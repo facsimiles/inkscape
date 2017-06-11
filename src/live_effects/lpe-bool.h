@@ -42,7 +42,7 @@ public:
     inline friend bool_op to_bool_op(bool_op_ex val)
     {
         assert(val <= bool_op_ex_slice);
-        return (bool_op) val;
+        (bool_op) val;
     }
 
 private:
