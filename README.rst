@@ -23,7 +23,7 @@ processes.
 Basic Installation
 ==================
 
-Inkscape version 0.92 and newer can be build using cmake:
+Inkscape version 0.92 and newer can be build using cmake::
 
   mkdir build
   cd build
@@ -40,10 +40,10 @@ The Inkscape core depends on several other libraries that you will need
 install, if they are not already present on your system.  The most
 typical libraries you may need to install are:
 
-   * Boehm-GC 
-   * libsigc++
-   * glibmm  
-   * gtkmm  
+* Boehm-GC 
+* libsigc++
+* glibmm  
+* gtkmm
 
 Please see http://wiki.inkscape.org/wiki/index.php/CompilingInkscape for the
 most current dependencies, including links to the source tarballs.
@@ -65,12 +65,12 @@ Next, you will need to ensure the dependencies for each extension is
 present.  Depending on which extensions you need, the dependencies are
 going to vary, but here are some you may need to install:
 
-   * XML::Parser
-   * XML::XQL
+* XML::Parser
+* XML::XQL
 
 If you install dependencies to non-standard locations, such as
 installing XML::Parser someplace in your home directory, you may need to
 take some extra steps to indicate where those dependencies are to be
 found.  For instance, with Perl modules, set the PERLLIB or PERL5LIB
-variable (see `man perlrun`)
+variable (see ``man perlrun``)
 
