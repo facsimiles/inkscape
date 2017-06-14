@@ -1,4 +1,4 @@
-if(UNIX)
+if(UNIX AND NOT APPLE)
     #The install directive for the binaries and libraries are found in src/CMakeList.txt
     install(FILES
       ${CMAKE_BINARY_DIR}/inkscape.desktop
