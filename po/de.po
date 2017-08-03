@@ -23,7 +23,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
 "POT-Creation-Date: 2017-07-24 23:11+0200\n"
-"PO-Revision-Date: 2017-08-03 22:35+0100\n"
+"PO-Revision-Date: 2017-08-03 23:09+0100\n"
 "Last-Translator: Maren Hachmann <marenhachmann@yahoo.com>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -8412,7 +8412,8 @@ msgid ""
 "The accuracy of the physical unit size and position values of objects\n"
 "in the file is most important. (Experimental.)"
 msgstr ""
-"Die Korrektheit der physischen Größe und die Positionen von Objekten\n"
+"Die präzise Wiedergabe physikalischer Einheitsgrößen und der Positionen von"
+" Objekten\n"
 "in der Datei sind besonders wichtig (experimentell)."
 
 #: ../src/file-update.cpp:338
@@ -8447,7 +8448,7 @@ msgid ""
 msgstr ""
 "<small>Wir haben Inkscape aktualisiert, um den CSS-Standard von 96 dpi "
 "Auflösung für bessere Kompatibilität mit Webbrowsern zu erfüllen. Früher "
-"haben wir 90 dpi verwendet. Digitale Kunstwerke, die auf einem Bildschirm "
+"haben wir 90 dpi verwendet. Digitales Bildmaterial, das auf einem Bildschirm "
 "dargestellt werden sollen, werden ohne Größenänderung zu 96 dpi konvertiert "
 "und sollten nicht betroffen sein. Kunstwerke, die mit 90 dpi für eine"
 " bestimmte physische Größe erstellt worden sind, werden zu klein sein, "
@@ -8455,7 +8456,8 @@ msgstr ""
 "Methoden zur Anpassung der Größe:\n"
 "\n"
 "<b>Die Größe des ganzen Dokuments ändern:</b> Dies ist die am wenigsten "
-"fehleranfällige Methode. Sie erhält das Aussehen des Kunstwerkes, und lässt "
+"fehleranfällige Methode. Sie erhält das Erscheinungsbild der Zeichnung, und"
+" lässt "
 "Filter und die Position von Masken usw. unverändert. Die Größe der "
 "Zeichnung im Verhältnis zur Dokumentgröße ist jedoch möglicherweise "
 "nicht korrekt.\n"
@@ -12321,9 +12323,7 @@ msgstr ""
 
 #: ../src/main.cpp:540
 msgid "Method used to convert pre-.92 document dpi, if needed."
-msgstr ""
-"Methode, die zur Anpassung der Auflösung eines Dokuments von vor Version 0.92"
-" verwendet wurde, falls notwendig."
+msgstr "Methode zur DPI-Konvertierung von pre-0.92-Dokumenten"
 
 #: ../src/main.cpp:890 ../src/main.cpp:1363
 msgid ""
@@ -12886,13 +12886,13 @@ msgstr "<b>Objekte</b> zum Absenken auswählen."
 
 #: ../src/selection-chemistry.cpp:1136
 msgid "We hit bottom."
-msgstr "Das Objekt ist ganz unten im Stapel."
+msgstr "Das Objekt ist bereits ganz unten."
 
 #. TRANSLATORS: "Lower" means "to lower an object" in the undo history
 #: ../src/selection-chemistry.cpp:1143
 msgctxt "Undo action"
 msgid "stack down"
-msgstr "im Stapel absenken"
+msgstr "Objekt absenken"
 
 #: ../src/selection-chemistry.cpp:1152
 msgid "Select <b>object(s)</b> to stack up."
@@ -12900,13 +12900,13 @@ msgstr "<b>Objekt(e)</b> zum Anheben auswählen."
 
 #: ../src/selection-chemistry.cpp:1165
 msgid "We hit top."
-msgstr "Das Objekt ist ganz oben im Stapel."
+msgstr "Das Objekt ist bereits ganz oben."
 
 #. TRANSLATORS: "Lower" means "to lower an object" in the undo history
 #: ../src/selection-chemistry.cpp:1172
 msgctxt "Undo action"
 msgid "stack up"
-msgstr "im Stapel anheben"
+msgstr "Objekt anheben"
 
 #: ../src/selection-chemistry.cpp:1180
 msgid "Select <b>object(s)</b> to lower to bottom."
@@ -27240,7 +27240,7 @@ msgstr "Die gewählten Objekte eine Stufe nach unten absenken"
 
 #: ../src/verbs.cpp:2569
 msgid "_Stack up"
-msgstr "Im Stapel anheben"
+msgstr "Objekt anheben"
 
 #: ../src/verbs.cpp:2570
 msgid "Stack selection one step up"
@@ -27248,7 +27248,7 @@ msgstr "Die gewählten Objekte eine Stufe weiter nach oben anheben"
 
 #: ../src/verbs.cpp:2571
 msgid "_Stack down"
-msgstr "Im Stapel absenken"
+msgstr "Objekt absenken"
 
 #: ../src/verbs.cpp:2572
 msgid "Stack selection one step down"
