@@ -14000,18 +14000,18 @@ msgstr "گهمائڻ لاءِ شفٽ + گهلڻ، مول هلائڻ لاءِ ڪ�
 
 #: ../src/sp-guide.cpp:495
 #, c-format
-msgid "vertical, at %s"
-msgstr "ڪمودي، %s تي"
+msgid "vertical, at %1"
+msgstr "ڪمودي، %1 تي"
 
 #: ../src/sp-guide.cpp:498
 #, c-format
-msgid "horizontal, at %s"
-msgstr "اُفقي %s تي"
+msgid "horizontal, at %1"
+msgstr "اُفقي %1 تي"
 
 #: ../src/sp-guide.cpp:503
 #, c-format
-msgid "at %d degrees, through (%s,%s)"
-msgstr " %d ڊگرين تي (%s,%s) ذريعي"
+msgid "at %1 degrees, through (%2,%3)"
+msgstr " %1 ڊگرين تي (%2,%3) ذريعي"
 
 #: ../src/sp-image.cpp:514
 msgid "embedded"

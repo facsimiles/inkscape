@@ -13743,18 +13743,18 @@ msgstr ""
 
 #: ../src/sp-guide.cpp:495
 #, c-format
-msgid "vertical, at %s"
-msgstr "लंबवत, %s मे  "
+msgid "vertical, at %1"
+msgstr "लंबवत, %1 मे  "
 
 #: ../src/sp-guide.cpp:498
 #, c-format
-msgid "horizontal, at %s"
-msgstr "क्षैतिज, %s मे "
+msgid "horizontal, at %1"
+msgstr "क्षैतिज, %1 मे "
 
 #: ../src/sp-guide.cpp:503
 #, c-format
-msgid "at %d degrees, through (%s,%s)"
-msgstr "%d डिग्रीसभ मे, (%s,%s) तक   "
+msgid "at %1 degrees, through (%2,%3)"
+msgstr "%1 डिग्रीसभ मे, (%2,%3) तक   "
 
 #: ../src/sp-image.cpp:514
 msgid "embedded"

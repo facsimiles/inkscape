@@ -13919,17 +13919,17 @@ msgstr ""
 
 #: ../src/sp-guide.cpp:495
 #, fuzzy, c-format
-msgid "vertical, at %s"
+msgid "vertical, at %1"
 msgstr "ലംബമായി"
 
 #: ../src/sp-guide.cpp:498
 #, fuzzy, c-format
-msgid "horizontal, at %s"
+msgid "horizontal, at %1"
 msgstr "സമാന്തരമായി"
 
 #: ../src/sp-guide.cpp:503
 #, fuzzy, c-format
-msgid "at %d degrees, through (%s,%s)"
+msgid "at %1 degrees, through (%2,%3)"
 msgstr "ഡിഗ്രികള്‍"
 
 #: ../src/sp-image.cpp:514

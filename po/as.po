@@ -13802,18 +13802,18 @@ msgstr ""
 
 #: ../src/sp-guide.cpp:495
 #, c-format
-msgid "vertical, at %s"
-msgstr "%s ত উলম্ব"
+msgid "vertical, at %1"
+msgstr "%1 ত উলম্ব"
 
 #: ../src/sp-guide.cpp:498
 #, c-format
-msgid "horizontal, at %s"
-msgstr "horizontal, at %s"
+msgid "horizontal, at %1"
+msgstr "horizontal, at %1"
 
 #: ../src/sp-guide.cpp:503
 #, c-format
-msgid "at %d degrees, through (%s,%s)"
-msgstr "(%s,%s) ৰ মাজেৰে %d মাত্রাবোৰত"
+msgid "at %1 degrees, through (%2,%3)"
+msgstr "(%2,%3) ৰ মাজেৰে %1 মাত্রাবোৰত"
 
 #: ../src/sp-image.cpp:514
 msgid "embedded"

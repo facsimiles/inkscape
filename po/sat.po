@@ -13998,18 +13998,18 @@ msgstr ""
 
 #: ../src/sp-guide.cpp:495
 #, c-format
-msgid "vertical, at %s"
-msgstr "ᱛᱤᱸᱜᱩ ᱛᱮᱭᱟᱜ , %s ᱨᱮ .  "
+msgid "vertical, at %1"
+msgstr "ᱛᱤᱸᱜᱩ ᱛᱮᱭᱟᱜ , %1 ᱨᱮ .  "
 
 #: ../src/sp-guide.cpp:498
 #, c-format
-msgid "horizontal, at %s"
-msgstr "ᱜᱤᱛᱤᱪ  %s ᱨᱮ"
+msgid "horizontal, at %1"
+msgstr "ᱜᱤᱛᱤᱪ  %1 ᱨᱮ"
 
 #: ../src/sp-guide.cpp:503
 #, c-format
-msgid "at %d degrees, through (%s,%s)"
-msgstr "%d ᱰᱤᱜᱽᱨᱤᱠᱚ ᱨᱮ, (%s,%s) ᱥᱮᱫ ᱛᱮ   "
+msgid "at %1 degrees, through (%2,%3)"
+msgstr "%1 ᱰᱤᱜᱽᱨᱤᱠᱚ ᱨᱮ, (%2,%3) ᱥᱮᱫ ᱛᱮ   "
 
 #: ../src/sp-image.cpp:514
 msgid "embedded"

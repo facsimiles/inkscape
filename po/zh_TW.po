@@ -12911,18 +12911,18 @@ msgstr "<b>Shift+拖曳</b>可旋轉，<b>Ctrl+拖曳</b>可移動原點，<b>De
 
 #: ../src/sp-guide.cpp:495
 #, c-format
-msgid "vertical, at %s"
-msgstr "垂直，位於 %s"
+msgid "vertical, at %1"
+msgstr "垂直，位於 %1"
 
 #: ../src/sp-guide.cpp:498
 #, c-format
-msgid "horizontal, at %s"
-msgstr "水平，位於 %s"
+msgid "horizontal, at %1"
+msgstr "水平，位於 %1"
 
 #: ../src/sp-guide.cpp:503
 #, c-format
-msgid "at %d degrees, through (%s,%s)"
-msgstr "於 %d 度，經過 (%s,%s)"
+msgid "at %1 degrees, through (%2,%3)"
+msgstr "於 %1 度，經過 (%2,%3)"
 
 #: ../src/sp-image.cpp:514
 msgid "embedded"

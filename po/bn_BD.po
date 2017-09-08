@@ -13480,18 +13480,18 @@ msgstr ""
 
 #: ../src/sp-guide.cpp:495
 #, c-format
-msgid "vertical, at %s"
-msgstr "উল্লম্ব, %s-এ"
+msgid "vertical, at %1"
+msgstr "উল্লম্ব, %1-এ"
 
 #: ../src/sp-guide.cpp:498
 #, c-format
-msgid "horizontal, at %s"
-msgstr "অনুভূমিক, %s-এ"
+msgid "horizontal, at %1"
+msgstr "অনুভূমিক, %1-এ"
 
 #: ../src/sp-guide.cpp:503
 #, c-format
-msgid "at %d degrees, through (%s,%s)"
-msgstr "%d ডিগ্রীতে, (%s,%s)-এর ভিতর দিয়ে"
+msgid "at %1 degrees, through (%2,%3)"
+msgstr "%1 ডিগ্রীতে, (%2,%3)-এর ভিতর দিয়ে"
 
 #: ../src/sp-image.cpp:514
 msgid "embedded"

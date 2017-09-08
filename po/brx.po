@@ -14003,18 +14003,18 @@ msgstr ""
 
 #: ../src/sp-guide.cpp:495
 #, c-format
-msgid "vertical, at %s"
-msgstr "थोंगोर, %s आव"
+msgid "vertical, at %1"
+msgstr "थोंगोर, %1 आव"
 
 #: ../src/sp-guide.cpp:498
 #, c-format
-msgid "horizontal, at %s"
-msgstr "समानथि, %s आव"
+msgid "horizontal, at %1"
+msgstr "समानथि, %1 आव"
 
 #: ../src/sp-guide.cpp:503
 #, c-format
-msgid "at %d degrees, through (%s,%s)"
-msgstr "%d दिग्रिआव, (%s,%s) गेजेरजों"
+msgid "at %1 degrees, through (%2,%3)"
+msgstr "%1 दिग्रिआव, (%2,%3) गेजेरजों"
 
 #: ../src/sp-image.cpp:514
 msgid "embedded"

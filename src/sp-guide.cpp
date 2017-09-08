@@ -471,49 +471,42 @@ void SPGuide::set_label(const char* label, bool const commit)
  *
  * The caller is responsible for freeing the string.
  */
-char* SPGuide::description(bool const verbose) const
+Glib::ustring SPGuide::description(bool const verbose) const
 {
     using Geom::X;
     using Geom::Y;
 
-    char *descr = NULL;
+    Glib::ustring descr;
     if ( !this->document ) {
         // Guide has probably been deleted and no longer has an attached namedview.
-        descr = g_strdup(_("Deleted"));
+        descr = _("Deleted");
     } else {
         SPNamedView *namedview = sp_document_namedview(this->document, NULL);
 
         Inkscape::Util::Quantity x_q = Inkscape::Util::Quantity(this->point_on_line[X], "px");
         Inkscape::Util::Quantity y_q = Inkscape::Util::Quantity(this->point_on_line[Y], "px");
-        GString *position_string_x = g_string_new(x_q.string(namedview->display_units).c_str());
-        GString *position_string_y = g_string_new(y_q.string(namedview->display_units).c_str());
+        Glib::ustring position_string_x = x_q.string(namedview->display_units);
+        Glib::ustring position_string_y = y_q.string(namedview->display_units);
 
-        gchar *shortcuts = g_strdup_printf("; %s", _("<b>Shift+drag</b> to rotate, <b>Ctrl+drag</b> to move origin, <b>Del</b> to delete"));
 
         if ( are_near(this->normal_to_line, Geom::Point(1., 0.)) ||
              are_near(this->normal_to_line, -Geom::Point(1., 0.)) ) {
-            descr = g_strdup_printf(_("vertical, at %s"), position_string_x->str);
+            descr = Glib::ustring::compose(_("vertical, at %1"), position_string_x);
         } else if ( are_near(this->normal_to_line, Geom::Point(0., 1.)) ||
                     are_near(this->normal_to_line, -Geom::Point(0., 1.)) ) {
-            descr = g_strdup_printf(_("horizontal, at %s"), position_string_y->str);
+            descr = Glib::ustring::compose(_("horizontal, at %s"), position_string_y);
         } else {
             double const radians = this->angle();
             double const degrees = Geom::deg_from_rad(radians);
             int const degrees_int = (int) round(degrees);
-            descr = g_strdup_printf(_("at %d degrees, through (%s,%s)"), 
-                                    degrees_int, position_string_x->str, position_string_y->str);
+            descr = Glib::ustring::compose(_("at %1 degrees, through (%2,%3)"), 
+                                    degrees_int, position_string_x, position_string_y);
         }
-
-        g_string_free(position_string_x, TRUE);
-        g_string_free(position_string_y, TRUE);
 
         if (verbose) {
-            gchar *oldDescr = descr;
-            descr = g_strconcat(oldDescr, shortcuts, NULL);
-            g_free(oldDescr);
+            descr += "; ";
+            descr += _("<b>Shift+drag</b> to rotate, <b>Ctrl+drag</b> to move origin, <b>Del</b> to delete");
         }
-
-        g_free(shortcuts);
     }
 
     return descr;

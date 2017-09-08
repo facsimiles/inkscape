@@ -13278,17 +13278,17 @@ msgstr ""
 
 #: ../src/sp-guide.cpp:499
 #, c-format
-msgid "vertical, at %s"
-msgstr "vertical, la %s"
+msgid "vertical, at %1"
+msgstr "vertical, la %1"
 
 #: ../src/sp-guide.cpp:502
 #, c-format
-msgid "horizontal, at %s"
-msgstr "horizontal, la %s"
+msgid "horizontal, at %1"
+msgstr "horizontal, la %1"
 
 #: ../src/sp-guide.cpp:507
 #, c-format
-msgid "at %d degrees, through (%s,%s)"
+msgid "at %1 degrees, through (%2,%3)"
 msgstr ""
 
 #: ../src/sp-image.cpp:517

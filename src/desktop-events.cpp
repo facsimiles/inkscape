@@ -545,9 +545,8 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
             gdk_window_set_cursor(gtk_widget_get_window (GTK_WIDGET(desktop->getCanvas())), guide_cursor);
             g_object_unref(guide_cursor);
 
-            char *guide_description = guide->description();
-            desktop->guidesMessageContext()->setF(Inkscape::NORMAL_MESSAGE, _("<b>Guideline</b>: %s"), guide_description);
-            g_free(guide_description);
+            Glib::ustring guide_description = guide->description();
+            desktop->guidesMessageContext()->setF(Inkscape::NORMAL_MESSAGE, _("<b>Guideline</b>: %s"), guide_description.c_str());
             break;
     }
     case GDK_LEAVE_NOTIFY:

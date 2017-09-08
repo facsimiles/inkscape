@@ -13827,18 +13827,18 @@ msgstr ""
 
 #: ../src/sp-guide.cpp:495
 #, c-format
-msgid "vertical, at %s"
-msgstr "אנכי, ב־%s"
+msgid "vertical, at %1"
+msgstr "אנכי, ב־%1"
 
 #: ../src/sp-guide.cpp:498
 #, c-format
-msgid "horizontal, at %s"
-msgstr "אופקי, ב־%s"
+msgid "horizontal, at %1"
+msgstr "אופקי, ב־%1"
 
 #: ../src/sp-guide.cpp:503
 #, c-format
-msgid "at %d degrees, through (%s,%s)"
-msgstr "ב־%d מעלות, דרך (%s,%s)"
+msgid "at %1 degrees, through (%2,%3)"
+msgstr "ב־%1 מעלות, דרך (%2,%3)"
 
 #: ../src/sp-image.cpp:514
 msgid "embedded"

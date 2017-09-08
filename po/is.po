@@ -12964,18 +12964,18 @@ msgstr ""
 
 #: ../src/sp-guide.cpp:495
 #, c-format
-msgid "vertical, at %s"
-msgstr "lóðrétt, við %s"
+msgid "vertical, at %1"
+msgstr "lóðrétt, við %1"
 
 #: ../src/sp-guide.cpp:498
 #, c-format
-msgid "horizontal, at %s"
-msgstr "lárétt, við %s"
+msgid "horizontal, at %1"
+msgstr "lárétt, við %1"
 
 #: ../src/sp-guide.cpp:503
 #, c-format
-msgid "at %d degrees, through (%s,%s)"
-msgstr "við %d gráður, gegnum (%s,%s)"
+msgid "at %1 degrees, through (%2,%3)"
+msgstr "við %1 gráður, gegnum (%2,%3)"
 
 #: ../src/sp-image.cpp:514
 msgid "embedded"

@@ -13871,18 +13871,18 @@ msgstr ""
 
 #: ../src/sp-guide.cpp:495
 #, c-format
-msgid "vertical, at %s"
-msgstr "ऋजुरूपम्, %s मध्ये"
+msgid "vertical, at %1"
+msgstr "ऋजुरूपम्, %1 मध्ये"
 
 #: ../src/sp-guide.cpp:498
 #, c-format
-msgid "horizontal, at %s"
-msgstr "तिर्यग्रूपम्, at %s मध्ये"
+msgid "horizontal, at %1"
+msgstr "तिर्यग्रूपम्, at %1 मध्ये"
 
 #: ../src/sp-guide.cpp:503
 #, c-format
-msgid "at %d degrees, through (%s,%s)"
-msgstr "%d डिग्रीस् मध्ये, (%s,%s) द्वारा"
+msgid "at %1 degrees, through (%2,%3)"
+msgstr "%1 डिग्रीस् मध्ये, (%2,%3) द्वारा"
 
 #: ../src/sp-image.cpp:514
 msgid "embedded"

@@ -13803,18 +13803,18 @@ msgstr ""
 
 #: ../src/sp-guide.cpp:495
 #, c-format
-msgid "vertical, at %s"
-msgstr "செங்குத்து, %s இல்"
+msgid "vertical, at %1"
+msgstr "செங்குத்து, %1 இல்"
 
 #: ../src/sp-guide.cpp:498
 #, c-format
-msgid "horizontal, at %s"
-msgstr "கிடைமட்டம், %s இல்"
+msgid "horizontal, at %1"
+msgstr "கிடைமட்டம், %1 இல்"
 
 #: ../src/sp-guide.cpp:503
 #, c-format
-msgid "at %d degrees, through (%s,%s)"
-msgstr "%d டிகிரிகளில்,  (%s,%s) வழியாக"
+msgid "at %1 degrees, through (%2,%3)"
+msgstr "%1 டிகிரிகளில்,  (%2,%3) வழியாக"
 
 #: ../src/sp-image.cpp:514
 msgid "embedded"

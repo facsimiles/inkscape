@@ -13471,18 +13471,18 @@ msgstr ""
 
 #: ../src/sp-guide.cpp:495
 #, c-format
-msgid "vertical, at %s"
-msgstr "вертикальна, на %s"
+msgid "vertical, at %1"
+msgstr "вертикальна, на %1"
 
 #: ../src/sp-guide.cpp:498
 #, c-format
-msgid "horizontal, at %s"
-msgstr "горизонтальна, на %s"
+msgid "horizontal, at %1"
+msgstr "горизонтальна, на %1"
 
 #: ../src/sp-guide.cpp:503
 #, c-format
-msgid "at %d degrees, through (%s,%s)"
-msgstr "на %d градусів, через (%s,%s)"
+msgid "at %1 degrees, through (%2,%3)"
+msgstr "на %1 градусів, через (%2,%3)"
 
 #: ../src/sp-image.cpp:514
 msgid "embedded"

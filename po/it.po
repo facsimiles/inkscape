@@ -13407,18 +13407,18 @@ msgstr ""
 
 #: ../src/sp-guide.cpp:499
 #, c-format
-msgid "vertical, at %s"
-msgstr "verticale, a %s"
+msgid "vertical, at %1"
+msgstr "verticale, a %1"
 
 #: ../src/sp-guide.cpp:502
 #, c-format
-msgid "horizontal, at %s"
-msgstr "orizzontale, a %s"
+msgid "horizontal, at %1"
+msgstr "orizzontale, a %1"
 
 #: ../src/sp-guide.cpp:507
 #, c-format
-msgid "at %d degrees, through (%s,%s)"
-msgstr "a %d gradi, intersecante (%s,%s)"
+msgid "at %1 degrees, through (%2,%3)"
+msgstr "a %1 gradi, intersecante (%2,%3)"
 
 #: ../src/sp-image.cpp:517
 msgid "embedded"

@@ -14319,18 +14319,18 @@ msgstr ""
 
 #: ../src/sp-guide.cpp:495
 #, fuzzy, c-format
-msgid "vertical, at %s"
-msgstr "vertikal, vid %s"
+msgid "vertical, at %1"
+msgstr "vertikal, vid %1"
 
 #: ../src/sp-guide.cpp:498
 #, fuzzy, c-format
-msgid "horizontal, at %s"
-msgstr "horisontell, vid %s"
+msgid "horizontal, at %1"
+msgstr "horisontell, vid %1"
 
 #: ../src/sp-guide.cpp:503
 #, fuzzy, c-format
-msgid "at %d degrees, through (%s,%s)"
-msgstr "vid %d grader, genom (%s,%s)"
+msgid "at %1 degrees, through (%2,%3)"
+msgstr "vid %1 grader, genom (%2,%3)"
 
 #: ../src/sp-image.cpp:514
 #, fuzzy

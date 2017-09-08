@@ -14300,20 +14300,20 @@ msgstr ""
 
 #: ../src/sp-guide.cpp:495
 #, c-format
-msgid "vertical, at %s"
-msgstr "κάθετα, σε %s"
+msgid "vertical, at %1"
+msgstr "κάθετα, σε %1"
 
 # #-#-#-#-#  orca.master.el.po (orca.HEAD)  #-#-#-#-#
 # #-#-#-#-#  gnome-terminal.HEAD.el.po (el)  #-#-#-#-#
 #: ../src/sp-guide.cpp:498
 #, c-format
-msgid "horizontal, at %s"
-msgstr "οριζόντια, σε %s"
+msgid "horizontal, at %1"
+msgstr "οριζόντια, σε %1"
 
 #: ../src/sp-guide.cpp:503
 #, c-format
-msgid "at %d degrees, through (%s,%s)"
-msgstr "στις %d μοίρες, μέσα από (%s,%s)"
+msgid "at %1 degrees, through (%2,%3)"
+msgstr "στις %1 μοίρες, μέσα από (%2,%3)"
 
 #: ../src/sp-image.cpp:514
 msgid "embedded"

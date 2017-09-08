@@ -13889,18 +13889,18 @@ msgstr ""
 
 #: ../src/sp-guide.cpp:495
 #, c-format
-msgid "vertical, at %s"
-msgstr "खडा %s पदठ "
+msgid "vertical, at %1"
+msgstr "खडा %1 पदठ "
 
 #: ../src/sp-guide.cpp:498
 #, c-format
-msgid "horizontal, at %s"
-msgstr "सीधय %s पदठ "
+msgid "horizontal, at %1"
+msgstr "सीधय %1 पदठ "
 
 #: ../src/sp-guide.cpp:503
 #, c-format
-msgid "at %d degrees, through (%s,%s)"
-msgstr "%d डिगरियन पदठ,(%s,%s) किनि "
+msgid "at %1 degrees, through (%2,%3)"
+msgstr "%1 डिगरियन पदठ,(%2,%3) किनि "
 
 #: ../src/sp-image.cpp:514
 msgid "embedded"

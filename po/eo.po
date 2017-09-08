@@ -14242,18 +14242,18 @@ msgstr ""
 
 #: ../src/sp-guide.cpp:495
 #, c-format
-msgid "vertical, at %s"
-msgstr "vertikala, al %s"
+msgid "vertical, at %1"
+msgstr "vertikala, al %1"
 
 #: ../src/sp-guide.cpp:498
 #, c-format
-msgid "horizontal, at %s"
-msgstr "horizontala, al %s"
+msgid "horizontal, at %1"
+msgstr "horizontala, al %1"
 
 #: ../src/sp-guide.cpp:503
 #, fuzzy, c-format
-msgid "at %d degrees, through (%s,%s)"
-msgstr "je %d gradoj, tra (%s,%s); <b>Strkl</b>+alklako pro forigi"
+msgid "at %1 degrees, through (%2,%3)"
+msgstr "je %1 gradoj, tra (%2,%3); <b>Strkl</b>+alklako pro forigi"
 
 #: ../src/sp-image.cpp:514
 msgid "embedded"

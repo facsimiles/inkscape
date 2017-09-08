@@ -13338,18 +13338,18 @@ msgstr ""
 
 #: ../src/sp-guide.cpp:495
 #, c-format
-msgid "vertical, at %s"
-msgstr "Vertikale Hilfslinie bei %s"
+msgid "vertical, at %1"
+msgstr "Vertikale Hilfslinie bei %1"
 
 #: ../src/sp-guide.cpp:498
 #, c-format
-msgid "horizontal, at %s"
-msgstr "Horizontale Hilfslinie bei %s"
+msgid "horizontal, at %1"
+msgstr "Horizontale Hilfslinie bei %1"
 
 #: ../src/sp-guide.cpp:503
 #, c-format
-msgid "at %d degrees, through (%s,%s)"
-msgstr "bei %d Grad, durch (%s, %s)"
+msgid "at %1 degrees, through (%2,%3)"
+msgstr "bei %1 Grad, durch (%2, %3)"
 
 #: ../src/sp-image.cpp:514
 msgid "embedded"

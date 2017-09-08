@@ -14303,18 +14303,18 @@ msgstr ""
 
 #: ../src/sp-guide.cpp:495
 #, c-format
-msgid "vertical, at %s"
-msgstr "erticalvay, atway %s"
+msgid "vertical, at %1"
+msgstr "erticalvay, atway %1"
 
 #: ../src/sp-guide.cpp:498
 #, c-format
-msgid "horizontal, at %s"
-msgstr "orizontalhay, atway %s"
+msgid "horizontal, at %1"
+msgstr "orizontalhay, atway %1"
 
 #: ../src/sp-guide.cpp:503
 #, c-format
-msgid "at %d degrees, through (%s,%s)"
-msgstr "atway %d egreesday, oughthray (%s,%s)"
+msgid "at %1 degrees, through (%2,%3)"
+msgstr "atway %1 egreesday, oughthray (%2,%3)"
 
 #: ../src/sp-image.cpp:514
 msgid "embedded"

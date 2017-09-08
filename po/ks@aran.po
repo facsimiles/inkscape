@@ -13950,18 +13950,18 @@ msgstr ""
 
 #: ../src/sp-guide.cpp:495
 #, c-format
-msgid "vertical, at %s"
-msgstr "کھڈا %s پد۪ ٹھ"
+msgid "vertical, at %1"
+msgstr "کھڈا %1 پد۪ ٹھ"
 
 #: ../src/sp-guide.cpp:498
 #, c-format
-msgid "horizontal, at %s"
-msgstr "سیدھے %s پد۪ ٹھ"
+msgid "horizontal, at %1"
+msgstr "سیدھے %1 پد۪ ٹھ"
 
 #: ../src/sp-guide.cpp:503
 #, c-format
-msgid "at %d degrees, through (%s,%s)"
-msgstr "%d ڈِگرِیَن پد۪ ٹھ، (%s,%s) کِن۪ی"
+msgid "at %1 degrees, through (%2,%3)"
+msgstr "%1 ڈِگرِیَن پد۪ ٹھ، (%2,%3) کِن۪ی"
 
 #: ../src/sp-image.cpp:514
 msgid "embedded"

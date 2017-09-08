@@ -286,9 +286,8 @@ void GuidelinePropertiesDialog::_setup() {
         g_free(label);
     }
     {
-        gchar *guide_description = _guide->description(false);
-        gchar *label = g_strdup_printf(_("Current: %s"), guide_description);
-        g_free(guide_description);
+        Glib::ustring guide_description = _guide->description(false);
+        gchar *label = g_strdup_printf(_("Current: %s"), guide_description.c_str());
         _label_descr.set_markup(label);
         g_free(label);
     }

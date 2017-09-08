@@ -14340,17 +14340,17 @@ msgstr ""
 
 #: ../src/sp-guide.cpp:495
 #, fuzzy, c-format
-msgid "vertical, at %s"
+msgid "vertical, at %1"
 msgstr "ཀེར་ཕྲང་སྦེ་ཡོད་མི་ལམ་སྟོན་གྲལ་ཐིག"
 
 #: ../src/sp-guide.cpp:498
 #, fuzzy, c-format
-msgid "horizontal, at %s"
+msgid "horizontal, at %1"
 msgstr "ཐད་སྙོམས་སྦེ་ཡོད་མི་ལམ་སྟོན་གྲལ་ཐིག"
 
 #: ../src/sp-guide.cpp:503
 #, c-format
-msgid "at %d degrees, through (%s,%s)"
+msgid "at %1 degrees, through (%2,%3)"
 msgstr ""
 
 #: ../src/sp-image.cpp:514

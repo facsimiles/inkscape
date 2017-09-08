@@ -13217,18 +13217,18 @@ msgstr ""
 
 #: ../src/sp-guide.cpp:495
 #, c-format
-msgid "vertical, at %s"
-msgstr "zvislé, na %s"
+msgid "vertical, at %1"
+msgstr "zvislé, na %1"
 
 #: ../src/sp-guide.cpp:498
 #, c-format
-msgid "horizontal, at %s"
-msgstr "vodorovné, na %s"
+msgid "horizontal, at %1"
+msgstr "vodorovné, na %1"
 
 #: ../src/sp-guide.cpp:503
 #, c-format
-msgid "at %d degrees, through (%s,%s)"
-msgstr "na %d stupňoch, cez (%s,%s)"
+msgid "at %1 degrees, through (%2,%3)"
+msgstr "na %1 stupňoch, cez (%2,%3)"
 
 #: ../src/sp-image.cpp:514
 msgid "embedded"

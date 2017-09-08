@@ -13771,18 +13771,18 @@ msgstr ""
 
 #: ../src/sp-guide.cpp:495
 #, c-format
-msgid "vertical, at %s"
-msgstr "បញ្ឈរ នៅ %s"
+msgid "vertical, at %1"
+msgstr "បញ្ឈរ នៅ %1"
 
 #: ../src/sp-guide.cpp:498
 #, c-format
-msgid "horizontal, at %s"
-msgstr "ផ្ដេក នៅ %s"
+msgid "horizontal, at %1"
+msgstr "ផ្ដេក នៅ %1"
 
 #: ../src/sp-guide.cpp:503
 #, c-format
-msgid "at %d degrees, through (%s,%s)"
-msgstr "នៅ​កម្រិត %d ដឺក្រេ តាម (%s,%s)"
+msgid "at %1 degrees, through (%2,%3)"
+msgstr "នៅ​កម្រិត %1 ដឺក្រេ តាម (%2,%3)"
 
 #: ../src/sp-image.cpp:514
 msgid "embedded"

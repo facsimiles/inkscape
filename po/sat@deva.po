@@ -13918,18 +13918,18 @@ msgstr ""
 
 #: ../src/sp-guide.cpp:495
 #, c-format
-msgid "vertical, at %s"
-msgstr "तिंगु तेयाक् , %s रे .  "
+msgid "vertical, at %1"
+msgstr "तिंगु तेयाक् , %1 रे .  "
 
 #: ../src/sp-guide.cpp:498
 #, c-format
-msgid "horizontal, at %s"
-msgstr "गितिच्  %s रे"
+msgid "horizontal, at %1"
+msgstr "गितिच्  %1 रे"
 
 #: ../src/sp-guide.cpp:503
 #, c-format
-msgid "at %d degrees, through (%s,%s)"
-msgstr "%d डिग्रीको रे, (%s,%s) सेत् ते   "
+msgid "at %1 degrees, through (%2,%3)"
+msgstr "%1 डिग्रीको रे, (%2,%3) सेत् ते   "
 
 #: ../src/sp-image.cpp:514
 msgid "embedded"

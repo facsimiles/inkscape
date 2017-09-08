@@ -13811,18 +13811,18 @@ msgstr ""
 
 #: ../src/sp-guide.cpp:495
 #, c-format
-msgid "vertical, at %s"
-msgstr "ಲಂಬ, %s ಎಂಬಲ್ಲಿ"
+msgid "vertical, at %1"
+msgstr "ಲಂಬ, %1 ಎಂಬಲ್ಲಿ"
 
 #: ../src/sp-guide.cpp:498
 #, c-format
-msgid "horizontal, at %s"
-msgstr "ಅಡ್ಡ, %s ಎಂಬಲ್ಲಿ"
+msgid "horizontal, at %1"
+msgstr "ಅಡ್ಡ, %1 ಎಂಬಲ್ಲಿ"
 
 #: ../src/sp-guide.cpp:503
 #, c-format
-msgid "at %d degrees, through (%s,%s)"
-msgstr "%d ಡಿಗ್ರಿಗಳಲ್ಲಿ, (%s,%s) ಮೂಲಕ"
+msgid "at %1 degrees, through (%2,%3)"
+msgstr "%1 ಡಿಗ್ರಿಗಳಲ್ಲಿ, (%2,%3) ಮೂಲಕ"
 
 #: ../src/sp-image.cpp:514
 msgid "embedded"

@@ -13961,18 +13961,18 @@ msgstr ""
 
 #: ../src/sp-guide.cpp:495
 #, fuzzy, c-format
-msgid "vertical, at %s"
-msgstr "vertikalno, na %s; %s"
+msgid "vertical, at %1"
+msgstr "vertikalno, na %1; %s"
 
 #: ../src/sp-guide.cpp:498
 #, fuzzy, c-format
-msgid "horizontal, at %s"
-msgstr "horizontalno, na %s; %s"
+msgid "horizontal, at %1"
+msgstr "horizontalno, na %1; %s"
 
 #: ../src/sp-guide.cpp:503
 #, fuzzy, c-format
-msgid "at %d degrees, through (%s,%s)"
-msgstr "na %d stepeni, preko (%s,%s); %s"
+msgid "at %1 degrees, through (%2,%3)"
+msgstr "na %1 stepeni, preko (%2,%3); %s"
 
 #: ../src/sp-image.cpp:514
 msgid "embedded"

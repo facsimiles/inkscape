@@ -67,7 +67,7 @@ public:
     bool isHorizontal() const { return (normal_to_line[Geom::X] == 0.); };
     bool isVertical() const { return (normal_to_line[Geom::Y] == 0.); };
 
-    char* description(bool const verbose = true) const;
+    Glib::ustring description(bool const verbose = true) const;
 
     double angle() const { return std::atan2( - normal_to_line[Geom::X], normal_to_line[Geom::Y] ); }
     double getDistanceFrom(Geom::Point const &pt) const;

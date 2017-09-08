@@ -13937,18 +13937,18 @@ msgstr ""
 
 #: ../src/sp-guide.cpp:495
 #, c-format
-msgid "vertical, at %s"
-msgstr "ubhem, %s kadde"
+msgid "vertical, at %1"
+msgstr "ubhem, %1 kadde"
 
 #: ../src/sp-guide.cpp:498
 #, c-format
-msgid "horizontal, at %s"
-msgstr "addvem, %s kadde"
+msgid "horizontal, at %1"
+msgstr "addvem, %1 kadde"
 
 #: ../src/sp-guide.cpp:503
 #, c-format
-msgid "at %d degrees, through (%s,%s)"
-msgstr "%d omxeamni, (%s,%s) poreant"
+msgid "at %1 degrees, through (%2,%3)"
+msgstr "%1 omxeamni, (%2,%3) poreant"
 
 #: ../src/sp-image.cpp:514
 msgid "embedded"

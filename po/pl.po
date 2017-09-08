@@ -13883,18 +13883,18 @@ msgstr ""
 
 #: ../src/sp-guide.cpp:495
 #, c-format
-msgid "vertical, at %s"
-msgstr "pionowa, na %s"
+msgid "vertical, at %1"
+msgstr "pionowa, na %1"
 
 #: ../src/sp-guide.cpp:498
 #, c-format
-msgid "horizontal, at %s"
-msgstr "pozioma, na %s"
+msgid "horizontal, at %1"
+msgstr "pozioma, na %1"
 
 #: ../src/sp-guide.cpp:503
 #, c-format
-msgid "at %d degrees, through (%s,%s)"
-msgstr "o %d stopni, przez (%s,%s)"
+msgid "at %1 degrees, through (%2,%3)"
+msgstr "o %1 stopni, przez (%2,%3)"
 
 #: ../src/sp-image.cpp:514
 msgid "embedded"
