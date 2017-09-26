@@ -755,6 +755,11 @@ std::set<ColorProfile::FilePlusHome> ColorProfile::getBaseProfileDirs() {
     sources.insert(FilePlusHome(path, true));
     g_free(path);
 
+    // try colord user-local dir
+    path = g_build_filename(g_get_user_data_dir(), "icc", NULL);
+    sources.insert(FilePlusHome(path, true));
+    g_free(path);
+
     const gchar* const * dataDirs = g_get_system_data_dirs();
     for ( int i = 0; dataDirs[i]; i++ ) {
         gchar* path = g_build_filename(dataDirs[i], "color", "icc", NULL);
