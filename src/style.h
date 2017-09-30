@@ -47,8 +47,8 @@ public:
     SPStyle(SPDocument *document = NULL, SPObject *object = NULL);// document is ignored if valid object given
     ~SPStyle();
     void clear();
-    void read(SPObject *object, Inkscape::XML::Node *repr);
-    void readFromObject(SPObject *object);
+    void read(SPObject *object, Inkscape::XML::Node *repr, bool stylesheet = true);
+    void readFromObject(SPObject *object, bool stylesheet = true);
     void readFromPrefs(Glib::ustring const &path);
     void readIfUnset( int id, char const *val, SPStyleSrc const &source = SP_STYLE_SRC_STYLE_PROP );
     Glib::ustring write( unsigned int const flags = SP_STYLE_FLAG_IFSET,

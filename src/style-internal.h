@@ -131,7 +131,10 @@ public:
 
     virtual void read( gchar const *str ) = 0;
     virtual void readIfUnset( gchar const *str, SPStyleSrc const &source = SP_STYLE_SRC_STYLE_PROP ) {
-        if ( !set ) {
+        if (!str) return;
+        gchar const *has_important_rule = strstr(str, "!important");
+        bool setted = set;
+        if ( !set || has_important_rule ) {
             read( str );
             if ( set ) {
                 style_src = source;
@@ -159,12 +162,12 @@ public:
 
     // Explicit assignment operator required due to templates.
     SPIBase& operator=(const SPIBase& rhs) {
-        name        = rhs.name;
-        inherits    = rhs.inherits;
-        set         = rhs.set;
-        inherit     = rhs.inherit;
-        style_src   = rhs.style_src;
-        style       = rhs.style;
+        name          = rhs.name;
+        inherits      = rhs.inherits;
+        set           = rhs.set;
+        inherit       = rhs.inherit;
+        style_src     = rhs.style_src;
+        style         = rhs.style;
         return *this;
     }
 
@@ -179,11 +182,11 @@ public:
 
   // To do: make private
 public:
-    Glib::ustring name;       // Make const
-    unsigned inherits : 1;    // Property inherits by default from parent.
-    unsigned set : 1;         // Property has been explicitly set (vs. inherited).
-    unsigned inherit : 1;     // Property value set to 'inherit'.
-    SPStyleSrc style_src : 2; // Source (attribute, style attribute, style-sheet).
+    Glib::ustring name;        // Make const
+    unsigned inherits : 1;     // Property inherits by default from parent.
+    unsigned set : 1;          // Property has been explicitly set  (vs. inherited).
+    unsigned inherit : 1;      // Property value set to 'inherit'.
+    SPStyleSrc style_src : 2;  // Source (attribute, style attribute, style-sheet).
 
   // To do: make private after g_asserts removed
 public:
@@ -203,7 +206,8 @@ public:
     SPIFloat( Glib::ustring const &name, float value_default  = 0.0 )
         : SPIBase( name ),
           value(value_default),
-          value_default(value_default)
+          value_default(value_default),
+          important(false)
     {}
 
     virtual ~SPIFloat() {}
@@ -214,6 +218,7 @@ public:
     virtual void clear() {
         SPIBase::clear();
         value = value_default;
+        important = false;
     }
 
     virtual void cascade( const SPIBase* const parent );
@@ -223,6 +228,7 @@ public:
         SPIBase::operator=(rhs);
         value         = rhs.value;
         value_default = rhs.value_default;
+        important = rhs.important;
         return *this;
     }
 
@@ -234,7 +240,7 @@ public:
   // To do: make private
 public:
     float value;
-
+    bool important : 1;
 private:
     float value_default;
 };
@@ -277,13 +283,15 @@ class SPIScale24 : public SPIBase
 public:
     SPIScale24()
         : SPIBase( "anonymous_scale24" ),
-          value(0)
+          value(0),
+          important(false)
     {}
 
     SPIScale24( Glib::ustring const &name, unsigned value = 0, bool inherits = true )
         : SPIBase( name, inherits ),
           value(value),
-          value_default(value)
+          value_default(value),
+          important(false)
     {}
 
     virtual ~SPIScale24()
@@ -296,6 +304,7 @@ public:
     virtual void clear() {
         SPIBase::clear();
         value = value_default;
+        important = false;
     }
 
     virtual void cascade( const SPIBase* const parent );
@@ -305,6 +314,7 @@ public:
         SPIBase::operator=(rhs);
         value         = rhs.value;
         value_default = rhs.value_default;
+        important = rhs.important;
         return *this;
     }
 
@@ -317,7 +327,7 @@ public:
   // To do: make private
 public:
     unsigned value : 24;
-
+    bool important : 1;
 private:
     unsigned value_default : 24;
 };
@@ -348,7 +358,8 @@ public:
         : SPIBase( "anonymous_length" ),
           unit(SP_CSS_UNIT_NONE),
           value(0),
-          computed(0)
+          computed(0),
+          important(false)
     {}
 
     SPILength( Glib::ustring const &name, float value = 0 )
@@ -356,7 +367,8 @@ public:
           unit(SP_CSS_UNIT_NONE),
           value(value),
           computed(value),
-          value_default(value)
+          value_default(value),
+          important(false)
     {}
 
     virtual ~SPILength()
@@ -370,6 +382,7 @@ public:
         SPIBase::clear();
         unit = SP_CSS_UNIT_NONE, value = value_default;
         computed = value_default;
+        important = false;
     }
 
     virtual void cascade( const SPIBase* const parent );
@@ -381,6 +394,7 @@ public:
         value         = rhs.value;
         computed      = rhs.computed;
         value_default = rhs.value_default;
+        important = rhs.important;
         return *this;
     }
 
@@ -394,6 +408,7 @@ public:
     unsigned unit : 4;
     float value;
     float computed;
+    bool important : 1;
 
 private:
     float value_default;
@@ -408,12 +423,14 @@ class SPILengthOrNormal : public SPILength
 public:
     SPILengthOrNormal()
         : SPILength( "anonymous_length" ),
-          normal(true)
+          normal(true),
+          important(false)
     {}
 
     SPILengthOrNormal( Glib::ustring const &name, float value = 0 )
         : SPILength( name, value ),
-          normal(true)
+          normal(true),
+          important(false)
     {}
 
     virtual ~SPILengthOrNormal()
@@ -426,6 +443,7 @@ public:
     virtual void clear() {
         SPILength::clear();
         normal = true;
+        important = false;
     }
 
     virtual void cascade( const SPIBase* const parent );
@@ -434,6 +452,7 @@ public:
     SPILengthOrNormal& operator=(const SPILengthOrNormal& rhs) {
         SPILength::operator=(rhs);
         normal = rhs.normal;
+        important = rhs.important;
         return *this;
     }
 
@@ -445,6 +464,7 @@ public:
   // To do: make private
 public:
     bool normal : 1;
+    bool important : 1;
 };
 
 
@@ -456,12 +476,14 @@ class SPIFontVariationSettings : public SPIBase
 public:
     SPIFontVariationSettings()
         : SPIBase( "anonymous_fontvariationsettings" ),
-          normal(true)
+          normal(true),
+          important(false)
     {}
 
     SPIFontVariationSettings( Glib::ustring const &name )
         : SPIBase( name ),
-          normal(true)
+          normal(true),
+          important(false)
     {}
 
     virtual ~SPIFontVariationSettings()
@@ -474,6 +496,7 @@ public:
     virtual void clear() {
         axes.empty();
         normal = true;
+        important = false;
     }
 
     virtual void cascade( const SPIBase* const parent );
@@ -482,6 +505,7 @@ public:
     SPIFontVariationSettings& operator=(const SPIFontVariationSettings& rhs) {
         axes = rhs.axes;
         normal = rhs.normal;
+        important = rhs.important;
         return *this;
     }
 
@@ -494,6 +518,7 @@ public:
 public:
     bool normal : 1;
     bool inherit : 1;
+    bool important : 1;
     std::map<char*, float> axes;
 };
 
@@ -508,7 +533,8 @@ public:
         SPIBase( "anonymous_enum" ),
         enums( NULL ),
         value(0),
-        computed(0)
+        computed(0),
+        important(false)
     {}
 
     SPIEnum( Glib::ustring const &name, SPStyleEnum const *enums, unsigned value = 0, bool inherits = true ) :
@@ -517,7 +543,8 @@ public:
         value(value),
         computed(value),
         value_default(value),
-        computed_default(value)
+        computed_default(value),
+        important(false)
     {}
 
     // Following is needed for font-weight
@@ -527,7 +554,8 @@ public:
         value(value),
         computed(computed),
         value_default(value),
-        computed_default(computed)
+        computed_default(computed),
+        important(false)
     {}
 
     virtual ~SPIEnum()
@@ -540,6 +568,7 @@ public:
     virtual void clear() {
         SPIBase::clear();
         value = value_default, computed = computed_default;
+        important = false;
     }
 
     virtual void cascade( const SPIBase* const parent );
@@ -551,6 +580,7 @@ public:
         computed         = rhs.computed;
         value_default    = rhs.value_default;
         computed_default = rhs.computed_default;
+        important = rhs.important;
         return *this;
     }
 
@@ -565,6 +595,7 @@ public:
 
     unsigned value : 16;  // 9 bits required for 'font-variant-east-asian'
     unsigned computed: 16;
+    bool important: 1;
 
 private:
     unsigned value_default : 16;
@@ -578,11 +609,13 @@ class SPIEnumBits : public SPIEnum
 
 public:
     SPIEnumBits() :
-        SPIEnum( "anonymous_enumbits", NULL )
+        SPIEnum( "anonymous_enumbits", NULL ),
+        important(false)
     {}
 
     SPIEnumBits( Glib::ustring const &name, SPStyleEnum const *enums, unsigned value = 0, bool inherits = true ) :
-        SPIEnum( name, enums, value, inherits )
+        SPIEnum( name, enums, value, inherits ),
+        important(false)
     {}
 
     virtual ~SPIEnumBits()
@@ -592,7 +625,7 @@ public:
     virtual const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
                                        SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
                                        SPIBase const *const base = NULL ) const;
-
+    bool important : 1;
 };
 
 
@@ -605,11 +638,13 @@ class SPILigatures : public SPIEnum
 
 public:
     SPILigatures() :
-        SPIEnum( "anonymous_enumligatures", NULL )
+        SPIEnum( "anonymous_enumligatures", NULL ),
+        important(false)
     {}
 
     SPILigatures( Glib::ustring const &name, SPStyleEnum const *enums) :
-        SPIEnum( name, enums, SP_CSS_FONT_VARIANT_LIGATURES_NORMAL )
+        SPIEnum( name, enums, SP_CSS_FONT_VARIANT_LIGATURES_NORMAL ),
+        important(false)
     {}
 
     virtual ~SPILigatures()
@@ -619,6 +654,7 @@ public:
     virtual const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
                                        SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
                                        SPIBase const *const base = NULL ) const;
+    bool important : 1;
 };
 
 
@@ -629,11 +665,13 @@ class SPINumeric : public SPIEnum
 
 public:
     SPINumeric() :
-        SPIEnum( "anonymous_enumnumeric", NULL )
+        SPIEnum( "anonymous_enumnumeric", NULL ),
+        important(false)
     {}
 
     SPINumeric( Glib::ustring const &name, SPStyleEnum const *enums) :
-        SPIEnum( name, enums, SP_CSS_FONT_VARIANT_NUMERIC_NORMAL )
+        SPIEnum( name, enums, SP_CSS_FONT_VARIANT_NUMERIC_NORMAL ),
+        important(false)
     {}
 
     virtual ~SPINumeric()
@@ -643,6 +681,8 @@ public:
     virtual const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
                                        SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
                                        SPIBase const *const base = NULL ) const;
+
+    bool important : 1;
 };
 
 
@@ -654,14 +694,16 @@ class SPIString : public SPIBase
 public:
     SPIString()
         : SPIBase( "anonymous_string" ),
-          value(NULL)
+          value(NULL),
+          important(false)
     {}
 
     // TODO probably want to avoid gchar* and c-style strings.
     SPIString( Glib::ustring const &name, gchar const* value_default_in = NULL )
         : SPIBase( name ),
           value(NULL),
-          value_default(value_default_in ? g_strdup(value_default_in) : NULL)
+          value_default(value_default_in ? g_strdup(value_default_in) : NULL),
+          important(false)
     {}
 
     virtual ~SPIString() {
@@ -683,6 +725,7 @@ public:
         g_free(value_default);
         value            = rhs.value ? g_strdup(rhs.value) : NULL;
         value_default    = rhs.value_default ? g_strdup(rhs.value_default) : NULL;
+        important        = rhs.important;
         return *this;
     }
 
@@ -695,6 +738,7 @@ public:
 public:
     gchar *value;
     gchar *value_default;
+    bool important : 1;
 };
 
 /// Color type interal to SPStyle, FIXME Add string value to store SVG named color.
@@ -706,12 +750,14 @@ public:
         : SPIBase( "anonymous_color" ),
           currentcolor(false) {
         value.color.set(0);
+        important = false;
     }
 
     SPIColor( Glib::ustring const &name )
         : SPIBase( name ),
           currentcolor(false) {
         value.color.set(0);
+        important = false;
     }
 
     virtual ~SPIColor()
@@ -724,6 +770,7 @@ public:
     virtual void clear() {
         SPIBase::clear();
         value.color.set(0);
+        important = false;
     }
 
     virtual void cascade( const SPIBase* const parent );
@@ -733,6 +780,7 @@ public:
         SPIBase::operator=(rhs);
         currentcolor = rhs.currentcolor;
         value.color  = rhs.value.color;
+        important = rhs.important;
         return *this;
     }
 
@@ -755,6 +803,7 @@ public:
 
 public:
     bool currentcolor : 1;
+    bool important : 1;
     // FIXME: remove structure and derive SPIPaint from this class.
     struct {
          SPColor color;
@@ -784,7 +833,8 @@ public:
         : SPIBase( "anonymous_paint" ),
           paintOrigin( SP_CSS_PAINT_ORIGIN_NORMAL ),
           colorSet(false),
-          noneSet(false) {
+          noneSet(false),
+          important(false) {
         value.href = NULL;
         clear();
     }
@@ -792,7 +842,8 @@ public:
     SPIPaint( Glib::ustring const &name )
         : SPIBase( name ),
           colorSet(false),
-          noneSet(false) {
+          noneSet(false),
+          important(false) {
         value.href = NULL;
         clear();  // Sets defaults
     }
@@ -815,6 +866,7 @@ public:
         noneSet         = rhs.noneSet;
         value.color     = rhs.value.color;
         value.href      = rhs.value.href;
+        important       = rhs.important;
         return *this;
     }
 
@@ -862,6 +914,7 @@ public:
     SPPaintOrigin paintOrigin : 2;
     bool colorSet : 1;
     bool noneSet : 1;
+    bool important : 1;
     struct {
          SPPaintServerReference *href;
          SPColor color;
@@ -891,7 +944,8 @@ class SPIPaintOrder : public SPIBase
 public:
     SPIPaintOrder()
         : SPIBase( "paint-order" ),
-          value(NULL) {
+          value(NULL),
+          important(false) {
         this->clear();
     }
 
@@ -911,6 +965,7 @@ public:
         }
         g_free(value);
         value = NULL;
+        important = false;
     }
     virtual void cascade( const SPIBase* const parent );
     virtual void merge(   const SPIBase* const parent );
@@ -923,6 +978,7 @@ public:
         }
         g_free(value);
         value            = g_strdup(rhs.value);
+        important        = rhs.important;
         return *this;
     }
 
@@ -937,6 +993,7 @@ public:
     SPPaintOrderLayer layer[PAINT_ORDER_LAYERS];
     bool layer_set[PAINT_ORDER_LAYERS];
     gchar *value;  // Raw string
+    bool important : 1;
 };
 
 
@@ -946,7 +1003,8 @@ class SPIDashArray : public SPIBase
 
 public:
     SPIDashArray()
-        : SPIBase( "stroke-dasharray" )
+        : SPIBase( "stroke-dasharray" ),
+        important(false)
     {}  // Only one instance of SPIDashArray
 
     virtual ~SPIDashArray()
@@ -959,6 +1017,7 @@ public:
     virtual void clear() {
         SPIBase::clear();
         values.clear();
+        important = false;
     }
 
     virtual void cascade( const SPIBase* const parent );
@@ -966,7 +1025,8 @@ public:
 
     SPIDashArray& operator=(const SPIDashArray& rhs) {
         SPIBase::operator=(rhs);
-        values = rhs.values;
+        values    = rhs.values;
+        important = rhs.important;
         return *this;
     }
 
@@ -979,6 +1039,7 @@ public:
   // To do: make private, change double to SVGLength
 public:
     std::vector<double> values;
+    bool important = 1;
 };
 
 /// Filter type internal to SPStyle
@@ -988,7 +1049,8 @@ class SPIFilter : public SPIBase
 public:
     SPIFilter()
         : SPIBase( "filter", false ),
-          href(NULL)
+          href(NULL),
+          important(false)
     {}
 
     virtual ~SPIFilter();
@@ -1002,7 +1064,8 @@ public:
 
     SPIFilter& operator=(const SPIFilter& rhs) {
         SPIBase::operator=(rhs);
-        href = rhs.href;
+        href      = rhs.href;
+        important = rhs.important;
         return *this;
     }
 
@@ -1014,6 +1077,7 @@ public:
   // To do: make private
 public:
     SPFilterReference *href;
+    bool important = 1;
 };
 
 
@@ -1030,7 +1094,8 @@ class SPIFontSize : public SPIBase
 
 public:
     SPIFontSize()
-        : SPIBase( "font-size" ) {
+        : SPIBase( "font-size" ),
+        important(false) {
         this->clear();
     }
 
@@ -1057,6 +1122,7 @@ public:
         literal   = rhs.literal;
         value     = rhs.value;
         computed  = rhs.computed;
+        important = rhs.important;
         return *this;
     }
 
@@ -1067,7 +1133,7 @@ public:
 
 public:
     static float const font_size_default;
-
+    bool important : 1;
   // To do: make private
 public:
     unsigned type : 2;
@@ -1088,7 +1154,8 @@ class SPIFont : public SPIBase
 
 public:
     SPIFont()
-        : SPIBase( "font" )
+        : SPIBase( "font" ),
+          important(false)
     {}
 
     virtual ~SPIFont()
@@ -1100,6 +1167,7 @@ public:
                                        SPIBase const *const base = NULL ) const;
     virtual void clear() {
         SPIBase::clear();
+        important = false;
     }
 
     virtual void cascade( const SPIBase* const /*parent*/ )
@@ -1110,6 +1178,7 @@ public:
 
     SPIFont& operator=(const SPIFont& rhs) {
         SPIBase::operator=(rhs);
+        important = rhs.important;
         return *this;
     }
 
@@ -1117,6 +1186,7 @@ public:
     virtual bool operator!=(const SPIBase& rhs) {
         return !(*this == rhs);
     }
+    bool important : 1;
 };
 
 
@@ -1132,7 +1202,8 @@ class SPIBaselineShift : public SPIBase
 
 public:
     SPIBaselineShift()
-        : SPIBase( "baseline-shift", false ) {
+        : SPIBase( "baseline-shift", false ),
+        important(false) {
         this->clear();
     }
 
@@ -1147,6 +1218,7 @@ public:
         SPIBase::clear();
         type=SP_BASELINE_SHIFT_LITERAL, unit=SP_CSS_UNIT_NONE,
             literal = SP_CSS_BASELINE_SHIFT_BASELINE, value = 0.0, computed = 0.0;
+        important = false;
     }
 
     virtual void cascade( const SPIBase* const parent );
@@ -1159,6 +1231,7 @@ public:
         literal   = rhs.literal;
         value     = rhs.value;
         computed  = rhs.computed;
+        important = rhs.important;
         return *this;
     }
 
@@ -1172,6 +1245,7 @@ public:
 
   // To do: make private
 public:
+    bool important : 1;
     unsigned type : 2;
     unsigned unit : 4;
     unsigned literal: 2;
@@ -1189,7 +1263,8 @@ class SPITextDecorationLine : public SPIBase
 
 public:
     SPITextDecorationLine()
-        : SPIBase( "text-decoration-line" ) {
+        : SPIBase( "text-decoration-line" ),
+          important(false) {
         this->clear();
     }
 
@@ -1202,7 +1277,7 @@ public:
                                        SPIBase const *const base = NULL ) const;
     virtual void clear() {
         SPIBase::clear();
-        underline = false, overline = false, line_through = false, blink = false;
+        underline = false, overline = false, line_through = false, blink = false, important = false;
     }
 
     virtual void cascade( const SPIBase* const parent );
@@ -1214,6 +1289,7 @@ public:
         overline      = rhs.overline;
         line_through  = rhs.line_through;
         blink         = rhs.blink;
+        important     = rhs.important;
         return *this;
     }
 
@@ -1228,6 +1304,7 @@ public:
     bool overline : 1;
     bool line_through : 1;
     bool blink : 1;    // "Conforming user agents are not required to support this value." yay!
+    bool important : 1;
 };
 
 // CSS3 2.2
@@ -1237,7 +1314,8 @@ class SPITextDecorationStyle : public SPIBase
 
 public:
     SPITextDecorationStyle()
-        : SPIBase( "text-decoration-style" ) {
+        : SPIBase( "text-decoration-style" ),
+          important(false) {
         this->clear();
     }
 
@@ -1250,7 +1328,7 @@ public:
                                        SPIBase const *const base = NULL ) const;
     virtual void clear() {
         SPIBase::clear();
-        solid = true, isdouble = false, dotted = false, dashed = false, wavy = false;
+        solid = true, isdouble = false, dotted = false, dashed = false, wavy = false, important = false;
     }
 
     virtual void cascade( const SPIBase* const parent );
@@ -1263,6 +1341,7 @@ public:
         dotted    = rhs.dotted;
         dashed    = rhs.dashed;
         wavy      = rhs.wavy;
+        important = rhs.important;
         return *this;
     }
 
@@ -1278,6 +1357,7 @@ public:
     bool dotted : 1;
     bool dashed : 1;
     bool wavy : 1;
+    bool important : 1;
 };
 
 
@@ -1295,7 +1375,8 @@ class SPITextDecoration : public SPIBase
 public:
     SPITextDecoration()
         : SPIBase( "text-decoration" ),
-          style_td( NULL )
+          style_td( NULL ),
+          important(false)
     {}
 
     virtual ~SPITextDecoration()
@@ -1308,6 +1389,7 @@ public:
     virtual void clear() {
         SPIBase::clear();
         style_td = NULL;
+        important = false;
     }
 
     virtual void cascade( const SPIBase* const parent );
@@ -1315,6 +1397,7 @@ public:
 
     SPITextDecoration& operator=(const SPITextDecoration& rhs) {
         SPIBase::operator=(rhs);
+        important = rhs.important;
         return *this;
     }
 
@@ -1326,6 +1409,7 @@ public:
 
 public:
     SPStyle* style_td;   // Style to be used for drawing CSS2 text decorations 
+    bool important : 1;
 };
 
 
