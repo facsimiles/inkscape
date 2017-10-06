@@ -44,6 +44,8 @@
 #include "svg/css-ostringstream.h"
 #include "util/units.h"
 
+#include  <iostream>
+
 // TODO REMOVE OR MAKE MEMBER FUNCTIONS
 void sp_style_fill_paint_server_ref_changed(  SPObject *old_ref, SPObject *ref, SPStyle *style);
 void sp_style_stroke_paint_server_ref_changed(SPObject *old_ref, SPObject *ref, SPStyle *style);
@@ -76,23 +78,13 @@ void
 SPIFloat::read( gchar const *str ) {
 
     if( !str ) return;
-    important = false;
-    gchar const *has_important_rule = strstr (g_strdup(str), "!important");
-    gchar const *strclean;
-    important = false;
-    if( has_important_rule ) {
-        important = true;
-        Glib::ustring strcleanustring = Glib::ustring(str);
-        strclean = strcleanustring.substr(0, strcleanustring.size()-11).c_str();
-    } else {
-        strclean = g_strdup(str);
-    }
-    if ( !strcmp(strclean, "inherit") ) {
+
+    if ( !strcmp(str, "inherit") ) {
         set = true;
         inherit = true;
     } else {
         gfloat value_tmp;
-        if (sp_svg_number_read_f(strclean, &value_tmp)) {
+        if (sp_svg_number_read_f(str, &value_tmp)) {
             set = true;
             inherit = false;
             value = value_tmp;
@@ -107,14 +99,11 @@ SPIFloat::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase con
     bool dfp = (!inherits || !my_base || (my_base != this)); // Different from parent
     bool src = (style_src_req == style_src || !(flags & SP_STYLE_FLAG_IFSRC));
     if (should_write(flags, set, dfp, src)) {
-        gchar const * important_str = this->important?" !important":"";
         if (this->inherit) {
-            Inkscape::CSSOStringStream os;
-            os << name << ":" << "inherit" << important_str << ";";
-            return os.str();
+            return (name + ":inherit;");
         } else {
             Inkscape::CSSOStringStream os;
-            os << name << ":" << this->value << important_str << ";";
+            os << name << ":" << this->value << important_str() << ";";
             return os.str();
         }
     }
@@ -138,7 +127,6 @@ SPIFloat::merge( const SPIBase* const parent ) {
                 set     = p->set;
                 inherit = p->inherit;
                 value   = p->value;
-                important   = p->important;
             }
         }
     } else {
@@ -149,7 +137,7 @@ SPIFloat::merge( const SPIBase* const parent ) {
 bool
 SPIFloat::operator==(const SPIBase& rhs) {
     if( const SPIFloat* r = dynamic_cast<const SPIFloat*>(&rhs) ) {
-        return (value == r->value && SPIBase::operator==(rhs) && important == r->important);
+        return (value == r->value && SPIBase::operator==(rhs));
     } else {
         return false;
     }
@@ -163,22 +151,13 @@ void
 SPIScale24::read( gchar const *str ) {
 
     if( !str ) return;
-    gchar const *has_important_rule = strstr (g_strdup(str), "!important");
-    gchar const *strclean;
-    important = false;
-    if( has_important_rule ) {
-        important = true;
-        Glib::ustring strcleanustring = Glib::ustring(str);
-        strclean = strcleanustring.substr(0, strcleanustring.size()-11).c_str();
-    } else {
-        strclean = g_strdup(str);
-    }
-    if ( !strcmp(strclean, "inherit") ) {
+
+    if ( !strcmp(str, "inherit") ) {
         set = true;
         inherit = true;
     } else {
         gfloat value_in;
-        if (sp_svg_number_read_f(strclean, &value_in)) {
+        if (sp_svg_number_read_f(str, &value_in)) {
             set = true;
             inherit = false;
             value_in = CLAMP(value_in, 0.0, 1.0);
@@ -194,14 +173,11 @@ SPIScale24::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase c
     bool dfp = (!inherits || !my_base || (my_base != this)); // Different from parent
     bool src = (style_src_req == style_src || !(flags & SP_STYLE_FLAG_IFSRC));
     if (should_write(flags, set, dfp, src)) {
-        gchar const * important_str = this->important?" !important":"";
         if (this->inherit) {
-            Inkscape::CSSOStringStream os;
-            os << name << ":" << "inherit" << important_str << ";";
-            return os.str();
+            return (name + ":inherit;");
         } else {
             Inkscape::CSSOStringStream os;
-            os << name << ":" << SP_SCALE24_TO_FLOAT(this->value) << important_str << ";";
+            os << name << ":" << SP_SCALE24_TO_FLOAT(this->value) << important_str() << ";";
             return os.str();
         }
     }
@@ -225,7 +201,6 @@ SPIScale24::merge( const SPIBase* const parent ) {
                 set     = p->set;
                 inherit = p->inherit;
                 value   = p->value;
-                important   = p->important;
             }
         } else {
             // Needed only for 'opacity' which does not inherit. See comment at bottom of file.
@@ -233,12 +208,8 @@ SPIScale24::merge( const SPIBase* const parent ) {
                 std::cerr << "SPIScale24::merge: unhandled property: " << name << std::endl;
             if( !set || (!inherit && value == SP_SCALE24_MAX) ) {
                 value = p->value;
-                important = p->important;
             } else {
-                if( inherit ) {
-                    value = p->value; // Insures child is up-to-date
-                    important = p->important;
-                }
+                if( inherit ) value = p->value; // Insures child is up-to-date
                 value = SP_SCALE24_MUL( value, p->value );
                 inherit = (inherit && p->inherit && (p->value == 0 || p->value == SP_SCALE24_MAX) );
                 set = (inherit || value < SP_SCALE24_MAX);
@@ -252,7 +223,7 @@ SPIScale24::merge( const SPIBase* const parent ) {
 bool
 SPIScale24::operator==(const SPIBase& rhs) {
     if( const SPIScale24* r = dynamic_cast<const SPIScale24*>(&rhs) ) {
-        return (value == r->value && SPIBase::operator==(rhs) && important == r->important);
+        return (value == r->value && SPIBase::operator==(rhs));
     } else {
         return false;
     }
@@ -266,17 +237,8 @@ void
 SPILength::read( gchar const *str ) {
 
     if( !str ) return;
-    gchar const *has_important_rule = strstr (g_strdup(str), "!important");
-    gchar const *strclean;
-    important = false;
-    if( has_important_rule ) {
-        important = true;
-        Glib::ustring strcleanustring = Glib::ustring(str);
-        strclean = strcleanustring.substr(0, strcleanustring.size()-11).c_str();
-    } else {
-        strclean = g_strdup(str);
-    }
-    if (!strcmp(strclean, "inherit")) {
+
+    if (!strcmp(str, "inherit")) {
         set = true;
         inherit = true;
         unit = SP_CSS_UNIT_NONE;
@@ -285,11 +247,11 @@ SPILength::read( gchar const *str ) {
         gdouble value_tmp;
         gchar *e;
         /** \todo fixme: Move this to standard place (Lauris) */
-        value_tmp = g_ascii_strtod(strclean, &e);
+        value_tmp = g_ascii_strtod(str, &e);
         if ( !IS_FINITE(value_tmp) ) { // fix for bug lp:935157
             return;
         }
-        if ((gchar const *) e != strclean) {
+        if ((gchar const *) e != str) {
 
             value = value_tmp;
             if (!*e) {
@@ -361,48 +323,46 @@ SPILength::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase co
     bool dfp = (!inherits || !my_base || (my_base != this)); // Different from parent
     bool src = (style_src_req == style_src || !(flags & SP_STYLE_FLAG_IFSRC));
     if (should_write(flags, set, dfp, src)) {
-        gchar const * important_str = this->important?" !important":"";
         if (this->inherit) {
-            Inkscape::CSSOStringStream os;
-            os << name << ":" << "inherit" << important_str << ";";
-            return os.str();
+            return (name + ":inherit" + important_str() + ";");
         } else {
             Inkscape::CSSOStringStream os;
             switch (this->unit) {
                 case SP_CSS_UNIT_NONE:
-                    os << name << ":" << this->computed  << important_str << ";";
+                    os << name << ":" << this->computed << "";
                     break;
                 case SP_CSS_UNIT_PX:
-                    os << name << ":" << this->computed << "px" << important_str << ";";
+                    os << name << ":" << this->computed << "px";
                     break;
                 case SP_CSS_UNIT_PT:
-                    os << name << ":" << Inkscape::Util::Quantity::convert(this->computed, "px", "pt") << "pt" << important_str << ";";
+                    os << name << ":" << Inkscape::Util::Quantity::convert(this->computed, "px", "pt") << "pt";
                     break;
                 case SP_CSS_UNIT_PC:
-                    os << name << ":" << Inkscape::Util::Quantity::convert(this->computed, "px", "pc") << "pc" << important_str << ";";
+                    os << name << ":" << Inkscape::Util::Quantity::convert(this->computed, "px", "pc") << "pc";
                     break;
                 case SP_CSS_UNIT_MM:
-                    os << name << ":" << Inkscape::Util::Quantity::convert(this->computed, "px", "mm") << "mm" << important_str << ";";
+                    os << name << ":" << Inkscape::Util::Quantity::convert(this->computed, "px", "mm") << "mm";
                     break;
                 case SP_CSS_UNIT_CM:
-                    os << name << ":" << Inkscape::Util::Quantity::convert(this->computed, "px", "cm") << "cm" << important_str << ";";
+                    os << name << ":" << Inkscape::Util::Quantity::convert(this->computed, "px", "cm") << "cm";
                     break;
                 case SP_CSS_UNIT_IN:
-                    os << name << ":" << Inkscape::Util::Quantity::convert(this->computed, "px", "in") << "in" << important_str << ";";
+                    os << name << ":" << Inkscape::Util::Quantity::convert(this->computed, "px", "in") << "in";
                     break;
                 case SP_CSS_UNIT_EM:
-                    os << name << ":" << this->value << "em" << important_str << ";";
+                    os << name << ":" << this->value << "em";
                     break;
                 case SP_CSS_UNIT_EX:
-                    os << name << ":" << this->value << "ex" << important_str << ";";
+                    os << name << ":" << this->value << "ex";
                     break;
                 case SP_CSS_UNIT_PERCENT:
-                    os << name << ":" << (this->value * 100.0) << "%" << important_str << ";";
+                    os << name << ":" << (this->value * 100.0) << "%";
                     break;
                 default:
                     /* Invalid */
                     break;
             }
+            os << important_str() << ";";
             return os.str();
         }
     }
@@ -416,7 +376,6 @@ SPILength::cascade( const SPIBase* const parent ) {
             unit     = p->unit;
             value    = p->value;
             computed = p->computed;
-            important = p->important;
         } else {
             // Recalculate based on new font-size, font-family inherited from parent
             double const em = style->font_size.computed;
@@ -440,12 +399,11 @@ SPILength::merge( const SPIBase* const parent ) {
     if( const SPILength* p = dynamic_cast<const SPILength*>(parent) ) {
         if( inherits ) {
             if( (!set || inherit) && p->set && !(p->inherit) ) {
-                set       = p->set;
-                inherit   = p->inherit;
-                unit      = p->unit;
-                value     = p->value;
-                important = p->important;
-                computed  = p->computed;
+                set      = p->set;
+                inherit  = p->inherit;
+                unit     = p->unit;
+                value    = p->value;
+                computed = p->computed;
 
                 // Fix up so values are correct
                 switch (p->unit) {
@@ -487,7 +445,7 @@ SPILength::operator==(const SPIBase& rhs) {
         if (r->unit == SP_CSS_UNIT_EX)      return false;
         if (r->unit == SP_CSS_UNIT_PERCENT) return false;
 
-        return (computed == r->computed && important == r->important );
+        return (computed == r->computed );
     } else {
         return false;
     }
@@ -501,25 +459,15 @@ void
 SPILengthOrNormal::read( gchar const *str ) {
 
     if( !str ) return;
-    important = false;
-    gchar const *has_important_rule = strstr (g_strdup(str), "!important");
-    gchar const *strclean;
-    important = false;
-    if( has_important_rule ) {
-        important = true;
-        Glib::ustring strcleanustring = Glib::ustring(str);
-        strclean = strcleanustring.substr(0, strcleanustring.size()-11).c_str();
-    } else {
-        strclean = g_strdup(str);
-    }
-    if ( !strcmp(strclean, "normal") ) {
+
+    if ( !strcmp(str, "normal") ) {
         set = true;
         inherit = false;
         unit = SP_CSS_UNIT_NONE;
         value = computed = 0.0;
         normal = true;
     } else {
-        SPILength::read( strclean );
+        SPILength::read( str );
         normal = false;
     }
 };
@@ -531,14 +479,10 @@ SPILengthOrNormal::write( guint const flags, SPStyleSrc const &style_src_req, SP
     bool dfp = (!inherits || !my_base || (my_base != this)); // Different from parent
     bool src = (style_src_req == style_src || !(flags & SP_STYLE_FLAG_IFSRC));
     if (should_write(flags, set, dfp, src)) {
-        gchar const * important_str = this->important?" !important":"";
         if (this->normal) {
-            Inkscape::CSSOStringStream os;
-            os << name << ":" << "normal" << important_str << ";";
-            return os.str();
+            return (name + ":normal" + important_str() + ";");
         } else {
-            Glib::ustring spilenght = SPILength::write(flags, style_src_req, base);
-            return spilenght.substr(0, spilenght.size()-1) + Glib::ustring(important_str) + Glib::ustring(";");
+            return SPILength::write(flags, style_src_req, base);
         }
     }
     return Glib::ustring("");
@@ -549,7 +493,6 @@ SPILengthOrNormal::cascade( const SPIBase* const parent ) {
     if( const SPILengthOrNormal* p = dynamic_cast<const SPILengthOrNormal*>(parent) ) {
         if( (inherits && !set) || inherit ) {
             normal   = p->normal;
-            important   = p->important;
         }
         SPILength::cascade( parent );
     } else {
@@ -563,7 +506,6 @@ SPILengthOrNormal::merge( const SPIBase* const parent ) {
         if( inherits ) {
             if( (!set || inherit) && p->set && !(p->inherit) ) {
                 normal = p->normal;
-                important = p->important;
                 SPILength::merge( parent );
             }
         }
@@ -573,7 +515,7 @@ SPILengthOrNormal::merge( const SPIBase* const parent ) {
 bool
 SPILengthOrNormal::operator==(const SPIBase& rhs) {
     if( const SPILengthOrNormal* r = dynamic_cast<const SPILengthOrNormal*>(&rhs) ) {
-        if( (normal && r->normal) && (important == r->important) ) { return true; }
+        if( normal && r->normal ) { return true; }
         if( normal != r->normal ) { return false; }
         return SPILength::operator==(rhs);
     } else {
@@ -588,17 +530,8 @@ void
 SPIFontVariationSettings::read( gchar const *str ) {
 
     if( !str ) return;
-    gchar const *has_important_rule = strstr (g_strdup(str), "!important");
-    gchar const *strclean;
-    important = false;
-    if( has_important_rule ) {
-        important = true;
-        Glib::ustring strcleanustring = Glib::ustring(str);
-        strclean = strcleanustring.substr(0, strcleanustring.size()-11).c_str();
-    } else {
-        strclean = g_strdup(str);
-    }
-    if ( !strcmp(strclean, "normal") ) {
+
+    if ( !strcmp(str, "normal") ) {
         set = true;
         inherit = false;
         normal = true;
@@ -606,7 +539,7 @@ SPIFontVariationSettings::read( gchar const *str ) {
         return;
     }
 
-    gchar ** strarray = g_strsplit(strclean, " ", 0);
+    gchar ** strarray = g_strsplit(str, " ", 0);
     unsigned int i=0;
     while (strarray[i]){
         char axis_name[5];
@@ -640,18 +573,15 @@ SPIFontVariationSettings::write( guint const flags, SPStyleSrc const &style_src_
     bool dfp = (!inherits || !my_base || (my_base != this)); // Different from parent
     bool src = (style_src_req == style_src || !(flags & SP_STYLE_FLAG_IFSRC));
     if (should_write(flags, set, dfp, src)) {
-        gchar const * important_str = this->important?" !important":"";
         if (this->normal) {
-            Inkscape::CSSOStringStream os;
-            os << name << ":" << "normal" << important_str << ";";
-            return os.str();
+            return (name + ":normal" + important_str() + ";");
         } else {
             Inkscape::CSSOStringStream os;
             for (std::map<char*,float>::const_iterator it=axes.begin(); it!=axes.end(); ++it){
                 os << "\"" << it->first << "\" " << it->second << " ";
                 // FIXME: can we avoid the last space char ?
             }
-            os << important_str;
+            os << important_str() << ";";
             return os.str();
         }
     }
@@ -671,7 +601,7 @@ SPIFontVariationSettings::merge( const SPIBase* const parent ) {
 bool
 SPIFontVariationSettings::operator==(const SPIBase& rhs) {
     if( const SPIFontVariationSettings* r = dynamic_cast<const SPIFontVariationSettings*>(&rhs) ) {
-        if( (normal && r->normal) && (important == r->important) ) { return true; }
+        if( normal && r->normal ) { return true; }
         if( normal != r->normal ) { return false; }
         return axes == r->axes;
     } else {
@@ -685,22 +615,13 @@ void
 SPIEnum::read( gchar const *str ) {
 
     if( !str ) return;
-    gchar const *has_important_rule = strstr (g_strdup(str), "!important");
-    gchar const *strclean;
-    important = false;
-    if( has_important_rule ) {
-        important = true;
-        Glib::ustring strcleanustring = Glib::ustring(str);
-        strclean = strcleanustring.substr(0, strcleanustring.size()-11).c_str();
-    } else {
-        strclean = g_strdup(str);
-    }
-    if( !strcmp(strclean, "inherit") ) {
+
+    if( !strcmp(str, "inherit") ) {
         set = true;
         inherit = true;
     } else {
         for (unsigned i = 0; enums[i].key; i++) {
-            if (!strcmp(strclean, enums[i].key)) {
+            if (!strcmp(str, enums[i].key)) {
                 set = true;
                 inherit = false;
                 value = enums[i].value;
@@ -727,15 +648,12 @@ SPIEnum::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase cons
     bool dfp = (!inherits || !my_base || (my_base != this)); // Different from parent
     bool src = (style_src_req == style_src || !(flags & SP_STYLE_FLAG_IFSRC));
     if (should_write(flags, set, dfp, src)) {
-        gchar const * important_str = this->important?" !important":"";
         if (this->inherit) {
-            Inkscape::CSSOStringStream os;
-            os << name << ":" << "inherit" << important_str << ";";
-            return os.str();
+            return (name + ":inherit" + important_str() + ";");
         }
         for (unsigned i = 0; enums[i].key; ++i) {
             if (enums[i].value == static_cast< gint > (this->value) ) {
-                return (name + ":" + enums[i].key + important_str + ";");
+                return (name + ":" + enums[i].key + important_str() + ";");
             }
         }
     }
@@ -747,7 +665,6 @@ SPIEnum::cascade( const SPIBase* const parent ) {
     if( const SPIEnum* p = dynamic_cast<const SPIEnum*>(parent) ) {
         if( inherits && (!set || inherit) ) {
             computed = p->computed;
-            important = p->important;
         } else {
             if( name.compare("font-stretch" ) == 0 ) {
                 unsigned const parent_val = p->computed;
@@ -830,7 +747,7 @@ SPIEnum::merge( const SPIBase* const parent ) {
 bool
 SPIEnum::operator==(const SPIBase& rhs) {
     if( const SPIEnum* r = dynamic_cast<const SPIEnum*>(&rhs) ) {
-        return (computed == r->computed && important == r->important && SPIBase::operator==(rhs));
+        return (computed == r->computed && SPIBase::operator==(rhs));
     } else {
         return false;
     }
@@ -843,23 +760,13 @@ void
 SPIEnumBits::read( gchar const *str ) {
 
     if( !str ) return;
-    gchar const *has_important_rule = strstr (g_strdup(str), "!important");
-    gchar const *strclean;
-    important = false;
-    if( has_important_rule ) {
-        important = true;
-        Glib::ustring strcleanustring = Glib::ustring(str);
-        strclean = strcleanustring.substr(0, strcleanustring.size()-11).c_str();
-    } else {
-        strclean = g_strdup(str);
-    }
     std::cout << "SPIEnumBits: " << name << ": " << str << std::endl;
-    if( !strcmp(strclean, "inherit") ) {
+    if( !strcmp(str, "inherit") ) {
         set = true;
         inherit = true;
     } else {
         for (unsigned i = 0; enums[i].key; i++) {
-            if (!strcmp(strclean, enums[i].key)) {
+            if (!strcmp(str, enums[i].key)) {
                 std::cout << "  found: " << enums[i].key << std::endl;
                 set = true;
                 inherit = false;
@@ -878,16 +785,11 @@ SPIEnumBits::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase 
     bool dfp = (!inherits || !my_base || (my_base != this)); // Different from parent
     bool src = (style_src_req == style_src || !(flags & SP_STYLE_FLAG_IFSRC));
     if (should_write(flags, set, dfp, src)) {
-        gchar const * important_str = this->important?" !important":"";
         if (this->inherit) {
-            Inkscape::CSSOStringStream os;
-            os << name << ":" << "inherit" << important_str << ";";
-            return os.str();
+            return (name + ":inherit" + important_str() + ";");
         }
-        if (this->value == 0) {
-            Inkscape::CSSOStringStream os;
-            os << name << ":" << "normal" << important_str << ";";
-            return os.str();
+        if (this->value == 0 ) {
+            return (name + ":normal" + important_str() + ";");
         }
         Glib::ustring return_string = name + ":";
         unsigned j = 1;
@@ -898,7 +800,9 @@ SPIEnumBits::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase 
             }
             j *= 2;
         }
-        return return_string + important_str;
+        return_string += important_str();
+        return_string += ";";
+        return return_string;
     }
     return Glib::ustring("");
 }
@@ -910,31 +814,22 @@ void
 SPILigatures::read( gchar const *str ) {
 
     if( !str ) return;
-    gchar const *has_important_rule = strstr (g_strdup(str), "!important");
-    gchar const *strclean;
-    important = false;
-    if( has_important_rule ) {
-        important = true;
-        Glib::ustring strcleanustring = Glib::ustring(str);
-        strclean = strcleanustring.substr(0, strcleanustring.size()-11).c_str();
-    } else {
-        strclean = g_strdup(str);
-    }
+
     value = SP_CSS_FONT_VARIANT_LIGATURES_NORMAL;
-    if( !strcmp(strclean, "inherit") ) {
+    if( !strcmp(str, "inherit") ) {
         set = true;
         inherit = true;
-    } else if (!strcmp(strclean, "normal" )) {
+    } else if (!strcmp(str, "normal" )) {
         // Defaults for TrueType
         inherit = false;
         set = true;
-    } else if (!strcmp(strclean, "none" )) {
+    } else if (!strcmp(str, "none" )) {
         value = SP_CSS_FONT_VARIANT_LIGATURES_NONE;
         inherit = false;
         set = true;
     } else {
         // We need to parse in order
-        std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("\\s+", strclean );
+        std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("\\s+", str );
         for( unsigned i = 0; i < tokens.size(); ++i ) {
             for (unsigned j = 0; enums[j].key; ++j ) {
                 if (tokens[i].compare( enums[j].key ) == 0 ) {
@@ -961,21 +856,14 @@ SPILigatures::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase
     bool dfp = (!inherits || !my_base || (my_base != this)); // Different from parent
     bool src = (style_src_req == style_src || !(flags & SP_STYLE_FLAG_IFSRC));
     if (should_write(flags, set, dfp, src)) {
-        gchar const * important_str = this->important?" !important":"";
         if (this->inherit) {
-            Inkscape::CSSOStringStream os;
-            os << name << ":" << "inherit" << important_str << ";";
-            return os.str();
+            return (name + ":inherit;");
         }
-        if (value == SP_CSS_FONT_VARIANT_LIGATURES_NONE) {
-            Inkscape::CSSOStringStream os;
-            os << name << ":" << "none" << important_str << ";";
-            return os.str();
+        if (value == SP_CSS_FONT_VARIANT_LIGATURES_NONE ) {
+                return (name + ":none;");
         }
-        if (value == SP_CSS_FONT_VARIANT_LIGATURES_NORMAL) {
-            Inkscape::CSSOStringStream os;
-            os << name << ":" << "normal" << important_str << ";";
-            return os.str();
+        if (value == SP_CSS_FONT_VARIANT_LIGATURES_NORMAL ) {
+                return (name + ":normal;");
         }
 
         Glib::ustring return_string = name + ":";
@@ -988,7 +876,7 @@ SPILigatures::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase
         if ( !(value & SP_CSS_FONT_VARIANT_LIGATURES_CONTEXTUAL) )
             return_string += "no-contextual ";
         return_string.erase( return_string.size() - 1 );
-        return_string += important_str;
+        return_string += important_str();
         return_string += ";";
         return return_string;
     }
@@ -1002,27 +890,18 @@ void
 SPINumeric::read( gchar const *str ) {
 
     if( !str ) return;
-    gchar const *has_important_rule = strstr (g_strdup(str), "!important");
-    gchar const *strclean;
-    important = false;
-    if( has_important_rule ) {
-        important = true;
-        Glib::ustring strcleanustring = Glib::ustring(str);
-        strclean = strcleanustring.substr(0, strcleanustring.size()-11).c_str();
-    } else {
-        strclean = g_strdup(str);
-    }
+
     value = SP_CSS_FONT_VARIANT_NUMERIC_NORMAL;
-    if( !strcmp(strclean, "inherit") ) {
+    if( !strcmp(str, "inherit") ) {
         set = true;
         inherit = true;
-    } else if (!strcmp(strclean, "normal" )) {
+    } else if (!strcmp(str, "normal" )) {
         // Defaults for TrueType
         inherit = false;
         set = true;
     } else {
         // We need to parse in order
-        std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("\\s+", strclean );
+        std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("\\s+", str );
         for( unsigned i = 0; i < tokens.size(); ++i ) {
             for (unsigned j = 0; enums[j].key; ++j ) {
                 if (tokens[i].compare( enums[j].key ) == 0 ) {
@@ -1077,16 +956,11 @@ SPINumeric::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase c
     bool dfp = (!inherits || !my_base || (my_base != this)); // Different from parent
     bool src = (style_src_req == style_src || !(flags & SP_STYLE_FLAG_IFSRC));
     if (should_write(flags, set, dfp, src)) {
-        gchar const * important_str = this->important?" !important":"";
         if (this->inherit) {
-            Inkscape::CSSOStringStream os;
-            os << name << ":" << "inherit" << important_str << ";";
-            return os.str();
+            return (name + ":inherit;");
         }
-        if (value == SP_CSS_FONT_VARIANT_NUMERIC_NORMAL) {
-            Inkscape::CSSOStringStream os;
-            os << name << ":" << "normal" << important_str << ";";
-            return os.str();
+        if (value == SP_CSS_FONT_VARIANT_NUMERIC_NORMAL ) {
+                return (name + ":normal;");
         }
 
         Glib::ustring return_string = name + ":";
@@ -1107,7 +981,6 @@ SPINumeric::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase c
         if ( value & SP_CSS_FONT_VARIANT_NUMERIC_SLASHED_ZERO )
             return_string += "slashed-zero ";
         return_string.erase( return_string.size() - 1 );
-        return_string += important_str;
         return_string += ";";
         return return_string;
     }
@@ -1121,17 +994,8 @@ void
 SPIString::read( gchar const *str ) {
 
     if( !str ) return;
-    gchar const *has_important_rule = strstr (g_strdup(str), "!important");
-    gchar const *strclean;
-    important = false;
-    if( has_important_rule ) {
-        important = true;
-        Glib::ustring strcleanustring = Glib::ustring(str);
-        strclean = strcleanustring.substr(0, strcleanustring.size()-11).c_str();
-    } else {
-        strclean = g_strdup(str);
-    }
-    if (!strcmp(strclean, "inherit")) {
+
+    if (!strcmp(str, "inherit")) {
         set = true;
         inherit = true;
         value = NULL;
@@ -1139,7 +1003,7 @@ SPIString::read( gchar const *str ) {
         set = true;
         inherit = false;
 
-        Glib::ustring str_temp(strclean);
+        Glib::ustring str_temp(str);
         if( name.compare( "font-family" ) == 0 ) {
             // Family names may be quoted in CSS, internally we use unquoted names.
             css_font_family_unquote( str_temp );
@@ -1161,23 +1025,20 @@ SPIString::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase co
     bool dfp = (!inherits || !my_base || (my_base != this) ); // Different from parent
     bool src = (style_src_req == style_src || !(flags & SP_STYLE_FLAG_IFSRC));
     if (should_write(flags, set, dfp, src)) {
-        gchar const * important_str = this->important?" !important":"";
         if (this->inherit) {
-            Inkscape::CSSOStringStream os;
-            os << name << ":" << "inherit" << important_str << ";";
-            return os.str();
+            return (name + ":inherit" + important_str() + ";");
         } else {
             if( this->value ) {
                 if( name.compare( "font-family" ) == 0 ) {
                     Glib::ustring font_family( this->value );
                     css_font_family_quote( font_family );
-                    return (name + ":" + font_family + important_str + ";");
+                    return (name + ":" + font_family + ";");
                 } else if( name.compare( "-inkscape-font-specification" ) == 0 ) {
                     Glib::ustring font_spec( this->value );
                     css_quote( font_spec );
-                    return (name + ":" + font_spec + important_str +";");
+                    return (name + ":" + font_spec + important_str() + ";");
                 } else {
-                    return (name + ":" + this->value + important_str + ";");
+                    return (name + ":" + this->value + important_str() + ";");
                 }
             }
         }
@@ -1198,7 +1059,6 @@ SPIString::cascade( const SPIBase* const parent ) {
     if( const SPIString* p = dynamic_cast<const SPIString*>(parent) ) {
         if( inherits && (!set || inherit) ) {
             g_free(value);
-            important = p->important;
             value = g_strdup(p->value);
         }
     } else {
@@ -1213,7 +1073,6 @@ SPIString::merge( const SPIBase* const parent ) {
             if( (!set || inherit) && p->set && !(p->inherit) ) {
                 set     = p->set;
                 inherit = p->inherit;
-                important = p->important;
                 g_free(value);
                 value = g_strdup(p->value);
             }
@@ -1227,7 +1086,7 @@ SPIString::operator==(const SPIBase& rhs) {
         if( value == NULL && r->value == NULL ) return (SPIBase::operator==(rhs));
         if( value == NULL || r->value == NULL ) return false;
 
-        return (important = r->important && strcmp(value, r->value) == 0 && SPIBase::operator==(rhs));
+        return (strcmp(value, r->value) == 0 && SPIBase::operator==(rhs));
     } else {
         return false;
     }
@@ -1248,16 +1107,6 @@ void SPIColor::read( gchar const *str ) {
     set = false;
     inherit = false;
     currentcolor = false;
-    gchar const *has_important_rule = strstr (g_strdup(str), "!important");
-    gchar const *strclean;
-    important = false;
-    if( has_important_rule ) {
-        important = true;
-        Glib::ustring strcleanustring = Glib::ustring(str);
-        strclean = strcleanustring.substr(0, strcleanustring.size()-11).c_str();
-    } else {
-        strclean = g_strdup(str);
-    }
     if ( !strcmp(str, "inherit") ) {
         set = true;
         inherit = true;
@@ -1270,7 +1119,7 @@ void SPIColor::read( gchar const *str ) {
             setColor( style->color.value.color );
         }
     } else {
-        guint32 const rgb0 = sp_svg_read_color( strclean, 0xff);
+        guint32 const rgb0 = sp_svg_read_color(str, 0xff);
         if (rgb0 != 0xff) {
             setColor(rgb0);
             set = true;
@@ -1285,7 +1134,6 @@ SPIColor::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase con
     bool dfp = (!inherits || !my_base || (my_base != this)); // Different from parent
     bool src = (style_src_req == style_src || !(flags & SP_STYLE_FLAG_IFSRC));
     if (should_write(flags, set, dfp, src)) {
-        gchar const * important_str = this->important?" !important":"";
         CSSOStringStream css;
 
         if (this->currentcolor) {
@@ -1313,8 +1161,7 @@ SPIColor::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase con
         }
 
         if ( !css.str().empty() ) {
-            css << important_str;
-            return (name + ":" + css.str() + ";");
+            return (name + ":" + css.str() + important_str() + ";");
         }
     }
 
@@ -1345,7 +1192,6 @@ SPIColor::merge( const SPIBase* const parent ) {
                 inherit       = p->inherit;
                 currentcolor  = p->currentcolor;
                 value.color   = p->value.color;
-                important     = p->important;
             }
         }
     }
@@ -1356,7 +1202,6 @@ SPIColor::operator==(const SPIBase& rhs) {
     if( const SPIColor* r = dynamic_cast<const SPIColor*>(&rhs) ) {
 
         if ( (this->currentcolor    != r->currentcolor    ) ||
-             (this->important       != r->important       ) ||
              (this->value.color     != r->value.color     ) ||
              (this->value.color.icc != r->value.color.icc ) ||
              (this->value.color.icc && r->value.color.icc &&
@@ -1410,31 +1255,22 @@ SPIPaint::read( gchar const *str ) {
     if(!str ) return;
 
     reset( false ); // Do not init
-    gchar const *has_important_rule = strstr (g_strdup(str), "!important");
-    gchar const *strclean;
-    important = false;
-    if( has_important_rule ) {
-        important = true;
-        Glib::ustring strcleanustring = Glib::ustring(str);
-        strclean = strcleanustring.substr(0, strcleanustring.size()-11).c_str();
-    } else {
-        strclean = g_strdup(str);
-    }
+    std::cout <<  str << important_str() << "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb" << std::endl;
     // Is this necessary?
-    while (g_ascii_isspace(*strclean)) {
-        ++strclean;
+    while (g_ascii_isspace(*str)) {
+        ++str;
     }
 
-    if (streq(strclean, "inherit")) {
+    if (streq(str, "inherit")) {
         set = true;
         inherit = true;
     } else {
         // Read any URL first. The other values can be stand-alone or backup to the URL.
 
-        if ( strneq(strclean, "url", 3) ) {
+        if ( strneq(str, "url", 3) ) {
 
             // FIXME: THE FOLLOWING CODE SHOULD BE PUT IN A PRIVATE FUNCTION FOR REUSE
-            gchar *uri = extract_uri( strclean, &strclean );
+            gchar *uri = extract_uri( str, &str );
             if(uri == NULL || uri[0] == '\0') {
                 std::cerr << "SPIPaint::read: url is empty or invalid" << std::endl;
             } else if (!style ) {
@@ -1461,11 +1297,11 @@ SPIPaint::read( gchar const *str ) {
             g_free( uri );
         }
 
-        while ( g_ascii_isspace(*strclean) ) {
-            ++strclean;
+        while ( g_ascii_isspace(*str) ) {
+            ++str;
         }
 
-        if (streq(strclean, "currentColor")) {
+        if (streq(str, "currentColor")) {
             set = true;
             paintOrigin = SP_CSS_PAINT_ORIGIN_CURRENT_COLOR;
             if (style) {
@@ -1478,27 +1314,27 @@ SPIPaint::read( gchar const *str ) {
                 std::cerr << "SPIPaint::read(): value is 'currentColor' but 'color' not available." << std::endl;
                 setColor( 0 );
             }
-        } else if (streq(strclean, "context-fill")) {
+        } else if (streq(str, "context-fill")) {
             set = true;
             paintOrigin = SP_CSS_PAINT_ORIGIN_CONTEXT_FILL;
-        } else if (streq(strclean, "context-stroke")) {
+        } else if (streq(str, "context-stroke")) {
             set = true;
             paintOrigin = SP_CSS_PAINT_ORIGIN_CONTEXT_STROKE;
-        } else if (streq(strclean, "none")) {
+        } else if (streq(str, "none")) {
             set = true;
             noneSet = true;
         } else {
-            guint32 const rgb0 = sp_svg_read_color(strclean, 0xff);
+            guint32 const rgb0 = sp_svg_read_color(str, &str, 0xff);
             if (rgb0 != 0xff) {
                 setColor( rgb0 );
                 set = true;
 
-                while (g_ascii_isspace(*strclean)) {
+                while (g_ascii_isspace(*str)) {
                     ++str;
                 }
-                if (strneq(strclean, "icc-color(", 10)) {
+                if (strneq(str, "icc-color(", 10)) {
                     SVGICCColor* tmp = new SVGICCColor();
-                    if ( ! sp_svg_read_icc_color( strclean, &strclean, tmp ) ) {
+                    if ( ! sp_svg_read_icc_color( str, &str, tmp ) ) {
                         delete tmp;
                         tmp = 0;
                     }
@@ -1525,7 +1361,6 @@ SPIPaint::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase con
     bool dfp = (!inherits || !my_base || (my_base != this)); // Different from parent
     bool src = (style_src_req == style_src || !(flags & SP_STYLE_FLAG_IFSRC));
     if (should_write(flags, set, dfp, src)) {
-        gchar const * important_str = this->important?" !important":"";
         CSSOStringStream css;
 
         if (this->inherit) {
@@ -1591,8 +1426,8 @@ SPIPaint::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase con
         }
 
         if ( !css.str().empty() ) {
-            css << important_str;
-            return (name + ":" + css.str() + ";");
+            std::cout << name << ":" << css.str() << important_str() << ";" << "aaaaaaaaaaaaaaaaaaaaaaaaa" << std::endl;
+            return (name + ":" + css.str() + important_str() + ";");
         }
     }
 
@@ -1677,9 +1512,8 @@ SPIPaint::merge( const SPIBase* const parent ) {
         //    if( inherits ) {  Paint always inherits
         if( (!set || inherit) && p->set && !(p->inherit) ) {
             this->cascade( parent );  // Must call before setting 'set'
-            set       = p->set;
-            inherit   = p->inherit;
-            important = p->important;
+            set     = p->set;
+            inherit = p->inherit;
         }
     }
 }
@@ -1690,7 +1524,6 @@ SPIPaint::operator==(const SPIBase& rhs) {
     if( const SPIPaint* r = dynamic_cast<const SPIPaint*>(&rhs) ) {
 
         if ( (this->isColor()       != r->isColor()       )  ||
-             (this->important       != r->important       )  ||
              (this->isPaintserver() != r->isPaintserver() )  ||
              (this->paintOrigin     != r->paintOrigin     ) ) {
             return false;
@@ -1732,22 +1565,13 @@ SPIPaintOrder::read( gchar const *str ) {
     g_free(value);
     set = false;
     inherit = false;
-    gchar const *has_important_rule = strstr (g_strdup(str), "!important");
-    gchar const *strclean;
-    important = false;
-    if( has_important_rule ) {
-        important = true;
-        Glib::ustring strcleanustring = Glib::ustring(str);
-        strclean = strcleanustring.substr(0, strcleanustring.size()-11).c_str();
-    } else {
-        strclean = g_strdup(str);
-    }
-    if (!strcmp(strclean, "inherit")) {
+
+    if (!strcmp(str, "inherit")) {
         set = true;
         inherit = true;
     } else {
         set = true;
-        value = g_strdup(strclean);
+        value = g_strdup(str);
 
         if (!strcmp(value, "normal")) {
             layer[0] = SP_CSS_PAINT_ORDER_NORMAL;
@@ -1809,9 +1633,9 @@ SPIPaintOrder::write( guint const flags, SPStyleSrc const &style_src_req, SPIBas
     bool src = (style_src_req == style_src || !(flags & SP_STYLE_FLAG_IFSRC));
     if (should_write(flags, set, dfp, src)) {
         CSSOStringStream css;
-        gchar const * important_str = this->important?" !important":"";
+
         if (this->inherit) {
-            css << "inherit" ;
+            css << "inherit";
         } else {
             for( unsigned i = 0; i < PAINT_ORDER_LAYERS; ++i ) {
                 if( layer_set[i] ) {
@@ -1838,7 +1662,7 @@ SPIPaintOrder::write( guint const flags, SPStyleSrc const &style_src_req, SPIBas
                 }
             }
         }
-        return (name + ":" + css.str() + important_str + ";");
+        return (name + ":" + css.str() + important_str() + ";");
     }
     return Glib::ustring("");
 }
@@ -1853,7 +1677,6 @@ SPIPaintOrder::cascade( const SPIBase* const parent ) {
             }
             g_free( value );
             value = g_strdup(p->value);
-            important = p->important;
         }
     } else {
         std::cerr << "SPIPaintOrder::cascade(): Incorrect parent type" << std::endl;
@@ -1868,7 +1691,6 @@ SPIPaintOrder::merge( const SPIBase* const parent ) {
             this->cascade( parent );  // Must call be setting 'set'
             set     = p->set;
             inherit = p->inherit;
-            important = p->important;
         }
     }
 }
@@ -1876,7 +1698,6 @@ SPIPaintOrder::merge( const SPIBase* const parent ) {
 bool
 SPIPaintOrder::operator==(const SPIBase& rhs) {
     if( const SPIPaintOrder* r = dynamic_cast<const SPIPaintOrder*>(&rhs) ) {
-        if (important != r->important) { return false; }
         if( layer[0] == SP_CSS_PAINT_ORDER_NORMAL &&
             r->layer[0] == SP_CSS_PAINT_ORDER_NORMAL ) return SPIBase::operator==(rhs);
         for (unsigned i = 0; i < PAINT_ORDER_LAYERS; ++i ) {
@@ -1904,25 +1725,16 @@ void
 SPIFilter::read( gchar const *str ) {
 
     if( !str ) return;
-    gchar const *has_important_rule = strstr (g_strdup(str), "!important");
-    gchar const *strclean;
-    important = false;
-    if( has_important_rule ) {
-        important = true;
-        Glib::ustring strcleanustring = Glib::ustring(str);
-        strclean = strcleanustring.substr(0, strcleanustring.size()-11).c_str();
-    } else {
-        strclean = g_strdup(str);
-    }
+
     clear();
 
-    if ( streq(strclean, "inherit") ) {
+    if ( streq(str, "inherit") ) {
         set = true;
         inherit = true;
-    } else if(streq(strclean, "none")) {
+    } else if(streq(str, "none")) {
         set = true;
-    } else if (strneq(strclean, "url", 3)) {
-        gchar *uri = extract_uri(strclean);
+    } else if (strneq(str, "url", 3)) {
+        gchar *uri = extract_uri(str);
         if(uri == NULL || uri[0] == '\0') {
             std::cerr << "SPIFilter::read: url is empty or invalid" << std::endl;
             return;
@@ -1968,12 +1780,11 @@ const Glib::ustring SPIFilter::write( guint const flags, SPStyleSrc const &style
     bool dfp = true;
     bool src = (style_src_req == style_src || !(flags & SP_STYLE_FLAG_IFSRC));
     if (should_write(flags, set, dfp, src)) {
-        gchar const * important_str = this->important?" !important":"";
         if (this->inherit) {
-            return (name + ":inherit" + important_str + ";");
+            return (name + ":inherit" + important_str() +";");
         } else if(this->href && this->href->getURI()) {
             gchar *uri = this->href->getURI()->toString();
-            Glib::ustring retval = name + ":url(" + uri + ")" + important_str + ";";
+            Glib::ustring retval = name + ":url(" + uri + ")" + important_str() + ";";
             g_free(uri);
             return retval;
         }
@@ -2017,7 +1828,6 @@ SPIFilter::merge( const SPIBase* const parent ) {
         if( (!set || inherit) && p->href && p->href->getObject() ) { // is the getObject()  needed?
             set     = p->set;
             inherit = p->inherit;
-            important = p->important;
             if( href ) {
                 // If we alread have an href, use it (unlikely but heck...)
                 if( href->getObject() ) {
@@ -2048,9 +1858,9 @@ SPIFilter::merge( const SPIBase* const parent ) {
 // FIXME
 bool
 SPIFilter::operator==(const SPIBase& rhs) {
-    if (const SPIFilter* r = dynamic_cast<const SPIFilter*>(&rhs)) {
+    if( const SPIFilter* r = dynamic_cast<const SPIFilter*>(&rhs) ) {
         (void)r;
-        return important == r->important;
+        return true;
     } else {
         return false;
     }
@@ -2064,26 +1874,17 @@ void
 SPIDashArray::read( gchar const *str ) {
 
     if( !str ) return;
-    gchar const *has_important_rule = strstr (g_strdup(str), "!important");
-    gchar const *strclean;
-    important = false;
-    if( has_important_rule ) {
-        important = true;
-        Glib::ustring strcleanustring = Glib::ustring(str);
-        strclean = g_strdup(strcleanustring.substr(0, strcleanustring.size()-11).c_str());
-    } else {
-        strclean = g_strdup(str);
-    }
+
     set = true;
 
-    if( strcmp( strclean, "inherit") == 0 ) {
+    if( strcmp( str, "inherit") == 0 ) {
         inherit = true;
         return;
     }
 
     values.clear();
 
-    if( strcmp(strclean, "none") == 0) {
+    if( strcmp(str, "none") == 0) {
         return;
     }
 
@@ -2091,16 +1892,16 @@ SPIDashArray::read( gchar const *str ) {
 
     gchar *e = NULL;
     bool LineSolid = true;
-    while (e != strclean && *strclean != '\0') {
+    while (e != str && *str != '\0') {
         /* TODO: Should allow <length> rather than just a unitless (px) number. */
-        double number = g_ascii_strtod(strclean, (char **) &e);
+        double number = g_ascii_strtod(str, (char **) &e);
         values.push_back( number );
         if (number > 0.00000001)
             LineSolid = false;
-        if (e != strclean) {
-            strclean = e;
+        if (e != str) {
+            str = e;
         }
-        while (strclean && *strclean && !(isalnum(*strclean) || *strclean=='.')) strclean += 1;
+        while (str && *str && !(isalnum(*str) || *str=='.')) str += 1;
     }
 
     if (LineSolid) {
@@ -2116,11 +1917,10 @@ SPIDashArray::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase
     bool dfp = (!inherits || !my_base || (my_base != this)); // Different from parent
     bool src = (style_src_req == style_src || !(flags & SP_STYLE_FLAG_IFSRC));
     if (should_write(flags, set, dfp, src)) {
-        gchar const * important_str = this->important?" !important":"";
         if (this->inherit) {
-            return (name + ":inherit" + important_str + ";");
+            return (name + ":inherit;");
         } else if (this->values.empty() ) {
-            return (name + ":none" + important_str + ";");
+            return (name + ":none;");
         } else {
             Inkscape::CSSOStringStream os;
             os << name << ":";
@@ -2130,7 +1930,8 @@ SPIDashArray::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase
                 }
                 os << this->values[i];
             }
-            os << important_str << ";";
+            os << important_str();
+            os << ";";
             return os.str();
         }
     }
@@ -2141,10 +1942,7 @@ SPIDashArray::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase
 void
 SPIDashArray::cascade( const SPIBase* const parent ) {
     if( const SPIDashArray* p = dynamic_cast<const SPIDashArray*>(parent) ) {
-        if( !set || inherit ) {  // Always inherits
-            values = p->values;
-            important = p->important;
-        }
+        if( !set || inherit ) values = p->values;  // Always inherits
     } else {
         std::cerr << "SPIDashArray::cascade(): Incorrect parent type" << std::endl;
     }
@@ -2157,7 +1955,6 @@ SPIDashArray::merge( const SPIBase* const parent ) {
             if( (!set || inherit) && p->set && !(p->inherit) ) {
                 set     = p->set;
                 inherit = p->inherit;
-                important = p->important;
                 values  = p->values;
             }
         }
@@ -2169,7 +1966,7 @@ SPIDashArray::merge( const SPIBase* const parent ) {
 bool
 SPIDashArray::operator==(const SPIBase& rhs) {
     if( const SPIDashArray* r = dynamic_cast<const SPIDashArray*>(&rhs) ) {
-        return values == r->values && important == r->important && SPIBase::operator==(rhs);
+        return values == r->values && SPIBase::operator==(rhs);
     } else {
         return false;
     }
@@ -2187,23 +1984,14 @@ void
 SPIFontSize::read( gchar const *str ) {
 
     if( !str ) return;
-    gchar const *has_important_rule = strstr (g_strdup(str), "!important");
-    gchar const *strclean;
-    important = false;
-    if( has_important_rule ) {
-        important = true;
-        Glib::ustring strcleanustring = Glib::ustring(str);
-        strclean = strcleanustring.substr(0, strcleanustring.size()-11).c_str();
-    } else {
-        strclean = g_strdup(str);
-    }
-    if (!strcmp(strclean, "inherit")) {
+
+    if (!strcmp(str, "inherit")) {
         set = true;
         inherit = true;
-    } else if ((*strclean == 'x') || (*strclean == 's') || (*strclean == 'm') || (*strclean == 'l')) {
+    } else if ((*str == 'x') || (*str == 's') || (*str == 'm') || (*str == 'l')) {
         // xx-small, x-small, etc.
         for (unsigned i = 0; enum_font_size[i].key; i++) {
-            if (!strcmp(strclean, enum_font_size[i].key)) {
+            if (!strcmp(str, enum_font_size[i].key)) {
                 set = true;
                 inherit = false;
                 type = SP_FONT_SIZE_LITERAL;
@@ -2216,7 +2004,7 @@ SPIFontSize::read( gchar const *str ) {
     } else {
         SPILength length("temp");
         length.set = false;
-        length.read( strclean );
+        length.read( str );
         if( length.set ) {
             set      = true;
             inherit  = length.inherit;
@@ -2246,7 +2034,7 @@ SPIFontSize::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase 
     bool src = (style_src_req == style_src || !(flags & SP_STYLE_FLAG_IFSRC));
     if (should_write(flags, set, dfp, src)) {
         CSSOStringStream css;
-        gchar const * important_str = this->important?" !important":"";
+
         if (this->inherit) {
             css << "inherit";
         } else if (this->type == SP_FONT_SIZE_LITERAL) {
@@ -2265,7 +2053,7 @@ SPIFontSize::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase 
         } else if (this->type == SP_FONT_SIZE_PERCENTAGE) {
             css << (this->value * 100.0) << "%";
         }
-        return (name + ":" + css.str() + important_str + ";");
+        return (name + ":" + css.str() + important_str() + ";");
     }
     return Glib::ustring("");
 }
@@ -2274,7 +2062,7 @@ void
 SPIFontSize::cascade( const SPIBase* const parent ) {
     if( const SPIFontSize* p = dynamic_cast<const SPIFontSize*>(parent) ) {
         if( !set || inherit ) { // Always inherits
-            computed = p->computed;value = p->value;important = p->important;
+            computed = p->computed;value = p->value;
 
 
         // Calculate computed based on parent as needed
@@ -2362,7 +2150,6 @@ SPIFontSize::merge( const SPIBase* const parent ) {
                 set      = p->set;
                 inherit  = p->inherit;
                 value    = p->value;
-                important    = p->important;
                 computed = p->computed; // Just to be sure
             } else if ( type == SP_FONT_SIZE_LENGTH  && 
                         unit != SP_CSS_UNIT_EM &&
@@ -2416,7 +2203,6 @@ bool
 SPIFontSize::operator==(const SPIBase& rhs) {
     if( const SPIFontSize* r = dynamic_cast<const SPIFontSize*>(&rhs) ) {
         if( type != r->type ) { return false;}
-        if( important != r->important ) { return false;}
         if( type == SP_FONT_SIZE_LENGTH ) {
             if( computed != r->computed ) { return false;}
         } else if (type == SP_FONT_SIZE_LITERAL ) {
@@ -2443,23 +2229,14 @@ SPIFont::read( gchar const *str ) {
         std::cerr << "SPIFont::read(): style is void" << std::endl;
         return;
     }
-    gchar const *has_important_rule = strstr (g_strdup(str), "!important");
-    gchar const *strclean;
-    important = false;
-    if( has_important_rule ) {
-        important = true;
-        Glib::ustring strcleanustring = Glib::ustring(str);
-        strclean = strcleanustring.substr(0, strcleanustring.size()-11).c_str();
-    } else {
-        strclean = g_strdup(str);
-    }
-    if ( !strcmp(strclean, "inherit") ) {
+
+    if ( !strcmp(str, "inherit") ) {
         set = true;
         inherit = true;
     } else {
 
         // Break string into white space separated tokens
-        std::stringstream os( strclean );
+        std::stringstream os( str );
         Glib::ustring param;
 
         while (os >> param) {
@@ -2522,7 +2299,7 @@ SPIFont::read( gchar const *str ) {
         } // params
 
         // The rest must be font-family...
-        std::string str_s = strclean; // Why this extra step?
+        std::string str_s = str; // Why this extra step?
         std::string family = str_s.substr( str_s.find( param ) );
 
         style->font_family.readIfUnset( family.c_str() );
@@ -2584,23 +2361,14 @@ void
 SPIBaselineShift::read( gchar const *str ) {
 
     if( !str ) return;
-    gchar const *has_important_rule = strstr (g_strdup(str), "!important");
-    gchar const *strclean;
-    important = false;
-    if( has_important_rule ) {
-        important = true;
-        Glib::ustring strcleanustring = Glib::ustring(str);
-        strclean = strcleanustring.substr(0, strcleanustring.size()-11).c_str();
-    } else {
-        strclean = g_strdup(str);
-    }
-    if (!strcmp(strclean, "inherit")) {
+
+    if (!strcmp(str, "inherit")) {
         set = true;
         inherit = true;
-    } else if ((*strclean == 'b') || (*strclean == 's')) {
+    } else if ((*str == 'b') || (*str == 's')) {
         // baseline or sub or super
         for (unsigned i = 0; enum_baseline_shift[i].key; i++) {
-            if (!strcmp(strclean, enum_baseline_shift[i].key)) {
+            if (!strcmp(str, enum_baseline_shift[i].key)) {
                 set = true;
                 inherit = false;
                 type = SP_BASELINE_SHIFT_LITERAL;
@@ -2612,7 +2380,7 @@ SPIBaselineShift::read( gchar const *str ) {
         return;
     } else {
         SPILength length( "temp" );
-        length.read( strclean );
+        length.read( str );
         set      = length.set;
         inherit  = length.inherit;
         unit     = length.unit;
@@ -2635,7 +2403,7 @@ SPIBaselineShift::write( guint const flags, SPStyleSrc const &style_src_req, SPI
     bool src = (style_src_req == style_src || !(flags & SP_STYLE_FLAG_IFSRC));
     if (should_write(flags, set, dfp, src)) {
         CSSOStringStream css;
-        gchar const * important_str = this->important?" !important":"";
+
         if (this->inherit) {
             css << "inherit";
         } else if (this->type == SP_BASELINE_SHIFT_LITERAL) {
@@ -2653,7 +2421,7 @@ SPIBaselineShift::write( guint const flags, SPStyleSrc const &style_src_req, SPI
         } else if (this->type == SP_BASELINE_SHIFT_PERCENTAGE) {
             css << (this->value * 100.0) << "%";
         }
-        return (name + ":" + css.str() + important_str + ";");
+        return (name + ":" + css.str() + important_str() + ";");
     }
     return Glib::ustring("");
 }
@@ -2665,7 +2433,6 @@ SPIBaselineShift::cascade( const SPIBase* const parent ) {
         g_assert( pfont_size != NULL );
 
         if( !set || inherit ) {
-            important = p->important;
             computed = p->computed;  // Shift relative to parent shift, corrected below
         } else if (type == SP_BASELINE_SHIFT_LITERAL) {
             if( literal == SP_CSS_BASELINE_SHIFT_BASELINE ) {
@@ -2712,10 +2479,9 @@ void
 SPIBaselineShift::merge( const SPIBase* const parent ) {
     if( const SPIBaselineShift* p = dynamic_cast<const SPIBaselineShift*>(parent) ) {
         if( (!set || inherit) && p->set && !(p->inherit) ) {
-            set       = p->set;
-            inherit   = p->inherit;
-            value     = p->value;
-            important = p->important;
+            set     = p->set;
+            inherit = p->inherit;
+            value   = p->value;
         }
     } else {
         std::cerr << "SPIBaselineShift::merge(): Incorrect parent type" << std::endl;
@@ -2726,7 +2492,6 @@ SPIBaselineShift::merge( const SPIBase* const parent ) {
 bool
 SPIBaselineShift::operator==(const SPIBase& rhs) {
     if( const SPIBaselineShift* r = dynamic_cast<const SPIBaselineShift*>(&rhs) ) {
-        if( important != r->important ) return false;
         if( type != r->type ) return false;
         if( type == SP_BASELINE_SHIFT_LENGTH ) {
             if( computed != r->computed ) return false;
@@ -2759,20 +2524,11 @@ void
 SPITextDecorationLine::read( gchar const *str ) {
 
     if( !str ) return;
-    gchar const *has_important_rule = strstr (g_strdup(str), "!important");
-    gchar const *strclean;
-    important = false;
-    if( has_important_rule ) {
-        important = true;
-        Glib::ustring strcleanustring = Glib::ustring(str);
-        strclean = strcleanustring.substr(0, strcleanustring.size()-11).c_str();
-    } else {
-        strclean = g_strdup(str);
-    }
-    if (!strcmp(strclean, "inherit")) {
+
+    if (!strcmp(str, "inherit")) {
         set          = true;
         inherit      = true;
-    } else if (!strcmp(strclean, "none")) {
+    } else if (!strcmp(str, "none")) {
         set          = true;
         inherit      = false;
         underline    = false;
@@ -2791,10 +2547,10 @@ SPITextDecorationLine::read( gchar const *str ) {
 
         // This method ignores inlineid keys and extra delimiters, so " ,,, blink hello" will set
         // blink and ignore hello
-        const gchar *hstr = strclean;
+        const gchar *hstr = str;
         while (1) {
-            if (*strclean == ' ' || *strclean == ',' || *strclean == '\0'){
-                int slen = strclean - hstr;
+            if (*str == ' ' || *str == ',' || *str == '\0'){
+                int slen = str - hstr;
                 // CSS 2 keywords
                 while(1){ // not really a loop, used to avoid a goto
                     hit_one = true; // most likely we will
@@ -2808,10 +2564,10 @@ SPITextDecorationLine::read( gchar const *str ) {
                     break;
                 }
                 found_one |= hit_one;
-                if(*strclean == '\0')break;
-                hstr = strclean + 1;
+                if(*str == '\0')break;
+                hstr = str + 1;
             }
-            strclean++;
+            str++;
         }
         if (found_one) {
             set          = true;
@@ -2835,7 +2591,6 @@ SPITextDecorationLine::write( guint const flags, SPStyleSrc const &style_src_req
     bool src = (style_src_req == style_src || !(flags & SP_STYLE_FLAG_IFSRC));
     if (should_write(flags, set, dfp, src)) {
         Inkscape::CSSOStringStream os;
-        gchar const * important_str = this->important?" !important":"";
         os << name << ":";
         if( inherit ) {
             os << "inherit";
@@ -2847,7 +2602,8 @@ SPITextDecorationLine::write( guint const flags, SPStyleSrc const &style_src_req
         } else {
             os << "none";
         }
-        os << important_str << ";";
+        os << important_str();
+        os << ";";
         return ( os.str() );
     }
     return Glib::ustring("");
@@ -2858,7 +2614,6 @@ SPITextDecorationLine::cascade( const SPIBase* const parent ) {
     if( const SPITextDecorationLine* p = dynamic_cast<const SPITextDecorationLine*>(parent) ) {
         if( inherits && (!set || inherit) ) {
             underline    = p->underline;
-            important    = p->important;
             overline     = p->overline;
             line_through = p->line_through;
             blink        = p->blink;
@@ -2876,7 +2631,6 @@ SPITextDecorationLine::merge( const SPIBase* const parent ) {
                 set      = p->set;
                 inherit  = p->inherit;
                 underline    = p->underline;
-                important    = p->important;
                 overline     = p->overline;
                 line_through = p->line_through;
                 blink        = p->blink;
@@ -2891,7 +2645,6 @@ SPITextDecorationLine::operator==(const SPIBase& rhs) {
         return
             (underline    == r->underline    ) &&
             (overline     == r->overline     ) &&
-            (important    == r->important    ) &&
             (line_through == r->line_through ) &&
             (blink        == r->blink        ) &&
             SPIBase::operator==(rhs);
@@ -2908,16 +2661,7 @@ void
 SPITextDecorationStyle::read( gchar const *str ) {
 
     if( !str ) return;
-    gchar const *has_important_rule = strstr (g_strdup(str), "!important");
-    gchar const *strclean;
-    important = false;
-    if( has_important_rule ) {
-        important = true;
-        Glib::ustring strcleanustring = Glib::ustring(str);
-        strclean = strcleanustring.substr(0, strcleanustring.size()-11).c_str();
-    } else {
-        strclean = g_strdup(str);
-    }
+
     set         = false;
     inherit     = false;
 
@@ -2927,7 +2671,7 @@ SPITextDecorationStyle::read( gchar const *str ) {
     dashed      = false;
     wavy        = false;
 
-    if (!strcmp(strclean, "inherit")) {
+    if (!strcmp(str, "inherit")) {
         set         = true;
         inherit     = true;
         solid       = false;
@@ -2942,19 +2686,19 @@ SPITextDecorationStyle::read( gchar const *str ) {
         
         // this method ignores inlineid keys and extra delimiters, so " ,,, style hello" will set style and ignore hello
         // if more than one style is present, the first is used
-        const gchar *hstr = strclean;
+        const gchar *hstr = str;
         while (1) {
-            if (*strclean == ' ' || *strclean == ',' || *strclean == '\0'){
-                int slen = strclean - hstr;
+            if (*str == ' ' || *str == ',' || *str == '\0'){
+                int slen = str - hstr;
                 if (     (slen ==  5) && strneq(hstr, "solid",        slen)){  found_solid  = true; found_one = true; break; }
                 else if ((slen ==  6) && strneq(hstr, "double",       slen)){  found_double = true; found_one = true; break; }
                 else if ((slen ==  6) && strneq(hstr, "dotted",       slen)){  found_dotted = true; found_one = true; break; }
                 else if ((slen ==  6) && strneq(hstr, "dashed",       slen)){  found_dashed = true; found_one = true; break; }
                 else if ((slen ==  4) && strneq(hstr, "wavy",         slen)){  found_wavy   = true; found_one = true; break; }
-                if(*strclean == '\0')break; // nothing more to test
-                hstr = strclean + 1;
+                if(*str == '\0')break; // nothing more to test
+                hstr = str + 1;
             }
-            strclean++;
+            str++;
         }
         if(found_one){
             set         = true;
@@ -2978,7 +2722,6 @@ SPITextDecorationStyle::write( guint const flags, SPStyleSrc const &style_src_re
     bool src = (style_src_req == style_src || !(flags & SP_STYLE_FLAG_IFSRC));
     if (should_write(flags, set, dfp, src)) {
         Inkscape::CSSOStringStream os;
-        gchar const * important_str = this->important?" !important":"";
         os << name << ":";
         if( inherit ) {
             os << "inherit";
@@ -2996,7 +2739,8 @@ SPITextDecorationStyle::write( guint const flags, SPStyleSrc const &style_src_re
             std::cerr  << "SPITextDecorationStyle::write(): No valid value for property" << std::endl;
             return Glib::ustring("");
         }
-        os << important_str << ";";
+        os << important_str();
+        os << ";";
         return ( os.str() );
     }
     return Glib::ustring("");
@@ -3009,7 +2753,6 @@ SPITextDecorationStyle::cascade( const SPIBase* const parent ) {
             solid     = p->solid;
             isdouble  = p->isdouble;
             dotted    = p->dotted;
-            important = p->important;
             dashed    = p->dashed;
             wavy      = p->wavy;
         }
@@ -3026,7 +2769,6 @@ SPITextDecorationStyle::merge( const SPIBase* const parent ) {
                 set      = p->set;
                 inherit  = p->inherit;
                 solid     = p->solid;
-                important = p->important;
                 isdouble  = p->isdouble;
                 dotted    = p->dotted;
                 dashed    = p->dashed;
@@ -3040,12 +2782,11 @@ bool
 SPITextDecorationStyle::operator==(const SPIBase& rhs) {
     if( const SPITextDecorationStyle* r = dynamic_cast<const SPITextDecorationStyle*>(&rhs) ) {
         return
-            (solid     == r->solid     ) &&
-            (isdouble  == r->isdouble  ) &&
-            (important == r->important ) &&
-            (dotted    == r->dotted    ) &&
-            (dashed    == r->dashed    ) &&
-            (wavy      == r->wavy      ) &&
+            (solid    == r->solid    ) &&
+            (isdouble == r->isdouble ) &&
+            (dotted   == r->dotted   ) &&
+            (dashed   == r->dashed   ) &&
+            (wavy     == r->wavy     ) &&
             SPIBase::operator==(rhs);
     } else {
         return false;
@@ -3066,26 +2807,16 @@ SPITextDecoration::read( gchar const *str ) {
 
     if( !str ) return;
 
-    gchar const *has_important_rule = strstr (g_strdup(str), "!important");
-    gchar const *strclean;
-    important = false;
-    if( has_important_rule ) {
-        important = true;
-        Glib::ustring strcleanustring = Glib::ustring(str);
-        strclean = strcleanustring.substr(0, strcleanustring.size()-11).c_str();
-    } else {
-        strclean = g_strdup(str);
-    }
     bool is_css3 = false;
 
     SPITextDecorationLine test_line;
-    test_line.read( strclean );
+    test_line.read( str );
     if( test_line.set ) {
         style->text_decoration_line = test_line;
     }
 
     SPITextDecorationStyle test_style;
-    test_style.read( strclean );
+    test_style.read( str );
     if( test_style.set ) {
         style->text_decoration_style = test_style;
         is_css3 = true;
@@ -3099,10 +2830,10 @@ SPITextDecoration::read( gchar const *str ) {
     test_color.setStylePointer( style );
     test_color.read( "currentColor" );  // Default value
     test_color.set = false;
-    const gchar *hstr = strclean;
+    const gchar *hstr = str;
     while (1) {
-        if (*strclean == ' ' || *strclean == ',' || *strclean == '\0'){
-            int slen = strclean - hstr;
+        if (*str == ' ' || *str == ',' || *str == '\0'){
+            int slen = str - hstr;
             gchar *frag = g_strndup(hstr,slen+1); // only send one piece at a time, since keywords may be intermixed
 
             if( strcmp( frag, "none" ) != 0 ) { // 'none' not allowed
@@ -3117,10 +2848,10 @@ SPITextDecoration::read( gchar const *str ) {
             }
             test_color.read( "currentColor" );  // Default value
             test_color.set = false;
-            if( *strclean == '\0' )break;
-            hstr = strclean + 1;
+            if( *str == '\0' )break;
+            hstr = str + 1;
         }
-        strclean++;
+        str++;
     }
 
     // If we read a style or color then we have CSS3 which require any non-set values to be
@@ -3149,7 +2880,6 @@ SPITextDecoration::write( guint const flags, SPStyleSrc const &style_src_req, SP
               style->text_decoration_line != my_base->style->text_decoration_line )))
     {
         Inkscape::CSSOStringStream os;
-        gchar const * important_str = this->important?" !important":"";
         os << name << ":";
         if( inherit ) {
             os << "inherit";
@@ -3164,7 +2894,8 @@ SPITextDecoration::write( guint const flags, SPStyleSrc const &style_src_req, SP
         } else {
             os << "none";
         }
-        os << important_str << ";";
+        os << important_str();
+        os << ";";
         return ( os.str() );
     }
     return Glib::ustring("");
@@ -3198,8 +2929,7 @@ SPITextDecoration::merge( const SPIBase* const parent ) {
 bool
 SPITextDecoration::operator==(const SPIBase& rhs) {
     if( const SPITextDecoration* r = dynamic_cast<const SPITextDecoration*>(&rhs) ) {
-        return (style->text_decoration_line == r->style->text_decoration_line &&
-                important == r->important &&
+        return (style->text_decoration_line == r->style->text_decoration_line && 
                 SPIBase::operator==(rhs));
     } else {
         return false;

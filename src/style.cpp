@@ -562,7 +562,7 @@ SPStyle::clear() {
 
 // Matches void sp_style_read(SPStyle *style, SPObject *object, Inkscape::XML::Node *repr)
 void
-SPStyle::read( SPObject *object, Inkscape::XML::Node *repr, bool stylesheet) {
+SPStyle::read( SPObject *object, Inkscape::XML::Node *repr ) {
 
     // std::cout << "SPstyle::read( SPObject, Inkscape::XML::Node ): Entrance: "
     //           << (object?(object->getId()?object->getId():"id null"):"object null") << " "
@@ -592,7 +592,7 @@ SPStyle::read( SPObject *object, Inkscape::XML::Node *repr, bool stylesheet) {
 
     /* 2 Style sheet */
     // std::cout << " MERGING OBJECT STYLESHEET" << std::endl;
-    if (object && stylesheet) {
+    if (object) {
         _mergeObjectStylesheet( object );
     } else {
         // std::cerr << "SPStyle::read: No object! Can not read style sheet" << std::endl;
@@ -641,7 +641,7 @@ SPStyle::read( SPObject *object, Inkscape::XML::Node *repr, bool stylesheet) {
  * 3. Load i attributes from immediate parent (which has to be up-to-date)
  */
 void
-SPStyle::readFromObject( SPObject *object, bool stylesheet ) {
+SPStyle::readFromObject( SPObject *object ) {
 
     // std::cout << "SPStyle::readFromObject: "<< (object->getId()?object->getId():"null")<< std::endl;
 
@@ -651,7 +651,7 @@ SPStyle::readFromObject( SPObject *object, bool stylesheet ) {
     Inkscape::XML::Node *repr = object->getRepr();
     g_return_if_fail(repr != NULL);
 
-    read( object, repr, stylesheet);
+    read( object, repr );
 }
 
 /**

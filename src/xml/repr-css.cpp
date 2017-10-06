@@ -345,7 +345,7 @@ void sp_repr_css_merge(SPCSSAttr *dst, SPCSSAttr *src)
 static void sp_repr_css_merge_from_decl(SPCSSAttr *css, CRDeclaration const *const decl)
 {
     guchar *const str_value_unsigned = cr_term_to_string(decl->value);
-    gchar const * important = decl->important?" !important":"";
+
     Glib::ustring value( reinterpret_cast<gchar *>(str_value_unsigned ) );
     g_free(str_value_unsigned);
 
@@ -400,7 +400,6 @@ static void sp_repr_css_merge_from_decl(SPCSSAttr *css, CRDeclaration const *con
         os << units;
         //g_message("sp_repr_css_merge_from_decl looks like em or ex units %s --> %s", str_value, os.str().c_str());
     }
-    os << important;
     ((Node *) css)->setAttribute(decl->property->stryng->str, os.str().c_str(), false);
 }
 
