@@ -123,6 +123,7 @@ public:
           set(false),
           inherit(false),
           important(false),
+          important_set(false),
           style_src(SP_STYLE_SRC_STYLE_PROP), // Default to property, see bug 1662285.
           style(NULL)
     {}
@@ -134,7 +135,13 @@ public:
     virtual void readIfUnset( gchar const *str, SPStyleSrc const &source = SP_STYLE_SRC_STYLE_PROP ) {
         if (!str) return;
         Glib::ustring stripped = strip_important(str);
-        if ( !set || important ) {
+        if (source == SP_STYLE_SRC_STYLE_PROP && important) {
+            important_set = true;
+        }
+        if (source == SP_STYLE_SRC_ATTRIBUTE && important){
+            return;
+        }
+        if ( !set || (important && !important_set) ) {
             read( stripped.c_str() );
             if ( set ) {
                 style_src = source;
@@ -150,11 +157,10 @@ public:
         assert (str != NULL);
         Glib::ustring string = Glib::ustring(str);
         auto pos = string.rfind( " !important" );
+        important = false;
         if (pos != std::string::npos) {
-            important = important?false:true;
+            important = true;
             string.erase(pos);
-        } else {
-            important = important?true:false;
         }
         return string;
     }
@@ -179,13 +185,14 @@ public:
 
     // Explicit assignment operator required due to templates.
     SPIBase& operator=(const SPIBase& rhs) {
-        name        = rhs.name;
-        inherits    = rhs.inherits;
-        set         = rhs.set;
-        important   = rhs.important;
-        inherit     = rhs.inherit;
-        style_src   = rhs.style_src;
-        style       = rhs.style;
+        name          = rhs.name;
+        inherits      = rhs.inherits;
+        set           = rhs.set;
+        important     = rhs.important;
+        important_set = rhs.important_set;
+        inherit       = rhs.inherit;
+        style_src     = rhs.style_src;
+        style         = rhs.style;
         return *this;
     }
 
@@ -205,6 +212,7 @@ public:
     unsigned set : 1;         // Property has been explicitly set (vs. inherited).
     unsigned inherit : 1;     // Property value set to 'inherit'.
     unsigned important : 1;   // Property value set to 'important'.
+    unsigned important_set : 1;   // Property 'important' has been explicitly set.
     SPStyleSrc style_src : 2; // Source (attribute, style attribute, style-sheet).
 
   // To do: make private after g_asserts removed
