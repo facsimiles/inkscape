@@ -113,7 +113,7 @@ concat_children(Inkscape::XML::Node const &repr)
     // effic: Initialising ret to a reasonable starting size could speed things up.
     for (Inkscape::XML::Node const *rch = repr.firstChild(); rch != NULL; rch = rch->next()) {
         if ( rch->type() == TEXT_NODE ) {
-            ret += rch->content();
+            ret = rch->content() + ret;
         }
     }
     return ret;

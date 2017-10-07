@@ -133,9 +133,9 @@ public:
     virtual void read( gchar const *str ) = 0;
     virtual void readIfUnset( gchar const *str, SPStyleSrc const &source = SP_STYLE_SRC_STYLE_PROP ) {
         if (!str) return;
-        gchar const * stripped = strip_important(str).c_str();
+        Glib::ustring stripped = strip_important(str);
         if ( !set || important ) {
-            read( stripped );
+            read( stripped.c_str() );
             if ( set ) {
                 style_src = source;
             }
@@ -150,10 +150,11 @@ public:
         assert (str != NULL);
         Glib::ustring string = Glib::ustring(str);
         auto pos = string.rfind( " !important" );
-        important = false;
         if (pos != std::string::npos) {
-            important = true;
+            important = important?false:true;
             string.erase(pos);
+        } else {
+            important = important?true:false;
         }
         return string;
     }

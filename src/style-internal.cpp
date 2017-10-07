@@ -44,8 +44,6 @@
 #include "svg/css-ostringstream.h"
 #include "util/units.h"
 
-#include  <iostream>
-
 // TODO REMOVE OR MAKE MEMBER FUNCTIONS
 void sp_style_fill_paint_server_ref_changed(  SPObject *old_ref, SPObject *ref, SPStyle *style);
 void sp_style_stroke_paint_server_ref_changed(SPObject *old_ref, SPObject *ref, SPStyle *style);
@@ -103,7 +101,7 @@ SPIFloat::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase con
             return (name + ":inherit;");
         } else {
             Inkscape::CSSOStringStream os;
-            os << name << ":" << this->value << important_str() << ";";
+            os << name << ":" << this->value << ";";
             return os.str();
         }
     }
@@ -177,7 +175,7 @@ SPIScale24::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase c
             return (name + ":inherit;");
         } else {
             Inkscape::CSSOStringStream os;
-            os << name << ":" << SP_SCALE24_TO_FLOAT(this->value) << important_str() << ";";
+            os << name << ":" << SP_SCALE24_TO_FLOAT(this->value) << ";";
             return os.str();
         }
     }
@@ -324,45 +322,44 @@ SPILength::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase co
     bool src = (style_src_req == style_src || !(flags & SP_STYLE_FLAG_IFSRC));
     if (should_write(flags, set, dfp, src)) {
         if (this->inherit) {
-            return (name + ":inherit" + important_str() + ";");
+            return (name + ":inherit;");
         } else {
             Inkscape::CSSOStringStream os;
             switch (this->unit) {
                 case SP_CSS_UNIT_NONE:
-                    os << name << ":" << this->computed << "";
+                    os << name << ":" << this->computed << ";";
                     break;
                 case SP_CSS_UNIT_PX:
-                    os << name << ":" << this->computed << "px";
+                    os << name << ":" << this->computed << "px;";
                     break;
                 case SP_CSS_UNIT_PT:
-                    os << name << ":" << Inkscape::Util::Quantity::convert(this->computed, "px", "pt") << "pt";
+                    os << name << ":" << Inkscape::Util::Quantity::convert(this->computed, "px", "pt") << "pt;";
                     break;
                 case SP_CSS_UNIT_PC:
-                    os << name << ":" << Inkscape::Util::Quantity::convert(this->computed, "px", "pc") << "pc";
+                    os << name << ":" << Inkscape::Util::Quantity::convert(this->computed, "px", "pc") << "pc;";
                     break;
                 case SP_CSS_UNIT_MM:
-                    os << name << ":" << Inkscape::Util::Quantity::convert(this->computed, "px", "mm") << "mm";
+                    os << name << ":" << Inkscape::Util::Quantity::convert(this->computed, "px", "mm") << "mm;";
                     break;
                 case SP_CSS_UNIT_CM:
-                    os << name << ":" << Inkscape::Util::Quantity::convert(this->computed, "px", "cm") << "cm";
+                    os << name << ":" << Inkscape::Util::Quantity::convert(this->computed, "px", "cm") << "cm;";
                     break;
                 case SP_CSS_UNIT_IN:
-                    os << name << ":" << Inkscape::Util::Quantity::convert(this->computed, "px", "in") << "in";
+                    os << name << ":" << Inkscape::Util::Quantity::convert(this->computed, "px", "in") << "in;";
                     break;
                 case SP_CSS_UNIT_EM:
-                    os << name << ":" << this->value << "em";
+                    os << name << ":" << this->value << "em;";
                     break;
                 case SP_CSS_UNIT_EX:
-                    os << name << ":" << this->value << "ex";
+                    os << name << ":" << this->value << "ex;";
                     break;
                 case SP_CSS_UNIT_PERCENT:
-                    os << name << ":" << (this->value * 100.0) << "%";
+                    os << name << ":" << (this->value * 100.0) << "%;";
                     break;
                 default:
                     /* Invalid */
                     break;
             }
-            os << important_str() << ";";
             return os.str();
         }
     }
@@ -480,7 +477,7 @@ SPILengthOrNormal::write( guint const flags, SPStyleSrc const &style_src_req, SP
     bool src = (style_src_req == style_src || !(flags & SP_STYLE_FLAG_IFSRC));
     if (should_write(flags, set, dfp, src)) {
         if (this->normal) {
-            return (name + ":normal" + important_str() + ";");
+            return (name + ":normal;");
         } else {
             return SPILength::write(flags, style_src_req, base);
         }
@@ -574,14 +571,13 @@ SPIFontVariationSettings::write( guint const flags, SPStyleSrc const &style_src_
     bool src = (style_src_req == style_src || !(flags & SP_STYLE_FLAG_IFSRC));
     if (should_write(flags, set, dfp, src)) {
         if (this->normal) {
-            return (name + ":normal" + important_str() + ";");
+            return (name + ":normal;");
         } else {
             Inkscape::CSSOStringStream os;
             for (std::map<char*,float>::const_iterator it=axes.begin(); it!=axes.end(); ++it){
                 os << "\"" << it->first << "\" " << it->second << " ";
                 // FIXME: can we avoid the last space char ?
             }
-            os << important_str() << ";";
             return os.str();
         }
     }
@@ -649,11 +645,11 @@ SPIEnum::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase cons
     bool src = (style_src_req == style_src || !(flags & SP_STYLE_FLAG_IFSRC));
     if (should_write(flags, set, dfp, src)) {
         if (this->inherit) {
-            return (name + ":inherit" + important_str() + ";");
+            return (name + ":inherit;");
         }
         for (unsigned i = 0; enums[i].key; ++i) {
             if (enums[i].value == static_cast< gint > (this->value) ) {
-                return (name + ":" + enums[i].key + important_str() + ";");
+                return (name + ":" + enums[i].key + ";");
             }
         }
     }
@@ -786,10 +782,10 @@ SPIEnumBits::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase 
     bool src = (style_src_req == style_src || !(flags & SP_STYLE_FLAG_IFSRC));
     if (should_write(flags, set, dfp, src)) {
         if (this->inherit) {
-            return (name + ":inherit" + important_str() + ";");
+            return (name + ":inherit;");
         }
         if (this->value == 0 ) {
-            return (name + ":normal" + important_str() + ";");
+            return (name + ":normal");
         }
         Glib::ustring return_string = name + ":";
         unsigned j = 1;
@@ -800,8 +796,6 @@ SPIEnumBits::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase 
             }
             j *= 2;
         }
-        return_string += important_str();
-        return_string += ";";
         return return_string;
     }
     return Glib::ustring("");
@@ -876,7 +870,6 @@ SPILigatures::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase
         if ( !(value & SP_CSS_FONT_VARIANT_LIGATURES_CONTEXTUAL) )
             return_string += "no-contextual ";
         return_string.erase( return_string.size() - 1 );
-        return_string += important_str();
         return_string += ";";
         return return_string;
     }
@@ -1026,7 +1019,7 @@ SPIString::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase co
     bool src = (style_src_req == style_src || !(flags & SP_STYLE_FLAG_IFSRC));
     if (should_write(flags, set, dfp, src)) {
         if (this->inherit) {
-            return (name + ":inherit" + important_str() + ";");
+            return (name + ":inherit;");
         } else {
             if( this->value ) {
                 if( name.compare( "font-family" ) == 0 ) {
@@ -1036,9 +1029,9 @@ SPIString::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase co
                 } else if( name.compare( "-inkscape-font-specification" ) == 0 ) {
                     Glib::ustring font_spec( this->value );
                     css_quote( font_spec );
-                    return (name + ":" + font_spec + important_str() + ";");
+                    return (name + ":" + font_spec + ";");
                 } else {
-                    return (name + ":" + this->value + important_str() + ";");
+                    return (name + ":" + this->value + ";");
                 }
             }
         }
@@ -1161,7 +1154,7 @@ SPIColor::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase con
         }
 
         if ( !css.str().empty() ) {
-            return (name + ":" + css.str() + important_str() + ";");
+            return (name + ":" + css.str() + ";");
         }
     }
 
@@ -1255,7 +1248,7 @@ SPIPaint::read( gchar const *str ) {
     if(!str ) return;
 
     reset( false ); // Do not init
-    std::cout <<  str << important_str() << "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb" << std::endl;
+
     // Is this necessary?
     while (g_ascii_isspace(*str)) {
         ++str;
@@ -1426,8 +1419,7 @@ SPIPaint::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase con
         }
 
         if ( !css.str().empty() ) {
-            std::cout << name << ":" << css.str() << important_str() << ";" << "aaaaaaaaaaaaaaaaaaaaaaaaa" << std::endl;
-            return (name + ":" + css.str() + important_str() + ";");
+            return (name + ":" + css.str() + ";");
         }
     }
 
@@ -1662,7 +1654,7 @@ SPIPaintOrder::write( guint const flags, SPStyleSrc const &style_src_req, SPIBas
                 }
             }
         }
-        return (name + ":" + css.str() + important_str() + ";");
+        return (name + ":" + css.str() + ";");
     }
     return Glib::ustring("");
 }
@@ -1781,10 +1773,10 @@ const Glib::ustring SPIFilter::write( guint const flags, SPStyleSrc const &style
     bool src = (style_src_req == style_src || !(flags & SP_STYLE_FLAG_IFSRC));
     if (should_write(flags, set, dfp, src)) {
         if (this->inherit) {
-            return (name + ":inherit" + important_str() +";");
+            return (name + ":inherit;");
         } else if(this->href && this->href->getURI()) {
             gchar *uri = this->href->getURI()->toString();
-            Glib::ustring retval = name + ":url(" + uri + ")" + important_str() + ";";
+            Glib::ustring retval = name + ":url(" + uri + ");";
             g_free(uri);
             return retval;
         }
@@ -1930,7 +1922,6 @@ SPIDashArray::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase
                 }
                 os << this->values[i];
             }
-            os << important_str();
             os << ";";
             return os.str();
         }
@@ -2053,7 +2044,7 @@ SPIFontSize::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase 
         } else if (this->type == SP_FONT_SIZE_PERCENTAGE) {
             css << (this->value * 100.0) << "%";
         }
-        return (name + ":" + css.str() + important_str() + ";");
+        return (name + ":" + css.str() + ";");
     }
     return Glib::ustring("");
 }
@@ -2421,7 +2412,7 @@ SPIBaselineShift::write( guint const flags, SPStyleSrc const &style_src_req, SPI
         } else if (this->type == SP_BASELINE_SHIFT_PERCENTAGE) {
             css << (this->value * 100.0) << "%";
         }
-        return (name + ":" + css.str() + important_str() + ";");
+        return (name + ":" + css.str() + ";");
     }
     return Glib::ustring("");
 }
@@ -2602,7 +2593,6 @@ SPITextDecorationLine::write( guint const flags, SPStyleSrc const &style_src_req
         } else {
             os << "none";
         }
-        os << important_str();
         os << ";";
         return ( os.str() );
     }
@@ -2739,7 +2729,6 @@ SPITextDecorationStyle::write( guint const flags, SPStyleSrc const &style_src_re
             std::cerr  << "SPITextDecorationStyle::write(): No valid value for property" << std::endl;
             return Glib::ustring("");
         }
-        os << important_str();
         os << ";";
         return ( os.str() );
     }
@@ -2894,7 +2883,6 @@ SPITextDecoration::write( guint const flags, SPStyleSrc const &style_src_req, SP
         } else {
             os << "none";
         }
-        os << important_str();
         os << ";";
         return ( os.str() );
     }
