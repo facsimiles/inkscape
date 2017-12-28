@@ -347,6 +347,7 @@ private:
      * Callback for user input into fileNameEntry
      */
     void fileNameEntryChangedCallback();
+    void fileNameChanged();
 };
 
 

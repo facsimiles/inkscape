@@ -1014,6 +1014,8 @@ FileSaveDialogImplGtk::FileSaveDialogImplGtk(Gtk::Window &parentWindow, const Gl
         fileNameEntry->signal_activate().connect(
             sigc::mem_fun(*this, &FileSaveDialogImplGtk::fileNameEntryChangedCallback));
     }
+    signal_selection_changed().connect(
+        sigc::mem_fun(*this, &FileSaveDialogImplGtk::fileNameChanged));
 
     // Let's do more customization
     std::vector<Gtk::Expander *> expanders;
@@ -1104,6 +1106,16 @@ void FileSaveDialogImplGtk::fileTypeChangedCallback()
     set_filter(filter);
 
     updateNameAndExtension();
+}
+
+void FileSaveDialogImplGtk::fileNameChanged() {
+    Glib::ustring name = get_filename();
+    Glib::ustring::size_type pos = name.rfind('.');
+    if ( pos == Glib::ustring::npos ) return;
+    Glib::ustring ext = name.substr( pos ).casefold();
+    if (extension && Glib::ustring(dynamic_cast<Inkscape::Extension::Output *>(extension)->get_extension()).casefold() == ext ) return;
+    if (knownExtensions.find(ext) == knownExtensions.end()) return;
+    fileTypeComboBox.set_active_text(_("Guess from extension"));
 }
 
 void FileSaveDialogImplGtk::addFileType(Glib::ustring name, Glib::ustring pattern)
