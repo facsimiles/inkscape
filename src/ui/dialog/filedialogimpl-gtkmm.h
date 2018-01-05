@@ -348,6 +348,7 @@ private:
      */
     void fileNameEntryChangedCallback();
     void fileNameChanged();
+    bool fromCB;
 };
 
 
