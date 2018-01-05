@@ -47,6 +47,11 @@ namespace WPAP {
     class KnotHolderEntityWidthPatternAlongPath : public LPEKnotHolderEntity {
     public:
         KnotHolderEntityWidthPatternAlongPath(LPEPatternAlongPath * effect) : LPEKnotHolderEntity(effect) {}
+        virtual ~KnotHolderEntityWidthPatternAlongPath()
+        {
+            LPEPatternAlongPath *lpe = dynamic_cast<LPEPatternAlongPath *> (_effect);
+            lpe->_knot_entity = NULL;
+        }
         virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state);
         virtual Geom::Point knot_get() const;
     };
@@ -98,7 +103,7 @@ LPEPatternAlongPath::LPEPatternAlongPath(LivePathEffectObject *lpeobject) :
     registerParameter(&fuse_tolerance);
     prop_scale.param_set_digits(3);
     prop_scale.param_set_increments(0.01, 0.10);
-    knot_entity = NULL;
+    _knot_entity = NULL;
     _provides_knotholder_entities = true;
 
 }
@@ -116,14 +121,14 @@ LPEPatternAlongPath::doBeforeEffect (SPLPEItem const* lpeitem)
     if (bbox) {
         original_height = (*bbox)[Geom::Y].max() - (*bbox)[Geom::Y].min();
     }
-    if (knot_entity) {
+    if (_knot_entity) {
         if (hide_knot) {
             helper_path.clear();
-            knot_entity->knot->hide();
+            _knot_entity->knot->hide();
         } else {
-            knot_entity->knot->show();
+            _knot_entity->knot->show();
         }
-        knot_entity->update_knot();
+        _knot_entity->update_knot();
     }
 }
 
@@ -289,12 +294,12 @@ LPEPatternAlongPath::addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vect
 void 
 LPEPatternAlongPath::addKnotHolderEntities(KnotHolder *knotholder, SPItem *item)
 {
-    knot_entity = new WPAP::KnotHolderEntityWidthPatternAlongPath(this);
-    knot_entity->create(NULL, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN, _("Change the width"), SP_KNOT_SHAPE_CIRCLE);
-    knotholder->add(knot_entity);
+    _knot_entity = new WPAP::KnotHolderEntityWidthPatternAlongPath(this);
+    _knot_entity->create(NULL, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN, _("Change the width"), SP_KNOT_SHAPE_CIRCLE);
+    knotholder->add(_knot_entity);
     if (hide_knot) {
-        knot_entity->knot->hide();
-        knot_entity->update_knot();
+        _knot_entity->knot->hide();
+        _knot_entity->update_knot();
     }
 }
 
