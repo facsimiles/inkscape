@@ -6749,4 +6749,3 @@ G01 Z1 (going to cutting z)\n""",
 #						
 gcodetools = Gcodetools()
 gcodetools.affect()					
-
