@@ -5,14 +5,14 @@
 # Alessio Frusciante <algol@firenze.linux.it>, 2002-2003.
 # Luca Ferretti <elle.uca@infinito.it>, 2005.
 # Luca Bruno <lucab@debian.org>, 2005-2009.
-# Firas Hanife <FirasHanife@gmail.com>, 2014-2017.
+# Firas Hanife <FirasHanife@gmail.com>, 2014-2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Inkscape 0.92\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
 "POT-Creation-Date: 2018-02-03 23:41+0100\n"
-"PO-Revision-Date: 2017-08-05 02:00+0100\n"
+"PO-Revision-Date: 2018-02-17 00:00+0100\n"
 "Last-Translator: Firas Hanife <FirasHanife@gmail.com>\n"
 "Language-Team: \n"
 "Language: it\n"
