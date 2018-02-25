@@ -100,7 +100,7 @@
         FileOpen $unlog_tmp_4 "$unlog_tmp_5" a
      !endif
 
-        ${PerfomUninstall} "${TargetDir}" "${UnLog_Uninstall_CallBackFunc}"
+        ${PerformUninstall} "${TargetDir}" "${UnLog_Uninstall_CallBackFunc}"
 
      !ifdef INTERACTIVE_UNINSTALL
         FileClose $unlog_tmp_4
@@ -110,7 +110,7 @@
 !macroend
 
 
-!define PerfomUninstall "!insertmacro PERFORMUNINSTALL"
+!define PerformUninstall "!insertmacro PERFORMUNINSTALL"
 
 !macro PERFORMUNINSTALL TargetDir UninstCallBackFunc
   !verbose push
