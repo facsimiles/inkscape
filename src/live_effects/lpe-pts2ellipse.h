@@ -36,11 +36,6 @@ public:
     virtual ~LPEPts2Ellipse();
 
     virtual Geom::PathVector doEffect_path (Geom::PathVector const & path_in);
-    virtual Gtk::Widget * newWidget();
-    // protected:
-    //   virtual void addCanvasIndicators(SPLPEItem const *lpeitem, std::vector< Geom::PathVector > &hp_vec);
-
-    int putEllipseInDocument();
 
 private:
     LPEPts2Ellipse(const LPEPts2Ellipse&);
@@ -54,8 +49,6 @@ private:
                         Geom::PathVector & path_out);
 
     EnumParam<EllipseMethod> method;
-//    BoolParam only_circle;
-//    BoolParam gen_isometric;
     BoolParam gen_isometric_frame;
     BoolParam gen_arc;
     BoolParam other_arc;
@@ -64,7 +57,6 @@ private:
     ScalarParam rot_axes;
     BoolParam draw_ori_path;
 
-    // Geom::Path helper_path;
     std::vector<Geom::Point> points;
 };
 

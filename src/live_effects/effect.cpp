@@ -66,6 +66,7 @@
 #include "live_effects/lpe-vonkoch.h"
 #include "live_effects/lpe-embrodery-stitch.h"
 #include "live_effects/lpe-bool.h"
+#include "live_effects/lpe-pts2ellipse.h"
 
 #include "live_effects/lpeobject.h"
 
@@ -156,6 +157,7 @@ const Util::EnumData<EffectType> LPETypeData[] = {
     {RECURSIVE_SKELETON,    N_("Recursive skeleton"),              "recursive_skeleton"},
     {TANGENT_TO_CURVE,      N_("Tangent to curve"),                "tangent_to_curve"},
     {TEXT_LABEL,            N_("Text label"),                      "text_label"},
+    {PTS2ELLIPSE,           N_("Ellipse from points"),             "pts2ellipse"},
 #endif
 
 };
@@ -340,6 +342,9 @@ Effect::New(EffectType lpenr, LivePathEffectObject *lpeobj)
             break;
         case MEASURE_SEGMENTS:
             neweffect = static_cast<Effect*> ( new LPEMeasureSegments(lpeobj) );
+            break;
+        case PTS2ELLIPSE:
+            neweffect = static_cast<Effect*> ( new LPEPts2Ellipse(lpeobj) );
             break;
         default:
             g_warning("LivePathEffect::Effect::New called with invalid patheffect type (%d)", lpenr);
