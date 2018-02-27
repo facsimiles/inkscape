@@ -110,8 +110,8 @@ unit_arc_path(Geom::Path &path, Geom::Affine &affine,
               double start=0.0, double end=2*M_PI, // angles
               bool slice=false)
 {
-    double Da = calc_delta_angle(start,end);
-    if (fabs(Da) < 1e-9) {
+    double arc_angle = calc_delta_angle(start,end);
+    if (fabs(arc_angle) < 1e-9) {
         g_warning("angle was 0");
         return -1;
     }
@@ -119,19 +119,19 @@ unit_arc_path(Geom::Path &path, Geom::Affine &affine,
     // the delta angle
     double da=M_PI_2;
     // number of segments with da length
-    int nda=(int)ceil(Da/M_PI_2);
+    int nda=(int)ceil(arc_angle/M_PI_2);
     // recalculate da
-    da=Da/(double)nda;
+    da=arc_angle/(double)nda;
 
     bool closed=false;
-    if (fabs(Da - 2*M_PI) < 1e-8) {
+    if (fabs(arc_angle - 2*M_PI) < 1e-8) {
         closed = true;
         da=M_PI_2;
         nda=4;
     }
 
     start = range2pi(start);
-    end=start+Da;
+    end=start+arc_angle;
 
     // adopted from: sp-ellipse.cpp
     SPCurve * curve=new SPCurve();
