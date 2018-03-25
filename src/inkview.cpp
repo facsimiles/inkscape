@@ -33,7 +33,6 @@
 
 #include <libxml/tree.h>
 
-#include <glibmm.h>
 #include <glibmm/i18n.h>
 
 #include "document.h"
@@ -45,89 +44,43 @@
 #include "inkgc/gc-core.h"
 #include "io/sys.h"
 #include "svg-view-slideshow.h"
-
-
-
-
+#include "inkview-options-group.h"
 
 /**
- * \brief Set of command-line options for Inkview
+ * @brief Get a list of valid SVG files from a list of strings
+ *
+ * @param[in] filenames       The list of filenames/folders to check
+ * @param[in] recursive       True if we want to search within subfolders
+ * @param[in] first_iteration True if this is the first iteration of the search
+ *
+ * @returns A new vector containing the complete paths for any valid SVG files
  */
-class InkviewOptionsGroup : public Glib::OptionGroup
+std::vector<Glib::ustring>
+get_valid_files(std::vector<Glib::ustring> filenames,
+                bool                       recursive = false,
+                bool                       first_iteration = false)
 {
-public:
-    // list of all input filenames;
-    // this list contains all arguments that are not recognized as an option (so needs to be checked)
-    Glib::OptionGroup::vecustrings filenames;
-
-    bool fullscreen = false; // whether to launch in fullscreen mode
-    bool recursive = false;  // whether to search folders for SVG files recursively
-    int timer = 0;           // time (in seconds) after which the next image of the slideshow is automatically loaded
-    double scale = 1;        // scale factor for images
-                             //   (currently only applied to the first image - others are resized to window dimensions)
-
-    InkviewOptionsGroup() : Glib::OptionGroup(N_("Inkscape Options"),
-                                              N_("Default program options"))
-    {
-        // Entry for the "fullscreen" option
-        Glib::OptionEntry entry_fullscreen;
-        entry_fullscreen.set_short_name('f');
-        entry_fullscreen.set_long_name("fullscreen");
-        entry_fullscreen.set_description(N_("Launch in fullscreen mode"));
-        add_entry(entry_fullscreen, fullscreen);
-
-        // Entry for the "recursive" option
-        Glib::OptionEntry entry_recursive;
-        entry_recursive.set_short_name('r');
-        entry_recursive.set_long_name("recursive");
-        entry_recursive.set_description(N_("Search folders recursively"));
-        add_entry(entry_recursive, recursive);
-
-        // Entry for the "timer" option
-        Glib::OptionEntry entry_timer;
-        entry_timer.set_short_name('t');
-        entry_timer.set_long_name("timer");
-        entry_timer.set_arg_description(N_("NUM"));
-        entry_timer.set_description(N_("Change image every NUM seconds"));
-        add_entry(entry_timer, timer);
-
-        // Entry for the "scale" option
-        Glib::OptionEntry entry_scale;
-        entry_scale.set_short_name('s');
-        entry_scale.set_long_name("scale");
-        entry_scale.set_arg_description(N_("NUM"));
-        entry_scale.set_description(N_("Scale image by factor NUM"));
-        add_entry(entry_scale, scale);
-
-        // Entry for the remaining non-option arguments
-        Glib::OptionEntry entry_args;
-        entry_args.set_long_name(G_OPTION_REMAINING);
-        entry_args.set_arg_description(N_("FILES/FOLDERS…"));
-
-        add_entry(entry_args, filenames);
-    }
-};
-
-
-/** get a list of valid SVG files from a list of strings */
-std::vector<Glib::ustring> get_valid_files(std::vector<Glib::ustring> filenames, bool recursive = false, bool first_iteration = false)
-{
+    // List to store all the valid files found by the search
     std::vector<Glib::ustring> valid_files;
 
+    // Loop through all the input filenames
     for(auto file : filenames)
     {
+        // First check if the file actually exists.  Skip to the next item if not
         if (!Inkscape::IO::file_test( file.c_str(), G_FILE_TEST_EXISTS )) {
             g_printerr("%s: %s\n", _("File or folder does not exist"), file.c_str());
             continue;
         }
 
+        // Now determine if this is a directory or a single file
         if (Inkscape::IO::file_test( file.c_str(), G_FILE_TEST_IS_DIR )) {
+
             // only recurse into directories if explicitly specified by user on command line or if recursive = true
             if (first_iteration || recursive) {
                 std::vector<Glib::ustring> new_filenames;
                 Glib::Dir directory(file);
                 for (auto new_file: directory) {
-                        new_filenames.push_back(Glib::build_filename(file, new_file));
+                    new_filenames.push_back(Glib::build_filename(file, new_file));
                 }
                 std::vector<Glib::ustring> new_valid_files = get_valid_files(new_filenames, recursive);
                 valid_files.insert(valid_files.end(), new_valid_files.begin(), new_valid_files.end());
@@ -141,6 +94,8 @@ std::vector<Glib::ustring> get_valid_files(std::vector<Glib::ustring> filenames,
                 }
             }
 
+            // Try to create a new document from the contents of the file, and if it is valid
+            // add the path to the list
             auto doc = SPDocument::createNewDoc(file.c_str(), TRUE, false);
             if(doc) {
                 /* Append to list */

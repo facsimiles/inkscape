@@ -22,77 +22,18 @@
 #include FT_TRUETYPE_TAGS_H
 #include FT_TRUETYPE_TABLES_H
 #include FT_GLYPH_H
+#include FT_MULTIPLE_MASTERS_H
+
 #include <pango/pangoft2.h>
+
+#include <glibmm/regex.h>
+
 #include <2geom/pathvector.h>
 #include <2geom/path-sink.h>
 #include "libnrtype/font-glyph.h"
 #include "libnrtype/font-instance.h"
-#include "livarot/Path.h"
 #include "util/unordered-containers.h"
 
-
-struct font_style_hash : public std::unary_function<font_style, size_t> {
-    size_t operator()(font_style const &x) const;
-};
-
-struct font_style_equal : public std::binary_function<font_style, font_style, bool> {
-    bool operator()(font_style const &a, font_style const &b) const;
-};
-
-static const double STROKE_WIDTH_THREASHOLD = 0.01;
-
-
-
-size_t font_style_hash::operator()(const font_style &x) const {
-    int h = 0;
-    int n = static_cast<int>(floor(100 * x.stroke_width));
-    h *= 12186;
-    h += n;
-    n = (x.vertical) ? 1:0;
-    h *= 12186;
-    h += n;
-    if ( x.stroke_width >= STROKE_WIDTH_THREASHOLD ) {
-        n = x.stroke_cap * 10 + x.stroke_join + static_cast<int>(x.stroke_miter_limit * 100);
-        h *= 12186;
-        h += n;
-        if ( x.nbDash > 0 ) {
-            n = x.nbDash;
-            h *= 12186;
-            h += n;
-            n = static_cast<int>(floor(100 * x.dash_offset));
-            h *= 12186;
-            h += n;
-            for (int i = 0; i < x.nbDash; i++) {
-                n = static_cast<int>(floor(100 * x.dashes[i]));
-                h *= 12186;
-                h += n;
-            }
-        }
-    }
-    return h;
-}
-
-bool font_style_equal::operator()(const font_style &a,const font_style &b) const {
-    bool same = true;
-    for (int i = 0; (i < 6) && same; i++) {
-        same = ( static_cast<int>(100 * a.transform[i]) == static_cast<int>(100 * b.transform[i]) );
-    }
-    same &= ( a.vertical == b.vertical )
-        && ( a.stroke_width > STROKE_WIDTH_THREASHOLD ) == ( b.stroke_width > STROKE_WIDTH_THREASHOLD );
-    if ( same && ( a.stroke_width > STROKE_WIDTH_THREASHOLD ) ) {
-        same = ( a.stroke_cap == b.stroke_cap )
-            && ( a.stroke_join == b.stroke_join )
-            && ( static_cast<int>(a.stroke_miter_limit * 100) == static_cast<int>(b.stroke_miter_limit * 100) )
-            && ( a.nbDash == b.nbDash );
-        if ( same && ( a.nbDash > 0 ) ) {
-            same = ( static_cast<int>(floor(100 * a.dash_offset)) == static_cast<int>(floor(100 * b.dash_offset)) );
-            for (int i = 0; (i < a.nbDash) && same; i++) {
-                same = ( static_cast<int>(floor(100 * a.dashes[i])) == static_cast<int>(floor(100 * b.dashes[i])) );
-            }
-        }
-    }
-    return same;
-}
 
 #ifndef USE_PANGO_WIN32
 /*
@@ -110,20 +51,8 @@ struct FT2GeomData {
     double scale;
 };
 
-// Note: Freetype 2.2.1 redefined function signatures for functions to be placed in an
-// FT_Outline_Funcs structure.  This is needed to keep backwards compatibility with the
-// 2.1.x series.
-
-/* *** BEGIN #if HACK *** */
-#if FREETYPE_MAJOR == 2 && FREETYPE_MINOR >= 2
-typedef FT_Vector const FREETYPE_VECTOR;
-#else
-typedef FT_Vector FREETYPE_VECTOR;
-#endif
-
-// outline as returned by freetype -> livarot Path
-// see nr-type-ft2.cpp for the freetype -> artBPath on which this code is based
-static int ft2_move_to(FREETYPE_VECTOR *to, void * i_user)
+// outline as returned by freetype
+static int ft2_move_to(FT_Vector const *to, void * i_user)
 {
     FT2GeomData *user = (FT2GeomData*)i_user;
     Geom::Point p(to->x, to->y);
@@ -133,7 +62,7 @@ static int ft2_move_to(FREETYPE_VECTOR *to, void * i_user)
     return 0;
 }
 
-static int ft2_line_to(FREETYPE_VECTOR *to, void *i_user)
+static int ft2_line_to(FT_Vector const *to, void *i_user)
 {
     FT2GeomData *user = (FT2GeomData*)i_user;
     Geom::Point p(to->x, to->y);
@@ -143,7 +72,7 @@ static int ft2_line_to(FREETYPE_VECTOR *to, void *i_user)
     return 0;
 }
 
-static int ft2_conic_to(FREETYPE_VECTOR *control, FREETYPE_VECTOR *to, void *i_user)
+static int ft2_conic_to(FT_Vector const *control, FT_Vector const *to, void *i_user)
 {
     FT2GeomData *user = (FT2GeomData*)i_user;
     Geom::Point p(to->x, to->y), c(control->x, control->y);
@@ -153,7 +82,7 @@ static int ft2_conic_to(FREETYPE_VECTOR *control, FREETYPE_VECTOR *to, void *i_u
     return 0;
 }
 
-static int ft2_cubic_to(FREETYPE_VECTOR *control1, FREETYPE_VECTOR *control2, FREETYPE_VECTOR *to, void *i_user)
+static int ft2_cubic_to(FT_Vector const *control1, FT_Vector const *control2, FT_Vector const *to, void *i_user)
 {
     FT2GeomData *user = (FT2GeomData*)i_user;
     Geom::Point p(to->x, to->y);
@@ -257,24 +186,115 @@ void font_instance::Unref(void)
 void font_instance::InitTheFace()
 {
     if (theFace == NULL && pFont != NULL) {
+
 #ifdef USE_PANGO_WIN32
-    if ( !theFace ) {
+
         LOGFONT *lf=pango_win32_font_logfont(pFont);
         g_assert(lf != NULL);
-        theFace=pango_win32_font_cache_load(parent->pangoFontCache,lf);
+        theFace = pango_win32_font_cache_load(parent->pangoFontCache,lf);
         g_free(lf);
-    }
-    XFORM identity = {1.0, 0.0, 0.0, 1.0, 0.0, 0.0};
-    SetWorldTransform(parent->hScreenDC, &identity);
-    SetGraphicsMode(parent->hScreenDC, GM_COMPATIBLE);
-    SelectObject(parent->hScreenDC,theFace);
+
+        XFORM identity = {1.0, 0.0, 0.0, 1.0, 0.0, 0.0};
+        SetWorldTransform(parent->hScreenDC, &identity);
+        SetGraphicsMode(parent->hScreenDC, GM_COMPATIBLE);
+        SelectObject(parent->hScreenDC,theFace);
+
 #else
-    theFace=pango_fc_font_lock_face(PANGO_FC_FONT(pFont));
-    if ( theFace ) {
-        FT_Select_Charmap(theFace,ft_encoding_unicode) && FT_Select_Charmap(theFace,ft_encoding_symbol);
-    }
+
+        theFace = pango_fc_font_lock_face(PANGO_FC_FONT(pFont));
+        if ( theFace ) {
+            FT_Select_Charmap(theFace, ft_encoding_unicode);
+            FT_Select_Charmap(theFace, ft_encoding_symbol);
+        }
+
 #endif
-    FindFontMetrics();
+
+#ifndef USE_PANGO_WIN32
+#if PANGO_VERSION_CHECK(1,41,1)
+#if FREETYPE_MAJOR == 2 && FREETYPE_MINOR >= 8  // 2.8 does not seem to work even though it has some support.
+
+        // 'font-variation-settings' support.
+        //    The font returned from pango_fc_font_lock_face does not include variation settings. We must set them.
+
+        // We need to:
+        //   Get a list of axes supported in the font with the range of allowed values.
+        //   Extract axes with values from Pango font description.
+        //   Fill an array indexed by FT axis with values from Pango.
+
+        char const *var = pango_font_description_get_variations( descr );
+        if (var) {
+
+            Glib::ustring variations(var);
+
+            FT_MM_Var* mmvar = NULL;
+            FT_Multi_Master mmtype;
+            if (FT_HAS_MULTIPLE_MASTERS( theFace )    &&    // Font has variables
+                FT_Get_MM_Var(theFace, &mmvar) == 0   &&    // We found the data
+                FT_Get_Multi_Master(theFace, &mmtype) !=0) {  // It's not an Adobe MM font
+
+                // std::cout << "  Multiple Masters: variables: " << mmvar->num_axis
+                //           << "  named styles: " << mmvar->num_namedstyles << std::endl;
+
+                // Get a list of axis and their default values from the font.
+                std::map<Glib::ustring, int> axis_map;
+                std::vector<int> axis_value;
+                for (FT_UInt axisIndex = 0; axisIndex < mmvar->num_axis; ++axisIndex) {
+
+                    const FT_Var_Axis& ftAxis = mmvar->axis[axisIndex];
+                    const FT_Tag axisTag = ftAxis.tag;
+
+                    Glib::ustring axis_name;
+                    axis_name += (char)(axisTag>>24 & 0xff);
+                    axis_name += (char)(axisTag>>16 & 0xff);
+                    axis_name += (char)(axisTag>> 8 & 0xff);
+                    axis_name += (char)(axisTag     & 0xff);
+
+                    axis_map.insert(std::pair<Glib::ustring, int>(axis_name, axisIndex));
+                    axis_value.push_back(static_cast<FT_Int32>(ftAxis.def/65536.0));
+                }
+
+                // Get the required values from Pango Font Description
+                // Need to check format of values from Pango, for the moment accept any format.
+                Glib::RefPtr<Glib::Regex> regex = Glib::Regex::create("(\\w{4})=([-+]?\\d*\\.?\\d+([eE][-+]?\\d+)?)");
+                Glib::MatchInfo matchInfo;
+
+                std::vector<Glib::ustring> tokens = Glib::Regex::split_simple(",", variations);
+                for (auto token: tokens) {
+
+                    regex->match(token, matchInfo);
+                    if (matchInfo.matches()) {
+                        float value = std::stod(matchInfo.fetch(2));  // Should clamp value
+
+                        auto it = axis_map.find(matchInfo.fetch(1));
+                        if (it != axis_map.end()) {
+                            axis_value[it->second] = value;
+                        }
+                    }
+                }
+
+                // Fill coordinate array
+                const FT_UInt num_axis = axis_map.size();
+                FT_Fixed w[num_axis];
+                for (FT_UInt axisIndex = 0; axisIndex < num_axis; ++axisIndex) {
+                    w[axisIndex] = axis_value[axisIndex] * 65536;
+                }
+
+                // Set design coordinates
+                FT_Error err;
+                err = FT_Set_Var_Design_Coordinates (theFace, 2, w);
+                if (err) {
+                    std::cout << "font_instance::InitTheFace(): Error in call to FT_Set_Var_Design_Coordinates(): " << err << std::endl;
+                }
+
+                // FT_Done_MM_Var(mmlib, mmvar);
+            }
+        }
+
+#endif // FreeType
+#endif // Pango
+#endif // !USE_PANGO_WIN32
+
+       FindFontMetrics();
     }
 }
 

@@ -144,7 +144,6 @@ public:
 
         bool has_important = false;
         Glib::ustring stripped = strip_important(str, has_important); // Sets 'has_important'
-
         // '!important' is invalid on attributes, don't read.
         if (source == SP_STYLE_SRC_ATTRIBUTE && has_important){
             return;
@@ -512,7 +511,8 @@ public:
                                        SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
                                        SPIBase const *const base = NULL ) const;
     virtual void clear() {
-        axes.empty();
+        SPIBase::clear();
+        axes.clear();
         normal = true;
     }
 
@@ -520,6 +520,7 @@ public:
     virtual void merge(   const SPIBase* const parent );
 
     SPIFontVariationSettings& operator=(const SPIFontVariationSettings& rhs) {
+        SPIBase::operator=(rhs);
         axes = rhs.axes;
         normal = rhs.normal;
         return *this;
@@ -530,11 +531,13 @@ public:
         return !(*this == rhs);
     }
 
+    virtual const Glib::ustring toString() const;
+
   // To do: make private
 public:
     bool normal : 1;
     bool inherit : 1;
-    std::map<char*, float> axes;
+    std::map<Glib::ustring, float> axes;
 };
 
 

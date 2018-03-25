@@ -68,9 +68,13 @@ if(APPLE AND DEFINED ENV{CMAKE_PREFIX_PATH})
 endif()
 
 
-find_package(JeMalloc)
-if (JEMALLOC_FOUND)
-	list(APPEND INKSCAPE_LIBS ${JEMALLOC_LIBRARIES})
+if(WITH_JEMALLOC)
+    find_package(JeMalloc)
+    if (JEMALLOC_FOUND)
+        list(APPEND INKSCAPE_LIBS ${JEMALLOC_LIBRARIES})
+    else()
+        set(WITH_JEMALLOC OFF)
+    endif()
 endif()
 
 if(ENABLE_LCMS)
@@ -256,6 +260,15 @@ set(TRY_GTKSPELL ON)
         )
     list(APPEND INKSCAPE_CXX_FLAGS ${GTK3_CFLAGS_OTHER})
 
+    # Use some obtuse string parsing to get the version
+    # number components for GTKMM.
+    # These variables are also substituted in config.h, and used within the
+    # GTKMM_CHECK_VERSION macro
+    string(REPLACE "." ";" GTKMM_VERSION_COMPONENTS ${GTK3_gtkmm-3.0_VERSION})
+    list(GET GTKMM_VERSION_COMPONENTS 0 INKSCAPE_GTKMM_MAJOR_VERSION)
+    list(GET GTKMM_VERSION_COMPONENTS 1 INKSCAPE_GTKMM_MINOR_VERSION)
+    list(GET GTKMM_VERSION_COMPONENTS 2 INKSCAPE_GTKMM_MICRO_VERSION)
+
     pkg_check_modules(GDL_3_6 gdl-3.0>=3.6)
 
     if("${GDL_3_6_FOUND}")
@@ -364,15 +377,17 @@ list(APPEND INKSCAPE_LIBS ${SIGC++_LDFLAGS})
 
 list(APPEND INKSCAPE_CXX_FLAGS ${SIGC++_CFLAGS_OTHER})
 
-find_package(yaml)
-if(YAML_FOUND)
-    set (WITH_YAML ON)
-    list(APPEND INKSCAPE_INCS_SYS ${YAML_INCLUDE_DIRS})
-    list(APPEND INKSCAPE_LIBS ${YAML_LIBRARIES})
-    add_definitions(-DWITH_YAML)
-else(YAML_FOUND)
-    set(WITH_YAML OFF)
-    message(STATUS "Could not locate the yaml library headers: xverb feature will be disabled")
+if(WITH_YAML)
+    find_package(yaml)
+    if(YAML_FOUND)
+        set (WITH_YAML ON)
+        list(APPEND INKSCAPE_INCS_SYS ${YAML_INCLUDE_DIRS})
+        list(APPEND INKSCAPE_LIBS ${YAML_LIBRARIES})
+        add_definitions(-DWITH_YAML)
+    else(YAML_FOUND)
+        set(WITH_YAML OFF)
+        message(STATUS "Could not locate the yaml library headers: xverb feature will be disabled")
+    endif()
 endif()
 
 list(REMOVE_DUPLICATES INKSCAPE_CXX_FLAGS)

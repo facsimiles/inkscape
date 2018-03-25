@@ -141,6 +141,7 @@ const Util::EnumData<EffectType> LPETypeData[] = {
     {POWERCLIP,             N_("Power clip"),                      "powerclip"},
     {POWERMASK,             N_("Power mask"),                      "powermask"},
     {PTS2ELLIPSE,           N_("Ellipse from points"),             "pts2ellipse"},
+    {OFFSET,                N_("Offset"),                          "offset"},
 #ifdef LPE_ENABLE_TEST_EFFECTS
     {DOEFFECTSTACK_TEST,    N_("doEffect stack test"),             "doeffectstacktest"},
     {ANGLE_BISECTOR,        N_("Angle bisector"),                  "angle_bisector"},
@@ -150,7 +151,6 @@ const Util::EnumData<EffectType> LPETypeData[] = {
     {EXTRUDE,               N_("Extrude"),                         "extrude"},
     {LATTICE,               N_("Lattice Deformation"),             "lattice"},
     {LINE_SEGMENT,          N_("Line Segment"),                    "line_segment"},
-    {OFFSET,                N_("Offset"),                          "offset"},
     {PARALLEL,              N_("Parallel"),                        "parallel"},
     {PATH_LENGTH,           N_("Path length"),                     "path_length"},
     {PERP_BISECTOR,         N_("Perpendicular bisector"),          "perp_bisector"},

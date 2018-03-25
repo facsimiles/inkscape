@@ -46,7 +46,7 @@ class InkScale : public Gtk::Scale
  private:
 
   double get_fraction();
-  void set_adjustment_value(double x);
+  void set_adjustment_value(double x, bool constrained = false);
 
   Gtk::SpinButton * _spinbutton; // Needed to get placement/text color.
   Glib::ustring _label;
@@ -84,7 +84,7 @@ class InkSpinScale : public Gtk::Box
   InkScale*                      _scale;
   Gtk::SpinButton*               _spinbutton;
   Glib::RefPtr<Gtk::Adjustment>  _adjustment;
-  GtkWidget*                     _focus_widget;
+  GtkWidget*                     _focus_widget = nullptr;
 
   bool on_key_release_event(GdkEventKey* key_event) override;
 

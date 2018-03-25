@@ -17,18 +17,19 @@
 #endif
 
 #include <glibmm/i18n.h>
+
 #include <fontconfig/fontconfig.h>
+
 #include <pango/pangofc-fontmap.h>
 #include <pango/pangoft2.h>
 #include <pango/pango-ot.h>
+
 #include "io/sys.h"
+#include "util/unordered-containers.h"
+
 #include "libnrtype/FontFactory.h"
 #include "libnrtype/font-instance.h"
-#include "util/unordered-containers.h"
-#include <map>
-
-#include <harfbuzz/hb-ft.h>
-#include <harfbuzz/hb-ot.h>
+#include "libnrtype/OpenTypeUtil.h"
 
 typedef INK_UNORDERED_MAP<PangoFontDescription*, font_instance*, font_descr_hash, font_descr_equal> FaceMapType;
 
@@ -45,8 +46,14 @@ size_t font_descr_hash::operator()( PangoFontDescription *const &x) const {
     h += (int)pango_font_description_get_weight(x);
     h *= 1128467;
     h += (int)pango_font_description_get_stretch(x);
+#if PANGO_VERSION_CHECK(1,41,1)
+    char const *theV = pango_font_description_get_variations(x);
+    h *= 1128467;
+    h += (theV)?g_str_hash(theV):0;
+#endif
     return h;
 }
+
 bool  font_descr_equal::operator()( PangoFontDescription *const&a, PangoFontDescription *const &b) const {
     //if ( pango_font_description_equal(a,b) ) return true;
     char const *fa = sp_font_description_get_family(a);
@@ -57,7 +64,147 @@ bool  font_descr_equal::operator()( PangoFontDescription *const&a, PangoFontDesc
     if ( pango_font_description_get_variant(a) != pango_font_description_get_variant(b) ) return false;
     if ( pango_font_description_get_weight(a) != pango_font_description_get_weight(b) ) return false;
     if ( pango_font_description_get_stretch(a) != pango_font_description_get_stretch(b) ) return false;
+#if PANGO_VERSION_CHECK(1,41,1)
+    if ( g_strcmp0( pango_font_description_get_variations(a),
+                    pango_font_description_get_variations(b) ) != 0 ) return false;
+#endif
     return true;
+}
+
+// User must free return value.
+PangoFontDescription* ink_font_description_from_style(SPStyle const *style)
+{
+    PangoFontDescription *descr = pango_font_description_new();
+
+    pango_font_description_set_family(descr, style->font_family.value);
+
+    // This duplicates Layout::EnumConversionItem... perhaps we can share code?
+    switch ( style->font_style.computed ) {
+        case SP_CSS_FONT_STYLE_ITALIC:
+            pango_font_description_set_style(descr, PANGO_STYLE_ITALIC);
+            break;
+
+        case SP_CSS_FONT_STYLE_OBLIQUE:
+            pango_font_description_set_style(descr, PANGO_STYLE_OBLIQUE);
+            break;
+
+        case SP_CSS_FONT_STYLE_NORMAL:
+        default:
+            pango_font_description_set_style(descr, PANGO_STYLE_NORMAL);
+            break;
+    }
+
+    switch( style->font_weight.computed ) {
+        case SP_CSS_FONT_WEIGHT_100:
+            pango_font_description_set_weight(descr, PANGO_WEIGHT_THIN);
+            break;
+
+        case SP_CSS_FONT_WEIGHT_200:
+            pango_font_description_set_weight(descr, PANGO_WEIGHT_ULTRALIGHT);
+            break;
+
+        case SP_CSS_FONT_WEIGHT_300:
+            pango_font_description_set_weight(descr, PANGO_WEIGHT_LIGHT);
+            break;
+
+        case SP_CSS_FONT_WEIGHT_400:
+        case SP_CSS_FONT_WEIGHT_NORMAL:
+            pango_font_description_set_weight(descr, PANGO_WEIGHT_NORMAL);
+            break;
+
+        case SP_CSS_FONT_WEIGHT_500:
+            pango_font_description_set_weight(descr, PANGO_WEIGHT_MEDIUM);
+            break;
+
+        case SP_CSS_FONT_WEIGHT_600:
+            pango_font_description_set_weight(descr, PANGO_WEIGHT_SEMIBOLD);
+            break;
+
+        case SP_CSS_FONT_WEIGHT_700:
+        case SP_CSS_FONT_WEIGHT_BOLD:
+            pango_font_description_set_weight(descr, PANGO_WEIGHT_BOLD);
+            break;
+
+        case SP_CSS_FONT_WEIGHT_800:
+            pango_font_description_set_weight(descr, PANGO_WEIGHT_ULTRABOLD);
+            break;
+
+        case SP_CSS_FONT_WEIGHT_900:
+            pango_font_description_set_weight(descr, PANGO_WEIGHT_HEAVY);
+            break;
+
+        case SP_CSS_FONT_WEIGHT_LIGHTER:
+        case SP_CSS_FONT_WEIGHT_BOLDER:
+        default:
+            g_warning("FaceFromStyle: Unrecognized font_weight.computed value");
+            pango_font_description_set_weight(descr, PANGO_WEIGHT_NORMAL);
+            break;
+    }
+    // PANGO_WIEGHT_ULTRAHEAVY not used (not CSS2)
+
+    switch (style->font_stretch.computed) {
+        case SP_CSS_FONT_STRETCH_ULTRA_CONDENSED:
+            pango_font_description_set_stretch(descr, PANGO_STRETCH_ULTRA_CONDENSED);
+            break;
+
+        case SP_CSS_FONT_STRETCH_EXTRA_CONDENSED:
+            pango_font_description_set_stretch(descr, PANGO_STRETCH_EXTRA_CONDENSED);
+            break;
+
+        case SP_CSS_FONT_STRETCH_CONDENSED:
+            pango_font_description_set_stretch(descr, PANGO_STRETCH_CONDENSED);
+            break;
+
+        case SP_CSS_FONT_STRETCH_SEMI_CONDENSED:
+            pango_font_description_set_stretch(descr, PANGO_STRETCH_SEMI_CONDENSED);
+            break;
+
+        case SP_CSS_FONT_STRETCH_NORMAL:
+            pango_font_description_set_stretch(descr, PANGO_STRETCH_NORMAL);
+            break;
+
+        case SP_CSS_FONT_STRETCH_SEMI_EXPANDED:
+            pango_font_description_set_stretch(descr, PANGO_STRETCH_SEMI_EXPANDED);
+            break;
+
+        case SP_CSS_FONT_STRETCH_EXPANDED:
+            pango_font_description_set_stretch(descr, PANGO_STRETCH_EXPANDED);
+            break;
+
+        case SP_CSS_FONT_STRETCH_EXTRA_EXPANDED:
+            pango_font_description_set_stretch(descr, PANGO_STRETCH_EXTRA_EXPANDED);
+            break;
+
+        case SP_CSS_FONT_STRETCH_ULTRA_EXPANDED:
+            pango_font_description_set_stretch(descr, PANGO_STRETCH_ULTRA_EXPANDED);
+
+        case SP_CSS_FONT_STRETCH_WIDER:
+        case SP_CSS_FONT_STRETCH_NARROWER:
+        default:
+            g_warning("FaceFromStyle: Unrecognized font_stretch.computed value");
+            pango_font_description_set_stretch(descr, PANGO_STRETCH_NORMAL);
+            break;
+    }
+
+    switch ( style->font_variant.computed ) {
+        case SP_CSS_FONT_VARIANT_SMALL_CAPS:
+            pango_font_description_set_variant(descr, PANGO_VARIANT_SMALL_CAPS);
+            break;
+
+        case SP_CSS_FONT_VARIANT_NORMAL:
+        default:
+            pango_font_description_set_variant(descr, PANGO_VARIANT_NORMAL);
+            break;
+    }
+
+#if PANGO_VERSION_CHECK(1,41,1)
+    // Check if set as Pango will add @ to string even if empty (bug in Pango?).
+    if (style->font_variation_settings.set) {
+        pango_font_description_set_variations(descr, style->font_variation_settings.toString().c_str());
+    }
+#endif
+
+    return descr;
 }
 
 /////////////////// helper functions
@@ -111,6 +258,12 @@ font_factory::font_factory(void) :
                                               this,
                                               NULL);
 #endif
+
+// TEMP
+#if PANGO_VERSION_CHECK(1,41,1)
+    std::cerr << "Pango version: " << pango_version_string() << std::endl;
+#endif
+
 }
 
 font_factory::~font_factory(void)
@@ -234,7 +387,6 @@ Glib::ustring font_factory::GetUIStyleString(PangoFontDescription const *fontDes
         // For now, keep it as style name taken from pango
         char *fontDescrAsString = pango_font_description_to_string(fontDescrCopy);
         style = fontDescrAsString;
-
         g_free(fontDescrAsString);
         fontDescrAsString = 0;
         pango_font_description_free(fontDescrCopy);
@@ -321,6 +473,7 @@ GList* font_factory::GetUIStyles(PangoFontFamily * in)
         std::cerr << "font_factory::GetUIStyles(): PangoFontFamily is NULL" << std::endl;
         return ret;
     }
+
     pango_font_family_list_faces(in, &faces, &numFaces);
 
     for (int currentFace = 0; currentFace < numFaces; currentFace++) {
@@ -338,7 +491,8 @@ GList* font_factory::GetUIStyles(PangoFontFamily * in)
         if (faceDescr) {
             Glib::ustring familyUIName = GetUIFamilyString(faceDescr);
             Glib::ustring styleUIName = GetUIStyleString(faceDescr);
-            // std::cout << familyUIName << "  " << styleUIName << "  " << displayName << std::endl;
+            // std::cout << "  " << familyUIName << "  styleUIName: " << styleUIName << "  displayName: " << displayName << std::endl;
+
             // Disable synthesized (faux) font faces except for CSS generic faces
             if (pango_font_face_is_synthesized(faces[currentFace]) ) {
                 if (familyUIName.compare( "sans-serif" ) != 0 &&
@@ -424,130 +578,8 @@ font_instance* font_factory::FaceFromStyle(SPStyle const *style)
 
         // If that failed, try using the CSS information in the style
         if (!font) {
-
-            PangoFontDescription *temp_descr = pango_font_description_new();
-
-            pango_font_description_set_family(temp_descr, style->font_family.value);
-
-            // This duplicates Layout::EnumConversionItem... perhaps we can share code?
-            switch ( style->font_style.computed ) {
-                case SP_CSS_FONT_STYLE_ITALIC:
-                    pango_font_description_set_style(temp_descr, PANGO_STYLE_ITALIC);
-                    break;
-
-                case SP_CSS_FONT_STYLE_OBLIQUE:
-                    pango_font_description_set_style(temp_descr, PANGO_STYLE_OBLIQUE);
-                    break;
-
-                case SP_CSS_FONT_STYLE_NORMAL:
-                default:
-                    pango_font_description_set_style(temp_descr, PANGO_STYLE_NORMAL);
-                    break;
-            }
-
-            switch( style->font_weight.computed ) {
-                case SP_CSS_FONT_WEIGHT_100:
-                    pango_font_description_set_weight(temp_descr, PANGO_WEIGHT_THIN);
-                    break;
-
-                case SP_CSS_FONT_WEIGHT_200:
-                    pango_font_description_set_weight(temp_descr, PANGO_WEIGHT_ULTRALIGHT);
-                    break;
-
-                case SP_CSS_FONT_WEIGHT_300:
-                    pango_font_description_set_weight(temp_descr, PANGO_WEIGHT_LIGHT);
-                    break;
-
-                case SP_CSS_FONT_WEIGHT_400:
-                case SP_CSS_FONT_WEIGHT_NORMAL:
-                    pango_font_description_set_weight(temp_descr, PANGO_WEIGHT_NORMAL);
-                    break;
-
-                case SP_CSS_FONT_WEIGHT_500:
-                    pango_font_description_set_weight(temp_descr, PANGO_WEIGHT_MEDIUM);
-                    break;
-
-                case SP_CSS_FONT_WEIGHT_600:
-                    pango_font_description_set_weight(temp_descr, PANGO_WEIGHT_SEMIBOLD);
-                    break;
-
-                case SP_CSS_FONT_WEIGHT_700:
-                case SP_CSS_FONT_WEIGHT_BOLD:
-                    pango_font_description_set_weight(temp_descr, PANGO_WEIGHT_BOLD);
-                    break;
-
-                case SP_CSS_FONT_WEIGHT_800:
-                    pango_font_description_set_weight(temp_descr, PANGO_WEIGHT_ULTRABOLD);
-                    break;
-
-                case SP_CSS_FONT_WEIGHT_900:
-                    pango_font_description_set_weight(temp_descr, PANGO_WEIGHT_HEAVY);
-                    break;
-
-                case SP_CSS_FONT_WEIGHT_LIGHTER:
-                case SP_CSS_FONT_WEIGHT_BOLDER:
-                default:
-                    g_warning("FaceFromStyle: Unrecognized font_weight.computed value");
-                    pango_font_description_set_weight(temp_descr, PANGO_WEIGHT_NORMAL);
-                    break;
-            }
-            // PANGO_WIEGHT_ULTRAHEAVY not used (not CSS2)
-
-            switch (style->font_stretch.computed) {
-                case SP_CSS_FONT_STRETCH_ULTRA_CONDENSED:
-                    pango_font_description_set_stretch(temp_descr, PANGO_STRETCH_ULTRA_CONDENSED);
-                    break;
-
-                case SP_CSS_FONT_STRETCH_EXTRA_CONDENSED:
-                    pango_font_description_set_stretch(temp_descr, PANGO_STRETCH_EXTRA_CONDENSED);
-                    break;
-
-                case SP_CSS_FONT_STRETCH_CONDENSED:
-                    pango_font_description_set_stretch(temp_descr, PANGO_STRETCH_CONDENSED);
-                    break;
-
-                case SP_CSS_FONT_STRETCH_SEMI_CONDENSED:
-                    pango_font_description_set_stretch(temp_descr, PANGO_STRETCH_SEMI_CONDENSED);
-                    break;
-
-                case SP_CSS_FONT_STRETCH_NORMAL:
-                    pango_font_description_set_stretch(temp_descr, PANGO_STRETCH_NORMAL);
-                    break;
-
-                case SP_CSS_FONT_STRETCH_SEMI_EXPANDED:
-                    pango_font_description_set_stretch(temp_descr, PANGO_STRETCH_SEMI_EXPANDED);
-                    break;
-
-                case SP_CSS_FONT_STRETCH_EXPANDED:
-                    pango_font_description_set_stretch(temp_descr, PANGO_STRETCH_EXPANDED);
-                    break;
-
-                case SP_CSS_FONT_STRETCH_EXTRA_EXPANDED:
-                    pango_font_description_set_stretch(temp_descr, PANGO_STRETCH_EXTRA_EXPANDED);
-                    break;
-
-                case SP_CSS_FONT_STRETCH_ULTRA_EXPANDED:
-                    pango_font_description_set_stretch(temp_descr, PANGO_STRETCH_ULTRA_EXPANDED);
-
-                case SP_CSS_FONT_STRETCH_WIDER:
-                case SP_CSS_FONT_STRETCH_NARROWER:
-                default:
-                    g_warning("FaceFromStyle: Unrecognized font_stretch.computed value");
-                    pango_font_description_set_stretch(temp_descr, PANGO_STRETCH_NORMAL);
-                    break;
-            }
-
-            switch ( style->font_variant.computed ) {
-                case SP_CSS_FONT_VARIANT_SMALL_CAPS:
-                    pango_font_description_set_variant(temp_descr, PANGO_VARIANT_SMALL_CAPS);
-                    break;
-
-                case SP_CSS_FONT_VARIANT_NORMAL:
-                default:
-                    pango_font_description_set_variant(temp_descr, PANGO_VARIANT_NORMAL);
-                    break;
-            }
-
+            PangoFontDescription* temp_descr =
+                ink_font_description_from_style(style);
             font = Face(temp_descr);
             pango_font_description_free(temp_descr);
         }
@@ -602,174 +634,6 @@ font_instance* font_factory::FaceFromFontSpecification(char const *fontSpecifica
     }
 
     return font;
-}
-
-void dump_tag( guint32 *tag, Glib::ustring prefix = "", bool lf=true ) {
-    std::cout << prefix
-              << ((char)((*tag & 0xff000000)>>24))
-              << ((char)((*tag & 0x00ff0000)>>16))
-              << ((char)((*tag & 0x0000ff00)>>8))
-              << ((char)((*tag & 0x000000ff)>>0));
-    if( lf ) {
-        std::cout << std::endl;
-    }
-}
-
-Glib::ustring extract_tag( guint32 *tag ) {
-    Glib::ustring tag_name;
-    tag_name += ((char)((*tag & 0xff000000)>>24));
-    tag_name += ((char)((*tag & 0x00ff0000)>>16));
-    tag_name += ((char)((*tag & 0x0000ff00)>>8));
-    tag_name += ((char)((*tag & 0x000000ff)>>0));
-    return tag_name;
-}
-
-// Extract which OpenType tables are in the font. A list of all tables (regardless of which script and langauge
-// they are in) will be stored as a std::map in the openTypeTables field of the font_instance
-// This Harfbuzz code replaces an earlier Pango version as the Pango functions are deprecated.
-void extract_openTypeTables(font_instance *res) {
-    // Empty map... bitmap fonts seem to be loaded multiple times.
-    res->openTypeTables.clear();
-
-#ifndef USE_PANGO_WIN32
-    auto const face = hb_ft_face_create(res->theFace, NULL);
-
-    // First time to get size of array
-    auto script_count = hb_ot_layout_table_get_script_tags(face, HB_OT_TAG_GSUB, 0, NULL, NULL);
-    auto const scripts_hb = g_new(hb_tag_t, script_count + 1);
-
-    // Second time to fill array (this two step process was not necessary with Pango).
-    hb_ot_layout_table_get_script_tags(face, HB_OT_TAG_GSUB, 0, &script_count, scripts_hb);
-
-    for(unsigned int i = 0; i < script_count; ++i) {
-        auto language_count = hb_ot_layout_script_get_language_tags(face, HB_OT_TAG_GSUB, i, 0, NULL, NULL);
-
-        if(language_count > 0) {
-            auto const languages_hb = g_new(hb_tag_t, language_count + 1);
-            hb_ot_layout_script_get_language_tags(face, HB_OT_TAG_GSUB, i, 0, &language_count, languages_hb);
-
-            for(unsigned int j = 0; j < language_count; ++j) {
-                auto feature_count = hb_ot_layout_language_get_feature_tags(face, HB_OT_TAG_GSUB, i, j, 0, NULL, NULL);
-                auto const features_hb = g_new(hb_tag_t, feature_count + 1);
-                hb_ot_layout_language_get_feature_tags(face, HB_OT_TAG_GSUB, i, j, 0, &feature_count, features_hb);
-
-                for(unsigned int k = 0; k < feature_count; ++k) {
-                    ++(res->openTypeTables[ extract_tag(&features_hb[k])]);
-                }
-
-                g_free(features_hb);
-            }
-
-            g_free(languages_hb);
-        }
-        else {
-            // Even if no languages are present there is still the default.
-            auto feature_count = hb_ot_layout_language_get_feature_tags(face, HB_OT_TAG_GSUB, i,
-                                                                        HB_OT_LAYOUT_DEFAULT_LANGUAGE_INDEX,
-                                                                        0, NULL, NULL);
-            auto const features_hb = g_new(hb_tag_t, feature_count + 1); 
-            hb_ot_layout_language_get_feature_tags(face, HB_OT_TAG_GSUB, i,
-                                                   HB_OT_LAYOUT_DEFAULT_LANGUAGE_INDEX,
-                                                   0, &feature_count, features_hb);
-
-            for(unsigned int k = 0; k < feature_count; ++k) {
-                ++(res->openTypeTables[ extract_tag(&features_hb[k])]);
-            }
-
-            g_free(features_hb);
-        }
-    }
-
-// TODO: Ideally, we should use the HB_VERSION_ATLEAST macro here,
-// but this was only released in harfbuzz >= 0.9.30
-// #if HB_VERSION_ATLEAST(1,2,3)
-#if HB_VERSION_MAJOR*10000 + HB_VERSION_MINOR*100 + HB_VERSION_MICRO >= 10203
-    // Find glyphs in OpenType substitution tables ('gsub').
-    // Note that pango's functions are just dummies. Must use harfbuzz.
-
-    // Loop over all tables
-    for (auto table: res->openTypeTables) {
-
-        // Only look at style substitution tables ('salt', 'ss01', etc. but not 'ssty').
-        if (table.first == "salt" ||
-            (table.first[0] == 's' && table.first[1] == 's' && !(table.first[2] == 't') ) ) {
-            // std::cout << " Table: " << table.first << std::endl;
-
-            Glib::ustring unicode_characters;
-
-            unsigned int feature_index;
-            if (  hb_ot_layout_language_find_feature (face, HB_OT_TAG_GSUB,
-                                                      0,  // Assume one script exists with index 0
-                                                      HB_OT_LAYOUT_DEFAULT_LANGUAGE_INDEX,
-                                                      HB_TAG(table.first[0],
-                                                             table.first[1],
-                                                             table.first[2],
-                                                             table.first[3]),
-                                                      &feature_index ) ) {
-
-                // std::cout << "  Found feature, number: " << feature_index << std::endl;
-                unsigned int lookup_indexes[32]; 
-                unsigned int lookup_count = 32;
-                int count = hb_ot_layout_feature_get_lookups (face, HB_OT_TAG_GSUB,
-                                                              feature_index,
-                                                              0, // Start
-                                                              &lookup_count,
-                                                              lookup_indexes );
-                // std::cout << "  Lookup count: " << count << " total: " << lookup_count << std::endl;
-
-                if (count > 0) {
-                    hb_set_t* glyphs_before = NULL; // hb_set_create();
-                    hb_set_t* glyphs_input  = hb_set_create();
-                    hb_set_t* glyphs_after  = NULL; // hb_set_create();
-                    hb_set_t* glyphs_output = NULL; // hb_set_create();
-
-                    // For now, just look at first index
-                    hb_ot_layout_lookup_collect_glyphs (face, HB_OT_TAG_GSUB,
-                                                        lookup_indexes[0],
-                                                        glyphs_before,
-                                                        glyphs_input,
-                                                        glyphs_after,
-                                                        glyphs_output );
-
-                    hb_font_t *font = hb_font_create (face);
-
-                    // Without this, all functions return 0, etc.
-                    hb_ft_font_set_funcs (font);
-
-                    hb_codepoint_t codepoint = -1;
-                    while (hb_set_next (glyphs_input, &codepoint)) {
-
-                        // There is a unicode to glyph mapping function but not the inverse!
-                        for (hb_codepoint_t unicode_i = 0; unicode_i < 0xffff; ++unicode_i) {
-                            hb_codepoint_t glyph = 0;
-                            hb_font_get_nominal_glyph (font, unicode_i, &glyph);
-                            if ( glyph == codepoint) {
-                                unicode_characters += (gunichar)unicode_i;
-                                continue;
-                            }
-                        }
-                    }
-                    res->openTypeSubstitutions[table.first] = unicode_characters;
-
-                    hb_set_destroy (glyphs_input);
-                    hb_font_destroy (font);
-                }
-            } else {
-                // std::cout << "  Did not find '" << table.first << "'!" << std::endl;
-            }
-        }
-    }
-    // for (auto table: res->openTypeSubstitutions) {
-    //     std::cout << table.first << ": " << table.second << std::endl;
-    // }
-#else
-    std::cerr << "Requires Harfbuzz 1.2.3 for visualizing alternative glyph OpenType tables. "
-              << "Compiled with: " << HB_VERSION_STRING << "." << std::endl;
-#endif
-
-    hb_face_destroy (face);
-    g_free(scripts_hb);
-#endif // USE_PANGO_WIN32
 }
 
 font_instance *font_factory::Face(PangoFontDescription *descr, bool canFail)
@@ -839,9 +703,15 @@ font_instance *font_factory::Face(PangoFontDescription *descr, bool canFail)
             }
         }
 
+#ifndef USE_PANGO_WIN32
         if (res) {
-            extract_openTypeTables(res);
+            readOpenTypeGsubTable( res->theFace, res->openTypeTables, res->openTypeSubstitutions );
+            std::map<Glib::ustring, OTVarAxis> axes;
+            std::map<Glib::ustring, OTVarNamed> named;
+            readOpenTypeFvarTable( res->theFace, axes, named );
         }
+#endif
+
     } else {
         // already here
         res = loadedFaces[descr];
@@ -854,18 +724,20 @@ font_instance *font_factory::Face(PangoFontDescription *descr, bool canFail)
     return res;
 }
 
-font_instance *font_factory::Face(char const *family, int variant, int style, int weight, int stretch, int /*size*/, int /*spacing*/)
-{
-    PangoFontDescription *temp_descr = pango_font_description_new();
-    pango_font_description_set_family(temp_descr,family);
-    pango_font_description_set_weight(temp_descr,(PangoWeight)weight);
-    pango_font_description_set_stretch(temp_descr,(PangoStretch)stretch);
-    pango_font_description_set_style(temp_descr,(PangoStyle)style);
-    pango_font_description_set_variant(temp_descr,(PangoVariant)variant);
-    font_instance *res = Face(temp_descr);
-    pango_font_description_free(temp_descr);
-    return res;
-}
+// Not used, need to add variations if ever used.
+// font_instance *font_factory::Face(char const *family, int variant, int style, int weight, int stretch, int /*size*/, int /*spacing*/)
+// {
+//     // std::cout << "font_factory::Face(family, variant, style, weight, stretch,)" << std::endl;
+//     PangoFontDescription *temp_descr = pango_font_description_new();
+//     pango_font_description_set_family(temp_descr,family);
+//     pango_font_description_set_weight(temp_descr,(PangoWeight)weight);
+//     pango_font_description_set_stretch(temp_descr,(PangoStretch)stretch);
+//     pango_font_description_set_style(temp_descr,(PangoStyle)style);
+//     pango_font_description_set_variant(temp_descr,(PangoVariant)variant);
+//     font_instance *res = Face(temp_descr);
+//     pango_font_description_free(temp_descr);
+//     return res;
+// }
 
 void font_factory::UnrefFace(font_instance *who)
 {
