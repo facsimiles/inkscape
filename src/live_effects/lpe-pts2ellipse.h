@@ -26,7 +26,7 @@ namespace LivePathEffect {
 enum EllipseMethod {
     EM_AUTO,
     EM_CIRCLE,
-    EM_ISONOMETRIC_CIRCLE,
+    EM_ISOMETRIC_CIRCLE,
     EM_END
 };
 
