@@ -32,21 +32,21 @@ enum EllipseMethod {
 
 class LPEPts2Ellipse : public Effect {
 public:
-    LPEPts2Ellipse(LivePathEffectObject *lpeobject);
-    virtual ~LPEPts2Ellipse();
+    explicit LPEPts2Ellipse(LivePathEffectObject *lpeobject);
+    ~LPEPts2Ellipse() override;
 
-    virtual Geom::PathVector doEffect_path (Geom::PathVector const & path_in);
+    Geom::PathVector doEffect_path(Geom::PathVector const &path_in) override;
 
 private:
-    LPEPts2Ellipse(const LPEPts2Ellipse&);
-    LPEPts2Ellipse& operator=(const LPEPts2Ellipse&);
+    LPEPts2Ellipse(const LPEPts2Ellipse &);
+    LPEPts2Ellipse &operator=(const LPEPts2Ellipse &);
 
 
-    int genIsometricEllipse (std::vector<Geom::Point> const & points_in,
-                             Geom::PathVector & path_out);
+    int genIsometricEllipse(std::vector<Geom::Point> const &points_in,
+                            Geom::PathVector &path_out);
 
-    int  genFitEllipse (std::vector<Geom::Point> const & points_in,
-                        Geom::PathVector & path_out);
+    int  genFitEllipse(std::vector<Geom::Point> const &points_in,
+                       Geom::PathVector &path_out);
 
     EnumParam<EllipseMethod> method;
     BoolParam gen_isometric_frame;
