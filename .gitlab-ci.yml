@@ -29,6 +29,6 @@ AppImage:
   artifacts:
     expire_in: 1 year
     paths:
-      - "build/*.AppImage*""
+      - "build/*.AppImage*"
 
 
