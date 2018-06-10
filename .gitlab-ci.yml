@@ -10,9 +10,8 @@ cache:
   paths:
     - ccache/
 
-# Building inkscape
-inkscape:linux:
-  stage: build
+AppImage:
+
   before_script:
     # CCache Config
     - mkdir -p ccache
