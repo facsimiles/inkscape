@@ -1,7 +1,7 @@
 # Dependencies are managed in the Dockerfile in the inkscape-ci-docker
 # Git repository. Change them there, wait a bit, and then we'll use
 # the new ones here in these builds.
-image: registry.gitlab.com/inkscape/inkscape-ci-docker/master
+image: registry.gitlab.com/probono/inkscape-ci-docker/patch-1:latest # 14.04
 
 variables:
   GIT_DEPTH: "10"
@@ -22,7 +22,7 @@ inkscape:linux:
     - mkdir -p build/conf
     - ln -s . share/inkscape
     - cd build
-    - cmake .. -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX:PATH=$PWD/install_dir/
+    - cmake .. -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX:PATH=$PWD/install_dir/
     - make -j3 install
     - make -j3 tests
     - cpack -G DEB
@@ -30,103 +30,6 @@ inkscape:linux:
   artifacts:
     expire_in: 1 year
     paths:
-      - build/
+      - "build/*.AppImage*""
 
-inkscape:codequality:
-    stage: build
-    script:
-        - git fetch https://gitlab.com/inkscape/inkscape.git
-        - git diff FETCH_HEAD -U0 --no-color | clang-format-diff-6.0 -p1 -style file | tee clang_format_diff
-        - if [[ -s clang_format_diff ]]; then false; fi
-    allow_failure: true
 
-inkscape:mac:
-  stage: build
-  tags:
-    - mac
-  only:
-    - branches@inkscape/inkscape
-  before_script:
-    - brew update
-    - brew upgrade
-    # Tools
-    - brew install cmake intltool libtool pkg-config ccache
-    # Libraries
-    - brew install bdw-gc boost gdl gettext gsl gtkmm3 gtkspell3 imagemagick@6 jemalloc libcdr libvisio libyaml libwpg pango popt poppler potrace libsoup
-    # Testing tools
-    # TODO
-    # Cleanup
-    - brew cleanup
-    # CCache Config
-    - mkdir -p ccache
-    - export CCACHE_BASEDIR=${PWD}
-    - export CCACHE_DIR=${PWD}/ccache
-  script:
-    - mkdir -p build
-    - cd build
-    - cmake .. -DCMAKE_PREFIX_PATH="/usr/local/opt/gettext;/usr/local/opt/imagemagick@6/;/usr/local/opt/icu4c/" -DWITH_OPENMP=OFF -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_BUILD_TYPE=Debug
-    - make -j1
-    - cd ..
-  artifacts:
-    expire_in: 1 year
-    paths:
-      - build/
-  allow_failure: true
-
-inkscape:doc:
-  stage: build
-  only:
-    - schedules
-  script:
-    - cd buildtools
-    - doxygen Doxyfile
-    - doxygen Doxyfile-extensions
-    - cd ..
-  artifacts:
-    paths:
-      - doc/doxygen
-      - doc/doxygen-extensions
-
-# This job is a static analysis build by clang.
-# It takes MORE THAN 3 HOURS, and depending on worker sometimes 4 hours.
-# Make sure the timeout of the build is big enough
-clang:
-  stage: build
-  only:
-    - schedules
-  script:
-    - apt-get update -yqq && apt-get install -y clang
-    - mkdir -p clang-build
-    - cd clang-build
-    - scan-build cmake .. -DCMAKE_BUILD_TYPE=Debug
-    - VERBOSE=1 scan-build -o ../scan make -j2
-  artifacts:
-    paths:
-      - scan/
-
-test:linux:
-  stage: test
-  dependencies:
-    - inkscape:linux
-  script:
-    - cd build
-    - make test
-    - ctest -V
-
-# uploads the clang scan to user.gitlab.io/inkscape/
-pages:
-  stage: deploy
-  dependencies:
-    - inkscape:doc
-    - clang
-  script:
-    - mkdir -p public/
-    - sed "s/%DATE%/$(date '+%B %d, %Y')/" buildtools/ci-index.html > public/index.html
-    - if test -e scan; then cp -rv scan/* public/scan-build; fi
-    - if test -e doc/doxygen; then cp -rv doc/doxygen/html public/doxygen; fi
-    - if test -e doc/doxygen-extensions; then cp -rv doc/doxygen-extensions/html public/doxygen-extensions; fi
-  artifacts:
-    paths:
-      - public
-  only:
-    - schedules
