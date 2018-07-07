@@ -1,29 +1,28 @@
-# ARABIC INKSCAPE Translation.
-# Copyright (C) 2015 THE INKSCAPE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the INKSCAPE package.
+# Arabic Inkscape Translation.
+# Copyright (C) 2018 THE INKSCAPE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the Inkscape package.
 #
 # Translators:
-# 99MaNoOo <too-sient@hotmail.com>, 2012
-# Ahmad Ghabeia أحمد  غربية <ahmad@gharbeia.org>, 2014
-# Banxoo <banxoo+launchpad@gmail.com>, 2009
-# fahad.alsaidi <fahad.alsaidi@gmail.com>, 2015
-# fahad.alsaidi <fahad.alsaidi@gmail.com>, 2015
-# Mohammed.H <mohammed.ayman132@gmail.com>, 2012
-# Mosaab Alzoubi <moceap@hotmail.com>, 2014-2015
-# Muhammad Azmi Al Hashemi <m.azmie89@gmail.com>, 2012
-# Mustafa <mostapha98@yahoo.com>, 2013
-# Mustafa <mostapha98@yahoo.com>, 2013
+# Banxoo <banxoo+launchpad@gmail.com>, 2009.
+# 99MaNoOo <too-sient@hotmail.com>, 2012.
+# Mohammed.H <mohammed.ayman132@gmail.com>, 2012.
+# Muhammad Azmi Al Hashemi <m.azmie89@gmail.com>, 2012.
 # صفا الفليج <safaalfulaij@hotmail.com>, 2012
-# tareefm <tareef.m@gmail.com>, 2012
-# صفا الفليج <safaalfulaij@hotmail.com>, 2012
-# tareefm <tareef.m@gmail.com>, 2012
+# tareefm <tareef.m@gmail.com>, 2012.
+# Mustafa <mostapha98@yahoo.com>, 2013.
+# Ahmad Ghabeia أحمد  غربية <ahmad@gharbeia.org>, 2014.
+# fahad.alsaidi <fahad.alsaidi@gmail.com>, 2015.
+# fahad.alsaidi <fahad.alsaidi@gmail.com>, 2015.
+# Mosaab Alzoubi <moceap@hotmail.com>, 2014-2015.
+# Abdelhak Sidi Ali Mebarek <abdelhakcpm@gmail.com>, 2018.
+
 msgid ""
 msgstr ""
 "Project-Id-Version: Arabic Inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
 "POT-Creation-Date: 2016-12-21 17:10+0100\n"
 "PO-Revision-Date: 2015-02-05 21:43+0000\n"
-"Last-Translator: Mosaab Alzoubi <moceap@hotmail.com>\n"
+"Last-Translator: Abdelhak Sidi Ali Mebarek <abdelhakcpm@gmail.com>\n"
 "Language-Team: Arabic (http://www.transifex.com/projects/p/arabic-inkscape/"
 "language/ar/)\n"
 "Language: ar\n"
@@ -58,9 +57,8 @@ msgid ""
 msgstr ""
 
 #: ../inkscape.appdata.xml.in.h:5
-#, fuzzy
 msgid "Main application window"
-msgstr "ضاعِف النافذة"
+msgstr "النافذة الأساسية"
 
 #: ../inkscape.desktop.in.h:3
 msgid "Inkscape Vector Graphics Editor"
@@ -68,7 +66,7 @@ msgstr "إنكسكيب محرر الرسومات الشعاعية"
 
 #: ../inkscape.desktop.in.h:4
 msgid "Create and edit Scalable Vector Graphics images"
-msgstr "إنشاء و تحرير الرسومات الشعاعية"
+msgstr "انشئ و حرّر الرسومات الشعاعية"
 
 #: ../inkscape.desktop.in.h:5
 msgid "image;editor;vector;drawing;"
@@ -6696,21 +6694,21 @@ msgstr "استخراج القناة"
 #: ../src/ui/widget/color-icc-selector.cpp:182
 #: ../src/ui/widget/color-scales.cpp:409 ../src/ui/widget/color-scales.cpp:410
 msgid "Cyan"
-msgstr " اللون السماوي"
+msgstr "اللون السماوي"
 
 #: ../src/extension/internal/filter/color.h:716
 #: ../src/ui/widget/color-icc-selector.cpp:178
 #: ../src/ui/widget/color-icc-selector.cpp:183
 #: ../src/ui/widget/color-scales.cpp:412 ../src/ui/widget/color-scales.cpp:413
 msgid "Magenta"
-msgstr " اللون الأرجواني"
+msgstr "اللون الأرجواني"
 
 #: ../src/extension/internal/filter/color.h:717
 #: ../src/ui/widget/color-icc-selector.cpp:179
 #: ../src/ui/widget/color-icc-selector.cpp:184
 #: ../src/ui/widget/color-scales.cpp:415 ../src/ui/widget/color-scales.cpp:416
 msgid "Yellow"
-msgstr " اللون الأصفر"
+msgstr "اللون الأصفر"
 
 #: ../src/extension/internal/filter/color.h:719
 msgid "Background blend mode:"
@@ -7216,8 +7214,9 @@ msgid "Width 1"
 msgstr "العرض 1"
 
 #: ../src/extension/internal/filter/morphology.h:185
+#, fuzzy
 msgid "Dilatation 1"
-msgstr ""
+msgstr "التوسعة 1"
 
 #: ../src/extension/internal/filter/morphology.h:186
 msgid "Erosion 1"
@@ -7228,8 +7227,9 @@ msgid "Width 2"
 msgstr "العرض 2"
 
 #: ../src/extension/internal/filter/morphology.h:188
+#, fuzzy
 msgid "Dilatation 2"
-msgstr ""
+msgstr "التوسعة 2"
 
 #: ../src/extension/internal/filter/morphology.h:189
 msgid "Erosion 2"
@@ -7603,8 +7603,9 @@ msgid "Use object's color"
 msgstr "اِستعمل لون الكائن"
 
 #: ../src/extension/internal/filter/shadows.h:84
+#, fuzzy
 msgid "Colorizable Drop shadow"
-msgstr ""
+msgstr "ظل قابل للتلوين"
 
 #: ../src/extension/internal/filter/textures.h:62
 msgid "Ink Blot"
@@ -7620,7 +7621,7 @@ msgstr "البطانة الأفقية:"
 
 #: ../src/extension/internal/filter/textures.h:72
 msgid "Vertical inlay:"
-msgstr ""
+msgstr "البطانة الشاقولية:"
 
 #: ../src/extension/internal/filter/textures.h:73
 msgid "Displacement:"
@@ -7684,8 +7685,9 @@ msgid "Mode:"
 msgstr "النمط:"
 
 #: ../src/extension/internal/filter/transparency.h:73
+#, fuzzy
 msgid "Blend objects with background images or with themselves"
-msgstr ""
+msgstr "خلّط الكائنات مع بعضها أو مع صور الخلفية"
 
 #: ../src/extension/internal/filter/transparency.h:130
 msgid "Channel Transparency"
@@ -7706,7 +7708,7 @@ msgstr "العتامة العامة"
 
 #: ../src/extension/internal/filter/transparency.h:218
 msgid "Make the lightest parts of the object progressively transparent"
-msgstr "شعل الأجزاﺀ الفاتحة من الكائن شفافة تدريجيا"
+msgstr "إجعل الأجزاﺀ الفاتحة من الكائن شفافة تدريجيا"
 
 #: ../src/extension/internal/filter/transparency.h:291
 msgid "Set opacity and strength of opacity boundaries"
@@ -7956,8 +7958,9 @@ msgstr "علبة الفن"
 
 #. Crop settings
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:109
+#, fuzzy
 msgid "Clip to:"
-msgstr ""
+msgstr "اقطع ل:"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:120
 msgid "Page settings"
@@ -7985,9 +7988,8 @@ msgid ""
 msgstr ""
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:128
-#, fuzzy
 msgid "Internal import"
-msgstr "المنفذ التسلسلي:"
+msgstr "استيراد داخلي"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:129
 msgid ""
@@ -8017,7 +8019,7 @@ msgstr "تضمين الصور"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:150
 msgid "Import settings"
-msgstr "استيراد الإعدادات"
+msgstr "إعدادات الاستيراد"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:272
 msgid "PDF Import Settings"
@@ -8125,7 +8127,7 @@ msgstr "SVG إنكسكيب المضغوط (*.svgz)"
 
 #: ../src/extension/internal/svgz.cpp:53
 msgid "SVG file format compressed with GZip"
-msgstr ""
+msgstr "ملف SVG مضغوط باستعمال GZip"
 
 #: ../src/extension/internal/svgz.cpp:61 ../src/extension/internal/svgz.cpp:75
 msgid "SVGZ Output"
@@ -8492,7 +8494,7 @@ msgstr ""
 
 #: ../src/filter-enums.cpp:62
 msgid "Soft Light"
-msgstr ""
+msgstr "ضوء ناعم"
 
 #: ../src/filter-enums.cpp:63 ../src/splivarot.cpp:72
 msgid "Difference"
@@ -8800,7 +8802,7 @@ msgstr "فشل التحفيظ التلقائي الإحطياتي للملفات
 #: ../src/inkview.cpp:225
 #, fuzzy
 msgid "Inkscape Options"
-msgstr "ملحقات إنكسكيب"
+msgstr "خيارات إنكسكيب"
 
 #: ../src/inkview.cpp:226
 #, fuzzy
@@ -8817,7 +8819,7 @@ msgstr ""
 
 #: ../src/inkview.cpp:251
 msgid "Open SVG files"
-msgstr ""
+msgstr "فتح ملفات SVG"
 
 #: ../src/knot.cpp:329
 msgid "Node or handle drag canceled."
@@ -8962,7 +8964,7 @@ msgstr ""
 
 #: ../src/live_effects/effect.cpp:115
 msgid "Sketch"
-msgstr ""
+msgstr "رسم تخطيطي"
 
 #: ../src/live_effects/effect.cpp:116
 msgid "Ruler"
@@ -8998,7 +9000,7 @@ msgstr "تحويل التدرّج"
 #: ../src/live_effects/lpe-show_handles.cpp:27
 #: ../src/widgets/mesh-toolbar.cpp:505
 msgid "Show handles"
-msgstr ""
+msgstr "إظهار المقبض"
 
 #: ../src/live_effects/effect.cpp:128 ../src/widgets/pencil-toolbar.cpp:115
 msgid "BSpline"
@@ -9014,7 +9016,7 @@ msgstr "حاشية رقيقة"
 
 #: ../src/live_effects/effect.cpp:131
 msgid "Mirror symmetry"
-msgstr ""
+msgstr "تناظر محوري"
 
 #: ../src/live_effects/effect.cpp:132
 msgid "Rotate copies"
@@ -9077,7 +9079,7 @@ msgstr ""
 
 #: ../src/live_effects/lpe-attach-path.cpp:21
 msgid "Start path:"
-msgstr ""
+msgstr "بداية المسار:"
 
 #: ../src/live_effects/lpe-attach-path.cpp:21
 msgid "Path to attach to the start of this path"
@@ -9085,7 +9087,7 @@ msgstr ""
 
 #: ../src/live_effects/lpe-attach-path.cpp:22
 msgid "Start path position:"
-msgstr ""
+msgstr "موقع بداية المسار:"
 
 #: ../src/live_effects/lpe-attach-path.cpp:22
 msgid "Position to attach path start to"
@@ -9113,7 +9115,7 @@ msgstr ""
 #. , true
 #: ../src/live_effects/lpe-attach-path.cpp:25
 msgid "End path:"
-msgstr ""
+msgstr "نهاية المسار:"
 
 #: ../src/live_effects/lpe-attach-path.cpp:25
 msgid "Path to attach to the end of this path"
@@ -9121,7 +9123,7 @@ msgstr ""
 
 #: ../src/live_effects/lpe-attach-path.cpp:26
 msgid "End path position:"
-msgstr ""
+msgstr "موقع نهاية المسار:"
 
 #: ../src/live_effects/lpe-attach-path.cpp:26
 msgid "Position to attach path end to"
@@ -9200,17 +9202,17 @@ msgstr ""
 
 #: ../src/live_effects/lpe-bspline.cpp:30
 msgid "Steps with CTRL:"
-msgstr ""
+msgstr "تدرجات بإستعمال CTRL"
 
 #: ../src/live_effects/lpe-bspline.cpp:30
 msgid "Change number of steps with CTRL pressed"
-msgstr ""
+msgstr "تغيير عدد التدرجات عند الضغط على CTRL"
 
 #: ../src/live_effects/lpe-bspline.cpp:31
 #: ../src/live_effects/lpe-simplify.cpp:25
 #: ../src/live_effects/lpe-transform_2pts.cpp:41
 msgid "Helper size:"
-msgstr "حجم المساعد"
+msgstr "حجم المساعد:"
 
 #: ../src/live_effects/lpe-bspline.cpp:31
 #: ../src/live_effects/lpe-simplify.cpp:25
@@ -9261,8 +9263,9 @@ msgstr "النص: تغيير ارتفاع السطر"
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:235
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:257
 #: ../src/live_effects/parameter/parameter.cpp:177
+#, fuzzy
 msgid "Change scalar parameter"
-msgstr ""
+msgstr "تغيير الوسيط السلّمي"
 
 #: ../src/live_effects/lpe-constructgrid.cpp:24
 msgid "Size _X:"
@@ -9492,7 +9495,7 @@ msgstr ""
 
 #: ../src/live_effects/lpe-fill-between-strokes.cpp:20
 msgid "Second path:"
-msgstr ""
+msgstr "المسار الثاني:"
 
 #: ../src/live_effects/lpe-fill-between-strokes.cpp:20
 msgid "Second path from which to take the original path data"
@@ -9558,11 +9561,11 @@ msgstr ""
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:56
 msgid "Chamfer steps:"
-msgstr ""
+msgstr "خطوات الشطف:"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:56
 msgid "Chamfer steps"
-msgstr ""
+msgstr "خطوات الشطف"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:58
 msgid "Helper size with direction:"
@@ -9593,12 +9596,12 @@ msgstr ""
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:169
 #: ../src/ui/dialog/lpe-fillet-chamfer-properties.cpp:66
 msgid "Chamfer"
-msgstr ""
+msgstr "الشطف"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:173
 #: ../src/ui/dialog/lpe-fillet-chamfer-properties.cpp:68
 msgid "Inverse chamfer"
-msgstr ""
+msgstr "الشطف المقلوب"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:242
 #, fuzzy
@@ -9612,9 +9615,8 @@ msgid "Convert to inverse fillet"
 msgstr "_حوّل إلى نصّ"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:265
-#, fuzzy
 msgid "Convert to chamfer"
-msgstr "_حوّل إلى نصّ"
+msgstr "حوّل إلى شطف"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:285
 msgid "Knots and helper paths refreshed"
@@ -9636,12 +9638,11 @@ msgstr "الزاوية Phi_:"
 msgid ""
 "Tooth pressure angle (typically 20-25 deg).  The ratio of teeth not in "
 "contact."
-msgstr ""
+msgstr "زاوية ضغط الأسنان (عادة 20-25 درجة). نسبة الأسنان غير ملتمسة"
 
 #: ../src/live_effects/lpe-gears.cpp:210
-#, fuzzy
 msgid "Min Radius:"
-msgstr "نصف القطر:"
+msgstr "نصف القطر الأصغر:"
 
 #: ../src/live_effects/lpe-gears.cpp:210
 msgid "Minimun radius, low balues can slow"
@@ -22324,11 +22325,11 @@ msgstr "إسقاط SVG"
 
 #: ../src/ui/interface.cpp:1232
 msgid "Drop Symbol"
-msgstr ""
+msgstr "إسقاط رمز"
 
 #: ../src/ui/interface.cpp:1263
 msgid "Drop bitmap image"
-msgstr ""
+msgstr "إسقاط صورة نقطية"
 
 #: ../src/ui/interface.cpp:1355
 #, c-format
@@ -22350,8 +22351,9 @@ msgstr "إذهب إلى الأب"
 
 #. TRANSLATORS: #%1 is the id of the group e.g. <g id="#g7">, not a number.
 #: ../src/ui/interface.cpp:1474
+#, fuzzy
 msgid "Enter group #%1"
-msgstr ""
+msgstr "دخل المجموعة #%1"
 
 #. Pop selection out of group
 #: ../src/ui/interface.cpp:1488
@@ -22380,7 +22382,7 @@ msgstr "ملء وحاشية"
 #. Select same fill color
 #: ../src/ui/interface.cpp:1653
 msgid "Fill Color"
-msgstr ""
+msgstr "لون الملء"
 
 #. Select same stroke color
 #: ../src/ui/interface.cpp:1660
@@ -26701,11 +26703,11 @@ msgstr "تدوير التحديد 90° عكس عقارب الساعة"
 
 #: ../src/verbs.cpp:2749
 msgid "Remove _Transformations"
-msgstr ""
+msgstr "حذف ال_تحولات"
 
 #: ../src/verbs.cpp:2750
 msgid "Remove transformations from object"
-msgstr ""
+msgstr "حذف التحولات من الكائن"
 
 #: ../src/verbs.cpp:2751
 msgid "_Object to Path"
@@ -26896,8 +26898,9 @@ msgstr "رسم منحنيات بيزيير وخطوط مستقيمة"
 
 #: ../src/verbs.cpp:2805
 msgctxt "ContextVerb"
+#, fuzzy
 msgid "Calligraphy"
-msgstr ""
+msgstr "فن الخط"
 
 #: ../src/verbs.cpp:2806
 msgid "Draw calligraphic or brush strokes"
@@ -26919,7 +26922,7 @@ msgstr "إنشاء وتحرير التدرج اللوني"
 #: ../src/verbs.cpp:2811
 msgctxt "ContextVerb"
 msgid "Mesh"
-msgstr ""
+msgstr "شبكة"
 
 #: ../src/verbs.cpp:2812
 msgid "Create and edit meshes"
@@ -26941,25 +26944,27 @@ msgstr "أداة القياس"
 #: ../src/verbs.cpp:2817
 msgctxt "ContextVerb"
 msgid "Dropper"
-msgstr ""
+msgstr "ماصّة"
 
 #: ../src/verbs.cpp:2819
 msgctxt "ContextVerb"
 msgid "Connector"
-msgstr ""
+msgstr "رابط"
 
 #: ../src/verbs.cpp:2820
 msgid "Create diagram connectors"
 msgstr "إنشاء روابط الرسوم البيانية"
 
 #: ../src/verbs.cpp:2823
+#, fuzzy
 msgctxt "ContextVerb"
 msgid "Paint Bucket"
-msgstr ""
+msgstr "دلو الطلاء"
 
 #: ../src/verbs.cpp:2824
+#, fuzzy
 msgid "Fill bounded areas"
-msgstr ""
+msgstr "لوّن مساحات مغلوقة"
 
 #: ../src/verbs.cpp:2827
 msgctxt "ContextVerb"
@@ -33038,7 +33043,7 @@ msgstr "حافة ثلاثية الأبعاد"
 
 #: ../share/extensions/edge3d.inx.h:2
 msgid "Illumination Angle:"
-msgstr ""
+msgstr "زاوية الإضاءة:"
 
 #: ../share/extensions/edge3d.inx.h:3
 msgid "Shades:"
@@ -33046,7 +33051,7 @@ msgstr ""
 
 #: ../share/extensions/edge3d.inx.h:4
 msgid "Only black and white:"
-msgstr ""
+msgstr "أبيض و أسود فقط:"
 
 #: ../share/extensions/edge3d.inx.h:6
 msgid "Blur stdDeviation:"
@@ -33075,11 +33080,11 @@ msgstr "اِدمج الصور المختارة"
 
 #: ../share/extensions/empty_business_card.inx.h:1
 msgid "Business Card"
-msgstr ""
+msgstr "بطاقة العمل"
 
 #: ../share/extensions/empty_business_card.inx.h:2
 msgid "Business card size:"
-msgstr ""
+msgstr "حجم بطاقة العمل:"
 
 #: ../share/extensions/empty_desktop.inx.h:1
 msgid "Desktop"
@@ -33348,7 +33353,7 @@ msgstr "الدالة:"
 
 #: ../share/extensions/funcplot.inx.h:32
 msgid "Calculate first derivative numerically"
-msgstr ""
+msgstr "حساب عددي للمشتقة الأولى"
 
 #: ../share/extensions/funcplot.inx.h:33
 msgid "First derivative:"
@@ -33501,7 +33506,7 @@ msgstr ""
 #: ../share/extensions/gcodetools_lathe.inx.h:12
 #: ../share/extensions/gcodetools_path_to_gcode.inx.h:1
 msgid "Path to Gcode"
-msgstr ""
+msgstr "تحويل مسار إلى Gcode"
 
 #: ../share/extensions/gcodetools_area.inx.h:20
 #: ../share/extensions/gcodetools_lathe.inx.h:13
@@ -33700,8 +33705,9 @@ msgstr "توليد ملف السجل"
 #: ../share/extensions/gcodetools_graffiti.inx.h:36
 #: ../share/extensions/gcodetools_lathe.inx.h:38
 #: ../share/extensions/gcodetools_path_to_gcode.inx.h:27
+#, fuzzy
 msgid "Full path to log file:"
-msgstr ""
+msgstr "المسار الكامل لملف log:"
 
 #: ../share/extensions/gcodetools_area.inx.h:48
 #: ../share/extensions/gcodetools_dxf_points.inx.h:20
@@ -33900,8 +33906,9 @@ msgid ""
 msgstr ""
 
 #: ../share/extensions/gcodetools_lathe.inx.h:1
+#, fuzzy
 msgid "Lathe"
-msgstr ""
+msgstr "آلة خراطة"
 
 #: ../share/extensions/gcodetools_lathe.inx.h:2
 msgid "Lathe width:"
@@ -34673,7 +34680,7 @@ msgstr ""
 #: ../share/extensions/hpgl_output.inx.h:12
 #: ../share/extensions/plotter.inx.h:40
 msgid "Pen speed (cm/s or mm/s):"
-msgstr ""
+msgstr "سرعة القلم (سم/ثا أو مم/ثا)"
 
 #: ../share/extensions/hpgl_output.inx.h:13
 msgid ""
@@ -34855,13 +34862,12 @@ msgstr ""
 #: ../share/extensions/image_attributes.inx.h:17
 #, fuzzy
 msgid "Scope:"
-msgstr "المجال"
+msgstr "المجال:"
 
 #. image-rendering
 #: ../share/extensions/image_attributes.inx.h:19
-#, fuzzy
 msgid "Unset"
-msgstr "مجموعة داخلية"
+msgstr "غير معيّن"
 
 #: ../share/extensions/image_attributes.inx.h:20
 #, fuzzy
@@ -34874,9 +34880,8 @@ msgid "Change all images in selection"
 msgstr "تغيير تعريف اللون"
 
 #: ../share/extensions/image_attributes.inx.h:22
-#, fuzzy
 msgid "Change all images in document"
-msgstr "تحقق هجاء النص في المستند"
+msgstr "تغيير كل الصور في المستند"
 
 #. image-rendering
 #: ../share/extensions/image_attributes.inx.h:24
@@ -34914,7 +34919,7 @@ msgstr ""
 
 #: ../share/extensions/inkscape_follow_link.inx.h:1
 msgid "Follow Link"
-msgstr "اتب_ع الوصلة"
+msgstr "اتبع الوصلة"
 
 #: ../share/extensions/inkscape_help_askaquestion.inx.h:1
 msgid "Ask Us a Question"
@@ -34944,9 +34949,8 @@ msgstr "مرجع أزرار الفأرة ولوحة المفاتيح"
 
 #. i18n. Please don't translate it unless a page exists in your language
 #: ../share/extensions/inkscape_help_keys.inx.h:3
-#, fuzzy
 msgid "http://inkscape.org/doc/keys092.html"
-msgstr "http://inkscape.org/doc/keys048.html"
+msgstr ""
 
 #: ../share/extensions/inkscape_help_manual.inx.h:1
 msgid "Inkscape Manual"
@@ -34955,7 +34959,7 @@ msgstr "دليل إنكسكيب"
 #. i18n. Please don't translate it unless a page exists in your language
 #: ../share/extensions/inkscape_help_manual.inx.h:3
 msgid "http://tavmjong.free.fr/INKSCAPE/MANUAL/html/index.php"
-msgstr "http://tavmjong.free.fr/INKSCAPE/MANUAL/html/index.php"
+msgstr ""
 
 #: ../share/extensions/inkscape_help_relnotes.inx.h:1
 msgid "New in This Version"
@@ -34963,9 +34967,8 @@ msgstr "الجديد في هذا الإصدار"
 
 #. i18n. Please don't translate it unless a page exists in your language
 #: ../share/extensions/inkscape_help_relnotes.inx.h:3
-#, fuzzy
 msgid "http://wiki.inkscape.org/wiki/index.php/Release_notes/0.92"
-msgstr "http://wiki.inkscape.org/wiki/index.php/Release_notes/0.91"
+msgstr ""
 
 #: ../share/extensions/inkscape_help_reportabug.inx.h:1
 msgid "Report a Bug"
@@ -34996,9 +34999,8 @@ msgid "Interpolate style"
 msgstr ""
 
 #: ../share/extensions/interp.inx.h:7 ../share/extensions/interp_att_g.inx.h:10
-#, fuzzy
 msgid "Use Z-order"
-msgstr "حدود مرتفعة"
+msgstr ""
 
 #: ../share/extensions/interp.inx.h:8 ../share/extensions/interp_att_g.inx.h:11
 msgid "Workaround for reversed selection order in Live Preview cycles"
@@ -36161,11 +36163,11 @@ msgstr "طول الخط"
 
 #: ../share/extensions/nicechart.inx.h:42
 msgid "Pie chart"
-msgstr ""
+msgstr "دائرة مجزأة"
 
 #: ../share/extensions/nicechart.inx.h:43
 msgid "Pie chart (percentage)"
-msgstr ""
+msgstr "(نسبة مئوية) دائرة مجزأة"
 
 #: ../share/extensions/nicechart.inx.h:44
 msgid "Stacked bar chart"
@@ -36173,7 +36175,7 @@ msgstr ""
 
 #: ../share/extensions/param_curves.inx.h:1
 msgid "Parametric Curves"
-msgstr ""
+msgstr "منحنيات وسيطية"
 
 #: ../share/extensions/param_curves.inx.h:2
 msgid "Range and Sampling"
@@ -36265,7 +36267,7 @@ msgstr ""
 
 #: ../share/extensions/pathalongpath.inx.h:14
 msgid "Snake"
-msgstr ""
+msgstr "افعى"
 
 #: ../share/extensions/pathalongpath.inx.h:15
 msgid "Ribbon"
@@ -36503,7 +36505,7 @@ msgstr "العتاد (RTS/CTS)"
 
 #: ../share/extensions/plotter.inx.h:23
 msgid "Hardware (DSR/DTR + RTS/CTS)"
-msgstr ""
+msgstr "العتاد (DSR/DTR + RTS/CTS)"
 
 #: ../share/extensions/plotter.inx.h:25
 msgid "HPGL"
@@ -36644,7 +36646,7 @@ msgstr "عشريني الوجوه المسنن"
 
 #: ../share/extensions/polyhedron_3d.inx.h:18
 msgid "Dodecahedron"
-msgstr ""
+msgstr "اثنعشري الوجوه"
 
 #: ../share/extensions/polyhedron_3d.inx.h:19
 msgid "Truncated Dodecahedron"
@@ -37293,7 +37295,7 @@ msgstr ""
 #: ../share/extensions/scour.inx.h:33
 #, fuzzy
 msgid "Indentation characters:"
-msgstr "حرف يونيكود:"
+msgstr "حروف المسافة البادئة:"
 
 #: ../share/extensions/scour.inx.h:34
 msgid ""
@@ -37303,9 +37305,8 @@ msgid ""
 msgstr ""
 
 #: ../share/extensions/scour.inx.h:35
-#, fuzzy
 msgid "Depth of indentation:"
-msgstr "دالة العمق:"
+msgstr "عمق المسافة البادئة:"
 
 #: ../share/extensions/scour.inx.h:36
 msgid ""
@@ -37327,7 +37328,7 @@ msgstr ""
 #: ../share/extensions/scour.inx.h:39
 #, fuzzy
 msgid "Document options"
-msgstr "خصائص ال_مستند..."
+msgstr "خيارات المستند"
 
 #: ../share/extensions/scour.inx.h:40
 #, fuzzy
@@ -37350,7 +37351,7 @@ msgstr "لا شيء"
 #: ../share/extensions/scour.inx.h:44
 #, fuzzy
 msgid "IDs"
-msgstr "هوية"
+msgstr "هويات"
 
 #: ../share/extensions/scour.inx.h:45
 #, fuzzy
@@ -37396,11 +37397,8 @@ msgid ""
 msgstr ""
 
 #: ../share/extensions/scour.inx.h:53
-#, fuzzy
 msgid "Preserve the following IDs:"
-msgstr ""
-"وُجدت الخطوط التالية:\n"
-"%s"
+msgstr "الإحتفاظ على الهويات التالية:"
 
 #: ../share/extensions/scour.inx.h:54
 msgid "A comma-separated list of IDs that are to be preserved."
@@ -37747,15 +37745,15 @@ msgstr "ترميز الحرف:"
 
 #: ../share/extensions/svgcalendar.inx.h:32
 msgid "You may change the names for other languages:"
-msgstr "يمكن تغيير الأسماﺀ لللغات الأخرى"
+msgstr "يمكن تغيير الأسماﺀ لللغات الأخرى:"
 
 #: ../share/extensions/svgcalendar.inx.h:33
 msgid ""
 "January February March April May June July August September October November "
 "December"
 msgstr ""
-"كانون الثاني شباط آذار نيسان أيّار حزيران تمّوز آب أيلول تشرين الأوّل تشرين "
-"الثانيكانون الأوّل"
+"يناير فبراير مارس ابريل مايو يونيو يوليو أغسطس سبتمبر أكتوبر نوفمبر"
+"ديسمبر"
 
 #: ../share/extensions/svgcalendar.inx.h:34
 msgid "Sun Mon Tue Wed Thu Fri Sat"
@@ -37787,7 +37785,7 @@ msgstr "تحميل أول 30 شكل فقط (مستحسن)"
 
 #: ../share/extensions/synfig_output.inx.h:1
 msgid "Synfig Output"
-msgstr ""
+msgstr "الإخراج Synfig"
 
 #: ../share/extensions/synfig_output.inx.h:2
 msgid "Synfig Animation (*.sif)"
@@ -37813,7 +37811,7 @@ msgstr ""
 
 #: ../share/extensions/text_braille.inx.h:1
 msgid "Convert to Braille"
-msgstr ""
+msgstr "تحويل إلى برايل"
 
 #: ../share/extensions/text_extract.inx.h:1
 msgid "Extract"
@@ -37864,6 +37862,7 @@ msgstr ""
 #: ../share/extensions/text_sentencecase.inx.h:3
 #: ../share/extensions/text_titlecase.inx.h:3
 #: ../share/extensions/text_uppercase.inx.h:3
+#, fuzzy
 msgid "Change Case"
 msgstr "بدّل الحالة"
 
@@ -37877,6 +37876,7 @@ msgid "Keep style"
 msgstr "أبق الطراز"
 
 #: ../share/extensions/text_randomcase.inx.h:1
+#, fuzzy
 msgid "rANdOm CasE"
 msgstr "حالة  عشوائي"
 
@@ -37941,9 +37941,8 @@ msgid "From Side c and Angles a, b"
 msgstr "من جهة ج وزوايا أ، ب"
 
 #: ../share/extensions/ungroup_deep.inx.h:1
-#, fuzzy
 msgid "Deep Ungroup"
-msgstr "تفكيك المجموعة"
+msgstr "تفكيك عميق"
 
 #: ../share/extensions/ungroup_deep.inx.h:2
 #, fuzzy
@@ -37951,21 +37950,20 @@ msgid "Ungroup all groups in the selected object."
 msgstr "اِستنساخ الكائنات المختارة"
 
 #: ../share/extensions/ungroup_deep.inx.h:3
-#, fuzzy
 msgid "Starting Depth"
-msgstr "إنشاﺀ مسار جديد"
+msgstr "عمق البداية"
 
 #: ../share/extensions/ungroup_deep.inx.h:4
 msgid "Stopping Depth (from top)"
-msgstr ""
+msgstr "عمق النهاية (من الأعلى)"
 
 #: ../share/extensions/ungroup_deep.inx.h:5
 msgid "Depth to Keep (from bottom)"
-msgstr ""
+msgstr "عمق النهاية (من الأسفل)"
 
 #: ../share/extensions/voronoi2svg.inx.h:1
 msgid "Voronoi Diagram"
-msgstr ""
+msgstr "مخطط فوروني"
 
 #: ../share/extensions/voronoi2svg.inx.h:3
 msgid "Type of diagram:"
@@ -38090,7 +38088,7 @@ msgstr "عند مرور الفأرة"
 #: ../share/extensions/web-set-att.inx.h:16
 #: ../share/extensions/web-transmit-att.inx.h:15
 msgid "on mouse out"
-msgstr ""
+msgstr "عند خروج الفأرة"
 
 #: ../share/extensions/web-set-att.inx.h:17
 #: ../share/extensions/web-transmit-att.inx.h:16
@@ -38149,7 +38147,7 @@ msgstr ""
 #: ../share/extensions/webslicer_create_rect.inx.h:41
 #: ../share/extensions/webslicer_export.inx.h:8
 msgid "Web"
-msgstr "وب"
+msgstr "ويب"
 
 #: ../share/extensions/web-transmit-att.inx.h:1
 msgid "Transmit Attributes"
@@ -38414,8 +38412,9 @@ msgid "Lines of longitude:"
 msgstr "خطوط الطول:"
 
 #: ../share/extensions/wireframe_sphere.inx.h:4
+#,fuzzy 
 msgid "Tilt (deg):"
-msgstr ""
+msgstr "ميل (درجات)"
 
 #: ../share/extensions/wireframe_sphere.inx.h:7
 msgid "Hide lines behind the sphere"
