@@ -8442,9 +8442,8 @@ msgid "Old Inkscape file detected (90 DPI)"
 msgstr ""
 
 #: ../src/file.cpp:425 ../src/file.cpp:542
-#, fuzzy
 msgid "Create backup file (in same directory)."
-msgstr "Impossible de créer le dossier de profil %s."
+msgstr "Créer un fichier de sauvegarde (dans le même dossier)."
 
 #: ../src/file.cpp:431 ../src/file.cpp:548 ../src/ui/widget/page-sizer.cpp:898
 msgid "Set 'viewBox'"
@@ -8453,7 +8452,7 @@ msgstr "Définir la « zone de vue »"
 #: ../src/file.cpp:432 ../src/file.cpp:549
 #, fuzzy
 msgid "Scale elements"
-msgstr "Mode redimensionnement"
+msgstr "Redimensionner les élements"
 
 #: ../src/file.cpp:433 ../src/file.cpp:550
 #: ../src/widgets/connector-toolbar.cpp:316
@@ -8996,14 +8995,13 @@ msgid "Automatic backup of the following documents failed:\n"
 msgstr "Les enregistrements automatiques des documents suivants ont échoué :\n"
 
 #: ../src/inkview.cpp:225
-#, fuzzy
 msgid "Inkscape Options"
-msgstr "Extensions d'Inkscape :"
+msgstr "Options d'Inkscape"
 
 #: ../src/inkview.cpp:226
 #, fuzzy
 msgid "Default program options"
-msgstr "Fractions par défaut"
+msgstr "Options par défaut du programme"
 
 #: ../src/inkview.cpp:233
 msgid "NUM"
@@ -9014,9 +9012,8 @@ msgid "FILES..."
 msgstr ""
 
 #: ../src/inkview.cpp:251
-#, fuzzy
 msgid "Open SVG files"
-msgstr "Ouvrir des fichiers HPGL pour table traçante"
+msgstr "Ouvrir des fichiers SVG"
 
 #: ../src/knot.cpp:329
 msgid "Node or handle drag canceled."
@@ -9490,7 +9487,7 @@ msgstr "Origine"
 #: ../src/live_effects/lpe-copy_rotate.cpp:42
 #, fuzzy
 msgid "Adjust origin of the rotation"
-msgstr "Origine de la rotation"
+msgstr "Ajuster l'origine de la rotation"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:43
 #: ../src/live_effects/lpe-transform_2pts.cpp:35
@@ -9517,18 +9514,16 @@ msgid "Angle of the first copy"
 msgstr "Angle de la première copie"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:45
-#, fuzzy
 msgid "Rotation angle"
-msgstr "Angle de rotation :"
+msgstr "Angle de rotation"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:45
 msgid "Angle between two successive copies"
 msgstr "Angle entre deux copies successives"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:46
-#, fuzzy
 msgid "Number of copies"
-msgstr "Nombre de copies :"
+msgstr "Nombre de copies"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:46
 msgid "Number of copies of the original path"
@@ -10386,12 +10381,12 @@ msgstr "Horizontal"
 #: ../src/live_effects/lpe-measure-line.cpp:43
 #, fuzzy
 msgid "Vertical"
-msgstr "Vertical :"
+msgstr "Vertical"
 
 #: ../src/live_effects/lpe-measure-line.cpp:50
 #, fuzzy
 msgid "Unit*"
-msgstr "Unité"
+msgstr "Unité*"
 
 #: ../src/live_effects/lpe-measure-line.cpp:50
 #: ../src/live_effects/lpe-ruler.cpp:39 ../src/widgets/gimp/ruler.cpp:193
@@ -10401,7 +10396,7 @@ msgstr "Unité"
 #: ../src/live_effects/lpe-measure-line.cpp:51
 #, fuzzy
 msgid "Font*"
-msgstr "_Police"
+msgstr "Police*"
 
 #: ../src/live_effects/lpe-measure-line.cpp:51
 #, fuzzy
@@ -10416,9 +10411,8 @@ msgid "Orientation"
 msgstr "Orientation"
 
 #: ../src/live_effects/lpe-measure-line.cpp:52
-#, fuzzy
 msgid "Orientation method"
-msgstr "Orientation"
+msgstr "Méthode d'orientation"
 
 #: ../src/live_effects/lpe-measure-line.cpp:53
 #, fuzzy
@@ -10432,12 +10426,12 @@ msgstr ""
 #: ../src/live_effects/lpe-measure-line.cpp:54
 #, fuzzy
 msgid "Precision*"
-msgstr "Précision"
+msgstr "Précision*"
 
 #: ../src/live_effects/lpe-measure-line.cpp:55
 #, fuzzy
 msgid "Positon*"
-msgstr "Position"
+msgstr "Position*"
 
 #: ../src/live_effects/lpe-measure-line.cpp:55
 #, fuzzy
@@ -10492,12 +10486,12 @@ msgstr "Échelle"
 #: ../src/live_effects/lpe-measure-line.cpp:60
 #, fuzzy
 msgid "Scaling factor"
-msgstr "Facteur d'échelle :"
+msgstr "Facteur d'échelle"
 
 #: ../src/live_effects/lpe-measure-line.cpp:61
 #, fuzzy
 msgid "Format*"
-msgstr "Format :"
+msgstr "Format*"
 
 #: ../src/live_effects/lpe-measure-line.cpp:61
 msgid "Format the number ex:{measure} {unit}, return to save"
@@ -10506,7 +10500,7 @@ msgstr ""
 #: ../src/live_effects/lpe-measure-line.cpp:63
 #, fuzzy
 msgid "Arrows outside"
-msgstr "Froid dehors"
+msgstr "Flèches à l'extérieur"
 
 #: ../src/live_effects/lpe-measure-line.cpp:64
 msgid "Flip side*"
@@ -10519,7 +10513,7 @@ msgstr ""
 #: ../src/live_effects/lpe-measure-line.cpp:65
 #, fuzzy
 msgid "Scale sensitive*"
-msgstr "Sensible à la ca_sse"
+msgstr "Sensible au redimensionnement*"
 
 #: ../src/live_effects/lpe-measure-line.cpp:65
 msgid "Costrained scale sensitive to transformed containers"
@@ -10581,7 +10575,7 @@ msgstr ""
 #: ../src/live_effects/lpe-measure-line.cpp:72
 #, fuzzy
 msgid "CSS anotation*"
-msgstr "Saturation"
+msgstr "Annotation CSS*"
 
 #: ../src/live_effects/lpe-measure-line.cpp:72
 msgid "Override CSS to anotation text, return to save, empty to reset to DIM"
@@ -10590,7 +10584,7 @@ msgstr ""
 #: ../src/live_effects/lpe-measure-line.cpp:73
 #, fuzzy
 msgid "CSS arrows*"
-msgstr "Ctrl+flèche"
+msgstr "Flèches CSS*"
 
 #: ../src/live_effects/lpe-measure-line.cpp:73
 msgid "Override CSS to arrows, return to save, empty to reset DIM"
@@ -10599,7 +10593,7 @@ msgstr ""
 #: ../src/live_effects/lpe-measure-line.cpp:349
 #, fuzzy
 msgid "Non Uniform Scale"
-msgstr "Bruit uniforme"
+msgstr "Redimensionnement non-uniforme"
 
 #: ../src/live_effects/lpe-measure-line.cpp:777
 #, fuzzy
@@ -11331,7 +11325,7 @@ msgstr "Afficher le chemin"
 #: ../src/live_effects/lpe-show_handles.cpp:29
 #, fuzzy
 msgid "Show center of node"
-msgstr "Descendre le nœud"
+msgstr "Afficher le centre du nœud"
 
 #: ../src/live_effects/lpe-show_handles.cpp:30
 msgid "Scale nodes and handles"
@@ -11915,7 +11909,7 @@ msgstr "NOM_DE_FICHIER"
 
 #: ../src/main.cpp:314
 msgid "xverbs command"
-msgstr ""
+msgstr "commande xverbs"
 
 #: ../src/main.cpp:315
 #, fuzzy
@@ -12930,7 +12924,7 @@ msgstr "Délier le clone"
 #: ../src/selection-chemistry.cpp:2768
 #, fuzzy
 msgid "Unlink clone recursively"
-msgstr "Délier le clone"
+msgstr "Délier le clone récursivement"
 
 #: ../src/selection-chemistry.cpp:2778
 msgid ""
@@ -33959,7 +33953,7 @@ msgstr ""
 #: ../share/extensions/docinfo.inx.h:2
 #, fuzzy
 msgid "Show page info"
-msgstr "Afficher la _bordure de page"
+msgstr "Afficher les informations de page"
 
 #: ../share/extensions/docinfo.inx.h:3
 #, fuzzy
