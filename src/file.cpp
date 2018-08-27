@@ -958,7 +958,7 @@ sp_file_save_a_copy(Gtk::Window &parentWindow, gpointer /*object*/, gpointer /*d
  *  Sanitize file name according to
  *  https://docs.microsoft.com/en-us/windows/desktop/fileio/naming-a-file#naming-conventions.
  *
- *  Forbiden characters are converted with percent encoding, (i.e. ":" is
+ *  Forbidden characters are converted with percent encoding, (i.e. ":" is
  *  replaced by "%3a").
  *
  */
