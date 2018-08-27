@@ -73,7 +73,6 @@
 #include "xml/rebase-hrefs.h"
 #include "xml/sp-css-attr.h"
 
-
 using Inkscape::DocumentUndo;
 using Inkscape::IO::Resource::TEMPLATES;
 using Inkscape::IO::Resource::USER;
@@ -955,53 +954,6 @@ sp_file_save_a_copy(Gtk::Window &parentWindow, gpointer /*object*/, gpointer /*d
 }
 
 /**
- *  Sanitize file name according to
- *  https://docs.microsoft.com/en-us/windows/desktop/fileio/naming-a-file#naming-conventions.
- *
- *  Forbidden characters are converted with percent encoding, (i.e. ":" is
- *  replaced by "%3a").
- *
- */
-
-Glib::ustring sp_encode_filename(Glib::ustring string_to_escape) {
-
-    Glib::ustring escaped_string;
-
-    for (auto iter = string_to_escape.begin(); iter!= string_to_escape.end(); ++iter)
-    {
-
-        if (*iter < 32) {
-            escaped_string +=
-                Glib::ustring::compose("%%%1",
-                    Glib::ustring::format(std::hex, *iter));
-            break;
-        }
-
-        switch (*iter) {
-
-            case 0x3c:
-            case 0x3e:
-            case 0x3a:
-            case 0x22:
-            case 0x2f:
-            case 0x5c:
-            case 0x7c:
-            case 0x3f:
-            case 0x2a:
-                escaped_string +=
-                    Glib::ustring::compose("%%%1",
-                        Glib::ustring::format(std::hex, *iter));
-                break;
-            default:
-                escaped_string += *iter;
-        }
-    }
-
-    return escaped_string;
-}
-
-
-/**
  *  Save a copy of a document as template.
  */
 void
@@ -1075,7 +1027,7 @@ sp_file_save_template(Gtk::Window &parentWindow, Glib::ustring name,
         Inkscape::Extension::FILE_SAVE_METHOD_INKSCAPE_SVG);
     }
 
-    auto encodedName = sp_encode_filename(name);
+    auto encodedName = Glib::uri_escape_string(name);
     encodedName.append(".svg");
 
     auto filename =  Inkscape::IO::Resource::get_path_ustring(USER, TEMPLATES,
