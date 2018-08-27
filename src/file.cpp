@@ -279,7 +279,7 @@ bool sp_file_open(const Glib::ustring &uri,
         }
 
         if ( INKSCAPE.use_gui() ) {
-            
+
             SPNamedView *nv = desktop->namedview;
             if (nv->lockguides) {
                 nv->lockGuides();
@@ -955,6 +955,53 @@ sp_file_save_a_copy(Gtk::Window &parentWindow, gpointer /*object*/, gpointer /*d
 }
 
 /**
+ *  Sanitize file name according to
+ *  https://docs.microsoft.com/en-us/windows/desktop/fileio/naming-a-file#naming-conventions.
+ *
+ *  Forbiden characters are converted with percent encoding, (i.e. ":" is
+ *  replaced by "%3a").
+ *
+ */
+
+Glib::ustring sp_encode_filename(Glib::ustring string_to_escape) {
+
+    Glib::ustring escaped_string;
+
+    for (auto iter = string_to_escape.begin(); iter!= string_to_escape.end(); ++iter)
+    {
+
+        if (*iter < 32) {
+            escaped_string +=
+                Glib::ustring::compose("%%%1",
+                    Glib::ustring::format(std::hex, *iter));
+            break;
+        }
+
+        switch (*iter) {
+
+            case 0x3c:
+            case 0x3e:
+            case 0x3a:
+            case 0x22:
+            case 0x2f:
+            case 0x5c:
+            case 0x7c:
+            case 0x3f:
+            case 0x2a:
+                escaped_string +=
+                    Glib::ustring::compose("%%%1",
+                        Glib::ustring::format(std::hex, *iter));
+                break;
+            default:
+                escaped_string += *iter;
+        }
+    }
+
+    return escaped_string;
+}
+
+
+/**
  *  Save a copy of a document as template.
  */
 void
@@ -962,7 +1009,6 @@ sp_file_save_template(Gtk::Window &parentWindow, Glib::ustring name,
     Glib::ustring author, Glib::ustring description, Glib::ustring keywords,
     bool isDefault)
 {
-
     if (!SP_ACTIVE_DOCUMENT || name.length() == 0)
         return;
 
@@ -1029,10 +1075,11 @@ sp_file_save_template(Gtk::Window &parentWindow, Glib::ustring name,
         Inkscape::Extension::FILE_SAVE_METHOD_INKSCAPE_SVG);
     }
 
-    name.append(".svg");
+    auto encodedName = sp_encode_filename(name);
+    encodedName.append(".svg");
 
     auto filename =  Inkscape::IO::Resource::get_path_ustring(USER, TEMPLATES,
-        name.c_str());
+        encodedName.c_str());
     file_save(parentWindow, document, filename,
         Inkscape::Extension::db.get(".svg"), false, false,
         Inkscape::Extension::FILE_SAVE_METHOD_INKSCAPE_SVG);
