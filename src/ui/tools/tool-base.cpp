@@ -793,9 +793,8 @@ bool ToolBase::root_handler(GdkEvent* event) {
         if (ctrl & shift) {
             /* ctrl + shift, rotate */
 
-            double constexpr ROTATE_INC_DEFAULT = 15.0;
             double rotate_inc = prefs->getDoubleLimited(
-                    "/options/rotateincrement/value", ROTATE_INC_DEFAULT, 1, 90, "°" );
+                    "/options/rotateincrement/value", 15, 1, 90, "°" );
             rotate_inc *= M_PI/180.0;
 
             switch (event->scroll.direction) {
@@ -809,8 +808,9 @@ bool ToolBase::root_handler(GdkEvent* event) {
 
             case GDK_SCROLL_SMOOTH: {
                 gdk_event_get_scroll_deltas(event, &delta_x, &delta_y);
-#ifdef __APPLE__
-                delta_y /= ROTATE_INC_DEFAULT;
+#ifdef GDK_WINDOWING_QUARTZ
+                // MacBook trackpad scroll event gives pixel delta
+                delta_y /= WHEEL_SCROLL_DEFAULT;
 #endif
                 double delta_y_clamped = CLAMP(delta_y, -1.0, 1.0); // values > 1 result in excessive rotating
                 rotate_inc = rotate_inc * -delta_y_clamped;
@@ -843,8 +843,8 @@ bool ToolBase::root_handler(GdkEvent* event) {
 
             case GDK_SCROLL_SMOOTH: {
                 gdk_event_get_scroll_deltas(event, &delta_x, &delta_y);
-#ifdef __APPLE__
-                // MacBook touchpad scroll event gives pixel delta
+#ifdef GDK_WINDOWING_QUARTZ
+                // MacBook trackpad scroll event gives pixel delta
                 delta_y /= WHEEL_SCROLL_DEFAULT;
 #endif
                 desktop->scroll_relative(Geom::Point(wheel_scroll * -delta_y, 0));
@@ -872,9 +872,9 @@ bool ToolBase::root_handler(GdkEvent* event) {
 
             case GDK_SCROLL_SMOOTH: {
                 gdk_event_get_scroll_deltas(event, &delta_x, &delta_y);
-#ifdef __APPLE__
-                // empirical value (MacBook Pro 2016)
-                delta_y /= 30.;
+#ifdef GDK_WINDOWING_QUARTZ
+                // MacBook trackpad scroll event gives pixel delta
+                delta_y /= WHEEL_SCROLL_DEFAULT;
 #endif
                 double delta_y_clamped = CLAMP(std::abs(delta_y), 0.0, 1.0); // values > 1 result in excessive zooming
                 double zoom_inc_scaled = (zoom_inc-1) * delta_y_clamped + 1;
@@ -917,8 +917,8 @@ bool ToolBase::root_handler(GdkEvent* event) {
 
             case GDK_SCROLL_SMOOTH:
                 gdk_event_get_scroll_deltas(event, &delta_x, &delta_y);
-#ifdef __APPLE__
-                // MacBook touchpad scroll event gives pixel delta
+#ifdef GDK_WINDOWING_QUARTZ
+                // MacBook trackpad scroll event gives pixel delta
                 delta_x /= WHEEL_SCROLL_DEFAULT;
                 delta_y /= WHEEL_SCROLL_DEFAULT;
 #endif
