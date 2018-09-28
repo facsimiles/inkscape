@@ -3,7 +3,7 @@
 
 #include <glib/poppler-features.h>
 
-#if POPPLER_CHECK_VERSION(0,69,0)
+#if POPPLER_CHECK_VERSION(0,70,0)
 #define _POPPLER_CONST const
 #else
 #define _POPPLER_CONST
