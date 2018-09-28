@@ -18,6 +18,7 @@
 #endif
 
 #if POPPLER_CHECK_VERSION(0,58,0)
+#define POPPLER_NEW_OBJECT_API
 #define _POPPLER_FREE(obj)
 #define _POPPLER_CALL(ret, func) (ret = func())
 #define _POPPLER_CALL_ARGS(ret, func, ...) (ret = func(__VA_ARGS__))
@@ -25,6 +26,14 @@
 #define _POPPLER_FREE(obj) (obj).free()
 #define _POPPLER_CALL(ret, func) (*func(&ret))
 #define _POPPLER_CALL_ARGS(ret, func, ...) (*func(__VA_ARGS__, &ret))
+#endif
+
+#if POPPLER_CHECK_VERSION(0, 29, 0)
+#define POPPLER_EVEN_NEWER_NEW_COLOR_SPACE_API
+#endif
+
+#if POPPLER_CHECK_VERSION(0, 25, 0)
+#define POPPLER_EVEN_NEWER_COLOR_SPACE_API
 #endif
 
 #endif
