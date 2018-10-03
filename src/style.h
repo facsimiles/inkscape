@@ -47,6 +47,8 @@ public:
     SPStyle(SPDocument *document = nullptr, SPObject *object = nullptr);// document is ignored if valid object given
     ~SPStyle();
     void clear();
+    void clear(/* SPAttributeEnum */ int id);
+    SPIBase *getProperty(/* SPAttributeEnum */ int id);
     void read(SPObject *object, Inkscape::XML::Node *repr);
     void readFromObject(SPObject *object);
     void readFromPrefs(Glib::ustring const &path);
@@ -84,6 +86,7 @@ public:
 private:
     /// Pointers to all the properties (for looping through them)
     std::vector<SPIBase *> _properties;
+    std::map</* SPAttributeEnum */ int, size_t> _property_keys;
     // static SPPropMap _propmap;
 
 public:

@@ -283,107 +283,181 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
     // This might be too resource hungary... but for now it possible to loop over properties
 
     // SVG 2: Attributes promoted to properties
+    _property_keys[SP_ATTR_D] = _properties.size();
     _properties.push_back( &d );
 
     // 'color' must be before 'fill', 'stroke', 'text-decoration-color', ...
+    _property_keys[SP_PROP_COLOR] = _properties.size();
     _properties.push_back( &color );
 
     // 'font-size'/'font' must be before properties that need to know em, ex size (SPILength,
     // SPILengthOrNormal)
+    _property_keys[SP_PROP_FONT_STYLE] = _properties.size();
     _properties.push_back( &font_style );
+    _property_keys[SP_PROP_FONT_VARIANT] = _properties.size();
     _properties.push_back( &font_variant );
+    _property_keys[SP_PROP_FONT_WEIGHT] = _properties.size();
     _properties.push_back( &font_weight );
+    _property_keys[SP_PROP_FONT_STRETCH] = _properties.size();
     _properties.push_back( &font_stretch );
+    _property_keys[SP_PROP_FONT_SIZE] = _properties.size();
     _properties.push_back( &font_size ); 
+    _property_keys[SP_PROP_LINE_HEIGHT] = _properties.size();
     _properties.push_back( &line_height );
+    _property_keys[SP_PROP_FONT_FAMILY] = _properties.size();
     _properties.push_back( &font_family );
+    _property_keys[SP_PROP_FONT] = _properties.size();
     _properties.push_back( &font );
+    _property_keys[SP_PROP_INKSCAPE_FONT_SPEC] = _properties.size();
     _properties.push_back( &font_specification );
 
     // Font variants
+    _property_keys[SP_PROP_FONT_VARIANT_LIGATURES] = _properties.size();
     _properties.push_back( &font_variant_ligatures );
+    _property_keys[SP_PROP_FONT_VARIANT_POSITION] = _properties.size();
     _properties.push_back( &font_variant_position );
+    _property_keys[SP_PROP_FONT_VARIANT_CAPS] = _properties.size();
     _properties.push_back( &font_variant_caps );
+    _property_keys[SP_PROP_FONT_VARIANT_NUMERIC] = _properties.size();
     _properties.push_back( &font_variant_numeric );
+    _property_keys[SP_PROP_FONT_VARIANT_ALTERNATES] = _properties.size();
     _properties.push_back( &font_variant_alternates );
+    _property_keys[SP_PROP_FONT_VARIANT_EAST_ASIAN] = _properties.size();
     _properties.push_back( &font_variant_east_asian );
+    _property_keys[SP_PROP_FONT_FEATURE_SETTINGS] = _properties.size();
     _properties.push_back( &font_feature_settings );
 
     // Variable Fonts
+    _property_keys[SP_PROP_FONT_VARIATION_SETTINGS] = _properties.size();
     _properties.push_back( &font_variation_settings );
 
+    _property_keys[SP_PROP_TEXT_INDENT] = _properties.size();
     _properties.push_back( &text_indent );
+    _property_keys[SP_PROP_TEXT_ALIGN] = _properties.size();
     _properties.push_back( &text_align );
 
+    _property_keys[SP_PROP_TEXT_DECORATION] = _properties.size();
     _properties.push_back( &text_decoration );
+    _property_keys[SP_PROP_TEXT_DECORATION_LINE] = _properties.size();
     _properties.push_back( &text_decoration_line );
+    _property_keys[SP_PROP_TEXT_DECORATION_STYLE] = _properties.size();
     _properties.push_back( &text_decoration_style );
+    _property_keys[SP_PROP_TEXT_DECORATION_COLOR] = _properties.size();
     _properties.push_back( &text_decoration_color );
 
+    _property_keys[SP_PROP_LETTER_SPACING] = _properties.size();
     _properties.push_back( &letter_spacing );
+    _property_keys[SP_PROP_WORD_SPACING] = _properties.size();
     _properties.push_back( &word_spacing );
+    _property_keys[SP_PROP_TEXT_TRANSFORM] = _properties.size();
     _properties.push_back( &text_transform );
 
+    _property_keys[SP_PROP_WRITING_MODE] = _properties.size();
     _properties.push_back( &writing_mode );
+    _property_keys[SP_PROP_DIRECTION] = _properties.size();
     _properties.push_back( &direction );
+    _property_keys[SP_PROP_TEXT_ORIENTATION] = _properties.size();
     _properties.push_back( &text_orientation );
+    _property_keys[SP_PROP_DOMINANT_BASELINE] = _properties.size();
     _properties.push_back( &dominant_baseline );
+    _property_keys[SP_PROP_BASELINE_SHIFT] = _properties.size();
     _properties.push_back( &baseline_shift );
+    _property_keys[SP_PROP_TEXT_ANCHOR] = _properties.size();
     _properties.push_back( &text_anchor );
+    _property_keys[SP_PROP_WHITE_SPACE] = _properties.size();
     _properties.push_back( &white_space );
 
+    _property_keys[SP_PROP_SHAPE_INSIDE] = _properties.size();
     _properties.push_back( &shape_inside );
+    _property_keys[SP_PROP_SHAPE_SUBTRACT] = _properties.size();
     _properties.push_back( &shape_subtract );
+    _property_keys[SP_PROP_SHAPE_PADDING] = _properties.size();
     _properties.push_back( &shape_padding );
+    _property_keys[SP_PROP_SHAPE_MARGIN] = _properties.size();
     _properties.push_back( &shape_margin );
+    _property_keys[SP_PROP_INLINE_SIZE] = _properties.size();
     _properties.push_back( &inline_size );
 
+    _property_keys[SP_PROP_CLIP_RULE] = _properties.size();
     _properties.push_back( &clip_rule );
+    _property_keys[SP_PROP_DISPLAY] = _properties.size();
     _properties.push_back( &display );
+    _property_keys[SP_PROP_OVERFLOW] = _properties.size();
     _properties.push_back( &overflow );
+    _property_keys[SP_PROP_VISIBILITY] = _properties.size();
     _properties.push_back( &visibility );
+    _property_keys[SP_PROP_OPACITY] = _properties.size();
     _properties.push_back( &opacity );
 
+    _property_keys[SP_PROP_ISOLATION] = _properties.size();
     _properties.push_back( &isolation );
+    _property_keys[SP_PROP_MIX_BLEND_MODE] = _properties.size();
     _properties.push_back( &mix_blend_mode );
 
+    _property_keys[SP_PROP_COLOR_INTERPOLATION] = _properties.size();
     _properties.push_back( &color_interpolation );
+    _property_keys[SP_PROP_COLOR_INTERPOLATION_FILTERS] = _properties.size();
     _properties.push_back( &color_interpolation_filters );
 
+    _property_keys[SP_PROP_SOLID_COLOR] = _properties.size();
     _properties.push_back( &solid_color );
+    _property_keys[SP_PROP_SOLID_OPACITY] = _properties.size();
     _properties.push_back( &solid_opacity );
 
+    _property_keys[SP_PROP_VECTOR_EFFECT] = _properties.size();
     _properties.push_back( &vector_effect );
 
+    _property_keys[SP_PROP_FILL] = _properties.size();
     _properties.push_back( &fill );
+    _property_keys[SP_PROP_FILL_OPACITY] = _properties.size();
     _properties.push_back( &fill_opacity );
+    _property_keys[SP_PROP_FILL_RULE] = _properties.size();
     _properties.push_back( &fill_rule );
 
+    _property_keys[SP_PROP_STROKE] = _properties.size();
     _properties.push_back( &stroke );
+    _property_keys[SP_PROP_STROKE_WIDTH] = _properties.size();
     _properties.push_back( &stroke_width );
+    _property_keys[SP_PROP_STROKE_LINECAP] = _properties.size();
     _properties.push_back( &stroke_linecap );
+    _property_keys[SP_PROP_STROKE_LINEJOIN] = _properties.size();
     _properties.push_back( &stroke_linejoin );
+    _property_keys[SP_PROP_STROKE_MITERLIMIT] = _properties.size();
     _properties.push_back( &stroke_miterlimit );
+    _property_keys[SP_PROP_STROKE_DASHARRAY] = _properties.size();
     _properties.push_back( &stroke_dasharray );
+    _property_keys[SP_PROP_STROKE_DASHOFFSET] = _properties.size();
     _properties.push_back( &stroke_dashoffset );
+    _property_keys[SP_PROP_STROKE_OPACITY] = _properties.size();
     _properties.push_back( &stroke_opacity );
 
+    _property_keys[SP_PROP_MARKER] = _properties.size();
     _properties.push_back( &marker );
+    _property_keys[SP_PROP_MARKER_START] = _properties.size();
     _properties.push_back( &marker_start );
+    _property_keys[SP_PROP_MARKER_MID] = _properties.size();
     _properties.push_back( &marker_mid );
+    _property_keys[SP_PROP_MARKER_END] = _properties.size();
     _properties.push_back( &marker_end );
 
+    _property_keys[SP_PROP_PAINT_ORDER] = _properties.size();
     _properties.push_back( &paint_order );
 
+    _property_keys[SP_PROP_FILTER] = _properties.size();
     _properties.push_back( &filter );
     _properties.push_back( &filter_blend_mode );
     _properties.push_back( &filter_gaussianBlur_deviation );
 
+    _property_keys[SP_PROP_COLOR_RENDERING] = _properties.size();
     _properties.push_back( &color_rendering );
+    _property_keys[SP_PROP_IMAGE_RENDERING] = _properties.size();
     _properties.push_back( &image_rendering );
+    _property_keys[SP_PROP_SHAPE_RENDERING] = _properties.size();
     _properties.push_back( &shape_rendering );
+    _property_keys[SP_PROP_TEXT_RENDERING] = _properties.size();
     _properties.push_back( &text_rendering );
 
+    _property_keys[SP_PROP_ENABLE_BACKGROUND] = _properties.size();
     _properties.push_back( &enable_background );
 
     // MAP -------------------------------------------
@@ -521,6 +595,25 @@ SPStyle::~SPStyle() {
         std::cerr << "SPStyle::~SPStyle: ref count greater than 1! " << _refcount << std::endl;
     }
     // std::cout << "SPStyle::~SPStyle(): Exit\n" << std::endl;
+}
+
+SPIBase *
+SPStyle::getProperty(/* SPAttributeEnum */ int id) {
+    auto it = _property_keys.find(id);
+    if (it != _property_keys.end()) {
+        return _properties[it->second];
+    }
+    return nullptr;
+}
+
+void
+SPStyle::clear(/* SPAttributeEnum */ int id) {
+    SPIBase *p = getProperty(id);
+    if (p) {
+        p->clear();
+    } else {
+        g_warning("Unimplemented style property %d", id);
+    }
 }
 
 // Used in SPStyle::clear()
