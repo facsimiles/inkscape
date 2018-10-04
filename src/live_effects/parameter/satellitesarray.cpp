@@ -237,6 +237,7 @@ void FilletChamferKnotHolderEntity::knot_set(Geom::Point const &p,
     if (!_pparam->_last_pathvector_satellites) {
         return;
     }
+    _pparam->param_effect->upd_params = true;
     size_t total_satellites = _pparam->_last_pathvector_satellites->getTotalSatellites();
     bool is_mirror = false;
     size_t index = _index;
@@ -455,6 +456,7 @@ void FilletChamferKnotHolderEntity::knot_set_offset(Satellite satellite)
     if (!_pparam->_last_pathvector_satellites) {
         return;
     }
+    _pparam->param_effect->upd_params = true;
     size_t total_satellites = _pparam->_last_pathvector_satellites->getTotalSatellites();
     bool is_mirror = false;
     size_t index = _index;
