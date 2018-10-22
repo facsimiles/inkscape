@@ -71,6 +71,7 @@ if(WIN32)
     ${MINGW_BIN}/libjasper-[0-9]*.dll
     ${MINGW_BIN}/libjpeg-[0-9]*.dll
     ${MINGW_BIN}/liblcms2-[0-9]*.dll
+    ${MINGW_BIN}/libltdl-[0-9]*.dll
     ${MINGW_BIN}/liblqr-1-[0-9]*.dll
     ${MINGW_BIN}/liblzma-[0-9]*.dll
     ${MINGW_BIN}/libnghttp2-[0-9]*.dll
