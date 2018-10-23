@@ -24,6 +24,10 @@
 #include "ui/shape-editor.h"
 #include "xml/node-event-vector.h"
 
+#include "inkscape.h"
+#include "sp-shape.h"
+#include "sp-path.h"
+
 //using Inkscape::createKnotHolder;
 
 namespace Inkscape {
@@ -84,7 +88,7 @@ const SPItem *ShapeEditor::get_item() {
     return item;
 }
 
-void ShapeEditor::event_attr_changed(Inkscape::XML::Node *, gchar const *name, gchar const *, gchar const *, bool, void *data)
+void ShapeEditor::event_attr_changed(Inkscape::XML::Node * node, gchar const *name, gchar const *, gchar const *, bool, void *data)
 {
     g_assert(data);
     ShapeEditor *sh = static_cast<ShapeEditor *>(data);
@@ -97,7 +101,10 @@ void ShapeEditor::event_attr_changed(Inkscape::XML::Node *, gchar const *name, g
         if (changed_kh) {
             // this can happen if an LPEItem's knotholder handle was dragged, in which case we want
             // to keep the knotholder; in all other cases (e.g., if the LPE itself changes) we delete it
-            sh->reset_item(!strcmp(name, "d"));
+            // Backport 1d2fa48c9a62c4929264cf5b59907f8d4f0e55b5
+            SPObject * obj = SP_ACTIVE_DOCUMENT->getObjectById(node->attribute("id"));
+            bool is_shape = SP_IS_SHAPE(obj) && !SP_IS_PATH(obj);
+            sh->reset_item(!strcmp(name, "d") || is_shape);
         }
     }
 }
