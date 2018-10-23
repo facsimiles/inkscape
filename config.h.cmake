@@ -117,6 +117,9 @@
    first (like Motorola and SPARC, unlike Intel and VAX). */
 #cmakedefine WORDS_BIGENDIAN 1
 
+/* disable assertions */
+#cmakedefine NDEBUG 1
+
 /* Enable LPE Tool? */
 #cmakedefine WITH_LPETOOL 1
 
