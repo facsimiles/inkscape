@@ -218,9 +218,13 @@ void Print::begin_print(const Glib::RefPtr<Gtk::PrintContext>&)
     _printop->set_n_pages(1);
 }
 
-Gtk::PrintOperationResult Print::run(Gtk::PrintOperationAction, Gtk::Window &parent_window)
+Gtk::PrintOperationResult Print::run(Gtk::PrintOperationAction, Gtk::Window &parent_window,
+        PrinterSettings& printer_settings)
 {
+    // Remember to restore the previous print settings
+    _printop->set_print_settings(printer_settings._gtk_print_settings);
     _printop->run(Gtk::PRINT_OPERATION_ACTION_PRINT_DIALOG, parent_window);
+    printer_settings._gtk_print_settings = _printop->get_print_settings();
     return Gtk::PRINT_OPERATION_RESULT_APPLY;
 }
 

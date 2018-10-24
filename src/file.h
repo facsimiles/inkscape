@@ -18,6 +18,7 @@
 #include <glibmm/ustring.h>
 #include <string>
 #include "extension/system.h"
+#include "ui/dialog/print.h"
 
 class SPDesktop;
 class SPDocument;
@@ -193,7 +194,7 @@ would be useful as instance methods
 /**
  *
  */
-void sp_file_print (Gtk::Window& parentWindow);
+void sp_file_print (Gtk::Window& parentWindow, Inkscape::UI::Dialog::PrinterSettings& printer_settings);
 
 /*#####################
 ## U T I L I T Y
