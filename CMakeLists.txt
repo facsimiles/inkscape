@@ -22,10 +22,11 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/CMakeScripts/Modules")
 # avoid having empty buildtype
 set(CMAKE_BUILD_TYPE_INIT "Release")
 
-project(inkscape)
-
 include(CMakeScripts/HelperFunctions.cmake)
 include(CMakeScripts/ConfigEnv.cmake)
+
+project(inkscape)
+
 include(CMakeScripts/ConfigPaths.cmake)
 
 set(PROJECT_NAME inkscape)
