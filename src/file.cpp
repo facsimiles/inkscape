@@ -1746,11 +1746,11 @@ sp_file_import_from_ocal(Gtk::Window &parent_window)
  *  Print the current document, if any.
  */
 void
-sp_file_print(Gtk::Window& parentWindow)
+sp_file_print(Gtk::Window& parentWindow, Inkscape::UI::Dialog::PrinterSettings& printer_settings)
 {
     SPDocument *doc = SP_ACTIVE_DOCUMENT;
     if (doc)
-        sp_print_document(parentWindow, doc);
+        sp_print_document(parentWindow, doc, printer_settings);
 }
 
 
