@@ -616,7 +616,7 @@ dnl ******************************
 dnl Check for ImageMagick Magick++ 
 dnl ******************************
 
-PKG_CHECK_MODULES(IMAGEMAGICK, ImageMagick++, magick_ok=yes, magick_ok=no)
+PKG_CHECK_MODULES(IMAGEMAGICK, Magick++, magick_ok=yes, magick_ok=no)
 if test "x$magick_ok" = "xyes"; then
       AC_DEFINE(WITH_IMAGE_MAGICK,1,[Image Magick++ support for bitmap effects])
 fi
