@@ -902,7 +902,7 @@ void FileVerb::perform(SPAction *action, void *data)
             Inkscape::UI::Dialog::SaveTemplate::save_document_as_template(*parent);
             break;
         case SP_VERB_FILE_PRINT:
-            sp_file_print(*parent, INKSCAPE.printer_settings());
+            sp_file_print(*parent);
             break;
         case SP_VERB_FILE_IMPORT:
             prefs->setBool("/options/onimport",true);

@@ -12,7 +12,6 @@
  */
 
 #include <2geom/forward.h>
-#include "ui/dialog/print.h"
 
 namespace Gtk {
 class Window;
@@ -51,8 +50,7 @@ struct SPPrintContext {
 
 
 /* UI */
-void sp_print_document(Gtk::Window& parentWindow, SPDocument *doc,
-        Inkscape::UI::Dialog::PrinterSettings& printer_settings);
+void sp_print_document(Gtk::Window& parentWindow, SPDocument *doc);
 void sp_print_document_to_file(SPDocument *doc, char const *filename);
 
 

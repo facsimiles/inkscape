@@ -44,8 +44,7 @@ struct PrinterSettings {
 class Print {
 public:
     Print(SPDocument *doc, SPItem *base);
-    Gtk::PrintOperationResult run(Gtk::PrintOperationAction, Gtk::Window &parent_window,
-            PrinterSettings& printer_settings);
+    Gtk::PrintOperationResult run(Gtk::PrintOperationAction, Gtk::Window &parent_window);
 
 protected:
 

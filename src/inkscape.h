@@ -20,7 +20,6 @@
 #include <sigc++/signal.h>
 #include "layer-model.h"
 #include "selection.h"
-#include "ui/dialog/print.h"
 
 class SPDesktop;
 class SPDocument;
@@ -202,10 +201,6 @@ public:
     void add_style_sheet();
     void add_icon_theme();
 
-    // This is used in verbs.cpp and ultimately passed through to print.cpp so Gtk can remember the
-    // print settings when we re-open the print dialogue.
-    Inkscape::UI::Dialog::PrinterSettings& printer_settings() { return _printer_settings; }
-
   private:
     static Inkscape::Application * _S_inst;
 
@@ -229,7 +224,6 @@ public:
     static bool _crashIsHappening;
     bool _use_gui;
     gint _pdf_page;
-    Inkscape::UI::Dialog::PrinterSettings _printer_settings;
 };
 
 } // namespace Inkscape

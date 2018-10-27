@@ -77,8 +77,7 @@ unsigned int SPPrintContext::text(char const *text, Geom::Point p,
 /* UI */
 
 void
-sp_print_document(Gtk::Window& parentWindow, SPDocument *doc,
-        Inkscape::UI::Dialog::PrinterSettings& printer_settings)
+sp_print_document(Gtk::Window& parentWindow, SPDocument *doc)
 {
     doc->ensureUpToDate();
 
@@ -87,8 +86,7 @@ sp_print_document(Gtk::Window& parentWindow, SPDocument *doc,
 
     // Run print dialog
     Inkscape::UI::Dialog::Print printop(doc,base);
-    Gtk::PrintOperationResult res = printop.run(Gtk::PRINT_OPERATION_ACTION_PRINT_DIALOG,
-            parentWindow, printer_settings);
+    Gtk::PrintOperationResult res = printop.run(Gtk::PRINT_OPERATION_ACTION_PRINT_DIALOG, parentWindow);
     (void)res; // TODO handle this
 }
 
