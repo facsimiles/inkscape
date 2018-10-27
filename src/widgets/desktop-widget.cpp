@@ -670,8 +670,8 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     dtw->coord_status_y = gtk_label_new(nullptr);
     gtk_widget_set_name(dtw->coord_status_x, "CoordinateStatusX");
     gtk_widget_set_name(dtw->coord_status_y, "CoordinateStatusY");
-    gtk_label_set_markup( GTK_LABEL(dtw->coord_status_x), "   0.00 " );
-    gtk_label_set_markup( GTK_LABEL(dtw->coord_status_y), "   0.00 " );
+    gtk_label_set_markup(GTK_LABEL(dtw->coord_status_x), "   0.00 ");
+    gtk_label_set_markup(GTK_LABEL(dtw->coord_status_y), "   0.00 ");
 
     auto label_z = gtk_label_new(_("Z:"));
     gtk_widget_set_name(label_z, "ZLabel");
