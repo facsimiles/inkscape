@@ -117,39 +117,25 @@ static Dialog::FillAndStroke *get_fill_and_stroke_panel(SPDesktop *desktop);
 
 SelectedStyle::SelectedStyle(bool /*layout*/)
     : current_stroke_width(0)
-    ,
-
-    _sw_unit(nullptr)
-    ,
-
-    _desktop(nullptr)
+    , _sw_unit(nullptr)
+    , _desktop(nullptr)
     , _table()
     , _fill_label(_("Fill:"))
     , _stroke_label(_("Stroke:"))
     , _opacity_label(_("O:"))
-    ,
-
-    _fill_place(this, SS_FILL)
+    , _fill_place(this, SS_FILL)
     , _stroke_place(this, SS_STROKE)
-    ,
-
-    _fill_flag_place()
+    , _fill_flag_place()
     , _stroke_flag_place()
-    ,
-
-    _opacity_place()
+    , _opacity_place()
     , _opacity_adjustment(Gtk::Adjustment::create(100, 0.0, 100, 1.0, 10.0))
     , _opacity_sb(0.02, 0)
-    ,
-
-    _fill()
+    , _fill()
     , _stroke()
     , _stroke_width_place(this)
     , _stroke_width("")
     , _fill_empty_space("")
-    ,
-
-    _opacity_blocked(false)
+    , _opacity_blocked(false)
 {
     set_name("SelectedStyle");
     _drop[0] = _drop[1] = nullptr;
