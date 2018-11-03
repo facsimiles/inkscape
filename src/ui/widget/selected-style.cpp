@@ -1109,7 +1109,7 @@ SelectedStyle::update()
         current_stroke_width = w;
 
         {
-            gchar *str = g_strdup_printf("<span font_features='tnum'>%#.3g</span>", w);
+            gchar *str = g_strdup_printf(" %#.3g", w);
             if (str[strlen(str) - 1] == ',' || str[strlen(str) - 1] == '.') {
                 str[strlen(str)-1] = '\0';
             }

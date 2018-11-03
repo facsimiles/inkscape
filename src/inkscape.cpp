@@ -394,6 +394,17 @@ Application::add_style_sheet()
     if (settings) {
         g_object_get(settings, "gtk-font-name", &gtk_font_name, NULL);
     }
+    if (!strncmp(gtk_font_name, "Cantarell", 9)) {
+        css_str += "#monoStrokeWidth,";
+        css_str += "#fillEmptySpace,";
+        css_str += "#SelectStatus,";
+        css_str += "#CoordinateStatusX,";
+        css_str += "#CoordinateStatusY,";
+        css_str += "#DesktopMainTable spinbutton{";
+        css_str += "    font-family: sans-serif";
+        css_str += "}"; // we also can add to * but seems to me Cantarell looks better for oter places
+    }
+    // From 3.16, throws an error which we must catch.
     try {
         provider->load_from_data(css_str);
     }

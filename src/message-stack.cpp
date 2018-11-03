@@ -112,7 +112,8 @@ MessageId MessageStack::_push(MessageType type, guint lifetime, gchar const *mes
     m->stack = this;
     m->id = id;
     m->type = type;
-    m->message = g_strdup_printf("<span font_features='tnum'>%s</span>", message);
+    m->message = g_strdup(message);
+
     if (lifetime) {
         m->timeout_id = g_timeout_add(lifetime, &MessageStack::_timeout, m);
     } else {
