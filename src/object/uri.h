@@ -19,6 +19,17 @@ namespace Inkscape {
 
 /**
  * Represents an URI as per RFC 2396.
+ *
+ * Typical use-cases of this class:
+ * - converting between relative and absolute URIs
+ * - converting URIs to/from filenames (alternative: Glib functions, but those only handle absolute paths)
+ * - generic handling of data/file/http URIs (e.g. URI::getContents and URI::getMimeType)
+ *
+ * Wraps libxml2's URI functions. Direct usage of libxml2's C-API is discouraged if favor of
+ * Inkscape::URI. (At the time of writing this, no de-factor standard C++ URI library exists, so
+ * wrapping libxml2 seems like a good solution)
+ *
+ * Implementation detail: Immutable type, copies share a ref-counted data pointer.
  */
 class URI {
 public:
