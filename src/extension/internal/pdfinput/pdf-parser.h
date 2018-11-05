@@ -8,6 +8,12 @@
 #ifndef PDF_PARSER_H
 #define PDF_PARSER_H
 
+#if POPPLER_CHECK_VERSION(0,71,0)
+typedef bool GBool;
+#define gTrue true
+#define gFalse false
+#endif
+
 #ifdef HAVE_CONFIG_H
 # include "config.h"  // only include where actually required!
 #endif
