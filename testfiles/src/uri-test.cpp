@@ -26,8 +26,10 @@ TEST(UriTest, FromDir)
 {
 #ifdef _WIN32
     ASSERT_EQ(URI::from_dirname("C:\\tmp").str(), "file:///C:/tmp/");
+    ASSERT_EQ(URI::from_dirname("C:\\").str(), "file:///C:/");
     ASSERT_EQ(URI::from_href_and_basedir("uri.svg", "C:\\tmp").str(), "file:///C:/tmp/uri.svg");
 #else
+    ASSERT_EQ(URI::from_dirname("/").str(), "file:///");
     ASSERT_EQ(URI::from_dirname("/tmp").str(), "file:///tmp/");
     ASSERT_EQ(URI::from_href_and_basedir("uri.svg", "/tmp").str(), "file:///tmp/uri.svg");
 #endif
@@ -50,6 +52,15 @@ TEST(UriTest, Str)
     ASSERT_EQ(URI("foo/uri.svg", "http://web/a/b/c").str(), "http://web/a/b/foo/uri.svg");
     ASSERT_EQ(URI("foo/uri.svg", "http://web/a/b/c").str("http://web/a/"), "b/foo/uri.svg");
     ASSERT_EQ(URI("foo/uri.svg", "http://web/a/b/c").str("http://other/a/"), "http://web/a/b/foo/uri.svg");
+
+    ASSERT_EQ(URI("http://web/").str("http://web/"), "");
+    ASSERT_EQ(URI("http://web/").str("http://web/url"), "./");
+
+    // special case: don't cross filesystem root
+    ASSERT_EQ(URI("file:///a").str("file:///"), "a");
+    ASSERT_EQ(URI("file:///ax/b").str("file:///ay/"), "file:///ax/b"); // special case
+    ASSERT_EQ(URI("file:///C:/b").str("file:///D:/"), "file:///C:/b"); // special case
+    ASSERT_EQ(URI("file:///C:/a/b").str("file:///C:/b/"), "../a/b");
 
     const char *win_url_unc = "file://laptop/My%20Documents/FileSchemeURIs.doc";
     const char *win_url_local = "file:///C:/Documents%20and%20Settings/davris/FileSchemeURIs.doc";

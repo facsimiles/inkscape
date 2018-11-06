@@ -436,7 +436,6 @@ public:
     void mouseover() override {}
     void mouseout() override {}
 
-
     virtual bool onDeleteUI (GdkEventAny*);
     virtual bool onWindowStateEvent (GdkEventWindowState* event);
 

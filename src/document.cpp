@@ -1381,25 +1381,37 @@ static bool overlaps(Geom::Rect const &area, Geom::Rect const &box)
     return area.intersects(box);
 }
 
-static std::vector<SPItem*> &find_items_in_area(std::vector<SPItem*> &s, SPGroup *group, unsigned int dkey, Geom::Rect const &area,
-                                  bool (*test)(Geom::Rect const &, Geom::Rect const &), bool take_insensitive = false, bool into_groups = false)
+static std::vector<SPItem*> &find_items_in_area(std::vector<SPItem*> &s, 
+                                                SPGroup *group, unsigned int dkey, 
+                                                Geom::Rect const &area,
+                                                bool (*test)(Geom::Rect const &, Geom::Rect const &), 
+                                                bool take_hidden = false, 
+                                                bool take_insensitive = false,
+                                                bool take_groups = true,
+                                                bool enter_groups = false)
 {
     g_return_val_if_fail(SP_IS_GROUP(group), s);
 
     for (auto& o: group->children) {
-        if ( SP_IS_ITEM(&o) ) {
-            if (SP_IS_GROUP(&o) && (SP_GROUP(&o)->effectiveLayerMode(dkey) == SPGroup::LAYER || into_groups)) {
-                s = find_items_in_area(s, SP_GROUP(&o), dkey, area, test, take_insensitive, into_groups);
-            } else {
-                SPItem *child = SP_ITEM(&o);
-                Geom::OptRect box = child->desktopVisualBounds();
-                if ( box && test(area, *box) && (take_insensitive || child->isVisibleAndUnlocked(dkey))) {
-                    s.push_back(child);
+        if (SPItem *item = dynamic_cast<SPItem *>(&o)) {
+            if (SPGroup * childgroup = dynamic_cast<SPGroup *>(item)) {
+                bool is_layer = childgroup->effectiveLayerMode(dkey) == SPGroup::LAYER;
+                if (is_layer || (enter_groups)) {
+                    s = find_items_in_area(s, childgroup, dkey, area, test, take_hidden, take_insensitive, take_groups, enter_groups);
                 }
+                if (!take_groups || is_layer) {
+                    continue;
+                }
+            }
+            Geom::OptRect box = item->desktopVisualBounds();
+            if (box && test(area, *box)                    
+                && (take_insensitive || !item->isLocked())
+                && (take_hidden || !item->isHidden()))
+            {
+                s.push_back(item);
             }
         }
     }
-
     return s;
 }
 
@@ -1456,6 +1468,7 @@ SPItem *SPDocument::getItemFromListAtPointBottom(unsigned int dkey, SPGroup *gro
 Turn the SVG DOM into a flat list of nodes that can be searched from top-down.
 The list can be persisted, which improves "find at multiple points" speed.
 */
+// TODO: study add `gboolean with_groups = false` as parameter.
 void SPDocument::build_flat_item_list(unsigned int dkey, SPGroup *group, gboolean into_groups) const
 {
     for (auto& o: group->children) {
@@ -1548,29 +1561,35 @@ static SPItem *find_group_at_point(unsigned int dkey, SPGroup *group, Geom::Poin
     return seen;
 }
 
+
 /*
  * Return list of items, contained in box
  *
  * Assumes box is normalized (and g_asserts it!)
  *
  */
-std::vector<SPItem*> SPDocument::getItemsInBox(unsigned int dkey, Geom::Rect const &box, bool take_insensitive, bool into_groups) const
+
+std::vector<SPItem*> SPDocument::getItemsInBox(unsigned int dkey, Geom::Rect const &box, bool take_hidden, bool take_insensitive, bool take_groups, bool enter_groups) const
 {
     std::vector<SPItem*> x;
-    return find_items_in_area(x, SP_GROUP(this->root), dkey, box, is_within, take_insensitive, into_groups);
+    return find_items_in_area(x, SP_GROUP(this->root), dkey, box, is_within, take_hidden, take_insensitive, take_groups, enter_groups);
 }
 
 /*
- * Return list of items, that the parts of the item contained in box
- *
  * Assumes box is normalized (and g_asserts it!)
- *
+ * @param dkey desktop view in use
+ * @param box area to find items
+ * @param take_hidden get hidden items
+ * @param take_insensitive get insensitive items
+ * @param take_groups get also the groups
+ * @param enter_groups get items inside groups
+ * @return Return list of items, that the parts of the item contained in box
  */
 
-std::vector<SPItem*> SPDocument::getItemsPartiallyInBox(unsigned int dkey, Geom::Rect const &box, bool take_insensitive, bool into_groups) const
+std::vector<SPItem*> SPDocument::getItemsPartiallyInBox(unsigned int dkey, Geom::Rect const &box, bool take_hidden, bool take_insensitive, bool take_groups, bool enter_groups) const
 {
     std::vector<SPItem*> x;
-    return find_items_in_area(x, SP_GROUP(this->root), dkey, box, overlaps, take_insensitive, into_groups);
+    return find_items_in_area(x, SP_GROUP(this->root), dkey, box, overlaps, take_hidden, take_insensitive, take_groups, enter_groups);
 }
 
 std::vector<SPItem*> SPDocument::getItemsAtPoints(unsigned const key, std::vector<Geom::Point> points, bool all_layers, size_t limit) const 
