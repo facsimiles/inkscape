@@ -1210,6 +1210,22 @@ StrokeStyle::setPaintOrderButtons(Gtk::ToggleButton *active)
 
 
 /**
+ * Recursively builds a simple list from an arbitrarily complex selection
+ * of items and grouped items
+ */
+static void buildGroupedItemList(SPObject *element, std::vector<SPObject*> &simple_list)
+{
+    if (SP_IS_GROUP(element)) {
+        for (SPObject *i = element->firstChild(); i; i = i->getNext()) {
+            buildGroupedItemList(i, simple_list);
+        }
+    } else {
+        simple_list.push_back(element);
+    }
+}
+
+
+/**
  * Updates the marker combobox to highlight the appropriate marker and scroll to
  * that marker.
  */
@@ -1230,53 +1246,64 @@ StrokeStyle::updateAllMarkers(std::vector<SPItem*> const &objects, bool skip_und
         }
     }
 
+    auto simplified_list = std::vector<SPObject *>();
+    for (SPItem *item : objects) {
+            SPObject *o = SP_OBJECT (item);
+            if (SP_IS_GROUP(o)) {
+                buildGroupedItemList(o, simplified_list);
+            } else {
+                simplified_list.push_back(o);
+            }
+        }
+
     for (unsigned i = 0; i < G_N_ELEMENTS(keyloc); ++i) {
         MarkerComboBox *combo = static_cast<MarkerComboBox *>(keyloc[i].key);
         // Per SVG spec, text objects cannot have markers; disable combobox if only texts are selected
         combo->set_sensitive(!all_texts);
     }
 
-    // We show markers of the first object in the list only
+    // We show markers of the last object in the list only
     // FIXME: use the first in the list that has the marker of each type, if any
-    SPObject *object = objects[0];
 
-    for (unsigned i = 0; i < G_N_ELEMENTS(keyloc); ++i) {
-        // For all three marker types,
+    for (SPObject *object : simplified_list) {
+        for (unsigned i = 0; i < G_N_ELEMENTS(keyloc); ++i) {
+            // For all three marker types,
 
-        // find the corresponding combobox item
-        MarkerComboBox *combo = static_cast<MarkerComboBox *>(keyloc[i].key);
+            // find the corresponding combobox item
+            MarkerComboBox *combo = static_cast<MarkerComboBox *>(keyloc[i].key);
 
-        // Quit if we're in update state
-        if (combo->update()) {
-            return;
-        }
-
-        combo->setDesktop(desktop);
-
-        if (object->style->marker_ptrs[keyloc[i].loc]->value != nullptr && !all_texts) {
-            // If the object has this type of markers,
-
-            // Extract the name of the marker that the object uses
-            SPObject *marker = getMarkerObj(object->style->marker_ptrs[keyloc[i].loc]->value, object->document);
-            // Scroll the combobox to that marker
-            combo->set_current(marker);
-
-            // Set the marker color
-            Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-            gboolean update = prefs->getBool("/options/markers/colorUpdateMarkers", true);
-
-            if (update) {
-                setMarkerColor(marker, combo->get_loc(), SP_ITEM(object));
-
-                if (!skip_undo) {
-                    SPDocument *document = desktop->getDocument();
-                    DocumentUndo::maybeDone(document, "UaM", SP_VERB_DIALOG_FILL_STROKE,
-                                   _("Set marker color"));
-                }
+            // Quit if we're in update state
+            if (combo->update()) {
+                return;
             }
 
-        } else {
-            combo->set_current(nullptr);
+            combo->setDesktop(desktop);
+
+            if (object->style->marker_ptrs[keyloc[i].loc]->value != nullptr && !all_texts) {
+                // If the object has this type of markers,
+
+                // Extract the name of the marker that the object uses
+                SPObject *marker = getMarkerObj(object->style->marker_ptrs[keyloc[i].loc]->value, object->document);
+                // Scroll the combobox to that marker
+                combo->set_current(marker);
+
+                // Set the marker color
+                Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+                gboolean update = prefs->getBool("/options/markers/colorUpdateMarkers", true);
+
+                if (update) {
+                    setMarkerColor(marker, combo->get_loc(), SP_ITEM(object));
+
+                    if (!skip_undo) {
+                        SPDocument *document = desktop->getDocument();
+                        DocumentUndo::maybeDone(document, "UaM", SP_VERB_DIALOG_FILL_STROKE,
+                                       _("Set marker color"));
+                    }
+                }
+
+            } else {
+                combo->set_current(nullptr);
+            }
         }
     }
 
