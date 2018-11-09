@@ -1246,7 +1246,7 @@ StrokeStyle::updateAllMarkers(std::vector<SPItem*> const &objects, bool skip_und
 
     auto simplified_list = std::vector<SPObject *>();
     for (SPItem *item : objects) {
-        buildGroupedItemList(o, simplified_list);
+        buildGroupedItemList(item, simplified_list);
     }
 
     for (unsigned i = 0; i < G_N_ELEMENTS(keyloc); ++i) {
