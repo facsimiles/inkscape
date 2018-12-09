@@ -230,13 +230,15 @@ TEST(UriTest, getQuery)
 
 TEST(UriTest, getFragment)
 {
+    ASSERT_STREQ(URI("uri.svg").getFragment(), nullptr);
     ASSERT_STREQ(URI("uri.svg#hash").getFragment(), "hash");
     ASSERT_STREQ(URI("?a=b&c=d#hash").getFragment(), "hash");
+    ASSERT_STREQ(URI("urn:isbn:096139210x#hash").getFragment(), "hash");
 }
 
 TEST(UriTest, getOpaque)
 {
-    ASSERT_STREQ(URI("urn:isbn:096139210x").getOpaque(), "isbn:096139210x");
+    ASSERT_STREQ(URI("urn:isbn:096139210x#hash").getOpaque(), "isbn:096139210x");
     ASSERT_STREQ(URI("data:,foo").getOpaque(), ",foo");
 }
 
