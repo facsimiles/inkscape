@@ -23,6 +23,10 @@ using Inkscape::URI;
 char const *DATA_BASE64_HELLO_WORLD = DATA_BASE64_HEADER BASE64_HELLO_WORLD_P1 BASE64_HELLO_WORLD_P2;
 char const *DATA_BASE64_HELLO_WORLD_WRAPPED = DATA_BASE64_HEADER BASE64_HELLO_WORLD_P1 "\n" BASE64_HELLO_WORLD_P2;
 
+char const *win_url_unc = "file://laptop/My%20Documents/FileSchemeURIs.doc";
+char const *win_url_local = "file:///C:/Documents%20and%20Settings/davris/FileSchemeURIs.doc";
+char const *win_filename_local = "C:\\Documents and Settings\\davris\\FileSchemeURIs.doc";
+
 TEST(UriTest, GetPath)
 {
     ASSERT_STREQ(URI("foo.svg").getPath(), "foo.svg");
@@ -74,16 +78,13 @@ TEST(UriTest, Str)
     ASSERT_EQ(URI("file:///C:/b").str("file:///D:/"), "file:///C:/b"); // special case
     ASSERT_EQ(URI("file:///C:/a/b").str("file:///C:/b/"), "../a/b");
 
-    const char *win_url_unc = "file://laptop/My%20Documents/FileSchemeURIs.doc";
-    const char *win_url_local = "file:///C:/Documents%20and%20Settings/davris/FileSchemeURIs.doc";
-
     ASSERT_EQ(URI(win_url_unc).str(), win_url_unc);
     ASSERT_EQ(URI(win_url_unc).str("file://laptop/My%20Documents/"), "FileSchemeURIs.doc");
     ASSERT_EQ(URI(win_url_local).str(), win_url_local);
     ASSERT_EQ(URI(win_url_local).str("file:///C:/Documents%20and%20Settings/"), "davris/FileSchemeURIs.doc");
     ASSERT_EQ(URI(win_url_local).str(win_url_unc), win_url_local);
 #ifdef _WIN32
-    ASSERT_EQ(URI(win_url_local).toNativeFilename(), "C:\\Documents and Settings\\davris\\FileSchemeURIs.doc");
+    ASSERT_EQ(URI(win_url_local).toNativeFilename(), win_filename_local);
 #else
     ASSERT_EQ(URI("file:///tmp/uri.svg").toNativeFilename(), "/tmp/uri.svg");
     ASSERT_EQ(URI("file:///tmp/x%20y.svg").toNativeFilename(), "/tmp/x y.svg");
@@ -242,7 +243,7 @@ TEST(UriTest, getOpaque)
 TEST(UriTest, from_native_filename)
 {
 #ifdef _WIN32
-    ASSERT_EQ(URI::from_native_filename("C:\\Documents and Settings\\davris\\FileSchemeURIs.doc").str(), win_url_local);
+    ASSERT_EQ(URI::from_native_filename(win_filename_local).str(), win_url_local);
 #else
     ASSERT_EQ(URI::from_native_filename("/tmp/uri.svg").str(), "file:///tmp/uri.svg");
     ASSERT_EQ(URI::from_native_filename("/tmp/x y.svg").str(), "file:///tmp/x%20y.svg");
