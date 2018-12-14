@@ -25,7 +25,7 @@ public:
     /**
      * Set undo sensitivity.
      *
-     * @deprecated use ScopedInsensitive
+     * Don't use this to temporarily turn sensitivity off, use ScopedInsensitive instead.
     */
     static void setUndoSensitive(SPDocument *doc, bool sensitive);
 
