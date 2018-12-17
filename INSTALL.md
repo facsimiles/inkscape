@@ -6,7 +6,7 @@ Inkscape version 0.92 and newer can be build using cmake:
 ```bash
 mkdir build
 cd build
-cmake ..
+cmake ..zczxczxc
 make
 make install
 ```
