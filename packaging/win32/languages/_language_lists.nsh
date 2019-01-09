@@ -14,6 +14,7 @@
 !macro INSTALLER_TRANSLATIONS _MACRONAME
     !insertmacro ${_MACRONAME} Breton       1150
     !insertmacro ${_MACRONAME} Catalan      1027
+    !insertmacro ${_MACRONAME} Croatian     1050
     !insertmacro ${_MACRONAME} Czech        1029
     !insertmacro ${_MACRONAME} Danish       1030
     !insertmacro ${_MACRONAME} Dutch        1043
@@ -27,7 +28,6 @@
     !insertmacro ${_MACRONAME} Indonesian   1057
     !insertmacro ${_MACRONAME} Italian      1040
     !insertmacro ${_MACRONAME} Japanese     1041
-    !insertmacro ${_MACRONAME} Korean       1042
     !insertmacro ${_MACRONAME} Polish       1045
     !insertmacro ${_MACRONAME} Portuguese   2070
     !insertmacro ${_MACRONAME} PortugueseBR 1046
@@ -69,6 +69,7 @@
     !insertmacro ${_MACRONAME} EnglishAustralian   en_AU
     !insertmacro ${_MACRONAME} EnglishCanadian     en_CA
     !insertmacro ${_MACRONAME} EnglishBritain      en_GB
+    !insertmacro ${_MACRONAME} EnglishPiglatin     en_US@piglatin
     !insertmacro ${_MACRONAME} Esperanto           eo
     !insertmacro ${_MACRONAME} Spanish             es
     !insertmacro ${_MACRONAME} SpanishMexico       es_MX
