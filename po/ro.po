@@ -3,13 +3,14 @@
 # Bogdan Oancea <bogdan DOT oancea77 AT gmail DOT com>, 2008.
 # PaulS <paulspn AT gmail DOT com>, 2009.
 # Cristian Secară <cristi AT secarica DOT ro>, 2010-2017.
+# Valentin Ionita <valentin DOT ionita1201 AT gmail DOT com>.
 msgid ""
 msgstr ""
 "Project-Id-Version: Inkscape 0.92.x\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
 "POT-Creation-Date: 2018-04-21 11:25+0100\n"
 "PO-Revision-Date: 2017-06-07 18:12+0200\n"
-"Last-Translator: Cristian Secară <cristi AT secarica DOT ro>\n"
+"Last-Translator: Valentin Ionita <valentin DOT ionita1201 AT gmail DOT com>\n"
 "Language-Team: \n"
 "Language: ro\n"
 "MIME-Version: 1.0\n"
@@ -41,7 +42,7 @@ msgstr "Creează și editează imagini în format Scalable Vector Graphics"
 
 #: ../inkscape.desktop.in.h:5
 msgid "image;editor;vector;drawing;"
-msgstr ""
+msgstr "imagine;editor;vector;desen;"
 
 #: ../inkscape.desktop.in.h:6
 msgid "New Drawing"
@@ -241,7 +242,7 @@ msgstr "Zebră"
 
 #: ../share/filters/filters.svg.h:60
 msgid "Irregular vertical dark stripes (loses object's own color)"
-msgstr ""
+msgstr "Dungi verticale întunecate aleatorii (se pierde culoarea obiectului)"
 
 #: ../share/filters/filters.svg.h:62
 msgid "Clouds"
@@ -249,7 +250,7 @@ msgstr "Nori"
 
 #: ../share/filters/filters.svg.h:64
 msgid "Airy, fluffy, sparse white clouds"
-msgstr ""
+msgstr "Nori albi, aerisiti, pufosi, rari"
 
 #: ../share/filters/filters.svg.h:66
 #: ../src/extension/internal/bitmap/sharpen.cpp:38
@@ -265,7 +266,7 @@ msgstr "Efecte de imagine"
 
 #: ../share/filters/filters.svg.h:68
 msgid "Sharpen edges and boundaries within the object, force=0.15"
-msgstr ""
+msgstr "Ascute marginile din obiect, intensitate=0.15"
 
 #: ../share/filters/filters.svg.h:70
 msgid "Sharpen More"
@@ -273,7 +274,7 @@ msgstr "Intensifică claritatea mai mult"
 
 #: ../share/filters/filters.svg.h:72
 msgid "Sharpen edges and boundaries within the object, force=0.3"
-msgstr ""
+msgstr "Ascute marginile din obiect, intensitate=0.3"
 
 #: ../share/filters/filters.svg.h:74
 #, fuzzy
@@ -349,7 +350,7 @@ msgstr "Texturi"
 
 #: ../share/filters/filters.svg.h:92
 msgid "Bulging, knotty, slick 3D surface"
-msgstr ""
+msgstr "Suprafață 3D netedă, noduroasă"
 
 #: ../share/filters/filters.svg.h:94
 msgid "Barbed Wire"
@@ -396,7 +397,7 @@ msgstr "Umbre și străluciri"
 
 #: ../share/filters/filters.svg.h:112
 msgid "Shadowy outer bevel"
-msgstr ""
+msgstr "Teșitură exterioară umbrită"
 
 #: ../share/filters/filters.svg.h:114
 msgid "Dripping"
@@ -404,15 +405,15 @@ msgstr "Picurare"
 
 #: ../share/filters/filters.svg.h:116
 msgid "Random paint streaks downwards"
-msgstr ""
+msgstr "Dungi de vopsea verticale, aleatorii"
 
 #: ../share/filters/filters.svg.h:118
 msgid "Jam Spread"
-msgstr ""
+msgstr "Răspândire de gem"
 
 #: ../share/filters/filters.svg.h:120
 msgid "Glossy clumpy jam spread"
-msgstr ""
+msgstr "Răspândire de gem lucios îngrămădit"
 
 # hm ?
 #: ../share/filters/filters.svg.h:122
@@ -554,11 +555,11 @@ msgstr "Efect de plastic sau sticlă translucidă"
 
 #: ../share/filters/filters.svg.h:174
 msgid "Iridescent Beeswax"
-msgstr ""
+msgstr "Ceară irizată"
 
 #: ../share/filters/filters.svg.h:176
 msgid "Waxy texture which keeps its iridescence through color fill change"
-msgstr ""
+msgstr "Textura irizată care își păstrează irizarea prin schimbarea culorii de umplere"
 
 #: ../share/filters/filters.svg.h:178
 msgid "Eroded Metal"
@@ -574,7 +575,7 @@ msgstr "Lavă crăpată"
 
 #: ../share/filters/filters.svg.h:184
 msgid "A volcanic texture, a little like leather"
-msgstr ""
+msgstr "O textură vulcanică, puțin ca pielea"
 
 #: ../share/filters/filters.svg.h:186
 msgid "Bark"
@@ -586,11 +587,11 @@ msgstr "Textură tip scoarță, verticală; a se folosi cu culori adânci"
 
 #: ../share/filters/filters.svg.h:190
 msgid "Lizard Skin"
-msgstr ""
+msgstr "Piele de șopârlă"
 
 #: ../share/filters/filters.svg.h:192
 msgid "Stylized reptile skin texture"
-msgstr ""
+msgstr "Textură de piele de șopârlă stilizată"
 
 #: ../share/filters/filters.svg.h:194
 msgid "Stone Wall"
@@ -598,15 +599,15 @@ msgstr "Zid de piatră"
 
 #: ../share/filters/filters.svg.h:196
 msgid "Stone wall texture to use with not too saturated colors"
-msgstr ""
+msgstr "Textură de piatră de utilizat cu culori nesaturate"
 
 #: ../share/filters/filters.svg.h:198
 msgid "Silk Carpet"
-msgstr ""
+msgstr "Covor de mătase"
 
 #: ../share/filters/filters.svg.h:200
 msgid "Silk carpet texture, horizontal stripes"
-msgstr ""
+msgstr "Textură de covor de mătase cu dungi orizontale"
 
 #: ../share/filters/filters.svg.h:202
 msgid "Refractive Gel A"
@@ -647,7 +648,7 @@ msgstr "Chenar proeminent"
 
 #: ../share/filters/filters.svg.h:220
 msgid "Strongly raised border around a flat surface"
-msgstr ""
+msgstr "Margine accentuată în jurul unei suprafețe netede"
 
 #: ../share/filters/filters.svg.h:222
 msgid "Metallized Ridge"
@@ -687,48 +688,48 @@ msgstr "Cuburi"
 
 #: ../share/filters/filters.svg.h:236
 msgid "Scattered cubes; adjust the Morphology primitive to vary size"
-msgstr ""
+msgstr "Cuburi împrăștiate, ajustează variabila Morfologie pentru a varia mărimea"
 "Cuburi împrăștiate; ajustați primitiva morfologiei pentru a modifica mărimea"
 
 #: ../share/filters/filters.svg.h:238
 msgid "Peel Off"
-msgstr ""
+msgstr "Decojește"
 
 #: ../share/filters/filters.svg.h:240
 msgid "Peeling painting on a wall"
-msgstr ""
+msgstr "Decojește pictură pe perete"
 
 #: ../share/filters/filters.svg.h:242
 msgid "Gold Splatter"
-msgstr ""
+msgstr "Stropitură de aur"
 
 #: ../share/filters/filters.svg.h:244
 msgid "Splattered cast metal, with golden highlights"
-msgstr ""
+msgstr "Metal turnat stropit cu aur"
 
 #: ../share/filters/filters.svg.h:246
 msgid "Gold Paste"
-msgstr ""
+msgstr "Clei de aur"
 
 #: ../share/filters/filters.svg.h:248
 msgid "Fat pasted cast metal, with golden highlights"
-msgstr ""
+msgstr "Metal turnat acoperit cu clei de aur"
 
 #: ../share/filters/filters.svg.h:250
 msgid "Crumpled Plastic"
-msgstr ""
+msgstr "Plastic mototolit"
 
 #: ../share/filters/filters.svg.h:252
 msgid "Crumpled matte plastic, with melted edge"
-msgstr ""
+msgstr "Plastic mat mototolit, cu margine topită"
 
 #: ../share/filters/filters.svg.h:254
 msgid "Enamel Jewelry"
-msgstr ""
+msgstr "Bijuterie smălțuită"
 
 #: ../share/filters/filters.svg.h:256
 msgid "Slightly cracked enameled texture"
-msgstr ""
+msgstr "Textura smălțuită, puțin spartă"
 
 #: ../share/filters/filters.svg.h:258
 msgid "Rough Paper"
@@ -736,7 +737,7 @@ msgstr "Hârtie abrazivă"
 
 #: ../share/filters/filters.svg.h:260
 msgid "Aquarelle paper effect which can be used for pictures as for objects"
-msgstr ""
+msgstr "Efect de hârtie pictată, utilizabil pentru picturi și obiecte"
 
 #: ../share/filters/filters.svg.h:262
 msgid "Rough and Glossy"
@@ -746,6 +747,7 @@ msgstr "Aspru și lucios"
 msgid ""
 "Crumpled glossy paper effect which can be used for pictures as for objects"
 msgstr ""
+"Efect de hârtie lucioasă mototolită, utilizabil pentru picturi și obiecte"
 
 #: ../share/filters/filters.svg.h:266
 msgid "In and Out"
@@ -765,28 +767,29 @@ msgstr "Convertește la particule mici și împrăștiate cu grosime oarecare"
 
 #: ../share/filters/filters.svg.h:274
 msgid "Warm Inside"
-msgstr ""
+msgstr "Interior cald"
 
 #: ../share/filters/filters.svg.h:276
 msgid "Blurred colorized contour, filled inside"
-msgstr ""
+msgstr "Contur colorat neclar, umplut la interior"
 
 #: ../share/filters/filters.svg.h:278
 msgid "Cool Outside"
-msgstr ""
+msgstr "Exterior rece"
 
 #: ../share/filters/filters.svg.h:280
 msgid "Blurred colorized contour, empty inside"
-msgstr ""
+msgstr "Contur colorat neclar, golit la interior"
 
 #: ../share/filters/filters.svg.h:282
 msgid "Electronic Microscopy"
-msgstr ""
+msgstr "Microscopie electronică"
 
 #: ../share/filters/filters.svg.h:284
 msgid ""
 "Bevel, crude light, discoloration and glow like in electronic microscopy"
 msgstr ""
+"Smalț, lumină brută, decolorare și strălucire ca în microscopie electronică"
 
 #: ../share/filters/filters.svg.h:286
 msgid "Tartan"
@@ -794,19 +797,19 @@ msgstr "Tartan"
 
 #: ../share/filters/filters.svg.h:288
 msgid "Checkered tartan pattern"
-msgstr ""
+msgstr "Model de carouri"
 
 #: ../share/filters/filters.svg.h:290
 msgid "Shaken Liquid"
-msgstr ""
+msgstr "Lichid amestecat"
 
 #: ../share/filters/filters.svg.h:292
 msgid "Colorizable filling with flow inside like transparency"
-msgstr ""
+msgstr "Umplutură colorabilă cu flux la interior, ca transparența"
 
 #: ../share/filters/filters.svg.h:294
 msgid "Soft Focus Lens"
-msgstr ""
+msgstr "Lentilă cu focus slab"
 
 #: ../share/filters/filters.svg.h:296
 msgid "Glowing image content without blurring it"
@@ -814,23 +817,23 @@ msgstr "Accentuează strălucirea imaginii, fără a-i estomparea claritatea"
 
 #: ../share/filters/filters.svg.h:298
 msgid "Stained Glass"
-msgstr ""
+msgstr "Vitraliu"
 
 #: ../share/filters/filters.svg.h:300
 msgid "Illuminated stained glass effect"
-msgstr ""
+msgstr "Efect de vitraliu iluminat"
 
 #: ../share/filters/filters.svg.h:302
 msgid "Dark Glass"
-msgstr ""
+msgstr "Sticlă opacă"
 
 #: ../share/filters/filters.svg.h:304
 msgid "Illuminated glass effect with light coming from beneath"
-msgstr ""
+msgstr "Efect de lumină iluminată de dedesubt"
 
 #: ../share/filters/filters.svg.h:306
 msgid "HSL Bumps Alpha"
-msgstr ""
+msgstr "Denivelări HSL Alfa"
 
 #: ../share/filters/filters.svg.h:308
 msgid "Same as HSL Bumps but with transparent highlights"
@@ -838,7 +841,7 @@ msgstr "La fel ca denivelările HSL, dar cu părți luminoase transparente"
 
 #: ../share/filters/filters.svg.h:310
 msgid "Bubbly Bumps Alpha"
-msgstr ""
+msgstr "Denivelări bulbucate Alfa"
 
 #: ../share/filters/filters.svg.h:312
 msgid "Same as Bubbly Bumps but with transparent highlights"
@@ -846,63 +849,65 @@ msgstr "La fel ca denivelările bulbucate, dar cu părți luminoase transparente
 
 #: ../share/filters/filters.svg.h:314 ../share/filters/filters.svg.h:362
 msgid "Torn Edges"
-msgstr ""
+msgstr "Margini rupte"
 
 #: ../share/filters/filters.svg.h:316 ../share/filters/filters.svg.h:364
 msgid ""
 "Displace the outside of shapes and pictures without altering their content"
-msgstr ""
+msgstr "Deplaseasă exteriorul formelor și imaginilor fără a altera conținutul"
 
 #: ../share/filters/filters.svg.h:318
 msgid "Roughen Inside"
-msgstr ""
+msgstr "Înăsprește la interior"
 
 #: ../share/filters/filters.svg.h:320
 msgid "Roughen all inside shapes"
-msgstr ""
+msgstr "Înăsprește toate formele din interior"
 
 #: ../share/filters/filters.svg.h:322
 msgid "Evanescent"
-msgstr ""
+msgstr "Efemer"
 
 #: ../share/filters/filters.svg.h:324
 msgid ""
 "Blur the contents of objects, preserving the outline and adding progressive "
 "transparency at edges"
 msgstr ""
+"Estompează conținutul obiectelor, prezervând conturul și adăugând"
+"transparență progresivă la margini"
 
 #: ../share/filters/filters.svg.h:326
 msgid "Chalk and Sponge"
-msgstr ""
+msgstr "Cretă și burete"
 
 #: ../share/filters/filters.svg.h:328
 msgid "Low turbulence gives sponge look and high turbulence chalk"
-msgstr ""
+msgstr "Turbulența scăzută dă aparență de burete și ridicată, de cretă"
 
 #: ../share/filters/filters.svg.h:330
 msgid "People"
-msgstr ""
+msgstr "Oameni"
 
 #: ../share/filters/filters.svg.h:332
 msgid "Colorized blotches, like a crowd of people"
-msgstr ""
+msgstr "Pete colorate, ca o mulțime de oameni"
 
 #: ../share/filters/filters.svg.h:334
 msgid "Scotland"
-msgstr ""
+msgstr "Scoția"
 
 #: ../share/filters/filters.svg.h:336
 msgid "Colorized mountain tops out of the fog"
-msgstr ""
+msgstr "Vârfuri de munte colorate care ies din ceață"
 
 #: ../share/filters/filters.svg.h:338
 msgid "Garden of Delights"
-msgstr ""
+msgstr "Grădina Răsfățurilor"
 
 #: ../share/filters/filters.svg.h:340
 msgid ""
 "Phantasmagorical turbulent wisps, like Hieronymus Bosch's Garden of Delights"
-msgstr ""
+msgstr "Viespi fantasmagorice, ca Grădina Răsfățurilor a lui Hieronymus Bosch"
 
 #: ../share/filters/filters.svg.h:342
 msgid "Cutout Glow"
@@ -916,7 +921,7 @@ msgstr ""
 
 #: ../share/filters/filters.svg.h:346
 msgid "Dark Emboss"
-msgstr ""
+msgstr "Gravură întunecată"
 
 #: ../share/filters/filters.svg.h:348
 msgid "Emboss effect : 3D relief where white is replaced by black"
@@ -924,7 +929,7 @@ msgstr "Efect de stampare: relief 3D, unde albul este înlocuit de negru"
 
 #: ../share/filters/filters.svg.h:350
 msgid "Bubbly Bumps Matte"
-msgstr ""
+msgstr "Denivelări cu bule mate"
 
 #: ../share/filters/filters.svg.h:352
 msgid "Same as Bubbly Bumps but with a diffuse light instead of a specular one"
@@ -938,7 +943,7 @@ msgstr "Sugativă"
 
 #: ../share/filters/filters.svg.h:356
 msgid "Inkblot on blotting paper"
-msgstr ""
+msgstr "Pată de cerneală pe hârtie sugativă"
 
 #: ../share/filters/filters.svg.h:358
 msgid "Wax Print"
@@ -958,60 +963,60 @@ msgstr "Efect de acuarelă tulbure"
 
 #: ../share/filters/filters.svg.h:370
 msgid "Felt"
-msgstr ""
+msgstr "Simțit"
 
 #: ../share/filters/filters.svg.h:372
 msgid ""
 "Felt like texture with color turbulence and slightly darker at the edges"
-msgstr ""
+msgstr "Simțit ca o textură colorată tulbure și puțin întunecată la margini"
 
 #: ../share/filters/filters.svg.h:374
 msgid "Ink Paint"
-msgstr ""
+msgstr "Cerneală"
 
 #: ../share/filters/filters.svg.h:376
 msgid "Ink paint on paper with some turbulent color shift"
-msgstr ""
+msgstr "Cerneală pe hârtie cu culori diverse"
 
 #: ../share/filters/filters.svg.h:378
 msgid "Tinted Rainbow"
-msgstr ""
+msgstr "Curcubeu nuanțat"
 
 #: ../share/filters/filters.svg.h:380
 msgid "Smooth rainbow colors melted along the edges and colorizable"
-msgstr ""
+msgstr "Curcubeu de culori netede pe margini și colorabile"
 
 #: ../share/filters/filters.svg.h:382
 msgid "Melted Rainbow"
-msgstr ""
+msgstr "Curcubeu topit"
 
 #: ../share/filters/filters.svg.h:384
 msgid "Smooth rainbow colors slightly melted along the edges"
-msgstr ""
+msgstr "Culoi de curcubeu topite puțin pe margini"
 
 #: ../share/filters/filters.svg.h:386
 msgid "Flex Metal"
-msgstr ""
+msgstr "Metal contractat"
 
 #: ../share/filters/filters.svg.h:388
 msgid "Bright, polished uneven metal casting, colorizable"
-msgstr ""
+msgstr "Metal turnat neuniform, strălucitor, colorabil"
 
 #: ../share/filters/filters.svg.h:390
 msgid "Wavy Tartan"
-msgstr ""
+msgstr "Model ondulat în carouri"
 
 #: ../share/filters/filters.svg.h:392
 msgid "Tartan pattern with a wavy displacement and bevel around the edges"
-msgstr ""
+msgstr "Model în carouri cu deplasament ondulat și teșituri la margini"
 
 #: ../share/filters/filters.svg.h:394
 msgid "3D Marble"
-msgstr ""
+msgstr "Marmură 3D"
 
 #: ../share/filters/filters.svg.h:396
 msgid "3D warped marble texture"
-msgstr ""
+msgstr "Textură de marmură 3D încovoiată"
 
 #: ../share/filters/filters.svg.h:398
 msgid "3D Wood"
@@ -1023,23 +1028,23 @@ msgstr "Textură 3D din fibră lemnoasă, deformată"
 
 #: ../share/filters/filters.svg.h:402
 msgid "3D Mother of Pearl"
-msgstr ""
+msgstr "3D Perlă Maternă"
 
 #: ../share/filters/filters.svg.h:404
 msgid "3D warped, iridescent pearly shell texture"
-msgstr ""
+msgstr "Textură 3D încovoiată, irizată, ca o cochilie perlată"
 
 #: ../share/filters/filters.svg.h:406
 msgid "Tiger Fur"
-msgstr ""
+msgstr "Blană de tigru"
 
 #: ../share/filters/filters.svg.h:408
 msgid "Tiger fur pattern with folds and bevel around the edges"
-msgstr ""
+msgstr "Model de blană de tigru cu falduri și teșituri"
 
 #: ../share/filters/filters.svg.h:410
 msgid "Black Light"
-msgstr ""
+msgstr "Lumină neagră"
 
 #: ../share/filters/filters.svg.h:411 ../share/filters/filters.svg.h:575
 #: ../share/filters/filters.svg.h:587 ../share/filters/filters.svg.h:627
@@ -1109,23 +1114,23 @@ msgstr "Culoare"
 
 #: ../share/filters/filters.svg.h:412
 msgid "Light areas turn to black"
-msgstr ""
+msgstr "Suprafață luminoasă care se întunecă"
 
 #: ../share/filters/filters.svg.h:414
 msgid "Film Grain"
-msgstr ""
+msgstr "Film granulat"
 
 #: ../share/filters/filters.svg.h:416
 msgid "Adds a small scale graininess"
-msgstr ""
+msgstr "Adaugă granulare discretă"
 
 #: ../share/filters/filters.svg.h:418
 msgid "Plaster Color"
-msgstr ""
+msgstr "Culoare de gips"
 
 #: ../share/filters/filters.svg.h:420
 msgid "Colored plaster emboss effect"
-msgstr ""
+msgstr "Efect de gips colorat în relief"
 
 #: ../share/filters/filters.svg.h:422
 msgid "Velvet Bumps"
@@ -1137,7 +1142,7 @@ msgstr "Creează denivelări netede precum catifeaua"
 
 #: ../share/filters/filters.svg.h:426
 msgid "Comics Cream"
-msgstr ""
+msgstr "Cremă comică"
 
 #: ../share/filters/filters.svg.h:427 ../share/filters/filters.svg.h:727
 #: ../share/filters/filters.svg.h:731 ../share/filters/filters.svg.h:735
@@ -1155,17 +1160,18 @@ msgstr "Umbrare 3D nerealiste"
 
 #: ../share/filters/filters.svg.h:428
 msgid "Comics shader with creamy waves transparency"
-msgstr ""
+msgstr "Umbrare cu valuri cremoase transparente"
 
 #: ../share/filters/filters.svg.h:430
 msgid "Chewing Gum"
-msgstr ""
+msgstr "Gumă de mestecat"
 
 #: ../share/filters/filters.svg.h:432
 msgid ""
 "Creates colorizable blotches which smoothly flow over the edges of the lines "
 "at their crossings"
 msgstr ""
+"Creează pete colorabile care curg peste marginile liniilor la intersecția lor"
 
 #: ../share/filters/filters.svg.h:434
 #, fuzzy
@@ -1188,11 +1194,11 @@ msgstr "Culori netede de curcubeu deformate în lungul marginilor și colorabile
 
 #: ../share/filters/filters.svg.h:442
 msgid "Rough and Dilate"
-msgstr ""
+msgstr "Dur și Dilată"
 
 #: ../share/filters/filters.svg.h:444
 msgid "Create a turbulent contour around"
-msgstr ""
+msgstr "Creează un contur turbulent în jur"
 
 #: ../share/filters/filters.svg.h:446
 msgid "Old Postcard"
@@ -1216,16 +1222,16 @@ msgstr "Transparență canava"
 
 #: ../share/filters/filters.svg.h:456
 msgid "Gives a canvas like HSL sensitive transparency."
-msgstr ""
+msgstr "Transformă o pânză cu transparență HSL sensibilă"
 
 #: ../share/filters/filters.svg.h:458
 msgid "Smear Transparency"
-msgstr ""
+msgstr "Pătează Transparență"
 
 #: ../share/filters/filters.svg.h:460
 msgid ""
 "Paint objects with a transparent turbulence which turns around color edges"
-msgstr ""
+msgstr "Pictează obiecte cu o turbulență transparentă cu margini colorate"
 
 #: ../share/filters/filters.svg.h:462
 msgid "Thick Paint"
@@ -1237,15 +1243,15 @@ msgstr "Efect de vopsea groasă cu turbulență"
 
 #: ../share/filters/filters.svg.h:466
 msgid "Burst"
-msgstr ""
+msgstr "Explozie"
 
 #: ../share/filters/filters.svg.h:468
 msgid "Burst balloon texture crumpled and with holes"
-msgstr ""
+msgstr "Textură de balon mototolit cu găuri"
 
 #: ../share/filters/filters.svg.h:470
 msgid "Embossed Leather"
-msgstr ""
+msgstr "Piele în relief"
 
 #: ../share/filters/filters.svg.h:472
 msgid ""
@@ -1746,11 +1752,11 @@ msgstr ""
 
 #: ../share/filters/filters.svg.h:714
 msgid "Tartan Smart"
-msgstr ""
+msgstr "Tartan Inteligent"
 
 #: ../share/filters/filters.svg.h:716
 msgid "Highly configurable checkered tartan pattern"
-msgstr ""
+msgstr "Model în carouri configurabil"
 
 #: ../share/filters/filters.svg.h:718
 msgid "Light Contour"
@@ -2366,253 +2372,253 @@ msgstr "puf de piersică (#FFDAB9)"
 #: ../share/palettes/palettes.h:59
 msgctxt "Palette"
 msgid "peru (#CD853F)"
-msgstr ""
+msgstr "brun deschis (#CD853F)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:60
 msgctxt "Palette"
 msgid "linen (#FAF0E6)"
-msgstr ""
+msgstr "ln (#FAF0E6)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:61
 msgctxt "Palette"
 msgid "bisque (#FFE4C4)"
-msgstr ""
+msgstr "galbe biscuite (#FFE4C4)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:62
 msgctxt "Palette"
 msgid "darkorange (#FF8C00)"
-msgstr ""
+msgstr "oranj închis (#FF8C00)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:63
 msgctxt "Palette"
 msgid "burlywood (#DEB887)"
-msgstr ""
+msgstr "lemn masiv (#DEB887)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:64
 msgctxt "Palette"
 msgid "tan (#D2B48C)"
-msgstr ""
+msgstr "bronz (#D2B48C)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:65
 msgctxt "Palette"
 msgid "antiquewhite (#FAEBD7)"
-msgstr ""
+msgstr "alb antic (#FAEBD7)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:66
 msgctxt "Palette"
 msgid "navajowhite (#FFDEAD)"
-msgstr ""
+msgstr "alb navajo (#FFDEAD)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:67
 msgctxt "Palette"
 msgid "blanchedalmond (#FFEBCD)"
-msgstr ""
+msgstr "migdal (#FFEBCD)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:68
 msgctxt "Palette"
 msgid "papayawhip (#FFEFD5)"
-msgstr ""
+msgstr "papais (#FFEFD5)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:69
 msgctxt "Palette"
 msgid "moccasin (#FFE4B5)"
-msgstr ""
+msgstr "mocasin (#FFE4B5)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:70
 msgctxt "Palette"
 msgid "orange (#FFA500)"
-msgstr ""
+msgstr "oranj (#FFA500)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:71
 msgctxt "Palette"
 msgid "wheat (#F5DEB3)"
-msgstr ""
+msgstr "grâu (#F5DEB3)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:72
 msgctxt "Palette"
 msgid "oldlace (#FDF5E6)"
-msgstr ""
+msgstr "dantela veche (#FDF5E6)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:73
 msgctxt "Palette"
 msgid "floralwhite (#FFFAF0)"
-msgstr ""
+msgstr "alb floral (#FFFAF0)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:74
 msgctxt "Palette"
 msgid "darkgoldenrod (#B8860B)"
-msgstr ""
+msgstr "tijă de aur întunecat (#B8860B)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:75
 msgctxt "Palette"
 msgid "goldenrod (#DAA520)"
-msgstr ""
+msgstr "tijă de aur (#DAA520)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:76
 msgctxt "Palette"
 msgid "cornsilk (#FFF8DC)"
-msgstr ""
+msgstr "mătase de porumb (#FFF8DC)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:77
 msgctxt "Palette"
 msgid "gold (#FFD700)"
-msgstr ""
+msgstr "auriu (#FFD700)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:78
 msgctxt "Palette"
 msgid "khaki (#F0E68C)"
-msgstr ""
+msgstr "kaki (#F0E68C)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:79
 msgctxt "Palette"
 msgid "lemonchiffon (#FFFACD)"
-msgstr ""
+msgstr "șifon de lămâie (#FFFACD)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:80
 msgctxt "Palette"
 msgid "palegoldenrod (#EEE8AA)"
-msgstr ""
+msgstr "tijă de aur pal (#EEE8AA)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:81
 msgctxt "Palette"
 msgid "darkkhaki (#BDB76B)"
-msgstr ""
+msgstr "kaki întunecat (#BDB76B)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:82
 msgctxt "Palette"
 msgid "beige (#F5F5DC)"
-msgstr ""
+msgstr "bej (#F5F5DC)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:83
 msgctxt "Palette"
 msgid "lightgoldenrodyellow (#FAFAD2)"
-msgstr ""
+msgstr "tijă auriu-gălbuie (#FAFAD2)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:84
 msgctxt "Palette"
 msgid "olive (#808000)"
-msgstr ""
+msgstr "olive (#808000)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:85
 msgctxt "Palette"
 msgid "yellow (#FFFF00)"
-msgstr ""
+msgstr "galben (#FFFF00)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:86
 msgctxt "Palette"
 msgid "lightyellow (#FFFFE0)"
-msgstr ""
+msgstr "galben deschis (#FFFFE0)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:87
 msgctxt "Palette"
 msgid "ivory (#FFFFF0)"
-msgstr ""
+msgstr "ivoriu (#FFFFF0)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:88
 msgctxt "Palette"
 msgid "olivedrab (#6B8E23)"
-msgstr ""
+msgstr "oliv cenușiu (#6B8E23)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:89
 msgctxt "Palette"
 msgid "yellowgreen (#9ACD32)"
-msgstr ""
+msgstr "galben-verzui (#9ACD32)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:90
 msgctxt "Palette"
 msgid "darkolivegreen (#556B2F)"
-msgstr ""
+msgstr "oliv-verde întunecat (#556B2F)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:91
 msgctxt "Palette"
 msgid "greenyellow (#ADFF2F)"
-msgstr ""
+msgstr "verde gălbui (#ADFF2F)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:92
 msgctxt "Palette"
 msgid "chartreuse (#7FFF00)"
-msgstr ""
+msgstr "verde aprins (#7FFF00)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:93
 msgctxt "Palette"
 msgid "lawngreen (#7CFC00)"
-msgstr ""
+msgstr "verde de pajiște (#7CFC00)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:94
 msgctxt "Palette"
 msgid "darkseagreen (#8FBC8F)"
-msgstr ""
+msgstr "verde marin întunecat (#8FBC8F)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:95
 msgctxt "Palette"
 msgid "forestgreen (#228B22)"
-msgstr ""
+msgstr "verde de pădure (#228B22)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:96
 msgctxt "Palette"
 msgid "limegreen (#32CD32)"
-msgstr ""
+msgstr "lime (#32CD32)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:97
 msgctxt "Palette"
 msgid "lightgreen (#90EE90)"
-msgstr ""
+msgstr "verde deschis (#90EE90)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:98
 msgctxt "Palette"
 msgid "palegreen (#98FB98)"
-msgstr ""
+msgstr "vede pal (#98FB98)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:99
 msgctxt "Palette"
 msgid "darkgreen (#006400)"
-msgstr ""
+msgstr "verde închis (#006400)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:100
 msgctxt "Palette"
 msgid "green (#008000)"
-msgstr ""
+msgstr "verde (#008000)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:101
