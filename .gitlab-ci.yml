@@ -84,7 +84,7 @@ appimage:linux:
     - wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
     - chmod a+x linuxdeployqt-continuous-x86_64.AppImage
     - |
-      ./linuxdeployqt-continuous-x86_64.AppImage --appimage-extract-and-run appdir/usr/share/applications/*.desktop \
+      ./linuxdeployqt-continuous-x86_64.AppImage --appimage-extract-and-run appdir/usr/share/applications/inkscape.desktop \
       -appimage -unsupported-bundle-everything -executable=appdir/usr/bin/inkview \
       -executable=appdir/usr/lib/inkscape/libinkscape_base.so \
       -executable=$(readlink -f appdir/usr/lib/x86_64-linux-gnu/gdk-pixbuf-*/*/loaders/libpixbufloader-xpm.so) \
