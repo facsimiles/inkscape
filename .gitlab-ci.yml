@@ -52,7 +52,7 @@ appimage:linux:
   script:
     - apt-get update -yqq && apt-get install -y wget
     - mkdir -p build && cd build
-    - cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
+    - cmake .. -DCMAKE_BUILD_TYPE=Release -DENABLE_BINRELOC=ON -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
     - make -j$(nproc)
     - make DESTDIR=appdir -j$(nproc) install ; find appdir/
     - wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
