@@ -76,7 +76,7 @@ appimage:linux:
     - rm *deb
     - cp /usr/lib/x86_64-linux-gnu/gdk-pixbuf-*/*/loaders/* usr/lib/x86_64-linux-gnu/gdk-pixbuf-*/*/loaders/
     - cp /usr/lib/x86_64-linux-gnu/gdk-pixbuf-*/*/loaders.cache usr/lib/x86_64-linux-gnu/gdk-pixbuf-*/*/
-    - sed -i -e 's|/usr/||g' usr/lib/x86_64-linux-gnu/gdk-pixbuf-*/*/loaders.cache # FIXME: Find better solution using an environment variable
+    - sed -i -e 's|lib/x86_64-linux-gnu/gdk-pixbuf-2.0/2.10.0/loaders/||g' usr/lib/x86_64-linux-gnu/gdk-pixbuf-*/*/loaders.cache
     # Bundle Python
     - apt-get download libpython2.7-stdlib python2.7 python2.7-minimal libpython2.7-minimal python-lxml
     - find *.deb -exec dpkg-deb -x {} . \;
