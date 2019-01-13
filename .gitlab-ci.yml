@@ -64,7 +64,7 @@ appimage:linux:
     - sed -i -e 's|^Icon=.*|Icon=inkscape|g' ./appdir/usr/share/applications/inkscape.desktop # FIXME
     - cd appdir/
     # Bundle all of glibc; this should eventually be done by linuxdeployqt
-    - apt-get download libc6
+    - apt-get download libc6 locales-all
     - find *.deb -exec dpkg-deb -x {} . \;
     - rm *deb
     # Make absolutely sure it will not load stuff from /lib or /usr
