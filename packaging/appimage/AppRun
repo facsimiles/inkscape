@@ -42,7 +42,7 @@ if [ -e "$HERE/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2" ] ; then
   export GDK_PIXBUF_MODULEDIR=$(readlink -f "$HERE"/usr/lib/x86_64-linux-gnu/gdk-pixbuf-*/*/loaders/ )
   export GDK_PIXBUF_MODULE_FILE=$(readlink -f "$HERE"/usr/lib/x86_64-linux-gnu/gdk-pixbuf-*/*/loaders.cache )
   export GTK_THEME=Adwaita
-  exec lib/x86_64-linux-gnu/ld-linux-x86-64.so.2 --inhibit-cache --library-path "${LIBRARY_PATH}" "${MAIN}" "$@"
+  exec "${HERE}/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2" --inhibit-cache --library-path "${LIBRARY_PATH}" "${MAIN}" "$@"
 else
   exec "${MAIN}" "$@"
 fi
