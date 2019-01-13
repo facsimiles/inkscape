@@ -50,6 +50,7 @@ appimage:linux:
     - export CCACHE_BASEDIR=${PWD}
     - export CCACHE_DIR=${PWD}/ccache
   script:
+    - apt-get update -yqq && apt-get install -y software-properties-common # FIXME: Move to Dockerfile?
     - add-apt-repository -y ppa:bryce/pango1.0 # backported pango (from 18.10) for variable font support
     - apt-get update -yqq && apt-get install -y wget libpango1.0-0 libpango1.0-dev
     - mkdir -p build && cd build
