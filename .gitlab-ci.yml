@@ -83,7 +83,24 @@ appimage:linux:
     - cd -
     - wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
     - chmod a+x linuxdeployqt-continuous-x86_64.AppImage
-    - ./linuxdeployqt-continuous-x86_64.AppImage --appimage-extract-and-run appdir/usr/share/applications/*.desktop -appimage -unsupported-bundle-everything -executable=appdir/usr/bin/inkview -executable=appdir/usr/lib/inkscape/libinkscape_base.so
+    - |
+      ./linuxdeployqt-continuous-x86_64.AppImage --appimage-extract-and-run appdir/usr/share/applications/*.desktop \
+      -appimage -unsupported-bundle-everything -executable=appdir/usr/bin/inkview \
+      -executable=appdir/usr/lib/inkscape/libinkscape_base.so \
+      -executable=appdir/usr/lib/x86_64-linux-gnu/gdk-pixbuf-*/*/loaders/libpixbufloader-xpm.so \
+      -executable=appdir/usr/lib/x86_64-linux-gnu/gdk-pixbuf-*/*/loaders/libpixbufloader-xbm.so \
+      -executable=appdir/usr/lib/x86_64-linux-gnu/gdk-pixbuf-*/*/loaders/libpixbufloader-tiff.so \
+      -executable=appdir/usr/lib/x86_64-linux-gnu/gdk-pixbuf-*/*/loaders/libpixbufloader-tga.so \
+      -executable=appdir/usr/lib/x86_64-linux-gnu/gdk-pixbuf-*/*/loaders/libpixbufloader-svg.so \
+      -executable=appdir/usr/lib/x86_64-linux-gnu/gdk-pixbuf-*/*/loaders/libpixbufloader-qtif.so \
+      -executable=appdir/usr/lib/x86_64-linux-gnu/gdk-pixbuf-*/*/loaders/libpixbufloader-pnm.so \
+      -executable=appdir/usr/lib/x86_64-linux-gnu/gdk-pixbuf-*/*/loaders/libpixbufloader-png.so \
+      -executable=appdir/usr/lib/x86_64-linux-gnu/gdk-pixbuf-*/*/loaders/libpixbufloader-jpeg.so \
+      -executable=appdir/usr/lib/x86_64-linux-gnu/gdk-pixbuf-*/*/loaders/libpixbufloader-ico.so \
+      -executable=appdir/usr/lib/x86_64-linux-gnu/gdk-pixbuf-*/*/loaders/libpixbufloader-icns.so \
+      -executable=appdir/usr/lib/x86_64-linux-gnu/gdk-pixbuf-*/*/loaders/libpixbufloader-gif.so \
+      -executable=appdir/usr/lib/x86_64-linux-gnu/gdk-pixbuf-*/*/loaders/libpixbufloader-bmp.so \
+      -executable=appdir/usr/lib/x86_64-linux-gnu/gdk-pixbuf-*/*/loaders/libpixbufloader-ani.so
   artifacts:
     expire_in: 1 year
     paths:
