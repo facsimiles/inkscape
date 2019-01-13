@@ -55,6 +55,7 @@ appimage:linux:
     - cmake .. -DCMAKE_BUILD_TYPE=Release -DENABLE_BINRELOC=ON -DCMAKE_INSTALL_PREFIX=/ -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
     - make -j$(nproc)
     - make DESTDIR=appdir -j$(nproc) install ; find appdir/
+    - cp ../packaging/appimage/AppRun appdir/AppRun ; chmod +x appdir/AppRun
     - ( cd appdir/usr/lib/ ; ln -s ../* . ) # FIXME: Why is this needed?
     - ( cd appdir/ ; ln -s usr/* . ) # FIXME: Why is this needed?
     - cp ./appdir/usr/share/inkscape/icons/hicolor/scalable/apps/inkscape.svg ./appdir/
