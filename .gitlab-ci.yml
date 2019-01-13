@@ -77,7 +77,7 @@ appimage:linux:
     - cp /usr/lib/x86_64-linux-gnu/gdk-pixbuf-*/*/loaders/* usr/lib/x86_64-linux-gnu/gdk-pixbuf-*/*/loaders/
     - cp /usr/lib/x86_64-linux-gnu/gdk-pixbuf-*/*/loaders.cache usr/lib/x86_64-linux-gnu/gdk-pixbuf-*/*/
     # Bundle Python
-    - apt-get download libpython2.7-stdlib python2.7 libpython2.7-minimal python-lxml
+    - apt-get download libpython2.7-stdlib python2.7 python2.7-minimal libpython2.7-minimal python-lxml
     - find *.deb -exec dpkg-deb -x {} . \;
     - rm *deb
     - cd -
