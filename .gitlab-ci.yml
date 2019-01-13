@@ -61,6 +61,7 @@ appimage:linux:
     - cp ./appdir/usr/share/inkscape/icons/hicolor/scalable/apps/inkscape.svg ./appdir/
     - sed -i -e 's|^Icon=.*|Icon=inkscape|g' ./appdir/usr/share/applications/inkscape.desktop # FIXME
     - cd appdir/
+    # Bundle all of glibc; this should eventually be done by linuxdeployqt
     - apt-get download libc6
     - ar x libc6_*.deb 
     - tar xvJf data.tar.xz
@@ -68,6 +69,17 @@ appimage:linux:
     # Make absolutely sure it will not load stuff from /lib or /usr
     - sed -i -e 's|/usr|/xxx|g' lib/x86_64-linux-gnu/ld-linux-x86-64.so.2
     - sed -i -e 's|/usr/lib|/ooo/ooo|g' lib/x86_64-linux-gnu/ld-linux-x86-64.so.2
+    # Bundle Gdk pixbuf loaders without which the bundled Gtk does not work; this should eventually be done by linuxdeployqt
+    - apt-get download librsvg2-common
+    - ar x librsvg2-common_*.deb 
+    - tar xvJf data.tar.xz
+    - rm *deb *xz
+    - apt-get download libgdk-pixbuf2.0-0
+    - ar x libgdk-pixbuf2.0-0_*.deb 
+    - tar xvJf data.tar.xz
+    - rm *deb *xz
+    - cp /usr/lib/x86_64-linux-gnu/gdk-pixbuf-*/*/loaders/* usr/lib/x86_64-linux-gnu/gdk-pixbuf-*/*/loaders/
+    - cp /usr/lib/x86_64-linux-gnu/gdk-pixbuf-*/*/loaders.cache usr/lib/x86_64-linux-gnu/gdk-pixbuf-*/*/
     - cd -
     - wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
     - chmod a+x linuxdeployqt-continuous-x86_64.AppImage
