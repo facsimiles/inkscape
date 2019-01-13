@@ -65,9 +65,8 @@ appimage:linux:
     - cd appdir/
     # Bundle all of glibc; this should eventually be done by linuxdeployqt
     - apt-get download libc6
-    - ar x libc6_*.deb 
-    - tar xvJf data.tar.xz
-    - rm *deb *xz
+    - find *.deb -exec ar p {} data.tar.xz \; | tar xJ
+    - rm *deb
     # Make absolutely sure it will not load stuff from /lib or /usr
     - sed -i -e 's|/usr|/xxx|g' lib/x86_64-linux-gnu/ld-linux-x86-64.so.2
     - sed -i -e 's|/usr/lib|/ooo/ooo|g' lib/x86_64-linux-gnu/ld-linux-x86-64.so.2
@@ -101,7 +100,8 @@ appimage:linux:
       -executable=appdir/usr/lib/x86_64-linux-gnu/gdk-pixbuf-*/*/loaders/libpixbufloader-icns.so \
       -executable=appdir/usr/lib/x86_64-linux-gnu/gdk-pixbuf-*/*/loaders/libpixbufloader-gif.so \
       -executable=appdir/usr/lib/x86_64-linux-gnu/gdk-pixbuf-*/*/loaders/libpixbufloader-bmp.so \
-      -executable=appdir/usr/lib/x86_64-linux-gnu/gdk-pixbuf-*/*/loaders/libpixbufloader-ani.so
+      -executable=appdir/usr/lib/x86_64-linux-gnu/gdk-pixbuf-*/*/loaders/libpixbufloader-ani.so \
+      -executable=appdir/usr/bin/python2.7
   artifacts:
     expire_in: 1 year
     paths:
