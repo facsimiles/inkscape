@@ -40,6 +40,7 @@ export PYTHONHOME="$HERE/usr/"
 
 if [ -e "$HERE/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2" ] ; then
   echo "Run experimental bundle that bundles everything"
+  cd "$HERE/usr/" # FIXME; this is needed becasue loaders.cache contains hardcoded path
   export LOCPATH="$HERE/usr/lib/locale" # locales-all must be bundled
   export GCONV_PATH="$HERE/usr/lib/x86_64-linux-gnu/gconv"
   export LIBRARY_PATH="$HERE/usr/lib":$LIBRARY_PATH
