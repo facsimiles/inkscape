@@ -50,6 +50,7 @@ appimage:linux:
     - export CCACHE_BASEDIR=${PWD}
     - export CCACHE_DIR=${PWD}/ccache
   script:
+    - apt-get update -yqq && apt-get install -y wget
     - mkdir -p build && cd build
     - cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
     - make -j$(nproc)
