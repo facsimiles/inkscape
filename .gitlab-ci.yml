@@ -65,7 +65,7 @@ appimage:linux:
     - ar x libc6_*.deb 
     - tar xvJf data.tar.xz
     - rm *deb *xz
-    - # Make absolutely sure it will not load stuff from /lib or /usr
+    # Make absolutely sure it will not load stuff from /lib or /usr
     - sed -i -e 's|/usr|/xxx|g' lib/x86_64-linux-gnu/ld-linux-x86-64.so.2
     - sed -i -e 's|/usr/lib|/ooo/ooo|g' lib/x86_64-linux-gnu/ld-linux-x86-64.so.2
     - cd -
