@@ -5,9 +5,11 @@ HERE="$(dirname "$(readlink -f "${0}")")"
 # Custom AppRun script for Inkscape
 # by Simon Peter
 
+############################################################################################
 # Allow AppRun or the AppImage to be symlinked to, e.g.,
 # /usr/local/bin/inkview
 # or to be called with ./Inkscape*.AppImage inkview
+############################################################################################
 
 if [ ! -z $APPIMAGE ] ; then
   BINARY_NAME=$(basename "$ARGV0")
@@ -25,6 +27,16 @@ elif [ -e "$HERE/usr/bin/$BINARY_NAME" ] ; then
 else
   MAIN="$HERE/usr/bin/inkscape"
 fi
+
+############################################################################################
+# Use bundled Python
+############################################################################################
+
+export PYTHONHOME="$HERE/usr/"
+
+############################################################################################
+# Run experimental bundle that bundles everything if a private ld-linux-x86-64.so.2 is there
+############################################################################################
 
 if [ -e "$HERE/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2" ] ; then
   echo "Run experimental bundle that bundles everything"
