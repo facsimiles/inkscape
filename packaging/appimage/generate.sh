@@ -2,22 +2,13 @@
 
 ########################################################################
 # Install build-time and run-time dependencies
-# TODO: Dependencies should be in Dockerfile to speed up builds
 ########################################################################
 
 export DEBIAN_FRONTEND=noninteractive
 
-apt-get update -yqq
-
-apt-get install -y software-properties-common \
-libhunspell-1.6-0 libaspell-dev libgtkspell-dev libgtkspell3-3-dev \
-libmagick++-dev wget # FIXME: Move to Dockerfile?
-
 # Backported pango (from 18.10) for variable font support
 add-apt-repository -y ppa:bryce/pango1.0
-
 apt-get update -yqq
-
 apt-get install -y libpango1.0-0 libpango1.0-dev
 
 ########################################################################
