@@ -78,7 +78,7 @@ appimage:linux:
     - cp /usr/lib/x86_64-linux-gnu/gdk-pixbuf-*/*/loaders.cache usr/lib/x86_64-linux-gnu/gdk-pixbuf-*/*/
     - sed -i -e 's|/usr/lib/x86_64-linux-gnu/gdk-pixbuf-2.0/2.10.0/loaders/||g' usr/lib/x86_64-linux-gnu/gdk-pixbuf-*/*/loaders.cache
     # Optionally bundle Gtk+ themes
-    - apt-get download gnome-themes-extra gnome-themes-extra-data
+    - apt-get download gnome-themes-extra gnome-themes-extra-data adwaita-icon-theme-full
     - find *.deb -exec dpkg-deb -x {} . \;
     - rm *deb
     # Bundle fontconfig settings
