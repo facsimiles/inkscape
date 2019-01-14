@@ -60,7 +60,7 @@ appimage:linux:
     - cp ../packaging/appimage/AppRun appdir/AppRun ; chmod +x appdir/AppRun
     - ( cd appdir/usr/lib/ ; ln -s ../* . ) # FIXME: Why is this needed?
     - ( cd appdir/ ; ln -s usr/* . ) # FIXME: Why is this needed?
-    - cp ./appdir/usr/share/inkscape/icons/hicolor/scalable/apps/inkscape.svg ./appdir/
+    - cp ./appdir/usr/share/icons/hicolor/256x256/apps/inkscape.png ./appdir/
     - sed -i -e 's|^Icon=.*|Icon=inkscape|g' ./appdir/usr/share/applications/inkscape.desktop # FIXME
     - cd appdir/
     # Bundle all of glibc; this should eventually be done by linuxdeployqt
