@@ -29,6 +29,12 @@ else
 fi
 
 ############################################################################################
+# Prefer to run the bundled executables (e.g., Python)
+############################################################################################
+
+export PATH="${HERE}"/usr/bin/:"${HERE}"/usr/sbin/:"${HERE}"/usr/games/:"${HERE}"/bin/:"${HERE}"/sbin/:"${PATH}"
+
+############################################################################################
 # Use bundled Python
 ############################################################################################
 
@@ -40,7 +46,6 @@ export PYTHONHOME="$HERE/usr/"
 
 if [ -e "$HERE/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2" ] ; then
   echo "Run experimental bundle that bundles everything"
-  export LOCPATH="$HERE/usr/lib/locale" # locales-all must be bundled
   export GCONV_PATH="$HERE/usr/lib/x86_64-linux-gnu/gconv"
   export FONTCONFIG_FILE="$HERE/etc/fonts/fonts.conf"
   export LIBRARY_PATH="$HERE/usr/lib":$LIBRARY_PATH
