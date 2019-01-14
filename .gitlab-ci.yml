@@ -77,6 +77,10 @@ appimage:linux:
     - cp /usr/lib/x86_64-linux-gnu/gdk-pixbuf-*/*/loaders/* usr/lib/x86_64-linux-gnu/gdk-pixbuf-*/*/loaders/
     - cp /usr/lib/x86_64-linux-gnu/gdk-pixbuf-*/*/loaders.cache usr/lib/x86_64-linux-gnu/gdk-pixbuf-*/*/
     - sed -i -e 's|/usr/lib/x86_64-linux-gnu/gdk-pixbuf-2.0/2.10.0/loaders/||g' usr/lib/x86_64-linux-gnu/gdk-pixbuf-*/*/loaders.cache
+    # Optionally bundle Gtk+ themes
+    - apt-get download gnome-themes-extra gnome-themes-extra-data
+    - find *.deb -exec dpkg-deb -x {} . \;
+    - rm *deb
     # Bundle fontconfig settings
     - mkdir -p etc/fonts/
     - cp /etc/fonts/fonts.conf etc/fonts/
