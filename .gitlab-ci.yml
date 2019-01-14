@@ -111,10 +111,11 @@ appimage:linux:
       -executable=$(readlink -f appdir/usr/lib/x86_64-linux-gnu/gdk-pixbuf-*/*/loaders/libpixbufloader-ani.so) \
       -executable=$(readlink -f appdir/usr/lib/x86_64-linux-gnu/gtk-*/*/engines/libadwaita.so) \
       -executable=appdir/usr/bin/python2.7
+      mv Inkscape*.AppImage* ../
   artifacts:
     expire_in: 1 year
     paths:
-      - build/Inkscape*.AppImage*
+      - Inkscape*.AppImage*
 
 inkscape:mac:
   stage: build
