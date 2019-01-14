@@ -1,9 +1,10 @@
 doxygen_warnings.log
 doxygen/
 gtest/
-build
+build/
 share/inkscape
 share/*/*.h
+install-prefix/
 
 inkscape_devel_*.snap
 inkscape_devel_source.tar.bz2
