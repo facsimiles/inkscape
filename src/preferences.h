@@ -18,6 +18,7 @@
 #include <cfloat>
 #include <glibmm/ustring.h>
 #include <map>
+#include <memory>
 #include <unordered_map>
 #include <utility>
 #include <vector>
@@ -110,7 +111,7 @@ public:
 
         Glib::ustring const observed_path; ///< Path which the observer watches
     private:
-        _ObserverData *_data; ///< additional data used by the implementation while the observer is active
+        std::unique_ptr<_ObserverData> _data; ///< additional data used by the implementation while the observer is active
     };
 
 
@@ -603,13 +604,13 @@ private:
     /// Wrapper class for XML node observers
     class PrefNodeObserver;
 
-    typedef std::map<Observer *, PrefNodeObserver *> _ObsMap;
+    typedef std::map<Observer *, std::unique_ptr<PrefNodeObserver>> _ObsMap;
     /// Map that keeps track of wrappers assigned to PrefObservers
     _ObsMap _observer_map;
 
     // privilege escalation methods for PrefNodeObserver
     static Entry const _create_pref_value(Glib::ustring const &, void const *ptr);
-    static _ObserverData *_get_pref_observer_data(Observer &o) { return o._data; }
+    static _ObserverData *_get_pref_observer_data(Observer &o) { return o._data.get(); }
 
     static Preferences *_instance;
 

@@ -105,10 +105,6 @@ Preferences::Preferences() :
 
 Preferences::~Preferences()
 {
-    // delete all PrefNodeObservers
-    for (_ObsMap::iterator i = _observer_map.begin(); i != _observer_map.end(); ) {
-        delete (*i++).second; // avoids reference to a deleted key
-    }
     // unref XML document
     Inkscape::GC::release(_prefs_doc);
 }
@@ -301,9 +297,6 @@ void Preferences::reset()
         int retcode = g_unlink (_prefs_filename.c_str());
         if (retcode == 0) g_warning("%s", _("Preferences file was deleted."));
         else g_warning("%s", _("There was an error trying to delete the preferences file."));
-    }
-    for (_ObsMap::iterator i = _observer_map.begin(); i != _observer_map.end(); ) {
-        delete (*i++).second; // avoids reference to a deleted key
     }
     _observer_map.clear();
     Inkscape::GC::release(_prefs_doc);
@@ -682,12 +675,9 @@ void Preferences::addObserver(Observer &o)
         node = _findObserverNode(o.observed_path, node_key, attr_key, true);
         if (node) {
             // set additional data
-            if (o._data) {
-                delete o._data;
-            }
-            o._data = new _ObserverData(node, !attr_key.empty());
+            o._data.reset(new _ObserverData(node, !attr_key.empty()));
 
-            _observer_map[&o] = new PrefNodeObserver(o, attr_key);
+            _observer_map[&o].reset(new PrefNodeObserver(o, attr_key));
 
             // if we watch a single pref, we want to receive notifications only for a single node
             if (o._data->_is_attr) {
@@ -702,21 +692,18 @@ void Preferences::addObserver(Observer &o)
 void Preferences::removeObserver(Observer &o)
 {
     // prevent removing an observer which was not added
-    if ( _observer_map.find(&o) != _observer_map.end() ) {
+    auto it = _observer_map.find(&o);
+    if (it != _observer_map.end()) {
         Inkscape::XML::Node *node = o._data->_node;
-        _ObserverData *priv_data = o._data;
-        o._data = nullptr;
+        _ObserverData *priv_data = o._data.get();
 
         if (priv_data->_is_attr) {
-            node->removeObserver( *(_observer_map[&o]) );
+            node->removeObserver(*it->second);
         } else {
-            node->removeSubtreeObserver( *(_observer_map[&o]) );
+            node->removeSubtreeObserver(*it->second);
         }
 
-        delete priv_data;
-        priv_data = nullptr;
-        delete _observer_map[&o];
-        _observer_map.erase(&o);
+        _observer_map.erase(it);
     }
 }
 
