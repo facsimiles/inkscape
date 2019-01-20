@@ -40,7 +40,7 @@ enum CRStyleOrigin
         /*Please don't change the order of
          *the values enumerated here ...
          *New values should be added at the end,
-         *just before ORIGIN_END.
+         *just before NB_ORIGIN.
          */
         ORIGIN_UA = 0,
         ORIGIN_USER,
