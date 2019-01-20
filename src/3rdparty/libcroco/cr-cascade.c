@@ -39,7 +39,7 @@ struct _CRCascadePriv {
 	 *sheets[ORIGIN_AUTHOR] or sheets[ORIGIN_USER]
 	 *of sheets[ORIGIN_UA] ;
 	 */
-        CRStyleSheet *sheets[3];
+        CRStyleSheet *sheets[NB_ORIGINS];
         guint ref_count;
 };
 
@@ -197,7 +197,7 @@ cr_cascade_destroy (CRCascade * a_this)
         if (PRIVATE (a_this)) {
                 gulong i = 0;
 
-                for (i = 0; PRIVATE (a_this)->sheets && i < NB_ORIGINS; i++) {
+                for (i = 0; (i < NB_ORIGINS) && (PRIVATE (a_this)->sheets[i] != NULL); i++) {
                         if (PRIVATE (a_this)->sheets[i]) {
                                 if (cr_stylesheet_unref
                                     (PRIVATE (a_this)->sheets[i])
