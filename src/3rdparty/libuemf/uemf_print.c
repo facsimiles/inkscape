@@ -44,7 +44,7 @@ Code based on example crc32b  here:
    http://www.hackersdelight.org/hdcodetxt/crc.c.txt
 */
 uint32_t lu_crc32(const char *record, uint32_t Size){
-   const unsigned char *message = record;
+   const unsigned char *message = (const unsigned char*) record;
    uint32_t i, j;
    uint32_t crc, mask;
 
