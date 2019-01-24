@@ -10,13 +10,15 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include <cstring>
 #include <fstream>
+#include <memory>
+#include <string>
 #include <vector>
 #include <glib.h>
 #include "inkscape-version.h"
 #include "debug/logger.h"
 #include "debug/simple-event.h"
-#include "inkgc/gc-alloc.h"
 
 namespace Inkscape {
 
@@ -27,7 +29,7 @@ bool Logger::_category_mask[Event::N_CATEGORIES];
 
 namespace {
 
-static void write_escaped_value(std::ostream &os, Util::ptr_shared value) {
+static void write_escaped_value(std::ostream &os, char const *value) {
     for ( char const *current=value ; *current ; ++current ) {
         switch (*current) {
         case '&':
@@ -59,7 +61,7 @@ static void write_indent(std::ostream &os, unsigned depth) {
 
 static std::ofstream log_stream;
 static bool empty_tag=false;
-typedef std::vector<Util::ptr_shared, GC::Alloc<Util::ptr_shared, GC::MANUAL> > TagStack;
+typedef std::vector<std::shared_ptr<std::string>> TagStack;
 static TagStack &tag_stack() {
     static TagStack stack;
     return stack;
@@ -133,7 +135,7 @@ typedef SimpleEvent<Event::CORE> CoreEvent;
 
 class SessionEvent : public CoreEvent {
 public:
-    SessionEvent() : CoreEvent(Util::share_static_string("session")) {
+    SessionEvent() : CoreEvent("session") {
         _addProperty("inkscape-version", Inkscape::version_string);
     }
 };
@@ -159,7 +161,7 @@ void Logger::init() {
 }
 
 void Logger::_start(Event const &event) {
-    Util::ptr_shared name=event.name();
+    char const *name=event.name();
 
     if (empty_tag) {
         log_stream << ">\n";
@@ -167,26 +169,26 @@ void Logger::_start(Event const &event) {
 
     write_indent(log_stream, tag_stack().size());
 
-    log_stream << "<" << name.pointer();
+    log_stream << "<" << name;
 
     unsigned property_count=event.propertyCount();
     for ( unsigned i = 0 ; i < property_count ; i++ ) {
         Event::PropertyPair property=event.property(i);
-        log_stream << " " << property.name.pointer() << "=\"";
-        write_escaped_value(log_stream, property.value);
+        log_stream << " " << property.name << "=\"";
+        write_escaped_value(log_stream, property.value->c_str());
         log_stream << "\"";
     }
 
     log_stream.flush();
 
-    tag_stack().push_back(name);
+    tag_stack().push_back(std::make_shared<std::string>(name));
     empty_tag = true;
 
     event.generateChildEvents();
 }
 
 void Logger::_skip() {
-    tag_stack().push_back(Util::ptr_shared());
+    tag_stack().push_back(nullptr);
 }
 
 void Logger::_finish() {
@@ -195,7 +197,7 @@ void Logger::_finish() {
             log_stream << "/>\n";
         } else {
             write_indent(log_stream, tag_stack().size() - 1);
-            log_stream << "</" << tag_stack().back().pointer() << ">\n";
+            log_stream << "</" << tag_stack().back()->c_str() << ">\n";
         }
         log_stream.flush();
 
