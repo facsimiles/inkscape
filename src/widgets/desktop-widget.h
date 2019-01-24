@@ -15,7 +15,8 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <gtkmm/window.h>
+#include <gtkmm.h>
+
 #include "message.h"
 #include "ui/view/view-widget.h"
 #include "ui/view/edit-widget-interface.h"
@@ -28,19 +29,10 @@
 typedef struct _EgeColorProfTracker EgeColorProfTracker;
 struct SPCanvas;
 struct SPCanvasItem;
+class SPDocument;
 class SPDesktop;
 struct SPDesktopWidget;
 class SPObject;
-
-namespace Gtk {
-    class Box;
-    class EventBox;
-    class Grid;
-    class MenuBar;
-    class Scrollbar;
-    class SpinButton;
-    class ToggleButton;
-}
 
 namespace Inkscape {
 namespace UI {
@@ -65,7 +57,7 @@ class SelectedStyle;
 /**
  * Create a new SPDesktopWidget
  */
-SPDesktopWidget *sp_desktop_widget_new(SPNamedView *namedview);
+SPDesktopWidget *sp_desktop_widget_new(SPDocument* document);
 
 void sp_desktop_widget_show_decorations(SPDesktopWidget *dtw, gboolean show);
 void sp_desktop_widget_update_hruler (SPDesktopWidget *dtw);
@@ -106,7 +98,6 @@ private:
 
     Gtk::Box *_hbox;
 
-    Gtk::MenuBar *_menubar;
     Gtk::Box     *_statusbar;
 
     Inkscape::UI::Dialog::SwatchesPanel *_panels;
@@ -276,7 +267,7 @@ public:
     Inkscape::UI::Widget::Dock* getDock();
 
     static GType getType();
-    static SPDesktopWidget* createInstance(SPNamedView *namedview);
+    static SPDesktopWidget* createInstance(SPDocument *document);
 
     void updateNamedview();
     void update_guides_lock();

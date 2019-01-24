@@ -49,7 +49,6 @@ using Inkscape::UI::Widget::UnitTracker;
 using Inkscape::Util::Unit;
 using Inkscape::DocumentUndo;
 using Inkscape::UI::ToolboxFactory;
-using Inkscape::UI::PrefPusher;
 using Inkscape::UI::Tools::MeasureTool;
 
 //########################
@@ -227,13 +226,11 @@ MeasureToolbar::prep(SPDesktop * desktop, GtkActionGroup* mainActions)
                                          _("Font Size"), _("Font Size:"),
                                          _("The font size to be used in the measurement labels"),
                                          "/tools/measure/fontsize", 10.0,
-                                         GTK_WIDGET(desktop->canvas),
-                                         nullptr, // dataKludge
                                          FALSE, nullptr,
                                          1.0, 36.0, 1.0, 4.0,
                                          nullptr, nullptr, 0,
-                                         nullptr, // callback
                                          nullptr, 0 , 2);
+        ege_adjustment_action_set_focuswidget(eact, GTK_WIDGET(desktop->canvas));
         holder->_font_size_adj = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
         holder->_font_size_adj->signal_value_changed().connect(sigc::mem_fun(*holder, &MeasureToolbar::fontsize_value_changed));
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact));
@@ -260,13 +257,11 @@ MeasureToolbar::prep(SPDesktop * desktop, GtkActionGroup* mainActions)
                                          _("Precision"), _("Precision:"),
                                          _("Decimal precision of measure"),
                                          "/tools/measure/precision", 2,
-                                         GTK_WIDGET(desktop->canvas),
-                                         nullptr, // dataKludge
                                          FALSE, nullptr,
                                          0, 10, 1, 0,
                                          nullptr, nullptr, 0,
-                                         nullptr, // callback
                                          nullptr, 0 ,0);
+        ege_adjustment_action_set_focuswidget(eact, GTK_WIDGET(desktop->canvas));
         holder->_precision_adj = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
         holder->_precision_adj->signal_value_changed().connect(sigc::mem_fun(*holder, &MeasureToolbar::precision_value_changed));
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact));
@@ -278,13 +273,11 @@ MeasureToolbar::prep(SPDesktop * desktop, GtkActionGroup* mainActions)
                                          _("Scale %"), _("Scale %:"),
                                          _("Scale the results"),
                                          "/tools/measure/scale", 100.0,
-                                         GTK_WIDGET(desktop->canvas),
-                                         nullptr, // dataKludge
                                          FALSE, nullptr,
                                          0.0, 90000.0, 1.0, 4.0,
                                          nullptr, nullptr, 0,
-                                         nullptr, // callback
                                          nullptr, 0 , 3);
+        ege_adjustment_action_set_focuswidget(eact, GTK_WIDGET(desktop->canvas));
         holder->_scale_adj = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
         holder->_scale_adj->signal_value_changed().connect(sigc::mem_fun(*holder, &MeasureToolbar::scale_value_changed));
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
@@ -296,13 +289,11 @@ MeasureToolbar::prep(SPDesktop * desktop, GtkActionGroup* mainActions)
                                          _("Offset"), _("Offset:"),
                                          _("Mark dimension offset"),
                                          "/tools/measure/offset", 5.0,
-                                         GTK_WIDGET(desktop->canvas),
-                                         nullptr, // dataKludge
                                          FALSE, nullptr,
                                          0.0, 90000.0, 1.0, 4.0,
                                          nullptr, nullptr, 0,
-                                         nullptr, // callback
                                          nullptr, 0 , 2);
+        ege_adjustment_action_set_focuswidget(eact, GTK_WIDGET(desktop->canvas));
         holder->_offset_adj = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
         holder->_offset_adj->signal_value_changed().connect(sigc::mem_fun(*holder, &MeasureToolbar::offset_value_changed));
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );

@@ -23,6 +23,7 @@
 #include "object/sp-namedview.h"  // TODO Remove need for this!
 
 #include "ui/drag-and-drop.h"  // Move to canvas?
+#include "ui/interface.h" // main menu
 #include "ui/monitor.h" // get_monitor_geometry_at_point()
 
 #include "ui/drag-and-drop.h"
@@ -53,71 +54,45 @@ InkscapeWindow::InkscapeWindow(SPDocument* document)
      // =============== Build interface ===============
 
     // Main box
-    _mainbox = Gtk::manage(new Gtk::Box);
+    _mainbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
     _mainbox->set_name("DesktopMainBox");
     _mainbox->show();
     add(*_mainbox);
 
-    // Menu bar
-
     // Desktop widget (=> MultiPaned)
-    _desktop_widget = sp_desktop_widget_new(sp_document_namedview(document, nullptr));
-    gtk_container_add(GTK_CONTAINER(_mainbox->gobj()), GTK_WIDGET(_desktop_widget));
+    _desktop_widget = sp_desktop_widget_new(_document);
+    _desktop_widget->window = this;
     gtk_widget_show(GTK_WIDGET(_desktop_widget));
     _desktop = _desktop_widget->desktop;
+
+    // Menu bar (must come after desktop widget creation as we need _desktop)
+    _menubar = Glib::wrap(GTK_MENU_BAR(sp_ui_main_menubar(_desktop)));
+    _menubar->set_name("MenuBar");
+    _menubar->show_all();
 
     // Pallet
 
     // Status bar
 
+    _mainbox->pack_start(*_menubar, false, false);
+    gtk_box_pack_start(GTK_BOX(_mainbox->gobj()), GTK_WIDGET(_desktop_widget), true, true, 0); // Can't use Glib::wrap()
+
     // ================== Callbacks ==================
-    signal_key_press_event().connect(sigc::mem_fun(*this, &InkscapeWindow::key_press));
+    signal_key_press_event().connect(   sigc::mem_fun(*this, &InkscapeWindow::key_press));
+    signal_delete_event().connect(      sigc::mem_fun(*_desktop, &SPDesktop::onDeleteUI));
+    signal_window_state_event().connect(sigc::mem_fun(*_desktop, &SPDesktop::onWindowStateEvent));
+    signal_focus_in_event().connect(    sigc::mem_fun(*_desktop_widget, &SPDesktopWidget::onFocusInEvent));
 
     // =================== Actions ===================
 
-
-    // ============ Stuff to be cleaned up ===========
-
-    g_object_set_data(G_OBJECT(_desktop_widget), "window", this);
-    _desktop_widget->window = this;
-
-    set_data("desktop", _desktop);
-    set_data("desktopwidget", _desktop_widget);
-
-    signal_delete_event().connect(      sigc::mem_fun(*_desktop, &SPDesktop::onDeleteUI));
-    signal_window_state_event().connect(sigc::mem_fun(*_desktop, &SPDesktop::onWindowStateEvent));
-    signal_focus_in_event().connect(sigc::mem_fun(*_desktop_widget, &SPDesktopWidget::onFocusInEvent));
-
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    int window_geometry = prefs->getInt("/options/savewindowgeometry/value", PREFS_WINDOW_GEOMETRY_NONE);
-    if (window_geometry == PREFS_WINDOW_GEOMETRY_LAST) {
-        gint pw = prefs->getInt("/desktop/geometry/width", -1);
-        gint ph = prefs->getInt("/desktop/geometry/height", -1);
-        gint px = prefs->getInt("/desktop/geometry/x", -1);
-        gint py = prefs->getInt("/desktop/geometry/y", -1);
-        gint full = prefs->getBool("/desktop/geometry/fullscreen");
-        gint maxed = prefs->getBool("/desktop/geometry/maximized");
-        if (pw>0 && ph>0) {
-            Gdk::Rectangle monitor_geometry = Inkscape::UI::get_monitor_geometry_at_point(px, py);
-            pw = std::min(pw, monitor_geometry.get_width());
-            ph = std::min(ph, monitor_geometry.get_height());
-            _desktop->setWindowSize(pw, ph);
-            _desktop->setWindowPosition(Geom::Point(px, py));
-        }
-        if (maxed) {
-            maximize();
-        }
-        if (full) {
-            fullscreen();
-        }
-    }
 
     // ================ Window Options ==============
 
     show(); // Must show before resize!
 
     // Resize the window to match the document properties
-    sp_namedview_window_from_document(_desktop);
+    sp_namedview_window_from_document(_desktop); // This should probably be a member function here.
+
     sp_namedview_update_layers_from_document(_desktop);
 
 }

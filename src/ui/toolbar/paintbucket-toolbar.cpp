@@ -45,7 +45,6 @@ using Inkscape::UI::Widget::UnitTracker;
 using Inkscape::UI::UXManager;
 using Inkscape::DocumentUndo;
 using Inkscape::UI::ToolboxFactory;
-using Inkscape::UI::PrefPusher;
 using Inkscape::Util::unit_table;
 
 
@@ -105,13 +104,12 @@ PaintbucketToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
             "ThresholdAction",
             _("Fill Threshold"), _("Threshold:"),
             _("The maximum allowed difference between the clicked pixel and the neighboring pixels to be counted in the fill"),
-            "/tools/paintbucket/threshold", 5, GTK_WIDGET(desktop->canvas),
-            nullptr, // dataKludge
+            "/tools/paintbucket/threshold", 5,
             TRUE,
             "inkscape:paintbucket-threshold", 0, 100.0, 1.0, 10.0,
             nullptr, nullptr, 0,
-            nullptr, // callback
             nullptr /*unit tracker*/, 1, 0 );
+        ege_adjustment_action_set_focuswidget(eact, GTK_WIDGET(desktop->canvas));
 
         toolbar->_threshold_adj = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
         toolbar->_threshold_adj->signal_value_changed().connect(sigc::mem_fun(*toolbar, &PaintbucketToolbar::threshold_changed));
@@ -137,14 +135,13 @@ PaintbucketToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
             "OffsetAction",
             _("Grow/shrink by"), _("Grow/shrink by:"),
             _("The amount to grow (positive) or shrink (negative) the created fill path"),
-            "/tools/paintbucket/offset", 0, GTK_WIDGET(desktop->canvas),
-            nullptr, // dataKludge
+            "/tools/paintbucket/offset", 0,
             TRUE,
             "inkscape:paintbucket-offset", -1e4, 1e4, 0.1, 0.5,
             nullptr, nullptr, 0,
-            nullptr, // callback
             toolbar->_tracker,
             1, 2);
+        ege_adjustment_action_set_focuswidget(eact, GTK_WIDGET(desktop->canvas));
         toolbar->_offset_adj = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
         toolbar->_offset_adj->signal_value_changed().connect(sigc::mem_fun(*toolbar, &PaintbucketToolbar::offset_changed));
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );

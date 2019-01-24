@@ -65,9 +65,9 @@ private:
     InkToggleAction *_tracebackground;
     InkToggleAction *_usetilt;
 
-    PrefPusher *_tracebackground_pusher;
-    PrefPusher *_usepressure_pusher;
-    PrefPusher *_usetilt_pusher;
+    std::unique_ptr<PrefPusher> _tracebackground_pusher;
+    std::unique_ptr<PrefPusher> _usepressure_pusher;
+    std::unique_ptr<PrefPusher> _usetilt_pusher;
 
     void width_value_changed();
     void velthin_value_changed();
@@ -86,11 +86,7 @@ private:
     static void tilt_state_changed( GtkToggleAction *act, gpointer data );
     
 protected:
-    CalligraphyToolbar(SPDesktop *desktop)
-        : Toolbar(desktop)
-    {}
-
-    ~CalligraphyToolbar();
+    CalligraphyToolbar(SPDesktop *desktop);
 
 public:
     static GtkWidget * prep(SPDesktop *desktop, GtkActionGroup* mainActions);

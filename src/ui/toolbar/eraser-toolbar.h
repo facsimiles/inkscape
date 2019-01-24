@@ -62,7 +62,7 @@ private:
     Glib::RefPtr<Gtk::Adjustment> _cap_rounding_adj;
     Glib::RefPtr<Gtk::Adjustment> _tremor_adj;
 
-    PrefPusher *_pressure_pusher;
+    std::unique_ptr<PrefPusher> _pressure_pusher;
 
     bool _freeze;
 
@@ -78,12 +78,7 @@ private:
                                    gpointer         data);
 
 protected:
-    EraserToolbar(SPDesktop *desktop)
-        : Toolbar(desktop),
-          _freeze(false)
-    {}
-
-    ~EraserToolbar();
+    EraserToolbar(SPDesktop *desktop);
 
 public:
     static GtkWidget * prep(SPDesktop *desktop, GtkActionGroup* mainActions);

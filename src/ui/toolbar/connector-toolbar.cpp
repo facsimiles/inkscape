@@ -55,7 +55,6 @@
 using Inkscape::UI::UXManager;
 using Inkscape::DocumentUndo;
 using Inkscape::UI::ToolboxFactory;
-using Inkscape::UI::PrefPusher;
 
 static Inkscape::XML::NodeEventVector connector_tb_repr_events = {
     nullptr, /* child_added */
@@ -116,13 +115,11 @@ ConnectorToolbar::prep( SPDesktop *desktop, GtkActionGroup* mainActions)
                                     _("Connector Curvature"), _("Curvature:"),
                                     _("The amount of connectors curvature"),
                                     "/tools/connector/curvature", defaultConnCurvature,
-                                    GTK_WIDGET(desktop->canvas),
-                                    nullptr, // dataKludge
                                     TRUE, "inkscape:connector-curvature",
                                     0, 100, 1.0, 10.0,
                                     nullptr, nullptr, 0,
-                                    nullptr, // callback
                                     nullptr /*unit tracker*/, 1, 0 );
+    ege_adjustment_action_set_focuswidget(eact, GTK_WIDGET(desktop->canvas));
     toolbar->_curvature_adj = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
     toolbar->_curvature_adj->signal_value_changed().connect(sigc::mem_fun(*toolbar, &ConnectorToolbar::curvature_changed));
     gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
@@ -132,13 +129,11 @@ ConnectorToolbar::prep( SPDesktop *desktop, GtkActionGroup* mainActions)
                                     _("Connector Spacing"), _("Spacing:"),
                                     _("The amount of space left around objects by auto-routing connectors"),
                                     "/tools/connector/spacing", defaultConnSpacing,
-                                    GTK_WIDGET(desktop->canvas),
-                                    nullptr, // dataKludge
                                     TRUE, "inkscape:connector-spacing",
                                     0, 100, 1.0, 10.0,
                                     nullptr, nullptr, 0,
-                                    nullptr, // callback
                                     nullptr /*unit tracker*/, 1, 0 );
+    ege_adjustment_action_set_focuswidget(eact, GTK_WIDGET(desktop->canvas));
     toolbar->_spacing_adj = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
     toolbar->_spacing_adj->signal_value_changed().connect(sigc::mem_fun(*toolbar, &ConnectorToolbar::spacing_changed));
     gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
@@ -159,13 +154,11 @@ ConnectorToolbar::prep( SPDesktop *desktop, GtkActionGroup* mainActions)
                                      _("Connector Length"), _("Length:"),
                                      _("Ideal length for connectors when layout is applied"),
                                      "/tools/connector/length", 100,
-                                     GTK_WIDGET(desktop->canvas),
-                                     nullptr, // dataKludge
                                      TRUE, "inkscape:connector-length",
                                      10, 1000, 10.0, 100.0,
                                      nullptr, nullptr, 0,
-                                     nullptr, // callback
                                      nullptr /*unit tracker*/, 1, 0 );
+    ege_adjustment_action_set_focuswidget(eact, GTK_WIDGET(desktop->canvas));
     toolbar->_length_adj = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
     toolbar->_length_adj->signal_value_changed().connect(sigc::mem_fun(*toolbar, &ConnectorToolbar::length_changed));
     gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );

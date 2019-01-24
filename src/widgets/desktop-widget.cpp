@@ -25,21 +25,6 @@
 # include "config.h"  // only include where actually required!
 #endif
 
-#include <gtkmm/cssprovider.h>
-#include <gtkmm/menubar.h>
-#include <gtkmm/messagedialog.h>
-#include <gtkmm/paned.h>
-#include <gtkmm/scrollbar.h>
-#include <gtkmm/separator.h>
-#include <gtkmm/separatormenuitem.h>
-
-#include <gdkmm/types.h>
-#if GTK_CHECK_VERSION(3,20,0)
-#include <gdkmm/seat.h>
-#else
-#include <gdkmm/devicemanager.h>
-#endif
-
 #include <2geom/rect.h>
 
 #include "attributes.h"
@@ -689,8 +674,8 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
         enabled = !dtw->_canvas->_cms_key.empty();
         dtw->cms_adjust_set_sensitive(enabled);
     }
-#endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
     g_signal_connect( G_OBJECT(dtw->_tracker), "changed", G_CALLBACK(SPDesktopWidget::color_profile_event), dtw );
+#endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
 
     // ------------------ Finish Up -------------------- //
     dtw->_vbox->show_all();
@@ -776,8 +761,6 @@ SPDesktopWidget::dispose(GObject *object)
 void
 SPDesktopWidget::updateTitle(gchar const* uri)
 {
-    Gtk::Window *window = static_cast<Gtk::Window*>(g_object_get_data(G_OBJECT(this), "window"));
-
     if (window) {
 
         SPDocument *doc = this->desktop->doc();
@@ -1107,8 +1090,6 @@ SPDesktopWidget::shutdown()
             switch (response) {
             case GTK_RESPONSE_YES:
             {
-                Gtk::Window *window = static_cast<Gtk::Window*>(g_object_get_data(G_OBJECT(this), "window"));
-
                 doc->doRef();
                 sp_namedview_document_from_window(desktop);
                 if (sp_file_save_document(*window, doc)) {
@@ -1161,8 +1142,6 @@ SPDesktopWidget::shutdown()
             case GTK_RESPONSE_YES:
             {
                 doc->doRef();
-
-                Gtk::Window *window = static_cast<Gtk::Window*>(g_object_get_data(G_OBJECT(this), "window"));
 
                 if (sp_file_save_dialog(*window, doc, Inkscape::Extension::FILE_SAVE_METHOD_INKSCAPE_SVG)) {
                     doc->doUnref();
@@ -1279,11 +1258,6 @@ SPDesktopWidget::letZoomGrabFocus()
 void
 SPDesktopWidget::getWindowGeometry (gint &x, gint &y, gint &w, gint &h)
 {
-    gboolean vis = gtk_widget_get_visible (GTK_WIDGET(this));
-    (void)vis; // TODO figure out why it is here but not used.
-
-    Gtk::Window *window = static_cast<Gtk::Window*>(g_object_get_data(G_OBJECT(this), "window"));
-
     if (window)
     {
         window->get_size (w, h);
@@ -1294,8 +1268,6 @@ SPDesktopWidget::getWindowGeometry (gint &x, gint &y, gint &w, gint &h)
 void
 SPDesktopWidget::setWindowPosition (Geom::Point p)
 {
-    Gtk::Window *window = static_cast<Gtk::Window*>(g_object_get_data(G_OBJECT(this), "window"));
-
     if (window)
     {
         window->move (gint(round(p[Geom::X])), gint(round(p[Geom::Y])));
@@ -1305,8 +1277,6 @@ SPDesktopWidget::setWindowPosition (Geom::Point p)
 void
 SPDesktopWidget::setWindowSize (gint w, gint h)
 {
-    Gtk::Window *window = static_cast<Gtk::Window*>(g_object_get_data(G_OBJECT(this), "window"));
-
     if (window)
     {
         window->set_default_size (w, h);
@@ -1323,7 +1293,6 @@ SPDesktopWidget::setWindowSize (gint w, gint h)
 void
 SPDesktopWidget::setWindowTransient (void *p, int transient_policy)
 {
-    Gtk::Window *window = static_cast<Gtk::Window*>(g_object_get_data(G_OBJECT(this), "window"));
     if (window)
     {
         GtkWindow *w = GTK_WINDOW(window->gobj());
@@ -1459,12 +1428,6 @@ void SPDesktopWidget::layoutWidgets()
         pref_root = "/fullscreen/";
     } else {
         pref_root = "/window/";
-    }
-
-    if (!prefs->getBool(pref_root + "menu/state", true)) {
-        dtw->_menubar->hide();
-    } else {
-        dtw->_menubar->show_all();
     }
 
     if (!prefs->getBool(pref_root + "commands/state", true)) {
@@ -1636,15 +1599,17 @@ void SPDesktopWidget::setToolboxPosition(Glib::ustring const& id, GtkPositionTyp
 }
 
 
-SPDesktopWidget *sp_desktop_widget_new( SPNamedView *namedview )
+SPDesktopWidget *sp_desktop_widget_new(SPDocument *document)
 {
-    SPDesktopWidget* dtw = SPDesktopWidget::createInstance(namedview);
+    SPDesktopWidget* dtw = SPDesktopWidget::createInstance(document);
     return dtw;
 }
 
-SPDesktopWidget* SPDesktopWidget::createInstance(SPNamedView *namedview)
+SPDesktopWidget* SPDesktopWidget::createInstance(SPDocument *document)
 {
     SPDesktopWidget *dtw = static_cast<SPDesktopWidget*>(g_object_new(SP_TYPE_DESKTOP_WIDGET, nullptr));
+
+    SPNamedView *namedview = sp_document_namedview(document, nullptr);
 
     dtw->_dt2r = 1. / namedview->display_units->factor;
 
@@ -1671,11 +1636,6 @@ SPDesktopWidget* SPDesktopWidget::createInstance(SPNamedView *namedview)
 
     dtw->layer_selector->setDesktop(dtw->desktop);
 
-    dtw->_menubar = Glib::wrap(GTK_MENU_BAR(sp_ui_main_menubar (dtw->desktop)));
-    dtw->_menubar->set_name("MenuBar");
-    dtw->_menubar->show_all();
-
-    dtw->_vbox->pack_start(*dtw->_menubar, false, false);
     dtw->layoutWidgets();
 
     std::vector<GtkWidget *> toolboxes;
@@ -2103,21 +2063,6 @@ SPDesktopWidget::toggle_color_prof_adj()
         }
     }
 }
-
-/* Unused
-void
-sp_spw_toggle_menubar (SPDesktopWidget *dtw, bool is_fullscreen)
-{
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    if (dtw->_menubar->get_visible()) {
-        dtw->_menubar->hide();
-        prefs->setBool(is_fullscreen ? "/fullscreen/menu/state" : "/window/menu/state", false);
-    } else {
-        dtw->_menubar->show_all();
-        prefs->setBool(is_fullscreen ? "/fullscreen/menu/state" : "/window/menu/state", true);
-    }
-}
-*/
 
 static void
 set_adjustment (Glib::RefPtr<Gtk::Adjustment> &adj, double l, double u, double ps, double si, double pi)

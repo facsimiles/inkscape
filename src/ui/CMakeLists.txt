@@ -9,6 +9,7 @@ set(ui_SRC
 	icon-loader.cpp
 	interface.cpp
         monitor.cpp
+        pref-pusher.cpp
 	previewholder.cpp
 	selected-color.cpp
 	shape-editor.cpp
@@ -196,6 +197,7 @@ set(ui_SRC
 	widget/scalar-unit.cpp
 	widget/scalar.cpp
 	widget/selected-style.cpp
+        widget/spin-button-tool-item.cpp
 	widget/spin-scale.cpp
 	widget/spin-slider.cpp
 	widget/spinbutton.cpp
@@ -224,14 +226,15 @@ set(ui_SRC
 	icon-names.h
 	icon-loader.h
 	interface.h
-    monitor.h
+        monitor.h
+        pref-pusher.h
 	previewable.h
 	previewholder.h
 	selected-color.h
 	shape-editor.h
 	tool-factory.h
 	tools-switch.h
-    util.h
+        util.h
 	uxmanager.h
 
 	cache/svg_preview_cache.h
@@ -425,6 +428,7 @@ set(ui_SRC
 	widget/scalar-unit.h
 	widget/scalar.h
 	widget/selected-style.h
+        widget/spin-button-tool-item.h
 	widget/spin-scale.h
 	widget/spin-slider.h
 	widget/spinbutton.h

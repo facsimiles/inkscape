@@ -39,6 +39,7 @@
 #include "svg/css-ostringstream.h"
 
 #include "ui/icon-names.h"
+#include "ui/pref-pusher.h"
 #include "ui/tools/gradient-tool.h"
 #include "ui/tools/mesh-tool.h"
 #include "ui/widget/color-preview.h"
@@ -191,13 +192,10 @@ static void mesh_toolbox_watch_ec(SPDesktop* dt, Inkscape::UI::Tools::ToolBase* 
 namespace Inkscape {
 namespace UI {
 namespace Toolbar {
-
-MeshToolbar::~MeshToolbar()
-{
-    if(_edit_fill_pusher) delete _edit_fill_pusher;
-    if(_edit_stroke_pusher) delete _edit_stroke_pusher;
-    if(_show_handles_pusher) delete _show_handles_pusher;
-}
+MeshToolbar::MeshToolbar(SPDesktop *desktop)
+    : Toolbar(desktop),
+    _edit_fill_pusher(nullptr)
+{}
 
 /**
  * Mesh auxiliary toolbar construction and setup.
@@ -296,14 +294,12 @@ MeshToolbar::prep(SPDesktop * desktop, GtkActionGroup* mainActions)
         eact = create_adjustment_action( "MeshRowAction",
                                          _("Rows"), _("Rows:"), _("Number of rows in new mesh"),
                                          "/tools/mesh/mesh_rows", 1,
-                                         GTK_WIDGET(desktop->canvas),
-                                         nullptr, // dataKludge
                                          FALSE, nullptr,
                                          1, 20, 1, 1,
                                          labels, values, 0,
-                                         nullptr, // callback
                                          nullptr /*unit tracker*/,
                                          1.0, 0 );
+        ege_adjustment_action_set_focuswidget(eact, GTK_WIDGET(desktop->canvas));
         toolbar->_row_adj = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
         toolbar->_row_adj->signal_value_changed().connect(sigc::mem_fun(*toolbar, &MeshToolbar::row_changed));
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
@@ -317,14 +313,12 @@ MeshToolbar::prep(SPDesktop * desktop, GtkActionGroup* mainActions)
         eact = create_adjustment_action( "MeshColumnAction",
                                          _("Columns"), _("Columns:"), _("Number of columns in new mesh"),
                                          "/tools/mesh/mesh_cols", 1,
-                                         GTK_WIDGET(desktop->canvas),
-                                         nullptr, // dataKludge
                                          FALSE, nullptr,
                                          1, 20, 1, 1,
                                          labels, values, 0,
-                                         nullptr, // callback
                                          nullptr /*unit tracker*/,
                                          1.0, 0 );
+        ege_adjustment_action_set_focuswidget(eact, GTK_WIDGET(desktop->canvas));
         toolbar->_col_adj = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
         toolbar->_col_adj->signal_value_changed().connect(sigc::mem_fun(*toolbar, &MeshToolbar::col_changed));
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
@@ -339,7 +333,7 @@ MeshToolbar::prep(SPDesktop * desktop, GtkActionGroup* mainActions)
                                                       INKSCAPE_ICON("object-fill"),
                                                       secondarySize );
         gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
-        toolbar->_edit_fill_pusher = new PrefPusher(GTK_TOGGLE_ACTION(act), "/tools/mesh/edit_fill");
+        toolbar->_edit_fill_pusher.reset(new PrefPusher(GTK_TOGGLE_ACTION(act), "/tools/mesh/edit_fill"));
         g_signal_connect_after( G_OBJECT(act), "activate", G_CALLBACK(toggle_fill_stroke), (gpointer)toolbar);
     }
 
@@ -351,7 +345,7 @@ MeshToolbar::prep(SPDesktop * desktop, GtkActionGroup* mainActions)
                                                       INKSCAPE_ICON("object-stroke"),
                                                       secondarySize );
         gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
-        toolbar->_edit_stroke_pusher = new PrefPusher(GTK_TOGGLE_ACTION(act), "/tools/mesh/edit_stroke");
+        toolbar->_edit_stroke_pusher.reset(new PrefPusher(GTK_TOGGLE_ACTION(act), "/tools/mesh/edit_stroke"));
         g_signal_connect_after( G_OBJECT(act), "activate", G_CALLBACK(toggle_fill_stroke), (gpointer)toolbar);
     }
 
@@ -363,7 +357,7 @@ MeshToolbar::prep(SPDesktop * desktop, GtkActionGroup* mainActions)
                                                       INKSCAPE_ICON("show-node-handles"),
                                                       secondarySize );
         gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
-        toolbar->_show_handles_pusher = new PrefPusher(GTK_TOGGLE_ACTION(act), "/tools/mesh/show_handles");
+        toolbar->_show_handles_pusher.reset(new PrefPusher(GTK_TOGGLE_ACTION(act), "/tools/mesh/show_handles"));
         g_signal_connect_after( G_OBJECT(act), "activate", G_CALLBACK(toggle_handles), nullptr);
     }
 

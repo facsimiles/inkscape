@@ -43,6 +43,7 @@
 #include "object/sp-namedview.h"
 
 #include "ui/icon-names.h"
+#include "ui/pref-pusher.h"
 #include "ui/tool/control-point-selection.h"
 #include "ui/tool/multi-path-manipulator.h"
 #include "ui/tools/node-tool.h"
@@ -209,29 +210,15 @@ static void sp_node_path_edit_nextLPEparam(GtkAction * /*act*/, gpointer data) {
     sp_selection_next_patheffect_param( reinterpret_cast<SPDesktop*>(data) );
 }
 
-
-
-//################################
-//##    Node Editing Toolbox    ##
-//################################
-
 namespace Inkscape {
 namespace UI {
 namespace Toolbar {
 
 NodeToolbar::NodeToolbar(SPDesktop *desktop)
     : Toolbar(desktop),
-    _tracker(new UnitTracker(Inkscape::Util::UNIT_TYPE_LINEAR))
+    _tracker(new UnitTracker(Inkscape::Util::UNIT_TYPE_LINEAR)),
+    _freeze(false)
 {}
-
-NodeToolbar::~NodeToolbar()
-{
-    delete _pusher_show_transform_handles;
-    delete _pusher_show_handles;
-    delete _pusher_show_outline;
-    delete _pusher_edit_clipping_paths;
-    delete _pusher_edit_masks;
-}
 
 GtkWidget *
 NodeToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
@@ -418,7 +405,7 @@ NodeToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
                                                       "node-transform",
                                                       secondarySize );
         gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
-        holder->_pusher_show_transform_handles = new PrefPusher(GTK_TOGGLE_ACTION(act), "/tools/nodes/show_transform_handles");
+        holder->_pusher_show_transform_handles.reset(new PrefPusher(GTK_TOGGLE_ACTION(act), "/tools/nodes/show_transform_handles"));
     }
 
     {
@@ -428,7 +415,7 @@ NodeToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
                                                       INKSCAPE_ICON("show-node-handles"),
                                                       secondarySize );
         gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
-        holder->_pusher_show_handles = new PrefPusher(GTK_TOGGLE_ACTION(act), "/tools/nodes/show_handles");
+        holder->_pusher_show_handles.reset(new PrefPusher(GTK_TOGGLE_ACTION(act), "/tools/nodes/show_handles"));
     }
 
     {
@@ -438,7 +425,7 @@ NodeToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
                                                       INKSCAPE_ICON("show-path-outline"),
                                                       secondarySize );
         gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
-        holder->_pusher_show_outline = new PrefPusher(GTK_TOGGLE_ACTION(act), "/tools/nodes/show_outline");
+        holder->_pusher_show_outline.reset(new PrefPusher(GTK_TOGGLE_ACTION(act), "/tools/nodes/show_outline"));
     }
 
     {
@@ -459,7 +446,7 @@ NodeToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
                                           INKSCAPE_ICON("path-clip-edit"),
                                           secondarySize );
         gtk_action_group_add_action( mainActions, GTK_ACTION(inky) );
-        holder->_pusher_edit_clipping_paths = new PrefPusher(GTK_TOGGLE_ACTION(inky), "/tools/nodes/edit_clipping_paths");
+        holder->_pusher_edit_clipping_paths.reset(new PrefPusher(GTK_TOGGLE_ACTION(inky), "/tools/nodes/edit_clipping_paths"));
     }
 
     {
@@ -469,7 +456,7 @@ NodeToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
                                           INKSCAPE_ICON("path-mask-edit"),
                                           secondarySize );
         gtk_action_group_add_action( mainActions, GTK_ACTION(inky) );
-        holder->_pusher_edit_masks = new PrefPusher(GTK_TOGGLE_ACTION(inky), "/tools/nodes/edit_masks");
+        holder->_pusher_edit_masks.reset(new PrefPusher(GTK_TOGGLE_ACTION(inky), "/tools/nodes/edit_masks"));
     }
 
     /* X coord of selected node(s) */
@@ -479,13 +466,11 @@ NodeToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
         holder->_nodes_x_action = create_adjustment_action( "NodeXAction",
                                                             _("X coordinate:"), _("X:"), _("X coordinate of selected node(s)"),
                                                             "/tools/nodes/Xcoord", 0,
-                                                            GTK_WIDGET(desktop->canvas),
-                                                            nullptr, // dataKludge
                                                             TRUE, "altx-nodes",
                                                             -1e6, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
                                                             labels, values, G_N_ELEMENTS(labels),
-                                                            nullptr, // callback
-                                                            holder->_tracker );
+                                                            holder->_tracker.get() );
+        ege_adjustment_action_set_focuswidget(holder->_nodes_x_action, GTK_WIDGET(desktop->canvas));
         holder->_nodes_x_adj = Glib::wrap(ege_adjustment_action_get_adjustment(holder->_nodes_x_action));
         holder->_nodes_x_adj->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*holder, &NodeToolbar::value_changed), Geom::X));
         gtk_action_set_sensitive( GTK_ACTION(holder->_nodes_x_action), FALSE );
@@ -499,13 +484,11 @@ NodeToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
         holder->_nodes_y_action = create_adjustment_action( "NodeYAction",
                                                             _("Y coordinate:"), _("Y:"), _("Y coordinate of selected node(s)"),
                                                             "/tools/nodes/Ycoord", 0,
-                                                            GTK_WIDGET(desktop->canvas),
-                                                            nullptr, // dataKludge
                                                             FALSE, nullptr,
                                                             -1e6, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
                                                             labels, values, G_N_ELEMENTS(labels),
-                                                            nullptr, // callback
-                                                            holder->_tracker );
+                                                            holder->_tracker.get() );
+        ege_adjustment_action_set_focuswidget(holder->_nodes_y_action, GTK_WIDGET(desktop->canvas));
         holder->_nodes_y_adj = Glib::wrap(ege_adjustment_action_get_adjustment(holder->_nodes_y_action));
         holder->_nodes_y_adj->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*holder, &NodeToolbar::value_changed), Geom::Y));
         gtk_action_set_sensitive( GTK_ACTION(holder->_nodes_y_action), FALSE );

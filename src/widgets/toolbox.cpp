@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
+
 /**
  * @file
  * Inkscape toolbar definitions and general utility functions.
@@ -102,7 +103,6 @@
 
 using Inkscape::UI::UXManager;
 using Inkscape::DocumentUndo;
-using Inkscape::UI::PrefPusher;
 using Inkscape::UI::ToolboxFactory;
 using Inkscape::UI::Tools::ToolBase;
 
@@ -121,9 +121,6 @@ enum BarId {
 
 #define BAR_ID_KEY "BarIdValue"
 #define HANDLE_POS_MARK "x-inkscape-pos"
-
-static GtkWidget *sp_empty_toolbox_new(SPDesktop *desktop);
-
 
 GtkIconSize ToolboxFactory::prefToSize( Glib::ustring const &path, int base ) {
     static GtkIconSize sizeChoices[] = {
@@ -192,7 +189,7 @@ static struct {
     gchar const *swatch_tool;
     gchar const *swatch_tip;
 } const aux_toolboxes[] = {
-    { "/tools/select", "select_toolbox", nullptr, Inkscape::UI::Toolbar::SelectToolbar::prep,            "SelectToolbar",
+    { "/tools/select", "select_toolbox", Inkscape::UI::Toolbar::SelectToolbar::create, nullptr,           "SelectToolbar",
       SP_VERB_INVALID, nullptr, nullptr},
     { "/tools/nodes",   "node_toolbox",   nullptr, Inkscape::UI::Toolbar::NodeToolbar::prep,              "NodeToolbar",
       SP_VERB_INVALID, nullptr, nullptr},
@@ -379,84 +376,7 @@ void VerbAction::on_activate()
     }
 }
 
-/* Global text entry widgets necessary for update */
-/* GtkWidget *dropper_rgb_entry,
-          *dropper_opacity_entry ; */
-// should be made a private member once this is converted to class
-
-void delete_connection(GObject * /*obj*/, sigc::connection *connection)
-{
-    connection->disconnect();
-    delete connection;
-}
-
-void purge_repr_listener( GObject* /*obj*/, GObject* tbl )
-{
-    Inkscape::XML::Node* oldrepr = reinterpret_cast<Inkscape::XML::Node *>( g_object_get_data( tbl, "repr" ) );
-    if (oldrepr) { // remove old listener
-        sp_repr_remove_listener_by_data(oldrepr, tbl);
-        Inkscape::GC::release(oldrepr);
-        oldrepr = nullptr;
-        g_object_set_data( tbl, "repr", nullptr );
-    }
-}
-
-PrefPusher::PrefPusher( GtkToggleAction *act, Glib::ustring const &path, void (*callback)(gpointer), gpointer cbData ) :
-    Observer(path),
-    act(act),
-    callback(callback),
-    cbData(cbData),
-    freeze(false)
-{
-    g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(toggleCB), this);
-    freeze = true;
-    gtk_toggle_action_set_active( act, Inkscape::Preferences::get()->getBool(observed_path) );
-    freeze = false;
-
-    Inkscape::Preferences::get()->addObserver(*this);
-}
-
-PrefPusher::~PrefPusher()
-{
-    Inkscape::Preferences::get()->removeObserver(*this);
-}
-
-void PrefPusher::toggleCB( GtkToggleAction * /*act*/, PrefPusher *self )
-{
-    if (self) {
-        self->handleToggled();
-    }
-}
-
-void PrefPusher::handleToggled()
-{
-    if (!freeze) {
-        freeze = true;
-        Inkscape::Preferences::get()->setBool(observed_path, gtk_toggle_action_get_active( act ));
-        if (callback) {
-            (*callback)(cbData);
-        }
-        freeze = false;
-    }
-}
-
-void PrefPusher::notify(Inkscape::Preferences::Entry const &newVal)
-{
-    bool newBool = newVal.getBool();
-    bool oldBool = gtk_toggle_action_get_active(act);
-
-    if (!freeze && (newBool != oldBool)) {
-        gtk_toggle_action_set_active( act, newBool );
-    }
-}
-
-void delete_prefspusher(GObject * /*obj*/, PrefPusher *watcher )
-{
-    delete watcher;
-}
-
 // ------------------------------------------------------
-
 
 GtkToolItem * sp_toolbox_button_item_new_from_verb_with_doubleclick(GtkWidget *t, GtkIconSize size, Inkscape::UI::Widget::ButtonType type,
                                                              Inkscape::Verb *verb, Inkscape::Verb *doubleclick_verb,
@@ -713,12 +633,9 @@ static GtkWidget* createCustomSlider( GtkAdjustment *adjustment, gdouble climbRa
 EgeAdjustmentAction * create_adjustment_action( gchar const *name,
                                                        gchar const *label, gchar const *shortLabel, gchar const *tooltip,
                                                        Glib::ustring const &path, gdouble def,
-                                                       GtkWidget *focusTarget,
-                                                       GObject * /* dataKludge */,
                                                        gboolean altx, gchar const *altx_mark,
                                                        gdouble lower, gdouble upper, gdouble step, gdouble page,
                                                        gchar const** descrLabels, gdouble const* descrValues, guint descrCount,
-                                                       void (*callback)(GtkAdjustment *, GObject *),
                                                        Inkscape::UI::Widget::UnitTracker *unit_tracker,
                                                        gdouble climb/* = 0.1*/, guint digits/* = 3*/, double factor/* = 1.0*/ )
 {
@@ -732,8 +649,6 @@ EgeAdjustmentAction * create_adjustment_action( gchar const *name,
     GtkAdjustment* adj = GTK_ADJUSTMENT( gtk_adjustment_new( prefs->getDouble(path, def) * factor,
                                                              lower, upper, step, page, 0 ) );
 
-//    g_signal_connect( G_OBJECT(adj), "value-changed", G_CALLBACK(callback), dataKludge );
-
     EgeAdjustmentAction* act = ege_adjustment_action_new( adj, name, label, tooltip, nullptr, climb, digits, unit_tracker );
     if ( shortLabel ) {
         g_object_set( act, "short_label", shortLabel, NULL );
@@ -743,22 +658,9 @@ EgeAdjustmentAction * create_adjustment_action( gchar const *name,
         ege_adjustment_action_set_descriptions( act, descrLabels, descrValues, descrCount );
     }
 
-    if ( focusTarget ) {
-        ege_adjustment_action_set_focuswidget( act, focusTarget );
-    }
-
     if ( altx && altx_mark ) {
         g_object_set( G_OBJECT(act), "self-id", altx_mark, NULL );
     }
-
-    /*
-     * TODO: Is this ever used?
-    if ( dataKludge ) {
-        // Rather lame, but it's the only place where we need to get the entry name
-        // but we don't have an Entry
-        g_object_set_data( dataKludge, prefs->getEntry(path).getEntryName().data(), adj );
-    }
-    */
 
     if (unit_tracker) {
         unit_tracker->addAdjustment(adj);
@@ -1032,20 +934,13 @@ void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
             // just defines behaviour.
             GtkWidget* kludge = aux_toolboxes[i].prep_func(desktop, mainActions->gobj());
             gtk_widget_set_name( kludge, "Kludge" );
-            // g_object_set_data( G_OBJECT(kludge), "dtw", desktop->canvas);
-            // g_object_set_data( G_OBJECT(kludge), "desktop", desktop);
             dataHolders[aux_toolboxes[i].type_name] = kludge;
-        } else {
+        } else if (aux_toolboxes[i].create_func) {
 
             // For the "create" method, directly create a "real" toolbar,
             // which contains visible, fully functional widgets.  Note that
             // this should also contain any swatches that are needed.
-            GtkWidget *sub_toolbox = nullptr;
-            if (aux_toolboxes[i].create_func == nullptr) {
-                sub_toolbox = sp_empty_toolbox_new(desktop);
-            } else {
-                sub_toolbox = aux_toolboxes[i].create_func(desktop);
-            }
+            GtkWidget *sub_toolbox = aux_toolboxes[i].create_func(desktop);
             gtk_widget_set_name( sub_toolbox, "SubToolBox" );
             gtk_size_group_add_widget( grouper, sub_toolbox );
 
@@ -1058,6 +953,8 @@ void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
             //       so that we can store a list of toolbars, rather than using
             //       GObject data
             g_object_set_data(G_OBJECT(toolbox), aux_toolboxes[i].data_name, sub_toolbox);
+        } else {
+            g_warning("Could not create toolbox %s", aux_toolboxes[i].ui_name);
         }
     }
 
@@ -1613,18 +1510,6 @@ void ToolboxFactory::showAuxToolbox(GtkWidget *toolbox_toplevel)
     gtk_widget_show(toolbox);
 
     gtk_widget_show_all(shown_toolbox);
-}
-
-static GtkWidget *sp_empty_toolbox_new(SPDesktop *desktop)
-{
-    GtkWidget *tbl = gtk_toolbar_new();
-    g_object_set_data(G_OBJECT(tbl), "dtw", desktop->canvas);
-    g_object_set_data(G_OBJECT(tbl), "desktop", desktop);
-
-    gtk_widget_show_all(tbl);
-    sp_set_font_size_smaller (tbl);
-
-    return tbl;
 }
 
 #define MODE_LABEL_WIDTH 70

@@ -54,8 +54,8 @@ private:
     Glib::RefPtr<Gtk::Adjustment> _offset_adj;
     Glib::RefPtr<Gtk::Adjustment> _scale_adj;
 
-    PrefPusher *_usepressurewidth_pusher;
-    PrefPusher *_usepressurepopulation_pusher;
+    std::unique_ptr<PrefPusher> _usepressurewidth_pusher;
+    std::unique_ptr<PrefPusher> _usepressurepopulation_pusher;
 
     InkSelectOneAction *_spray_tool_mode;
     EgeAdjustmentAction *_spray_population;
@@ -105,11 +105,7 @@ private:
                                            gpointer         user_data);
 
 protected:
-    SprayToolbar(SPDesktop *desktop) :
-        Toolbar(desktop)
-    {}
-
-    ~SprayToolbar();
+    SprayToolbar(SPDesktop *desktop);
 
 public:
     static GtkWidget * prep(SPDesktop *desktop, GtkActionGroup* mainActions);
