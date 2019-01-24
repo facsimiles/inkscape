@@ -1086,18 +1086,18 @@ bool PenTool::_handleKeyPress(GdkEvent *event) {
             if (!MOD__CTRL(event)) { // not ctrl
                 if (MOD__ALT(event)) { // alt
                     if (MOD__SHIFT(event)) {
-                        this->_lastpointMoveScreen(0, 10); // shift
+                        this->_lastpointMoveScreen(0, -10 * this->desktop->yaxisdir()); // shift
                     }
                     else {
-                        this->_lastpointMoveScreen(0, 1); // no shift
+                        this->_lastpointMoveScreen(0, -1 * this->desktop->yaxisdir()); // no shift
                     }
                 }
                 else { // no alt
                     if (MOD__SHIFT(event)) {
-                        this->_lastpointMove(0, 10*nudge); // shift
+                        this->_lastpointMove(0, -10 * nudge * this->desktop->yaxisdir()); // shift
                     }
                     else {
-                        this->_lastpointMove(0, nudge); // no shift
+                        this->_lastpointMove(0, -nudge * this->desktop->yaxisdir()); // no shift
                     }
                 }
                 ret = true;
@@ -1130,18 +1130,18 @@ bool PenTool::_handleKeyPress(GdkEvent *event) {
             if (!MOD__CTRL(event)) { // not ctrl
                 if (MOD__ALT(event)) { // alt
                     if (MOD__SHIFT(event)) {
-                        this->_lastpointMoveScreen(0, -10); // shift
+                        this->_lastpointMoveScreen(0, 10 * this->desktop->yaxisdir()); // shift
                     }
                     else {
-                        this->_lastpointMoveScreen(0, -1); // no shift
+                        this->_lastpointMoveScreen(0, 1 * this->desktop->yaxisdir()); // no shift
                     }
                 }
                 else { // no alt
                     if (MOD__SHIFT(event)) {
-                        this->_lastpointMove(0, -10*nudge); // shift
+                        this->_lastpointMove(0, 10 * nudge * this->desktop->yaxisdir()); // shift
                     }
                     else {
-                        this->_lastpointMove(0, -nudge); // no shift
+                        this->_lastpointMove(0, nudge * this->desktop->yaxisdir()); // no shift
                     }
                 }
                 ret = true;
