@@ -917,6 +917,8 @@ void PenTool::_lastpointMove(gdouble x, gdouble y) {
     if (this->npoints != 5)
         return;
 
+	y *= -this->desktop->yaxisdir();
+
     // green
     if (!this->green_curve->is_unset()) {
         this->green_curve->last_point_additive_move( Geom::Point(x,y) );
@@ -1086,18 +1088,18 @@ bool PenTool::_handleKeyPress(GdkEvent *event) {
             if (!MOD__CTRL(event)) { // not ctrl
                 if (MOD__ALT(event)) { // alt
                     if (MOD__SHIFT(event)) {
-                        this->_lastpointMoveScreen(0, -10 * this->desktop->yaxisdir()); // shift
+                        this->_lastpointMoveScreen(0, 10); // shift
                     }
                     else {
-                        this->_lastpointMoveScreen(0, -1 * this->desktop->yaxisdir()); // no shift
+                        this->_lastpointMoveScreen(0, 1); // no shift
                     }
                 }
                 else { // no alt
                     if (MOD__SHIFT(event)) {
-                        this->_lastpointMove(0, -10 * nudge * this->desktop->yaxisdir()); // shift
+                        this->_lastpointMove(0, 10*nudge); // shift
                     }
                     else {
-                        this->_lastpointMove(0, -nudge * this->desktop->yaxisdir()); // no shift
+                        this->_lastpointMove(0, nudge); // no shift
                     }
                 }
                 ret = true;
@@ -1130,18 +1132,18 @@ bool PenTool::_handleKeyPress(GdkEvent *event) {
             if (!MOD__CTRL(event)) { // not ctrl
                 if (MOD__ALT(event)) { // alt
                     if (MOD__SHIFT(event)) {
-                        this->_lastpointMoveScreen(0, 10 * this->desktop->yaxisdir()); // shift
+                        this->_lastpointMoveScreen(0, -10); // shift
                     }
                     else {
-                        this->_lastpointMoveScreen(0, 1 * this->desktop->yaxisdir()); // no shift
+                        this->_lastpointMoveScreen(0, -1); // no shift
                     }
                 }
                 else { // no alt
                     if (MOD__SHIFT(event)) {
-                        this->_lastpointMove(0, 10 * nudge * this->desktop->yaxisdir()); // shift
+                        this->_lastpointMove(0, -10*nudge); // shift
                     }
                     else {
-                        this->_lastpointMove(0, nudge * this->desktop->yaxisdir()); // no shift
+                        this->_lastpointMove(0, -nudge); // no shift
                     }
                 }
                 ret = true;
