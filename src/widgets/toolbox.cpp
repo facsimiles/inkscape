@@ -862,10 +862,7 @@ void ToolboxFactory::setOrientation(GtkWidget* toolbox, GtkOrientation orientati
 
 void setup_tool_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
 {
-    setupToolboxCommon( toolbox, desktop,
-            "toolbar-tool.ui",
-            "/ui/ToolToolbar",
-            "/toolbox/tools/small");
+    setupToolboxCommon(toolbox, desktop, "toolbar-tool.ui", "/ui/ToolToolbar", "/toolbox/tools/small");
 }
 
 void update_tool_toolbox( SPDesktop *desktop, ToolBase *eventcontext, GtkWidget * /*toolbox*/ )
@@ -1099,10 +1096,7 @@ void update_aux_toolbox(SPDesktop * /*desktop*/, ToolBase *eventcontext, GtkWidg
 
 void setup_commands_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
 {
-    setupToolboxCommon( toolbox, desktop,
-            "toolbar-commands.ui",
-            "/ui/CommandsToolbar",
-            "/toolbox/small" );
+    setupToolboxCommon(toolbox, desktop, "toolbar-commands.ui", "/ui/CommandsToolbar", "/toolbox/small");
 }
 
 void update_commands_toolbox(SPDesktop * /*desktop*/, ToolBase * /*eventcontext*/, GtkWidget * /*toolbox*/)
@@ -1413,10 +1407,7 @@ void setup_snap_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
         g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(toggle_snap_callback), toolbox );
     }
 
-    setupToolboxCommon( toolbox, desktop,
-            "toolbar-snap.ui",
-            "/ui/SnapToolbar",
-            "/toolbox/secondary" );
+    setupToolboxCommon(toolbox, desktop, "toolbar-snap.ui", "/ui/SnapToolbar", "/toolbox/secondary");
 }
 
 Glib::ustring ToolboxFactory::getToolboxName(GtkWidget* toolbox)
