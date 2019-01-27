@@ -116,7 +116,6 @@ src/io/resource-manager.cpp
 src/knot.cpp
 src/knotholder.cpp
 src/libnrtype/FontFactory.cpp
-src/live_effects/effect-enum.h
 src/live_effects/effect.cpp
 src/live_effects/lpe-attach-path.cpp
 src/live_effects/lpe-bendpath.cpp
