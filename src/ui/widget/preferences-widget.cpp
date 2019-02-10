@@ -761,7 +761,7 @@ void PrefEntryFileButtonHBox::init(Glib::ustring const &prefs_path,
     Gtk::Image *im = sp_get_icon_image("applications-graphics", Gtk::ICON_SIZE_BUTTON);
     pixlabel->pack_start(*im);
     Gtk::Label *l = new Gtk::Label();
-    l->set_markup_with_mnemonic(_("_Browse..."));
+    l->set_markup_with_mnemonic(_("_Browse…"));
     pixlabel->pack_start(*l);
     relatedButton->add(*pixlabel); 
 

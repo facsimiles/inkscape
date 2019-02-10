@@ -40,7 +40,7 @@ LPERuler::LPERuler(LivePathEffectObject *lpeobject) :
     unit(_("Unit:"), _("Unit"), "unit", &wr, this),
     mark_length(_("Ma_jor length:"), _("Length of major ruler marks"), "mark_length", &wr, this, 14.0),
     minor_mark_length(_("Mino_r length:"), _("Length of minor ruler marks"), "minor_mark_length", &wr, this, 7.0),
-    major_mark_steps(_("Major steps_:"), _("Draw a major mark every ... steps"), "major_mark_steps", &wr, this, 5),
+    major_mark_steps(_("Major steps_:"), _("Draw a major mark every … steps"), "major_mark_steps", &wr, this, 5),
     shift(_("Shift marks _by:"), _("Shift marks by this many steps"), "shift", &wr, this, 0),
     mark_dir(_("Mark direction:"), _("Direction of marks (when viewing along the path from start to end)"), "mark_dir", MarkDirTypeConverter, &wr, this, MARKDIR_LEFT),
     offset(_("_Offset:"), _("Offset of first mark"), "offset", &wr, this, 0.0),

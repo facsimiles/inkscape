@@ -627,7 +627,7 @@ void ImportDialog::on_button_import_clicked() {
     button_import->set_sensitive(false);
     button_close->hide();
     button_cancel->show();
-    widget_status->start_process(_("Downloading image..."));
+    widget_status->start_process(_("Downloading image…"));
     download_resource(TYPE_IMAGE, row);
 }
 
@@ -942,7 +942,7 @@ void ImportDialog::on_button_cancel_clicked()
 void ImportDialog::on_entry_search_activated()
 {
     preview_files->clear();
-    widget_status->start_process(_("Searching clipart..."));
+    widget_status->start_process(_("Searching clipart…"));
     
     notebook_content->set_current_page(NOTEBOOK_PAGE_LOGO);
 

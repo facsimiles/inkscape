@@ -255,7 +255,7 @@ SelectedStyle::SelectedStyle(bool /*layout*/)
         _multiple[i].show_all();
         __multiple[i] = (i == SS_FILL)? (_("Multiple selected objects have the same fill")) : (_("Multiple selected objects have the same stroke"));
 
-        _popup_edit[i].add(*(new Gtk::Label((i == SS_FILL)? _("Edit fill...") : _("Edit stroke..."), Gtk::ALIGN_START)));
+        _popup_edit[i].add(*(new Gtk::Label((i == SS_FILL)? _("Edit fill…") : _("Edit stroke…"), Gtk::ALIGN_START)));
         _popup_edit[i].signal_activate().connect(sigc::mem_fun(*this,
                                (i == SS_FILL)? &SelectedStyle::on_fill_edit : &SelectedStyle::on_stroke_edit ));
 

@@ -70,7 +70,7 @@ ObjectSet::combine(bool skip_undo)
     }
 
     if(desktop()){
-        desktop()->messageStack()->flash(Inkscape::IMMEDIATE_MESSAGE, _("Combining paths..."));
+        desktop()->messageStack()->flash(Inkscape::IMMEDIATE_MESSAGE, _("Combining paths…"));
         // set "busy" cursor
         desktop()->setWaitingCursor();
     }
@@ -205,7 +205,7 @@ ObjectSet::breakApart(bool skip_undo)
         return;
     }
     if(desktop()){
-        desktop()->messageStack()->flash(Inkscape::IMMEDIATE_MESSAGE, _("Breaking apart paths..."));
+        desktop()->messageStack()->flash(Inkscape::IMMEDIATE_MESSAGE, _("Breaking apart paths…"));
         // set "busy" cursor
         desktop()->setWaitingCursor();
         // disable redrawing during the break-apart operation for remarkable speedup for large paths
@@ -310,7 +310,7 @@ void ObjectSet::toCurves(bool skip_undo)
     
     bool did = false;
     if (desktop()) {
-        desktop()->messageStack()->flash(Inkscape::IMMEDIATE_MESSAGE, _("Converting objects to paths..."));
+        desktop()->messageStack()->flash(Inkscape::IMMEDIATE_MESSAGE, _("Converting objects to paths…"));
         // set "busy" cursor
         desktop()->setWaitingCursor();
     }
@@ -643,7 +643,7 @@ ObjectSet::pathReverse()
     // set "busy" cursor
     if(desktop()){
         desktop()->setWaitingCursor();
-        desktop()->messageStack()->flash(Inkscape::IMMEDIATE_MESSAGE, _("Reversing paths..."));
+        desktop()->messageStack()->flash(Inkscape::IMMEDIATE_MESSAGE, _("Reversing paths…"));
     }
     
     bool did = false;

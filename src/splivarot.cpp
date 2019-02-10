@@ -2349,7 +2349,7 @@ sp_selected_path_simplify_items(SPDesktop *desktop,
         pathsSimplified++;
 
         if (pathsSimplified % 20 == 0) {
-            gchar *message = g_strdup_printf(_("%s <b>%d</b> of <b>%d</b> paths simplified..."),
+            gchar *message = g_strdup_printf(_("%s <b>%d</b> of <b>%d</b> paths simplified…"),
                 simplificationType, pathsSimplified, totalPathCount);
             desktop->messageStack()->flash(Inkscape::IMMEDIATE_MESSAGE, message);
             g_free(message);

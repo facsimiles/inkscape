@@ -1822,7 +1822,7 @@ ObjectsPanel::ObjectsPanel() :
 
     //Add object/layer
     Gtk::Button* btn = Gtk::manage( new Gtk::Button() );
-    _styleButton(*btn, INKSCAPE_ICON("list-add"), _("Add layer..."));
+    _styleButton(*btn, INKSCAPE_ICON("list-add"), _("Add layer…"));
     btn->set_relief(Gtk::RELIEF_NONE);
     btn->signal_clicked().connect( sigc::bind( sigc::mem_fun(*this, &ObjectsPanel::_takeAction), (int)BUTTON_NEW) );
     _buttonsSecondary.pack_start(*btn, Gtk::PACK_SHRINK);

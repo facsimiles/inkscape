@@ -210,7 +210,7 @@ PageSizer::PageSizer(Registry & _wr)
 
     //## Set up fit page expander
     _fitPageMarginExpander.set_use_underline();
-    _fitPageMarginExpander.set_label(_("Resi_ze page to content..."));
+    _fitPageMarginExpander.set_label(_("Resi_ze page to content…"));
     _fitPageMarginExpander.add(_marginTable);
     
     //## Set up margin settings
@@ -280,7 +280,7 @@ PageSizer::PageSizer(Registry & _wr)
     _scaleTable.attach(_viewboxExpander, 0, 2, 2, 1);
 
     _viewboxExpander.set_use_underline();
-    _viewboxExpander.set_label(_("_Viewbox..."));
+    _viewboxExpander.set_label(_("_Viewbox…"));
     _viewboxExpander.add(_viewboxTable);
 
     _viewboxTable.set_row_spacing(2);

@@ -243,7 +243,7 @@ int Application::autosave()
     gint docnum = 0;
     int pid = ::getpid();
 
-    SP_ACTIVE_DESKTOP->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Autosaving documents..."));
+    SP_ACTIVE_DESKTOP->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Autosaving documents…"));
     for (auto & iter : _document_set) {
 
         SPDocument *doc = iter.first;

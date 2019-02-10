@@ -254,7 +254,7 @@ gchar* SPUse::description() const {
         if (recursion_depth >= 4) {
             /* TRANSLATORS: Used for statusbar description for long <use> chains:
              * "Clone of: Clone of: ... in Layer 1". */
-            return g_strdup(_("..."));
+            return g_strdup(_("…"));
             /* We could do better, e.g. chasing the href chain until we reach something other than
              * a <use>, and giving its description. */
         }

@@ -1259,9 +1259,9 @@ void InkscapePreferences::initPageIO()
     Gtk::TreeModel::iterator iter_io = this->AddPage(_page_io, _("Input/Output"), PREFS_PAGE_IO);
     _path_io = _page_list.get_model()->get_path(iter_io);
 
-    _save_use_current_dir.init( _("Use current directory for \"Save As ...\""), "/dialogs/save_as/use_current_dir", true);
+    _save_use_current_dir.init( _("Use current directory for \"Save As…\""), "/dialogs/save_as/use_current_dir", true);
     _page_io.add_line( false, "", _save_use_current_dir, "",
-                         _("When this option is on, the \"Save as...\" and \"Save a Copy...\" dialogs will always open in the directory where the currently open document is; when it's off, each will open in the directory where you last saved a file using it"), true);
+                         _("When this option is on, the \"Save as…\" and \"Save a Copy…\" dialogs will always open in the directory where the currently open document is; when it's off, each will open in the directory where you last saved a file using it"), true);
 
     _misc_comment.init( _("Add label comments to printing output"), "/printing/debug/show-label-comments", false);
     _page_io.add_line( false, "", _misc_comment, "",
@@ -2042,12 +2042,12 @@ void InkscapePreferences::initKeyboardShortcuts(Gtk::TreeModel::iterator iter_ui
     box_buttons->pack_start(*kb_reset, true, true, 6);
     box_buttons->set_child_secondary(*kb_reset);
 
-    auto kb_import = Gtk::manage(new Gtk::Button(_("Import ...")));
+    auto kb_import = Gtk::manage(new Gtk::Button(_("Import…")));
     kb_import->set_use_underline();
     kb_import->set_tooltip_text(_("Import custom keyboard shortcuts from a file"));
     box_buttons->pack_end(*kb_import, true, true, 6);
 
-    auto kb_export = Gtk::manage(new Gtk::Button(_("Export ...")));
+    auto kb_export = Gtk::manage(new Gtk::Button(_("Export…")));
     kb_export->set_use_underline();
     kb_export->set_tooltip_text(_("Export custom keyboard shortcuts to a file"));
     box_buttons->pack_end(*kb_export, true, true, 6);

@@ -355,7 +355,7 @@ void ContextMenu::MakeItemMenu ()
     Gtk::MenuItem* mi;
 
     /* Item dialog */
-    mi = Gtk::manage(new Gtk::MenuItem(_("_Object Properties..."),true));
+    mi = Gtk::manage(new Gtk::MenuItem(_("_Object Properties…"),true));
     mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::ItemProperties));
     mi->show();
     append(*mi);//insert(*mi,positionOfLastDialog++);
@@ -420,7 +420,7 @@ void ContextMenu::MakeItemMenu ()
     select_same_submenu->append(*mi);
 
     /* Move to layer */
-    mi = Gtk::manage(new Gtk::MenuItem(_("_Move to layer ..."), true));
+    mi = Gtk::manage(new Gtk::MenuItem(_("_Move to layer…"), true));
     if (_desktop->selection->isEmpty()) {
         mi->set_sensitive(FALSE);
     } else {
@@ -640,7 +640,7 @@ void ContextMenu::MakeAnchorMenu()
     Gtk::MenuItem* mi;
 
     /* Link dialog */
-    mi = Gtk::manage(new Gtk::MenuItem(_("Link _Properties..."), true));
+    mi = Gtk::manage(new Gtk::MenuItem(_("Link _Properties…"), true));
     mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::AnchorLinkProperties));
     mi->show();
     insert(*mi,positionOfLastDialog++);
@@ -693,13 +693,13 @@ void ContextMenu::MakeImageMenu ()
     const gchar *href = ir->attribute("xlink:href");
 
     /* Image properties */
-    mi = Gtk::manage(new Gtk::MenuItem(_("Image _Properties..."), true));
+    mi = Gtk::manage(new Gtk::MenuItem(_("Image _Properties…"), true));
     mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::ImageProperties));
     mi->show();
     insert(*mi,positionOfLastDialog++);
 
     /* Edit externally */
-    mi = Gtk::manage(new Gtk::MenuItem(_("Edit Externally..."), true));
+    mi = Gtk::manage(new Gtk::MenuItem(_("Edit Externally…"), true));
     mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::ImageEdit));
     mi->show();
     insert(*mi,positionOfLastDialog++);
@@ -708,7 +708,7 @@ void ContextMenu::MakeImageMenu ()
     }
 
     /* Trace Bitmap */
-    mi = Gtk::manage(new Gtk::MenuItem(_("_Trace Bitmap..."), true));
+    mi = Gtk::manage(new Gtk::MenuItem(_("_Trace Bitmap…"), true));
     mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::ImageTraceBitmap));
     mi->show();
     insert(*mi,positionOfLastDialog++);
@@ -738,7 +738,7 @@ void ContextMenu::MakeImageMenu ()
 
     /* Extract image */
     if (Inkscape::Verb::getbyid( "org.ekips.filter.extractimage" )) {
-        mi = Gtk::manage(new Gtk::MenuItem(C_("Context menu", "Extract Image...")));
+        mi = Gtk::manage(new Gtk::MenuItem(C_("Context menu", "Extract Image…")));
         mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::ImageExtract));
         mi->show();
         insert(*mi,positionOfLastDialog++);
@@ -899,7 +899,7 @@ void ContextMenu::MakeShapeMenu ()
     Gtk::MenuItem* mi;
 
     /* Item dialog */
-    mi = Gtk::manage(new Gtk::MenuItem(_("_Fill and Stroke..."), true));
+    mi = Gtk::manage(new Gtk::MenuItem(_("_Fill and Stroke…"), true));
     mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::FillSettings));
     mi->show();
     insert(*mi,positionOfLastDialog++);
@@ -919,19 +919,19 @@ void ContextMenu::MakeTextMenu ()
     Gtk::MenuItem* mi;
 
     /* Fill and Stroke dialog */
-    mi = Gtk::manage(new Gtk::MenuItem(_("_Fill and Stroke..."), true));
+    mi = Gtk::manage(new Gtk::MenuItem(_("_Fill and Stroke…"), true));
     mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::FillSettings));
     mi->show();
     insert(*mi,positionOfLastDialog++);
 
     /* Edit Text dialog */
-    mi = Gtk::manage(new Gtk::MenuItem(_("_Text and Font..."), true));
+    mi = Gtk::manage(new Gtk::MenuItem(_("_Text and Font…"), true));
     mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::TextSettings));
     mi->show();
     insert(*mi,positionOfLastDialog++);
 
     /* Spellcheck dialog */
-    mi = Gtk::manage(new Gtk::MenuItem(_("Check Spellin_g..."), true));
+    mi = Gtk::manage(new Gtk::MenuItem(_("Check Spellin_g…"), true));
     mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::SpellcheckSettings));
     mi->show();
     insert(*mi,positionOfLastDialog++);

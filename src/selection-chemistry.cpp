@@ -3606,7 +3606,7 @@ void ObjectSet::createBitmapCopy()
         return;
     }
     if(desktop()){
-        desktop()->messageStack()->flash(Inkscape::IMMEDIATE_MESSAGE, _("Rendering bitmap..."));
+        desktop()->messageStack()->flash(Inkscape::IMMEDIATE_MESSAGE, _("Rendering bitmap…"));
         // set "busy" cursor
         desktop()->setWaitingCursor();
     }

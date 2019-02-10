@@ -694,7 +694,7 @@ SpellCheck::deleteLastRect ()
 
 void SpellCheck::doSpellcheck ()
 {
-    banner_label.set_markup(_("<i>Checking...</i>"));
+    banner_label.set_markup(_("<i>Checking…</i>"));
 
     //desktop->setWaitingCursor();
 

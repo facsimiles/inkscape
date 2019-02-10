@@ -1086,7 +1086,7 @@ void DocumentProperties::addExternalScript(){
         xml_doc->root()->addChild(scriptRepr, nullptr);
 
         // inform the document, so we can undo
-        DocumentUndo::done(desktop->doc(), SP_VERB_EDIT_ADD_EXTERNAL_SCRIPT, _("Add external script..."));
+        DocumentUndo::done(desktop->doc(), SP_VERB_EDIT_ADD_EXTERNAL_SCRIPT, _("Add external script…"));
 
         populate_script_lists();
     }
@@ -1153,7 +1153,7 @@ void DocumentProperties::addEmbeddedScript(){
         xml_doc->root()->addChild(scriptRepr, nullptr);
 
         // inform the document, so we can undo
-        DocumentUndo::done(desktop->doc(), SP_VERB_EDIT_ADD_EMBEDDED_SCRIPT, _("Add embedded script..."));
+        DocumentUndo::done(desktop->doc(), SP_VERB_EDIT_ADD_EMBEDDED_SCRIPT, _("Add embedded script…"));
 
         populate_script_lists();
     }

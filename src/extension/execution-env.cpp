@@ -117,7 +117,7 @@ ExecutionEnv::createWorkingDialog () {
         return;
     Gtk::Window *window = Glib::wrap(GTK_WINDOW(toplevel), false);
 
-    gchar * dlgmessage = g_strdup_printf(_("'%s' working, please wait..."), _(_effect->get_name()));
+    gchar * dlgmessage = g_strdup_printf(_("'%s' working, please wait…"), _(_effect->get_name()));
     _visibleDialog = new Gtk::MessageDialog(*window,
                                dlgmessage,
                                false, // use markup

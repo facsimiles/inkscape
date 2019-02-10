@@ -801,7 +801,7 @@ Gtk::VBox* SvgFontsDialog::glyphs_tab(){
     missing_glyph_hbox->pack_start(*missing_glyph_label, false,false);
     missing_glyph_hbox->pack_start(missing_glyph_button, false,false);
     missing_glyph_hbox->pack_start(missing_glyph_reset_button, false,false);
-    missing_glyph_button.set_label(_("From selection..."));
+    missing_glyph_button.set_label(_("From selection…"));
     missing_glyph_button.signal_clicked().connect(sigc::mem_fun(*this, &SvgFontsDialog::missing_glyph_description_from_selected_path));
     missing_glyph_reset_button.set_label(_("Reset"));
     missing_glyph_reset_button.signal_clicked().connect(sigc::mem_fun(*this, &SvgFontsDialog::reset_missing_glyph_description));
@@ -825,7 +825,7 @@ Gtk::VBox* SvgFontsDialog::glyphs_tab(){
     hb->pack_start(glyph_from_path_button, false,false);
 
     glyphs_vbox.pack_start(*hb, false, false);
-    glyph_from_path_button.set_label(_("Get curves from selection..."));
+    glyph_from_path_button.set_label(_("Get curves from selection…"));
     glyph_from_path_button.signal_clicked().connect(sigc::mem_fun(*this, &SvgFontsDialog::set_glyph_description_from_selected_path));
 
     dynamic_cast<Gtk::CellRendererText*>( _GlyphsList.get_column_cell_renderer(0))->signal_edited().connect(

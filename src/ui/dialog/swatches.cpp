@@ -289,7 +289,7 @@ bool colorItemHandleButtonPress(GdkEventButton* event, UI::Widget::Preview *prev
             popupExtras.push_back(child);
             gtk_widget_set_sensitive( child, FALSE );
 
-            child = gtk_menu_item_new_with_label(_("Edit..."));
+            child = gtk_menu_item_new_with_label(_("Edit…"));
             g_signal_connect( G_OBJECT(child),
                               "activate",
                               G_CALLBACK(editGradient),

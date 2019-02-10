@@ -357,7 +357,7 @@ void sp_file_convert_dpi(SPDocument *doc)
             Gtk::RadioButton choice2_2(c2, _("The accuracy of the physical unit size and position values of objects\n"
                                              "in the file is most important. (Experimental.)"));
             Gtk::CheckButton backup_button(_("Create a backup file in same directory."));
-            Gtk::Expander moreinfo(_("More details..."));
+            Gtk::Expander moreinfo(_("More details…"));
             Gtk::Label moreinfo_text("", Gtk::ALIGN_START);
             moreinfo_text.set_markup(
                 _("<small>We've updated Inkscape to follow the CSS standard of 96 DPI for "

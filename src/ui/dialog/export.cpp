@@ -134,7 +134,7 @@ Export::Export () :
     unit_selector(),
     units_label(_("Units:")),
     filename_box(false, 5),
-    browse_label(_("_Export As..."), true),
+    browse_label(_("_Export As…"), true),
     browse_image(),
     batch_box(false, 5),
     batch_export(_("B_atch export all selected objects")),
@@ -1055,9 +1055,9 @@ void Export::onExport ()
                     // Do export
                     gchar * safeFile = Inkscape::IO::sanitizeString(path.c_str());
                     MessageCleaner msgCleanup(desktop->messageStack()->pushF(Inkscape::IMMEDIATE_MESSAGE,
-                                              _("Exporting file <b>%s</b>..."), safeFile), desktop);
+                                              _("Exporting file <b>%s</b>…"), safeFile), desktop);
                     MessageCleaner msgFlashCleanup(desktop->messageStack()->flashF(Inkscape::IMMEDIATE_MESSAGE,
-                                                   _("Exporting file <b>%s</b>..."), safeFile), desktop);
+                                                   _("Exporting file <b>%s</b>…"), safeFile), desktop);
                     std::vector<SPItem*> x;
                     std::vector<SPItem*> selected(desktop->getSelection()->items().begin(), desktop->getSelection()->items().end());
                     if (!sp_export_png_file (doc, path.c_str(),

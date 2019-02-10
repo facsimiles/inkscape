@@ -910,7 +910,7 @@ sp_file_save(Gtk::Window &parentWindow, gpointer /*object*/, gpointer /*data*/)
     if (!SP_ACTIVE_DOCUMENT)
         return false;
 
-    SP_ACTIVE_DESKTOP->messageStack()->flash(Inkscape::IMMEDIATE_MESSAGE, _("Saving document..."));
+    SP_ACTIVE_DESKTOP->messageStack()->flash(Inkscape::IMMEDIATE_MESSAGE, _("Saving document…"));
 
     sp_namedview_document_from_window(SP_ACTIVE_DESKTOP);
     return sp_file_save_document(parentWindow, SP_ACTIVE_DOCUMENT);
@@ -1686,7 +1686,7 @@ sp_file_export_to_ocal(Gtk::Window &parentWindow)
         return;
     bool success = sp_file_export_to_ocal_dialog(parentWindow);
     if (success)
-        SP_ACTIVE_DESKTOP->messageStack()->flash(Inkscape::IMMEDIATE_MESSAGE, _("Document exported..."));
+        SP_ACTIVE_DESKTOP->messageStack()->flash(Inkscape::IMMEDIATE_MESSAGE, _("Document exported…"));
 }
 */
 
