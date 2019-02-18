@@ -280,7 +280,7 @@ void SelectionHelper::fixSelection(SPDesktop *dt)
 
     for(auto i = boost::rbegin(selList); i != boost::rend(selList); ++i) {
         SPItem *item = *i;
-        if( item &&
+        if(item &&
             !dt->isLayer(item) &&
             (!item->isLocked()))
         {
@@ -408,7 +408,7 @@ void ObjectSet::deleteItems()
          * associated selection context.  For example: deleting an object
          * while moving it around the canvas.
          */
-        tools_switch( d, tools_active( d ) );
+        tools_switch(d, tools_active(d));
     }
     if(document())
             DocumentUndo::done(document(), SP_VERB_EDIT_DELETE,
@@ -433,7 +433,7 @@ static void add_ids_recursive(std::vector<const gchar *> &ids, SPObject *obj)
 
 void ObjectSet::duplicate(bool suppressDone, bool duplicateLayer)
 {
-    if(duplicateLayer && !desktop() ){
+    if(duplicateLayer && !desktop()){
         //TODO: understand why layer management is tied to desktop and not to document.
         return;
     }
@@ -559,7 +559,7 @@ void ObjectSet::duplicate(bool suppressDone, bool duplicateLayer)
     }
 
 
-    if ( !suppressDone ) {
+    if (!suppressDone) {
         DocumentUndo::done(document(), SP_VERB_EDIT_DUPLICATE,
                            _("Duplicate"));
     }
@@ -568,7 +568,7 @@ void ObjectSet::duplicate(bool suppressDone, bool duplicateLayer)
     else{
         SPObject* new_layer = doc->getObjectByRepr(newsel[0]);
         gchar* name = g_strdup_printf(_("%s copy"), new_layer->label());
-        desktop()->layer_manager->renameLayer( new_layer, name, TRUE );
+        desktop()->layer_manager->renameLayer(new_layer, name, TRUE);
         g_free(name);
     }
 }
@@ -612,7 +612,7 @@ std::vector<SPItem*> &get_all_items(std::vector<SPItem*> &list, SPObject *from, 
             (!onlysensitive || !item->isLocked()) &&
             (!onlyvisible || !desktop->itemIsHidden(item)) &&
             (exclude.empty() || exclude.end() == std::find(exclude.begin(), exclude.end(), &child))
-            )
+)
         {
             list.insert(list.begin(),item);
         }
@@ -651,8 +651,8 @@ static void sp_edit_select_all_full(SPDesktop *dt, bool force_all_layers, bool i
 
     switch (inlayer) {
         case PREFS_SELECTION_LAYER: {
-        if ( (onlysensitive && dynamic_cast<SPItem *>(dt->currentLayer())->isLocked()) ||
-             (onlyvisible && dt->itemIsHidden(dynamic_cast<SPItem *>(dt->currentLayer()))) )
+        if ((onlysensitive && dynamic_cast<SPItem *>(dt->currentLayer())->isLocked()) ||
+             (onlyvisible && dt->itemIsHidden(dynamic_cast<SPItem *>(dt->currentLayer()))))
         return;
 
         std::vector<SPItem*> all_items = sp_item_group_item_list(dynamic_cast<SPGroup *>(dt->currentLayer()));
@@ -969,7 +969,7 @@ enclose_items(std::vector<SPItem*> const &items)
 static SPObject *prev_sibling(SPObject *child)
 {
     SPObject *prev = nullptr;
-    if ( child && dynamic_cast<SPGroup *>(child->parent) ) {
+    if (child && dynamic_cast<SPGroup *>(child->parent)) {
         prev = child->getPrev();
     }
     return prev;
@@ -1015,9 +1015,9 @@ void ObjectSet::raise(bool skip_undo){
                 SPItem *newItem = dynamic_cast<SPItem *>(newref);
                 if (newItem) {
                     Geom::OptRect newref_bbox = newItem->documentVisualBounds();
-                    if ( newref_bbox && selected->intersects(*newref_bbox) ) {
+                    if (newref_bbox && selected->intersects(*newref_bbox)) {
                         // AND if it's not one of our selected objects,
-                        if ( std::find(items_copy.begin(),items_copy.end(),newref)==items_copy.end()) {
+                        if (std::find(items_copy.begin(),items_copy.end(),newref)==items_copy.end()) {
                             // move the selected object after that sibling
                             grepr->changeOrder(child->getRepr(), newref->getRepr());
                         }
@@ -1092,7 +1092,7 @@ void ObjectSet::lower(bool skip_undo){
                 SPItem *newItem = dynamic_cast<SPItem *>(newref);
                 if (newItem) {
                     Geom::OptRect ref_bbox = newItem->documentVisualBounds();
-                    if ( ref_bbox && selected->intersects(*ref_bbox) ) {
+                    if (ref_bbox && selected->intersects(*ref_bbox)) {
                         // AND if it's not one of our selected objects,
                         if (items_copy.end()==std::find(items_copy.begin(),items_copy.end(),newref)) {
                             // move the selected object before that sibling
@@ -1249,7 +1249,7 @@ take_style_from_item(SPObject *object)
         // If this is a group, merge the style of its topmost (last) child with style
         auto list = object->children | boost::adaptors::reversed;
         for (auto& element: list) {
-            if (element.style ) {
+            if (element.style) {
                 SPCSSAttr *temp = sp_css_attr_from_object(&element, SP_STYLE_FLAG_IFSET);
                 if (temp) {
                     sp_repr_css_merge(css, temp);
@@ -1315,8 +1315,8 @@ void ObjectSet::pastePathEffect()
 
 static void sp_selection_remove_livepatheffect_impl(SPItem *item)
 {
-    if ( SPLPEItem *lpeitem = dynamic_cast<SPLPEItem*>(item) ) {
-        if ( lpeitem->hasPathEffect() ) {
+    if (SPLPEItem *lpeitem = dynamic_cast<SPLPEItem*>(item)) {
+        if (lpeitem->hasPathEffect()) {
             lpeitem->removeAllPathEffects(false);
         }
     }
@@ -1431,7 +1431,7 @@ void ObjectSet::toNextLayer(bool skip_undo)
         }
         setReprList(copied);
         if (next) dt->setCurrentLayer(next);
-        if ( !skip_undo ) {
+        if (!skip_undo) {
             DocumentUndo::done(dt->getDocument(), SP_VERB_LAYER_MOVE_TO_NEXT,
                                _("Raise to next layer"));
         }
@@ -1475,9 +1475,9 @@ void ObjectSet::toPrevLayer(bool skip_undo)
             copied = sp_selection_paste_impl(dt->getDocument(), dt->currentLayer(), temp_clip);
             no_more = true;
         }
-        setReprList( copied);
+        setReprList(copied);
         if (next) dt->setCurrentLayer(next);
-        if ( !skip_undo ) {
+        if (!skip_undo) {
             DocumentUndo::done(dt->getDocument(), SP_VERB_LAYER_MOVE_TO_PREV,
                                _("Lower to previous layer"));
         }
@@ -1515,7 +1515,7 @@ void ObjectSet::toLayer(SPObject *moveto, bool skip_undo)
         setReprList(copied);
         if (!temp_clip.empty()) temp_clip.clear();
         if (moveto && dt) dt->setCurrentLayer(moveto);
-        if ( !skip_undo ) {
+        if (!skip_undo) {
             DocumentUndo::done(document(), SP_VERB_LAYER_MOVE_TO,
                                _("Move selection to layer"));
         }
@@ -1605,7 +1605,7 @@ void ObjectSet::applyAffine(Geom::Affine const &affine, bool set_i2d, bool compe
     for (auto l=items_copy.begin();l!=items_copy.end() ;++l) {
         SPItem *item = *l;
 
-        if( dynamic_cast<SPRoot *>(item) ) {
+        if(dynamic_cast<SPRoot *>(item)) {
             // An SVG element cannot have a transform. We could change 'x' and 'y' in response
             // to a translation... but leave that for another day.
             if(desktop())
@@ -1627,13 +1627,13 @@ void ObjectSet::applyAffine(Geom::Affine const &affine, bool set_i2d, bool compe
 
         // ...both a text-on-path and its path?
         bool transform_textpath_with_path = ((dynamic_cast<SPText *>(item) && item->firstChild() && dynamic_cast<SPTextPath *>(item->firstChild()))
-                                             && includes( sp_textpath_get_path_item(dynamic_cast<SPTextPath *>(item->firstChild())) ));
+                                             && includes(sp_textpath_get_path_item(dynamic_cast<SPTextPath *>(item->firstChild()))));
 
         // ...both a flowtext and its frame?
-        bool transform_flowtext_with_frame = (dynamic_cast<SPFlowtext *>(item) && includes( dynamic_cast<SPFlowtext *>(item)->get_frame(nullptr))); // (only the first frame is checked so far)
+        bool transform_flowtext_with_frame = (dynamic_cast<SPFlowtext *>(item) && includes(dynamic_cast<SPFlowtext *>(item)->get_frame(nullptr))); // (only the first frame is checked so far)
 
         // ...both an offset and its source?
-        bool transform_offset_with_source = (dynamic_cast<SPOffset *>(item) && dynamic_cast<SPOffset *>(item)->sourceHref) && includes( sp_offset_get_source(dynamic_cast<SPOffset *>(item)) );
+        bool transform_offset_with_source = (dynamic_cast<SPOffset *>(item) && dynamic_cast<SPOffset *>(item)->sourceHref) && includes(sp_offset_get_source(dynamic_cast<SPOffset *>(item)));
 
         // If we're moving a connector, we want to detach it
         // from shapes that aren't part of the selection, but
@@ -1668,7 +1668,7 @@ void ObjectSet::applyAffine(Geom::Affine const &affine, bool set_i2d, bool compe
          * Same for linked offset if we are also moving its source: do not move it. */
         if (transform_textpath_with_path) {
             // Restore item->transform field from the repr, in case it was changed by seltrans.
-            item->readAttr( "transform" );
+            item->readAttr("transform");
         } else if (transform_flowtext_with_frame) {
             // apply the inverse of the region's transform to the <use> so that the flow remains
             // the same (even though the output itself gets transformed)
@@ -1676,7 +1676,7 @@ void ObjectSet::applyAffine(Geom::Affine const &affine, bool set_i2d, bool compe
                 if (dynamic_cast<SPFlowregion *>(&region) || dynamic_cast<SPFlowregionExclude *>(&region)) {
                     for (auto& itm: region.children) {
                         SPUse *use = dynamic_cast<SPUse *>(&itm);
-                        if ( use ) {
+                        if (use) {
                             use->doWriteTransform(item->transform.inverse(), nullptr, compensate);
                         }
                     }
@@ -1688,7 +1688,7 @@ void ObjectSet::applyAffine(Geom::Affine const &affine, bool set_i2d, bool compe
             // transform and its move compensation are both cancelled out.
 
             // restore item->transform field from the repr, in case it was changed by seltrans
-            item->readAttr( "transform" );
+            item->readAttr("transform");
 
             // calculate the matrix we need to apply to the clone to cancel its induced transform from its original
             Geom::Affine parent2dt;
@@ -1784,7 +1784,7 @@ void ObjectSet::setScaleAbsolute(double x0, double x1,double y0, double y1)
         return;
 
     Geom::OptRect bbox = visualBounds();
-    if ( !bbox ) {
+    if (!bbox) {
         return;
     }
 
@@ -1792,9 +1792,9 @@ void ObjectSet::setScaleAbsolute(double x0, double x1,double y0, double y1)
 
     Geom::Scale const newSize(x1 - x0,
                               y1 - y0);
-    Geom::Scale const scale( newSize * Geom::Scale(bbox->dimensions()).inverse() );
+    Geom::Scale const scale(newSize * Geom::Scale(bbox->dimensions()).inverse());
     Geom::Translate const o2n(x0, y0);
-    Geom::Affine const final( p2o * scale * o2n );
+    Geom::Affine const final(p2o * scale * o2n);
 
     applyAffine(final);
 }
@@ -1806,20 +1806,20 @@ void ObjectSet::setScaleRelative(Geom::Point const &align, Geom::Scale const &sc
 
     Geom::OptRect bbox = visualBounds();
 
-    if ( !bbox ) {
+    if (!bbox) {
         return;
     }
 
     // FIXME: ARBITRARY LIMIT: don't try to scale above 1 Mpx, it won't display properly and will crash sooner or later anyway
-    if ( bbox->dimensions()[Geom::X] * scale[Geom::X] > 1e6  ||
-         bbox->dimensions()[Geom::Y] * scale[Geom::Y] > 1e6 )
+    if (bbox->dimensions()[Geom::X] * scale[Geom::X] > 1e6  ||
+         bbox->dimensions()[Geom::Y] * scale[Geom::Y] > 1e6)
     {
         return;
     }
 
     Geom::Translate const n2d(-align);
     Geom::Translate const d2n(align);
-    Geom::Affine const final( n2d * scale * d2n );
+    Geom::Affine const final(n2d * scale * d2n);
     applyAffine(final);
 }
 
@@ -1828,7 +1828,7 @@ void ObjectSet::rotateRelative(Geom::Point const &center, double angle_degrees)
     Geom::Translate const d2n(center);
     Geom::Translate const n2d(-center);
     Geom::Rotate const rotate(Geom::Rotate::from_degrees(angle_degrees));
-    Geom::Affine const final( Geom::Affine(n2d) * rotate * d2n );
+    Geom::Affine const final(Geom::Affine(n2d) * rotate * d2n);
     applyAffine(final);
 }
 
@@ -1839,7 +1839,7 @@ void ObjectSet::skewRelative(Geom::Point const &align, double dx, double dy)
     Geom::Affine const skew(1, dy,
                             dx, 1,
                             0, 0);
-    Geom::Affine const final( n2d * skew * d2n );
+    Geom::Affine const final(n2d * skew * d2n);
     applyAffine(final);
 }
 
@@ -1892,9 +1892,9 @@ void ObjectSet::rotate(gdouble const angle_degrees)
 
     if (document())
         DocumentUndo::maybeDone(document(),
-                                ( ( angle_degrees > 0 )
+                                ((angle_degrees > 0)
                                   ? "selector:rotate:ccw"
-                                  : "selector:rotate:cw" ),
+                                  : "selector:rotate:cw"),
                                 SP_VERB_CONTEXT_SELECT,
                                 _("Rotate"));
 }
@@ -2063,8 +2063,8 @@ std::vector<SPItem*> sp_get_same_fill_or_stroke_color(SPItem *sel, std::vector<S
 
 static bool item_type_match (SPItem *i, SPItem *j)
 {
-    if ( dynamic_cast<SPRect *>(i)) {
-        return ( dynamic_cast<SPRect *>(j) );
+    if (dynamic_cast<SPRect *>(i)) {
+        return (dynamic_cast<SPRect *>(j));
 
     } else if (dynamic_cast<SPGenericEllipse *>(i)) {
         return (dynamic_cast<SPGenericEllipse *>(j));
@@ -2139,7 +2139,7 @@ std::vector<SPItem*> sp_get_same_style(SPItem *sel, std::vector<SPItem*> &src, S
      */
     std::vector<SPItem*> objects;
     SPStyle *sel_style_for_width = nullptr;
-    if (type == SP_STROKE_STYLE_WIDTH || type == SP_STROKE_STYLE_ALL || type==SP_STYLE_ALL ) {
+    if (type == SP_STROKE_STYLE_WIDTH || type == SP_STROKE_STYLE_ALL || type==SP_STYLE_ALL) {
         objects.push_back(sel);
         sel_style_for_width = new SPStyle(SP_ACTIVE_DOCUMENT);
         objects_query_strokewidth (objects, sel_style_for_width);
@@ -2195,7 +2195,7 @@ std::vector<SPItem*> sp_get_same_style(SPItem *sel, std::vector<SPItem*> &src, S
         }
     }
 
-    if( sel_style_for_width != nullptr ) delete sel_style_for_width;
+    if(sel_style_for_width != nullptr) delete sel_style_for_width;
     return matches;
 }
 
@@ -2225,7 +2225,7 @@ void ObjectSet::rotateScreen(double angle)
     Geom::OptRect bbox = visualBounds();
     boost::optional<Geom::Point> center_ = center();
 
-    if ( !bbox || !center_ ) {
+    if (!bbox || !center_) {
         return;
     }
 
@@ -2238,9 +2238,9 @@ void ObjectSet::rotateScreen(double angle)
     rotateRelative(*center_, zangle);
 
     DocumentUndo::maybeDone(document(),
-                            ( (angle > 0)
+                            ((angle > 0)
                               ? "selector:rotate:ccw"
-                              : "selector:rotate:cw" ),
+                              : "selector:rotate:cw"),
                             SP_VERB_CONTEXT_SELECT,
                             _("Rotate by pixels"));
 }
@@ -2259,7 +2259,7 @@ void ObjectSet::scale(double grow)
 
     // you can't scale "do nizhe pola" (below zero)
     double const max_len = bbox->maxExtent();
-    if ( max_len + grow <= 1e-3 ) {
+    if (max_len + grow <= 1e-3) {
         return;
     }
 
@@ -2267,9 +2267,9 @@ void ObjectSet::scale(double grow)
     setScaleRelative(center_, Geom::Scale(times, times));
 
     DocumentUndo::maybeDone(document(),
-                            ( (grow > 0)
+                            ((grow > 0)
                               ? "selector:scale:larger"
-                              : "selector:scale:smaller" ),
+                              : "selector:scale:smaller"),
                             SP_VERB_CONTEXT_SELECT,
                             _("Scale"));
 }
@@ -2414,7 +2414,7 @@ SPItem *next_item(SPDesktop *desktop, std::vector<SPObject *> &path, SPObject *r
         iter = children = D::children(root);
     }
 
-    while ( !D::isNull(iter) && !found ) {
+    while (!D::isNull(iter) && !found) {
         SPObject *object=D::object(iter);
         if (desktop->isLayer(object)) {
             if (PREFS_SELECTION_LAYER != inlayer) { // recurse into sublayers
@@ -2423,11 +2423,11 @@ SPItem *next_item(SPDesktop *desktop, std::vector<SPObject *> &path, SPObject *r
             }
         } else {
             SPItem *item = dynamic_cast<SPItem *>(object);
-            if ( item &&
-                 ( !only_in_viewport || desktop->isWithinViewport(item) ) &&
-                 ( !onlyvisible || !desktop->itemIsHidden(item)) &&
-                 ( !onlysensitive || !item->isLocked()) &&
-                 !desktop->isLayer(item) )
+            if (item &&
+                 (!only_in_viewport || desktop->isWithinViewport(item)) &&
+                 (!onlyvisible || !desktop->itemIsHidden(item)) &&
+                 (!onlysensitive || !item->isLocked()) &&
+                 !desktop->isLayer(item))
             {
                 found = item;
             }
@@ -2447,8 +2447,8 @@ SPItem *next_item_from_list(SPDesktop *desktop, std::vector<SPItem*> const &item
 {
     SPObject *current=root;
     for(auto item : items) {
-        if ( root->isAncestorOf(item) &&
-             ( !only_in_viewport || desktop->isWithinViewport(item) ) )
+        if (root->isAncestorOf(item) &&
+             (!only_in_viewport || desktop->isWithinViewport(item)))
         {
             current = item;
             break;
@@ -2456,7 +2456,7 @@ SPItem *next_item_from_list(SPDesktop *desktop, std::vector<SPItem*> const &item
     }
 
     std::vector<SPObject *> path;
-    while ( current != root ) {
+    while (current != root) {
         path.push_back(current);
         current = current->parent;
     }
@@ -2496,7 +2496,7 @@ sp_selection_item_next(SPDesktop *desktop)
 
     if (item) {
         selection->set(item, PREFS_SELECTION_LAYER_RECURSIVE == inlayer);
-        if ( SP_CYCLING == SP_CYCLE_FOCUS ) {
+        if (SP_CYCLING == SP_CYCLE_FOCUS) {
             scroll_to_show_item(desktop, item);
         }
     }
@@ -2527,7 +2527,7 @@ sp_selection_item_prev(SPDesktop *desktop)
 
     if (item) {
         selection->set(item, PREFS_SELECTION_LAYER_RECURSIVE == inlayer);
-        if ( SP_CYCLING == SP_CYCLE_FOCUS ) {
+        if (SP_CYCLING == SP_CYCLE_FOCUS) {
             scroll_to_show_item(desktop, item);
         }
     }
@@ -2538,9 +2538,9 @@ void sp_selection_next_patheffect_param(SPDesktop * dt)
     if (!dt) return;
 
     Inkscape::Selection *selection = dt->getSelection();
-    if ( selection && !selection->isEmpty() ) {
+    if (selection && !selection->isEmpty()) {
         SPItem *item = selection->singleItem();
-        if ( SPLPEItem *lpeitem = dynamic_cast<SPLPEItem*>(item) ) {
+        if (SPLPEItem *lpeitem = dynamic_cast<SPLPEItem*>(item)) {
             if (lpeitem->hasPathEffect()) {
                 lpeitem->editNextParamOncanvas(dt);
             } else {
@@ -2581,12 +2581,12 @@ void scroll_to_show_item(SPDesktop *desktop, SPItem *item)
     Geom::Rect dbox = desktop->get_display_area();
     Geom::OptRect sbox = item->desktopVisualBounds();
 
-    if ( sbox && dbox.contains(*sbox) == false ) {
+    if (sbox && dbox.contains(*sbox) == false) {
         Geom::Point const s_dt = sbox->midpoint();
         Geom::Point const s_w = desktop->d2w(s_dt);
         Geom::Point const d_dt = dbox.midpoint();
         Geom::Point const d_w = desktop->d2w(d_dt);
-        Geom::Point const moved_w( d_w - s_w );
+        Geom::Point const moved_w(d_w - s_w);
         desktop->scroll_relative(moved_w);
     }
 }
@@ -2871,7 +2871,7 @@ void ObjectSet::cloneOriginal()
         if (highlight) {
             Geom::OptRect a = item->desktopVisualBounds();
             Geom::OptRect b = original->desktopVisualBounds();
-            if ( a && b && desktop()) {
+            if (a && b && desktop()) {
                 // draw a flashing line between the objects
                 SPCurve *curve = new SPCurve();
                 curve->moveto(a->midpoint());
@@ -2982,7 +2982,7 @@ void ObjectSet::toMarker(bool apply)
     doc->ensureUpToDate();
     Geom::OptRect r = visualBounds();
     boost::optional<Geom::Point> c = center();
-    if ( !r || !c ) {
+    if (!r || !c) {
         return;
     }
 
@@ -3129,16 +3129,16 @@ void ObjectSet::toSymbol()
     bool single_group = false;
     SPGroup *the_group = nullptr;
     Geom::Affine transform;
-    if( items_.size() == 1 ) {
+    if(items_.size() == 1) {
         SPObject *object = items_[0];
         the_group = dynamic_cast<SPGroup *>(object);
-        if ( the_group ) {
+        if (the_group) {
             single_group = true;
 
-            if( !sp_svg_transform_read( object->getAttribute("transform"), &transform ))
+            if(!sp_svg_transform_read(object->getAttribute("transform"), &transform))
                 transform = Geom::identity();
 
-            if( transform.isTranslation() ) {
+            if(transform.isTranslation()) {
 
                 // Create new list from group children.
                 items_ = object->childList(false);
@@ -3167,7 +3167,7 @@ void ObjectSet::toSymbol()
     defsrepr->appendChild(symbol_repr);
     bool settitle = false;
     // For a single group, copy relevant attributes.
-    if( single_group ) {
+    if(single_group) {
         Glib::ustring id = the_group->getAttribute("id");
         symbol_repr->setAttribute("style",  the_group->getAttribute("style"));
 
@@ -3230,7 +3230,7 @@ void ObjectSet::toSymbol()
         symbol_repr->addChild(repr, nullptr);
     }
 
-    if( single_group && transform.isTranslation() ) {
+    if(single_group && transform.isTranslation()) {
         the_group->deleteObject(true);
     }
 
@@ -3241,9 +3241,9 @@ void ObjectSet::toSymbol()
 
     the_parent_repr->appendChild(clone);
 
-    if( single_group && transform.isTranslation() ) {
-        if( !transform.isIdentity() ) {
-            gchar *c = sp_svg_transform_write( transform );
+    if(single_group && transform.isTranslation()) {
+        if(!transform.isIdentity()) {
+            gchar *c = sp_svg_transform_write(transform);
             clone->setAttribute("transform", c);
             g_free(c);
         }
@@ -3276,7 +3276,7 @@ void ObjectSet::unSymbol()
 
     // Make sure we have only one object in selection.
     // Require that we really have a <symbol>.
-    if( symbol == nullptr || !dynamic_cast<SPSymbol *>( symbol ))  {
+    if(symbol == nullptr || !dynamic_cast<SPSymbol *>(symbol))  {
         if(desktop())
             desktop()->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select only one <b>symbol</b> in Symbol dialog to convert to group."));
         return;
@@ -3298,11 +3298,11 @@ void ObjectSet::unSymbol()
     // Converting a group to a symbol inserts a group for non-translational transform.
     // In converting a symbol back to a group we strip out the inserted group (or any other
     // group that only adds a transform to the symbol content).
-    if( children.size() == 1 ) {
+    if(children.size() == 1) {
         SPObject *object = children[0];
-        if ( dynamic_cast<SPGroup *>( object ) ) {
-            if( object->getAttribute("style") == nullptr ||
-                object->getAttribute("class") == nullptr ) {
+        if (dynamic_cast<SPGroup *>(object)) {
+            if(object->getAttribute("style") == nullptr ||
+                object->getAttribute("class") == nullptr) {
 
                 group->setAttribute("transform", object->getAttribute("transform"));
                 children = object->childList(false);
@@ -3360,7 +3360,7 @@ void ObjectSet::tile(bool apply)
 
     doc->ensureUpToDate();
     Geom::OptRect r = visualBounds();
-    if ( !r ) {
+    if (!r) {
         return;
     }
 
@@ -3500,7 +3500,7 @@ void ObjectSet::untile()
                 doc->ensureUpToDate();
 
                 if (i) {
-                    Geom::Affine transform( i->transform * pat_transform );
+                    Geom::Affine transform(i->transform * pat_transform);
                     i->doWriteTransform(transform);
 
                     new_select.push_back(i);
@@ -3643,8 +3643,8 @@ void ObjectSet::createBitmapCopy()
 
     // Build the complete path by adding document base dir, if set, otherwise home dir
     gchar *directory = nullptr;
-    if ( doc->getURI() ) {
-        directory = g_path_get_dirname( doc->getURI() );
+    if (doc->getURI()) {
+        directory = g_path_get_dirname(doc->getURI());
     }
     if (directory == nullptr) {
         directory = Inkscape::IO::Resource::homedir_path(nullptr);
@@ -3923,11 +3923,11 @@ void ObjectSet::setClipGroup()
 
     // check if something is selected
     bool is_empty = isEmpty();
-    if ( apply_to_layer && is_empty) {
+    if (apply_to_layer && is_empty) {
         if(desktop())
             desktop()->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to create clippath or mask from."));
         return;
-    } else if (!apply_to_layer && ( is_empty || boost::distance(items())==1 )) {
+    } else if (!apply_to_layer && (is_empty || boost::distance(items())==1)) {
         if(desktop())
             desktop()->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select mask object and <b>object(s)</b> to apply clippath or mask to."));
         return;
@@ -4372,7 +4372,7 @@ void fit_canvas_to_selection_or_drawing(SPDesktop *desktop) {
     g_return_if_fail(doc != nullptr);
     g_return_if_fail(desktop->selection != nullptr);
 
-    bool const changed = ( desktop->selection->isEmpty()
+    bool const changed = (desktop->selection->isEmpty()
                            ? fit_canvas_to_drawing(doc, true)
                            : desktop->selection->fitCanvas(true,true));
     if (changed) {

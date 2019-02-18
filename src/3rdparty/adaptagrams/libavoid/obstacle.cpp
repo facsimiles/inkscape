@@ -298,7 +298,7 @@ Point Obstacle::shapeCentre(void)
 void Obstacle::removeFromGraph(void)
 {
     bool isConnPt = false;
-    for (VertInf *iter = firstVert(); iter != lastVert()->lstNext; )
+    for (VertInf *iter = firstVert(); iter != lastVert()->lstNext;)
     {
         VertInf *tmp = iter;
         iter = iter->lstNext;

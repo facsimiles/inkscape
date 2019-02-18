@@ -214,13 +214,13 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
             center_point.param_setValue(previous_center);
             return;
         }
-        if ( mode == MT_X || mode == MT_Y ) {
+        if (mode == MT_X || mode == MT_Y) {
             if (!are_near(previous_center, (Geom::Point)center_point, 0.01)) {
                 center_point.param_setValue(Geom::middle_point(point_a, point_b));
                 end_point.param_setValue(point_b);
                 start_point.param_setValue(point_a);
             } else {
-                if ( mode == MT_X ) {
+                if (mode == MT_X) {
                     if (!are_near(start_point[X], point_a[X], 0.01)) {
                         start_point.param_setValue(point_a);
                     }
@@ -236,7 +236,7 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
                     }
                 }
             }
-        } else if ( mode == MT_FREE) {
+        } else if (mode == MT_FREE) {
             if (are_near(previous_center, (Geom::Point)center_point, 0.01)) {
                 center_point.param_setValue(Geom::middle_point((Geom::Point)start_point, (Geom::Point)end_point));
 
@@ -246,7 +246,7 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
                 end_point.param_setValue(end_point * trans);
                
             }
-        } else if ( mode == MT_V){
+        } else if (mode == MT_V){
             SPDocument * document = SP_ACTIVE_DOCUMENT;
             if (document) {
                 Geom::Affine transform = i2anc_affine(SP_OBJECT(lpeitem), nullptr).inverse();
@@ -279,7 +279,7 @@ LPEMirrorSymmetry::cloneD(SPObject *orig, SPObject *dest, bool reset)
         return;
     }
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
-    if ( SP_IS_GROUP(orig) && SP_IS_GROUP(dest) && SP_GROUP(orig)->getItemCount() == SP_GROUP(dest)->getItemCount() ) {
+    if (SP_IS_GROUP(orig) && SP_IS_GROUP(dest) && SP_GROUP(orig)->getItemCount() == SP_GROUP(dest)->getItemCount()) {
         std::vector< SPObject * > childs = orig->childList(true);
         size_t index = 0;
         for (auto & child : childs) {
@@ -487,7 +487,7 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
             Geom::Path original = path_it;
             if (end_open && path_it.closed()) {
                 original.close(false);
-                original.appendNew<Geom::LineSegment>( original.initialPoint() );
+                original.appendNew<Geom::LineSegment>(original.initialPoint());
                 original.close(true);
             }
             Geom::Point s = start_point;
@@ -547,7 +547,7 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
                         if (!original.closed()) {
                             tmp_pathvector.push_back(portion);
                         } else {
-                            if (cs.size() > 1 && tmp_pathvector.size() > 0 && tmp_pathvector[0].size() > 0 ) {
+                            if (cs.size() > 1 && tmp_pathvector.size() > 0 && tmp_pathvector[0].size() > 0) {
                                 portion.setFinal(tmp_pathvector[0].initialPoint());
                                 portion.setInitial(tmp_pathvector[0].finalPoint());
                                 tmp_pathvector[0].append(portion);
@@ -583,8 +583,8 @@ LPEMirrorSymmetry::addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector
     Geom::Path path;
     Geom::Point s = start_point;
     Geom::Point e = end_point;
-    path.start( s );
-    path.appendNew<Geom::LineSegment>( e );
+    path.start(s);
+    path.appendNew<Geom::LineSegment>(e);
     Geom::PathVector helper;
     helper.push_back(path);
     hp_vec.push_back(helper);

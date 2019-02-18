@@ -177,17 +177,17 @@ public:
     /**
      * Update GUI based on query results.
      */
-    void update( SPStyle const *query, bool different_features, Glib::ustring& font_spec );
+    void update(SPStyle const *query, bool different_features, Glib::ustring& font_spec);
 
     /**
      * Update GUI based on OpenType features of selected font.
      */
-    void update_opentype( Glib::ustring& font_spec );
+    void update_opentype(Glib::ustring& font_spec);
 
     /**
      * Fill SPCSSAttr based on settings of buttons.
      */
-    void fill_css( SPCSSAttr* css );
+    void fill_css(SPCSSAttr* css);
 
     /**
      * Get CSS string for markup.

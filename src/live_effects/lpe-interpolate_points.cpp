@@ -40,7 +40,7 @@ LPEInterpolatePoints::LPEInterpolatePoints(LivePathEffectObject *lpeobject)
 {
     show_orig_path = false;
 
-    registerParameter( &interpolator_type );
+    registerParameter(&interpolator_type);
 }
 
 LPEInterpolatePoints::~LPEInterpolatePoints()
@@ -51,7 +51,7 @@ Geom::PathVector
 LPEInterpolatePoints::doEffect_path (Geom::PathVector const & path_in)
 {
     Geom::PathVector path_out;
-    std::unique_ptr<Geom::Interpolate::Interpolator> interpolator(  Geom::Interpolate::Interpolator::create(static_cast<Geom::Interpolate::InterpolatorType>(interpolator_type.get_value())) );
+    std::unique_ptr<Geom::Interpolate::Interpolator> interpolator(Geom::Interpolate::Interpolator::create(static_cast<Geom::Interpolate::InterpolatorType>(interpolator_type.get_value())));
 
     for(const auto & path_it : path_in) {
         if (path_it.empty())

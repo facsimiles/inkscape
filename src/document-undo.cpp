@@ -23,8 +23,8 @@
  * stack. Two methods exist to indicate that the given action is completed:
  *
  * \verbatim
-   void sp_document_done( SPDocument *document );
-   void sp_document_maybe_done( SPDocument *document, const unsigned char *key ) \endverbatim
+   void sp_document_done(SPDocument *document);
+   void sp_document_maybe_done(SPDocument *document, const unsigned char *key) \endverbatim
  *
  * Both move the recent action list into the undo stack and clear the
  * list afterwards.  While the first method does an unconditional push,
@@ -63,7 +63,7 @@ void Inkscape::DocumentUndo::setUndoSensitive(SPDocument *doc, bool sensitive)
 {
 	g_assert (doc != nullptr);
 
-	if ( sensitive == doc->sensitive )
+	if (sensitive == doc->sensitive)
 		return;
 
 	if (sensitive) {
@@ -89,7 +89,7 @@ void Inkscape::DocumentUndo::done(SPDocument *doc, const unsigned int event_type
     maybeDone(doc, nullptr, event_type, event_description);
 }
 
-void Inkscape::DocumentUndo::resetKey( SPDocument *doc )
+void Inkscape::DocumentUndo::resetKey(SPDocument *doc)
 {
     doc->actionkey.clear();
 }
@@ -128,7 +128,7 @@ void Inkscape::DocumentUndo::maybeDone(SPDocument *doc, const gchar *key, const 
 {
 	g_assert (doc != nullptr);
         g_assert (doc->sensitive);
-        if ( key && !*key ) {
+        if (key && !*key) {
             g_warning("Blank undo key specified.");
         }
 
@@ -158,7 +158,7 @@ void Inkscape::DocumentUndo::maybeDone(SPDocument *doc, const gchar *key, const 
 		doc->undoStackObservers.notifyUndoCommitEvent(event);
 	}
 
-        if ( key ) {
+        if (key) {
             doc->actionkey = key;
         } else {
             doc->actionkey.clear();

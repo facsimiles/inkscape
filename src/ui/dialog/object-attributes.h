@@ -91,7 +91,7 @@ private:
     /**
      * Callback function invoked by the desktop tracker in case of a modification of the selected object.
      */
-    void selectionModifiedCB( guint flags );
+    void selectionModifiedCB(guint flags);
     
     /*
      * Can be invoked for setting the desktop. Currently not used.

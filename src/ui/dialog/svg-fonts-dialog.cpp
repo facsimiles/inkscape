@@ -67,17 +67,17 @@ void SvgFontDrawingArea::redraw(){
 
 bool SvgFontDrawingArea::on_draw(const Cairo::RefPtr<Cairo::Context> &cr) {
   if (_svgfont){
-    cr->set_font_face( Cairo::RefPtr<Cairo::FontFace>(new Cairo::FontFace(_svgfont->get_font_face(), false /* does not have reference */)) );
+    cr->set_font_face(Cairo::RefPtr<Cairo::FontFace>(new Cairo::FontFace(_svgfont->get_font_face(), false /* does not have reference */)));
     cr->set_font_size (_y-20);
     cr->move_to (10, 10);
     cr->show_text (_text.c_str());
 
     // Draw some lines to show line area.
-    cr->set_source_rgb( 0.5, 0.5, 0.5 );
-    cr->move_to ( 0, 10);
+    cr->set_source_rgb(0.5, 0.5, 0.5);
+    cr->move_to (0, 10);
     cr->line_to (_x, 10);
     cr->stroke();
-    cr->move_to ( 0, _y-10);
+    cr->move_to (0, _y-10);
     cr->line_to (_x, _y-10);
     cr->stroke();
   }
@@ -91,9 +91,9 @@ namespace Dialog {
 /*
 Gtk::HBox* SvgFontsDialog::AttrEntry(gchar* lbl, const SPAttributeEnum attr){
     Gtk::HBox* hbox = Gtk::manage(new Gtk::HBox());
-    hbox->add(* Gtk::manage(new Gtk::Label(lbl)) );
+    hbox->add(* Gtk::manage(new Gtk::Label(lbl)));
     Gtk::Entry* entry = Gtk::manage(new Gtk::Entry());
-    hbox->add(* entry );
+    hbox->add(* entry);
     hbox->show_all();
 
     entry->signal_changed().connect(sigc::mem_fun(*this, &SvgFontsDialog::on_attr_changed));
@@ -153,7 +153,7 @@ SvgFontsDialog::AttrSpin::AttrSpin(SvgFontsDialog* d, gchar* lbl, Glib::ustring 
     this->dialog = d;
     this->attr = attr;
     spin.set_tooltip_text(tooltip);
-    this->add(* Gtk::manage(new Gtk::Label(lbl)) );
+    this->add(* Gtk::manage(new Gtk::Label(lbl)));
     this->add(spin);
     this->show_all();
     spin.set_range(0, 4096);
@@ -206,7 +206,7 @@ void SvgFontsDialog::AttrSpin::on_attr_changed(){
     if(name && o) {
         std::ostringstream temp;
         temp << this->spin.get_value();
-        o->getRepr()->setAttribute((const gchar*) name, temp.str().c_str() );
+        o->getRepr()->setAttribute((const gchar*) name, temp.str().c_str());
         o->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
 
         Glib::ustring undokey = "svgfonts:";
@@ -219,8 +219,8 @@ void SvgFontsDialog::AttrSpin::on_attr_changed(){
 
 Gtk::HBox* SvgFontsDialog::AttrCombo(gchar* lbl, const SPAttributeEnum /*attr*/){
     Gtk::HBox* hbox = Gtk::manage(new Gtk::HBox());
-    hbox->add(* Gtk::manage(new Gtk::Label(lbl)) );
-    hbox->add(* Gtk::manage(new Gtk::ComboBox()) );
+    hbox->add(* Gtk::manage(new Gtk::Label(lbl)));
+    hbox->add(* Gtk::manage(new Gtk::ComboBox()));
     hbox->show_all();
     return hbox;
 }
@@ -228,8 +228,8 @@ Gtk::HBox* SvgFontsDialog::AttrCombo(gchar* lbl, const SPAttributeEnum /*attr*/)
 /*
 Gtk::HBox* SvgFontsDialog::AttrSpin(gchar* lbl){
     Gtk::HBox* hbox = Gtk::manage(new Gtk::HBox());
-    hbox->add(* Gtk::manage(new Gtk::Label(lbl)) );
-    hbox->add(* Gtk::manage(new Inkscape::UI::Widget::SpinBox()) );
+    hbox->add(* Gtk::manage(new Gtk::Label(lbl)));
+    hbox->add(* Gtk::manage(new Inkscape::UI::Widget::SpinBox()));
     hbox->show_all();
     return hbox;
 }*/
@@ -351,7 +351,7 @@ void SvgFontsDialog::update_fonts()
 {
     SPDesktop* desktop = this->getDesktop();
     SPDocument* document = desktop->getDocument();
-    std::vector<SPObject *> fonts = document->getResourceList( "font" );
+    std::vector<SPObject *> fonts = document->getResourceList("font");
 
     _model->clear();
     for (std::vector<SPObject *>::const_iterator it = fonts.begin(); it != fonts.end(); ++it) {
@@ -462,17 +462,17 @@ SPGlyph* SvgFontsDialog::get_selected_glyph()
 }
 
 Gtk::VBox* SvgFontsDialog::global_settings_tab(){
-    _font_label          = new Gtk::Label( _("Font Attributes") );
-    _horiz_adv_x_spin    = new AttrSpin( this, (gchar*) _("Horiz. Advance X"), _("Average amount of horizontal space each letter takes up."), SP_ATTR_HORIZ_ADV_X);
-    _horiz_origin_x_spin = new AttrSpin( this, (gchar*) _("Horiz. Origin X"), _("Average horizontal origin location for each letter."), SP_ATTR_HORIZ_ORIGIN_X);
-    _horiz_origin_y_spin = new AttrSpin( this, (gchar*) _("Horiz. Origin Y"), _("Average vertical origin location for each letter."), SP_ATTR_HORIZ_ORIGIN_Y);
-    _font_face_label     = new Gtk::Label( _("Font Face Attributes") );
+    _font_label          = new Gtk::Label(_("Font Attributes"));
+    _horiz_adv_x_spin    = new AttrSpin(this, (gchar*) _("Horiz. Advance X"), _("Average amount of horizontal space each letter takes up."), SP_ATTR_HORIZ_ADV_X);
+    _horiz_origin_x_spin = new AttrSpin(this, (gchar*) _("Horiz. Origin X"), _("Average horizontal origin location for each letter."), SP_ATTR_HORIZ_ORIGIN_X);
+    _horiz_origin_y_spin = new AttrSpin(this, (gchar*) _("Horiz. Origin Y"), _("Average vertical origin location for each letter."), SP_ATTR_HORIZ_ORIGIN_Y);
+    _font_face_label     = new Gtk::Label(_("Font Face Attributes"));
     _familyname_entry    = new AttrEntry(this, (gchar*) _("Family Name:"), _("Name of the font as it appears in font selectors and css font-family properties."), SP_PROP_FONT_FAMILY);
-    _units_per_em_spin   = new AttrSpin( this, (gchar*) _("Units per em"), _("Number of display units each letter takes up."), SP_ATTR_UNITS_PER_EM);
-    _ascent_spin         = new AttrSpin( this, (gchar*) _("Ascent:"),      _("Amount of space taken up by accenders like the tall line on the letter 'h'."), SP_ATTR_ASCENT);
-    _descent_spin        = new AttrSpin( this, (gchar*) _("Descent:"),     _("Amount of space taken up by decenders like the tail on the letter 'g'."), SP_ATTR_DESCENT);
-    _cap_height_spin     = new AttrSpin( this, (gchar*) _("Cap Height:"),  _("The height of a capital letter above the baseline like the letter 'H' or 'I'."), SP_ATTR_CAP_HEIGHT);
-    _x_height_spin       = new AttrSpin( this, (gchar*) _("x Height:"),    _("The height of a lower-case letter above the baseline like the letter 'x'."), SP_ATTR_X_HEIGHT);
+    _units_per_em_spin   = new AttrSpin(this, (gchar*) _("Units per em"), _("Number of display units each letter takes up."), SP_ATTR_UNITS_PER_EM);
+    _ascent_spin         = new AttrSpin(this, (gchar*) _("Ascent:"),      _("Amount of space taken up by accenders like the tall line on the letter 'h'."), SP_ATTR_ASCENT);
+    _descent_spin        = new AttrSpin(this, (gchar*) _("Descent:"),     _("Amount of space taken up by decenders like the tail on the letter 'g'."), SP_ATTR_DESCENT);
+    _cap_height_spin     = new AttrSpin(this, (gchar*) _("Cap Height:"),  _("The height of a capital letter above the baseline like the letter 'H' or 'I'."), SP_ATTR_CAP_HEIGHT);
+    _x_height_spin       = new AttrSpin(this, (gchar*) _("x Height:"),    _("The height of a lower-case letter above the baseline like the letter 'x'."), SP_ATTR_X_HEIGHT);
 
     //_descent_spin->set_range(-4096,0);
 
@@ -553,7 +553,7 @@ SPGlyph *new_glyph(SPDocument* document, SPFont *font, const int count)
     Inkscape::GC::release(repr);
 
     // get corresponding object
-    SPGlyph *g = SP_GLYPH( document->getObjectByRepr(repr) );
+    SPGlyph *g = SP_GLYPH(document->getObjectByRepr(repr));
 
     g_assert(g != nullptr);
     g_assert(SP_IS_GLYPH(g));
@@ -828,13 +828,13 @@ Gtk::VBox* SvgFontsDialog::glyphs_tab(){
     glyph_from_path_button.set_label(_("Get curves from selection..."));
     glyph_from_path_button.signal_clicked().connect(sigc::mem_fun(*this, &SvgFontsDialog::set_glyph_description_from_selected_path));
 
-    dynamic_cast<Gtk::CellRendererText*>( _GlyphsList.get_column_cell_renderer(0))->signal_edited().connect(
+    dynamic_cast<Gtk::CellRendererText*>(_GlyphsList.get_column_cell_renderer(0))->signal_edited().connect(
         sigc::mem_fun(*this, &SvgFontsDialog::glyph_name_edit));
 
-    dynamic_cast<Gtk::CellRendererText*>( _GlyphsList.get_column_cell_renderer(1))->signal_edited().connect(
+    dynamic_cast<Gtk::CellRendererText*>(_GlyphsList.get_column_cell_renderer(1))->signal_edited().connect(
         sigc::mem_fun(*this, &SvgFontsDialog::glyph_unicode_edit));
 
-    dynamic_cast<Gtk::CellRendererText*>( _GlyphsList.get_column_cell_renderer(2))->signal_edited().connect(
+    dynamic_cast<Gtk::CellRendererText*>(_GlyphsList.get_column_cell_renderer(2))->signal_edited().connect(
         sigc::mem_fun(*this, &SvgFontsDialog::glyph_advance_edit));
 
     _glyphs_observer.signal_changed().connect(sigc::mem_fun(*this, &SvgFontsDialog::update_glyphs));
@@ -852,7 +852,7 @@ void SvgFontsDialog::add_kerning_pair(){
         //TODO: It is not really correct to get only the first byte of each string.
         //TODO: We should also support vertical kerning
         if (SP_IS_HKERN(&node) && (static_cast<SPGlyphKerning*>(&node))->u1->contains((gchar) first_glyph.get_active_text().c_str()[0])
-            && (static_cast<SPGlyphKerning*>(&node))->u2->contains((gchar) second_glyph.get_active_text().c_str()[0]) ){
+            && (static_cast<SPGlyphKerning*>(&node))->u2->contains((gchar) second_glyph.get_active_text().c_str()[0])){
             this->kerning_pair = static_cast<SPGlyphKerning*>(&node);
             continue;
         }
@@ -875,7 +875,7 @@ void SvgFontsDialog::add_kerning_pair(){
     Inkscape::GC::release(repr);
 
     // get corresponding object
-    this->kerning_pair = SP_HKERN( document->getObjectByRepr(repr) );
+    this->kerning_pair = SP_HKERN(document->getObjectByRepr(repr));
 
     DocumentUndo::done(document, SP_VERB_DIALOG_SVG_FONTS, _("Add kerning pair"));
 }
@@ -951,7 +951,7 @@ SPFont *new_font(SPDocument *document)
     repr->appendChild(mg);
 
     // get corresponding object
-    SPFont *f = SP_FONT( document->getObjectByRepr(repr) );
+    SPFont *f = SP_FONT(document->getObjectByRepr(repr));
 
     g_assert(f != nullptr);
     g_assert(SP_IS_FONT(f));

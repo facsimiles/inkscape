@@ -48,8 +48,8 @@ protected:
     gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
-    NoiseFill ( ) : Filter() { };
-    ~NoiseFill ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
+    NoiseFill () : Filter() { };
+    ~NoiseFill () override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
         Inkscape::Extension::build_from_mem(

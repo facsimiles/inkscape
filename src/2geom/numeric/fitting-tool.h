@@ -65,7 +65,7 @@ class lsf_base
     typedef typename model_type::parameter_type      parameter_type;
     typedef typename model_type::value_type          value_type;
 
-    lsf_base( model_type const& _model, size_t forecasted_samples )
+    lsf_base(model_type const& _model, size_t forecasted_samples)
         : m_model(_model),
           m_total_samples(0),
           m_matrix(forecasted_samples, m_model.size()),
@@ -82,7 +82,7 @@ class lsf_base
             delete m_psdinv_matrix;
         }
         MatrixView mv(m_matrix, 0, 0, total_samples(), m_matrix.columns());
-        m_psdinv_matrix = new Matrix( pseudo_inverse(mv) );
+        m_psdinv_matrix = new Matrix(pseudo_inverse(mv));
         assert(m_psdinv_matrix != NULL);
     }
 
@@ -144,8 +144,8 @@ public:
     using base_type::total_samples;
 
 public:
-    lsf_solution<ModelT, double>( model_type const& _model,
-                                  size_t forecasted_samples )
+    lsf_solution<ModelT, double>(model_type const& _model,
+                                  size_t forecasted_samples)
         : base_type(_model, forecasted_samples),
           m_solution(_model.size())
     {
@@ -166,8 +166,8 @@ public:
     //     old_sample_values.size() == new_sample_values.size()
     //     no update() call can be performed between two result invocations
     template< typename VectorT >
-    solution_type& result( VectorT const& old_sample_values,
-                           VectorT const& new_sample_values )
+    solution_type& result(VectorT const& old_sample_values,
+                           VectorT const& new_sample_values)
     {
         assert(old_sample_values.size() == total_samples());
         assert(new_sample_values.size() == total_samples());
@@ -220,8 +220,8 @@ public:
     using base_type::total_samples;
 
 public:
-    lsf_solution<ModelT, Point>( model_type const& _model,
-                                 size_t forecasted_samples )
+    lsf_solution<ModelT, Point>(model_type const& _model,
+                                 size_t forecasted_samples)
         : base_type(_model, forecasted_samples),
           m_solution(_model.size(), 2)
     {
@@ -245,8 +245,8 @@ public:
     // prerequisite:
     //     old_sample_values.size() == new_sample_values.size()
     //     no update() call can to be performed between two result invocations
-    solution_type& result( std::vector<Point> const& old_sample_values,
-                           std::vector<Point> const& new_sample_values )
+    solution_type& result(std::vector<Point> const& old_sample_values,
+                           std::vector<Point> const& new_sample_values)
     {
         assert(old_sample_values.size() == total_samples());
         assert(new_sample_values.size() == total_samples());
@@ -318,8 +318,8 @@ class lsf_with_fixed_terms<ModelT, false>
     using base_type::m_model;
 
   public:
-      lsf_with_fixed_terms<ModelT, false>( model_type const& _model,
-                                           size_t forecasted_samples )
+      lsf_with_fixed_terms<ModelT, false>(model_type const& _model,
+                                           size_t forecasted_samples)
         : base_type(_model, forecasted_samples)
     {
     }
@@ -364,8 +364,8 @@ class lsf_with_fixed_terms<ModelT, true>
     using base_type::m_model;
 
   public:
-    lsf_with_fixed_terms<ModelT, true>( model_type const& _model,
-                                        size_t forecasted_samples )
+    lsf_with_fixed_terms<ModelT, true>(model_type const& _model,
+                                        size_t forecasted_samples)
         : base_type(_model, forecasted_samples),
           m_vector(forecasted_samples),
           m_vector_view(NULL)
@@ -443,8 +443,8 @@ class least_squeares_fitter<ModelT, ValueType, false>
     typedef typename base_type::solution_type           solution_type;
 
   public:
-    least_squeares_fitter<ModelT, ValueType, false>( model_type const& _model,
-                                                     size_t forecasted_samples )
+    least_squeares_fitter<ModelT, ValueType, false>(model_type const& _model,
+                                                     size_t forecasted_samples)
           : base_type(_model, forecasted_samples)
   {
   }
@@ -464,8 +464,8 @@ class least_squeares_fitter<ModelT, double, true>
 
     using base_type::m_vector_view;
     //using base_type::result; // VSC legacy support
-    solution_type& result( std::vector<Point> const& old_sample_values,
-                           std::vector<Point> const& new_sample_values )
+    solution_type& result(std::vector<Point> const& old_sample_values,
+                           std::vector<Point> const& new_sample_values)
     {
         return base_type::result(old_sample_values, new_sample_values);
     }
@@ -476,8 +476,8 @@ class least_squeares_fitter<ModelT, double, true>
     }
 
   public:
-    least_squeares_fitter<ModelT, double, true>( model_type const& _model,
-                                                 size_t forecasted_samples )
+    least_squeares_fitter<ModelT, double, true>(model_type const& _model,
+                                                 size_t forecasted_samples)
         : base_type(_model, forecasted_samples)
     {
     }
@@ -508,8 +508,8 @@ class least_squeares_fitter<ModelT, Point, true>
 
     using base_type::m_vector_view;
     //using base_type::result; // VCS legacy support
-    solution_type& result( std::vector<Point> const& old_sample_values,
-                           std::vector<Point> const& new_sample_values )
+    solution_type& result(std::vector<Point> const& old_sample_values,
+                           std::vector<Point> const& new_sample_values)
     {
         return base_type::result(old_sample_values, new_sample_values);
     }
@@ -521,8 +521,8 @@ class least_squeares_fitter<ModelT, Point, true>
 
 
   public:
-    least_squeares_fitter<ModelT, Point, true>( model_type const& _model,
-                                                size_t forecasted_samples )
+    least_squeares_fitter<ModelT, Point, true>(model_type const& _model,
+                                                size_t forecasted_samples)
         : base_type(_model, forecasted_samples)
     {
     }

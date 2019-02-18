@@ -56,10 +56,10 @@ LPEEnvelope::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd
     using namespace Geom;
 
     // Don't allow empty path parameters:
-    if ( bend_path1.get_pathvector().empty()
+    if (bend_path1.get_pathvector().empty()
          || bend_path2.get_pathvector().empty()
          || bend_path3.get_pathvector().empty()
-         || bend_path4.get_pathvector().empty() )
+         || bend_path4.get_pathvector().empty())
     {
         return pwd2_in;
     }
@@ -156,8 +156,8 @@ LPEEnvelope::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd
     This is done by the line "ybis*Derformation1 + y*Deformation2"
     The result is a mix between the 2 deformed paths
     */
-    output_y =  ybis*(compose((uskeleton1),x1) + y1*compose(n1,x1) )
-            +    y*(compose((uskeleton3),x3) + y3*compose(n3,x3) );
+    output_y =  ybis*(compose((uskeleton1),x1) + y1*compose(n1,x1))
+            +    y*(compose((uskeleton3),x3) + y3*compose(n3,x3));
     output_y /= (boundingbox_Y.extent());
     if(!xx.get_value() && yy.get_value())
     {
@@ -165,8 +165,8 @@ LPEEnvelope::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd
     }
 
     /*output_x : Deformation by Left and Right Bend Paths*/
-    output_x =    x*(compose((uskeleton2),y2) + -x2*compose(n2,y2) )
-            + xbis*(compose((uskeleton4),y4) + -x4*compose(n4,y4) );
+    output_x =    x*(compose((uskeleton2),y2) + -x2*compose(n2,y2))
+            + xbis*(compose((uskeleton4),y4) + -x4*compose(n4,y4));
     output_x /= (boundingbox_X.extent());
     if(xx.get_value() && !yy.get_value())
     {
@@ -225,24 +225,24 @@ LPEEnvelope::resetDefaults(SPItem const* item)
     Geom::Point Down_Right(boundingbox_X.max(), boundingbox_Y.max());
 
     Geom::Path path1;
-    path1.start( Up_Left );
-    path1.appendNew<Geom::LineSegment>( Up_Right );
-    bend_path1.set_new_value( path1.toPwSb(), true );
+    path1.start(Up_Left);
+    path1.appendNew<Geom::LineSegment>(Up_Right);
+    bend_path1.set_new_value(path1.toPwSb(), true);
 
     Geom::Path path2;
-    path2.start( Up_Right );
-    path2.appendNew<Geom::LineSegment>( Down_Right );
-    bend_path2.set_new_value( path2.toPwSb(), true );
+    path2.start(Up_Right);
+    path2.appendNew<Geom::LineSegment>(Down_Right);
+    bend_path2.set_new_value(path2.toPwSb(), true);
 
     Geom::Path path3;
-    path3.start( Down_Left );
-    path3.appendNew<Geom::LineSegment>( Down_Right );
-    bend_path3.set_new_value( path3.toPwSb(), true );
+    path3.start(Down_Left);
+    path3.appendNew<Geom::LineSegment>(Down_Right);
+    bend_path3.set_new_value(path3.toPwSb(), true);
 
     Geom::Path path4;
-    path4.start( Up_Left );
-    path4.appendNew<Geom::LineSegment>( Down_Left );
-    bend_path4.set_new_value( path4.toPwSb(), true );
+    path4.start(Up_Left);
+    path4.appendNew<Geom::LineSegment>(Down_Left);
+    bend_path4.set_new_value(path4.toPwSb(), true);
 }
 
 

@@ -72,7 +72,7 @@ Gtk::Widget *
 LPESimplify::newWidget()
 {
     // use manage here, because after deletion of Effect object, others might still be pointing to this widget.
-    Gtk::VBox * vbox = Gtk::manage( new Gtk::VBox(Effect::newWidget()) );
+    Gtk::VBox * vbox = Gtk::manage(new Gtk::VBox(Effect::newWidget()));
     
     vbox->set_border_width(5);
     vbox->set_homogeneous(false);
@@ -134,7 +134,7 @@ LPESimplify::doEffect(SPCurve *curve)
     }
     size /= sp_lpe_item->i2doc_affine().descrim();
     for (int unsigned i = 0; i < steps; i++) {
-        if ( simplify_just_coalesce ) {
+        if (simplify_just_coalesce) {
             pathliv->Coalesce(threshold * size);
         } else {
             pathliv->ConvertEvenLines(threshold * size);
@@ -278,13 +278,13 @@ void
 LPESimplify::drawHandleLine(Geom::Point p,Geom::Point p2)
 {
     Geom::Path path;
-    path.start( p );
+    path.start(p);
     double diameter = radius_helper_nodes;
     if(helper_size > 0 && Geom::distance(p,p2) > (diameter * 0.35)) {
         Geom::Ray ray2(p, p2);
         p2 =  p2 - Geom::Point::polar(ray2.angle(),(diameter * 0.35));
     }
-    path.appendNew<Geom::LineSegment>( p2 );
+    path.appendNew<Geom::LineSegment>(p2);
     hp.push_back(path);
 }
 

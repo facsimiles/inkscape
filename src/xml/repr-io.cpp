@@ -86,21 +86,21 @@ public:
     virtual ~XmlSource()
     {
         close();
-        if ( encoding ) {
+        if (encoding) {
             g_free(encoding);
             encoding = nullptr;
         }
     }
 
-    int setFile( char const * filename, bool load_entities );
+    int setFile(char const * filename, bool load_entities);
 
     xmlDocPtr readXml();
 
-    static int readCb( void * context, char * buffer, int len );
-    static int closeCb( void * context );
+    static int readCb(void * context, char * buffer, int len);
+    static int closeCb(void * context);
 
     char const* getEncoding() const { return encoding; }
-    int read( char * buffer, int len );
+    int read(char * buffer, int len);
     int close();
 private:
     const char* filename;
@@ -122,14 +122,14 @@ int XmlSource::setFile(char const *filename, bool load_entities=false)
     this->filename = filename;
 
     fp = Inkscape::IO::fopen_utf8name(filename, "r");
-    if ( fp ) {
+    if (fp) {
         // First peek in the file to see what it is
-        memset( firstFew, 0, sizeof(firstFew) );
+        memset(firstFew, 0, sizeof(firstFew));
 
-        size_t some = fread( firstFew, 1, 4, fp );
-        if ( fp ) {
+        size_t some = fread(firstFew, 1, 4, fp);
+        if (fp) {
             // first check for compression
-            if ( (some >= 2) && (firstFew[0] == 0x1f) && (firstFew[1] == 0x8b) ) {
+            if ((some >= 2) && (firstFew[0] == 0x1f) && (firstFew[1] == 0x8b)) {
                 //g_message(" the file being read is gzip'd. extract it");
                 fclose(fp);
                 fp = nullptr;
@@ -137,13 +137,13 @@ int XmlSource::setFile(char const *filename, bool load_entities=false)
                 instr = new Inkscape::IO::FileInputStream(fp);
                 gzin = new Inkscape::IO::GzipInputStream(*instr);
 
-                memset( firstFew, 0, sizeof(firstFew) );
+                memset(firstFew, 0, sizeof(firstFew));
                 some = 0;
                 int single = 0;
-                while ( some < 4 && single >= 0 )
+                while (some < 4 && single >= 0)
                 {
                     single = gzin->get();
-                    if ( single >= 0 ) {
+                    if (single >= 0) {
                         firstFew[some++] = 0x0ff & single;
                     } else {
                         break;
@@ -152,19 +152,19 @@ int XmlSource::setFile(char const *filename, bool load_entities=false)
             }
 
             int encSkip = 0;
-            if ( (some >= 2) &&(firstFew[0] == 0xfe) && (firstFew[1] == 0xff) ) {
+            if ((some >= 2) &&(firstFew[0] == 0xfe) && (firstFew[1] == 0xff)) {
                 encoding = g_strdup("UTF-16BE");
                 encSkip = 2;
-            } else if ( (some >= 2) && (firstFew[0] == 0xff) && (firstFew[1] == 0xfe) ) {
+            } else if ((some >= 2) && (firstFew[0] == 0xff) && (firstFew[1] == 0xfe)) {
                 encoding = g_strdup("UTF-16LE");
                 encSkip = 2;
-            } else if ( (some >= 3) && (firstFew[0] == 0xef) && (firstFew[1] == 0xbb) && (firstFew[2] == 0xbf) ) {
+            } else if ((some >= 3) && (firstFew[0] == 0xef) && (firstFew[1] == 0xbb) && (firstFew[2] == 0xbf)) {
                 encoding = g_strdup("UTF-8");
                 encSkip = 3;
             }
 
-            if ( encSkip ) {
-                memmove( firstFew, firstFew + encSkip, (some - encSkip) );
+            if (encSkip) {
+                memmove(firstFew, firstFew + encSkip, (some - encSkip));
                 some -= encSkip;
             }
 
@@ -220,36 +220,36 @@ xmlDocPtr XmlSource::readXml()
     // Allow NOENT only if we're filtering out SYSTEM and PUBLIC entities
     if (LoadEntities)     parse_options |= XML_PARSE_NOENT;
 
-    return xmlReadIO( readCb, closeCb, this,
+    return xmlReadIO(readCb, closeCb, this,
                       filename, getEncoding(), parse_options);
 }
 
-int XmlSource::readCb( void * context, char * buffer, int len )
+int XmlSource::readCb(void * context, char * buffer, int len)
 {
     int retVal = -1;
 
-    if ( context ) {
+    if (context) {
         XmlSource* self = static_cast<XmlSource*>(context);
-        retVal = self->read( buffer, len );
+        retVal = self->read(buffer, len);
     }
     return retVal;
 }
 
 int XmlSource::closeCb(void * context)
 {
-    if ( context ) {
+    if (context) {
         XmlSource* self = static_cast<XmlSource*>(context);
         self->close();
     }
     return 0;
 }
 
-int XmlSource::read( char *buffer, int len )
+int XmlSource::read(char *buffer, int len)
 {
     int retVal = 0;
     size_t got = 0;
 
-    if ( LoadEntities ) {
+    if (LoadEntities) {
         if (cachedPos >= cachedData.length()) {
             return -1;
         } else {
@@ -257,32 +257,32 @@ int XmlSource::read( char *buffer, int len )
             cachedPos += retVal;
             return retVal; // Do NOT continue.
         }
-    } else if ( firstFewLen > 0 ) {
+    } else if (firstFewLen > 0) {
         int some = (len < firstFewLen) ? len : firstFewLen;
-        memcpy( buffer, firstFew, some );
-        if ( len < firstFewLen ) {
-            memmove( firstFew, firstFew + some, (firstFewLen - some) );
+        memcpy(buffer, firstFew, some);
+        if (len < firstFewLen) {
+            memmove(firstFew, firstFew + some, (firstFewLen - some));
         }
         firstFewLen -= some;
         got = some;
-    } else if ( gzin ) {
+    } else if (gzin) {
         int single = 0;
-        while ( (static_cast<int>(got) < len) && (single >= 0) )
+        while ((static_cast<int>(got) < len) && (single >= 0))
         {
             single = gzin->get();
-            if ( single >= 0 ) {
+            if (single >= 0) {
                 buffer[got++] = 0x0ff & single;
             } else {
                 break;
             }
         }
     } else {
-        got = fread( buffer, 1, len, fp );
+        got = fread(buffer, 1, len, fp);
     }
 
-    if ( feof(fp) ) {
+    if (feof(fp)) {
         retVal = got;
-    } else if ( ferror(fp) ) {
+    } else if (ferror(fp)) {
         retVal = -1;
     } else {
         retVal = got;
@@ -293,18 +293,18 @@ int XmlSource::read( char *buffer, int len )
 
 int XmlSource::close()
 {
-    if ( gzin ) {
+    if (gzin) {
         gzin->close();
         delete gzin;
         gzin = nullptr;
     }
-    if ( instr ) {
+    if (instr) {
         instr->close();
         fp = nullptr;
         delete instr;
         instr = nullptr;
     }
-    if ( fp ) {
+    if (fp) {
         fclose(fp);
         fp = nullptr;
     }
@@ -419,7 +419,7 @@ typedef std::map<Glib::QueryQuark, Glib::QueryQuark, Inkscape::compare_quark_ids
 Glib::QueryQuark qname_prefix(Glib::QueryQuark qname) {
     static PrefixMap prefix_map;
     PrefixMap::iterator iter = prefix_map.find(qname);
-    if ( iter != prefix_map.end() ) {
+    if (iter != prefix_map.end()) {
         return (*iter).second;
     } else {
         gchar const *name_string=g_quark_to_string(qname);
@@ -439,14 +439,14 @@ Glib::QueryQuark qname_prefix(Glib::QueryQuark qname) {
 namespace {
 
 void promote_to_namespace(Node *repr, const gchar *prefix) {
-    if ( repr->type() == Inkscape::XML::ELEMENT_NODE ) {
+    if (repr->type() == Inkscape::XML::ELEMENT_NODE) {
         GQuark code = repr->code();
         if (!qname_prefix(code).id()) {
             gchar *svg_name = g_strconcat(prefix, ":", g_quark_to_string(code), NULL);
             repr->setCodeUnsafe(g_quark_from_string(svg_name));
             g_free(svg_name);
         }
-        for ( Node *child = repr->firstChild() ; child ; child = child->next() ) {
+        for (Node *child = repr->firstChild() ; child ; child = child->next()) {
             promote_to_namespace(child, prefix);
         }
     }
@@ -472,7 +472,7 @@ Document *sp_repr_do_read (xmlDocPtr doc, const gchar *default_ns)
     Document *rdoc = new Inkscape::XML::SimpleDocument();
 
     Node *root=nullptr;
-    for ( node = doc->children ; node != nullptr ; node = node->next ) {
+    for (node = doc->children ; node != nullptr ; node = node->next) {
         if (node->type == XML_ELEMENT_NODE) {
             Node *repr=sp_repr_svg_read_node(rdoc, node, default_ns, prefix_map);
             rdoc->appendChild(repr);
@@ -484,7 +484,7 @@ Document *sp_repr_do_read (xmlDocPtr doc, const gchar *default_ns)
                 root = nullptr;
                 break;
             }
-        } else if ( node->type == XML_COMMENT_NODE || node->type == XML_PI_NODE ) {
+        } else if (node->type == XML_COMMENT_NODE || node->type == XML_PI_NODE) {
             Node *repr=sp_repr_svg_read_node(rdoc, node, default_ns, prefix_map);
             rdoc->appendChild(repr);
             Inkscape::GC::release(repr);
@@ -494,11 +494,11 @@ Document *sp_repr_do_read (xmlDocPtr doc, const gchar *default_ns)
     if (root != nullptr) {
         /* promote elements of some XML documents that don't use namespaces
          * into their default namespace */
-        if ( default_ns && !strchr(root->name(), ':') ) {
-            if ( !strcmp(default_ns, SP_SVG_NS_URI) ) {
+        if (default_ns && !strchr(root->name(), ':')) {
+            if (!strcmp(default_ns, SP_SVG_NS_URI)) {
                 promote_to_namespace(root, "svg");
             }
-            if ( !strcmp(default_ns, INKSCAPE_EXTENSION_URI) ) {
+            if (!strcmp(default_ns, INKSCAPE_EXTENSION_URI)) {
                 promote_to_namespace(root, INKSCAPE_EXTENSION_NS_NC);
             }
         }
@@ -507,11 +507,11 @@ Document *sp_repr_do_read (xmlDocPtr doc, const gchar *default_ns)
         // Clean unnecessary attributes and style properties from SVG documents. (Controlled by
         // preferences.)  Note: internal Inkscape svg files will also be cleaned (filters.svg,
         // icons.svg). How can one tell if a file is internal?
-        if ( !strcmp(root->name(), "svg:svg" ) ) {
+        if (!strcmp(root->name(), "svg:svg")) {
             Inkscape::Preferences *prefs = Inkscape::Preferences::get();
             bool clean = prefs->getBool("/options/svgoutput/check_on_reading");
-            if( clean ) {
-                sp_attribute_clean_tree( root );
+            if(clean) {
+                sp_attribute_clean_tree(root);
             }
         }
     }
@@ -523,9 +523,9 @@ gint sp_repr_qualified_name (gchar *p, gint len, xmlNsPtr ns, const xmlChar *nam
 {
     const xmlChar *prefix;
     if (ns){
-        if (ns->href ) {
-            prefix = reinterpret_cast<const xmlChar*>( sp_xml_ns_uri_prefix(reinterpret_cast<const gchar*>(ns->href),
-                                                                            reinterpret_cast<const char*>(ns->prefix)) );
+        if (ns->href) {
+            prefix = reinterpret_cast<const xmlChar*>(sp_xml_ns_uri_prefix(reinterpret_cast<const gchar*>(ns->href),
+                                                                            reinterpret_cast<const char*>(ns->prefix)));
             prefix_map[reinterpret_cast<const char*>(prefix)] = reinterpret_cast<const char*>(ns->href);
         }
         else {
@@ -570,7 +570,7 @@ static Node *sp_repr_svg_read_node (Document *xml_doc, xmlNodePtr node, const gc
 
         // We keep track of original node type so that CDATA sections are preserved on output.
         return xml_doc->createTextNode(reinterpret_cast<gchar *>(node->content),
-                                       node->type == XML_CDATA_SECTION_NODE );
+                                       node->type == XML_CDATA_SECTION_NODE);
     }
 
     if (node->type == XML_COMMENT_NODE) {
@@ -624,24 +624,24 @@ static void sp_repr_save_writer(Document *doc, Inkscape::IO::Writer *out,
     int indent = prefs->getInt("/options/svgoutput/indent", 2);
 
     /* fixme: do this The Right Way */
-    out->writeString( "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n" );
+    out->writeString("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n");
 
     const gchar *str = static_cast<Node *>(doc)->attribute("doctype");
     if (str) {
-        out->writeString( str );
+        out->writeString(str);
     }
 
     for (Node *repr = sp_repr_document_first_child(doc);
          repr; repr = repr->next())
     {
         Inkscape::XML::NodeType const node_type = repr->type();
-        if ( node_type == Inkscape::XML::ELEMENT_NODE ) {
+        if (node_type == Inkscape::XML::ELEMENT_NODE) {
             sp_repr_write_stream_root_element(repr, *out, TRUE, default_ns, inlineattrs, indent,
                                               old_href_abs_base, new_href_abs_base);
         } else {
             sp_repr_write_stream(repr, *out, 0, TRUE, GQuark(0), inlineattrs, indent,
                                  old_href_abs_base, new_href_abs_base);
-            if ( node_type == Inkscape::XML::COMMENT_NODE ) {
+            if (node_type == Inkscape::XML::COMMENT_NODE) {
                 out->writeChar('\n');
             }
         }
@@ -669,7 +669,7 @@ void sp_repr_save_stream(Document *doc, FILE *fp, gchar const *default_ns, bool 
 {
     Inkscape::IO::FileOutputStream bout(fp);
     Inkscape::IO::GzipOutputStream *gout = compress ? new Inkscape::IO::GzipOutputStream(bout) : nullptr;
-    Inkscape::IO::OutputStreamWriter *out  = compress ? new Inkscape::IO::OutputStreamWriter( *gout ) : new Inkscape::IO::OutputStreamWriter( bout );
+    Inkscape::IO::OutputStreamWriter *out  = compress ? new Inkscape::IO::OutputStreamWriter(*gout) : new Inkscape::IO::OutputStreamWriter(bout);
 
     sp_repr_save_writer(doc, out, default_ns, old_href_abs_base, new_href_abs_base);
 
@@ -697,11 +697,11 @@ bool sp_repr_save_rebased_file(Document *doc, gchar const *const filename, gchar
     bool compress;
     {
         size_t const filename_len = strlen(filename);
-        compress = ( filename_len > 5
-                     && strcasecmp(".svgz", filename + filename_len - 5) == 0 );
+        compress = (filename_len > 5
+                     && strcasecmp(".svgz", filename + filename_len - 5) == 0);
     }
 
-    Inkscape::IO::dump_fopen_call( filename, "B" );
+    Inkscape::IO::dump_fopen_call(filename, "B");
     FILE *file = Inkscape::IO::fopen_utf8name(filename, "w");
     if (file == nullptr) {
         return false;
@@ -754,19 +754,19 @@ static void repr_quote_write (Writer &out, const gchar * val)
     if (val) {
         for (; *val != '\0'; val++) {
             switch (*val) {
-                case '"': out.writeString( "&quot;" ); break;
-                case '&': out.writeString( "&amp;" ); break;
-                case '<': out.writeString( "&lt;" ); break;
-                case '>': out.writeString( "&gt;" ); break;
-                default: out.writeChar( *val ); break;
+                case '"': out.writeString("&quot;"); break;
+                case '&': out.writeString("&amp;"); break;
+                case '<': out.writeString("&lt;"); break;
+                case '>': out.writeString("&gt;"); break;
+                default: out.writeChar(*val); break;
             }
         }
     }
 }
 
-static void repr_write_comment( Writer &out, const gchar * val, bool addWhitespace, gint indentLevel, int indent )
+static void repr_write_comment(Writer &out, const gchar * val, bool addWhitespace, gint indentLevel, int indent)
 {
-    if ( indentLevel > 16 ) {
+    if (indentLevel > 16) {
         indentLevel = 16;
     }
     if (addWhitespace && indent) {
@@ -792,7 +792,7 @@ typedef std::map<Glib::QueryQuark, Inkscape::Util::ptr_shared, Inkscape::compare
 gchar const *qname_local_name(Glib::QueryQuark qname) {
     static LocalNameMap local_name_map;
     LocalNameMap::iterator iter = local_name_map.find(qname);
-    if ( iter != local_name_map.end() ) {
+    if (iter != local_name_map.end()) {
         return (*iter).second;
     } else {
         gchar const *name_string=g_quark_to_string(qname);
@@ -812,12 +812,12 @@ void add_ns_map_entry(NSMap &ns_map, Glib::QueryQuark prefix) {
     static const Glib::QueryQuark xml_prefix("xml");
 
     NSMap::iterator iter=ns_map.find(prefix);
-    if ( iter == ns_map.end() ) {
+    if (iter == ns_map.end()) {
         if (prefix.id()) {
             gchar const *uri=sp_xml_ns_prefix_uri(g_quark_to_string(prefix));
             if (uri) {
                 ns_map.insert(NSMap::value_type(prefix, share_unsafe(uri)));
-            } else if ( prefix != xml_prefix ) {
+            } else if (prefix != xml_prefix) {
                 g_warning("No namespace known for normalized prefix %s", g_quark_to_string(prefix));
             }
         } else {
@@ -827,18 +827,18 @@ void add_ns_map_entry(NSMap &ns_map, Glib::QueryQuark prefix) {
 }
 
 void populate_ns_map(NSMap &ns_map, Node &repr) {
-    if ( repr.type() == Inkscape::XML::ELEMENT_NODE ) {
+    if (repr.type() == Inkscape::XML::ELEMENT_NODE) {
         add_ns_map_entry(ns_map, qname_prefix(repr.code()));
-        for ( List<AttributeRecord const> iter=repr.attributeList() ;
-              iter ; ++iter )
+        for (List<AttributeRecord const> iter=repr.attributeList() ;
+              iter ; ++iter)
         {
             Glib::QueryQuark prefix=qname_prefix(iter->key);
             if (prefix.id()) {
                 add_ns_map_entry(ns_map, prefix);
             }
         }
-        for ( Node *child=repr.firstChild() ;
-              child ; child = child->next() )
+        for (Node *child=repr.firstChild() ;
+              child ; child = child->next())
         {
             populate_ns_map(ns_map, *child);
         }
@@ -860,11 +860,11 @@ static void sp_repr_write_stream_root_element(Node *repr, Writer &out,
     // Clean unnecessary attributes and stype properties. (Controlled by preferences.)
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     bool clean = prefs->getBool("/options/svgoutput/check_on_writing");
-    if (clean) sp_attribute_clean_tree( repr );
+    if (clean) sp_attribute_clean_tree(repr);
 
     // Sort attributes in a canonical order (helps with "diffing" SVG files).only if not set disable optimizations
     bool sort = !prefs->getBool("/options/svgoutput/disable_optimizations") && prefs->getBool("/options/svgoutput/sort_attributes");
-    if (sort) sp_attribute_sort_tree( repr );
+    if (sort) sp_attribute_sort_tree(repr);
 
     Glib::QueryQuark xml_prefix=g_quark_from_static_string("xml");
 
@@ -872,7 +872,7 @@ static void sp_repr_write_stream_root_element(Node *repr, Writer &out,
     populate_ns_map(ns_map, *repr);
 
     Glib::QueryQuark elide_prefix=GQuark(0);
-    if ( default_ns && ns_map.find(GQuark(0)) == ns_map.end() ) {
+    if (default_ns && ns_map.find(GQuark(0)) == ns_map.end()) {
         elide_prefix = g_quark_from_string(sp_xml_ns_uri_prefix(default_ns, nullptr));
     }
 
@@ -883,8 +883,8 @@ static void sp_repr_write_stream_root_element(Node *repr, Writer &out,
         ptr_shared ns_uri=iter.second;
 
         if (prefix.id()) {
-            if ( prefix != xml_prefix ) {
-                if ( elide_prefix == prefix ) {
+            if (prefix != xml_prefix) {
+                if (elide_prefix == prefix) {
                     attributes = cons(AttributeRecord(g_quark_from_static_string("xmlns"), ns_uri), attributes);
                 }
 
@@ -904,7 +904,7 @@ static void sp_repr_write_stream_root_element(Node *repr, Writer &out,
                                         inlineattrs, indent, old_href_base, new_href_base);
 }
 
-void sp_repr_write_stream( Node *repr, Writer &out, gint indent_level,
+void sp_repr_write_stream(Node *repr, Writer &out, gint indent_level,
                            bool add_whitespace, Glib::QueryQuark elide_prefix,
                            int inlineattrs, int indent,
                            gchar const *const old_href_base,
@@ -912,24 +912,24 @@ void sp_repr_write_stream( Node *repr, Writer &out, gint indent_level,
 {
     switch (repr->type()) {
         case Inkscape::XML::TEXT_NODE: {
-            if( dynamic_cast<const Inkscape::XML::TextNode *>(repr)->is_CData() ) {
+            if(dynamic_cast<const Inkscape::XML::TextNode *>(repr)->is_CData()) {
                 // Preserve CDATA sections, not converting '&' to &amp;, etc.
-                out.printf( "<![CDATA[%s]]>", repr->content() );
+                out.printf("<![CDATA[%s]]>", repr->content());
             } else {
-                repr_quote_write( out, repr->content() );
+                repr_quote_write(out, repr->content());
             }
             break;
         }
         case Inkscape::XML::COMMENT_NODE: {
-            repr_write_comment( out, repr->content(), add_whitespace, indent_level, indent );
+            repr_write_comment(out, repr->content(), add_whitespace, indent_level, indent);
             break;
         }
         case Inkscape::XML::PI_NODE: {
-            out.printf( "<?%s %s?>", repr->name(), repr->content() );
+            out.printf("<?%s %s?>", repr->name(), repr->content());
             break;
         }
         case Inkscape::XML::ELEMENT_NODE: {
-            sp_repr_write_stream_element( repr, out, indent_level,
+            sp_repr_write_stream_element(repr, out, indent_level,
                                           add_whitespace, elide_prefix,
                                           repr->attributeList(),
                                           inlineattrs, indent,
@@ -947,20 +947,20 @@ void sp_repr_write_stream( Node *repr, Writer &out, gint indent_level,
 }
 
 
-void sp_repr_write_stream_element( Node * repr, Writer & out,
+void sp_repr_write_stream_element(Node * repr, Writer & out,
                                    gint indent_level, bool add_whitespace,
                                    Glib::QueryQuark elide_prefix,
                                    List<AttributeRecord const> attributes, 
                                    int inlineattrs, int indent,
                                    gchar const *old_href_base,
-                                   gchar const *new_href_base )
+                                   gchar const *new_href_base)
 {
     Node *child = nullptr;
     bool loose = false;
 
     g_return_if_fail (repr != nullptr);
 
-    if ( indent_level > 16 ) {
+    if (indent_level > 16) {
         indent_level = 16;
     }
 
@@ -974,12 +974,12 @@ void sp_repr_write_stream_element( Node * repr, Writer & out,
 
     GQuark code = repr->code();
     gchar const *element_name;
-    if ( elide_prefix == qname_prefix(code) ) {
+    if (elide_prefix == qname_prefix(code)) {
         element_name = qname_local_name(code);
     } else {
         element_name = g_quark_to_string(code);
     }
-    out.printf( "<%s", element_name );
+    out.printf("<%s", element_name);
 
     // If this is a <text> element, suppress formatting whitespace
     // for its content and children:
@@ -987,15 +987,15 @@ void sp_repr_write_stream_element( Node * repr, Writer & out,
         add_whitespace = false;
     }
 
-    for ( List<AttributeRecord const> iter = rebase_href_attrs(old_href_base, new_href_base,
+    for (List<AttributeRecord const> iter = rebase_href_attrs(old_href_base, new_href_base,
                                                                attributes);
-          iter ; ++iter )
+          iter ; ++iter)
     {
         if (!inlineattrs) {
             out.writeChar('\n');
             if (indent) {
-                for ( gint i = 0 ; i < indent_level + 1 ; i++ ) {
-                    for ( gint j = 0 ; j < indent ; j++ ) {
+                for (gint i = 0 ; i < indent_level + 1 ; i++) {
+                    for (gint j = 0 ; j < indent ; j++) {
                         out.writeChar(' ');
                     }
                 }
@@ -1020,21 +1020,21 @@ void sp_repr_write_stream_element( Node * repr, Writer & out,
             out.writeChar('\n');
         }
         for (child = repr->firstChild(); child != nullptr; child = child->next()) {
-            sp_repr_write_stream(child, out, ( loose ? indent_level + 1 : 0 ),
+            sp_repr_write_stream(child, out, (loose ? indent_level + 1 : 0),
                                  add_whitespace, elide_prefix, inlineattrs, indent,
                                  old_href_base, new_href_base);
         }
 
         if (loose && add_whitespace && indent) {
             for (gint i = 0; i < indent_level; i++) {
-                for ( gint j = 0 ; j < indent ; j++ ) {
+                for (gint j = 0 ; j < indent ; j++) {
                     out.writeChar(' ');
                 }
             }
         }
-        out.printf( "</%s>", element_name );
+        out.printf("</%s>", element_name);
     } else {
-        out.writeString( " />" );
+        out.writeString(" />");
     }
 
     // text elements cannot nest, so we can output newline

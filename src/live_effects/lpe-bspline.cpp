@@ -245,7 +245,7 @@ void sp_bspline_do_effect(SPCurve *curve, double helper_size)
             }
             in->reset();
             delete in;
-            if ( curve_it2 != curve_endit ) {
+            if (curve_it2 != curve_endit) {
                 SPCurve *out = new SPCurve();
                 out->moveto(curve_it2->initialPoint());
                 out->lineto(curve_it2->finalPoint());
@@ -298,7 +298,7 @@ void sp_bspline_do_effect(SPCurve *curve, double helper_size)
                 node = sbasis_helper.valueAt(0.5);
                 curve_n->curveto(point_at1, point_at2, node);
                 curve_n->move_endpoints(node, node);
-            } else if ( curve_it2 == curve_endit) {
+            } else if (curve_it2 == curve_endit) {
                 curve_n->curveto(point_at1, point_at2, curve_it1->finalPoint());
                 curve_n->move_endpoints(path_it.begin()->initialPoint(), curve_it1->finalPoint());
             } else {

@@ -151,7 +151,7 @@ void Inkscape::SnapPreferences::_mapTargetToArrayIndex(Inkscape::SnapTargetType 
         return;
     }
 
-    if (target == SNAPTARGET_UNDEFINED ) {
+    if (target == SNAPTARGET_UNDEFINED) {
         g_warning("Snap-preferences warning: Undefined snaptarget (#%i)", target);
     } else {
         g_warning("Snap-preferences warning: Snaptarget not handled (#%i)", target);

@@ -24,34 +24,34 @@ std::string extract_uri(char const *s, char const **endptr)
         return result;
 
     gchar const *sb = s;
-    if ( strlen(sb) < 4 || strncmp(sb, "url", 3) != 0 ) {
+    if (strlen(sb) < 4 || strncmp(sb, "url", 3) != 0) {
         return result;
     }
 
     sb += 3;
 
-    if ( endptr ) {
+    if (endptr) {
         *endptr = nullptr;
     }
 
     // This first whitespace technically is not allowed.
     // Just left in for now for legacy behavior.
-    while ( ( *sb == ' ' ) ||
-            ( *sb == '\t' ) )
+    while ((*sb == ' ') ||
+            (*sb == '\t'))
     {
         sb++;
     }
 
-    if ( *sb == '(' ) {
+    if (*sb == '(') {
         sb++;
-        while ( ( *sb == ' ' ) ||
-                ( *sb == '\t' ) )
+        while ((*sb == ' ') ||
+                (*sb == '\t'))
         {
             sb++;
         }
 
         gchar delim = ')';
-        if ( (*sb == '\'' || *sb == '"') ) {
+        if ((*sb == '\'' || *sb == '"')) {
             delim = *sb;
             sb++;
         }
@@ -61,14 +61,14 @@ std::string extract_uri(char const *s, char const **endptr)
         }
 
         gchar const* se = sb;
-        while ( *se && (*se != delim) ) {
+        while (*se && (*se != delim)) {
             se++;
         }
 
         // we found the delimiter
-        if ( *se ) {
-            if ( delim == ')' ) {
-                if ( endptr ) {
+        if (*se) {
+            if (delim == ')') {
+                if (endptr) {
                     *endptr = se + 1;
                 }
 
@@ -81,13 +81,13 @@ std::string extract_uri(char const *s, char const **endptr)
                 result = std::string(sb, se);
             } else {
                 gchar const* tail = se + 1;
-                while ( ( *tail == ' ' ) ||
-                        ( *tail == '\t' ) )
+                while ((*tail == ' ') ||
+                        (*tail == '\t'))
                 {
                     tail++;
                 }
-                if ( *tail == ')' ) {
-                    if ( endptr ) {
+                if (*tail == ')') {
+                    if (endptr) {
                         *endptr = tail + 1;
                     }
                     result = std::string(sb, se);

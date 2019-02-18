@@ -51,19 +51,19 @@ ExtensionsPanel::ExtensionsPanel() :
 
 void ExtensionsPanel::set_full(bool full)
 {
-    if ( full != _showAll ) {
+    if (full != _showAll) {
         _showAll = full;
         rescan();
     }
 }
 
-void ExtensionsPanel::listCB( Inkscape::Extension::Extension * in_plug, gpointer in_data )
+void ExtensionsPanel::listCB(Inkscape::Extension::Extension * in_plug, gpointer in_data)
 {
     ExtensionsPanel * self = static_cast<ExtensionsPanel*>(in_data);
 
     const char* stateStr;
     Extension::state_t state = in_plug->get_state();
-    switch ( state ) {
+    switch (state) {
         case Extension::STATE_LOADED:
         {
             stateStr = "loaded";
@@ -83,11 +83,11 @@ void ExtensionsPanel::listCB( Inkscape::Extension::Extension * in_plug, gpointer
             stateStr = "unknown";
     }
 
-    if ( self->_showAll || in_plug->deactivated() ) {
-        gchar* line = g_strdup_printf( "%s   %s\n        \"%s\"", stateStr, in_plug->get_name(), in_plug->get_id() );
+    if (self->_showAll || in_plug->deactivated()) {
+        gchar* line = g_strdup_printf("%s   %s\n        \"%s\"", stateStr, in_plug->get_name(), in_plug->get_id());
 
-        self->_view.get_buffer()->insert( self->_view.get_buffer()->end(), line );
-        self->_view.get_buffer()->insert( self->_view.get_buffer()->end(), "\n" );
+        self->_view.get_buffer()->insert(self->_view.get_buffer()->end(), line);
+        self->_view.get_buffer()->insert(self->_view.get_buffer()->end(), "\n");
         g_free(line);
     }
 

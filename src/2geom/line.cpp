@@ -334,7 +334,7 @@ OptCrossing intersection_impl(Ray const& r1, Line const& l2, unsigned int i)
 
     OptCrossing crossing =
         intersection_impl(r1.vector(), r1.origin(),
-                          l2.vector(), l2.origin() );
+                          l2.vector(), l2.origin());
 
     if (crossing) {
         if (crossing->ta < 0) {
@@ -354,9 +354,9 @@ OptCrossing intersection_impl(Ray const& r1, Line const& l2, unsigned int i)
 }
 
 
-OptCrossing intersection_impl( LineSegment const& ls1,
+OptCrossing intersection_impl(LineSegment const& ls1,
                                Line const& l2,
-                               unsigned int i )
+                               unsigned int i)
 {
     using std::swap;
 
@@ -364,11 +364,11 @@ OptCrossing intersection_impl( LineSegment const& ls1,
         intersection_impl(ls1.finalPoint() - ls1.initialPoint(),
                           ls1.initialPoint(),
                           l2.vector(),
-                          l2.origin() );
+                          l2.origin());
 
     if (crossing) {
-        if ( crossing->getTime(0) < 0
-             || crossing->getTime(0) > 1 )
+        if (crossing->getTime(0) < 0
+             || crossing->getTime(0) > 1)
         {
             return OptCrossing();
         } else {
@@ -386,23 +386,23 @@ OptCrossing intersection_impl( LineSegment const& ls1,
 }
 
 
-OptCrossing intersection_impl( LineSegment const& ls1,
+OptCrossing intersection_impl(LineSegment const& ls1,
                                Ray const& r2,
-                               unsigned int i )
+                               unsigned int i)
 {
     using std::swap;
 
     Point direction = ls1.finalPoint() - ls1.initialPoint();
     OptCrossing crossing =
-        intersection_impl( direction,
+        intersection_impl(direction,
                            ls1.initialPoint(),
                            r2.vector(),
-                           r2.origin() );
+                           r2.origin());
 
     if (crossing) {
-        if ( (crossing->getTime(0) < 0)
+        if ((crossing->getTime(0) < 0)
              || (crossing->getTime(0) > 1)
-             || (crossing->getTime(1) < 0) )
+             || (crossing->getTime(1) < 0))
         {
             return OptCrossing();
         } else {
@@ -413,12 +413,12 @@ OptCrossing intersection_impl( LineSegment const& ls1,
         }
     }
 
-    if ( are_near(r2.origin(), ls1) ) {
+    if (are_near(r2.origin(), ls1)) {
         bool eqvs = (dot(direction, r2.vector()) > 0);
-        if ( are_near(ls1.initialPoint(), r2.origin()) && !eqvs)  {
+        if (are_near(ls1.initialPoint(), r2.origin()) && !eqvs)  {
             crossing->ta = crossing->tb = 0;
             return crossing;
-        } else if ( are_near(ls1.finalPoint(), r2.origin()) && eqvs) {
+        } else if (are_near(ls1.finalPoint(), r2.origin()) && eqvs) {
             if (i == 0) {
                 crossing->ta = 1;
                 crossing->tb = 0;
@@ -430,7 +430,7 @@ OptCrossing intersection_impl( LineSegment const& ls1,
         } else {
             THROW_INFINITESOLUTIONS();
         }
-    } else if ( are_near(ls1.initialPoint(), r2) ) {
+    } else if (are_near(ls1.initialPoint(), r2)) {
         THROW_INFINITESOLUTIONS();
     } else {
         OptCrossing no_crossing;
@@ -457,13 +457,13 @@ OptCrossing intersection(Line const& l1, Line const& l2)
 OptCrossing intersection(Ray const& r1, Ray const& r2)
 {
     OptCrossing crossing =
-    detail::intersection_impl( r1.vector(), r1.origin(),
-                               r2.vector(), r2.origin() );
+    detail::intersection_impl(r1.vector(), r1.origin(),
+                               r2.vector(), r2.origin());
 
     if (crossing)
     {
-        if ( crossing->ta < 0
-             || crossing->tb < 0 )
+        if (crossing->ta < 0
+             || crossing->tb < 0)
         {
             OptCrossing no_crossing;
             return no_crossing;
@@ -474,10 +474,10 @@ OptCrossing intersection(Ray const& r1, Ray const& r2)
         }
     }
 
-    if ( are_near(r1.origin(), r2) || are_near(r2.origin(), r1) )
+    if (are_near(r1.origin(), r2) || are_near(r2.origin(), r1))
     {
-        if ( are_near(r1.origin(), r2.origin())
-             && !are_near(r1.vector(), r2.vector()) )
+        if (are_near(r1.origin(), r2.origin())
+             && !are_near(r1.vector(), r2.vector()))
         {
             crossing->ta = crossing->tb = 0;
             return crossing;
@@ -495,22 +495,22 @@ OptCrossing intersection(Ray const& r1, Ray const& r2)
 }
 
 
-OptCrossing intersection( LineSegment const& ls1, LineSegment const& ls2 )
+OptCrossing intersection(LineSegment const& ls1, LineSegment const& ls2)
 {
     Point direction1 = ls1.finalPoint() - ls1.initialPoint();
     Point direction2 = ls2.finalPoint() - ls2.initialPoint();
     OptCrossing crossing =
-        detail::intersection_impl( direction1,
+        detail::intersection_impl(direction1,
                                    ls1.initialPoint(),
                                    direction2,
-                                   ls2.initialPoint() );
+                                   ls2.initialPoint());
 
     if (crossing)
     {
-        if ( crossing->getTime(0) < 0
+        if (crossing->getTime(0) < 0
              || crossing->getTime(0) > 1
              || crossing->getTime(1) < 0
-             || crossing->getTime(1) > 1 )
+             || crossing->getTime(1) > 1)
         {
             OptCrossing no_crossing;
             return no_crossing;
@@ -522,14 +522,14 @@ OptCrossing intersection( LineSegment const& ls1, LineSegment const& ls2 )
     }
 
     bool eqvs = (dot(direction1, direction2) > 0);
-    if ( are_near(ls2.initialPoint(), ls1) )
+    if (are_near(ls2.initialPoint(), ls1))
     {
-        if ( are_near(ls1.initialPoint(), ls2.initialPoint()) && !eqvs )
+        if (are_near(ls1.initialPoint(), ls2.initialPoint()) && !eqvs)
         {
             crossing->ta = crossing->tb = 0;
             return crossing;
         }
-        else if ( are_near(ls1.finalPoint(), ls2.initialPoint()) && eqvs )
+        else if (are_near(ls1.finalPoint(), ls2.initialPoint()) && eqvs)
         {
             crossing->ta = 1;
             crossing->tb = 0;
@@ -540,14 +540,14 @@ OptCrossing intersection( LineSegment const& ls1, LineSegment const& ls2 )
             THROW_INFINITESOLUTIONS();
         }
     }
-    else if ( are_near(ls2.finalPoint(), ls1) )
+    else if (are_near(ls2.finalPoint(), ls1))
     {
-        if ( are_near(ls1.finalPoint(), ls2.finalPoint()) && !eqvs )
+        if (are_near(ls1.finalPoint(), ls2.finalPoint()) && !eqvs)
         {
             crossing->ta = crossing->tb = 1;
             return crossing;
         }
-        else if ( are_near(ls1.initialPoint(), ls2.finalPoint()) && eqvs )
+        else if (are_near(ls1.initialPoint(), ls2.finalPoint()) && eqvs)
         {
             crossing->ta = 0;
             crossing->tb = 1;

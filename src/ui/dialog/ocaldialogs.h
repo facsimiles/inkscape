@@ -85,7 +85,7 @@ public:
     = default;
 
 protected:
-    void cleanup( bool showConfirmed );
+    void cleanup(bool showConfirmed);
 
     /**
      * What type of 'open' are we? (open, import, place, etc)

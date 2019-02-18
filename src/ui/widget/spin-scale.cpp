@@ -64,7 +64,7 @@ Glib::ustring SpinScale::get_as_attribute() const
 {
     const double val = _adjustment->get_value();
 
-    if( _inkspinscale.get_digits() == 0)
+    if(_inkspinscale.get_digits() == 0)
         return Glib::Ascii::dtostr((int)val);
     else
         return Glib::Ascii::dtostr(val);

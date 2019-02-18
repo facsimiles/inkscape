@@ -51,7 +51,7 @@ static cairo_status_t font_init_cb (cairo_scaled_font_t  *scaled_font,
     return instance->scaled_font_init(scaled_font, metrics);
 }
 
-static cairo_status_t font_text_to_glyphs_cb ( cairo_scaled_font_t  *scaled_font,
+static cairo_status_t font_text_to_glyphs_cb (cairo_scaled_font_t  *scaled_font,
                                                const char           *utf8,
                                                int                  utf8_len,
                                                cairo_glyph_t        **glyphs,
@@ -172,7 +172,7 @@ SvgFont::scaled_font_text_to_glyphs (cairo_scaled_font_t  */*scaled_font*/,
     while(g_utf8_get_char(_utf8)){
         missing = true;
         for (i=0; i < (unsigned long) this->glyphs.size(); i++){
-            if ( (len = size_of_substring(this->glyphs[i]->unicode.c_str(), _utf8)) ){
+            if ((len = size_of_substring(this->glyphs[i]->unicode.c_str(), _utf8))){
                 //TODO: store this cluster
                 _utf8+=len;
                 count++;
@@ -205,7 +205,7 @@ SvgFont::scaled_font_text_to_glyphs (cairo_scaled_font_t  */*scaled_font*/,
         for (i=0; i < (unsigned long) this->glyphs.size(); i++){
             //check whether is there a glyph declared on the SVG document
             // that matches with the text string in its current position
-            if ( (len = size_of_substring(this->glyphs[i]->unicode.c_str(), _utf8)) ){
+            if ((len = size_of_substring(this->glyphs[i]->unicode.c_str(), _utf8))){
                 for(auto& node: font->children) {
                     if (!previous_unicode) {
                         break;
@@ -213,12 +213,12 @@ SvgFont::scaled_font_text_to_glyphs (cairo_scaled_font_t  */*scaled_font*/,
                     //apply glyph kerning if appropriate
                     SPHkern *hkern = dynamic_cast<SPHkern *>(&node);
                     if (hkern && is_horizontal_text &&
-                        MatchHKerningRule(hkern, this->glyphs[i], previous_unicode, previous_glyph_name) ){
+                        MatchHKerningRule(hkern, this->glyphs[i], previous_unicode, previous_glyph_name)){
                         x -= (hkern->k / font_height);
                     }
                     SPVkern *vkern = dynamic_cast<SPVkern *>(&node);
                     if (vkern && !is_horizontal_text &&
-                        MatchVKerningRule(vkern, this->glyphs[i], previous_unicode, previous_glyph_name) ){
+                        MatchVKerningRule(vkern, this->glyphs[i], previous_unicode, previous_glyph_name)){
                         y -= (vkern->k / font_height);
                     }
                 }
@@ -268,7 +268,7 @@ SvgFont::render_glyph_path(cairo_t* cr, Geom::PathVector* pathv){
 
         //adjust scale of the glyph
         Geom::Scale s(1.0/units_per_em());
-        Geom::Rect area( Geom::Point(0,0), Geom::Point(1,1) ); //I need help here!    (reaction: note that the 'area' parameter is an *optional* rect, so you can pass an empty Geom::OptRect() )
+        Geom::Rect area(Geom::Point(0,0), Geom::Point(1,1)); //I need help here!    (reaction: note that the 'area' parameter is an *optional* rect, so you can pass an empty Geom::OptRect())
 
         feed_pathvector_to_cairo (cr, *pathv, s, area, false, 0);
         cairo_fill(cr);

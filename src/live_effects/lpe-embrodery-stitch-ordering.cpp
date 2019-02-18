@@ -30,8 +30,8 @@ using namespace Geom;
 #define DebugTraceTSP(list)      // list
 
 // Combinations of above
-#define DebugTrace1TSP(list) DebugTraceTSP( DebugTrace1(list) )
-#define DebugTrace2TSP(list) DebugTraceTSP( DebugTrace2(list) )
+#define DebugTrace1TSP(list) DebugTraceTSP(DebugTrace1(list))
+#define DebugTrace2TSP(list) DebugTraceTSP(DebugTrace2(list))
 
 // ==================== Template Utilities ====================
 
@@ -318,14 +318,14 @@ void OrderingPoint::EnforceSymmetric(const OrderingPoint &other)
     if (nearest[0] && !(
                 (other.nearest[0] && nearest[0]->infoex == other.nearest[0]->infoex) ||
                 (other.nearest[1] && nearest[0]->infoex == other.nearest[1]->infoex)
-            )) {
+)) {
         nearest[0] = nullptr;
     }
 
     if (nearest[1] && !(
                 (other.nearest[0] && nearest[1]->infoex == other.nearest[0]->infoex) ||
                 (other.nearest[1] && nearest[1]->infoex == other.nearest[1]->infoex)
-            )) {
+)) {
         nearest[1] = nullptr;
     }
 
@@ -951,7 +951,7 @@ void OrderGroups(std::vector<OrderingGroup *> *groups, const int nDims)
             triangleit_begin(iterators, connections.begin(), connections.end(), nDims);
             triangleit_test(iterators, connections.end());
             triangleit_incr(iterators, connections.end())
-        ) {
+) {
             nTrials ++;
 
             Coord dist = 0;
@@ -1044,7 +1044,7 @@ void OrderingAdvanced(std::vector<OrderingInfo> &infos, int nDims)
     (*it)->beg.Dump();
         (*it)->end.Dump();
     }
-    )
+)
 
     // Make sure the nearest points are mutual
     for (auto & it : infoex) {
@@ -1058,7 +1058,7 @@ void OrderingAdvanced(std::vector<OrderingInfo> &infos, int nDims)
     (*it)->beg.Dump();
         (*it)->end.Dump();
     }
-    )
+)
 
     // Make sure the nearest points for begin and end lead to the same sub-path (same index)
     for (auto & it : infoex) {
@@ -1072,7 +1072,7 @@ void OrderingAdvanced(std::vector<OrderingInfo> &infos, int nDims)
     (*it)->beg.Dump();
         (*it)->end.Dump();
     }
-    )
+)
 
     // The remaining nearest neighbors should be 100% non ambiguous, so group them
     std::vector<OrderingGroup *> groups;
@@ -1098,7 +1098,7 @@ void OrderingAdvanced(std::vector<OrderingInfo> &infos, int nDims)
     for (std::vector<OrderingGroup *>::iterator it = groups.begin(); it != groups.end(); ++it) {
     DebugTrace2(("Group size %d", (*it)->items.size()));
     }
-    )
+)
 
     // Order groups, so that the connection path gets shortest
     OrderGroups(&groups, nDims);
@@ -1110,7 +1110,7 @@ void OrderingAdvanced(std::vector<OrderingInfo> &infos, int nDims)
             OrderingInfoEx *item = group->items[iItemRev];
 
             // If revItems is false, even items shall have reverse=false
-            // In this case ( ( iItem & 1 ) == 0 )== true, revItems=false, (true==false) == false
+            // In this case ((iItem & 1) == 0)== true, revItems=false, (true==false) == false
             bool reverse = ((iItem & 1) == 0) == group->revItems;
             if (!reverse) {
                 for (int & origIndice : item->origIndices) {

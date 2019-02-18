@@ -177,7 +177,7 @@ public:
         //Tracer *tracer = (Tracer *)context;
         //## Allow the GUI to update
         Gtk::Main::iteration(false); //at least once, non-blocking
-        while( Gtk::Main::events_pending() )
+        while(Gtk::Main::events_pending())
             Gtk::Main::iteration();
         return true;
         }

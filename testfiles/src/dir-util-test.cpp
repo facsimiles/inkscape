@@ -39,12 +39,12 @@ TEST(DirUtilTest, Base)
 
     for (auto & i : cases)
     {
-        if ( i[0] && i[1] ) { // std::string can't use null.
-            std::string  result = sp_relative_path_from_path( i[0], i[1] );
-            ASSERT_FALSE( result.empty() );
-            if ( !result.empty() )
+        if (i[0] && i[1]) { // std::string can't use null.
+            std::string  result = sp_relative_path_from_path(i[0], i[1]);
+            ASSERT_FALSE(result.empty());
+            if (!result.empty())
             {
-                ASSERT_EQ( std::string(i[2]), result );
+                ASSERT_EQ(std::string(i[2]), result);
             }
         }
     }

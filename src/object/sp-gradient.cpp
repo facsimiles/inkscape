@@ -85,14 +85,14 @@ SPGradientSpread SPGradient::getSpread() const
     return spread;
 }
 
-void SPGradient::setSwatch( bool swatch )
+void SPGradient::setSwatch(bool swatch)
 {
-    if ( swatch != isSwatch() ) {
+    if (swatch != isSwatch()) {
         this->swatch = swatch; // to make isSolid() work, this happens first
         gchar const* paintVal = swatch ? (isSolid() ? "solid" : "gradient") : nullptr;
-        setAttribute( "osb:paint", paintVal, nullptr );
+        setAttribute("osb:paint", paintVal, nullptr);
 
-        requestModified( SP_OBJECT_MODIFIED_FLAG );
+        requestModified(SP_OBJECT_MODIFIED_FLAG);
     }
 }
 
@@ -113,7 +113,7 @@ bool SPGradient::isEquivalent(SPGradient *that)
         if (this->hasStops() != that->hasStops()) { break; }
         if (!this->getVector() || !that->getVector()) { break; }
         if (this->isSwatch() != that->isSwatch()) {  break; }
-        if ( this->isSwatch() ){
+        if (this->isSwatch()){
            // drop down to check stops.
         }
         else if (
@@ -130,7 +130,7 @@ bool SPGradient::isEquivalent(SPGradient *that)
         bool effective = true;
         while (effective && (as && bs)) {
             if (!as->getColor().isClose(bs->getColor(), 0.001) ||
-                    as->offset != bs->offset || as->getOpacity() != bs->getOpacity() ) {
+                    as->offset != bs->offset || as->getOpacity() != bs->getOpacity()) {
                 effective = false;
                 break;
             } 
@@ -176,44 +176,44 @@ bool SPGradient::isAligned(SPGradient *that)
             SPLinearGradient *sg=SP_LINEARGRADIENT(this);
             SPLinearGradient *tg=SP_LINEARGRADIENT(that);
  
-            if( sg->x1._set != tg->x1._set) { break; }
-            if( sg->y1._set != tg->y1._set) { break; }
-            if( sg->x2._set != tg->x2._set) { break; }
-            if( sg->y2._set != tg->y2._set) { break; }
-            if( sg->x1._set && sg->y1._set && sg->x2._set && sg->y2._set) {
-                if( (sg->x1.computed != tg->x1.computed) ||
+            if(sg->x1._set != tg->x1._set) { break; }
+            if(sg->y1._set != tg->y1._set) { break; }
+            if(sg->x2._set != tg->x2._set) { break; }
+            if(sg->y2._set != tg->y2._set) { break; }
+            if(sg->x1._set && sg->y1._set && sg->x2._set && sg->y2._set) {
+                if((sg->x1.computed != tg->x1.computed) ||
                     (sg->y1.computed != tg->y1.computed) ||
                     (sg->x2.computed != tg->x2.computed) ||
-                    (sg->y2.computed != tg->y2.computed) )  { break; }
-            } else if( sg->x1._set || sg->y1._set || sg->x2._set || sg->y2._set) { break; } // some mix of set and not set
+                    (sg->y2.computed != tg->y2.computed))  { break; }
+            } else if(sg->x1._set || sg->y1._set || sg->x2._set || sg->y2._set) { break; } // some mix of set and not set
             // none set? assume aligned and fall through
         } else if (SP_IS_RADIALGRADIENT(this) && SP_IS_LINEARGRADIENT(that)) {
             SPRadialGradient *sg=SP_RADIALGRADIENT(this);
             SPRadialGradient *tg=SP_RADIALGRADIENT(that);
 
-            if( sg->cx._set != tg->cx._set) { break; }
-            if( sg->cy._set != tg->cy._set) { break; }
-            if( sg->r._set  != tg->r._set)  { break; }
-            if( sg->fx._set != tg->fx._set) { break; }
-            if( sg->fy._set != tg->fy._set) { break; }
-            if( sg->cx._set && sg->cy._set && sg->fx._set && sg->fy._set && sg->r._set) {
-                if( (sg->cx.computed != tg->cx.computed) ||
+            if(sg->cx._set != tg->cx._set) { break; }
+            if(sg->cy._set != tg->cy._set) { break; }
+            if(sg->r._set  != tg->r._set)  { break; }
+            if(sg->fx._set != tg->fx._set) { break; }
+            if(sg->fy._set != tg->fy._set) { break; }
+            if(sg->cx._set && sg->cy._set && sg->fx._set && sg->fy._set && sg->r._set) {
+                if((sg->cx.computed != tg->cx.computed) ||
                     (sg->cy.computed != tg->cy.computed) ||
-                    (sg->r.computed  != tg->r.computed ) ||
+                    (sg->r.computed  != tg->r.computed) ||
                     (sg->fx.computed != tg->fx.computed) ||
-                    (sg->fy.computed != tg->fy.computed)  ) { break; }
-            } else if(  sg->cx._set || sg->cy._set || sg->fx._set || sg->fy._set || sg->r._set ) { break; } // some mix of set and not set
+                    (sg->fy.computed != tg->fy.computed)) { break; }
+            } else if(sg->cx._set || sg->cy._set || sg->fx._set || sg->fy._set || sg->r._set) { break; } // some mix of set and not set
             // none set? assume aligned and fall through
         } else if (SP_IS_MESHGRADIENT(this) && SP_IS_MESHGRADIENT(that)) {
             SPMeshGradient *sg=SP_MESHGRADIENT(this);
             SPMeshGradient *tg=SP_MESHGRADIENT(that);
  
-            if( sg->x._set  !=  !tg->x._set) { break; }
-            if( sg->y._set  !=  !tg->y._set) { break; }
-            if( sg->x._set  &&  sg->y._set) { 
-                if( (sg->x.computed != tg->x.computed) ||
-                    (sg->y.computed != tg->y.computed) ) { break; }
-            } else if( sg->x._set || sg->y._set) { break; } // some mix of set and not set
+            if(sg->x._set  !=  !tg->x._set) { break; }
+            if(sg->y._set  !=  !tg->y._set) { break; }
+            if(sg->x._set  &&  sg->y._set) { 
+                if((sg->x.computed != tg->x.computed) ||
+                    (sg->y.computed != tg->y.computed)) { break; }
+            } else if(sg->x._set || sg->y._set) { break; } // some mix of set and not set
             // none set? assume aligned and fall through
          } else {
             break;
@@ -266,7 +266,7 @@ SPGradient::~SPGradient() = default;
 void SPGradient::build(SPDocument *document, Inkscape::XML::Node *repr)
 {
     // Work-around in case a swatch had been marked for immediate collection:
-    if ( repr->attribute("osb:paint") && repr->attribute("inkscape:collect") ) {
+    if (repr->attribute("osb:paint") && repr->attribute("inkscape:collect")) {
         repr->setAttribute("inkscape:collect", nullptr);
     }
 
@@ -290,11 +290,11 @@ void SPGradient::build(SPDocument *document, Inkscape::XML::Node *repr)
         }
     }
 
-    this->readAttr( "gradientUnits" );
-    this->readAttr( "gradientTransform" );
-    this->readAttr( "spreadMethod" );
-    this->readAttr( "xlink:href" );
-    this->readAttr( "osb:paint" );
+    this->readAttr("gradientUnits");
+    this->readAttr("gradientTransform");
+    this->readAttr("spreadMethod");
+    this->readAttr("xlink:href");
+    this->readAttr("osb:paint");
 
     // Register ourselves
     document->addResource("gradient", this);
@@ -335,7 +335,7 @@ void SPGradient::set(SPAttributeEnum key, gchar const *value)
 #ifdef OBJECT_TRACE
     std::stringstream temp;
     temp << "SPGradient::set: " << key  << " " << (value?value:"null");
-    objectTrace( temp.str() );
+    objectTrace(temp.str());
 #endif
 
     switch (key) {
@@ -412,10 +412,10 @@ void SPGradient::set(SPAttributeEnum key, gchar const *value)
 
             if (newVal) {
                 // Might need to flip solid/gradient
-                Glib::ustring paintVal = ( this->hasStops() && (this->getStopCount() == 0) ) ? "solid" : "gradient";
+                Glib::ustring paintVal = (this->hasStops() && (this->getStopCount() == 0)) ? "solid" : "gradient";
 
-                if ( paintVal != value ) {
-                    this->setAttribute( "osb:paint", paintVal.c_str(), nullptr );
+                if (paintVal != value) {
+                    this->setAttribute("osb:paint", paintVal.c_str(), nullptr);
                     modified = true;
                 }
             }
@@ -431,7 +431,7 @@ void SPGradient::set(SPAttributeEnum key, gchar const *value)
     }
 
 #ifdef OBJECT_TRACE
-    objectTrace( "SPGradient::set", false );
+    objectTrace("SPGradient::set", false);
 #endif
 }
 
@@ -443,8 +443,8 @@ void SPGradient::gradientRefChanged(SPObject *old_ref, SPObject *ref, SPGradient
     if (old_ref) {
         gr->modified_connection.disconnect();
     }
-    if ( SP_IS_GRADIENT(ref)
-         && ref != gr )
+    if (SP_IS_GRADIENT(ref)
+         && ref != gr)
     {
         gr->modified_connection = ref->connectModified(sigc::bind<2>(sigc::ptr_fun(&SPGradient::gradientRefModified), gr));
     }
@@ -474,16 +474,16 @@ void SPGradient::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *re
     SPPaintServer::child_added(child, ref);
 
     SPObject *ochild = this->get_child_by_repr(child);
-    if ( ochild && SP_IS_STOP(ochild) ) {
+    if (ochild && SP_IS_STOP(ochild)) {
         this->has_stops = TRUE;
-        if ( this->getStopCount() > 0 ) {
+        if (this->getStopCount() > 0) {
             gchar const * attr = this->getAttribute("osb:paint");
-            if ( attr && strcmp(attr, "gradient") ) {
-            	this->setAttribute( "osb:paint", "gradient", nullptr );
+            if (attr && strcmp(attr, "gradient")) {
+            	this->setAttribute("osb:paint", "gradient", nullptr);
             }
         }
     }
-    if ( ochild && SP_IS_MESHROW(ochild) ) {
+    if (ochild && SP_IS_MESHROW(ochild)) {
         this->has_patches = TRUE;
     }
 
@@ -520,11 +520,11 @@ void SPGradient::remove_child(Inkscape::XML::Node *child)
         }
     }
 
-    if ( this->getStopCount() == 0 ) {
+    if (this->getStopCount() == 0) {
         gchar const * attr = this->getAttribute("osb:paint");
 
-        if ( attr && strcmp(attr, "solid") ) {
-            this->setAttribute( "osb:paint", "solid", nullptr );
+        if (attr && strcmp(attr, "solid")) {
+            this->setAttribute("osb:paint", "solid", nullptr);
         }
     }
 
@@ -538,7 +538,7 @@ void SPGradient::remove_child(Inkscape::XML::Node *child)
 void SPGradient::modified(guint flags)
 {
 #ifdef OBJECT_TRACE
-    objectTrace( "SPGradient::modified" );
+    objectTrace("SPGradient::modified");
 #endif
     if (flags & SP_OBJECT_CHILD_MODIFIED_FLAG) {
         if (SP_IS_MESHGRADIENT(this)) {
@@ -574,7 +574,7 @@ void SPGradient::modified(guint flags)
     }
 
 #ifdef OBJECT_TRACE
-    objectTrace( "SPGradient::modified", false );
+    objectTrace("SPGradient::modified", false);
 #endif
 }
 
@@ -607,7 +607,7 @@ int SPGradient::getStopCount() const
 Inkscape::XML::Node *SPGradient::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
 {
 #ifdef OBJECT_TRACE
-    objectTrace( "SPGradient::write" );
+    objectTrace("SPGradient::write");
 #endif
 
     SPPaintServer::write(xml_doc, repr, flags);
@@ -668,18 +668,18 @@ Inkscape::XML::Node *SPGradient::write(Inkscape::XML::Document *xml_doc, Inkscap
         }
     }
 
-    if ( (flags & SP_OBJECT_WRITE_EXT) && this->isSwatch() ) {
-        if ( this->isSolid() ) {
-            repr->setAttribute( "osb:paint", "solid" );
+    if ((flags & SP_OBJECT_WRITE_EXT) && this->isSwatch()) {
+        if (this->isSolid()) {
+            repr->setAttribute("osb:paint", "solid");
         } else {
-            repr->setAttribute( "osb:paint", "gradient" );
+            repr->setAttribute("osb:paint", "gradient");
         }
     } else {
-        repr->setAttribute( "osb:paint", nullptr );
+        repr->setAttribute("osb:paint", nullptr);
     }
 
 #ifdef OBJECT_TRACE
-    objectTrace( "SPGradient::write", false );
+    objectTrace("SPGradient::write", false);
 #endif
     return repr;
 }
@@ -691,7 +691,7 @@ Inkscape::XML::Node *SPGradient::write(Inkscape::XML::Document *xml_doc, Inkscap
  */
 void SPGradient::ensureVector()
 {
-    if ( !vector.built ) {
+    if (!vector.built) {
         rebuildVector();
     }
 }
@@ -704,7 +704,7 @@ void SPGradient::ensureVector()
 void SPGradient::ensureArray()
 {
     //std::cout << "SPGradient::ensureArray()" << std::endl;
-    if ( !array.built ) {
+    if (!array.built) {
         rebuildArray();
     }
 }
@@ -767,7 +767,7 @@ chase_hrefs(SPGradient *const src, bool (*match)(SPGradient const *))
         }
         do1 = !do1;
 
-        if ( p2 == p1 ) {
+        if (p2 == p1) {
             /* We've been here before, so return NULL to indicate that no matching gradient found
              * in the chain. */
             return nullptr;
@@ -839,9 +839,9 @@ SPGradient *SPGradient::getArray(bool force_vector)
 SPGradientSpread SPGradient::fetchSpread()
 {
     SPGradient const *src = chase_hrefs(this, has_spread_set);
-    return ( src
+    return (src
              ? src->spread
-             : SP_GRADIENT_SPREAD_PAD ); // pad is the default
+             : SP_GRADIENT_SPREAD_PAD); // pad is the default
 }
 
 /**
@@ -852,9 +852,9 @@ SPGradientSpread SPGradient::fetchSpread()
 SPGradientUnits SPGradient::fetchUnits()
 {
     SPGradient const *src = chase_hrefs(this, has_units_set);
-    return ( src
+    return (src
              ? src->units
-             : SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX ); // bbox is the default
+             : SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX); // bbox is the default
 }
 
 
@@ -868,7 +868,7 @@ SPGradient::repr_clear_vector()
 
     /* Collect stops from original repr */
     std::vector<Inkscape::XML::Node *> l;
-    for (Inkscape::XML::Node *child = repr->firstChild() ; child != nullptr; child = child->next() ) {
+    for (Inkscape::XML::Node *child = repr->firstChild() ; child != nullptr; child = child->next()) {
         if (!strcmp(child->name(), "svg:stop")) {
             l.push_back(child);
         }
@@ -921,7 +921,7 @@ SPGradient::repr_write_vector()
 
 void SPGradient::gradientRefModified(SPObject */*href*/, guint /*flags*/, SPGradient *gradient)
 {
-    if ( gradient->invalidateVector() ) {
+    if (gradient->invalidateVector()) {
         gradient->requestModified(SP_OBJECT_MODIFIED_FLAG);
         // Conditional to avoid causing infinite loop if there's a cycle in the href chain.
     }
@@ -970,7 +970,7 @@ void SPGradient::rebuildVector()
     vector.stops.clear();
 
     SPGradient *reffed = ref ? ref->getObject() : nullptr;
-    if ( !hasStops() && reffed ) {
+    if (!hasStops() && reffed) {
         /* Copy vector from referenced gradient */
         vector.built = true;   // Prevent infinite recursion.
         reffed->ensureVector();
@@ -1017,14 +1017,14 @@ void SPGradient::rebuildVector()
         {
             SPGradientStop gstop;
             gstop.offset = 0.0;
-            gstop.color.set( 0x00000000 );
+            gstop.color.set(0x00000000);
             gstop.opacity = 0.0;
             vector.stops.push_back(gstop);
         }
         {
             SPGradientStop gstop;
             gstop.offset = 1.0;
-            gstop.color.set( 0x00000000 );
+            gstop.color.set(0x00000000);
             gstop.opacity = 0.0;
             vector.stops.push_back(gstop);
         }
@@ -1058,12 +1058,12 @@ void SPGradient::rebuildArray()
 {
     // std::cout << "SPGradient::rebuildArray()" << std::endl;
 
-    if( !SP_IS_MESHGRADIENT(this) ) {
-        g_warning( "SPGradient::rebuildArray() called for non-mesh gradient" );
+    if(!SP_IS_MESHGRADIENT(this)) {
+        g_warning("SPGradient::rebuildArray() called for non-mesh gradient");
         return;
     }
 
-    array.read( SP_MESHGRADIENT( this ) );
+    array.read(SP_MESHGRADIENT(this));
     has_patches = array.patch_columns() > 0;
 }
 
@@ -1071,9 +1071,9 @@ Geom::Affine
 SPGradient::get_g2d_matrix(Geom::Affine const &ctm, Geom::Rect const &bbox) const
 {
     if (getUnits() == SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX) {
-        return ( Geom::Scale(bbox.dimensions())
+        return (Geom::Scale(bbox.dimensions())
                  * Geom::Translate(bbox.min())
-                 * Geom::Affine(ctm) );
+                 * Geom::Affine(ctm));
     } else {
         return ctm;
     }
@@ -1083,10 +1083,10 @@ Geom::Affine
 SPGradient::get_gs2d_matrix(Geom::Affine const &ctm, Geom::Rect const &bbox) const
 {
     if (getUnits() == SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX) {
-        return ( gradientTransform
+        return (gradientTransform
                  * Geom::Scale(bbox.dimensions())
                  * Geom::Translate(bbox.min())
-                 * Geom::Affine(ctm) );
+                 * Geom::Affine(ctm));
     } else {
         return gradientTransform * ctm;
     }
@@ -1097,10 +1097,10 @@ SPGradient::set_gs2d_matrix(Geom::Affine const &ctm,
                             Geom::Rect const &bbox, Geom::Affine const &gs2d)
 {
     gradientTransform = gs2d * ctm.inverse();
-    if (getUnits() == SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX ) {
-        gradientTransform = ( gradientTransform
+    if (getUnits() == SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX) {
+        gradientTransform = (gradientTransform
                                   * Geom::Translate(-bbox.min())
-                                  * Geom::Scale(bbox.dimensions()).inverse() );
+                                  * Geom::Scale(bbox.dimensions()).inverse());
     }
     gradientTransform_set = TRUE;
 
@@ -1176,7 +1176,7 @@ SPGradient::create_preview_pattern(double width)
         pat = cairo_pattern_create_linear(0, 0, width, 0);
 
         for (unsigned i = 0; i < columns+1; ++i) {
-            SPMeshNode* node = array.node( 0, i*3 );
+            SPMeshNode* node = array.node(0, i*3);
             cairo_pattern_add_color_stop_rgba(pat, i*offset,
               node->color.v.c[0], node->color.v.c[1], node->color.v.c[2], node->opacity);
         }

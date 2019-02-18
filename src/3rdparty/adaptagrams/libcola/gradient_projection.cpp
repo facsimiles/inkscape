@@ -154,9 +154,9 @@ double GradientProjection::computeSteepestDescentVector(
         valarray<double> const &x,
         valarray<double> &g) const {
     // find steepest descent direction
-    //  g = 2 ( b - A x )
+    //  g = 2 (b - A x)
     //    where: A = denseQ + sparseQ
-    //  g = 2 ( b - denseQ x) - 2 sparseQ x
+    //  g = 2 (b - denseQ x) - 2 sparseQ x
     //
     //  except the 2s don't matter because we compute 
     //  the optimal stepsize anyway
@@ -177,7 +177,7 @@ double GradientProjection::computeSteepestDescentVector(
 }
 // compute optimal step size along descent vector d relative to
 // a gradient related vector g 
-//    stepsize = ( g' d ) / ( d' A d )
+//    stepsize = (g' d) / (d' A d)
 double GradientProjection::computeStepSize(
         valarray<double> const & g, valarray<double> const & d) const {
     COLA_ASSERT(g.size()==d.size());
@@ -243,7 +243,7 @@ unsigned GradientProjection::solve(
     COLA_ASSERT(x.size()==denseSize);
     COLA_ASSERT(numStaticVars>=denseSize);
     COLA_ASSERT(sparseQ==NULL || 
-                (sparseQ!=NULL && (vars.size()==sparseQ->rowSize())) );
+                (sparseQ!=NULL && (vars.size()==sparseQ->rowSize())));
 
     if(max_iterations==0) return 0;
 

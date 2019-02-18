@@ -96,7 +96,7 @@ private:
     /*
      * Callbacks for drawing the combo box
      */
-    void prepareImageRenderer( Gtk::TreeModel::const_iterator const &row );
+    void prepareImageRenderer(Gtk::TreeModel::const_iterator const &row);
     static gboolean separator_cb (GtkTreeModel *model, GtkTreeIter *iter, gpointer data);
 
     static void handleDefsModified(MarkerComboBox *self);

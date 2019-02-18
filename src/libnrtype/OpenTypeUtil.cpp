@@ -27,23 +27,23 @@
 
 // Utilities used in this file
 
-void dump_tag( guint32 *tag, Glib::ustring prefix = "", bool lf=true ) {
+void dump_tag(guint32 *tag, Glib::ustring prefix = "", bool lf=true) {
     std::cout << prefix
               << ((char)((*tag & 0xff000000)>>24))
               << ((char)((*tag & 0x00ff0000)>>16))
               << ((char)((*tag & 0x0000ff00)>> 8))
-              << ((char)((*tag & 0x000000ff)    ));
-    if( lf ) {
+              << ((char)((*tag & 0x000000ff)));
+    if(lf) {
         std::cout << std::endl;
     }
 }
 
-Glib::ustring extract_tag( guint32 *tag ) {
+Glib::ustring extract_tag(guint32 *tag) {
     Glib::ustring tag_name;
     tag_name += ((char)((*tag & 0xff000000)>>24));
     tag_name += ((char)((*tag & 0x00ff0000)>>16));
     tag_name += ((char)((*tag & 0x0000ff00)>> 8));
-    tag_name += ((char)((*tag & 0x000000ff)    ));
+    tag_name += ((char)((*tag & 0x000000ff)));
     return tag_name;
 }
 
@@ -52,7 +52,7 @@ Glib::ustring extract_tag( guint32 *tag ) {
 // but this was only released in harfbuzz >= 0.9.30
 // #if HB_VERSION_ATLEAST(1,2,3)
 #if HB_VERSION_MAJOR*10000 + HB_VERSION_MINOR*100 + HB_VERSION_MICRO >= 10203
-void get_glyphs( hb_font_t* font, hb_set_t* set, Glib::ustring& characters) {
+void get_glyphs(hb_font_t* font, hb_set_t* set, Glib::ustring& characters) {
 
     // There is a unicode to glyph mapping function but not the inverse!
     hb_codepoint_t codepoint = -1;
@@ -73,7 +73,7 @@ void get_glyphs( hb_font_t* font, hb_set_t* set, Glib::ustring& characters) {
 // This list includes all tables regardless of script or language.
 void readOpenTypeGsubTable (const FT_Face ft_face,
                             std::map<Glib::ustring, OTSubstitution>& tables
-    ) {
+) {
 
     // std::cout << "readOpenTypeGsubTable: Entrance: "
     //           << (ft_face->family_name?ft_face->family_name:"null") << std::endl;
@@ -157,32 +157,32 @@ void readOpenTypeGsubTable (const FT_Face ft_face,
             (table.first[0] == 's' && table.first[1] == 's' && !(table.first[2] == 't')) ||
             (table.first[0] == 'c' && table.first[1] == 'v');
 
-        bool ligature = ( table.first == "liga" ||  // Standard ligatures
+        bool ligature = (table.first == "liga" ||  // Standard ligatures
                           table.first == "clig" ||  // Common ligatures
                           table.first == "dlig" ||  // Discretionary ligatures
                           table.first == "hlig" ||  // Historical ligatures
-                          table.first == "calt" );  // Contextual alternatives
+                          table.first == "calt");  // Contextual alternatives
 
-        bool numeric  = ( table.first == "lnum" ||  // Lining numerals
+        bool numeric  = (table.first == "lnum" ||  // Lining numerals
                           table.first == "onum" ||  // Old style
                           table.first == "pnum" ||  // Proportional
                           table.first == "tnum" ||  // Tabular
                           table.first == "frac" ||  // Diagonal fractions
                           table.first == "afrc" ||  // Stacked fractions
                           table.first == "ordn" ||  // Ordinal fractions
-                          table.first == "zero" );  // Slashed zero
+                          table.first == "zero");  // Slashed zero
 
         if (style || ligature || numeric) {
 
             unsigned int feature_index;
-            if (  hb_ot_layout_language_find_feature (hb_face, HB_OT_TAG_GSUB,
+            if (hb_ot_layout_language_find_feature (hb_face, HB_OT_TAG_GSUB,
                                                       0,  // Assume one script exists with index 0
                                                       HB_OT_LAYOUT_DEFAULT_LANGUAGE_INDEX,
                                                       HB_TAG(table.first[0],
                                                              table.first[1],
                                                              table.first[2],
                                                              table.first[3]),
-                                                      &feature_index ) ) {
+                                                      &feature_index)) {
 
                 // std::cout << "Table: " << table.first << std::endl;
                 // std::cout << "  Found feature, number: " << feature_index << std::endl;
@@ -192,7 +192,7 @@ void readOpenTypeGsubTable (const FT_Face ft_face,
                                                               feature_index,
                                                               0, // Start
                                                               &lookup_count,
-                                                              lookup_indexes );
+                                                              lookup_indexes);
                 // std::cout << "  Lookup count: " << count << " total: " << lookup_count << std::endl;
 
                 hb_font_t *hb_font = hb_font_create (hb_face); // MOVE THIS OUT OF LOOPS?
@@ -208,7 +208,7 @@ void readOpenTypeGsubTable (const FT_Face ft_face,
                                                         glyphs_before,
                                                         glyphs_input,
                                                         glyphs_after,
-                                                        glyphs_output );
+                                                        glyphs_output);
 
                     // std::cout << "  Populations: "
                     //           << " " << hb_set_get_population (glyphs_before)
@@ -221,8 +221,8 @@ void readOpenTypeGsubTable (const FT_Face ft_face,
                     hb_ft_font_set_funcs (hb_font);
 
                     get_glyphs (hb_font, glyphs_before, tables[table.first].before);
-                    get_glyphs (hb_font, glyphs_input,  tables[table.first].input );
-                    get_glyphs (hb_font, glyphs_after,  tables[table.first].after );
+                    get_glyphs (hb_font, glyphs_input,  tables[table.first].input);
+                    get_glyphs (hb_font, glyphs_after,  tables[table.first].after);
                     get_glyphs (hb_font, glyphs_output, tables[table.first].output);
 
                     // std::cout << "  Before: " << tables[table.first].before.c_str() << std::endl;
@@ -261,12 +261,12 @@ void readOpenTypeFvarAxes(const FT_Face ft_face,
 #if FREETYPE_MAJOR *10000 + FREETYPE_MINOR*100 + FREETYPE_MICRO >= 20701
     FT_MM_Var* mmvar = nullptr;
     FT_Multi_Master mmtype;
-    if (FT_HAS_MULTIPLE_MASTERS( ft_face )    &&    // Font has variables
-        FT_Get_MM_Var( ft_face, &mmvar) == 0   &&    // We found the data
-        FT_Get_Multi_Master( ft_face, &mmtype) !=0) {  // It's not an Adobe MM font
+    if (FT_HAS_MULTIPLE_MASTERS(ft_face)    &&    // Font has variables
+        FT_Get_MM_Var(ft_face, &mmvar) == 0   &&    // We found the data
+        FT_Get_Multi_Master(ft_face, &mmtype) !=0) {  // It's not an Adobe MM font
 
         FT_Fixed coords[mmvar->num_axis];
-        FT_Get_Var_Design_Coordinates( ft_face, mmvar->num_axis, coords );
+        FT_Get_Var_Design_Coordinates(ft_face, mmvar->num_axis, coords);
 
         for (size_t i = 0; i < mmvar->num_axis; ++i) {
             FT_Var_Axis* axis = &mmvar->axis[i];
@@ -296,9 +296,9 @@ void readOpenTypeFvarNamed(const FT_Face ft_face,
 #if FREETYPE_MAJOR *10000 + FREETYPE_MINOR*100 + FREETYPE_MICRO >= 20701
     FT_MM_Var* mmvar = nullptr;
     FT_Multi_Master mmtype;
-    if (FT_HAS_MULTIPLE_MASTERS( ft_face )    &&    // Font has variables
-        FT_Get_MM_Var( ft_face, &mmvar) == 0   &&    // We found the data
-        FT_Get_Multi_Master( ft_face, &mmtype) !=0) {  // It's not an Adobe MM font
+    if (FT_HAS_MULTIPLE_MASTERS(ft_face)    &&    // Font has variables
+        FT_Get_MM_Var(ft_face, &mmvar) == 0   &&    // We found the data
+        FT_Get_Multi_Master(ft_face, &mmtype) !=0) {  // It's not an Adobe MM font
 
         std::cout << "  Multiple Masters: variables: " << mmvar->num_axis
                   << "  named styles: " << mmvar->num_namedstyles << std::endl;

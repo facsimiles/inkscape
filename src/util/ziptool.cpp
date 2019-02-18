@@ -139,7 +139,7 @@ static void makeCrcTable()
     for (int n = 0; n < 256; n++)
         {
         unsigned long c = n;
-        for (int k = 8;  --k >= 0; )
+        for (int k = 8;  --k >= 0;)
             {
             if ((c & 1) != 0)
                 c = 0xedb88320 ^ (c >> 1);
@@ -624,13 +624,13 @@ bool Inflater::doFixed()
 
         // literal/length table
         int symbol = 0;
-        for ( ; symbol < 144; symbol++)
+        for (; symbol < 144; symbol++)
             lengths[symbol] = 8;
-        for ( ; symbol < 256; symbol++)
+        for (; symbol < 256; symbol++)
             lengths[symbol] = 9;
-        for ( ; symbol < 280; symbol++)
+        for (; symbol < 280; symbol++)
             lengths[symbol] = 7;
-        for ( ; symbol < FIXLCODES; symbol++)
+        for (; symbol < FIXLCODES; symbol++)
             lengths[symbol] = 8;
         buildHuffman(&lencode, lengths, FIXLCODES);
 
@@ -677,13 +677,13 @@ bool Inflater::doDynamic()
 
     // get code length code lengths
     int index = 0;
-    for ( ; index < ncode; index++)
+    for (; index < ncode; index++)
         {
         if (!getBits(3, &ret))
             return false;
         lengths[order[index]] = ret;
         }
-    for ( ; index < 19; index++)
+    for (; index < 19; index++)
         lengths[order[index]] = 0;
 
     // build huffman table for code lengths codes
@@ -1043,7 +1043,7 @@ void Deflater::put(int ch)
  */
 void Deflater::putWord(int ch)
 {
-    int lo = (ch   ) & 0xff;
+    int lo = (ch) & 0xff;
     int hi = (ch>>8) & 0xff;
     put(lo);
     put(hi);
@@ -1332,7 +1332,7 @@ bool Deflater::compressWindow()
                     {
                     unsigned int lookAhead=4;
                     unsigned int lookAheadMax = windowSize - 4 - windowPos;
-                    if (lookBack + lookAheadMax >= windowPos -4 )
+                    if (lookBack + lookAheadMax >= windowPos -4)
                         lookAheadMax = windowPos - 4 - lookBack;
                     if (lookAheadMax > 258)
                         lookAheadMax = 258;
@@ -1394,7 +1394,7 @@ bool Deflater::compress()
     unsigned long total = 0L;
     windowPos = 0;
     std::vector<unsigned char>::iterator iter;
-    for (iter = uncompressed.begin(); iter != uncompressed.end() ; )
+    for (iter = uncompressed.begin(); iter != uncompressed.end() ;)
         {
         total += windowPos;
         trace("total:%ld", total);
@@ -1569,10 +1569,10 @@ bool GzipFile::putByte(unsigned char ch)
  */
 bool GzipFile::putLong(unsigned long val)
 {
-    fileBuf.push_back( (unsigned char)((val    ) & 0xff));
-    fileBuf.push_back( (unsigned char)((val>> 8) & 0xff));
-    fileBuf.push_back( (unsigned char)((val>>16) & 0xff));
-    fileBuf.push_back( (unsigned char)((val>>24) & 0xff));
+    fileBuf.push_back((unsigned char)((val) & 0xff));
+    fileBuf.push_back((unsigned char)((val>> 8) & 0xff));
+    fileBuf.push_back((unsigned char)((val>>16) & 0xff));
+    fileBuf.push_back((unsigned char)((val>>24) & 0xff));
     return true;
 }
 
@@ -1587,7 +1587,7 @@ bool GzipFile::write()
 
     putByte(0x1f); //magic
     putByte(0x8b); //magic
-    putByte(   8); //compression method
+    putByte(8); //compression method
     putByte(0x08); //flags.  say we have a crc and file name
 
     unsigned long ltime = (unsigned long) time(nullptr);
@@ -1693,7 +1693,7 @@ bool GzipFile::getLong(unsigned long *val)
     *val = ((ch4<<24) & 0xff000000L) |
            ((ch3<<16) & 0x00ff0000L) |
            ((ch2<< 8) & 0x0000ff00L) |
-           ((ch1    ) & 0x000000ffL);
+           ((ch1) & 0x000000ffL);
     return true;
 }
 
@@ -2271,10 +2271,10 @@ ZipEntry *ZipFile::newEntry(const std::string &fileName,
  */
 bool ZipFile::putLong(unsigned long val)
 {
-    fileBuf.push_back( ((int)(val    )) & 0xff);
-    fileBuf.push_back( ((int)(val>> 8)) & 0xff);
-    fileBuf.push_back( ((int)(val>>16)) & 0xff);
-    fileBuf.push_back( ((int)(val>>24)) & 0xff);
+    fileBuf.push_back(((int)(val)) & 0xff);
+    fileBuf.push_back(((int)(val>> 8)) & 0xff);
+    fileBuf.push_back(((int)(val>>16)) & 0xff);
+    fileBuf.push_back(((int)(val>>24)) & 0xff);
     return true;
 }
 
@@ -2284,8 +2284,8 @@ bool ZipFile::putLong(unsigned long val)
  */
 bool ZipFile::putInt(unsigned int val)
 {
-    fileBuf.push_back( (val    ) & 0xff);
-    fileBuf.push_back( (val>> 8) & 0xff);
+    fileBuf.push_back((val) & 0xff);
+    fileBuf.push_back((val>> 8) & 0xff);
     return true;
 }
 
@@ -2465,7 +2465,7 @@ bool ZipFile::getLong(unsigned long *val)
     *val = ((ch4<<24) & 0xff000000L) |
            ((ch3<<16) & 0x00ff0000L) |
            ((ch2<< 8) & 0x0000ff00L) |
-           ((ch1    ) & 0x000000ffL);
+           ((ch1) & 0x000000ffL);
     return true;
 }
 
@@ -2479,7 +2479,7 @@ bool ZipFile::getInt(unsigned int *val)
     int ch1 = fileBuf[fileBufPos++];
     int ch2 = fileBuf[fileBufPos++];
     *val = ((ch2<< 8) & 0xff00) |
-           ((ch1    ) & 0x00ff);
+           ((ch1) & 0x00ff);
     return true;
 }
 

@@ -68,12 +68,12 @@ void SPBox3D::build(SPDocument *document, Inkscape::XML::Node *repr) {
 
     // TODO: Create/link to the correct perspective
 
-    if ( document ) {
+    if (document) {
         persp_ref->changedSignal().connect(sigc::bind(sigc::ptr_fun(box3d_ref_changed), this));
 
-        readAttr( "inkscape:perspectiveID" );
-        readAttr( "inkscape:corner0" );
-        readAttr( "inkscape:corner7" );
+        readAttr("inkscape:perspectiveID");
+        readAttr("inkscape:corner0");
+        readAttr("inkscape:corner7");
     }
 }
 
@@ -121,7 +121,7 @@ void SPBox3D::set(SPAttributeEnum key, const gchar* value) {
 
     switch (key) {
         case SP_ATTR_INKSCAPE_BOX3D_PERSPECTIVE_ID:
-            if ( value && box->persp_href && ( strcmp(value, box->persp_href) == 0 ) ) {
+            if (value && box->persp_href && (strcmp(value, box->persp_href) == 0)) {
                 /* No change, do nothing. */
             } else {
                 if (box->persp_href) {
@@ -181,7 +181,7 @@ box3d_ref_changed(SPObject *old_ref, SPObject *ref, SPBox3D *box)
         }
     }
     Persp3D *persp = dynamic_cast<Persp3D *>(ref);
-    if ( persp && (ref != box) ) // FIXME: Comparisons sane?
+    if (persp && (ref != box)) // FIXME: Comparisons sane?
     {
         persp3d_add_box(persp, box);
     }
@@ -333,7 +333,7 @@ box3d_get_center_screen (SPBox3D *box) {
     if (!box3d_get_perspective(box)) {
         return Geom::Point (Geom::infinity(), Geom::infinity());
     }
-    Geom::Affine const i2d( box->i2dt_affine() );
+    Geom::Affine const i2d(box->i2dt_affine());
     return box3d_get_perspective(box)->perspective_impl->tmat.image(proj_center).affine() * i2d.inverse();
 }
 

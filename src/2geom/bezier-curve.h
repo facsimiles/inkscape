@@ -325,7 +325,7 @@ template <> void BezierCurveN<2>::feed(PathSink &sink, bool moveto_initial) cons
 template <> void BezierCurveN<3>::feed(PathSink &sink, bool moveto_initial) const;
 
 inline Point middle_point(LineSegment const& _segment) {
-    return ( _segment.initialPoint() + _segment.finalPoint() ) / 2;
+    return (_segment.initialPoint() + _segment.finalPoint()) / 2;
 }
 
 inline Coord length(LineSegment const& seg) {

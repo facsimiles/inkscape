@@ -197,7 +197,7 @@ LPECopyRotate::cloneD(SPObject *orig, SPObject *dest, Geom::Affine transform, bo
         return;
     }
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
-    if ( SP_IS_GROUP(orig) && SP_IS_GROUP(dest) && SP_GROUP(orig)->getItemCount() == SP_GROUP(dest)->getItemCount() ) {
+    if (SP_IS_GROUP(orig) && SP_IS_GROUP(dest) && SP_GROUP(orig)->getItemCount() == SP_GROUP(dest)->getItemCount()) {
         std::vector< SPObject * > childs = orig->childList(true);
         size_t index = 0;
         for (auto & child : childs) {
@@ -457,7 +457,7 @@ LPECopyRotate::split(Geom::PathVector &path_on, Geom::Path const &divider)
             if (!original.closed()) {
                 tmp_path.push_back(portion_original);
             } else {
-                if (tmp_path.size() > 0 && tmp_path[0].size() > 0 ) {
+                if (tmp_path.size() > 0 && tmp_path[0].size() > 0) {
                     portion_original.setFinal(tmp_path[0].initialPoint());
                     portion_original.append(tmp_path[0]);
                     tmp_path[0] = portion_original;
@@ -533,7 +533,7 @@ LPECopyRotate::split(Geom::PathVector &path_on, Geom::Path const &divider)
 //                } else {
 //                    tmp_path_helper.push_back(append_path);
 //                }
-//                if ( Geom::are_near(tmp_path_helper[tmp_path_helper.size()-1].finalPoint(),tmp_path_helper[tmp_path_helper.size()-1].initialPoint())) {
+//                if (Geom::are_near(tmp_path_helper[tmp_path_helper.size()-1].finalPoint(),tmp_path_helper[tmp_path_helper.size()-1].initialPoint())) {
 //                    tmp_path_helper[tmp_path_helper.size()-1].close();
 //                }
 //            } else {
@@ -617,7 +617,7 @@ LPECopyRotate::doEffect_path (Geom::PathVector const & path_in)
             path_out = pig->getIntersection();
         }
         path_out *= Geom::Translate(half_dir * gap);
-        if ( !split_items ) {
+        if (!split_items) {
             path_out *= Geom::Translate(half_dir * gap).inverse();
             path_out = doEffect_path_post(path_out);
         }
@@ -647,7 +647,7 @@ LPECopyRotate::doEffect_path_post (Geom::PathVector const & path_in)
     for (int i = 0; i < num_copies; ++i) {
         Geom::Rotate rot(-Geom::rad_from_deg(rotation_angle * i));
         Geom::Affine r = Geom::identity();
-        if( i%2 != 0 && mirror_copies) {
+        if(i%2 != 0 && mirror_copies) {
             r *= Geom::Rotate(Geom::Angle(half_dir)).inverse();
             r *= Geom::Scale(1, -1);
             r *= Geom::Rotate(Geom::Angle(half_dir));

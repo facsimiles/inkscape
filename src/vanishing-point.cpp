@@ -497,7 +497,7 @@ VPDrag::VPDrag(SPDocument *document)
     this->sel_changed_connection =
         this->selection->connectChanged(sigc::bind(sigc::ptr_fun(&vp_drag_sel_changed), (gpointer) this)
 
-                                            );
+);
     this->sel_modified_connection =
         this->selection->connectModified(sigc::bind(sigc::ptr_fun(&vp_drag_sel_modified), (gpointer) this));
 

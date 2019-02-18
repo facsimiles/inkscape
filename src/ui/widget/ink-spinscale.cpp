@@ -53,11 +53,11 @@ InkScale::on_draw(const::Cairo::RefPtr<::Cairo::Context>& cr) {
   // Get SpinButton style info...
   auto style_spin = _spinbutton->get_style_context();
   auto state_spin = style_spin->get_state();
-  Gdk::RGBA text_color = style_spin->get_color( state_spin );
+  Gdk::RGBA text_color = style_spin->get_color(state_spin);
 
   // Create Pango layout.
   auto layout_label = create_pango_layout(_label);
-  layout_label->set_ellipsize( Pango::ELLIPSIZE_END );
+  layout_label->set_ellipsize(Pango::ELLIPSIZE_END);
   layout_label->set_width(PANGO_SCALE * get_width());
 
   // Get y location of SpinButton text (to match vertical position of SpinButton text).
@@ -77,7 +77,7 @@ InkScale::on_draw(const::Cairo::RefPtr<::Cairo::Context>& cr) {
   cr->clip();
   Gdk::Cairo::set_source_rgba(cr, text_color);
   //cr->set_source_rgba(0, 0, 0, 1);
-  cr->move_to(5, y );
+  cr->move_to(5, y);
   layout_label->show_in_cairo_context(cr);
   cr->restore();
 
@@ -96,7 +96,7 @@ InkScale::on_draw(const::Cairo::RefPtr<::Cairo::Context>& cr) {
 bool
 InkScale::on_button_press_event(GdkEventButton* button_event) {
 
-  if (! (button_event->state & GDK_MOD1_MASK) ) {
+  if (! (button_event->state & GDK_MOD1_MASK)) {
     bool constrained = button_event->state & GDK_CONTROL_MASK;
     set_adjustment_value(button_event->x, constrained);
   }
@@ -124,7 +124,7 @@ InkScale::on_motion_notify_event(GdkEventMotion* motion_event) {
 
   if (_dragging) {
 
-    if (! (motion_event->state & GDK_MOD1_MASK) ) {
+    if (! (motion_event->state & GDK_MOD1_MASK)) {
       // Absolute change
       bool constrained = motion_event->state & GDK_CONTROL_MASK;
       set_adjustment_value(x, constrained);
@@ -142,12 +142,12 @@ InkScale::on_motion_notify_event(GdkEventMotion* motion_event) {
     auto cursor = Gdk::Cursor::create(display, Gdk::SB_UP_ARROW);
     // Get Gdk::window (not Gtk::window).. set cursor for entire window.
     // Would need to unset with leave event.
-    // get_window()->set_cursor( cursor );
+    // get_window()->set_cursor(cursor);
 
     // Can't see how to do this the C++ way since GdkEventMotion
     // is a structure with a C window member. There is a gdkmm
     // wrapping function for Gdk::EventMotion but only in unstable.
-    gdk_window_set_cursor( motion_event->window, cursor->gobj() );
+    gdk_window_set_cursor(motion_event->window, cursor->gobj());
   }
 
   return false;
@@ -194,7 +194,7 @@ InkScale::set_adjustment_value(double x, bool constrained) {
     }
   }
 
-  adjustment->set_value( value );
+  adjustment->set_value(value);
 }
 
 /*******************************************************************/
@@ -221,8 +221,8 @@ InkSpinScale::InkSpinScale(double value, double lower,
   _scale       = Gtk::manage(new InkScale(_adjustment, _spinbutton));
   _scale->set_draw_value(false);
 
-  pack_end( *_spinbutton,  Gtk::PACK_SHRINK );
-  pack_end( *_scale,       Gtk::PACK_EXPAND_WIDGET );
+  pack_end(*_spinbutton,  Gtk::PACK_SHRINK);
+  pack_end(*_scale,       Gtk::PACK_EXPAND_WIDGET);
 }
 
 InkSpinScale::InkSpinScale(Glib::RefPtr<Gtk::Adjustment> adjustment)
@@ -238,8 +238,8 @@ InkSpinScale::InkSpinScale(Glib::RefPtr<Gtk::Adjustment> adjustment)
   _scale       = Gtk::manage(new InkScale(_adjustment, _spinbutton));
   _scale->set_draw_value(false);
 
-  pack_end( *_spinbutton,  Gtk::PACK_SHRINK );
-  pack_end( *_scale,       Gtk::PACK_EXPAND_WIDGET );
+  pack_end(*_spinbutton,  Gtk::PACK_SHRINK);
+  pack_end(*_scale,       Gtk::PACK_EXPAND_WIDGET);
 }
 
 void
@@ -272,7 +272,7 @@ InkSpinScale::on_key_release_event(GdkEventKey* key_event) {
   case GDK_KEY_KP_Enter:
     {
       if (_focus_widget) {
-        gtk_widget_grab_focus( _focus_widget );
+        gtk_widget_grab_focus(_focus_widget);
       }
     }
     break;

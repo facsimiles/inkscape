@@ -29,7 +29,7 @@ namespace {
 
 void synthesize_events_recursive(Node &node, NodeObserver &observer) {
     node.synthesizeEvents(observer);
-    for ( NodeSiblingIterator iter = node.firstChild() ; iter ; ++iter ) {
+    for (NodeSiblingIterator iter = node.firstChild() ; iter ; ++iter) {
         synthesize_events_recursive(*iter, observer);
     }
 }

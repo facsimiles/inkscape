@@ -45,7 +45,7 @@
 using namespace std;
 using namespace topology;
 
-Node* addNode( Nodes& vs, vpsc::Rectangle* r) {
+Node* addNode(Nodes& vs, vpsc::Rectangle* r) {
     Node *v = new Node(vs.size(), r);
     vs.push_back(v);
     return v;

@@ -81,29 +81,29 @@ public:
         _labelAttr(g_quark_from_string("inkscape:label"))
     {}
         
-    void notifyChildAdded( Node &/*node*/, Node &/*child*/, Node */*prev*/ ) override
+    void notifyChildAdded(Node &/*node*/, Node &/*child*/, Node */*prev*/) override
     {
-        if ( _pnl && _obj ) {
-            _pnl->_objectsChanged( _obj );
+        if (_pnl && _obj) {
+            _pnl->_objectsChanged(_obj);
         }
     }
-    void notifyChildRemoved( Node &/*node*/, Node &/*child*/, Node */*prev*/ ) override
+    void notifyChildRemoved(Node &/*node*/, Node &/*child*/, Node */*prev*/) override
     {
-        if ( _pnl && _obj ) {
-            _pnl->_objectsChanged( _obj );
+        if (_pnl && _obj) {
+            _pnl->_objectsChanged(_obj);
         }
     }
-    void notifyChildOrderChanged( Node &/*node*/, Node &/*child*/, Node */*old_prev*/, Node */*new_prev*/ ) override
+    void notifyChildOrderChanged(Node &/*node*/, Node &/*child*/, Node */*old_prev*/, Node */*new_prev*/) override
     {
-        if ( _pnl && _obj ) {
-            _pnl->_objectsChanged( _obj );
+        if (_pnl && _obj) {
+            _pnl->_objectsChanged(_obj);
         }
     }
-    void notifyContentChanged( Node &/*node*/, Util::ptr_shared /*old_content*/, Util::ptr_shared /*new_content*/ ) override {}
-    void notifyAttributeChanged( Node &/*node*/, GQuark name, Util::ptr_shared /*old_value*/, Util::ptr_shared /*new_value*/ ) override {
-        if ( _pnl && _obj ) {
-            if ( name == _labelAttr ) {
-                _pnl->_updateObject( _obj);
+    void notifyContentChanged(Node &/*node*/, Util::ptr_shared /*old_content*/, Util::ptr_shared /*new_content*/) override {}
+    void notifyAttributeChanged(Node &/*node*/, GQuark name, Util::ptr_shared /*old_value*/, Util::ptr_shared /*new_value*/) override {
+        if (_pnl && _obj) {
+            if (name == _labelAttr) {
+                _pnl->_updateObject(_obj);
             }
         }
     }
@@ -130,35 +130,35 @@ void TagsPanel::_styleButton(Gtk::Button& btn, char const* iconName, char const*
 }
 
 
-Gtk::MenuItem& TagsPanel::_addPopupItem( SPDesktop *desktop, unsigned int code, char const* iconName, char const* fallback, int id )
+Gtk::MenuItem& TagsPanel::_addPopupItem(SPDesktop *desktop, unsigned int code, char const* iconName, char const* fallback, int id)
 {
     GtkWidget* iconWidget = nullptr;
     const char* label = nullptr;
 
-    if ( iconName ) {
+    if (iconName) {
         iconWidget = sp_get_icon_image(iconName, GTK_ICON_SIZE_MENU);
     }
 
-    if ( desktop ) {
-        Verb *verb = Verb::get( code );
-        if ( verb ) {
+    if (desktop) {
+        Verb *verb = Verb::get(code);
+        if (verb) {
             SPAction *action = verb->get_action(desktop);
-            if ( !iconWidget && action && action->image ) {
+            if (!iconWidget && action && action->image) {
                 iconWidget = sp_get_icon_image(action->image, GTK_ICON_SIZE_MENU);
             }
 
-            if ( action ) {
+            if (action) {
                // label = action->name;
             }
         }
     }
 
-    if ( !label && fallback ) {
+    if (!label && fallback) {
         label = fallback;
     }
 
     Gtk::Widget* wrapped = nullptr;
-    if ( iconWidget ) {
+    if (iconWidget) {
         wrapped = Gtk::manage(Glib::wrap(iconWidget));
         wrapped->show();
     }
@@ -178,61 +178,61 @@ Gtk::MenuItem& TagsPanel::_addPopupItem( SPDesktop *desktop, unsigned int code, 
     return *item;
 }
 
-void TagsPanel::_fireAction( unsigned int code )
+void TagsPanel::_fireAction(unsigned int code)
 {
-    if ( _desktop ) {
-        Verb *verb = Verb::get( code );
-        if ( verb ) {
+    if (_desktop) {
+        Verb *verb = Verb::get(code);
+        if (verb) {
             SPAction *action = verb->get_action(_desktop);
-            if ( action ) {
-                sp_action_perform( action, nullptr );
+            if (action) {
+                sp_action_perform(action, nullptr);
             }
         }
     }
 }
 
-void TagsPanel::_takeAction( int val )
+void TagsPanel::_takeAction(int val)
 {
-    if ( !_pending ) {
+    if (!_pending) {
         _pending = new InternalUIBounce();
         _pending->_actionCode = val;
-        Glib::signal_timeout().connect( sigc::mem_fun(*this, &TagsPanel::_executeAction), 0 );
+        Glib::signal_timeout().connect(sigc::mem_fun(*this, &TagsPanel::_executeAction), 0);
     }
 }
 
 bool TagsPanel::_executeAction()
 {
     // Make sure selected layer hasn't changed since the action was triggered
-    if ( _pending) 
+    if (_pending) 
     {
         int val = _pending->_actionCode;
 //      SPObject* target = _pending->_target;
         bool empty = _desktop->selection->isEmpty();
 
-        switch ( val ) {
+        switch (val) {
             case BUTTON_NEW:
             {
-                _fireAction( SP_VERB_TAG_NEW );
+                _fireAction(SP_VERB_TAG_NEW);
             }
             break;
             case BUTTON_TOP:
             {
-                _fireAction( empty ? SP_VERB_LAYER_TO_TOP :  SP_VERB_SELECTION_TO_FRONT);
+                _fireAction(empty ? SP_VERB_LAYER_TO_TOP :  SP_VERB_SELECTION_TO_FRONT);
             }
             break;
             case BUTTON_BOTTOM:
             {
-                _fireAction( empty ? SP_VERB_LAYER_TO_BOTTOM : SP_VERB_SELECTION_TO_BACK );
+                _fireAction(empty ? SP_VERB_LAYER_TO_BOTTOM : SP_VERB_SELECTION_TO_BACK);
             }
             break;
             case BUTTON_UP:
             {
-                _fireAction( empty ? SP_VERB_LAYER_RAISE : SP_VERB_SELECTION_RAISE );
+                _fireAction(empty ? SP_VERB_LAYER_RAISE : SP_VERB_SELECTION_RAISE);
             }
             break;
             case BUTTON_DOWN:
             {
-                _fireAction( empty ? SP_VERB_LAYER_LOWER : SP_VERB_SELECTION_LOWER );
+                _fireAction(empty ? SP_VERB_LAYER_LOWER : SP_VERB_SELECTION_LOWER);
             }
             break;
             case BUTTON_DELETE:
@@ -250,7 +250,7 @@ bool TagsPanel::_executeAction()
             break;
             case DRAGNDROP:
             {
-                _doTreeMove( );
+                _doTreeMove();
             }
             break;
         }
@@ -293,14 +293,14 @@ void TagsPanel::_checkForDeleted(const Gtk::TreeIter& iter, std::vector<SPObject
     }
 }
 
-void TagsPanel::_updateObject( SPObject *obj ) {
-    _store->foreach( sigc::bind<SPObject*>(sigc::mem_fun(*this, &TagsPanel::_checkForUpdated), obj) );
+void TagsPanel::_updateObject(SPObject *obj) {
+    _store->foreach(sigc::bind<SPObject*>(sigc::mem_fun(*this, &TagsPanel::_checkForUpdated), obj));
 }
 
 bool TagsPanel::_checkForUpdated(const Gtk::TreePath &/*path*/, const Gtk::TreeIter& iter, SPObject* obj)
 {
     Gtk::TreeModel::Row row = *iter;
-    if ( obj == row[_model->_colObject] )
+    if (obj == row[_model->_colObject])
     {
         /*
          * We get notified of layer update here (from layer->setLabel()) before layer->label() is set
@@ -322,7 +322,7 @@ bool TagsPanel::_checkForUpdated(const Gtk::TreePath &/*path*/, const Gtk::TreeI
     return false;
 }
 
-void TagsPanel::_objectsSelected( Selection *sel ) {
+void TagsPanel::_objectsSelected(Selection *sel) {
     
     _selectedConnection.block();
     _tree.get_selection()->unselect_all();
@@ -330,7 +330,7 @@ void TagsPanel::_objectsSelected( Selection *sel ) {
 	for(auto i = tmp.begin(); i != tmp.end(); ++i)
     {
         SPObject *obj = *i;
-        _store->foreach(sigc::bind<SPObject *>( sigc::mem_fun(*this, &TagsPanel::_checkForSelected), obj));
+        _store->foreach(sigc::bind<SPObject *>(sigc::mem_fun(*this, &TagsPanel::_checkForSelected), obj));
     }
     _selectedConnection.unblock();
     _checkTreeSelection();
@@ -340,7 +340,7 @@ bool TagsPanel::_checkForSelected(const Gtk::TreePath &/*path*/, const Gtk::Tree
 {
     Gtk::TreeModel::Row row = *iter;
     SPObject * it = row[_model->_colObject];
-    if ( it && SP_IS_TAG_USE(it) && SP_TAG_USE(it)->ref->getObject() == obj )
+    if (it && SP_IS_TAG_USE(it) && SP_TAG_USE(it)->ref->getObject() == obj)
     {
         Glib::RefPtr<Gtk::TreeSelection> select = _tree.get_selection();
 
@@ -363,10 +363,10 @@ void TagsPanel::_objectsChanged(SPObject* root)
     if (_desktop) {
         SPDocument* document = _desktop->doc();
         SPDefs* root = document->getDefs();
-        if ( root ) {
+        if (root) {
             _selectedConnection.block();
             _store->clear();
-            _addObject( document, root, nullptr );
+            _addObject(document, root, nullptr);
             _selectedConnection.unblock();
             _objectsSelected(_desktop->selection);
             _checkTreeSelection();
@@ -374,9 +374,9 @@ void TagsPanel::_objectsChanged(SPObject* root)
     }
 }
 
-void TagsPanel::_addObject( SPDocument* doc, SPObject* obj, Gtk::TreeModel::Row* parentRow )
+void TagsPanel::_addObject(SPDocument* doc, SPObject* obj, Gtk::TreeModel::Row* parentRow)
 {
-    if ( _desktop && obj ) {
+    if (_desktop && obj) {
         for (auto& child: obj->children) {
             if (SP_IS_TAG(&child))
             {
@@ -388,12 +388,12 @@ void TagsPanel::_addObject( SPDocument* doc, SPObject* obj, Gtk::TreeModel::Row*
                 row[_model->_colAddRemove] = 1;
                 row[_model->_colAllowAddRemove] = true;
                 
-                _tree.expand_to_path( _store->get_path(iter) );
+                _tree.expand_to_path(_store->get_path(iter));
 
                 TagsPanel::ObjectWatcher *w = new TagsPanel::ObjectWatcher(this, &child);
                 child.getRepr()->addObserver(*w);
                 _objectWatchers.push_back(w);
-                _addObject( doc, &child, &row );
+                _addObject(doc, &child, &row);
             }
         }
         if (SP_IS_TAG(obj) && obj->firstChild())
@@ -406,7 +406,7 @@ void TagsPanel::_addObject( SPDocument* doc, SPObject* obj, Gtk::TreeModel::Row*
             rowitems[_model->_colAddRemove] = 0;
             rowitems[_model->_colAllowAddRemove] = false;
             
-            _tree.expand_to_path( _store->get_path(iteritems) );
+            _tree.expand_to_path(_store->get_path(iteritems));
 
             for (auto& child: obj->children) {
                 if (SP_IS_TAG_USE(&child))
@@ -421,7 +421,7 @@ void TagsPanel::_addObject( SPDocument* doc, SPObject* obj, Gtk::TreeModel::Row*
                     row[_model->_colAllowAddRemove] = true;
 
                     if (SP_TAG(obj)->expanded()) {
-                        _tree.expand_to_path( _store->get_path(iter) );
+                        _tree.expand_to_path(_store->get_path(iter));
                     }
 
                     if (item) {
@@ -435,7 +435,7 @@ void TagsPanel::_addObject( SPDocument* doc, SPObject* obj, Gtk::TreeModel::Row*
     }
 }
 
-void TagsPanel::_select_tag( SPTag * tag )
+void TagsPanel::_select_tag(SPTag * tag)
 {
     for (auto& child: tag->children) {
         if (SP_IS_TAG(&child)) {
@@ -450,7 +450,7 @@ void TagsPanel::_select_tag( SPTag * tag )
     }
 }
 
-void TagsPanel::_selected_row_callback( const Gtk::TreeModel::iterator& iter )
+void TagsPanel::_selected_row_callback(const Gtk::TreeModel::iterator& iter)
 {
     if (iter) {
         Gtk::TreeModel::Row row = *iter;
@@ -473,9 +473,9 @@ void TagsPanel::_pushTreeSelectionToCurrent()
 {
     _selectionChangedConnection.block();
     // TODO hunt down the possible API abuse in getting NULL
-    if ( _desktop && _desktop->currentRoot() ) {
+    if (_desktop && _desktop->currentRoot()) {
         _desktop->selection->clear();
-        _tree.get_selection()->selected_foreach_iter( sigc::mem_fun(*this, &TagsPanel::_selected_row_callback));
+        _tree.get_selection()->selected_foreach_iter(sigc::mem_fun(*this, &TagsPanel::_selected_row_callback));
     }
     _selectionChangedConnection.unblock();
     
@@ -487,11 +487,11 @@ void TagsPanel::_checkTreeSelection()
     bool sensitive = _tree.get_selection()->count_selected_rows() > 0;
     bool sensitiveNonTop = true;
     bool sensitiveNonBottom = true;
-//    if ( _tree.get_selection()->count_selected_rows() > 0 ) {
+//    if (_tree.get_selection()->count_selected_rows() > 0) {
 //        sensitive = true;
 //
 //        SPObject* inTree = _selectedLayer();
-//        if ( inTree ) {
+//        if (inTree) {
 //
 //            sensitiveNonTop = (Inkscape::Nex(inTree->parent, inTree) != 0);
 //            sensitiveNonBottom = (Inkscape::previous_layer(inTree->parent, inTree) != 0);
@@ -501,13 +501,13 @@ void TagsPanel::_checkTreeSelection()
 
 
     for (auto & it : _watching) {
-        it->set_sensitive( sensitive );
+        it->set_sensitive(sensitive);
     }
     for (auto & it : _watchingNonTop) {
-        it->set_sensitive( sensitiveNonTop );
+        it->set_sensitive(sensitiveNonTop);
     }
     for (auto & it : _watchingNonBottom) {
-        it->set_sensitive( sensitiveNonBottom );
+        it->set_sensitive(sensitiveNonBottom);
     }
 }
 
@@ -555,12 +555,12 @@ bool TagsPanel::_handleButtonEvent(GdkEventButton* event)
 {
     static unsigned doubleclick = 0;
 
-    if ( (event->type == GDK_BUTTON_PRESS) && (event->button == 3) ) {
+    if ((event->type == GDK_BUTTON_PRESS) && (event->button == 3)) {
         // TODO - fix to a better is-popup function
         Gtk::TreeModel::Path path;
         int x = static_cast<int>(event->x);
         int y = static_cast<int>(event->y);
-        if ( _tree.get_path_at_pos( x, y, path ) ) {
+        if (_tree.get_path_at_pos(x, y, path)) {
             _checkTreeSelection();
 #if GTKMM_CHECK_VERSION(3,22,0)
             _popupMenu.popup_at_pointer(reinterpret_cast<GdkEvent *>(event));
@@ -573,7 +573,7 @@ bool TagsPanel::_handleButtonEvent(GdkEventButton* event)
         }
     }
 
-    if ( (event->type == GDK_BUTTON_PRESS) && (event->button == 1)) {
+    if ((event->type == GDK_BUTTON_PRESS) && (event->button == 1)) {
         // Alt left click on the visible/lock columns - eat this event to keep row selection
         Gtk::TreeModel::Path path;
         Gtk::TreeViewColumn* col = nullptr;
@@ -581,11 +581,11 @@ bool TagsPanel::_handleButtonEvent(GdkEventButton* event)
         int y = static_cast<int>(event->y);
         int x2 = 0;
         int y2 = 0;
-        if ( _tree.get_path_at_pos( x, y, path, col, x2, y2 ) ) {
+        if (_tree.get_path_at_pos(x, y, path, col, x2, y2)) {
             if (col == _tree.get_column(COL_ADD-1)) {
                 down_at_add = true;
                 return true;
-            } else if ( !(event->state & (GDK_SHIFT_MASK | GDK_CONTROL_MASK)) & _tree.get_selection()->is_selected(path) ) {
+            } else if (!(event->state & (GDK_SHIFT_MASK | GDK_CONTROL_MASK)) & _tree.get_selection()->is_selected(path)) {
                 _tree.get_selection()->set_select_function(sigc::mem_fun(*this, &TagsPanel::_noSelection));
                 _defer_target = path;
             } else {
@@ -596,12 +596,12 @@ bool TagsPanel::_handleButtonEvent(GdkEventButton* event)
         }
     }
 
-    if ( event->type == GDK_BUTTON_RELEASE) {
+    if (event->type == GDK_BUTTON_RELEASE) {
         _tree.get_selection()->set_select_function(sigc::mem_fun(*this, &TagsPanel::_rowSelectFunction));
     }
     
     // TODO - ImageToggler doesn't seem to handle Shift/Alt clicks - so we deal with them here.
-    if ( (event->type == GDK_BUTTON_RELEASE) && (event->button == 1)) {
+    if ((event->type == GDK_BUTTON_RELEASE) && (event->button == 1)) {
 
         Gtk::TreeModel::Path path;
         Gtk::TreeViewColumn* col = nullptr;
@@ -609,7 +609,7 @@ bool TagsPanel::_handleButtonEvent(GdkEventButton* event)
         int y = static_cast<int>(event->y);
         int x2 = 0;
         int y2 = 0;
-        if ( _tree.get_path_at_pos( x, y, path, col, x2, y2 ) ) {
+        if (_tree.get_path_at_pos(x, y, path, col, x2, y2)) {
             if (_defer_target) {
                 if (_defer_target == path && !(event->x == 0 && event->y == 0))
                 {
@@ -668,11 +668,11 @@ bool TagsPanel::_handleButtonEvent(GdkEventButton* event)
     }
 
 
-    if ( (event->type == GDK_2BUTTON_PRESS) && (event->button == 1) ) {
+    if ((event->type == GDK_2BUTTON_PRESS) && (event->button == 1)) {
         doubleclick = 1;
     }
 
-    if ( event->type == GDK_BUTTON_RELEASE && doubleclick) {
+    if (event->type == GDK_BUTTON_RELEASE && doubleclick) {
         doubleclick = 0;
         Gtk::TreeModel::Path path;
         Gtk::TreeViewColumn* col = nullptr;
@@ -680,7 +680,7 @@ bool TagsPanel::_handleButtonEvent(GdkEventButton* event)
         int y = static_cast<int>(event->y);
         int x2 = 0;
         int y2 = 0;
-        if ( _tree.get_path_at_pos( x, y, path, col, x2, y2 ) && col == _name_column) {
+        if (_tree.get_path_at_pos(x, y, path, col, x2, y2) && col == _name_column) {
             Gtk::TreeModel::Children::iterator iter = _tree.get_model()->get_iter(path);
             Gtk::TreeModel::Row row = *iter;
 
@@ -701,7 +701,7 @@ void TagsPanel::_storeDragSource(const Gtk::TreeModel::iterator& iter)
 {
     Gtk::TreeModel::Row row = *iter;
     SPObject* obj = row[_model->_colObject];
-    SPTag* item = ( obj && SP_IS_TAG(obj) ) ? SP_TAG(obj) : nullptr;
+    SPTag* item = (obj && SP_IS_TAG(obj)) ? SP_TAG(obj) : nullptr;
     if (item)
     {
         _dnd_source.push_back(item);
@@ -782,7 +782,7 @@ bool TagsPanel::_handleDragDrop(const Glib::RefPtr<Gdk::DragContext>& /*context*
 /*
  * Move a layer in response to a drag & drop action
  */
-void TagsPanel::_doTreeMove( )
+void TagsPanel::_doTreeMove()
 {
     if (_dnd_target) {
         for (auto src : _dnd_source)
@@ -798,7 +798,7 @@ void TagsPanel::_doTreeMove( )
             _select_tag(src);
             _dnd_source.pop_back();
         }
-        DocumentUndo::done( _desktop->doc() , SP_VERB_DIALOG_TAGS,
+        DocumentUndo::done(_desktop->doc() , SP_VERB_DIALOG_TAGS,
                                                 _("Moved sets"));
     }
 }
@@ -820,21 +820,21 @@ void TagsPanel::_handleEditingCancelled()
 
 void TagsPanel::_renameObject(Gtk::TreeModel::Row row, const Glib::ustring& name)
 {
-    if ( row && _desktop) {
+    if (row && _desktop) {
         SPObject* obj = row[_model->_colObject];
-        if ( obj ) {
+        if (obj) {
             if (SP_IS_TAG(obj)) {
                 gchar const* oldLabel = obj->label();
-                if ( !name.empty() && (!oldLabel || name != oldLabel) ) {
+                if (!name.empty() && (!oldLabel || name != oldLabel)) {
                     obj->setLabel(name.c_str());
-                    DocumentUndo::done( _desktop->doc() , SP_VERB_NONE,
+                    DocumentUndo::done(_desktop->doc() , SP_VERB_NONE,
                                                         _("Rename object"));
                 }
             } else if (SP_IS_TAG_USE(obj) && (obj = SP_TAG_USE(obj)->ref->getObject())) {
                 gchar const* oldLabel = obj->label();
-                if ( !name.empty() && (!oldLabel || name != oldLabel) ) {
+                if (!name.empty() && (!oldLabel || name != oldLabel)) {
                     obj->setLabel(name.c_str());
-                    DocumentUndo::done( _desktop->doc() , SP_VERB_NONE,
+                    DocumentUndo::done(_desktop->doc() , SP_VERB_NONE,
                                                         _("Rename object"));
                 }
             }
@@ -842,28 +842,28 @@ void TagsPanel::_renameObject(Gtk::TreeModel::Row row, const Glib::ustring& name
     }
 }
 
-bool TagsPanel::_noSelection( Glib::RefPtr<Gtk::TreeModel> const & /*model*/, Gtk::TreeModel::Path const & /*path*/, bool /*currentlySelected*/ )
+bool TagsPanel::_noSelection(Glib::RefPtr<Gtk::TreeModel> const & /*model*/, Gtk::TreeModel::Path const & /*path*/, bool /*currentlySelected*/)
 {
     return false;
 }
 
-bool TagsPanel::_rowSelectFunction( Glib::RefPtr<Gtk::TreeModel> const & /*model*/, Gtk::TreeModel::Path const & /*path*/, bool currentlySelected )
+bool TagsPanel::_rowSelectFunction(Glib::RefPtr<Gtk::TreeModel> const & /*model*/, Gtk::TreeModel::Path const & /*path*/, bool currentlySelected)
 {
     bool val = true;
-    if ( !currentlySelected && _toggleEvent )
+    if (!currentlySelected && _toggleEvent)
     {
         GdkEvent* event = gtk_get_current_event();
-        if ( event ) {
+        if (event) {
             // (keep these checks separate, so we know when to call gdk_event_free()
-            if ( event->type == GDK_BUTTON_PRESS ) {
+            if (event->type == GDK_BUTTON_PRESS) {
                 GdkEventButton const* target = reinterpret_cast<GdkEventButton const*>(_toggleEvent);
                 GdkEventButton const* evtb = reinterpret_cast<GdkEventButton const*>(event);
 
-                if ( (evtb->window == target->window)
+                if ((evtb->window == target->window)
                      && (evtb->send_event == target->send_event)
                      && (evtb->time == target->time)
                      && (evtb->state == target->state)
-                    )
+)
                 {
                     // Ooooh! It's a magic one
                     val = false;
@@ -907,9 +907,9 @@ TagsPanel::TagsPanel() :
     ModelColumns *zoop = new ModelColumns();
     _model = zoop;
 
-    _store = Gtk::TreeStore::create( *zoop );
+    _store = Gtk::TreeStore::create(*zoop);
 
-    _tree.set_model( _store );
+    _tree.set_model(_store);
     _tree.set_headers_visible(false);
     _tree.set_reorderable(true);
     _tree.enable_model_drag_dest (Gdk::ACTION_MOVE);
@@ -922,17 +922,17 @@ TagsPanel::TagsPanel() :
     tooltip_string += (_("Add selection to set"));
     tooltip_string += "; '×': ";
     tooltip_string += (_("Remove from selection set"));
-    _tree.set_tooltip_text( tooltip_string );
+    _tree.set_tooltip_text(tooltip_string);
 
-    Inkscape::UI::Widget::IconRenderer * addRenderer = manage( new Inkscape::UI::Widget::IconRenderer());
+    Inkscape::UI::Widget::IconRenderer * addRenderer = manage(new Inkscape::UI::Widget::IconRenderer());
     addRenderer->add_icon("edit-delete");
     addRenderer->add_icon("list-add");
 
     int addColNum = _tree.append_column("type", *addRenderer) - 1;
     Gtk::TreeViewColumn *col = _tree.get_column(addColNum);
-    if ( col ) {
-        col->add_attribute( addRenderer->property_icon(), _model->_colAddRemove );
-        col->add_attribute( addRenderer->property_visible(), _model->_colAllowAddRemove );
+    if (col) {
+        col->add_attribute(addRenderer->property_icon(), _model->_colAddRemove);
+        col->add_attribute(addRenderer->property_visible(), _model->_colAllowAddRemove);
     }
 
     _text_renderer = manage(new Gtk::CellRendererText());
@@ -940,25 +940,25 @@ TagsPanel::TagsPanel() :
     _name_column = _tree.get_column(nameColNum);
     _name_column->add_attribute(_text_renderer->property_text(), _model->_colLabel);
 
-    _tree.set_expander_column( *_tree.get_column(nameColNum) );
+    _tree.set_expander_column(*_tree.get_column(nameColNum));
 
     _tree.get_selection()->set_mode(Gtk::SELECTION_MULTIPLE);
-    _selectedConnection = _tree.get_selection()->signal_changed().connect( sigc::mem_fun(*this, &TagsPanel::_pushTreeSelectionToCurrent) );
-    _tree.get_selection()->set_select_function( sigc::mem_fun(*this, &TagsPanel::_rowSelectFunction) );
+    _selectedConnection = _tree.get_selection()->signal_changed().connect(sigc::mem_fun(*this, &TagsPanel::_pushTreeSelectionToCurrent));
+    _tree.get_selection()->set_select_function(sigc::mem_fun(*this, &TagsPanel::_rowSelectFunction));
 
-    _tree.signal_drag_drop().connect( sigc::mem_fun(*this, &TagsPanel::_handleDragDrop), false);
-    _collapsedConnection = _tree.signal_row_collapsed().connect( sigc::bind<bool>(sigc::mem_fun(*this, &TagsPanel::_setExpanded), false));
-    _expandedConnection = _tree.signal_row_expanded().connect( sigc::bind<bool>(sigc::mem_fun(*this, &TagsPanel::_setExpanded), true));
+    _tree.signal_drag_drop().connect(sigc::mem_fun(*this, &TagsPanel::_handleDragDrop), false);
+    _collapsedConnection = _tree.signal_row_collapsed().connect(sigc::bind<bool>(sigc::mem_fun(*this, &TagsPanel::_setExpanded), false));
+    _expandedConnection = _tree.signal_row_expanded().connect(sigc::bind<bool>(sigc::mem_fun(*this, &TagsPanel::_setExpanded), true));
 
-    _text_renderer->signal_edited().connect( sigc::mem_fun(*this, &TagsPanel::_handleEdited) );
-    _text_renderer->signal_editing_canceled().connect( sigc::mem_fun(*this, &TagsPanel::_handleEditingCancelled) );
+    _text_renderer->signal_edited().connect(sigc::mem_fun(*this, &TagsPanel::_handleEdited));
+    _text_renderer->signal_editing_canceled().connect(sigc::mem_fun(*this, &TagsPanel::_handleEditingCancelled));
 
-    _tree.signal_button_press_event().connect( sigc::mem_fun(*this, &TagsPanel::_handleButtonEvent), false );
-    _tree.signal_button_release_event().connect( sigc::mem_fun(*this, &TagsPanel::_handleButtonEvent), false );
-    _tree.signal_key_press_event().connect( sigc::mem_fun(*this, &TagsPanel::_handleKeyEvent), false );
+    _tree.signal_button_press_event().connect(sigc::mem_fun(*this, &TagsPanel::_handleButtonEvent), false);
+    _tree.signal_button_release_event().connect(sigc::mem_fun(*this, &TagsPanel::_handleButtonEvent), false);
+    _tree.signal_key_press_event().connect(sigc::mem_fun(*this, &TagsPanel::_handleKeyEvent), false);
 
-    _scroller.add( _tree );
-    _scroller.set_policy( Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC );
+    _scroller.add(_tree);
+    _scroller.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
     _scroller.set_shadow_type(Gtk::SHADOW_IN);
     Gtk::Requisition sreq;
     Gtk::Requisition sreq_natural;
@@ -969,7 +969,7 @@ TagsPanel::TagsPanel() :
         _scroller.set_size_request(sreq.width, minHeight);
     }
 
-    _layersPage.pack_start( _scroller, Gtk::PACK_EXPAND_WIDGET );
+    _layersPage.pack_start(_scroller, Gtk::PACK_EXPAND_WIDGET);
 
     _layersPage.pack_end(_buttonsRow, Gtk::PACK_SHRINK);
 
@@ -977,19 +977,19 @@ TagsPanel::TagsPanel() :
 
     SPDesktop* targetDesktop = getDesktop();
 
-    Gtk::Button* btn = manage( new Gtk::Button() );
-    _styleButton(*btn, "list-add", _("Add a new selection set") );
-    btn->signal_clicked().connect( sigc::bind( sigc::mem_fun(*this, &TagsPanel::_takeAction), (int)BUTTON_NEW) );
+    Gtk::Button* btn = manage(new Gtk::Button());
+    _styleButton(*btn, "list-add", _("Add a new selection set"));
+    btn->signal_clicked().connect(sigc::bind(sigc::mem_fun(*this, &TagsPanel::_takeAction), (int)BUTTON_NEW));
     _buttonsSecondary.pack_start(*btn, Gtk::PACK_SHRINK);
 
-//     btn = manage( new Gtk::Button("Dup") );
-//     btn->signal_clicked().connect( sigc::bind( sigc::mem_fun(*this, &LayersPanel::_takeAction), (int)BUTTON_DUPLICATE) );
-//     _buttonsRow.add( *btn );
+//     btn = manage(new Gtk::Button("Dup"));
+//     btn->signal_clicked().connect(sigc::bind(sigc::mem_fun(*this, &LayersPanel::_takeAction), (int)BUTTON_DUPLICATE));
+//     _buttonsRow.add(*btn);
 
-    btn = manage( new Gtk::Button() );
-    _styleButton( *btn, "list-remove", _("Remove Item/Set") );
-    btn->signal_clicked().connect( sigc::bind( sigc::mem_fun(*this, &TagsPanel::_takeAction), (int)BUTTON_DELETE) );
-    _watching.push_back( btn );
+    btn = manage(new Gtk::Button());
+    _styleButton(*btn, "list-remove", _("Remove Item/Set"));
+    btn->signal_clicked().connect(sigc::bind(sigc::mem_fun(*this, &TagsPanel::_takeAction), (int)BUTTON_DELETE));
+    _watching.push_back(btn);
     _buttonsSecondary.pack_start(*btn, Gtk::PACK_SHRINK);
     
     _buttonsRow.pack_start(_buttonsSecondary, Gtk::PACK_EXPAND_WIDGET);
@@ -997,7 +997,7 @@ TagsPanel::TagsPanel() :
 
     // -------------------------------------------------------
     {
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_TAG_NEW, nullptr, "Add a new selection set", (int)BUTTON_NEW ) );
+        _watching.push_back(&_addPopupItem(targetDesktop, SP_VERB_TAG_NEW, nullptr, "Add a new selection set", (int)BUTTON_NEW));
 
         _popupMenu.show_all_children();
     }
@@ -1006,23 +1006,23 @@ TagsPanel::TagsPanel() :
 
 
     for (auto & it : _watching) {
-        it->set_sensitive( false );
+        it->set_sensitive(false);
     }
     for (auto & it : _watchingNonTop) {
-        it->set_sensitive( false );
+        it->set_sensitive(false);
     }
     for (auto & it : _watchingNonBottom) {
-        it->set_sensitive( false );
+        it->set_sensitive(false);
     }
 
-    setDesktop( targetDesktop );
+    setDesktop(targetDesktop);
 
     show_all_children();
 
     // restorePanelPrefs();
 
     // Connect this up last
-    desktopChangeConn = deskTrack.connectDesktopChanged( sigc::mem_fun(*this, &TagsPanel::setDesktop) );
+    desktopChangeConn = deskTrack.connectDesktopChanged(sigc::mem_fun(*this, &TagsPanel::setDesktop));
     deskTrack.connect(GTK_WIDGET(gobj()));
 }
 
@@ -1031,7 +1031,7 @@ TagsPanel::~TagsPanel()
     
     setDesktop(nullptr);
 
-    if ( _model )
+    if (_model)
     {
         delete _model;
         _model = nullptr;
@@ -1042,9 +1042,9 @@ TagsPanel::~TagsPanel()
         _pending = nullptr;
     }
 
-    if ( _toggleEvent )
+    if (_toggleEvent)
     {
-        gdk_event_free( _toggleEvent );
+        gdk_event_free(_toggleEvent);
         _toggleEvent = nullptr;
     }
 
@@ -1079,22 +1079,22 @@ void TagsPanel::setDocument(SPDesktop* /*desktop*/, SPDocument* document)
     }
 }
 
-void TagsPanel::setDesktop( SPDesktop* desktop )
+void TagsPanel::setDesktop(SPDesktop* desktop)
 {
     Panel::setDesktop(desktop);
 
-    if ( desktop != _desktop ) {
+    if (desktop != _desktop) {
         _documentChangedConnection.disconnect();
         _selectionChangedConnection.disconnect();
-        if ( _desktop ) {
+        if (_desktop) {
             _desktop = nullptr;
         }
 
         _desktop = Panel::getDesktop();
-        if ( _desktop ) {
-            //setLabel( _desktop->doc()->name );
-            _documentChangedConnection = _desktop->connectDocumentReplaced( sigc::mem_fun(*this, &TagsPanel::setDocument));
-            _selectionChangedConnection = _desktop->selection->connectChanged( sigc::mem_fun(*this, &TagsPanel::_objectsSelected));
+        if (_desktop) {
+            //setLabel(_desktop->doc()->name);
+            _documentChangedConnection = _desktop->connectDocumentReplaced(sigc::mem_fun(*this, &TagsPanel::setDocument));
+            _selectionChangedConnection = _desktop->selection->connectChanged(sigc::mem_fun(*this, &TagsPanel::_objectsSelected));
             
             setDocument(_desktop, _desktop->doc());
         }

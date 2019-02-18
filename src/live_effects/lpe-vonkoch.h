@@ -21,7 +21,7 @@ namespace LivePathEffect {
 
 class VonKochPathParam : public PathParam{
 public:
-    VonKochPathParam ( const Glib::ustring& label,
+    VonKochPathParam (const Glib::ustring& label,
 		       const Glib::ustring& tip,
 		       const Glib::ustring& key,
 		       Inkscape::UI::Widget::Registry* wr,
@@ -34,7 +34,7 @@ public:
   //FIXME: a path is used here instead of 2 points to work around path/point param incompatibility bug.
 class VonKochRefPathParam : public PathParam{
 public:
-    VonKochRefPathParam ( const Glib::ustring& label,
+    VonKochRefPathParam (const Glib::ustring& label,
 		       const Glib::ustring& tip,
 		       const Glib::ustring& key,
 		       Inkscape::UI::Widget::Registry* wr,

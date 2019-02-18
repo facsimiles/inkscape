@@ -127,14 +127,14 @@ tools_prefpath2num(char const *id)
             return i;
         else i++;
     }
-    g_assert( 0 == TOOLS_INVALID );
+    g_assert(0 == TOOLS_INVALID);
     return 0; //nothing found
 }
 
 int
 tools_isactive(SPDesktop *dt, unsigned num)
 {
-    g_assert( num < G_N_ELEMENTS(tool_names) );
+    g_assert(num < G_N_ELEMENTS(tool_names));
     if (dynamic_cast<ToolBase *>(dt->event_context)) {
         return dt->event_context->pref_observer->observed_path == tool_names[num];
     } else {
@@ -151,7 +151,7 @@ tools_active(SPDesktop *dt)
 void
 tools_switch(SPDesktop *dt, int num)
 {
-    dt->tipsMessageContext()->set(Inkscape::NORMAL_MESSAGE, gettext( tool_msg[num] ) );
+    dt->tipsMessageContext()->set(Inkscape::NORMAL_MESSAGE, gettext(tool_msg[num]));
     if (dt) {
         // This event may change the above message
         dt->_tool_changed.emit(num);

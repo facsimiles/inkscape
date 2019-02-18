@@ -220,7 +220,7 @@ unsigned int PrintWmf::begin(Inkscape::Extension::Print *mod, SPDocument *doc)
         g_error("Fatal programming error in PrintWmf::begin at U_WMRSETPOLYFILLMODE");
     }
 
-    // Text alignment:  (only changed if RTL text is encountered )
+    // Text alignment:  (only changed if RTL text is encountered)
     //   - (x,y) coordinates received by this filter are those of the point where the text
     //     actually starts, and already takes into account the text object's alignment;
     //   - for this reason, the WMF text alignment must always be TA_BASELINE|TA_LEFT.
@@ -844,7 +844,7 @@ unsigned int PrintWmf::fill(
             (style->stroke.isNone() || style->stroke.noneSet || style->stroke_width.computed == 0.0) ||
             (!style->stroke_dasharray.values.empty()  && FixPPTDashLine)             ||
             !all_closed
-        ) {
+) {
             print_pathv(pathv, fill_transform);  // do any fills. side effect: clears fill_pathv
             use_fill = false;
         }
@@ -1173,7 +1173,7 @@ unsigned int PrintWmf::image(
               Bmi,                 //! (Optional) bitmapbuffer (U_BITMAPINFO section)
               h * rs,              //! size in bytes of px
               px                   //! (Optional) bitmapbuffer (U_BITMAPINFO section)
-          );
+);
     if (!rec || wmf_append((U_METARECORD *)rec, wt, U_REC_FREE)) {
         g_error("Fatal programming error in PrintWmf::image at U_WMRSTRETCHDIB_set");
     }
@@ -1500,8 +1500,8 @@ unsigned int PrintWmf::text(Inkscape::Extension::Print * /*mod*/, char const *te
 
     //Handle super/subscripts and vertical kerning
     /*  Previously used this, but vertical kerning was not supported
-        p2[Geom::X] -= style->baseline_shift.computed * std::sin( rotb );
-        p2[Geom::Y] -= style->baseline_shift.computed * std::cos( rotb );
+        p2[Geom::X] -= style->baseline_shift.computed * std::sin(rotb);
+        p2[Geom::Y] -= style->baseline_shift.computed * std::cos(rotb);
     */
     p2[Geom::X] += ky * std::sin(rotb);
     p2[Geom::Y] += ky * std::cos(rotb);

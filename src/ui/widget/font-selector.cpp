@@ -76,7 +76,7 @@ FontSelector::FontSelector (bool with_size, bool with_variations)
     // Size
     size_combobox.set_name ("FontSelector: Size");
     set_sizes();
-    size_combobox.set_active_text( "18" );
+    size_combobox.set_active_text("18");
 
     // Font Variations
     // Do nothing.
@@ -125,7 +125,7 @@ FontSelector::set_sizes ()
     for (int i : sizes)
     {
         double size = i/ratios[unit];
-        size_combobox.append( Glib::ustring::format(size) );
+        size_combobox.append(Glib::ustring::format(size));
     }
 }
 
@@ -179,7 +179,7 @@ FontSelector::update_font ()
     Gtk::TreeModel::iterator match;
     FontLister::FontStyleListClass FontStyleList;
     Glib::RefPtr<Gtk::ListStore> local_style_list_store = Gtk::ListStore::create(FontStyleList);
-    for ( ; styles; styles = styles->next ) {
+    for (; styles; styles = styles->next) {
         Gtk::TreeModel::iterator treeModelIter = local_style_list_store->append();
         (*treeModelIter)[FontStyleList.cssStyle] = ((StyleNames *)styles->data)->CssName;
         (*treeModelIter)[FontStyleList.displayStyle] = ((StyleNames *)styles->data)->DisplayName;
@@ -195,7 +195,7 @@ FontSelector::update_font ()
     }
 
     Glib::ustring fontspec = font_lister->get_fontspec();
-    font_variations.update( fontspec );
+    font_variations.update(fontspec);
 
     signal_block = false;
 }
@@ -208,7 +208,7 @@ FontSelector::update_size (double size)
     // Set font size
     std::stringstream ss;
     ss << size;
-    size_combobox.get_entry()->set_text( ss.str() );
+    size_combobox.get_entry()->set_text(ss.str());
     font_size = size; // Store value
     set_fontsize_tooltip();
 
@@ -269,8 +269,8 @@ FontSelector::style_cell_data_func (Gtk::CellRenderer *renderer, Gtk::TreeIter c
     Glib::ustring style = "Normal";
     (*iter).get_value(1, style);
 
-    Glib::ustring style_escaped  = Glib::Markup::escape_text( style );
-    Glib::ustring font_desc = Glib::Markup::escape_text( family + " " + style );
+    Glib::ustring style_escaped  = Glib::Markup::escape_text(style);
+    Glib::ustring font_desc = Glib::Markup::escape_text(family + " " + style);
     Glib::ustring markup;
 
     markup = "<span font='" + font_desc + "'>" + style_escaped + "</span>";
@@ -324,7 +324,7 @@ FontSelector::on_family_changed() {
     Glib::RefPtr<Gtk::ListStore>  local_style_list_store = Gtk::ListStore::create(FontStyleList);
 
     // Build list and find best match.
-    for ( ; styles; styles = styles->next ) {
+    for (; styles; styles = styles->next) {
         Gtk::TreeModel::iterator treeModelIter = local_style_list_store->append();
         (*treeModelIter)[FontStyleList.cssStyle] = ((StyleNames *)styles->data)->CssName;
         (*treeModelIter)[FontStyleList.displayStyle] = ((StyleNames *)styles->data)->DisplayName;

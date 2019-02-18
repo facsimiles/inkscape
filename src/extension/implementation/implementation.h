@@ -59,8 +59,8 @@ class ImplementationDocumentCache {
 public:
     ImplementationDocumentCache (Inkscape::UI::View::View * view) { return; };
     
-    virtual ~ImplementationDocumentCache ( ) { return; };
-    Inkscape::UI::View::View const * view ( ) { return _view; };
+    virtual ~ImplementationDocumentCache () { return; };
+    Inkscape::UI::View::View const * view () { return _view; };
 };
 
 /**

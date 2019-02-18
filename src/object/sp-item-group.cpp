@@ -67,7 +67,7 @@ SPGroup::SPGroup() : SPLPEItem(),
 SPGroup::~SPGroup() = default;
 
 void SPGroup::build(SPDocument *document, Inkscape::XML::Node *repr) {
-    this->readAttr( "inkscape:groupmode" );
+    this->readAttr("inkscape:groupmode");
 
     SPLPEItem::build(document, repr);
 }
@@ -87,7 +87,7 @@ void SPGroup::child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) 
     if (last_child && last_child->getRepr() == child) {
         // optimization for the common special case where the child is being added at the end
         SPItem *item = dynamic_cast<SPItem *>(last_child);
-        if ( item ) {
+        if (item) {
             /* TODO: this should be moved into SPItem somehow */
             SPItemView *v;
 
@@ -101,7 +101,7 @@ void SPGroup::child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) 
         }
     } else {    // general case
         SPItem *item = dynamic_cast<SPItem *>(get_child_by_repr(child));
-        if ( item ) {
+        if (item) {
             /* TODO: this should be moved into SPItem somehow */
             SPItemView *v;
             unsigned position = item->pos_in_parent();
@@ -132,11 +132,11 @@ void SPGroup::order_changed (Inkscape::XML::Node *child, Inkscape::XML::Node *ol
     SPLPEItem::order_changed(child, old_ref, new_ref);
 
     SPItem *item = dynamic_cast<SPItem *>(get_child_by_repr(child));
-    if ( item ) {
+    if (item) {
         /* TODO: this should be moved into SPItem somehow */
         SPItemView *v;
         unsigned position = item->pos_in_parent();
-        for ( v = item->display ; v != nullptr ; v = v->next ) {
+        for (v = item->display ; v != nullptr ; v = v->next) {
             v->arenaitem->setZOrder(position);
         }
     }
@@ -184,7 +184,7 @@ void SPGroup::update(SPCtx *ctx, unsigned int flags) {
     if (flags & SP_OBJECT_STYLE_MODIFIED_FLAG) {
         for (SPItemView *v = this->display; v != nullptr; v = v->next) {
             Inkscape::DrawingGroup *group = dynamic_cast<Inkscape::DrawingGroup *>(v->arenaitem);
-            if( this->parent ) {
+            if(this->parent) {
                 this->context_style = this->parent->context_style;
             }
             group->setStyle(this->style, this->context_style);
@@ -233,7 +233,7 @@ Inkscape::XML::Node* SPGroup::write(Inkscape::XML::Document *xml_doc, Inkscape::
         }
 
         for (auto& child: children) {
-            if ( !dynamic_cast<SPTitle *>(&child) && !dynamic_cast<SPDesc *>(&child) ) {
+            if (!dynamic_cast<SPTitle *>(&child) && !dynamic_cast<SPDesc *>(&child)) {
                 Inkscape::XML::Node *crepr = child.updateRepr(xml_doc, nullptr, flags);
 
                 if (crepr) {
@@ -247,19 +247,19 @@ Inkscape::XML::Node* SPGroup::write(Inkscape::XML::Document *xml_doc, Inkscape::
         }
     } else {
         for (auto& child: children) {
-            if ( !dynamic_cast<SPTitle *>(&child) && !dynamic_cast<SPDesc *>(&child) ) {
+            if (!dynamic_cast<SPTitle *>(&child) && !dynamic_cast<SPDesc *>(&child)) {
                 child.updateRepr(flags);
             }
         }
     }
 
-    if ( flags & SP_OBJECT_WRITE_EXT ) {
+    if (flags & SP_OBJECT_WRITE_EXT) {
         const char *value;
-        if ( _layer_mode == SPGroup::LAYER ) {
+        if (_layer_mode == SPGroup::LAYER) {
             value = "layer";
-        } else if ( _layer_mode == SPGroup::MASK_HELPER ) {
+        } else if (_layer_mode == SPGroup::MASK_HELPER) {
             value = "maskhelper";
-        } else if ( flags & SP_OBJECT_WRITE_ALL ) {
+        } else if (flags & SP_OBJECT_WRITE_ALL) {
             value = "group";
         } else {
             value = nullptr;
@@ -314,9 +314,9 @@ gchar *SPGroup::description() const {
 void SPGroup::set(SPAttributeEnum key, gchar const* value) {
     switch (key) {
         case SP_ATTR_INKSCAPE_GROUPMODE:
-            if ( value && !strcmp(value, "layer") ) {
+            if (value && !strcmp(value, "layer")) {
                 this->setLayerMode(SPGroup::LAYER);
-            } else if ( value && !strcmp(value, "maskhelper") ) {
+            } else if (value && !strcmp(value, "maskhelper")) {
                 this->setLayerMode(SPGroup::MASK_HELPER);
             } else {
                 this->setLayerMode(SPGroup::GROUP);
@@ -335,7 +335,7 @@ Inkscape::DrawingItem *SPGroup::show (Inkscape::Drawing &drawing, unsigned int k
 
     ai = new Inkscape::DrawingGroup(drawing);
     ai->setPickChildren(this->effectiveLayerMode(key) == SPGroup::LAYER);
-    if( this->parent ) {
+    if(this->parent) {
         this->context_style = this->parent->context_style;
     }
     ai->setStyle(this->style, this->context_style);
@@ -388,8 +388,8 @@ void sp_item_group_ungroup_handle_clones(SPItem *parent, Geom::Affine const g)
 
 void
 sp_recursive_scale_text_size(Inkscape::XML::Node *repr, double scale){
-    for (Inkscape::XML::Node *child = repr->firstChild() ; child; child = child->next() ){
-        if ( child) {
+    for (Inkscape::XML::Node *child = repr->firstChild() ; child; child = child->next()){
+        if (child) {
             sp_recursive_scale_text_size(child, scale);
         }
     }
@@ -520,7 +520,7 @@ sp_item_group_ungroup (SPGroup *group, std::vector<SPItem*> &children, bool do_d
             // it here _before_ the new transform is set, so as to use the pre-transform bbox
             citem->adjust_paint_recursive (Geom::identity(), Geom::identity(), false);
 
-            child.style->merge( group->style );
+            child.style->merge(group->style);
             /*
              * fixme: We currently make no allowance for the case where child is cloned
              * and the group has any style settings.
@@ -558,7 +558,7 @@ sp_item_group_ungroup (SPGroup *group, std::vector<SPItem*> &children, bool do_d
                         source = sp_offset_get_source(dynamic_cast<SPOffset *>(source));
                     }
                     if (source != nullptr && // If true then we must be dealing with a linked offset ...
-                        group->isAncestorOf(source) ) { // ... of which the source is in the same group
+                        group->isAncestorOf(source)) { // ... of which the source is in the same group
                         ctrans = citem->transform; // then we should apply the transformation of the group to the offset
                     }
                 }
@@ -658,7 +658,7 @@ std::vector<SPItem*> sp_item_group_item_list(SPGroup * group)
     g_return_val_if_fail(group != nullptr, s);
 
     for (auto& o: group->children) {
-        if ( dynamic_cast<SPItem *>(&o) ) {
+        if (dynamic_cast<SPItem *>(&o)) {
             s.push_back((SPItem*)&o);
         }
     }
@@ -668,17 +668,17 @@ std::vector<SPItem*> sp_item_group_item_list(SPGroup * group)
 SPObject *sp_item_group_get_child_by_name(SPGroup *group, SPObject *ref, const gchar *name)
 {
     SPObject *child = (ref) ? ref->getNext() : group->firstChild();
-    while ( child && strcmp(child->getRepr()->name(), name) ) {
+    while (child && strcmp(child->getRepr()->name(), name)) {
         child = child->getNext();
     }
     return child;
 }
 
 void SPGroup::setLayerMode(LayerMode mode) {
-    if ( _layer_mode != mode ) {
-        if ( mode == LAYER ) {
+    if (_layer_mode != mode) {
+        if (mode == LAYER) {
             this->document->addResource("layer", this);
-        } else if ( _layer_mode == LAYER ) {
+        } else if (_layer_mode == LAYER) {
             this->document->removeResource("layer", this);
         }
         _layer_mode = mode;
@@ -689,7 +689,7 @@ void SPGroup::setLayerMode(LayerMode mode) {
 SPGroup::LayerMode SPGroup::layerDisplayMode(unsigned int dkey) const {
     std::map<unsigned int, LayerMode>::const_iterator iter;
     iter = _display_modes.find(dkey);
-    if ( iter != _display_modes.end() ) {
+    if (iter != _display_modes.end()) {
         return (*iter).second;
     } else {
         return GROUP;
@@ -697,19 +697,19 @@ SPGroup::LayerMode SPGroup::layerDisplayMode(unsigned int dkey) const {
 }
 
 void SPGroup::setExpanded(bool isexpanded) {
-    if ( _expanded != isexpanded ){
+    if (_expanded != isexpanded){
         _expanded = isexpanded;
     }
 }
 
 void SPGroup::setInsertBottom(bool insertbottom) {
-    if ( _insert_bottom != insertbottom) {
+    if (_insert_bottom != insertbottom) {
         _insert_bottom = insertbottom;
     }
 }
 
 void SPGroup::setLayerDisplayMode(unsigned int dkey, SPGroup::LayerMode mode) {
-    if ( layerDisplayMode(dkey) != mode ) {
+    if (layerDisplayMode(dkey) != mode) {
         _display_modes[dkey] = mode;
         _updateLayerMode(dkey);
     }
@@ -717,8 +717,8 @@ void SPGroup::setLayerDisplayMode(unsigned int dkey, SPGroup::LayerMode mode) {
 
 void SPGroup::_updateLayerMode(unsigned int display_key) {
     SPItemView *view;
-    for ( view = this->display ; view ; view = view->next ) {
-        if ( !display_key || view->key == display_key ) {
+    for (view = this->display ; view ; view = view->next) {
+        if (!display_key || view->key == display_key) {
             Inkscape::DrawingGroup *g = dynamic_cast<Inkscape::DrawingGroup *>(view->arenaitem);
             if (g) {
                 g->setPickChildren(effectiveLayerMode(view->key) == SPGroup::LAYER);
@@ -729,10 +729,10 @@ void SPGroup::_updateLayerMode(unsigned int display_key) {
 
 void SPGroup::translateChildItems(Geom::Translate const &tr)
 {
-    if ( hasChildren() ) {
+    if (hasChildren()) {
         for (auto& o: children) {
             SPItem *item = dynamic_cast<SPItem *>(&o);
-            if ( item ) {
+            if (item) {
                 sp_item_move_rel(item, tr);
             }
         }
@@ -742,15 +742,15 @@ void SPGroup::translateChildItems(Geom::Translate const &tr)
 // Recursively (or not) scale child items around a point
 void SPGroup::scaleChildItemsRec(Geom::Scale const &sc, Geom::Point const &p, bool noRecurse)
 {
-    if ( hasChildren() ) {
+    if (hasChildren()) {
         for (auto& o: children) {
-            if ( SPDefs *defs = dynamic_cast<SPDefs *>(&o) ) { // select symbols from defs, ignore clips, masks, patterns
+            if (SPDefs *defs = dynamic_cast<SPDefs *>(&o)) { // select symbols from defs, ignore clips, masks, patterns
                 for (auto& defschild: defs->children) {
                     SPGroup *defsgroup = dynamic_cast<SPGroup *>(&defschild);
                     if (defsgroup)
                         defsgroup->scaleChildItemsRec(sc, p, false);
                 }
-            } else if ( SPItem *item = dynamic_cast<SPItem *>(&o) ) {
+            } else if (SPItem *item = dynamic_cast<SPItem *>(&o)) {
                 SPGroup *group = dynamic_cast<SPGroup *>(item);
                 if (group && !dynamic_cast<SPBox3D *>(item)) {
                     /* Using recursion breaks clipping because transforms are applied 
@@ -941,11 +941,11 @@ sp_group_perform_patheffect(SPGroup *group, SPGroup *top_group, Inkscape::LivePa
             if (sub_shape) {
                 SPCurve * c = nullptr;
                 // If item is a SPRect, convert it to path first:
-                if ( dynamic_cast<SPRect *>(sub_shape) ) {
+                if (dynamic_cast<SPRect *>(sub_shape)) {
                     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
                     if (desktop) {
                         Inkscape::Selection *sel = desktop->getSelection();
-                        if ( sel && !sel->isEmpty() ) {
+                        if (sel && !sel->isEmpty()) {
                             sel->clear();
                             sel->add(SP_ITEM(sub_shape));
                             sel->toCurves();

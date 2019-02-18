@@ -485,7 +485,7 @@ void build_from_sbasis(Geom::PathBuilder &pb, D2<SBasis> const &B, double tol, b
         THROW_EXCEPTION("assertion failed: B.isFinite()");
     }
     if(tail_error(B, 3) < tol || sbasis_size(B) == 2) { // nearly cubic enough
-        if( !only_cubicbeziers && (sbasis_size(B) <= 1) ) {
+        if(!only_cubicbeziers && (sbasis_size(B) <= 1)) {
             pb.lineTo(B.at1());
         } else {
             std::vector<Geom::Point> bez;
@@ -528,8 +528,8 @@ path_from_piecewise(Geom::Piecewise<Geom::D2<Geom::SBasis> > const &B, double to
     Geom::Point start = B[0].at0();
     pb.moveTo(start);
     for(unsigned i = 0; ; i++) {
-        if ( (i+1 == B.size()) 
-             || !are_near(B[i+1].at0(), B[i].at1(), tol) )
+        if ((i+1 == B.size()) 
+             || !are_near(B[i+1].at0(), B[i].at1(), tol))
         {
             //start of a new path
             if (are_near(start, B[i].at1()) && sbasis_size(B[i]) <= 1) {

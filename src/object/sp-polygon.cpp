@@ -32,7 +32,7 @@ void SPPolygon::build(SPDocument *document, Inkscape::XML::Node *repr) {
 
     SPShape::build(document, repr);
 
-    object->readAttr( "points" );
+    object->readAttr("points");
 }
 
 /*
@@ -46,7 +46,7 @@ static gchar *sp_svg_write_polygon(Geom::PathVector const & pathv)
 
     for (const auto & pit : pathv) {
         for (Geom::Path::const_iterator cit = pit.begin(); cit != pit.end_default(); ++cit) {
-            if ( is_straight_curve(*cit) )
+            if (is_straight_curve(*cit))
             {
                 os << cit->finalPoint()[0] << "," << cit->finalPoint()[1] << " ";
             } else {

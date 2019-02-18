@@ -59,7 +59,7 @@ const int SYMBOL_ICON_SIZES[] = {16, 24, 32, 48, 64};
 class SymbolsDialog : public UI::Widget::Panel {
 
 public:
-    SymbolsDialog( gchar const* prefsPath = "/dialogs/symbols" );
+    SymbolsDialog(gchar const* prefsPath = "/dialogs/symbols");
     ~SymbolsDialog() override;
 
     static SymbolsDialog& getInstance();
@@ -88,12 +88,12 @@ private:
     void getSymbolsTitle();
     Glib::ustring documentTitle(SPDocument* doc);
     std::pair<Glib::ustring, SPDocument*> getSymbolsSet(Glib::ustring title);
-    void addSymbol( SPObject* symbol, Glib::ustring doc_title);
+    void addSymbol(SPObject* symbol, Glib::ustring doc_title);
     SPDocument* symbolsPreviewDoc();
     void symbolsInDocRecursive (SPObject *r, std::map<Glib::ustring, std::pair<Glib::ustring, SPSymbol*> > &l, Glib::ustring doc_title);
-    std::map<Glib::ustring, std::pair<Glib::ustring, SPSymbol*> > symbolsInDoc( SPDocument* document, Glib::ustring doc_title);
+    std::map<Glib::ustring, std::pair<Glib::ustring, SPSymbol*> > symbolsInDoc(SPDocument* document, Glib::ustring doc_title);
     void useInDoc(SPObject *r, std::vector<SPUse*> &l);
-    std::vector<SPUse*> useInDoc( SPDocument* document);
+    std::vector<SPUse*> useInDoc(SPDocument* document);
     void beforeSearch(GdkEventKey* evt);
     void unsensitive(GdkEventKey* evt);
     void addSymbols();
@@ -105,7 +105,7 @@ private:
     bool callbackAllSymbols();
     void enableWidgets(bool enable);
     Glib::ustring ellipsize(Glib::ustring data, size_t limit);
-    gchar const* styleFromUse( gchar const* id, SPDocument* document);
+    gchar const* styleFromUse(gchar const* id, SPDocument* document);
     Glib::RefPtr<Gdk::Pixbuf> drawSymbol(SPObject *symbol);
     Glib::RefPtr<Gdk::Pixbuf> getOverlay(gint width, gint height);
     /* Keep track of all symbol template documents */

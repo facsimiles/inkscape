@@ -79,10 +79,10 @@ public:
     {
         Inkscape::SVGOStringStream os;
 
-        if( _set )
+        if(_set)
         {
 
-            if( optNumber_set )
+            if(optNumber_set)
             {
                 os << number << " " << optNumber;
             }
@@ -100,12 +100,12 @@ public:
 
         char **values = g_strsplit(str, " ", 2);
 
-        if( values[0] != nullptr )
+        if(values[0] != nullptr)
         {
             number = g_ascii_strtod(values[0], nullptr);
             _set = TRUE;
 
-            if( values[1] != nullptr )
+            if(values[1] != nullptr)
             {
                 optNumber = g_ascii_strtod(values[1], nullptr);
                 optNumber_set = TRUE;

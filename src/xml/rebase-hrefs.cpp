@@ -33,7 +33,7 @@ static bool href_needs_rebasing(std::string const &href)
 {
     bool ret = true;
 
-    if ( href.empty() || (href[0] == '#') ) {
+    if (href.empty() || (href[0] == '#')) {
         ret = false;
         /* False (no change) is the right behaviour even when the base URI differs from the
          * document URI: RFC 3986 defines empty string relative URL as referring to the containing
@@ -41,7 +41,7 @@ static bool href_needs_rebasing(std::string const &href)
     } else {
         /* Don't change data or http hrefs. */
         std::string scheme = Glib::uri_parse_scheme(href);
-        if ( !scheme.empty() ) {
+        if (!scheme.empty()) {
             /* Assume it shouldn't be changed.  This is probably wrong if the scheme is `file'
              * (or if the scheme of the new base is non-file, though I believe that never
              * happens at the time of writing), but that's rare, and we won't try too hard to
@@ -123,9 +123,9 @@ Inkscape::XML::rebase_href_attrs(gchar const *const old_abs_base,
     if (sp_absref) {
         /* We assume that if there wasn't previously a sodipodi:absref attribute
          * then we shouldn't create one. */
-        ret = cons(AttributeRecord(absref_key, ( streq(abs_href.c_str(), sp_absref)
+        ret = cons(AttributeRecord(absref_key, (streq(abs_href.c_str(), sp_absref)
                                                  ? sp_absref
-                                                 : share_string(abs_href.c_str()) )),
+                                                 : share_string(abs_href.c_str()))),
                    ret);
     }
 

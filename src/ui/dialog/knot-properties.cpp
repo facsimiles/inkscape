@@ -87,8 +87,8 @@ KnotPropertiesDialog::KnotPropertiesDialog()
         sigc::bind_return(
             sigc::hide(sigc::mem_fun(*this, &KnotPropertiesDialog::_close)),
             true
-        )
-    );
+)
+);
     add_action_widget(_close_button, Gtk::RESPONSE_CLOSE);
     add_action_widget(_apply_button, Gtk::RESPONSE_APPLY);
 
@@ -141,8 +141,8 @@ KnotPropertiesDialog::_close()
         sigc::bind_return(
             sigc::bind(sigc::ptr_fun<void*, void>(&::operator delete), this),
             false 
-        )
-    );
+)
+);
 }
 
 bool KnotPropertiesDialog::_handleKeyEvent(GdkEventKey * /*event*/)
@@ -161,7 +161,7 @@ bool KnotPropertiesDialog::_handleKeyEvent(GdkEventKey * /*event*/)
 
 void KnotPropertiesDialog::_handleButtonEvent(GdkEventButton* event)
 {
-    if ( (event->type == GDK_2BUTTON_PRESS) && (event->button == 1) ) {
+    if ((event->type == GDK_2BUTTON_PRESS) && (event->button == 1)) {
         _apply();
     }
 }
@@ -169,8 +169,8 @@ void KnotPropertiesDialog::_handleButtonEvent(GdkEventButton* event)
 void KnotPropertiesDialog::_setKnotPoint(Geom::Point knotpoint, Glib::ustring const unit_name)
 {
     _unit_name = unit_name;
-    _knot_x_entry.set_value( Inkscape::Util::Quantity::convert(knotpoint.x(), "px", _unit_name));
-    _knot_y_entry.set_value( Inkscape::Util::Quantity::convert(knotpoint.y(), "px", _unit_name));
+    _knot_x_entry.set_value(Inkscape::Util::Quantity::convert(knotpoint.x(), "px", _unit_name));
+    _knot_y_entry.set_value(Inkscape::Util::Quantity::convert(knotpoint.y(), "px", _unit_name));
     _knot_x_label.set_label(g_strdup_printf(_("Position X (%s):"), _unit_name.c_str()));
     _knot_y_label.set_label(g_strdup_printf(_("Position Y (%s):"), _unit_name.c_str()));
 }

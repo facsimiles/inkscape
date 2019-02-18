@@ -112,24 +112,24 @@ SPCSSAttr *sp_repr_css_attr_parse_color_to_fill(const Glib::ustring &text)
     Glib::ustring::size_type len = text.bytes();
     char *str = const_cast<char *>(text.data());
     bool attempt_alpha = false;
-    if ( !str || ( *str == '\0' ) ) {
+    if (!str || (*str == '\0')) {
         return nullptr; // this is OK due to boolean short-circuit
     }
 
     // those conditionals guard against parsing e.g. the string "fab" as "fab000"
     // (incomplete color) and "45fab71" as "45fab710" (incomplete alpha)
-    if ( *str == '#' ) {
-        if ( len < 7 ) {
+    if (*str == '#') {
+        if (len < 7) {
             return nullptr;
         }
-        if ( len >= 9 ) {
+        if (len >= 9) {
             attempt_alpha = true;
         }
     } else {
-        if ( len < 6 ) {
+        if (len < 6) {
             return nullptr;
         }
-        if ( len >= 8 ) {
+        if (len >= 8) {
             attempt_alpha = true;
         }
     }
@@ -137,16 +137,16 @@ SPCSSAttr *sp_repr_css_attr_parse_color_to_fill(const Glib::ustring &text)
     unsigned int color = 0, alpha = 0xff;
 
     // skip a leading #, if present
-    if ( *str == '#' ) {
+    if (*str == '#') {
         ++str;
     }
 
     // try to parse first 6 digits
     int res = sscanf(str, "%6x", &color);
-    if ( res && ( res != EOF ) ) {
+    if (res && (res != EOF)) {
         if (attempt_alpha) {// try to parse alpha if there's enough characters
             sscanf(str + 6, "%2x", &alpha);
-            if ( !res || res == EOF ) {
+            if (!res || res == EOF) {
                 alpha = 0xff;
             }
         }
@@ -225,9 +225,9 @@ char const *sp_repr_css_property(SPCSSAttr *css, gchar const *name, gchar const 
     g_assert(name != nullptr);
 
     char const *attr = ((Node *)css)->attribute(name);
-    return ( attr == nullptr
+    return (attr == nullptr
              ? defval
-             : attr );
+             : attr);
 }
 
 /**
@@ -301,8 +301,8 @@ double sp_repr_css_double_property(SPCSSAttr *css, gchar const *name, double def
 void sp_repr_css_write_string(SPCSSAttr *css, Glib::ustring &str)
 {
     str.clear();
-    for ( List<AttributeRecord const> iter = css->attributeList() ;
-          iter ; ++iter )
+    for (List<AttributeRecord const> iter = css->attributeList() ;
+          iter ; ++iter)
     {
         if (iter->value && !strcmp(iter->value, "inkscape:unset")) {
             continue;
@@ -344,8 +344,8 @@ void sp_repr_css_set(Node *repr, SPCSSAttr *css, gchar const *attr)
  */
 void sp_repr_css_print(SPCSSAttr *css)
 {
-    for ( List<AttributeRecord const> iter = css->attributeList() ;
-          iter ; ++iter )
+    for (List<AttributeRecord const> iter = css->attributeList() ;
+          iter ; ++iter)
     {
         gchar const * key = g_quark_to_string(iter->key);
         gchar const * val = iter->value;
@@ -375,11 +375,11 @@ static void sp_repr_css_merge_from_decl(SPCSSAttr *css, CRDeclaration const *con
 {
     guchar *const str_value_unsigned = cr_term_to_string(decl->value);
 
-    Glib::ustring value( reinterpret_cast<gchar *>(str_value_unsigned ) );
+    Glib::ustring value(reinterpret_cast<gchar *>(str_value_unsigned));
     g_free(str_value_unsigned);
 
     Glib::ustring::size_type pos = 0;
-    while( (pos=value.find("\"",pos)) != Glib::ustring::npos) {
+    while((pos=value.find("\"",pos)) != Glib::ustring::npos) {
         value.replace(pos,1,"'");
         ++pos;
     }
@@ -408,7 +408,7 @@ static void sp_repr_css_merge_from_decl(SPCSSAttr *css, CRDeclaration const *con
     // CSSOStringStream is used here to write valid CSS (as in sp_style_write_string). This has
     // the additional benefit of respecting the numerical precision set in the SVG Output
     // preferences. We assume any numerical part comes first (if not, the whole string is copied).
-    std::stringstream ss( value );
+    std::stringstream ss(value);
     double number = 0;
     std::string characters;
     std::string temp;
@@ -417,13 +417,13 @@ static void sp_repr_css_merge_from_decl(SPCSSAttr *css, CRDeclaration const *con
         ss.clear();
         ss.seekg(0); // work-around for a bug in libc++ (see lp:1300271)
     }
-    while( !(ss >> temp).eof() ) {
+    while(!(ss >> temp).eof()) {
         characters += temp;
         characters += " ";
     }
     characters += temp;
     Inkscape::CSSOStringStream os;
-    if( number_valid ) os << number;
+    if(number_valid) os << number;
     os << characters;
     if (!units.empty()) {
         os << units;
@@ -501,7 +501,7 @@ void sp_repr_css_change_recursive(Node *repr, SPCSSAttr *css, gchar const *attr)
 SPCSSAttr* sp_repr_css_attr_unset_all(SPCSSAttr *css)
 {
     SPCSSAttr* css_unset = sp_repr_css_attr_new();
-    for ( List<AttributeRecord const> iter = css->attributeList() ; iter ; ++iter ) {
+    for (List<AttributeRecord const> iter = css->attributeList() ; iter ; ++iter) {
         sp_repr_css_set_property (css_unset, g_quark_to_string(iter->key), "inkscape:unset");
     }
     return css_unset;

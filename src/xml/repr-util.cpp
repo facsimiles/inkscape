@@ -177,8 +177,8 @@ gchar const *sp_xml_ns_uri_prefix(gchar const *uri, gchar const *suggested)
 
     GQuark const key = g_quark_from_string(uri);
     prefix = nullptr;
-    for ( SPXMLNs *iter=namespaces ; iter ; iter = iter->next ) {
-        if ( iter->uri == key ) {
+    for (SPXMLNs *iter=namespaces ; iter ; iter = iter->next) {
+        if (iter->uri == key) {
             prefix = g_quark_to_string(iter->prefix);
             break;
         }
@@ -210,7 +210,7 @@ gchar const *sp_xml_ns_uri_prefix(gchar const *uri, gchar const *suggested)
         }
 
         ns = g_new(SPXMLNs, 1);
-        g_assert( ns != nullptr );
+        g_assert(ns != nullptr);
         ns->uri = g_quark_from_string(uri);
         ns->prefix = g_quark_from_string(new_prefix);
 
@@ -238,8 +238,8 @@ gchar const *sp_xml_ns_prefix_uri(gchar const *prefix)
 
     GQuark const key = g_quark_from_string(prefix);
     uri = nullptr;
-    for ( iter = namespaces ; iter ; iter = iter->next ) {
-        if ( iter->prefix == key ) {
+    for (iter = namespaces ; iter ; iter = iter->next) {
+        if (iter->prefix == key) {
             uri = g_quark_to_string(iter->uri);
             break;
         }
@@ -325,10 +325,10 @@ Inkscape::XML::Node *sp_repr_lookup_child(Inkscape::XML::Node *repr,
                                           gchar const *value)
 {
     g_return_val_if_fail(repr != nullptr, NULL);
-    for ( Inkscape::XML::Node *child = repr->firstChild() ; child ; child = child->next() ) {
+    for (Inkscape::XML::Node *child = repr->firstChild() ; child ; child = child->next()) {
         gchar const *child_value = child->attribute(key);
-        if ( (child_value == value) ||
-             (value && child_value && !strcmp(child_value, value)) )
+        if ((child_value == value) ||
+             (value && child_value && !strcmp(child_value, value)))
         {
             return child;
         }
@@ -346,12 +346,12 @@ Inkscape::XML::Node const *sp_repr_lookup_descendant(Inkscape::XML::Node const *
     Inkscape::XML::Node const *found = nullptr;
     g_return_val_if_fail(repr != nullptr, NULL);
     gchar const *repr_value = repr->attribute(key);
-    if ( (repr_value == value) ||
-         (repr_value && value && strcmp(repr_value, value) == 0) ) {
+    if ((repr_value == value) ||
+         (repr_value && value && strcmp(repr_value, value) == 0)) {
         found = repr;
     } else {
-        for (Inkscape::XML::Node const *child = repr->firstChild() ; child && !found; child = child->next() ) {
-            found = sp_repr_lookup_descendant( child, key, value );
+        for (Inkscape::XML::Node const *child = repr->firstChild() ; child && !found; child = child->next()) {
+            found = sp_repr_lookup_descendant(child, key, value);
         }
     }
     return found;
@@ -362,11 +362,11 @@ Inkscape::XML::Node *sp_repr_lookup_descendant(Inkscape::XML::Node *repr,
                                               gchar const *key,
                                               gchar const *value)
 {
-    Inkscape::XML::Node const *found = sp_repr_lookup_descendant( const_cast<Inkscape::XML::Node const *>(repr), key, value );
+    Inkscape::XML::Node const *found = sp_repr_lookup_descendant(const_cast<Inkscape::XML::Node const *>(repr), key, value);
     return const_cast<Inkscape::XML::Node *>(found);
 }
 
-Inkscape::XML::Node const *sp_repr_lookup_name( Inkscape::XML::Node const *repr, gchar const *name, gint maxdepth )
+Inkscape::XML::Node const *sp_repr_lookup_name(Inkscape::XML::Node const *repr, gchar const *name, gint maxdepth)
 {
     Inkscape::XML::Node const *found = nullptr;
     g_return_val_if_fail(repr != nullptr, NULL);
@@ -374,28 +374,28 @@ Inkscape::XML::Node const *sp_repr_lookup_name( Inkscape::XML::Node const *repr,
 
     GQuark const quark = g_quark_from_string(name);
 
-    if ( (GQuark)repr->code() == quark ) {
+    if ((GQuark)repr->code() == quark) {
         found = repr;
-    } else if ( maxdepth != 0 ) {
+    } else if (maxdepth != 0) {
         // maxdepth == -1 means unlimited
-        if ( maxdepth == -1 ) {
+        if (maxdepth == -1) {
             maxdepth = 0;
         }
 
-        for (Inkscape::XML::Node const *child = repr->firstChild() ; child && !found; child = child->next() ) {
-            found = sp_repr_lookup_name( child, name, maxdepth - 1 );
+        for (Inkscape::XML::Node const *child = repr->firstChild() ; child && !found; child = child->next()) {
+            found = sp_repr_lookup_name(child, name, maxdepth - 1);
         }
     }
     return found;
 }
 
-Inkscape::XML::Node *sp_repr_lookup_name( Inkscape::XML::Node *repr, gchar const *name, gint maxdepth )
+Inkscape::XML::Node *sp_repr_lookup_name(Inkscape::XML::Node *repr, gchar const *name, gint maxdepth)
 {
-    Inkscape::XML::Node const *found = sp_repr_lookup_name( const_cast<Inkscape::XML::Node const *>(repr), name, maxdepth );
+    Inkscape::XML::Node const *found = sp_repr_lookup_name(const_cast<Inkscape::XML::Node const *>(repr), name, maxdepth);
     return const_cast<Inkscape::XML::Node *>(found);
 }
 
-std::vector<Inkscape::XML::Node const *> sp_repr_lookup_name_many( Inkscape::XML::Node const *repr, gchar const *name, gint maxdepth )
+std::vector<Inkscape::XML::Node const *> sp_repr_lookup_name_many(Inkscape::XML::Node const *repr, gchar const *name, gint maxdepth)
 {
     std::vector<Inkscape::XML::Node const *> nodes;
     std::vector<Inkscape::XML::Node const *> found;
@@ -404,18 +404,18 @@ std::vector<Inkscape::XML::Node const *> sp_repr_lookup_name_many( Inkscape::XML
 
     GQuark const quark = g_quark_from_string(name);
 
-    if ( (GQuark)repr->code() == quark ) {
+    if ((GQuark)repr->code() == quark) {
         nodes.push_back(repr);
     }
 
-    if ( maxdepth != 0 ) {
+    if (maxdepth != 0) {
         // maxdepth == -1 means unlimited
-        if ( maxdepth == -1 ) {
+        if (maxdepth == -1) {
             maxdepth = 0;
         }
 
-        for (Inkscape::XML::Node const *child = repr->firstChild() ; child; child = child->next() ) {
-            found = sp_repr_lookup_name_many( child, name, maxdepth - 1);
+        for (Inkscape::XML::Node const *child = repr->firstChild() ; child; child = child->next()) {
+            found = sp_repr_lookup_name_many(child, name, maxdepth - 1);
             nodes.insert(nodes.end(), found.begin(), found.end());
         }
     }
@@ -424,8 +424,8 @@ std::vector<Inkscape::XML::Node const *> sp_repr_lookup_name_many( Inkscape::XML
 }
 
 std::vector<Inkscape::XML::Node *>
-sp_repr_lookup_property_many( Inkscape::XML::Node *repr, Glib::ustring const& property,
-                              Glib::ustring const &value, int maxdepth )
+sp_repr_lookup_property_many(Inkscape::XML::Node *repr, Glib::ustring const& property,
+                              Glib::ustring const &value, int maxdepth)
 {
     std::vector<Inkscape::XML::Node *> nodes;
     std::vector<Inkscape::XML::Node *> found;
@@ -436,14 +436,14 @@ sp_repr_lookup_property_many( Inkscape::XML::Node *repr, Glib::ustring const& pr
         nodes.push_back(repr);
     }
 
-    if ( maxdepth != 0 ) {
+    if (maxdepth != 0) {
         // maxdepth == -1 means unlimited
-        if ( maxdepth == -1 ) {
+        if (maxdepth == -1) {
             maxdepth = 0;
         }
 
-        for (Inkscape::XML::Node *child = repr->firstChild() ; child; child = child->next() ) {
-            found = sp_repr_lookup_property_many( child, property, value, maxdepth - 1);
+        for (Inkscape::XML::Node *child = repr->firstChild() ; child; child = child->next()) {
+            found = sp_repr_lookup_property_many(child, property, value, maxdepth - 1);
             nodes.insert(nodes.end(), found.begin(), found.end());
         }
     }
@@ -484,8 +484,8 @@ unsigned int sp_repr_get_boolean(Inkscape::XML::Node *repr, gchar const *key, un
 
     if (v != nullptr) {
         if (!g_ascii_strcasecmp(v, "true") ||
-            !g_ascii_strcasecmp(v, "yes" ) ||
-            !g_ascii_strcasecmp(v, "y"   ) ||
+            !g_ascii_strcasecmp(v, "yes") ||
+            !g_ascii_strcasecmp(v, "y") ||
             (atoi(v) != 0)) {
             *val = TRUE;
         } else {

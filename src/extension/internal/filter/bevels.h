@@ -45,8 +45,8 @@ protected:
     gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
-    DiffuseLight ( ) : Filter() { };
-    ~DiffuseLight ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
+    DiffuseLight () : Filter() { };
+    ~DiffuseLight () override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
         Inkscape::Extension::build_from_mem(
@@ -125,8 +125,8 @@ protected:
     gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
-    MatteJelly ( ) : Filter() { };
-    ~MatteJelly ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
+    MatteJelly () : Filter() { };
+    ~MatteJelly () override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
         Inkscape::Extension::build_from_mem(
@@ -209,8 +209,8 @@ protected:
     gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
-    SpecularLight ( ) : Filter() { };
-    ~SpecularLight ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
+    SpecularLight () : Filter() { };
+    ~SpecularLight () override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
         Inkscape::Extension::build_from_mem(

@@ -43,11 +43,11 @@ public:
  */
 class ColorItem : public Inkscape::UI::Previewable
 {
-    friend void _loadPaletteFile( gchar const *filename );
+    friend void _loadPaletteFile(gchar const *filename);
 public:
-    ColorItem( ege::PaintDef::ColorType type );
-    ColorItem( unsigned int r, unsigned int g, unsigned int b,
-               Glib::ustring& name );
+    ColorItem(ege::PaintDef::ColorType type);
+    ColorItem(unsigned int r, unsigned int g, unsigned int b,
+               Glib::ustring& name);
     ~ColorItem() override;
     ColorItem(ColorItem const &other);
     virtual ColorItem &operator=(ColorItem const &other);
@@ -63,7 +63,7 @@ public:
     void setPattern(cairo_pattern_t *pattern);
     void setName(const Glib::ustring name);
 
-    void setState( bool fill, bool stroke );
+    void setState(bool fill, bool stroke);
     bool isFill() { return _isFill; }
     bool isStroke() { return _isStroke; }
 
@@ -71,7 +71,7 @@ public:
 
 private:
 
-    static void _dropDataIn( GtkWidget *widget,
+    static void _dropDataIn(GtkWidget *widget,
                              GdkDragContext *drag_context,
                              gint x, gint y,
                              GtkSelectionData *data,
@@ -84,14 +84,14 @@ private:
                            guint                                 info,
                            guint                                 time);
 
-    static void _wireMagicColors( SwatchPage *colorSet );
+    static void _wireMagicColors(SwatchPage *colorSet);
     static void _colorDefChanged(void* data);
 
     void _updatePreviews();
     void _regenPreview(UI::Widget::Preview * preview);
 
-    void _linkTint( ColorItem& other, int percent );
-    void _linkTone( ColorItem& other, int percent, int grayLevel );
+    void _linkTint(ColorItem& other, int percent);
+    void _linkTone(ColorItem& other, int percent, int grayLevel);
     void drag_begin(const Glib::RefPtr<Gdk::DragContext> &dc);
     void handleClick();
     void handleSecondaryClick(gint arg1);

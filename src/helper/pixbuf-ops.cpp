@@ -36,12 +36,12 @@
 static void hide_other_items_recursively(SPObject *o, SPItem *i, unsigned dkey)
 {
     SPItem *item = dynamic_cast<SPItem *>(o);
-    if ( item
+    if (item
          && !dynamic_cast<SPDefs *>(item)
          && !dynamic_cast<SPRoot *>(item)
          && !dynamic_cast<SPGroup *>(item)
          && !dynamic_cast<SPUse *>(item)
-         && (i != o) )
+         && (i != o))
     {
         item->invoke_hide(dkey);
     }
@@ -114,7 +114,7 @@ Inkscape::Pixbuf *sp_generate_internal_bitmap(SPDocument *doc, gchar const */*fi
     Geom::Affine affine = scale * Geom::Translate(-origin * scale);
 
     /* Create ArenaItems and set transform */
-    Inkscape::DrawingItem *root = doc->getRoot()->invoke_show( drawing, dkey, SP_ITEM_SHOW_DISPLAY);
+    Inkscape::DrawingItem *root = doc->getRoot()->invoke_show(drawing, dkey, SP_ITEM_SHOW_DISPLAY);
     root->setTransform(affine);
     drawing.setRoot(root);
 

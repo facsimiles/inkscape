@@ -52,8 +52,8 @@ public:
 
     static ObjectsPanel& getInstance();
 
-    void setDesktop( SPDesktop* desktop ) override;
-    void setDocument( SPDesktop* desktop, SPDocument* document);
+    void setDesktop(SPDesktop* desktop) override;
+    void setDocument(SPDesktop* desktop, SPDocument* document);
 
 private:
     //Internal Classes:
@@ -161,13 +161,13 @@ private:
     ObjectsPanel(ObjectsPanel const &); // no copy
     ObjectsPanel &operator=(ObjectsPanel const &); // no assign
 
-    void _styleButton( Gtk::Button& btn, char const* iconName, char const* tooltip );
-    void _fireAction( unsigned int code );
+    void _styleButton(Gtk::Button& btn, char const* iconName, char const* tooltip);
+    void _fireAction(unsigned int code);
     
-    Gtk::MenuItem& _addPopupItem( SPDesktop *desktop, unsigned int code, char const* iconName, char const* fallback, int id );
+    Gtk::MenuItem& _addPopupItem(SPDesktop *desktop, unsigned int code, char const* iconName, char const* fallback, int id);
     
-    void _setVisibleIter( const Gtk::TreeModel::iterator& iter, const bool visible );
-    void _setLockedIter( const Gtk::TreeModel::iterator& iter, const bool locked );
+    void _setVisibleIter(const Gtk::TreeModel::iterator& iter, const bool visible);
+    void _setLockedIter(const Gtk::TreeModel::iterator& iter, const bool locked);
     
     bool _handleButtonEvent(GdkEventButton *event);
     bool _handleKeyEvent(GdkEventKey *event);
@@ -182,20 +182,20 @@ private:
     void _renameObject(Gtk::TreeModel::Row row, const Glib::ustring& name);
 
     void _pushTreeSelectionToCurrent();
-    void _selected_row_callback( const Gtk::TreeModel::iterator& iter, bool *setOpacity );
+    void _selected_row_callback(const Gtk::TreeModel::iterator& iter, bool *setOpacity);
     
     void _checkTreeSelection();
 
-    void _takeAction( int val );
+    void _takeAction(int val);
     bool _executeAction();
 
-    void _setExpanded( const Gtk::TreeModel::iterator& iter, const Gtk::TreeModel::Path& path, bool isexpanded );
+    void _setExpanded(const Gtk::TreeModel::iterator& iter, const Gtk::TreeModel::Path& path, bool isexpanded);
     void _setCollapsed(SPGroup * group);
     
-    bool _noSelection( Glib::RefPtr<Gtk::TreeModel> const & model, Gtk::TreeModel::Path const & path, bool b );
-    bool _rowSelectFunction( Glib::RefPtr<Gtk::TreeModel> const & model, Gtk::TreeModel::Path const & path, bool b );
+    bool _noSelection(Glib::RefPtr<Gtk::TreeModel> const & model, Gtk::TreeModel::Path const & path, bool b);
+    bool _rowSelectFunction(Glib::RefPtr<Gtk::TreeModel> const & model, Gtk::TreeModel::Path const & path, bool b);
 
-    void _compositingChanged( const Gtk::TreeModel::iterator& iter, bool *setValues );
+    void _compositingChanged(const Gtk::TreeModel::iterator& iter, bool *setValues);
     void _updateComposite();
     void _setCompositingValues(SPItem *item);
     
@@ -206,7 +206,7 @@ private:
     bool _checkForSelected(const Gtk::TreePath& path, const Gtk::TreeIter& iter, SPItem* item, bool scrollto, bool expand);
 
     void _objectsChanged(SPObject *obj);
-    void _addObject( SPObject* obj, Gtk::TreeModel::Row* parentRow );
+    void _addObject(SPObject* obj, Gtk::TreeModel::Row* parentRow);
     
     void _opacityChangedIter(const Gtk::TreeIter& iter);
     void _opacityValueChanged();

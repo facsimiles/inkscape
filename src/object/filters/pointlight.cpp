@@ -44,9 +44,9 @@ void SPFePointLight::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPObject::build(document, repr);
 
     //Read values of key attributes from XML nodes into object.
-    this->readAttr( "x" );
-    this->readAttr( "y" );
-    this->readAttr( "z" );
+    this->readAttr("x");
+    this->readAttr("y");
+    this->readAttr("z");
 
 //is this necessary?
     document->addResource("fepointlight", this);
@@ -56,7 +56,7 @@ void SPFePointLight::build(SPDocument *document, Inkscape::XML::Node *repr) {
  * Drops any allocated memory.
  */
 void SPFePointLight::release() {
-    if ( this->document ) {
+    if (this->document) {
         // Unregister ourselves
         this->document->removeResource("fepointlight", this);
     }
@@ -150,9 +150,9 @@ void SPFePointLight::set(SPAttributeEnum key, gchar const *value) {
 void SPFePointLight::update(SPCtx *ctx, guint flags) {
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         /* do something to trigger redisplay, updates? */
-        this->readAttr( "x" );
-        this->readAttr( "y" );
-        this->readAttr( "z" );
+        this->readAttr("x");
+        this->readAttr("y");
+        this->readAttr("z");
     }
 
     SPObject::update(ctx, flags);

@@ -74,16 +74,16 @@ int sp_desktop_root_handler(SPCanvasItem */*item*/, GdkEvent *event, SPDesktop *
     static bool watch = false;
     static bool first = true;
 
-    if ( first ) {
+    if (first) {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        if ( prefs->getBool("/options/useextinput/value", true)
-            && prefs->getBool("/options/switchonextinput/value") ) {
+        if (prefs->getBool("/options/useextinput/value", true)
+            && prefs->getBool("/options/switchonextinput/value")) {
             watch = true;
             init_extended();
         }
         first = false;
     }
-    if ( watch ) {
+    if (watch) {
         snoop_extended(event, desktop);
     }
 
@@ -143,9 +143,9 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
 
                 if (drag_type == SP_DRAG_ROTATE || drag_type == SP_DRAG_TRANSLATE) {
                     sp_canvas_item_grab(item,
-                                        ( GDK_BUTTON_RELEASE_MASK  |
+                                        (GDK_BUTTON_RELEASE_MASK  |
                                           GDK_BUTTON_PRESS_MASK    |
-                                          GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK ),
+                                          GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK),
                                         nullptr,
                                         event->button.time);
                 }
@@ -436,18 +436,18 @@ static void init_extended()
     auto const devices = dm->list_devices(Gdk::DEVICE_TYPE_SLAVE);	
 #endif
     
-    if ( !devices.empty() ) {
+    if (!devices.empty()) {
         for (auto const dev : devices) {
             auto const devName = dev->get_name();
             auto devSrc = dev->get_source();
             
-            if ( !devName.empty()
+            if (!devName.empty()
                  && (avoidName != devName)
-                 && (devSrc != Gdk::SOURCE_MOUSE) ) {
+                 && (devSrc != Gdk::SOURCE_MOUSE)) {
 //                 g_message("Adding '%s' as [%d]", devName, devSrc);
 
                 // Set the initial tool for the device
-                switch ( devSrc ) {
+                switch (devSrc) {
                     case Gdk::SOURCE_PEN:
                         toolToUse[devName] = TOOLS_CALLIGRAPHIC;
                         break;
@@ -473,11 +473,11 @@ void snoop_extended(GdkEvent* event, SPDesktop *desktop)
     GdkInputSource source = GDK_SOURCE_MOUSE;
     std::string name;
 
-    switch ( event->type ) {
+    switch (event->type) {
         case GDK_MOTION_NOTIFY:
         {
             GdkEventMotion* event2 = reinterpret_cast<GdkEventMotion*>(event);
-            if ( event2->device ) {
+            if (event2->device) {
                 source = gdk_device_get_source(event2->device);
                 name = gdk_device_get_name(event2->device);
             }
@@ -490,7 +490,7 @@ void snoop_extended(GdkEvent* event, SPDesktop *desktop)
         case GDK_BUTTON_RELEASE:
         {
             GdkEventButton* event2 = reinterpret_cast<GdkEventButton*>(event);
-            if ( event2->device ) {
+            if (event2->device) {
                 source = gdk_device_get_source(event2->device);
                 name = gdk_device_get_name(event2->device);
             }
@@ -500,7 +500,7 @@ void snoop_extended(GdkEvent* event, SPDesktop *desktop)
         case GDK_SCROLL:
         {
             GdkEventScroll* event2 = reinterpret_cast<GdkEventScroll*>(event);
-            if ( event2->device ) {
+            if (event2->device) {
                 source = gdk_device_get_source(event2->device);
                 name = gdk_device_get_name(event2->device);
             }
@@ -511,7 +511,7 @@ void snoop_extended(GdkEvent* event, SPDesktop *desktop)
         case GDK_PROXIMITY_OUT:
         {
             GdkEventProximity* event2 = reinterpret_cast<GdkEventProximity*>(event);
-            if ( event2->device ) {
+            if (event2->device) {
                 source = gdk_device_get_source(event2->device);
                 name = gdk_device_get_name(event2->device);
             }
@@ -523,7 +523,7 @@ void snoop_extended(GdkEvent* event, SPDesktop *desktop)
     }
 
     if (!name.empty()) {
-        if ( lastType != source || lastName != name ) {
+        if (lastType != source || lastName != name) {
             // The device switched. See if it is one we 'count'
             //g_message("Changed device %s -> %s", lastName.c_str(), name.c_str());
             std::map<std::string, int>::iterator it = toolToUse.find(lastName);
@@ -534,7 +534,7 @@ void snoop_extended(GdkEvent* event, SPDesktop *desktop)
             }
 
             it = toolToUse.find(name);
-            if (it != toolToUse.end() ) {
+            if (it != toolToUse.end()) {
                 tools_switch(desktop, it->second);
             }
 

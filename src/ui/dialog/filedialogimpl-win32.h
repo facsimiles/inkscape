@@ -355,7 +355,7 @@ public:
     virtual Inkscape::Extension::Extension* getSelectionType()
         { return FileDialogBaseWin32::getSelectionType(); }
 
-    virtual void setSelectionType( Inkscape::Extension::Extension *key );
+    virtual void setSelectionType(Inkscape::Extension::Extension *key);
 
     virtual void addFileType(Glib::ustring name, Glib::ustring pattern);
 

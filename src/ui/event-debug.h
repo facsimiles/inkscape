@@ -23,7 +23,7 @@ inline void ui_dump_event (GdkEvent *event, Glib::ustring const &prefix, bool me
     // Doesn't usually help to dump a zillion events of the same type (e.g. GDK_MOTION_NOTIFY).
     ++count;
     if (merge && event->type == old_type) {
-        if ( count == 1 ) {
+        if (count == 1) {
             std::cout << prefix << "  ... ditto" << std::endl;
         }
         return;

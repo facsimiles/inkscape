@@ -44,7 +44,7 @@ public:
 
     static LayersPanel& getInstance();
 
-    void setDesktop( SPDesktop* desktop ) override;
+    void setDesktop(SPDesktop* desktop) override;
 
 private:
     class ModelColumns;
@@ -53,12 +53,12 @@ private:
     LayersPanel(LayersPanel const &) = delete; // no copy
     LayersPanel &operator=(LayersPanel const &) = delete; // no assign
 
-    void _styleButton( Gtk::Button& btn, SPDesktop *desktop, unsigned int code, char const* iconName, char const* fallback );
-    void _fireAction( unsigned int code );
-    Gtk::MenuItem& _addPopupItem( SPDesktop *desktop, unsigned int code, char const* iconName, char const* fallback, int id );
+    void _styleButton(Gtk::Button& btn, SPDesktop *desktop, unsigned int code, char const* iconName, char const* fallback);
+    void _fireAction(unsigned int code);
+    Gtk::MenuItem& _addPopupItem(SPDesktop *desktop, unsigned int code, char const* iconName, char const* fallback, int id);
 
-    void _preToggle( GdkEvent const *event );
-    void _toggled( Glib::ustring const& str, int targetCol );
+    void _preToggle(GdkEvent const *event);
+    void _toggled(Glib::ustring const& str, int targetCol);
 
     bool _handleButtonEvent(GdkEventButton *event);
     bool _handleKeyEvent(GdkEventKey *event);
@@ -72,10 +72,10 @@ private:
     void _pushTreeSelectionToCurrent();
     void _checkTreeSelection();
 
-    void _takeAction( int val );
+    void _takeAction(int val);
     bool _executeAction();
 
-    bool _rowSelectFunction( Glib::RefPtr<Gtk::TreeModel> const & model, Gtk::TreeModel::Path const & path, bool b );
+    bool _rowSelectFunction(Glib::RefPtr<Gtk::TreeModel> const & model, Gtk::TreeModel::Path const & path, bool b);
 
     void _updateLayer(SPObject *layer);
     bool _checkForUpdated(const Gtk::TreePath &path, const Gtk::TreeIter& iter, SPObject* layer);
@@ -84,7 +84,7 @@ private:
     bool _checkForSelected(const Gtk::TreePath& path, const Gtk::TreeIter& iter, SPObject* layer);
 
     void _layersChanged();
-    void _addLayer( SPDocument* doc, SPObject* layer, Gtk::TreeModel::Row* parentRow, SPObject* target, int level );
+    void _addLayer(SPDocument* doc, SPObject* layer, Gtk::TreeModel::Row* parentRow, SPObject* target, int level);
 
     SPObject* _selectedLayer();
 

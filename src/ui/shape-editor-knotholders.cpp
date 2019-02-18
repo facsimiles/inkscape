@@ -923,7 +923,7 @@ ArcKnotHolderEntityStart::knot_set(Geom::Point const &p, Geom::Point const &/*or
     g_assert(arc != nullptr);
 
     gint side = sp_genericellipse_side(arc, p);
-    if(side != 0) { arc->setArcType( (side == -1) ?
+    if(side != 0) { arc->setArcType((side == -1) ?
                                      SP_GENERIC_ELLIPSE_ARC_TYPE_SLICE :
                                      SP_GENERIC_ELLIPSE_ARC_TYPE_ARC); }
 
@@ -974,7 +974,7 @@ ArcKnotHolderEntityEnd::knot_set(Geom::Point const &p, Geom::Point const &/*orig
     g_assert(arc != nullptr);
 
     gint side = sp_genericellipse_side(arc, p);
-    if(side != 0) { arc->setArcType( (side == -1) ?
+    if(side != 0) { arc->setArcType((side == -1) ?
                                      SP_GENERIC_ELLIPSE_ARC_TYPE_SLICE :
                                      SP_GENERIC_ELLIPSE_ARC_TYPE_ARC); }
 
@@ -1026,9 +1026,9 @@ ArcKnotHolderEntityRX::knot_set(Geom::Point const &p, Geom::Point const &/*origi
 
     Geom::Point const s = snap_knot_position(p, state);
 
-    ge->rx = fabs( ge->cx.computed - s[Geom::X] );
+    ge->rx = fabs(ge->cx.computed - s[Geom::X]);
 
-    if ( state & GDK_CONTROL_MASK ) {
+    if (state & GDK_CONTROL_MASK) {
         ge->ry = ge->rx.computed;
     }
 
@@ -1064,9 +1064,9 @@ ArcKnotHolderEntityRY::knot_set(Geom::Point const &p, Geom::Point const &/*origi
 
     Geom::Point const s = snap_knot_position(p, state);
 
-    ge->ry = fabs( ge->cy.computed - s[Geom::Y] );
+    ge->ry = fabs(ge->cy.computed - s[Geom::Y]);
 
-    if ( state & GDK_CONTROL_MASK ) {
+    if (state & GDK_CONTROL_MASK) {
         ge->rx = ge->ry.computed;
     }
 
@@ -1404,9 +1404,9 @@ SpiralKnotHolderEntityInner::knot_set(Geom::Point const &p, Geom::Point const &o
         spiral->t0 = (arg_t0_new - spiral->arg) / (2.0*M_PI*spiral->revo);
 
         /* round inner arg per PI/snaps, if CTRL is pressed */
-        if ( ( state & GDK_CONTROL_MASK )
-             && ( fabs(spiral->revo) > SP_EPSILON_2 )
-             && ( snaps != 0 ) ) {
+        if ((state & GDK_CONTROL_MASK)
+             && (fabs(spiral->revo) > SP_EPSILON_2)
+             && (snaps != 0)) {
             gdouble arg = 2.0*M_PI*spiral->revo*spiral->t0 + spiral->arg;
             spiral->t0 = (sp_round(arg, M_PI/snaps) - spiral->arg)/(2.0*M_PI*spiral->revo);
         }
@@ -1440,8 +1440,8 @@ SpiralKnotHolderEntityOuter::knot_set(Geom::Point const &p, Geom::Point const &/
             // if alt not pressed, change also rad; otherwise it is locked
             spiral->rad = MAX(hypot(dx, dy), 0.001);
         }
-        if ( ( state & GDK_CONTROL_MASK )
-             && snaps ) {
+        if ((state & GDK_CONTROL_MASK)
+             && snaps) {
             spiral->arg = sp_round(spiral->arg, M_PI/snaps);
         }
     } else { // roll/unroll
@@ -1458,7 +1458,7 @@ SpiralKnotHolderEntityOuter::knot_set(Geom::Point const &p, Geom::Point const &/
             mouse_angle += 2*M_PI;
 
         // snap if ctrl
-        if ( ( state & GDK_CONTROL_MASK ) && snaps ) {
+        if ((state & GDK_CONTROL_MASK) && snaps) {
             mouse_angle = sp_round(mouse_angle, M_PI/snaps);
         }
 
@@ -1667,15 +1667,15 @@ TextKnotHolderEntityInlineSize::knot_get() const
         if (mode == SP_CSS_WRITING_MODE_LR_TB ||
             mode == SP_CSS_WRITING_MODE_RL_TB) {
             // horizontal
-            if ( (direction == SP_CSS_DIRECTION_LTR && anchor == SP_CSS_TEXT_ANCHOR_START  ) ||
-                 (direction == SP_CSS_DIRECTION_RTL && anchor == SP_CSS_TEXT_ANCHOR_END) ) {
+            if ((direction == SP_CSS_DIRECTION_LTR && anchor == SP_CSS_TEXT_ANCHOR_START) ||
+                 (direction == SP_CSS_DIRECTION_RTL && anchor == SP_CSS_TEXT_ANCHOR_END)) {
                 p *= Geom::Translate (inline_size, 0);
-            } else if ( direction == SP_CSS_DIRECTION_LTR && anchor == SP_CSS_TEXT_ANCHOR_MIDDLE) {
-                p *= Geom::Translate (inline_size/2.0, 0 );
-            } else if ( direction == SP_CSS_DIRECTION_RTL && anchor == SP_CSS_TEXT_ANCHOR_MIDDLE) {
-                p *= Geom::Translate (-inline_size/2.0, 0 );
-            } else if ( (direction == SP_CSS_DIRECTION_LTR && anchor == SP_CSS_TEXT_ANCHOR_END  ) ||
-                        (direction == SP_CSS_DIRECTION_RTL && anchor == SP_CSS_TEXT_ANCHOR_START) ) {
+            } else if (direction == SP_CSS_DIRECTION_LTR && anchor == SP_CSS_TEXT_ANCHOR_MIDDLE) {
+                p *= Geom::Translate (inline_size/2.0, 0);
+            } else if (direction == SP_CSS_DIRECTION_RTL && anchor == SP_CSS_TEXT_ANCHOR_MIDDLE) {
+                p *= Geom::Translate (-inline_size/2.0, 0);
+            } else if ((direction == SP_CSS_DIRECTION_LTR && anchor == SP_CSS_TEXT_ANCHOR_END) ||
+                        (direction == SP_CSS_DIRECTION_RTL && anchor == SP_CSS_TEXT_ANCHOR_START)) {
                 p *= Geom::Translate (-inline_size, 0);
             }
         } else {
@@ -1695,15 +1695,15 @@ TextKnotHolderEntityInlineSize::knot_get() const
             if (mode == SP_CSS_WRITING_MODE_LR_TB ||
                 mode == SP_CSS_WRITING_MODE_RL_TB) {
                 // horizontal
-                if ( (direction == SP_CSS_DIRECTION_LTR && anchor == SP_CSS_TEXT_ANCHOR_START  ) ||
-                     (direction == SP_CSS_DIRECTION_RTL && anchor == SP_CSS_TEXT_ANCHOR_END) ) {
+                if ((direction == SP_CSS_DIRECTION_LTR && anchor == SP_CSS_TEXT_ANCHOR_START) ||
+                     (direction == SP_CSS_DIRECTION_RTL && anchor == SP_CSS_TEXT_ANCHOR_END)) {
                     p *= Geom::Translate ((*bbox).width(), 0);
-                } else if ( direction == SP_CSS_DIRECTION_LTR && anchor == SP_CSS_TEXT_ANCHOR_MIDDLE) {
+                } else if (direction == SP_CSS_DIRECTION_LTR && anchor == SP_CSS_TEXT_ANCHOR_MIDDLE) {
                     p *= Geom::Translate ((*bbox).width()/2, 0);
-                } else if ( direction == SP_CSS_DIRECTION_RTL && anchor == SP_CSS_TEXT_ANCHOR_MIDDLE) {
+                } else if (direction == SP_CSS_DIRECTION_RTL && anchor == SP_CSS_TEXT_ANCHOR_MIDDLE) {
                     p *= Geom::Translate (-(*bbox).width()/2, 0);
-                } else if ( (direction == SP_CSS_DIRECTION_LTR && anchor == SP_CSS_TEXT_ANCHOR_END  ) ||
-                            (direction == SP_CSS_DIRECTION_RTL && anchor == SP_CSS_TEXT_ANCHOR_START) ) {
+                } else if ((direction == SP_CSS_DIRECTION_LTR && anchor == SP_CSS_TEXT_ANCHOR_END) ||
+                            (direction == SP_CSS_DIRECTION_RTL && anchor == SP_CSS_TEXT_ANCHOR_START)) {
                     p *= Geom::Translate (-(*bbox).width(), 0);
                 }
             } else {

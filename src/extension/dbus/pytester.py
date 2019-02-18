@@ -15,12 +15,12 @@ import random
 #####################################################################
 
 def randomrect (document):
-  document.rectangle( random.randint(0,1000), 
+  document.rectangle(random.randint(0,1000), 
                       random.randint(0,1000),
                       random.randint(1,100),
                       random.randint(1,100))
 
-def lottarects ( document ):
+def lottarects (document):
   document.pause_updates()
   listy = []
   for x in range(1,2000):
@@ -28,7 +28,7 @@ def lottarects ( document ):
       print "HALFWAY"
     if x == 1:
       print "BEGUN"
-    document.rectangle( 0, 0, 100, 100)
+    document.rectangle(0, 0, 100, 100)
     #randomrect(document)
   print "DONE"
   for x in listy:
@@ -39,7 +39,7 @@ def lottarects ( document ):
 def lottaverbs (doc):
   doc.pause_updates()
   doc.document_set_css ("fill:#ff0000;fill-opacity:.5;stroke:#0000ff;stroke-width:5;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none")
-  doc.rectangle( 0, 0, 100, 100)
+  doc.rectangle(0, 0, 100, 100)
   doc.select_all()
   doc.selection_copy()
   for x in range(1,2000):
@@ -48,12 +48,12 @@ def lottaverbs (doc):
     if x == 1:
       print "BEGUN"
     doc.selection_paste()
-    #doc.rectangle( 0, 0, 100, 100)
+    #doc.rectangle(0, 0, 100, 100)
   doc.resume_updates()
   
 def testDrawing (doc):
   doc.document_set_css ("fill:#000000;fill-opacity:.5;stroke:#000000;stroke-width:5;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none")
-  doc.ellipse( 0, 0, 100, 100)
+  doc.ellipse(0, 0, 100, 100)
   doc.select_all()
   doc.selection_copy()
   for x in range(1,2000):
@@ -68,7 +68,7 @@ def testDrawing (doc):
     doc.mark_as_unmodified()
 
 
-def testcopypaste (document ):
+def testcopypaste (document):
   #document.pause_updates()
   print document.rectangle (400, 500, 100, 100)
   print document.rectangle (200, 200, 100, 100)

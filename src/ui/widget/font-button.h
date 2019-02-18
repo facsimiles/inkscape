@@ -31,7 +31,7 @@ public:
      *                  indicates the next character should be used for the
      *                  mnemonic accelerator key (defaults to false).
      */
-    FontButton( Glib::ustring const &label,
+    FontButton(Glib::ustring const &label,
            Glib::ustring const &tooltip,
            Glib::ustring const &suffix = "",
            Glib::ustring const &icon = "",

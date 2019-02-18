@@ -25,7 +25,7 @@ void SPScript::build(SPDocument* doc, Inkscape::XML::Node* repr) {
     SPObject::build(doc, repr);
 
     //Read values of key attributes from XML nodes into object.
-    this->readAttr( "xlink:href" );
+    this->readAttr("xlink:href");
 
     doc->addResource("script", this);
 }

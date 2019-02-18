@@ -559,11 +559,11 @@ private:
     std::vector<point_data> pData;
     
     static int CmpQRs(const quick_raster_data &p1, const quick_raster_data &p2) {
-        if ( fabs(p1.x - p2.x) < 0.00001 ) {
+        if (fabs(p1.x - p2.x) < 0.00001) {
             return 0;
         }
 
-        return ( ( p1.x < p2.x ) ? -1 : 1 );
+        return ((p1.x < p2.x) ? -1 : 1);
     };
 
     // edge direction comparison function    

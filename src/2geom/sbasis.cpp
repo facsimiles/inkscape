@@ -645,7 +645,7 @@ SBasis compose_inverse(SBasis const &f, SBasis const &g, unsigned order, double 
         if (fabs(det)<zero){
             a=b=0;
         }else{
-            a=( q01*r10-q10*r01)/det;
+            a=(q01*r10-q10*r01)/det;
             b=(-p01*r10+p10*r01)/det;
         }
         result[k] = Linear(a,b);

@@ -34,7 +34,7 @@ namespace Inkscape {
 class ErrorReporter {
 public:
     virtual ~ErrorReporter() = default;
-    virtual void handleError(Glib::ustring const& primary, Glib::ustring const& secondary ) const = 0;
+    virtual void handleError(Glib::ustring const& primary, Glib::ustring const& secondary) const = 0;
 };
 
 /**
@@ -298,7 +298,7 @@ public:
      *
      * @return True if an error has occurred since last checking, false otherwise.
      */
-    bool getLastError( Glib::ustring& primary, Glib::ustring& secondary );
+    bool getLastError(Glib::ustring& primary, Glib::ustring& secondary);
 
     /**
      * @name Iterate over directories and entries.
@@ -530,7 +530,7 @@ public:
     /**
      * Copies values from old location to new.
      */
-    static void migrate( std::string const& legacyDir, std::string const& prefdir );
+    static void migrate(std::string const& legacyDir, std::string const& prefdir);
 
     /**
      * Access the singleton Preferences object.
@@ -657,7 +657,7 @@ inline int Preferences::Entry::getIntLimited(int def, int min, int max) const
         return def;
     } else {
         int val = Inkscape::Preferences::get()->_extractInt(*this);
-        return ( val >= min && val <= max ? val : def );
+        return (val >= min && val <= max ? val : def);
     }
 }
 
@@ -683,7 +683,7 @@ inline double Preferences::Entry::getDoubleLimited(double def, double min, doubl
         } else {
             val = Inkscape::Preferences::get()->_extractDouble(*this, unit);
         }
-        return ( val >= min && val <= max ? val : def );
+        return (val >= min && val <= max ? val : def);
     }
 }
 

@@ -57,7 +57,7 @@ class OriginalPathArrayParam : public Parameter {
 public:
     class ModelColumns;
     
-    OriginalPathArrayParam( const Glib::ustring& label,
+    OriginalPathArrayParam(const Glib::ustring& label,
                 const Glib::ustring& tip,
                 const Glib::ustring& key,
                 Inkscape::UI::Widget::Registry* wr,

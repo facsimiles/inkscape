@@ -38,7 +38,7 @@ enum IntersectorKind {
  *
  * (
  *  e.g. a = (x2 - x1), b = (y2 - y1), c = (x2 - x1)*x1 + (y2 - y1)*y1
- * )
+ *)
  *
  * In our case we use:
  *   a = n0.x     d = n1.x
@@ -76,7 +76,7 @@ line_intersection(Geom::Point const &n0, double const d0,
     /* X = (-d1, d0) dot (n0[Y], n1[Y]) */
 
     if (denominator == 0) {
-        if ( X == 0 ) {
+        if (X == 0) {
             return coincident;
         } else {
             return parallel;
@@ -109,10 +109,10 @@ intersector_ccw(const Geom::Point& p0, const Geom::Point& p1,
         return -1; // cw
 
     /* Colinear [or NaN].  Decide the order. */
-    if ( ( d1[0] * d2[0] < 0 )  ||
-         ( d1[1] * d2[1] < 0 ) ) {
+    if ((d1[0] * d2[0] < 0)  ||
+         (d1[1] * d2[1] < 0)) {
         return -1; // p2  <  p0 < p1
-    } else if ( dot(d1,d1) < dot(d2,d2) ) {
+    } else if (dot(d1,d1) < dot(d2,d2)) {
         return +1; // p0 <= p1  <  p2
     } else {
         return 0; // p0 <= p2 <= p1
@@ -133,7 +133,7 @@ line_segment_intersectp(Geom::Point const &p00, Geom::Point const &p01,
     if(p00 == p01) return false;
     if(p10 == p11) return false;
 
-    return ((intersector_ccw(p00, p01, p10) * intersector_ccw(p00, p01, p11)) <= 0 );
+    return ((intersector_ccw(p00, p01, p10) * intersector_ccw(p00, p01, p11)) <= 0);
 }
 
 
@@ -150,8 +150,8 @@ segment_intersectp(Geom::Point const &p00, Geom::Point const &p01,
     if(p00 == p01) return false;
     if(p10 == p11) return false;
 
-    /* true iff (    (the p1 segment straddles the p0 infinite line)
-     *           and (the p0 segment straddles the p1 infinite line) ). */
+    /* true iff ((the p1 segment straddles the p0 infinite line)
+     *           and (the p0 segment straddles the p1 infinite line)). */
     return (line_segment_intersectp(p00, p01, p10, p11) &&
             line_segment_intersectp(p10, p11, p00, p01));
 }

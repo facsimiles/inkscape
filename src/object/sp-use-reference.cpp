@@ -62,11 +62,11 @@ SPUsePath::~SPUsePath()
 void
 SPUsePath::link(char *to)
 {
-    if ( to == nullptr ) {
+    if (to == nullptr) {
         quit_listening();
         unlink();
     } else {
-        if ( !sourceHref || ( strcmp(to, sourceHref) != 0 ) ) {
+        if (!sourceHref || (strcmp(to, sourceHref) != 0)) {
             g_free(sourceHref);
             sourceHref = g_strdup(to);
             try {
@@ -93,7 +93,7 @@ SPUsePath::unlink()
 void
 SPUsePath::start_listening(SPObject* to)
 {
-    if ( to == nullptr ) {
+    if (to == nullptr) {
         return;
     }
     sourceObject = to;
@@ -106,7 +106,7 @@ SPUsePath::start_listening(SPObject* to)
 void
 SPUsePath::quit_listening()
 {
-    if ( sourceObject == nullptr ) {
+    if (sourceObject == nullptr) {
         return;
     }
     _modified_connection.disconnect();
@@ -121,7 +121,7 @@ sp_usepath_href_changed(SPObject */*old_ref*/, SPObject */*ref*/, SPUsePath *off
 {
     offset->quit_listening();
     SPItem *refobj = offset->getObject();
-    if ( refobj ) {
+    if (refobj) {
         offset->start_listening(refobj);
     }
     offset->sourceDirty=true;
@@ -204,7 +204,7 @@ void SPUsePath::refresh_source()
     }
 
     SPObject *refobj = sourceObject;
-    if ( refobj == nullptr ) return;
+    if (refobj == nullptr) return;
     
     SPItem *item = SP_ITEM(refobj);
 

@@ -119,7 +119,7 @@ vector<Edge> random_dag(unsigned depth, unsigned maxbranch, unsigned &V,
     /*
     for(unsigned i=0;i<dfs.leaves.size();i++) {
         for(unsigned j=1;j<dfs.leaves[i].size();j++) {
-            cx.push_back( new SeparationConstraint(dfs.leaves[i][j-1],dfs.leaves[i][j],10));
+            cx.push_back(new SeparationConstraint(dfs.leaves[i][j-1],dfs.leaves[i][j],10));
         }
     }
     */
@@ -245,7 +245,7 @@ void makeFeasible(vpsc::Rectangles& rs, vector<cola::Edge>& edges,
         router->processTransaction();
         const Avoid::Polygon& route = connRef->route();
         vector<topology::EdgePoint*> eps;
-        eps.push_back( new topology::EdgePoint( topologyNodes[e.first], 
+        eps.push_back(new topology::EdgePoint(topologyNodes[e.first], 
                     topology::EdgePoint::CENTRE));
         for(size_t j=1;j+1<route.size();j++) {
             const Avoid::Point& p = route.ps[j];

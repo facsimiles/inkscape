@@ -691,7 +691,7 @@ void OrthogonalEdgeConstraint::generateTopologyConstraints(const vpsc::Dim k,
         if (r->allowOverlap()) continue;
         double l, rMin, rMax, rCentre;
         rectBounds(k, r, rMin, rMax, rCentre, l);
-        if ( ((rMin >= minBound) && (rMin <= maxBound)) || 
+        if (((rMin >= minBound) && (rMin <= maxBound)) || 
              ((rMax >= minBound) && (rMax <= maxBound))) 
         {
             double g = l / 2;

@@ -47,11 +47,11 @@ public:
         delete b;
         delete a;
     }
-    SPObject* a;
-    SPObject* b;
-    SPObject* c;
-    SPObject* d;
-    SPObject* e;
+    SPObject *a;
+    SPObject *b;
+    SPObject *c;
+    SPObject *d;
+    SPObject *e;
 };
 
 TEST_F(SPObjectTest, Basics) {

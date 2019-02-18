@@ -51,7 +51,7 @@ void desktopDestructHandler(SPDesktop *desktop)
 
 
 // TODO unify this later:
-static Glib::ustring getLayoutPrefPath( Inkscape::UI::View::View *view )
+static Glib::ustring getLayoutPrefPath(Inkscape::UI::View::View *view)
 {
     Glib::ustring prefPath;
 
@@ -79,12 +79,12 @@ public:
     UXManagerImpl();
     ~UXManagerImpl() override;
 
-    void addTrack( SPDesktopWidget* dtw ) override;
-    void delTrack( SPDesktopWidget* dtw ) override;
+    void addTrack(SPDesktopWidget* dtw) override;
+    void delTrack(SPDesktopWidget* dtw) override;
 
-    void connectToDesktop( vector<GtkWidget *> const & toolboxes, SPDesktop *desktop ) override;
+    void connectToDesktop(vector<GtkWidget *> const & toolboxes, SPDesktop *desktop) override;
 
-    gint getDefaultTask( SPDesktop *desktop ) override;
+    gint getDefaultTask(SPDesktop *desktop) override;
     void setTask(SPDesktop* dt, gint val) override;
 
     bool isWidescreen() const override;
@@ -138,12 +138,12 @@ bool UXManagerImpl::isWidescreen() const
     return _widescreen;
 }
 
-gint UXManagerImpl::getDefaultTask( SPDesktop *desktop )
+gint UXManagerImpl::getDefaultTask(SPDesktop *desktop)
 {
     gint taskNum = isWidescreen() ? 2 : 0;
 
-    Glib::ustring prefPath = getLayoutPrefPath( desktop );
-    taskNum = Inkscape::Preferences::get()->getInt( prefPath + "task/taskset", taskNum );
+    Glib::ustring prefPath = getLayoutPrefPath(desktop);
+    taskNum = Inkscape::Preferences::get()->getInt(prefPath + "task/taskset", taskNum);
     taskNum = (taskNum < 0) ? 0 : (taskNum > 2) ? 2 : taskNum;
 
     return taskNum;
@@ -183,21 +183,21 @@ void UXManagerImpl::setTask(SPDesktop* dt, gint val)
                         dtw->setToolboxPosition("AuxToolbar", GTK_POS_RIGHT);
                     }
             }
-            Glib::ustring prefPath = getLayoutPrefPath( dtw->desktop );
-            Inkscape::Preferences::get()->setInt( prefPath + "task/taskset", taskNum );
+            Glib::ustring prefPath = getLayoutPrefPath(dtw->desktop);
+            Inkscape::Preferences::get()->setInt(prefPath + "task/taskset", taskNum);
         }
     }
 }
 
 
-void UXManagerImpl::addTrack( SPDesktopWidget* dtw )
+void UXManagerImpl::addTrack(SPDesktopWidget* dtw)
 {
     if (std::find(dtws.begin(), dtws.end(), dtw) == dtws.end()) {
         dtws.push_back(dtw);
     }
 }
 
-void UXManagerImpl::delTrack( SPDesktopWidget* dtw )
+void UXManagerImpl::delTrack(SPDesktopWidget* dtw)
 {
     vector<SPDesktopWidget*>::iterator iter = std::find(dtws.begin(), dtws.end(), dtw);
     if (iter != dtws.end()) {
@@ -205,7 +205,7 @@ void UXManagerImpl::delTrack( SPDesktopWidget* dtw )
     }
 }
 
-void UXManagerImpl::connectToDesktop( vector<GtkWidget *> const & toolboxes, SPDesktop *desktop )
+void UXManagerImpl::connectToDesktop(vector<GtkWidget *> const & toolboxes, SPDesktop *desktop)
 {
     if (!desktop)
     {
@@ -216,7 +216,7 @@ void UXManagerImpl::connectToDesktop( vector<GtkWidget *> const & toolboxes, SPD
     tracker.destroyConn = desktop->connectDestroy(&desktopDestructHandler);
 
     for (auto toolbox : toolboxes) {
-        ToolboxFactory::setToolboxDesktop( toolbox, desktop );
+        ToolboxFactory::setToolboxDesktop(toolbox, desktop);
         if (find(tracked.begin(), tracked.end(), toolbox) == tracked.end()) {
             tracked.push_back(toolbox);
         }
@@ -226,10 +226,10 @@ void UXManagerImpl::connectToDesktop( vector<GtkWidget *> const & toolboxes, SPD
         desktops.push_back(desktop);
     }
 
-    gint taskNum = getDefaultTask( desktop );
+    gint taskNum = getDefaultTask(desktop);
 
     // note: this will change once more options are in the task set support:
-    Inkscape::UI::UXManager::getInstance()->setTask( desktop, taskNum );
+    Inkscape::UI::UXManager::getInstance()->setTask(desktop, taskNum);
 }
 
 

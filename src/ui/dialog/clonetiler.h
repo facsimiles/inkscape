@@ -140,7 +140,7 @@ protected:
             double rotate_rand,
             int    rotate_alternatei, int    rotate_alternatej,
             int    rotate_cumulatei,  int    rotate_cumulatej
-            );
+);
 
 
 private:

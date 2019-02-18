@@ -226,8 +226,8 @@ public:
         void setMessage (Inkscape::MessageType type, gchar const* msg) override
         { _dtw->setMessage (type, msg); }
 
-        bool showInfoDialog( Glib::ustring const &message ) override {
-            return _dtw->showInfoDialog( message );
+        bool showInfoDialog(Glib::ustring const &message) override {
+            return _dtw->showInfoDialog(message);
         }
 
         bool warnDialog (Glib::ustring const &text) override
@@ -249,7 +249,7 @@ public:
     void setWindowSize (gint w, gint h);
     void setWindowTransient (void *p, int transient_policy);
     void presentWindow();
-    bool showInfoDialog( Glib::ustring const &message );
+    bool showInfoDialog(Glib::ustring const &message);
     bool warnDialog (Glib::ustring const &text);
     void setToolboxFocusTo (gchar const *);
     void setToolboxAdjustmentValue (gchar const * id, double value);
@@ -318,7 +318,7 @@ public:
     void canvas_tbl_size_allocate(Gtk::Allocation &allocation);
 
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
-    static void cms_adjust_toggled( GtkWidget *button, gpointer data );
+    static void cms_adjust_toggled(GtkWidget *button, gpointer data);
     static void color_profile_event(EgeColorProfTracker *tracker, SPDesktopWidget *dtw);
 #endif
     static void ruler_snap_new_guide(SPDesktop *desktop, SPCanvasItem *guide, Geom::Point &event_dt, Geom::Point &normal);

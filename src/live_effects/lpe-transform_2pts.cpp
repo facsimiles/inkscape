@@ -167,7 +167,7 @@ LPETransform2Pts::doBeforeEffect (SPLPEItem const* lpeitem)
             previous_lenght = Geom::distance((Geom::Point)start, (Geom::Point)end);
         }
     }
-    if(lock_lenght || lock_angle ) {
+    if(lock_lenght || lock_angle) {
         Geom::Point end_point = Geom::Point::polar(previous_angle, previous_lenght) + (Geom::Point)start;
         end.param_setValue(end_point);
     }
@@ -437,7 +437,7 @@ LPETransform2Pts::addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<
     Geom::PathVector pathv;
     pathv.push_back(hp);
     double r = helper_size*.1;
-    if(lock_lenght || lock_angle ) {
+    if(lock_lenght || lock_angle) {
         char const * svgd;
         svgd = "M -5.39,8.78 -9.13,5.29 -10.38,10.28 Z M -7.22,7.07 -3.43,3.37 m -1.95,-12.16 -3.74,3.5 -1.26,-5 z m -1.83,1.71 3.78,3.7 M 5.24,8.78 8.98,5.29 10.24,10.28 Z M 7.07,7.07 3.29,3.37 M 5.24,-8.78 l 3.74,3.5 1.26,-5 z M 7.07,-7.07 3.29,-3.37";
         PathVector pathv_move = sp_svg_read_pathv(svgd);

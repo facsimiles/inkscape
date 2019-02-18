@@ -24,7 +24,7 @@ namespace LivePathEffect {
 
 class TransformedPointParam : public Parameter {
 public:
-    TransformedPointParam( const Glib::ustring& label,
+    TransformedPointParam(const Glib::ustring& label,
                 const Glib::ustring& tip,
                 const Glib::ustring& key,
                 Inkscape::UI::Widget::Registry* wr,

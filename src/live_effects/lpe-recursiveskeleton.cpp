@@ -51,7 +51,7 @@ LPERecursiveSkeleton::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > co
     OptInterval pattBndsX = bounds_exact(x0);
     OptInterval pattBndsY = bounds_exact(y0);
 
-    if ( !pattBndsX || !pattBndsY) {
+    if (!pattBndsX || !pattBndsY) {
         return pwd2_in;
     }
 
@@ -91,7 +91,7 @@ LPERecursiveSkeleton::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > co
                 x*=scaling;
             }
 
-            if ( true /*scale_y_rel.get_value()*/ ) {
+            if (true /*scale_y_rel.get_value()*/) {
                 y*=(scaling*prop_scale);
             } else {
                 if (prop_scale != 1.0) y *= prop_scale;

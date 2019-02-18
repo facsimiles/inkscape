@@ -48,7 +48,7 @@ extern "C" {
 */
 void brush_print(
       U_BRUSH b  
-   ){
+){
     uint16_t hatch;
     U_COLORREF Color;
     switch(b.Style){
@@ -80,21 +80,21 @@ void brush_print(
 */
 void font_print(
        const char *font
-   ){
-   printf("Height:%d ",              *(int16_t *)(font + offsetof(U_FONT,Height        )));
-   printf("Width:%d ",               *(int16_t *)(font + offsetof(U_FONT,Width         )));
-   printf("Escapement:%d ",          *(int16_t *)(font + offsetof(U_FONT,Escapement    )));
-   printf("Orientation:%d ",         *(int16_t *)(font + offsetof(U_FONT,Orientation   )));
-   printf("Weight:%d ",              *(int16_t *)(font + offsetof(U_FONT,Weight        )));
-   printf("Italic:0x%2.2X ",         *(uint8_t *)(font + offsetof(U_FONT,Italic        )));
-   printf("Underline:0x%2.2X ",      *(uint8_t *)(font + offsetof(U_FONT,Underline     )));
-   printf("StrikeOut:0x%2.2X ",      *(uint8_t *)(font + offsetof(U_FONT,StrikeOut     )));
-   printf("CharSet:0x%2.2X ",        *(uint8_t *)(font + offsetof(U_FONT,CharSet       )));
-   printf("OutPrecision:0x%2.2X ",   *(uint8_t *)(font + offsetof(U_FONT,OutPrecision  )));
-   printf("ClipPrecision:0x%2.2X ",  *(uint8_t *)(font + offsetof(U_FONT,ClipPrecision )));
-   printf("Quality:0x%2.2X ",        *(uint8_t *)(font + offsetof(U_FONT,Quality       )));
+){
+   printf("Height:%d ",              *(int16_t *)(font + offsetof(U_FONT,Height)));
+   printf("Width:%d ",               *(int16_t *)(font + offsetof(U_FONT,Width)));
+   printf("Escapement:%d ",          *(int16_t *)(font + offsetof(U_FONT,Escapement)));
+   printf("Orientation:%d ",         *(int16_t *)(font + offsetof(U_FONT,Orientation)));
+   printf("Weight:%d ",              *(int16_t *)(font + offsetof(U_FONT,Weight)));
+   printf("Italic:0x%2.2X ",         *(uint8_t *)(font + offsetof(U_FONT,Italic)));
+   printf("Underline:0x%2.2X ",      *(uint8_t *)(font + offsetof(U_FONT,Underline)));
+   printf("StrikeOut:0x%2.2X ",      *(uint8_t *)(font + offsetof(U_FONT,StrikeOut)));
+   printf("CharSet:0x%2.2X ",        *(uint8_t *)(font + offsetof(U_FONT,CharSet)));
+   printf("OutPrecision:0x%2.2X ",   *(uint8_t *)(font + offsetof(U_FONT,OutPrecision)));
+   printf("ClipPrecision:0x%2.2X ",  *(uint8_t *)(font + offsetof(U_FONT,ClipPrecision)));
+   printf("Quality:0x%2.2X ",        *(uint8_t *)(font + offsetof(U_FONT,Quality)));
    printf("PitchAndFamily:0x%2.2X ", *(uint8_t *)(font + offsetof(U_FONT,PitchAndFamily)));
-   printf("FaceName:%s ",                        (font + offsetof(U_FONT,FaceName      )));
+   printf("FaceName:%s ",                        (font + offsetof(U_FONT,FaceName)));
 }
 
 
@@ -104,11 +104,11 @@ void font_print(
 */
 void pltntry_print(
       U_PLTNTRY pny
-   ){
+){
    printf("Value:%u ", pny.Value);
-   printf("Red:%u ",   pny.Red  );
+   printf("Red:%u ",   pny.Red);
    printf("Green:%u ", pny.Green);
-   printf("Blue:%u ",  pny.Blue );
+   printf("Blue:%u ",  pny.Blue);
 }
 
 
@@ -120,12 +120,12 @@ void pltntry_print(
 void palette_print(
       const U_PALETTE  *p,
       const char       *PalEntries
-   ){
+){
    int            i;
    U_PLTNTRY pny;
 
-   printf("Start:%X ", p->Start );
-   printf("NumEntries:%u ",p->NumEntries );
+   printf("Start:%X ", p->Start);
+   printf("NumEntries:%u ",p->NumEntries);
    if(p->NumEntries && PalEntries){
      for(i=0; i < p->NumEntries; i++, PalEntries += sizeof(U_PLTNTRY)){
         memcpy(&pny, PalEntries, sizeof(U_PLTNTRY));
@@ -147,10 +147,10 @@ void palette_print(
 */
 void pen_print(
       U_PEN p
-   ){
+){
    U_COLORREF Color;
-   printf("Style:0x%8.8X "      ,p.Style  );
-   printf("Width:%u "           ,p.Widthw[0]  );
+   printf("Style:0x%8.8X "      ,p.Style);
+   printf("Width:%u "           ,p.Widthw[0]);
    memcpy(&Color, &p.Color, sizeof(U_COLORREF));
    printf("Color");              colorref_print(Color);
 }
@@ -162,7 +162,7 @@ void pen_print(
 */
 void rect16_ltrb_print(
       U_RECT16 rect
-    ){
+){
     printf("LTRB{%d,%d,%d,%d} ",rect.left,rect.top,rect.right,rect.bottom);
 }
 
@@ -180,7 +180,7 @@ void rect16_ltrb_print(
 */
 void rect16_brtl_print(
       U_RECT16 rect
-    ){
+){
     printf("BRTL{%d,%d,%d,%d} ",rect.bottom,rect.right,rect.top,rect.left);
 }
 
@@ -192,13 +192,13 @@ void rect16_brtl_print(
 */
 void region_print(
       const char *region
-    ){
+){
     U_RECT16 rect16;
-    printf("Type:%d ",  *(uint16_t *)(region + offsetof(U_REGION,Type  )));
-    printf("Size:%d ",  *( int16_t *)(region + offsetof(U_REGION,Size  )));
-    printf("sCount:%d ",*( int16_t *)(region + offsetof(U_REGION,sCount)));
-    printf("sMax:%d ",  *( int16_t *)(region + offsetof(U_REGION,sMax  )));
-    memcpy(&rect16,                  (region + offsetof(U_REGION,sRect )),  sizeof(U_RECT16));
+    printf("Type:%d ",  *(uint16_t *)(region + offsetof(U_REGION,Type)));
+    printf("Size:%d ",  *(int16_t *)(region + offsetof(U_REGION,Size)));
+    printf("sCount:%d ",*(int16_t *)(region + offsetof(U_REGION,sCount)));
+    printf("sMax:%d ",  *(int16_t *)(region + offsetof(U_REGION,sMax)));
+    memcpy(&rect16,                  (region + offsetof(U_REGION,sRect)),  sizeof(U_RECT16));
     printf("sRect: ");  rect16_ltrb_print(rect16);
 }
 
@@ -209,14 +209,14 @@ void region_print(
 */
 void bitmap16_print(
       U_BITMAP16 b
-    ){
-    printf("Type:%d ",        b.Type      );
-    printf("Width:%d ",       b.Width     );
-    printf("Height:%d ",      b.Height    );
+){
+    printf("Type:%d ",        b.Type);
+    printf("Width:%d ",       b.Width);
+    printf("Height:%d ",      b.Height);
     printf("WidthBytes:%d ",  b.WidthBytes);
-    printf("Planes:%d ",      b.Planes    );
-    printf("BitsPixel:%d ",   b.BitsPixel );
-    printf("BitsBytes:%d ",   (((b.Width * b.BitsPixel + 15) >> 4) << 1) * b.Height );
+    printf("Planes:%d ",      b.Planes);
+    printf("BitsPixel:%d ",   b.BitsPixel);
+    printf("BitsBytes:%d ",   (((b.Width * b.BitsPixel + 15) >> 4) << 1) * b.Height);
 }
 
 /**
@@ -225,7 +225,7 @@ void bitmap16_print(
 */
 void bitmapcoreheader_print(
       U_BITMAPCOREHEADER ch
-    ){
+){
     uint32_t Size;
     memcpy(&Size, &(ch.Size_4), 4);  /* will be aligned, but is in two pieces */
     printf("Size:%d ",     Size);
@@ -249,7 +249,7 @@ void bitmapcoreheader_print(
 */
 void wlogbrush_print(
       const char *lb  
-   ){
+){
     U_COLORREF Color;
     uint16_t Style = *(uint16_t *)(lb + offsetof(U_WLOGBRUSH,Style));
     uint16_t Hatch = *(uint16_t *)(lb + offsetof(U_WLOGBRUSH,Hatch));
@@ -289,7 +289,7 @@ void polypolygon_print(
      uint16_t        nPolys,
      const uint16_t *aPolyCounts,
      const char     *Points
-   ){
+){
    int i,j;
    U_POINT16 pt;
    for(i=0; i<nPolys; i++, aPolyCounts++){
@@ -307,7 +307,7 @@ void polypolygon_print(
 */
 void scan_print(
       U_SCAN sc
-    ){
+){
     printf("Count:%d ",     sc.count);
     printf("Top:%d ",       sc.top);
     printf("Bottom:%d ",    sc.bottom);
@@ -322,7 +322,7 @@ void scan_print(
 void dibheader_print(const char *dh, const char *blimit){
    uint32_t Size;
    memcpy(&Size, dh, 4); /* may not be aligned */
-   if(Size == 0xC ){
+   if(Size == 0xC){
        printf("(BitmapCoreHeader) ");
        U_BITMAPCOREHEADER bmch;
        memcpy(&bmch, dh, sizeof(U_BITMAPCOREHEADER)); /* may not be aligned */
@@ -345,7 +345,7 @@ void dibheader_print(const char *dh, const char *blimit){
 int wmfheader_print(
        const char *contents,
        const char *blimit
-    ){
+){
     U_WMRPLACEABLE  Placeable;
     U_WMRHEADER     Header;
     int size = wmfheader_get(contents, blimit, &Placeable, &Header);
@@ -542,9 +542,9 @@ void U_WMRSCALEWINDOWEXT_print(const char *contents){
    int size = U_WMRSCALEWINDOWEXT_get(contents, &Denom, &Num);
    if(size > 0){
       printf("   yDenom:%d\n",  Denom.y);
-      printf("   yNum:%d\n",    Num.y  );
+      printf("   yNum:%d\n",    Num.y);
       printf("   xDenom:%d\n",  Denom.x);
-      printf("   xNum:%d\n",    Num.x  );
+      printf("   xNum:%d\n",    Num.x);
    }
 }
 
@@ -561,9 +561,9 @@ void U_WMRSCALEVIEWPORTEXT_print(const char *contents){
    int       size = U_WMRSCALEVIEWPORTEXT_get(contents, &Denom, &Num);
    if(size > 0){
       printf("   yDenom:%d\n",  Denom.y);
-      printf("   yNum:%d\n",    Num.y  );
+      printf("   yNum:%d\n",    Num.y);
       printf("   xDenom:%d\n",  Denom.x);
-      printf("   xNum:%d\n",    Num.x  );
+      printf("   xNum:%d\n",    Num.x);
    }
 }
 
@@ -680,9 +680,9 @@ void U_WMRPATBLT_print(const char *contents){
    U_POINT16  cwh;
    int        size = U_WMRPATBLT_get(contents, &Dst, &cwh, &dwRop3);
    if(size > 0){
-      printf("    Rop3:%8.8X\n",      dwRop3 );
-      printf("    W,H:%d,%d\n",       cwh.x, cwh.y );
-      printf("    Dst X,Y:{%d,%d}\n", Dst.x,  Dst.y );
+      printf("    Rop3:%8.8X\n",      dwRop3);
+      printf("    W,H:%d,%d\n",       cwh.x, cwh.y);
+      printf("    Dst X,Y:{%d,%d}\n", Dst.x,  Dst.y);
    }
 }
 
@@ -728,7 +728,7 @@ void U_WMRBITBLT_print(const char *contents){
    const char      *px;
    int              size = U_WMRBITBLT_get(contents, &Dst, &cwh, &Src, &dwRop3, &Bm16, &px);
    if(size > 0){
-      printf("    Rop3:%8.8X\n",      dwRop3 );
+      printf("    Rop3:%8.8X\n",      dwRop3);
       printf("    Src X,Y:{%d,%d}\n", Src.x,  Src.y);
       printf("    W,H:%d,%d\n",       cwh.x,  cwh.y);
       printf("    Dst X,Y:{%d,%d}\n", Dst.x,  Dst.y);
@@ -744,11 +744,11 @@ void U_WMRSTRETCHBLT_print(const char *contents){
    const char      *px;
    int              size = U_WMRSTRETCHBLT_get(contents, &Dst, &cDst, &Src, &cSrc, &dwRop3, &Bm16, &px);
    if(size > 0){
-      printf("    Rop3:%8.8X\n",      dwRop3 );
+      printf("    Rop3:%8.8X\n",      dwRop3);
       printf("    Src W,H:%d,%d\n",   cSrc.x,  cSrc.y);
-      printf("    Src X,Y:{%d,%d}\n", Src.x,   Src.y );
+      printf("    Src X,Y:{%d,%d}\n", Src.x,   Src.y);
       printf("    Dst W,H:%d,%d\n",   cDst.x,  cDst.y);
-      printf("    Dst X,Y:{%d,%d}\n", Dst.x,   Dst.y );
+      printf("    Dst X,Y:{%d,%d}\n", Dst.x,   Dst.y);
       if(px){ printf("    Bitmap16:");   bitmap16_print(Bm16);  printf("\n"); }
       else {  printf("    Bitmap16: none\n");                                 }
    }
@@ -814,9 +814,9 @@ void U_WMRFRAMEREGION_print(const char *contents){
    int      size = U_WMRFRAMEREGION_get(contents, &Region, &Brush, &Height, &Width);
    if(size > 0){
       printf("   Region:%d\n",Region);
-      printf("   Brush:%d\n", Brush );
+      printf("   Brush:%d\n", Brush);
       printf("   Height:%d\n",Height);
-      printf("   Width:%d\n", Width );
+      printf("   Width:%d\n", Width);
    }
 }
 
@@ -894,14 +894,14 @@ void U_WMREXTTEXTOUT_print(const char *contents){
    int               size  = U_WMREXTTEXTOUT_get(contents, &Dst, &Length, &Opts, &string, &dx, &rect16);
    if(size > 0){
       printf("   X,Y:{%d,%d}\n",      Dst.x, Dst.y);
-      printf("   Length:%d\n",        Length      );
-      printf("   Opts:%4.4X\n",       Opts        );
+      printf("   Length:%d\n",        Length);
+      printf("   Opts:%4.4X\n",       Opts);
       if(Opts & (U_ETO_OPAQUE | U_ETO_CLIPPED)){
          printf("   Rect:");   rect16_ltrb_print(rect16); printf("\n");
       }
       printf("   String:<%.*s>\n",Length, string);
       printf("   Dx:");
-      for(i=0; i<Length; i++,dx++){  printf("%d:", *dx  ); }
+      for(i=0; i<Length; i++,dx++){  printf("%d:", *dx); }
       printf("\n");
    }
 }
@@ -916,12 +916,12 @@ void U_WMRSETDIBTODEV_print(const char *contents){
    const char        *dib;
    int                size = U_WMRSETDIBTODEV_get(contents, &Dst, &cwh, &Src, &cUsage, &ScanCount, &StartScan, &dib);
    if(size > 0){
-      printf("    cUsage:%d\n",       cUsage        );
-      printf("    ScanCount:%d\n",    ScanCount     );
-      printf("    StartScan:%d\n",    StartScan     );
-      printf("    Src X,Y:{%d,%d}\n", Src.x,  Src.y );
-      printf("    W,H:%d,%d\n",       cwh.x,  cwh.y );
-      printf("    Dst X,Y:{%d,%d}\n", Dst.x,  Dst.y );
+      printf("    cUsage:%d\n",       cUsage);
+      printf("    ScanCount:%d\n",    ScanCount);
+      printf("    StartScan:%d\n",    StartScan);
+      printf("    Src X,Y:{%d,%d}\n", Src.x,  Src.y);
+      printf("    W,H:%d,%d\n",       cwh.x,  cwh.y);
+      printf("    Dst X,Y:{%d,%d}\n", Dst.x,  Dst.y);
       printf("    DIB:");   dibheader_print(dib, dib+size);   printf("\n");
    }
 }
@@ -989,10 +989,10 @@ void U_WMRDIBBITBLT_print(const char *contents){
    const char      *dib;
    int              size = U_WMRDIBBITBLT_get(contents, &Dst, &cwh, &Src, &dwRop3, &dib);
    if(size > 0){
-      printf("    Rop3:%8.8X\n",      dwRop3 );
-      printf("    Src X,Y:{%d,%d}\n", Src.x, Src.x );
-      printf("    W,H:%d,%d\n",       cwh.x, cwh.y );
-      printf("    Dst X,Y:{%d,%d}\n", Dst.x, Dst.y );
+      printf("    Rop3:%8.8X\n",      dwRop3);
+      printf("    Src X,Y:{%d,%d}\n", Src.x, Src.x);
+      printf("    W,H:%d,%d\n",       cwh.x, cwh.y);
+      printf("    Dst X,Y:{%d,%d}\n", Dst.x, Dst.y);
       if(dib){  printf("    DIB:");   dibheader_print(dib, dib+size);  printf("\n"); }
       else {    printf("    DIB: none\n");                                 }
    }
@@ -1004,11 +1004,11 @@ void U_WMRDIBSTRETCHBLT_print(const char *contents){
    const char      *dib;
    int              size = U_WMRDIBSTRETCHBLT_get(contents, &Dst, &cDst, &Src, &cSrc, &dwRop3, &dib);
    if(size > 0){
-      printf("    Rop3:%8.8X\n",      dwRop3 );
-      printf("    Src W,H:%d,%d\n",   cSrc.x, cSrc.y );
-      printf("    Src X,Y:{%d,%d}\n", Src.x,  Src.x );
-      printf("    Dst W,H:%d,%d\n",   cDst.x, cDst.y );
-      printf("    Dst X,Y:{%d,%d}\n", Dst.x,  Dst.y );
+      printf("    Rop3:%8.8X\n",      dwRop3);
+      printf("    Src W,H:%d,%d\n",   cSrc.x, cSrc.y);
+      printf("    Src X,Y:{%d,%d}\n", Src.x,  Src.x);
+      printf("    Dst W,H:%d,%d\n",   cDst.x, cDst.y);
+      printf("    Dst X,Y:{%d,%d}\n", Dst.x,  Dst.y);
       if(dib){  printf("    DIB:");   dibheader_print(dib, dib+size);  printf("\n"); }
       else {    printf("    DIB: none\n");                                 }
    }
@@ -1021,7 +1021,7 @@ void U_WMRDIBCREATEPATTERNBRUSH_print(const char *contents){
    int             size = U_WMRDIBCREATEPATTERNBRUSH_get(contents, &Style, &cUsage, &TBm16, &dib);
    if(size > 0){
       U_BITMAP16 Bm16;
-      printf("   Style:%d\n",   Style );
+      printf("   Style:%d\n",   Style);
       printf("   cUsage:%d\n",  cUsage);
       if(TBm16){
          memcpy(&Bm16, TBm16, U_SIZE_BITMAP16);
@@ -1040,12 +1040,12 @@ void U_WMRSTRETCHDIB_print(const char *contents){
    const char      *dib;
    int              size = U_WMRSTRETCHDIB_get(contents, &Dst, &cDst, &Src, &cSrc, &cUsage, &dwRop3, &dib);
    if(size > 0){
-      printf("    Rop3:%8.8X\n",      dwRop3 );
-      printf("    cUsage:%d\n",       cUsage );
-      printf("    Src W,H:%d,%d\n",   cSrc.x, cSrc.y );
-      printf("    Src X,Y:{%d,%d}\n", Src.x,  Src.x );
-      printf("    Dst W,H:%d,%d\n",   cDst.x, cDst.y );
-      printf("    Dst X,Y:{%d,%d}\n", Dst.x,  Dst.y );
+      printf("    Rop3:%8.8X\n",      dwRop3);
+      printf("    cUsage:%d\n",       cUsage);
+      printf("    Src W,H:%d,%d\n",   cSrc.x, cSrc.y);
+      printf("    Src X,Y:{%d,%d}\n", Src.x,  Src.x);
+      printf("    Dst W,H:%d,%d\n",   cDst.x, cDst.y);
+      printf("    Dst X,Y:{%d,%d}\n", Dst.x,  Dst.y);
       if(dib){  printf("    DIB:");   dibheader_print(dib, dib+size);  printf("\n"); }
       else {    printf("    DIB: none\n");                                 }
    }
@@ -1349,7 +1349,7 @@ int U_wmf_onerec_print(const char *contents, const char *blimit, int recnum, siz
     size = U_WMRRECSAFE_get(contents, blimit);
     if(!size)return(-1);
 
-    iType     = *(uint8_t *)(contents + offsetof(U_METARECORD, iType )  );
+    iType     = *(uint8_t *)(contents + offsetof(U_METARECORD, iType));
 
     uint32_t crc;   
 #if U_BYTE_SWAP

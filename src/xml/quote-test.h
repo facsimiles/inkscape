@@ -29,7 +29,7 @@ public:
 // createSuite and destroySuite get us per-suite setup and teardown
 // without us having to worry about static initialization order, etc.
     static XmlQuoteTest *createSuite() { return new XmlQuoteTest(); }
-    static void destroySuite( XmlQuoteTest *suite ) { delete suite; }
+    static void destroySuite(XmlQuoteTest *suite) { delete suite; }
 
     void testXmlQuotedStrlen()
     {
@@ -48,7 +48,7 @@ public:
             {"a\"b<c>d;!@#$%^*(\\)?", 30}
         };
         for(size_t i=0; i<G_N_ELEMENTS(cases); i++) {
-            TS_ASSERT_EQUALS( xml_quoted_strlen(cases[i].s) , cases[i].len );
+            TS_ASSERT_EQUALS(xml_quoted_strlen(cases[i].s) , cases[i].len);
         }
     }
 
@@ -69,7 +69,7 @@ public:
         };
         for(size_t i=0; i<G_N_ELEMENTS(cases); i++) {
             char* str = xml_quote_strdup(cases[i].s1);
-            TS_ASSERT_RELATION( streq_rel, cases[i].s2, str );
+            TS_ASSERT_RELATION(streq_rel, cases[i].s2, str);
             g_free(str);
         }
     }

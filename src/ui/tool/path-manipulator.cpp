@@ -143,7 +143,7 @@ PathManipulator::PathManipulator(MultiPathManipulator &mpm, SPPath *path,
     _selection.signal_selection_changed.connect(
         sigc::mem_fun(*this, &PathManipulator::_selectionChangedM));
     _desktop->signal_zoom_changed.connect(
-        sigc::hide( sigc::mem_fun(*this, &PathManipulator::_updateOutlineOnZoomChange)));
+        sigc::hide(sigc::mem_fun(*this, &PathManipulator::_updateOutlineOnZoomChange)));
 
     _createControlPointsFromGeometry();
     //Define if the path is BSpline on construction
@@ -296,11 +296,11 @@ add_or_replace_if_extremum(std::vector< std::pair<NodeList::iterator, double> > 
     if (testvalue > extrvalue) {
         // replace all extreme nodes with the new one
         vec.clear();
-        vec.emplace_back( node, t );
+        vec.emplace_back(node, t);
         extrvalue = testvalue;
-    } else if ( Geom::are_near(testvalue, extrvalue) ) {
+    } else if (Geom::are_near(testvalue, extrvalue)) {
         // very rare but: extremum node at the same extreme value!!! so add it to the list
-        vec.emplace_back( node, t );
+        vec.emplace_back(node, t);
     }
 }
 
@@ -341,9 +341,9 @@ void PathManipulator::insertNodeAtExtremum(ExtremumType extremum)
         for (auto & i : extremum_vector) {
             // don't insert node at the start or end of a segment, i.e. round values for extr_t
             double t = i.second;
-            if ( !Geom::are_near(t - std::floor(t+0.5),0.) )  //  std::floor(t+0.5) is another way of writing round(t)
+            if (!Geom::are_near(t - std::floor(t+0.5),0.))  //  std::floor(t+0.5) is another way of writing round(t)
             {
-                _selection.insert( subdivideSegment(i.first, t).ptr() );
+                _selection.insert(subdivideSegment(i.first, t).ptr());
             }
         }
     }
@@ -1140,7 +1140,7 @@ void PathManipulator::_createControlPointsFromGeometry()
     // sanitize pathvector and store it in SPCurve,
     // so that _updateDragPoint doesn't crash on paths with naked movetos
     Geom::PathVector pathv = pathv_to_linear_and_cubic_beziers(_spcurve->get_pathvector());
-    for (Geom::PathVector::iterator i = pathv.begin(); i != pathv.end(); ) {
+    for (Geom::PathVector::iterator i = pathv.begin(); i != pathv.end();) {
         // NOTE: this utilizes the fact that Geom::PathVector is an std::vector.
         // When we erase an element, the next one slides into position,
         // so we do not increment the iterator even though it is theoretically invalidated.
@@ -1334,7 +1334,7 @@ void PathManipulator::_createGeometryFromControlPoints(bool alert_LPE)
     Geom::PathBuilder builder;
     //Refresh if is bspline some times -think on path change selection, this value get lost
     _recalculateIsBSpline();
-    for (std::list<SubpathPtr>::iterator spi = _subpaths.begin(); spi != _subpaths.end(); ) {
+    for (std::list<SubpathPtr>::iterator spi = _subpaths.begin(); spi != _subpaths.end();) {
         SubpathPtr subpath = *spi;
         if (subpath->empty()) {
             _subpaths.erase(spi++);
@@ -1359,7 +1359,7 @@ void PathManipulator::_createGeometryFromControlPoints(bool alert_LPE)
     }
     builder.flush();
     Geom::PathVector pathv = builder.peek() * (_edit_transform * _i2d_transform).inverse();
-    for (Geom::PathVector::iterator i = pathv.begin(); i != pathv.end(); ) {
+    for (Geom::PathVector::iterator i = pathv.begin(); i != pathv.end();) {
         // NOTE: this utilizes the fact that Geom::PathVector is an std::vector.
         // When we erase an element, the next one slides into position,
         // so we do not increment the iterator even though it is theoretically invalidated.

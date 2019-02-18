@@ -171,7 +171,7 @@ void TemplateLoadTab::_refreshTemplatesList()
                 it.second.display_name.lowercase().find(_current_keyword.lowercase()) != Glib::ustring::npos ||
                 it.second.author.lowercase().find(_current_keyword.lowercase()) != Glib::ustring::npos ||
                 it.second.short_description.lowercase().find(_current_keyword.lowercase()) != Glib::ustring::npos ||
-                it.second.long_description.lowercase().find(_current_keyword.lowercase()) != Glib::ustring::npos )
+                it.second.long_description.lowercase().find(_current_keyword.lowercase()) != Glib::ustring::npos)
             {
                 Gtk::TreeModel::iterator iter = _tlist_store->append();
                 Gtk::TreeModel::Row row = *iter;
@@ -285,8 +285,8 @@ void TemplateLoadTab::_getDataFromNode(Inkscape::XML::Node *dataNode, TemplateDa
     if ((currentData = sp_repr_lookup_name(dataNode, "inkscape:author")) != nullptr)
         data.author = currentData->firstChild()->content();
     if ((currentData = sp_repr_lookup_name(dataNode, "inkscape:_shortdesc")) != nullptr)
-        data.short_description = _( currentData->firstChild()->content());
-    if ((currentData = sp_repr_lookup_name(dataNode, "inkscape:_long") )!= nullptr)
+        data.short_description = _(currentData->firstChild()->content());
+    if ((currentData = sp_repr_lookup_name(dataNode, "inkscape:_long"))!= nullptr)
         data.long_description = _(currentData->firstChild()->content());
     if ((currentData = sp_repr_lookup_name(dataNode, "inkscape:preview")) != nullptr)
         data.preview_name = currentData->firstChild()->content();

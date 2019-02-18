@@ -141,7 +141,7 @@ SPDocument::~SPDocument() {
     destroySignal.emit();
 
     // kill/unhook this first
-    if ( profileManager ) {
+    if (profileManager) {
         delete profileManager;
         profileManager = nullptr;
     }
@@ -432,7 +432,7 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
     }
 
     /* Default RDF */
-    rdf_set_defaults( document );
+    rdf_set_defaults(document);
 
     if (keepalive) {
         inkscape_ref(INKSCAPE);
@@ -453,26 +453,26 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
     document->selChangeConnection = INKSCAPE.signal_selection_changed.connect(
                 sigc::hide(sigc::bind(
                 sigc::ptr_fun(&DocumentUndo::resetKey), document)
-    ));
+));
     document->desktopActivatedConnection = INKSCAPE.signal_activate_desktop.connect(
                 sigc::hide(sigc::bind(
                 sigc::ptr_fun(&DocumentUndo::resetKey), document)
-    ));
+));
     document->oldSignalsConnected = true;
 
     /** Fix baseline spacing (pre-92 files) **/
-    if ( (!sp_no_convert_text_baseline_spacing)
-         && sp_version_inside_range( document->root->version.inkscape, 0, 1, 0, 92 ) ) {
+    if ((!sp_no_convert_text_baseline_spacing)
+         && sp_version_inside_range(document->root->version.inkscape, 0, 1, 0, 92)) {
         sp_file_convert_text_baseline_spacing(document);
     }
 
     /** Fix font names in legacy documents (pre-92 files) **/
-    if ( sp_version_inside_range( document->root->version.inkscape, 0, 1, 0, 92 ) ) {
+    if (sp_version_inside_range(document->root->version.inkscape, 0, 1, 0, 92)) {
         sp_file_convert_font_name(document);
     }
 
     /** Fix dpi (pre-92 files) **/
-    if ( !(INKSCAPE.use_gui()) && sp_version_inside_range( document->root->version.inkscape, 0, 1, 0, 92 ) ) {
+    if (!(INKSCAPE.use_gui()) && sp_version_inside_range(document->root->version.inkscape, 0, 1, 0, 92)) {
         sp_file_convert_dpi(document);
     }
 
@@ -579,14 +579,14 @@ SPDocument *SPDocument::createNewDocFromMem(gchar const *buffer, gint length, un
     SPDocument *doc = nullptr;
 
     Inkscape::XML::Document *rdoc = sp_repr_read_mem(buffer, length, SP_SVG_NS_URI);
-    if ( rdoc ) {
+    if (rdoc) {
         // Only continue to create a non-null doc if it could be loaded
         Inkscape::XML::Node *rroot = rdoc->root();
-        if ( strcmp(rroot->name(), "svg:svg") != 0 ) {
+        if (strcmp(rroot->name(), "svg:svg") != 0) {
             // If xml file is not svg, return NULL without warning
             // TODO fixme: destroy document
         } else {
-            Glib::ustring name = Glib::ustring::compose( _("Memory document %1"), ++doc_mem_count );
+            Glib::ustring name = Glib::ustring::compose(_("Memory document %1"), ++doc_mem_count);
             doc = createDoc(rdoc, nullptr, nullptr, name.c_str(), keepalive, nullptr);
         }
     }
@@ -621,20 +621,20 @@ Inkscape::Util::Unit const* SPDocument::getDisplayUnit() const
 }
 
 /// Sets document scale (by changing viewBox)
-void SPDocument::setDocumentScale( double scaleX, double scaleY ) {
+void SPDocument::setDocumentScale(double scaleX, double scaleY) {
 
     root->viewBox = Geom::Rect::from_xywh(
         root->viewBox.left(),
         root->viewBox.top(),
         root->width.computed  * scaleX,
-        root->height.computed * scaleY );
+        root->height.computed * scaleY);
     root->viewBox_set = true;
     root->updateRepr();
 }
 
 /// Sets document scale (by changing viewBox, x and y scaling equal) 
-void SPDocument::setDocumentScale( double scale ) {
-    setDocumentScale( scale, scale );
+void SPDocument::setDocumentScale(double scale) {
+    setDocumentScale(scale, scale);
 }
 
 /// Returns document scale as defined by width/height (in pixels) and viewBox (real world to
@@ -642,13 +642,13 @@ void SPDocument::setDocumentScale( double scale ) {
 Geom::Scale SPDocument::getDocumentScale() const
 {
     Geom::Scale scale;
-    if( root->viewBox_set ) {
+    if(root->viewBox_set) {
         double scale_x = 1.0;
         double scale_y = 1.0;
-        if( root->viewBox.width() > 0.0 ) {
+        if(root->viewBox.width() > 0.0) {
             scale_x = root->width.computed / root->viewBox.width();
         }
-        if( root->viewBox.height() > 0.0 ) {
+        if(root->viewBox.height() > 0.0) {
             scale_y = root->height.computed / root->viewBox.height();
         }
         scale = Geom::Scale(scale_x, scale_y);
@@ -690,7 +690,7 @@ void SPDocument::setWidthAndHeight(const Inkscape::Util::Quantity &width, const 
     // viewBox scaled by relative change in page size (maintains document scale).
     if (root->viewBox_set && changeSize) {
         root->viewBox.setMax(Geom::Point(
-        root->viewBox.left() + (root->width.value /  old_width_converted ) * root->viewBox.width(),
+        root->viewBox.left() + (root->width.value /  old_width_converted) * root->viewBox.width(),
         root->viewBox.top()  + (root->height.value / old_height_converted) * root->viewBox.height()));
     }
     root->updateRepr();
@@ -777,7 +777,7 @@ Geom::Rect SPDocument::getViewBox() const
     if (root->viewBox_set) {
         viewBox = root->viewBox;
     } else {
-        viewBox = Geom::Rect::from_xywh( 0, 0, getWidth().value("px"), getHeight().value("px"));
+        viewBox = Geom::Rect::from_xywh(0, 0, getWidth().value("px"), getHeight().value("px"));
     }
     return viewBox;
 }
@@ -796,7 +796,7 @@ Geom::Point SPDocument::getDimensions() const
 
 Geom::OptRect SPDocument::preferredBounds() const
 {
-    return Geom::OptRect( Geom::Point(0, 0), getDimensions() );
+    return Geom::OptRect(Geom::Point(0, 0), getDimensions());
 }
 
 /**
@@ -851,7 +851,7 @@ void SPDocument::fitToRect(Geom::Rect const &rect, bool with_margins)
     setWidthAndHeight(
         Inkscape::Util::Quantity(Inkscape::Util::Quantity::convert(rect_with_margins.width(),  "px", nv_units), nv_units),
         Inkscape::Util::Quantity(Inkscape::Util::Quantity::convert(rect_with_margins.height(), "px", nv_units), nv_units)
-        );
+);
 
     Geom::Translate const tr(
             Geom::Point(0, (y_dir > 0) ? 0 : old_height - rect_with_margins.height())
@@ -868,7 +868,7 @@ void SPDocument::fitToRect(Geom::Rect const &rect, bool with_margins)
     }
 }
 
-void SPDocument::setBase( gchar const* base )
+void SPDocument::setBase(gchar const* base)
 {
     if (this->base) {
         g_free(this->base);
@@ -1038,7 +1038,7 @@ void SPDocument::bindObjectToId(gchar const *id, SPObject *object) {
     SPDocument::IDChangedSignalMap::iterator pos;
 
     pos = id_changed_signals.find(idq);
-    if ( pos != id_changed_signals.end() ) {
+    if (pos != id_changed_signals.end()) {
         if (!(*pos).second.empty()) {
             (*pos).second.emit(object);
         } else { // discard unused signal
@@ -1074,7 +1074,7 @@ SPObject *SPDocument::getObjectById(Glib::ustring const &id) const
     {
         return nullptr;
     }
-    return getObjectById( id );
+    return getObjectById(id);
 }
 
 SPObject *SPDocument::getObjectById(gchar const *id) const
@@ -1101,13 +1101,13 @@ void _getObjectsByClassRecursive(Glib::ustring const &klass, SPObject *parent, s
             class_attribute = temp;
         }
 
-        if (class_attribute.find( klass ) != std::string::npos) {
-            objects.push_back( parent );
+        if (class_attribute.find(klass) != std::string::npos) {
+            objects.push_back(parent);
         }
 
         // Check children
         for (auto& child : parent->children) {
-            _getObjectsByClassRecursive( klass, &child, objects );
+            _getObjectsByClassRecursive(klass, &child, objects);
         }
     }
 }
@@ -1152,7 +1152,7 @@ void _getObjectsBySelectorRecursive(SPObject *parent,
 {
     if (parent) {
         gboolean result = false;
-        cr_sel_eng_matches_node( sel_eng, simple_sel, parent->getRepr(), &result );
+        cr_sel_eng_matches_node(sel_eng, simple_sel, parent->getRepr(), &result);
         if (result) {
             objects.push_back(parent);
         }
@@ -1179,11 +1179,11 @@ std::vector<SPObject *> SPDocument::getObjectsBySelector(Glib::ustring const &se
 
     Glib::ustring my_selector = selector + " {";  // Parsing fails sometimes without '{'. Fix me
     CRSelector *cr_selector = cr_selector_parse_from_buf ((guchar*)my_selector.c_str(), CR_UTF_8);
-    // char * cr_string = (char*)cr_selector_to_string( cr_selector );
+    // char * cr_string = (char*)cr_selector_to_string(cr_selector);
     // std::cout << "  selector: |" << (cr_string?cr_string:"Empty") << "|" << std::endl;
     CRSelector const *cur = nullptr;
     for (cur = cr_selector; cur; cur = cur->next) {
-        if (cur->simple_sel ) {
+        if (cur->simple_sel) {
             _getObjectsBySelectorRecursive(root, sel_eng, cur->simple_sel, objects);
         }
     }
@@ -1218,28 +1218,28 @@ Glib::ustring SPDocument::getLanguage() const
         while (isspace(*document_language))
             document_language++;
     }
-    if ( !document_language || 0 == *document_language) {
+    if (!document_language || 0 == *document_language) {
         // retrieve system language
         document_language = getenv("LC_ALL");
-        if ( nullptr == document_language || *document_language == 0 ) {
+        if (nullptr == document_language || *document_language == 0) {
             document_language = getenv ("LC_MESSAGES");
         }
-        if ( nullptr == document_language || *document_language == 0 ) {
+        if (nullptr == document_language || *document_language == 0) {
             document_language = getenv ("LANG");
         }
-        if ( nullptr == document_language || *document_language == 0 ) {
+        if (nullptr == document_language || *document_language == 0) {
             document_language = getenv ("LANGUAGE");
         }
         
-        if ( nullptr != document_language ) {
+        if (nullptr != document_language) {
             const char *pos = strchr(document_language, '_');
-            if ( nullptr != pos ) {
+            if (nullptr != pos) {
                 return Glib::ustring(document_language, pos - document_language);
             }
         }
     }
 
-    if ( nullptr == document_language )
+    if (nullptr == document_language)
         return Glib::ustring();
     return document_language;
 }
@@ -1428,7 +1428,7 @@ Returns true if an item is among the descendants of group (recursively).
 static bool item_is_in_group(SPItem *item, SPGroup *group)
 {
     for (auto& o: group->children) {
-        if ( SP_IS_ITEM(&o) ) {
+        if (SP_IS_ITEM(&o)) {
             if (SP_ITEM(&o) == item) {
                 return true;
             } else if (SP_IS_GROUP(&o) && item_is_in_group(item, SP_GROUP(&o))) {
@@ -1551,7 +1551,7 @@ static SPItem *find_group_at_point(unsigned int dkey, SPGroup *group, Geom::Poin
                 seen = newseen;
             }
         }
-        if (SP_IS_GROUP(&o) && SP_GROUP(&o)->effectiveLayerMode(dkey) != SPGroup::LAYER ) {
+        if (SP_IS_GROUP(&o) && SP_GROUP(&o)->effectiveLayerMode(dkey) != SPGroup::LAYER) {
             SPItem *child = SP_ITEM(&o);
             Inkscape::DrawingItem *arenaitem = child->get_arenaitem(dkey);
             if (arenaitem) {
@@ -1643,7 +1643,7 @@ std::vector<SPItem*> SPDocument::getItemsAtPoints(unsigned const key, std::vecto
     return items;
 }
 
-SPItem *SPDocument::getItemAtPoint( unsigned const key, Geom::Point const &p,
+SPItem *SPDocument::getItemAtPoint(unsigned const key, Geom::Point const &p,
                                     bool const into_groups, SPItem *upto) const 
 {
     // Build a flattened SVG DOM for find_item_at_point.
@@ -1680,7 +1680,7 @@ bool SPDocument::addResource(gchar const *key, SPObject *object)
 
     bool result = false;
 
-    if ( !object->cloned ) {
+    if (!object->cloned) {
         std::vector<SPObject *> rlist = resources[key];
         g_return_val_if_fail(std::find(rlist.begin(),rlist.end(),object) == rlist.end(), false);
         resources[key].insert(resources[key].begin(),object);
@@ -1693,7 +1693,7 @@ bool SPDocument::addResource(gchar const *key, SPObject *object)
         [this check should be more generally presend on emit() calls since 
         the backtrace is unusable with crashed from this cause]
         */
-        if(object->getId() || dynamic_cast<SPGroup*>(object) )
+        if(object->getId() || dynamic_cast<SPGroup*>(object))
             resources_changed_signals[q].emit();
 
         result = true;
@@ -1711,7 +1711,7 @@ bool SPDocument::removeResource(gchar const *key, SPObject *object)
 
     bool result = false;
 
-    if ( !object->cloned ) {
+    if (!object->cloned) {
         std::vector<SPObject *> rlist = resources[key];
         g_return_val_if_fail(!rlist.empty(), false);
         std::vector<SPObject*>::iterator it = std::find(resources[key].begin(),resources[key].end(),object);
@@ -1829,7 +1829,7 @@ void SPDocument::setModifiedSinceSave(bool modified) {
         InkscapeWindow *window = SP_ACTIVE_DESKTOP->getInkscapeWindow();
         if (window) { // during load, SP_ACTIVE_DESKTOP may be !nullptr, but parent might still be nullptr
             SPDesktopWidget *dtw = window->get_desktop_widget();
-            dtw->updateTitle( this->getName() );
+            dtw->updateTitle(this->getName());
         }
     }
 }
@@ -1902,7 +1902,7 @@ void SPDocument::importDefsNode(SPDocument *source, Inkscape::XML::Node *defs, I
         or pasted again into the same, it will already have been processed.  If we detect that then 
         skip the rest of this pass. */
         Glib::ustring defid = def->attribute("id");
-        if( defid.find( DuplicateDefString ) != Glib::ustring::npos )break;
+        if(defid.find(DuplicateDefString) != Glib::ustring::npos)break;
 
         SPObject *src = source->getObjectByRepr(def);
 
@@ -1919,7 +1919,7 @@ void SPDocument::importDefsNode(SPDocument *source, Inkscape::XML::Node *defs, I
                              change_def_references(src, &trg);
                          }
                          gchar *longid = g_strdup_printf("%s_%9.9d", DuplicateDefString.c_str(), stagger++);
-                         def->setAttribute("id", longid );
+                         def->setAttribute("id", longid);
                          g_free(longid);
                          // do NOT break here, there could be more than 1 duplicate!
                     }
@@ -1932,7 +1932,7 @@ void SPDocument::importDefsNode(SPDocument *source, Inkscape::XML::Node *defs, I
     for (Inkscape::XML::Node *def = defs->firstChild() ; def ; def = def->next()) {
         if(def->type() != Inkscape::XML::ELEMENT_NODE)continue;
         Glib::ustring defid = def->attribute("id");
-        if( defid.find( DuplicateDefString ) != Glib::ustring::npos )continue; // this one already handled
+        if(defid.find(DuplicateDefString) != Glib::ustring::npos)continue; // this one already handled
         SPObject *src = source->getObjectByRepr(def);
         if (src && SP_IS_GRADIENT(src)) {
             SPGradient *s_gr = SP_GRADIENT(src);
@@ -1940,14 +1940,14 @@ void SPDocument::importDefsNode(SPDocument *source, Inkscape::XML::Node *defs, I
                 SPObject *trg = source->getObjectByRepr(laterDef);
                 if(trg && (src != trg) && SP_IS_GRADIENT(trg)) {
                      Glib::ustring newid = trg->getId();
-                     if( newid.find( DuplicateDefString ) != Glib::ustring::npos )continue; // this one already handled
+                     if(newid.find(DuplicateDefString) != Glib::ustring::npos)continue; // this one already handled
                      SPGradient *t_gr = SP_GRADIENT(trg);
                      if (t_gr && s_gr->isEquivalent(t_gr)) {
                          // Change object references to the existing equivalent gradient
                          // two id's in the clipboard should never be the same, so always change references
                          change_def_references(trg, src);
                          gchar *longid = g_strdup_printf("%s_%9.9d", DuplicateDefString.c_str(), stagger++);
-                         laterDef->setAttribute("id", longid );
+                         laterDef->setAttribute("id", longid);
                          g_free(longid);
                          // do NOT break here, there could be more than 1 duplicate!
                      }
@@ -1962,7 +1962,7 @@ void SPDocument::importDefsNode(SPDocument *source, Inkscape::XML::Node *defs, I
 
         /* Ignore duplicate defs marked in the first pass */
         Glib::ustring defid = def->attribute("id");
-        if( defid.find( DuplicateDefString ) != Glib::ustring::npos )continue;
+        if(defid.find(DuplicateDefString) != Glib::ustring::npos)continue;
 
         bool duplicate = false;
         SPObject *src = source->getObjectByRepr(def);
@@ -1973,25 +1973,25 @@ void SPDocument::importDefsNode(SPDocument *source, Inkscape::XML::Node *defs, I
         if (src && SP_IS_SYMBOL(src)) {
 
             Glib::ustring id = src->getRepr()->attribute("id");
-            size_t pos = id.find( "_inkscape_duplicate" );
-            if( pos != Glib::ustring::npos ) {
+            size_t pos = id.find("_inkscape_duplicate");
+            if(pos != Glib::ustring::npos) {
 
                 // This is our symbol, now get rid of tag
-                id.erase( pos ); 
+                id.erase(pos); 
 
                 // Check that it really is a duplicate
                 for (auto& trg: getDefs()->children) {
-                    if(&trg && SP_IS_SYMBOL(&trg) && src != &trg ) {
+                    if(&trg && SP_IS_SYMBOL(&trg) && src != &trg) {
                         std::string id2 = trg.getRepr()->attribute("id");
 
-                        if( !id.compare( id2 ) ) {
+                        if(!id.compare(id2)) {
                             duplicate = true;
                             break;
                         }
                     }
                 }
-                if ( !duplicate ) {
-                    src->getRepr()->setAttribute("id", id.c_str() );
+                if (!duplicate) {
+                    src->getRepr()->setAttribute("id", id.c_str());
                 }
             }
         }

@@ -49,9 +49,9 @@ namespace Geom {
  * that it is defined on 0.
  * @return -1 when x is negative, 1 when positive, and 0 if equal to 0. */
 template <class T> inline int sgn(const T& x) {
-    return (x < 0 ? -1 : (x > 0 ? 1 : 0) );
+    return (x < 0 ? -1 : (x > 0 ? 1 : 0));
 // can we 'optimize' this with:
-//    return ( (T(0) < x) - (x < T(0)) );
+//    return ((T(0) < x) - (x < T(0)));
 }
 
 template <class T> inline T sqr(const T& x) {return x * x;}
@@ -77,7 +77,7 @@ template <class T> inline const T& between (const T& min, const T& max, const T&
 inline double decimal_round(double x, int p) {
     //TODO: possibly implement with modulus instead?
     double const multiplier = ::pow(10.0, p);
-    return ::round( x * multiplier ) / multiplier;
+    return ::round(x * multiplier) / multiplier;
 }
 
 /** @brief Simultaneously compute a sine and a cosine of the same angle.

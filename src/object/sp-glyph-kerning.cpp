@@ -35,11 +35,11 @@ void SPGlyphKerning::build(SPDocument *document, Inkscape::XML::Node *repr)
 {
     SPObject::build(document, repr);
 
-    this->readAttr( "u1" );
-    this->readAttr( "g1" );
-    this->readAttr( "u2" );
-    this->readAttr( "g2" );
-    this->readAttr( "k" );
+    this->readAttr("u1");
+    this->readAttr("g1");
+    this->readAttr("u2");
+    this->readAttr("g2");
+    this->readAttr("k");
 }
 
 void SPGlyphKerning::release()
@@ -148,10 +148,10 @@ void SPGlyphKerning::update(SPCtx *ctx, guint flags)
 {
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         /* do something to trigger redisplay, updates? */
-        this->readAttr( "u1" );
-        this->readAttr( "u2" );
-        this->readAttr( "g2" );
-        this->readAttr( "k" );
+        this->readAttr("u1");
+        this->readAttr("u2");
+        this->readAttr("g2");
+        this->readAttr("k");
     }
 
     SPObject::update(ctx, flags);

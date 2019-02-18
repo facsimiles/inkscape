@@ -84,7 +84,7 @@ void hexbytes_print(uint8_t *buf,unsigned int num){
 */
 void colorref_print(
       U_COLORREF color
-   ){
+){
    printf("{%u,%u,%u} ",color.Red,color.Green,color.Blue);
 }
 
@@ -95,7 +95,7 @@ void colorref_print(
 */
 void rgbquad_print(
       U_RGBQUAD color
-   ){
+){
    printf("{%u,%u,%u,%u} ",color.Blue,color.Green,color.Red,color.Reserved);
 }
 
@@ -105,7 +105,7 @@ void rgbquad_print(
 */
 void rectl_print(
       U_RECTL rect
-    ){
+){
     printf("{%d,%d,%d,%d} ",rect.left,rect.top,rect.right,rect.bottom);
 }
 
@@ -115,7 +115,7 @@ void rectl_print(
 */
 void sizel_print(
        U_SIZEL sz
-    ){
+){
     printf("{%d,%d} ",sz.cx ,sz.cy);
 } 
 
@@ -125,7 +125,7 @@ void sizel_print(
 */
 void pointl_print(
        U_POINTL pt
-    ){
+){
     printf("{%d,%d} ",pt.x ,pt.y);
 } 
 
@@ -137,7 +137,7 @@ void pointl_print(
 */
 void point16_print(
        U_POINT16 pt
-    ){
+){
     printf("{%d,%d} ",pt.x ,pt.y);
 } 
 
@@ -147,7 +147,7 @@ void point16_print(
 */
 void lcs_gamma_print(
       U_LCS_GAMMA lg
-   ){
+){
    uint8_t tmp;
    tmp = lg.ignoreHi; printf("ignoreHi:%u ",tmp);
    tmp = lg.intPart ; printf("intPart :%u ",tmp);
@@ -161,10 +161,10 @@ void lcs_gamma_print(
 */
 void lcs_gammargb_print(
       U_LCS_GAMMARGB lgr
-   ){
-   printf("lcsGammaRed:");   lcs_gamma_print(lgr.lcsGammaRed  );
+){
+   printf("lcsGammaRed:");   lcs_gamma_print(lgr.lcsGammaRed);
    printf("lcsGammaGreen:"); lcs_gamma_print(lgr.lcsGammaGreen);
-   printf("lcsGammaBlue:");  lcs_gamma_print(lgr.lcsGammaBlue );
+   printf("lcsGammaBlue:");  lcs_gamma_print(lgr.lcsGammaBlue);
 }
 
 /**
@@ -173,7 +173,7 @@ void lcs_gammargb_print(
 */
 void trivertex_print(
       U_TRIVERTEX tv
-   ){
+){
    printf("{{%d,%d},{%u,%u,%u,%u}} ",tv.x,tv.y,tv.Red,tv.Green,tv.Blue,tv.Alpha);
 }
 
@@ -183,7 +183,7 @@ void trivertex_print(
 */
 void gradient3_print(
       U_GRADIENT3 g3
-   ){
+){
    printf("{%u,%u,%u} ",g3.Vertex1,g3.Vertex2,g3.Vertex3);
 }
 
@@ -193,7 +193,7 @@ void gradient3_print(
 */
 void gradient4_print(
       U_GRADIENT4 g4
-   ){
+){
    printf("{%u,%u} ",g4.UpperLeft,g4.LowerRight);
 }
 
@@ -203,7 +203,7 @@ void gradient4_print(
 */
 void logbrush_print(
       U_LOGBRUSH lb  
-   ){
+){
     printf("lbStyle:0x%8.8X ",  lb.lbStyle);
     printf("lbColor:");         colorref_print(lb.lbColor);
     printf("lbHatch:0x%8.8X ",  lb.lbHatch);
@@ -215,7 +215,7 @@ void logbrush_print(
 */
 void xform_print(
       U_XFORM xform
-   ){
+){
    printf("{%f,%f.%f,%f,%f,%f} ",xform.eM11,xform.eM12,xform.eM21,xform.eM22,xform.eDx,xform.eDy);
 }
 
@@ -225,7 +225,7 @@ void xform_print(
 */
 void ciexyz_print(
       U_CIEXYZ ciexyz
-   ){
+){
    printf("{%d,%d.%d} ",ciexyz.ciexyzX,ciexyz.ciexyzY,ciexyz.ciexyzZ);
     
 }
@@ -236,10 +236,10 @@ void ciexyz_print(
 */
 void ciexyztriple_print(
       U_CIEXYZTRIPLE cie3
-   ){
-   printf("{Red:");     ciexyz_print(cie3.ciexyzRed  );
+){
+   printf("{Red:");     ciexyz_print(cie3.ciexyzRed);
    printf(", Green:");  ciexyz_print(cie3.ciexyzGreen);
-   printf(", Blue:");   ciexyz_print(cie3.ciexyzBlue );
+   printf(", Blue:");   ciexyz_print(cie3.ciexyzBlue);
    printf("} ");
 }
 /**
@@ -248,15 +248,15 @@ void ciexyztriple_print(
 */
 void logcolorspacea_print(
       U_LOGCOLORSPACEA lcsa
-   ){
+){
    printf("lcsSignature:%u ",lcsa.lcsSignature);
-   printf("lcsVersion:%u ",  lcsa.lcsVersion  );
-   printf("lcsSize:%u ",     lcsa.lcsSize     );
-   printf("lcsCSType:%d ",    lcsa.lcsCSType   );
-   printf("lcsIntent:%d ",    lcsa.lcsIntent   );
+   printf("lcsVersion:%u ",  lcsa.lcsVersion);
+   printf("lcsSize:%u ",     lcsa.lcsSize);
+   printf("lcsCSType:%d ",    lcsa.lcsCSType);
+   printf("lcsIntent:%d ",    lcsa.lcsIntent);
    printf("lcsEndpoints:");   ciexyztriple_print(lcsa.lcsEndpoints);
-   printf("lcsGammaRGB: ");   lcs_gammargb_print(lcsa.lcsGammaRGB );
-   printf("filename:%s ",     lcsa.lcsFilename );
+   printf("lcsGammaRGB: ");   lcs_gammargb_print(lcsa.lcsGammaRGB);
+   printf("filename:%s ",     lcsa.lcsFilename);
 }
 
 /**
@@ -266,17 +266,17 @@ void logcolorspacea_print(
 */
 void logcolorspacew_print(
       U_LOGCOLORSPACEW lcsa
-   ){
+){
    char *string;
    printf("lcsSignature:%d ",lcsa.lcsSignature);
-   printf("lcsVersion:%d ",  lcsa.lcsVersion  );
-   printf("lcsSize:%d ",     lcsa.lcsSize     );
-   printf("lcsCSType:%d ",   lcsa.lcsCSType   );
-   printf("lcsIntent:%d ",   lcsa.lcsIntent   );
+   printf("lcsVersion:%d ",  lcsa.lcsVersion);
+   printf("lcsSize:%d ",     lcsa.lcsSize);
+   printf("lcsCSType:%d ",   lcsa.lcsCSType);
+   printf("lcsIntent:%d ",   lcsa.lcsIntent);
    printf("lcsEndpoints:");   ciexyztriple_print(lcsa.lcsEndpoints);
-   printf("lcsGammaRGB: ");   lcs_gammargb_print(lcsa.lcsGammaRGB );
+   printf("lcsGammaRGB: ");   lcs_gammargb_print(lcsa.lcsGammaRGB);
    string = U_Utf16leToUtf8(lcsa.lcsFilename, U_MAX_PATH, NULL);
-   printf("filename:%s ",   string );
+   printf("filename:%s ",   string);
    free(string);
 }
 
@@ -286,17 +286,17 @@ void logcolorspacew_print(
 */
 void panose_print(
       U_PANOSE panose
-    ){
-    printf("bFamilyType:%u ",     panose.bFamilyType     );
-    printf("bSerifStyle:%u ",     panose.bSerifStyle     );
-    printf("bWeight:%u ",         panose.bWeight         );
-    printf("bProportion:%u ",     panose.bProportion     );
-    printf("bContrast:%u ",       panose.bContrast       );
+){
+    printf("bFamilyType:%u ",     panose.bFamilyType);
+    printf("bSerifStyle:%u ",     panose.bSerifStyle);
+    printf("bWeight:%u ",         panose.bWeight);
+    printf("bProportion:%u ",     panose.bProportion);
+    printf("bContrast:%u ",       panose.bContrast);
     printf("bStrokeVariation:%u ",panose.bStrokeVariation);
-    printf("bArmStyle:%u ",       panose.bArmStyle       );
-    printf("bLetterform:%u ",     panose.bLetterform     );
-    printf("bMidline:%u ",        panose.bMidline        );
-    printf("bXHeight:%u ",        panose.bXHeight        );
+    printf("bArmStyle:%u ",       panose.bArmStyle);
+    printf("bLetterform:%u ",     panose.bLetterform);
+    printf("bMidline:%u ",        panose.bMidline);
+    printf("bXHeight:%u ",        panose.bXHeight);
 }
 
 /**
@@ -305,23 +305,23 @@ void panose_print(
 */
 void logfont_print(
        U_LOGFONT lf
-   ){
+){
    char *string;
-   printf("lfHeight:%d ",            lf.lfHeight        );
-   printf("lfWidth:%d ",             lf.lfWidth         );
-   printf("lfEscapement:%d ",        lf.lfEscapement    );
-   printf("lfOrientation:%d ",       lf.lfOrientation   );
-   printf("lfWeight:%d ",            lf.lfWeight        );
-   printf("lfItalic:0x%2.2X ",         lf.lfItalic        );
-   printf("lfUnderline:0x%2.2X ",      lf.lfUnderline     );
-   printf("lfStrikeOut:0x%2.2X ",      lf.lfStrikeOut     );
-   printf("lfCharSet:0x%2.2X ",        lf.lfCharSet       );
-   printf("lfOutPrecision:0x%2.2X ",   lf.lfOutPrecision  );
-   printf("lfClipPrecision:0x%2.2X ",  lf.lfClipPrecision );
-   printf("lfQuality:0x%2.2X ",        lf.lfQuality       );
+   printf("lfHeight:%d ",            lf.lfHeight);
+   printf("lfWidth:%d ",             lf.lfWidth);
+   printf("lfEscapement:%d ",        lf.lfEscapement);
+   printf("lfOrientation:%d ",       lf.lfOrientation);
+   printf("lfWeight:%d ",            lf.lfWeight);
+   printf("lfItalic:0x%2.2X ",         lf.lfItalic);
+   printf("lfUnderline:0x%2.2X ",      lf.lfUnderline);
+   printf("lfStrikeOut:0x%2.2X ",      lf.lfStrikeOut);
+   printf("lfCharSet:0x%2.2X ",        lf.lfCharSet);
+   printf("lfOutPrecision:0x%2.2X ",   lf.lfOutPrecision);
+   printf("lfClipPrecision:0x%2.2X ",  lf.lfClipPrecision);
+   printf("lfQuality:0x%2.2X ",        lf.lfQuality);
    printf("lfPitchAndFamily:0x%2.2X ", lf.lfPitchAndFamily);
      string = U_Utf16leToUtf8(lf.lfFaceName, U_LF_FACESIZE, NULL);
-   printf("lfFaceName:%s ",   string );
+   printf("lfFaceName:%s ",   string);
    free(string);
 }
 
@@ -331,21 +331,21 @@ void logfont_print(
 */
 void logfont_panose_print(
       U_LOGFONT_PANOSE lfp
-   ){    
+){    
    char *string;
    printf("elfLogFont:");       logfont_print(lfp.elfLogFont);
      string = U_Utf16leToUtf8(lfp.elfFullName, U_LF_FULLFACESIZE, NULL);
-   printf("elfFullName:%s ",    string );
+   printf("elfFullName:%s ",    string);
    free(string);
      string = U_Utf16leToUtf8(lfp.elfStyle, U_LF_FACESIZE, NULL);
-   printf("elfStyle:%s ",       string );
+   printf("elfStyle:%s ",       string);
    free(string);
-   printf("elfVersion:%u "      ,lfp.elfVersion  );
+   printf("elfVersion:%u "      ,lfp.elfVersion);
    printf("elfStyleSize:%u "    ,lfp.elfStyleSize);
-   printf("elfMatch:%u "        ,lfp.elfMatch    );
-   printf("elfReserved:%u "     ,lfp.elfReserved );
+   printf("elfMatch:%u "        ,lfp.elfMatch);
+   printf("elfReserved:%u "     ,lfp.elfReserved);
    printf("elfVendorId:");      hexbytes_print((uint8_t *)lfp.elfVendorId,U_ELF_VENDOR_SIZE); printf(" ");
-   printf("elfCulture:%u "      ,lfp.elfCulture  );
+   printf("elfCulture:%u "      ,lfp.elfCulture);
    printf("elfPanose:");        panose_print(lfp.elfPanose);
 }
 
@@ -361,7 +361,7 @@ void logfont_panose_print(
 */
 int bitmapinfoheader_print(
       const char *Bmih
-   ){
+){
    uint32_t  utmp4;
    int32_t   tmp4;
    int16_t   tmp2;
@@ -369,21 +369,21 @@ int bitmapinfoheader_print(
 
    /* DIB from a WMF may not be properly aligned on a 4 byte boundary, will be aligned on a 2 byte boundary */
 
-   memcpy(&utmp4, Bmih + offsetof(U_BITMAPINFOHEADER,biSize),          4);  printf("biSize:%u "            ,utmp4 );
-   memcpy(&tmp4,  Bmih + offsetof(U_BITMAPINFOHEADER,biWidth),         4);  printf("biWidth:%d "           ,tmp4  );
+   memcpy(&utmp4, Bmih + offsetof(U_BITMAPINFOHEADER,biSize),          4);  printf("biSize:%u "            ,utmp4);
+   memcpy(&tmp4,  Bmih + offsetof(U_BITMAPINFOHEADER,biWidth),         4);  printf("biWidth:%d "           ,tmp4);
    Width = tmp4;
-   memcpy(&tmp4,  Bmih + offsetof(U_BITMAPINFOHEADER,biHeight),        4);  printf("biHeight:%d "          ,tmp4  );
+   memcpy(&tmp4,  Bmih + offsetof(U_BITMAPINFOHEADER,biHeight),        4);  printf("biHeight:%d "          ,tmp4);
    Height = tmp4;
-   memcpy(&tmp2,  Bmih + offsetof(U_BITMAPINFOHEADER,biPlanes),        2);  printf("biPlanes:%u "          ,tmp2  );
-   memcpy(&tmp2,  Bmih + offsetof(U_BITMAPINFOHEADER,biBitCount),      2);  printf("biBitCount:%u "        ,tmp2  );
+   memcpy(&tmp2,  Bmih + offsetof(U_BITMAPINFOHEADER,biPlanes),        2);  printf("biPlanes:%u "          ,tmp2);
+   memcpy(&tmp2,  Bmih + offsetof(U_BITMAPINFOHEADER,biBitCount),      2);  printf("biBitCount:%u "        ,tmp2);
    BitCount = tmp2;
-   memcpy(&utmp4, Bmih + offsetof(U_BITMAPINFOHEADER,biCompression),   4);  printf("biCompression:%u "     ,utmp4 );
-   memcpy(&utmp4, Bmih + offsetof(U_BITMAPINFOHEADER,biSizeImage),     4);  printf("biSizeImage:%u "       ,utmp4 );
-   memcpy(&tmp4,  Bmih + offsetof(U_BITMAPINFOHEADER,biXPelsPerMeter), 4);  printf("biXPelsPerMeter:%d "   ,tmp4  );
-   memcpy(&tmp4,  Bmih + offsetof(U_BITMAPINFOHEADER,biYPelsPerMeter), 4);  printf("biYPelsPerMeter:%d "   ,tmp4  );
-   memcpy(&utmp4, Bmih + offsetof(U_BITMAPINFOHEADER,biClrUsed),       4);  printf("biClrUsed:%u "         ,utmp4 );
+   memcpy(&utmp4, Bmih + offsetof(U_BITMAPINFOHEADER,biCompression),   4);  printf("biCompression:%u "     ,utmp4);
+   memcpy(&utmp4, Bmih + offsetof(U_BITMAPINFOHEADER,biSizeImage),     4);  printf("biSizeImage:%u "       ,utmp4);
+   memcpy(&tmp4,  Bmih + offsetof(U_BITMAPINFOHEADER,biXPelsPerMeter), 4);  printf("biXPelsPerMeter:%d "   ,tmp4);
+   memcpy(&tmp4,  Bmih + offsetof(U_BITMAPINFOHEADER,biYPelsPerMeter), 4);  printf("biYPelsPerMeter:%d "   ,tmp4);
+   memcpy(&utmp4, Bmih + offsetof(U_BITMAPINFOHEADER,biClrUsed),       4);  printf("biClrUsed:%u "         ,utmp4);
    Colors = utmp4;
-   memcpy(&utmp4, Bmih + offsetof(U_BITMAPINFOHEADER,biClrImportant),  4);  printf("biClrImportant:%u "    ,utmp4 );
+   memcpy(&utmp4, Bmih + offsetof(U_BITMAPINFOHEADER,biClrImportant),  4);  printf("biClrImportant:%u "    ,utmp4);
    RealColors = get_real_color_icount(Colors, BitCount, Width, Height);
    printf("ColorEntries:%d ",RealColors);
    return(RealColors);
@@ -401,7 +401,7 @@ int bitmapinfoheader_print(
 void bitmapinfo_print(
       const char *Bmi,
       const char *blimit
-   ){
+){
    int       i,k;
    int       ClrUsed;
    U_RGBQUAD BmiColor;
@@ -424,11 +424,11 @@ void bitmapinfo_print(
 */
 void blend_print(
       U_BLEND blend
-   ){
+){
    printf("Operation:%u " ,blend.Operation);
-   printf("Flags:%u "     ,blend.Flags    );
-   printf("Global:%u "    ,blend.Global   );
-   printf("Op:%u "        ,blend.Op       );
+   printf("Flags:%u "     ,blend.Flags);
+   printf("Global:%u "    ,blend.Global);
+   printf("Op:%u "        ,blend.Op);
 }
 
 /**
@@ -437,14 +437,14 @@ void blend_print(
 */
 void extlogpen_print(
       PU_EXTLOGPEN elp
-   ){
+){
    unsigned int i;
    U_STYLEENTRY *elpStyleEntry;
-   printf("elpPenStyle:0x%8.8X "   ,elp->elpPenStyle  );
-   printf("elpWidth:%u "           ,elp->elpWidth     );
+   printf("elpPenStyle:0x%8.8X "   ,elp->elpPenStyle);
+   printf("elpWidth:%u "           ,elp->elpWidth);
    printf("elpBrushStyle:0x%8.8X " ,elp->elpBrushStyle);
    printf("elpColor");              colorref_print(elp->elpColor);
-   printf("elpHatch:%d "           ,elp->elpHatch     );
+   printf("elpHatch:%d "           ,elp->elpHatch);
    printf("elpNumEntries:%u "      ,elp->elpNumEntries);
    if(elp->elpNumEntries){
      printf("elpStyleEntry:");
@@ -462,10 +462,10 @@ void extlogpen_print(
 */
 void logpen_print(
       U_LOGPEN lp
-   ){
-   printf("lopnStyle:0x%8.8X "    ,lp.lopnStyle  );
-   printf("lopnWidth:");      pointl_print(  lp.lopnWidth  );
-   printf("lopnColor:");      colorref_print(lp.lopnColor );
+){
+   printf("lopnStyle:0x%8.8X "    ,lp.lopnStyle);
+   printf("lopnWidth:");      pointl_print(lp.lopnWidth);
+   printf("lopnColor:");      colorref_print(lp.lopnColor);
 } 
 
 /**
@@ -474,11 +474,11 @@ void logpen_print(
 */
 void logpltntry_print(
       U_LOGPLTNTRY lpny
-   ){
-   printf("peReserved:%u " ,lpny.peReserved );
-   printf("peRed:%u "      ,lpny.peRed      );
-   printf("peGreen:%u "    ,lpny.peGreen    );
-   printf("peBlue:%u "     ,lpny.peBlue     );
+){
+   printf("peReserved:%u " ,lpny.peReserved);
+   printf("peRed:%u "      ,lpny.peRed);
+   printf("peGreen:%u "    ,lpny.peGreen);
+   printf("peBlue:%u "     ,lpny.peBlue);
 }
 
 /**
@@ -487,11 +487,11 @@ void logpltntry_print(
 */
 void logpalette_print(
       PU_LOGPALETTE lp
-   ){
+){
    int            i;
    PU_LOGPLTNTRY palPalEntry;
-   printf("palVersion:%u ",    lp->palVersion );
-   printf("palNumEntries:%u ", lp->palNumEntries );
+   printf("palVersion:%u ",    lp->palVersion);
+   printf("palNumEntries:%u ", lp->palNumEntries);
    if(lp->palNumEntries){
      palPalEntry = (PU_LOGPLTNTRY) &(lp->palPalEntry);
      for(i=0;i<lp->palNumEntries;i++){
@@ -506,12 +506,12 @@ void logpalette_print(
 */
 void rgndataheader_print(
       U_RGNDATAHEADER rdh
-   ){
-   printf("dwSize:%u ",   rdh.dwSize   );
-   printf("iType:%u ",    rdh.iType    );
-   printf("nCount:%u ",   rdh.nCount   );
-   printf("nRgnSize:%u ", rdh.nRgnSize );
-   printf("rclBounds:");  rectl_print(rdh.rclBounds  );
+){
+   printf("dwSize:%u ",   rdh.dwSize);
+   printf("iType:%u ",    rdh.iType);
+   printf("nCount:%u ",   rdh.nCount);
+   printf("nRgnSize:%u ", rdh.nRgnSize);
+   printf("rclBounds:");  rectl_print(rdh.rclBounds);
 }
 
 /**
@@ -522,11 +522,11 @@ void rgndataheader_print(
 void rgndata_print(
       PU_RGNDATA rd,
       const char *blimit
-   ){
+){
    unsigned int i;
    PU_RECTL rects;
    IF_MEM_UNSAFE_PRINT_AND_RETURN(rd, sizeof(U_RGNDATAHEADER), blimit);
-   printf("rdh: ");     rgndataheader_print(rd->rdh ); printf(" rects: ");
+   printf("rdh: ");     rgndataheader_print(rd->rdh); printf(" rects: ");
    if(rd->rdh.nCount){
      rects = (PU_RECTL) &(rd->Buffer);
      IF_MEM_UNSAFE_PRINT_AND_RETURN(rects, rd->rdh.nCount * sizeof(U_RECTL), blimit);
@@ -542,19 +542,19 @@ void rgndata_print(
 */
 void coloradjustment_print(
       U_COLORADJUSTMENT ca
-   ){
-   printf("caSize:%u "            ,ca.caSize           );
-   printf("caFlags:0x%4.4X "        ,ca.caFlags          );
+){
+   printf("caSize:%u "            ,ca.caSize);
+   printf("caFlags:0x%4.4X "        ,ca.caFlags);
    printf("caIlluminantIndex:%u " ,ca.caIlluminantIndex);
-   printf("caRedGamma:%u "        ,ca.caRedGamma       );
-   printf("caGreenGamma:%u "      ,ca.caGreenGamma     );
-   printf("caBlueGamma:%u "       ,ca.caBlueGamma      );
-   printf("caReferenceBlack:%u "  ,ca.caReferenceBlack );
-   printf("caReferenceWhite:%u "  ,ca.caReferenceWhite );
-   printf("caContrast:%d "         ,ca.caContrast       );
-   printf("caBrightness:%d "       ,ca.caBrightness     );
-   printf("caColorfulness:%d "     ,ca.caColorfulness   );
-   printf("caRedGreenTint:%d "     ,ca.caRedGreenTint   );
+   printf("caRedGamma:%u "        ,ca.caRedGamma);
+   printf("caGreenGamma:%u "      ,ca.caGreenGamma);
+   printf("caBlueGamma:%u "       ,ca.caBlueGamma);
+   printf("caReferenceBlack:%u "  ,ca.caReferenceBlack);
+   printf("caReferenceWhite:%u "  ,ca.caReferenceWhite);
+   printf("caContrast:%d "         ,ca.caContrast);
+   printf("caBrightness:%d "       ,ca.caBrightness);
+   printf("caColorfulness:%d "     ,ca.caColorfulness);
+   printf("caRedGreenTint:%d "     ,ca.caRedGreenTint);
 }
 
 /**
@@ -563,33 +563,33 @@ void coloradjustment_print(
 */
 void pixelformatdescriptor_print(
       U_PIXELFORMATDESCRIPTOR pfd
-   ){
-   printf("nSize:%u "           ,pfd.nSize           );
-   printf("nVersion:%u "        ,pfd.nVersion        );
-   printf("dwFlags:0x%8.8X "      ,pfd.dwFlags         );
-   printf("iPixelType:%u "      ,pfd.iPixelType      );
-   printf("cColorBits:%u "      ,pfd.cColorBits      );
-   printf("cRedBits:%u "        ,pfd.cRedBits        );
-   printf("cRedShift:%u "       ,pfd.cRedShift       );
-   printf("cGreenBits:%u "      ,pfd.cGreenBits      );
-   printf("cGreenShift:%u "     ,pfd.cGreenShift     );
-   printf("cBlueBits:%u "       ,pfd.cBlueBits       );
-   printf("cBlueShift:%u "      ,pfd.cBlueShift      );
-   printf("cAlphaBits:%u "      ,pfd.cAlphaBits      );
-   printf("cAlphaShift:%u "     ,pfd.cAlphaShift     );
-   printf("cAccumBits:%u "      ,pfd.cAccumBits      );
-   printf("cAccumRedBits:%u "   ,pfd.cAccumRedBits   );
-   printf("cAccumGreenBits:%u " ,pfd.cAccumGreenBits );
-   printf("cAccumBlueBits:%u "  ,pfd.cAccumBlueBits  );
-   printf("cAccumAlphaBits:%u " ,pfd.cAccumAlphaBits );
-   printf("cDepthBits:%u "      ,pfd.cDepthBits      );
-   printf("cStencilBits:%u "    ,pfd.cStencilBits    );
-   printf("cAuxBuffers:%u "     ,pfd.cAuxBuffers     );
-   printf("iLayerType:%u "      ,pfd.iLayerType      );
-   printf("bReserved:%u "       ,pfd.bReserved       );
-   printf("dwLayerMask:%u "     ,pfd.dwLayerMask     );
-   printf("dwVisibleMask:%u "   ,pfd.dwVisibleMask   );
-   printf("dwDamageMask:%u "    ,pfd.dwDamageMask    );
+){
+   printf("nSize:%u "           ,pfd.nSize);
+   printf("nVersion:%u "        ,pfd.nVersion);
+   printf("dwFlags:0x%8.8X "      ,pfd.dwFlags);
+   printf("iPixelType:%u "      ,pfd.iPixelType);
+   printf("cColorBits:%u "      ,pfd.cColorBits);
+   printf("cRedBits:%u "        ,pfd.cRedBits);
+   printf("cRedShift:%u "       ,pfd.cRedShift);
+   printf("cGreenBits:%u "      ,pfd.cGreenBits);
+   printf("cGreenShift:%u "     ,pfd.cGreenShift);
+   printf("cBlueBits:%u "       ,pfd.cBlueBits);
+   printf("cBlueShift:%u "      ,pfd.cBlueShift);
+   printf("cAlphaBits:%u "      ,pfd.cAlphaBits);
+   printf("cAlphaShift:%u "     ,pfd.cAlphaShift);
+   printf("cAccumBits:%u "      ,pfd.cAccumBits);
+   printf("cAccumRedBits:%u "   ,pfd.cAccumRedBits);
+   printf("cAccumGreenBits:%u " ,pfd.cAccumGreenBits);
+   printf("cAccumBlueBits:%u "  ,pfd.cAccumBlueBits);
+   printf("cAccumAlphaBits:%u " ,pfd.cAccumAlphaBits);
+   printf("cDepthBits:%u "      ,pfd.cDepthBits);
+   printf("cStencilBits:%u "    ,pfd.cStencilBits);
+   printf("cAuxBuffers:%u "     ,pfd.cAuxBuffers);
+   printf("iLayerType:%u "      ,pfd.iLayerType);
+   printf("bReserved:%u "       ,pfd.bReserved);
+   printf("dwLayerMask:%u "     ,pfd.dwLayerMask);
+   printf("dwVisibleMask:%u "   ,pfd.dwVisibleMask);
+   printf("dwDamageMask:%u "    ,pfd.dwDamageMask);
 }
 
 /**
@@ -604,14 +604,14 @@ void emrtext_print(
       const char *record,
       const char *blimit,
       int         type
-   ){
+){
    unsigned int i,off;
    char *string;
    PU_EMRTEXT pemt = (PU_EMRTEXT) emt;
    // constant part
    printf("ptlReference:");   pointl_print(pemt->ptlReference);
-   printf("nChars:%u "       ,pemt->nChars      );
-   printf("offString:%u "    ,pemt->offString   );
+   printf("nChars:%u "       ,pemt->nChars);
+   printf("offString:%u "    ,pemt->offString);
    if(pemt->offString){
       if(!type){
          IF_MEM_UNSAFE_PRINT_AND_RETURN(record, pemt->offString + pemt->nChars*sizeof(char), blimit);
@@ -624,16 +624,16 @@ void emrtext_print(
          free(string);
       }
    }
-   printf("fOptions:0x%8.8X "     ,pemt->fOptions    );
+   printf("fOptions:0x%8.8X "     ,pemt->fOptions);
    off = sizeof(U_EMRTEXT);
    if(!(pemt->fOptions & U_ETO_NO_RECT)){
-      printf("rcl");   rectl_print( *((U_RECTL *)(emt+off)) );
+      printf("rcl");   rectl_print(*((U_RECTL *)(emt+off)));
       off += sizeof(U_RECTL);
    }
-   printf("offDx:%u "        , *((U_OFFDX *)(emt+off))   ); off = *(U_OFFDX *)(emt+off);
+   printf("offDx:%u "        , *((U_OFFDX *)(emt+off))); off = *(U_OFFDX *)(emt+off);
    printf("Dx:");
    for(i=0; i<pemt->nChars; i++, off+=sizeof(uint32_t)){
-      printf("%d:", *((uint32_t *)(record+off))  );
+      printf("%d:", *((uint32_t *)(record+off)));
    }
 }
 
@@ -669,7 +669,7 @@ void core1_print(const char *name, const char *contents){
    }
    const char *blimit = contents + pEmr->emr.nSize;
    printf("   rclBounds:      ");    rectl_print(pEmr->rclBounds);    printf("\n");
-   printf("   cptl:           %d\n",pEmr->cptl        );
+   printf("   cptl:           %d\n",pEmr->cptl);
    printf("   Points:         ");
    IF_MEM_UNSAFE_PRINT_AND_RETURN(pEmr->aptl, pEmr->cptl*sizeof(U_POINTL), blimit);
    for(i=0;i<pEmr->cptl; i++){
@@ -689,12 +689,12 @@ void core2_print(const char *name, const char *contents){
    }
    const char *blimit = contents + pEmr->emr.nSize;
    printf("   rclBounds:      ");    rectl_print(pEmr->rclBounds);    printf("\n");
-   printf("   nPolys:         %d\n",pEmr->nPolys        );
-   printf("   cptl:           %d\n",pEmr->cptl          );
+   printf("   nPolys:         %d\n",pEmr->nPolys);
+   printf("   cptl:           %d\n",pEmr->cptl);
    printf("   Counts:         ");
    IF_MEM_UNSAFE_PRINT_AND_RETURN(pEmr->aPolyCounts, pEmr->nPolys*sizeof(U_POLYCOUNTS), blimit);
    for(i=0;i<pEmr->nPolys; i++){
-      printf(" [%d]:%d ",i,pEmr->aPolyCounts[i] );
+      printf(" [%d]:%d ",i,pEmr->aPolyCounts[i]);
    }
    printf("\n");
    PU_POINTL paptl = (PU_POINTL)((char *)pEmr->aPolyCounts + sizeof(uint32_t)* pEmr->nPolys);
@@ -720,17 +720,17 @@ void core3_print(const char *name, const char *label, const char *contents){
       printf("   %-15s ",label); colorref_print(*(U_COLORREF *)&(pEmr->iMode)); printf("\n");
    }
    else if(!strcmp(label,"iMode:")){
-      printf("   %-15s 0x%8.8X\n",label,pEmr->iMode     );
+      printf("   %-15s 0x%8.8X\n",label,pEmr->iMode);
    }
    else {
-      printf("   %-15s %d\n",label,pEmr->iMode        );
+      printf("   %-15s %d\n",label,pEmr->iMode);
    }
 } 
 
 // Functions taking a single U_RECT or U_RECTL, starting with U_EMRELLIPSE_print, also U_EMRFILLPATH_print, 
 void core4_print(const char *name, const char *contents){
    UNUSED(name);
-   PU_EMRELLIPSE pEmr      = (PU_EMRELLIPSE)(   contents);
+   PU_EMRELLIPSE pEmr      = (PU_EMRELLIPSE)(contents);
    if(pEmr->emr.nSize < sizeof(U_EMRELLIPSE)){
       printf("   record corruption HERE\n");
       return;
@@ -749,7 +749,7 @@ void core6_print(const char *name, const char *contents){
    }
    const char *blimit = contents + pEmr->emr.nSize;
    printf("   rclBounds:      ");    rectl_print(pEmr->rclBounds);    printf("\n");
-   printf("   cpts:           %d\n",pEmr->cpts        );
+   printf("   cpts:           %d\n",pEmr->cpts);
    printf("   Points:         ");
    PU_POINT16 papts = (PU_POINT16)(&(pEmr->apts));
    IF_MEM_UNSAFE_PRINT_AND_RETURN(papts, pEmr->cpts*sizeof(U_POINT16), blimit);
@@ -785,10 +785,10 @@ void core8_print(const char *name, const char *contents, int type){
    UNUSED(name);
    PU_EMREXTTEXTOUTA pEmr = (PU_EMREXTTEXTOUTA) (contents);
    const char *blimit = contents + pEmr->emr.nSize;
-   printf("   iGraphicsMode:  %u\n",pEmr->iGraphicsMode );
+   printf("   iGraphicsMode:  %u\n",pEmr->iGraphicsMode);
    printf("   rclBounds:      ");    rectl_print(pEmr->rclBounds);                              printf("\n");
-   printf("   exScale:        %f\n",pEmr->exScale        );
-   printf("   eyScale:        %f\n",pEmr->eyScale        );
+   printf("   exScale:        %f\n",pEmr->exScale);
+   printf("   eyScale:        %f\n",pEmr->eyScale);
    printf("   emrtext:        ");
       emrtext_print(contents + sizeof(U_EMREXTTEXTOUTA) - sizeof(U_EMRTEXT),contents,blimit,type);
       printf("\n");
@@ -818,16 +818,16 @@ void core10_print(const char *name, const char *contents){
    }
    const char *blimit = contents + pEmr->emr.nSize;
    printf("   rclBounds:      ");    rectl_print(pEmr->rclBounds);    printf("\n");
-   printf("   nPolys:         %d\n",pEmr->nPolys        );
-   printf("   cpts:           %d\n",pEmr->cpts          );
+   printf("   nPolys:         %d\n",pEmr->nPolys);
+   printf("   cpts:           %d\n",pEmr->cpts);
    printf("   Counts:         ");
    IF_MEM_UNSAFE_PRINT_AND_RETURN(&(pEmr->aPolyCounts), pEmr->nPolys*sizeof(U_POLYCOUNTS), blimit);
    for(i=0;i<pEmr->nPolys; i++){
-      printf(" [%d]:%d ",i,pEmr->aPolyCounts[i] );
+      printf(" [%d]:%d ",i,pEmr->aPolyCounts[i]);
    }
    printf("\n");
    printf("   Points:         ");
-   PU_POINT16 papts = (PU_POINT16)((char *)pEmr->aPolyCounts + pEmr->nPolys*sizeof(U_POLYCOUNTS) );
+   PU_POINT16 papts = (PU_POINT16)((char *)pEmr->aPolyCounts + pEmr->nPolys*sizeof(U_POLYCOUNTS));
    IF_MEM_UNSAFE_PRINT_AND_RETURN(papts, pEmr->cpts*sizeof(U_POINT16), blimit);
    for(i=0; i<pEmr->cpts; i++){
       printf(" [%d]:",i);  point16_print(papts[i]);
@@ -863,17 +863,17 @@ void core12_print(const char *name, const char *contents){
       return;
    }
    const char *blimit = contents + pEmr->emr.nSize;
-   printf("   ihBrush:      %u\n",pEmr->ihBrush );
-   printf("   iUsage :      %u\n",pEmr->iUsage  );
-   printf("   offBmi :      %u\n",pEmr->offBmi  );
-   printf("   cbBmi  :      %u\n",pEmr->cbBmi   );
+   printf("   ihBrush:      %u\n",pEmr->ihBrush);
+   printf("   iUsage :      %u\n",pEmr->iUsage);
+   printf("   offBmi :      %u\n",pEmr->offBmi);
+   printf("   cbBmi  :      %u\n",pEmr->cbBmi);
    if(pEmr->cbBmi){
       printf("      bitmap:");
       bitmapinfo_print(contents + pEmr->offBmi, blimit);
       printf("\n");
    }
-   printf("   offBits:      %u\n",pEmr->offBits );
-   printf("   cbBits :      %u\n",pEmr->cbBits  );
+   printf("   offBits:      %u\n",pEmr->offBits);
+   printf("   cbBits :      %u\n",pEmr->cbBits);
 }
 
 // common code for U_EMRALPHABLEND_print and U_EMRTRANSPARENTBLT_print,
@@ -885,23 +885,23 @@ void core13_print(const char *name, const char *contents){
       return;
    }
    const char *blimit = contents + pEmr->emr.nSize;
-   printf("   rclBounds:      ");    rectl_print( pEmr->rclBounds);       printf("\n");
+   printf("   rclBounds:      ");    rectl_print(pEmr->rclBounds);       printf("\n");
    printf("   Dest:           ");    pointl_print(pEmr->Dest);            printf("\n");
    printf("   cDest:          ");    pointl_print(pEmr->cDest);           printf("\n");
    printf("   Blend:          ");    blend_print(pEmr->Blend);            printf("\n");
    printf("   Src:            ");    pointl_print(pEmr->Src);             printf("\n");
-   printf("   xformSrc:       ");    xform_print( pEmr->xformSrc);        printf("\n");
-   printf("   crBkColorSrc:   ");    colorref_print( pEmr->crBkColorSrc); printf("\n");
-   printf("   iUsageSrc:      %u\n",pEmr->iUsageSrc   );
-   printf("   offBmiSrc:      %u\n",pEmr->offBmiSrc   );
-   printf("   cbBmiSrc:       %u\n",pEmr->cbBmiSrc    );
+   printf("   xformSrc:       ");    xform_print(pEmr->xformSrc);        printf("\n");
+   printf("   crBkColorSrc:   ");    colorref_print(pEmr->crBkColorSrc); printf("\n");
+   printf("   iUsageSrc:      %u\n",pEmr->iUsageSrc);
+   printf("   offBmiSrc:      %u\n",pEmr->offBmiSrc);
+   printf("   cbBmiSrc:       %u\n",pEmr->cbBmiSrc);
    if(pEmr->cbBmiSrc){
       printf("      bitmap:");
       bitmapinfo_print(contents + pEmr->offBmiSrc, blimit);
       printf("\n");
    }
-   printf("   offBitsSrc:     %u\n",pEmr->offBitsSrc  );
-   printf("   cbBitsSrc:      %u\n",pEmr->cbBitsSrc   );
+   printf("   offBitsSrc:     %u\n",pEmr->offBitsSrc);
+   printf("   cbBitsSrc:      %u\n",pEmr->cbBitsSrc);
 }
 //! @endcond
 
@@ -937,15 +937,15 @@ void U_EMRHEADER_print(const char *contents){
       return;
    }
    const char *blimit = contents + pEmr->emr.nSize;
-   printf("   rclBounds:      ");          rectl_print( pEmr->rclBounds);   printf("\n");
-   printf("   rclFrame:       ");          rectl_print( pEmr->rclFrame);    printf("\n");
-   printf("   dSignature:     0x%8.8X\n",  pEmr->dSignature    );
-   printf("   nVersion:       0x%8.8X\n",  pEmr->nVersion      );
-   printf("   nBytes:         %d\n",       pEmr->nBytes        );
-   printf("   nRecords:       %d\n",       pEmr->nRecords      );
-   printf("   nHandles:       %d\n",       pEmr->nHandles      );
-   printf("   sReserved:      %d\n",       pEmr->sReserved     );
-   printf("   nDescription:   %d\n",       pEmr->nDescription  );
+   printf("   rclBounds:      ");          rectl_print(pEmr->rclBounds);   printf("\n");
+   printf("   rclFrame:       ");          rectl_print(pEmr->rclFrame);    printf("\n");
+   printf("   dSignature:     0x%8.8X\n",  pEmr->dSignature);
+   printf("   nVersion:       0x%8.8X\n",  pEmr->nVersion);
+   printf("   nBytes:         %d\n",       pEmr->nBytes);
+   printf("   nRecords:       %d\n",       pEmr->nRecords);
+   printf("   nHandles:       %d\n",       pEmr->nHandles);
+   printf("   sReserved:      %d\n",       pEmr->sReserved);
+   printf("   nDescription:   %d\n",       pEmr->nDescription);
    printf("   offDescription: %d\n",       pEmr->offDescription);
    if(pEmr->offDescription){
       IF_MEM_UNSAFE_PRINT_AND_RETURN(contents, pEmr->offDescription + pEmr->nDescription*2*sizeof(char), blimit);
@@ -957,25 +957,25 @@ void U_EMRHEADER_print(const char *contents){
       printf("      Desc. B:  %s\n",string);
       free(string);
    }
-   printf("   nPalEntries:    %d\n",       pEmr->nPalEntries   );
+   printf("   nPalEntries:    %d\n",       pEmr->nPalEntries);
    printf("   szlDevice:      {%d,%d} \n", pEmr->szlDevice.cx,pEmr->szlDevice.cy);
    printf("   szlMillimeters: {%d,%d} \n", pEmr->szlMillimeters.cx,pEmr->szlMillimeters.cy);
    if((pEmr->nDescription && (pEmr->offDescription >= 100)) || 
       (!pEmr->offDescription && pEmr->emr.nSize >= 100)
-     ){
-      printf("   cbPixelFormat:  %d\n",       pEmr->cbPixelFormat );
+){
+      printf("   cbPixelFormat:  %d\n",       pEmr->cbPixelFormat);
       printf("   offPixelFormat: %d\n",       pEmr->offPixelFormat);
       if(pEmr->cbPixelFormat){
          printf("      PFD:");
          IF_MEM_UNSAFE_PRINT_AND_RETURN(contents, pEmr->offPixelFormat + sizeof(U_PIXELFORMATDESCRIPTOR), blimit);
-         pixelformatdescriptor_print( *(PU_PIXELFORMATDESCRIPTOR) (contents + pEmr->offPixelFormat));
+         pixelformatdescriptor_print(*(PU_PIXELFORMATDESCRIPTOR) (contents + pEmr->offPixelFormat));
          printf("\n");
       }
-      printf("   bOpenGL:        %d\n",pEmr->bOpenGL       );
+      printf("   bOpenGL:        %d\n",pEmr->bOpenGL);
       if((pEmr->nDescription    && (pEmr->offDescription >= 108)) || 
               (pEmr->cbPixelFormat   && (pEmr->offPixelFormat >=108)) ||
               (!pEmr->offDescription && !pEmr->cbPixelFormat && pEmr->emr.nSize >= 108)
-             ){
+){
          printf("   szlMicrometers: {%d,%d} \n", pEmr->szlMicrometers.cx,pEmr->szlMicrometers.cy);
      }
    }
@@ -1101,11 +1101,11 @@ void U_EMREOF_print(const char *contents){
       printf("   record corruption HERE\n");
       return;
    }
-   printf("   cbPalEntries:   %u\n",      pEmr->cbPalEntries );
+   printf("   cbPalEntries:   %u\n",      pEmr->cbPalEntries);
    printf("   offPalEntries:  %u\n",      pEmr->offPalEntries);
    if(pEmr->cbPalEntries){
      printf("      PE:");
-     logpalette_print( (PU_LOGPALETTE)(contents + pEmr->offPalEntries));
+     logpalette_print((PU_LOGPALETTE)(contents + pEmr->offPalEntries));
      printf("\n");
    }
 } 
@@ -1122,7 +1122,7 @@ void U_EMRSETPIXELV_print(const char *contents){
       printf("   record corruption HERE\n");
       return;
    }
-   printf("   ptlPixel:       ");  pointl_print(  pEmr->ptlPixel);  printf("\n");
+   printf("   ptlPixel:       ");  pointl_print(pEmr->ptlPixel);  printf("\n");
    printf("   crColor:        ");  colorref_print(pEmr->crColor);   printf("\n");
 } 
 
@@ -1342,7 +1342,7 @@ void U_EMRMODIFYWORLDTRANSFORM_print(const char *contents){
    printf("   xform:");
    xform_print(pEmr->xform);
    printf("\n");
-   printf("   iMode:          %u\n",      pEmr->iMode );
+   printf("   iMode:          %u\n",      pEmr->iMode);
 } 
 
 // U_EMRSELECTOBJECT         37
@@ -1357,10 +1357,10 @@ void U_EMRSELECTOBJECT_print(const char *contents){
       return;
    }
    if(pEmr->ihObject & U_STOCK_OBJECT){
-     printf("   StockObject:    0x%8.8X\n",  pEmr->ihObject );
+     printf("   StockObject:    0x%8.8X\n",  pEmr->ihObject);
    }
    else {
-     printf("   ihObject:       %u\n",     pEmr->ihObject );
+     printf("   ihObject:       %u\n",     pEmr->ihObject);
    }
 } 
 
@@ -1375,7 +1375,7 @@ void U_EMRCREATEPEN_print(const char *contents){
       printf("   record corruption HERE\n");
       return;
    }
-   printf("   ihPen:          %u\n",      pEmr->ihPen );
+   printf("   ihPen:          %u\n",      pEmr->ihPen);
    printf("   lopn:           ");    logpen_print(pEmr->lopn);  printf("\n");
 } 
 
@@ -1390,7 +1390,7 @@ void U_EMRCREATEBRUSHINDIRECT_print(const char *contents){
       printf("   record corruption HERE\n");
       return;
    }
-   printf("   ihBrush:        %u\n",      pEmr->ihBrush );
+   printf("   ihBrush:        %u\n",      pEmr->ihBrush);
    printf("   lb:             ");         logbrush_print(pEmr->lb);  printf("\n");
 } 
 
@@ -1405,7 +1405,7 @@ void U_EMRDELETEOBJECT_print(const char *contents){
       printf("   record corruption HERE\n");
       return;
    }
-   printf("   ihObject:       %u\n",      pEmr->ihObject );
+   printf("   ihObject:       %u\n",      pEmr->ihObject);
 } 
 
 // U_EMRANGLEARC             41
@@ -1419,10 +1419,10 @@ void U_EMRANGLEARC_print(const char *contents){
       printf("   record corruption HERE\n");
       return;
    }
-   printf("   ptlCenter:      "), pointl_print(pEmr->ptlCenter ); printf("\n");
-   printf("   nRadius:        %u\n",      pEmr->nRadius );
-   printf("   eStartAngle:    %f\n",       pEmr->eStartAngle );
-   printf("   eSweepAngle:    %f\n",       pEmr->eSweepAngle );
+   printf("   ptlCenter:      "), pointl_print(pEmr->ptlCenter); printf("\n");
+   printf("   nRadius:        %u\n",      pEmr->nRadius);
+   printf("   eStartAngle:    %f\n",       pEmr->eStartAngle);
+   printf("   eSweepAngle:    %f\n",       pEmr->eSweepAngle);
 } 
 
 // U_EMRELLIPSE              42
@@ -1454,8 +1454,8 @@ void U_EMRROUNDRECT_print(const char *contents){
       printf("   record corruption HERE\n");
       return;
    }
-   printf("   rclBox:         "), rectl_print(pEmr->rclBox );     printf("\n");
-   printf("   szlCorner:      "), sizel_print(pEmr->szlCorner );  printf("\n");
+   printf("   rclBox:         "), rectl_print(pEmr->rclBox);     printf("\n");
+   printf("   szlCorner:      "), sizel_print(pEmr->szlCorner);  printf("\n");
 }
 
 // U_EMRARC                  45
@@ -1506,7 +1506,7 @@ void U_EMRCREATEPALETTE_print(const char *contents){
       return;
    }
    printf("   ihPal:          %u\n",pEmr->ihPal);
-   printf("   lgpl:           "), logpalette_print( (PU_LOGPALETTE)&(pEmr->lgpl) );  printf("\n");
+   printf("   lgpl:           "), logpalette_print((PU_LOGPALETTE)&(pEmr->lgpl));  printf("\n");
 }
 
 // U_EMRSETPALETTEENTRIES    50
@@ -1601,8 +1601,8 @@ void U_EMRPOLYDRAW_print(const char *contents){
       return;
    }
    const char *blimit = contents + pEmr->emr.nSize;
-   printf("   rclBounds:      ");          rectl_print( pEmr->rclBounds);   printf("\n");
-   printf("   cptl:           %d\n",pEmr->cptl        );
+   printf("   rclBounds:      ");          rectl_print(pEmr->rclBounds);   printf("\n");
+   printf("   cptl:           %d\n",pEmr->cptl);
    printf("   Points:         ");
    IF_MEM_UNSAFE_PRINT_AND_RETURN(pEmr->aptl, pEmr->cptl*sizeof(U_POINTL), blimit);
    for(i=0;i<pEmr->cptl; i++){
@@ -1758,7 +1758,7 @@ void U_EMRCOMMENT_print(const char *contents, size_t off){
 
    IF_MEM_UNSAFE_PRINT_AND_RETURN(contents, sizeof(U_EMRCOMMENT), blimit);
    cbData = pEmr->cbData;
-   printf("   cbData:         %d\n",cbData        );
+   printf("   cbData:         %d\n",cbData);
    IF_MEM_UNSAFE_PRINT_AND_RETURN(contents, sizeof(U_EMR) + sizeof(U_CBDATA) + cbData, blimit);
    src = (char *)&(pEmr->Data);  // default
    if(cbData >= 4){
@@ -1768,7 +1768,7 @@ void U_EMRCOMMENT_print(const char *contents, size_t off){
 	 what the contents are even if more byte swapping is required. */
       cIdent = *(uint32_t *)(src);
       if(U_BYTE_SWAP){ U_swap4(&(cIdent),1); }
-      if(     cIdent == U_EMR_COMMENT_PUBLIC       ){
+      if(cIdent == U_EMR_COMMENT_PUBLIC){
          printf("   cIdent:  Public\n");
          PU_EMRCOMMENT_PUBLIC pEmrp = (PU_EMRCOMMENT_PUBLIC) pEmr;
          IF_MEM_UNSAFE_PRINT_AND_RETURN(contents, sizeof(U_EMRCOMMENT_PUBLIC), blimit);
@@ -1778,7 +1778,7 @@ void U_EMRCOMMENT_print(const char *contents, size_t off){
          src = (char *)&(pEmrp->Data);
          cbData -= 8;
       }
-      else if(cIdent == U_EMR_COMMENT_SPOOL        ){
+      else if(cIdent == U_EMR_COMMENT_SPOOL){
          printf("   cIdent:  Spool\n");
          PU_EMRCOMMENT_SPOOL pEmrs = (PU_EMRCOMMENT_SPOOL) pEmr;
          IF_MEM_UNSAFE_PRINT_AND_RETURN(contents, sizeof(U_EMRCOMMENT_SPOOL), blimit);
@@ -1854,7 +1854,7 @@ void U_EMRFRAMERGN_print(const char *contents){
    printf("   rclBounds:      ");    rectl_print(pEmr->rclBounds);    printf("\n");
    printf("   cbRgnData:      %u\n",pEmr->cbRgnData);
    printf("   ihBrush:        %u\n",pEmr->ihBrush);
-   printf("   szlStroke:      "), sizel_print(pEmr->szlStroke );      printf("\n");
+   printf("   szlStroke:      "), sizel_print(pEmr->szlStroke);      printf("\n");
    const char *minptr = MAKE_MIN_PTR(((const char *) &pEmr->RgnData + pEmr->cbRgnData),blimit);
    printf("   RegionData: "); rgndata_print(pEmr->RgnData, minptr); printf("\n");
 } 
@@ -1913,23 +1913,23 @@ void U_EMRBITBLT_print(const char *contents){
       return;
    }
    const char *blimit = contents + pEmr->emr.nSize;
-   printf("   rclBounds:      ");     rectl_print( pEmr->rclBounds);       printf("\n");
+   printf("   rclBounds:      ");     rectl_print(pEmr->rclBounds);       printf("\n");
    printf("   Dest:           ");     pointl_print(pEmr->Dest);            printf("\n");
    printf("   cDest:          ");     pointl_print(pEmr->cDest);           printf("\n");
-   printf("   dwRop :         0x%8.8X\n", pEmr->dwRop   );
+   printf("   dwRop :         0x%8.8X\n", pEmr->dwRop);
    printf("   Src:            ");     pointl_print(pEmr->Src);             printf("\n");
-   printf("   xformSrc:       ");     xform_print( pEmr->xformSrc);        printf("\n");
-   printf("   crBkColorSrc:   ");     colorref_print( pEmr->crBkColorSrc); printf("\n");
-   printf("   iUsageSrc:      %u\n", pEmr->iUsageSrc   );
-   printf("   offBmiSrc:      %u\n", pEmr->offBmiSrc   );
-   printf("   cbBmiSrc:       %u\n", pEmr->cbBmiSrc    );
+   printf("   xformSrc:       ");     xform_print(pEmr->xformSrc);        printf("\n");
+   printf("   crBkColorSrc:   ");     colorref_print(pEmr->crBkColorSrc); printf("\n");
+   printf("   iUsageSrc:      %u\n", pEmr->iUsageSrc);
+   printf("   offBmiSrc:      %u\n", pEmr->offBmiSrc);
+   printf("   cbBmiSrc:       %u\n", pEmr->cbBmiSrc);
    if(pEmr->cbBmiSrc){
       printf("      bitmap:      ");
       bitmapinfo_print(contents + pEmr->offBmiSrc, blimit);
       printf("\n");
    }
-   printf("   offBitsSrc:     %u\n", pEmr->offBitsSrc   );
-   printf("   cbBitsSrc:      %u\n", pEmr->cbBitsSrc    );
+   printf("   offBitsSrc:     %u\n", pEmr->offBitsSrc);
+   printf("   cbBitsSrc:      %u\n", pEmr->cbBitsSrc);
 }
 
 // U_EMRSTRETCHBLT           77
@@ -1944,23 +1944,23 @@ void U_EMRSTRETCHBLT_print(const char *contents){
       return;
    }
    const char *blimit = contents + pEmr->emr.nSize;
-   printf("   rclBounds:      ");     rectl_print( pEmr->rclBounds);       printf("\n");
+   printf("   rclBounds:      ");     rectl_print(pEmr->rclBounds);       printf("\n");
    printf("   Dest:           ");     pointl_print(pEmr->Dest);            printf("\n");
    printf("   cDest:          ");     pointl_print(pEmr->cDest);           printf("\n");
-   printf("   dwRop :         0x%8.8X\n", pEmr->dwRop   );
+   printf("   dwRop :         0x%8.8X\n", pEmr->dwRop);
    printf("   Src:            ");     pointl_print(pEmr->Src);             printf("\n");
-   printf("   xformSrc:       ");     xform_print( pEmr->xformSrc);        printf("\n");
-   printf("   crBkColorSrc:   ");     colorref_print( pEmr->crBkColorSrc); printf("\n");
-   printf("   iUsageSrc:      %u\n", pEmr->iUsageSrc   );
-   printf("   offBmiSrc:      %u\n", pEmr->offBmiSrc   );
-   printf("   cbBmiSrc:       %u\n", pEmr->cbBmiSrc    );
+   printf("   xformSrc:       ");     xform_print(pEmr->xformSrc);        printf("\n");
+   printf("   crBkColorSrc:   ");     colorref_print(pEmr->crBkColorSrc); printf("\n");
+   printf("   iUsageSrc:      %u\n", pEmr->iUsageSrc);
+   printf("   offBmiSrc:      %u\n", pEmr->offBmiSrc);
+   printf("   cbBmiSrc:       %u\n", pEmr->cbBmiSrc);
    if(pEmr->cbBmiSrc){
       printf("      bitmap:      ");
       bitmapinfo_print(contents + pEmr->offBmiSrc, blimit);
       printf("\n");
    }
-   printf("   offBitsSrc:     %u\n", pEmr->offBitsSrc   );
-   printf("   cbBitsSrc:      %u\n", pEmr->cbBitsSrc    );
+   printf("   offBitsSrc:     %u\n", pEmr->offBitsSrc);
+   printf("   cbBitsSrc:      %u\n", pEmr->cbBitsSrc);
    printf("   cSrc:           ");     pointl_print(pEmr->cSrc);            printf("\n");
 }
 
@@ -1976,34 +1976,34 @@ void U_EMRMASKBLT_print(const char *contents){
       return;
    }
    const char *blimit = contents + pEmr->emr.nSize;
-   printf("   rclBounds:      ");     rectl_print( pEmr->rclBounds);       printf("\n");
+   printf("   rclBounds:      ");     rectl_print(pEmr->rclBounds);       printf("\n");
    printf("   Dest:           ");     pointl_print(pEmr->Dest);            printf("\n");
    printf("   cDest:          ");     pointl_print(pEmr->cDest);           printf("\n");
-   printf("   dwRop :         0x%8.8X\n",  pEmr->dwRop   );
+   printf("   dwRop :         0x%8.8X\n",  pEmr->dwRop);
    printf("   Src:            ");     pointl_print(pEmr->Src);             printf("\n");
-   printf("   xformSrc:       ");     xform_print( pEmr->xformSrc);        printf("\n");
-   printf("   crBkColorSrc:   ");     colorref_print( pEmr->crBkColorSrc); printf("\n");
-   printf("   iUsageSrc:      %u\n",  pEmr->iUsageSrc   );
-   printf("   offBmiSrc:      %u\n",  pEmr->offBmiSrc   );
-   printf("   cbBmiSrc:       %u\n",  pEmr->cbBmiSrc    );
+   printf("   xformSrc:       ");     xform_print(pEmr->xformSrc);        printf("\n");
+   printf("   crBkColorSrc:   ");     colorref_print(pEmr->crBkColorSrc); printf("\n");
+   printf("   iUsageSrc:      %u\n",  pEmr->iUsageSrc);
+   printf("   offBmiSrc:      %u\n",  pEmr->offBmiSrc);
+   printf("   cbBmiSrc:       %u\n",  pEmr->cbBmiSrc);
    if(pEmr->cbBmiSrc){
       printf("      Src bitmap:  ");
       bitmapinfo_print(contents + pEmr->offBmiSrc, blimit);
       printf("\n");
    }
-   printf("   offBitsSrc:     %u\n",  pEmr->offBitsSrc   );
-   printf("   cbBitsSrc:      %u\n",  pEmr->cbBitsSrc    );
+   printf("   offBitsSrc:     %u\n",  pEmr->offBitsSrc);
+   printf("   cbBitsSrc:      %u\n",  pEmr->cbBitsSrc);
    printf("   Mask:           ");     pointl_print(pEmr->Mask);            printf("\n");
-   printf("   iUsageMask:     %u\n",  pEmr->iUsageMask   );
-   printf("   offBmiMask:     %u\n",  pEmr->offBmiMask   );
-   printf("   cbBmiMask:      %u\n",  pEmr->cbBmiMask    );
+   printf("   iUsageMask:     %u\n",  pEmr->iUsageMask);
+   printf("   offBmiMask:     %u\n",  pEmr->offBmiMask);
+   printf("   cbBmiMask:      %u\n",  pEmr->cbBmiMask);
    if(pEmr->cbBmiMask){
       printf("      Mask bitmap: ");
       bitmapinfo_print(contents + pEmr->offBmiMask, blimit);
       printf("\n");
    }
-   printf("   offBitsMask:    %u\n",  pEmr->offBitsMask   );
-   printf("   cbBitsMask:     %u\n",  pEmr->cbBitsMask    );
+   printf("   offBitsMask:    %u\n",  pEmr->offBitsMask);
+   printf("   cbBitsMask:     %u\n",  pEmr->cbBitsMask);
 }
 
 // U_EMRPLGBLT               79
@@ -2018,35 +2018,35 @@ void U_EMRPLGBLT_print(const char *contents){
       return;
    }
    const char *blimit = contents + pEmr->emr.nSize;
-   printf("   rclBounds:      ");     rectl_print( pEmr->rclBounds);       printf("\n");
+   printf("   rclBounds:      ");     rectl_print(pEmr->rclBounds);       printf("\n");
    printf("   aptlDst(UL):    ");     pointl_print(pEmr->aptlDst[0]);      printf("\n");
    printf("   aptlDst(UR):    ");     pointl_print(pEmr->aptlDst[1]);      printf("\n");
    printf("   aptlDst(LL):    ");     pointl_print(pEmr->aptlDst[2]);      printf("\n");
    printf("   Src:            ");     pointl_print(pEmr->Src);             printf("\n");
    printf("   cSrc:           ");     pointl_print(pEmr->cSrc);            printf("\n");
-   printf("   xformSrc:       ");     xform_print( pEmr->xformSrc);        printf("\n");
-   printf("   crBkColorSrc:   ");     colorref_print( pEmr->crBkColorSrc); printf("\n");
-   printf("   iUsageSrc:      %u\n", pEmr->iUsageSrc   );
-   printf("   offBmiSrc:      %u\n", pEmr->offBmiSrc   );
-   printf("   cbBmiSrc:       %u\n", pEmr->cbBmiSrc    );
+   printf("   xformSrc:       ");     xform_print(pEmr->xformSrc);        printf("\n");
+   printf("   crBkColorSrc:   ");     colorref_print(pEmr->crBkColorSrc); printf("\n");
+   printf("   iUsageSrc:      %u\n", pEmr->iUsageSrc);
+   printf("   offBmiSrc:      %u\n", pEmr->offBmiSrc);
+   printf("   cbBmiSrc:       %u\n", pEmr->cbBmiSrc);
    if(pEmr->cbBmiSrc){
       printf("      Src bitmap:  ");
       bitmapinfo_print(contents + pEmr->offBmiSrc, blimit);
       printf("\n");
    }
-   printf("   offBitsSrc:     %u\n", pEmr->offBitsSrc   );
-   printf("   cbBitsSrc:      %u\n", pEmr->cbBitsSrc    );
+   printf("   offBitsSrc:     %u\n", pEmr->offBitsSrc);
+   printf("   cbBitsSrc:      %u\n", pEmr->cbBitsSrc);
    printf("   Mask:           ");    pointl_print(pEmr->Mask);            printf("\n");
-   printf("   iUsageMsk:      %u\n", pEmr->iUsageMask   );
-   printf("   offBmiMask:     %u\n", pEmr->offBmiMask   );
-   printf("   cbBmiMask:      %u\n", pEmr->cbBmiMask    );
+   printf("   iUsageMsk:      %u\n", pEmr->iUsageMask);
+   printf("   offBmiMask:     %u\n", pEmr->offBmiMask);
+   printf("   cbBmiMask:      %u\n", pEmr->cbBmiMask);
    if(pEmr->cbBmiMask){
       printf("      Mask bitmap: ");
       bitmapinfo_print(contents + pEmr->offBmiMask, blimit);
       printf("\n");
    }
-   printf("   offBitsMask:    %u\n", pEmr->offBitsMask   );
-   printf("   cbBitsMask:     %u\n", pEmr->cbBitsMask    );
+   printf("   offBitsMask:    %u\n", pEmr->offBitsMask);
+   printf("   cbBitsMask:     %u\n", pEmr->cbBitsMask);
 }
 
 // U_EMRSETDIBITSTODEVICE    80
@@ -2061,22 +2061,22 @@ void U_EMRSETDIBITSTODEVICE_print(const char *contents){
       return;
    }
    const char *blimit = contents + pEmr->emr.nSize;
-   printf("   rclBounds:      ");     rectl_print( pEmr->rclBounds);       printf("\n");
+   printf("   rclBounds:      ");     rectl_print(pEmr->rclBounds);       printf("\n");
    printf("   Dest:           ");     pointl_print(pEmr->Dest);            printf("\n");
    printf("   Src:            ");     pointl_print(pEmr->Src);             printf("\n");
    printf("   cSrc:           ");     pointl_print(pEmr->cSrc);            printf("\n");
-   printf("   offBmiSrc:      %u\n", pEmr->offBmiSrc   );
-   printf("   cbBmiSrc:       %u\n", pEmr->cbBmiSrc    );
+   printf("   offBmiSrc:      %u\n", pEmr->offBmiSrc);
+   printf("   cbBmiSrc:       %u\n", pEmr->cbBmiSrc);
    if(pEmr->cbBmiSrc){
       printf("      Src bitmap:  ");
       bitmapinfo_print(contents + pEmr->offBmiSrc, blimit);
       printf("\n");
    }
-   printf("   offBitsSrc:     %u\n", pEmr->offBitsSrc   );
-   printf("   cbBitsSrc:      %u\n", pEmr->cbBitsSrc    );
-   printf("   iUsageSrc:      %u\n", pEmr->iUsageSrc   );
-   printf("   iStartScan:     %u\n", pEmr->iStartScan    );
-   printf("   cScans :        %u\n", pEmr->cScans        );
+   printf("   offBitsSrc:     %u\n", pEmr->offBitsSrc);
+   printf("   cbBitsSrc:      %u\n", pEmr->cbBitsSrc);
+   printf("   iUsageSrc:      %u\n", pEmr->iUsageSrc);
+   printf("   iStartScan:     %u\n", pEmr->iStartScan);
+   printf("   cScans :        %u\n", pEmr->cScans);
 }
 
 // U_EMRSTRETCHDIBITS        81
@@ -2091,21 +2091,21 @@ void U_EMRSTRETCHDIBITS_print(const char *contents){
       return;
    }
    const char *blimit = contents + pEmr->emr.nSize;
-   printf("   rclBounds:      ");     rectl_print( pEmr->rclBounds);       printf("\n");
+   printf("   rclBounds:      ");     rectl_print(pEmr->rclBounds);       printf("\n");
    printf("   Dest:           ");     pointl_print(pEmr->Dest);            printf("\n");
    printf("   Src:            ");     pointl_print(pEmr->Src);             printf("\n");
    printf("   cSrc:           ");     pointl_print(pEmr->cSrc);            printf("\n");
-   printf("   offBmiSrc:      %u\n", pEmr->offBmiSrc   );
-   printf("   cbBmiSrc:       %u\n", pEmr->cbBmiSrc    );
+   printf("   offBmiSrc:      %u\n", pEmr->offBmiSrc);
+   printf("   cbBmiSrc:       %u\n", pEmr->cbBmiSrc);
    if(pEmr->cbBmiSrc){
       printf("      Src bitmap:  ");
       bitmapinfo_print(contents + pEmr->offBmiSrc, blimit);
       printf("\n");
    }
-   printf("   offBitsSrc:     %u\n", pEmr->offBitsSrc   );
-   printf("   cbBitsSrc:      %u\n", pEmr->cbBitsSrc    );
-   printf("   iUsageSrc:      %u\n", pEmr->iUsageSrc   );
-   printf("   dwRop :         0x%8.8X\n", pEmr->dwRop   );
+   printf("   offBitsSrc:     %u\n", pEmr->offBitsSrc);
+   printf("   cbBitsSrc:      %u\n", pEmr->cbBitsSrc);
+   printf("   iUsageSrc:      %u\n", pEmr->iUsageSrc);
+   printf("   dwRop :         0x%8.8X\n", pEmr->dwRop);
    printf("   cDest:          ");     pointl_print(pEmr->cDest);           printf("\n");
 }
 
@@ -2121,7 +2121,7 @@ void U_EMREXTCREATEFONTINDIRECTW_print(const char *contents){
       return;
    }
    const char *blimit = contents + pEmr->emr.nSize;
-   printf("   ihFont:         %u\n",pEmr->ihFont );
+   printf("   ihFont:         %u\n",pEmr->ihFont);
    printf("   Font:           ");
    if(pEmr->emr.nSize == U_SIZE_EMREXTCREATEFONTINDIRECTW_LOGFONT_PANOSE){ // holds logfont_panose
       IF_MEM_UNSAFE_PRINT_AND_RETURN(&(pEmr->elfw), sizeof(U_PANOSE), blimit);
@@ -2129,7 +2129,7 @@ void U_EMREXTCREATEFONTINDIRECTW_print(const char *contents){
    }
    else { // holds logfont or logfontExDv.  The latter isn't supported but it starts with logfont, so use that
       IF_MEM_UNSAFE_PRINT_AND_RETURN(&(pEmr->elfw), sizeof(U_LOGFONT), blimit);
-      logfont_print( *(PU_LOGFONT) &(pEmr->elfw));
+      logfont_print(*(PU_LOGFONT) &(pEmr->elfw));
    }
    printf("\n");
 }
@@ -2229,8 +2229,8 @@ void U_EMRPOLYDRAW16_print(const char *contents){
       return;
    }
    const char *blimit = contents + pEmr->emr.nSize;
-   printf("   rclBounds:      ");          rectl_print( pEmr->rclBounds);   printf("\n");
-   printf("   cpts:           %d\n",pEmr->cpts        );
+   printf("   rclBounds:      ");          rectl_print(pEmr->rclBounds);   printf("\n");
+   printf("   cpts:           %d\n",pEmr->cpts);
    printf("   Points:         ");
    IF_MEM_UNSAFE_PRINT_AND_RETURN(pEmr->apts, pEmr->cpts*sizeof(U_POINT16), blimit);
    for(i=0;i<pEmr->cpts; i++){
@@ -2278,16 +2278,16 @@ void U_EMREXTCREATEPEN_print(const char *contents){
       return;
    }
    const char *blimit = contents + pEmr->emr.nSize;
-   printf("   ihPen:          %u\n", pEmr->ihPen );
-   printf("   offBmi:         %u\n", pEmr->offBmi   );
-   printf("   cbBmi:          %u\n", pEmr->cbBmi    );
+   printf("   ihPen:          %u\n", pEmr->ihPen);
+   printf("   offBmi:         %u\n", pEmr->offBmi);
+   printf("   cbBmi:          %u\n", pEmr->cbBmi);
    if(pEmr->cbBmi){
       printf("      bitmap:      ");
       bitmapinfo_print(contents + pEmr->offBmi, blimit);
       printf("\n");
    }
-   printf("   offBits:        %u\n", pEmr->offBits   );
-   printf("   cbBits:         %u\n", pEmr->cbBits    );
+   printf("   offBits:        %u\n", pEmr->offBits);
+   printf("   cbBits:         %u\n", pEmr->cbBits);
    printf("   elp:            ");     extlogpen_print((PU_EXTLOGPEN) &(pEmr->elp));  printf("\n");
 } 
 
@@ -2316,7 +2316,7 @@ void U_EMRCREATECOLORSPACE_print(const char *contents){
       printf("   record corruption HERE\n");
       return;
    }
-   printf("   ihCS:           %u\n", pEmr->ihCS    );
+   printf("   ihCS:           %u\n", pEmr->ihCS);
    printf("   ColorSpace:     "); logcolorspacea_print(pEmr->lcs);  printf("\n");
 }
 
@@ -2381,15 +2381,15 @@ void U_EMRSMALLTEXTOUT_print(const char *contents){
    }
    const char *blimit = contents + pEmr->emr.nSize;
    printf("   Dest:           ");         pointl_print(pEmr->Dest);            printf("\n");
-   printf("   cChars:         %u\n",      pEmr->cChars          );
-   printf("   fuOptions:      0x%8.8X\n", pEmr->fuOptions       );
-   printf("   iGraphicsMode:  0x%8.8X\n", pEmr->iGraphicsMode   );
-   printf("   exScale:        %f\n",      pEmr->exScale         );
-   printf("   eyScale:        %f\n",      pEmr->eyScale         );
+   printf("   cChars:         %u\n",      pEmr->cChars);
+   printf("   fuOptions:      0x%8.8X\n", pEmr->fuOptions);
+   printf("   iGraphicsMode:  0x%8.8X\n", pEmr->iGraphicsMode);
+   printf("   exScale:        %f\n",      pEmr->exScale);
+   printf("   eyScale:        %f\n",      pEmr->eyScale);
    roff = sizeof(U_EMRSMALLTEXTOUT);  //offset to the start of the variable fields
    if(!(pEmr->fuOptions & U_ETO_NO_RECT)){
       IF_MEM_UNSAFE_PRINT_AND_RETURN(contents, roff, blimit);
-      printf("   rclBounds:      ");      rectl_print( *(PU_RECTL) (contents + roff));       printf("\n");
+      printf("   rclBounds:      ");      rectl_print(*(PU_RECTL) (contents + roff));       printf("\n");
       roff += sizeof(U_RECTL);
    }
    if(pEmr->fuOptions & U_ETO_SMALL_CHARS){
@@ -2457,10 +2457,10 @@ void U_EMRGRADIENTFILL_print(const char *contents){
       return;
    }
    const char *blimit = contents + pEmr->emr.nSize;
-   printf("   rclBounds:      ");      rectl_print( pEmr->rclBounds);   printf("\n");
-   printf("   nTriVert:       %u\n",   pEmr->nTriVert   );
-   printf("   nGradObj:       %u\n",   pEmr->nGradObj   );
-   printf("   ulMode:         %u\n",   pEmr->ulMode     );
+   printf("   rclBounds:      ");      rectl_print(pEmr->rclBounds);   printf("\n");
+   printf("   nTriVert:       %u\n",   pEmr->nTriVert);
+   printf("   nGradObj:       %u\n",   pEmr->nGradObj);
+   printf("   ulMode:         %u\n",   pEmr->ulMode);
    contents += sizeof(U_EMRGRADIENTFILL);
    if(pEmr->nTriVert){
       IF_MEM_UNSAFE_PRINT_AND_RETURN(contents, pEmr->nTriVert*sizeof(U_TRIVERTEX), blimit);
@@ -2472,7 +2472,7 @@ void U_EMRGRADIENTFILL_print(const char *contents){
    }
    if(pEmr->nGradObj){
       printf("   GradObj:        ");
-      if(     pEmr->ulMode == U_GRADIENT_FILL_TRIANGLE){
+      if(pEmr->ulMode == U_GRADIENT_FILL_TRIANGLE){
          IF_MEM_UNSAFE_PRINT_AND_RETURN(contents, pEmr->nGradObj*sizeof(U_GRADIENT3), blimit);
          for(i=0; i<pEmr->nGradObj; i++, contents+=sizeof(U_GRADIENT3)){
             gradient3_print(*(PU_GRADIENT3)(contents));
@@ -2510,10 +2510,10 @@ void U_EMRCREATECOLORSPACEW_print(const char *contents){
       return;
    }
    const char *blimit = contents + pEmr->emr.nSize;
-   printf("   ihCS:           %u\n", pEmr->ihCS     );
+   printf("   ihCS:           %u\n", pEmr->ihCS);
    printf("   ColorSpace:     "); logcolorspacew_print(pEmr->lcs);  printf("\n");
-   printf("   dwFlags:        0x%8.8X\n", pEmr->dwFlags  );
-   printf("   cbData:         %u\n", pEmr->cbData   );
+   printf("   dwFlags:        0x%8.8X\n", pEmr->dwFlags);
+   printf("   cbData:         %u\n", pEmr->cbData);
    printf("   Data(hexvalues):");
    if(pEmr->dwFlags & 1){
      IF_MEM_UNSAFE_PRINT_AND_RETURN(contents, pEmr->cbData, blimit);

@@ -88,9 +88,9 @@ private:
     void startend_value_changed(Glib::RefPtr<Gtk::Adjustment>&  adj,
                                 gchar const                    *value_name,
                                 Glib::RefPtr<Gtk::Adjustment>&  other_adj);
-    void type_changed( int type );
+    void type_changed(int type);
     void defaults();
-    void sensitivize( double v1, double v2 );
+    void sensitivize(double v1, double v2);
     void check_ec(SPDesktop* desktop, Inkscape::UI::Tools::ToolBase* ec);
     void selection_changed(Inkscape::Selection *selection);
 

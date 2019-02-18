@@ -80,12 +80,12 @@ SnapManager::SnapperList SnapManager::getGridSnappers() const
 
 bool SnapManager::someSnapperMightSnap(bool immediately) const
 {
-    if ( !snapprefs.getSnapEnabledGlobally() ) {
+    if (!snapprefs.getSnapEnabledGlobally()) {
         return false;
     }
 
     // If we're asking if some snapper might snap RIGHT NOW (without the snap being postponed)...
-    if ( immediately && snapprefs.getSnapPostponedGlobally() ) {
+    if (immediately && snapprefs.getSnapPostponedGlobally()) {
         return false;
     }
 
@@ -100,7 +100,7 @@ bool SnapManager::someSnapperMightSnap(bool immediately) const
 
 bool SnapManager::gridSnapperMightSnap() const
 {
-    if ( !snapprefs.getSnapEnabledGlobally() || snapprefs.getSnapPostponedGlobally() ) {
+    if (!snapprefs.getSnapEnabledGlobally() || snapprefs.getSnapPostponedGlobally()) {
         return false;
     }
 
@@ -446,7 +446,7 @@ void SnapManager::snapTransformed(
     std::vector<Inkscape::SnapCandidatePoint> const &points,
     Geom::Point const &pointer,
     Inkscape::PureTransform &transform
-    )
+)
 {
     /* We have a list of points, which we are proposing to transform in some way.  We need to see
     ** if any of these points, when transformed, snap to anything.  If they do, we return the

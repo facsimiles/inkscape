@@ -87,7 +87,7 @@ void PureTransform::snap(::SnapManager *sm, std::vector<Inkscape::SnapCandidateP
                 // in case of a free snap we might have use for the transformed point, so let's return that
                 // point, whether it's constrained or not
 
-                if (best_snapped_point.isOtherSnapBetter(snapped_point, true) ) {
+                if (best_snapped_point.isOtherSnapBetter(snapped_point, true)) {
                     // .. so we must keep track of the best non-snapped constrained point.. but what
                     // is the best? There is no best, or is there? We cannot compare on snapped distance
                     // because neither has snapped, and both have their snapped distance set to infinity.

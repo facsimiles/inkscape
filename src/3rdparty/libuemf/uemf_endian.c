@@ -79,7 +79,7 @@ void U_swap4(void *ul, unsigned int count){
 void rectl_swap(
       PU_RECTL rect,
       unsigned int count
-    ){
+){
     U_swap4(rect,4*count);
 }
 
@@ -91,7 +91,7 @@ void rectl_swap(
 void sizel_swap(
        PU_SIZEL sz,
        unsigned int count
-    ){
+){
     U_swap4(sz,2*count);
 } 
 
@@ -103,7 +103,7 @@ void sizel_swap(
 void pointl_swap(
        PU_POINTL pt,
        unsigned int count
-    ){
+){
     U_swap4(pt,2*count);
 } 
 
@@ -115,7 +115,7 @@ void pointl_swap(
 void point16_swap(
        PU_POINT16 pt,
        unsigned int count
-    ){
+){
     U_swap2(pt,2*count);
 } 
 
@@ -129,7 +129,7 @@ void point16_swap(
 void trivertex_swap(
       PU_TRIVERTEX tv,
       unsigned int count
-   ){
+){
    for(;count; count--, tv++){
       U_swap4(tv,2);          /* x,y */
       U_swap2(&(tv->Red),4);  /* Red, Green, Blue, Alpha */
@@ -144,7 +144,7 @@ void trivertex_swap(
 void gradient3_swap(
       PU_GRADIENT3 g3,
       unsigned int count
-   ){
+){
    U_swap4(g3,3*count);
 }
 
@@ -156,7 +156,7 @@ void gradient3_swap(
 void gradient4_swap(
       PU_GRADIENT4 g4,
       unsigned int count
-   ){
+){
    U_swap4(g4,2*count); //a gradient4 object has 2 int4's, NOT 4!
 }
 
@@ -166,7 +166,7 @@ void gradient4_swap(
 */
 void logbrush_swap(
       PU_LOGBRUSH lb  
-   ){
+){
    U_swap4(&(lb->lbStyle),1);               // lbStyle
    // ordered bytes:                           lbColor
    U_swap4(&(lb->lbHatch),1);               // lbHatch
@@ -178,7 +178,7 @@ void logbrush_swap(
 */
 void xform_swap(
       PU_XFORM xform
-   ){
+){
    U_swap4(xform,6);
 }
 
@@ -189,7 +189,7 @@ void xform_swap(
 */
 void ciexyztriple_swap(
       PU_CIEXYZTRIPLE cie3
-   ){
+){
    U_swap4(cie3,9);
 }
 /**
@@ -198,7 +198,7 @@ void ciexyztriple_swap(
 */
 void logcolorspacea_swap(
       PU_LOGCOLORSPACEA lcsa
-   ){
+){
    U_swap4(lcsa,5);                         // lcsSignature lcsVersion lcsSize lcsCSType lcsIntent
    ciexyztriple_swap(&(lcsa->lcsEndpoints));
    // ordered bytes:                           lcsGammaRGB
@@ -212,7 +212,7 @@ void logcolorspacea_swap(
 */
 void logcolorspacew_swap(
       PU_LOGCOLORSPACEW lcsa
-   ){
+){
    U_swap4(lcsa,5);                         // lcsSignature lcsVersion lcsSize lcsCSType lcsIntent
    ciexyztriple_swap(&(lcsa->lcsEndpoints));
    // ordered bytes:                           lcsGammaRGB
@@ -226,7 +226,7 @@ void logcolorspacew_swap(
 */
 void logfont_swap(
        PU_LOGFONT lf
-   ){
+){
    U_swap4(lf,5);                           // lfHeight lfWidth lfEscapement lfOrientation lfWeight
    // ordered bytes:                           lfItalic lfUnderline lfStrikeOut lfCharSet lfOutPrecision lfClipPrecision lfQuality lfPitchAndFamily
    // UTF16-LE, already in order
@@ -238,7 +238,7 @@ void logfont_swap(
 */
 void logfont_panose_swap(
       PU_LOGFONT_PANOSE lfp
-   ){    
+){    
    logfont_swap(&(lfp->elfLogFont));        // elfLogFont
    // UTF-16LE, already in order:              elfFullName
    // UTF-16LE, already in order:              elfStyle
@@ -254,7 +254,7 @@ void logfont_panose_swap(
 */
 void bitmapinfoheader_swap(
       PU_BITMAPINFOHEADER Bmi
-   ){
+){
    U_swap4(Bmi,3);                          // biSize biWidth biHeight
    U_swap2(&(Bmi->biPlanes),2);             // biPlanes biBitCount
    U_swap4(&(Bmi->biCompression),6);        // biCompression biSizeImage biXPelsPerMeter biYPelsPerMeter biClrUsed biClrImportant 
@@ -267,7 +267,7 @@ void bitmapinfoheader_swap(
 */
 void bitmapinfo_swap(
       const char *Bmi
-   ){
+){
    PU_BITMAPINFO pBmi = (PU_BITMAPINFO)Bmi;
    bitmapinfoheader_swap(&(pBmi->bmiHeader)); // bmIHeader
    // ordered bytes:                            bmiColors
@@ -298,7 +298,7 @@ int DIB_swap(
        uint32_t         cbBits,
        const char      *blimit,
        int              torev
-   ){
+){
    int  dibparams = U_BI_UNKNOWN;       // type of image not yet determined
    const char      *px      = NULL;     // DIB pixels
    const U_RGBQUAD *ct      = NULL;     // DIB color table
@@ -352,7 +352,7 @@ int extlogpen_swap(
       PU_EXTLOGPEN elp,
       const char *blimit,
       int torev
-   ){
+){
    int count=0;
    U_swap4(elp,3);                          // elpPenStyle elpWidth elpBrushStyle
    // ordered bytes:                           elpColor
@@ -375,7 +375,7 @@ int extlogpen_swap(
 */
 void logpen_swap(
       PU_LOGPEN lp
-   ){
+){
    U_swap4(lp,1);                           // lopnStyle
    pointl_swap(&(lp->lopnWidth),1);         // lopnWidth
    // ordered bytes:                           lopnColor
@@ -388,7 +388,7 @@ void logpen_swap(
 */
 void logpalette_swap(
       PU_LOGPALETTE lp
-   ){
+){
    U_swap2(lp,2);                           // palVersion palNumEntries
    // ordered bytes:                           palPalEntry[]
 }
@@ -399,7 +399,7 @@ void logpalette_swap(
 */
 void rgndataheader_swap(
       PU_RGNDATAHEADER rdh
-   ){
+){
    U_swap4(rdh,4);                          // dwSize iType nCount nRgnSize
    rectl_swap(&(rdh->rclBounds),1);         // rclBounds
 }
@@ -414,7 +414,7 @@ int rgndata_swap(
       PU_RGNDATA rd,
       int cbRgnData,
       int torev
-   ){
+){
    int count = 0;
    if(torev){
       count = rd->rdh.nCount;
@@ -434,7 +434,7 @@ int rgndata_swap(
 */
 void coloradjustment_swap(
       PU_COLORADJUSTMENT ca
-   ){
+){
    U_swap2(ca,12);                          // caSize caFlags caIlluminantIndex caRedGamma caGreenGamma caBlueGamma caReferenceBlack caReferenceWhite caContrast caBrightness caColorfulness caRedGreenTint   
 }
 
@@ -444,7 +444,7 @@ void coloradjustment_swap(
 */
 void pixelformatdescriptor_swap(
       PU_PIXELFORMATDESCRIPTOR pfd
-   ){
+){
    U_swap2(pfd,2);                          // nSize nVersion
    U_swap4(&(pfd->dwFlags),1);              // dwFlags
    // ordered bytes:                           iPixelType cColorBits cRedBits cRedShift cGreenBits cGreenShift cBlueBits cBlueShift cAlphaBits cAlphaShift cAccumBits cAccumRedBits cAccumGreenBits cAccumBlueBits cAccumAlphaBits cDepthBits cStencilBits cAuxBuffers iLayerType bReserved      
@@ -463,7 +463,7 @@ int emrtext_swap(
       char       *record,
       const char *blimit,
       int         torev
-   ){
+){
    int        off;
    uint32_t   count=0;
    uint32_t   offDx=0;
@@ -535,7 +535,7 @@ int core1_swap(char *record, int torev){
       blimit = record + pEmr->emr.nSize;
    }
    if(!core5_swap(record, torev))return(0);
-   rectl_swap(&(pEmr->rclBounds),1 );       // rclBounds
+   rectl_swap(&(pEmr->rclBounds),1);       // rclBounds
    U_swap4(&(pEmr->cptl),1);                // cptl
    if(!torev){
       count = pEmr->cptl;
@@ -584,7 +584,7 @@ int core3_swap(char *record, int torev){
 
 // Functions taking a single U_RECT or U_RECTL, starting with U_EMRELLIPSE_swap, also U_EMRFILLPATH_swap, 
 int core4_swap(char *record, int torev){
-   PU_EMRELLIPSE pEmr      = (PU_EMRELLIPSE)(   record);
+   PU_EMRELLIPSE pEmr      = (PU_EMRELLIPSE)(record);
    if(!core5_swap(record, torev))return(0);
    rectl_swap(&(pEmr->rclBox),1);           // rclBox
    return(1);
@@ -752,7 +752,7 @@ int core13_swap(char *record, int torev){
    pointl_swap(&(pEmr->Dest),2);            // Dest cDest
    // ordered bytes:                           Blend
    pointl_swap(&(pEmr->Src),2);             // Src
-   xform_swap( &(pEmr->xformSrc));          // xformSrc
+   xform_swap(&(pEmr->xformSrc));          // xformSrc
    // ordered bytes:                           crBkColorSrc
    U_swap4(&(pEmr->iUsageSrc),5);           // iUsageSrc offBmiSrc cbBmiSrc offBitsSrc cbBitsSrc
    if(!torev){
@@ -812,7 +812,7 @@ int U_EMRHEADER_swap(char *record, int torev){
    sizel_swap(&(pEmr->szlDevice), 2);       // szlDevice szlMillimeters
    if((nDesc && (offDesc >= 100)) || 
       (!offDesc && nSize >= 100)
-     ){
+){
      if(torev){
         cbPix = pEmr->cbPixelFormat;
         offPix = pEmr->offPixelFormat;
@@ -823,11 +823,11 @@ int U_EMRHEADER_swap(char *record, int torev){
         cbPix = pEmr->cbPixelFormat;
         offPix = pEmr->offPixelFormat;
      }
-     if(cbPix)pixelformatdescriptor_swap( (PU_PIXELFORMATDESCRIPTOR) (record + pEmr->offPixelFormat));
+     if(cbPix)pixelformatdescriptor_swap((PU_PIXELFORMATDESCRIPTOR) (record + pEmr->offPixelFormat));
      if((nDesc && (offDesc >= 108)) || 
         (cbPix && (offPix >=108)) ||
         (!offDesc && !cbPix && nSize >= 108)
-       ){
+){
          sizel_swap(&(pEmr->szlMicrometers), 1);  // szlMicrometers
        }
    }
@@ -913,7 +913,7 @@ int U_EMREOF_swap(char *record, int torev){
    }
    if(cbPalEntries){
       if(IS_MEM_UNSAFE(record, pEmr->offPalEntries + 2*2, blimit))return(0); // 2 16 bit values in U_LOGPALLETE
-      logpalette_swap( (PU_LOGPALETTE)(record + pEmr->offPalEntries));
+      logpalette_swap((PU_LOGPALETTE)(record + pEmr->offPalEntries));
       // U_LOGPLTNTRY values in pallette are ordered data
    }
    off = sizeof(U_EMREOF) + 4 * cbPalEntries;
@@ -1143,7 +1143,7 @@ int U_EMRCREATEPALETTE_swap(char *record, int torev){
    if(!core5_swap(record, torev))return(0);
    PU_EMRCREATEPALETTE pEmr = (PU_EMRCREATEPALETTE)(record);
    U_swap4(&(pEmr->ihPal),1);               // ihPal
-   logpalette_swap( (PU_LOGPALETTE)&(pEmr->lgpl) ); // lgpl
+   logpalette_swap((PU_LOGPALETTE)&(pEmr->lgpl)); // lgpl
    return(1);
 }
 
@@ -1642,7 +1642,7 @@ int U_EMREXTCREATEFONTINDIRECTW_swap(char *record, int torev){
       logfont_panose_swap(&(pEmr->elfw));
    }
    else { // logfont or logfontExDv (which starts with logfont, which can be swapped, and the rest is already in byte order
-      logfont_swap( (PU_LOGFONT) &(pEmr->elfw));
+      logfont_swap((PU_LOGFONT) &(pEmr->elfw));
    }
    return(1);
 }
@@ -1834,7 +1834,7 @@ int U_EMRSMALLTEXTOUT_swap(char *record, int torev){
    }
    if(!(fuOptions & U_ETO_NO_RECT)){
       if(IS_MEM_UNSAFE(record, roff + sizeof(U_RECTL), blimit))return(0);
-      rectl_swap( (PU_RECTL) (record + roff),1);  // rclBounds
+      rectl_swap((PU_RECTL) (record + roff),1);  // rclBounds
    }
    if(IS_MEM_UNSAFE(record, roff + sizeof(U_RECTL) + cChars, blimit))return(0);
    // ordered bytes or UTF16-LE                TextString
@@ -1899,7 +1899,7 @@ int U_EMRGRADIENTFILL_swap(char *record, int torev){
    }
    record += nTriVert * sizeof(U_TRIVERTEX);
    if(nGradObj){
-      if(     ulMode == U_GRADIENT_FILL_TRIANGLE){
+      if(ulMode == U_GRADIENT_FILL_TRIANGLE){
          if(IS_MEM_UNSAFE(record, nGradObj*sizeof(U_GRADIENT3), blimit))return(0);
          gradient3_swap((PU_GRADIENT3)(record), nGradObj);   // GradObj[]
       }

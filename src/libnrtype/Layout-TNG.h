@@ -644,7 +644,7 @@ public:
             descent_max =  0.2;
         }            
 
-        void set( font_instance *font );
+        void set(font_instance *font);
         
         // CSS 2.1 dictates that font-size is based on em-size which is defined as ascent + descent
         inline double emSize() const {return ascent + descent;}
@@ -663,7 +663,7 @@ public:
         void max(FontMetrics const &other);
 
         /// Calculate the effective ascent and descent including half "leading".
-        void computeEffective( const double &line_height );
+        void computeEffective(const double &line_height);
 
         inline double getTypoAscent()  const {return ascent; }
         inline double getTypoDescent() const {return descent; }

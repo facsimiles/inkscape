@@ -91,7 +91,7 @@ Glib::ustring SvgPreview::cache_key(gchar const *uri, gchar const *name, unsigne
 
 GdkPixbuf* SvgPreview::get_preview_from_cache(const Glib::ustring& key) {
     std::map<Glib::ustring, GdkPixbuf *>::iterator found = _pixmap_cache.find(key);
-    if ( found != _pixmap_cache.end() ) {
+    if (found != _pixmap_cache.end()) {
         return found->second;
     }
     return nullptr;
@@ -119,7 +119,7 @@ GdkPixbuf* SvgPreview::get_preview(const gchar* uri, const gchar* id, Inkscape::
 
 void SvgPreview::remove_preview_from_cache(const Glib::ustring& key) {
     std::map<Glib::ustring, GdkPixbuf *>::iterator found = _pixmap_cache.find(key);
-    if ( found != _pixmap_cache.end() ) {
+    if (found != _pixmap_cache.end()) {
         g_object_unref(found->second);
         found->second = NULL;
         _pixmap_cache.erase(key);

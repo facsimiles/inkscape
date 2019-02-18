@@ -45,10 +45,10 @@ void SPFeDisplacementMap::build(SPDocument *document, Inkscape::XML::Node *repr)
 	SPFilterPrimitive::build(document, repr);
 
 	/*LOAD ATTRIBUTES FROM REPR HERE*/
-	this->readAttr( "scale" );
-	this->readAttr( "in2" );
-	this->readAttr( "xChannelSelector" );
-	this->readAttr( "yChannelSelector" );
+	this->readAttr("scale");
+	this->readAttr("in2");
+	this->readAttr("xChannelSelector");
+	this->readAttr("yChannelSelector");
 
 	/* Unlike normal in, in2 is required attribute. Make sure, we can call
 	 * it by some name. */
@@ -195,7 +195,7 @@ Inkscape::XML::Node* SPFeDisplacementMap::write(Inkscape::XML::Document *doc, In
 
     gchar const *in2_name = parent->name_for_image(this->in2);
 
-    if( !in2_name ) {
+    if(!in2_name) {
 
         // This code is very similar to name_previous_out()
         SPObject *i = parent->firstChild();
@@ -205,7 +205,7 @@ Inkscape::XML::Node* SPFeDisplacementMap::write(Inkscape::XML::Document *doc, In
         	i = i->getNext();
         }
 
-        if( i ) {
+        if(i) {
             SPFilterPrimitive *i_prim = SP_FILTER_PRIMITIVE(i);
             in2_name = parent->name_for_image(i_prim->image_out);
         }

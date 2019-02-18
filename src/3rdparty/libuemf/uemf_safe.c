@@ -44,7 +44,7 @@ extern "C" {
 int extlogpen_safe(
       PU_EXTLOGPEN elp,
       const char *blimit
-   ){
+){
    int count=elp->elpNumEntries;
    if(IS_MEM_UNSAFE(&(elp->elpStyleEntry), count*4, blimit))return(0);
    return(1);
@@ -60,7 +60,7 @@ int emrtext_safe(
       PU_EMRTEXT  pemt,
       const char *record,
       const char *blimit
-   ){
+){
    int        off;
    uint32_t   count    = pemt->nChars;
    uint32_t   fOptions = pemt->fOptions;
@@ -85,7 +85,7 @@ int emrtext_safe(
 int rgndata_safe(
       PU_RGNDATA rd,
       int cbRgnData
-   ){
+){
    int count = rd->rdh.nCount;
    if(4*count + (int)sizeof(U_RGNDATAHEADER) > cbRgnData)return(0);
    return(1);
@@ -101,7 +101,7 @@ int rgndata_safe(
 int bitmapinfo_safe(
       const char *Bmi,
       const char *blimit
-   ){
+){
    int       ClrUsed;
    if(IS_MEM_UNSAFE(Bmi, offsetof(U_BITMAPINFO,bmiHeader) + sizeof(U_BITMAPINFOHEADER), blimit))return(0);
    ClrUsed = get_real_color_count(Bmi + offsetof(U_BITMAPINFO,bmiHeader));
@@ -132,7 +132,7 @@ int DIB_safe(
        uint32_t         offBits,
        uint32_t         cbBits,
        const char      *blimit
-   ){
+){
    int  dibparams = U_BI_UNKNOWN;       // type of image not yet determined
    const char      *px      = NULL;     // DIB pixels
    const U_RGBQUAD *ct      = NULL;     // DIB color table
@@ -1029,7 +1029,7 @@ int U_EMRGRADIENTFILL_safe(const char *record){
    if(IS_MEM_UNSAFE(record, nTriVert*sizeof(U_TRIVERTEX), blimit))return(0);
    record += nTriVert * sizeof(U_TRIVERTEX);
    if(nGradObj){
-      if(     ulMode == U_GRADIENT_FILL_TRIANGLE){
+      if(ulMode == U_GRADIENT_FILL_TRIANGLE){
          if(IS_MEM_UNSAFE(record, nGradObj*sizeof(U_GRADIENT3), blimit))return(0);
       }
       else if(ulMode == U_GRADIENT_FILL_RECT_H || ulMode == U_GRADIENT_FILL_RECT_V){

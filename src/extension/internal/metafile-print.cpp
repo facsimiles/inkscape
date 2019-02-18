@@ -130,7 +130,7 @@ U_COLORREF PrintMetafile::_gethexcolor(uint32_t color)
                 (color >> 16) & 0xFF,
                 (color >>  8) & 0xFF,
                 (color >>  0) & 0xFF
-            );
+);
     return out;
 }
 
@@ -177,7 +177,7 @@ U_COLORREF PrintMetafile::avg_stop_color(SPGradient *gr)
                     255 * ((opweight(rgbs[0], gv.rgb[0], ops)   +   opweight(rgbe[0], gv.rgb[0], ope)) / 2.0),
                     255 * ((opweight(rgbs[1], gv.rgb[1], ops)   +   opweight(rgbe[1], gv.rgb[1], ope)) / 2.0),
                     255 * ((opweight(rgbs[2], gv.rgb[2], ops)   +   opweight(rgbe[2], gv.rgb[2], ope)) / 2.0)
-                );
+);
     } else {
         cr = U_RGB(0, 0, 0);  // The default fill
     }
@@ -191,7 +191,7 @@ U_COLORREF PrintMetafile::weight_opacity(U_COLORREF c1)
                             255 * opweight((float)c1.Red  / 255.0, gv.rgb[0], opa),
                             255 * opweight((float)c1.Green / 255.0, gv.rgb[1], opa),
                             255 * opweight((float)c1.Blue / 255.0, gv.rgb[2], opa)
-                        );
+);
     return result;
 }
 
@@ -200,7 +200,7 @@ U_COLORREF PrintMetafile::weight_colors(U_COLORREF c1, U_COLORREF c2, double t)
 {
 #define clrweight(a,b,t) ((1-t)*((double) a) + (t)*((double) b))
     U_COLORREF result;
-    t = ( t > 1.0 ? 1.0 : ( t < 0.0 ? 0.0 : t));
+    t = (t > 1.0 ? 1.0 : (t < 0.0 ? 0.0 : t));
     result.Red      = clrweight(c1.Red,      c2.Red,      t);
     result.Green    = clrweight(c1.Green,    c2.Green,    t);
     result.Blue     = clrweight(c1.Blue,     c2.Blue,     t);

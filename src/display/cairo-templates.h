@@ -500,7 +500,7 @@ struct SurfaceSynth {
                 fx *= (2.0/3.0);
                 fy *= (2.0/3.0);
                 double p00 = alphaAt(x,y-1), p10 = alphaAt(x+1, y-1),
-                       p01 = alphaAt(x,y  ), p11 = alphaAt(x+1, y);
+                       p01 = alphaAt(x,y), p11 = alphaAt(x+1, y);
                 normal[X_3D] =
                     -1.0 * p00 +1.0 * p10
                     -2.0 * p01 +2.0 * p11;
@@ -512,7 +512,7 @@ struct SurfaceSynth {
                 fx *= (1.0/2.0);
                 fy *= (1.0/3.0);
                 double p00 = alphaAt(x, y-1), p10 = alphaAt(x+1, y-1),
-                       p01 = alphaAt(x, y  ), p11 = alphaAt(x+1, y  ),
+                       p01 = alphaAt(x, y), p11 = alphaAt(x+1, y),
                        p02 = alphaAt(x, y+1), p12 = alphaAt(x+1, y+1);
                 normal[X_3D] =
                     -1.0 * p00 +1.0 * p10
@@ -542,7 +542,7 @@ struct SurfaceSynth {
                 fx *= (2.0/3.0);
                 fy *= (2.0/3.0);
                 double p00 = alphaAt(x-1,y-1), p10 = alphaAt(x, y-1),
-                       p01 = alphaAt(x-1,y  ), p11 = alphaAt(x, y);
+                       p01 = alphaAt(x-1,y), p11 = alphaAt(x, y);
                 normal[X_3D] =
                     -1.0 * p00 +1.0 * p10
                     -2.0 * p01 +2.0 * p11;
@@ -554,7 +554,7 @@ struct SurfaceSynth {
                 fx *= (1.0/2.0);
                 fy *= (1.0/3.0);
                 double p00 = alphaAt(x-1, y-1), p10 = alphaAt(x, y-1),
-                       p01 = alphaAt(x-1, y  ), p11 = alphaAt(x, y  ),
+                       p01 = alphaAt(x-1, y), p11 = alphaAt(x, y),
                        p02 = alphaAt(x-1, y+1), p12 = alphaAt(x, y+1);
                 normal[X_3D] =
                     -1.0 * p00 +1.0 * p10
@@ -571,7 +571,7 @@ struct SurfaceSynth {
                 // top row
                 fx *= (1.0/3.0);
                 fy *= (1.0/2.0);
-                double p00 = alphaAt(x-1, y  ), p10 = alphaAt(x, y  ), p20 = alphaAt(x+1, y  ),
+                double p00 = alphaAt(x-1, y), p10 = alphaAt(x, y), p20 = alphaAt(x+1, y),
                        p01 = alphaAt(x-1, y+1), p11 = alphaAt(x, y+1), p21 = alphaAt(x+1, y+1);
                 normal[X_3D] =
                     -2.0 * p00 +0.0 * p10 +2.0 * p20
@@ -584,7 +584,7 @@ struct SurfaceSynth {
                 fx *= (1.0/3.0);
                 fy *= (1.0/2.0);
                 double p00 = alphaAt(x-1, y-1), p10 = alphaAt(x, y-1), p20 = alphaAt(x+1, y-1),
-                       p01 = alphaAt(x-1, y  ), p11 = alphaAt(x, y  ), p21 = alphaAt(x+1, y  );
+                       p01 = alphaAt(x-1, y), p11 = alphaAt(x, y), p21 = alphaAt(x+1, y);
                 normal[X_3D] =
                     -1.0 * p00 +0.0 * p10 +1.0 * p20
                     -2.0 * p01 +0.0 * p11 +2.0 * p21;
@@ -597,7 +597,7 @@ struct SurfaceSynth {
                 fx *= (1.0/4.0);
                 fy *= (1.0/4.0);
                 double p00 = alphaAt(x-1, y-1), p10 = alphaAt(x, y-1), p20 = alphaAt(x+1, y-1),
-                       p01 = alphaAt(x-1, y  ), p11 = 0.0,             p21 = alphaAt(x+1, y  ),
+                       p01 = alphaAt(x-1, y), p11 = 0.0,             p21 = alphaAt(x+1, y),
                        p02 = alphaAt(x-1, y+1), p12 = alphaAt(x, y+1), p22 = alphaAt(x+1, y+1);
                 normal[X_3D] =
                     -1.0 * p00 +0.0 * p10 +1.0 * p20

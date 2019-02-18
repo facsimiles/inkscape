@@ -164,7 +164,7 @@ static ProfileFloatElement f_profile[PROFILE_FLOAT_SIZE] = {
 static double
 flerp(double f0, double f1, double p)
 {
-    return f0 + ( f1 - f0 ) * p;
+    return f0 + (f1 - f0) * p;
 }
 
 void EraserTool::reset(Geom::Point p) {
@@ -211,7 +211,7 @@ bool EraserTool::apply(Geom::Point p) {
     // This prevents flips, blobs, and jerks caused by microscopic tremor of the tablet pen,
     // especially bothersome at the start of the stroke where we don't yet have the inertia to
     // smooth them out.
-    if ( Geom::L2(force) < ERASER_EPSILON || (this->vel_max < ERASER_VEL_START && Geom::L2(force) < ERASER_EPSILON_START)) {
+    if (Geom::L2(force) < ERASER_EPSILON || (this->vel_max < ERASER_VEL_START && Geom::L2(force) < ERASER_EPSILON_START)) {
         return FALSE;
     }
 
@@ -239,14 +239,14 @@ bool EraserTool::apply(Geom::Point p) {
     }
     else {
         // 1b. fixed dc->angle (absolutely flat nib):
-        double const radians = ( (this->angle - 90) / 180.0 ) * M_PI;
+        double const radians = ((this->angle - 90) / 180.0) * M_PI;
         Geom::Point ang1 = Geom::Point(-sin(radians),  cos(radians));
         a1 = atan2(ang1);
     }
 
     // 2. perpendicular to dc->vel (absolutely non-flat nib):
     gdouble const mag_vel = Geom::L2(this->vel);
-    if ( mag_vel < ERASER_EPSILON ) {
+    if (mag_vel < ERASER_EPSILON) {
         return FALSE;
     }
     Geom::Point ang2 = Geom::rot90(this->vel) / mag_vel;
@@ -272,7 +272,7 @@ bool EraserTool::apply(Geom::Point p) {
     // Try to detect a sudden flip when the new angle differs too much from the previous for the
     // current velocity; in that case discard this move
     double angle_delta = Geom::L2(Geom::Point (cos (new_ang), sin (new_ang)) - this->ang);
-    if ( angle_delta / Geom::L2(this->vel) > 4000 ) {
+    if (angle_delta / Geom::L2(this->vel) > 4000) {
         return FALSE;
     }
 
@@ -292,7 +292,7 @@ bool EraserTool::apply(Geom::Point p) {
 }
 
 void EraserTool::brush() {
-    g_assert( this->npoints >= 0 && this->npoints < SAMPLING_SIZE );
+    g_assert(this->npoints >= 0 && this->npoints < SAMPLING_SIZE);
 
     // How much velocity thins strokestyle
     double vel_thin = flerp (0, 160, this->vel_thin);
@@ -317,8 +317,8 @@ void EraserTool::brush() {
             x1 = 2.0 * g_random_double_range(0,1) - 1.0;
             x2 = 2.0 * g_random_double_range(0,1) - 1.0;
             w = x1 * x1 + x2 * x2;
-        } while ( w >= 1.0 );
-        w = sqrt( (-2.0 * log( w ) ) / w );
+        } while (w >= 1.0);
+        w = sqrt((-2.0 * log(w)) / w);
         y1 = x1 * w;
         y2 = x2 * w;
 
@@ -331,7 +331,7 @@ void EraserTool::brush() {
         tremble_right = (y2)*this->tremor * (0.15 + 0.8*width) * (0.35 + 14*Geom::L2(this->vel));
     }
 
-    if ( width < 0.02 * this->width ) {
+    if (width < 0.02 * this->width) {
         width = 0.02 * this->width;
     }
 
@@ -400,7 +400,7 @@ bool EraserTool::root_handler(GdkEvent* event) {
                 if (this->repr) {
                     this->repr = nullptr;
                 }
-                if ( eraser_mode == ERASER_MODE_DELETE ) {
+                if (eraser_mode == ERASER_MODE_DELETE) {
                     Inkscape::Rubberband::get(desktop)->start(desktop, button_dt);
                     Inkscape::Rubberband::get(desktop)->setMode(RUBBERBAND_MODE_TOUCHPATH);
                 }
@@ -408,10 +408,10 @@ bool EraserTool::root_handler(GdkEvent* event) {
                 this->npoints = 0;
 
                 sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
-                                    ( GDK_KEY_PRESS_MASK |
+                                    (GDK_KEY_PRESS_MASK |
                                       GDK_BUTTON_RELEASE_MASK |
                                       GDK_POINTER_MOTION_MASK |
-                                      GDK_BUTTON_PRESS_MASK ),
+                                      GDK_BUTTON_PRESS_MASK),
                                     nullptr,
                                     event->button.time);
 
@@ -430,7 +430,7 @@ bool EraserTool::root_handler(GdkEvent* event) {
 
             this->message_context->clear();
 
-            if ( this->is_drawing && (event->motion.state & GDK_BUTTON1_MASK) && !this->space_panning) {
+            if (this->is_drawing && (event->motion.state & GDK_BUTTON1_MASK) && !this->space_panning) {
                 this->dragging = TRUE;
 
                 this->message_context->set(Inkscape::NORMAL_MESSAGE, _("<b>Drawing</b> an eraser stroke"));
@@ -440,15 +440,15 @@ bool EraserTool::root_handler(GdkEvent* event) {
                     break;
                 }
 
-                if ( this->cur != this->last ) {
+                if (this->cur != this->last) {
                     this->brush();
-                    g_assert( this->npoints > 0 );
+                    g_assert(this->npoints > 0);
                     this->fit_and_split(false);
                 }
 
                 ret = TRUE;
             }
-            if ( eraser_mode == ERASER_MODE_DELETE ) {
+            if (eraser_mode == ERASER_MODE_DELETE) {
                 this->accumulated->reset();
                 Inkscape::Rubberband::get(desktop)->move(motion_dt);
             }
@@ -577,7 +577,7 @@ bool EraserTool::root_handler(GdkEvent* event) {
             break;
 
         case GDK_KEY_Escape:
-            if ( eraser_mode == ERASER_MODE_DELETE ) {
+            if (eraser_mode == ERASER_MODE_DELETE) {
                 Inkscape::Rubberband::get(desktop)->stop();
             }
             if (this->is_drawing) {
@@ -658,11 +658,11 @@ void EraserTool::set_to_accumulated() {
         Geom::PathVector pathv = this->accumulated->get_pathvector() * this->desktop->dt2doc();
         pathv *= item_repr->i2doc_affine().inverse();
         gchar *str = sp_svg_write_path(pathv);
-        g_assert( str != nullptr );
+        g_assert(str != nullptr);
         this->repr->setAttribute("d", str);
         g_free(str);
         Geom::OptRect eraserBbox;
-        if ( this->repr ) {
+        if (this->repr) {
             bool wasSelection = false;
             Inkscape::Selection *selection = this->desktop->getSelection();
             Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -697,7 +697,7 @@ void EraserTool::set_to_accumulated() {
                 wasSelection = true;
             }
 
-            if ( !toWorkOn.empty() ) {
+            if (!toWorkOn.empty()) {
                 if (eraser_mode  == ERASER_MODE_CUT) {
                     for (std::vector<SPItem*>::const_iterator i = toWorkOn.begin(); i != toWorkOn.end(); ++i){
                         SPItem *item = *i;
@@ -706,7 +706,7 @@ void EraserTool::set_to_accumulated() {
                             SPItem *item = *i;
                             item->deleteObject(true);
                             workDone = true;
-                        } else if (SP_IS_GROUP(item) || use ) {
+                        } else if (SP_IS_GROUP(item) || use) {
                             /*Do nothing*/
                         } else {
                             Geom::OptRect bbox = item->desktopVisualBounds();
@@ -740,7 +740,7 @@ void EraserTool::set_to_accumulated() {
                                         selection->breakApart(true);
                                     }
                                 }
-                                if ( !selection->isEmpty() ) {
+                                if (!selection->isEmpty()) {
                                     // If the item was not completely erased, track the new remainder.
                                     std::vector<SPItem*> nowSel(selection->items().begin(), selection->items().end());
                                     for (std::vector<SPItem*>::const_iterator i2 = nowSel.begin();i2!=nowSel.end();++i2) {
@@ -835,14 +835,14 @@ void EraserTool::set_to_accumulated() {
 
                 selection->clear();
 
-                if ( wasSelection ) {
-                    if ( !remainingItems.empty() ) {
+                if (wasSelection) {
+                    if (!remainingItems.empty()) {
                         selection->add(remainingItems.begin(), remainingItems.end());
                     }
                 }
             }
             // Remove the eraser stroke itself:
-            sp_repr_unparent( this->repr );
+            sp_repr_unparent(this->repr);
             this->repr = nullptr;
         }
     } else {
@@ -851,7 +851,7 @@ void EraserTool::set_to_accumulated() {
             this->repr = nullptr;
         }
     }
-    if ( workDone ) {
+    if (workDone) {
         DocumentUndo::done(document, SP_VERB_CONTEXT_ERASER, _("Draw eraser stroke"));
     } else {
         DocumentUndo::cancel(document);
@@ -864,13 +864,13 @@ add_cap(SPCurve *curve,
         Geom::Point const &to, Geom::Point const &post,
         double rounding)
 {
-    Geom::Point vel = rounding * Geom::rot90( to - from ) / sqrt(2.0);
+    Geom::Point vel = rounding * Geom::rot90(to - from) / sqrt(2.0);
     double mag = Geom::L2(vel);
 
     Geom::Point v_in = from - pre;
     double mag_in = Geom::L2(v_in);
 
-    if ( mag_in > ERASER_EPSILON ) {
+    if (mag_in > ERASER_EPSILON) {
         v_in = mag * v_in / mag_in;
     } else {
         v_in = Geom::Point(0, 0);
@@ -879,13 +879,13 @@ add_cap(SPCurve *curve,
     Geom::Point v_out = to - post;
     double mag_out = Geom::L2(v_out);
 
-    if ( mag_out > ERASER_EPSILON ) {
+    if (mag_out > ERASER_EPSILON) {
         v_out = mag * v_out / mag_out;
     } else {
         v_out = Geom::Point(0, 0);
     }
 
-    if ( Geom::L2(v_in) > ERASER_EPSILON || Geom::L2(v_out) > ERASER_EPSILON ) {
+    if (Geom::L2(v_in) > ERASER_EPSILON || Geom::L2(v_out) > ERASER_EPSILON) {
         curve->curveto(from + v_in, to + v_out, to);
     }
 }
@@ -893,24 +893,24 @@ add_cap(SPCurve *curve,
 void EraserTool::accumulate() {
     // construct a crude outline of the eraser's path.
     // this desperately needs to be rewritten to use the path outliner...
-    if ( !this->cal1->is_empty() && !this->cal2->is_empty() ) {
+    if (!this->cal1->is_empty() && !this->cal2->is_empty()) {
         this->accumulated->reset(); /*  Is this required ?? */
         SPCurve *rev_cal2 = this->cal2->create_reverse();
 
         g_assert(this->cal1->get_segment_count() > 0);
         g_assert(rev_cal2->get_segment_count() > 0);
-        g_assert( ! this->cal1->first_path()->closed() );
-        g_assert( ! rev_cal2->first_path()->closed() );
+        g_assert(! this->cal1->first_path()->closed());
+        g_assert(! rev_cal2->first_path()->closed());
 
-        Geom::BezierCurve const * dc_cal1_firstseg  = dynamic_cast<Geom::BezierCurve const *>( this->cal1->first_segment() );
-        Geom::BezierCurve const * rev_cal2_firstseg = dynamic_cast<Geom::BezierCurve const *>( rev_cal2->first_segment() );
-        Geom::BezierCurve const * dc_cal1_lastseg   = dynamic_cast<Geom::BezierCurve const *>( this->cal1->last_segment() );
-        Geom::BezierCurve const * rev_cal2_lastseg  = dynamic_cast<Geom::BezierCurve const *>( rev_cal2->last_segment() );
+        Geom::BezierCurve const * dc_cal1_firstseg  = dynamic_cast<Geom::BezierCurve const *>(this->cal1->first_segment());
+        Geom::BezierCurve const * rev_cal2_firstseg = dynamic_cast<Geom::BezierCurve const *>(rev_cal2->first_segment());
+        Geom::BezierCurve const * dc_cal1_lastseg   = dynamic_cast<Geom::BezierCurve const *>(this->cal1->last_segment());
+        Geom::BezierCurve const * rev_cal2_lastseg  = dynamic_cast<Geom::BezierCurve const *>(rev_cal2->last_segment());
 
-        g_assert( dc_cal1_firstseg );
-        g_assert( rev_cal2_firstseg );
-        g_assert( dc_cal1_lastseg );
-        g_assert( rev_cal2_lastseg );
+        g_assert(dc_cal1_firstseg);
+        g_assert(rev_cal2_firstseg);
+        g_assert(dc_cal1_lastseg);
+        g_assert(rev_cal2_lastseg);
 
         this->accumulated->append(this->cal1, FALSE);
         if(!this->nowidth) {
@@ -946,21 +946,21 @@ static double square(double const x)
 }
 
 void EraserTool::fit_and_split(bool release) {
-    double const tolerance_sq = square( desktop->w2d().descrim() * TOLERANCE_ERASER );
+    double const tolerance_sq = square(desktop->w2d().descrim() * TOLERANCE_ERASER);
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    this->nowidth = prefs->getDouble( "/tools/eraser/width", 1) == 0;
+    this->nowidth = prefs->getDouble("/tools/eraser/width", 1) == 0;
 
 #ifdef ERASER_VERBOSE
     g_print("[F&S:R=%c]", release?'T':'F');
 #endif
 
-    if (!( this->npoints > 0 && this->npoints < SAMPLING_SIZE ))
+    if (!(this->npoints > 0 && this->npoints < SAMPLING_SIZE))
         return; // just clicked
 
-    if ( this->npoints == SAMPLING_SIZE - 1 || release ) {
+    if (this->npoints == SAMPLING_SIZE - 1 || release) {
 #define BEZIER_SIZE       4
 #define BEZIER_MAX_BEZIERS  8
-#define BEZIER_MAX_LENGTH ( BEZIER_SIZE * BEZIER_MAX_BEZIERS )
+#define BEZIER_MAX_LENGTH (BEZIER_SIZE * BEZIER_MAX_BEZIERS)
 
 #ifdef ERASER_VERBOSE
         g_print("[F&S:#] this->npoints:%d, release:%s\n",
@@ -968,7 +968,7 @@ void EraserTool::fit_and_split(bool release) {
 #endif
 
         /* Current eraser */
-        if ( this->cal1->is_empty() || this->cal2->is_empty() ) {
+        if (this->cal1->is_empty() || this->cal2->is_empty()) {
             /* dc->npoints > 0 */
             /* g_print("erasers(1|2) reset\n"); */
             this->cal1->reset();
@@ -980,13 +980,13 @@ void EraserTool::fit_and_split(bool release) {
 
         Geom::Point b1[BEZIER_MAX_LENGTH];
         gint const nb1 = Geom::bezier_fit_cubic_r(b1, this->point1, this->npoints, tolerance_sq, BEZIER_MAX_BEZIERS);
-        g_assert( nb1 * BEZIER_SIZE <= gint(G_N_ELEMENTS(b1)) );
+        g_assert(nb1 * BEZIER_SIZE <= gint(G_N_ELEMENTS(b1)));
 
         Geom::Point b2[BEZIER_MAX_LENGTH];
         gint const nb2 = Geom::bezier_fit_cubic_r(b2, this->point2, this->npoints, tolerance_sq, BEZIER_MAX_BEZIERS);
-        g_assert( nb2 * BEZIER_SIZE <= gint(G_N_ELEMENTS(b2)) );
+        g_assert(nb2 * BEZIER_SIZE <= gint(G_N_ELEMENTS(b2)));
 
-        if ( nb1 != -1 && nb2 != -1 ) {
+        if (nb1 != -1 && nb2 != -1) {
             /* Fit and draw and reset state */
 #ifdef ERASER_VERBOSE
             g_print("nb1:%d nb2:%d\n", nb1, nb2);
@@ -1003,7 +1003,7 @@ void EraserTool::fit_and_split(bool release) {
 
                 this->currentcurve->lineto(b2[BEZIER_SIZE*(nb2-1) + 3]);
 
-                for (Geom::Point *bp2 = b2 + BEZIER_SIZE * ( nb2 - 1 ); bp2 >= b2; bp2 -= BEZIER_SIZE) {
+                for (Geom::Point *bp2 = b2 + BEZIER_SIZE * (nb2 - 1); bp2 >= b2; bp2 -= BEZIER_SIZE) {
                     this->currentcurve->curveto(bp2[2], bp2[1], bp2[0]);
                 }
 

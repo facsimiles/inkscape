@@ -44,7 +44,7 @@ public:
   /* Adjusts c2p for viewbox */
   void apply_viewbox(const Geom::Rect& in, double scale_none = 1.0);
 
-  SPItemCtx get_rctx( const SPItemCtx* ictx, double scale_none = 1.0);
+  SPItemCtx get_rctx(const SPItemCtx* ictx, double scale_none = 1.0);
 
 };
 

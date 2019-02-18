@@ -66,19 +66,19 @@ SPText::SPText() : SPItem() {
 SPText::~SPText() = default;
 
 void SPText::build(SPDocument *doc, Inkscape::XML::Node *repr) {
-    this->readAttr( "x" );
-    this->readAttr( "y" );
-    this->readAttr( "dx" );
-    this->readAttr( "dy" );
-    this->readAttr( "rotate" );
+    this->readAttr("x");
+    this->readAttr("y");
+    this->readAttr("dx");
+    this->readAttr("dy");
+    this->readAttr("rotate");
 
     // textLength and friends
-    this->readAttr( "textLength" );
-    this->readAttr( "lengthAdjust" );
+    this->readAttr("textLength");
+    this->readAttr("lengthAdjust");
 
     SPItem::build(doc, repr);
 
-    this->readAttr( "sodipodi:linespacing" );    // has to happen after the styles are read
+    this->readAttr("sodipodi:linespacing");    // has to happen after the styles are read
 }
 
 void SPText::release() {
@@ -86,7 +86,7 @@ void SPText::release() {
 }
 
 void SPText::set(SPAttributeEnum key, const gchar* value) {
-    //std::cout << "SPText::set: " << sp_attribute_name( key ) << ": " << (value?value:"Null") << std::endl;
+    //std::cout << "SPText::set: " << sp_attribute_name(key) << ": " << (value?value:"Null") << std::endl;
 
     if (this->attributes.readSingleAttribute(key, value, style, &viewport)) {
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
@@ -152,9 +152,9 @@ void SPText::update(SPCtx *ctx, guint flags) {
     // update ourselves after updating children
     SPItem::update(ctx, flags);
 
-    if (flags & ( SP_OBJECT_STYLE_MODIFIED_FLAG |
+    if (flags & (SP_OBJECT_STYLE_MODIFIED_FLAG |
                   SP_OBJECT_CHILD_MODIFIED_FLAG |
-                  SP_TEXT_LAYOUT_MODIFIED_FLAG   ) )
+                  SP_TEXT_LAYOUT_MODIFIED_FLAG))
     {
 
         SPItemCtx const *ictx = reinterpret_cast<SPItemCtx const *>(ctx);
@@ -164,7 +164,7 @@ void SPText::update(SPCtx *ctx, guint flags) {
         double const em = style->font_size.computed;
         double const ex = 0.5 * em;  // fixme: get x height from pango or libnrtype.
 
-        attributes.update( em, ex, w, h );
+        attributes.update(em, ex, w, h);
 
         // Set inline_size computed value if necessary (i.e. if unit is %).
         if (style->inline_size.set) {
@@ -207,7 +207,7 @@ void SPText::modified(guint flags) {
     // style, but there's no easy way to access the drawing glyphs or texts corresponding to a
     // text this. Therefore we do here the same as in _update, that is, destroy all items
     // and create new ones. This is probably quite wasteful.
-    if (flags & ( SP_OBJECT_STYLE_MODIFIED_FLAG )) {
+    if (flags & (SP_OBJECT_STYLE_MODIFIED_FLAG)) {
         Geom::OptRect paintbox = this->geometricBounds();
 
         for (SPItemView* v = this->display; v != nullptr; v = v->next) {
@@ -332,7 +332,7 @@ gchar* SPText::description() const {
 
     SPStyle *style = this->style;
 
-    char *n = xml_quote_strdup( style->font_family.value );
+    char *n = xml_quote_strdup(style->font_family.value);
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     int unit = prefs->getInt("/options/font/unitType", SP_CSS_UNIT_PT);
@@ -347,9 +347,9 @@ gchar* SPText::description() const {
         trunc = _(" [truncated]");
     }
 
-    char *ret = ( SP_IS_TEXT_TEXTPATH(this)
+    char *ret = (SP_IS_TEXT_TEXTPATH(this)
       ? g_strdup_printf(_("on path%s (%s, %s)"), trunc, n, xs.c_str())
-      : g_strdup_printf(_("%s (%s, %s)"),        trunc, n, xs.c_str()) );
+      : g_strdup_printf(_("%s (%s, %s)"),        trunc, n, xs.c_str()));
     return ret;
 }
 
@@ -445,25 +445,25 @@ void SPText::_buildLayoutInit()
     if (style) {
 
         // Strut
-        font_instance *font = font_factory::Default()->FaceFromStyle( style );
+        font_instance *font = font_factory::Default()->FaceFromStyle(style);
         if (font) {
             font->FontMetrics(layout.strut.ascent, layout.strut.descent, layout.strut.xheight);
             font->Unref();
         }
         layout.strut *= style->font_size.computed;
-        if (style->line_height.normal ) {
-            layout.strut.computeEffective( Inkscape::Text::Layout::LINE_HEIGHT_NORMAL ); 
+        if (style->line_height.normal) {
+            layout.strut.computeEffective(Inkscape::Text::Layout::LINE_HEIGHT_NORMAL); 
         } else if (style->line_height.unit == SP_CSS_UNIT_NONE) {
-            layout.strut.computeEffective( style->line_height.computed );
+            layout.strut.computeEffective(style->line_height.computed);
         } else {
-            if( style->font_size.computed > 0.0 ) {
-                layout.strut.computeEffective( style->line_height.computed/style->font_size.computed );
+            if(style->font_size.computed > 0.0) {
+                layout.strut.computeEffective(style->line_height.computed/style->font_size.computed);
             }
         }
 
 
         // To do: follow SPItem clip_ref/mask_ref code
-        if (style->shape_inside.set ) {
+        if (style->shape_inside.set) {
 
             layout.wrap_mode = Inkscape::Text::Layout::WRAP_SHAPE_INSIDE;
 
@@ -477,14 +477,14 @@ void SPText::_buildLayoutInit()
             Glib::ustring shapeInside_value = style->shape_inside.value;
             std::vector<Glib::ustring> shapes_url = Glib::Regex::split_simple(" ", shapeInside_value);
             for (auto shape_url : shapes_url) {
-                if ( shape_url.compare(0,5,"url(#") != 0 || shape_url.compare(shape_url.size()-1,1,")") != 0 ){
+                if (shape_url.compare(0,5,"url(#") != 0 || shape_url.compare(shape_url.size()-1,1,")") != 0){
                     std::cerr << "SPText::_buildLayoutInit(): Invalid shape-inside value: " << shape_url << std::endl;
                 } else {
                     shape_url.erase(0,5);
                     shape_url.erase(shape_url.size()-1,1);
                     // std::cout << "SPText::_buildLayoutInit(): shape-inside: " << shape_url << std::endl;
-                    SPShape *shape = dynamic_cast<SPShape *>(document->getObjectById( shape_url ));
-                    if ( shape ) {
+                    SPShape *shape = dynamic_cast<SPShape *>(document->getObjectById(shape_url));
+                    if (shape) {
 
                         // This code adapted from sp-flowregion.cpp: GetDest()
                         if (!(shape->_curve)) {
@@ -492,26 +492,26 @@ void SPText::_buildLayoutInit()
                         }
                         SPCurve *curve = shape->getCurve();
 
-                        if ( curve ) {
+                        if (curve) {
                             Path *temp = new Path;
                             Path *padded = new Path;
-                            temp->LoadPathVector( curve->get_pathvector(), shape->transform, true );
-                            if( style->shape_padding.set ) {
+                            temp->LoadPathVector(curve->get_pathvector(), shape->transform, true);
+                            if(style->shape_padding.set) {
                                 // std::cout << "  padding: " << style->shape_padding.computed << std::endl;
-                                temp->OutsideOutline ( padded, style->shape_padding.computed, join_round, butt_straight, 20.0 );
+                                temp->OutsideOutline (padded, style->shape_padding.computed, join_round, butt_straight, 20.0);
                             } else {
                                 // std::cout << "  no padding" << std::endl;
-                                padded->Copy( temp );
+                                padded->Copy(temp);
                             }
-                            padded->Convert( 0.25 );  // Convert to polyline
+                            padded->Convert(0.25);  // Convert to polyline
                             Shape* sh = new Shape;
-                            padded->Fill( sh, 0 );
-                            // for( unsigned i = 0; i < temp->pts.size(); ++i ) {
+                            padded->Fill(sh, 0);
+                            // for(unsigned i = 0; i < temp->pts.size(); ++i) {
                             //   std::cout << " ........ " << temp->pts[i].p << std::endl;
                             // }
                             // std::cout << " ...... shape: " << sh->numberOfPoints() << std::endl;
                             Shape *uncross = new Shape;
-                            uncross->ConvertToShape( sh );
+                            uncross->ConvertToShape(sh);
 
                             // Subtract exclusion shape
                             if(style->shape_subtract.set) {
@@ -521,12 +521,12 @@ void SPText::_buildLayoutInit()
                                 } else {
                                     copy->Copy(uncross);
                                 }
-                                layout.appendWrapShape( copy );
+                                layout.appendWrapShape(copy);
                                 //delete exclusion_shape;
                                 continue;
                             }
 
-                            layout.appendWrapShape( uncross );
+                            layout.appendWrapShape(uncross);
 
                             delete temp;
                             delete padded;
@@ -565,9 +565,9 @@ void SPText::_buildLayoutInit()
             shape->AddEdge(v2, v3);
             shape->AddEdge(v3, v0);
             Shape *uncross = new Shape;
-            uncross->ConvertToShape( shape );
+            uncross->ConvertToShape(shape);
 
-            layout.appendWrapShape( uncross );
+            layout.appendWrapShape(uncross);
 
             delete shape;
         }
@@ -728,37 +728,37 @@ Shape* SPText::_buildExclusionShape() const
     std::vector<Glib::ustring> shapes_url = Glib::Regex::split_simple(" ", shapeSubtract_value);
 
     for(auto shape_url : shapes_url) {
-        if ( shape_url.compare(0,5,"url(#") != 0 || shape_url.compare(shape_url.size()-1,1,")") != 0 ){
+        if (shape_url.compare(0,5,"url(#") != 0 || shape_url.compare(shape_url.size()-1,1,")") != 0){
                 std::cerr << "SPText::_buildExclusionShape(): Invalid shape-inside value: " << shape_url << std::endl;
         } else {
             shape_url.erase(0,5);
             shape_url.erase(shape_url.size()-1,1);
             // std::cout << "SPText::_buildExlusionShape(): shape-inside: " << shape_url << std::endl;
-            SPShape *shape = dynamic_cast<SPShape *>(document->getObjectById( shape_url ));
-            if ( shape ) {
+            SPShape *shape = dynamic_cast<SPShape *>(document->getObjectById(shape_url));
+            if (shape) {
                 // This code adapted from sp-flowregion.cpp: GetDest()
                 if (!(shape->_curve)) {
                     shape->set_shape();
                 }
                 SPCurve *curve = shape->getCurve();
 
-                if ( curve ) {
+                if (curve) {
                     Path *temp = new Path;
                     Path *margin = new Path;
-                    temp->LoadPathVector( curve->get_pathvector(), shape->transform, true );
+                    temp->LoadPathVector(curve->get_pathvector(), shape->transform, true);
 
-                    if( shape->style->shape_margin.set ) {
-                        temp->OutsideOutline ( margin, -shape->style->shape_margin.computed, join_round, butt_straight, 20.0 );
+                    if(shape->style->shape_margin.set) {
+                        temp->OutsideOutline (margin, -shape->style->shape_margin.computed, join_round, butt_straight, 20.0);
                     } else {
-                        margin->Copy( temp );
+                        margin->Copy(temp);
                     }
 
-                    margin->Convert( 0.25 );  // Convert to polyline
+                    margin->Convert(0.25);  // Convert to polyline
                     Shape* sh = new Shape;
-                    margin->Fill( sh, 0 );
+                    margin->Fill(sh, 0);
 
                     Shape *uncross = new Shape;
-                    uncross->ConvertToShape( sh );
+                    uncross->ConvertToShape(sh);
 
                     if (result->hasEdges()) {
                         shape_temp->Booleen(result, uncross, bool_op_union);
@@ -802,8 +802,8 @@ void SPText::rebuildLayout()
     for (auto& child: children) {
         if (SP_IS_TSPAN(&child)) {
             SPTSpan *tspan = SP_TSPAN(&child);
-            if ( (tspan->role != SP_TSPAN_ROLE_UNSPECIFIED)
-                 && tspan->attributes.singleXYCoordinates() ) {
+            if ((tspan->role != SP_TSPAN_ROLE_UNSPECIFIED)
+                 && tspan->attributes.singleXYCoordinates()) {
                 Inkscape::Text::Layout::iterator iter = layout.sourceToIterator(tspan);
                 Geom::Point anchor_point = layout.chunkAnchorPoint(iter);
                 tspan->attributes.setFirstXY(anchor_point);
@@ -898,9 +898,9 @@ Geom::OptRect SPText::get_frame()
             // horizontal
             frame = Geom::Rect::from_xywh(attributes.firstXY()[Geom::X], -100000, inline_size, 200000);
             if (anchor == SP_CSS_TEXT_ANCHOR_MIDDLE) {
-                frame *= Geom::Translate (-inline_size/2.0, 0 );
-            } else if ( (direction == SP_CSS_DIRECTION_LTR && anchor == SP_CSS_TEXT_ANCHOR_END  ) ||
-                        (direction == SP_CSS_DIRECTION_RTL && anchor == SP_CSS_TEXT_ANCHOR_START) ) {
+                frame *= Geom::Translate (-inline_size/2.0, 0);
+            } else if ((direction == SP_CSS_DIRECTION_LTR && anchor == SP_CSS_TEXT_ANCHOR_END) ||
+                        (direction == SP_CSS_DIRECTION_RTL && anchor == SP_CSS_TEXT_ANCHOR_START)) {
                 frame *= Geom::Translate (-inline_size, 0);
             }
         } else {
@@ -928,7 +928,7 @@ Geom::OptRect SPText::get_frame()
             sp_repr_get_double (rectangle, "y",      &y);
             sp_repr_get_double (rectangle, "width",  &width);
             sp_repr_get_double (rectangle, "height", &height);
-            frame = Geom::Rect::from_xywh( x, y, width, height);
+            frame = Geom::Rect::from_xywh(x, y, width, height);
             opt_frame = frame;
         }
     }
@@ -1001,12 +1001,12 @@ SPItem *create_text_with_inline_size (SPDesktop *desktop, Geom::Point p0, Geom::
     p0 *= SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
     p1 *= SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
 
-    sp_repr_set_svg_double( text_repr, "x", p0[Geom::X]);
-    sp_repr_set_svg_double( text_repr, "y", p0[Geom::Y]);
+    sp_repr_set_svg_double(text_repr, "x", p0[Geom::X]);
+    sp_repr_set_svg_double(text_repr, "y", p0[Geom::Y]);
 
     double inline_size = p1[Geom::X] - p0[Geom::X];
 
-    text_object->style->inline_size.setDouble( inline_size );
+    text_object->style->inline_size.setDouble(inline_size);
     text_object->style->inline_size.set = true;
 
     Inkscape::XML::Node *text_node = xml_doc->createTextNode("");
@@ -1048,10 +1048,10 @@ SPItem *create_text_with_rectangle (SPDesktop *desktop, Geom::Point p0, Geom::Po
 
     // Create rectangle
     Inkscape::XML::Node *rect_repr = xml_doc->createElement("svg:rect");
-    sp_repr_set_svg_double( rect_repr, "x", p0[Geom::X]);
-    sp_repr_set_svg_double( rect_repr, "y", p0[Geom::Y]);
-    sp_repr_set_svg_double( rect_repr, "width",  abs(p1[Geom::X]-p0[Geom::X]));
-    sp_repr_set_svg_double( rect_repr, "height", abs(p1[Geom::Y]-p0[Geom::Y]));
+    sp_repr_set_svg_double(rect_repr, "x", p0[Geom::X]);
+    sp_repr_set_svg_double(rect_repr, "y", p0[Geom::Y]);
+    sp_repr_set_svg_double(rect_repr, "width",  abs(p1[Geom::X]-p0[Geom::X]));
+    sp_repr_set_svg_double(rect_repr, "height", abs(p1[Geom::Y]-p0[Geom::Y]));
 
     // Find defs, if does not exist, create.
     Inkscape::XML::Node *defs_repr = sp_repr_lookup_name (xml_doc->root(), "svg:defs");
@@ -1131,16 +1131,16 @@ bool TextTagAttributes::readSingleAttribute(unsigned key, gchar const *value, SP
     // FIXME: sp_svg_length_list_read() amalgamates repeated separators. This prevents unset values.
     *attr_vector = sp_svg_length_list_read(value);
 
-    if( (update_x || update_y) && style != nullptr && viewport != nullptr ) {
+    if((update_x || update_y) && style != nullptr && viewport != nullptr) {
         double const w = viewport->width();
         double const h = viewport->height();
         double const em = style->font_size.computed;
         double const ex = em * 0.5;
         for(auto & it : *attr_vector) {
-            if( update_x )
-                it.update( em, ex, w );
-            if( update_y )
-                it.update( em, ex, h );
+            if(update_x)
+                it.update(em, ex, w);
+            if(update_y)
+                it.update(em, ex, h);
         }
     }
     return true;
@@ -1165,19 +1165,19 @@ void TextTagAttributes::writeTo(Inkscape::XML::Node *node) const
     }
 }
 
-void TextTagAttributes::update( double em, double ex, double w, double h )
+void TextTagAttributes::update(double em, double ex, double w, double h)
 {
     for(auto & it : attributes.x) {
-        it.update( em, ex, w );
+        it.update(em, ex, w);
     }
     for(auto & it : attributes.y) {
-        it.update( em, ex, h );
+        it.update(em, ex, h);
     }
     for(auto & it : attributes.dx) {
-        it.update( em, ex, w );
+        it.update(em, ex, w);
     }
     for(auto & it : attributes.dy) {
-        it.update( em, ex, h );
+        it.update(em, ex, h);
     }
 }
 
@@ -1446,10 +1446,10 @@ void TextTagAttributes::transform(Geom::Affine const &matrix, double scale_x, do
 
 double TextTagAttributes::getDx(unsigned index)
 {
-    if( attributes.dx.empty()) {
+    if(attributes.dx.empty()) {
         return 0.0;
     }
-    if( index < attributes.dx.size() ) {
+    if(index < attributes.dx.size()) {
         return attributes.dx[index].computed;
     } else {
         return 0.0; // attributes.dx.back().computed;
@@ -1459,10 +1459,10 @@ double TextTagAttributes::getDx(unsigned index)
 
 double TextTagAttributes::getDy(unsigned index)
 {
-    if( attributes.dy.empty() ) {
+    if(attributes.dy.empty()) {
         return 0.0;
     }
-    if( index < attributes.dy.size() ) {
+    if(index < attributes.dy.size()) {
         return attributes.dy[index].computed;
     } else {
         return 0.0; // attributes.dy.back().computed;
@@ -1505,10 +1505,10 @@ void TextTagAttributes::addToDxDy(unsigned index, Geom::Point const &adjust)
 
 double TextTagAttributes::getRotate(unsigned index)
 {
-    if( attributes.rotate.empty() ) {
+    if(attributes.rotate.empty()) {
         return 0.0;
     }
-    if( index < attributes.rotate.size() ) {
+    if(index < attributes.rotate.size()) {
         return attributes.rotate[index].computed;
     } else {
         return attributes.rotate.back().computed;

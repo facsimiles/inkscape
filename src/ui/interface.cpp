@@ -131,7 +131,7 @@ sp_ui_close_view(GtkWidget */*widget*/)
     INKSCAPE.get_all_desktops(desktops);
     if (desktops.size() == 1) {
         Glib::ustring templateUri = sp_file_default_template_uri();
-        SPDocument *doc = SPDocument::createNewDoc( templateUri.empty() ? nullptr : templateUri.c_str(), TRUE, true );
+        SPDocument *doc = SPDocument::createNewDoc(templateUri.empty() ? nullptr : templateUri.c_str(), TRUE, true);
         // Set viewBox if it doesn't exist
         if (!doc->getRoot()->viewBox_set) {
             doc->setViewBox(Geom::Rect::from_xywh(0, 0, doc->getWidth().value(doc->getDisplayUnit()), doc->getHeight().value(doc->getDisplayUnit())));
@@ -197,7 +197,7 @@ sp_ui_dialog_title_string(Inkscape::Verb *verb, gchar *c)
 }
 
 
-Glib::ustring getLayoutPrefPath( Inkscape::UI::View::View *view )
+Glib::ustring getLayoutPrefPath(Inkscape::UI::View::View *view)
 {
     Glib::ustring prefPath;
 
@@ -244,7 +244,7 @@ sp_ui_import_one_file(char const *filename)
 
     // Pass off to common implementation
     // TODO might need to get the proper type of Inkscape::Extension::Extension
-    file_import( doc, filename, nullptr );
+    file_import(doc, filename, nullptr);
 }
 
 void
@@ -269,31 +269,31 @@ sp_ui_overwrite_file(gchar const *filename)
 
     if (Inkscape::IO::file_test(filename, G_FILE_TEST_EXISTS)) {
         Gtk::Window *window = SP_ACTIVE_DESKTOP->getToplevel();
-        gchar* baseName = g_path_get_basename( filename );
-        gchar* dirName = g_path_get_dirname( filename );
-        GtkWidget* dialog = gtk_message_dialog_new_with_markup( window->gobj(),
+        gchar* baseName = g_path_get_basename(filename);
+        gchar* dirName = g_path_get_dirname(filename);
+        GtkWidget* dialog = gtk_message_dialog_new_with_markup(window->gobj(),
                                                                 (GtkDialogFlags)(GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT),
                                                                 GTK_MESSAGE_QUESTION,
                                                                 GTK_BUTTONS_NONE,
-                                                                _( "<span weight=\"bold\" size=\"larger\">A file named \"%s\" already exists. Do you want to replace it?</span>\n\n"
-                                                                   "The file already exists in \"%s\". Replacing it will overwrite its contents." ),
+                                                                _("<span weight=\"bold\" size=\"larger\">A file named \"%s\" already exists. Do you want to replace it?</span>\n\n"
+                                                                   "The file already exists in \"%s\". Replacing it will overwrite its contents."),
                                                                 baseName,
                                                                 dirName
-            );
-        gtk_dialog_add_buttons( GTK_DIALOG(dialog),
+);
+        gtk_dialog_add_buttons(GTK_DIALOG(dialog),
                                 _("_Cancel"), GTK_RESPONSE_NO,
                                 _("Replace"), GTK_RESPONSE_YES,
-                                NULL );
-        gtk_dialog_set_default_response( GTK_DIALOG(dialog), GTK_RESPONSE_YES );
+                                NULL);
+        gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_YES);
 
-        if ( gtk_dialog_run( GTK_DIALOG(dialog) ) == GTK_RESPONSE_YES ) {
+        if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_YES) {
             return_value = TRUE;
         } else {
             return_value = FALSE;
         }
         gtk_widget_destroy(dialog);
-        g_free( baseName );
-        g_free( dirName );
+        g_free(baseName);
+        g_free(dirName);
     } else {
         return_value = TRUE;
     }

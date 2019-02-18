@@ -42,14 +42,14 @@ public:
         _labelAttr(g_quark_from_string("inkscape:label"))
     {}
 
-    void notifyChildAdded( Node &/*node*/, Node &/*child*/, Node */*prev*/ ) override {}
-    void notifyChildRemoved( Node &/*node*/, Node &/*child*/, Node */*prev*/ ) override {}
-    void notifyChildOrderChanged( Node &/*node*/, Node &/*child*/, Node */*old_prev*/, Node */*new_prev*/ ) override {}
-    void notifyContentChanged( Node &/*node*/, Util::ptr_shared /*old_content*/, Util::ptr_shared /*new_content*/ ) override {}
-    void notifyAttributeChanged( Node &/*node*/, GQuark name, Util::ptr_shared /*old_value*/, Util::ptr_shared /*new_value*/ ) override {
-        if ( name == _lockedAttr || name == _labelAttr ) {
-            if ( _mgr && _obj ) {
-                _mgr->_objectModified( _obj, 0 );
+    void notifyChildAdded(Node &/*node*/, Node &/*child*/, Node */*prev*/) override {}
+    void notifyChildRemoved(Node &/*node*/, Node &/*child*/, Node */*prev*/) override {}
+    void notifyChildOrderChanged(Node &/*node*/, Node &/*child*/, Node */*old_prev*/, Node */*new_prev*/) override {}
+    void notifyContentChanged(Node &/*node*/, Util::ptr_shared /*old_content*/, Util::ptr_shared /*new_content*/) override {}
+    void notifyAttributeChanged(Node &/*node*/, GQuark name, Util::ptr_shared /*old_value*/, Util::ptr_shared /*new_value*/) override {
+        if (name == _lockedAttr || name == _labelAttr) {
+            if (_mgr && _obj) {
+                _mgr->_objectModified(_obj, 0);
             }
         }
     }
@@ -124,15 +124,15 @@ public:
 LayerManager::LayerManager(SPDesktop *desktop)
 : _desktop(desktop), _document(nullptr)
 {
-    _layer_connection = desktop->connectCurrentLayerChanged( sigc::mem_fun(*this, &LayerManager::_selectedLayerChanged) );
+    _layer_connection = desktop->connectCurrentLayerChanged(sigc::mem_fun(*this, &LayerManager::_selectedLayerChanged));
 
     sigc::bound_mem_functor1<void, Inkscape::LayerManager, SPDocument*> first = sigc::mem_fun(*this, &LayerManager::_setDocument);
 
     // This next line has problems on gcc 4.0.2
     sigc::slot<void, SPDocument*> base2 = first;
 
-    sigc::slot<void,SPDesktop*,SPDocument*> slot2 = sigc::hide<0>( base2 );
-    _document_connection = desktop->connectDocumentReplaced( slot2 );
+    sigc::slot<void,SPDesktop*,SPDocument*> slot2 = sigc::hide<0>(base2);
+    _document_connection = desktop->connectDocumentReplaced(slot2);
 
     _setDocument(desktop->doc());
 }
@@ -145,11 +145,11 @@ LayerManager::~LayerManager()
     _document = nullptr;
 }
 
-void LayerManager::setCurrentLayer( SPObject* obj )
+void LayerManager::setCurrentLayer(SPObject* obj)
 {
-    //g_return_if_fail( _desktop->currentRoot() );
-    if ( _desktop->currentRoot() ) {
-        _desktop->setCurrentLayer( obj );
+    //g_return_if_fail(_desktop->currentRoot());
+    if (_desktop->currentRoot()) {
+        _desktop->setCurrentLayer(obj);
 
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         if (prefs->getBool("/options/selection/layerdeselect", true)) {
@@ -163,9 +163,9 @@ void LayerManager::setCurrentLayer( SPObject* obj )
  * A unique name is made by substituting or appending the label's number suffix with
  * the next unique larger number suffix not already used for any layer name
  */
-Glib::ustring LayerManager::getNextLayerName( SPObject* obj, gchar const *label)
+Glib::ustring LayerManager::getNextLayerName(SPObject* obj, gchar const *label)
 {
-    Glib::ustring incoming( label ? label : "Layer 1" );
+    Glib::ustring incoming(label ? label : "Layer 1");
     Glib::ustring result(incoming);
     Glib::ustring base(incoming);
     Glib::ustring split(" ");
@@ -177,11 +177,11 @@ Glib::ustring LayerManager::getNextLayerName( SPObject* obj, gchar const *label)
     }
 
     gchar* numpart = g_strdup(base.substr(pos+1).c_str());
-    if ( numpart ) {
+    if (numpart) {
         gchar* endPtr = nullptr;
-        guint64 val = g_ascii_strtoull( numpart, &endPtr, 10);
-        if ( ((val > 0) || (endPtr != numpart)) && (val < 65536) ) {
-            base.erase( pos+1);
+        guint64 val = g_ascii_strtoull(numpart, &endPtr, 10);
+        if (((val > 0) || (endPtr != numpart)) && (val < 65536)) {
+            base.erase(pos+1);
             result = incoming;
             startNum = static_cast<int>(val);
             split = "";
@@ -192,33 +192,33 @@ Glib::ustring LayerManager::getNextLayerName( SPObject* obj, gchar const *label)
     std::set<Glib::ustring> currentNames;
     std::vector<SPObject *> layers = _document->getResourceList("layer");
     SPObject *root=_desktop->currentRoot();
-    if ( root ) {
+    if (root) {
         for (std::vector<SPObject *>::const_iterator iter = layers.begin(); iter != layers.end(); ++iter) { 
             if (*iter != obj)
-                currentNames.insert( (*iter)->label() ? Glib::ustring((*iter)->label()) : Glib::ustring() );
+                currentNames.insert((*iter)->label() ? Glib::ustring((*iter)->label()) : Glib::ustring());
         }
     }
 
     // Not sure if we need to cap it, but we'll just be paranoid for the moment
     // Intentionally unsigned
     guint endNum = startNum + 3000;
-    for ( guint i = startNum; (i < endNum) && (currentNames.find(result) != currentNames.end()); i++ ) {
+    for (guint i = startNum; (i < endNum) && (currentNames.find(result) != currentNames.end()); i++) {
         result = Glib::ustring::format(base, split, i);
     }
 
     return result;
 }
 
-void LayerManager::renameLayer( SPObject* obj, gchar const *label, bool uniquify )
+void LayerManager::renameLayer(SPObject* obj, gchar const *label, bool uniquify)
 {
-    Glib::ustring incoming( label ? label : "" );
+    Glib::ustring incoming(label ? label : "");
     Glib::ustring result(incoming);
 
     if (uniquify) {
         result = getNextLayerName(obj, label);
     }
 
-    obj->setLabel( result.c_str() );
+    obj->setLabel(result.c_str());
 }
 
 
@@ -234,20 +234,20 @@ void LayerManager::_setDocument(SPDocument *document) {
     _rebuild();
 }
 
-void LayerManager::_objectModified( SPObject* obj, guint /*flags*/ )
+void LayerManager::_objectModified(SPObject* obj, guint /*flags*/)
 {
-    _details_changed_signal.emit( obj );
+    _details_changed_signal.emit(obj);
 }
 
 void LayerManager::_rebuild() {
 //     Debug::EventTracker<DebugLayerRebuild> tracker1();
 
-    while ( !_watchers.empty() ) {
+    while (!_watchers.empty()) {
         LayerWatcher* one = _watchers.back();
         _watchers.pop_back();
-        if ( one->_obj ) {
+        if (one->_obj) {
             Node* node = one->_obj->getRepr();
-            if ( node ) {
+            if (node) {
                 node->removeObserver(*one);
             }
             one->_connection.disconnect();
@@ -262,33 +262,33 @@ void LayerManager::_rebuild() {
     std::vector<SPObject *> layers = _document->getResourceList("layer");
 
     SPObject *root=_desktop->currentRoot();
-    if ( root ) {
+    if (root) {
         _addOne(root);
 
         std::set<SPGroup*> layersToAdd;
 
-        for ( std::vector<SPObject *>::const_iterator iter = layers.begin(); iter != layers.end(); ++iter ) {
+        for (std::vector<SPObject *>::const_iterator iter = layers.begin(); iter != layers.end(); ++iter) {
             SPObject *layer = *iter;
             bool needsAdd = false;
             std::set<SPGroup*> additional;
 
-            if ( root->isAncestorOf(layer) ) {
+            if (root->isAncestorOf(layer)) {
                 needsAdd = true;
-                for ( SPObject* curr = layer; curr && (curr != root) && needsAdd; curr = curr->parent ) {
-                    if ( SP_IS_GROUP(curr) ) {
+                for (SPObject* curr = layer; curr && (curr != root) && needsAdd; curr = curr->parent) {
+                    if (SP_IS_GROUP(curr)) {
                         SPGroup* group = SP_GROUP(curr);
-                        if ( group->layerMode() == SPGroup::LAYER ) {
+                        if (group->layerMode() == SPGroup::LAYER) {
                             // If we have a layer-group as the one or a parent, ensure it is listed as a valid layer.
-                            needsAdd &= ( std::find(layers.begin(),layers.end(),curr) != layers.end() );
+                            needsAdd &= (std::find(layers.begin(),layers.end(),curr) != layers.end());
 							// XML Tree being used here directly while it shouldn't be...
-                            if ( (!(group->getRepr())) || (!(group->getRepr()->parent())) ) {
+                            if ((!(group->getRepr())) || (!(group->getRepr()->parent()))) {
                                 needsAdd = false;
                             }
                         } else {
                             // If a non-layer group is a parent of layer groups, then show it also as a layer.
                             // TODO add the magic Inkscape group mode?
 							// XML Tree being used directly while it shouldn't be...
-                            if ( group->getRepr() && group->getRepr()->parent() ) {
+                            if (group->getRepr() && group->getRepr()->parent()) {
                                 additional.insert(group);
                             } else {
                                 needsAdd = false;
@@ -297,12 +297,12 @@ void LayerManager::_rebuild() {
                     }
                 }
             }
-            if ( needsAdd ) {
-                if ( !includes(layer) ) {
+            if (needsAdd) {
+                if (!includes(layer)) {
                     layersToAdd.insert(SP_GROUP(layer));
                 }
                 for (auto it : additional) {
-                    if ( !includes(it) ) {
+                    if (!includes(it)) {
                         layersToAdd.insert(it);
                     }
                 }
@@ -316,17 +316,17 @@ void LayerManager::_rebuild() {
             // See http://sourceforge.net/tracker/index.php?func=detail&aid=1339397&group_id=93438&atid=604306
 
             SPObject const *higher = layer;
-            while ( higher && (higher->parent != root) ) {
+            while (higher && (higher->parent != root)) {
                 higher = higher->parent;
             }
             Node const* node = higher ? higher->getRepr() : nullptr;
-            if ( node && node->parent() ) {
+            if (node && node->parent()) {
 //                 Debug::EventTracker<DebugAddLayer> tracker(*layer);
 
                 sigc::connection connection = layer->connectModified(sigc::mem_fun(*this, &LayerManager::_objectModified));
 
                 LayerWatcher *eye = new LayerWatcher(this, layer, connection);
-                _watchers.push_back( eye );
+                _watchers.push_back(eye);
                 layer->getRepr()->addObserver(*eye);
 
                 _addOne(layer);

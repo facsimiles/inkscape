@@ -72,7 +72,7 @@ DrawingShape::setStyle(SPStyle *style, SPStyle *context_style)
 void
 DrawingShape::setChildrenStyle(SPStyle* context_style)
 {
-    DrawingItem::setChildrenStyle( context_style );
+    DrawingItem::setChildrenStyle(context_style);
     _nrstyle.set(_style, _context_style);
 }
 
@@ -121,12 +121,12 @@ DrawingShape::_updateItem(Geom::IntRect const &area, UpdateContext const &ctx, u
             float width, scale;
             scale = ctx.ctm.descrim();
             width = std::max(0.125f, _nrstyle.stroke_width * scale);
-            if ( fabs(_nrstyle.stroke_width * scale) > 0.01 ) { // FIXME: this is always true
+            if (fabs(_nrstyle.stroke_width * scale) > 0.01) { // FIXME: this is always true
                 boundingbox->expandBy(width);
             }
             // those pesky miters, now
             float miterMax = width * _nrstyle.miter_limit;
-            if ( miterMax > 0.01 ) {
+            if (miterMax > 0.01) {
                 // grunt mode. we should compute the various miters instead
                 // (one for each point on the curve)
                 boundingbox->expandBy(miterMax);
@@ -139,8 +139,8 @@ DrawingShape::_updateItem(Geom::IntRect const &area, UpdateContext const &ctx, u
     if (!_curve || 
         !_style ||
         _curve->is_empty() ||
-        (( _nrstyle.fill.type != NRStyle::PAINT_NONE ) &&
-         ( _nrstyle.stroke.type != NRStyle::PAINT_NONE && !outline) ))
+        ((_nrstyle.fill.type != NRStyle::PAINT_NONE) &&
+         (_nrstyle.stroke.type != NRStyle::PAINT_NONE && !outline)))
     {
         return STATE_ALL;
     }
@@ -161,7 +161,7 @@ DrawingShape::_renderFill(DrawingContext &dc)
 
     bool has_fill =  _nrstyle.prepareFill(dc, _item_bbox, _fill_pattern);
 
-    if( has_fill ) {
+    if(has_fill) {
         dc.path(_curve->get_pathvector());
         _nrstyle.applyFill(dc);
         dc.fillPreserve();
@@ -178,7 +178,7 @@ DrawingShape::_renderStroke(DrawingContext &dc)
     bool has_stroke = _nrstyle.prepareStroke(dc, _item_bbox, _stroke_pattern);
     has_stroke &= (_nrstyle.stroke_width != 0);
 
-    if( has_stroke ) {
+    if(has_stroke) {
         // TODO: remove segments outside of bbox when no dashes present
         dc.path(_curve->get_pathvector());
         if (_style && _style->vector_effect.stroke) {
@@ -239,7 +239,7 @@ DrawingShape::_renderItem(DrawingContext &dc, Geom::IntRect const &area, unsigne
 
     }
 
-    if( _nrstyle.paint_order_layer[0] == NRStyle::PAINT_ORDER_NORMAL ) {
+    if(_nrstyle.paint_order_layer[0] == NRStyle::PAINT_ORDER_NORMAL) {
         // This is the most common case, special case so we don't call get_pathvector(), etc. twice
 
         {

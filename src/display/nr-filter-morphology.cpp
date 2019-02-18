@@ -107,7 +107,7 @@ void morphologicalFilter1D(cairo_surface_t * const input, cairo_surface_t * cons
                     ++out_p;
                 }
             }
-            if (axis == Geom::Y && j < w  ) in_p += stridein - BPP;
+            if (axis == Geom::Y && j < w) in_p += stridein - BPP;
             if (axis == Geom::Y && j >= ri) out_p += strideout - BPP;
         }*/
         for (int j = 0; j < std::min(ri,w); ++j) {

@@ -72,7 +72,7 @@ namespace Implementation {
     update and look pretty.
 */
 void Script::pump_events () {
-    while ( Gtk::Main::events_pending() ) {
+    while (Gtk::Main::events_pending()) {
         Gtk::Main::iteration();
     }
     return;
@@ -108,7 +108,7 @@ std::string Script::resolveInterpreterExecutable(const Glib::ustring &interpName
 {
     interpreter_t const *interp = nullptr;
     bool foundInterp = false;
-    for (interp =  interpreterTab ; interp->identity ; interp++ ){
+    for (interp =  interpreterTab ; interp->identity ; interp++){
         if (interpNameArg == interp->identity) {
             foundInterp = true;
             break;
@@ -235,7 +235,7 @@ bool Script::check_existence(const std::string &command)
 
     std::string::size_type pos  = 0;
     std::string::size_type pos2 = 0;
-    while ( pos < path.size() ) {
+    while (pos < path.size()) {
 
         std::string localPath;
 
@@ -400,7 +400,7 @@ protected:
     int _tempfd;
 public:
     ScriptDocCache (Inkscape::UI::View::View * view);
-    ~ScriptDocCache ( ) override;
+    ~ScriptDocCache () override;
 };
 
 ScriptDocCache::ScriptDocCache (Inkscape::UI::View::View * view) :
@@ -427,13 +427,13 @@ ScriptDocCache::ScriptDocCache (Inkscape::UI::View::View * view) :
     return;
 }
 
-ScriptDocCache::~ScriptDocCache ( )
+ScriptDocCache::~ScriptDocCache ()
 {
     close(_tempfd);
     unlink(_filename.c_str());
 }
 
-ImplementationDocumentCache *Script::newDocCache( Inkscape::Extension::Extension * /*ext*/, Inkscape::UI::View::View * view ) {
+ImplementationDocumentCache *Script::newDocCache(Inkscape::Extension::Extension * /*ext*/, Inkscape::UI::View::View * view) {
     return new ScriptDocCache(view);
 }
 
@@ -714,7 +714,7 @@ void Script::effect(Inkscape::Extension::Effect *module,
             Gtk::MessageDialog warning(
                     _("The output from the extension could not be parsed."),
                     false, Gtk::MESSAGE_WARNING, Gtk::BUTTONS_OK, true);
-            warning.set_transient_for( parent_window ? *parent_window : *(INKSCAPE.active_desktop()->getToplevel()) );
+            warning.set_transient_for(parent_window ? *parent_window : *(INKSCAPE.active_desktop()->getToplevel()));
             warning.run();
         }
     } // data_read
@@ -739,9 +739,9 @@ void Script::effect(Inkscape::Extension::Effect *module,
             
             //Check if it has a default layer set up
             SPObject *layer = nullptr;
-            if ( nv != nullptr)
+            if (nv != nullptr)
             {
-                if( nv->default_layer_id != 0 ) {
+                if(nv->default_layer_id != 0) {
                     SPDocument *document = desktop->doc();
                     //If so, get that layer
                     if (document != nullptr)
@@ -1038,7 +1038,7 @@ int Script::execute (const std::list<std::string> &in_command,
     Glib::ustring stderr_data = fileerr.string();
     if (stderr_data.length() != 0 &&
         INKSCAPE.use_gui()
-       ) {
+) {
         checkStderr(stderr_data, Gtk::MESSAGE_INFO,
                                  _("Inkscape has received additional data from the script executed.  "
                                    "The script did not return an error, but this may indicate the results will not be as expected."));

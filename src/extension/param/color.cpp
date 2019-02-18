@@ -32,7 +32,7 @@ ParamColor::~ParamColor()
     _color_changed.disconnect();
 }
 
-guint32 ParamColor::set( guint32 in, SPDocument * /*doc*/, Inkscape::XML::Node * /*node*/ )
+guint32 ParamColor::set(guint32 in, SPDocument * /*doc*/, Inkscape::XML::Node * /*node*/)
 {
     _color_changed.block(true);
     _color.setValue(in);
@@ -85,7 +85,7 @@ void ParamColor::string(std::string &string) const
     string += str;
 }
 
-Gtk::Widget *ParamColor::get_widget( SPDocument * /*doc*/, Inkscape::XML::Node * /*node*/, sigc::signal<void> * changeSignal )
+Gtk::Widget *ParamColor::get_widget(SPDocument * /*doc*/, Inkscape::XML::Node * /*node*/, sigc::signal<void> * changeSignal)
 {
     using Inkscape::UI::Widget::ColorNotebook;
 

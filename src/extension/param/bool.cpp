@@ -49,7 +49,7 @@ ParamBool::ParamBool(const gchar * name,
     return;
 }
 
-bool ParamBool::set( bool in, SPDocument * /*doc*/, Inkscape::XML::Node * /*node*/ )
+bool ParamBool::set(bool in, SPDocument * /*doc*/, Inkscape::XML::Node * /*node*/)
 {
     _value = in;
 

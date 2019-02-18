@@ -61,10 +61,10 @@ void SPFeDiffuseLighting::build(SPDocument *document, Inkscape::XML::Node *repr)
 	SPFilterPrimitive::build(document, repr);
 
 	/*LOAD ATTRIBUTES FROM REPR HERE*/
-	this->readAttr( "surfaceScale" );
-	this->readAttr( "diffuseConstant" );
-	this->readAttr( "kernelUnitLength" );
-	this->readAttr( "lighting-color" );
+	this->readAttr("surfaceScale");
+	this->readAttr("diffuseConstant");
+	this->readAttr("kernelUnitLength");
+	this->readAttr("lighting-color");
 }
 
 /**
@@ -155,7 +155,7 @@ void SPFeDiffuseLighting::set(SPAttributeEnum key, gchar const *value) {
                     	this->icc = new SVGICCColor();
                     }
 
-                    if ( ! sp_svg_read_icc_color( cend_ptr, this->icc ) ) {
+                    if (! sp_svg_read_icc_color(cend_ptr, this->icc)) {
                         delete this->icc;
                         this->icc = nullptr;
                     }
@@ -184,10 +184,10 @@ void SPFeDiffuseLighting::set(SPAttributeEnum key, gchar const *value) {
  */
 void SPFeDiffuseLighting::update(SPCtx *ctx, guint flags) {
     if (flags & (SP_OBJECT_MODIFIED_FLAG)) {
-        this->readAttr( "surfaceScale" );
-        this->readAttr( "diffuseConstant" );
-        this->readAttr( "kernelUnit" );
-        this->readAttr( "lighting-color" );
+        this->readAttr("surfaceScale");
+        this->readAttr("diffuseConstant");
+        this->readAttr("kernelUnit");
+        this->readAttr("lighting-color");
     }
 
     SPFilterPrimitive::update(ctx, flags);

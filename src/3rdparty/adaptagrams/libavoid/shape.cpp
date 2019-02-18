@@ -185,7 +185,7 @@ void ShapeRef::transformConnectionPinPositions(
             }
         }
 
-        if ( (visDirs & ConnDirAll) && (visDirs != ConnDirAll) )
+        if ((visDirs & ConnDirAll) && (visDirs != ConnDirAll))
         {
             // Visibility is set, but not in all directions.
             

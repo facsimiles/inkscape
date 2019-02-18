@@ -37,7 +37,7 @@ if(WIN32)
   list(APPEND io_SRC
     registrytool.h
     registrytool.cpp
-  )
+)
 endif()
 
 # add_inkscape_lib(io_LIB "${io_SRC}")

@@ -56,15 +56,15 @@ void SPFeConvolveMatrix::build(SPDocument *document, Inkscape::XML::Node *repr) 
 	SPFilterPrimitive::build(document, repr);
 
 	/*LOAD ATTRIBUTES FROM REPR HERE*/
-	this->readAttr( "order" );
-	this->readAttr( "kernelMatrix" );
-	this->readAttr( "divisor" );
-	this->readAttr( "bias" );
-	this->readAttr( "targetX" );
-	this->readAttr( "targetY" );
-	this->readAttr( "edgeMode" );
-	this->readAttr( "kernelUnitLength" );
-	this->readAttr( "preserveAlpha" );
+	this->readAttr("order");
+	this->readAttr("kernelMatrix");
+	this->readAttr("divisor");
+	this->readAttr("bias");
+	this->readAttr("targetX");
+	this->readAttr("targetY");
+	this->readAttr("edgeMode");
+	this->readAttr("kernelUnitLength");
+	this->readAttr("preserveAlpha");
 }
 
 /**
@@ -300,8 +300,8 @@ void SPFeConvolveMatrix::build_renderer(Inkscape::Filters::Filter* filter) {
 
     nr_convolve->set_targetX(this->targetX);
     nr_convolve->set_targetY(this->targetY);
-    nr_convolve->set_orderX( (int)this->order.getNumber() );
-    nr_convolve->set_orderY( (int)this->order.getOptNumber() );
+    nr_convolve->set_orderX((int)this->order.getNumber());
+    nr_convolve->set_orderY((int)this->order.getOptNumber());
     nr_convolve->set_kernelMatrix(this->kernelMatrix);
     nr_convolve->set_divisor(this->divisor);
     nr_convolve->set_bias(this->bias);

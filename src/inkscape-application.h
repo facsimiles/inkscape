@@ -73,7 +73,7 @@ public:
     // These are needed to cast Glib::RefPtr<Gtk::Application> to Glib::RefPtr<InkscapeApplication>,
     // Presumably, Gtk/Gio::Application takes care of ref counting in ConcreteInkscapeApplication
     // so we just provide dummies (and there is only one application in the application!).
-    void reference()   { /*printf("reference()\n"  );*/ }
+    void reference()   { /*printf("reference()\n");*/ }
     void unreference() { /*printf("unreference()\n");*/ }
 
 protected:

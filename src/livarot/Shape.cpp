@@ -1691,9 +1691,9 @@ Shape::CmpToVert (Geom::Point ax, Geom::Point bx,bool as,bool bs)
   int tstSi = 0;
   if (si > 0.000001) tstSi = 1;
   if (si < -0.000001) tstSi = -1;
-  if ( tstSi == 0 ) {
-    if ( as && !bs ) return -1;
-    if ( !as && bs ) return 1;
+  if (tstSi == 0) {
+    if (as && !bs) return -1;
+    if (!as && bs) return 1;
   }
   return tstSi;
 }
@@ -1705,7 +1705,7 @@ Shape::SortEdgesList (edge_list * list, int s, int e)
     return;
   if (e == s + 1) {
     int cmpval=CmpToVert (list[e].x, list[s].x,list[e].starting,list[s].starting);
-    if ( cmpval > 0 )  { // priorite aux sortants
+    if (cmpval > 0)  { // priorite aux sortants
       edge_list swap = list[s];
       list[s] = list[e];
       list[e] = swap;
@@ -2044,16 +2044,16 @@ Shape::CalcBBox (bool strict_degree)
   bool not_set=true;
   for (int i = 0; i < numberOfPoints(); i++)
   {
-    if ( strict_degree == false || getPoint(i).dI > 0 || getPoint(i).dO > 0 ) {
-      if ( not_set ) {
+    if (strict_degree == false || getPoint(i).dI > 0 || getPoint(i).dO > 0) {
+      if (not_set) {
         leftX = rightX = getPoint(i).x[0];
         topY = bottomY = getPoint(i).x[1];
         not_set=false;
       } else {
-        if (  getPoint(i).x[0] < leftX) leftX = getPoint(i).x[0];
-        if (  getPoint(i).x[0] > rightX) rightX = getPoint(i).x[0];
-        if (  getPoint(i).x[1] < topY) topY = getPoint(i).x[1];
-        if (  getPoint(i).x[1] > bottomY) bottomY = getPoint(i).x[1];
+        if (getPoint(i).x[0] < leftX) leftX = getPoint(i).x[0];
+        if (getPoint(i).x[0] > rightX) rightX = getPoint(i).x[0];
+        if (getPoint(i).x[1] < topY) topY = getPoint(i).x[1];
+        if (getPoint(i).x[1] > bottomY) bottomY = getPoint(i).x[1];
       }
     }
   }
@@ -2205,7 +2205,7 @@ bool directedEulerian(Shape const *s)
 
 double distance(Shape const *s, Geom::Point const &p)
 {
-    if ( s->hasPoints() == false) {
+    if (s->hasPoints() == false) {
         return 0.0;
     }
 
@@ -2217,15 +2217,15 @@ double distance(Shape const *s, Geom::Point const &p)
     double bdot = Geom::dot(p - s->getPoint(0).x, p - s->getPoint(0).x);
 
     for (int i = 0; i < s->numberOfPoints(); i++) {
-        Geom::Point const offset( p - s->getPoint(i).x );
+        Geom::Point const offset(p - s->getPoint(i).x);
         double ndot = Geom::dot(offset, offset);
-        if ( ndot < bdot ) {
+        if (ndot < bdot) {
             bdot = ndot;
         }
     }
 
     for (int i = 0; i < s->numberOfEdges(); i++) {
-        if ( s->getEdge(i).st >= 0 && s->getEdge(i).en >= 0 ) {
+        if (s->getEdge(i).st >= 0 && s->getEdge(i).en >= 0) {
             /* The edge has start and end points */
             Geom::Point const st(s->getPoint(s->getEdge(i).st).x); // edge start
             Geom::Point const en(s->getPoint(s->getEdge(i).en).x); // edge end
@@ -2235,12 +2235,12 @@ double distance(Shape const *s, Geom::Point const &p)
             double const el = Geom::dot(e, e); // edge length
 
             /* Update bdot if appropriate */
-            if ( el > 0.001 ) {
+            if (el > 0.001) {
                 double const npr = Geom::dot(d, e);
-                if ( npr > 0 && npr < el ) {
-                    double const nl = fabs( Geom::cross(d, e) );
+                if (npr > 0 && npr < el) {
+                    double const nl = fabs(Geom::cross(d, e));
                     double ndot = nl * nl / el;
-                    if ( ndot < bdot ) {
+                    if (ndot < bdot) {
                         bdot = ndot;
                     }
                 }
@@ -2267,7 +2267,7 @@ double distance(Shape const *s, Geom::Point const &p)
 
 bool distanceLessThanOrEqual(Shape const *s, Geom::Point const &p, double const max_l2)
 {
-    if ( s->hasPoints() == false ) {
+    if (s->hasPoints() == false) {
         return false;
     }
     
@@ -2283,26 +2283,26 @@ bool distanceLessThanOrEqual(Shape const *s, Geom::Point const &p, double const 
   
     double const max_l1 = max_l2 * M_SQRT2;
     for (int i = 0; i < s->numberOfPoints(); i++) {
-        Geom::Point const offset( p - s->getPoint(i).x );
+        Geom::Point const offset(p - s->getPoint(i).x);
         double const l1 = Geom::L1(offset);
-        if ( (l1 <= max_l2) || ((l1 <= max_l1) && (Geom::L2(offset) <= max_l2)) ) {
+        if ((l1 <= max_l2) || ((l1 <= max_l1) && (Geom::L2(offset) <= max_l2))) {
             return true;
         }
     }
     
     for (int i = 0; i < s->numberOfEdges(); i++) {
-        if ( s->getEdge(i).st >= 0 && s->getEdge(i).en >= 0 ) {
+        if (s->getEdge(i).st >= 0 && s->getEdge(i).en >= 0) {
             Geom::Point const st(s->getPoint(s->getEdge(i).st).x);
             Geom::Point const en(s->getPoint(s->getEdge(i).en).x);
             Geom::Point const d(p - st);
             Geom::Point const e(en - st);
             double const el = Geom::L2(e);
-            if ( el > 0.001 ) {
+            if (el > 0.001) {
                 Geom::Point const e_unit(e / el);
                 double const npr = Geom::dot(d, e_unit);
-                if ( npr > 0 && npr < el ) {
+                if (npr > 0 && npr < el) {
                     double const nl = fabs(Geom::cross(d, e_unit));
-                    if ( nl <= max_l2 ) {
+                    if (nl <= max_l2) {
                         return true;
                     }
                 }

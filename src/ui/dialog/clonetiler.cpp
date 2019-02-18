@@ -1156,7 +1156,7 @@ CloneTiler::CloneTiler () :
 
     show_all();
 
-    desktopChangeConn = deskTrack.connectDesktopChanged( sigc::mem_fun(*this, &CloneTiler::setTargetDesktop) );
+    desktopChangeConn = deskTrack.connectDesktopChanged(sigc::mem_fun(*this, &CloneTiler::setTargetDesktop));
     deskTrack.connect(GTK_WIDGET(gobj()));
 
 }
@@ -1267,27 +1267,27 @@ Geom::Affine CloneTiler::get_transform(
     double rotate_rand,
     int    rotate_alternatei, int    rotate_alternatej,
     int    rotate_cumulatei,  int    rotate_cumulatej
-    )
+)
 {
 
     // Shift (in units of tile width or height) -------------
     double delta_shifti = 0.0;
     double delta_shiftj = 0.0;
 
-    if( shiftx_alternate ) {
+    if(shiftx_alternate) {
         delta_shifti = (double)(i%2);
     } else {
-        if( shiftx_cumulate ) {  // Should the delta shifts be cumulative (i.e. 1, 1+2, 1+2+3, ...)
+        if(shiftx_cumulate) {  // Should the delta shifts be cumulative (i.e. 1, 1+2, 1+2+3, ...)
             delta_shifti = (double)(i*i);
         } else {
             delta_shifti = (double)i;
         }
     }
 
-    if( shifty_alternate ) {
+    if(shifty_alternate) {
         delta_shiftj = (double)(j%2);
     } else {
-        if( shifty_cumulate ) {
+        if(shifty_cumulate) {
             delta_shiftj = (double)(j*j);
         } else {
             delta_shiftj = (double)j;
@@ -1297,8 +1297,8 @@ Geom::Affine CloneTiler::get_transform(
     // Random shift, only calculate if non-zero.
     double delta_shiftx_rand = 0.0;
     double delta_shifty_rand = 0.0;
-    if( shiftx_rand != 0.0 ) delta_shiftx_rand = shiftx_rand * g_random_double_range (-1, 1);
-    if( shifty_rand != 0.0 ) delta_shifty_rand = shifty_rand * g_random_double_range (-1, 1);
+    if(shiftx_rand != 0.0) delta_shiftx_rand = shiftx_rand * g_random_double_range (-1, 1);
+    if(shifty_rand != 0.0) delta_shifty_rand = shifty_rand * g_random_double_range (-1, 1);
 
 
     // Delta shift (units of tile width/height)
@@ -1313,8 +1313,8 @@ Geom::Affine CloneTiler::get_transform(
     double shiftj = dj;
 
     // Include tile width and height in shift if required
-    if( !shiftx_excludew ) shifti += i;
-    if( !shifty_excludeh ) shiftj += j;
+    if(!shiftx_excludew) shifti += i;
+    if(!shifty_excludeh) shiftj += j;
 
     // Add exponential shift if necessary
     double shifti_sign = (shifti > 0.0) ? 1.0 : -1.0;
@@ -1329,20 +1329,20 @@ Geom::Affine CloneTiler::get_transform(
     double delta_rotationi = 0.0;
     double delta_rotationj = 0.0;
 
-    if( rotate_alternatei ) {
+    if(rotate_alternatei) {
         delta_rotationi = (double)(i%2);
     } else {
-        if( rotate_cumulatei ) {
+        if(rotate_cumulatei) {
             delta_rotationi = (double)(i*i + i)/2.0;
         } else {
             delta_rotationi = (double)i;
         }
     }
 
-    if( rotate_alternatej ) {
+    if(rotate_alternatej) {
         delta_rotationj = (double)(j%2);
     } else {
-        if( rotate_cumulatej ) {
+        if(rotate_cumulatej) {
             delta_rotationj = (double)(j*j + j)/2.0;
         } else {
             delta_rotationj = (double)j;
@@ -1350,7 +1350,7 @@ Geom::Affine CloneTiler::get_transform(
     }
 
     double delta_rotate_rand = 0.0;
-    if( rotate_rand != 0.0 ) delta_rotate_rand = rotate_rand * 180.0 * g_random_double_range (-1, 1);
+    if(rotate_rand != 0.0) delta_rotate_rand = rotate_rand * 180.0 * g_random_double_range (-1, 1);
 
     double dr = rotate_per_i * delta_rotationi + rotate_per_j * delta_rotationj + delta_rotate_rand;
 
@@ -1358,20 +1358,20 @@ Geom::Affine CloneTiler::get_transform(
     double delta_scalei = 0.0;
     double delta_scalej = 0.0;
 
-    if( scalex_alternate ) {
+    if(scalex_alternate) {
         delta_scalei = (double)(i%2);
     } else {
-        if( scalex_cumulate ) {  // Should the delta scales be cumulative (i.e. 1, 1+2, 1+2+3, ...)
+        if(scalex_cumulate) {  // Should the delta scales be cumulative (i.e. 1, 1+2, 1+2+3, ...)
             delta_scalei = (double)(i*i + i)/2.0;
         } else {
             delta_scalei = (double)i;
         }
     }
 
-    if( scaley_alternate ) {
+    if(scaley_alternate) {
         delta_scalej = (double)(j%2);
     } else {
-        if( scaley_cumulate ) {
+        if(scaley_cumulate) {
             delta_scalej = (double)(j*j + j)/2.0;
         } else {
             delta_scalej = (double)j;
@@ -1381,28 +1381,28 @@ Geom::Affine CloneTiler::get_transform(
     // Random scale, only calculate if non-zero.
     double delta_scalex_rand = 0.0;
     double delta_scaley_rand = 0.0;
-    if( scalex_rand != 0.0 ) delta_scalex_rand = scalex_rand * g_random_double_range (-1, 1);
-    if( scaley_rand != 0.0 ) delta_scaley_rand = scaley_rand * g_random_double_range (-1, 1);
+    if(scalex_rand != 0.0) delta_scalex_rand = scalex_rand * g_random_double_range (-1, 1);
+    if(scaley_rand != 0.0) delta_scaley_rand = scaley_rand * g_random_double_range (-1, 1);
     // But if random factors are same, scale x and y proportionally
-    if( scalex_rand == scaley_rand ) delta_scalex_rand = delta_scaley_rand;
+    if(scalex_rand == scaley_rand) delta_scalex_rand = delta_scaley_rand;
 
     // Total delta scale
     double scalex = 1.0 + scalex_per_i * delta_scalei  + scalex_per_j * delta_scalej + delta_scalex_rand;
     double scaley = 1.0 + scaley_per_i * delta_scalei  + scaley_per_j * delta_scalej + delta_scaley_rand;
 
-    if( scalex < 0.0 ) scalex = 0.0;
-    if( scaley < 0.0 ) scaley = 0.0;
+    if(scalex < 0.0) scalex = 0.0;
+    if(scaley < 0.0) scaley = 0.0;
 
     // Add exponential scale if necessary
-    if ( scalex_exp != 1.0 ) scalex = pow( scalex, scalex_exp );
-    if ( scaley_exp != 1.0 ) scaley = pow( scaley, scaley_exp );
+    if (scalex_exp != 1.0) scalex = pow(scalex, scalex_exp);
+    if (scaley_exp != 1.0) scaley = pow(scaley, scaley_exp);
 
     // Add logarithmic factor if necessary
-    if ( scalex_log  > 0.0 ) scalex = pow( scalex_log, scalex - 1.0 );
-    if ( scaley_log  > 0.0 ) scaley = pow( scaley_log, scaley - 1.0 );
+    if (scalex_log  > 0.0) scalex = pow(scalex_log, scalex - 1.0);
+    if (scaley_log  > 0.0) scaley = pow(scaley_log, scaley - 1.0);
     // Alternative using rotation angle
-    //if ( scalex_log  != 1.0 ) scalex *= pow( scalex_log, M_PI*dr/180 );
-    //if ( scaley_log  != 1.0 ) scaley *= pow( scaley_log, M_PI*dr/180 );
+    //if (scalex_log  != 1.0) scalex *= pow(scalex_log, M_PI*dr/180);
+    //if (scaley_log  != 1.0) scaley *= pow(scaley_log, M_PI*dr/180);
 
 
     // Calculate transformation matrices, translating back to "center of tile" (rotation center) before transforming
@@ -1415,13 +1415,13 @@ Geom::Affine CloneTiler::get_transform(
     Geom::Affine rotate_180_c  = Geom::Translate(-cx, -cy) * Geom::Rotate (M_PI)      * Geom::Translate(cx, cy);
 
     Geom::Affine rotate_90_c   = Geom::Translate(-cx, -cy) * Geom::Rotate (-M_PI/2)   * Geom::Translate(cx, cy);
-    Geom::Affine rotate_m90_c  = Geom::Translate(-cx, -cy) * Geom::Rotate ( M_PI/2)   * Geom::Translate(cx, cy);
+    Geom::Affine rotate_m90_c  = Geom::Translate(-cx, -cy) * Geom::Rotate (M_PI/2)   * Geom::Translate(cx, cy);
 
     Geom::Affine rotate_120_c  = Geom::Translate(-cx, -cy) * Geom::Rotate (-2*M_PI/3) * Geom::Translate(cx, cy);
-    Geom::Affine rotate_m120_c = Geom::Translate(-cx, -cy) * Geom::Rotate ( 2*M_PI/3) * Geom::Translate(cx, cy);
+    Geom::Affine rotate_m120_c = Geom::Translate(-cx, -cy) * Geom::Rotate (2*M_PI/3) * Geom::Translate(cx, cy);
 
     Geom::Affine rotate_60_c   = Geom::Translate(-cx, -cy) * Geom::Rotate (-M_PI/3)   * Geom::Translate(cx, cy);
-    Geom::Affine rotate_m60_c  = Geom::Translate(-cx, -cy) * Geom::Rotate ( M_PI/3)   * Geom::Translate(cx, cy);
+    Geom::Affine rotate_m60_c  = Geom::Translate(-cx, -cy) * Geom::Rotate (M_PI/3)   * Geom::Translate(cx, cy);
 
     Geom::Affine flip_x        = Geom::Translate(-cx, -cy) * Geom::Scale (-1, 1)      * Geom::Translate(cx, cy);
     Geom::Affine flip_y        = Geom::Translate(-cx, -cy) * Geom::Scale (1, -1)      * Geom::Translate(cx, cy);
@@ -1572,7 +1572,7 @@ Geom::Affine CloneTiler::get_transform(
     {
         double max = MAX(w, h);
         Geom::Affine ori (Geom::Translate ((max + max) * pow((i/4), shiftx_exp) + dx,  (max + max) * pow((j/2), shifty_exp) + dy));
-        Geom::Affine dia1 (Geom::Translate ( w/2 - h/2, h/2 - w/2));
+        Geom::Affine dia1 (Geom::Translate (w/2 - h/2, h/2 - w/2));
         Geom::Affine dia2 (Geom::Translate (-h/2 + w/2, w/2 - h/2));
         if (j % 2 == 0) {
             if (i % 4 == 0) {
@@ -1602,7 +1602,7 @@ Geom::Affine CloneTiler::get_transform(
     {
         double max = MAX(w, h);
         Geom::Affine ori (Geom::Translate ((max + max) * pow((i/4), shiftx_exp) + dx,  (max + max) * pow(j, shifty_exp) + dy));
-        Geom::Affine dia1 (Geom::Translate ( w/2 + h/2, h/2 - w/2));
+        Geom::Affine dia1 (Geom::Translate (w/2 + h/2, h/2 - w/2));
         Geom::Affine dia2 (Geom::Translate (-h/2 + w/2, w/2 + h/2));
         if (((i/4) + j) % 2 == 0) {
             if (i % 4 == 0) {
@@ -1665,7 +1665,7 @@ Geom::Affine CloneTiler::get_transform(
         Geom::Affine dia4;
         if (w > h) {
             ori = Geom::Affine(Geom::Translate (w * pow((i/6) + 0.5*(j%2), shiftx_exp) + dx,  (w * cos30) * pow(j, shifty_exp) + dy));
-            dia1 = Geom::Affine (Geom::Translate (0, h/2) * Geom::Translate (w/2, 0) * Geom::Translate (w/2 * cos60, -w/2 * sin60) * Geom::Translate (-h/2 * cos30, -h/2 * sin30) );
+            dia1 = Geom::Affine (Geom::Translate (0, h/2) * Geom::Translate (w/2, 0) * Geom::Translate (w/2 * cos60, -w/2 * sin60) * Geom::Translate (-h/2 * cos30, -h/2 * sin30));
             dia2 = dia1 * Geom::Affine (Geom::Translate (h * cos30, h * sin30));
             dia3 = dia2 * Geom::Affine (Geom::Translate (0, 2 * (w/2 * sin60 - h/2 * sin30)));
             dia4 = dia3 * Geom::Affine (Geom::Translate (-h * cos30, h * sin30));
@@ -1703,7 +1703,7 @@ Geom::Affine CloneTiler::get_transform(
         if (w > h) {
             width = w + w * cos60;
             height = 2 * w * sin60;
-            dia1 = Geom::Affine (Geom::Translate (0, h/2) * Geom::Translate (w/2, 0) * Geom::Translate (w/2 * cos60, -w/2 * sin60) * Geom::Translate (-h/2 * cos30, -h/2 * sin30) );
+            dia1 = Geom::Affine (Geom::Translate (0, h/2) * Geom::Translate (w/2, 0) * Geom::Translate (w/2 * cos60, -w/2 * sin60) * Geom::Translate (-h/2 * cos30, -h/2 * sin30));
             dia2 = dia1 * Geom::Affine (Geom::Translate (h * cos30, h * sin30));
             dia3 = dia2 * Geom::Affine (Geom::Translate (0, 2 * (w/2 * sin60 - h/2 * sin30)));
             dia4 = dia3 * Geom::Affine (Geom::Translate (-h * cos30, h * sin30));
@@ -2204,8 +2204,8 @@ void CloneTiler::apply()
         sp_repr_get_double (obj_repr, "inkscape:tile-y0", &y0);
     } else {
         bool prefs_bbox = prefs->getBool("/tools/bounding_box", false);
-        SPItem::BBoxType bbox_type = ( !prefs_bbox ?
-            SPItem::VISUAL_BBOX : SPItem::GEOMETRIC_BBOX );
+        SPItem::BBoxType bbox_type = (!prefs_bbox ?
+            SPItem::VISUAL_BBOX : SPItem::GEOMETRIC_BBOX);
         Geom::OptRect r = item->documentBounds(bbox_type);
         if (r) {
             w = scale_units*r->dimensions()[Geom::X];
@@ -2265,7 +2265,7 @@ void CloneTiler::apply()
                                                        rotate_per_i,     rotate_per_j,
                                                        rotate_rand,
                                                        rotate_alternatei, rotate_alternatej,
-                                                       rotate_cumulatei,  rotate_cumulatej      );
+                                                       rotate_cumulatei,  rotate_cumulatej);
             Geom::Affine parent_transform = (((SPItem*)item->parent)->i2doc_affine())*(item->document->getRoot()->c2p.inverse());
             Geom::Affine t = parent_transform*orig_t*parent_transform.inverse();
             cur = center * t - center;
@@ -2288,7 +2288,7 @@ void CloneTiler::apply()
 
                 hsl[0] += hue_per_i * eff_i + hue_per_j * eff_j + hue_rand * g_random_double_range (-1, 1);
                 double notused;
-                hsl[0] = modf( hsl[0], &notused ); // Restrict to 0-1
+                hsl[0] = modf(hsl[0], &notused); // Restrict to 0-1
                 hsl[1] += saturation_per_i * eff_i + saturation_per_j * eff_j + saturation_rand * g_random_double_range (-1, 1);
                 hsl[1] = CLAMP (hsl[1], 0, 1);
                 hsl[2] += lightness_per_i * eff_i + lightness_per_j * eff_j + lightness_rand * g_random_double_range (-1, 1);
@@ -2642,7 +2642,7 @@ void CloneTiler::reset_recursive(GtkWidget *w)
 
     if (GTK_IS_CONTAINER(w)) {
         std::vector<Gtk::Widget*> c = Glib::wrap(GTK_CONTAINER(w))->get_children();
-        for ( auto i : c ) {
+        for (auto i : c) {
             reset_recursive(i->gobj());
         }
     }

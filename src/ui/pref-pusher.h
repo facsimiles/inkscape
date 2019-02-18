@@ -25,10 +25,10 @@ public:
      * @param callback function to invoke when changes are pushed.
      * @param cbData data to be passed on to the callback function.
      */
-    PrefPusher( GtkToggleAction       *act,
+    PrefPusher(GtkToggleAction       *act,
                 Glib::ustring const &  path,
                 void (*callback)(gpointer) = nullptr,
-                gpointer cbData = nullptr );
+                gpointer cbData = nullptr);
 
     /**
      * Destructor that unregisters the preference callback.
@@ -48,7 +48,7 @@ private:
      * @param act the toggle action widget that was changed.
      * @param self the PrefPusher instance the callback was registered to.
      */
-   static void toggleCB( GtkToggleAction *act, PrefPusher *self );
+   static void toggleCB(GtkToggleAction *act, PrefPusher *self);
 
     /**
      * Method to handle the widget change.

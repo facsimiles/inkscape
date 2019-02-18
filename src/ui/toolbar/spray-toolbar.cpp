@@ -121,7 +121,7 @@ SprayToolbar::SprayToolbar(SPDesktop *desktop) :
         width_item->set_custom_numeric_menu_data(values, labels);
         width_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
         _width_adj->signal_value_changed().connect(sigc::mem_fun(*this, &SprayToolbar::width_value_changed));
-        // ege_adjustment_action_set_appearance( eact, TOOLBAR_SLIDER_HINT );
+        // ege_adjustment_action_set_appearance(eact, TOOLBAR_SLIDER_HINT);
         add(*width_item);
         width_item->set_sensitive(true);
     }
@@ -147,7 +147,7 @@ SprayToolbar::SprayToolbar(SPDesktop *desktop) :
         _spray_population->set_custom_numeric_menu_data(values, labels);
         _spray_population->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
         _population_adj->signal_value_changed().connect(sigc::mem_fun(*this, &SprayToolbar::population_value_changed));
-        //ege_adjustment_action_set_appearance( holder->_spray_population, TOOLBAR_SLIDER_HINT );
+        //ege_adjustment_action_set_appearance(holder->_spray_population, TOOLBAR_SLIDER_HINT);
         add(*_spray_population);
         _spray_population->set_sensitive(true);
     }
@@ -176,7 +176,7 @@ SprayToolbar::SprayToolbar(SPDesktop *desktop) :
         _spray_rotation->set_custom_numeric_menu_data(values, labels);
         _spray_rotation->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
         _rotation_adj->signal_value_changed().connect(sigc::mem_fun(*this, &SprayToolbar::rotation_value_changed));
-        // ege_adjustment_action_set_appearance(holder->_spray_rotation, TOOLBAR_SLIDER_HINT );
+        // ege_adjustment_action_set_appearance(holder->_spray_rotation, TOOLBAR_SLIDER_HINT);
         add(*_spray_rotation);
         _spray_rotation->set_sensitive();
     }
@@ -192,7 +192,7 @@ SprayToolbar::SprayToolbar(SPDesktop *desktop) :
         _spray_scale->set_custom_numeric_menu_data(values, labels);
         _spray_scale->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
         _scale_adj->signal_value_changed().connect(sigc::mem_fun(*this, &SprayToolbar::scale_value_changed));
-        // ege_adjustment_action_set_appearance( holder->_spray_scale, TOOLBAR_SLIDER_HINT );
+        // ege_adjustment_action_set_appearance(holder->_spray_scale, TOOLBAR_SLIDER_HINT);
         add(*_spray_scale);
         _spray_scale->set_sensitive(true);
     }
@@ -219,7 +219,7 @@ SprayToolbar::SprayToolbar(SPDesktop *desktop) :
         sd_item->set_custom_numeric_menu_data(values, labels);
         sd_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
         _sd_adj->signal_value_changed().connect(sigc::mem_fun(*this, &SprayToolbar::standard_deviation_value_changed));
-        // ege_adjustment_action_set_appearance( eact, TOOLBAR_SLIDER_HINT );
+        // ege_adjustment_action_set_appearance(eact, TOOLBAR_SLIDER_HINT);
         add(*sd_item);
         sd_item->set_sensitive(true);
     }
@@ -235,7 +235,7 @@ SprayToolbar::SprayToolbar(SPDesktop *desktop) :
         mean_item->set_custom_numeric_menu_data(values, labels);
         mean_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
         _mean_adj->signal_value_changed().connect(sigc::mem_fun(*this, &SprayToolbar::mean_value_changed));
-        // ege_adjustment_action_set_appearance( eact, TOOLBAR_SLIDER_HINT );
+        // ege_adjustment_action_set_appearance(eact, TOOLBAR_SLIDER_HINT);
         add(*mean_item);
         mean_item->set_sensitive(true);
     }
@@ -370,7 +370,7 @@ void
 SprayToolbar::width_value_changed()
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setDouble( "/tools/spray/width",
+    prefs->setDouble("/tools/spray/width",
             _width_adj->get_value());
 }
 
@@ -378,7 +378,7 @@ void
 SprayToolbar::mean_value_changed()
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setDouble( "/tools/spray/mean",
+    prefs->setDouble("/tools/spray/mean",
             _mean_adj->get_value());
 }
 
@@ -386,7 +386,7 @@ void
 SprayToolbar::standard_deviation_value_changed()
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setDouble( "/tools/spray/standard_deviation",
+    prefs->setDouble("/tools/spray/standard_deviation",
             _sd_adj->get_value());
 }
 
@@ -432,7 +432,7 @@ void
 SprayToolbar::population_value_changed()
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setDouble( "/tools/spray/population",
+    prefs->setDouble("/tools/spray/population",
             _population_adj->get_value());
 }
 
@@ -440,7 +440,7 @@ void
 SprayToolbar::rotation_value_changed()
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setDouble( "/tools/spray/rotation_variation",
+    prefs->setDouble("/tools/spray/rotation_variation",
             _rotation_adj->get_value());
 }
 
@@ -478,7 +478,7 @@ void
 SprayToolbar::scale_value_changed()
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setDouble( "/tools/spray/scale_variation",
+    prefs->setDouble("/tools/spray/scale_variation",
             _scale_adj->get_value());
 }
 
@@ -486,7 +486,7 @@ void
 SprayToolbar::offset_value_changed()
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setDouble( "/tools/spray/offset",
+    prefs->setDouble("/tools/spray/offset",
             _offset_adj->get_value());
 }
 

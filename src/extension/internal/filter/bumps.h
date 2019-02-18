@@ -72,8 +72,8 @@ protected:
     gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
-    Bump ( ) : Filter() { };
-    ~Bump ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
+    Bump () : Filter() { };
+    ~Bump () override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
         Inkscape::Extension::build_from_mem(
@@ -301,8 +301,8 @@ protected:
     gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
-    WaxBump ( ) : Filter() { };
-    ~WaxBump ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
+    WaxBump () : Filter() { };
+    ~WaxBump () override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
         Inkscape::Extension::build_from_mem(
@@ -471,7 +471,7 @@ WaxBump::get_filter_text (Inkscape::Extension::Extension * ext)
                        lightRed.str().c_str(), lightGreen.str().c_str(), lightBlue.str().c_str(),
                        lightness.str().c_str(), height.str().c_str(), precision.str().c_str(),
                        distantElevation.str().c_str(), distantAzimuth.str().c_str(),
-                       lightingblend.str().c_str(), transparency.str().c_str(), highlightblend.str().c_str() );
+                       lightingblend.str().c_str(), transparency.str().c_str(), highlightblend.str().c_str());
 
     return _filter;
 

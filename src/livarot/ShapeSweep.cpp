@@ -157,7 +157,7 @@ Shape::Reoriente (Shape * a)
 
   if (directedEulerian(this) == false)
     {
-//              printf( "pas euclidian2");
+//              printf("pas euclidian2");
       _pts.clear();
       _aretes.clear();
       return shape_euler_err;
@@ -176,7 +176,7 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 	return 0;
     }
     
-    if ( directed != fill_justDont && directedEulerian(a) == false ) {
+    if (directed != fill_justDont && directedEulerian(a) == false) {
   			g_warning ("Shape error in ConvertToShape: directedEulerian(a) == false\n");
 				return shape_input_err;
     }
@@ -663,13 +663,13 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 //      Validate();
 
   _need_edges_sorting = true;
-  if ( directed == fill_justDont ) {
+  if (directed == fill_justDont) {
     SortEdges();
   } else {
     GetWindings (a);
   }
 //  Plot (98.0, 112.0, 8.0, 400.0, 400.0, true, true, true, true);
-//   if ( doDebug ) {
+//   if (doDebug) {
 //   a->CalcBBox();
 //     a->Plot(a->leftX,a->topY,32.0,0.0,0.0,true,true,true,true,"orig.svg");
 //     Plot(a->leftX,a->topY,32.0,0.0,0.0,true,true,true,true,"winded.svg");
@@ -808,9 +808,9 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 	      i--;
 	    }
     }
-  } else if ( directed == fill_justDont ) {
+  } else if (directed == fill_justDont) {
     for (int i=0;i<numberOfEdges();i++) {
-      if ( getEdge(i).st < 0 || getEdge(i).en < 0 ) {
+      if (getEdge(i).st < 0 || getEdge(i).en < 0) {
         SubEdge(i);
         i--;
       } else {
@@ -848,8 +848,8 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
     return 0;
   if (b->numberOfPoints() <= 1 || b->numberOfEdges() <= 1)
     return 0;
-  if ( mod == bool_op_cut ) {
-  } else if ( mod == bool_op_slice ) {
+  if (mod == bool_op_cut) {
+  } else if (mod == bool_op_slice) {
   } else {
     if (a->type != shape_polygon)
       return shape_input_err;
@@ -909,9 +909,9 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
 			printf("%f %f %i %i\n",sEvts.events[i].posx,sEvts.events[i].posy,sEvts.events[i].leftSweep->bord,sEvts.events[i].rightSweep->bord); // localizing ok
 		}
 		//		cout << endl;
-		if ( sTree.racine ) {
+		if (sTree.racine) {
 			SweepTree*  ct=static_cast <SweepTree*> (sTree.racine->Leftmost());
-			while ( ct ) {
+			while (ct) {
 				printf("%i %i [%i\n",ct->bord,ct->startPoint,(ct->src==a)?1:0);
 				ct=static_cast <SweepTree*> (ct->elem[RIGHT]);
 			}
@@ -1463,12 +1463,12 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
 
 //      Plot(190,70,6,400,400,true,false,true,true);
 
-  if ( mod == bool_op_cut ) {
+  if (mod == bool_op_cut) {
     AssembleAretes (fill_justDont);
     // dupliquer les aretes de la coupure
     int i=numberOfEdges()-1;
     for (;i>=0;i--) {
-      if ( ebData[i].pathID == cutPathID ) {
+      if (ebData[i].pathID == cutPathID) {
         // on duplique
         int nEd=AddEdge(getEdge(i).en,getEdge(i).st);
         ebData[nEd].pathID=cutPathID;
@@ -1477,7 +1477,7 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
         ebData[nEd].tEn=ebData[i].tSt;
         eData[nEd].weight=eData[i].weight;
         // lui donner les firstlinkedpoitn si besoin
-        if ( getEdge(i).en >= getEdge(i).st ) {
+        if (getEdge(i).en >= getEdge(i).st) {
           int cp = swsData[i].firstLinkedPoint;
           while (cp >= 0) {
             pData[cp].askForWindingB = nEd;
@@ -1488,7 +1488,7 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
         }
       }
     }
-  } else if ( mod == bool_op_slice ) {
+  } else if (mod == bool_op_slice) {
   } else {
     AssembleAretes ();
   }
@@ -1499,7 +1499,7 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
     }
 
   _need_edges_sorting = true;
-  if ( mod == bool_op_slice ) {
+  if (mod == bool_op_slice) {
   } else {
     GetWindings (a, b, mod, false);
   }
@@ -1574,11 +1574,11 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
 	      i--;
 	    }
     }
-  } else if ( mod == bool_op_cut ) {
+  } else if (mod == bool_op_cut) {
     // inverser les aretes de la coupe au besoin
     for (int i=0;i<numberOfEdges();i++) {
-      if ( getEdge(i).st < 0 || getEdge(i).en < 0 ) {
-        if ( i < numberOfEdges()-1 ) {
+      if (getEdge(i).st < 0 || getEdge(i).en < 0) {
+        if (i < numberOfEdges()-1) {
           // decaler les askForWinding
           int cp = swsData[numberOfEdges()-1].firstLinkedPoint;
           while (cp >= 0) {
@@ -1590,19 +1590,19 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
         SubEdge(numberOfEdges()-1);
 //        SubEdge(i);
         i--;
-      } else if ( ebData[i].pathID == cutPathID ) {
+      } else if (ebData[i].pathID == cutPathID) {
         swdData[i].leW=swdData[i].leW%2;
         swdData[i].riW=swdData[i].riW%2;
-        if ( swdData[i].leW < swdData[i].riW ) {
+        if (swdData[i].leW < swdData[i].riW) {
           Inverse(i);
         }
       }
     }
-  } else if ( mod == bool_op_slice ) {
+  } else if (mod == bool_op_slice) {
     // supprimer les aretes de la coupe
     int i=numberOfEdges()-1;
     for (;i>=0;i--) {
-      if ( ebData[i].pathID == cutPathID || getEdge(i).st < 0 || getEdge(i).en < 0 ) {
+      if (ebData[i].pathID == cutPathID || getEdge(i).st < 0 || getEdge(i).en < 0) {
         SubEdge(i);
       }
     }
@@ -1634,7 +1634,7 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
   delete sEvts;
   sEvts = nullptr;
   
-  if ( mod == bool_op_cut ) {
+  if (mod == bool_op_cut) {
     // on garde le askForWinding
   } else {
     MakePointData (false);
@@ -1647,7 +1647,7 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
 
   if (directedEulerian(this) == false)
     {
-//              printf( "pas euclidian2");
+//              printf("pas euclidian2");
       _pts.clear();
       _aretes.clear();
       return shape_euler_err;
@@ -1957,8 +1957,8 @@ Shape::TesteIntersection (SweepTree * iL, SweepTree * iR, Geom::Point &atx, doub
       }
 
 /*		double  slb=slDot-elDot,srb=srDot-erDot;
-		if ( slb < 0 ) slb=-slb;
-		if ( srb < 0 ) srb=-srb;*/
+		if (slb < 0) slb=-slb;
+		if (srb < 0) srb=-srb;*/
     if (iL->src->eData[iL->bord].siEd > iR->src->eData[iR->bord].siEd)
       {
 	atx =
@@ -2180,7 +2180,7 @@ Shape::AssemblePoints (Shape * a)
 void
 Shape::AssembleAretes (FillRule directed)
 {
-  if ( directed == fill_justDont && _has_back_data == false ) {
+  if (directed == fill_justDont && _has_back_data == false) {
     directed=fill_nonZero;
   }
   
@@ -2192,27 +2192,27 @@ Shape::AssembleAretes (FillRule directed)
       bool  doublon=false;
       if ((getEdge(cb).st == getEdge(cc).st && getEdge(cb).en == getEdge(cc).en)
           || (getEdge(cb).st == getEdge(cc).en && getEdge(cb).en == getEdge(cc).en)) doublon=true;
-      if ( directed == fill_justDont ) {
-        if ( doublon ) {
-          if ( ebData[cb].pathID > ebData[cc].pathID ) {
+      if (directed == fill_justDont) {
+        if (doublon) {
+          if (ebData[cb].pathID > ebData[cc].pathID) {
             cc = getPoint(i).incidentEdge[FIRST]; // on swappe pour enlever cc
             cb = getPoint(i).incidentEdge[LAST];
-          } else if ( ebData[cb].pathID == ebData[cc].pathID ) {
-            if ( ebData[cb].pieceID > ebData[cc].pieceID ) {
+          } else if (ebData[cb].pathID == ebData[cc].pathID) {
+            if (ebData[cb].pieceID > ebData[cc].pieceID) {
               cc = getPoint(i).incidentEdge[FIRST]; // on swappe pour enlever cc
               cb = getPoint(i).incidentEdge[LAST];
-            } else if ( ebData[cb].pieceID == ebData[cc].pieceID ) { 
-              if ( ebData[cb].tSt > ebData[cc].tSt ) {
+            } else if (ebData[cb].pieceID == ebData[cc].pieceID) { 
+              if (ebData[cb].tSt > ebData[cc].tSt) {
                 cc = getPoint(i).incidentEdge[FIRST]; // on swappe pour enlever cc
                 cb = getPoint(i).incidentEdge[LAST];
               }
             }
           }
         }
-        if ( doublon ) eData[cc].weight = 0;
+        if (doublon) eData[cc].weight = 0;
       } else {
       }
-      if ( doublon ) {
+      if (doublon) {
         if (getEdge(cb).st == getEdge(cc).st) {
           eData[cb].weight += eData[cc].weight;
         } else {
@@ -2262,25 +2262,25 @@ Shape::AssembleAretes (FillRule directed)
 	      while (cc >= 0 && cc < numberOfEdges()) {
           int ncc = NextAt (i, cc);
           bool  doublon=false;
-          if (cc != cb && Other (i, cc) == other ) doublon=true;
-          if ( directed == fill_justDont ) {
-            if ( doublon ) {
-              if ( ebData[cb].pathID > ebData[cc].pathID ) {
+          if (cc != cb && Other (i, cc) == other) doublon=true;
+          if (directed == fill_justDont) {
+            if (doublon) {
+              if (ebData[cb].pathID > ebData[cc].pathID) {
                 doublon=false;
-              } else if ( ebData[cb].pathID == ebData[cc].pathID ) {
-                if ( ebData[cb].pieceID > ebData[cc].pieceID ) {
+              } else if (ebData[cb].pathID == ebData[cc].pathID) {
+                if (ebData[cb].pieceID > ebData[cc].pieceID) {
                   doublon=false;
-                } else if ( ebData[cb].pieceID == ebData[cc].pieceID ) { 
-                  if ( ebData[cb].tSt > ebData[cc].tSt ) {
+                } else if (ebData[cb].pieceID == ebData[cc].pieceID) { 
+                  if (ebData[cb].tSt > ebData[cc].tSt) {
                     doublon=false;
                   }
                 }
               }
             }
-            if ( doublon ) eData[cc].weight = 0;
+            if (doublon) eData[cc].weight = 0;
           } else {
           }
-          if ( doublon ) {
+          if (doublon) {
 //            if (cc != cb && Other (i, cc) == other) {
             // doublon
             if (getEdge(cb).st == getEdge(cc).st) {
@@ -2332,7 +2332,7 @@ Shape::AssembleAretes (FillRule directed)
     }
   }
   
-  if ( directed == fill_justDont ) {
+  if (directed == fill_justDont) {
     for (int i = 0; i < numberOfEdges(); i++)  {
       if (eData[i].weight == 0) {
 //        SubEdge(i);
@@ -2401,9 +2401,9 @@ Shape::GetWindings (Shape * /*a*/, Shape * /*b*/, BooleanOp /*mod*/, bool brutal
 			outsideW = Winding (fi);
 		      }
 		  }
-    if ( getPoint(fi).totalDegree() == 1 ) {
-      if ( fi == getEdge(startBord).en ) {
-        if ( eData[startBord].weight == 0 ) {
+    if (getPoint(fi).totalDegree() == 1) {
+      if (fi == getEdge(startBord).en) {
+        if (eData[startBord].weight == 0) {
           // on se contente d'inverser
           Inverse(startBord);
         } else {
@@ -2423,7 +2423,7 @@ Shape::GetWindings (Shape * /*a*/, Shape * /*b*/, BooleanOp /*mod*/, bool brutal
 	  swdData[startBord].misc = (void *) 1;
 	  swdData[startBord].leW = outsideW;
 	  swdData[startBord].riW = outsideW - eData[startBord].weight;
-//    if ( doDebug ) printf("part de %d\n",startBord);
+//    if (doDebug) printf("part de %d\n",startBord);
 	  int curBord = startBord;
 	  bool curDir = true;
 	  swdData[curBord].precParc = -1;
@@ -2436,7 +2436,7 @@ Shape::GetWindings (Shape * /*a*/, Shape * /*b*/, BooleanOp /*mod*/, bool brutal
 	      else
 		cPt = getEdge(curBord).st;
 	      int nb = curBord;
-//        if ( doDebug ) printf("de curBord= %d avec leF= %d et riF= %d  -> ",curBord,swdData[curBord].leW,swdData[curBord].riW);
+//        if (doDebug) printf("de curBord= %d avec leF= %d et riF= %d  -> ",curBord,swdData[curBord].leW,swdData[curBord].riW);
 	      do
 		{
 		  int nnb = -1;
@@ -2468,7 +2468,7 @@ Shape::GetWindings (Shape * /*a*/, Shape * /*b*/, BooleanOp /*mod*/, bool brutal
 		  else
 		    oPt = getEdge(curBord).en;
 		  curBord = swdData[curBord].precParc;
-//    if ( doDebug ) printf("retour vers %d\n",curBord);
+//    if (doDebug) printf("retour vers %d\n",curBord);
 		  if (curBord < 0)
 		    break;
 		  if (oPt == getEdge(curBord).en)
@@ -2493,14 +2493,14 @@ Shape::GetWindings (Shape * /*a*/, Shape * /*b*/, BooleanOp /*mod*/, bool brutal
 		  swdData[nb].precParc = curBord;
 		  swdData[curBord].suivParc = nb;
 		  curBord = nb;
-//		  if ( doDebug ) printf("suite %d\n",curBord);
+//		  if (doDebug) printf("suite %d\n",curBord);
 		  if (cPt == getEdge(nb).en)
 		    curDir = false;
 		  else
 		    curDir = true;
 		}
 	    }
-	  while (true /*swdData[curBord].precParc >= 0 */ );
+	  while (true /*swdData[curBord].precParc >= 0 */);
 	  // fin du cas non-oriente
 	}
     }
@@ -3073,7 +3073,7 @@ Shape::CheckEdges (int lastPointNo, int lastChgtPt, Shape * a, Shape * b,
 	  Shape *nSrc = chgt.lSrc;
 	  int nBrd = chgt.lBrd;
 	  while (nSrc->swsData[nBrd].leftRnd >=
-		 lastChgtPt /*&& nSrc->swsData[nBrd].doneTo < lastChgtPt */ )
+		 lastChgtPt /*&& nSrc->swsData[nBrd].doneTo < lastChgtPt */)
 	    {
 	      Avance (lastPointNo, lastChgtPt, nSrc, nBrd, a, b, mod);
 
@@ -3093,7 +3093,7 @@ Shape::CheckEdges (int lastPointNo, int lastChgtPt, Shape * a, Shape * b,
 	  Shape *nSrc = chgt.rSrc;
 	  int nBrd = chgt.rBrd;
 	  while (nSrc->swsData[nBrd].rightRnd >=
-		 lastChgtPt /*&& nSrc->swsData[nBrd].doneTo < lastChgtPt */ )
+		 lastChgtPt /*&& nSrc->swsData[nBrd].doneTo < lastChgtPt */)
 	    {
 	      Avance (lastPointNo, lastChgtPt, nSrc, nBrd, a, b, mod);
 
@@ -3117,7 +3117,7 @@ Shape::Avance (int lastPointNo, int lastChgtPt, Shape * lS, int lB, Shape * /*a*
 {
   double dd = HalfRound (1);
   bool avoidDiag = false;
-//      if ( lastChgtPt > 0 && pts[lastChgtPt-1].y+dd == pts[lastChgtPt].y ) avoidDiag=true;
+//      if (lastChgtPt > 0 && pts[lastChgtPt-1].y+dd == pts[lastChgtPt].y) avoidDiag=true;
 
   bool direct = true;
   if (lS == b && (mod == bool_op_diff || mod == bool_op_symdiff))

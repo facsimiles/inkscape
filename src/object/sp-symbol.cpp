@@ -28,8 +28,8 @@ SPSymbol::SPSymbol() : SPGroup(), SPViewBox() {
 SPSymbol::~SPSymbol() = default;
 
 void SPSymbol::build(SPDocument *document, Inkscape::XML::Node *repr) {
-    this->readAttr( "viewBox" );
-    this->readAttr( "preserveAspectRatio" );
+    this->readAttr("viewBox");
+    this->readAttr("preserveAspectRatio");
 
     SPGroup::build(document, repr);
 }
@@ -41,13 +41,13 @@ void SPSymbol::release() {
 void SPSymbol::set(SPAttributeEnum key, const gchar* value) {
     switch (key) {
     case SP_ATTR_VIEWBOX:
-        set_viewBox( value );
+        set_viewBox(value);
         // std::cout << "Symbol: ViewBox: " << viewBox << std::endl;
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
         break;
 
     case SP_ATTR_PRESERVEASPECTRATIO:
-        set_preserveAspectRatio( value );
+        set_preserveAspectRatio(value);
         // std::cout << "Symbol: Preserve aspect ratio: " << aspect_align << ", " << aspect_clip << std::endl;
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
         break;
@@ -67,7 +67,7 @@ void SPSymbol::update(SPCtx *ctx, guint flags) {
     if (this->cloned) {
 
         SPItemCtx *ictx = (SPItemCtx *) ctx;
-        SPItemCtx rctx = get_rctx( ictx );
+        SPItemCtx rctx = get_rctx(ictx);
 
         // And invoke parent method
         SPGroup::update((SPCtx *) &rctx, flags);
@@ -134,7 +134,7 @@ Geom::OptRect SPSymbol::bbox(Geom::Affine const &transform, SPItem::BBoxType typ
     // We don't need a bounding box for Symbols dialog when selecting
     // symbols. They have no canvas location. But cloned symbols are.
     if (this->cloned) {
-    	Geom::Affine const a( this->c2p * transform );
+    	Geom::Affine const a(this->c2p * transform);
     	bbox = SPGroup::bbox(a, type);
     }
 

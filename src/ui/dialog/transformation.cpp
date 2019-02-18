@@ -165,7 +165,7 @@ Transformation::Transformation()
     _selChangeConn = INKSCAPE.signal_selection_changed.connect(sigc::bind(sigc::ptr_fun(&on_selection_changed), this));
     _selModifyConn = INKSCAPE.signal_selection_modified.connect(sigc::hide<1>(sigc::bind(sigc::ptr_fun(&on_selection_modified), this)));
 
-    _desktopChangeConn = _deskTrack.connectDesktopChanged( sigc::mem_fun(*this, &Transformation::setDesktop) );
+    _desktopChangeConn = _deskTrack.connectDesktopChanged(sigc::mem_fun(*this, &Transformation::setDesktop));
     _deskTrack.connect(GTK_WIDGET(gobj()));
 
     show_all_children();
@@ -224,7 +224,7 @@ void Transformation::layoutPageMove()
     _scalar_move_vertical.setDigits(3);
     _scalar_move_vertical.setIncrements(0.1, 1.0);
 
-    //_scalar_move_vertical.set_label_image( INKSCAPE_STOCK_ARROWS_HOR );
+    //_scalar_move_vertical.set_label_image(INKSCAPE_STOCK_ARROWS_HOR);
     
     _page_move.table().attach(_scalar_move_horizontal, 0, 0, 2, 1);
     _page_move.table().attach(_units_move,             2, 0, 1, 1);
@@ -232,7 +232,7 @@ void Transformation::layoutPageMove()
     _scalar_move_horizontal.signal_value_changed()
         .connect(sigc::mem_fun(*this, &Transformation::onMoveValueChanged));
 
-    //_scalar_move_vertical.set_label_image( INKSCAPE_STOCK_ARROWS_VER );
+    //_scalar_move_vertical.set_label_image(INKSCAPE_STOCK_ARROWS_VER);
     _page_move.table().attach(_scalar_move_vertical, 0, 1, 2, 1);
 
     _scalar_move_vertical.signal_value_changed()
@@ -666,9 +666,9 @@ void Transformation::applyPageMove(Inkscape::Selection *selection)
                 std::sort(sorted.begin(), sorted.end());
 
                 double move = x;
-                for ( std::vector<BBoxSort> ::iterator it (sorted.begin());
+                for (std::vector<BBoxSort> ::iterator it (sorted.begin());
                       it < sorted.end();
-                      ++it )
+                      ++it)
                 {
                     sp_item_move_rel(it->item, Geom::Translate(move, 0));
                     // move each next object by x relative to previous
@@ -688,9 +688,9 @@ void Transformation::applyPageMove(Inkscape::Selection *selection)
                 std::sort(sorted.begin(), sorted.end());
 
                 double move = y;
-                for ( std::vector<BBoxSort> ::iterator it (sorted.begin());
+                for (std::vector<BBoxSort> ::iterator it (sorted.begin());
                       it < sorted.end();
-                      ++it )
+                      ++it)
                 {
                     sp_item_move_rel(it->item, Geom::Translate(0, move));
                     // move each next object by x relative to previous
@@ -705,7 +705,7 @@ void Transformation::applyPageMove(Inkscape::Selection *selection)
         }
     }
 
-    DocumentUndo::done( selection->desktop()->getDocument() , SP_VERB_DIALOG_TRANSFORM,
+    DocumentUndo::done(selection->desktop()->getDocument() , SP_VERB_DIALOG_TRANSFORM,
                         _("Move"));
 }
 
@@ -846,7 +846,7 @@ void Transformation::applyPageSkew(Inkscape::Selection *selection)
         Geom::OptRect bbox = selection->preferredBounds();
         boost::optional<Geom::Point> center = selection->center();
 
-        if ( bbox && center ) {
+        if (bbox && center) {
             double width  = bbox->dimensions()[Geom::X];
             double height = bbox->dimensions()[Geom::Y];
 
@@ -951,11 +951,11 @@ void Transformation::onMoveRelativeToggled()
         if (_check_move_relative.get_active()) {
             // From absolute to relative
             _scalar_move_horizontal.setValue((x - bbox->min()[Geom::X]) / conversion);
-            _scalar_move_vertical.setValue((  y - bbox->min()[Geom::Y]) / conversion);
+            _scalar_move_vertical.setValue((y - bbox->min()[Geom::Y]) / conversion);
         } else {
             // From relative to absolute
             _scalar_move_horizontal.setValue((bbox->min()[Geom::X] + x) / conversion);
-            _scalar_move_vertical.setValue((  bbox->min()[Geom::Y] + y) / conversion);
+            _scalar_move_vertical.setValue((bbox->min()[Geom::Y] + y) / conversion);
         }
     }
 

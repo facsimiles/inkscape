@@ -28,7 +28,7 @@ namespace Inkscape
 {
 
 template <class T>
-T* createSuiteAndDocument( void (*fun)(T*&) )
+T* createSuiteAndDocument(void (*fun)(T*&))
 {
     T* suite = 0;
 
@@ -37,16 +37,16 @@ T* createSuiteAndDocument( void (*fun)(T*&) )
 #endif
 
     Inkscape::GC::init();
-    if ( !Inkscape::Application::exists() )
+    if (!Inkscape::Application::exists())
     {
         // Create the global inkscape object.
         Inkscape::Application::create("", false);
     }
 
-    SPDocument* tmp = SPDocument::createNewDoc( NULL, TRUE, true );
-    if ( tmp ) {
-        fun( suite );
-        if ( suite )
+    SPDocument* tmp = SPDocument::createNewDoc(NULL, TRUE, true);
+    if (tmp) {
+        fun(suite);
+        if (suite)
         {
             suite->_doc = tmp;
         }

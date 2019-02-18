@@ -32,10 +32,10 @@ void sp_item_update_cns(SPItem &item, SPDesktop const &desktop)
          fi != fiEnd; ++fi)
     {
         SPGuideConstraint const &cn = *fi;
-        if ( find(item.constraints.begin(),
+        if (find(item.constraints.begin(),
                   item.constraints.end(),
                   cn)
-             == item.constraints.end() )
+             == item.constraints.end())
         {
             item.constraints.push_back(cn);
             cn.g->attached_items.emplace_back(&item, cn.snappoint_ix);

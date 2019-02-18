@@ -436,9 +436,9 @@ void
 lpetool_update_measuring_items(LpeTool *lc)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    for ( std::map<SPPath *, SPCanvasItem*>::iterator i = lc->measuring_items->begin();
+    for (std::map<SPPath *, SPCanvasItem*>::iterator i = lc->measuring_items->begin();
           i != lc->measuring_items->end();
-          ++i )
+          ++i)
     {
         SPPath *path = i->first;
         SPCurve *curve = path->getCurve();

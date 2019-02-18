@@ -42,7 +42,7 @@ public:
     ~ParamColor() override;
 
     /** Returns \c _value, with a \i const to protect it. */
-    guint32 get( SPDocument const * /*doc*/, Inkscape::XML::Node const * /*node*/ ) const { return _color.value(); }
+    guint32 get(SPDocument const * /*doc*/, Inkscape::XML::Node const * /*node*/) const { return _color.value(); }
 
     guint32 set (guint32 in, SPDocument * doc, Inkscape::XML::Node * node);
 

@@ -72,12 +72,12 @@ public:
     /**
      * Update GUI.
      */
-    void update( Glib::ustring& font_spec );
+    void update(Glib::ustring& font_spec);
 
     /**
      * Fill SPCSSAttr based on settings of buttons.
      */
-    void fill_css( SPCSSAttr* css );
+    void fill_css(SPCSSAttr* css);
 
     /**
      * Get CSS String

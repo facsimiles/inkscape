@@ -41,7 +41,7 @@ Inkscape::Util::List<AttributeRecord const> rebase_href_attrs(
 //  * .
 //  * @return a non-empty replacement href if needed, empty otherwise.
 //  */
-// std::string rebase_href_attrs( std::string const &oldAbsBase, std::string const &newAbsBase, gchar const *href, gchar const *absref = 0 );
+// std::string rebase_href_attrs(std::string const &oldAbsBase, std::string const &newAbsBase, gchar const *href, gchar const *absref = 0);
 
 } // namespace XML
 } // namespace Inkscape

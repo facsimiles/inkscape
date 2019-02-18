@@ -282,7 +282,7 @@ void LPEFilletChamfer::setSelected(PathVectorSatellites *_pathvector_satellites)
     for (size_t i = 0; i < satellites.size(); ++i) {
         for (size_t j = 0; j < satellites[i].size(); ++j) {
             Geom::Curve const &curve_in = pathv[i][j];
-            if (only_selected && isNodePointSelected(curve_in.initialPoint()) ){
+            if (only_selected && isNodePointSelected(curve_in.initialPoint())){
                 satellites[i][j].setSelected(true);
             } else {
                 satellites[i][j].setSelected(false);
@@ -362,7 +362,7 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
                     }
                 }
                 satellites[i][j].hidden = hide_knots;
-                if (only_selected && isNodePointSelected(curve_in.initialPoint()) ){
+                if (only_selected && isNodePointSelected(curve_in.initialPoint())){
                     satellites[i][j].setSelected(true);
                 }
             }

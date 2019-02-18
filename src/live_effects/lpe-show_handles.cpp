@@ -187,7 +187,7 @@ LPEShowHandles::drawNode(Geom::Point p, Geom::NodeType nodetype)
 {
     if(stroke_width * scale_nodes_and_handles > 0.0) {
         Geom::Rotate rotate = Geom::Rotate(0);
-        if ( nodetype == Geom::NODE_CUSP) {
+        if (nodetype == Geom::NODE_CUSP) {
             rotate = Geom::Rotate::from_degrees(45);
         }
         double diameter = stroke_width * scale_nodes_and_handles;
@@ -229,8 +229,8 @@ LPEShowHandles::drawHandleLine(Geom::Point p,Geom::Point p2)
         Geom::Ray ray2(p, p2);
         p2 =  p2 - Geom::Point::polar(ray2.angle(),(diameter * 0.35));
     }
-    path.start( p );
-    path.appendNew<Geom::LineSegment>( p2 );
+    path.start(p);
+    path.appendNew<Geom::LineSegment>(p2);
     outline_path.push_back(path);
 }
 

@@ -30,9 +30,9 @@ public:
     LayerManager(SPDesktop *desktop);
     ~LayerManager() override;
 
-    void setCurrentLayer( SPObject* obj );
-    void renameLayer( SPObject* obj, char const *label, bool uniquify );
-    Glib::ustring getNextLayerName( SPObject* obj, char const *label);
+    void setCurrentLayer(SPObject* obj);
+    void renameLayer(SPObject* obj, char const *label, bool uniquify);
+    Glib::ustring getNextLayerName(SPObject* obj, char const *label);
 
     sigc::connection connectCurrentLayerChanged(const sigc::slot<void, SPObject *> & slot) {
         return _layer_changed_signal.connect(slot);
@@ -46,7 +46,7 @@ private:
     friend class LayerWatcher;
     class LayerWatcher;
 
-    void _objectModified( SPObject* obj, unsigned int flags );
+    void _objectModified(SPObject* obj, unsigned int flags);
     void _setDocument(SPDocument *document);
     void _rebuild();
     void _selectedLayerChanged(SPObject *layer);

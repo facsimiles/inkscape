@@ -113,25 +113,25 @@ sp_svg_transform_read(gchar const *str, Geom::Affine *transform)
             }
             Geom::Rotate const rot(Geom::rad_from_deg(args[0]));
             if (n_args == 3) {
-                a = ( Geom::Translate(-args[1], -args[2])
+                a = (Geom::Translate(-args[1], -args[2])
                       * rot
                       * Geom::Translate(args[1], args[2])
-                      * Geom::Affine(a) );
+                      * Geom::Affine(a));
             } else {
                 a = rot * a;
             }
         } else if (!strcmp (keyword, "skewX")) {
             if (n_args != 1) return false;
-            a = ( Geom::Affine(1, 0,
+            a = (Geom::Affine(1, 0,
                      tan(args[0] * M_PI / 180.0), 1,
                      0, 0)
-                  * a );
+                  * a);
         } else if (!strcmp (keyword, "skewY")) {
             if (n_args != 1) return false;
-            a = ( Geom::Affine(1, tan(args[0] * M_PI / 180.0),
+            a = (Geom::Affine(1, tan(args[0] * M_PI / 180.0),
                      0, 1,
                      0, 0)
-                  * a );
+                  * a);
         } else {
             return false; /* unknown keyword */
         }
@@ -175,13 +175,13 @@ sp_svg_transform_write(Geom::Affine const &transform)
         // We are more or less a uniform scale
         strcpy (c + p, "scale(");
         p += 6;
-        p += sp_svg_number_write_de( c + p, sizeof(c) - p, transform[0], prec, min_exp );
+        p += sp_svg_number_write_de(c + p, sizeof(c) - p, transform[0], prec, min_exp);
         if (Geom::are_near(transform[0], transform[3], e)) {
             c[p++] = ')';
             c[p] = '\000';
         } else {
             c[p++] = ',';
-            p += sp_svg_number_write_de( c + p, sizeof(c) - p, transform[3], prec, min_exp );
+            p += sp_svg_number_write_de(c + p, sizeof(c) - p, transform[3], prec, min_exp);
             c[p++] = ')';
             c[p] = '\000';
         }
@@ -189,13 +189,13 @@ sp_svg_transform_write(Geom::Affine const &transform)
         // We are more or less a pure translation
         strcpy (c + p, "translate(");
         p += 10;
-        p += sp_svg_number_write_de( c + p, sizeof(c) - p, transform[4], prec, min_exp );
+        p += sp_svg_number_write_de(c + p, sizeof(c) - p, transform[4], prec, min_exp);
         if (Geom::are_near(transform[5], 0.0, e)) {
             c[p++] = ')';
             c[p] = '\000';
         } else {
             c[p++] = ',';
-            p += sp_svg_number_write_de( c + p, sizeof(c) - p, transform[5], prec, min_exp );
+            p += sp_svg_number_write_de(c + p, sizeof(c) - p, transform[5], prec, min_exp);
             c[p++] = ')';
             c[p] = '\000';
         }
@@ -255,17 +255,17 @@ sp_svg_transform_write(Geom::Affine const &transform)
     } else {
         strcpy (c + p, "matrix(");
         p += 7;
-        p += sp_svg_number_write_de( c + p, sizeof(c) - p, transform[0], prec, min_exp );
+        p += sp_svg_number_write_de(c + p, sizeof(c) - p, transform[0], prec, min_exp);
         c[p++] = ',';
-        p += sp_svg_number_write_de( c + p, sizeof(c) - p, transform[1], prec, min_exp );
+        p += sp_svg_number_write_de(c + p, sizeof(c) - p, transform[1], prec, min_exp);
         c[p++] = ',';
-        p += sp_svg_number_write_de( c + p, sizeof(c) - p, transform[2], prec, min_exp );
+        p += sp_svg_number_write_de(c + p, sizeof(c) - p, transform[2], prec, min_exp);
         c[p++] = ',';
-        p += sp_svg_number_write_de( c + p, sizeof(c) - p, transform[3], prec, min_exp );
+        p += sp_svg_number_write_de(c + p, sizeof(c) - p, transform[3], prec, min_exp);
         c[p++] = ',';
-        p += sp_svg_number_write_de( c + p, sizeof(c) - p, transform[4], prec, min_exp );
+        p += sp_svg_number_write_de(c + p, sizeof(c) - p, transform[4], prec, min_exp);
         c[p++] = ',';
-        p += sp_svg_number_write_de( c + p, sizeof(c) - p, transform[5], prec, min_exp );
+        p += sp_svg_number_write_de(c + p, sizeof(c) - p, transform[5], prec, min_exp);
         c[p++] = ')';
         c[p] = '\000';
     }

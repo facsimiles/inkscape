@@ -107,9 +107,9 @@ gchar *sp_action_get_title(SPAction const *action)
     for (unsigned si = 0 ; ; si++)  {
         int const c = src[si];
         // Ignore Unicode Character "…" (U+2026)
-        if ( c == '\xE2' && si + 2 < len && src[si+1] == '\x80' && src[si+2] == '\xA6' ) {
+        if (c == '\xE2' && si + 2 < len && src[si+1] == '\x80' && src[si+2] == '\xA6') {
             si += 2;
-        } else if ( c != '_' && c != '.' ) {
+        } else if (c != '_' && c != '.') {
             ret[ri] = c;
             ri++;
             if (c == '\0') {
@@ -631,7 +631,7 @@ SPAction *Verb::get_action(Inkscape::ActionContext const & context)
 {
     SPAction *action = nullptr;
 
-    if ( _actions == nullptr ) {
+    if (_actions == nullptr) {
         _actions = new ActionTable;
     }
     ActionTable::iterator action_found = _actions->find(context.getView());
@@ -698,7 +698,7 @@ gchar const *Verb::get_tip()
     gchar const *result = nullptr;
     if (_tip) {
         unsigned int shortcut = sp_shortcut_get_primary(this);
-        if ( (shortcut != _shortcut) || !_full_tip) {
+        if ((shortcut != _shortcut) || !_full_tip) {
             if (_full_tip) {
                 g_free(_full_tip);
                 _full_tip = nullptr;
@@ -837,7 +837,7 @@ Verb *Verb::getbyid(gchar const *id, bool verbose)
                 && strcmp(id, "SelectionTrace")   != 0
                 && strcmp(id, "PaintBucketPrefs") != 0
 #endif
-            ) {
+) {
         if (verbose)
             printf("Unable to find: %s\n", id);
     }
@@ -1326,7 +1326,7 @@ void LayerVerb::perform(SPAction *action, void *data)
     SPDesktop *dt = sp_action_get_desktop(action);
     size_t verb = reinterpret_cast<std::size_t>(data);
 
-    if ( !dt->currentLayer() ) {
+    if (!dt->currentLayer()) {
         return;
     }
 
@@ -1379,7 +1379,7 @@ void LayerVerb::perform(SPAction *action, void *data)
         case SP_VERB_LAYER_TO_BOTTOM:
         case SP_VERB_LAYER_RAISE:
         case SP_VERB_LAYER_LOWER: {
-            if ( dt->currentLayer() == dt->currentRoot() ) {
+            if (dt->currentLayer() == dt->currentRoot()) {
                 dt->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("No current layer."));
                 return;
             }
@@ -1404,7 +1404,7 @@ void LayerVerb::perform(SPAction *action, void *data)
                     break;
             }
 
-            if ( layer->getNext() != old_pos ) {
+            if (layer->getNext() != old_pos) {
                 char const *message = nullptr;
                 Glib::ustring description = "";
                 switch (verb) {
@@ -1437,7 +1437,7 @@ void LayerVerb::perform(SPAction *action, void *data)
             break;
         }
         case SP_VERB_LAYER_DUPLICATE: {
-            if ( dt->currentLayer() != dt->currentRoot() ) {
+            if (dt->currentLayer() != dt->currentRoot()) {
 
                 dt->selection->duplicate(true,true);
 
@@ -1452,7 +1452,7 @@ void LayerVerb::perform(SPAction *action, void *data)
             break;
         }
         case SP_VERB_LAYER_DELETE: {
-            if ( dt->currentLayer() != dt->currentRoot() ) {
+            if (dt->currentLayer() != dt->currentRoot()) {
                 dt->getSelection()->clear();
                 SPObject *old_layer=dt->currentLayer();
 
@@ -1486,49 +1486,49 @@ void LayerVerb::perform(SPAction *action, void *data)
             break;
         }
         case SP_VERB_LAYER_SOLO: {
-            if ( dt->currentLayer() == dt->currentRoot() ) {
+            if (dt->currentLayer() == dt->currentRoot()) {
                 dt->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("No current layer."));
             } else {
-                dt->toggleLayerSolo( dt->currentLayer() );
+                dt->toggleLayerSolo(dt->currentLayer());
                 DocumentUndo::done(dt->getDocument(), SP_VERB_LAYER_SOLO, _("Toggle layer solo"));
             }
             break;
         }
         case SP_VERB_LAYER_SHOW_ALL: {
-            dt->toggleHideAllLayers( false );
+            dt->toggleHideAllLayers(false);
             DocumentUndo::maybeDone(dt->getDocument(), "layer:showall", SP_VERB_LAYER_SHOW_ALL, _("Show all layers"));
             break;
         }
         case SP_VERB_LAYER_HIDE_ALL: {
-            dt->toggleHideAllLayers( true );
+            dt->toggleHideAllLayers(true);
             DocumentUndo::maybeDone(dt->getDocument(), "layer:hideall", SP_VERB_LAYER_HIDE_ALL, _("Hide all layers"));
             break;
         }
         case SP_VERB_LAYER_LOCK_ALL: {
-            dt->toggleLockAllLayers( true );
+            dt->toggleLockAllLayers(true);
             DocumentUndo::maybeDone(dt->getDocument(), "layer:lockall", SP_VERB_LAYER_LOCK_ALL, _("Lock all layers"));
             break;
         }
         case SP_VERB_LAYER_LOCK_OTHERS: {
-            if ( dt->currentLayer() == dt->currentRoot() ) {
+            if (dt->currentLayer() == dt->currentRoot()) {
                 dt->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("No current layer."));
             } else {
-                dt->toggleLockOtherLayers( dt->currentLayer() );
+                dt->toggleLockOtherLayers(dt->currentLayer());
                 DocumentUndo::done(dt->getDocument(), SP_VERB_LAYER_LOCK_OTHERS, _("Lock other layers"));
             }
             break;
         }
         case SP_VERB_LAYER_UNLOCK_ALL: {
-            dt->toggleLockAllLayers( false );
+            dt->toggleLockAllLayers(false);
             DocumentUndo::maybeDone(dt->getDocument(), "layer:unlockall", SP_VERB_LAYER_UNLOCK_ALL, _("Unlock all layers"));
             break;
         }
         case SP_VERB_LAYER_TOGGLE_LOCK:
         case SP_VERB_LAYER_TOGGLE_HIDE: {
-            if ( dt->currentLayer() == dt->currentRoot() ) {
+            if (dt->currentLayer() == dt->currentRoot()) {
                 dt->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("No current layer."));
             } else {
-                if ( verb == SP_VERB_LAYER_TOGGLE_HIDE ){
+                if (verb == SP_VERB_LAYER_TOGGLE_HIDE){
                     SP_ITEM(dt->currentLayer())->setHidden(!SP_ITEM(dt->currentLayer())->isHidden());
                 } else {
                     SP_ITEM(dt->currentLayer())->setLocked(!SP_ITEM(dt->currentLayer())->isLocked());
@@ -1544,7 +1544,7 @@ void LayerVerb::perform(SPAction *action, void *data)
 /**
  * Decode the verb code and take appropriate action.
  */
-void ObjectVerb::perform( SPAction *action, void *data)
+void ObjectVerb::perform(SPAction *action, void *data)
 {
     SPDesktop *dt = sp_action_get_desktop(action);
     Inkscape::Selection *sel = sp_action_get_selection(action);
@@ -1651,7 +1651,7 @@ void ObjectVerb::perform( SPAction *action, void *data)
 /**
  * Decode the verb code and take appropriate action.
  */
-void TagVerb::perform( SPAction *action, void *data)
+void TagVerb::perform(SPAction *action, void *data)
 {
     SPDesktop *dt = static_cast<SPDesktop*>(sp_action_get_view(action));
     if (!dt)
@@ -1925,9 +1925,9 @@ void ZoomVerb::perform(SPAction *action, void *data)
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     gdouble zoom_inc   =
-        prefs->getDoubleLimited( "/options/zoomincrement/value",  M_SQRT2, 1.01, 10 );
+        prefs->getDoubleLimited("/options/zoomincrement/value",  M_SQRT2, 1.01, 10);
     gdouble rotate_inc =
-        prefs->getDoubleLimited( "/options/rotateincrement/value", 15, 1, 90, "°" );
+        prefs->getDoubleLimited("/options/rotateincrement/value", 15, 1, 90, "°");
     rotate_inc *= M_PI/180.0;
 
     double zcorr = 1.0;
@@ -1956,7 +1956,7 @@ void ZoomVerb::perform(SPAction *action, void *data)
                 }
             }
 
-            dt->zoom_relative_center_point( midpoint, mul*zoom_inc);
+            dt->zoom_relative_center_point(midpoint, mul*zoom_inc);
             break;
         }
         case SP_VERB_ZOOM_OUT:
@@ -1973,17 +1973,17 @@ void ZoomVerb::perform(SPAction *action, void *data)
                 }
             }
 
-            dt->zoom_relative_center_point( midpoint, 1 / (mul*zoom_inc) );
+            dt->zoom_relative_center_point(midpoint, 1 / (mul*zoom_inc));
             break;
         }
         case SP_VERB_ZOOM_1_1:
-            dt->zoom_absolute_center_point( midpoint, 1.0 * zcorr );
+            dt->zoom_absolute_center_point(midpoint, 1.0 * zcorr);
             break;
         case SP_VERB_ZOOM_1_2:
-            dt->zoom_absolute_center_point( midpoint, 0.5 * zcorr );
+            dt->zoom_absolute_center_point(midpoint, 0.5 * zcorr);
             break;
         case SP_VERB_ZOOM_2_1:
-            dt->zoom_absolute_center_point( midpoint, 2.0 * zcorr );
+            dt->zoom_absolute_center_point(midpoint, 2.0 * zcorr);
             break;
         case SP_VERB_ZOOM_PAGE:
             dt->zoom_page();
@@ -2005,7 +2005,7 @@ void ZoomVerb::perform(SPAction *action, void *data)
             break;
         case SP_VERB_ROTATE_CW:
         {
-            gint mul = 1 + Inkscape::UI::Tools::gobble_key_events( GDK_KEY_parenleft, 0);
+            gint mul = 1 + Inkscape::UI::Tools::gobble_key_events(GDK_KEY_parenleft, 0);
             // While drawing with the pen/pencil tool, rotate towards the end of the unfinished path
             if (tools_isactive(dt, TOOLS_FREEHAND_PENCIL) || tools_isactive(dt, TOOLS_FREEHAND_PEN)) {
                 SPCurve *rc = SP_DRAW_CONTEXT(ec)->red_curve;
@@ -2016,12 +2016,12 @@ void ZoomVerb::perform(SPAction *action, void *data)
                 }
             }
 
-            dt->rotate_relative_center_point( midpoint, -mul*rotate_inc);
+            dt->rotate_relative_center_point(midpoint, -mul*rotate_inc);
             break;
         }
         case SP_VERB_ROTATE_CCW:
         {
-            gint mul = 1 + Inkscape::UI::Tools::gobble_key_events( GDK_KEY_parenright, 0);
+            gint mul = 1 + Inkscape::UI::Tools::gobble_key_events(GDK_KEY_parenright, 0);
             // While drawing with the pen/pencil tool, rotate towards the end of the unfinished path
             if (tools_isactive(dt, TOOLS_FREEHAND_PENCIL) || tools_isactive(dt, TOOLS_FREEHAND_PEN)) {
                 SPCurve *rc = SP_DRAW_CONTEXT(ec)->red_curve;
@@ -2032,11 +2032,11 @@ void ZoomVerb::perform(SPAction *action, void *data)
                 }
             }
 
-            dt->rotate_relative_center_point( midpoint, mul*rotate_inc);
+            dt->rotate_relative_center_point(midpoint, mul*rotate_inc);
             break;
         }
         case SP_VERB_ROTATE_ZERO:
-            dt->rotate_absolute_center_point( midpoint, 0.0 );
+            dt->rotate_absolute_center_point(midpoint, 0.0);
             break;
         case SP_VERB_FLIP_HORIZONTAL:
         {
@@ -2050,12 +2050,12 @@ void ZoomVerb::perform(SPAction *action, void *data)
                 }
             }
 
-            dt->flip_relative_center_point( midpoint, SPDesktop::FLIP_HORIZONTAL);
+            dt->flip_relative_center_point(midpoint, SPDesktop::FLIP_HORIZONTAL);
             break;
         }
         case SP_VERB_FLIP_VERTICAL:
         {
-            /* gint mul = 1 + */ Inkscape::UI::Tools::gobble_key_events( GDK_KEY_parenright, 0);
+            /* gint mul = 1 + */ Inkscape::UI::Tools::gobble_key_events(GDK_KEY_parenright, 0);
             // While drawing with the pen/pencil tool, flip towards the end of the unfinished path
             if (tools_isactive(dt, TOOLS_FREEHAND_PENCIL) || tools_isactive(dt, TOOLS_FREEHAND_PEN)) {
                 SPCurve *rc = SP_DRAW_CONTEXT(ec)->red_curve;
@@ -2066,11 +2066,11 @@ void ZoomVerb::perform(SPAction *action, void *data)
                 }
             }
 
-            dt->flip_relative_center_point( midpoint, SPDesktop::FLIP_VERTICAL);
+            dt->flip_relative_center_point(midpoint, SPDesktop::FLIP_VERTICAL);
             break;
         }
         case SP_VERB_FLIP_NONE:
-            dt->flip_absolute_center_point( midpoint, SPDesktop::FLIP_NONE);
+            dt->flip_absolute_center_point(midpoint, SPDesktop::FLIP_NONE);
             break;
         case SP_VERB_TOGGLE_RULERS:
             dt->toggleRulers();
@@ -2312,7 +2312,7 @@ void HelpVerb::perform(SPAction *action, void *data)
         case SP_VERB_HELP_ABOUT_EXTENSIONS:
             // Inkscape::UI::Dialogs::ExtensionsPanel *panel = new Inkscape::UI::Dialogs::ExtensionsPanel();
             // panel->set_full(true);
-            // show_panel( *panel, "dialogs.aboutextensions", SP_VERB_HELP_ABOUT_EXTENSIONS );
+            // show_panel(*panel, "dialogs.aboutextensions", SP_VERB_HELP_ABOUT_EXTENSIONS);
             break;
         case SP_VERB_HELP_MEMORY:
             INKSCAPE.dialogs_unhide();

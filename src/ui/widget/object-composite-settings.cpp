@@ -40,7 +40,7 @@ ObjectCompositeSettings::ObjectCompositeSettings(unsigned int verb_code, char co
   _filter_modifier(flags),
   _blocked(false)
 {
-    set_name( "ObjectCompositeSettings");
+    set_name("ObjectCompositeSettings");
 
     // Filter Effects
     pack_start(_filter_modifier, false, false, 2);
@@ -104,7 +104,7 @@ ObjectCompositeSettings::_blendBlurValueChanged()
 
     //apply created filter to every selected item
     std::vector<SPObject*> sel = _subject->list();
-    for (std::vector<SPObject*>::const_iterator i = sel.begin() ; i != sel.end() ; ++i ) {
+    for (std::vector<SPObject*>::const_iterator i = sel.begin() ; i != sel.end() ; ++i) {
         if (!SP_IS_ITEM(*i)) {
             continue;
         }
@@ -130,8 +130,8 @@ ObjectCompositeSettings::_blendBlurValueChanged()
         }
 
         //request update
-        item->requestDisplayUpdate(( SP_OBJECT_MODIFIED_FLAG |
-                                     SP_OBJECT_STYLE_MODIFIED_FLAG ));
+        item->requestDisplayUpdate((SP_OBJECT_MODIFIED_FLAG |
+                                     SP_OBJECT_STYLE_MODIFIED_FLAG));
     }
 
     DocumentUndo::maybeDone(document, _blur_tag.c_str(), _verb_code,
@@ -243,10 +243,10 @@ ObjectCompositeSettings::_subjectChanged() {
 
     // If we have nothing selected, disable dialog.
     if (result       == QUERY_STYLE_NOTHING &&
-        blend_result == QUERY_STYLE_NOTHING ) {
-        _filter_modifier.set_sensitive( false );
+        blend_result == QUERY_STYLE_NOTHING) {
+        _filter_modifier.set_sensitive(false);
     } else {
-        _filter_modifier.set_sensitive( true );
+        _filter_modifier.set_sensitive(true);
     }
 
     _blocked = false;

@@ -96,7 +96,7 @@ ConnectorToolbar::ConnectorToolbar(SPDesktop *desktop)
         _orthogonal->set_icon_name(INKSCAPE_ICON("connector-orthogonal"));
 
         bool tbuttonstate = prefs->getBool("/tools/connector/orthogonal");
-        _orthogonal->set_active(( tbuttonstate ? TRUE : FALSE ));
+        _orthogonal->set_active((tbuttonstate ? TRUE : FALSE));
         _orthogonal->signal_toggled().connect(sigc::mem_fun(*this, &ConnectorToolbar::orthogonal_toggled));
     }
 
@@ -185,7 +185,7 @@ ConnectorToolbar::ConnectorToolbar(SPDesktop *desktop)
 }
 
 GtkWidget *
-ConnectorToolbar::create( SPDesktop *desktop)
+ConnectorToolbar::create(SPDesktop *desktop)
 {
     auto toolbar = new ConnectorToolbar(desktop);
     return GTK_WIDGET(toolbar->gobj());
@@ -231,7 +231,7 @@ ConnectorToolbar::orthogonal_toggled()
         SPItem *item = *i;
 
         if (Inkscape::UI::Tools::cc_item_is_connector(item)) {
-            item->setAttribute( "inkscape:connector-type",
+            item->setAttribute("inkscape:connector-type",
                     value, nullptr);
             item->avoidRef->handleSettingChange();
             modmade = true;
@@ -278,7 +278,7 @@ ConnectorToolbar::curvature_changed()
         SPItem *item = *i;
 
         if (Inkscape::UI::Tools::cc_item_is_connector(item)) {
-            item->setAttribute( "inkscape:connector-curvature",
+            item->setAttribute("inkscape:connector-curvature",
                     value, nullptr);
             item->avoidRef->handleSettingChange();
             modmade = true;
@@ -308,8 +308,8 @@ ConnectorToolbar::spacing_changed()
 
     Inkscape::XML::Node *repr = _desktop->namedview->getRepr();
 
-    if ( !repr->attribute("inkscape:connector-spacing") &&
-            ( _spacing_adj->get_value() == defaultConnSpacing )) {
+    if (!repr->attribute("inkscape:connector-spacing") &&
+            (_spacing_adj->get_value() == defaultConnSpacing)) {
         // Don't need to update the repr if the attribute doesn't
         // exist and it is being set to the default value -- as will
         // happen at startup.
@@ -330,7 +330,7 @@ ConnectorToolbar::spacing_changed()
 
     std::vector<SPItem *> items;
     items = get_avoided_items(items, _desktop->currentRoot(), _desktop);
-    for (std::vector<SPItem *>::const_iterator iter = items.begin(); iter != items.end(); ++iter ) {
+    for (std::vector<SPItem *>::const_iterator iter = items.begin(); iter != items.end(); ++iter) {
         SPItem *item = *iter;
         Geom::Affine m = Geom::identity();
         avoid_item_move(&m, item);
@@ -411,8 +411,8 @@ ConnectorToolbar::event_attr_changed(Inkscape::XML::Node *repr,
 {
     auto toolbar = reinterpret_cast<ConnectorToolbar *>(data);
 
-    if ( !toolbar->_freeze
-         && (strcmp(name, "inkscape:connector-spacing") == 0) ) {
+    if (!toolbar->_freeze
+         && (strcmp(name, "inkscape:connector-spacing") == 0)) {
         gdouble spacing = defaultConnSpacing;
         sp_repr_get_double(repr, "inkscape:connector-spacing", &spacing);
 

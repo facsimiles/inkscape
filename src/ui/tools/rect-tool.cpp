@@ -110,7 +110,7 @@ void RectTool::setup() {
     this->sel_changed_connection.disconnect();
     this->sel_changed_connection = this->desktop->getSelection()->connectChanged(
     	sigc::mem_fun(this, &RectTool::selection_changed)
-    );
+);
 
     sp_event_context_read(this, "rx");
     sp_event_context_read(this, "ry");
@@ -130,9 +130,9 @@ void RectTool::set(const Inkscape::Preferences::Entry& val) {
      * g_ascii_strtod (or a thin wrapper that does the right thing for invalid values inf/nan). */
     Glib::ustring name = val.getEntryName();
     
-    if ( name == "rx" ) {
+    if (name == "rx") {
         this->rx = val.getDoubleLimited(); // prevents NaN and +/-Inf from messing up
-    } else if ( name == "ry" ) {
+    } else if (name == "ry") {
         this->ry = val.getDoubleLimited();
     }
 }
@@ -142,7 +142,7 @@ bool RectTool::item_handler(SPItem* item, GdkEvent* event) {
 
     switch (event->type) {
     case GDK_BUTTON_PRESS:
-        if ( event->button.button == 1 && !this->space_panning) {
+        if (event->button.button == 1 && !this->space_panning) {
             Inkscape::setup_for_drag_start(desktop, this, event);
         }
         break;
@@ -195,23 +195,23 @@ bool RectTool::root_handler(GdkEvent* event) {
             this->center = button_dt;
 
             sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
-                                ( GDK_KEY_PRESS_MASK |
+                                (GDK_KEY_PRESS_MASK |
                                   GDK_BUTTON_RELEASE_MASK       |
                                   GDK_POINTER_MOTION_MASK       |
                                   GDK_POINTER_MOTION_HINT_MASK       |
-                                  GDK_BUTTON_PRESS_MASK ),
+                                  GDK_BUTTON_PRESS_MASK),
                                 nullptr, event->button.time);
 
             ret = TRUE;
         }
         break;
     case GDK_MOTION_NOTIFY:
-        if ( dragging
+        if (dragging
              && (event->motion.state & GDK_BUTTON1_MASK) && !this->space_panning)
         {
-            if ( this->within_tolerance
-                 && ( abs( (gint) event->motion.x - this->xp ) < this->tolerance )
-                 && ( abs( (gint) event->motion.y - this->yp ) < this->tolerance ) ) {
+            if (this->within_tolerance
+                 && (abs((gint) event->motion.x - this->xp) < this->tolerance)
+                 && (abs((gint) event->motion.y - this->yp) < this->tolerance)) {
                 break; // do not drag if we're within tolerance from origin
             }
             // Once the user has moved farther than tolerance from the original location

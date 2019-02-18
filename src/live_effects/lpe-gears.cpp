@@ -179,7 +179,7 @@ Geom::Path Gear::path() {
 
 Gear Gear::spawn(Geom::Point p) {
     double radius = Geom::distance(this->centre(), p) - this->pitch_radius();
-    int N  = (int) floor( (radius / this->pitch_radius()) * this->number_of_teeth() );
+    int N  = (int) floor((radius / this->pitch_radius()) * this->number_of_teeth());
 
     Gear gear(N, _module, _pressure_angle);
     gear.centre(p);
@@ -235,7 +235,7 @@ LPEGears::doEffect_path (Geom::PathVector const &path_in)
     Geom::Path gearpath = path_in[0];
 
     Geom::Path::iterator it(gearpath.begin());
-    if ( it == gearpath.end() ) return path_out;
+    if (it == gearpath.end()) return path_out;
 
     Gear * gear = new Gear(teeth, 200.0, phi * M_PI / 180);
     Geom::Point gear_centre = (*it).finalPoint();
@@ -243,20 +243,20 @@ LPEGears::doEffect_path (Geom::PathVector const &path_in)
     gear->angle(atan2((*it).initialPoint() - gear_centre));
 
     ++it;
-    if ( it == gearpath.end() ) return path_out;
+    if (it == gearpath.end()) return path_out;
     double radius = Geom::distance(gear_centre, (*it).finalPoint());
     radius = radius < min_radius?min_radius:radius;
     gear->pitch_radius(radius);
 
-    path_out.push_back( gear->path());
+    path_out.push_back(gear->path());
     
     for (++it; it != gearpath.end() ; ++it) {
         if (are_near((*it).initialPoint(), (*it).finalPoint())) {
             continue;
         }
         // iterate through Geom::Curve in path_in
-        Gear* gearnew = new Gear(gear->spawn( (*it).finalPoint() ));
-        path_out.push_back( gearnew->path() );
+        Gear* gearnew = new Gear(gear->spawn((*it).finalPoint()));
+        path_out.push_back(gearnew->path());
         delete gear;
         gear = gearnew;
     }

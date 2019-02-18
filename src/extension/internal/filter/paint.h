@@ -63,8 +63,8 @@ protected:
     gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
-    Chromolitho ( ) : Filter() { };
-    ~Chromolitho ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
+    Chromolitho () : Filter() { };
+    ~Chromolitho () override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
         Inkscape::Extension::build_from_mem(
@@ -224,8 +224,8 @@ protected:
     gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
-    CrossEngraving ( ) : Filter() { };
-    ~CrossEngraving ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
+    CrossEngraving () : Filter() { };
+    ~CrossEngraving () override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
         Inkscape::Extension::build_from_mem(
@@ -323,8 +323,8 @@ protected:
     gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
-    Drawing ( ) : Filter() { };
-    ~Drawing ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
+    Drawing () : Filter() { };
+    ~Drawing () override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
         Inkscape::Extension::build_from_mem(
@@ -486,8 +486,8 @@ protected:
     gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
-    Electrize ( ) : Filter() { };
-    ~Electrize ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
+    Electrize () : Filter() { };
+    ~Electrize () override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
         Inkscape::Extension::build_from_mem(
@@ -533,7 +533,7 @@ Electrize::get_filter_text (Inkscape::Extension::Extension * ext)
         val = 1;
     }
     values << val;
-    for ( int step = 1 ; step <= levels ; step++ ) {
+    for (int step = 1 ; step <= levels ; step++) {
         if (val == 1) {
             val = 0;
         }
@@ -576,8 +576,8 @@ protected:
     gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
-    NeonDraw ( ) : Filter() { };
-    ~NeonDraw ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
+    NeonDraw () : Filter() { };
+    ~NeonDraw () override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
         Inkscape::Extension::build_from_mem(
@@ -679,8 +679,8 @@ protected:
     gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
-    PointEngraving ( ) : Filter() { };
-    ~PointEngraving ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
+    PointEngraving () : Filter() { };
+    ~PointEngraving () override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
         Inkscape::Extension::build_from_mem(
@@ -814,7 +814,7 @@ PointEngraving::get_filter_text (Inkscape::Extension::Extension * ext)
                        lightness.str().c_str(), grain.str().c_str(), erase.str().c_str(), blur.str().c_str(),
                        br.str().c_str(), bg.str().c_str(), bb.str().c_str(), ba.str().c_str(), iop.str().c_str(),
                        r.str().c_str(), g.str().c_str(), b.str().c_str(), a.str().c_str(), iof.str().c_str(),
-                       a.str().c_str(), ba.str().c_str() );
+                       a.str().c_str(), ba.str().c_str());
 
     return _filter;
 }; /* Point engraving filter */
@@ -842,8 +842,8 @@ protected:
     gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
-    Posterize ( ) : Filter() { };
-    ~Posterize ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
+    Posterize () : Filter() { };
+    ~Posterize () override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
         Inkscape::Extension::build_from_mem(
@@ -916,7 +916,7 @@ Posterize::get_filter_text (Inkscape::Extension::Extension * ext)
             transf << " 1";
         }
     } else {
-        for ( int step = 1 ; step <= levels ; step++ ) {
+        for (int step = 1 ; step <= levels ; step++) {
             float val = (float) step / levels;
             transf << " " << val;
             if ((g_ascii_strcasecmp("dented", effecttype) == 0)) {
@@ -965,8 +965,8 @@ protected:
     gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
-    PosterizeBasic ( ) : Filter() { };
-    ~PosterizeBasic ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
+    PosterizeBasic () : Filter() { };
+    ~PosterizeBasic () override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
         Inkscape::Extension::build_from_mem(
@@ -1000,7 +1000,7 @@ PosterizeBasic::get_filter_text (Inkscape::Extension::Extension * ext)
 
     transf << "0";
     int levels = ext->get_param_int("levels") + 1;
-    for ( int step = 1 ; step <= levels ; step++ ) {
+    for (int step = 1 ; step <= levels ; step++) {
         const float val = (float) step / levels;
         transf << " " << val;
     }

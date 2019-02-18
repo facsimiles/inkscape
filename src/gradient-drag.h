@@ -56,7 +56,7 @@ struct GrDraggable {
 
     SPItem *item;
     GrPointType point_type;
-    gint point_i;  // the stop number of this point ( = 0 POINT_LG_BEGIN and POINT_RG_CENTER)
+    gint point_i;  // the stop number of this point (= 0 POINT_LG_BEGIN and POINT_RG_CENTER)
     Inkscape::PaintTarget fill_or_stroke;
 
     SPObject *getServer();
@@ -106,7 +106,7 @@ struct GrDragger {
     void updateDependencies(bool write_repr);
 
     /* Update handles/tensors when mesh corner moved */
-    void moveMeshHandles( Geom::Point pc_old,  MeshNodeOperation op );
+    void moveMeshHandles(Geom::Point pc_old,  MeshNodeOperation op);
 
     /* Following are for highlighting mesh handles when corner node is selected. */
     GrDragger *getMgCorner();
@@ -152,7 +152,7 @@ public: // FIXME: make more of this private!
     guint numDraggers() {return draggers.size();}
 
     guint singleSelectedDraggerNumDraggables() {
-        return (selected.empty()? 0 : (*(selected.begin()))->draggables.size() );
+        return (selected.empty()? 0 : (*(selected.begin()))->draggables.size());
     }
 
     guint singleSelectedDraggerSingleDraggableType() {
@@ -215,7 +215,7 @@ public: // FIXME: make more of this private!
 private:
     void deselect_all();
 
-    void addLine( SPItem *item, Geom::Point p1, Geom::Point p2, Inkscape::PaintTarget fill_or_stroke);
+    void addLine(SPItem *item, Geom::Point p1, Geom::Point p2, Inkscape::PaintTarget fill_or_stroke);
     void addCurve(SPItem *item, Geom::Point p0, Geom::Point p1, Geom::Point p2, Geom::Point p3,
                   int corner0, int corner1, int handle0, int handle1, Inkscape::PaintTarget fill_or_stroke);
 
@@ -223,12 +223,12 @@ private:
 
     void addDraggersRadial(SPRadialGradient *rg, SPItem *item, Inkscape::PaintTarget fill_or_stroke);
     void addDraggersLinear(SPLinearGradient *lg, SPItem *item, Inkscape::PaintTarget fill_or_stroke);
-    void addDraggersMesh(  SPMeshGradient   *mg, SPItem *item, Inkscape::PaintTarget fill_or_stroke);
+    void addDraggersMesh(SPMeshGradient   *mg, SPItem *item, Inkscape::PaintTarget fill_or_stroke);
     void refreshDraggersMesh(SPMeshGradient *mg, SPItem *item, Inkscape::PaintTarget fill_or_stroke);
 
-    bool styleSet( const SPCSSAttr *css );
+    bool styleSet(const SPCSSAttr *css);
 
-    Glib::ustring makeStopSafeColor( gchar const *str, bool &isNull );
+    Glib::ustring makeStopSafeColor(gchar const *str, bool &isNull);
 
     Inkscape::Selection *selection;
     sigc::connection sel_changed_connection;

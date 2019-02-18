@@ -20,9 +20,9 @@
 //#define MESH_DEBUG
 //#define OBJECT_TRACE
 
-SPMeshGradient::SPMeshGradient() : SPGradient(), type( SP_MESH_TYPE_COONS ), type_set(false) {
+SPMeshGradient::SPMeshGradient() : SPGradient(), type(SP_MESH_TYPE_COONS), type_set(false) {
 #ifdef OBJECT_TRACE
-  objectTrace( "SPMeshGradient::SPMeshGradient" );
+  objectTrace("SPMeshGradient::SPMeshGradient");
 #endif
 
     // Start coordinate of mesh
@@ -30,39 +30,39 @@ SPMeshGradient::SPMeshGradient() : SPGradient(), type( SP_MESH_TYPE_COONS ), typ
     this->y.unset(SVGLength::NONE, 0.0, 0.0);
 
 #ifdef OBJECT_TRACE
-  objectTrace( "SPMeshGradient::SPMeshGradient", false );
+  objectTrace("SPMeshGradient::SPMeshGradient", false);
 #endif
 }
 
 SPMeshGradient::~SPMeshGradient() {
 #ifdef OBJECT_TRACE
-  objectTrace( "SPMeshGradient::~SPMeshGradient (empty function)" );
-  objectTrace( "SPMeshGradient::~SPMeshGradient", false );
+  objectTrace("SPMeshGradient::~SPMeshGradient (empty function)");
+  objectTrace("SPMeshGradient::~SPMeshGradient", false);
 #endif
 }
 
 void SPMeshGradient::build(SPDocument *document, Inkscape::XML::Node *repr) {
 #ifdef OBJECT_TRACE
-  objectTrace( "SPMeshGradient::build" );
+  objectTrace("SPMeshGradient::build");
 #endif
 
     SPGradient::build(document, repr);
 
     // Start coordinate of meshgradient
-    this->readAttr( "x" );
-    this->readAttr( "y" );
+    this->readAttr("x");
+    this->readAttr("y");
 
-    this->readAttr( "type" );
+    this->readAttr("type");
 
 #ifdef OBJECT_TRACE
-    objectTrace( "SPMeshGradient::build", false );
+    objectTrace("SPMeshGradient::build", false);
 #endif
 }
 
 
 void SPMeshGradient::set(SPAttributeEnum key, gchar const *value) {
 #ifdef OBJECT_TRACE
-  objectTrace( "SPMeshGradient::set" );
+  objectTrace("SPMeshGradient::set");
 #endif
 
     switch (key) {
@@ -107,7 +107,7 @@ void SPMeshGradient::set(SPAttributeEnum key, gchar const *value) {
     }
 
 #ifdef OBJECT_TRACE
-    objectTrace( "SPMeshGradient::set", false );
+    objectTrace("SPMeshGradient::set", false);
 #endif
 }
 
@@ -116,7 +116,7 @@ void SPMeshGradient::set(SPAttributeEnum key, gchar const *value) {
  */
 Inkscape::XML::Node* SPMeshGradient::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
 #ifdef OBJECT_TRACE
-    objectTrace( "SPMeshGradient::write", false );
+    objectTrace("SPMeshGradient::write", false);
 #endif
 
     if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
@@ -148,7 +148,7 @@ Inkscape::XML::Node* SPMeshGradient::write(Inkscape::XML::Document *xml_doc, Ink
     SPGradient::write(xml_doc, repr, flags);
 
 #ifdef OBJECT_TRACE
-    objectTrace( "SPMeshGradient::write", false );
+    objectTrace("SPMeshGradient::write", false);
 #endif
     return repr;
 }
@@ -161,7 +161,7 @@ cairo_pattern_t* SPMeshGradient::pattern_new(cairo_t * /*ct*/,
 				     Geom::OptRect const & /*bbox*/,
 				     double /*opacity*/
 #endif
-				     )
+				)
 {
   using Geom::X;
   using Geom::Y;
@@ -177,13 +177,13 @@ cairo_pattern_t* SPMeshGradient::pattern_new(cairo_t * /*ct*/,
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 11, 4)
   SPMeshNodeArray* my_array = &array;
 
-  if( type_set ) {
+  if(type_set) {
     switch (type) {
     case SP_MESH_TYPE_COONS:
       // std::cout << "SPMeshGradient::pattern_new: Coons" << std::endl;
       break;
     case SP_MESH_TYPE_BICUBIC:
-      array.bicubic( &array_smoothed, type );
+      array.bicubic(&array_smoothed, type);
       my_array = &array_smoothed;
       break;
     }
@@ -191,42 +191,42 @@ cairo_pattern_t* SPMeshGradient::pattern_new(cairo_t * /*ct*/,
 
   cp = cairo_pattern_create_mesh();
 
-  for( unsigned int i = 0; i < my_array->patch_rows(); ++i ) {
-    for( unsigned int j = 0; j < my_array->patch_columns(); ++j ) {
+  for(unsigned int i = 0; i < my_array->patch_rows(); ++i) {
+    for(unsigned int j = 0; j < my_array->patch_columns(); ++j) {
 
-      SPMeshPatchI patch( &(my_array->nodes), i, j );
+      SPMeshPatchI patch(&(my_array->nodes), i, j);
 
-      cairo_mesh_pattern_begin_patch( cp );
-      cairo_mesh_pattern_move_to( cp, patch.getPoint( 0, 0 )[X], patch.getPoint( 0, 0 )[Y] );
+      cairo_mesh_pattern_begin_patch(cp);
+      cairo_mesh_pattern_move_to(cp, patch.getPoint(0, 0)[X], patch.getPoint(0, 0)[Y]);
 
-      for( unsigned int k = 0; k < 4; ++k ) {
+      for(unsigned int k = 0; k < 4; ++k) {
 #ifdef DEBUG_MESH
 	std::cout << i << " " << j << " "
-		  << patch.getPathType( k ) << "  (";
-	for( int p = 0; p < 4; ++p ) {
-	  std::cout << patch.getPoint( k, p );
+		  << patch.getPathType(k) << "  (";
+	for(int p = 0; p < 4; ++p) {
+	  std::cout << patch.getPoint(k, p);
 	}
 	std::cout << ") "
-		  << patch.getColor( k ).toString() << std::endl;
+		  << patch.getColor(k).toString() << std::endl;
 #endif
 
-	switch ( patch.getPathType( k ) ) {
+	switch (patch.getPathType(k)) {
 	case 'l':
 	case 'L':
 	case 'z':
 	case 'Z':
-	  cairo_mesh_pattern_line_to( cp,
-				      patch.getPoint( k, 3 )[X],
-				      patch.getPoint( k, 3 )[Y] );
+	  cairo_mesh_pattern_line_to(cp,
+				      patch.getPoint(k, 3)[X],
+				      patch.getPoint(k, 3)[Y]);
 	  break;
 	case 'c':
 	case 'C':
 	  {
-	    std::vector< Geom::Point > pts = patch.getPointsForSide( k );
-	    cairo_mesh_pattern_curve_to( cp,
+	    std::vector< Geom::Point > pts = patch.getPointsForSide(k);
+	    cairo_mesh_pattern_curve_to(cp,
 					 pts[1][X], pts[1][Y],
 					 pts[2][X], pts[2][Y],
-					 pts[3][X], pts[3][Y] );
+					 pts[3][X], pts[3][Y]);
 	    break;
 	  }
 	default:
@@ -234,10 +234,10 @@ cairo_pattern_t* SPMeshGradient::pattern_new(cairo_t * /*ct*/,
 	  std::cout << "sp_mesh_create_pattern: path error" << std::endl;
 	}
 
-	if( patch.tensorIsSet(k) ) {
+	if(patch.tensorIsSet(k)) {
 	  // Tensor point defined relative to corner.
 	  Geom::Point t = patch.getTensorPoint(k);
-	  cairo_mesh_pattern_set_control_point( cp, k, t[X], t[Y] );
+	  cairo_mesh_pattern_set_control_point(cp, k, t[X], t[Y]);
 	  //std::cout << "  sp_mesh_create_pattern: tensor " << k
 	  //          << " set to " << t << "." << std::endl;
 	} else {
@@ -248,13 +248,13 @@ cairo_pattern_t* SPMeshGradient::pattern_new(cairo_t * /*ct*/,
 
 	cairo_mesh_pattern_set_corner_color_rgba(
 						 cp, k,
-						 patch.getColor( k ).v.c[0],
-						 patch.getColor( k ).v.c[1],
-						 patch.getColor( k ).v.c[2],
-						 patch.getOpacity( k ) * opacity );
+						 patch.getColor(k).v.c[0],
+						 patch.getColor(k).v.c[1],
+						 patch.getColor(k).v.c[2],
+						 patch.getOpacity(k) * opacity);
       }
 
-      cairo_mesh_pattern_end_patch( cp );
+      cairo_mesh_pattern_end_patch(cp);
     }
   }
 
@@ -268,7 +268,7 @@ cairo_pattern_t* SPMeshGradient::pattern_new(cairo_t * /*ct*/,
 
 #else
   static bool shown = false;
-  if( !shown ) {
+  if(!shown) {
     std::cout << "sp_mesh_create_pattern: needs cairo >= 1.11.4, using "
 	      << cairo_version_string() << std::endl;
     shown = true;

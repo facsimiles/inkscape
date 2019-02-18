@@ -454,7 +454,7 @@ String DepTool::trim(const String &s)
     
     //Find first non-ws char
     unsigned int begin = 0;
-    for ( ; begin < s.size() ; begin++)
+    for (; begin < s.size() ; begin++)
         {
         if (!isspace(s[begin]))
             break;
@@ -462,7 +462,7 @@ String DepTool::trim(const String &s)
 
     //Find first non-ws char, going in reverse
     unsigned int end = s.size() - 1;
-    for ( ; end > begin ; end--)
+    for (; end > begin ; end--)
         {
         if (!isspace(s[end]))
             break;

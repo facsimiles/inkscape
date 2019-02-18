@@ -96,9 +96,9 @@ bool ZoomTool::root_handler(GdkEvent* event) {
 
                 ret = true;
             } else if (event->button.button == 3) {
-                double const zoom_rel( (event->button.state & GDK_SHIFT_MASK)
+                double const zoom_rel((event->button.state & GDK_SHIFT_MASK)
                                        ? zoom_inc
-                                       : 1 / zoom_inc );
+                                       : 1 / zoom_inc);
 
                 desktop->zoom_relative_keep_point(button_dt, zoom_rel);
                 ret = true;
@@ -118,9 +118,9 @@ bool ZoomTool::root_handler(GdkEvent* event) {
             if ((event->motion.state & GDK_BUTTON1_MASK) && !this->space_panning) {
                 ret = true;
 
-                if ( within_tolerance
-                     && ( abs( (gint) event->motion.x - xp ) < tolerance )
-                     && ( abs( (gint) event->motion.y - yp ) < tolerance ) ) {
+                if (within_tolerance
+                     && (abs((gint) event->motion.x - xp) < tolerance)
+                     && (abs((gint) event->motion.y - yp) < tolerance)) {
                     break; // do not drag if we're within tolerance from origin
                 }
                 // Once the user has moved farther than tolerance from the original location
@@ -140,15 +140,15 @@ bool ZoomTool::root_handler(GdkEvent* event) {
             Geom::Point const button_w(event->button.x, event->button.y);
             Geom::Point const button_dt(desktop->w2d(button_w));
 
-            if ( event->button.button == 1  && !this->space_panning) {
+            if (event->button.button == 1  && !this->space_panning) {
                 Geom::OptRect const b = Inkscape::Rubberband::get(desktop)->getRectangle();
 
-                if (b && !within_tolerance && !(GDK_SHIFT_MASK & event->button.state) ) {
+                if (b && !within_tolerance && !(GDK_SHIFT_MASK & event->button.state)) {
                     desktop->set_display_area(*b, 10);
                 } else if (!escaped) {
-                    double const zoom_rel( (event->button.state & GDK_SHIFT_MASK)
+                    double const zoom_rel((event->button.state & GDK_SHIFT_MASK)
                                            ? 1 / zoom_inc
-                                           : zoom_inc );
+                                           : zoom_inc);
 
                     desktop->zoom_relative_keep_point(button_dt, zoom_rel);
                 }

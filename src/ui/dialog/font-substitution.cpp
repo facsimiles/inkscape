@@ -204,10 +204,10 @@ std::vector<SPItem*> FontSubstitution::getFontReplacedItems(SPDocument* doc, Gli
             // trim whitespace
             size_t startpos = font.find_first_not_of(" \n\r\t");
             size_t endpos = font.find_last_not_of(" \n\r\t");
-            if(( std::string::npos == startpos ) || ( std::string::npos == endpos)) {
+            if((std::string::npos == startpos) || (std::string::npos == endpos)) {
                 continue; // empty font name
             }
-            font = font.substr( startpos, endpos-startpos+1 );
+            font = font.substr(startpos, endpos-startpos+1);
             std::set<Glib::ustring>::const_iterator iter = setFontSpans.find(font);
             if (iter != setFontSpans.end() ||
                     font == Glib::ustring("sans-serif") ||

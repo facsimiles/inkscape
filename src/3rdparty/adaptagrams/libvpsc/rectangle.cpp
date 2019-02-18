@@ -216,9 +216,9 @@ int compare_events(const void *a, const void *b) {
         return -1;
     } else if(isNaN(ea->pos) != isNaN(ea->pos)) {
         /* See comment in CmpNodePos. */
-        return ( isNaN(ea->pos)
+        return (isNaN(ea->pos)
              ? -1
-             : 1 );
+             : 1);
     }
     return 0;
 }
@@ -243,7 +243,7 @@ void generateXConstraints(const Rectangles& rs, const Variables& vars,
         events[ctr++]=new Event(Open,v,rs[i]->getMinY());
         events[ctr++]=new Event(Close,v,rs[i]->getMaxY());
     }
-    qsort((Event*)events, (size_t)2*n, sizeof(Event*), compare_events );
+    qsort((Event*)events, (size_t)2*n, sizeof(Event*), compare_events);
 
     NodeSet scanline;
     for(i=0;i<2*n;i++) {
@@ -255,7 +255,7 @@ void generateXConstraints(const Rectangles& rs, const Variables& vars,
                 v->setNeighbours(
                     getLeftNeighbours(scanline,v),
                     getRightNeighbours(scanline,v)
-                );
+);
             } else {
                 NodeSet::iterator it=scanline.find(v);
                 if(it!=scanline.begin()) {
@@ -276,7 +276,7 @@ void generateXConstraints(const Rectangles& rs, const Variables& vars,
             if(useNeighbourLists) {
                 for(NodeSet::iterator i=v->leftNeighbours->begin();
                     i!=v->leftNeighbours->end();i++
-                ) {
+) {
                     Node *u=*i;
                     double sep = (v->r->width()+u->r->width())/2.0;
                     cs.push_back(new Constraint(u->v,v->v,sep));
@@ -286,7 +286,7 @@ void generateXConstraints(const Rectangles& rs, const Variables& vars,
                 
                 for(NodeSet::iterator i=v->rightNeighbours->begin();
                     i!=v->rightNeighbours->end();i++
-                ) {
+) {
                     Node *u=*i;
                     double sep = (v->r->width()+u->r->width())/2.0;
                     cs.push_back(new Constraint(v->v,u->v,sep));
@@ -339,7 +339,7 @@ void generateYConstraints(const Rectangles& rs, const Variables& vars,
         events[ctr++]=new Event(Close,node,r->getMaxX());
     }
     COLA_ASSERT(ri==rs.end());
-    qsort((Event*)events, (size_t)2*n, sizeof(Event*), compare_events );
+    qsort((Event*)events, (size_t)2*n, sizeof(Event*), compare_events);
     NodeSet scanline;
 #ifndef NDEBUG
     size_t deletes=0;

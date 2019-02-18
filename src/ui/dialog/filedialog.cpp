@@ -51,8 +51,8 @@ bool hasSuffix(const Glib::ustring &str, const Glib::ustring &ext)
         Glib::ustring::value_type ch = str[strpos];
         if (ch != ext[extpos])
             {
-            if ( ((ch & 0xff80) != 0) ||
-                 static_cast<Glib::ustring::value_type>( g_ascii_tolower( static_cast<gchar>(0x07f & ch) ) ) != ext[extpos] )
+            if (((ch & 0xff80) != 0) ||
+                 static_cast<Glib::ustring::value_type>(g_ascii_tolower(static_cast<gchar>(0x07f & ch))) != ext[extpos])
                 {
                 return false;
                 }
@@ -91,7 +91,7 @@ FileOpenDialog *FileOpenDialog::create(Gtk::Window &parentWindow,
 #ifdef _WIN32
     FileOpenDialog *dialog = NULL;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    if (prefs->getBool( "/options/desktopintegration/value")) {
+    if (prefs->getBool("/options/desktopintegration/value")) {
         dialog = new FileOpenDialogImplWin32(parentWindow, path, fileTypes, title);
     } else {
         dialog = new FileOpenDialogImplGtk(parentWindow, path, fileTypes, title);
@@ -126,7 +126,7 @@ FileSaveDialog *FileSaveDialog::create(Gtk::Window& parentWindow,
 #ifdef _WIN32
     FileSaveDialog *dialog = NULL;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    if (prefs->getBool( "/options/desktopintegration/value")) {
+    if (prefs->getBool("/options/desktopintegration/value")) {
         dialog = new FileSaveDialogImplWin32(parentWindow, path, fileTypes, title, default_key, docTitle, save_method);
     } else {
         dialog = new FileSaveDialogImplGtk(parentWindow, path, fileTypes, title, default_key, docTitle, save_method);
@@ -159,15 +159,15 @@ void FileSaveDialog::appendExtension(Glib::ustring& path, Inkscape::Extension::O
 
 	try {
 		bool appendExtension = true;
-		Glib::ustring utf8Name = Glib::filename_to_utf8( path );
+		Glib::ustring utf8Name = Glib::filename_to_utf8(path);
 		Glib::ustring::size_type pos = utf8Name.rfind('.');
-		if ( pos != Glib::ustring::npos ) {
-			Glib::ustring trail = utf8Name.substr( pos );
+		if (pos != Glib::ustring::npos) {
+			Glib::ustring trail = utf8Name.substr(pos);
 			Glib::ustring foldedTrail = trail.casefold();
-			if ( (trail == ".")
-				 | (foldedTrail != Glib::ustring( outputExtension->get_extension() ).casefold()
-					&& ( knownExtensions.find(foldedTrail) != knownExtensions.end() ) ) ) {
-				utf8Name = utf8Name.erase( pos );
+			if ((trail == ".")
+				 | (foldedTrail != Glib::ustring(outputExtension->get_extension()).casefold()
+					&& (knownExtensions.find(foldedTrail) != knownExtensions.end()))) {
+				utf8Name = utf8Name.erase(pos);
 			} else {
 				appendExtension = false;
 			}
@@ -175,9 +175,9 @@ void FileSaveDialog::appendExtension(Glib::ustring& path, Inkscape::Extension::O
 
 		if (appendExtension) {
 			utf8Name = utf8Name + outputExtension->get_extension();
-			myFilename = Glib::filename_from_utf8( utf8Name );
+			myFilename = Glib::filename_from_utf8(utf8Name);
 		}
-	} catch ( Glib::ConvertError& e ) {
+	} catch (Glib::ConvertError& e) {
 		// ignore
 	}
 }

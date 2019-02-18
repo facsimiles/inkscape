@@ -44,8 +44,8 @@ void SPFeFlood::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPFilterPrimitive::build(document, repr);
 
 	/*LOAD ATTRIBUTES FROM REPR HERE*/
-	this->readAttr( "flood-opacity" );
-	this->readAttr( "flood-color" );
+	this->readAttr("flood-opacity");
+	this->readAttr("flood-color");
 }
 
 /**
@@ -86,7 +86,7 @@ void SPFeFlood::set(SPAttributeEnum key, gchar const *value) {
                     	this->icc = new SVGICCColor();
                     }
 
-                    if ( ! sp_svg_read_icc_color( cend_ptr, this->icc ) ) {
+                    if (! sp_svg_read_icc_color(cend_ptr, this->icc)) {
                         delete this->icc;
                         this->icc = nullptr;
                     }

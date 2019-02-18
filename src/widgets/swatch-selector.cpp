@@ -41,7 +41,7 @@ SwatchSelector::SwatchSelector() :
 
     GtkWidget *gsel = sp_gradient_selector_new();
     _gsel = SP_GRADIENT_SELECTOR(gsel);
-    g_object_set_data( G_OBJECT(gobj()), "base", this );
+    g_object_set_data(G_OBJECT(gobj()), "base", this);
     _gsel->setMode(SPGradientSelector::MODE_SWATCH);
 
     gtk_widget_show(gsel);
@@ -91,7 +91,7 @@ void SwatchSelector::_changedCb()
         if (stop) {
             SPColor color = _selected_color.color();
             gfloat alpha = _selected_color.alpha();
-            guint32 rgb = color.toRGBA32( 0x00 );
+            guint32 rgb = color.toRGBA32(0x00);
 
             // TODO replace with generic shared code that also handles icc-color
             Inkscape::CSSOStringStream os;
@@ -106,28 +106,28 @@ void SwatchSelector::_changedCb()
     }
 }
 
-void SwatchSelector::connectGrabbedHandler( GCallback handler, void *data )
+void SwatchSelector::connectGrabbedHandler(GCallback handler, void *data)
 {
     GObject* obj = G_OBJECT(_gsel);
-    g_signal_connect( obj, "grabbed", handler, data );
+    g_signal_connect(obj, "grabbed", handler, data);
 }
 
-void SwatchSelector::connectDraggedHandler( GCallback handler, void *data )
+void SwatchSelector::connectDraggedHandler(GCallback handler, void *data)
 {
     GObject* obj = G_OBJECT(_gsel);
-    g_signal_connect( obj, "dragged", handler, data );
+    g_signal_connect(obj, "dragged", handler, data);
 }
 
-void SwatchSelector::connectReleasedHandler( GCallback handler, void *data )
+void SwatchSelector::connectReleasedHandler(GCallback handler, void *data)
 {
     GObject* obj = G_OBJECT(_gsel);
-    g_signal_connect( obj, "released", handler, data );
+    g_signal_connect(obj, "released", handler, data);
 }
 
-void SwatchSelector::connectchangedHandler( GCallback handler, void *data )
+void SwatchSelector::connectchangedHandler(GCallback handler, void *data)
 {
     GObject* obj = G_OBJECT(_gsel);
-    g_signal_connect( obj, "changed", handler, data );
+    g_signal_connect(obj, "changed", handler, data);
 }
 
 void SwatchSelector::setVector(SPDocument */*doc*/, SPGradient *vector)
@@ -135,16 +135,16 @@ void SwatchSelector::setVector(SPDocument */*doc*/, SPGradient *vector)
     //GtkVBox * box = gobj();
     _gsel->setVector((vector) ? vector->document : nullptr, vector);
 
-    if ( vector && vector->isSolid() ) {
+    if (vector && vector->isSolid()) {
         SPStop* stop = vector->getFirstStop();
 
         guint32 const colorVal = stop->get_rgba32();
         _updating_color = true;
         _selected_color.setValue(colorVal);
         _updating_color = false;
-        // gtk_widget_show_all( GTK_WIDGET(_csel) );
+        // gtk_widget_show_all(GTK_WIDGET(_csel));
     } else {
-        //gtk_widget_hide( GTK_WIDGET(_csel) );
+        //gtk_widget_hide(GTK_WIDGET(_csel));
     }
 
 /*

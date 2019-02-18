@@ -75,13 +75,13 @@ public:
     void setPoints(Point const &a, Point const &b) {
         _origin = a;
         _vector = b - a;
-        if (are_near(_vector, Point(0,0)) )
+        if (are_near(_vector, Point(0,0)))
             _vector = Point(0,0);
         else
             _vector.normalize();
     }
     bool isDegenerate() const {
-        return ( _vector[X] == 0 && _vector[Y] == 0 );
+        return (_vector[X] == 0 && _vector[Y] == 0);
     }
     Point pointAt(Coord t) const {
         return _origin + _vector * t;
@@ -91,7 +91,7 @@ public:
     }
     std::vector<Coord> roots(Coord v, Dim2 d) const {
         std::vector<Coord> result;
-        if ( _vector[d] != 0 ) {
+        if (_vector[d] != 0) {
             double t = (v - _origin[d]) / _vector[d];
             if (t >= 0)	result.push_back(t);
         } else if (_vector[(d+1)%2] == v) {
@@ -100,7 +100,7 @@ public:
         return result;
     }
     Coord nearestTime(Point const& point) const {
-        if ( isDegenerate() ) return 0;
+        if (isDegenerate()) return 0;
         double t = dot(point - _origin, _vector);
         if (t < 0) t = 0;
         return t;
@@ -166,7 +166,7 @@ double angle_between(Ray const& r1, Ray const& r2, bool cw = true) {
 inline
 Ray make_angle_bisector_ray(Ray const& r1, Ray const& r2, bool cw = true)
 {
-    if ( !are_near(r1.origin(), r2.origin()) )
+    if (!are_near(r1.origin(), r2.origin()))
     {
         THROW_RANGEERROR("passed rays do not have the same origin");
     }

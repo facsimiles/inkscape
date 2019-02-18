@@ -53,7 +53,7 @@ using Inkscape::UI::Tools::MeasureTool;
 static MeasureTool *get_measure_tool()
 {
     MeasureTool *tool = nullptr;
-    if (SP_ACTIVE_DESKTOP ) {
+    if (SP_ACTIVE_DESKTOP) {
         Inkscape::UI::Tools::ToolBase *ec = SP_ACTIVE_DESKTOP->event_context;
         if (SP_IS_MEASURE_CONTEXT(ec)) {
             tool = static_cast<MeasureTool*>(ec);
@@ -117,7 +117,7 @@ MeasureToolbar::MeasureToolbar(SPDesktop *desktop)
 
     /* units menu */
     {
-        auto ti = _tracker->create_tool_item(_("Units:"), _("The units to be used for the measurements") );
+        auto ti = _tracker->create_tool_item(_("Units:"), _("The units to be used for the measurements"));
         ti->signal_changed().connect(sigc::mem_fun(*this, &MeasureToolbar::unit_changed));
         add(*ti);
     }
@@ -311,7 +311,7 @@ MeasureToolbar::toggle_only_selected()
     auto prefs = Inkscape::Preferences::get();
     bool active = _only_selected_item->get_active();
     prefs->setBool("/tools/measure/only_selected", active);
-    if ( active ) {
+    if (active) {
         _desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Measures only selected."));
     } else {
         _desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Measure all."));
@@ -328,7 +328,7 @@ MeasureToolbar::toggle_ignore_1st_and_last()
     auto prefs = Inkscape::Preferences::get();
     bool active = _ignore_1st_and_last_item->get_active();
     prefs->setBool("/tools/measure/ignore_1st_and_last", active);
-    if ( active ) {
+    if (active) {
         _desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Start and end measures inactive."));
     } else {
         _desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Start and end measures active."));
@@ -345,7 +345,7 @@ MeasureToolbar::toggle_show_in_between()
     auto prefs = Inkscape::Preferences::get();
     bool active = _inbetween_item->get_active();
     prefs->setBool("/tools/measure/show_in_between", active);
-    if ( active ) {
+    if (active) {
         _desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Compute all elements."));
     } else {
         _desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Compute max length."));
@@ -362,7 +362,7 @@ MeasureToolbar::toggle_show_hidden()
     auto prefs = Inkscape::Preferences::get();
     bool active = _show_hidden_item->get_active();
     prefs->setBool("/tools/measure/show_hidden", active);
-    if ( active ) {
+    if (active) {
         _desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Show all crossings."));
     } else {
         _desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Show visible crossings."));
@@ -379,7 +379,7 @@ MeasureToolbar::toggle_all_layers()
     auto prefs = Inkscape::Preferences::get();
     bool active = _all_layers_item->get_active();
     prefs->setBool("/tools/measure/all_layers", active);
-    if ( active ) {
+    if (active) {
         _desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Use all layers in the measure."));
     } else {
         _desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Use current layer in the measure."));

@@ -112,7 +112,7 @@ void ArcTool::setup() {
     this->sel_changed_connection.disconnect();
     this->sel_changed_connection = selection->connectChanged(
         sigc::mem_fun(this, &ArcTool::selection_changed)
-    );
+);
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     if (prefs->getBool("/tools/shapes/selcue")) {
@@ -171,9 +171,9 @@ bool ArcTool::root_handler(GdkEvent* event) {
             break;
         case GDK_MOTION_NOTIFY:
             if (dragging && (event->motion.state & GDK_BUTTON1_MASK) && !this->space_panning) {
-                if ( this->within_tolerance
-                     && ( abs( (gint) event->motion.x - this->xp ) < this->tolerance )
-                     && ( abs( (gint) event->motion.y - this->yp ) < this->tolerance ) ) {
+                if (this->within_tolerance
+                     && (abs((gint) event->motion.x - this->xp) < this->tolerance)
+                     && (abs((gint) event->motion.y - this->yp) < this->tolerance)) {
                     break; // do not drag if we're within tolerance from origin
                 }
                 // Once the user has moved farther than tolerance from the original location
@@ -363,7 +363,7 @@ void ArcTool::drag(Geom::Point pt, guint state) {
 
         if (!ctrl_save) {
             if (fabs(dir[Geom::X]) > 1E-6 && fabs(dir[Geom::Y]) > 1E-6) {
-                Geom::Affine const i2d ( (this->arc)->i2dt_affine() );
+                Geom::Affine const i2d ((this->arc)->i2dt_affine());
                 Geom::Point new_dir = pt * i2d - c;
                 new_dir[Geom::X] *= dir[Geom::Y] / dir[Geom::X];
                 double lambda = new_dir.length() / dir[Geom::Y];

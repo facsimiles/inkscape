@@ -74,8 +74,8 @@ static void sp_gvs_defs_release(SPObject *defs, SPGradientVectorSelector *gvs);
 static void sp_gvs_defs_modified(SPObject *defs, guint flags, SPGradientVectorSelector *gvs);
 
 static void sp_gvs_rebuild_gui_full(SPGradientVectorSelector *gvs);
-static SPStop *get_selected_stop( GtkWidget *vb);
-void gr_get_usage_counts(SPDocument *doc, std::map<SPGradient *, gint> *mapUsageCount );
+static SPStop *get_selected_stop(GtkWidget *vb);
+void gr_get_usage_counts(SPDocument *doc, std::map<SPGradient *, gint> *mapUsageCount);
 unsigned long sp_gradient_to_hhssll(SPGradient *gr);
 
 static guint signals[LAST_SIGNAL] = {0};
@@ -92,7 +92,7 @@ static void sp_gradient_vector_selector_class_init(SPGradientVectorSelectorClass
 {
     GObjectClass *gobject_class = G_OBJECT_CLASS(klass);
 
-    signals[VECTOR_SET] = g_signal_new( "vector_set",
+    signals[VECTOR_SET] = g_signal_new("vector_set",
                                         G_TYPE_FROM_CLASS(gobject_class),
                                         G_SIGNAL_RUN_LAST,
                                         G_STRUCT_OFFSET(SPGradientVectorSelectorClass, vector_set),
@@ -277,7 +277,7 @@ static void sp_gvs_rebuild_gui_full(SPGradientVectorSelector *gvs)
         std::vector<SPObject *> gradients = gvs->gr->document->getResourceList("gradient");
         for (std::vector<SPObject *>::const_iterator it = gradients.begin(); it != gradients.end(); ++it) {
             SPGradient* grad = SP_GRADIENT(*it);
-            if ( grad->hasStops() && (grad->isSwatch() == gvs->swatched) ) {
+            if (grad->hasStops() && (grad->isSwatch() == gvs->swatched)) {
                 gl.push_back(SP_GRADIENT(*it));
             }
         }
@@ -365,7 +365,7 @@ static SPGradient * gr_item_get_gradient(SPItem *item, gboolean fillorstroke)
 /*
  * Map each gradient to its usage count for both fill and stroke styles
  */
-void gr_get_usage_counts(SPDocument *doc, std::map<SPGradient *, gint> *mapUsageCount )
+void gr_get_usage_counts(SPDocument *doc, std::map<SPGradient *, gint> *mapUsageCount)
 {
     if (!doc)
         return;
@@ -449,7 +449,7 @@ static void sp_gradient_vector_gradient_release(SPObject *obj, GtkWidget *widget
 static void sp_gradient_vector_gradient_modified(SPObject *obj, guint flags, GtkWidget *widget);
 static void sp_gradient_vector_color_dragged(Inkscape::UI::SelectedColor *selected_color, GObject *object);
 static void sp_gradient_vector_color_changed(Inkscape::UI::SelectedColor *selected_color, GObject *object);
-static void update_stop_list( GtkWidget *vb, SPGradient *gradient, SPStop *new_stop);
+static void update_stop_list(GtkWidget *vb, SPGradient *gradient, SPStop *new_stop);
 
 static gboolean blocked = FALSE;
 
@@ -515,7 +515,7 @@ static void verify_grad(SPGradient *gradient)
     }
 }
 
-static void select_stop_in_list( GtkWidget *vb, SPGradient *gradient, SPStop *new_stop)
+static void select_stop_in_list(GtkWidget *vb, SPGradient *gradient, SPStop *new_stop)
 {
     GtkWidget *combo_box = static_cast<GtkWidget *>(g_object_get_data(G_OBJECT(vb), "combo_box"));
 
@@ -531,7 +531,7 @@ static void select_stop_in_list( GtkWidget *vb, SPGradient *gradient, SPStop *ne
     }
 }
 
-static void update_stop_list( GtkWidget *vb, SPGradient *gradient, SPStop *new_stop)
+static void update_stop_list(GtkWidget *vb, SPGradient *gradient, SPStop *new_stop)
 {
 
     if (!SP_IS_GRADIENT(gradient)) {
@@ -554,7 +554,7 @@ static void update_stop_list( GtkWidget *vb, SPGradient *gradient, SPStop *new_s
 
     /* Populate the combobox store */
     std::vector<SPStop *> sl;
-    if ( gradient->hasStops() ) {
+    if (gradient->hasStops()) {
         for (auto& ochild: gradient->children) {
             if (SP_IS_STOP(&ochild)) {
                 sl.push_back(SP_STOP(&ochild));
@@ -614,7 +614,7 @@ static void sp_grad_edit_combo_box_changed (GtkComboBox * /*widget*/, GtkWidget 
 
     SPStop *prev = nullptr;
     prev = stop->getPrevStop();
-    if (prev != nullptr )  {
+    if (prev != nullptr)  {
         gtk_adjustment_set_lower (adj, prev->offset);
     } else {
         isEndStop = true;
@@ -623,7 +623,7 @@ static void sp_grad_edit_combo_box_changed (GtkComboBox * /*widget*/, GtkWidget 
 
     SPStop *next = nullptr;
     next = stop->getNextStop();
-    if (next != nullptr ) {
+    if (next != nullptr) {
         gtk_adjustment_set_upper (adj, next->offset);
     } else {
         isEndStop = true;
@@ -646,7 +646,7 @@ static void sp_grad_edit_combo_box_changed (GtkComboBox * /*widget*/, GtkWidget 
     blocked = FALSE;
 }
 
-static SPStop *get_selected_stop( GtkWidget *vb)
+static SPStop *get_selected_stop(GtkWidget *vb)
 {
     SPStop *stop = nullptr;
     GtkWidget *combo_box = static_cast<GtkWidget *>(g_object_get_data(G_OBJECT(vb), "combo_box"));
@@ -660,7 +660,7 @@ static SPStop *get_selected_stop( GtkWidget *vb)
     return stop;
 }
 
-static void offadjustmentChanged( GtkAdjustment *adjustment, GtkWidget *vb)
+static void offadjustmentChanged(GtkAdjustment *adjustment, GtkWidget *vb)
 {
     if (!blocked) {
         blocked = TRUE;
@@ -735,7 +735,7 @@ static void sp_grd_ed_add_stop(GtkWidget */*widget*/,  GtkWidget *vb)
     gdouble opacity = static_cast<gdouble>(SP_RGBA32_A_F(cnew));
     os << "stop-color:" << c << ";stop-opacity:" << opacity <<";";
     newstop->getRepr()->setAttribute("style", os.str().c_str());
-    sp_repr_set_css_double( newstop->getRepr(), "offset", (double)newstop->offset);
+    sp_repr_set_css_double(newstop->getRepr(), "offset", (double)newstop->offset);
 
     sp_gradient_vector_widget_load_gradient(vb, gradient);
     Inkscape::GC::release(new_stop_repr);
@@ -868,7 +868,7 @@ static GtkWidget * sp_gradient_vector_widget_new(SPGradient *gradient, SPStop *s
 
     /* Slider */
     auto slider = gtk_scale_new(GTK_ORIENTATION_HORIZONTAL, Offset_adj);
-    gtk_scale_set_draw_value( GTK_SCALE(slider), FALSE );
+    gtk_scale_set_draw_value(GTK_SCALE(slider), FALSE);
     gtk_widget_show(slider);
     gtk_box_pack_start(GTK_BOX(hb),slider, TRUE, TRUE, AUX_BETWEEN_BUTTON_GROUPS);
     g_object_set_data(G_OBJECT(vb), "offslide", slider);
@@ -982,7 +982,7 @@ GtkWidget * sp_gradient_vector_editor_new(SPGradient *gradient, SPStop *stop)
         conn = new sigc::connection(INKSCAPE.signal_shut_down.connect(
             sigc::hide_return(
             sigc::bind(sigc::ptr_fun(&sp_gradient_vector_dialog_delete), (GtkWidget *) nullptr, (GdkEvent *) nullptr, (GtkWidget *) nullptr)
-        )));
+)));
         g_object_set_data(obj, "shutdown-connection", conn);
 
         conn = new sigc::connection(INKSCAPE.signal_dialogs_hide.connect(sigc::bind(sigc::ptr_fun(&gtk_widget_hide), dlg)));
@@ -1037,8 +1037,8 @@ static void sp_gradient_vector_widget_load_gradient(GtkWidget *widget, SPGradien
         modified_connection = static_cast<sigc::connection *>(g_object_get_data(G_OBJECT(widget), "gradient_modified_connection"));
 
         if (old) {
-            g_assert( release_connection != nullptr );
-            g_assert( modified_connection != nullptr );
+            g_assert(release_connection != nullptr);
+            g_assert(modified_connection != nullptr);
             release_connection->disconnect();
             modified_connection->disconnect();
             sp_signal_disconnect_by_data(old, widget);
@@ -1165,8 +1165,8 @@ static void sp_gradient_vector_widget_destroy(GtkWidget *object, gpointer /*data
     sigc::connection *modified_connection = static_cast<sigc::connection *>(g_object_get_data(G_OBJECT(object), "gradient_modified_connection"));
 
     if (gradient) {
-        g_assert( release_connection != nullptr );
-        g_assert( modified_connection != nullptr );
+        g_assert(release_connection != nullptr);
+        g_assert(modified_connection != nullptr);
         release_connection->disconnect();
         modified_connection->disconnect();
         sp_signal_disconnect_by_data(gradient, object);

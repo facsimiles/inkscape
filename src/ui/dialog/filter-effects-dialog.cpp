@@ -363,9 +363,9 @@ public:
     {
         const gchar* val = attribute_value(o);
         if(val) {
-            set_text( val );
+            set_text(val);
         } else {
-            set_text( "" );
+            set_text("");
         }
     }
 };
@@ -708,10 +708,10 @@ private:
 
             Glib::ustring newFileName = Glib::filename_to_utf8(fileName);
 
-            if ( newFileName.size() > 0)
+            if (newFileName.size() > 0)
                 fileName = newFileName;
             else
-                g_warning( "ERROR CONVERTING OPEN FILENAME TO UTF-8" );
+                g_warning("ERROR CONVERTING OPEN FILENAME TO UTF-8");
 
             open_path = fileName;
             open_path.append(G_DIR_SEPARATOR_S);
@@ -1046,12 +1046,12 @@ public:
         bool found = false;
         for(auto& node: ct->children) {
             funcNode = SP_FEFUNCNODE(&node);
-            if( funcNode->channel == _channel ) {
+            if(funcNode->channel == _channel) {
                 found = true;
                 break;
             }
         }
-        if( !found )
+        if(!found)
             funcNode = nullptr;
 
         return funcNode;
@@ -1059,7 +1059,7 @@ public:
 
     void set_func_attr(const AttrWidget* input)
     {
-        _dialog.set_attr( _funcNode, input->get_attribute(), input->get_as_attribute().c_str());
+        _dialog.set_attr(_funcNode, input->get_attribute(), input->get_as_attribute().c_str());
     }
 
     // Set new type and update widget visibility
@@ -1070,8 +1070,8 @@ public:
             SPFeComponentTransfer* ct = SP_FECOMPONENTTRANSFER(o);
 
             _funcNode = find_node(ct);
-            if( _funcNode ) {
-                _type.set_from_attribute( _funcNode );
+            if(_funcNode) {
+                _type.set_from_attribute(_funcNode);
             } else {
                 // Create <funcNode>
                 SPFilterPrimitive* prim = _dialog._primitive_list.get_selected();
@@ -1099,8 +1099,8 @@ public:
 
                     // Now we should find it!
                     _funcNode = find_node(ct);
-                    if( _funcNode ) {
-                        _funcNode->setAttribute( "type", "identity" );
+                    if(_funcNode) {
+                        _funcNode->setAttribute("type", "identity");
                     } else {
                         //std::cout << "ERROR ERROR: feFuncX not found!" << std::endl;
                     }
@@ -1117,7 +1117,7 @@ private:
         SPFilterPrimitive* prim = _dialog._primitive_list.get_selected();
         if(prim) {
 
-            _funcNode->getRepr()->setAttribute( "type", _type.get_as_attribute().c_str() );
+            _funcNode->getRepr()->setAttribute("type", _type.get_as_attribute().c_str());
 
             SPFilter* filter = _dialog._filter_modifier.get_selected_filter();
             filter->requestModified(SP_OBJECT_MODIFIED_FLAG);
@@ -1356,7 +1356,7 @@ FilterEffectsDialog::FilterModifier::FilterModifier(FilterEffectsDialog& d)
     _list.set_reorderable(true);
     _list.enable_model_drag_dest (Gdk::ACTION_MOVE);
 
-    _list.signal_drag_drop().connect( sigc::mem_fun(*this, &FilterModifier::on_filter_move), false );
+    _list.signal_drag_drop().connect(sigc::mem_fun(*this, &FilterModifier::on_filter_move), false);
 
     sw->set_shadow_type(Gtk::SHADOW_IN);
     show_all_children();
@@ -1378,7 +1378,7 @@ FilterEffectsDialog::FilterModifier::FilterModifier(FilterEffectsDialog& d)
     _list.get_selection()->signal_changed().connect(sigc::mem_fun(*this, &FilterModifier::on_filter_selection_changed));
     _observer->signal_changed().connect(signal_filter_changed().make_slot());
 
-    desktopChangeConn = _deskTrack.connectDesktopChanged( sigc::mem_fun(*this, &FilterModifier::setTargetDesktop) );
+    desktopChangeConn = _deskTrack.connectDesktopChanged(sigc::mem_fun(*this, &FilterModifier::setTargetDesktop));
     _deskTrack.connect(GTK_WIDGET(gobj()));
 
     update_filters();
@@ -1408,7 +1408,7 @@ void FilterEffectsDialog::FilterModifier::setTargetDesktop(SPDesktop *desktop)
                 _selectChangedConn = desktop->selection->connectChanged(sigc::hide(sigc::mem_fun(*this, &FilterModifier::on_change_selection)));
                 _selectModifiedConn = desktop->selection->connectModified(sigc::hide<0>(sigc::mem_fun(*this, &FilterModifier::on_modified_selection)));
             }
-            _doc_replaced = desktop->connectDocumentReplaced( sigc::mem_fun(*this, &FilterModifier::on_document_replaced));
+            _doc_replaced = desktop->connectDocumentReplaced(sigc::mem_fun(*this, &FilterModifier::on_document_replaced));
             _resource_changed = desktop->getDocument()->connectResourcesChanged("filter",sigc::mem_fun(*this, &FilterModifier::update_filters));
             _dialog.setDesktop(desktop);
 
@@ -1438,11 +1438,11 @@ void FilterEffectsDialog::FilterModifier::on_change_selection()
     update_selection(selection);
 }
 
-void FilterEffectsDialog::FilterModifier::on_modified_selection( guint flags )
+void FilterEffectsDialog::FilterModifier::on_modified_selection(guint flags)
 {
-    if (flags & ( SP_OBJECT_MODIFIED_FLAG |
+    if (flags & (SP_OBJECT_MODIFIED_FLAG |
                    SP_OBJECT_PARENT_MODIFIED_FLAG |
-                   SP_OBJECT_STYLE_MODIFIED_FLAG) ) {
+                   SP_OBJECT_STYLE_MODIFIED_FLAG)) {
         on_change_selection();
     }
 }
@@ -1551,7 +1551,7 @@ void FilterEffectsDialog::FilterModifier::on_selection_toggled(const Glib::ustri
                 ::remove_filter(item, false);
             }
 
-            item->requestDisplayUpdate((SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG ));
+            item->requestDisplayUpdate((SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG));
         }
 
         update_selection(sel);
@@ -1575,7 +1575,7 @@ void FilterEffectsDialog::FilterModifier::update_filters()
     SPDesktop* desktop = _dialog.getDesktop();
     SPDocument* document = desktop->getDocument();
 
-    std::vector<SPObject *> filters = document->getResourceList( "filter" );
+    std::vector<SPObject *> filters = document->getResourceList("filter");
 
     _model->clear();
 
@@ -2363,7 +2363,7 @@ bool FilterEffectsDialog::PrimitiveList::on_motion_notify_event(GdkEventMotion* 
     else
         _autoscroll_y = 0;
 
-    double e2 = ( e->x - vis_x2/2);
+    double e2 = (e->x - vis_x2/2);
     // horizontal scrolling 
     if(e2 < vis_x)
         _autoscroll_x = -(int)(speed + (vis_x - e2) / 5);
@@ -2968,7 +2968,7 @@ bool number_or_empy(const Glib::ustring& text) {
     if (text.empty()) {
         return true;
     }
-    double n = atof( text.c_str() );
+    double n = atof(text.c_str());
     if (n == 0.0 && strcmp(text.c_str(), "0") != 0 && strcmp(text.c_str(), "0.0") != 0) {
         return false; 
     }

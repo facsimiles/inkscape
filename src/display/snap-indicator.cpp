@@ -255,7 +255,7 @@ SnapIndicator::set_new_snaptarget(Inkscape::SnappedPoint const &p, bool pre_snap
                                         "stroke_color", pre_snap ? 0x7f7f7fff : 0xff0000ff,
                                         "mode", SP_KNOT_MODE_XOR,
                                         "shape", SP_KNOT_SHAPE_CROSS,
-                                        NULL );
+                                        NULL);
 
         double timeout_val = prefs->getDouble("/options/snapindicatorpersistence/value", 2.0);
         if (timeout_val < 0.1) {
@@ -283,7 +283,7 @@ SnapIndicator::set_new_snaptarget(Inkscape::SnappedPoint const &p, bool pre_snap
 
         // Display the tooltip, which reveals the type of snap source and the type of snap target
         gchar *tooltip_str = nullptr;
-        if ( (p.getSource() != SNAPSOURCE_GRID_PITCH) && (p.getTarget() != SNAPTARGET_UNDEFINED) ) {
+        if ((p.getSource() != SNAPSOURCE_GRID_PITCH) && (p.getTarget() != SNAPTARGET_UNDEFINED)) {
             tooltip_str = g_strconcat(source_name, _(" to "), target_name, NULL);
         } else if (p.getSource() != SNAPSOURCE_UNDEFINED) {
             tooltip_str = g_strdup(source_name);
@@ -369,7 +369,7 @@ SnapIndicator::set_new_snapsource(Inkscape::SnapCandidatePoint const &p)
     bool value = prefs->getBool("/options/snapindicator/value", true);
 
     if (value) {
-        SPCanvasItem * canvasitem = sp_canvas_item_new( _desktop->getTempGroup(),
+        SPCanvasItem * canvasitem = sp_canvas_item_new(_desktop->getTempGroup(),
                                                         SP_TYPE_CTRL,
                                                         "anchor", SP_ANCHOR_CENTER,
                                                         "size", 6.0,
@@ -377,7 +377,7 @@ SnapIndicator::set_new_snapsource(Inkscape::SnapCandidatePoint const &p)
                                                         "stroke_color", 0xff0000ff,
                                                         "mode", SP_KNOT_MODE_XOR,
                                                         "shape", SP_KNOT_SHAPE_CIRCLE,
-                                                        NULL );
+                                                        NULL);
 
         SP_CTRL(canvasitem)->moveto(p.getPoint());
         _snapsource = _desktop->add_temporary_canvasitem(canvasitem, 1000);
@@ -388,7 +388,7 @@ void
 SnapIndicator::set_new_debugging_point(Geom::Point const &p)
 {
     g_assert(_desktop != nullptr);
-    SPCanvasItem * canvasitem = sp_canvas_item_new( _desktop->getTempGroup(),
+    SPCanvasItem * canvasitem = sp_canvas_item_new(_desktop->getTempGroup(),
                                                     SP_TYPE_CTRL,
                                                     "anchor", SP_ANCHOR_CENTER,
                                                     "size", 10.0,
@@ -396,7 +396,7 @@ SnapIndicator::set_new_debugging_point(Geom::Point const &p)
                                                     "stroked", FALSE,
                                                     "mode", SP_KNOT_MODE_XOR,
                                                     "shape", SP_KNOT_SHAPE_DIAMOND,
-                                                    NULL );
+                                                    NULL);
 
     SP_CTRL(canvasitem)->moveto(p);
     _debugging_points.push_back(_desktop->add_temporary_canvasitem(canvasitem, 5000));

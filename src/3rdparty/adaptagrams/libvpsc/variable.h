@@ -75,7 +75,7 @@ public:
 	{
 	}
 	double dfdv(void) const {
-		return 2. * weight * ( position() - desiredPosition );
+		return 2. * weight * (position() - desiredPosition);
 	}
 private:
     inline double position(void) const {

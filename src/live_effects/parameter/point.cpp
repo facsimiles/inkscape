@@ -19,10 +19,10 @@ namespace Inkscape {
 
 namespace LivePathEffect {
 
-PointParam::PointParam( const Glib::ustring& label, const Glib::ustring& tip,
+PointParam::PointParam(const Glib::ustring& label, const Glib::ustring& tip,
                         const Glib::ustring& key, Inkscape::UI::Widget::Registry* wr,
                         Effect* effect, const gchar *htip, Geom::Point default_value,
-                        bool live_update )
+                        bool live_update)
     :   Parameter(label, tip, key, wr, effect), 
         defvalue(default_value),
         liveupdate(live_update),
@@ -47,7 +47,7 @@ PointParam::param_set_default()
 }
 
 void
-PointParam::param_set_liveupdate( bool live_update)
+PointParam::param_set_liveupdate(bool live_update)
 {
     liveupdate = live_update;
 }
@@ -72,7 +72,7 @@ PointParam::param_update_default(const gchar * default_point)
     success += sp_svg_number_read_d(strarray[1], &newy);
     g_strfreev (strarray);
     if (success == 2) {
-        param_update_default( Geom::Point(newx, newy) );
+        param_update_default(Geom::Point(newx, newy));
     }
 }
 
@@ -96,7 +96,7 @@ PointParam::param_hide_knot(bool hide) {
 void
 PointParam::param_setValue(Geom::Point newpoint, bool write)
 {
-    *dynamic_cast<Geom::Point *>( this ) = newpoint;
+    *dynamic_cast<Geom::Point *>(this) = newpoint;
     if(write){
         Inkscape::SVGOStringStream os;
         os << newpoint;
@@ -118,7 +118,7 @@ PointParam::param_readSVGValue(const gchar * strvalue)
     success += sp_svg_number_read_d(strarray[1], &newy);
     g_strfreev (strarray);
     if (success == 2) {
-        param_setValue( Geom::Point(newx, newy) );
+        param_setValue(Geom::Point(newx, newy));
         return true;
     }
     return false;
@@ -128,7 +128,7 @@ gchar *
 PointParam::param_getSVGValue() const
 {
     Inkscape::SVGOStringStream os;
-    os << *dynamic_cast<Geom::Point const *>( this );
+    os << *dynamic_cast<Geom::Point const *>(this);
     return g_strdup(os.str().c_str());
 }
 
@@ -143,27 +143,27 @@ PointParam::param_getDefaultSVGValue() const
 void
 PointParam::param_transform_multiply(Geom::Affine const& postmul, bool /*set*/)
 {
-    param_setValue( (*this) * postmul, true);
+    param_setValue((*this) * postmul, true);
 }
 
 Gtk::Widget *
 PointParam::param_newWidget()
 {
     Inkscape::UI::Widget::RegisteredTransformedPoint * pointwdg = Gtk::manage(
-        new Inkscape::UI::Widget::RegisteredTransformedPoint( param_label,
+        new Inkscape::UI::Widget::RegisteredTransformedPoint(param_label,
                                                               param_tooltip,
                                                               param_key,
                                                               *param_wr,
                                                               param_effect->getRepr(),
-                                                              param_effect->getSPDoc() ) );
+                                                              param_effect->getSPDoc()));
     Geom::Affine transf = SP_ACTIVE_DESKTOP->doc2dt();
     pointwdg->setTransform(transf);
-    pointwdg->setValue( *this );
+    pointwdg->setValue(*this);
     pointwdg->clearProgrammatically();
     pointwdg->set_undo_parameters(SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Change point parameter"));
     pointwdg->signal_button_release_event().connect(sigc::mem_fun (*this, &PointParam::on_button_release));
 
-    Gtk::HBox * hbox = Gtk::manage( new Gtk::HBox() );
+    Gtk::HBox * hbox = Gtk::manage(new Gtk::HBox());
     static_cast<Gtk::HBox*>(hbox)->pack_start(*pointwdg, true, true);
     static_cast<Gtk::HBox*>(hbox)->show_all_children();
     return dynamic_cast<Gtk::Widget *> (hbox);

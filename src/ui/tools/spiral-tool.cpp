@@ -164,11 +164,11 @@ bool SpiralTool::root_handler(GdkEvent* event) {
                 m.unSetup();
 
                 sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
-                                    ( GDK_KEY_PRESS_MASK |
+                                    (GDK_KEY_PRESS_MASK |
                                       GDK_BUTTON_RELEASE_MASK |
                                       GDK_POINTER_MOTION_MASK |
                                       GDK_POINTER_MOTION_HINT_MASK |
-                                      GDK_BUTTON_PRESS_MASK    ),
+                                      GDK_BUTTON_PRESS_MASK),
                                     nullptr, event->button.time);
                 ret = TRUE;
             }
@@ -176,9 +176,9 @@ bool SpiralTool::root_handler(GdkEvent* event) {
 
         case GDK_MOTION_NOTIFY:
             if (dragging && (event->motion.state & GDK_BUTTON1_MASK) && !this->space_panning) {
-                if ( this->within_tolerance
-                     && ( abs( (gint) event->motion.x - this->xp ) < this->tolerance )
-                     && ( abs( (gint) event->motion.y - this->yp ) < this->tolerance ) ) {
+                if (this->within_tolerance
+                     && (abs((gint) event->motion.x - this->xp) < this->tolerance)
+                     && (abs((gint) event->motion.y - this->yp) < this->tolerance)) {
                     break; // do not drag if we're within tolerance from origin
                 }
                 // Once the user has moved farther than tolerance from the original location

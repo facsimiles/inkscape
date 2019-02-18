@@ -35,10 +35,10 @@ void CellRendererSPIcon::render_vfunc(const Cairo::RefPtr<Cairo::Context>& cr,
                                       Gtk::CellRendererState flags)
 {
     // if this event type doesn't have an icon...
-    if ( !Inkscape::Verb::get(_property_event_type)->get_image() ) return;
+    if (!Inkscape::Verb::get(_property_event_type)->get_image()) return;
 
     // if the icon isn't cached, render it to a pixbuf
-    if ( !_icon_cache[_property_event_type] ) {
+    if (!_icon_cache[_property_event_type]) {
 
         Glib::ustring image_name = Inkscape::Verb::get(_property_event_type)->get_image();
         Gtk::Image* icon = Gtk::manage(new Gtk::Image());
@@ -47,7 +47,7 @@ void CellRendererSPIcon::render_vfunc(const Cairo::RefPtr<Cairo::Context>& cr,
         if (icon) {
 
             // check icon type (inkscape, gtk, none)
-            if ( GTK_IS_IMAGE(icon->gobj()) ) {
+            if (GTK_IS_IMAGE(icon->gobj())) {
                 _property_icon = sp_get_icon_pixbuf(image_name, 16);
             } else {
                 delete icon;
@@ -73,7 +73,7 @@ void CellRendererInt::render_vfunc(const Cairo::RefPtr<Cairo::Context>& cr,
                                    const Gdk::Rectangle& cell_area,
                                    Gtk::CellRendererState flags)
 {
-    if( _filter(_property_number) ) {
+    if(_filter(_property_number)) {
         std::ostringstream s;
         s << _property_number << std::flush;
         property_text() = s.str();
@@ -103,7 +103,7 @@ UndoHistory::UndoHistory()
       _desktopChangeConn(),
       _callback_connections()
 {
-    if ( !_document || !_event_log || !_columns ) return;
+    if (!_document || !_event_log || !_columns) return;
 
     set_size_request(-1, 95);
 
@@ -144,7 +144,7 @@ UndoHistory::UndoHistory()
     description_column->set_sizing(Gtk::TREE_VIEW_COLUMN_AUTOSIZE);
     description_column->set_min_width (150);
 
-    _event_list_view.set_expander_column( *_event_list_view.get_column(cols_count-1) );
+    _event_list_view.set_expander_column(*_event_list_view.get_column(cols_count-1));
 
     _scrolled_window.add(_event_list_view);
 
@@ -158,7 +158,7 @@ UndoHistory::UndoHistory()
     _callback_connections[EventLog::CALLB_COLLAPSE] =
         _event_list_view.signal_row_collapsed().connect(sigc::mem_fun(*this, &Inkscape::UI::Dialog::UndoHistory::_onCollapseEvent));
 
-    _desktopChangeConn = _deskTrack.connectDesktopChanged( sigc::mem_fun(*this, &UndoHistory::setDesktop) );
+    _desktopChangeConn = _deskTrack.connectDesktopChanged(sigc::mem_fun(*this, &UndoHistory::setDesktop));
     _deskTrack.connect(GTK_WIDGET(gobj()));
 
     // connect to be informed of document changes
@@ -271,7 +271,7 @@ UndoHistory::_onListSelectionChange()
             EventLog::iterator last = curr_event_parent->children().end();
 
             _event_log->blockNotifications();
-            for ( --last ; curr_event != last ; ++curr_event ) {
+            for (--last ; curr_event != last ; ++curr_event) {
                 DocumentUndo::redo(_document);
             }
             _event_log->blockNotifications(false);
@@ -291,31 +291,31 @@ UndoHistory::_onListSelectionChange()
          * of that parent's branch.
          */
 
-        if ( !selected->children().empty() &&
-             !_event_list_view.row_expanded(_event_list_store->get_path(selected)) )
+        if (!selected->children().empty() &&
+             !_event_list_view.row_expanded(_event_list_store->get_path(selected)))
         {
             selected = selected->children().end();
             --selected;
         }
 
         // An event before the current one has been selected. Undo to the selected event.
-        if ( _event_list_store->get_path(selected) <
-             _event_list_store->get_path(last_selected) )
+        if (_event_list_store->get_path(selected) <
+             _event_list_store->get_path(last_selected))
         {
             _event_log->blockNotifications();
 
-            while ( selected != last_selected ) {
+            while (selected != last_selected) {
 
                 DocumentUndo::undo(_document);
 
-                if ( last_selected->parent() &&
-                     last_selected == last_selected->parent()->children().begin() )
+                if (last_selected->parent() &&
+                     last_selected == last_selected->parent()->children().begin())
                 {
                     last_selected = last_selected->parent();
                     _event_log->setCurrEventParent((EventLog::iterator)nullptr);
                 } else {
                     --last_selected;
-                    if ( !last_selected->children().empty() ) {
+                    if (!last_selected->children().empty()) {
                         _event_log->setCurrEventParent(last_selected);
                         last_selected = last_selected->children().end();
                         --last_selected;
@@ -329,17 +329,17 @@ UndoHistory::_onListSelectionChange()
 
             _event_log->blockNotifications();
 
-            while ( selected != last_selected ) {
+            while (selected != last_selected) {
 
                 DocumentUndo::redo(_document);
 
-                if ( !last_selected->children().empty() ) {
+                if (!last_selected->children().empty()) {
                     _event_log->setCurrEventParent(last_selected);
                     last_selected = last_selected->children().begin();
                 } else {
                     ++last_selected;
-                    if ( last_selected->parent() &&
-                         last_selected == last_selected->parent()->children().end() )
+                    if (last_selected->parent() &&
+                         last_selected == last_selected->parent()->children().end())
                     {
                         last_selected = last_selected->parent();
                         ++last_selected;
@@ -360,7 +360,7 @@ UndoHistory::_onListSelectionChange()
 void
 UndoHistory::_onExpandEvent(const Gtk::TreeModel::iterator &iter, const Gtk::TreeModel::Path &/*path*/)
 {
-    if ( iter == _event_list_selection->get_selected() ) {
+    if (iter == _event_list_selection->get_selected()) {
         _event_list_selection->select(_event_log->getCurrEvent());
     }
 }
@@ -369,7 +369,7 @@ void
 UndoHistory::_onCollapseEvent(const Gtk::TreeModel::iterator &iter, const Gtk::TreeModel::Path &/*path*/)
 {
     // Collapsing a branch we're currently in is equal to stepping to the last event in that branch
-    if ( iter == _event_log->getCurrEvent() ) {
+    if (iter == _event_log->getCurrEvent()) {
         EventLog::const_iterator curr_event_parent = _event_log->getCurrEvent();
         EventLog::const_iterator curr_event = curr_event_parent->children().begin();
         EventLog::const_iterator last = curr_event_parent->children().end();
@@ -377,7 +377,7 @@ UndoHistory::_onCollapseEvent(const Gtk::TreeModel::iterator &iter, const Gtk::T
         _event_log->blockNotifications();
         DocumentUndo::redo(_document);
 
-        for ( --last ; curr_event != last ; ++curr_event ) {
+        for (--last ; curr_event != last ; ++curr_event) {
             DocumentUndo::redo(_document);
         }
         _event_log->blockNotifications(false);

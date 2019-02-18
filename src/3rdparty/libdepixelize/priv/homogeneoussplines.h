@@ -47,7 +47,7 @@ public:
         Polygon() {}
         Polygon(const guint8 (&rgba)[4])
         {
-            for ( int i = 0 ; i != 4 ; ++i )
+            for (int i = 0 ; i != 4 ; ++i)
                 this->rgba[i] = rgba[i];
         }
 
@@ -187,26 +187,26 @@ HomogeneousSplines<T>::HomogeneousSplines(const SimplifiedVoronoi<T,
         voronoi_citer;
 
     // Identify visible edges (group polygons with the same color)
-    for ( voronoi_citer cell_it = voronoi.begin(), cell_end = voronoi.end()
-              ; cell_it != cell_end ; ++cell_it ) {
+    for (voronoi_citer cell_it = voronoi.begin(), cell_end = voronoi.end()
+              ; cell_it != cell_end ; ++cell_it) {
         bool found = false;
-        for ( iterator polygon_it = _polygons.begin(),
+        for (iterator polygon_it = _polygons.begin(),
                   polygon_end = _polygons.end()
-                  ; polygon_it != polygon_end ; ++polygon_it ) {
-            if ( same_color(polygon_it->rgba, cell_it->rgba) ) {
+                  ; polygon_it != polygon_end ; ++polygon_it) {
+            if (same_color(polygon_it->rgba, cell_it->rgba)) {
                 CommonEdge common_edge = _common_edge(polygon_it->vertices,
                                                       cell_it->vertices);
-                if ( common_edge.ok ) {
+                if (common_edge.ok) {
                     _polygon_union(common_edge);
                     found = true;
 
-                    for ( iterator polygon2_it = polygon_it + 1
-                              ; polygon2_it != polygon_end ; ++polygon2_it ) {
-                        if ( same_color(polygon_it->rgba, polygon2_it->rgba) ) {
+                    for (iterator polygon2_it = polygon_it + 1
+                              ; polygon2_it != polygon_end ; ++polygon2_it) {
+                        if (same_color(polygon_it->rgba, polygon2_it->rgba)) {
                             CommonEdge common_edge2
                                 = _common_edge(polygon_it->vertices,
                                                polygon2_it->vertices);
-                            if ( common_edge2.ok ) {
+                            if (common_edge2.ok) {
                                 _polygon_union(common_edge2);
                                 _polygons.erase(polygon2_it);
                                 break;
@@ -218,7 +218,7 @@ HomogeneousSplines<T>::HomogeneousSplines(const SimplifiedVoronoi<T,
                 }
             }
         }
-        if ( !found ) {
+        if (!found) {
             Polygon polygon(cell_it->rgba);
             polygon.vertices = cell_it->vertices;
             _polygons.insert(_polygons.end(), polygon);
@@ -229,10 +229,10 @@ HomogeneousSplines<T>::HomogeneousSplines(const SimplifiedVoronoi<T,
     // This iteration runs such complex time-consuming algorithm, but each
     // polygon has an independent result. They wouldn't even need to share/sync
     // results and the only waste would be a join at the end of the for.
-    for ( typename std::vector<Polygon>::iterator it = _polygons.begin(),
-              end = _polygons.end() ; it != end ; ++it ) {
+    for (typename std::vector<Polygon>::iterator it = _polygons.begin(),
+              end = _polygons.end() ; it != end ; ++it) {
         SelfCommonEdge ce = _common_edge(it->vertices, it->vertices.rbegin());
-        while ( ce.ok ) {
+        while (ce.ok) {
             _fill_holes(it->holes, ce.sml_end.base(), ce.sml_begin.base());
             it->vertices.erase(ce.grt_end.base() + 1, ce.grt_begin.base());
             ce = _common_edge(it->vertices, ce.grt_end);
@@ -256,33 +256,33 @@ HomogeneousSplines<T>::_common_edge(Points &dst, const Points &src)
     const points_citer src_begin = src.begin();
     const points_citer src_end = src.end();
 
-    for ( points_iter it = dst_begin ; it != dst_end ; ++it ) {
+    for (points_iter it = dst_begin ; it != dst_end ; ++it) {
         points_citer src_it = std::find(src_begin, src_end, *it);
 
-        if ( src_it == src_end )
+        if (src_it == src_end)
             continue;
 
         points_iter dst_common_edge_begin = it;
         points_citer src_common_edge_end = src_it;
 
         // iterate until find the beginning of the common edge range
-        while ( *dst_common_edge_begin == *src_common_edge_end ) {
-            if ( dst_common_edge_begin == dst_begin )
+        while (*dst_common_edge_begin == *src_common_edge_end) {
+            if (dst_common_edge_begin == dst_begin)
                 dst_common_edge_begin = dst_end - 1;
             else
                 --dst_common_edge_begin;
 
             ++src_common_edge_end;
-            if ( src_common_edge_end == src_end )
+            if (src_common_edge_end == src_end)
                 src_common_edge_end = src_begin;
         }
 
         // fix {dst_begin, src_end} range
         ++dst_common_edge_begin;
-        if ( dst_common_edge_begin == dst_end )
+        if (dst_common_edge_begin == dst_end)
             dst_common_edge_begin = dst_begin;
 
-        if ( src_common_edge_end == src_begin )
+        if (src_common_edge_end == src_begin)
             src_common_edge_end = src_end - 1;
         else
             --src_common_edge_end;
@@ -291,31 +291,31 @@ HomogeneousSplines<T>::_common_edge(Points &dst, const Points &src)
         points_citer src_common_edge_begin = src_it;
 
         // find the end of the common edge range
-        while ( *dst_common_edge_end == *src_common_edge_begin ) {
+        while (*dst_common_edge_end == *src_common_edge_begin) {
             ++dst_common_edge_end;
-            if ( dst_common_edge_end == dst_end )
+            if (dst_common_edge_end == dst_end)
                 dst_common_edge_end = dst_begin;
 
-            if ( src_common_edge_begin == src_begin )
+            if (src_common_edge_begin == src_begin)
                 src_common_edge_begin = src_end - 1;
             else
                 --src_common_edge_begin;
         }
 
         // fix {dst_end, src_begin} range
-        if ( dst_common_edge_end == dst_begin )
+        if (dst_common_edge_end == dst_begin)
             dst_common_edge_end = dst_end - 1;
         else
             --dst_common_edge_end;
 
         ++src_common_edge_begin;
-        if ( src_common_edge_begin == src_end )
+        if (src_common_edge_begin == src_end)
             src_common_edge_begin = src_begin;
 
         CommonEdge ret;
 
         // if only one point in common
-        if ( dst_common_edge_begin == dst_common_edge_end )
+        if (dst_common_edge_begin == dst_common_edge_end)
             continue;
 
         ret.ok = true;
@@ -344,10 +344,10 @@ HomogeneousSplines<T>::_common_edge(Points &points, points_riter it)
 
     ret.grt_end = points.rend();
 
-    for ( ; it != ret.grt_end ; ++it ) {
+    for (; it != ret.grt_end ; ++it) {
         ret.sml_end = std::find(it + 1, ret.grt_end, *it);
 
-        if ( ret.sml_end == ret.grt_end )
+        if (ret.sml_end == ret.grt_end)
             continue;
 
         ret.grt_begin = it;
@@ -355,7 +355,7 @@ HomogeneousSplines<T>::_common_edge(Points &points, points_riter it)
 
         ret.sml_begin = it;
 
-        while ( *ret.sml_begin == *ret.sml_end ) {
+        while (*ret.sml_begin == *ret.sml_end) {
             ++ret.sml_begin;
             --ret.sml_end;
         }
@@ -382,7 +382,7 @@ void HomogeneousSplines<T>::_polygon_union(CommonEdge common_edge)
     typename Points::difference_type index;
 
     // first, we remove the common edge in dst
-    if ( common_edge.dst_begin < common_edge.dst_end ) {
+    if (common_edge.dst_begin < common_edge.dst_end) {
         // common edge is in the middle of dst
 
         index = dst.erase(common_edge.dst_begin,
@@ -396,7 +396,7 @@ void HomogeneousSplines<T>::_polygon_union(CommonEdge common_edge)
     }
 
     // second, we copy src points to polygon
-    if ( common_edge.src_begin < common_edge.src_end ) {
+    if (common_edge.src_begin < common_edge.src_end) {
         // common edge is in the middle of src
 
         const typename Points::difference_type nfirstinserted
@@ -434,9 +434,9 @@ void HomogeneousSplines<T>::_fill_holes(std::vector<Points> &holes,
     const typename std::vector<Points>::size_type hole_index = holes.size();
     holes.resize(hole_index + 1);
 
-    for ( points_iter it = region_begin + 1 ; it != region_end ; ++it ) {
+    for (points_iter it = region_begin + 1 ; it != region_end ; ++it) {
         points_iter res = std::find(it + 1, region_end, *it);
-        if ( res == region_end )
+        if (res == region_end)
             continue;
 
         holes[hole_index].insert(holes[hole_index].end(), region_begin,
@@ -446,7 +446,7 @@ void HomogeneousSplines<T>::_fill_holes(std::vector<Points> &holes,
         do {
             ++it;
             --res;
-        } while ( *it == *res );
+        } while (*it == *res);
         _fill_holes(holes, it - 1, res + 2);
 
         it = region_begin;

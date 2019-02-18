@@ -119,7 +119,7 @@ TextTool::~TextTool() {
 void TextTool::setup() {
     GtkSettings* settings = gtk_settings_get_default();
     gint timeout = 0;
-    g_object_get( settings, "gtk-cursor-blink-time", &timeout, NULL );
+    g_object_get(settings, "gtk-cursor-blink-time", &timeout, NULL);
     
     if (timeout < 0) {
         timeout = 200;
@@ -176,23 +176,23 @@ void TextTool::setup() {
     SPItem *item = this->desktop->getSelection()->singleItem();
     if (item && (
             (SP_IS_FLOWTEXT(item) && SP_FLOWTEXT(item)->has_internal_frame()) ||
-            (SP_IS_TEXT(item) && !SP_TEXT(item)->has_shape_inside())           )
-        ) {
+            (SP_IS_TEXT(item) && !SP_TEXT(item)->has_shape_inside()))
+) {
         this->shape_editor->set_item(item);
     }
 
     this->sel_changed_connection = desktop->getSelection()->connectChangedFirst(
         sigc::mem_fun(*this, &TextTool::_selectionChanged)
-    );
+);
     this->sel_modified_connection = desktop->getSelection()->connectModifiedFirst(
         sigc::mem_fun(*this, &TextTool::_selectionModified)
-    );
+);
     this->style_set_connection = desktop->connectSetStyle(
         sigc::mem_fun(*this, &TextTool::_styleSet)
-    );
+);
     this->style_query_connection = desktop->connectQueryStyle(
         sigc::mem_fun(*this, &TextTool::_styleQueried)
-    );
+);
 
     _selectionChanged(desktop->getSelection());
 
@@ -451,8 +451,8 @@ static void insert_uni_char(TextTool *const tc)
     tc->unipos = 0;
     tc->uni[tc->unipos] = '\0';
 
-    if ( !g_unichar_isprint(static_cast<gunichar>(uv))
-         && !(g_unichar_validate(static_cast<gunichar>(uv)) && (g_unichar_type(static_cast<gunichar>(uv)) == G_UNICODE_PRIVATE_USE) ) ) {
+    if (!g_unichar_isprint(static_cast<gunichar>(uv))
+         && !(g_unichar_validate(static_cast<gunichar>(uv)) && (g_unichar_type(static_cast<gunichar>(uv)) == G_UNICODE_PRIVATE_USE))) {
         // This may be due to bad input, so it goes to statusbar.
         tc->desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE,
                                            _("Non-printable character"));
@@ -562,9 +562,9 @@ bool TextTool::root_handler(GdkEvent* event) {
             }
 
             if (this->creating && (event->motion.state & GDK_BUTTON1_MASK) && !this->space_panning) {
-                if ( this->within_tolerance
-                     && ( abs( (gint) event->motion.x - this->xp ) < this->tolerance )
-                     && ( abs( (gint) event->motion.y - this->yp ) < this->tolerance ) ) {
+                if (this->within_tolerance
+                     && (abs((gint) event->motion.x - this->xp) < this->tolerance)
+                     && (abs((gint) event->motion.y - this->yp) < this->tolerance)) {
                     break; // do not drag if we're within tolerance from origin
                 }
                 // Once the user has moved farther than tolerance from the original location
@@ -663,8 +663,8 @@ bool TextTool::root_handler(GdkEvent* event) {
                             sp_desktop_apply_style_tool(desktop, text->getRepr(), "/tools/text", true);
 
                             /* Restore "shape-inside" */
-                            text->style->shape_inside.read( shape_inside );
-                            g_free( shape_inside );
+                            text->style->shape_inside.read(shape_inside);
+                            g_free(shape_inside);
                             text->updateRepr();
 
                             desktop->getSelection()->set(text);
@@ -1249,7 +1249,7 @@ bool TextTool::root_handler(GdkEvent* event) {
                 if ((group0_keyval == GDK_KEY_Up    ||
                      group0_keyval == GDK_KEY_Down  ||
                      group0_keyval == GDK_KEY_KP_Up ||
-                     group0_keyval == GDK_KEY_KP_Down )
+                     group0_keyval == GDK_KEY_KP_Down)
                     && !MOD__CTRL_ONLY(event)) {
                     return TRUE;
                 } else if (group0_keyval == GDK_KEY_Escape) { // cancel rubberband
@@ -1339,7 +1339,7 @@ bool sp_text_paste_inline(ToolBase *ec)
 
             // using indices is slow in ustrings. Whatever.
             Glib::ustring::size_type begin = 0;
-            for ( ; ; ) {
+            for (; ;) {
                 Glib::ustring::size_type end = text.find('\n', begin);
                 if (end == Glib::ustring::npos) {
                     if (begin != text.length())
@@ -1395,13 +1395,13 @@ SPCSSAttr *sp_text_get_style_at_cursor(ToolBase const *ec)
 static bool css_attrs_are_equal(SPCSSAttr const *first, SPCSSAttr const *second)
 {
     Inkscape::Util::List<Inkscape::XML::AttributeRecord const> attrs = first->attributeList();
-    for ( ; attrs ; attrs++) {
+    for (; attrs ; attrs++) {
         gchar const *other_attr = second->attribute(g_quark_to_string(attrs->key));
         if (other_attr == nullptr || strcmp(attrs->value, other_attr))
             return false;
     }
     attrs = second->attributeList();
-    for ( ; attrs ; attrs++) {
+    for (; attrs ; attrs++) {
         gchar const *other_attr = first->attribute(g_quark_to_string(attrs->key));
         if (other_attr == nullptr || strcmp(attrs->value, other_attr))
             return false;
@@ -1492,7 +1492,7 @@ void TextTool::_selectionChanged(Inkscape::Selection *selection)
             (SP_IS_FLOWTEXT(item) && SP_FLOWTEXT(item)->has_internal_frame()) ||
             (SP_IS_TEXT(item) &&
              !(SP_TEXT(item)->has_shape_inside() && !SP_TEXT(item)->get_first_rectangle()))
-            )) {
+)) {
         ec->shape_editor->set_item(item);
     }
 
@@ -1763,7 +1763,7 @@ static void sp_text_context_forget_text(TextTool *tc)
         // if we were called e.g. as the result of
         // an undo or the element being removed from
         // the XML editor
-        if ( text_repr && text_repr->parent() ) {
+        if (text_repr && text_repr->parent()) {
             sp_repr_unparent(text_repr);
             SPDocumentUndo::done(tc->desktop->getDocument(), SP_VERB_CONTEXT_TEXT,
                      _("Remove empty text"));

@@ -37,7 +37,7 @@
 typedef std::unordered_map<PangoFontDescription*, font_instance*, font_descr_hash, font_descr_equal> FaceMapType;
 
 // need to avoid using the size field
-size_t font_descr_hash::operator()( PangoFontDescription *const &x) const {
+size_t font_descr_hash::operator()(PangoFontDescription *const &x) const {
     int h = 0;
     char const *theF = sp_font_description_get_family(x);
     h += (theF)?g_str_hash(theF):0;
@@ -57,19 +57,19 @@ size_t font_descr_hash::operator()( PangoFontDescription *const &x) const {
     return h;
 }
 
-bool  font_descr_equal::operator()( PangoFontDescription *const&a, PangoFontDescription *const &b) const {
-    //if ( pango_font_description_equal(a,b) ) return true;
+bool  font_descr_equal::operator()(PangoFontDescription *const&a, PangoFontDescription *const &b) const {
+    //if (pango_font_description_equal(a,b)) return true;
     char const *fa = sp_font_description_get_family(a);
     char const *fb = sp_font_description_get_family(b);
-    if ( ( fa && fb == nullptr ) || ( fb && fa == nullptr ) ) return false;
-    if ( fa && fb && strcmp(fa,fb) != 0 ) return false;
-    if ( pango_font_description_get_style(a) != pango_font_description_get_style(b) ) return false;
-    if ( pango_font_description_get_variant(a) != pango_font_description_get_variant(b) ) return false;
-    if ( pango_font_description_get_weight(a) != pango_font_description_get_weight(b) ) return false;
-    if ( pango_font_description_get_stretch(a) != pango_font_description_get_stretch(b) ) return false;
+    if ((fa && fb == nullptr) || (fb && fa == nullptr)) return false;
+    if (fa && fb && strcmp(fa,fb) != 0) return false;
+    if (pango_font_description_get_style(a) != pango_font_description_get_style(b)) return false;
+    if (pango_font_description_get_variant(a) != pango_font_description_get_variant(b)) return false;
+    if (pango_font_description_get_weight(a) != pango_font_description_get_weight(b)) return false;
+    if (pango_font_description_get_stretch(a) != pango_font_description_get_stretch(b)) return false;
 #if PANGO_VERSION_CHECK(1,41,1)
-    if ( g_strcmp0( pango_font_description_get_variations(a),
-                    pango_font_description_get_variations(b) ) != 0 ) return false;
+    if (g_strcmp0(pango_font_description_get_variations(a),
+                    pango_font_description_get_variations(b)) != 0) return false;
 #endif
     return true;
 }
@@ -82,7 +82,7 @@ PangoFontDescription* ink_font_description_from_style(SPStyle const *style)
     pango_font_description_set_family(descr, style->font_family.value);
 
     // This duplicates Layout::EnumConversionItem... perhaps we can share code?
-    switch ( style->font_style.computed ) {
+    switch (style->font_style.computed) {
         case SP_CSS_FONT_STYLE_ITALIC:
             pango_font_description_set_style(descr, PANGO_STYLE_ITALIC);
             break;
@@ -97,7 +97,7 @@ PangoFontDescription* ink_font_description_from_style(SPStyle const *style)
             break;
     }
 
-    switch( style->font_weight.computed ) {
+    switch(style->font_weight.computed) {
         case SP_CSS_FONT_WEIGHT_100:
             pango_font_description_set_weight(descr, PANGO_WEIGHT_THIN);
             break;
@@ -189,7 +189,7 @@ PangoFontDescription* ink_font_description_from_style(SPStyle const *style)
             break;
     }
 
-    switch ( style->font_variant.computed ) {
+    switch (style->font_variant.computed) {
         case SP_CSS_FONT_VARIANT_SMALL_CAPS:
             pango_font_description_set_variant(descr, PANGO_VARIANT_SMALL_CAPS);
             break;
@@ -234,7 +234,7 @@ font_factory *font_factory::lUsine = nullptr;
 
 font_factory *font_factory::Default()
 {
-    if ( lUsine == nullptr ) lUsine = new font_factory;
+    if (lUsine == nullptr) lUsine = new font_factory;
     return lUsine;
 }
 
@@ -272,7 +272,7 @@ font_factory::font_factory() :
 font_factory::~font_factory()
 {
     for (int i = 0;i < nbEnt;i++) ents[i].f->Unref();
-    if ( ents ) g_free(ents);
+    if (ents) g_free(ents);
 
     g_object_unref(fontServer);
 #ifdef USE_PANGO_WIN32
@@ -367,7 +367,7 @@ Glib::ustring font_factory::GetUIFamilyString(PangoFontDescription const *fontDe
         // For now, keep it as family name taken from pango
         const char *pangoFamily = sp_font_description_get_family(fontDescr);
 
-        if( pangoFamily ) {
+        if(pangoFamily) {
             family = pangoFamily;
         }
     }
@@ -402,29 +402,29 @@ Glib::ustring font_factory::GetUIStyleString(PangoFontDescription const *fontDes
 /////
 
 // Calculate a Style "value" based on CSS values for ordering styles.
-static int StyleNameValue( const Glib::ustring &style )
+static int StyleNameValue(const Glib::ustring &style)
 {
 
-    PangoFontDescription *pfd = pango_font_description_from_string ( style.c_str() );
+    PangoFontDescription *pfd = pango_font_description_from_string (style.c_str());
     int value =
-        pango_font_description_get_weight ( pfd ) * 1000000 +
-        pango_font_description_get_style  ( pfd ) *   10000 +
-        pango_font_description_get_stretch( pfd ) *     100 +
-        pango_font_description_get_variant( pfd );
-    pango_font_description_free ( pfd );
+        pango_font_description_get_weight (pfd) * 1000000 +
+        pango_font_description_get_style  (pfd) *   10000 +
+        pango_font_description_get_stretch(pfd) *     100 +
+        pango_font_description_get_variant(pfd);
+    pango_font_description_free (pfd);
     return value;
 }
 
 // Determines order in which styles are presented (sorted by CSS style values)
 //static bool StyleNameCompareInternal(const StyleNames &style1, const StyleNames &style2)
 //{
-//   return( StyleNameValue( style1.CssName ) < StyleNameValue( style2.CssName ) );
+//   return(StyleNameValue(style1.CssName) < StyleNameValue(style2.CssName));
 //}
 
 static gint StyleNameCompareInternalGlib(gconstpointer a, gconstpointer b)
 {
-    return( StyleNameValue( ((StyleNames *)a)->CssName  ) <
-            StyleNameValue( ((StyleNames *)b)->CssName  ) ? -1 : 1 );
+    return(StyleNameValue(((StyleNames *)a)->CssName) <
+            StyleNameValue(((StyleNames *)b)->CssName) ? -1 : 1);
 }
 
 static bool ustringPairSort(std::pair<PangoFontFamily*, Glib::ustring> const& first, std::pair<PangoFontFamily*, Glib::ustring> const& second)
@@ -497,12 +497,12 @@ GList* font_factory::GetUIStyles(PangoFontFamily * in)
             // std::cout << "  " << familyUIName << "  styleUIName: " << styleUIName << "  displayName: " << displayName << std::endl;
 
             // Disable synthesized (faux) font faces except for CSS generic faces
-            if (pango_font_face_is_synthesized(faces[currentFace]) ) {
-                if (familyUIName.compare( "sans-serif" ) != 0 &&
-                    familyUIName.compare( "serif"      ) != 0 &&
-                    familyUIName.compare( "monospace"  ) != 0 &&
-                    familyUIName.compare( "fantasy"    ) != 0 &&
-                    familyUIName.compare( "cursive"    ) != 0 ) {
+            if (pango_font_face_is_synthesized(faces[currentFace])) {
+                if (familyUIName.compare("sans-serif") != 0 &&
+                    familyUIName.compare("serif") != 0 &&
+                    familyUIName.compare("monospace") != 0 &&
+                    familyUIName.compare("fantasy") != 0 &&
+                    familyUIName.compare("cursive") != 0) {
                     continue;
                 }
             }
@@ -523,22 +523,22 @@ GList* font_factory::GetUIStyles(PangoFontFamily * in)
             //     String equivalents in src/fcfreetype.c
             //     Weight set from os2->usWeightClass
             //   Use Fontforge: Element->Font Info...->OS/2->Misc->Weight Class to check font weight
-            size_t f = styleUIName.find( "Book" );
-            if( f != Glib::ustring::npos ) {
-                styleUIName.replace( f, 4, "Normal" );
+            size_t f = styleUIName.find("Book");
+            if(f != Glib::ustring::npos) {
+                styleUIName.replace(f, 4, "Normal");
             }
-            f = styleUIName.find( "Semi-Light" );
-            if( f != Glib::ustring::npos ) {
-                styleUIName.replace( f, 10, "Light" );
+            f = styleUIName.find("Semi-Light");
+            if(f != Glib::ustring::npos) {
+                styleUIName.replace(f, 10, "Light");
             }
-            f = styleUIName.find( "Ultra-Heavy" );
-            if( f != Glib::ustring::npos ) {
-                styleUIName.replace( f, 11, "Heavy" );
+            f = styleUIName.find("Ultra-Heavy");
+            if(f != Glib::ustring::npos) {
+                styleUIName.replace(f, 11, "Heavy");
             }
 
             bool exists = false;
             for(GList *temp = ret; temp; temp = temp->next) {
-                if( ((StyleNames*)temp->data)->CssName.compare( styleUIName ) == 0 ) {
+                if(((StyleNames*)temp->data)->CssName.compare(styleUIName) == 0) {
                     exists = true;
                     std::cerr << "Warning: Font face with same CSS values already added: "
                               << familyUIName << " " << styleUIName
@@ -558,7 +558,7 @@ GList* font_factory::GetUIStyles(PangoFontFamily * in)
     g_free(faces);
 
     // Sort the style lists
-    ret = g_list_sort( ret, StyleNameCompareInternalGlib );
+    ret = g_list_sort(ret, StyleNameCompareInternalGlib);
     return ret;
 }
 
@@ -651,7 +651,7 @@ font_instance *font_factory::Face(PangoFontDescription *descr, bool canFail)
     font_instance *res = nullptr;
 
     FaceMapType& loadedFaces = *static_cast<FaceMapType*>(loadedPtr);
-    if ( loadedFaces.find(descr) == loadedFaces.end() ) {
+    if (loadedFaces.find(descr) == loadedFaces.end()) {
         // not yet loaded
         PangoFont *nFace = nullptr;
 
@@ -664,7 +664,7 @@ font_instance *font_factory::Face(PangoFontDescription *descr, bool canFail)
             g_warning("%s", _("Ignoring font without family that will crash Pango"));
         }
 
-        if ( nFace ) {
+        if (nFace) {
             // duplicate FcPattern, the hard way
             res = new font_instance();
             // store the descr of the font we asked for, since this is the key where we intend
@@ -675,13 +675,13 @@ font_instance *font_factory::Face(PangoFontDescription *descr, bool canFail)
             res->descr = pango_font_description_copy(descr);
             res->parent = this;
             res->InstallFace(nFace);
-            if ( res->pFont == nullptr ) {
+            if (res->pFont == nullptr) {
                 // failed to install face -> bitmap font
                 // printf("face failed\n");
                 res->parent = nullptr;
                 delete res;
                 res = nullptr;
-                if ( canFail ) {
+                if (canFail) {
                     char *tc = pango_font_description_to_string(descr);
                     PANGO_DEBUG("falling back from %s to 'sans-serif' because InstallFace failed\n",tc);
                     g_free(tc);
@@ -695,7 +695,7 @@ font_instance *font_factory::Face(PangoFontDescription *descr, bool canFail)
             }
         } else {
             // no match
-            if ( canFail ) {
+            if (canFail) {
                 PANGO_DEBUG("falling back to 'sans-serif'\n");
                 PangoFontDescription *new_descr = pango_font_description_new();
                 pango_font_description_set_family(new_descr, "sans-serif");
@@ -735,10 +735,10 @@ font_instance *font_factory::Face(PangoFontDescription *descr, bool canFail)
 
 void font_factory::UnrefFace(font_instance *who)
 {
-    if ( who ) {
+    if (who) {
         FaceMapType& loadedFaces = *static_cast<FaceMapType*>(loadedPtr);
 
-        if ( loadedFaces.find(who->descr) == loadedFaces.end() ) {
+        if (loadedFaces.find(who->descr) == loadedFaces.end()) {
             // not found
             char *tc = pango_font_description_to_string(who->descr);
             g_warning("unrefFace %p=%s: failed\n",who,tc);
@@ -752,25 +752,25 @@ void font_factory::UnrefFace(font_instance *who)
 
 void font_factory::AddInCache(font_instance *who)
 {
-    if ( who == nullptr ) return;
+    if (who == nullptr) return;
     for (int i = 0;i < nbEnt;i++) ents[i].age *= 0.9;
     for (int i = 0;i < nbEnt;i++) {
-        if ( ents[i].f == who ) {
+        if (ents[i].f == who) {
             //            printf("present\n");
             ents[i].age += 1.0;
             return;
         }
     }
-    if ( nbEnt > maxEnt ) {
+    if (nbEnt > maxEnt) {
         printf("cache sur-plein?\n");
         return;
     }
     who->Ref();
-    if ( nbEnt == maxEnt ) { // cache is filled, unref the oldest-accessed font in it
+    if (nbEnt == maxEnt) { // cache is filled, unref the oldest-accessed font in it
         int    bi = 0;
         double ba = ents[bi].age;
         for (int i = 1;i < nbEnt;i++) {
-            if ( ents[i].age < ba ) {
+            if (ents[i].age < ba) {
                 bi = i;
                 ba = ents[bi].age;
             }

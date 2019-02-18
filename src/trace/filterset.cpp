@@ -129,9 +129,9 @@ RgbMap *rgbMapGaussian(RgbMap *me)
 		    }
 	        }
             RGB rout;
-            rout.r = ( sumR / 159 ) & 0xff;
-            rout.g = ( sumG / 159 ) & 0xff;
-            rout.b = ( sumB / 159 ) & 0xff;
+            rout.r = (sumR / 159) & 0xff;
+            rout.g = (sumG / 159) & 0xff;
+            rout.b = (sumB / 159) & 0xff;
 	    newGm->setPixelRGB(newGm, x, y, rout);
 	    }
 	}
@@ -238,7 +238,7 @@ static GrayMap *grayMapSobel(GrayMap *gm,
                     }
                 else
                     {
-                    orient = 57.295779515 * atan2( ((double)sumY),((double)sumX) );
+                    orient = 57.295779515 * atan2(((double)sumY),((double)sumX));
                     if (orient < 0.0)
                         orient += 180.0;
                     }
@@ -316,11 +316,11 @@ static GrayMap *grayMapSobel(GrayMap *gm,
                         sum = 0; /* NONEDGE */
                     else
                         {
-                        if ( gm->getPixel(gm, x-1, y-1)> highThreshold ||
+                        if (gm->getPixel(gm, x-1, y-1)> highThreshold ||
                              gm->getPixel(gm, x  , y-1)> highThreshold ||
                              gm->getPixel(gm, x+1, y-1)> highThreshold ||
-                             gm->getPixel(gm, x-1, y  )> highThreshold ||
-                             gm->getPixel(gm, x+1, y  )> highThreshold ||
+                             gm->getPixel(gm, x-1, y)> highThreshold ||
+                             gm->getPixel(gm, x+1, y)> highThreshold ||
                              gm->getPixel(gm, x-1, y+1)> highThreshold ||
                              gm->getPixel(gm, x  , y+1)> highThreshold ||
                              gm->getPixel(gm, x+1, y+1)> highThreshold)

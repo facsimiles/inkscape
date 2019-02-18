@@ -60,11 +60,11 @@ SPTagUsePath::~SPTagUsePath()
 void
 SPTagUsePath::link(char *to)
 {
-    if ( to == nullptr ) {
+    if (to == nullptr) {
         quit_listening();
         unlink();
     } else {
-        if ( !sourceHref || ( strcmp(to, sourceHref) != 0 ) ) {
+        if (!sourceHref || (strcmp(to, sourceHref) != 0)) {
             g_free(sourceHref);
             sourceHref = g_strdup(to);
             try {
@@ -91,7 +91,7 @@ SPTagUsePath::unlink()
 void
 SPTagUsePath::start_listening(SPObject* to)
 {
-    if ( to == nullptr ) {
+    if (to == nullptr) {
         return;
     }
     sourceObject = to;
@@ -102,7 +102,7 @@ SPTagUsePath::start_listening(SPObject* to)
 void
 SPTagUsePath::quit_listening()
 {
-    if ( sourceObject == nullptr ) {
+    if (sourceObject == nullptr) {
         return;
     }
     _delete_connection.disconnect();
@@ -115,7 +115,7 @@ sp_usepath_href_changed(SPObject */*old_ref*/, SPObject */*ref*/, SPTagUsePath *
 {
     offset->quit_listening();
     SPItem *refobj = offset->getObject();
-    if ( refobj ) {
+    if (refobj) {
         offset->start_listening(refobj);
     }
 }

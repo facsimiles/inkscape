@@ -27,7 +27,7 @@ namespace Widget {
 class Entry : public Labelled
 {
 public:
-    Entry( Glib::ustring const &label,
+    Entry(Glib::ustring const &label,
            Glib::ustring const &tooltip,
            Glib::ustring const &suffix = "",
            Glib::ustring const &icon = "",

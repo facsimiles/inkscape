@@ -134,7 +134,7 @@ ClusterContainmentConstraints::getCurrSubConstraintAlternatives(vpsc::Variables 
     {
         // Constrain the objects with negative offsets to be 
         // to the left of the boundary.
-        vpsc::Constraint constraint = vpsc::Constraint( 
+        vpsc::Constraint constraint = vpsc::Constraint(
                 vs[info->dim][info->varIndex], vs[info->dim][info->boundaryVar], 
                 info->offset);
         alternatives.push_back(SubConstraint(info->dim, constraint));

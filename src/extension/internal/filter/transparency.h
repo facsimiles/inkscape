@@ -45,8 +45,8 @@ protected:
     gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
-    Blend ( ) : Filter() { };
-    ~Blend ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
+    Blend () : Filter() { };
+    ~Blend () override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
         Inkscape::Extension::build_from_mem(
@@ -92,7 +92,7 @@ Blend::get_filter_text (Inkscape::Extension::Extension * ext)
     _filter = g_strdup_printf(
         "<filter xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" style=\"color-interpolation-filters:sRGB;\" inkscape:label=\"Blend\">\n"
           "<feBlend in2=\"%s\" mode=\"%s\" result=\"blend\" />\n"
-        "</filter>\n", source.str().c_str(), mode.str().c_str() );
+        "</filter>\n", source.str().c_str(), mode.str().c_str());
 
     return _filter;
 }; /* Blend filter */
@@ -122,8 +122,8 @@ protected:
     gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
-    ChannelTransparency ( ) : Filter() { };
-    ~ChannelTransparency ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
+    ChannelTransparency () : Filter() { };
+    ~ChannelTransparency () override { if (_filter != nullptr) g_free((void *)_filter); return; }
     
     static void init () {
         Inkscape::Extension::build_from_mem(
@@ -197,8 +197,8 @@ protected:
     gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
-    LightEraser ( ) : Filter() { };
-    ~LightEraser ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
+    LightEraser () : Filter() { };
+    ~LightEraser () override { if (_filter != nullptr) g_free((void *)_filter); return; }
     
     static void init () {
         Inkscape::Extension::build_from_mem(
@@ -271,8 +271,8 @@ protected:
     gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
-    Opacity ( ) : Filter() { };
-    ~Opacity ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
+    Opacity () : Filter() { };
+    ~Opacity () override { if (_filter != nullptr) g_free((void *)_filter); return; }
     
     static void init () {
         Inkscape::Extension::build_from_mem(
@@ -333,8 +333,8 @@ protected:
     gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
-    Silhouette ( ) : Filter() { };
-    ~Silhouette ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
+    Silhouette () : Filter() { };
+    ~Silhouette () override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
         Inkscape::Extension::build_from_mem(

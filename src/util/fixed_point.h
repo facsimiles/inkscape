@@ -42,7 +42,7 @@ public:
         const T al = v&((1<<half_size)-1), bl = val.v&((1<<half_size)-1);
         const T ah = v>>half_size, bh = val.v>>half_size;
         v = static_cast<unsigned int>(al*bl)>>precision;
-        if ( half_size >= precision ) {
+        if (half_size >= precision) {
             v += ((al*bh)+(ah*bl)+((ah*bh)<<half_size))<<(half_size-precision);
         } else {
             v += ((al*bh)+(ah*bl))>>(precision-half_size);

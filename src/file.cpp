@@ -126,7 +126,7 @@ static void sp_file_add_recent(gchar const *uri)
  */
 SPDesktop *sp_file_new(const std::string &templ)
 {
-    SPDocument *doc = SPDocument::createNewDoc( !templ.empty() ? templ.c_str() : nullptr , TRUE, true );
+    SPDocument *doc = SPDocument::createNewDoc(!templ.empty() ? templ.c_str() : nullptr , TRUE, true);
     g_return_val_if_fail(doc != nullptr, NULL);
 
     // Remove all the template info from xml tree
@@ -167,7 +167,7 @@ SPDesktop* sp_file_new_default()
 {
     Glib::ustring templateUri = sp_file_default_template_uri();
     SPDesktop* desk = sp_file_new(sp_file_default_template_uri());
-    //rdf_add_from_preferences( SP_ACTIVE_DOCUMENT );
+    //rdf_add_from_preferences(SP_ACTIVE_DOCUMENT);
 
     return desk;
 }
@@ -246,7 +246,7 @@ bool sp_file_open(const Glib::ustring &uri,
         doc->virgin = FALSE;
 
         if (add_to_recent) {
-            sp_file_add_recent( doc->getURI() );
+            sp_file_add_recent(doc->getURI());
         }
 
         // ---------------  Fix up document ----------------
@@ -257,7 +257,7 @@ bool sp_file_open(const Glib::ustring &uri,
         }
 
         // Perform a fixup pass for hrefs.
-        if ( Inkscape::ResourceManager::getManager().fixupBrokenLinks(doc) ) {
+        if (Inkscape::ResourceManager::getManager().fixupBrokenLinks(doc)) {
             Glib::ustring msg = _("Broken links have been changed to point to existing files.");
             desktop->showInfoDialog(msg);
         }
@@ -372,9 +372,9 @@ void dump_ustr(Glib::ustring const &ustr)
     Glib::ustring::size_type const cstrLen = strlen(cstr);
 
     g_message("   size: %lu\n   length: %lu\n   bytes: %lu\n    clen: %lu",
-              gulong(ustr.size()), gulong(dataLen), gulong(byteLen), gulong(cstrLen) );
-    g_message( "  ASCII? %s", (ustr.is_ascii() ? "yes":"no") );
-    g_message( "  UTF-8? %s", (ustr.validate() ? "yes":"no") );
+              gulong(ustr.size()), gulong(dataLen), gulong(byteLen), gulong(cstrLen));
+    g_message("  ASCII? %s", (ustr.is_ascii() ? "yes":"no"));
+    g_message("  UTF-8? %s", (ustr.validate() ? "yes":"no"));
 
     try {
         Glib::ustring tmp;
@@ -382,9 +382,9 @@ void dump_ustr(Glib::ustring const &ustr)
             tmp = "    ";
             if (i < dataLen) {
                 Glib::ustring::value_type val = ustr.at(i);
-                gchar* tmp2 = g_strdup_printf( (((val & 0xff00) == 0) ? "  %02x" : "%04x"), val );
+                gchar* tmp2 = g_strdup_printf((((val & 0xff00) == 0) ? "  %02x" : "%04x"), val);
                 tmp += tmp2;
-                g_free( tmp2 );
+                g_free(tmp2);
             } else {
                 tmp += "    ";
             }
@@ -393,11 +393,11 @@ void dump_ustr(Glib::ustring const &ustr)
                 int val = (0x0ff & data[i]);
                 gchar *tmp2 = g_strdup_printf("    %02x", val);
                 tmp += tmp2;
-                g_free( tmp2 );
-                if ( val > 32 && val < 127 ) {
-                    tmp2 = g_strdup_printf( "   '%c'", (gchar)val );
+                g_free(tmp2);
+                if (val > 32 && val < 127) {
+                    tmp2 = g_strdup_printf("   '%c'", (gchar)val);
                     tmp += tmp2;
-                    g_free( tmp2 );
+                    g_free(tmp2);
                 } else {
                     tmp += "    . ";
                 }
@@ -405,15 +405,15 @@ void dump_ustr(Glib::ustring const &ustr)
                 tmp += "       ";
             }
 
-            if ( i < cstrLen ) {
+            if (i < cstrLen) {
                 int val = (0x0ff & cstr[i]);
                 gchar* tmp2 = g_strdup_printf("    %02x", val);
                 tmp += tmp2;
                 g_free(tmp2);
-                if ( val > 32 && val < 127 ) {
+                if (val > 32 && val < 127) {
                     tmp2 = g_strdup_printf("   '%c'", (gchar) val);
                     tmp += tmp2;
-                    g_free( tmp2 );
+                    g_free(tmp2);
                 } else {
                     tmp += "    . ";
                 }
@@ -421,10 +421,10 @@ void dump_ustr(Glib::ustring const &ustr)
                 tmp += "            ";
             }
 
-            g_message( "%s", tmp.c_str() );
+            g_message("%s", tmp.c_str());
         }
     } catch (...) {
-        g_message("XXXXXXXXXXXXXXXXXX Exception" );
+        g_message("XXXXXXXXXXXXXXXXXX Exception");
     }
     g_message("---------------");
 }
@@ -528,10 +528,10 @@ sp_file_open_dialog(Gtk::Window &parentWindow, gpointer /*object*/, gpointer /*d
             fileName = i;
 
             Glib::ustring newFileName = Glib::filename_to_utf8(fileName);
-            if ( newFileName.size() > 0 )
+            if (newFileName.size() > 0)
                 fileName = newFileName;
             else
-                g_warning( "ERROR CONVERTING OPEN FILENAME TO UTF-8" );
+                g_warning("ERROR CONVERTING OPEN FILENAME TO UTF-8");
 
 #ifdef INK_DUMP_FILENAME_CONV
             g_message("Opening File %s\n", fileName.c_str());
@@ -547,10 +547,10 @@ sp_file_open_dialog(Gtk::Window &parentWindow, gpointer /*object*/, gpointer /*d
     {
         Glib::ustring newFileName = Glib::filename_to_utf8(fileName);
 
-        if ( newFileName.size() > 0)
+        if (newFileName.size() > 0)
             fileName = newFileName;
         else
-            g_warning( "ERROR CONVERTING OPEN FILENAME TO UTF-8" );
+            g_warning("ERROR CONVERTING OPEN FILENAME TO UTF-8");
 
         open_path = Glib::path_get_dirname (fileName);
         open_path.append(G_DIR_SEPARATOR_S);
@@ -627,7 +627,7 @@ file_save(Gtk::Window &parentWindow, SPDocument *doc, const Glib::ustring &uri,
         g_free(text);
         g_free(safeUri);
         // Restore Inkscape version
-        doc->getReprRoot()->setAttribute("inkscape:version", sp_version_to_string( save ));
+        doc->getReprRoot()->setAttribute("inkscape:version", sp_version_to_string(save));
         return false;
     } catch (Inkscape::Extension::Output::file_read_only &e) {
         gchar *safeUri = Inkscape::IO::sanitizeString(uri.c_str());
@@ -636,7 +636,7 @@ file_save(Gtk::Window &parentWindow, SPDocument *doc, const Glib::ustring &uri,
         sp_ui_error_dialog(text);
         g_free(text);
         g_free(safeUri);
-        doc->getReprRoot()->setAttribute("inkscape:version", sp_version_to_string( save ));
+        doc->getReprRoot()->setAttribute("inkscape:version", sp_version_to_string(save));
         return false;
     } catch (Inkscape::Extension::Output::save_failed &e) {
         gchar *safeUri = Inkscape::IO::sanitizeString(uri.c_str());
@@ -645,18 +645,18 @@ file_save(Gtk::Window &parentWindow, SPDocument *doc, const Glib::ustring &uri,
         sp_ui_error_dialog(text);
         g_free(text);
         g_free(safeUri);
-        doc->getReprRoot()->setAttribute("inkscape:version", sp_version_to_string( save ));
+        doc->getReprRoot()->setAttribute("inkscape:version", sp_version_to_string(save));
         return false;
     } catch (Inkscape::Extension::Output::save_cancelled &e) {
         SP_ACTIVE_DESKTOP->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("Document not saved."));
-        doc->getReprRoot()->setAttribute("inkscape:version", sp_version_to_string( save ));
+        doc->getReprRoot()->setAttribute("inkscape:version", sp_version_to_string(save));
         return false;
     } catch (Inkscape::Extension::Output::export_id_not_found &e) {
         gchar *text = g_strdup_printf(_("File could not be saved:\nNo object with ID '%s' found."), e.id);
         SP_ACTIVE_DESKTOP->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("Document not saved."));
         sp_ui_error_dialog(text);
         g_free(text);
-        doc->getReprRoot()->setAttribute("inkscape:version", sp_version_to_string( save ));
+        doc->getReprRoot()->setAttribute("inkscape:version", sp_version_to_string(save));
         return false;
     } catch (Inkscape::Extension::Output::no_overwrite &e) {
         return sp_file_save_dialog(parentWindow, doc, save_method);
@@ -669,7 +669,7 @@ file_save(Gtk::Window &parentWindow, SPDocument *doc, const Glib::ustring &uri,
         sp_ui_error_dialog(text);
         g_free(text);
         g_free(safeUri);
-        doc->getReprRoot()->setAttribute("inkscape:version", sp_version_to_string( save ));
+        doc->getReprRoot()->setAttribute("inkscape:version", sp_version_to_string(save));
         return false;
     } catch (...) {
         g_critical("Extension '%s' threw an unspecified exception.", key->get_id());
@@ -679,7 +679,7 @@ file_save(Gtk::Window &parentWindow, SPDocument *doc, const Glib::ustring &uri,
         sp_ui_error_dialog(text);
         g_free(text);
         g_free(safeUri);
-        doc->getReprRoot()->setAttribute("inkscape:version", sp_version_to_string( save ));
+        doc->getReprRoot()->setAttribute("inkscape:version", sp_version_to_string(save));
         return false;
     }
 
@@ -755,7 +755,7 @@ sp_file_save_dialog(Gtk::Window &parentWindow, SPDocument *doc, Inkscape::Extens
     save_loc.append(G_DIR_SEPARATOR_S);
 
     int i = 1;
-    if ( !doc->getURI() ) {
+    if (!doc->getURI()) {
         // We are saving for the first time; create a unique default filename
         save_loc = save_loc + _("drawing") + filename_extension;
 
@@ -793,7 +793,7 @@ sp_file_save_dialog(Gtk::Window &parentWindow, SPDocument *doc, Inkscape::Extens
             default_extension,
             doc_title ? doc_title : "",
             save_method
-            );
+);
 
     saveDialog->setSelectionType(extension);
 
@@ -820,12 +820,12 @@ sp_file_save_dialog(Gtk::Window &parentWindow, SPDocument *doc, Inkscape::Extens
         if (!newFileName.empty())
             fileName = newFileName;
         else
-            g_warning( "Error converting filename for saving to UTF-8." );
+            g_warning("Error converting filename for saving to UTF-8.");
 
         Inkscape::Extension::Output *omod = dynamic_cast<Inkscape::Extension::Output *>(selectionType);
         if (omod) {
             Glib::ustring save_extension = (omod->get_extension()) ? (omod->get_extension()) : "";
-            if ( !hasEnding(fileName, save_extension) ) {
+            if (!hasEnding(fileName, save_extension)) {
                 fileName += save_extension;
             }
         }
@@ -834,7 +834,7 @@ sp_file_save_dialog(Gtk::Window &parentWindow, SPDocument *doc, Inkscape::Extens
         success = file_save(parentWindow, doc, fileName, selectionType, TRUE, !is_copy, save_method);
 
         if (success && doc->getURI()) {
-            sp_file_add_recent( doc->getURI() );
+            sp_file_add_recent(doc->getURI());
         }
 
         save_path = Glib::path_get_dirname(fileName);
@@ -857,7 +857,7 @@ sp_file_save_document(Gtk::Window &parentWindow, SPDocument *doc)
     bool success = true;
 
     if (doc->isModifiedSinceSave()) {
-        if ( doc->getURI() == nullptr )
+        if (doc->getURI() == nullptr)
         {
             // Hier sollte in Argument mitgegeben werden, das anzeigt, da� das Dokument das erste
             // Mal gespeichert wird, so da� als default .svg ausgew�hlt wird und nicht die zuletzt
@@ -874,7 +874,7 @@ sp_file_save_document(Gtk::Window &parentWindow, SPDocument *doc)
             if (pos != Glib::ustring::npos) {
                 // FIXME: this could/should be more sophisticated (see FileSaveDialog::appendExtension()),
                 // but hopefully it's a reasonable workaround for now
-                ext = fn.substr( pos );
+                ext = fn.substr(pos);
             }
             success = file_save(parentWindow, doc, fn, Inkscape::Extension::db.get(ext.c_str()), FALSE, TRUE, Inkscape::Extension::FILE_SAVE_METHOD_SAVE_AS);
             if (success == false) {
@@ -884,7 +884,7 @@ sp_file_save_document(Gtk::Window &parentWindow, SPDocument *doc)
         }
     } else {
         Glib::ustring msg;
-        if ( doc->getURI() == nullptr )
+        if (doc->getURI() == nullptr)
         {
             msg = Glib::ustring::format(_("No changes need to be saved."));
         } else {
@@ -1092,7 +1092,7 @@ void sp_import_document(SPDesktop *desktop, SPDocument *clipdoc, bool in_place)
 
         // if we are pasting a clone to an already existing object, its
         // transform is wrong (see ui/clipboard.cpp)
-        if(obj_copy->attribute("transform-with-parent") && target_document->getObjectById(obj->attribute("xlink:href")+1) ){
+        if(obj_copy->attribute("transform-with-parent") && target_document->getObjectById(obj->attribute("xlink:href")+1)){
             obj_copy->setAttribute("transform",obj_copy->attribute("transform-with-parent"));
         }
         if(obj_copy->attribute("transform-with-parent"))
@@ -1168,7 +1168,7 @@ file_import(SPDocument *in_doc, const Glib::ustring &uri,
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     bool cancelled = false;
 
-    //DEBUG_MESSAGE( fileImport, "file_import( in_doc:%p uri:[%s], key:%p", in_doc, uri, key );
+    //DEBUG_MESSAGE(fileImport, "file_import(in_doc:%p uri:[%s], key:%p", in_doc, uri, key);
     SPDocument *doc;
     try {
         doc = Inkscape::Extension::open(key, uri.c_str());
@@ -1277,7 +1277,7 @@ file_import(SPDocument *in_doc, const Glib::ustring &uri,
                 desktop->getDocument()->ensureUpToDate();
                 Geom::OptRect sel_bbox = selection->visualBounds();
                 if (sel_bbox) {
-                    Geom::Point m( desktop->point() - sel_bbox->midpoint() );
+                    Geom::Point m(desktop->point() - sel_bbox->midpoint());
                     selection->moveRelative(m, false);
                 }
             }
@@ -1469,7 +1469,7 @@ sp_file_export_dialog(Gtk::Window &parentWindow)
             Inkscape::UI::Dialog::EXPORT_TYPES,
             (char const *) _("Select file to export to"),
             default_extension
-        );
+);
 
     bool success = exportDialogInstance->show();
     if (!success) {
@@ -1488,16 +1488,16 @@ sp_file_export_dialog(Gtk::Window &parentWindow)
     if (fileName.size() > 0) {
         Glib::ustring newFileName = Glib::filename_to_utf8(fileName);
 
-        if ( newFileName.size()>0 )
+        if (newFileName.size()>0)
             fileName = newFileName;
         else
-            g_warning( "Error converting save filename to UTF-8." );
+            g_warning("Error converting save filename to UTF-8.");
 
         success = file_save(parentWindow, doc, fileName, selectionType, TRUE, FALSE, Inkscape::Extension::FILE_SAVE_METHOD_EXPORT);
 
         if (success) {
             Glib::RefPtr<Gtk::RecentManager> recent = Gtk::RecentManager::get_default();
-            recent->add_item( doc->getURI() );
+            recent->add_item(doc->getURI());
         }
 
         export_path = fileName;
@@ -1575,7 +1575,7 @@ sp_file_export_to_ocal_dialog(Gtk::Window &parentWindow)
     // is this needed any more, now that everything is handled in
     // Inkscape::IO?
     Glib::ustring export_path_local = Glib::filename_from_utf8(export_path);
-    if ( export_path_local.size() > 0)
+    if (export_path_local.size() > 0)
         export_path = export_path_local;
 
     // Show the Export To OCAL dialog
@@ -1584,7 +1584,7 @@ sp_file_export_to_ocal_dialog(Gtk::Window &parentWindow)
                 parentWindow,
                 Inkscape::UI::Dialog::EXPORT_TYPES,
                 (char const *) _("Select file to export to")
-                );
+);
 
     success = exportDialogInstance->show();
     if (!success) {
@@ -1601,10 +1601,10 @@ sp_file_export_to_ocal_dialog(Gtk::Window &parentWindow)
     if (fileName.size() > 0) {
         Glib::ustring newFileName = Glib::filename_to_utf8(fileName);
 
-        if ( newFileName.size()>0 )
+        if (newFileName.size()>0)
             fileName = newFileName;
         else
-            g_warning( "Error converting save filename to UTF-8." );
+            g_warning("Error converting save filename to UTF-8.");
     }
     Glib::ustring filePath = export_path;
     filePath.append(G_DIR_SEPARATOR_S);

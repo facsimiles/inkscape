@@ -121,7 +121,7 @@ testbed_emf.c     Program used for testing emf functions in libUEMF.  Run it lik
                   It creates a test file "test_libuemf.emf" which should be identical to
                   test_libuemf_ref.emf.  (This file cannot be imported from EMF into PowerPoint
                   because it contains dotted lines.  Use "testbed_emf 1" to generate a file without
-                  any dotted lines. )
+                  any dotted lines.)
 
 testbed_pmf.c     Program used for testing EMF+ functions in libUEMF.  Similar to testbed_emf.
 

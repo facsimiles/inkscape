@@ -85,16 +85,16 @@ public:
         int_ligne_bord const *d1 = reinterpret_cast<int_ligne_bord const *>(p1);
         int_ligne_bord const *d2 = reinterpret_cast<int_ligne_bord const *>(p2);
         
-        if ( d1->pos == d2->pos ) {
-            if ( d1->start && !(d2->start) ) {
+        if (d1->pos == d2->pos) {
+            if (d1->start && !(d2->start)) {
                 return 1;
             }
-            if ( !(d1->start) && d2->start ) {
+            if (!(d1->start) && d2->start) {
                 return -1;
             }
             return 0;
         }
-        return (( d1->pos < d2->pos ) ? -1 : 1);
+        return ((d1->pos < d2->pos) ? -1 : 1);
     };
 
     inline float ValAt(int at, int ps, int pe, float vs, float ve) {

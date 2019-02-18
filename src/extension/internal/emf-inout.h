@@ -61,10 +61,10 @@ struct EMF_DEVICE_CONTEXT {
         // worldTransform, cur
     {
         font_name = nullptr;
-        sizeWnd  = sizel_set( 0.0, 0.0 );
-        sizeView = sizel_set( 0.0, 0.0 );
-        winorg  = point32_set( 0.0, 0.0 );
-        vieworg = point32_set( 0.0, 0.0 );
+        sizeWnd  = sizel_set(0.0, 0.0);
+        sizeView = sizel_set(0.0, 0.0);
+        winorg  = point32_set(0.0, 0.0);
+        vieworg = point32_set(0.0, 0.0);
         bkColor = U_RGB(255, 255, 255); // default foreground color (white)
         textColor = U_RGB(0, 0, 0);     // default foreground color (black)
         worldTransform.eM11 = 1.0;
@@ -73,7 +73,7 @@ struct EMF_DEVICE_CONTEXT {
         worldTransform.eM22 = 1.0;
         worldTransform.eDx = 0.0;
         worldTransform.eDy = 0.0;
-        cur = point32_set( 0, 0 );
+        cur = point32_set(0, 0);
     };        
     SPStyle         style;
     char           *font_name;
@@ -182,8 +182,8 @@ public:
               SPDocument *doc,
               gchar const *filename) override;
 
-    SPDocument *open( Inkscape::Extension::Input *mod,
-                                const gchar *uri ) override;
+    SPDocument *open(Inkscape::Extension::Input *mod,
+                                const gchar *uri) override;
 
     static void init();//Initialize the class
 

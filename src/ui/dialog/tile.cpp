@@ -3,7 +3,7 @@
  * A simple dialog for creating grid type arrangements of selected objects
  *
  * Authors:
- *   Bob Jamison ( based off trace dialog)
+ *   Bob Jamison (based off trace dialog)
  *   John Cliff
  *   Other dudes from The Inkscape Organization
  *   Abhishek Sharma

@@ -60,7 +60,7 @@ public:
     }
     void generateChildEvents() const {
         gint n_monitors = gdk_screen_get_n_monitors(screen);
-        for ( gint i = 0 ; i < n_monitors ; i++ ) {
+        for (gint i = 0 ; i < n_monitors ; i++) {
             Logger::write<Monitor>(screen, i);
         }
     }

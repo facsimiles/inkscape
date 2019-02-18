@@ -46,7 +46,7 @@ public:
 
     static SwatchesPanel& getInstance();
 
-    void setDesktop( SPDesktop* desktop ) override;
+    void setDesktop(SPDesktop* desktop) override;
     virtual SPDesktop* getDesktop() {return _currentDesktop;}
 
     virtual int getSelectedIndex() {return _currentIndex;} // temporary
@@ -55,7 +55,7 @@ protected:
     static void handleGradientsChange(SPDocument *document);
 
     virtual void _updateFromSelection();
-    virtual void _setDocument( SPDocument *document );
+    virtual void _setDocument(SPDocument *document);
     virtual void _rebuild();
 
     virtual std::vector<SwatchPage*> _getSwatchSets() const;
@@ -66,7 +66,7 @@ private:
 
     void _build_menu();
 
-    static void _trackDocument( SwatchesPanel *panel, SPDocument *document );
+    static void _trackDocument(SwatchesPanel *panel, SPDocument *document);
     static void handleDefsModified(SPDocument *document);
 
     PreviewHolder* _holder;

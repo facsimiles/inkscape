@@ -36,12 +36,12 @@ SPRadialGradient::~SPRadialGradient() = default;
 void SPRadialGradient::build(SPDocument *document, Inkscape::XML::Node *repr) {
     SPGradient::build(document, repr);
 
-    this->readAttr( "cx" );
-    this->readAttr( "cy" );
-    this->readAttr( "r" );
-    this->readAttr( "fx" );
-    this->readAttr( "fy" );
-    this->readAttr( "fr" );
+    this->readAttr("cx");
+    this->readAttr("cy");
+    this->readAttr("r");
+    this->readAttr("fx");
+    this->readAttr("fy");
+    this->readAttr("fr");
 }
 
 /**

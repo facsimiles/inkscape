@@ -144,12 +144,12 @@ Wmf::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar const *filena
     bool new_FixPPTGrad2Polys     = mod->get_param_bool("FixPPTGrad2Polys");  // gradient bug
     bool new_FixPPTPatternAsHatch = mod->get_param_bool("FixPPTPatternAsHatch");  // force all patterns as standard WMF hatch
 
-    TableGen(                  //possibly regenerate the unicode-convert tables
+    TableGen(//possibly regenerate the unicode-convert tables
         mod->get_param_bool("TnrToSymbol"),
         mod->get_param_bool("TnrToWingdings"),
         mod->get_param_bool("TnrToZapfDingbats"),
         mod->get_param_bool("UsePUA")
-    );
+);
 
     ext->set_param_bool("FixPPTCharPos",new_FixPPTCharPos);   // Remember to add any new ones to PrintWmf::init or a mysterious failure will result!
     ext->set_param_bool("FixPPTDashLine",new_FixPPTDashLine);
@@ -469,12 +469,12 @@ uint32_t Wmf::add_dib_image(PWMF_CALLBACK_DATA d, const char *dib, uint32_t iUsa
                 colortype,  // DIB BitCount Enumeration
                 numCt,      // Color table used if not 0
                 invert      // If DIB rows are in opposite order from RGBA rows
-            )){
-                toPNG(         // Get the image from the RGBA px into mempng
+)){
+                toPNG(// Get the image from the RGBA px into mempng
                     &mempng,
                     width, height,    // of the SRC bitmap
                     rgba_px
-                );
+);
                 free(rgba_px);
             }
         }
@@ -482,10 +482,10 @@ uint32_t Wmf::add_dib_image(PWMF_CALLBACK_DATA d, const char *dib, uint32_t iUsa
 
     gchar *base64String=nullptr;
     if(dibparams == U_BI_JPEG || dibparams==U_BI_PNG){  // image was binary png or jpg in source file
-        base64String = g_base64_encode((guchar*) px, numCt );
+        base64String = g_base64_encode((guchar*) px, numCt);
     }
     else if(mempng.buffer){                             // image was DIB in source file, converted to png in this routine
-        base64String = g_base64_encode((guchar*) mempng.buffer, mempng.size );
+        base64String = g_base64_encode((guchar*) mempng.buffer, mempng.size);
         free(mempng.buffer);
     }
     else {                         // failed conversion, insert the common bad image picture
@@ -569,18 +569,18 @@ uint32_t Wmf::add_bm16_image(PWMF_CALLBACK_DATA d, U_BITMAP16 Bm16, const char *
         colortype,  // DIB BitCount Enumeration
         numCt,      // Color table used if not 0
         invert      // If DIB rows are in opposite order from RGBA rows
-    )){
-        toPNG(         // Get the image from the RGBA px into mempng
+)){
+        toPNG(// Get the image from the RGBA px into mempng
             &mempng,
             width, height,    // of the SRC bitmap
             rgba_px
-        );
+);
         free(rgba_px);
     }
 
     gchar *base64String=nullptr;
     if(mempng.buffer){             // image was Bm16 in source file, converted to png in this routine
-        base64String = g_base64_encode((guchar*) mempng.buffer, mempng.size );
+        base64String = g_base64_encode((guchar*) mempng.buffer, mempng.size);
         free(mempng.buffer);
     }
     else {                         // failed conversion, insert the common bad image picture
@@ -776,7 +776,7 @@ Wmf::output_style(PWMF_CALLBACK_DATA d)
 //    tmp_id << "\n\tid=\"" << (d->id++) << "\"";
 //    d->outsvg += tmp_id.str().c_str();
     d->outsvg += "\n\tstyle=\"";
-    if (!d->dc[d->level].fill_set ||  ( d->mask & U_DRAW_NOFILL)) { // nofill are lines and arcs
+    if (!d->dc[d->level].fill_set ||  (d->mask & U_DRAW_NOFILL)) { // nofill are lines and arcs
         tmp_style << "fill:none;";
     } else {
         switch(d->dc[d->level].fill_mode){
@@ -797,7 +797,7 @@ Wmf::output_style(PWMF_CALLBACK_DATA d)
                     SP_COLOR_F_TO_U(fill_rgb[0]),
                     SP_COLOR_F_TO_U(fill_rgb[1]),
                     SP_COLOR_F_TO_U(fill_rgb[2])
-                );
+);
                 tmp_style << tmp;
                 break;
         }
@@ -805,15 +805,15 @@ Wmf::output_style(PWMF_CALLBACK_DATA d)
             tmp, 1023,
             "fill-rule:%s;",
             (d->dc[d->level].style.fill_rule.value == 0 ? "evenodd" : "nonzero")
-        );
+);
         tmp_style << tmp;
         tmp_style << "fill-opacity:1;";
 
         // if the stroke is the same as the fill, and the right size not to change the end size of the object, do not do it separately
         if(
-            (d->dc[d->level].fill_set                                )  &&
-            (d->dc[d->level].stroke_set                              )  &&
-            (d->dc[d->level].style.stroke_width.value == 1           )  &&
+            (d->dc[d->level].fill_set)  &&
+            (d->dc[d->level].stroke_set)  &&
+            (d->dc[d->level].style.stroke_width.value == 1)  &&
             (d->dc[d->level].fill_mode == d->dc[d->level].stroke_mode)  &&
             (
                 (d->dc[d->level].fill_mode != DRAW_PAINT)               ||
@@ -821,9 +821,9 @@ Wmf::output_style(PWMF_CALLBACK_DATA d)
                     (fill_rgb[0]==stroke_rgb[0])                        &&
                     (fill_rgb[1]==stroke_rgb[1])                        &&
                     (fill_rgb[2]==stroke_rgb[2])
-                )
-            )
-        ){
+)
+)
+){
             d->dc[d->level].stroke_set = false;
         }
     }
@@ -849,16 +849,16 @@ Wmf::output_style(PWMF_CALLBACK_DATA d)
                     SP_COLOR_F_TO_U(stroke_rgb[0]),
                     SP_COLOR_F_TO_U(stroke_rgb[1]),
                     SP_COLOR_F_TO_U(stroke_rgb[2])
-                );
+);
                 tmp_style << tmp;
                 break;
         }
         if(d->dc[d->level].style.stroke_width.value){
             tmp_style << "stroke-width:" <<
-                MAX( 0.001, d->dc[d->level].style.stroke_width.value ) << "px;";
+                MAX(0.001, d->dc[d->level].style.stroke_width.value) << "px;";
         }
         else { // In a WMF a 0 width pixel means "1 pixel"
-            tmp_style << "stroke-width:" << pix_to_abs_size( d, 1 ) << "px;";
+            tmp_style << "stroke-width:" << pix_to_abs_size(d, 1) << "px;";
         }
 
         tmp_style << "stroke-linecap:" <<
@@ -867,7 +867,7 @@ Wmf::output_style(PWMF_CALLBACK_DATA d)
                 d->dc[d->level].style.stroke_linecap.computed == 1 ? "round" :
                 d->dc[d->level].style.stroke_linecap.computed == 2 ? "square" :
                 "unknown"
-            ) << ";";
+) << ";";
 
         tmp_style << "stroke-linejoin:" <<
             (
@@ -875,11 +875,11 @@ Wmf::output_style(PWMF_CALLBACK_DATA d)
                 d->dc[d->level].style.stroke_linejoin.computed == 1 ? "round" :
                 d->dc[d->level].style.stroke_linejoin.computed == 2 ? "bevel" :
                 "unknown"
-            ) << ";";
+) << ";";
 
         // Set miter limit if known, even if it is not needed immediately (not miter)
         tmp_style << "stroke-miterlimit:" <<
-            MAX( 2.0, d->dc[d->level].style.stroke_miterlimit.value ) << ";";
+            MAX(2.0, d->dc[d->level].style.stroke_miterlimit.value) << ";";
 
         if (d->dc[d->level].style.stroke_dasharray.set &&
             !d->dc[d->level].style.stroke_dasharray.values.empty())
@@ -1036,22 +1036,22 @@ Wmf::select_pen(PWMF_CALLBACK_DATA d, int index)
         d->dc[d->level].stroke_set = true;
         int cur_level = d->level;
         d->level = d->wmf_obj[index].level;   // this object may have been defined in some other DC.
-        pen_width = pix_to_abs_size( d, width );
+        pen_width = pix_to_abs_size(d, width);
         d->level = cur_level;
     } else { // this stroke should always be rendered as 1 pixel wide, independent of zoom level (can that be done in SVG?)
         d->dc[d->level].stroke_set = true;
         int cur_level = d->level;
         d->level = d->wmf_obj[index].level;   // this object may have been defined in some other DC.
-        pen_width = pix_to_abs_size( d, 1 );
+        pen_width = pix_to_abs_size(d, 1);
         d->level = cur_level;
     }
     d->dc[d->level].style.stroke_width.value = pen_width;
 
     double r, g, b;
-    r = SP_COLOR_U_TO_F( U_RGBAGetR(up.Color) );
-    g = SP_COLOR_U_TO_F( U_RGBAGetG(up.Color) );
-    b = SP_COLOR_U_TO_F( U_RGBAGetB(up.Color) );
-    d->dc[d->level].style.stroke.value.color.set( r, g, b );
+    r = SP_COLOR_U_TO_F(U_RGBAGetR(up.Color));
+    g = SP_COLOR_U_TO_F(U_RGBAGetG(up.Color));
+    b = SP_COLOR_U_TO_F(U_RGBAGetB(up.Color));
+    d->dc[d->level].style.stroke.value.color.set(r, g, b);
 }
 
 
@@ -1067,17 +1067,17 @@ Wmf::select_brush(PWMF_CALLBACK_DATA d, int index)
     if(!record)return;
     d->dc[d->level].active_brush = index;
 
-    iType     = *(uint8_t *)(record + offsetof(U_METARECORD, iType )  );
+    iType     = *(uint8_t *)(record + offsetof(U_METARECORD, iType));
     if(iType == U_WMR_CREATEBRUSHINDIRECT){
         U_WLOGBRUSH  lb;
         (void) U_WMRCREATEBRUSHINDIRECT_get(record, &membrush);
         memcpy(&lb, membrush, U_SIZE_WLOGBRUSH);
         if(lb.Style == U_BS_SOLID){
             double r, g, b;
-            r = SP_COLOR_U_TO_F( U_RGBAGetR(lb.Color) );
-            g = SP_COLOR_U_TO_F( U_RGBAGetG(lb.Color) );
-            b = SP_COLOR_U_TO_F( U_RGBAGetB(lb.Color) );
-            d->dc[d->level].style.fill.value.color.set( r, g, b );
+            r = SP_COLOR_U_TO_F(U_RGBAGetR(lb.Color));
+            g = SP_COLOR_U_TO_F(U_RGBAGetG(lb.Color));
+            b = SP_COLOR_U_TO_F(U_RGBAGetB(lb.Color));
+            d->dc[d->level].style.fill.value.color.set(r, g, b);
             d->dc[d->level].fill_mode    = DRAW_PAINT;
             d->dc[d->level].fill_set     = true;
         }
@@ -1110,10 +1110,10 @@ Wmf::select_brush(PWMF_CALLBACK_DATA d, int index)
             }
             if(tidx == U_WMR_INVALID){  // Problem with the image, for instance, an unsupported bitmap16 type
                 double r, g, b;
-                r = SP_COLOR_U_TO_F( U_RGBAGetR(d->dc[d->level].textColor));
-                g = SP_COLOR_U_TO_F( U_RGBAGetG(d->dc[d->level].textColor));
-                b = SP_COLOR_U_TO_F( U_RGBAGetB(d->dc[d->level].textColor));
-                d->dc[d->level].style.fill.value.color.set( r, g, b );
+                r = SP_COLOR_U_TO_F(U_RGBAGetR(d->dc[d->level].textColor));
+                g = SP_COLOR_U_TO_F(U_RGBAGetG(d->dc[d->level].textColor));
+                b = SP_COLOR_U_TO_F(U_RGBAGetB(d->dc[d->level].textColor));
+                d->dc[d->level].style.fill.value.color.set(r, g, b);
                 d->dc[d->level].fill_mode = DRAW_PAINT;
             }
             else {
@@ -1135,10 +1135,10 @@ Wmf::select_brush(PWMF_CALLBACK_DATA d, int index)
             tidx = add_bm16_image(d, Bm16h, px);
             if(tidx == 0xFFFFFFFF){  // Problem with the image, for instance, an unsupported bitmap16 type
                 double r, g, b;
-                r = SP_COLOR_U_TO_F( U_RGBAGetR(d->dc[d->level].textColor));
-                g = SP_COLOR_U_TO_F( U_RGBAGetG(d->dc[d->level].textColor));
-                b = SP_COLOR_U_TO_F( U_RGBAGetB(d->dc[d->level].textColor));
-                d->dc[d->level].style.fill.value.color.set( r, g, b );
+                r = SP_COLOR_U_TO_F(U_RGBAGetR(d->dc[d->level].textColor));
+                g = SP_COLOR_U_TO_F(U_RGBAGetG(d->dc[d->level].textColor));
+                b = SP_COLOR_U_TO_F(U_RGBAGetB(d->dc[d->level].textColor));
+                d->dc[d->level].style.fill.value.color.set(r, g, b);
                 d->dc[d->level].fill_mode = DRAW_PAINT;
             }
             else {
@@ -1175,7 +1175,7 @@ Wmf::select_font(PWMF_CALLBACK_DATA d, int index)
     */
     int cur_level = d->level;
     d->level = d->wmf_obj[index].level;
-    double font_size = pix_to_abs_size( d, font.Height );
+    double font_size = pix_to_abs_size(d, font.Height);
     /*  snap the font_size to the nearest 1/32nd of a point.
         (The size is converted from Pixels to points, snapped, and converted back.)
         See the notes where d->D2Pscale[XY] are set for the reason why.
@@ -1240,7 +1240,7 @@ Wmf::delete_object(PWMF_CALLBACK_DATA d, int index)
             d->dc[d->level].style.stroke_linejoin.computed = 0; // U_PS_JOIN_MITER;
             d->dc[d->level].stroke_set                     = true;
             d->dc[d->level].style.stroke_width.value       = 1.0;
-            d->dc[d->level].style.stroke.value.color.set( 0, 0, 0 );
+            d->dc[d->level].style.stroke.value.color.set(0, 0, 0);
         }
         else if(index == d->dc[d->level].active_brush){
             d->dc[d->level].active_brush                   = -1;
@@ -1348,21 +1348,21 @@ void Wmf::common_dib_to_image(PWMF_CALLBACK_DATA d, const char *dib,
                 colortype,  // DIB BitCount Enumeration
                 numCt,      // Color table used if not 0
                 invert      // If DIB rows are in opposite order from RGBA rows
-            )){
-                sub_px = RGBA_to_RGBA( // returns either a subset (side effect: frees rgba_px) or NULL (for subset == entire image)
+)){
+                sub_px = RGBA_to_RGBA(// returns either a subset (side effect: frees rgba_px) or NULL (for subset == entire image)
                     rgba_px,           // full pixel array from DIB
                     width,             // Width of pixel array
                     height,            // Height of pixel array
                     sx,sy,             // starting point in pixel array
                     &sw,&sh            // columns/rows to extract from the pixel array (output array size)
-                );
+);
 
                 if(!sub_px)sub_px=rgba_px;
-                toPNG(         // Get the image from the RGBA px into mempng
+                toPNG(// Get the image from the RGBA px into mempng
                     &mempng,
                     sw, sh,    // size of the extracted pixel array
                     sub_px
-                );
+);
                 free(sub_px);
             }
         }
@@ -1371,15 +1371,15 @@ void Wmf::common_dib_to_image(PWMF_CALLBACK_DATA d, const char *dib,
     gchar *base64String=nullptr;
     if(dibparams == U_BI_JPEG){    // image was binary jpg in source file
         tmp_image << " xlink:href=\"data:image/jpeg;base64,";
-        base64String = g_base64_encode((guchar*) px, numCt );
+        base64String = g_base64_encode((guchar*) px, numCt);
     }
     else if(dibparams==U_BI_PNG){  // image was binary png in source file
         tmp_image << " xlink:href=\"data:image/png;base64,";
-        base64String = g_base64_encode((guchar*) px, numCt );
+        base64String = g_base64_encode((guchar*) px, numCt);
     }
     else if(mempng.buffer){        // image was DIB in source file, converted to png in this routine
         tmp_image << " xlink:href=\"data:image/png;base64,";
-        base64String = g_base64_encode((guchar*) mempng.buffer, mempng.size );
+        base64String = g_base64_encode((guchar*) mempng.buffer, mempng.size);
         free(mempng.buffer);
     }
     else {                         // unknown or unsupported image type or failed conversion, insert the common bad image picture
@@ -1453,28 +1453,28 @@ void Wmf::common_bm16_to_image(PWMF_CALLBACK_DATA d, U_BITMAP16 Bm16, const char
         colortype,  // DIB BitCount Enumeration
         numCt,      // Color table used if not 0
         invert      // If DIB rows are in opposite order from RGBA rows
-    )){
-        sub_px = RGBA_to_RGBA( // returns either a subset (side effect: frees rgba_px) or NULL (for subset == entire image)
+)){
+        sub_px = RGBA_to_RGBA(// returns either a subset (side effect: frees rgba_px) or NULL (for subset == entire image)
             rgba_px,           // full pixel array from DIB
             width,             // Width of pixel array
             height,            // Height of pixel array
             sx,sy,             // starting point in pixel array
             &sw,&sh            // columns/rows to extract from the pixel array (output array size)
-        );
+);
 
         if(!sub_px)sub_px=rgba_px;
-        toPNG(         // Get the image from the RGBA px into mempng
+        toPNG(// Get the image from the RGBA px into mempng
             &mempng,
             sw, sh,    // size of the extracted pixel array
             sub_px
-        );
+);
         free(sub_px);
     }
 
     gchar *base64String=nullptr;
     if(mempng.buffer){             // image was Bm16 in source file, converted to png in this routine
         tmp_image << " xlink:href=\"data:image/png;base64,";
-        base64String = g_base64_encode((guchar*) mempng.buffer, mempng.size );
+        base64String = g_base64_encode((guchar*) mempng.buffer, mempng.size);
         free(mempng.buffer);
     }
     else {                         // unknown or unsupported image type or failed conversion, insert the common bad image picture
@@ -1541,8 +1541,8 @@ int Wmf::myMetaFileProc(const char *contents, unsigned int length, PWMF_CALLBACK
     int  wDbgRecord=0;
     int  wDbgComment=0;
     int  wDbgFinal=0;
-    char const* wDbgString = getenv( "INKSCAPE_DBG_WMF" );
-    if ( wDbgString != nullptr ) {
+    char const* wDbgString = getenv("INKSCAPE_DBG_WMF");
+    if (wDbgString != nullptr) {
         if(strstr(wDbgString,"RECORD")){  wDbgRecord  = 1; }
         if(strstr(wDbgString,"COMMENT")){ wDbgComment = 1; }
         if(strstr(wDbgString,"FINAL")){   wDbgFinal   = 1; }
@@ -1593,9 +1593,9 @@ int Wmf::myMetaFileProc(const char *contents, unsigned int length, PWMF_CALLBACK
 
         // Init the new wmf_obj list elements to null, provided the
         // dynamic allocation succeeded.
-        if ( d->wmf_obj != nullptr )
+        if (d->wmf_obj != nullptr)
         {
-            for( int i=0; i < d->n_obj; ++i )
+            for(int i=0; i < d->n_obj; ++i)
                 d->wmf_obj[i].record = nullptr;
         } //if
 
@@ -1609,7 +1609,7 @@ int Wmf::myMetaFileProc(const char *contents, unsigned int length, PWMF_CALLBACK
             while(OK){
                 nSize = U_WMRRECSAFE_get(contents + off, blimit);
                 if(nSize){
-                    iType = *(uint8_t *)(contents + off + offsetof(U_METARECORD, iType )  );
+                    iType = *(uint8_t *)(contents + off + offsetof(U_METARECORD, iType));
                     if(iType ==  U_WMR_SETWINDOWEXT){
                         OK=0;
                         (void) U_WMRSETWINDOWEXT_get(contents + off, &Dst);
@@ -1664,7 +1664,7 @@ int Wmf::myMetaFileProc(const char *contents, unsigned int length, PWMF_CALLBACK
         d->ulCornerOutX = d->ulCornerInX              * d->D2PscaleX;
         d->ulCornerOutY = d->ulCornerInY * d->E2IdirY * d->D2PscaleY;
 
-        d->dc[0].style.stroke_width.value =  pix_to_abs_size( d, 1 ); // This could not be set until the size of the WMF was known
+        d->dc[0].style.stroke_width.value =  pix_to_abs_size(d, 1); // This could not be set until the size of the WMF was known
         dbg_str << "<!-- U_WMR_HEADER -->\n";
 
         d->outdef += "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n";
@@ -1705,7 +1705,7 @@ int Wmf::myMetaFileProc(const char *contents, unsigned int length, PWMF_CALLBACK
         break;
     }
 
-    iType     = *(uint8_t *)(contents + offsetof(U_METARECORD, iType )  );
+    iType     = *(uint8_t *)(contents + offsetof(U_METARECORD, iType));
 
     wmr_mask = U_wmr_properties(iType);
     if (wmr_mask == U_WMR_INVALID) { 
@@ -1768,13 +1768,13 @@ int Wmf::myMetaFileProc(const char *contents, unsigned int length, PWMF_CALLBACK
 //std::cout << "BEFORE DRAW logic d->mask: " << std::hex << d->mask << " wmr_mask: " << wmr_mask << std::dec << std::endl;
 /*
 std::cout << "BEFORE DRAW"
- << " test0 " << ( d->mask & U_DRAW_VISIBLE)
- << " test1 " << ( d->mask & U_DRAW_FORCE)
+ << " test0 " << (d->mask & U_DRAW_VISIBLE)
+ << " test1 " << (d->mask & U_DRAW_FORCE)
  << " test2 " << (wmr_mask & U_DRAW_ALTERS)
- << " test2.5 " << ((d->mask & U_DRAW_NOFILL) != (wmr_mask & U_DRAW_NOFILL)  )
+ << " test2.5 " << ((d->mask & U_DRAW_NOFILL) != (wmr_mask & U_DRAW_NOFILL))
  << " test3 " << (wmr_mask & U_DRAW_VISIBLE)
  << " test4 " << !(d->mask & U_DRAW_ONLYTO)
- << " test5 " << ((d->mask & U_DRAW_ONLYTO) && !(wmr_mask & U_DRAW_ONLYTO)  )
+ << " test5 " << ((d->mask & U_DRAW_ONLYTO) && !(wmr_mask & U_DRAW_ONLYTO))
  << std::endl;
 */
     /* spurious moveto records should not affect the drawing.  However, they set the NOFILL
@@ -1793,14 +1793,14 @@ std::cout << "BEFORE DRAW"
             (d->mask & U_DRAW_FORCE)                            ||              // This draw is forced by STROKE/FILL/STROKEANDFILL PATH
             (wmr_mask & U_DRAW_ALTERS)                          ||              // Next record would alter the drawing environment in some way
             ((d->mask & U_DRAW_NOFILL) != (wmr_mask & U_DRAW_NOFILL)) ||        // Fill<->!Fill requires a draw between
-            (  (wmr_mask & U_DRAW_VISIBLE)                      &&              // Next record is visible...
+            ((wmr_mask & U_DRAW_VISIBLE)                      &&              // Next record is visible...
                 (
-                    ( !(d->mask & U_DRAW_ONLYTO) )              ||              //   Non *TO records cannot be followed by any Visible
-                    ((d->mask & U_DRAW_ONLYTO) && !(wmr_mask & U_DRAW_ONLYTO)  )//   *TO records can only be followed by other *TO records
-                )
-            )
-        )
-    ){
+                    (!(d->mask & U_DRAW_ONLYTO))              ||              //   Non *TO records cannot be followed by any Visible
+                    ((d->mask & U_DRAW_ONLYTO) && !(wmr_mask & U_DRAW_ONLYTO))//   *TO records can only be followed by other *TO records
+)
+)
+)
+){
 //  std::cout << "PATH DRAW at TOP <<+++++++++++++++++++++++++++++++++++++" << std::endl;
         if(!(d->path.empty())){
             d->outsvg += "   <path ";    // this is the ONLY place <path should be used!!!!
@@ -1937,7 +1937,7 @@ std::cout << "BEFORE DRAW"
                 double Oy = d->PixelsOutY;
                 double Wx = d->dc[d->level].sizeWnd.x;
                 double Wy = d->dc[d->level].sizeWnd.y;
-                if(Wx != Wy && Geom::are_near(Ox/Wy, Oy/Wx, 1.01/MIN(Wx,Wy)) ){
+                if(Wx != Wy && Geom::are_near(Ox/Wy, Oy/Wx, 1.01/MIN(Wx,Wy))){
                     int tmp;
                     tmp = d->dc[d->level].sizeWnd.x;
                     d->dc[d->level].sizeWnd.x = d->dc[d->level].sizeWnd.y;
@@ -2017,7 +2017,7 @@ std::cout << "BEFORE DRAW"
 
             d->mask |= wmr_mask;
 
-            tmp_path << "\n\tL " << pix_to_xy( d, pt16.x, pt16.y) << " ";
+            tmp_path << "\n\tL " << pix_to_xy(d, pt16.x, pt16.y) << " ";
             break;
         }
         case U_WMR_MOVETO:
@@ -2031,7 +2031,7 @@ std::cout << "BEFORE DRAW"
             d->dc[d->level].cur = pt16;
 
             tmp_path <<
-                "\n\tM " << pix_to_xy( d, pt16.x, pt16.y ) << " ";
+                "\n\tM " << pix_to_xy(d, pt16.x, pt16.y) << " ";
             break;
         }
         case U_WMR_EXCLUDECLIPRECT:
@@ -2050,10 +2050,10 @@ std::cout << "BEFORE DRAW"
             tmp_path << "L " << -faraway << "," <<  faraway << " ";
             tmp_path << "z ";
             //inner rect, counterclockwise (sign of Y is reversed)
-            tmp_path << "M " << pix_to_xy( d, rc.left , rc.top )     << " ";
-            tmp_path << "L " << pix_to_xy( d, rc.right, rc.top )     << " ";
-            tmp_path << "L " << pix_to_xy( d, rc.right, rc.bottom )  << " ";
-            tmp_path << "L " << pix_to_xy( d, rc.left,  rc.bottom )  << " ";
+            tmp_path << "M " << pix_to_xy(d, rc.left , rc.top)     << " ";
+            tmp_path << "L " << pix_to_xy(d, rc.right, rc.top)     << " ";
+            tmp_path << "L " << pix_to_xy(d, rc.right, rc.bottom)  << " ";
+            tmp_path << "L " << pix_to_xy(d, rc.left,  rc.bottom)  << " ";
             tmp_path << "z";
             
             add_clips(d, tmp_path.str().c_str(), U_RGN_AND);
@@ -2069,10 +2069,10 @@ std::cout << "BEFORE DRAW"
             nSize = U_WMRINTERSECTCLIPRECT_get(contents, &rc);
 
             SVGOStringStream tmp_path;
-            tmp_path << "M " << pix_to_xy( d, rc.left , rc.top )     << " ";
-            tmp_path << "L " << pix_to_xy( d, rc.right, rc.top )     << " ";
-            tmp_path << "L " << pix_to_xy( d, rc.right, rc.bottom )  << " ";
-            tmp_path << "L " << pix_to_xy( d, rc.left,  rc.bottom )  << " ";
+            tmp_path << "M " << pix_to_xy(d, rc.left , rc.top)     << " ";
+            tmp_path << "L " << pix_to_xy(d, rc.right, rc.top)     << " ";
+            tmp_path << "L " << pix_to_xy(d, rc.right, rc.bottom)  << " ";
+            tmp_path << "L " << pix_to_xy(d, rc.left,  rc.bottom)  << " ";
             tmp_path << "z";
             
             add_clips(d, tmp_path.str().c_str(), U_RGN_AND);
@@ -2112,10 +2112,10 @@ std::cout << "BEFORE DRAW"
 
             nSize = U_WMRELLIPSE_get(contents, &rc);
 
-            double cx = pix_to_x_point( d, (rc.left + rc.right)/2.0, (rc.bottom + rc.top)/2.0 );
-            double cy = pix_to_y_point( d, (rc.left + rc.right)/2.0, (rc.bottom + rc.top)/2.0 );
-            double rx = pix_to_abs_size( d, std::abs(rc.right - rc.left  )/2.0 );
-            double ry = pix_to_abs_size( d, std::abs(rc.top   - rc.bottom)/2.0 );
+            double cx = pix_to_x_point(d, (rc.left + rc.right)/2.0, (rc.bottom + rc.top)/2.0);
+            double cy = pix_to_y_point(d, (rc.left + rc.right)/2.0, (rc.bottom + rc.top)/2.0);
+            double rx = pix_to_abs_size(d, std::abs(rc.right - rc.left)/2.0);
+            double ry = pix_to_abs_size(d, std::abs(rc.top   - rc.bottom)/2.0);
 
             SVGOStringStream tmp_ellipse;
             tmp_ellipse << "cx=\"" << cx << "\" ";
@@ -2167,10 +2167,10 @@ std::cout << "BEFORE DRAW"
             U_sanerect16(rc, &left, &top, &right, &bottom);
 
             SVGOStringStream tmp_rectangle;
-            tmp_rectangle << "\n\tM " << pix_to_xy( d, left , top )     << " ";
-            tmp_rectangle << "\n\tL " << pix_to_xy( d, right, top )     << " ";
-            tmp_rectangle << "\n\tL " << pix_to_xy( d, right, bottom )  << " ";
-            tmp_rectangle << "\n\tL " << pix_to_xy( d, left,  bottom )  << " ";
+            tmp_rectangle << "\n\tM " << pix_to_xy(d, left , top)     << " ";
+            tmp_rectangle << "\n\tL " << pix_to_xy(d, right, top)     << " ";
+            tmp_rectangle << "\n\tL " << pix_to_xy(d, right, bottom)  << " ";
+            tmp_rectangle << "\n\tL " << pix_to_xy(d, left,  bottom)  << " ";
             tmp_rectangle << "\n\tz";
 
             d->mask |= wmr_mask;
@@ -2194,44 +2194,44 @@ std::cout << "BEFORE DRAW"
             SVGOStringStream tmp_rectangle;
             tmp_rectangle << "\n"
                           << "    M "
-                          << pix_to_xy(d, left            ,  top    + cny    )
+                          << pix_to_xy(d, left            ,  top    + cny)
                           << "\n";
             tmp_rectangle << "   C "
-                          << pix_to_xy(d, left            ,  top    + cny*f1 )
+                          << pix_to_xy(d, left            ,  top    + cny*f1)
                           << " "
-                          << pix_to_xy(d, left  + cnx*f1  ,  top             )
+                          << pix_to_xy(d, left  + cnx*f1  ,  top)
                           << " "
-                          << pix_to_xy(d, left  + cnx     ,  top             )
+                          << pix_to_xy(d, left  + cnx     ,  top)
                           << "\n";
             tmp_rectangle << "   L "
-                          << pix_to_xy(d, right - cnx     ,  top             )
+                          << pix_to_xy(d, right - cnx     ,  top)
                           << "\n";
             tmp_rectangle << "   C "
-                          << pix_to_xy(d, right - cnx*f1  ,  top             )
+                          << pix_to_xy(d, right - cnx*f1  ,  top)
                           << " "
-                          << pix_to_xy(d, right           ,  top    + cny*f1 )
+                          << pix_to_xy(d, right           ,  top    + cny*f1)
                           << " "
-                          << pix_to_xy(d, right           ,  top    + cny    )
+                          << pix_to_xy(d, right           ,  top    + cny)
                           << "\n";
             tmp_rectangle << "   L "
-                          << pix_to_xy(d, right           ,  bottom - cny    )
+                          << pix_to_xy(d, right           ,  bottom - cny)
                           << "\n";
             tmp_rectangle << "   C "
-                          << pix_to_xy(d, right           ,  bottom - cny*f1 )
+                          << pix_to_xy(d, right           ,  bottom - cny*f1)
                           << " "
-                          << pix_to_xy(d, right - cnx*f1  ,  bottom          )
+                          << pix_to_xy(d, right - cnx*f1  ,  bottom)
                           << " "
-                          << pix_to_xy(d, right - cnx     ,  bottom          )
+                          << pix_to_xy(d, right - cnx     ,  bottom)
                           << "\n";
             tmp_rectangle << "   L "
-                          << pix_to_xy(d, left  + cnx     ,  bottom          )
+                          << pix_to_xy(d, left  + cnx     ,  bottom)
                           << "\n";
             tmp_rectangle << "   C "
-                          << pix_to_xy(d, left  + cnx*f1  ,  bottom          )
+                          << pix_to_xy(d, left  + cnx*f1  ,  bottom)
                           << " "
-                          << pix_to_xy(d, left            ,  bottom - cny*f1 )
+                          << pix_to_xy(d, left            ,  bottom - cny*f1)
                           << " "
-                          << pix_to_xy(d, left            ,  bottom - cny    )
+                          << pix_to_xy(d, left            ,  bottom - cny)
                           << "\n";
             tmp_rectangle << "   z\n";
 
@@ -2247,10 +2247,10 @@ std::cout << "BEFORE DRAW"
             // Treat this like any other rectangle, ie, ignore the dwRop3
             nSize = U_WMRPATBLT_get(contents, &Dst, &cwh, &dwRop3);
             SVGOStringStream tmp_rectangle;
-            tmp_rectangle << "\n\tM " << pix_to_xy( d, Dst.x ,        Dst.y )         << " ";
-            tmp_rectangle << "\n\tL " << pix_to_xy( d, Dst.x + cwh.x, Dst.y )         << " ";
-            tmp_rectangle << "\n\tL " << pix_to_xy( d, Dst.x + cwh.x, Dst.y + cwh.y )  << " ";
-            tmp_rectangle << "\n\tL " << pix_to_xy( d, Dst.x,         Dst.y + cwh.y )  << " ";
+            tmp_rectangle << "\n\tM " << pix_to_xy(d, Dst.x ,        Dst.y)         << " ";
+            tmp_rectangle << "\n\tL " << pix_to_xy(d, Dst.x + cwh.x, Dst.y)         << " ";
+            tmp_rectangle << "\n\tL " << pix_to_xy(d, Dst.x + cwh.x, Dst.y + cwh.y)  << " ";
+            tmp_rectangle << "\n\tL " << pix_to_xy(d, Dst.x,         Dst.y + cwh.y)  << " ";
             tmp_rectangle << "\n\tz";
 
             d->mask |= wmr_mask;
@@ -2302,10 +2302,10 @@ std::cout << "BEFORE DRAW"
                 int32_t dw = cwh.x;
                 int32_t dh = cwh.y;
                 SVGOStringStream tmp_rectangle;
-                tmp_rectangle << "\n\tM " << pix_to_xy( d, dx,      dy      )    << " ";
-                tmp_rectangle << "\n\tL " << pix_to_xy( d, dx + dw, dy      )    << " ";
-                tmp_rectangle << "\n\tL " << pix_to_xy( d, dx + dw, dy + dh )    << " ";
-                tmp_rectangle << "\n\tL " << pix_to_xy( d, dx,      dy + dh )    << " ";
+                tmp_rectangle << "\n\tM " << pix_to_xy(d, dx,      dy)    << " ";
+                tmp_rectangle << "\n\tL " << pix_to_xy(d, dx + dw, dy)    << " ";
+                tmp_rectangle << "\n\tL " << pix_to_xy(d, dx + dw, dy + dh)    << " ";
+                tmp_rectangle << "\n\tL " << pix_to_xy(d, dx,      dy + dh)    << " ";
                 tmp_rectangle << "\n\tz";
 
                 d->mask |= wmr_mask;
@@ -2315,10 +2315,10 @@ std::cout << "BEFORE DRAW"
                 tmp_path <<   tmp_rectangle.str().c_str();
             }
             else { /* Not done yet, Bm16 image present */ }
-                 double dx = pix_to_x_point( d, Dst.x, Dst.y);
-                 double dy = pix_to_y_point( d, Dst.x, Dst.y);
-                 double dw = pix_to_abs_size( d, cwh.x);
-                 double dh = pix_to_abs_size( d, cwh.y);
+                 double dx = pix_to_x_point(d, Dst.x, Dst.y);
+                 double dy = pix_to_y_point(d, Dst.x, Dst.y);
+                 double dw = pix_to_abs_size(d, cwh.x);
+                 double dh = pix_to_abs_size(d, cwh.y);
                  //source position within the bitmap, in pixels
                  int sx = Src.x;
                  int sy = Src.y;
@@ -2340,10 +2340,10 @@ std::cout << "BEFORE DRAW"
                 int32_t dw = cDst.x;
                 int32_t dh = cDst.y;
                 SVGOStringStream tmp_rectangle;
-                tmp_rectangle << "\n\tM " << pix_to_xy( d, dx,      dy      )    << " ";
-                tmp_rectangle << "\n\tL " << pix_to_xy( d, dx + dw, dy      )    << " ";
-                tmp_rectangle << "\n\tL " << pix_to_xy( d, dx + dw, dy + dh )    << " ";
-                tmp_rectangle << "\n\tL " << pix_to_xy( d, dx,      dy + dh )    << " ";
+                tmp_rectangle << "\n\tM " << pix_to_xy(d, dx,      dy)    << " ";
+                tmp_rectangle << "\n\tL " << pix_to_xy(d, dx + dw, dy)    << " ";
+                tmp_rectangle << "\n\tL " << pix_to_xy(d, dx + dw, dy + dh)    << " ";
+                tmp_rectangle << "\n\tL " << pix_to_xy(d, dx,      dy + dh)    << " ";
                 tmp_rectangle << "\n\tz";
 
                 d->mask |= wmr_mask;
@@ -2353,10 +2353,10 @@ std::cout << "BEFORE DRAW"
                 tmp_path <<   tmp_rectangle.str().c_str();
             }
             else { /* Not done yet, Bm16 image present */ }
-                 double dx = pix_to_x_point( d, Dst.x, Dst.y);
-                 double dy = pix_to_y_point( d, Dst.x, Dst.y);
-                 double dw = pix_to_abs_size( d, cDst.x);
-                 double dh = pix_to_abs_size( d, cDst.y);
+                 double dx = pix_to_x_point(d, Dst.x, Dst.y);
+                 double dy = pix_to_y_point(d, Dst.x, Dst.y);
+                 double dw = pix_to_abs_size(d, cDst.x);
+                 double dh = pix_to_abs_size(d, cDst.y);
                  //source position within the bitmap, in pixels
                  int sx = Src.x;
                  int sy = Src.y;
@@ -2379,11 +2379,11 @@ std::cout << "BEFORE DRAW"
             d->mask |= wmr_mask;
             memcpy(&pt16,points,U_SIZE_POINT16); points += U_SIZE_POINT16;
 
-            tmp_str << "\n\tM " << pix_to_xy( d, pt16.x, pt16.y) << " ";
+            tmp_str << "\n\tM " << pix_to_xy(d, pt16.x, pt16.y) << " ";
 
             for (i=1; i<cPts; i++) {
                 memcpy(&pt16,points,U_SIZE_POINT16); points+=U_SIZE_POINT16;
-                tmp_str << "\n\tL " << pix_to_xy( d, pt16.x, pt16.y) << " ";
+                tmp_str << "\n\tL " << pix_to_xy(d, pt16.x, pt16.y) << " ";
             }
 
             tmp_path << tmp_str.str().c_str();
@@ -2474,7 +2474,7 @@ std::cout << "BEFORE DRAW"
             unsigned int index = utmp16;
 
             // WMF has no stock objects
-            if ( /*index >= 0 &&*/ index < (unsigned int) d->n_obj) {
+            if (/*index >= 0 &&*/ index < (unsigned int) d->n_obj) {
                 switch (d->wmf_obj[index].type)
                 {
                      case U_WMR_CREATEPENINDIRECT:
@@ -2540,7 +2540,7 @@ std::cout << "BEFORE DRAW"
             }
             else {
                 dbg_str << "<!-- U_WMR_EXTTEXTOUT -->\n";
-                nSize = U_WMREXTTEXTOUT_get(contents, &Dst, &tlen, &Opts, &text, &dx, &rc );
+                nSize = U_WMREXTTEXTOUT_get(contents, &Dst, &tlen, &Opts, &text, &dx, &rc);
             }
             uint32_t fOptions = Opts;
 
@@ -2632,7 +2632,7 @@ std::cout << "BEFORE DRAW"
                                                                           ALITOP));
 
                 // language direction can be encoded two ways, U_TA_RTLREADING is preferred 
-                if( (fOptions & U_ETO_RTLREADING) || (d->dc[d->level].textAlign & U_TA_RTLREADING) ){ tsp.ldir = LDIR_RL; }
+                if((fOptions & U_ETO_RTLREADING) || (d->dc[d->level].textAlign & U_TA_RTLREADING)){ tsp.ldir = LDIR_RL; }
                 else{                                                                                 tsp.ldir = LDIR_LR; }
 
                 tsp.condensed = FC_WIDTH_NORMAL; // Not implemented well in libTERE (yet)
@@ -2701,12 +2701,12 @@ std::cout << "BEFORE DRAW"
 
                 memcpy(&apt, Points + i, U_SIZE_POINT16); // points may not be aligned, copy them this way
 
-                poly_path << "\n\tM " << pix_to_xy( d, apt.x, apt.y) << " ";
+                poly_path << "\n\tM " << pix_to_xy(d, apt.x, apt.y) << " ";
                 i += U_SIZE_POINT16;
 
                 for (j=1; j < aPolyCounts[n] && i < cpts; j++) {
                     memcpy(&apt, Points + i, U_SIZE_POINT16); // points may not be aligned, copy them this way
-                    poly_path << "\n\tL " << pix_to_xy( d, apt.x, apt.y) << " ";
+                    poly_path << "\n\tL " << pix_to_xy(d, apt.x, apt.y) << " ";
                     i += U_SIZE_POINT16;
                 }
 
@@ -2746,10 +2746,10 @@ std::cout << "BEFORE DRAW"
                 int32_t dw = cwh.x;
                 int32_t dh = cwh.y;
                 SVGOStringStream tmp_rectangle;
-                tmp_rectangle << "\n\tM " << pix_to_xy( d, dx,      dy      )    << " ";
-                tmp_rectangle << "\n\tL " << pix_to_xy( d, dx + dw, dy      )    << " ";
-                tmp_rectangle << "\n\tL " << pix_to_xy( d, dx + dw, dy + dh )    << " ";
-                tmp_rectangle << "\n\tL " << pix_to_xy( d, dx,      dy + dh )    << " ";
+                tmp_rectangle << "\n\tM " << pix_to_xy(d, dx,      dy)    << " ";
+                tmp_rectangle << "\n\tL " << pix_to_xy(d, dx + dw, dy)    << " ";
+                tmp_rectangle << "\n\tL " << pix_to_xy(d, dx + dw, dy + dh)    << " ";
+                tmp_rectangle << "\n\tL " << pix_to_xy(d, dx,      dy + dh)    << " ";
                 tmp_rectangle << "\n\tz";
 
                 d->mask |= wmr_mask;
@@ -2759,10 +2759,10 @@ std::cout << "BEFORE DRAW"
                 tmp_path <<   tmp_rectangle.str().c_str();
             }
             else {
-                 double dx = pix_to_x_point( d, Dst.x, Dst.y);
-                 double dy = pix_to_y_point( d, Dst.x, Dst.y);
-                 double dw = pix_to_abs_size( d, cDst.x);
-                 double dh = pix_to_abs_size( d, cDst.y);
+                 double dx = pix_to_x_point(d, Dst.x, Dst.y);
+                 double dy = pix_to_y_point(d, Dst.x, Dst.y);
+                 double dw = pix_to_abs_size(d, cDst.x);
+                 double dh = pix_to_abs_size(d, cDst.y);
                  //source position within the bitmap, in pixels
                  int sx = Src.x;
                  int sy = Src.y;
@@ -2781,10 +2781,10 @@ std::cout << "BEFORE DRAW"
             nSize = U_WMRDIBSTRETCHBLT_get(contents, &Dst, &cDst, &Src, &cSrc, &dwRop3, &dib);
             // Always grab image, ignore modes.
             if (dib) {
-                double dx = pix_to_x_point( d, Dst.x, Dst.y);
-                double dy = pix_to_y_point( d, Dst.x, Dst.y);
-                double dw = pix_to_abs_size( d, cDst.x);
-                double dh = pix_to_abs_size( d, cDst.y);
+                double dx = pix_to_x_point(d, Dst.x, Dst.y);
+                double dy = pix_to_y_point(d, Dst.x, Dst.y);
+                double dw = pix_to_abs_size(d, cDst.x);
+                double dh = pix_to_abs_size(d, cDst.y);
                 //source position within the bitmap, in pixels
                 int sx = Src.x;
                 int sy = Src.y;
@@ -2805,10 +2805,10 @@ std::cout << "BEFORE DRAW"
         {
             dbg_str << "<!-- U_WMR_STRETCHDIB -->\n";
             nSize = U_WMRSTRETCHDIB_get(contents, &Dst, &cDst, &Src, &cSrc, &cUsage, &dwRop3, &dib);
-            double dx = pix_to_x_point( d, Dst.x, Dst.y );
-            double dy = pix_to_y_point( d, Dst.x, Dst.y );
-            double dw = pix_to_abs_size( d, cDst.x);
-            double dh = pix_to_abs_size( d, cDst.y);
+            double dx = pix_to_x_point(d, Dst.x, Dst.y);
+            double dy = pix_to_y_point(d, Dst.x, Dst.y);
+            double dw = pix_to_abs_size(d, cDst.x);
+            double dh = pix_to_abs_size(d, cDst.y);
             int sx = Src.x;  //source position within the bitmap, in pixels
             int sy = Src.y;
             int sw = cSrc.x; // extract the specified amount of the image
@@ -3101,7 +3101,7 @@ void Wmf::free_wmf_strings(WMF_STRINGS name){
 }
 
 SPDocument *
-Wmf::open( Inkscape::Extension::Input * /*mod*/, const gchar *uri )
+Wmf::open(Inkscape::Extension::Input * /*mod*/, const gchar *uri)
 {
 
     if (uri == nullptr) {
@@ -3131,7 +3131,7 @@ Wmf::open( Inkscape::Extension::Input * /*mod*/, const gchar *uri )
     d.dc[0].style.stroke_linecap.computed      = 2; // U_PS_ENDCAP_SQUARE;
     d.dc[0].style.stroke_linejoin.computed     = 0; // U_PS_JOIN_MITER;
     d.dc[0].style.stroke_width.value           = 1.0; // will be reset to something reasonable once WMF drawing size is known
-    d.dc[0].style.stroke.value.color.set( 0, 0, 0 );
+    d.dc[0].style.stroke.value.color.set(0, 0, 0);
     d.dc[0].stroke_set                         = true;
 
     // Default brush is none - no fill. WMF files that do not specify a brush are unlikely to look very good!

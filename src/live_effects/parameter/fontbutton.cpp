@@ -20,9 +20,9 @@ namespace Inkscape {
 
 namespace LivePathEffect {
 
-FontButtonParam::FontButtonParam( const Glib::ustring& label, const Glib::ustring& tip,
+FontButtonParam::FontButtonParam(const Glib::ustring& label, const Glib::ustring& tip,
                       const Glib::ustring& key, Inkscape::UI::Widget::Registry* wr,
-                      Effect* effect, const Glib::ustring default_value )
+                      Effect* effect, const Glib::ustring default_value)
     : Parameter(label, tip, key, wr, effect),
       value(default_value),
       defvalue(default_value)
@@ -68,14 +68,14 @@ Gtk::Widget *
 FontButtonParam::param_newWidget()
 {
     Inkscape::UI::Widget::RegisteredFontButton * fontbuttonwdg = Gtk::manage(
-        new Inkscape::UI::Widget::RegisteredFontButton( param_label,
+        new Inkscape::UI::Widget::RegisteredFontButton(param_label,
                                                         param_tooltip,
                                                         param_key,
                                                         *param_wr,
                                                         param_effect->getRepr(),
-                                                        param_effect->getSPDoc() ) );
+                                                        param_effect->getSPDoc()));
     Glib::ustring fontspec = param_getSVGValue();
-    fontbuttonwdg->setValue( fontspec);
+    fontbuttonwdg->setValue(fontspec);
     fontbuttonwdg->set_undo_parameters(SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Change font button parameter"));
     return dynamic_cast<Gtk::Widget *> (fontbuttonwdg);
 }

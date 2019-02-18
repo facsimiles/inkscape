@@ -175,7 +175,7 @@ bool PencilTool::root_handler(GdkEvent* event) {
 
 bool PencilTool::_handleButtonPress(GdkEventButton const &bevent) {
     bool ret = false;
-    if ( bevent.button == 1  && !this->space_panning) {
+    if (bevent.button == 1  && !this->space_panning) {
         Inkscape::Selection *selection = desktop->getSelection();
 
         if (Inkscape::have_viable_layer(desktop, defaultMessageContext()) == false) {
@@ -185,9 +185,9 @@ bool PencilTool::_handleButtonPress(GdkEventButton const &bevent) {
         if (!this->grab) {
             /* Grab mouse, so release will not pass unnoticed */
             this->grab = SP_CANVAS_ITEM(desktop->acetate);
-            sp_canvas_item_grab(this->grab, ( GDK_KEY_PRESS_MASK | GDK_BUTTON_PRESS_MASK   |
+            sp_canvas_item_grab(this->grab, (GDK_KEY_PRESS_MASK | GDK_BUTTON_PRESS_MASK   |
                                             GDK_BUTTON_RELEASE_MASK |
-                                            GDK_POINTER_MOTION_MASK  ),
+                                            GDK_POINTER_MOTION_MASK),
                                 nullptr, bevent.time);
         }
 
@@ -238,7 +238,7 @@ bool PencilTool::_handleButtonPress(GdkEventButton const &bevent) {
                         // anchor, which is handled by the sibling branch above)
                         selection->clear();
                         desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Creating new path"));
-                    } else if (!(bevent.state & GDK_SHIFT_MASK) ) {
+                    } else if (!(bevent.state & GDK_SHIFT_MASK)) {
                         // This is the first click of a new curve; deselect item so that
                         // this curve is not combined with it (unless it is drawn from its
                         // anchor, which is handled by the sibling branch above)
@@ -284,12 +284,12 @@ bool PencilTool::_handleMotionNotify(GdkEventMotion const &mevent) {
         return ret;
     }
     
-    if ( ( mevent.state & GDK_BUTTON1_MASK ) && !this->grab && this->_is_drawing) {
+    if ((mevent.state & GDK_BUTTON1_MASK) && !this->grab && this->_is_drawing) {
         /* Grab mouse, so release will not pass unnoticed */
         this->grab = SP_CANVAS_ITEM(desktop->acetate);
-        sp_canvas_item_grab(this->grab, ( GDK_KEY_PRESS_MASK | GDK_BUTTON_PRESS_MASK   |
+        sp_canvas_item_grab(this->grab, (GDK_KEY_PRESS_MASK | GDK_BUTTON_PRESS_MASK   |
                                         GDK_BUTTON_RELEASE_MASK |
-                                        GDK_POINTER_MOTION_MASK  ),
+                                        GDK_POINTER_MOTION_MASK),
                             nullptr, mevent.time);
     }
 
@@ -301,7 +301,7 @@ bool PencilTool::_handleMotionNotify(GdkEventMotion const &mevent) {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     if (pencil_within_tolerance) {
         gint const tolerance = prefs->getIntLimited("/options/dragtolerance/value", 0, 0, 100);
-        if ( Geom::LInfty( Geom::Point(mevent.x,mevent.y) - pencil_drag_origin_w ) < tolerance ) {
+        if (Geom::LInfty(Geom::Point(mevent.x,mevent.y) - pencil_drag_origin_w) < tolerance) {
             return false;   // Do not drag if we're within tolerance from origin.
         }
     }
@@ -333,20 +333,20 @@ bool PencilTool::_handleMotionNotify(GdkEventMotion const &mevent) {
             break;
         default:
             /* We may be idle or already freehand */
-            if ( (mevent.state & GDK_BUTTON1_MASK) && this->_is_drawing ) {
+            if ((mevent.state & GDK_BUTTON1_MASK) && this->_is_drawing) {
                 if (this->_state == SP_PENCIL_CONTEXT_IDLE) {
                     sp_event_context_discard_delayed_snap_event(this);
                 }
                 this->_state = SP_PENCIL_CONTEXT_FREEHAND;
 
-                if ( !this->sa && !this->green_anchor ) {
+                if (!this->sa && !this->green_anchor) {
                     /* Create green anchor */
                     this->green_anchor = sp_draw_anchor_new(this, this->green_curve, TRUE, this->p[0]);
                 }
                 if (anchor) {
                     p = anchor->dp;
                 }
-                if ( this->_npoints != 0) { // buttonpress may have happened before we entered draw context!
+                if (this->_npoints != 0) { // buttonpress may have happened before we entered draw context!
                     if (this->ps.empty()) {
                         // Only in freehand mode we have to add the first point also to this->ps (apparently)
                         // - We cannot add this point in spdc_set_startpoint, because we only need it for freehand
@@ -401,7 +401,7 @@ bool PencilTool::_handleMotionNotify(GdkEventMotion const &mevent) {
 bool PencilTool::_handleButtonRelease(GdkEventButton const &revent) {
     bool ret = false;
 
-    if ( revent.button == 1 && this->_is_drawing && !this->space_panning) {
+    if (revent.button == 1 && this->_is_drawing && !this->space_panning) {
         this->_is_drawing = false;
 
         /* Find desktop coordinates */
@@ -651,11 +651,11 @@ void PencilTool::_setEndpoint(Geom::Point const &p) {
          * zoom setting).
          */
     }
-    g_return_if_fail( this->_npoints > 0 );
+    g_return_if_fail(this->_npoints > 0);
 
     this->red_curve->reset();
-    if ( ( p == this->p[0] )
-         || !in_svg_plane(p) )
+    if ((p == this->p[0])
+         || !in_svg_plane(p))
     {
         this->_npoints = 1;
     } else {
@@ -790,7 +790,7 @@ PencilTool::addPowerStrokePencil()
     if (!green_curve->is_unset()) {
         this->_curve = green_curve->copy();
         if (!red_curve->is_unset()) {
-            this->_curve->append_continuous( red_curve, 0.0625);
+            this->_curve->append_continuous(red_curve, 0.0625);
         }
     }
     if (!this->_curve || this->_curve->is_unset()) {
@@ -823,11 +823,11 @@ PencilTool::addPowerStrokePencil()
 }
 
 void PencilTool::_addFreehandPoint(Geom::Point const &p, guint /*state*/) {
-    g_assert( this->_npoints > 0 );
+    g_assert(this->_npoints > 0);
     g_return_if_fail(unsigned(this->_npoints) < G_N_ELEMENTS(this->p));
 
-    if ( ( p != this->p[ this->_npoints - 1 ] )
-         && in_svg_plane(p) )
+    if ((p != this->p[ this->_npoints - 1 ])
+         && in_svg_plane(p))
     {
         this->p[this->_npoints++] = p;
         this->_fitAndSplit();
@@ -855,7 +855,7 @@ square(double const x)
 void
 PencilTool::_powerstrokeInterpolate(bool apply) {
     size_t ps_size = this->ps.size();
-    if ( ps_size <= 1 ) {
+    if (ps_size <= 1) {
         return;
     }
     
@@ -867,7 +867,7 @@ PencilTool::_powerstrokeInterpolate(bool apply) {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     //This is a calculated number of nodes from 2 to 12 to get a simplify simil
     int tol = 2 + (prefs->getIntLimited("/tools/freehand/pencil/tolerance",10, 1, 100)/10);
-    std::unique_ptr<Geom::Interpolate::Interpolator> interpolator(  Geom::Interpolate::Interpolator::create(Geom::Interpolate::INTERP_CENTRIPETAL_CATMULLROM) );
+    std::unique_ptr<Geom::Interpolate::Interpolator> interpolator(Geom::Interpolate::Interpolator::create(Geom::Interpolate::INTERP_CENTRIPETAL_CATMULLROM));
     Geom::Affine transform_coordinate = SP_ITEM(SP_ACTIVE_DESKTOP->currentLayer())->i2dt_affine();
     this->_key_nodes.clear();
     std::vector<Geom::Point> sa_points;
@@ -894,7 +894,7 @@ PencilTool::_powerstrokeInterpolate(bool apply) {
     for (auto current:this->ps) {
         current *= transform_coordinate.inverse();
         Geom::Point prev = Geom::Point(0,0);
-        if (count == ps_size - 1 || (apply && count%tol == 0 ) || (!apply && count%2 == 0)) {
+        if (count == ps_size - 1 || (apply && count%tol == 0) || (!apply && count%2 == 0)) {
             size_t keys_size = this->_key_nodes.size();
             if (count == ps_size - 1 && apply && keys_size > 1) {
                 this->_key_nodes.pop_back();
@@ -922,7 +922,7 @@ PencilTool::_powerstrokeInterpolate(bool apply) {
     for (auto point:this->_points_pos) {
         double pos = Geom::nearest_time(point, path);
         this->points[count][Geom::X] = pos;
-        if (count > 1 && (this->points[count-1][Geom::X] == pos || (apply && pos > path.size() - 1 ))) {
+        if (count > 1 && (this->points[count-1][Geom::X] == pos || (apply && pos > path.size() - 1))) {
             this->points.pop_back();
         }
         count++;
@@ -933,12 +933,12 @@ PencilTool::_powerstrokeInterpolate(bool apply) {
     sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->red_bpath), nullptr);
     if (!path.empty()){
         this->_curve->set_pathvector(path);
-        if( apply &&
+        if(apply &&
             sa && 
             ea
             && sa->curve == ea->curve 
-            && ( ( sa != ea )
-            || sa->curve->is_closed() ))
+            && ((sa != ea)
+            || sa->curve->is_closed()))
         {
             this->_curve->closepath_current();
         }
@@ -947,7 +947,7 @@ PencilTool::_powerstrokeInterpolate(bool apply) {
 
 void PencilTool::_interpolate() {
     size_t ps_size = this->ps.size();
-    if ( ps_size <= 1 ) {
+    if (ps_size <= 1) {
         return;
     }
     
@@ -998,15 +998,15 @@ void PencilTool::_interpolate() {
         /* Set up direction of next curve. */
         {
             Geom::Curve const * last_seg = this->green_curve->last_segment();
-            g_assert( last_seg );      // Relevance: validity of (*last_seg)
+            g_assert(last_seg);      // Relevance: validity of (*last_seg)
             this->p[0] = last_seg->finalPoint();
             this->_npoints = 1;
             Geom::Curve *last_seg_reverse = last_seg->reverse();
-            Geom::Point const req_vec( -last_seg_reverse->unitTangentAt(0) );
+            Geom::Point const req_vec(-last_seg_reverse->unitTangentAt(0));
             delete last_seg_reverse;
-            this->_req_tangent = ( ( Geom::is_zero(req_vec) || !in_svg_plane(req_vec) )
+            this->_req_tangent = ((Geom::is_zero(req_vec) || !in_svg_plane(req_vec))
                                 ? Geom::Point(0, 0)
-                                : Geom::unit_vector(req_vec) );
+                                : Geom::unit_vector(req_vec));
         }
     }
 }
@@ -1014,7 +1014,7 @@ void PencilTool::_interpolate() {
 
 /* interpolates the sketched curve and tweaks the current sketch interpolation*/
 void PencilTool::_sketchInterpolate() {
-    if ( this->ps.size() <= 1 ) {
+    if (this->ps.size() <= 1) {
         return;
     }
 
@@ -1091,15 +1091,15 @@ void PencilTool::_sketchInterpolate() {
         /* Set up direction of next curve. */
         {
             Geom::Curve const * last_seg = this->green_curve->last_segment();
-            g_assert( last_seg );      // Relevance: validity of (*last_seg)
+            g_assert(last_seg);      // Relevance: validity of (*last_seg)
             this->p[0] = last_seg->finalPoint();
             this->_npoints = 1;
             Geom::Curve *last_seg_reverse = last_seg->reverse();
-            Geom::Point const req_vec( -last_seg_reverse->unitTangentAt(0) );
+            Geom::Point const req_vec(-last_seg_reverse->unitTangentAt(0));
             delete last_seg_reverse;
-            this->_req_tangent = ( ( Geom::is_zero(req_vec) || !in_svg_plane(req_vec) )
+            this->_req_tangent = ((Geom::is_zero(req_vec) || !in_svg_plane(req_vec))
                                 ? Geom::Point(0, 0)
-                                : Geom::unit_vector(req_vec) );
+                                : Geom::unit_vector(req_vec));
         }
     }
 
@@ -1109,7 +1109,7 @@ void PencilTool::_sketchInterpolate() {
 }
 
 void PencilTool::_fitAndSplit() {
-    g_assert( this->_npoints > 1 );
+    g_assert(this->_npoints > 1);
 
     double const tolerance_sq = 0;
 
@@ -1121,8 +1121,8 @@ void PencilTool::_fitAndSplit() {
     int const n_segs = Geom::bezier_fit_cubic_full(b, nullptr, this->p, this->_npoints,
                                                 this->_req_tangent, tHatEnd,
                                                 tolerance_sq, 1);
-    if ( n_segs > 0
-         && unsigned(this->_npoints) < G_N_ELEMENTS(this->p) )
+    if (n_segs > 0
+         && unsigned(this->_npoints) < G_N_ELEMENTS(this->p))
     {
         /* Fit and draw and reset state */
 
@@ -1153,15 +1153,15 @@ void PencilTool::_fitAndSplit() {
         /* Set up direction of next curve. */
         {
             Geom::Curve const * last_seg = this->red_curve->last_segment();
-            g_assert( last_seg );      // Relevance: validity of (*last_seg)
+            g_assert(last_seg);      // Relevance: validity of (*last_seg)
             this->p[0] = last_seg->finalPoint();
             this->_npoints = 1;
             Geom::Curve *last_seg_reverse = last_seg->reverse();
-            Geom::Point const req_vec( -last_seg_reverse->unitTangentAt(0) );
+            Geom::Point const req_vec(-last_seg_reverse->unitTangentAt(0));
             delete last_seg_reverse;
-            this->_req_tangent = ( ( Geom::is_zero(req_vec) || !in_svg_plane(req_vec) )
+            this->_req_tangent = ((Geom::is_zero(req_vec) || !in_svg_plane(req_vec))
                                 ? Geom::Point(0, 0)
-                                : Geom::unit_vector(req_vec) );
+                                : Geom::unit_vector(req_vec));
         }
 
 

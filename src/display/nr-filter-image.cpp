@@ -57,7 +57,7 @@ void FilterImage::render_cairo(FilterSlot &slot)
     // Viewport is filter primitive area (in user coordinates).
     // Note: viewport calculation in non-trivial. Do not rely
     // on get_matrix_primitiveunits2pb().
-    Geom::Rect vp = filter_primitive_area( slot.get_units() );
+    Geom::Rect vp = filter_primitive_area(slot.get_units());
     slot.set_primitive_area(_output, vp); // Needed for tiling
 
     double feImageX      = vp.min()[Geom::X];
@@ -77,8 +77,8 @@ void FilterImage::render_cairo(FilterSlot &slot)
     double bbox_width = Geom::distance(bbox_00, bbox_w0);
     double bbox_height = Geom::distance(bbox_00, bbox_0h);
 
-    if( feImageWidth  == 0 ) feImageWidth  = bbox_width;
-    if( feImageHeight == 0 ) feImageHeight = bbox_height;
+    if(feImageWidth  == 0) feImageWidth  = bbox_width;
+    if(feImageHeight == 0) feImageHeight = bbox_height;
 
     int device_scale = slot.get_device_scale();
 
@@ -137,7 +137,7 @@ void FilterImage::render_cairo(FilterSlot &slot)
 
         slot.set(_output, out);
         cairo_surface_destroy(out);
-        std::cout << "  feImage: out: " << cairo_image_surface_get_width( out) << std::endl;
+        std::cout << "  feImage: out: " << cairo_image_surface_get_width(out) << std::endl;
         std::cout << "FilterImage::render_cairo: Exit 2" << std::endl;
         return;
     }
@@ -155,21 +155,21 @@ void FilterImage::render_cairo(FilterSlot &slot)
          * (i.e. interpreting it as relative to our current working directory).
          * (See http://www.w3.org/TR/xmlbase/#resolution .) */
         gchar *fullname = feImageHref;
-        if ( !g_file_test( fullname, G_FILE_TEST_EXISTS ) ) {
+        if (!g_file_test(fullname, G_FILE_TEST_EXISTS)) {
             // Try to load from relative position combined with document base
-            if( document ) {
-                fullname = g_build_filename( document->getBase(), feImageHref, NULL );
+            if(document) {
+                fullname = g_build_filename(document->getBase(), feImageHref, NULL);
             }
         }
-        if ( !g_file_test( fullname, G_FILE_TEST_EXISTS ) ) {
+        if (!g_file_test(fullname, G_FILE_TEST_EXISTS)) {
             // Should display Broken Image png.
-            g_warning("FilterImage::render: Can not find: %s", feImageHref  );
+            g_warning("FilterImage::render: Can not find: %s", feImageHref);
             return;
         }
         image = Inkscape::Pixbuf::create_from_file(fullname);
-        if( fullname != feImageHref ) g_free( fullname );
+        if(fullname != feImageHref) g_free(fullname);
 
-        if ( !image ) {
+        if (!image) {
             g_warning("FilterImage::render: failed to load image: %s", feImageHref);
             return;
         }
@@ -186,7 +186,7 @@ void FilterImage::render_cairo(FilterSlot &slot)
     Geom::Rect sa = slot.get_slot_area();
     cairo_surface_t *out = cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
         sa.width() * device_scale, sa.height() * device_scale);
-    cairo_surface_set_device_scale( out, device_scale, device_scale );
+    cairo_surface_set_device_scale(out, device_scale, device_scale);
     std::cout << "    out:   " << cairo_image_surface_get_width(out) << std::endl;
 
     // For the moment, we'll assume that any image is in sRGB color space
@@ -205,7 +205,7 @@ void FilterImage::render_cairo(FilterSlot &slot)
     // Partially copied from sp-image.cpp.
 
     // Do nothing if preserveAspectRatio is "none".
-    if( aspect_align != SP_ASPECT_NONE ) {
+    if(aspect_align != SP_ASPECT_NONE) {
 
         // Check aspect ratio of image vs. viewport
         double feAspect = feImageHeight/feImageWidth;
@@ -213,7 +213,7 @@ void FilterImage::render_cairo(FilterSlot &slot)
         bool ratio = (feAspect < aspect);
 
         double ax, ay; // Align side
-        switch( aspect_align ) {
+        switch(aspect_align) {
             case SP_ASPECT_XMIN_YMIN:
                 ax = 0.0;
                 ay = 0.0;
@@ -256,10 +256,10 @@ void FilterImage::render_cairo(FilterSlot &slot)
                 break;
         }
 
-        if( aspect_clip == SP_ASPECT_SLICE ) {
+        if(aspect_clip == SP_ASPECT_SLICE) {
             // image clipped by viewbox
 
-            if( ratio ) {
+            if(ratio) {
                 // clip top/bottom
                 feImageY -= ay * (feImageWidth * aspect - feImageHeight);
                 feImageHeight = feImageWidth * aspect;
@@ -272,9 +272,9 @@ void FilterImage::render_cairo(FilterSlot &slot)
         } else {
             // image fits into viewbox
 
-            if( ratio ) {
+            if(ratio) {
                 // fit to height
-                feImageX += ax * (feImageWidth - feImageHeight / aspect );
+                feImageX += ax * (feImageWidth - feImageHeight / aspect);
                 feImageWidth = feImageHeight / aspect;
             } else {
                 // fit to width
@@ -321,11 +321,11 @@ void FilterImage::set_document(SPDocument *doc){
     document = doc;
 }
 
-void FilterImage::set_align( unsigned int align ) {
+void FilterImage::set_align(unsigned int align) {
     aspect_align = align;
 }
 
-void FilterImage::set_clip( unsigned int clip ) {
+void FilterImage::set_clip(unsigned int clip) {
     aspect_clip = clip;
 }
 

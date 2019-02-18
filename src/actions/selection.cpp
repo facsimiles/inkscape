@@ -115,11 +115,11 @@ select_all(Inkscape* app)
 void
 add_actions_selection(InkscapeApplication* app)
 {
-    app->add_action(               "select-clear",       sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&selecton_clear),            app)        );
-    app->add_action_radio_string(  "select-via-id",      sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_via_id),             app), "null");
-    app->add_action_radio_string(  "select-via-class",   sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_via_id),             app), "null");
-    app->add_action_radio_string(  "select-via-element", sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_via_element),        app), "null");
-    app->add_action_radio_string(  "select-via-selector",sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_via_selector),       app), "null");
+    app->add_action("select-clear",       sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&selecton_clear),            app));
+    app->add_action_radio_string("select-via-id",      sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_via_id),             app), "null");
+    app->add_action_radio_string("select-via-class",   sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_via_id),             app), "null");
+    app->add_action_radio_string("select-via-element", sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_via_element),        app), "null");
+    app->add_action_radio_string("select-via-selector",sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_via_selector),       app), "null");
 }
 
 

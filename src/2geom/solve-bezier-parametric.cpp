@@ -66,7 +66,7 @@ find_parametric_bezier_roots(Geom::Point const *w, /* The control points  */
 
     //Geom::Point Left[degree+1],	/* New left and right  */
     //    Right[degree+1];	/* control polygons  */
-    std::vector<Geom::Point> Left( degree+1 ), Right(degree+1);
+    std::vector<Geom::Point> Left(degree+1), Right(degree+1);
 
     casteljau_subdivision(0.5, w, Left.data(), Right.data(), degree);
     total_subs ++;

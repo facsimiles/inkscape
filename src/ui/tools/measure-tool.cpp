@@ -242,7 +242,7 @@ void setMeasureItem(Geom::PathVector pathv, bool is_curve, bool markers, guint32
     sp_repr_css_write_string(css,css_str);
     repr->setAttribute("style", css_str.c_str());
     sp_repr_css_attr_unref (css);
-    g_assert( str != nullptr );
+    g_assert(str != nullptr);
     repr->setAttribute("d", str);
     g_free(str);
     if(measure_repr) {
@@ -602,8 +602,8 @@ bool MeasureTool::root_handler(GdkEvent* event)
             Inkscape::Preferences *prefs = Inkscape::Preferences::get();
             tolerance = prefs->getIntLimited("/options/dragtolerance/value", 0, 0, 100);
             Geom::Point const motion_w(event->motion.x, event->motion.y);
-            if ( within_tolerance) {
-                if ( Geom::LInfty( motion_w - start_p ) < tolerance) {
+            if (within_tolerance) {
+                if (Geom::LInfty(motion_w - start_p) < tolerance) {
                     return FALSE;   // Do not drag if we're within tolerance from origin.
                 }
             }
@@ -611,7 +611,7 @@ bool MeasureTool::root_handler(GdkEvent* event)
             // (indicating they intend to move the object, not click), then always process the
             // motion notify coordinates as given (no snapping back to origin)
             within_tolerance = false;
-            if(event->motion.time == 0 || !last_end  || Geom::LInfty( motion_w - *last_end ) > (tolerance/4.0)) {
+            if(event->motion.time == 0 || !last_end  || Geom::LInfty(motion_w - *last_end) > (tolerance/4.0)) {
                 Geom::Point const motion_dt(desktop->w2d(motion_w));
                 end_p = motion_dt;
 
@@ -860,7 +860,7 @@ void MeasureTool::setGuide(Geom::Point origin,double angle, const char *label)
     std::stringstream position;
     position.imbue(std::locale::classic());
     position <<  origin[Geom::X] << "," << origin[Geom::Y];
-    guide->setAttribute("position", position.str().c_str() );
+    guide->setAttribute("position", position.str().c_str());
     guide->setAttribute("inkscape:color", "rgb(167,0,255)");
     guide->setAttribute("inkscape:label", label);
     Geom::Point unit_vector = Geom::rot90(origin.polar(angle));
@@ -1085,7 +1085,7 @@ void MeasureTool::setMeasureCanvasItem(Geom::Point position, bool to_item, bool 
         "stroke_color", color,
         "mode", SP_KNOT_MODE_XOR,
         "shape", SP_KNOT_SHAPE_CROSS,
-        NULL );
+        NULL);
 
     SP_CTRL(canvasitem)->moveto(position);
     if(to_phantom){
@@ -1355,7 +1355,7 @@ void MeasureTool::showCanvasItems(bool to_guides, bool to_item, bool to_phantom,
         placement.lengthVal = (intersections[idx] - intersections[idx - 1]).length();
         placement.lengthVal = Inkscape::Util::Quantity::convert(placement.lengthVal, "px", unit_name);
         placement.offset = dimension_offset / 2;
-        placement.start = desktop->doc2dt( (intersections[idx - 1] + intersections[idx]) / 2 );
+        placement.start = desktop->doc2dt((intersections[idx - 1] + intersections[idx]) / 2);
         placement.end = placement.start - (normal * placement.offset);
 
         placements.push_back(placement);

@@ -97,20 +97,20 @@ void
 LPETangentToCurve::addKnotHolderEntities(KnotHolder *knotholder, SPItem *item) {
     {
         KnotHolderEntity *e = new TtC::KnotHolderEntityAttachPt(this);
-        e->create( nullptr, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN,
-                   _("Adjust the point of attachment of the tangent") );
+        e->create(nullptr, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN,
+                   _("Adjust the point of attachment of the tangent"));
         knotholder->add(e);
     }
     {
         KnotHolderEntity *e = new TtC::KnotHolderEntityLeftEnd(this);
-        e->create( nullptr, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN,
-                    _("Adjust the <b>left</b> end of the tangent") );
+        e->create(nullptr, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN,
+                    _("Adjust the <b>left</b> end of the tangent"));
         knotholder->add(e);
     }
     {
         KnotHolderEntity *e = new TtC::KnotHolderEntityRightEnd(this);
-        e->create( nullptr, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN,
-                   _("Adjust the <b>right</b> end of the tangent") );
+        e->create(nullptr, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN,
+                   _("Adjust the <b>right</b> end of the tangent"));
         knotholder->add(e);
     }
 };
@@ -126,12 +126,12 @@ KnotHolderEntityAttachPt::knot_set(Geom::Point const &p, Geom::Point const &/*or
 
     Geom::Point const s = snap_knot_position(p, state);
 
-    if ( !SP_IS_SHAPE(lpe->sp_lpe_item) ) {
+    if (!SP_IS_SHAPE(lpe->sp_lpe_item)) {
         //lpe->t_attach.param_set_value(0);
         g_warning("LPEItem is not a path! %s:%d\n", __FILE__, __LINE__);
         return;
     }
-    Piecewise<D2<SBasis> > pwd2 = paths_to_pw( lpe->pathvector_before_effect );
+    Piecewise<D2<SBasis> > pwd2 = paths_to_pw(lpe->pathvector_before_effect);
     
     double t0 = nearest_time(s, pwd2);
     lpe->t_attach.param_set_value(t0);

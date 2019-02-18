@@ -107,11 +107,11 @@ public:
         return bounds_local(inner, i, deg);
     }
     virtual std::vector<Coord> roots(Coord v, Dim2 d) const { return Geom::roots(inner[d] - v); }
-    virtual Coord nearestTime( Point const& p, Coord from = 0, Coord to = 1 ) const {
+    virtual Coord nearestTime(Point const& p, Coord from = 0, Coord to = 1) const {
         return nearest_time(p, inner, from, to);
     }
-    virtual std::vector<Coord> allNearestTimes( Point const& p, Coord from = 0,
-        Coord to = 1 ) const
+    virtual std::vector<Coord> allNearestTimes(Point const& p, Coord from = 0,
+        Coord to = 1) const
     {
         return all_nearest_times(p, inner, from, to);
     }

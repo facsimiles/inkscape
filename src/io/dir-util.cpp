@@ -18,10 +18,10 @@
 #include <glib.h>
 #include "dir-util.h"
 
-std::string sp_relative_path_from_path( std::string const &path, std::string const &base)
+std::string sp_relative_path_from_path(std::string const &path, std::string const &base)
 {
     std::string result;
-    if ( !base.empty() && !path.empty() ) {
+    if (!base.empty() && !path.empty()) {
         size_t base_len = base.length();
         while (base_len != 0
                && (base[base_len - 1] == G_DIR_SEPARATOR))
@@ -29,20 +29,20 @@ std::string sp_relative_path_from_path( std::string const &path, std::string con
             --base_len;
         }
 
-        if ( (path.substr(0, base_len) == base.substr(0, base_len))
+        if ((path.substr(0, base_len) == base.substr(0, base_len))
              && (path[base_len] == G_DIR_SEPARATOR))
         {
             size_t retPos = base_len + 1;
-            while ( (retPos < path.length()) && (path[retPos] == G_DIR_SEPARATOR) ) {
+            while ((retPos < path.length()) && (path[retPos] == G_DIR_SEPARATOR)) {
                 retPos++;
             }
-            if ( (retPos + 1) < path.length() ) {
+            if ((retPos + 1) < path.length()) {
                 result = path.substr(retPos);
             }
         }
 
     }
-    if ( result.empty() ) {
+    if (result.empty()) {
         result = path;
     }
     return result;
@@ -238,7 +238,7 @@ char *prepend_current_dir_if_relative(gchar const *uri)
 	gsize bytesRead = 0;
 	gsize bytesWritten = 0;
 	GError* error = nullptr;
-	gchar* cwd_utf8 = g_filename_to_utf8 ( cwd,
+	gchar* cwd_utf8 = g_filename_to_utf8 (cwd,
                                                   -1,
                                                   &bytesRead,
                                                   &bytesWritten,

@@ -33,7 +33,7 @@ public:
 // createSuite and destroySuite get us per-suite setup and teardown
 // without us having to worry about static initialization order, etc.
     static CSSOStringStreamTest *createSuite() { return new CSSOStringStreamTest(); }
-    static void destroySuite( CSSOStringStreamTest *suite ) { delete suite; }
+    static void destroySuite(CSSOStringStreamTest *suite) { delete suite; }
 
     void testFloats()
     {

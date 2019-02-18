@@ -43,7 +43,7 @@ LivePathEffectAdd::LivePathEffectAdd() :
      * Effect Store and Tree
      */
     effectlist_store = Gtk::ListStore::create(_columns);
-    effectlist_store->set_sort_column (_columns.name, Gtk::SORT_ASCENDING );
+    effectlist_store->set_sort_column (_columns.name, Gtk::SORT_ASCENDING);
 
     effectlist_treeview.set_model(effectlist_store);
     effectlist_treeview.set_headers_visible(false);
@@ -65,7 +65,7 @@ LivePathEffectAdd::LivePathEffectAdd() :
     for(int i = 0; i < static_cast<int>(converter._length); ++i) {
         Gtk::TreeModel::Row row = *(effectlist_store->append());
         const Util::EnumData<LivePathEffect::EffectType>* data = &converter.data(i);
-        row[_columns.name] = _( converter.get_label(data->id).c_str() );
+        row[_columns.name] = _(converter.get_label(data->id).c_str());
         row[_columns.data] = data;
         if (i == show) {
             Glib::RefPtr<Gtk::TreeSelection> select = effectlist_treeview.get_selection();
@@ -90,11 +90,11 @@ LivePathEffectAdd::LivePathEffectAdd() :
     /**
      * Signal handlers
      */
-    effectlist_treeview.signal_button_press_event().connect_notify( sigc::mem_fun(*this, &LivePathEffectAdd::onButtonEvent) );
+    effectlist_treeview.signal_button_press_event().connect_notify(sigc::mem_fun(*this, &LivePathEffectAdd::onButtonEvent));
     effectlist_treeview.signal_key_press_event().connect_notify(sigc::mem_fun(*this, &LivePathEffectAdd::onKeyEvent));
     close_button.signal_clicked().connect(sigc::mem_fun(*this, &LivePathEffectAdd::onClose));
     add_button.signal_clicked().connect(sigc::mem_fun(*this, &LivePathEffectAdd::onAdd));
-    signal_delete_event().connect( sigc::bind_return(sigc::hide(sigc::mem_fun(*this, &LivePathEffectAdd::onClose)), true ) );
+    signal_delete_event().connect(sigc::bind_return(sigc::hide(sigc::mem_fun(*this, &LivePathEffectAdd::onClose)), true));
 
     add_button.grab_default();
 
@@ -134,7 +134,7 @@ const Util::EnumData<LivePathEffect::EffectType>*
 LivePathEffectAdd::getActiveData()
 {
     Gtk::TreeModel::iterator iter = instance().effectlist_treeview.get_selection()->get_selected();
-    if ( iter ) {
+    if (iter) {
         Gtk::TreeModel::Row row = *iter;
         return row[instance()._columns.data];
     }

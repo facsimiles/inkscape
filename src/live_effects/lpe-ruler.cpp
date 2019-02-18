@@ -122,7 +122,7 @@ LPERuler::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_i
 
     const int mminterval = static_cast<int>(major_mark_steps);
     const int i_shift = static_cast<int>(shift) % mminterval;
-    int sign = (mark_dir == MARKDIR_RIGHT ? 1 : -1 );
+    int sign = (mark_dir == MARKDIR_RIGHT ? 1 : -1);
 
     Piecewise<D2<SBasis> >output(pwd2_in);
     Piecewise<D2<SBasis> >speed = derivative(pwd2_in);
@@ -174,13 +174,13 @@ LPERuler::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_i
         Point n = rot90(unit_vector(speed.lastValue()))*sign;
         //speed.lastValue() is sometimes wrong when the path is closed: a tiny line seg might added at the end to fix rounding errors...
         //TODO: Find a better fix!! (How do we know if the path was closed?)
-        if ( A == pwd2_in.firstValue() &&
+        if (A == pwd2_in.firstValue() &&
              speed.segs.size() > 1 &&
              speed.segs.back()[X].size() <= 1 &&
              speed.segs.back()[Y].size() <= 1 &&
              speed.segs.back()[X].tailError(0) <= 1e-10 &&
              speed.segs.back()[Y].tailError(0) <= 1e-10 
-            ){
+){
             n = rot90(unit_vector(speed.segs[speed.segs.size()-2].at1()))*sign;
         }
         output.concat (ruler_mark(A, n, MARK_MAJOR));

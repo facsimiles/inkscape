@@ -68,7 +68,7 @@ static gint arena_handler(SPCanvasArena */*arena*/, Inkscape::DrawingItem *ai,
                 if (active && (event->button.x == x) &&
                     (event->button.y == y)) {
                     spev.type = SPEvent::ACTIVATE;
-                    if ( spitem != nullptr )
+                    if (spitem != nullptr)
                     {
                         spitem->emitEvent (spev);
                     }
@@ -82,7 +82,7 @@ static gint arena_handler(SPCanvasArena */*arena*/, Inkscape::DrawingItem *ai,
         case GDK_ENTER_NOTIFY:
             spev.type = SPEvent::MOUSEOVER;
             spev.view = svgview;
-            if ( spitem != nullptr )
+            if (spitem != nullptr)
             {
                 spitem->emitEvent (spev);
             }
@@ -90,7 +90,7 @@ static gint arena_handler(SPCanvasArena */*arena*/, Inkscape::DrawingItem *ai,
         case GDK_LEAVE_NOTIFY:
             spev.type = SPEvent::MOUSEOUT;
             spev.view = svgview;
-            if ( spitem != nullptr )
+            if (spitem != nullptr)
             {
                 spitem->emitEvent (spev);
             }

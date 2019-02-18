@@ -136,13 +136,13 @@ void SPFlowregion::modified(guint flags) {
 
 Inkscape::XML::Node *SPFlowregion::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
     if (flags & SP_OBJECT_WRITE_BUILD) {
-        if ( repr == nullptr ) {
+        if (repr == nullptr) {
             repr = xml_doc->createElement("svg:flowRegion");
         }
 
         std::vector<Inkscape::XML::Node *> l;
         for (auto& child: children) {
-            if ( !dynamic_cast<SPTitle *>(&child) && !dynamic_cast<SPDesc *>(&child) ) {
+            if (!dynamic_cast<SPTitle *>(&child) && !dynamic_cast<SPDesc *>(&child)) {
                 Inkscape::XML::Node *crepr = child.updateRepr(xml_doc, nullptr, flags);
 
                 if (crepr) {
@@ -157,7 +157,7 @@ Inkscape::XML::Node *SPFlowregion::write(Inkscape::XML::Document *xml_doc, Inksc
         }
 
         for (auto& child: children) {
-            if ( !dynamic_cast<SPTitle *>(&child) && !dynamic_cast<SPDesc *>(&child) ) {
+            if (!dynamic_cast<SPTitle *>(&child) && !dynamic_cast<SPDesc *>(&child)) {
                 child.updateRepr(flags);
             }
         }
@@ -281,7 +281,7 @@ void SPFlowregionExclude::modified(guint flags) {
 
 Inkscape::XML::Node *SPFlowregionExclude::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
     if (flags & SP_OBJECT_WRITE_BUILD) {
-        if ( repr == nullptr ) {
+        if (repr == nullptr) {
             repr = xml_doc->createElement("svg:flowRegionExclude");
         }
 
@@ -323,9 +323,9 @@ static void         UnionShape(Shape **base_shape, Shape const *add_shape)
 {
     if (*base_shape == nullptr)
         *base_shape = new Shape;
-	if ( (*base_shape)->hasEdges() == false ) {
+	if ((*base_shape)->hasEdges() == false) {
 		(*base_shape)->Copy(const_cast<Shape*>(add_shape));
-	} else if ( add_shape->hasEdges() ) {
+	} else if (add_shape->hasEdges()) {
 		Shape* temp=new Shape;
 		temp->Booleen(const_cast<Shape*>(add_shape), *base_shape, bool_op_union);
 		delete *base_shape;
@@ -335,7 +335,7 @@ static void         UnionShape(Shape **base_shape, Shape const *add_shape)
 
 static void         GetDest(SPObject* child,Shape **computed)
 {
-	if ( child == nullptr || dynamic_cast<SPItem *>(child) == nullptr ) return;
+	if (child == nullptr || dynamic_cast<SPItem *>(child) == nullptr) return;
 
 	SPCurve *curve=nullptr;
 	Geom::Affine tr_mat;
@@ -344,26 +344,26 @@ static void         GetDest(SPObject* child,Shape **computed)
     SPItem *item = dynamic_cast<SPItem *>(u_child);
     g_assert(item != nullptr);
     SPUse *use = dynamic_cast<SPUse *>(item);
-    if ( use ) {
+    if (use) {
         u_child = use->child;
         tr_mat = use->getRelativeTransform(child->parent);
     } else {
         tr_mat = item->transform;
     }
     SPShape *shape = dynamic_cast<SPShape *>(u_child);
-    if ( shape ) {
+    if (shape) {
         if (!(shape->_curve)) {
             shape->set_shape();
         }
         curve = shape->getCurve();
     } else {
         SPText *text = dynamic_cast<SPText *>(u_child);
-        if ( text ) {
+        if (text) {
             curve = text->getNormalizedBpath();
         }
     }
 
-	if ( curve ) {
+	if (curve) {
 		Path*   temp=new Path;
         temp->LoadPathVector(curve->get_pathvector(), tr_mat, true);
 		Shape*  n_shp=new Shape;
@@ -371,7 +371,7 @@ static void         GetDest(SPObject* child,Shape **computed)
 		temp->Fill(n_shp,0);
 		Shape*  uncross=new Shape;
 		SPStyle* style = u_child->style;
-		if ( style && style->fill_rule.computed == SP_WIND_RULE_EVENODD ) {
+		if (style && style->fill_rule.computed == SP_WIND_RULE_EVENODD) {
 			uncross->ConvertToShape(n_shp,fill_oddEven);
 		} else {
 			uncross->ConvertToShape(n_shp,fill_nonZero);

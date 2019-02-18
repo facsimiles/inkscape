@@ -63,9 +63,9 @@ private:
     class NodeWatcher;
 
     std::vector<StyleDialog::NodeWatcher*> _nodeWatchers;
-    void _nodeAdded(   Inkscape::XML::Node &repr );
-    void _nodeRemoved( Inkscape::XML::Node &repr );
-    void _nodeChanged( Inkscape::XML::Node &repr );
+    void _nodeAdded(Inkscape::XML::Node &repr);
+    void _nodeRemoved(Inkscape::XML::Node &repr);
+    void _nodeChanged(Inkscape::XML::Node &repr);
 
     // Data structure
     class ModelColumns : public Gtk::TreeModel::ColumnRecord {
@@ -161,9 +161,9 @@ private:
     void _objChanged();
 
     // Signal handlers for CssDialog
-    void _handleProp( const Glib::ustring& path, const Glib::ustring& new_text);
+    void _handleProp(const Glib::ustring& path, const Glib::ustring& new_text);
     void _handleSheet(const Glib::ustring& path, const Glib::ustring& new_text);
-    void _handleAttr( const Glib::ustring& path, const Glib::ustring& new_text);
+    void _handleAttr(const Glib::ustring& path, const Glib::ustring& new_text);
     bool _delProperty(GdkEventButton *event);
 
     // GUI

@@ -101,12 +101,12 @@ bool TagSet::addTag(Tag const& tag)
 {
     bool present = false;
 
-    for ( std::vector<Tag>::iterator it = tags.begin(); (it != tags.end()) && !present; ++it ) {
+    for (std::vector<Tag>::iterator it = tags.begin(); (it != tags.end()) && !present; ++it) {
         if (tag.key == it->key) {
             present = true;
 
             for (const auto & label : tag.labels) {
-                std::vector<Label>::iterator itOld = std::find_if( it->labels.begin(), it->labels.end(), std::bind2nd(sameLang(), label) );
+                std::vector<Label>::iterator itOld = std::find_if(it->labels.begin(), it->labels.end(), std::bind2nd(sameLang(), label));
                 if (itOld != it->labels.end()) {
                     itOld->value = label.value;
                 } else {
@@ -130,18 +130,18 @@ std::vector<Tag> const& TagSet::getTags()
     return tags;
 }
 
-int TagSet::getCount( std::string const& key )
+int TagSet::getCount(std::string const& key)
 {
     int count = 0;
-    if ( counts.find(key) != counts.end() ) {
+    if (counts.find(key) != counts.end()) {
         count = counts[key];
     }
     return count;
 }
 
-void TagSet::increment( std::string const& key )
+void TagSet::increment(std::string const& key)
 {
-    if ( counts.find(key) != counts.end() ) {
+    if (counts.find(key) != counts.end()) {
         counts[key]++;
     } else {
         Tag tag(key);
@@ -150,9 +150,9 @@ void TagSet::increment( std::string const& key )
     }
 }
 
-void TagSet::decrement( std::string const& key )
+void TagSet::decrement(std::string const& key)
 {
-    if ( counts.find(key) != counts.end() ) {
+    if (counts.find(key) != counts.end()) {
         counts[key]--;
     }
 }

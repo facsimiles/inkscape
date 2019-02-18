@@ -212,7 +212,7 @@ Find::Find()
     frame_options.add(hbox_options);
 
     hbox_properties1.set_homogeneous(false);
-    hbox_properties1.pack_start(check_ids, false, false, 4 );
+    hbox_properties1.pack_start(check_ids, false, false, 4);
     hbox_properties1.pack_start(check_style, false, false, 8);
     hbox_properties1.pack_start(check_font, false, false, 8);
     hbox_properties2.set_homogeneous(false);
@@ -296,7 +296,7 @@ Find::Find()
     onSearchinText();
     onToggleAlltypes();
 
-    desktopChangeConn = deskTrack.connectDesktopChanged( sigc::mem_fun(*this, &Find::setTargetDesktop) );
+    desktopChangeConn = deskTrack.connectDesktopChanged(sigc::mem_fun(*this, &Find::setTargetDesktop));
     deskTrack.connect(GTK_WIDGET(gobj()));
 
     show_all_children();
@@ -577,7 +577,7 @@ bool Find::item_font_match(SPItem *item, const gchar *text, bool exact, bool cas
     for(auto & vStyleToken : vStyleTokens) {
         Glib::ustring token = vStyleToken;
         for(const auto & vFontTokenName : vFontTokenNames) {
-            if ( token.find(vFontTokenName) != std::string::npos) {
+            if (token.find(vFontTokenName) != std::string::npos) {
                 Glib::ustring font1 = Glib::ustring(vFontTokenName).append(text);
                 bool found = find_strcmp(token.c_str(), font1.c_str(), exact, casematch);
                 if (found) {
@@ -740,17 +740,17 @@ bool Find::item_type_match (SPItem *item)
 {
     bool all  =check_alltypes.get_active();
 
-    if ( dynamic_cast<SPRect *>(item)) {
-        return ( all ||check_rects.get_active());
+    if (dynamic_cast<SPRect *>(item)) {
+        return (all ||check_rects.get_active());
 
     } else if (dynamic_cast<SPGenericEllipse *>(item)) {
-        return ( all ||  check_ellipses.get_active());
+        return (all ||  check_ellipses.get_active());
 
     } else if (dynamic_cast<SPStar *>(item) || dynamic_cast<SPPolygon *>(item)) {
-        return ( all || check_stars.get_active());
+        return (all || check_stars.get_active());
 
     } else if (dynamic_cast<SPSpiral *>(item)) {
-        return ( all || check_spirals.get_active());
+        return (all || check_spirals.get_active());
 
     } else if (dynamic_cast<SPPath *>(item) || dynamic_cast<SPLine *>(item) || dynamic_cast<SPPolyLine *>(item)) {
         return (all || check_paths.get_active());
@@ -761,7 +761,7 @@ bool Find::item_type_match (SPItem *item)
 			   dynamic_cast<SPFlowtspan *>(item) || dynamic_cast<SPFlowpara *>(item)) {
         return (all || check_texts.get_active());
 
-    } else if (dynamic_cast<SPGroup *>(item) && !desktop->isLayer(item) ) { // never select layers!
+    } else if (dynamic_cast<SPGroup *>(item) && !desktop->isLayer(item)) { // never select layers!
         return (all || check_groups.get_active());
 
     } else if (dynamic_cast<SPUse *>(item)) {

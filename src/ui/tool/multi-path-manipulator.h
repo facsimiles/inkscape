@@ -83,7 +83,7 @@ private:
 
     template <typename R>
     void invokeForAll(R (PathManipulator::*method)()) {
-        for (MapType::iterator i = _mmap.begin(); i != _mmap.end(); ) {
+        for (MapType::iterator i = _mmap.begin(); i != _mmap.end();) {
             // Sometimes the PathManipulator got freed at loop end, thus
             // invalidating the iterator so make sure that next_i will
             // be a valid iterator and then assign i to it.

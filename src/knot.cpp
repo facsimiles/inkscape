@@ -274,9 +274,9 @@ static int sp_knot_handler(SPCanvasItem */*item*/, GdkEvent *event, SPKnot *knot
         if (grabbed && knot->desktop && knot->desktop->event_context && !knot->desktop->event_context->space_panning) {
             consumed = TRUE;
 
-            if ( within_tolerance
-                 && ( abs( (gint) event->motion.x - xp ) < tolerance )
-                 && ( abs( (gint) event->motion.y - yp ) < tolerance ) ) {
+            if (within_tolerance
+                 && (abs((gint) event->motion.x - xp) < tolerance)
+                 && (abs((gint) event->motion.y - yp) < tolerance)) {
                 break; // do not drag if we're within tolerance from origin
             }
 

@@ -34,9 +34,9 @@ SPStop::~SPStop() = default;
 void SPStop::build(SPDocument* doc, Inkscape::XML::Node* repr) {
     SPObject::build(doc, repr);
 
-    this->readAttr( "style" );
-    this->readAttr( "offset" );
-    this->readAttr( "path" ); // For mesh
+    this->readAttr("style");
+    this->readAttr("offset");
+    this->readAttr("path"); // For mesh
     SPObject::build(doc, repr);
 }
 
@@ -53,10 +53,10 @@ void SPStop::set(SPAttributeEnum key, const gchar* value) {
         }
         case SP_PROP_STOP_PATH: {
             if (value) {
-                this->path_string = new Glib::ustring( value );
+                this->path_string = new Glib::ustring(value);
                 //Geom::PathVector pv = sp_svg_read_pathv(value);
                 //SPCurve *curve = new SPCurve(pv);
-                //if( curve ) {
+                //if(curve) {
                     // std::cout << "Got Curve" << std::endl;
                     //curve->unref();
                 //}

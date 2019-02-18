@@ -55,7 +55,7 @@
 #ifdef DEBUG_LCMS
 #define DEBUG_MESSAGE(key, ...)\
 {\
-    g_message( __VA_ARGS__ );\
+    g_message(__VA_ARGS__);\
 }
 #include <gtk/gtk.h>
 #else
@@ -86,24 +86,24 @@ extern guint update_in_progress;
     bool dump = prefs->getBool("/options/scislac/" #key);\
     bool dumpD = prefs->getBool("/options/scislac/" #key "D");\
     bool dumpD2 = prefs->getBool("/options/scislac/" #key "D2");\
-    dumpD &&= ( (update_in_progress == 0) || dumpD2 );\
-    if ( dump )\
+    dumpD &&= ((update_in_progress == 0) || dumpD2);\
+    if (dump)\
     {\
-        g_message( __VA_ARGS__ );\
+        g_message(__VA_ARGS__);\
 \
     }\
-    if ( dumpD )\
+    if (dumpD)\
     {\
         GtkWidget *dialog = gtk_message_dialog_new(NULL,\
                                                    GTK_DIALOG_DESTROY_WITH_PARENT, \
                                                    GTK_MESSAGE_INFO,    \
                                                    GTK_BUTTONS_OK,      \
                                                    __VA_ARGS__          \
-                                                   );\
+                                                 );\
         g_signal_connect_swapped(dialog, "response",\
                                  G_CALLBACK(gtk_widget_destroy),        \
                                  dialog);                               \
-        gtk_widget_show_all( dialog );\
+        gtk_widget_show_all(dialog);\
     }\
 }
 #else // DEBUG_LCMS
@@ -136,14 +136,14 @@ SPImage::~SPImage() = default;
 void SPImage::build(SPDocument *document, Inkscape::XML::Node *repr) {
     SPItem::build(document, repr);
 
-    this->readAttr( "xlink:href" );
-    this->readAttr( "x" );
-    this->readAttr( "y" );
-    this->readAttr( "width" );
-    this->readAttr( "height" );
+    this->readAttr("xlink:href");
+    this->readAttr("x");
+    this->readAttr("y");
+    this->readAttr("width");
+    this->readAttr("height");
     this->readAttr("inkscape:svg-dpi");
-    this->readAttr( "preserveAspectRatio" );
-    this->readAttr( "color-profile" );
+    this->readAttr("preserveAspectRatio");
+    this->readAttr("color-profile");
 
     /* Register */
     document->addResource("image", this);
@@ -226,22 +226,22 @@ void SPImage::set(SPAttributeEnum key, const gchar* value) {
             break;
 
         case SP_ATTR_PRESERVEASPECTRATIO:
-            set_preserveAspectRatio( value );
+            set_preserveAspectRatio(value);
             this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
             break;
 
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
         case SP_PROP_COLOR_PROFILE:
-            if ( this->color_profile ) {
+            if (this->color_profile) {
                 g_free (this->color_profile);
             }
 
             this->color_profile = (value) ? g_strdup (value) : nullptr;
 
-            if ( value ) {
-                DEBUG_MESSAGE( lcmsFour, "<this> color-profile set to '%s'", value );
+            if (value) {
+                DEBUG_MESSAGE(lcmsFour, "<this> color-profile set to '%s'", value);
             } else {
-                DEBUG_MESSAGE( lcmsFour, "<this> color-profile cleared" );
+                DEBUG_MESSAGE(lcmsFour, "<this> color-profile cleared");
             }
 
             // TODO check on this HREF_MODIFIED flag
@@ -270,19 +270,19 @@ void SPImage::apply_profile(Inkscape::Pixbuf *pixbuf) {
     int rowstride = pixbuf->rowstride();;
     guchar* px = pixbuf->pixels();
 
-    if ( px ) {
-        DEBUG_MESSAGE( lcmsFive, "in <image>'s sp_image_update. About to call colorprofile_get_handle()" );
+    if (px) {
+        DEBUG_MESSAGE(lcmsFive, "in <image>'s sp_image_update. About to call colorprofile_get_handle()");
 
         guint profIntent = Inkscape::RENDERING_INTENT_UNKNOWN;
-        cmsHPROFILE prof = Inkscape::CMSSystem::getHandle( this->document,
+        cmsHPROFILE prof = Inkscape::CMSSystem::getHandle(this->document,
                                                            &profIntent,
-                                                           this->color_profile );
-        if ( prof ) {
-            cmsProfileClassSignature profileClass = cmsGetDeviceClass( prof );
-            if ( profileClass != cmsSigNamedColorClass ) {
+                                                           this->color_profile);
+        if (prof) {
+            cmsProfileClassSignature profileClass = cmsGetDeviceClass(prof);
+            if (profileClass != cmsSigNamedColorClass) {
                 int intent = INTENT_PERCEPTUAL;
-                                
-                switch ( profIntent ) {
+
+                switch (profIntent) {
                     case Inkscape::RENDERING_INTENT_RELATIVE_COLORIMETRIC:
                         intent = INTENT_RELATIVE_COLORIMETRIC;
                         break;
@@ -298,32 +298,32 @@ void SPImage::apply_profile(Inkscape::Pixbuf *pixbuf) {
                     default:
                         intent = INTENT_PERCEPTUAL;
                 }
-                                
+
                 cmsHPROFILE destProf = cmsCreate_sRGBProfile();
-                cmsHTRANSFORM transf = cmsCreateTransform( prof,
+                cmsHTRANSFORM transf = cmsCreateTransform(prof,
                                                            TYPE_RGBA_8,
                                                            destProf,
                                                            TYPE_RGBA_8,
-                                                           intent, 0 );
-                if ( transf ) {
+                                                           intent, 0);
+                if (transf) {
                     guchar* currLine = px;
-                    for ( int y = 0; y < imageheight; y++ ) {
+                    for (int y = 0; y < imageheight; y++) {
                         // Since the types are the same size, we can do the transformation in-place
-                        cmsDoTransform( transf, currLine, currLine, imagewidth );
+                        cmsDoTransform(transf, currLine, currLine, imagewidth);
                         currLine += rowstride;
                     }
 
-                    cmsDeleteTransform( transf );
+                    cmsDeleteTransform(transf);
                 } else {
-                    DEBUG_MESSAGE( lcmsSix, "in <image>'s sp_image_update. Unable to create LCMS transform." );
+                    DEBUG_MESSAGE(lcmsSix, "in <image>'s sp_image_update. Unable to create LCMS transform.");
                 }
 
-                cmsCloseProfile( destProf );
+                cmsCloseProfile(destProf);
             } else {
-                DEBUG_MESSAGE( lcmsSeven, "in <image>'s sp_image_update. Profile type is named color. Can't transform." );
+                DEBUG_MESSAGE(lcmsSeven, "in <image>'s sp_image_update. Profile type is named color. Can't transform.");
             }
         } else {
-            DEBUG_MESSAGE( lcmsEight, "in <image>'s sp_image_update. No profile found." );
+            DEBUG_MESSAGE(lcmsEight, "in <image>'s sp_image_update. No profile found.");
         }
     }
 }
@@ -349,7 +349,7 @@ void SPImage::update(SPCtx *ctx, unsigned int flags) {
 
             if (pixbuf) {
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
-                if ( this->color_profile ) apply_profile( pixbuf );
+                if (this->color_profile) apply_profile(pixbuf);
 #endif
                 this->pixbuf = pixbuf;
             }
@@ -386,9 +386,9 @@ void SPImage::update(SPCtx *ctx, unsigned int flags) {
     this->calcDimsFromParentViewport(ictx);
 
     // Image creates a new viewport
-    ictx->viewport= Geom::Rect::from_xywh( this->x.computed, this->y.computed,
+    ictx->viewport= Geom::Rect::from_xywh(this->x.computed, this->y.computed,
                                            this->width.computed, this->height.computed);
- 
+
     this->clipbox = ictx->viewport;
 
     this->ox = this->x.computed;
@@ -397,11 +397,11 @@ void SPImage::update(SPCtx *ctx, unsigned int flags) {
     if (this->pixbuf) {
 
         // Viewbox is either from SVG (not supported) or dimensions of pixbuf (PNG, JPG)
-        this->viewBox = Geom::Rect::from_xywh(0, 0, this->pixbuf->width(), this->pixbuf->height()); 
+        this->viewBox = Geom::Rect::from_xywh(0, 0, this->pixbuf->width(), this->pixbuf->height());
         this->viewBox_set = true;
 
         // SPItemCtx rctx =
-        get_rctx( ictx );
+        get_rctx(ictx);
 
         this->ox = c2p[4];
         this->oy = c2p[5];
@@ -455,7 +455,7 @@ void SPImage::modified(unsigned int flags) {
 }
 
 
-Inkscape::XML::Node *SPImage::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags ) {
+Inkscape::XML::Node *SPImage::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
     if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
         repr = xml_doc->createElement("svg:image");
     }
@@ -504,7 +504,7 @@ Geom::OptRect SPImage::bbox(Geom::Affine const &transform, SPItem::BBoxType /*ty
 }
 
 void SPImage::print(SPPrintContext *ctx) {
-    if (this->pixbuf && (this->width.computed > 0.0) && (this->height.computed > 0.0) ) {
+    if (this->pixbuf && (this->width.computed > 0.0) && (this->height.computed > 0.0)) {
         Inkscape::Pixbuf *pb = new Inkscape::Pixbuf(*this->pixbuf);
         pb->ensurePixelFormat(Inkscape::Pixbuf::PF_GDK);
 
@@ -541,15 +541,15 @@ gchar* SPImage::description() const {
         href_desc = g_strdup("(null_pointer)"); // we call g_free() on href_desc
     }
 
-    char *ret = ( this->pixbuf == nullptr
+    char *ret = (this->pixbuf == nullptr
                   ? g_strdup_printf(_("[bad reference]: %s"), href_desc)
                   : g_strdup_printf(_("%d &#215; %d: %s"),
                                     this->pixbuf->width(),
                                     this->pixbuf->height(),
-                                    href_desc) );
-                                    
-    if (this->pixbuf == nullptr && 
-        this->document) 
+                                    href_desc));
+
+    if (this->pixbuf == nullptr &&
+        this->document)
     {
         Inkscape::Pixbuf * pb = nullptr;
         double svgdpi = 96;
@@ -599,7 +599,7 @@ Inkscape::Pixbuf *sp_image_repr_read_image(gchar const *href, gchar const *absre
     Inkscape::Pixbuf *inkpb = nullptr;
 
     gchar const *filename = href;
-    
+
     if (filename != nullptr) {
         if (g_ascii_strncasecmp(filename, "data:", 5) == 0) {
             /* data URI - embedded image */
@@ -630,7 +630,7 @@ Inkscape::Pixbuf *sp_image_repr_read_image(gchar const *href, gchar const *absre
     filename = absref;
     if (filename != nullptr) {
         // using absref is outside of SVG rules, so we must at least warn the user
-        if ( base != nullptr && href != nullptr ) {
+        if (base != nullptr && href != nullptr) {
             g_warning ("<image xlink:href=\"%s\"> did not resolve to a valid image file (base dir is %s), now trying sodipodi:absref=\"%s\"", href, base, absref);
         } else {
             g_warning ("xlink:href did not resolve to a valid image file, now trying sodipodi:absref=\"%s\"", absref);
@@ -642,7 +642,7 @@ Inkscape::Pixbuf *sp_image_repr_read_image(gchar const *href, gchar const *absre
         }
     }
 
-    /* Nope: We do not find any valid pixmap file :-( */
+    /* Nope: We do not find any valid pixmap file :-(*/
     // Need a "fake" filename to trigger svg mode.
     inkpb = Inkscape::Pixbuf::create_from_buffer(broken_image_svg, 0, "brokenimage.svg");
 
@@ -707,7 +707,7 @@ void SPImage::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape:
 
 Geom::Affine SPImage::set_transform(Geom::Affine const &xform) {
     /* Calculate position in parent coords. */
-    Geom::Point pos( Geom::Point(this->x.computed, this->y.computed) * xform );
+    Geom::Point pos(Geom::Point(this->x.computed, this->y.computed) * xform);
 
     /* This function takes care of translation and scaling, we return whatever parts we can't
        handle. */
@@ -715,7 +715,7 @@ Geom::Affine SPImage::set_transform(Geom::Affine const &xform) {
     Geom::Point const scale(hypot(ret[0], ret[1]),
                             hypot(ret[2], ret[3]));
 
-    if ( scale[Geom::X] > MAGIC_EPSILON ) {
+    if (scale[Geom::X] > MAGIC_EPSILON) {
         ret[0] /= scale[Geom::X];
         ret[1] /= scale[Geom::X];
     } else {
@@ -723,7 +723,7 @@ Geom::Affine SPImage::set_transform(Geom::Affine const &xform) {
         ret[1] = 0.0;
     }
 
-    if ( scale[Geom::Y] > MAGIC_EPSILON ) {
+    if (scale[Geom::Y] > MAGIC_EPSILON) {
         ret[2] /= scale[Geom::Y];
         ret[3] /= scale[Geom::Y];
     } else {
@@ -742,7 +742,7 @@ Geom::Affine SPImage::set_transform(Geom::Affine const &xform) {
     return ret;
 }
 
-static void sp_image_set_curve( SPImage *image )
+static void sp_image_set_curve(SPImage *image)
 {
     //create a curve at the image's boundary for snapping
     if ((image->height.computed < MAGIC_EPSILON_TOO) || (image->width.computed < MAGIC_EPSILON_TOO) || (image->clip_ref->getObject())) {
@@ -752,7 +752,7 @@ static void sp_image_set_curve( SPImage *image )
     } else {
         Geom::OptRect rect = image->bbox(Geom::identity(), SPItem::VISUAL_BBOX);
         SPCurve *c = nullptr;
-        
+
         if (rect->isFinite()) {
             c = SPCurve::new_from_rect(*rect, true);
         }
@@ -826,7 +826,7 @@ void sp_embed_image(Inkscape::XML::Node *image_node, Inkscape::Pixbuf *pb)
 
 void sp_embed_svg(Inkscape::XML::Node *image_node, std::string const &fn)
 {
-    if (!g_file_test(fn.c_str(), G_FILE_TEST_EXISTS)) { 
+    if (!g_file_test(fn.c_str(), G_FILE_TEST_EXISTS)) {
         return;
     }
     GStatBuf stdir;
@@ -880,18 +880,18 @@ void sp_embed_svg(Inkscape::XML::Node *image_node, std::string const &fn)
 
 void SPImage::refresh_if_outdated()
 {
-    if ( href && pixbuf && pixbuf->modificationTime()) {
+    if (href && pixbuf && pixbuf->modificationTime()) {
         // It *might* change
 
         GStatBuf st;
         memset(&st, 0, sizeof(st));
         int val = 0;
-        if (g_file_test (pixbuf->originalPath().c_str(), G_FILE_TEST_EXISTS)){ 
+        if (g_file_test (pixbuf->originalPath().c_str(), G_FILE_TEST_EXISTS)){
             val = g_stat(pixbuf->originalPath().c_str(), &st);
         }
-        if ( !val ) {
+        if (!val) {
             // stat call worked. Check time now
-            if ( st.st_mtime != pixbuf->modificationTime() ) {
+            if (st.st_mtime != pixbuf->modificationTime()) {
                 requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_IMAGE_HREF_MODIFIED_FLAG);
             }
         }

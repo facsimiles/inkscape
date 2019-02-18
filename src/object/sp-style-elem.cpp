@@ -44,9 +44,9 @@ void SPStyleElem::set(SPAttributeEnum key, const gchar* value) {
             } else {
                 /* fixme: determine what whitespace is allowed.  Will probably need to ask on SVG
                   list; though the relevant RFC may give info on its lexer. */
-                is_css = ( g_ascii_strncasecmp(value, "text/css", 8) == 0
-                           && ( value[8] == '\0' ||
-                                value[8] == ';'    ) );
+                is_css = (g_ascii_strncasecmp(value, "text/css", 8) == 0
+                           && (value[8] == '\0' ||
+                                value[8] == ';'));
             }
             break;
         }
@@ -83,7 +83,7 @@ content_changed_cb(Inkscape::XML::Node *, gchar const *, gchar const *,
     SPObject *obj = reinterpret_cast<SPObject *>(data);
     g_assert(data != nullptr);
     obj->read_content();
-    obj->document->getRoot()->emitModified( SP_OBJECT_MODIFIED_CASCADE );
+    obj->document->getRoot()->emitModified(SP_OBJECT_MODIFIED_CASCADE);
 }
 
 static void
@@ -124,7 +124,7 @@ concat_children(Inkscape::XML::Node const &repr)
     Glib::ustring ret;
     // effic: Initialising ret to a reasonable starting size could speed things up.
     for (Inkscape::XML::Node const *rch = repr.firstChild(); rch != nullptr; rch = rch->next()) {
-        if ( rch->type() == TEXT_NODE ) {
+        if (rch->type() == TEXT_NODE) {
             ret += rch->content();
         }
     }
@@ -243,8 +243,8 @@ start_selector_cb(CRDocHandler *a_handler,
     g_return_if_fail(a_handler->app_data != nullptr);
     ParseTmp &parse_tmp = *static_cast<ParseTmp *>(a_handler->app_data);
     g_return_if_fail(parse_tmp.hasMagic());
-    if ( (parse_tmp.currStmt != nullptr)
-         || (parse_tmp.stmtType != NO_STMT) ) {
+    if ((parse_tmp.currStmt != nullptr)
+         || (parse_tmp.stmtType != NO_STMT)) {
         g_warning("Expecting currStmt==NULL and stmtType==0 (NO_STMT) at start of ruleset, but found currStmt=%p, stmtType=%u",
                   static_cast<void *>(parse_tmp.currStmt), unsigned(parse_tmp.stmtType));
         // fixme: Check whether we need to unref currStmt if non-NULL.
@@ -343,7 +343,7 @@ end_font_face_cb(CRDocHandler *a_handler)
         if (cur->property &&
             cur->property->stryng &&
             cur->property->stryng->str &&
-            strcmp(cur->property->stryng->str, "src") == 0 ) {
+            strcmp(cur->property->stryng->str, "src") == 0) {
 
             if (cur->value &&
                 cur->value->content.str &&
@@ -361,7 +361,7 @@ end_font_face_cb(CRDocHandler *a_handler)
 
                     if (!ttf_file.empty()) {
                         font_factory *factory = font_factory::Default();
-                        factory->AddFontFile( ttf_file.c_str() );
+                        factory->AddFontFile(ttf_file.c_str());
                         std::cout << "end_font_face_cb: Added font: " << ttf_file << std::endl;
 
                         // FIX ME: Need to refresh font list.
@@ -437,15 +437,15 @@ parser_init(CRStyleSheet *const stylesheet, SPDocument *const document) {
     return parser;
 }
 
-void update_style_recursively( SPObject *object ) {
+void update_style_recursively(SPObject *object) {
     if (object) {
         // std::cout << "update_style_recursively: "
         //           << (object->getId()?object->getId():"null") << std::endl;
         if (object->style) {
-            object->style->readFromObject( object );
+            object->style->readFromObject(object);
         }
         for (auto& child : object->children) {
-            update_style_recursively( &child );
+            update_style_recursively(&child);
         }
     }
 }
@@ -505,7 +505,7 @@ void SPStyleElem::read_content() {
 
     // If style sheet has changed, we need to cascade the entire object tree, top down
     // Get root, read style, loop through children
-    update_style_recursively( (SPObject *)document->getRoot() );
+    update_style_recursively((SPObject *)document->getRoot());
     // cr_stylesheet_dump (document->style_sheet, stdout);
 }
 
@@ -525,8 +525,8 @@ rec_add_listener(Inkscape::XML::Node &repr,
 void SPStyleElem::build(SPDocument *document, Inkscape::XML::Node *repr) {
     read_content();
 
-    readAttr( "type" );
-    readAttr( "media" );
+    readAttr("type");
+    readAttr("media");
 
     static Inkscape::XML::NodeEventVector const nodeEventVector = {
         child_add_rm_cb,   // child_added

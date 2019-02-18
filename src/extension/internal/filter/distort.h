@@ -59,8 +59,8 @@ protected:
     gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
-    FeltFeather ( ) : Filter() { };
-    ~FeltFeather ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
+    FeltFeather () : Filter() { };
+    ~FeltFeather () override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
         Inkscape::Extension::build_from_mem(
@@ -158,7 +158,7 @@ FeltFeather::get_filter_text (Inkscape::Extension::Extension * ext)
           "<feComposite in=\"composite3\" in2=\"colormatrix\" operator=\"%s\" result=\"composite4\" />\n"
         "</filter>\n", hblur.str().c_str(), vblur.str().c_str(), 
                        turbulence.str().c_str(), complexity.str().c_str(), variation.str().c_str(), hfreq.str().c_str(), vfreq.str().c_str(),
-                       map.str().c_str(), intensity.str().c_str(), dilat.str().c_str(), erosion.str().c_str(), stroke.str().c_str() );
+                       map.str().c_str(), intensity.str().c_str(), dilat.str().c_str(), erosion.str().c_str(), stroke.str().c_str());
 
     return _filter;
 }; /* Felt feather filter */
@@ -182,8 +182,8 @@ protected:
     gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
-    Roughen ( ) : Filter() { };
-    ~Roughen ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
+    Roughen () : Filter() { };
+    ~Roughen () override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
         Inkscape::Extension::build_from_mem(

@@ -49,8 +49,8 @@ SaveTemplate::SaveTemplate() :
     content_area->add(grid);
     content_area->add(is_default_template);
 
-    name_text.signal_changed().connect( sigc::mem_fun(*this,
-              &SaveTemplate::on_name_changed) );
+    name_text.signal_changed().connect(sigc::mem_fun(*this,
+              &SaveTemplate::on_name_changed));
 
     add_button("Cancel", Gtk::RESPONSE_CANCEL);
     add_button("Save", Gtk::RESPONSE_OK);

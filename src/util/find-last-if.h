@@ -24,9 +24,9 @@ inline ForwardIterator find_last_if(ForwardIterator start, ForwardIterator end,
                                     UnaryPredicate pred)
 {
     ForwardIterator last_found(end);
-    while ( start != end ) {
+    while (start != end) {
         start = std::find_if(start, end, pred);
-        if ( start != end ) {
+        if (start != end) {
             last_found = start;
             ++start;
         }

@@ -90,7 +90,7 @@ ContextMenu::ContextMenu(SPDesktop *desktop, SPItem *item) :
     AddSeparator();
     /* Lock/Unock Hide/Unhide*/
     Geom::Rect b(_desktop->point(),_desktop->point() + Geom::Point(1,1));
-    std::vector< SPItem * > down_items = _desktop->getDocument()->getItemsPartiallyInBox( _desktop->dkey, b, true, true, true, true);
+    std::vector< SPItem * > down_items = _desktop->getDocument()->getItemsPartiallyInBox(_desktop->dkey, b, true, true, true, true);
     bool has_down_hidden = false;
     bool has_down_locked = false;
     for(auto & down_item : down_items){
@@ -139,17 +139,17 @@ ContextMenu::ContextMenu(SPDesktop *desktop, SPItem *item) :
     if (item) {
         if (SP_IS_GROUP(item)) {
             group = SP_GROUP(item);
-        } else if ( item != _desktop->currentRoot() && SP_IS_GROUP(item->parent) ) {
+        } else if (item != _desktop->currentRoot() && SP_IS_GROUP(item->parent)) {
             group = SP_GROUP(item->parent);
         }
     }
 
-    if (( group && group != _desktop->currentLayer() ) ||
-        ( _desktop->currentLayer() != _desktop->currentRoot() && _desktop->currentLayer()->parent != _desktop->currentRoot() ) ) {
+    if ((group && group != _desktop->currentLayer()) ||
+        (_desktop->currentLayer() != _desktop->currentRoot() && _desktop->currentLayer()->parent != _desktop->currentRoot())) {
         AddSeparator();
     }
 
-    if ( group && group != _desktop->currentLayer() ) {
+    if (group && group != _desktop->currentLayer()) {
         /* TRANSLATORS: #%1 is the id of the group e.g. <g id="#g7">, not a number. */
         MIGroup.set_label (Glib::ustring::compose(_("Enter group #%1"), group->getId()));
         MIGroup.set_data("group", group);
@@ -158,8 +158,8 @@ ContextMenu::ContextMenu(SPDesktop *desktop, SPItem *item) :
         append(MIGroup);
     }
 
-    if ( _desktop->currentLayer() != _desktop->currentRoot() ) {
-        if ( _desktop->currentLayer()->parent != _desktop->currentRoot() ) {
+    if (_desktop->currentLayer() != _desktop->currentRoot()) {
+        if (_desktop->currentLayer()->parent != _desktop->currentRoot()) {
             MIParent.signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::LeaveGroup));
             MIParent.show();
             append(MIParent);
@@ -363,7 +363,7 @@ void ContextMenu::MakeItemMenu ()
     AddSeparator();
 
     /* Select item */
-    if (Inkscape::Verb::getbyid( "org.inkscape.followlink" )) {
+    if (Inkscape::Verb::getbyid("org.inkscape.followlink")) {
         mi = Gtk::manage(new Gtk::MenuItem(_("_Select This"), true));
         if (_desktop->selection->includes(_item)) {
             mi->set_sensitive(FALSE);
@@ -670,7 +670,7 @@ void ContextMenu::AnchorLinkFollow()
         _desktop->selection->set(_item);
     }
     // Opening the selected links with a python extension
-    Inkscape::Verb *verb = Inkscape::Verb::getbyid( "org.inkscape.followlink" );
+    Inkscape::Verb *verb = Inkscape::Verb::getbyid("org.inkscape.followlink");
     if (verb) {
         SPAction *action = verb->get_action(Inkscape::ActionContext(_desktop));
         if (action) {
@@ -703,8 +703,8 @@ void ContextMenu::MakeImageMenu ()
     mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::ImageEdit));
     mi->show();
     insert(*mi,positionOfLastDialog++);
-    if ( (!href) || ((strncmp(href, "data:", 5) == 0)) ) {
-        mi->set_sensitive( FALSE );
+    if ((!href) || ((strncmp(href, "data:", 5) == 0))) {
+        mi->set_sensitive(FALSE);
     }
 
     /* Trace Bitmap */
@@ -726,24 +726,24 @@ void ContextMenu::MakeImageMenu ()
     }
 
     /* Embed image */
-    if (Inkscape::Verb::getbyid( "org.ekips.filter.embedselectedimages" )) {
+    if (Inkscape::Verb::getbyid("org.ekips.filter.embedselectedimages")) {
         mi = Gtk::manage(new Gtk::MenuItem(C_("Context menu", "Embed Image")));
         mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::ImageEmbed));
         mi->show();
         insert(*mi,positionOfLastDialog++);
-        if ( (!href) || ((strncmp(href, "data:", 5) == 0)) ) {
-            mi->set_sensitive( FALSE );
+        if ((!href) || ((strncmp(href, "data:", 5) == 0))) {
+            mi->set_sensitive(FALSE);
         }
     }
 
     /* Extract image */
-    if (Inkscape::Verb::getbyid( "org.ekips.filter.extractimage" )) {
+    if (Inkscape::Verb::getbyid("org.ekips.filter.extractimage")) {
         mi = Gtk::manage(new Gtk::MenuItem(C_("Context menu", "Extract Image...")));
         mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::ImageExtract));
         mi->show();
         insert(*mi,positionOfLastDialog++);
-        if ( (!href) || ((strncmp(href, "data:", 5) != 0)) ) {
-            mi->set_sensitive( FALSE );
+        if ((!href) || ((strncmp(href, "data:", 5) != 0))) {
+            mi->set_sensitive(FALSE);
         }
     }
 }
@@ -793,9 +793,9 @@ void ContextMenu::ImageEdit()
     // not Windows command interpreter rules. Thus we need to enclose the
     // executable path with single quotes.
     int index = cmdline.find(".exe");
-    if ( index < 0 ) index = cmdline.find(".bat");
-    if ( index < 0 ) index = cmdline.find(".com");
-    if ( index >= 0 ) {
+    if (index < 0) index = cmdline.find(".bat");
+    if (index < 0) index = cmdline.find(".com");
+    if (index >= 0) {
         Glib::ustring editorBin = cmdline.substr(0, index + 4).c_str();
         Glib::ustring args = cmdline.substr(index + 4, cmdline.length()).c_str();
         editorBin.insert(0, "'");
@@ -829,7 +829,7 @@ void ContextMenu::ImageEdit()
             fullname = Glib::build_filename(Glib::get_current_dir(), name);
         }
         if (name.substr(name.find_last_of(".") + 1) == "SVG" ||
-            name.substr(name.find_last_of(".") + 1) == "svg"   )
+            name.substr(name.find_last_of(".") + 1) == "svg")
         {
             cmdline.erase(0, bmpeditor.length());
             Glib::ustring svgeditor = getImageEditorName(true);
@@ -844,7 +844,7 @@ void ContextMenu::ImageEdit()
 
     g_spawn_command_line_async(cmdline.c_str(), &errThing);
 
-    if ( errThing ) {
+    if (errThing) {
         g_warning("Problem launching editor (%d). %s", errThing->code, errThing->message);
         (_desktop->messageStack())->flash(Inkscape::ERROR_MESSAGE, errThing->message);
         g_error_free(errThing);
@@ -870,7 +870,7 @@ void ContextMenu::ImageEmbed()
         _desktop->selection->set(_item);
     }
 
-    Inkscape::Verb *verb = Inkscape::Verb::getbyid( "org.ekips.filter.embedselectedimages" );
+    Inkscape::Verb *verb = Inkscape::Verb::getbyid("org.ekips.filter.embedselectedimages");
     if (verb) {
         SPAction *action = verb->get_action(Inkscape::ActionContext(_desktop));
         if (action) {
@@ -885,7 +885,7 @@ void ContextMenu::ImageExtract()
         _desktop->selection->set(_item);
     }
 
-    Inkscape::Verb *verb = Inkscape::Verb::getbyid( "org.ekips.filter.extractimage" );
+    Inkscape::Verb *verb = Inkscape::Verb::getbyid("org.ekips.filter.extractimage");
     if (verb) {
         SPAction *action = verb->get_action(Inkscape::ActionContext(_desktop));
         if (action) {

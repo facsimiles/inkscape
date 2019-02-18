@@ -60,7 +60,7 @@ LPEDynastroke::LPEDynastroke(LivePathEffectObject *lpeobject) :
     registerParameter(&width);
     registerParameter(&roundness);
     registerParameter(&angle);
-    //registerParameter(&modulo_pi) );
+    //registerParameter(&modulo_pi));
     registerParameter(&start_cap);
     registerParameter(&growfor);
     registerParameter(&end_cap);
@@ -136,12 +136,12 @@ LPEDynastroke::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & p
                  //FIXME: roundness=0???
                  double c = cos(angle_rad), s = sin(angle_rad); 
                  Affine rot,slant;
-                 rot = Affine(c, -s, s,  c, 0, 0 );
-                 slant = Affine(double(width)*roundness, 0, 0,  double(width), 0, 0 );
-                 Piecewise<D2<SBasis> > nn = unitVector(v * ( rot * slant ) );
-                 slant = Affine( 0,-roundness, 1, 0, 0, 0 );
-                 rot = Affine(-s, -c, c, -s, 0, 0 );
-                 nn = nn * (slant * rot );
+                 rot = Affine(c, -s, s,  c, 0, 0);
+                 slant = Affine(double(width)*roundness, 0, 0,  double(width), 0, 0);
+                 Piecewise<D2<SBasis> > nn = unitVector(v * (rot * slant));
+                 slant = Affine(0,-roundness, 1, 0, 0, 0);
+                 rot = Affine(-s, -c, c, -s, 0, 0);
+                 nn = nn * (slant * rot);
 
                  n1 = nn*double(width);
                  n2 =-n1;
@@ -187,7 +187,7 @@ LPEDynastroke::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & p
      //
 
      Piecewise<D2<SBasis> > left, right;
-     if ( m.segs.front().at0() == m.segs.back().at1()){
+     if (m.segs.front().at0() == m.segs.back().at1()){
          // if closed:
 //         std::cout<<"closed input.\n";
          left  = m + n1;//+ n;

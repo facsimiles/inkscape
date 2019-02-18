@@ -40,8 +40,8 @@ void SPFeMorphology::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPFilterPrimitive::build(document, repr);
 
 	/*LOAD ATTRIBUTES FROM REPR HERE*/
-	this->readAttr( "operator" );
-	this->readAttr( "radius" );
+	this->readAttr("operator");
+	this->readAttr("radius");
 }
 
 /**
@@ -146,8 +146,8 @@ void SPFeMorphology::build_renderer(Inkscape::Filters::Filter* filter) {
     this->renderer_common(nr_primitive);
     
     nr_morphology->set_operator(this->Operator);
-    nr_morphology->set_xradius( this->radius.getNumber() );
-    nr_morphology->set_yradius( this->radius.getOptNumber() );
+    nr_morphology->set_xradius(this->radius.getNumber());
+    nr_morphology->set_yradius(this->radius.getOptNumber());
 }
 
 /*

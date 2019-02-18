@@ -208,7 +208,7 @@ public:
 
     void setAttribute(Glib::ustring const &key, Glib::ustring const &value, bool is_interactive=false)
     {
-        setAttribute( key.empty()   ? nullptr : key.c_str(),
+        setAttribute(key.empty()   ? nullptr : key.c_str(),
                       value.empty() ? nullptr : value.c_str(), is_interactive);
     }
     //@}

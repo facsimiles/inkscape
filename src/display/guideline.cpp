@@ -121,14 +121,14 @@ static void sp_guideline_render(SPCanvasItem *item, SPCanvasBuf *buf)
     // Draw guide.
     // Special case horizontal and vertical lines so they snap to pixels.
     // Don't use isHorizontal()/isVertical() as they test only exact matches.
-    if ( Geom::are_near(normal_dt[Geom::Y], 0.0) ) { // Vertical?
+    if (Geom::are_near(normal_dt[Geom::Y], 0.0)) { // Vertical?
 
         int position = round(point_on_line_dt[Geom::X]);
         cairo_move_to(buf->ct, position + 0.5, buf->rect.top() + 0.5);
         cairo_line_to(buf->ct, position + 0.5, buf->rect.bottom() - 0.5);
         cairo_stroke(buf->ct);
 
-    } else if ( Geom::are_near(normal_dt[Geom::X], 0.0) ) { // Horizontal?
+    } else if (Geom::are_near(normal_dt[Geom::X], 0.0)) { // Horizontal?
 
         int position = round(point_on_line_dt[Geom::Y]);
         cairo_move_to(buf->ct, buf->rect.left() + 0.5, position + 0.5);
@@ -138,16 +138,16 @@ static void sp_guideline_render(SPCanvasItem *item, SPCanvasBuf *buf)
     } else {
 
         Geom::Line guide =
-            Geom::Line::from_origin_and_vector( point_on_line_dt, Geom::rot90(normal_dt) );
+            Geom::Line::from_origin_and_vector(point_on_line_dt, Geom::rot90(normal_dt));
 
         // Find intersections of guide with buf rectangle. There should be zero or two.
         std::vector<Geom::Point> intersections;
         for (unsigned i = 0; i < 4; ++i) {
-            Geom::LineSegment side( buf->rect.corner(i), buf->rect.corner((i+1)%4) );
+            Geom::LineSegment side(buf->rect.corner(i), buf->rect.corner((i+1)%4));
             try {
                 Geom::OptCrossing oc = Geom::intersection(guide, side);
                 if (oc) {
-                    intersections.push_back( guide.pointAt((*oc).ta));
+                    intersections.push_back(guide.pointAt((*oc).ta));
                 }
             } catch (Geom::InfiniteSolutions) {
                 // Shouldn't happen as we have already taken care of horizontal/vertical guides.
@@ -223,7 +223,7 @@ SPCanvasItem *sp_guideline_new(SPCanvasGroup *parent, char* label, Geom::Point p
     gl->label = label;
     gl->locked = false;
     gl->normal_to_line = normal;
-    gl->angle = tan( -gl->normal_to_line[Geom::X] / gl->normal_to_line[Geom::Y]);
+    gl->angle = tan(-gl->normal_to_line[Geom::X] / gl->normal_to_line[Geom::Y]);
     sp_guideline_set_position(gl, point_on_line);
 
     gl->origin = (SPCtrl *) sp_canvas_item_new(parent, SP_TYPE_CTRL, 
@@ -262,7 +262,7 @@ void sp_guideline_set_position(SPGuideLine *gl, Geom::Point point_on_line)
 void sp_guideline_set_normal(SPGuideLine *gl, Geom::Point normal_to_line)
 {
     gl->normal_to_line = normal_to_line;
-    gl->angle = tan( -normal_to_line[Geom::X] / normal_to_line[Geom::Y]);
+    gl->angle = tan(-normal_to_line[Geom::X] / normal_to_line[Geom::Y]);
 
     sp_canvas_item_request_update(SP_CANVAS_ITEM (gl));
 }

@@ -73,27 +73,27 @@ class BaseVectorImpl
 
 	bool is_positive() const
 	{
-	    for ( size_t i = 0; i < size(); ++i )
+	    for (size_t i = 0; i < size(); ++i)
 	    {
-	        if ( (*this)[i] <= 0 ) return false;
+	        if ((*this)[i] <= 0) return false;
 	    }
 		return true;
 	}
 
 	bool is_negative() const
 	{
-        for ( size_t i = 0; i < size(); ++i )
+        for (size_t i = 0; i < size(); ++i)
         {
-            if ( (*this)[i] >= 0 ) return false;
+            if ((*this)[i] >= 0) return false;
         }
         return true;
 	}
 
 	bool is_non_negative() const
 	{
-		for ( size_t i = 0; i < size(); ++i )
+		for (size_t i = 0; i < size(); ++i)
 		{
-			if ( (*this)[i] < 0 ) return false;
+			if ((*this)[i] < 0) return false;
 		}
 		return true;
 	}
@@ -153,7 +153,7 @@ inline
 std::basic_ostream<charT> &
 operator<< (std::basic_ostream<charT> & os, const BaseVectorImpl & _vector)
 {
-	if (_vector.size() == 0 ) return os;
+	if (_vector.size() == 0) return os;
 	os << "[" << _vector[0];
 	for (unsigned int i = 1; i < _vector.size(); ++i)
 	{
@@ -304,36 +304,36 @@ class Vector : public detail::VectorImpl
 
 	Vector & operator=(Vector const& _vector)
 	{
-		assert( size() == _vector.size() );
+		assert(size() == _vector.size());
 		gsl_vector_memcpy(m_vector, _vector.m_vector);
 		return (*this);
 	}
 
 	Vector & operator=(base_type::base_type const& _vector)
 	{
-		assert( size() == _vector.size() );
+		assert(size() == _vector.size());
 		gsl_vector_memcpy(m_vector, _vector.get_gsl_vector());
 		return (*this);
 	}
 
 	Vector & scale(double x)
 	{
-		return static_cast<Vector&>( base_type::scale(x) );
+		return static_cast<Vector&>(base_type::scale(x));
 	}
 
 	Vector & translate(double x)
 	{
-		return static_cast<Vector&>( base_type::translate(x) );
+		return static_cast<Vector&>(base_type::translate(x));
 	}
 
 	Vector & operator+=(base_type::base_type const& _vector)
 	{
-		return static_cast<Vector&>( base_type::operator+=(_vector) );
+		return static_cast<Vector&>(base_type::operator+=(_vector));
 	}
 
 	Vector & operator-=(base_type::base_type const& _vector)
 	{
-		return static_cast<Vector&>( base_type::operator-=(_vector) );
+		return static_cast<Vector&>(base_type::operator-=(_vector));
 	}
 
 	friend
@@ -369,46 +369,46 @@ class ConstVectorView : public detail::BaseVectorImpl
 
   public:
 	ConstVectorView(const base_type & _vector, size_t n, size_t offset = 0)
-		: m_vector_view( gsl_vector_const_subvector(_vector.get_gsl_vector(), offset, n) )
+		: m_vector_view(gsl_vector_const_subvector(_vector.get_gsl_vector(), offset, n))
 	{
 		m_size = n;
-		m_vector = const_cast<gsl_vector*>( &(m_vector_view.vector) );
+		m_vector = const_cast<gsl_vector*>(&(m_vector_view.vector));
 	}
 
 	ConstVectorView(const base_type & _vector, size_t n, size_t offset , size_t stride)
-		: m_vector_view( gsl_vector_const_subvector_with_stride(_vector.get_gsl_vector(), offset, stride, n) )
+		: m_vector_view(gsl_vector_const_subvector_with_stride(_vector.get_gsl_vector(), offset, stride, n))
 	{
 		m_size = n;
-		m_vector = const_cast<gsl_vector*>( &(m_vector_view.vector) );
+		m_vector = const_cast<gsl_vector*>(&(m_vector_view.vector));
 	}
 
     ConstVectorView(const double* _vector, size_t n, size_t offset = 0)
-        : m_vector_view( gsl_vector_const_view_array(_vector + offset, n) )
+        : m_vector_view(gsl_vector_const_view_array(_vector + offset, n))
     {
         m_size = n;
-        m_vector = const_cast<gsl_vector*>( &(m_vector_view.vector) );
+        m_vector = const_cast<gsl_vector*>(&(m_vector_view.vector));
     }
 
     ConstVectorView(const double* _vector, size_t n, size_t offset, size_t stride)
-        : m_vector_view( gsl_vector_const_view_array_with_stride(_vector + offset, stride, n) )
+        : m_vector_view(gsl_vector_const_view_array_with_stride(_vector + offset, stride, n))
     {
         m_size = n;
-        m_vector = const_cast<gsl_vector*>( &(m_vector_view.vector) );
+        m_vector = const_cast<gsl_vector*>(&(m_vector_view.vector));
     }
 
 	explicit
 	ConstVectorView(gsl_vector_const_view  _gsl_vector_view)
 		: m_vector_view(_gsl_vector_view)
 	{
-		m_vector = const_cast<gsl_vector*>( &(m_vector_view.vector) );
+		m_vector = const_cast<gsl_vector*>(&(m_vector_view.vector));
 		m_size = m_vector->size;
 	}
 
     explicit
     ConstVectorView(const std::vector<double>&  _vector)
-        : m_vector_view( gsl_vector_const_view_array(&(_vector[0]), _vector.size()) )
+        : m_vector_view(gsl_vector_const_view_array(&(_vector[0]), _vector.size()))
     {
-        m_vector = const_cast<gsl_vector*>( &(m_vector_view.vector) );
+        m_vector = const_cast<gsl_vector*>(&(m_vector_view.vector));
         m_size = _vector.size();
     }
 
@@ -417,14 +417,14 @@ class ConstVectorView : public detail::BaseVectorImpl
 		  m_vector_view(_vector.m_vector_view)
 	{
 		m_size = _vector.size();
-		m_vector = const_cast<gsl_vector*>( &(m_vector_view.vector) );
+		m_vector = const_cast<gsl_vector*>(&(m_vector_view.vector));
 	}
 
 	ConstVectorView(const base_type & _vector)
 		: m_vector_view(gsl_vector_const_subvector(_vector.get_gsl_vector(), 0, _vector.size()))
 	{
 		m_size = _vector.size();
-		m_vector = const_cast<gsl_vector*>( &(m_vector_view.vector) );
+		m_vector = const_cast<gsl_vector*>(&(m_vector_view.vector));
 	}
 
   private:
@@ -509,36 +509,36 @@ class VectorView : public detail::VectorImpl
 
 	VectorView & operator=(VectorView const& _vector)
 	{
-		assert( size() == _vector.size() );
+		assert(size() == _vector.size());
 		gsl_vector_memcpy(m_vector, _vector.get_gsl_vector());
 		return (*this);
 	}
 
 	VectorView & operator=(base_type::base_type const& _vector)
 	{
-		assert( size() == _vector.size() );
+		assert(size() == _vector.size());
 		gsl_vector_memcpy(m_vector, _vector.get_gsl_vector());
 		return (*this);
 	}
 
 	VectorView & scale(double x)
 	{
-		return static_cast<VectorView&>( base_type::scale(x) );
+		return static_cast<VectorView&>(base_type::scale(x));
 	}
 
 	VectorView & translate(double x)
 	{
-		return static_cast<VectorView&>( base_type::translate(x) );
+		return static_cast<VectorView&>(base_type::translate(x));
 	}
 
 	VectorView & operator+=(base_type::base_type const& _vector)
 	{
-		return static_cast<VectorView&>( base_type::operator+=(_vector) );
+		return static_cast<VectorView&>(base_type::operator+=(_vector));
 	}
 
 	VectorView & operator-=(base_type::base_type const& _vector)
 	{
-		return static_cast<VectorView&>( base_type::operator-=(_vector) );
+		return static_cast<VectorView&>(base_type::operator-=(_vector));
 	}
 
 	friend
@@ -553,7 +553,7 @@ class VectorView : public detail::VectorImpl
 inline
 void swap_view(VectorView & v1, VectorView & v2)
 {
-	assert( v1.size() == v2.size() );
+	assert(v1.size() == v2.size());
 	using std::swap;
 	swap(v1.m_vector_view, v2.m_vector_view); // not swap m_vector too
 }

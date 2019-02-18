@@ -148,7 +148,7 @@ private:
 /**
  * Resolves an item referenced by a URI in CSS form contained in "url(...)"
  */
-SPObject* sp_css_uri_reference_resolve( SPDocument *document, const char *uri );
+SPObject* sp_css_uri_reference_resolve(SPDocument *document, const char *uri);
 
 SPObject *sp_uri_reference_resolve (SPDocument *document, const char *uri);
 

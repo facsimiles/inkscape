@@ -124,7 +124,7 @@ PrefDialog::PrefDialog (Glib::ustring name, gchar const * help, Gtk::Widget * co
     return;
 }
 
-PrefDialog::~PrefDialog ( )
+PrefDialog::~PrefDialog ()
 {
     if (_param_preview != nullptr) {
         delete _param_preview;

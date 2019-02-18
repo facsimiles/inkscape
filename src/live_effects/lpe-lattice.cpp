@@ -125,7 +125,7 @@ LPELattice::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2
                         unsigned i = ui + vi*sb2[dim].us;
                         
                         //This is the offset from the Upperleft point
-                        Geom::Point base(   (ui + iu*(3-2*ui))*width/3.,
+                        Geom::Point base((ui + iu*(3-2*ui))*width/3.,
                                             (vi + iv*(3-2*vi))*height/3.);
                        
                         //Special action for corners
@@ -137,7 +137,7 @@ LPELattice::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2
                         // corner = actual corner of the rectangle
                         // origin = Upperleft point
                         double dl = dot((*handles[corner+4*i] - (base + origin)), dir)/dot(dir,dir);
-                        sb2[dim][i][corner] = dl/( dim ? height : width )*pow(4.0,ui+vi);
+                        sb2[dim][i][corner] = dl/(dim ? height : width)*pow(4.0,ui+vi);
                     }
                 }
             }

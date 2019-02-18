@@ -81,21 +81,21 @@ void SPString::read_content() {
     bool is_css         = false;
 
     // Strings don't have style, check parent for style
-    if( parent && parent->style ) {
-        if( parent->style->white_space.computed == SP_CSS_WHITE_SPACE_PRE     ||
+    if(parent && parent->style) {
+        if(parent->style->white_space.computed == SP_CSS_WHITE_SPACE_PRE     ||
             parent->style->white_space.computed == SP_CSS_WHITE_SPACE_PREWRAP ||
-            parent->style->white_space.computed == SP_CSS_WHITE_SPACE_PRELINE  ) {
+            parent->style->white_space.computed == SP_CSS_WHITE_SPACE_PRELINE) {
             collapse_line = false;
         }
-        if( parent->style->white_space.computed == SP_CSS_WHITE_SPACE_PRE     ||
-            parent->style->white_space.computed == SP_CSS_WHITE_SPACE_PREWRAP ) {
+        if(parent->style->white_space.computed == SP_CSS_WHITE_SPACE_PRE     ||
+            parent->style->white_space.computed == SP_CSS_WHITE_SPACE_PREWRAP) {
             collapse_space = false;
         }
-        if( parent->style->white_space.computed != SP_CSS_WHITE_SPACE_NORMAL ) {
+        if(parent->style->white_space.computed != SP_CSS_WHITE_SPACE_NORMAL) {
             is_css = true; // If white-space not normal, we assume white-space is set.
         }
     }
-    if( !is_css ) {
+    if(!is_css) {
         // SVG 2: Use 'xml:space' only if 'white-space' not 'normal'.
         if (xml_space.value == SP_XML_SPACE_PRESERVE) {
             collapse_space = false;
@@ -103,7 +103,7 @@ void SPString::read_content() {
     }
 
     bool white_space = false;
-    for ( ; *xml_string ; xml_string = g_utf8_next_char(xml_string) ) {
+    for (; *xml_string ; xml_string = g_utf8_next_char(xml_string)) {
 
         gunichar c = g_utf8_get_char(xml_string);
         switch (c) {
@@ -114,8 +114,8 @@ void SPString::read_content() {
                 continue;
                 break;
             case 0xa: // Line feed
-                if( collapse_line ) {
-                    if( !is_css && collapse_space ) continue; // xml:space == 'default' strips LFs.
+                if(collapse_line) {
+                    if(!is_css && collapse_space) continue; // xml:space == 'default' strips LFs.
                     white_space = true;        // Convert to space and collapse
                 } else {
                     string += c;       // Preserve line feed
@@ -123,7 +123,7 @@ void SPString::read_content() {
                 }
                 break;
             case '\t': // Tab
-                if( collapse_space ) {
+                if(collapse_space) {
                     white_space = true;        // Convert to space and collapse
                 } else {
                     string += c;       // Preserve tab
@@ -131,7 +131,7 @@ void SPString::read_content() {
                 }
                 break;
             case ' ': // Space
-                if( collapse_space ) {
+                if(collapse_space) {
                     white_space = true;        // Collapse white space
                 } else {
                     string += c;       // Preserve space
@@ -139,7 +139,7 @@ void SPString::read_content() {
                 }
                 break;
             default:
-                if( white_space && (!string.empty() || (getPrev() != nullptr))) {
+                if(white_space && (!string.empty() || (getPrev() != nullptr))) {
                     string += ' ';
                 }
                 string += c;

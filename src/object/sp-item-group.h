@@ -51,7 +51,7 @@ public:
     void setInsertBottom(bool insertbottom);
 
     LayerMode effectiveLayerMode(unsigned int display_key) const {
-        if ( _layer_mode == LAYER ) {
+        if (_layer_mode == LAYER) {
             return LAYER;
         } else {
             return layerDisplayMode(display_key);

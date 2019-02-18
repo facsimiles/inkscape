@@ -101,8 +101,8 @@ T pow(T const &t, int n) {
     T result(T::identity());
     T x(n < 0 ? t.inverse() : t);
     if (n < 0) n = -n;
-    while ( n ) { // binary exponentiation - fast
-        if ( n & 1 ) { result *= x; --n; }
+    while (n) { // binary exponentiation - fast
+        if (n & 1) { result *= x; --n; }
         x *= x; n /= 2;
     }
     return result;

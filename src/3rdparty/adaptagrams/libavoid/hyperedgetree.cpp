@@ -342,7 +342,7 @@ void HyperedgeTreeNode::deleteEdgesExcept(HyperedgeTreeEdge *ignored)
 void HyperedgeTreeNode::disconnectEdge(HyperedgeTreeEdge *edge)
 {
     for (std::list<HyperedgeTreeEdge *>::iterator curr = edges.begin();
-            curr != edges.end(); )
+            curr != edges.end();)
     {
         if (*curr == edge)
         {

@@ -35,11 +35,11 @@ void FilterMerge::render_cairo(FilterSlot &slot)
     if (_input_image.empty()) return;
 
     SPColorInterpolation ci_fp  = SP_CSS_COLOR_INTERPOLATION_AUTO;
-    if( _style ) {
+    if(_style) {
         ci_fp = (SPColorInterpolation)_style->color_interpolation_filters.computed;
     }
 
-    Geom::Rect vp = filter_primitive_area( slot.get_units() );
+    Geom::Rect vp = filter_primitive_area(slot.get_units());
     slot.set_primitive_area(_output, vp); // Needed for tiling
 
     // output is RGBA if at least one input is RGBA
@@ -49,7 +49,7 @@ void FilterMerge::render_cairo(FilterSlot &slot)
         cairo_surface_t *in = slot.getcairo(i);
         if (cairo_surface_get_content(in) == CAIRO_CONTENT_COLOR_ALPHA) {
             out = ink_cairo_surface_create_identical(in);
-            set_cairo_surface_ci( out, ci_fp );
+            set_cairo_surface_ci(out, ci_fp);
             rgba32 = true;
             break;
         }
@@ -63,7 +63,7 @@ void FilterMerge::render_cairo(FilterSlot &slot)
     for (int & i : _input_image) {
         cairo_surface_t *in = slot.getcairo(i);
 
-        set_cairo_surface_ci( in, ci_fp );
+        set_cairo_surface_ci(in, ci_fp);
         cairo_set_source_surface(out_ct, in, 0, 0);
         cairo_paint(out_ct);
     }

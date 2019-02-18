@@ -67,7 +67,7 @@ void TemplateWidget::create()
         desc->getDocument()->setModifiedSinceSave(false);
 
 	// Apply cx,cy etc. from document
-	sp_namedview_window_from_document( desc );
+	sp_namedview_window_from_document(desc);
 
         if (desktop)
             desktop->clearWaitingCursor();

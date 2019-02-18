@@ -46,13 +46,13 @@ SPGradient *sp_item_set_gradient(SPItem *item, SPGradient *gr, SPGradientType ty
 /*
  * Get default normalized gradient vector of document, create if there is none
  */
-SPGradient *sp_document_default_gradient_vector( SPDocument *document, SPColor const &color, bool singleStop );
+SPGradient *sp_document_default_gradient_vector(SPDocument *document, SPColor const &color, bool singleStop);
 
 /**
  * Return the preferred vector for \a o, made from (in order of preference) its current vector,
  * current fill or stroke color, or from desktop style if \a o is NULL or doesn't have style.
  */
-SPGradient *sp_gradient_vector_for_object( SPDocument *doc, SPDesktop *desktop, SPObject *o, Inkscape::PaintTarget fill_or_stroke, bool singleStop = false );
+SPGradient *sp_gradient_vector_for_object(SPDocument *doc, SPDesktop *desktop, SPObject *o, Inkscape::PaintTarget fill_or_stroke, bool singleStop = false);
 
 void sp_object_ensure_fill_gradient_normalized (SPObject *object);
 void sp_object_ensure_stroke_gradient_normalized (SPObject *object);

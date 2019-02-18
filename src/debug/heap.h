@@ -29,9 +29,9 @@ public:
     };
 
     enum {
-        SIZE_AVAILABLE    = ( 1 << 0 ),
-        USED_AVAILABLE    = ( 1 << 1 ),
-        GARBAGE_COLLECTED = ( 1 << 2 )
+        SIZE_AVAILABLE    = (1 << 0),
+        USED_AVAILABLE    = (1 << 1),
+        GARBAGE_COLLECTED = (1 << 2)
     };
 
     virtual int features() const=0;

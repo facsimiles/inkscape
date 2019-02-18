@@ -65,7 +65,7 @@ static void sp_canvas_rotate_destroy (SPCanvasItem *object)
 }
 
 // NOT USED... TOO SLOW
-static void sp_canvas_rotate_update( SPCanvasItem *item, Geom::Affine const &/*affine*/, unsigned int /*flags*/ )
+static void sp_canvas_rotate_update(SPCanvasItem *item, Geom::Affine const &/*affine*/, unsigned int /*flags*/)
 {
     SPCanvasRotate *cr = SP_CANVAS_ROTATE(item);
 
@@ -84,14 +84,14 @@ static void sp_canvas_rotate_update( SPCanvasItem *item, Geom::Affine const &/*a
     cr->surface_rotated = ink_cairo_surface_create_identical(cr->surface_copy);
     double width  = cairo_image_surface_get_width  (cr->surface_rotated);
     double height = cairo_image_surface_get_height (cr->surface_rotated);
-    cairo_t *context = cairo_create( cr->surface_rotated );
-    cairo_set_operator( context, CAIRO_OPERATOR_SOURCE );
-    cairo_translate(    context, width/2.0, height/2.0 );
-    cairo_rotate(       context, Geom::rad_from_deg(-cr->angle) );
-    cairo_translate(    context, -width/2.0, -height/2.0 );
-    cairo_set_source_surface( context, cr->surface_copy, 0, 0 );
-    cairo_paint(        context );
-    cairo_destroy(      context);
+    cairo_t *context = cairo_create(cr->surface_rotated);
+    cairo_set_operator(context, CAIRO_OPERATOR_SOURCE);
+    cairo_translate(context, width/2.0, height/2.0);
+    cairo_rotate(context, Geom::rad_from_deg(-cr->angle));
+    cairo_translate(context, -width/2.0, -height/2.0);
+    cairo_set_source_surface(context, cr->surface_copy, 0, 0);
+    cairo_paint(context);
+    cairo_destroy(context);
 
     // We cover the entire canvas
     item->x1 = -G_MAXINT;
@@ -103,7 +103,7 @@ static void sp_canvas_rotate_update( SPCanvasItem *item, Geom::Affine const &/*a
 }
 
 // NOT USED... TOO SLOW
-static void sp_canvas_rotate_render( SPCanvasItem *item, SPCanvasBuf *buf)
+static void sp_canvas_rotate_render(SPCanvasItem *item, SPCanvasBuf *buf)
 {
     // std::cout << "sp_canvas_rotate_render:" << std::endl;
     // std::cout << "  buf->rect:         " << buf->rect << std::endl;
@@ -115,7 +115,7 @@ static void sp_canvas_rotate_render( SPCanvasItem *item, SPCanvasBuf *buf)
         return;
     }
 
-    if (cr->surface_rotated == nullptr ) {
+    if (cr->surface_rotated == nullptr) {
         // std::cout << "  surface_rotated is NULL" << std::endl;
         return;
     }
@@ -124,9 +124,9 @@ static void sp_canvas_rotate_render( SPCanvasItem *item, SPCanvasBuf *buf)
     cairo_save (ct);
     cairo_translate (ct,
                      buf->canvas_rect.left() - buf->rect.left(),
-                     buf->canvas_rect.top()  - buf->rect.top() );
-    cairo_set_operator (ct, CAIRO_OPERATOR_SOURCE );
-    cairo_set_source_surface (ct, cr->surface_rotated, 0, 0 );
+                     buf->canvas_rect.top()  - buf->rect.top());
+    cairo_set_operator (ct, CAIRO_OPERATOR_SOURCE);
+    cairo_set_source_surface (ct, cr->surface_rotated, 0, 0);
     cairo_paint   (ct);
     cairo_restore (ct);
 
@@ -157,11 +157,11 @@ static int sp_canvas_rotate_event  (SPCanvasItem *item, GdkEvent *event)
     switch (event->type) {
         case GDK_MOTION_NOTIFY:
         {
-            Geom::Point cursor( event->motion.x, event->motion.y );
+            Geom::Point cursor(event->motion.x, event->motion.y);
 
             // Both cursor and center are in window coordinates
-            Geom::Point rcursor( cursor - cr->center );
-            double angle = Geom::deg_from_rad( Geom::atan2(rcursor) );
+            Geom::Point rcursor(cursor - cr->center);
+            double angle = Geom::deg_from_rad(Geom::atan2(rcursor));
 
             // Set start angle
             if (cr->start_angle < -360) {
@@ -189,10 +189,10 @@ static int sp_canvas_rotate_event  (SPCanvasItem *item, GdkEvent *event)
 
             // Correct line for snapping of angle
             double distance = rcursor.length();
-            cr->cursor = Geom::Point::polar( Geom::rad_from_deg(angle), distance );
+            cr->cursor = Geom::Point::polar(Geom::rad_from_deg(angle), distance);
 
             // Update screen
-            // sp_canvas_item_request_update( item );
+            // sp_canvas_item_request_update(item);
             sp_canvas_rotate_paint (cr, cr->canvas->_backing_store);
             break;
         }
@@ -201,7 +201,7 @@ static int sp_canvas_rotate_event  (SPCanvasItem *item, GdkEvent *event)
             // Rotate the actual canvas
             desktop->rotate_relative_center_point (desktop->w2d(cr->center),
                                                    (desktop->w2d().det() > 0 ? -1 : 1) *
-                                                   Geom::rad_from_deg(cr->angle) );
+                                                   Geom::rad_from_deg(cr->angle));
 
             // We're done
             sp_canvas_item_ungrab (item, event->button.time);
@@ -209,11 +209,11 @@ static int sp_canvas_rotate_event  (SPCanvasItem *item, GdkEvent *event)
 
             cr->start_angle = -1000;
             if (cr->surface_copy != nullptr) {
-                cairo_surface_destroy( cr->surface_copy );
+                cairo_surface_destroy(cr->surface_copy);
                 cr->surface_copy = nullptr;
             }
             if (cr->surface_rotated != nullptr) {
-                cairo_surface_destroy( cr->surface_rotated );
+                cairo_surface_destroy(cr->surface_rotated);
                 cr->surface_rotated = nullptr;
             }
             // sp_canvas_item_show (desktop->drawing);
@@ -247,10 +247,10 @@ void sp_canvas_rotate_start (SPCanvasRotate *canvas_rotate, cairo_surface_t *bac
     canvas_rotate->angle = 0.0;
 
     // Copy current background
-    canvas_rotate->surface_copy = ink_cairo_surface_copy( background );
+    canvas_rotate->surface_copy = ink_cairo_surface_copy(background);
 
     // Paint canvas with background... since we are hiding drawing.
-    sp_canvas_item_request_update( canvas_rotate );
+    sp_canvas_item_request_update(canvas_rotate);
 }
 
 // Paint the canvas ourselves for speed....
@@ -265,17 +265,17 @@ void sp_canvas_rotate_paint (SPCanvasRotate *canvas_rotate, cairo_surface_t *bac
     double height = cairo_image_surface_get_height (background);
 
     // Draw rotated canvas
-    cairo_t *context = cairo_create( background );
+    cairo_t *context = cairo_create(background);
 
     cairo_save (context);
-    cairo_set_operator( context, CAIRO_OPERATOR_SOURCE );
-    cairo_translate(    context, width/2.0, height/2.0 );
-    cairo_rotate(       context, Geom::rad_from_deg(-canvas_rotate->angle) );
-    cairo_translate(    context, -width/2.0, -height/2.0 );
-    cairo_set_source_surface( context, canvas_rotate->surface_copy, 0, 0 );
-    cairo_paint(        context );
-    cairo_restore(      context );
-    cairo_destroy(      context );
+    cairo_set_operator(context, CAIRO_OPERATOR_SOURCE);
+    cairo_translate(context, width/2.0, height/2.0);
+    cairo_rotate(context, Geom::rad_from_deg(-canvas_rotate->angle));
+    cairo_translate(context, -width/2.0, -height/2.0);
+    cairo_set_source_surface(context, canvas_rotate->surface_copy, 0, 0);
+    cairo_paint(context);
+    cairo_restore(context);
+    cairo_destroy(context);
 
     gtk_widget_queue_draw (GTK_WIDGET (canvas_rotate->canvas));
 }

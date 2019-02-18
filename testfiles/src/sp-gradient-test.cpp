@@ -115,13 +115,13 @@ TEST_F(SPGradientTest, GetG2dGetGs2dSetGs2) {
         Geom::Affine gs2d(gr->get_gs2d_matrix(funny, larger_rect));
         EXPECT_TRUE(Geom::are_near(Geom::Affine(3, 0,
                                                 0, 4,
-                                                5, 6) * funny, g2d ));
+                                                5, 6) * funny, g2d));
         EXPECT_TRUE(Geom::are_near(gs2d, gr->gradientTransform * g2d, 1e-12));
 
         gr->set_gs2d_matrix(funny, larger_rect, gs2d);
         EXPECT_TRUE(Geom::are_near(gr->gradientTransform, grXform, 1e-12));
 
-        SP_OBJECT(gr)->setKeyValue( SP_ATTR_GRADIENTUNITS, "userSpaceOnUse");
+        SP_OBJECT(gr)->setKeyValue(SP_ATTR_GRADIENTUNITS, "userSpaceOnUse");
         Geom::Affine user_g2d(gr->get_g2d_matrix(funny, larger_rect));
         Geom::Affine user_gs2d(gr->get_gs2d_matrix(funny, larger_rect));
         EXPECT_TRUE(Geom::are_near(funny, user_g2d));

@@ -185,27 +185,27 @@ void DebugDialogImpl::captureLogMessages()
     GLogLevelFlags flags = (GLogLevelFlags) (G_LOG_LEVEL_ERROR   | G_LOG_LEVEL_CRITICAL |
                              G_LOG_LEVEL_WARNING | G_LOG_LEVEL_MESSAGE  |
                              G_LOG_LEVEL_INFO    | G_LOG_LEVEL_DEBUG);
-    if ( !handlerDefault ) {
+    if (!handlerDefault) {
         handlerDefault = g_log_set_handler(nullptr, flags,
               dialogLoggingFunction, (gpointer)this);
     }
-    if ( !handlerGlibmm ) {
+    if (!handlerGlibmm) {
         handlerGlibmm = g_log_set_handler("glibmm", flags,
               dialogLoggingFunction, (gpointer)this);
     }
-    if ( !handlerAtkmm ) {
+    if (!handlerAtkmm) {
         handlerAtkmm = g_log_set_handler("atkmm", flags,
               dialogLoggingFunction, (gpointer)this);
     }
-    if ( !handlerPangomm ) {
+    if (!handlerPangomm) {
         handlerPangomm = g_log_set_handler("pangomm", flags,
               dialogLoggingFunction, (gpointer)this);
     }
-    if ( !handlerGdkmm ) {
+    if (!handlerGdkmm) {
         handlerGdkmm = g_log_set_handler("gdkmm", flags,
               dialogLoggingFunction, (gpointer)this);
     }
-    if ( !handlerGtkmm ) {
+    if (!handlerGtkmm) {
         handlerGtkmm = g_log_set_handler("gtkmm", flags,
               dialogLoggingFunction, (gpointer)this);
     }
@@ -214,27 +214,27 @@ void DebugDialogImpl::captureLogMessages()
 
 void DebugDialogImpl::releaseLogMessages()
 {
-    if ( handlerDefault ) {
+    if (handlerDefault) {
         g_log_remove_handler(nullptr, handlerDefault);
         handlerDefault = 0;
     }
-    if ( handlerGlibmm ) {
+    if (handlerGlibmm) {
         g_log_remove_handler("glibmm", handlerGlibmm);
         handlerGlibmm = 0;
     }
-    if ( handlerAtkmm ) {
+    if (handlerAtkmm) {
         g_log_remove_handler("atkmm", handlerAtkmm);
         handlerAtkmm = 0;
     }
-    if ( handlerPangomm ) {
+    if (handlerPangomm) {
         g_log_remove_handler("pangomm", handlerPangomm);
         handlerPangomm = 0;
     }
-    if ( handlerGdkmm ) {
+    if (handlerGdkmm) {
         g_log_remove_handler("gdkmm", handlerGdkmm);
         handlerGdkmm = 0;
     }
-    if ( handlerGtkmm ) {
+    if (handlerGtkmm) {
         g_log_remove_handler("gtkmm", handlerGtkmm);
         handlerGtkmm = 0;
     }

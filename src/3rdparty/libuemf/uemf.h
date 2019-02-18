@@ -165,9 +165,9 @@ extern "C" {
 #define U_CT_ARGB                     1               //!< For RGBA_to_DIB, use color table (16 bits or less only) BGRA colors, compatible with EMF+ ARGB
 #define U_EMR_COMMENT_SPOOLFONTDEF    0x544F4E46      //!< For U_EMRCOMMENT record that is U_EMR_COMMENT_SPOOL, comment holds font definition informtion.
 /** Solaris 8 has problems with round/roundf, just use this everywhere  */
-#define U_ROUND(A)  ( (A) > 0 ? floor((A)+0.5) : ( (A) < 0 ? -floor(-(A)+0.5) : (A) ) )
+#define U_ROUND(A)  ((A) > 0 ? floor((A)+0.5) : ((A) < 0 ? -floor(-(A)+0.5) : (A)))
 
-#define MAKE_MIN_PTR(A,B) ( A < B ? A : B)
+#define MAKE_MIN_PTR(A,B) (A < B ? A : B)
 /* IS_MEM_UNSAFE takes 3 parameters:
       A  start address of a block of allocated memory
       B  offset into this block starting at A
@@ -184,7 +184,7 @@ extern "C" {
    If B is a uint16_t gcc complains about the first test.  
    This Macro must not be used where B needs more than 32 bits!
 */
-#define IS_MEM_UNSAFE(A,B,C) ( (sizeof(B) < sizeof(int) || (int)(B) < 0) ? 1 : ((int8_t *)(A) > (int8_t *)(C) ? 1 : ((int8_t *)(C) - (int8_t *)(A) >= (int)(B) ? 0 : 1 ))) //!< Return 1 when a region of memory starting at A of B bytes extends beyond pointer C
+#define IS_MEM_UNSAFE(A,B,C) ((sizeof(B) < sizeof(int) || (int)(B) < 0) ? 1 : ((int8_t *)(A) > (int8_t *)(C) ? 1 : ((int8_t *)(C) - (int8_t *)(A) >= (int)(B) ? 0 : 1))) //!< Return 1 when a region of memory starting at A of B bytes extends beyond pointer C
 
 /** @} */
 
@@ -630,7 +630,7 @@ typedef struct {
 /** @} */
 
 /** \defgroup U_EMF_EMR_Qualifiers EMF RecordType Enumeration
-  (RecordType Enumeration, EMF manual 2.1.1 )
+  (RecordType Enumeration, EMF manual 2.1.1)
   For U_EMR iType field
   EMF manual 2.1.1
   @{
@@ -1578,9 +1578,9 @@ typedef struct {
 #define U_BGRA(r,g,b,a)      rgbquad_set(r, g, b, a)        //!<  Set any BGRA color with an {r,g,b,a} quad
 #define U_WHITE              U_BGR(255,255,255)             //!<  Set BGR white.
 #define U_BLACK              U_BGR(0,0,0)                   //!<  Set BGR black.
-#define U_BGRAGetR(rgb)      (rgb.Red     )                 //!<  Color BGR Red.
-#define U_BGRAGetG(rgb)      (rgb.Green   )                 //!<  Color BGR Green.
-#define U_BGRAGetB(rgb)      (rgb.Blue    )                 //!<  Color BGR Blue.
+#define U_BGRAGetR(rgb)      (rgb.Red)                 //!<  Color BGR Red.
+#define U_BGRAGetG(rgb)      (rgb.Green)                 //!<  Color BGR Green.
+#define U_BGRAGetB(rgb)      (rgb.Blue)                 //!<  Color BGR Blue.
 #define U_BGRAGetA(rgb)      (rgb.Reserved)                 //!<  Color BGRA A/reserved
 
 
@@ -1593,9 +1593,9 @@ typedef struct {
 #define colorref_set         colorref3_set                  //!<  Most frequent usage is 3 colors, so set the unqualified one to that
 #define U_RGB(r,g,b)         colorref3_set(r, g, b)         //!<  Set any RGB  color with an {r,g,b} triplet
 #define U_RGBA(r,g,b,a)      colorref4_set(r, g, b,  a)     //!<  Set any RGBA color with an {r,g,b,a} quad
-#define U_RGBAGetR(rgb)      (rgb.Red     )                 //!<  Color RGB Red.
-#define U_RGBAGetG(rgb)      (rgb.Green   )                 //!<  Color RGB Green
-#define U_RGBAGetB(rgb)      (rgb.Blue    )                 //!<  Color RGB Blue
+#define U_RGBAGetR(rgb)      (rgb.Red)                 //!<  Color RGB Red.
+#define U_RGBAGetG(rgb)      (rgb.Green)                 //!<  Color RGB Green
+#define U_RGBAGetB(rgb)      (rgb.Blue)                 //!<  Color RGB Blue
 #define U_RGBAGetA(rgb)      (rgb.Reserved)                 //!<  Color RGBA A/reserved
 
 //   color type conversions
@@ -1608,7 +1608,7 @@ typedef struct {
 #define U_CMYK(c,m,y,k)\
   ((COLOREF)((((uint8_t)(k)|((uint16_t)((uint8_t)(y))<<8))|(((uint32_t)(uint8_t)(m))<<16))|(((uint32_t)(uint8_t)(c))<<24))) \
                                                                 //!<   Color CMYK Set Macro.
-#define U_GetKValue(cmyk)     ((uint8_t)  (cmyk) )              //!<  Color CMYK Get K Macro.
+#define U_GetKValue(cmyk)     ((uint8_t)  (cmyk))              //!<  Color CMYK Get K Macro.
 #define U_GetYValue(cmyk)     ((uint8_t) ((cymk) >> 8))         //!<  Color CMYK Get Y Macro.
 #define U_GetMValue(cmyk)     ((uint8_t) ((cymk) >> 16))        //!<  Color CMYK Get M Macro.
 #define U_GetCValue(cmyk)     ((uint8_t) ((cymk) >> 24))        //!<  Color CMYK Get C Macro.
@@ -1626,7 +1626,7 @@ typedef struct {
 #define U_EMRSIZE(A) (((PU_EMR)A)->nSize)                       //!<  Get nSize from U_EMR* record
 
 // Utility macros
-#define UP4(A) (4 * ((A + 3 ) / 4))                             //!< Round up to nearest multiple of 4
+#define UP4(A) (4 * ((A + 3) / 4))                             //!< Round up to nearest multiple of 4
 
 /** @} */
 
@@ -2169,7 +2169,7 @@ typedef struct {
  *PU_EMRPOLYBEZIERTO,                       //!< EMF manual 2.3.5.18
  *PU_EMRPOLYLINETO;                         //!< EMF manual 2.3.5.26
 
-#define U_SIZE_EMRPOLYBEZIER   (sizeof(U_EMR) + sizeof(U_RECTL) + sizeof(U_NUM_POINTL) )
+#define U_SIZE_EMRPOLYBEZIER   (sizeof(U_EMR) + sizeof(U_RECTL) + sizeof(U_NUM_POINTL))
 #define U_SIZE_EMRPOLYGON      U_SIZE_EMRPOLYBEZIER
 #define U_SIZE_EMRPOLYLINE     U_SIZE_EMRPOLYBEZIER
 #define U_SIZE_EMRPOLYBEZIERTO U_SIZE_EMRPOLYBEZIER
@@ -2203,7 +2203,7 @@ typedef struct {
   U_EMRSETVIEWPORTEXTEX,                    //!< EMF manual manual 2.3.11.28
   *PU_EMRSETWINDOWEXTEX,                    //!< EMF manual manual 2.3.11.30
   *PU_EMRSETVIEWPORTEXTEX;                  //!< EMF manual manual 2.3.11.28
-#define U_SIZE_EMRSETWINDOWEXTEX    (sizeof(U_EMRSETWINDOWEXTEX  ))
+#define U_SIZE_EMRSETWINDOWEXTEX    (sizeof(U_EMRSETWINDOWEXTEX))
 #define U_SIZE_EMRSETVIEWPORTEXTEX  (sizeof(U_EMRSETVIEWPORTEXTEX))
 
 /* Index  10,12,13 */
@@ -2218,9 +2218,9 @@ typedef struct {
   *PU_EMRSETWINDOWORGEX,                    //!< EMF manual 2.3.11.31
   *PU_EMRSETVIEWPORTORGEX,                  //!< EMF manual 2.3.11.29
   *PU_EMRSETBRUSHORGEX;                     //!< EMF manual 2.3.11.12
-#define U_SIZE_EMRSETWINDOWORGEX     (sizeof(U_EMRSETWINDOWORGEX  ))
+#define U_SIZE_EMRSETWINDOWORGEX     (sizeof(U_EMRSETWINDOWORGEX))
 #define U_SIZE_EMRSETVIEWPORTORGEX   (sizeof(U_EMRSETVIEWPORTORGEX))
-#define U_SIZE_EMRSETBRUSHORGEX      (sizeof(U_EMRSETBRUSHORGEX   ))
+#define U_SIZE_EMRSETBRUSHORGEX      (sizeof(U_EMRSETBRUSHORGEX))
 
 /* Index  14 */
 /** EMF manual 3.2.4.1  
@@ -2289,15 +2289,15 @@ typedef struct {
   *PU_EMRSETICMMODE,                        //!< EMF manual 2.3.11.14 ICMMode Enumeration
   *PU_EMRSETLAYOUT;                         //!< EMF manual 2.3.11.17 Mirroring Enumeration
 
-#define U_SIZE_EMRSETMAPMODE        (sizeof(U_EMRSETMAPMODE       ))
-#define U_SIZE_EMRSETBKMODE         (sizeof(U_EMRSETBKMODE        ))
-#define U_SIZE_EMRSETPOLYFILLMODE   (sizeof(U_EMRSETPOLYFILLMODE  ))
-#define U_SIZE_EMRSETROP2           (sizeof(U_EMRSETROP2          ))
+#define U_SIZE_EMRSETMAPMODE        (sizeof(U_EMRSETMAPMODE))
+#define U_SIZE_EMRSETBKMODE         (sizeof(U_EMRSETBKMODE))
+#define U_SIZE_EMRSETPOLYFILLMODE   (sizeof(U_EMRSETPOLYFILLMODE))
+#define U_SIZE_EMRSETROP2           (sizeof(U_EMRSETROP2))
 #define U_SIZE_EMRSETSTRETCHBLTMODE (sizeof(U_EMRSETSTRETCHBLTMODE))
-#define U_SIZE_EMRSETTEXTALIGN      (sizeof(U_EMRSETTEXTALIGN     ))
-#define U_SIZE_EMRSELECTCLIPPATH    (sizeof(U_EMRSELECTCLIPPATH   ))
-#define U_SIZE_EMRSETICMMODE        (sizeof(U_EMRSETICMMODE       ))
-#define U_SIZE_EMRSETLAYOUT         (sizeof(U_EMRSETLAYOUT        ))
+#define U_SIZE_EMRSETTEXTALIGN      (sizeof(U_EMRSETTEXTALIGN))
+#define U_SIZE_EMRSELECTCLIPPATH    (sizeof(U_EMRSELECTCLIPPATH))
+#define U_SIZE_EMRSETICMMODE        (sizeof(U_EMRSETICMMODE))
+#define U_SIZE_EMRSETLAYOUT         (sizeof(U_EMRSETLAYOUT))
 
 /* Index  23 */
 /** EMF manual 2.3.11.13         
@@ -2320,7 +2320,7 @@ typedef struct {
   *PU_EMRSETTEXTCOLOR,                      //!< EMF manual 2.3.11.26
   *PU_EMRSETBKCOLOR;                        //!< EMF manual 2.3.11.10
 #define U_SIZE_EMRSETTEXTCOLOR  (sizeof(U_EMRSETTEXTCOLOR))
-#define U_SIZE_EMRSETBKCOLOR    (sizeof(U_EMRSETBKCOLOR  ))
+#define U_SIZE_EMRSETBKCOLOR    (sizeof(U_EMRSETBKCOLOR))
 
 /* Index  26 */
 /** EMF manual 2.3.2.4           
@@ -2345,7 +2345,7 @@ typedef struct {
   *PU_EMRMOVETOEX,                          //!< EMF manual 2.3.11.4 
   *PU_EMRLINETO;                            //!< EMF manual 2.3.5.13 
 #define U_SIZE_EMRMOVETOEX  (sizeof(U_EMRMOVETOEX))
-#define U_SIZE_EMRLINETO    (sizeof(U_EMRLINETO  ))
+#define U_SIZE_EMRLINETO    (sizeof(U_EMRLINETO))
 
 /* Index  28,33,52,59,60,61,65,66,68 */
 /** EMF manual 2.3.2
@@ -2371,15 +2371,15 @@ typedef struct {
   *PU_EMRFLATTENPATH,                       //!< EMF manual 2.3.10
   *PU_EMRWIDENPATH,                         //!< EMF manual 2.3.10
   *PU_EMRABORTPATH;                         //!< EMF manual 2.3.10
-#define U_SIZE_EMRSETMETARGN      (sizeof(U_EMRSETMETARGN    ))
-#define U_SIZE_EMRSAVEDC          (sizeof(U_EMRSAVEDC        ))
+#define U_SIZE_EMRSETMETARGN      (sizeof(U_EMRSETMETARGN))
+#define U_SIZE_EMRSAVEDC          (sizeof(U_EMRSAVEDC))
 #define U_SIZE_EMRREALIZEPALETTE  (sizeof(U_EMRREALIZEPALETTE))
-#define U_SIZE_EMRBEGINPATH       (sizeof(U_EMRBEGINPATH     ))
-#define U_SIZE_EMRENDPATH         (sizeof(U_EMRENDPATH       ))
-#define U_SIZE_EMRCLOSEFIGURE     (sizeof(U_EMRCLOSEFIGURE   ))
-#define U_SIZE_EMRFLATTENPATH     (sizeof(U_EMRFLATTENPATH   ))
-#define U_SIZE_EMRWIDENPATH       (sizeof(U_EMRWIDENPATH     ))
-#define U_SIZE_EMRABORTPATH       (sizeof(U_EMRABORTPATH     ))
+#define U_SIZE_EMRBEGINPATH       (sizeof(U_EMRBEGINPATH))
+#define U_SIZE_EMRENDPATH         (sizeof(U_EMRENDPATH))
+#define U_SIZE_EMRCLOSEFIGURE     (sizeof(U_EMRCLOSEFIGURE))
+#define U_SIZE_EMRFLATTENPATH     (sizeof(U_EMRFLATTENPATH))
+#define U_SIZE_EMRWIDENPATH       (sizeof(U_EMRWIDENPATH))
+#define U_SIZE_EMRABORTPATH       (sizeof(U_EMRABORTPATH))
 
 /* Index  29,30  */
 /** EMF manual 2.3.2.1           
@@ -2391,8 +2391,8 @@ typedef struct {
   U_EMRINTERSECTCLIPRECT,                   //!< EMF manual 2.3.2.3
   *PU_EMREXCLUDECLIPRECT,                   //!< EMF manual 2.3.2.1
   *PU_EMRINTERSECTCLIPRECT;                 //!< EMF manual 2.3.2.3
-#define U_SIZE_EMREXCLUDECLIPRECT        (sizeof(U_EMREXCLUDECLIPRECT   ))
-#define U_SIZE_EMRINTERSECTCLIPRECT      (sizeof(U_EMRINTERSECTCLIPRECT ))
+#define U_SIZE_EMREXCLUDECLIPRECT        (sizeof(U_EMREXCLUDECLIPRECT))
+#define U_SIZE_EMRINTERSECTCLIPRECT      (sizeof(U_EMRINTERSECTCLIPRECT))
 
 /* Index  31,32 */
 /** EMF manual 2.3.11.7          
@@ -2408,7 +2408,7 @@ typedef struct {
   *PU_EMRSCALEVIEWPORTEXTEX,                //!< EMF manual 2.3.11.7
   *PU_EMRSCALEWINDOWEXTEX;                  //!< EMF manual 2.3.11.8 
 #define U_SIZE_EMRSCALEVIEWPORTEXTEX      (sizeof(U_EMRSCALEVIEWPORTEXTEX))
-#define U_SIZE_EMRSCALEWINDOWEXTEX        (sizeof(U_EMRSCALEWINDOWEXTEX  ))
+#define U_SIZE_EMRSCALEWINDOWEXTEX        (sizeof(U_EMRSCALEWINDOWEXTEX))
 
 /* Index  33  (see 28) */
 
@@ -2503,7 +2503,7 @@ typedef struct {
   U_EMRRECTANGLE,                           //!< EMF manual 2.3.5.5           
   *PU_EMRELLIPSE,                           //!< EMF manual 2.3.5.5 
   *PU_EMRRECTANGLE;                         //!< EMF manual 2.3.5.34
-#define U_SIZE_EMRELLIPSE        (sizeof(U_EMRELLIPSE  ))
+#define U_SIZE_EMRELLIPSE        (sizeof(U_EMRELLIPSE))
 #define U_SIZE_EMRRECTANGLE      (sizeof(U_EMRRECTANGLE))
 
 /* Index  44  */
@@ -2533,9 +2533,9 @@ typedef struct {
   *PU_EMRCHORD,                             //!< EMF manual 2.3.5.4 
   *PU_EMRPIE,                               //!< EMF manual 2.3.5.15
   *PU_EMRARCTO;                             //!< EMF manual 2.3.5.3 
-#define U_SIZE_EMRARC          (sizeof(U_EMRARC  ))
+#define U_SIZE_EMRARC          (sizeof(U_EMRARC))
 #define U_SIZE_EMRCHORD        (sizeof(U_EMRCHORD))
-#define U_SIZE_EMRPIE          (sizeof(U_EMRPIE  ))
+#define U_SIZE_EMRPIE          (sizeof(U_EMRPIE))
 #define U_SIZE_EMRARCTO        (sizeof(U_EMRARCTO))
 
 /* Index  48  */
@@ -2653,14 +2653,14 @@ typedef struct {
   *PU_EMRFILLPATH,                          //!< EMF manual 2.3.5.9 
   *PU_EMRSTROKEANDFILLPATH,                 //!< EMF manual 2.3.5.38
   *PU_EMRSTROKEPATH;                        //!< EMF manual 2.3.5.39
-#define U_SIZE_EMRFILLPATH                 (sizeof(U_EMRFILLPATH         ))
+#define U_SIZE_EMRFILLPATH                 (sizeof(U_EMRFILLPATH))
 #define U_SIZE_EMRSTROKEANDFILLPATH        (sizeof(U_EMRSTROKEANDFILLPATH))
-#define U_SIZE_EMRSTROKEPATH               (sizeof(U_EMRSTROKEPATH       ))
+#define U_SIZE_EMRSTROKEPATH               (sizeof(U_EMRSTROKEPATH))
 
 /* Index  65,66  (see 28) */
 /* Index  67  (see 17) */
 /* Index  68  (see 28) */
-/* Index  69  (not a defined U_EMR record type ) */
+/* Index  69  (not a defined U_EMR record type) */
 
 
 /* Index  70  */
@@ -2934,8 +2934,8 @@ typedef struct {
     U_EMR               emr;                //!< U_EMR
     U_RECTL             rclBounds;          //!< Bounding rectangle in device units
     uint32_t            iGraphicsMode;      //!< GraphicsMode Enumeration
-    U_FLOAT             exScale;            //!< scale to 0.01 mm units ( only if iGraphicsMode & U_GM_COMPATIBLE)
-    U_FLOAT             eyScale;            //!< scale to 0.01 mm units ( only if iGraphicsMode & U_GM_COMPATIBLE)
+    U_FLOAT             exScale;            //!< scale to 0.01 mm units (only if iGraphicsMode & U_GM_COMPATIBLE)
+    U_FLOAT             eyScale;            //!< scale to 0.01 mm units (only if iGraphicsMode & U_GM_COMPATIBLE)
     U_EMRTEXT           emrtext;            //!< Text parameters
 } U_EMREXTTEXTOUTA,
   U_EMREXTTEXTOUTW,                         //!< EMF manual 2.3.5.8
@@ -3057,8 +3057,8 @@ typedef struct {
     U_EMR               emr;                //!< U_EMR
     U_RECTL             rclBounds;          //!< Bounding rectangle in device units
     uint32_t            iGraphicsMode;      //!< GraphicsMode Enumeration
-    U_FLOAT             exScale;            //!< scale to 0.01 mm units ( only if iGraphicsMode & U_GM_COMPATIBLE)
-    U_FLOAT             eyScale;            //!< scale to 0.01 mm units ( only if iGraphicsMode & U_GM_COMPATIBLE)
+    U_FLOAT             exScale;            //!< scale to 0.01 mm units (only if iGraphicsMode & U_GM_COMPATIBLE)
+    U_FLOAT             eyScale;            //!< scale to 0.01 mm units (only if iGraphicsMode & U_GM_COMPATIBLE)
     U_NUM_EMRTEXT       cStrings;           //!< Number of U_EMRTEXT in array
     U_EMRTEXT           emrtext[1];         //!< Text parameters
 } U_EMRPOLYTEXTOUTA,
@@ -3092,7 +3092,7 @@ typedef struct {
   *PU_EMRDELETECOLORSPACE,                  //!< EMF manual 2.3.8.2
   *PU_EMRSETCOLORSPACE;                     //!< EMF manual 2.3.8.7
 #define U_SIZE_EMRDELETECOLORSPACE   (sizeof(U_EMRDELETECOLORSPACE))
-#define U_SIZE_EMRSETCOLORSPACE      (sizeof(U_EMRSETCOLORSPACE   ))
+#define U_SIZE_EMRSETCOLORSPACE      (sizeof(U_EMRSETCOLORSPACE))
 
 /* Index  102 */
 /** EMF manual 2.3.9.2           
@@ -3149,7 +3149,7 @@ typedef struct {
   *PU_EMREXTESCAPE;                         //!< EMF manual 2.3.6.2
 #define U_SIZE_EMREXTESCAPE   (sizeof(U_EMR) + sizeof(U_CBDATA))
 
-/* Index  107 (not implemented ) */
+/* Index  107 (not implemented) */
 
 /* Index  108 */
 /** EMF manual 2.3.5.37          
@@ -3169,7 +3169,7 @@ typedef struct {
   *PU_EMRSMALLTEXTOUT;                      //!< EMF manual 2.3.5.37
 #define U_SIZE_EMRSMALLTEXTOUT   (sizeof(U_EMRSMALLTEXTOUT))
 
-/* Index  109 (not implemented )
+/* Index  109 (not implemented)
 EMF manual 2.3.11.2          
 */
 
@@ -3188,7 +3188,7 @@ typedef struct {
   *PU_EMRNAMEDESCAPE;                       //!< EMF manual 2.3.6.3
 #define U_SIZE_EMRNAMEDESCAPE   (sizeof(U_EMR) + 2*sizeof(U_CBDATA))
 
-/* Index  111-113 (not implemented ) 
+/* Index  111-113 (not implemented) 
   EMF manual 2.3.8.1           
   EMF manual 2.3.11.15
   EMF manual 2.3.11.16
@@ -3242,7 +3242,7 @@ typedef struct {
   *PU_EMRTRANSPARENTBLT;                    //!< EMF manual 2.3.1.8
 #define U_SIZE_EMRTRANSPARENTBLT   (sizeof(U_EMRTRANSPARENTBLT))
 
-/* Index  117 (not a defined U_EMR record type ) */
+/* Index  117 (not a defined U_EMR record type) */
 
 /* Index  118 */
 /** EMF manual 2.3.5.12   
@@ -3261,7 +3261,7 @@ typedef struct {
   *PU_EMRGRADIENTFILL;                      //!< EMF manual 2.3.5.12
 #define U_SIZE_EMRGRADIENTFILL   (sizeof(U_EMRGRADIENTFILL))
 
-/* Index  119,120 (not implemented )
+/* Index  119,120 (not implemented)
 EMF manual 2.3.11.18         
 EMF manual 2.3.11.27         
 */
@@ -3367,9 +3367,9 @@ int       get_real_color_count(const char *Bmih);
 int       get_real_color_icount(int Colors, int BitCount, int Width, int Height);
 int       RGBA_to_DIB(char **px, uint32_t *cbPx, PU_RGBQUAD *ct, int *numCt, 
                const char *rgba_px, int w, int h, int stride, uint32_t colortype, int use_ct, int invert);
-int       get_DIB_params( const char *record, uint32_t offBitsSrc, uint32_t offBmiSrc, 
+int       get_DIB_params(const char *record, uint32_t offBitsSrc, uint32_t offBmiSrc, 
                const char **px, const U_RGBQUAD **ct, uint32_t *numCt, 
-               uint32_t *width, uint32_t *height, uint32_t *colortype, uint32_t *invert );
+               uint32_t *width, uint32_t *height, uint32_t *colortype, uint32_t *invert);
 int       DIB_to_RGBA(const char *px, const U_RGBQUAD *ct, int numCt,
                char **rgba_px, int w, int h, uint32_t colortype, int use_ct, int invert);
 char     *RGBA_to_RGBA(char *rgba_px, int w, int h, int sl, int st, int *ew, int *eh);
@@ -3405,27 +3405,27 @@ U_POINTL         point32_set(int32_t  x,  int32_t  y);
 U_POINT16        point16_set(int16_t  x,  int16_t  y);
 U_PANOSE         panose_set(uint8_t bFamilyType, uint8_t bSerifStyle,      uint8_t bWeight,   uint8_t bProportion,
                       uint8_t bContrast,   uint8_t bStrokeVariation, uint8_t bArmStyle, uint8_t bLetterform, 
-                      uint8_t bMidline,    uint8_t bXHeight );
+                      uint8_t bMidline,    uint8_t bXHeight);
 U_COLORREF       colorref3_set(uint8_t red, uint8_t green, uint8_t blue);
 U_COLORREF       colorref4_set(uint8_t red, uint8_t green, uint8_t blue, uint8_t reserved);
 U_RGBQUAD        rgbquad_set(uint8_t red,uint8_t green, uint8_t blue,  uint8_t reserved);
 U_LOGBRUSH       logbrush_set(uint32_t lbStyle, U_COLORREF lbColor, int32_t lbHatch);
 U_XFORM          xform_set(U_FLOAT eM11, U_FLOAT eM12, U_FLOAT eM21, U_FLOAT eM22, U_FLOAT eDx, U_FLOAT eDy);
 U_XFORM          xform_alt_set(U_FLOAT scale, U_FLOAT ratio, U_FLOAT rot, U_FLOAT axisrot, U_FLOAT eDx, U_FLOAT eDy);
-U_LOGPEN         logpen_set( uint32_t lopnStyle,  U_POINT lopnWidth, U_COLORREF lopnColor );
+U_LOGPEN         logpen_set(uint32_t lopnStyle,  U_POINT lopnWidth, U_COLORREF lopnColor);
 PU_EXTLOGPEN     extlogpen_set(uint32_t elpPenStyle, uint32_t elpWidth, uint32_t elpBrushStyle,
-                     U_COLORREF elpColor, int32_t elpHatch, U_NUM_STYLEENTRY elpNumEntries, U_STYLEENTRY *elpStyleEntry );
+                     U_COLORREF elpColor, int32_t elpHatch, U_NUM_STYLEENTRY elpNumEntries, U_STYLEENTRY *elpStyleEntry);
 U_LOGFONT_PANOSE logfont_panose_set(U_LOGFONT elfLogFont, uint16_t *elfFullName, 
                      uint16_t *elfStyle, uint32_t elfStyleSize, U_PANOSE elfPanose);
-U_LOGFONT        logfont_set( int32_t lfHeight, int32_t lfWidth, int32_t lfEscapement, int32_t lfOrientation, 
+U_LOGFONT        logfont_set(int32_t lfHeight, int32_t lfWidth, int32_t lfEscapement, int32_t lfOrientation, 
                      int32_t lfWeight, uint8_t lfItalic, uint8_t lfUnderline, uint8_t lfStrikeOut,
                      uint8_t lfCharSet, uint8_t lfOutPrecision, uint8_t lfClipPrecision, 
                      uint8_t lfQuality, uint8_t lfPitchAndFamily, uint16_t *lfFaceName);
 char            *emrtext_set(U_POINTL ptlReference, U_NUM_STR NumString, uint32_t cbChar, void *String, uint32_t fOptions, U_RECTL rcl, uint32_t *Dx);
 U_LOGPLTNTRY     logpltntry_set(uint8_t peReserved,uint8_t peRed,uint8_t peGreen,uint8_t peBlue);
 PU_LOGPALETTE    logpalette_set(U_NUM_LOGPLTNTRY palNumEntries,PU_LOGPLTNTRY *palPalEntry);
-U_RGNDATAHEADER  rgndataheader_set( U_NUM_RECTL nCount,  U_RECTL rcBound);
-PU_RGNDATA       rgndata_set( U_RGNDATAHEADER rdh, PU_RECTL Buffer);
+U_RGNDATAHEADER  rgndataheader_set(U_NUM_RECTL nCount,  U_RECTL rcBound);
+PU_RGNDATA       rgndata_set(U_RGNDATAHEADER rdh, PU_RECTL Buffer);
 U_BITMAPINFOHEADER bitmapinfoheader_set(int32_t biWidth, int32_t biHeight, 
                      uint16_t biPlanes, uint16_t biBitCount, uint32_t biCompression, 
                      uint32_t biSizeImage, int32_t biXPelsPerMeter, 
@@ -3439,7 +3439,7 @@ U_COLORADJUSTMENT coloradjustment_set(uint16_t Size, uint16_t Flags, uint16_t Il
                      uint16_t RedGamma, uint16_t GreenGamma, uint16_t BlueGamma, 
                      uint16_t ReferenceBlack, uint16_t ReferenceWhite,
                      int16_t Contrast, int16_t Brightness, int16_t Colorfulness, int16_t RedGreenTint);
-U_PIXELFORMATDESCRIPTOR pixelformatdescriptor_set( uint32_t dwFlags, uint8_t iPixelType, uint8_t cColorBits,
+U_PIXELFORMATDESCRIPTOR pixelformatdescriptor_set(uint32_t dwFlags, uint8_t iPixelType, uint8_t cColorBits,
                      uint8_t cRedBits, uint8_t cRedShift,
                      uint8_t cGreenBits, uint8_t cGreenShift,
                      uint8_t cBlueBits, uint8_t cBlueShift,
@@ -3464,10 +3464,10 @@ char *textcomment_set(const char *string);
 // These generate the handle and then call the underlying function
 char *deleteobject_set(uint32_t *ihObject, EMFHANDLES *eht); 
 char *selectobject_set(uint32_t ihObject, EMFHANDLES *eht);
-char *createpen_set(uint32_t *ihPen, EMFHANDLES *eht, U_LOGPEN lopn );
+char *createpen_set(uint32_t *ihPen, EMFHANDLES *eht, U_LOGPEN lopn);
 char *extcreatepen_set(uint32_t *ihPen, EMFHANDLES *eht,
                     PU_BITMAPINFO Bmi, const uint32_t cbPx, char *Px, PU_EXTLOGPEN elp);
-char *createbrushindirect_set(uint32_t *ihBrush, EMFHANDLES *eht, U_LOGBRUSH lb );
+char *createbrushindirect_set(uint32_t *ihBrush, EMFHANDLES *eht, U_LOGBRUSH lb);
 char *createdibpatternbrushpt_set(uint32_t *ihBrush, EMFHANDLES *eht, uint32_t iUsage, 
                     PU_BITMAPINFO Bmi, const uint32_t cbPx, const char *Px);
 char *createmonobrush_set(uint32_t *ihBrush, EMFHANDLES *eht, uint32_t iUsage, 
@@ -3480,14 +3480,14 @@ char *framergn_set(uint32_t *ihBrush, EMFHANDLES *eht, U_RECTL rclBounds, U_SIZE
 char *createcolorspace_set(uint32_t *ihCS, EMFHANDLES *eht, U_LOGCOLORSPACEA lcs);
 char *createcolorspacew_set(uint32_t *ihCS, EMFHANDLES *eht, U_LOGCOLORSPACEW lcs, uint32_t dwFlags, U_CBDATA cbData, uint8_t *Data);
 
-char *U_EMRHEADER_set( const U_RECTL rclBounds,  const U_RECTL rclFrame,  U_PIXELFORMATDESCRIPTOR* const pfmtDesc,
+char *U_EMRHEADER_set(const U_RECTL rclBounds,  const U_RECTL rclFrame,  U_PIXELFORMATDESCRIPTOR* const pfmtDesc,
     U_CBSTR nDesc, uint16_t* const Description, const U_SIZEL szlDevice, const U_SIZEL szlMillimeters,
     const uint32_t bOpenGL);
-char *U_EMRPOLYBEZIER_set(  const U_RECTL rclBounds, const uint32_t count, const U_POINTL *points);
-char *U_EMRPOLYGON_set(     const U_RECTL rclBounds, const uint32_t count, const U_POINTL *points);
-char *U_EMRPOLYLINE_set(    const U_RECTL rclBounds, const uint32_t count, const U_POINTL *points);
+char *U_EMRPOLYBEZIER_set(const U_RECTL rclBounds, const uint32_t count, const U_POINTL *points);
+char *U_EMRPOLYGON_set(const U_RECTL rclBounds, const uint32_t count, const U_POINTL *points);
+char *U_EMRPOLYLINE_set(const U_RECTL rclBounds, const uint32_t count, const U_POINTL *points);
 char *U_EMRPOLYBEZIERTO_set(const U_RECTL rclBounds, const uint32_t count, const U_POINTL *points);
-char *U_EMRPOLYLINETO_set(  const U_RECTL rclBounds, const uint32_t count, const U_POINTL *points);
+char *U_EMRPOLYLINETO_set(const U_RECTL rclBounds, const uint32_t count, const U_POINTL *points);
 
 char *U_EMRPOLYPOLYLINE_set(const U_RECTL rclBounds, const uint32_t nPolys, const uint32_t *aPolyCounts,
                           const uint32_t cptl, const U_POINTL *points);
@@ -3522,7 +3522,7 @@ char *U_EMRRESTOREDC_set(const int32_t iRelative);
 char *U_EMRSETWORLDTRANSFORM_set(const U_XFORM xform);
 char *U_EMRMODIFYWORLDTRANSFORM_set(const U_XFORM xform, const uint32_t iMode);
 char *U_EMRSELECTOBJECT_set(const uint32_t ihObject);  // better to call selectobject_set()
-char *U_EMRCREATEPEN_set(const uint32_t ihPen, const U_LOGPEN lopn );
+char *U_EMRCREATEPEN_set(const uint32_t ihPen, const U_LOGPEN lopn);
 char *U_EMRCREATEBRUSHINDIRECT_set(const uint32_t ihBrush, const U_LOGBRUSH lb);
 char *U_EMRDELETEOBJECT_set(const uint32_t ihObject); // better to call deleteobject_set()
 char *U_EMRANGLEARC_set(const U_POINTL ptlCenter, const uint32_t nRadius, const U_FLOAT eStartAngle, const U_FLOAT eSweepAngle);
@@ -3587,7 +3587,7 @@ char *U_EMRSTRETCHDIBITS_set(const U_RECTL rclBounds, const U_POINTL Dest, const
                     const U_POINTL Src, const U_POINTL cSrc, const uint32_t iUsageSrc, 
                     const uint32_t dwRop,
                     const PU_BITMAPINFO Bmi, const uint32_t cbPx, char *Px);
-char *U_EMREXTCREATEFONTINDIRECTW_set( uint32_t ihFont, const char *elf, const char *elfw);
+char *U_EMREXTCREATEFONTINDIRECTW_set(uint32_t ihFont, const char *elf, const char *elfw);
 char *U_EMREXTTEXTOUTA_set(U_RECTL rclBounds, uint32_t iGraphicsMode, U_FLOAT exScale, U_FLOAT eyScale, PU_EMRTEXT emrtext);
 char *U_EMREXTTEXTOUTW_set(U_RECTL rclBounds, uint32_t iGraphicsMode, U_FLOAT exScale, U_FLOAT eyScale, PU_EMRTEXT emrtext);
 char *U_EMRPOLYBEZIER16_set(const U_RECTL rclBounds, const uint32_t cpts, const U_POINT16 *points);
@@ -3602,12 +3602,12 @@ char *U_EMRCREATEMONOBRUSH_set(const uint32_t ihBrush, const uint32_t iUsage,
                     const PU_BITMAPINFO Bmi, const uint32_t cbPx, const char *Px);
 char *U_EMRCREATEDIBPATTERNBRUSHPT_set(const uint32_t ihBrush, const uint32_t iUsage,
                     const PU_BITMAPINFO Bmi, const uint32_t cbPx, const char *Px);
-char *U_EMREXTCREATEPEN_set(const uint32_t ihPen, const PU_BITMAPINFO Bmi, const uint32_t cbPx, char *Px, const PU_EXTLOGPEN elp );
+char *U_EMREXTCREATEPEN_set(const uint32_t ihPen, const PU_BITMAPINFO Bmi, const uint32_t cbPx, char *Px, const PU_EXTLOGPEN elp);
 // U_EMRPOLYTEXTOUTA_set 96 NOT IMPLEMENTED, denigrated after Windows NT
 // U_EMRPOLYTEXTOUTW_set 97 NOT IMPLEMENTED, denigrated after Windows NT
 char *U_EMRSETICMMODE_set(const uint32_t iMode);
 char *U_EMRCREATECOLORSPACE_set(const uint32_t ihCS, const U_LOGCOLORSPACEA lcs);
-char *U_EMRSETCOLORSPACE_set(const uint32_t ihCS );
+char *U_EMRSETCOLORSPACE_set(const uint32_t ihCS);
 char *U_EMRDELETECOLORSPACE_set(const uint32_t ihCS);
 // U_EMRGLSRECORD_set                102  Not implemented
 // U_EMRGLSBOUNDEDRECORD_set         103  Not implemented
@@ -3637,7 +3637,7 @@ char *U_EMRTRANSPARENTBLT_set(const U_RECTL rclBounds, const U_POINTL Dest, cons
                     const PU_BITMAPINFO Bmi, const uint32_t cbPx, char *Px);
 // U_EMRUNDEF117_set                 117  Not implemented
 char *U_EMRGRADIENTFILL_set(const U_RECTL rclBounds, const U_NUM_TRIVERTEX nTriVert, const U_NUM_GRADOBJ nGradObj, 
-                    const uint32_t ulMode, const PU_TRIVERTEX TriVert, const uint32_t *GradObj );
+                    const uint32_t ulMode, const PU_TRIVERTEX TriVert, const uint32_t *GradObj);
 // U_EMRSETLINKEDUFIS_set            119  Not implemented
 // U_EMRSETTEXTJUSTIFICATION_set     120  Not implemented (denigrated)
 // U_EMRCOLORMATCHTOTARGETW_set      121  Not implemented  

@@ -65,11 +65,11 @@ void SPFeSpecularLighting::build(SPDocument *document, Inkscape::XML::Node *repr
 	SPFilterPrimitive::build(document, repr);
 
 	/*LOAD ATTRIBUTES FROM REPR HERE*/
-	this->readAttr( "surfaceScale" );
-	this->readAttr( "specularConstant" );
-	this->readAttr( "specularExponent" );
-	this->readAttr( "kernelUnitLength" );
-	this->readAttr( "lighting-color" );
+	this->readAttr("surfaceScale");
+	this->readAttr("specularConstant");
+	this->readAttr("specularExponent");
+	this->readAttr("kernelUnitLength");
+	this->readAttr("lighting-color");
 }
 
 /**
@@ -169,7 +169,7 @@ void SPFeSpecularLighting::set(SPAttributeEnum key, gchar const *value) {
                 }
                 if (strneq(cend_ptr, "icc-color(", 10)) {
                     if (!this->icc) this->icc = new SVGICCColor();
-                    if ( ! sp_svg_read_icc_color( cend_ptr, this->icc ) ) {
+                    if (! sp_svg_read_icc_color(cend_ptr, this->icc)) {
                         delete this->icc;
                         this->icc = nullptr;
                     }
@@ -195,11 +195,11 @@ void SPFeSpecularLighting::set(SPAttributeEnum key, gchar const *value) {
  */
 void SPFeSpecularLighting::update(SPCtx *ctx, guint flags) {
     if (flags & (SP_OBJECT_MODIFIED_FLAG)) {
-        this->readAttr( "surfaceScale" );
-        this->readAttr( "specularConstant" );
-        this->readAttr( "specularExponent" );
-        this->readAttr( "kernelUnitLength" );
-        this->readAttr( "lighting-color" );
+        this->readAttr("surfaceScale");
+        this->readAttr("specularConstant");
+        this->readAttr("specularExponent");
+        this->readAttr("kernelUnitLength");
+        this->readAttr("lighting-color");
     }
 
     SPFilterPrimitive::update(ctx, flags);

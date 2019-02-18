@@ -206,7 +206,7 @@ static void ocnodePrint(Ocnode *node, int indent)
            (node->bs / node->weight)),
            node->nleaf,
            node->mi
-           );
+);
     for (int i = 0; i < 8; i++) if (node->child[i])
         {
         for (int k = 0; k < indent; k++) printf(" ");//indentation
@@ -477,7 +477,7 @@ static Ocnode *octreeBuild(pool<Ocnode> *pool, RgbMap *rgbmap, int ncolor)
     octreeBuildArea(pool,
                     rgbmap, &node,
                     0, 0, rgbmap->width, rgbmap->height, ncolor
-                    );
+);
 
     //prune the octree
     octreePrune(pool, &node, ncolor);
@@ -562,7 +562,7 @@ IndexedMap *rgbMapQuantize(RgbMap *rgbmap, int ncolor)
         //should do smthg else?
     }
 
-    if ( tree ) {
+    if (tree) {
         RGB *rgbpal = new RGB[ncolor];
         int indexes = 0;
         octreeIndex(tree, rgbpal, &indexes);

@@ -97,7 +97,7 @@ double Point::getYValue() const
 
 Geom::Point Point::getValue() const
 {
-    return Geom::Point( getXValue() , getYValue() );
+    return Geom::Point(getXValue() , getYValue());
 }
 
 int Point::getXValueAsInt() const

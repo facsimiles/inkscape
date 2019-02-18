@@ -190,62 +190,62 @@ static void sp_namedview_generate_old_grid(SPNamedView * /*nv*/, SPDocument *doc
 void SPNamedView::build(SPDocument *document, Inkscape::XML::Node *repr) {
     SPObjectGroup::build(document, repr);
 
-    this->readAttr( "inkscape:document-units" );
-    this->readAttr( "units" );
-    this->readAttr( "viewonly" );
-    this->readAttr( "showguides" );
-    this->readAttr( "showgrid" );
-    this->readAttr( "gridtolerance" );
-    this->readAttr( "guidetolerance" );
-    this->readAttr( "objecttolerance" );
-    this->readAttr( "guidecolor" );
-    this->readAttr( "guideopacity" );
-    this->readAttr( "guidehicolor" );
-    this->readAttr( "guidehiopacity" );
-    this->readAttr( "showborder" );
-    this->readAttr( "inkscape:showpageshadow" );
-    this->readAttr( "borderlayer" );
-    this->readAttr( "bordercolor" );
-    this->readAttr( "borderopacity" );
-    this->readAttr( "pagecolor" );
-    this->readAttr( "inkscape:pagecheckerboard" );
-    this->readAttr( "inkscape:pageopacity" );
-    this->readAttr( "inkscape:pageshadow" );
-    this->readAttr( "inkscape:zoom" );
-    this->readAttr( "inkscape:cx" );
-    this->readAttr( "inkscape:cy" );
-    this->readAttr( "inkscape:window-width" );
-    this->readAttr( "inkscape:window-height" );
-    this->readAttr( "inkscape:window-x" );
-    this->readAttr( "inkscape:window-y" );
-    this->readAttr( "inkscape:window-maximized" );
-    this->readAttr( "inkscape:snap-global" );
-    this->readAttr( "inkscape:snap-bbox" );
-    this->readAttr( "inkscape:snap-nodes" );
-    this->readAttr( "inkscape:snap-others" );
-    this->readAttr( "inkscape:snap-from-guide" );
-    this->readAttr( "inkscape:snap-center" );
-    this->readAttr( "inkscape:snap-smooth-nodes" );
-    this->readAttr( "inkscape:snap-midpoints" );
-    this->readAttr( "inkscape:snap-object-midpoints" );
-    this->readAttr( "inkscape:snap-text-baseline" );
-    this->readAttr( "inkscape:snap-bbox-edge-midpoints" );
-    this->readAttr( "inkscape:snap-bbox-midpoints" );
-    this->readAttr( "inkscape:snap-to-guides" );
-    this->readAttr( "inkscape:snap-grids" );
-    this->readAttr( "inkscape:snap-intersection-paths" );
-    this->readAttr( "inkscape:object-paths" );
-    this->readAttr( "inkscape:snap-perpendicular" );
-    this->readAttr( "inkscape:snap-tangential" );
-    this->readAttr( "inkscape:snap-path-clip" );
-    this->readAttr( "inkscape:snap-path-mask" );
-    this->readAttr( "inkscape:object-nodes" );
-    this->readAttr( "inkscape:bbox-paths" );
-    this->readAttr( "inkscape:bbox-nodes" );
-    this->readAttr( "inkscape:snap-page" );
-    this->readAttr( "inkscape:current-layer" );
-    this->readAttr( "inkscape:connector-spacing" );
-    this->readAttr( "inkscape:lockguides" );
+    this->readAttr("inkscape:document-units");
+    this->readAttr("units");
+    this->readAttr("viewonly");
+    this->readAttr("showguides");
+    this->readAttr("showgrid");
+    this->readAttr("gridtolerance");
+    this->readAttr("guidetolerance");
+    this->readAttr("objecttolerance");
+    this->readAttr("guidecolor");
+    this->readAttr("guideopacity");
+    this->readAttr("guidehicolor");
+    this->readAttr("guidehiopacity");
+    this->readAttr("showborder");
+    this->readAttr("inkscape:showpageshadow");
+    this->readAttr("borderlayer");
+    this->readAttr("bordercolor");
+    this->readAttr("borderopacity");
+    this->readAttr("pagecolor");
+    this->readAttr("inkscape:pagecheckerboard");
+    this->readAttr("inkscape:pageopacity");
+    this->readAttr("inkscape:pageshadow");
+    this->readAttr("inkscape:zoom");
+    this->readAttr("inkscape:cx");
+    this->readAttr("inkscape:cy");
+    this->readAttr("inkscape:window-width");
+    this->readAttr("inkscape:window-height");
+    this->readAttr("inkscape:window-x");
+    this->readAttr("inkscape:window-y");
+    this->readAttr("inkscape:window-maximized");
+    this->readAttr("inkscape:snap-global");
+    this->readAttr("inkscape:snap-bbox");
+    this->readAttr("inkscape:snap-nodes");
+    this->readAttr("inkscape:snap-others");
+    this->readAttr("inkscape:snap-from-guide");
+    this->readAttr("inkscape:snap-center");
+    this->readAttr("inkscape:snap-smooth-nodes");
+    this->readAttr("inkscape:snap-midpoints");
+    this->readAttr("inkscape:snap-object-midpoints");
+    this->readAttr("inkscape:snap-text-baseline");
+    this->readAttr("inkscape:snap-bbox-edge-midpoints");
+    this->readAttr("inkscape:snap-bbox-midpoints");
+    this->readAttr("inkscape:snap-to-guides");
+    this->readAttr("inkscape:snap-grids");
+    this->readAttr("inkscape:snap-intersection-paths");
+    this->readAttr("inkscape:object-paths");
+    this->readAttr("inkscape:snap-perpendicular");
+    this->readAttr("inkscape:snap-tangential");
+    this->readAttr("inkscape:snap-path-clip");
+    this->readAttr("inkscape:snap-path-mask");
+    this->readAttr("inkscape:object-nodes");
+    this->readAttr("inkscape:bbox-paths");
+    this->readAttr("inkscape:bbox-nodes");
+    this->readAttr("inkscape:snap-page");
+    this->readAttr("inkscape:current-layer");
+    this->readAttr("inkscape:connector-spacing");
+    this->readAttr("inkscape:lockguides");
 
     /* Construct guideline list */
     for (auto& o: children) {
@@ -255,7 +255,7 @@ void SPNamedView::build(SPDocument *document, Inkscape::XML::Node *repr) {
             //g_object_set(G_OBJECT(g), "color", nv->guidecolor, "hicolor", nv->guidehicolor, NULL);
             g->setColor(this->guidecolor);
             g->setHiColor(this->guidehicolor);
-            g->readAttr( "inkscape:color" );
+            g->readAttr("inkscape:color");
         }
     }
 
@@ -267,7 +267,7 @@ void SPNamedView::release() {
         this->guides.clear();
 
     // delete grids:
-    for(std::vector<Inkscape::CanvasGrid *>::const_iterator it=this->grids.begin();it!=this->grids.end();++it )
+    for(std::vector<Inkscape::CanvasGrid *>::const_iterator it=this->grids.begin();it!=this->grids.end();++it)
         delete *it;
     this->grids.clear();
     SPObjectGroup::release();
@@ -317,7 +317,7 @@ void SPNamedView::set(SPAttributeEnum key, const gchar* value) {
                 this->guidecolor = (this->guidecolor & 0xff) | sp_svg_read_color(value, this->guidecolor);
             }
 
-            for(std::vector<SPGuide *>::const_iterator it=this->guides.begin();it!=this->guides.end();++it ) {
+            for(std::vector<SPGuide *>::const_iterator it=this->guides.begin();it!=this->guides.end();++it) {
                 (*it)->setColor(this->guidecolor);
                 (*it)->readAttr("inkscape:color");
             }
@@ -328,7 +328,7 @@ void SPNamedView::set(SPAttributeEnum key, const gchar* value) {
             this->guidecolor = (this->guidecolor & 0xffffff00) | (DEFAULTGUIDECOLOR & 0xff);
             sp_nv_read_opacity(value, &this->guidecolor);
 
-            for(std::vector<SPGuide *>::const_iterator it=this->guides.begin();it!=this->guides.end();++it ) {
+            for(std::vector<SPGuide *>::const_iterator it=this->guides.begin();it!=this->guides.end();++it) {
                 (*it)->setColor(this->guidecolor);
                 (*it)->readAttr("inkscape:color");
             }
@@ -341,7 +341,7 @@ void SPNamedView::set(SPAttributeEnum key, const gchar* value) {
             if (value) {
                 this->guidehicolor = (this->guidehicolor & 0xff) | sp_svg_read_color(value, this->guidehicolor);
             }
-            for(std::vector<SPGuide *>::const_iterator it=this->guides.begin();it!=this->guides.end();++it ) {
+            for(std::vector<SPGuide *>::const_iterator it=this->guides.begin();it!=this->guides.end();++it) {
             	(*it)->setHiColor(this->guidehicolor);
             }
 
@@ -350,7 +350,7 @@ void SPNamedView::set(SPAttributeEnum key, const gchar* value) {
     case SP_ATTR_GUIDEHIOPACITY:
             this->guidehicolor = (this->guidehicolor & 0xffffff00) | (DEFAULTGUIDEHICOLOR & 0xff);
             sp_nv_read_opacity(value, &this->guidehicolor);
-            for(std::vector<SPGuide *>::const_iterator it=this->guides.begin();it!=this->guides.end();++it ) {
+            for(std::vector<SPGuide *>::const_iterator it=this->guides.begin();it!=this->guides.end();++it) {
             	(*it)->setHiColor(this->guidehicolor);
             }
 
@@ -548,13 +548,13 @@ void SPNamedView::set(SPAttributeEnum key, const gchar* value) {
 
             if (value && document->getRoot()->viewBox_set) {
                 Inkscape::Util::Unit const *const req_unit = unit_table.getUnit(value);
-                if ( !unit_table.hasUnit(value) ) {
+                if (!unit_table.hasUnit(value)) {
                     g_warning("Unrecognized unit `%s'", value);
                     /* fixme: Document errors should be reported in the status bar or
                      * the like (e.g. as per
                      * http://www.w3.org/TR/SVG11/implnote.html#ErrorProcessing); g_log
                      * should be only for programmer errors. */
-                } else if ( req_unit->isAbsolute() ) {
+                } else if (req_unit->isAbsolute()) {
                     new_unit = req_unit;
                 } else {
                     g_warning("Document units must be absolute like `mm', `pt' or `px', but found `%s'",
@@ -572,13 +572,13 @@ void SPNamedView::set(SPAttributeEnum key, const gchar* value) {
 
             if (value) {
                 Inkscape::Util::Unit const *const req_unit = unit_table.getUnit(value);
-                if ( !unit_table.hasUnit(value) ) {
+                if (!unit_table.hasUnit(value)) {
                     g_warning("Unrecognized unit `%s'", value);
                     /* fixme: Document errors should be reported in the status bar or
                      * the like (e.g. as per
                      * http://www.w3.org/TR/SVG11/implnote.html#ErrorProcessing); g_log
                      * should be only for programmer errors. */
-                } else if ( req_unit->isAbsolute() ) {
+                } else if (req_unit->isAbsolute()) {
                     new_unit = req_unit;
                 } else {
                     g_warning("Document units must be absolute like `mm', `pt' or `px', but found `%s'",
@@ -609,7 +609,7 @@ static Inkscape::CanvasGrid*
 sp_namedview_add_grid(SPNamedView *nv, Inkscape::XML::Node *repr, SPDesktop *desktop) {
     Inkscape::CanvasGrid* grid = nullptr;
     //check if namedview already has an object for this grid
-    for(std::vector<Inkscape::CanvasGrid *>::const_iterator it=nv->grids.begin();it!=nv->grids.end();++it ) {
+    for(std::vector<Inkscape::CanvasGrid *>::const_iterator it=nv->grids.begin();it!=nv->grids.end();++it) {
         if (repr == (*it)->repr) {
             grid = (*it);
             break;
@@ -629,7 +629,7 @@ sp_namedview_add_grid(SPNamedView *nv, Inkscape::XML::Node *repr, SPDesktop *des
 
     if (!desktop) {
         //add canvasitem to all desktops
-        for(std::vector<SPDesktop *>::const_iterator it=nv->views.begin();it!=nv->views.end();++it ) {
+        for(std::vector<SPDesktop *>::const_iterator it=nv->views.begin();it!=nv->views.end();++it) {
             grid->createCanvasItem(*it);
         }
     } else {
@@ -647,7 +647,7 @@ void SPNamedView::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *r
         sp_namedview_add_grid(this, child, nullptr);
     } else {
         SPObject *no = this->document->getObjectByRepr(child);
-        if ( !SP_IS_OBJECT(no) ) {
+        if (!SP_IS_OBJECT(no)) {
             return;
         }
 
@@ -661,7 +661,7 @@ void SPNamedView::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *r
             g->readAttr("inkscape:color");
 
             if (this->editable) {
-                for(std::vector<SPDesktop *>::const_iterator it=this->views.begin();it!=this->views.end();++it ) {
+                for(std::vector<SPDesktop *>::const_iterator it=this->views.begin();it!=this->views.end();++it) {
                     g->SPGuide::showSPGuide((*it)->guides, (GCallback) sp_dt_guide_event);
 
                     if ((*it)->guides_active) {
@@ -677,16 +677,16 @@ void SPNamedView::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *r
 
 void SPNamedView::remove_child(Inkscape::XML::Node *child) {
     if (!strcmp(child->name(), "inkscape:grid")) {
-        for(std::vector<Inkscape::CanvasGrid *>::iterator it=this->grids.begin();it!=this->grids.end();++it ) {
-            if ( (*it)->repr == child ) {
+        for(std::vector<Inkscape::CanvasGrid *>::iterator it=this->grids.begin();it!=this->grids.end();++it) {
+            if ((*it)->repr == child) {
                 delete (*it);
                 this->grids.erase(it);
                 break;
             }
         }
     } else {
-        for(std::vector<SPGuide *>::iterator it=this->guides.begin();it!=this->guides.end();++it ) {
-            if ( (*it)->getRepr() == child ) {
+        for(std::vector<SPGuide *>::iterator it=this->guides.begin();it!=this->guides.end();++it) {
+            if ((*it)->getRepr() == child) {
                 this->guides.erase(it); 
                 break;
             }   
@@ -697,8 +697,8 @@ void SPNamedView::remove_child(Inkscape::XML::Node *child) {
 }
 
 Inkscape::XML::Node* SPNamedView::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
-    if ( ( flags & SP_OBJECT_WRITE_EXT ) &&
-         repr != this->getRepr() )
+    if ((flags & SP_OBJECT_WRITE_EXT) &&
+         repr != this->getRepr())
     {
         if (repr) {
             repr->mergeFrom(this->getRepr(), "id");
@@ -712,8 +712,8 @@ Inkscape::XML::Node* SPNamedView::write(Inkscape::XML::Document *xml_doc, Inksca
 
 void SPNamedView::show(SPDesktop *desktop)
 {
-    for(std::vector<SPGuide *>::const_iterator it=this->guides.begin();it!=this->guides.end();++it ) {
-        (*it)->showSPGuide( desktop->guides, (GCallback) sp_dt_guide_event);
+    for(std::vector<SPGuide *>::const_iterator it=this->guides.begin();it!=this->guides.end();++it) {
+        (*it)->showSPGuide(desktop->guides, (GCallback) sp_dt_guide_event);
         if (desktop->guides_active) {
             (*it)->sensitize(desktop->getCanvas(), TRUE);
         }
@@ -725,7 +725,7 @@ void SPNamedView::show(SPDesktop *desktop)
     // generate grids specified in SVG:
     Inkscape::XML::Node *repr = this->getRepr();
     if (repr) {
-        for (Inkscape::XML::Node * child = repr->firstChild() ; child != nullptr; child = child->next() ) {
+        for (Inkscape::XML::Node * child = repr->firstChild() ; child != nullptr; child = child->next()) {
             if (!strcmp(child->name(), "inkscape:grid")) {
                 sp_namedview_add_grid(this, child, desktop);
             }
@@ -816,7 +816,7 @@ void sp_namedview_window_from_document(SPDesktop *desktop)
     if (nv->zoom != 0 && nv->zoom != HUGE_VAL && !IS_NAN(nv->zoom)
         && nv->cx != HUGE_VAL && !IS_NAN(nv->cx)
         && nv->cy != HUGE_VAL && !IS_NAN(nv->cy)) {
-        desktop->zoom_absolute_center_point( Geom::Point(nv->cx, nv->cy), nv->zoom );
+        desktop->zoom_absolute_center_point(Geom::Point(nv->cx, nv->cy), nv->zoom);
     } else if (desktop->getDocument()) { // document without saved zoom, zoom to its page
         desktop->zoom_page();
     }
@@ -848,11 +848,11 @@ void sp_namedview_update_layers_from_document (SPDesktop *desktop)
     SPObject *layer = nullptr;
     SPDocument *document = desktop->doc();
     SPNamedView *nv = desktop->namedview;
-    if ( nv->default_layer_id != 0 ) {
+    if (nv->default_layer_id != 0) {
         layer = document->getObjectById(g_quark_to_string(nv->default_layer_id));
     }
     // don't use that object if it's not at least group
-    if ( !layer || !SP_IS_GROUP(layer) ) {
+    if (!layer || !SP_IS_GROUP(layer)) {
         layer = nullptr;
     }
     // if that didn't work out, look for the topmost layer
@@ -929,14 +929,14 @@ void SPNamedView::activateGuides(void* desktop, bool active)
 
 static void sp_namedview_setup_guides(SPNamedView *nv)
 {
-    for(std::vector<SPGuide *>::iterator it=nv->guides.begin();it!=nv->guides.end();++it ) {
+    for(std::vector<SPGuide *>::iterator it=nv->guides.begin();it!=nv->guides.end();++it) {
         sp_namedview_show_single_guide(*it, nv->showguides);
     }
 }
 
 static void sp_namedview_lock_guides(SPNamedView *nv)
 {
-    for(std::vector<SPGuide *>::iterator it=nv->guides.begin();it!=nv->guides.end();++it ) {
+    for(std::vector<SPGuide *>::iterator it=nv->guides.begin();it!=nv->guides.end();++it) {
         sp_namedview_lock_single_guide(*it, nv->lockguides);
     }
 }
@@ -1157,7 +1157,7 @@ Inkscape::Util::Unit const * SPNamedView::getDisplayUnit() const
  */
 Inkscape::CanvasGrid * sp_namedview_get_first_enabled_grid(SPNamedView *namedview)
 {
-    for(std::vector<Inkscape::CanvasGrid *>::const_iterator it=namedview->grids.begin();it!=namedview->grids.end();++it ) {
+    for(std::vector<Inkscape::CanvasGrid *>::const_iterator it=namedview->grids.begin();it!=namedview->grids.end();++it) {
         if ((*it)->isEnabled())
             return (*it);
     }

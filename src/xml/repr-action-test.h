@@ -40,7 +40,7 @@ public:
 // createSuite and destroySuite get us per-suite setup and teardown
 // without us having to worry about static initialization order, etc.
     static XmlReprActionTest *createSuite() { return new XmlReprActionTest(); }
-    static void destroySuite( XmlReprActionTest *suite ) { delete suite; }
+    static void destroySuite(XmlReprActionTest *suite) { delete suite; }
 
     void testRollbackOfNodeAddition()
     {

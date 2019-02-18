@@ -134,14 +134,14 @@ inline void *operator new(std::size_t size,
     using namespace Inkscape::GC;
 
     void *mem;
-    if ( collect == AUTO ) {
-        if ( scan == SCANNED ) {
+    if (collect == AUTO) {
+        if (scan == SCANNED) {
             mem = Core::malloc(size);
         } else {
             mem = Core::malloc_atomic(size);
         }
     } else {
-        if ( scan == SCANNED ) {
+        if (scan == SCANNED) {
             mem = Core::malloc_uncollectable(size);
         } else {
             mem = Core::malloc_atomic_uncollectable(size);

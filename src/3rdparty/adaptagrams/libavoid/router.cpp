@@ -238,7 +238,7 @@ void Router::modifyConnectionPin(ShapeConnectionPin *pin)
 void Router::removeObjectFromQueuedActions(const void *object)
 {
     for (ActionInfoList::iterator curr = actionList.begin();
-            curr != actionList.end(); )
+            curr != actionList.end();)
     {
         if (curr->objPtr == object)
         {
@@ -1130,8 +1130,8 @@ class CrossingConnectorsInfo
 
                 // For each crossing-causing connector.
                 ConnCostRef crossingCausingConnector;
-                while ( (crossingCausingConnector = 
-                            removeConnectorWithMostCrossings(pairsSet)).second != NULL )
+                while ((crossingCausingConnector = 
+                            removeConnectorWithMostCrossings(pairsSet)).second != NULL)
                 {
                     // Add it to our crossing-causing set.
                     crossingSet.insert(crossingCausingConnector);
@@ -1552,7 +1552,7 @@ void Router::newBlockingShape(const Polygon& poly, int pid)
     // o  Check all visibility edges to see if this one shape
     //    blocks them.
     EdgeInf *finish = visGraph.end();
-    for (EdgeInf *iter = visGraph.begin(); iter != finish ; )
+    for (EdgeInf *iter = visGraph.begin(); iter != finish ;)
     {
         EdgeInf *tmp = iter;
         iter = iter->lstNext;
@@ -1616,7 +1616,7 @@ void Router::checkAllBlockedEdges(int pid)
 {
     COLA_ASSERT(InvisibilityGrph);
 
-    for (EdgeInf *iter = invisGraph.begin(); iter != invisGraph.end() ; )
+    for (EdgeInf *iter = invisGraph.begin(); iter != invisGraph.end() ;)
     {
         EdgeInf *tmp = iter;
         iter = iter->lstNext;
@@ -2321,8 +2321,8 @@ bool Router::existsInvalidOrthogonalPaths(void)
             for (size_t iInd = 1; iInd < iRoute.size(); ++iInd)
             {
                 // And if it isn't either vertical or horizontal...
-                if ( (iRoute.at(iInd - 1).x != iRoute.at(iInd).x) &&
-                     (iRoute.at(iInd - 1).y != iRoute.at(iInd).y) )
+                if ((iRoute.at(iInd - 1).x != iRoute.at(iInd).x) &&
+                     (iRoute.at(iInd - 1).y != iRoute.at(iInd).y))
                 {
                     // Then we've found an invalid path.
                     return true;
@@ -2536,7 +2536,7 @@ void Router::outputInstanceToSVG(std::string instanceName)
         Obstacle *obstacle = *obstacleIt;
         bool isShape = (NULL != dynamic_cast<ShapeRef *> (obstacle));
 
-        if ( ! isShape )
+        if (! isShape)
         {
             // Don't output obstacles here, for now.
             ++obstacleIt;
@@ -2565,7 +2565,7 @@ void Router::outputInstanceToSVG(std::string instanceName)
         Obstacle *obstacle = *obstacleIt;
         bool isShape = (NULL != dynamic_cast<ShapeRef *> (obstacle));
 
-        if ( ! isShape )
+        if (! isShape)
         {
             // Don't output obstacles here, for now.
             ++obstacleIt;
@@ -2613,7 +2613,7 @@ void Router::outputInstanceToSVG(std::string instanceName)
         Obstacle *obstacle = *obstacleIt;
         bool isShape = (NULL != dynamic_cast<ShapeRef *> (obstacle));
 
-        if ( ! isShape )
+        if (! isShape)
         {
             // Don't output obstacles here, for now.
             ++obstacleIt;
@@ -2924,7 +2924,7 @@ void Router::outputDiagramSVG(std::string instanceName, LineReps *lineReps)
         Obstacle *obstacle = *obstacleIt;
         bool isShape = (NULL != dynamic_cast<ShapeRef *> (obstacle));
 
-        if ( ! isShape )
+        if (! isShape)
         {
             // Don't output non-shape obstacles here, for now.
             ++obstacleIt;
@@ -3033,7 +3033,7 @@ void Router::outputDiagramText(std::string instanceName)
         Obstacle *obstacle = *obstacleIt;
         bool isShape = (NULL != dynamic_cast<ShapeRef *> (obstacle));
 
-        if ( ! isShape )
+        if (! isShape)
         {
             // Don't output non-shape obstacles here, for now.
             ++obstacleIt;

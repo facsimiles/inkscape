@@ -64,7 +64,7 @@ public:
     void flipIconVertically();
 
 private:
-    bool on_mnemonic_activate( bool group_cycling ) override;
+    bool on_mnemonic_activate(bool group_cycling) override;
 
 protected:
 

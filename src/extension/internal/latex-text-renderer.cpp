@@ -56,7 +56,7 @@ namespace Internal {
  * @param filename This should be the filename without '_tex' extension to which the tex code should be written. Output goes to <filename>_tex, note the underscore instead of period.
  */
 bool
-latex_render_document_text_to_file( SPDocument *doc, gchar const *filename,
+latex_render_document_text_to_file(SPDocument *doc, gchar const *filename,
                                     const gchar * const exportId, bool exportDrawing, bool exportCanvas, float bleedmargin_px,
                                     bool pdflatex)
 {
@@ -670,16 +670,16 @@ LaTeXTextRenderer::setupDocument(SPDocument *doc, bool pageBoundingBox, float bl
     double scale = 1/(d.width());
     double _width = d.width() * scale;
     double _height = d.height() * scale;
-    push_transform( Geom::Scale(scale, scale) );
+    push_transform(Geom::Scale(scale, scale));
 
     if (!pageBoundingBox)
     {
-        push_transform( Geom::Translate( -d.min() ) );
+        push_transform(Geom::Translate(-d.min()));
     }
 
     // flip y-axis
     if (SP_ACTIVE_DESKTOP) {
-        push_transform( SP_ACTIVE_DESKTOP->doc2dt() );
+        push_transform(SP_ACTIVE_DESKTOP->doc2dt());
     }
 
     // write the info to LaTeX

@@ -28,14 +28,14 @@ public:
         _changed_connection.disconnect();
     }
 
-    RegisteredEnum ( const Glib::ustring& label,
+    RegisteredEnum (const Glib::ustring& label,
                 const Glib::ustring& tip,
                 const Glib::ustring& key,
                 const Util::EnumDataConverter<E>& c,
                 Registry& wr,
                 Inkscape::XML::Node* repr_in = nullptr,
                 SPDocument *doc_in = nullptr,
-                bool sorted = true )
+                bool sorted = true)
         : RegisteredWidget< LabelledComboBoxEnum<E> >(label, tip, c, (const Glib::ustring &)"", (const Glib::ustring &)"", true, sorted)
     {
         RegisteredWidget< LabelledComboBoxEnum<E> >::init_parent(key, wr, repr_in, doc_in);

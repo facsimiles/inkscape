@@ -185,7 +185,7 @@ root_pseudo_class_handler (CRSelEng *const a_this,
 
         // libxml apears to set the parent of the root element to an
         // element of type 'xml'.
-        return (parent == NULL || !strcmp(node_iface->getLocalName(parent),"xml") );
+        return (parent == NULL || !strcmp(node_iface->getLocalName(parent),"xml"));
 }
 
 static gboolean
@@ -232,8 +232,8 @@ lang_pseudo_class_handler (CRSelEng *const a_this,
         node_iface = PRIVATE(a_this)->node_iface;
 
         /* "xml:lang" needed for SVG */
-        if ( (strqcmp (a_sel->content.pseudo->name->stryng->str, "lang", 4 ) &&
-              (strqcmp (a_sel->content.pseudo->name->stryng->str, "xml:lang", 8 ) ) )
+        if ((strqcmp (a_sel->content.pseudo->name->stryng->str, "lang", 4) &&
+              (strqcmp (a_sel->content.pseudo->name->stryng->str, "xml:lang", 8)))
             || a_sel->content.pseudo->type != FUNCTION_PSEUDO) {
                 cr_utils_trace_info ("This handler is for :lang only");
                 return FALSE;
@@ -288,7 +288,7 @@ only_child_pseudo_class_handler (CRSelEng *const a_this,
 
         cur_node = get_first_child_element_node (node_iface, parent);
         return (cur_node == a_node &&
-                !get_next_element_node(node_iface, cur_node) );
+                !get_next_element_node(node_iface, cur_node));
 }
 
 static gboolean
@@ -1185,7 +1185,7 @@ get_arguments_from_function (CRAdditionalSel * a_sel)
         if (arg.a != 0 && a_sel->content.pseudo->term->next) {
                 /* check for b in 'an+b' */
                 if (a_sel->content.pseudo->term->next->type == TERM_NUMBER &&
-                    a_sel->content.pseudo->term->next->content.num ) {
+                    a_sel->content.pseudo->term->next->content.num) {
                         arg.b = a_sel->content.pseudo->term->next->content.num->val;
                 }
         }
@@ -2089,7 +2089,7 @@ cr_sel_eng_get_matched_rulesets (CRSelEng * a_this,
 }
 
 enum CRStatus
-cr_sel_eng_process_stylesheet ( CRSelEng * a_eng,
+cr_sel_eng_process_stylesheet (CRSelEng * a_eng,
                                 CRXMLNodePtr a_node,
                                 CRStyleSheet * a_stylesheet,
                                 CRStatement *** stmts_tab,
@@ -2103,7 +2103,7 @@ cr_sel_eng_process_stylesheet ( CRSelEng * a_eng,
 
         // Process imported stylesheets first
         for (cur = a_stylesheet->import ; cur ; cur = cur->next) {
-                cr_sel_eng_process_stylesheet( a_eng, a_node, cur, stmts_tab, tab_size, tab_len, index );
+                cr_sel_eng_process_stylesheet(a_eng, a_node, cur, stmts_tab, tab_size, tab_len, index);
         }
 
         // Process this stylesheet
@@ -2152,7 +2152,7 @@ cr_sel_eng_process_stylesheet ( CRSelEng * a_eng,
 
         // Process other document stylesheets last
         for (cur = a_stylesheet->next ; cur ; cur = cur->next) {
-                cr_sel_eng_process_stylesheet( a_eng, a_node, cur, stmts_tab, tab_size, tab_len, index );
+                cr_sel_eng_process_stylesheet(a_eng, a_node, cur, stmts_tab, tab_size, tab_len, index);
         }
 
         return status;

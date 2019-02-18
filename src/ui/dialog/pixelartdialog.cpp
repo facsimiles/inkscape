@@ -311,13 +311,13 @@ PixelArtDialogImpl::PixelArtDialogImpl() :
 
     show_all_children();
 
-    desktopChangeConn = deskTrack.connectDesktopChanged( sigc::mem_fun(*this, &PixelArtDialogImpl::setTargetDesktop) );
+    desktopChangeConn = deskTrack.connectDesktopChanged(sigc::mem_fun(*this, &PixelArtDialogImpl::setTargetDesktop));
     deskTrack.connect(GTK_WIDGET(gobj()));
 
     signalResponse().connect(sigc::mem_fun(*this, &PixelArtDialogImpl::responseCallback));
 
     dispatcher.connect(
-        sigc::mem_fun(*this, &PixelArtDialogImpl::onWorkerThreadFinished) );
+        sigc::mem_fun(*this, &PixelArtDialogImpl::onWorkerThreadFinished));
 }
 
 void PixelArtDialogImpl::responseCallback(int response_id)
@@ -365,7 +365,7 @@ void PixelArtDialogImpl::vectorize()
 {
     Inkscape::MessageStack *msgStack = desktop->getMessageStack();
 
-    if ( !desktop->selection ) {
+    if (!desktop->selection) {
         char *msg = _("Select an <b>image</b> to trace");
         msgStack->flash(Inkscape::ERROR_MESSAGE, msg);
         return;
@@ -373,7 +373,7 @@ void PixelArtDialogImpl::vectorize()
 
     auto items = desktop->selection->items();
     for(auto i=items.begin(); i!=items.end();++i){
-        if ( !SP_IS_IMAGE(*i) )
+        if (!SP_IS_IMAGE(*i))
             continue;
 
         SPImage *img = SP_IMAGE(*i);
@@ -382,22 +382,22 @@ void PixelArtDialogImpl::vectorize()
         input.x = img->x;
         input.y = img->y;
 
-        if ( input.pixbuf->get_width() > 256
-             || input.pixbuf->get_height() > 256 ) {
+        if (input.pixbuf->get_width() > 256
+             || input.pixbuf->get_height() > 256) {
             char *msg = _("Image looks too big. Process may take a while and it is"
                           " wise to save your document before continuing."
                           "\n\nContinue the procedure (without saving)?");
             Gtk::MessageDialog dialog(msg, false, Gtk::MESSAGE_WARNING,
                                       Gtk::BUTTONS_OK_CANCEL, true);
 
-            if ( dialog.run() != Gtk::RESPONSE_OK )
+            if (dialog.run() != Gtk::RESPONSE_OK)
                 continue;
         }
 
         queue.push_back(input);
     }
 
-    if ( !queue.size() ) {
+    if (!queue.size()) {
         char *msg = _("Select an <b>image</b> to trace");
         msgStack->flash(Inkscape::ERROR_MESSAGE, msg);
         return;
@@ -417,18 +417,18 @@ void PixelArtDialogImpl::processLibdepixelize(const Input &input)
 {
     Tracer::Splines out;
 
-    if ( input.pixbuf->get_width() > 256 || input.pixbuf->get_height() > 256 ) {
+    if (input.pixbuf->get_width() > 256 || input.pixbuf->get_height() > 256) {
         char *msg = _("Image looks too big. Process may take a while and it is"
                       " wise to save your document before continuing."
                       "\n\nContinue the procedure (without saving)?");
         Gtk::MessageDialog dialog(msg, false, Gtk::MESSAGE_WARNING,
                                   Gtk::BUTTONS_OK_CANCEL, true);
 
-        if ( dialog.run() != Gtk::RESPONSE_OK )
+        if (dialog.run() != Gtk::RESPONSE_OK)
             return;
     }
 
-    if ( voronoiRadioButton.get_active() ) {
+    if (voronoiRadioButton.get_active()) {
         output.emplace_back(Tracer::Kopf2011::to_voronoi(input.pixbuf,
                                                              lastOptions),
                                 input.x, input.y);
@@ -444,8 +444,8 @@ void PixelArtDialogImpl::importOutput(const Output &output)
     Inkscape::XML::Document *xml_doc = desktop->doc()->getReprDoc();
     Inkscape::XML::Node *group = xml_doc->createElement("svg:g");
 
-    for ( Tracer::Splines::const_iterator it = output.splines.begin(),
-              end = output.splines.end() ; it != end ; ++it ) {
+    for (Tracer::Splines::const_iterator it = output.splines.begin(),
+              end = output.splines.end() ; it != end ; ++it) {
         Inkscape::XML::Node *repr = xml_doc->createElement("svg:path");
 
         {
@@ -524,13 +524,13 @@ void PixelArtDialogImpl::setDefaults()
 
     ignorePreview = false;
 
-    if ( pendingPreview )
+    if (pendingPreview)
         updatePreview();
 }
 
 void PixelArtDialogImpl::updatePreview()
 {
-    if ( ignorePreview ) {
+    if (ignorePreview) {
         pendingPreview = true;
         return;
     }
@@ -541,8 +541,8 @@ void PixelArtDialogImpl::updatePreview()
 
 void PixelArtDialogImpl::workerThread()
 {
-    for ( std::vector<Input>::iterator it = queue.begin(), end = queue.end()
-              ; it != end && !g_atomic_int_get(&abortThread) ; ++it ) {
+    for (std::vector<Input>::iterator it = queue.begin(), end = queue.end()
+              ; it != end && !g_atomic_int_get(&abortThread) ; ++it) {
         processLibdepixelize(*it);
     }
     queue.clear();
@@ -553,8 +553,8 @@ void PixelArtDialogImpl::onWorkerThreadFinished()
 {
     thread->join();
     thread = nullptr;
-    for ( std::vector<Output>::const_iterator it = output.begin(),
-              end = output.end() ; it != end ; ++it ) {
+    for (std::vector<Output>::const_iterator it = output.begin(),
+              end = output.end() ; it != end ; ++it) {
         importOutput(*it);
     }
     output.clear();

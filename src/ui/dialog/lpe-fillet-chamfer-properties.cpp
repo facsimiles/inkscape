@@ -172,8 +172,8 @@ void FilletChamferPropertiesDialog::_close()
         sigc::bind_return(
             sigc::bind(sigc::ptr_fun<void*, void>(&::operator delete), this),
             false
-        )
-    );
+)
+);
 }
 
 bool FilletChamferPropertiesDialog::_handleKeyEvent(GdkEventKey * /*event*/)

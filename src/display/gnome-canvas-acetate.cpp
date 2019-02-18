@@ -21,7 +21,7 @@ static void sp_canvas_acetate_destroy(SPCanvasItem *object);
 
 static void sp_canvas_acetate_update (SPCanvasItem *item, Geom::Affine const &affine, unsigned int flags);
 static double sp_canvas_acetate_point (SPCanvasItem *item, Geom::Point p, SPCanvasItem **actual_item);
-static int  sp_canvas_acetate_event( SPCanvasItem *item, GdkEvent *event);
+static int  sp_canvas_acetate_event(SPCanvasItem *item, GdkEvent *event);
 
 G_DEFINE_TYPE(SPCanvasAcetate, sp_canvas_acetate, SP_TYPE_CANVAS_ITEM);
 
@@ -49,7 +49,7 @@ static void sp_canvas_acetate_destroy(SPCanvasItem *object)
 	    SP_CANVAS_ITEM_CLASS(sp_canvas_acetate_parent_class)->destroy(object);
 }
 
-static void sp_canvas_acetate_update( SPCanvasItem *item, Geom::Affine const &/*affine*/, unsigned int /*flags*/ )
+static void sp_canvas_acetate_update(SPCanvasItem *item, Geom::Affine const &/*affine*/, unsigned int /*flags*/)
 {
     item->x1 = -G_MAXINT;
     item->y1 = -G_MAXINT;
@@ -57,14 +57,14 @@ static void sp_canvas_acetate_update( SPCanvasItem *item, Geom::Affine const &/*
     item->y2 = G_MAXINT;
 }
 
-static double sp_canvas_acetate_point( SPCanvasItem *item, Geom::Point /*p*/, SPCanvasItem **actual_item )
+static double sp_canvas_acetate_point(SPCanvasItem *item, Geom::Point /*p*/, SPCanvasItem **actual_item)
 {
     *actual_item = item;
 
     return 0.0;
 }
 
-// static int sp_canvas_acetate_event( SPCanvasItem *item, GdkEvent *event)
+// static int sp_canvas_acetate_event(SPCanvasItem *item, GdkEvent *event)
 // {
 //   ui_dump_event (event, "sp_canvas_acetate_event");
 //   return 0; // ?

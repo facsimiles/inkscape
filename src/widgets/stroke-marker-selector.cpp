@@ -58,7 +58,7 @@ MarkerComboBox::MarkerComboBox(gchar const *id, int l) :
     desktop = SP_ACTIVE_DESKTOP;
     doc = desktop->getDocument();
 
-    modified_connection = doc->getDefs()->connectModified( sigc::hide(sigc::hide(sigc::bind(sigc::ptr_fun(&MarkerComboBox::handleDefsModified), this))) );
+    modified_connection = doc->getDefs()->connectModified(sigc::hide(sigc::hide(sigc::bind(sigc::ptr_fun(&MarkerComboBox::handleDefsModified), this))));
 
     init_combo();
     this->get_style_context()->add_class("combobright");
@@ -88,7 +88,7 @@ void MarkerComboBox::setDesktop(SPDesktop *desktop)
         doc = desktop->getDocument();
 
         if (doc) {
-            modified_connection = doc->getDefs()->connectModified( sigc::hide(sigc::hide(sigc::bind(sigc::ptr_fun(&MarkerComboBox::handleDefsModified), this))) );
+            modified_connection = doc->getDefs()->connectModified(sigc::hide(sigc::hide(sigc::bind(sigc::ptr_fun(&MarkerComboBox::handleDefsModified), this))));
         }
 
         refreshHistory();
@@ -534,7 +534,7 @@ MarkerComboBox::create_marker_image(unsigned psize, gchar const *mname,
     return pb;
 }
 
-void MarkerComboBox::prepareImageRenderer( Gtk::TreeModel::const_iterator const &row ) {
+void MarkerComboBox::prepareImageRenderer(Gtk::TreeModel::const_iterator const &row) {
 
     Gtk::Image *image = (*row)[marker_columns.image];
     if (image)

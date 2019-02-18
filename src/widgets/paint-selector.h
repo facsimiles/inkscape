@@ -90,37 +90,37 @@ struct SPPaintSelector {
 
     static Mode getModeForStyle(SPStyle const & style, FillOrStroke kind);
 
-    void setMode( Mode mode );
-    void setFillrule( FillRule fillrule );
+    void setMode(Mode mode);
+    void setFillrule(FillRule fillrule);
 
-    void setColorAlpha( SPColor const &color, float alpha );
-    void getColorAlpha( SPColor &color, gfloat &alpha ) const;
+    void setColorAlpha(SPColor const &color, float alpha);
+    void getColorAlpha(SPColor &color, gfloat &alpha) const;
 
-    void setGradientLinear( SPGradient *vector );
-    void setGradientRadial( SPGradient *vector );
+    void setGradientLinear(SPGradient *vector);
+    void setGradientRadial(SPGradient *vector);
 #ifdef WITH_MESH
     void setGradientMesh(SPMeshGradient *array);
 #endif
-    void setSwatch( SPGradient *vector );
+    void setSwatch(SPGradient *vector);
 
-    void setGradientProperties( SPGradientUnits units, SPGradientSpread spread );
-    void getGradientProperties( SPGradientUnits &units, SPGradientSpread &spread ) const;
+    void setGradientProperties(SPGradientUnits units, SPGradientSpread spread);
+    void getGradientProperties(SPGradientUnits &units, SPGradientSpread &spread) const;
 
-    void pushAttrsToGradient( SPGradient *gr ) const;
+    void pushAttrsToGradient(SPGradient *gr) const;
     SPGradient *getGradientVector();
 
 #ifdef WITH_MESH
     SPMeshGradient * getMeshGradient();
-    void updateMeshList( SPMeshGradient *pat );
+    void updateMeshList(SPMeshGradient *pat);
 #endif
 
     SPPattern * getPattern();
-    void updatePatternList( SPPattern *pat );
+    void updatePatternList(SPPattern *pat);
 
     static gboolean isSeparator (GtkTreeModel *model, GtkTreeIter *iter, gpointer data);
 
     // TODO move this elsewhere:
-    void setFlatColor( SPDesktop *desktop, const gchar *color_property, const gchar *opacity_property );
+    void setFlatColor(SPDesktop *desktop, const gchar *color_property, const gchar *opacity_property);
 
     void onSelectedColorGrabbed();
     void onSelectedColorDragged();

@@ -312,7 +312,7 @@ public:
      */
     SPObject *getPrev();
 
-    bool hasChildren() const { return ( children.size() > 0 ); }
+    bool hasChildren() const { return (children.size() > 0); }
 
     SPObject *firstChild() { return children.empty() ? nullptr : &children.front(); }
     SPObject const *firstChild() const { return children.empty() ? nullptr : &children.front(); }
@@ -440,7 +440,7 @@ public:
      * @see SPObject::deleteObject
      */
     void collectOrphan() {
-        if ( _total_hrefcount == 0 ) {
+        if (_total_hrefcount == 0) {
             deleteObject(false);
         }
     }
@@ -448,7 +448,7 @@ public:
     /**
      * Check if object is referenced by any other object.
      */
-    bool isReferenced() { return ( _total_hrefcount > 0 ); }
+    bool isReferenced() { return (_total_hrefcount > 0); }
 
     /**
      * Deletes an object, unparenting it from its parent.
@@ -637,7 +637,7 @@ public:
      */
     sigc::connection connectModified(
       sigc::slot<void, SPObject *, unsigned int> slot
-    ) {
+) {
         return _modified_signal.connect(slot);
     }
 
@@ -710,8 +710,8 @@ public:
      */
     void setKeyValue(SPAttributeEnum key, char const *value);
 
-    void setAttribute(         char const *key,          char const *value, SPException *ex=nullptr);
-    void setAttribute(         char const *key, Glib::ustring const &value, SPException *ex=nullptr);
+    void setAttribute(char const *key,          char const *value, SPException *ex=nullptr);
+    void setAttribute(char const *key, Glib::ustring const &value, SPException *ex=nullptr);
     void setAttribute(Glib::ustring const &key, Glib::ustring const &value, SPException *ex=nullptr);
 
     /**
@@ -727,7 +727,7 @@ public:
 
     void changeCSS(SPCSSAttr *css, char const *attr);
 
-    bool storeAsDouble( char const *key, double *val ) const;
+    bool storeAsDouble(char const *key, double *val) const;
 
 private:
     // Private member functions used in the definitions of setTitle(),
@@ -841,7 +841,7 @@ public:
 
     void recursivePrintTree(unsigned level = 0);  // For debugging
     static unsigned indent_level;
-    void objectTrace( std::string, bool in=true, unsigned flags=0 );
+    void objectTrace(std::string, bool in=true, unsigned flags=0);
 };
 
 

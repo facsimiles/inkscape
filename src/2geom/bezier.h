@@ -151,7 +151,7 @@ public:
     Bezier() {}
     Bezier(const Bezier& b) :c_(b.c_) {}
     Bezier &operator=(Bezier const &other) {
-        if ( c_.size() != other.c_.size() ) {
+        if (c_.size() != other.c_.size()) {
             c_.resize(other.c_.size());
         }
         c_ = other.c_;
@@ -236,13 +236,13 @@ public:
     typedef Coord output_type;
     bool isZero(double eps=EPSILON) const {
         for(unsigned i = 0; i <= order(); i++) {
-            if( ! are_near(c_[i], 0., eps) ) return false;
+            if(! are_near(c_[i], 0., eps)) return false;
         }
         return true;
     }
     bool isConstant(double eps=EPSILON) const {
         for(unsigned i = 1; i <= order(); i++) {
-            if( ! are_near(c_[i], c_[0], eps) ) return false;
+            if(! are_near(c_[i], c_[0], eps)) return false;
         }
         return true;
     }

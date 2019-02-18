@@ -53,7 +53,7 @@ public:
         bool operator()(const ColorProfile * const & a, const ColorProfile * const & b) { return (*a) < (*b); };
     };
 
-    friend cmsHPROFILE colorprofile_get_handle( SPDocument*, unsigned int*, char const* );
+    friend cmsHPROFILE colorprofile_get_handle(SPDocument*, unsigned int*, char const*);
     friend class CMSSystem;
 
     class FilePlusHome {

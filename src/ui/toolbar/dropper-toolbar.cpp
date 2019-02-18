@@ -41,7 +41,7 @@ void DropperToolbar::on_pick_alpha_button_toggled()
     auto active = _pick_alpha_button->get_active();
 
     auto prefs = Inkscape::Preferences::get();
-    prefs->setInt( "/tools/dropper/pick", active );
+    prefs->setInt("/tools/dropper/pick", active);
 
     _set_alpha_button->set_sensitive(active);
 
@@ -51,7 +51,7 @@ void DropperToolbar::on_pick_alpha_button_toggled()
 void DropperToolbar::on_set_alpha_button_toggled()
 {
     auto prefs = Inkscape::Preferences::get();
-    prefs->setBool( "/tools/dropper/setalpha", _set_alpha_button->get_active( ) );
+    prefs->setBool("/tools/dropper/setalpha", _set_alpha_button->get_active());
     spinbutton_defocus(GTK_WIDGET(gobj()));
 }
 
@@ -75,8 +75,8 @@ DropperToolbar::DropperToolbar(SPDesktop *desktop)
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
     // Set initial state of widgets
-    auto pickAlpha = prefs->getInt( "/tools/dropper/pick", 1 );
-    auto setAlpha  = prefs->getBool( "/tools/dropper/setalpha", true);
+    auto pickAlpha = prefs->getInt("/tools/dropper/pick", 1);
+    auto setAlpha  = prefs->getBool("/tools/dropper/setalpha", true);
 
     _pick_alpha_button->set_active(pickAlpha);
     _set_alpha_button->set_active(setAlpha);

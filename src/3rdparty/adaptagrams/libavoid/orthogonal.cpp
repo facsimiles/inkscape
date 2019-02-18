@@ -221,7 +221,7 @@ class NudgingShiftSegment : public ShiftSegment
                 weight = fixedWeight;
                 varID = fixedSegmentID;
             }
-            else if ( ! finalSegment )
+            else if (! finalSegment)
             {
                 // Set a higher weight for c-bends to stop them sometimes 
                 // getting pushed out into channels by more-free connectors
@@ -312,24 +312,24 @@ class NudgingShiftSegment : public ShiftSegment
             const Point& highPt = highPoint();
             const Point& rhsLowPt = rhs->lowPoint();
             const Point& rhsHighPt = rhs->highPoint();
-            if ( (lowPt[altDim] < rhsHighPt[altDim]) &&
+            if ((lowPt[altDim] < rhsHighPt[altDim]) &&
                     (rhsLowPt[altDim] < highPt[altDim]))
             {
                 // The segments overlap.
-                if ( (minSpaceLimit <= rhs->maxSpaceLimit) &&
-                        (rhs->minSpaceLimit <= maxSpaceLimit) )
+                if ((minSpaceLimit <= rhs->maxSpaceLimit) &&
+                        (rhs->minSpaceLimit <= maxSpaceLimit))
                 {
                     return true;
                 }
             }
-            else if ( (lowPt[altDim] == rhsHighPt[altDim]) || 
-                      (rhsLowPt[altDim] == highPt[altDim]) )
+            else if ((lowPt[altDim] == rhsHighPt[altDim]) || 
+                      (rhsLowPt[altDim] == highPt[altDim]))
             {
                 bool nudgeColinearSegments = connRef->router()->routingOption(
                         nudgeOrthogonalTouchingColinearSegments);
 
-                if ( (minSpaceLimit <= rhs->maxSpaceLimit) &&
-                        (rhs->minSpaceLimit <= maxSpaceLimit) )
+                if ((minSpaceLimit <= rhs->maxSpaceLimit) &&
+                        (rhs->minSpaceLimit <= maxSpaceLimit))
                 {
                     // The segments could touch at one end.
                     if (connRef->router()->routingParameter(
@@ -720,7 +720,7 @@ public:
         if (pos == rhs.pos)
         {
             if (((begin >= rhs.begin) && (begin <= rhs.finish)) ||
-                ((rhs.begin >= begin) && (rhs.begin <= finish)) )
+                ((rhs.begin >= begin) && (rhs.begin <= finish)))
             {
                 // They are colinear and overlap by some amount.
                 return true;
@@ -743,8 +743,8 @@ public:
             return NULL;
         }
         VertInf *inf = *vertInfs.begin();
-        if ( ((inf->point.y == begin) && (inf->point.x == pos)) ||
-             ((inf->point.x == begin) && (inf->point.y == pos)) )
+        if (((inf->point.y == begin) && (inf->point.x == pos)) ||
+             ((inf->point.x == begin) && (inf->point.y == pos)))
         {
             // Only return the point if it is actually at the begin pos.
             return inf;
@@ -758,8 +758,8 @@ public:
             return NULL;
         }
         VertInf *inf = *vertInfs.rbegin();
-        if ( ((inf->point.y == finish) && (inf->point.x == pos)) ||
-             ((inf->point.x == finish) && (inf->point.y == pos)) )
+        if (((inf->point.y == finish) && (inf->point.x == pos)) ||
+             ((inf->point.x == finish) && (inf->point.y == pos)))
         {
             // Only return the point if it is actually at the finish pos.
             return inf;
@@ -1282,7 +1282,7 @@ static void intersectSegments(Router *router, SegmentList& segments,
     //COLA_ASSERT(vertLine.finishVertInf() == NULL);
 
     COLA_ASSERT(!segments.empty());
-    for (SegmentList::iterator it = segments.begin(); it != segments.end(); )
+    for (SegmentList::iterator it = segments.begin(); it != segments.end();)
     {
         LineSegment& horiLine = *it;
 
@@ -1370,8 +1370,8 @@ static void processEventVert(Router *router, NodeSet& scanline,
 {
     Node *v = e->v;
     
-    if ( ((pass == 1) && (e->type == Open)) ||
-         ((pass == 2) && (e->type == ConnPoint)) )
+    if (((pass == 1) && (e->type == Open)) ||
+         ((pass == 2) && (e->type == ConnPoint)))
     {
         std::pair<NodeSet::iterator, bool> result = scanline.insert(v);
         v->iter = result.first;
@@ -1512,8 +1512,8 @@ static void processEventVert(Router *router, NodeSet& scanline,
         }
     }
     
-    if ( ((pass == 3) && (e->type == Close)) ||
-         ((pass == 2) && (e->type == ConnPoint)) )
+    if (((pass == 3) && (e->type == Close)) ||
+         ((pass == 2) && (e->type == ConnPoint)))
     {
         // Clean up neighbour pointers.
         Node *l = v->firstAbove, *r = v->firstBelow;
@@ -1553,8 +1553,8 @@ static void processEventHori(Router *router, NodeSet& scanline,
 {
     Node *v = e->v;
     
-    if ( ((pass == 1) && (e->type == Open)) ||
-         ((pass == 2) && (e->type == ConnPoint)) )
+    if (((pass == 1) && (e->type == Open)) ||
+         ((pass == 2) && (e->type == ConnPoint)))
     {
         std::pair<NodeSet::iterator, bool> result = scanline.insert(v);
         v->iter = result.first;
@@ -1655,8 +1655,8 @@ static void processEventHori(Router *router, NodeSet& scanline,
         }
     }
     
-    if ( ((pass == 3) && (e->type == Close)) ||
-         ((pass == 2) && (e->type == ConnPoint)) )
+    if (((pass == 3) && (e->type == Close)) ||
+         ((pass == 2) && (e->type == ConnPoint)))
     {
         // Clean up neighbour pointers.
         Node *l = v->firstAbove, *r = v->firstBelow;
@@ -1967,7 +1967,7 @@ extern void generateStaticOrthogonalVisGraph(Router *router)
     // Add portions of horizontal lines that are after the final vertical
     // position we considered.
     for (SegmentList::iterator it = segments.list().begin(); 
-            it != segments.list().end(); )
+            it != segments.list().end();)
     {
         LineSegment& horiLine = *it;
 
@@ -2150,7 +2150,7 @@ static void buildOrthogonalNudgingSegments(Router *router,
                             }
                         }
 
-                        if ( endsInShapes == 0 )
+                        if (endsInShapes == 0)
                         {
                             // If the segment is not within a shape, then we
                             // should limit it's nudging buffer so we don't
@@ -2243,8 +2243,8 @@ static void buildOrthogonalNudgingSegments(Router *router,
 
                     double prevPos = displayRoute.ps[i - 2][dim];
                     double nextPos = displayRoute.ps[i + 1][dim];
-                    if ( ((prevPos < thisPos) && (nextPos > thisPos)) ||
-                         ((prevPos > thisPos) && (nextPos < thisPos)) )
+                    if (((prevPos < thisPos) && (nextPos > thisPos)) ||
+                         ((prevPos > thisPos) && (nextPos < thisPos)))
                     {
                         // Determine limits if the s-bend is not due to an 
                         // obstacle.  In this case we need to limit the channel 
@@ -2387,7 +2387,7 @@ static ShiftSegmentList linesort(bool nudgeFinalSegments,
                 currSegIt != origList.end(); ++currSegIt)
         {
             for (ShiftSegmentList::iterator otherSegIt = currSegIt;
-                    otherSegIt != origList.end(); )
+                    otherSegIt != origList.end();)
             {
                 NudgingShiftSegment *currSeg = 
                         static_cast<NudgingShiftSegment *> (*currSegIt);
@@ -2627,7 +2627,7 @@ void ImproveOrthogonalRoutes::nudgeOrthogonalRoutes(size_t dimension,
         currentRegion.push_back(currentSegment);
         m_segment_list.erase(m_segment_list.begin());
         for (ShiftSegmentList::iterator curr = m_segment_list.begin();
-                curr != m_segment_list.end(); )
+                curr != m_segment_list.end();)
         {
             bool overlaps = false;
             for (ShiftSegmentList::iterator curr2 = currentRegion.begin();
@@ -2687,7 +2687,7 @@ void ImproveOrthogonalRoutes::nudgeOrthogonalRoutes(size_t dimension,
         printf("\n\n");
 #endif
         for (ShiftSegmentList::iterator currSegmentIt = currentRegion.begin();
-                currSegmentIt != currentRegion.end(); ++currSegmentIt )
+                currSegmentIt != currentRegion.end(); ++currSegmentIt)
         {
             NudgingShiftSegment *currSegment = static_cast<NudgingShiftSegment *> (*currSegmentIt);
 

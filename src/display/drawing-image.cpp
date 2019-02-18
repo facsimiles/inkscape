@@ -129,12 +129,12 @@ unsigned DrawingImage::_renderItem(DrawingContext &dc, Geom::IntRect const &/*ar
                     //   We don't have special rendering for 'crisp-edges' yet
                     //   so follow what browsers do.
                     // In recent Cairo, BEST used Lanczos3, which is prohibitively slow
-                    dc.patternSetFilter( CAIRO_FILTER_GOOD );
+                    dc.patternSetFilter(CAIRO_FILTER_GOOD);
                     break;
                 case SP_CSS_IMAGE_RENDERING_OPTIMIZESPEED:
                 case SP_CSS_IMAGE_RENDERING_PIXELATED:
                 default:
-                    dc.patternSetFilter( CAIRO_FILTER_NEAREST );
+                    dc.patternSetFilter(CAIRO_FILTER_NEAREST);
                     break;
             }
         }

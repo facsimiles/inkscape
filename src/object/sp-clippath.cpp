@@ -44,8 +44,8 @@ SPClipPath::~SPClipPath() = default;
 void SPClipPath::build(SPDocument* doc, Inkscape::XML::Node* repr) {
     SPObjectGroup::build(doc, repr);
 
-    this->readAttr( "style" );
-    this->readAttr( "clipPathUnits" );
+    this->readAttr("style");
+    this->readAttr("clipPathUnits");
 
     /* Register ourselves */
     doc->addResource("clipPath", this);

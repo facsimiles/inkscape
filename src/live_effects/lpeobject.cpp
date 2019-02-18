@@ -50,7 +50,7 @@ void LivePathEffectObject::build(SPDocument *document, Inkscape::XML::Node *repr
 
     SPObject::build(document, repr);
 
-    this->readAttr( "effect" );
+    this->readAttr("effect");
 
     if (repr) {
         repr->addListener (&livepatheffect_repr_events, this);
@@ -107,7 +107,7 @@ void LivePathEffectObject::set(SPAttributeEnum key, gchar const *value) {
                 this->lpe = nullptr;
             }
 
-            if ( value && Inkscape::LivePathEffect::LPETypeConverter.is_valid_key(value) ) {
+            if (value && Inkscape::LivePathEffect::LPETypeConverter.is_valid_key(value)) {
                 this->effecttype = Inkscape::LivePathEffect::LPETypeConverter.get_id_from_key(value);
                 this->lpe = Inkscape::LivePathEffect::Effect::New(this->effecttype, this);
                 this->effecttype_set = true;
@@ -144,12 +144,12 @@ Inkscape::XML::Node* LivePathEffectObject::write(Inkscape::XML::Document *xml_do
 }
 
 static void
-livepatheffect_on_repr_attr_changed ( Inkscape::XML::Node * /*repr*/,
+livepatheffect_on_repr_attr_changed (Inkscape::XML::Node * /*repr*/,
                                       const gchar *key,
                                       const gchar */*oldval*/,
                                       const gchar *newval,
                                       bool /*is_interactive*/,
-                                      void * data )
+                                      void * data)
 {
 #ifdef LIVEPATHEFFECT_VERBOSE
     g_print("livepatheffect_on_repr_attr_changed");
@@ -180,7 +180,7 @@ LivePathEffectObject *LivePathEffectObject::fork_private_if_necessary(unsigned i
         Inkscape::XML::Node *dup_repr = this->getRepr()->duplicate(xml_doc);
 
         doc->getDefs()->getRepr()->addChild(dup_repr, nullptr);
-        LivePathEffectObject *lpeobj_new = LIVEPATHEFFECT( doc->getObjectByRepr(dup_repr) );
+        LivePathEffectObject *lpeobj_new = LIVEPATHEFFECT(doc->getObjectByRepr(dup_repr));
 
         Inkscape::GC::release(dup_repr);
         return lpeobj_new;

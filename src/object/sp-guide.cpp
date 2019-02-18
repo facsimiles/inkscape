@@ -65,11 +65,11 @@ void SPGuide::build(SPDocument *document, Inkscape::XML::Node *repr)
 {
     SPObject::build(document, repr);
 
-    this->readAttr( "inkscape:color" );
-    this->readAttr( "inkscape:label" );
-    this->readAttr( "inkscape:locked" );
-    this->readAttr( "orientation" );
-    this->readAttr( "position" );
+    this->readAttr("inkscape:color");
+    this->readAttr("inkscape:label");
+    this->readAttr("inkscape:locked");
+    this->readAttr("orientation");
+    this->readAttr("position");
 
     /* Register */
     document->addResource("guide", this);
@@ -158,7 +158,7 @@ void SPGuide::set(SPAttributeEnum key, const gchar *value) {
             if (success == 2) {
                 // If root viewBox set, interpret guides in terms of viewBox (90/96)
                 SPRoot *root = document->getRoot();
-                if( root->viewBox_set ) {
+                if(root->viewBox_set) {
                     if(Geom::are_near((root->width.computed * root->viewBox.height()) / (root->viewBox.width() * root->height.computed), 1.0, Geom::EPSILON)) {
                         // for uniform scaling, try to reduce numerical error
                         double vbunit2px = (root->width.computed / root->viewBox.width() + root->height.computed / root->viewBox.height())/2.0;
@@ -220,7 +220,7 @@ SPGuide *SPGuide::createSPGuide(SPDocument *doc, Geom::Point const &pt1, Geom::P
         n[Geom::Y] *= -1.0;
     }
 
-    if( root->viewBox_set ) {
+    if(root->viewBox_set) {
         // check to see if scaling is uniform
         if(Geom::are_near((root->viewBox.width() * root->height.computed) / (root->width.computed * root->viewBox.height()), 1.0, Geom::EPSILON)) {
             double px2vbunit = (root->viewBox.width()/root->width.computed + root->viewBox.height()/root->height.computed)/2.0;
@@ -232,7 +232,7 @@ SPGuide *SPGuide::createSPGuide(SPDocument *doc, Geom::Point const &pt1, Geom::P
         }
     }
 
-    sp_repr_set_point(repr, "position", Geom::Point( newx, newy ));
+    sp_repr_set_point(repr, "position", Geom::Point(newx, newy));
     sp_repr_set_point(repr, "orientation", n);
 
     SPNamedView *namedview = sp_document_namedview(doc, nullptr);
@@ -389,7 +389,7 @@ void SPGuide::moveto(Geom::Point const point_on_line, bool const commit)
         }
 
         SPRoot *root = document->getRoot();
-        if( root->viewBox_set ) {
+        if(root->viewBox_set) {
             // check to see if scaling is uniform
             if(Geom::are_near((root->viewBox.width() * root->height.computed) / (root->width.computed * root->viewBox.height()), 1.0, Geom::EPSILON)) {
                 double px2vbunit = (root->viewBox.width()/root->width.computed + root->viewBox.height()/root->height.computed)/2.0;
@@ -402,7 +402,7 @@ void SPGuide::moveto(Geom::Point const point_on_line, bool const commit)
         }
 
         //XML Tree being used here directly while it shouldn't be.
-        sp_repr_set_point(getRepr(), "position", Geom::Point(newx, newy) );
+        sp_repr_set_point(getRepr(), "position", Geom::Point(newx, newy));
     }
 
 /*  DISABLED CODE BECAUSE  SPGuideAttachment  IS NOT USE AT THE MOMENT (johan)
@@ -474,7 +474,7 @@ void SPGuide::set_color(const unsigned r, const unsigned g, const unsigned b, bo
 void SPGuide::set_locked(const bool locked, bool const commit)
 {
     this->locked = locked;
-    if ( !views.empty() ) {
+    if (!views.empty()) {
         sp_guideline_set_locked(views[0], locked);
     }
 
@@ -507,7 +507,7 @@ char* SPGuide::description(bool const verbose) const
     using Geom::Y;
 
     char *descr = nullptr;
-    if ( !this->document ) {
+    if (!this->document) {
         // Guide has probably been deleted and no longer has an attached namedview.
         descr = g_strdup(_("Deleted"));
     } else {
@@ -520,11 +520,11 @@ char* SPGuide::description(bool const verbose) const
 
         gchar *shortcuts = g_strdup_printf("; %s", _("<b>Shift+drag</b> to rotate, <b>Ctrl+drag</b> to move origin, <b>Del</b> to delete"));
 
-        if ( are_near(this->normal_to_line, Geom::Point(1., 0.)) ||
-             are_near(this->normal_to_line, -Geom::Point(1., 0.)) ) {
+        if (are_near(this->normal_to_line, Geom::Point(1., 0.)) ||
+             are_near(this->normal_to_line, -Geom::Point(1., 0.))) {
             descr = g_strdup_printf(_("vertical, at %s"), position_string_x.c_str());
-        } else if ( are_near(this->normal_to_line, Geom::Point(0., 1.)) ||
-                    are_near(this->normal_to_line, -Geom::Point(0., 1.)) ) {
+        } else if (are_near(this->normal_to_line, Geom::Point(0., 1.)) ||
+                    are_near(this->normal_to_line, -Geom::Point(0., 1.))) {
             descr = g_strdup_printf(_("horizontal, at %s"), position_string_y.c_str());
         } else {
             double const radians = this->angle();

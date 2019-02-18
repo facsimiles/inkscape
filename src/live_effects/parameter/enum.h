@@ -22,7 +22,7 @@ namespace LivePathEffect {
 
 template<typename E> class EnumParam : public Parameter {
 public:
-    EnumParam(  const Glib::ustring& label,
+    EnumParam(const Glib::ustring& label,
                 const Glib::ustring& tip,
                 const Glib::ustring& key,
                 const Util::EnumDataConverter<E>& c,
@@ -43,9 +43,9 @@ public:
     EnumParam& operator=(const EnumParam&) = delete;
 
     Gtk::Widget * param_newWidget() override {
-        Inkscape::UI::Widget::RegisteredEnum<E> *regenum = Gtk::manage ( 
-            new Inkscape::UI::Widget::RegisteredEnum<E>( param_label, param_tooltip,
-                       param_key, *enumdataconv, *param_wr, param_effect->getRepr(), param_effect->getSPDoc(), sorted ) );
+        Inkscape::UI::Widget::RegisteredEnum<E> *regenum = Gtk::manage (
+            new Inkscape::UI::Widget::RegisteredEnum<E>(param_label, param_tooltip,
+                       param_key, *enumdataconv, *param_wr, param_effect->getRepr(), param_effect->getSPDoc(), sorted));
 
         regenum->set_active_by_id(value);
         regenum->combobox()->setProgrammatically = false;
@@ -63,16 +63,16 @@ public:
             return true;
         }
 
-        param_set_value( enumdataconv->get_id_from_key(Glib::ustring(strvalue)) );
+        param_set_value(enumdataconv->get_id_from_key(Glib::ustring(strvalue)));
 
         return true;
     };
     gchar * param_getSVGValue() const override {
-        return g_strdup( enumdataconv->get_key(value).c_str() );
+        return g_strdup(enumdataconv->get_key(value).c_str());
     };
     
     gchar * param_getDefaultSVGValue() const override {
-        return g_strdup( enumdataconv->get_key(defvalue).c_str() );
+        return g_strdup(enumdataconv->get_key(defvalue).c_str());
     };
     
     E get_value() const {

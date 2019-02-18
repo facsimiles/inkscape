@@ -40,7 +40,7 @@ static SPObject const *get_nearest_common_ancestor(SPObject const *const obj, SP
 {
     SPObject const *anc_sofar = obj;
     for (unsigned i = 0; i < 2; ++i) {
-        if ( objs[i] != nullptr ) {
+        if (objs[i] != nullptr) {
             anc_sofar = anc_sofar->nearestCommonAncestor(objs[i]);
         }
     }
@@ -88,7 +88,7 @@ static bool try_get_intersect_point_with_item_recursive(Geom::PathVector& conn_p
         const Geom::Crossings& cr = *i;
 
         for (const auto & cr_pt : cr) {
-            if ( intersect_pos < cr_pt.ta)
+            if (intersect_pos < cr_pt.ta)
                 intersect_pos = cr_pt.ta;
         }
     }

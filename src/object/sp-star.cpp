@@ -46,16 +46,16 @@ void SPStar::build(SPDocument * document, Inkscape::XML::Node * repr) {
 	// CPPIFY: see header file
     SPShape::build(document, repr);
 
-    this->readAttr( "sodipodi:cx" );
-    this->readAttr( "sodipodi:cy" );
-    this->readAttr( "sodipodi:sides" );
-    this->readAttr( "sodipodi:r1" );
-    this->readAttr( "sodipodi:r2" );
-    this->readAttr( "sodipodi:arg1" );
-    this->readAttr( "sodipodi:arg2" );
-    this->readAttr( "inkscape:flatsided" );
-    this->readAttr( "inkscape:rounded" );
-    this->readAttr( "inkscape:randomized" );
+    this->readAttr("sodipodi:cx");
+    this->readAttr("sodipodi:cy");
+    this->readAttr("sodipodi:sides");
+    this->readAttr("sodipodi:r1");
+    this->readAttr("sodipodi:r2");
+    this->readAttr("sodipodi:arg1");
+    this->readAttr("sodipodi:arg2");
+    this->readAttr("inkscape:flatsided");
+    this->readAttr("inkscape:rounded");
+    this->readAttr("inkscape:randomized");
 }
 
 Inkscape::XML::Node* SPStar::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
@@ -259,7 +259,7 @@ point_unique_int (Geom::Point o)
         (((int) floor (o[Geom::X] * 64)) % 1024 + ((int) floor (o[Geom::X] * 1024)) % 64)
     +
              (((int) floor (o[Geom::Y] * 64)) % 1024 + ((int) floor (o[Geom::Y] * 1024)) % 64)
-    );
+);
 }
 
 /**
@@ -270,7 +270,7 @@ i.e. it is guaranteed to go through all integers < 2^32 (see http://random.mat.s
 static inline guint32
 lcg_next(guint32 const prev)
 {
-    return (guint32) ( 69069 * prev + 1 );
+    return (guint32) (69069 * prev + 1);
 }
 
 /**
@@ -282,7 +282,7 @@ rnd (guint32 const seed, unsigned steps) {
     for (; steps > 0; steps --)
         lcg = lcg_next (lcg);
 
-    return ( lcg / 4294967296. ) - 0.5;
+    return (lcg / 4294967296.) - 0.5;
 }
 
 static Geom::Point
@@ -333,7 +333,7 @@ sp_star_get_curvepoint (SPStar *star, SPStarPoint point, gint index, bool previ)
 
         // randomly rotate (by step 3 from the seed) and scale (by step 4) the vector
         ret = ret * Geom::Affine (Geom::Rotate (star->randomized * M_PI * rnd (seed, 3)));
-        ret *= ( 1 + star->randomized * rnd (seed, 4));
+        ret *= (1 + star->randomized * rnd (seed, 4));
 
         // the randomized corner point
         Geom::Point o_randomized = sp_star_get_xy (star, point, index, true);
@@ -462,7 +462,7 @@ sp_star_position_set (SPStar *star, gint sides, Geom::Point center, gdouble r1, 
     if (isflat == false) {
         star->r[1] = CLAMP(r2, 0.0, star->r[0]);
     } else {
-        star->r[1] = CLAMP( r1*cos(M_PI/sides) ,0.0, star->r[0] );
+        star->r[1] = CLAMP(r1*cos(M_PI/sides) ,0.0, star->r[0]);
     }
 
     star->arg[0] = arg1;
@@ -500,7 +500,7 @@ Geom::Affine SPStar::set_transform(Geom::Affine const &xform)
     }
 
     /* Calculate star start in parent coords. */
-    Geom::Point pos( this->center * xform );
+    Geom::Point pos(this->center * xform);
 
     /* This function takes care of translation and scaling, we return whatever parts we can't
        handle. */

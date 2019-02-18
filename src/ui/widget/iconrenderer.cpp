@@ -67,15 +67,15 @@ void IconRenderer::get_preferred_width_vfunc(Gtk::Widget& widget,
     }
 }
 
-void IconRenderer::render_vfunc( const Cairo::RefPtr<Cairo::Context>& cr,
+void IconRenderer::render_vfunc(const Cairo::RefPtr<Cairo::Context>& cr,
                                  Gtk::Widget& widget,
                                  const Gdk::Rectangle& background_area,
                                  const Gdk::Rectangle& cell_area,
-                                 Gtk::CellRendererState flags )
+                                 Gtk::CellRendererState flags)
 {
     set_pixbuf();
     
-    Gtk::CellRendererPixbuf::render_vfunc( cr, widget, background_area, cell_area, flags );
+    Gtk::CellRendererPixbuf::render_vfunc(cr, widget, background_area, cell_area, flags);
 }
 
 bool IconRenderer::activate_vfunc(GdkEvent* /*event*/,

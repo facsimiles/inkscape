@@ -45,7 +45,7 @@ typedef enum {
     ? COMPUTE_##axis##_DELTA ((dir) - 1)                \
       + COMPUTE_##axis##_DELTA (((dir) + 1) % 8)        \
     : COMPUTE_##axis##_DELTA (dir)                      \
-  )
+)
 
 #define COMPUTE_ROW_DELTA(dir)                          \
   ((dir) == NORTH ? -1 : (dir) == SOUTH ? +1 : 0)

@@ -68,21 +68,21 @@ public:
 protected:
     RegisteredWidget() : W() { construct(); }
     template< typename A >
-    explicit RegisteredWidget( A& a ): W( a ) { construct(); }
+    explicit RegisteredWidget(A& a): W(a) { construct(); }
     template< typename A, typename B >
-    RegisteredWidget( A& a, B& b ): W( a, b ) { construct(); }
+    RegisteredWidget(A& a, B& b): W(a, b) { construct(); }
     template< typename A, typename B, typename C >
-    RegisteredWidget( A& a, B& b, C* c ): W( a, b, c ) { construct(); }
+    RegisteredWidget(A& a, B& b, C* c): W(a, b, c) { construct(); }
     template< typename A, typename B, typename C >
-    RegisteredWidget( A& a, B& b, C& c ): W( a, b, c ) { construct(); }
+    RegisteredWidget(A& a, B& b, C& c): W(a, b, c) { construct(); }
     template< typename A, typename B, typename C, typename D >
-    RegisteredWidget( A& a, B& b, C c, D d ): W( a, b, c, d ) { construct(); }
+    RegisteredWidget(A& a, B& b, C c, D d): W(a, b, c, d) { construct(); }
     template< typename A, typename B, typename C, typename D, typename E >
-    RegisteredWidget( A& a, B& b, C& c, D d, E e ): W( a, b, c, d, e ) { construct(); }
+    RegisteredWidget(A& a, B& b, C& c, D d, E e): W(a, b, c, d, e) { construct(); }
     template< typename A, typename B, typename C, typename D, typename E , typename F>
-    RegisteredWidget( A& a, B& b, C c, D& d, E& e, F* f): W( a, b, c, d, e, f) { construct(); }
+    RegisteredWidget(A& a, B& b, C c, D& d, E& e, F* f): W(a, b, c, d, e, f) { construct(); }
     template< typename A, typename B, typename C, typename D, typename E , typename F, typename G>
-    RegisteredWidget( A& a, B& b, C& c, D& d, E& e, F f, G& g): W( a, b, c, d, e, f, g) { construct(); }
+    RegisteredWidget(A& a, B& b, C& c, D& d, E& e, F f, G& g): W(a, b, c, d, e, f, g) { construct(); }
 
     ~RegisteredWidget() override = default;;
 
@@ -198,11 +198,11 @@ protected:
 class RegisteredUnitMenu : public RegisteredWidget<Labelled> {
 public:
     ~RegisteredUnitMenu() override;
-    RegisteredUnitMenu ( const Glib::ustring& label,
+    RegisteredUnitMenu (const Glib::ustring& label,
                          const Glib::ustring& key,
                          Registry& wr,
                          Inkscape::XML::Node* repr_in = nullptr,
-                         SPDocument *doc_in = nullptr );
+                         SPDocument *doc_in = nullptr);
 
     void setUnit (const Glib::ustring);
     Unit const * getUnit() const { return static_cast<UnitMenu*>(_widget)->getUnit(); };
@@ -224,14 +224,14 @@ enum RSU_UserUnits {
 class RegisteredScalarUnit : public RegisteredWidget<ScalarUnit> {
 public:
     ~RegisteredScalarUnit() override;
-    RegisteredScalarUnit ( const Glib::ustring& label,
+    RegisteredScalarUnit (const Glib::ustring& label,
                            const Glib::ustring& tip,
                            const Glib::ustring& key,
                            const RegisteredUnitMenu &rum,
                            Registry& wr,
                            Inkscape::XML::Node* repr_in = nullptr,
                            SPDocument *doc_in = nullptr,
-                           RSU_UserUnits _user_units = RSU_none );
+                           RSU_UserUnits _user_units = RSU_none);
 
 protected:
     sigc::connection  _value_changed_connection;
@@ -248,7 +248,7 @@ public:
             const Glib::ustring& key,
             Registry& wr,
             Inkscape::XML::Node* repr_in = nullptr,
-            SPDocument *doc_in = nullptr );
+            SPDocument *doc_in = nullptr);
 protected:
     sigc::connection _value_changed_connection;
     void on_value_changed();
@@ -262,7 +262,7 @@ public:
             const Glib::ustring& key,
             Registry& wr,
             Inkscape::XML::Node* repr_in = nullptr,
-            SPDocument *doc_in = nullptr );
+            SPDocument *doc_in = nullptr);
 
 protected:
     sigc::connection  _activate_connection;
@@ -294,13 +294,13 @@ protected:
 class RegisteredSuffixedInteger : public RegisteredWidget<Scalar> {
 public:
     ~RegisteredSuffixedInteger() override;
-    RegisteredSuffixedInteger ( const Glib::ustring& label,
+    RegisteredSuffixedInteger (const Glib::ustring& label,
                                 const Glib::ustring& tip, 
                                 const Glib::ustring& suffix,
                                 const Glib::ustring& key,
                                 Registry& wr,
                                 Inkscape::XML::Node* repr_in = nullptr,
-                                SPDocument *doc_in = nullptr );
+                                SPDocument *doc_in = nullptr);
 
     bool setProgrammatically; // true if the value was set by setValue, not changed by the user;
                                 // if a callback checks it, it must reset it back to false
@@ -313,7 +313,7 @@ protected:
 class RegisteredRadioButtonPair : public RegisteredWidget<Gtk::HBox> {
 public:
     ~RegisteredRadioButtonPair() override;
-    RegisteredRadioButtonPair ( const Glib::ustring& label,
+    RegisteredRadioButtonPair (const Glib::ustring& label,
                                 const Glib::ustring& label1,
                                 const Glib::ustring& label2,
                                 const Glib::ustring& tip1,
@@ -321,7 +321,7 @@ public:
                                 const Glib::ustring& key,
                                 Registry& wr,
                                 Inkscape::XML::Node* repr_in = nullptr,
-                                SPDocument *doc_in = nullptr );
+                                SPDocument *doc_in = nullptr);
 
     void setValue (bool second);
 
@@ -336,12 +336,12 @@ protected:
 class RegisteredPoint : public RegisteredWidget<Point> {
 public:
     ~RegisteredPoint() override;
-    RegisteredPoint ( const Glib::ustring& label,
+    RegisteredPoint (const Glib::ustring& label,
                       const Glib::ustring& tip,
                       const Glib::ustring& key,
                       Registry& wr,
                       Inkscape::XML::Node* repr_in = nullptr,
-                      SPDocument *doc_in = nullptr );
+                      SPDocument *doc_in = nullptr);
 
 protected:
     sigc::connection  _value_x_changed_connection;
@@ -353,12 +353,12 @@ protected:
 class RegisteredTransformedPoint : public RegisteredWidget<Point> {
 public:
     ~RegisteredTransformedPoint() override;
-    RegisteredTransformedPoint (  const Glib::ustring& label,
+    RegisteredTransformedPoint (const Glib::ustring& label,
                                   const Glib::ustring& tip,
                                   const Glib::ustring& key,
                                   Registry& wr,
                                   Inkscape::XML::Node* repr_in = nullptr,
-                                  SPDocument *doc_in = nullptr );
+                                  SPDocument *doc_in = nullptr);
 
     // redefine setValue, because transform must be applied
     void setValue(Geom::Point const & p);
@@ -382,7 +382,7 @@ public:
                       const Glib::ustring& key,
                       Registry& wr,
                       Inkscape::XML::Node* repr_in = nullptr,
-                      SPDocument *doc_in = nullptr );
+                      SPDocument *doc_in = nullptr);
 
     // redefine setValue, because transform must be applied
     void setValue(Geom::Point const & p);
@@ -408,7 +408,7 @@ protected:
 class RegisteredRandom : public RegisteredWidget<Random> {
 public:
     ~RegisteredRandom() override;
-    RegisteredRandom ( const Glib::ustring& label,
+    RegisteredRandom (const Glib::ustring& label,
                        const Glib::ustring& tip,
                        const Glib::ustring& key,
                        Registry& wr,
@@ -426,7 +426,7 @@ protected:
 class RegisteredFontButton : public RegisteredWidget<FontButton> {
 public:
     ~RegisteredFontButton() override;
-    RegisteredFontButton ( const Glib::ustring& label,
+    RegisteredFontButton (const Glib::ustring& label,
                              const Glib::ustring& tip,
                              const Glib::ustring& key,
                              Registry& wr,

@@ -47,7 +47,7 @@ FillAndStroke::FillAndStroke()
       _page_stroke_style(Gtk::manage(new UI::Widget::NotebookPage(1, 1, true, true))),
       _composite_settings(SP_VERB_DIALOG_FILL_STROKE, "fillstroke",
                           UI::Widget::SimpleFilterModifier::BLUR |
-                          UI::Widget::SimpleFilterModifier::OPACITY ),
+                          UI::Widget::SimpleFilterModifier::OPACITY),
       deskTrack(),
       targetDesktop(nullptr),
       fillWdgt(nullptr),
@@ -76,7 +76,7 @@ FillAndStroke::FillAndStroke()
     _composite_settings.setSubject(&_subject);
 
     // Connect this up last
-    desktopChangeConn = deskTrack.connectDesktopChanged( sigc::mem_fun(*this, &FillAndStroke::setTargetDesktop) );
+    desktopChangeConn = deskTrack.connectDesktopChanged(sigc::mem_fun(*this, &FillAndStroke::setTargetDesktop));
     deskTrack.connect(GTK_WIDGET(gobj()));
 }
 

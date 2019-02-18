@@ -39,11 +39,11 @@ void DesktopTracker::connect(GtkWidget *widget)
     this->widget = widget;
 
     // Use C/gobject callbacks to avoid gtkmm rewrap-during-destruct issues:
-    hierID = g_signal_connect( G_OBJECT(widget), "hierarchy-changed", G_CALLBACK(hierarchyChangeCB), this );
+    hierID = g_signal_connect(G_OBJECT(widget), "hierarchy-changed", G_CALLBACK(hierarchyChangeCB), this);
     inkID = INKSCAPE.signal_activate_desktop.connect(
               sigc::bind(
               sigc::ptr_fun(&DesktopTracker::activateDesktopCB), this)
-    );
+);
 
     GtkWidget *wdgt = gtk_widget_get_ancestor(widget, SP_TYPE_DESKTOP_WIDGET);
     if (wdgt && !base) {
@@ -88,12 +88,12 @@ SPDesktop *DesktopTracker::getDesktop() const
     return desktop;
 }
 
-sigc::connection DesktopTracker::connectDesktopChanged( const sigc::slot<void, SPDesktop*> & slot )
+sigc::connection DesktopTracker::connectDesktopChanged(const sigc::slot<void, SPDesktop*> & slot)
 {
     return desktopChangedSig.connect(slot);
 }
 
-void DesktopTracker::activateDesktopCB(SPDesktop *desktop, DesktopTracker *self )
+void DesktopTracker::activateDesktopCB(SPDesktop *desktop, DesktopTracker *self)
 {
     if (self && self->trackActive) {
         self->setDesktop(desktop);

@@ -63,7 +63,7 @@ DashSelector::DashSelector()
     dash_combo.set_tooltip_text(_("Dash pattern"));
     dash_combo.get_style_context()->add_class("combobright");
     dash_combo.show();
-    dash_combo.signal_changed().connect( sigc::mem_fun(*this, &DashSelector::on_selection) );
+    dash_combo.signal_changed().connect(sigc::mem_fun(*this, &DashSelector::on_selection));
 
     this->pack_start(dash_combo, false, false, 0);
     offset = Gtk::Adjustment::create(0.0, 0.0, 10.0, 0.1, 1.0, 0.0);
@@ -97,7 +97,7 @@ DashSelector::~DashSelector() {
     // sp_stroke_style_line_widget_new() not processed correctly?
 }
 
-void DashSelector::prepareImageRenderer( Gtk::TreeModel::const_iterator const &row ) {
+void DashSelector::prepareImageRenderer(Gtk::TreeModel::const_iterator const &row) {
 
     Glib::RefPtr<Gdk::Pixbuf> pixbuf = (*row)[dash_columns.pixbuf];
     image_renderer.property_pixbuf() = pixbuf;
@@ -115,7 +115,7 @@ void DashSelector::init_dashes() {
             dashes = g_new (double *, dash_prefs.size() + 2); // +1 for custom slot, +1 for terminator slot
             
             for (auto & dash_pref : dash_prefs) {
-                style.readFromPrefs( dash_pref );
+                style.readFromPrefs(dash_pref);
                 
                 if (!style.stroke_dasharray.values.empty()) {
                     dashes[pos] = g_new (double, style.stroke_dasharray.values.size() + 1);

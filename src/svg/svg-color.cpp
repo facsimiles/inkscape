@@ -359,7 +359,7 @@ static guint32 internal_sp_svg_read_color(gchar const *str, gchar const **end_pt
 
         gfloat rgb[3];
 
-        SPColor::hsl_to_rgb_floatv( rgb, h, s, l );
+        SPColor::hsl_to_rgb_floatv(rgb, h, s, l);
 
         val  =  static_cast<guint>(floor(CLAMP(rgb[0], 0.0, 1.0) * 255.9999)) << 24;
         val |= (static_cast<guint>(floor(CLAMP(rgb[1], 0.0, 1.0) * 255.9999)) << 16);
@@ -415,7 +415,7 @@ guint32 sp_svg_read_color(gchar const *str, gchar const **end_ptr, guint32 dfl)
                && buf_end - buf == end - str);
         g_free(buf);
 
-        if ( end_ptr ) {
+        if (end_ptr) {
             *end_ptr = end;
         }
     }
@@ -492,8 +492,8 @@ void sp_svg_write_color(gchar *buf, unsigned const buflen, guint32 const rgba32)
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     unsigned const rgb24 = rgba32 >> 8;
-    if ( prefs->getBool("/options/svgoutput/usenamedcolors") &&
-        !prefs->getBool("/options/svgoutput/disable_optimizations" )) {
+    if (prefs->getBool("/options/svgoutput/usenamedcolors") &&
+        !prefs->getBool("/options/svgoutput/disable_optimizations")) {
         rgb24_to_css(buf, rgb24);
     } else {
         g_snprintf(buf, buflen, "#%06x", rgb24);
@@ -518,13 +518,13 @@ void icc_color_to_sRGB(SVGICCColor* icc, guchar* r, guchar* g, guchar* b)
     if (icc) {
 g_message("profile name: %s", icc->colorProfile.c_str());
         Inkscape::ColorProfile* prof = SP_ACTIVE_DOCUMENT->profileManager->find(icc->colorProfile.c_str());
-        if ( prof ) {
+        if (prof) {
             guchar color_out[4] = {0,0,0,0};
             cmsHTRANSFORM trans = prof->getTransfToSRGB8();
-            if ( trans ) {
-                std::vector<colorspace::Component> comps = colorspace::getColorSpaceInfo( prof );
+            if (trans) {
+                std::vector<colorspace::Component> comps = colorspace::getColorSpaceInfo(prof);
 
-                size_t count = CMSSystem::getChannelCount( prof );
+                size_t count = CMSSystem::getChannelCount(prof);
                 size_t cap = std::min(count, comps.size());
                 guchar color_in[4];
                 for (size_t i = 0; i < cap; i++) {
@@ -532,7 +532,7 @@ g_message("profile name: %s", icc->colorProfile.c_str());
                     g_message("input[%d]: %d", (int)i, (int)color_in[i]);
                 }
 
-                CMSSystem::doTransform( trans, color_in, color_out, 1 );
+                CMSSystem::doTransform(trans, color_in, color_out, 1);
 g_message("transform to sRGB done");
             }
             *r = color_out[0];
@@ -548,62 +548,62 @@ g_message("transform to sRGB done");
  * Allowed ASCII first characters:  ':', 'A'-'Z', '_', 'a'-'z'
  * Allowed ASCII remaining chars add: '-', '.', '0'-'9',
  */
-bool sp_svg_read_icc_color( gchar const *str, gchar const **end_ptr, SVGICCColor* dest )
+bool sp_svg_read_icc_color(gchar const *str, gchar const **end_ptr, SVGICCColor* dest)
 {
     bool good = true;
 
-    if ( end_ptr ) {
+    if (end_ptr) {
         *end_ptr = str;
     }
-    if ( dest ) {
+    if (dest) {
         dest->colorProfile.clear();
         dest->colors.clear();
     }
 
-    if ( !str ) {
+    if (!str) {
         // invalid input
         good = false;
     } else {
-        while ( g_ascii_isspace(*str) ) {
+        while (g_ascii_isspace(*str)) {
             str++;
         }
 
-        good = strneq( str, "icc-color(", 10 );
+        good = strneq(str, "icc-color(", 10);
 
-        if ( good ) {
+        if (good) {
             str += 10;
-            while ( g_ascii_isspace(*str) ) {
+            while (g_ascii_isspace(*str)) {
                 str++;
             }
 
-            if ( !g_ascii_isalpha(*str)
-                 && ( !(0x080 & *str) )
+            if (!g_ascii_isalpha(*str)
+                 && (!(0x080 & *str))
                  && (*str != '_')
-                 && (*str != ':') ) {
+                 && (*str != ':')) {
                 // Name must start with a certain type of character
                 good = false;
             } else {
-                while ( g_ascii_isdigit(*str) || g_ascii_isalpha(*str)
-                        || (*str == '-') || (*str == ':') || (*str == '_') || (*str == '.') ) {
-                    if ( dest ) {
+                while (g_ascii_isdigit(*str) || g_ascii_isalpha(*str)
+                        || (*str == '-') || (*str == ':') || (*str == '_') || (*str == '.')) {
+                    if (dest) {
                         dest->colorProfile += *str;
                     }
                     str++;
                 }
-                while ( g_ascii_isspace(*str) || *str == ',' ) {
+                while (g_ascii_isspace(*str) || *str == ',') {
                     str++;
                 }
             }
         }
 
-        if ( good ) {
-            while ( *str && *str != ')' ) {
-                if ( g_ascii_isdigit(*str) || *str == '.' || *str == '-' || *str == '+') {
+        if (good) {
+            while (*str && *str != ')') {
+                if (g_ascii_isdigit(*str) || *str == '.' || *str == '-' || *str == '+') {
                     gchar* endPtr = nullptr;
-                    gdouble dbl = g_ascii_strtod( str, &endPtr );
-                    if ( !errno ) {
-                        if ( dest ) {
-                            dest->colors.push_back( dbl );
+                    gdouble dbl = g_ascii_strtod(str, &endPtr);
+                    if (!errno) {
+                        if (dest) {
+                            dest->colors.push_back(dbl);
                         }
                         str = endPtr;
                     } else {
@@ -611,7 +611,7 @@ bool sp_svg_read_icc_color( gchar const *str, gchar const **end_ptr, SVGICCColor
                         break;
                     }
 
-                    while ( g_ascii_isspace(*str) || *str == ',' ) {
+                    while (g_ascii_isspace(*str) || *str == ',') {
                         str++;
                     }
                 } else {
@@ -621,20 +621,20 @@ bool sp_svg_read_icc_color( gchar const *str, gchar const **end_ptr, SVGICCColor
         }
 
         // We need to have ended on a closing parenthesis
-        if ( good ) {
-            while ( g_ascii_isspace(*str) ) {
+        if (good) {
+            while (g_ascii_isspace(*str)) {
                 str++;
             }
             good &= (*str == ')');
         }
     }
 
-    if ( good ) {
-        if ( end_ptr ) {
+    if (good) {
+        if (end_ptr) {
             *end_ptr = str;
         }
     } else {
-        if ( dest ) {
+        if (dest) {
             dest->colorProfile.clear();
             dest->colors.clear();
         }
@@ -644,7 +644,7 @@ bool sp_svg_read_icc_color( gchar const *str, gchar const **end_ptr, SVGICCColor
 }
 
 
-bool sp_svg_read_icc_color( gchar const *str, SVGICCColor* dest )
+bool sp_svg_read_icc_color(gchar const *str, SVGICCColor* dest)
 {
     return sp_svg_read_icc_color(str, nullptr, dest);
 }

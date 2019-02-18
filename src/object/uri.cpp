@@ -56,7 +56,7 @@ URI::URI(gchar const *preformed, char const *baseuri)
     // check for invalid characters, escape if needed
     xmlChar *escaped = nullptr;
     if (uri_needs_escaping(preformed)) {
-        escaped = xmlURIEscapeStr(      //
+        escaped = xmlURIEscapeStr(//
             (xmlChar const *)preformed, //
             (xmlChar const *)URI_ALLOWED_NON_ALNUM);
         preformed = (decltype(preformed))escaped;
@@ -65,7 +65,7 @@ URI::URI(gchar const *preformed, char const *baseuri)
     // make absolute
     xmlChar *full = nullptr;
     if (baseuri) {
-        full = xmlBuildURI(             //
+        full = xmlBuildURI(//
             (xmlChar const *)preformed, //
             (xmlChar const *)baseuri);
 #if LIBXML_VERSION < 20905
@@ -102,10 +102,10 @@ URI::URI(char const *preformed, URI const &baseuri)
 // From RFC 2396:
 //
 // URI-reference = [ absoluteURI | relativeURI ] [ "#" fragment ]
-// absoluteURI   = scheme ":" ( hier_part | opaque_part )
-// relativeURI   = ( net_path | abs_path | rel_path ) [ "?" query ]
+// absoluteURI   = scheme ":" (hier_part | opaque_part)
+// relativeURI   = (net_path | abs_path | rel_path) [ "?" query ]
 //
-// hier_part     = ( net_path | abs_path ) [ "?" query ]
+// hier_part     = (net_path | abs_path) [ "?" query ]
 // opaque_part   = uric_no_slash *uric
 //
 // uric_no_slash = unreserved | escaped | ";" | "?" | ":" | "@" |
@@ -115,8 +115,8 @@ URI::URI(char const *preformed, URI const &baseuri)
 // abs_path      = "/"  path_segments
 // rel_path      = rel_segment [ abs_path ]
 //
-// rel_segment   = 1*( unreserved | escaped |
-//                     ";" | "@" | "&" | "=" | "+" | "$" | "," )
+// rel_segment   = 1*(unreserved | escaped |
+//                     ";" | "@" | "&" | "=" | "+" | "$" | ",")
 //
 // authority     = server | reg_name
 
@@ -190,7 +190,7 @@ std::string URI::toNativeFilename() const
 URI URI::from_native_filename(gchar const *path) {
     gchar *uri = g_filename_to_uri(path, nullptr, nullptr);
     URI result(uri);
-    g_free( uri );
+    g_free(uri);
     return result;
 }
 

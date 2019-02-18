@@ -245,7 +245,7 @@ public:
      * @param b Maximum time value to consider; \f$a < b\f$
      * @return \f$q \in [a, b]: ||\mathbf{C}(q) - \mathbf{p}|| = 
                \inf(\{r \in \mathbb{R} : ||\mathbf{C}(r) - \mathbf{p}||\})\f$ */
-    virtual Coord nearestTime( Point const& p, Coord a = 0, Coord b = 1 ) const;
+    virtual Coord nearestTime(Point const& p, Coord a = 0, Coord b = 1) const;
 
     /** @brief A version that takes an Interval. */
     Coord nearestTime(Point const &p, Interval const &i) const {
@@ -257,8 +257,8 @@ public:
      * @param a Minimum time value to consider
      * @param b Maximum time value to consider; \f$a < b\f$
      * @return Vector of points closest and equally far away from the query point */
-    virtual std::vector<Coord> allNearestTimes( Point const& p, Coord from = 0,
-        Coord to = 1 ) const;
+    virtual std::vector<Coord> allNearestTimes(Point const& p, Coord from = 0,
+        Coord to = 1) const;
 
     /** @brief A version that takes an Interval. */
     std::vector<Coord> allNearestTimes(Point const &p, Interval const &i) {

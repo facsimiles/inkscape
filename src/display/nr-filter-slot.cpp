@@ -85,14 +85,14 @@ cairo_surface_t *FilterSlot::getcairo(int slot_nr)
             case NR_FILTER_SOURCEGRAPHIC: {
                 cairo_surface_t *tr = _get_transformed_source_graphic();
                 // Assume all source graphics are sRGB
-                set_cairo_surface_ci( tr, SP_CSS_COLOR_INTERPOLATION_SRGB );
+                set_cairo_surface_ci(tr, SP_CSS_COLOR_INTERPOLATION_SRGB);
                 _set_internal(NR_FILTER_SOURCEGRAPHIC, tr);
                 cairo_surface_destroy(tr);
             } break;
             case NR_FILTER_BACKGROUNDIMAGE: {
                 cairo_surface_t *bg = _get_transformed_background();
                 // Assume all backgrounds are sRGB
-                set_cairo_surface_ci( bg, SP_CSS_COLOR_INTERPOLATION_SRGB );
+                set_cairo_surface_ci(bg, SP_CSS_COLOR_INTERPOLATION_SRGB);
                 _set_internal(NR_FILTER_BACKGROUNDIMAGE, bg);
                 cairo_surface_destroy(bg);
             } break;
@@ -194,7 +194,7 @@ cairo_surface_t *FilterSlot::get_result(int res)
         cairo_surface_get_content(_source_graphic),
         _source_graphic_area.width(),
         _source_graphic_area.height());
-    copy_cairo_surface_ci( result, r );
+    copy_cairo_surface_ci(result, r);
     cairo_t *r_ct = cairo_create(r);
 
     cairo_translate(r_ct, -_source_graphic_area.left(), -_source_graphic_area.top());

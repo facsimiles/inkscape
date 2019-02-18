@@ -194,12 +194,12 @@ private:
         void appendOp(char op) {
             if (prevop != 0) str += ' ';
             str += op;
-            prevop = ( op == 'M' ? 'L' : op == 'm' ? 'l' : op );
+            prevop = (op == 'M' ? 'L' : op == 'm' ? 'l' : op);
         }
 
         void append(bool flag) {
             str += ' ';
-            str += ( flag ? '1' : '0' );
+            str += (flag ? '1' : '0');
         }
 
         void append(Geom::Coord v);
@@ -210,10 +210,10 @@ private:
         void appendRelative(Geom::Point p, Geom::Point r);
 
         bool operator<=(const State& s) const {
-            if ( str.size() < s.str.size() ) return true;
-            if ( str.size() > s.str.size() ) return false;
-            if ( switches < s.switches ) return true;
-            if ( switches > s.switches ) return false;
+            if (str.size() < s.str.size()) return true;
+            if (str.size() > s.str.size()) return false;
+            if (switches < s.switches) return true;
+            if (switches > s.switches) return false;
             return true;
         }
 
@@ -238,9 +238,9 @@ private:
     std::string commonbase;
     std::string final;
     std::string const &tail() const {
-        return ( (format == PATHSTRING_ABSOLUTE) ||
-                 (format == PATHSTRING_OPTIMIZE && _abs_state <= _rel_state ) ?
-                 _abs_state.str : _rel_state.str );
+        return ((format == PATHSTRING_ABSOLUTE) ||
+                 (format == PATHSTRING_OPTIMIZE && _abs_state <= _rel_state) ?
+                 _abs_state.str : _rel_state.str);
     }
 
     static PATHSTRING_FORMAT format;

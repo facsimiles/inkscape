@@ -239,7 +239,7 @@ void Inkscape::ObjectSnapper::_collectNodes(SnapSourceType const &t,
                 bool old_pref2 = _snapmanager->snapprefs.isTargetSnappable(SNAPTARGET_ROTATION_CENTER);
                 if (old_pref2) {
                 	std::vector<SPItem*> rotationSource=_snapmanager->getRotationCenterSource();
-                    for ( std::vector<SPItem*>::const_iterator itemlist = rotationSource.begin(); itemlist != rotationSource.end(); ++itemlist) {
+                    for (std::vector<SPItem*>::const_iterator itemlist = rotationSource.begin(); itemlist != rotationSource.end(); ++itemlist) {
                         if ((*i).item == *itemlist) {
                             // don't snap to this item's rotation center
                             _snapmanager->snapprefs.setTargetSnappable(SNAPTARGET_ROTATION_CENTER, false);
@@ -704,7 +704,7 @@ void Inkscape::ObjectSnapper::freeSnap(IntermSnapResults &isr,
     }
 }
 
-void Inkscape::ObjectSnapper::constrainedSnap( IntermSnapResults &isr,
+void Inkscape::ObjectSnapper::constrainedSnap(IntermSnapResults &isr,
                                                   SnapCandidatePoint const &p,
                                                   Geom::OptRect const &bbox_to_snap,
                                                   SnapConstraint const &c,
@@ -784,7 +784,7 @@ void Inkscape::getBBoxPoints(Geom::OptRect const bbox,
 {
     if (bbox) {
         // collect the corners of the bounding box
-        for ( unsigned k = 0 ; k < 4 ; k++ ) {
+        for (unsigned k = 0 ; k < 4 ; k++) {
             if (includeCorners) {
                 points->push_back(SnapCandidatePoint(bbox->corner(k), SNAPSOURCE_BBOX_CORNER, -1, SNAPTARGET_BBOX_CORNER, *bbox));
             }

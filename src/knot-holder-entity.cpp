@@ -151,7 +151,7 @@ PatternKnotHolderEntityXY::knot_set(Geom::Point const &p, Geom::Point const &ori
     // FIXME: this snapping should be done together with knowing whether control was pressed. If GDK_CONTROL_MASK, then constrained snapping should be used.
     Geom::Point p_snapped = snap_knot_position(p, state);
 
-    if ( state & GDK_CONTROL_MASK ) {
+    if (state & GDK_CONTROL_MASK) {
         if (fabs((p - origin)[Geom::X]) > fabs((p - origin)[Geom::Y])) {
             p_snapped[Geom::Y] = origin[Geom::Y];
         } else {
@@ -200,7 +200,7 @@ PatternKnotHolderEntityAngle::knot_set(Geom::Point const &p, Geom::Point const &
     gdouble theta = atan2(p - transform_origin);
     gdouble theta_old = atan2(knot_get() - transform_origin);
 
-    if ( state & GDK_CONTROL_MASK ) {
+    if (state & GDK_CONTROL_MASK) {
         theta = sp_round(theta, M_PI/snaps);
     }
 
@@ -227,7 +227,7 @@ PatternKnotHolderEntityScale::knot_set(Geom::Point const &p, Geom::Point const &
     Geom::Point origin_dt;
     gdouble pat_x = pat->width();
     gdouble pat_y = pat->height();
-    if ( state & GDK_CONTROL_MASK ) {
+    if (state & GDK_CONTROL_MASK) {
         // if ctrl is pressed: use 1:1 scaling
         d = d_origin * (d.length() / d_origin.length());
     }
@@ -255,7 +255,7 @@ void FilterKnotHolderEntity::knot_set(Geom::Point const &p, Geom::Point const &o
     // FIXME: this snapping should be done together with knowing whether control was pressed. If GDK_CONTROL_MASK, then constrained snapping should be used.
     Geom::Point p_snapped = snap_knot_position(p, state);
 
-    if ( state & GDK_CONTROL_MASK ) {
+    if (state & GDK_CONTROL_MASK) {
         if (fabs((p - origin)[Geom::X]) > fabs((p - origin)[Geom::Y])) {
             p_snapped[Geom::Y] = origin[Geom::Y];
         } else {

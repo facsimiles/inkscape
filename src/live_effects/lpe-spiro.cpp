@@ -65,7 +65,7 @@ void sp_spiro_do_effect(SPCurve *curve){
         Geom::Path::const_iterator curve_it2 = ++(path_it.begin());         // outgoing curve
         Geom::Path::const_iterator curve_endit = path_it.end_default(); // this determines when the loop has to stop
 
-        while ( curve_it2 != curve_endit )
+        while (curve_it2 != curve_endit)
         {
             /* This deals with the node between curve_it1 and curve_it2.
              * Loop to end_default (so without last segment), loop ends when curve_it2 hits the end
@@ -81,7 +81,7 @@ void sp_spiro_do_effect(SPCurve *curve){
 
             Geom::NodeType nodetype = Geom::get_nodetype(*curve_it1, *curve_it2);
 
-            if ( nodetype == Geom::NODE_SMOOTH || nodetype == Geom::NODE_SYMM )
+            if (nodetype == Geom::NODE_SMOOTH || nodetype == Geom::NODE_SYMM)
             {
                 if (this_is_line && !next_is_line) {
                     path[ip].ty = ']';

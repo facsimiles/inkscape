@@ -31,23 +31,23 @@ public:
         // Compute bounding box for a
         minax = p[0][X];	 // These are the most likely to be extremal
         maxax = p.back()[X];
-        if( minax > maxax )
+        if(minax > maxax)
             std::swap(minax, maxax);
         for(unsigned i = 1; i < p.size()-1; i++) {
-            if( p[i][X] < minax )
+            if(p[i][X] < minax)
                 minax = p[i][X];
-            else if( p[i][X] > maxax )
+            else if(p[i][X] > maxax)
                 maxax = p[i][X];
         }
 
         minay = p[0][Y];	 // These are the most likely to be extremal
         maxay = p.back()[Y];
-        if( minay > maxay )
+        if(minay > maxay)
             std::swap(minay, maxay);
         for(unsigned i = 1; i < p.size()-1; i++) {
-            if( p[i][Y] < minay )
+            if(p[i][Y] < minay)
                 minay = p[i][Y];
-            else if( p[i][Y] > maxay )
+            else if(p[i][Y] > maxay)
                 maxay = p[i][Y];
         }
 
@@ -61,7 +61,7 @@ find_intersections_bezier_recursive(std::vector<std::pair<double, double> > & xs
                    OldBezier b);
 
 void
-find_intersections_bezier_recursive( std::vector<std::pair<double, double> > &xs,
+find_intersections_bezier_recursive(std::vector<std::pair<double, double> > &xs,
                     vector<Geom::Point> const & A,
                     vector<Geom::Point> const & B,
                     double /*precision*/) {
@@ -81,7 +81,7 @@ void OldBezier::split(double t, OldBezier &left, OldBezier &right) const {
     const unsigned sz = p.size();
     //Geom::Point Vtemp[sz][sz];
     std::vector< std::vector< Geom::Point > > Vtemp;
-    for (size_t i = 0; i < sz; ++i )
+    for (size_t i = 0; i < sz; ++i)
         Vtemp[i].reserve(sz);
 
     /* Copy control points	*/
@@ -166,15 +166,15 @@ Point OldBezier::operator()(double const t) const {
  *	subdivisions and tests) is worth the extra work.
  */
 
-bool intersect_BB( OldBezier a, OldBezier b ) {
+bool intersect_BB(OldBezier a, OldBezier b) {
     double minax, maxax, minay, maxay;
     a.bounds(minax, maxax, minay, maxay);
     double minbx, maxbx, minby, maxby;
     b.bounds(minbx, maxbx, minby, maxby);
     // Test bounding box of b against bounding box of a
     // Not >= : need boundary case
-    return !( ( minax > maxbx ) || ( minay > maxby )
-              || ( minbx > maxax ) || ( minby > maxay ) );
+    return !((minax > maxbx) || (minay > maxby)
+              || (minbx > maxax) || (minby > maxay));
 }
 
 /*
@@ -215,68 +215,68 @@ bool intersect_BB( OldBezier a, OldBezier b ) {
  * is robust: a near-tangential intersection will yield zero or two
  * intersections.
  */
-void recursively_intersect( OldBezier a, double t0, double t1, int deptha,
+void recursively_intersect(OldBezier a, double t0, double t1, int deptha,
 			   OldBezier b, double u0, double u1, int depthb,
 			   std::vector<std::pair<double, double> > &parameters)
 {
     intersect_steps ++;
     //std::cout << deptha << std::endl;
-    if( deptha > 0 )
+    if(deptha > 0)
     {
         OldBezier A[2];
         a.split(0.5, A[0], A[1]);
 	double tmid = (t0+t1)*0.5;
 	deptha--;
-	if( depthb > 0 )
+	if(depthb > 0)
         {
 	    OldBezier B[2];
             b.split(0.5, B[0], B[1]);
 	    double umid = (u0+u1)*0.5;
 	    depthb--;
-	    if( intersect_BB( A[0], B[0] ) )
-		recursively_intersect( A[0], t0, tmid, deptha,
+	    if(intersect_BB(A[0], B[0]))
+		recursively_intersect(A[0], t0, tmid, deptha,
 				      B[0], u0, umid, depthb,
-				      parameters );
-	    if( intersect_BB( A[1], B[0] ) )
-		recursively_intersect( A[1], tmid, t1, deptha,
+				      parameters);
+	    if(intersect_BB(A[1], B[0]))
+		recursively_intersect(A[1], tmid, t1, deptha,
 				      B[0], u0, umid, depthb,
-				      parameters );
-	    if( intersect_BB( A[0], B[1] ) )
-		recursively_intersect( A[0], t0, tmid, deptha,
+				      parameters);
+	    if(intersect_BB(A[0], B[1]))
+		recursively_intersect(A[0], t0, tmid, deptha,
 				      B[1], umid, u1, depthb,
-				      parameters );
-	    if( intersect_BB( A[1], B[1] ) )
-		recursively_intersect( A[1], tmid, t1, deptha,
+				      parameters);
+	    if(intersect_BB(A[1], B[1]))
+		recursively_intersect(A[1], tmid, t1, deptha,
 				      B[1], umid, u1, depthb,
-				      parameters );
+				      parameters);
         }
 	else
         {
-	    if( intersect_BB( A[0], b ) )
-		recursively_intersect( A[0], t0, tmid, deptha,
+	    if(intersect_BB(A[0], b))
+		recursively_intersect(A[0], t0, tmid, deptha,
 				      b, u0, u1, depthb,
-				      parameters );
-	    if( intersect_BB( A[1], b ) )
-		recursively_intersect( A[1], tmid, t1, deptha,
+				      parameters);
+	    if(intersect_BB(A[1], b))
+		recursively_intersect(A[1], tmid, t1, deptha,
 				      b, u0, u1, depthb,
-				      parameters );
+				      parameters);
         }
     }
     else
-	if( depthb > 0 )
+	if(depthb > 0)
         {
 	    OldBezier B[2];
             b.split(0.5, B[0], B[1]);
 	    double umid = (u0 + u1)*0.5;
 	    depthb--;
-	    if( intersect_BB( a, B[0] ) )
-		recursively_intersect( a, t0, t1, deptha,
+	    if(intersect_BB(a, B[0]))
+		recursively_intersect(a, t0, t1, deptha,
 				      B[0], u0, umid, depthb,
-				      parameters );
-	    if( intersect_BB( a, B[1] ) )
-		recursively_intersect( a, t0, t1, deptha,
+				      parameters);
+	    if(intersect_BB(a, B[1]))
+		recursively_intersect(a, t0, t1, deptha,
 				      B[0], umid, u1, depthb,
-				      parameters );
+				      parameters);
         }
 	else // Both segments are fully subdivided; now do line segments
         {
@@ -287,22 +287,22 @@ void recursively_intersect( OldBezier a, double t0, double t1, int deptha,
 	    double xmk = b.p[0][X] - a.p[0][X];
 	    double ymk = b.p[0][Y] - a.p[0][Y];
 	    double det = xnm * ylk - ynm * xlk;
-	    if( 1.0 + det == 1.0 )
+	    if(1.0 + det == 1.0)
 		return;
 	    else
             {
 		double detinv = 1.0 / det;
-		double s = ( xnm * ymk - ynm *xmk ) * detinv;
-		double t = ( xlk * ymk - ylk * xmk ) * detinv;
-		if( ( s < 0.0 ) || ( s > 1.0 ) || ( t < 0.0 ) || ( t > 1.0 ) )
+		double s = (xnm * ymk - ynm *xmk) * detinv;
+		double t = (xlk * ymk - ylk * xmk) * detinv;
+		if((s < 0.0) || (s > 1.0) || (t < 0.0) || (t > 1.0))
 		    return;
-		parameters.push_back(std::pair<double, double>(t0 + s * ( t1 - t0 ),
-                                                         u0 + t * ( u1 - u0 )));
+		parameters.push_back(std::pair<double, double>(t0 + s * (t1 - t0),
+                                                         u0 + t * (u1 - u0)));
             }
         }
 }
 
-inline double log4( double x ) { return log(x)/log(4.); }
+inline double log4(double x) { return log(x)/log(4.); }
 
 /*
  * Wang's theorem is used to estimate the level of subdivision required,
@@ -323,14 +323,14 @@ unsigned wangs_theorem(OldBezier /*a*/) {
     /*
     const double INV_EPS = (1L<<14); // The value of 1.0 / (1L<<14) is enough for most applications
 
-    double la1 = Lmax( ( a.p[2] - a.p[1] ) - (a.p[1] - a.p[0]) );
-    double la2 = Lmax( ( a.p[3] - a.p[2] ) - (a.p[2] - a.p[1]) );
+    double la1 = Lmax((a.p[2] - a.p[1]) - (a.p[1] - a.p[0]));
+    double la2 = Lmax((a.p[3] - a.p[2]) - (a.p[2] - a.p[1]));
     double l0 = std::max(la1, la2);
     unsigned ra;
-    if( l0 * 0.75 * M_SQRT2 + 1.0 == 1.0 )
+    if(l0 * 0.75 * M_SQRT2 + 1.0 == 1.0)
         ra = 0;
     else
-        ra = (unsigned)ceil( log4( M_SQRT2 * 6.0 / 8.0 * INV_EPS * l0 ) );
+        ra = (unsigned)ceil(log4(M_SQRT2 * 6.0 / 8.0 * INV_EPS * l0));
     //std::cout << ra << std::endl;
     return ra;*/
 }
@@ -446,12 +446,12 @@ static void intersect_polish_root (OldBezier &A, double &s,
 }*/
 
 
-void find_intersections_bezier_recursive( std::vector<std::pair<double, double> > &xs,
+void find_intersections_bezier_recursive(std::vector<std::pair<double, double> > &xs,
                          OldBezier a, OldBezier b)
 {
-    if( intersect_BB( a, b ) )
+    if(intersect_BB(a, b))
     {
-	recursively_intersect( a, 0., 1., wangs_theorem(a),
+	recursively_intersect(a, 0., 1., wangs_theorem(a),
                                b, 0., 1., wangs_theorem(b),
                                xs);
     }

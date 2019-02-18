@@ -83,7 +83,7 @@ Geom::Affine FilterUnits::get_matrix_user2pb() const {
 }
 
 Geom::Affine FilterUnits::get_matrix_units2pb(SPFilterUnits units) const {
-    if ( item_bbox && (units == SP_FILTER_UNITS_OBJECTBOUNDINGBOX) ) {
+    if (item_bbox && (units == SP_FILTER_UNITS_OBJECTBOUNDINGBOX)) {
 
         Geom::Affine u2pb = get_matrix_user2pb();
 

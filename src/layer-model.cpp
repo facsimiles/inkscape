@@ -41,9 +41,9 @@ static void _layer_changed(SPObject *top, SPObject *bottom, Inkscape::LayerModel
 namespace Inkscape {
 
 LayerModel::LayerModel()
-    : _doc( nullptr )
-    , _layer_hierarchy( nullptr )
-    , _display_key( 0 )
+    : _doc(nullptr)
+    , _layer_hierarchy(nullptr)
+    , _display_key(0)
 {
 }
 
@@ -111,39 +111,39 @@ void LayerModel::reset() {
  */
 void LayerModel::setCurrentLayer(SPObject *object) {
     g_return_if_fail(SP_IS_GROUP(object));
-    g_return_if_fail( currentRoot() == object || (currentRoot() && currentRoot()->isAncestorOf(object)) );
+    g_return_if_fail(currentRoot() == object || (currentRoot() && currentRoot()->isAncestorOf(object)));
     // printf("Set Layer to ID: %s\n", object->getId());
     _layer_hierarchy->setBottom(object);
 }
 
 void LayerModel::toggleHideAllLayers(bool hide) {
 
-    for ( SPObject* obj = Inkscape::previous_layer(currentRoot(), currentRoot()); obj; obj = Inkscape::previous_layer(currentRoot(), obj) ) {
+    for (SPObject* obj = Inkscape::previous_layer(currentRoot(), currentRoot()); obj; obj = Inkscape::previous_layer(currentRoot(), obj)) {
         SP_ITEM(obj)->setHidden(hide);
     }
 }
 
 void LayerModel::toggleLockAllLayers(bool lock) {
 
-    for ( SPObject* obj = Inkscape::previous_layer(currentRoot(), currentRoot()); obj; obj = Inkscape::previous_layer(currentRoot(), obj) ) {
+    for (SPObject* obj = Inkscape::previous_layer(currentRoot(), currentRoot()); obj; obj = Inkscape::previous_layer(currentRoot(), obj)) {
         SP_ITEM(obj)->setLocked(lock);
     }
 }
 
 void LayerModel::toggleLockOtherLayers(SPObject *object) {
     g_return_if_fail(SP_IS_GROUP(object));
-    g_return_if_fail( currentRoot() == object || (currentRoot() && currentRoot()->isAncestorOf(object)) );
+    g_return_if_fail(currentRoot() == object || (currentRoot() && currentRoot()->isAncestorOf(object)));
 
     bool othersLocked = false;
     std::vector<SPObject*> layers;
-    for ( SPObject* obj = Inkscape::next_layer(currentRoot(), object); obj; obj = Inkscape::next_layer(currentRoot(), obj) ) {
+    for (SPObject* obj = Inkscape::next_layer(currentRoot(), object); obj; obj = Inkscape::next_layer(currentRoot(), obj)) {
         // Don't lock any ancestors, since that would in turn lock the layer as well
         if (!obj->isAncestorOf(object)) {
             layers.push_back(obj);
             othersLocked |= !SP_ITEM(obj)->isLocked();
         }
     }
-    for ( SPObject* obj = Inkscape::previous_layer(currentRoot(), object); obj; obj = Inkscape::previous_layer(currentRoot(), obj) ) {
+    for (SPObject* obj = Inkscape::previous_layer(currentRoot(), object); obj; obj = Inkscape::previous_layer(currentRoot(), obj)) {
         if (!obj->isAncestorOf(object)) {
             layers.push_back(obj);
             othersLocked |= !SP_ITEM(obj)->isLocked();
@@ -151,7 +151,7 @@ void LayerModel::toggleLockOtherLayers(SPObject *object) {
     }
 
     SPItem *item = SP_ITEM(object);
-    if ( item->isLocked() ) {
+    if (item->isLocked()) {
         item->setLocked(false);
     }
 
@@ -163,18 +163,18 @@ void LayerModel::toggleLockOtherLayers(SPObject *object) {
 
 void LayerModel::toggleLayerSolo(SPObject *object) {
     g_return_if_fail(SP_IS_GROUP(object));
-    g_return_if_fail( currentRoot() == object || (currentRoot() && currentRoot()->isAncestorOf(object)) );
+    g_return_if_fail(currentRoot() == object || (currentRoot() && currentRoot()->isAncestorOf(object)));
 
     bool othersShowing = false;
     std::vector<SPObject*> layers;
-    for ( SPObject* obj = Inkscape::next_layer(currentRoot(), object); obj; obj = Inkscape::next_layer(currentRoot(), obj) ) {
+    for (SPObject* obj = Inkscape::next_layer(currentRoot(), object); obj; obj = Inkscape::next_layer(currentRoot(), obj)) {
         // Don't hide ancestors, since that would in turn hide the layer as well
         if (!obj->isAncestorOf(object)) {
             layers.push_back(obj);
             othersShowing |= !SP_ITEM(obj)->isHidden();
         }
     }
-    for ( SPObject* obj = Inkscape::previous_layer(currentRoot(), object); obj; obj = Inkscape::previous_layer(currentRoot(), obj) ) {
+    for (SPObject* obj = Inkscape::previous_layer(currentRoot(), object); obj; obj = Inkscape::previous_layer(currentRoot(), obj)) {
         if (!obj->isAncestorOf(object)) {
             layers.push_back(obj);
             othersShowing |= !SP_ITEM(obj)->isHidden();
@@ -183,7 +183,7 @@ void LayerModel::toggleLayerSolo(SPObject *object) {
 
 
     SPItem *item = SP_ITEM(object);
-    if ( item->isHidden() ) {
+    if (item->isHidden()) {
         item->setHidden(false);
     }
 
@@ -200,7 +200,7 @@ SPObject *LayerModel::layerForObject(SPObject *object) {
 
     SPObject *root=currentRoot();
     object = object->parent;
-    while ( object && object != root && !isLayer(object) ) {
+    while (object && object != root && !isLayer(object)) {
         // Objects in defs have no layer and are NOT in the root layer
         if(SP_IS_DEFS(object))
             return nullptr;
@@ -213,9 +213,9 @@ SPObject *LayerModel::layerForObject(SPObject *object) {
  * True if object is a layer.
  */
 bool LayerModel::isLayer(SPObject *object) const {
-    return ( SP_IS_GROUP(object)
-             && ( SP_GROUP(object)->effectiveLayerMode(_display_key)
-                  == SPGroup::LAYER ) );
+    return (SP_IS_GROUP(object)
+             && (SP_GROUP(object)->effectiveLayerMode(_display_key)
+                  == SPGroup::LAYER));
 }
 
 } // namespace Inkscape

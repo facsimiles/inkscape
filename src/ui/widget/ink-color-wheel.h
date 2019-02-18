@@ -37,7 +37,7 @@ private:
                           double& x1, double& y1,
                           double& x2, double& y2);
     void set_from_xy(const double& x, const double& y);
-    bool is_in_ring(    const double& x, const double& y);
+    bool is_in_ring(const double& x, const double& y);
     bool is_in_triangle(const double& x, const double& y);
 
     enum DragMode {

@@ -130,14 +130,14 @@ Affine Rect::transformTo(Rect const &viewport, Aspect const &aspect) const
 Coord distanceSq(Point const &p, Rect const &rect)
 {
     double dx = 0, dy = 0;
-    if ( p[X] < rect.left() ) {
+    if (p[X] < rect.left()) {
         dx = p[X] - rect.left();
-    } else if ( p[X] > rect.right() ) {
+    } else if (p[X] > rect.right()) {
         dx = rect.right() - p[X];
     }
-    if (p[Y] < rect.top() ) {
+    if (p[Y] < rect.top()) {
         dy = rect.top() - p[Y];
-    } else if (  p[Y] > rect.bottom() ) {
+    } else if (p[Y] > rect.bottom()) {
         dy = p[Y] - rect.bottom();
     }
     return dx*dx+dy*dy;
@@ -149,14 +149,14 @@ Coord distance(Point const &p, Rect const &rect)
 {
     // copy of distanceSq, because we need to use hypot()
     double dx = 0, dy = 0;
-    if ( p[X] < rect.left() ) {
+    if (p[X] < rect.left()) {
         dx = p[X] - rect.left();
-    } else if ( p[X] > rect.right() ) {
+    } else if (p[X] > rect.right()) {
         dx = rect.right() - p[X];
     }
-    if (p[Y] < rect.top() ) {
+    if (p[Y] < rect.top()) {
         dy = rect.top() - p[Y];
-    } else if (  p[Y] > rect.bottom() ) {
+    } else if (p[Y] > rect.bottom()) {
         dy = p[Y] - rect.bottom();
     }
     return hypot(dx, dy);

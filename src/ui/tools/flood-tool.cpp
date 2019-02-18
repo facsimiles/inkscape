@@ -95,7 +95,7 @@ Glib::ustring ch_init[8] = {
     _("Lightness"),
     _("Alpha"),
 };
-const std::vector<Glib::ustring> FloodTool::channel_list( ch_init, ch_init+8 );
+const std::vector<Glib::ustring> FloodTool::channel_list(ch_init, ch_init+8);
 
 Glib::ustring gap_init[4] = {
     NC_("Flood autogap", "None"),
@@ -103,7 +103,7 @@ Glib::ustring gap_init[4] = {
     NC_("Flood autogap", "Medium"),
     NC_("Flood autogap", "Large")
 };
-const std::vector<Glib::ustring> FloodTool::gap_list( gap_init, gap_init+4 );
+const std::vector<Glib::ustring> FloodTool::gap_list(gap_init, gap_init+4);
 
 FloodTool::FloodTool()
     : ToolBase(cursor_paintbucket_xpm)
@@ -147,7 +147,7 @@ void FloodTool::setup() {
     this->sel_changed_connection.disconnect();
     this->sel_changed_connection = this->desktop->getSelection()->connectChanged(
     	sigc::mem_fun(this, &FloodTool::selection_changed)
-    );
+);
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
@@ -472,15 +472,15 @@ static void do_trace(bitmap_coords_info bci, guchar *trace_px, SPDesktop *deskto
             pathRepr->setPosition(-1);
 
             if (union_with_selection) {
-                desktop->messageStack()->flashF( Inkscape::WARNING_MESSAGE,
+                desktop->messageStack()->flashF(Inkscape::WARNING_MESSAGE,
                     ngettext("Area filled, path with <b>%d</b> node created and unioned with selection.","Area filled, path with <b>%d</b> nodes created and unioned with selection.",
-                    SP_PATH(reprobj)->nodesInPath()), SP_PATH(reprobj)->nodesInPath() );
+                    SP_PATH(reprobj)->nodesInPath()), SP_PATH(reprobj)->nodesInPath());
                 selection->add(reprobj);
                 selection->pathUnion(true);
             } else {
-                desktop->messageStack()->flashF( Inkscape::WARNING_MESSAGE,
+                desktop->messageStack()->flashF(Inkscape::WARNING_MESSAGE,
                     ngettext("Area filled, path with <b>%d</b> node created.","Area filled, path with <b>%d</b> nodes created.",
-                    SP_PATH(reprobj)->nodesInPath()), SP_PATH(reprobj)->nodesInPath() );
+                    SP_PATH(reprobj)->nodesInPath()), SP_PATH(reprobj)->nodesInPath());
                 selection->set(reprobj);
             }
 
@@ -780,7 +780,7 @@ static void sp_flood_do_flood_fill(ToolBase *event_context, GdkEvent *event, boo
         /* Create DrawingItems and set transform */
         unsigned dkey = SPItem::display_key_new(1);
         Inkscape::Drawing drawing;
-        Inkscape::DrawingItem *root = document->getRoot()->invoke_show( drawing, dkey, SP_ITEM_SHOW_DISPLAY);
+        Inkscape::DrawingItem *root = document->getRoot()->invoke_show(drawing, dkey, SP_ITEM_SHOW_DISPLAY);
         root->setTransform(affine);
         drawing.setRoot(root);
 
@@ -804,7 +804,7 @@ static void sp_flood_do_flood_fill(ToolBase *event_context, GdkEvent *event, boo
 
         drawing.render(dc, final_bbox);
 
-        //cairo_surface_write_to_png( s, "cairo.png" );
+        //cairo_surface_write_to_png(s, "cairo.png");
 
         cairo_surface_flush(s);
         cairo_surface_destroy(s);
@@ -817,7 +817,7 @@ static void sp_flood_do_flood_fill(ToolBase *event_context, GdkEvent *event, boo
     //     // Dump data to png
     //     cairo_surface_t *s = cairo_image_surface_create_for_data(
     //         px, CAIRO_FORMAT_ARGB32, width, height, stride);
-    //     cairo_surface_write_to_png( s, "cairo2.png" );
+    //     cairo_surface_write_to_png(s, "cairo2.png");
     //     std::cout << "  Wrote cairo2.png" << std::endl;
     // }
 
@@ -1146,10 +1146,10 @@ bool FloodTool::root_handler(GdkEvent* event) {
         }
 
     case GDK_MOTION_NOTIFY:
-        if ( dragging && ( event->motion.state & GDK_BUTTON1_MASK ) && !this->space_panning) {
-            if ( this->within_tolerance
-                 && ( abs( (gint) event->motion.x - this->xp ) < this->tolerance )
-                 && ( abs( (gint) event->motion.y - this->yp ) < this->tolerance ) ) {
+        if (dragging && (event->motion.state & GDK_BUTTON1_MASK) && !this->space_panning) {
+            if (this->within_tolerance
+                 && (abs((gint) event->motion.x - this->xp) < this->tolerance)
+                 && (abs((gint) event->motion.y - this->yp) < this->tolerance)) {
                 break; // do not drag if we're within tolerance from origin
             }
             

@@ -33,14 +33,14 @@ void sp_item_notify_moveto(SPItem &item, SPGuide const &mv_g, int const snappoin
                            double const position, bool const commit)
 {
     return_if_fail(SP_IS_ITEM(&item));
-    return_if_fail( unsigned(snappoint_ix) < 8 );
-    Geom::Point const dir( mv_g.getNormal() );
+    return_if_fail(unsigned(snappoint_ix) < 8);
+    Geom::Point const dir(mv_g.getNormal());
     double const dir_lensq(dot(dir, dir));
-    return_if_fail( dir_lensq != 0 );
+    return_if_fail(dir_lensq != 0);
 
     std::vector<Inkscape::SnapCandidatePoint> snappoints;
     item.getSnappoints(snappoints, nullptr);
-    return_if_fail( snappoint_ix < int(snappoints.size()) );
+    return_if_fail(snappoint_ix < int(snappoints.size()));
 
     double const pos0 = dot(dir, snappoints[snappoint_ix].getPoint());
     /// \todo effic: skip if mv_g is already satisfied.
@@ -53,8 +53,8 @@ void sp_item_notify_moveto(SPItem &item, SPGuide const &mv_g, int const snappoin
        pos0 + s * dot(dir, dir) = position.
        s * lensq(dir) = position - pos0.
        s = (position - pos0) / dot(dir, dir). */
-    Geom::Translate const tr( ( position - pos0 )
-                            * ( dir / dir_lensq ) );
+    Geom::Translate const tr((position - pos0)
+                            * (dir / dir_lensq));
     item.set_i2d_affine(item.i2dt_affine() * tr);
     /// \todo Reget snappoints, check satisfied.
 

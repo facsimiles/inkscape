@@ -176,7 +176,7 @@ LPELattice2::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd
                         unsigned i = ui + vi*sb2[dim].us;
 
                         //This is the offset from the Upperleft point
-                        Geom::Point base(   (ui + iu*(4-2*ui))*width/4.,
+                        Geom::Point base((ui + iu*(4-2*ui))*width/4.,
                                             (vi + iv*(4-2*vi))*height/4.);
 
                         //Special action for corners
@@ -188,7 +188,7 @@ LPELattice2::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd
                         // corner = actual corner of the rectangle
                         // origin = Upperleft point
                         double dl = dot((handles[corner+4*i] - (base + origin)), dir)/dot(dir,dir);
-                        sb2[dim][i][corner] = dl/( dim ? height : width )*pow(4.0,ui+vi);
+                        sb2[dim][i][corner] = dl/(dim ? height : width)*pow(4.0,ui+vi);
                     }
                 }
             }
@@ -218,13 +218,13 @@ Gtk::Widget *
 LPELattice2::newWidget()
 {
     // use manage here, because after deletion of Effect object, others might still be pointing to this widget.
-    Gtk::VBox * vbox = Gtk::manage( new Gtk::VBox(Effect::newWidget()) );
+    Gtk::VBox * vbox = Gtk::manage(new Gtk::VBox(Effect::newWidget()));
 
     vbox->set_border_width(5);
     vbox->set_homogeneous(false);
     vbox->set_spacing(6);
     Gtk::HBox * hbox = Gtk::manage(new Gtk::HBox(false,0));
-    Gtk::VBox * vbox_expander = Gtk::manage( new Gtk::VBox(Effect::newWidget()) );
+    Gtk::VBox * vbox_expander = Gtk::manage(new Gtk::VBox(Effect::newWidget()));
     vbox_expander->set_border_width(0);
     vbox_expander->set_spacing(2);
     Gtk::Button * reset_button = Gtk::manage(new Gtk::Button(Glib::ustring(_("Reset grid"))));
@@ -267,7 +267,7 @@ LPELattice2::newWidget()
     expander->add(*vbox_expander);
     expander->set_expanded(expanded);
     vbox->pack_start(*expander, true, true, 2);
-    expander->property_expanded().signal_changed().connect(sigc::mem_fun(*this, &LPELattice2::onExpanderChanged) );
+    expander->property_expanded().signal_changed().connect(sigc::mem_fun(*this, &LPELattice2::onExpanderChanged));
     if(Gtk::Widget* widg = defaultParamSet()) {
         vbox->pack_start(*widg, true, true, 2);
     }

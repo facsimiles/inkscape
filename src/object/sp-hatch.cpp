@@ -76,7 +76,7 @@ void SPHatch::build(SPDocument* doc, Inkscape::XML::Node* repr)
     readAttr("pitch");
     readAttr("rotate");
     readAttr("xlink:href");
-    readAttr( "style" );
+    readAttr("style");
 
     // Register ourselves
     doc->addResource("hatch", this);

@@ -156,7 +156,7 @@ Glib::ustring FontLister::get_font_family_markup(Gtk::TreeIter const &iter)
     Glib::ustring family = row[FontList.family];
     bool onSystem        = row[FontList.onSystem];
 
-    Glib::ustring family_escaped = Glib::Markup::escape_text( family );
+    Glib::ustring family_escaped = Glib::Markup::escape_text(family);
     Glib::ustring markup;
 
     if (!onSystem) {
@@ -218,15 +218,15 @@ Glib::ustring FontLister::get_font_family_markup(Gtk::TreeIter const &iter)
 
 // Example of how to use "foreach_iter"
 // bool
-// FontLister::print_document_font( const Gtk::TreeModel::iterator &iter ) {
+// FontLister::print_document_font(const Gtk::TreeModel::iterator &iter) {
 //   Gtk::TreeModel::Row row = *iter;
-//   if( !row[FontList.onSystem] ) {
+//   if(!row[FontList.onSystem]) {
 // 	   std::cout << " Not on system: " << row[FontList.family] << std::endl;
 // 	   return false;
 //   }
 //   return true;
 // }
-// font_list_store->foreach_iter( sigc::mem_fun(*this, &FontLister::print_document_font ));
+// font_list_store->foreach_iter(sigc::mem_fun(*this, &FontLister::print_document_font));
 
 /* Used to insert a font that was not in the document and not on the system into the font list. */
 void FontLister::insert_font_family(Glib::ustring new_family)
@@ -332,7 +332,7 @@ void FontLister::update_font_list(SPDocument *document)
 
                         bool exists = false;
                         for(GList *temp = row[FontList.styles]; temp; temp = temp->next) {
-                            if( ((StyleNames*)temp->data)->CssName.compare( j ) == 0 ) {
+                            if(((StyleNames*)temp->data)->CssName.compare(j) == 0) {
                                 exists = true;
                                 break;
                             }
@@ -397,11 +397,11 @@ void FontLister::update_font_data_recursive(SPObject& r, std::map<Glib::ustring,
         return;
     }
 
-    PangoFontDescription* descr = ink_font_description_from_style( r.style );
+    PangoFontDescription* descr = ink_font_description_from_style(r.style);
     const gchar* font_family_char = pango_font_description_get_family(descr);
     if (font_family_char) {
         Glib::ustring font_family(font_family_char);
-        pango_font_description_unset_fields( descr, PANGO_FONT_MASK_FAMILY);
+        pango_font_description_unset_fields(descr, PANGO_FONT_MASK_FAMILY);
         Glib::ustring font_style = pango_font_description_to_string(descr);
 
         if (!font_family.empty() && !font_style.empty()) {
@@ -445,7 +445,7 @@ Glib::ustring FontLister::canonize_fontspec(Glib::ustring fontspec)
     // Pango canonized strings remove space after comma between family names. Put it back.
     // But don't add a space inside a 'font-variation-settings' declaration (this breaks Pango).
     size_t i = 0;
-    while ((i = Canonized.find_first_of(",@", i)) != std::string::npos ) {
+    while ((i = Canonized.find_first_of(",@", i)) != std::string::npos) {
         if (Canonized[i] == '@') // Found start of 'font-variation-settings'.
             break;
         Canonized.replace(i, 1, ", ");
@@ -689,7 +689,7 @@ std::pair<Glib::ustring, Glib::ustring> FontLister::set_font_family(int row, boo
 
 #ifdef DEBUG_FONT
     std::cout << "\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl;
-    std::cout << "FontLister::set_font_family( row ): " << row << std::endl;
+    std::cout << "FontLister::set_font_family(row): " << row << std::endl;
 #endif
 
     current_family_row = row;
@@ -704,7 +704,7 @@ std::pair<Glib::ustring, Glib::ustring> FontLister::set_font_family(int row, boo
     std::pair<Glib::ustring, Glib::ustring> ui = set_font_family(new_family, check_style);
 
 #ifdef DEBUG_FONT
-    std::cout << "FontLister::set_font_family( row ): end" << std::endl;
+    std::cout << "FontLister::set_font_family(row): end" << std::endl;
     std::cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n" << std::endl;
 #endif
     return ui;
@@ -883,7 +883,7 @@ void FontLister::fill_css(SPCSSAttr *css, Glib::ustring fontspec)
     if (!variations.empty()) {
         sp_repr_css_set_property(css, "font-variation-settings", variations.c_str());
     } else {
-        sp_repr_css_unset_property(css,  "font-variation-settings" );
+        sp_repr_css_unset_property(css,  "font-variation-settings");
     }
 #endif
 }
@@ -892,8 +892,8 @@ void FontLister::fill_css(SPCSSAttr *css, Glib::ustring fontspec)
 Glib::ustring FontLister::fontspec_from_style(SPStyle *style)
 {
 
-    PangoFontDescription* descr = ink_font_description_from_style( style );
-    Glib::ustring fontspec = pango_font_description_to_string( descr );
+    PangoFontDescription* descr = ink_font_description_from_style(style);
+    Glib::ustring fontspec = pango_font_description_to_string(descr);
     pango_font_description_free(descr);
 
     //std::cout << "FontLister:fontspec_from_style: " << fontspec << std::endl;
@@ -1000,13 +1000,13 @@ gboolean font_description_better_match(PangoFontDescription *target, PangoFontDe
 }
 
 // void
-// font_description_dump( PangoFontDescription* target ) {
-//   std::cout << "  Font:      " << pango_font_description_to_string( target ) << std::endl;
-//   std::cout << "    style:   " << pango_font_description_get_style(   target ) << std::endl;
-//   std::cout << "    weight:  " << pango_font_description_get_weight(  target ) << std::endl;
-//   std::cout << "    variant: " << pango_font_description_get_variant( target ) << std::endl;
-//   std::cout << "    stretch: " << pango_font_description_get_stretch( target ) << std::endl;
-//   std::cout << "    gravity: " << pango_font_description_get_gravity( target ) << std::endl;
+// font_description_dump(PangoFontDescription* target) {
+//   std::cout << "  Font:      " << pango_font_description_to_string(target) << std::endl;
+//   std::cout << "    style:   " << pango_font_description_get_style(target) << std::endl;
+//   std::cout << "    weight:  " << pango_font_description_get_weight(target) << std::endl;
+//   std::cout << "    variant: " << pango_font_description_get_variant(target) << std::endl;
+//   std::cout << "    stretch: " << pango_font_description_get_stretch(target) << std::endl;
+//   std::cout << "    gravity: " << pango_font_description_get_gravity(target) << std::endl;
 // }
 
 /* Returns style string */
@@ -1035,7 +1035,7 @@ Glib::ustring FontLister::get_best_style_match(Glib::ustring family, Glib::ustri
     PangoFontDescription *target = pango_font_description_from_string(fontspec.c_str());
     PangoFontDescription *best = nullptr;
 
-    //font_description_dump( target );
+    //font_description_dump(target);
 
     GList *styles = default_styles;
     if (row[FontList.onSystem] && !row[FontList.styles]) {
@@ -1046,8 +1046,8 @@ Glib::ustring FontLister::get_best_style_match(Glib::ustring family, Glib::ustri
     for (GList *l = styles; l; l = l->next) {
         Glib::ustring fontspec = family + ", " + ((StyleNames *)l->data)->CssName;
         PangoFontDescription *candidate = pango_font_description_from_string(fontspec.c_str());
-        //font_description_dump( candidate );
-        //std::cout << "           " << font_description_better_match( target, best, candidate ) << std::endl;
+        //font_description_dump(candidate);
+        //std::cout << "           " << font_description_better_match(target, best, candidate) << std::endl;
         if (font_description_better_match(target, best, candidate)) {
             pango_font_description_free(best);
             best = candidate;
@@ -1204,7 +1204,7 @@ void font_lister_style_cell_data_func (Gtk::CellRenderer *renderer, Gtk::TreeIte
     Glib::ustring family = font_lister->get_font_family();
     Glib::ustring style  = row[font_lister->FontStyleList.cssStyle];
 
-    Glib::ustring style_escaped  = Glib::Markup::escape_text( style );
+    Glib::ustring style_escaped  = Glib::Markup::escape_text(style);
     Glib::ustring font_desc = family + ", " + style;
     Glib::ustring markup;
 

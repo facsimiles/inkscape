@@ -197,7 +197,7 @@ public:
      */
     virtual Inkscape::Extension::Extension * getSelectionType() = 0;
 
-    virtual void setSelectionType( Inkscape::Extension::Extension * key ) = 0;
+    virtual void setSelectionType(Inkscape::Extension::Extension * key) = 0;
 
     /**
      * Get the file name chosen by the user.   Valid after an [OK]

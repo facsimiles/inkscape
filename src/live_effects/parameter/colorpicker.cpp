@@ -25,9 +25,9 @@ namespace Inkscape {
 
 namespace LivePathEffect {
 
-ColorPickerParam::ColorPickerParam( const Glib::ustring& label, const Glib::ustring& tip,
+ColorPickerParam::ColorPickerParam(const Glib::ustring& label, const Glib::ustring& tip,
                       const Glib::ustring& key, Inkscape::UI::Widget::Registry* wr,
-                      Effect* effect, const guint32 default_color )
+                      Effect* effect, const guint32 default_color)
     : Parameter(label, tip, key, wr, effect),
       value(default_color),
       defvalue(default_color)
@@ -107,14 +107,14 @@ ColorPickerParam::param_newWidget()
     hbox->set_homogeneous(false);
     hbox->set_spacing(2);
     Inkscape::UI::Widget::RegisteredColorPicker * colorpickerwdg =
-        new Inkscape::UI::Widget::RegisteredColorPicker( param_label,
+        new Inkscape::UI::Widget::RegisteredColorPicker(param_label,
                                                          param_label,
                                                          param_tooltip,
                                                          param_key,
                                                          param_key + "_opacity_LPE",
                                                         *param_wr,
                                                          param_effect->getRepr(),
-                                                         param_effect->getSPDoc() );
+                                                         param_effect->getSPDoc());
     SPDocument *document = SP_ACTIVE_DOCUMENT;
     bool saved = DocumentUndo::getUndoSensitive(document);
     DocumentUndo::setUndoSensitive(document, false);

@@ -66,10 +66,10 @@ Persp3D::~Persp3D() = default;
 void Persp3D::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPObject::build(document, repr);
 
-    this->readAttr( "inkscape:vp_x" );
-    this->readAttr( "inkscape:vp_y" );
-    this->readAttr( "inkscape:vp_z" );
-    this->readAttr( "inkscape:persp3d-origin" );
+    this->readAttr("inkscape:vp_x");
+    this->readAttr("inkscape:vp_y");
+    this->readAttr("inkscape:vp_z");
+    this->readAttr("inkscape:persp3d-origin");
 
     if (repr) {
         repr->addListener (&persp3d_repr_events, this);
@@ -140,7 +140,7 @@ void Persp3D::set(SPAttributeEnum key, gchar const *value) {
             if (value) {
                 Proj::Pt2 pt (value);
                 Proj::Pt2 ptn = legacy_transform_forward(pt, document);
-                perspective_impl->tmat.set_image_pt( Proj::X, ptn );
+                perspective_impl->tmat.set_image_pt(Proj::X, ptn);
             }
             break;
         }
@@ -148,7 +148,7 @@ void Persp3D::set(SPAttributeEnum key, gchar const *value) {
             if (value) {
                 Proj::Pt2 pt (value);
                 Proj::Pt2 ptn = legacy_transform_forward(pt, document);
-                perspective_impl->tmat.set_image_pt( Proj::Y, ptn );
+                perspective_impl->tmat.set_image_pt(Proj::Y, ptn);
             }
             break;
         }
@@ -156,7 +156,7 @@ void Persp3D::set(SPAttributeEnum key, gchar const *value) {
             if (value) {
                 Proj::Pt2 pt (value);
                 Proj::Pt2 ptn = legacy_transform_forward(pt, document);
-                perspective_impl->tmat.set_image_pt( Proj::Z, ptn );
+                perspective_impl->tmat.set_image_pt(Proj::Z, ptn);
             }
             break;
         }
@@ -164,7 +164,7 @@ void Persp3D::set(SPAttributeEnum key, gchar const *value) {
             if (value) {
                 Proj::Pt2 pt (value);
                 Proj::Pt2 ptn = legacy_transform_forward(pt, document);
-                perspective_impl->tmat.set_image_pt( Proj::W, ptn );
+                perspective_impl->tmat.set_image_pt(Proj::W, ptn);
             }
             break;
         }
@@ -207,7 +207,7 @@ Persp3D *persp3d_create_xml_element(SPDocument *document, Persp3DImpl *dup) {// 
     // Use 'user-units'
     double width = document->getWidth().value("px");
     double height = document->getHeight().value("px");
-    if( document->getRoot()->viewBox_set ) {
+    if(document->getRoot()->viewBox_set) {
         Geom::Rect vb = document->getRoot()->viewBox;
         width = vb.width();
         height = vb.height();
@@ -216,7 +216,7 @@ Persp3D *persp3d_create_xml_element(SPDocument *document, Persp3DImpl *dup) {// 
     Proj::Pt2 proj_vp_x = Proj::Pt2 (0.0,   height/2.0, 1.0);
     Proj::Pt2 proj_vp_y = Proj::Pt2 (0.0,   1000.0,     0.0);
     Proj::Pt2 proj_vp_z = Proj::Pt2 (width, height/2.0, 1.0);
-    Proj::Pt2 proj_origin = Proj::Pt2 (width/2.0, height/3.0, 1.0 );
+    Proj::Pt2 proj_origin = Proj::Pt2 (width/2.0, height/3.0, 1.0);
 
     if (dup) {
         proj_vp_x = dup->tmat.column (Proj::X);
@@ -243,7 +243,7 @@ Persp3D *persp3d_create_xml_element(SPDocument *document, Persp3DImpl *dup) {// 
     defs->getRepr()->addChild(repr, nullptr);
     Inkscape::GC::release(repr);
 
-    return reinterpret_cast<Persp3D *>( defs->get_child_by_repr(repr) );
+    return reinterpret_cast<Persp3D *>(defs->get_child_by_repr(repr));
 }
 
 Persp3D *persp3d_document_first_persp(SPDocument *document)
@@ -271,28 +271,28 @@ Inkscape::XML::Node* Persp3D::write(Inkscape::XML::Document *xml_doc, Inkscape::
 
     if (flags & SP_OBJECT_WRITE_EXT) {
         {
-            Proj::Pt2 pt = perspective_impl->tmat.column( Proj::X );
+            Proj::Pt2 pt = perspective_impl->tmat.column(Proj::X);
             Inkscape::SVGOStringStream os;
             pt = legacy_transform_backward(pt, document);
             os << pt[0] << " : " << pt[1] << " : " << pt[2];
             repr->setAttribute("inkscape:vp_x", os.str().c_str());
         }
         {
-            Proj::Pt2 pt = perspective_impl->tmat.column( Proj::Y );
+            Proj::Pt2 pt = perspective_impl->tmat.column(Proj::Y);
             Inkscape::SVGOStringStream os;
             pt = legacy_transform_backward(pt, document);
             os << pt[0] << " : " << pt[1] << " : " << pt[2];
             repr->setAttribute("inkscape:vp_y", os.str().c_str());
         }
         {
-            Proj::Pt2 pt = perspective_impl->tmat.column( Proj::Z );
+            Proj::Pt2 pt = perspective_impl->tmat.column(Proj::Z);
             Inkscape::SVGOStringStream os;
             pt = legacy_transform_backward(pt, document);
             os << pt[0] << " : " << pt[1] << " : " << pt[2];
             repr->setAttribute("inkscape:vp_z", os.str().c_str());
         }
         {
-            Proj::Pt2 pt = perspective_impl->tmat.column( Proj::W );
+            Proj::Pt2 pt = perspective_impl->tmat.column(Proj::W);
             Inkscape::SVGOStringStream os;
             pt = legacy_transform_backward(pt, document);
             os << pt[0] << " : " << pt[1] << " : " << pt[2];
@@ -381,7 +381,7 @@ persp3d_rotate_VP (Persp3D *persp, Proj::Axis axis, double angle, bool alt_press
     Proj::Pt2 v_dir_proj (persp->perspective_impl->tmat.column(axis));
     Geom::Point v_dir (v_dir_proj[0], v_dir_proj[1]);
     double a = Geom::atan2 (v_dir) * 180/M_PI;
-    a += alt_pressed ? 0.5 * ((angle > 0 ) - (angle < 0)) : angle; // the r.h.s. yields +/-0.5 or angle
+    a += alt_pressed ? 0.5 * ((angle > 0) - (angle < 0)) : angle; // the r.h.s. yields +/-0.5 or angle
     persp->perspective_impl->tmat.set_infinite_direction (axis, a);
 
     persp3d_update_box_reprs (persp);
@@ -507,12 +507,12 @@ persp3d_absorb(Persp3D *persp1, Persp3D *persp2) {
 }
 
 static void
-persp3d_on_repr_attr_changed ( Inkscape::XML::Node * /*repr*/,
+persp3d_on_repr_attr_changed (Inkscape::XML::Node * /*repr*/,
                                const gchar */*key*/,
                                const gchar */*oldval*/,
                                const gchar */*newval*/,
                                bool /*is_interactive*/,
-                               void * data )
+                               void * data)
 {
     if (!data)
         return;

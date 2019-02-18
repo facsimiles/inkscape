@@ -21,7 +21,7 @@ namespace LivePathEffect {
 /**
  * Updates the \c boundingbox_X and \c boundingbox_Y values from the geometric bounding box of \c lpeitem.
  *
- * @pre   lpeitem must have an existing geometric boundingbox (usually this is guaranteed when: \code SP_SHAPE(lpeitem)->curve != NULL \endcode )
+ * @pre   lpeitem must have an existing geometric boundingbox (usually this is guaranteed when: \code SP_SHAPE(lpeitem)->curve != NULL \endcode)
  *        It's not possible to run LPEs on items without their original-d having a bbox.
  * @param lpeitem   This is not allowed to be NULL.
  * @param absolute  Determines whether the bbox should be calculated of the untransformed lpeitem (\c absolute = \c false)
@@ -45,7 +45,7 @@ GroupBBoxEffect::clip_mask_bbox(SPLPEItem *item, Geom::Affine transform)
     SPGroup * group = dynamic_cast<SPGroup *>(item);
     if (group) {
         std::vector<SPItem*> item_list = sp_item_group_item_list(group);
-        for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
+        for (std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
             SPLPEItem * subitem = dynamic_cast<SPLPEItem *>(*iter);
             if (subitem) {
                 bbox.unionWith(clip_mask_bbox(subitem, affine));

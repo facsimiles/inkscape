@@ -25,7 +25,7 @@ namespace LivePathEffect {
  */
 class ToggleButtonParam : public Parameter {
 public:
-    ToggleButtonParam( const Glib::ustring& label,
+    ToggleButtonParam(const Glib::ustring& label,
                const Glib::ustring& tip,
                const Glib::ustring& key,
                Inkscape::UI::Widget::Registry* wr,

@@ -143,7 +143,7 @@ ExecutionEnv::createWorkingDialog () {
 }
 
 void
-ExecutionEnv::workingCanceled( const int /*resp*/) {
+ExecutionEnv::workingCanceled(const int /*resp*/) {
     cancel();
     undo();
     return;

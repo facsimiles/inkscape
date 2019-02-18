@@ -29,12 +29,12 @@ public:
     { }
 
     bool operator==(SPGuideConstraint const &o) const {
-        return ( ( g == o.g )
-                 && ( snappoint_ix == o.snappoint_ix ) );
+        return ((g == o.g)
+                 && (snappoint_ix == o.snappoint_ix));
     }
 
     bool operator!=(SPGuideConstraint const &o) const {
-        return !( *this == o );
+        return !(*this == o);
     }
 };
 

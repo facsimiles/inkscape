@@ -157,7 +157,7 @@ unsigned int sp_svg_number_write_de(gchar *buf, int bufLen, double val, unsigned
         eval<0?tprec+(unsigned int)-eval+1:
         eval+1<(int)tprec?tprec+1:
         (unsigned int)eval+1;
-    unsigned int maxnumdigitsWithExp = tprec + ( eval<0 ? 4 : 3 ); // It's not necessary to take larger exponents into account, because then maxnumdigitsWithoutExp is DEFINITELY larger
+    unsigned int maxnumdigitsWithExp = tprec + (eval<0 ? 4 : 3); // It's not necessary to take larger exponents into account, because then maxnumdigitsWithoutExp is DEFINITELY larger
     if (maxnumdigitsWithoutExp <= maxnumdigitsWithExp) {
         return sp_svg_number_write_d(buf, bufLen, val, tprec, 0);
     } else {
@@ -470,7 +470,7 @@ void SVGLength::set(SVGLength::Unit u, float v)
     _set = true;
     unit = u;
     Glib::ustring hack("px");
-    switch( unit ) {
+    switch(unit) {
         case NONE:
         case PX:
         case EM:

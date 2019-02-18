@@ -135,10 +135,10 @@ sp_desktop_apply_css_recursive(SPObject *o, SPCSSAttr *css, bool skip_lines)
            o->parent &&
            (dynamic_cast<SPFlowregion *>(o->parent) ||
             dynamic_cast<SPFlowregionExclude *>(o->parent)
-               )
-              )
-            )
-        ) {
+)
+)
+)
+) {
 
         SPCSSAttr *css_set = sp_repr_css_attr_new();
         sp_repr_css_merge(css_set, css);
@@ -147,8 +147,8 @@ sp_desktop_apply_css_recursive(SPObject *o, SPCSSAttr *css, bool skip_lines)
         {
             Geom::Affine const local(item->i2doc_affine());
             double const ex(local.descrim());
-            if ( ( ex != 0. )
-                 && ( ex != 1. ) ) {
+            if ((ex != 0.)
+                 && (ex != 1.)) {
                 sp_css_attr_scale(css_set, 1/ex);
             }
         }
@@ -245,7 +245,7 @@ sp_desktop_set_style(Inkscape::ObjectSet *set, SPDesktop *desktop, SPCSSAttr *cs
 
                 // If any font property has changed, then we have written out the font
                 // properties in longhand and we need to remove the 'font' shorthand.
-                if( !sp_repr_css_property_is_unset(css, "font-family") ) {
+                if(!sp_repr_css_property_is_unset(css, "font-family")) {
                     sp_repr_css_unset_property(css, "font");
                 }
 
@@ -319,7 +319,7 @@ sp_desktop_get_master_opacity_tool(SPDesktop *desktop, Glib::ustring const &tool
         gchar const *property = css ? sp_repr_css_property(css, "opacity", "1.000") : nullptr;
 
         if (desktop->current && property) { // if there is style and the property in it,
-            if ( !sp_svg_number_read_f(property, &value) ) {
+            if (!sp_svg_number_read_f(property, &value)) {
                 value = 1.0; // things failed. set back to the default
             } else {
                 if (has_opacity)
@@ -348,7 +348,7 @@ sp_desktop_get_opacity_tool(SPDesktop *desktop, Glib::ustring const &tool, bool 
         gchar const *property = css ? sp_repr_css_property(css, is_fill ? "fill-opacity": "stroke-opacity", "1.000") : nullptr;
 
         if (desktop->current && property) { // if there is style and the property in it,
-            if ( !sp_svg_number_read_f(property, &value) ) {
+            if (!sp_svg_number_read_f(property, &value)) {
                 value = 1.0; // things failed. set back to the default
             }
         }
@@ -458,7 +458,7 @@ stroke_average_width (const std::vector<SPItem*> &objects)
 
         double width = item->style->stroke_width.computed * i2dt.descrim();
 
-        if ( item->style->stroke.isNone() || IS_NAN(width)) {
+        if (item->style->stroke.isNone() || IS_NAN(width)) {
             ++n_notstroked;   // do not count nonstroked objects
             continue;
         } else {
@@ -474,13 +474,13 @@ stroke_average_width (const std::vector<SPItem*> &objects)
     return avgwidth / (objects.size() - n_notstroked);
 }
 
-static bool vectorsClose( std::vector<double> const &lhs, std::vector<double> const &rhs )
+static bool vectorsClose(std::vector<double> const &lhs, std::vector<double> const &rhs)
 {
     bool isClose = false;
-    if ( lhs.size() == rhs.size() ) {
+    if (lhs.size() == rhs.size()) {
         static double epsilon = 1e-6;
         isClose = true;
-        for ( size_t i = 0; (i < lhs.size()) && isClose; ++i ) {
+        for (size_t i = 0; (i < lhs.size()) && isClose; ++i) {
             isClose = fabs(lhs[i] - rhs[i]) < epsilon;
         }
     }
@@ -603,10 +603,10 @@ objects_query_fillstroke (const std::vector<SPItem*> &objects, SPStyle *style_re
                     same_color = false;
                     iccColor = nullptr;
                 }
-                if ( iccSeen && iccColor ) {
-                    if ( !paint->value.color.icc
+                if (iccSeen && iccColor) {
+                    if (!paint->value.color.icc
                          || (iccColor->colorProfile != paint->value.color.icc->colorProfile)
-                         || !vectorsClose(iccColor->colors, paint->value.color.icc->colors) ) {
+                         || !vectorsClose(iccColor->colors, paint->value.color.icc->colors)) {
                         same_color = false;
                         iccColor = nullptr;
                     }
@@ -652,7 +652,7 @@ objects_query_fillstroke (const std::vector<SPItem*> &objects, SPStyle *style_re
         }
 
 
-        if ( iccSeen && iccColor ) {
+        if (iccSeen && iccColor) {
             // TODO check for existing
             SVGICCColor* tmp = new SVGICCColor(*iccColor);
             paint_res->value.color.icc = tmp;
@@ -761,7 +761,7 @@ objects_query_strokewidth (const std::vector<SPItem*> &objects, SPStyle *style_r
             continue;
         }
 
-        if ( style->stroke.isNone() && !(
+        if (style->stroke.isNone() && !(
                  style->marker.set       || // stroke width affects markers, so if there's no
                  style->marker_start.set || // stroke but only markers then we should
                  style->marker_mid.set   || // still calculate the stroke width
@@ -830,7 +830,7 @@ objects_query_miterlimit (const std::vector<SPItem*> &objects, SPStyle *style_re
             continue;
         }
 
-        if ( style->stroke.isNone() ) {
+        if (style->stroke.isNone()) {
             continue;
         }
 
@@ -887,7 +887,7 @@ objects_query_strokecap (const std::vector<SPItem*> &objects, SPStyle *style_res
             continue;
         }
 
-        if ( style->stroke.isNone() ) {
+        if (style->stroke.isNone()) {
             continue;
         }
 
@@ -937,7 +937,7 @@ objects_query_strokejoin (const std::vector<SPItem*> &objects, SPStyle *style_re
             continue;
         }
 
-        if ( style->stroke.isNone() ) {
+        if (style->stroke.isNone()) {
             continue;
         }
 
@@ -988,14 +988,14 @@ objects_query_paintorder (const std::vector<SPItem*> &objects, SPStyle *style_re
             continue;
         }
 
-        if ( style->stroke.isNone() ) {
+        if (style->stroke.isNone()) {
             continue;
         }
 
         n_order ++;
 
         if (style->paint_order.set) {
-            if (!prev_order.empty() && prev_order.compare( style->paint_order.value ) != 0) {
+            if (!prev_order.empty() && prev_order.compare(style->paint_order.value) != 0) {
                 same_order = false;
             }
             prev_order = style->paint_order.value;
@@ -1003,8 +1003,8 @@ objects_query_paintorder (const std::vector<SPItem*> &objects, SPStyle *style_re
     }
 
     
-    g_free( style_res->paint_order.value );
-    style_res->paint_order.value= g_strdup( prev_order.c_str() );
+    g_free(style_res->paint_order.value);
+    style_res->paint_order.value= g_strdup(prev_order.c_str());
     style_res->paint_order.set = true;
 
     if (n_order == 0) {
@@ -1237,11 +1237,11 @@ objects_query_fontstyle (const std::vector<SPItem*> &objects, SPStyle *style_res
         texts ++;
 
         if (set &&
-            ( ( style_res->font_weight.computed    != style->font_weight.computed  ) ||
-              ( style_res->font_style.computed     != style->font_style.computed   ) ||
-              ( style_res->font_stretch.computed   != style->font_stretch.computed ) ||
-              ( style_res->font_variant.computed   != style->font_variant.computed ) ||
-              ( style_res->font_variation_settings != style->font_variation_settings ) ) ) {
+            ((style_res->font_weight.computed    != style->font_weight.computed) ||
+              (style_res->font_style.computed     != style->font_style.computed) ||
+              (style_res->font_stretch.computed   != style->font_stretch.computed) ||
+              (style_res->font_variant.computed   != style->font_variant.computed) ||
+              (style_res->font_variation_settings != style->font_variation_settings))) {
             different = true;  // different styles
         }
 
@@ -1319,19 +1319,19 @@ objects_query_fontvariants (const std::vector<SPItem*> &objects, SPStyle *style_
         // value stores which bits are different between objects. This is a bit of an abuse of
         // the values but then we don't need to add new variables to class.
         if (set) {
-            ligatures_res->value  |= (ligatures_res->computed ^ ligatures_in->computed );
+            ligatures_res->value  |= (ligatures_res->computed ^ ligatures_in->computed);
             ligatures_res->computed &= ligatures_in->computed;
 
-            position_res->value  |= (position_res->computed ^ position_in->computed );
+            position_res->value  |= (position_res->computed ^ position_in->computed);
             position_res->computed &= position_in->computed;
 
-            caps_res->value  |= (caps_res->computed ^ caps_in->computed );
+            caps_res->value  |= (caps_res->computed ^ caps_in->computed);
             caps_res->computed &= caps_in->computed;
 
-            numeric_res->value  |= (numeric_res->computed ^ numeric_in->computed );
+            numeric_res->value  |= (numeric_res->computed ^ numeric_in->computed);
             numeric_res->computed &= numeric_in->computed;
 
-            asian_res->value  |= (asian_res->computed ^ asian_in->computed );
+            asian_res->value  |= (asian_res->computed ^ asian_in->computed);
             asian_res->computed &= asian_in->computed;
 
         } else {
@@ -1390,9 +1390,9 @@ objects_query_writing_modes (const std::vector<SPItem*> &objects, SPStyle *style
         texts ++;
 
         if (set &&
-            ( ( style_res->writing_mode.computed     != style->writing_mode.computed     ) ||
-              ( style_res->direction.computed        != style->direction.computed        ) ||
-              ( style_res->text_orientation.computed != style->text_orientation.computed ) ) ) {
+            ((style_res->writing_mode.computed     != style->writing_mode.computed) ||
+              (style_res->direction.computed        != style->direction.computed) ||
+              (style_res->text_orientation.computed != style->text_orientation.computed))) {
             different = true;  // different styles
         }
 
@@ -1516,13 +1516,13 @@ objects_query_baselines (const std::vector<SPItem*> &objects, SPStyle *style_res
             current.value    = style->baseline_shift.value;
             current.computed = style->baseline_shift.computed;
 
-            if( set ) {
-                if( current.set      != old.set ||
+            if(set) {
+                if(current.set      != old.set ||
                     current.inherit  != old.inherit ||
                     current.type     != old.type ||
                     current.literal  != old.literal ||
                     current.value    != old.value ||
-                    current.computed != old.computed ) {
+                    current.computed != old.computed) {
                     // Maybe this needs to be better thought out.
                     different = true;
                 }
@@ -1539,7 +1539,7 @@ objects_query_baselines (const std::vector<SPItem*> &objects, SPStyle *style_res
         }
     }
 
-    if (different || !set ) {
+    if (different || !set) {
         style_res->baseline_shift.set = false;
         style_res->baseline_shift.computed = 0.0;
     } else {

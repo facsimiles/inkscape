@@ -199,8 +199,8 @@ void CairoRenderContext::setStateForStyle(SPStyle const *style)
 CairoRenderContext* 
 CairoRenderContext::cloneMe(double width, double height) const
 {
-    g_assert( _is_valid );
-    g_assert( width > 0.0 && height > 0.0 );
+    g_assert(_is_valid);
+    g_assert(width > 0.0 && height > 0.0);
 
     CairoRenderContext *new_context = _renderer->createContext();
     cairo_surface_t *surface = cairo_surface_create_similar(cairo_get_target(_cr), CAIRO_CONTENT_COLOR_ALPHA,
@@ -216,7 +216,7 @@ CairoRenderContext::cloneMe(double width, double height) const
 
 CairoRenderContext* CairoRenderContext::cloneMe() const
 {
-    g_assert( _is_valid );
+    g_assert(_is_valid);
 
     return cloneMe(_width, _height);
 }
@@ -295,9 +295,9 @@ bool CairoRenderContext::setPdfTarget(gchar const *utf8_fn)
             _stream = osf;
         } else {
             /* put cwd stuff in here */
-            gchar *qn = ( *fn
+            gchar *qn = (*fn
                     ? g_strdup_printf("lpr -P %s", fn)  /* FIXME: quote fn */
-                : g_strdup("lpr") );
+                : g_strdup("lpr"));
 #ifndef _WIN32
             osp = popen(qn, "w");
 #else
@@ -377,9 +377,9 @@ bool CairoRenderContext::setPsTarget(gchar const *utf8_fn)
             _stream = osf;
         } else {
             /* put cwd stuff in here */
-            gchar *qn = ( *fn
+            gchar *qn = (*fn
                     ? g_strdup_printf("lpr -P %s", fn)  /* FIXME: quote fn */
-                : g_strdup("lpr") );
+                : g_strdup("lpr"));
 #ifndef _WIN32
             osp = popen(qn, "w");
 #else
@@ -465,7 +465,7 @@ int CairoRenderContext::getBitmapResolution()
 cairo_surface_t*
 CairoRenderContext::getSurface()
 {
-    g_assert( _is_valid );
+    g_assert(_is_valid);
 
     return _surface;
 }
@@ -523,7 +523,7 @@ CairoRenderContext::getClipMode() const
 CairoRenderState* CairoRenderContext::_createState()
 {
     CairoRenderState *state = static_cast<CairoRenderState*>(g_try_malloc(sizeof(CairoRenderState)));
-    g_assert( state != nullptr );
+    g_assert(state != nullptr);
 
     state->has_filtereffect = FALSE;
     state->merge_opacity = TRUE;
@@ -539,7 +539,7 @@ CairoRenderState* CairoRenderContext::_createState()
 
 void CairoRenderContext::pushLayer()
 {
-    g_assert( _is_valid );
+    g_assert(_is_valid);
 
     TRACE(("--pushLayer\n"));
     cairo_push_group(_cr);
@@ -556,7 +556,7 @@ void CairoRenderContext::pushLayer()
 void
 CairoRenderContext::popLayer()
 {
-    g_assert( _is_valid );
+    g_assert(_is_valid);
 
     float opacity = _state->opacity;
     TRACE(("--popLayer w/ opacity %f\n", opacity));
@@ -664,16 +664,16 @@ CairoRenderContext::popLayer()
             // Cairo surface is expecting the mask to be 96 dpi.
             float surface_width = _width;
             float surface_height = _height;
-            if( _vector_based_target ) {
+            if(_vector_based_target) {
                 surface_width *= 4.0/3.0;
                 surface_height *= 4.0/3.0;
             }
-            if (!mask_ctx->setupSurface( surface_width, surface_height )) {
+            if (!mask_ctx->setupSurface(surface_width, surface_height)) {
                 TRACE(("mask: setupSurface failed\n"));
                 _renderer->destroyContext(mask_ctx);
                 return;
             }
-            TRACE(("mask surface: %f x %f at %i dpi\n", surface_width, surface_height, _dpi ));
+            TRACE(("mask surface: %f x %f at %i dpi\n", surface_width, surface_height, _dpi));
 
             // Mask should start black, but it is created white.
             cairo_set_source_rgba(mask_ctx->_cr, 0.0, 0.0, 0.0, 1.0);
@@ -726,7 +726,7 @@ CairoRenderContext::popLayer()
                     guint32 *pixel = reinterpret_cast<guint32 *>(row_data) + i;
                     float lum_alpha = (((*pixel & 0x00ff0000) >> 16) * coeff_r +
                                        ((*pixel & 0x0000ff00) >>  8) * coeff_g +
-                                       ((*pixel & 0x000000ff)      ) * coeff_b );
+                                       ((*pixel & 0x000000ff)) * coeff_b);
                     // lum_alpha can be slightly greater than 1 due to rounding errors...
                     // but this should be OK since it doesn't matter what the lower
                     // six hexadecimal numbers of *pixel are.
@@ -756,7 +756,7 @@ CairoRenderContext::popLayer()
 void
 CairoRenderContext::addClipPath(Geom::PathVector const &pv, SPIEnum const *fill_rule)
 {
-    g_assert( _is_valid );
+    g_assert(_is_valid);
 
     // here it should be checked whether the current clip winding changed
     // so we could switch back to masked clipping
@@ -771,7 +771,7 @@ CairoRenderContext::addClipPath(Geom::PathVector const &pv, SPIEnum const *fill_
 void
 CairoRenderContext::addClippingRect(double x, double y, double width, double height)
 {
-    g_assert( _is_valid );
+    g_assert(_is_valid);
 
     cairo_rectangle(_cr, x, y, width, height);
     cairo_clip(_cr);
@@ -923,7 +923,7 @@ CairoRenderContext::_finishSurfaceSetup(cairo_surface_t *surface, cairo_matrix_t
 bool
 CairoRenderContext::finish(bool finish_surface)
 {
-    g_assert( _is_valid );
+    g_assert(_is_valid);
 
     if (_vector_based_target && finish_surface)
         cairo_show_page(_cr);
@@ -963,7 +963,7 @@ CairoRenderContext::finish(bool finish_surface)
 void
 CairoRenderContext::transform(Geom::Affine const &transform)
 {
-    g_assert( _is_valid );
+    g_assert(_is_valid);
 
     cairo_matrix_t matrix;
     _initCairoMatrix(&matrix, transform);
@@ -976,7 +976,7 @@ CairoRenderContext::transform(Geom::Affine const &transform)
 void
 CairoRenderContext::setTransform(Geom::Affine const &transform)
 {
-    g_assert( _is_valid );
+    g_assert(_is_valid);
 
     cairo_matrix_t matrix;
     _initCairoMatrix(&matrix, transform);
@@ -986,7 +986,7 @@ CairoRenderContext::setTransform(Geom::Affine const &transform)
 
 Geom::Affine CairoRenderContext::getTransform() const
 {
-    g_assert( _is_valid );
+    g_assert(_is_valid);
 
     cairo_matrix_t ctm;
     cairo_get_matrix(_cr, &ctm);
@@ -1002,7 +1002,7 @@ Geom::Affine CairoRenderContext::getTransform() const
 
 Geom::Affine CairoRenderContext::getParentTransform() const
 {
-    g_assert( _is_valid );
+    g_assert(_is_valid);
 
     CairoRenderState *parent_state = getParentState();
     return parent_state->transform;
@@ -1010,7 +1010,7 @@ Geom::Affine CairoRenderContext::getParentTransform() const
 
 void CairoRenderContext::pushState()
 {
-    g_assert( _is_valid );
+    g_assert(_is_valid);
 
     cairo_save(_cr);
 
@@ -1023,14 +1023,14 @@ void CairoRenderContext::pushState()
 
 void CairoRenderContext::popState()
 {
-    g_assert( _is_valid );
+    g_assert(_is_valid);
 
     cairo_restore(_cr);
 
     g_free(_state_stack.back());
     _state_stack.pop_back();
 
-    g_assert( !_state_stack.empty());
+    g_assert(!_state_stack.empty());
     _state = _state_stack.back();
 }
 
@@ -1047,7 +1047,7 @@ static bool pattern_hasItemChildren(SPPattern *pat)
 cairo_pattern_t*
 CairoRenderContext::_createPatternPainter(SPPaintServer const *const paintserver, Geom::OptRect const &pbox)
 {
-    g_assert( SP_IS_PATTERN(paintserver) );
+    g_assert(SP_IS_PATTERN(paintserver));
 
     SPPattern *pat = SP_PATTERN (paintserver);
 
@@ -1180,7 +1180,7 @@ CairoRenderContext::_createPatternPainter(SPPaintServer const *const paintserver
 cairo_pattern_t*
 CairoRenderContext::_createHatchPainter(SPPaintServer const *const paintserver, Geom::OptRect const &pbox) {
     SPHatch const *hatch = dynamic_cast<SPHatch const *>(paintserver);
-    g_assert( hatch );
+    g_assert(hatch);
 
     g_assert(hatch->pitch() > 0);
 
@@ -1312,7 +1312,7 @@ CairoRenderContext::_createPatternForPaintServer(SPPaintServer const *const pain
         pattern = mg->pattern_new(_cr, pbox, 1.0);
     } else if (SP_IS_PATTERN (paintserver)) {
         pattern = _createPatternPainter(paintserver, pbox);
-    } else if ( dynamic_cast<SPHatch const *>(paintserver) ) {
+    } else if (dynamic_cast<SPHatch const *>(paintserver)) {
         pattern = _createHatchPainter(paintserver, pbox);
     } else {
         return nullptr;
@@ -1369,9 +1369,9 @@ CairoRenderContext::_createPatternForPaintServer(SPPaintServer const *const pain
 void
 CairoRenderContext::_setFillStyle(SPStyle const *const style, Geom::OptRect const &pbox)
 {
-    g_return_if_fail( !style->fill.set
+    g_return_if_fail(!style->fill.set
                       || style->fill.isColor()
-                      || style->fill.isPaintserver() );
+                      || style->fill.isPaintserver());
 
     float alpha = SP_SCALE24_TO_FLOAT(style->fill_opacity.value);
     if (_state->merge_opacity) {
@@ -1418,7 +1418,7 @@ CairoRenderContext::_setStrokeStyle(SPStyle const *style, Geom::OptRect const &p
 
         cairo_set_source_rgba(_cr, rgb[0], rgb[1], rgb[2], alpha);
     } else {
-        g_assert( style->stroke.isPaintserver()
+        g_assert(style->stroke.isPaintserver()
                   || SP_IS_GRADIENT(SP_STYLE_STROKE_SERVER(style))
                   || SP_IS_PATTERN(SP_STYLE_STROKE_SERVER(style))
                   || dynamic_cast<SPHatch *>(SP_STYLE_STROKE_SERVER(style)));
@@ -1435,7 +1435,7 @@ CairoRenderContext::_setStrokeStyle(SPStyle const *style, Geom::OptRect const &p
     {
         size_t ndashes = style->stroke_dasharray.values.size();
         double* dashes =(double*)malloc(ndashes*sizeof(double));
-        for( unsigned i = 0; i < ndashes; ++i ) {
+        for(unsigned i = 0; i < ndashes; ++i) {
             dashes[i] = style->stroke_dasharray.values[i].value;
         }
         cairo_set_dash(_cr, dashes, ndashes, style->stroke_dashoffset.value);
@@ -1538,7 +1538,7 @@ CairoRenderContext::_prepareRenderText()
 bool
 CairoRenderContext::renderPathVector(Geom::PathVector const & pathv, SPStyle const *style, Geom::OptRect const &pbox, CairoPaintOrder order)
 {
-    g_assert( _is_valid );
+    g_assert(_is_valid);
 
     _prepareRenderGraphic();
 
@@ -1566,8 +1566,8 @@ CairoRenderContext::renderPathVector(Geom::PathVector const & pathv, SPStyle con
     if (no_fill && no_stroke)
         return true;
 
-    bool need_layer = ( !_state->merge_opacity && !_state->need_layer &&
-                        ( _state->opacity != 1.0 || _state->clip_path != nullptr || _state->mask != nullptr ) );
+    bool need_layer = (!_state->merge_opacity && !_state->need_layer &&
+                        (_state->opacity != 1.0 || _state->clip_path != nullptr || _state->mask != nullptr));
 
     if (!need_layer)
         cairo_save(_cr);
@@ -1619,7 +1619,7 @@ CairoRenderContext::renderPathVector(Geom::PathVector const & pathv, SPStyle con
 bool CairoRenderContext::renderImage(Inkscape::Pixbuf *pb,
                                      Geom::Affine const &image_transform, SPStyle const *style)
 {
-    g_assert( _is_valid );
+    g_assert(_is_valid);
 
     if (_render_mode == RENDER_MODE_CLIP) {
         return true;
@@ -1663,12 +1663,12 @@ bool CairoRenderContext::renderImage(Inkscape::Pixbuf *pb,
             case SP_CSS_IMAGE_RENDERING_AUTO:
             case SP_CSS_IMAGE_RENDERING_OPTIMIZEQUALITY:
             case SP_CSS_IMAGE_RENDERING_CRISPEDGES:
-                cairo_pattern_set_filter(cairo_get_source(_cr), CAIRO_FILTER_BEST );
+                cairo_pattern_set_filter(cairo_get_source(_cr), CAIRO_FILTER_BEST);
                 break;
             case SP_CSS_IMAGE_RENDERING_OPTIMIZESPEED:
             case SP_CSS_IMAGE_RENDERING_PIXELATED:
             default:
-                cairo_pattern_set_filter(cairo_get_source(_cr), CAIRO_FILTER_NEAREST );
+                cairo_pattern_set_filter(cairo_get_source(_cr), CAIRO_FILTER_NEAREST);
                 break;
         }
     }
@@ -1805,14 +1805,14 @@ CairoRenderContext::renderGlyphtext(PangoFont *font, Geom::Affine const &font_ma
 
         // Text never has markers
         bool stroke_over_fill = true;
-        if ( (style->paint_order.layer[0] == SP_CSS_PAINT_ORDER_STROKE &&
+        if ((style->paint_order.layer[0] == SP_CSS_PAINT_ORDER_STROKE &&
               style->paint_order.layer[1] == SP_CSS_PAINT_ORDER_FILL)   ||
 
              (style->paint_order.layer[0] == SP_CSS_PAINT_ORDER_STROKE &&
               style->paint_order.layer[2] == SP_CSS_PAINT_ORDER_FILL)   ||
 
              (style->paint_order.layer[1] == SP_CSS_PAINT_ORDER_STROKE &&
-              style->paint_order.layer[2] == SP_CSS_PAINT_ORDER_FILL) ) {
+              style->paint_order.layer[2] == SP_CSS_PAINT_ORDER_FILL)) {
             stroke_over_fill = false;
         }
 

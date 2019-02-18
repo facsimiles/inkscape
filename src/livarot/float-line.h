@@ -52,7 +52,7 @@ struct float_ligne_bord {
     int s_prev;   ///< index of the previous bord in the doubly-linked list
     int s_next;   ///< index of the next bord in the doubly-linked list
     int pend_ind; ///< bords[i].pend_ind is the index of the float_ligne_bord that is the start of the
-                  ///< coverage portion being scanned (in the Flatten() )  
+                  ///< coverage portion being scanned (in the Flatten())  
     int pend_inv; ///< inverse of pend_ind, for faster handling of insertion/removal in the "pending" array
 };
 
@@ -106,17 +106,17 @@ public:
     float RemainingValAt(float at, int pending);
   
     static int CmpBord(float_ligne_bord const &d1, float_ligne_bord const &d2) {
-        if ( d1.pos == d2.pos ) {
-            if ( d1.start && !(d2.start) ) {
+        if (d1.pos == d2.pos) {
+            if (d1.start && !(d2.start)) {
                 return 1;
             }
-            if ( !(d1.start) && d2.start ) {
+            if (!(d1.start) && d2.start) {
                 return -1;
             }
             return 0;
         }
         
-        return (( d1.pos < d2.pos ) ? -1 : 1);
+        return ((d1.pos < d2.pos) ? -1 : 1);
     };
 
     int AddRun(float st, float en, float vst, float ven, float pente);

@@ -171,11 +171,11 @@ bool segmentShapeIntersect(const Point& e1, const Point& e2, const Point& s1,
         // Basic intersection of segments.
         return true;
     }
-    else if ( (((s2 == e1) || pointOnLine(s1, s2, e1)) && 
+    else if ((((s2 == e1) || pointOnLine(s1, s2, e1)) && 
                (vecDir(s1, s2, e2) != 0)) 
               ||
               (((s2 == e2) || pointOnLine(s1, s2, e2)) &&
-               (vecDir(s1, s2, e1) != 0)) )
+               (vecDir(s1, s2, e1) != 0)))
     {
         // Segments intersect at the endpoint of one of the segments.  We
         // allow this once, but the second one blocks visibility.  Otherwise
@@ -406,13 +406,13 @@ bool inPolyGen(const PolygonInterface& argpoly, const Point& q)
         }
 
         // point index; i1 = i-1 mod n
-        size_t i1 = ( i + n - 1 ) % n;
+        size_t i1 = (i + n - 1) % n;
 
         // if e "straddles" the x-axis...
         // The commented-out statement is logically equivalent to the one
         // following.
-        // if( ((P[i].y > 0) && (P[i1].y <= 0)) ||
-        //         ((P[i1].y > 0) && (P[i].y <= 0)) )
+        // if(((P[i].y > 0) && (P[i1].y <= 0)) ||
+        //         ((P[i1].y > 0) && (P[i].y <= 0)))
 
         if ((P[i].y > 0) != (P[i1].y > 0))
         {
@@ -428,8 +428,8 @@ bool inPolyGen(const PolygonInterface& argpoly, const Point& q)
         }
 
         // if e straddles the x-axis when reversed...
-        // if( ((P[i].y < 0) && (P[i1].y >= 0)) ||
-        //         ((P[i1].y < 0) && (P[i].y >= 0)) )
+        // if(((P[i].y < 0) && (P[i1].y >= 0)) ||
+        //         ((P[i1].y < 0) && (P[i].y >= 0)))
 
         if ((P[i].y < 0) != (P[i1].y < 0))
         {
@@ -446,7 +446,7 @@ bool inPolyGen(const PolygonInterface& argpoly, const Point& q)
     }
 
     // q on the edge if left and right cross are not the same parity.
-    if ( (Rcross % 2) != (Lcross % 2) )
+    if ((Rcross % 2) != (Lcross % 2))
     {
         // We count the edge as inside.
         return true;
@@ -470,8 +470,8 @@ bool inPolyGen(const PolygonInterface& argpoly, const Point& q)
 // The SAME_SIGNS macro assumes arithmetic where the exclusive-or
 // operation will work on sign bits.  This works for twos-complement,
 // and most other machine arithmetic.
-#define SAME_SIGNS( a, b ) \
-        (((long) ((unsigned long) a ^ (unsigned long) b)) >= 0 )
+#define SAME_SIGNS(a, b) \
+        (((long) ((unsigned long) a ^ (unsigned long) b)) >= 0)
 // 
 int segmentIntersectPoint(const Point& a1, const Point& a2,
         const Point& b1, const Point& b2, double *x, double *y) 

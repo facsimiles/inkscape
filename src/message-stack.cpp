@@ -53,8 +53,8 @@ MessageId MessageStack::pushVF(MessageType type, gchar const *format, va_list ar
 
 void MessageStack::cancel(MessageId id) {
     Message **ref;
-    for ( ref = &_messages ; *ref ; ref = &(*ref)->next ) {
-        if ( (*ref)->id == id ) {
+    for (ref = &_messages ; *ref ; ref = &(*ref)->next) {
+        if ((*ref)->id == id) {
             *ref = _discard(*ref);
             _emitChanged();
             break;
@@ -64,7 +64,7 @@ void MessageStack::cancel(MessageId id) {
 
 MessageId MessageStack::flash(MessageType type, Glib::ustring const &message)
 {
-    MessageId id = flash( type, message.c_str() );
+    MessageId id = flash(type, message.c_str());
     return id;
 }
 

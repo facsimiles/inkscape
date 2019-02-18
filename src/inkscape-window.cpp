@@ -76,9 +76,9 @@ InkscapeWindow::InkscapeWindow(SPDocument* document)
     gtk_box_pack_start(GTK_BOX(_mainbox->gobj()), GTK_WIDGET(_desktop_widget), true, true, 0); // Can't use Glib::wrap()
 
     // ================== Callbacks ==================
-    signal_delete_event().connect(      sigc::mem_fun(*_desktop, &SPDesktop::onDeleteUI));
+    signal_delete_event().connect(sigc::mem_fun(*_desktop, &SPDesktop::onDeleteUI));
     signal_window_state_event().connect(sigc::mem_fun(*_desktop, &SPDesktop::onWindowStateEvent));
-    signal_focus_in_event().connect(    sigc::mem_fun(*_desktop_widget, &SPDesktopWidget::onFocusInEvent));
+    signal_focus_in_event().connect(sigc::mem_fun(*_desktop_widget, &SPDesktopWidget::onFocusInEvent));
 
     // =================== Actions ===================
 

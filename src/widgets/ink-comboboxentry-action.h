@@ -73,7 +73,7 @@ GType ink_comboboxentry_action_get_type ();
 /**
  * Creates a GtkAction subclass that wraps a GtkComboBoxEntry object.
  */
-Ink_ComboBoxEntry_Action *ink_comboboxentry_action_new ( const gchar  *name,
+Ink_ComboBoxEntry_Action *ink_comboboxentry_action_new (const gchar  *name,
 							 const gchar  *label,
 							 const gchar  *tooltip,
 							 const gchar  *stock_id,
@@ -84,24 +84,24 @@ Ink_ComboBoxEntry_Action *ink_comboboxentry_action_new ( const gchar  *name,
 							 gpointer separator_func = nullptr,
 							 GtkWidget* focusWidget = nullptr);
 
-GtkTreeModel     *ink_comboboxentry_action_get_model( Ink_ComboBoxEntry_Action* action );
-GtkComboBox      *ink_comboboxentry_action_get_comboboxentry( Ink_ComboBoxEntry_Action* action );
+GtkTreeModel     *ink_comboboxentry_action_get_model(Ink_ComboBoxEntry_Action* action);
+GtkComboBox      *ink_comboboxentry_action_get_comboboxentry(Ink_ComboBoxEntry_Action* action);
 
-gchar*   ink_comboboxentry_action_get_active_text( Ink_ComboBoxEntry_Action* action );
-gboolean ink_comboboxentry_action_set_active_text( Ink_ComboBoxEntry_Action* action, const gchar* text, int row=-1 );
+gchar*   ink_comboboxentry_action_get_active_text(Ink_ComboBoxEntry_Action* action);
+gboolean ink_comboboxentry_action_set_active_text(Ink_ComboBoxEntry_Action* action, const gchar* text, int row=-1);
 
-void     ink_comboboxentry_action_set_entry_width( Ink_ComboBoxEntry_Action* action, gint entry_width );
-void     ink_comboboxentry_action_set_extra_width( Ink_ComboBoxEntry_Action* action, gint extra_width );
+void     ink_comboboxentry_action_set_entry_width(Ink_ComboBoxEntry_Action* action, gint entry_width);
+void     ink_comboboxentry_action_set_extra_width(Ink_ComboBoxEntry_Action* action, gint extra_width);
 
-void     ink_comboboxentry_action_popup_enable(  Ink_ComboBoxEntry_Action* action );
-void     ink_comboboxentry_action_popup_disable( Ink_ComboBoxEntry_Action* action );
+void     ink_comboboxentry_action_popup_enable(Ink_ComboBoxEntry_Action* action);
+void     ink_comboboxentry_action_popup_disable(Ink_ComboBoxEntry_Action* action);
 
-void     ink_comboboxentry_action_set_info(      Ink_ComboBoxEntry_Action* action, const gchar* info );
-void     ink_comboboxentry_action_set_info_cb(   Ink_ComboBoxEntry_Action* action, gpointer info_cb );
-void     ink_comboboxentry_action_set_warning(   Ink_ComboBoxEntry_Action* action, const gchar* warning_cb );
-void     ink_comboboxentry_action_set_warning_cb(Ink_ComboBoxEntry_Action* action, gpointer warning );
-void     ink_comboboxentry_action_set_tooltip(   Ink_ComboBoxEntry_Action* action, const gchar* tooltip );
+void     ink_comboboxentry_action_set_info(Ink_ComboBoxEntry_Action* action, const gchar* info);
+void     ink_comboboxentry_action_set_info_cb(Ink_ComboBoxEntry_Action* action, gpointer info_cb);
+void     ink_comboboxentry_action_set_warning(Ink_ComboBoxEntry_Action* action, const gchar* warning_cb);
+void     ink_comboboxentry_action_set_warning_cb(Ink_ComboBoxEntry_Action* action, gpointer warning);
+void     ink_comboboxentry_action_set_tooltip(Ink_ComboBoxEntry_Action* action, const gchar* tooltip);
 
-void     ink_comboboxentry_action_set_altx_name( Ink_ComboBoxEntry_Action* action, const gchar* altx_name );
+void     ink_comboboxentry_action_set_altx_name(Ink_ComboBoxEntry_Action* action, const gchar* altx_name);
 
 #endif /* SEEN_INK_COMBOBOXENTRY_ACTION */

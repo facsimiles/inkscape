@@ -51,14 +51,14 @@ public:
     void read(SPObject *object, Inkscape::XML::Node *repr);
     void readFromObject(SPObject *object);
     void readFromPrefs(Glib::ustring const &path);
-    void readIfUnset(SPAttributeEnum id, char const *val, SPStyleSrc const &source = SP_STYLE_SRC_STYLE_PROP );
-    Glib::ustring write( unsigned int const flags = SP_STYLE_FLAG_IFSET,
+    void readIfUnset(SPAttributeEnum id, char const *val, SPStyleSrc const &source = SP_STYLE_SRC_STYLE_PROP);
+    Glib::ustring write(unsigned int const flags = SP_STYLE_FLAG_IFSET,
                          SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
-                         SPStyle const *const base = nullptr ) const;
-    void cascade( SPStyle const *const parent );
-    void merge(   SPStyle const *const parent );
-    void mergeString( char const *const p );
-    void mergeStatement( CRStatement *statement );
+                         SPStyle const *const base = nullptr) const;
+    void cascade(SPStyle const *const parent);
+    void merge(SPStyle const *const parent);
+    void mergeString(char const *const p);
+    void mergeStatement(CRStatement *statement);
     bool operator==(const SPStyle& rhs);
 
     int style_ref()   { ++_refcount; return _refcount; }
@@ -66,11 +66,11 @@ public:
     int refCount() { return _refcount; }
 
 private:
-    void _mergeString( char const *const p );
-    void _mergeDeclList( CRDeclaration const *const decl_list, SPStyleSrc const &source );
-    void _mergeDecl(     CRDeclaration const *const decl,      SPStyleSrc const &source );
-    void _mergeProps( CRPropList *const props );
-    void _mergeObjectStylesheet( SPObject const *const object );
+    void _mergeString(char const *const p);
+    void _mergeDeclList(CRDeclaration const *const decl_list, SPStyleSrc const &source);
+    void _mergeDecl(CRDeclaration const *const decl,      SPStyleSrc const &source);
+    void _mergeProps(CRPropList *const props);
+    void _mergeObjectStylesheet(SPObject const *const object);
 
 private:
     int _refcount;
@@ -357,10 +357,10 @@ void sp_style_unset_property_attrs(SPObject *o);
 
 void sp_style_set_property_url (SPObject *item, char const *property, SPObject *linked, bool recursive);
 
-void css_quote( Glib::ustring &val );   // Add quotes around CSS values
-void css_unquote( Glib::ustring &val ); // Remove quotes from CSS values (style-internal.cpp, xml/repr-css.cpp)
-void css_font_family_quote( Glib::ustring &val ); // style-internal.cpp, text-toolbar.cpp
-void css_font_family_unquote( Glib::ustring &val ); // style-internal.cpp, text-toolbar.cpp
+void css_quote(Glib::ustring &val);   // Add quotes around CSS values
+void css_unquote(Glib::ustring &val); // Remove quotes from CSS values (style-internal.cpp, xml/repr-css.cpp)
+void css_font_family_quote(Glib::ustring &val); // style-internal.cpp, text-toolbar.cpp
+void css_font_family_unquote(Glib::ustring &val); // style-internal.cpp, text-toolbar.cpp
 
 Glib::ustring css2_escape_quote(char const *val);
 

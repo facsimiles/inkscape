@@ -96,7 +96,7 @@ void EntityLineEntry::update(SPDocument *doc)
 {
     const char *text = rdf_get_work_entity (doc, _entity);
     // If RDF title is not set, get the document's <title> and set the RDF:
-    if ( !text && !strcmp(_entity->name, "title") && doc->getRoot() ) {
+    if (!text && !strcmp(_entity->name, "title") && doc->getRoot()) {
         text = doc->getRoot()->title();
         rdf_set_work_entity(doc, _entity, text);
     }
@@ -153,7 +153,7 @@ void EntityMultiLineEntry::update(SPDocument *doc)
 {
     const char *text = rdf_get_work_entity (doc, _entity);
     // If RDF title is not set, get the document's <title> and set the RDF:
-    if ( !text && !strcmp(_entity->name, "title") && doc->getRoot() ) {
+    if (!text && !strcmp(_entity->name, "title") && doc->getRoot()) {
         text = doc->getRoot()->title();
         rdf_set_work_entity(doc, _entity, text);
     }

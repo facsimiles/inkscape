@@ -40,12 +40,12 @@ void FilterTile::render_cairo(FilterSlot &slot)
     // ++i;
     // std::stringstream filename;
     // filename << "dump." << i << ".png";
-    // cairo_surface_write_to_png( in, filename.str().c_str() );
+    // cairo_surface_write_to_png(in, filename.str().c_str());
 
     // This is the feTile source area as determined by the input primitive area (see SVG spec).
     Geom::Rect tile_area = slot.get_primitive_area(_input);
 
-    if( tile_area.width() == 0.0 || tile_area.height() == 0.0 ) {
+    if(tile_area.width() == 0.0 || tile_area.height() == 0.0) {
 
         slot.set(_output, in);
         std::cerr << "FileTile::render_cairo: tile has zero width or height" << std::endl;
@@ -82,18 +82,18 @@ void FilterTile::render_cairo(FilterSlot &slot)
         // For debugging
         // std::stringstream filename;
         // filename << "tile." << i << ".png";
-        // cairo_surface_write_to_png( tile, filename.str().c_str() );
+        // cairo_surface_write_to_png(tile, filename.str().c_str());
         
         // Determine number of feTile rows and columns
-        Geom::Rect pr = filter_primitive_area( slot.get_units() );
-        int tile_cols = ceil( pr.width()  / tile_area.width() );
-        int tile_rows = ceil( pr.height() / tile_area.height() );
+        Geom::Rect pr = filter_primitive_area(slot.get_units());
+        int tile_cols = ceil(pr.width()  / tile_area.width());
+        int tile_rows = ceil(pr.height() / tile_area.height());
 
         // Do tiling (TO DO: restrict to slot area.)
-        for( int col=0; col < tile_cols; ++col ) {
-            for( int row=0; row < tile_rows; ++row ) {
+        for(int col=0; col < tile_cols; ++col) {
+            for(int row=0; row < tile_rows; ++row) {
 
-                Geom::Point offset( col*tile_area.width(), row*tile_area.height() );
+                Geom::Point offset(col*tile_area.width(), row*tile_area.height());
                 offset *= trans;
                 offset[Geom::X] -= trans[4];
                 offset[Geom::Y] -= trans[5];

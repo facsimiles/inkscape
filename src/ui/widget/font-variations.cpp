@@ -37,18 +37,18 @@ FontVariationAxis::FontVariationAxis (Glib::ustring name, OTVarAxis& axis)
     //           << " max:  " << axis.maximum
     //           << " val:  " << axis.set_val << std::endl;
 
-    label = Gtk::manage( new Gtk::Label( name ) );
-    add( *label );
+    label = Gtk::manage(new Gtk::Label(name));
+    add(*label);
 
-    precision = 2 - int( log10(axis.maximum - axis.minimum));
+    precision = 2 - int(log10(axis.maximum - axis.minimum));
     if (precision < 0) precision = 0;
 
-    scale = Gtk::manage( new Gtk::Scale() );
+    scale = Gtk::manage(new Gtk::Scale());
     scale->set_range (axis.minimum, axis.maximum);
     scale->set_value (axis.set_val);
     scale->set_digits (precision);
     scale->set_hexpand(true);
-    add( *scale );
+    add(*scale);
 }
 
 
@@ -58,7 +58,7 @@ FontVariations::FontVariations () :
     Gtk::Grid ()
 {
     // std::cout << "FontVariations::FontVariations" << std::endl;
-    set_orientation( Gtk::ORIENTATION_VERTICAL );
+    set_orientation(Gtk::ORIENTATION_VERTICAL);
     set_name ("FontVariations");
     size_group = Gtk::SizeGroup::create(Gtk::SIZE_GROUP_HORIZONTAL);
     show_all_children();
@@ -73,26 +73,26 @@ FontVariations::update (Glib::ustring& font_spec) {
 
     auto children = get_children();
     for (auto child: children) {
-        remove ( *child );
+        remove (*child);
     }
     axes.clear();
     
     for (auto a: res->openTypeVarAxes) {
         // std::cout << "Creating axis: " << a.first << std::endl;
-        FontVariationAxis* axis = Gtk::manage( new FontVariationAxis( a.first, a.second ));
-        axes.push_back( axis );
-        add( *axis );
-        size_group->add_widget( *(axis->get_label()) ); // Keep labels the same width
+        FontVariationAxis* axis = Gtk::manage(new FontVariationAxis(a.first, a.second));
+        axes.push_back(axis);
+        add(*axis);
+        size_group->add_widget(*(axis->get_label())); // Keep labels the same width
         axis->get_scale()->signal_value_changed().connect(
             sigc::mem_fun(*this, &FontVariations::on_variations_change)
-            );
+);
     }
 
     show_all_children();
 }
 
 void
-FontVariations::fill_css( SPCSSAttr *css ) {
+FontVariations::fill_css(SPCSSAttr *css) {
     std::cout << "FontVariations::fill_css" << std::endl;
 
     // Eventually will want to favor using 'font-weight', etc. but at the moment these

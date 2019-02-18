@@ -210,14 +210,14 @@ DockBehavior::onShutdown()
 {
     int visible = _dock_item.isIconified() || !_dialog._user_hidden;
     int status = (_dock_item.getState() == Inkscape::UI::Widget::DockItem::UNATTACHED) ? _dock_item.getPrevState() : _dock_item.getState();
-    _dialog.save_status( visible, status, _dock_item.getPlacement() );
+    _dialog.save_status(visible, status, _dock_item.getPlacement());
 }
 
 void
 DockBehavior::onDesktopActivated(SPDesktop *desktop)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    gint transient_policy = prefs->getIntLimited( "/options/transientpolicy/value", 1, 0, 2);
+    gint transient_policy = prefs->getIntLimited("/options/transientpolicy/value", 1, 0, 2);
 
 #ifdef _WIN32 // Win32 special code to enable transient dialogs
     transient_policy = 2;

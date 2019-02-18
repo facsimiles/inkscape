@@ -138,7 +138,7 @@ CompositeUndoStackObserver::_unlock()
 	if (!--this->_iterating) {
 		// Remove marked observers
 		UndoObserverRecordList::iterator i = this->_active.begin();
-		for(; i != this->_active.begin(); ) {
+		for(; i != this->_active.begin();) {
 			if (i->to_remove) {
 				i = this->_active.erase(i);
 			}
@@ -148,7 +148,7 @@ CompositeUndoStackObserver::_unlock()
 		}
 
 		i = this->_pending.begin();
-		for(; i != this->_pending.begin(); ) {
+		for(; i != this->_pending.begin();) {
 			if (i->to_remove) {
 				i = this->_active.erase(i);
 			}

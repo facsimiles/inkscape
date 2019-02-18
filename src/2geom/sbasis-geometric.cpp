@@ -36,7 +36,7 @@ static vector<double>
 vect_intersect(vector<double> const &a, vector<double> const &b, double tol=0.){
     vector<double> inter;
     unsigned i=0,j=0;
-    while ( i<a.size() && j<b.size() ){
+    while (i<a.size() && j<b.size()){
         if (fabs(a[i]-b[j])<tol){
             inter.push_back(a[i]);
             i+=1;
@@ -52,7 +52,7 @@ vect_intersect(vector<double> const &a, vector<double> const &b, double tol=0.){
 
 //------------------------------------------------------------------------------
 static SBasis divide_by_sk(SBasis const &a, int k) {
-    if ( k>=(int)a.size()){
+    if (k>=(int)a.size()){
         //make sure a is 0?
         return SBasis();
     }
@@ -238,7 +238,7 @@ Geom::unitVector(D2<SBasis> const &V_in, double tol, unsigned order){
     SBasis a = SBasis(order+1, Linear(0.));
     a[0] = Linear(-v0[1],-v1[1]);
     SBasis b = SBasis(order+1, Linear(0.));
-    b[0] = Linear( v0[0], v1[0]);
+    b[0] = Linear(v0[0], v1[0]);
 
     r_eqn1 = -(a*x+b*y);
     r_eqn2 = Linear(1.)-(a*a+b*b);
@@ -408,7 +408,7 @@ Geom::arc_length_parametrization(D2<SBasis> const &M,
     Piecewise<SBasis> s = arcLengthSb(Piecewise<D2<SBasis> >(M),tol);
     for (unsigned i=0; i < s.size();i++){
         double t0=s.cuts[i],t1=s.cuts[i+1];
-        if ( are_near(s(t0),s(t1)) ) {
+        if (are_near(s(t0),s(t1))) {
             continue;
         }
         D2<SBasis> sub_M = compose(M,Linear(t0,t1));
@@ -436,7 +436,7 @@ Geom::arc_length_parametrization(Piecewise<D2<SBasis> > const &M,
                                  double tol){
     Piecewise<D2<SBasis> > result;
     for (unsigned i=0; i<M.size(); i++) {
-        result.concat( arc_length_parametrization(M[i],order,tol) );
+        result.concat(arc_length_parametrization(M[i],order,tol));
     }
     return result;
 }
@@ -569,7 +569,7 @@ find_bounds_for_lambda0(double aa0,double aa1,double cc0,double cc1,
     double a = (a0<a1 ? a0 : a1);
     double c = (c0<c1 ? c0 : c1);
     double delta = 1-4*a*c;
-    if ( delta < 0 )
+    if (delta < 0)
         return OptInterval();//return empty interval
     double lambda_max = (1+std::sqrt(delta))/2/a;
     
@@ -591,12 +591,12 @@ solve_lambda0(double a0,double a1,double c0,double c1,
              int insist_on_speeds_signs){
 
     SBasis p(3, Linear());
-    p[0] = Linear( a1*c0*c0+c1, a1*a0*(a0+ 2*c0) +a1*c0*c0 +c1 -1  );
-    p[1] = Linear( -a1*a0*(a0+2*c0), -a1*a0*(3*a0+2*c0) );
-    p[2] = Linear( a1*a0*a0 );
+    p[0] = Linear(a1*c0*c0+c1, a1*a0*(a0+ 2*c0) +a1*c0*c0 +c1 -1);
+    p[1] = Linear(-a1*a0*(a0+2*c0), -a1*a0*(3*a0+2*c0));
+    p[2] = Linear(a1*a0*a0);
 
     OptInterval domain = find_bounds_for_lambda0(a0,a1,c0,c1,insist_on_speeds_signs);
-    if ( !domain ) 
+    if (!domain) 
         return std::vector<double>();
     p = compose(p,Linear(domain->min(),domain->max()));
     std::vector<double>rts = roots(p);
@@ -648,8 +648,8 @@ Geom::cubics_fitting_curvature(Point const &M0,   Point const &M1,
         if (lbda02<0 || lbda12<0){
             return result;
         }
-        lambda0.push_back(std::sqrt(lbda02) );
-        lambda1.push_back(std::sqrt(lbda12) );
+        lambda0.push_back(std::sqrt(lbda02));
+        lambda1.push_back(std::sqrt(lbda12));
     }else{
         //solve:  lambda1 = a0 lambda0^2 + c0
         //        lambda0 = a1 lambda1^2 + c1
@@ -660,11 +660,11 @@ Geom::cubics_fitting_curvature(Point const &M0,   Point const &M1,
         c1 = -3*cross(M1-M0,dM1)/dM1xdM0;
 
         if (fabs(a0)<epsilon){
-            lambda1.push_back( c0 );
-            lambda0.push_back( a1*c0*c0 + c1 );
+            lambda1.push_back(c0);
+            lambda0.push_back(a1*c0*c0 + c1);
         }else if (fabs(a1)<epsilon){
-            lambda0.push_back( c1 );
-            lambda1.push_back( a0*c1*c1 + c0 );
+            lambda0.push_back(c1);
+            lambda1.push_back(a0*c1*c1 + c0);
         }else{
             //find lamda0 by solving a deg 4 equation d0+d1*X+...+d4*X^4=0
             vector<double> solns=solve_lambda0(a0,a1,c0,c1,insist_on_speed_signs);
@@ -673,18 +673,18 @@ Geom::cubics_fitting_curvature(Point const &M0,   Point const &M1,
                 double lbda1=c0+a0*lbda0*lbda0;
                 //is this solution pointing in the + direction at both ends?
                 if (lbda0>=0. && lbda1>=0.){
-                    lambda0.push_back( lbda0);
-                    lambda1.push_back( lbda1);
+                    lambda0.push_back(lbda0);
+                    lambda1.push_back(lbda1);
                 }
                 //is this solution pointing in the - direction at both ends?
                 else if (lbda0<=0. && lbda1<=0. && insist_on_speed_signs<=0){
-                    lambda0.push_back( lbda0);
-                    lambda1.push_back( lbda1);
+                    lambda0.push_back(lbda0);
+                    lambda1.push_back(lbda1);
                 }
                 //ok,this solution is pointing in the + and - directions.
                 else if (insist_on_speed_signs<0){
-                    lambda0.push_back( lbda0);
-                    lambda1.push_back( lbda1);
+                    lambda0.push_back(lbda0);
+                    lambda1.push_back(lbda1);
                 }
             }
         }
@@ -697,7 +697,7 @@ Geom::cubics_fitting_curvature(Point const &M0,   Point const &M1,
         for(unsigned dim=0;dim<2;dim++){
             SBasis c(2, Linear());
             c[0] = Linear(M0[dim],M1[dim]);
-            c[1] = Linear( M0[dim]-M1[dim]+V0[dim],
+            c[1] = Linear(M0[dim]-M1[dim]+V0[dim],
                            -M0[dim]+M1[dim]-V1[dim]);
             cubic[dim] = c;
         }

@@ -149,7 +149,7 @@ public:
     // of what kind of input/output parameters he desires.
     // the order in which they appear is the order in which they are
     // called by this base class. (i.e. doEffect(SPCurve * curve) defaults to calling
-    // doEffect(Geom::PathVector )
+    // doEffect(Geom::PathVector)
     virtual Geom::PathVector
             doEffect_path (Geom::PathVector const & path_in);
     virtual Geom::Piecewise<Geom::D2<Geom::SBasis> >

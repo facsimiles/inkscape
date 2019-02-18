@@ -182,9 +182,9 @@ bool mark_one(ObserverRecordList &observers, unsigned &/*marked_count*/,
     ObserverRecordList::iterator found=std::find_if(
         observers.begin(), observers.end(),
         unmarked_record_satisfying<Predicate>(p)
-    );
+);
 
-    if ( found != observers.end() ) {
+    if (found != observers.end()) {
         found->marked = true;
         return true;
     } else {
@@ -208,9 +208,9 @@ bool remove_one(ObserverRecordList &observers, unsigned &/*marked_count*/,
     ObserverRecordList::iterator found=find_if_before(
         observers.begin(), observers.end(),
         unmarked_record_satisfying<Predicate>(p)
-    );
+);
 
-    if ( found != observers.end() ) {
+    if (found != observers.end()) {
         observers.erase_after(found);
         return true;
     } else {
@@ -224,9 +224,9 @@ void remove_all_marked(ObserverRecordList &observers, unsigned &marked_count)
 {
     ObserverRecordList::iterator iter;
 
-    g_assert( !observers.empty() || !marked_count );
+    g_assert(!observers.empty() || !marked_count);
 
-    while ( marked_count && observers.front().marked ) {
+    while (marked_count && observers.front().marked) {
         observers.pop_front();
         --marked_count;
     }

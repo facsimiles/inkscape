@@ -108,8 +108,8 @@ sp_canvas_bpath_render (SPCanvasItem *item, SPCanvasBuf *buf)
 
     Geom::Rect area = buf->rect;
 
-    if ( !cbp->curve  || 
-         ((cbp->stroke_rgba & 0xff) == 0 && (cbp->fill_rgba & 0xff) == 0 ) || 
+    if (!cbp->curve  || 
+         ((cbp->stroke_rgba & 0xff) == 0 && (cbp->fill_rgba & 0xff) == 0) || 
          cbp->curve->get_segment_count() < 1)
         return;
 
@@ -164,8 +164,8 @@ sp_canvas_bpath_point (SPCanvasItem *item, Geom::Point p, SPCanvasItem **actual_
 {
     SPCanvasBPath *cbp = SP_CANVAS_BPATH (item);
 
-    if ( !cbp->curve  || 
-         ((cbp->stroke_rgba & 0xff) == 0 && (cbp->fill_rgba & 0xff) == 0 ) || 
+    if (!cbp->curve  || 
+         ((cbp->stroke_rgba & 0xff) == 0 && (cbp->fill_rgba & 0xff) == 0) || 
          cbp->curve->get_segment_count() < 1)
         return Geom::infinity();
 

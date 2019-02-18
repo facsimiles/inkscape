@@ -241,7 +241,7 @@ public:
      * @param p Arbitrary point.
      * @return Time value corresponding to a point closest to @c p. */
     Coord timeAtProjection(Point const& p) const {
-        if ( isDegenerate() ) return 0;
+        if (isDegenerate()) return 0;
         Point v = vector();
         return dot(p - _initial, v) / dot(v, v);
     }
@@ -495,7 +495,7 @@ Line make_parallel_line(Point const &p, Line const &line)
 inline
 Line make_bisector_line(LineSegment const& _segment)
 {
-    return make_orthogonal_line( middle_point(_segment), Line(_segment) );
+    return make_orthogonal_line(middle_point(_segment), Line(_segment));
 }
 
 // build the bisector line of the angle between ray(O,A) and ray(O,B)
@@ -507,7 +507,7 @@ Line make_angle_bisector_line(Point const &A, Point const &O, Point const &B)
     return Line(O, bisect);
 }
 
-// prj(P) = rot(v, Point( rot(-v, P-O)[X], 0 )) + O
+// prj(P) = rot(v, Point(rot(-v, P-O)[X], 0)) + O
 inline
 Point projection(Point const &p, Line const &line)
 {
@@ -531,12 +531,12 @@ namespace detail
 {
 
 OptCrossing intersection_impl(Ray const& r1, Line const& l2, unsigned int i);
-OptCrossing intersection_impl( LineSegment const& ls1,
+OptCrossing intersection_impl(LineSegment const& ls1,
                              Line const& l2,
-                             unsigned int i );
-OptCrossing intersection_impl( LineSegment const& ls1,
+                             unsigned int i);
+OptCrossing intersection_impl(LineSegment const& ls1,
                              Ray const& r2,
-                             unsigned int i );
+                             unsigned int i);
 }
 
 

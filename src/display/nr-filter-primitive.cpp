@@ -118,7 +118,7 @@ Geom::Rect FilterPrimitive::filter_primitive_area(FilterUnits const &units)
     Geom::Rect fa = *fa_opt;
 
     // x, y, width, and height are independently defined (i.e. one can be defined, by default, to
-    // the filter area (via default value ) while another is defined relative to the bounding
+    // the filter area (via default value) while another is defined relative to the bounding
     // box). It is better to keep track of them separately and then compose the Rect at the end.
     double x = 0;
     double y = 0;
@@ -126,12 +126,12 @@ Geom::Rect FilterPrimitive::filter_primitive_area(FilterUnits const &units)
     double height = 0;
 
     // If subregion not set, by special case use filter region.
-    if( !_subregion_x._set )      x = fa.min()[X];
-    if( !_subregion_y._set )      y = fa.min()[Y];
-    if( !_subregion_width._set )  width  = fa.width();
-    if( !_subregion_height._set ) height = fa.height();
+    if(!_subregion_x._set)      x = fa.min()[X];
+    if(!_subregion_y._set)      y = fa.min()[Y];
+    if(!_subregion_width._set)  width  = fa.width();
+    if(!_subregion_height._set) height = fa.height();
 
-    if( units.get_primitive_units() == SP_FILTER_UNITS_OBJECTBOUNDINGBOX ) {
+    if(units.get_primitive_units() == SP_FILTER_UNITS_OBJECTBOUNDINGBOX) {
 
         Geom::OptRect const bb_opt = units.get_item_bbox();
         if (!bb_opt) {
@@ -152,21 +152,21 @@ Geom::Rect FilterPrimitive::filter_primitive_area(FilterUnits const &units)
         _subregion_height.update(12, 6, len_y);
 
         // Values are in terms of fraction of bounding box.
-        if( _subregion_x._set      && (_subregion_x.unit      != SVGLength::PERCENT) )      x = bb.min()[X] + bb.width()  * _subregion_x.value;
-        if( _subregion_y._set      && (_subregion_y.unit      != SVGLength::PERCENT) )      y = bb.min()[Y] + bb.height() * _subregion_y.value;
-        if( _subregion_width._set  && (_subregion_width.unit  != SVGLength::PERCENT) )  width = bb.width()  * _subregion_width.value;
-        if( _subregion_height._set && (_subregion_height.unit != SVGLength::PERCENT) ) height = bb.height() * _subregion_height.value;
+        if(_subregion_x._set      && (_subregion_x.unit      != SVGLength::PERCENT))      x = bb.min()[X] + bb.width()  * _subregion_x.value;
+        if(_subregion_y._set      && (_subregion_y.unit      != SVGLength::PERCENT))      y = bb.min()[Y] + bb.height() * _subregion_y.value;
+        if(_subregion_width._set  && (_subregion_width.unit  != SVGLength::PERCENT))  width = bb.width()  * _subregion_width.value;
+        if(_subregion_height._set && (_subregion_height.unit != SVGLength::PERCENT)) height = bb.height() * _subregion_height.value;
         // Values are in terms of percent                                                         
-        if( _subregion_x._set      && (_subregion_x.unit      == SVGLength::PERCENT) )      x = bb.min()[X] + _subregion_x.computed;
-        if( _subregion_y._set      && (_subregion_y.unit      == SVGLength::PERCENT) )      y = bb.min()[Y] + _subregion_y.computed;
-        if( _subregion_width._set  && (_subregion_width.unit  == SVGLength::PERCENT) )  width = _subregion_width.computed;
-        if( _subregion_height._set && (_subregion_height.unit == SVGLength::PERCENT) ) height = _subregion_height.computed;
+        if(_subregion_x._set      && (_subregion_x.unit      == SVGLength::PERCENT))      x = bb.min()[X] + _subregion_x.computed;
+        if(_subregion_y._set      && (_subregion_y.unit      == SVGLength::PERCENT))      y = bb.min()[Y] + _subregion_y.computed;
+        if(_subregion_width._set  && (_subregion_width.unit  == SVGLength::PERCENT))  width = _subregion_width.computed;
+        if(_subregion_height._set && (_subregion_height.unit == SVGLength::PERCENT)) height = _subregion_height.computed;
     } else {
         // Values are in terms of user space coordinates or percent of viewport (already calculated in sp-filter-primitive.cpp).
-        if( _subregion_x._set      )      x = _subregion_x.computed;
-        if( _subregion_y._set      )      y = _subregion_y.computed;
-        if( _subregion_width._set  )  width = _subregion_width.computed;
-        if( _subregion_height._set ) height = _subregion_height.computed;
+        if(_subregion_x._set)      x = _subregion_x.computed;
+        if(_subregion_y._set)      y = _subregion_y.computed;
+        if(_subregion_width._set)  width = _subregion_width.computed;
+        if(_subregion_height._set) height = _subregion_height.computed;
     }
 
     return Geom::Rect (Geom::Point(x,y), Geom::Point(x + width, y + height));
@@ -174,7 +174,7 @@ Geom::Rect FilterPrimitive::filter_primitive_area(FilterUnits const &units)
 
 void FilterPrimitive::setStyle(SPStyle *style)
 {
-    if( style != _style ) {
+    if(style != _style) {
         if (style) sp_style_ref(style);
         if (_style) sp_style_unref(_style);
         _style = style;

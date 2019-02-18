@@ -387,14 +387,14 @@ void FilterTurbulence::render_cairo(FilterSlot &slot)
     double x_scale = 0;
     double y_scale = 0;
     cairo_surface_get_device_scale(input, &x_scale, &y_scale);
-    int width  = ceil(cairo_image_surface_get_width( input)/x_scale/x_scale);
+    int width  = ceil(cairo_image_surface_get_width(input)/x_scale/x_scale);
     int height = ceil(cairo_image_surface_get_height(input)/y_scale/y_scale);
     cairo_surface_t *temp = cairo_surface_create_similar (input, CAIRO_CONTENT_COLOR_ALPHA, width, height);
-    cairo_surface_set_device_scale( temp, 1, 1 );
+    cairo_surface_set_device_scale(temp, 1, 1);
 
     // color_interpolation_filter is determined by CSS value (see spec. Turbulence).
-    if( _style ) {
-        set_cairo_surface_ci(out, (SPColorInterpolation)_style->color_interpolation_filters.computed );
+    if(_style) {
+        set_cairo_surface_ci(out, (SPColorInterpolation)_style->color_interpolation_filters.computed);
     }
 
     if (!gen->ready()) {
@@ -411,7 +411,7 @@ void FilterTurbulence::render_cairo(FilterSlot &slot)
     double y0 = slot_area.min()[Geom::Y];
     ink_cairo_surface_synthesize(temp, Turbulence(*gen, unit_trans, x0, y0));
 
-    // cairo_surface_write_to_png( temp, "turbulence0.png" );
+    // cairo_surface_write_to_png(temp, "turbulence0.png");
 
     cairo_t *ct = cairo_create(out);
     cairo_set_source_surface(ct, temp, 0, 0);

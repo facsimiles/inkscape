@@ -101,7 +101,7 @@ grid_canvasitem_render (SPCanvasItem * item, SPCanvasBuf * buf)
 {
     GridCanvasItem *gridcanvasitem = INKSCAPE_GRID_CANVASITEM (item);
 
-    if ( gridcanvasitem->grid && gridcanvasitem->grid->isVisible() ) {
+    if (gridcanvasitem->grid && gridcanvasitem->grid->isVisible()) {
         sp_canvas_prepare_buffer (buf);
         gridcanvasitem->grid->Render(buf);
     }
@@ -274,12 +274,12 @@ CanvasGrid::createCanvasItem(SPDesktop * desktop)
 
     // check if there is already a canvasitem on this desktop linking to this grid
     for (auto i:canvasitems) {
-        if ( desktop->getGridGroup() == SP_CANVAS_GROUP(i->parent) ) {
+        if (desktop->getGridGroup() == SP_CANVAS_GROUP(i->parent)) {
             return nullptr;
         }
     }
 
-    GridCanvasItem * item = INKSCAPE_GRID_CANVASITEM( sp_canvas_item_new(desktop->getGridGroup(), INKSCAPE_TYPE_GRID_CANVASITEM, nullptr) );
+    GridCanvasItem * item = INKSCAPE_GRID_CANVASITEM(sp_canvas_item_new(desktop->getGridGroup(), INKSCAPE_TYPE_GRID_CANVASITEM, nullptr));
     item->grid = this;
     sp_canvas_item_show(SP_CANVAS_ITEM(item));
 
@@ -292,8 +292,8 @@ CanvasGrid::createCanvasItem(SPDesktop * desktop)
 Gtk::Widget *
 CanvasGrid::newWidget()
 {
-    Gtk::VBox * vbox = Gtk::manage( new Gtk::VBox() );
-    Gtk::Label * namelabel = Gtk::manage(new Gtk::Label("", Gtk::ALIGN_CENTER) );
+    Gtk::VBox * vbox = Gtk::manage(new Gtk::VBox());
+    Gtk::Label * namelabel = Gtk::manage(new Gtk::Label("", Gtk::ALIGN_CENTER));
 
     Glib::ustring str("<b>");
     str += getName();
@@ -301,26 +301,26 @@ CanvasGrid::newWidget()
     namelabel->set_markup(str);
     vbox->pack_start(*namelabel, true, true);
 
-    _rcb_enabled = Gtk::manage( new Inkscape::UI::Widget::RegisteredCheckButton(
+    _rcb_enabled = Gtk::manage(new Inkscape::UI::Widget::RegisteredCheckButton(
             _("_Enabled"),
             _("Determines whether to snap to this grid or not. Can be 'on' for invisible grids."),
-            "enabled", _wr, false, repr, doc) );
+            "enabled", _wr, false, repr, doc));
 
-    _rcb_snap_visible_only = Gtk::manage( new Inkscape::UI::Widget::RegisteredCheckButton(
+    _rcb_snap_visible_only = Gtk::manage(new Inkscape::UI::Widget::RegisteredCheckButton(
             _("Snap to visible _grid lines only"),
             _("When zoomed out, not all grid lines will be displayed. Only the visible ones will be snapped to"),
-            "snapvisiblegridlinesonly", _wr, true, repr, doc) );
+            "snapvisiblegridlinesonly", _wr, true, repr, doc));
 
-    _rcb_visible = Gtk::manage( new Inkscape::UI::Widget::RegisteredCheckButton(
+    _rcb_visible = Gtk::manage(new Inkscape::UI::Widget::RegisteredCheckButton(
             _("_Visible"),
             _("Determines whether the grid is displayed or not. Objects are still snapped to invisible grids."),
-            "visible", _wr, true, repr, doc) );
+            "visible", _wr, true, repr, doc));
 
     vbox->pack_start(*_rcb_enabled, true, true);
     vbox->pack_start(*_rcb_visible, true, true);
     vbox->pack_start(*_rcb_snap_visible_only, true, true);
 
-    _as_alignment = Gtk::manage( new Inkscape::UI::Widget::AlignmentSelector() );
+    _as_alignment = Gtk::manage(new Inkscape::UI::Widget::AlignmentSelector());
     _as_alignment->on_alignmentClicked().connect(sigc::mem_fun(*this, &CanvasGrid::align_clicked));
 
     Gtk::VBox *left = new Gtk::VBox();
@@ -373,7 +373,7 @@ void CanvasGrid::setOrigin(Geom::Point const &origin_px)
     SPRoot *root = doc->getRoot();
     double scale_x = 1.0;
     double scale_y = 1.0;
-    if( root->viewBox_set ) {
+    if(root->viewBox_set) {
         scale_x = root->viewBox.width()  / root->width.computed;
         scale_y = root->viewBox.height() / root->height.computed;
     }
@@ -458,13 +458,13 @@ static void validateInt(gint oldVal,
                         gint* pTarget)
 {
     // Avoid nullness.
-    if ( pTarget == nullptr )
+    if (pTarget == nullptr)
         return;
 
     // Invalid new value?
-    if ( *pTarget <= 0 ) {
+    if (*pTarget <= 0) {
         // If the old value is somehow invalid as well, then default to 1.
-        if ( oldVal <= 0 )
+        if (oldVal <= 0)
             oldVal = 1;
 
         // Reset the int and associated widget to the old value.
@@ -479,7 +479,7 @@ CanvasXYGrid::readRepr()
     SPRoot *root = doc->getRoot();
     double scale_x = 1.0;
     double scale_y = 1.0;
-    if( root->viewBox_set ) {
+    if(root->viewBox_set) {
         scale_x = root->width.computed  / root->viewBox.width();
         scale_y = root->height.computed / root->viewBox.height();
         if (Geom::are_near(scale_x / scale_y, 1.0, Geom::EPSILON)) {
@@ -494,15 +494,15 @@ CanvasXYGrid::readRepr()
 
     gchar const *value;
 
-    if ( (value = repr->attribute("originx")) ) {
+    if ((value = repr->attribute("originx"))) {
 
         Inkscape::Util::Quantity q = unit_table.parseQuantity(value);
 
-        if( q.unit->type == UNIT_TYPE_LINEAR ) {
+        if(q.unit->type == UNIT_TYPE_LINEAR) {
             // Legacy grid not in 'user units'
             origin[Geom::X] = q.value("px");
             legacy = true;
-            if (q.unit->abbr == "px" ) {
+            if (q.unit->abbr == "px") {
                 pixel = true;
             }
         } else {
@@ -511,15 +511,15 @@ CanvasXYGrid::readRepr()
         }
     }
 
-    if ( (value = repr->attribute("originy")) ) {
+    if ((value = repr->attribute("originy"))) {
 
         Inkscape::Util::Quantity q = unit_table.parseQuantity(value);
 
-        if( q.unit->type == UNIT_TYPE_LINEAR ) {
+        if(q.unit->type == UNIT_TYPE_LINEAR) {
             // Legacy grid not in 'user units'
             origin[Geom::Y] = q.value("px");
             legacy = true;
-            if (q.unit->abbr == "px" ) {
+            if (q.unit->abbr == "px") {
                 pixel = true;
             }
         } else {
@@ -528,20 +528,20 @@ CanvasXYGrid::readRepr()
         }
     }
 
-    if ( (value = repr->attribute("spacingx")) ) {
+    if ((value = repr->attribute("spacingx"))) {
 
         // Ensure a valid default value
-        if( spacing[Geom::X] <= 0.0 )
+        if(spacing[Geom::X] <= 0.0)
             spacing[Geom::X] = 1.0;
 
         Inkscape::Util::Quantity q = unit_table.parseQuantity(value);
         // Ensure a valid new value
-        if( q.quantity > 0 ) {
-            if( q.unit->type == UNIT_TYPE_LINEAR ) {
+        if(q.quantity > 0) {
+            if(q.unit->type == UNIT_TYPE_LINEAR) {
                 // Legacy grid not in 'user units'
                 spacing[Geom::X] = q.value("px");
                 legacy = true;
-                if (q.unit->abbr == "px" ) {
+                if (q.unit->abbr == "px") {
                     pixel = true;
                 }
             } else {
@@ -551,20 +551,20 @@ CanvasXYGrid::readRepr()
         }
     }
 
-    if ( (value = repr->attribute("spacingy")) ) {
+    if ((value = repr->attribute("spacingy"))) {
 
         // Ensure a valid default value
-        if( spacing[Geom::Y] <= 0.0 )
+        if(spacing[Geom::Y] <= 0.0)
             spacing[Geom::Y] = 1.0;
 
         Inkscape::Util::Quantity q = unit_table.parseQuantity(value);
         // Ensure a valid new value
-        if( q.quantity > 0 ) {
-            if( q.unit->type == UNIT_TYPE_LINEAR ) {
+        if(q.quantity > 0) {
+            if(q.unit->type == UNIT_TYPE_LINEAR) {
                 // Legacy grid not in 'user units'
                 spacing[Geom::Y] = q.value("px");
                 legacy = true;
-                if (q.unit->abbr == "px" ) {
+                if (q.unit->abbr == "px") {
                     pixel = true;
                 }
             } else {
@@ -574,46 +574,46 @@ CanvasXYGrid::readRepr()
         }
     }
  
-    if ( (value = repr->attribute("color")) ) {
+    if ((value = repr->attribute("color"))) {
         color = (color & 0xff) | sp_svg_read_color(value, color);
     }
 
-    if ( (value = repr->attribute("empcolor")) ) {
+    if ((value = repr->attribute("empcolor"))) {
         empcolor = (empcolor & 0xff) | sp_svg_read_color(value, empcolor);
     }
            
-    if ( (value = repr->attribute("opacity")) ) {
+    if ((value = repr->attribute("opacity"))) {
         sp_nv_read_opacity(value, &color);
     }
-    if ( (value = repr->attribute("empopacity")) ) {
+    if ((value = repr->attribute("empopacity"))) {
         sp_nv_read_opacity(value, &empcolor);
     }
 
-    if ( (value = repr->attribute("empspacing")) ) {
+    if ((value = repr->attribute("empspacing"))) {
         gint oldVal = empspacing;
         empspacing = atoi(value);
-        validateInt( oldVal, &empspacing);
+        validateInt(oldVal, &empspacing);
     }
 
-    if ( (value = repr->attribute("dotted")) ) {
+    if ((value = repr->attribute("dotted"))) {
         render_dotted = (strcmp(value,"false") != 0 && strcmp(value, "0") != 0);
     }
 
-    if ( (value = repr->attribute("visible")) ) {
+    if ((value = repr->attribute("visible"))) {
         visible = (strcmp(value,"false") != 0 && strcmp(value, "0") != 0);
     }
 
-    if ( (value = repr->attribute("enabled")) ) {
+    if ((value = repr->attribute("enabled"))) {
         g_assert(snapper != nullptr);
         snapper->setEnabled(strcmp(value,"false") != 0 && strcmp(value, "0") != 0);
     }
 
-    if ( (value = repr->attribute("snapvisiblegridlinesonly")) ) {
+    if ((value = repr->attribute("snapvisiblegridlinesonly"))) {
         g_assert(snapper != nullptr);
         snapper->setSnapVisibleOnly(strcmp(value,"false") != 0 && strcmp(value, "0") != 0);
     }
 
-    if ( (value = repr->attribute("units")) ) {
+    if ((value = repr->attribute("units"))) {
         gridunit = unit_table.getUnit(value); // Display unit identifier in grid menu
     }
 
@@ -638,32 +638,32 @@ CanvasXYGrid::onReprAttrChanged(Inkscape::XML::Node */*repr*/, gchar const */*ke
 Gtk::Widget *
 CanvasXYGrid::newSpecificWidget()
 {
-    _rumg = Gtk::manage( new Inkscape::UI::Widget::RegisteredUnitMenu(
-            _("Grid _units:"), "units", _wr, repr, doc) );
-    _rsu_ox = Gtk::manage( new Inkscape::UI::Widget::RegisteredScalarUnit(
+    _rumg = Gtk::manage(new Inkscape::UI::Widget::RegisteredUnitMenu(
+            _("Grid _units:"), "units", _wr, repr, doc));
+    _rsu_ox = Gtk::manage(new Inkscape::UI::Widget::RegisteredScalarUnit(
             _("_Origin X:"), _("X coordinate of grid origin"), "originx",
-            *_rumg, _wr, repr, doc, Inkscape::UI::Widget::RSU_x) );
-    _rsu_oy = Gtk::manage( new Inkscape::UI::Widget::RegisteredScalarUnit(
+            *_rumg, _wr, repr, doc, Inkscape::UI::Widget::RSU_x));
+    _rsu_oy = Gtk::manage(new Inkscape::UI::Widget::RegisteredScalarUnit(
             _("O_rigin Y:"), _("Y coordinate of grid origin"), "originy",
-            *_rumg, _wr, repr, doc, Inkscape::UI::Widget::RSU_y) );
-    _rsu_sx = Gtk::manage( new Inkscape::UI::Widget::RegisteredScalarUnit(
+            *_rumg, _wr, repr, doc, Inkscape::UI::Widget::RSU_y));
+    _rsu_sx = Gtk::manage(new Inkscape::UI::Widget::RegisteredScalarUnit(
             _("Spacing _X:"), _("Distance between vertical grid lines"), "spacingx",
-            *_rumg, _wr, repr, doc, Inkscape::UI::Widget::RSU_x) );
-    _rsu_sy = Gtk::manage( new Inkscape::UI::Widget::RegisteredScalarUnit(
+            *_rumg, _wr, repr, doc, Inkscape::UI::Widget::RSU_x));
+    _rsu_sy = Gtk::manage(new Inkscape::UI::Widget::RegisteredScalarUnit(
             _("Spacing _Y:"), _("Distance between horizontal grid lines"), "spacingy",
-            *_rumg, _wr, repr, doc, Inkscape::UI::Widget::RSU_y) );
+            *_rumg, _wr, repr, doc, Inkscape::UI::Widget::RSU_y));
 
-    _rcp_gcol = Gtk::manage( new Inkscape::UI::Widget::RegisteredColorPicker(
+    _rcp_gcol = Gtk::manage(new Inkscape::UI::Widget::RegisteredColorPicker(
             _("Minor grid line _color:"), _("Minor grid line color"), _("Color of the minor grid lines"),
-            "color", "opacity", _wr, repr, doc) );
+            "color", "opacity", _wr, repr, doc));
 
-    _rcp_gmcol = Gtk::manage( new Inkscape::UI::Widget::RegisteredColorPicker(
+    _rcp_gmcol = Gtk::manage(new Inkscape::UI::Widget::RegisteredColorPicker(
             _("Ma_jor grid line color:"), _("Major grid line color"),
             _("Color of the major (highlighted) grid lines"), "empcolor", "empopacity",
-            _wr, repr, doc) );
+            _wr, repr, doc));
 
-    _rsi = Gtk::manage( new Inkscape::UI::Widget::RegisteredSuffixedInteger(
-            _("_Major grid line every:"), "", _("lines"), "empspacing", _wr, repr, doc) );
+    _rsi = Gtk::manage(new Inkscape::UI::Widget::RegisteredSuffixedInteger(
+            _("_Major grid line every:"), "", _("lines"), "empspacing", _wr, repr, doc));
 
     _wr.setUpdating (true);
 
@@ -679,9 +679,9 @@ CanvasXYGrid::newSpecificWidget()
     _rsu_sy->setDigits(5);
     _rsu_sy->setIncrements(0.1, 1.0);
 
-    _rcb_dotted = Gtk::manage( new Inkscape::UI::Widget::RegisteredCheckButton(
+    _rcb_dotted = Gtk::manage(new Inkscape::UI::Widget::RegisteredCheckButton(
             _("_Show dots instead of lines"), _("If set, displays dots at gridpoints instead of gridlines"),
-            "dotted", _wr, false, repr, doc) );
+            "dotted", _wr, false, repr, doc));
 
     // set widget values
     _rumg->setUnit (gridunit->abbr);
@@ -782,7 +782,7 @@ CanvasXYGrid::updateWidgets()
 
 // For correcting old SVG Inkscape files
 void
-CanvasXYGrid::Scale (Geom::Scale const &scale ) {
+CanvasXYGrid::Scale (Geom::Scale const &scale) {
     origin *= scale;
     spacing *= scale;
 
@@ -827,20 +827,20 @@ CanvasXYGrid::Update (Geom::Affine const &affine, unsigned int /*flags*/)
 // Find intersections of line with rectangle. There should be zero or two.
 // If line is degenerate with rectangle side, two corner points are returned.
 static std::vector<Geom::Point>
-intersect_line_rectangle( Geom::Line const &line, Geom::Rect const &rect )
+intersect_line_rectangle(Geom::Line const &line, Geom::Rect const &rect)
 {
     std::vector<Geom::Point> intersections;
     for (unsigned i = 0; i < 4; ++i) {
-        Geom::LineSegment side( rect.corner(i), rect.corner((i+1)%4) );
+        Geom::LineSegment side(rect.corner(i), rect.corner((i+1)%4));
         try {
             Geom::OptCrossing oc = Geom::intersection(line, side);
             if (oc) {
-                intersections.push_back( line.pointAt((*oc).ta));
+                intersections.push_back(line.pointAt((*oc).ta));
             }
         } catch (Geom::InfiniteSolutions) {
             intersections.clear();
-            intersections.push_back( side.pointAt(0) );
-            intersections.push_back( side.pointAt(1) );
+            intersections.push_back(side.pointAt(0));
+            intersections.push_back(side.pointAt(1));
             return intersections;
         }
     }
@@ -850,11 +850,11 @@ intersect_line_rectangle( Geom::Line const &line, Geom::Rect const &rect )
 // Find the signed distance of a point to a line. The distance is negative if
 // the point lies to the left of the line considering the line's versor.
 static double
-signed_distance( Geom::Point const &point, Geom::Line const &line ) {
-    Geom::Coord t = line.nearestTime( point );
+signed_distance(Geom::Point const &point, Geom::Line const &line) {
+    Geom::Coord t = line.nearestTime(point);
     Geom::Point p = line.pointAt(t);
-    double distance = Geom::distance( p, point );
-    if ( Geom::cross( Geom::Line( p, point ).versor(), line.versor() ) < 0.0 ) {
+    double distance = Geom::distance(p, point);
+    if (Geom::cross(Geom::Line(p, point).versor(), line.versor()) < 0.0) {
         distance = -distance;
     }
     return distance;
@@ -869,7 +869,7 @@ CanvasXYGrid::Render (SPCanvasBuf *buf)
     guint32 _empcolor;
     guint32 _color = color;
     bool no_emp_when_zoomed_out = prefs->getBool("/options/grids/no_emphasize_when_zoomedout", false);
-    if( (scaled[Geom::X] || scaled[Geom::Y]) && no_emp_when_zoomed_out ) {
+    if((scaled[Geom::X] || scaled[Geom::Y]) && no_emp_when_zoomed_out) {
         _empcolor = color;
     } else {
         _empcolor = empcolor;
@@ -899,8 +899,8 @@ CanvasXYGrid::Render (SPCanvasBuf *buf)
         // std::cout << "\n  " << (dim==0?"Horizontal":"Vertical") << "   ------------" << std::endl;
 
         // Construct an axis line through origin with direction normal to grid spacing.
-        Geom::Line axis = Geom::Line::from_origin_and_vector( ow, sw[dim]       );
-        Geom::Line orth = Geom::Line::from_origin_and_vector( ow, sw[(dim+1)%2] );
+        Geom::Line axis = Geom::Line::from_origin_and_vector(ow, sw[dim]);
+        Geom::Line orth = Geom::Line::from_origin_and_vector(ow, sw[(dim+1)%2]);
 
         double spacing = sw[(dim+1)%2].length();  // Spacing between grid lines.
         double dash    = sw[dim].length();        // Total length of dash pattern.
@@ -915,10 +915,10 @@ CanvasXYGrid::Render (SPCanvasBuf *buf)
         for (unsigned c = 0; c < 4; ++c) {
 
             // We need signed distance... lib2geom offers only positive distance.
-            double distance = signed_distance( buf->rect.corner(c), axis );
+            double distance = signed_distance(buf->rect.corner(c), axis);
 
             // Correct it for coordinate flips (inverts handedness).
-            if (Geom::cross( axis.vector(), orth.vector() ) > 0 ) {
+            if (Geom::cross(axis.vector(), orth.vector()) > 0) {
                 distance = -distance;
             }
 
@@ -927,8 +927,8 @@ CanvasXYGrid::Render (SPCanvasBuf *buf)
             if (distance > max)
                 max = distance;
         }
-        int start = floor( min/spacing );
-        int stop  = floor( max/spacing );
+        int start = floor(min/spacing);
+        int stop  = floor(max/spacing);
 
         // std::cout << "  rect: " << buf->rect << std::endl;
         // std::cout << "  min: " << min << "  max: " << max << std::endl;
@@ -937,16 +937,16 @@ CanvasXYGrid::Render (SPCanvasBuf *buf)
         // Loop over grid lines that intersected buf rectangle.
         for (int j = start+1; j <= stop; ++j) {
             
-            Geom::Line grid_line = Geom::make_parallel_line( ow + j * sw[(dim+1)%2], axis );
+            Geom::Line grid_line = Geom::make_parallel_line(ow + j * sw[(dim+1)%2], axis);
 
-            std::vector<Geom::Point> x = intersect_line_rectangle( grid_line, buf->rect );
+            std::vector<Geom::Point> x = intersect_line_rectangle(grid_line, buf->rect);
 
             // If we have two intersections, grid line intersects buffer rectangle.
-            if (x.size() == 2 ) {
+            if (x.size() == 2) {
 
                 // Make sure lines are always drawn in the same direction (or dashes misplaced).
-                Geom::Line vector( x[0], x[1]);
-                if (Geom::dot( vector.vector(), axis.vector() ) < 0.0) {
+                Geom::Line vector(x[0], x[1]);
+                if (Geom::dot(vector.vector(), axis.vector()) < 0.0) {
                     std::swap(x[0], x[1]);
                 }
 
@@ -973,8 +973,8 @@ CanvasXYGrid::Render (SPCanvasBuf *buf)
 
                     // Dash pattern must use spacing from orthogonal direction.
                     // Offset is to center dash on orthogonal lines.
-                    double offset = fmod( signed_distance( x[0], orth ), sw[dim].length());
-                    if (Geom::cross( axis.vector(), orth.vector() ) > 0 ) {
+                    double offset = fmod(signed_distance(x[0], orth), sw[dim].length());
+                    if (Geom::cross(axis.vector(), orth.vector()) > 0) {
                         offset = -offset;
                     }
 
@@ -1002,9 +1002,9 @@ CanvasXYGrid::Render (SPCanvasBuf *buf)
 
                     // Set color
                     if (!scaled[dim] && (j % empspacing) != 0) {
-                        ink_cairo_set_source_rgba32(buf->ct, _color );
+                        ink_cairo_set_source_rgba32(buf->ct, _color);
                     } else {
-                        ink_cairo_set_source_rgba32(buf->ct, _empcolor );
+                        ink_cairo_set_source_rgba32(buf->ct, _empcolor);
                     }
                 }
 
@@ -1044,7 +1044,7 @@ CanvasXYGridSnapper::_getSnapLines(Geom::Point const &p) const
 {
     LineList s;
 
-    if ( grid == nullptr ) {
+    if (grid == nullptr) {
         return s;
     }
 

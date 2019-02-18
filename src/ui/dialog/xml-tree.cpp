@@ -60,10 +60,10 @@ XmlTree::XmlTree() :
     tree (nullptr),
     status (""),
     tree_toolbar(),
-    xml_element_new_button ( _("New element node")),
-    xml_text_new_button ( _("New text node")),
-    xml_node_delete_button ( Q_("nodeAsInXMLdialogTooltip|Delete node")),
-    xml_node_duplicate_button ( _("Duplicate node")),
+    xml_element_new_button (_("New element node")),
+    xml_text_new_button (_("New text node")),
+    xml_node_delete_button (Q_("nodeAsInXMLdialogTooltip|Delete node")),
+    xml_node_duplicate_button (_("Duplicate node")),
     unindent_node_button(),
     indent_node_button(),
     raise_node_button(),
@@ -86,7 +86,7 @@ XmlTree::XmlTree() :
     status.set_size_request(1, -1);
     status.set_markup("");
     status.set_line_wrap(true);
-    status_box.pack_start( status, TRUE, TRUE, 0);
+    status_box.pack_start(status, TRUE, TRUE, 0);
 
     contents->pack_start(*flowbox_content, true, true, 0);
 
@@ -98,7 +98,7 @@ XmlTree::XmlTree() :
     /* tree view */
     flowbox_content->insert(&node_box, _("_Nodes"), FLOWBOX_PAGE_NODES, true, -1);
     tree = SP_XMLVIEW_TREE(sp_xmlview_tree_new(nullptr, nullptr, nullptr));
-    gtk_widget_set_tooltip_text( GTK_WIDGET(tree), _("Drag to reorder nodes") );
+    gtk_widget_set_tooltip_text(GTK_WIDGET(tree), _("Drag to reorder nodes"));
 
     tree_toolbar.set_toolbar_style(Gtk::TOOLBAR_ICONS);
 
@@ -169,7 +169,7 @@ XmlTree::XmlTree() :
     node_box.pack_start(tree_toolbar, FALSE, TRUE, 0);
 
     Gtk::ScrolledWindow *tree_scroller = new Gtk::ScrolledWindow();
-    tree_scroller->set_policy( Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC );
+    tree_scroller->set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
     tree_scroller->set_shadow_type(Gtk::SHADOW_IN);
     tree_scroller->add(*Gtk::manage(Glib::wrap(GTK_WIDGET(tree))));
 
@@ -185,10 +185,10 @@ XmlTree::XmlTree() :
     /* Signal handlers */
     GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(tree));
     g_signal_connect (G_OBJECT(selection), "changed", G_CALLBACK (on_tree_select_row), this);
-    g_signal_connect_after( G_OBJECT(tree), "tree_move", G_CALLBACK(after_tree_move), this);
+    g_signal_connect_after(G_OBJECT(tree), "tree_move", G_CALLBACK(after_tree_move), this);
 
-    //g_signal_connect( G_OBJECT(attributes), "row-value-changed", G_CALLBACK(on_attr_row_changed), this);
-    //g_signal_connect( G_OBJECT(attributes), "attr-value-edited", G_CALLBACK(on_attr_edited), this);
+    //g_signal_connect(G_OBJECT(attributes), "row-value-changed", G_CALLBACK(on_attr_row_changed), this);
+    //g_signal_connect(G_OBJECT(attributes), "attr-value-edited", G_CALLBACK(on_attr_edited), this);
 
     xml_element_new_button.signal_clicked().connect(sigc::mem_fun(*this, &XmlTree::cmd_new_element_node));
     xml_text_new_button.signal_clicked().connect(sigc::mem_fun(*this, &XmlTree::cmd_new_text_node));
@@ -203,7 +203,7 @@ XmlTree::XmlTree() :
     css_box.pack_start(*styles);
     flowbox_content->insert(&css_box, _("_Styles"), FLOWBOX_PAGE_STYLES, false, 200);
 
-    desktopChangeConn = deskTrack.connectDesktopChanged( sigc::mem_fun(*this, &XmlTree::set_tree_desktop) );
+    desktopChangeConn = deskTrack.connectDesktopChanged(sigc::mem_fun(*this, &XmlTree::set_tree_desktop));
     deskTrack.connect(GTK_WIDGET(gobj()));
 
     /* initial show/hide */
@@ -250,7 +250,7 @@ void XmlTree::tree_reset_context()
 
 void XmlTree::set_tree_desktop(SPDesktop *desktop)
 {
-    if ( desktop == current_desktop ) {
+    if (desktop == current_desktop) {
         return;
     }
 
@@ -284,7 +284,7 @@ void XmlTree::set_tree_document(SPDocument *document)
     if (current_document) {
 
         document_uri_set_connection = current_document->connectURISet(sigc::bind(sigc::ptr_fun(&on_document_uri_set), current_document));
-        on_document_uri_set( current_document->getURI(), current_document );
+        on_document_uri_set(current_document->getURI(), current_document);
         set_tree_repr(current_document->getReprRoot());
     } else {
         set_tree_repr(nullptr);
@@ -384,8 +384,8 @@ void XmlTree::set_dt_select(Inkscape::XML::Node *repr)
 
     SPObject *object;
     if (repr) {
-        while ( ( repr->type() != Inkscape::XML::ELEMENT_NODE )
-                && repr->parent() )
+        while ((repr->type() != Inkscape::XML::ELEMENT_NODE)
+                && repr->parent())
         {
             repr = repr->parent();
         } // end of while loop
@@ -396,9 +396,9 @@ void XmlTree::set_dt_select(Inkscape::XML::Node *repr)
     }
 
     blocked++;
-    if ( object && in_dt_coordsys(*object)
+    if (object && in_dt_coordsys(*object)
          && !(SP_IS_STRING(object) ||
-                SP_IS_ROOT(object)     ) )
+                SP_IS_ROOT(object)))
     {
             /* We cannot set selection to root or string - they are not items and selection is not
              * equipped to deal with them */
@@ -521,13 +521,13 @@ void XmlTree::on_tree_select_row_enable(GtkTreeIter *node)
     if (xml_tree_node_mutable(node)) {
         Inkscape::XML::Node *prev;
 
-        if ( parent && repr != parent->firstChild() ) {
+        if (parent && repr != parent->firstChild()) {
             g_assert(parent->firstChild());
 
             // skip to the child just before the current repr
-            for ( prev = parent->firstChild() ;
+            for (prev = parent->firstChild() ;
                   prev && prev->next() != repr ;
-                  prev = prev->next() ){};
+                  prev = prev->next()){};
 
             if (prev && (prev->type() == Inkscape::XML::ELEMENT_NODE)) {
                 indentable = TRUE;
@@ -539,7 +539,7 @@ void XmlTree::on_tree_select_row_enable(GtkTreeIter *node)
 
     //on_tree_select_row_enable_if_not_first_child
     {
-        if ( parent && repr != parent->firstChild() ) {
+        if (parent && repr != parent->firstChild()) {
             raise_node_button.set_sensitive(true);
         } else {
             raise_node_button.set_sensitive(false);
@@ -548,7 +548,7 @@ void XmlTree::on_tree_select_row_enable(GtkTreeIter *node)
 
     //on_tree_select_row_enable_if_not_last_child
     {
-        if ( parent && (parent->parent() && repr->next())) {
+        if (parent && (parent->parent() && repr->next())) {
             lower_node_button.set_sensitive(true);
         } else {
             lower_node_button.set_sensitive(false);
@@ -577,8 +577,8 @@ gboolean XmlTree::xml_tree_node_mutable(GtkTreeIter *node)
     g_assert(repr);
 
     // don't let "defs" or "namedview" disappear
-    if ( !strcmp(repr->name(),"svg:defs") ||
-         !strcmp(repr->name(),"sodipodi:namedview") ) {
+    if (!strcmp(repr->name(),"svg:defs") ||
+         !strcmp(repr->name(),"sodipodi:namedview")) {
         return false;
     }
 
@@ -636,7 +636,7 @@ void XmlTree::on_tree_unselect_row_disable()
     gchar *attr_name = nullptr;
     if (gtk_tree_selection_get_selected (selection, &model, &iter)) {
         gtk_tree_model_get (model, &iter, 0, &attr_name, -1);
-        if (gtk_list_store_iter_is_valid(GTK_LIST_STORE(model), &iter) ) {
+        if (gtk_list_store_iter_is_valid(GTK_LIST_STORE(model), &iter)) {
             if (!strcmp(name, attr_name)) {
                 gtk_tree_selection_unselect_all(selection);
                 gtk_tree_selection_select_iter(selection, &iter);
@@ -835,7 +835,7 @@ void XmlTree::cmd_indent_node()
 
     Inkscape::XML::Node* ref = nullptr;
     if (prev->firstChild()) {
-        for( ref = prev->firstChild() ; ref->next() ; ref = ref->next() ){};
+        for(ref = prev->firstChild() ; ref->next() ; ref = ref->next()){};
     }
 
     parent->removeChild(repr);

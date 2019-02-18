@@ -27,7 +27,7 @@ namespace LivePathEffect {
 
 class TextParam : public Parameter {
 public:
-    TextParam( const Glib::ustring& label,
+    TextParam(const Glib::ustring& label,
                const Glib::ustring& tip,
                const Glib::ustring& key,
                Inkscape::UI::Widget::Registry* wr,

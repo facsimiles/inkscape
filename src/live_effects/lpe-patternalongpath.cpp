@@ -26,8 +26,8 @@ using std::vector;
 /* Theory in e-mail from J.F. Barraud
 Let B be the skeleton path, and P the pattern (the path to be deformed).
 
-P is a map t --> P(t) = ( x(t), y(t) ).
-B is a map t --> B(t) = ( a(t), b(t) ).
+P is a map t --> P(t) = (x(t), y(t)).
+B is a map t --> B(t) = (a(t), b(t)).
 
 The first step is to re-parametrize B by its arc length: this is the parametrization in which a point p on B is located by its distance s from start. One obtains a new map s --> U(s) = (a'(s),b'(s)), that still describes the same path B, but where the distance along B from start to
 U(s) is s itself.
@@ -140,7 +140,7 @@ LPEPatternAlongPath::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > con
     using namespace Geom;
 
     // Don't allow empty path parameter:
-    if ( pattern.get_pathvector().empty() ) {
+    if (pattern.get_pathvector().empty()) {
         return pwd2_in;
     }
 
@@ -235,7 +235,7 @@ LPEPatternAlongPath::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > con
             double pattWidth = pattBndsX->extent() * scaling;
             
             x *= scaling;
-            if ( scale_y_rel.get_value() ) {
+            if (scale_y_rel.get_value()) {
                 y *= prop_scale * scaling;
             } else {
                 y *= prop_scale;
@@ -247,7 +247,7 @@ LPEPatternAlongPath::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > con
                 if (fuse_tolerance > 0){        
                     Geom::Piecewise<Geom::D2<Geom::SBasis> > output_piece = compose(uskeleton,x+offs)+y*compose(n,x+offs);
                     std::vector<Geom::Piecewise<Geom::D2<Geom::SBasis> > > splited_output_piece = split_at_discontinuities(output_piece);
-                    pre_output.insert(pre_output.end(), splited_output_piece.begin(), splited_output_piece.end() );
+                    pre_output.insert(pre_output.end(), splited_output_piece.begin(), splited_output_piece.end());
                 }else{
                     output.concat(compose(uskeleton,x+offs)+y*compose(n,x+offs));
                 }

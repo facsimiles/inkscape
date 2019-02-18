@@ -271,7 +271,7 @@ Parameter::set_string (gchar const * in, SPDocument * doc, Inkscape::XML::Node *
     return stringpntr->set(in, doc, node);
 }
 
-gchar const * Parameter::set_optiongroup( gchar const * in, SPDocument * doc, Inkscape::XML::Node * node )
+gchar const * Parameter::set_optiongroup(gchar const * in, SPDocument * doc, Inkscape::XML::Node * node)
 {
     ParamRadioButton *param = dynamic_cast<ParamRadioButton *>(this);
     if (!param) {
@@ -280,7 +280,7 @@ gchar const * Parameter::set_optiongroup( gchar const * in, SPDocument * doc, In
     return param->set(in, doc, node);
 }
 
-gchar const *Parameter::set_enum( gchar const * in, SPDocument * doc, Inkscape::XML::Node * node )
+gchar const *Parameter::set_enum(gchar const * in, SPDocument * doc, Inkscape::XML::Node * node)
 {
     ParamComboBox *param = dynamic_cast<ParamComboBox *>(this);
     if (!param) {

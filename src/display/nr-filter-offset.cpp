@@ -40,7 +40,7 @@ void FilterOffset::render_cairo(FilterSlot &slot)
     copy_cairo_surface_ci(in, out);
     cairo_t *ct = cairo_create(out);
 
-    Geom::Rect vp = filter_primitive_area( slot.get_units() );
+    Geom::Rect vp = filter_primitive_area(slot.get_units());
     slot.set_primitive_area(_output, vp); // Needed for tiling
 
     Geom::Affine p2pb = slot.get_units().get_matrix_primitiveunits2pb();

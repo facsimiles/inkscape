@@ -35,7 +35,7 @@ public:
     ~PreviewHolder() override;
 
     virtual void clear();
-    virtual void addPreview( Previewable* preview );
+    virtual void addPreview(Previewable* preview);
     virtual void freezeUpdates();
     virtual void thawUpdates();
     virtual void setStyle(UI::Widget::PreviewSize size,
@@ -44,12 +44,12 @@ public:
                           UI::Widget::BorderStyle border);
     virtual void setOrientation(SPAnchorType how);
     virtual int getColumnPref() const { return _prefCols; }
-    virtual void setColumnPref( int cols );
+    virtual void setColumnPref(int cols);
     virtual UI::Widget::PreviewSize getPreviewSize() const { return _baseSize; }
     virtual UI::Widget::ViewType getPreviewType() const { return _view; }
     virtual guint getPreviewRatio() const { return _ratio; }
     virtual UI::Widget::BorderStyle getPreviewBorder() const { return _border; }
-    virtual void setWrap( bool wrap );
+    virtual void setWrap(bool wrap);
     virtual bool getWrap() const { return _wrap; }
 
 protected:
@@ -57,7 +57,7 @@ protected:
 
 private:
     void rebuildUI();
-    void calcGridSize( const Gtk::Widget* item, int itemCount, int& ncols, int& nrows );
+    void calcGridSize(const Gtk::Widget* item, int itemCount, int& ncols, int& nrows);
 
     std::vector<Previewable*> items;
     Gtk::ScrolledWindow *_scroller;

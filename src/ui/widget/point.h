@@ -45,7 +45,7 @@ public:
      *                  indicates the next character should be used for the
      *                  mnemonic accelerator key (defaults to false).
      */
-    Point( Glib::ustring const &label,
+    Point(Glib::ustring const &label,
            Glib::ustring const &tooltip,
            Glib::ustring const &suffix = "",
            Glib::ustring const &icon = "",
@@ -62,7 +62,7 @@ public:
      *                  indicates the next character should be used for the
      *                  mnemonic accelerator key (defaults to false).
      */
-    Point( Glib::ustring const &label,
+    Point(Glib::ustring const &label,
            Glib::ustring const &tooltip,
            unsigned digits,
            Glib::ustring const &suffix = "",
@@ -81,7 +81,7 @@ public:
      *                  indicates the next character should be used for the
      *                  mnemonic accelerator key (defaults to true).
      */
-    Point( Glib::ustring const &label,
+    Point(Glib::ustring const &label,
            Glib::ustring const &tooltip,
 	   Glib::RefPtr<Gtk::Adjustment> &adjust,
            unsigned digits = 0,

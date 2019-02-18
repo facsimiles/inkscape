@@ -65,15 +65,15 @@ SPFilter::~SPFilter() = default;
  */
 void SPFilter::build(SPDocument *document, Inkscape::XML::Node *repr) {
     //Read values of key attributes from XML nodes into object.
-    this->readAttr( "style" ); // struct not derived from SPItem, we need to do this ourselves.
-    this->readAttr( "filterUnits" );
-    this->readAttr( "primitiveUnits" );
-    this->readAttr( "x" );
-    this->readAttr( "y" );
-    this->readAttr( "width" );
-    this->readAttr( "height" );
-    this->readAttr( "filterRes" );
-    this->readAttr( "xlink:href" );
+    this->readAttr("style"); // struct not derived from SPItem, we need to do this ourselves.
+    this->readAttr("filterUnits");
+    this->readAttr("primitiveUnits");
+    this->readAttr("x");
+    this->readAttr("y");
+    this->readAttr("width");
+    this->readAttr("height");
+    this->readAttr("filterRes");
+    this->readAttr("xlink:href");
     this->_refcount = 0;
 
 	SPObject::build(document, repr);
@@ -224,7 +224,7 @@ void SPFilter::update(SPCtx *ctx, guint flags) {
     childflags &= SP_OBJECT_MODIFIED_CASCADE;
     std::vector<SPObject*> l(this->childList(true, SPObject::ActionUpdate));
     for(SPObject* child: l){
-        if( SP_IS_FILTER_PRIMITIVE( child ) ) {
+        if(SP_IS_FILTER_PRIMITIVE(child)) {
             child->updateDisplay(ctx, childflags);
         }
         sp_object_unref(child);
@@ -337,8 +337,8 @@ filter_ref_changed(SPObject *old_ref, SPObject *ref, SPFilter *filter)
         filter->modified_connection.disconnect();
     }
 
-    if ( SP_IS_FILTER(ref)
-         && ref != filter )
+    if (SP_IS_FILTER(ref)
+         && ref != filter)
     {
         filter->modified_connection =
             ref->connectModified(sigc::bind(sigc::ptr_fun(&filter_ref_modified), filter));

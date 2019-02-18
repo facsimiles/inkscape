@@ -257,14 +257,14 @@ gboolean
 dbus_call_verb (DocumentInterface *doc_interface, int verbid, GError **error)
 {    
     SPDesktop *desk = doc_interface->target.getDesktop();    
-    if ( desk ) {
+    if (desk) {
         desktop_ensure_active (desk);
     }
-    Inkscape::Verb *verb = Inkscape::Verb::get( verbid );
-    if ( verb ) {
+    Inkscape::Verb *verb = Inkscape::Verb::get(verbid);
+    if (verb) {
         SPAction *action = verb->get_action(doc_interface->target);
-        if ( action ) {
-            sp_action_perform( action, NULL );
+        if (action) {
+            sp_action_perform(action, NULL);
             if (doc_interface->updates)
                 Inkscape::DocumentUndo::done(doc_interface->target.getDocument(), verb->get_code(), verb->get_tip());
             return TRUE;
@@ -346,14 +346,14 @@ gboolean
 document_interface_call_verb (DocumentInterface *doc_interface, gchar *verbid, GError **error)
 {
     SPDesktop *desk = doc_interface->target.getDesktop();
-    if ( desk ) {
+    if (desk) {
         desktop_ensure_active (desk);
     }
-    Inkscape::Verb *verb = Inkscape::Verb::getbyid( verbid );
-    if ( verb ) {
+    Inkscape::Verb *verb = Inkscape::Verb::getbyid(verbid);
+    if (verb) {
         SPAction *action = verb->get_action(doc_interface->target);
-        if ( action ) {
-            sp_action_perform( action, NULL );
+        if (action) {
+            sp_action_perform(action, NULL);
             if (doc_interface->updates) {
                 Inkscape::DocumentUndo::done(doc_interface->target.getDocument(), verb->get_code(), verb->get_tip());
             }
@@ -491,7 +491,7 @@ document_interface_text (DocumentInterface *doc_interface, int x, int y, gchar *
     //just a workaround so i can get an spitem from the name
     gchar  *name = finish_create_shape (doc_interface, error, text_node, (gchar *)"create text");
     
-    SPItem* text_obj=(SPItem* )get_object_by_name(doc_interface->target.getDocument(), name, error);
+    SPItem* text_obj=(SPItem*)get_object_by_name(doc_interface->target.getDocument(), name, error);
     sp_te_set_repr_text_multiline(text_obj, text);
 
     return name;
@@ -602,7 +602,7 @@ document_interface_document_set_display_area (DocumentInterface *doc_interface,
 {
     SPDesktop *desk = doc_interface->target.getDesktop();
     g_return_val_if_fail(ensure_desktop_valid(desk, error), FALSE);
-    desk->set_display_area (Geom::Rect( Geom::Point(x0,y0), Geom::Point(x1,y1)), border, false );
+    desk->set_display_area (Geom::Rect(Geom::Point(x0,y0), Geom::Point(x1,y1)), border, false);
     return TRUE;
 }
 
@@ -874,7 +874,7 @@ gboolean
 document_interface_set_text (DocumentInterface *doc_interface, gchar *name, gchar *text, GError **error)
 {
 
-  SPItem* text_obj=(SPItem* )get_object_by_name(doc_interface->target.getDocument(), name, error);
+  SPItem* text_obj=(SPItem*)get_object_by_name(doc_interface->target.getDocument(), name, error);
   //TODO verify object type
   if (!text_obj)
     return FALSE;
@@ -891,7 +891,7 @@ document_interface_text_apply_style (DocumentInterface *doc_interface, gchar *na
                                      GError **error)
 {
 
-  SPItem* text_obj=(SPItem* )get_object_by_name(doc_interface->target.getDocument(), name, error);
+  SPItem* text_obj=(SPItem*)get_object_by_name(doc_interface->target.getDocument(), name, error);
 
   //void sp_te_apply_style(SPItem *text, Inkscape::Text::Layout::iterator const &start, Inkscape::Text::Layout::iterator const &end, SPCSSAttr const *css)
   //TODO verify object type
@@ -1240,7 +1240,7 @@ gboolean document_interface_selection_move_to(DocumentInterface *doc_interface, 
 
     Geom::OptRect sel_bbox = sel->visualBounds();
     if (sel_bbox) {
-        Geom::Point m( x - selection_get_center_x(sel) , 0 - (y - selection_get_center_y(sel)) );
+        Geom::Point m(x - selection_get_center_x(sel) , 0 - (y - selection_get_center_y(sel)));
         sel->moveRelative(m, true);
     }
     return TRUE;
@@ -1417,7 +1417,7 @@ gboolean dbus_send_ping (SPDesktop* desk,     SPItem *item)
 gboolean
 document_interface_get_children (DocumentInterface *doc_interface,  char *name, char ***out, GError **error)
 {
-    SPItem* parent=(SPItem* )get_object_by_name(doc_interface->target.getDocument(), name, error);
+    SPItem* parent=(SPItem*)get_object_by_name(doc_interface->target.getDocument(), name, error);
     std::vector<SPObject*> children = parent->childList(false);
 
     int size = children.size();
@@ -1438,7 +1438,7 @@ document_interface_get_children (DocumentInterface *doc_interface,  char *name, 
 gchar* 
 document_interface_get_parent (DocumentInterface *doc_interface,  char *name, GError **error)
 {
-  SPItem* node=(SPItem* )get_object_by_name(doc_interface->target.getDocument(), name, error);
+  SPItem* node=(SPItem*)get_object_by_name(doc_interface->target.getDocument(), name, error);
   
   SPObject* parent=node->parent;
 

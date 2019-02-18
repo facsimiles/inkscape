@@ -373,7 +373,7 @@ void OutputFile::draw_curved_edges(Cairo::RefPtr<Cairo::Context> &cr,
     cr->restore();
 }
 void OutputFile::openCairo(Cairo::RefPtr<Cairo::Context> &cr, double width, double height) {
-    if(fname.rfind("pdf") == (fname.length()-3) ) {
+    if(fname.rfind("pdf") == (fname.length()-3)) {
         printf("writing pdf file: %s\n",fname.c_str());
         Cairo::RefPtr<Cairo::PdfSurface> pdfsurface =
             Cairo::PdfSurface::create(fname, width, height);

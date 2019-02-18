@@ -61,35 +61,35 @@ PrintColorsPreviewDialog::PrintColorsPreviewDialog()
     Gtk::VBox* vbox = Gtk::manage(new Gtk::VBox());
 
     cyan = new Gtk::ToggleButton(_("Cyan"));
-    vbox->pack_start( *cyan, false, false );
+    vbox->pack_start(*cyan, false, false);
 //    tips.set_tip((*cyan), _("Render cyan separation"));
-    cyan->signal_clicked().connect( sigc::mem_fun(*this, &PrintColorsPreviewDialog::toggle_cyan) );
+    cyan->signal_clicked().connect(sigc::mem_fun(*this, &PrintColorsPreviewDialog::toggle_cyan));
 
     magenta = new Gtk::ToggleButton(_("Magenta"));
-    vbox->pack_start( *magenta, false, false );
+    vbox->pack_start(*magenta, false, false);
 //    tips.set_tip((*magenta), _("Render magenta separation"));
-    magenta->signal_clicked().connect( sigc::mem_fun(*this, &PrintColorsPreviewDialog::toggle_magenta) );
+    magenta->signal_clicked().connect(sigc::mem_fun(*this, &PrintColorsPreviewDialog::toggle_magenta));
 
     yellow = new Gtk::ToggleButton(_("Yellow"));
-    vbox->pack_start( *yellow, false, false );
+    vbox->pack_start(*yellow, false, false);
 //    tips.set_tip((*yellow), _("Render yellow separation"));
-    yellow->signal_clicked().connect( sigc::mem_fun(*this, &PrintColorsPreviewDialog::toggle_yellow) );
+    yellow->signal_clicked().connect(sigc::mem_fun(*this, &PrintColorsPreviewDialog::toggle_yellow));
 
     black = new Gtk::ToggleButton(_("Black"));
-    vbox->pack_start( *black, false, false );
+    vbox->pack_start(*black, false, false);
 //    tips.set_tip((*black), _("Render black separation"));
-    black->signal_clicked().connect( sigc::mem_fun(*this, &PrintColorsPreviewDialog::toggle_black) );
+    black->signal_clicked().connect(sigc::mem_fun(*this, &PrintColorsPreviewDialog::toggle_black));
 
     gint val;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     val = prefs->getBool("/options/printcolorspreview/cyan");
-    cyan->set_active( val != 0 );
+    cyan->set_active(val != 0);
     val = prefs->getBool("/options/printcolorspreview/magenta");
-    magenta->set_active( val != 0 );
+    magenta->set_active(val != 0);
     val = prefs->getBool("/options/printcolorspreview/yellow");
-    yellow->set_active( val != 0 );
+    yellow->set_active(val != 0);
     val = prefs->getBool("/options/printcolorspreview/black");
-    black->set_active( val != 0 );
+    black->set_active(val != 0);
 
     _getContents()->add(*vbox);
     _getContents()->show_all();

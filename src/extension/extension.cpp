@@ -108,7 +108,7 @@ Extension::Extension (Inkscape::XML::Node * in_repr, Implementation::Implementat
                 }
             } /* check command as a dependency (see LP #505920) */
             if (!strcmp(chname, "options")) {
-                silent = !strcmp( child_repr->attribute("silent"), "true" );
+                silent = !strcmp(child_repr->attribute("silent"), "true");
             }
             child_repr = child_repr->next();
         }
@@ -400,7 +400,7 @@ Parameter *Extension::get_param(gchar const *name)
         throw Extension::param_not_exist();
     }
 
-    for( auto param:this->parameters) {
+    for(auto param:this->parameters) {
         if (!strcmp(param->name(), name)) {
             return param;
         } else {
@@ -449,7 +449,7 @@ Extension::get_param_enum_contains(gchar const * name, gchar const * value, SPDo
 }
 
 gchar const *
-Extension::get_param_optiongroup( gchar const * name, SPDocument const * doc, Inkscape::XML::Node const * node) const
+Extension::get_param_optiongroup(gchar const * name, SPDocument const * doc, Inkscape::XML::Node const * node) const
 {
     Parameter const*param = get_param(name);
     return param->get_optiongroup(doc, node);
@@ -650,7 +650,7 @@ void
 Extension::error_file_open ()
 {
     gchar * ext_error_file = Inkscape::IO::Resource::log_path(EXTENSION_ERROR_LOG_FILENAME);
-    gchar * filename = g_filename_from_utf8( ext_error_file, -1, nullptr, nullptr, nullptr );
+    gchar * filename = g_filename_from_utf8(ext_error_file, -1, nullptr, nullptr, nullptr);
     error_file.open(filename);
     if (!error_file.is_open()) {
         g_warning(_("Could not create extension error log file '%s'"),
@@ -821,7 +821,7 @@ Extension::get_params_widget()
     return retval;
 }
 
-unsigned int Extension::param_visible_count ( )
+unsigned int Extension::param_visible_count ()
 {
     unsigned int _visible_count = 0;
     for (auto param:parameters) {

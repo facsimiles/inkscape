@@ -148,7 +148,7 @@ protected:
     void _setup_layers_controls();
     void _prepareLabelRenderer(Gtk::TreeModel::const_iterator const &row);
 
-    void _addLayer( SPDocument* doc, SPObject* layer, Gtk::TreeModel::Row* parentRow, SPObject* target, int level );
+    void _addLayer(SPDocument* doc, SPObject* layer, Gtk::TreeModel::Row* parentRow, SPObject* target, int level);
     SPObject* _selectedLayer();
     bool _handleKeyEvent(GdkEventKey *event);
     void _handleButtonEvent(GdkEventButton* event);

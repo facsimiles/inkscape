@@ -100,12 +100,12 @@ const std::string SprayTool::prefsPath = "/tools/spray";
 /**
  * This function returns pseudo-random numbers from a normal distribution
  * @param mu : mean
- * @param sigma : standard deviation ( > 0 )
+ * @param sigma : standard deviation (> 0)
  */
 inline double NormalDistribution(double mu, double sigma)
 {
   // use Box Muller's algorithm
-  return mu + sigma * sqrt( -2.0 * log(g_random_double_range(0, 1)) ) * cos( 2.0*M_PI*g_random_double_range(0, 1) );
+  return mu + sigma * sqrt(-2.0 * log(g_random_double_range(0, 1))) * cos(2.0*M_PI*g_random_double_range(0, 1));
 }
 
 /* Method to rotate items */
@@ -406,7 +406,7 @@ static void random_position(double &radius, double &angle, double &a, double &s,
 
     // radius is taken from a Normal Distribution
     double radius_temp =-1;
-    while(!((radius_temp >= 0) && (radius_temp <=1 )))
+    while(!((radius_temp >= 0) && (radius_temp <=1)))
     {
         radius_temp = NormalDistribution(a, s);
     }
@@ -455,7 +455,7 @@ guint32 getPickerData(Geom::IntRect area){
     ink_cairo_surface_average_color(s, R, G, B, A);
     cairo_surface_destroy(s);
     //this can fix the bug #1511998 if confirmed 
-    if( A == 0 || A < 1e-6){
+    if(A == 0 || A < 1e-6){
         R = 1;
         G = 1;
         B = 1;
@@ -506,11 +506,11 @@ static bool fit_item(SPDesktop *desktop,
     double width = bbox->width();
     double height = bbox->height();
     double offset_width = (offset * width)/100.0 - (width);
-    if(offset_width < 0 ){
+    if(offset_width < 0){
         offset_width = 0;
     }
     double offset_height = (offset * height)/100.0 - (height);
-    if(offset_height < 0 ){
+    if(offset_height < 0){
         offset_height = 0;
     }
     if(picker && pick_to_size && !trace_scale && do_trace){
@@ -563,7 +563,7 @@ static bool fit_item(SPDesktop *desktop,
             return false;
         }
     }
-    if(offset < 100 ) {
+    if(offset < 100) {
         offset_width = ((99.0 - offset) * width_transformed)/100.0 - width_transformed;
         offset_height = ((99.0 - offset) * height_transformed)/100.0 - height_transformed;
     } else {
@@ -593,10 +593,10 @@ static bool fit_item(SPDesktop *desktop,
             }
             if(strcmp(item_down_sharp, spray_origin) == 0 ||
                 (item_down->getAttribute("inkscape:spray-origin") && 
-                strcmp(item_down->getAttribute("inkscape:spray-origin"),spray_origin) == 0 ))
+                strcmp(item_down->getAttribute("inkscape:spray-origin"),spray_origin) == 0))
             {
                 if(mode == SPRAY_MODE_ERASER) {
-                    if(strcmp(item_down_sharp, spray_origin) != 0 && !selection->includes(item_down) ){
+                    if(strcmp(item_down_sharp, spray_origin) != 0 && !selection->includes(item_down)){
                         item_down->deleteObject();
                         items_down_erased.pop_back();
                         break;
@@ -771,7 +771,7 @@ static bool fit_item(SPDesktop *desktop,
                                  , invert_picked
                                  , gamma_picked
                                  , rand_picked)
-                        )
+)
                     {
                         if(!no_overlap && (picker || over_transparent || over_no_transparent)){
                             showHidden(items_down);
@@ -895,13 +895,13 @@ static bool sp_spray_recursive(SPDesktop *desktop,
     }
 
     double _fid = g_random_double_range(0, 1);
-    double angle = g_random_double_range( - rotation_variation / 100.0 * M_PI , rotation_variation / 100.0 * M_PI );
-    double _scale = g_random_double_range( 1.0 - scale_variation / 100.0, 1.0 + scale_variation / 100.0 );
+    double angle = g_random_double_range(- rotation_variation / 100.0 * M_PI , rotation_variation / 100.0 * M_PI);
+    double _scale = g_random_double_range(1.0 - scale_variation / 100.0, 1.0 + scale_variation / 100.0);
     if(usepressurescale){
         _scale = pressure;
     }
     double dr; double dp;
-    random_position( dr, dp, mean, standard_deviation, _distrib );
+    random_position(dr, dp, mean, standard_deviation, _distrib);
     dr=dr*radius;
 
     if (mode == SPRAY_MODE_COPY || mode == SPRAY_MODE_ERASER) {
@@ -1202,7 +1202,7 @@ static bool sp_spray_dilate(SprayTool *tc, Geom::Point /*event_p*/, Geom::Point 
 static void sp_spray_update_area(SprayTool *tc)
 {
     double radius = get_dilate_radius(tc);
-    Geom::Affine const sm ( Geom::Scale(radius/(1-tc->ratio), radius/(1+tc->ratio)) );
+    Geom::Affine const sm (Geom::Scale(radius/(1-tc->ratio), radius/(1+tc->ratio)));
     sp_canvas_item_affine_absolute(tc->dilate_area, (sm* Geom::Rotate(tc->tilt))* Geom::Translate(SP_EVENT_CONTEXT(tc)->desktop->point()));
     sp_canvas_item_show(tc->dilate_area);
 }
@@ -1265,7 +1265,7 @@ bool SprayTool::root_handler(GdkEvent* event) {
 
             // Draw the dilating cursor
             double radius = get_dilate_radius(this);
-            Geom::Affine const sm (Geom::Scale(radius/(1-this->ratio), radius/(1+this->ratio)) );
+            Geom::Affine const sm (Geom::Scale(radius/(1-this->ratio), radius/(1+this->ratio)));
             sp_canvas_item_affine_absolute(this->dilate_area, (sm*Geom::Rotate(this->tilt))*Geom::Translate(desktop->w2d(motion_w)));
             sp_canvas_item_show(this->dilate_area);
 
@@ -1278,7 +1278,7 @@ bool SprayTool::root_handler(GdkEvent* event) {
             }
 
             // Dilating:
-            if (this->is_drawing && ( event->motion.state & GDK_BUTTON1_MASK )) {
+            if (this->is_drawing && (event->motion.state & GDK_BUTTON1_MASK)) {
                 sp_spray_dilate(this, motion_w, motion_doc, motion_doc - this->last_push, event->button.state & GDK_SHIFT_MASK? true : false);
                 //this->last_push = motion_doc;
                 this->has_dilated = true;

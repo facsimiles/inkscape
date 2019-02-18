@@ -30,7 +30,7 @@ Inkscape::XML::Node const *LCA(Inkscape::XML::Node const *a, Inkscape::XML::Node
             OK = true;
         }
     }
-    if ( OK ) {
+    if (OK) {
         return ancestor;
     } else {
         return nullptr;
@@ -46,7 +46,7 @@ Inkscape::XML::Node *LCA(Inkscape::XML::Node *a, Inkscape::XML::Node *b)
 Inkscape::XML::Node const *AncetreFils(Inkscape::XML::Node const *descendent, Inkscape::XML::Node const *ancestor)
 {
     Inkscape::XML::Node const *result = nullptr;
-    if ( descendent && ancestor ) {
+    if (descendent && ancestor) {
         if (descendent->parent() == ancestor) {
             result = descendent;
         } else {

@@ -121,7 +121,7 @@ void SPFlowtext::modified(unsigned int flags) {
     flags &= SP_OBJECT_MODIFIED_CASCADE;
 
     // FIXME: the below stanza is copied over from sp_text_modified, consider factoring it out
-    if (flags & ( SP_OBJECT_STYLE_MODIFIED_FLAG )) {
+    if (flags & (SP_OBJECT_STYLE_MODIFIED_FLAG)) {
         Geom::OptRect pbox = geometricBounds();
 
         for (SPItemView* v = display; v != nullptr; v = v->next) {
@@ -151,7 +151,7 @@ void SPFlowtext::build(SPDocument* doc, Inkscape::XML::Node* repr) {
 
     SPItem::build(doc, repr);
 
-    this->readAttr( "inkscape:layoutOptions" );     // must happen after css has been read
+    this->readAttr("inkscape:layoutOptions");     // must happen after css has been read
 }
 
 void SPFlowtext::set(SPAttributeEnum key, const gchar* value) {
@@ -164,7 +164,7 @@ void SPFlowtext::set(SPAttributeEnum key, const gchar* value) {
                 gchar const *val = sp_repr_css_property(opts, "justification", nullptr);
 
                 if (val != nullptr && !this->style->text_align.set) {
-                    if ( strcmp(val, "0") == 0 || strcmp(val, "false") == 0 ) {
+                    if (strcmp(val, "0") == 0 || strcmp(val, "false") == 0) {
                         this->style->text_align.value = SP_CSS_TEXT_ALIGN_LEFT;
                     } else {
                         this->style->text_align.value = SP_CSS_TEXT_ALIGN_JUSTIFY;
@@ -178,14 +178,14 @@ void SPFlowtext::set(SPAttributeEnum key, const gchar* value) {
             /* no equivalent css attribute for these two (yet)
             {
                 gchar const *val = sp_repr_css_property(opts, "layoutAlgo", NULL);
-                if ( val == NULL ) {
+                if (val == NULL) {
                     group->algo = 0;
                 } else {
-                    if ( strcmp(val, "better") == 0 ) {     // knuth-plass, never worked for general cases
+                    if (strcmp(val, "better") == 0) {     // knuth-plass, never worked for general cases
                         group->algo = 2;
-                    } else if ( strcmp(val, "simple") == 0 ) {   // greedy, but allowed lines to be compressed by up to 20% if it would make them fit
+                    } else if (strcmp(val, "simple") == 0) {   // greedy, but allowed lines to be compressed by up to 20% if it would make them fit
                         group->algo = 1;
-                    } else if ( strcmp(val, "default") == 0 ) {    // the same one we use, a standard greedy
+                    } else if (strcmp(val, "default") == 0) {    // the same one we use, a standard greedy
                         group->algo = 0;
                     }
                 }
@@ -194,7 +194,7 @@ void SPFlowtext::set(SPAttributeEnum key, const gchar* value) {
             {   // This would probably translate to padding-left, if SPStyle had it.
                 gchar const *val = sp_repr_css_property(opts, "par-indent", nullptr);
 
-                if ( val == nullptr ) {
+                if (val == nullptr) {
                     this->par_indent = 0.0;
                 } else {
                     this->par_indent = g_ascii_strtod(val, nullptr);
@@ -213,8 +213,8 @@ void SPFlowtext::set(SPAttributeEnum key, const gchar* value) {
 }
 
 Inkscape::XML::Node* SPFlowtext::write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags) {
-    if ( flags & SP_OBJECT_WRITE_BUILD ) {
-        if ( repr == nullptr ) {
+    if (flags & SP_OBJECT_WRITE_BUILD) {
+        if (repr == nullptr) {
             repr = doc->createElement("svg:flowRoot");
         }
 
@@ -223,11 +223,11 @@ Inkscape::XML::Node* SPFlowtext::write(Inkscape::XML::Document* doc, Inkscape::X
         for (auto& child: children) {
             Inkscape::XML::Node *c_repr = nullptr;
 
-            if ( dynamic_cast<SPFlowdiv *>(&child) || dynamic_cast<SPFlowpara *>(&child) || dynamic_cast<SPFlowregion *>(&child) || dynamic_cast<SPFlowregionExclude *>(&child)) {
+            if (dynamic_cast<SPFlowdiv *>(&child) || dynamic_cast<SPFlowpara *>(&child) || dynamic_cast<SPFlowregion *>(&child) || dynamic_cast<SPFlowregionExclude *>(&child)) {
                 c_repr = child.updateRepr(doc, nullptr, flags);
             }
 
-            if ( c_repr ) {
+            if (c_repr) {
                 l.push_back(c_repr);
             }
         }
@@ -238,7 +238,7 @@ Inkscape::XML::Node* SPFlowtext::write(Inkscape::XML::Document* doc, Inkscape::X
         }
     } else {
         for (auto& child: children) {
-            if ( dynamic_cast<SPFlowdiv *>(&child) || dynamic_cast<SPFlowpara *>(&child) || dynamic_cast<SPFlowregion *>(&child) || dynamic_cast<SPFlowregionExclude *>(&child)) {
+            if (dynamic_cast<SPFlowdiv *>(&child) || dynamic_cast<SPFlowpara *>(&child) || dynamic_cast<SPFlowregion *>(&child) || dynamic_cast<SPFlowregionExclude *>(&child)) {
                 child.updateRepr(flags);
             }
         }
@@ -340,19 +340,19 @@ void SPFlowtext::_buildLayoutInput(SPObject *root, Shape const *exclusion_shape,
 
         layout.strut.reset();
         if (style) {
-            font_instance *font = font_factory::Default()->FaceFromStyle( style );
+            font_instance *font = font_factory::Default()->FaceFromStyle(style);
             if (font) {
                 font->FontMetrics(layout.strut.ascent, layout.strut.descent, layout.strut.xheight);
                 font->Unref();
             }
             layout.strut *= style->font_size.computed;
-            if (style->line_height.normal ) {
-                layout.strut.computeEffective( Inkscape::Text::Layout::LINE_HEIGHT_NORMAL ); 
+            if (style->line_height.normal) {
+                layout.strut.computeEffective(Inkscape::Text::Layout::LINE_HEIGHT_NORMAL); 
             } else if (style->line_height.unit == SP_CSS_UNIT_NONE) {
-                layout.strut.computeEffective( style->line_height.computed );
+                layout.strut.computeEffective(style->line_height.computed);
             } else {
-                if( style->font_size.computed > 0.0 ) {
-                    layout.strut.computeEffective( style->line_height.computed/style->font_size.computed );
+                if(style->font_size.computed > 0.0) {
+                    layout.strut.computeEffective(style->line_height.computed/style->font_size.computed);
                 }
             }
         }
@@ -439,7 +439,7 @@ Shape* SPFlowtext::_buildExclusionShape() const
     for (auto& child: children) {
         // RH: is it right that this shouldn't be recursive?
         SPFlowregionExclude *c_child = dynamic_cast<SPFlowregionExclude *>(const_cast<SPObject*>(&child));
-        if ( c_child && c_child->computed && c_child->computed->hasEdges() ) {
+        if (c_child && c_child->computed && c_child->computed->hasEdges()) {
             if (shape->hasEdges()) {
                 shape_temp->Booleen(shape, c_child->computed, bool_op_union);
                 std::swap(shape, shape_temp);
@@ -488,7 +488,7 @@ Inkscape::XML::Node *SPFlowtext::getAsText()
     sp_repr_set_svg_double(repr, "x", anchor_point[Geom::X]);
     sp_repr_set_svg_double(repr, "y", anchor_point[Geom::Y]);
 
-    for (Inkscape::Text::Layout::iterator it = this->layout.begin() ; it != this->layout.end() ; ) {
+    for (Inkscape::Text::Layout::iterator it = this->layout.begin() ; it != this->layout.end() ;) {
         Inkscape::XML::Node *line_tspan = xml_doc->createElement("svg:tspan");
         line_tspan->setAttribute("sodipodi:role", "line");
 
@@ -538,7 +538,7 @@ Inkscape::XML::Node *SPFlowtext::getAsText()
             this->layout.getSourceOfCharacter(it, &rawptr, &span_text_start_iter);
             SPObject *source_obj = reinterpret_cast<SPObject *>(rawptr);
 
-            Glib::ustring style_text = (dynamic_cast<SPString *>(source_obj) ? source_obj->parent : source_obj)->style->write( SP_STYLE_FLAG_IFDIFF, SP_STYLE_SRC_UNSET, this->style);
+            Glib::ustring style_text = (dynamic_cast<SPString *>(source_obj) ? source_obj->parent : source_obj)->style->write(SP_STYLE_FLAG_IFDIFF, SP_STYLE_SRC_UNSET, this->style);
             if (!style_text.empty()) {
                 span_tspan->setAttribute("style", style_text.c_str());
             }
@@ -604,7 +604,7 @@ SPItem *SPFlowtext::get_frame(SPItem const *after)
         for (auto& o: region->children) {
             SPItem *item = dynamic_cast<SPItem *>(&o);
             if (item) {
-                if ( (after == nullptr) || past ) {
+                if ((after == nullptr) || past) {
                     frame = item;
                 } else {
                     if (item == after) {
@@ -615,7 +615,7 @@ SPItem *SPFlowtext::get_frame(SPItem const *after)
         }
 
         SPUse *use = dynamic_cast<SPUse *>(frame);
-        if ( use ) {
+        if (use) {
             frame = use->get_original();
         }
     }

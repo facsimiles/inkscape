@@ -26,7 +26,7 @@
 // until i find something better
 static Geom::Point StrokeNormalize(const Geom::Point value) {
     double length = L2(value); 
-    if ( length < 0.0000001 ) { 
+    if (length < 0.0000001) { 
         return Geom::Point(0, 0);
     } else { 
         return value/length; 
@@ -35,7 +35,7 @@ static Geom::Point StrokeNormalize(const Geom::Point value) {
 
 // faster version if length is known
 static Geom::Point StrokeNormalize(const Geom::Point value, double length) {
-    if ( length < 0.0000001 ) { 
+    if (length < 0.0000001) { 
         return Geom::Point(0, 0);
     } else { 
         return value/length; 
@@ -66,11 +66,11 @@ void Path::Stroke(Shape *dest, bool doClose, double width, JoinType join,
             lastP++;
         }
 
-        if ( lastP > lastM+1 ) {
+        if (lastP > lastM+1) {
             Geom::Point sbStart = pts[lastM].p;
             Geom::Point sbEnd = pts[lastP - 1].p;
-            // if ( pts[lastP - 1].closed ) { // this is correct, but this bugs text rendering (doesn't close text stroke)...
-            if ( Geom::LInfty(sbEnd-sbStart) < 0.00001 ) {       // why close lines that shouldn't be closed?
+            // if (pts[lastP - 1].closed) { // this is correct, but this bugs text rendering (doesn't close text stroke)...
+            if (Geom::LInfty(sbEnd-sbStart) < 0.00001) {       // why close lines that shouldn't be closed?
                 // ah I see, because close is defined here for
                 // a whole path and should be defined per subpath.
                 // debut==fin => ferme (on devrait garder un element pour les close(), mais tant pis)
@@ -385,7 +385,7 @@ void Path::DoJoin (Shape *dest, double width, JoinType join, Geom::Point pos, Ge
             if (emiter < miter) {
                 emiter = miter;
             }
-            if ( fabs(l) < miter) {
+            if (fabs(l) < miter) {
                 int const n = dest->AddPoint (pos + l * biss);
                 dest->AddEdge (enNo[LEFT], n);
                 dest->AddEdge (n, stNo[LEFT]);
@@ -435,7 +435,7 @@ Path::DoLeftJoin (Shape * dest, double width, JoinType join, Geom::Point pos,
             leftStNo = dest->AddPoint (pos + width * pnor);
             leftEnNo = dest->AddPoint (pos - width * pnor);
             int nEdge=dest->AddEdge (leftEnNo, leftStNo);
-            if ( dest->hasBackData() ) {
+            if (dest->hasBackData()) {
                 dest->ebData[nEdge].pathID=pathID;
                 dest->ebData[nEdge].pieceID=pieceID;
                 dest->ebData[nEdge].tSt=dest->ebData[nEdge].tEn=tID;
@@ -452,7 +452,7 @@ Path::DoLeftJoin (Shape * dest, double width, JoinType join, Geom::Point pos,
                         double   l=width/c2;
                         double		projn=l*(dot(biss,next));
                         double		projp=-l*(dot(biss,prev));
-                        if ( projp <= 0.5*prevL && projn <= 0.5*nextL ) {
+                        if (projp <= 0.5*prevL && projn <= 0.5*nextL) {
                         double   x,y;
                         x=pos.x+l*biss.x;
                         y=pos.y+l*biss.y;
@@ -463,13 +463,13 @@ Path::DoLeftJoin (Shape * dest, double width, JoinType join, Geom::Point pos,
 //        int midNo = dest->AddPoint (pos);
 //        int nEdge=dest->AddEdge (leftEnNo, midNo);
         int nEdge=dest->AddEdge (leftEnNo, leftStNo);
-        if ( dest->hasBackData() ) {
+        if (dest->hasBackData()) {
             dest->ebData[nEdge].pathID=pathID;
             dest->ebData[nEdge].pieceID=pieceID;
             dest->ebData[nEdge].tSt=dest->ebData[nEdge].tEn=tID;
         }
 //        nEdge=dest->AddEdge (midNo, leftStNo);
-//        if ( dest->hasBackData() ) {
+//        if (dest->hasBackData()) {
 //            dest->ebData[nEdge].pathID=pathID;
 //            dest->ebData[nEdge].pieceID=pieceID;
 //            dest->ebData[nEdge].tSt=dest->ebData[nEdge].tEn=tID;
@@ -493,13 +493,13 @@ Path::DoLeftJoin (Shape * dest, double width, JoinType join, Geom::Point pos,
             {
                 int nleftStNo = dest->AddPoint (pos + l * biss);
                 int nEdge=dest->AddEdge (leftEnNo, nleftStNo);
-                if ( dest->hasBackData() ) {
+                if (dest->hasBackData()) {
                     dest->ebData[nEdge].pathID=pathID;
                     dest->ebData[nEdge].pieceID=pieceID;
                     dest->ebData[nEdge].tSt=dest->ebData[nEdge].tEn=tID;
                 }
                 nEdge=dest->AddEdge (nleftStNo, leftStNo);
-                if ( dest->hasBackData() ) {
+                if (dest->hasBackData()) {
                     dest->ebData[nEdge].pathID=pathID;
                     dest->ebData[nEdge].pieceID=pieceID;
                     dest->ebData[nEdge].tSt=dest->ebData[nEdge].tEn=tID;
@@ -514,19 +514,19 @@ Path::DoLeftJoin (Shape * dest, double width, JoinType join, Geom::Point pos,
                 int nleftStNo = dest->AddPoint (pos + emiter * biss + dec * tbiss);
                 int nleftEnNo = dest->AddPoint (pos + emiter * biss - dec * tbiss);
                 int nEdge=dest->AddEdge (nleftEnNo, nleftStNo);
-                if ( dest->hasBackData() ) {
+                if (dest->hasBackData()) {
                     dest->ebData[nEdge].pathID=pathID;
                     dest->ebData[nEdge].pieceID=pieceID;
                     dest->ebData[nEdge].tSt=dest->ebData[nEdge].tEn=tID;
                 }
                 nEdge=dest->AddEdge (leftEnNo, nleftEnNo);
-                if ( dest->hasBackData() ) {
+                if (dest->hasBackData()) {
                     dest->ebData[nEdge].pathID=pathID;
                     dest->ebData[nEdge].pieceID=pieceID;
                     dest->ebData[nEdge].tSt=dest->ebData[nEdge].tEn=tID;
                 }
                 nEdge=dest->AddEdge (nleftStNo, leftStNo);
-                if ( dest->hasBackData() ) {
+                if (dest->hasBackData()) {
                     dest->ebData[nEdge].pathID=pathID;
                     dest->ebData[nEdge].pieceID=pieceID;
                     dest->ebData[nEdge].tSt=dest->ebData[nEdge].tEn=tID;
@@ -549,7 +549,7 @@ Path::DoLeftJoin (Shape * dest, double width, JoinType join, Geom::Point pos,
             leftStNo = dest->AddPoint (pos + width * pnor);
             leftEnNo = dest->AddPoint (pos + width * nnor);
             int nEdge=dest->AddEdge (leftEnNo, leftStNo);
-            if ( dest->hasBackData() ) {
+            if (dest->hasBackData()) {
                 dest->ebData[nEdge].pathID=pathID;
                 dest->ebData[nEdge].pieceID=pieceID;
                 dest->ebData[nEdge].tSt=dest->ebData[nEdge].tEn=tID;
@@ -579,7 +579,7 @@ Path::DoRightJoin (Shape * dest, double width, JoinType join, Geom::Point pos,
             rightEnNo = dest->AddPoint (pos + width*pnor);
             rightStNo = dest->AddPoint (pos - width*pnor);
             int nEdge=dest->AddEdge (rightStNo, rightEnNo);
-            if ( dest->hasBackData() ) {
+            if (dest->hasBackData()) {
                 dest->ebData[nEdge].pathID=pathID;
                 dest->ebData[nEdge].pieceID=pieceID;
                 dest->ebData[nEdge].tSt=dest->ebData[nEdge].tEn=tID;
@@ -604,13 +604,13 @@ Path::DoRightJoin (Shape * dest, double width, JoinType join, Geom::Point pos,
             {
                 int nrightStNo = dest->AddPoint (pos - l * biss);
                 int nEdge=dest->AddEdge (rightStNo, nrightStNo);
-                if ( dest->hasBackData() ) {
+                if (dest->hasBackData()) {
                     dest->ebData[nEdge].pathID=pathID;
                     dest->ebData[nEdge].pieceID=pieceID;
                     dest->ebData[nEdge].tSt=dest->ebData[nEdge].tEn=tID;
                 }
                 nEdge=dest->AddEdge (nrightStNo, rightEnNo);
-                if ( dest->hasBackData() ) {
+                if (dest->hasBackData()) {
                     dest->ebData[nEdge].pathID=pathID;
                     dest->ebData[nEdge].pieceID=pieceID;
                     dest->ebData[nEdge].tSt=dest->ebData[nEdge].tEn=tID;
@@ -625,19 +625,19 @@ Path::DoRightJoin (Shape * dest, double width, JoinType join, Geom::Point pos,
                 int nrightStNo = dest->AddPoint (pos - emiter*biss - dec*tbiss);
                 int nrightEnNo = dest->AddPoint (pos - emiter*biss + dec*tbiss);
                 int nEdge=dest->AddEdge (rightStNo, nrightStNo);
-                if ( dest->hasBackData() ) {
+                if (dest->hasBackData()) {
                     dest->ebData[nEdge].pathID=pathID;
                     dest->ebData[nEdge].pieceID=pieceID;
                     dest->ebData[nEdge].tSt=dest->ebData[nEdge].tEn=tID;
                 }
                 nEdge=dest->AddEdge (nrightStNo, nrightEnNo);
-                if ( dest->hasBackData() ) {
+                if (dest->hasBackData()) {
                     dest->ebData[nEdge].pathID=pathID;
                     dest->ebData[nEdge].pieceID=pieceID;
                     dest->ebData[nEdge].tSt=dest->ebData[nEdge].tEn=tID;
                 }
                 nEdge=dest->AddEdge (nrightEnNo, rightEnNo);
-                if ( dest->hasBackData() ) {
+                if (dest->hasBackData()) {
                     dest->ebData[nEdge].pathID=pathID;
                     dest->ebData[nEdge].pieceID=pieceID;
                     dest->ebData[nEdge].tSt=dest->ebData[nEdge].tEn=tID;
@@ -659,7 +659,7 @@ Path::DoRightJoin (Shape * dest, double width, JoinType join, Geom::Point pos,
             rightStNo = dest->AddPoint (pos - width * pnor);
             rightEnNo = dest->AddPoint (pos - width * nnor);
             int nEdge=dest->AddEdge (rightStNo, rightEnNo);
-            if ( dest->hasBackData() ) {
+            if (dest->hasBackData()) {
                 dest->ebData[nEdge].pathID=pathID;
                 dest->ebData[nEdge].pieceID=pieceID;
                 dest->ebData[nEdge].tSt=dest->ebData[nEdge].tEn=tID;
@@ -675,7 +675,7 @@ Path::DoRightJoin (Shape * dest, double width, JoinType join, Geom::Point pos,
                         double   l=width/c2;
                         double		projn=l*(dot(biss,next));
                         double		projp=-l*(dot(biss,prev));
-                        if ( projp <= 0.5*prevL && projn <= 0.5*nextL ) {
+                        if (projp <= 0.5*prevL && projn <= 0.5*nextL) {
                         double   x,y;
                         x=pos.x+l*biss.x;
                         y=pos.y+l*biss.y;
@@ -686,13 +686,13 @@ Path::DoRightJoin (Shape * dest, double width, JoinType join, Geom::Point pos,
 //        int midNo = dest->AddPoint (pos);
 //        int nEdge=dest->AddEdge (rightStNo, midNo);
         int nEdge=dest->AddEdge (rightStNo, rightEnNo);
-        if ( dest->hasBackData() ) {
+        if (dest->hasBackData()) {
             dest->ebData[nEdge].pathID=pathID;                                  
             dest->ebData[nEdge].pieceID=pieceID;
             dest->ebData[nEdge].tSt=dest->ebData[nEdge].tEn=tID;
         }
 //        nEdge=dest->AddEdge (midNo, rightEnNo);
-//        if ( dest->hasBackData() ) {
+//        if (dest->hasBackData()) {
 //            dest->ebData[nEdge].pathID=pathID;
 //            dest->ebData[nEdge].pieceID=pieceID;
 //            dest->ebData[nEdge].tSt=dest->ebData[nEdge].tEn=tID;
@@ -725,10 +725,10 @@ void Path::RecRound(Shape *dest, int sNo, int eNo, // start and end index
         double coa = dot(nS, nE);
         sia = cross(nE, nS);
         ang = acos(coa);
-        if ( coa >= 1 ) {
+        if (coa >= 1) {
             ang = 0;
         }
-        if ( coa <= -1 ) {
+        if (coa <= -1) {
             ang = M_PI;
         }
     }

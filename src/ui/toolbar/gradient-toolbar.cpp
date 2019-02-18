@@ -49,18 +49,18 @@ using Inkscape::UI::Tools::ToolBase;
 
 static bool blocked = false;
 
-void gr_apply_gradient_to_item( SPItem *item, SPGradient *gr, SPGradientType initialType, Inkscape::PaintTarget initialMode, Inkscape::PaintTarget mode )
+void gr_apply_gradient_to_item(SPItem *item, SPGradient *gr, SPGradientType initialType, Inkscape::PaintTarget initialMode, Inkscape::PaintTarget mode)
 {
     SPStyle *style = item->style;
     bool isFill = (mode == Inkscape::FOR_FILL);
     if (style
         && (isFill ? style->fill.isPaintserver() : style->stroke.isPaintserver())
-        //&& SP_IS_GRADIENT(isFill ? style->getFillPaintServer() : style->getStrokePaintServer()) ) {
-        && (isFill ? SP_IS_GRADIENT(style->getFillPaintServer()) : SP_IS_GRADIENT(style->getStrokePaintServer())) ) {
+        //&& SP_IS_GRADIENT(isFill ? style->getFillPaintServer() : style->getStrokePaintServer())) {
+        && (isFill ? SP_IS_GRADIENT(style->getFillPaintServer()) : SP_IS_GRADIENT(style->getStrokePaintServer()))) {
         SPPaintServer *server = isFill ? style->getFillPaintServer() : style->getStrokePaintServer();
-        if ( SP_IS_LINEARGRADIENT(server) ) {
+        if (SP_IS_LINEARGRADIENT(server)) {
             sp_item_set_gradient(item, gr, SP_GRADIENT_TYPE_LINEAR, mode);
-        } else if ( SP_IS_RADIALGRADIENT(server) ) {
+        } else if (SP_IS_RADIALGRADIENT(server)) {
             sp_item_set_gradient(item, gr, SP_GRADIENT_TYPE_RADIAL, mode);
         }
     }
@@ -113,10 +113,10 @@ int gr_vector_list(Glib::RefPtr<Gtk::ListStore> store, SPDesktop *desktop,
     // Get list of gradients in document.
     SPDocument *document = desktop->getDocument();
     std::vector<SPObject *> gl;
-    std::vector<SPObject *> gradients = document->getResourceList( "gradient" );
+    std::vector<SPObject *> gradients = document->getResourceList("gradient");
     for (std::vector<SPObject *>::const_iterator it = gradients.begin(); it != gradients.end(); ++it) {
         SPGradient *grad = SP_GRADIENT(*it);
-        if ( grad->hasStops() && !grad->isSolid() ) {
+        if (grad->hasStops() && !grad->isSolid()) {
             gl.push_back(*it);
         }
     }
@@ -216,7 +216,7 @@ void gr_get_dt_selected_gradient(Inkscape::Selection *selection, SPGradient *&gr
              server = item->style->getStrokePaintServer();
          }
 
-         if ( SP_IS_GRADIENT(server) ) {
+         if (SP_IS_GRADIENT(server)) {
              gradient = SP_GRADIENT(server);
          }
     }
@@ -233,12 +233,12 @@ void gr_get_dt_selected_gradient(Inkscape::Selection *selection, SPGradient *&gr
 /*
  * Get the current selection and dragger status from the desktop
  */
-void gr_read_selection( Inkscape::Selection *selection,
+void gr_read_selection(Inkscape::Selection *selection,
                         GrDrag *drag,
                         SPGradient *&gr_selected,
                         bool &gr_multi,
                         SPGradientSpread &spr_selected,
-                        bool &spr_multi )
+                        bool &spr_multi)
 {
     if (drag && !drag->selected.empty()) {
         // GRADIENTFIXME: make this work for more than one selected dragger?
@@ -278,7 +278,7 @@ void gr_read_selection( Inkscape::Selection *selection,
 
         if (style && (style->fill.isPaintserver())) {
             SPPaintServer *server = item->style->getFillPaintServer();
-            if ( SP_IS_GRADIENT(server) ) {
+            if (SP_IS_GRADIENT(server)) {
                 SPGradient *gradient = SP_GRADIENT(server)->getVector();
                 SPGradientSpread spread = SP_GRADIENT(server)->fetchSpread();
 
@@ -304,7 +304,7 @@ void gr_read_selection( Inkscape::Selection *selection,
         }
         if (style && (style->stroke.isPaintserver())) {
             SPPaintServer *server = item->style->getStrokePaintServer();
-            if ( SP_IS_GRADIENT(server) ) {
+            if (SP_IS_GRADIENT(server)) {
                 SPGradient *gradient = SP_GRADIENT(server)->getVector();
                 SPGradientSpread spread = SP_GRADIENT(server)->fetchSpread();
 
@@ -412,13 +412,13 @@ GradientToolbar::GradientToolbar(SPDesktop *desktop)
         _select_cb = UI::Widget::ComboToolItem::create(_("Select"),         // Label
                                                        "",                  // Tooltip
                                                        "Not Used",          // Icon
-                                                       store );             // Tree store
+                                                       store);             // Tree store
 
-        _select_cb->use_icon( false );
-        _select_cb->use_pixbuf( true );
-        _select_cb->use_group_label( true );
-        _select_cb->set_active( 0 );
-        _select_cb->set_sensitive( false );
+        _select_cb->use_icon(false);
+        _select_cb->use_pixbuf(true);
+        _select_cb->use_group_label(true);
+        _select_cb->set_active(0);
+        _select_cb->set_sensitive(false);
 
         add(*_select_cb);
         _select_cb->signal_changed().connect(sigc::mem_fun(*this, &GradientToolbar::gradient_changed));
@@ -485,16 +485,16 @@ GradientToolbar::GradientToolbar(SPDesktop *desktop)
         row[columns.col_sensitive] = true;
 
         _stop_cb =
-            UI::Widget::ComboToolItem::create(_("Stops" ),         // Label
+            UI::Widget::ComboToolItem::create(_("Stops"),         // Label
                                               "",                  // Tooltip
                                               "Not Used",          // Icon
-                                              store );             // Tree store
+                                              store);             // Tree store
 
-        _stop_cb->use_icon( false );
-        _stop_cb->use_pixbuf( true );
-        _stop_cb->use_group_label( true );
-        _stop_cb->set_active( 0 );
-        _stop_cb->set_sensitive( false );
+        _stop_cb->use_icon(false);
+        _stop_cb->use_pixbuf(true);
+        _stop_cb->use_group_label(true);
+        _stop_cb->set_active(0);
+        _stop_cb->set_sensitive(false);
 
         add(*_stop_cb);
         _stop_cb->signal_changed().connect(sigc::mem_fun(*this, &GradientToolbar::stop_changed));
@@ -730,7 +730,7 @@ GradientToolbar::stop_set_offset()
 
     SPStop *prev = nullptr;
     prev = stop->getPrevStop();
-    if (prev != nullptr )  {
+    if (prev != nullptr)  {
         _offset_adj->set_lower(prev->offset);
     } else {
         isEndStop = true;
@@ -739,7 +739,7 @@ GradientToolbar::stop_set_offset()
 
     SPStop *next = nullptr;
     next = stop->getNextStop();
-    if (next != nullptr ) {
+    if (next != nullptr) {
         _offset_adj->set_upper(next->offset);
     } else {
         isEndStop = true;
@@ -747,7 +747,7 @@ GradientToolbar::stop_set_offset()
     }
 
     _offset_adj->set_value(stop->offset);
-    _offset_item->set_sensitive( !isEndStop );
+    _offset_item->set_sensitive(!isEndStop);
     _offset_adj->changed();
 }
 
@@ -841,7 +841,7 @@ void
 GradientToolbar::linked_changed()
 {
     bool active = _linked_item->get_active();
-    if ( active ) {
+    if (active) {
         _linked_item->set_icon_name(INKSCAPE_ICON("object-locked"));
     } else {
         _linked_item->set_icon_name(INKSCAPE_ICON("object-unlocked"));
@@ -925,23 +925,23 @@ GradientToolbar::selection_changed(Inkscape::Selection * /*selection*/)
 
         if (gradient < 0) {
             // No selection or no gradients
-            _select_cb->set_active( 0 );
+            _select_cb->set_active(0);
             _select_cb->set_sensitive (false);
         } else {
             // Single gradient or multiple gradients
-            _select_cb->set_active( gradient );
+            _select_cb->set_active(gradient);
             _select_cb->set_sensitive (true);
         }
 
         // Spread menu
-        _spread_cb->set_sensitive( gr_selected && !gr_multi );
-        _spread_cb->set_active( gr_selected ? (int)spr_selected : 0 );
+        _spread_cb->set_sensitive(gr_selected && !gr_multi);
+        _spread_cb->set_active(gr_selected ? (int)spr_selected : 0);
 
         _stops_add_item->set_sensitive((gr_selected && !gr_multi && drag && !drag->selected.empty()));
         _stops_delete_item->set_sensitive((gr_selected && !gr_multi && drag && !drag->selected.empty()));
         _stops_reverse_item->set_sensitive((gr_selected!= nullptr));
 
-        _stop_cb->set_sensitive( gr_selected && !gr_multi);
+        _stop_cb->set_sensitive(gr_selected && !gr_multi);
 
         update_stop_list (gr_selected, nullptr, gr_multi);
         select_stop_by_draggers(gr_selected, ev);
@@ -954,7 +954,7 @@ GradientToolbar::selection_changed(Inkscape::Selection * /*selection*/)
  * \brief Construct stop list
  */
 int
-GradientToolbar::update_stop_list( SPGradient *gradient, SPStop *new_stop, bool gr_multi)
+GradientToolbar::update_stop_list(SPGradient *gradient, SPStop *new_stop, bool gr_multi)
 {
     if (!blocked) {
         std::cerr << "update_stop_list should be blocked!" << std::endl;

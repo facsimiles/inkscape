@@ -82,11 +82,11 @@ void Point::normalize() {
         unsigned n_inf_coords = 0;
         /* Delay updating pt in case neither coord is infinite. */
         Point tmp;
-        for ( unsigned i = 0 ; i < 2 ; ++i ) {
-            if ( _pt[i] == inf ) {
+        for (unsigned i = 0 ; i < 2 ; ++i) {
+            if (_pt[i] == inf) {
                 ++n_inf_coords;
                 tmp[i] = 1.0;
-            } else if ( _pt[i] == -inf ) {
+            } else if (_pt[i] == -inf) {
                 ++n_inf_coords;
                 tmp[i] = -1.0;
             } else {
@@ -120,7 +120,7 @@ void Point::normalize() {
  * @relates Point */
 Coord L1(Point const &p) {
     Coord d = 0;
-    for ( int i = 0 ; i < 2 ; i++ ) {
+    for (int i = 0 ; i < 2 ; i++) {
         d += fabs(p[i]);
     }
     return d;
@@ -132,17 +132,17 @@ Coord L1(Point const &p) {
 Coord LInfty(Point const &p) {
     Coord const a(fabs(p[0]));
     Coord const b(fabs(p[1]));
-    return ( a < b || IS_NAN(b)
+    return (a < b || IS_NAN(b)
              ? b
-             : a );
+             : a);
 }
 
 /** @brief True if the point has both coordinates zero.
  * NaNs are treated as not equal to zero.
  * @relates Point */
 bool is_zero(Point const &p) {
-    return ( p[0] == 0 &&
-             p[1] == 0   );
+    return (p[0] == 0 &&
+             p[1] == 0);
 }
 
 /** @brief True if the point has a length near 1. The are_near() function is used.

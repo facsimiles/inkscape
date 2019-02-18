@@ -51,7 +51,7 @@ static void vertexSweep(VertInf *vert);
 
 void Obstacle::computeVisibilityNaive(void)
 {
-    if ( !(router()->InvisibilityGrph) )
+    if (!(router()->InvisibilityGrph))
     {
         // Clear shape from graph.
         removeFromGraph();
@@ -96,7 +96,7 @@ void Obstacle::computeVisibilityNaive(void)
 
 void Obstacle::computeVisibilitySweep(void)
 {
-    if ( !(router()->InvisibilityGrph) )
+    if (!(router()->InvisibilityGrph))
     {
         // Clear shape from graph.
         removeFromGraph();
@@ -121,7 +121,7 @@ void vertexVisibility(VertInf *point, VertInf *partner, bool knownNew,
     // Make sure we're only doing ptVis for endpoints.
     COLA_ASSERT(pID.isConnPt());
 
-    if ( !(router->InvisibilityGrph) )
+    if (!(router->InvisibilityGrph))
     {
         point->removeFromGraph();
     }

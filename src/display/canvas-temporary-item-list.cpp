@@ -39,17 +39,17 @@ TemporaryItemList::add_item(SPCanvasItem *item, unsigned int lifetime)
     // beware of strange things happening due to very short timeouts
     TemporaryItem * tempitem = new TemporaryItem(item, lifetime);
     itemlist.push_back(tempitem);
-    tempitem->signal_timeout.connect( sigc::mem_fun(*this, &TemporaryItemList::_item_timeout) );
+    tempitem->signal_timeout.connect(sigc::mem_fun(*this, &TemporaryItemList::_item_timeout));
     return tempitem;
 }
 
 void
-TemporaryItemList::delete_item( TemporaryItem * tempitem )
+TemporaryItemList::delete_item(TemporaryItem * tempitem)
 {
     // check if the item is in the list, if so, delete it. (in other words, don't wait for the item to delete itself)
     bool in_list = false;
     for (auto & it : itemlist) {
-        if ( it == tempitem ) {
+        if (it == tempitem) {
             in_list = true;
             break;
         }

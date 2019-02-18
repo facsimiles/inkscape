@@ -258,8 +258,8 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
     // glyph-orientation-horizontal, glyph-orientation-vertical, kerning, lighting-color,
     // pointer-events, unicode-bidi
 
-    // For enums:   property( name, enumeration, default value , inherits = true );
-    // For scale24: property( name, default value = 0, inherits = true );
+    // For enums:   property(name, enumeration, default value , inherits = true);
+    // For scale24: property(name, default value = 0, inherits = true);
 
     // 'font', 'font-size', and 'font-family' must come first as other properties depend on them
     // for calculated values (through 'em' and 'ex'). ('ex' is currently not read.)
@@ -273,129 +273,129 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
 
 
     // SVG 2 attributes promoted to properties. (When geometry properties are added, move after font.)
-    d(                "d"                                    ),  // SPIString Not inherited!
+    d("d"),  // SPIString Not inherited!
 
     // Font related properties and 'font' shorthand
-    font_style(       "font-style",      enum_font_style,      SP_CSS_FONT_STYLE_NORMAL   ),
-    font_variant(     "font-variant",    enum_font_variant,    SP_CSS_FONT_VARIANT_NORMAL ),
-    font_weight(      "font-weight",     enum_font_weight,     SP_CSS_FONT_WEIGHT_NORMAL, SP_CSS_FONT_WEIGHT_400  ),
-    font_stretch(     "font-stretch",    enum_font_stretch,    SP_CSS_FONT_STRETCH_NORMAL ), 
+    font_style("font-style",      enum_font_style,      SP_CSS_FONT_STYLE_NORMAL),
+    font_variant("font-variant",    enum_font_variant,    SP_CSS_FONT_VARIANT_NORMAL),
+    font_weight("font-weight",     enum_font_weight,     SP_CSS_FONT_WEIGHT_NORMAL, SP_CSS_FONT_WEIGHT_400),
+    font_stretch("font-stretch",    enum_font_stretch,    SP_CSS_FONT_STRETCH_NORMAL), 
     font_size(),
-    line_height(      "line-height",                    1.25 ),  // SPILengthOrNormal
-    font_family(      "font-family",     "sans-serif"        ),  // SPIString w/default
+    line_height("line-height",                    1.25),  // SPILengthOrNormal
+    font_family("font-family",     "sans-serif"),  // SPIString w/default
     font(),                                                      // SPIFont
-    font_specification( "-inkscape-font-specification"       ),  // SPIString
+    font_specification("-inkscape-font-specification"),  // SPIString
 
     // Font variants (Features)
-    font_variant_ligatures( "font-variant-ligatures",  enum_font_variant_ligatures ),
-    font_variant_position(  "font-variant-position",   enum_font_variant_position,   SP_CSS_FONT_VARIANT_POSITION_NORMAL   ),
-    font_variant_caps(      "font-variant-caps",       enum_font_variant_caps,       SP_CSS_FONT_VARIANT_CAPS_NORMAL       ),
-    font_variant_numeric(   "font-variant-numeric",    enum_font_variant_numeric ),
-    font_variant_alternates("font-variant-alternates", enum_font_variant_alternates, SP_CSS_FONT_VARIANT_ALTERNATES_NORMAL ),
-    font_variant_east_asian("font-variant-east-asian", enum_font_variant_east_asian ),
-    font_feature_settings(  "font-feature-settings",   "normal" ),
+    font_variant_ligatures("font-variant-ligatures",  enum_font_variant_ligatures),
+    font_variant_position("font-variant-position",   enum_font_variant_position,   SP_CSS_FONT_VARIANT_POSITION_NORMAL),
+    font_variant_caps("font-variant-caps",       enum_font_variant_caps,       SP_CSS_FONT_VARIANT_CAPS_NORMAL),
+    font_variant_numeric("font-variant-numeric",    enum_font_variant_numeric),
+    font_variant_alternates("font-variant-alternates", enum_font_variant_alternates, SP_CSS_FONT_VARIANT_ALTERNATES_NORMAL),
+    font_variant_east_asian("font-variant-east-asian", enum_font_variant_east_asian),
+    font_feature_settings("font-feature-settings",   "normal"),
 
     // Variable Fonts
-    font_variation_settings( "font-variation-settings" ),  // SPIFontVariationSettings
+    font_variation_settings("font-variation-settings"),  // SPIFontVariationSettings
 
     // Text related properties
-    text_indent(      "text-indent",                     0.0 ),  // SPILength
-    text_align(       "text-align",      enum_text_align,      SP_CSS_TEXT_ALIGN_START    ),
+    text_indent("text-indent",                     0.0),  // SPILength
+    text_align("text-align",      enum_text_align,      SP_CSS_TEXT_ALIGN_START),
 
-    letter_spacing(   "letter-spacing",                  0.0 ),  // SPILengthOrNormal
-    word_spacing(     "word-spacing",                    0.0 ),  // SPILengthOrNormal
-    text_transform(   "text-transform",  enum_text_transform,  SP_CSS_TEXT_TRANSFORM_NONE ),
+    letter_spacing("letter-spacing",                  0.0),  // SPILengthOrNormal
+    word_spacing("word-spacing",                    0.0),  // SPILengthOrNormal
+    text_transform("text-transform",  enum_text_transform,  SP_CSS_TEXT_TRANSFORM_NONE),
 
-    direction(        "direction",       enum_direction,       SP_CSS_DIRECTION_LTR       ),
-    writing_mode(     "writing-mode",    enum_writing_mode,    SP_CSS_WRITING_MODE_LR_TB  ),
-    text_orientation( "text-orientation",enum_text_orientation,SP_CSS_TEXT_ORIENTATION_MIXED ),
-    dominant_baseline("dominant-baseline",enum_baseline,       SP_CSS_BASELINE_AUTO       ),
+    direction("direction",       enum_direction,       SP_CSS_DIRECTION_LTR),
+    writing_mode("writing-mode",    enum_writing_mode,    SP_CSS_WRITING_MODE_LR_TB),
+    text_orientation("text-orientation",enum_text_orientation,SP_CSS_TEXT_ORIENTATION_MIXED),
+    dominant_baseline("dominant-baseline",enum_baseline,       SP_CSS_BASELINE_AUTO),
     baseline_shift(),
-    text_anchor(      "text-anchor",     enum_text_anchor,     SP_CSS_TEXT_ANCHOR_START   ),
-    white_space(      "white-space",     enum_white_space,     SP_CSS_WHITE_SPACE_NORMAL  ),
+    text_anchor("text-anchor",     enum_text_anchor,     SP_CSS_TEXT_ANCHOR_START),
+    white_space("white-space",     enum_white_space,     SP_CSS_WHITE_SPACE_NORMAL),
 
     // SVG 2 Text Wrapping
-    shape_inside(     "shape-inside"                         ), // SPIString
-    shape_subtract(   "shape-subtract"                       ), // SPIString
-    shape_padding(    "shape-padding",   0.0                 ), // SPILength for now
-    shape_margin(     "shape-margin",    0.0                 ), // SPILength for now
-    inline_size(      "inline-size",     0.0                 ), // SPILength for now
+    shape_inside("shape-inside"), // SPIString
+    shape_subtract("shape-subtract"), // SPIString
+    shape_padding("shape-padding",   0.0), // SPILength for now
+    shape_margin("shape-margin",    0.0), // SPILength for now
+    inline_size("inline-size",     0.0), // SPILength for now
 
     text_decoration(),
     text_decoration_line(),
     text_decoration_style(),
-    text_decoration_color( "text-decoration-color" ),            // SPIColor
-    text_decoration_fill(  "text-decoration-fill" ),             // SPIPaint
-    text_decoration_stroke("text-decoration-stroke" ),           // SPIPaint
+    text_decoration_color("text-decoration-color"),            // SPIColor
+    text_decoration_fill("text-decoration-fill"),             // SPIPaint
+    text_decoration_stroke("text-decoration-stroke"),           // SPIPaint
 
     // General visual properties
-    clip_rule(        "clip-rule",       enum_clip_rule,       SP_WIND_RULE_NONZERO       ),
-    display(          "display",         enum_display,         SP_CSS_DISPLAY_INLINE,   false ),
-    overflow(         "overflow",        enum_overflow,        SP_CSS_OVERFLOW_VISIBLE, false ),
-    visibility(       "visibility",      enum_visibility,      SP_CSS_VISIBILITY_VISIBLE  ),
-    opacity(          "opacity",                               SP_SCALE24_MAX,          false ),
+    clip_rule("clip-rule",       enum_clip_rule,       SP_WIND_RULE_NONZERO),
+    display("display",         enum_display,         SP_CSS_DISPLAY_INLINE,   false),
+    overflow("overflow",        enum_overflow,        SP_CSS_OVERFLOW_VISIBLE, false),
+    visibility("visibility",      enum_visibility,      SP_CSS_VISIBILITY_VISIBLE),
+    opacity("opacity",                               SP_SCALE24_MAX,          false),
 
-    isolation(        "isolation",       enum_isolation,       SP_CSS_ISOLATION_AUTO      ),
-    mix_blend_mode(   "mix-blend-mode",  enum_blend_mode,      SP_CSS_BLEND_NORMAL        ),
+    isolation("isolation",       enum_isolation,       SP_CSS_ISOLATION_AUTO),
+    mix_blend_mode("mix-blend-mode",  enum_blend_mode,      SP_CSS_BLEND_NORMAL),
 
     paint_order(), // SPIPaintOrder
 
     // Color properties
-    color(            "color"                                ),  // SPIColor
-    color_interpolation(        "color-interpolation",         enum_color_interpolation, SP_CSS_COLOR_INTERPOLATION_SRGB),
+    color("color"),  // SPIColor
+    color_interpolation("color-interpolation",         enum_color_interpolation, SP_CSS_COLOR_INTERPOLATION_SRGB),
     color_interpolation_filters("color-interpolation-filters", enum_color_interpolation, SP_CSS_COLOR_INTERPOLATION_LINEARRGB),
 
     // Solid color properties
-    solid_color(      "solid-color"                          ), // SPIColor
-    solid_opacity(    "solid-opacity",                         SP_SCALE24_MAX             ),
+    solid_color("solid-color"), // SPIColor
+    solid_opacity("solid-opacity",                         SP_SCALE24_MAX),
 
     // Vector effects
     vector_effect(),
 
     // Fill properties
-    fill(             "fill"                                 ),  // SPIPaint
-    fill_opacity(     "fill-opacity",                          SP_SCALE24_MAX             ),
-    fill_rule(        "fill-rule",       enum_fill_rule,       SP_WIND_RULE_NONZERO       ),
+    fill("fill"),  // SPIPaint
+    fill_opacity("fill-opacity",                          SP_SCALE24_MAX),
+    fill_rule("fill-rule",       enum_fill_rule,       SP_WIND_RULE_NONZERO),
 
     // Stroke properites
-    stroke(           "stroke"                               ),  // SPIPaint
-    stroke_width(     "stroke-width",      1.0               ),  // SPILength
-    stroke_linecap(   "stroke-linecap",  enum_stroke_linecap,  SP_STROKE_LINECAP_BUTT     ),
-    stroke_linejoin(  "stroke-linejoin", enum_stroke_linejoin, SP_STROKE_LINEJOIN_MITER   ),
-    stroke_miterlimit("stroke-miterlimit",   4               ),  // SPIFloat (only use of float!)
+    stroke("stroke"),  // SPIPaint
+    stroke_width("stroke-width",      1.0),  // SPILength
+    stroke_linecap("stroke-linecap",  enum_stroke_linecap,  SP_STROKE_LINECAP_BUTT),
+    stroke_linejoin("stroke-linejoin", enum_stroke_linejoin, SP_STROKE_LINEJOIN_MITER),
+    stroke_miterlimit("stroke-miterlimit",   4),  // SPIFloat (only use of float!)
     stroke_dasharray(),                                          // SPIDashArray
-    stroke_dashoffset("stroke-dashoffset", 0.0               ),  // SPILength for now
+    stroke_dashoffset("stroke-dashoffset", 0.0),  // SPILength for now
 
-    stroke_opacity(   "stroke-opacity",    SP_SCALE24_MAX    ),
+    stroke_opacity("stroke-opacity",    SP_SCALE24_MAX),
 
-    marker(           "marker"                               ),  // SPIString
-    marker_start(     "marker-start"                         ),  // SPIString
-    marker_mid(       "marker-mid"                           ),  // SPIString
-    marker_end(       "marker-end"                           ),  // SPIString
+    marker("marker"),  // SPIString
+    marker_start("marker-start"),  // SPIString
+    marker_mid("marker-mid"),  // SPIString
+    marker_end("marker-end"),  // SPIString
 
     // Filter properties
     filter(),
     filter_blend_mode("filter-blend-mode", enum_blend_mode,    SP_CSS_BLEND_NORMAL),
-    filter_gaussianBlur_deviation( "filter-gaussianBlur-deviation", 0.0 ), // SPILength
+    filter_gaussianBlur_deviation("filter-gaussianBlur-deviation", 0.0), // SPILength
     enable_background("enable-background", enum_enable_background, SP_CSS_BACKGROUND_ACCUMULATE, false),
 
     // Rendering hint properties
-    color_rendering(  "color-rendering", enum_color_rendering, SP_CSS_COLOR_RENDERING_AUTO),
-    image_rendering(  "image-rendering", enum_image_rendering, SP_CSS_IMAGE_RENDERING_AUTO),
-    shape_rendering(  "shape-rendering", enum_shape_rendering, SP_CSS_SHAPE_RENDERING_AUTO),
-    text_rendering(   "text-rendering",  enum_text_rendering,  SP_CSS_TEXT_RENDERING_AUTO ),
+    color_rendering("color-rendering", enum_color_rendering, SP_CSS_COLOR_RENDERING_AUTO),
+    image_rendering("image-rendering", enum_image_rendering, SP_CSS_IMAGE_RENDERING_AUTO),
+    shape_rendering("shape-rendering", enum_shape_rendering, SP_CSS_SHAPE_RENDERING_AUTO),
+    text_rendering("text-rendering",  enum_text_rendering,  SP_CSS_TEXT_RENDERING_AUTO),
 
     // Stop color and opacity
     stop_color("stop-color",                      false),       // SPIColor, does not inherit
     stop_opacity("stop-opacity", SP_SCALE24_MAX,  false)        // Does not inherit
 {
-    // std::cout << "SPStyle::SPStyle( SPDocument ): Entrance: (" << _count << ")" << std::endl;
+    // std::cout << "SPStyle::SPStyle(SPDocument): Entrance: (" << _count << ")" << std::endl;
     // std::cout << "                      Document: " << (document_in?"present":"null") << std::endl;
     // std::cout << "                        Object: "
     //           << (object_in?(object_in->getId()?object_in->getId():"id null"):"object null") << std::endl;
 
     // static bool first = true;
-    // if( first ) {
+    // if(first) {
     //     std::cout << "Size of SPStyle: " << sizeof(SPStyle) << std::endl;
     //     std::cout << "        SPIBase: " << sizeof(SPIBase) << std::endl;
     //     std::cout << "       SPIFloat: " << sizeof(SPIFloat) << std::endl;
@@ -417,8 +417,8 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
     cloned = false;
 
     object = object_in;
-    if( object ) {
-        g_assert( SP_IS_OBJECT(object) );
+    if(object) {
+        g_assert(SP_IS_OBJECT(object));
         document = object->document;
         release_connection =
             object->connectRelease(sigc::bind<1>(sigc::ptr_fun(&sp_style_object_release), this));
@@ -430,32 +430,32 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
     }
 
     // 'font' shorthand requires access to included properties.
-    font.setStylePointer(              this );
+    font.setStylePointer(this);
 
     // Properties that depend on 'font-size' for calculating lengths.
-    baseline_shift.setStylePointer(    this );
-    text_indent.setStylePointer(       this );
-    line_height.setStylePointer(       this );
-    letter_spacing.setStylePointer(    this );
-    word_spacing.setStylePointer(      this );
-    stroke_width.setStylePointer(      this );
-    stroke_dashoffset.setStylePointer( this );
-    shape_padding.setStylePointer(     this );
-    shape_margin.setStylePointer(      this );
-    inline_size.setStylePointer(       this );
+    baseline_shift.setStylePointer(this);
+    text_indent.setStylePointer(this);
+    line_height.setStylePointer(this);
+    letter_spacing.setStylePointer(this);
+    word_spacing.setStylePointer(this);
+    stroke_width.setStylePointer(this);
+    stroke_dashoffset.setStylePointer(this);
+    shape_padding.setStylePointer(this);
+    shape_margin.setStylePointer(this);
+    inline_size.setStylePointer(this);
 
     // Properties that depend on 'color'
-    text_decoration_color.setStylePointer( this );
-    fill.setStylePointer(                  this );
-    stroke.setStylePointer(                this );
-    // color.setStylePointer( this ); // Doesn't need reference to self
+    text_decoration_color.setStylePointer(this);
+    fill.setStylePointer(this);
+    stroke.setStylePointer(this);
+    // color.setStylePointer(this); // Doesn't need reference to self
 
     // 'text_decoration' shorthand requires access to included properties.
-    text_decoration.setStylePointer( this );
+    text_decoration.setStylePointer(this);
 
     // SPIPaint, SPIFilter needs access to 'this' (SPStyle)
     // for setting up signals...  'fill', 'stroke' already done
-    filter.setStylePointer( this );
+    filter.setStylePointer(this);
 
     // Used to iterate over markers
     marker_ptrs[SP_MARKER_LOC]       = &marker;
@@ -495,7 +495,7 @@ SPStyle::~SPStyle() {
     // SPStyle when it is constructed and deletes it when it is destructed. The refcount is
     // incremented and decremented only in the files: display/drawing-item.cpp,
     // display/nr-filter-primitive.cpp, and libnrtype/Layout-TNG-Input.cpp.
-    if( _refcount > 1 ) {
+    if(_refcount > 1) {
         std::cerr << "SPStyle::~SPStyle: ref count greater than 1! " << _refcount << std::endl;
     }
     // std::cout << "SPStyle::~SPStyle(): Exit\n" << std::endl;
@@ -554,9 +554,9 @@ SPStyle::clear() {
 
 // Matches void sp_style_read(SPStyle *style, SPObject *object, Inkscape::XML::Node *repr)
 void
-SPStyle::read( SPObject *object, Inkscape::XML::Node *repr ) {
+SPStyle::read(SPObject *object, Inkscape::XML::Node *repr) {
 
-    // std::cout << "SPstyle::read( SPObject, Inkscape::XML::Node ): Entrance: "
+    // std::cout << "SPstyle::read(SPObject, Inkscape::XML::Node): Entrance: "
     //           << (object?(object->getId()?object->getId():"id null"):"object null") << " "
     //           << (repr?(repr->name()?repr->name():"no name"):"repr null")
     //           << std::endl;
@@ -566,7 +566,7 @@ SPStyle::read( SPObject *object, Inkscape::XML::Node *repr ) {
     // // Uncomment to verify that we don't need to call clear.
     // std::cout << " Creating temp style for testing" << std::endl;
     // SPStyle *temp = new SPStyle();
-    // if( !(*temp == *this ) ) std::cout << "SPStyle::read: Need to clear" << std::endl;
+    // if(!(*temp == *this)) std::cout << "SPStyle::read: Need to clear" << std::endl;
     // delete temp;
 
     clear(); // FIXME, If this isn't here, EVERYTHING stops working! Why?
@@ -578,13 +578,13 @@ SPStyle::read( SPObject *object, Inkscape::XML::Node *repr ) {
     /* 1. Style attribute */
     // std::cout << " MERGING STYLE ATTRIBUTE" << std::endl;
     gchar const *val = repr->attribute("style");
-    if( val != nullptr && *val ) {
-        _mergeString( val );
+    if(val != nullptr && *val) {
+        _mergeString(val);
     }
 
     /* 2 Style sheet */
     if (object) {
-        _mergeObjectStylesheet( object );
+        _mergeObjectStylesheet(object);
     }
 
     /* 3 Presentation attributes */
@@ -593,21 +593,21 @@ SPStyle::read( SPObject *object, Inkscape::XML::Node *repr ) {
         // font-variant are converted to shorthands in CSS 3 but can still be read as a
         // non-shorthand for compatibility with older renders, so they should not be in this list.
         // We could add a flag to SPIBase to avoid string comparison.
-        if( p->name != "font" && p->name != "marker") {
-            p->readAttribute( repr );
+        if(p->name != "font" && p->name != "marker") {
+            p->readAttribute(repr);
         }
     }
 
     /* 4 Cascade from parent */
-    if( object ) {
-        if( object->parent ) {
-            cascade( object->parent->style );
+    if(object) {
+        if(object->parent) {
+            cascade(object->parent->style);
         }
-    } else if( repr->parent() ) { // When does this happen?
+    } else if(repr->parent()) { // When does this happen?
         // std::cout << "SPStyle::read(): reading via repr->parent()" << std::endl;
         SPStyle *parent = new SPStyle();
-        parent->read( nullptr, repr->parent() );
-        cascade( parent );
+        parent->read(nullptr, repr->parent());
+        cascade(parent);
         delete parent;
     }
 }
@@ -620,7 +620,7 @@ SPStyle::read( SPObject *object, Inkscape::XML::Node *repr ) {
  * 3. Load i attributes from immediate parent (which has to be up-to-date)
  */
 void
-SPStyle::readFromObject( SPObject *object ) {
+SPStyle::readFromObject(SPObject *object) {
 
     // std::cout << "SPStyle::readFromObject: "<< (object->getId()?object->getId():"null")<< std::endl;
 
@@ -630,7 +630,7 @@ SPStyle::readFromObject( SPObject *object ) {
     Inkscape::XML::Node *repr = object->getRepr();
     g_return_if_fail(repr != nullptr);
 
-    read( object, repr );
+    read(object, repr);
 }
 
 /**
@@ -654,7 +654,7 @@ SPStyle::readFromPrefs(Glib::ustring const &path) {
         tempnode->setAttribute(attr.getEntryName().data(), attr.getString().data());
     }
 
-    read( nullptr, tempnode );
+    read(nullptr, tempnode);
 
     Inkscape::GC::release(tempnode);
     Inkscape::GC::release(tempdoc);
@@ -663,7 +663,7 @@ SPStyle::readFromPrefs(Glib::ustring const &path) {
 
 // Matches sp_style_merge_property(SPStyle *style, gint id, gchar const *val)
 void
-SPStyle::readIfUnset(SPAttributeEnum id, gchar const *val, SPStyleSrc const &source ) {
+SPStyle::readIfUnset(SPAttributeEnum id, gchar const *val, SPStyleSrc const &source) {
 
     // std::cout << "SPStyle::readIfUnset: Entrance: " << id << ": " << (val?val:"null") << std::endl;
     // To Do: If it is not too slow, use std::map instead of std::vector inorder to remove switch()
@@ -695,12 +695,12 @@ SPStyle::readIfUnset(SPAttributeEnum id, gchar const *val, SPStyleSrc const &sou
             this->object->getRepr()->setAttribute("mask", val);
             return;
         case SP_PROP_FILTER:
-            if( !filter.inherit ) filter.readIfUnset( val, source );
+            if(!filter.inherit) filter.readIfUnset(val, source);
             return;
         case SP_PROP_COLOR_INTERPOLATION:
             // We read it but issue warning
-            color_interpolation.readIfUnset( val, source );
-            if( color_interpolation.value != SP_CSS_COLOR_INTERPOLATION_SRGB ) {
+            color_interpolation.readIfUnset(val, source);
+            if(color_interpolation.value != SP_CSS_COLOR_INTERPOLATION_SRGB) {
                 g_warning("Inkscape currently only supports color-interpolation = sRGB");
             }
             return;
@@ -728,22 +728,22 @@ SPStyle::readIfUnset(SPAttributeEnum id, gchar const *val, SPStyleSrc const &sou
  * \post ret != NULL.
  */
 Glib::ustring
-SPStyle::write( guint const flags, SPStyleSrc const &style_src_req, SPStyle const *const base ) const {
+SPStyle::write(guint const flags, SPStyleSrc const &style_src_req, SPStyle const *const base) const {
 
     // std::cout << "SPStyle::write: flags: " << flags << std::endl;
 
     Glib::ustring style_string;
     for(std::vector<SPIBase*>::size_type i = 0; i != _properties.size(); ++i) {
-        if( base != nullptr ) {
-            style_string += _properties[i]->write( flags, style_src_req, base->_properties[i] );
+        if(base != nullptr) {
+            style_string += _properties[i]->write(flags, style_src_req, base->_properties[i]);
         } else {
-            style_string += _properties[i]->write( flags, style_src_req, nullptr );
+            style_string += _properties[i]->write(flags, style_src_req, nullptr);
         }
     }
 
     // Remove trailing ';'
-    if( style_string.size() > 0 ) {
-        style_string.erase( style_string.size() - 1 );
+    if(style_string.size() > 0) {
+        style_string.erase(style_string.size() - 1);
     }
     return style_string;
 }
@@ -761,10 +761,10 @@ SPStyle::write( guint const flags, SPStyleSrc const &style_src_req, SPStyle cons
  * \pre \a parent's computed values are already up-to-date.
  */
 void
-SPStyle::cascade( SPStyle const *const parent ) {
+SPStyle::cascade(SPStyle const *const parent) {
     // std::cout << "SPStyle::cascade: " << (object->getId()?object->getId():"null") << std::endl;
     for(std::vector<SPIBase*>::size_type i = 0; i != _properties.size(); ++i) {
-        _properties[i]->cascade( parent->_properties[i] );
+        _properties[i]->cascade(parent->_properties[i]);
     }
 }
 
@@ -787,10 +787,10 @@ SPStyle::cascade( SPStyle const *const parent ) {
  *   (\a style's computed values needn't be up-to-date.)
  */
 void
-SPStyle::merge( SPStyle const *const parent ) {
+SPStyle::merge(SPStyle const *const parent) {
     // std::cout << "SPStyle::merge" << std::endl;
     for(std::vector<SPIBase*>::size_type i = 0; i != _properties.size(); ++i) {
-        _properties[i]->merge( parent->_properties[i] );
+        _properties[i]->merge(parent->_properties[i]);
     }
 }
 
@@ -798,8 +798,8 @@ SPStyle::merge( SPStyle const *const parent ) {
  * Parses a style="..." string and merges it with an existing SPStyle.
  */
 void
-SPStyle::mergeString( gchar const *const p ) {
-    _mergeString( p );
+SPStyle::mergeString(gchar const *const p) {
+    _mergeString(p);
 }
 
 /**
@@ -807,7 +807,7 @@ SPStyle::mergeString( gchar const *const p ) {
   * always appends declarations as STYLE_SHEET properties.
   */
 void
-SPStyle::mergeStatement( CRStatement *statement ) {
+SPStyle::mergeStatement(CRStatement *statement) {
     if (statement->type != RULESET_STMT) {
         return;
     }
@@ -824,7 +824,7 @@ SPStyle::operator==(const SPStyle& rhs) {
 
     // Uncomment for testing
     // for(std::vector<SPIBase*>::size_type i = 0; i != _properties.size(); ++i) {
-    //     if( *_properties[i] != *rhs._properties[i])
+    //     if(*_properties[i] != *rhs._properties[i])
     //     std::cout << _properties[i]->name << ": "
     //               << _properties[i]->write(SP_STYLE_FLAG_ALWAYS,NULL) << " " 
     //               << rhs._properties[i]->write(SP_STYLE_FLAG_ALWAYS,NULL)
@@ -832,25 +832,25 @@ SPStyle::operator==(const SPStyle& rhs) {
     // }
 
     for(std::vector<SPIBase*>::size_type i = 0; i != _properties.size(); ++i) {
-        if( *_properties[i] != *rhs._properties[i]) return false;
+        if(*_properties[i] != *rhs._properties[i]) return false;
     }
     return true;
 }
 
 void
-SPStyle::_mergeString( gchar const *const p ) {
+SPStyle::_mergeString(gchar const *const p) {
 
     // std::cout << "SPStyle::_mergeString: " << (p?p:"null") << std::endl;
     CRDeclaration *const decl_list
         = cr_declaration_parse_list_from_buf(reinterpret_cast<guchar const *>(p), CR_UTF_8);
     if (decl_list) {
-        _mergeDeclList( decl_list, SP_STYLE_SRC_STYLE_PROP );
+        _mergeDeclList(decl_list, SP_STYLE_SRC_STYLE_PROP);
         cr_declaration_destroy(decl_list);
     }
 }
 
 void
-SPStyle::_mergeDeclList( CRDeclaration const *const decl_list, SPStyleSrc const &source ) {
+SPStyle::_mergeDeclList(CRDeclaration const *const decl_list, SPStyleSrc const &source) {
 
     // std::cout << "SPStyle::_mergeDeclList" << std::endl;
 
@@ -858,13 +858,13 @@ SPStyle::_mergeDeclList( CRDeclaration const *const decl_list, SPStyleSrc const 
     // (Properties are only set if not previously set. See:
     // Ref: http://www.w3.org/TR/REC-CSS2/cascade.html#cascading-order point 4.)
     if (decl_list->next) {
-        _mergeDeclList( decl_list->next, source );
+        _mergeDeclList(decl_list->next, source);
     }
-    _mergeDecl( decl_list, source );
+    _mergeDecl(decl_list, source);
 }
 
 void
-SPStyle::_mergeDecl(  CRDeclaration const *const decl, SPStyleSrc const &source ) {
+SPStyle::_mergeDecl(CRDeclaration const *const decl, SPStyleSrc const &source) {
 
     // std::cout << "SPStyle::_mergeDecl" << std::endl;
 
@@ -883,27 +883,27 @@ SPStyle::_mergeDecl(  CRDeclaration const *const decl, SPStyleSrc const &source 
         Inkscape::CSSOStringStream os;
         os << str_value << important;
 
-        readIfUnset( prop_idx, os.str().c_str(), source );
+        readIfUnset(prop_idx, os.str().c_str(), source);
         g_free(str_value);
     }
 }
 
 void
-SPStyle::_mergeProps( CRPropList *const props ) {
+SPStyle::_mergeProps(CRPropList *const props) {
 
     // std::cout << "SPStyle::_mergeProps" << std::endl;
 
     // In reverse order, as later declarations to take precedence over earlier ones.
     if (props) {
-        _mergeProps( cr_prop_list_get_next( props ) );
+        _mergeProps(cr_prop_list_get_next(props));
         CRDeclaration *decl = nullptr;
         cr_prop_list_get_decl(props, &decl);
-        _mergeDecl( decl, SP_STYLE_SRC_STYLE_SHEET );
+        _mergeDecl(decl, SP_STYLE_SRC_STYLE_SHEET);
     }
 }
 
 void
-SPStyle::_mergeObjectStylesheet( SPObject const *const object ) {
+SPStyle::_mergeObjectStylesheet(SPObject const *const object) {
 
     // std::cout << "SPStyle::_mergeObjectStylesheet: " << (object->getId()?object->getId():"null") << std::endl;
 
@@ -932,70 +932,70 @@ SPStyle::getFontFeatureString() {
 
     std::string feature_string;
 
-    if ( !(font_variant_ligatures.value & SP_CSS_FONT_VARIANT_LIGATURES_COMMON) )
+    if (!(font_variant_ligatures.value & SP_CSS_FONT_VARIANT_LIGATURES_COMMON))
         feature_string += "liga 0, clig 0, ";
-    if (   font_variant_ligatures.value & SP_CSS_FONT_VARIANT_LIGATURES_DISCRETIONARY )
+    if (font_variant_ligatures.value & SP_CSS_FONT_VARIANT_LIGATURES_DISCRETIONARY)
         feature_string += "dlig, ";
-    if (   font_variant_ligatures.value & SP_CSS_FONT_VARIANT_LIGATURES_HISTORICAL )
+    if (font_variant_ligatures.value & SP_CSS_FONT_VARIANT_LIGATURES_HISTORICAL)
         feature_string += "hlig, ";
-    if ( !(font_variant_ligatures.value & SP_CSS_FONT_VARIANT_LIGATURES_CONTEXTUAL) )
+    if (!(font_variant_ligatures.value & SP_CSS_FONT_VARIANT_LIGATURES_CONTEXTUAL))
         feature_string += "calt 0, ";
 
-    if ( font_variant_position.value & SP_CSS_FONT_VARIANT_POSITION_SUB )
+    if (font_variant_position.value & SP_CSS_FONT_VARIANT_POSITION_SUB)
         feature_string += "subs, ";
-    if ( font_variant_position.value & SP_CSS_FONT_VARIANT_POSITION_SUPER )
+    if (font_variant_position.value & SP_CSS_FONT_VARIANT_POSITION_SUPER)
         feature_string += "sups, ";
 
-    if ( font_variant_caps.value & SP_CSS_FONT_VARIANT_CAPS_SMALL )
+    if (font_variant_caps.value & SP_CSS_FONT_VARIANT_CAPS_SMALL)
         feature_string += "smcp, ";
-    if ( font_variant_caps.value & SP_CSS_FONT_VARIANT_CAPS_ALL_SMALL )
+    if (font_variant_caps.value & SP_CSS_FONT_VARIANT_CAPS_ALL_SMALL)
         feature_string += "smcp, c2sc, ";
-    if ( font_variant_caps.value & SP_CSS_FONT_VARIANT_CAPS_PETITE )
+    if (font_variant_caps.value & SP_CSS_FONT_VARIANT_CAPS_PETITE)
         feature_string += "pcap, ";
-    if ( font_variant_caps.value & SP_CSS_FONT_VARIANT_CAPS_ALL_PETITE )
+    if (font_variant_caps.value & SP_CSS_FONT_VARIANT_CAPS_ALL_PETITE)
         feature_string += "pcap, c2pc, ";
-    if ( font_variant_caps.value & SP_CSS_FONT_VARIANT_CAPS_UNICASE )
+    if (font_variant_caps.value & SP_CSS_FONT_VARIANT_CAPS_UNICASE)
         feature_string += "unic, ";
-    if ( font_variant_caps.value & SP_CSS_FONT_VARIANT_CAPS_TITLING )
+    if (font_variant_caps.value & SP_CSS_FONT_VARIANT_CAPS_TITLING)
         feature_string += "titl, ";
 
-    if ( font_variant_numeric.value & SP_CSS_FONT_VARIANT_NUMERIC_LINING_NUMS )
+    if (font_variant_numeric.value & SP_CSS_FONT_VARIANT_NUMERIC_LINING_NUMS)
         feature_string += "lnum, ";
-    if ( font_variant_numeric.value & SP_CSS_FONT_VARIANT_NUMERIC_OLDSTYLE_NUMS )
+    if (font_variant_numeric.value & SP_CSS_FONT_VARIANT_NUMERIC_OLDSTYLE_NUMS)
         feature_string += "onum, ";
-    if ( font_variant_numeric.value & SP_CSS_FONT_VARIANT_NUMERIC_PROPORTIONAL_NUMS )
+    if (font_variant_numeric.value & SP_CSS_FONT_VARIANT_NUMERIC_PROPORTIONAL_NUMS)
         feature_string += "pnum, ";
-    if ( font_variant_numeric.value & SP_CSS_FONT_VARIANT_NUMERIC_TABULAR_NUMS )
+    if (font_variant_numeric.value & SP_CSS_FONT_VARIANT_NUMERIC_TABULAR_NUMS)
         feature_string += "tnum, ";
-    if ( font_variant_numeric.value & SP_CSS_FONT_VARIANT_NUMERIC_DIAGONAL_FRACTIONS )
+    if (font_variant_numeric.value & SP_CSS_FONT_VARIANT_NUMERIC_DIAGONAL_FRACTIONS)
         feature_string += "frac, ";
-    if ( font_variant_numeric.value & SP_CSS_FONT_VARIANT_NUMERIC_STACKED_FRACTIONS )
+    if (font_variant_numeric.value & SP_CSS_FONT_VARIANT_NUMERIC_STACKED_FRACTIONS)
         feature_string += "afrc, ";
-    if ( font_variant_numeric.value & SP_CSS_FONT_VARIANT_NUMERIC_ORDINAL )
+    if (font_variant_numeric.value & SP_CSS_FONT_VARIANT_NUMERIC_ORDINAL)
         feature_string += "ordn, ";
-    if ( font_variant_numeric.value & SP_CSS_FONT_VARIANT_NUMERIC_SLASHED_ZERO )
+    if (font_variant_numeric.value & SP_CSS_FONT_VARIANT_NUMERIC_SLASHED_ZERO)
         feature_string += "zero, ";
 
-    if( font_variant_east_asian.value & SP_CSS_FONT_VARIANT_EAST_ASIAN_JIS78 )
+    if(font_variant_east_asian.value & SP_CSS_FONT_VARIANT_EAST_ASIAN_JIS78)
         feature_string += "jp78, ";
-    if( font_variant_east_asian.value & SP_CSS_FONT_VARIANT_EAST_ASIAN_JIS83 )
+    if(font_variant_east_asian.value & SP_CSS_FONT_VARIANT_EAST_ASIAN_JIS83)
         feature_string += "jp83, ";
-    if( font_variant_east_asian.value & SP_CSS_FONT_VARIANT_EAST_ASIAN_JIS90 )
+    if(font_variant_east_asian.value & SP_CSS_FONT_VARIANT_EAST_ASIAN_JIS90)
         feature_string += "jp90, ";
-    if( font_variant_east_asian.value & SP_CSS_FONT_VARIANT_EAST_ASIAN_JIS04 )
+    if(font_variant_east_asian.value & SP_CSS_FONT_VARIANT_EAST_ASIAN_JIS04)
         feature_string += "jp04, ";
-    if( font_variant_east_asian.value & SP_CSS_FONT_VARIANT_EAST_ASIAN_SIMPLIFIED )
+    if(font_variant_east_asian.value & SP_CSS_FONT_VARIANT_EAST_ASIAN_SIMPLIFIED)
         feature_string += "smpl, ";
-    if( font_variant_east_asian.value & SP_CSS_FONT_VARIANT_EAST_ASIAN_TRADITIONAL )
+    if(font_variant_east_asian.value & SP_CSS_FONT_VARIANT_EAST_ASIAN_TRADITIONAL)
         feature_string += "trad, ";
-    if( font_variant_east_asian.value & SP_CSS_FONT_VARIANT_EAST_ASIAN_FULL_WIDTH )
+    if(font_variant_east_asian.value & SP_CSS_FONT_VARIANT_EAST_ASIAN_FULL_WIDTH)
         feature_string += "fwid, ";
-    if( font_variant_east_asian.value & SP_CSS_FONT_VARIANT_EAST_ASIAN_PROPORTIONAL_WIDTH )
+    if(font_variant_east_asian.value & SP_CSS_FONT_VARIANT_EAST_ASIAN_PROPORTIONAL_WIDTH)
         feature_string += "pwid, ";
-    if( font_variant_east_asian.value & SP_CSS_FONT_VARIANT_EAST_ASIAN_RUBY )
+    if(font_variant_east_asian.value & SP_CSS_FONT_VARIANT_EAST_ASIAN_RUBY)
         feature_string += "ruby, ";
 
-    if ( font_feature_settings.value && strcmp( font_feature_settings.value, "normal") ) {
+    if (font_feature_settings.value && strcmp(font_feature_settings.value, "normal")) {
         // We do no sanity checking...
         feature_string += font_feature_settings.value; 
         feature_string += ", ";
@@ -1005,8 +1005,8 @@ SPStyle::getFontFeatureString() {
         feature_string = "normal";
     } else {
         // Remove last ", "
-        feature_string.erase( feature_string.size() - 1 );
-        feature_string.erase( feature_string.size() - 1 );
+        feature_string.erase(feature_string.size() - 1);
+        feature_string.erase(feature_string.size() - 1);
     }
 
     return feature_string;
@@ -1049,12 +1049,12 @@ void
 sp_style_filter_ref_changed(SPObject *old_ref, SPObject *ref, SPStyle *style)
 {
     if (old_ref) {
-        (dynamic_cast<SPFilter *>( old_ref ))->_refcount--;
+        (dynamic_cast<SPFilter *>(old_ref))->_refcount--;
         style->filter_modified_connection.disconnect();
     }
-    if ( SP_IS_FILTER(ref))
+    if (SP_IS_FILTER(ref))
     {
-       (dynamic_cast<SPFilter *>( ref ))->_refcount++;
+       (dynamic_cast<SPFilter *>(ref))->_refcount++;
         style->filter_modified_connection =
            ref->connectModified(sigc::bind(sigc::ptr_fun(&sp_style_filter_ref_modified), style));
     }
@@ -1365,7 +1365,7 @@ sp_css_attr_from_style(SPStyle const *const style, guint const flags)
 SPCSSAttr *sp_css_attr_from_object(SPObject *object, guint const flags)
 {
     g_return_val_if_fail(((flags == SP_STYLE_FLAG_IFSET) ||
-                          (flags == SP_STYLE_FLAG_ALWAYS)  ),
+                          (flags == SP_STYLE_FLAG_ALWAYS)),
                          NULL);
     SPCSSAttr * result = nullptr;    
     if (object->style) {
@@ -1589,7 +1589,7 @@ css_quote(Glib::ustring &val)
     bool quote = false;
 
     // Can't wait for C++11!
-    for( Glib::ustring::iterator it = val.begin(); it != val.end(); ++it) {
+    for(Glib::ustring::iterator it = val.begin(); it != val.end(); ++it) {
         if(g_ascii_isalnum(*it) || *it=='-' || *it=='_' || *it > 0xA0) {
             out += *it;
         } else if (*it == '\'') {
@@ -1603,14 +1603,14 @@ css_quote(Glib::ustring &val)
             out += *it;
             quote = true;
         }
-        if( it == val.begin() && !g_ascii_isalpha(*it) ) {
+        if(it == val.begin() && !g_ascii_isalpha(*it)) {
             // A non-ASCII/non-alpha initial value on any identifier needs quotes.
             // (Actually it's a bit more complicated but as it never hurts to quote...)
             quote = true;
         }
     }
-    if( quote ) {
-        out.insert( out.begin(), '\'' );
+    if(quote) {
+        out.insert(out.begin(), '\'');
         out += '\'';
     }
     val = out;
@@ -1624,15 +1624,15 @@ css_quote(Glib::ustring &val)
 void
 css_font_family_quote(Glib::ustring &val)
 {
-    std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("\\s*,\\s*", val );
+    std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("\\s*,\\s*", val);
 
     val.erase();
     for(auto & token : tokens) {
-        css_quote( token );
+        css_quote(token);
         val += token + ", ";
     }
-    if( val.size() > 1 )
-        val.erase( val.size() - 2 ); // Remove trailing ", "
+    if(val.size() > 1)
+        val.erase(val.size() - 2); // Remove trailing ", "
 }
 
 
@@ -1643,12 +1643,12 @@ css_font_family_quote(Glib::ustring &val)
 void
 css_unquote(Glib::ustring &val)
 {
-  if( val.size() > 1 &&
-      ( (val[0] == '"'  && val[val.size()-1] == '"'  ) ||
-	(val[0] == '\'' && val[val.size()-1] == '\'' ) ) ) {
+  if(val.size() > 1 &&
+      ((val[0] == '"'  && val[val.size()-1] == '"') ||
+	(val[0] == '\'' && val[val.size()-1] == '\''))) {
 
-    val.erase( 0, 1 );
-    val.erase( val.size()-1 );
+    val.erase(0, 1);
+    val.erase(val.size()-1);
   }
 }
 
@@ -1661,15 +1661,15 @@ css_unquote(Glib::ustring &val)
 void
 css_font_family_unquote(Glib::ustring &val)
 {
-    std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("\\s*,\\s*", val );
+    std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("\\s*,\\s*", val);
 
     val.erase();
     for(auto & token : tokens) {
-        css_unquote( token );
+        css_unquote(token);
         val += token + ", ";
     }
-    if( val.size() > 1 )
-        val.erase( val.size() - 2 ); // Remove trailing ", "
+    if(val.size() > 1)
+        val.erase(val.size() - 2); // Remove trailing ", "
 }
 
 /*

@@ -164,7 +164,7 @@ void PrefCheckButton::init(Glib::ustring const &label, Glib::ustring const &pref
     _prefs_path = prefs_path;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     this->set_label(label);
-    this->set_active( prefs->getBool(_prefs_path, default_value) );
+    this->set_active(prefs->getBool(_prefs_path, default_value));
 }
 
 void PrefCheckButton::on_toggled()
@@ -192,10 +192,10 @@ void PrefRadioButton::init(Glib::ustring const &label, Glib::ustring const &pref
     }
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     Glib::ustring val = prefs->getString(_prefs_path);
-    if ( !val.empty() )
+    if (!val.empty())
         this->set_active(val == _string_value);
     else
-        this->set_active( false );
+        this->set_active(false);
 }
 
 void PrefRadioButton::init(Glib::ustring const &label, Glib::ustring const &prefs_path,
@@ -212,9 +212,9 @@ void PrefRadioButton::init(Glib::ustring const &label, Glib::ustring const &pref
     }
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     if (default_value)
-        this->set_active( prefs->getInt(_prefs_path, int_value) == _int_value );
+        this->set_active(prefs->getInt(_prefs_path, int_value) == _int_value);
     else
-        this->set_active( prefs->getInt(_prefs_path, int_value + 1) == _int_value );
+        this->set_active(prefs->getInt(_prefs_path, int_value + 1) == _int_value);
 }
 
 void PrefRadioButton::on_toggled()
@@ -222,11 +222,11 @@ void PrefRadioButton::on_toggled()
     this->changed_signal.emit(this->get_active());
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
-    if (this->get_visible() && this->get_active() ) //only take action if toggled by user (to active)
+    if (this->get_visible() && this->get_active()) //only take action if toggled by user (to active)
     {
-        if ( _value_type == VAL_STRING )
+        if (_value_type == VAL_STRING)
             prefs->setString(_prefs_path, _string_value);
-        else if ( _value_type == VAL_INT )
+        else if (_value_type == VAL_INT)
             prefs->setInt(_prefs_path, _int_value);
     }
 }
@@ -477,9 +477,9 @@ ZoomCorrRulerSlider::on_unit_changed() {
     }
 }
 
-bool ZoomCorrRulerSlider::on_mnemonic_activate ( bool group_cycling )
+bool ZoomCorrRulerSlider::on_mnemonic_activate (bool group_cycling)
 {
-    return _sb.mnemonic_activate ( group_cycling );
+    return _sb.mnemonic_activate (group_cycling);
 }
 
 
@@ -555,9 +555,9 @@ PrefSlider::on_spinbutton_value_changed()
     }
 }
 
-bool PrefSlider::on_mnemonic_activate ( bool group_cycling )
+bool PrefSlider::on_mnemonic_activate (bool group_cycling)
 {
-    return _sb.mnemonic_activate ( group_cycling );
+    return _sb.mnemonic_activate (group_cycling);
 }
 
 void
@@ -740,9 +740,9 @@ void PrefEntryButtonHBox::onRelatedButtonClickedCallback()
     }
 }
 
-bool PrefEntryButtonHBox::on_mnemonic_activate ( bool group_cycling )
+bool PrefEntryButtonHBox::on_mnemonic_activate (bool group_cycling)
 {
-    return relatedEntry->mnemonic_activate ( group_cycling );
+    return relatedEntry->mnemonic_activate (group_cycling);
 }
 
 void PrefEntryFileButtonHBox::init(Glib::ustring const &prefs_path,
@@ -864,10 +864,10 @@ void PrefEntryFileButtonHBox::onRelatedButtonClickedCallback()
         {
             Glib::ustring newFileName = Glib::filename_to_utf8(fileName);
 
-            if ( newFileName.size() > 0)
+            if (newFileName.size() > 0)
                 open_path = newFileName;
             else
-                g_warning( "ERROR CONVERTING OPEN FILENAME TO UTF-8" );
+                g_warning("ERROR CONVERTING OPEN FILENAME TO UTF-8");
 
             prefs->setString(_prefs_path, open_path);
         }
@@ -876,9 +876,9 @@ void PrefEntryFileButtonHBox::onRelatedButtonClickedCallback()
     }
 }
 
-bool PrefEntryFileButtonHBox::on_mnemonic_activate ( bool group_cycling )
+bool PrefEntryFileButtonHBox::on_mnemonic_activate (bool group_cycling)
 {
-    return relatedEntry->mnemonic_activate ( group_cycling );
+    return relatedEntry->mnemonic_activate (group_cycling);
 }
 
 void PrefOpenFolder::init(Glib::ustring const &entry_string, Glib::ustring const &tooltip)
@@ -985,7 +985,7 @@ void PrefColorPicker::init(Glib::ustring const &label, Glib::ustring const &pref
     _prefs_path = prefs_path;
     _title = label;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    this->setRgba32( prefs->getInt(_prefs_path, (int)default_rgba) );
+    this->setRgba32(prefs->getInt(_prefs_path, (int)default_rgba));
 }
 
 void PrefColorPicker::on_changed (guint32 rgba)

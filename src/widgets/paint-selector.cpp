@@ -431,11 +431,11 @@ void SPPaintSelector::setFillrule(FillRule fillrule)
 
 void SPPaintSelector::setColorAlpha(SPColor const &color, float alpha)
 {
-    g_return_if_fail( ( 0.0 <= alpha ) && ( alpha <= 1.0 ) );
+    g_return_if_fail((0.0 <= alpha) && (alpha <= 1.0));
 /*
     guint32 rgba = 0;
 
-    if ( sp_color_get_colorspace_type(color) == SP_COLORSPACE_TYPE_CMYK )
+    if (sp_color_get_colorspace_type(color) == SP_COLORSPACE_TYPE_CMYK)
     {
 #ifdef SP_PS_VERBOSE
         g_print("PaintSelector set CMYKA\n");
@@ -454,10 +454,10 @@ void SPPaintSelector::setColorAlpha(SPColor const &color, float alpha)
     updating_color = true;
     selected_color->setColorAlpha(color, alpha);
     updating_color = false;
-    //rgba = color.toRGBA32( alpha );
+    //rgba = color.toRGBA32(alpha);
 }
 
-void SPPaintSelector::setSwatch(SPGradient *vector )
+void SPPaintSelector::setSwatch(SPGradient *vector)
 {
 #ifdef SP_PS_VERBOSE
     g_print("PaintSelector set SWATCH\n");
@@ -466,7 +466,7 @@ void SPPaintSelector::setSwatch(SPGradient *vector )
 
     SwatchSelector *swatchsel = static_cast<SwatchSelector*>(g_object_get_data(G_OBJECT(selector), "swatch-selector"));
     if (swatchsel) {
-        swatchsel->setVector( (vector) ? vector->document : nullptr, vector );
+        swatchsel->setVector((vector) ? vector->document : nullptr, vector);
     }
 }
 
@@ -512,7 +512,7 @@ void SPPaintSelector::setGradientMesh(SPMeshGradient *array)
 }
 #endif
 
-void SPPaintSelector::setGradientProperties( SPGradientUnits units, SPGradientSpread spread )
+void SPPaintSelector::setGradientProperties(SPGradientUnits units, SPGradientSpread spread)
 {
     g_return_if_fail(isPaintModeGradient(mode));
 
@@ -521,7 +521,7 @@ void SPPaintSelector::setGradientProperties( SPGradientUnits units, SPGradientSp
     gsel->setSpread(spread);
 }
 
-void SPPaintSelector::getGradientProperties( SPGradientUnits &units, SPGradientSpread &spread) const
+void SPPaintSelector::getGradientProperties(SPGradientUnits &units, SPGradientSpread &spread) const
 {
     g_return_if_fail(isPaintModeGradient(mode));
 
@@ -538,8 +538,8 @@ void SPPaintSelector::getColorAlpha(SPColor &color, gfloat &alpha) const
 {
     selected_color->colorAlpha(color, alpha);
 
-    g_assert( ( 0.0 <= alpha )
-              && ( alpha <= 1.0 ) );
+    g_assert((0.0 <= alpha)
+              && (alpha <= 1.0));
 }
 
 SPGradient *SPPaintSelector::getGradientVector()
@@ -555,11 +555,11 @@ SPGradient *SPPaintSelector::getGradientVector()
 }
 
 
-void SPPaintSelector::pushAttrsToGradient( SPGradient *gr ) const
+void SPPaintSelector::pushAttrsToGradient(SPGradient *gr) const
 {
     SPGradientUnits units = SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX;
     SPGradientSpread spread = SP_GRADIENT_SPREAD_PAD;
-    getGradientProperties( units, spread );
+    getGradientProperties(units, spread);
     gr->setUnits(units);
     gr->setSpread(spread);
     gr->updateRepr();
@@ -568,7 +568,7 @@ void SPPaintSelector::pushAttrsToGradient( SPGradient *gr ) const
 static void
 sp_paint_selector_clear_frame(SPPaintSelector *psel)
 {
-    g_return_if_fail( psel != nullptr);
+    g_return_if_fail(psel != nullptr);
 
     if (psel->selector) {
 
@@ -660,7 +660,7 @@ static void sp_paint_selector_set_mode_color(SPPaintSelector *psel, SPPaintSelec
 
     if ((psel->mode == SPPaintSelector::MODE_SWATCH) 
             || (psel->mode == SPPaintSelector::MODE_GRADIENT_LINEAR)
-            || (psel->mode == SPPaintSelector::MODE_GRADIENT_RADIAL) ) {
+            || (psel->mode == SPPaintSelector::MODE_GRADIENT_RADIAL)) {
         SPGradientSelector *gsel = getGradientFromData(psel);
         if (gsel) {
             SPGradient *gradient = gsel->getVector();
@@ -781,7 +781,7 @@ static void sp_paint_selector_set_mode_gradient(SPPaintSelector *psel, SPPaintSe
 static void sp_psel_mesh_destroy(GtkWidget *widget, SPPaintSelector * /*psel*/)
 {
     // drop our reference to the mesh menu widget
-    g_object_unref( G_OBJECT(widget) );
+    g_object_unref(G_OBJECT(widget));
 }
 
 static void sp_psel_mesh_change(GtkWidget * /*widget*/, SPPaintSelector *psel)
@@ -869,7 +869,7 @@ ink_mesh_menu_populate_menu(GtkWidget *combo, SPDocument *doc)
     // }
 
     // suck in from current doc
-    sp_mesh_list_from_doc ( combo, nullptr, doc, meshes_doc );
+    sp_mesh_list_from_doc (combo, nullptr, doc, meshes_doc);
 
     // add separator
     // {
@@ -883,7 +883,7 @@ ink_mesh_menu_populate_menu(GtkWidget *combo, SPDocument *doc)
     // suck in from meshes.svg
     // if (meshes_doc) {
     //     doc->ensureUpToDate();
-    //     sp_mesh_list_from_doc ( combo, doc, meshes_doc, NULL );
+    //     sp_mesh_list_from_doc (combo, doc, meshes_doc, NULL);
     // }
 
 }
@@ -926,14 +926,14 @@ ink_mesh_menu(GtkWidget *combo)
 
 
 /*update mesh list*/
-void SPPaintSelector::updateMeshList( SPMeshGradient *mesh )
+void SPPaintSelector::updateMeshList(SPMeshGradient *mesh)
 {
     if (update) {
         return;
     }
 
     GtkWidget *combo = GTK_WIDGET(g_object_get_data(G_OBJECT(this), "meshmenu"));
-    g_assert( combo != nullptr );
+    g_assert(combo != nullptr);
 
     /* Clear existing menu if any */
     GtkTreeModel *store = gtk_combo_box_get_model(GTK_COMBO_BOX(combo));
@@ -1010,12 +1010,12 @@ static void sp_paint_selector_set_mode_mesh(SPPaintSelector *psel, SPPaintSelect
             g_signal_connect(G_OBJECT(combo), "changed", G_CALLBACK(sp_psel_mesh_change), psel);
             g_signal_connect(G_OBJECT(combo), "destroy", G_CALLBACK(sp_psel_mesh_destroy), psel);
             g_object_set_data(G_OBJECT(psel), "meshmenu", combo);
-            g_object_ref( G_OBJECT(combo));
+            g_object_ref(G_OBJECT(combo));
 
             gtk_container_add(GTK_CONTAINER(hb), combo);
             gtk_box_pack_start(GTK_BOX(tbl), hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
 
-            g_object_unref( G_OBJECT(store));
+            g_object_unref(G_OBJECT(store));
         }
 
         {
@@ -1049,7 +1049,7 @@ SPMeshGradient *SPPaintSelector::getMeshGradient()
     GtkWidget *combo = GTK_WIDGET(g_object_get_data(G_OBJECT(this), "meshmenu"));
 
     /* no mesh menu if we were just selected */
-    if ( combo == nullptr ) {
+    if (combo == nullptr) {
         return nullptr;
     }
     GtkTreeModel *store = gtk_combo_box_get_model(GTK_COMBO_BOX(combo));
@@ -1114,7 +1114,7 @@ sp_paint_selector_set_style_buttons(SPPaintSelector *psel, GtkWidget *active)
 static void sp_psel_pattern_destroy(GtkWidget *widget, SPPaintSelector * /*psel*/)
 {
     // drop our reference to the pattern menu widget
-    g_object_unref( G_OBJECT(widget) );
+    g_object_unref(G_OBJECT(widget));
 }
 
 static void sp_psel_pattern_change(GtkWidget * /*widget*/, SPPaintSelector *psel)
@@ -1205,7 +1205,7 @@ ink_pattern_menu_populate_menu(GtkWidget *combo, SPDocument *doc)
     }
 
     // suck in from current doc
-    sp_pattern_list_from_doc ( combo, nullptr, doc, patterns_doc );
+    sp_pattern_list_from_doc (combo, nullptr, doc, patterns_doc);
 
     // add separator
     {
@@ -1219,7 +1219,7 @@ ink_pattern_menu_populate_menu(GtkWidget *combo, SPDocument *doc)
     // suck in from patterns.svg
     if (patterns_doc) {
         doc->ensureUpToDate();
-        sp_pattern_list_from_doc ( combo, doc, patterns_doc, nullptr );
+        sp_pattern_list_from_doc (combo, doc, patterns_doc, nullptr);
     }
 
 }
@@ -1262,13 +1262,13 @@ ink_pattern_menu(GtkWidget *combo)
 
 
 /*update pattern list*/
-void SPPaintSelector::updatePatternList( SPPattern *pattern )
+void SPPaintSelector::updatePatternList(SPPattern *pattern)
 {
     if (update) {
         return;
     }
     GtkWidget *combo = GTK_WIDGET(g_object_get_data(G_OBJECT(this), "patternmenu"));
-    g_assert( combo != nullptr );
+    g_assert(combo != nullptr);
 
     /* Clear existing menu if any */
     GtkTreeModel *store = gtk_combo_box_get_model(GTK_COMBO_BOX(combo));
@@ -1346,12 +1346,12 @@ static void sp_paint_selector_set_mode_pattern(SPPaintSelector *psel, SPPaintSel
             g_signal_connect(G_OBJECT(combo), "changed", G_CALLBACK(sp_psel_pattern_change), psel);
             g_signal_connect(G_OBJECT(combo), "destroy", G_CALLBACK(sp_psel_pattern_destroy), psel);
             g_object_set_data(G_OBJECT(psel), "patternmenu", combo);
-            g_object_ref( G_OBJECT(combo));
+            g_object_ref(G_OBJECT(combo));
 
             gtk_container_add(GTK_CONTAINER(hb), combo);
             gtk_box_pack_start(GTK_BOX(tbl), hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
 
-            g_object_unref( G_OBJECT(store));
+            g_object_unref(G_OBJECT(store));
         }
 
         {
@@ -1393,7 +1393,7 @@ SPPattern *SPPaintSelector::getPattern()
     GtkWidget *combo = GTK_WIDGET(g_object_get_data(G_OBJECT(this), "patternmenu"));
 
     /* no pattern menu if we were just selected */
-    if ( combo == nullptr ) {
+    if (combo == nullptr) {
         return nullptr;
     }
 
@@ -1455,10 +1455,10 @@ static void sp_paint_selector_set_mode_swatch(SPPaintSelector *psel, SPPaintSele
         SwatchSelector *swatchsel = new SwatchSelector();
         swatchsel->show();
 
-        swatchsel->connectGrabbedHandler( G_CALLBACK(sp_paint_selector_gradient_grabbed), psel );
-        swatchsel->connectDraggedHandler( G_CALLBACK(sp_paint_selector_gradient_dragged), psel );
-        swatchsel->connectReleasedHandler( G_CALLBACK(sp_paint_selector_gradient_released), psel );
-        swatchsel->connectchangedHandler( G_CALLBACK(sp_paint_selector_gradient_changed), psel );
+        swatchsel->connectGrabbedHandler(G_CALLBACK(sp_paint_selector_gradient_grabbed), psel);
+        swatchsel->connectDraggedHandler(G_CALLBACK(sp_paint_selector_gradient_dragged), psel);
+        swatchsel->connectReleasedHandler(G_CALLBACK(sp_paint_selector_gradient_released), psel);
+        swatchsel->connectchangedHandler(G_CALLBACK(sp_paint_selector_gradient_changed), psel);
 
         // Pack everything to frame
         gtk_container_add(GTK_CONTAINER(psel->frame), GTK_WIDGET(swatchsel->gobj()));
@@ -1474,22 +1474,22 @@ static void sp_paint_selector_set_mode_swatch(SPPaintSelector *psel, SPPaintSele
 }
 
 // TODO this seems very bad to be taking in a desktop pointer to muck with. Logic probably belongs elsewhere
-void SPPaintSelector::setFlatColor( SPDesktop *desktop, gchar const *color_property, gchar const *opacity_property )
+void SPPaintSelector::setFlatColor(SPDesktop *desktop, gchar const *color_property, gchar const *opacity_property)
 {
     SPCSSAttr *css = sp_repr_css_attr_new();
 
     SPColor color;
     gfloat alpha = 0;
-    getColorAlpha( color, alpha );
+    getColorAlpha(color, alpha);
 
     std::string colorStr = color.toString();
 
 #ifdef SP_PS_VERBOSE
-    guint32 rgba = color.toRGBA32( alpha );
+    guint32 rgba = color.toRGBA32(alpha);
     g_message("sp_paint_selector_set_flat_color() to '%s' from 0x%08x::%s",
               colorStr.c_str(),
               rgba,
-              (color.icc ? color.icc->colorProfile.c_str():"<null>") );
+              (color.icc ? color.icc->colorProfile.c_str():"<null>"));
 #endif // SP_PS_VERBOSE
 
     sp_repr_css_set_property(css, color_property, colorStr.c_str());
@@ -1507,9 +1507,9 @@ SPPaintSelector::Mode SPPaintSelector::getModeForStyle(SPStyle const & style, Fi
     Mode mode = MODE_UNSET;
     SPIPaint const & target = (kind == FILL) ? style.fill : style.stroke;
 
-    if ( !target.set ) {
+    if (!target.set) {
         mode = MODE_UNSET;
-    } else if ( target.isPaintserver() ) {
+    } else if (target.isPaintserver()) {
         SPPaintServer const *server = (kind == FILL) ? style.getFillPaintServer() : style.getStrokePaintServer();
 
 #ifdef SP_PS_VERBOSE
@@ -1531,16 +1531,16 @@ SPPaintSelector::Mode SPPaintSelector::getModeForStyle(SPStyle const & style, Fi
         } else if (SP_IS_PATTERN(server)) {
             mode = MODE_PATTERN;
         } else {
-            g_warning( "file %s: line %d: Unknown paintserver", __FILE__, __LINE__ );
+            g_warning("file %s: line %d: Unknown paintserver", __FILE__, __LINE__);
             mode = MODE_NONE;
         }
-    } else if ( target.isColor() ) {
+    } else if (target.isColor()) {
         // TODO this is no longer a valid assertion:
         mode = MODE_SOLID_COLOR; // so far only rgb can be read from svg
-    } else if ( target.isNone() ) {
+    } else if (target.isNone()) {
         mode = MODE_NONE;
     } else {
-        g_warning( "file %s: line %d: Unknown paint type", __FILE__, __LINE__ );
+        g_warning("file %s: line %d: Unknown paint type", __FILE__, __LINE__);
         mode = MODE_NONE;
     }
 

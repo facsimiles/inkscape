@@ -40,13 +40,13 @@ bool Inkscape::have_viable_layer(SPDesktop *desktop, MessageContext *message)
 {
     SPItem const *layer = SP_ITEM(desktop->currentLayer());
 
-    if ( !layer || desktop->itemIsHidden(layer) ) {
+    if (!layer || desktop->itemIsHidden(layer)) {
             message->flash(Inkscape::ERROR_MESSAGE,
                          _("<b>Current layer is hidden</b>. Unhide it to be able to draw on it."));
             return false;
     }
 
-    if ( !layer || layer->isLocked() ) {
+    if (!layer || layer->isLocked()) {
             message->flash(Inkscape::ERROR_MESSAGE,
                          _("<b>Current layer is locked</b>. Unlock it to be able to draw on it."));
             return false;
@@ -69,13 +69,13 @@ bool Inkscape::have_viable_layer(SPDesktop *desktop, MessageStack *message)
 {
     SPItem const *layer = SP_ITEM(desktop->currentLayer());
 
-    if ( !layer || desktop->itemIsHidden(layer) ) {
+    if (!layer || desktop->itemIsHidden(layer)) {
             message->flash(Inkscape::WARNING_MESSAGE,
                          _("<b>Current layer is hidden</b>. Unhide it to be able to draw on it."));
             return false;
     }
 
-    if ( !layer || layer->isLocked() ) {
+    if (!layer || layer->isLocked()) {
             message->flash(Inkscape::WARNING_MESSAGE,
                          _("<b>Current layer is locked</b>. Unlock it to be able to draw on it."));
             return false;

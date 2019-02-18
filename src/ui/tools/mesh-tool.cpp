@@ -182,14 +182,14 @@ void MeshTool::setup() {
 
     this->selcon = new sigc::connection(selection->connectChanged(
     	sigc::mem_fun(this, &MeshTool::selection_changed)
-    ));
+));
 
     this->subselcon = new sigc::connection(this->desktop->connectToolSubselectionChanged(
     	sigc::hide(sigc::bind(
     		sigc::mem_fun(*this, &MeshTool::selection_changed),
     		(Inkscape::Selection*)nullptr)
     	)
-    ));
+));
 
     sp_event_context_read(this, "show_handles");
     sp_event_context_read(this, "edit_fill");
@@ -255,9 +255,9 @@ sp_mesh_context_over_line (MeshTool *rc, Geom::Point event_p, bool first = true)
         if (!SP_IS_CTRLCURVE(*l)) continue;
 
         SPCtrlCurve *curve = SP_CTRLCURVE(*l);
-        Geom::BezierCurveN<3> b( curve->p0, curve->p1, curve->p2, curve->p3 );
-        Geom::Coord coord = b.nearestTime( rc->mousepoint_doc ); // Coord == double
-        Geom::Point nearest = b( coord );
+        Geom::BezierCurveN<3> b(curve->p0, curve->p1, curve->p2, curve->p3);
+        Geom::Coord coord = b.nearestTime(rc->mousepoint_doc); // Coord == double
+        Geom::Point nearest = b(coord);
 
         double dist_screen = Geom::L2 (rc->mousepoint_doc - nearest) * desktop->current_zoom();
         if (dist_screen < tolerance) {
@@ -300,7 +300,7 @@ static void sp_mesh_context_split_near_point(MeshTool *rc, SPItem *item,  Geom::
 Wrapper for various mesh operations that require a list of selected corner nodes.
  */
 void
-sp_mesh_context_corner_operation (MeshTool *rc, MeshCornerOperation operation )
+sp_mesh_context_corner_operation (MeshTool *rc, MeshCornerOperation operation)
 {
 
 #ifdef DEBUG_MESH
@@ -322,61 +322,61 @@ sp_mesh_context_corner_operation (MeshTool *rc, MeshCornerOperation operation )
             GrDraggable *d = *j;
 
             // Only mesh corners
-            if( d->point_type != POINT_MG_CORNER ) continue;
+            if(d->point_type != POINT_MG_CORNER) continue;
 
             // Find the gradient
-            SPMeshGradient *gradient = SP_MESHGRADIENT( getGradient (d->item, d->fill_or_stroke) );
+            SPMeshGradient *gradient = SP_MESHGRADIENT(getGradient (d->item, d->fill_or_stroke));
 
             // Collect points together for same gradient
-            points[gradient].push_back( d->point_i );
+            points[gradient].push_back(d->point_i);
             items[gradient] = d->item;
             fill_or_stroke[gradient] = d->fill_or_stroke ? Inkscape::FOR_FILL: Inkscape::FOR_STROKE;
         }
     }
 
     // Loop over meshes.
-    for( std::map<SPMeshGradient*, std::vector<guint> >::const_iterator iter = points.begin(); iter != points.end(); ++iter) {
-        SPMeshGradient *mg = SP_MESHGRADIENT( iter->first );
-        if( iter->second.size() > 0 ) {
+    for(std::map<SPMeshGradient*, std::vector<guint> >::const_iterator iter = points.begin(); iter != points.end(); ++iter) {
+        SPMeshGradient *mg = SP_MESHGRADIENT(iter->first);
+        if(iter->second.size() > 0) {
             guint noperation = 0;
             switch (operation) {
 
                 case MG_CORNER_SIDE_TOGGLE:
                     // std::cout << "SIDE_TOGGLE" << std::endl;
-                    noperation += mg->array.side_toggle( iter->second );
+                    noperation += mg->array.side_toggle(iter->second);
                     break;
 
                 case MG_CORNER_SIDE_ARC:
                     // std::cout << "SIDE_ARC" << std::endl;
-                    noperation += mg->array.side_arc( iter->second );
+                    noperation += mg->array.side_arc(iter->second);
                     break;
 
                 case MG_CORNER_TENSOR_TOGGLE:
                     // std::cout << "TENSOR_TOGGLE" << std::endl;
-                    noperation += mg->array.tensor_toggle( iter->second );
+                    noperation += mg->array.tensor_toggle(iter->second);
                     break;
 
                 case MG_CORNER_COLOR_SMOOTH:
                     // std::cout << "COLOR_SMOOTH" << std::endl;
-                    noperation += mg->array.color_smooth( iter->second );
+                    noperation += mg->array.color_smooth(iter->second);
                     break;
 
                 case MG_CORNER_COLOR_PICK:
                     // std::cout << "COLOR_PICK" << std::endl;
-                    noperation += mg->array.color_pick( iter->second, items[iter->first] );
+                    noperation += mg->array.color_pick(iter->second, items[iter->first]);
                     break;
 
                 case MG_CORNER_INSERT:
                     // std::cout << "INSERT" << std::endl;
-                    noperation += mg->array.insert( iter->second );
+                    noperation += mg->array.insert(iter->second);
                     break;
 
                 default:
                     std::cout << "sp_mesh_corner_operation: unknown operation" << std::endl;
             }                    
 
-            if( noperation > 0 ) {
-                mg->array.write( mg );
+            if(noperation > 0) {
+                mg->array.write(mg);
                 mg->requestModified(SP_OBJECT_MODIFIED_FLAG);
                 doc = mg->document;
 
@@ -453,11 +453,11 @@ sp_mesh_context_fit_mesh_in_bbox (MeshTool *rc)
 
             if (style->fill.isPaintserver()) {
                 SPPaintServer *server = item->style->getFillPaintServer();
-                if ( SP_IS_MESHGRADIENT(server) ) {
+                if (SP_IS_MESHGRADIENT(server)) {
 
                     Geom::OptRect item_bbox = item->geometricBounds();
                     SPMeshGradient *gradient = SP_MESHGRADIENT(server);
-                    if (gradient->array.fill_box( item_bbox )) {
+                    if (gradient->array.fill_box(item_bbox)) {
                         changed = true;
                     }
                 }
@@ -465,11 +465,11 @@ sp_mesh_context_fit_mesh_in_bbox (MeshTool *rc)
 
             if (style->stroke.isPaintserver()) {
                 SPPaintServer *server = item->style->getStrokePaintServer();
-                if ( SP_IS_MESHGRADIENT(server) ) {
+                if (SP_IS_MESHGRADIENT(server)) {
 
                     Geom::OptRect item_bbox = item->visualBounds();
                     SPMeshGradient *gradient = SP_MESHGRADIENT(server);
-                    if (gradient->array.fill_box( item_bbox )) {
+                    if (gradient->array.fill_box(item_bbox)) {
                         changed = true;
                     }
                 }
@@ -517,7 +517,7 @@ bool MeshTool::root_handler(GdkEvent* event) {
         //  If over a mesh line, divide mesh row/column
         //  If not over a line and no mesh, create new mesh for top selected object.
 
-        if ( event->button.button == 1 ) {
+        if (event->button.button == 1) {
 
             // Are we over a mesh line?
             std::vector<SPCtrlCurve *> over_line =
@@ -563,7 +563,7 @@ bool MeshTool::root_handler(GdkEvent* event) {
         // Button down
         //  If mesh already exists, do rubber band selection.
         //  Else set origin for drag which will create a new gradient.
-         if ( event->button.button == 1 && !this->space_panning ) {
+         if (event->button.button == 1 && !this->space_panning) {
 
             // Are we over a mesh line?
             std::vector<SPCtrlCurve *> over_line =
@@ -571,7 +571,7 @@ bool MeshTool::root_handler(GdkEvent* event) {
 
             if (!over_line.empty()) {
                 for (std::vector<SPCtrlCurve *>::const_iterator it = over_line.begin();
-                     it != over_line.end(); ++it ) {
+                     it != over_line.end(); ++it) {
                     SPItem *item = (*it)->item;
                     Inkscape::PaintTarget fill_or_stroke =
                         (*it)->is_fill ? Inkscape::FOR_FILL : Inkscape::FOR_STROKE;
@@ -579,11 +579,11 @@ bool MeshTool::root_handler(GdkEvent* event) {
                     GrDragger* dragger1 = drag->getDraggerFor(item, POINT_MG_CORNER, (*it)->corner1, fill_or_stroke);
                     bool add    = (event->button.state & GDK_SHIFT_MASK);
                     bool toggle = (event->button.state & GDK_CONTROL_MASK);
-                    if ( !add && !toggle ) {
+                    if (!add && !toggle) {
                         drag->deselectAll();
                     }
-                    drag->setSelected( dragger0, true, !toggle );
-                    drag->setSelected( dragger1, true, !toggle );
+                    drag->setSelected(dragger0, true, !toggle);
+                    drag->setSelected(dragger1, true, !toggle);
                 }
                 ret = true;
                 break; // To avoid putting the following code in an else block.
@@ -639,14 +639,14 @@ bool MeshTool::root_handler(GdkEvent* event) {
 
     case GDK_MOTION_NOTIFY:
         // Mouse move
-        if ( dragging && ( event->motion.state & GDK_BUTTON1_MASK ) && !this->space_panning ) {
+        if (dragging && (event->motion.state & GDK_BUTTON1_MASK) && !this->space_panning) {
  
 #ifdef DEBUG_MESH
             std::cout << "sp_mesh_context_root_handler: GDK_MOTION_NOTIFY: Dragging" << std::endl;
 #endif
-            if ( this->within_tolerance
-                 && ( abs( (gint) event->motion.x - this->xp ) < this->tolerance )
-                 && ( abs( (gint) event->motion.y - this->yp ) < this->tolerance ) ) {
+            if (this->within_tolerance
+                 && (abs((gint) event->motion.x - this->xp) < this->tolerance)
+                 && (abs((gint) event->motion.y - this->yp) < this->tolerance)) {
                 break; // do not drag if we're within tolerance from origin
             }
             // Once the user has moved farther than tolerance from the original location
@@ -686,10 +686,10 @@ bool MeshTool::root_handler(GdkEvent* event) {
             }
 
             // Highlight corner node corresponding to side or tensor node
-            if( drag->mouseOver() ) {
+            if(drag->mouseOver()) {
                 // MESH FIXME: Light up corresponding corner node corresponding to node we are over.
                 // See "pathflash" in ui/tools/node-tool.cpp for ideas.
-                // Use desktop->add_temporary_canvasitem( SPCanvasItem, milliseconds );
+                // Use desktop->add_temporary_canvasitem(SPCanvasItem, milliseconds);
             }
 
             // Change cursor shape if over line
@@ -716,13 +716,13 @@ bool MeshTool::root_handler(GdkEvent* event) {
 
         this->xp = this->yp = 0;
 
-        if ( event->button.button == 1 && !this->space_panning ) {
+        if (event->button.button == 1 && !this->space_panning) {
 
             // Check if over line
             std::vector<SPCtrlCurve *> over_line =
                 sp_mesh_context_over_line(this, Geom::Point(event->motion.x, event->motion.y));
 
-            if ( (event->button.state & GDK_CONTROL_MASK) && (event->button.state & GDK_MOD1_MASK ) ) {
+            if ((event->button.state & GDK_CONTROL_MASK) && (event->button.state & GDK_MOD1_MASK)) {
                 if (!over_line.empty()) {
                     sp_mesh_context_split_near_point(this, over_line[0]->item,
                                                      this->mousepoint_doc, 0);
@@ -952,7 +952,7 @@ bool MeshTool::root_handler(GdkEvent* event) {
         case GDK_KEY_Insert:
         case GDK_KEY_KP_Insert:
             // with any modifiers:
-            sp_mesh_context_corner_operation ( this, MG_CORNER_INSERT );
+            sp_mesh_context_corner_operation (this, MG_CORNER_INSERT);
             ret = TRUE;
             break;
 
@@ -961,7 +961,7 @@ bool MeshTool::root_handler(GdkEvent* event) {
             if (MOD__SHIFT_ONLY(event)) {
                 // Shift+I - insert corners (alternate keybinding for keyboards
                 //           that don't have the Insert key)
-                sp_mesh_context_corner_operation ( this, MG_CORNER_INSERT );
+                sp_mesh_context_corner_operation (this, MG_CORNER_INSERT);
                 ret = TRUE;
             }
             break;
@@ -969,7 +969,7 @@ bool MeshTool::root_handler(GdkEvent* event) {
         case GDK_KEY_Delete:
         case GDK_KEY_KP_Delete:
         case GDK_KEY_BackSpace:
-            if ( !drag->selected.empty() ) {
+            if (!drag->selected.empty()) {
                 ret = TRUE;
             }
             break;
@@ -977,7 +977,7 @@ bool MeshTool::root_handler(GdkEvent* event) {
         case GDK_KEY_b:  // Toggle mesh side between lineto and curveto.
         case GDK_KEY_B: 
             if (MOD__ALT(event) && drag->isNonEmpty() && drag->hasSelection()) {
-                sp_mesh_context_corner_operation ( this, MG_CORNER_SIDE_TOGGLE );
+                sp_mesh_context_corner_operation (this, MG_CORNER_SIDE_TOGGLE);
                 ret = TRUE;
             }
             break;
@@ -985,7 +985,7 @@ bool MeshTool::root_handler(GdkEvent* event) {
         case GDK_KEY_c:  // Convert mesh side from generic Bezier to Bezier approximating arc,
         case GDK_KEY_C:  // preserving handle direction.
             if (MOD__ALT(event) && drag->isNonEmpty() && drag->hasSelection()) {
-                sp_mesh_context_corner_operation ( this, MG_CORNER_SIDE_ARC );
+                sp_mesh_context_corner_operation (this, MG_CORNER_SIDE_ARC);
                 ret = TRUE;
             }
             break;
@@ -993,7 +993,7 @@ bool MeshTool::root_handler(GdkEvent* event) {
         case GDK_KEY_g:  // Toggle mesh tensor points on/off
         case GDK_KEY_G: 
             if (MOD__ALT(event) && drag->isNonEmpty() && drag->hasSelection()) {
-                sp_mesh_context_corner_operation ( this, MG_CORNER_TENSOR_TOGGLE );
+                sp_mesh_context_corner_operation (this, MG_CORNER_TENSOR_TOGGLE);
                 ret = TRUE;
             }
             break;
@@ -1001,7 +1001,7 @@ bool MeshTool::root_handler(GdkEvent* event) {
         case GDK_KEY_j:  // Smooth corner color
         case GDK_KEY_J:
             if (MOD__ALT(event) && drag->isNonEmpty() && drag->hasSelection()) {
-                sp_mesh_context_corner_operation ( this, MG_CORNER_COLOR_SMOOTH );
+                sp_mesh_context_corner_operation (this, MG_CORNER_COLOR_SMOOTH);
                 ret = TRUE;
             }
             break;
@@ -1009,7 +1009,7 @@ bool MeshTool::root_handler(GdkEvent* event) {
         case GDK_KEY_k:  // Pick corner color
         case GDK_KEY_K:
             if (MOD__ALT(event) && drag->isNonEmpty() && drag->hasSelection()) {
-                sp_mesh_context_corner_operation ( this, MG_CORNER_COLOR_PICK );
+                sp_mesh_context_corner_operation (this, MG_CORNER_COLOR_PICK);
                 ret = TRUE;
             }
             break;
@@ -1066,11 +1066,11 @@ static void sp_mesh_new_default(MeshTool &rc) {
         // Ensure mesh is immediately editable.
         // Editing both fill and stroke at same time doesn't work well so avoid.
         if (fill_or_stroke_pref == Inkscape::FOR_FILL) {
-            prefs->setBool("/tools/mesh/edit_fill",   true );
+            prefs->setBool("/tools/mesh/edit_fill",   true);
             prefs->setBool("/tools/mesh/edit_stroke", false);
         } else {
             prefs->setBool("/tools/mesh/edit_fill",   false);
-            prefs->setBool("/tools/mesh/edit_stroke", true );
+            prefs->setBool("/tools/mesh/edit_stroke", true);
         }
 
 // HACK: reset fill-opacity - that 0.75 is annoying; BUT remove this when we have an opacity slider for all tabs

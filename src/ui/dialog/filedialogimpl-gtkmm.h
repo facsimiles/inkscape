@@ -175,7 +175,7 @@ public:
         = default;
 
 protected:
-    void cleanup( bool showConfirmed );
+    void cleanup(bool showConfirmed);
 
     Glib::ustring const preferenceBase;
     /**
@@ -296,7 +296,7 @@ public:
     bool show() override;
 
     Inkscape::Extension::Extension *getSelectionType() override;
-    void setSelectionType( Inkscape::Extension::Extension * key ) override;
+    void setSelectionType(Inkscape::Extension::Extension * key) override;
 
 	Glib::ustring getCurrentDirectory() override;
 	void addFileType(Glib::ustring name, Glib::ustring pattern) override;

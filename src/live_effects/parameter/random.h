@@ -21,7 +21,7 @@ namespace LivePathEffect {
 
 class RandomParam : public Parameter {
 public:
-    RandomParam(  const Glib::ustring& label,
+    RandomParam(const Glib::ustring& label,
                 const Glib::ustring& tip,
                 const Glib::ustring& key, 
                 Inkscape::UI::Widget::Registry* wr,

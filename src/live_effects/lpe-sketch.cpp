@@ -63,7 +63,7 @@ LPESketch::LPESketch(LivePathEffectObject *lpeobject) :
     // register all your parameters here, so Inkscape knows which parameters this effect has:
     //Add some comment in the UI:  *warning* the precise output of this effect might change in future releases!
     //convert to path if you want to keep exact output unchanged in future releases...
-    //registerParameter(&testpointA) );
+    //registerParameter(&testpointA));
     registerParameter(&nbiter_approxstrokes);
     registerParameter(&strokelength);
     registerParameter(&strokelength_rdm);
@@ -175,7 +175,7 @@ LPESketch::computePerturbation (double s0, double s1){
             perturb[dim][0] = Linear(A[dim],B[dim]);
             dA[dim] = dA[dim]-B[dim]+A[dim];
             //avoid dividing by 0. Very short strokes will have ends parallel to the curve...
-            if ( s1-s0 > 1e-2)
+            if (s1-s0 > 1e-2)
                 dB[dim] = -(2*tremble_size-tremble_size.get_value())/(s0-s1)-B[dim]+A[dim];
             else
                 dB[dim] = -(2*tremble_size-tremble_size.get_value())-B[dim]+A[dim];
@@ -243,7 +243,7 @@ LPESketch::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_
             while (!done){
                 // if the start point is already too far... do nothing. (this should not happen!)
                 if (!closed && s1>piece_total_length - ends_tolerance.get_value()*strokelength) break;
-                if ( closed && s0>piece_total_length + s0_initial) break;
+                if (closed && s0>piece_total_length + s0_initial) break;
 
                 std::vector<double> times;
                 times = roots(piecelength-s0);
@@ -301,15 +301,15 @@ LPESketch::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_
     double k_max = k_bnds->min() + k_bnds->extent() * max_curvature;
 
     Piecewise<SBasis> bump;
-    //SBasis bump_seg = SBasis( 2, Linear(0) );
-    //bump_seg[1] = Linear( 4. );
-    SBasis bump_seg = SBasis( 1, Linear(1) );
-    bump.push_cut( k_bnds->min() - 1 );
-    bump.push( Linear(0), k_min );
+    //SBasis bump_seg = SBasis(2, Linear(0));
+    //bump_seg[1] = Linear(4.);
+    SBasis bump_seg = SBasis(1, Linear(1));
+    bump.push_cut(k_bnds->min() - 1);
+    bump.push(Linear(0), k_min);
     bump.push(bump_seg,k_max);
-    bump.push( Linear(0), k_bnds->max()+1 );
+    bump.push(Linear(0), k_bnds->max()+1);
         
-    Piecewise<SBasis> repartition = compose( bump, k );
+    Piecewise<SBasis> repartition = compose(bump, k);
     repartition = integral(repartition);
     //-------------------------------
 #endif
@@ -323,10 +323,10 @@ LPESketch::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_
         times = roots(repartition - proba);
         double t = times.at(0);//there should be one and only one solution!
 #else
-        //double s = total_length * ( i + tgtlength_rdm ) / (nbtangents+1.);
-        double reg_place = total_length * ( i + .5) / ( nbtangents );
+        //double s = total_length * (i + tgtlength_rdm) / (nbtangents+1.);
+        double reg_place = total_length * (i + .5) / (nbtangents);
         double rdm_place = total_length * tgt_places_rdmness;
-        double s = ( 1.- tgt_places_rdmness.get_value() ) * reg_place  +  rdm_place ;
+        double s = (1.- tgt_places_rdmness.get_value()) * reg_place  +  rdm_place ;
         std::vector<double> times;
         times = roots(pathlength-s);
         double t = times.at(0);//there should be one and only one solution!

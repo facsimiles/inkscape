@@ -534,8 +534,8 @@ InkFileExportCmd::do_export_png(SPDocument *doc, std::string filename_in)
 
         reverse(items.begin(),items.end()); // But there was only one item!
 
-        if( sp_export_png_file(doc, filename_out.c_str(), area, width, height, dpi,
-                               dpi, bgcolor, nullptr, nullptr, true, export_id_only ? items : std::vector<SPItem*>()) == 1 ) {
+        if(sp_export_png_file(doc, filename_out.c_str(), area, width, height, dpi,
+                               dpi, bgcolor, nullptr, nullptr, true, export_id_only ? items : std::vector<SPItem*>()) == 1) {
         } else {
             std::cerr << "InkFileExport::do_export_png: Failed to export to " << filename_out << std::endl;
             continue;
@@ -560,7 +560,7 @@ InkFileExportCmd::do_export_ps_pdf(SPDocument* doc, std::string filename_in, std
     Inkscape::Extension::DB::OutputList o;
     Inkscape::Extension::db.get_output_list(o);
     Inkscape::Extension::DB::OutputList::const_iterator i = o.begin();
-    while (i != o.end() && strcmp( (*i)->get_mimetype(), mime_type.c_str() ) != 0) {
+    while (i != o.end() && strcmp((*i)->get_mimetype(), mime_type.c_str()) != 0) {
         i++;
     }
 
@@ -630,7 +630,7 @@ InkFileExportCmd::do_export_ps_pdf(SPDocument* doc, std::string filename_in, std
     }
 
     if (mime_type == "image/x-postscript" || mime_type == "image/x-e-postscript") {
-        if ( export_ps_level < 2 || export_ps_level > 3 ) {
+        if (export_ps_level < 2 || export_ps_level > 3) {
             g_warning("Only supported PostScript levels are 2 and 3."
                       " Defaulting to 2.");
             export_ps_level = 2;
@@ -720,7 +720,7 @@ InkFileExportCmd::do_export_win_metafile(SPDocument* doc, std::string filename_i
     Inkscape::Extension::DB::OutputList o;
     Inkscape::Extension::db.get_output_list(o);
     Inkscape::Extension::DB::OutputList::const_iterator i = o.begin();
-    while (i != o.end() && strcmp( (*i)->get_mimetype(), mime_type.c_str() ) != 0) {
+    while (i != o.end() && strcmp((*i)->get_mimetype(), mime_type.c_str()) != 0) {
         i++;
     }
 

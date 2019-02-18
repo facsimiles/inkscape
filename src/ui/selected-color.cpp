@@ -37,7 +37,7 @@ SelectedColor::~SelectedColor() = default;
 
 void SelectedColor::setColor(SPColor const &color)
 {
-    setColorAlpha( color, _alpha);
+    setColorAlpha(color, _alpha);
 }
 
 SPColor SelectedColor::color() const
@@ -47,8 +47,8 @@ SPColor SelectedColor::color() const
 
 void SelectedColor::setAlpha(gfloat alpha)
 {
-    g_return_if_fail( ( 0.0 <= alpha ) && ( alpha <= 1.0 ) );
-    setColorAlpha( _color, alpha);
+    g_return_if_fail((0.0 <= alpha) && (alpha <= 1.0));
+    setColorAlpha(_color, alpha);
 }
 
 gfloat SelectedColor::alpha() const
@@ -71,9 +71,9 @@ guint32 SelectedColor::value() const
 void SelectedColor::setColorAlpha(SPColor const &color, gfloat alpha, bool emit_signal)
 {
 #ifdef DUMP_CHANGE_INFO
-    g_message("SelectedColor::setColorAlpha( this=%p, %f, %f, %f, %s,   %f,   %s)", this, color.v.c[0], color.v.c[1], color.v.c[2], (color.icc?color.icc->colorProfile.c_str():"<null>"), alpha, (emit_signal?"YES":"no"));
+    g_message("SelectedColor::setColorAlpha(this=%p, %f, %f, %f, %s,   %f,   %s)", this, color.v.c[0], color.v.c[1], color.v.c[2], (color.icc?color.icc->colorProfile.c_str():"<null>"), alpha, (emit_signal?"YES":"no"));
 #endif
-    g_return_if_fail( ( 0.0 <= alpha ) && ( alpha <= 1.0 ) );
+    g_return_if_fail((0.0 <= alpha) && (alpha <= 1.0));
 
     if (_updating) {
         return;
@@ -82,13 +82,13 @@ void SelectedColor::setColorAlpha(SPColor const &color, gfloat alpha, bool emit_
 #ifdef DUMP_CHANGE_INFO
     g_message("---- SelectedColor::setColorAlpha    virgin:%s   !close:%s    alpha is:%s",
               (_virgin?"YES":"no"),
-              (!color.isClose( _color, _EPSILON )?"YES":"no"),
-              ((fabs((_alpha) - (alpha)) >= _EPSILON )?"YES":"no")
-              );
+              (!color.isClose(_color, _EPSILON)?"YES":"no"),
+              ((fabs((_alpha) - (alpha)) >= _EPSILON)?"YES":"no")
+);
 #endif
 
-    if ( _virgin || !color.isClose( _color, _EPSILON ) ||
-         (fabs((_alpha) - (alpha)) >= _EPSILON )) {
+    if (_virgin || !color.isClose(_color, _EPSILON) ||
+         (fabs((_alpha) - (alpha)) >= _EPSILON)) {
 
         _virgin = false;
 
@@ -109,7 +109,7 @@ void SelectedColor::setColorAlpha(SPColor const &color, gfloat alpha, bool emit_
 #ifdef DUMP_CHANGE_INFO
     } else {
         g_message("++++ SelectedColor::setColorAlpha   color:%08x  ==>  _color:%08X   isClose:%s", color.toRGBA32(alpha), _color.toRGBA32(_alpha),
-                  (color.isClose( _color, _EPSILON )?"YES":"no"));
+                  (color.isClose(_color, _EPSILON)?"YES":"no"));
 #endif
     }
 }

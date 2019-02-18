@@ -121,7 +121,7 @@ ArcToolbar::ArcToolbar(SPDesktop *desktop) :
 
     // add the units menu
     {
-        auto unit_menu = _tracker->create_tool_item(_("Units"), ("") );
+        auto unit_menu = _tracker->create_tool_item(_("Units"), (""));
         add(*unit_menu);
     }
 
@@ -148,7 +148,7 @@ ArcToolbar::ArcToolbar(SPDesktop *desktop) :
     }
     _start_adj->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*this, &ArcToolbar::startend_value_changed),
                                                           _start_adj, "start", _end_adj));
-    _end_adj->signal_value_changed().connect(  sigc::bind(sigc::mem_fun(*this, &ArcToolbar::startend_value_changed),
+    _end_adj->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*this, &ArcToolbar::startend_value_changed),
                                                           _end_adj,   "end",   _start_adj));
 
     add(* Gtk::manage(new Gtk::SeparatorToolItem()));
@@ -199,7 +199,7 @@ ArcToolbar::ArcToolbar(SPDesktop *desktop) :
     _single = true;
     // sensitivize make whole and open checkbox
     {
-        sensitivize( _start_adj->get_value(), _end_adj->get_value() );
+        sensitivize(_start_adj->get_value(), _end_adj->get_value());
     }
 
     desktop->connectEventContextChanged(sigc::mem_fun(*this, &ArcToolbar::check_ec));
@@ -329,7 +329,7 @@ ArcToolbar::startend_value_changed(Glib::RefPtr<Gtk::Adjustment>&  adj,
 
     g_free(namespaced_name);
 
-    sensitivize( adj->get_value(), other_adj->get_value() );
+    sensitivize(adj->get_value(), other_adj->get_value());
 
     if (modmade) {
         DocumentUndo::maybeDone(_desktop->getDocument(), value_name, SP_VERB_CONTEXT_ARC,
@@ -340,7 +340,7 @@ ArcToolbar::startend_value_changed(Glib::RefPtr<Gtk::Adjustment>&  adj,
 }
 
 void
-ArcToolbar::type_changed( int type )
+ArcToolbar::type_changed(int type)
 {
     if (DocumentUndo::getUndoSensitive(_desktop->getDocument())) {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -380,7 +380,7 @@ ArcToolbar::type_changed( int type )
         SPItem *item = *i;
         if (SP_IS_GENERICELLIPSE(item)) {
             Inkscape::XML::Node *repr = item->getRepr();
-            repr->setAttribute("sodipodi:open", (open?"true":nullptr) );
+            repr->setAttribute("sodipodi:open", (open?"true":nullptr));
             repr->setAttribute("sodipodi:arc-type", arc_type.c_str());
             item->updateRepr();
             modmade = true;
@@ -410,7 +410,7 @@ ArcToolbar::defaults()
 }
 
 void
-ArcToolbar::sensitivize( double v1, double v2 )
+ArcToolbar::sensitivize(double v1, double v2)
 {
     if (v1 == 0 && v2 == 0) {
         if (_single) { // only for a single selected ellipse (for now)
@@ -447,7 +447,7 @@ ArcToolbar::selection_changed(Inkscape::Selection *selection)
     int n_selected = 0;
     Inkscape::XML::Node *repr = nullptr;
 
-    if ( _repr ) {
+    if (_repr) {
         _item = nullptr;
         _repr->removeListenerByData(this);
         GC::release(_repr);
@@ -484,7 +484,7 @@ ArcToolbar::selection_changed(Inkscape::Selection *selection)
         // FIXME: implement averaging of all parameters for multiple selected
         //gtk_label_set_markup(GTK_LABEL(l), _("<b>Average:</b>"));
         _mode_item->set_markup(_("<b>Change:</b>"));
-        sensitivize( 1, 0 );
+        sensitivize(1, 0);
     }
 }
 

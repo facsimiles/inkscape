@@ -41,8 +41,8 @@ SPFeOffset::~SPFeOffset() = default;
 void SPFeOffset::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPFilterPrimitive::build(document, repr);
 
-	this->readAttr( "dx" );
-	this->readAttr( "dy" );
+	this->readAttr("dx");
+	this->readAttr("dy");
 }
 
 /**
@@ -88,8 +88,8 @@ void SPFeOffset::set(SPAttributeEnum key, gchar const *value) {
  */
 void SPFeOffset::update(SPCtx *ctx, guint flags) {
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
-        this->readAttr( "dx" );
-        this->readAttr( "dy" );
+        this->readAttr("dx");
+        this->readAttr("dy");
     }
 
     SPFilterPrimitive::update(ctx, flags);

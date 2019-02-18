@@ -642,7 +642,7 @@ void ColorICCSelectorImpl::_switchToProfile(gchar const *name)
         g_message("+   new color is [%s]", tmp.toString().c_str());
 #endif // DEBUG_LCMS
         _setProfile(tmp.icc);
-        //_adjustmentChanged( _compUI[0]._adj, SP_COLOR_ICC_SELECTOR(_csel) );
+        //_adjustmentChanged(_compUI[0]._adj, SP_COLOR_ICC_SELECTOR(_csel));
         _color.setColor(tmp);
 #ifdef DEBUG_LCMS
         g_message("+_________________");
@@ -657,8 +657,8 @@ struct _cmp {
   {
     const Inkscape::ColorProfile &a_prof = reinterpret_cast<const Inkscape::ColorProfile &>(*a);
     const Inkscape::ColorProfile &b_prof = reinterpret_cast<const Inkscape::ColorProfile &>(*b);
-    gchar *a_name_casefold = g_utf8_casefold(a_prof.name, -1 );
-    gchar *b_name_casefold = g_utf8_casefold(b_prof.name, -1 );
+    gchar *a_name_casefold = g_utf8_casefold(a_prof.name, -1);
+    gchar *b_name_casefold = g_utf8_casefold(b_prof.name, -1);
     int result = g_strcmp0(a_name_casefold, b_name_casefold);
     g_free(a_name_casefold);
     g_free(b_name_casefold);
@@ -724,7 +724,7 @@ void ColorICCSelector::on_show()
 void ColorICCSelector::_colorChanged()
 {
     _impl->_updating = TRUE;
-// sp_color_icc_set_color( SP_COLOR_ICC( _icc ), &color );
+// sp_color_icc_set_color(SP_COLOR_ICC(_icc), &color);
 
 #ifdef DEBUG_LCMS
     g_message("/^^^^^^^^^  %p::_colorChanged(%08x:%s)", this, _impl->_color.color().toRGBA32(_impl->_color.alpha()),
@@ -839,22 +839,22 @@ void ColorICCSelectorImpl::_setProfile(SVGICCColor *profile)
                                                   SPColor(0.5, 0.5, 0.5).toRGBA32(0xff),
                                                   SPColor(1.0, 1.0, 1.0).toRGBA32(0xff));
                     /*
-                                        _compUI[i]._adj = GTK_ADJUSTMENT( gtk_adjustment_new( val, 0.0, _fooScales[i],
-                       step, page, page ) );
-                                        g_signal_connect( G_OBJECT( _compUI[i]._adj ), "value_changed", G_CALLBACK(
-                       _adjustmentChanged ), _csel );
+                                        _compUI[i]._adj = GTK_ADJUSTMENT(gtk_adjustment_new(val, 0.0, _fooScales[i],
+                       step, page, page));
+                                        g_signal_connect(G_OBJECT(_compUI[i]._adj), "value_changed", G_CALLBACK(
+                       _adjustmentChanged), _csel);
 
-                                        sp_color_slider_set_adjustment( SP_COLOR_SLIDER(_compUI[i]._slider),
-                       _compUI[i]._adj );
-                                        gtk_spin_button_set_adjustment( GTK_SPIN_BUTTON(_compUI[i]._btn),
-                       _compUI[i]._adj );
-                                        gtk_spin_button_set_digits( GTK_SPIN_BUTTON(_compUI[i]._btn), digits );
+                                        sp_color_slider_set_adjustment(SP_COLOR_SLIDER(_compUI[i]._slider),
+                       _compUI[i]._adj);
+                                        gtk_spin_button_set_adjustment(GTK_SPIN_BUTTON(_compUI[i]._btn),
+                       _compUI[i]._adj);
+                                        gtk_spin_button_set_digits(GTK_SPIN_BUTTON(_compUI[i]._btn), digits);
                     */
                     gtk_widget_show(_compUI[i]._label);
                     _compUI[i]._slider->show();
                     gtk_widget_show(_compUI[i]._btn);
-                    // gtk_adjustment_set_value( _compUI[i]._adj, 0.0 );
-                    // gtk_adjustment_set_value( _compUI[i]._adj, val );
+                    // gtk_adjustment_set_value(_compUI[i]._adj, 0.0);
+                    // gtk_adjustment_set_value(_compUI[i]._adj, val);
                 }
                 for (size_t i = _profChannelCount; i < _compUI.size(); i++) {
                     gtk_widget_hide(_compUI[i]._label);
@@ -944,7 +944,7 @@ void ColorICCSelectorImpl::_adjustmentChanged(GtkAdjustment *adjustment, ColorIC
 // // TODO check this. It looks questionable:
 //     // if a value is entered between 0 and 1 exclusive, normalize it to (int) 0..255  or 0..100
 //     if (adjustment->value > 0.0 && adjustment->value < 1.0) {
-//         gtk_adjustment_set_value( adjustment, floor ((adjustment->value) * adjustment->upper + 0.5) );
+//         gtk_adjustment_set_value(adjustment, floor ((adjustment->value) * adjustment->upper + 0.5));
 //     }
 
 #ifdef DEBUG_LCMS
@@ -1021,7 +1021,7 @@ void ColorICCSelectorImpl::_adjustmentChanged(GtkAdjustment *adjustment, ColorIC
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
     }
     iccSelector->_impl->_color.setColorAlpha(newColor, scaled);
-    // iccSelector->_updateInternals( newColor, scaled, iccSelector->_impl->_dragging );
+    // iccSelector->_updateInternals(newColor, scaled, iccSelector->_impl->_dragging);
     iccSelector->_impl->_updateSliders(match);
 
     iccSelector->_impl->_updating = FALSE;
@@ -1036,8 +1036,8 @@ void ColorICCSelectorImpl::_sliderGrabbed()
     //     if (!iccSelector->_dragging) {
     //         iccSelector->_dragging = TRUE;
     //         iccSelector->_grabbed();
-    //         iccSelector->_updateInternals( iccSelector->_color, ColorScales::getScaled( iccSelector->_impl->_adj ),
-    //         iccSelector->_dragging );
+    //         iccSelector->_updateInternals(iccSelector->_color, ColorScales::getScaled(iccSelector->_impl->_adj),
+    //         iccSelector->_dragging);
     //     }
 }
 
@@ -1047,8 +1047,8 @@ void ColorICCSelectorImpl::_sliderReleased()
     //     if (iccSelector->_dragging) {
     //         iccSelector->_dragging = FALSE;
     //         iccSelector->_released();
-    //         iccSelector->_updateInternals( iccSelector->_color, ColorScales::getScaled( iccSelector->_adj ),
-    //         iccSelector->_dragging );
+    //         iccSelector->_updateInternals(iccSelector->_color, ColorScales::getScaled(iccSelector->_adj),
+    //         iccSelector->_dragging);
     //     }
 }
 
@@ -1063,8 +1063,8 @@ void ColorICCSelectorImpl::_sliderChanged()
 #endif // DEBUG_LCMS
     //     ColorICCSelector* iccSelector = dynamic_cast<ColorICCSelector*>(SP_COLOR_SELECTOR(cs)->base);
 
-    //     iccSelector->_updateInternals( iccSelector->_color, ColorScales::getScaled( iccSelector->_adj ),
-    //     iccSelector->_dragging );
+    //     iccSelector->_updateInternals(iccSelector->_color, ColorScales::getScaled(iccSelector->_adj),
+    //     iccSelector->_dragging);
 }
 
 Gtk::Widget *ColorICCSelectorFactory::createWidget(Inkscape::UI::SelectedColor &color) const

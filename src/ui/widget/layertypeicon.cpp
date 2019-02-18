@@ -70,14 +70,14 @@ void LayerTypeIcon::get_preferred_width_vfunc(Gtk::Widget& widget,
     }
 }
 
-void LayerTypeIcon::render_vfunc( const Cairo::RefPtr<Cairo::Context>& cr,
+void LayerTypeIcon::render_vfunc(const Cairo::RefPtr<Cairo::Context>& cr,
                                  Gtk::Widget& widget,
                                  const Gdk::Rectangle& background_area,
                                  const Gdk::Rectangle& cell_area,
-                                 Gtk::CellRendererState flags )
+                                 Gtk::CellRendererState flags)
 {
     property_pixbuf() = _property_active.get_value() == 1 ? _property_pixbuf_group : (_property_active.get_value() == 2 ? _property_pixbuf_layer : _property_pixbuf_path);
-    Gtk::CellRendererPixbuf::render_vfunc( cr, widget, background_area, cell_area, flags );
+    Gtk::CellRendererPixbuf::render_vfunc(cr, widget, background_area, cell_area, flags);
 }
 
 bool

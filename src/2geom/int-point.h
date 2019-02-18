@@ -65,11 +65,11 @@ public:
     /// @name Access the coordinates of a point
     /// @{
     IntCoord operator[](unsigned i) const {
-        if ( i > Y ) throw std::out_of_range("index out of range");
+        if (i > Y) throw std::out_of_range("index out of range");
         return _pt[i];
     }
     IntCoord &operator[](unsigned i) {
-        if ( i > Y ) throw std::out_of_range("index out of range");
+        if (i > Y) throw std::out_of_range("index out of range");
         return _pt[i];
     }
     IntCoord operator[](Dim2 d) const { return _pt[d]; }
@@ -110,8 +110,8 @@ public:
      * ordering, the points will be sorted according to the Y coordinate, and within
      * points with the same Y coordinate according to the X coordinate. */
     bool operator<(IntPoint const &p) const {
-        return ( ( _pt[Y] < p[Y] ) ||
-             (( _pt[Y] == p[Y] ) && ( _pt[X] < p[X] )));
+        return ((_pt[Y] < p[Y]) ||
+             ((_pt[Y] == p[Y]) && (_pt[X] < p[X])));
     }
     /// @}
     

@@ -228,7 +228,7 @@ double Node::firstPointAbove(size_t dim)
     {
         bool inLineWithEdge = (min[altDim] == curr->min[altDim]) ||
                 (min[altDim] == curr->max[altDim]);
-        if ( ! inLineWithEdge && (curr->max[dim] <= pos) )
+        if (! inLineWithEdge && (curr->max[dim] <= pos))
         {
             result = std::max(curr->max[dim], result);
         }
@@ -250,7 +250,7 @@ double Node::firstPointBelow(size_t dim)
     { 
         bool inLineWithEdge = (min[altDim] == curr->min[altDim]) ||
                 (min[altDim] == curr->max[altDim]);
-        if ( ! inLineWithEdge && (curr->min[dim] >= pos) )
+        if (! inLineWithEdge && (curr->min[dim] >= pos))
         {
             result = std::min(curr->min[dim], result);
         }
@@ -334,7 +334,7 @@ void buildConnectorRouteCheckpointCache(Router *router)
                 for (size_t cpi = 0; cpi < checkpoints.size(); ++cpi)
                 {
                     if (pointOnLine(displayRoute.ps[ind - 1], 
-                             displayRoute.ps[ind], checkpoints[cpi].point) )
+                             displayRoute.ps[ind], checkpoints[cpi].point))
                     {
                         // The checkpoint is on a segment.
                         displayRoute.checkpointsOnRoute.push_back(
@@ -389,8 +389,8 @@ static void processShiftEvent(NodeSet& scanline, Event *e, size_t dim,
 {
     Node *v = e->v;
     
-    if ( ((pass == 3) && (e->type == Open)) ||
-         ((pass == 3) && (e->type == SegOpen)) )
+    if (((pass == 3) && (e->type == Open)) ||
+         ((pass == 3) && (e->type == SegOpen)))
     {
         std::pair<NodeSet::iterator, bool> result = scanline.insert(v);
         v->iter = result.first;
@@ -413,10 +413,10 @@ static void processShiftEvent(NodeSet& scanline, Event *e, size_t dim,
         }
     }
     
-    if ( ((pass == 4) && (e->type == Open)) ||
+    if (((pass == 4) && (e->type == Open)) ||
          ((pass == 4) && (e->type == SegOpen)) ||
          ((pass == 1) && (e->type == SegClose)) ||
-         ((pass == 1) && (e->type == Close)) )
+         ((pass == 1) && (e->type == Close)))
     {
         if (v->ss)
         {
@@ -436,8 +436,8 @@ static void processShiftEvent(NodeSet& scanline, Event *e, size_t dim,
         }
     }
     
-    if ( ((pass == 2) && (e->type == SegClose)) ||
-         ((pass == 2) && (e->type == Close)) )
+    if (((pass == 2) && (e->type == SegClose)) ||
+         ((pass == 2) && (e->type == Close)))
     {
         // Clean up neighbour pointers.
         Node *l = v->firstAbove, *r = v->firstBelow;

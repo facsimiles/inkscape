@@ -40,22 +40,22 @@ struct SVGICCColor;
  */
 struct SPColor {
     SPColor();
-    SPColor( SPColor const& other );
-    SPColor( float r, float g, float b );
-    SPColor( guint32 value );
+    SPColor(SPColor const& other);
+    SPColor(float r, float g, float b);
+    SPColor(guint32 value);
     virtual ~SPColor();
 
     SPColor& operator= (SPColor const& other);
 
-    bool operator == ( SPColor const& other ) const;
-    bool operator != ( SPColor const& other ) const { return !(*this == other); };
-    bool isClose( SPColor const& other, float epsilon ) const;
+    bool operator == (SPColor const& other) const;
+    bool operator != (SPColor const& other) const { return !(*this == other); };
+    bool isClose(SPColor const& other, float epsilon) const;
 
-    void set( float r, float g, float b );
-    void set( guint32 value );
+    void set(float r, float g, float b);
+    void set(guint32 value);
 
-    guint32 toRGBA32( int alpha ) const;
-    guint32 toRGBA32( double alpha ) const;
+    guint32 toRGBA32(int alpha) const;
+    guint32 toRGBA32(double alpha) const;
 
     std::string toString() const;
 

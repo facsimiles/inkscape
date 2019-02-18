@@ -165,7 +165,7 @@ int Filter::render(Inkscape::DrawingItem const *item, DrawingContext &graphic, D
     cairo_surface_t *result = slot.get_result(_output_slot);
 
     // Assume for the moment that we paint the filter in sRGB
-    set_cairo_surface_ci( result, SP_CSS_COLOR_INTERPOLATION_SRGB );
+    set_cairo_surface_ci(result, SP_CSS_COLOR_INTERPOLATION_SRGB);
 
     graphic.setSource(result, origin[Geom::X], origin[Geom::Y]);
     graphic.setOperator(CAIRO_OPERATOR_SOURCE);

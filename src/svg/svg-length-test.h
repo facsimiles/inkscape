@@ -36,7 +36,7 @@ public:
 // createSuite and destroySuite get us per-suite setup and teardown
 // without us having to worry about static initialization order, etc.
     static SvgLengthTest *createSuite() { return new SvgLengthTest(); }
-    static void destroySuite( SvgLengthTest *suite ) { delete suite; }
+    static void destroySuite(SvgLengthTest *suite) { delete suite; }
 
     void testRead()
     {
@@ -108,10 +108,10 @@ public:
 
     void testEnumMappedToString()
     {
-        for ( int i = (static_cast<int>(SVGLength::NONE) + 1); i <= static_cast<int>(SVGLength::LAST_UNIT); i++ ) {
+        for (int i = (static_cast<int>(SVGLength::NONE) + 1); i <= static_cast<int>(SVGLength::LAST_UNIT); i++) {
             SVGLength::Unit target = static_cast<SVGLength::Unit>(i);
             // PX is a special case where we don't have a unit string
-            if ( (target != SVGLength::PX) ) {
+            if ((target != SVGLength::PX)) {
                 gchar const* val = sp_svg_length_get_css_units(target);
                 TSM_ASSERT_DIFFERS(i, val, "");
             }
@@ -123,7 +123,7 @@ public:
     {
         gchar const* valid[] = {"", "em", "ex", "px", "pt", "pc", "cm", "mm", "in", "%"};
         std::set<std::string> validStrings(valid, valid + G_N_ELEMENTS(valid));
-        for ( int i = (static_cast<int>(SVGLength::NONE) + 1); i <= static_cast<int>(SVGLength::LAST_UNIT); i++ ) {
+        for (int i = (static_cast<int>(SVGLength::NONE) + 1); i <= static_cast<int>(SVGLength::LAST_UNIT); i++) {
             SVGLength::Unit target = static_cast<SVGLength::Unit>(i);
             gchar const* val = sp_svg_length_get_css_units(target);
             TSM_ASSERT(i, validStrings.find(std::string(val)) != validStrings.end());
@@ -136,7 +136,7 @@ public:
         // Note that "px" is omitted from the list, as it will be assumed to be so if not explicitly set.
         gchar const* valid[] = {"em", "ex", "pt", "pc", "cm", "mm", "in", "%"};
         std::set<std::string> validStrings(valid, valid + G_N_ELEMENTS(valid));
-        for ( int i = (static_cast<int>(SVGLength::NONE) + 1); i <= static_cast<int>(SVGLength::LAST_UNIT); i++ ) {
+        for (int i = (static_cast<int>(SVGLength::NONE) + 1); i <= static_cast<int>(SVGLength::LAST_UNIT); i++) {
             SVGLength::Unit target = static_cast<SVGLength::Unit>(i);
             gchar const* val = sp_svg_length_get_css_units(target);
             std::set<std::string>::iterator iter = validStrings.find(std::string(val));
@@ -154,10 +154,10 @@ public:
             {"761.9", 761.92918978947023, 4, -8},
         };
 
-        for ( size_t i = 0; i < G_N_ELEMENTS(precTests); i++ ) {
+        for (size_t i = 0; i < G_N_ELEMENTS(precTests); i++) {
             char buf[256] = {0};
             memset(buf, 0xCC, sizeof(buf)); // Make it easy to detect an overrun.
-            unsigned int retval = sp_svg_number_write_de( buf, sizeof(buf), precTests[i].val, precTests[i].prec, precTests[i].minexp );
+            unsigned int retval = sp_svg_number_write_de(buf, sizeof(buf), precTests[i].val, precTests[i].prec, precTests[i].minexp);
             TSM_ASSERT_EQUALS("Number of chars written", retval, strlen(precTests[i].str));
             TSM_ASSERT_EQUALS("Numeric string written", std::string(buf), std::string(precTests[i].str));
             TSM_ASSERT_EQUALS(std::string("Buffer overrun ") + precTests[i].str, '\xCC', buf[retval + 1]);

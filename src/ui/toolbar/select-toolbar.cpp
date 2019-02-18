@@ -101,7 +101,7 @@ SelectToolbar::SelectToolbar(SPDesktop *desktop) :
     add(* Gtk::manage(new Gtk::SeparatorToolItem()));
 
     _tracker->addUnit(unit_table.getUnit("%"));
-    _tracker->setActiveUnit( desktop->getNamedView()->display_units );
+    _tracker->setActiveUnit(desktop->getNamedView()->display_units);
 
     // x-value control
     auto x_val = prefs->getDouble("/tools/select/X", 0.0);
@@ -171,7 +171,7 @@ SelectToolbar::SelectToolbar(SPDesktop *desktop) :
     add(*h_btn);
 
     // units menu
-    auto unit_menu = _tracker->create_tool_item(_("Units"), ("") );
+    auto unit_menu = _tracker->create_tool_item(_("Units"), (""));
     add(*unit_menu);
 
     add(* Gtk::manage(new Gtk::SeparatorToolItem()));
@@ -212,7 +212,7 @@ SelectToolbar::SelectToolbar(SPDesktop *desktop) :
     layout_widget_update(SP_ACTIVE_DESKTOP ? SP_ACTIVE_DESKTOP->getSelection() : nullptr);
 
     for (auto item : _context_items) {
-        if ( item->is_sensitive() ) {
+        if (item->is_sensitive()) {
             item->set_sensitive(false);
         }
     }
@@ -234,7 +234,7 @@ SelectToolbar::any_value_changed(Glib::RefPtr<Gtk::Adjustment>& adj)
         return;
     }
 
-    if ( !_tracker || _tracker->isUpdating() ) {
+    if (!_tracker || _tracker->isUpdating()) {
         /*
          * When only units are being changed, don't treat changes
          * to adjuster values as object changes.
@@ -258,7 +258,7 @@ SelectToolbar::any_value_changed(Glib::RefPtr<Gtk::Adjustment>& adj)
         SPItem::VISUAL_BBOX : SPItem::GEOMETRIC_BBOX;
     Geom::OptRect bbox_user = selection->bounds(bbox_type);
 
-    if ( !bbox_user ) {
+    if (!bbox_user) {
         _update = false;
         return;
     }
@@ -291,7 +291,7 @@ SelectToolbar::any_value_changed(Glib::RefPtr<Gtk::Adjustment>& adj)
     }
 
     // Keep proportions if lock is on
-    if ( _lock_btn->get_active() ) {
+    if (_lock_btn->get_active()) {
         if (adj == _adj_h) {
             x1 = x0 + yrel * bbox_user->dimensions()[Geom::X];
         } else if (adj == _adj_w) {
@@ -318,10 +318,10 @@ SelectToolbar::any_value_changed(Glib::RefPtr<Gtk::Adjustment>& adj)
     // the value was changed by the user, the difference will be at least that much; otherwise it's
     // just rounding difference between the spinbox value and actual value, so no action is
     // performed
-    char const * const actionkey = ( mh > 5e-4 ? "selector:toolbar:move:horizontal" :
+    char const * const actionkey = (mh > 5e-4 ? "selector:toolbar:move:horizontal" :
                                      sh > 5e-4 ? "selector:toolbar:scale:horizontal" :
                                      mv > 5e-4 ? "selector:toolbar:move:vertical" :
-                                     sv > 5e-4 ? "selector:toolbar:scale:vertical" : nullptr );
+                                     sv > 5e-4 ? "selector:toolbar:scale:vertical" : nullptr);
 
     if (actionkey != nullptr) {
 
@@ -365,12 +365,12 @@ SelectToolbar::layout_widget_update(Inkscape::Selection *sel)
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     using Geom::X;
     using Geom::Y;
-    if ( sel && !sel->isEmpty() ) {
+    if (sel && !sel->isEmpty()) {
         int prefs_bbox = prefs->getInt("/tools/bounding_box", 0);
         SPItem::BBoxType bbox_type = (prefs_bbox ==0)?
             SPItem::VISUAL_BBOX : SPItem::GEOMETRIC_BBOX;
         Geom::OptRect const bbox(sel->bounds(bbox_type));
-        if ( bbox ) {
+        if (bbox) {
             Unit const *unit = _tracker->getActiveUnit();
             g_return_if_fail(unit != nullptr);
 
@@ -387,10 +387,10 @@ SelectToolbar::layout_widget_update(Inkscape::Selection *sel)
                 _adj_y->set_value(val);
                 _adj_w->set_value(val);
                 _adj_h->set_value(val);
-                _tracker->setFullVal( _adj_x->gobj(), keyval[0].val );
-                _tracker->setFullVal( _adj_y->gobj(), keyval[1].val );
-                _tracker->setFullVal( _adj_w->gobj(), keyval[2].val );
-                _tracker->setFullVal( _adj_h->gobj(), keyval[3].val );
+                _tracker->setFullVal(_adj_x->gobj(), keyval[0].val);
+                _tracker->setFullVal(_adj_y->gobj(), keyval[1].val);
+                _tracker->setFullVal(_adj_w->gobj(), keyval[2].val);
+                _tracker->setFullVal(_adj_h->gobj(), keyval[3].val);
             } else {
                 _adj_x->set_value(Quantity::convert(keyval[0].val, "px", unit));
                 _adj_y->set_value(Quantity::convert(keyval[1].val, "px", unit));
@@ -409,7 +409,7 @@ SelectToolbar::on_inkscape_selection_modified(Inkscape::Selection *selection, gu
     if ((_desktop->getSelection() == selection) // only respond to changes in our desktop
         && (flags & (SP_OBJECT_MODIFIED_FLAG        |
                      SP_OBJECT_PARENT_MODIFIED_FLAG |
-                     SP_OBJECT_CHILD_MODIFIED_FLAG   )))
+                     SP_OBJECT_CHILD_MODIFIED_FLAG)))
     {
         layout_widget_update(selection);
     }
@@ -422,7 +422,7 @@ SelectToolbar::on_inkscape_selection_changed(Inkscape::Selection *selection)
         bool setActive = (selection && !selection->isEmpty());
 
         for (auto item : _context_items) {
-            if ( setActive != item->get_sensitive() ) {
+            if (setActive != item->get_sensitive()) {
                 item->set_sensitive(setActive);
             }
         }
@@ -433,7 +433,7 @@ SelectToolbar::on_inkscape_selection_changed(Inkscape::Selection *selection)
 
 void
 SelectToolbar::toggle_lock() {
-    if ( _lock_btn->get_active() ) {
+    if (_lock_btn->get_active()) {
         _lock_btn->set_icon_name(INKSCAPE_ICON("object-locked"));
     } else {
         _lock_btn->set_icon_name(INKSCAPE_ICON("object-unlocked"));
@@ -446,7 +446,7 @@ SelectToolbar::toggle_stroke()
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     bool active = _transform_stroke_btn->get_active();
     prefs->setBool("/options/transform/stroke", active);
-    if ( active ) {
+    if (active) {
         _desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Now <b>stroke width</b> is <b>scaled</b> when objects are scaled."));
     } else {
         _desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Now <b>stroke width</b> is <b>not scaled</b> when objects are scaled."));
@@ -459,7 +459,7 @@ SelectToolbar::toggle_corners()
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     bool active = _transform_corners_btn->get_active();
     prefs->setBool("/options/transform/rectcorners", active);
-    if ( active ) {
+    if (active) {
         _desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Now <b>rounded rectangle corners</b> are <b>scaled</b> when rectangles are scaled."));
     } else {
         _desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Now <b>rounded rectangle corners</b> are <b>not scaled</b> when rectangles are scaled."));
@@ -472,7 +472,7 @@ SelectToolbar::toggle_gradient()
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     bool active = _transform_gradient_btn->get_active();
     prefs->setBool("/options/transform/gradient", active);
-    if ( active ) {
+    if (active) {
         _desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Now <b>gradients</b> are <b>transformed</b> along with their objects when those are transformed (moved, scaled, rotated, or skewed)."));
     } else {
         _desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Now <b>gradients</b> remain <b>fixed</b> when objects are transformed (moved, scaled, rotated, or skewed)."));
@@ -485,7 +485,7 @@ SelectToolbar::toggle_pattern()
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     bool active = _transform_pattern_btn->get_active();
     prefs->setInt("/options/transform/pattern", active);
-    if ( active ) {
+    if (active) {
         _desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Now <b>patterns</b> are <b>transformed</b> along with their objects when those are transformed (moved, scaled, rotated, or skewed)."));
     } else {
         _desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Now <b>patterns</b> remain <b>fixed</b> when objects are transformed (moved, scaled, rotated, or skewed)."));

@@ -146,7 +146,7 @@ public:
     /** \brief  A function to get the number of parameters that
                 the extension has.
         \return The number of parameters. */
-    unsigned int param_count ( ) { return parameters.size(); };
+    unsigned int param_count () { return parameters.size(); };
     /** \brief  A function to get the number of parameters that
                 are visible to the user that the extension has.
         \return The number of visible parameters.
@@ -156,7 +156,7 @@ public:
               the appropriate function in code so that it'll work in the
               future.
     */
-    unsigned int param_visible_count ( );
+    unsigned int param_visible_count ();
 
 public:
     /** An error class for when a parameter is called on a type it is not */
@@ -238,7 +238,7 @@ public:
                                        const SPDocument *   doc = nullptr,
                                        const Inkscape::XML::Node * node = nullptr) const;
 
-    gchar const *get_param_optiongroup( gchar const * name,
+    gchar const *get_param_optiongroup(gchar const * name,
                                         SPDocument const *   doc = nullptr,
                                         Inkscape::XML::Node const * node = nullptr) const;
 

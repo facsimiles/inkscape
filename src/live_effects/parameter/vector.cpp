@@ -21,7 +21,7 @@ namespace Inkscape {
 
 namespace LivePathEffect {
 
-VectorParam::VectorParam( const Glib::ustring& label, const Glib::ustring& tip,
+VectorParam::VectorParam(const Glib::ustring& label, const Glib::ustring& tip,
                         const Glib::ustring& key, Inkscape::UI::Widget::Registry* wr,
                         Effect* effect, Geom::Point default_vector)
     : Parameter(label, tip, key, wr, effect),
@@ -62,7 +62,7 @@ VectorParam::param_update_default(const gchar * default_point)
     success += sp_svg_number_read_d(strarray[1], &newy);
     g_strfreev (strarray);
     if (success == 2) {
-        param_update_default( Geom::Point(newx, newy) );
+        param_update_default(Geom::Point(newx, newy));
     }
 }
 
@@ -84,8 +84,8 @@ VectorParam::param_readSVGValue(const gchar * strvalue)
     }
     g_strfreev (strarray);
     if (i == 4) {
-        setOrigin( Geom::Point(val[0], val[1]) );
-        setVector( Geom::Point(val[2], val[3]) );
+        setOrigin(Geom::Point(val[0], val[1]));
+        setVector(Geom::Point(val[2], val[3]));
         return true;
     }
     return false;
@@ -111,18 +111,18 @@ Gtk::Widget *
 VectorParam::param_newWidget()
 {
     Inkscape::UI::Widget::RegisteredVector * pointwdg = Gtk::manage(
-        new Inkscape::UI::Widget::RegisteredVector( param_label,
+        new Inkscape::UI::Widget::RegisteredVector(param_label,
                                                     param_tooltip,
                                                     param_key,
                                                     *param_wr,
                                                     param_effect->getRepr(),
-                                                    param_effect->getSPDoc() ) );
+                                                    param_effect->getSPDoc()));
     pointwdg->setPolarCoords();
-    pointwdg->setValue( vector, origin );
+    pointwdg->setValue(vector, origin);
     pointwdg->clearProgrammatically();
     pointwdg->set_undo_parameters(SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Change vector parameter"));
 
-    Gtk::HBox * hbox = Gtk::manage( new Gtk::HBox() );
+    Gtk::HBox * hbox = Gtk::manage(new Gtk::HBox());
     static_cast<Gtk::HBox*>(hbox)->pack_start(*pointwdg, true, true);
     static_cast<Gtk::HBox*>(hbox)->show_all_children();
 
@@ -141,7 +141,7 @@ VectorParam::set_and_write_new_values(Geom::Point const &new_origin, Geom::Point
 void
 VectorParam::param_transform_multiply(Geom::Affine const& postmul, bool /*set*/)
 {
-    set_and_write_new_values( origin * postmul, vector * postmul.withoutTranslation() );
+    set_and_write_new_values(origin * postmul, vector * postmul.withoutTranslation());
 }
 
 

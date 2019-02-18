@@ -31,15 +31,15 @@ template<class T>
 void
 add_actions_transform(ConcreteInkscapeApplication<T>* app)
 {
-    Glib::VariantType Bool(  Glib::VARIANT_TYPE_BOOL);
-    Glib::VariantType Int(   Glib::VARIANT_TYPE_INT32);
+    Glib::VariantType Bool(Glib::VARIANT_TYPE_BOOL);
+    Glib::VariantType Int(Glib::VARIANT_TYPE_INT32);
     Glib::VariantType Double(Glib::VARIANT_TYPE_DOUBLE);
     Glib::VariantType String(Glib::VARIANT_TYPE_STRING);
 
     // Debian 9 has 2.50.0
 #if GLIB_CHECK_VERSION(2, 52, 0)
 
-    app->add_action_with_parameter( "transform-rotate",         Double, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&transform_rotate),          app));
+    app->add_action_with_parameter("transform-rotate",         Double, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&transform_rotate),          app));
 
 #endif
 }

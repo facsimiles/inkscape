@@ -513,7 +513,7 @@ void SingularValueDecomposition::calculate()
                      U(i, j) += t*U(i, k);
                   }
                }
-               for (int i = k; i < m; i++ ) {
+               for (int i = k; i < m; i++) {
                   U(i, k) = -U(i, k);
                }
                U(k, k) = 1.0 + U(k, k);
@@ -869,7 +869,7 @@ int SingularValueDecomposition::rank()
 /**
  * Get the value of a node/attribute pair
  */
-static Glib::ustring getAttribute( Inkscape::XML::Node *node, char const *attrName)
+static Glib::ustring getAttribute(Inkscape::XML::Node *node, char const *attrName)
 {
     Glib::ustring val;
     char const *valstr = node->attribute(attrName);
@@ -1232,7 +1232,7 @@ writePath(Writer &outs, Geom::PathVector const &pathv,
 
             for (Geom::Path::const_iterator cit = pit->begin(); cit != pit->end_closed(); ++cit) {
 
-                if( is_straight_curve(*cit) )
+                if(is_straight_curve(*cit))
                 {
                     double destx = cit->finalPoint()[X];
                     double desty = cit->finalPoint()[Y];
@@ -1282,7 +1282,7 @@ bool OdfOutput::processStyle(SPItem *item, const Glib::ustring &id, const Glib::
     // FILL
     if (style->fill.isColor())
     {
-        guint32 fillCol = style->fill.value.color.toRGBA32( 0 );
+        guint32 fillCol = style->fill.value.color.toRGBA32(0);
         char buf[16];
         int r = (fillCol >> 24) & 0xff;
         int g = (fillCol >> 16) & 0xff;
@@ -1307,7 +1307,7 @@ bool OdfOutput::processStyle(SPItem *item, const Glib::ustring &id, const Glib::
     // STROKE
     if (style->stroke.isColor())
     {
-        guint32 strokeCol = style->stroke.value.color.toRGBA32( 0 );
+        guint32 strokeCol = style->stroke.value.color.toRGBA32(0);
         char buf[16];
         int r = (strokeCol >> 24) & 0xff;
         int g = (strokeCol >> 16) & 0xff;

@@ -155,7 +155,7 @@ unsigned DrawingGlyphs::_updateItem(Geom::IntRect const &/*area*/, UpdateContext
             scale /= _transform->descrim(); // FIXME temporary hack
         }
         float width = MAX(0.125, ggroup->_nrstyle.stroke_width * scale);
-        if ( fabs(ggroup->_nrstyle.stroke_width * scale) > 0.01 ) { // FIXME: this is always true
+        if (fabs(ggroup->_nrstyle.stroke_width * scale) > 0.01) { // FIXME: this is always true
             b.expandBy(0.5 * width);
             pb->expandBy(0.5 * width);
         }
@@ -164,7 +164,7 @@ unsigned DrawingGlyphs::_updateItem(Geom::IntRect const &/*area*/, UpdateContext
         _pick_bbox = pb->roundOutwards();
 
         float miterMax = width * ggroup->_nrstyle.miter_limit;
-        if ( miterMax > 0.01 ) {
+        if (miterMax > 0.01) {
             // grunt mode. we should compute the various miters instead
             // (one for each point on the curve)
             b.expandBy(miterMax);
@@ -249,7 +249,7 @@ DrawingText::setStyle(SPStyle *style, SPStyle *context_style)
 void
 DrawingText::setChildrenStyle(SPStyle* context_style)
 {
-    DrawingGroup::setChildrenStyle( context_style );
+    DrawingGroup::setChildrenStyle(context_style);
     _nrstyle.set(_style, _context_style);
 }
 
@@ -294,10 +294,10 @@ void DrawingText::decorateStyle(DrawingContext &dc, double vextent, double xphas
     if(_nrstyle.text_decoration_style & NRStyle::TEXT_DECORATION_STYLE_ISDOUBLE){
         ps -= Geom::Point(0, vextent/12.0);
         pf -= Geom::Point(0, vextent/12.0);
-        dc.rectangle( Geom::Rect(ps + poff, pf - poff));
+        dc.rectangle(Geom::Rect(ps + poff, pf - poff));
         ps += Geom::Point(0, vextent/6.0);
         pf += Geom::Point(0, vextent/6.0);
-        dc.rectangle( Geom::Rect(ps + poff, pf - poff));
+        dc.rectangle(Geom::Rect(ps + poff, pf - poff));
     }
     /* The next three have a problem in that they are phase dependent.  The bits of a line are not
     necessarily passing through this routine in order, so we have to use the xphase information
@@ -316,10 +316,10 @@ void DrawingText::decorateStyle(DrawingContext &dc, double vextent, double xphas
 
                 if(pv[Geom::X]>= pf[Geom::X]){
                     // Last dot
-                    dc.rectangle( Geom::Rect(pvlast + poff, pf - poff));
+                    dc.rectangle(Geom::Rect(pvlast + poff, pf - poff));
                     break;
                 } else {
-                    dc.rectangle( Geom::Rect(pvlast + poff, pv - poff));
+                    dc.rectangle(Geom::Rect(pvlast + poff, pv - poff));
                 }
 
                 pv += Geom::Point(step * 4.0, 0.0);
@@ -341,10 +341,10 @@ void DrawingText::decorateStyle(DrawingContext &dc, double vextent, double xphas
 
                 if(pv[Geom::X]>= pf[Geom::X]){
                     // Last dash
-                    dc.rectangle( Geom::Rect(pvlast + poff, pf - poff));
+                    dc.rectangle(Geom::Rect(pvlast + poff, pf - poff));
                     break;
                 } else {
-                    dc.rectangle( Geom::Rect(pvlast + poff, pv - poff));
+                    dc.rectangle(Geom::Rect(pvlast + poff, pv - poff));
                 }
 
                 pv += Geom::Point(step * 8.0, 0.0);
@@ -377,14 +377,14 @@ void DrawingText::decorateStyle(DrawingContext &dc, double vextent, double xphas
         dc.closePath();
     }
     else { // TEXT_DECORATION_STYLE_SOLID, also default in case it was not set for some reason
-        dc.rectangle( Geom::Rect(ps + poff, pf - poff));
+        dc.rectangle(Geom::Rect(ps + poff, pf - poff));
     }
 }
 
 /* returns scaled line thickness */
 void DrawingText::decorateItem(DrawingContext &dc, double phase_length, bool under)
 {
-    if ( _nrstyle.font_size <= 1.0e-32 )return;  // might cause a divide by zero or overflow and nothing would be visible anyway
+    if (_nrstyle.font_size <= 1.0e-32)return;  // might cause a divide by zero or overflow and nothing would be visible anyway
     double tsp_width_adj                = _nrstyle.tspan_width                     / _nrstyle.font_size;
     double tsp_asc_adj                  = _nrstyle.ascender                        / _nrstyle.font_size;
     double tsp_size_adj                 = (_nrstyle.ascender + _nrstyle.descender) / _nrstyle.font_size;
@@ -398,10 +398,10 @@ void DrawingText::decorateItem(DrawingContext &dc, double phase_length, bool und
     Geom::Point p2;
     // All lines must be the same thickness, in combinations, line_through trumps underline
     double thickness = final_underline_thickness;
-    if ( thickness <= 1.0e-32 )return;  // might cause a divide by zero or overflow and nothing would be visible anyway
+    if (thickness <= 1.0e-32)return;  // might cause a divide by zero or overflow and nothing would be visible anyway
     dc.setTolerance(0.5); // Is this really necessary... could effect dots.
 
-    if( under ) {
+    if(under) {
 
         if(_nrstyle.text_decoration_line & NRStyle::TEXT_DECORATION_LINE_UNDERLINE){
             p1 = Geom::Point(0.0,          -_nrstyle.underline_position);
@@ -467,7 +467,7 @@ unsigned DrawingText::_renderItem(DrawingContext &dc, Geom::IntRect const &/*are
 
 
     // Do we have text decorations?
-    bool decorate = (_nrstyle.text_decoration_line != NRStyle::TEXT_DECORATION_LINE_CLEAR );
+    bool decorate = (_nrstyle.text_decoration_line != NRStyle::TEXT_DECORATION_LINE_CLEAR);
 
     // prepareFill / prepareStroke need to be called with _ctm in effect.
     // However, we might need to apply a different ctm for glyphs.
@@ -480,12 +480,12 @@ unsigned DrawingText::_renderItem(DrawingContext &dc, Geom::IntRect const &/*are
         Inkscape::DrawingContext::Save save(dc);
         dc.transform(_ctm);
 
-        has_fill      = _nrstyle.prepareFill(                dc, _item_bbox, _fill_pattern);
-        has_stroke    = _nrstyle.prepareStroke(              dc, _item_bbox, _stroke_pattern);
+        has_fill      = _nrstyle.prepareFill(dc, _item_bbox, _fill_pattern);
+        has_stroke    = _nrstyle.prepareStroke(dc, _item_bbox, _stroke_pattern);
 
         // Avoid creating patterns if not needed
-        if( decorate ) {
-            has_td_fill   = _nrstyle.prepareTextDecorationFill(  dc, _item_bbox, _fill_pattern);
+        if(decorate) {
+            has_td_fill   = _nrstyle.prepareTextDecorationFill(dc, _item_bbox, _fill_pattern);
             has_td_stroke = _nrstyle.prepareTextDecorationStroke(dc, _item_bbox, _stroke_pattern);
         }
     }
@@ -495,9 +495,9 @@ unsigned DrawingText::_renderItem(DrawingContext &dc, Geom::IntRect const &/*are
         // Determine order for fill and stroke.
         // Text doesn't have markers, we can do paint-order quick and dirty.
         bool fill_first = false;
-        if( _nrstyle.paint_order_layer[0] == NRStyle::PAINT_ORDER_NORMAL ||
+        if(_nrstyle.paint_order_layer[0] == NRStyle::PAINT_ORDER_NORMAL ||
             _nrstyle.paint_order_layer[0] == NRStyle::PAINT_ORDER_FILL   ||
-            _nrstyle.paint_order_layer[2] == NRStyle::PAINT_ORDER_STROKE ) {
+            _nrstyle.paint_order_layer[2] == NRStyle::PAINT_ORDER_STROKE) {
             fill_first = true;
         } // Won't get "stroke fill stroke" but that isn't 'valid'
 
@@ -505,7 +505,7 @@ unsigned DrawingText::_renderItem(DrawingContext &dc, Geom::IntRect const &/*are
         // Determine geometry of text decoration
         double phase_length = 0.0;
         Geom::Affine aff;
-        if( decorate ) {
+        if(decorate) {
 
             Geom::Affine rotinv;
             bool   invset    = false;
@@ -543,7 +543,7 @@ unsigned DrawingText::_renderItem(DrawingContext &dc, Geom::IntRect const &/*are
         }
 
         // Draw text decorations that go UNDER the text (underline, over-line)
-        if( decorate ) {
+        if(decorate) {
 
             {
                 Inkscape::DrawingContext::Save save(dc);

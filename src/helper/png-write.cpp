@@ -227,7 +227,7 @@ sp_png_write_rgba_striped(SPDocument *doc,
                                //"Comment", ""
         };
         for (size_t i = 0; i < G_N_ELEMENTS(pngToDc); i += 2) {
-            struct rdf_work_entity_t * entity = rdf_find_entity ( pngToDc[i + 1] );
+            struct rdf_work_entity_t * entity = rdf_find_entity (pngToDc[i + 1]);
             if (entity) {
                 gchar const* data = rdf_get_work_entity(doc, entity);
                 if (data && *data) {
@@ -259,10 +259,10 @@ sp_png_write_rgba_striped(SPDocument *doc,
     /* other optional chunks like cHRM, bKGD, tRNS, tIME, oFFs, pHYs, */
     /* note that if sRGB is present the cHRM chunk must be ignored
      * on read and must be written in accordance with the sRGB profile */
-    if(xdpi < 0.0254 ) xdpi = 0.0255;
-    if(ydpi < 0.0254 ) ydpi = 0.0255;
+    if(xdpi < 0.0254) xdpi = 0.0255;
+    if(ydpi < 0.0254) ydpi = 0.0255;
 
-    png_set_pHYs(png_ptr, info_ptr, unsigned(xdpi / 0.0254 ), unsigned(ydpi / 0.0254 ), PNG_RESOLUTION_METER);
+    png_set_pHYs(png_ptr, info_ptr, unsigned(xdpi / 0.0254), unsigned(ydpi / 0.0254), PNG_RESOLUTION_METER);
 
     /* Write the file header information.  REQUIRED */
     png_write_info(png_ptr, info_ptr);
@@ -377,7 +377,7 @@ sp_export_get_rows(guchar const **rows, void **to_free, int row, int num_rows, v
  */
 static void hide_other_items_recursively(SPObject *o, const std::vector<SPItem*> &list, unsigned dkey)
 {
-    if ( SP_IS_ITEM(o)
+    if (SP_IS_ITEM(o)
          && !SP_IS_DEFS(o)
          && !SP_IS_ROOT(o)
          && !SP_IS_GROUP(o)

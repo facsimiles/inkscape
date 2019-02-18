@@ -167,11 +167,11 @@ Inkscape::SelTrans::SelTrans(SPDesktop *desktop) :
 
     _sel_changed_connection = _selection->connectChanged(
         sigc::mem_fun(*this, &Inkscape::SelTrans::_selChanged)
-        );
+);
 
     _sel_modified_connection = _selection->connectModified(
         sigc::mem_fun(*this, &Inkscape::SelTrans::_selModified)
-        );
+);
 
     _all_snap_sources_iter = _all_snap_sources_sorted.end();
 
@@ -382,13 +382,13 @@ void Inkscape::SelTrans::transform(Geom::Affine const &rel_affine, Geom::Point c
     g_return_if_fail(_grabbed);
     g_return_if_fail(!_empty);
 
-    Geom::Affine const affine( Geom::Translate(-norm) * rel_affine * Geom::Translate(norm) );
+    Geom::Affine const affine(Geom::Translate(-norm) * rel_affine * Geom::Translate(norm));
 
     if (_show == SHOW_CONTENT) {
         // update the content
         for (unsigned i = 0; i < _items.size(); i++) {
             SPItem &item = *_items[i];
-            if( SP_IS_ROOT(&item) ) {
+            if(SP_IS_ROOT(&item)) {
                 _desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Cannot transform an embedded SVG."));
                 break;
             }
@@ -520,7 +520,7 @@ void Inkscape::SelTrans::stamp()
     Inkscape::Selection *selection = _desktop->getSelection();
 
     bool fixup = !_grabbed;
-    if ( fixup && !_stamp_cache.empty() ) {
+    if (fixup && !_stamp_cache.empty()) {
         // TODO - give a proper fix. Simple temporary work-around for the grab() issue
         _stamp_cache.clear();
     }
@@ -558,7 +558,7 @@ void Inkscape::SelTrans::stamp()
             Geom::Affine const *new_affine;
             if (_show == SHOW_OUTLINE) {
                 Geom::Affine const i2d(original_item->i2dt_affine());
-                Geom::Affine const i2dnew( i2d * _current_relative_affine );
+                Geom::Affine const i2dnew(i2d * _current_relative_affine);
                 copy_item->set_i2d_affine(i2dnew);
                 new_affine = &copy_item->transform;
             } else {
@@ -567,7 +567,7 @@ void Inkscape::SelTrans::stamp()
 
             copy_item->doWriteTransform(*new_affine);
 
-            if ( copy_item->isCenterSet() && _center ) {
+            if (copy_item->isCenterSet() && _center) {
                 copy_item->setCenter(*_center * _current_relative_affine);
             }
             Inkscape::GC::release(copy_repr);
@@ -581,7 +581,7 @@ void Inkscape::SelTrans::stamp()
                            _("Stamp"));
     }
 
-    if ( fixup && !_stamp_cache.empty() ) {
+    if (fixup && !_stamp_cache.empty()) {
         // TODO - give a proper fix. Simple temporary work-around for the grab() issue
         _stamp_cache.clear();
     }
@@ -592,7 +592,7 @@ void Inkscape::SelTrans::_updateHandles()
     for (auto & knot : knots)
         knot->hide();
 
-    if ( !_show_handles || _empty )
+    if (!_show_handles || _empty)
         return;
 
     if (!_center_is_set) {
@@ -600,7 +600,7 @@ void Inkscape::SelTrans::_updateHandles()
         _center_is_set = true;
     }
 
-    if ( _state == STATE_SCALE ) {
+    if (_state == STATE_SCALE) {
         _showHandles(HANDLE_STRETCH);
         _showHandles(HANDLE_SCALE);
     } else {
@@ -651,7 +651,7 @@ void Inkscape::SelTrans::_showHandles(SPSelTransType type)
 
         // This controls the center handle's position, because the default can
         // be moved and needs to be remembered.
-        if( type == HANDLE_CENTER && _center )
+        if(type == HANDLE_CENTER && _center)
             knots[i]->moveto(*_center);
     }
 }
@@ -684,7 +684,7 @@ static void sp_sel_trans_handle_grab(SPKnot *knot, guint state, SPSelTransHandle
 {
     SP_SELECT_CONTEXT(knot->desktop->event_context)->_seltrans->handleGrab(
         knot, state, *(SPSelTransHandle const *) data
-        );
+);
 }
 
 static void sp_sel_trans_handle_ungrab(SPKnot *knot, guint /*state*/, SPSelTransHandle const* /*data*/)
@@ -698,21 +698,21 @@ static void sp_sel_trans_handle_new_event(SPKnot *knot, Geom::Point const& posit
 
     SP_SELECT_CONTEXT(knot->desktop->event_context)->_seltrans->handleNewEvent(
         knot, &pos, state, *(SPSelTransHandle const *) data
-        );
+);
 }
 
 static gboolean sp_sel_trans_handle_request(SPKnot *knot, Geom::Point *position, guint state, SPSelTransHandle const *data)
 {
     return SP_SELECT_CONTEXT(knot->desktop->event_context)->_seltrans->handleRequest(
         knot, position, state, *(SPSelTransHandle const *) data
-        );
+);
 }
 
 static void sp_sel_trans_handle_click(SPKnot *knot, guint state, SPSelTransHandle const* data)
 {
     SP_SELECT_CONTEXT(knot->desktop->event_context)->_seltrans->handleClick(
         knot, state, *(SPSelTransHandle const *) data
-        );
+);
 }
 
 void Inkscape::SelTrans::handleClick(SPKnot */*knot*/, guint state, SPSelTransHandle const &handle)
@@ -773,7 +773,7 @@ void Inkscape::SelTrans::handleNewEvent(SPKnot *knot, Geom::Point *position, gui
     // in case items have been unhooked from the document, don't
     // try to continue processing events for them.
     for (auto & _item : _items) {
-        if ( !_item->document ) {
+        if (!_item->document) {
             return;
         }
     }
@@ -878,9 +878,9 @@ void Inkscape::SelTrans::_boundingBoxPrefsChanged(int prefs_bbox)
 /** Returns -1 or 1 according to the sign of x.  Returns 1 for 0 and NaN. */
 static double sign(double const x)
 {
-    return ( x < 0
+    return (x < 0
              ? -1
-             : 1 );
+             : 1);
 }
 
 gboolean Inkscape::SelTrans::scaleRequest(Geom::Point &pt, guint state)
@@ -898,7 +898,7 @@ gboolean Inkscape::SelTrans::scaleRequest(Geom::Point &pt, guint state)
 
     if (state & GDK_MOD1_MASK) { // scale by an integer multiplier/divider
         // We're scaling either the visual or the geometric bbox here (see the comment above)
-        for ( unsigned int i = 0 ; i < 2 ; i++ ) {
+        for (unsigned int i = 0 ; i < 2 ; i++) {
             if (fabs(default_scale[i]) > 1) {
                 default_scale[i] = round(default_scale[i]);
             } else if (default_scale[i] != 0) {
@@ -1251,7 +1251,7 @@ gboolean Inkscape::SelTrans::rotateRequest(Geom::Point &pt, guint state)
         double sin_t = Geom::dot(Geom::rot90(q1), q2);
         radians = atan2(sin_t, cos_t);
         if (snaps) {
-            radians = ( M_PI / snaps ) * floor( radians * snaps / M_PI + .5 );
+            radians = (M_PI / snaps) * floor(radians * snaps / M_PI + .5);
         }
         r1 = Geom::Rotate(0); //q1 = Geom::Point(1, 0);
         r2 = Geom::Rotate(radians); //q2 = Geom::Point(cos(radians), sin(radians));
@@ -1479,7 +1479,7 @@ void Inkscape::SelTrans::moveTo(Geom::Point const &xy, guint state)
 // geometrical bounding box
 Geom::Point Inkscape::SelTrans::_getGeomHandlePos(Geom::Point const &visual_handle_pos)
 {
-    if ( _snap_bbox_type == SPItem::GEOMETRIC_BBOX) {
+    if (_snap_bbox_type == SPItem::GEOMETRIC_BBOX) {
         // When the selector tool is using geometric bboxes, then the handle is already
         // located at one of the geometric bbox corners
         return visual_handle_pos;
@@ -1519,8 +1519,8 @@ Geom::Scale Inkscape::calcScaleFactors(Geom::Point const &initial_point, Geom::P
     Geom::Point const offset = new_point - initial_point;
     Geom::Scale scale(1, 1);
 
-    for ( unsigned int i = 0 ; i < 2 ; i++ ) {
-        if ( fabs(initial_delta[i]) > 1e-6 ) {
+    for (unsigned int i = 0 ; i < 2 ; i++) {
+        if (fabs(initial_delta[i]) > 1e-6) {
             if (skew) {
                 scale[i] = offset[1-i] / initial_delta[i];
             } else {
@@ -1544,7 +1544,7 @@ Geom::Point Inkscape::SelTrans::_calcAbsAffineDefault(Geom::Scale const default_
     gdouble stroke_x = 0;
     gdouble stroke_y = 0;
 
-    if ( _snap_bbox_type != SPItem::GEOMETRIC_BBOX) {
+    if (_snap_bbox_type != SPItem::GEOMETRIC_BBOX) {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         transform_stroke = prefs->getBool("/options/transform/stroke", true);
         preserve = prefs->getBool("/options/preservetransform/value", false);
@@ -1556,7 +1556,7 @@ Geom::Point Inkscape::SelTrans::_calcAbsAffineDefault(Geom::Scale const default_
                     new_bbox_min[Geom::X], new_bbox_min[Geom::Y], new_bbox_max[Geom::X], new_bbox_max[Geom::Y]);
 
     // return the new handle position
-    return ( _point - _origin ) * default_scale + _origin;
+    return (_point - _origin) * default_scale + _origin;
 }
 
 // Only for scaling/stretching

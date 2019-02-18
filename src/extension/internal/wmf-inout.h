@@ -59,13 +59,13 @@ struct WMF_DEVICE_CONTEXT {
         // worldTransform, cur
     {
         font_name = nullptr;
-        sizeWnd = point16_set( 0.0, 0.0 );
-        sizeView = point16_set( 0.0, 0.0 );
-        winorg = point16_set( 0.0, 0.0 );
-        vieworg = point16_set( 0.0, 0.0 );
+        sizeWnd = point16_set(0.0, 0.0);
+        sizeView = point16_set(0.0, 0.0);
+        winorg = point16_set(0.0, 0.0);
+        vieworg = point16_set(0.0, 0.0);
         bkColor = U_RGB(255, 255, 255); // default foreground color (white)
         textColor = U_RGB(0, 0, 0);     // default foreground color (black)
-        cur = point16_set( 0.0, 0.0 );
+        cur = point16_set(0.0, 0.0);
     };
     SPStyle         style;
     char           *font_name;
@@ -175,8 +175,8 @@ public:
               SPDocument *doc,
               gchar const *filename) override;
 
-    SPDocument *open( Inkscape::Extension::Input *mod,
-                                const gchar *uri ) override;
+    SPDocument *open(Inkscape::Extension::Input *mod,
+                                const gchar *uri) override;
 
     static void init();//Initialize the class
 

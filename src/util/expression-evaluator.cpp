@@ -98,7 +98,7 @@ EvaluatorQuantity ExpressionEvaluator::evaluate()
     resolveUnit(nullptr, &default_unit_factor, unit);
     
     // Entire expression is dimensionless, apply default unit if applicable
-    if ( result.dimension == 0 && default_unit_factor.dimension != 0 ) {
+    if (result.dimension == 0 && default_unit_factor.dimension != 0) {
         result.value     /= default_unit_factor.value;
         result.dimension  = default_unit_factor.dimension;
     }
@@ -120,18 +120,18 @@ EvaluatorQuantity ExpressionEvaluator::evaluateExpression()
         EvaluatorQuantity new_term = evaluateTerm();
         
         // If dimensions mismatch, attempt default unit assignent
-        if ( new_term.dimension != evaluated_terms.dimension ) {
+        if (new_term.dimension != evaluated_terms.dimension) {
             EvaluatorQuantity default_unit_factor;
             
             resolveUnit(nullptr, &default_unit_factor, unit);
             
-            if ( new_term.dimension == 0
-                && evaluated_terms.dimension == default_unit_factor.dimension )
+            if (new_term.dimension == 0
+                && evaluated_terms.dimension == default_unit_factor.dimension)
             {
                 new_term.value     /= default_unit_factor.value;
                 new_term.dimension  = default_unit_factor.dimension;
-            } else if ( evaluated_terms.dimension == 0
-                && new_term.dimension == default_unit_factor.dimension )
+            } else if (evaluated_terms.dimension == 0
+                && new_term.dimension == default_unit_factor.dimension)
             {
                 evaluated_terms.value     /= default_unit_factor.value;
                 evaluated_terms.dimension  = default_unit_factor.dimension;
@@ -151,9 +151,9 @@ EvaluatorQuantity ExpressionEvaluator::evaluateTerm()
     bool division;
     EvaluatorQuantity evaluated_exp_terms = evaluateExpTerm();
     
-    for ( division = false;
+    for (division = false;
         acceptToken('*', nullptr) || (division = acceptToken('/', nullptr));
-        division = false )
+        division = false)
     {
         EvaluatorQuantity new_exp_term = evaluateExpTerm();
         
@@ -223,7 +223,7 @@ EvaluatorQuantity ExpressionEvaluator::evaluateFactor()
         throwError("Expected number or '('");
     }
     
-    if ( current_token.type == TOKEN_IDENTIFIER ) {
+    if (current_token.type == TOKEN_IDENTIFIER) {
         char *identifier;
         EvaluatorQuantity result;
         
@@ -250,7 +250,7 @@ bool ExpressionEvaluator::acceptToken(TokenType token_type,
 {
     bool existed = FALSE;
     
-    if ( token_type == current_token.type || token_type == TOKEN_ANY ) {
+    if (token_type == current_token.type || token_type == TOKEN_ANY) {
         existed = TRUE;
         
         if (consumed_token) {
@@ -272,10 +272,10 @@ void ExpressionEvaluator::parseNextToken()
     s = string;
     start_of_current_token = s;
     
-    if ( !s || s[0] == '\0' ) {
+    if (!s || s[0] == '\0') {
         // We're all done
         current_token.type = TOKEN_END;
-    } else if ( s[0] == '+' || s[0] == '-' ) {
+    } else if (s[0] == '+' || s[0] == '-') {
         // Snatch these before the g_strtod() does, otherwise they might
         // be used in a numeric conversion.
         acceptTokenCount(1, s[0]);
@@ -284,7 +284,7 @@ void ExpressionEvaluator::parseNextToken()
         char *endptr = nullptr;
         gdouble value = g_strtod(s, &endptr);
         
-        if ( endptr && endptr != s ) {
+        if (endptr && endptr != s) {
             // A numeric could be parsed, use it
             current_token.value.fl = value;
             
@@ -355,7 +355,7 @@ int ExpressionEvaluator::getIdentifierSize(const char *string, int start_offset)
         c = g_utf8_get_char (s);
         length++;
         
-        while ( isUnitIdentifierStart (c) || g_unichar_isdigit (c) ) {
+        while (isUnitIdentifierStart (c) || g_unichar_isdigit (c)) {
             s = g_utf8_next_char(s);
             c = g_utf8_get_char(s);
             length++;

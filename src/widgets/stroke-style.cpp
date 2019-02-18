@@ -43,7 +43,7 @@ using Inkscape::Util::unit_table;
  */
 Gtk::Widget *sp_stroke_style_paint_widget_new()
 {
-    return Inkscape::Widgets::createStyleWidget( STROKE );
+    return Inkscape::Widgets::createStyleWidget(STROKE);
 }
 
 /**
@@ -132,7 +132,7 @@ StrokeStyle::StrokeStyleButton::StrokeStyleButton(Gtk::RadioButtonGroup &grp,
 /**
  * Create the fill or stroke style widget, and hook up all the signals.
  */
-Gtk::Widget *Inkscape::Widgets::createStrokeStyleWidget( )
+Gtk::Widget *Inkscape::Widgets::createStrokeStyleWidget()
 {
     StrokeStyle *strokeStyle = new StrokeStyle();
 
@@ -483,7 +483,7 @@ void StrokeStyle::markerSelectCB(MarkerComboBox *marker_combo, StrokeStyle *spw,
 
     // Also update the marker combobox, so the document's markers
     // show up at the top of the combobox
-//    sp_stroke_style_line_update( SP_WIDGET(spw), desktop ? desktop->getSelection() : NULL);
+//    sp_stroke_style_line_update(SP_WIDGET(spw), desktop ? desktop->getSelection() : NULL);
     //spw->updateMarkerHist(which);
 
     Inkscape::Selection *selection = spw->desktop->getSelection();
@@ -667,7 +667,7 @@ StrokeStyle::setMarkerColor(SPObject *marker, int loc, SPItem *item)
     sp_repr_css_set_property(css, "stroke", lstroke);
     sp_repr_css_set_property(css, "stroke-opacity", lstroke_opacity);
 
-    if (strcmp(lfill, "none") ) {
+    if (strcmp(lfill, "none")) {
         // 1. If the line has fill, use that for the marker fill
         sp_repr_css_set_property(css, "fill", lfill);
         sp_repr_css_set_property(css, "fill-opacity", lfill_opacity);
@@ -823,7 +823,7 @@ StrokeStyle::setPaintOrder (gchar const *paint_order)
     Gtk::RadioButton *tb = paintOrderFSM;
 
     SPIPaintOrder temp;
-    temp.read( paint_order );
+    temp.read(paint_order);
 
     if (temp.layer[0] != SP_CSS_PAINT_ORDER_NORMAL) {
 

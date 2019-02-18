@@ -65,7 +65,7 @@ void LPEAttachPath::doEffect (SPCurve * curve)
             Geom::PathVector linked_pathv = start_path.get_pathvector();
             Geom::Affine linkedtransform = start_path.getObject()->getRelativeTransform(sp_lpe_item);
 
-            if ( !linked_pathv.empty() )
+            if (!linked_pathv.empty())
             {
                 Geom::Path transformedpath = linked_pathv.front() * linkedtransform;
                 start_path_curve_start.setOrigin(this_pathv.front().initialPoint());
@@ -74,7 +74,7 @@ void LPEAttachPath::doEffect (SPCurve * curve)
                 
                 for (unsigned deriv_n = 1; deriv_n < derivs.size(); deriv_n++) {
                     Geom::Coord length = derivs[deriv_n].length();
-                    if ( ! Geom::are_near(length, 0) ) {
+                    if (! Geom::are_near(length, 0)) {
                         if (set_start_end) {
                             start_path_position.param_set_value(transformedpath.nearestTime(start_path_curve_end.getOrigin()).asFlatTime());
                         }
@@ -90,7 +90,7 @@ void LPEAttachPath::doEffect (SPCurve * curve)
                         std::vector<Geom::Point> derivs_2 = c->pointAndDerivatives(start_path_position >= transformedpath.size() ? 1 : (start_path_position - (int)start_path_position), 3);
                         for (unsigned deriv_n_2 = 1; deriv_n_2 < derivs_2.size(); deriv_n_2++) {
                             Geom::Coord length_2 = derivs[deriv_n_2].length();
-                            if ( ! Geom::are_near(length_2, 0) ) {
+                            if (! Geom::are_near(length_2, 0)) {
                                 start_path_curve_end.setOrigin(derivs_2[0]);
                                 curve_start_previous_origin = start_path_curve_end.getOrigin();
 
@@ -119,7 +119,7 @@ void LPEAttachPath::doEffect (SPCurve * curve)
             Geom::PathVector linked_pathv = end_path.get_pathvector();
             Geom::Affine linkedtransform = end_path.getObject()->getRelativeTransform(sp_lpe_item);
 
-            if ( !linked_pathv.empty() )
+            if (!linked_pathv.empty())
             {
                 Geom::Path transformedpath = linked_pathv.front() * linkedtransform;
                 Geom::Curve * last_seg_reverse = this_pathv.front().back().reverse();
@@ -129,7 +129,7 @@ void LPEAttachPath::doEffect (SPCurve * curve)
                 std::vector<Geom::Point> derivs = last_seg_reverse->pointAndDerivatives(0, 3);
                 for (unsigned deriv_n = 1; deriv_n < derivs.size(); deriv_n++) {
                     Geom::Coord length = derivs[deriv_n].length();
-                    if ( ! Geom::are_near(length, 0) ) {
+                    if (! Geom::are_near(length, 0)) {
                         if (set_end_end) {
                             end_path_position.param_set_value(transformedpath.nearestTime(end_path_curve_end.getOrigin()).asFlatTime());
                         }
@@ -145,7 +145,7 @@ void LPEAttachPath::doEffect (SPCurve * curve)
                         std::vector<Geom::Point> derivs_2 = c->pointAndDerivatives(end_path_position >= transformedpath.size() ? 1 : (end_path_position - (int)end_path_position), 3);
                         for (unsigned deriv_n_2 = 1; deriv_n_2 < derivs_2.size(); deriv_n_2++) {
                             Geom::Coord length_2 = derivs[deriv_n_2].length();
-                            if ( ! Geom::are_near(length_2, 0) ) {
+                            if (! Geom::are_near(length_2, 0)) {
                                 
                                 end_path_curve_end.setOrigin(derivs_2[0]);
                                 curve_end_previous_origin = end_path_curve_end.getOrigin();

@@ -52,13 +52,13 @@ struct ModuleInputCmp {
     // GDK filetypenames begin with lower case letters and thus are sorted at the end.
     // Special case "sK1" which starts with a lower case letter to keep it out of GDK region.
     if (strncmp(module1->get_id(),"org.inkscape.input.sk1",  22) == 0) {
-      return ( strcmp("SK1", module2->get_filetypename()) <= 0 );
+      return (strcmp("SK1", module2->get_filetypename()) <= 0);
     }
     if (strncmp(module2->get_id(),"org.inkscape.input.sk1",  22) == 0) {
-      return ( strcmp(module1->get_filetypename(), "SK1" ) <= 0 );
+      return (strcmp(module1->get_filetypename(), "SK1") <= 0);
     }
 
-    return ( strcmp(module1->get_filetypename(), module2->get_filetypename()) <= 0 );
+    return (strcmp(module1->get_filetypename(), module2->get_filetypename()) <= 0);
   }
 };
 
@@ -91,13 +91,13 @@ struct ModuleOutputCmp {
 
     // Special case "sK1" which starts with a lower case letter.
     if (strncmp(module1->get_id(),"org.inkscape.output.sk1",  23) == 0) {
-      return ( strcmp("SK1", module2->get_filetypename()) <= 0 );
+      return (strcmp("SK1", module2->get_filetypename()) <= 0);
     }
     if (strncmp(module2->get_id(),"org.inkscape.output.sk1",  23) == 0) {
-      return ( strcmp(module1->get_filetypename(), "SK1" ) <= 0 );
+      return (strcmp(module1->get_filetypename(), "SK1") <= 0);
     }
 
-    return ( strcmp(module1->get_filetypename(), module2->get_filetypename()) <= 0 );
+    return (strcmp(module1->get_filetypename(), module2->get_filetypename()) <= 0);
   }
 };
 
@@ -114,13 +114,13 @@ DB::register_ext (Extension *module)
 
 	// only add to list if it's a never-before-seen module
         bool add_to_list = 
-               ( moduledict.find(module->get_id()) == moduledict.end());
+               (moduledict.find(module->get_id()) == moduledict.end());
         
 	//printf("Registering: '%s' '%s' add:%d\n", module->get_id(), module->get_name(), add_to_list);
 	moduledict[module->get_id()] = module;
 
 	if (add_to_list) {
-	  modulelist.push_back( module );
+	  modulelist.push_back(module);
 	}
 }
 
@@ -137,7 +137,7 @@ DB::unregister_ext (Extension * module)
 	// printf("Extension DB: removing %s\n", module->get_id());
 	moduledict.erase(moduledict.find(module->get_id()));
 	// only remove if it's not there any more
-	if ( moduledict.find(module->get_id()) != moduledict.end())
+	if (moduledict.find(module->get_id()) != moduledict.end())
 		modulelist.remove(module);
 }
 
@@ -157,7 +157,7 @@ DB::get (const gchar *key)
         if (key == nullptr) return nullptr;
 
 	Extension *mod = moduledict[key];
-	if ( !mod || mod->deactivated() )
+	if (!mod || mod->deactivated())
 		return nullptr;
 
 	return mod;
@@ -276,7 +276,7 @@ DB::InputList &
 DB::get_input_list (DB::InputList &ou_list)
 {
 	foreach(input_internal, (gpointer)&ou_list);
-	ou_list.sort( ModuleInputCmp() );
+	ou_list.sort(ModuleInputCmp());
 	return ou_list;
 }
 
@@ -290,7 +290,7 @@ DB::OutputList &
 DB::get_output_list (DB::OutputList &ou_list)
 {
 	foreach(output_internal, (gpointer)&ou_list);
-	ou_list.sort( ModuleOutputCmp() );
+	ou_list.sort(ModuleOutputCmp());
 	return ou_list;
 }
 

@@ -19,7 +19,7 @@
  * Simple fixture that creates a single SPDocument to be shared between all tests
  * in this test case.
  */
-class DocPerCaseTest : public ::testing::Test
+class DocPerCaseTest: public ::testing::Test
 {
 public:
     DocPerCaseTest();

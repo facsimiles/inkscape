@@ -224,7 +224,7 @@ Point unitTangentAt(D2<SBasis> const & a, Coord t, unsigned n)
     std::vector<Point> derivs = a.valueAndDerivatives(t, n);
     for (unsigned deriv_n = 1; deriv_n < derivs.size(); deriv_n++) {
         Coord length = derivs[deriv_n].length();
-        if ( ! are_near(length, 0) ) {
+        if (! are_near(length, 0)) {
             // length of derivative is non-zero, so return unit vector
             return derivs[deriv_n] / length;
         }
@@ -233,7 +233,7 @@ Point unitTangentAt(D2<SBasis> const & a, Coord t, unsigned n)
 }
 
 static void set_first_point(Piecewise<D2<SBasis> > &f, Point const &a){
-    if ( f.empty() ){
+    if (f.empty()){
         f.concat(Piecewise<D2<SBasis> >(D2<SBasis>(SBasis(Linear(a[X])), SBasis(Linear(a[Y])))));
         return;
     }
@@ -242,7 +242,7 @@ static void set_first_point(Piecewise<D2<SBasis> > &f, Point const &a){
     }
 }
 static void set_last_point(Piecewise<D2<SBasis> > &f, Point const &a){
-    if ( f.empty() ){
+    if (f.empty()){
         f.concat(Piecewise<D2<SBasis> >(D2<SBasis>(SBasis(Linear(a[X])), SBasis(Linear(a[Y])))));
         return;
     }
@@ -253,7 +253,7 @@ static void set_last_point(Piecewise<D2<SBasis> > &f, Point const &a){
 
 std::vector<Piecewise<D2<SBasis> > > fuse_nearby_ends(std::vector<Piecewise<D2<SBasis> > > const &f, double tol){
 
-    if ( f.empty()) return f;
+    if (f.empty()) return f;
     std::vector<Piecewise<D2<SBasis> > > result;
     std::vector<std::vector<unsigned> > pre_result;
     for (unsigned i=0; i<f.size(); i++){
@@ -263,12 +263,12 @@ std::vector<Piecewise<D2<SBasis> > > fuse_nearby_ends(std::vector<Piecewise<D2<S
         for (unsigned j=0; j<pre_result.size(); j++){
             Point aj = f.at(pre_result[j].back()).lastValue();
             Point bj = f.at(pre_result[j].front()).firstValue();
-            if ( L2(a-aj) < tol ) {
+            if (L2(a-aj) < tol) {
                 pre_result[j].push_back(i);
                 inserted = true;
                 break;
             }
-            if ( L2(b-bj) < tol ) {
+            if (L2(b-bj) < tol) {
                 pre_result[j].insert(pre_result[j].begin(),i);
                 inserted = true;
                 break;
@@ -283,14 +283,14 @@ std::vector<Piecewise<D2<SBasis> > > fuse_nearby_ends(std::vector<Piecewise<D2<S
         Piecewise<D2<SBasis> > comp;
         for (unsigned j=0; j<pre_result[i].size(); j++){
             Piecewise<D2<SBasis> > new_comp = f.at(pre_result[i][j]);
-            if ( j>0 ){
-                set_first_point( new_comp, comp.segs.back().at1() );
+            if (j>0){
+                set_first_point(new_comp, comp.segs.back().at1());
             }
             comp.concat(new_comp);
         }
-        if ( L2(comp.firstValue()-comp.lastValue()) < tol ){
+        if (L2(comp.firstValue()-comp.lastValue()) < tol){
             //TODO: check sizes!!!
-            set_last_point( comp, comp.segs.front().at0() ); 
+            set_last_point(comp, comp.segs.front().at0()); 
         }
         result.push_back(comp);
     }
@@ -300,52 +300,52 @@ std::vector<Piecewise<D2<SBasis> > > fuse_nearby_ends(std::vector<Piecewise<D2<S
 /*
  *  Computes the intersection of two sets given as (ordered) union of intervals.
  */
-static std::vector<Interval> intersect( std::vector<Interval> const &a, std::vector<Interval> const &b){
+static std::vector<Interval> intersect(std::vector<Interval> const &a, std::vector<Interval> const &b){
 	std::vector<Interval> result;
 	//TODO: use order!
 	for (unsigned i=0; i < a.size(); i++){
 		for (unsigned j=0; j < b.size(); j++){
-			OptInterval c( a[i] );
+			OptInterval c(a[i]);
 			c &= b[j];
-			if ( c ) {
-				result.push_back( *c );
+			if (c) {
+				result.push_back(*c);
 			}
 		}
 	}
 	return result;
 }
 
-std::vector<Interval> level_set( D2<SBasis> const &f, Rect region){
-	std::vector<Rect> regions( 1, region );
-	return level_sets( f, regions ).front();
+std::vector<Interval> level_set(D2<SBasis> const &f, Rect region){
+	std::vector<Rect> regions(1, region);
+	return level_sets(f, regions).front();
 }
-std::vector<Interval> level_set( D2<SBasis> const &f, Point p, double tol){
+std::vector<Interval> level_set(D2<SBasis> const &f, Point p, double tol){
 	Rect region(p, p);
-	region.expandBy( tol );
-	return level_set( f, region );
+	region.expandBy(tol);
+	return level_set(f, region);
 }
-std::vector<std::vector<Interval> > level_sets( D2<SBasis> const &f, std::vector<Rect> regions){
-	std::vector<Interval> regsX (regions.size(), Interval() );
-	std::vector<Interval> regsY (regions.size(), Interval() );
-	for ( unsigned i=0; i < regions.size(); i++ ){
+std::vector<std::vector<Interval> > level_sets(D2<SBasis> const &f, std::vector<Rect> regions){
+	std::vector<Interval> regsX (regions.size(), Interval());
+	std::vector<Interval> regsY (regions.size(), Interval());
+	for (unsigned i=0; i < regions.size(); i++){
 		regsX[i] = regions[i][X];
 		regsY[i] = regions[i][Y];
 	}
-	std::vector<std::vector<Interval> > x_in_regs = level_sets( f[X], regsX );
-	std::vector<std::vector<Interval> > y_in_regs = level_sets( f[Y], regsY );
-	std::vector<std::vector<Interval> >result(regions.size(), std::vector<Interval>() );
+	std::vector<std::vector<Interval> > x_in_regs = level_sets(f[X], regsX);
+	std::vector<std::vector<Interval> > y_in_regs = level_sets(f[Y], regsY);
+	std::vector<std::vector<Interval> >result(regions.size(), std::vector<Interval>());
 	for (unsigned i=0; i<regions.size(); i++){
-		result[i] = intersect ( x_in_regs[i], y_in_regs[i] );
+		result[i] = intersect (x_in_regs[i], y_in_regs[i]);
 	}
 	return result;
 }
-std::vector<std::vector<Interval> > level_sets( D2<SBasis> const &f, std::vector<Point> pts, double tol){
-	std::vector<Rect> regions( pts.size(), Rect() );
+std::vector<std::vector<Interval> > level_sets(D2<SBasis> const &f, std::vector<Point> pts, double tol){
+	std::vector<Rect> regions(pts.size(), Rect());
 	for (unsigned i=0; i<pts.size(); i++){
-		regions[i] = Rect( pts[i], pts[i] );
-		regions[i].expandBy( tol );
+		regions[i] = Rect(pts[i], pts[i]);
+		regions[i].expandBy(tol);
 	}
-	return level_sets( f, regions );
+	return level_sets(f, regions);
 }
 
 

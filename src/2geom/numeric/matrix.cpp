@@ -39,8 +39,8 @@
 
 namespace Geom { namespace NL {
 
-Vector operator*( detail::BaseMatrixImpl const& A,
-                  detail::BaseVectorImpl const& v )
+Vector operator*(detail::BaseMatrixImpl const& A,
+                  detail::BaseVectorImpl const& v)
 {
     assert(A.columns() == v.size());
 
@@ -52,8 +52,8 @@ Vector operator*( detail::BaseMatrixImpl const& A,
     return result;
 }
 
-Matrix operator*( detail::BaseMatrixImpl const& A,
-                  detail::BaseMatrixImpl const& B )
+Matrix operator*(detail::BaseMatrixImpl const& A,
+                  detail::BaseMatrixImpl const& B)
 {
     assert(A.columns() == B.rows());
 
@@ -74,15 +74,15 @@ Matrix pseudo_inverse(detail::BaseMatrixImpl const& A)
     Vector s(A.columns());
     gsl_vector* work = gsl_vector_alloc(A.columns());
 
-    gsl_linalg_SV_decomp( U.get_gsl_matrix(),
+    gsl_linalg_SV_decomp(U.get_gsl_matrix(),
                           V.get_gsl_matrix(),
                           s.get_gsl_vector(),
-                          work );
+                          work);
 
     Matrix P(A.columns(), A.rows(), 0.0);
 
     int sz = s.size();
-    while ( sz-- > 0 && s[sz] == 0 ) {}
+    while (sz-- > 0 && s[sz] == 0) {}
     ++sz;
     if (sz == 0) return P;
     VectorView sv(s, sz);

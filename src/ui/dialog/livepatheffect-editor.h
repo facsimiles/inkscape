@@ -66,7 +66,7 @@ private:
     sigc::connection selection_changed_connection;
     sigc::connection selection_modified_connection;
 
-    // void add_entry(const char* name );
+    // void add_entry(const char* name);
     void effect_list_reload(SPLPEItem *lpeitem);
 
     void set_sensitize_all(bool sensitive);
@@ -113,7 +113,7 @@ private:
     Glib::RefPtr<Gtk::ListStore> effectlist_store;
     Glib::RefPtr<Gtk::TreeSelection> effectlist_selection;
 
-    void on_visibility_toggled( Glib::ustring const& str);
+    void on_visibility_toggled(Glib::ustring const& str);
     bool _on_button_release(GdkEventButton* button_event);
     Gtk::ButtonBox toolbar_hbox;
     Gtk::Button button_add;

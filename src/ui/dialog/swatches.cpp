@@ -73,7 +73,7 @@ enum {
 #define VBLOCK 16
 #define PREVIEW_PIXBUF_WIDTH 128
 
-void _loadPaletteFile( gchar const *filename, gboolean user=FALSE );
+void _loadPaletteFile(gchar const *filename, gboolean user=FALSE);
 
 std::list<SwatchPage*> userSwatchPages;
 std::list<SwatchPage*> systemSwatchPages;
@@ -85,20 +85,20 @@ static std::map<SwatchesPanel*, SPDocument*> docPerPanel;
 class SwatchesPanelHook : public SwatchesPanel
 {
 public:
-    static void convertGradient( GtkMenuItem *menuitem, gpointer userData );
-    static void deleteGradient( GtkMenuItem *menuitem, gpointer userData );
+    static void convertGradient(GtkMenuItem *menuitem, gpointer userData);
+    static void deleteGradient(GtkMenuItem *menuitem, gpointer userData);
 };
 
-static void handleClick( GtkWidget* /*widget*/, gpointer callback_data ) {
+static void handleClick(GtkWidget* /*widget*/, gpointer callback_data) {
     ColorItem* item = reinterpret_cast<ColorItem*>(callback_data);
-    if ( item ) {
+    if (item) {
         item->buttonClicked(false);
     }
 }
 
-static void handleSecondaryClick( GtkWidget* /*widget*/, gint /*arg1*/, gpointer callback_data ) {
+static void handleSecondaryClick(GtkWidget* /*widget*/, gint /*arg1*/, gpointer callback_data) {
     ColorItem* item = reinterpret_cast<ColorItem*>(callback_data);
-    if ( item ) {
+    if (item) {
         item->buttonClicked(true);
     }
 }
@@ -111,37 +111,37 @@ static std::vector<GtkWidget*> popupExtras;
 static ColorItem* bounceTarget = nullptr;
 static SwatchesPanel* bouncePanel = nullptr;
 
-static void redirClick( GtkMenuItem *menuitem, gpointer /*user_data*/ )
+static void redirClick(GtkMenuItem *menuitem, gpointer /*user_data*/)
 {
-    if ( bounceTarget ) {
-        handleClick( GTK_WIDGET(menuitem), bounceTarget );
+    if (bounceTarget) {
+        handleClick(GTK_WIDGET(menuitem), bounceTarget);
     }
 }
 
-static void redirSecondaryClick( GtkMenuItem *menuitem, gpointer /*user_data*/ )
+static void redirSecondaryClick(GtkMenuItem *menuitem, gpointer /*user_data*/)
 {
-    if ( bounceTarget ) {
-        handleSecondaryClick( GTK_WIDGET(menuitem), 0, bounceTarget );
+    if (bounceTarget) {
+        handleSecondaryClick(GTK_WIDGET(menuitem), 0, bounceTarget);
     }
 }
 
-static void editGradientImpl( SPDesktop* desktop, SPGradient* gr )
+static void editGradientImpl(SPDesktop* desktop, SPGradient* gr)
 {
-    if ( gr ) {
+    if (gr) {
         bool shown = false;
-        if ( desktop && desktop->doc() ) {
+        if (desktop && desktop->doc()) {
             Inkscape::Selection *selection = desktop->getSelection();
             std::vector<SPItem*> const items(selection->items().begin(), selection->items().end());
             if (!items.empty()) {
-                SPStyle query( desktop->doc() );
+                SPStyle query(desktop->doc());
                 int result = objects_query_fillstroke((items), &query, true);
-                if ( (result == QUERY_STYLE_MULTIPLE_SAME) || (result == QUERY_STYLE_SINGLE) ) {
+                if ((result == QUERY_STYLE_MULTIPLE_SAME) || (result == QUERY_STYLE_SINGLE)) {
                     // could be pertinent
                     if (query.fill.isPaintserver()) {
                         SPPaintServer* server = query.getFillPaintServer();
-                        if ( SP_IS_GRADIENT(server) ) {
+                        if (SP_IS_GRADIENT(server)) {
                             SPGradient* grad = SP_GRADIENT(server);
-                            if ( grad->isSwatch() && grad->getId() == gr->getId()) {
+                            if (grad->isSwatch() && grad->getId() == gr->getId()) {
                                 desktop->_dlg_mgr->showDialog("FillAndStroke");
                                 shown = true;
                             }
@@ -155,15 +155,15 @@ static void editGradientImpl( SPDesktop* desktop, SPGradient* gr )
             Inkscape::Preferences *prefs = Inkscape::Preferences::get();
             if (prefs->getBool("/dialogs/gradienteditor/showlegacy", false)) {
                 // Legacy gradient dialog
-                GtkWidget *dialog = sp_gradient_vector_editor_new( gr );
-                gtk_widget_show( dialog );
+                GtkWidget *dialog = sp_gradient_vector_editor_new(gr);
+                gtk_widget_show(dialog);
             } else {
                 // Invoke the gradient tool
-                Inkscape::Verb *verb = Inkscape::Verb::get( SP_VERB_CONTEXT_GRADIENT );
-                if ( verb ) {
-                    SPAction *action = verb->get_action( Inkscape::ActionContext( ( Inkscape::UI::View::View * ) SP_ACTIVE_DESKTOP ) );
-                    if ( action ) {
-                        sp_action_perform( action, nullptr );
+                Inkscape::Verb *verb = Inkscape::Verb::get(SP_VERB_CONTEXT_GRADIENT);
+                if (verb) {
+                    SPAction *action = verb->get_action(Inkscape::ActionContext((Inkscape::UI::View::View *) SP_ACTIVE_DESKTOP));
+                    if (action) {
+                        sp_action_perform(action, nullptr);
                     }
                 }
             }
@@ -171,9 +171,9 @@ static void editGradientImpl( SPDesktop* desktop, SPGradient* gr )
     }
 }
 
-static void editGradient( GtkMenuItem */*menuitem*/, gpointer /*user_data*/ )
+static void editGradient(GtkMenuItem */*menuitem*/, gpointer /*user_data*/)
 {
-    if ( bounceTarget ) {
+    if (bounceTarget) {
         SwatchesPanel* swp = bouncePanel;
         SPDesktop* desktop = swp ? swp->getDesktop() : nullptr;
         SPDocument *doc = desktop ? desktop->doc() : nullptr;
@@ -182,8 +182,8 @@ static void editGradient( GtkMenuItem */*menuitem*/, gpointer /*user_data*/ )
             std::vector<SPObject *> gradients = doc->getResourceList("gradient");
             for (std::vector<SPObject *>::const_iterator item = gradients.begin(); item != gradients.end(); ++item) {
                 SPGradient* grad = SP_GRADIENT(*item);
-                if ( targetName == grad->getId() ) {
-                    editGradientImpl( desktop, grad );
+                if (targetName == grad->getId()) {
+                    editGradientImpl(desktop, grad);
                     break;
                 }
             }
@@ -191,20 +191,20 @@ static void editGradient( GtkMenuItem */*menuitem*/, gpointer /*user_data*/ )
     }
 }
 
-void SwatchesPanelHook::convertGradient( GtkMenuItem * /*menuitem*/, gpointer userData )
+void SwatchesPanelHook::convertGradient(GtkMenuItem * /*menuitem*/, gpointer userData)
 {
-    if ( bounceTarget ) {
+    if (bounceTarget) {
         SwatchesPanel* swp = bouncePanel;
         SPDesktop* desktop = swp ? swp->getDesktop() : nullptr;
         SPDocument *doc = desktop ? desktop->doc() : nullptr;
         gint index = GPOINTER_TO_INT(userData);
-        if ( doc && (index >= 0) && (static_cast<guint>(index) < popupItems.size()) ) {
+        if (doc && (index >= 0) && (static_cast<guint>(index) < popupItems.size())) {
             Glib::ustring targetName = popupItems[index];
             std::vector<SPObject *> gradients = doc->getResourceList("gradient");
             for (std::vector<SPObject *>::const_iterator item = gradients.begin(); item != gradients.end(); ++item) {
                 SPGradient* grad = SP_GRADIENT(*item);
 
-                if ( targetName == grad->getId() ) {
+                if (targetName == grad->getId()) {
                     grad->setSwatch();
                     DocumentUndo::done(doc, SP_VERB_CONTEXT_GRADIENT,
                                        _("Add gradient stop"));
@@ -215,16 +215,16 @@ void SwatchesPanelHook::convertGradient( GtkMenuItem * /*menuitem*/, gpointer us
     }
 }
 
-void SwatchesPanelHook::deleteGradient( GtkMenuItem */*menuitem*/, gpointer /*userData*/ )
+void SwatchesPanelHook::deleteGradient(GtkMenuItem */*menuitem*/, gpointer /*userData*/)
 {
-    if ( bounceTarget ) {
+    if (bounceTarget) {
         SwatchesPanel* swp = bouncePanel;
         SPDesktop* desktop = swp ? swp->getDesktop() : nullptr;
         sp_gradient_unset_swatch(desktop, bounceTarget->def.descr);
     }
 }
 
-static SwatchesPanel* findContainingPanel( GtkWidget *widget )
+static SwatchesPanel* findContainingPanel(GtkWidget *widget)
 {
     SwatchesPanel *swp = nullptr;
 
@@ -242,9 +242,9 @@ static SwatchesPanel* findContainingPanel( GtkWidget *widget )
     return swp;
 }
 
-static void removeit( GtkWidget *widget, gpointer data )
+static void removeit(GtkWidget *widget, gpointer data)
 {
-    gtk_container_remove( GTK_CONTAINER(data), widget );
+    gtk_container_remove(GTK_CONTAINER(data), widget);
 }
 
 /* extern'ed from color-item.cpp */
@@ -252,16 +252,16 @@ bool colorItemHandleButtonPress(GdkEventButton* event, UI::Widget::Preview *prev
 {
     gboolean handled = FALSE;
 
-    if ( event && (event->button == 3) && (event->type == GDK_BUTTON_PRESS) ) {
-        SwatchesPanel* swp = findContainingPanel( GTK_WIDGET(preview->gobj()) );
+    if (event && (event->button == 3) && (event->type == GDK_BUTTON_PRESS)) {
+        SwatchesPanel* swp = findContainingPanel(GTK_WIDGET(preview->gobj()));
 
-        if ( !popupMenu ) {
+        if (!popupMenu) {
             popupMenu = gtk_menu_new();
             GtkWidget* child = nullptr;
 
             //TRANSLATORS: An item in context menu on a colour in the swatches
             child = gtk_menu_item_new_with_label(_("Set fill"));
-            g_signal_connect( G_OBJECT(child),
+            g_signal_connect(G_OBJECT(child),
                               "activate",
                               G_CALLBACK(redirClick),
                               user_data);
@@ -270,7 +270,7 @@ bool colorItemHandleButtonPress(GdkEventButton* event, UI::Widget::Preview *prev
             //TRANSLATORS: An item in context menu on a colour in the swatches
             child = gtk_menu_item_new_with_label(_("Set stroke"));
 
-            g_signal_connect( G_OBJECT(child),
+            g_signal_connect(G_OBJECT(child),
                               "activate",
                               G_CALLBACK(redirSecondaryClick),
                               user_data);
@@ -281,19 +281,19 @@ bool colorItemHandleButtonPress(GdkEventButton* event, UI::Widget::Preview *prev
             popupExtras.push_back(child);
 
             child = gtk_menu_item_new_with_label(_("Delete"));
-            g_signal_connect( G_OBJECT(child),
+            g_signal_connect(G_OBJECT(child),
                               "activate",
                               G_CALLBACK(SwatchesPanelHook::deleteGradient),
-                              user_data );
+                              user_data);
             gtk_menu_shell_append(GTK_MENU_SHELL(popupMenu), child);
             popupExtras.push_back(child);
-            gtk_widget_set_sensitive( child, FALSE );
+            gtk_widget_set_sensitive(child, FALSE);
 
             child = gtk_menu_item_new_with_label(_("Edit..."));
-            g_signal_connect( G_OBJECT(child),
+            g_signal_connect(G_OBJECT(child),
                               "activate",
                               G_CALLBACK(editGradient),
-                              user_data );
+                              user_data);
             gtk_menu_shell_append(GTK_MENU_SHELL(popupMenu), child);
             popupExtras.push_back(child);
 
@@ -304,17 +304,17 @@ bool colorItemHandleButtonPress(GdkEventButton* event, UI::Widget::Preview *prev
             child = gtk_menu_item_new_with_label(_("Convert"));
             gtk_menu_shell_append(GTK_MENU_SHELL(popupMenu), child);
             //popupExtras.push_back(child);
-            //gtk_widget_set_sensitive( child, FALSE );
+            //gtk_widget_set_sensitive(child, FALSE);
             {
                 popupSubHolder = child;
                 popupSub = gtk_menu_new();
-                gtk_menu_item_set_submenu( GTK_MENU_ITEM(child), popupSub );
+                gtk_menu_item_set_submenu(GTK_MENU_ITEM(child), popupSub);
             }
 
             gtk_widget_show_all(popupMenu);
         }
 
-        if ( user_data ) {
+        if (user_data) {
             ColorItem* item = reinterpret_cast<ColorItem*>(user_data);
             bool show = swp && (swp->getSelectedIndex() == 0);
             for (auto & popupExtra : popupExtras) {
@@ -324,29 +324,29 @@ bool colorItemHandleButtonPress(GdkEventButton* event, UI::Widget::Preview *prev
             bounceTarget = item;
             bouncePanel = swp;
             popupItems.clear();
-            if ( popupMenu ) {
+            if (popupMenu) {
                 gtk_container_foreach(GTK_CONTAINER(popupSub), removeit, popupSub);
                 bool processed = false;
                 GtkWidget *wdgt = gtk_widget_get_ancestor(GTK_WIDGET(preview->gobj()), SP_TYPE_DESKTOP_WIDGET);
-                if ( wdgt ) {
+                if (wdgt) {
                     SPDesktopWidget *dtw = SP_DESKTOP_WIDGET(wdgt);
-                    if ( dtw && dtw->desktop ) {
+                    if (dtw && dtw->desktop) {
                         // Pick up all gradients with vectors
                         std::vector<SPObject *> gradients = (dtw->desktop->doc())->getResourceList("gradient");
                         gint index = 0;
                         for (std::vector<SPObject *>::const_iterator item = gradients.begin(); item != gradients.end(); ++item) {
                             SPGradient* grad = SP_GRADIENT(*item);
-                            if ( grad->hasStops() && !grad->isSwatch() ) {
+                            if (grad->hasStops() && !grad->isSwatch()) {
                                 //gl = g_slist_prepend(gl, curr->data);
                                 processed = true;
                                 GtkWidget *child = gtk_menu_item_new_with_label(grad->getId());
                                 gtk_menu_shell_append(GTK_MENU_SHELL(popupSub), child);
 
                                 popupItems.emplace_back(grad->getId());
-                                g_signal_connect( G_OBJECT(child),
+                                g_signal_connect(G_OBJECT(child),
                                                   "activate",
                                                   G_CALLBACK(SwatchesPanelHook::convertGradient),
-                                                  GINT_TO_POINTER(index) );
+                                                  GINT_TO_POINTER(index));
                                 index++;
                             }
                         }
@@ -354,7 +354,7 @@ bool colorItemHandleButtonPress(GdkEventButton* event, UI::Widget::Preview *prev
                         gtk_widget_show_all(popupSub);
                     }
                 }
-                gtk_widget_set_sensitive( popupSubHolder, processed );
+                gtk_widget_set_sensitive(popupSubHolder, processed);
 
 #if GTK_CHECK_VERSION(3,22,0)
                 gtk_menu_popup_at_pointer(GTK_MENU(popupMenu), reinterpret_cast<GdkEvent *>(event));
@@ -370,31 +370,31 @@ bool colorItemHandleButtonPress(GdkEventButton* event, UI::Widget::Preview *prev
 }
 
 
-static char* trim( char* str ) {
+static char* trim(char* str) {
     char* ret = str;
-    while ( *str && (*str == ' ' || *str == '\t') ) {
+    while (*str && (*str == ' ' || *str == '\t')) {
         str++;
     }
     ret = str;
-    while ( *str ) {
+    while (*str) {
         str++;
     }
     str--;
-    while ( str >= ret && (( *str == ' ' || *str == '\t' ) || *str == '\r' || *str == '\n') ) {
+    while (str >= ret && ((*str == ' ' || *str == '\t') || *str == '\r' || *str == '\n')) {
         *str-- = 0;
     }
     return ret;
 }
 
-static void skipWhitespace( char*& str ) {
-    while ( *str == ' ' || *str == '\t' ) {
+static void skipWhitespace(char*& str) {
+    while (*str == ' ' || *str == '\t') {
         str++;
     }
 }
 
-static bool parseNum( char*& str, int& val ) {
+static bool parseNum(char*& str, int& val) {
     val = 0;
-    while ( '0' <= *str && *str <= '9' ) {
+    while ('0' <= *str && *str <= '9') {
         val = val * 10 + (*str - '0');
         str++;
     }
@@ -408,10 +408,10 @@ void _loadPaletteFile(Glib::ustring path, gboolean user/*=FALSE*/)
     Glib::ustring filename = Glib::path_get_basename(path);
     char block[1024];
     FILE *f = Inkscape::IO::fopen_utf8name(path.c_str(), "r");
-    if ( f ) {
-        char* result = fgets( block, sizeof(block), f );
-        if ( result ) {
-            if ( strncmp( "GIMP Palette", block, 12 ) == 0 ) {
+    if (f) {
+        char* result = fgets(block, sizeof(block), f);
+        if (result) {
+            if (strncmp("GIMP Palette", block, 12) == 0) {
                 bool inHeader = true;
                 bool hasErr = false;
 
@@ -419,39 +419,39 @@ void _loadPaletteFile(Glib::ustring path, gboolean user/*=FALSE*/)
                 onceMore->_name = filename.c_str();
 
                 do {
-                    result = fgets( block, sizeof(block), f );
+                    result = fgets(block, sizeof(block), f);
                     block[sizeof(block) - 1] = 0;
-                    if ( result ) {
-                        if ( block[0] == '#' ) {
+                    if (result) {
+                        if (block[0] == '#') {
                             // ignore comment
                         } else {
                             char *ptr = block;
                             // very simple check for header versus entry
-                            while ( *ptr == ' ' || *ptr == '\t' ) {
+                            while (*ptr == ' ' || *ptr == '\t') {
                                 ptr++;
                             }
-                            if ( (*ptr == 0) || (*ptr == '\r') || (*ptr == '\n') ) {
+                            if ((*ptr == 0) || (*ptr == '\r') || (*ptr == '\n')) {
                                 // blank line. skip it.
-                            } else if ( '0' <= *ptr && *ptr <= '9' ) {
+                            } else if ('0' <= *ptr && *ptr <= '9') {
                                 // should be an entry link
                                 inHeader = false;
                                 ptr = block;
                                 Glib::ustring name("");
                                 skipWhitespace(ptr);
-                                if ( *ptr ) {
+                                if (*ptr) {
                                     int r = 0;
                                     int g = 0;
                                     int b = 0;
                                     hasErr = parseNum(ptr, r);
-                                    if ( !hasErr ) {
+                                    if (!hasErr) {
                                         skipWhitespace(ptr);
                                         hasErr = parseNum(ptr, g);
                                     }
-                                    if ( !hasErr ) {
+                                    if (!hasErr) {
                                         skipWhitespace(ptr);
                                         hasErr = parseNum(ptr, b);
                                     }
-                                    if ( !hasErr && *ptr ) {
+                                    if (!hasErr && *ptr) {
                                         char* n = trim(ptr);
                                         if (n != nullptr && *n) {
                                             name = g_dpgettext2(nullptr, "Palette", n);
@@ -461,40 +461,40 @@ void _loadPaletteFile(Glib::ustring path, gboolean user/*=FALSE*/)
                                                        Glib::ustring::format(std::hex, std::setw(2), std::setfill(L'0'), r),
                                                        Glib::ustring::format(std::hex, std::setw(2), std::setfill(L'0'), g),
                                                        Glib::ustring::format(std::hex, std::setw(2), std::setfill(L'0'), b)
-                                                   ).uppercase();
+              ).uppercase();
                                         } 
                                     }
-                                    if ( !hasErr ) {
+                                    if (!hasErr) {
                                         // Add the entry now
                                         Glib::ustring nameStr(name);
-                                        ColorItem* item = new ColorItem( r, g, b, nameStr );
+                                        ColorItem* item = new ColorItem(r, g, b, nameStr);
                                         onceMore->_colors.push_back(item);
                                     }
                                 } else {
                                     hasErr = true;
                                 }
                             } else {
-                                if ( !inHeader ) {
+                                if (!inHeader) {
                                     // Hmmm... probably bad. Not quite the format we want?
                                     hasErr = true;
                                 } else {
                                     char* sep = strchr(result, ':');
-                                    if ( sep ) {
+                                    if (sep) {
                                         *sep = 0;
                                         char* val = trim(sep + 1);
                                         char* name = trim(result);
-                                        if ( *name ) {
-                                            if ( strcmp( "Name", name ) == 0 )
+                                        if (*name) {
+                                            if (strcmp("Name", name) == 0)
                                             {
                                                 onceMore->_name = val;
                                             }
-                                            else if ( strcmp( "Columns", name ) == 0 )
+                                            else if (strcmp("Columns", name) == 0)
                                             {
                                                 gchar* endPtr = nullptr;
-                                                guint64 numVal = g_ascii_strtoull( val, &endPtr, 10 );
-                                                if ( (numVal == G_MAXUINT64) && (ERANGE == errno) ) {
+                                                guint64 numVal = g_ascii_strtoull(val, &endPtr, 10);
+                                                if ((numVal == G_MAXUINT64) && (ERANGE == errno)) {
                                                     // overflow
-                                                } else if ( (numVal == 0) && (endPtr == val) ) {
+                                                } else if ((numVal == 0) && (endPtr == val)) {
                                                     // failed conversion
                                                 } else {
                                                     onceMore->_prefWidth = numVal;
@@ -512,14 +512,14 @@ void _loadPaletteFile(Glib::ustring path, gboolean user/*=FALSE*/)
                             }
                         }
                     }
-                } while ( result && !hasErr );
-                if ( !hasErr ) {
+                } while (result && !hasErr);
+                if (!hasErr) {
                     if (user)
                         userSwatchPages.push_back(onceMore);
                     else
                         systemSwatchPages.push_back(onceMore);
 #if ENABLE_MAGIC_COLORS
-                    ColorItem::_wireMagicColors( onceMore );
+                    ColorItem::_wireMagicColors(onceMore);
 #endif // ENABLE_MAGIC_COLORS
                 } else {
                     delete onceMore;
@@ -603,8 +603,8 @@ SwatchesPanel::SwatchesPanel(gchar const* prefsPath) :
     load_palettes();
 
     Gtk::RadioMenuItem* hotItem = nullptr;
-    _clear = new ColorItem( ege::PaintDef::CLEAR );
-    _remove = new ColorItem( ege::PaintDef::NONE );
+    _clear = new ColorItem(ege::PaintDef::CLEAR);
+    _remove = new ColorItem(ege::PaintDef::NONE);
 
     if (docPalettes.empty()) {
         SwatchPage *docPalette = new SwatchPage();
@@ -613,11 +613,11 @@ SwatchesPanel::SwatchesPanel(gchar const* prefsPath) :
         docPalettes[nullptr] = docPalette;
     }
 
-    if ( !systemSwatchPages.empty() || !userSwatchPages.empty()) {
+    if (!systemSwatchPages.empty() || !userSwatchPages.empty()) {
         SwatchPage* first = nullptr;
         int index = 0;
         Glib::ustring targetName;
-        if ( !_prefs_path.empty() ) {
+        if (!_prefs_path.empty()) {
             Inkscape::Preferences *prefs = Inkscape::Preferences::get();
             targetName = prefs->getString(_prefs_path + "/palette");
             if (!targetName.empty()) {
@@ -626,7 +626,7 @@ SwatchesPanel::SwatchesPanel(gchar const* prefsPath) :
                 } else {
                     std::vector<SwatchPage*> pages = _getSwatchSets();
                     for (auto & page : pages) {
-                        if ( page->_name == targetName ) {
+                        if (page->_name == targetName) {
                             first = page;
                             break;
                         }
@@ -636,7 +636,7 @@ SwatchesPanel::SwatchesPanel(gchar const* prefsPath) :
             }
         }
 
-        if ( !first ) {
+        if (!first) {
             first = docPalettes[nullptr];
             _currentIndex = 0;
         } else {
@@ -651,7 +651,7 @@ SwatchesPanel::SwatchesPanel(gchar const* prefsPath) :
         std::vector<SwatchPage*> swatchSets = _getSwatchSets();
         for (auto curr : swatchSets) {
             Gtk::RadioMenuItem* single = Gtk::manage(new Gtk::RadioMenuItem(groupOne, curr->_name));
-            if ( curr == first ) {
+            if (curr == first) {
                 hotItem = single;
             }
             _regItem(single, i);
@@ -660,7 +660,7 @@ SwatchesPanel::SwatchesPanel(gchar const* prefsPath) :
         }
     }
 
-    if ( hotItem ) {
+    if (hotItem) {
         hotItem->set_active();
     }
 
@@ -669,18 +669,18 @@ SwatchesPanel::SwatchesPanel(gchar const* prefsPath) :
 
 SwatchesPanel::~SwatchesPanel()
 {
-    _trackDocument( this, nullptr );
+    _trackDocument(this, nullptr);
 
     _documentConnection.disconnect();
     _selChanged.disconnect();
 
-    if ( _clear ) {
+    if (_clear) {
         delete _clear;
     }
-    if ( _remove ) {
+    if (_remove) {
         delete _remove;
     }
-    if ( _holder ) {
+    if (_holder) {
         delete _holder;
     }
 
@@ -696,8 +696,8 @@ void SwatchesPanel::_build_menu()
         panel_wrap = prefs->getBool(_prefs_path + "/panel_wrap");
         panel_size = prefs->getIntLimited(_prefs_path + "/panel_size", 1, 0, UI::Widget::PREVIEW_SIZE_HUGE);
         panel_mode = prefs->getIntLimited(_prefs_path + "/panel_mode", 1, 0, 10);
-        panel_ratio = prefs->getIntLimited(_prefs_path + "/panel_ratio", 100, 0, 500 );
-        panel_border = prefs->getIntLimited(_prefs_path + "/panel_border", UI::Widget::BORDER_NONE, 0, 2 );
+        panel_ratio = prefs->getIntLimited(_prefs_path + "/panel_ratio", 100, 0, 500);
+        panel_border = prefs->getIntLimited(_prefs_path + "/panel_border", UI::Widget::BORDER_NONE, 0, 2);
     }
 
     _menu = new Gtk::Menu();
@@ -765,7 +765,7 @@ void SwatchesPanel::_build_menu()
             NC_("Swatches width", "Wider")
         };
 
-        Gtk::MenuItem *item = Gtk::manage( new Gtk::MenuItem(widthItemLabel));
+        Gtk::MenuItem *item = Gtk::manage(new Gtk::MenuItem(widthItemLabel));
         Gtk::Menu *type_menu = Gtk::manage(new Gtk::Menu());
         item->set_submenu(*type_menu);
         _menu->append(*item);
@@ -774,17 +774,17 @@ void SwatchesPanel::_build_menu()
 
         guint values[] = {0, 25, 50, 100, 200, 400};
         guint hot_index = 3;
-        for ( guint i = 0; i < G_N_ELEMENTS(widthLabels); ++i ) {
+        for (guint i = 0; i < G_N_ELEMENTS(widthLabels); ++i) {
             // Assume all values are in increasing order
-            if ( values[i] <= panel_ratio ) {
+            if (values[i] <= panel_ratio) {
                 hot_index = i;
             }
         }
-        for ( guint i = 0; i < G_N_ELEMENTS(widthLabels); ++i ) {
+        for (guint i = 0; i < G_N_ELEMENTS(widthLabels); ++i) {
             Glib::ustring _label(g_dpgettext2(nullptr, "Swatches width", widthLabels[i]));
             Gtk::RadioMenuItem *_item = Gtk::manage(new Gtk::RadioMenuItem(widthGroup, _label));
             type_menu->append(*_item);
-            if ( i <= hot_index ) {
+            if (i <= hot_index) {
                 _item->set_active(true);
             }
             _item->signal_activate().connect(sigc::bind<int, int>(sigc::mem_fun(*this, &SwatchesPanel::_updateSettings), SWATCHES_SETTINGS_SHAPE, values[i]));
@@ -801,7 +801,7 @@ void SwatchesPanel::_build_menu()
             NC_("Swatches border", "Wide"),
         };
 
-        Gtk::MenuItem *item = Gtk::manage( new Gtk::MenuItem(widthItemLabel));
+        Gtk::MenuItem *item = Gtk::manage(new Gtk::MenuItem(widthItemLabel));
         Gtk::Menu *type_menu = Gtk::manage(new Gtk::Menu());
         item->set_submenu(*type_menu);
         _menu->append(*item);
@@ -810,17 +810,17 @@ void SwatchesPanel::_build_menu()
 
         guint values[] = {0, 1, 2};
         guint hot_index = 0;
-        for ( guint i = 0; i < G_N_ELEMENTS(widthLabels); ++i ) {
+        for (guint i = 0; i < G_N_ELEMENTS(widthLabels); ++i) {
             // Assume all values are in increasing order
-            if ( values[i] <= panel_border ) {
+            if (values[i] <= panel_border) {
                 hot_index = i;
             }
         }
-        for ( guint i = 0; i < G_N_ELEMENTS(widthLabels); ++i ) {
+        for (guint i = 0; i < G_N_ELEMENTS(widthLabels); ++i) {
             Glib::ustring _label(g_dpgettext2(nullptr, "Swatches border", widthLabels[i]));
             Gtk::RadioMenuItem *_item = Gtk::manage(new Gtk::RadioMenuItem(widthGroup, _label));
             type_menu->append(*_item);
-            if ( i <= hot_index ) {
+            if (i <= hot_index) {
                 _item->set_active(true);
             }
             _item->signal_activate().connect(sigc::bind<int, int>(sigc::mem_fun(*this, &SwatchesPanel::_updateSettings), SWATCHES_SETTINGS_BORDER, values[i]));
@@ -848,17 +848,17 @@ void SwatchesPanel::_build_menu()
     _updateSettings(SWATCHES_SETTINGS_BORDER, panel_border);
 }
 
-void SwatchesPanel::setDesktop( SPDesktop* desktop )
+void SwatchesPanel::setDesktop(SPDesktop* desktop)
 {
-    if ( desktop != _currentDesktop ) {
-        if ( _currentDesktop ) {
+    if (desktop != _currentDesktop) {
+        if (_currentDesktop) {
             _documentConnection.disconnect();
             _selChanged.disconnect();
         }
 
         _currentDesktop = desktop;
 
-        if ( desktop ) {
+        if (desktop) {
             _currentDesktop->selection->connectChanged(
                 sigc::hide(sigc::mem_fun(*this, &SwatchesPanel::_updateFromSelection)));
 
@@ -870,10 +870,10 @@ void SwatchesPanel::setDesktop( SPDesktop* desktop )
 
             sigc::bound_mem_functor1<void, SwatchesPanel, SPDocument*> first = sigc::mem_fun(*this, &SwatchesPanel::_setDocument);
             sigc::slot<void, SPDocument*> base2 = first;
-            sigc::slot<void,SPDesktop*, SPDocument*> slot2 = sigc::hide<0>( base2 );
-            _documentConnection = desktop->connectDocumentReplaced( slot2 );
+            sigc::slot<void,SPDesktop*, SPDocument*> slot2 = sigc::hide<0>(base2);
+            _documentConnection = desktop->connectDocumentReplaced(slot2);
 
-            _setDocument( desktop->doc() );
+            _setDocument(desktop->doc());
         } else {
             _setDocument(nullptr);
         }
@@ -972,7 +972,7 @@ void SwatchesPanel::_updateSettings(int settings, int value)
     }
     case SWATCHES_SETTINGS_PALETTE: {
         std::vector<SwatchPage*> pages = _getSwatchSets();
-        if (value >= 0 && value < static_cast<int>(pages.size()) ) {
+        if (value >= 0 && value < static_cast<int>(pages.size())) {
             _currentIndex = value;
 
             prefs->setString(_prefs_path + "/palette", pages[_currentIndex]->_name);
@@ -1011,9 +1011,9 @@ public:
         defsChanged(defsChanged),
         defsModified(defsModified)
     {
-        if ( !timer ) {
+        if (!timer) {
             timer = new Glib::Timer();
-            refreshTimer = Glib::signal_timeout().connect( sigc::ptr_fun(handleTimerCB), 33 );
+            refreshTimer = Glib::signal_timeout().connect(sigc::ptr_fun(handleTimerCB), 33);
         }
         timerRefCount++;
     }
@@ -1021,10 +1021,10 @@ public:
     ~DocTrack()
     {
         timerRefCount--;
-        if ( timerRefCount <= 0 ) {
+        if (timerRefCount <= 0) {
             refreshTimer.disconnect();
             timerRefCount = 0;
-            if ( timer ) {
+            if (timer) {
                 timer->stop();
                 delete timer;
                 timer = nullptr;
@@ -1076,13 +1076,13 @@ bool DocTrack::handleTimerCB()
 
     std::vector<DocTrack *> needCallback;
     for (auto track : docTrackings) {
-        if ( track->updatePending && ( (now - track->lastGradientUpdate) >= DOC_UPDATE_THREASHOLD) ) {
+        if (track->updatePending && ((now - track->lastGradientUpdate) >= DOC_UPDATE_THREASHOLD)) {
             needCallback.push_back(track);
         }
     }
 
     for (auto track : needCallback) {
-        if ( std::find(docTrackings.begin(), docTrackings.end(), track) != docTrackings.end() ) { // Just in case one gets deleted while we are looping
+        if (std::find(docTrackings.begin(), docTrackings.end(), track) != docTrackings.end()) { // Just in case one gets deleted while we are looping
             // Note: calling handleDefsModified will call queueUpdateIfNeeded and thus update the time and flag.
             SwatchesPanel::handleDefsModified(track->doc);
         }
@@ -1091,15 +1091,15 @@ bool DocTrack::handleTimerCB()
     return true;
 }
 
-bool DocTrack::queueUpdateIfNeeded( SPDocument *doc )
+bool DocTrack::queueUpdateIfNeeded(SPDocument *doc)
 {
     bool deferProcessing = false;
     for (auto track : docTrackings) {
-        if ( track->doc == doc ) {
+        if (track->doc == doc) {
             double now = timer->elapsed();
             double elapsed = now - track->lastGradientUpdate;
 
-            if ( elapsed < DOC_UPDATE_THREASHOLD ) {
+            if (elapsed < DOC_UPDATE_THREASHOLD) {
                 deferProcessing = true;
                 track->updatePending = true;
             } else {
@@ -1113,7 +1113,7 @@ bool DocTrack::queueUpdateIfNeeded( SPDocument *doc )
     return deferProcessing;
 }
 
-void SwatchesPanel::_trackDocument( SwatchesPanel *panel, SPDocument *document )
+void SwatchesPanel::_trackDocument(SwatchesPanel *panel, SPDocument *document)
 {
     SPDocument *oldDoc = nullptr;
     if (docPerPanel.find(panel) != docPerPanel.end()) {
@@ -1147,9 +1147,9 @@ void SwatchesPanel::_trackDocument( SwatchesPanel *panel, SPDocument *document )
             }
             docPerPanel[panel] = document;
             if (!found) {
-                sigc::connection conn1 = document->connectResourcesChanged( "gradient", sigc::bind(sigc::ptr_fun(&SwatchesPanel::handleGradientsChange), document) );
-                sigc::connection conn2 = document->getDefs()->connectRelease( sigc::hide(sigc::bind(sigc::ptr_fun(&SwatchesPanel::handleDefsModified), document)) );
-                sigc::connection conn3 = document->getDefs()->connectModified( sigc::hide(sigc::hide(sigc::bind(sigc::ptr_fun(&SwatchesPanel::handleDefsModified), document))) );
+                sigc::connection conn1 = document->connectResourcesChanged("gradient", sigc::bind(sigc::ptr_fun(&SwatchesPanel::handleGradientsChange), document));
+                sigc::connection conn2 = document->getDefs()->connectRelease(sigc::hide(sigc::bind(sigc::ptr_fun(&SwatchesPanel::handleDefsModified), document)));
+                sigc::connection conn3 = document->getDefs()->connectModified(sigc::hide(sigc::hide(sigc::bind(sigc::ptr_fun(&SwatchesPanel::handleDefsModified), document))));
 
                 DocTrack *dt = new DocTrack(document, conn1, conn2, conn3);
                 docTrackings.push_back(dt);
@@ -1164,12 +1164,12 @@ void SwatchesPanel::_trackDocument( SwatchesPanel *panel, SPDocument *document )
     }
 }
 
-void SwatchesPanel::_setDocument( SPDocument *document )
+void SwatchesPanel::_setDocument(SPDocument *document)
 {
-    if ( document != _currentDocument ) {
+    if (document != _currentDocument) {
         _trackDocument(this, document);
         _currentDocument = document;
-        handleGradientsChange( document );
+        handleGradientsChange(document);
     }
 }
 
@@ -1182,12 +1182,12 @@ static void recalcSwatchContents(SPDocument* doc,
     std::vector<SPObject *> gradients = doc->getResourceList("gradient");
     for (std::vector<SPObject *>::const_iterator item = gradients.begin(); item != gradients.end(); ++item) {
         SPGradient* grad = SP_GRADIENT(*item);
-        if ( grad->isSwatch() ) {
+        if (grad->isSwatch()) {
             newList.push_back(SP_GRADIENT(*item));
         }
     }
 
-    if ( !newList.empty() ) {
+    if (!newList.empty()) {
         std::reverse(newList.begin(), newList.end());
         for (auto grad : newList)
         {
@@ -1195,8 +1195,8 @@ static void recalcSwatchContents(SPDocument* doc,
                 PREVIEW_PIXBUF_WIDTH, VBLOCK);
             cairo_t *ct = cairo_create(preview);
 
-            Glib::ustring name( grad->getId() );
-            ColorItem* item = new ColorItem( 0, 0, 0, name );
+            Glib::ustring name(grad->getId());
+            ColorItem* item = new ColorItem(0, 0, 0, name);
 
             cairo_pattern_t *check = ink_cairo_pattern_create_checkerboard();
             cairo_pattern_t *gradient = grad->create_preview_pattern(PREVIEW_PIXBUF_WIDTH);
@@ -1258,29 +1258,29 @@ void SwatchesPanel::handleGradientsChange(SPDocument *document)
 void SwatchesPanel::handleDefsModified(SPDocument *document)
 {
     SwatchPage *docPalette = (docPalettes.find(document) != docPalettes.end()) ? docPalettes[document] : nullptr;
-    if (docPalette && !DocTrack::queueUpdateIfNeeded(document) ) {
+    if (docPalette && !DocTrack::queueUpdateIfNeeded(document)) {
         boost::ptr_vector<ColorItem> tmpColors;
         std::map<ColorItem*, cairo_pattern_t*> tmpPrevs;
         std::map<ColorItem*, SPGradient*> tmpGrads;
         recalcSwatchContents(document, tmpColors, tmpPrevs, tmpGrads);
 
-        if ( tmpColors.size() != docPalette->_colors.size() ) {
+        if (tmpColors.size() != docPalette->_colors.size()) {
             handleGradientsChange(document);
         } else {
             int cap = std::min(docPalette->_colors.size(), tmpColors.size());
             for (int i = 0; i < cap; i++) {
                 ColorItem *newColor = &tmpColors[i];
                 ColorItem *oldColor = &docPalette->_colors[i];
-                if ( (newColor->def.getType() != oldColor->def.getType()) ||
+                if ((newColor->def.getType() != oldColor->def.getType()) ||
                      (newColor->def.getR() != oldColor->def.getR()) ||
                      (newColor->def.getG() != oldColor->def.getG()) ||
-                     (newColor->def.getB() != oldColor->def.getB()) ) {
+                     (newColor->def.getB() != oldColor->def.getB())) {
                     oldColor->def.setRGB(newColor->def.getR(), newColor->def.getG(), newColor->def.getB());
                 }
                 if (tmpGrads.find(newColor) != tmpGrads.end()) {
                     oldColor->setGradient(tmpGrads[newColor]);
                 }
-                if ( tmpPrevs.find(newColor) != tmpPrevs.end() ) {
+                if (tmpPrevs.find(newColor) != tmpPrevs.end()) {
                     oldColor->setPattern(tmpPrevs[newColor]);
                 }
             }
@@ -1309,12 +1309,12 @@ std::vector<SwatchPage*> SwatchesPanel::_getSwatchSets() const
 void SwatchesPanel::_updateFromSelection()
 {
     SwatchPage *docPalette = (docPalettes.find(_currentDocument) != docPalettes.end()) ? docPalettes[_currentDocument] : nullptr;
-    if ( docPalette ) {
+    if (docPalette) {
         Glib::ustring fillId;
         Glib::ustring strokeId;
 
         SPStyle tmpStyle(_currentDesktop->getDocument());
-        int result = sp_desktop_query_style( _currentDesktop, &tmpStyle, QUERY_STYLE_PROPERTY_FILL );
+        int result = sp_desktop_query_style(_currentDesktop, &tmpStyle, QUERY_STYLE_PROPERTY_FILL);
         switch (result) {
             case QUERY_STYLE_SINGLE:
             case QUERY_STYLE_MULTIPLE_AVERAGED:
@@ -1322,22 +1322,22 @@ void SwatchesPanel::_updateFromSelection()
             {
                 if (tmpStyle.fill.set && tmpStyle.fill.isPaintserver()) {
                     SPPaintServer* server = tmpStyle.getFillPaintServer();
-                    if ( SP_IS_GRADIENT(server) ) {
+                    if (SP_IS_GRADIENT(server)) {
                         SPGradient* target = nullptr;
                         SPGradient* grad = SP_GRADIENT(server);
 
-                        if ( grad->isSwatch() ) {
+                        if (grad->isSwatch()) {
                             target = grad;
-                        } else if ( grad->ref ) {
+                        } else if (grad->ref) {
                             SPGradient *tmp = grad->ref->getObject();
-                            if ( tmp && tmp->isSwatch() ) {
+                            if (tmp && tmp->isSwatch()) {
                                 target = tmp;
                             }
                         }
-                        if ( target ) {
+                        if (target) {
                             //XML Tree being used directly here while it shouldn't be
                             gchar const* id = target->getRepr()->attribute("id");
-                            if ( id ) {
+                            if (id) {
                                 fillId = id;
                             }
                         }
@@ -1347,7 +1347,7 @@ void SwatchesPanel::_updateFromSelection()
             }
         }
 
-        result = sp_desktop_query_style( _currentDesktop, &tmpStyle, QUERY_STYLE_PROPERTY_STROKE );
+        result = sp_desktop_query_style(_currentDesktop, &tmpStyle, QUERY_STYLE_PROPERTY_STROKE);
         switch (result) {
             case QUERY_STYLE_SINGLE:
             case QUERY_STYLE_MULTIPLE_AVERAGED:
@@ -1355,21 +1355,21 @@ void SwatchesPanel::_updateFromSelection()
             {
                 if (tmpStyle.stroke.set && tmpStyle.stroke.isPaintserver()) {
                     SPPaintServer* server = tmpStyle.getStrokePaintServer();
-                    if ( SP_IS_GRADIENT(server) ) {
+                    if (SP_IS_GRADIENT(server)) {
                         SPGradient* target = nullptr;
                         SPGradient* grad = SP_GRADIENT(server);
-                        if ( grad->isSwatch() ) {
+                        if (grad->isSwatch()) {
                             target = grad;
-                        } else if ( grad->ref ) {
+                        } else if (grad->ref) {
                             SPGradient *tmp = grad->ref->getObject();
-                            if ( tmp && tmp->isSwatch() ) {
+                            if (tmp && tmp->isSwatch()) {
                                 target = tmp;
                             }
                         }
-                        if ( target ) {
+                        if (target) {
                             //XML Tree being used directly here while it shouldn't be
                             gchar const* id = target->getRepr()->attribute("id");
-                            if ( id ) {
+                            if (id) {
                                 strokeId = id;
                             }
                         }
@@ -1383,7 +1383,7 @@ void SwatchesPanel::_updateFromSelection()
             ColorItem* item = &_color;
             bool isFill = (fillId == item->def.descr);
             bool isStroke = (strokeId == item->def.descr);
-            item->setState( isFill, isStroke );
+            item->setState(isFill, isStroke);
         }
     }
 }
@@ -1394,8 +1394,8 @@ void SwatchesPanel::_rebuild()
     SwatchPage* curr = pages[_currentIndex];
     _holder->clear();
 
-    if ( curr->_prefWidth > 0 ) {
-        _holder->setColumnPref( curr->_prefWidth );
+    if (curr->_prefWidth > 0) {
+        _holder->setColumnPref(curr->_prefWidth);
     }
     _holder->freezeUpdates();
     // TODO restore once 'clear' works _holder->addPreview(_clear);

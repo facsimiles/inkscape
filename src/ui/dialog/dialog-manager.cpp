@@ -249,13 +249,13 @@ Dialog *DialogManager::getDialog(GQuark name) {
     dialog_found = _dialog_map.find(name);
 
     Dialog *dialog=nullptr;
-    if ( dialog_found != _dialog_map.end() ) {
+    if (dialog_found != _dialog_map.end()) {
         dialog = dialog_found->second;
     } else {
         FactoryMap::iterator factory_found;
         factory_found = _factory_map.find(name);
 
-        if ( factory_found != _factory_map.end() ) {
+        if (factory_found != _factory_map.end()) {
             dialog = factory_found->second();
             _dialog_map[name] = dialog;
         }
@@ -278,8 +278,8 @@ void DialogManager::showDialog(GQuark name, bool /*grabfocus*/) {
     bool wantTiming = Inkscape::Preferences::get()->getBool("/dialogs/debug/trackAppear", false);
     GTimer *timer = (wantTiming) ? g_timer_new() : nullptr; // if needed, must be created/started before getDialog()
     Dialog *dialog = getDialog(name);
-    if ( dialog ) {
-        if ( wantTiming ) {
+    if (dialog) {
+        if (wantTiming) {
             gchar const * nameStr = g_quark_to_string(name);
             ege::AppearTimeTracker *tracker = new ege::AppearTimeTracker(timer, dialog->gobj(), nameStr);
             tracker->setAutodelete(true);
@@ -289,7 +289,7 @@ void DialogManager::showDialog(GQuark name, bool /*grabfocus*/) {
         dialog->present();
     }
 
-    if ( timer ) {
+    if (timer) {
         g_timer_destroy(timer);
         timer = nullptr;
     }

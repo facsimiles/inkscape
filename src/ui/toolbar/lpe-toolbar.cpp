@@ -106,7 +106,7 @@ LPEToolbar::LPEToolbar(SPDesktop *desktop)
                                             _("Show bounding box (used to cut infinite lines)"));
         _show_bbox_item->set_icon_name(INKSCAPE_ICON("show-bounding-box"));
         _show_bbox_item->signal_toggled().connect(sigc::mem_fun(*this, &LPEToolbar::toggle_show_bbox));
-        _show_bbox_item->set_active(prefs->getBool( "/tools/lpetool/show_bbox", true ));
+        _show_bbox_item->set_active(prefs->getBool("/tools/lpetool/show_bbox", true));
     }
 
     /* Set limiting bounding box to bbox of current selection */
@@ -145,15 +145,15 @@ LPEToolbar::LPEToolbar(SPDesktop *desktop)
                                             _("Display measuring info for selected items"));
         _measuring_item->set_icon_name(INKSCAPE_ICON("draw-geometry-show-measuring-info"));
         _measuring_item->signal_toggled().connect(sigc::mem_fun(*this, &LPEToolbar::toggle_show_measuring_info));
-        _measuring_item->set_active( prefs->getBool( "/tools/lpetool/show_measuring_info", true ) );
+        _measuring_item->set_active(prefs->getBool("/tools/lpetool/show_measuring_info", true));
     }
 
     // Add the units menu
     {
-        _units_item = _tracker->create_tool_item(_("Units"), ("") );
+        _units_item = _tracker->create_tool_item(_("Units"), (""));
         add(*_units_item);
         _units_item->signal_changed_after().connect(sigc::mem_fun(*this, &LPEToolbar::unit_changed));
-        _units_item->set_sensitive( prefs->getBool("/tools/lpetool/show_measuring_info", true));
+        _units_item->set_sensitive(prefs->getBool("/tools/lpetool/show_measuring_info", true));
     }
 
     add(* Gtk::manage(new Gtk::SeparatorToolItem()));
@@ -211,7 +211,7 @@ LPEToolbar::mode_changed(int mode)
 
         if (DocumentUndo::getUndoSensitive(_desktop->getDocument())) {
             Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-            prefs->setInt( "/tools/lpetool/mode", mode );
+            prefs->setInt("/tools/lpetool/mode", mode);
         }
 
         _freeze = false;
@@ -296,7 +296,7 @@ LPEToolbar::toggle_show_measuring_info()
     LpeTool *lc = SP_LPETOOL_CONTEXT(_desktop->event_context);
     lpetool_show_measuring_info(lc, show);
 
-    _units_item->set_sensitive( show );
+    _units_item->set_sensitive(show);
 }
 
 void
@@ -372,7 +372,7 @@ LPEToolbar::sel_changed(Inkscape::Selection *selection)
             _currentlpe = lpe;
             _currentlpeitem = lpeitem;
             _line_segment_combo->set_sensitive(true);
-            _line_segment_combo->set_active( lpels->end_type.get_value() );
+            _line_segment_combo->set_active(lpels->end_type.get_value());
         } else {
             _currentlpe = nullptr;
             _currentlpeitem = nullptr;

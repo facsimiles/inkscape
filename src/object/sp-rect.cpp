@@ -34,7 +34,7 @@ SPRect::~SPRect() = default;
 
 void SPRect::build(SPDocument* doc, Inkscape::XML::Node* repr) {
 #ifdef OBJECT_TRACE
-    objectTrace( "SPRect::build" );
+    objectTrace("SPRect::build");
 #endif
 
     SPShape::build(doc, repr);
@@ -47,7 +47,7 @@ void SPRect::build(SPDocument* doc, Inkscape::XML::Node* repr) {
     this->readAttr("ry");
 
 #ifdef OBJECT_TRACE
-    objectTrace( "SPRect::build", false );
+    objectTrace("SPRect::build", false);
 #endif
 }
 
@@ -56,7 +56,7 @@ void SPRect::set(SPAttributeEnum key, gchar const *value) {
 #ifdef OBJECT_TRACE
     std::stringstream temp;
     temp << "SPRect::set: " << key  << " " << (value?value:"null");
-    objectTrace( temp.str() );
+    objectTrace(temp.str());
 #endif
 
     /* fixme: We need real error processing some time */
@@ -70,13 +70,13 @@ void SPRect::set(SPAttributeEnum key, gchar const *value) {
     switch (key) {
         case SP_ATTR_X:
             this->x.readOrUnset(value);
-            this->x.update( em, ex, w );
+            this->x.update(em, ex, w);
             this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
 
         case SP_ATTR_Y:
             this->y.readOrUnset(value);
-            this->y.update( em, ex, h );
+            this->y.update(em, ex, h);
             this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
 
@@ -84,7 +84,7 @@ void SPRect::set(SPAttributeEnum key, gchar const *value) {
             if (!this->width.read(value) || this->width.value < 0.0) {
             	this->width.unset();
             }
-            this->width.update( em, ex, w );
+            this->width.update(em, ex, w);
             this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
 
@@ -92,7 +92,7 @@ void SPRect::set(SPAttributeEnum key, gchar const *value) {
             if (!this->height.read(value) || this->height.value < 0.0) {
             	this->height.unset();
             }
-            this->height.update( em, ex, h );
+            this->height.update(em, ex, h);
             this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
 
@@ -100,7 +100,7 @@ void SPRect::set(SPAttributeEnum key, gchar const *value) {
             if (!this->rx.read(value) || this->rx.value <= 0.0) {
             	this->rx.unset();
             }
-            this->rx.update( em, ex, w );
+            this->rx.update(em, ex, w);
             this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
 
@@ -108,7 +108,7 @@ void SPRect::set(SPAttributeEnum key, gchar const *value) {
             if (!this->ry.read(value) || this->ry.value <= 0.0) {
             	this->ry.unset();
             }
-            this->ry.update( em, ex, h );
+            this->ry.update(em, ex, h);
             this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
 
@@ -117,14 +117,14 @@ void SPRect::set(SPAttributeEnum key, gchar const *value) {
             break;
     }
 #ifdef OBJECT_TRACE
-    objectTrace( "SPRect::set", false );
+    objectTrace("SPRect::set", false);
 #endif
 }
 
 void SPRect::update(SPCtx* ctx, unsigned int flags) {
 
 #ifdef OBJECT_TRACE
-    objectTrace( "SPRect::update", true, flags );
+    objectTrace("SPRect::update", true, flags);
 #endif
 
     if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
@@ -148,14 +148,14 @@ void SPRect::update(SPCtx* ctx, unsigned int flags) {
 
     SPShape::update(ctx, flags);
 #ifdef OBJECT_TRACE
-    objectTrace( "SPRect::update", false, flags );
+    objectTrace("SPRect::update", false, flags);
 #endif
 }
 
 Inkscape::XML::Node * SPRect::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
 
 #ifdef OBJECT_TRACE
-    objectTrace( "SPRect::write", true, flags );
+    objectTrace("SPRect::write", true, flags);
 #endif
 
     if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
@@ -180,7 +180,7 @@ Inkscape::XML::Node * SPRect::write(Inkscape::XML::Document *xml_doc, Inkscape::
     SPShape::write(xml_doc, repr, flags);
 
 #ifdef OBJECT_TRACE
-    objectTrace( "SPRect::write", false, flags );
+    objectTrace("SPRect::write", false, flags);
 #endif
 
     return repr;
@@ -207,17 +207,17 @@ void SPRect::set_shape() {
     double const h = this->height.computed;
     double const w2 = w / 2;
     double const h2 = h / 2;
-    double const rx = std::min(( this->rx._set
+    double const rx = std::min((this->rx._set
                                  ? this->rx.computed
-                                 : ( this->ry._set
+                                 : (this->ry._set
                                      ? this->ry.computed
-                                     : 0.0 ) ),
+                                     : 0.0)),
                                .5 * this->width.computed);
-    double const ry = std::min(( this->ry._set
+    double const ry = std::min((this->ry._set
                                  ? this->ry.computed
-                                 : ( this->rx._set
+                                 : (this->rx._set
                                      ? this->rx.computed
-                                     : 0.0 ) ),
+                                     : 0.0)),
                                .5 * this->height.computed);
     /* TODO: Handle negative rx or ry as per
      * http://www.w3.org/TR/SVG11/shapes.html#RectElementRXAttribute once Inkscape has proper error
@@ -327,15 +327,15 @@ Geom::Affine SPRect::set_transform(Geom::Affine const& xform) {
     }
 
     /* Preserve units */
-    this->width.scale( sw );
-    this->height.scale( sh );
+    this->width.scale(sw);
+    this->height.scale(sh);
 
     if (this->rx._set) {
-    	this->rx.scale( sw );
+    	this->rx.scale(sw);
     }
 
     if (this->ry._set) {
-    	this->ry.scale( sh );
+    	this->ry.scale(sh);
     }
 
     /* Find start in item coords */

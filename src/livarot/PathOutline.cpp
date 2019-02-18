@@ -25,16 +25,16 @@
 // the left side has to be reversed to make a contour
 void Path::Outline(Path *dest, double width, JoinType join, ButtType butt, double miter)
 {
-    if ( descr_flags & descr_adding_bezier ) {
+    if (descr_flags & descr_adding_bezier) {
         CancelBezier();
     }
-    if ( descr_flags & descr_doing_subpath ) {
+    if (descr_flags & descr_doing_subpath) {
         CloseSubpath();
     }
-    if ( descr_cmd.size() <= 1 ) {
+    if (descr_cmd.size() <= 1) {
         return;
     }
-    if ( dest == nullptr ) {
+    if (dest == nullptr) {
         return;
     }
 
@@ -230,10 +230,10 @@ void
 Path::InsideOutline (Path * dest, double width, JoinType join, ButtType butt,
                      double miter)
 {
-	if ( descr_flags & descr_adding_bezier ) {
+	if (descr_flags & descr_adding_bezier) {
 		CancelBezier();
 	}
-	if ( descr_flags & descr_doing_subpath ) {
+	if (descr_flags & descr_doing_subpath) {
 		CloseSubpath();
 	}
 	if (int(descr_cmd.size()) <= 1) return;
@@ -358,7 +358,7 @@ void Path::SubContractOutline(int off, int num_pd,
     Geom::Point curX;
     {
         int firstTyp = descr_cmd[off]->getType();
-        if ( firstTyp != descr_moveto ) {
+        if (firstTyp != descr_moveto) {
             curX[0] = curX[1] = 0;
             curP = 0;
         } else {
@@ -389,7 +389,7 @@ void Path::SubContractOutline(int off, int num_pd,
 			if (doFirst) {
 			} else {
 				if (closeIfNeeded) {
-					if ( Geom::LInfty (curX- firstP) < 0.0001 ) {
+					if (Geom::LInfty (curX- firstP) < 0.0001) {
 						OutlineJoin (dest, firstP, curT, firstT, width, join,
 									 miter, nType);
 						dest->Close ();
@@ -856,7 +856,7 @@ Path::IsNulCurve (std::vector<PathDescr*> const &cmd, int curD, Geom::Point cons
     case descr_arcto:
     {
 		PathDescrArcTo* nData = dynamic_cast<PathDescrArcTo*>(cmd[curD]);
-		if ( Geom::LInfty(nData->p - curX) < 0.00001) {
+		if (Geom::LInfty(nData->p - curX) < 0.00001) {
 			if ((! nData->large)
 				|| (fabs (nData->rx) < 0.00001
 					|| fabs (nData->ry) < 0.00001)) {
@@ -1197,7 +1197,7 @@ Path::OutlineJoin (Path * dest, Geom::Point pos, Geom::Point stNor, Geom::Point 
         if ((angSi > 0 && width >= 0) 
             || (angSi < 0 && width < 0)) { // This is an inside join -> join is independent of chosen JoinType.
             if ((dest->descr_cmd[dest->descr_cmd.size() - 1]->getType() == descr_lineto) && (nType == descr_lineto)) {
-                Geom::Point const biss = unit_vector(Geom::rot90( stNor - enNor ));
+                Geom::Point const biss = unit_vector(Geom::rot90(stNor - enNor));
                 double c2 = Geom::dot (biss, enNor);
                 if (fabs(c2) > M_SQRT1_2) {    // apply only to obtuse angles
                     double l = width / c2;
@@ -1221,7 +1221,7 @@ Path::OutlineJoin (Path * dest, Geom::Point pos, Geom::Point stNor, Geom::Point 
                 // utiliser des bouts de cubique: approximation de l'arc (au point ou on en est...), et supporte mieux
                 // l'arrondi des coordonnees des extremites
                 /* double   angle=acos(angCo);
-                   if ( angCo >= 0 ) {
+                   if (angCo >= 0) {
                    Geom::Point   stTgt,enTgt;
                    RotCCWTo(stNor,stTgt);
                    RotCCWTo(enNor,enTgt);
@@ -1255,10 +1255,10 @@ Path::OutlineJoin (Path * dest, Geom::Point pos, Geom::Point stNor, Geom::Point 
                                  false);
                 }
             } else if (join == join_pointy) {
-                Geom::Point const biss = unit_vector(Geom::rot90( stNor - enNor ));
+                Geom::Point const biss = unit_vector(Geom::rot90(stNor - enNor));
                 double c2 = Geom::dot (biss, enNor);
                 double l = width / c2;
-                if ( fabs(l) > miter) {
+                if (fabs(l) > miter) {
                     dest->LineTo (pos + width*enNor);
                 } else {
                     if (dest->descr_cmd[dest->descr_cmd.size() - 1]->getType() == descr_lineto) {
@@ -1346,7 +1346,7 @@ Path::RecStdCubicTo (outline_callback_data * data, double tol, double width,
 	}
 	const Geom::Point diff = req - chk;
 	const double err = dot(diff,diff);
-	if (err <= tol ) {  // tolerance is given as a quadratic value, no need to use tol*tol here
+	if (err <= tol) {  // tolerance is given as a quadratic value, no need to use tol*tol here
 //    printf("%f <= %f %i\n",err,tol,lev);
 		int n_d = data->dest->CubicTo (enPos + width*enNor,
 									   stGue*stTgt,

@@ -44,7 +44,7 @@ void bitmapinfo_swap(char *Bmi);
 */
 void bitmap16_swap(
       char *b
-    ){
+){
     U_swap2(b,4); /* Type, Width, Height, WidthBytes */
     /* Planes and BitsPixel are bytes, so no swap needed */
     /* Bits[] pixel data should already be in order */
@@ -63,7 +63,7 @@ void bitmap16_swap(
 void brush_swap(
       char *b,
       int torev
-   ){
+){
    int Style;
    if(torev){   Style = *(uint16_t *)(b + offsetof(U_BRUSH,Style)); }
    U_swap2(b + offsetof(U_BRUSH,Style),1);
@@ -94,7 +94,7 @@ void brush_swap(
 */
 void font_swap(
        char *f
-   ){
+){
    U_swap2(f + offsetof(U_FONT,Height),5); /*Height, Width, Escapement, Orientation, Weight */
    /* Other fields are single bytes */
 }
@@ -105,7 +105,7 @@ void font_swap(
 */
 void palette_swap(
       char *p
-   ){
+){
    U_swap2(p + offsetof(U_PALETTE,Start),2); /* Start, NumEntries*/
    /* PalEntries[1] is byte ordered, so no need to swap */
 }
@@ -116,7 +116,7 @@ void palette_swap(
 */
 void pen_swap(
       char *p
-   ){
+){
    U_swap2(p + offsetof(U_PEN,Style),3);             /* Style,Widthw[0],Widthw[1] */
    /* Color already in order  */
 }
@@ -137,7 +137,7 @@ because rectangles are swapped using U_swap2 as an array of 4 int16 values.
 void region_swap(
       char *reg,
       int   torev
-    ){
+){
     int Size;
     if(torev){  Size = *(int16_t *)(reg + offsetof(U_REGION,Size)); }
     U_swap2(reg,10); /* ignore1 through sRrect*/
@@ -152,7 +152,7 @@ void region_swap(
 */
 void bitmapcoreheader_swap(
       char *ch
-    ){
+){
     U_swap4(ch + offsetof(U_BITMAPCOREHEADER,Size_4), 1);  /* Size_4, may not be aligned  */
     U_swap2(ch + offsetof(U_BITMAPCOREHEADER,Width),4);    /* Width, Height, Planes, BitCount, */
 }
@@ -171,7 +171,7 @@ void bitmapcoreheader_swap(
 */
 void wlogbrush_swap(
       char *lb  
-   ){
+){
     U_swap2(lb + offsetof(U_WLOGBRUSH,Style),1);
     /* Color is already in order */
     U_swap2(lb + offsetof(U_WLOGBRUSH,Hatch),1);
@@ -184,7 +184,7 @@ void wlogbrush_swap(
 void polypolygon_swap(
      char *pp,
      int torev
-   ){
+){
    int i,totPoints;
    uint16_t  nPolys;
    uint16_t *aPolyCounts;
@@ -209,7 +209,7 @@ void polypolygon_swap(
 void scan_swap(
       char *sc,
       int torev
-   ){
+){
    int count;
    if(torev){  count = *(uint16_t *)sc;  }
    U_swap2(sc,3); /*count, top, bottom */
@@ -225,7 +225,7 @@ void scan_swap(
 void dibheader_swap(
       char *dh,
       int torev
-   ){
+){
    int Size;
    memcpy(&Size, dh, 4); /* may not be aligned */
    if(!torev)U_swap4(&Size,1);
@@ -247,16 +247,16 @@ void dibheader_swap(
 int wmfheader_swap(
       char *contents,
       int torev
-    ){
+){
     uint32_t Key,Size16w;
     int size=0;
     Key=*(uint32_t *)(contents + offsetof(U_WMRPLACEABLE,Key));
     if(!torev)U_swap4(&Key,1);
     if(Key == 0x9AC6CDD7){
-       U_swap4(contents + offsetof(U_WMRPLACEABLE,Key     ),1);
-       U_swap2(contents + offsetof(U_WMRPLACEABLE,HWmf    ),1);
-       U_swap2(contents + offsetof(U_WMRPLACEABLE,Dst     ),4);
-       U_swap2(contents + offsetof(U_WMRPLACEABLE,Inch    ),1);
+       U_swap4(contents + offsetof(U_WMRPLACEABLE,Key),1);
+       U_swap2(contents + offsetof(U_WMRPLACEABLE,HWmf),1);
+       U_swap2(contents + offsetof(U_WMRPLACEABLE,Dst),4);
+       U_swap2(contents + offsetof(U_WMRPLACEABLE,Inch),1);
        U_swap4(contents + offsetof(U_WMRPLACEABLE,Reserved),1);
        U_swap2(contents + offsetof(U_WMRPLACEABLE,Checksum),1);
        contents += U_SIZE_WMRPLACEABLE;
@@ -265,9 +265,9 @@ int wmfheader_swap(
     if(torev){  Size16w = *(uint16_t *)(contents + offsetof(U_WMRHEADER,Size16w)); }
     U_swap2(contents + offsetof(U_WMRHEADER,Size16w),2);/* Size16w, Version   */
     if(!torev){ Size16w = *(uint16_t *)(contents + offsetof(U_WMRHEADER,Size16w)); }
-    U_swap4(contents + offsetof(U_WMRHEADER,Sizew   ),1);/* Sizew    */
+    U_swap4(contents + offsetof(U_WMRHEADER,Sizew),1);/* Sizew    */
     U_swap2(contents + offsetof(U_WMRHEADER,nObjects),1);/* nObjects */
-    U_swap4(contents + offsetof(U_WMRHEADER,maxSize ),1);/* maxSize  */
+    U_swap4(contents + offsetof(U_WMRHEADER,maxSize),1);/* maxSize  */
     U_swap2(contents + offsetof(U_WMRHEADER,nMembers),1);/* nMembers */
     size += 2*Size16w;
     return(size);
@@ -585,12 +585,12 @@ void U_WMREXTTEXTOUT_swap(char *record, int torev){
    int off,Length,Len2,Opts;
    U_swap4(record + offsetof(U_WMREXTTEXTOUT,Size16_4),1);
    if(torev){ 
-      Length = *(int16_t *)( record + offsetof(U_WMREXTTEXTOUT,Length));
+      Length = *(int16_t *)(record + offsetof(U_WMREXTTEXTOUT,Length));
       Opts   = *(uint16_t *)(record + offsetof(U_WMREXTTEXTOUT,Opts));
    }
    U_swap2(record + offsetof(U_WMREXTTEXTOUT,y),    4);       /* y,x,Length,Opts*/
    if(!torev){ 
-      Length = *(int16_t *)( record + offsetof(U_WMREXTTEXTOUT,Length));
+      Length = *(int16_t *)(record + offsetof(U_WMREXTTEXTOUT,Length));
       Opts   = *(uint16_t *)(record + offsetof(U_WMREXTTEXTOUT,Opts));
    }
    off = U_SIZE_WMREXTTEXTOUT;

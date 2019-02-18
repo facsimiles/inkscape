@@ -821,7 +821,7 @@ cr_tknzr_parse_nmstart (CRTknzr * a_this,
         } else if (cr_utils_is_nonascii (next_char) == TRUE
                    || ((next_char >= 'a') && (next_char <= 'z'))
                    || ((next_char >= 'A') && (next_char <= 'Z'))
-                ) {
+) {
                 READ_NEXT_CHAR (a_this, &cur_char);
                 if (a_location) {
                         cr_tknzr_get_parsing_location (a_this, 
@@ -892,7 +892,7 @@ cr_tknzr_parse_nmchar (CRTknzr * a_this, guint32 * a_char,
                    || ((next_char >= '0') && (next_char <= '9'))
                    || (next_char == '-')
                    || (next_char == '_') /*'_' not allowed by the spec. */
-                ) {
+) {
                 READ_NEXT_CHAR (a_this, &cur_char);
                 *a_char = cur_char;
                 status = CR_OK;
@@ -994,7 +994,7 @@ cr_tknzr_parse_ident (CRTknzr * a_this, CRString ** a_str)
                 cr_string_destroy (stringue) ;
                 stringue = NULL ;
         }
-        if (status != CR_OK ) {
+        if (status != CR_OK) {
                 cr_tknzr_set_cur_pos (a_this, &init_pos) ;
         }
         return status ;

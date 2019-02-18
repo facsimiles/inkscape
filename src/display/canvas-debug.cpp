@@ -50,7 +50,7 @@ static void sp_canvas_debug_destroy (SPCanvasItem *object)
     }
 }
 
-static void sp_canvas_debug_update( SPCanvasItem *item, Geom::Affine const &/*affine*/, unsigned int /*flags*/ )
+static void sp_canvas_debug_update(SPCanvasItem *item, Geom::Affine const &/*affine*/, unsigned int /*flags*/)
 {
     // We cover the entire canvas
     item->x1 = -G_MAXINT;
@@ -59,7 +59,7 @@ static void sp_canvas_debug_update( SPCanvasItem *item, Geom::Affine const &/*af
     item->y2 = G_MAXINT;
 }
 
-static void sp_canvas_debug_render( SPCanvasItem *item, SPCanvasBuf *buf)
+static void sp_canvas_debug_render(SPCanvasItem *item, SPCanvasBuf *buf)
 {
     if (!buf->ct) {
         return;

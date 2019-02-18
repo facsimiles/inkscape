@@ -151,9 +151,9 @@ Affine reflection(Point const & vector, Point const & origin)
     Coord cx2 = vn[X] * vn[X];
     Coord cy2 = vn[Y] * vn[Y];
     Coord c2xy = 2 * vn[X] * vn[Y];
-    Affine mirror ( cx2 - cy2, c2xy,
+    Affine mirror (cx2 - cy2, c2xy,
                     c2xy, cy2 - cx2,
-                    0, 0 );
+                    0, 0);
     return Translate(-origin) * mirror * Translate(origin);
 }
 

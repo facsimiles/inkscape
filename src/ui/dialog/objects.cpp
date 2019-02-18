@@ -138,30 +138,30 @@ public:
         _maskAttr(g_quark_from_string("mask"))
     {}
 
-    void notifyChildAdded( Node &/*node*/, Node &/*child*/, Node */*prev*/ ) override
+    void notifyChildAdded(Node &/*node*/, Node &/*child*/, Node */*prev*/) override
     {
-        if ( _pnl && _obj ) {
-            _pnl->_objectsChanged( _obj );
+        if (_pnl && _obj) {
+            _pnl->_objectsChanged(_obj);
         }
     }
-    void notifyChildRemoved( Node &/*node*/, Node &/*child*/, Node */*prev*/ ) override
+    void notifyChildRemoved(Node &/*node*/, Node &/*child*/, Node */*prev*/) override
     {
-        if ( _pnl && _obj ) {
-            _pnl->_objectsChanged( _obj );
+        if (_pnl && _obj) {
+            _pnl->_objectsChanged(_obj);
         }
     }
-    void notifyChildOrderChanged( Node &/*node*/, Node &/*child*/, Node */*old_prev*/, Node */*new_prev*/ ) override
+    void notifyChildOrderChanged(Node &/*node*/, Node &/*child*/, Node */*old_prev*/, Node */*new_prev*/) override
     {
-        if ( _pnl && _obj ) {
-            _pnl->_objectsChanged( _obj );
+        if (_pnl && _obj) {
+            _pnl->_objectsChanged(_obj);
         }
     }
-    void notifyContentChanged( Node &/*node*/, Util::ptr_shared /*old_content*/, Util::ptr_shared /*new_content*/ ) override {}
-    void notifyAttributeChanged( Node &/*node*/, GQuark name, Util::ptr_shared /*old_value*/, Util::ptr_shared /*new_value*/ ) override {
-        if ( _pnl && _obj ) {
-            if ( name == _lockedAttr || name == _labelAttr || name == _highlightAttr || name == _groupAttr || name == _styleAttr || name == _clipAttr || name == _maskAttr ) {
+    void notifyContentChanged(Node &/*node*/, Util::ptr_shared /*old_content*/, Util::ptr_shared /*new_content*/) override {}
+    void notifyAttributeChanged(Node &/*node*/, GQuark name, Util::ptr_shared /*old_value*/, Util::ptr_shared /*new_value*/) override {
+        if (_pnl && _obj) {
+            if (name == _lockedAttr || name == _labelAttr || name == _highlightAttr || name == _groupAttr || name == _styleAttr || name == _clipAttr || name == _maskAttr) {
                 _pnl->_updateObject(_obj, name == _highlightAttr);
-                if ( name == _styleAttr ) {
+                if (name == _styleAttr) {
                     _pnl->_updateComposite();
                 }
             }
@@ -232,8 +232,8 @@ public:
 void ObjectsPanel::_styleButton(Gtk::Button& btn, char const* iconName, char const* tooltip)
 {
     GtkWidget *child = sp_get_icon_image(iconName, GTK_ICON_SIZE_SMALL_TOOLBAR);
-    gtk_widget_show( child );
-    btn.add( *Gtk::manage(Glib::wrap(child)) );
+    gtk_widget_show(child);
+    btn.add(*Gtk::manage(Glib::wrap(child)));
     btn.set_relief(Gtk::RELIEF_NONE);
     btn.set_tooltip_text (tooltip);
 }
@@ -247,30 +247,30 @@ void ObjectsPanel::_styleButton(Gtk::Button& btn, char const* iconName, char con
  * @param id Button id for callback function
  * @return The generated menu item
  */
-Gtk::MenuItem& ObjectsPanel::_addPopupItem( SPDesktop *desktop, unsigned int code, char const* iconName, char const* fallback, int id )
+Gtk::MenuItem& ObjectsPanel::_addPopupItem(SPDesktop *desktop, unsigned int code, char const* iconName, char const* fallback, int id)
 {
     Gtk::Image *iconWidget = nullptr;
     const char* label = nullptr;
 
-    if ( iconName ) {
+    if (iconName) {
         iconWidget = Gtk::manage(sp_get_icon_image(iconName, Gtk::ICON_SIZE_MENU));
     }
 
-    if ( desktop ) {
-        Verb *verb = Verb::get( code );
-        if ( verb ) {
+    if (desktop) {
+        Verb *verb = Verb::get(code);
+        if (verb) {
             SPAction *action = verb->get_action(Inkscape::ActionContext(desktop));
-            if ( !iconWidget && action && action->image ) {
+            if (!iconWidget && action && action->image) {
                 iconWidget = Gtk::manage(sp_get_icon_image(action->image, Gtk::ICON_SIZE_MENU));
             }
 
-            if ( action ) {
+            if (action) {
                 label = action->name;
             }
         }
     }
 
-    if ( !label && fallback ) {
+    if (!label && fallback) {
         label = fallback;
     }
 
@@ -320,13 +320,13 @@ void ObjectsPanel::_objectsChanged(SPObject */*obj*/)
         //Get the current document's root and use that to enumerate the tree
         SPDocument* document = _desktop->doc();
         SPRoot* root = document->getRoot();
-        if ( root ) {
+        if (root) {
             _selectedConnection.block();
             _documentChangedCurrentLayer.block();
             //Clear the tree store
             _store->clear();
             //Add all items recursively
-            _addObject( root, nullptr );
+            _addObject(root, nullptr);
             _selectedConnection.unblock();
             _documentChangedCurrentLayer.unblock();
             //Set the tree selection
@@ -344,7 +344,7 @@ void ObjectsPanel::_objectsChanged(SPObject */*obj*/)
  */
 void ObjectsPanel::_addObject(SPObject* obj, Gtk::TreeModel::Row* parentRow)
 {
-    if ( _desktop && obj ) {
+    if (_desktop && obj) {
         for(auto& child: obj->children) {
             if (SP_IS_ITEM(&child))
             {
@@ -369,14 +369,14 @@ void ObjectsPanel::_addObject(SPObject* obj, Gtk::TreeModel::Row* parentRow)
                 row[_model->_colClipMask] = item ? (
                     (item->clip_ref && item->clip_ref->getObject() ? 1 : 0) |
                     (item->mask_ref && item->mask_ref->getObject() ? 2 : 0)
-                ) : 0;
+) : 0;
                 //row[_model->_colInsertOrder] = group ? (group->insertBottom() ? 2 : 1) : 0;
 
                 //If our parent object is a group and it's expanded, expand the tree
                 if (SP_IS_GROUP(obj) && SP_GROUP(obj)->expanded())
                 {
-                    _tree.expand_to_path( _store->get_path(iter) );
-                    _tree.collapse_row( _store->get_path(iter) );
+                    _tree.expand_to_path(_store->get_path(iter));
+                    _tree.collapse_row(_store->get_path(iter));
                 }
 
                 //Add an object watcher to the item
@@ -387,7 +387,7 @@ void ObjectsPanel::_addObject(SPObject* obj, Gtk::TreeModel::Row* parentRow)
                 //If the item is a group, recursively add its children
                 if (group)
                 {
-                    _addObject( &child, &row );
+                    _addObject(&child, &row);
                 }
             }
         }
@@ -399,11 +399,11 @@ void ObjectsPanel::_addObject(SPObject* obj, Gtk::TreeModel::Row* parentRow)
  * @param obj The item to update in the tree
  * @param recurse Whether to recurse through the item's children
  */
-void ObjectsPanel::_updateObject( SPObject *obj, bool recurse ) {
+void ObjectsPanel::_updateObject(SPObject *obj, bool recurse) {
     //Find the object in the tree store and update it
 
     //mark
-    _store->foreach_iter( sigc::bind<SPObject*>(sigc::mem_fun(*this, &ObjectsPanel::_checkForUpdated), obj) );
+    _store->foreach_iter(sigc::bind<SPObject*>(sigc::mem_fun(*this, &ObjectsPanel::_checkForUpdated), obj));
     //end mark
     if (recurse)
     {
@@ -422,7 +422,7 @@ void ObjectsPanel::_updateObject( SPObject *obj, bool recurse ) {
 bool ObjectsPanel::_checkForUpdated(const Gtk::TreeIter& iter, SPObject* obj)
 {
     Gtk::TreeModel::Row row = *iter;
-    if (obj && *iter && obj == row[_model->_colObject] )
+    if (obj && *iter && obj == row[_model->_colObject])
     {
         //We found our item in the tree!!  Update it!
         SPItem * item = SP_IS_ITEM(obj) ? SP_ITEM(obj) : nullptr;
@@ -439,7 +439,7 @@ bool ObjectsPanel::_checkForUpdated(const Gtk::TreeIter& iter, SPObject* obj)
         row[_model->_colClipMask] = item ? (
             (item->clip_ref && item->clip_ref->getObject() ? 1 : 0) |
             (item->mask_ref && item->mask_ref->getObject() ? 2 : 0)
-        ) : 0;
+) : 0;
         //row[_model->_colInsertOrder] = group ? (group->insertBottom() ? 2 : 1) : 0;
 
         return true;
@@ -468,7 +468,7 @@ void ObjectsPanel::_updateComposite() {
  * @param setValues Whether to set the compositing values
  * @param blur Blur value to use
  */
-void ObjectsPanel::_compositingChanged( const Gtk::TreeModel::iterator& iter, bool *setValues )
+void ObjectsPanel::_compositingChanged(const Gtk::TreeModel::iterator& iter, bool *setValues)
 {
     if (iter) {
         Gtk::TreeModel::Row row = *iter;
@@ -485,7 +485,7 @@ void ObjectsPanel::_compositingChanged( const Gtk::TreeModel::iterator& iter, bo
  * Occurs when the current desktop selection changes
  * @param sel The current selection
  */
-void ObjectsPanel::_objectsSelected( Selection *sel ) {
+void ObjectsPanel::_objectsSelected(Selection *sel) {
     
     bool setOpacity = true;
     _selectedConnection.block();
@@ -499,13 +499,13 @@ void ObjectsPanel::_objectsSelected( Selection *sel ) {
             _setCompositingValues(item);
             setOpacity = false;
         }
-        _store->foreach(sigc::bind<SPItem *, bool>( sigc::mem_fun(*this, &ObjectsPanel::_checkForSelected), item, (*i)==items.back(), false));
+        _store->foreach(sigc::bind<SPItem *, bool>(sigc::mem_fun(*this, &ObjectsPanel::_checkForSelected), item, (*i)==items.back(), false));
     }
     if (!item) {
         if (_desktop->currentLayer() && SP_IS_ITEM(_desktop->currentLayer())) {
             item = SP_ITEM(_desktop->currentLayer());
             _setCompositingValues(item);
-            _store->foreach(sigc::bind<SPItem *, bool>( sigc::mem_fun(*this, &ObjectsPanel::_checkForSelected), item, false, true));
+            _store->foreach(sigc::bind<SPItem *, bool>(sigc::mem_fun(*this, &ObjectsPanel::_checkForSelected), item, false, true));
         }
     }
     _selectedConnection.unblock();
@@ -579,10 +579,10 @@ bool ObjectsPanel::_checkForSelected(const Gtk::TreePath &path, const Gtk::TreeI
     bool stopGoing = false;
 
     Gtk::TreeModel::Row row = *iter;
-    if ( item == row[_model->_colObject] )
+    if (item == row[_model->_colObject])
     {
         //We found the item!  Expand to the path and select it in the tree.
-        _tree.expand_to_path( path );
+        _tree.expand_to_path(path);
         if (!expand)
             // but don't expand itself, just the path
             _tree.collapse_row(path);
@@ -606,7 +606,7 @@ bool ObjectsPanel::_checkForSelected(const Gtk::TreePath &path, const Gtk::TreeI
  */
 void ObjectsPanel::_pushTreeSelectionToCurrent()
 {
-    if ( _desktop && _desktop->currentRoot() ) {
+    if (_desktop && _desktop->currentRoot()) {
         //block connections for selection and compositing values to prevent interference
         _selectionChangedConnection.block();
         _documentChangedCurrentLayer.block();
@@ -614,7 +614,7 @@ void ObjectsPanel::_pushTreeSelectionToCurrent()
         //Clear the selection and then iterate over the tree selection, pushing each item to the desktop
         _desktop->selection->clear();
         bool setOpacity = true;
-        _tree.get_selection()->selected_foreach_iter( sigc::bind<bool *>(sigc::mem_fun(*this, &ObjectsPanel::_selected_row_callback), &setOpacity));
+        _tree.get_selection()->selected_foreach_iter(sigc::bind<bool *>(sigc::mem_fun(*this, &ObjectsPanel::_selected_row_callback), &setOpacity));
         //unblock connections
         _selectionChangedConnection.unblock();
         _documentChangedCurrentLayer.unblock();
@@ -629,7 +629,7 @@ void ObjectsPanel::_pushTreeSelectionToCurrent()
  * @param setCompositingValues Whether to set the compositing values
  * @param blur
  */
-void ObjectsPanel::_selected_row_callback( const Gtk::TreeModel::iterator& iter, bool *setCompositingValues )
+void ObjectsPanel::_selected_row_callback(const Gtk::TreeModel::iterator& iter, bool *setCompositingValues)
 {
     if (iter) {
         Gtk::TreeModel::Row row = *iter;
@@ -665,13 +665,13 @@ void ObjectsPanel::_checkTreeSelection()
     bool sensitiveNonBottom = true;
 
     for (auto & it : _watching) {
-        it->set_sensitive( sensitive );
+        it->set_sensitive(sensitive);
     }
     for (auto & it : _watchingNonTop) {
-        it->set_sensitive( sensitiveNonTop );
+        it->set_sensitive(sensitiveNonTop);
     }
     for (auto & it : _watchingNonBottom) {
-        it->set_sensitive( sensitiveNonBottom );
+        it->set_sensitive(sensitiveNonBottom);
     }
 }
 
@@ -680,13 +680,13 @@ void ObjectsPanel::_checkTreeSelection()
  * @param iter Current item in the tree
  * @param visible Whether the item should be visible or not
  */
-void ObjectsPanel::_setVisibleIter( const Gtk::TreeModel::iterator& iter, const bool visible )
+void ObjectsPanel::_setVisibleIter(const Gtk::TreeModel::iterator& iter, const bool visible)
 {
     Gtk::TreeModel::Row row = *iter;
     SPItem* item = row[_model->_colObject];
     if (item)
     {
-        item->setHidden( !visible );
+        item->setHidden(!visible);
         row[_model->_colVisible] = visible;
         item->updateRepr(SP_OBJECT_WRITE_NO_CHILDREN | SP_OBJECT_WRITE_EXT);
     }
@@ -697,13 +697,13 @@ void ObjectsPanel::_setVisibleIter( const Gtk::TreeModel::iterator& iter, const 
  * @param iter Current item in the tree
  * @param locked Whether the item should be locked
  */
-void ObjectsPanel::_setLockedIter( const Gtk::TreeModel::iterator& iter, const bool locked )
+void ObjectsPanel::_setLockedIter(const Gtk::TreeModel::iterator& iter, const bool locked)
 {
     Gtk::TreeModel::Row row = *iter;
     SPItem* item = row[_model->_colObject];
     if (item)
     {
-        item->setLocked( locked );
+        item->setLocked(locked);
         row[_model->_colLocked] = locked;
         item->updateRepr(SP_OBJECT_WRITE_NO_CHILDREN | SP_OBJECT_WRITE_EXT);
     }
@@ -780,11 +780,11 @@ bool ObjectsPanel::_handleButtonEvent(GdkEventButton* event)
     static bool overVisible = false;
 
     //Right mouse button was clicked, launch the pop-up menu
-    if ( (event->type == GDK_BUTTON_PRESS) && (event->button == 3) ) {
+    if ((event->type == GDK_BUTTON_PRESS) && (event->button == 3)) {
         Gtk::TreeModel::Path path;
         int x = static_cast<int>(event->x);
         int y = static_cast<int>(event->y);
-        if ( _tree.get_path_at_pos( x, y, path ) ) {
+        if (_tree.get_path_at_pos(x, y, path)) {
             _checkTreeSelection();
 
 #if GTKMM_CHECK_VERSION(3,22,0)
@@ -803,7 +803,7 @@ bool ObjectsPanel::_handleButtonEvent(GdkEventButton* event)
     //we need to defer selection by setting the select function so that the tree doesn't
     //automatically select anything.  In order to handle multiple item icon clicking,
     //we need to eat the event.  There might be a better way to do both of these...
-    if ( (event->type == GDK_BUTTON_PRESS) && (event->button == 1)) {
+    if ((event->type == GDK_BUTTON_PRESS) && (event->button == 1)) {
         overVisible = false;
         Gtk::TreeModel::Path path;
         Gtk::TreeViewColumn* col = nullptr;
@@ -811,7 +811,7 @@ bool ObjectsPanel::_handleButtonEvent(GdkEventButton* event)
         int y = static_cast<int>(event->y);
         int x2 = 0;
         int y2 = 0;
-        if ( _tree.get_path_at_pos( x, y, path, col, x2, y2 ) ) {
+        if (_tree.get_path_at_pos(x, y, path, col, x2, y2)) {
             if (col == _tree.get_column(COL_VISIBLE-1)) {
                 //Click on visible column, eat this event to keep row selection
                 overVisible = true;
@@ -822,7 +822,7 @@ bool ObjectsPanel::_handleButtonEvent(GdkEventButton* event)
                     col == _tree.get_column(COL_HIGHLIGHT-1)) {
                 //Click on an icon column, eat this event to keep row selection
                 return true;
-            } else if ( !(event->state & (GDK_SHIFT_MASK | GDK_CONTROL_MASK)) & _tree.get_selection()->is_selected(path) ) {
+            } else if (!(event->state & (GDK_SHIFT_MASK | GDK_CONTROL_MASK)) & _tree.get_selection()->is_selected(path)) {
                 //Click on a selected item with no modifiers, defer selection to the mouse-up by
                 //setting the select function to _noSelection
                 _tree.get_selection()->set_select_function(sigc::mem_fun(*this, &ObjectsPanel::_noSelection));
@@ -832,13 +832,13 @@ bool ObjectsPanel::_handleButtonEvent(GdkEventButton* event)
     }
 
     //Restore the selection function to allow tree selection on mouse button release
-    if ( event->type == GDK_BUTTON_RELEASE) {
+    if (event->type == GDK_BUTTON_RELEASE) {
         _tree.get_selection()->set_select_function(sigc::mem_fun(*this, &ObjectsPanel::_rowSelectFunction));
     }
     
     //CellRenderers do not have good support for dealing with multiple items, so
     //we handle all events on them here
-    if ( (event->type == GDK_BUTTON_RELEASE) && (event->button == 1)) {
+    if ((event->type == GDK_BUTTON_RELEASE) && (event->button == 1)) {
 
         Gtk::TreeModel::Path path;
         Gtk::TreeViewColumn* col = nullptr;
@@ -846,7 +846,7 @@ bool ObjectsPanel::_handleButtonEvent(GdkEventButton* event)
         int y = static_cast<int>(event->y);
         int x2 = 0;
         int y2 = 0;
-        if ( _tree.get_path_at_pos( x, y, path, col, x2, y2 ) ) {
+        if (_tree.get_path_at_pos(x, y, path, col, x2, y2)) {
             if (_defer_target) {
                 //We had deferred a selection target, select it here (assuming no drag & drop)
                 if (_defer_target == path && !(event->x == 0 && event->y == 0))
@@ -870,10 +870,10 @@ bool ObjectsPanel::_handleButtonEvent(GdkEventButton* event)
                         Gtk::TreeModel::Row row = *iter;
                         SPItem *item = row[_model->_colObject];
                         if (col == _tree.get_column(COL_VISIBLE - 1)) {
-                            _desktop->toggleLayerSolo( item );
+                            _desktop->toggleLayerSolo(item);
                             DocumentUndo::maybeDone(_desktop->doc(), "layer:solo", SP_VERB_LAYER_SOLO, _("Toggle layer solo"));
                         } else if (col == _tree.get_column(COL_LOCKED - 1)) {
-                            _desktop->toggleLockOtherLayers( item );
+                            _desktop->toggleLockOtherLayers(item);
                             DocumentUndo::maybeDone(_desktop->doc(), "layer:lockothers", SP_VERB_LAYER_LOCK_OTHERS, _("Lock other layers"));
                         }
                     }
@@ -900,7 +900,7 @@ bool ObjectsPanel::_handleButtonEvent(GdkEventButton* event)
                                 item->setHidden(!newValue);
                                 item->updateRepr(SP_OBJECT_WRITE_NO_CHILDREN | SP_OBJECT_WRITE_EXT);
                             }
-                            DocumentUndo::done( _desktop->doc() , SP_VERB_DIALOG_OBJECTS,
+                            DocumentUndo::done(_desktop->doc() , SP_VERB_DIALOG_OBJECTS,
                                             newValue? _("Unhide objects") : _("Hide objects"));
                             overVisible = false;
                         }
@@ -917,10 +917,10 @@ bool ObjectsPanel::_handleButtonEvent(GdkEventButton* event)
                         {
                             //If the current row is not selected, toggle just its sensitivity
                             row[_model->_colLocked] = newValue;
-                            item->setLocked( newValue );
+                            item->setLocked(newValue);
                             item->updateRepr(SP_OBJECT_WRITE_NO_CHILDREN | SP_OBJECT_WRITE_EXT);
                         }
-                        DocumentUndo::done( _desktop->doc() , SP_VERB_DIALOG_OBJECTS,
+                        DocumentUndo::done(_desktop->doc() , SP_VERB_DIALOG_OBJECTS,
                                             newValue? _("Lock objects") : _("Unlock objects"));
 
                     } else if (col == _tree.get_column(COL_TYPE - 1)) {
@@ -932,7 +932,7 @@ bool ObjectsPanel::_handleButtonEvent(GdkEventButton* event)
                             row[_model->_colType] = newValue ? 1: 2;
                             g->setLayerMode(newValue ? SPGroup::GROUP : SPGroup::LAYER);
                             g->updateRepr(SP_OBJECT_WRITE_NO_CHILDREN | SP_OBJECT_WRITE_EXT);
-                            DocumentUndo::done( _desktop->doc() , SP_VERB_DIALOG_OBJECTS,
+                            DocumentUndo::done(_desktop->doc() , SP_VERB_DIALOG_OBJECTS,
                                             newValue? _("Layer to group") : _("Group to layer"));
                         }
                     } /*else if (col == _tree.get_column(COL_INSERTORDER - 1)) {
@@ -944,7 +944,7 @@ bool ObjectsPanel::_handleButtonEvent(GdkEventButton* event)
                             row[_model->_colInsertOrder] = newValue ? 2: 1;
                             g->setInsertBottom(newValue);
                             g->updateRepr(SP_OBJECT_WRITE_NO_CHILDREN | SP_OBJECT_WRITE_EXT);
-                            DocumentUndo::done( _desktop->doc() , SP_VERB_DIALOG_OBJECTS,
+                            DocumentUndo::done(_desktop->doc() , SP_VERB_DIALOG_OBJECTS,
                                             newValue? _("Set insert mode bottom") : _("Set insert mode top"));
                         }
                     }*/ else if (col == _tree.get_column(COL_HIGHLIGHT - 1)) {
@@ -963,7 +963,7 @@ bool ObjectsPanel::_handleButtonEvent(GdkEventButton* event)
                         {
                             //Set up the color selector
                             SPColor color;
-                            color.set( row[_model->_colHighlight] );
+                            color.set(row[_model->_colHighlight]);
                             _selectedColor->setColorAlpha(color, SP_RGBA32_A_F(row[_model->_colHighlight]));
                         }
                         //Show the color selector dialog
@@ -975,13 +975,13 @@ bool ObjectsPanel::_handleButtonEvent(GdkEventButton* event)
     }
 
     //Second mouse button press, set double click status for when the mouse is released
-    if ( (event->type == GDK_2BUTTON_PRESS) && (event->button == 1) ) {
+    if ((event->type == GDK_2BUTTON_PRESS) && (event->button == 1)) {
         doubleclick = 1;
     }
 
     //Double click on mouse button release, if we're over the label column, edit
     //the item name
-    if ( event->type == GDK_BUTTON_RELEASE && doubleclick) {
+    if (event->type == GDK_BUTTON_RELEASE && doubleclick) {
         doubleclick = 0;
         Gtk::TreeModel::Path path;
         Gtk::TreeViewColumn* col = nullptr;
@@ -989,7 +989,7 @@ bool ObjectsPanel::_handleButtonEvent(GdkEventButton* event)
         int y = static_cast<int>(event->y);
         int x2 = 0;
         int y2 = 0;
-        if ( _tree.get_path_at_pos( x, y, path, col, x2, y2 ) && col == _name_column) {
+        if (_tree.get_path_at_pos(x, y, path, col, x2, y2) && col == _name_column) {
             // Double click on the Layer name, enable editing
             _text_renderer->property_editable() = true;
             _tree.set_cursor (path, *_name_column, true);
@@ -1088,7 +1088,7 @@ void ObjectsPanel::_storeDragSource(const Gtk::TreeModel::iterator& iter)
 /*
  * Move a layer in response to a drag & drop action
  */
-void ObjectsPanel::_doTreeMove( )
+void ObjectsPanel::_doTreeMove()
 {
     g_assert(_desktop != nullptr);
     g_assert(_document != nullptr);
@@ -1130,21 +1130,21 @@ void ObjectsPanel::_doTreeMove( )
         }
     }
 
-    DocumentUndo::done( _desktop->doc() , SP_VERB_NONE,
+    DocumentUndo::done(_desktop->doc() , SP_VERB_NONE,
                                             _("Moved objects"));
 }
 
 /**
  * Fires the action verb
  */
-void ObjectsPanel::_fireAction( unsigned int code )
+void ObjectsPanel::_fireAction(unsigned int code)
 {
-    if ( _desktop ) {
-        Verb *verb = Verb::get( code );
-        if ( verb ) {
+    if (_desktop) {
+        Verb *verb = Verb::get(code);
+        if (verb) {
             SPAction *action = verb->get_action(_desktop);
-            if ( action ) {
-                sp_action_perform( action, nullptr );
+            if (action) {
+                sp_action_perform(action, nullptr);
             }
         }
     }
@@ -1153,12 +1153,12 @@ void ObjectsPanel::_fireAction( unsigned int code )
 /**
  * Executes the given button action during the idle time
  */
-void ObjectsPanel::_takeAction( int val )
+void ObjectsPanel::_takeAction(int val)
 {
-    if ( !_pending ) {
+    if (!_pending) {
         _pending = new InternalUIBounce();
         _pending->_actionCode = val;
-        Glib::signal_timeout().connect( sigc::mem_fun(*this, &ObjectsPanel::_executeAction), 0 );
+        Glib::signal_timeout().connect(sigc::mem_fun(*this, &ObjectsPanel::_executeAction), 0);
     }
 }
 
@@ -1168,31 +1168,31 @@ void ObjectsPanel::_takeAction( int val )
 bool ObjectsPanel::_executeAction()
 {
     // Make sure selected layer hasn't changed since the action was triggered
-    if ( _document && _pending) 
+    if (_document && _pending) 
     {
         int val = _pending->_actionCode;
 //        SPObject* target = _pending->_target;
 
-        switch ( val ) {
+        switch (val) {
             case BUTTON_NEW:
             {
-                _fireAction( SP_VERB_LAYER_NEW );
+                _fireAction(SP_VERB_LAYER_NEW);
             }
             break;
             case BUTTON_RENAME:
             {
-                _fireAction( SP_VERB_LAYER_RENAME );
+                _fireAction(SP_VERB_LAYER_RENAME);
             }
             break;
             case BUTTON_TOP:
             {
                 if (_desktop->selection->isEmpty())
                 {
-                    _fireAction( SP_VERB_LAYER_TO_TOP );
+                    _fireAction(SP_VERB_LAYER_TO_TOP);
                 }
                 else
                 {
-                    _fireAction( SP_VERB_SELECTION_TO_FRONT);
+                    _fireAction(SP_VERB_SELECTION_TO_FRONT);
                 }
             }
             break;
@@ -1200,11 +1200,11 @@ bool ObjectsPanel::_executeAction()
             {
                 if (_desktop->selection->isEmpty())
                 {
-                    _fireAction( SP_VERB_LAYER_TO_BOTTOM );
+                    _fireAction(SP_VERB_LAYER_TO_BOTTOM);
                 }
                 else
                 {
-                    _fireAction( SP_VERB_SELECTION_TO_BACK);
+                    _fireAction(SP_VERB_SELECTION_TO_BACK);
                 }
             }
             break;
@@ -1212,11 +1212,11 @@ bool ObjectsPanel::_executeAction()
             {
                 if (_desktop->selection->isEmpty())
                 {
-                    _fireAction( SP_VERB_LAYER_RAISE );
+                    _fireAction(SP_VERB_LAYER_RAISE);
                 }
                 else
                 {
-                    _fireAction( SP_VERB_SELECTION_STACK_UP );
+                    _fireAction(SP_VERB_SELECTION_STACK_UP);
                 }
             }
             break;
@@ -1224,11 +1224,11 @@ bool ObjectsPanel::_executeAction()
             {
                 if (_desktop->selection->isEmpty())
                 {
-                    _fireAction( SP_VERB_LAYER_LOWER );
+                    _fireAction(SP_VERB_LAYER_LOWER);
                 }
                 else
                 {
-                    _fireAction( SP_VERB_SELECTION_STACK_DOWN );
+                    _fireAction(SP_VERB_SELECTION_STACK_DOWN);
                 }
             }
             break;
@@ -1236,11 +1236,11 @@ bool ObjectsPanel::_executeAction()
             {
                 if (_desktop->selection->isEmpty())
                 {
-                    _fireAction( SP_VERB_LAYER_DUPLICATE );
+                    _fireAction(SP_VERB_LAYER_DUPLICATE);
                 }
                 else
                 {
-                    _fireAction( SP_VERB_EDIT_DUPLICATE );
+                    _fireAction(SP_VERB_EDIT_DUPLICATE);
                 }
             }
             break;
@@ -1248,76 +1248,76 @@ bool ObjectsPanel::_executeAction()
             {
                 if (_desktop->selection->isEmpty())
                 {
-                    _fireAction( SP_VERB_LAYER_DELETE );
+                    _fireAction(SP_VERB_LAYER_DELETE);
                 }
                 else
                 {
-                    _fireAction( SP_VERB_EDIT_DELETE );
+                    _fireAction(SP_VERB_EDIT_DELETE);
                 }
             }
             break;
             case BUTTON_SOLO:
             {
-                _fireAction( SP_VERB_LAYER_SOLO );
+                _fireAction(SP_VERB_LAYER_SOLO);
             }
             break;
             case BUTTON_SHOW_ALL:
             {
-                _fireAction( SP_VERB_LAYER_SHOW_ALL );
+                _fireAction(SP_VERB_LAYER_SHOW_ALL);
             }
             break;
             case BUTTON_HIDE_ALL:
             {
-                _fireAction( SP_VERB_LAYER_HIDE_ALL );
+                _fireAction(SP_VERB_LAYER_HIDE_ALL);
             }
             break;
             case BUTTON_LOCK_OTHERS:
             {
-                _fireAction( SP_VERB_LAYER_LOCK_OTHERS );
+                _fireAction(SP_VERB_LAYER_LOCK_OTHERS);
             }
             break;
             case BUTTON_LOCK_ALL:
             {
-                _fireAction( SP_VERB_LAYER_LOCK_ALL );
+                _fireAction(SP_VERB_LAYER_LOCK_ALL);
             }
             break;
             case BUTTON_UNLOCK_ALL:
             {
-                _fireAction( SP_VERB_LAYER_UNLOCK_ALL );
+                _fireAction(SP_VERB_LAYER_UNLOCK_ALL);
             }
             break;
             case BUTTON_CLIPGROUP:
             {
-               _fireAction ( SP_VERB_OBJECT_CREATE_CLIP_GROUP );
+               _fireAction (SP_VERB_OBJECT_CREATE_CLIP_GROUP);
             }
             case BUTTON_SETCLIP:
             {
-                _fireAction( SP_VERB_OBJECT_SET_CLIPPATH );
+                _fireAction(SP_VERB_OBJECT_SET_CLIPPATH);
             }
             break;
             case BUTTON_UNSETCLIP:
             {
-                _fireAction( SP_VERB_OBJECT_UNSET_CLIPPATH );
+                _fireAction(SP_VERB_OBJECT_UNSET_CLIPPATH);
             }
             break;
             case BUTTON_SETMASK:
             {
-                _fireAction( SP_VERB_OBJECT_SET_MASK );
+                _fireAction(SP_VERB_OBJECT_SET_MASK);
             }
             break;
             case BUTTON_UNSETMASK:
             {
-                _fireAction( SP_VERB_OBJECT_UNSET_MASK );
+                _fireAction(SP_VERB_OBJECT_UNSET_MASK);
             }
             break;
             case BUTTON_GROUP:
             {
-                _fireAction( SP_VERB_SELECTION_GROUP );
+                _fireAction(SP_VERB_SELECTION_GROUP);
             }
             break;
             case BUTTON_UNGROUP:
             {
-                _fireAction( SP_VERB_SELECTION_UNGROUP );
+                _fireAction(SP_VERB_SELECTION_UNGROUP);
             }
             break;
             case BUTTON_COLLAPSE_ALL:
@@ -1332,7 +1332,7 @@ bool ObjectsPanel::_executeAction()
             break;
             case DRAGNDROP:
             {
-                _doTreeMove( );
+                _doTreeMove();
             }
             break;
         }
@@ -1373,13 +1373,13 @@ void ObjectsPanel::_handleEdited(const Glib::ustring& path, const Glib::ustring&
  */
 void ObjectsPanel::_renameObject(Gtk::TreeModel::Row row, const Glib::ustring& name)
 {
-    if ( row && _desktop) {
+    if (row && _desktop) {
         SPItem* item = row[_model->_colObject];
-        if ( item ) {
+        if (item) {
             gchar const* oldLabel = item->label();
-            if ( !name.empty() && (!oldLabel || name != oldLabel) ) {
+            if (!name.empty() && (!oldLabel || name != oldLabel)) {
                 item->setLabel(name.c_str());
-                DocumentUndo::done( _desktop->doc() , SP_VERB_NONE,
+                DocumentUndo::done(_desktop->doc() , SP_VERB_NONE,
                                                     _("Rename object"));
             }
         }
@@ -1390,7 +1390,7 @@ void ObjectsPanel::_renameObject(Gtk::TreeModel::Row row, const Glib::ustring& n
  * A row selection function used by the tree that doesn't allow any new items to be selected.
  * Currently, this is used to allow multi-item drag & drop.
  */
-bool ObjectsPanel::_noSelection( Glib::RefPtr<Gtk::TreeModel> const & /*model*/, Gtk::TreeModel::Path const & /*path*/, bool /*currentlySelected*/ )
+bool ObjectsPanel::_noSelection(Glib::RefPtr<Gtk::TreeModel> const & /*model*/, Gtk::TreeModel::Path const & /*path*/, bool /*currentlySelected*/)
 {
     return false;
 }
@@ -1398,23 +1398,23 @@ bool ObjectsPanel::_noSelection( Glib::RefPtr<Gtk::TreeModel> const & /*model*/,
 /**
  * Default row selection function taken from the layers dialog
  */
-bool ObjectsPanel::_rowSelectFunction( Glib::RefPtr<Gtk::TreeModel> const & /*model*/, Gtk::TreeModel::Path const & /*path*/, bool currentlySelected )
+bool ObjectsPanel::_rowSelectFunction(Glib::RefPtr<Gtk::TreeModel> const & /*model*/, Gtk::TreeModel::Path const & /*path*/, bool currentlySelected)
 {
     bool val = true;
-    if ( !currentlySelected && _toggleEvent )
+    if (!currentlySelected && _toggleEvent)
     {
         GdkEvent* event = gtk_get_current_event();
-        if ( event ) {
+        if (event) {
             // (keep these checks separate, so we know when to call gdk_event_free()
-            if ( event->type == GDK_BUTTON_PRESS ) {
+            if (event->type == GDK_BUTTON_PRESS) {
                 GdkEventButton const* target = reinterpret_cast<GdkEventButton const*>(_toggleEvent);
                 GdkEventButton const* evtb = reinterpret_cast<GdkEventButton const*>(event);
 
-                if ( (evtb->window == target->window)
+                if ((evtb->window == target->window)
                      && (evtb->send_event == target->send_event)
                      && (evtb->time == target->time)
                      && (evtb->state == target->state)
-                    )
+)
                 {
                     // Ooooh! It's a magic one
                     val = false;
@@ -1478,7 +1478,7 @@ void ObjectsPanel::_highlightPickerColorMod()
     float alpha = 0;
     _selectedColor->colorAlpha(color, alpha);
 
-    guint32 rgba = color.toRGBA32( alpha );
+    guint32 rgba = color.toRGBA32(alpha);
 
     //Set the highlight color for all items in the _highlight_target (all selected items)
     for (auto target : _highlight_target)
@@ -1667,130 +1667,130 @@ ObjectsPanel::ObjectsPanel() :
     _clipmaskHeader(C_("Clip and mask", "CM")),
     _highlightHeader(C_("Highlight", "HL")),
     _nameHeader(_("Label")),
-    _filter_modifier( UI::Widget::SimpleFilterModifier::BLEND   |
+    _filter_modifier(UI::Widget::SimpleFilterModifier::BLEND   |
                       UI::Widget::SimpleFilterModifier::BLUR    |
-                      UI::Widget::SimpleFilterModifier::OPACITY ),
+                      UI::Widget::SimpleFilterModifier::OPACITY),
     _colorSelectorDialog("dialogs.colorpickerwindow")
 {
     //Create the tree model and store
     ModelColumns *zoop = new ModelColumns();
     _model = zoop;
 
-    _store = Gtk::TreeStore::create( *zoop );
+    _store = Gtk::TreeStore::create(*zoop);
 
     //Set up the tree
-    _tree.set_model( _store );
+    _tree.set_model(_store);
     _tree.set_headers_visible(true);
     _tree.set_reorderable(true);
     _tree.enable_model_drag_dest (Gdk::ACTION_MOVE);
 
     //Create the column CellRenderers
     //Visible
-    Inkscape::UI::Widget::ImageToggler *eyeRenderer = Gtk::manage( new Inkscape::UI::Widget::ImageToggler(
-        INKSCAPE_ICON("object-visible"), INKSCAPE_ICON("object-hidden")) );
+    Inkscape::UI::Widget::ImageToggler *eyeRenderer = Gtk::manage(new Inkscape::UI::Widget::ImageToggler(
+        INKSCAPE_ICON("object-visible"), INKSCAPE_ICON("object-hidden")));
     int visibleColNum = _tree.append_column("vis", *eyeRenderer) - 1;
     eyeRenderer->property_activatable() = true;
     Gtk::TreeViewColumn* col = _tree.get_column(visibleColNum);
-    if ( col ) {
-        col->add_attribute( eyeRenderer->property_active(), _model->_colVisible );
+    if (col) {
+        col->add_attribute(eyeRenderer->property_active(), _model->_colVisible);
         // In order to get tooltips on header, we must create our own label.
         _visibleHeader.set_tooltip_text(_("Toggle visibility of Layer, Group, or Object."));
         _visibleHeader.show();
-        col->set_widget( _visibleHeader );
+        col->set_widget(_visibleHeader);
     }
 
     //Locked
-    Inkscape::UI::Widget::ImageToggler * renderer = Gtk::manage( new Inkscape::UI::Widget::ImageToggler(
-        INKSCAPE_ICON("object-locked"), INKSCAPE_ICON("object-unlocked")) );
+    Inkscape::UI::Widget::ImageToggler * renderer = Gtk::manage(new Inkscape::UI::Widget::ImageToggler(
+        INKSCAPE_ICON("object-locked"), INKSCAPE_ICON("object-unlocked")));
     int lockedColNum = _tree.append_column("lock", *renderer) - 1;
     renderer->property_activatable() = true;
     col = _tree.get_column(lockedColNum);
-    if ( col ) {
-        col->add_attribute( renderer->property_active(), _model->_colLocked );
+    if (col) {
+        col->add_attribute(renderer->property_active(), _model->_colLocked);
         _lockHeader.set_tooltip_text(_("Toggle lock of Layer, Group, or Object."));
         _lockHeader.show();
-        col->set_widget( _lockHeader );
+        col->set_widget(_lockHeader);
     }
     
     //Type
-    Inkscape::UI::Widget::LayerTypeIcon * typeRenderer = Gtk::manage( new Inkscape::UI::Widget::LayerTypeIcon());
+    Inkscape::UI::Widget::LayerTypeIcon * typeRenderer = Gtk::manage(new Inkscape::UI::Widget::LayerTypeIcon());
     int typeColNum = _tree.append_column("type", *typeRenderer) - 1;
     typeRenderer->property_activatable() = true;
     col = _tree.get_column(typeColNum);
-    if ( col ) {
-        col->add_attribute( typeRenderer->property_active(), _model->_colType );
+    if (col) {
+        col->add_attribute(typeRenderer->property_active(), _model->_colType);
         _typeHeader.set_tooltip_text(_("Type: Layer, Group, or Object. Clicking on Layer or Group icon, toggles between the two types."));
         _typeHeader.show();
-        col->set_widget( _typeHeader );
+        col->set_widget(_typeHeader);
     }
 
     //Insert order (LiamW: unused)
-    /*Inkscape::UI::Widget::InsertOrderIcon * insertRenderer = Gtk::manage( new Inkscape::UI::Widget::InsertOrderIcon());
+    /*Inkscape::UI::Widget::InsertOrderIcon * insertRenderer = Gtk::manage(new Inkscape::UI::Widget::InsertOrderIcon());
     int insertColNum = _tree.append_column("type", *insertRenderer) - 1;
     col = _tree.get_column(insertColNum);
-    if ( col ) {
-        col->add_attribute( insertRenderer->property_active(), _model->_colInsertOrder );
+    if (col) {
+        col->add_attribute(insertRenderer->property_active(), _model->_colInsertOrder);
     }*/
     
     //Clip/mask
-    Inkscape::UI::Widget::ClipMaskIcon * clipRenderer = Gtk::manage( new Inkscape::UI::Widget::ClipMaskIcon());
+    Inkscape::UI::Widget::ClipMaskIcon * clipRenderer = Gtk::manage(new Inkscape::UI::Widget::ClipMaskIcon());
     int clipColNum = _tree.append_column("clipmask", *clipRenderer) - 1;
     col = _tree.get_column(clipColNum);
-    if ( col ) {
-        col->add_attribute( clipRenderer->property_active(), _model->_colClipMask );
+    if (col) {
+        col->add_attribute(clipRenderer->property_active(), _model->_colClipMask);
         _clipmaskHeader.set_tooltip_text(_("Is object clipped and/or masked?"));
         _clipmaskHeader.show();
-        col->set_widget( _clipmaskHeader );
+        col->set_widget(_clipmaskHeader);
     }
     
     //Highlight
-    Inkscape::UI::Widget::HighlightPicker * highlightRenderer = Gtk::manage( new Inkscape::UI::Widget::HighlightPicker());
+    Inkscape::UI::Widget::HighlightPicker * highlightRenderer = Gtk::manage(new Inkscape::UI::Widget::HighlightPicker());
     int highlightColNum = _tree.append_column("highlight", *highlightRenderer) - 1;
     col = _tree.get_column(highlightColNum);
-    if ( col ) {
-        col->add_attribute( highlightRenderer->property_active(), _model->_colHighlight );
+    if (col) {
+        col->add_attribute(highlightRenderer->property_active(), _model->_colHighlight);
         _highlightHeader.set_tooltip_text(_("Highlight color of outline in Node tool. Click to set. If alpha is zero, use inherited color."));
         _highlightHeader.show();
-        col->set_widget( _highlightHeader );
+        col->set_widget(_highlightHeader);
     }
 
     //Label
     _text_renderer = Gtk::manage(new Gtk::CellRendererText());
     int nameColNum = _tree.append_column("Name", *_text_renderer) - 1;
     _name_column = _tree.get_column(nameColNum);
-    if( _name_column ) {
+    if(_name_column) {
         _name_column->add_attribute(_text_renderer->property_text(), _model->_colLabel);
         _nameHeader.set_tooltip_text(_("Layer/Group/Object label (inkscape:label). Double-click to set. Default value is object 'id'."));
         _nameHeader.show();
-        _name_column->set_widget( _nameHeader );
+        _name_column->set_widget(_nameHeader);
     }
 
     //Set the expander and search columns
-    _tree.set_expander_column( *_tree.get_column(nameColNum) );
+    _tree.set_expander_column(*_tree.get_column(nameColNum));
     _tree.set_search_column(_model->_colLabel);
     // use ctrl+f to start search
     _tree.set_enable_search(false);
 
     //Set up the tree selection
     _tree.get_selection()->set_mode(Gtk::SELECTION_MULTIPLE);
-    _selectedConnection = _tree.get_selection()->signal_changed().connect( sigc::mem_fun(*this, &ObjectsPanel::_pushTreeSelectionToCurrent) );
-    _tree.get_selection()->set_select_function( sigc::mem_fun(*this, &ObjectsPanel::_rowSelectFunction) );
+    _selectedConnection = _tree.get_selection()->signal_changed().connect(sigc::mem_fun(*this, &ObjectsPanel::_pushTreeSelectionToCurrent));
+    _tree.get_selection()->set_select_function(sigc::mem_fun(*this, &ObjectsPanel::_rowSelectFunction));
 
     //Set up tree signals
-    _tree.signal_button_press_event().connect( sigc::mem_fun(*this, &ObjectsPanel::_handleButtonEvent), false );
-    _tree.signal_button_release_event().connect( sigc::mem_fun(*this, &ObjectsPanel::_handleButtonEvent), false );
-    _tree.signal_key_press_event().connect( sigc::mem_fun(*this, &ObjectsPanel::_handleKeyEvent), false );
-    _tree.signal_drag_drop().connect( sigc::mem_fun(*this, &ObjectsPanel::_handleDragDrop), false);
-    _tree.signal_row_collapsed().connect( sigc::bind<bool>(sigc::mem_fun(*this, &ObjectsPanel::_setExpanded), false));
-    _tree.signal_row_expanded().connect( sigc::bind<bool>(sigc::mem_fun(*this, &ObjectsPanel::_setExpanded), true));
+    _tree.signal_button_press_event().connect(sigc::mem_fun(*this, &ObjectsPanel::_handleButtonEvent), false);
+    _tree.signal_button_release_event().connect(sigc::mem_fun(*this, &ObjectsPanel::_handleButtonEvent), false);
+    _tree.signal_key_press_event().connect(sigc::mem_fun(*this, &ObjectsPanel::_handleKeyEvent), false);
+    _tree.signal_drag_drop().connect(sigc::mem_fun(*this, &ObjectsPanel::_handleDragDrop), false);
+    _tree.signal_row_collapsed().connect(sigc::bind<bool>(sigc::mem_fun(*this, &ObjectsPanel::_setExpanded), false));
+    _tree.signal_row_expanded().connect(sigc::bind<bool>(sigc::mem_fun(*this, &ObjectsPanel::_setExpanded), true));
 
     //Set up the label editing signals
-    _text_renderer->signal_edited().connect( sigc::mem_fun(*this, &ObjectsPanel::_handleEdited) );
-    _text_renderer->signal_editing_canceled().connect( sigc::mem_fun(*this, &ObjectsPanel::_handleEditingCancelled) );
+    _text_renderer->signal_edited().connect(sigc::mem_fun(*this, &ObjectsPanel::_handleEdited));
+    _text_renderer->signal_editing_canceled().connect(sigc::mem_fun(*this, &ObjectsPanel::_handleEditingCancelled));
 
     //Set up the scroller window and pack the page
-    _scroller.add( _tree );
-    _scroller.set_policy( Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC );
+    _scroller.add(_tree);
+    _scroller.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
     _scroller.set_shadow_type(Gtk::SHADOW_IN);
     Gtk::Requisition sreq;
     Gtk::Requisition sreq_natural;
@@ -1801,12 +1801,12 @@ ObjectsPanel::ObjectsPanel() :
         _scroller.set_size_request(sreq.width, minHeight);
     }
 
-    _page.pack_start( _scroller, Gtk::PACK_EXPAND_WIDGET );
+    _page.pack_start(_scroller, Gtk::PACK_EXPAND_WIDGET);
 
     //Set up the compositing items
     _blendConnection   = _filter_modifier.signal_blend_changed().connect(sigc::mem_fun(*this, &ObjectsPanel::_blendValueChanged));
     _blurConnection    = _filter_modifier.signal_blur_changed().connect(sigc::mem_fun(*this, &ObjectsPanel::_blurValueChanged));
-    _opacityConnection = _filter_modifier.signal_opacity_changed().connect(   sigc::mem_fun(*this, &ObjectsPanel::_opacityValueChanged));
+    _opacityConnection = _filter_modifier.signal_opacity_changed().connect(sigc::mem_fun(*this, &ObjectsPanel::_opacityValueChanged));
 
     //Pack the compositing functions and the button row
     _page.pack_end(_filter_modifier, Gtk::PACK_SHRINK);
@@ -1821,58 +1821,58 @@ ObjectsPanel::ObjectsPanel() :
 
 
     //Add object/layer
-    Gtk::Button* btn = Gtk::manage( new Gtk::Button() );
+    Gtk::Button* btn = Gtk::manage(new Gtk::Button());
     _styleButton(*btn, INKSCAPE_ICON("list-add"), _("Add layer..."));
     btn->set_relief(Gtk::RELIEF_NONE);
-    btn->signal_clicked().connect( sigc::bind( sigc::mem_fun(*this, &ObjectsPanel::_takeAction), (int)BUTTON_NEW) );
+    btn->signal_clicked().connect(sigc::bind(sigc::mem_fun(*this, &ObjectsPanel::_takeAction), (int)BUTTON_NEW));
     _buttonsSecondary.pack_start(*btn, Gtk::PACK_SHRINK);
 
     //Remove object
-    btn = Gtk::manage( new Gtk::Button() );
+    btn = Gtk::manage(new Gtk::Button());
     _styleButton(*btn, INKSCAPE_ICON("list-remove"), _("Remove object"));
     btn->set_relief(Gtk::RELIEF_NONE);
-    btn->signal_clicked().connect( sigc::bind( sigc::mem_fun(*this, &ObjectsPanel::_takeAction), (int)BUTTON_DELETE) );
-    _watching.push_back( btn );
+    btn->signal_clicked().connect(sigc::bind(sigc::mem_fun(*this, &ObjectsPanel::_takeAction), (int)BUTTON_DELETE));
+    _watching.push_back(btn);
     _buttonsSecondary.pack_start(*btn, Gtk::PACK_SHRINK);
 
     //Move to bottom
-    btn = Gtk::manage( new Gtk::Button() );
+    btn = Gtk::manage(new Gtk::Button());
     _styleButton(*btn, INKSCAPE_ICON("go-bottom"), _("Move To Bottom"));
     btn->set_relief(Gtk::RELIEF_NONE);
-    btn->signal_clicked().connect( sigc::bind( sigc::mem_fun(*this, &ObjectsPanel::_takeAction), (int)BUTTON_BOTTOM) );
-    _watchingNonBottom.push_back( btn );
+    btn->signal_clicked().connect(sigc::bind(sigc::mem_fun(*this, &ObjectsPanel::_takeAction), (int)BUTTON_BOTTOM));
+    _watchingNonBottom.push_back(btn);
     _buttonsPrimary.pack_end(*btn, Gtk::PACK_SHRINK);
     
     //Move down    
-    btn = Gtk::manage( new Gtk::Button() );
+    btn = Gtk::manage(new Gtk::Button());
     _styleButton(*btn, INKSCAPE_ICON("go-down"), _("Move Down"));
     btn->set_relief(Gtk::RELIEF_NONE);
-    btn->signal_clicked().connect( sigc::bind( sigc::mem_fun(*this, &ObjectsPanel::_takeAction), (int)BUTTON_DOWN) );
-    _watchingNonBottom.push_back( btn );
+    btn->signal_clicked().connect(sigc::bind(sigc::mem_fun(*this, &ObjectsPanel::_takeAction), (int)BUTTON_DOWN));
+    _watchingNonBottom.push_back(btn);
     _buttonsPrimary.pack_end(*btn, Gtk::PACK_SHRINK);
     
     //Move up
-    btn = Gtk::manage( new Gtk::Button() );
+    btn = Gtk::manage(new Gtk::Button());
     _styleButton(*btn, INKSCAPE_ICON("go-up"), _("Move Up"));
     btn->set_relief(Gtk::RELIEF_NONE);
-    btn->signal_clicked().connect( sigc::bind( sigc::mem_fun(*this, &ObjectsPanel::_takeAction), (int)BUTTON_UP) );
-    _watchingNonTop.push_back( btn );
+    btn->signal_clicked().connect(sigc::bind(sigc::mem_fun(*this, &ObjectsPanel::_takeAction), (int)BUTTON_UP));
+    _watchingNonTop.push_back(btn);
     _buttonsPrimary.pack_end(*btn, Gtk::PACK_SHRINK);
     
     //Move to top
-    btn = Gtk::manage( new Gtk::Button() );
+    btn = Gtk::manage(new Gtk::Button());
     _styleButton(*btn, INKSCAPE_ICON("go-top"), _("Move To Top"));
     btn->set_relief(Gtk::RELIEF_NONE);
-    btn->signal_clicked().connect( sigc::bind( sigc::mem_fun(*this, &ObjectsPanel::_takeAction), (int)BUTTON_TOP) );
-    _watchingNonTop.push_back( btn );
+    btn->signal_clicked().connect(sigc::bind(sigc::mem_fun(*this, &ObjectsPanel::_takeAction), (int)BUTTON_TOP));
+    _watchingNonTop.push_back(btn);
     _buttonsPrimary.pack_end(*btn, Gtk::PACK_SHRINK);
     
     //Collapse all
-    btn = Gtk::manage( new Gtk::Button() );
+    btn = Gtk::manage(new Gtk::Button());
     _styleButton(*btn, INKSCAPE_ICON("format-indent-less"), _("Collapse All"));
     btn->set_relief(Gtk::RELIEF_NONE);
-    btn->signal_clicked().connect( sigc::bind( sigc::mem_fun(*this, &ObjectsPanel::_takeAction), (int)BUTTON_COLLAPSE_ALL) );
-    _watchingNonBottom.push_back( btn );
+    btn->signal_clicked().connect(sigc::bind(sigc::mem_fun(*this, &ObjectsPanel::_takeAction), (int)BUTTON_COLLAPSE_ALL));
+    _watchingNonBottom.push_back(btn);
     _buttonsPrimary.pack_end(*btn, Gtk::PACK_SHRINK);
     
     _buttonsRow.pack_start(_buttonsSecondary, Gtk::PACK_EXPAND_WIDGET);
@@ -1883,21 +1883,21 @@ ObjectsPanel::ObjectsPanel() :
     //Set up the pop-up menu
     // -------------------------------------------------------
     {
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_RENAME, nullptr, _("Rename"), (int)BUTTON_RENAME ) );
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_EDIT_DUPLICATE, nullptr, _("Duplicate"), (int)BUTTON_DUPLICATE ) );
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_NEW, nullptr, _("New"), (int)BUTTON_NEW ) );
+        _watching.push_back(&_addPopupItem(targetDesktop, SP_VERB_LAYER_RENAME, nullptr, _("Rename"), (int)BUTTON_RENAME));
+        _watching.push_back(&_addPopupItem(targetDesktop, SP_VERB_EDIT_DUPLICATE, nullptr, _("Duplicate"), (int)BUTTON_DUPLICATE));
+        _watching.push_back(&_addPopupItem(targetDesktop, SP_VERB_LAYER_NEW, nullptr, _("New"), (int)BUTTON_NEW));
 
         _popupMenu.append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
 
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_SOLO, nullptr, _("Solo"), (int)BUTTON_SOLO ) );
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_SHOW_ALL, nullptr, _("Show All"), (int)BUTTON_SHOW_ALL ) );
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_HIDE_ALL, nullptr, _("Hide All"), (int)BUTTON_HIDE_ALL ) );
+        _watching.push_back(&_addPopupItem(targetDesktop, SP_VERB_LAYER_SOLO, nullptr, _("Solo"), (int)BUTTON_SOLO));
+        _watching.push_back(&_addPopupItem(targetDesktop, SP_VERB_LAYER_SHOW_ALL, nullptr, _("Show All"), (int)BUTTON_SHOW_ALL));
+        _watching.push_back(&_addPopupItem(targetDesktop, SP_VERB_LAYER_HIDE_ALL, nullptr, _("Hide All"), (int)BUTTON_HIDE_ALL));
 
         _popupMenu.append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
 
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_LOCK_OTHERS, nullptr, _("Lock Others"), (int)BUTTON_LOCK_OTHERS ) );
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_LOCK_ALL, nullptr, _("Lock All"), (int)BUTTON_LOCK_ALL ) );
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_UNLOCK_ALL, nullptr, _("Unlock All"), (int)BUTTON_UNLOCK_ALL ) );
+        _watching.push_back(&_addPopupItem(targetDesktop, SP_VERB_LAYER_LOCK_OTHERS, nullptr, _("Lock Others"), (int)BUTTON_LOCK_OTHERS));
+        _watching.push_back(&_addPopupItem(targetDesktop, SP_VERB_LAYER_LOCK_ALL, nullptr, _("Lock All"), (int)BUTTON_LOCK_ALL));
+        _watching.push_back(&_addPopupItem(targetDesktop, SP_VERB_LAYER_UNLOCK_ALL, nullptr, _("Unlock All"), (int)BUTTON_UNLOCK_ALL));
 
         _popupMenu.append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
 
@@ -1908,23 +1908,23 @@ ObjectsPanel::ObjectsPanel() :
 
         _popupMenu.append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
         
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_SELECTION_GROUP, nullptr, _("Group"), (int)BUTTON_GROUP ) );
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_SELECTION_UNGROUP, nullptr, _("Ungroup"), (int)BUTTON_UNGROUP ) );
+        _watching.push_back(&_addPopupItem(targetDesktop, SP_VERB_SELECTION_GROUP, nullptr, _("Group"), (int)BUTTON_GROUP));
+        _watching.push_back(&_addPopupItem(targetDesktop, SP_VERB_SELECTION_UNGROUP, nullptr, _("Ungroup"), (int)BUTTON_UNGROUP));
         
         _popupMenu.append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
         
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_OBJECT_SET_CLIPPATH, nullptr, _("Set Clip"), (int)BUTTON_SETCLIP ) );
+        _watching.push_back(&_addPopupItem(targetDesktop, SP_VERB_OBJECT_SET_CLIPPATH, nullptr, _("Set Clip"), (int)BUTTON_SETCLIP));
         
-	_watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_OBJECT_CREATE_CLIP_GROUP, nullptr, _("Create Clip Group"), (int)BUTTON_CLIPGROUP ) );
+	_watching.push_back(&_addPopupItem(targetDesktop, SP_VERB_OBJECT_CREATE_CLIP_GROUP, nullptr, _("Create Clip Group"), (int)BUTTON_CLIPGROUP));
 
         //will never be implemented
-        //_watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_OBJECT_SET_INVERSE_CLIPPATH, 0, "Set Inverse Clip", (int)BUTTON_SETINVCLIP ) );
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_OBJECT_UNSET_CLIPPATH, nullptr, _("Unset Clip"), (int)BUTTON_UNSETCLIP ) );
+        //_watching.push_back(&_addPopupItem(targetDesktop, SP_VERB_OBJECT_SET_INVERSE_CLIPPATH, 0, "Set Inverse Clip", (int)BUTTON_SETINVCLIP));
+        _watching.push_back(&_addPopupItem(targetDesktop, SP_VERB_OBJECT_UNSET_CLIPPATH, nullptr, _("Unset Clip"), (int)BUTTON_UNSETCLIP));
 
         _popupMenu.append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
         
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_OBJECT_SET_MASK, nullptr, _("Set Mask"), (int)BUTTON_SETMASK ) );
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_OBJECT_UNSET_MASK, nullptr, _("Unset Mask"), (int)BUTTON_UNSETMASK ) );
+        _watching.push_back(&_addPopupItem(targetDesktop, SP_VERB_OBJECT_SET_MASK, nullptr, _("Set Mask"), (int)BUTTON_SETMASK));
+        _watching.push_back(&_addPopupItem(targetDesktop, SP_VERB_OBJECT_UNSET_MASK, nullptr, _("Unset Mask"), (int)BUTTON_UNSETMASK));
         
         _popupMenu.show_all_children();
     }
@@ -1932,13 +1932,13 @@ ObjectsPanel::ObjectsPanel() :
 
     //Set initial sensitivity of buttons
     for (auto & it : _watching) {
-        it->set_sensitive( false );
+        it->set_sensitive(false);
     }
     for (auto & it : _watchingNonTop) {
-        it->set_sensitive( false );
+        it->set_sensitive(false);
     }
     for (auto & it : _watchingNonBottom) {
-        it->set_sensitive( false );
+        it->set_sensitive(false);
     }
 
     //Set up the color selection dialog
@@ -1960,12 +1960,12 @@ ObjectsPanel::ObjectsPanel() :
 
     color_selector->show();
     
-    setDesktop( targetDesktop );
+    setDesktop(targetDesktop);
 
     show_all_children();
 
     //Connect the desktop changed connection
-    desktopChangeConn = _deskTrack.connectDesktopChanged( sigc::mem_fun(*this, &ObjectsPanel::setDesktop) );
+    desktopChangeConn = _deskTrack.connectDesktopChanged(sigc::mem_fun(*this, &ObjectsPanel::setDesktop));
     _deskTrack.connect(GTK_WIDGET(gobj()));
 }
 
@@ -1980,7 +1980,7 @@ ObjectsPanel::~ObjectsPanel()
     //Set the desktop to null, which will disconnect all object watchers
     setDesktop(nullptr);
 
-    if ( _model )
+    if (_model)
     {
         delete _model;
         _model = nullptr;
@@ -1991,9 +1991,9 @@ ObjectsPanel::~ObjectsPanel()
         _pending = nullptr;
     }
 
-    if ( _toggleEvent )
+    if (_toggleEvent)
     {
-        gdk_event_free( _toggleEvent );
+        gdk_event_free(_toggleEvent);
         _toggleEvent = nullptr;
     }
 
@@ -2037,26 +2037,26 @@ void ObjectsPanel::setDocument(SPDesktop* /*desktop*/, SPDocument* document)
 /**
  * Set the current panel desktop
  */
-void ObjectsPanel::setDesktop( SPDesktop* desktop )
+void ObjectsPanel::setDesktop(SPDesktop* desktop)
 {
     Panel::setDesktop(desktop);
 
-    if ( desktop != _desktop ) {
+    if (desktop != _desktop) {
         _documentChangedConnection.disconnect();
         _documentChangedCurrentLayer.disconnect();
         _selectionChangedConnection.disconnect();
-        if ( _desktop ) {
+        if (_desktop) {
             _desktop = nullptr;
         }
 
         _desktop = Panel::getDesktop();
-        if ( _desktop ) {
+        if (_desktop) {
             //Connect desktop signals
-            _documentChangedConnection = _desktop->connectDocumentReplaced( sigc::mem_fun(*this, &ObjectsPanel::setDocument));
+            _documentChangedConnection = _desktop->connectDocumentReplaced(sigc::mem_fun(*this, &ObjectsPanel::setDocument));
 
-            _documentChangedCurrentLayer = _desktop->connectCurrentLayerChanged( sigc::mem_fun(*this, &ObjectsPanel::_objectsChanged));
+            _documentChangedCurrentLayer = _desktop->connectCurrentLayerChanged(sigc::mem_fun(*this, &ObjectsPanel::_objectsChanged));
 
-            _selectionChangedConnection = _desktop->selection->connectChanged( sigc::mem_fun(*this, &ObjectsPanel::_objectsSelected));
+            _selectionChangedConnection = _desktop->selection->connectChanged(sigc::mem_fun(*this, &ObjectsPanel::_objectsSelected));
             
             setDocument(_desktop, _desktop->doc());
         } else {
@@ -2085,7 +2085,7 @@ void SPItem::setHighlightColor(guint32 const color)
     }
     
     NodeTool *tool = nullptr;
-    if (SP_ACTIVE_DESKTOP ) {
+    if (SP_ACTIVE_DESKTOP) {
         Inkscape::UI::Tools::ToolBase *ec = SP_ACTIVE_DESKTOP->event_context;
         if (INK_IS_NODE_TOOL(ec)) {
             tool = static_cast<NodeTool*>(ec);
@@ -2099,7 +2099,7 @@ void SPItem::unsetHighlightColor()
     g_free(_highlightColor);
     _highlightColor = nullptr;
     NodeTool *tool = nullptr;
-    if (SP_ACTIVE_DESKTOP ) {
+    if (SP_ACTIVE_DESKTOP) {
         Inkscape::UI::Tools::ToolBase *ec = SP_ACTIVE_DESKTOP->event_context;
         if (INK_IS_NODE_TOOL(ec)) {
             tool = static_cast<NodeTool*>(ec);

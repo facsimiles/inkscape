@@ -136,9 +136,9 @@ private:
 class PdfInput: public Inkscape::Extension::Implementation::Implementation {
     PdfInput () = default;;
 public:
-    SPDocument *open( Inkscape::Extension::Input *mod,
-                                const gchar *uri ) override;
-    static void         init( );
+    SPDocument *open(Inkscape::Extension::Input *mod,
+                                const gchar *uri) override;
+    static void         init();
     bool wasCancelled() override;
 private:
     bool _cancelled;

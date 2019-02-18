@@ -28,18 +28,18 @@ public:
     static UXManager* getInstance();
     virtual ~UXManager();
 
-    virtual void addTrack( SPDesktopWidget* dtw ) = 0;
-    virtual void delTrack( SPDesktopWidget* dtw ) = 0;
+    virtual void addTrack(SPDesktopWidget* dtw) = 0;
+    virtual void delTrack(SPDesktopWidget* dtw) = 0;
 
-    virtual void connectToDesktop( std::vector<GtkWidget *> const & toolboxes, SPDesktop *desktop ) = 0;
+    virtual void connectToDesktop(std::vector<GtkWidget *> const & toolboxes, SPDesktop *desktop) = 0;
 
-    virtual gint getDefaultTask( SPDesktop *desktop ) = 0;
-    virtual void setTask( SPDesktop* dt, gint val ) = 0;
+    virtual gint getDefaultTask(SPDesktop *desktop) = 0;
+    virtual void setTask(SPDesktop* dt, gint val) = 0;
 
     virtual bool isWidescreen() const = 0;
 
-    UXManager( UXManager const & ) = delete;
-    UXManager & operator=( UXManager const & ) = delete;
+    UXManager(UXManager const &) = delete;
+    UXManager & operator=(UXManager const &) = delete;
 
 protected:
     UXManager();

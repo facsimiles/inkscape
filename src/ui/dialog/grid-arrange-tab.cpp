@@ -3,7 +3,7 @@
  * A simple dialog for creating grid type arrangements of selected objects
  *
  * Authors:
- *   Bob Jamison ( based off trace dialog)
+ *   Bob Jamison (based off trace dialog)
  *   John Cliff
  *   Other dudes from The Inkscape Organization
  *   Abhishek Sharma
@@ -48,7 +48,7 @@
         Geom::OptRect a = first->documentVisualBounds();
         Geom::OptRect b = second->documentVisualBounds();
 
-        if ( !a || !b ) {
+        if (!a || !b) {
             // FIXME?
             return false;
         }
@@ -81,7 +81,7 @@
         Geom::OptRect a = first->documentVisualBounds();
         Geom::OptRect b = second->documentVisualBounds();
 
-        if ( !a || !b ) {
+        if (!a || !b) {
             // FIXME?
             return false;
         }
@@ -258,7 +258,7 @@
 
     Geom::OptRect sel_bbox = selection->visualBounds();
     // Fit to bbox, calculate padding between rows accordingly.
-    if ( sel_bbox && !SpaceManualRadioButton.get_active() ){
+    if (sel_bbox && !SpaceManualRadioButton.get_active()){
 #ifdef DEBUG_GRID_ARRANGE
 g_print("\n row = %f     col = %f selection x= %f selection y = %f", total_row_height,total_col_width, b.extent(Geom::X), b.extent(Geom::Y));
 #endif
@@ -358,7 +358,7 @@ void GridArrangeTab::on_row_spinbutton_changed()
     SPDesktop *desktop = Parent->getDesktop();
 
     Inkscape::Selection *selection = desktop ? desktop->selection : nullptr;
-    g_return_if_fail( selection );
+    g_return_if_fail(selection);
 
     int selcount = (int) boost::distance(selection->items());
 
@@ -426,7 +426,7 @@ void GridArrangeTab::on_RowSize_checkbutton_changed()
     } else {
         prefs->setDouble("/dialogs/gridtiler/AutoRowSize", -20);
     }
-    RowHeightBox.set_sensitive ( !RowHeightButton.get_active());
+    RowHeightBox.set_sensitive (!RowHeightButton.get_active());
 }
 
 /**
@@ -440,7 +440,7 @@ void GridArrangeTab::on_ColSize_checkbutton_changed()
     } else {
         prefs->setDouble("/dialogs/gridtiler/AutoColSize", -20);
     }
-    ColumnWidthBox.set_sensitive ( !ColumnWidthButton.get_active());
+    ColumnWidthBox.set_sensitive (!ColumnWidthButton.get_active());
 }
 
 /**
@@ -491,8 +491,8 @@ void GridArrangeTab::Spacing_button_changed()
         prefs->setDouble("/dialogs/gridtiler/SpacingType", -20);
     }
 
-    XPadding.set_sensitive ( SpaceManualRadioButton.get_active());
-    YPadding.set_sensitive ( SpaceManualRadioButton.get_active());
+    XPadding.set_sensitive (SpaceManualRadioButton.get_active());
+    YPadding.set_sensitive (SpaceManualRadioButton.get_active());
 }
 
 /**
@@ -589,7 +589,7 @@ GridArrangeTab::GridArrangeTab(ArrangeDialog *parent)
     SPDesktop *desktop = Parent->getDesktop();
 
     Inkscape::Selection *selection = desktop ? desktop->selection : nullptr;
-    g_return_if_fail( selection );
+    g_return_if_fail(selection);
     int selcount = 1;
     if (!selection->isEmpty()) {
         selcount = (int) boost::distance(selection->items());

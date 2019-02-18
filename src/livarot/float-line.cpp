@@ -43,22 +43,22 @@ void FloatLigne::Reset()
  */
 int FloatLigne::AddBord(float spos, float sval, float epos, float eval, int guess)
 {
-//  if ( showCopy ) printf("b= %f %f -> %f %f \n",spos,sval,epos,eval);
-    if ( spos >= epos ) {
+//  if (showCopy) printf("b= %f %f -> %f %f \n",spos,sval,epos,eval);
+    if (spos >= epos) {
         return -1;
     }
 
     float pente = (eval - sval) / (epos - spos);
     
 #ifdef faster_flatten
-    if ( std::abs(epos - spos) < 0.001 || std::abs(pente) > 1000 ) {
+    if (std::abs(epos - spos) < 0.001 || std::abs(pente) > 1000) {
         return -1;
         epos = spos;
         pente = 0;
     }
 #endif
   
-    if ( guess >= int(bords.size()) ) {
+    if (guess >= int(bords.size())) {
         guess = -1;
     }
     
@@ -100,20 +100,20 @@ int FloatLigne::AddBord(float spos, float sval, float epos, float eval, int gues
  */
 int FloatLigne::AddBord(float spos, float sval, float epos, float eval, float pente, int guess)
 {
-//  if ( showCopy ) printf("b= %f %f -> %f %f \n",spos,sval,epos,eval);
-    if ( spos >= epos ) {
+//  if (showCopy) printf("b= %f %f -> %f %f \n",spos,sval,epos,eval);
+    if (spos >= epos) {
         return -1;
     }
 
 #ifdef faster_flatten
-    if ( std::abs(epos - spos) < 0.001 || std::abs(pente) > 1000 ) {
+    if (std::abs(epos - spos) < 0.001 || std::abs(pente) > 1000) {
         return -1;
         epos = spos;
         pente = 0;
     }
 #endif
     
-    if ( guess >= int(bords.size()) ) {
+    if (guess >= int(bords.size())) {
         guess=-1;
     }
 
@@ -138,13 +138,13 @@ int FloatLigne::AddBord(float spos, float sval, float epos, float eval, float pe
 
     InsertBord(n - 1, spos, guess);
     InsertBord(n, epos, n - 1);
-/*	if ( bords[n-1].s_next < 0 ) {
+/*	if (bords[n-1].s_next < 0) {
 		bords[n].s_next=-1;
 		s_last=n;
 
 		bords[n].s_prev=n-1;
 		bords[n-1].s_next=n;
-	} else if ( bords[bords[n-1].s_next].pos >= epos ) {
+	} else if (bords[bords[n-1].s_next].pos >= epos) {
 		bords[n].s_next=bords[n-1].s_next;
 		bords[bords[n].s_next].s_prev=n;
 		
@@ -152,8 +152,8 @@ int FloatLigne::AddBord(float spos, float sval, float epos, float eval, float pe
 		bords[n-1].s_next=n;
 	} else {
 		int c=bords[bords[n-1].s_next].s_next;
-		while ( c >= 0 && bords[c].pos < epos ) c=bords[c].s_next;
-		if ( c < 0 ) {
+		while (c >= 0 && bords[c].pos < epos) c=bords[c].s_next;
+		if (c < 0) {
 			bords[n].s_prev=s_last;
 			bords[s_last].s_next=n;
 			s_last=n;
@@ -177,21 +177,21 @@ int FloatLigne::AddBord(float spos, float sval, float epos, float eval, float pe
  */
 int FloatLigne::AddBordR(float spos, float sval, float epos, float eval, float pente, int guess)
 {
-//  if ( showCopy ) printf("br= %f %f -> %f %f \n",spos,sval,epos,eval);
+//  if (showCopy) printf("br= %f %f -> %f %f \n",spos,sval,epos,eval);
 //	return AddBord(spos,sval,epos,eval,pente,guess);
-    if ( spos >= epos ){
+    if (spos >= epos){
         return -1;
     }
     
 #ifdef faster_flatten
-    if ( std::abs(epos - spos) < 0.001 || std::abs(pente) > 1000 ) {
+    if (std::abs(epos - spos) < 0.001 || std::abs(pente) > 1000) {
         return -1;
         epos = spos;
         pente = 0;
     }
 #endif
 
-    if ( guess >= int(bords.size()) ) {
+    if (guess >= int(bords.size())) {
         guess=-1;
     }
 
@@ -217,13 +217,13 @@ int FloatLigne::AddBordR(float spos, float sval, float epos, float eval, float p
     InsertBord(n, epos, guess);
     InsertBord(n - 1, spos, n);
     
-/*	if ( bords[n].s_prev < 0 ) {
+/*	if (bords[n].s_prev < 0) {
 		bords[n-1].s_prev=-1;
 		s_first=n-1;
 
 		bords[n-1].s_next=n;
 		bords[n].s_prev=n-1;
-	} else if ( bords[bords[n].s_prev].pos <= spos ) {
+	} else if (bords[bords[n].s_prev].pos <= spos) {
 		bords[n-1].s_prev=bords[n].s_prev;
 		bords[bords[n-1].s_prev].s_next=n-1;
 
@@ -231,8 +231,8 @@ int FloatLigne::AddBordR(float spos, float sval, float epos, float eval, float p
 		bords[n].s_prev=n-1;
 	} else {
 		int c=bords[bords[n].s_prev].s_prev;
-		while ( c >= 0 && bords[c].pos > spos ) c=bords[c].s_prev;
-		if ( c < 0 ) {
+		while (c >= 0 && bords[c].pos > spos) c=bords[c].s_prev;
+		if (c < 0) {
 			bords[n-1].s_next=s_first;
 			bords[s_first].s_prev=n-1;
 			s_first=n-1;
@@ -255,14 +255,14 @@ int FloatLigne::AddBordR(float spos, float sval, float epos, float eval, float p
  */
 int FloatLigne::AppendBord(float spos, float sval, float epos, float eval, float pente)
 {
-//  if ( showCopy ) printf("b= %f %f -> %f %f \n",spos,sval,epos,eval);
+//  if (showCopy) printf("b= %f %f -> %f %f \n",spos,sval,epos,eval);
 //	return AddBord(spos,sval,epos,eval,pente,s_last);
-    if ( spos >= epos ) {
+    if (spos >= epos) {
         return -1;
     }
     
 #ifdef faster_flatten
-    if ( std::abs(epos - spos) < 0.001 || std::abs(pente) > 1000 ) {
+    if (std::abs(epos - spos) < 0.001 || std::abs(pente) > 1000) {
         return -1;
         epos = spos;
         pente = 0;
@@ -280,11 +280,11 @@ int FloatLigne::AppendBord(float spos, float sval, float epos, float eval, float
     b.s_next = n + 1;
     bords.push_back(b);
  
-    if ( s_last >=  0 ) {
+    if (s_last >=  0) {
         bords[s_last].s_next = n;
     }
     
-    if ( s_first < 0 ) {
+    if (s_first < 0) {
         s_first = n;
     }
 
@@ -309,30 +309,30 @@ int FloatLigne::AppendBord(float spos, float sval, float epos, float eval, float
 void FloatLigne::InsertBord(int no, float /*p*/, int guess)
 {
 // TODO check if ignoring p is bad
-    if ( no < 0 || no >= int(bords.size()) ) {
+    if (no < 0 || no >= int(bords.size())) {
         return;
     }
     
-    if ( s_first < 0 ) {
+    if (s_first < 0) {
         s_first = s_last = no;
         bords[no].s_prev = -1;
         bords[no].s_next = -1;
         return;
     }
     
-    if ( guess < 0 || guess >= int(bords.size()) ) {
+    if (guess < 0 || guess >= int(bords.size())) {
         int c = s_first;
-        while ( c >= 0 && c < int(bords.size()) && CmpBord(bords[c], bords[no]) < 0 ) {
+        while (c >= 0 && c < int(bords.size()) && CmpBord(bords[c], bords[no]) < 0) {
             c = bords[c].s_next;
         }
         
-        if ( c < 0 || c >= int(bords.size()) ) {
+        if (c < 0 || c >= int(bords.size())) {
             bords[no].s_prev = s_last;
             bords[s_last].s_next = no;
             s_last = no;
         } else {
             bords[no].s_prev = bords[c].s_prev;
-            if ( bords[no].s_prev >= 0 ) {
+            if (bords[no].s_prev >= 0) {
                 bords[bords[no].s_prev].s_next = no;
             } else {
                 s_first = no;
@@ -344,10 +344,10 @@ void FloatLigne::InsertBord(int no, float /*p*/, int guess)
         int c = guess;
         int stTst = CmpBord(bords[c], bords[no]);
 
-        if ( stTst == 0 ) {
+        if (stTst == 0) {
 
             bords[no].s_prev = bords[c].s_prev;
-            if ( bords[no].s_prev >= 0 ) {
+            if (bords[no].s_prev >= 0) {
                 bords[bords[no].s_prev].s_next = no;
             } else {
                 s_first = no;
@@ -355,19 +355,19 @@ void FloatLigne::InsertBord(int no, float /*p*/, int guess)
             bords[no].s_next = c;
             bords[c].s_prev = no;
             
-        } else if ( stTst > 0 ) {
+        } else if (stTst > 0) {
             
-            while ( c >= 0 && c < int(bords.size()) && CmpBord(bords[c], bords[no]) > 0 ) {
+            while (c >= 0 && c < int(bords.size()) && CmpBord(bords[c], bords[no]) > 0) {
                 c = bords[c].s_prev;
             }
             
-            if ( c < 0 || c >= int(bords.size()) ) {
+            if (c < 0 || c >= int(bords.size())) {
                 bords[no].s_next = s_first;
                 bords[s_first].s_prev =no; // s_first != -1
                 s_first = no; 
             } else {
                 bords[no].s_next = bords[c].s_next;
-                if ( bords[no].s_next >= 0 ) {
+                if (bords[no].s_next >= 0) {
                     bords[bords[no].s_next].s_prev = no;
                 } else {
                     s_last = no;
@@ -378,17 +378,17 @@ void FloatLigne::InsertBord(int no, float /*p*/, int guess)
             
         } else {
 
-            while ( c >= 0 && c < int(bords.size()) && CmpBord(bords[c],bords[no]) < 0 ) {
+            while (c >= 0 && c < int(bords.size()) && CmpBord(bords[c],bords[no]) < 0) {
                 c = bords[c].s_next;
             }
             
-            if ( c < 0 || c >= int(bords.size()) ) {
+            if (c < 0 || c >= int(bords.size())) {
                 bords[no].s_prev = s_last;
                 bords[s_last].s_next = no;
                 s_last = no;
             } else {
                 bords[no].s_prev = bords[c].s_prev;
-                if ( bords[no].s_prev >= 0 ) {
+                if (bords[no].s_prev >= 0) {
                     bords[bords[no].s_prev].s_next = no;
                 } else {
                     s_first = no;
@@ -408,7 +408,7 @@ float FloatLigne::RemainingValAt(float at, int pending)
 {
     float sum = 0;
 /*	int     no=firstAc;
-	while ( no >= 0 && no < bords.size() ) {
+	while (no >= 0 && no < bords.size()) {
 		int   nn=bords[no].other;
 		sum+=bords[nn].val+(at-bords[nn].pos)*bords[nn].pente;
 //				sum+=((at-bords[nn].pos)*bords[no].val+(bords[no].pos-at)*bords[nn].val)/(bords[no].pos-bords[nn].pos);
@@ -440,7 +440,7 @@ float FloatLigne::RemainingValAt(float at, int pending)
  */
 void FloatLigne::Flatten()
 {
-    if ( int(bords.size()) <= 1 ) {
+    if (int(bords.size()) <= 1) {
         Reset();
         return;
     }
@@ -474,16 +474,16 @@ void FloatLigne::Flatten()
         // idem for leftP and rightP
     
         // start by scanning all boundaries that end a portion at this position
-        while ( i >= 0 && i < int(bords.size()) && bords[i].pos == cur && bords[i].start == false ) {
+        while (i >= 0 && i < int(bords.size()) && bords[i].pos == cur && bords[i].start == false) {
             leftV += bords[i].val;
             leftP += bords[i].pente;
             
 #ifndef faster_flatten
             // we need to remove the boundary that started this coverage portion for the pending list
-            if ( bords[i].other >= 0 && bords[i].other < int(bords.size()) ) {
+            if (bords[i].other >= 0 && bords[i].other < int(bords.size())) {
                 // so we use the pend_inv "array"
                 int const k = bords[bords[i].other].pend_inv;
-                if ( k >= 0 && k < pending ) {
+                if (k >= 0 && k < pending) {
                     // and update the pend_ind array and its inverse pend_inv
                     bords[k].pend_ind = bords[pending - 1].pend_ind;
                     bords[bords[k].pend_ind].pend_inv = k;
@@ -499,7 +499,7 @@ void FloatLigne::Flatten()
         }
         
         // then scan all boundaries that start a portion at this position
-        while ( i >= 0 && i < int(bords.size()) && bords[i].pos == cur && bords[i].start ) {
+        while (i >= 0 && i < int(bords.size()) && bords[i].pos == cur && bords[i].start) {
             rightV += bords[i].val;
             rightP += bords[i].pente;
 #ifndef faster_flatten
@@ -514,7 +514,7 @@ void FloatLigne::Flatten()
         // coverage value at end of the run will be "start coverage"+"delta per unit length"*"length"
         totStart = totStart + totPente * (cur - totX);
     
-        if ( startExists ) {
+        if (startExists) {
             // add that run
             AddRun(lastStart, cur, lastVal, totStart, totPente);
         }
@@ -524,7 +524,7 @@ void FloatLigne::Flatten()
         totStart += rightV - leftV;
         // update position
         totX = cur;
-        if ( pending > 0 ) {
+        if (pending > 0) {
             startExists = true;
             
 #ifndef faster_flatten
@@ -570,7 +570,7 @@ int FloatLigne::AddRun(float st, float en, float vst, float ven)
 
 int FloatLigne::AddRun(float st, float en, float vst, float ven, float pente)
 {
-    if ( st >= en ) {
+    if (st >= en) {
         return -1;
     }
 
@@ -588,7 +588,7 @@ int FloatLigne::AddRun(float st, float en, float vst, float ven, float pente)
 
 void FloatLigne::Copy(FloatLigne *a)
 {
-    if ( a->runs.empty() ) {
+    if (a->runs.empty()) {
         Reset();
         return;
     }
@@ -599,7 +599,7 @@ void FloatLigne::Copy(FloatLigne *a)
 
 void FloatLigne::Copy(IntLigne *a)
 {
-    if ( a->nbRun ) {
+    if (a->nbRun) {
         Reset();
         return;
     }
@@ -619,7 +619,7 @@ void FloatLigne::Copy(IntLigne *a)
 void FloatLigne::Min(FloatLigne *a, float tresh, bool addIt)
 {
     Reset();
-    if ( a->runs.empty() ) {
+    if (a->runs.empty()) {
         return;
     }
 
@@ -628,13 +628,13 @@ void FloatLigne::Min(FloatLigne *a, float tresh, bool addIt)
     float lastEnd = 0;
     
     for (auto runA : a->runs) {
-        if ( runA.vst <= tresh ) {
-            if ( runA.ven <= tresh ) {
-                if ( startExists ) {
-                    if ( lastEnd >= runA.st - 0.00001 ) {
+        if (runA.vst <= tresh) {
+            if (runA.ven <= tresh) {
+                if (startExists) {
+                    if (lastEnd >= runA.st - 0.00001) {
                         lastEnd = runA.en;
                     } else {
-                        if ( addIt ) {
+                        if (addIt) {
                             AddRun(lastStart, lastEnd, tresh, tresh);
                         }
                         lastStart = runA.st;
@@ -647,23 +647,23 @@ void FloatLigne::Min(FloatLigne *a, float tresh, bool addIt)
                 startExists = true;
             } else {
                 float cutPos = (runA.st * (tresh - runA.ven) + runA.en * (runA.vst - tresh)) / (runA.vst - runA.ven);
-                if ( startExists ) {
-                    if ( lastEnd >= runA.st - 0.00001 ) {
-                        if ( addIt ) {
+                if (startExists) {
+                    if (lastEnd >= runA.st - 0.00001) {
+                        if (addIt) {
                             AddRun(lastStart, cutPos, tresh, tresh);
                         }
                         AddRun(cutPos,runA.en, tresh, runA.ven);
                     } else {
-                        if ( addIt ) {
+                        if (addIt) {
                             AddRun(lastStart, lastEnd, tresh, tresh);
                         }
-                        if ( addIt ) {
+                        if (addIt) {
                             AddRun(runA.st, cutPos, tresh, tresh);
                         }
                         AddRun(cutPos, runA.en, tresh, runA.ven);
                     }
                 } else {
-                    if ( addIt ) {
+                    if (addIt) {
                         AddRun(runA.st, cutPos, tresh, tresh);
                     }
                     AddRun(cutPos, runA.en, tresh, runA.ven);
@@ -673,10 +673,10 @@ void FloatLigne::Min(FloatLigne *a, float tresh, bool addIt)
             
         } else {
             
-            if ( runA.ven <= tresh ) {
+            if (runA.ven <= tresh) {
                 float cutPos = (runA.st * (runA.ven - tresh) + runA.en * (tresh - runA.vst)) / (runA.ven - runA.vst);
-                if ( startExists ) {
-                    if ( addIt ) {
+                if (startExists) {
+                    if (addIt) {
                         AddRun(lastStart, lastEnd, tresh, tresh);
                     }
                 }
@@ -685,8 +685,8 @@ void FloatLigne::Min(FloatLigne *a, float tresh, bool addIt)
                 lastStart = cutPos;
                 lastEnd = runA.en;
             } else {
-                if ( startExists ) {
-                    if ( addIt ) {
+                if (startExists) {
+                    if (addIt) {
                         AddRun(lastStart, lastEnd, tresh, tresh);
                     }
                 }
@@ -696,8 +696,8 @@ void FloatLigne::Min(FloatLigne *a, float tresh, bool addIt)
         }
     }
     
-    if ( startExists ) {
-        if ( addIt ) {
+    if (startExists) {
+        if (addIt) {
             AddRun(lastStart, lastEnd, tresh, tresh);
         }
     }
@@ -712,28 +712,28 @@ void FloatLigne::Min(FloatLigne *a, float tresh, bool addIt)
 void FloatLigne::Split(FloatLigne *a, float tresh, FloatLigne *over)
 {
     Reset();
-    if ( a->runs.empty() ) {
+    if (a->runs.empty()) {
         return;
     }
 
     for (auto runA : a->runs) {
-        if ( runA.vst >= tresh ) {
-            if ( runA.ven >= tresh ) {
-                if ( over ) {
+        if (runA.vst >= tresh) {
+            if (runA.ven >= tresh) {
+                if (over) {
                     over->AddRun(runA.st, runA.en, runA.vst, runA.ven);
                 }
             } else {
                 float cutPos = (runA.st * (tresh - runA.ven) + runA.en * (runA.vst - tresh)) / (runA.vst - runA.ven);
-                if ( over ) {
+                if (over) {
                     over->AddRun(runA.st, cutPos, runA.vst, tresh);
                 }
                 AddRun(cutPos, runA.en, tresh, runA.ven);
             }
         } else {
-            if ( runA.ven >= tresh ) {
+            if (runA.ven >= tresh) {
                 float cutPos = (runA.st * (runA.ven - tresh) + runA.en * (tresh-runA.vst)) / (runA.ven - runA.vst);
                 AddRun(runA.st, cutPos, runA.vst, tresh);
-                if ( over ) {
+                if (over) {
                     over->AddRun(cutPos, runA.en, tresh, runA.ven);
                 }
             } else {
@@ -752,7 +752,7 @@ void FloatLigne::Split(FloatLigne *a, float tresh, FloatLigne *over)
 void FloatLigne::Max(FloatLigne *a, float tresh, bool addIt)
 {
     Reset();
-    if ( a->runs.empty() <= 0 ) {
+    if (a->runs.empty() <= 0) {
         return;
     }
 
@@ -760,13 +760,13 @@ void FloatLigne::Max(FloatLigne *a, float tresh, bool addIt)
     float lastStart = 0;
     float lastEnd = 0;
     for (auto runA : a->runs) {
-        if ( runA.vst >= tresh ) {
-            if ( runA.ven >= tresh ) {
-                if ( startExists ) {
-                    if ( lastEnd >= runA.st-0.00001 ) {
+        if (runA.vst >= tresh) {
+            if (runA.ven >= tresh) {
+                if (startExists) {
+                    if (lastEnd >= runA.st-0.00001) {
                         lastEnd = runA.en;
                     } else {
-                        if ( addIt ) {
+                        if (addIt) {
                             AddRun(lastStart,lastEnd,tresh,tresh);
                         }
                         lastStart = runA.st;
@@ -779,23 +779,23 @@ void FloatLigne::Max(FloatLigne *a, float tresh, bool addIt)
                 startExists = true;
             } else {
                 float cutPos = (runA.st * (tresh - runA.ven) + runA.en * (runA.vst - tresh)) / (runA.vst - runA.ven);
-                if ( startExists ) {
-                    if ( lastEnd >= runA.st-0.00001 ) {
-                        if ( addIt ) {
+                if (startExists) {
+                    if (lastEnd >= runA.st-0.00001) {
+                        if (addIt) {
                             AddRun(lastStart, cutPos, tresh, tresh);
                         }
                         AddRun(cutPos, runA.en, tresh, runA.ven);
                     } else {
-                        if ( addIt ) {
+                        if (addIt) {
                             AddRun(lastStart, lastEnd, tresh, tresh);
                         }
-                        if ( addIt ) {
+                        if (addIt) {
                             AddRun(runA.st, cutPos, tresh, tresh);
                         }
                         AddRun(cutPos, runA.en, tresh, runA.ven);
                     }
                 } else {
-                    if ( addIt ) {
+                    if (addIt) {
                         AddRun(runA.st, cutPos, tresh, tresh);
                     }
                     AddRun(cutPos, runA.en, tresh, runA.ven);
@@ -805,10 +805,10 @@ void FloatLigne::Max(FloatLigne *a, float tresh, bool addIt)
             
         } else {
             
-            if ( runA.ven >= tresh ) {
+            if (runA.ven >= tresh) {
                 float cutPos = (runA.st * (runA.ven - tresh) + runA.en * (tresh - runA.vst)) / (runA.ven - runA.vst);
-                if ( startExists ) {
-                    if ( addIt ) {
+                if (startExists) {
+                    if (addIt) {
                         AddRun(lastStart,lastEnd,tresh,tresh);
                     }
                 }
@@ -817,8 +817,8 @@ void FloatLigne::Max(FloatLigne *a, float tresh, bool addIt)
                 lastStart = cutPos;
                 lastEnd = runA.en;
             } else {
-                if ( startExists ) {
-                    if ( addIt ) {
+                if (startExists) {
+                    if (addIt) {
                         AddRun(lastStart,lastEnd,tresh,tresh);
                     }
                 }
@@ -828,8 +828,8 @@ void FloatLigne::Max(FloatLigne *a, float tresh, bool addIt)
         }
     }
     
-    if ( startExists ) {
-        if ( addIt ) {
+    if (startExists) {
+        if (addIt) {
             AddRun(lastStart, lastEnd, tresh, tresh);
         }
     }
@@ -839,7 +839,7 @@ void FloatLigne::Max(FloatLigne *a, float tresh, bool addIt)
 void FloatLigne::Over(FloatLigne *a, float tresh)
 {
     Reset();
-    if ( a->runs.empty() ) {
+    if (a->runs.empty()) {
         return;
     }
 
@@ -848,10 +848,10 @@ void FloatLigne::Over(FloatLigne *a, float tresh)
     float lastEnd = 0;
     
     for (auto runA : a->runs) {
-        if ( runA.vst >= tresh ) {
-            if ( runA.ven >= tresh ) {
-                if ( startExists ) {
-                    if ( lastEnd >= runA.st - 0.00001 ) {
+        if (runA.vst >= tresh) {
+            if (runA.ven >= tresh) {
+                if (startExists) {
+                    if (lastEnd >= runA.st - 0.00001) {
                         lastEnd = runA.en;
                     } else {
                         AddRun(lastStart, lastEnd, tresh, tresh);
@@ -867,8 +867,8 @@ void FloatLigne::Over(FloatLigne *a, float tresh)
             } else {
                 
                 float cutPos = (runA.st * (tresh - runA.ven) + runA.en * (runA.vst - tresh)) / (runA.vst - runA.ven);
-                if ( startExists ) {
-                    if ( lastEnd >= runA.st - 0.00001 ) {
+                if (startExists) {
+                    if (lastEnd >= runA.st - 0.00001) {
                         AddRun(lastStart, cutPos, tresh, tresh);
                     } else {
                         AddRun(lastStart, lastEnd, tresh, tresh);
@@ -881,16 +881,16 @@ void FloatLigne::Over(FloatLigne *a, float tresh)
             }
             
         } else {
-            if ( runA.ven >= tresh ) {
+            if (runA.ven >= tresh) {
                 float cutPos = (runA.st * (runA.ven - tresh) + runA.en * (tresh - runA.vst)) / (runA.ven - runA.vst);
-                if ( startExists ) {
+                if (startExists) {
                     AddRun(lastStart, lastEnd, tresh, tresh);
                 }
                 startExists = true;
                 lastStart = cutPos;
                 lastEnd = runA.en;
             } else {
-                if ( startExists ) {
+                if (startExists) {
                     AddRun(lastStart, lastEnd, tresh, tresh);
                 }
                 startExists = false;
@@ -898,7 +898,7 @@ void FloatLigne::Over(FloatLigne *a, float tresh)
         }
     }
     
-    if ( startExists ) {
+    if (startExists) {
         AddRun(lastStart, lastEnd, tresh, tresh);
     }
 }

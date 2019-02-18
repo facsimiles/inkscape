@@ -54,11 +54,11 @@ bool LPEObjectReference::_acceptObject(SPObject * const obj) const
 void
 LPEObjectReference::link(const char *to)
 {
-    if ( to && !to[0] ) {
+    if (to && !to[0]) {
         quit_listening();
         unlink();
     } else {
-        if ( !lpeobject_href || ( strcmp(to, lpeobject_href) != 0 ) ) {
+        if (!lpeobject_href || (strcmp(to, lpeobject_href) != 0)) {
             if (lpeobject_href) {
                 g_free(lpeobject_href);
             }
@@ -89,7 +89,7 @@ LPEObjectReference::unlink()
 void
 LPEObjectReference::start_listening(LivePathEffectObject* to)
 {
-    if ( to == nullptr ) {
+    if (to == nullptr) {
         return;
     }
     lpeobject = to;
@@ -111,8 +111,8 @@ static void
 lpeobjectreference_href_changed(SPObject */*old_ref*/, SPObject */*ref*/, LPEObjectReference *lpeobjref)
 {
     lpeobjref->quit_listening();
-    LivePathEffectObject *refobj = LIVEPATHEFFECT( lpeobjref->getObject() );
-    if ( refobj ) {
+    LivePathEffectObject *refobj = LIVEPATHEFFECT(lpeobjref->getObject());
+    if (refobj) {
         lpeobjref->start_listening(refobj);
     }
     if (lpeobjref->owner) {

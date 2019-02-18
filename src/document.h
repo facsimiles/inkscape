@@ -168,7 +168,7 @@ public:
 
     /** To be used for resolving relative hrefs. */
     char const *getBase() const { return base; };
-    void setBase( char const* base );
+    void setBase(char const* base);
 
     /** basename(uri) or other human-readable label for the document. */
     char const* getName() const { return name; }
@@ -256,7 +256,7 @@ public:
 
     void fitToRect(Geom::Rect const &rect, bool with_margins = false);
     static SPDocument *createNewDoc(char const*uri, unsigned int keepalive,
-            bool make_new = false, SPDocument *parent=nullptr );
+            bool make_new = false, SPDocument *parent=nullptr);
     static SPDocument *createNewDocFromMem(char const*buffer, int length, unsigned int keepalive);
            SPDocument *createChildDoc(std::string const &uri);
 
@@ -273,8 +273,8 @@ public:
     SPDocument *doRef();
     SPDocument *doUnref();
     Inkscape::Util::Unit const* getDisplayUnit() const;
-    void setDocumentScale( const double scaleX, const double scaleY );
-    void setDocumentScale( const double scale );
+    void setDocumentScale(const double scaleX, const double scaleY);
+    void setDocumentScale(const double scale);
     Geom::Scale getDocumentScale() const;
     Inkscape::Util::Quantity getWidth() const;
     Inkscape::Util::Quantity getHeight() const;
@@ -364,7 +364,7 @@ public:
  * 2. Removing referenced object is simply prohibited -
  * needs analyse, how we can deal with situations, where
  * we simply want to ungroup etc. - probably we need
- * Repr::reparent method :( [Or was it ;)]
+ * Repr::reparent method :([Or was it ;)]
  *
  */
 

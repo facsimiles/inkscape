@@ -161,7 +161,7 @@ static int ppWritePPM(PackedPixelMap *me, char *fileName)
             unsigned long rgb = me->getPixel(me, x, y);
             unsigned char r = (unsigned char) ((rgb>>16) & 0xff);
             unsigned char g = (unsigned char) ((rgb>> 8) & 0xff);
-            unsigned char b = (unsigned char) ((rgb    ) & 0xff);
+            unsigned char b = (unsigned char) ((rgb) & 0xff);
             fputc(r, f);
             fputc(g, f);
             fputc(b, f);

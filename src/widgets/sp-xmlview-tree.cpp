@@ -121,7 +121,7 @@ void sp_xmlview_tree_class_init(SPXMLViewTreeClass * klass)
     widget_class->destroy = sp_xmlview_tree_destroy;
     
     // Signal for when a tree drag and drop has completed
-    g_signal_new (  "tree_move",
+    g_signal_new ("tree_move",
         G_TYPE_FROM_CLASS(klass),
         G_SIGNAL_RUN_FIRST,
         0,
@@ -178,13 +178,13 @@ add_node (SPXMLViewTree * tree, GtkTreeIter *parent, GtkTreeIter *before, Inksca
 
 	gtk_tree_store_set (tree->store, &iter, STORE_TEXT_COL, default_text, STORE_DATA_COL, data, STORE_REPR_COL, repr, -1);
 
-	if ( repr->type() == Inkscape::XML::TEXT_NODE ) {
+	if (repr->type() == Inkscape::XML::TEXT_NODE) {
 		vec = &text_repr_events;
-	} else if ( repr->type() == Inkscape::XML::COMMENT_NODE ) {
+	} else if (repr->type() == Inkscape::XML::COMMENT_NODE) {
 		vec = &comment_repr_events;
-	} else if ( repr->type() == Inkscape::XML::PI_NODE ) {
+	} else if (repr->type() == Inkscape::XML::PI_NODE) {
 		vec = &pi_repr_events;
-	} else if ( repr->type() == Inkscape::XML::ELEMENT_NODE ) {
+	} else if (repr->type() == Inkscape::XML::ELEMENT_NODE) {
 		vec = &element_repr_events;
 	} else {
 		vec = nullptr;
@@ -379,21 +379,21 @@ void on_row_changed(GtkTreeModel *tree_model, GtkTreePath *path, GtkTreeIter *it
     GtkTreeIter new_parent;
     if (!gtk_tree_model_iter_parent(tree_model, &new_parent, iter)) {
         //No parent of drop location
-        g_signal_emit_by_name(G_OBJECT (tree), "tree_move", GUINT_TO_POINTER(0) );
+        g_signal_emit_by_name(G_OBJECT (tree), "tree_move", GUINT_TO_POINTER(0));
         return;
     }
 
     GtkTreeRowReference  *old_parent_ref = static_cast<GtkTreeRowReference *>(g_object_get_data (G_OBJECT (tree), "drag-src-path"));
     if (!old_parent_ref) {
         //No drag source location
-        g_signal_emit_by_name(G_OBJECT (tree), "tree_move", GUINT_TO_POINTER(0) );
+        g_signal_emit_by_name(G_OBJECT (tree), "tree_move", GUINT_TO_POINTER(0));
         return;
     }
 
     GtkTreeIter old_parent;
     if (!tree_ref_to_iter(tree, &old_parent,  old_parent_ref)) {
         //Drag source parent is not valid
-        g_signal_emit_by_name(G_OBJECT (tree), "tree_move", GUINT_TO_POINTER(0) );
+        g_signal_emit_by_name(G_OBJECT (tree), "tree_move", GUINT_TO_POINTER(0));
         return;
     }
 
@@ -433,7 +433,7 @@ void on_row_changed(GtkTreeModel *tree_model, GtkTreePath *path, GtkTreeIter *it
     gtk_tree_selection_select_iter(selection, iter);
 
     // Signal that a drag and drop has completed successfully
-    g_signal_emit_by_name(G_OBJECT (tree), "tree_move", GUINT_TO_POINTER(1) );
+    g_signal_emit_by_name(G_OBJECT (tree), "tree_move", GUINT_TO_POINTER(1));
 }
 
 /*
@@ -524,7 +524,7 @@ gboolean tree_model_iter_compare(GtkTreeModel* store, GtkTreeIter * iter1, GtkTr
     GtkTreePath *path1 = gtk_tree_model_get_path(store, iter1);
     GtkTreePath *path2 = gtk_tree_model_get_path(store, iter2);
 
-    gboolean result = gtk_tree_path_compare( path1, path2);
+    gboolean result = gtk_tree_path_compare(path1, path2);
 
     gtk_tree_path_free(path1);
     gtk_tree_path_free(path2);
@@ -578,7 +578,7 @@ gboolean do_drag_motion(GtkWidget *widget, GdkDragContext *context, gint x, gint
 void
 sp_xmlview_tree_set_repr (SPXMLViewTree * tree, Inkscape::XML::Node * repr)
 {
-    if ( tree->repr == repr ) return;
+    if (tree->repr == repr) return;
     if (tree->repr) {
         /*
          *  Would like to simple call gtk_tree_store_clear here,

@@ -47,7 +47,7 @@ protected:
     SPItem** _imageItems;
 public:
     ImageMagickDocCache(Inkscape::UI::View::View * view);
-    ~ImageMagickDocCache ( ) override;
+    ~ImageMagickDocCache () override;
 };
 
 ImageMagickDocCache::ImageMagickDocCache(Inkscape::UI::View::View * view) :
@@ -93,7 +93,7 @@ ImageMagickDocCache::ImageMagickDocCache(Inkscape::UI::View::View * view) :
     }
 }
 
-ImageMagickDocCache::~ImageMagickDocCache ( ) {
+ImageMagickDocCache::~ImageMagickDocCache () {
     if (_nodes)
         delete _nodes;
     if (_originals)
@@ -195,11 +195,11 @@ ImageMagick::effect (Inkscape::Extension::Effect *module, Inkscape::UI::View::Vi
             char *formatted_i = dc->_caches[i];
             const char *src;
 
-            for (src = "data:image/"; *src; )
+            for (src = "data:image/"; *src;)
                 *formatted_i++ = *src++;
-            for (src = effectedImage.magick().c_str(); *src ; )
+            for (src = effectedImage.magick().c_str(); *src ;)
                 *formatted_i++ = *src++;
-            for (src = ";base64, \n" ; *src; )
+            for (src = ";base64, \n" ; *src;)
                 *formatted_i++ = *src++;
 
             int col = 0;

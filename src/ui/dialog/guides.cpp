@@ -93,12 +93,12 @@ void GuidelinePropertiesDialog::_onOK()
     if (!_mode)
         deg_angle += _oldangle;
     Geom::Point normal;
-    if ( deg_angle == 90. || deg_angle == 270. || deg_angle == -90. || deg_angle == -270.) {
+    if (deg_angle == 90. || deg_angle == 270. || deg_angle == -90. || deg_angle == -270.) {
         normal = Geom::Point(1.,0.);
-    } else if ( deg_angle == 0. || deg_angle == 180. || deg_angle == -180.) {
+    } else if (deg_angle == 0. || deg_angle == 180. || deg_angle == -180.) {
         normal = Geom::Point(0.,1.);
     } else {
-        double rad_angle = Geom::rad_from_deg( deg_angle );
+        double rad_angle = Geom::rad_from_deg(deg_angle);
         normal = Geom::rot90(Geom::Point::polar(rad_angle, 1.0));
     }
     //To allow reposition from dialog
@@ -114,7 +114,7 @@ void GuidelinePropertiesDialog::_onOK()
 
     _guide->moveto(newpos, true);
 
-    const gchar* name = g_strdup( _label_entry.getEntry()->get_text().c_str() );
+    const gchar* name = g_strdup(_label_entry.getEntry()->get_text().c_str());
 
     _guide->set_label(name, true);
     
@@ -203,7 +203,7 @@ void GuidelinePropertiesDialog::_setup() {
     _unit_menu.setUnitType(UNIT_TYPE_LINEAR);
     _unit_menu.setUnit("px");
     if (_desktop->namedview->display_units) {
-        _unit_menu.setUnit( _desktop->namedview->display_units->abbr );
+        _unit_menu.setUnit(_desktop->namedview->display_units->abbr);
     }
     _spin_angle.setUnit(_angle_unit_status);
 
@@ -280,7 +280,7 @@ void GuidelinePropertiesDialog::_setup() {
     } else if (_guide->isHorizontal()) {
         _oldangle = 0;
     } else {
-        _oldangle = Geom::deg_from_rad( std::atan2( - _guide->getNormal()[Geom::X], _guide->getNormal()[Geom::Y] ) );
+        _oldangle = Geom::deg_from_rad(std::atan2(- _guide->getNormal()[Geom::X], _guide->getNormal()[Geom::Y]));
     }
 
     {
@@ -308,9 +308,9 @@ void GuidelinePropertiesDialog::_setup() {
 
     _modeChanged(); // sets values of spinboxes.
 
-    if ( _oldangle == 90. || _oldangle == 270. || _oldangle == -90. || _oldangle == -270.) {
+    if (_oldangle == 90. || _oldangle == 270. || _oldangle == -90. || _oldangle == -270.) {
         _spin_button_x.grabFocusAndSelectEntry();
-    } else if ( _oldangle == 0. || _oldangle == 180. || _oldangle == -180.) {
+    } else if (_oldangle == 0. || _oldangle == 180. || _oldangle == -180.) {
         _spin_button_y.grabFocusAndSelectEntry();
     } else {
         _spin_angle.grabFocusAndSelectEntry();

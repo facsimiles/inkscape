@@ -543,10 +543,10 @@ inline OptRect bounds_local(D2<SBasis> const & s, OptInterval i, unsigned order=
     return retval;
 }
 
-std::vector<Interval> level_set( D2<SBasis> const &f, Rect region);
-std::vector<Interval> level_set( D2<SBasis> const &f, Point p, double tol);
-std::vector<std::vector<Interval> > level_sets( D2<SBasis> const &f, std::vector<Rect> regions);
-std::vector<std::vector<Interval> > level_sets( D2<SBasis> const &f, std::vector<Point> pts, double tol);
+std::vector<Interval> level_set(D2<SBasis> const &f, Rect region);
+std::vector<Interval> level_set(D2<SBasis> const &f, Point p, double tol);
+std::vector<std::vector<Interval> > level_sets(D2<SBasis> const &f, std::vector<Rect> regions);
+std::vector<std::vector<Interval> > level_sets(D2<SBasis> const &f, std::vector<Point> pts, double tol);
 
 
 } // end namespace Geom

@@ -17,12 +17,12 @@
 
 G_BEGIN_DECLS
 
-#define INK_ACTION_TYPE                ( ink_action_get_type() )
-#define INK_ACTION( obj )              ( G_TYPE_CHECK_INSTANCE_CAST( (obj), INK_ACTION_TYPE, InkAction) )
-#define INK_ACTION_CLASS( klass )      ( G_TYPE_CHECK_CLASS_CAST( (klass), INK_ACTION_TYPE, InkActionClass) )
-#define IS_INK_ACTION( obj )           ( G_TYPE_CHECK_INSTANCE_TYPE( (obj), INK_ACTION_TYPE) )
-#define IS_INK_ACTION_CLASS( klass )   ( G_TYPE_CHECK_CLASS_TYPE( (klass), INK_ACTION_TYPE) )
-#define INK_ACTION_GET_CLASS( obj )    ( G_TYPE_INSTANCE_GET_CLASS( (obj), INK_ACTION_TYPE, InkActionClass) )
+#define INK_ACTION_TYPE                (ink_action_get_type())
+#define INK_ACTION(obj)              (G_TYPE_CHECK_INSTANCE_CAST((obj), INK_ACTION_TYPE, InkAction))
+#define INK_ACTION_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST((klass), INK_ACTION_TYPE, InkActionClass))
+#define IS_INK_ACTION(obj)           (G_TYPE_CHECK_INSTANCE_TYPE((obj), INK_ACTION_TYPE))
+#define IS_INK_ACTION_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE((klass), INK_ACTION_TYPE))
+#define INK_ACTION_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS((obj), INK_ACTION_TYPE, InkActionClass))
 
 typedef struct _InkAction      InkAction;
 typedef struct _InkActionClass InkActionClass;
@@ -37,13 +37,13 @@ struct _InkActionClass
     GtkActionClass parent_class;
 };
 
-GType ink_action_get_type( void );
+GType ink_action_get_type(void);
 
-InkAction* ink_action_new( const gchar *name,
+InkAction* ink_action_new(const gchar *name,
                            const gchar *label,
                            const gchar *tooltip,
                            const gchar *inkId,
-                           GtkIconSize  size );
+                           GtkIconSize  size);
 
 
 G_END_DECLS

@@ -30,16 +30,16 @@ namespace Inkscape {
 
 class ColorSpaceSigWrapper : public ColorSpaceSig {
 public :
-    ColorSpaceSigWrapper( cmsColorSpaceSignature sig ) : ColorSpaceSig( static_cast<guint32>(sig) ) {}
-    ColorSpaceSigWrapper( ColorSpaceSig const &other ) : ColorSpaceSig( other ) {}
+    ColorSpaceSigWrapper(cmsColorSpaceSignature sig) : ColorSpaceSig(static_cast<guint32>(sig)) {}
+    ColorSpaceSigWrapper(ColorSpaceSig const &other) : ColorSpaceSig(other) {}
 
     operator cmsColorSpaceSignature() const { return static_cast<cmsColorSpaceSignature>(value); }
 };
 
 class ColorProfileClassSigWrapper : public ColorProfileClassSig {
 public :
-    ColorProfileClassSigWrapper( cmsProfileClassSignature sig ) : ColorProfileClassSig( static_cast<guint32>(sig) ) {}
-    ColorProfileClassSigWrapper( ColorProfileClassSig const &other ) : ColorProfileClassSig( other ) {}
+    ColorProfileClassSigWrapper(cmsProfileClassSignature sig) : ColorProfileClassSig(static_cast<guint32>(sig)) {}
+    ColorProfileClassSigWrapper(ColorProfileClassSig const &other) : ColorProfileClassSig(other) {}
 
     operator cmsProfileClassSignature() const { return static_cast<cmsProfileClassSignature>(value); }
 };

@@ -72,8 +72,8 @@ ParamComboBox::ParamComboBox(const gchar * name,
                     newvalue = contents;
                 }
 
-                if ( (!newtext.empty()) && (!newvalue.empty()) ) {   // logical error if this is not true here
-                    choices.push_back(new enumentry(newvalue, newtext) );
+                if ((!newtext.empty()) && (!newvalue.empty())) {   // logical error if this is not true here
+                    choices.push_back(new enumentry(newvalue, newtext));
                 }
             }
         }
@@ -130,7 +130,7 @@ const gchar *ParamComboBox::set(const gchar * in, SPDocument * /*doc*/, Inkscape
 
     Glib::ustring settext;
     for (auto entr:choices) {
-        if ( !entr->text.compare(in) ) {
+        if (!entr->text.compare(in)) {
             settext = entr->value;
             break;  // break out of for loop
         }
@@ -159,7 +159,7 @@ bool ParamComboBox::contains(const gchar * text, SPDocument const * /*doc*/, Ink
     }
 
     for (auto entr:choices) {
-        if ( !entr->text.compare(text) )
+        if (!entr->text.compare(text))
             return true;
     }
     // if we did not find the text in this ParamComboBox:
@@ -236,7 +236,7 @@ Gtk::Widget *ParamComboBox::get_widget(SPDocument * doc, Inkscape::XML::Node * n
         Glib::ustring text = entr->text;
         combo->append(text);
 
-        if ( _value && !entr->value.compare(_value) ) {
+        if (_value && !entr->value.compare(_value)) {
             settext = entr->text;
         }
     }

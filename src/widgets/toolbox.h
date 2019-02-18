@@ -61,7 +61,7 @@ public:
 
     static void updateSnapToolbox(SPDesktop *desktop, Inkscape::UI::Tools::ToolBase *eventcontext, GtkWidget *toolbox);
 
-    static GtkIconSize prefToSize(Glib::ustring const &path, int base = 0 );
+    static GtkIconSize prefToSize(Glib::ustring const &path, int base = 0);
     static Gtk::IconSize prefToSize_mm(Glib::ustring const &path, int base = 0);
 
     ToolboxFactory() = delete;
@@ -75,14 +75,14 @@ public:
 
 // utility
 
- EgeAdjustmentAction * create_adjustment_action( gchar const *name,
+ EgeAdjustmentAction * create_adjustment_action(gchar const *name,
                                                        gchar const *label, gchar const *shortLabel, gchar const *tooltip,
                                                        Glib::ustring const &path, gdouble def,
                                                        gboolean altx, gchar const *altx_mark,
                                                        gdouble lower, gdouble upper, gdouble step, gdouble page,
                                                        gchar const** descrLabels, gdouble const* descrValues, guint descrCount,
                                                        Inkscape::UI::Widget::UnitTracker *unit_tracker = nullptr,
-                                                       gdouble climb = 0.1, guint digits = 3, double factor = 1.0 );
+                                                       gdouble climb = 0.1, guint digits = 3, double factor = 1.0);
 
 #endif /* !SEEN_TOOLBOX_H */
 

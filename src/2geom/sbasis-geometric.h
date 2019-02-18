@@ -79,13 +79,13 @@ unitVector(Piecewise<D2<SBasis> > const &vect,
 // uniform_speed(D2<SBasis> const M, 
 //               double tol=.1);
 
-Piecewise<SBasis> curvature(          D2<SBasis>   const &M, double tol=.01);
+Piecewise<SBasis> curvature(D2<SBasis>   const &M, double tol=.01);
 Piecewise<SBasis> curvature(Piecewise<D2<SBasis> > const &M, double tol=.01);
 
-Piecewise<SBasis> arcLengthSb(          D2<SBasis>   const &M, double tol=.01);
+Piecewise<SBasis> arcLengthSb(D2<SBasis>   const &M, double tol=.01);
 Piecewise<SBasis> arcLengthSb(Piecewise<D2<SBasis> > const &M, double tol=.01);
 
-double length(          D2<SBasis>   const &M, double tol=.01);
+double length(D2<SBasis>   const &M, double tol=.01);
 double length(Piecewise<D2<SBasis> > const &M, double tol=.01);
 
 void length_integrating(D2<SBasis> const &B, double &result, double &abs_error, double tol);

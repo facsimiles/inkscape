@@ -29,10 +29,10 @@ bool id_permitted(Node const *node);
  * @relates Inkscape::XML::Node
  */
 inline Node *next_node(Node *node) {
-    return ( node ? node->next() : nullptr );
+    return (node ? node->next() : nullptr);
 }
 inline Node const *next_node(Node const *node) {
-    return ( node ? node->next() : nullptr );
+    return (node ? node->next() : nullptr);
 }
 //@}
 
@@ -61,10 +61,10 @@ inline Node const *previous_node(Node const *node) {
  * @relates Inkscape::XML::Node
  */
 inline Node *parent_node(Node *node) {
-    return ( node ? node->parent() : nullptr );
+    return (node ? node->parent() : nullptr);
 }
 inline Node const *parent_node(Node const *node) {
-    return ( node ? node->parent() : nullptr );
+    return (node ? node->parent() : nullptr);
 }
 //@}
 

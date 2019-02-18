@@ -72,7 +72,7 @@ private:
     static void hierarchyCB(GtkWidget *widget, GtkWidget *prevTop, gpointer userData);
 
     void report(gchar const* msg);
-    void handleHierarchyChange( GtkWidget *prevTop );
+    void handleHierarchyChange(GtkWidget *prevTop);
 };
 
 } // namespace ege

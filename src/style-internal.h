@@ -127,7 +127,7 @@ class SPIBase
 {
 
 public:
-    SPIBase( Glib::ustring name, bool inherits = true )
+    SPIBase(Glib::ustring name, bool inherits = true)
         : name(std::move(name)),
           inherits(inherits),
           set(false),
@@ -140,8 +140,8 @@ public:
     virtual ~SPIBase()
     = default;
 
-    virtual void read( gchar const *str ) = 0;
-    virtual void readIfUnset( gchar const *str, SPStyleSrc const &source = SP_STYLE_SRC_STYLE_PROP ) {
+    virtual void read(gchar const *str) = 0;
+    virtual void readIfUnset(gchar const *str, SPStyleSrc const &source = SP_STYLE_SRC_STYLE_PROP) {
         if (!str) return;
 
         bool has_important = false;
@@ -151,9 +151,9 @@ public:
             return;
         }
 
-        if ( !set || (has_important && !important) ) {
-            read( stripped.c_str() );
-            if ( set ) {
+        if (!set || (has_important && !important)) {
+            read(stripped.c_str());
+            if (set) {
                 style_src = source;
                 if (has_important) {
                     important = true;
@@ -166,10 +166,10 @@ public:
         return Glib::ustring(important ? " !important" : "");
     }
 
-    Glib::ustring strip_important( gchar const *str, bool &important ) {
+    Glib::ustring strip_important(gchar const *str, bool &important) {
         assert (str != NULL);
         Glib::ustring string = Glib::ustring(str);
-        auto pos = string.rfind( " !important" );
+        auto pos = string.rfind(" !important");
         important = false;
         if (pos != std::string::npos) {
             important = true;
@@ -178,22 +178,22 @@ public:
         return string;
     }
 
-    virtual void readAttribute( Inkscape::XML::Node *repr ) {
-        readIfUnset( repr->attribute( name.c_str() ), SP_STYLE_SRC_ATTRIBUTE );
+    virtual void readAttribute(Inkscape::XML::Node *repr) {
+        readIfUnset(repr->attribute(name.c_str()), SP_STYLE_SRC_ATTRIBUTE);
     }
 
     virtual const Glib::ustring get_value() const = 0;
-    virtual const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
+    virtual const Glib::ustring write(guint const flags = SP_STYLE_FLAG_IFSET,
                                        SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
-                                       SPIBase const *const base = nullptr ) const;
+                                       SPIBase const *const base = nullptr) const;
     virtual void clear() {
         set = false, inherit = false, important = false;
     }
 
-    virtual void cascade( const SPIBase* const parent ) = 0;
-    virtual void merge(   const SPIBase* const parent ) = 0;
+    virtual void cascade(const SPIBase* const parent) = 0;
+    virtual void merge(const SPIBase* const parent) = 0;
 
-    virtual void setStylePointer( SPStyle *style_in  ) {
+    virtual void setStylePointer(SPStyle *style_in) {
         style = style_in;
     }
 
@@ -229,26 +229,26 @@ class SPIFloat : public SPIBase
 
 public:
     SPIFloat()
-        : SPIBase( "anonymous_float" ),
+        : SPIBase("anonymous_float"),
           value(0.0)
     {}
 
-    SPIFloat( Glib::ustring const &name, float value_default  = 0.0 )
-        : SPIBase( name ),
+    SPIFloat(Glib::ustring const &name, float value_default  = 0.0)
+        : SPIBase(name),
           value(value_default),
           value_default(value_default)
     {}
 
     ~SPIFloat() override = default;
-    void read( gchar const *str ) override;
+    void read(gchar const *str) override;
     const Glib::ustring get_value() const override;
     void clear() override {
         SPIBase::clear();
         value = value_default;
     }
 
-    void cascade( const SPIBase* const parent ) override;
-    void merge(   const SPIBase* const parent ) override;
+    void cascade(const SPIBase* const parent) override;
+    void merge(const SPIBase* const parent) override;
 
     SPIFloat& operator=(const SPIFloat& rhs) = default;
 
@@ -302,12 +302,12 @@ class SPIScale24 : public SPIBase
 
 public:
     SPIScale24()
-        : SPIBase( "anonymous_scale24" ),
+        : SPIBase("anonymous_scale24"),
           value(0)
     {}
 
-    SPIScale24( Glib::ustring const &name, unsigned value = 0, bool inherits = true )
-        : SPIBase( name, inherits ),
+    SPIScale24(Glib::ustring const &name, unsigned value = 0, bool inherits = true)
+        : SPIBase(name, inherits),
           value(value),
           value_default(value)
     {}
@@ -315,15 +315,15 @@ public:
     ~SPIScale24() override
     = default;
 
-    void read( gchar const *str ) override;
+    void read(gchar const *str) override;
     const Glib::ustring get_value() const override;
     void clear() override {
         SPIBase::clear();
         value = value_default;
     }
 
-    void cascade( const SPIBase* const parent ) override;
-    void merge(   const SPIBase* const parent ) override;
+    void cascade(const SPIBase* const parent) override;
+    void merge(const SPIBase* const parent) override;
 
     SPIScale24& operator=(const SPIScale24& rhs) = default;
 
@@ -364,14 +364,14 @@ class SPILength : public SPIBase
 
 public:
     SPILength()
-        : SPIBase( "anonymous_length" ),
+        : SPIBase("anonymous_length"),
           unit(SP_CSS_UNIT_NONE),
           value(0),
           computed(0)
     {}
 
-    SPILength( Glib::ustring const &name, float value = 0 )
-        : SPIBase( name ),
+    SPILength(Glib::ustring const &name, float value = 0)
+        : SPIBase(name),
           unit(SP_CSS_UNIT_NONE),
           value(value),
           computed(value),
@@ -381,7 +381,7 @@ public:
     ~SPILength() override
     = default;
 
-    void read( gchar const *str ) override;
+    void read(gchar const *str) override;
     const Glib::ustring get_value() const override;
     void clear() override {
         SPIBase::clear();
@@ -389,8 +389,8 @@ public:
         computed = value_default;
     }
 
-    void cascade( const SPIBase* const parent ) override;
-    void merge(   const SPIBase* const parent ) override;
+    void cascade(const SPIBase* const parent) override;
+    void merge(const SPIBase* const parent) override;
 
     SPILength& operator=(const SPILength& rhs) = default;
 
@@ -419,27 +419,27 @@ class SPILengthOrNormal : public SPILength
 
 public:
     SPILengthOrNormal()
-        : SPILength( "anonymous_length" ),
+        : SPILength("anonymous_length"),
           normal(true)
     {}
 
-    SPILengthOrNormal( Glib::ustring const &name, float value = 0 )
-        : SPILength( name, value ),
+    SPILengthOrNormal(Glib::ustring const &name, float value = 0)
+        : SPILength(name, value),
           normal(true)
     {}
 
     ~SPILengthOrNormal() override
     = default;
 
-    void read( gchar const *str ) override;
+    void read(gchar const *str) override;
     const Glib::ustring get_value() const override;
     void clear() override {
         SPILength::clear();
         normal = true;
     }
 
-    void cascade( const SPIBase* const parent ) override;
-    void merge(   const SPIBase* const parent ) override;
+    void cascade(const SPIBase* const parent) override;
+    void merge(const SPIBase* const parent) override;
 
     SPILengthOrNormal& operator=(const SPILengthOrNormal& rhs) = default;
 
@@ -461,19 +461,19 @@ class SPIFontVariationSettings : public SPIBase
 
 public:
     SPIFontVariationSettings()
-        : SPIBase( "anonymous_fontvariationsettings" ),
+        : SPIBase("anonymous_fontvariationsettings"),
           normal(true)
     {}
 
-    SPIFontVariationSettings( Glib::ustring const &name )
-        : SPIBase( name ),
+    SPIFontVariationSettings(Glib::ustring const &name)
+        : SPIBase(name),
           normal(true)
     {}
 
     ~SPIFontVariationSettings() override
     = default;
 
-    void read( gchar const *str ) override;
+    void read(gchar const *str) override;
     const Glib::ustring get_value() const override;
     void clear() override {
         SPIBase::clear();
@@ -481,8 +481,8 @@ public:
         normal = true;
     }
 
-    void cascade( const SPIBase* const parent ) override;
-    void merge(   const SPIBase* const parent ) override;
+    void cascade(const SPIBase* const parent) override;
+    void merge(const SPIBase* const parent) override;
 
     SPIFontVariationSettings& operator=(const SPIFontVariationSettings& rhs) {
         SPIBase::operator=(rhs);
@@ -513,15 +513,15 @@ class SPIEnum : public SPIBase
 
 public:
     SPIEnum() :
-        SPIBase( "anonymous_enum" ),
-        enums( nullptr ),
+        SPIBase("anonymous_enum"),
+        enums(nullptr),
         value(0),
         computed(0)
     {}
 
-    SPIEnum( Glib::ustring const &name, SPStyleEnum const *enums, unsigned value = 0, bool inherits = true ) :
-        SPIBase( name, inherits ),
-        enums( enums ),
+    SPIEnum(Glib::ustring const &name, SPStyleEnum const *enums, unsigned value = 0, bool inherits = true) :
+        SPIBase(name, inherits),
+        enums(enums),
         value(value),
         computed(value),
         value_default(value),
@@ -529,9 +529,9 @@ public:
     {}
 
     // Following is needed for font-weight
-    SPIEnum( Glib::ustring const &name, SPStyleEnum const *enums, SPCSSFontWeight value, SPCSSFontWeight computed ) :
-        SPIBase( name ),
-        enums( enums ),
+    SPIEnum(Glib::ustring const &name, SPStyleEnum const *enums, SPCSSFontWeight value, SPCSSFontWeight computed) :
+        SPIBase(name),
+        enums(enums),
         value(value),
         computed(computed),
         value_default(value),
@@ -541,15 +541,15 @@ public:
     ~SPIEnum() override
     = default;
 
-    void read( gchar const *str ) override;
+    void read(gchar const *str) override;
     const Glib::ustring get_value() const override;
     void clear() override {
         SPIBase::clear();
         value = value_default, computed = computed_default;
     }
 
-    void cascade( const SPIBase* const parent ) override;
-    void merge(   const SPIBase* const parent ) override;
+    void cascade(const SPIBase* const parent) override;
+    void merge(const SPIBase* const parent) override;
 
     SPIEnum& operator=(const SPIEnum& rhs) {
         SPIBase::operator=(rhs);
@@ -584,17 +584,17 @@ class SPIEnumBits : public SPIEnum
 
 public:
     SPIEnumBits() :
-        SPIEnum( "anonymous_enumbits", nullptr )
+        SPIEnum("anonymous_enumbits", nullptr)
     {}
 
-    SPIEnumBits( Glib::ustring const &name, SPStyleEnum const *enums, unsigned value = 0, bool inherits = true ) :
-        SPIEnum( name, enums, value, inherits )
+    SPIEnumBits(Glib::ustring const &name, SPStyleEnum const *enums, unsigned value = 0, bool inherits = true) :
+        SPIEnum(name, enums, value, inherits)
     {}
 
     ~SPIEnumBits() override
     = default;
 
-    void read( gchar const *str ) override;
+    void read(gchar const *str) override;
     const Glib::ustring get_value() const override;
 };
 
@@ -608,17 +608,17 @@ class SPILigatures : public SPIEnum
 
 public:
     SPILigatures() :
-        SPIEnum( "anonymous_enumligatures", nullptr )
+        SPIEnum("anonymous_enumligatures", nullptr)
     {}
 
-    SPILigatures( Glib::ustring const &name, SPStyleEnum const *enums) :
-        SPIEnum( name, enums, SP_CSS_FONT_VARIANT_LIGATURES_NORMAL )
+    SPILigatures(Glib::ustring const &name, SPStyleEnum const *enums) :
+        SPIEnum(name, enums, SP_CSS_FONT_VARIANT_LIGATURES_NORMAL)
     {}
 
     ~SPILigatures() override
     = default;
 
-    void read( gchar const *str ) override;
+    void read(gchar const *str) override;
     const Glib::ustring get_value() const override;
 };
 
@@ -630,17 +630,17 @@ class SPINumeric : public SPIEnum
 
 public:
     SPINumeric() :
-        SPIEnum( "anonymous_enumnumeric", nullptr )
+        SPIEnum("anonymous_enumnumeric", nullptr)
     {}
 
-    SPINumeric( Glib::ustring const &name, SPStyleEnum const *enums) :
-        SPIEnum( name, enums, SP_CSS_FONT_VARIANT_NUMERIC_NORMAL )
+    SPINumeric(Glib::ustring const &name, SPStyleEnum const *enums) :
+        SPIEnum(name, enums, SP_CSS_FONT_VARIANT_NUMERIC_NORMAL)
     {}
 
     ~SPINumeric() override
     = default;
 
-    void read( gchar const *str ) override;
+    void read(gchar const *str) override;
     const Glib::ustring get_value() const override;
 };
 
@@ -652,17 +652,17 @@ class SPIEastAsian : public SPIEnum
 
 public:
     SPIEastAsian() :
-        SPIEnum( "anonymous_enumeastasian", nullptr )
+        SPIEnum("anonymous_enumeastasian", nullptr)
     {}
 
-    SPIEastAsian( Glib::ustring const &name, SPStyleEnum const *enums) :
-        SPIEnum( name, enums, SP_CSS_FONT_VARIANT_EAST_ASIAN_NORMAL )
+    SPIEastAsian(Glib::ustring const &name, SPStyleEnum const *enums) :
+        SPIEnum(name, enums, SP_CSS_FONT_VARIANT_EAST_ASIAN_NORMAL)
     {}
 
     ~SPIEastAsian() override
     = default;
 
-    void read( gchar const *str ) override;
+    void read(gchar const *str) override;
     const Glib::ustring get_value() const override;
 };
 
@@ -674,13 +674,13 @@ class SPIString : public SPIBase
 
 public:
     SPIString()
-        : SPIBase( "anonymous_string" ),
+        : SPIBase("anonymous_string"),
           value(nullptr)
     {}
 
     // TODO probably want to avoid gchar* and c-style strings.
-    SPIString( Glib::ustring const &name, gchar const* value_default_in = nullptr )
-        : SPIBase( name ),
+    SPIString(Glib::ustring const &name, gchar const* value_default_in = nullptr)
+        : SPIBase(name),
           value(nullptr),
           value_default(value_default_in ? g_strdup(value_default_in) : nullptr)
     {}
@@ -690,11 +690,11 @@ public:
         g_free(value_default);
     }
 
-    void read( gchar const *str ) override;
+    void read(gchar const *str) override;
     const Glib::ustring get_value() const override;
     void clear() override; // TODO check about value and value_default
-    void cascade( const SPIBase* const parent ) override;
-    void merge(   const SPIBase* const parent ) override;
+    void cascade(const SPIBase* const parent) override;
+    void merge(const SPIBase* const parent) override;
 
     SPIString& operator=(const SPIString& rhs) {
         SPIBase::operator=(rhs);
@@ -722,13 +722,13 @@ class SPIColor : public SPIBase
 
 public:
     SPIColor()
-        : SPIBase( "anonymous_color" ),
+        : SPIBase("anonymous_color"),
           currentcolor(false) {
         value.color.set(0);
     }
 
-    SPIColor( Glib::ustring const &name, bool inherits = true )
-        : SPIBase( name, inherits ),
+    SPIColor(Glib::ustring const &name, bool inherits = true)
+        : SPIBase(name, inherits),
           currentcolor(false) {
         value.color.set(0);
     }
@@ -736,15 +736,15 @@ public:
     ~SPIColor() override
     = default;
 
-    void read( gchar const *str ) override;
+    void read(gchar const *str) override;
     const Glib::ustring get_value() const override;
     void clear() override {
         SPIBase::clear();
         value.color.set(0);
     }
 
-    void cascade( const SPIBase* const parent ) override;
-    void merge(   const SPIBase* const parent ) override;
+    void cascade(const SPIBase* const parent) override;
+    void merge(const SPIBase* const parent) override;
 
     SPIColor& operator=(const SPIColor& rhs) {
         SPIBase::operator=(rhs);
@@ -758,15 +758,15 @@ public:
         return !(*this == rhs);
     }
 
-    void setColor( float r, float g, float b ) {
-        value.color.set( r, g, b );
+    void setColor(float r, float g, float b) {
+        value.color.set(r, g, b);
     }
 
-    void setColor( guint32 val ) {
-        value.color.set( val );
+    void setColor(guint32 val) {
+        value.color.set(val);
     }
 
-    void setColor( SPColor const& color ) {
+    void setColor(SPColor const& color) {
         value.color = color;
     }
 
@@ -798,16 +798,16 @@ class SPIPaint : public SPIBase
 
 public:
     SPIPaint()
-        : SPIBase( "anonymous_paint" ),
-          paintOrigin( SP_CSS_PAINT_ORIGIN_NORMAL ),
+        : SPIBase("anonymous_paint"),
+          paintOrigin(SP_CSS_PAINT_ORIGIN_NORMAL),
           colorSet(false),
           noneSet(false) {
         value.href = nullptr;
         clear();
     }
 
-    SPIPaint( Glib::ustring const &name )
-        : SPIBase( name ),
+    SPIPaint(Glib::ustring const &name)
+        : SPIBase(name),
           colorSet(false),
           noneSet(false) {
         value.href = nullptr;
@@ -815,13 +815,13 @@ public:
     }
 
     ~SPIPaint() override;  // Clear and delete href.
-    void read( gchar const *str ) override;
-    virtual void read( gchar const *str, SPStyle &style, SPDocument *document = nullptr);
+    void read(gchar const *str) override;
+    virtual void read(gchar const *str, SPStyle &style, SPDocument *document = nullptr);
     const Glib::ustring get_value() const override;
     void clear() override;
-    virtual void reset( bool init ); // Used internally when reading or cascading
-    void cascade( const SPIBase* const parent ) override;
-    void merge(   const SPIBase* const parent ) override;
+    virtual void reset(bool init); // Used internally when reading or cascading
+    void cascade(const SPIBase* const parent) override;
+    void merge(const SPIBase* const parent) override;
 
     SPIPaint& operator=(const SPIPaint& rhs) {
         SPIBase::operator=(rhs);
@@ -838,7 +838,7 @@ public:
         return !(*this == rhs);
     }
 
-    bool isSameType( SPIPaint const & other ) const {
+    bool isSameType(SPIPaint const & other) const {
         return (isPaintserver() == other.isPaintserver()) && (colorSet == other.colorSet) && (paintOrigin == other.paintOrigin);
     }
 
@@ -858,15 +858,15 @@ public:
         return value.href && value.href->getObject() != nullptr;
     }
 
-    void setColor( float r, float g, float b ) {
-        value.color.set( r, g, b ); colorSet = true;
+    void setColor(float r, float g, float b) {
+        value.color.set(r, g, b); colorSet = true;
     }
 
-    void setColor( guint32 val ) {
-        value.color.set( val ); colorSet = true;
+    void setColor(guint32 val) {
+        value.color.set(val); colorSet = true;
     }
 
-    void setColor( SPColor const& color ) {
+    void setColor(SPColor const& color) {
         value.color = color; colorSet = true;
     }
 
@@ -905,32 +905,32 @@ class SPIPaintOrder : public SPIBase
 
 public:
     SPIPaintOrder()
-        : SPIBase( "paint-order" ),
+        : SPIBase("paint-order"),
           value(nullptr) {
         this->clear();
     }
 
     ~SPIPaintOrder() override {
-        g_free( value );
+        g_free(value);
     }
 
-    void read( gchar const *str ) override;
+    void read(gchar const *str) override;
     const Glib::ustring get_value() const override;
     void clear() override {
         SPIBase::clear();
-        for( unsigned i = 0; i < PAINT_ORDER_LAYERS; ++i ) {
+        for(unsigned i = 0; i < PAINT_ORDER_LAYERS; ++i) {
             layer[i]     = SP_CSS_PAINT_ORDER_NORMAL;
             layer_set[i] = false;
         }
         g_free(value);
         value = nullptr;
     }
-    void cascade( const SPIBase* const parent ) override;
-    void merge(   const SPIBase* const parent ) override;
+    void cascade(const SPIBase* const parent) override;
+    void merge(const SPIBase* const parent) override;
 
     SPIPaintOrder& operator=(const SPIPaintOrder& rhs) {
         SPIBase::operator=(rhs);
-        for( unsigned i = 0; i < PAINT_ORDER_LAYERS; ++i ) {
+        for(unsigned i = 0; i < PAINT_ORDER_LAYERS; ++i) {
             layer[i]     = rhs.layer[i];
             layer_set[i] = rhs.layer_set[i];
         }
@@ -959,21 +959,21 @@ class SPIDashArray : public SPIBase
 
 public:
     SPIDashArray()
-        : SPIBase( "stroke-dasharray" )
+        : SPIBase("stroke-dasharray")
     {}  // Only one instance of SPIDashArray
 
     ~SPIDashArray() override
     = default;
 
-    void read( gchar const *str ) override;
+    void read(gchar const *str) override;
     const Glib::ustring get_value() const override;
     void clear() override {
         SPIBase::clear();
         values.clear();
     }
 
-    void cascade( const SPIBase* const parent ) override;
-    void merge(   const SPIBase* const parent ) override;
+    void cascade(const SPIBase* const parent) override;
+    void merge(const SPIBase* const parent) override;
 
     SPIDashArray& operator=(const SPIDashArray& rhs) = default;
 
@@ -993,16 +993,16 @@ class SPIFilter : public SPIBase
 
 public:
     SPIFilter()
-        : SPIBase( "filter", false ),
+        : SPIBase("filter", false),
           href(nullptr)
     {}
 
     ~SPIFilter() override;
-    void read( gchar const *str ) override;
+    void read(gchar const *str) override;
     const Glib::ustring get_value() const override;
     void clear() override;
-    void cascade( const SPIBase* const parent ) override;
-    void merge(   const SPIBase* const parent ) override;
+    void cascade(const SPIBase* const parent) override;
+    void merge(const SPIBase* const parent) override;
 
     SPIFilter& operator=(const SPIFilter& rhs) = default;
 
@@ -1030,14 +1030,14 @@ class SPIFontSize : public SPIBase
 
 public:
     SPIFontSize()
-        : SPIBase( "font-size" ) {
+        : SPIBase("font-size") {
         this->clear();
     }
 
     ~SPIFontSize() override
     = default;
 
-    void read( gchar const *str ) override;
+    void read(gchar const *str) override;
     const Glib::ustring get_value() const override;
     void clear() override {
         SPIBase::clear();
@@ -1045,8 +1045,8 @@ public:
             literal = SP_CSS_FONT_SIZE_MEDIUM, value = 12.0, computed = 12.0;
     }
 
-    void cascade( const SPIBase* const parent ) override;
-    void merge(   const SPIBase* const parent ) override;
+    void cascade(const SPIBase* const parent) override;
+    void merge(const SPIBase* const parent) override;
 
     SPIFontSize& operator=(const SPIFontSize& rhs) = default;
 
@@ -1078,22 +1078,22 @@ class SPIFont : public SPIBase
 
 public:
     SPIFont()
-        : SPIBase( "font" )
+        : SPIBase("font")
     {}
 
     ~SPIFont() override
     = default;
 
-    void read( gchar const *str ) override;
+    void read(gchar const *str) override;
     const Glib::ustring get_value() const override;
     void clear() override {
         SPIBase::clear();
     }
 
-    void cascade( const SPIBase* const /*parent*/ ) override
+    void cascade(const SPIBase* const /*parent*/) override
     {} // Done in dependent properties
 
-    void merge(   const SPIBase* const /*parent*/ ) override
+    void merge(const SPIBase* const /*parent*/) override
     {}
 
     SPIFont& operator=(const SPIFont& rhs) = default;
@@ -1117,14 +1117,14 @@ class SPIBaselineShift : public SPIBase
 
 public:
     SPIBaselineShift()
-        : SPIBase( "baseline-shift", false ) {
+        : SPIBase("baseline-shift", false) {
         this->clear();
     }
 
     ~SPIBaselineShift() override
     = default;
 
-    void read( gchar const *str ) override;
+    void read(gchar const *str) override;
     const Glib::ustring get_value() const override;
     void clear() override {
         SPIBase::clear();
@@ -1132,8 +1132,8 @@ public:
             literal = SP_CSS_BASELINE_SHIFT_BASELINE, value = 0.0, computed = 0.0;
     }
 
-    void cascade( const SPIBase* const parent ) override;
-    void merge(   const SPIBase* const parent ) override;
+    void cascade(const SPIBase* const parent) override;
+    void merge(const SPIBase* const parent) override;
 
     SPIBaselineShift& operator=(const SPIBaselineShift& rhs) = default;
 
@@ -1164,22 +1164,22 @@ class SPITextDecorationLine : public SPIBase
 
 public:
     SPITextDecorationLine()
-        : SPIBase( "text-decoration-line" ) {
+        : SPIBase("text-decoration-line") {
         this->clear();
     }
 
     ~SPITextDecorationLine() override
     = default;
 
-    void read( gchar const *str ) override;
+    void read(gchar const *str) override;
     const Glib::ustring get_value() const override;
     void clear() override {
         SPIBase::clear();
         underline = false, overline = false, line_through = false, blink = false;
     }
 
-    void cascade( const SPIBase* const parent ) override;
-    void merge(   const SPIBase* const parent ) override;
+    void cascade(const SPIBase* const parent) override;
+    void merge(const SPIBase* const parent) override;
 
     SPITextDecorationLine& operator=(const SPITextDecorationLine& rhs) = default;
 
@@ -1203,22 +1203,22 @@ class SPITextDecorationStyle : public SPIBase
 
 public:
     SPITextDecorationStyle()
-        : SPIBase( "text-decoration-style" ) {
+        : SPIBase("text-decoration-style") {
         this->clear();
     }
 
     ~SPITextDecorationStyle() override
     = default;
 
-    void read( gchar const *str ) override;
+    void read(gchar const *str) override;
     const Glib::ustring get_value() const override;
     void clear() override {
         SPIBase::clear();
         solid = true, isdouble = false, dotted = false, dashed = false, wavy = false;
     }
 
-    void cascade( const SPIBase* const parent ) override;
-    void merge(   const SPIBase* const parent ) override;
+    void cascade(const SPIBase* const parent) override;
+    void merge(const SPIBase* const parent) override;
 
     SPITextDecorationStyle& operator=(const SPITextDecorationStyle& rhs) = default;
 
@@ -1242,7 +1242,7 @@ public:
 // and color parts to the appropriate CSS3 long-hand classes for reading and storing values.  When
 // writing out data, we write all four properties, with 'text-decoration' being written out with
 // the CSS2 format. This allows CSS1/CSS2 renderers to at least render lines, even if they are not
-// the right style. (See http://www.w3.org/TR/css-text-decor-3/#text-decoration-property )
+// the right style. (See http://www.w3.org/TR/css-text-decor-3/#text-decoration-property)
 
 /// Text decoration type internal to SPStyle.
 class SPITextDecoration : public SPIBase
@@ -1250,25 +1250,25 @@ class SPITextDecoration : public SPIBase
 
 public:
     SPITextDecoration()
-        : SPIBase( "text-decoration" ),
-          style_td( nullptr )
+        : SPIBase("text-decoration"),
+          style_td(nullptr)
     {}
 
     ~SPITextDecoration() override
     = default;
 
-    void read( gchar const *str ) override;
+    void read(gchar const *str) override;
     const Glib::ustring get_value() const override;
-    const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
+    const Glib::ustring write(guint const flags = SP_STYLE_FLAG_IFSET,
                                        SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
-                                       SPIBase const *const base = nullptr ) const override;
+                                       SPIBase const *const base = nullptr) const override;
     void clear() override {
         SPIBase::clear();
         style_td = nullptr;
     }
 
-    void cascade( const SPIBase* const parent ) override;
-    void merge(   const SPIBase* const parent ) override;
+    void cascade(const SPIBase* const parent) override;
+    void merge(const SPIBase* const parent) override;
 
     SPITextDecoration& operator=(const SPITextDecoration& rhs) {
         SPIBase::operator=(rhs);
@@ -1306,7 +1306,7 @@ class SPIVectorEffect : public SPIBase
 
 public:
     SPIVectorEffect()
-        : SPIBase( "vector-effect" ) {
+        : SPIBase("vector-effect") {
         this->clear();
         inherits = false;
     }
@@ -1314,7 +1314,7 @@ public:
     ~SPIVectorEffect() override
     = default;
 
-    void read( gchar const *str ) override;
+    void read(gchar const *str) override;
     const Glib::ustring get_value() const override;
     void clear() override {
         SPIBase::clear();
@@ -1325,8 +1325,8 @@ public:
     }
 
     // Does not inherit
-    void cascade( const SPIBase* const parent ) override {};
-    void merge(   const SPIBase* const parent ) override {};
+    void cascade(const SPIBase* const parent) override {};
+    void merge(const SPIBase* const parent) override {};
 
     SPIVectorEffect& operator=(const SPIVectorEffect& rhs) = default;
 

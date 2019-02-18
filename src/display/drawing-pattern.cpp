@@ -86,7 +86,7 @@ DrawingPattern::renderPattern(float opacity) {
     // based on required resolution (c).
     Inkscape::DrawingSurface pattern_surface(pattern_tile, _pattern_resolution);
     Inkscape::DrawingContext dc(pattern_surface);
-    dc.transform( pattern_surface.drawingTransform().inverse() );
+    dc.transform(pattern_surface.drawingTransform().inverse());
 
     pattern_tile *= pattern_surface.drawingTransform();
     Geom::IntRect one_tile = pattern_tile.roundOutwards();
@@ -106,7 +106,7 @@ DrawingPattern::renderPattern(float opacity) {
         render(dc, one_tile, RENDER_DEFAULT);
     } else {
         //Overflow transforms need to be transformed to the new coordinate system
-        //introduced by dc.transform( pattern_surface.drawingTransform().inverse() );
+        //introduced by dc.transform(pattern_surface.drawingTransform().inverse());
         Geom::Affine dt = pattern_surface.drawingTransform();
         Geom::Affine idt = pattern_surface.drawingTransform().inverse();
         Geom::Affine initial_transform = idt * _overflow_initial_transform * dt;
@@ -122,11 +122,11 @@ DrawingPattern::renderPattern(float opacity) {
     //Uncomment to debug
     // cairo_surface_t* raw = pattern_surface.raw();
     // std::cout << "  cairo_surface (sp-pattern): "
-    //           << " width: "  << cairo_image_surface_get_width( raw )
-    //           << " height: " << cairo_image_surface_get_height( raw )
+    //           << " width: "  << cairo_image_surface_get_width(raw)
+    //           << " height: " << cairo_image_surface_get_height(raw)
     //           << std::endl;
     // std::string filename = "drawing-pattern.png";
-    // cairo_surface_write_to_png( pattern_surface.raw(), filename.c_str() );
+    // cairo_surface_write_to_png(pattern_surface.raw(), filename.c_str());
 
     if (needs_opacity) {
         dc.popGroupToSource(); // pop raw pattern

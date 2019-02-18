@@ -61,7 +61,7 @@ void sp_dialog_defocus_callback_cpp(Gtk::Entry *e)
 void
 sp_dialog_defocus_callback (GtkWindow * /*win*/, gpointer data)
 {
-    sp_dialog_defocus( GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(data))) );
+    sp_dialog_defocus(GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(data))));
 }
 
 
@@ -75,8 +75,8 @@ sp_dialog_defocus_on_enter_cpp (Gtk::Entry *e)
 void
 sp_dialog_defocus_on_enter (GtkWidget *w)
 {
-    g_signal_connect ( G_OBJECT (w), "activate",
-                       G_CALLBACK (sp_dialog_defocus_callback), w );
+    g_signal_connect (G_OBJECT (w), "activate",
+                       G_CALLBACK (sp_dialog_defocus_callback), w);
 }
 
 
@@ -149,7 +149,7 @@ void sp_transientize(GtkWidget *dialog)
     // _set_skip_taskbar_hint makes transient dialogs NON-transient! When dialogs
     // are made transient (_set_transient_for), they are already removed from
     // the taskbar in Win32.
-    if (prefs->getBool( "/options/dialogsskiptaskbar/value")) {
+    if (prefs->getBool("/options/dialogsskiptaskbar/value")) {
         gtk_window_set_skip_taskbar_hint (GTK_WINDOW (dialog), TRUE);
     }
 #endif
@@ -164,23 +164,23 @@ void sp_transientize(GtkWidget *dialog)
 
     // if there's an active document window, attach dialog to it as a transient:
 
-        if ( SP_ACTIVE_DESKTOP )
+        if (SP_ACTIVE_DESKTOP)
         {
             SP_ACTIVE_DESKTOP->setWindowTransient (dialog, transient_policy);
         }
     }
 } // end of sp_transientize()
 
-void on_transientize (SPDesktop *desktop, win_data *wd )
+void on_transientize (SPDesktop *desktop, win_data *wd)
 {
     sp_transientize_callback (desktop, wd);
 }
 
 void
-sp_transientize_callback ( SPDesktop *desktop, win_data *wd )
+sp_transientize_callback (SPDesktop *desktop, win_data *wd)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    gint transient_policy = prefs->getIntLimited( "/options/transientpolicy/value", 1, 0, 2);
+    gint transient_policy = prefs->getIntLimited("/options/transientpolicy/value", 1, 0, 2);
 
 #ifdef _WIN32 // Win32 special code to enable transient dialogs
     transient_policy = 1;

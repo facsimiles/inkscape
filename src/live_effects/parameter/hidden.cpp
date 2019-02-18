@@ -21,7 +21,7 @@ namespace Inkscape {
 
 namespace LivePathEffect {
 
-HiddenParam::HiddenParam( const Glib::ustring& label, const Glib::ustring& tip,
+HiddenParam::HiddenParam(const Glib::ustring& label, const Glib::ustring& tip,
                       const Glib::ustring& key, Inkscape::UI::Widget::Registry* wr,
                       Effect* effect, const Glib::ustring default_value, bool is_visible)
     : Parameter(label, tip, key, wr, effect),

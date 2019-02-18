@@ -18,7 +18,7 @@ namespace LivePathEffect {
 
 class OriginalPathParam: public PathParam {
 public:
-    OriginalPathParam ( const Glib::ustring& label,
+    OriginalPathParam (const Glib::ustring& label,
                 const Glib::ustring& tip,
                 const Glib::ustring& key,
                 Inkscape::UI::Widget::Registry* wr,

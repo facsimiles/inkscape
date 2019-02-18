@@ -888,7 +888,7 @@ void Node::setType(NodeType type, bool update_handles)
            or we give them the default power in curve mode */
         if(_pm()._isBSpline()){
             double weight = NO_POWER;
-            if(_pm()._bsplineHandlePosition(this->front()) != NO_POWER ){
+            if(_pm()._bsplineHandlePosition(this->front()) != NO_POWER){
                 weight = DEFAULT_START_POWER;
             }
             _front.setPosition(_pm()._bsplineHandleReposition(this->front(), weight));

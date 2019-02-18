@@ -48,12 +48,12 @@ cubic_bbox (Geom::Coord x000, Geom::Coord y000, Geom::Coord x001, Geom::Coord y0
      * xttt = s3 * x000 + (1 - s) 3s2 * x001 + (1 - s) * (1 - s) * 3s * x011 + (1 - s) * (1 - s) * (1 - s) * x111
      * xttt = s3 * x000 + (3s2 - 3s3) * x001 + (3s - 6s2 + 3s3) * x011 + (1 - 2s + s2 - s + 2s2 - s3) * x111
      * xttt = (x000 - 3 * x001 + 3 * x011 -     x111) * s3 +
-     *        (       3 * x001 - 6 * x011 + 3 * x111) * s2 +
-     *        (                  3 * x011 - 3 * x111) * s  +
-     *        (                                 x111)
+     *        (3 * x001 - 6 * x011 + 3 * x111) * s2 +
+     *        (3 * x011 - 3 * x111) * s  +
+     *        (x111)
      * xttt' = (3 * x000 - 9 * x001 +  9 * x011 - 3 * x111) * s2 +
-     *         (           6 * x001 - 12 * x011 + 6 * x111) * s  +
-     *         (                       3 * x011 - 3 * x111)
+     *         (6 * x001 - 12 * x011 + 6 * x111) * s  +
+     *         (3 * x011 - 3 * x111)
      */
 
     if (!containsXrange) {
@@ -182,7 +182,7 @@ bounds_exact_transformed(Geom::PathVector const & pv, Geom::Affine const & t)
             } else {
                 // should handle all not-so-easy curves:
                 Geom::Curve *ctemp = cit->transformed(t);
-                bbox.unionWith( ctemp->boundsExact());
+                bbox.unionWith(ctemp->boundsExact());
                 delete ctemp;
             }
         }
@@ -377,7 +377,7 @@ geom_curve_bbox_wind_distance(Geom::Curve const & c, Geom::Affine const &m,
         swept.expandTo(p2);
 
         if (!viewbox || swept.intersects(*viewbox)) { // we see this segment, so do full processing
-            geom_cubic_bbox_wind_distance ( p0[X], p0[Y],
+            geom_cubic_bbox_wind_distance (p0[X], p0[Y],
                                             p1[X], p1[Y],
                                             p2[X], p2[Y],
                                             p3[X], p3[Y],
@@ -455,14 +455,14 @@ pathv_matrix_point_bbox_wind_distance (Geom::PathVector const & pathv, Geom::Aff
  * Geom::VLineSegment or Geom::CubicBezier.
  */
 Geom::PathVector
-pathv_to_linear_and_cubic_beziers( Geom::PathVector const &pathv )
+pathv_to_linear_and_cubic_beziers(Geom::PathVector const &pathv)
 {
     Geom::PathVector output;
 
     for (const auto & pit : pathv) {
-        output.push_back( Geom::Path() );
+        output.push_back(Geom::Path());
         output.back().setStitching(true);
-        output.back().start( pit.initialPoint() );
+        output.back().start(pit.initialPoint());
 
         for (Geom::Path::const_iterator cit = pit.begin(); cit != pit.end_open(); ++cit) {
             if (is_straight_curve(*cit)) {
@@ -482,7 +482,7 @@ pathv_to_linear_and_cubic_beziers( Geom::PathVector const &pathv )
             }
         }
         
-        output.back().close( pit.closed() );
+        output.back().close(pit.closed());
     }
     
     return output;
@@ -497,7 +497,7 @@ pathv_to_linear_and_cubic_beziers( Geom::PathVector const &pathv )
  * fewest points.
  */
 Geom::PathVector
-pathv_to_linear( Geom::PathVector const &pathv, double /*maxdisp*/)
+pathv_to_linear(Geom::PathVector const &pathv, double /*maxdisp*/)
 {
     Geom::PathVector output;
     Geom::PathVector tmppath = pathv_to_linear_and_cubic_beziers(pathv);
@@ -505,9 +505,9 @@ pathv_to_linear( Geom::PathVector const &pathv, double /*maxdisp*/)
     // Now all path segments are either already lines, or they are beziers.
 
     for (Geom::PathVector::const_iterator pit = tmppath.begin(); pit != tmppath.end(); ++pit) {
-        output.push_back( Geom::Path() );
-        output.back().start( pit->initialPoint() );
-        output.back().close( pit->closed() );
+        output.push_back(Geom::Path());
+        output.back().start(pit->initialPoint());
+        output.back().close(pit->closed());
 
         for (Geom::Path::const_iterator cit = pit->begin(); cit != pit->end_open(); ++cit) {
             if (is_straight_curve(*cit)) {
@@ -553,14 +553,14 @@ pathv_to_linear( Geom::PathVector const &pathv, double /*maxdisp*/)
  * The straight curve part is needed as is for the effect to work appropriately
  */
 Geom::PathVector
-pathv_to_cubicbezier( Geom::PathVector const &pathv)
+pathv_to_cubicbezier(Geom::PathVector const &pathv)
 {
     Geom::PathVector output;
     double cubicGap = 0.01;
     for (const auto & pit : pathv) {
-        output.push_back( Geom::Path() );
-        output.back().start( pit.initialPoint() );
-        output.back().close( pit.closed() );
+        output.push_back(Geom::Path());
+        output.back().start(pit.initialPoint());
+        output.back().close(pit.closed());
         bool end_open = false;
         if (pit.closed()) {
             const Geom::Curve &closingline = pit.back_closed();
@@ -571,7 +571,7 @@ pathv_to_cubicbezier( Geom::PathVector const &pathv)
         Geom::Path pitCubic = (Geom::Path)pit;
         if(end_open && pit.closed()){
             pitCubic.close(false);
-            pitCubic.appendNew<Geom::LineSegment>( pitCubic.initialPoint() );
+            pitCubic.appendNew<Geom::LineSegment>(pitCubic.initialPoint());
             pitCubic.close(true);
         }
         for (Geom::Path::iterator cit = pitCubic.begin(); cit != pitCubic.end_open(); ++cit) {

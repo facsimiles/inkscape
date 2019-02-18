@@ -26,7 +26,7 @@ public:
      * Creates a new instance that if the signal is currently unblocked will block
      * it until this instance is destructed and then will unblock it.
      */
-    SignalBlocker( sigc::connection *connection ) :
+    SignalBlocker(sigc::connection *connection) :
         _connection(connection),
         _wasBlocked(_connection->blocked())
     {

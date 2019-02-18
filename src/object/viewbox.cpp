@@ -70,9 +70,9 @@ void SPViewBox::set_viewBox(const gchar* value) {
   }
 
   // The C++ way?  -- not necessarily using iostreams
-  // std::string sv( value );
-  // std::replace( sv.begin(), sv.end(), ',', ' ');
-  // std::stringstream ss( sv );
+  // std::string sv(value);
+  // std::replace(sv.begin(), sv.end(), ',', ' ');
+  // std::stringstream ss(sv);
   // double x, y, width, height;
   // ss >> x >> y >> width >> height;
 }
@@ -250,7 +250,7 @@ SPItemCtx SPViewBox::get_rctx(const SPItemCtx* ictx, double scale_none) {
 
   if (this->viewBox_set) {
     // Adjusts c2p for viewbox
-    apply_viewbox( rctx.viewport, scale_none );
+    apply_viewbox(rctx.viewport, scale_none);
   }
 
   rctx.i2doc = this->c2p * rctx.i2doc;

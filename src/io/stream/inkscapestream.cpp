@@ -251,7 +251,7 @@ static bool getDouble(Glib::ustring &str, double *val)
 
 
 
-const Reader &BasicReader::readBool (bool& val )
+const Reader &BasicReader::readBool (bool& val)
 {
     Glib::ustring buf = readWord();
     if (buf == "true")
@@ -261,7 +261,7 @@ const Reader &BasicReader::readBool (bool& val )
     return *this;
 }
 
-const Reader &BasicReader::readShort (short& val )
+const Reader &BasicReader::readShort (short& val)
 {
     Glib::ustring buf = readWord();
     long ival;
@@ -270,7 +270,7 @@ const Reader &BasicReader::readShort (short& val )
     return *this;
 }
 
-const Reader &BasicReader::readUnsignedShort (unsigned short& val )
+const Reader &BasicReader::readUnsignedShort (unsigned short& val)
 {
     Glib::ustring buf = readWord();
     unsigned long ival;
@@ -279,7 +279,7 @@ const Reader &BasicReader::readUnsignedShort (unsigned short& val )
     return *this;
 }
 
-const Reader &BasicReader::readInt (int& val )
+const Reader &BasicReader::readInt (int& val)
 {
     Glib::ustring buf = readWord();
     long ival;
@@ -288,7 +288,7 @@ const Reader &BasicReader::readInt (int& val )
     return *this;
 }
 
-const Reader &BasicReader::readUnsignedInt (unsigned int& val )
+const Reader &BasicReader::readUnsignedInt (unsigned int& val)
 {
     Glib::ustring buf = readWord();
     unsigned long ival;
@@ -297,7 +297,7 @@ const Reader &BasicReader::readUnsignedInt (unsigned int& val )
     return *this;
 }
 
-const Reader &BasicReader::readLong (long& val )
+const Reader &BasicReader::readLong (long& val)
 {
     Glib::ustring buf = readWord();
     long ival;
@@ -306,7 +306,7 @@ const Reader &BasicReader::readLong (long& val )
     return *this;
 }
 
-const Reader &BasicReader::readUnsignedLong (unsigned long& val )
+const Reader &BasicReader::readUnsignedLong (unsigned long& val)
 {
     Glib::ustring buf = readWord();
     unsigned long ival;
@@ -315,7 +315,7 @@ const Reader &BasicReader::readUnsignedLong (unsigned long& val )
     return *this;
 }
 
-const Reader &BasicReader::readFloat (float& val )
+const Reader &BasicReader::readFloat (float& val)
 {
     Glib::ustring buf = readWord();
     double ival;
@@ -324,7 +324,7 @@ const Reader &BasicReader::readFloat (float& val )
     return *this;
 }
 
-const Reader &BasicReader::readDouble (double& val )
+const Reader &BasicReader::readDouble (double& val)
 {
     Glib::ustring buf = readWord();
     double ival;
@@ -534,7 +534,7 @@ Writer &BasicWriter::writeString(const char *str)
 /**
  *
  */
-Writer &BasicWriter::writeBool (bool val )
+Writer &BasicWriter::writeBool (bool val)
 {
     if (val)
         writeString("true");
@@ -547,7 +547,7 @@ Writer &BasicWriter::writeBool (bool val )
 /**
  *
  */
-Writer &BasicWriter::writeShort (short val )
+Writer &BasicWriter::writeShort (short val)
 {
     gchar *buf = g_strdup_printf("%d", val);
     if (buf) {
@@ -562,7 +562,7 @@ Writer &BasicWriter::writeShort (short val )
 /**
  *
  */
-Writer &BasicWriter::writeUnsignedShort (unsigned short val )
+Writer &BasicWriter::writeUnsignedShort (unsigned short val)
 {
     gchar *buf = g_strdup_printf("%u", val);
     if (buf) {

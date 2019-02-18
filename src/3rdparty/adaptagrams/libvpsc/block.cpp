@@ -129,8 +129,8 @@ void Block::setUpConstraintHeap(PairingHeap<Constraint*,CompareConstraints>* &h,
         for (Cit j=cs->begin();j!=cs->end();++j) {
             Constraint *c=*j;
             c->timeStamp=blocks->blockTimeCtr;
-            if ( ((c->left->block != this) && in) || 
-                 ((c->right->block != this) && !in) )
+            if (((c->left->block != this) && in) || 
+                 ((c->right->block != this) && !in))
             {
                 h->insert(c);
             }
@@ -349,7 +349,7 @@ bool Block::split_path(
     Variable* const u, 
     Constraint* &m,
     bool desperation=false
-    ) 
+) 
 {
     for(Cit it(v->in.begin());it!=v->in.end();++it) {
         Constraint *c=*it;

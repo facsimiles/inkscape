@@ -182,169 +182,169 @@ Effect::New(EffectType lpenr, LivePathEffectObject *lpeobj)
     Effect* neweffect = nullptr;
     switch (lpenr) {
         case EMBRODERY_STITCH:
-            neweffect = static_cast<Effect*> ( new LPEEmbroderyStitch(lpeobj) );
+            neweffect = static_cast<Effect*> (new LPEEmbroderyStitch(lpeobj));
             break;
         case BOOL_OP:
-            neweffect = static_cast<Effect*> ( new LPEBool(lpeobj) );
+            neweffect = static_cast<Effect*> (new LPEBool(lpeobj));
             break;
         case PATTERN_ALONG_PATH:
-            neweffect = static_cast<Effect*> ( new LPEPatternAlongPath(lpeobj) );
+            neweffect = static_cast<Effect*> (new LPEPatternAlongPath(lpeobj));
             break;
         case BEND_PATH:
-            neweffect = static_cast<Effect*> ( new LPEBendPath(lpeobj) );
+            neweffect = static_cast<Effect*> (new LPEBendPath(lpeobj));
             break;
         case SKETCH:
-            neweffect = static_cast<Effect*> ( new LPESketch(lpeobj) );
+            neweffect = static_cast<Effect*> (new LPESketch(lpeobj));
             break;
         case ROUGH_HATCHES:
-            neweffect = static_cast<Effect*> ( new LPERoughHatches(lpeobj) );
+            neweffect = static_cast<Effect*> (new LPERoughHatches(lpeobj));
             break;
         case VONKOCH:
-            neweffect = static_cast<Effect*> ( new LPEVonKoch(lpeobj) );
+            neweffect = static_cast<Effect*> (new LPEVonKoch(lpeobj));
             break;
         case KNOT:
-            neweffect = static_cast<Effect*> ( new LPEKnot(lpeobj) );
+            neweffect = static_cast<Effect*> (new LPEKnot(lpeobj));
             break;
         case GEARS:
-            neweffect = static_cast<Effect*> ( new LPEGears(lpeobj) );
+            neweffect = static_cast<Effect*> (new LPEGears(lpeobj));
             break;
         case CURVE_STITCH:
-            neweffect = static_cast<Effect*> ( new LPECurveStitch(lpeobj) );
+            neweffect = static_cast<Effect*> (new LPECurveStitch(lpeobj));
             break;
         case LATTICE:
-            neweffect = static_cast<Effect*> ( new LPELattice(lpeobj) );
+            neweffect = static_cast<Effect*> (new LPELattice(lpeobj));
             break;
         case ENVELOPE:
-            neweffect = static_cast<Effect*> ( new LPEEnvelope(lpeobj) );
+            neweffect = static_cast<Effect*> (new LPEEnvelope(lpeobj));
             break;
         case CIRCLE_WITH_RADIUS:
-            neweffect = static_cast<Effect*> ( new LPECircleWithRadius(lpeobj) );
+            neweffect = static_cast<Effect*> (new LPECircleWithRadius(lpeobj));
             break;
         case SPIRO:
-            neweffect = static_cast<Effect*> ( new LPESpiro(lpeobj) );
+            neweffect = static_cast<Effect*> (new LPESpiro(lpeobj));
             break;
         case CONSTRUCT_GRID:
-            neweffect = static_cast<Effect*> ( new LPEConstructGrid(lpeobj) );
+            neweffect = static_cast<Effect*> (new LPEConstructGrid(lpeobj));
             break;
         case PERP_BISECTOR:
-            neweffect = static_cast<Effect*> ( new LPEPerpBisector(lpeobj) );
+            neweffect = static_cast<Effect*> (new LPEPerpBisector(lpeobj));
             break;
         case TANGENT_TO_CURVE:
-            neweffect = static_cast<Effect*> ( new LPETangentToCurve(lpeobj) );
+            neweffect = static_cast<Effect*> (new LPETangentToCurve(lpeobj));
             break;
         case MIRROR_SYMMETRY:
-            neweffect = static_cast<Effect*> ( new LPEMirrorSymmetry(lpeobj) );
+            neweffect = static_cast<Effect*> (new LPEMirrorSymmetry(lpeobj));
             break;
         case CIRCLE_3PTS:
-            neweffect = static_cast<Effect*> ( new LPECircle3Pts(lpeobj) );
+            neweffect = static_cast<Effect*> (new LPECircle3Pts(lpeobj));
             break;
         case ANGLE_BISECTOR:
-            neweffect = static_cast<Effect*> ( new LPEAngleBisector(lpeobj) );
+            neweffect = static_cast<Effect*> (new LPEAngleBisector(lpeobj));
             break;
         case PARALLEL:
-            neweffect = static_cast<Effect*> ( new LPEParallel(lpeobj) );
+            neweffect = static_cast<Effect*> (new LPEParallel(lpeobj));
             break;
         case COPY_ROTATE:
-            neweffect = static_cast<Effect*> ( new LPECopyRotate(lpeobj) );
+            neweffect = static_cast<Effect*> (new LPECopyRotate(lpeobj));
             break;
         case OFFSET:
-            neweffect = static_cast<Effect*> ( new LPEOffset(lpeobj) );
+            neweffect = static_cast<Effect*> (new LPEOffset(lpeobj));
             break;
         case RULER:
-            neweffect = static_cast<Effect*> ( new LPERuler(lpeobj) );
+            neweffect = static_cast<Effect*> (new LPERuler(lpeobj));
             break;
         case INTERPOLATE:
-            neweffect = static_cast<Effect*> ( new LPEInterpolate(lpeobj) );
+            neweffect = static_cast<Effect*> (new LPEInterpolate(lpeobj));
             break;
         case INTERPOLATE_POINTS:
-            neweffect = static_cast<Effect*> ( new LPEInterpolatePoints(lpeobj) );
+            neweffect = static_cast<Effect*> (new LPEInterpolatePoints(lpeobj));
             break;
         case TEXT_LABEL:
-            neweffect = static_cast<Effect*> ( new LPETextLabel(lpeobj) );
+            neweffect = static_cast<Effect*> (new LPETextLabel(lpeobj));
             break;
         case PATH_LENGTH:
-            neweffect = static_cast<Effect*> ( new LPEPathLength(lpeobj) );
+            neweffect = static_cast<Effect*> (new LPEPathLength(lpeobj));
             break;
         case LINE_SEGMENT:
-            neweffect = static_cast<Effect*> ( new LPELineSegment(lpeobj) );
+            neweffect = static_cast<Effect*> (new LPELineSegment(lpeobj));
             break;
         case DOEFFECTSTACK_TEST:
-            neweffect = static_cast<Effect*> ( new LPEdoEffectStackTest(lpeobj) );
+            neweffect = static_cast<Effect*> (new LPEdoEffectStackTest(lpeobj));
             break;
         case BSPLINE:
-            neweffect = static_cast<Effect*> ( new LPEBSpline(lpeobj) );
+            neweffect = static_cast<Effect*> (new LPEBSpline(lpeobj));
             break;
         case DYNASTROKE:
-            neweffect = static_cast<Effect*> ( new LPEDynastroke(lpeobj) );
+            neweffect = static_cast<Effect*> (new LPEDynastroke(lpeobj));
             break;
         case RECURSIVE_SKELETON:
-            neweffect = static_cast<Effect*> ( new LPERecursiveSkeleton(lpeobj) );
+            neweffect = static_cast<Effect*> (new LPERecursiveSkeleton(lpeobj));
             break;
         case EXTRUDE:
-            neweffect = static_cast<Effect*> ( new LPEExtrude(lpeobj) );
+            neweffect = static_cast<Effect*> (new LPEExtrude(lpeobj));
             break;
         case POWERSTROKE:
-            neweffect = static_cast<Effect*> ( new LPEPowerStroke(lpeobj) );
+            neweffect = static_cast<Effect*> (new LPEPowerStroke(lpeobj));
             break;
         case CLONE_ORIGINAL:
-            neweffect = static_cast<Effect*> ( new LPECloneOriginal(lpeobj) );
+            neweffect = static_cast<Effect*> (new LPECloneOriginal(lpeobj));
             break;
         case ATTACH_PATH:
-            neweffect = static_cast<Effect*> ( new LPEAttachPath(lpeobj) );
+            neweffect = static_cast<Effect*> (new LPEAttachPath(lpeobj));
             break;
         case FILL_BETWEEN_STROKES:
-            neweffect = static_cast<Effect*> ( new LPEFillBetweenStrokes(lpeobj) );
+            neweffect = static_cast<Effect*> (new LPEFillBetweenStrokes(lpeobj));
             break;
         case FILL_BETWEEN_MANY:
-            neweffect = static_cast<Effect*> ( new LPEFillBetweenMany(lpeobj) );
+            neweffect = static_cast<Effect*> (new LPEFillBetweenMany(lpeobj));
             break;
         case ELLIPSE_5PTS:
-            neweffect = static_cast<Effect*> ( new LPEEllipse5Pts(lpeobj) );
+            neweffect = static_cast<Effect*> (new LPEEllipse5Pts(lpeobj));
             break;
         case BOUNDING_BOX:
-            neweffect = static_cast<Effect*> ( new LPEBoundingBox(lpeobj) );
+            neweffect = static_cast<Effect*> (new LPEBoundingBox(lpeobj));
             break;
         case JOIN_TYPE:
-            neweffect = static_cast<Effect*> ( new LPEJoinType(lpeobj) );
+            neweffect = static_cast<Effect*> (new LPEJoinType(lpeobj));
             break;
         case TAPER_STROKE:
-            neweffect = static_cast<Effect*> ( new LPETaperStroke(lpeobj) );
+            neweffect = static_cast<Effect*> (new LPETaperStroke(lpeobj));
             break;
         case SIMPLIFY:
-            neweffect = static_cast<Effect*> ( new LPESimplify(lpeobj) );
+            neweffect = static_cast<Effect*> (new LPESimplify(lpeobj));
             break;
         case LATTICE2:
-            neweffect = static_cast<Effect*> ( new LPELattice2(lpeobj) );
+            neweffect = static_cast<Effect*> (new LPELattice2(lpeobj));
             break;
         case PERSPECTIVE_ENVELOPE:
-            neweffect = static_cast<Effect*> ( new LPEPerspectiveEnvelope(lpeobj) );
+            neweffect = static_cast<Effect*> (new LPEPerspectiveEnvelope(lpeobj));
             break;
         case FILLET_CHAMFER:
-            neweffect = static_cast<Effect*> ( new LPEFilletChamfer(lpeobj) );
+            neweffect = static_cast<Effect*> (new LPEFilletChamfer(lpeobj));
             break;
         case POWERCLIP:
-            neweffect = static_cast<Effect*> ( new LPEPowerClip(lpeobj) );
+            neweffect = static_cast<Effect*> (new LPEPowerClip(lpeobj));
             break;
         case POWERMASK:
-            neweffect = static_cast<Effect*> ( new LPEPowerMask(lpeobj) );
+            neweffect = static_cast<Effect*> (new LPEPowerMask(lpeobj));
             break;
         case ROUGHEN:
-            neweffect = static_cast<Effect*> ( new LPERoughen(lpeobj) );
+            neweffect = static_cast<Effect*> (new LPERoughen(lpeobj));
             break;
         case SHOW_HANDLES:
-            neweffect = static_cast<Effect*> ( new LPEShowHandles(lpeobj) );
+            neweffect = static_cast<Effect*> (new LPEShowHandles(lpeobj));
             break;
         case TRANSFORM_2PTS:
-            neweffect = static_cast<Effect*> ( new LPETransform2Pts(lpeobj) );
+            neweffect = static_cast<Effect*> (new LPETransform2Pts(lpeobj));
             break;
         case MEASURE_SEGMENTS:
-            neweffect = static_cast<Effect*> ( new LPEMeasureSegments(lpeobj) );
+            neweffect = static_cast<Effect*> (new LPEMeasureSegments(lpeobj));
             break;
         case PTS2ELLIPSE:
-            neweffect = static_cast<Effect*> ( new LPEPts2Ellipse(lpeobj) );
+            neweffect = static_cast<Effect*> (new LPEPts2Ellipse(lpeobj));
             break;
         case DASH_STROKE:
-            neweffect = static_cast<Effect*> ( new LPEDashStroke(lpeobj) );
+            neweffect = static_cast<Effect*> (new LPEDashStroke(lpeobj));
             break;
         default:
             g_warning("LivePathEffect::Effect::New called with invalid patheffect type (%d)", lpenr);
@@ -399,7 +399,7 @@ Effect::Effect(LivePathEffectObject *lpeobject)
       defaultsopen(false),
       is_ready(false) // is automatically set to false if providesOwnFlashPaths() is not overridden
 {
-    registerParameter( dynamic_cast<Parameter *>(&is_visible) );
+    registerParameter(dynamic_cast<Parameter *>(&is_visible));
     is_visible.widget_is_visible = false;
     current_zoom = 0.0;
 }
@@ -409,10 +409,10 @@ Effect::~Effect() = default;
 Glib::ustring
 Effect::getName() const
 {
-    if (lpeobj->effecttype_set && LPETypeConverter.is_valid_id(lpeobj->effecttype) )
-        return Glib::ustring( _(LPETypeConverter.get_label(lpeobj->effecttype).c_str()) );
+    if (lpeobj->effecttype_set && LPETypeConverter.is_valid_id(lpeobj->effecttype))
+        return Glib::ustring(_(LPETypeConverter.get_label(lpeobj->effecttype).c_str()));
     else
-        return Glib::ustring( _("No effect") );
+        return Glib::ustring(_("No effect"));
 }
 
 EffectType
@@ -615,12 +615,12 @@ Effect::doEffect_path (Geom::PathVector const & path_in)
 {
     Geom::PathVector path_out;
 
-    if ( !concatenate_before_pwd2 ) {
+    if (!concatenate_before_pwd2) {
         // default behavior
         for (const auto & i : path_in) {
             Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2_in = i.toPwSb();
             Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2_out = doEffect_pwd2(pwd2_in);
-            Geom::PathVector path = Geom::path_from_piecewise( pwd2_out, LPE_CONVERSION_TOLERANCE);
+            Geom::PathVector path = Geom::path_from_piecewise(pwd2_out, LPE_CONVERSION_TOLERANCE);
             // add the output path vector to the already accumulated vector:
             for (const auto & j : path) {
                 path_out.push_back(j);
@@ -630,10 +630,10 @@ Effect::doEffect_path (Geom::PathVector const & path_in)
       // concatenate the path into possibly discontinuous pwd2
         Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2_in;
         for (const auto & i : path_in) {
-            pwd2_in.concat( i.toPwSb() );
+            pwd2_in.concat(i.toPwSb());
         }
         Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2_out = doEffect_pwd2(pwd2_in);
-        path_out = Geom::path_from_piecewise( pwd2_out, LPE_CONVERSION_TOLERANCE);
+        path_out = Geom::path_from_piecewise(pwd2_out, LPE_CONVERSION_TOLERANCE);
     }
 
     return path_out;
@@ -763,7 +763,7 @@ Gtk::Widget *
 Effect::newWidget()
 {
     // use manage here, because after deletion of Effect object, others might still be pointing to this widget.
-    Gtk::VBox * vbox = Gtk::manage( new Gtk::VBox() );
+    Gtk::VBox * vbox = Gtk::manage(new Gtk::VBox());
 
     vbox->set_border_width(5);
 
@@ -800,7 +800,7 @@ Effect::defaultParamSet()
 {
     // use manage here, because after deletion of Effect object, others might still be pointing to this widget.
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    Gtk::VBox * vbox_expander = Gtk::manage( new Gtk::VBox() );
+    Gtk::VBox * vbox_expander = Gtk::manage(new Gtk::VBox());
     Glib::ustring effectname = (Glib::ustring)Inkscape::LivePathEffect::LPETypeConverter.get_label(effectType());
     Glib::ustring effectkey = (Glib::ustring)Inkscape::LivePathEffect::LPETypeConverter.get_key(effectType());
     std::vector<Parameter *>::iterator it = param_vector.begin();
@@ -831,7 +831,7 @@ Effect::defaultParamSet()
                 ove = Glib::ustring(_("<b>Default value overridden:</b> None\n"));
             }
             Glib::ustring cur = Glib::ustring(_("<b>Current parameter value:</b> ")) + value;
-            Gtk::HBox * vbox_param = Gtk::manage( new Gtk::HBox(true) );
+            Gtk::HBox * vbox_param = Gtk::manage(new Gtk::HBox(true));
             Gtk::Label *parameter_label = Gtk::manage(new Gtk::Label(label, Gtk::ALIGN_START));
             parameter_label->set_use_markup(true);
             parameter_label->set_use_underline(true);
@@ -859,7 +859,7 @@ Effect::defaultParamSet()
     expander->set_use_markup(true);
     expander->add(*vbox_expander);
     expander->set_expanded(defaultsopen);
-    expander->property_expanded().signal_changed().connect(sigc::bind<0>(sigc::mem_fun(*this, &Effect::onDefaultsExpanderChanged), expander ));
+    expander->property_expanded().signal_changed().connect(sigc::bind<0>(sigc::mem_fun(*this, &Effect::onDefaultsExpanderChanged), expander));
     if (has_params) {
         Gtk::Widget *vboxwidg = dynamic_cast<Gtk::Widget *>(expander);
         vboxwidg->set_margin_bottom(5);
@@ -926,7 +926,7 @@ Effect::getParameter(const char * key)
     std::vector<Parameter *>::iterator it = param_vector.begin();
     while (it != param_vector.end()) {
         Parameter * param = *it;
-        if ( param->param_key == key) {
+        if (param->param_key == key) {
             return param;
         }
 
@@ -975,8 +975,8 @@ Effect::editNextParamOncanvas(SPItem * item, SPDesktop * desktop)
         desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, message);
         g_free(message);
     } else {
-        desktop->messageStack()->flash( Inkscape::WARNING_MESSAGE,
-                                        _("None of the applied path effect's parameters can be edited on-canvas.") );
+        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE,
+                                        _("None of the applied path effect's parameters can be edited on-canvas."));
     }
 }
 

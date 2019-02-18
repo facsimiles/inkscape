@@ -86,10 +86,10 @@ SBasis2d partial_derivative(SBasis2d const &f, int dim) {
             unsigned di = dim?j:i;
             if (di>=1){
                 float motpi = dim?-1:1;
-                Linear2d ds_lin_low( lin[0], -motpi*lin[1], motpi*lin[2], -lin[3] );
+                Linear2d ds_lin_low(lin[0], -motpi*lin[1], motpi*lin[2], -lin[3]);
                 result[(i+dim-1)+(j-dim)*result.us] += di*ds_lin_low;
                 
-                Linear2d ds_lin_hi( lin[1+dim]-lin[0], lin[1+2*dim]-lin[dim], lin[3]-lin[2-dim], lin[3-dim]-lin[2-dim] );
+                Linear2d ds_lin_hi(lin[1+dim]-lin[0], lin[1+2*dim]-lin[dim], lin[3]-lin[2-dim], lin[3-dim]-lin[2-dim]);
                 result[i+j*result.us] += di*ds_lin_hi;                
             }
         }
@@ -176,8 +176,8 @@ sb2d_cubic_solve(SBasis2d const &f, Geom::Point const &A, Geom::Point const &B){
     unsigned best = 0;
     for (unsigned i=0; i<candidates.size(); i++){
         Interval bounds = *bounds_fast(compose(f,candidates[i]));
-        double new_error = (fabs(bounds.max())>fabs(bounds.min()) ? fabs(bounds.max()) : fabs(bounds.min()) );
-        if ( new_error < error || error < 0 ){
+        double new_error = (fabs(bounds.max())>fabs(bounds.min()) ? fabs(bounds.max()) : fabs(bounds.min()));
+        if (new_error < error || error < 0){
             error = new_error;
             best = i;
         }

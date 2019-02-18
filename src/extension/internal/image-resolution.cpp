@@ -87,7 +87,7 @@ double ImageResolution::y() const {
   
 static bool haspngheader(FILE *fp) {
     unsigned char header[8];
-    if ( fread(header, 1, 8, fp) != 8 ) {
+    if (fread(header, 1, 8, fp) != 8) {
         return false;
     }
 
@@ -227,12 +227,12 @@ void ImageResolution::readexif(char const *fn) {
     ExifEntry *yres = exif_content_get_entry(ed->ifd[EXIF_IFD_0], EXIF_TAG_Y_RESOLUTION);
     ExifEntry *unit = exif_content_get_entry(ed->ifd[EXIF_IFD_0], EXIF_TAG_RESOLUTION_UNIT);
     
-    if ( xres && yres ) {
+    if (xres && yres) {
         x_ = exifDouble(xres, byte_order);
         y_ = exifDouble(yres, byte_order);
         if (unit) {
             double u = exifDouble(unit, byte_order);
-            if ( u == 3 ) {
+            if (u == 3) {
                 x_ *= 2.54;
                 y_ *= 2.54;
             }
@@ -277,21 +277,21 @@ void ImageResolution::readexiv(char const *fn) {
     for (Exiv2::ExifData::const_iterator i = exifData.begin(); i != end; ++i) {
         if (ok_)
             break;
-        if ( i->tag() == 0x011a ) {
+        if (i->tag() == 0x011a) {
             // X Resolution
             x_ = i->toFloat();
             havex = true;
-        } else if ( i->tag() == 0x011b ) {
+        } else if (i->tag() == 0x011b) {
             // Y Resolution
             y_ = i->toFloat();
             havey = true;
-        } else if ( i->tag() == 0x0128 ) {
+        } else if (i->tag() == 0x0128) {
             unit = i->toLong();
         }
         ok_ = havex && havey && haveunit;
     }
     if (haveunit) {
-        if ( unit == 3 ) {
+        if (unit == 3) {
             x_ *= 2.54;
             y_ *= 2.54;
         }
@@ -362,11 +362,11 @@ void ImageResolution::readjfif(char const *fn) {
     
     debug("cinfo.[XY]_density");
     if (cinfo.saw_JFIF_marker) { // JFIF APP0 marker was seen
-        if ( cinfo.density_unit == 1 ) { // dots/inch
+        if (cinfo.density_unit == 1) { // dots/inch
             x_ = cinfo.X_density;
             y_ = cinfo.Y_density;
             ok_ = true;
-        } else if ( cinfo.density_unit == 2 ) { // dots/cm
+        } else if (cinfo.density_unit == 2) { // dots/cm
             x_ = cinfo.X_density * 2.54;
             y_ = cinfo.Y_density * 2.54;
             ok_ = true;

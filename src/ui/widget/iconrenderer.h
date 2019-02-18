@@ -35,11 +35,11 @@ public:
 protected:
     type_signal_activated m_signal_activated;
 
-    void render_vfunc( const Cairo::RefPtr<Cairo::Context>& cr,
+    void render_vfunc(const Cairo::RefPtr<Cairo::Context>& cr,
                                Gtk::Widget& widget,
                                const Gdk::Rectangle& background_area,
                                const Gdk::Rectangle& cell_area,
-                               Gtk::CellRendererState flags ) override;
+                               Gtk::CellRendererState flags) override;
 
     void get_preferred_width_vfunc(Gtk::Widget& widget,
                                            int& min_w,

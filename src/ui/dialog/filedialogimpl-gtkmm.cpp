@@ -222,7 +222,7 @@ void SVGPreview::showImage(Glib::ustring &theFileName)
     Glib::ustring svg = ".svg";
     if (hasSuffix(fileName, svg)) {
         std::ifstream input(theFileName.c_str());
-        if( !input ) {
+        if(!input) {
             std::cerr << "SVGPreview::showImage: Failed to open file: " << theFileName << std::endl;
         } else {
 
@@ -232,7 +232,7 @@ void SVGPreview::showImage(Glib::ustring &theFileName)
             Glib::RefPtr<Glib::Regex> regex1 = Glib::Regex::create("width=\"(.*)\"");
             Glib::RefPtr<Glib::Regex> regex2 = Glib::Regex::create("height=\"(.*)\"");
      
-            while( !input.eof() && (height.empty() || width.empty()) ) {
+            while(!input.eof() && (height.empty() || width.empty())) {
 
                 input >> token;
                 // std::cout << "|" << token << "|" << std::endl;
@@ -299,7 +299,7 @@ void SVGPreview::showImage(Glib::ustring &theFileName)
     /* FIXME: Do proper XML quoting for fileName. */
     gchar *xmlBuffer =
         g_strdup_printf(xformat, previewWidth, previewHeight, imgX, imgY, scaledImgWidth, scaledImgHeight,
-                        fileName.c_str(), rectX, rectY, rectWidth, rectHeight, width.c_str(), height.c_str() );
+                        fileName.c_str(), rectX, rectY, rectWidth, rectHeight, width.c_str(), height.c_str());
 
     // g_message("%s\n", xmlBuffer);
 
@@ -1054,9 +1054,9 @@ void FileSaveDialogImplGtk::fileTypeChangedCallback()
 void FileSaveDialogImplGtk::fileNameChanged() {
     Glib::ustring name = get_filename();
     Glib::ustring::size_type pos = name.rfind('.');
-    if ( pos == Glib::ustring::npos ) return;
-    Glib::ustring ext = name.substr( pos ).casefold();
-    if (extension && Glib::ustring(dynamic_cast<Inkscape::Extension::Output *>(extension)->get_extension()).casefold() == ext ) return;
+    if (pos == Glib::ustring::npos) return;
+    Glib::ustring ext = name.substr(pos).casefold();
+    if (extension && Glib::ustring(dynamic_cast<Inkscape::Extension::Output *>(extension)->get_extension()).casefold() == ext) return;
     if (knownExtensions.find(ext) == knownExtensions.end()) return;
     fromCB = true;
     fileTypeComboBox.set_active_text(_(knownExtensions[ext]->get_filetypename()));
@@ -1582,7 +1582,7 @@ bool FileExportDialogImpl::show()
         append_extension = checkbox.get_active();
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         prefs->setBool("/dialogs/save_export/append_extension", append_extension);
-        prefs->setBool("/dialogs/save_export/default", ( extension != NULL ? extension->get_id() : "" ));
+        prefs->setBool("/dialogs/save_export/default", (extension != NULL ? extension->get_id() : ""));
         */
         return true;
     } else {

@@ -93,7 +93,7 @@ void Layout::_clearOutputObjects()
 
 void Layout::FontMetrics::set(font_instance *font)
 {
-    if( font != nullptr ) {
+    if(font != nullptr) {
         ascent      = font->GetTypoAscent();  
         descent     = font->GetTypoDescent();
         xheight     = font->GetXHeight();
@@ -104,14 +104,14 @@ void Layout::FontMetrics::set(font_instance *font)
 
 void Layout::FontMetrics::max(FontMetrics const &other)
 {
-    if (other.ascent      > ascent      ) ascent      = other.ascent;
-    if (other.descent     > descent     ) descent     = other.descent;
-    if( other.xheight     > xheight     ) xheight     = other.xheight;
-    if( other.ascent_max  > ascent_max  ) ascent_max  = other.ascent_max;
-    if( other.descent_max > descent_max ) descent_max = other.descent_max;
+    if (other.ascent      > ascent) ascent      = other.ascent;
+    if (other.descent     > descent) descent     = other.descent;
+    if(other.xheight     > xheight) xheight     = other.xheight;
+    if(other.ascent_max  > ascent_max) ascent_max  = other.ascent_max;
+    if(other.descent_max > descent_max) descent_max = other.descent_max;
 }
 
-void Layout::FontMetrics::computeEffective( const double &line_height_multiplier ) {
+void Layout::FontMetrics::computeEffective(const double &line_height_multiplier) {
     double half_leading = 0.5 * (line_height_multiplier - 1.0) * emSize();
     ascent  += half_leading;
     descent += half_leading;
@@ -121,8 +121,8 @@ void Layout::_getGlyphTransformMatrix(int glyph_index, Geom::Affine *matrix) con
 {
     Span const &span = _glyphs[glyph_index].span(this);
     double rotation = _glyphs[glyph_index].rotation;
-    if ( (span.block_progression == LEFT_TO_RIGHT || span.block_progression == RIGHT_TO_LEFT) &&
-        _glyphs[glyph_index].orientation == ORIENTATION_SIDEWAYS ) {
+    if ((span.block_progression == LEFT_TO_RIGHT || span.block_progression == RIGHT_TO_LEFT) &&
+        _glyphs[glyph_index].orientation == ORIENTATION_SIDEWAYS) {
         // Vertical sideways text
         rotation += M_PI/2.0;
     }
@@ -206,7 +206,7 @@ void Layout::show(DrawingGroup *in_arena, Geom::OptRect const &paintbox) const
                     _spans[span_index].line_height.getMaxAscent(),
                     _spans[span_index].line_height.getMaxDescent(),
                     glyph_matrix.translation()[Geom::X] - phase0
-                );
+);
             }
             glyph_index++;
         }
@@ -283,7 +283,7 @@ Geom::Affine glyph_matrix;
         int ndx = 0;
         double rtl = 1.0;        // 1 L->R, -1 R->L, constant across a span. 1.0 for t->b b->t???
         
-        for (unsigned char_index = 0 ; char_index < _characters.size() ; ) {
+        for (unsigned char_index = 0 ; char_index < _characters.size() ;) {
             Glib::ustring text_string;  // accumulate text for record in this
             Geom::Point g_pos(0,0);     // all strings are output at (0,0) because we do the translation using the matrix
             int glyph_index = _characters[char_index].in_glyph;
@@ -423,7 +423,7 @@ void Layout::showGlyphs(CairoRenderContext *ctx) const
     bool clip_mode = false;//(ctx->getRenderMode() == CairoRenderContext::RENDER_MODE_CLIP);
     std::vector<CairoGlyphInfo> glyphtext;
 
-    for (unsigned glyph_index = 0 ; glyph_index < _glyphs.size() ; ) {
+    for (unsigned glyph_index = 0 ; glyph_index < _glyphs.size() ;) {
         if (_characters[_glyphs[glyph_index].in_character].in_glyph == -1) {
             // invisible glyphs
             unsigned same_character = _glyphs[glyph_index].in_character;
@@ -615,18 +615,18 @@ Glib::ustring Layout::dumpAsText() const
                 "    font '%1' %2 %3 %4 %5\n",
                 sp_font_description_get_family(_spans[span_index].font->descr),
                 _spans[span_index].font_size,
-                style_to_text( pango_font_description_get_style(_spans[span_index].font->descr) ),
-                weight_to_text( pango_font_description_get_weight(_spans[span_index].font->descr) ),
+                style_to_text(pango_font_description_get_style(_spans[span_index].font->descr)),
+                weight_to_text(pango_font_description_get_weight(_spans[span_index].font->descr)),
                 (variations?variations:"")
-            );
+);
 #else
             result += Glib::ustring::compose(
                 "    font '%1' %2 %3 %4\n",
                 sp_font_description_get_family(_spans[span_index].font->descr),
                 _spans[span_index].font_size,
-                style_to_text( pango_font_description_get_style(_spans[span_index].font->descr) ),
-                weight_to_text( pango_font_description_get_weight(_spans[span_index].font->descr) )
-            );
+                style_to_text(pango_font_description_get_style(_spans[span_index].font->descr)),
+                weight_to_text(pango_font_description_get_weight(_spans[span_index].font->descr))
+);
 #endif
         }
         result += Glib::ustring::compose("    x_start = %1, x_end = %2\n", _spans[span_index].x_start, _spans[span_index].x_end)
@@ -698,7 +698,7 @@ void Layout::fitToPathAlign(SVGLength const &startOffset, Path const &path)
         }
     }
 
-    for (unsigned char_index = 0 ; char_index < _characters.size() ; ) {
+    for (unsigned char_index = 0 ; char_index < _characters.size() ;) {
         Span const &span = _characters[char_index].span(this);
 
         size_t next_cluster_char_index = 0; // TODO refactor to not bump via for loops

@@ -159,7 +159,7 @@ Geom::Affine get_scale_transform_for_uniform_stroke(Geom::Rect const &bbox_visua
         scale_y = h1/h0;
         scale_x = transform_stroke ? 1 : scale_y;
         unbudge *= Geom::Translate (-flip_x * 0.5 * (scale_x - 1.0) * w0, 0);
-        unbudge *= Geom::Translate ( flip_x * 0.5 * (w1 - w0), 0); // compensate for the fact that this operation cannot be performed
+        unbudge *= Geom::Translate (flip_x * 0.5 * (w1 - w0), 0); // compensate for the fact that this operation cannot be performed
     } else if ((fabs(h0 - stroke_y) < 1e-6) || h1 == 0) { // We have a horizontal line at hand
         scale_x = w1/w0;
         scale_y = transform_stroke ? 1 : scale_x;
@@ -318,7 +318,7 @@ Geom::Affine get_scale_transform_for_variable_stroke(Geom::Rect const &bbox_visu
         scale_y = h1/h0;
         scale_x = transform_stroke ? 1 : scale_y;
         unbudge *= Geom::Translate (-flip_x * 0.5 * (scale_x - 1.0) * w0, 0);
-        unbudge *= Geom::Translate ( flip_x * 0.5 * (w1 - w0), 0); // compensate for the fact that this operation cannot be performed
+        unbudge *= Geom::Translate (flip_x * 0.5 * (w1 - w0), 0); // compensate for the fact that this operation cannot be performed
     } else if ((fabs(h0 - r0h) < 1e-6) || h1 == 0) { // We have a horizontal line at hand
         scale_x = w1/w0;
         scale_y = transform_stroke ? 1 : scale_x;

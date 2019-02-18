@@ -49,7 +49,7 @@ class Effect;
 
 class Parameter {
 public:
-    Parameter(  Glib::ustring  label,
+    Parameter(Glib::ustring  label,
                 Glib::ustring  tip,
                 Glib::ustring  key,
                 Inkscape::UI::Widget::Registry* wr,
@@ -100,7 +100,7 @@ protected:
 
 class ScalarParam : public Parameter {
 public:
-    ScalarParam(  const Glib::ustring& label,
+    ScalarParam(const Glib::ustring& label,
                 const Glib::ustring& tip,
                 const Glib::ustring& key,
                 Inkscape::UI::Widget::Registry* wr,

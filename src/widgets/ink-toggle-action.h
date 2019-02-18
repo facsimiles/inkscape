@@ -15,12 +15,12 @@
 #include "attributes.h"
 
 G_BEGIN_DECLS
-#define INK_TOGGLE_ACTION_TYPE                ( ink_toggle_action_get_type() )
-#define INK_TOGGLE_ACTION( obj )              ( G_TYPE_CHECK_INSTANCE_CAST( (obj), INK_TOGGLE_ACTION_TYPE, InkToggleAction) )
-#define INK_TOGGLE_ACTION_CLASS( klass )      ( G_TYPE_CHECK_CLASS_CAST( (klass), INK_TOGGLE_ACTION_TYPE, InkToggleActionClass) )
-#define IS_INK_TOGGLE_ACTION( obj )           ( G_TYPE_CHECK_INSTANCE_TYPE( (obj), INK_TOGGLE_ACTION_TYPE) )
-#define IS_INK_TOGGLE_ACTION_CLASS( klass )   ( G_TYPE_CHECK_CLASS_TYPE( (klass), INK_TOGGLE_ACTION_TYPE) )
-#define INK_TOGGLE_ACTION_GET_CLASS( obj )    ( G_TYPE_INSTANCE_GET_CLASS( (obj), INK_TOGGLE_ACTION_TYPE, InkToggleActionClass) )
+#define INK_TOGGLE_ACTION_TYPE                (ink_toggle_action_get_type())
+#define INK_TOGGLE_ACTION(obj)              (G_TYPE_CHECK_INSTANCE_CAST((obj), INK_TOGGLE_ACTION_TYPE, InkToggleAction))
+#define INK_TOGGLE_ACTION_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST((klass), INK_TOGGLE_ACTION_TYPE, InkToggleActionClass))
+#define IS_INK_TOGGLE_ACTION(obj)           (G_TYPE_CHECK_INSTANCE_TYPE((obj), INK_TOGGLE_ACTION_TYPE))
+#define IS_INK_TOGGLE_ACTION_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE((klass), INK_TOGGLE_ACTION_TYPE))
+#define INK_TOGGLE_ACTION_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS((obj), INK_TOGGLE_ACTION_TYPE, InkToggleActionClass))
 
 typedef struct _InkToggleAction      InkToggleAction;
 typedef struct _InkToggleActionClass InkToggleActionClass;
@@ -35,9 +35,9 @@ struct _InkToggleActionClass
     GtkToggleActionClass parent_class;
 };
 
-GType ink_toggle_action_get_type( void );
+GType ink_toggle_action_get_type(void);
 
-InkToggleAction* ink_toggle_action_new( const gchar *name,
+InkToggleAction* ink_toggle_action_new(const gchar *name,
                                         const gchar *label,
                                         const gchar *tooltip,
                                         const gchar *inkId,

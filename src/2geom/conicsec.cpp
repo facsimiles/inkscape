@@ -68,7 +68,7 @@ static T det(T M[2][2]) {
 
 template <typename T>
 static T det3(T M[3][3]) {
-    return ( M[0][0] * det(M[1][1], M[1][2],
+    return (M[0][0] * det(M[1][1], M[1][2],
                            M[2][1], M[2][2])
              -M[1][0] * det(M[0][1], M[0][2],
                             M[2][1], M[2][2])

@@ -80,7 +80,7 @@ namespace Geom { namespace NL {
  *       the coefficients of the curve A(t) expressed in S-Basis form;
  *   parameter type: the type of x and t variable in the examples above;
  *   value type:     the type of the known sample values (in the first example
- *                   is constant )
+ *                   is constant)
  *   instance type:  the type of the objects produced by using
  *                   the fitting raw data solution
  */
@@ -101,8 +101,8 @@ class LinearFittingModel
     /*
      * a LinearFittingModel must implement the following methods:
      *
-     * void feed( VectorView & vector,
-     *            parameter_type const& sample_parameter ) const;
+     * void feed(VectorView & vector,
+     *            parameter_type const& sample_parameter) const;
      *
      * size_t size() const;
      *
@@ -129,9 +129,9 @@ class LinearFittingModelWithFixedTerms
     /*
      * a LinearFittingModelWithFixedTerms must implement the following methods:
      *
-     * void feed( VectorView & vector,
+     * void feed(VectorView & vector,
      *            value_type & fixed_term,
-     *            parameter_type const& sample_parameter ) const;
+     *            parameter_type const& sample_parameter) const;
      *
      * size_t size() const;
      *
@@ -156,7 +156,7 @@ class LFMPowerBasis
     {
     }
 
-    void feed( VectorView & coeff, double sample_parameter ) const
+    void feed(VectorView & coeff, double sample_parameter) const
     {
         coeff[0] = 1;
         double x_i = 1;
@@ -208,15 +208,15 @@ class LFMNormalizedPowerBasis
 {
   public:
     LFMNormalizedPowerBasis(size_t _degree)
-        : m_model( _degree - 1)
+        : m_model(_degree - 1)
     {
         assert(_degree > 0);
     }
 
 
-    void feed( VectorView & coeff,
+    void feed(VectorView & coeff,
                double & known_term,
-               double sample_parameter ) const
+               double sample_parameter) const
     {
         m_model.feed(coeff, sample_parameter);
         known_term = coeff[m_model.size()-1] * sample_parameter;
@@ -240,7 +240,7 @@ class LFMNormalizedPowerBasis
 //    : public LinearFittingModelWithFixedTerms<Point, double, InstanceType>
 //{
 //  public:
-//    void feed( VectorView & coeff, double & fixed_term, Point const& p ) const
+//    void feed(VectorView & coeff, double & fixed_term, Point const& p) const
 //    {
 //        coeff[0] = p[X] * p[Y];
 //        coeff[1] = p[Y] * p[Y];
@@ -264,7 +264,7 @@ class LFMConicEquation
     : public LinearFittingModelWithFixedTerms<Point, double, InstanceType>
 {
   public:
-    void feed( VectorView & coeff, double & fixed_term, Point const& p ) const
+    void feed(VectorView & coeff, double & fixed_term, Point const& p) const
     {
         coeff[0] = p[X] * p[Y];
         coeff[1] = p[Y] * p[Y];
@@ -311,7 +311,7 @@ class LFMCircleEquation
     : public LinearFittingModelWithFixedTerms<Point, double, InstanceType>
 {
   public:
-    void feed( VectorView & coeff, double & fixed_term, Point const& p ) const
+    void feed(VectorView & coeff, double & fixed_term, Point const& p) const
     {
         coeff[0] = p[X];
         coeff[1] = p[Y];
@@ -343,13 +343,13 @@ class LFMSBasis
     : public LinearFittingModel<double, double, SBasis>
 {
   public:
-    LFMSBasis( size_t _order )
-        : m_size( 2*(_order+1) ),
+    LFMSBasis(size_t _order)
+        : m_size(2*(_order+1)),
           m_order(_order)
     {
     }
 
-    void feed( VectorView & coeff, double t ) const
+    void feed(VectorView & coeff, double t) const
     {
         double u0 = 1-t;
         double u1 = t;
@@ -391,12 +391,12 @@ class LFMD2SBasis
     : public LinearFittingModel< double, Point, D2<SBasis> >
 {
   public:
-    LFMD2SBasis( size_t _order )
+    LFMD2SBasis(size_t _order)
         : mosb(_order)
     {
     }
 
-    void feed( VectorView & coeff, double t ) const
+    void feed(VectorView & coeff, double t) const
     {
         mosb.feed(coeff, t);
     }
@@ -422,14 +422,14 @@ class LFMBezier
     : public LinearFittingModel<double, double, Bezier>
 {
   public:
-    LFMBezier( size_t _order )
+    LFMBezier(size_t _order)
         : m_size(_order + 1),
           m_order(_order)
     {
         binomial_coefficients(m_bc, m_order);
     }
 
-    void feed( VectorView & coeff, double t ) const
+    void feed(VectorView & coeff, double t) const
     {
         double s = 1;
         for (size_t i = 0; i < size(); ++i)
@@ -479,7 +479,7 @@ class LFMBezierCurveN
     {
     }
 
-    void feed( VectorView & coeff, double t ) const
+    void feed(VectorView & coeff, double t) const
     {
         mob.feed(coeff, t);
     }

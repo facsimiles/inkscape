@@ -155,7 +155,7 @@ Point Curve::unitTangentAt(Coord t, unsigned n) const
     std::vector<Point> derivs = pointAndDerivatives(t, n);
     for (unsigned deriv_n = 1; deriv_n < derivs.size(); deriv_n++) {
         Coord length = derivs[deriv_n].length();
-        if ( ! are_near(length, 0) ) {
+        if (! are_near(length, 0)) {
             // length of derivative is non-zero, so return unit vector
             return derivs[deriv_n] / length;
         }

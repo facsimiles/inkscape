@@ -18,11 +18,11 @@
 double mod360(double const x)
 {
     double const m = fmod(x, 360.0);
-    double const ret = ( std::isnan(m)
+    double const ret = (std::isnan(m)
                          ? 0.0
-                         : ( m < 0
+                         : (m < 0
                              ? m + 360
-                             : m ) );
+                             : m));
     g_return_val_if_fail(0.0 <= ret && ret < 360.0,
                          0.0);
     return ret;

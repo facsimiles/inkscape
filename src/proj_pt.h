@@ -54,7 +54,7 @@ public:
         Pt2 *result = new Pt2 (*this);
         result->normalize();
         rhs.normalize();
-        for ( unsigned i = 0 ; i < 2 ; ++i ) {
+        for (unsigned i = 0 ; i < 2 ; ++i) {
             result->pt[i] += rhs.pt[i];
         }
         return *result;
@@ -64,7 +64,7 @@ public:
         Pt2 *result = new Pt2 (*this);
         result->normalize();
         rhs.normalize();
-        for ( unsigned i = 0 ; i < 2 ; ++i ) {
+        for (unsigned i = 0 ; i < 2 ; ++i) {
             result->pt[i] -= rhs.pt[i];
         }
         return *result;
@@ -73,7 +73,7 @@ public:
     inline Pt2 &operator*(double const s) const {
         Pt2 *result = new Pt2 (*this);
         result->normalize();
-        for ( unsigned i = 0 ; i < 2 ; ++i ) {
+        for (unsigned i = 0 ; i < 2 ; ++i) {
             result->pt[i] *= s;
         }
         return *result;
@@ -111,7 +111,7 @@ public:
         Pt3 *result = new Pt3 (*this);
         result->normalize();
         rhs.normalize();
-        for ( unsigned i = 0 ; i < 3 ; ++i ) {
+        for (unsigned i = 0 ; i < 3 ; ++i) {
             result->pt[i] += rhs.pt[i];
         }
         return *result;
@@ -121,7 +121,7 @@ public:
         Pt3 *result = new Pt3 (*this);
         result->normalize();
         rhs.normalize();
-        for ( unsigned i = 0 ; i < 3 ; ++i ) {
+        for (unsigned i = 0 ; i < 3 ; ++i) {
             result->pt[i] -= rhs.pt[i];
         }
         return *result;
@@ -130,7 +130,7 @@ public:
     inline Pt3 &operator*(double const s) const {
         Pt3 *result = new Pt3 (*this);
         result->normalize();
-        for ( unsigned i = 0 ; i < 3 ; ++i ) {
+        for (unsigned i = 0 ; i < 3 ; ++i) {
             result->pt[i] *= s;
         }
         return *result;

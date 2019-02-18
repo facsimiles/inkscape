@@ -160,8 +160,8 @@ Drawing::setCacheBudget(size_t bytes)
 
 void
 Drawing::setGrayscaleMatrix(gdouble value_matrix[20]) {
-    _grayscale_colormatrix = Filters::FilterColorMatrix::ColorMatrixMatrix( 
-        std::vector<gdouble> (value_matrix, value_matrix + 20) );
+    _grayscale_colormatrix = Filters::FilterColorMatrix::ColorMatrixMatrix(
+        std::vector<gdouble> (value_matrix, value_matrix + 20));
 }
 
 void

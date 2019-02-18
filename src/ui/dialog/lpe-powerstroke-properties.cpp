@@ -81,8 +81,8 @@ PowerstrokePropertiesDialog::PowerstrokePropertiesDialog()
         sigc::bind_return(
             sigc::hide(sigc::mem_fun(*this, &PowerstrokePropertiesDialog::_close)),
             true
-        )
-    );
+)
+);
 
     add_action_widget(_close_button, Gtk::RESPONSE_CLOSE);
     add_action_widget(_apply_button, Gtk::RESPONSE_APPLY);
@@ -136,8 +136,8 @@ PowerstrokePropertiesDialog::_close()
         sigc::bind_return(
             sigc::bind(sigc::ptr_fun<void*, void>(&::operator delete), this),
             false 
-        )
-    );
+)
+);
 }
 
 bool PowerstrokePropertiesDialog::_handleKeyEvent(GdkEventKey * /*event*/)
@@ -156,7 +156,7 @@ bool PowerstrokePropertiesDialog::_handleKeyEvent(GdkEventKey * /*event*/)
 
 void PowerstrokePropertiesDialog::_handleButtonEvent(GdkEventButton* event)
 {
-    if ( (event->type == GDK_2BUTTON_PRESS) && (event->button == 1) ) {
+    if ((event->type == GDK_2BUTTON_PRESS) && (event->button == 1)) {
         _apply();
     }
 }

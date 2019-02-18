@@ -102,14 +102,14 @@ LayerSelector::LayerSelector(SPDesktop *desktop)
         sigc::compose(
             sigc::mem_fun(*label, &AlternateIcons::setState),
             sigc::mem_fun(_visibility_toggle, &Gtk::ToggleButton::get_active)
-        )
-    );
+)
+);
     _visibility_toggled_connection = _visibility_toggle.signal_toggled().connect(
         sigc::compose(
             sigc::mem_fun(*this, &LayerSelector::_hideLayer),
             sigc::mem_fun(_visibility_toggle, &Gtk::ToggleButton::get_active)
-        )
-    );
+)
+);
 
     _visibility_toggle.set_relief(Gtk::RELIEF_NONE);
     _visibility_toggle.set_tooltip_text(_("Toggle current layer visibility"));
@@ -122,14 +122,14 @@ LayerSelector::LayerSelector(SPDesktop *desktop)
         sigc::compose(
             sigc::mem_fun(*label, &AlternateIcons::setState),
             sigc::mem_fun(_lock_toggle, &Gtk::ToggleButton::get_active)
-        )
-    );
+)
+);
     _lock_toggled_connection = _lock_toggle.signal_toggled().connect(
         sigc::compose(
             sigc::mem_fun(*this, &LayerSelector::_lockLayer),
             sigc::mem_fun(_lock_toggle, &Gtk::ToggleButton::get_active)
-        )
-    );
+)
+);
 
     _lock_toggle.set_relief(Gtk::RELIEF_NONE);
     _lock_toggle.set_tooltip_text(_("Lock or unlock current layer"));
@@ -144,11 +144,11 @@ LayerSelector::LayerSelector(SPDesktop *desktop)
     _selector.set_cell_data_func(
         _label_renderer,
         sigc::mem_fun(*this, &LayerSelector::_prepareLabelRenderer)
-    );
+);
 
     _selection_changed_connection = _selector.signal_changed().connect(
         sigc::mem_fun(*this, &LayerSelector::_setDesktopLayer)
-    );
+);
     setDesktop(desktop);
 }
 
@@ -165,7 +165,7 @@ LayerSelector::~LayerSelector() {
  *  Then it selects the current layer for the desktop.
  */
 void LayerSelector::setDesktop(SPDesktop *desktop) {
-    if ( desktop == _desktop ) {
+    if (desktop == _desktop) {
         return;
     }
 
@@ -185,10 +185,10 @@ void LayerSelector::setDesktop(SPDesktop *desktop) {
 //        g_signal_connect_after(_desktop, "shutdown", GCallback(detach), this);
 
         LayerManager *mgr = _desktop->layer_manager;
-        if ( mgr ) {
-            _current_layer_changed_connection = mgr->connectCurrentLayerChanged( sigc::mem_fun(*this, &LayerSelector::_selectLayer) );
-            //_layerUpdatedConnection = mgr->connectLayerDetailsChanged( sigc::mem_fun(*this, &LayerSelector::_updateLayer) );
-            _layers_changed_connection = mgr->connectChanged( sigc::mem_fun(*this, &LayerSelector::_layersChanged) );
+        if (mgr) {
+            _current_layer_changed_connection = mgr->connectCurrentLayerChanged(sigc::mem_fun(*this, &LayerSelector::_selectLayer));
+            //_layerUpdatedConnection = mgr->connectLayerDetailsChanged(sigc::mem_fun(*this, &LayerSelector::_updateLayer));
+            _layers_changed_connection = mgr->connectChanged(sigc::mem_fun(*this, &LayerSelector::_layersChanged));
         }
 
         _selectLayer(_desktop->currentLayer());
@@ -260,7 +260,7 @@ void LayerSelector::_selectLayer(SPObject *layer) {
 
     if (layer) {
         List<SPObject &> hierarchy=reverse_list<SPObject::ParentIterator>(layer, root);
-        if ( layer == root ) {
+        if (layer == root) {
             _buildEntries(0, cons(*root, hierarchy));
         } else if (hierarchy) {
             _buildSiblingEntries(0, *root, hierarchy);
@@ -271,9 +271,9 @@ void LayerSelector::_selectLayer(SPObject *layer) {
                 _layer_model->children().begin(),
                 _layer_model->children().end(),
                 column_matches_object(_model_columns.object, *layer)
-            )
-        );
-        if ( row != _layer_model->children().end() ) {
+)
+);
+        if (row != _layer_model->children().end()) {
             _selector.set_active(row);
         }
 
@@ -281,16 +281,16 @@ void LayerSelector::_selectLayer(SPObject *layer) {
         sp_object_ref(_layer, nullptr);
     }
 
-    if ( !layer || layer == root ) {
+    if (!layer || layer == root) {
         _visibility_toggle.set_sensitive(false);
         _visibility_toggle.set_active(false);
         _lock_toggle.set_sensitive(false);
         _lock_toggle.set_active(false);
     } else {
         _visibility_toggle.set_sensitive(true);
-        _visibility_toggle.set_active(( SP_IS_ITEM(layer) ? SP_ITEM(layer)->isHidden() : false ));
+        _visibility_toggle.set_active((SP_IS_ITEM(layer) ? SP_ITEM(layer)->isHidden() : false));
         _lock_toggle.set_sensitive(true);
-        _lock_toggle.set_active(( SP_IS_ITEM(layer) ? SP_ITEM(layer)->isLocked() : false ));
+        _lock_toggle.set_active((SP_IS_ITEM(layer) ? SP_ITEM(layer)->isLocked() : false));
     }
 
     _lock_toggled_connection.unblock();
@@ -303,7 +303,7 @@ void LayerSelector::_selectLayer(SPObject *layer) {
 void LayerSelector::_setDesktopLayer() {
     Gtk::ListStore::iterator selected(_selector.get_active());
     SPObject *layer=_selector.get_active()->get_value(_model_columns.object);
-    if ( _desktop && layer ) {
+    if (_desktop && layer) {
         _current_layer_changed_connection.block();
         _layers_changed_connection.block();
 
@@ -349,11 +349,11 @@ void LayerSelector::_buildSiblingEntries(
 
     auto siblings = parent.children | boost::adaptors::filtered(is_layer(_desktop)) | boost::adaptors::reversed;
 
-    SPObject *layer( hierarchy ? &*hierarchy : nullptr );
+    SPObject *layer(hierarchy ? &*hierarchy : nullptr);
 
     for (auto& sib: siblings) {
         _buildEntry(depth, sib);
-        if ( &sib == layer ) {
+        if (&sib == layer) {
             _buildSiblingEntries(depth+1, *layer, rest(hierarchy));
         }
     }
@@ -370,7 +370,7 @@ void attribute_changed(Inkscape::XML::Node */*repr*/, gchar const *name,
                        gchar const */*old_value*/, gchar const */*new_value*/,
                        bool /*is_interactive*/, void *data)
 {
-    if ( !std::strcmp(name, "inkscape:groupmode") ) {
+    if (!std::strcmp(name, "inkscape:groupmode")) {
         reinterpret_cast<Callbacks *>(data)->update_list();
     } else {
         reinterpret_cast<Callbacks *>(data)->update_row();
@@ -379,14 +379,14 @@ void attribute_changed(Inkscape::XML::Node */*repr*/, gchar const *name,
 
 void node_added(Inkscape::XML::Node */*parent*/, Inkscape::XML::Node *child, Inkscape::XML::Node */*ref*/, void *data) {
     gchar const *mode=child->attribute("inkscape:groupmode");
-    if ( mode && !std::strcmp(mode, "layer") ) {
+    if (mode && !std::strcmp(mode, "layer")) {
         reinterpret_cast<Callbacks *>(data)->update_list();
     }
 }
 
 void node_removed(Inkscape::XML::Node */*parent*/, Inkscape::XML::Node *child, Inkscape::XML::Node */*ref*/, void *data) {
     gchar const *mode=child->attribute("inkscape:groupmode");
-    if ( mode && !std::strcmp(mode, "layer") ) {
+    if (mode && !std::strcmp(mode, "layer")) {
         reinterpret_cast<Callbacks *>(data)->update_list();
     }
 }
@@ -396,7 +396,7 @@ void node_reordered(Inkscape::XML::Node */*parent*/, Inkscape::XML::Node *child,
                     void *data)
 {
     gchar const *mode=child->attribute("inkscape:groupmode");
-    if ( mode && !std::strcmp(mode, "layer") ) {
+    if (mode && !std::strcmp(mode, "layer")) {
         reinterpret_cast<Callbacks *>(data)->update_list();
     }
 }
@@ -410,9 +410,9 @@ void update_row_for_object(SPObject *object,
             model->children().begin(),
             model->children().end(),
             column_matches_object(column, *object)
-        )
-    );
-    if ( row != model->children().end() ) {
+)
+);
+    if (row != model->children().end()) {
         model->row_changed(model->get_path(row), row);
     }
 }
@@ -432,14 +432,14 @@ void LayerSelector::_protectUpdate(sigc::slot<void> slot) {
     slot();
 
     SPObject *layer = _desktop ? _desktop->currentLayer() : nullptr;
-    if ( layer ) {
-        bool wantedValue = ( SP_IS_ITEM(layer) ? SP_ITEM(layer)->isLocked() : false );
-        if ( _lock_toggle.get_active() != wantedValue ) {
-            _lock_toggle.set_active( wantedValue );
+    if (layer) {
+        bool wantedValue = (SP_IS_ITEM(layer) ? SP_ITEM(layer)->isLocked() : false);
+        if (_lock_toggle.get_active() != wantedValue) {
+            _lock_toggle.set_active(wantedValue);
         }
-        wantedValue = ( SP_IS_ITEM(layer) ? SP_ITEM(layer)->isHidden() : false );
-        if ( _visibility_toggle.get_active() != wantedValue ) {
-            _visibility_toggle.set_active( wantedValue );
+        wantedValue = (SP_IS_ITEM(layer) ? SP_ITEM(layer)->isHidden() : false);
+        if (_visibility_toggle.get_active() != wantedValue) {
+            _visibility_toggle.set_active(wantedValue);
         }
     }
     _visibility_toggled_connection.block(visibility_blocked);
@@ -458,19 +458,19 @@ void LayerSelector::_buildEntry(unsigned depth, SPObject &object) {
         sigc::bind(
             sigc::ptr_fun(&update_row_for_object),
             &object, _model_columns.object, _layer_model
-        )
-    );
+)
+);
 
     SPObject *layer=_desktop->currentLayer();
-    if ( (&object == layer) || (&object == layer->parent) ) {
+    if ((&object == layer) || (&object == layer->parent)) {
         callbacks->update_list = sigc::bind(
             sigc::mem_fun(*this, &LayerSelector::_protectUpdate),
             sigc::bind(
                 sigc::ptr_fun(&rebuild_all_rows),
                 sigc::mem_fun(*this, &LayerSelector::_selectLayer),
                 _desktop
-            )
-        );
+)
+);
 
         Inkscape::XML::NodeEventVector events = {
             &node_added,
@@ -538,28 +538,28 @@ void LayerSelector::_prepareLabelRenderer(
     //       (or before one has been selected) something appears to
     //       "invent" an iterator with null data and try to render it;
     //       where does it come from, and how can we avoid it?
-    if ( object && object->getRepr() ) {
-        SPObject *layer=( _desktop ? _desktop->currentLayer() : nullptr );
-        SPObject *root=( _desktop ? _desktop->currentRoot() : nullptr );
+    if (object && object->getRepr()) {
+        SPObject *layer=(_desktop ? _desktop->currentLayer() : nullptr);
+        SPObject *root=(_desktop ? _desktop->currentRoot() : nullptr);
 
-        bool isancestor = !( (layer && (object->parent == layer->parent)) || ((layer == root) && (object->parent == root)));
+        bool isancestor = !((layer && (object->parent == layer->parent)) || ((layer == root) && (object->parent == root)));
 
-        bool iscurrent = ( (object == layer) && (object != root) );
+        bool iscurrent = ((object == layer) && (object != root));
 
         gchar *format = g_strdup_printf (
             "<span size=\"smaller\" %s><tt>%*s%s</tt>%s%s%s%%s%s%s%s</span>",
-            ( _desktop && _desktop->itemIsHidden (SP_ITEM(object)) ? "foreground=\"gray50\"" : "" ),
-            depth, "", ( iscurrent ? "&#8226;" : " " ),
-            ( iscurrent ? "<b>" : "" ),
-            ( SP_ITEM(object)->isLocked() ? "[" : "" ),
-            ( isancestor ? "<small>" : "" ),
-            ( isancestor ? "</small>" : "" ),
-            ( SP_ITEM(object)->isLocked() ? "]" : "" ),
-            ( iscurrent ? "</b>" : "" )
-            );
+            (_desktop && _desktop->itemIsHidden (SP_ITEM(object)) ? "foreground=\"gray50\"" : ""),
+            depth, "", (iscurrent ? "&#8226;" : " "),
+            (iscurrent ? "<b>" : ""),
+            (SP_ITEM(object)->isLocked() ? "[" : ""),
+            (isancestor ? "<small>" : ""),
+            (isancestor ? "</small>" : ""),
+            (SP_ITEM(object)->isLocked() ? "]" : ""),
+            (iscurrent ? "</b>" : "")
+);
 
         gchar const *label;
-        if ( object != root ) {
+        if (object != root) {
             label = object->label();
             if (!object->label()) {
                 label = object->defaultLabel();
@@ -578,14 +578,14 @@ void LayerSelector::_prepareLabelRenderer(
     }
 
     _label_renderer.property_ypad() = 1;
-    _label_renderer.property_style() = ( label_defaulted ?
+    _label_renderer.property_style() = (label_defaulted ?
                                          Pango::STYLE_ITALIC :
-                                         Pango::STYLE_NORMAL );
+                                         Pango::STYLE_NORMAL);
 
 }
 
 void LayerSelector::_lockLayer(bool lock) {
-    if ( _layer && SP_IS_ITEM(_layer) ) {
+    if (_layer && SP_IS_ITEM(_layer)) {
         SP_ITEM(_layer)->setLocked(lock);
         DocumentUndo::done(_desktop->getDocument(), SP_VERB_NONE,
                            lock? _("Lock layer") : _("Unlock layer"));
@@ -593,7 +593,7 @@ void LayerSelector::_lockLayer(bool lock) {
 }
 
 void LayerSelector::_hideLayer(bool hide) {
-    if ( _layer && SP_IS_ITEM(_layer) ) {
+    if (_layer && SP_IS_ITEM(_layer)) {
         SP_ITEM(_layer)->setHidden(hide);
         DocumentUndo::done(_desktop->getDocument(), SP_VERB_NONE,
                            hide? _("Hide layer") : _("Unhide layer"));

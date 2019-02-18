@@ -44,7 +44,7 @@ Geom::Path worker_helper(const std::vector< Point<T> > &source1, bool optimize)
 
     std::vector< Point<T> > source;
 
-    if ( optimize )
+    if (optimize)
         source = Tracer::optimize(source1);
     else
         source = source1;
@@ -53,18 +53,18 @@ Geom::Path worker_helper(const std::vector< Point<T> > &source1, bool optimize)
     Point<T> prev = source.back();
     Geom::Path ret(to_geom_point(midpoint(prev, *it)));
 
-    for ( iterator end = source.end() ; it != end ; ++it ) {
+    for (iterator end = source.end() ; it != end ; ++it) {
 #if LIBDEPIXELIZE_ENABLE_EXPERIMENTAL_FEATURES
         // remove redundant points
-        if ( !it->visible ) {
+        if (!it->visible) {
             prev = *it;
             continue;
         }
 #endif // LIBDEPIXELIZE_ENABLE_EXPERIMENTAL_FEATURES
 
-        if ( !prev.visible ) {
+        if (!prev.visible) {
             Geom::Point middle = to_geom_point(midpoint(prev, *it));
-            if ( ret.finalPoint() != middle ) {
+            if (ret.finalPoint() != middle) {
                 // All generated invisible points are straight lines
                 ret.appendNew<Line>(middle);
             }
@@ -73,7 +73,7 @@ Geom::Path worker_helper(const std::vector< Point<T> > &source1, bool optimize)
         Point<T> next = (it + 1 == end) ? source.front() : *(it + 1);
         Point<T> middle = midpoint(*it, next);
 
-        if ( !it->smooth ) {
+        if (!it->smooth) {
             ret.appendNew<Line>(to_geom_point(*it));
             ret.appendNew<Line>(to_geom_point(middle));
         } else {
@@ -95,14 +95,14 @@ void worker(const typename HomogeneousSplines<T>::Polygon &source,
 {
     //dest.pathVector.reserve(source.holes.size() + 1);
 
-    for ( int i = 0 ; i != 4 ; ++i )
+    for (int i = 0 ; i != 4 ; ++i)
         dest.rgba[i] = source.rgba[i];
 
     dest.pathVector.push_back(worker_helper(source.vertices, optimize));
 
-    for ( typename std::vector< std::vector< Point<T> > >::const_iterator
+    for (typename std::vector< std::vector< Point<T> > >::const_iterator
               it = source.holes.begin(), end = source.holes.end()
-              ; it != end ; ++it ) {
+              ; it != end ; ++it) {
         dest.pathVector.push_back(worker_helper(*it, optimize));
     }
 }
@@ -114,21 +114,21 @@ Splines::Splines(const SimplifiedVoronoi<T, adjust_splines> &diagram) :
 {
     _paths.reserve(diagram.size());
 
-    for ( typename SimplifiedVoronoi<T, adjust_splines>::const_iterator
-              it = diagram.begin() , end = diagram.end() ; it != end ; ++it ) {
+    for (typename SimplifiedVoronoi<T, adjust_splines>::const_iterator
+              it = diagram.begin() , end = diagram.end() ; it != end ; ++it) {
         Path path;
 
         path.pathVector
             .push_back(Geom::Path(to_geom_point(it->vertices.front())));
 
-        for ( typename std::vector< Point<T> >::const_iterator
+        for (typename std::vector< Point<T> >::const_iterator
                   it2 = ++it->vertices.begin(), end2 = it->vertices.end()
-                  ; it2 != end2 ; ++it2 ) {
+                  ; it2 != end2 ; ++it2) {
             path.pathVector.back()
                 .appendNew<Geom::LineSegment>(Geom::Point(it2->x, it2->y));
         }
 
-        for ( int i = 0 ; i != 4 ; ++i )
+        for (int i = 0 ; i != 4 ; ++i)
             path.rgba[i] = it->rgba[i];
 
         _paths.push_back(path);
@@ -144,9 +144,9 @@ Splines::Splines(const HomogeneousSplines<T> &homogeneousSplines,
 {
     // TODO: It should be threaded
     iterator paths_it = begin();
-    for ( typename HomogeneousSplines<T>::const_iterator
+    for (typename HomogeneousSplines<T>::const_iterator
               it = homogeneousSplines.begin(), end = homogeneousSplines.end()
-              ; it != end ; ++it, ++paths_it ) {
+              ; it != end ; ++it, ++paths_it) {
         worker<T>(*it, *paths_it, optimize);
     }
 }

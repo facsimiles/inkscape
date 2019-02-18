@@ -108,7 +108,7 @@ int U_PMR_drawline(uint32_t PenID, uint32_t PathID, U_PMF_POINTF Start, U_PMF_PO
    U_PSEUDO_OBJ *poPath;
    U_PSEUDO_OBJ *po;
    int           status=0;
-   int           PTP_value = ( Dashed ? U_PTP_DashMode : U_PTP_None);
+   int           PTP_value = (Dashed ? U_PTP_DashMode : U_PTP_None);
    dpath =  U_PATH_create(0, NULL, 0, 0); /* create an empty path*/
    if(dpath){
       if(U_PATH_moveto(dpath, Start, PTP_value) && U_PATH_lineto(dpath, End, PTP_value)){
@@ -156,7 +156,7 @@ int U_PMR_drawline(uint32_t PenID, uint32_t PathID, U_PMF_POINTF Start, U_PMF_PO
     the bounding box if that box has the same height as the font.  For those fonts specify 0.0 for
     both Ascent and Descent.
 */
-int U_PMR_drawstring( const char *string, int Vpos, uint32_t FontID, const U_PSEUDO_OBJ *BrushID, uint32_t FormatID,
+int U_PMR_drawstring(const char *string, int Vpos, uint32_t FontID, const U_PSEUDO_OBJ *BrushID, uint32_t FormatID,
       U_PMF_STRINGFORMAT  Sfs, const char *FontName, U_FLOAT Height, U_FontInfoParams *fip, uint32_t FontFlags,
       U_FLOAT x, U_FLOAT y, U_PSEUDO_OBJ *sum, EMFTRACK *et){
    U_PSEUDO_OBJ  *po;
@@ -197,16 +197,16 @@ int U_PMR_drawstring( const char *string, int Vpos, uint32_t FontID, const U_PSE
                if(fip->LineGap > -fip->Descent){ aval = fip->yMax;   } // sylfaen, palatino
                else {                            aval = fip->Ascent; } // others
                if(fip->LineGap && (fip->LineGap < -fip->Descent)){ dval =  ((double) (fip->Descent - fip->LineGap)) / ((double) fip->EmSize); } //shruti and some others
-               else {                                              dval =  ((double)  fip->Descent                ) / ((double) fip->EmSize); }
+               else {                                              dval =  ((double)  fip->Descent) / ((double) fip->EmSize); }
                switch(Vpos){
                   case U_SA_Near:  
                      rd = Height * aval / ((double) fip->EmSize);
                      break;
                   case U_SA_Center:
-                     rd = 0.5 * (  Height * aval / ((double) fip->EmSize) +  Height * ( 1.0 +  dval));
+                     rd = 0.5 * (Height * aval / ((double) fip->EmSize) +  Height * (1.0 +  dval));
                      break;
                   case U_SA_Far:
-                     rd = Height * ( 1.0 +  dval);
+                     rd = Height * (1.0 +  dval);
                      break;
                }
                ry = y - rd;   /* draw from upper left corner, which is shifted to put baseline on y */
@@ -219,7 +219,7 @@ int U_PMR_drawstring( const char *string, int Vpos, uint32_t FontID, const U_PSE
 (void) U_PMR_drawline(OBJ_PEN_BLACK_1,OBJ_PATH_1, (U_PMF_POINTF){x- 80, ry}, (U_PMF_POINTF){x- 80, ry + Height * (double) fip->yMax / ((double) fip->EmSize)},  0, sum, et);
 (void) U_PMR_drawline(OBJ_PEN_BLACK_1,OBJ_PATH_1, (U_PMF_POINTF){x- 70, ry}, (U_PMF_POINTF){x- 70, ry - Height * (double) fip->yMin / ((double) fip->EmSize)},  0, sum, et);
 (void) U_PMR_drawline(OBJ_PEN_BLACK_1,OBJ_PATH_1, (U_PMF_POINTF){x- 60, ry}, (U_PMF_POINTF){x- 60, ry + Height * (double) fip->LineGap / ((double) fip->EmSize)},  0, sum, et);
-(void) U_PMR_drawline(OBJ_PEN_BLACK_1,OBJ_PATH_1, (U_PMF_POINTF){x- 50, ry}, (U_PMF_POINTF){x- 50, ry + Height * ( 1.0 -  (((double) (fip->LineGap - fip->Descent)) / ((double) fip->EmSize)) )},  0, sum, et);
+(void) U_PMR_drawline(OBJ_PEN_BLACK_1,OBJ_PATH_1, (U_PMF_POINTF){x- 50, ry}, (U_PMF_POINTF){x- 50, ry + Height * (1.0 -  (((double) (fip->LineGap - fip->Descent)) / ((double) fip->EmSize)))},  0, sum, et);
 #endif
 
                Text16 = U_Utf8ToUtf16le(string, 0, NULL);
@@ -340,22 +340,22 @@ char *U_pmr_names(unsigned int idx){
 /**
     \brief Convert from PseudoObject OID to ObjectType enumeration.
     \returns OT value on success, 0 if no match
-    \param OID   PseudoObject OID (based on EMF+ manual chapter number. )
+    \param OID   PseudoObject OID (based on EMF+ manual chapter number.)
 
     Only OTs that may be stored in the EMF+ object table are supported.
 */
 
 int U_OID_To_OT(uint32_t OID){
    int otype;
-   if(     OID==U_PMF_BRUSH_OID          ){ otype = U_OT_Brush;           }                    
-   else if(OID==U_PMF_PEN_OID            ){ otype = U_OT_Pen;             }         
-   else if(OID==U_PMF_PATH_OID           ){ otype = U_OT_Path;            }               
-   else if(OID==U_PMF_REGION_OID         ){ otype = U_OT_Region;          }               
-   else if(OID==U_PMF_IMAGE_OID          ){ otype = U_OT_Image;           }               
-   else if(OID==U_PMF_FONT_OID           ){ otype = U_OT_Font;            }               
-   else if(OID==U_PMF_STRINGFORMAT_OID   ){ otype = U_OT_StringFormat;    }               
+   if(OID==U_PMF_BRUSH_OID){ otype = U_OT_Brush;           }                    
+   else if(OID==U_PMF_PEN_OID){ otype = U_OT_Pen;             }         
+   else if(OID==U_PMF_PATH_OID){ otype = U_OT_Path;            }               
+   else if(OID==U_PMF_REGION_OID){ otype = U_OT_Region;          }               
+   else if(OID==U_PMF_IMAGE_OID){ otype = U_OT_Image;           }               
+   else if(OID==U_PMF_FONT_OID){ otype = U_OT_Font;            }               
+   else if(OID==U_PMF_STRINGFORMAT_OID){ otype = U_OT_StringFormat;    }               
    else if(OID==U_PMF_IMAGEATTRIBUTES_OID){ otype = U_OT_ImageAttributes; }               
-   else if(OID==U_PMF_CUSTOMLINECAP_OID  ){ otype = U_OT_CustomLineCap;   } 
+   else if(OID==U_PMF_CUSTOMLINECAP_OID){ otype = U_OT_CustomLineCap;   } 
    else {                                   otype = U_OT_Invalid;         }          
    return(otype);
 }
@@ -363,18 +363,18 @@ int U_OID_To_OT(uint32_t OID){
 /**
     \brief Convert from PseudoObject OID to BrushType enumeration.
     \returns BT value on success, -1 if no match
-    \param OID   PseudoObject OID (based on EMF+ manual chapter number. )
+    \param OID   PseudoObject OID (based on EMF+ manual chapter number.)
 
     Only OIDs that map to BT's are supported.
 */
 
 int U_OID_To_BT(uint32_t OID){
    int otype;
-   if(     OID==U_PMF_HATCHBRUSHDATA_OID          ){ otype = U_BT_HatchFill;      }                    
-   else if(OID==U_PMF_LINEARGRADIENTBRUSHDATA_OID ){ otype = U_BT_LinearGradient; }               
-   else if(OID==U_PMF_PATHGRADIENTBRUSHDATA_OID   ){ otype = U_BT_PathGradient;   }               
-   else if(OID==U_PMF_SOLIDBRUSHDATA_OID          ){ otype = U_BT_SolidColor;     }               
-   else if(OID==U_PMF_TEXTUREBRUSHDATA_OID        ){ otype = U_BT_TextureFill;    }               
+   if(OID==U_PMF_HATCHBRUSHDATA_OID){ otype = U_BT_HatchFill;      }                    
+   else if(OID==U_PMF_LINEARGRADIENTBRUSHDATA_OID){ otype = U_BT_LinearGradient; }               
+   else if(OID==U_PMF_PATHGRADIENTBRUSHDATA_OID){ otype = U_BT_PathGradient;   }               
+   else if(OID==U_PMF_SOLIDBRUSHDATA_OID){ otype = U_BT_SolidColor;     }               
+   else if(OID==U_PMF_TEXTUREBRUSHDATA_OID){ otype = U_BT_TextureFill;    }               
    else {                                            otype = -1;                  }          
    return(otype);
 }
@@ -382,15 +382,15 @@ int U_OID_To_BT(uint32_t OID){
 /**
     \brief Convert from PseudoObject OID to CustomLineCapDataType Enumeration.
     \returns BT value on success, -1 if no match
-    \param OID   PseudoObject OID (based on EMF+ manual chapter number. )
+    \param OID   PseudoObject OID (based on EMF+ manual chapter number.)
 
     Only OIDs that map to CLCDT's are supported.
 */
 
 int U_OID_To_CLCDT(uint32_t OID){
    int otype;
-   if(     OID==U_PMF_CUSTOMLINECAPDATA_OID       ){ otype = U_CLCDT_Default;         }                    
-   else if(OID==U_PMF_CUSTOMLINECAPARROWDATA_OID ){  otype = U_CLCDT_AdjustableArrow; }               
+   if(OID==U_PMF_CUSTOMLINECAPDATA_OID){ otype = U_CLCDT_Default;         }                    
+   else if(OID==U_PMF_CUSTOMLINECAPARROWDATA_OID){  otype = U_CLCDT_AdjustableArrow; }               
    else {                                            otype = -1;                      }          
    return(otype);
 }
@@ -398,15 +398,15 @@ int U_OID_To_CLCDT(uint32_t OID){
 /**
     \brief Convert from PseudoObject OID to ImageDataType Enumeration.
     \returns BT value on success, -1 if no match
-    \param OID   PseudoObject OID (based on EMF+ manual chapter number. )
+    \param OID   PseudoObject OID (based on EMF+ manual chapter number.)
 
     Only OIDs that map to IDT's are supported.
 */
 
 int U_OID_To_IDT(uint32_t OID){
    int otype;
-   if(     OID==U_PMF_BITMAP_OID   ){ otype = U_IDT_Bitmap;   }                    
-   else if(OID==U_PMF_METAFILE_OID ){ otype = U_IDT_Metafile; }               
+   if(OID==U_PMF_BITMAP_OID){ otype = U_IDT_Bitmap;   }                    
+   else if(OID==U_PMF_METAFILE_OID){ otype = U_IDT_Metafile; }               
    else {                             otype = -1;             }          
    return(otype);
 }
@@ -414,16 +414,16 @@ int U_OID_To_IDT(uint32_t OID){
 /**
     \brief Convert from PseudoObject OID to RegionNodeDataType Enumeration.
     \returns BT value on success, -1 if no match
-    \param OID   PseudoObject OID (based on EMF+ manual chapter number. )
+    \param OID   PseudoObject OID (based on EMF+ manual chapter number.)
 
     Only OIDs that map to RNDT's are supported.
 */
 
 int U_OID_To_RNDT(uint32_t OID){
    int otype;
-   if(     OID==U_PMF_REGIONNODECHILDNODES_OID   ){ otype = U_RNDT_Kids; }  /* there are 5 types, which must be specified separately */         
-   else if(OID==U_PMF_RECTF_OID ){                  otype = U_RNDT_Rect; }               
-   else if(OID==U_PMF_REGIONNODEPATH_OID ){         otype = U_RNDT_Path; }               
+   if(OID==U_PMF_REGIONNODECHILDNODES_OID){ otype = U_RNDT_Kids; }  /* there are 5 types, which must be specified separately */         
+   else if(OID==U_PMF_RECTF_OID){                  otype = U_RNDT_Rect; }               
+   else if(OID==U_PMF_REGIONNODEPATH_OID){         otype = U_RNDT_Path; }               
    else {                                           otype = -1;          }          
    return(otype);
 }
@@ -684,7 +684,7 @@ U_PSEUDO_OBJ *U_PMF_SERIAL_set(uint32_t Type, const U_SERIAL_DESC *List){
 U_DPSEUDO_OBJ *U_PATH_create(int Elements, const U_PMF_POINTF *Points, uint8_t First, uint8_t Others){
    if(Elements){
       if(!Points){                               return(NULL); }
-      if( (First & U_PPT_MASK) != U_PPT_Start ){ return(NULL); }
+      if((First & U_PPT_MASK) != U_PPT_Start){ return(NULL); }
       if(!(Others & U_PPT_Bezier)){              return(NULL); } /* will pass if either line or bezier is set */
    }
     
@@ -995,7 +995,7 @@ int U_PATH_arcto(U_DPSEUDO_OBJ *Path, U_FLOAT Start, U_FLOAT Sweep, U_FLOAT Rot,
    /* convert to radians */
    Start = (2.0 * U_PI * Start)/360.0;
    Sweep = (2.0 * U_PI * Sweep)/360.0;
-   Theta = (2.0 * U_PI * Rot  )/360.0;
+   Theta = (2.0 * U_PI * Rot)/360.0;
    Slop  = Sweep/100000.0;
    L1 = Start;
 
@@ -1023,7 +1023,7 @@ int U_PATH_arcto(U_DPSEUDO_OBJ *Path, U_FLOAT Start, U_FLOAT Sweep, U_FLOAT Rot,
          else {        U_PATH_lineto(Path, P1, Flags); }
          fpoint = 1;
       }
-      U_PATH_polybezierto(Path, 3, Bz, Flags, U_SEG_OLD );
+      U_PATH_polybezierto(Path, 3, Bz, Flags, U_SEG_OLD);
       L1 = L2;
    }
    return(1);
@@ -1178,7 +1178,7 @@ int U_PMF_SERIAL_get(const char **Src, void *Dst, size_t Units, size_t Reps, int
    if(SE == U_LE && U_IS_LE){ return(1); }
    if(SE == U_BE && U_IS_BE){ return(1); }
    /* need to swap */
-   if(     Units==2){ U_swap2(Dst,Reps); }
+   if(Units==2){ U_swap2(Dst,Reps); }
    else if(Units==4){ U_swap4(Dst,Reps); }
    return(1);
 }
@@ -1216,7 +1216,7 @@ int U_PMF_SERIAL_array_copy_get(const char **Src, void **Dst, size_t Units, size
    if(SE == U_LE && U_IS_LE){ return(1); }
    if(SE == U_BE && U_IS_BE){ return(1); }
    /* need to swap */
-   if(     Units==2){ U_swap2(*Dst,Reps); }
+   if(Units==2){ U_swap2(*Dst,Reps); }
    else if(Units==4){ U_swap4(*Dst,Reps); }
    return(1);
 }
@@ -1232,7 +1232,7 @@ int U_PMF_SERIAL_array_copy_get(const char **Src, void **Dst, size_t Units, size
 int U_PMF_LEN_REL715(const char *contents, int Elements){
    int length=0;
    Elements *= 2; /* N pairs = 2N values */
-   for( ; Elements; Elements--){
+   for(; Elements; Elements--){
       /* X or Y value */
       if(*contents & U_TEST_INT7){ contents +=2; length +=2; } //int15
       else {                       contents +=1; length +=1; } //int7
@@ -1290,7 +1290,7 @@ char *U_PMF_CURLYGUID_set(uint8_t *GUID){
          GUID[7],GUID[6],
          GUID[8],GUID[9],
          GUID[10],GUID[11],GUID[12],GUID[13],GUID[14],GUID[15]
-      );
+);
    }
    return(string);
 }
@@ -1304,7 +1304,7 @@ char *U_PMF_CURLYGUID_set(uint8_t *GUID){
 */
 int U_PMF_KNOWNCURLYGUID_set(const char *string){
    int status; 
-   if(     !strcmp(string,"{633C80A4-1843-482B-9EF2-BE2834C5FDD4}")){ status = U_IEE_BlurEffectGuid;                  }                                                     
+   if(!strcmp(string,"{633C80A4-1843-482B-9EF2-BE2834C5FDD4}")){ status = U_IEE_BlurEffectGuid;                  }                                                     
    else if(!strcmp(string,"{D3A1DBE1-8EC4-4C17-9F4C-EA97AD1C343D}")){ status = U_IEE_BrightnessContrastEffectGuid;    }
    else if(!strcmp(string,"{537E597D-251E-48DA-9664-29CA496B70F8}")){ status = U_IEE_ColorBalanceEffectGuid;          }
    else if(!strcmp(string,"{DD6A0022-58E4-4A67-9D9B-D48EB881A53D}")){ status = U_IEE_ColorCurveEffectGuid;            }
@@ -1378,17 +1378,17 @@ bye:
 */
 uint8_t *U_OID_To_GUID(uint32_t OID){
    uint8_t *lf = NULL;
-   if(     OID == U_PMF_IE_BLUR_OID                  ){ lf = U_LOAD_GUID("633C80A41843482B9EF2BE2834C5FDD4"); } 
-   else if(OID == U_PMF_IE_BRIGHTNESSCONTRAST_OID    ){ lf = U_LOAD_GUID("D3A1DBE18EC44C179F4CEA97AD1C343D"); } 
-   else if(OID == U_PMF_IE_COLORBALANCE_OID          ){ lf = U_LOAD_GUID("537E597D251E48DA966429CA496B70F8"); } 
-   else if(OID == U_PMF_IE_COLORCURVE_OID            ){ lf = U_LOAD_GUID("DD6A002258E44A679D9BD48EB881A53D"); } 
-   else if(OID == U_PMF_IE_COLORLOOKUPTABLE_OID      ){ lf = U_LOAD_GUID("A7CE72A90F7F40D7B3CCD0C02D5C3212"); } 
-   else if(OID == U_PMF_IE_COLORMATRIX_OID           ){ lf = U_LOAD_GUID("718F2615793340E3A5115F68FE14DD74"); } 
+   if(OID == U_PMF_IE_BLUR_OID){ lf = U_LOAD_GUID("633C80A41843482B9EF2BE2834C5FDD4"); } 
+   else if(OID == U_PMF_IE_BRIGHTNESSCONTRAST_OID){ lf = U_LOAD_GUID("D3A1DBE18EC44C179F4CEA97AD1C343D"); } 
+   else if(OID == U_PMF_IE_COLORBALANCE_OID){ lf = U_LOAD_GUID("537E597D251E48DA966429CA496B70F8"); } 
+   else if(OID == U_PMF_IE_COLORCURVE_OID){ lf = U_LOAD_GUID("DD6A002258E44A679D9BD48EB881A53D"); } 
+   else if(OID == U_PMF_IE_COLORLOOKUPTABLE_OID){ lf = U_LOAD_GUID("A7CE72A90F7F40D7B3CCD0C02D5C3212"); } 
+   else if(OID == U_PMF_IE_COLORMATRIX_OID){ lf = U_LOAD_GUID("718F2615793340E3A5115F68FE14DD74"); } 
    else if(OID == U_PMF_IE_HUESATURATIONLIGHTNESS_OID){ lf = U_LOAD_GUID("8B2DD6C3EB074D87A5F07108E26A9C5F"); } 
-   else if(OID == U_PMF_IE_LEVELS_OID                ){ lf = U_LOAD_GUID("99C354EC2A314F3A8C3417A803B33A25"); } 
-   else if(OID == U_PMF_IE_REDEYECORRECTION_OID      ){ lf = U_LOAD_GUID("74D29D0569A4426695493CC52836B632"); } 
-   else if(OID == U_PMF_IE_SHARPEN_OID               ){ lf = U_LOAD_GUID("63CBF3EEC526402C8F7162C540BF5142"); } 
-   else if(OID == U_PMF_IE_TINT_OID                  ){ lf = U_LOAD_GUID("1077AF0028484441948944AD4C2D7A2C"); }
+   else if(OID == U_PMF_IE_LEVELS_OID){ lf = U_LOAD_GUID("99C354EC2A314F3A8C3417A803B33A25"); } 
+   else if(OID == U_PMF_IE_REDEYECORRECTION_OID){ lf = U_LOAD_GUID("74D29D0569A4426695493CC52836B632"); } 
+   else if(OID == U_PMF_IE_SHARPEN_OID){ lf = U_LOAD_GUID("63CBF3EEC526402C8F7162C540BF5142"); } 
+   else if(OID == U_PMF_IE_TINT_OID){ lf = U_LOAD_GUID("1077AF0028484441948944AD4C2D7A2C"); }
    return(lf);
 }
 
@@ -1708,14 +1708,14 @@ U_PSEUDO_OBJ *U_PMF_PATH_set(uint32_t Version, const U_PSEUDO_OBJ *Points, const
    int ctype, RelAbs, rtype;
    int pad;
    if(Points){
-      if(     Points->Type == U_PMF_POINTR_OID){                               RelAbs = 1; ctype = 0; }
+      if(Points->Type == U_PMF_POINTR_OID){                               RelAbs = 1; ctype = 0; }
       else if(Points->Type == (U_PMF_POINT_OID  | U_PMF_ARRAY_OID)){           RelAbs = 0; ctype = 1; }
       else if(Points->Type == (U_PMF_POINTF_OID | U_PMF_ARRAY_OID)){           RelAbs = 0; ctype = 0; }
       else {                                                                   return(NULL);          }
    }
    else {                                                                      return(NULL);          }
    if(Types){
-      if(     Types->Type  == (U_PMF_PATHPOINTTYPERLE_OID | U_PMF_ARRAY_OID)){ rtype = 1;             }
+      if(Types->Type  == (U_PMF_PATHPOINTTYPERLE_OID | U_PMF_ARRAY_OID)){ rtype = 1;             }
       else if(Types->Type  == (U_PMF_PATHPOINTTYPE_OID | U_PMF_ARRAY_OID)){    rtype = 0;             }
       else {                                                                   return(NULL);          }
    }
@@ -1806,7 +1806,7 @@ U_PSEUDO_OBJ *U_PMF_PATH_set3(uint32_t Version, const U_DPSEUDO_OBJ *Path){
 */
 U_PSEUDO_OBJ *U_PMF_PEN_set(uint32_t Version, const U_PSEUDO_OBJ *PenData, const U_PSEUDO_OBJ *Brush){
    if(!PenData   || (PenData->Type    != U_PMF_PENDATA_OID)){ return(NULL); }
-   if(!Brush     || (Brush->Type      != U_PMF_BRUSH_OID)  ){ return(NULL); }
+   if(!Brush     || (Brush->Type      != U_PMF_BRUSH_OID)){ return(NULL); }
    const U_SERIAL_DESC List[] = {
       {&Version,        4,             1, U_LE},
       {NULL,            4,             1, U_LE},
@@ -1966,7 +1966,7 @@ U_PMF_ARGB U_PMF_ARGBOBJ_set(uint8_t Alpha, uint8_t Red, uint8_t Green, uint8_t 
 U_PSEUDO_OBJ *U_PMF_BITMAP_set(const U_PMF_BITMAP *Bs, const U_PSEUDO_OBJ *Bm){
    if(!Bs)return(NULL);
    if(Bm->Type  != U_PMF_BITMAPDATA_OID &&
-      Bm->Type  != U_PMF_COMPRESSEDIMAGE_OID )return(NULL);
+      Bm->Type  != U_PMF_COMPRESSEDIMAGE_OID)return(NULL);
    uint32_t Pad = UP4(Bm->Used) - Bm->Used;  /* undocumented padding, must be present for at least PNG */
    const U_SERIAL_DESC List[] = {
       {Bs,       4,               5,             U_LE},
@@ -1987,7 +1987,7 @@ U_PSEUDO_OBJ *U_PMF_BITMAP_set(const U_PMF_BITMAP *Bs, const U_PSEUDO_OBJ *Bm){
 
     EMF+ manual 2.2.2.3, Microsoft name: EmfPlusBitmapData Object
 */
-U_PSEUDO_OBJ *U_PMF_BITMAPDATA_set( const U_PSEUDO_OBJ *Ps, int cbBm, const char *Bm){
+U_PSEUDO_OBJ *U_PMF_BITMAPDATA_set(const U_PSEUDO_OBJ *Ps, int cbBm, const char *Bm){
    if(Ps && (Ps->Type  != U_PMF_PALETTE_OID))return(NULL);
    if(!Bm && cbBm)return(NULL);
    const U_SERIAL_DESC List[] = {
@@ -2044,7 +2044,7 @@ U_PSEUDO_OBJ *U_PMF_BLENDCOLORS_linear_set(uint32_t Elements, U_PMF_ARGB StartCo
    U_PMF_ARGB *Colors;
    U_PMF_ARGB *pC;
    unsigned int i;
-   if(Elements <= 2 ){ return(NULL); }
+   if(Elements <= 2){ return(NULL); }
    pP = Positions = (U_FLOAT *)malloc(Elements *sizeof(U_FLOAT));
    if(!Positions){ return(NULL); }
    pC = Colors    = (U_PMF_ARGB *)malloc(Elements *sizeof(U_PMF_ARGB));
@@ -2052,10 +2052,10 @@ U_PSEUDO_OBJ *U_PMF_BLENDCOLORS_linear_set(uint32_t Elements, U_PMF_ARGB StartCo
       free(Positions); 
       return(NULL);
    }
-   dP = (EndPos    - StartPos   )/(float)(Elements - 1);
-   dB = ((double)EndColor.Blue  - (double)StartColor.Blue )/(double)(Elements - 1);
+   dP = (EndPos    - StartPos)/(float)(Elements - 1);
+   dB = ((double)EndColor.Blue  - (double)StartColor.Blue)/(double)(Elements - 1);
    dG = ((double)EndColor.Green - (double)StartColor.Green)/(double)(Elements - 1);
-   dR = ((double)EndColor.Red   - (double)StartColor.Red  )/(double)(Elements - 1);
+   dR = ((double)EndColor.Red   - (double)StartColor.Red)/(double)(Elements - 1);
    dA = ((double)EndColor.Alpha - (double)StartColor.Alpha)/(double)(Elements - 1);
    P  = StartPos;
    B  = StartColor.Blue; 
@@ -2123,7 +2123,7 @@ U_PSEUDO_OBJ *U_PMF_BLENDFACTORS_linear_set(uint32_t Elements, U_FLOAT StartFact
    U_FLOAT *pP;
    U_FLOAT *pF;
    unsigned int i;
-   if(Elements <= 2 ){ return(NULL); }
+   if(Elements <= 2){ return(NULL); }
    pP = Positions = (U_FLOAT *)malloc(Elements *sizeof(U_FLOAT));
    if(!Positions){ return(NULL); }
    pF = Factors   = (U_FLOAT *)malloc(Elements *sizeof(U_FLOAT));
@@ -2131,7 +2131,7 @@ U_PSEUDO_OBJ *U_PMF_BLENDFACTORS_linear_set(uint32_t Elements, U_FLOAT StartFact
       free(Positions); 
       return(NULL);
    }
-   dP = (EndPos    - StartPos   )/(float)(Elements - 1);
+   dP = (EndPos    - StartPos)/(float)(Elements - 1);
    dF = (EndFactor - StartFactor)/(float)(Elements - 1);
    P  = StartPos;
    F  = StartFactor;
@@ -2207,7 +2207,7 @@ U_PSEUDO_OBJ *U_PMF_CHARACTERRANGE_set(int32_t First, int32_t Length){
     \brief  Create and set a U_PMF_COMPOUNDLINEDATA PseudoObject
     \return Pointer to PseudoObject, NULL on error
     \param  Elements   Members in Widths
-    \param  Widths     Array of U_FLOAT Line or gap widths (0.0 <-> 1.0, fraction of total line width )
+    \param  Widths     Array of U_FLOAT Line or gap widths (0.0 <-> 1.0, fraction of total line width)
 
     EMF+ manual 2.2.2.9, Microsoft name: EmfPlusCompoundLineData Object
 */
@@ -2278,7 +2278,7 @@ U_PSEUDO_OBJ *U_PMF_CUSTOMENDCAPDATA_set(const U_PSEUDO_OBJ *Clc){
 U_PSEUDO_OBJ *U_PMF_CUSTOMLINECAPARROWDATA_set(U_FLOAT Width, U_FLOAT Height, 
       U_FLOAT MiddleInset, uint32_t FillState, uint32_t StartCap, uint32_t EndCap, uint32_t Join,
       U_FLOAT MiterLimit, U_FLOAT WidthScale
-   ){
+){
    const U_SERIAL_DESC List[] = {
       {&Width,       4, 1, U_LE},
       {&Height      ,4, 1, U_LE},
@@ -2316,7 +2316,7 @@ U_PSEUDO_OBJ *U_PMF_CUSTOMLINECAPDATA_set(uint32_t Flags, uint32_t Cap,
       U_FLOAT Inset, uint32_t StartCap, uint32_t EndCap, 
       uint32_t Join, U_FLOAT MiterLimit, U_FLOAT WidthScale, 
       const U_PSEUDO_OBJ *Clcod
-   ){
+){
    if(!Clcod || Clcod->Type  != U_PMF_CUSTOMLINECAPOPTIONALDATA_OID)return(NULL);
    const U_SERIAL_DESC List[] = {
       {&Flags,      4,           1, U_LE},
@@ -2436,7 +2436,7 @@ U_PSEUDO_OBJ *U_PMF_DASHEDLINEDATA_set2(U_FLOAT Unit, int StdPat){
          {3,1,1,1,0},  // LongDotDotDot
          {3,1,3,1,0}   // LongDotLongDot
       };
-   if(Unit <= 0                                      ){ return(NULL); }
+   if(Unit <= 0){ return(NULL); }
    if((StdPat <= 0) || (StdPat > U_DD_LongDotLongDot)){ return(NULL); }
    p = &(SB[StdPat][0]);
    for(Elements = 0; *p; p++, Elements++){}
@@ -2488,7 +2488,7 @@ U_PSEUDO_OBJ *U_PMF_DASHEDLINEDATA_set3(U_FLOAT Unit, uint32_t BitPat){
    U_FLOAT SubUnit = Unit/32.0;
    U_FLOAT Lengths[32];  /* This is the most dash/spaces that will be needed*/
    if(!(0x00000001 & BitPat))return(NULL);  /* Pattern must start with a drawn segment, this bit must be set */
-   if(  0x80000000 & BitPat )return(NULL);  /* Pattern must end with an undrawn segment, this bit must be clear */
+   if(0x80000000 & BitPat)return(NULL);  /* Pattern must end with an undrawn segment, this bit must be clear */
    int i=0;
    int k;
    int lastType=1;
@@ -2722,12 +2722,12 @@ U_PSEUDO_OBJ *U_PMF_LINEARGRADIENTBRUSHDATA_set(const U_PMF_LINEARGRADIENTBRUSHD
 */
 U_PSEUDO_OBJ *U_PMF_LINEARGRADIENTBRUSHOPTIONALDATA_set(uint32_t *Flags, const U_PSEUDO_OBJ *Tm, 
       const U_PSEUDO_OBJ *Bc, const U_PSEUDO_OBJ *BfH, const U_PSEUDO_OBJ *BfV){
-   if(!Flags                                         )return(NULL);
+   if(!Flags)return(NULL);
    if(Tm  && (Tm->Type  != U_PMF_TRANSFORMMATRIX_OID))return(NULL);
-   if(Bc  && (Bc->Type  != U_PMF_BLENDCOLORS_OID)    )return(NULL);
-   if(BfH && (BfH->Type != U_PMF_BLENDFACTORS_OID)   )return(NULL);
-   if(BfV && (BfV->Type != U_PMF_BLENDFACTORS_OID)   )return(NULL);
-   if(Bc  && (BfH || BfV)                            )return(NULL);
+   if(Bc  && (Bc->Type  != U_PMF_BLENDCOLORS_OID))return(NULL);
+   if(BfH && (BfH->Type != U_PMF_BLENDFACTORS_OID))return(NULL);
+   if(BfV && (BfV->Type != U_PMF_BLENDFACTORS_OID))return(NULL);
+   if(Bc  && (BfH || BfV))return(NULL);
    const U_SERIAL_DESC List[] = {
       {(Tm  ? Tm->Data  : NULL), (Tm  ? Tm->Used  : 0), 1, U_XE},
       {(Bc  ? Bc->Data  : NULL), (Bc  ? Bc->Used  : 0), 1, U_XE},
@@ -2736,8 +2736,8 @@ U_PSEUDO_OBJ *U_PMF_LINEARGRADIENTBRUSHOPTIONALDATA_set(uint32_t *Flags, const U
       {NULL,0,0,U_XX}
    };
    U_PSEUDO_OBJ *po = U_PMF_SERIAL_set(U_PMF_LINEARGRADIENTBRUSHOPTIONALDATA_OID, List);
-   if(Tm ){ *Flags |= U_BD_Transform;     }
-   if(Bc ){ *Flags |= U_BD_PresetColors;  }
+   if(Tm){ *Flags |= U_BD_Transform;     }
+   if(Bc){ *Flags |= U_BD_PresetColors;  }
    if(BfH){ *Flags |= U_BD_BlendFactorsH; }
    if(BfV){ *Flags |= U_BD_BlendFactorsV; }
    return(po);
@@ -2809,7 +2809,7 @@ U_PSEUDO_OBJ *U_PMF_PALETTE_set(uint32_t Flags, uint32_t Elements, const U_PMF_A
 U_PSEUDO_OBJ *U_PMF_PATHGRADIENTBRUSHDATA_set(uint32_t Flags, int32_t WrapMode, U_PMF_ARGB CenterColor, 
       U_PMF_POINTF Center,
       const U_PSEUDO_OBJ *Gradient, const U_PSEUDO_OBJ *Boundary, const U_PSEUDO_OBJ *Data){
-   if( (Flags & U_BD_Path) && (!Boundary || (Boundary->Type != U_PMF_BOUNDARYPATHDATA_OID)))return(NULL);
+   if((Flags & U_BD_Path) && (!Boundary || (Boundary->Type != U_PMF_BOUNDARYPATHDATA_OID)))return(NULL);
    if(!(Flags & U_BD_Path) && (!Boundary || (Boundary->Type != U_PMF_BOUNDARYPOINTDATA_OID)))return(NULL);
    if(!Gradient || (Gradient->Type != (U_PMF_ARGB_OID | U_PMF_ARRAY_OID)))return(NULL);
    if(!(Flags & U_BD_Transform) && 
@@ -2846,10 +2846,10 @@ U_PSEUDO_OBJ *U_PMF_PATHGRADIENTBRUSHOPTIONALDATA_set(uint32_t Flags,
       const U_PSEUDO_OBJ *Tm, const U_PSEUDO_OBJ *Pd, const U_PSEUDO_OBJ *Fsd){
    if(Tm &&  (Tm->Type != U_PMF_TRANSFORMMATRIX_OID))return(NULL);
    if(Pd && !(Flags & (U_BD_PresetColors | U_BD_BlendFactorsH)))return(NULL);
-   if( (Flags & U_BD_PresetColors)  && ((Flags & U_BD_BlendFactorsH)  || !Pd || (Pd->Type != U_PMF_BLENDCOLORS_OID) ))return(NULL);
-   if( (Flags & U_BD_BlendFactorsH) && ((Flags & U_BD_PresetColors)   || !Pd || (Pd->Type != U_PMF_BLENDFACTORS_OID)))return(NULL);
+   if((Flags & U_BD_PresetColors)  && ((Flags & U_BD_BlendFactorsH)  || !Pd || (Pd->Type != U_PMF_BLENDCOLORS_OID)))return(NULL);
+   if((Flags & U_BD_BlendFactorsH) && ((Flags & U_BD_PresetColors)   || !Pd || (Pd->Type != U_PMF_BLENDFACTORS_OID)))return(NULL);
    if(Fsd && !(Flags & U_BD_FocusScales))return(NULL);
-   if( (Flags & U_BD_FocusScales)   && (!Fsd || (Fsd->Type != U_PMF_BLENDCOLORS_OID) ))return(NULL);
+   if((Flags & U_BD_FocusScales)   && (!Fsd || (Fsd->Type != U_PMF_BLENDCOLORS_OID)))return(NULL);
    const U_SERIAL_DESC List[] = {
       {(Tm  ? Tm->Data  : NULL), (Tm ?  Tm->Used  : 0), 1, U_XE},
       {(Pd  ? Pd->Data  : NULL), (Pd ?  Pd->Used  : 0), 1, U_XE},
@@ -2923,7 +2923,7 @@ U_PSEUDO_OBJ *U_PMF_PATHPOINTTYPERLE_set(uint32_t Elements, const uint8_t *Bz, c
       U_PO_free(&poi);
       if(!po)goto end;
 
-      for( ;Elements; Elements--, Bz++, RL++, Ppte++){
+      for(;Elements; Elements--, Bz++, RL++, Ppte++){
          po = U_PO_append(po, (char *)Ppte, 1);
          if(!po)goto end;
          
@@ -2989,30 +2989,30 @@ U_PSEUDO_OBJ *U_PMF_PENOPTIONALDATA_set(uint32_t Flags, U_PSEUDO_OBJ *Tm, int32_
       U_FLOAT MiterLimit, int32_t Style, int32_t DLCap, U_FLOAT DLOffset, 
       U_PSEUDO_OBJ *DLData, int32_t PenAlignment, U_PSEUDO_OBJ *CmpndLineData, U_PSEUDO_OBJ *CSCapData, 
       U_PSEUDO_OBJ *CECapData
-   ){
+){
 
-   if((Flags & U_PD_Transform)      && (!Tm            || (Tm->Type            != U_PMF_TRANSFORMMATRIX_OID))   )return(NULL);
-   if((Flags & U_PD_DLData)         && (!DLData        || (DLData->Type        != U_PMF_DASHEDLINEDATA_OID))    )return(NULL);
-   if((Flags & U_PD_CLData)         && (!CmpndLineData || (CmpndLineData->Type != U_PMF_COMPOUNDLINEDATA_OID))  )return(NULL);
+   if((Flags & U_PD_Transform)      && (!Tm            || (Tm->Type            != U_PMF_TRANSFORMMATRIX_OID)))return(NULL);
+   if((Flags & U_PD_DLData)         && (!DLData        || (DLData->Type        != U_PMF_DASHEDLINEDATA_OID)))return(NULL);
+   if((Flags & U_PD_CLData)         && (!CmpndLineData || (CmpndLineData->Type != U_PMF_COMPOUNDLINEDATA_OID)))return(NULL);
    if((Flags & U_PD_CustomStartCap) && (!CSCapData     || (CSCapData->Type     != U_PMF_CUSTOMSTARTCAPDATA_OID)))return(NULL); 
-   if((Flags & U_PD_CustomEndCap)   && (!CECapData     || (CECapData->Type     != U_PMF_CUSTOMENDCAPDATA_OID))  )return(NULL);
+   if((Flags & U_PD_CustomEndCap)   && (!CECapData     || (CECapData->Type     != U_PMF_CUSTOMENDCAPDATA_OID)))return(NULL);
    
    /* prepend the Flags field to the PseudoObject proper */
    const U_SERIAL_DESC List[] = {
       {&Flags,                                                         4,                                                         1, U_LE},
       {((Flags & U_PD_Transform)      ? Tm->Data              : NULL), ((Flags & U_PD_Transform)      ? Tm->Used            : 0), 1, U_XE},
-      {((Flags & U_PD_StartCap )      ? (char *)&StartCap     : NULL), ((Flags & U_PD_StartCap )      ? 4                   : 0), 1, U_LE},
-      {((Flags & U_PD_EndCap )        ? (char *)&EndCap       : NULL), ((Flags & U_PD_EndCap )        ? 4                   : 0), 1, U_LE},
-      {((Flags & U_PD_Join )          ? (char *)&Join         : NULL), ((Flags & U_PD_Join )          ? 4                   : 0), 1, U_LE},
-      {((Flags & U_PD_MiterLimit )    ? (char *)&MiterLimit   : NULL), ((Flags & U_PD_MiterLimit )    ? 4                   : 0), 1, U_LE},
-      {((Flags & U_PD_LineStyle )     ? (char *)&Style        : NULL), ((Flags & U_PD_LineStyle )     ? 4                   : 0), 1, U_LE},
-      {((Flags & U_PD_DLCap )         ? (char *)&DLCap        : NULL), ((Flags & U_PD_DLCap )         ? 4                   : 0), 1, U_LE},
-      {((Flags & U_PD_DLOffset )      ? (char *)&DLOffset     : NULL), ((Flags & U_PD_DLOffset )      ? 4                   : 0), 1, U_LE},
-      {((Flags & U_PD_DLData )        ? DLData->Data          : NULL), ((Flags & U_PD_DLData )        ? DLData->Used        : 0), 1, U_XE},
-      {((Flags & U_PD_NonCenter )     ? (char *)&PenAlignment : NULL), ((Flags & U_PD_NonCenter )     ? 4                   : 0), 1, U_LE},
-      {((Flags & U_PD_CLData )        ? CmpndLineData->Data   : NULL), ((Flags & U_PD_CLData )        ? CmpndLineData->Used : 0), 1, U_XE},
+      {((Flags & U_PD_StartCap)      ? (char *)&StartCap     : NULL), ((Flags & U_PD_StartCap)      ? 4                   : 0), 1, U_LE},
+      {((Flags & U_PD_EndCap)        ? (char *)&EndCap       : NULL), ((Flags & U_PD_EndCap)        ? 4                   : 0), 1, U_LE},
+      {((Flags & U_PD_Join)          ? (char *)&Join         : NULL), ((Flags & U_PD_Join)          ? 4                   : 0), 1, U_LE},
+      {((Flags & U_PD_MiterLimit)    ? (char *)&MiterLimit   : NULL), ((Flags & U_PD_MiterLimit)    ? 4                   : 0), 1, U_LE},
+      {((Flags & U_PD_LineStyle)     ? (char *)&Style        : NULL), ((Flags & U_PD_LineStyle)     ? 4                   : 0), 1, U_LE},
+      {((Flags & U_PD_DLCap)         ? (char *)&DLCap        : NULL), ((Flags & U_PD_DLCap)         ? 4                   : 0), 1, U_LE},
+      {((Flags & U_PD_DLOffset)      ? (char *)&DLOffset     : NULL), ((Flags & U_PD_DLOffset)      ? 4                   : 0), 1, U_LE},
+      {((Flags & U_PD_DLData)        ? DLData->Data          : NULL), ((Flags & U_PD_DLData)        ? DLData->Used        : 0), 1, U_XE},
+      {((Flags & U_PD_NonCenter)     ? (char *)&PenAlignment : NULL), ((Flags & U_PD_NonCenter)     ? 4                   : 0), 1, U_LE},
+      {((Flags & U_PD_CLData)        ? CmpndLineData->Data   : NULL), ((Flags & U_PD_CLData)        ? CmpndLineData->Used : 0), 1, U_XE},
       {((Flags & U_PD_CustomStartCap) ? CSCapData->Data       : NULL), ((Flags & U_PD_CustomStartCap) ? CSCapData->Used     : 0), 1, U_XE},
-      {((Flags & U_PD_CustomEndCap )  ? CECapData->Data       : NULL), ((Flags & U_PD_CustomEndCap )  ? CECapData->Used     : 0), 1, U_XE},
+      {((Flags & U_PD_CustomEndCap)  ? CECapData->Data       : NULL), ((Flags & U_PD_CustomEndCap)  ? CECapData->Used     : 0), 1, U_XE},
       {NULL,0,0,U_XX}
    };
    U_PSEUDO_OBJ *po = U_PMF_SERIAL_set(U_PMF_PENOPTIONALDATA_OID, List);
@@ -3082,8 +3082,8 @@ U_PSEUDO_OBJ *U_PMF_POINTR_set(uint32_t Elements, const U_PMF_POINTF *Coords){
    for(Xf = Yf = 0.0 ;Elements; Elements--, Coords++){
       Xf = U_ROUND(Coords->X) - Xf;
       Yf = U_ROUND(Coords->Y) - Yf;
-      X = ( Xf >= UINT16_MAX ? UINT16_MAX : ( Xf <= INT16_MIN ? INT16_MIN : Xf));
-      Y = ( Yf >= UINT16_MAX ? UINT16_MAX : ( Yf <= INT16_MIN ? INT16_MIN : Yf));
+      X = (Xf >= UINT16_MAX ? UINT16_MAX : (Xf <= INT16_MIN ? INT16_MIN : Xf));
+      Y = (Yf >= UINT16_MAX ? UINT16_MAX : (Yf <= INT16_MIN ? INT16_MIN : Yf));
       Xf = U_ROUND(Coords->X);
       Yf = U_ROUND(Coords->Y);
       
@@ -3254,21 +3254,21 @@ U_PSEUDO_OBJ *U_PMF_REGIONNODE_set(int32_t Type, const U_PSEUDO_OBJ *Rnd){
    /* make sure that the type of Rnd agrees with Type */
    if(Rnd){
       pType = U_OID_To_RNDT(Rnd->Type);
-      if( pType <  0){                     return(NULL); }
+      if(pType <  0){                     return(NULL); }
       if((pType >  0) && (pType != Type)){ return(NULL); }
       if((pType == 0) && 
          (
             (Type < U_RNDT_And) || 
             (Type > U_RNDT_Complement)
-         )
-      ){                                   return(NULL); }
+)
+){                                   return(NULL); }
       if((Type == U_RNDT_Rect) && (Rnd->Type != U_PMF_RECTF_OID)){           return(NULL); }
       if((Type == U_RNDT_Path) && (Rnd->Type != U_PMF_REGIONNODEPATH_OID)){  return(NULL); }
       
    }
    else {  /* only U_RNDT_Empty and  U_RNDT_Infinite do not have data */
       if((Type != U_RNDT_Empty)  || 
-         (Type != U_RNDT_Infinite)  ){     return(NULL); }
+         (Type != U_RNDT_Infinite)){     return(NULL); }
    }
    
 
@@ -3796,7 +3796,7 @@ U_PSEUDO_OBJ *U_PMR_SETCLIPRECT_set(uint32_t CMenum, const U_PSEUDO_OBJ *Rect){
    const char *start;
    uint16_t utmp16 = ((CMenum & U_FF_MASK_CM4) << U_FF_SHFT_CM4);
    if(Rect){
-      if(        Rect->Type == U_PMF_RECTF_OID){ 
+      if(Rect->Type == U_PMF_RECTF_OID){ 
         start = Rect->Data;
       }
       else if(Rect->Type == (U_PMF_RECTF_OID | U_PMF_ARRAY_OID)){ 
@@ -3977,7 +3977,7 @@ U_PSEUDO_OBJ *U_PMR_DRAWARC_set(uint32_t PenID, U_FLOAT Start, U_FLOAT Sweep, co
    if(PenID>63)return(NULL);
    if(!Rect){                                 return(NULL); }
    else {
-      if(     Rect->Type == U_PMF_RECT_OID ){ ctype = 1;    }
+      if(Rect->Type == U_PMF_RECT_OID){ ctype = 1;    }
       else if(Rect->Type == U_PMF_RECTF_OID){ ctype = 0;    }
       else {                                  return(NULL); }
    }
@@ -4009,7 +4009,7 @@ U_PSEUDO_OBJ *U_PMR_DRAWBEZIERS_set(uint32_t PenID, const U_PSEUDO_OBJ *Points){
    int ctype, RelAbs;
    if(PenID>63)return(NULL);
    if(Points){
-      if(     Points->Type == U_PMF_POINTR_OID){                     RelAbs = 1; ctype = 0; }
+      if(Points->Type == U_PMF_POINTR_OID){                     RelAbs = 1; ctype = 0; }
       else if(Points->Type == (U_PMF_POINT_OID  | U_PMF_ARRAY_OID)){ RelAbs = 0; ctype = 1; }
       else if(Points->Type == (U_PMF_POINTF_OID | U_PMF_ARRAY_OID)){ RelAbs = 0; ctype = 0; }
       else {                                                         return(NULL);          }
@@ -4052,7 +4052,7 @@ U_PSEUDO_OBJ *U_PMR_DRAWCLOSEDCURVE_set(uint32_t PenID, U_FLOAT Tension, const U
    int ctype, RelAbs;
    if(PenID>63)return(NULL);
    if(Points){
-      if(     Points->Type == U_PMF_POINTR_OID){                     RelAbs = 1; ctype = 0; }
+      if(Points->Type == U_PMF_POINTR_OID){                     RelAbs = 1; ctype = 0; }
       else if(Points->Type == (U_PMF_POINT_OID  | U_PMF_ARRAY_OID)){ RelAbs = 0; ctype = 1; }
       else if(Points->Type == (U_PMF_POINTF_OID | U_PMF_ARRAY_OID)){ RelAbs = 0; ctype = 0; }
       else {                                                         return(NULL);          }
@@ -4099,7 +4099,7 @@ U_PSEUDO_OBJ *U_PMR_DRAWCURVE_set(uint32_t PenID, U_FLOAT Tension, uint32_t Offs
    if(!Points){                                                      return(NULL); }
    if(!NSegs){                                                       return(NULL); }
    else {
-      if(     Points->Type == (U_PMF_POINT_OID  | U_PMF_ARRAY_OID)){ ctype = 1;    }
+      if(Points->Type == (U_PMF_POINT_OID  | U_PMF_ARRAY_OID)){ ctype = 1;    }
       else if(Points->Type == (U_PMF_POINTF_OID | U_PMF_ARRAY_OID)){ ctype = 0;    }
       else {                                                         return(NULL); }
    }
@@ -4146,9 +4146,9 @@ U_PSEUDO_OBJ *U_PMR_DRAWDRIVERSTRING_set(uint32_t FontID, const U_PSEUDO_OBJ *Br
    uint32_t Elements = (Points->Used -4)/4;
    if(GlyphCount != Elements){                                              return(NULL); } 
    if(BrushID){ 
-      if(      BrushID->Used != 4){                                         return(NULL); }
-      else if( BrushID->Type == U_PMF_ARGB_OID){                            btype = 1;    }
-      else if( BrushID->Type == U_PMF_4NUM_OID){                            btype = 0;    }
+      if(BrushID->Used != 4){                                         return(NULL); }
+      else if(BrushID->Type == U_PMF_ARGB_OID){                            btype = 1;    }
+      else if(BrushID->Type == U_PMF_4NUM_OID){                            btype = 0;    }
       else {                                                                return(NULL); }
    }
    else {                                                                   return(NULL); } 
@@ -4190,7 +4190,7 @@ U_PSEUDO_OBJ *U_PMR_DRAWELLIPSE_set(uint32_t PenID, const U_PSEUDO_OBJ *Rect){
    int ctype;
    if(!Rect){                                 return(NULL); }
    else {
-      if(     Rect->Type == U_PMF_RECT_OID ){ ctype = 1;    }
+      if(Rect->Type == U_PMF_RECT_OID){ ctype = 1;    }
       else if(Rect->Type == U_PMF_RECTF_OID){ ctype = 0;    }
       else {                                  return(NULL); }
    }
@@ -4226,7 +4226,7 @@ U_PSEUDO_OBJ *U_PMR_DRAWIMAGE_set(uint32_t ImgID,
    if(!SrcRect || (SrcRect->Type != U_PMF_RECTF_OID)){  return(NULL); }
    if(!DstRect){                                 return(NULL); }
    else {
-      if(     DstRect->Type == U_PMF_RECT_OID ){ ctype = 1;    }
+      if(DstRect->Type == U_PMF_RECT_OID){ ctype = 1;    }
       else if(DstRect->Type == U_PMF_RECTF_OID){ ctype = 0;    }
       else {                                     return(NULL); }
    }
@@ -4270,7 +4270,7 @@ U_PSEUDO_OBJ *U_PMR_DRAWIMAGEPOINTS_set(uint32_t ImgID, int etype,
    if(ImgID>63){                                                      return(NULL); }
    if(!SrcRect || (SrcRect->Type != U_PMF_RECTF_OID)){                return(NULL); }
    if(Points){
-      if(     Points->Type == U_PMF_POINTR_OID){                     RelAbs = 1; ctype = 0; }
+      if(Points->Type == U_PMF_POINTR_OID){                     RelAbs = 1; ctype = 0; }
       else if(Points->Type == (U_PMF_POINT_OID  | U_PMF_ARRAY_OID)){ RelAbs = 0; ctype = 1; }
       else if(Points->Type == (U_PMF_POINTF_OID | U_PMF_ARRAY_OID)){ RelAbs = 0; ctype = 0; }
       else {                                                         return(NULL);          }
@@ -4306,7 +4306,7 @@ U_PSEUDO_OBJ *U_PMR_DRAWLINES_set(uint32_t PenID, int dtype, const U_PSEUDO_OBJ 
    int ctype, RelAbs;
    if(PenID>63){                                                      return(NULL); }
    if(Points){
-      if(     Points->Type == U_PMF_POINTR_OID){                     RelAbs = 1; ctype = 0; }
+      if(Points->Type == U_PMF_POINTR_OID){                     RelAbs = 1; ctype = 0; }
       else if(Points->Type == (U_PMF_POINT_OID  | U_PMF_ARRAY_OID)){ RelAbs = 0; ctype = 1; }
       else if(Points->Type == (U_PMF_POINTF_OID | U_PMF_ARRAY_OID)){ RelAbs = 0; ctype = 0; }
       else {                                                         return(NULL);          }
@@ -4367,7 +4367,7 @@ U_PSEUDO_OBJ *U_PMR_DRAWPIE_set(uint32_t PenID,
    if(PenID>63)return(NULL);
    if(!Rect){                                 return(NULL); }
    else {
-      if(     Rect->Type == U_PMF_RECT_OID ){ ctype = 1;    }
+      if(Rect->Type == U_PMF_RECT_OID){ ctype = 1;    }
       else if(Rect->Type == U_PMF_RECTF_OID){ ctype = 0;    }
       else {                                  return(NULL); }
    }
@@ -4401,8 +4401,8 @@ U_PSEUDO_OBJ *U_PMR_DRAWRECTS_set(uint32_t PenID, const U_PSEUDO_OBJ *Rects){
    uint32_t Elements=1; /* only used when a single rect is passed in, not an array, not even an array with one member*/
    if(PenID>63){ return(NULL); }
    if(Rects){
-      if(      (Rects->Type & U_PMF_MASK_OID) == U_PMF_RECT_OID ){   ctype = 1;    }
-      else if( (Rects->Type & U_PMF_MASK_OID) == U_PMF_RECTF_OID){   ctype = 0;    }
+      if((Rects->Type & U_PMF_MASK_OID) == U_PMF_RECT_OID){   ctype = 1;    }
+      else if((Rects->Type & U_PMF_MASK_OID) == U_PMF_RECTF_OID){   ctype = 0;    }
       else {                                                         return(NULL); }
    }
    else {                                                            return(NULL); }
@@ -4442,9 +4442,9 @@ U_PSEUDO_OBJ *U_PMR_DRAWSTRING_set(uint32_t FontID, const U_PSEUDO_OBJ *BrushID,
    else if (!Text){                               return(NULL); }
    if(!Rect || Rect->Type != U_PMF_RECTF_OID){    return(NULL); }
    if(BrushID){  
-      if(      BrushID->Used != 4){               return(NULL); }
-      else if( BrushID->Type == U_PMF_ARGB_OID){  btype = 1;    }
-      else if( BrushID->Type == U_PMF_4NUM_OID){  btype = 0;    }
+      if(BrushID->Used != 4){               return(NULL); }
+      else if(BrushID->Type == U_PMF_ARGB_OID){  btype = 1;    }
+      else if(BrushID->Type == U_PMF_4NUM_OID){  btype = 0;    }
       else {                                      return(NULL); }
    }
    else {                                         return(NULL); }
@@ -4483,14 +4483,14 @@ U_PSEUDO_OBJ *U_PMR_FILLCLOSEDCURVE_set(int ftype, U_FLOAT Tension, const U_PSEU
    int btype, ctype, RelAbs;
    int Size=0;
    if(BrushID){ 
-      if(      BrushID->Used != 4){              return(NULL); }
-      else if( BrushID->Type == U_PMF_ARGB_OID){ btype = 1;    }
-      else if( BrushID->Type == U_PMF_4NUM_OID){ btype = 0;    }
+      if(BrushID->Used != 4){              return(NULL); }
+      else if(BrushID->Type == U_PMF_ARGB_OID){ btype = 1;    }
+      else if(BrushID->Type == U_PMF_4NUM_OID){ btype = 0;    }
       else {                                     return(NULL); }
    }
    else {                                        return(NULL); }
    if(Points){
-      if(     Points->Type == U_PMF_POINTR_OID){                     RelAbs = 1; ctype = 0; }
+      if(Points->Type == U_PMF_POINTR_OID){                     RelAbs = 1; ctype = 0; }
       else if(Points->Type == (U_PMF_POINT_OID  | U_PMF_ARRAY_OID)){ RelAbs = 0; ctype = 1; }
       else if(Points->Type == (U_PMF_POINTF_OID | U_PMF_ARRAY_OID)){ RelAbs = 0; ctype = 0; }
       else {                                                         return(NULL);          }
@@ -4523,14 +4523,14 @@ U_PSEUDO_OBJ *U_PMR_FILLCLOSEDCURVE_set(int ftype, U_FLOAT Tension, const U_PSEU
 U_PSEUDO_OBJ *U_PMR_FILLELLIPSE_set(const U_PSEUDO_OBJ *BrushID, const U_PSEUDO_OBJ *Rect){
    int btype, ctype;
    if(BrushID){ 
-      if(      BrushID->Used != 4){              return(NULL); }
-      else if( BrushID->Type == U_PMF_ARGB_OID){ btype = 1;    }
-      else if( BrushID->Type == U_PMF_4NUM_OID){ btype = 0;    }
+      if(BrushID->Used != 4){              return(NULL); }
+      else if(BrushID->Type == U_PMF_ARGB_OID){ btype = 1;    }
+      else if(BrushID->Type == U_PMF_4NUM_OID){ btype = 0;    }
       else {                                     return(NULL); }
    }
    else {                                        return(NULL); } 
    if(Rect){
-      if(     Rect->Type == U_PMF_RECT_OID ){    ctype = 1;    }
+      if(Rect->Type == U_PMF_RECT_OID){    ctype = 1;    }
       else if(Rect->Type == U_PMF_RECTF_OID){    ctype = 0;    }
       else {                                     return(NULL); }
    }
@@ -4563,9 +4563,9 @@ U_PSEUDO_OBJ *U_PMR_FILLPATH_set(uint32_t PathID, const U_PSEUDO_OBJ *BrushID){
    int Size=0;
    if(PathID>63)return(NULL);
    if(BrushID){ 
-      if(      BrushID->Used != 4){              return(NULL); }
-      else if( BrushID->Type == U_PMF_ARGB_OID){ btype = 1;    }
-      else if( BrushID->Type == U_PMF_4NUM_OID){ btype = 0;    }
+      if(BrushID->Used != 4){              return(NULL); }
+      else if(BrushID->Type == U_PMF_ARGB_OID){ btype = 1;    }
+      else if(BrushID->Type == U_PMF_4NUM_OID){ btype = 0;    }
       else {                                     return(NULL); }
    }
    else {                                        return(NULL); }
@@ -4596,15 +4596,15 @@ U_PSEUDO_OBJ *U_PMR_FILLPATH_set(uint32_t PathID, const U_PSEUDO_OBJ *BrushID){
 U_PSEUDO_OBJ *U_PMR_FILLPIE_set(U_FLOAT Start, U_FLOAT Sweep, const U_PSEUDO_OBJ *BrushID, const U_PSEUDO_OBJ *Rect){
    int btype, ctype;
    if(BrushID){ 
-      if(      BrushID->Used != 4){              return(NULL); }
-      else if( BrushID->Type == U_PMF_ARGB_OID){ btype = 1;    }
-      else if( BrushID->Type == U_PMF_4NUM_OID){ btype = 0;    }
+      if(BrushID->Used != 4){              return(NULL); }
+      else if(BrushID->Type == U_PMF_ARGB_OID){ btype = 1;    }
+      else if(BrushID->Type == U_PMF_4NUM_OID){ btype = 0;    }
       else {                                     return(NULL); }
    }
    else {                                        return(NULL); } 
    if(!Rect){                                    return(NULL); }
    else {
-      if(     Rect->Type == U_PMF_RECT_OID ){    ctype = 1;    }
+      if(Rect->Type == U_PMF_RECT_OID){    ctype = 1;    }
       else if(Rect->Type == U_PMF_RECTF_OID){    ctype = 0;    }
       else {                                     return(NULL); }
    }
@@ -4636,14 +4636,14 @@ U_PSEUDO_OBJ *U_PMR_FILLPIE_set(U_FLOAT Start, U_FLOAT Sweep, const U_PSEUDO_OBJ
 U_PSEUDO_OBJ *U_PMR_FILLPOLYGON_set(const U_PSEUDO_OBJ *BrushID, const U_PSEUDO_OBJ *Points){
    int btype, ctype, RelAbs;
    if(BrushID){ 
-      if(      BrushID->Used != 4){                                  return(NULL); }
-      else if( BrushID->Type == U_PMF_ARGB_OID){                     btype = 1;    }
-      else if( BrushID->Type == U_PMF_4NUM_OID){                     btype = 0;    }
+      if(BrushID->Used != 4){                                  return(NULL); }
+      else if(BrushID->Type == U_PMF_ARGB_OID){                     btype = 1;    }
+      else if(BrushID->Type == U_PMF_4NUM_OID){                     btype = 0;    }
       else {                                                         return(NULL); }
    }
    else {                                                            return(NULL); }
    if(Points){
-      if(     Points->Type ==  U_PMF_POINTR_OID){                    RelAbs = 1; ctype = 0; }
+      if(Points->Type ==  U_PMF_POINTR_OID){                    RelAbs = 1; ctype = 0; }
       else if(Points->Type == (U_PMF_POINT_OID  | U_PMF_ARRAY_OID)){ RelAbs = 0; ctype = 1; }
       else if(Points->Type == (U_PMF_POINTF_OID | U_PMF_ARRAY_OID)){ RelAbs = 0; ctype = 0; }
       else {                                                         return(NULL);          }
@@ -4677,15 +4677,15 @@ U_PSEUDO_OBJ *U_PMR_FILLRECTS_set(const U_PSEUDO_OBJ *BrushID, const U_PSEUDO_OB
    int just1;
    uint32_t Elements=1; /* only used when a single rect is passed in, not an array, not even an array with one member*/
    if(BrushID){ 
-      if(      BrushID->Used != 4){                                  return(NULL); }
-      else if( BrushID->Type == U_PMF_ARGB_OID){                     btype = 1;    }
-      else if( BrushID->Type == U_PMF_4NUM_OID){                     btype = 0;    }
+      if(BrushID->Used != 4){                                  return(NULL); }
+      else if(BrushID->Type == U_PMF_ARGB_OID){                     btype = 1;    }
+      else if(BrushID->Type == U_PMF_4NUM_OID){                     btype = 0;    }
       else {                                                         return(NULL); }
    }
    else {                                                            return(NULL); }
    if(Rects){
-      if(      (Rects->Type & U_PMF_MASK_OID) == U_PMF_RECT_OID ){   ctype = 1;    }
-      else if( (Rects->Type & U_PMF_MASK_OID) == U_PMF_RECTF_OID){   ctype = 0;    }
+      if((Rects->Type & U_PMF_MASK_OID) == U_PMF_RECT_OID){   ctype = 1;    }
+      else if((Rects->Type & U_PMF_MASK_OID) == U_PMF_RECTF_OID){   ctype = 0;    }
       else {                                                         return(NULL); }
    }
    else {                                                            return(NULL); }
@@ -4717,9 +4717,9 @@ U_PSEUDO_OBJ *U_PMR_FILLRECTS_set(const U_PSEUDO_OBJ *BrushID, const U_PSEUDO_OB
 U_PSEUDO_OBJ *U_PMR_FILLREGION_set(uint32_t RgnID, const U_PSEUDO_OBJ *BrushID){
    int btype;
    if(BrushID){ 
-      if(      BrushID->Used != 4){                                  return(NULL); }
-      else if( BrushID->Type == U_PMF_ARGB_OID){                     btype = 1;    }
-      else if( BrushID->Type == U_PMF_4NUM_OID){                     btype = 0;    }
+      if(BrushID->Used != 4){                                  return(NULL); }
+      else if(BrushID->Type == U_PMF_ARGB_OID){                     btype = 1;    }
+      else if(BrushID->Type == U_PMF_4NUM_OID){                     btype = 0;    }
       else {                                                         return(NULL); }
    }
    else {                                                            return(NULL); }
@@ -5159,7 +5159,7 @@ U_PSEUDO_OBJ *U_PMR_SETTSCLIP_set(U_PSEUDO_OBJ *Rects){
    int ctype;
    uint32_t Elements;
    if(Rects){
-      if(     Rects->Type == (U_PMF_RECT_OID  | U_PMF_ARRAY_OID)){ ctype = 1;  Elements = (Rects->Used - 4)/8;  }
+      if(Rects->Type == (U_PMF_RECT_OID  | U_PMF_ARRAY_OID)){ ctype = 1;  Elements = (Rects->Used - 4)/8;  }
       else if(Rects->Type == (U_PMF_RECTF_OID | U_PMF_ARRAY_OID)){ ctype = 0;  Elements = (Rects->Used - 4)/16; }
       else {                                                       return(NULL); }
    }
@@ -5792,7 +5792,7 @@ int U_PMF_CHARACTERRANGE_get(const char *contents, int32_t *First, int32_t *Leng
     \return 1 on success, 0 on error
     \param  contents   Record from which to extract data
     \param  Elements   Members in the array
-    \param  Widths     Caller must free.  Pointer to memory holding Line or gap widths (0.0 <-> 1.0, fraction of total line width ).  
+    \param  Widths     Caller must free.  Pointer to memory holding Line or gap widths (0.0 <-> 1.0, fraction of total line width).  
 
     EMF+ manual 2.2.2.9, Microsoft name: EmfPlusCompoundLineData Object
 */
@@ -6103,8 +6103,8 @@ int U_PMF_INTEGER15_get(const char **contents, U_FLOAT *Value, const char *blimi
 */
 int U_PMF_LANGUAGEIDENTIFIER_get(U_PMF_LANGUAGEIDENTIFIER LId, int *SubLId, int *PriLId){
     if(!SubLId || !PriLId){ return(0); }
-    *SubLId = (LId >> U_FF_SHFT_SUBLID ) & U_FF_MASK_SUBLID;         
-    *PriLId = (LId >> U_FF_SHFT_PRILID ) & U_FF_MASK_PRILID;
+    *SubLId = (LId >> U_FF_SHFT_SUBLID) & U_FF_MASK_SUBLID;         
+    *PriLId = (LId >> U_FF_SHFT_PRILID) & U_FF_MASK_PRILID;
     /* 16 bits above that are not used */
     return(1);
 }
@@ -6157,7 +6157,7 @@ int U_PMF_LINEARGRADIENTBRUSHOPTIONALDATA_get(const char *contents, uint32_t Fla
     if(Flags & U_BD_PresetColors){
        if(IS_MEM_UNSAFE(contents, 4, blimit))return(0);
        U_PMF_SERIAL_get(&contents, &Elements, 4, 1, U_LE);  /* starts with a 4 byte count*/
-       if(IS_MEM_UNSAFE(contents, Elements * ( sizeof(U_FLOAT) + sizeof(U_PMF_ARGB)), blimit))return(0);
+       if(IS_MEM_UNSAFE(contents, Elements * (sizeof(U_FLOAT) + sizeof(U_PMF_ARGB)), blimit))return(0);
        contents-=4; /* back up to the front of the count, as it is part of the data field */
        U_PMF_PTRSAV_SHIFT(Bc, &contents, 0);
     }
@@ -6462,21 +6462,21 @@ int U_PMF_PENOPTIONALDATA_get(
     }
     if(Flags & U_PD_DLData){          if(IS_MEM_UNSAFE(contents, 4, blimit))return(0);
                                       if(IS_MEM_UNSAFE(contents, U_PMF_LEN_FLOATDATA(contents), blimit))return(0);
-                                      U_PMF_PTRSAV_SHIFT(   DLData,         &contents, U_PMF_LEN_FLOATDATA(contents)); 
+                                      U_PMF_PTRSAV_SHIFT(DLData,         &contents, U_PMF_LEN_FLOATDATA(contents)); 
     }
     if(Flags & U_PD_NonCenter){       if(IS_MEM_UNSAFE(contents, 4, blimit))return(0);
                                       U_PMF_SERIAL_get(&contents, Alignment,      4, 1, U_LE); }
     if(Flags & U_PD_CLData){          if(IS_MEM_UNSAFE(contents, 4, blimit))return(0);
                                       if(IS_MEM_UNSAFE(contents, U_PMF_LEN_FLOATDATA(contents), blimit))return(0);
-                                      U_PMF_PTRSAV_SHIFT(   CmpndLineData,  &contents, U_PMF_LEN_FLOATDATA(contents)); 
+                                      U_PMF_PTRSAV_SHIFT(CmpndLineData,  &contents, U_PMF_LEN_FLOATDATA(contents)); 
     }
     if(Flags & U_PD_CustomStartCap){  if(IS_MEM_UNSAFE(contents, 4, blimit))return(0);
                                       if(IS_MEM_UNSAFE(contents, U_PMF_LEN_BYTEDATA(contents), blimit))return(0);
-                                      U_PMF_PTRSAV_SHIFT(   CSCapData,      &contents, U_PMF_LEN_BYTEDATA(contents));  
+                                      U_PMF_PTRSAV_SHIFT(CSCapData,      &contents, U_PMF_LEN_BYTEDATA(contents));  
     }
     if(Flags & U_PD_CustomEndCap){    if(IS_MEM_UNSAFE(contents, 4, blimit))return(0);
                                       if(IS_MEM_UNSAFE(contents, U_PMF_LEN_BYTEDATA(contents), blimit))return(0);
-                                      U_PMF_PTRSAV_SHIFT(   CECapData,      &contents, U_PMF_LEN_BYTEDATA(contents));  
+                                      U_PMF_PTRSAV_SHIFT(CECapData,      &contents, U_PMF_LEN_BYTEDATA(contents));  
     }
     return(1);
 }
@@ -6532,11 +6532,11 @@ int U_PMF_POINTR_get(const char **contents, U_FLOAT *X, U_FLOAT *Y, const char *
     if(!contents || !*contents | !X || !Y || !blimit){ return(0); }
     int size=0;
 
-    if(     U_PMF_INTEGER7_get( contents, X, blimit)){ size +=1; } 
+    if(U_PMF_INTEGER7_get(contents, X, blimit)){ size +=1; } 
     else if(U_PMF_INTEGER15_get(contents, X, blimit)){ size +=2; }
     else {  return(0); }
 
-    if(     U_PMF_INTEGER7_get( contents, Y, blimit)){ size +=1; } 
+    if(U_PMF_INTEGER7_get(contents, Y, blimit)){ size +=1; } 
     else if(U_PMF_INTEGER15_get(contents, Y, blimit)){ size +=2; }
     else {  return(0); }
 
@@ -6707,7 +6707,7 @@ int U_PMF_REGIONNODE_get(const char *contents, uint32_t *Type, const char **Data
     if(IS_MEM_UNSAFE(contents, sizeof(U_PMF_REGIONNODE), blimit))return(0);
     U_PMF_SERIAL_get(&contents, Type, 4, 1, U_LE);
     if(contents >= blimit)return(0); // returned Data is variable size, this much at least must be true
-    U_PMF_PTRSAV_COND(Data, contents, !(*Type == U_RNDT_Empty || *Type == U_RNDT_Infinite ));
+    U_PMF_PTRSAV_COND(Data, contents, !(*Type == U_RNDT_Empty || *Type == U_RNDT_Infinite));
     return(1);
 }
 
@@ -7172,7 +7172,7 @@ int U_PMR_SETCLIPPATH_get(const char *contents, U_PMF_CMN_HDR *Header,
 int U_PMR_SETCLIPRECT_get(const char *contents, U_PMF_CMN_HDR *Header,
       int *CMenum,
       U_PMF_RECTF *Rect){
-   if(!contents || !CMenum || !Rect ){ return(0); }
+   if(!contents || !CMenum || !Rect){ return(0); }
 
    U_PMF_CMN_HDR lclHeader;
    U_PMF_CMN_HDR_get(&contents, &lclHeader);
@@ -7283,12 +7283,12 @@ int U_PMR_HEADER_get(const char *contents, U_PMF_CMN_HDR *Header,
    if(lclHeader.Size < sizeof(U_PMF_HEADER))return(0);
    if(Header){ memcpy(Header,&lclHeader,sizeof(U_PMF_CMN_HDR)); }
 
-   *IsDual = (lclHeader.Flags & U_PPF_DM ? 1 : 0 );
+   *IsDual = (lclHeader.Flags & U_PPF_DM ? 1 : 0);
    U_PMF_SERIAL_get(&contents, Version,     4, 1, U_LE);
    U_PMF_SERIAL_get(&contents, &tmp,        4, 1, U_LE);
    U_PMF_SERIAL_get(&contents, LogicalDpiX, 4, 1, U_LE);
    U_PMF_SERIAL_get(&contents, LogicalDpiY, 4, 1, U_LE);
-   *IsVideo = (tmp & U_PPF_VIDEO ? 1 : 0 );
+   *IsVideo = (tmp & U_PPF_VIDEO ? 1 : 0);
    return(1);
 }
 
@@ -7340,7 +7340,7 @@ int U_PMR_DRAWARC_get(const char *contents, U_PMF_CMN_HDR *Header,
    if(Header){ memcpy(Header,&lclHeader,sizeof(U_PMF_CMN_HDR)); }
    blimit += lclHeader.Size;
 
-   *ctype = (lclHeader.Flags & U_PPF_C ? 1 : 0 );
+   *ctype = (lclHeader.Flags & U_PPF_C ? 1 : 0);
    *PenID = (lclHeader.Flags >> U_FF_SHFT_OID8) & U_FF_MASK_OID8;
    U_PMF_SERIAL_get(&contents, Start, 4, 1, U_LE);
    U_PMF_SERIAL_get(&contents, Sweep, 4, 1, U_LE);
@@ -7378,11 +7378,11 @@ int U_PMR_DRAWBEZIERS_get(const char *contents, U_PMF_CMN_HDR *Header,
    if(Header){ memcpy(Header,&lclHeader,sizeof(U_PMF_CMN_HDR)); }
    blimit += lclHeader.Size;
 
-   *ctype  = (lclHeader.Flags & U_PPF_C ? 1 : 0 );
-   *RelAbs = (lclHeader.Flags & U_PPF_P ? 1 : 0 );
+   *ctype  = (lclHeader.Flags & U_PPF_C ? 1 : 0);
+   *RelAbs = (lclHeader.Flags & U_PPF_P ? 1 : 0);
    *PenID  = (lclHeader.Flags >> U_FF_SHFT_OID8) & U_FF_MASK_OID8;
    U_PMF_SERIAL_get(&contents, Elements, 4, 1, U_LE);
-   int status = U_PMF_VARPOINTS_get(contents, lclHeader.Flags, *Elements, Points, blimit );
+   int status = U_PMF_VARPOINTS_get(contents, lclHeader.Flags, *Elements, Points, blimit);
    return(status);
 }
 
@@ -7413,8 +7413,8 @@ int U_PMR_DRAWCLOSEDCURVE_get(const char *contents, U_PMF_CMN_HDR *Header,
    if(Header){ memcpy(Header,&lclHeader,sizeof(U_PMF_CMN_HDR)); }
    blimit += lclHeader.Size;
 
-   *ctype  = (lclHeader.Flags & U_PPF_C ? 1 : 0 );
-   *RelAbs = (lclHeader.Flags & U_PPF_P ? 1 : 0 );
+   *ctype  = (lclHeader.Flags & U_PPF_C ? 1 : 0);
+   *RelAbs = (lclHeader.Flags & U_PPF_P ? 1 : 0);
    *PenID  = (lclHeader.Flags >> U_FF_SHFT_OID8) & U_FF_MASK_OID8;
    U_PMF_SERIAL_get(&contents, Tension,  4, 1, U_LE);
    U_PMF_SERIAL_get(&contents, Elements, 4, 1, U_LE);
@@ -7450,7 +7450,7 @@ int U_PMR_DRAWCURVE_get(const char *contents, U_PMF_CMN_HDR *Header,
    if(Header){ memcpy(Header,&lclHeader,sizeof(U_PMF_CMN_HDR)); }
    blimit += lclHeader.Size;
 
-   *ctype  = (lclHeader.Flags & U_PPF_C ? 1 : 0 );
+   *ctype  = (lclHeader.Flags & U_PPF_C ? 1 : 0);
    *PenID  = (lclHeader.Flags >> U_FF_SHFT_OID8) & U_FF_MASK_OID8;
    U_PMF_SERIAL_get(&contents, Tension,  4, 1, U_LE);
    U_PMF_SERIAL_get(&contents, Offset,   4, 1, U_LE);
@@ -7491,7 +7491,7 @@ int U_PMR_DRAWDRIVERSTRING_get(const char *contents, U_PMF_CMN_HDR *Header,
    if(Header){ memcpy(Header,&lclHeader,sizeof(U_PMF_CMN_HDR)); }
    blimit += lclHeader.Size;
 
-   *btype  = (lclHeader.Flags & U_PPF_B ? 1 : 0 );
+   *btype  = (lclHeader.Flags & U_PPF_B ? 1 : 0);
    *FontID = (lclHeader.Flags >> U_FF_SHFT_OID8) & U_FF_MASK_OID8;
    U_PMF_SERIAL_get(&contents, BrushID,   4, 1, (*btype ? U_XE : U_LE)); /* color is not byte swapped, ID integer is */
    U_PMF_SERIAL_get(&contents, DSOFlags,  4, 1, U_LE);
@@ -7525,7 +7525,7 @@ int U_PMR_DRAWELLIPSE_get(const char *contents, U_PMF_CMN_HDR *Header,
    if(lclHeader.Size < sizeof(U_PMF_DRAWELLIPSE))return(0);
    if(Header){ memcpy(Header,&lclHeader,sizeof(U_PMF_CMN_HDR)); }
 
-   *ctype  = (lclHeader.Flags & U_PPF_C ? 1 : 0 );
+   *ctype  = (lclHeader.Flags & U_PPF_C ? 1 : 0);
    *PenID  = (lclHeader.Flags >> U_FF_SHFT_OID8) & U_FF_MASK_OID8;
    U_PMF_SERIAL_get(&contents, Rect,  4, 4, U_LE);
    return(1);
@@ -7556,7 +7556,7 @@ int U_PMR_DRAWIMAGE_get(const char *contents, U_PMF_CMN_HDR *Header,
    if(lclHeader.Size < sizeof(U_PMF_DRAWIMAGE))return(0);
    if(Header){ memcpy(Header,&lclHeader,sizeof(U_PMF_CMN_HDR)); }
 
-   *ctype  = (lclHeader.Flags & U_PPF_C ? 1 : 0 );
+   *ctype  = (lclHeader.Flags & U_PPF_C ? 1 : 0);
    *ImgID  = (lclHeader.Flags >> U_FF_SHFT_OID8) & U_FF_MASK_OID8;
    U_PMF_SERIAL_get(&contents, ImgAttrID, 4, 1, U_LE);
    U_PMF_SERIAL_get(&contents, SrcUnit,   4, 1, U_LE);
@@ -7595,9 +7595,9 @@ int U_PMR_DRAWIMAGEPOINTS_get(const char *contents, U_PMF_CMN_HDR *Header,
    if(Header){ memcpy(Header,&lclHeader,sizeof(U_PMF_CMN_HDR)); }
    blimit += lclHeader.Size;
 
-   *ctype  = (lclHeader.Flags & U_PPF_C ? 1 : 0 );
-   *etype  = (lclHeader.Flags & U_PPF_E ? 1 : 0 );
-   *RelAbs = (lclHeader.Flags & U_PPF_P ? 1 : 0 );
+   *ctype  = (lclHeader.Flags & U_PPF_C ? 1 : 0);
+   *etype  = (lclHeader.Flags & U_PPF_E ? 1 : 0);
+   *RelAbs = (lclHeader.Flags & U_PPF_P ? 1 : 0);
    *ImgID  = (lclHeader.Flags >> U_FF_SHFT_OID8) & U_FF_MASK_OID8;
    U_PMF_SERIAL_get(&contents, ImgAttrID, 4, 1, U_LE);
    U_PMF_SERIAL_get(&contents, SrcUnit,   4, 1, U_LE);
@@ -7634,9 +7634,9 @@ int U_PMR_DRAWLINES_get(const char *contents, U_PMF_CMN_HDR *Header,
    if(Header){ memcpy(Header,&lclHeader,sizeof(U_PMF_CMN_HDR)); }
    blimit += lclHeader.Size;
 
-   *ctype  = (lclHeader.Flags & U_PPF_C ? 1 : 0 );
-   *dtype  = (lclHeader.Flags & U_PPF_D ? 1 : 0 );
-   *RelAbs = (lclHeader.Flags & U_PPF_P ? 1 : 0 );
+   *ctype  = (lclHeader.Flags & U_PPF_C ? 1 : 0);
+   *dtype  = (lclHeader.Flags & U_PPF_D ? 1 : 0);
+   *RelAbs = (lclHeader.Flags & U_PPF_P ? 1 : 0);
    *PenID  = (lclHeader.Flags >> U_FF_SHFT_OID8) & U_FF_MASK_OID8;
    U_PMF_SERIAL_get(&contents, Elements, 4, 1, U_LE);
    U_PMF_VARPOINTS_get(contents, lclHeader.Flags, *Elements, Points, blimit);
@@ -7693,7 +7693,7 @@ int U_PMR_DRAWPIE_get(const char *contents, U_PMF_CMN_HDR *Header,
    if(Header){ memcpy(Header,&lclHeader,sizeof(U_PMF_CMN_HDR)); }
    blimit += lclHeader.Size;
 
-   *ctype = (lclHeader.Flags & U_PPF_C ? 1 : 0 );
+   *ctype = (lclHeader.Flags & U_PPF_C ? 1 : 0);
    *PenID = (lclHeader.Flags >> U_FF_SHFT_OID8) & U_FF_MASK_OID8;
    U_PMF_SERIAL_get(&contents, Start, 4, 1, U_LE);
    U_PMF_SERIAL_get(&contents, Sweep, 4, 1, U_LE);
@@ -7733,7 +7733,7 @@ int U_PMR_DRAWRECTS_get(const char *contents, U_PMF_CMN_HDR *Header,
    blimit += lclHeader.Size;
 
    *PenID =  (lclHeader.Flags >> U_FF_SHFT_OID8) & U_FF_MASK_OID8;
-   *ctype  = (lclHeader.Flags & U_PPF_C ? 1 : 0 );
+   *ctype  = (lclHeader.Flags & U_PPF_C ? 1 : 0);
    U_PMF_SERIAL_get(&contents, Elements, 4, 1, U_LE);
    U_PMF_VARRECTS_get(&contents, lclHeader.Flags, *Elements, Rects, blimit);
    return(1);
@@ -7767,7 +7767,7 @@ int U_PMR_DRAWSTRING_get(const char *contents, U_PMF_CMN_HDR *Header,
    if(Header){ memcpy(Header,&lclHeader,sizeof(U_PMF_CMN_HDR)); }
    blimit += lclHeader.Size;
 
-   *btype  = (lclHeader.Flags & U_PPF_B ? 1 : 0 );
+   *btype  = (lclHeader.Flags & U_PPF_B ? 1 : 0);
    *FontID = (lclHeader.Flags >> U_FF_SHFT_OID8) & U_FF_MASK_OID8;
    U_PMF_SERIAL_get(&contents, BrushID,  4, 1, (*btype ? U_XE : U_LE)); /* color is not byte swapped, ID integer is */
    U_PMF_SERIAL_get(&contents, FormatID, 4, 1, U_LE);
@@ -7807,10 +7807,10 @@ int U_PMR_FILLCLOSEDCURVE_get(const char *contents, U_PMF_CMN_HDR *Header,
    if(Header){ memcpy(Header,&lclHeader,sizeof(U_PMF_CMN_HDR)); }
    blimit += lclHeader.Size;
 
-   *btype  = (lclHeader.Flags & U_PPF_B ? 1 : 0 );
-   *ctype  = (lclHeader.Flags & U_PPF_C ? 1 : 0 );
-   *ftype  = (lclHeader.Flags & U_PPF_F ? 1 : 0 );
-   *RelAbs = (lclHeader.Flags & U_PPF_P ? 1 : 0 );
+   *btype  = (lclHeader.Flags & U_PPF_B ? 1 : 0);
+   *ctype  = (lclHeader.Flags & U_PPF_C ? 1 : 0);
+   *ftype  = (lclHeader.Flags & U_PPF_F ? 1 : 0);
+   *RelAbs = (lclHeader.Flags & U_PPF_P ? 1 : 0);
    U_PMF_SERIAL_get(&contents, BrushID,  4, 1, (*btype ? U_XE : U_LE)); /* color is not byte swapped, ID integer is */
    U_PMF_SERIAL_get(&contents, Tension,  4, 1, U_LE);
    U_PMF_SERIAL_get(&contents, Elements, 4, 1, U_LE);
@@ -7841,8 +7841,8 @@ int U_PMR_FILLELLIPSE_get(const char *contents, U_PMF_CMN_HDR *Header,
    if(lclHeader.Size < sizeof(U_PMF_FILLELLIPSE))return(0);
    if(Header){ memcpy(Header,&lclHeader,sizeof(U_PMF_CMN_HDR)); }
 
-   *btype  = (lclHeader.Flags & U_PPF_B ? 1 : 0 );
-   *ctype  = (lclHeader.Flags & U_PPF_C ? 1 : 0 );
+   *btype  = (lclHeader.Flags & U_PPF_B ? 1 : 0);
+   *ctype  = (lclHeader.Flags & U_PPF_C ? 1 : 0);
    U_PMF_SERIAL_get(&contents, BrushID, 4, 1, (*btype ? U_XE : U_LE)); /* color is not byte swapped, ID integer is */
    U_PMF_SERIAL_get(&contents, Rect,    4, 4, U_LE);
    return(1);
@@ -7871,7 +7871,7 @@ int U_PMR_FILLPATH_get(const char *contents, U_PMF_CMN_HDR *Header,
    if(lclHeader.Size < sizeof(U_PMF_FILLPATH))return(0);
    if(Header){ memcpy(Header,&lclHeader,sizeof(U_PMF_CMN_HDR)); }
 
-   *btype  = (lclHeader.Flags & U_PPF_B ? 1 : 0 );
+   *btype  = (lclHeader.Flags & U_PPF_B ? 1 : 0);
    *PathID = (lclHeader.Flags >> U_FF_SHFT_OID8) & U_FF_MASK_OID8;
    U_PMF_SERIAL_get(&contents, BrushID, 4, 1, (*btype ? U_XE : U_LE)); /* color is not byte swapped, ID integer is */
    return(1);
@@ -7904,8 +7904,8 @@ int U_PMR_FILLPIE_get(const char *contents, U_PMF_CMN_HDR *Header,
    if(Header){ memcpy(Header,&lclHeader,sizeof(U_PMF_CMN_HDR)); }
    blimit += lclHeader.Size;
 
-   *btype  = (lclHeader.Flags & U_PPF_B ? 1 : 0 );
-   *ctype  = (lclHeader.Flags & U_PPF_C ? 1 : 0 );
+   *btype  = (lclHeader.Flags & U_PPF_B ? 1 : 0);
+   *ctype  = (lclHeader.Flags & U_PPF_C ? 1 : 0);
    U_PMF_SERIAL_get(&contents, BrushID, 4, 1, (*btype ? U_XE : U_LE)); /* color is not byte swapped, ID integer is */
    U_PMF_SERIAL_get(&contents, Start,   4, 1, U_LE);
    U_PMF_SERIAL_get(&contents, Sweep,   4, 1, U_LE);
@@ -7943,9 +7943,9 @@ int U_PMR_FILLPOLYGON_get(const char *contents, U_PMF_CMN_HDR *Header,
    if(Header){ memcpy(Header,&lclHeader,sizeof(U_PMF_CMN_HDR)); }
    blimit += lclHeader.Size;
 
-   *btype   = (lclHeader.Flags & U_PPF_B ? 1 : 0 );
-   *ctype   = (lclHeader.Flags & U_PPF_C ? 1 : 0 );
-   *RelAbs  = (lclHeader.Flags & U_PPF_R ? 1 : 0 );
+   *btype   = (lclHeader.Flags & U_PPF_B ? 1 : 0);
+   *ctype   = (lclHeader.Flags & U_PPF_C ? 1 : 0);
+   *RelAbs  = (lclHeader.Flags & U_PPF_R ? 1 : 0);
    U_PMF_SERIAL_get(&contents, BrushID,  4, 1, (*btype ? U_XE : U_LE)); /* color is not byte swapped, ID integer is */
    U_PMF_SERIAL_get(&contents, Elements, 4, 1, U_LE);
    U_PMF_VARPOINTS_get(contents, lclHeader.Flags, *Elements, Points, blimit);
@@ -7985,8 +7985,8 @@ int U_PMR_FILLRECTS_get(const char *contents, U_PMF_CMN_HDR *Header,
    if(Header){ memcpy(Header,&lclHeader,sizeof(U_PMF_CMN_HDR)); }
    blimit += lclHeader.Size;
 
-   *btype  = (lclHeader.Flags & U_PPF_B ? 1 : 0 );
-   *ctype  = (lclHeader.Flags & U_PPF_C ? 1 : 0 );
+   *btype  = (lclHeader.Flags & U_PPF_B ? 1 : 0);
+   *ctype  = (lclHeader.Flags & U_PPF_C ? 1 : 0);
    U_PMF_SERIAL_get(&contents, BrushID,  4, 1, (*btype ? U_XE : U_LE)); /* color is not byte swapped, ID integer is */
    U_PMF_SERIAL_get(&contents, Elements, 4, 1, U_LE);
    U_PMF_VARRECTS_get(&contents, lclHeader.Flags, *Elements, Rects, blimit);
@@ -8018,8 +8018,8 @@ int U_PMR_FILLREGION_get(const char *contents, U_PMF_CMN_HDR *Header,
    if(lclHeader.Size < sizeof(U_PMF_FILLREGION))return(0);
    if(Header){ memcpy(Header,&lclHeader,sizeof(U_PMF_CMN_HDR)); }
 
-   *btype  = (lclHeader.Flags & U_PPF_B ? 1 : 0 );
-   *ctype  = (lclHeader.Flags & U_PPF_C ? 1 : 0 );
+   *btype  = (lclHeader.Flags & U_PPF_B ? 1 : 0);
+   *ctype  = (lclHeader.Flags & U_PPF_C ? 1 : 0);
    *RgnID  = (lclHeader.Flags >> U_FF_SHFT_OID8) & U_FF_MASK_OID8;
    U_PMF_SERIAL_get(&contents, BrushID, 4, 1, (*btype ? U_XE : U_LE)); /* color is not byte swapped, ID integer is */
    return(1);
@@ -8075,7 +8075,7 @@ int U_PMR_OBJECT_get(const char *contents, U_PMF_CMN_HDR *Header,
    if(lclHeader.Size < sizeof(U_PMF_OBJECT))return(0);
    if(Header){ memcpy(Header,&lclHeader,sizeof(U_PMF_CMN_HDR)); }
 
-   *ntype  = (lclHeader.Flags & U_PPF_N ? 1 : 0 );
+   *ntype  = (lclHeader.Flags & U_PPF_N ? 1 : 0);
    *ObjID  = (lclHeader.Flags >> U_FF_SHFT_OID8) & U_FF_MASK_OID8;
    *otype  = (lclHeader.Flags >> U_FF_SHFT_OT) & U_FF_MASK_OT;
    if(*ntype){  U_PMF_SERIAL_get(&contents, TSize, 4, 1,  U_LE); }
@@ -8132,7 +8132,7 @@ int U_PMR_SETANTIALIASMODE_get(const char *contents, U_PMF_CMN_HDR *Header,
    if(lclHeader.Size < sizeof(U_PMF_SETANTIALIASMODE))return(0);
    if(Header){ memcpy(Header,&lclHeader,sizeof(U_PMF_CMN_HDR)); }
 
-   *aatype = (lclHeader.Flags & U_PPF_AA ? 1 : 0 );
+   *aatype = (lclHeader.Flags & U_PPF_AA ? 1 : 0);
    *SMenum = (lclHeader.Flags >> U_FF_SHFT_AA) & U_FF_MASK_AA;
    return(1);
 }
@@ -8379,7 +8379,7 @@ int U_PMR_SETTSCLIP_get(const char *contents, U_PMF_CMN_HDR *Header,
    if(Header){ memcpy(Header,&lclHeader,sizeof(U_PMF_CMN_HDR)); }
    blimit += lclHeader.Size;
 
-   *ctype     = (lclHeader.Flags & U_PPF_K ? 1 : 0 );
+   *ctype     = (lclHeader.Flags & U_PPF_K ? 1 : 0);
    *Elements  = (lclHeader.Flags >> U_FF_SHFT_TSC) & U_FF_MASK_TSC;
    U_PMF_VARRECTS_get(&contents, lclHeader.Flags, *Elements, Rects, blimit);
    return(1);
@@ -8424,8 +8424,8 @@ int U_PMR_SETTSGRAPHICS_get(const char *contents, U_PMF_CMN_HDR *Header,
    if(lclHeader.Size < sizeof(U_PMF_SETTSGRAPHICS))return(0);
    if(Header){ memcpy(Header,&lclHeader,sizeof(U_PMF_CMN_HDR)); }
 
-   *vgatype     = (lclHeader.Flags & U_PPF_VGA ? 1 : 0 );
-   *pptype      = (lclHeader.Flags & U_PPF_PP  ? 1 : 0 );
+   *vgatype     = (lclHeader.Flags & U_PPF_VGA ? 1 : 0);
+   *pptype      = (lclHeader.Flags & U_PPF_PP  ? 1 : 0);
    U_PMF_SERIAL_get(&contents, AntiAliasMode,      1, 1, U_XE);
    U_PMF_SERIAL_get(&contents, TextRenderHint,     1, 1, U_XE);
    U_PMF_SERIAL_get(&contents, CompositingMode,    1, 1, U_XE);
@@ -8459,7 +8459,7 @@ int U_PMR_MULTIPLYWORLDTRANSFORM_get(const char *contents, U_PMF_CMN_HDR *Header
    if(lclHeader.Size < sizeof(U_PMF_MULTIPLYWORLDTRANSFORM))return(0);
    if(Header){ memcpy(Header,&lclHeader,sizeof(U_PMF_CMN_HDR)); }
 
-   *xmtype     = (lclHeader.Flags & U_PPF_XM ? 1 : 0 );
+   *xmtype     = (lclHeader.Flags & U_PPF_XM ? 1 : 0);
    U_PMF_SERIAL_get(&contents, Matrix, 4, 6, U_LE);
    return(1);
 }
@@ -8473,7 +8473,7 @@ int U_PMR_MULTIPLYWORLDTRANSFORM_get(const char *contents, U_PMF_CMN_HDR *Header
     EMF+ manual 2.3.9.2, Microsoft name: EmfPlusResetWorldTransform Record, Index 0x2B
 */
 int U_PMR_RESETWORLDTRANSFORM_get(const char *contents, U_PMF_CMN_HDR *Header){
-   return( U_PMR_common_header_get(contents,Header));
+   return(U_PMR_common_header_get(contents,Header));
 }
 
 /**
@@ -8496,7 +8496,7 @@ int U_PMR_ROTATEWORLDTRANSFORM_get(const char *contents, U_PMF_CMN_HDR *Header,
    if(lclHeader.Size < sizeof(U_PMF_ROTATEWORLDTRANSFORM))return(0);
    if(Header){ memcpy(Header,&lclHeader,sizeof(U_PMF_CMN_HDR)); }
 
-   *xmtype     = (lclHeader.Flags & U_PPF_XM ? 1 : 0 );
+   *xmtype     = (lclHeader.Flags & U_PPF_XM ? 1 : 0);
    U_PMF_SERIAL_get(&contents, Angle, 4, 1, U_LE);
    return(1);
 }
@@ -8522,7 +8522,7 @@ int U_PMR_SCALEWORLDTRANSFORM_get(const char *contents, U_PMF_CMN_HDR *Header,
    if(lclHeader.Size < sizeof(U_PMF_SCALEWORLDTRANSFORM))return(0);
    if(Header){ memcpy(Header,&lclHeader,sizeof(U_PMF_CMN_HDR)); }
 
-   *xmtype     = (lclHeader.Flags & U_PPF_XM ? 1 : 0 );
+   *xmtype     = (lclHeader.Flags & U_PPF_XM ? 1 : 0);
    U_PMF_SERIAL_get(&contents, Sx, 4, 1, U_LE);
    U_PMF_SERIAL_get(&contents, Sy, 4, 1, U_LE);
    return(1);
@@ -8596,7 +8596,7 @@ int U_PMR_TRANSLATEWORLDTRANSFORM_get(const char *contents, U_PMF_CMN_HDR *Heade
    if(lclHeader.Size < sizeof(U_PMF_TRANSLATEWORLDTRANSFORM))return(0);
    if(Header){ memcpy(Header,&lclHeader,sizeof(U_PMF_CMN_HDR)); }
 
-   *xmtype     = (lclHeader.Flags & U_PPF_XM ? 1 : 0 );
+   *xmtype     = (lclHeader.Flags & U_PPF_XM ? 1 : 0);
    U_PMF_SERIAL_get(&contents, Dx, 4, 1, U_LE);
    U_PMF_SERIAL_get(&contents, Dy, 4, 1, U_LE);
    return(1);
@@ -8615,7 +8615,7 @@ int U_PMR_TRANSLATEWORLDTRANSFORM_get(const char *contents, U_PMF_CMN_HDR *Heade
      the path by using the current pen, and fills its interior by using the current brush."
 */
 int U_PMR_STROKEFILLPATH_get(const char *contents, U_PMF_CMN_HDR *Header){
-   return( U_PMR_common_header_get(contents,Header));
+   return(U_PMR_common_header_get(contents,Header));
 }
 
 /**
@@ -8627,7 +8627,7 @@ int U_PMR_STROKEFILLPATH_get(const char *contents, U_PMF_CMN_HDR *Header){
     EMF+ manual mentioned in 2.1.1.1, reserved, not otherwise documented, Microsoft name: EmfPlusMultiFormatStart Record, Index 0x05 
 */
 int U_PMR_MULTIFORMATSTART_get(const char *contents, U_PMF_CMN_HDR *Header){
-   return( U_PMR_common_header_get(contents,Header));
+   return(U_PMR_common_header_get(contents,Header));
 }
 
 /**
@@ -8639,7 +8639,7 @@ int U_PMR_MULTIFORMATSTART_get(const char *contents, U_PMF_CMN_HDR *Header){
     EMF+ manual mentioned in 2.1.1.1, reserved, not otherwise documented, Microsoft name: EmfPlusMultiFormatSection Record, Index 0x06 
 */
 int U_PMR_MULTIFORMATSECTION_get(const char *contents, U_PMF_CMN_HDR *Header){
-   return( U_PMR_common_header_get(contents,Header));
+   return(U_PMR_common_header_get(contents,Header));
 }
 
 /**
@@ -8651,7 +8651,7 @@ int U_PMR_MULTIFORMATSECTION_get(const char *contents, U_PMF_CMN_HDR *Header){
     EMF+ manual mentioned in 2.1.1.1, reserved, not otherwise documented, Microsoft name: EmfPlusMultiFormatEnd Record, Index 0x06
 */
 int U_PMR_MULTIFORMATEND_get(const char *contents, U_PMF_CMN_HDR *Header){
-   return( U_PMR_common_header_get(contents,Header));
+   return(U_PMR_common_header_get(contents,Header));
 }
 
 

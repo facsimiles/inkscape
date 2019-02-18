@@ -429,7 +429,7 @@ private:
         to find the different verbs in the hash map. */
     struct ltstr {
         bool operator()(const char* s1, const char* s2) const {
-            if ( (s1 == nullptr) && (s2 != nullptr) ) {
+            if ((s1 == nullptr) && (s2 != nullptr)) {
                 return true;
             } else if (s1 == nullptr || s2 == nullptr) {
                 return false;

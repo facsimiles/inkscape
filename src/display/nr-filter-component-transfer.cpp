@@ -33,7 +33,7 @@ FilterComponentTransfer::~FilterComponentTransfer()
 struct UnmultiplyAlpha {
     guint32 operator()(guint32 in) {
         EXTRACT_ARGB32(in, a, r, g, b);
-        if (a == 0 )
+        if (a == 0)
             return in;
         r = unpremul_alpha(r, a);
         g = unpremul_alpha(g, a);
@@ -46,7 +46,7 @@ struct UnmultiplyAlpha {
 struct MultiplyAlpha {
     guint32 operator()(guint32 in) {
         EXTRACT_ARGB32(in, a, r, g, b);
-        if (a == 0 )
+        if (a == 0)
             return in;
         r = premul_alpha(r, a);
         g = premul_alpha(g, a);
@@ -99,7 +99,7 @@ struct ComponentTransferDiscrete : public ComponentTransfer {
     guint32 operator()(guint32 in) {
         guint32 component = (in & _mask) >> _shift;
         guint32 k = (_v.size()) * component / 255;
-        if( k == _v.size() ) --k;
+        if(k == _v.size()) --k;
         component = _v[k];
         return (in & ~_mask) | ((guint32)component << _shift);
     }
@@ -155,11 +155,11 @@ void FilterComponentTransfer::render_cairo(FilterSlot &slot)
     // might be used as input to another primitive but it is likely that all the primitives in a given
     // filter use the same color interpolation space so we don't copy the input before converting.
     SPColorInterpolation ci_fp = SP_CSS_COLOR_INTERPOLATION_AUTO;
-    if( _style ) {
+    if(_style) {
         ci_fp = (SPColorInterpolation)_style->color_interpolation_filters.computed;
-        set_cairo_surface_ci(out, ci_fp );
+        set_cairo_surface_ci(out, ci_fp);
     }
-    set_cairo_surface_ci( input, ci_fp );
+    set_cairo_surface_ci(input, ci_fp);
 
     //cairo_surface_t *outtemp = ink_cairo_surface_create_identical(out);
     ink_cairo_surface_blit(input, out);

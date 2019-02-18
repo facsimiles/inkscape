@@ -33,7 +33,7 @@ public:
     }
     ListContainer &operator=(ListContainer const &other) {
         clear();
-        for ( const_iterator iter = other.begin() ; iter ; ++iter ) {
+        for (const_iterator iter = other.begin() ; iter ; ++iter) {
             push_back(*iter);
         }
         return *this;
@@ -47,8 +47,8 @@ public:
     bool operator==(ListContainer const &other) const {
         const_iterator iter = _head;
         const_iterator other_iter = other._head;
-        while ( iter && other_iter ) {
-            if (!( *iter == *other_iter )) {
+        while (iter && other_iter) {
+            if (!(*iter == *other_iter)) {
                 return false;
             }
             ++iter;
@@ -64,10 +64,10 @@ public:
     bool operator<(ListContainer const &other) const {
         const_iterator iter = _head;
         const_iterator other_iter = other._head;
-        while ( iter && other_iter ) {
-            if ( *iter < *other_iter ) {
+        while (iter && other_iter) {
+            if (*iter < *other_iter) {
                 return true;
-            } else if ( *other_iter < *iter ) {
+            } else if (*other_iter < *iter) {
                 return false;
             }
             ++iter;
@@ -95,7 +95,7 @@ public:
     const_iterator end() const { return const_iterator(); }
     size_type size() const {
         size_type size=0;
-        for ( iterator iter = _head ; iter ; ++iter ) {
+        for (iterator iter = _head ; iter ; ++iter) {
             size++;
         }
         return size;
@@ -107,19 +107,19 @@ public:
 
     /* sequence */
     ListContainer(size_type count, const_reference value) {
-        for ( ; count ; --count ) {
+        for (; count ; --count) {
             push_back(value);
         }
     }
     ListContainer(size_type count) {
         value_type default_value;
-        for ( ; count ; --count ) {
+        for (; count ; --count) {
             push_back(default_value);
         }
     }
     template <typename ForwardIterator>
     ListContainer(ForwardIterator i, ForwardIterator j) {
-        for ( ; i != j ; ++i ) {
+        for (; i != j ; ++i) {
             push_back(*i);
         }
     }
@@ -129,7 +129,7 @@ public:
 
     iterator insert(const_iterator position, const_reference value) {
         if (position) {
-            if ( position != _head ) {
+            if (position != _head) {
                 MutableList<T> added(value);
                 MutableList<T> before=_before(position);
                 set_rest(added, rest(before));
@@ -156,9 +156,9 @@ public:
         erase(position, rest(position));
     }
     void erase(const_iterator i, const_iterator j) {
-        if ( i == _head ) {
+        if (i == _head) {
             _head = static_cast<MutableList<T> &>(j);
-            if ( !j || !rest(j) ) {
+            if (!j || !rest(j)) {
                 _tail = _head;
             }
         } else {
@@ -177,7 +177,7 @@ public:
     void resize(size_type size, const_reference fill) {
         MutableList<T> before;
         MutableList<T> iter;
-        for ( iter = _head ; iter && size ; ++iter ) {
+        for (iter = _head ; iter && size ; ++iter) {
             before = iter;
             size--;
         }
@@ -247,7 +247,7 @@ public:
             MutableList<T> before=static_cast<MutableList<T> &>(pos);
             set_rest(added, rest(before));
             set_rest(before, added);
-            if ( _tail == before ) {
+            if (_tail == before) {
                 _tail = added;
             }
         } else {
@@ -272,7 +272,7 @@ public:
             MutableList<T> before=static_cast<MutableList<T> &>(position);
             MutableList<T> removed=rest(before);
             set_rest(before, rest(removed));
-            if ( removed == _tail ) {
+            if (removed == _tail) {
                 _tail = before;
             }
         }
@@ -283,8 +283,8 @@ private:
     MutableList<T> _tail;
 
     MutableList<T> _before(const_iterator position) {
-        for ( MutableList<T> iter = _head ; iter ; ++iter ) {
-            if ( rest(iter) == position ) {
+        for (MutableList<T> iter = _head ; iter ; ++iter) {
+            if (rest(iter) == position) {
                 return iter;
             }
         }
@@ -298,7 +298,7 @@ private:
             _head = temp._head;
             _tail = temp._tail;
         } else if (pos) {
-            if ( pos == _head ) { /* prepend */
+            if (pos == _head) { /* prepend */
                 set_rest(temp._tail, _head);
                 _head = temp._head;
             } else { /* insert somewhere in the middle */
@@ -321,7 +321,7 @@ private:
             _head = temp._head;
             _tail = temp._tail;
         } else if (pos) {
-            if ( pos == _tail ) { /* append */
+            if (pos == _tail) { /* append */
                 set_rest(_tail, temp._head);
                 _tail = temp._tail;
             } else { /* insert somewhere in the middle */

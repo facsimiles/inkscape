@@ -54,7 +54,7 @@ public:
 
     Path interpolateToPath(std::vector<Point> const &points) const override {
         Path path;
-        path.start( points.at(0) );
+        path.start(points.at(0));
         for (unsigned int i = 1 ; i < points.size(); ++i) {
             path.appendNew<Geom::LineSegment>(points.at(i));
         }
@@ -88,7 +88,7 @@ public:
                                                  tolerance_sq, max_segs);
 
         Geom::Path fit;
-        if ( n_segs > 0)
+        if (n_segs > 0)
         {
             fit.start(b[0]);
             for (int c = 0; c < n_segs; c++) {

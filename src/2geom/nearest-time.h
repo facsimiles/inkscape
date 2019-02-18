@@ -75,7 +75,7 @@ double nearest_time(Point const &p,
 inline
 double nearest_time(Point const &p,
                     D2<SBasis> const &c,
-                    double from = 0, double to = 1 )
+                    double from = 0, double to = 1)
 {
     return nearest_time(p, c, Geom::derivative(c), from, to);
 }
@@ -88,7 +88,7 @@ double nearest_time(Point const &p,
 std::vector<double>
 all_nearest_times(Point const& p,
                   D2<SBasis> const& c, D2<SBasis> const& dc,
-                  double from = 0, double to = 1 );
+                  double from = 0, double to = 1);
 
 inline
 std::vector<double>
@@ -121,7 +121,7 @@ all_nearest_times(Point const &p,
 
 inline
 std::vector<double>
-all_nearest_times( Point const& p, Piecewise< D2<SBasis> > const& c )
+all_nearest_times(Point const& p, Piecewise< D2<SBasis> > const& c)
 {
     return all_nearest_times(p, c, c.cuts[0], c.cuts[c.size()]);
 }

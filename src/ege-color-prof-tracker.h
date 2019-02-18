@@ -69,10 +69,10 @@ struct _EgeColorProfTrackerClass
 /**
  * Creates a new EgeColorProfTracker instance.
  */
-EgeColorProfTracker* ege_color_prof_tracker_new( GtkWidget* target );
+EgeColorProfTracker* ege_color_prof_tracker_new(GtkWidget* target);
 
-void ege_color_prof_tracker_get_profile( EgeColorProfTracker const * tracker, gpointer* ptr, guint* len );
-void ege_color_prof_tracker_get_profile_for( guint monitor, gpointer* ptr, guint* len );
+void ege_color_prof_tracker_get_profile(EgeColorProfTracker const * tracker, gpointer* ptr, guint* len);
+void ege_color_prof_tracker_get_profile_for(guint monitor, gpointer* ptr, guint* len);
 
 G_END_DECLS
 

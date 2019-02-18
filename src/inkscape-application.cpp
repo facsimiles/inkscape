@@ -181,7 +181,7 @@ void
 InkscapeApplication::update_windows(SPDocument* document)
 {
     // Find windows:
-    auto it = _documents.find( document );
+    auto it = _documents.find(document);
     if (it != _documents.end()) {
         std::vector<InkscapeWindow*> windows = it->second;
         std::cout << "InkscapeApplication::update_windows: windows: " << windows.size() << std::endl;
@@ -204,7 +204,7 @@ template<class T>
 ConcreteInkscapeApplication<T>::ConcreteInkscapeApplication()
     : T("org.inkscape.application.with_gui",
                        Gio::APPLICATION_HANDLES_OPEN | // Use default file opening.
-                       Gio::APPLICATION_NON_UNIQUE   ) // Allows different instances of Inkscape to run at same time.
+                       Gio::APPLICATION_NON_UNIQUE) // Allows different instances of Inkscape to run at same time.
     , InkscapeApplication()
 {
 
@@ -337,8 +337,8 @@ ConcreteInkscapeApplication<Gtk::Application>::on_startup2()
     }
 
     // ======================= Actions (GUI) ======================
-    add_action("new",    sigc::mem_fun(*this, &InkscapeApplication::on_new   ));
-    add_action("quit",   sigc::mem_fun(*this, &InkscapeApplication::on_quit  ));
+    add_action("new",    sigc::mem_fun(*this, &InkscapeApplication::on_new));
+    add_action("quit",   sigc::mem_fun(*this, &InkscapeApplication::on_quit));
 
     // ========================= GUI Init =========================
     Gtk::Window::set_default_icon_name("inkscape");
@@ -416,7 +416,7 @@ ConcreteInkscapeApplication<T>::on_open(const Gio::Application::type_vec_files& 
 
         // process_file(file);
         for (auto action: _command_line_actions) {
-            Gio::Application::activate_action( action.first, action.second );
+            Gio::Application::activate_action(action.first, action.second);
         }
 
         if (_use_shell) {
@@ -452,7 +452,7 @@ ConcreteInkscapeApplication<Gtk::Application>::on_open(const Gio::Application::t
 
             // Process each file.
             for (auto action: _command_line_actions) {
-		    Gio::Application::activate_action( action.first, action.second );
+		    Gio::Application::activate_action(action.first, action.second);
             }
 
             // Close window after we're done with file. This may not be the best way...
@@ -481,7 +481,7 @@ ConcreteInkscapeApplication<Gtk::Application>::on_open(const Gio::Application::t
 
             // process_file(file);
             for (auto action: _command_line_actions) {
-		    Gio::Application::activate_action( action.first, action.second );
+		    Gio::Application::activate_action(action.first, action.second);
             }
 
             if (_use_shell) {
@@ -578,23 +578,23 @@ ConcreteInkscapeApplication<T>::parse_actions(const Glib::ustring& input, action
                         std::cerr << "InkscapeApplication::parse_actions: Invalid boolean value: " << action << ":" << value << std::endl;
                     }
                     action_vector.push_back(
-                        std::make_pair( action, Glib::Variant<bool>::create(b)));
+                        std::make_pair(action, Glib::Variant<bool>::create(b)));
                 } else if (type.get_string() == "i") {
                     action_vector.push_back(
-                        std::make_pair( action, Glib::Variant<int>::create(std::stoi(value))));
+                        std::make_pair(action, Glib::Variant<int>::create(std::stoi(value))));
                 } else if (type.get_string() == "d") {
                     action_vector.push_back(
-                        std::make_pair( action, Glib::Variant<double>::create(std::stod(value))));
+                        std::make_pair(action, Glib::Variant<double>::create(std::stod(value))));
                 } else if (type.get_string() == "s") {
                     action_vector.push_back(
-                        std::make_pair( action, Glib::Variant<Glib::ustring>::create(value) ));
+                        std::make_pair(action, Glib::Variant<Glib::ustring>::create(value)));
                 } else {
                     std::cerr << "InkscapeApplication::parse_actions: unhandled action value: "
                               << action << ": " << type.get_string() << std::endl;
                 }
             } else {
                 // Stateless (i.e. no value).
-                action_vector.push_back( std::make_pair( action, Glib::VariantBase() ) );
+                action_vector.push_back(std::make_pair(action, Glib::VariantBase()));
             }
         } else {
             // Assume a verb
@@ -649,7 +649,7 @@ ConcreteInkscapeApplication<T>::shell()
         action_vector_t action_vector;
         parse_actions(input_u, action_vector);
         for (auto action: action_vector) {
-		Gio::Application::activate_action( action.first, action.second );
+		Gio::Application::activate_action(action.first, action.second);
         }
 
         if (desktop) {
@@ -678,7 +678,7 @@ ConcreteInkscapeApplication<T>::shell2()
         action_vector_t action_vector;
         parse_actions(input, action_vector);
         for (auto action: action_vector) {
-            T::activate_action( action.first, action.second );
+            T::activate_action(action.first, action.second);
         }
     }
 }
@@ -751,7 +751,7 @@ ConcreteInkscapeApplication<T>::on_handle_local_options(const Glib::RefPtr<Glib:
         options->contains("export-id")        ||
         options->contains("export-plain-svg") ||
         options->contains("export-text-to_path")
-        ) {
+) {
         _with_gui = false;
     }
 

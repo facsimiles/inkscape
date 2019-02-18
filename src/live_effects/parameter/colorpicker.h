@@ -17,7 +17,7 @@ namespace LivePathEffect {
 
 class ColorPickerParam : public Parameter {
 public:
-    ColorPickerParam( const Glib::ustring& label,
+    ColorPickerParam(const Glib::ustring& label,
                const Glib::ustring& tip,
                const Glib::ustring& key,
                Inkscape::UI::Widget::Registry* wr,

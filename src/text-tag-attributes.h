@@ -44,7 +44,7 @@ public:
     void writeTo(Inkscape::XML::Node *node) const;
 
     /// Update relative values
-    void update( double em, double ex, double w, double h );
+    void update(double em, double ex, double w, double h);
 
     /** For tspan role=line elements we should not use the set x,y
     coordinates since that would overrule the values calculated by the

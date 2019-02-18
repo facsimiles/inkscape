@@ -38,7 +38,7 @@
 InkviewApplication::InkviewApplication()
     : Gtk::Application("org.inkscape.application.inkview",
                        Gio::APPLICATION_HANDLES_OPEN | // Use default file opening.
-                       Gio::APPLICATION_NON_UNIQUE   ) // Allows different instances of Inkview to run at same time.
+                       Gio::APPLICATION_NON_UNIQUE) // Allows different instances of Inkview to run at same time.
     , fullscreen(false)
     , recursive(false)
     , timer(0)

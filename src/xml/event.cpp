@@ -128,7 +128,7 @@ void Inkscape::XML::undo_log_to_observer(
     Inkscape::XML::Event const *log,
     Inkscape::XML::NodeObserver &observer
 ) {
-    for ( Event const *action = log ; action ; action = action->next ) {
+    for (Event const *action = log ; action ; action = action->next) {
         action->undoOne(observer);
     }
 }
@@ -186,7 +186,7 @@ void Inkscape::XML::replay_log_to_observer(
 ) {
     List<Inkscape::XML::Event const &> reversed =
       reverse_list<Inkscape::XML::Event::ConstIterator>(log, nullptr);
-    for ( ; reversed ; ++reversed ) {
+    for (; reversed ; ++reversed) {
         reversed->replayOne(observer);
     }
 }
@@ -252,7 +252,7 @@ sp_repr_coalesce_log (Inkscape::XML::Event *a, Inkscape::XML::Event *b)
     /* (also noting the pointer that references it, so we can
      *  replace it later) */
     prev_ptr = &b;
-    for ( action = b ; action->next ; action = action->next ) {
+    for (action = b ; action->next ; action = action->next) {
         prev_ptr = &action->next;
     }
 
@@ -299,7 +299,7 @@ Inkscape::XML::Event *cancel_add_or_remove(A *action) {
     if (opposite){
         if (opposite->repr == action->repr &&
             opposite->child == action->child &&
-            opposite->ref == action->ref ) {
+            opposite->ref == action->ref) {
             OK = true;
         }
     }
@@ -328,9 +328,9 @@ Inkscape::XML::Event *Inkscape::XML::EventChgAttr::_optimizeOne() {
     Inkscape::XML::EventChgAttr *chg_attr=dynamic_cast<Inkscape::XML::EventChgAttr *>(this->next);
 
     /* consecutive chgattrs on the same key can be combined */
-    if ( chg_attr) {
-        if ( chg_attr->repr == this->repr &&
-             chg_attr->key == this->key )
+    if (chg_attr) {
+        if (chg_attr->repr == this->repr &&
+             chg_attr->key == this->key)
         {
             /* replace our oldval with the prior action's */
             this->oldval = chg_attr->oldval;
@@ -349,7 +349,7 @@ Inkscape::XML::Event *Inkscape::XML::EventChgContent::_optimizeOne() {
 
     /* consecutive content changes can be combined */
     if (chg_content) {
-        if (chg_content->repr == this->repr ) {
+        if (chg_content->repr == this->repr) {
             /* replace our oldval with the prior action's */
             this->oldval = chg_content->oldval;
 
@@ -370,12 +370,12 @@ Inkscape::XML::Event *Inkscape::XML::EventChgOrder::_optimizeOne() {
     bool OK = false;
     if (chg_order) {
         if (chg_order->repr == this->repr &&
-            chg_order->child == this->child ){
+            chg_order->child == this->child){
             OK = true;
         }
     }
     if (OK)    {
-        if ( chg_order->oldref == this->newref ) {
+        if (chg_order->oldref == this->newref) {
             /* cancel them out */
             Inkscape::XML::Event *after=chg_order->next;
 

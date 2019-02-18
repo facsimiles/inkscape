@@ -85,25 +85,25 @@ void ActionAlign::do_node_action(Inkscape::UI::Tools::NodeTool *nt, int verb)
     int prev_pref = prefs->getInt("/dialogs/align/align-nodes-to");
     switch(verb){
         case SP_VERB_ALIGN_HORIZONTAL_LEFT:
-            prefs->setInt("/dialogs/align/align-nodes-to", MIN_NODE );
+            prefs->setInt("/dialogs/align/align-nodes-to", MIN_NODE);
             nt->_multipath->alignNodes(Geom::Y);
             break;
         case SP_VERB_ALIGN_HORIZONTAL_CENTER:
             nt->_multipath->alignNodes(Geom::Y);
             break;
         case SP_VERB_ALIGN_HORIZONTAL_RIGHT:
-            prefs->setInt("/dialogs/align/align-nodes-to", MAX_NODE );
+            prefs->setInt("/dialogs/align/align-nodes-to", MAX_NODE);
             nt->_multipath->alignNodes(Geom::Y);
             break;
         case SP_VERB_ALIGN_VERTICAL_TOP:
-            prefs->setInt("/dialogs/align/align-nodes-to", MAX_NODE );
+            prefs->setInt("/dialogs/align/align-nodes-to", MAX_NODE);
             nt->_multipath->alignNodes(Geom::X);
             break;
         case SP_VERB_ALIGN_VERTICAL_CENTER:
             nt->_multipath->alignNodes(Geom::X);
             break;
         case SP_VERB_ALIGN_VERTICAL_BOTTOM:
-            prefs->setInt("/dialogs/align/align-nodes-to", MIN_NODE );
+            prefs->setInt("/dialogs/align/align-nodes-to", MIN_NODE);
             nt->_multipath->alignNodes(Geom::X);
             break;
         case SP_VERB_ALIGN_VERTICAL_HORIZONTAL_CENTER:
@@ -112,7 +112,7 @@ void ActionAlign::do_node_action(Inkscape::UI::Tools::NodeTool *nt, int verb)
             break;
         default:return;
     }
-    prefs->setInt("/dialogs/align/align-nodes-to", prev_pref );
+    prefs->setInt("/dialogs/align/align-nodes-to", prev_pref);
 }
 
 void ActionAlign::do_action(SPDesktop *desktop, int index)
@@ -198,7 +198,7 @@ void ActionAlign::do_action(SPDesktop *desktop, int index)
         if (b && (!focus || (item) != focus)) {
             Geom::Point const sp(a.sx0 * b->min()[Geom::X] + a.sx1 * b->max()[Geom::X],
                                  a.sy0 * b->min()[Geom::Y] + a.sy1 * b->max()[Geom::Y]);
-            Geom::Point const mp_rel( mp - sp );
+            Geom::Point const mp_rel(mp - sp);
             if (LInfty(mp_rel) > 1e-9) {
                 sp_item_move_rel(item, Geom::Translate(mp_rel));
                 changed = true;
@@ -207,7 +207,7 @@ void ActionAlign::do_action(SPDesktop *desktop, int index)
     }
 
     if (changed) {
-        DocumentUndo::done( desktop->getDocument() , SP_VERB_DIALOG_ALIGN_DISTRIBUTE,
+        DocumentUndo::done(desktop->getDocument() , SP_VERB_DIALOG_ALIGN_DISTRIBUTE,
                             _("Align"));
     }
 }
@@ -277,14 +277,14 @@ public :
                      bool onInterSpace,
                      Geom::Dim2 orientation,
                      double kBegin, double kEnd
-        ):
+):
         Action(id, tiptext, row, column,
                dialog.distribute_table(), dialog),
         _dialog(dialog),
         _onInterSpace(onInterSpace),
         _orientation(orientation),
         _kBegin(kBegin),
-        _kEnd( kEnd)
+        _kEnd(kEnd)
     {}
 
 private :
@@ -343,9 +343,9 @@ private :
             //new distance between each bbox
             float step = (dist - span) / (len - 1);
             float pos = sorted.front().bbox.min()[_orientation];
-            for ( std::vector<BBoxSort> ::iterator it (sorted.begin());
+            for (std::vector<BBoxSort> ::iterator it (sorted.begin());
                   it < sorted.end();
-                  ++it )
+                  ++it)
             {
                 if (!Geom::are_near(pos, it->bbox.min()[_orientation], 1e-6)) {
                     Geom::Point t(0.0, 0.0);
@@ -364,7 +364,7 @@ private :
             //distance between anchors
             float step = dist / (len - 1);
 
-            for ( unsigned int i = 0; i < len ; i ++ )
+            for (unsigned int i = 0; i < len ; i ++)
             {
                 BBoxSort & it(sorted[i]);
                 //new anchor position
@@ -385,7 +385,7 @@ private :
         prefs->setInt("/options/clonecompensation/value", saved_compensation);
 
         if (changed) {
-            DocumentUndo::done( desktop->getDocument(), SP_VERB_DIALOG_ALIGN_DISTRIBUTE,
+            DocumentUndo::done(desktop->getDocument(), SP_VERB_DIALOG_ALIGN_DISTRIBUTE,
                                 _("Distribute"));
         }
     }
@@ -617,7 +617,7 @@ private :
 	{
 		Geom::Point p2 = item->getCenter();
 		Geom::Point delta = p1 - p2;
-		sp_item_move_rel(item,Geom::Translate(delta[Geom::X],delta[Geom::Y] ));
+		sp_item_move_rel(item,Geom::Translate(delta[Geom::X],delta[Geom::Y]));
 		p1 = p2;
 	}
 
@@ -1127,7 +1127,7 @@ AlignAndDistribute::AlignAndDistribute()
     _selChangeConn = INKSCAPE.signal_selection_changed.connect(sigc::hide<0>(sigc::bind(sigc::ptr_fun(&on_selection_changed), this)));
     randomize_bbox = Geom::OptRect();
 
-    _desktopChangeConn = _deskTrack.connectDesktopChanged( sigc::mem_fun(*this, &AlignAndDistribute::setDesktop) );
+    _desktopChangeConn = _deskTrack.connectDesktopChanged(sigc::mem_fun(*this, &AlignAndDistribute::setDesktop));
     _deskTrack.connect(GTK_WIDGET(gobj()));
 
     show_all_children();
@@ -1183,11 +1183,11 @@ void AlignAndDistribute::on_selgrp_toggled(){
 void AlignAndDistribute::setMode(bool nodeEdit)
 {
     //Act on widgets used in node mode
-    void ( Gtk::Widget::*mNode) ()  = nodeEdit ?
+    void (Gtk::Widget::*mNode) ()  = nodeEdit ?
         &Gtk::Widget::show_all : &Gtk::Widget::hide;
 
     //Act on widgets used in selection mode
-  void ( Gtk::Widget::*mSel) ()  = nodeEdit ?
+  void (Gtk::Widget::*mSel) ()  = nodeEdit ?
       &Gtk::Widget::hide : &Gtk::Widget::show_all;
 
     ((_alignFrame).*(mSel))();
@@ -1215,8 +1215,8 @@ void AlignAndDistribute::addDistributeButton(const Glib::ustring &id, const Glib
             id, tiptext, row, col, *this ,
             onInterSpace, orientation,
             kBegin, kEnd
-            )
-        );
+)
+);
 }
 
 void AlignAndDistribute::addNodeButton(const Glib::ustring &id, const Glib::ustring tiptext,
@@ -1234,7 +1234,7 @@ void AlignAndDistribute::addRemoveOverlapsButton(const Glib::ustring &id, const 
     _actionList.push_back(
         new ActionRemoveOverlaps(
             id, tiptext, row, col, *this)
-        );
+);
 }
 
 void AlignAndDistribute::addGraphLayoutButton(const Glib::ustring &id, const Glib::ustring tiptext,
@@ -1243,7 +1243,7 @@ void AlignAndDistribute::addGraphLayoutButton(const Glib::ustring &id, const Gli
     _actionList.push_back(
         new ActionGraphLayout(
             id, tiptext, row, col, *this)
-        );
+);
 }
 
 void AlignAndDistribute::addExchangePositionsButton(const Glib::ustring &id, const Glib::ustring tiptext,
@@ -1252,7 +1252,7 @@ void AlignAndDistribute::addExchangePositionsButton(const Glib::ustring &id, con
     _actionList.push_back(
         new ActionExchangePositions(
             id, tiptext, row, col, *this)
-        );
+);
 }
 
 void AlignAndDistribute::addExchangePositionsByZOrderButton(const Glib::ustring &id, const Glib::ustring tiptext,
@@ -1261,7 +1261,7 @@ void AlignAndDistribute::addExchangePositionsByZOrderButton(const Glib::ustring 
     _actionList.push_back(
         new ActionExchangePositions(
             id, tiptext, row, col, *this, ActionExchangePositions::ZOrder)
-        );
+);
 }
 
 void AlignAndDistribute::addExchangePositionsClockwiseButton(const Glib::ustring &id, const Glib::ustring tiptext,
@@ -1270,7 +1270,7 @@ void AlignAndDistribute::addExchangePositionsClockwiseButton(const Glib::ustring
     _actionList.push_back(
         new ActionExchangePositions(
             id, tiptext, row, col, *this, ActionExchangePositions::Clockwise)
-        );
+);
 }
 
 void AlignAndDistribute::addUnclumpButton(const Glib::ustring &id, const Glib::ustring tiptext,
@@ -1279,7 +1279,7 @@ void AlignAndDistribute::addUnclumpButton(const Glib::ustring &id, const Glib::u
     _actionList.push_back(
         new ActionUnclump(
             id, tiptext, row, col, *this)
-        );
+);
 }
 
 void AlignAndDistribute::addRandomizeButton(const Glib::ustring &id, const Glib::ustring tiptext,
@@ -1288,7 +1288,7 @@ void AlignAndDistribute::addRandomizeButton(const Glib::ustring &id, const Glib:
     _actionList.push_back(
         new ActionRandomize(
             id, tiptext, row, col, *this)
-        );
+);
 }
 
 void AlignAndDistribute::addBaselineButton(const Glib::ustring &id, const Glib::ustring tiptext,

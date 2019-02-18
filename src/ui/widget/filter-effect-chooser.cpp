@@ -20,10 +20,10 @@ namespace UI {
 namespace Widget {
 
 SimpleFilterModifier::SimpleFilterModifier(int flags)
-    : _flags( flags )
+    : _flags(flags)
     , _lb_blend(_("Blend mode:"))
     , _blend(BlendModeConverter, SP_ATTR_INVALID, false)
-    , _blur(   _("Blur (%)"   ), 0, 0, 100, 1, 0.1, 1)
+    , _blur(_("Blur (%)"), 0, 0, 100, 1, 0.1, 1)
     , _opacity(_("Opacity (%)"), 0, 0, 100, 1, 0.1, 1)
 {
     set_name("SimpleFilterModifier");

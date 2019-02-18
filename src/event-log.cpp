@@ -192,14 +192,14 @@ EventLog::~EventLog() {
 void
 EventLog::notifyUndoEvent(Event* log) 
 {
-    if ( !_notifications_blocked ) {
+    if (!_notifications_blocked) {
     
         // make sure the supplied event matches the next undoable event
-        g_return_if_fail ( _getUndoEvent() && (*(_getUndoEvent()))[_columns.event] == log );
+        g_return_if_fail (_getUndoEvent() && (*(_getUndoEvent()))[_columns.event] == log);
 
         // if we're on the first child event...
-        if ( _curr_event->parent() &&
-             _curr_event == _curr_event->parent()->children().begin() )
+        if (_curr_event->parent() &&
+             _curr_event == _curr_event->parent()->children().begin())
 	{
             // ...back up to the parent
             _curr_event = _curr_event->parent();
@@ -208,7 +208,7 @@ EventLog::notifyUndoEvent(Event* log)
 	} else {
 
             // if we're about to leave a branch, collapse it
-            if ( !_curr_event->children().empty() ) {
+            if (!_curr_event->children().empty()) {
                 _priv->collapseRow(_event_list_store->get_path(_curr_event));
             }
 
@@ -238,13 +238,13 @@ EventLog::notifyUndoEvent(Event* log)
 void
 EventLog::notifyRedoEvent(Event* log)
 {
-    if ( !_notifications_blocked ) {
+    if (!_notifications_blocked) {
 
         // make sure the supplied event matches the next redoable event
-        g_return_if_fail ( _getRedoEvent() && (*(_getRedoEvent()))[_columns.event] == log );
+        g_return_if_fail (_getRedoEvent() && (*(_getRedoEvent()))[_columns.event] == log);
 
         // if we're on a parent event...
-        if ( !_curr_event->children().empty() ) {
+        if (!_curr_event->children().empty()) {
 
             // ...move to its first child
             _curr_event_parent = _curr_event;
@@ -255,8 +255,8 @@ EventLog::notifyRedoEvent(Event* log)
             ++_curr_event;
 
             // if we are about to leave a branch...
-            if ( _curr_event->parent() &&
-                 _curr_event == _curr_event->parent()->children().end() )
+            if (_curr_event->parent() &&
+                 _curr_event == _curr_event->parent()->children().end())
             {
 
                 // ...collapse it
@@ -293,8 +293,8 @@ EventLog::notifyUndoCommitEvent(Event* log)
     Gtk::TreeRow curr_row;
 
     // if the new event is of the same type as the previous then create a new branch
-    if ( event_type == (*_curr_event)[_columns.type] ) {
-        if ( !_curr_event_parent ) {
+    if (event_type == (*_curr_event)[_columns.type]) {
+        if (!_curr_event_parent) {
             _curr_event_parent = _curr_event;
         }
         curr_row = *(_event_list_store->append(_curr_event_parent->children()));
@@ -390,7 +390,7 @@ EventLog::const_iterator
 EventLog::_getUndoEvent() const
 {
     const_iterator undo_event = (const_iterator)nullptr;
-    if( _curr_event != _event_list_store->children().begin() )
+    if(_curr_event != _event_list_store->children().begin())
         undo_event = _curr_event;
     return undo_event;
 }
@@ -400,16 +400,16 @@ EventLog::_getRedoEvent() const
 {
     const_iterator redo_event = (const_iterator)nullptr;
 
-    if ( _curr_event != _last_event ) {
+    if (_curr_event != _last_event) {
 
-        if ( !_curr_event->children().empty() )
+        if (!_curr_event->children().empty())
             redo_event = _curr_event->children().begin();
         else  {
             redo_event = _curr_event;
             ++redo_event;
 
-            if ( redo_event->parent() &&
-                 redo_event == redo_event->parent()->children().end() ) {
+            if (redo_event->parent() &&
+                 redo_event == redo_event->parent()->children().end()) {
 
                 redo_event = redo_event->parent();
                 ++redo_event;
@@ -431,20 +431,20 @@ EventLog::_clearUndo()
 void
 EventLog::_clearRedo()
 {
-    if ( _last_event != _curr_event ) {
+    if (_last_event != _curr_event) {
 
         _last_event = _curr_event;
 
-        if ( !_last_event->children().empty() ) {
+        if (!_last_event->children().empty()) {
             _last_event = _last_event->children().begin();
         } else {
             ++_last_event;
         }
 
-        while ( _last_event != _event_list_store->children().end() ) {
+        while (_last_event != _event_list_store->children().end()) {
 
             if (_last_event->parent()) {
-                while ( _last_event != _last_event->parent()->children().end() ) {
+                while (_last_event != _last_event->parent()->children().end()) {
                     _last_event = _event_list_store->erase(_last_event);
                 }
                 _last_event = _last_event->parent();

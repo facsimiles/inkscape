@@ -200,7 +200,7 @@ void ColorWheelSelector::_updateDisplay()
     if(_updating) { return; }
 
 #ifdef DUMP_CHANGE_INFO
-    g_message("ColorWheelSelector::_colorChanged( this=%p, %f, %f, %f,   %f)", this, _color.color().v.c[0],
+    g_message("ColorWheelSelector::_colorChanged(this=%p, %f, %f, %f,   %f)", this, _color.color().v.c[0],
               _color.color().v.c[1], _color.color().v.c[2], alpha);
 #endif
 

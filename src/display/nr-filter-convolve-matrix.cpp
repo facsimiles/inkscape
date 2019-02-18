@@ -125,11 +125,11 @@ void FilterConvolveMatrix::render_cairo(FilterSlot &slot)
     // might be used as input to another primitive but it is likely that all the primitives in a given
     // filter use the same color interpolation space so we don't copy the input before converting.
     SPColorInterpolation ci_fp = SP_CSS_COLOR_INTERPOLATION_AUTO;
-    if( _style ) {
+    if(_style) {
         ci_fp = (SPColorInterpolation)_style->color_interpolation_filters.computed;
         set_cairo_surface_ci(out, ci_fp);
     }
-    set_cairo_surface_ci( input, ci_fp );
+    set_cairo_surface_ci(input, ci_fp);
 
     if (bias!=0 && !bias_warning) {
         g_warning("It is unknown whether Inkscape's implementation of bias in feConvolveMatrix "

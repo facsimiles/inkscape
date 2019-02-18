@@ -70,11 +70,11 @@ void ClipMaskIcon::get_preferred_width_vfunc(Gtk::Widget& widget,
     }
 }
 
-void ClipMaskIcon::render_vfunc( const Cairo::RefPtr<Cairo::Context>& cr,
+void ClipMaskIcon::render_vfunc(const Cairo::RefPtr<Cairo::Context>& cr,
                                  Gtk::Widget& widget,
                                  const Gdk::Rectangle& background_area,
                                  const Gdk::Rectangle& cell_area,
-                                 Gtk::CellRendererState flags )
+                                 Gtk::CellRendererState flags)
 {
     switch (_property_active.get_value())
     {
@@ -91,7 +91,7 @@ void ClipMaskIcon::render_vfunc( const Cairo::RefPtr<Cairo::Context>& cr,
             property_pixbuf() = Glib::RefPtr<Gdk::Pixbuf>(nullptr);
             break;
     }
-    Gtk::CellRendererPixbuf::render_vfunc( cr, widget, background_area, cell_area, flags );
+    Gtk::CellRendererPixbuf::render_vfunc(cr, widget, background_area, cell_area, flags);
 }
 
 bool ClipMaskIcon::activate_vfunc(GdkEvent* /*event*/,

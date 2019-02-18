@@ -66,7 +66,7 @@ PaintbucketToolbar::PaintbucketToolbar(SPDesktop *desktop)
         }
 
         int channels = prefs->getInt("/tools/paintbucket/channels", 0);
-        _channels_cbt->set_active( channels );
+        _channels_cbt->set_active(channels);
         _channels_cbt->signal_changed().connect(sigc::mem_fun(*this, &PaintbucketToolbar::channels_changed));
 
         auto channels_item = Gtk::manage(new Gtk::ToolItem());
@@ -82,7 +82,7 @@ PaintbucketToolbar::PaintbucketToolbar(SPDesktop *desktop)
         threshold_item->set_tooltip_text(_("The maximum allowed difference between the clicked pixel and the neighboring pixels to be counted in the fill"));
         threshold_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
         _threshold_adj->signal_value_changed().connect(sigc::mem_fun(*this, &PaintbucketToolbar::threshold_changed));
-        // ege_adjustment_action_set_appearance( eact, TOOLBAR_SLIDER_HINT );
+        // ege_adjustment_action_set_appearance(eact, TOOLBAR_SLIDER_HINT);
         add(*threshold_item);
     }
 
@@ -125,7 +125,7 @@ PaintbucketToolbar::PaintbucketToolbar(SPDesktop *desktop)
         }
 
         int autogap = prefs->getInt("/tools/paintbucket/autogap");
-        _autogap_cbt->set_active( autogap );
+        _autogap_cbt->set_active(autogap);
         auto autogap_item = Gtk::manage(new Gtk::ToolItem());
         autogap_item->add(*_autogap_cbt);
         add(*autogap_item);
@@ -197,8 +197,8 @@ PaintbucketToolbar::defaults()
     _threshold_adj->set_value(15);
     _offset_adj->set_value(0.0);
 
-    _channels_cbt->set_active( Inkscape::UI::Tools::FLOOD_CHANNELS_RGB );
-    _autogap_cbt->set_active( 0 );
+    _channels_cbt->set_active(Inkscape::UI::Tools::FLOOD_CHANNELS_RGB);
+    _autogap_cbt->set_active(0);
 }
 
 }

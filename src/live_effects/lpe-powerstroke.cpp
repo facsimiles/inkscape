@@ -36,7 +36,7 @@ namespace Geom {
 
 /** Find the point where two straight lines cross.
 */
-static boost::optional<Point> intersection_point( Point const & origin_a, Point const & vector_a,
+static boost::optional<Point> intersection_point(Point const & origin_a, Point const & vector_a,
                                            Point const & origin_b, Point const & vector_b)
 {
     Coord denom = cross(vector_a, vector_b);
@@ -51,7 +51,7 @@ static Geom::CubicBezier sbasis_to_cubicbezier(Geom::D2<Geom::SBasis> const & sb
 {
     std::vector<Geom::Point> temp;
     sbasis_to_bezier(temp, sbasis_in, 4);
-    return Geom::CubicBezier( temp );
+    return Geom::CubicBezier(temp);
 }
 
 /**
@@ -90,17 +90,17 @@ static Ellipse find_ellipse(Point P, Point Q, Point O)
  * Find circle that touches inside of the curve, with radius matching the curvature, at time value \c t.
  * Because this method internally uses unitTangentAt, t should be smaller than 1.0 (see unitTangentAt).
  */
-static Circle touching_circle( D2<SBasis> const &curve, double t, double tol=0.01 )
+static Circle touching_circle(D2<SBasis> const &curve, double t, double tol=0.01)
 {
     //Piecewise<SBasis> k = curvature(curve, tol);
     D2<SBasis> dM=derivative(curve);
-    if ( are_near(L2sq(dM(t)),0.) && (dM[0].size() > 1) && (dM[1].size() > 1) ) {
+    if (are_near(L2sq(dM(t)),0.) && (dM[0].size() > 1) && (dM[1].size() > 1)) {
         dM=derivative(dM);
     }
-    if ( are_near(L2sq(dM(t)),0.) && (dM[0].size() > 1) && (dM[1].size() > 1) ) {   // try second time
+    if (are_near(L2sq(dM(t)),0.) && (dM[0].size() > 1) && (dM[1].size() > 1)) {   // try second time
         dM=derivative(dM);
     }
-    if ( dM.isZero(tol) || (are_near(L2sq(dM(t)),0.) && (dM[0].size() > 1) && (dM[1].size() > 1) )) {   // admit defeat
+    if (dM.isZero(tol) || (are_near(L2sq(dM(t)),0.) && (dM[0].size() > 1) && (dM[1].size() > 1))) {   // admit defeat
         return Geom::Circle(Geom::Point(0., 0.), 0.);
     }
     Piecewise<D2<SBasis> > unitv = unitVector(dM,tol);
@@ -246,18 +246,18 @@ LPEPowerStroke::doOnApply(SPLPEItem const* lpeitem)
         
         item->updateRepr();
         if (pathv.empty()) {
-            points.emplace_back(0.2,width );
-            points.emplace_back(0.5,width );
-            points.emplace_back(0.8,width );
+            points.emplace_back(0.2,width);
+            points.emplace_back(0.5,width);
+            points.emplace_back(0.8,width);
         } else {
             Geom::Path const &path = pathv.front();
             Geom::Path::size_type const size = path.size_default();
             if (!path.closed()) {
-                points.emplace_back(0.2,width );
+                points.emplace_back(0.2,width);
             }
-            points.emplace_back(0.5*size,width );
+            points.emplace_back(0.5*size,width);
             if (!path.closed()) {
-                points.emplace_back(size - 0.2,width );
+                points.emplace_back(size - 0.2,width);
             }
         }
         offset_points.set_scale_width(scale_width);
@@ -317,7 +317,7 @@ static bool compare_offsets (Geom::Point first, Geom::Point second)
     return first[Geom::X] < second[Geom::X];
 }
 
-static Geom::Path path_from_piecewise_fix_cusps( Geom::Piecewise<Geom::D2<Geom::SBasis> > const & B,
+static Geom::Path path_from_piecewise_fix_cusps(Geom::Piecewise<Geom::D2<Geom::SBasis> > const & B,
                                                  Geom::Piecewise<Geom::SBasis> const & y, // width path
                                                  LineJoinType jointype,
                                                  double miter_limit,
@@ -342,14 +342,14 @@ static Geom::Path path_from_piecewise_fix_cusps( Geom::Piecewise<Geom::D2<Geom::
         if (B[i].isConstant(1e-4)) {
             continue;
         }
-        if (!are_near(B[prev_i].at1(), B[i].at0(), tol) )
+        if (!are_near(B[prev_i].at1(), B[i].at0(), tol))
         { // discontinuity found, so fix it :-)
-            double width = y( B.cuts[i] );
+            double width = y(B.cuts[i]);
 
             Geom::Point tang1 = -unitTangentAt(reverse(B[prev_i]),0.); // = unitTangentAt(B[prev_i],1);
             Geom::Point tang2 = unitTangentAt(B[i],0);
             Geom::Point discontinuity_vec = B[i].at0() - B[prev_i].at1();
-            bool on_outside = ( dot(tang1, discontinuity_vec) >= 0. );
+            bool on_outside = (dot(tang1, discontinuity_vec) >= 0.);
 
             if (on_outside) {
                 // we are on the outside: add some type of join!
@@ -363,8 +363,8 @@ static Geom::Path path_from_piecewise_fix_cusps( Geom::Piecewise<Geom::D2<Geom::
                        A 2Geom method was created to do exactly this :)
                        */
 
-                    boost::optional<Geom::Point> O = intersection_point( B[prev_i].at1(), tang1,
-                                                                              B[i].at0(), tang2 );
+                    boost::optional<Geom::Point> O = intersection_point(B[prev_i].at1(), tang1,
+                                                                              B[i].at0(), tang2);
                     if (!O) {
                         // no center found, i.e. 180 degrees round
                        pb.lineTo(B[i].at0()); // default to bevel for too shallow cusp angles
@@ -383,25 +383,25 @@ static Geom::Path path_from_piecewise_fix_cusps( Geom::Piecewise<Geom::D2<Geom::
                     }
 
                     // check if ellipse.ray is within 'sane' range.
-                    if ( ( fabs(ellipse.ray(Geom::X)) > 1e6 ) ||
-                         ( fabs(ellipse.ray(Geom::Y)) > 1e6 ) )
+                    if ((fabs(ellipse.ray(Geom::X)) > 1e6) ||
+                         (fabs(ellipse.ray(Geom::Y)) > 1e6))
                     {
                         // do bevel, and break
                          pb.lineTo(B[i].at0());
                          break;
                     }
 
-                    pb.arcTo( ellipse.ray(Geom::X), ellipse.ray(Geom::Y), ellipse.rotationAngle(),
-                              false, width < 0, B[i].at0() );
+                    pb.arcTo(ellipse.ray(Geom::X), ellipse.ray(Geom::Y), ellipse.rotationAngle(),
+                              false, width < 0, B[i].at0());
 
                     break;
                 }
                 case LINEJOIN_EXTRP_MITER: {
                     Geom::D2<Geom::SBasis> newcurve1 = B[prev_i] * Geom::reflection(rot90(tang1), B[prev_i].at1());
-                    Geom::CubicBezier bzr1 = sbasis_to_cubicbezier( reverse(newcurve1) );
+                    Geom::CubicBezier bzr1 = sbasis_to_cubicbezier(reverse(newcurve1));
 
                     Geom::D2<Geom::SBasis> newcurve2 = B[i] * Geom::reflection(rot90(tang2), B[i].at0());
-                    Geom::CubicBezier bzr2 = sbasis_to_cubicbezier( reverse(newcurve2) );
+                    Geom::CubicBezier bzr2 = sbasis_to_cubicbezier(reverse(newcurve2));
 
                     Geom::Crossings cross = crossings(bzr1, bzr2);
                     if (cross.empty()) {
@@ -431,15 +431,15 @@ static Geom::Path path_from_piecewise_fix_cusps( Geom::Piecewise<Geom::D2<Geom::
                     solutions = circle1.intersect(circle2);
                     if (solutions.size() == 2) {
                         Geom::Point sol(0.,0.);
-                        if ( dot(tang2, solutions[0].point() - B[i].at0()) > 0 ) {
+                        if (dot(tang2, solutions[0].point() - B[i].at0()) > 0) {
                             // points[0] is bad, choose points[1]
                             sol = solutions[1].point();
-                        } else if ( dot(tang2, solutions[1].point() - B[i].at0()) > 0 ) { // points[0] could be good, now check points[1]
+                        } else if (dot(tang2, solutions[1].point() - B[i].at0()) > 0) { // points[0] could be good, now check points[1]
                             // points[1] is bad, choose points[0]
                             sol = solutions[0].point();
                         } else {
                             // both points are good, choose nearest
-                            sol = ( distanceSq(B[i].at0(), solutions[0].point()) < distanceSq(B[i].at0(), solutions[1].point()) ) ?
+                            sol = (distanceSq(B[i].at0(), solutions[0].point()) < distanceSq(B[i].at0(), solutions[1].point())) ?
                                     solutions[0].point() : solutions[1].point();
                         }
 
@@ -460,8 +460,8 @@ static Geom::Path path_from_piecewise_fix_cusps( Geom::Piecewise<Geom::D2<Geom::
                         break;
                     } else {
                         // fall back to miter
-                        boost::optional<Geom::Point> p = intersection_point( B[prev_i].at1(), tang1,
-                                                                             B[i].at0(), tang2 );
+                        boost::optional<Geom::Point> p = intersection_point(B[prev_i].at1(), tang1,
+                                                                             B[i].at0(), tang2);
                         if (p) {
                             // check size of miter
                             Geom::Point point_on_path = B[prev_i].at1() - rot90(tang1) * width;
@@ -484,8 +484,8 @@ static Geom::Path path_from_piecewise_fix_cusps( Geom::Piecewise<Geom::D2<Geom::
                     break;
                 }
                 case LINEJOIN_MITER: {
-                    boost::optional<Geom::Point> p = intersection_point( B[prev_i].at1(), tang1,
-                                                                         B[i].at0(), tang2 );
+                    boost::optional<Geom::Point> p = intersection_point(B[prev_i].at1(), tang1,
+                                                                         B[i].at0(), tang2);
                     if (p) {
                         // check size of miter
                         Geom::Point point_on_path = B[prev_i].at1() - rot90(tang1) * width;
@@ -532,8 +532,8 @@ static Geom::Path path_from_piecewise_fix_cusps( Geom::Piecewise<Geom::D2<Geom::
 
             } else {
                 // we are on inside of corner!
-                Geom::Path bzr1 = path_from_sbasis( B[prev_i], tol );
-                Geom::Path bzr2 = path_from_sbasis( B[i], tol );
+                Geom::Path bzr1 = path_from_sbasis(B[prev_i], tol);
+                Geom::Path bzr2 = path_from_sbasis(B[i], tol);
                 Geom::Crossings cross = crossings(bzr1, bzr2);
                 if (cross.size() != 1) {
                     // empty crossing or too many crossings: default to bevel
@@ -545,8 +545,8 @@ static Geom::Path path_from_piecewise_fix_cusps( Geom::Piecewise<Geom::D2<Geom::
                         pb.backspace();
                     }
 
-                    pb.append( bzr1.portion(0, cross[0].ta) );
-                    pb.append( bzr2.portion(cross[0].tb, bzr2.size_open()) );
+                    pb.append(bzr1.portion(0, cross[0].ta));
+                    pb.append(bzr2.portion(cross[0].tb, bzr2.size_open()));
                 }
             }
         } else {
@@ -611,29 +611,29 @@ LPEPowerStroke::doEffect_path (Geom::PathVector const & path_in)
     if (pathv[0].closed()) {
         std::vector<Geom::Point> ts_close;
         //we have only one knot or overwrite before
-        Geom::Point start = Geom::Point( pwd2_in.domain().min(), ts.front()[Geom::Y]);
-        Geom::Point end   = Geom::Point( pwd2_in.domain().max(), ts.front()[Geom::Y]); 
+        Geom::Point start = Geom::Point(pwd2_in.domain().min(), ts.front()[Geom::Y]);
+        Geom::Point end   = Geom::Point(pwd2_in.domain().max(), ts.front()[Geom::Y]); 
         if (ts.size() > 1) {
             ts_close.push_back(ts[ts.size()-2]);
             ts_close.push_back(ts.back());
             ts_close.push_back(ts.front());
             ts_close.push_back(ts[1]);
             Geom::Path closepath = interpolator->interpolateToPath(ts_close);
-            start = closepath.pointAt(Geom::nearest_time(Geom::Point( pwd2_in.domain().min(),0), closepath));
+            start = closepath.pointAt(Geom::nearest_time(Geom::Point(pwd2_in.domain().min(),0), closepath));
             start[Geom::X] = pwd2_in.domain().min();
             end   = start;
             end[Geom::X] = pwd2_in.domain().max();
         }
-        ts.insert(ts.begin(), start );
-        ts.push_back( end );
+        ts.insert(ts.begin(), start);
+        ts.push_back(end);
         ts_close.clear();
     } else {
         // add width data for first and last point on the path
         // depending on cap type, these first and last points have width zero or take the width from the closest width point.
-        ts.insert(ts.begin(), Point( pwd2_in.domain().min(),
-                                    (start_linecap==LINECAP_ZERO_WIDTH) ? 0. : ts.front()[Geom::Y]) );
-        ts.emplace_back( pwd2_in.domain().max(),
-                             (end_linecap==LINECAP_ZERO_WIDTH) ? 0. : ts.back()[Geom::Y] );
+        ts.insert(ts.begin(), Point(pwd2_in.domain().min(),
+                                    (start_linecap==LINECAP_ZERO_WIDTH) ? 0. : ts.front()[Geom::Y]));
+        ts.emplace_back(pwd2_in.domain().max(),
+                             (end_linecap==LINECAP_ZERO_WIDTH) ? 0. : ts.back()[Geom::Y]);
     }
 
     // do the interpolation in a coordinate system that is more alike to the on-canvas knots,
@@ -657,7 +657,7 @@ LPEPowerStroke::doEffect_path (Geom::PathVector const & path_in)
     // and only take portion of x and y that lies within those time values
     std::vector< double > rtsmin = roots (x - pwd2_in.domain().min());
     std::vector< double > rtsmax = roots (x + pwd2_in.domain().max());
-    if ( !rtsmin.empty() && !rtsmax.empty() ) {
+    if (!rtsmin.empty() && !rtsmax.empty()) {
         x = portion(x, rtsmin.at(0), rtsmax.at(0));
         y = portion(y, rtsmin.at(0), rtsmax.at(0));
     }
@@ -667,10 +667,10 @@ LPEPowerStroke::doEffect_path (Geom::PathVector const & path_in)
         return path_in;
     }
     Piecewise<D2<SBasis> > pwd2_out   = compose(pwd2_in,x) + y*compose(n,x);
-    Piecewise<D2<SBasis> > mirrorpath = reverse( compose(pwd2_in,x) - y*compose(n,x));
+    Piecewise<D2<SBasis> > mirrorpath = reverse(compose(pwd2_in,x) - y*compose(n,x));
 
-    Geom::Path fixed_path       = path_from_piecewise_fix_cusps( pwd2_out,   y,          jointype, miter_limit, LPE_CONVERSION_TOLERANCE);
-    Geom::Path fixed_mirrorpath = path_from_piecewise_fix_cusps( mirrorpath, reverse(y), jointype, miter_limit, LPE_CONVERSION_TOLERANCE);
+    Geom::Path fixed_path       = path_from_piecewise_fix_cusps(pwd2_out,   y,          jointype, miter_limit, LPE_CONVERSION_TOLERANCE);
+    Geom::Path fixed_mirrorpath = path_from_piecewise_fix_cusps(mirrorpath, reverse(y), jointype, miter_limit, LPE_CONVERSION_TOLERANCE);
     if (pathv[0].closed()) {
         fixed_path.close(true);
         path_out.push_back(fixed_path);
@@ -684,7 +684,7 @@ LPEPowerStroke::doEffect_path (Geom::PathVector const & path_in)
                 break;
             case LINECAP_PEAK:
             {
-                Geom::Point end_deriv = -unitTangentAt( reverse(pwd2_in.segs.back()), 0.);
+                Geom::Point end_deriv = -unitTangentAt(reverse(pwd2_in.segs.back()), 0.);
                 double radius = 0.5 * distance(fixed_path.finalPoint(), fixed_mirrorpath.initialPoint());
                 Geom::Point midpoint = 0.5*(fixed_path.finalPoint() + fixed_mirrorpath.initialPoint()) + radius*end_deriv;
                 fixed_path.appendNew<LineSegment>(midpoint);
@@ -693,23 +693,23 @@ LPEPowerStroke::doEffect_path (Geom::PathVector const & path_in)
             }
             case LINECAP_SQUARE:
             {
-                Geom::Point end_deriv = -unitTangentAt( reverse(pwd2_in.segs.back()), 0.);
+                Geom::Point end_deriv = -unitTangentAt(reverse(pwd2_in.segs.back()), 0.);
                 double radius = 0.5 * distance(fixed_path.finalPoint(), fixed_mirrorpath.initialPoint());
-                fixed_path.appendNew<LineSegment>( fixed_path.finalPoint() + radius*end_deriv );
-                fixed_path.appendNew<LineSegment>( fixed_mirrorpath.initialPoint() + radius*end_deriv );
-                fixed_path.appendNew<LineSegment>( fixed_mirrorpath.initialPoint() );
+                fixed_path.appendNew<LineSegment>(fixed_path.finalPoint() + radius*end_deriv);
+                fixed_path.appendNew<LineSegment>(fixed_mirrorpath.initialPoint() + radius*end_deriv);
+                fixed_path.appendNew<LineSegment>(fixed_mirrorpath.initialPoint());
                 break;
             }
             case LINECAP_BUTT:
             {
-                fixed_path.appendNew<LineSegment>( fixed_mirrorpath.initialPoint() );
+                fixed_path.appendNew<LineSegment>(fixed_mirrorpath.initialPoint());
                 break;
             }
             case LINECAP_ROUND:
             default:
             {
                 double radius1 = 0.5 * distance(fixed_path.finalPoint(), fixed_mirrorpath.initialPoint());
-                fixed_path.appendNew<EllipticalArc>( radius1, radius1, M_PI/2., false, y.lastValue() < 0, fixed_mirrorpath.initialPoint() );
+                fixed_path.appendNew<EllipticalArc>(radius1, radius1, M_PI/2., false, y.lastValue() < 0, fixed_mirrorpath.initialPoint());
                 break;
             }
         }
@@ -721,32 +721,32 @@ LPEPowerStroke::doEffect_path (Geom::PathVector const & path_in)
                 break;
             case LINECAP_PEAK:
             {
-                Geom::Point start_deriv = unitTangentAt( pwd2_in.segs.front(), 0.);
+                Geom::Point start_deriv = unitTangentAt(pwd2_in.segs.front(), 0.);
                 double radius = 0.5 * distance(fixed_path.initialPoint(), fixed_mirrorpath.finalPoint());
                 Geom::Point midpoint = 0.5*(fixed_mirrorpath.finalPoint() + fixed_path.initialPoint()) - radius*start_deriv;
-                fixed_path.appendNew<LineSegment>( midpoint );
-                fixed_path.appendNew<LineSegment>( fixed_path.initialPoint() );
+                fixed_path.appendNew<LineSegment>(midpoint);
+                fixed_path.appendNew<LineSegment>(fixed_path.initialPoint());
                 break;
             }
             case LINECAP_SQUARE:
             {
-                Geom::Point start_deriv = unitTangentAt( pwd2_in.segs.front(), 0.);
+                Geom::Point start_deriv = unitTangentAt(pwd2_in.segs.front(), 0.);
                 double radius = 0.5 * distance(fixed_path.initialPoint(), fixed_mirrorpath.finalPoint());
-                fixed_path.appendNew<LineSegment>( fixed_mirrorpath.finalPoint() - radius*start_deriv );
-                fixed_path.appendNew<LineSegment>( fixed_path.initialPoint() - radius*start_deriv );
-                fixed_path.appendNew<LineSegment>( fixed_path.initialPoint() );
+                fixed_path.appendNew<LineSegment>(fixed_mirrorpath.finalPoint() - radius*start_deriv);
+                fixed_path.appendNew<LineSegment>(fixed_path.initialPoint() - radius*start_deriv);
+                fixed_path.appendNew<LineSegment>(fixed_path.initialPoint());
                 break;
             }
             case LINECAP_BUTT:
             {
-                fixed_path.appendNew<LineSegment>( fixed_path.initialPoint() );
+                fixed_path.appendNew<LineSegment>(fixed_path.initialPoint());
                 break;
             }
             case LINECAP_ROUND:
             default:
             {
                 double radius2 = 0.5 * distance(fixed_path.initialPoint(), fixed_mirrorpath.finalPoint());
-                fixed_path.appendNew<EllipticalArc>( radius2, radius2, M_PI/2., false, y.firstValue() < 0, fixed_path.initialPoint() );
+                fixed_path.appendNew<EllipticalArc>(radius2, radius2, M_PI/2., false, y.firstValue() < 0, fixed_path.initialPoint());
                 break;
             }
         }

@@ -17,7 +17,7 @@ namespace Inkscape {
 namespace UI {
 namespace Widget {
 
-Frame::Frame(Glib::ustring const &label_text /*= ""*/, gboolean label_bold /*= TRUE*/ )
+Frame::Frame(Glib::ustring const &label_text /*= ""*/, gboolean label_bold /*= TRUE*/)
     : _label(label_text, Gtk::ALIGN_END, Gtk::ALIGN_CENTER, true)
 {
     set_shadow_type(Gtk::SHADOW_NONE);

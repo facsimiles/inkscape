@@ -51,12 +51,12 @@
 G_BEGIN_DECLS
 
 
-#define EGE_ADJUSTMENT_ACTION_TYPE                ( ege_adjustment_action_get_type() )
-#define EGE_ADJUSTMENT_ACTION( obj )              ( G_TYPE_CHECK_INSTANCE_CAST( (obj), EGE_ADJUSTMENT_ACTION_TYPE, EgeAdjustmentAction) )
-#define EGE_ADJUSTMENT_ACTION_CLASS( klass )      ( G_TYPE_CHECK_CLASS_CAST( (klass), EGE_ADJUSTMENT_ACTION_TYPE, EgeAdjustmentActionClass) )
-#define IS_EGE_ADJUSTMENT_ACTION( obj )           ( G_TYPE_CHECK_INSTANCE_TYPE( (obj), EGE_ADJUSTMENT_ACTION_TYPE) )
-#define IS_EGE_ADJUSTMENT_ACTION_CLASS( klass )   ( G_TYPE_CHECK_CLASS_TYPE( (klass), EGE_ADJUSTMENT_ACTION_TYPE) )
-#define EGE_ADJUSTMENT_ACTION_GET_CLASS( obj )    ( G_TYPE_INSTANCE_GET_CLASS( (obj), EGE_ADJUSTMENT_ACTION_TYPE, EgeAdjustmentActionClass) )
+#define EGE_ADJUSTMENT_ACTION_TYPE                (ege_adjustment_action_get_type())
+#define EGE_ADJUSTMENT_ACTION(obj)              (G_TYPE_CHECK_INSTANCE_CAST((obj), EGE_ADJUSTMENT_ACTION_TYPE, EgeAdjustmentAction))
+#define EGE_ADJUSTMENT_ACTION_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST((klass), EGE_ADJUSTMENT_ACTION_TYPE, EgeAdjustmentActionClass))
+#define IS_EGE_ADJUSTMENT_ACTION(obj)           (G_TYPE_CHECK_INSTANCE_TYPE((obj), EGE_ADJUSTMENT_ACTION_TYPE))
+#define IS_EGE_ADJUSTMENT_ACTION_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE((klass), EGE_ADJUSTMENT_ACTION_TYPE))
+#define EGE_ADJUSTMENT_ACTION_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS((obj), EGE_ADJUSTMENT_ACTION_TYPE, EgeAdjustmentActionClass))
 
 typedef struct _EgeAdjustmentAction      EgeAdjustmentAction;
 typedef struct _EgeAdjustmentActionClass EgeAdjustmentActionClass;
@@ -88,7 +88,7 @@ struct _EgeAdjustmentActionClass
 };
 
 /** Standard Gtk type function */
-GType ege_adjustment_action_get_type( void );
+GType ege_adjustment_action_get_type(void);
 
 
 /*
@@ -98,14 +98,14 @@ GType ege_adjustment_action_get_type( void );
  */
 
 /** Callback type for widgets creation factory */
-typedef GtkWidget* (*EgeCreateAdjWidgetCB)( GtkAdjustment *adjustment, gdouble climb_rate, guint digits, Inkscape::UI::Widget::UnitTracker *unit_tracker );
+typedef GtkWidget* (*EgeCreateAdjWidgetCB)(GtkAdjustment *adjustment, gdouble climb_rate, guint digits, Inkscape::UI::Widget::UnitTracker *unit_tracker);
 
 /**
  * Sets a factory callback to be used to create the specific widget.
  *
  * @param factoryCb the callback to use to create custom widgets, NULL to use the default.
  */
-void ege_adjustment_action_set_compact_tool_factory( EgeCreateAdjWidgetCB factoryCb );
+void ege_adjustment_action_set_compact_tool_factory(EgeCreateAdjWidgetCB factoryCb);
 
 
 /**
@@ -122,7 +122,7 @@ void ege_adjustment_action_set_compact_tool_factory( EgeCreateAdjWidgetCB factor
  * @param digits Used for created widgets.
  * @param unit_tracker Used to store unit.
  */
-EgeAdjustmentAction* ege_adjustment_action_new( GtkAdjustment* adjustment,
+EgeAdjustmentAction* ege_adjustment_action_new(GtkAdjustment* adjustment,
                                                 const gchar *name,
                                                 const gchar *label,
                                                 const gchar *tooltip,
@@ -130,14 +130,14 @@ EgeAdjustmentAction* ege_adjustment_action_new( GtkAdjustment* adjustment,
                                                 gdouble climb_rate,
                                                 guint digits,
                                                 Inkscape::UI::Widget::UnitTracker *unit_tracker
-                                                );
+);
 /**
  * Returns a pointer to the GtkAdjustment represented by the given
  * EgeAdjustmentAction.
  *
  * @param action The action to fetch the GtkAdjustment for.
  */
-GtkAdjustment* ege_adjustment_action_get_adjustment( EgeAdjustmentAction* action );
+GtkAdjustment* ege_adjustment_action_get_adjustment(EgeAdjustmentAction* action);
 
 /**
  * Sets the GtkWidget to return focus to.
@@ -147,7 +147,7 @@ GtkAdjustment* ege_adjustment_action_get_adjustment( EgeAdjustmentAction* action
  * @param widget The widget to return focus to after editing.
  * @see ege_adjustment_action_get_focuswidget
  */
-void ege_adjustment_action_set_focuswidget( EgeAdjustmentAction* action, GtkWidget* widget );
+void ege_adjustment_action_set_focuswidget(EgeAdjustmentAction* action, GtkWidget* widget);
 
 /**
  * Returns a pointer to the GtkWidget to return focus to after changing
@@ -157,7 +157,7 @@ void ege_adjustment_action_set_focuswidget( EgeAdjustmentAction* action, GtkWidg
  * @returns A pointer to the widget to return focus to, NULL if none set.
  * @see ege_adjustment_action_set_focuswidget
  */
-GtkWidget* ege_adjustment_action_get_focuswidget( EgeAdjustmentAction* action );
+GtkWidget* ege_adjustment_action_get_focuswidget(EgeAdjustmentAction* action);
 
 /**
  * Set a list of values with labels to explicitly include in menus.
@@ -169,7 +169,7 @@ GtkWidget* ege_adjustment_action_get_focuswidget( EgeAdjustmentAction* action );
  *          Values will be matched one-for-one with numbers in the 'descriptions' array.
  * @param count Number of items in the 'descriptions' and 'values' arrays.
  */
-void ege_adjustment_action_set_descriptions( EgeAdjustmentAction* action, gchar const** descriptions, gdouble const* values, guint count );
+void ege_adjustment_action_set_descriptions(EgeAdjustmentAction* action, gchar const** descriptions, gdouble const* values, guint count);
 
 /**
  * Sets a hint to be used in determining the display form.
@@ -178,7 +178,7 @@ void ege_adjustment_action_set_descriptions( EgeAdjustmentAction* action, gchar 
  * @param action The action to set the tooltip column for.
  * @param val The value of the appearance hint.
  */
-void ege_adjustment_action_set_appearance( EgeAdjustmentAction* action, gchar const* val );
+void ege_adjustment_action_set_appearance(EgeAdjustmentAction* action, gchar const* val);
 
 /** Callback type for post-creation 'fixup' pass on generated widgets */
 typedef void (*EgeWidgetFixup)(GtkWidget *widget);

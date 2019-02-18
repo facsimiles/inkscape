@@ -68,11 +68,11 @@ void InsertOrderIcon::get_preferred_width_vfunc(Gtk::Widget& widget,
     }
 }
 
-void InsertOrderIcon::render_vfunc( const Cairo::RefPtr<Cairo::Context>& cr,
+void InsertOrderIcon::render_vfunc(const Cairo::RefPtr<Cairo::Context>& cr,
                                  Gtk::Widget& widget,
                                  const Gdk::Rectangle& background_area,
                                  const Gdk::Rectangle& cell_area,
-                                 Gtk::CellRendererState flags )
+                                 Gtk::CellRendererState flags)
 {
     switch (_property_active.get_value())
     {
@@ -86,7 +86,7 @@ void InsertOrderIcon::render_vfunc( const Cairo::RefPtr<Cairo::Context>& cr,
             property_pixbuf() = Glib::RefPtr<Gdk::Pixbuf>(nullptr);
             break;
     }
-    Gtk::CellRendererPixbuf::render_vfunc( cr, widget, background_area, cell_area, flags );
+    Gtk::CellRendererPixbuf::render_vfunc(cr, widget, background_area, cell_area, flags);
 }
 
 bool InsertOrderIcon::activate_vfunc(GdkEvent* /*event*/,

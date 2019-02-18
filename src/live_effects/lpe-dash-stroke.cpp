@@ -48,7 +48,7 @@ LPEDashStroke::doBeforeEffect (SPLPEItem const* lpeitem){
 double 
 LPEDashStroke::timeAtLength(double const A, Geom::Path const &segment)
 {
-    if ( A == 0 || segment[0].isDegenerate()) {
+    if (A == 0 || segment[0].isDegenerate()) {
         return 0;
     }
     double t = 1;
@@ -61,7 +61,7 @@ LPEDashStroke::timeAtLength(double const A, Geom::Path const &segment)
 double 
 LPEDashStroke::timeAtLength(double const A, Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2)
 {
-    if ( A == 0 || pwd2.size() == 0) {
+    if (A == 0 || pwd2.size() == 0) {
         return 0;
     }
 

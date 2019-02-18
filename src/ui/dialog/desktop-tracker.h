@@ -34,10 +34,10 @@ public:
     void setBase(SPDesktop *desktop);
     SPDesktop *getBase() const;
 
-    sigc::connection connectDesktopChanged( const sigc::slot<void, SPDesktop*> & slot );
+    sigc::connection connectDesktopChanged(const sigc::slot<void, SPDesktop*> & slot);
 
 private:
-    static void activateDesktopCB(SPDesktop *desktop, DesktopTracker *self );
+    static void activateDesktopCB(SPDesktop *desktop, DesktopTracker *self);
     static bool hierarchyChangeCB(GtkWidget *widget, GtkWidget* prev, DesktopTracker *self);
 
     void handleHierarchyChange();

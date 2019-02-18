@@ -153,7 +153,7 @@ void SelectTool::setup() {
                 desktop->messageStack(),
                 _("Click selection to toggle scale/rotation handles (or Shift+s)"),
                 _("No objects selected. Click, Shift+click, Alt+scroll mouse on top of objects, or drag around objects to select.")
-    );
+);
 
     this->_seltrans = new Inkscape::SelTrans(desktop);
 
@@ -196,7 +196,7 @@ bool SelectTool::sp_select_context_abort() {
                     DocumentUndo::undo(desktop->getDocument());
                 }
 
-                sp_object_unref( this->item, nullptr);
+                sp_object_unref(this->item, nullptr);
             } else if (this->button_press_ctrl) {
                 // NOTE:  This is a workaround to a bug.
                 // When the ctrl key is held, sc->item is not defined
@@ -250,10 +250,10 @@ sp_select_context_up_one_layer(SPDesktop *desktop)
     if (current_layer) {
         SPObject *const parent = current_layer->parent;
         SPGroup *current_group = dynamic_cast<SPGroup *>(current_layer);
-        if ( parent
-             && ( parent->parent
-                  || !( current_group
-                        && ( SPGroup::LAYER == current_group->layerMode() ) ) ) )
+        if (parent
+             && (parent->parent
+                  || !(current_group
+                        && (SPGroup::LAYER == current_group->layerMode()))))
         {
             desktop->setCurrentLayer(parent);
             if (current_group && (SPGroup::LAYER != current_group->layerMode())) {
@@ -384,7 +384,7 @@ bool SelectTool::item_handler(SPItem* item, GdkEvent* event) {
 }
 
 void SelectTool::sp_select_context_cycle_through_items(Inkscape::Selection *selection, GdkEventScroll *scroll_event, bool shift_pressed) {
-    if ( this->cycling_items.empty() )
+    if (this->cycling_items.empty())
         return;
 
     Inkscape::DrawingItem *arenaitem;
@@ -404,11 +404,11 @@ void SelectTool::sp_select_context_cycle_through_items(Inkscape::Selection *sele
         if (! cycling_cur_item) {
             next = cycling_items.begin();
         } else {
-            next = std::find( cycling_items.begin(), cycling_items.end(), cycling_cur_item );
+            next = std::find(cycling_items.begin(), cycling_items.end(), cycling_cur_item);
             g_assert (next != cycling_items.end());
             next++;
             if (next == cycling_items.end()) {
-                if ( cycling_wrap ) {
+                if (cycling_wrap) {
                     next = cycling_items.begin();
                 } else {
                     next--;
@@ -420,10 +420,10 @@ void SelectTool::sp_select_context_cycle_through_items(Inkscape::Selection *sele
             next = cycling_items.end();
             next--;
         } else {
-            next = std::find( cycling_items.begin(), cycling_items.end(), cycling_cur_item );
+            next = std::find(cycling_items.begin(), cycling_items.end(), cycling_cur_item);
             g_assert (next != cycling_items.end());
             if (next == cycling_items.begin()){
-                if ( cycling_wrap ) { 
+                if (cycling_wrap) { 
                     next = cycling_items.end();
                     next--;
                 }
@@ -448,7 +448,7 @@ void SelectTool::sp_select_context_cycle_through_items(Inkscape::Selection *sele
 }
 
 void SelectTool::sp_select_context_reset_opacities() {
-    for (std::vector<SPItem *>::const_iterator l = this->cycling_items_cmp.begin(); l != this->cycling_items_cmp.end(); ++l ) {
+    for (std::vector<SPItem *>::const_iterator l = this->cycling_items_cmp.begin(); l != this->cycling_items_cmp.end(); ++l) {
         SPItem *item = *l;
         if (item) {
             Inkscape::DrawingItem *arenaitem = item->get_arenaitem(desktop->dkey);
@@ -552,9 +552,9 @@ bool SelectTool::root_handler(GdkEvent* event) {
                 Geom::Point const motion_pt(event->motion.x, event->motion.y);
                 Geom::Point const p(desktop->w2d(motion_pt));
 
-                if ( within_tolerance
-                     && ( abs( (gint) event->motion.x - xp ) < tolerance )
-                     && ( abs( (gint) event->motion.y - yp ) < tolerance ) ) {
+                if (within_tolerance
+                     && (abs((gint) event->motion.x - xp) < tolerance)
+                     && (abs((gint) event->motion.y - yp) < tolerance)) {
                     break; // do not drag if we're within tolerance from origin
                 }
                 // Once the user has moved farther than tolerance from the original location
@@ -705,7 +705,7 @@ bool SelectTool::root_handler(GdkEvent* event) {
                     desktop->canvas->endForcedFullRedraws();
 
                     if (this->item) {
-                        sp_object_unref( this->item, nullptr);
+                        sp_object_unref(this->item, nullptr);
                     }
 
                     this->item = nullptr;
@@ -810,7 +810,7 @@ bool SelectTool::root_handler(GdkEvent* event) {
 
             GdkEventScroll *scroll_event = (GdkEventScroll*) event;
 
-            if ( ! (scroll_event->state & GDK_MOD1_MASK)) // do nothing specific if alt was not pressed
+            if (! (scroll_event->state & GDK_MOD1_MASK)) // do nothing specific if alt was not pressed
                 break;
 
             bool shift_pressed = scroll_event->state & GDK_SHIFT_MASK;
@@ -855,7 +855,7 @@ bool SelectTool::root_handler(GdkEvent* event) {
 
             ret = TRUE;
 
-            GtkWindow *w =GTK_WINDOW(gtk_widget_get_toplevel( GTK_WIDGET(desktop->canvas) ));
+            GtkWindow *w =GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(desktop->canvas)));
             if (w) {
                 gtk_window_present(w);
                 gtk_widget_grab_focus (GTK_WIDGET(desktop->canvas)); 
@@ -868,7 +868,7 @@ bool SelectTool::root_handler(GdkEvent* event) {
             {
             guint keyval = get_latin_keyval(&event->key);
             
-                bool alt = ( MOD__ALT(event)
+                bool alt = (MOD__ALT(event)
                                     || (keyval == GDK_KEY_Alt_L)
                                     || (keyval == GDK_KEY_Alt_R)
                                     || (keyval == GDK_KEY_Meta_L)
@@ -913,7 +913,7 @@ bool SelectTool::root_handler(GdkEvent* event) {
                 case GDK_KEY_Left: // move selection left
                 case GDK_KEY_KP_Left:
                     if (!MOD__CTRL(event)) { // not ctrl
-                        gint mul = 1 + gobble_key_events( get_latin_keyval(&event->key), 0); // with any mask
+                        gint mul = 1 + gobble_key_events(get_latin_keyval(&event->key), 0); // with any mask
                         
                         if (MOD__ALT(event)) { // alt
                             if (MOD__SHIFT(event)) {
@@ -1068,7 +1068,7 @@ bool SelectTool::root_handler(GdkEvent* event) {
                         if (selection->singleItem()) {
                             SPItem *clicked_item = selection->singleItem();
                             SPGroup *clickedGroup = dynamic_cast<SPGroup *>(clicked_item);
-                            if ( (clickedGroup && (clickedGroup->layerMode() != SPGroup::LAYER)) || dynamic_cast<SPBox3D *>(clicked_item)) { // enter group or a 3D box
+                            if ((clickedGroup && (clickedGroup->layerMode() != SPGroup::LAYER)) || dynamic_cast<SPBox3D *>(clicked_item)) { // enter group or a 3D box
                                 desktop->setCurrentLayer(clicked_item);
                                 desktop->getSelection()->clear();
                             } else {
@@ -1117,7 +1117,7 @@ bool SelectTool::root_handler(GdkEvent* event) {
                 this->defaultMessageContext()->clear();
             }
             
-            bool alt = ( MOD__ALT(event)
+            bool alt = (MOD__ALT(event)
                          || (keyval == GDK_KEY_Alt_L)
                          || (keyval == GDK_KEY_Alt_R)
                          || (keyval == GDK_KEY_Meta_L)

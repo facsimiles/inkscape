@@ -71,9 +71,9 @@ sp_ctrlcurve_render(SPCanvasItem *item, SPCanvasBuf *buf)
     if (!buf->ct)
         return;
 
-    if ( cl->p0 == cl->p1 &&
+    if (cl->p0 == cl->p1 &&
          cl->p1 == cl->p2 &&
-         cl->p2 == cl->p3 )
+         cl->p2 == cl->p3)
         return;
 
     ink_cairo_set_source_rgba32(buf->ct, cl->rgba);
@@ -89,7 +89,7 @@ sp_ctrlcurve_render(SPCanvasItem *item, SPCanvasBuf *buf)
     cairo_curve_to (buf->ct,
                     p1[Geom::X] - buf->rect.left(), p1[Geom::Y] - buf->rect.top(),
                     p2[Geom::X] - buf->rect.left(), p2[Geom::Y] - buf->rect.top(),
-                    p3[Geom::X] - buf->rect.left(), p3[Geom::Y] - buf->rect.top() );
+                    p3[Geom::X] - buf->rect.left(), p3[Geom::Y] - buf->rect.top());
 
     cairo_stroke(buf->ct);
 }
@@ -108,7 +108,7 @@ sp_ctrlcurve_update(SPCanvasItem *item, Geom::Affine const &affine, unsigned int
 
     cl->affine = affine;
 
-    if (cl->p0 == cl->p1 && cl->p1 == cl->p2 && cl->p2 == cl->p3 ) {
+    if (cl->p0 == cl->p1 && cl->p1 == cl->p2 && cl->p2 == cl->p3) {
         item->x1 = item->x2 = item->y1 = item->y2 = 0;
     } else {
 
@@ -122,25 +122,25 @@ sp_ctrlcurve_update(SPCanvasItem *item, Geom::Affine const &affine, unsigned int
         double max_x = p0[Geom::X];
         double max_y = p0[Geom::Y];
 
-        min_x = MIN( min_x, p1[Geom::X] );
-        min_y = MIN( min_y, p1[Geom::Y] );
-        max_x = MAX( max_x, p1[Geom::X] );
-        max_y = MAX( max_y, p1[Geom::Y] );
+        min_x = MIN(min_x, p1[Geom::X]);
+        min_y = MIN(min_y, p1[Geom::Y]);
+        max_x = MAX(max_x, p1[Geom::X]);
+        max_y = MAX(max_y, p1[Geom::Y]);
 
-        min_x = MIN( min_x, p2[Geom::X] );
-        min_y = MIN( min_y, p2[Geom::Y] );
-        max_x = MAX( max_x, p2[Geom::X] );
-        max_y = MAX( max_y, p2[Geom::Y] );
+        min_x = MIN(min_x, p2[Geom::X]);
+        min_y = MIN(min_y, p2[Geom::Y]);
+        max_x = MAX(max_x, p2[Geom::X]);
+        max_y = MAX(max_y, p2[Geom::Y]);
 
-        min_x = MIN( min_x, p3[Geom::X] );
-        min_y = MIN( min_y, p3[Geom::Y] );
-        max_x = MAX( max_x, p3[Geom::X] );
-        max_y = MAX( max_y, p3[Geom::Y] );
+        min_x = MIN(min_x, p3[Geom::X]);
+        min_y = MIN(min_y, p3[Geom::Y]);
+        max_x = MAX(max_x, p3[Geom::X]);
+        max_y = MAX(max_y, p3[Geom::Y]);
 
-        item->x1 = round( min_x - 1 );
-        item->y1 = round( min_y - 1 );
-        item->x2 = round( max_x + 1 );
-        item->y2 = round( max_y + 1 );
+        item->x1 = round(min_x - 1);
+        item->y1 = round(min_y - 1);
+        item->x2 = round(max_x + 1);
+        item->y2 = round(max_y + 1);
 
         item->canvas->requestRedraw(item->x1, item->y1, item->x2, item->y2);
 
@@ -152,31 +152,31 @@ sp_ctrlcurve_update(SPCanvasItem *item, Geom::Affine const &affine, unsigned int
 #define EPSILON 1e-6
 #define DIFFER(a,b) (fabs ((a) - (b)) > EPSILON)
 
-void SPCtrlCurve::setCoords( gdouble x0, gdouble y0, gdouble x1, gdouble y1,
-                             gdouble x2, gdouble y2, gdouble x3, gdouble y3 )
+void SPCtrlCurve::setCoords(gdouble x0, gdouble y0, gdouble x1, gdouble y1,
+                             gdouble x2, gdouble y2, gdouble x3, gdouble y3)
 {
 
-    Geom::Point q0( x0, y0 );
-    Geom::Point q1( x1, y1 );
-    Geom::Point q2( x2, y2 );
-    Geom::Point q3( x3, y3 );
+    Geom::Point q0(x0, y0);
+    Geom::Point q1(x1, y1);
+    Geom::Point q2(x2, y2);
+    Geom::Point q3(x3, y3);
 
-    setCoords( q0, q1, q2, q3 );
+    setCoords(q0, q1, q2, q3);
 
 }
 
-void SPCtrlCurve::setCoords( Geom::Point const &q0, Geom::Point const &q1,
+void SPCtrlCurve::setCoords(Geom::Point const &q0, Geom::Point const &q1,
                              Geom::Point const &q2, Geom::Point const &q3)
 {
     if (DIFFER(p0[Geom::X], q0[Geom::X]) || DIFFER(p0[Geom::Y], q0[Geom::Y]) ||
         DIFFER(p1[Geom::X], q1[Geom::X]) || DIFFER(p1[Geom::Y], q1[Geom::Y]) ||
         DIFFER(p2[Geom::X], q2[Geom::X]) || DIFFER(p2[Geom::Y], q2[Geom::Y]) ||
-        DIFFER(p3[Geom::X], q3[Geom::X]) || DIFFER(p3[Geom::Y], q3[Geom::Y]) ) {
+        DIFFER(p3[Geom::X], q3[Geom::X]) || DIFFER(p3[Geom::Y], q3[Geom::Y])) {
         p0 = q0;
         p1 = q1;
         p2 = q2;
         p3 = q3;
-        sp_canvas_item_request_update( this );
+        sp_canvas_item_request_update(this);
     }
 }
 

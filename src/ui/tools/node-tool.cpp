@@ -219,7 +219,7 @@ void NodeTool::setup() {
 
     this->_sizeUpdatedConn = ControlManager::getManager().connectCtrlSizeChanged(
             sigc::mem_fun(this, &NodeTool::handleControlUiStyleChange)
-    );
+);
     this->helperpath_tmpitem = nullptr;
     this->_selected_nodes = new Inkscape::UI::ControlPointSelection(this->desktop, this->_transform_handle_group);
 
@@ -234,8 +234,8 @@ void NodeTool::setup() {
         sigc::bind(
             sigc::mem_fun(*this->desktop, &SPDesktop::emitToolSubselectionChanged),
             (void*)nullptr
-        )
-    );
+)
+);
 
     this->_selected_nodes->signal_selection_changed.connect(
         // Hide both signal parameters and bind the function parameter to 0
@@ -245,8 +245,8 @@ void NodeTool::setup() {
         sigc::hide(sigc::hide(sigc::bind(
                 sigc::mem_fun(this, &NodeTool::update_tip),
                 (GdkEvent*)nullptr
-        )))
-    );
+)))
+);
 
     this->cursor_drag = false;
     this->show_transform_handles = true;
@@ -429,7 +429,7 @@ void NodeTool::selection_changed(Inkscape::Selection *sel) {
     // use multiple ShapeEditors for now, to allow editing many shapes at once
     // needs to be rethought
     for (boost::ptr_map<SPItem*, ShapeEditor>::iterator i = this->_shape_editors.begin();
-         i != this->_shape_editors.end(); )
+         i != this->_shape_editors.end();)
     {
         ShapeRecord s;
         s.item = i->first;

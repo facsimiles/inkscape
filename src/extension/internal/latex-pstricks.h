@@ -33,7 +33,7 @@ class PrintLatex : public Inkscape::Extension::Implementation::Implementation {
     std::stack<Geom::Affine> m_tr_stack;
 
     void print_pathvector(SVGOStringStream &os, Geom::PathVector const &pathv_in, const Geom::Affine & /*transform*/);
-    void print_2geomcurve(SVGOStringStream &os, Geom::Curve const & c );
+    void print_2geomcurve(SVGOStringStream &os, Geom::Curve const & c);
 
 public:
         PrintLatex ();

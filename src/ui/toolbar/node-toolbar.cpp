@@ -67,7 +67,7 @@ using Inkscape::UI::Tools::NodeTool;
 static NodeTool *get_node_tool()
 {
     NodeTool *tool = nullptr;
-    if (SP_ACTIVE_DESKTOP ) {
+    if (SP_ACTIVE_DESKTOP) {
         Inkscape::UI::Tools::ToolBase *ec = SP_ACTIVE_DESKTOP->event_context;
         if (INK_IS_NODE_TOOL(ec)) {
             tool = static_cast<NodeTool*>(ec);

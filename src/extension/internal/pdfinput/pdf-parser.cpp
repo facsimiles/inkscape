@@ -59,7 +59,7 @@
 //------------------------------------------------------------------------
 
 // Default max delta allowed in any color component for a shading fill.
-#define defaultShadingColorDelta (dblToCol( 1 / 2.0 ))
+#define defaultShadingColorDelta (dblToCol(1 / 2.0))
 
 // Default max recursive depth for a shading fill.
 #define defaultShadingMaxDepth 6
@@ -1584,7 +1584,7 @@ void PdfParser::doShadingPatternFillFallback(GfxShadingPattern *sPat,
   saveState();
 
   // clip to bbox
-  if (false ){//shading->getHasBBox()) {
+  if (false){//shading->getHasBBox()) {
     shading->getBBox(&xMin, &yMin, &xMax, &yMax);
     state->moveTo(xMin, yMin);
     state->lineTo(xMax, yMin);
@@ -3309,7 +3309,7 @@ void PdfParser::saveState() {
 
   GfxPattern *pattern = state->getFillPattern();
   if (pattern != nullptr)
-    if (pattern->getType() == 2 ) {
+    if (pattern->getType() == 2) {
         GfxShadingPattern *shading_pattern = static_cast<GfxShadingPattern *>(pattern);
         GfxShading *shading = shading_pattern->getShading();
         if (shading->getType() == 3)

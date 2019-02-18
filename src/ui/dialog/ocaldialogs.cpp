@@ -107,12 +107,12 @@ ExportDialog::ExportDialog(Gtk::Window &parentWindow,
     Gtk::Container *cont = get_toplevel();
     std::vector<Gtk::Entry *> entries;
     findEntryWidgets(cont, entries);
-    if (entries.size() >=1 )
+    if (entries.size() >=1)
         {
         //Catch when user hits [return] on the text field
         fileNameEntry = entries[0];
         fileNameEntry->signal_activate().connect(
-             sigc::mem_fun(*this, &ExportDialog::fileNameEntryChangedCallback) );
+             sigc::mem_fun(*this, &ExportDialog::fileNameEntryChangedCallback));
         }
 
     add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
@@ -963,7 +963,7 @@ void ImportDialog::on_entry_search_activated()
         sigc::bind<Glib::RefPtr<Gio::File> , Glib::ustring>(
             sigc::mem_fun(*this, &ImportDialog::on_xml_file_read),
             xml_file, xml_uri)
-    );
+);
 }
 
 void ImportDialog::on_xml_file_read(const Glib::RefPtr<Gio::AsyncResult>& result,

@@ -39,10 +39,10 @@ namespace {
 
 void strip_ids_recursively(Inkscape::XML::Node *node) {
     using Inkscape::XML::NodeSiblingIterator;
-    if ( node->type() == Inkscape::XML::ELEMENT_NODE ) {
+    if (node->type() == Inkscape::XML::ELEMENT_NODE) {
         node->setAttribute("id", nullptr);
     }
-    for ( NodeSiblingIterator iter=node->firstChild() ; iter ; ++iter ) {
+    for (NodeSiblingIterator iter=node->firstChild() ; iter ; ++iter) {
         strip_ids_recursively(iter);
     }
 }
@@ -59,8 +59,8 @@ void SPMetadata::build(SPDocument* doc, Inkscape::XML::Node* repr) {
      * have id= attributes... */
     static GQuark const rdf_root_name = g_quark_from_static_string("rdf:RDF");
 
-    for ( NodeSiblingIterator iter=repr->firstChild() ; iter ; ++iter ) {
-        if ( (GQuark)iter->code() == rdf_root_name ) {
+    for (NodeSiblingIterator iter=repr->firstChild() ; iter ; ++iter) {
+        if ((GQuark)iter->code() == rdf_root_name) {
             strip_ids_recursively(iter);
         }
     }
@@ -101,7 +101,7 @@ void SPMetadata::update(SPCtx* /*ctx*/, unsigned int flags) {
 Inkscape::XML::Node* SPMetadata::write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags) {
     debug("0x%08x",(unsigned int)this);
 
-    if ( repr != this->getRepr() ) {
+    if (repr != this->getRepr()) {
         if (repr) {
             repr->mergeFrom(this->getRepr(), "id");
         } else {
@@ -123,7 +123,7 @@ SPMetadata *sp_document_metadata(SPDocument *document)
 
     g_return_val_if_fail (document != nullptr, NULL);
 
-    nv = sp_item_group_get_child_by_name( document->getRoot(), nullptr,
+    nv = sp_item_group_get_child_by_name(document->getRoot(), nullptr,
                                         "metadata");
     g_assert (nv != nullptr);
 

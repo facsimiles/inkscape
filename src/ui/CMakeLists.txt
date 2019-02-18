@@ -463,7 +463,7 @@ endif()
 
 add_inkscape_source("${ui_SRC}")
 
-set ( ui_flood_and_trace_SRC
+set (ui_flood_and_trace_SRC
 	tools/flood-tool.h
 	tools/flood-tool.cpp
 	dialog/tracedialog.cpp

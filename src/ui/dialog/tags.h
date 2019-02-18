@@ -48,8 +48,8 @@ public:
 
     static TagsPanel& getInstance();
 
-    void setDesktop( SPDesktop* desktop ) override;
-    void setDocument( SPDesktop* desktop, SPDocument* document);
+    void setDesktop(SPDesktop* desktop) override;
+    void setDocument(SPDesktop* desktop, SPDocument* document);
 
 protected:
     friend void sp_highlight_picker_color_mod(SPColorSelector *csel, GObject *cp);
@@ -61,9 +61,9 @@ private:
     TagsPanel(TagsPanel const &) = delete; // no copy
     TagsPanel &operator=(TagsPanel const &) = delete; // no assign
 
-    void _styleButton( Gtk::Button& btn, char const* iconName, char const* tooltip );
-    void _fireAction( unsigned int code );
-    Gtk::MenuItem& _addPopupItem( SPDesktop *desktop, unsigned int code, char const* iconName, char const* fallback, int id );
+    void _styleButton(Gtk::Button& btn, char const* iconName, char const* tooltip);
+    void _fireAction(unsigned int code);
+    Gtk::MenuItem& _addPopupItem(SPDesktop *desktop, unsigned int code, char const* iconName, char const* fallback, int id);
     
     bool _handleButtonEvent(GdkEventButton *event);
     bool _handleKeyEvent(GdkEventKey *event);
@@ -77,18 +77,18 @@ private:
     void _renameObject(Gtk::TreeModel::Row row, const Glib::ustring& name);
 
     void _pushTreeSelectionToCurrent();
-    void _selected_row_callback( const Gtk::TreeModel::iterator& iter );
-    void _select_tag( SPTag * tag );
+    void _selected_row_callback(const Gtk::TreeModel::iterator& iter);
+    void _select_tag(SPTag * tag);
     
     void _checkTreeSelection();
 
-    void _takeAction( int val );
+    void _takeAction(int val);
     bool _executeAction();
 
-    void _setExpanded( const Gtk::TreeModel::iterator& iter, const Gtk::TreeModel::Path& path, bool isexpanded );
+    void _setExpanded(const Gtk::TreeModel::iterator& iter, const Gtk::TreeModel::Path& path, bool isexpanded);
     
-    bool _noSelection( Glib::RefPtr<Gtk::TreeModel> const & model, Gtk::TreeModel::Path const & path, bool b );
-    bool _rowSelectFunction( Glib::RefPtr<Gtk::TreeModel> const & model, Gtk::TreeModel::Path const & path, bool b );
+    bool _noSelection(Glib::RefPtr<Gtk::TreeModel> const & model, Gtk::TreeModel::Path const & path, bool b);
+    bool _rowSelectFunction(Glib::RefPtr<Gtk::TreeModel> const & model, Gtk::TreeModel::Path const & path, bool b);
 
     void _updateObject(SPObject *obj);
     bool _checkForUpdated(const Gtk::TreePath &path, const Gtk::TreeIter& iter, SPObject* obj);
@@ -97,7 +97,7 @@ private:
     bool _checkForSelected(const Gtk::TreePath& path, const Gtk::TreeIter& iter, SPObject* layer);
 
     void _objectsChanged(SPObject *root);
-    void _addObject( SPDocument* doc, SPObject* obj, Gtk::TreeModel::Row* parentRow );
+    void _addObject(SPDocument* doc, SPObject* obj, Gtk::TreeModel::Row* parentRow);
     
     void _checkForDeleted(const Gtk::TreeIter& iter, std::vector<SPObject *>* todelete);
 

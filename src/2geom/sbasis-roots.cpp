@@ -279,7 +279,7 @@ static void multi_roots_internal(SBasis const &f,
         ta_hi=ta_lo=a+htol;
     }else{
         if (bs.max()>0 && idxa<(int)levels.size())
-            ta_hi=a+(levels.at(idxa  )-fa)/bs.max();
+            ta_hi=a+(levels.at(idxa)-fa)/bs.max();
         if (bs.min()<0 && idxa>0)
             ta_lo=a+(levels.at(idxa-1)-fa)/bs.min();
     }
@@ -289,7 +289,7 @@ static void multi_roots_internal(SBasis const &f,
         tb_hi=tb_lo=b-htol;
     }else{
         if (bs.min()<0 && idxb<(int)levels.size())
-            tb_hi=b+(levels.at(idxb  )-fb)/bs.min();
+            tb_hi=b+(levels.at(idxb)-fb)/bs.min();
         if (bs.max()>0 && idxb>0)
             tb_lo=b+(levels.at(idxb-1)-fb)/bs.max();
     }
@@ -316,7 +316,7 @@ static void multi_roots_internal(SBasis const &f,
             ft_right=f(t_right);
         }
         multi_roots_internal(f,df,levels,roots,htol,vtol,t0     ,f(t0)   ,t_left,ft_left);
-        multi_roots_internal(f,df,levels,roots,htol,vtol,t_right,ft_right,t1    ,f(t1)  );
+        multi_roots_internal(f,df,levels,roots,htol,vtol,t_right,ft_right,t1    ,f(t1));
     }
 }
 
@@ -359,27 +359,27 @@ std::vector<std::vector<double> > multi_roots(SBasis const &f,
 }
 
 
-static bool compareIntervalMin( Interval I, Interval J ){
+static bool compareIntervalMin(Interval I, Interval J){
 	return I.min()<J.min();
 }
-static bool compareIntervalMax( Interval I, Interval J ){
+static bool compareIntervalMax(Interval I, Interval J){
 	return I.max()<J.max();
 }
 
 //find the first interval whose max is >= x
-static unsigned upper_level(vector<Interval> const &levels, double x ){
-    return( lower_bound( levels.begin(), levels.end(), Interval(x,x), compareIntervalMax) - levels.begin() );
+static unsigned upper_level(vector<Interval> const &levels, double x){
+    return(lower_bound(levels.begin(), levels.end(), Interval(x,x), compareIntervalMax) - levels.begin());
 }
 
 static std::vector<Interval> fuseContiguous(std::vector<Interval> const &sets, double tol=0.){
 	std::vector<Interval> result;
-	if (sets.empty() ) return result;
-	result.push_back( sets.front() );
-	for (unsigned i=1; i < sets.size(); i++ ){
-		if ( result.back().max() + tol >= sets[i].min() ){
-			result.back().unionWith( sets[i] );
+	if (sets.empty()) return result;
+	result.push_back(sets.front());
+	for (unsigned i=1; i < sets.size(); i++){
+		if (result.back().max() + tol >= sets[i].min()){
+			result.back().unionWith(sets[i]);
 		}else{
-			result.push_back( sets[i] );
+			result.push_back(sets[i]);
 		}
 	}
 	return result;
@@ -416,9 +416,9 @@ static void level_sets_internal(SBasis const &f,
 
     if (f.isZero(0)){
         unsigned idx;
-        idx=upper_level( levels, 0. );
+        idx=upper_level(levels, 0.);
         if (idx<levels.size() && levels[idx].contains(0.)){
-            solsets[idx].push_back( Interval(a,b) ) ;
+            solsets[idx].push_back(Interval(a,b)) ;
         }
         return;
     }
@@ -438,59 +438,59 @@ static void level_sets_internal(SBasis const &f,
     tb_hi=tb_lo=a-1;//default values => no root there.
 
     //--- if f(a) belongs to a level.-------
-    if ( idxa < levels.size() && levels[idxa].contains( fa ) ){
+    if (idxa < levels.size() && levels[idxa].contains(fa)){
     	//find the first time when we may exit this level.
-    	ta_lo = a + ( levels[idxa].min() - fa)/bs.min();
-    	ta_hi = a + ( levels[idxa].max() - fa)/bs.max();
-    	if ( ta_lo < a || ta_lo > b ) ta_lo = b;
-    	if ( ta_hi < a || ta_hi > b  ) ta_hi = b;
+    	ta_lo = a + (levels[idxa].min() - fa)/bs.min();
+    	ta_hi = a + (levels[idxa].max() - fa)/bs.max();
+    	if (ta_lo < a || ta_lo > b) ta_lo = b;
+    	if (ta_hi < a || ta_hi > b) ta_hi = b;
     	//move to that time for the next iteration.
-    	solsets[idxa].push_back( Interval( a, std::min( ta_lo, ta_hi ) ) );
+    	solsets[idxa].push_back(Interval(a, std::min(ta_lo, ta_hi)));
     }else{
         //--- if f(b) does not belong to a level.-------
-        if ( idxa == 0 ){
+        if (idxa == 0){
         	ta_lo = b;
         }else{
-        	ta_lo = a + ( levels[idxa-1].max() - fa)/bs.min();
-        	if ( ta_lo < a ) ta_lo = b;
+        	ta_lo = a + (levels[idxa-1].max() - fa)/bs.min();
+        	if (ta_lo < a) ta_lo = b;
         }
-        if ( idxa == levels.size() ){
+        if (idxa == levels.size()){
         	ta_hi = b;
         }else{
-        	ta_hi = a + ( levels[idxa].min() - fa)/bs.max();
-        	if ( ta_hi < a ) ta_hi = b;
+        	ta_hi = a + (levels[idxa].min() - fa)/bs.max();
+        	if (ta_hi < a) ta_hi = b;
         }
     }
 
     //--- if f(b) belongs to a level.-------
     if (idxb<levels.size() && levels.at(idxb).contains(fb)){
     	//find the first time from b when we may exit this level.
-    	tb_lo = b + ( levels[idxb].min() - fb ) / bs.max();
-    	tb_hi = b + ( levels[idxb].max() - fb ) / bs.min();
-    	if ( tb_lo > b || tb_lo < a ) tb_lo = a;
-    	if ( tb_hi > b || tb_hi < a ) tb_hi = a;
+    	tb_lo = b + (levels[idxb].min() - fb) / bs.max();
+    	tb_hi = b + (levels[idxb].max() - fb) / bs.min();
+    	if (tb_lo > b || tb_lo < a) tb_lo = a;
+    	if (tb_hi > b || tb_hi < a) tb_hi = a;
     	//move to that time for the next iteration.
-    	solsets[idxb].push_back( Interval( std::max( tb_lo, tb_hi ), b) );
+    	solsets[idxb].push_back(Interval(std::max(tb_lo, tb_hi), b));
     }else{
         //--- if f(b) does not belong to a level.-------
-        if ( idxb == 0 ){
+        if (idxb == 0){
         	tb_lo = a;
         }else{
-        	tb_lo = b + ( levels[idxb-1].max() - fb)/bs.max();
-        	if ( tb_lo > b ) tb_lo = a;
+        	tb_lo = b + (levels[idxb-1].max() - fb)/bs.max();
+        	if (tb_lo > b) tb_lo = a;
         }
-        if ( idxb == levels.size() ){
+        if (idxb == levels.size()){
         	tb_hi = a;
         }else{
-        	tb_hi = b + ( levels[idxb].min() - fb)/bs.min();
-        	if ( tb_hi > b ) tb_hi = a;
+        	tb_hi = b + (levels[idxb].min() - fb)/bs.min();
+        	if (tb_hi > b) tb_hi = a;
         }
 
 
-    	if ( bs.min() < 0 && idxb < levels.size() )
-            tb_hi = b + ( levels[idxb  ].min() - fb ) / bs.min();
-        if ( bs.max() > 0 && idxb > 0 )
-            tb_lo = b + ( levels[idxb-1].max() - fb ) / bs.max();
+    	if (bs.min() < 0 && idxb < levels.size())
+            tb_hi = b + (levels[idxb  ].min() - fb) / bs.min();
+        if (bs.max() > 0 && idxb > 0)
+            tb_lo = b + (levels[idxb-1].max() - fb) / bs.max();
     }
 
     //let [t0,t1] be the next interval where to search.
@@ -501,30 +501,30 @@ static void level_sets_internal(SBasis const &f,
 
     //if the interval is smaller than our resolution:
     //pretend f simultaneously meets all the levels between f(t0) and f(t1)...
-    if ( t1 - t0 <= tol ){
-    	Interval f_t0t1 ( f(t0), f(t1) );
+    if (t1 - t0 <= tol){
+    	Interval f_t0t1 (f(t0), f(t1));
     	unsigned idxmin = std::min(idxa, idxb);
     	unsigned idxmax = std::max(idxa, idxb);
     	//push [t0,t1] into all crossed level. Cheat to avoid overlapping intervals on different levels?
-    	if ( idxmax > idxmin ){
+    	if (idxmax > idxmin){
         	for (unsigned idx = idxmin; idx < idxmax; idx++){
-    			solsets[idx].push_back( Interval( t0, t1 ) );
+    			solsets[idx].push_back(Interval(t0, t1));
         	}
     	}
-    	if ( idxmax < levels.size() && f_t0t1.intersects( levels[idxmax] ) ){
-    		solsets[idxmax].push_back( Interval( t0, t1 ) );
+    	if (idxmax < levels.size() && f_t0t1.intersects(levels[idxmax])){
+    		solsets[idxmax].push_back(Interval(t0, t1));
     	}
     	return;
     }
 
 	//To make sure we finally exit the level jump at least by tol:
-    t0 = std::min( std::max( t0, a + tol ), b );
-    t1 = std::max( std::min( t1, b - tol ), a );
+    t0 = std::min(std::max(t0, a + tol), b);
+    t1 = std::max(std::min(t1, b - tol), a);
 
     double t =(t0+t1)/2;
     double ft=f(t);
-    level_sets_internal( f, df, levels, solsets, t0, f(t0), t, ft );
-    level_sets_internal( f, df, levels, solsets, t, ft, t1, f(t1) );
+    level_sets_internal(f, df, levels, solsets, t0, f(t0), t, ft);
+    level_sets_internal(f, df, levels, solsets, t, ft, t1, f(t1));
 }
 
 std::vector<std::vector<Interval> > level_sets(SBasis const &f,
@@ -537,15 +537,15 @@ std::vector<std::vector<Interval> > level_sets(SBasis const &f,
     level_sets_internal(f,df,levels,solsets,a,f(a),b,f(b),tol);
     // Fuse overlapping intervals...
     for (unsigned i=0; i<solsets.size(); i++){
-    	if ( solsets[i].size() == 0 ) continue;
-    	std::sort( solsets[i].begin(), solsets[i].end(), compareIntervalMin );
-    	solsets[i] = fuseContiguous( solsets[i], tol );
+    	if (solsets[i].size() == 0) continue;
+    	std::sort(solsets[i].begin(), solsets[i].end(), compareIntervalMin);
+    	solsets[i] = fuseContiguous(solsets[i], tol);
     }
     return solsets;
 }
 
 std::vector<Interval> level_set (SBasis const &f, double level, double vtol, double a, double b, double tol){
-	Interval fat_level( level - vtol, level + vtol );
+	Interval fat_level(level - vtol, level + vtol);
 	return level_set(f, fat_level, a, b, tol);
 }
 std::vector<Interval> level_set (SBasis const &f, Interval const &level, double a, double b, double tol){
@@ -553,9 +553,9 @@ std::vector<Interval> level_set (SBasis const &f, Interval const &level, double 
 	return level_sets(f,levels, a, b, tol).front() ;
 }
 std::vector<std::vector<Interval> > level_sets (SBasis const &f, std::vector<double> const &levels, double vtol, double a, double b, double tol){
-	std::vector<Interval> fat_levels( levels.size(), Interval());
+	std::vector<Interval> fat_levels(levels.size(), Interval());
 	for (unsigned i = 0; i < levels.size(); i++){
-		fat_levels[i] = Interval( levels[i]-vtol, levels[i]+vtol);
+		fat_levels[i] = Interval(levels[i]-vtol, levels[i]+vtol);
 	}
 	return level_sets(f, fat_levels, a, b, tol);
 }

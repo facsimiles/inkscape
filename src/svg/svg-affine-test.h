@@ -53,7 +53,7 @@ public:
 // createSuite and destroySuite get us per-suite setup and teardown
 // without us having to worry about static initialization order, etc.
     static SvgAffineTest *createSuite() { return new SvgAffineTest(); }
-    static void destroySuite( SvgAffineTest *suite ) { delete suite; }
+    static void destroySuite(SvgAffineTest *suite) { delete suite; }
 
     void testReadIdentity()
     {
@@ -207,12 +207,12 @@ SvgAffineTest::test_t const SvgAffineTest::read_scale_tests[3] = {
     {"scale(2,3)",Geom::Affine(2,0,0,3,0,0)},
     {"scale(0.1e-2 -.475e0)",Geom::Affine(0.1e-2,0,0,-.475e0,0,0)}};
 SvgAffineTest::test_t const SvgAffineTest::read_rotate_tests[4] = {
-    {"rotate(13 )",Geom::Affine(cos(13.*DEGREE),sin(13.*DEGREE),-sin(13.*DEGREE),cos(13.*DEGREE),0,0)},
+    {"rotate(13)",Geom::Affine(cos(13.*DEGREE),sin(13.*DEGREE),-sin(13.*DEGREE),cos(13.*DEGREE),0,0)},
     {"rotate(-13)",Geom::Affine(cos(-13.*DEGREE),sin(-13.*DEGREE),-sin(-13.*DEGREE),cos(-13.*DEGREE),0,0)},
     {"rotate(373)",Geom::Affine(cos(13.*DEGREE),sin(13.*DEGREE),-sin(13.*DEGREE),cos(13.*DEGREE),0,0)},
     {"rotate(13,7,11)",Geom::Affine(cos(13.*DEGREE),sin(13.*DEGREE),-sin(13.*DEGREE),cos(13.*DEGREE),(1-cos(13.*DEGREE))*7+sin(13.*DEGREE)*11,(1-cos(13.*DEGREE))*11-sin(13.*DEGREE)*7)}};
 SvgAffineTest::test_t const SvgAffineTest::read_skew_tests[3] = {
-    {"skewX( 30)",Geom::Affine(1,0,tan(30.*DEGREE),1,0,0)},
+    {"skewX(30)",Geom::Affine(1,0,tan(30.*DEGREE),1,0,0)},
     {"skewX(-30)",Geom::Affine(1,0,tan(-30.*DEGREE),1,0,0)},
     {"skewY(390)",Geom::Affine(1,tan(30.*DEGREE),0,1,0,0)}};
 char const * const SvgAffineTest::read_fail_tests[25] = {

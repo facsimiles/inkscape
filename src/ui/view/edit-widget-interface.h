@@ -152,7 +152,7 @@ struct EditWidgetInterface
 
 
     /** Show an info dialog with the given message */
-    virtual bool showInfoDialog( Glib::ustring const &message ) = 0;
+    virtual bool showInfoDialog(Glib::ustring const &message) = 0;
 
     /// Open yes/no dialog with warning text and confirmation question.
     virtual bool warnDialog (Glib::ustring const &) = 0;

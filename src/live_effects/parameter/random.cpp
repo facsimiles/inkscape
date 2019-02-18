@@ -23,7 +23,7 @@ namespace Inkscape {
 namespace LivePathEffect {
 
 
-RandomParam::RandomParam( const Glib::ustring& label, const Glib::ustring& tip,
+RandomParam::RandomParam(const Glib::ustring& label, const Glib::ustring& tip,
                       const Glib::ustring& key, Inkscape::UI::Widget::Registry* wr,
                       Effect* effect, gdouble default_value, long default_seed)
     : Parameter(label, tip, key, wr, effect)
@@ -137,12 +137,12 @@ Gtk::Widget *
 RandomParam::param_newWidget()
 {
     Inkscape::UI::Widget::RegisteredRandom* regrandom = Gtk::manage(
-        new Inkscape::UI::Widget::RegisteredRandom( param_label,
+        new Inkscape::UI::Widget::RegisteredRandom(param_label,
                                                     param_tooltip,
                                                     param_key,
                                                     *param_wr,
                                                     param_effect->getRepr(),
-                                                    param_effect->getSPDoc() )  );
+                                                    param_effect->getSPDoc()));
 
     regrandom->setValue(value, startseed);
     if (integer) {

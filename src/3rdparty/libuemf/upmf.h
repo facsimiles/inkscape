@@ -1608,7 +1608,7 @@ of total width).
 typedef struct {
     int32_t             Elements;           //!< Members in the array
 /* variable part of object, not part of structure.
-    U_FLOAT             Data                //!< Line or gap width (0.0 <-> 1.0, fraction of total line width )
+    U_FLOAT             Data                //!< Line or gap width (0.0 <-> 1.0, fraction of total line width)
 */
 } U_PMF_COMPOUNDLINEDATA;
 
@@ -2822,7 +2822,7 @@ typedef struct {
 /* EMF+ prototypes (helper functions) */
 int U_PMR_write(U_PSEUDO_OBJ *po, U_PSEUDO_OBJ *sum, EMFTRACK *et);
 int U_PMR_drawline(uint32_t PenID, uint32_t PathID, U_PMF_POINTF Start, U_PMF_POINTF End, int Dashed, U_PSEUDO_OBJ *sum, EMFTRACK *et);
-int U_PMR_drawstring( const char *string, int Vpos, uint32_t FontID, const U_PSEUDO_OBJ *BrushID, uint32_t FormatID,
+int U_PMR_drawstring(const char *string, int Vpos, uint32_t FontID, const U_PSEUDO_OBJ *BrushID, uint32_t FormatID,
       U_PMF_STRINGFORMAT  Sfs, const char *FontName, U_FLOAT Height, U_FontInfoParams *fip, uint32_t FontFlags,
       U_FLOAT x, U_FLOAT y, U_PSEUDO_OBJ *sum, EMFTRACK *et);
 U_PMF_POINT *POINTF_To_POINT16_LE(U_PMF_POINTF *points, int count);
@@ -2890,7 +2890,7 @@ U_PSEUDO_OBJ *U_PMF_ARGB_set(uint8_t Alpha, uint8_t Red, uint8_t Green, uint8_t 
 U_PSEUDO_OBJ *U_PMF_ARGBN_set(uint32_t Count, U_PMF_ARGB *Colors);
 U_PMF_ARGB U_PMF_ARGBOBJ_set(uint8_t Alpha, uint8_t Red, uint8_t Green, uint8_t Blue);
 U_PSEUDO_OBJ *U_PMF_BITMAP_set(const U_PMF_BITMAP *Bs, const U_PSEUDO_OBJ *Bm);
-U_PSEUDO_OBJ *U_PMF_BITMAPDATA_set( const U_PSEUDO_OBJ *Ps, int cbBm, const char *Bm);
+U_PSEUDO_OBJ *U_PMF_BITMAPDATA_set(const U_PSEUDO_OBJ *Ps, int cbBm, const char *Bm);
 U_PSEUDO_OBJ *U_PMF_BLENDCOLORS_set(uint32_t Elements, const U_FLOAT *Positions, const U_PSEUDO_OBJ *Colors);
 U_PSEUDO_OBJ *U_PMF_BLENDCOLORS_linear_set(uint32_t Elements,U_PMF_ARGB StartColor, U_PMF_ARGB EndColor);
 U_PSEUDO_OBJ *U_PMF_BLENDFACTORS_set(uint32_t Elements, const U_FLOAT *Positions, const U_FLOAT *Factors);

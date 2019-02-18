@@ -179,7 +179,7 @@ ObjectSet::combine(bool skip_undo)
 
         // move to the position of the topmost, reduced by the number of deleted items
         repr->setPosition(position > 0 ? position : 0);
-        if ( !skip_undo ) {
+        if (!skip_undo) {
             DocumentUndo::done(doc, SP_VERB_SELECTION_COMBINE, 
                                _("Combine"));
         }
@@ -290,7 +290,7 @@ ObjectSet::breakApart(bool skip_undo)
     }
 
     if (did) {
-        if ( !skip_undo ) {
+        if (!skip_undo) {
             DocumentUndo::done(document(), SP_VERB_SELECTION_BREAK_APART, 
                                _("Break apart"));
         }
@@ -373,9 +373,9 @@ sp_item_list_to_curves(const std::vector<SPItem*> &items, std::vector<SPItem*>& 
         SPDocument *document = item->document;
 
         SPGroup *group = dynamic_cast<SPGroup *>(item);
-        if ( skip_all_lpeitems &&
+        if (skip_all_lpeitems &&
              dynamic_cast<SPLPEItem *>(item) && 
-             !group ) // also convert objects in an SPGroup when skip_all_lpeitems is set.
+             !group) // also convert objects in an SPGroup when skip_all_lpeitems is set.
         { 
             continue;
         }
@@ -475,7 +475,7 @@ sp_item_list_to_curves(const std::vector<SPItem*> &items, std::vector<SPItem*>& 
             g_free(desc);
         }
         if (highlight_color && newObj) {
-                SP_ITEM(newObj)->setHighlightColor( highlight_color );
+                SP_ITEM(newObj)->setHighlightColor(highlight_color);
         }
 
         // move to the saved position
@@ -503,21 +503,21 @@ sp_selected_item_to_curved_repr(SPItem *item, guint32 /*text_grouping_policy*/)
         Inkscape::XML::Node *g_repr = xml_doc->createElement("svg:g");
 
         // Save original text for accessibility.
-        Glib::ustring original_text = sp_te_get_string_multiline( item,
+        Glib::ustring original_text = sp_te_get_string_multiline(item,
                                                                   te_get_layout(item)->begin(),
-                                                                  te_get_layout(item)->end() );
-        if( original_text.size() > 0 ) {
-            g_repr->setAttribute("aria-label", original_text.c_str() );
+                                                                  te_get_layout(item)->end());
+        if(original_text.size() > 0) {
+            g_repr->setAttribute("aria-label", original_text.c_str());
         }
 
         g_repr->setAttribute("transform", item->getRepr()->attribute("transform"));
         /* Mask */
         gchar *mask_str = (gchar *) item->getRepr()->attribute("mask");
-        if ( mask_str )
+        if (mask_str)
             g_repr->setAttribute("mask", mask_str);
         /* Clip path */
         gchar *clip_path_str = (gchar *) item->getRepr()->attribute("clip-path");
-        if ( clip_path_str )
+        if (clip_path_str)
             g_repr->setAttribute("clip-path", clip_path_str);
         /* Rotation center */
         g_repr->setAttribute("inkscape:transform-center-x", item->getRepr()->attribute("inkscape:transform-center-x"), false);
@@ -525,7 +525,7 @@ sp_selected_item_to_curved_repr(SPItem *item, guint32 /*text_grouping_policy*/)
 
         /* Whole text's style */
         Glib::ustring style_str =
-            item->style->write( SP_STYLE_FLAG_IFDIFF, SP_STYLE_SRC_UNSET, item->parent ? item->parent->style : nullptr); // TODO investigate possibility
+            item->style->write(SP_STYLE_FLAG_IFDIFF, SP_STYLE_SRC_UNSET, item->parent ? item->parent->style : nullptr); // TODO investigate possibility
         g_repr->setAttribute("style", style_str.c_str());
 
         Inkscape::Text::Layout::iterator iter = te_get_layout(item)->begin();
@@ -546,7 +546,7 @@ sp_selected_item_to_curved_repr(SPItem *item, guint32 /*text_grouping_policy*/)
                pos_obj = pos_obj->parent;   // SPStrings don't have style
             }
             Glib::ustring style_str =
-                pos_obj->style->write( SP_STYLE_FLAG_IFDIFF, SP_STYLE_SRC_UNSET, pos_obj->parent ? pos_obj->parent->style : nullptr); // TODO investigate possibility
+                pos_obj->style->write(SP_STYLE_FLAG_IFDIFF, SP_STYLE_SRC_UNSET, pos_obj->parent ? pos_obj->parent->style : nullptr); // TODO investigate possibility
 
             // get path from iter to iter_next:
             SPCurve *curve = te_get_layout(item)->convertToCurves(iter, iter_next);
@@ -604,17 +604,17 @@ sp_selected_item_to_curved_repr(SPItem *item, guint32 /*text_grouping_policy*/)
 
     /* Style */
     Glib::ustring style_str =
-        item->style->write( SP_STYLE_FLAG_IFDIFF, SP_STYLE_SRC_UNSET, item->parent ? item->parent->style : nullptr); // TODO investigate possibility
+        item->style->write(SP_STYLE_FLAG_IFDIFF, SP_STYLE_SRC_UNSET, item->parent ? item->parent->style : nullptr); // TODO investigate possibility
     repr->setAttribute("style", style_str.c_str());
 
     /* Mask */
     gchar *mask_str = (gchar *) item->getRepr()->attribute("mask");
-    if ( mask_str )
+    if (mask_str)
         repr->setAttribute("mask", mask_str);
 
     /* Clip path */
     gchar *clip_path_str = (gchar *) item->getRepr()->attribute("clip-path");
-    if ( clip_path_str )
+    if (clip_path_str)
         repr->setAttribute("clip-path", clip_path_str);
 
     /* Rotation center */
@@ -660,7 +660,7 @@ ObjectSet::pathReverse()
         SPCurve *rcurve = path->getCurveForEdit(true)->create_reverse();
 
         gchar *str = sp_svg_write_path(rcurve->get_pathvector());
-        if ( path->hasPathEffectRecursive() ) {
+        if (path->hasPathEffectRecursive()) {
             path->getRepr()->setAttribute("inkscape:original-d", str);
         } else {
             path->getRepr()->setAttribute("d", str);
@@ -671,7 +671,7 @@ ObjectSet::pathReverse()
 
         // reverse nodetypes order (Bug #179866)
         gchar *nodetypes = g_strdup(path->getRepr()->attribute("sodipodi:nodetypes"));
-        if ( nodetypes ) {
+        if (nodetypes) {
             path->getRepr()->setAttribute("sodipodi:nodetypes", g_strreverse(nodetypes));
             g_free(nodetypes);
         }

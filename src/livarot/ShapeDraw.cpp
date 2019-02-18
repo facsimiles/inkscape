@@ -59,14 +59,14 @@ Shape::Plot (double ix, double iy, double ir, double mx, double my, bool doPoint
   fprintf(outFile,"     inkscape:window-x=\"20\"\n");
   fprintf(outFile,"     inkscape:window-y=\"42\" />\n");
   
-	if ( doPoint ) {
+	if (doPoint) {
 		for (int i=0;i<numberOfPoints();i++) {
 			double   ph=(getPoint(i).x[0]-ix)*ir+mx;
 			double   pv=(getPoint(i).x[1]-iy)*ir+my;
       fprintf(outFile,"     <svg:circle cx=\"%f\" cy=\"%f\" r=\"5\" fill=\"none\" stroke=\"red\" stroke-width=\"0.25\" />\n",ph,pv); // localizing ok
     }
 	}
-  if ( pointsNo ) {
+  if (pointsNo) {
 		for (int i=0;i<numberOfPoints();i++) {
 			double   ph=(getPoint(i).x[0]-ix)*ir+mx;
 			double   pv=(getPoint(i).x[1]-iy)*ir+my;
@@ -79,12 +79,12 @@ Shape::Plot (double ix, double iy, double ir, double mx, double my, bool doPoint
 		for (int i=0;i<numberOfEdges();i++) {
 			int     stP=getEdge(i).st;
 			int     enP=getEdge(i).en;
-			if ( stP < 0 || enP < 0 ) continue;
+			if (stP < 0 || enP < 0) continue;
 			double   sh=(getPoint(stP).x[0]-ix)*ir+mx;
 			double   sv=(getPoint(stP).x[1]-iy)*ir+my;
 			double   eh=(getPoint(enP).x[0]-ix)*ir+mx;
 			double   ev=(getPoint(enP).x[1]-iy)*ir+my;
-			if ( doDir ) {
+			if (doDir) {
 				double   endh=(9*eh+1*sh)/10;
 				double   endv=(9*ev+1*sv)/10;
         fprintf(outFile,"     <svg:line x1=\"%f\" y1=\"%f\" x2=\"%f\" y2=\"%f\" stroke=\"black\" stroke-width=\"0.5\" />\n",sh,sv,endh,endv); // localizing ok
@@ -93,11 +93,11 @@ Shape::Plot (double ix, double iy, double ir, double mx, double my, bool doPoint
 			}
 		}
 	}
-  if ( edgesNo ) {
+  if (edgesNo) {
 		for (int i=0;i<numberOfEdges();i++) {
 			int     stP=getEdge(i).st;
 			int     enP=getEdge(i).en;
-			if ( stP < 0 || enP < 0 ) continue;
+			if (stP < 0 || enP < 0) continue;
 			double   sh=(getPoint(stP).x[0]-ix)*ir+mx;
 			double   sv=(getPoint(stP).x[1]-iy)*ir+my;
 			double   eh=(getPoint(enP).x[0]-ix)*ir+mx;

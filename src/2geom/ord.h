@@ -55,9 +55,9 @@ static inline Cmp operator-(Cmp x) {
 
 template <typename T1, typename T2>
 inline Cmp cmp(T1 const &a, T2 const &b) {
-  if ( a < b ) {
+  if (a < b) {
     return LESS_THAN;
-  } else if ( b < a ) {
+  } else if (b < a) {
     return GREATER_THAN;
   } else {
     return EQUAL_TO;

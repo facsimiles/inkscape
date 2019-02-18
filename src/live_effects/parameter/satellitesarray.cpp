@@ -116,7 +116,7 @@ void SatellitesArrayParam::updateCanvasIndicators(bool mirror)
                 if (j == 0 && pathv[i].closed()) {
                     previous_index = pathv[i].size() - 1;
                 }
-                if ( previous_index < 0 ) {
+                if (previous_index < 0) {
                     return;
                 }
                 double lenght_in = pathv.curveAt(previous_index).length();
@@ -266,7 +266,7 @@ void FilletChamferKnotHolderEntity::knot_set(Geom::Point const &p,
     if (curve_index == 0 && pathv[path_index].closed()) {
         previous_index = pathv[path_index].size() - 1;
     }
-    if ( previous_index < 0 ) {
+    if (previous_index < 0) {
         return;
     }
     Geom::Curve const &curve_in = pathv[path_index][previous_index];
@@ -331,7 +331,7 @@ Geom::Point FilletChamferKnotHolderEntity::knot_get() const
         if (curve_index == 0 && pathv[path_index].closed()) {
             previous_index = pathv[path_index].size() - 1;
         }
-        if ( previous_index < 0 ) {
+        if (previous_index < 0) {
             return Geom::Point(Geom::infinity(), Geom::infinity());
         }
         Geom::Curve const &curve_in = pathv[path_index][previous_index];
@@ -431,7 +431,7 @@ void FilletChamferKnotHolderEntity::knot_click(guint state)
         if (curve_index == 0 && pathv[path_index].closed()) {
             previous_index = pathv[path_index].size() - 1;
         }
-        if ( previous_index < 0 ) {
+        if (previous_index < 0) {
             return;
         }
         if (!_pparam->_use_distance && !_pparam->_vector[path_index][curve_index].is_time) {
@@ -485,7 +485,7 @@ void FilletChamferKnotHolderEntity::knot_set_offset(Satellite satellite)
         if (curve_index == 0 && pathv[path_index].closed()) {
             previous_index = pathv[path_index].size() - 1;
         }
-        if ( previous_index < 0 ) {
+        if (previous_index < 0) {
             return;
         }
         amount = _pparam->_vector[path_index][curve_index].radToLen(amount, pathv[path_index][previous_index], pathv[path_index][curve_index]);

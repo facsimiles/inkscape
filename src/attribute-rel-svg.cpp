@@ -42,12 +42,12 @@ bool SPAttributeRelSVG::isSVGElement(Glib::ustring element)
     }
 
     // Always valid if data file not found!
-    if( !foundFile ) return true;
+    if(!foundFile) return true;
 
     // Strip off "svg:" from the element's name
     Glib::ustring temp = element;
-    if ( temp.find("svg:") != std::string::npos ) {
-        temp.erase( temp.find("svg:"), 4 );
+    if (temp.find("svg:") != std::string::npos) {
+        temp.erase(temp.find("svg:"), 4);
     }
 
     return (SPAttributeRelSVG::instance->attributesOfElements.count(temp) > 0);
@@ -63,12 +63,12 @@ bool SPAttributeRelSVG::findIfValid(Glib::ustring attribute, Glib::ustring eleme
     }
 
     // Always valid if data file not found!
-    if( !foundFile ) return true;
+    if(!foundFile) return true;
 
     // Strip off "svg:" from the element's name
     Glib::ustring temp = element;
-    if ( temp.find("svg:") != std::string::npos ) {
-        temp.erase( temp.find("svg:"), 4 );
+    if (temp.find("svg:") != std::string::npos) {
+        temp.erase(temp.find("svg:"), 4);
     }
     
     // Check for attributes with -, role, aria etc. to allow for more accessbility
@@ -83,10 +83,10 @@ bool SPAttributeRelSVG::findIfValid(Glib::ustring attribute, Glib::ustring eleme
         || attribute.substr(0,4) == "ns1:"  // JessyInk
         || attribute.substr(0,4) == "osb:"  // Open Swatch Book
         || (SPAttributeRelSVG::instance->attributesOfElements[temp].find(attribute)
-            != SPAttributeRelSVG::instance->attributesOfElements[temp].end()) ) {
+            != SPAttributeRelSVG::instance->attributesOfElements[temp].end())) {
         return true;
     } else {
-        //g_warning( "Invalid attribute: %s used on <%s>", attribute.c_str(), element.c_str() );
+        //g_warning("Invalid attribute: %s used on <%s>", attribute.c_str(), element.c_str());
         return false;
     }
 }

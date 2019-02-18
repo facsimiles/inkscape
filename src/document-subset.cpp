@@ -37,7 +37,7 @@ struct DocumentSubset::Relations : public GC::Managed<GC::ATOMIC>,
         unsigned childIndex(SPObject *obj) {
             Siblings::iterator found;
             found = std::find(children.begin(), children.end(), obj);
-            if ( found != children.end() ) {
+            if (found != children.end()) {
                 return found - children.begin();
             } else {
                 return 0;
@@ -51,13 +51,13 @@ struct DocumentSubset::Relations : public GC::Managed<GC::ATOMIC>,
                 Siblings::const_iterator first=children.begin();
                 Siblings::const_iterator last=children.end() - 1;
 
-                while ( first != last ) {
-                    Siblings::const_iterator mid = first + ( last - first + 1 ) / 2;
+                while (first != last) {
+                    Siblings::const_iterator mid = first + (last - first + 1) / 2;
                     int pos = sp_object_compare_position(*mid, obj);
-                    if ( pos < 0 ) {
+                    if (pos < 0) {
                         first = mid;
-                    } else if ( pos > 0 ) {
-                        if ( last == mid ) {
+                    } else if (pos > 0) {
+                        if (last == mid) {
                             last = mid - 1; // already at the top limit
                         } else {
                             last = mid;
@@ -67,10 +67,10 @@ struct DocumentSubset::Relations : public GC::Managed<GC::ATOMIC>,
                     }
                 }
 
-                if ( first == last ) {
+                if (first == last) {
                     // compare to the single possibility left
                     int pos = sp_object_compare_position(*last, obj);
-                    if ( pos < 0 ) {
+                    if (pos < 0) {
                         ++last;
                     }
                 }
@@ -90,8 +90,8 @@ struct DocumentSubset::Relations : public GC::Managed<GC::ATOMIC>,
         {
             Siblings new_children;
             bool found_one=false;
-            for ( Siblings::iterator iter=children.begin()
-                ; iter != children.end() ; ++iter )
+            for (Siblings::iterator iter=children.begin()
+                ; iter != children.end() ; ++iter)
             {
                 if (obj->isAncestorOf(*iter)) {
                     if (!found_one) {
@@ -113,7 +113,7 @@ struct DocumentSubset::Relations : public GC::Managed<GC::ATOMIC>,
             Siblings::iterator found;
             found = std::find(children.begin(), children.end(), obj);
             unsigned index = found - children.begin();
-            if ( found != children.end() ) {
+            if (found != children.end()) {
                 children.erase(found);
             }
             return index;
@@ -143,7 +143,7 @@ struct DocumentSubset::Relations : public GC::Managed<GC::ATOMIC>,
 
     Record *get(SPObject *obj) {
         Map::iterator found=records.find(obj);
-        if ( found != records.end() ) {
+        if (found != records.end()) {
             return &(*found).second;
         } else {
             return nullptr;
@@ -162,11 +162,11 @@ private:
         record.release_connection
           = obj->connectRelease(
               sigc::mem_fun(this, &Relations::_release_object)
-            );
+);
         record.position_changed_connection
           = obj->connectPositionChanged(
               sigc::mem_fun(this, &Relations::reorder)
-            );
+);
         return record;
     }
 
@@ -177,11 +177,11 @@ private:
     void _doRemove(SPObject *obj) {
         Record &record=records[obj];
 
-        if ( record.parent == nullptr ) {
+        if (record.parent == nullptr) {
             Record &root = records[nullptr];
-            for ( Siblings::iterator it = root.children.begin(); it != root.children.end(); ++it ) {
-                if ( *it == obj ) {
-                    root.children.erase( it );
+            for (Siblings::iterator it = root.children.begin(); it != root.children.end(); ++it) {
+                if (*it == obj) {
+                    root.children.erase(it);
                     break;
                 }
             }
@@ -219,15 +219,15 @@ DocumentSubset::DocumentSubset()
 }
 
 void DocumentSubset::Relations::addOne(SPObject *obj) {
-    g_return_if_fail( obj != nullptr );
-    g_return_if_fail( get(obj) == nullptr );
+    g_return_if_fail(obj != nullptr);
+    g_return_if_fail(get(obj) == nullptr);
 
     Record &record=_doAdd(obj);
 
     /* find the nearest ancestor in the subset */
     Record *parent_record=nullptr;
-    for ( SPObject::ParentIterator parent_iter=obj->parent
-        ; !parent_record && parent_iter ; ++parent_iter )
+    for (SPObject::ParentIterator parent_iter=obj->parent
+        ; !parent_record && parent_iter ; ++parent_iter)
     {
         parent_record = get(parent_iter);
         if (parent_record) {
@@ -236,7 +236,7 @@ void DocumentSubset::Relations::addOne(SPObject *obj) {
     }
     if (!parent_record) {
         parent_record = get(nullptr);
-        g_assert( parent_record != nullptr );
+        g_assert(parent_record != nullptr);
     }
 
     Siblings &children=record.children;
@@ -245,11 +245,11 @@ void DocumentSubset::Relations::addOne(SPObject *obj) {
     parent_record->extractDescendants(
         std::back_insert_iterator<Siblings>(children),
         obj
-    );
+);
     for (auto & iter : children)
     {
         Record *child_record=get(iter);
-        g_assert( child_record != nullptr );
+        g_assert(child_record != nullptr);
         child_record->parent = obj;
     }
 
@@ -261,13 +261,13 @@ void DocumentSubset::Relations::addOne(SPObject *obj) {
 }
 
 void DocumentSubset::Relations::remove(SPObject *obj, bool subtree) {
-    g_return_if_fail( obj != nullptr );
+    g_return_if_fail(obj != nullptr);
 
     Record *record=get(obj);
-    g_return_if_fail( record != nullptr );
+    g_return_if_fail(record != nullptr);
 
     Record *parent_record=get(record->parent);
-    g_assert( parent_record != nullptr );
+    g_assert(parent_record != nullptr);
 
     unsigned index=parent_record->removeChild(obj);
 
@@ -283,7 +283,7 @@ void DocumentSubset::Relations::remove(SPObject *obj, bool subtree) {
         for (auto & iter : children)
         {
             Record *child_record=get(iter);
-            g_assert( child_record != nullptr );
+            g_assert(child_record != nullptr);
             child_record->parent = record->parent;
         }
 
@@ -324,7 +324,7 @@ void DocumentSubset::Relations::reorder(SPObject *obj) {
         parent_record->extractDescendants(
             std::back_insert_iterator<Siblings>(descendants),
             obj
-        );
+);
         if (!descendants.empty()) {
             unsigned index=parent_record->findInsertIndex(obj);
             Siblings &family=parent_record->children;
@@ -353,23 +353,23 @@ bool DocumentSubset::includes(SPObject *obj) const {
 
 SPObject *DocumentSubset::parentOf(SPObject *obj) const {
     Relations::Record *record=_relations->get(obj);
-    return ( record ? record->parent : nullptr );
+    return (record ? record->parent : nullptr);
 }
 
 unsigned DocumentSubset::childCount(SPObject *obj) const {
     Relations::Record *record=_relations->get(obj);
-    return ( record ? record->children.size() : 0 );
+    return (record ? record->children.size() : 0);
 }
 
 unsigned DocumentSubset::indexOf(SPObject *obj) const {
     SPObject *parent=parentOf(obj);
     Relations::Record *record=_relations->get(parent);
-    return ( record ? record->childIndex(obj) : 0 );
+    return (record ? record->childIndex(obj) : 0);
 }
 
 SPObject *DocumentSubset::nthChildOf(SPObject *obj, unsigned n) const {
     Relations::Record *record=_relations->get(obj);
-    return ( record ? record->children[n] : nullptr );
+    return (record ? record->children[n] : nullptr);
 }
 
 sigc::connection DocumentSubset::connectChanged(sigc::slot<void> slot) const {

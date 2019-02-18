@@ -54,18 +54,18 @@ public:
     static ComboToolItem* create(const Glib::ustring &label,
                                  const Glib::ustring &tooltip,
                                  const Glib::ustring &stock_id,
-                                 Glib::RefPtr<Gtk::ListStore> store );
+                                 Glib::RefPtr<Gtk::ListStore> store);
 
     /* Style of action */
-    void use_label(  bool use_label  ) { _use_label  = use_label;  }
-    void use_icon(   bool use_icon   ) { _use_icon   = use_icon;   }
-    void use_pixbuf( bool use_pixbuf ) { _use_pixbuf = use_pixbuf; }
-    void use_group_label( bool use_group_label ) { _use_group_label = use_group_label; }
+    void use_label(bool use_label) { _use_label  = use_label;  }
+    void use_icon(bool use_icon) { _use_icon   = use_icon;   }
+    void use_pixbuf(bool use_pixbuf) { _use_pixbuf = use_pixbuf; }
+    void use_group_label(bool use_group_label) { _use_group_label = use_group_label; }
   
     gint get_active() { return _active; }
     Glib::ustring get_active_text();
-    void set_active( gint active );
-    void set_icon_size( Gtk::BuiltinIconSize size ) { _icon_size = size; }
+    void set_active(gint active);
+    void set_icon_size(Gtk::BuiltinIconSize size) { _icon_size = size; }
 
     Glib::RefPtr<Gtk::ListStore> get_store() { return _store; }
 
@@ -108,7 +108,7 @@ private:
     ComboToolItem(Glib::ustring group_label,
                   Glib::ustring tooltip,
                   Glib::ustring stock_id,
-                  Glib::RefPtr<Gtk::ListStore> store );
+                  Glib::RefPtr<Gtk::ListStore> store);
 };
 }
 }

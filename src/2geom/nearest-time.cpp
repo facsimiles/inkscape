@@ -103,10 +103,10 @@ Coord nearest_time(Point const &p, D2<Bezier> const &input, Coord from, Coord to
 double nearest_time(Point const& p,
                     D2<SBasis> const& c,
                     D2<SBasis> const& dc,
-                    double from, double to )
+                    double from, double to)
 {
-    if ( from > to ) std::swap(from, to);
-    if ( from < 0 || to > 1 )
+    if (from > to) std::swap(from, to);
+    if (from < 0 || to > 1)
     {
         THROW_RANGEERROR("[from,to] interval out of bounds");
     }
@@ -117,16 +117,16 @@ double nearest_time(Point const& p,
 
     double closest = from;
     double min_dist_sq = L2sq(c(from) - p);
-    for ( size_t i = 0; i < zeros.size(); ++i )
+    for (size_t i = 0; i < zeros.size(); ++i)
     {
         double distsq = L2sq(c(zeros[i]) - p);
-        if ( min_dist_sq > L2sq(c(zeros[i]) - p) )
+        if (min_dist_sq > L2sq(c(zeros[i]) - p))
         {
             closest = zeros[i];
             min_dist_sq = distsq;
         }
     }
-    if ( min_dist_sq > L2sq( c(to) - p ) )
+    if (min_dist_sq > L2sq(c(to) - p))
         closest = to;
     return closest;
 
@@ -215,7 +215,7 @@ double nearest_time(Point const &p,
     for (unsigned i = si + 1; i < ei; ++i) {
         bb = *bounds_fast(c[i]);
         dsq = distanceSq(p, bb);
-        if ( mindistsq <= dsq ) continue;
+        if (mindistsq <= dsq) continue;
 
         t = nearest_time(p, c[i]);
         dsq = distanceSq(p, c[i](t));
@@ -252,11 +252,11 @@ all_nearest_times(Point const &p,
 
     unsigned si = c.segN(from);
     unsigned ei = c.segN(to);
-    if ( si == ei )
+    if (si == ei)
     {
         std::vector<double>	all_nearest =
             all_nearest_times(p, c[si], c.segT(from, si), c.segT(to, si));
-        for ( unsigned int i = 0; i < all_nearest.size(); ++i )
+        for (unsigned int i = 0; i < all_nearest.size(); ++i)
         {
             all_nearest[i] = c.mapToDomain(all_nearest[i], si);
         }
@@ -264,20 +264,20 @@ all_nearest_times(Point const &p,
     }
     std::vector<double> all_t;
     std::vector< std::vector<double> > all_np;
-    all_np.push_back( all_nearest_times(p, c[si], c.segT(from, si)) );
+    all_np.push_back(all_nearest_times(p, c[si], c.segT(from, si)));
     std::vector<unsigned> ni;
     ni.push_back(si);
     double dsq;
-    double mindistsq = distanceSq( p, c[si](all_np.front().front()) );
+    double mindistsq = distanceSq(p, c[si](all_np.front().front()));
     Rect bb;
 
     for (unsigned i = si + 1; i < ei; ++i) {
         bb = *bounds_fast(c[i]);
         dsq = distanceSq(p, bb);
-        if ( mindistsq < dsq ) continue;
+        if (mindistsq < dsq) continue;
         all_t = all_nearest_times(p, c[i]);
-        dsq = distanceSq( p, c[i](all_t.front()) );
-        if ( mindistsq > dsq )
+        dsq = distanceSq(p, c[i](all_t.front()));
+        if (mindistsq > dsq)
         {
             all_np.clear();
             all_np.push_back(all_t);
@@ -285,7 +285,7 @@ all_nearest_times(Point const &p,
             ni.push_back(i);
             mindistsq = dsq;
         }
-        else if ( mindistsq == dsq )
+        else if (mindistsq == dsq)
         {
             all_np.push_back(all_t);
             ni.push_back(i);
@@ -295,7 +295,7 @@ all_nearest_times(Point const &p,
     dsq = distanceSq(p, bb);
     if (mindistsq >= dsq) {
         all_t = all_nearest_times(p, c[ei], 0, c.segT(to, ei));
-        dsq = distanceSq( p, c[ei](all_t.front()) );
+        dsq = distanceSq(p, c[ei](all_t.front()));
         if (mindistsq > dsq) {
             for (unsigned int i = 0; i < all_t.size(); ++i) {
                 all_t[i] = c.mapToDomain(all_t[i], ei);
@@ -309,7 +309,7 @@ all_nearest_times(Point const &p,
     std::vector<double> all_nearest;
     for (unsigned i = 0; i < all_np.size(); ++i) {
         for (unsigned int j = 0; j < all_np[i].size(); ++j) {
-            all_nearest.push_back( c.mapToDomain(all_np[i][j], ni[i]) );
+            all_nearest.push_back(c.mapToDomain(all_np[i][j], ni[i]));
         }
     }
     all_nearest.erase(std::unique(all_nearest.begin(), all_nearest.end()),

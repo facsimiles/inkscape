@@ -53,8 +53,8 @@ protected:
 	gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
-	InkBlot ( ) : Filter() { };
-	~InkBlot ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
+	InkBlot () : Filter() { };
+	~InkBlot () override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
 public:
 	static void init () {
@@ -143,7 +143,7 @@ InkBlot::get_filter_text (Inkscape::Extension::Extension * ext)
         "</filter>\n", hblur.str().c_str(), vblur.str().c_str(), type.str().c_str(),
                        freq.str().c_str(), complexity.str().c_str(), variation.str().c_str(),
                        displacement.str().c_str(), blend.str().c_str(),
-                       custom.str().c_str(), stroke.str().c_str() );
+                       custom.str().c_str(), stroke.str().c_str());
 
 	return _filter;
 

@@ -124,8 +124,8 @@ protected:
     bool on_draw(const Cairo::RefPtr<Cairo::Context> &cr) override;
     bool on_button_press_event(GdkEventButton *button_event) override;
     bool on_button_release_event(GdkEventButton *button_event) override;
-    bool on_enter_notify_event(GdkEventCrossing* event ) override;
-    bool on_leave_notify_event(GdkEventCrossing* event ) override;
+    bool on_enter_notify_event(GdkEventCrossing* event) override;
+    bool on_leave_notify_event(GdkEventCrossing* event) override;
 
 public:
     Preview();

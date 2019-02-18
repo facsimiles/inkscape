@@ -95,9 +95,9 @@ public:
     bool addTag(Tag const& tag);
     std::vector<Tag> const& getTags();
 
-    int getCount( std::string const& key );
-    void increment( std::string const& key );
-    void decrement( std::string const& key );
+    int getCount(std::string const& key);
+    void increment(std::string const& key);
+    void decrement(std::string const& key);
 
 private:
 

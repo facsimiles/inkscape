@@ -108,7 +108,7 @@ public:
 
     bool operator==(Affine const &o) const {
         for(unsigned i = 0; i < 6; ++i) {
-            if ( _c[i] != o._c[i] ) return false;
+            if (_c[i] != o._c[i]) return false;
         }
         return true;
     }

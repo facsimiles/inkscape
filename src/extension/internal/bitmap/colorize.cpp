@@ -29,7 +29,7 @@ Colorize::applyEffect(Magick::Image *image) {
 	float r = ((_color >> 24) & 0xff) / 255.0F;
 	float g = ((_color >> 16) & 0xff) / 255.0F;
 	float b = ((_color >>  8) & 0xff) / 255.0F;
-	float a = ((_color      ) & 0xff) / 255.0F;
+	float a = ((_color) & 0xff) / 255.0F;
 	
     Magick::ColorRGB mc(r,g,b);
 	

@@ -91,7 +91,7 @@ private:
        
         void on_document_replaced(SPDesktop *desktop, SPDocument *document);
         void on_change_selection();
-        void on_modified_selection( guint flags );
+        void on_modified_selection(guint flags);
         
         void update_selection(Selection *);
         void on_filter_selection_changed();

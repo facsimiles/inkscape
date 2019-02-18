@@ -65,20 +65,20 @@ ss_selection_changed (Inkscape::Selection *, gpointer data)
 }
 
 static void
-ss_selection_modified( Inkscape::Selection *selection, guint /*flags*/, gpointer data )
+ss_selection_modified(Inkscape::Selection *selection, guint /*flags*/, gpointer data)
 {
     ss_selection_changed (selection, data);
 }
 
 static void
-ss_subselection_changed( gpointer /*dragger*/, gpointer data )
+ss_subselection_changed(gpointer /*dragger*/, gpointer data)
 {
     ss_selection_changed (nullptr, data);
 }
 
 namespace {
 
-void clearTooltip( Gtk::Widget &widget )
+void clearTooltip(Gtk::Widget &widget)
 {
     widget.set_tooltip_text("");
     widget.set_has_tooltip(false);
@@ -257,35 +257,35 @@ SelectedStyle::SelectedStyle(bool /*layout*/)
 
         _popup_edit[i].add(*(new Gtk::Label((i == SS_FILL)? _("Edit fill...") : _("Edit stroke..."), Gtk::ALIGN_START)));
         _popup_edit[i].signal_activate().connect(sigc::mem_fun(*this,
-                               (i == SS_FILL)? &SelectedStyle::on_fill_edit : &SelectedStyle::on_stroke_edit ));
+                               (i == SS_FILL)? &SelectedStyle::on_fill_edit : &SelectedStyle::on_stroke_edit));
 
         _popup_lastused[i].add(*(new Gtk::Label(_("Last set color"), Gtk::ALIGN_START)));
         _popup_lastused[i].signal_activate().connect(sigc::mem_fun(*this,
-                               (i == SS_FILL)? &SelectedStyle::on_fill_lastused : &SelectedStyle::on_stroke_lastused ));
+                               (i == SS_FILL)? &SelectedStyle::on_fill_lastused : &SelectedStyle::on_stroke_lastused));
 
         _popup_lastselected[i].add(*(new Gtk::Label(_("Last selected color"), Gtk::ALIGN_START)));
         _popup_lastselected[i].signal_activate().connect(sigc::mem_fun(*this,
-                               (i == SS_FILL)? &SelectedStyle::on_fill_lastselected : &SelectedStyle::on_stroke_lastselected ));
+                               (i == SS_FILL)? &SelectedStyle::on_fill_lastselected : &SelectedStyle::on_stroke_lastselected));
 
         _popup_invert[i].add(*(new Gtk::Label(_("Invert"), Gtk::ALIGN_START)));
         _popup_invert[i].signal_activate().connect(sigc::mem_fun(*this,
-                               (i == SS_FILL)? &SelectedStyle::on_fill_invert : &SelectedStyle::on_stroke_invert ));
+                               (i == SS_FILL)? &SelectedStyle::on_fill_invert : &SelectedStyle::on_stroke_invert));
 
         _popup_white[i].add(*(new Gtk::Label(_("White"), Gtk::ALIGN_START)));
         _popup_white[i].signal_activate().connect(sigc::mem_fun(*this,
-                               (i == SS_FILL)? &SelectedStyle::on_fill_white : &SelectedStyle::on_stroke_white ));
+                               (i == SS_FILL)? &SelectedStyle::on_fill_white : &SelectedStyle::on_stroke_white));
 
         _popup_black[i].add(*(new Gtk::Label(_("Black"), Gtk::ALIGN_START)));
         _popup_black[i].signal_activate().connect(sigc::mem_fun(*this,
-                               (i == SS_FILL)? &SelectedStyle::on_fill_black : &SelectedStyle::on_stroke_black ));
+                               (i == SS_FILL)? &SelectedStyle::on_fill_black : &SelectedStyle::on_stroke_black));
 
         _popup_copy[i].add(*(new Gtk::Label(_("Copy color"), Gtk::ALIGN_START)));
         _popup_copy[i].signal_activate().connect(sigc::mem_fun(*this,
-                               (i == SS_FILL)? &SelectedStyle::on_fill_copy : &SelectedStyle::on_stroke_copy ));
+                               (i == SS_FILL)? &SelectedStyle::on_fill_copy : &SelectedStyle::on_stroke_copy));
 
         _popup_paste[i].add(*(new Gtk::Label(_("Paste color"), Gtk::ALIGN_START)));
         _popup_paste[i].signal_activate().connect(sigc::mem_fun(*this,
-                               (i == SS_FILL)? &SelectedStyle::on_fill_paste : &SelectedStyle::on_stroke_paste ));
+                               (i == SS_FILL)? &SelectedStyle::on_fill_paste : &SelectedStyle::on_stroke_paste));
 
         _popup_swap[i].add(*(new Gtk::Label(_("Swap fill and stroke"), Gtk::ALIGN_START)));
         _popup_swap[i].signal_activate().connect(sigc::mem_fun(*this,
@@ -293,16 +293,16 @@ SelectedStyle::SelectedStyle(bool /*layout*/)
 
         _popup_opaque[i].add(*(new Gtk::Label((i == SS_FILL)? _("Make fill opaque") : _("Make stroke opaque"), Gtk::ALIGN_START)));
         _popup_opaque[i].signal_activate().connect(sigc::mem_fun(*this,
-                               (i == SS_FILL)? &SelectedStyle::on_fill_opaque : &SelectedStyle::on_stroke_opaque ));
+                               (i == SS_FILL)? &SelectedStyle::on_fill_opaque : &SelectedStyle::on_stroke_opaque));
 
         //TRANSLATORS COMMENT: unset is a verb here
         _popup_unset[i].add(*(new Gtk::Label((i == SS_FILL)? _("Unset fill") : _("Unset stroke"), Gtk::ALIGN_START)));
         _popup_unset[i].signal_activate().connect(sigc::mem_fun(*this,
-                               (i == SS_FILL)? &SelectedStyle::on_fill_unset : &SelectedStyle::on_stroke_unset ));
+                               (i == SS_FILL)? &SelectedStyle::on_fill_unset : &SelectedStyle::on_stroke_unset));
 
         _popup_remove[i].add(*(new Gtk::Label((i == SS_FILL)? _("Remove fill") : _("Remove stroke"), Gtk::ALIGN_START)));
         _popup_remove[i].signal_activate().connect(sigc::mem_fun(*this,
-                               (i == SS_FILL)? &SelectedStyle::on_fill_remove : &SelectedStyle::on_stroke_remove ));
+                               (i == SS_FILL)? &SelectedStyle::on_fill_remove : &SelectedStyle::on_stroke_remove));
 
         _popup[i].attach(_popup_edit[i], 0,1, 0,1);
           _popup[i].attach(*(new Gtk::SeparatorMenuItem()), 0,1, 1,2);
@@ -474,23 +474,23 @@ SelectedStyle::setDesktop(SPDesktop *desktop)
     selection_changed_connection = new sigc::connection (selection->connectChanged(
         sigc::bind (
             sigc::ptr_fun(&ss_selection_changed),
-            this )
-    ));
+            this)
+));
     selection_modified_connection = new sigc::connection (selection->connectModified(
         sigc::bind (
             sigc::ptr_fun(&ss_selection_modified),
-            this )
-    ));
+            this)
+));
     subselection_changed_connection = new sigc::connection (desktop->connectToolSubselectionChanged(
         sigc::bind (
             sigc::ptr_fun(&ss_subselection_changed),
-            this )
-    ));
+            this)
+));
 
     _sw_unit = desktop->getNamedView()->display_units;
 
     // Set the doc default unit active in the units list
-    for ( auto mi:_unit_mis ) {
+    for (auto mi:_unit_mis) {
         if (mi && mi->get_label() == _sw_unit->abbr) {
             mi->set_active();
             break;
@@ -498,37 +498,37 @@ SelectedStyle::setDesktop(SPDesktop *desktop)
     }
 }
 
-void SelectedStyle::dragDataReceived( GtkWidget */*widget*/,
+void SelectedStyle::dragDataReceived(GtkWidget */*widget*/,
                                       GdkDragContext */*drag_context*/,
                                       gint /*x*/, gint /*y*/,
                                       GtkSelectionData *data,
                                       guint /*info*/,
                                       guint /*event_time*/,
-                                      gpointer user_data )
+                                      gpointer user_data)
 {
     DropTracker* tracker = (DropTracker*)user_data;
 
-    switch ( (int)tracker->item ) {
+    switch ((int)tracker->item) {
         case SS_FILL:
         case SS_STROKE:
         {
-            if (gtk_selection_data_get_length(data) == 8 ) {
+            if (gtk_selection_data_get_length(data) == 8) {
                 gchar c[64];
                 // Careful about endian issues.
                 guint16* dataVals = (guint16*)gtk_selection_data_get_data(data);
-                sp_svg_write_color( c, sizeof(c),
+                sp_svg_write_color(c, sizeof(c),
                                     SP_RGBA32_U_COMPOSE(
                                         0x0ff & (dataVals[0] >> 8),
                                         0x0ff & (dataVals[1] >> 8),
                                         0x0ff & (dataVals[2] >> 8),
                                         0xff // can't have transparency in the color itself
                                         //0x0ff & (data->data[3] >> 8),
-                                        ));
+                                      ));
                 SPCSSAttr *css = sp_repr_css_attr_new();
-                sp_repr_css_set_property( css, (tracker->item == SS_FILL) ? "fill":"stroke", c );
-                sp_desktop_set_style( tracker->parent->_desktop, css );
-                sp_repr_css_attr_unref( css );
-                DocumentUndo::done( tracker->parent->_desktop->getDocument(), SP_VERB_NONE, _("Drop color"));
+                sp_repr_css_set_property(css, (tracker->item == SS_FILL) ? "fill":"stroke", c);
+                sp_desktop_set_style(tracker->parent->_desktop, css);
+                sp_repr_css_attr_unref(css);
+                DocumentUndo::done(tracker->parent->_desktop->getDocument(), SP_VERB_NONE, _("Drop color"));
             }
         }
         break;
@@ -659,8 +659,8 @@ void SelectedStyle::on_fill_invert() {
                 (255 - SP_RGBA32_G_U(color)),
                 (255 - SP_RGBA32_B_U(color)),
                 SP_RGBA32_A_U(color)
-        )
-    );
+)
+);
     sp_repr_css_set_property (css, "fill", c);
     sp_desktop_set_style (_desktop, css);
     sp_repr_css_attr_unref (css);
@@ -683,8 +683,8 @@ void SelectedStyle::on_stroke_invert() {
                 (255 - SP_RGBA32_G_U(color)),
                 (255 - SP_RGBA32_B_U(color)),
                 SP_RGBA32_A_U(color)
-        )
-    );
+)
+);
     sp_repr_css_set_property (css, "stroke", c);
     sp_desktop_set_style (_desktop, css);
     sp_repr_css_attr_unref (css);
@@ -952,20 +952,20 @@ SelectedStyle::update()
             place->add(_na[i]);
             place->set_tooltip_text(__na[i]);
             _mode[i] = SS_NA;
-            if ( _dropEnabled[i] ) {
-                gtk_drag_dest_unset( GTK_WIDGET((i==SS_FILL) ? _fill_place.gobj():_stroke_place.gobj()) );
+            if (_dropEnabled[i]) {
+                gtk_drag_dest_unset(GTK_WIDGET((i==SS_FILL) ? _fill_place.gobj():_stroke_place.gobj()));
                 _dropEnabled[i] = false;
             }
             break;
         case QUERY_STYLE_SINGLE:
         case QUERY_STYLE_MULTIPLE_AVERAGED:
         case QUERY_STYLE_MULTIPLE_SAME:
-            if ( !_dropEnabled[i] ) {
-                gtk_drag_dest_set( GTK_WIDGET( (i==SS_FILL) ? _fill_place.gobj():_stroke_place.gobj()),
+            if (!_dropEnabled[i]) {
+                gtk_drag_dest_set(GTK_WIDGET((i==SS_FILL) ? _fill_place.gobj():_stroke_place.gobj()),
                                    GTK_DEST_DEFAULT_ALL,
                                    ui_drop_target_entries,
                                    nui_drop_target_entries,
-                                   GdkDragAction(GDK_ACTION_COPY | GDK_ACTION_MOVE) );
+                                   GdkDragAction(GDK_ACTION_COPY | GDK_ACTION_MOVE));
                 _dropEnabled[i] = true;
             }
             SPIPaint *paint;
@@ -976,7 +976,7 @@ SelectedStyle::update()
             }
             if (paint->set && paint->isPaintserver()) {
                 SPPaintServer *server = (i == SS_FILL)? SP_STYLE_FILL_SERVER (&query) : SP_STYLE_STROKE_SERVER (&query);
-                if ( server ) {
+                if (server) {
                     Inkscape::XML::Node *srepr = server->getRepr();
                     _paintserver_id[i] += "url(#";
                     _paintserver_id[i] += srepr->attribute("id");
@@ -1135,31 +1135,31 @@ void SelectedStyle::on_opacity_menu (Gtk::Menu *menu) {
     {
         Gtk::MenuItem *item = new Gtk::MenuItem;
         item->add(*(new Gtk::Label(_("0 (transparent)"), Gtk::ALIGN_START, Gtk::ALIGN_START)));
-        item->signal_activate().connect(sigc::mem_fun(*this, &SelectedStyle::opacity_0 ));
+        item->signal_activate().connect(sigc::mem_fun(*this, &SelectedStyle::opacity_0));
         menu->add(*item);
     }
     {
         Gtk::MenuItem *item = new Gtk::MenuItem;
         item->add(*(new Gtk::Label("25%", Gtk::ALIGN_START, Gtk::ALIGN_START)));
-        item->signal_activate().connect(sigc::mem_fun(*this, &SelectedStyle::opacity_025 ));
+        item->signal_activate().connect(sigc::mem_fun(*this, &SelectedStyle::opacity_025));
         menu->add(*item);
     }
     {
         Gtk::MenuItem *item = new Gtk::MenuItem;
         item->add(*(new Gtk::Label("50%", Gtk::ALIGN_START, Gtk::ALIGN_START)));
-        item->signal_activate().connect(sigc::mem_fun(*this, &SelectedStyle::opacity_05 ));
+        item->signal_activate().connect(sigc::mem_fun(*this, &SelectedStyle::opacity_05));
         menu->add(*item);
     }
     {
         Gtk::MenuItem *item = new Gtk::MenuItem;
         item->add(*(new Gtk::Label("75%", Gtk::ALIGN_START, Gtk::ALIGN_START)));
-        item->signal_activate().connect(sigc::mem_fun(*this, &SelectedStyle::opacity_075 ));
+        item->signal_activate().connect(sigc::mem_fun(*this, &SelectedStyle::opacity_075));
         menu->add(*item);
     }
     {
         Gtk::MenuItem *item = new Gtk::MenuItem;
         item->add(*(new Gtk::Label(_("100% (opaque)"), Gtk::ALIGN_START, Gtk::ALIGN_START)));
-        item->signal_activate().connect(sigc::mem_fun(*this, &SelectedStyle::opacity_1 ));
+        item->signal_activate().connect(sigc::mem_fun(*this, &SelectedStyle::opacity_1));
         menu->add(*item);
     }
 
@@ -1261,8 +1261,8 @@ RotateableSwatch::color_adjust(float *hsla, double by, guint32 cc, guint modifie
                 (SP_COLOR_F_TO_U(rgb[1])),
                 (SP_COLOR_F_TO_U(rgb[2])),
                 0xff
-        )
-    );
+)
+);
 
     SPCSSAttr *css = sp_repr_css_attr_new ();
 
@@ -1300,7 +1300,7 @@ RotateableSwatch::do_motion(double by, guint modifier) {
 	if (pixbuf != nullptr) {
 	    cr = gdk_cursor_new_from_pixbuf(gdk_display_get_default(), pixbuf, 16, 16);
 
-            g_object_unref(pixbuf);	    
+            g_object_unref(pixbuf);
             gdk_window_set_cursor(gtk_widget_get_window(w), cr);
 	    g_object_unref(cr);
 	    cr = nullptr;

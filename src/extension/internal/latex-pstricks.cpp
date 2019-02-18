@@ -67,7 +67,7 @@ unsigned int PrintLatex::begin (Inkscape::Extension::Print *mod, SPDocument *doc
 
     os.setf(std::ios::fixed);
     fn = mod->get_param_string("destination");
-    gchar* local_fn = g_filename_from_utf8( fn,
+    gchar* local_fn = g_filename_from_utf8(fn,
                                             -1,  &bytesRead,  &bytesWritten, &error);
     fn = local_fn;
 
@@ -126,7 +126,7 @@ unsigned int PrintLatex::begin (Inkscape::Extension::Print *mod, SPDocument *doc
         os << "\\begin{pspicture}(" << doc->getWidth().value("px") << "," << doc->getHeight().value("px") << ")\n";
     }
 
-    m_tr_stack.push( Geom::Scale(1, -1) * Geom::Translate(0, doc->getHeight().value("px")));  /// @fixme hardcoded doc2dt transform
+    m_tr_stack.push(Geom::Scale(1, -1) * Geom::Translate(0, doc->getHeight().value("px")));  /// @fixme hardcoded doc2dt transform
 
     return fprintf(_stream, "%s", os.str().c_str());
 }
@@ -290,7 +290,7 @@ PrintLatex::print_2geomcurve(SVGOStringStream &os, Geom::Curve const &c)
     using Geom::X;
     using Geom::Y;
 
-    if( is_straight_curve(c) )
+    if(is_straight_curve(c))
     {
         os << "\\lineto(" << c.finalPoint()[X] << "," << c.finalPoint()[Y] << ")\n";
     }

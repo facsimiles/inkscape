@@ -94,7 +94,7 @@ public:
      * @return The requested value.
      */
     float operator[](unsigned int const i) const {
-        assert( unsigned(i) < 4 );
+        assert(unsigned(i) < 4);
         return _c[i];
     }
 

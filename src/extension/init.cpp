@@ -137,7 +137,7 @@ update_pref(Glib::ustring const &pref_path,
             gchar const *pref_default) 
 {
     Glib::ustring pref = Inkscape::Preferences::get()->getString(pref_path);
-    if (!Inkscape::Extension::db.get( pref.data() ) /*missing*/) {
+    if (!Inkscape::Extension::db.get(pref.data()) /*missing*/) {
         Inkscape::Preferences::get()->setString(pref_path, pref_default);
     }
 }
@@ -255,7 +255,7 @@ init()
     update_pref("/dialogs/save_as/default",
                 SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE
                 // Inkscape::Extension::db.get_output_list()
-        );
+);
 }
 
 static void

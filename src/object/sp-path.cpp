@@ -97,7 +97,7 @@ void SPPath::convert_to_guides() const {
     for(const auto & pit : pv) {
         for(Geom::Path::const_iterator cit = pit.begin(); cit != pit.end_default(); ++cit) {
             // only add curves for straight line segments
-            if( is_straight_curve(*cit) )
+            if(is_straight_curve(*cit))
             {
                 pts.emplace_back(cit->initialPoint() * i2dt, cit->finalPoint() * i2dt);
             }
@@ -114,10 +114,10 @@ SPPath::~SPPath() = default;
 
 void SPPath::build(SPDocument *document, Inkscape::XML::Node *repr) {
     /* Are these calls actually necessary? */
-    this->readAttr( "marker" );
-    this->readAttr( "marker-start" );
-    this->readAttr( "marker-mid" );
-    this->readAttr( "marker-end" );
+    this->readAttr("marker");
+    this->readAttr("marker-start");
+    this->readAttr("marker-mid");
+    this->readAttr("marker-end");
 
     sp_conn_end_pair_build(this);
 
@@ -131,7 +131,7 @@ void SPPath::build(SPDocument *document, Inkscape::XML::Node *repr) {
 
     if (style->d.set &&
 
-        (d_source == SP_STYLE_SRC_STYLE_PROP || d_source == SP_STYLE_SRC_STYLE_SHEET) ) {
+        (d_source == SP_STYLE_SRC_STYLE_PROP || d_source == SP_STYLE_SRC_STYLE_SHEET)) {
 
         if (style->d.value) {
             // Chrome shipped with a different syntax for property vs attribute.
@@ -160,10 +160,10 @@ void SPPath::build(SPDocument *document, Inkscape::XML::Node *repr) {
                     // Convert from property to attribute (convert back on write)
                     getRepr()->setAttribute("d", value);
 
-                    SPCSSAttr *css = sp_repr_css_attr( getRepr(), "style");
-                    sp_repr_css_unset_property ( css, "d");
-                    sp_repr_css_set ( getRepr(), css, "style" );
-                    sp_repr_css_attr_unref ( css );
+                    SPCSSAttr *css = sp_repr_css_attr(getRepr(), "style");
+                    sp_repr_css_unset_property (css, "d");
+                    sp_repr_css_set (getRepr(), css, "style");
+                    sp_repr_css_attr_unref (css);
 
                     style->d.style_src = SP_STYLE_SRC_ATTRIBUTE;
                 } else {
@@ -175,7 +175,7 @@ void SPPath::build(SPDocument *document, Inkscape::XML::Node *repr) {
     }
 
 
-    // this->readAttr( "inkscape:original-d" ); // bug #1299948
+    // this->readAttr("inkscape:original-d"); // bug #1299948
     // Why we take the long way of doing this probably needs some explaining:
     //
     // Normally upon being built, reading the inkscape:original-d attribute
@@ -209,7 +209,7 @@ void SPPath::build(SPDocument *document, Inkscape::XML::Node *repr) {
             _curve_before_lpe = curve->ref();
         }
     }
-    this->readAttr( "d" );
+    this->readAttr("d");
 
     /* d is a required attribute */
     char const *d = this->getAttribute("d", nullptr);
@@ -221,7 +221,7 @@ void SPPath::build(SPDocument *document, Inkscape::XML::Node *repr) {
 
         // I guess that didn't work, now we have nothing useful to write ("")
         if (d == nullptr) {
-            this->setKeyValue( sp_attribute_lookup("d"), "");
+            this->setKeyValue(sp_attribute_lookup("d"), "");
         }
     }
 }
@@ -310,7 +310,7 @@ g_message("sp_path_write writes 'd' attribute");
     }
 
     if (flags & SP_OBJECT_WRITE_EXT) {
-        if ( this->_curve_before_lpe != nullptr ) {
+        if (this->_curve_before_lpe != nullptr) {
             gchar *str = sp_svg_write_path(this->_curve_before_lpe->get_pathvector());
             repr->setAttribute("inkscape:original-d", str);
             g_free(str);

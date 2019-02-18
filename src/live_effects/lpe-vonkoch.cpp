@@ -55,14 +55,14 @@ LPEVonKoch::LPEVonKoch(LivePathEffectObject *lpeobject) :
 {
     //FIXME: a path is used here instead of 2 points to work around path/point param incompatibility bug.
     registerParameter(&ref_path);
-    //registerParameter(&refA) );
-    //registerParameter(&refB) );
+    //registerParameter(&refA));
+    //registerParameter(&refB));
     registerParameter(&generator);
     registerParameter(&similar_only);
     registerParameter(&nbgenerations);
     registerParameter(&drawall);
     registerParameter(&maxComplexity);
-    //registerParameter(&draw_boxes) );
+    //registerParameter(&draw_boxes));
     apply_to_clippath_and_mask = true;
     nbgenerations.param_make_integer();
     nbgenerations.param_set_range(0, Geom::infinity());
@@ -244,8 +244,8 @@ LPEVonKoch::doBeforeEffect (SPLPEItem const* lpeitem)
     Geom::Point A,B;
     if (paths.empty()||paths.front().size()==0){
         //FIXME: a path is used as ref instead of 2 points to work around path/point param incompatibility bug.
-        //refA.param_setValue( Geom::Point(boundingbox_X.min(), boundingbox_Y.middle()) );
-        //refB.param_setValue( Geom::Point(boundingbox_X.max(), boundingbox_Y.middle()) );
+        //refA.param_setValue(Geom::Point(boundingbox_X.min(), boundingbox_Y.middle()));
+        //refB.param_setValue(Geom::Point(boundingbox_X.max(), boundingbox_Y.middle()));
         A = Point(boundingbox_X.min(), boundingbox_Y.middle());
         B = Point(boundingbox_X.max(), boundingbox_Y.middle());
     }else{
@@ -293,8 +293,8 @@ LPEVonKoch::resetDefaults(SPItem const* item)
     //refB[Geom::X] = boundingbox_X.max();
     //refB[Geom::Y] = boundingbox_Y.middle();
     //Geom::PathVector paths;
-    //Geom::Path path = Geom::Path( (Point) refA);
-    //path.appendNew<Geom::LineSegment>( (Point) refB );
+    //Geom::Path path = Geom::Path((Point) refA);
+    //path.appendNew<Geom::LineSegment>((Point) refB);
     //paths.push_back(path * Affine(1./3,0,0,1./3, refA[X]*2./3, refA[Y]*2./3 + boundingbox_Y.extent()/2));
     //paths.push_back(path * Affine(1./3,0,0,1./3, refB[X]*2./3, refB[Y]*2./3 + boundingbox_Y.extent()/2));
     //paths.push_back(path);

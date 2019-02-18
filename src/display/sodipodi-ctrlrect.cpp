@@ -103,18 +103,18 @@ void CtrlRect::render(SPCanvasBuf *buf)
     }
 
     Geom::IntRect area = *_area; // _area already includes space for shadow.
-    if ( area.intersects(buf->rect) )
+    if (area.intersects(buf->rect))
     {
 
         cairo_save(buf->ct);
         cairo_translate(buf->ct, -buf->rect.left(), -buf->rect.top());
  
         // Get canvas rotation (scale is isotropic).
-        double rotation = atan2( _affine[1], _affine[0] );
+        double rotation = atan2(_affine[1], _affine[0]);
 
         // Are we axis aligned?
         double mod_rot = fmod(rotation * M_2_PI, 1);
-        bool axis_aligned = Geom::are_near( mod_rot, 0 ) || Geom::are_near( mod_rot, 1.0 );
+        bool axis_aligned = Geom::are_near(mod_rot, 0) || Geom::are_near(mod_rot, 1.0);
 
         // Get the points we need transformed to window coordinates.
         Geom::Point rect_transformed[4];
@@ -135,35 +135,35 @@ void CtrlRect::render(SPCanvasBuf *buf)
 
             // Offset by half stroke width (_shadow_width is in window coordinates).
             // Need to handle change in handedness with flips.
-            Geom::Point shadow( _shadow_width/2.0, shadowydir * _shadow_width/2.0 );
-            shadow *= Geom::Rotate( rotation );
+            Geom::Point shadow(_shadow_width/2.0, shadowydir * _shadow_width/2.0);
+            shadow *= Geom::Rotate(rotation);
 
             if (axis_aligned) {
                 // Snap to pixel grid (add 0.5 to center on pixel).
-                cairo_move_to( buf->ct,
+                cairo_move_to(buf->ct,
                                floor(corners[0][X] + shadow[X]+0.5) + 0.5,
-                               floor(corners[0][Y] + shadow[Y]+0.5) + 0.5 );
-                cairo_line_to( buf->ct,
+                               floor(corners[0][Y] + shadow[Y]+0.5) + 0.5);
+                cairo_line_to(buf->ct,
                                floor(corners[1][X] + shadow[X]+0.5) + 0.5,
-                               floor(corners[1][Y] + shadow[Y]+0.5) + 0.5 );
-                cairo_line_to( buf->ct,
+                               floor(corners[1][Y] + shadow[Y]+0.5) + 0.5);
+                cairo_line_to(buf->ct,
                                floor(corners[2][X] + shadow[X]+0.5) + 0.5,
-                               floor(corners[2][Y] + shadow[Y]+0.5) + 0.5 );
+                               floor(corners[2][Y] + shadow[Y]+0.5) + 0.5);
             } else {
-                cairo_move_to( buf->ct,
+                cairo_move_to(buf->ct,
                                corners[0][X] + shadow[X],
-                               corners[0][Y] + shadow[Y] );
-                cairo_line_to( buf->ct,
+                               corners[0][Y] + shadow[Y]);
+                cairo_line_to(buf->ct,
                                corners[1][X] + shadow[X],
-                               corners[1][Y] + shadow[Y] );
-                cairo_line_to( buf->ct,
+                               corners[1][Y] + shadow[Y]);
+                cairo_line_to(buf->ct,
                                corners[2][X] + shadow[X],
-                               corners[2][Y] + shadow[Y] );
+                               corners[2][Y] + shadow[Y]);
             }               
 
-            ink_cairo_set_source_rgba32( buf->ct, _shadow_color );
-            cairo_set_line_width( buf->ct, _shadow_width + 1 );
-            cairo_stroke( buf->ct );
+            ink_cairo_set_source_rgba32(buf->ct, _shadow_color);
+            cairo_set_line_width(buf->ct, _shadow_width + 1);
+            cairo_stroke(buf->ct);
         }
 
 
@@ -171,25 +171,25 @@ void CtrlRect::render(SPCanvasBuf *buf)
         if (axis_aligned) {
 
             // Snap to pixel grid
-            Geom::Rect outline( _rect.min() * _affine, _rect.max() * _affine);
+            Geom::Rect outline(_rect.min() * _affine, _rect.max() * _affine);
             // Check if there is a simpler way to go from 'outline' to 'int_rect'.
-            Geom::IntRect int_rect ( (int) floor(outline.min()[X] + 0.5),
+            Geom::IntRect int_rect ((int) floor(outline.min()[X] + 0.5),
                                      (int) floor(outline.min()[Y] + 0.5),
                                      (int) floor(outline.max()[X] + 0.5),
-                                     (int) floor(outline.max()[Y] + 0.5) );
+                                     (int) floor(outline.max()[Y] + 0.5));
             cairo_rectangle (buf->ct,
                              0.5 + int_rect[X].min(),
                              0.5 + int_rect[Y].min(),
                              int_rect[X].max() - int_rect[X].min(),
-                             int_rect[Y].max() - int_rect[Y].min() );
+                             int_rect[Y].max() - int_rect[Y].min());
         } else {
 
             // Angled
-            cairo_move_to( buf->ct, rect_transformed[0][X], rect_transformed[0][Y] );
-            cairo_line_to( buf->ct, rect_transformed[1][X], rect_transformed[1][Y] );
-            cairo_line_to( buf->ct, rect_transformed[2][X], rect_transformed[2][Y] );
-            cairo_line_to( buf->ct, rect_transformed[3][X], rect_transformed[3][Y] );
-            cairo_close_path( buf->ct );
+            cairo_move_to(buf->ct, rect_transformed[0][X], rect_transformed[0][Y]);
+            cairo_line_to(buf->ct, rect_transformed[1][X], rect_transformed[1][Y]);
+            cairo_line_to(buf->ct, rect_transformed[2][X], rect_transformed[2][Y]);
+            cairo_line_to(buf->ct, rect_transformed[3][X], rect_transformed[3][Y]);
+            cairo_close_path(buf->ct);
         }
 
         // This doesn't seem to be used anywhere. If it is, then we should
@@ -222,7 +222,7 @@ void CtrlRect::render(SPCanvasBuf *buf)
             cairo_stroke_preserve(buf->ct);
         }
 
-        cairo_new_path( buf->ct ); // Clear path or get weird artifacts.
+        cairo_new_path(buf->ct); // Clear path or get weird artifacts.
         cairo_restore(buf->ct);
     }
 }
@@ -245,7 +245,7 @@ void CtrlRect::update(Geom::Affine const &affine, unsigned int flags)
     bbox *= affine;
 
     // Enlarge bbox by twice shadow size (to allow for shadow on any side with a 45deg rotation).
-    bbox.expandBy( 2.0 *_shadow_width );
+    bbox.expandBy(2.0 *_shadow_width);
 
     // Generate an integer rectangle that includes bbox.
     Geom::OptIntRect _area_old = _area;
@@ -257,7 +257,7 @@ void CtrlRect::update(Geom::Affine const &affine, unsigned int flags)
 
     if (_area) {
         Geom::IntRect area = *_area;
-        sp_canvas_update_bbox( this, area[X].min(), area[Y].min(), area[X].max(), area[Y].max() );
+        sp_canvas_update_bbox(this, area[X].min(), area[Y].min(), area[X].max(), area[Y].max());
     } else {
         std::cerr << "CtrlRect::update: No area!!" << std::endl;
     }

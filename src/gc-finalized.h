@@ -93,7 +93,7 @@ public:
                 // It's also possible that a member's constructor was called
                 // after ours (e.g. via placement new).  Don't do that.
 
-                if ( old_cleanup != _invoke_dtor ) {
+                if (old_cleanup != _invoke_dtor) {
                     Core::register_finalizer_ignore_self(base,
                                                          old_cleanup, old_data,
                                                          nullptr, nullptr);
@@ -116,14 +116,14 @@ private:
     static void *_offset(void *base, Finalized *self) {
         return reinterpret_cast<void *>(
             reinterpret_cast<char *>(self) - reinterpret_cast<char *>(base)
-        );
+);
     }
     /// reconstitute 'this' given an offset-from-base-address in a void *
     static Finalized *_unoffset(void *base, void *offset) {
         return reinterpret_cast<Finalized *>(
             reinterpret_cast<char *>(base) +
             reinterpret_cast<std::ptrdiff_t>(offset)
-        );
+);
     }
 };
 

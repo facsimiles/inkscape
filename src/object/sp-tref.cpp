@@ -64,12 +64,12 @@ SPTRef::~SPTRef() {
 void SPTRef::build(SPDocument *document, Inkscape::XML::Node *repr) {
     SPItem::build(document, repr);
 
-    this->readAttr( "xlink:href" );
-    this->readAttr( "x" );
-    this->readAttr( "y" );
-    this->readAttr( "dx" );
-    this->readAttr( "dy" );
-    this->readAttr( "rotate" );
+    this->readAttr("xlink:href");
+    this->readAttr("x");
+    this->readAttr("y");
+    this->readAttr("dx");
+    this->readAttr("dy");
+    this->readAttr("rotate");
 }
 
 void SPTRef::release() {
@@ -93,7 +93,7 @@ void SPTRef::set(SPAttributeEnum key, const gchar* value) {
     if (this->attributes.readSingleAttribute(key, value, style, &viewport)) { // x, y, dx, dy, rotate
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
     } else if (key == SP_ATTR_XLINK_HREF) { // xlink:href
-        if ( !value ) {
+        if (!value) {
             // No value
             g_free(this->href);
             this->href = nullptr;
@@ -101,7 +101,7 @@ void SPTRef::set(SPAttributeEnum key, const gchar* value) {
         } else if ((this->href && strcmp(value, this->href) != 0) || (!this->href)) {
             // Value has changed
 
-            if ( this->href ) {
+            if (this->href) {
                 g_free(this->href);
                 this->href = nullptr;
             }
@@ -111,7 +111,7 @@ void SPTRef::set(SPAttributeEnum key, const gchar* value) {
             try {
                 this->uriOriginalRef->attach(Inkscape::URI(value));
                 this->uriOriginalRef->updateObserver();
-            } catch ( Inkscape::BadURIException &e ) {
+            } catch (Inkscape::BadURIException &e) {
                 g_warning("%s", e.what());
                 this->uriOriginalRef->detach();
             }
@@ -136,7 +136,7 @@ void SPTRef::update(SPCtx *ctx, guint flags) {
     SPObject *child = this->stringChild;
     
     if (child) {
-        if ( childflags || ( child->uflags & SP_OBJECT_MODIFIED_FLAG )) {
+        if (childflags || (child->uflags & SP_OBJECT_MODIFIED_FLAG)) {
             child->updateDisplay(ctx, childflags);
         }
     }
@@ -190,7 +190,7 @@ Geom::OptRect SPTRef::bbox(Geom::Affine const &transform, SPItem::BBoxType type)
     // find out the ancestor text which holds our layout
     SPObject const *parent_text = this;
 
-    while ( parent_text && !SP_IS_TEXT(parent_text) ) {
+    while (parent_text && !SP_IS_TEXT(parent_text)) {
         parent_text = parent_text->parent;
     }
 
@@ -478,8 +478,8 @@ sp_tref_convert_to_tspan(SPObject *obj)
             //SPObject * new_string_child = document->getObjectByRepr(new_string_repr);
 
             // Merge style from the tref
-            new_tspan->style->merge( tref->style );
-            new_tspan->style->cascade( new_tspan->parent->style );
+            new_tspan->style->merge(tref->style);
+            new_tspan->style->cascade(new_tspan->parent->style);
             new_tspan->updateRepr();
 
             // Hold onto our SPObject and repr for now.

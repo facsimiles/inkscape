@@ -81,13 +81,13 @@ static Point const unconstrained_tangent(0, 0);
  *  B0, B1, B2, B3 : Bezier multipliers
  */
 
-#define B0(u) ( ( 1.0 - u )  *  ( 1.0 - u )  *  ( 1.0 - u ) )
-#define B1(u) ( 3 * u  *  ( 1.0 - u )  *  ( 1.0 - u ) )
-#define B2(u) ( 3 * u * u  *  ( 1.0 - u ) )
-#define B3(u) ( u * u * u )
+#define B0(u) ((1.0 - u)  *  (1.0 - u)  *  (1.0 - u))
+#define B1(u) (3 * u  *  (1.0 - u)  *  (1.0 - u))
+#define B2(u) (3 * u * u  *  (1.0 - u))
+#define B3(u) (u * u * u)
 
 #ifdef BEZIER_DEBUG
-# define DOUBLE_ASSERT(x) assert( ( (x) > -SP_HUGE ) && ( (x) < SP_HUGE ) )
+# define DOUBLE_ASSERT(x) assert(((x) > -SP_HUGE) && ((x) < SP_HUGE))
 # define BEZIER_ASSERT(b) do { \
            DOUBLE_ASSERT((b)[0][X]); DOUBLE_ASSERT((b)[0][Y]);  \
            DOUBLE_ASSERT((b)[1][X]); DOUBLE_ASSERT((b)[1][Y]);  \
@@ -132,7 +132,7 @@ bezier_fit_cubic_r(Point bezier[], Point const data[], int const len, double con
     Point *uniqued_data = new Point[len];
     unsigned uniqued_len = copy_without_nans_or_adjacent_duplicates(data, len, uniqued_data);
 
-    if ( uniqued_len < 2 ) {
+    if (uniqued_len < 2) {
         delete[] uniqued_data;
         return 0;
     }
@@ -155,7 +155,7 @@ copy_without_nans_or_adjacent_duplicates(Point const src[], unsigned src_len, Po
 {
     unsigned si = 0;
     for (;;) {
-        if ( si == src_len ) {
+        if (si == src_len) {
             return 0;
         }
         if (!IS_NAN(src[si][X]) &&
@@ -169,14 +169,14 @@ copy_without_nans_or_adjacent_duplicates(Point const src[], unsigned src_len, Po
     unsigned di = 0;
     for (; si < src_len; ++si) {
         Point const src_pt = Point(src[si]);
-        if ( src_pt != dest[di]
+        if (src_pt != dest[di]
              && !IS_NAN(src_pt[X])
              && !IS_NAN(src_pt[Y])) {
             dest[++di] = src_pt;
         }
     }
     unsigned dest_len = di + 1;
-    assert( dest_len <= src_len );
+    assert(dest_len <= src_len);
     return dest_len;
 }
 
@@ -201,9 +201,9 @@ bezier_fit_cubic_full(Point bezier[], int split_points[],
        !(error >= 0.0))
         return -1;
 
-    if ( len < 2 ) return 0;
+    if (len < 2) return 0;
 
-    if ( len == 2 ) {
+    if (len == 2) {
         /* We have 2 points, which can be fitted trivially. */
         bezier[0] = data[0];
         bezier[3] = data[len - 1];
@@ -213,12 +213,12 @@ bezier_fit_cubic_full(Point bezier[], int split_points[],
             bezier[1] = bezier[0];
             bezier[2] = bezier[3];
         } else {
-            bezier[1] = ( is_zero(tHat1)
-                          ? ( 2 * bezier[0] + bezier[3] ) / 3.
-                          : bezier[0] + dist * tHat1 );
-            bezier[2] = ( is_zero(tHat2)
-                          ? ( bezier[0] + 2 * bezier[3] ) / 3.
-                          : bezier[3] + dist * tHat2 );
+            bezier[1] = (is_zero(tHat1)
+                          ? (2 * bezier[0] + bezier[3]) / 3.
+                          : bezier[0] + dist * tHat1);
+            bezier[2] = (is_zero(tHat2)
+                          ? (bezier[0] + 2 * bezier[3]) / 3.
+                          : bezier[3] + dist * tHat2);
         }
         BEZIER_ASSERT(bezier);
         return 1;
@@ -230,7 +230,7 @@ bezier_fit_cubic_full(Point bezier[], int split_points[],
     {
         double *u = new double[len];
         chord_length_parameterize(data, u, len);
-        if ( u[len - 1] == 0.0 ) {
+        if (u[len - 1] == 0.0) {
             /* Zero-length path: every point in data[] is the same.
              *
              * (Clients aren't allowed to pass such data; handling the case is defensive
@@ -247,20 +247,20 @@ bezier_fit_cubic_full(Point bezier[], int split_points[],
         double const tolerance = sqrt(error + 1e-9);
         double maxErrorRatio = compute_max_error_ratio(data, u, len, bezier, tolerance, &splitPoint);
 
-        if ( fabs(maxErrorRatio) <= 1.0 ) {
+        if (fabs(maxErrorRatio) <= 1.0) {
             BEZIER_ASSERT(bezier);
             delete[] u;
             return 1;
         }
 
         /* If error not too large, then try some reparameterization and iteration. */
-        if ( 0.0 <= maxErrorRatio && maxErrorRatio <= 3.0 ) {
+        if (0.0 <= maxErrorRatio && maxErrorRatio <= 3.0) {
             int const maxIterations = 4;   /* std::max times to try iterating */
             for (int i = 0; i < maxIterations; i++) {
                 generate_bezier(bezier, data, u, len, tHat1, tHat2, error);
                 reparameterize(data, len, u, bezier);
                 maxErrorRatio = compute_max_error_ratio(data, u, len, bezier, tolerance, &splitPoint);
-                if ( fabs(maxErrorRatio) <= 1.0 ) {
+                if (fabs(maxErrorRatio) <= 1.0) {
                     BEZIER_ASSERT(bezier);
                     delete[] u;
                     return 1;
@@ -292,7 +292,7 @@ bezier_fit_cubic_full(Point bezier[], int split_points[],
         }
     }
 
-    if ( 1 < max_beziers ) {
+    if (1 < max_beziers) {
         /*
          *  Fitting failed -- split at max error point and fit recursively
          */
@@ -310,24 +310,24 @@ bezier_fit_cubic_full(Point bezier[], int split_points[],
         }
         int const nsegs1 = bezier_fit_cubic_full(bezier, split_points, data, splitPoint + 1,
                                                      tHat1, recTHat2, error, rec_max_beziers1);
-        if ( nsegs1 < 0 ) {
+        if (nsegs1 < 0) {
 #ifdef BEZIER_DEBUG
             g_print("fit_cubic[1]: recursive call failed\n");
 #endif
             return -1;
         }
-        assert( nsegs1 != 0 );
+        assert(nsegs1 != 0);
         if (split_points != NULL) {
             split_points[nsegs1 - 1] = splitPoint;
         }
         unsigned const rec_max_beziers2 = max_beziers - nsegs1;
         int const nsegs2 = bezier_fit_cubic_full(bezier + nsegs1*4,
-                                                     ( split_points == NULL
+                                                     (split_points == NULL
                                                        ? NULL
-                                                       : split_points + nsegs1 ),
+                                                       : split_points + nsegs1),
                                                      data + splitPoint, len - splitPoint,
                                                      recTHat1, tHat2, error, rec_max_beziers2);
-        if ( nsegs2 < 0 ) {
+        if (nsegs2 < 0) {
 #ifdef BEZIER_DEBUG
             g_print("fit_cubic[2]: recursive call failed\n");
 #endif
@@ -364,12 +364,12 @@ generate_bezier(Point bezier[],
 {
     bool const est1 = is_zero(tHat1);
     bool const est2 = is_zero(tHat2);
-    Point est_tHat1( est1
+    Point est_tHat1(est1
                          ? darray_left_tangent(data, len, tolerance_sq)
-                         : tHat1 );
-    Point est_tHat2( est2
+                         : tHat1);
+    Point est_tHat2(est2
                          ? darray_right_tangent(data, len, tolerance_sq)
-                         : tHat2 );
+                         : tHat2);
     estimate_lengths(bezier, data, u, len, est_tHat1, est_tHat2);
     /* We find that darray_right_tangent tends to produce better results
        for our current freehand tool than full estimation. */
@@ -423,9 +423,9 @@ estimate_lengths(Point bezier[],
         /* Additional offset to the data point from the predicted point if we were to set bezier[1]
            to bezier[0] and bezier[2] to bezier[3]. */
         Point const shortfall
-            = ( data[i]
-                - ( ( b0 + b1 ) * bezier[0] )
-                - ( ( b2 + b3 ) * bezier[3] ) );
+            = (data[i]
+                - ((b0 + b1) * bezier[0])
+                - ((b2 + b3) * bezier[3]));
         X[0] += dot(a1, shortfall);
         X[1] += dot(a2, shortfall);
     }
@@ -436,7 +436,7 @@ estimate_lengths(Point bezier[],
 
     /* Compute the determinants of C and X. */
     double const det_C0_C1 = C[0][0] * C[1][1] - C[1][0] * C[0][1];
-    if ( det_C0_C1 != 0 ) {
+    if (det_C0_C1 != 0) {
         /* Apparently Kramer's rule. */
         double const det_C0_X  = C[0][0] * X[1]    - C[0][1] * X[0];
         double const det_X_C1  = X[0]    * C[1][1] - X[1]    * C[0][1];
@@ -470,8 +470,8 @@ estimate_lengths(Point bezier[],
        NewtonRaphsonRootFind() call.) */
     /// \todo Check whether this special-casing is necessary now that 
     /// NewtonRaphsonRootFind handles non-positive denominator.
-    if ( alpha_l < 1.0e-6 ||
-         alpha_r < 1.0e-6   )
+    if (alpha_l < 1.0e-6 ||
+         alpha_r < 1.0e-6)
     {
         alpha_l = alpha_r = distance(data[0], data[len-1]) / 3.0;
     }
@@ -520,7 +520,7 @@ estimate_bi(Point bezier[4], unsigned const ei,
             bezier[ei][d] = num[d] / den;
         }
     } else {
-        bezier[ei] = ( oi * bezier[0] + ei * bezier[3] ) / 3.;
+        bezier[ei] = (oi * bezier[0] + ei * bezier[3]) / 3.;
     }
 }
 
@@ -540,13 +540,13 @@ reparameterize(Point const d[],
                double u[],
                Point const bezCurve[])
 {
-    assert( 2 <= len );
+    assert(2 <= len);
 
     unsigned const last = len - 1;
-    assert( bezCurve[0] == d[0] );
-    assert( bezCurve[3] == d[last] );
-    assert( u[0] == 0.0 );
-    assert( u[last] == 1.0 );
+    assert(bezCurve[0] == d[0]);
+    assert(bezCurve[3] == d[last]);
+    assert(u[0] == 0.0);
+    assert(u[last] == 1.0);
     /* Otherwise, consider including 0 and last in the below loop. */
 
     for (unsigned i = 1; i < last; i++) {
@@ -566,19 +566,19 @@ reparameterize(Point const d[],
 static double
 NewtonRaphsonRootFind(Point const Q[], Point const &P, double const u)
 {
-    assert( 0.0 <= u );
-    assert( u <= 1.0 );
+    assert(0.0 <= u);
+    assert(u <= 1.0);
 
     /* Generate control vertices for Q'. */
     Point Q1[3];
     for (unsigned i = 0; i < 3; i++) {
-        Q1[i] = 3.0 * ( Q[i+1] - Q[i] );
+        Q1[i] = 3.0 * (Q[i+1] - Q[i]);
     }
 
     /* Generate control vertices for Q''. */
     Point Q2[2];
     for (unsigned i = 0; i < 2; i++) {
-        Q2[i] = 2.0 * ( Q1[i+1] - Q1[i] );
+        Q2[i] = 2.0 * (Q1[i+1] - Q1[i]);
     }
 
     /* Compute Q(u), Q'(u) and Q''(u). */
@@ -595,16 +595,16 @@ NewtonRaphsonRootFind(Point const Q[], Point const &P, double const u)
     double denominator = dot(Q1_u, Q1_u) + dot(diff, Q2_u);
 
     double improved_u;
-    if ( denominator > 0. ) {
+    if (denominator > 0.) {
         /* One iteration of Newton-Raphson:
            improved_u = u - f(u)/f'(u) */
-        improved_u = u - ( numerator / denominator );
+        improved_u = u - (numerator / denominator);
     } else {
         /* Using Newton-Raphson would move in the wrong direction (towards a local maximum rather
            than local minimum), so we move an arbitrary amount in the right direction. */
-        if ( numerator > 0. ) {
+        if (numerator > 0.) {
             improved_u = u * .98 - .01;
-        } else if ( numerator < 0. ) {
+        } else if (numerator < 0.) {
             /* Deliberately asymmetrical, to reduce the chance of cycling. */
             improved_u = .031 + u * .98;
         } else {
@@ -614,9 +614,9 @@ NewtonRaphsonRootFind(Point const Q[], Point const &P, double const u)
 
     if (!IS_FINITE(improved_u)) {
         improved_u = u;
-    } else if ( improved_u < 0.0 ) {
+    } else if (improved_u < 0.0) {
         improved_u = 0.0;
-    } else if ( improved_u > 1.0 ) {
+    } else if (improved_u > 1.0) {
         improved_u = 1.0;
     }
 
@@ -624,14 +624,14 @@ NewtonRaphsonRootFind(Point const Q[], Point const &P, double const u)
     {
         double const diff_lensq = lensq(diff);
         for (double proportion = .125; ; proportion += .125) {
-            if ( lensq( bezier_pt(3, Q, improved_u) - P ) > diff_lensq ) {
-                if ( proportion > 1.0 ) {
+            if (lensq(bezier_pt(3, Q, improved_u) - P) > diff_lensq) {
+                if (proportion > 1.0) {
                     //g_warning("found proportion %g", proportion);
                     improved_u = u;
                     break;
                 }
-                improved_u = ( ( 1 - proportion ) * improved_u  +
-                               proportion         * u            );
+                improved_u = ((1 - proportion) * improved_u  +
+                               proportion         * u);
             } else {
                 break;
             }
@@ -670,7 +670,7 @@ bezier_pt(unsigned const degree, Point const V[], double const t)
                                      {1, 1, 0, 0},
                                      {1, 2, 1, 0},
                                      {1, 3, 3, 1}};
-    assert( degree < 4);
+    assert(degree < 4);
     double const s = 1.0 - t;
 
     /* Calculate powers of t and s. */
@@ -705,9 +705,9 @@ bezier_pt(unsigned const degree, Point const V[], double const t)
 Point
 darray_left_tangent(Point const d[], unsigned const len)
 {
-    assert( len >= 2 );
-    assert( d[0] != d[1] );
-    return unit_vector( d[1] - d[0] );
+    assert(len >= 2);
+    assert(d[0] != d[1]);
+    return unit_vector(d[1] - d[0]);
 }
 
 /** 
@@ -723,11 +723,11 @@ darray_left_tangent(Point const d[], unsigned const len)
 static Point
 darray_right_tangent(Point const d[], unsigned const len)
 {
-    assert( 2 <= len );
+    assert(2 <= len);
     unsigned const last = len - 1;
     unsigned const prev = last - 1;
-    assert( d[last] != d[prev] );
-    return unit_vector( d[prev] - d[last] );
+    assert(d[last] != d[prev]);
+    return unit_vector(d[prev] - d[last]);
 }
 
 /** 
@@ -744,20 +744,20 @@ darray_right_tangent(Point const d[], unsigned const len)
 Point
 darray_left_tangent(Point const d[], unsigned const len, double const tolerance_sq)
 {
-    assert( 2 <= len );
-    assert( 0 <= tolerance_sq );
+    assert(2 <= len);
+    assert(0 <= tolerance_sq);
     for (unsigned i = 1;;) {
         Point const pi(d[i]);
         Point const t(pi - d[0]);
         double const distsq = dot(t, t);
-        if ( tolerance_sq < distsq ) {
+        if (tolerance_sq < distsq) {
             return unit_vector(t);
         }
         ++i;
         if (i == len) {
-            return ( distsq == 0
+            return (distsq == 0
                      ? darray_left_tangent(d, len)
-                     : unit_vector(t) );
+                     : unit_vector(t));
         }
     }
 }
@@ -775,20 +775,20 @@ darray_left_tangent(Point const d[], unsigned const len, double const tolerance_
 Point
 darray_right_tangent(Point const d[], unsigned const len, double const tolerance_sq)
 {
-    assert( 2 <= len );
-    assert( 0 <= tolerance_sq );
+    assert(2 <= len);
+    assert(0 <= tolerance_sq);
     unsigned const last = len - 1;
     for (unsigned i = last - 1;; i--) {
         Point const pi(d[i]);
         Point const t(pi - d[last]);
         double const distsq = dot(t, t);
-        if ( tolerance_sq < distsq ) {
+        if (tolerance_sq < distsq) {
             return unit_vector(t);
         }
         if (i == 0) {
-            return ( distsq == 0
+            return (distsq == 0
                      ? darray_right_tangent(d, len)
-                     : unit_vector(t) );
+                     : unit_vector(t));
         }
     }
 }
@@ -808,11 +808,11 @@ darray_center_tangent(Point const d[],
                          unsigned const center,
                          unsigned const len)
 {
-    assert( center != 0 );
-    assert( center < len - 1 );
+    assert(center != 0);
+    assert(center < len - 1);
 
     Point ret;
-    if ( d[center + 1] == d[center - 1] ) {
+    if (d[center + 1] == d[center - 1]) {
         /* Rotate 90 degrees in an arbitrary direction. */
         Point const diff = d[center] - d[center - 1];
         ret = rot90(diff);
@@ -832,7 +832,7 @@ darray_center_tangent(Point const d[],
 static void
 chord_length_parameterize(Point const d[], double u[], unsigned const len)
 {
-    if(!( 2 <= len ))
+    if(!(2 <= len))
         return;
 
     /* First let u[i] equal the distance travelled along the path from d[0] to d[i]. */
@@ -844,7 +844,7 @@ chord_length_parameterize(Point const d[], double u[], unsigned const len)
 
     /* Then scale to [0.0 .. 1.0]. */
     double tot_len = u[len - 1];
-    if(!( tot_len != 0 ))
+    if(!(tot_len != 0))
         return;
     if (IS_FINITE(tot_len)) {
         for (unsigned i = 1; i < len; ++i) {
@@ -853,7 +853,7 @@ chord_length_parameterize(Point const d[], double u[], unsigned const len)
     } else {
         /* We could do better, but this probably never happens anyway. */
         for (unsigned i = 1; i < len; ++i) {
-            u[i] = i / (double) ( len - 1 );
+            u[i] = i / (double) (len - 1);
         }
     }
 
@@ -873,9 +873,9 @@ chord_length_parameterize(Point const d[], double u[], unsigned const len)
     }
 
 #ifdef BEZIER_DEBUG
-    assert( u[0] == 0.0 && u[len - 1] == 1.0 );
+    assert(u[0] == 0.0 && u[len - 1] == 1.0);
     for (unsigned i = 1; i < len; i++) {
-        assert( u[i] >= u[i-1] );
+        assert(u[i] >= u[i-1]);
     }
 #endif
 }
@@ -899,12 +899,12 @@ compute_max_error_ratio(Point const d[], double const u[], unsigned const len,
                         Point const bezCurve[], double const tolerance,
                         unsigned *const splitPoint)
 {
-    assert( 2 <= len );
+    assert(2 <= len);
     unsigned const last = len - 1;
-    assert( bezCurve[0] == d[0] );
-    assert( bezCurve[3] == d[last] );
-    assert( u[0] == 0.0 );
-    assert( u[last] == 1.0 );
+    assert(bezCurve[0] == d[0]);
+    assert(bezCurve[3] == d[last]);
+    assert(u[0] == 0.0);
+    assert(u[last] == 1.0);
     /* I.e. assert that the error for the first & last points is zero.
      * Otherwise we should include those points in the below loop.
      * The assertion is also necessary to ensure 0 < splitPoint < last.
@@ -916,8 +916,8 @@ compute_max_error_ratio(Point const d[], double const u[], unsigned const len,
     Point prev = bezCurve[0];
     for (unsigned i = 1; i <= last; i++) {
         Point const curr = bezier_pt(3, bezCurve, u[i]);
-        double const distsq = lensq( curr - d[i] );
-        if ( distsq > maxDistsq ) {
+        double const distsq = lensq(curr - d[i]);
+        if (distsq > maxDistsq) {
             maxDistsq = distsq;
             *splitPoint = i;
         }
@@ -938,9 +938,9 @@ compute_max_error_ratio(Point const d[], double const u[], unsigned const len,
         ret = -max_hook_ratio;
         *splitPoint = snap_end - 1;
     }
-    assert( ret == 0.0
-              || ( ( *splitPoint < last )
-                   && ( *splitPoint != 0 || ret < 0. ) ) );
+    assert(ret == 0.0
+              || ((*splitPoint < last)
+                   && (*splitPoint != 0 || ret < 0.)));
     return ret;
 }
 

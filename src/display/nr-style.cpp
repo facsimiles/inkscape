@@ -122,15 +122,15 @@ void NRStyle::set(SPStyle *style, SPStyle *context_style)
 {
     // Handle 'context-fill' and 'context-stroke': Work in progress
     const SPIPaint *style_fill = &(style->fill);
-    if( style_fill->paintOrigin == SP_CSS_PAINT_ORIGIN_CONTEXT_FILL ) {
-        if( context_style != nullptr ) {
+    if(style_fill->paintOrigin == SP_CSS_PAINT_ORIGIN_CONTEXT_FILL) {
+        if(context_style != nullptr) {
             style_fill = &(context_style->fill);
         } else {
             // A marker in the defs section will result in ending up here.
             //std::cerr << "NRStyle::set: 'context-fill': 'context_style' is NULL" << std::endl;
         }
-    } else if ( style_fill->paintOrigin == SP_CSS_PAINT_ORIGIN_CONTEXT_STROKE ) {
-        if( context_style != nullptr ) {
+    } else if (style_fill->paintOrigin == SP_CSS_PAINT_ORIGIN_CONTEXT_STROKE) {
+        if(context_style != nullptr) {
             style_fill = &(context_style->stroke);
         } else {
             //std::cerr << "NRStyle::set: 'context-stroke': 'context_style' is NULL" << std::endl;
@@ -152,14 +152,14 @@ void NRStyle::set(SPStyle *style, SPStyle *context_style)
     }
 
     const SPIPaint *style_stroke = &(style->stroke);
-    if( style_stroke->paintOrigin == SP_CSS_PAINT_ORIGIN_CONTEXT_FILL ) {
-        if( context_style != nullptr ) {
+    if(style_stroke->paintOrigin == SP_CSS_PAINT_ORIGIN_CONTEXT_FILL) {
+        if(context_style != nullptr) {
             style_stroke = &(context_style->fill);
         } else {
             //std::cerr << "NRStyle::set: 'context-fill': 'context_style' is NULL" << std::endl;
         }
-    } else if ( style_stroke->paintOrigin == SP_CSS_PAINT_ORIGIN_CONTEXT_STROKE ) {
-        if( context_style != nullptr ) {
+    } else if (style_stroke->paintOrigin == SP_CSS_PAINT_ORIGIN_CONTEXT_STROKE) {
+        if(context_style != nullptr) {
             style_stroke = &(context_style->stroke);
         } else {
             //std::cerr << "NRStyle::set: 'context-stroke': 'context_style' is NULL" << std::endl;
@@ -214,7 +214,7 @@ void NRStyle::set(SPStyle *style, SPStyle *context_style)
     }
 
 
-    for( unsigned i = 0; i < PAINT_ORDER_LAYERS; ++i) {
+    for(unsigned i = 0; i < PAINT_ORDER_LAYERS; ++i) {
         switch (style->paint_order.layer[i]) {
             case SP_CSS_PAINT_ORDER_NORMAL:
                 paint_order_layer[i]=PAINT_ORDER_NORMAL;
@@ -232,19 +232,19 @@ void NRStyle::set(SPStyle *style, SPStyle *context_style)
     }
 
     text_decoration_line = TEXT_DECORATION_LINE_CLEAR;
-    if(style->text_decoration_line.inherit     ){ text_decoration_line |= TEXT_DECORATION_LINE_INHERIT;                                }
-    if(style->text_decoration_line.underline   ){ text_decoration_line |= TEXT_DECORATION_LINE_UNDERLINE   + TEXT_DECORATION_LINE_SET; }
-    if(style->text_decoration_line.overline    ){ text_decoration_line |= TEXT_DECORATION_LINE_OVERLINE    + TEXT_DECORATION_LINE_SET; }
+    if(style->text_decoration_line.inherit){ text_decoration_line |= TEXT_DECORATION_LINE_INHERIT;                                }
+    if(style->text_decoration_line.underline){ text_decoration_line |= TEXT_DECORATION_LINE_UNDERLINE   + TEXT_DECORATION_LINE_SET; }
+    if(style->text_decoration_line.overline){ text_decoration_line |= TEXT_DECORATION_LINE_OVERLINE    + TEXT_DECORATION_LINE_SET; }
     if(style->text_decoration_line.line_through){ text_decoration_line |= TEXT_DECORATION_LINE_LINETHROUGH + TEXT_DECORATION_LINE_SET; }
-    if(style->text_decoration_line.blink       ){ text_decoration_line |= TEXT_DECORATION_LINE_BLINK       + TEXT_DECORATION_LINE_SET; }
+    if(style->text_decoration_line.blink){ text_decoration_line |= TEXT_DECORATION_LINE_BLINK       + TEXT_DECORATION_LINE_SET; }
 
     text_decoration_style = TEXT_DECORATION_STYLE_CLEAR;
-    if(style->text_decoration_style.inherit      ){ text_decoration_style |= TEXT_DECORATION_STYLE_INHERIT;                              }
-    if(style->text_decoration_style.solid        ){ text_decoration_style |= TEXT_DECORATION_STYLE_SOLID    + TEXT_DECORATION_STYLE_SET; }
-    if(style->text_decoration_style.isdouble     ){ text_decoration_style |= TEXT_DECORATION_STYLE_ISDOUBLE + TEXT_DECORATION_STYLE_SET; }
-    if(style->text_decoration_style.dotted       ){ text_decoration_style |= TEXT_DECORATION_STYLE_DOTTED   + TEXT_DECORATION_STYLE_SET; }
-    if(style->text_decoration_style.dashed       ){ text_decoration_style |= TEXT_DECORATION_STYLE_DASHED   + TEXT_DECORATION_STYLE_SET; }
-    if(style->text_decoration_style.wavy         ){ text_decoration_style |= TEXT_DECORATION_STYLE_WAVY     + TEXT_DECORATION_STYLE_SET; }
+    if(style->text_decoration_style.inherit){ text_decoration_style |= TEXT_DECORATION_STYLE_INHERIT;                              }
+    if(style->text_decoration_style.solid){ text_decoration_style |= TEXT_DECORATION_STYLE_SOLID    + TEXT_DECORATION_STYLE_SET; }
+    if(style->text_decoration_style.isdouble){ text_decoration_style |= TEXT_DECORATION_STYLE_ISDOUBLE + TEXT_DECORATION_STYLE_SET; }
+    if(style->text_decoration_style.dotted){ text_decoration_style |= TEXT_DECORATION_STYLE_DOTTED   + TEXT_DECORATION_STYLE_SET; }
+    if(style->text_decoration_style.dashed){ text_decoration_style |= TEXT_DECORATION_STYLE_DASHED   + TEXT_DECORATION_STYLE_SET; }
+    if(style->text_decoration_style.wavy){ text_decoration_style |= TEXT_DECORATION_STYLE_WAVY     + TEXT_DECORATION_STYLE_SET; }
  
     /* FIXME
        The meaning of text-decoration-color in CSS3 for SVG is ambiguous (2014-05-06).  Set
@@ -264,7 +264,7 @@ void NRStyle::set(SPStyle *style, SPStyle *context_style)
     // 'text-decoration' on an ancestor fixes the fill and stroke of the
     // decoration to the fill and stroke values of that ancestor.
     SPStyle* style_td = style;
-    if ( style->text_decoration.style_td ) style_td = style->text_decoration.style_td;
+    if (style->text_decoration.style_td) style_td = style->text_decoration.style_td;
     text_decoration_stroke.opacity = SP_SCALE24_TO_FLOAT(style_td->stroke_opacity.value);
     text_decoration_stroke_width = style_td->stroke_width.computed;
 

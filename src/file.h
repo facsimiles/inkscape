@@ -70,7 +70,7 @@ bool sp_file_open(
     Inkscape::Extension::Extension *key,
     bool add_to_recent = true,
     bool replace_empty = true
-    );
+);
 
 /**
  * Displays a file open dialog. Calls sp_file_open on
@@ -159,7 +159,7 @@ SPObject* file_import(SPDocument *in_doc, const Glib::ustring &uri,
 /**
  * Export the current document to OCAL
  */
-//void sp_file_export_to_ocal (Gtk::Window &parentWindow );
+//void sp_file_export_to_ocal (Gtk::Window &parentWindow);
 
 
 /**
@@ -180,7 +180,7 @@ void on_import_from_ocal_response(Glib::ustring filename);
 /**
  * Import a document from OCAL
  */
-void sp_file_import_from_ocal (Gtk::Window &parentWindow );
+void sp_file_import_from_ocal (Gtk::Window &parentWindow);
 
 
 /*######################

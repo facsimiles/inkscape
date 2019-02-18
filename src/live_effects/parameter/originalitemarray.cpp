@@ -51,11 +51,11 @@ public:
     Gtk::TreeModelColumn<bool> _colActive;
 };
 
-OriginalItemArrayParam::OriginalItemArrayParam( const Glib::ustring& label,
+OriginalItemArrayParam::OriginalItemArrayParam(const Glib::ustring& label,
         const Glib::ustring& tip,
         const Glib::ustring& key,
         Inkscape::UI::Widget::Registry* wr,
-        Effect* effect )
+        Effect* effect)
 : Parameter(label, tip, key, wr, effect), 
         _vector(),
         _tree(),
@@ -82,14 +82,14 @@ OriginalItemArrayParam::OriginalItemArrayParam( const Glib::ustring& label,
     _name_column = _tree.get_column(nameColNum);
     _name_column->add_attribute(_text_renderer->property_text(), _model->_colLabel);
 
-    _tree.set_expander_column( *_tree.get_column(nameColNum) );
+    _tree.set_expander_column(*_tree.get_column(nameColNum));
     _tree.set_search_column(_model->_colLabel);
     
     //quick little hack -- newer versions of gtk gave the item zero space allotment
     _scroller.set_size_request(-1, 120);
 
     _scroller.add(_tree);
-    _scroller.set_policy( Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC );
+    _scroller.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
     //_scroller.set_shadow_type(Gtk::SHADOW_IN);
     
     oncanvas_editable = true;
@@ -346,7 +346,7 @@ bool OriginalItemArrayParam::_updateLink(const Gtk::TreeIter& iter, ItemAndActiv
     Gtk::TreeModel::Row row = *iter;
     if (row[_model->_colObject] == pd) {
         SPObject *obj = pd->ref.getObject();
-        row[_model->_colLabel] = obj && obj->getId() ? ( obj->label() ? obj->label() : obj->getId() ) : pd->href;
+        row[_model->_colLabel] = obj && obj->getId() ? (obj->label() ? obj->label() : obj->getId()) : pd->href;
         return true;
     }
     return false;
@@ -407,7 +407,7 @@ bool OriginalItemArrayParam::param_readSVGValue(const gchar* strvalue)
                 SPObject *obj = w->ref.getObject();
 
                 row[_model->_colObject] = w;
-                row[_model->_colLabel] = obj ? ( obj->label() ? obj->label() : obj->getId() ) : w->href;
+                row[_model->_colLabel] = obj ? (obj->label() ? obj->label() : obj->getId()) : w->href;
                 row[_model->_colActive] = w->actived;
                 g_strfreev (substrarray);
             }

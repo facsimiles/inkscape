@@ -71,7 +71,7 @@ static float cbrt_table[ROOT_TAB_SIZE +1];
 
 double CieLab::cbrt(double x)
 {
-    double y = cbrt_table[int(x*ROOT_TAB_SIZE )]; // assuming x \in [0, 1]
+    double y = cbrt_table[int(x*ROOT_TAB_SIZE)]; // assuming x \in [0, 1]
     y = (2.0 * y + x/(y*y))/3.0;
     y = (2.0 * y + x/(y*y))/3.0; // polish twice
     return y;
@@ -81,7 +81,7 @@ static float qn_table[ROOT_TAB_SIZE +1];
 
 double CieLab::qnrt(double x)
 {
-    double y = qn_table[int(x*ROOT_TAB_SIZE )]; // assuming x \in [0, 1]
+    double y = qn_table[int(x*ROOT_TAB_SIZE)]; // assuming x \in [0, 1]
     double Y = y*y;
     y = (4.0*y + x/(Y*Y))/5.0;
     Y = y*y;
@@ -123,7 +123,7 @@ CieLab::CieLab(unsigned long rgb)
 
     int ir  = (rgb>>16) & 0xff;
     int ig  = (rgb>> 8) & 0xff;
-    int ib  = (rgb    ) & 0xff;
+    int ib  = (rgb) & 0xff;
 
     float fr = ((float)ir) / 255.0;
     float fg = ((float)ig) / 255.0;
@@ -439,7 +439,7 @@ void SioxImage::setPixel(unsigned int x, unsigned int y,
     unsigned int pixval = ((a << 24) & 0xff000000) |
                           ((r << 16) & 0x00ff0000) |
                           ((g <<  8) & 0x0000ff00) |
-                          ((b      ) & 0x000000ff);
+                          ((b) & 0x000000ff);
     pixdata[offset] = pixval;
 }
 
@@ -587,7 +587,7 @@ bool SioxImage::writePPM(const std::string &fileName)
             //unsigned int alpha = (rgb>>24) & 0xff;
             unsigned int r = ((rgb>>16) & 0xff);
             unsigned int g = ((rgb>> 8) & 0xff);
-            unsigned int b = ((rgb    ) & 0xff);
+            unsigned int b = ((rgb) & 0xff);
             fputc((unsigned char) r, f);
             fputc((unsigned char) g, f);
             fputc((unsigned char) b, f);
@@ -668,8 +668,8 @@ GdkPixbuf *SioxImage::getGdkPixbuf()
             unsigned int rgb = getPixel(x, y);
             p[0] = (rgb >> 16) & 0xff;//r
             p[1] = (rgb >>  8) & 0xff;//g
-            p[2] = (rgb      ) & 0xff;//b
-            if ( n_channels > 3 )
+            p[2] = (rgb) & 0xff;//b
+            if (n_channels > 3)
                 {
                 p[3] = (rgb >> 24) & 0xff;//a
                 }
@@ -1157,14 +1157,14 @@ void Siox::colorSignatureStage1(CieLab *points,
         //# partition points according to the dimension
         while (true)
             {
-            while ( true )
+            while (true)
                 {
                 point = points[left];
                 if (point(currentDim) > pivotPoint)
                     break;
                 left++;
                 }
-            while ( true )
+            while (true)
                 {
                 point = points[right];
                 if (point(currentDim) <= pivotPoint)
@@ -1246,14 +1246,14 @@ void Siox::colorSignatureStage2(CieLab         *points,
         //# partition points according to the dimension
         while (true)
             {
-            while ( true )
+            while (true)
                 {
                 point = points[left];
                 if (point(currentDim) > pivotPoint)
                     break;
                 left++;
                 }
-            while ( true )
+            while (true)
                 {
                 point = points[right];
                 if (point(currentDim) <= pivotPoint)

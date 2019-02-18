@@ -3,7 +3,7 @@
  * @brief Arranges Objects into a Grid
  */
 /* Authors:
- *   Bob Jamison ( based off trace dialog)
+ *   Bob Jamison (based off trace dialog)
  *   John Cliff
  *   Other dudes from The Inkscape Organization
  *   Abhishek Sharma

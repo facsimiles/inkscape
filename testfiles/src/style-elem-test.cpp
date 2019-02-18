@@ -64,7 +64,7 @@ TEST_F(ObjectTest, StyleElems) {
         EXPECT_EQ(style->fill.get_value(), Glib::ustring("#ff0000"));
     }
 
-    SPStyleElem *two = dynamic_cast<SPStyleElem *>(doc->getObjectById("style02"));
+    SPStyleElem *two = dynamic_cast<SPStyleElem*>(doc->getObjectById("style02"));
     ASSERT_TRUE(one != nullptr);
 
     for(auto style: two->styles) {

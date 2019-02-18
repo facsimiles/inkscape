@@ -269,7 +269,7 @@ unsigned int PrintEmf::begin(Inkscape::Extension::Print *mod, SPDocument *doc)
         g_error("Fatal programming error in PrintEmf::begin at U_EMRSETPOLYFILLMODE_set");
     }
 
-    // Text alignment:  (only changed if RTL text is encountered )
+    // Text alignment:  (only changed if RTL text is encountered)
     //   - (x,y) coordinates received by this filter are those of the point where the text
     //     actually starts, and already takes into account the text object's alignment;
     //   - for this reason, the EMF text alignment must always be TA_BASELINE|TA_LEFT.
@@ -818,15 +818,15 @@ Geom::Path PrintEmf::pathv_to_simple_polygon(Geom::PathVector const &pathv, int 
         P1_lead = cit->finalPoint();
         if(Geom::are_near(P1_lead, P1, 1e-5))continue;  // duplicate points at the same coordinate
         v1 = unit_vector(P1      - P1_trail);
-        v2 = unit_vector(P1_lead - P1      );
+        v2 = unit_vector(P1_lead - P1);
         if(Geom::are_near(dot(v1,v2), 1.0, 1e-5)){ // P1 is within a straight line
             P1 = P1_lead;
             continue;  
         }
         // P1 is the center point of a turn of some angle
         if(!*vertices){
-            output.start( P1 );
-            output.close( pit->closed() );
+            output.start(P1);
+            output.close(pit->closed());
         }
         if(!Geom::are_near(P1, P1_trail, 1e-5)){ // possible for P1 to start on the end point
            Geom::LineSegment ls(P1_trail, P1);
@@ -908,7 +908,7 @@ int PrintEmf::vector_rect_alignment(double angle, Geom::Point vtest){
     Geom::Point v1 = Geom::unit_vector(vtest);                 // unit vector to test alignment
     Geom::Point v2 = Geom::Point(1,0) * Geom::Rotate(-angle);  // unit horizontal side (sign change because Y increases DOWN)
     Geom::Point v3 = Geom::Point(0,1) * Geom::Rotate(-angle);  // unit horizontal side (sign change because Y increases DOWN)
-    if(     Geom::are_near(dot(v1,v2), 1.0, 1e-5)){ stat = 1; }
+    if(Geom::are_near(dot(v1,v2), 1.0, 1e-5)){ stat = 1; }
     else if(Geom::are_near(dot(v1,v2),-1.0, 1e-5)){ stat = 2; }
     else if(Geom::are_near(dot(v1,v3), 1.0, 1e-5)){ stat = 3; }
     else if(Geom::are_near(dot(v1,v3),-1.0, 1e-5)){ stat = 4; }
@@ -958,8 +958,8 @@ Geom::Point PrintEmf::get_pathrect_corner(Geom::Path pathRect, double angle, int
     for(Geom::Path::iterator cit = pathRect.begin(); ; ++cit) {
         P1 = cit->initialPoint();
 
-        if (   ( LR == (dot(P1 - center,v1) > 0 ? 0 : 1) )
-            && ( UL == (dot(P1 - center,v2) > 0 ? 1 : 0) ) ) break;
+        if ((LR == (dot(P1 - center,v1) > 0 ? 0 : 1))
+            && (UL == (dot(P1 - center,v2) > 0 ? 1 : 0))) break;
         if(cit == pathRect.end_open())break;
     }
     return(P1);
@@ -1282,7 +1282,7 @@ unsigned int PrintEmf::fill(
                 for(;istop<nstops;istop++){
                      doff_range = tg->vector.stops[istop].offset;  // next or last stop
                      if(rectDir == 1 || rectDir == 2){ 
-                         outUL = Geom::Point(doff_base *wRect, 0    ); 
+                         outUL = Geom::Point(doff_base *wRect, 0); 
                          outLR = Geom::Point(doff_range*wRect, hRect); 
                          gMode = U_GRADIENT_FILL_RECT_H;
                      }
@@ -1312,7 +1312,7 @@ unsigned int PrintEmf::fill(
                      c1 = c2;  // for next stop
                      ug4.UpperLeft = 0;
                      ug4.LowerRight= 1;
-                     rec = U_EMRGRADIENTFILL_set(rcb, 2, 1, gMode, ut, (uint32_t *) &ug4 );
+                     rec = U_EMRGRADIENTFILL_set(rcb, 2, 1, gMode, ut, (uint32_t *) &ug4);
                      if (!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)) {
                          g_error("Fatal programming error in PrintEmf::fill at U_EMRGRADIENTFILL_set");
                      }
@@ -1409,7 +1409,7 @@ unsigned int PrintEmf::fill(
             (style->stroke.isNone() || style->stroke.noneSet || style->stroke_width.computed == 0.0) ||
             (!style->stroke_dasharray.values.empty() && FixPPTDashLine)             ||
             !all_closed
-        ) {
+) {
             print_pathv(pathv, fill_transform);  // do any fills. side effect: clears fill_pathv
             use_fill = false;
         }
@@ -1784,7 +1784,7 @@ unsigned int PrintEmf::image(
               Bmi,                 //! (Optional) bitmapbuffer (U_BITMAPINFO section)
               h * rs,              //! size in bytes of px
               px                   //! (Optional) bitmapbuffer (U_BITMAPINFO section)
-          );
+);
     if (!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)) {
         g_error("Fatal programming error in PrintEmf::image at U_EMRSTRETCHDIBITS_set");
     }
@@ -2107,8 +2107,8 @@ unsigned int PrintEmf::text(Inkscape::Extension::Print * /*mod*/, char const *te
 
     //Handle super/subscripts and vertical kerning
     /*  Previously used this, but vertical kerning was not supported
-        p2[Geom::X] -= style->baseline_shift.computed * std::sin( rotb );
-        p2[Geom::Y] -= style->baseline_shift.computed * std::cos( rotb );
+        p2[Geom::X] -= style->baseline_shift.computed * std::sin(rotb);
+        p2[Geom::Y] -= style->baseline_shift.computed * std::cos(rotb);
     */
     p2[Geom::X] += ky * std::sin(rotb);
     p2[Geom::Y] += ky * std::cos(rotb);

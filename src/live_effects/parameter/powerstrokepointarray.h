@@ -23,7 +23,7 @@ namespace LivePathEffect {
 
 class PowerStrokePointArrayParam : public ArrayParam<Geom::Point> {
 public:
-    PowerStrokePointArrayParam( const Glib::ustring& label,
+    PowerStrokePointArrayParam(const Glib::ustring& label,
                 const Glib::ustring& tip,
                 const Glib::ustring& key,
                 Inkscape::UI::Widget::Registry* wr,

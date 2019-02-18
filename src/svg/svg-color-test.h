@@ -42,7 +42,7 @@ public:
 // createSuite and destroySuite get us per-suite setup and teardown
 // without us having to worry about static initialization order, etc.
     static SVGColorTest *createSuite() { return new SVGColorTest(); }
-    static void destroySuite( SVGColorTest *suite ) { delete suite; }
+    static void destroySuite(SVGColorTest *suite) { delete suite; }
 
     void testWrite()
     {
@@ -56,7 +56,7 @@ public:
                 rgb24 = (rgb24 << 8) | component;
                 tmp /= nc;
             }
-            assert( tmp == 0 );
+            assert(tmp == 0);
             check_rgb24(rgb24);
         }
 
@@ -73,9 +73,9 @@ public:
         size_t const n = sizeof(val)/sizeof(*val);
         for(size_t i=0; i<n; i++) {
             gchar const* end = 0;
-            guint32 result = sp_svg_read_color( val[i], &end, 0x3 );
-            TS_ASSERT_EQUALS( result, 0xff00ff00 );
-            TS_ASSERT_LESS_THAN( val[i], end );
+            guint32 result = sp_svg_read_color(val[i], &end, 0x3);
+            TS_ASSERT_EQUALS(result, 0xff00ff00);
+            TS_ASSERT_LESS_THAN(val[i], end);
         }
     }
 
@@ -100,22 +100,22 @@ public:
             {1, true, "under_name", "icc-color(under_name, 1)"},
         };
 
-        for ( size_t i = 0; i < G_N_ELEMENTS(cases); i++ ) {
+        for (size_t i = 0; i < G_N_ELEMENTS(cases); i++) {
             SVGICCColor tmp;
             gchar const* str = cases[i].str;
             gchar const* result = 0;
 
-            std::string testDescr( cases[i].str );
+            std::string testDescr(cases[i].str);
 
-            bool parseRet = sp_svg_read_icc_color( str, &result, &tmp );
-            TSM_ASSERT_EQUALS( testDescr, parseRet, cases[i].shouldPass );
-            TSM_ASSERT_EQUALS( testDescr, tmp.colors.size(), cases[i].numEntries );
-            if ( cases[i].shouldPass ) {
-                TSM_ASSERT_DIFFERS( testDescr, str, result );
-                TSM_ASSERT_EQUALS( testDescr, tmp.colorProfile, std::string(cases[i].name) );
+            bool parseRet = sp_svg_read_icc_color(str, &result, &tmp);
+            TSM_ASSERT_EQUALS(testDescr, parseRet, cases[i].shouldPass);
+            TSM_ASSERT_EQUALS(testDescr, tmp.colors.size(), cases[i].numEntries);
+            if (cases[i].shouldPass) {
+                TSM_ASSERT_DIFFERS(testDescr, str, result);
+                TSM_ASSERT_EQUALS(testDescr, tmp.colorProfile, std::string(cases[i].name));
             } else {
-                TSM_ASSERT_EQUALS( testDescr, str, result );
-                TSM_ASSERT( testDescr, tmp.colorProfile.empty() );
+                TSM_ASSERT_EQUALS(testDescr, str, result);
+                TSM_ASSERT(testDescr, tmp.colorProfile.empty());
             }
         }
     }

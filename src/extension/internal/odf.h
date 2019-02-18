@@ -93,7 +93,7 @@ public:
             fill          != other.fill          ||
             fillColor     != other.fillColor     ||
             fillOpacity   != other.fillOpacity
-           )
+)
             return false;
         return true;
         }
@@ -206,7 +206,7 @@ public:
             y1          != other.y1     ||
             x2          != other.x2     ||
             y2          != other.y2
-           )
+)
             return false;
         if (stops.size() != other.stops.size())
             return false;

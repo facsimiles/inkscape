@@ -61,7 +61,7 @@ SPUse::SPUse()
 
     this->_changed_connection = this->ref->changedSignal().connect(
         sigc::hide(sigc::hide(sigc::mem_fun(this, &SPUse::href_changed)))
-    );
+);
 }
 
 SPUse::~SPUse() {
@@ -78,11 +78,11 @@ SPUse::~SPUse() {
 void SPUse::build(SPDocument *document, Inkscape::XML::Node *repr) {
     SPItem::build(document, repr);
 
-    this->readAttr( "x" );
-    this->readAttr( "y" );
-    this->readAttr( "width" );
-    this->readAttr( "height" );
-    this->readAttr( "xlink:href" );
+    this->readAttr("x");
+    this->readAttr("y");
+    this->readAttr("width");
+    this->readAttr("height");
+    this->readAttr("xlink:href");
 
     // We don't need to create child here:
     // reading xlink:href will attach ref, and that will cause the changed signal to be emitted,
@@ -130,7 +130,7 @@ void SPUse::set(SPAttributeEnum key, const gchar* value) {
             break;
 
         case SP_ATTR_XLINK_HREF: {
-            if ( value && this->href && ( strcmp(value, this->href) == 0 ) ) {
+            if (value && this->href && (strcmp(value, this->href) == 0)) {
                 /* No change, do nothing. */
             } else {
                 g_free(this->href);
@@ -203,7 +203,7 @@ Geom::OptRect SPUse::bbox(Geom::Affine const &transform, SPItem::BBoxType bboxty
     Geom::OptRect bbox;
 
     if (this->child) {
-        Geom::Affine const ct(child->transform * Geom::Translate(this->x.computed, this->y.computed) * transform );
+        Geom::Affine const ct(child->transform * Geom::Translate(this->x.computed, this->y.computed) * transform);
 
         bbox = child->bounds(bboxtype, ct);
     }
@@ -239,11 +239,11 @@ const char* SPUse::displayName() const {
 
 gchar* SPUse::description() const {
     if (child) {
-        if ( dynamic_cast<SPSymbol *>(child) ) {
+        if (dynamic_cast<SPSymbol *>(child)) {
             if (child->title()) {
-                return g_strdup_printf(_("called %s"), Glib::Markup::escape_text(Glib::ustring( g_dpgettext2(nullptr, "Symbol", child->title()))).c_str());
+                return g_strdup_printf(_("called %s"), Glib::Markup::escape_text(Glib::ustring(g_dpgettext2(nullptr, "Symbol", child->title()))).c_str());
             } else if (child->getAttribute("id")) {
-                return g_strdup_printf(_("called %s"), Glib::Markup::escape_text(Glib::ustring( g_dpgettext2(nullptr, "Symbol", child->getAttribute("id")))).c_str());
+                return g_strdup_printf(_("called %s"), Glib::Markup::escape_text(Glib::ustring(g_dpgettext2(nullptr, "Symbol", child->getAttribute("id")))).c_str());
             } else {
                 return g_strdup_printf(_("called %s"), _("Unnamed Symbol"));
             }
@@ -540,11 +540,11 @@ void SPUse::href_changed() {
 
             this->_delete_connection = refobj->connectDelete(
                 sigc::hide(sigc::mem_fun(this, &SPUse::delete_self))
-            );
+);
 
             this->_transformed_connection = refobj->connectTransformed(
                 sigc::hide(sigc::mem_fun(this, &SPUse::move_compensate))
-            );
+);
         }
     }
 }
@@ -588,7 +588,7 @@ void SPUse::update(SPCtx *ctx, unsigned flags) {
         sp_object_ref(this->child);
 
         // viewport is only changed if referencing a symbol or svg element
-        if( SP_IS_SYMBOL(this->child) || SP_IS_ROOT(this->child) ) {
+        if(SP_IS_SYMBOL(this->child) || SP_IS_ROOT(this->child)) {
             cctx.viewport = Geom::Rect::from_xywh(0, 0, this->width.computed, this->height.computed);
             cctx.i2vp = Geom::identity();
         }
@@ -690,8 +690,8 @@ SPItem *SPUse::unlink() {
     SPObject *unlinked = document->getObjectByRepr(copy);
 
     // Merge style from the use.
-    unlinked->style->merge( this->style );
-    unlinked->style->cascade( unlinked->parent->style );
+    unlinked->style->merge(this->style);
+    unlinked->style->cascade(unlinked->parent->style);
     unlinked->updateRepr();
 
     // Hold onto our SPObject and repr for now.

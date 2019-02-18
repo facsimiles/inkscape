@@ -81,10 +81,10 @@ AboutBox::AboutBox()
     // Set Application metadata, which will be automatically
     // inserted into text widgets by the Gtk::AboutDialog parent class
     // clang-format off
-    set_program_name  (  "Inkscape");
-    set_version       (  Inkscape::version_string);
-    set_logo_icon_name(  INKSCAPE_ICON("inkscape"));
-    set_website       (  "https://www.inkscape.org");
+    set_program_name  ("Inkscape");
+    set_version       (Inkscape::version_string);
+    set_logo_icon_name(INKSCAPE_ICON("inkscape"));
+    set_website       ("https://www.inkscape.org");
     set_website_label (_("Inkscape website"));
     set_license_type    (Gtk::LICENSE_GPL_3_0);
     set_copyright     (_("© 2019 Inkscape Developers"));
@@ -121,7 +121,7 @@ void AboutBox::build_splash_widget() {
     // Leave _splash_widget as a nullptr if there is no document
     if(doc) {
         SPObject *version = doc->getObjectById("version");
-        if ( version && SP_IS_TEXT(version) ) {
+        if (version && SP_IS_TEXT(version)) {
             sp_te_set_repr_text_multiline (SP_TEXT (version), Inkscape::version_string);
         }
         doc->ensureUpToDate();

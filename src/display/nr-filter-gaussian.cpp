@@ -71,8 +71,8 @@ typedef Inkscape::Util::FixedPoint<unsigned int,16> FIRValue;
 template<typename T> static inline T sqr(T const& v) { return v*v; }
 
 template<typename T> static inline T clip(T const& v, T const& a, T const& b) {
-    if ( v < a ) return a;
-    if ( v > b ) return b;
+    if (v < a) return a;
+    if (v > b) return b;
     return v;
 }
 
@@ -106,8 +106,8 @@ static inline Tt clip_round_cast(Ts const v) {
     Ts const maxval = std::numeric_limits<Tt>::max();
     Tt const minval_rounded = std::numeric_limits<Tt>::min();
     Tt const maxval_rounded = std::numeric_limits<Tt>::max();
-    if ( v < minval ) return minval_rounded;
-    if ( v > maxval ) return maxval_rounded;
+    if (v < minval) return minval_rounded;
+    if (v > maxval) return maxval_rounded;
     return round_cast<Tt>(v);
 }
 
@@ -116,8 +116,8 @@ static inline Tt clip_round_cast_varmax(Ts const v, Tt const maxval_rounded) {
     Ts const minval = std::numeric_limits<Tt>::min();
     Tt const maxval = maxval_rounded;
     Tt const minval_rounded = std::numeric_limits<Tt>::min();
-    if ( v < minval ) return minval_rounded;
-    if ( v > maxval ) return maxval_rounded;
+    if (v < minval) return minval_rounded;
+    if (v > maxval) return maxval_rounded;
     return round_cast<Tt>(v);
 }
 
@@ -156,9 +156,9 @@ _make_kernel(FIRValue *const kernel, double const deviation)
     // Compute kernel and sum of coefficients
     // Note that actually only half the kernel is computed, as it is symmetric
     double sum = 0;
-    for ( int i = scr_len; i >= 0 ; i-- ) {
+    for (int i = scr_len; i >= 0 ; i--) {
         k[i] = std::exp(-sqr(i) / d_sq);
-        if ( i > 0 ) sum += k[i];
+        if (i > 0) sum += k[i];
     }
     // the sum of the complete kernel is twice as large (plus the center element which we skipped above to prevent counting it twice)
     sum = 2*sum + k[0];
@@ -166,7 +166,7 @@ _make_kernel(FIRValue *const kernel, double const deviation)
     // Normalize kernel (making sure the sum is exactly 1)
     double ksum = 0;
     FIRValue kernelsum = 0;
-    for ( int i = scr_len; i >= 1 ; i-- ) {
+    for (int i = scr_len; i >= 1 ; i--) {
         ksum += k[i]/sum;
         kernel[i] = ksum-static_cast<double>(kernelsum);
         kernelsum += kernel[i];
@@ -238,7 +238,7 @@ static void calcFilter(double const sigma, double b[N]) {
         double const d3 = pow(d3_org, 1.0/q);
         // Compute actual sigma^2
         double const ssqr = 2*(2*(d1/sqr(d1-1.)).real()+d3/sqr(d3-1.));
-        if ( ssqr < sigmasqr ) {
+        if (ssqr < sigmasqr) {
             qbeg = q;
         } else {
             qend = q;
@@ -311,7 +311,7 @@ INK_UNUSED(num_threads); // to suppress unused argument compiler warning
 #if HAVE_OPENMP
 #pragma omp parallel for num_threads(num_threads)
 #endif // HAVE_OPENMP
-    for ( int c2 = 0 ; c2 < n2 ; c2++ ) {
+    for (int c2 = 0 ; c2 < n2 ; c2++) {
 #if HAVE_OPENMP
         unsigned int tid = omp_get_thread_num();
 #else
@@ -326,7 +326,7 @@ INK_UNUSED(num_threads); // to suppress unused argument compiler warning
         // Forward pass
         IIRValue u[N+1][PC];
         for(unsigned int i=0; i<N; i++) copy_n(imin, PC, u[i]);
-        for ( int c1 = 0 ; c1 < n1 ; c1++ ) {
+        for (int c1 = 0 ; c1 < n1 ; c1++) {
             for(unsigned int i=N; i>0; i--) copy_n(u[i-1], PC, u[i]);
             copy_n(srcimg, PC, u[0]);
             srcimg += sstr1;
@@ -340,7 +340,7 @@ INK_UNUSED(num_threads); // to suppress unused argument compiler warning
         IIRValue v[N+1][PC];
         calcTriggsSdikaInitialization<PC>(M, u, iplus, iplus, b[0], v);
         dstimg -= dstr1;
-        if ( PREMULTIPLIED_ALPHA ) {
+        if (PREMULTIPLIED_ALPHA) {
             dstimg[alpha_PC] = clip_round_cast<PT>(v[0][alpha_PC]);
             PREMUL_ALPHA_LOOP dstimg[c] = clip_round_cast_varmax<PT>(v[0][c], dstimg[alpha_PC]);
         } else {
@@ -355,7 +355,7 @@ INK_UNUSED(num_threads); // to suppress unused argument compiler warning
                 for(unsigned int c=0; c<PC; c++) v[0][c] += v[i][c]*b[i];
             }
             dstimg -= dstr1;
-            if ( PREMULTIPLIED_ALPHA ) {
+            if (PREMULTIPLIED_ALPHA) {
                 dstimg[alpha_PC] = clip_round_cast<PT>(v[0][alpha_PC]);
                 PREMUL_ALPHA_LOOP dstimg[c] = clip_round_cast_varmax<PT>(v[0][c], dstimg[alpha_PC]);
             } else {
@@ -381,7 +381,7 @@ INK_UNUSED(num_threads); // suppresses unused argument compiler warning
 #if HAVE_OPENMP
 #pragma omp parallel for num_threads(num_threads) private(history)
 #endif // HAVE_OPENMP
-    for ( int c2 = 0 ; c2 < n2 ; c2++ ) {
+    for (int c2 = 0 ; c2 < n2 ; c2++) {
 
         // corresponding line in the source buffer
         int const src_line = c2 * sstr2;
@@ -395,7 +395,7 @@ INK_UNUSED(num_threads); // suppresses unused argument compiler warning
         PT imin[PC]; copy_n(src + src_line, PC, imin);
         for(int i=0; i<scr_len; i++) copy_n(imin, PC, history[i]);
 
-        for ( int c1 = 0 ; c1 < n1 ; c1++ ) {
+        for (int c1 = 0 ; c1 < n1 ; c1++) {
 
             int const src_disp = src_line + c1 * sstr1;
             int const dst_disp = dst_line + c1 * dstr1;
@@ -405,7 +405,7 @@ INK_UNUSED(num_threads); // suppresses unused argument compiler warning
             copy_n(src + src_disp, PC, history[0]);
 
             // for all bytes of the pixel
-            for ( unsigned int byte = 0 ; byte < PC ; byte++) {
+            for (unsigned int byte = 0 ; byte < PC ; byte++) {
 
                 if(skipbuf[byte] > c1) continue;
 
@@ -414,7 +414,7 @@ INK_UNUSED(num_threads); // suppresses unused argument compiler warning
                 int different_count = 0;
 
                 // go over our point's neighbours in the history
-                for ( int i = 0 ; i <= scr_len ; i++ ) {
+                for (int i = 0 ; i <= scr_len ; i++) {
                     // value at the pixel
                     PT in_byte = history[i][byte];
 
@@ -428,7 +428,7 @@ INK_UNUSED(num_threads); // suppresses unused argument compiler warning
 
                 // go over our point's neighborhood on x axis in the in buffer
                 int nb_src_disp = src_disp + byte;
-                for ( int i = 1 ; i <= scr_len ; i++ ) {
+                for (int i = 1 ; i <= scr_len ; i++) {
                     // the pixel we're looking at
                     int c1_in = c1 + i;
                     if (c1_in >= n1) {
@@ -558,10 +558,10 @@ void FilterGaussian::render_cairo(FilterSlot &slot)
     // might be used as input to another primitive but it is likely that all the primitives in a given
     // filter use the same color interpolation space so we don't copy the input before converting.
     SPColorInterpolation ci_fp = SP_CSS_COLOR_INTERPOLATION_AUTO;
-    if( _style ) {
+    if(_style) {
         ci_fp = (SPColorInterpolation)_style->color_interpolation_filters.computed;
     }
-    set_cairo_surface_ci( in, ci_fp );
+    set_cairo_surface_ci(in, ci_fp);
 
     // zero deviation = no change in output
     if (_deviation_x <= 0 && _deviation_y <= 0) {
@@ -574,9 +574,9 @@ void FilterGaussian::render_cairo(FilterSlot &slot)
     // Handle bounding box case.
     double dx = _deviation_x;
     double dy = _deviation_y;
-    if( slot.get_units().get_primitive_units() == SP_FILTER_UNITS_OBJECTBOUNDINGBOX ) {
+    if(slot.get_units().get_primitive_units() == SP_FILTER_UNITS_OBJECTBOUNDINGBOX) {
         Geom::OptRect const bbox = slot.get_units().get_item_bbox();
-        if( bbox ) {
+        if(bbox) {
             dx *= (*bbox).width();
             dy *= (*bbox).height();
         }
@@ -634,7 +634,7 @@ void FilterGaussian::render_cairo(FilterSlot &slot)
     // NOTE: This can be eliminated, but it reduces the precision a bit
     IIRValue * tmpdata[threads];
     std::fill_n(tmpdata, threads, (IIRValue*)0);
-    if ( use_IIR_x || use_IIR_y ) {
+    if (use_IIR_x || use_IIR_y) {
         for(int i = 0; i < threads; ++i) {
             tmpdata[i] = new IIRValue[std::max(w_downsampled,h_downsampled)*bytes_per_pixel];
         }
@@ -673,7 +673,7 @@ void FilterGaussian::render_cairo(FilterSlot &slot)
     }
 
     // free the temporary data
-    if ( use_IIR_x || use_IIR_y ) {
+    if (use_IIR_x || use_IIR_y) {
         for(int i = 0; i < threads; ++i) {
             delete[] tmpdata[i];
         }
@@ -689,13 +689,13 @@ void FilterGaussian::render_cairo(FilterSlot &slot)
         cairo_paint(ct);
         cairo_destroy(ct);
 
-        set_cairo_surface_ci( upsampled, ci_fp );
+        set_cairo_surface_ci(upsampled, ci_fp);
 
         slot.set(_output, upsampled);
         cairo_surface_destroy(upsampled);
         cairo_surface_destroy(downsampled);
     } else {
-        set_cairo_surface_ci( downsampled, ci_fp );
+        set_cairo_surface_ci(downsampled, ci_fp);
 
         slot.set(_output, downsampled);
         cairo_surface_destroy(downsampled);

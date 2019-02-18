@@ -61,36 +61,36 @@ public:
 	
 	const Vector & LU_solve()
 	{
-		assert( matrix().rows() == matrix().columns() 
-				&& matrix().rows() == vector().size() );
+		assert(matrix().rows() == matrix().columns() 
+				&& matrix().rows() == vector().size());
 		int s;
 		gsl_permutation * p = gsl_permutation_alloc(matrix().rows());
 		gsl_linalg_LU_decomp (matrix().get_gsl_matrix(), p, &s);
-		gsl_linalg_LU_solve( matrix().get_gsl_matrix(), 
+		gsl_linalg_LU_solve(matrix().get_gsl_matrix(), 
 							 p, 
 				             vector().get_gsl_vector(), 
 				             m_solution.get_gsl_vector()
-				           );
+				);
 		gsl_permutation_free(p);
 		return solution();
 	}
 	
 	const Vector & SV_solve()
 	{
-		assert( matrix().rows() >= matrix().columns()
-				&& matrix().rows() == vector().size() );
+		assert(matrix().rows() >= matrix().columns()
+				&& matrix().rows() == vector().size());
 		
 		gsl_matrix* U = matrix().get_gsl_matrix();
 		gsl_matrix* V = gsl_matrix_alloc(matrix().columns(), matrix().columns());
 		gsl_vector* S = gsl_vector_alloc(matrix().columns());
 		gsl_vector* work = gsl_vector_alloc(matrix().columns());
 		
-		gsl_linalg_SV_decomp( U, V, S, work );
+		gsl_linalg_SV_decomp(U, V, S, work);
 		
 		gsl_vector* b = vector().get_gsl_vector();
 		gsl_vector* x = m_solution.get_gsl_vector();
 		
-		gsl_linalg_SV_solve( U, V, S, b, x);
+		gsl_linalg_SV_solve(U, V, S, b, x);
 		
 		gsl_matrix_free(V);
 		gsl_vector_free(S);

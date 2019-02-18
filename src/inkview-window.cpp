@@ -32,7 +32,7 @@ InkviewWindow::InkviewWindow(const Gio::Application::type_vec_files files,
                              int timer,
                              double scale,
                              bool preload
-    )
+)
     : _files(files)
     , _fullscreen(fullscreen)
     , _recursive(recursive)
@@ -49,7 +49,7 @@ InkviewWindow::InkviewWindow(const Gio::Application::type_vec_files files,
         preload_documents();
     }
 
-    _documents.resize( _files.size(), nullptr); // We keep _documents and _files in sync.
+    _documents.resize(_files.size(), nullptr); // We keep _documents and _files in sync.
 
     // Callbacks
     signal_key_press_event().connect(sigc::mem_fun(*this, &InkviewWindow::key_press), false);
@@ -59,10 +59,10 @@ InkviewWindow::InkviewWindow(const Gio::Application::type_vec_files files,
     }
 
     // Actions
-    add_action( "show_first", sigc::mem_fun(*this, &InkviewWindow::show_first) );
-    add_action( "show_prev",  sigc::mem_fun(*this, &InkviewWindow::show_prev)  );
-    add_action( "show_next",  sigc::mem_fun(*this, &InkviewWindow::show_next)  );
-    add_action( "show_last",  sigc::mem_fun(*this, &InkviewWindow::show_last)  );
+    add_action("show_first", sigc::mem_fun(*this, &InkviewWindow::show_first));
+    add_action("show_prev",  sigc::mem_fun(*this, &InkviewWindow::show_prev));
+    add_action("show_next",  sigc::mem_fun(*this, &InkviewWindow::show_next));
+    add_action("show_last",  sigc::mem_fun(*this, &InkviewWindow::show_last));
 
     // ToDo: Add Pause, Resume.
 
@@ -71,7 +71,7 @@ InkviewWindow::InkviewWindow(const Gio::Application::type_vec_files files,
     }
 
     // Show first file
-    activate_action( "show_first" );
+    activate_action("show_first");
 }
 
 std::vector<Glib::RefPtr<Gio::File> >
@@ -179,7 +179,7 @@ InkviewWindow::load_document()
     if (!document) {
         // Failed to load document, remove from vectors.
         _documents.erase(std::next(_documents.begin(), _index));
-        _files.erase(    std::next(    _files.begin(), _index));
+        _files.erase(std::next(_files.begin(), _index));
     }
 
     return document;
@@ -190,7 +190,7 @@ InkviewWindow::load_document()
 void
 InkviewWindow::preload_documents()
 {
-    for (auto it =_files.begin(); it != _files.end(); ) {
+    for (auto it =_files.begin(); it != _files.end();) {
 
         SPDocument* document =
             SPDocument::createNewDoc ((*it)->get_parse_name().c_str(), true, false);
@@ -295,13 +295,13 @@ InkviewWindow::show_control()
         // Fixed in Gtk4. In Gtk4 this can be replaced by setting the action in the interface.
         Gtk::Button* button;
         builder->get_widget("show-first", button);
-        gtk_actionable_set_action_name( GTK_ACTIONABLE(button->gobj()), "viewer.show_first");
+        gtk_actionable_set_action_name(GTK_ACTIONABLE(button->gobj()), "viewer.show_first");
         builder->get_widget("show-prev", button);
-        gtk_actionable_set_action_name( GTK_ACTIONABLE(button->gobj()), "viewer.show_prev");
+        gtk_actionable_set_action_name(GTK_ACTIONABLE(button->gobj()), "viewer.show_prev");
         builder->get_widget("show-next", button);
-        gtk_actionable_set_action_name( GTK_ACTIONABLE(button->gobj()), "viewer.show_next");
+        gtk_actionable_set_action_name(GTK_ACTIONABLE(button->gobj()), "viewer.show_next");
         builder->get_widget("show-last", button);
-        gtk_actionable_set_action_name( GTK_ACTIONABLE(button->gobj()), "viewer.show_last");
+        gtk_actionable_set_action_name(GTK_ACTIONABLE(button->gobj()), "viewer.show_last");
 
         _controlwindow->set_resizable(false);
         _controlwindow->set_transient_for(*this);

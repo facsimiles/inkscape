@@ -748,8 +748,8 @@ comparison of int with unsigned int
 #define U_WMRXB(A)   (((U_METARECORD *)A)->xb)                 //!< Get xb from U_WMR* record.
 #define U_WMR_XB_FROM_TYPE(A) ((uint8_t) (U_wmr_values(A)>>8)) //!< Get xb from type value.
 #define U_U16(A)  (*(uint16_t *)&A)                            //!< interpret a 16 bit type as uint16_t.
-#define U_P16(A)  ( (uint16_t *)&A)                            //!< pass any 16 bit type as a pointer to a uint16_t.
-#define U_PP16(A) ( (uint16_t *) A)                            //!< pass any pointer to a 16 bit type as a pointer to a uint16_t.
+#define U_P16(A)  ((uint16_t *)&A)                            //!< pass any 16 bit type as a pointer to a uint16_t.
+#define U_PP16(A) ((uint16_t *) A)                            //!< pass any pointer to a 16 bit type as a pointer to a uint16_t.
 
 /** @} */
 
@@ -2090,7 +2090,7 @@ int          wmf_htable_delete(uint32_t *ih, WMFHANDLES *wht);
 int          wmf_htable_insert(uint32_t *ih, WMFHANDLES *wht);
 int          wmf_htable_free(WMFHANDLES **wht);
 int16_t      U_16_checksum(int16_t *buf, int count);
-int16_t     *dx16_set( int32_t  height, uint32_t weight, uint32_t members);
+int16_t     *dx16_set(int32_t  height, uint32_t weight, uint32_t members);
 uint32_t     U_wmr_properties(uint32_t type);
 
 uint32_t     U_wmr_size(const U_METARECORD *record);
@@ -2117,7 +2117,7 @@ U_WLOGBRUSH  U_WLOGBRUSH_set(uint16_t Style, U_COLORREF Color, uint16_t Hatch);
 U_PAIRF     *U_PAIRF_set(float x, float y);
 
 char        *wdeleteobject_set(uint32_t *ihObject, WMFHANDLES  *wht);
-char        *wselectobject_set(uint32_t ihObject, WMFHANDLES *wht );
+char        *wselectobject_set(uint32_t ihObject, WMFHANDLES *wht);
 char        *wcreatepenindirect_set(uint32_t *ihPen, WMFHANDLES *wht, U_PEN pen);
 char        *wcreatebrushindirect_set(uint32_t *ihBrush, WMFHANDLES *wht, U_WLOGBRUSH lb);
 char        *wcreatedibpatternbrush_srcdib_set(uint32_t *ihBrush, WMFHANDLES *wht, 
@@ -2400,11 +2400,11 @@ char        *U_WMRCREATEBITMAPINDIRECT_set(void);      /* in GDI and Wine, not i
 char        *U_WMRCREATEBITMAP_set(void);              /* in GDI and Wine, not in WMF manual. */
 char        *U_WMRCREATEREGION_set(const U_REGION *region);
 
-int16_t     *dx16_get( int32_t height, uint32_t weight, uint32_t members);
+int16_t     *dx16_get(int32_t height, uint32_t weight, uint32_t members);
 size_t       U_WMRRECSAFE_get(const char *contents, const char *blimit);
 int          wmfheader_get(const char *contents, const char *blimit, U_WMRPLACEABLE *Placeable, U_WMRHEADER *Header);
 int          wmr_arc_points(U_RECT16 rclBox, U_POINT16 ArcStart, U_POINT16 ArcEnd, 
-                int *f1, int f2, U_PAIRF *center, U_PAIRF *start, U_PAIRF *end, U_PAIRF *size );
+                int *f1, int f2, U_PAIRF *center, U_PAIRF *start, U_PAIRF *end, U_PAIRF *size);
 void         U_BITMAPINFOHEADER_get(const char *Bmih, uint32_t *Size, int32_t *Width, int32_t *Height, 
                 uint32_t *Planes, uint32_t *BitCount, uint32_t *Compression, uint32_t *SizeImage, 
                 int32_t *XPelsPerMeter, int32_t *YPelsPerMeter, uint32_t *ClrUsed, uint32_t *ClrImportant);

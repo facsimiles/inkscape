@@ -263,7 +263,7 @@ These functions are used for development and debugging and should be be includie
 int memprobe(
       const void   *buf,
       size_t        size
-   ){
+){
    int sum=0;
    char *ptr=(char *)buf;
    for(;size;size--,ptr++){ sum += *ptr; }  // read all bytes, trigger valgrind warning if any uninitialized
@@ -280,7 +280,7 @@ void dumpeht(
      char         *string, 
      unsigned int *handle,
      EMFHANDLES   *eht
-  ){
+){
   uint32_t i;
   printf("%s\n",string);
   printf("sptr: %d peak: %d top: %d\n",eht->sptr,eht->peak,eht->top);
@@ -317,13 +317,13 @@ uint32_t *dx_set(
       int32_t  height,
       uint32_t weight,
       uint32_t members
-   ){
+){
    uint32_t i, width, *dx;
    dx = (uint32_t *) malloc(members * sizeof(uint32_t));
    if(dx){
        if(U_FW_DONTCARE == weight)weight=U_FW_NORMAL;
        width = (uint32_t) U_ROUND(((float) (height > 0 ? height : -height)) * 0.6 * (0.00024*(float) weight + 0.904));
-       for ( i = 0; i < members; i++ ){ dx[i] = width; }
+       for (i = 0; i < members; i++){ dx[i] = width; }
    }
    return(dx);
 }
@@ -503,7 +503,7 @@ int emr_arc_points_common(
        PU_PAIRF          start,
        PU_PAIRF          end,
        PU_PAIRF          size
-    ){
+){
     U_PAIRF estart;     // EMF start position, defines a radial
     U_PAIRF eend;       // EMF end   position, defines a radial
     U_PAIRF vec_estart; // define a unit vector from the center to estart
@@ -511,10 +511,10 @@ int emr_arc_points_common(
     U_PAIRF radii;      // x,y radii of ellipse 
     U_PAIRF ratio;      // intermediate value
     float scale, cross;
-    center->x   = ((float)(rclBox->left   + rclBox->right ))/2.0;
+    center->x   = ((float)(rclBox->left   + rclBox->right))/2.0;
     center->y   = ((float)(rclBox->top    + rclBox->bottom))/2.0;
-    size->x     =  (float)(rclBox->right  - rclBox->left );
-    size->y     =  (float)(rclBox->bottom - rclBox->top  );
+    size->x     =  (float)(rclBox->right  - rclBox->left);
+    size->y     =  (float)(rclBox->bottom - rclBox->top);
     estart.x    =  (float)(ArcStart->x);
     estart.y    =  (float)(ArcStart->y);
     eend.x      =  (float)(ArcEnd->x);
@@ -542,8 +542,8 @@ int emr_arc_points_common(
     // that also satisfies (x/Rx)^2 + (y/Ry)^2 = 1.  x is t*(ux), y is t*(uy), where ux,uy are the x,y components
     // of the unit vector.  Substituting gives:
     // (t*(ux)/Rx)^2 + (t*(uy)/Ry)^2 = 1
-    // t^2 = 1/(  (ux/Rx)^2 + (uy/Ry)^2 )
-    // t = sqrt(1/(  (ux/Rx)^2 + (uy/Ry)^2 ))
+    // t^2 = 1/((ux/Rx)^2 + (uy/Ry)^2)
+    // t = sqrt(1/((ux/Rx)^2 + (uy/Ry)^2))
 
     ratio.x  = vec_estart.x/radii.x;
     ratio.y  = vec_estart.y/radii.y;
@@ -598,9 +598,9 @@ int emr_arc_points(
        PU_PAIRF          start,
        PU_PAIRF          end,
        PU_PAIRF          size
-    ){
+){
     PU_EMRARC pEmr = (PU_EMRARC) (record);
-    return emr_arc_points_common(&(pEmr->rclBox), &(pEmr->ptlStart), &(pEmr->ptlEnd), f1, f2, center, start, end, size );
+    return emr_arc_points_common(&(pEmr->rclBox), &(pEmr->ptlStart), &(pEmr->ptlEnd), f1, f2, center, start, end, size);
 }
 
 /**
@@ -635,7 +635,7 @@ int RGBA_to_DIB(
        uint32_t    colortype,
        int         use_ct,
        int         invert
-   ){
+){
    int          bs;
    int          pad;
    int          i,j,k;
@@ -779,11 +779,11 @@ int RGBA_to_DIB(
              }
           }
       }
-      if( use_ct && colortype == U_BCBM_MONOCHROME && (j % 8) ){
+      if(use_ct && colortype == U_BCBM_MONOCHROME && (j % 8)){
          *pxptr++ = tmp8;                   // Write last few indices
          tmp8 = 0;
       }
-      if( use_ct && colortype == U_BCBM_COLOR4     && (j % 2) ){
+      if(use_ct && colortype == U_BCBM_COLOR4     && (j % 2)){
          *pxptr++ = tmp8;                   // Write last few indices
          tmp8 = 0;
       }
@@ -808,7 +808,7 @@ int RGBA_to_DIB(
 */
 int get_real_color_count(
        const char *Bmih
-   ){
+){
    int Colors, BitCount, Width, Height;
    uint32_t  utmp4;
    uint16_t  utmp2;
@@ -834,13 +834,13 @@ int get_real_color_icount(
        int BitCount,
        int Width,
        int Height
-   ){
+){
    int area = Width * Height;
    if(area < 0){ area = -area; } /* Height might be negative */
    if(Colors == 0){
-         if(     BitCount == U_BCBM_MONOCHROME){ Colors = 2;   }                                                                                          
-         else if(BitCount == U_BCBM_COLOR4    ){ Colors = 16;  }                                                                                          
-         else if(BitCount == U_BCBM_COLOR8    ){ Colors = 256; } 
+         if(BitCount == U_BCBM_MONOCHROME){ Colors = 2;   }                                                                                          
+         else if(BitCount == U_BCBM_COLOR4){ Colors = 16;  }                                                                                          
+         else if(BitCount == U_BCBM_COLOR8){ Colors = 256; } 
          if(Colors > area){  Colors = area; }
    }
    return(Colors);
@@ -873,7 +873,7 @@ int get_DIB_params(
        uint32_t         *height,
        uint32_t         *colortype,
        uint32_t         *invert
-   ){
+){
    uint32_t bic;
    PU_BITMAPINFO Bmi = (PU_BITMAPINFO)(record + offBmiSrc);
    PU_BITMAPINFOHEADER Bmih = &(Bmi->bmiHeader);
@@ -891,7 +891,7 @@ int get_DIB_params(
    }
    if(bic == U_BI_RGB){
       *numCt     = get_real_color_count((const char *) Bmih);
-      if( numCt){ *ct = (PU_RGBQUAD) ((char *)Bmi + sizeof(U_BITMAPINFOHEADER)); }
+      if(numCt){ *ct = (PU_RGBQUAD) ((char *)Bmi + sizeof(U_BITMAPINFOHEADER)); }
       else {      *ct = NULL;                                                    }                                                                                       
    }
    else if(bic == U_BI_BITFIELDS){ /* to date only encountered once, for 32 bit, from PPT*/
@@ -931,7 +931,7 @@ int DIB_to_RGBA(
        uint32_t         colortype,
        int              use_ct,
        int              invert
-   ){
+){
    uint32_t     cbRgba_px;
    int          stride;
    int          bs;
@@ -1082,7 +1082,7 @@ char *RGBA_to_RGBA(
        int          st,
        int          *eew,
        int          *eeh
-   ){
+){
    int          i;
    char        *sub;
    char        *sptr;
@@ -1134,7 +1134,7 @@ writing the final data structure out to a file.
 */
 char *emr_dup(
       const char *emr
-   ){
+){
    char *dup;
    int   irecsize;
 
@@ -1161,7 +1161,7 @@ int  emf_start(
       const uint32_t   initsize,
       const uint32_t   chunksize,
       EMFTRACK       **et
-   ){
+){
    FILE *fp;
    EMFTRACK *etl=NULL;
 
@@ -1200,7 +1200,7 @@ int  emf_start(
 int  emf_finish(
       EMFTRACK   *et,
       EMFHANDLES *eht
-   ){
+){
    U_EMRHEADER *record;
 
    if(!et->fp)return(1);   // This could happen if something stomps on memory, otherwise should be caught in emf_start
@@ -1231,7 +1231,7 @@ int  emf_finish(
 */
 int emf_free(
       EMFTRACK **et
-   ){    
+){    
    EMFTRACK *etl;
    if(!et)return(1);
    etl=*et;
@@ -1251,7 +1251,7 @@ int emf_free(
 FILE *emf_fopen(
       const char *filename,
       const int mode
-   ){    
+){    
    FILE *fp = NULL;
 #ifdef WIN32
    uint16_t *fn16;
@@ -1280,7 +1280,7 @@ int emf_readdata(
       const char   *filename,
       char        **contents,
       size_t       *length
-   ){    
+){    
    FILE     *fp;
    int       status=0;
 
@@ -1326,7 +1326,7 @@ int  emf_append(
       U_ENHMETARECORD *rec,
       EMFTRACK        *et,
       int              freerec
-   ){
+){
    size_t deficit;
    
 #ifdef U_VALGRIND
@@ -1362,7 +1362,7 @@ int emf_htable_create(
       uint32_t     initsize,
       uint32_t     chunksize,
       EMFHANDLES **eht
-   ){
+){
    EMFHANDLES *ehtl;
    unsigned int i;
    
@@ -1404,7 +1404,7 @@ int emf_htable_create(
 int emf_htable_delete(
       uint32_t    *ih,
       EMFHANDLES  *eht
-   ){
+){
    if(!eht)return(1);
    if(!eht->table)return(2);
    if(!eht->stack)return(3);
@@ -1430,7 +1430,7 @@ int emf_htable_delete(
 int emf_htable_insert(
       uint32_t   *ih,
       EMFHANDLES *eht
-   ){
+){
    unsigned int i;
    size_t newsize;
 
@@ -1466,7 +1466,7 @@ int emf_htable_insert(
 */
 int emf_htable_free(
       EMFHANDLES **eht
-   ){
+){
    EMFHANDLES *ehtl;
    if(!eht)return(1);
    ehtl = *eht;
@@ -1501,7 +1501,7 @@ int device_size(
       const float  dpmm,
       U_SIZEL     *szlDev,
       U_SIZEL     *szlMm
-   ){
+){
    if(xmm < 0 || ymm < 0 || dpmm < 0)return(1);
    szlDev->cx          =  U_ROUND((float) xmm * dpmm);
    szlDev->cy          =  U_ROUND((float) ymm * dpmm);;
@@ -1528,7 +1528,7 @@ int drawing_size(
       const float  dpmm,
       U_RECTL     *rclBounds,
       U_RECTL     *rclFrame
-   ){
+){
    if(xmm < 0 || ymm < 0 || dpmm < 0)return(1);
    rclBounds->left     =  0;
    rclBounds->top      =  0;
@@ -1552,7 +1552,7 @@ U_COLORREF colorref3_set(
       uint8_t red,
       uint8_t green,
       uint8_t blue
-   ){
+){
    U_COLORREF cr = (U_COLORREF){red , green, blue, 0};
    return(cr);
 }
@@ -1570,7 +1570,7 @@ U_COLORREF colorref4_set(
       uint8_t green,
       uint8_t blue,
       uint8_t Reserved
-   ){
+){
    U_COLORREF cr = (U_COLORREF){red , green, blue, Reserved};
    return(cr);
 }
@@ -1588,7 +1588,7 @@ U_RGBQUAD rgbquad_set(
       uint8_t green,
       uint8_t blue,
       uint8_t reserved
-   ){
+){
    U_RGBQUAD cr = (U_RGBQUAD){blue , green, red, reserved};
    return(cr);
 }
@@ -1601,7 +1601,7 @@ U_RGBQUAD rgbquad_set(
 U_RECTL rectl_set(
       U_POINTL ul,
       U_POINTL lr
-    ){
+){
     U_RECTL rct;
     rct.left     =   ul.x;
     rct.top      =   ul.y;
@@ -1622,7 +1622,7 @@ void rectli_set(
       int index,
       U_POINTL ul,
       U_POINTL lr
-    ){
+){
     PU_RECTL rct = &(array[index]);
     rct->left     =   ul.x;
     rct->top      =   ul.y;
@@ -1638,7 +1638,7 @@ void rectli_set(
 U_SIZEL sizel_set(
        int32_t  x,
        int32_t  y
-    ){
+){
     U_SIZEL sz;
     sz.cx = x;
     sz.cy = y;
@@ -1653,7 +1653,7 @@ U_SIZEL sizel_set(
 U_POINTL point32_set(
        int32_t  x,   
        int32_t  y
-    ){
+){
     U_POINTL pt;
     pt.x = x;
     pt.y = y;
@@ -1668,7 +1668,7 @@ U_POINTL point32_set(
 U_POINT16 point16_set(
        int16_t  x,
        int16_t  y
-    ){
+){
     U_POINT16 pt;
     pt.x = x;
     pt.y = y;
@@ -1686,15 +1686,15 @@ U_RECT findbounds(
       uint32_t count,
       PU_POINT pts,
       uint32_t width
-   ){
+){
    U_RECT rect={INT32_MAX, INT32_MAX, INT32_MIN, INT32_MIN };
    unsigned int i;
 
    for(i=0; i<count;i++,pts++){
-       if ( pts->x < rect.left )   rect.left   = pts->x;
-       if ( pts->x > rect.right )  rect.right  = pts->x;
-       if ( pts->y < rect.top )    rect.top    = pts->y;
-       if ( pts->y > rect.bottom ) rect.bottom = pts->y;
+       if (pts->x < rect.left)   rect.left   = pts->x;
+       if (pts->x > rect.right)  rect.right  = pts->x;
+       if (pts->y < rect.top)    rect.top    = pts->y;
+       if (pts->y > rect.bottom) rect.bottom = pts->y;
    }
    if(width > 0){
      rect.left   -= width;
@@ -1716,15 +1716,15 @@ U_RECT findbounds16(
       uint32_t count,
       PU_POINT16 pts,
       uint32_t width
-   ){
+){
    U_RECT rect={INT16_MAX, INT16_MAX, INT16_MIN, INT16_MIN };
    unsigned int i;
 
    for(i=0; i<count;i++,pts++){
-       if ( pts->x < rect.left )   rect.left   = pts->x;
-       if ( pts->x > rect.right )  rect.right  = pts->x;
-       if ( pts->y < rect.top )    rect.top    = pts->y;
-       if ( pts->y > rect.bottom ) rect.bottom = pts->y;
+       if (pts->x < rect.left)   rect.left   = pts->x;
+       if (pts->x > rect.right)  rect.right  = pts->x;
+       if (pts->y < rect.top)    rect.top    = pts->y;
+       if (pts->y > rect.bottom) rect.bottom = pts->y;
    }
    if(width > 0){
      rect.left   -= width;
@@ -1745,7 +1745,7 @@ U_LOGBRUSH logbrush_set(
       uint32_t    lbStyle,
       U_COLORREF  lbColor,
       int32_t     lbHatch
-   ){
+){
    U_LOGBRUSH lb;
    lb.lbStyle = lbStyle;
    lb.lbColor = lbColor;
@@ -1770,7 +1770,7 @@ U_XFORM xform_set(
       U_FLOAT eM22,
       U_FLOAT eDx,
       U_FLOAT eDy
-   ){
+){
    U_XFORM xform;
    xform.eM11 =  eM11;
    xform.eM12 =  eM12;
@@ -1803,7 +1803,7 @@ U_XFORM xform_alt_set(
       U_FLOAT axisrot,
       U_FLOAT eDx,
       U_FLOAT eDy
-   ){
+){
    U_XFORM xform;
    U_MAT2X2 mat1, mat2;
    // angles are in degrees, must be in radians
@@ -1814,9 +1814,9 @@ U_XFORM xform_alt_set(
    mat1.M21 = sin(rot);
    mat1.M22 = cos(rot);
    if(ratio!=1.0){  // set scale/ellipticity matrix
-      mat2.M11 =            scale*( cos(axisrot)*cos(axisrot) + ratio*sin(axisrot)*sin(axisrot) );
-      mat2.M12 = mat2.M21 = scale*( sin(axisrot)*cos(axisrot) * (1.0 - ratio)           );
-      mat2.M22 =            scale*( sin(axisrot)*sin(axisrot) + ratio*cos(axisrot)*cos(axisrot) );
+      mat2.M11 =            scale*(cos(axisrot)*cos(axisrot) + ratio*sin(axisrot)*sin(axisrot));
+      mat2.M12 = mat2.M21 = scale*(sin(axisrot)*cos(axisrot) * (1.0 - ratio));
+      mat2.M22 =            scale*(sin(axisrot)*sin(axisrot) + ratio*cos(axisrot)*cos(axisrot));
    }
    else { // when the ratio is 1.0 then the major axis angle is ignored and only scale matters
       mat2.M11 = scale;
@@ -1849,7 +1849,7 @@ U_LOGCOLORSPACEA logcolorspacea_set(
       U_CIEXYZTRIPLE      lcsEndpoints,
       U_LCS_GAMMARGB      lcsGammaRGB,
       char                *lcsFilename
-   ){
+){
    U_LOGCOLORSPACEA lcsa;
    lcsa.lcsSignature  =    U_LCS_SIGNATURE;
    lcsa.lcsVersion    =    U_LCS_SIGNATURE;  
@@ -1879,7 +1879,7 @@ U_LOGCOLORSPACEW logcolorspacew_set(
     U_CIEXYZTRIPLE      lcsEndpoints,
     U_LCS_GAMMARGB      lcsGammaRGB,
     uint16_t            *lcsFilename
-    ){
+){
     U_LOGCOLORSPACEW lcsa;
     lcsa.lcsSignature  =    U_LCS_SIGNATURE;
     lcsa.lcsVersion    =    U_LCS_SIGNATURE;  
@@ -1919,7 +1919,7 @@ U_PANOSE panose_set(
       uint8_t bLetterform,
       uint8_t bMidline,
       uint8_t bXHeight
-    ){
+){
     U_PANOSE panose;
     panose.bFamilyType       = bFamilyType;      
     panose.bSerifStyle       = bSerifStyle;      
@@ -1968,7 +1968,7 @@ U_LOGFONT logfont_set(
     uint8_t    lfQuality,
     uint8_t    lfPitchAndFamily,
     uint16_t  *lfFaceName
-    ){
+){
     U_LOGFONT lf;
     lf.lfHeight                  = lfHeight;          
     lf.lfWidth                   = lfWidth;           
@@ -2004,7 +2004,7 @@ U_LOGFONT_PANOSE logfont_panose_set(
       uint16_t   *elfStyle,
       uint32_t    elfStyleSize,
       U_PANOSE    elfPanose
-    ){
+){
    U_LOGFONT_PANOSE lfp;
    memset(&lfp,0,sizeof(U_LOGFONT_PANOSE)); // all fields zero unless needed.  Many should be ignored or must be 0.
    wchar16strncpy(lfp.elfFullName, elfFullName, U_LF_FULLFACESIZE);
@@ -2042,7 +2042,7 @@ U_BITMAPINFOHEADER bitmapinfoheader_set(
       int32_t       biYPelsPerMeter,
       U_NUM_RGBQUAD biClrUsed,
       uint32_t      biClrImportant
-    ){
+){
     U_BITMAPINFOHEADER Bmi;
     Bmi.biSize          = sizeof(U_BITMAPINFOHEADER);         
     Bmi.biWidth         = biWidth;        
@@ -2068,7 +2068,7 @@ U_BITMAPINFOHEADER bitmapinfoheader_set(
 PU_BITMAPINFO bitmapinfo_set(
       U_BITMAPINFOHEADER  BmiHeader,
       PU_RGBQUAD          BmiColors
-   ){
+){
    char *record;
    int   irecsize;
    int   cbColors, cbColors4, off;
@@ -2108,7 +2108,7 @@ PU_EXTLOGPEN extlogpen_set(
       int32_t             elpHatch,
       U_NUM_STYLEENTRY    elpNumEntries,
       U_STYLEENTRY       *elpStyleEntry
-   ){
+){
    int irecsize,szSyleArray;
    char *record;
    
@@ -2147,7 +2147,7 @@ U_LOGPEN logpen_set(
       uint32_t     lopnStyle,
       U_POINT      lopnWidth,
       U_COLORREF   lopnColor
-   ){
+){
    U_LOGPEN lp;
    lp.lopnStyle = lopnStyle;
    lp.lopnWidth = lopnWidth;
@@ -2168,7 +2168,7 @@ U_LOGPLTNTRY logpltntry_set(
       uint8_t    peRed,
       uint8_t    peGreen,
       uint8_t    peBlue
-   ){
+){
    U_LOGPLTNTRY lpny;
    lpny.peReserved = peReserved;
    lpny.peRed      = peRed;     
@@ -2186,7 +2186,7 @@ U_LOGPLTNTRY logpltntry_set(
 PU_LOGPALETTE logpalette_set(
       U_NUM_LOGPLTNTRY    palNumEntries,
       PU_LOGPLTNTRY      *palPalEntry
-   ){
+){
    PU_LOGPALETTE record;
    int cbPalArray,irecsize;
    
@@ -2211,7 +2211,7 @@ PU_LOGPALETTE logpalette_set(
 U_RGNDATAHEADER rgndataheader_set(
       U_NUM_RECTL         nCount,
       U_RECTL             rclBounds
-   ){
+){
    U_RGNDATAHEADER rdh;
    rdh.dwSize    = U_RDH_OBJSIZE;  
    rdh.iType     = U_RDH_RECTANGLES;   
@@ -2230,7 +2230,7 @@ U_RGNDATAHEADER rgndataheader_set(
 PU_RGNDATA rgndata_set(
       U_RGNDATAHEADER     rdh,
       PU_RECTL            Buffer
-   ){
+){
    char *record;
    int irecsize;
    int szRgnArray,off;
@@ -2276,7 +2276,7 @@ U_COLORADJUSTMENT coloradjustment_set(
       int16_t             Brightness,
       int16_t             Colorfulness,
       int16_t             RedGreenTint
-   ){
+){
    U_COLORADJUSTMENT ca;
    ca.caSize            = Size;                     
    ca.caFlags           = Flags;          
@@ -2285,7 +2285,7 @@ U_COLORADJUSTMENT coloradjustment_set(
    ca.caGreenGamma      = U_MNMX(GreenGamma,     U_RGB_GAMMA_MIN,       U_RGB_GAMMA_MAX);
    ca.caBlueGamma       = U_MNMX(BlueGamma,      U_RGB_GAMMA_MIN,       U_RGB_GAMMA_MAX);
    // Next one is different to eliminate compiler warning -  U_R_B_MIN is 0 and unsigned
-   ca.caReferenceBlack  = U_MAX( ReferenceBlack, U_REFERENCE_BLACK_MAX);
+   ca.caReferenceBlack  = U_MAX(ReferenceBlack, U_REFERENCE_BLACK_MAX);
    ca.caReferenceWhite  = U_MNMX(ReferenceWhite, U_REFERENCE_WHITE_MIN, U_REFERENCE_WHITE_MAX); 
    ca.caContrast        = U_MNMX(Contrast,       U_COLOR_ADJ_MIN,       U_COLOR_ADJ_MAX); 
    ca.caBrightness      = U_MNMX(Brightness,     U_COLOR_ADJ_MIN,       U_COLOR_ADJ_MAX); 
@@ -2347,7 +2347,7 @@ U_PIXELFORMATDESCRIPTOR pixelformatdescriptor_set(
       uint32_t   dwLayerMask,
       uint32_t   dwVisibleMask,
       uint32_t   dwDamageMask
-   ){
+){
    U_PIXELFORMATDESCRIPTOR pfd;
    pfd.nSize           = sizeof(U_PIXELFORMATDESCRIPTOR);                  
    pfd.nVersion        = 1;        
@@ -2398,7 +2398,7 @@ char *emrtext_set(
       uint32_t         fOptions,
       U_RECTL          rcl,
       uint32_t        *Dx
-    ){
+){
     int   irecsize,cbDxArray,cbString4,cbString,off;
     char *record;
     uint32_t *loffDx;
@@ -2456,7 +2456,7 @@ Each should be called in preference to the underlying "base" EMR function.
 */
 char *textcomment_set(
       const char *string
-   ){
+){
    if(!string)return(NULL);
    return(U_EMRCOMMENT_set(1 + strlen(string),string));
 }
@@ -2478,7 +2478,7 @@ char *textcomment_set(
 char *deleteobject_set(
       uint32_t    *ihObject,
       EMFHANDLES  *eht
-   ){
+){
    uint32_t saveObject=*ihObject;
    if(emf_htable_delete(ihObject,eht))return(NULL);  // invalid handle or other problem, cannot be deleted
    return(U_EMRDELETEOBJECT_set(saveObject));
@@ -2494,7 +2494,7 @@ char *deleteobject_set(
 char *selectobject_set(
       uint32_t    ihObject,
       EMFHANDLES *eht
-   ){
+){
    if(!(U_STOCK_OBJECT & ihObject)){        // not a stock object, those go straight through
      if(ihObject > eht->top)return(NULL);   // handle this high is not in the table
      if(!eht->table[ihObject])return(NULL); // handle is not in the table, so not active, so cannot be selected
@@ -2520,9 +2520,9 @@ char *extcreatepen_set(
       const uint32_t   cbPx,
       char            *Px,
       PU_EXTLOGPEN     elp
-   ){
+){
    if(emf_htable_insert(ihPen, eht))return(NULL);
-   return(U_EMREXTCREATEPEN_set(*ihPen, Bmi, cbPx, Px, elp ));
+   return(U_EMREXTCREATEPEN_set(*ihPen, Bmi, cbPx, Px, elp));
 }
 
 /**
@@ -2537,7 +2537,7 @@ char *createpen_set(
       uint32_t   *ihPen,
       EMFHANDLES *eht,
       U_LOGPEN    lopn
-   ){
+){
    if(emf_htable_insert(ihPen, eht))return(NULL);
    return(U_EMRCREATEPEN_set(*ihPen, lopn));
 }
@@ -2554,7 +2554,7 @@ char *createbrushindirect_set(
       uint32_t    *ihBrush,
       EMFHANDLES  *eht,
       U_LOGBRUSH   lb
-   ){
+){
    if(emf_htable_insert(ihBrush, eht))return(NULL);
    return(U_EMRCREATEBRUSHINDIRECT_set(*ihBrush, lb));
 }
@@ -2568,7 +2568,7 @@ char *createbrushindirect_set(
     \param iUsage  DIBColors enumeration
     \param Bmi     Bitmap info
     \param cbPx    Size in bytes of pixel array (row stride * height, there may be some padding at the end of each row)
-    \param Px      (Optional) bitmapbuffer (pixel array section )
+    \param Px      (Optional) bitmapbuffer (pixel array section)
 */
 char *createdibpatternbrushpt_set(
       uint32_t            *ihBrush,
@@ -2578,7 +2578,7 @@ char *createdibpatternbrushpt_set(
       const uint32_t       cbPx,
       const char          *Px
       
-   ){
+){
    if(emf_htable_insert(ihBrush, eht))return(NULL);
    return(U_EMRCREATEDIBPATTERNBRUSHPT_set(*ihBrush, iUsage, Bmi, cbPx, Px));
 }
@@ -2592,7 +2592,7 @@ char *createdibpatternbrushpt_set(
     \param iUsage  DIBColors enumeration
     \param Bmi     Bitmap info
     \param cbPx    Size in bytes of pixel array (row stride * height, there may be some padding at the end of each row)
-    \param Px      (Optional) bitmapbuffer (pixel array section )
+    \param Px      (Optional) bitmapbuffer (pixel array section)
 */
 char *createmonobrush_set(
       uint32_t            *ihBrush,
@@ -2602,7 +2602,7 @@ char *createmonobrush_set(
       const uint32_t       cbPx,
       const char          *Px
       
-   ){
+){
    if(emf_htable_insert(ihBrush, eht))return(NULL);
    return(U_EMRCREATEMONOBRUSH_set(*ihBrush, iUsage, Bmi, cbPx, Px));
 }
@@ -2620,7 +2620,7 @@ char *createcolorspace_set(
       uint32_t          *ihCS,
       EMFHANDLES         *eht,
       U_LOGCOLORSPACEA    lcs
-   ){
+){
    if(emf_htable_insert(ihCS, eht))return(NULL);
    return(U_EMRCREATECOLORSPACE_set(*ihCS,lcs));
 }
@@ -2643,7 +2643,7 @@ char *createcolorspacew_set(
       uint32_t            dwFlags,
       U_CBDATA            cbData,
       uint8_t            *Data
-   ){
+){
    if(emf_htable_insert(ihCS, eht))return(NULL);
    return(U_EMRCREATECOLORSPACEW_set(*ihCS, lcs, dwFlags, cbData, Data));
 }
@@ -2662,7 +2662,7 @@ char *extcreatefontindirectw_set(
       EMFHANDLES *eht,
       const char *elf,
       const char *elfw
-   ){
+){
    if(emf_htable_insert(ihFont, eht))return(NULL);
    return(U_EMREXTCREATEFONTINDIRECTW_set(*ihFont, elf, elfw));
 }
@@ -2679,7 +2679,7 @@ char *createpalette_set(
       uint32_t     *ihPal,
       EMFHANDLES   *eht,
       U_LOGPALETTE  lgpl
-   ){
+){
   if(emf_htable_insert(ihPal, eht))return(NULL);
    return(U_EMRCREATEPALETTE_set(*ihPal, lgpl));
 }
@@ -2700,7 +2700,7 @@ char *setpaletteentries_set(
       const uint32_t         iStart,
       const U_NUM_LOGPLTNTRY cEntries,
       const PU_LOGPLTNTRY    aPalEntries
-   ){
+){
    if(emf_htable_insert(ihPal, eht))return(NULL);
    return(U_EMRSETPALETTEENTRIES_set(*ihPal, iStart, cEntries, aPalEntries));
 }
@@ -2719,7 +2719,7 @@ char *fillrgn_set(
       EMFHANDLES       *eht,
       const U_RECTL     rclBounds,
       const PU_RGNDATA  RgnData
-   ){
+){
    if(emf_htable_insert(ihBrush, eht))return(NULL);
    return(U_EMRFILLRGN_set(rclBounds, *ihBrush, RgnData));
 }
@@ -2740,7 +2740,7 @@ char *framergn_set(
       const U_RECTL     rclBounds,
       const U_SIZEL     szlStroke,
       const PU_RGNDATA  RgnData
-   ){
+){
    if(emf_htable_insert(ihBrush, eht))return(NULL);
    return(U_EMRFRAMERGN_set(rclBounds, *ihBrush, szlStroke, RgnData));
 }
@@ -3012,16 +3012,16 @@ char *U_EMR_CORE8_set(
        uint32_t            iType,
        U_RECTL             rclBounds,          // Bounding rectangle in device units
        uint32_t            iGraphicsMode,      // Graphics mode Enumeration
-       U_FLOAT             exScale,            // scale to 0.01 mm units ( only if iGraphicsMode & GM_COMPATIBLE)
-       U_FLOAT             eyScale,            // scale to 0.01 mm units ( only if iGraphicsMode & GM_COMPATIBLE)
+       U_FLOAT             exScale,            // scale to 0.01 mm units (only if iGraphicsMode & GM_COMPATIBLE)
+       U_FLOAT             eyScale,            // scale to 0.01 mm units (only if iGraphicsMode & GM_COMPATIBLE)
        PU_EMRTEXT          emrtext             // Text parameters
-   ){
+){
    char *record;
    int   irecsize,cbString,cbString4,cbDx,cbEmrtext,cbEmrtextAll;
    uint32_t *loffDx;
    int  csize;
    
-   if(     iType == U_EMR_EXTTEXTOUTA){ csize = 1; } // how many bytes per character
+   if(iType == U_EMR_EXTTEXTOUTA){ csize = 1; } // how many bytes per character
    else if(iType == U_EMR_EXTTEXTOUTW){ csize = 2; }
    else { return(NULL); }
  
@@ -3129,8 +3129,8 @@ char *U_EMR_CORE12_set(
        uint32_t            iUsage,             // DIBcolors Enumeration
        PU_BITMAPINFO       Bmi,                // (Optional) bitmapbuffer (U_BITMAPINFO + pixel array)
        const uint32_t      cbPx,               // Size in bytes of pixel array (row stride * height, there may be some padding at the end of each row)
-       const char         *Px                  // (Optional) bitmapbuffer (pixel array section )
-   ){
+       const char         *Px                  // (Optional) bitmapbuffer (pixel array section)
+){
    char *record;
    int   irecsize;
    int   cbImage,cbImage4,cbBmi,off;
@@ -3178,8 +3178,8 @@ char *U_EMR_CORE13_set(
       uint32_t             Data,            // The meaning and type of this field varies, but it is always 4 bytes
       const PU_BITMAPINFO  Bmi,             // (Optional) bitmapbuffer (U_BITMAPINFO section)
       const uint32_t       cbPx,            // Size in bytes of pixel array (row stride * height, there may be some padding at the end of each row)
-      char                *Px               // (Optional) bitmapbuffer (pixel array section )
-   ){
+      char                *Px               // (Optional) bitmapbuffer (pixel array section)
+){
    char *record;
    int   irecsize;
    int   cbImage,cbImage4,cbBmi,off;
@@ -3227,7 +3227,7 @@ They are listed in order by the corresponding U_EMR_* index number.
     \param szlMillimeters  Reference device size in 0.01 mm
     \param bOpenGL         nonZero if OpenGL commands are included
 */
-char *U_EMRHEADER_set( 
+char *U_EMRHEADER_set(
       const U_RECTL                  rclBounds,
       const U_RECTL                  rclFrame,
       U_PIXELFORMATDESCRIPTOR* const pfmtDesc,
@@ -3236,7 +3236,7 @@ char *U_EMRHEADER_set(
       const U_SIZEL                  szlDevice,
       const U_SIZEL                  szlMillimeters,
       const uint32_t                 bOpenGL
-   ){
+){
 
    char *record; 
    int cbPFD,cbDesc,cbDesc4;
@@ -3299,7 +3299,7 @@ char *U_EMRPOLYBEZIER_set(
       const U_RECTL   rclBounds,
       const uint32_t  cptl,
       const U_POINTL *points
-   ){
+){
    return(U_EMR_CORE1_set(U_EMR_POLYBEZIER, rclBounds, cptl, points));
 } 
 
@@ -3315,7 +3315,7 @@ char *U_EMRPOLYGON_set(
       const U_RECTL   rclBounds,
       const uint32_t  cptl,
       const U_POINTL *points
-   ){
+){
    return(U_EMR_CORE1_set(U_EMR_POLYGON, rclBounds, cptl, points));
 } 
 
@@ -3331,7 +3331,7 @@ char *U_EMRPOLYLINE_set(
       const U_RECTL   rclBounds,
       const uint32_t  cptl,
       const U_POINTL *points
-   ){
+){
    return(U_EMR_CORE1_set(U_EMR_POLYLINE, rclBounds, cptl, points));
 } 
 
@@ -3347,7 +3347,7 @@ char *U_EMRPOLYBEZIERTO_set(
       const U_RECTL   rclBounds,
       const uint32_t  cptl,
       const U_POINTL *points
-   ){
+){
    return(U_EMR_CORE1_set(U_EMR_POLYBEZIERTO, rclBounds, cptl, points));
 } 
 
@@ -3363,7 +3363,7 @@ char *U_EMRPOLYLINETO_set(
       const U_RECTL   rclBounds,
       const uint32_t  cptl,
       const U_POINTL *points
-   ){
+){
    return(U_EMR_CORE1_set(U_EMR_POLYLINETO, rclBounds, cptl, points));
 } 
 
@@ -3383,7 +3383,7 @@ char *U_EMRPOLYPOLYLINE_set(
       const uint32_t *aPolyCounts,
       const uint32_t  cptl,
       const U_POINTL *points
-   ){
+){
    return(U_EMR_CORE2_set(U_EMR_POLYPOLYLINE, rclBounds, nPolys, aPolyCounts,cptl, points));
 }
 
@@ -3403,7 +3403,7 @@ char *U_EMRPOLYPOLYGON_set(
       const uint32_t *aPolyCounts,
       const uint32_t  cptl,
       const U_POINTL *points
-   ){
+){
    return(U_EMR_CORE2_set(U_EMR_POLYPOLYGON, rclBounds, nPolys, aPolyCounts,cptl, points));
 }
 
@@ -3415,7 +3415,7 @@ char *U_EMRPOLYPOLYGON_set(
 */
 char *U_EMRSETWINDOWEXTEX_set(
       const U_SIZEL szlExtent 
-   ){
+){
    U_PAIR temp;
    temp.x = szlExtent.cx;
    temp.y = szlExtent.cy;
@@ -3430,7 +3430,7 @@ char *U_EMRSETWINDOWEXTEX_set(
 */
 char *U_EMRSETWINDOWORGEX_set(
       const U_POINTL ptlOrigin
-   ){
+){
    return(U_EMR_CORE7_set(U_EMR_SETWINDOWORGEX, ptlOrigin)); // U_PAIR and U_POINTL are the same thing
 }
 
@@ -3442,7 +3442,7 @@ char *U_EMRSETWINDOWORGEX_set(
 */
 char *U_EMRSETVIEWPORTEXTEX_set(
       const U_SIZEL szlExtent
-   ){
+){
    U_PAIR temp;
    temp.x = szlExtent.cx;
    temp.y = szlExtent.cy;
@@ -3457,7 +3457,7 @@ char *U_EMRSETVIEWPORTEXTEX_set(
 */
 char *U_EMRSETVIEWPORTORGEX_set(
       const U_POINTL ptlOrigin
-   ){
+){
    return(U_EMR_CORE7_set(U_EMR_SETVIEWPORTORGEX, ptlOrigin));  // U_PAIR and U_POINTL are the same thing
 }
 
@@ -3469,7 +3469,7 @@ char *U_EMRSETVIEWPORTORGEX_set(
 */
 char *U_EMRSETBRUSHORGEX_set(
       const U_POINTL ptlOrigin
-   ){
+){
    return(U_EMR_CORE7_set(U_EMR_SETBRUSHORGEX, *((PU_PAIR) & ptlOrigin))); 
 }
 
@@ -3485,7 +3485,7 @@ char *U_EMREOF_set(
       const U_CBPLENTRIES  cbPalEntries,
       const PU_LOGPLTNTRY  PalEntries,
       EMFTRACK            *et
-   ){
+){
    char *record;
    char *ptr;
    int  irecsize;
@@ -3526,7 +3526,7 @@ char *U_EMREOF_set(
 char *U_EMRSETPIXELV_set(
       const U_POINTL    ptlPixel,
       const U_COLORREF  crColor
-   ){
+){
    char *record;
    int  irecsize;
 
@@ -3569,7 +3569,7 @@ char *U_EMRSETMAPPERFLAGS_set(void){
 */
 char *U_EMRSETMAPMODE_set(
       const uint32_t iMode
-   ){
+){
    return(U_EMR_CORE3_set(U_EMR_SETMAPMODE, iMode));
 }
 
@@ -3579,9 +3579,9 @@ char *U_EMRSETMAPMODE_set(
     \return pointer to U_EMR_SETBKMODE record, or NULL on error.
     \param iMode BackgroundMode Enumeration
 */
-char *U_EMRSETBKMODE_set( 
+char *U_EMRSETBKMODE_set(
       const uint32_t iMode
-   ){
+){
   return(U_EMR_CORE3_set(U_EMR_SETBKMODE, iMode));
 }
 
@@ -3593,7 +3593,7 @@ char *U_EMRSETBKMODE_set(
 */
 char *U_EMRSETPOLYFILLMODE_set(
       const uint32_t iMode
-   ){
+){
    return(U_EMR_CORE3_set(U_EMR_SETPOLYFILLMODE, iMode));
 }
 
@@ -3605,7 +3605,7 @@ char *U_EMRSETPOLYFILLMODE_set(
 */
 char *U_EMRSETROP2_set(
       const uint32_t iMode 
-   ){
+){
    return(U_EMR_CORE3_set(U_EMR_SETROP2, iMode));
 }
 
@@ -3617,7 +3617,7 @@ char *U_EMRSETROP2_set(
 */
 char *U_EMRSETSTRETCHBLTMODE_set(
       const uint32_t iMode
-   ){
+){
    return(U_EMR_CORE3_set(U_EMR_SETSTRETCHBLTMODE, iMode));
 }
 
@@ -3629,7 +3629,7 @@ char *U_EMRSETSTRETCHBLTMODE_set(
 */
 char *U_EMRSETTEXTALIGN_set(
       const uint32_t iMode 
-   ){
+){
    return(U_EMR_CORE3_set(U_EMR_SETTEXTALIGN, iMode));
 }
 
@@ -3641,7 +3641,7 @@ char *U_EMRSETTEXTALIGN_set(
 */
 char *U_EMRSETCOLORADJUSTMENT_set(
       const U_COLORADJUSTMENT ColorAdjustment
-   ){
+){
    char *record;
    int  irecsize;
 
@@ -3663,7 +3663,7 @@ char *U_EMRSETCOLORADJUSTMENT_set(
 */
 char *U_EMRSETTEXTCOLOR_set(
       const U_COLORREF crColor
-  ){
+){
   return(U_EMR_CORE3_set(U_EMR_SETTEXTCOLOR, *(uint32_t *) &crColor));
 }
 
@@ -3675,7 +3675,7 @@ char *U_EMRSETTEXTCOLOR_set(
 */
 char *U_EMRSETBKCOLOR_set(
       const U_COLORREF crColor
-  ){
+){
   return(U_EMR_CORE3_set(U_EMR_SETBKCOLOR, *(uint32_t *) &crColor));
 }
 
@@ -3687,7 +3687,7 @@ char *U_EMRSETBKCOLOR_set(
 */
 char *U_EMROFFSETCLIPRGN_set(
       const U_POINTL ptl
-   ){
+){
   return(U_EMR_CORE7_set(U_EMR_OFFSETCLIPRGN, ptl));
 }
 
@@ -3699,7 +3699,7 @@ char *U_EMROFFSETCLIPRGN_set(
 */
 char *U_EMRMOVETOEX_set(
       const U_POINTL ptl
-   ){
+){
    return(U_EMR_CORE7_set(U_EMR_MOVETOEX, ptl));
 }
 
@@ -3720,7 +3720,7 @@ char *U_EMRSETMETARGN_set(void){
 */
 char *U_EMREXCLUDECLIPRECT_set(
       const U_RECTL rclClip
-    ){
+){
     return(U_EMR_CORE4_set(U_EMR_EXCLUDECLIPRECT,rclClip));
 } 
 
@@ -3732,7 +3732,7 @@ char *U_EMREXCLUDECLIPRECT_set(
 */
 char *U_EMRINTERSECTCLIPRECT_set(
       const U_RECTL rclClip
-    ){
+){
     return(U_EMR_CORE4_set(U_EMR_INTERSECTCLIPRECT,rclClip));
 } 
 
@@ -3750,7 +3750,7 @@ char *U_EMRSCALEVIEWPORTEXTEX_set(
     const int32_t  xDenom,
     const int32_t  yNum,
     const int32_t  yDenom
-  ){
+){
   return(U_EMR_CORE4_set(U_EMR_SCALEVIEWPORTEXTEX,(U_RECTL){xNum,xDenom,yNum,yDenom}));
 }
 
@@ -3769,7 +3769,7 @@ char *U_EMRSCALEWINDOWEXTEX_set(
     const int32_t  xDenom,
     const int32_t  yNum,
     const int32_t  yDenom
-  ){
+){
   return(U_EMR_CORE4_set(U_EMR_SCALEWINDOWEXTEX,(U_RECTL){xNum,xDenom,yNum,yDenom}));
 }
 
@@ -3790,7 +3790,7 @@ char *U_EMRSAVEDC_set(void){
 */
 char *U_EMRRESTOREDC_set(
     const int32_t iRelative
-  ){
+){
   return(U_EMR_CORE3_set(U_EMR_RESTOREDC, (uint32_t) iRelative));
 }
 
@@ -3802,7 +3802,7 @@ char *U_EMRRESTOREDC_set(
 */
 char *U_EMRSETWORLDTRANSFORM_set(
       const U_XFORM xform
-   ){
+){
    char *record;
    int  irecsize;
 
@@ -3826,7 +3826,7 @@ char *U_EMRSETWORLDTRANSFORM_set(
 char *U_EMRMODIFYWORLDTRANSFORM_set(
       const U_XFORM  xform,
       const uint32_t iMode
-   ){
+){
    char *record;
    int irecsize;
 
@@ -3850,7 +3850,7 @@ char *U_EMRMODIFYWORLDTRANSFORM_set(
 */
 char *U_EMRSELECTOBJECT_set(
       const uint32_t ihObject 
-   ){
+){
    char *record;
    int  irecsize;
 
@@ -3875,7 +3875,7 @@ char *U_EMRSELECTOBJECT_set(
 char *U_EMRCREATEPEN_set(
       const uint32_t ihPen,
       const U_LOGPEN lopn
-   ){
+){
    char *record;
    int irecsize=sizeof(U_EMRCREATEPEN);
 
@@ -3900,7 +3900,7 @@ char *U_EMRCREATEPEN_set(
 char *U_EMRCREATEBRUSHINDIRECT_set(
       const uint32_t   ihBrush,
       const U_LOGBRUSH lb
-   ){
+){
    char *record;
    int  irecsize;
 
@@ -3924,7 +3924,7 @@ char *U_EMRCREATEBRUSHINDIRECT_set(
 */
 char *U_EMRDELETEOBJECT_set(
       const uint32_t ihObject
-   ){
+){
    char *record;
    int  irecsize;
 
@@ -3952,7 +3952,7 @@ char *U_EMRANGLEARC_set(
       const uint32_t  nRadius,
       const U_FLOAT   eStartAngle,
       const U_FLOAT   eSweepAngle
-   ){
+){
    char *record;
    int  irecsize;
 
@@ -3977,7 +3977,7 @@ char *U_EMRANGLEARC_set(
 */
 char *U_EMRELLIPSE_set(
       const U_RECTL rclBox
-   ){
+){
    return(U_EMR_CORE4_set(U_EMR_ELLIPSE,rclBox));
 } 
 
@@ -3989,7 +3989,7 @@ char *U_EMRELLIPSE_set(
 */
 char *U_EMRRECTANGLE_set(
       const U_RECTL rclBox
-   ){
+){
    return(U_EMR_CORE4_set(U_EMR_RECTANGLE,rclBox));
 } 
 
@@ -4003,7 +4003,7 @@ char *U_EMRRECTANGLE_set(
 char *U_EMRROUNDRECT_set(
       const U_RECTL rclBox,
       const U_SIZEL szlCorner
-   ){
+){
    char *record;
    int  irecsize;
 
@@ -4030,7 +4030,7 @@ char *U_EMRARC_set(
       const U_RECTL  rclBox,
       const U_POINTL ptlStart,
       const U_POINTL ptlEnd
-   ){
+){
    return(U_EMR_CORE9_set(U_EMR_ARC,rclBox, ptlStart, ptlEnd));
 }
 
@@ -4046,7 +4046,7 @@ char *U_EMRCHORD_set(
       const U_RECTL  rclBox,
       const U_POINTL ptlStart,
       const U_POINTL ptlEnd
-   ){
+){
    return(U_EMR_CORE9_set(U_EMR_CHORD,rclBox, ptlStart, ptlEnd));
 }
 
@@ -4062,7 +4062,7 @@ char *U_EMRPIE_set(
       const U_RECTL  rclBox,
       const U_POINTL ptlStart,
       const U_POINTL ptlEnd
-   ){
+){
    return(U_EMR_CORE9_set(U_EMR_PIE,rclBox, ptlStart, ptlEnd));
 }
 
@@ -4074,7 +4074,7 @@ char *U_EMRPIE_set(
 */
 char *U_EMRSELECTPALETTE_set(
       const uint32_t ihPal
-   ){
+){
    return(U_EMR_CORE3_set(U_EMR_SELECTPALETTE, ihPal));
 }
 
@@ -4089,7 +4089,7 @@ char *U_EMRSELECTPALETTE_set(
 char *U_EMRCREATEPALETTE_set(
       const uint32_t     ihPal,
       const U_LOGPALETTE lgpl
-   ){
+){
    char *record;
    int  irecsize;
 
@@ -4119,7 +4119,7 @@ char *U_EMRSETPALETTEENTRIES_set(
       const uint32_t         iStart,
       const U_NUM_LOGPLTNTRY cEntries,
       const PU_LOGPLTNTRY    aPalEntries
-   ){
+){
    char *record;
    int  irecsize;
    int  cbPals;
@@ -4149,7 +4149,7 @@ char *U_EMRSETPALETTEENTRIES_set(
 char *U_EMRRESIZEPALETTE_set(
       const uint32_t ihPal,
       const uint32_t cEntries
-   ){
+){
    return(U_EMR_CORE7_set(U_EMR_RESIZEPALETTE, (U_PAIR){ihPal,cEntries}));
 }
 
@@ -4174,7 +4174,7 @@ char *U_EMREXTFLOODFILL_set(
       const U_POINTL   ptlStart,
       const U_COLORREF crColor,
       const uint32_t   iMode
-   ){
+){
    char *record;
    int  irecsize;
 
@@ -4198,7 +4198,7 @@ char *U_EMREXTFLOODFILL_set(
 */
 char *U_EMRLINETO_set(
       const U_POINTL ptl
-   ){
+){
    return(U_EMR_CORE7_set(U_EMR_LINETO, ptl));
 }
 
@@ -4217,7 +4217,7 @@ char *U_EMRARCTO_set(
       U_RECTL             rclBox,
       U_POINTL            ptlStart,
       U_POINTL            ptlEnd
-   ){
+){
    return(U_EMR_CORE9_set(U_EMR_ARCTO,rclBox, ptlStart, ptlEnd));
 }
 
@@ -4235,7 +4235,7 @@ char *U_EMRPOLYDRAW_set(
       const U_NUM_POINTL  cptl,
       const U_POINTL     *aptl,
       const uint8_t      *abTypes
-   ){
+){
    char *record;
    int  irecsize;
    int  cbPoints, cbAbTypes, cbAbTypes4, off;
@@ -4269,7 +4269,7 @@ char *U_EMRPOLYDRAW_set(
 */
 char *U_EMRSETARCDIRECTION_set(
       const uint32_t iArcDirection
-   ){
+){
    return(U_EMR_CORE3_set(U_EMR_SETARCDIRECTION, iArcDirection));
 }
 
@@ -4281,7 +4281,7 @@ char *U_EMRSETARCDIRECTION_set(
 */
 char *U_EMRSETMITERLIMIT_set(
       const uint32_t eMiterLimit
-   ){
+){
    return(U_EMR_CORE3_set(U_EMR_SETMITERLIMIT, eMiterLimit));
 }
 
@@ -4323,7 +4323,7 @@ char *U_EMRCLOSEFIGURE_set(void){
 */
 char *U_EMRFILLPATH_set(
       const U_RECTL rclBox
-   ){
+){
    return(U_EMR_CORE4_set(U_EMR_FILLPATH,rclBox));
 } 
 
@@ -4339,7 +4339,7 @@ char *U_EMRFILLPATH_set(
 */
 char *U_EMRSTROKEANDFILLPATH_set(
       const U_RECTL rclBox
-   ){
+){
    return(U_EMR_CORE4_set(U_EMR_STROKEANDFILLPATH,rclBox));
 } 
 
@@ -4353,7 +4353,7 @@ char *U_EMRSTROKEANDFILLPATH_set(
 */
 char *U_EMRSTROKEPATH_set(
       const U_RECTL rclBox
-   ){
+){
    return(U_EMR_CORE4_set(U_EMR_STROKEPATH,rclBox));
 } 
 
@@ -4383,7 +4383,7 @@ char *U_EMRWIDENPATH_set(void){
 */
 char *U_EMRSELECTCLIPPATH_set(
       const uint32_t iMode
-   ){ 
+){ 
    return(U_EMR_CORE3_set(U_EMR_SELECTCLIPPATH, iMode));
 }
 
@@ -4408,7 +4408,7 @@ char *U_EMRABORTPATH_set(void){
 char *U_EMRCOMMENT_set(
       const U_CBDATA cbData,
       const char    *Data
-   ){
+){
    char *record;
    unsigned int   cbData4;
    int   irecsize;
@@ -4439,7 +4439,7 @@ char *U_EMRFILLRGN_set(
       const U_RECTL     rclBounds,
       const uint32_t    ihBrush,
       const PU_RGNDATA  RgnData
-   ){
+){
    char *record;
    int   irecsize;
    int   cbRgns,cbRgns4,rds,rds4,off;
@@ -4480,7 +4480,7 @@ char *U_EMRFRAMERGN_set(
       const uint32_t    ihBrush,
       const U_SIZEL     szlStroke,
       const PU_RGNDATA  RgnData
-   ){
+){
    char *record;
    int   irecsize;
    int   cbRgns,cbRgns4,rds,rds4,off;
@@ -4515,7 +4515,7 @@ char *U_EMRFRAMERGN_set(
 */
 char *U_EMRINVERTRGN_set(
       const PU_RGNDATA RgnData
-   ){
+){
    return(U_EMR_CORE11_set(U_EMR_INVERTRGN, RgnData));
 } 
 
@@ -4527,7 +4527,7 @@ char *U_EMRINVERTRGN_set(
 */
 char *U_EMRPAINTRGN_set(
       const PU_RGNDATA RgnData
-   ){
+){
    return(U_EMR_CORE11_set(U_EMR_PAINTRGN, RgnData));
 } 
 
@@ -4541,7 +4541,7 @@ char *U_EMRPAINTRGN_set(
 char *U_EMREXTSELECTCLIPRGN_set(
       const uint32_t    iMode,
       const PU_RGNDATA  RgnData
-   ){
+){
    char *record;
    int   irecsize;
    int   cbRgns,cbRgns4,rds,rds4,off;
@@ -4580,7 +4580,7 @@ char *U_EMREXTSELECTCLIPRGN_set(
     \param dwRop        Ternary Raster Operation enumeration
     \param Bmi          (Optional) bitmapbuffer (U_BITMAPINFO section)
     \param cbPx         Size in bytes of pixel array (row stride * height, there may be some padding at the end of each row)
-    \param Px           (Optional) bitmapbuffer (pixel array section )
+    \param Px           (Optional) bitmapbuffer (pixel array section)
 */
 char *U_EMRBITBLT_set(
       const U_RECTL        rclBounds,
@@ -4594,7 +4594,7 @@ char *U_EMRBITBLT_set(
       const PU_BITMAPINFO  Bmi,
       const uint32_t       cbPx,
       char                *Px
-   ){
+){
    char *record;
    int   irecsize;
    int   cbImage,cbImage4,cbBmi,off;
@@ -4634,7 +4634,7 @@ char *U_EMRBITBLT_set(
     \param dwRop        Ternary Raster Operation enumeration
     \param Bmi          (Optional) bitmapbuffer (U_BITMAPINFO section)
     \param cbPx         Size in bytes of pixel array (row stride * height, there may be some padding at the end of each row)
-    \param Px           (Optional) bitmapbuffer (pixel array section )
+    \param Px           (Optional) bitmapbuffer (pixel array section)
 */
 char *U_EMRSTRETCHBLT_set(
       const U_RECTL        rclBounds,
@@ -4649,7 +4649,7 @@ char *U_EMRSTRETCHBLT_set(
       const PU_BITMAPINFO  Bmi,
       const uint32_t       cbPx,
       char                *Px
-   ){
+){
    char *record;
    int   irecsize;
    int   cbImage,cbImage4,cbBmi,off;
@@ -4692,10 +4692,10 @@ char *U_EMRSTRETCHBLT_set(
     \param dwRop        Ternary Raster Operation enumeration
     \param Bmi          (Optional) bitmapbuffer (U_BITMAPINFO section)
     \param cbPx         Size in bytes of pixel array (row stride * height, there may be some padding at the end of each row)
-    \param Px           (Optional) bitmapbuffer (pixel array section )
+    \param Px           (Optional) bitmapbuffer (pixel array section)
     \param MskBmi       (Optional) bitmapbuffer (U_BITMAPINFO section)
     \param cbMsk        Size in bytes of mask array (row stride * height, there may be some padding at the end of each row)
-    \param Msk          (Optional) bitmapbuffer (mask section )
+    \param Msk          (Optional) bitmapbuffer (mask section)
 */
 char *U_EMRMASKBLT_set(
       const U_RECTL        rclBounds,
@@ -4714,7 +4714,7 @@ char *U_EMRMASKBLT_set(
       const PU_BITMAPINFO  MskBmi,
       const uint32_t       cbMsk,
       char                *Msk
-   ){
+){
    char *record;
    int   irecsize;
    int   cbImage,cbImage4,cbBmi,cbMskImage,cbMskImage4,cbMskBmi,off;
@@ -4760,10 +4760,10 @@ char *U_EMRMASKBLT_set(
     \param iUsageMask   DIBcolors Enumeration
     \param Bmi          (Optional) bitmapbuffer (U_BITMAPINFO section)
     \param cbPx         Size in bytes of pixel array (row stride * height, there may be some padding at the end of each row)
-    \param Px           (Optional) bitmapbuffer (pixel array section )
+    \param Px           (Optional) bitmapbuffer (pixel array section)
     \param MskBmi       (Optional) bitmapbuffer (U_BITMAPINFO section)
     \param cbMsk        Size in bytes of mask array (row stride * height, there may be some padding at the end of each row)
-    \param Msk          (Optional) bitmapbuffer (mask section )
+    \param Msk          (Optional) bitmapbuffer (mask section)
 */
 char *U_EMRPLGBLT_set(
       const U_RECTL       rclBounds,
@@ -4781,7 +4781,7 @@ char *U_EMRPLGBLT_set(
       const PU_BITMAPINFO MskBmi,
       const uint32_t      cbMsk,
       char               *Msk
-   ){
+){
    char *record;
    int   irecsize;
    int   cbImage,cbImage4,cbBmi,cbMskImage,cbMskImage4,cbMskBmi,off;
@@ -4823,7 +4823,7 @@ char *U_EMRPLGBLT_set(
     \param cScans     Number of scan lines
     \param Bmi        (Optional) bitmapbuffer (U_BITMAPINFO section)
     \param cbPx       Size in bytes of pixel array (row stride * height, there may be some padding at the end of each row)
-    \param Px         (Optional) bitmapbuffer (pixel array section )
+    \param Px         (Optional) bitmapbuffer (pixel array section)
 */
 char *U_EMRSETDIBITSTODEVICE_set(
       const U_RECTL        rclBounds,
@@ -4836,7 +4836,7 @@ char *U_EMRSETDIBITSTODEVICE_set(
       const PU_BITMAPINFO  Bmi,
       const uint32_t       cbPx,
       char                *Px
-   ){
+){
    char *record;
    int   irecsize;
    int   cbImage,cbImage4,cbBmi,off;
@@ -4874,7 +4874,7 @@ char *U_EMRSETDIBITSTODEVICE_set(
     \param dwRop     RasterOPeration Enumeration
     \param Bmi       (Optional) bitmapbuffer (U_BITMAPINFO section)
     \param cbPx      Size in bytes of pixel array (row STRIDE * height, there may be some padding at the end of each row)
-    \param Px        (Optional) bitmapbuffer (pixel array section )
+    \param Px        (Optional) bitmapbuffer (pixel array section)
 */
 char *U_EMRSTRETCHDIBITS_set(
       const U_RECTL        rclBounds,
@@ -4887,7 +4887,7 @@ char *U_EMRSTRETCHDIBITS_set(
       const PU_BITMAPINFO  Bmi,
       const uint32_t       cbPx,
       char                *Px
-   ){
+){
    char *record;
    int   irecsize;
    int   cbImage,cbImage4,cbBmi,off;
@@ -4925,7 +4925,7 @@ char *U_EMREXTCREATEFONTINDIRECTW_set(
       const uint32_t               ihFont,
       const char *                 elf,
       const char *                 elfw
-   ){
+){
    char *record;
    const char *cptr;
    int   irecsize;
@@ -4953,8 +4953,8 @@ char *U_EMREXTCREATEFONTINDIRECTW_set(
     \return pointer to U_EMR_EXTTEXTOUTA record, or NULL on error.
     \param rclBounds     Bounding rectangle in device units
     \param iGraphicsMode Graphics mode Enumeration
-    \param exScale       scale to 0.01 mm units ( only if iGraphicsMode & GM_COMPATIBLE)
-    \param eyScale       scale to 0.01 mm units ( only if iGraphicsMode & GM_COMPATIBLE)
+    \param exScale       scale to 0.01 mm units (only if iGraphicsMode & GM_COMPATIBLE)
+    \param eyScale       scale to 0.01 mm units (only if iGraphicsMode & GM_COMPATIBLE)
     \param emrtext       Text parameters
 */
 char *U_EMREXTTEXTOUTA_set(
@@ -4963,7 +4963,7 @@ char *U_EMREXTTEXTOUTA_set(
       const U_FLOAT     exScale,
       const U_FLOAT     eyScale,
       const PU_EMRTEXT  emrtext
-   ){
+){
    return(U_EMR_CORE8_set(U_EMR_EXTTEXTOUTA,rclBounds, iGraphicsMode, exScale, eyScale,emrtext));
 }
 
@@ -4973,8 +4973,8 @@ char *U_EMREXTTEXTOUTA_set(
     \return pointer to U_EMR_EXTTEXTOUTW record, or NULL on error.
     \param rclBounds     Bounding rectangle in device units
     \param iGraphicsMode Graphics mode Enumeration
-    \param exScale       scale to 0.01 mm units ( only if iGraphicsMode & GM_COMPATIBLE)
-    \param eyScale       scale to 0.01 mm units ( only if iGraphicsMode & GM_COMPATIBLE)
+    \param exScale       scale to 0.01 mm units (only if iGraphicsMode & GM_COMPATIBLE)
+    \param eyScale       scale to 0.01 mm units (only if iGraphicsMode & GM_COMPATIBLE)
     \param emrtext       Text parameters
 */
 char *U_EMREXTTEXTOUTW_set(
@@ -4983,7 +4983,7 @@ char *U_EMREXTTEXTOUTW_set(
       const U_FLOAT    exScale,
       const U_FLOAT    eyScale,
       const PU_EMRTEXT emrtext
-   ){
+){
    return(U_EMR_CORE8_set(U_EMR_EXTTEXTOUTW,rclBounds, iGraphicsMode, exScale, eyScale,emrtext));
 }
 
@@ -4999,7 +4999,7 @@ char *U_EMRPOLYBEZIER16_set(
       const U_RECTL    rclBounds,
       const uint32_t   cpts,
       const U_POINT16 *points
-   ){
+){
    return(U_EMR_CORE6_set(U_EMR_POLYBEZIER16, rclBounds, cpts, points));
 } 
 
@@ -5015,7 +5015,7 @@ char *U_EMRPOLYGON16_set(
       const U_RECTL    rclBounds,
       const uint32_t   cpts,
       const U_POINT16 *points
-   ){
+){
    return(U_EMR_CORE6_set(U_EMR_POLYGON16, rclBounds, cpts, points));
 } 
 
@@ -5031,7 +5031,7 @@ char *U_EMRPOLYLINE16_set(
       const U_RECTL    rclBounds,
       const uint32_t   cpts,
       const U_POINT16 *points
-   ){
+){
    return(U_EMR_CORE6_set(U_EMR_POLYLINE16, rclBounds, cpts, points));
 } 
 
@@ -5047,7 +5047,7 @@ char *U_EMRPOLYBEZIERTO16_set(
       const U_RECTL    rclBounds,
       const uint32_t   cpts,
       const U_POINT16 *points
-   ){
+){
    return(U_EMR_CORE6_set(U_EMR_POLYBEZIERTO16, rclBounds, cpts, points));
 } 
 
@@ -5063,7 +5063,7 @@ char *U_EMRPOLYLINETO16_set(
       const U_RECTL    rclBounds,
       const uint32_t   cpts,
       const U_POINT16 *points
-   ){
+){
    return(U_EMR_CORE6_set(U_EMR_POLYLINETO16, rclBounds, cpts, points));
 } 
 
@@ -5083,7 +5083,7 @@ char *U_EMRPOLYPOLYLINE16_set(
       const uint32_t  *aPolyCounts,
       const uint32_t   cpts,
       const U_POINT16 *points
-   ){
+){
    return(U_EMR_CORE10_set(U_EMR_POLYPOLYLINE16, rclBounds, nPolys, aPolyCounts,cpts, points));
 }
 
@@ -5103,7 +5103,7 @@ char *U_EMRPOLYPOLYGON16_set(
       const uint32_t  *aPolyCounts,
       const uint32_t   cpts,
       const U_POINT16 *points
-   ){
+){
    return(U_EMR_CORE10_set(U_EMR_POLYPOLYGON16, rclBounds, nPolys, aPolyCounts,cpts, points));
 }
 
@@ -5122,7 +5122,7 @@ char *U_EMRPOLYDRAW16_set(
      const U_NUM_POINT16  cpts,
      const U_POINT16     *aptl,
      const uint8_t       *abTypes
-   ){
+){
    char *record;
    int  irecsize;
    int  cbPoints, cbAbTypes, cbAbTypes4, off;
@@ -5156,7 +5156,7 @@ char *U_EMRPOLYDRAW16_set(
     \param iUsage  DIBcolors Enumeration                                                     
     \param Bmi     (Optional) bitmapbuffer (U_BITMAPINFO + pixel array)                      
     \param cbPx    Size in bytes of pixel array (row stride * height, there may be some padding at the end of each row)
-    \param Px      (Optional) bitmapbuffer (pixel array section )
+    \param Px      (Optional) bitmapbuffer (pixel array section)
 */
 char *U_EMRCREATEMONOBRUSH_set(
       const uint32_t            ihBrush,
@@ -5164,7 +5164,7 @@ char *U_EMRCREATEMONOBRUSH_set(
       const PU_BITMAPINFO       Bmi,
       const uint32_t            cbPx,
       const char               *Px
-   ){
+){
    return(U_EMR_CORE12_set(U_EMR_CREATEMONOBRUSH,ihBrush,iUsage,Bmi,cbPx,Px));
 }
 
@@ -5177,7 +5177,7 @@ char *U_EMRCREATEMONOBRUSH_set(
     \param iUsage  DIBcolors Enumeration
     \param Bmi     (Optional) bitmapbuffer (U_BITMAPINFO + pixel array)
     \param cbPx    Size in bytes of pixel array (row stride * height, there may be some padding at the end of each row)
-    \param Px      (Optional) bitmapbuffer (pixel array section )
+    \param Px      (Optional) bitmapbuffer (pixel array section)
 */
 char *U_EMRCREATEDIBPATTERNBRUSHPT_set(
       const uint32_t            ihBrush,
@@ -5185,7 +5185,7 @@ char *U_EMRCREATEDIBPATTERNBRUSHPT_set(
       const PU_BITMAPINFO       Bmi,
       const uint32_t            cbPx,
       const char               *Px
-   ){
+){
     return(U_EMR_CORE12_set(U_EMR_CREATEDIBPATTERNBRUSHPT,ihBrush,iUsage,Bmi,cbPx,Px));
 }
 
@@ -5207,7 +5207,7 @@ char *U_EMREXTCREATEPEN_set(
       const uint32_t      cbPx,
       char               *Px,
       const PU_EXTLOGPEN  elp
-   ){
+){
    char *record;
    int   cbImage,cbImage4,cbBmi,off;
    int   irecsize,cbStyleArray,cbElp;
@@ -5272,7 +5272,7 @@ char *U_EMREXTCREATEPEN_set(
 */
 char *U_EMRSETICMMODE_set(
       const uint32_t iMode
-   ){ 
+){ 
    return(U_EMR_CORE3_set(U_EMR_SETICMMODE, iMode));
 }
 
@@ -5287,7 +5287,7 @@ char *U_EMRSETICMMODE_set(
 char *U_EMRCREATECOLORSPACE_set(
       const uint32_t            ihCS,
       const U_LOGCOLORSPACEA    lcs
-   ){
+){
    char *record;
    int   irecsize;
 
@@ -5310,7 +5310,7 @@ char *U_EMRCREATECOLORSPACE_set(
 */
 char *U_EMRSETCOLORSPACE_set(
       const uint32_t             ihCS
-   ){
+){
    return(U_EMR_CORE3_set(U_EMR_SETCOLORSPACE, ihCS));
 }
 
@@ -5322,7 +5322,7 @@ char *U_EMRSETCOLORSPACE_set(
 */
 char *U_EMRDELETECOLORSPACE_set(
       const uint32_t             ihCS
-   ){
+){
    return(U_EMR_CORE3_set(U_EMR_DELETECOLORSPACE, ihCS));
 }
 
@@ -5336,7 +5336,7 @@ char *U_EMRDELETECOLORSPACE_set(
 */
 char *U_EMRPIXELFORMAT_set(
       const U_PIXELFORMATDESCRIPTOR pfd
-   ){
+){
    char *record;
    int   irecsize;
 
@@ -5375,12 +5375,12 @@ char *U_EMRSMALLTEXTOUT_set(
       const U_FLOAT    eyScale,
       const U_RECTL    rclBounds,
       const char      *TextString
-   ){
+){
    char *record;
    int   irecsize,cbString,cbString4,cbRectl,off;
    int   csize;
    
-   if( fuOptions & U_ETO_SMALL_CHARS ){  csize = 1; }         // how many bytes per character
+   if(fuOptions & U_ETO_SMALL_CHARS){  csize = 1; }         // how many bytes per character
    else {                                csize = 2; }
    cbString = csize * cChars;                                   // filled contents of the string buffer
    cbString4 = UP4(cbString);                                      // size of the variable string buffer
@@ -5433,7 +5433,7 @@ char *U_EMRSMALLTEXTOUT_set(
     \param Blend        Blend function
     \param Bmi          (Optional) bitmapbuffer (U_BITMAPINFO section)
     \param cbPx         Size in bytes of pixel array (row stride * height, there may be some padding at the end of each row)
-    \param Px           (Optional) bitmapbuffer (pixel array section )
+    \param Px           (Optional) bitmapbuffer (pixel array section)
 */
 char *U_EMRALPHABLEND_set(
       const U_RECTL       rclBounds,
@@ -5448,7 +5448,7 @@ char *U_EMRALPHABLEND_set(
       const PU_BITMAPINFO Bmi,
       const uint32_t      cbPx,
       char               *Px
-   ){
+){
    return(U_EMR_CORE13_set(U_EMR_ALPHABLEND,rclBounds,Dest,cDest,Src,cSrc,xformSrc,crBkColorSrc,iUsageSrc,*((uint32_t *) &Blend),Bmi,cbPx,Px));
 }
 
@@ -5477,7 +5477,7 @@ char *U_EMRSETLAYOUT_set(uint32_t iMode){
     \param TColor       Bitmap color to be treated as transparent
     \param Bmi          (Optional) bitmapbuffer (U_BITMAPINFO section)
     \param cbPx         Size in bytes of pixel array (row stride * height, there may be some padding at the end of each row)
-    \param Px           (Optional) bitmapbuffer (pixel array section )
+    \param Px           (Optional) bitmapbuffer (pixel array section)
 */
 char *U_EMRTRANSPARENTBLT_set(
       const U_RECTL       rclBounds,
@@ -5492,7 +5492,7 @@ char *U_EMRTRANSPARENTBLT_set(
       const PU_BITMAPINFO Bmi,
       const uint32_t      cbPx,
       char               *Px
-   ){
+){
    return(U_EMR_CORE13_set(U_EMR_TRANSPARENTBLT,rclBounds,Dest,cDest,Src,cSrc,xformSrc,crBkColorSrc,iUsageSrc,TColor,Bmi,cbPx,Px));
 }
 // U_EMRUNDEF117_set                 117  Not implemented
@@ -5520,14 +5520,14 @@ char *U_EMRGRADIENTFILL_set(
       const uint32_t            ulMode,
       const PU_TRIVERTEX        TriVert,
       const uint32_t           *GradObj
-   ){
+){
    char *record;
    unsigned int   cbTriVert,cbGradObj,off;
    unsigned int   cbGradObjAlloc; /* larger than cbGradObj, because of problem described above */
    int   irecsize;
 
    cbTriVert = sizeof(U_TRIVERTEX) * nTriVert;  // all of the cb's will be a multiple of 4 bytes
-   if(     ulMode == U_GRADIENT_FILL_TRIANGLE){ cbGradObj = sizeof(U_GRADIENT3) * nGradObj; }
+   if(ulMode == U_GRADIENT_FILL_TRIANGLE){ cbGradObj = sizeof(U_GRADIENT3) * nGradObj; }
    else if(ulMode == U_GRADIENT_FILL_RECT_H || 
            ulMode == U_GRADIENT_FILL_RECT_V){   cbGradObj = sizeof(U_GRADIENT4) * nGradObj; }
    else {                                       return(NULL);                               }
@@ -5575,7 +5575,7 @@ char *U_EMRCREATECOLORSPACEW_set(
       const uint32_t          dwFlags,
       const U_CBDATA          cbData,
       const uint8_t          *Data
-   ){
+){
    char *record;
    unsigned int   cbData4,off;
    int   irecsize;

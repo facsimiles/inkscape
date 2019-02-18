@@ -182,7 +182,7 @@ void Blocks::cleanup(void)
     
     // For all items in the current blocks list...
     size_t length = m_blocks.size();
-    for (size_t j = 0; j < length; )
+    for (size_t j = 0; j < length;)
     {
         if (m_blocks[j]->deleted)
         {

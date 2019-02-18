@@ -37,16 +37,16 @@ void SPGlyph::build(SPDocument *document, Inkscape::XML::Node *repr)
 {
     SPObject::build(document, repr);
 
-    this->readAttr( "unicode" );
-    this->readAttr( "glyph-name" );
-    this->readAttr( "d" );
-    this->readAttr( "orientation" );
-    this->readAttr( "arabic-form" );
-    this->readAttr( "lang" );
-    this->readAttr( "horiz-adv-x" );
-    this->readAttr( "vert-origin-x" );
-    this->readAttr( "vert-origin-y" );
-    this->readAttr( "vert-adv-y" );
+    this->readAttr("unicode");
+    this->readAttr("glyph-name");
+    this->readAttr("d");
+    this->readAttr("orientation");
+    this->readAttr("arabic-form");
+    this->readAttr("lang");
+    this->readAttr("horiz-adv-x");
+    this->readAttr("vert-origin-x");
+    this->readAttr("vert-origin-y");
+    this->readAttr("vert-adv-y");
 }
 
 void SPGlyph::release() {
@@ -222,16 +222,16 @@ void SPGlyph::update(SPCtx *ctx, guint flags)
 {
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         /* do something to trigger redisplay, updates? */
-        this->readAttr( "unicode" );
-        this->readAttr( "glyph-name" );
-        this->readAttr( "d" );
-        this->readAttr( "orientation" );
-        this->readAttr( "arabic-form" );
-        this->readAttr( "lang" );
-        this->readAttr( "horiz-adv-x" );
-        this->readAttr( "vert-origin-x" );
-        this->readAttr( "vert-origin-y" );
-        this->readAttr( "vert-adv-y" );
+        this->readAttr("unicode");
+        this->readAttr("glyph-name");
+        this->readAttr("d");
+        this->readAttr("orientation");
+        this->readAttr("arabic-form");
+        this->readAttr("lang");
+        this->readAttr("horiz-adv-x");
+        this->readAttr("vert-origin-x");
+        this->readAttr("vert-origin-y");
+        this->readAttr("vert-adv-y");
     }
 
     SPObject::update(ctx, flags);

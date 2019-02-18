@@ -147,12 +147,12 @@ void SPRoot::set(SPAttributeEnum key, const gchar *value)
         break;
 
     case SP_ATTR_VIEWBOX:
-        set_viewBox( value );
+        set_viewBox(value);
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
         break;
 
     case SP_ATTR_PRESERVEASPECTRATIO:
-        set_preserveAspectRatio( value );
+        set_preserveAspectRatio(value);
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
         break;
 
@@ -224,33 +224,33 @@ void SPRoot::setRootDimensions()
      *   x, y are ignored.
      *   initial viewport = (0 0 width height)
      */
-    if( this->viewBox_set ) {
+    if(this->viewBox_set) {
 
-        if( this->width._set ) {
+        if(this->width._set) {
             // Check if this is necessary
             if (this->width.unit == SVGLength::PERCENT) {
                 this->width.computed  = this->width.value  * this->viewBox.width();
             }
         } else {
-            this->width.set( SVGLength::PX, this->viewBox.width(),  this->viewBox.width()  );
+            this->width.set(SVGLength::PX, this->viewBox.width(),  this->viewBox.width());
         }
 
-        if( this->height._set ) {
+        if(this->height._set) {
             if (this->height.unit == SVGLength::PERCENT) {
                 this->height.computed = this->height.value * this->viewBox.height();
             }
         } else {
-            this->height.set(SVGLength::PX, this->viewBox.height(), this->viewBox.height() );
+            this->height.set(SVGLength::PX, this->viewBox.height(), this->viewBox.height());
         }
 
     } else {
 
-        if( !this->width._set || this->width.unit == SVGLength::PERCENT) {
-            this->width.set(  SVGLength::PX, 300,  300 ); // CSS/SVG default
+        if(!this->width._set || this->width.unit == SVGLength::PERCENT) {
+            this->width.set(SVGLength::PX, 300,  300); // CSS/SVG default
         }
 
-        if( !this->height._set || this->height.unit == SVGLength::PERCENT) {
-            this->height.set( SVGLength::PX, 150,  150 ); // CSS/SVG default
+        if(!this->height._set || this->height.unit == SVGLength::PERCENT) {
+            this->height.set(SVGLength::PX, 150,  150); // CSS/SVG default
         }
     }
 
@@ -262,7 +262,7 @@ void SPRoot::update(SPCtx *ctx, guint flags)
 {
     SPItemCtx const *ictx = (SPItemCtx const *) ctx;
 
-    if( !this->parent ) {
+    if(!this->parent) {
         this->setRootDimensions();
     }
 
@@ -277,9 +277,9 @@ void SPRoot::update(SPCtx *ctx, guint flags)
 
     // Calculate new viewport
     SPItemCtx rctx = *ictx;
-    rctx.viewport = Geom::Rect::from_xywh( this->x.computed, this->y.computed,
-                                           this->width.computed, this->height.computed );
-    rctx = get_rctx( &rctx, Inkscape::Util::Quantity::convert(1, this->document->getDisplayUnit(), "px") );
+    rctx.viewport = Geom::Rect::from_xywh(this->x.computed, this->y.computed,
+                                           this->width.computed, this->height.computed);
+    rctx = get_rctx(&rctx, Inkscape::Util::Quantity::convert(1, this->document->getDisplayUnit(), "px"));
 
     /* And invoke parent method */
     SPGroup::update((SPCtx *) &rctx, flags);

@@ -273,10 +273,10 @@ void TweakTool::setup() {
     sp_event_context_read(this, "dos");
     sp_event_context_read(this, "doo");
 
-    this->style_set_connection = this->desktop->connectSetStyle( // catch style-setting signal in this tool
+    this->style_set_connection = this->desktop->connectSetStyle(// catch style-setting signal in this tool
         //sigc::bind(sigc::ptr_fun(&sp_tweak_context_style_set), this)
    		sigc::mem_fun(this, &TweakTool::set_style)
-    );
+);
     
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     if (prefs->getBool("/tools/tweak/selcue")) {
@@ -876,8 +876,8 @@ static void tweak_colors_in_gradient(SPItem *item, Inkscape::PaintTarget fill_or
             SPMeshGradient *mg_array = dynamic_cast<SPMeshGradient *>(mg->getArray());
             SPMeshNodeArray *array = &(mg_array->array);
             // Every third node is a corner node
-            for( unsigned i=0; i < array->nodes.size(); i+=3 ) {
-                for( unsigned j=0; j < array->nodes[i].size(); j+=3 ) {
+            for(unsigned i=0; i < array->nodes.size(); i+=3) {
+                for(unsigned j=0; j < array->nodes[i].size(); j+=3) {
                     SPStop *stop = array->nodes[i][j]->stop;
                     double distance = Geom::L2(Geom::Point(p - array->nodes[i][j]->p)); 
                     tweak_color (mode, stop->getColor().v.c, rgb_goal,
@@ -1196,7 +1196,7 @@ bool TweakTool::root_handler(GdkEvent* event) {
                 }
 
             // dilating:
-            if (this->is_drawing && ( event->motion.state & GDK_BUTTON1_MASK )) {
+            if (this->is_drawing && (event->motion.state & GDK_BUTTON1_MASK)) {
                 sp_tweak_dilate (this, motion_w, motion_doc, motion_doc - this->last_push, event->button.state & GDK_SHIFT_MASK? true : false);
                 //this->last_push = motion_doc;
                 this->has_dilated = true;

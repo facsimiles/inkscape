@@ -27,7 +27,7 @@ Layout::iterator Layout::_cursorXOnLineToIterator(unsigned line_index, double lo
     double best_x_difference = DBL_MAX;
 
     if (char_index == _characters.size()) return end();
-    for ( ; char_index < _characters.size() ; char_index++) {
+    for (; char_index < _characters.size() ; char_index++) {
         if (_characters[char_index].chunk(this).in_line != line_index) break;
         if (_characters[char_index].char_attributes.is_mandatory_break) break;
         if (!_characters[char_index].char_attributes.is_cursor_position) continue;
@@ -60,10 +60,10 @@ double Layout::_getChunkWidth(unsigned chunk_index) const
     unsigned span_index;
     if (chunk_index) {
         span_index = _lineToSpan(_chunks[chunk_index].in_line);
-        for ( ; span_index < _spans.size() && _spans[span_index].in_chunk < chunk_index ; span_index++){};
+        for (; span_index < _spans.size() && _spans[span_index].in_chunk < chunk_index ; span_index++){};
     } else
         span_index = 0;
-    for ( ; span_index < _spans.size() && _spans[span_index].in_chunk == chunk_index ; span_index++)
+    for (; span_index < _spans.size() && _spans[span_index].in_chunk == chunk_index ; span_index++)
         chunk_width = std::max(chunk_width, (double)std::max(_spans[span_index].x_start, _spans[span_index].x_end));
     return chunk_width;
 }
@@ -109,7 +109,7 @@ Layout::iterator Layout::getNearestCursorPositionTo(double x, double y) const
             span_left = _span.x_end;
             span_right = _span.x_start;
         }
-        if (   local_x >= _chunks[_span.in_chunk].left_x + span_left
+        if (local_x >= _chunks[_span.in_chunk].left_x + span_left
             && local_x <= _chunks[_span.in_chunk].left_x + span_right
             && local_y >= _span.line(this).baseline_y + _span.baseline_shift - _span.line_height.ascent
             && local_y <= _span.line(this).baseline_y + _span.baseline_shift + _span.line_height.descent) {
@@ -127,7 +127,7 @@ Layout::iterator Layout::getNearestCursorPositionTo(double x, double y) const
         FontMetrics line_height;
         line_height *= 0.0; // Set all metrics to zero.
         double chunk_width = 0.0;
-        for ( ; span_index < _spans.size() && _spans[span_index].in_chunk == chunk_index ; span_index++) {
+        for (; span_index < _spans.size() && _spans[span_index].in_chunk == chunk_index ; span_index++) {
             line_height.max(_spans[span_index].line_height);
             chunk_width = std::max(chunk_width, (double)std::max(_spans[span_index].x_start, _spans[span_index].x_end));
         }
@@ -198,7 +198,7 @@ Layout::iterator Layout::sourceToIterator(void *source_cookie /*, Glib::ustring:
         return iterator(this, _sourceToCharacter(source_index + 1));
     }
     Glib::ustring::const_iterator iter_text = text_source->text_begin;
-    for ( ; char_index < _characters.size() ; char_index++) {
+    for (; char_index < _characters.size() ; char_index++) {
         if (iter_text == text_iterator)
             return iterator(this, char_index);
         iter_text++;
@@ -383,7 +383,7 @@ std::vector<Geom::Point> Layout::createSelectionShape(iterator const &it_start, 
         char_index = it_end._char_index;
         end_char_index = it_start._char_index;
     }
-    for ( ; char_index < end_char_index ; ) {
+    for (; char_index < end_char_index ;) {
         if (_characters[char_index].in_glyph == -1) {
             char_index++;
             continue;
@@ -480,7 +480,7 @@ void Layout::queryCursorShape(iterator const &it, Geom::Point &position, double 
             const_cast<Path*>(_path_fitted)->PointAndTangentAt(path_parameter.piece, path_parameter.t, point, tangent);
             if (x < 0.0)
                 point += x * tangent;
-            if (x > path_length )
+            if (x > path_length)
                 point += (x - path_length) * tangent;
             if (_directions_are_orthogonal(_blockProgression(), TOP_TO_BOTTOM)) {
                 rotation = atan2(-tangent[Geom::X], tangent[Geom::Y]);
@@ -676,7 +676,7 @@ void Layout::simulateLayoutUsingKerning(iterator const &from, iterator const &to
         _cursor_moving_vertically = false;                                               \
         if (_char_index == _parent_layout->_characters.size()) return false;             \
         unsigned original_item = item_getter;                                            \
-        for( ; ; ) {                                                                     \
+        for(; ;) {                                                                     \
             _char_index++;                                                               \
             if (_char_index == _parent_layout->_characters.size()) {                     \
                 _glyph_index = _parent_layout->_glyphs.size();                           \
@@ -822,7 +822,7 @@ bool Layout::iterator::prevLineCursor(int n)
 #define NEXT_WITH_ATTRIBUTE_SET(attr)                                                            \
     {                                                                                            \
         _cursor_moving_vertically = false;                                                       \
-        for ( ; ; ) {                                                                            \
+        for (; ;) {                                                                            \
             if (_char_index + 1 >= _parent_layout->_characters.size()) {                         \
                 _char_index = _parent_layout->_characters.size();                                \
                 _glyph_index = _parent_layout->_glyphs.size();                                   \
@@ -839,7 +839,7 @@ bool Layout::iterator::prevLineCursor(int n)
 #define PREV_WITH_ATTRIBUTE_SET(attr)                                                            \
     {                                                                                            \
         _cursor_moving_vertically = false;                                                       \
-        for ( ; ; ) {                                                                            \
+        for (; ;) {                                                                            \
             if (_char_index == 0) {                                                              \
                 _glyph_index = 0;                                                                \
                 return false;                                                                    \
@@ -927,7 +927,7 @@ bool Layout::iterator::_cursorLeftOrRightLocalX(Direction direction)
     }
 
     unsigned new_span_index = old_span_index;
-    for ( ; ; ) {
+    for (; ;) {
         if (scan_direction > 0) {
             if (new_span_index == _parent_layout->_spans.size() - 1) {
                 if (_parent_layout->_spans[new_span_index].direction == old_span_direction) {

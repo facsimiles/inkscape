@@ -28,7 +28,7 @@ public:
 
     bool operator>(Version const &other) const {
         return _major > other._major ||
-            ( _major == other._major && _minor > other._minor );
+            (_major == other._major && _minor > other._minor);
     }
 
     bool operator==(Version const &other) const {
@@ -41,7 +41,7 @@ public:
 
     bool operator<(Version const &other) const {
         return _major < other._major ||
-            ( _major == other._major && _minor < other._minor );
+            (_major == other._major && _minor < other._minor);
     }
 
     unsigned int _major;

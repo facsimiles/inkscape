@@ -105,7 +105,7 @@ TextEdit::TextEdit()
     feat_vbox.pack_start(preview_label2, false, false, 5);
 
     /* Text tab -------------------------------- */
-    scroller.set_policy( Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC );
+    scroller.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
     scroller.set_shadow_type(Gtk::SHADOW_IN);
 
     text_buffer = gtk_text_buffer_new (nullptr);
@@ -132,7 +132,7 @@ TextEdit::TextEdit()
     text_vbox.pack_start(scroller, true, true, 0);
 
     /* Notebook -----------------------------------*/
-    notebook.set_name( "TextEdit Notebook" );
+    notebook.set_name("TextEdit Notebook");
     notebook.append_page(font_vbox, font_label);
     notebook.append_page(feat_vbox, feat_label);
     notebook.append_page(text_vbox, text_label);
@@ -151,14 +151,14 @@ TextEdit::TextEdit()
     contents->pack_start(button_row, false, false, VB_MARGIN);
 
     /* Signal handlers */
-    g_signal_connect ( G_OBJECT (text_buffer), "changed", G_CALLBACK (onTextChange), this );
+    g_signal_connect (G_OBJECT (text_buffer), "changed", G_CALLBACK (onTextChange), this);
     setasdefault_button.signal_clicked().connect(sigc::mem_fun(*this, &TextEdit::onSetDefault));
     apply_button.signal_clicked().connect(sigc::mem_fun(*this, &TextEdit::onApply));
     close_button.signal_clicked().connect(sigc::bind(_signal_response.make_slot(), GTK_RESPONSE_CLOSE));
     fontChangedConn = font_selector.connectChanged (sigc::mem_fun(*this, &TextEdit::onFontChange));
     fontFeaturesChangedConn = font_features.connectChanged(sigc::mem_fun(*this, &TextEdit::onChange));
 
-    desktopChangeConn = deskTrack.connectDesktopChanged( sigc::mem_fun(*this, &TextEdit::setTargetDesktop) );
+    desktopChangeConn = deskTrack.connectDesktopChanged(sigc::mem_fun(*this, &TextEdit::setTargetDesktop));
     deskTrack.connect(GTK_WIDGET(gobj()));
 
     font_selector.set_name ("TextEdit");
@@ -177,20 +177,20 @@ TextEdit::~TextEdit()
     fontFeaturesChangedConn.disconnect();
 }
 
-void TextEdit::onSelectionModified(guint flags )
+void TextEdit::onSelectionModified(guint flags)
 {
     gboolean style, content;
 
-    style =  ((flags & ( SP_OBJECT_CHILD_MODIFIED_FLAG |
-                    SP_OBJECT_STYLE_MODIFIED_FLAG  )) != 0 );
+    style =  ((flags & (SP_OBJECT_CHILD_MODIFIED_FLAG |
+                    SP_OBJECT_STYLE_MODIFIED_FLAG)) != 0);
 
-    content = ((flags & ( SP_OBJECT_CHILD_MODIFIED_FLAG |
-                    SP_TEXT_CONTENT_MODIFIED_FLAG  )) != 0 );
+    content = ((flags & (SP_OBJECT_CHILD_MODIFIED_FLAG |
+                    SP_TEXT_CONTENT_MODIFIED_FLAG)) != 0);
 
     onReadSelection (style, content);
 }
 
-void TextEdit::onReadSelection ( gboolean dostyle, gboolean /*docontent*/ )
+void TextEdit::onReadSelection (gboolean dostyle, gboolean /*docontent*/)
 {
     if (blocked)
         return;
@@ -214,8 +214,8 @@ void TextEdit::onReadSelection ( gboolean dostyle, gboolean /*docontent*/ )
         } else {
             gtk_widget_set_sensitive (text_view, FALSE);
         }
-        apply_button.set_sensitive ( false );
-        setasdefault_button.set_sensitive ( true );
+        apply_button.set_sensitive (false);
+        setasdefault_button.set_sensitive (true);
 
         gchar *str;
         str = sp_te_get_string_multiline (text);
@@ -233,8 +233,8 @@ void TextEdit::onReadSelection ( gboolean dostyle, gboolean /*docontent*/ )
         text->getRepr(); // was being called but result ignored. Check this.
     } else {
         gtk_widget_set_sensitive (text_view, FALSE);
-        apply_button.set_sensitive ( false );
-        setasdefault_button.set_sensitive ( false );
+        apply_button.set_sensitive (false);
+        setasdefault_button.set_sensitive (false);
     }
 
     if (dostyle) {
@@ -272,7 +272,7 @@ void TextEdit::onReadSelection ( gboolean dostyle, gboolean /*docontent*/ )
         sp_desktop_query_style (SP_ACTIVE_DESKTOP, &query, QUERY_STYLE_PROPERTY_FONTVARIANTS);
         int result_features =
             sp_desktop_query_style (SP_ACTIVE_DESKTOP, &query, QUERY_STYLE_PROPERTY_FONTFEATURESETTINGS);
-        font_features.update( &query, result_features == QUERY_STYLE_MULTIPLE_DIFFERENT, fontspec );
+        font_features.update(&query, result_features == QUERY_STYLE_MULTIPLE_DIFFERENT, fontspec);
         Glib::ustring features = font_features.get_markup();
 
         // Update Preview
@@ -291,8 +291,8 @@ void TextEdit::setPreviewText (Glib::ustring font_spec, Glib::ustring font_featu
         return;
     }
 
-    Glib::ustring font_spec_escaped = Glib::Markup::escape_text( font_spec );
-    Glib::ustring phrase_escaped = Glib::Markup::escape_text( phrase );
+    Glib::ustring font_spec_escaped = Glib::Markup::escape_text(font_spec);
+    Glib::ustring phrase_escaped = Glib::Markup::escape_text(phrase);
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     int unit = prefs->getInt("/options/font/unitType", SP_CSS_UNIT_PT);
@@ -302,7 +302,7 @@ void TextEdit::setPreviewText (Glib::ustring font_spec, Glib::ustring font_featu
     pt_size = std::min(pt_size, 100.0);
 
     // Pango font size is in 1024ths of a point
-    Glib::ustring size = std::to_string( int(pt_size * PANGO_SCALE) );
+    Glib::ustring size = std::to_string(int(pt_size * PANGO_SCALE));
     Glib::ustring markup = "<span font=\'" + font_spec_escaped +
         "\' size=\'" + size + "\'";
     if (!font_features.empty()) {
@@ -353,7 +353,7 @@ void TextEdit::onSelectionChange()
     onReadSelection (TRUE, TRUE);
 }
 
-void TextEdit::updateObjectText ( SPItem *text )
+void TextEdit::updateObjectText (SPItem *text)
 {
         GtkTextIter start, end;
 
@@ -373,10 +373,10 @@ SPCSSAttr *TextEdit::fillTextStyle ()
 
         Glib::ustring fontspec = font_selector.get_fontspec();
 
-        if( !fontspec.empty() ) {
+        if(!fontspec.empty()) {
 
             Inkscape::FontLister *fontlister = Inkscape::FontLister::get_instance();
-            fontlister->fill_css( css, fontspec );
+            fontlister->fill_css(css, fontspec);
 
             // TODO, possibly move this to FontLister::set_css to be shared.
             Inkscape::CSSOStringStream os;
@@ -392,7 +392,7 @@ SPCSSAttr *TextEdit::fillTextStyle ()
         }
 
         // Font features
-        font_features.fill_css( css );
+        font_features.fill_css(css);
 
         return css;
 }
@@ -408,7 +408,7 @@ void TextEdit::onSetDefault()
 
     sp_repr_css_attr_unref (css);
 
-    setasdefault_button.set_sensitive ( false );
+    setasdefault_button.set_sensitive (false);
 }
 
 void TextEdit::onApply()
@@ -424,7 +424,7 @@ void TextEdit::onApply()
 
     for(auto i=item_list.begin();i!=item_list.end();++i){
         // apply style to the reprs of all text objects in the selection
-        if (SP_IS_TEXT (*i) || (SP_IS_FLOWTEXT (*i)) ) {
+        if (SP_IS_TEXT (*i) || (SP_IS_FLOWTEXT (*i))) {
             ++items;
         }
     }
@@ -433,7 +433,7 @@ void TextEdit::onApply()
         // no text objects; apply style to prefs for new objects
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         prefs->mergeStyle("/tools/text/style", css);
-        setasdefault_button.set_sensitive ( false );
+        setasdefault_button.set_sensitive (false);
 
     } else if (items == 1) {
         // exactly one text object; now set its text, too
@@ -445,15 +445,15 @@ void TextEdit::onApply()
 
     // Update FontLister
     Glib::ustring fontspec = font_selector.get_fontspec();
-    if( !fontspec.empty() ) {
+    if(!fontspec.empty()) {
         Inkscape::FontLister *fontlister = Inkscape::FontLister::get_instance();
-        fontlister->set_fontspec( fontspec, false );
+        fontlister->set_fontspec(fontspec, false);
     }
 
     // complete the transaction
     DocumentUndo::done(SP_ACTIVE_DESKTOP->getDocument(), SP_VERB_CONTEXT_TEXT,
                        _("Set text style"));
-    apply_button.set_sensitive ( false );
+    apply_button.set_sensitive (false);
 
     sp_repr_css_attr_unref (css);
 
@@ -482,10 +482,10 @@ void TextEdit::onChange()
 
     SPItem *text = getSelectedTextItem();
     if (text) {
-        apply_button.set_sensitive ( true );
+        apply_button.set_sensitive (true);
     }
 
-    setasdefault_button.set_sensitive ( true);
+    setasdefault_button.set_sensitive (true);
 }
 
 void TextEdit::onTextChange (GtkTextBuffer *text_buffer, TextEdit *self)
@@ -495,7 +495,7 @@ void TextEdit::onTextChange (GtkTextBuffer *text_buffer, TextEdit *self)
 
 void TextEdit::onFontChange(Glib::ustring fontspec)
 {
-    font_features.update_opentype ( fontspec );
+    font_features.update_opentype (fontspec);
     onChange();
 }
 

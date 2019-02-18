@@ -103,7 +103,7 @@ CrossingGraph create_crossing_graph(PathVector const &p, Crossings const &crs) {
         edges.push_back(Edge(i, crs[i][j].getOtherTime(i), true));
     }
     std::sort(edges.begin(), edges.end(), TimeOrder());
-    for(unsigned j = 0; j < edges.size(); ) {
+    for(unsigned j = 0; j < edges.size();) {
         CrossingNode cn;
         double t = edges[j].time;
         while(j < edges.size() && are_near(edges[j].time, t)) {

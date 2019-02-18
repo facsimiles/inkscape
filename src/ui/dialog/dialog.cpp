@@ -169,7 +169,7 @@ void Dialog::read_geometry()
     // If there are stored values for where the dialog should be
     // located, then restore the dialog to that position.
     // also check if (x,y) is actually onscreen with the current screen dimensions
-    if ( (x >= 0) && (y >= 0) && (x < (screen_width-MIN_ONSCREEN_DISTANCE)) && (y < (screen_height-MIN_ONSCREEN_DISTANCE)) ) {
+    if ((x >= 0) && (y >= 0) && (x < (screen_width-MIN_ONSCREEN_DISTANCE)) && (y < (screen_height-MIN_ONSCREEN_DISTANCE))) {
         move(x, y);
     } else {
         // ...otherwise just put it in the middle of the screen
@@ -204,7 +204,7 @@ Dialog::save_status(int visible, int state, int placement)
 {
    // Only save dialog status for dialogs on the "last document"
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    if (desktop != nullptr || !_is_active_desktop ) {
+    if (desktop != nullptr || !_is_active_desktop) {
         return;
     }
 

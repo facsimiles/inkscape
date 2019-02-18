@@ -211,10 +211,10 @@ PanelDialog<Behavior::FloatingBehavior> *PanelDialog<Behavior::FloatingBehavior>
 
     INKSCAPE.signal_activate_desktop.connect(
             sigc::mem_fun(*instance, &PanelDialog<Behavior::FloatingBehavior>::_propagateDesktopActivated)
-    );
-    INKSCAPE.signal_deactivate_desktop.connect(        
+);
+    INKSCAPE.signal_deactivate_desktop.connect(
             sigc::mem_fun(*instance, &PanelDialog<Behavior::FloatingBehavior>::_propagateDesktopDeactivated)
-    );
+);
 
     return instance;
 }

@@ -18,12 +18,12 @@
 TEST(ExtractUriTest, valid)
 {
     ASSERT_EQ(extract_uri("url(#foo)"), "#foo");
-    ASSERT_EQ(extract_uri("url( \t #foo \t )"), "#foo");
-    ASSERT_EQ(extract_uri("url( '#foo' )"), "#foo");
+    ASSERT_EQ(extract_uri("url(\t #foo \t)"), "#foo");
+    ASSERT_EQ(extract_uri("url('#foo')"), "#foo");
     ASSERT_EQ(extract_uri("url('url(foo)')"), "url(foo)");
     ASSERT_EQ(extract_uri("url(\"foo(url)\")"), "foo(url)");
     ASSERT_EQ(extract_uri("url()bar"), "");
-    ASSERT_EQ(extract_uri("url( )bar"), "");
+    ASSERT_EQ(extract_uri("url()bar"), "");
     ASSERT_EQ(extract_uri("url(a b)"), "a b");
 }
 
@@ -57,10 +57,10 @@ TEST(ExtractUriTest, endptr)
     ASSERT_STREQ(extract_end("url(valid)"), "");
     ASSERT_STREQ(extract_end("url(valid)foo"), "foo");
     ASSERT_STREQ(extract_end("url('valid')bar"), "bar");
-    ASSERT_STREQ(extract_end("url(  'valid'  )bar"), "bar");
-    ASSERT_STREQ(extract_end("url(  valid  ) bar "), " bar ");
+    ASSERT_STREQ(extract_end("url('valid')bar"), "bar");
+    ASSERT_STREQ(extract_end("url(valid) bar "), " bar ");
     ASSERT_STREQ(extract_end("url()bar"), "bar");
-    ASSERT_STREQ(extract_end("url( )bar"), "bar");
+    ASSERT_STREQ(extract_end("url()bar"), "bar");
 }
 
 /*

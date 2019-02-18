@@ -198,8 +198,8 @@ void MinimumTerminalSpanningTree::buildHyperedgeTreeToRoot(VertInf *currVert,
 
         if (markEdges)
         {
-            //COLA_ASSERT( !(currVert->id == dimensionChangeVertexID) );
-            //COLA_ASSERT( !(prevVert->id == dimensionChangeVertexID) );
+            //COLA_ASSERT(!(currVert->id == dimensionChangeVertexID));
+            //COLA_ASSERT(!(prevVert->id == dimensionChangeVertexID));
             EdgeInf *edge = prevVert->hasNeighbour(currVert, isOrthogonal);
             if (edge == NULL && (currVert->id == dimensionChangeVertexID))
             {
@@ -325,7 +325,7 @@ void MinimumTerminalSpanningTree::constructSequential(void)
 
     // Shortest path terminal forest construction
     //
-    while ( ! vHeap.empty() )
+    while (! vHeap.empty())
     {
         // Take the lowest vertex from heap.
         VertInf *u = vHeap.front();
@@ -386,7 +386,7 @@ void MinimumTerminalSpanningTree::constructSequential(void)
                 // This edge is not colinear, so add it to the dummy node and
                 // ignore it.
                 COLA_ASSERT(u->id != dimensionChangeVertexID);
-                if ( ! extraVertex )
+                if (! extraVertex)
                 {
                     // Create the dummy node if necessary.
                     extraVertex = new VertInf(router, dimensionChangeVertexID,
@@ -457,7 +457,7 @@ void MinimumTerminalSpanningTree::constructSequential(void)
     // ==========================================
     //
     TIMER_START(router, tmHyperedgeMTST);
-    while ( ! beHeap.empty() )
+    while (! beHeap.empty())
     {
         // Take the lowest cost edge.
         EdgeInf *e = beHeap.front();
@@ -678,7 +678,7 @@ void MinimumTerminalSpanningTree::constructInterleaved(void)
     
     // Shortest Path Terminal Forest construction
     //
-    while ( ! vHeap.empty() )
+    while (! vHeap.empty())
     {
         // Take the lowest vertex from heap.
         VertInf *u = vHeap.front();

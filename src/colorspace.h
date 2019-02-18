@@ -44,9 +44,9 @@ public:
     guint scale;
 };
 
-std::vector<Component> getColorSpaceInfo( uint32_t space );
+std::vector<Component> getColorSpaceInfo(uint32_t space);
 
-std::vector<Component> getColorSpaceInfo( Inkscape::ColorProfile *prof );
+std::vector<Component> getColorSpaceInfo(Inkscape::ColorProfile *prof);
 
 } // namespace colorspace
 

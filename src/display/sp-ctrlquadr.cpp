@@ -97,13 +97,13 @@ sp_ctrlquadr_render (SPCanvasItem *item, SPCanvasBuf *buf)
    ((a <= b && a <= c && a <= d) ? a : \
     (b <= a && b <= c && b <= d) ? b : \
     (c <= a && c <= b && c <= d) ? c : \
-    d )
+    d)
 
 #define MAX4(a,b,c,d)\
    ((a >= b && a >= c && a >= d) ? a : \
     (b >= a && b >= c && b >= d) ? b : \
     (c >= a && c >= b && c >= d) ? c : \
-    d )
+    d)
 
 
 static void sp_ctrlquadr_update(SPCanvasItem *item, Geom::Affine const &affine, unsigned int flags)

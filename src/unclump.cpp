@@ -36,7 +36,7 @@ static Geom::Point
 unclump_center (SPItem *item)
 {
     std::map<const gchar *, Geom::Point>::iterator i = c_cache.find(item->getId());
-    if ( i != c_cache.end() ) {
+    if (i != c_cache.end()) {
         return i->second;
     }
 
@@ -56,7 +56,7 @@ unclump_wh (SPItem *item)
 {
     Geom::Point wh;
     std::map<const gchar *, Geom::Point>::iterator i = wh_cache.find(item->getId());
-    if ( i != wh_cache.end() ) {
+    if (i != wh_cache.end()) {
         wh = i->second;
     } else {
         Geom::OptRect r = item->desktopVisualBounds();
@@ -294,7 +294,7 @@ unclump_push (SPItem *from, SPItem *what, double dist)
     Geom::Affine move = Geom::Translate (by);
 
     std::map<const gchar *, Geom::Point>::iterator i = c_cache.find(what->getId());
-    if ( i != c_cache.end() ) {
+    if (i != c_cache.end()) {
         i->second *= move;
     }
 
@@ -317,7 +317,7 @@ unclump_pull (SPItem *to, SPItem *what, double dist)
     Geom::Affine move = Geom::Translate (by);
 
     std::map<const gchar *, Geom::Point>::iterator i = c_cache.find(what->getId());
-    if ( i != c_cache.end() ) {
+    if (i != c_cache.end()) {
         i->second *= move;
     }
 
@@ -365,7 +365,7 @@ unclump (std::vector<SPItem*> &items)
             }
         }
 
-        if ( (nei.size()) >= 2) {
+        if ((nei.size()) >= 2) {
             double ave = unclump_average (item, nei);
 
             SPItem *closest = unclump_closest (item, nei);

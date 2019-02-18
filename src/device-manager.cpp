@@ -179,7 +179,7 @@ public:
     bool hasCursor() const override {return device->get_has_cursor();}
     int getNumKeys() const override {return device->get_n_keys();}
     Glib::ustring getLink() const override {return link;}
-    virtual void setLink( Glib::ustring const& link ) {this->link = link;}
+    virtual void setLink(Glib::ustring const& link) {this->link = link;}
     gint getLiveAxes() const override {return liveAxes;}
     virtual void setLiveAxes(gint axes) {liveAxes = axes;}
     gint getLiveButtons() const override {return liveButtons;}
@@ -246,7 +246,7 @@ Glib::ustring InputDeviceImpl::createId(Glib::ustring const &id,
     }
 
     Glib::ustring base;
-    switch ( source ) {
+    switch (source) {
         case Gdk::SOURCE_MOUSE:
             base = "M:";
             break;
@@ -302,9 +302,9 @@ public:
     void addButton(Glib::ustring const & id, gint button) override;
     void setLinkedTo(Glib::ustring const & id, Glib::ustring const& link) override;
 
-    void setMode( Glib::ustring const & id, Gdk::InputMode mode ) override;
-    void setAxisUse( Glib::ustring const & id, guint index, Gdk::AxisUse use ) override;
-    void setKey( Glib::ustring const & id, guint index, guint keyval, Gdk::ModifierType mods ) override;
+    void setMode(Glib::ustring const & id, Gdk::InputMode mode) override;
+    void setAxisUse(Glib::ustring const & id, guint index, Gdk::AxisUse use) override;
+    void setKey(Glib::ustring const & id, guint index, guint keyval, Gdk::ModifierType mods) override;
 
 protected:
     std::list<Glib::RefPtr<InputDeviceImpl> > devices;
@@ -367,7 +367,7 @@ void DeviceManagerImpl::loadConfig()
                 mode = getStringToMode()[val];
             }
             if (device->getMode() != mode) {
-                setMode( device->getId(), mode );
+                setMode(device->getId(), mode);
             }
 
             //
@@ -379,7 +379,7 @@ void DeviceManagerImpl::loadConfig()
                     Glib::ustring name = parts[i];
                     if (getStringToAxis().find(name) != getStringToAxis().end()) {
                         Gdk::AxisUse use = getStringToAxis()[name];
-                        setAxisUse( device->getId(), i, use );
+                        setAxisUse(device->getId(), i, use);
                     }
                 }
             }
@@ -392,8 +392,8 @@ void DeviceManagerImpl::loadConfig()
                     if (!keyStr.empty()) {
                         guint key = 0;
                         GdkModifierType mods = static_cast<GdkModifierType>(0);
-                        gtk_accelerator_parse( keyStr.c_str(), &key, &mods );
-                        setKey( device->getId(), i, key, static_cast<Gdk::ModifierType>(mods) );
+                        gtk_accelerator_parse(keyStr.c_str(), &key, &mods);
+                        setKey(device->getId(), i, key, static_cast<Gdk::ModifierType>(mods));
                     }
                 }
             }
@@ -409,7 +409,7 @@ void DeviceManagerImpl::saveConfig()
         if (it->getSource() != Gdk::SOURCE_MOUSE) {
             Glib::ustring path = "/devices/" + it->getId();
 
-            prefs->setString( path + "/mode", getModeToString()[it->getMode()].c_str() );
+            prefs->setString(path + "/mode", getModeToString()[it->getMode()].c_str());
 
             Glib::ustring tmp;
             for (gint i = 0; i < it->getNumAxes(); ++i) {
@@ -419,7 +419,7 @@ void DeviceManagerImpl::saveConfig()
                 Glib::RefPtr<Gdk::Device> device = it->getDevice();
                 tmp += getAxisToString()[device->get_axis_use(i)];
             }
-            prefs->setString( path + "/axes", tmp );
+            prefs->setString(path + "/axes", tmp);
 
             tmp = "";
             for (gint i = 0; i < it->getNumKeys(); ++i) {
@@ -433,7 +433,7 @@ void DeviceManagerImpl::saveConfig()
                 Gtk::AccelKey accelkey(keyval, modifiers);
                 tmp += accelkey.get_abbrev();
             }
-            prefs->setString( path + "/keys", tmp );
+            prefs->setString(path + "/keys", tmp);
         }
     }
 }
@@ -441,18 +441,18 @@ void DeviceManagerImpl::saveConfig()
 std::list<Glib::RefPtr<InputDevice const> > DeviceManagerImpl::getDevices()
 {
     std::list<Glib::RefPtr<InputDevice const> > tmp;
-    for ( std::list<Glib::RefPtr<InputDeviceImpl> >::const_iterator it = devices.begin(); it != devices.end(); ++it ) {
+    for (std::list<Glib::RefPtr<InputDeviceImpl> >::const_iterator it = devices.begin(); it != devices.end(); ++it) {
         tmp.emplace_back(*it);
     }
     return tmp;
 }
 
-void DeviceManagerImpl::setMode( Glib::ustring const & id, Gdk::InputMode mode )
+void DeviceManagerImpl::setMode(Glib::ustring const & id, Gdk::InputMode mode)
 {
     std::list<Glib::RefPtr<InputDeviceImpl> >::iterator it = std::find_if(devices.begin(), devices.end(), IdMatcher(id));
-    if ( it != devices.end() ) {
+    if (it != devices.end()) {
         Glib::RefPtr<Gdk::Device> device = (*it)->getDevice();
-        if (isValidDevice(device) && ((*it)->getMode() != mode) ) {
+        if (isValidDevice(device) && ((*it)->getMode() != mode)) {
             bool success = device->set_mode(mode);
             if (success) {
                 signalDeviceChangedPriv.emit(*it);
@@ -463,10 +463,10 @@ void DeviceManagerImpl::setMode( Glib::ustring const & id, Gdk::InputMode mode )
     }
 }
 
-void DeviceManagerImpl::setAxisUse( Glib::ustring const & id, guint index, Gdk::AxisUse use )
+void DeviceManagerImpl::setAxisUse(Glib::ustring const & id, guint index, Gdk::AxisUse use)
 {
     std::list<Glib::RefPtr<InputDeviceImpl> >::iterator it = std::find_if(devices.begin(), devices.end(), IdMatcher(id));
-    if ( it != devices.end() ) {
+    if (it != devices.end()) {
         if (isValidDevice((*it)->getDevice())) {
             if (static_cast<gint>(index) <= (*it)->getNumAxes()) {
                 Glib::RefPtr<Gdk::Device> device = (*it)->getDevice();
@@ -482,13 +482,13 @@ void DeviceManagerImpl::setAxisUse( Glib::ustring const & id, guint index, Gdk::
     }
 }
 
-void DeviceManagerImpl::setKey( Glib::ustring const & id, guint index, guint keyval, Gdk::ModifierType mods )
+void DeviceManagerImpl::setKey(Glib::ustring const & id, guint index, guint keyval, Gdk::ModifierType mods)
 {
-    //static void setDeviceKey( GdkDevice* device, guint index, guint keyval, GdkModifierType modifiers )
+    //static void setDeviceKey(GdkDevice* device, guint index, guint keyval, GdkModifierType modifiers)
     //
 
     std::list<Glib::RefPtr<InputDeviceImpl> >::iterator it = std::find_if(devices.begin(), devices.end(), IdMatcher(id));
-    if ( it != devices.end() ) {
+    if (it != devices.end()) {
         if (isValidDevice((*it)->getDevice())) {
             Glib::RefPtr<Gdk::Device> device = (*it)->getDevice();
             device->set_key(index, keyval, mods);
@@ -519,11 +519,11 @@ sigc::signal<void, Glib::RefPtr<InputDevice const> > DeviceManagerImpl::signalLi
 
 void DeviceManagerImpl::addAxis(Glib::ustring const & id, gint axis)
 {
-    if ( axis >= 0 && axis < static_cast<gint>(bitVals.size()) ) {
+    if (axis >= 0 && axis < static_cast<gint>(bitVals.size())) {
         std::list<Glib::RefPtr<InputDeviceImpl> >::iterator it = std::find_if(devices.begin(), devices.end(), IdMatcher(id));
-        if ( it != devices.end() ) {
+        if (it != devices.end()) {
             gint mask = bitVals[axis];
-            if ( (mask & (*it)->getLiveAxes()) == 0 ) {
+            if ((mask & (*it)->getLiveAxes()) == 0) {
                 (*it)->setLiveAxes((*it)->getLiveAxes() | mask);
 
                 // Only signal if a new axis was added
@@ -536,11 +536,11 @@ void DeviceManagerImpl::addAxis(Glib::ustring const & id, gint axis)
 
 void DeviceManagerImpl::addButton(Glib::ustring const & id, gint button)
 {
-    if ( button >= 0 && button < static_cast<gint>(bitVals.size()) ) {
+    if (button >= 0 && button < static_cast<gint>(bitVals.size())) {
         std::list<Glib::RefPtr<InputDeviceImpl> >::iterator it = std::find_if(devices.begin(), devices.end(), IdMatcher(id));
-        if ( it != devices.end() ) {
+        if (it != devices.end()) {
             gint mask = bitVals[button];
-            if ( (mask & (*it)->getLiveButtons()) == 0 ) {
+            if ((mask & (*it)->getLiveButtons()) == 0) {
                 (*it)->setLiveButtons((*it)->getLiveButtons() | mask);
 
                 // Only signal if a new button was added
@@ -554,45 +554,45 @@ void DeviceManagerImpl::addButton(Glib::ustring const & id, gint button)
 void DeviceManagerImpl::setLinkedTo(Glib::ustring const & id, Glib::ustring const& link)
 {
     std::list<Glib::RefPtr<InputDeviceImpl> >::iterator it = std::find_if(devices.begin(), devices.end(), IdMatcher(id));
-    if ( it != devices.end() ) {
+    if (it != devices.end()) {
         Glib::RefPtr<InputDeviceImpl> dev = *it;
 
         Glib::RefPtr<InputDeviceImpl> targetDev;
-        if ( !link.empty() ) {
+        if (!link.empty()) {
             // Need to be sure the target of the link exists
             it = std::find_if(devices.begin(), devices.end(), IdMatcher(link));
-            if ( it != devices.end() ) {
+            if (it != devices.end()) {
                 targetDev = *it;
             }
         }
 
 
-        if ( (link.empty() && !dev->getLink().empty())
-             || (targetDev && (targetDev->getLink() != id)) ) {
+        if ((link.empty() && !dev->getLink().empty())
+             || (targetDev && (targetDev->getLink() != id))) {
             // only muck about if they aren't already linked
             std::list<Glib::RefPtr<InputDeviceImpl> > changedItems;
 
-            if ( targetDev ) {
+            if (targetDev) {
             // Is something else already using that link?
                 it = std::find_if(devices.begin(), devices.end(), LinkMatcher(link));
-                if ( it != devices.end() ) {
+                if (it != devices.end()) {
                     (*it)->setLink("");
                     changedItems.push_back(*it);
                 }
             }
             it = std::find_if(devices.begin(), devices.end(), LinkMatcher(id));
-            if ( it != devices.end() ) {
+            if (it != devices.end()) {
                 (*it)->setLink("");
                 changedItems.push_back(*it);
             }
-            if ( targetDev ) {
+            if (targetDev) {
                 targetDev->setLink(id);
                 changedItems.push_back(targetDev);
             }
             dev->setLink(link);
             changedItems.push_back(dev);
 
-            for ( std::list<Glib::RefPtr<InputDeviceImpl> >::const_iterator iter = changedItems.begin(); iter != changedItems.end(); ++iter ) {
+            for (std::list<Glib::RefPtr<InputDeviceImpl> >::const_iterator iter = changedItems.begin(); iter != changedItems.end(); ++iter) {
                 (*iter)->reference();
                 signalLinkChangedPriv.emit(*iter);
             }
@@ -615,7 +615,7 @@ DeviceManager::DeviceManager()
 DeviceManager::~DeviceManager() = default;
 
 DeviceManager& DeviceManager::getManager() {
-    if ( !theInstance ) {
+    if (!theInstance) {
         theInstance = new DeviceManagerImpl();
     }
 

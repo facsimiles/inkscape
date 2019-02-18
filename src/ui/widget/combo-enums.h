@@ -29,7 +29,7 @@ namespace Widget {
 template<typename E> class ComboBoxEnum : public Gtk::ComboBox, public AttrWidget
 {
 private:
-    int on_sort_compare( const Gtk::TreeModel::iterator & a, const Gtk::TreeModel::iterator & b)
+    int on_sort_compare(const Gtk::TreeModel::iterator & a, const Gtk::TreeModel::iterator & b)
     {
         Glib::ustring an=(*a)[_columns.label];
         Glib::ustring bn=(*b)[_columns.label];
@@ -56,7 +56,7 @@ public:
             Gtk::TreeModel::Row row = *_model->append();
             const Util::EnumData<E>* data = &_converter.data(i);
             row[_columns.data] = data;
-            row[_columns.label] = _( _converter.get_label(data->id).c_str() );
+            row[_columns.label] = _(_converter.get_label(data->id).c_str());
         }
         set_active_by_id(default_value);
 
@@ -84,7 +84,7 @@ public:
             Gtk::TreeModel::Row row = *_model->append();
             const Util::EnumData<E>* data = &_converter.data(i);
             row[_columns.data] = data;
-            row[_columns.label] = _( _converter.get_label(data->id).c_str() );
+            row[_columns.label] = _(_converter.get_label(data->id).c_str());
         }
         set_active(0);
 
@@ -154,7 +154,7 @@ public:
 
     void set_active_by_key(const Glib::ustring& key) {
         setProgrammatically = true;
-        set_active_by_id( _converter.get_id_from_key(key) );
+        set_active_by_id(_converter.get_id_from_key(key));
     };
 
     bool setProgrammatically;
@@ -185,7 +185,7 @@ private:
 template<typename E> class LabelledComboBoxEnum : public Labelled
 {
 public:
-    LabelledComboBoxEnum( Glib::ustring const &label,
+    LabelledComboBoxEnum(Glib::ustring const &label,
                           Glib::ustring const &tooltip,
                           const Util::EnumDataConverter<E>& c,
                           Glib::ustring const &suffix = "",

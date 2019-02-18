@@ -42,7 +42,7 @@ public:
   std::string src;
   std::string dst;
   std::string uri;
-  
+
 };
 
 std::vector<StyleRead> getStyleData()
@@ -55,7 +55,7 @@ std::vector<StyleRead> getStyleData()
 
         // TODO - fix this to preserve the string
         //    StyleRead("fill:url(#painter) rgb(100%, 0%, 100%)",
-        //	            "fill:url(#painter) #ff00ff", "#painter"     ),
+        //	            "fill:url(#painter) #ff00ff", "#painter"),
 
         // TODO - fix this to preserve the string
         // StyleRead("fill:url(#painter) rgb(255, 0, 255)",
@@ -284,7 +284,7 @@ public:
   std::string src;
   std::string dst;
   bool        match;
-  
+
 };
 
 std::vector<StyleMatch> getStyleMatchData()
@@ -292,107 +292,107 @@ std::vector<StyleMatch> getStyleMatchData()
   StyleMatch all_style_data[] = {
 
     // SPIFloat
-    StyleMatch("stroke-miterlimit:4",     "stroke-miterlimit:4",      true ),
+    StyleMatch("stroke-miterlimit:4",     "stroke-miterlimit:4",      true),
     StyleMatch("stroke-miterlimit:4",     "stroke-miterlimit:2",      false),
-    StyleMatch("stroke-miterlimit:4",     "",                         true ), // Default
+    StyleMatch("stroke-miterlimit:4",     "",                         true), // Default
 
     // SPIScale24
-    StyleMatch("opacity:0.3",             "opacity:0.3",              true ),
+    StyleMatch("opacity:0.3",             "opacity:0.3",              true),
     StyleMatch("opacity:0.3",             "opacity:0.6",              false),
-    StyleMatch("opacity:1.0",             "",                         true ), // Default
+    StyleMatch("opacity:1.0",             "",                         true), // Default
 
     // SPILength
-    StyleMatch("text-indent:3",           "text-indent:3",            true ),
+    StyleMatch("text-indent:3",           "text-indent:3",            true),
     StyleMatch("text-indent:6",           "text-indent:3",            false),
     StyleMatch("text-indent:6px",         "text-indent:3",            false),
     StyleMatch("text-indent:1px",         "text-indent:12pc",         false),
     StyleMatch("text-indent:2ex",         "text-indent:2ex",          false),
 
     // SPILengthOrNormal
-    StyleMatch("letter-spacing:normal",   "letter-spacing:normal",    true ),
+    StyleMatch("letter-spacing:normal",   "letter-spacing:normal",    true),
     StyleMatch("letter-spacing:2",        "letter-spacing:normal",    false),
     StyleMatch("letter-spacing:normal",   "letter-spacing:2",         false),
-    StyleMatch("letter-spacing:5px",      "letter-spacing:5px",       true ),
+    StyleMatch("letter-spacing:5px",      "letter-spacing:5px",       true),
     StyleMatch("letter-spacing:10px",     "letter-spacing:5px",       false),
     StyleMatch("letter-spacing:10em",     "letter-spacing:10em",      false),
 
     // SPIEnum
-    StyleMatch("text-anchor:start",       "text-anchor:start",        true ),
+    StyleMatch("text-anchor:start",       "text-anchor:start",        true),
     StyleMatch("text-anchor:start",       "text-anchor:middle",       false),
-    StyleMatch("text-anchor:start",       "",                         true ), // Default
-    StyleMatch("text-anchor:start",       "text-anchor:junk",         true ), // Bad value
+    StyleMatch("text-anchor:start",       "",                         true), // Default
+    StyleMatch("text-anchor:start",       "text-anchor:junk",         true), // Bad value
 
-    StyleMatch("font-weight:normal",      "font-weight:400",          true ),
-    StyleMatch("font-weight:bold",        "font-weight:700",          true ),
+    StyleMatch("font-weight:normal",      "font-weight:400",          true),
+    StyleMatch("font-weight:bold",        "font-weight:700",          true),
 
 
     // SPIString and SPIFontString
-    StyleMatch("font-family:Arial",       "font-family:Arial",        true ),
-    StyleMatch("font-family:A B",         "font-family:A B",          true ),
+    StyleMatch("font-family:Arial",       "font-family:Arial",        true),
+    StyleMatch("font-family:A B",         "font-family:A B",          true),
     StyleMatch("font-family:A B",         "font-family:A C",          false),
     // Default is not set by class... value is NULL which cannot be compared
-    // StyleMatch("font-family:sans-serif",  "",                       true ), // Default
+    // StyleMatch("font-family:sans-serif",  "",                       true), // Default
 
     // SPIColor
-    StyleMatch("color:blue",              "color:blue",               true ),
+    StyleMatch("color:blue",              "color:blue",               true),
     StyleMatch("color:blue",              "color:red",                false),
-    StyleMatch("color:red",               "color:#ff0000",            true ),
+    StyleMatch("color:red",               "color:#ff0000",            true),
 
     // SPIPaint
-    StyleMatch("fill:blue",               "fill:blue",               true ),
+    StyleMatch("fill:blue",               "fill:blue",               true),
     StyleMatch("fill:blue",               "fill:red",                false),
-    StyleMatch("fill:currentColor",       "fill:currentColor",       true ),
-    StyleMatch("fill:url(#xxx)",          "fill:url(#xxx)",          true ),
+    StyleMatch("fill:currentColor",       "fill:currentColor",       true),
+    StyleMatch("fill:url(#xxx)",          "fill:url(#xxx)",          true),
     // Needs URL defined as in test 1
     //StyleMatch("fill:url(#xxx)",          "fill:url(#yyy)",          false),
 
     // SPIPaintOrder
-    StyleMatch("paint-order:markers",     "paint-order:markers",     true ),
+    StyleMatch("paint-order:markers",     "paint-order:markers",     true),
     StyleMatch("paint-order:markers",     "paint-order:stroke",      false),
-    //StyleMatch("paint-order:fill stroke markers", "",                true ), // Default
-    StyleMatch("paint-order:normal",      "paint-order:normal",      true ),
-    //StyleMatch("paint-order:fill stroke markers", "paint-order:normal", true ),
+    //StyleMatch("paint-order:fill stroke markers", "",                true), // Default
+    StyleMatch("paint-order:normal",      "paint-order:normal",      true),
+    //StyleMatch("paint-order:fill stroke markers", "paint-order:normal", true),
 
     // SPIDashArray
-    StyleMatch("stroke-dasharray:0 1 2 3","stroke-dasharray:0 1 2 3",true ),
+    StyleMatch("stroke-dasharray:0 1 2 3","stroke-dasharray:0 1 2 3",true),
     StyleMatch("stroke-dasharray:0 1",    "stroke-dasharray:0 2",    false),
 
     // SPIFilter
 
     // SPIFontSize
-    StyleMatch("font-size:12px",          "font-size:12px",          true ),
+    StyleMatch("font-size:12px",          "font-size:12px",          true),
     StyleMatch("font-size:12px",          "font-size:24px",          false),
     StyleMatch("font-size:12ex",          "font-size:24ex",          false),
-    StyleMatch("font-size:medium",        "font-size:medium",        true ),
+    StyleMatch("font-size:medium",        "font-size:medium",        true),
     StyleMatch("font-size:medium",        "font-size:large",         false),
 
     // SPIBaselineShift
-    StyleMatch("baseline-shift:baseline", "baseline-shift:baseline", true ),
-    StyleMatch("baseline-shift:sub",      "baseline-shift:sub",      true ),
+    StyleMatch("baseline-shift:baseline", "baseline-shift:baseline", true),
+    StyleMatch("baseline-shift:sub",      "baseline-shift:sub",      true),
     StyleMatch("baseline-shift:sub",      "baseline-shift:super",    false),
     StyleMatch("baseline-shift:baseline", "baseline-shift:sub",      false),
-    StyleMatch("baseline-shift:10px",     "baseline-shift:10px",     true ),
+    StyleMatch("baseline-shift:10px",     "baseline-shift:10px",     true),
     StyleMatch("baseline-shift:10px",     "baseline-shift:12px",     false),
 
 
     // SPITextDecorationLine
-    StyleMatch("text-decoration-line:underline", "text-decoration-line:underline", true ),
+    StyleMatch("text-decoration-line:underline", "text-decoration-line:underline", true),
     StyleMatch("text-decoration-line:underline", "text-decoration-line:overline",  false),
-    StyleMatch("text-decoration-line:underline overline", "text-decoration-line:underline overline", true ),
-    StyleMatch("text-decoration-line:none",      "", true ), // Default
+    StyleMatch("text-decoration-line:underline overline", "text-decoration-line:underline overline", true),
+    StyleMatch("text-decoration-line:none",      "", true), // Default
 
 
     // SPITextDecorationStyle
-    StyleMatch("text-decoration-style:solid",    "text-decoration-style:solid", true ),
+    StyleMatch("text-decoration-style:solid",    "text-decoration-style:solid", true),
     StyleMatch("text-decoration-style:dotted",   "text-decoration-style:solid", false),
-    StyleMatch("text-decoration-style:solid",    "",   true ), // Default
+    StyleMatch("text-decoration-style:solid",    "",   true), // Default
 
     // SPITextDecoration
-    StyleMatch("text-decoration:underline",          "text-decoration:underline", true ),
+    StyleMatch("text-decoration:underline",          "text-decoration:underline", true),
     StyleMatch("text-decoration:underline",          "text-decoration:overline",  false),
-    StyleMatch("text-decoration:underline overline","text-decoration:underline overline",true ),
-    StyleMatch("text-decoration:overline underline","text-decoration:underline overline",true ),
-    // StyleMatch("text-decoration:none",               "text-decoration-color:currentColor", true ), // Default
+    StyleMatch("text-decoration:underline overline","text-decoration:underline overline",true),
+    StyleMatch("text-decoration:overline underline","text-decoration:underline overline",true),
+    // StyleMatch("text-decoration:none",               "text-decoration-color:currentColor", true), // Default
 
   };
 
@@ -409,16 +409,16 @@ TEST(StyleTest, Match) {
     SPStyle style_src;
     SPStyle style_dst;
 
-    style_src.mergeString( i.src.c_str() );
-    style_dst.mergeString( i.dst.c_str() );
+    style_src.mergeString(i.src.c_str());
+    style_dst.mergeString(i.dst.c_str());
 
     // std::cout << "Test:" << std::endl;
     // std::cout << "  C: |" << i.src
     // 	         << "|    |" << i.dst << "|" << std::endl;
-    // std::cout << "  S: |" << style_src.write( SP_STYLE_FLAG_IFSET )
-    // 	         << "|    |" << style_dst.write( SP_STYLE_FLAG_IFSET ) << "|" <<std::endl;
+    // std::cout << "  S: |" << style_src.write(SP_STYLE_FLAG_IFSET)
+    // 	         << "|    |" << style_dst.write(SP_STYLE_FLAG_IFSET) << "|" <<std::endl;
 
-    EXPECT_TRUE( (style_src == style_dst) == i.match );
+    EXPECT_TRUE((style_src == style_dst) == i.match);
   }
 }
 
@@ -435,7 +435,7 @@ public:
   std::string parent;
   std::string child;
   std::string result;
-  
+
 };
 
 std::vector<StyleCascade> getStyleCascadeData()
@@ -444,54 +444,54 @@ std::vector<StyleCascade> getStyleCascadeData()
   StyleCascade all_style_data[] = {
 
     // SPIFloat
-    StyleCascade("stroke-miterlimit:6",   "stroke-miterlimit:2",   "stroke-miterlimit:2"    ),
-    StyleCascade("stroke-miterlimit:6",   "",                      "stroke-miterlimit:6"    ),
-    StyleCascade("",                      "stroke-miterlimit:2",   "stroke-miterlimit:2"    ),
+    StyleCascade("stroke-miterlimit:6",   "stroke-miterlimit:2",   "stroke-miterlimit:2"),
+    StyleCascade("stroke-miterlimit:6",   "",                      "stroke-miterlimit:6"),
+    StyleCascade("",                      "stroke-miterlimit:2",   "stroke-miterlimit:2"),
 
     // SPIScale24
-    StyleCascade("opacity:0.3",           "opacity:0.3",            "opacity:0.3"           ),
-    StyleCascade("opacity:0.3",           "opacity:0.6",            "opacity:0.6"           ),
+    StyleCascade("opacity:0.3",           "opacity:0.3",            "opacity:0.3"),
+    StyleCascade("opacity:0.3",           "opacity:0.6",            "opacity:0.6"),
     // 'opacity' does not inherit
-    StyleCascade("opacity:0.3",           "",                       "opacity:1.0"           ),
-    StyleCascade("",                      "opacity:0.3",            "opacity:0.3"           ),
-    StyleCascade("opacity:0.5",           "opacity:inherit",        "opacity:0.5"           ),
-    StyleCascade("",                      "",                       "opacity:1.0"           ),
+    StyleCascade("opacity:0.3",           "",                       "opacity:1.0"),
+    StyleCascade("",                      "opacity:0.3",            "opacity:0.3"),
+    StyleCascade("opacity:0.5",           "opacity:inherit",        "opacity:0.5"),
+    StyleCascade("",                      "",                       "opacity:1.0"),
 
     // SPILength
-    StyleCascade("text-indent:3",         "text-indent:3",          "text-indent:3"         ),
-    StyleCascade("text-indent:6",         "text-indent:3",          "text-indent:3"         ),
-    StyleCascade("text-indent:6px",       "text-indent:3",          "text-indent:3"         ),
-    StyleCascade("text-indent:1px",       "text-indent:12pc",       "text-indent:12pc"      ),
+    StyleCascade("text-indent:3",         "text-indent:3",          "text-indent:3"),
+    StyleCascade("text-indent:6",         "text-indent:3",          "text-indent:3"),
+    StyleCascade("text-indent:6px",       "text-indent:3",          "text-indent:3"),
+    StyleCascade("text-indent:1px",       "text-indent:12pc",       "text-indent:12pc"),
     // ex, em cannot be equal
-    //StyleCascade("text-indent:2ex",       "text-indent:2ex",        "text-indent:2ex"       ),
-    StyleCascade("text-indent:3",         "",                       "text-indent:3"         ),
-    StyleCascade("text-indent:3",         "text-indent:inherit",    "text-indent:3"         ),
+    //StyleCascade("text-indent:2ex",       "text-indent:2ex",        "text-indent:2ex"),
+    StyleCascade("text-indent:3",         "",                       "text-indent:3"),
+    StyleCascade("text-indent:3",         "text-indent:inherit",    "text-indent:3"),
 
     // SPILengthOrNormal
-    StyleCascade("letter-spacing:normal", "letter-spacing:normal",  "letter-spacing:normal" ), 
-    StyleCascade("letter-spacing:2",      "letter-spacing:normal",  "letter-spacing:normal" ), 
-    StyleCascade("letter-spacing:normal", "letter-spacing:2",       "letter-spacing:2"      ),
-    StyleCascade("letter-spacing:5px",    "letter-spacing:5px",     "letter-spacing:5px"    ),
-    StyleCascade("letter-spacing:10px",   "letter-spacing:5px",     "letter-spacing:5px"    ),
+    StyleCascade("letter-spacing:normal", "letter-spacing:normal",  "letter-spacing:normal"),
+    StyleCascade("letter-spacing:2",      "letter-spacing:normal",  "letter-spacing:normal"),
+    StyleCascade("letter-spacing:normal", "letter-spacing:2",       "letter-spacing:2"),
+    StyleCascade("letter-spacing:5px",    "letter-spacing:5px",     "letter-spacing:5px"),
+    StyleCascade("letter-spacing:10px",   "letter-spacing:5px",     "letter-spacing:5px"),
     // ex, em cannot be equal
-    // StyleCascade("letter-spacing:10em",   "letter-spacing:10em",    "letter-spacing:10em"   ),    
+    // StyleCascade("letter-spacing:10em",   "letter-spacing:10em",    "letter-spacing:10em"),
 
     // SPIEnum
-    StyleCascade("text-anchor:start",     "text-anchor:start",      "text-anchor:start"     ),
-    StyleCascade("text-anchor:start",     "text-anchor:middle",     "text-anchor:middle"    ),
-    StyleCascade("text-anchor:start",     "",                       "text-anchor:start"     ),
-    StyleCascade("text-anchor:start",     "text-anchor:junk",       "text-anchor:start"     ),
-    StyleCascade("text-anchor:end",       "text-anchor:inherit",    "text-anchor:end"       ),
+    StyleCascade("text-anchor:start",     "text-anchor:start",      "text-anchor:start"),
+    StyleCascade("text-anchor:start",     "text-anchor:middle",     "text-anchor:middle"),
+    StyleCascade("text-anchor:start",     "",                       "text-anchor:start"),
+    StyleCascade("text-anchor:start",     "text-anchor:junk",       "text-anchor:start"),
+    StyleCascade("text-anchor:end",       "text-anchor:inherit",    "text-anchor:end"),
 
-    StyleCascade("font-weight:400",       "font-weight:400",        "font-weight:400"       ),
-    StyleCascade("font-weight:400",       "font-weight:700",        "font-weight:700"       ),
-    StyleCascade("font-weight:400",       "font-weight:bolder",     "font-weight:700"       ),
-    StyleCascade("font-weight:700",       "font-weight:bolder",     "font-weight:900"       ),
-    StyleCascade("font-weight:400",       "font-weight:lighter",    "font-weight:100"       ),
-    StyleCascade("font-weight:200",       "font-weight:lighter",    "font-weight:100"       ),
+    StyleCascade("font-weight:400",       "font-weight:400",        "font-weight:400"),
+    StyleCascade("font-weight:400",       "font-weight:700",        "font-weight:700"),
+    StyleCascade("font-weight:400",       "font-weight:bolder",     "font-weight:700"),
+    StyleCascade("font-weight:700",       "font-weight:bolder",     "font-weight:900"),
+    StyleCascade("font-weight:400",       "font-weight:lighter",    "font-weight:100"),
+    StyleCascade("font-weight:200",       "font-weight:lighter",    "font-weight:100"),
 
-    StyleCascade("font-stretch:condensed","font-stretch:expanded",  "font-stretch:expanded" ),
-    StyleCascade("font-stretch:condensed","font-stretch:wider",     "font-stretch:semi-condensed" ),
+    StyleCascade("font-stretch:condensed","font-stretch:expanded",  "font-stretch:expanded"),
+    StyleCascade("font-stretch:condensed","font-stretch:wider",     "font-stretch:semi-condensed"),
 
     // SPIString and SPIFontString
 
@@ -515,7 +515,7 @@ std::vector<StyleCascade> getStyleCascadeData()
 
     // SPITextDecorationLine
     StyleCascade("text-decoration-line:overline", "text-decoration-line:underline",
-    	         "text-decoration-line:underline"          ),
+    	         "text-decoration-line:underline"),
 
     // SPITextDecorationStyle
 
@@ -532,14 +532,14 @@ TEST(StyleTest, Cascade) {
    std::vector<StyleCascade> all_style = getStyleCascadeData();
   EXPECT_GT(all_style.size(), 0);
   for (auto i : all_style) {
-    
+
     SPStyle style_parent;
     SPStyle style_child;
     SPStyle style_result;
 
-    style_parent.mergeString( i.parent.c_str() );
-    style_child.mergeString(  i.child.c_str()  );
-    style_result.mergeString( i.result.c_str() );
+    style_parent.mergeString(i.parent.c_str());
+    style_child.mergeString(i.child.c_str());
+    style_result.mergeString(i.result.c_str());
 
     // std::cout << "Test:" << std::endl;
     // std::cout << " Input: ";
@@ -547,13 +547,13 @@ TEST(StyleTest, Cascade) {
     //           << "  Child: "  << i.child
     //           << "  Result: " << i.result << std::endl;
     // std::cout << " Write: ";
-    // std::cout << "  Parent: " << style_parent.write( SP_STYLE_FLAG_IFSET )
-    //           << "  Child: "  << style_child.write( SP_STYLE_FLAG_IFSET )
-    //           << "  Result: " << style_result.write( SP_STYLE_FLAG_IFSET ) << std::endl;
+    // std::cout << "  Parent: " << style_parent.write(SP_STYLE_FLAG_IFSET)
+    //           << "  Child: "  << style_child.write(SP_STYLE_FLAG_IFSET)
+    //           << "  Result: " << style_result.write(SP_STYLE_FLAG_IFSET) << std::endl;
 
-    style_child.cascade( &style_parent );
+    style_child.cascade(&style_parent);
 
-    EXPECT_TRUE(style_child == style_result );
+    EXPECT_TRUE(style_child == style_result);
   }
 }
 

@@ -45,12 +45,12 @@ bool SPAttributeRelCSS::findIfValid(Glib::ustring property, Glib::ustring elemen
     }
     
     // Always valid if data file not found!
-    if( !foundFileProp ) return true;
+    if(!foundFileProp) return true;
 
     // Strip of "svg:" from the element's name
     Glib::ustring temp = element;
-    if ( temp.find("svg:") != std::string::npos ) {
-        temp.erase( temp.find("svg:"), 4 );
+    if (temp.find("svg:") != std::string::npos) {
+        temp.erase(temp.find("svg:"), 4);
     }
 
     // Don't check for properties with -, role, aria etc. to allow for more accessbility
@@ -66,10 +66,10 @@ bool SPAttributeRelCSS::findIfValid(Glib::ustring property, Glib::ustring elemen
         || property.substr(0,4) == "ns1:"  // JessyInk
         || property.substr(0,4) == "osb:"  // Open Swatch Book
         || (SPAttributeRelCSS::instance->propertiesOfElements[temp].find(property)
-            != SPAttributeRelCSS::instance->propertiesOfElements[temp].end()) ) {
+            != SPAttributeRelCSS::instance->propertiesOfElements[temp].end())) {
         return true;
     } else {
-        //g_warning( "Invalid attribute: %s used on <%s>", property.c_str(), element.c_str() );
+        //g_warning("Invalid attribute: %s used on <%s>", property.c_str(), element.c_str());
         return false;
     }
 }
@@ -85,9 +85,9 @@ bool SPAttributeRelCSS::findIfDefault(Glib::ustring property, Glib::ustring valu
     }
 
     // Always false if data file not found!
-    if( !foundFileDefault ) return false;
+    if(!foundFileDefault) return false;
 
-    if( instance->defaultValuesOfProps[property] == value) {
+    if(instance->defaultValuesOfProps[property] == value) {
         return true;
     } else {
         return false;
@@ -104,7 +104,7 @@ bool SPAttributeRelCSS::findIfInherit(Glib::ustring property)
     }
 
     // Always false if data file not found!
-    if( !foundFileDefault ) return false;
+    if(!foundFileDefault) return false;
 
     return instance->inheritProps[property];
 }
@@ -119,10 +119,10 @@ bool SPAttributeRelCSS::findIfProperty(Glib::ustring property)
     }
 
     // Always true if data file not found!
-    if( !foundFileProp ) return true;
+    if(!foundFileProp) return true;
 
-    return ( instance->defaultValuesOfProps.find( property )
-             != instance->defaultValuesOfProps.end() );
+    return (instance->defaultValuesOfProps.find(property)
+             != instance->defaultValuesOfProps.end());
 }
 
 SPAttributeRelCSS::SPAttributeRelCSS()
@@ -188,7 +188,7 @@ bool SPAttributeRelCSS::readDataFromFileIn(Glib::ustring fileName, storageType t
                 std::getline(ss,s,'"');
                 std::getline(ss,s,'"');
                 gboolean inherit = false;
-                if ( s.find( "yes" ) != std::string::npos ) {
+                if (s.find("yes") != std::string::npos) {
                     inherit = true;
                 }
                 inheritProps[prop] = inherit;

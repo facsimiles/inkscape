@@ -147,12 +147,12 @@ Emf::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar const *filena
     bool new_FixPPTPatternAsHatch = mod->get_param_bool("FixPPTPatternAsHatch");  // force all patterns as standard EMF hatch
     bool new_FixImageRot          = mod->get_param_bool("FixImageRot");  // remove rotations on images
 
-    TableGen(                  //possibly regenerate the unicode-convert tables
+    TableGen(//possibly regenerate the unicode-convert tables
         mod->get_param_bool("TnrToSymbol"),
         mod->get_param_bool("TnrToWingdings"),
         mod->get_param_bool("TnrToZapfDingbats"),
         mod->get_param_bool("UsePUA")
-    );
+);
 
     ext->set_param_bool("FixPPTCharPos",new_FixPPTCharPos);   // Remember to add any new ones to PrintEmf::init or a mysterious failure will result!
     ext->set_param_bool("FixPPTDashLine",new_FixPPTDashLine);
@@ -510,12 +510,12 @@ uint32_t Emf::add_image(PEMF_CALLBACK_DATA d,  void *pEmr, uint32_t cbBits, uint
                 colortype,  // DIB BitCount Enumeration
                 numCt,      // Color table used if not 0
                 invert      // If DIB rows are in opposite order from RGBA rows
-            )){
-                toPNG(         // Get the image from the RGBA px into mempng
+)){
+                toPNG(// Get the image from the RGBA px into mempng
                     &mempng,
                     width, height,    // of the SRC bitmap
                     rgba_px
-                );
+);
                 free(rgba_px);
             }
         }
@@ -523,10 +523,10 @@ uint32_t Emf::add_image(PEMF_CALLBACK_DATA d,  void *pEmr, uint32_t cbBits, uint
 
     gchar *base64String=nullptr;
     if(dibparams == U_BI_JPEG || dibparams==U_BI_PNG){  // image was binary png or jpg in source file
-        base64String = g_base64_encode((guchar*) px, numCt );
+        base64String = g_base64_encode((guchar*) px, numCt);
     }
     else if(mempng.buffer){                             // image was DIB in source file, converted to png in this routine
-        base64String = g_base64_encode((guchar*) mempng.buffer, mempng.size );
+        base64String = g_base64_encode((guchar*) mempng.buffer, mempng.size);
         free(mempng.buffer);
     }
     else {                                              // unknown or unsupported image type or failed conversion, insert the common bad image picture
@@ -588,7 +588,7 @@ uint32_t Emf::add_image(PEMF_CALLBACK_DATA d,  void *pEmr, uint32_t cbBits, uint
     if(current_rotation(d) >= 0.00001 || current_rotation(d) <= -0.00001){ /* some rotation, allow a little rounding error around 0 degrees */
         int tangle = round(current_rotation(d)*1000000.0);
         sprintf(imrotname,"EMFrotimage%d_%d",idx-1,tangle);
-        base64String = g_base64_encode((guchar*) imrotname, strlen(imrotname) );
+        base64String = g_base64_encode((guchar*) imrotname, strlen(imrotname));
         idx = in_images(d, (char *) base64String); // scan for this "image"
         if(!idx){
             if(d->images.count == d->images.size){  enlarge_images(d); }
@@ -894,7 +894,7 @@ Emf::output_style(PEMF_CALLBACK_DATA d, int iType)
                     SP_COLOR_F_TO_U(fill_rgb[0]),
                     SP_COLOR_F_TO_U(fill_rgb[1]),
                     SP_COLOR_F_TO_U(fill_rgb[2])
-                );
+);
                 tmp_style << tmp;
                 break;
         }
@@ -902,15 +902,15 @@ Emf::output_style(PEMF_CALLBACK_DATA d, int iType)
             tmp, 1023,
             "fill-rule:%s;",
             (d->dc[d->level].style.fill_rule.value == 0 ? "evenodd" : "nonzero")
-        );
+);
         tmp_style << tmp;
         tmp_style << "fill-opacity:1;";
 
         // if the stroke is the same as the fill, and the right size not to change the end size of the object, do not do it separately
         if(
-            (d->dc[d->level].fill_set                                )  &&
-            (d->dc[d->level].stroke_set                              )  &&
-            (d->dc[d->level].style.stroke_width.value == 1           )  &&
+            (d->dc[d->level].fill_set)  &&
+            (d->dc[d->level].stroke_set)  &&
+            (d->dc[d->level].style.stroke_width.value == 1)  &&
             (d->dc[d->level].fill_mode == d->dc[d->level].stroke_mode)  &&
             (
                 (d->dc[d->level].fill_mode != DRAW_PAINT)               ||
@@ -918,9 +918,9 @@ Emf::output_style(PEMF_CALLBACK_DATA d, int iType)
                     (fill_rgb[0]==stroke_rgb[0])                        &&
                     (fill_rgb[1]==stroke_rgb[1])                        &&
                     (fill_rgb[2]==stroke_rgb[2])
-                )
-            )
-        ){
+)
+)
+){
             d->dc[d->level].stroke_set = false;
         }
     }
@@ -947,12 +947,12 @@ Emf::output_style(PEMF_CALLBACK_DATA d, int iType)
                     SP_COLOR_F_TO_U(stroke_rgb[0]),
                     SP_COLOR_F_TO_U(stroke_rgb[1]),
                     SP_COLOR_F_TO_U(stroke_rgb[2])
-                );
+);
                 tmp_style << tmp;
                 break;
         }
         tmp_style << "stroke-width:" <<
-            MAX( 0.001, d->dc[d->level].style.stroke_width.value ) << "px;";
+            MAX(0.001, d->dc[d->level].style.stroke_width.value) << "px;";
 
         tmp_style << "stroke-linecap:" <<
             (
@@ -960,7 +960,7 @@ Emf::output_style(PEMF_CALLBACK_DATA d, int iType)
                 d->dc[d->level].style.stroke_linecap.computed == 1 ? "round" :
                 d->dc[d->level].style.stroke_linecap.computed == 2 ? "square" :
                 "unknown"
-            ) << ";";
+) << ";";
 
         tmp_style << "stroke-linejoin:" <<
             (
@@ -968,14 +968,14 @@ Emf::output_style(PEMF_CALLBACK_DATA d, int iType)
                 d->dc[d->level].style.stroke_linejoin.computed == 1 ? "round" :
                 d->dc[d->level].style.stroke_linejoin.computed == 2 ? "bevel" :
                 "unknown"
-            ) << ";";
+) << ";";
 
         // Set miter limit if known, even if it is not needed immediately (not miter)
         tmp_style << "stroke-miterlimit:" <<
-            MAX( 2.0, d->dc[d->level].style.stroke_miterlimit.value ) << ";";
+            MAX(2.0, d->dc[d->level].style.stroke_miterlimit.value) << ";";
 
         if (d->dc[d->level].style.stroke_dasharray.set &&
-            !d->dc[d->level].style.stroke_dasharray.values.empty() )
+            !d->dc[d->level].style.stroke_dasharray.values.empty())
         {
             tmp_style << "stroke-dasharray:";
             for (unsigned i=0; i<d->dc[d->level].style.stroke_dasharray.values.size(); i++) {
@@ -1146,23 +1146,23 @@ Emf::select_pen(PEMF_CALLBACK_DATA d, int index)
     } else if (pEmr->lopn.lopnWidth.x) {
         int cur_level = d->level;
         d->level = d->emf_obj[index].level;
-        double pen_width = pix_to_abs_size( d, pEmr->lopn.lopnWidth.x );
+        double pen_width = pix_to_abs_size(d, pEmr->lopn.lopnWidth.x);
         d->level = cur_level;
         d->dc[d->level].style.stroke_width.value = pen_width;
     } else { // this stroke should always be rendered as 1 pixel wide, independent of zoom level (can that be done in SVG?)
         //d->dc[d->level].style.stroke_width.value = 1.0;
         int cur_level = d->level;
         d->level = d->emf_obj[index].level;
-        double pen_width = pix_to_abs_size( d, 1 );
+        double pen_width = pix_to_abs_size(d, 1);
         d->level = cur_level;
         d->dc[d->level].style.stroke_width.value = pen_width;
     }
 
     double r, g, b;
-    r = SP_COLOR_U_TO_F( U_RGBAGetR(pEmr->lopn.lopnColor) );
-    g = SP_COLOR_U_TO_F( U_RGBAGetG(pEmr->lopn.lopnColor) );
-    b = SP_COLOR_U_TO_F( U_RGBAGetB(pEmr->lopn.lopnColor) );
-    d->dc[d->level].style.stroke.value.color.set( r, g, b );
+    r = SP_COLOR_U_TO_F(U_RGBAGetR(pEmr->lopn.lopnColor));
+    g = SP_COLOR_U_TO_F(U_RGBAGetG(pEmr->lopn.lopnColor));
+    b = SP_COLOR_U_TO_F(U_RGBAGetB(pEmr->lopn.lopnColor));
+    d->dc[d->level].style.stroke.value.color.set(r, g, b);
 }
 
 
@@ -1186,7 +1186,7 @@ Emf::select_extpen(PEMF_CALLBACK_DATA d, int index)
                                                            d->dc[d->level - 1].style.stroke_dasharray)))
                     d->dc[d->level].style.stroke_dasharray.values.clear();
                 for (unsigned int i=0; i<pEmr->elp.elpNumEntries; i++) {
-                    double dash_length = pix_to_abs_size( d, pEmr->elp.elpStyleEntry[i] );
+                    double dash_length = pix_to_abs_size(d, pEmr->elp.elpStyleEntry[i]);
                     d->dc[d->level].style.stroke_dasharray.values.emplace_back("temp", dash_length);
                 }
                 d->dc[d->level].style.stroke_dasharray.set = 1;
@@ -1285,10 +1285,10 @@ Emf::select_extpen(PEMF_CALLBACK_DATA d, int index)
 
     if (pEmr->elp.elpPenStyle == U_PS_NULL) { // draw nothing, but fill out all the values with something
         double r, g, b;
-        r = SP_COLOR_U_TO_F( U_RGBAGetR(d->dc[d->level].textColor));
-        g = SP_COLOR_U_TO_F( U_RGBAGetG(d->dc[d->level].textColor));
-        b = SP_COLOR_U_TO_F( U_RGBAGetB(d->dc[d->level].textColor));
-        d->dc[d->level].style.stroke.value.color.set( r, g, b );
+        r = SP_COLOR_U_TO_F(U_RGBAGetR(d->dc[d->level].textColor));
+        g = SP_COLOR_U_TO_F(U_RGBAGetG(d->dc[d->level].textColor));
+        b = SP_COLOR_U_TO_F(U_RGBAGetB(d->dc[d->level].textColor));
+        d->dc[d->level].style.stroke.value.color.set(r, g, b);
         d->dc[d->level].style.stroke_width.value = 0;
         d->dc[d->level].stroke_set = false;
         d->dc[d->level].stroke_mode = DRAW_PAINT;
@@ -1297,24 +1297,24 @@ Emf::select_extpen(PEMF_CALLBACK_DATA d, int index)
         if (pEmr->elp.elpWidth) {
             int cur_level = d->level;
             d->level = d->emf_obj[index].level;
-            double pen_width = pix_to_abs_size( d, pEmr->elp.elpWidth );
+            double pen_width = pix_to_abs_size(d, pEmr->elp.elpWidth);
             d->level = cur_level;
             d->dc[d->level].style.stroke_width.value = pen_width;
         } else { // this stroke should always be rendered as 1 pixel wide, independent of zoom level (can that be done in SVG?)
             //d->dc[d->level].style.stroke_width.value = 1.0;
             int cur_level = d->level;
             d->level = d->emf_obj[index].level;
-            double pen_width = pix_to_abs_size( d, 1 );
+            double pen_width = pix_to_abs_size(d, 1);
             d->level = cur_level;
             d->dc[d->level].style.stroke_width.value = pen_width;
         }
 
-        if(     pEmr->elp.elpBrushStyle == U_BS_SOLID){
+        if(pEmr->elp.elpBrushStyle == U_BS_SOLID){
             double r, g, b;
-            r = SP_COLOR_U_TO_F( U_RGBAGetR(pEmr->elp.elpColor) );
-            g = SP_COLOR_U_TO_F( U_RGBAGetG(pEmr->elp.elpColor) );
-            b = SP_COLOR_U_TO_F( U_RGBAGetB(pEmr->elp.elpColor) );
-            d->dc[d->level].style.stroke.value.color.set( r, g, b );
+            r = SP_COLOR_U_TO_F(U_RGBAGetR(pEmr->elp.elpColor));
+            g = SP_COLOR_U_TO_F(U_RGBAGetG(pEmr->elp.elpColor));
+            b = SP_COLOR_U_TO_F(U_RGBAGetB(pEmr->elp.elpColor));
+            d->dc[d->level].style.stroke.value.color.set(r, g, b);
             d->dc[d->level].stroke_mode = DRAW_PAINT;
             d->dc[d->level].stroke_set  = true;
         }
@@ -1331,10 +1331,10 @@ Emf::select_extpen(PEMF_CALLBACK_DATA d, int index)
         }
         else { // U_BS_PATTERN and anything strange that falls in, stroke is solid textColor
             double r, g, b;
-            r = SP_COLOR_U_TO_F( U_RGBAGetR(d->dc[d->level].textColor));
-            g = SP_COLOR_U_TO_F( U_RGBAGetG(d->dc[d->level].textColor));
-            b = SP_COLOR_U_TO_F( U_RGBAGetB(d->dc[d->level].textColor));
-            d->dc[d->level].style.stroke.value.color.set( r, g, b );
+            r = SP_COLOR_U_TO_F(U_RGBAGetR(d->dc[d->level].textColor));
+            g = SP_COLOR_U_TO_F(U_RGBAGetG(d->dc[d->level].textColor));
+            b = SP_COLOR_U_TO_F(U_RGBAGetB(d->dc[d->level].textColor));
+            d->dc[d->level].style.stroke.value.color.set(r, g, b);
             d->dc[d->level].stroke_mode = DRAW_PAINT;
             d->dc[d->level].stroke_set  = true;
         }
@@ -1352,12 +1352,12 @@ Emf::select_brush(PEMF_CALLBACK_DATA d, int index)
         iType = ((PU_EMR) (d->emf_obj[index].lpEMFR))->iType;
         if(iType == U_EMR_CREATEBRUSHINDIRECT){
             PU_EMRCREATEBRUSHINDIRECT pEmr = (PU_EMRCREATEBRUSHINDIRECT) d->emf_obj[index].lpEMFR;
-            if(     pEmr->lb.lbStyle == U_BS_SOLID){
+            if(pEmr->lb.lbStyle == U_BS_SOLID){
                 double r, g, b;
-                r = SP_COLOR_U_TO_F( U_RGBAGetR(pEmr->lb.lbColor) );
-                g = SP_COLOR_U_TO_F( U_RGBAGetG(pEmr->lb.lbColor) );
-                b = SP_COLOR_U_TO_F( U_RGBAGetB(pEmr->lb.lbColor) );
-                d->dc[d->level].style.fill.value.color.set( r, g, b );
+                r = SP_COLOR_U_TO_F(U_RGBAGetR(pEmr->lb.lbColor));
+                g = SP_COLOR_U_TO_F(U_RGBAGetG(pEmr->lb.lbColor));
+                b = SP_COLOR_U_TO_F(U_RGBAGetB(pEmr->lb.lbColor));
+                d->dc[d->level].style.fill.value.color.set(r, g, b);
                 d->dc[d->level].fill_mode    = DRAW_PAINT;
                 d->dc[d->level].fill_set     = true;
             }
@@ -1373,10 +1373,10 @@ Emf::select_brush(PEMF_CALLBACK_DATA d, int index)
             tidx = add_image(d, (void *) pEmr, pEmr->cbBits, pEmr->cbBmi, pEmr->iUsage, pEmr->offBits, pEmr->offBmi);
             if(tidx == U_EMR_INVALID){  // This happens if createmonobrush has a DIB that isn't monochrome
                 double r, g, b;
-                r = SP_COLOR_U_TO_F( U_RGBAGetR(d->dc[d->level].textColor));
-                g = SP_COLOR_U_TO_F( U_RGBAGetG(d->dc[d->level].textColor));
-                b = SP_COLOR_U_TO_F( U_RGBAGetB(d->dc[d->level].textColor));
-                d->dc[d->level].style.fill.value.color.set( r, g, b );
+                r = SP_COLOR_U_TO_F(U_RGBAGetR(d->dc[d->level].textColor));
+                g = SP_COLOR_U_TO_F(U_RGBAGetG(d->dc[d->level].textColor));
+                b = SP_COLOR_U_TO_F(U_RGBAGetB(d->dc[d->level].textColor));
+                d->dc[d->level].style.fill.value.color.set(r, g, b);
                 d->dc[d->level].fill_mode = DRAW_PAINT;
             }
             else {
@@ -1406,7 +1406,7 @@ Emf::select_font(PEMF_CALLBACK_DATA d, int index)
     */
     int cur_level = d->level;
     d->level = d->emf_obj[index].level;
-    double font_size = pix_to_abs_size( d, pEmr->elfw.elfLogFont.lfHeight );
+    double font_size = pix_to_abs_size(d, pEmr->elfw.elfLogFont.lfHeight);
     /*  snap the font_size to the nearest 1/32nd of a point.
         (The size is converted from Pixels to points, snapped, and converted back.)
         See the notes where d->D2Pscale[XY] are set for the reason why.
@@ -1566,21 +1566,21 @@ void Emf::common_image_extraction(PEMF_CALLBACK_DATA d, void *pEmr,
                 colortype,  // DIB BitCount Enumeration
                 numCt,      // Color table used if not 0
                 invert      // If DIB rows are in opposite order from RGBA rows
-            )){
-                sub_px = RGBA_to_RGBA( // returns either a subset (side effect: frees rgba_px) or NULL (for subset == entire image)
+)){
+                sub_px = RGBA_to_RGBA(// returns either a subset (side effect: frees rgba_px) or NULL (for subset == entire image)
                     rgba_px,           // full pixel array from DIB
                     width,             // Width of pixel array
                     height,            // Height of pixel array
                     sx,sy,             // starting point in pixel array
                     &sw,&sh            // columns/rows to extract from the pixel array (output array size)
-                );
+);
 
                 if(!sub_px)sub_px=rgba_px;
-                toPNG(         // Get the image from the RGBA px into mempng
+                toPNG(// Get the image from the RGBA px into mempng
                     &mempng,
                     sw, sh,    // size of the extracted pixel array
                     sub_px
-                );
+);
                 free(sub_px);
             }
         }
@@ -1589,15 +1589,15 @@ void Emf::common_image_extraction(PEMF_CALLBACK_DATA d, void *pEmr,
     gchar *base64String=nullptr;
     if(dibparams == U_BI_JPEG){    // image was binary jpg in source file
         tmp_image << " xlink:href=\"data:image/jpeg;base64,";
-        base64String = g_base64_encode((guchar*) px, numCt );
+        base64String = g_base64_encode((guchar*) px, numCt);
     }
     else if(dibparams==U_BI_PNG){  // image was binary png in source file
         tmp_image << " xlink:href=\"data:image/png;base64,";
-        base64String = g_base64_encode((guchar*) px, numCt );
+        base64String = g_base64_encode((guchar*) px, numCt);
     }
     else if(mempng.buffer){        // image was DIB in source file, converted to png in this routine
         tmp_image << " xlink:href=\"data:image/png;base64,";
-        base64String = g_base64_encode((guchar*) mempng.buffer, mempng.size );
+        base64String = g_base64_encode((guchar*) mempng.buffer, mempng.size);
         free(mempng.buffer);
     }
     else {                         // unknown or unsupported image type or failed conversion, insert the common bad image picture
@@ -1642,8 +1642,8 @@ int Emf::myEnhMetaFileProc(char *contents, unsigned int length, PEMF_CALLBACK_DA
     int  eDbgRecord=0;
     int  eDbgComment=0;
     int  eDbgFinal=0;
-    char const* eDbgString = getenv( "INKSCAPE_DBG_EMF" );
-    if ( eDbgString != nullptr ) {
+    char const* eDbgString = getenv("INKSCAPE_DBG_EMF");
+    if (eDbgString != nullptr) {
         if(strstr(eDbgString,"RECORD")){  eDbgRecord  = 1; }
         if(strstr(eDbgString,"COMMENT")){ eDbgComment = 1; }
         if(strstr(eDbgString,"FINAL")){   eDbgFinal   = 1; }
@@ -1754,12 +1754,12 @@ int Emf::myEnhMetaFileProc(char *contents, unsigned int length, PEMF_CALLBACK_DA
 // std::cout << "BEFORE DRAW logic d->mask: " << std::hex << d->mask << " emr_mask: " << emr_mask << std::dec << std::endl;
 /*
 std::cout << "BEFORE DRAW"
- << " test0 " << ( d->mask & U_DRAW_VISIBLE)
- << " test1 " << ( d->mask & U_DRAW_FORCE)
+ << " test0 " << (d->mask & U_DRAW_VISIBLE)
+ << " test1 " << (d->mask & U_DRAW_FORCE)
  << " test2 " << (emr_mask & U_DRAW_ALTERS)
  << " test3 " << (emr_mask & U_DRAW_VISIBLE)
  << " test4 " << !(d->mask & U_DRAW_ONLYTO)
- << " test5 " << ((d->mask & U_DRAW_ONLYTO) && !(emr_mask & U_DRAW_ONLYTO)  )
+ << " test5 " << ((d->mask & U_DRAW_ONLYTO) && !(emr_mask & U_DRAW_ONLYTO))
  << std::endl;
 */
 
@@ -1772,12 +1772,12 @@ std::cout << "BEFORE DRAW"
             (
                 (emr_mask & U_DRAW_VISIBLE)                     &&              // Next record is visible...
                 (
-                    ( !(d->mask & U_DRAW_ONLYTO) )              ||              //   Non *TO records cannot be followed by any Visible
-                    ((d->mask & U_DRAW_ONLYTO) && !(emr_mask & U_DRAW_ONLYTO)  )//   *TO records can only be followed by other *TO records
-                )
-            )
-        )
-    ){
+                    (!(d->mask & U_DRAW_ONLYTO))              ||              //   Non *TO records cannot be followed by any Visible
+                    ((d->mask & U_DRAW_ONLYTO) && !(emr_mask & U_DRAW_ONLYTO))//   *TO records can only be followed by other *TO records
+)
+)
+)
+){
 // std::cout << "PATH DRAW at TOP path" << *(d->path) << std::endl;
         if(!(d->path.empty())){
             d->outsvg += "   <path ";     // this is the ONLY place <path should be used!!!  One exception, gradientfill.
@@ -1840,11 +1840,11 @@ std::cout << "BEFORE DRAW"
                 can end up as 29.9992 or 22.4994 instead of the intended 30 or 22.5.  This is handled by
                 snapping font sizes to the nearest .01.  The best estimate is made by using both values.
             */
-            if ((pEmr->szlMillimeters.cx + pEmr->szlMillimeters.cy) && ( pEmr->szlDevice.cx + pEmr->szlDevice.cy)){
+            if ((pEmr->szlMillimeters.cx + pEmr->szlMillimeters.cy) && (pEmr->szlDevice.cx + pEmr->szlDevice.cy)){
                 d->E2IdirY = 1.0;  // assume MM_TEXT, if not, this will be changed later
                 d->D2PscaleX = d->D2PscaleY = Inkscape::Util::Quantity::convert(1, "mm", "px") *
                     (double)(pEmr->szlMillimeters.cx + pEmr->szlMillimeters.cy)/
-                    (double)( pEmr->szlDevice.cx + pEmr->szlDevice.cy);
+                    (double)(pEmr->szlDevice.cx + pEmr->szlDevice.cy);
             }
             trinfo_load_qe(d->tri, d->D2PscaleX);  /* quantization error that will affect text positions */
 
@@ -1887,9 +1887,9 @@ std::cout << "BEFORE DRAW"
 
                 // Init the new emf_obj list elements to null, provided the
                 // dynamic allocation succeeded.
-                if ( d->emf_obj != nullptr )
+                if (d->emf_obj != nullptr)
                 {
-                    for( int i=0; i < d->n_obj; ++i )
+                    for(int i=0; i < d->n_obj; ++i)
                         d->emf_obj[i].lpEMFR = nullptr;
                 } //if
 
@@ -1913,12 +1913,12 @@ std::cout << "BEFORE DRAW"
 
             tmp_str <<
                 "\n\tM " <<
-                pix_to_xy( d, pEmr->aptl[0].x, pEmr->aptl[0].y) << " ";
+                pix_to_xy(d, pEmr->aptl[0].x, pEmr->aptl[0].y) << " ";
 
-            for (i=1; i<pEmr->cptl; ) {
+            for (i=1; i<pEmr->cptl;) {
                 tmp_str << "\n\tC ";
                 for (j=0; j<3 && i<pEmr->cptl; j++,i++) {
-                    tmp_str << pix_to_xy( d, pEmr->aptl[i].x, pEmr->aptl[i].y) << " ";
+                    tmp_str << pix_to_xy(d, pEmr->aptl[i].x, pEmr->aptl[i].y) << " ";
                 }
             }
 
@@ -1940,12 +1940,12 @@ std::cout << "BEFORE DRAW"
 
             tmp_str <<
                 "\n\tM " <<
-                pix_to_xy( d, pEmr->aptl[0].x, pEmr->aptl[0].y ) << " ";
+                pix_to_xy(d, pEmr->aptl[0].x, pEmr->aptl[0].y) << " ";
 
             for (i=1; i<pEmr->cptl; i++) {
                 tmp_str <<
                     "\n\tL " <<
-                    pix_to_xy( d, pEmr->aptl[i].x, pEmr->aptl[i].y ) << " ";
+                    pix_to_xy(d, pEmr->aptl[i].x, pEmr->aptl[i].y) << " ";
             }
 
             tmp_path << tmp_str.str().c_str();
@@ -1967,12 +1967,12 @@ std::cout << "BEFORE DRAW"
 
             tmp_str <<
                 "\n\tM " <<
-                pix_to_xy( d, pEmr->aptl[0].x, pEmr->aptl[0].y ) << " ";
+                pix_to_xy(d, pEmr->aptl[0].x, pEmr->aptl[0].y) << " ";
 
             for (i=1; i<pEmr->cptl; i++) {
                 tmp_str <<
                     "\n\tL " <<
-                    pix_to_xy( d, pEmr->aptl[i].x, pEmr->aptl[i].y ) << " ";
+                    pix_to_xy(d, pEmr->aptl[i].x, pEmr->aptl[i].y) << " ";
             }
 
             tmp_path << tmp_str.str().c_str();
@@ -1992,7 +1992,7 @@ std::cout << "BEFORE DRAW"
                 tmp_path << "\n\tC ";
                 for (j=0; j<3 && i<pEmr->cptl; j++,i++) {
                     tmp_path <<
-                        pix_to_xy( d, pEmr->aptl[i].x, pEmr->aptl[i].y ) << " ";
+                        pix_to_xy(d, pEmr->aptl[i].x, pEmr->aptl[i].y) << " ";
                 }
             }
 
@@ -2010,7 +2010,7 @@ std::cout << "BEFORE DRAW"
             for (i=0; i<pEmr->cptl;i++) {
                 tmp_path <<
                     "\n\tL " <<
-                    pix_to_xy( d, pEmr->aptl[i].x, pEmr->aptl[i].y ) << " ";
+                    pix_to_xy(d, pEmr->aptl[i].x, pEmr->aptl[i].y) << " ";
             }
 
             break;
@@ -2034,11 +2034,11 @@ std::cout << "BEFORE DRAW"
             for (n=0; n<pEmr->nPolys && i<pEmr->cptl; n++) {
                 SVGOStringStream poly_path;
 
-                poly_path << "\n\tM " << pix_to_xy( d, aptl[i].x, aptl[i].y) << " ";
+                poly_path << "\n\tM " << pix_to_xy(d, aptl[i].x, aptl[i].y) << " ";
                 i++;
 
                 for (j=1; j<pEmr->aPolyCounts[n] && i<pEmr->cptl; j++) {
-                    poly_path << "\n\tL " << pix_to_xy( d, aptl[i].x, aptl[i].y) << " ";
+                    poly_path << "\n\tL " << pix_to_xy(d, aptl[i].x, aptl[i].y) << " ";
                     i++;
                 }
 
@@ -2119,7 +2119,7 @@ std::cout << "BEFORE DRAW"
             if (d->dc[d->level].sizeWnd.cx && d->dc[d->level].sizeWnd.cy) {
                 d->dc[d->level].ScaleInX = (double) d->dc[d->level].sizeView.cx / (double) d->dc[d->level].sizeWnd.cx;
                 d->dc[d->level].ScaleInY = (double) d->dc[d->level].sizeView.cy / (double) d->dc[d->level].sizeWnd.cy;
-                if( d->dc[d->level].ScaleInY < 0){
+                if(d->dc[d->level].ScaleInY < 0){
                     d->dc[d->level].ScaleInY *= -1.0;
                     d->E2IdirY = -1.0;
                 }
@@ -2281,7 +2281,7 @@ std::cout << "BEFORE DRAW"
             d->dc[d->level].cur = pEmr->ptl;
 
             tmp_path <<
-                "\n\tM " << pix_to_xy( d, pEmr->ptl.x, pEmr->ptl.y ) << " ";
+                "\n\tM " << pix_to_xy(d, pEmr->ptl.x, pEmr->ptl.y) << " ";
             break;
         }
         case U_EMR_SETMETARGN:           dbg_str << "<!-- U_EMR_SETMETARGN -->\n";         break;
@@ -2300,10 +2300,10 @@ std::cout << "BEFORE DRAW"
             tmp_path << "L " << -faraway << "," <<  faraway << " ";
             tmp_path << "z ";
             //inner rect, counterclockwise (sign of Y is reversed)
-            tmp_path << "M " << pix_to_xy( d, rc.left , rc.top )     << " ";
-            tmp_path << "L " << pix_to_xy( d, rc.right, rc.top )     << " ";
-            tmp_path << "L " << pix_to_xy( d, rc.right, rc.bottom )  << " ";
-            tmp_path << "L " << pix_to_xy( d, rc.left,  rc.bottom )  << " ";
+            tmp_path << "M " << pix_to_xy(d, rc.left , rc.top)     << " ";
+            tmp_path << "L " << pix_to_xy(d, rc.right, rc.top)     << " ";
+            tmp_path << "L " << pix_to_xy(d, rc.right, rc.bottom)  << " ";
+            tmp_path << "L " << pix_to_xy(d, rc.left,  rc.bottom)  << " ";
             tmp_path << "z";
             
             add_clips(d, tmp_path.str().c_str(), U_RGN_AND);
@@ -2320,10 +2320,10 @@ std::cout << "BEFORE DRAW"
             U_RECTL rc = pEmr->rclClip;
 
             SVGOStringStream tmp_path;
-            tmp_path << "M " << pix_to_xy( d, rc.left , rc.top )     << " ";
-            tmp_path << "L " << pix_to_xy( d, rc.right, rc.top )     << " ";
-            tmp_path << "L " << pix_to_xy( d, rc.right, rc.bottom )  << " ";
-            tmp_path << "L " << pix_to_xy( d, rc.left,  rc.bottom )  << " ";
+            tmp_path << "M " << pix_to_xy(d, rc.left , rc.top)     << " ";
+            tmp_path << "L " << pix_to_xy(d, rc.right, rc.top)     << " ";
+            tmp_path << "L " << pix_to_xy(d, rc.right, rc.bottom)  << " ";
+            tmp_path << "L " << pix_to_xy(d, rc.left,  rc.bottom)  << " ";
             tmp_path << "z";
             
             add_clips(d, tmp_path.str().c_str(), U_RGN_AND);
@@ -2526,7 +2526,7 @@ std::cout << "BEFORE DRAW"
                                 val = 255.0 / 255.0;
                                 break;
                         }
-                        d->dc[d->level].style.fill.value.color.set( val, val, val );
+                        d->dc[d->level].style.fill.value.color.set(val, val, val);
 
                         d->dc[d->level].fill_mode = DRAW_PAINT;
                         d->dc[d->level].fill_set = true;
@@ -2542,7 +2542,7 @@ std::cout << "BEFORE DRAW"
                         float val = index == U_BLACK_PEN ? 0 : 1;
                         d->dc[d->level].style.stroke_dasharray.set = 0;
                         d->dc[d->level].style.stroke_width.value = 1.0;
-                        d->dc[d->level].style.stroke.value.color.set( val, val, val );
+                        d->dc[d->level].style.stroke.value.color.set(val, val, val);
 
                         d->dc[d->level].stroke_mode = DRAW_PAINT;
                         d->dc[d->level].stroke_set = true;
@@ -2551,7 +2551,7 @@ std::cout << "BEFORE DRAW"
                     }
                 }
             } else {
-                if ( /*index >= 0 &&*/ index < (unsigned int) d->n_obj) {
+                if (/*index >= 0 &&*/ index < (unsigned int) d->n_obj) {
                     switch (d->emf_obj[index].type)
                     {
                         case U_EMR_CREATEPEN:
@@ -2603,10 +2603,10 @@ std::cout << "BEFORE DRAW"
             PU_EMRELLIPSE pEmr = (PU_EMRELLIPSE) lpEMFR;
             U_RECTL rclBox = pEmr->rclBox;
 
-            double cx = pix_to_x_point( d, (rclBox.left + rclBox.right)/2.0, (rclBox.bottom + rclBox.top)/2.0 );
-            double cy = pix_to_y_point( d, (rclBox.left + rclBox.right)/2.0, (rclBox.bottom + rclBox.top)/2.0 );
-            double rx = pix_to_abs_size( d, std::abs(rclBox.right - rclBox.left  )/2.0 );
-            double ry = pix_to_abs_size( d, std::abs(rclBox.top   - rclBox.bottom)/2.0 );
+            double cx = pix_to_x_point(d, (rclBox.left + rclBox.right)/2.0, (rclBox.bottom + rclBox.top)/2.0);
+            double cy = pix_to_y_point(d, (rclBox.left + rclBox.right)/2.0, (rclBox.bottom + rclBox.top)/2.0);
+            double rx = pix_to_abs_size(d, std::abs(rclBox.right - rclBox.left)/2.0);
+            double ry = pix_to_abs_size(d, std::abs(rclBox.top   - rclBox.bottom)/2.0);
 
             SVGOStringStream tmp_ellipse;
             tmp_ellipse << "cx=\"" << cx << "\" ";
@@ -2632,10 +2632,10 @@ std::cout << "BEFORE DRAW"
             U_RECTL rc = pEmr->rclBox;
 
             SVGOStringStream tmp_rectangle;
-            tmp_rectangle << "\n\tM " << pix_to_xy( d, rc.left , rc.top )     << " ";
-            tmp_rectangle << "\n\tL " << pix_to_xy( d, rc.right, rc.top )     << " ";
-            tmp_rectangle << "\n\tL " << pix_to_xy( d, rc.right, rc.bottom )  << " ";
-            tmp_rectangle << "\n\tL " << pix_to_xy( d, rc.left,  rc.bottom )  << " ";
+            tmp_rectangle << "\n\tM " << pix_to_xy(d, rc.left , rc.top)     << " ";
+            tmp_rectangle << "\n\tL " << pix_to_xy(d, rc.right, rc.top)     << " ";
+            tmp_rectangle << "\n\tL " << pix_to_xy(d, rc.right, rc.bottom)  << " ";
+            tmp_rectangle << "\n\tL " << pix_to_xy(d, rc.left,  rc.bottom)  << " ";
             tmp_rectangle << "\n\tz";
 
             d->mask |= emr_mask;
@@ -2658,44 +2658,44 @@ std::cout << "BEFORE DRAW"
             SVGOStringStream tmp_rectangle;
             tmp_rectangle << "\n"
                           << "    M "
-                          << pix_to_xy(d,    rc.left            ,        rc.top    + cny    )
+                          << pix_to_xy(d,    rc.left            ,        rc.top    + cny)
                           << "\n";
             tmp_rectangle << "   C "
-                          << pix_to_xy(d,    rc.left            ,        rc.top    + cny*f1 )
+                          << pix_to_xy(d,    rc.left            ,        rc.top    + cny*f1)
                           << " "
-                          << pix_to_xy(d,    rc.left  + cnx*f1  ,        rc.top             )
+                          << pix_to_xy(d,    rc.left  + cnx*f1  ,        rc.top)
                           << " "
-                          << pix_to_xy(d,    rc.left  + cnx     ,        rc.top             )
+                          << pix_to_xy(d,    rc.left  + cnx     ,        rc.top)
                           << "\n";
             tmp_rectangle << "   L "
-                          << pix_to_xy(d,    rc.right - cnx     ,        rc.top             )
+                          << pix_to_xy(d,    rc.right - cnx     ,        rc.top)
                           << "\n";
             tmp_rectangle << "   C "
-                          << pix_to_xy(d,    rc.right - cnx*f1  ,        rc.top             )
+                          << pix_to_xy(d,    rc.right - cnx*f1  ,        rc.top)
                           << " "
-                          << pix_to_xy(d,    rc.right           ,        rc.top    + cny*f1 )
+                          << pix_to_xy(d,    rc.right           ,        rc.top    + cny*f1)
                           << " "
-                          << pix_to_xy(d,    rc.right           ,        rc.top    + cny    )
+                          << pix_to_xy(d,    rc.right           ,        rc.top    + cny)
                           << "\n";
             tmp_rectangle << "   L "
-                          << pix_to_xy(d,    rc.right           ,        rc.bottom - cny    )
+                          << pix_to_xy(d,    rc.right           ,        rc.bottom - cny)
                           << "\n";
             tmp_rectangle << "   C "
-                          << pix_to_xy(d,    rc.right           ,        rc.bottom - cny*f1 )
+                          << pix_to_xy(d,    rc.right           ,        rc.bottom - cny*f1)
                           << " "
-                          << pix_to_xy(d,    rc.right - cnx*f1  ,        rc.bottom          )
+                          << pix_to_xy(d,    rc.right - cnx*f1  ,        rc.bottom)
                           << " "
-                          << pix_to_xy(d,    rc.right - cnx     ,        rc.bottom          )
+                          << pix_to_xy(d,    rc.right - cnx     ,        rc.bottom)
                           << "\n";
             tmp_rectangle << "   L "
-                          << pix_to_xy(d,    rc.left  + cnx     ,        rc.bottom          )
+                          << pix_to_xy(d,    rc.left  + cnx     ,        rc.bottom)
                           << "\n";
             tmp_rectangle << "   C "
-                          << pix_to_xy(d,    rc.left  + cnx*f1  ,        rc.bottom          )
+                          << pix_to_xy(d,    rc.left  + cnx*f1  ,        rc.bottom)
                           << " "
-                          << pix_to_xy(d,    rc.left            ,        rc.bottom - cny*f1 )
+                          << pix_to_xy(d,    rc.left            ,        rc.bottom - cny*f1)
                           << " "
-                          << pix_to_xy(d,    rc.left            ,        rc.bottom - cny    )
+                          << pix_to_xy(d,    rc.left            ,        rc.bottom - cny)
                           << "\n";
             tmp_rectangle << "   z\n";
 
@@ -2711,7 +2711,7 @@ std::cout << "BEFORE DRAW"
             U_PAIRF center,start,end,size;
             int f1;
             int f2 = (d->arcdir == U_AD_COUNTERCLOCKWISE ? 0 : 1);
-            int stat = emr_arc_points( lpEMFR, &f1, f2, &center, &start, &end, &size);
+            int stat = emr_arc_points(lpEMFR, &f1, f2, &center, &start, &end, &size);
             if(!stat){
                 tmp_path <<  "\n\tM " << pix_to_xy(d, start.x, start.y);
                 tmp_path <<  " A "    << pix_to_abs_size(d, size.x)/2.0      << ","  << pix_to_abs_size(d, size.y)/2.0;
@@ -2733,7 +2733,7 @@ std::cout << "BEFORE DRAW"
             U_PAIRF center,start,end,size;
             int f1;
             int f2 = (d->arcdir == U_AD_COUNTERCLOCKWISE ? 0 : 1);
-            if(!emr_arc_points( lpEMFR, &f1, f2, &center, &start, &end, &size)){
+            if(!emr_arc_points(lpEMFR, &f1, f2, &center, &start, &end, &size)){
                 tmp_path <<  "\n\tM " << pix_to_xy(d, start.x, start.y);
                 tmp_path <<  " A "    << pix_to_abs_size(d, size.x)/2.0      << ","  << pix_to_abs_size(d, size.y)/2.0;
                 tmp_path <<  " ";
@@ -2755,7 +2755,7 @@ std::cout << "BEFORE DRAW"
             U_PAIRF center,start,end,size;
             int f1;
             int f2 = (d->arcdir == U_AD_COUNTERCLOCKWISE ? 0 : 1);
-            if(!emr_arc_points( lpEMFR, &f1, f2, &center, &start, &end, &size)){
+            if(!emr_arc_points(lpEMFR, &f1, f2, &center, &start, &end, &size)){
                 tmp_path <<  "\n\tM " << pix_to_xy(d, center.x, center.y);
                 tmp_path <<  "\n\tL " << pix_to_xy(d, start.x, start.y);
                 tmp_path <<  " A "    << pix_to_abs_size(d, size.x)/2.0      << ","  << pix_to_abs_size(d, size.y)/2.0;
@@ -2787,7 +2787,7 @@ std::cout << "BEFORE DRAW"
             d->mask |= emr_mask;
 
             tmp_path <<
-                "\n\tL " << pix_to_xy( d, pEmr->ptl.x, pEmr->ptl.y) << " ";
+                "\n\tL " << pix_to_xy(d, pEmr->ptl.x, pEmr->ptl.y) << " ";
             break;
         }
         case U_EMR_ARCTO:
@@ -2796,7 +2796,7 @@ std::cout << "BEFORE DRAW"
             U_PAIRF center,start,end,size;
             int f1;
             int f2 = (d->arcdir == U_AD_COUNTERCLOCKWISE ? 0 : 1);
-            if(!emr_arc_points( lpEMFR, &f1, f2, &center, &start, &end, &size)){
+            if(!emr_arc_points(lpEMFR, &f1, f2, &center, &start, &end, &size)){
                 // draw a line from current position to start, arc from there
                 tmp_path <<  "\n\tL " << pix_to_xy(d, start.x, start.y);
                 tmp_path <<  " A "    << pix_to_abs_size(d, size.x)/2.0      << ","  << pix_to_abs_size(d, size.y)/2.0;
@@ -2927,8 +2927,8 @@ std::cout << "BEFORE DRAW"
             char *szTxt = (char *) pEmr->Data;
 
             for (uint32_t i = 0; i < pEmr->cbData; i++) {
-                if ( *szTxt) {
-                    if ( *szTxt >= ' ' && *szTxt < 'z' && *szTxt != '<' && *szTxt != '>' ) {
+                if (*szTxt) {
+                    if (*szTxt >= ' ' && *szTxt < 'z' && *szTxt != '<' && *szTxt != '>') {
                         tmp_str << *szTxt;
                     }
                     szTxt++;
@@ -2974,10 +2974,10 @@ std::cout << "BEFORE DRAW"
                 int32_t dw = pEmr->cDest.x;
                 int32_t dh = pEmr->cDest.y;
                 SVGOStringStream tmp_rectangle;
-                tmp_rectangle << "\n\tM " << pix_to_xy( d, dx,      dy      )    << " ";
-                tmp_rectangle << "\n\tL " << pix_to_xy( d, dx + dw, dy      )    << " ";
-                tmp_rectangle << "\n\tL " << pix_to_xy( d, dx + dw, dy + dh )    << " ";
-                tmp_rectangle << "\n\tL " << pix_to_xy( d, dx,      dy + dh )    << " ";
+                tmp_rectangle << "\n\tM " << pix_to_xy(d, dx,      dy)    << " ";
+                tmp_rectangle << "\n\tL " << pix_to_xy(d, dx + dw, dy)    << " ";
+                tmp_rectangle << "\n\tL " << pix_to_xy(d, dx + dw, dy + dh)    << " ";
+                tmp_rectangle << "\n\tL " << pix_to_xy(d, dx,      dy + dh)    << " ";
                 tmp_rectangle << "\n\tz";
 
                 d->mask |= emr_mask;
@@ -2987,10 +2987,10 @@ std::cout << "BEFORE DRAW"
                 tmp_path <<   tmp_rectangle.str().c_str();
             }
             else {
-                 double dx = pix_to_x_point( d, pEmr->Dest.x, pEmr->Dest.y);
-                 double dy = pix_to_y_point( d, pEmr->Dest.x, pEmr->Dest.y);
-                 double dw = pix_to_abs_size( d, pEmr->cDest.x);
-                 double dh = pix_to_abs_size( d, pEmr->cDest.y);
+                 double dx = pix_to_x_point(d, pEmr->Dest.x, pEmr->Dest.y);
+                 double dy = pix_to_y_point(d, pEmr->Dest.x, pEmr->Dest.y);
+                 double dw = pix_to_abs_size(d, pEmr->cDest.x);
+                 double dh = pix_to_abs_size(d, pEmr->cDest.y);
                  //source position within the bitmap, in pixels
                  int sx = pEmr->Src.x + pEmr->xformSrc.eDx;
                  int sy = pEmr->Src.y + pEmr->xformSrc.eDy;
@@ -3009,10 +3009,10 @@ std::cout << "BEFORE DRAW"
             PU_EMRSTRETCHBLT pEmr = (PU_EMRSTRETCHBLT) lpEMFR;
             // Always grab image, ignore modes.
             if (pEmr->cbBmiSrc) {
-                double dx = pix_to_x_point( d, pEmr->Dest.x, pEmr->Dest.y);
-                double dy = pix_to_y_point( d, pEmr->Dest.x, pEmr->Dest.y);
-                double dw = pix_to_abs_size( d, pEmr->cDest.x);
-                double dh = pix_to_abs_size( d, pEmr->cDest.y);
+                double dx = pix_to_x_point(d, pEmr->Dest.x, pEmr->Dest.y);
+                double dy = pix_to_y_point(d, pEmr->Dest.x, pEmr->Dest.y);
+                double dw = pix_to_abs_size(d, pEmr->cDest.x);
+                double dh = pix_to_abs_size(d, pEmr->cDest.y);
                 //source position within the bitmap, in pixels
                 int sx = pEmr->Src.x + pEmr->xformSrc.eDx;
                 int sy = pEmr->Src.y + pEmr->xformSrc.eDy;
@@ -3029,10 +3029,10 @@ std::cout << "BEFORE DRAW"
             PU_EMRMASKBLT pEmr = (PU_EMRMASKBLT) lpEMFR;
             // Always grab image, ignore masks and modes.
             if (pEmr->cbBmiSrc) {
-                double dx = pix_to_x_point( d, pEmr->Dest.x, pEmr->Dest.y);
-                double dy = pix_to_y_point( d, pEmr->Dest.x, pEmr->Dest.y);
-                double dw = pix_to_abs_size( d, pEmr->cDest.x);
-                double dh = pix_to_abs_size( d, pEmr->cDest.y);
+                double dx = pix_to_x_point(d, pEmr->Dest.x, pEmr->Dest.y);
+                double dy = pix_to_y_point(d, pEmr->Dest.x, pEmr->Dest.y);
+                double dw = pix_to_abs_size(d, pEmr->cDest.x);
+                double dh = pix_to_abs_size(d, pEmr->cDest.y);
                 int sx = pEmr->Src.x + pEmr->xformSrc.eDx;  //source position within the bitmap, in pixels
                 int sy = pEmr->Src.y + pEmr->xformSrc.eDy;
                 int sw = 0; // extract all of the image
@@ -3053,10 +3053,10 @@ std::cout << "BEFORE DRAW"
             // user can sort out transparency later using Gimp, if need be.
 
             PU_EMRSTRETCHDIBITS pEmr = (PU_EMRSTRETCHDIBITS) lpEMFR;
-            double dx = pix_to_x_point( d, pEmr->Dest.x, pEmr->Dest.y );
-            double dy = pix_to_y_point( d, pEmr->Dest.x, pEmr->Dest.y );
-            double dw = pix_to_abs_size( d, pEmr->cDest.x);
-            double dh = pix_to_abs_size( d, pEmr->cDest.y);
+            double dx = pix_to_x_point(d, pEmr->Dest.x, pEmr->Dest.y);
+            double dy = pix_to_y_point(d, pEmr->Dest.x, pEmr->Dest.y);
+            double dw = pix_to_abs_size(d, pEmr->cDest.x);
+            double dh = pix_to_abs_size(d, pEmr->cDest.y);
             int sx = pEmr->Src.x;  //source position within the bitmap, in pixels
             int sy = pEmr->Src.y;
             int sw = pEmr->cSrc.x; // extract the specified amount of the image
@@ -3112,7 +3112,7 @@ std::cout << "BEFORE DRAW"
 
             uint32_t *dup_wt = nullptr;
 
-            if(       lpEMFR->iType==U_EMR_EXTTEXTOUTA){
+            if(lpEMFR->iType==U_EMR_EXTTEXTOUTA){
                 /*  These should be JUST ASCII, but they might not be...
                     If it holds Utf-8 or plain ASCII the first call will succeed.
                     If not, assume that it holds Latin1.
@@ -3122,7 +3122,7 @@ std::cout << "BEFORE DRAW"
                 if(!dup_wt)dup_wt = U_Latin1ToUtf32le((char *) pEmr + pEmr->emrtext.offString, pEmr->emrtext.nChars, nullptr);
                 if(!dup_wt)dup_wt = unknown_chars(pEmr->emrtext.nChars);
             }
-            else if(  lpEMFR->iType==U_EMR_EXTTEXTOUTW){
+            else if(lpEMFR->iType==U_EMR_EXTTEXTOUTW){
                 dup_wt = U_Utf16leToUtf32le((uint16_t *)((char *) pEmr + pEmr->emrtext.offString), pEmr->emrtext.nChars, nullptr);
                 if(!dup_wt)dup_wt = unknown_chars(pEmr->emrtext.nChars);
             }
@@ -3203,7 +3203,7 @@ std::cout << "BEFORE DRAW"
                                                                             ALITOP));
 
                 // language direction can be encoded two ways, U_TA_RTLREADING is preferred 
-                if( (fOptions & U_ETO_RTLREADING) || (d->dc[d->level].textAlign & U_TA_RTLREADING) ){ tsp.ldir = LDIR_RL; }
+                if((fOptions & U_ETO_RTLREADING) || (d->dc[d->level].textAlign & U_TA_RTLREADING)){ tsp.ldir = LDIR_RL; }
                 else{                                                                                 tsp.ldir = LDIR_LR; }
 
                 tsp.condensed = FC_WIDTH_NORMAL; // Not implemented well in libTERE (yet)
@@ -3256,12 +3256,12 @@ std::cout << "BEFORE DRAW"
 
             d->mask |= emr_mask;
 
-            tmp_str << "\n\tM " << pix_to_xy( d, apts[0].x, apts[0].y ) << " ";
+            tmp_str << "\n\tM " << pix_to_xy(d, apts[0].x, apts[0].y) << " ";
 
-            for (i=1; i<pEmr->cpts; ) {
+            for (i=1; i<pEmr->cpts;) {
                 tmp_str << "\n\tC ";
                 for (j=0; j<3 && i<pEmr->cpts; j++,i++) {
-                    tmp_str << pix_to_xy( d, apts[i].x, apts[i].y ) << " ";
+                    tmp_str << pix_to_xy(d, apts[i].x, apts[i].y) << " ";
                 }
             }
 
@@ -3282,10 +3282,10 @@ std::cout << "BEFORE DRAW"
             d->mask |= emr_mask;
 
             // skip the first point?
-            tmp_poly << "\n\tM " << pix_to_xy( d, apts[first].x, apts[first].y ) << " ";
+            tmp_poly << "\n\tM " << pix_to_xy(d, apts[first].x, apts[first].y) << " ";
 
             for (i=first+1; i<pEmr->cpts; i++) {
-                tmp_poly << "\n\tL " << pix_to_xy( d, apts[i].x, apts[i].y ) << " ";
+                tmp_poly << "\n\tL " << pix_to_xy(d, apts[i].x, apts[i].y) << " ";
             }
 
             tmp_path <<  tmp_poly.str().c_str();
@@ -3307,10 +3307,10 @@ std::cout << "BEFORE DRAW"
 
             d->mask |= emr_mask;
 
-            tmp_str << "\n\tM " << pix_to_xy( d, apts[0].x, apts[0].y ) << " ";
+            tmp_str << "\n\tM " << pix_to_xy(d, apts[0].x, apts[0].y) << " ";
 
             for (i=1; i<pEmr->cpts; i++) {
-                tmp_str << "\n\tL " << pix_to_xy( d, apts[i].x, apts[i].y ) << " ";
+                tmp_str << "\n\tL " << pix_to_xy(d, apts[i].x, apts[i].y) << " ";
             }
 
             tmp_path << tmp_str.str().c_str();
@@ -3330,7 +3330,7 @@ std::cout << "BEFORE DRAW"
             for (i=0; i<pEmr->cpts;) {
                 tmp_path << "\n\tC ";
                 for (j=0; j<3 && i<pEmr->cpts; j++,i++) {
-                    tmp_path << pix_to_xy( d, apts[i].x, apts[i].y) << " ";
+                    tmp_path << pix_to_xy(d, apts[i].x, apts[i].y) << " ";
                 }
             }
 
@@ -3347,7 +3347,7 @@ std::cout << "BEFORE DRAW"
             d->mask |= emr_mask;
 
             for (i=0; i<pEmr->cpts;i++) {
-                tmp_path << "\n\tL " << pix_to_xy( d, apts[i].x, apts[i].y) << " ";
+                tmp_path << "\n\tL " << pix_to_xy(d, apts[i].x, apts[i].y) << " ";
             }
 
             break;
@@ -3371,11 +3371,11 @@ std::cout << "BEFORE DRAW"
             for (n=0; n<pEmr->nPolys && i<pEmr->cpts; n++) {
                 SVGOStringStream poly_path;
 
-                poly_path << "\n\tM " << pix_to_xy( d, apts[i].x, apts[i].y) << " ";
+                poly_path << "\n\tM " << pix_to_xy(d, apts[i].x, apts[i].y) << " ";
                 i++;
 
                 for (j=1; j<pEmr->aPolyCounts[n] && i<pEmr->cpts; j++) {
-                    poly_path << "\n\tL " << pix_to_xy( d, apts[i].x, apts[i].y) << " ";
+                    poly_path << "\n\tL " << pix_to_xy(d, apts[i].x, apts[i].y) << " ";
                     i++;
                 }
 
@@ -3458,19 +3458,19 @@ std::cout << "BEFORE DRAW"
             int     nV = pEmr->nTriVert;  //  Number of TriVertex objects
             int     nG = pEmr->nGradObj;  //  Number of gradient triangle/rectangle objects
             U_TRIVERTEX *tv  = (U_TRIVERTEX *)(((char *)lpEMFR) + sizeof(U_EMRGRADIENTFILL));
-            if( pEmr->ulMode == U_GRADIENT_FILL_RECT_H ||
+            if(pEmr->ulMode == U_GRADIENT_FILL_RECT_H ||
                 pEmr->ulMode == U_GRADIENT_FILL_RECT_V
-            ){
+){
                  SVGOStringStream tmp_rectangle;
                  int i,fill_idx;
                  U_GRADIENT4 *rcs = (U_GRADIENT4 *)(((char *)lpEMFR) + sizeof(U_EMRGRADIENTFILL) + sizeof(U_TRIVERTEX)*nV);
                  for(i=0;i<nG;i++){
                      tmp_rectangle << "\n<path d=\"";
                      fill_idx = add_gradient(d, pEmr->ulMode, tv[rcs[i].UpperLeft], tv[rcs[i].LowerRight]);
-                     tmp_rectangle << "\n\tM " << pix_to_xy( d, tv[rcs[i].UpperLeft ].x , tv[rcs[i].UpperLeft ].y )  << " ";
-                     tmp_rectangle << "\n\tL " << pix_to_xy( d, tv[rcs[i].LowerRight].x , tv[rcs[i].UpperLeft ].y )  << " ";
-                     tmp_rectangle << "\n\tL " << pix_to_xy( d, tv[rcs[i].LowerRight].x , tv[rcs[i].LowerRight].y )  << " ";
-                     tmp_rectangle << "\n\tL " << pix_to_xy( d, tv[rcs[i].UpperLeft ].x , tv[rcs[i].LowerRight].y )  << " ";
+                     tmp_rectangle << "\n\tM " << pix_to_xy(d, tv[rcs[i].UpperLeft ].x , tv[rcs[i].UpperLeft ].y)  << " ";
+                     tmp_rectangle << "\n\tL " << pix_to_xy(d, tv[rcs[i].LowerRight].x , tv[rcs[i].UpperLeft ].y)  << " ";
+                     tmp_rectangle << "\n\tL " << pix_to_xy(d, tv[rcs[i].LowerRight].x , tv[rcs[i].LowerRight].y)  << " ";
+                     tmp_rectangle << "\n\tL " << pix_to_xy(d, tv[rcs[i].UpperLeft ].x , tv[rcs[i].LowerRight].y)  << " ";
                      tmp_rectangle << "\n\tz\"";
                      tmp_rectangle << "\n\tstyle=\"stroke:none;fill:url(#";
                      tmp_rectangle << d->gradients.strings[fill_idx];
@@ -3490,9 +3490,9 @@ std::cout << "BEFORE DRAW"
                  for(i=0;i<nG;i++){
                      tmp_triangle << "\n<path d=\"";
                      sprintf(tmpcolor,"%6.6X",sethexcolor(trivertex_to_colorref(tv[tris[i].Vertex1])));
-                     tmp_triangle << "\n\tM " << pix_to_xy( d, tv[tris[i].Vertex1].x , tv[tris[i].Vertex1].y )  << " ";
-                     tmp_triangle << "\n\tL " << pix_to_xy( d, tv[tris[i].Vertex2].x , tv[tris[i].Vertex2].y )  << " ";
-                     tmp_triangle << "\n\tL " << pix_to_xy( d, tv[tris[i].Vertex3].x , tv[tris[i].Vertex3].y )  << " ";
+                     tmp_triangle << "\n\tM " << pix_to_xy(d, tv[tris[i].Vertex1].x , tv[tris[i].Vertex1].y)  << " ";
+                     tmp_triangle << "\n\tL " << pix_to_xy(d, tv[tris[i].Vertex2].x , tv[tris[i].Vertex2].y)  << " ";
+                     tmp_triangle << "\n\tL " << pix_to_xy(d, tv[tris[i].Vertex3].x , tv[tris[i].Vertex3].y)  << " ";
                      tmp_triangle << "\n\tz\"";
                      tmp_triangle << "\n\tstyle=\"stroke:none;fill:#";
                      tmp_triangle << tmpcolor;
@@ -3541,7 +3541,7 @@ void Emf::free_emf_strings(EMF_STRINGS name){
 }
 
 SPDocument *
-Emf::open( Inkscape::Extension::Input * /*mod*/, const gchar *uri )
+Emf::open(Inkscape::Extension::Input * /*mod*/, const gchar *uri)
 {
     if (uri == nullptr) {
         return nullptr;
@@ -3584,7 +3584,7 @@ Emf::open( Inkscape::Extension::Input * /*mod*/, const gchar *uri )
     int good = myEnhMetaFileProc(contents,length, &d);
     free(contents);
 
-    if (d.pDesc){ free( d.pDesc ); }
+    if (d.pDesc){ free(d.pDesc); }
 
 //    std::cout << "SVG Output: " << std::endl << d.outsvg << std::endl;
 

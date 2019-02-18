@@ -98,7 +98,7 @@ PdfImportDialog::PdfImportDialog(PDFDoc *doc, const gchar */*uri*/)
     hbox2 = Gtk::manage(new class Gtk::HBox(false, 0));
     // Disable the page selector when there's only one page
     int num_pages = _pdf_doc->getCatalog()->getNumPages();
-    if ( num_pages == 1 ) {
+    if (num_pages == 1) {
         _pageNumberSpin->set_sensitive(false);
     } else {
         // Display total number of pages
@@ -111,7 +111,7 @@ PdfImportDialog::PdfImportDialog(PDFDoc *doc, const gchar */*uri*/)
     _cropCheck = Gtk::manage(new class Gtk::CheckButton(_("Clip to:")));
     _cropTypeCombo = Gtk::manage(new class Gtk::ComboBoxText());
     int num_crop_choices = sizeof(crop_setting_choices) / sizeof(crop_setting_choices[0]);
-    for ( int i = 0 ; i < num_crop_choices ; i++ ) {
+    for (int i = 0 ; i < num_crop_choices ; i++) {
         _cropTypeCombo->append(_(crop_setting_choices[i]));
     }
     _cropTypeCombo->set_active_text(_(crop_setting_choices[0]));
@@ -388,7 +388,7 @@ bool PdfImportDialog::showDialog() {
     show();
     gint b = run();
     hide();
-    if ( b == Gtk::RESPONSE_OK ) {
+    if (b == Gtk::RESPONSE_OK) {
         return TRUE;
     } else {
         return FALSE;
@@ -417,8 +417,8 @@ void PdfImportDialog::getImportSettings(Inkscape::XML::Node *prefs) {
         Glib::ustring current_choice = _cropTypeCombo->get_active_text();
         int num_crop_choices = sizeof(crop_setting_choices) / sizeof(crop_setting_choices[0]);
         int i = 0;
-        for ( ; i < num_crop_choices ; i++ ) {
-            if ( current_choice == _(crop_setting_choices[i]) ) {
+        for (; i < num_crop_choices ; i++) {
+            if (current_choice == _(crop_setting_choices[i])) {
                 break;
             }
         }
@@ -463,9 +463,9 @@ void PdfImportDialog::_onPrecisionChanged() {
     double min = _fallbackPrecisionSlider_adj->get_lower();
     double max = _fallbackPrecisionSlider_adj->get_upper();
     int num_intervals = sizeof(precision_comments) / sizeof(precision_comments[0]);
-    double interval_len = ( max - min ) / (double)num_intervals;
+    double interval_len = (max - min) / (double)num_intervals;
     double value = _fallbackPrecisionSlider_adj->get_value();
-    int comment_idx = (int)floor( ( value - min ) / interval_len );
+    int comment_idx = (int)floor((value - min) / interval_len);
     _labelPrecisionComment->set_label(precision_comments[comment_idx]);
 }
 
@@ -481,7 +481,7 @@ void PdfImportDialog::_onPageNumberChanged() {
 
 #ifdef HAVE_POPPLER_CAIRO
 void PdfImportDialog::_onToggleImport() {
-    if( _importViaPoppler->get_active() ) {
+    if(_importViaPoppler->get_active()) {
         hbox3->set_sensitive(false);
         _localFontsCheck->set_sensitive(false);
         _embedImagesCheck->set_sensitive(false);
@@ -609,7 +609,7 @@ void PdfImportDialog::_setPreviewPage(int page) {
     // Get page size by accounting for rotation
     double width, height;
     int rotate = _previewed_page->getRotate();
-    if ( rotate == 90 || rotate == 270 ) {
+    if (rotate == 90 || rotate == 270) {
         height = _previewed_page->getCropWidth();
         width = _previewed_page->getCropHeight();
     } else {
@@ -619,10 +619,10 @@ void PdfImportDialog::_setPreviewPage(int page) {
     // Calculate the needed scaling for the page
     double scale_x = (double)_preview_width / width;
     double scale_y = (double)_preview_height / height;
-    double scale_factor = ( scale_x > scale_y ) ? scale_y : scale_x;
+    double scale_factor = (scale_x > scale_y) ? scale_y : scale_x;
     // Create new Cairo surface
-    _thumb_width = (int)ceil( width * scale_factor );
-    _thumb_height = (int)ceil( height * scale_factor );
+    _thumb_width = (int)ceil(width * scale_factor);
+    _thumb_height = (int)ceil(height * scale_factor);
     _thumb_rowstride = _thumb_width * 4;
     if (_thumb_data) {
         delete _thumb_data;
@@ -811,7 +811,7 @@ PdfInput::open(::Inkscape::Extension::Input * /*mod*/, const gchar * uri) {
         Catalog *catalog = pdf_doc->getCatalog();
         Page *page = catalog->getPage(page_num);
 
-        if ( crop_setting >= 0.0 ) {    // Do page clipping
+        if (crop_setting >= 0.0) {    // Do page clipping
             int crop_choice = (int)crop_setting;
             switch (crop_choice) {
                 case 0: // Media box
@@ -841,12 +841,12 @@ PdfInput::open(::Inkscape::Extension::Input * /*mod*/, const gchar * uri) {
         // Set up approximation precision for parser. Used for convering Mesh Gradients into tiles.
         double color_delta;
         sp_repr_get_double(prefs, "approximationPrecision", &color_delta);
-        if ( color_delta <= 0.0 ) {
+        if (color_delta <= 0.0) {
             color_delta = 1.0 / 2.0;
         } else {
             color_delta = 1.0 / color_delta;
         }
-        for ( int i = 1 ; i <= pdfNumShadingTypes ; i++ ) {
+        for (int i = 1 ; i <= pdfNumShadingTypes ; i++) {
             pdf_parser->setApproximationPrecision(i, color_delta, 6);
         }
 
@@ -904,7 +904,7 @@ PdfInput::open(::Inkscape::Extension::Input * /*mod*/, const gchar * uri) {
             // gradient won't necessarily result in the whole PDF being rasterized. Of course, SVG
             // 1.2 never made it as a standard, but hey, we'll take what we can get. This trick was
             // found by examining the 'pdftocairo' code.
-            cairo_svg_surface_restrict_to_version( surface, CAIRO_SVG_VERSION_1_2 );
+            cairo_svg_surface_restrict_to_version(surface, CAIRO_SVG_VERSION_1_2);
 
             cairo_t* cr = cairo_create(surface);
 

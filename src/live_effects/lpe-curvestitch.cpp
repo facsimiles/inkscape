@@ -48,7 +48,7 @@ LPECurveStitch::LPECurveStitch(LivePathEffectObject *lpeobject) :
     registerParameter(&startpoint_spacing_variation);
     registerParameter(&endpoint_edge_variation);
     registerParameter(&endpoint_spacing_variation);
-    registerParameter(&strokepath );
+    registerParameter(&strokepath);
     registerParameter(&prop_scale);
     registerParameter(&scale_y_rel);
 
@@ -116,9 +116,9 @@ LPECurveStitch::doEffect_path (Geom::PathVector const & path_in)
                     }
 
                     Affine transform;
-                    transform.setXAxis( (end-start) / scaling );
-                    transform.setYAxis( rot90(unit_vector(end-start)) * scaling_y);
-                    transform.setTranslation( start );
+                    transform.setXAxis((end-start) / scaling);
+                    transform.setYAxis(rot90(unit_vector(end-start)) * scaling_y);
+                    transform.setTranslation(start);
                     Piecewise<D2<SBasis> > pwd2_out = (strokepath.get_pwd2()-stroke_origin) * transform;
 
                     // add stuff to one big pw<d2<sbasis> > and then outside the loop convert to path?
@@ -158,9 +158,9 @@ LPECurveStitch::resetDefaults(SPItem const* item)
     
     // calculate bounding box:  (isn't there a simpler way?)
     Piecewise<D2<SBasis> > pwd2;
-    Geom::PathVector temppath = sp_svg_read_pathv( item->getRepr()->attribute("inkscape:original-d"));
+    Geom::PathVector temppath = sp_svg_read_pathv(item->getRepr()->attribute("inkscape:original-d"));
     for (const auto & i : temppath) {
-        pwd2.concat( i.toPwSb() );
+        pwd2.concat(i.toPwSb());
     }
     D2<Piecewise<SBasis> > d2pw = make_cuts_independent(pwd2);
     OptInterval bndsX = bounds_exact(d2pw[0]);
@@ -168,11 +168,11 @@ LPECurveStitch::resetDefaults(SPItem const* item)
     if (bndsX && bndsY) {
         Point start(bndsX->min(), (bndsY->max()+bndsY->min())/2);
         Point end(bndsX->max(), (bndsY->max()+bndsY->min())/2);
-        if ( !Geom::are_near(start,end) ) {
+        if (!Geom::are_near(start,end)) {
             Geom::Path path;
-            path.start( start );
-            path.appendNew<Geom::LineSegment>( end );
-            strokepath.set_new_value( path.toPwSb(), true );
+            path.start(start);
+            path.appendNew<Geom::LineSegment>(end);
+            strokepath.set_new_value(path.toPwSb(), true);
         } else {
             // bounding box is too small to make decent path. set to default default. :-)
             strokepath.param_set_and_write_default();

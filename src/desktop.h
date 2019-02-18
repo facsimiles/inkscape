@@ -380,7 +380,7 @@ public:
     Gtk::Window* getToplevel();  // To be removed in favor of getInkscapeWindow
     InkscapeWindow* getInkscapeWindow();
     void presentWindow();
-    bool showInfoDialog( Glib::ustring const &message );
+    bool showInfoDialog(Glib::ustring const &message);
     bool warnDialog (Glib::ustring const &text);
     void toggleRulers();
     void toggleScrollbars();
@@ -466,38 +466,38 @@ private:
         Geom::Affine w2d() const { return _w2d; };
         Geom::Affine d2w() const { return _d2w; };
 
-        void setScale( Geom::Scale scale ) {
+        void setScale(Geom::Scale scale) {
             _scale = scale;
             _update();
         }
-        void addScale( Geom::Scale scale) {
+        void addScale(Geom::Scale scale) {
             _scale *= scale;
             _update();
         }
 
-        void setRotate( Geom::Rotate rotate ) {
+        void setRotate(Geom::Rotate rotate) {
             _rotate = rotate;
             _update();
         }
-        void setRotate( double rotate ) {
-            _rotate = Geom::Rotate( rotate );
+        void setRotate(double rotate) {
+            _rotate = Geom::Rotate(rotate);
             _update();
         }
-        void addRotate( Geom::Rotate rotate ) {
+        void addRotate(Geom::Rotate rotate) {
             _rotate *= rotate;
             _update();
         }
-        void addRotate( double rotate ) {
-            _rotate *= Geom::Rotate( rotate );
+        void addRotate(double rotate) {
+            _rotate *= Geom::Rotate(rotate);
             _update();
         }
 
-        void setFlip( CanvasFlip flip ) {
+        void setFlip(CanvasFlip flip) {
             _flip = Geom::Scale();
-            addFlip( flip );
+            addFlip(flip);
         }
 
-        void addFlip( CanvasFlip flip ) {
+        void addFlip(CanvasFlip flip) {
             if (flip & FLIP_HORIZONTAL) {
                 _flip *= Geom::Scale(-1.0, 1.0);
             }
@@ -515,10 +515,10 @@ private:
             return _rotate.angle();
         }
 
-        void setOffset( Geom::Point offset ) {
+        void setOffset(Geom::Point offset) {
             _offset = offset;
         }
-        void addOffset( Geom::Point offset ) {
+        void addOffset(Geom::Point offset) {
             _offset += offset;
         }
         Geom::Point getOffset() {

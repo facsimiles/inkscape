@@ -30,7 +30,7 @@ char const *demangle_helper(char const *name) {
     FILE *stream=popen(Util::format("c++filt %s", name), "r");
     if (fgets(buffer, sizeof(buffer), stream)) {
         size_t len=strlen(buffer);
-        if ( buffer[len-1] == '\n' ) {
+        if (buffer[len-1] == '\n') {
             buffer[len-1] = '\000';
         }
         result = strdup(buffer);
@@ -43,7 +43,7 @@ char const *demangle_helper(char const *name) {
 
 struct string_less_than {
     bool operator()(char const *a, char const *b) const {
-        return ( strcmp(a, b) < 0 );
+        return (strcmp(a, b) < 0);
     }
 };
 
@@ -54,7 +54,7 @@ MangleCache mangle_cache;
 
 std::shared_ptr<std::string> demangle(char const *name) {
     MangleCache::iterator found=mangle_cache.find(name);
-    if ( found != mangle_cache.end() ) {
+    if (found != mangle_cache.end()) {
         return (*found).second;
     }
 

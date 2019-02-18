@@ -950,7 +950,7 @@ unsigned char target=0;
     if(to_font){
       if(text && (target=to_font[*text])){ //There is actually something here to convert
           while(*text && target==to_font[*text]){
-              *text=from_unicode[*text] + (hold_pua ? 0xF000 : 0 );
+              *text=from_unicode[*text] + (hold_pua ? 0xF000 : 0);
               text++;
               count++;
           }
@@ -986,7 +986,7 @@ unsigned int i;
 void TableGen(bool new_symb,bool new_wing, bool new_zdng, bool new_pua){
 int i;
     if(hold_symb != new_symb || hold_wing != new_wing 
-       || hold_zdng != new_zdng || hold_pua != new_pua ){ // must (re)generate tables
+       || hold_zdng != new_zdng || hold_pua != new_pua){ // must (re)generate tables
        if(!from_unicode){ // create arrays
           from_unicode = (unsigned char *) calloc(0x10000,sizeof(unsigned char));
           to_font      = (unsigned char *) calloc(0x10000,sizeof(unsigned char));

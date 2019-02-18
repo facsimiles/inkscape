@@ -63,7 +63,7 @@ void Ellipse::setCoefficients(double A, double B, double C, double D, double E, 
 
 
     //evaluate ellipse rotation angle
-    _angle = std::atan2( -B, -(A - C) )/2;
+    _angle = std::atan2(-B, -(A - C))/2;
 
     // evaluate the length of the ellipse rays
     double sinrot, cosrot;
@@ -148,9 +148,9 @@ Rect Ellipse::boundsExact() const
     double sinrot, cosrot;
     sincos(_angle, sinrot, cosrot);
 
-    extremes[X][0] = std::atan2( -ray(Y) * sinrot, ray(X) * cosrot );
+    extremes[X][0] = std::atan2(-ray(Y) * sinrot, ray(X) * cosrot);
     extremes[X][1] = extremes[X][0] + M_PI;
-    extremes[Y][0] = std::atan2( ray(Y) * cosrot, ray(X) * sinrot );
+    extremes[Y][0] = std::atan2(ray(Y) * cosrot, ray(X) * sinrot);
     extremes[Y][1] = extremes[Y][0] + M_PI;
 
     Rect result;
@@ -307,9 +307,9 @@ Ellipse &Ellipse::operator*=(Affine const& m)
     }
 
     std::vector<double> coeff = coefficients();
-    Affine q( coeff[0],   coeff[1]/2,
+    Affine q(coeff[0],   coeff[1]/2,
               coeff[1]/2, coeff[2],
-              0,          0   );
+              0,          0);
 
     Affine invm = mwot.inverse();
     q = invm * q ;
@@ -357,7 +357,7 @@ Coord Ellipse::valueAt(Coord t, Dim2 d) const
     sincos(rotationAngle(), sinrot, cosrot);
     sincos(t, sint, cost);
 
-    if ( d == X ) {
+    if (d == X) {
         return    ray(X) * cosrot * cost
                 - ray(Y) * sinrot * sint
                 + center(X);

@@ -57,8 +57,8 @@ void SPFeImage::build(SPDocument *document, Inkscape::XML::Node *repr)
 
     /*LOAD ATTRIBUTES FROM REPR HERE*/
 
-    this->readAttr( "preserveAspectRatio" );
-    this->readAttr( "xlink:href" );
+    this->readAttr("preserveAspectRatio");
+    this->readAttr("xlink:href");
 }
 
 /**
@@ -244,8 +244,8 @@ void SPFeImage::build_renderer(Inkscape::Filters::Filter* filter) {
 
     nr_image->from_element = this->from_element;
     nr_image->SVGElem = this->SVGElem;
-    nr_image->set_align( this->aspect_align );
-    nr_image->set_clip( this->aspect_clip );
+    nr_image->set_align(this->aspect_align);
+    nr_image->set_clip(this->aspect_clip);
     nr_image->set_href(this->href);
     nr_image->set_document(this->document);
 }

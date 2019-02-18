@@ -29,17 +29,17 @@ public:
 
     virtual ~SPStyleElemTest()
     {
-        if ( _doc )
+        if (_doc)
         {
             _doc->doUnref();
         }
     }
 
-    static void createSuiteSubclass( SPStyleElemTest *& dst )
+    static void createSuiteSubclass(SPStyleElemTest *& dst)
     {
         SPStyleElem *style_elem = new SPStyleElem();
 
-        if ( style_elem ) {
+        if (style_elem) {
             TS_ASSERT(!style_elem->is_css);
             TS_ASSERT(style_elem->media.print);
             TS_ASSERT(style_elem->media.screen);
@@ -51,10 +51,10 @@ public:
 
     static SPStyleElemTest *createSuite()
     {
-        return Inkscape::createSuiteAndDocument<SPStyleElemTest>( createSuiteSubclass );
+        return Inkscape::createSuiteAndDocument<SPStyleElemTest>(createSuiteSubclass);
     }
 
-    static void destroySuite( SPStyleElemTest *suite ) { delete suite; }
+    static void destroySuite(SPStyleElemTest *suite) { delete suite; }
 
 // -------------------------------------------------------------------------
 // -------------------------------------------------------------------------
@@ -65,41 +65,41 @@ public:
         SPStyleElem *style_elem = new SPStyleElem();
         SP_OBJECT(style_elem)->document = _doc;
 
-        SP_OBJECT(style_elem)->setKeyValue( SP_ATTR_TYPE, "something unrecognized");
-        TS_ASSERT( !style_elem->is_css );
+        SP_OBJECT(style_elem)->setKeyValue(SP_ATTR_TYPE, "something unrecognized");
+        TS_ASSERT(!style_elem->is_css);
 
-        SP_OBJECT(style_elem)->setKeyValue( SP_ATTR_TYPE, "text/css");
-        TS_ASSERT( style_elem->is_css );
+        SP_OBJECT(style_elem)->setKeyValue(SP_ATTR_TYPE, "text/css");
+        TS_ASSERT(style_elem->is_css);
 
-        SP_OBJECT(style_elem)->setKeyValue( SP_ATTR_TYPE, "atext/css");
-        TS_ASSERT( !style_elem->is_css );
+        SP_OBJECT(style_elem)->setKeyValue(SP_ATTR_TYPE, "atext/css");
+        TS_ASSERT(!style_elem->is_css);
 
-        SP_OBJECT(style_elem)->setKeyValue( SP_ATTR_TYPE, "text/cssx");
-        TS_ASSERT( !style_elem->is_css );
+        SP_OBJECT(style_elem)->setKeyValue(SP_ATTR_TYPE, "text/cssx");
+        TS_ASSERT(!style_elem->is_css);
 
         delete style_elem;
     }
 
     void testWrite()
     {
-        TS_ASSERT( _doc );
-        TS_ASSERT( _doc->getReprDoc() );
-        if ( !_doc->getReprDoc() ) {
+        TS_ASSERT(_doc);
+        TS_ASSERT(_doc->getReprDoc());
+        if (!_doc->getReprDoc()) {
             return; // evil early return
         }
 
         SPStyleElem *style_elem = new SPStyleElem();
         SP_OBJECT(style_elem)->document = _doc;
 
-        SP_OBJECT(style_elem)->setKeyValue( SP_ATTR_TYPE, "text/css");
+        SP_OBJECT(style_elem)->setKeyValue(SP_ATTR_TYPE, "text/css");
         Inkscape::XML::Node *repr = _doc->getReprDoc()->createElement("svg:style");
         SP_OBJECT(style_elem)->updateRepr(_doc->getReprDoc(), repr, SP_OBJECT_WRITE_ALL);
         {
             gchar const *typ = repr->attribute("type");
-            TS_ASSERT( typ != NULL );
-            if ( typ )
+            TS_ASSERT(typ != NULL);
+            if (typ)
             {
-                TS_ASSERT_EQUALS( std::string(typ), std::string("text/css") );
+                TS_ASSERT_EQUALS(std::string(typ), std::string("text/css"));
             }
         }
 
@@ -108,19 +108,19 @@ public:
 
     void testBuild()
     {
-        TS_ASSERT( _doc );
-        TS_ASSERT( _doc->getReprDoc() );
-        if ( !_doc->getReprDoc() ) {
+        TS_ASSERT(_doc);
+        TS_ASSERT(_doc->getReprDoc());
+        if (!_doc->getReprDoc()) {
             return; // evil early return
         }
 
         SPStyleElem *style_elem = new SPStyleElem();
         Inkscape::XML::Node *const repr = _doc->getReprDoc()->createElement("svg:style");
         repr->setAttribute("type", "text/css");
-        style_elem->invoke_build( _doc, repr, false);
-        TS_ASSERT( style_elem->is_css );
-        TS_ASSERT( style_elem->media.print );
-        TS_ASSERT( style_elem->media.screen );
+        style_elem->invoke_build(_doc, repr, false);
+        TS_ASSERT(style_elem->is_css);
+        TS_ASSERT(style_elem->media.print);
+        TS_ASSERT(style_elem->media.screen);
 
         /* Some checks relevant to the read_content test below. */
         {
@@ -136,9 +136,9 @@ public:
 
     void testReadContent()
     {
-        TS_ASSERT( _doc );
-        TS_ASSERT( _doc->getReprDoc() );
-        if ( !_doc->getReprDoc() ) {
+        TS_ASSERT(_doc);
+        TS_ASSERT(_doc->getReprDoc());
+        if (!_doc->getReprDoc()) {
             return; // evil early return
         }
 
@@ -148,8 +148,8 @@ public:
         Inkscape::XML::Node *const content_repr = _doc->getReprDoc()->createTextNode(".myclass { }");
         repr->addChild(content_repr, NULL);
         style_elem->invoke_build(_doc, repr, false);
-        TS_ASSERT( style_elem->is_css );
-        TS_ASSERT( _doc->style_cascade );
+        TS_ASSERT(style_elem->is_css);
+        TS_ASSERT(_doc->style_cascade);
         CRStyleSheet const *const stylesheet = cr_cascade_get_sheet(_doc->style_cascade, ORIGIN_AUTHOR);
         TS_ASSERT(stylesheet != NULL);
         TS_ASSERT(stylesheet->statements != NULL);

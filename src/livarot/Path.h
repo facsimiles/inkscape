@@ -113,15 +113,15 @@ public:
   // the commands...
   int ForcePoint();
   int Close();
-  int MoveTo ( Geom::Point const &ip);
-  int LineTo ( Geom::Point const &ip);
-  int CubicTo ( Geom::Point const &ip,  Geom::Point const &iStD,  Geom::Point const &iEnD);
-  int ArcTo ( Geom::Point const &ip, double iRx, double iRy, double angle, bool iLargeArc, bool iClockwise);
-  int IntermBezierTo ( Geom::Point const &ip);	// add a quadratic bezier spline control point
-  int BezierTo ( Geom::Point const &ip);	// quadratic bezier spline to this point (control points can be added after this)
+  int MoveTo (Geom::Point const &ip);
+  int LineTo (Geom::Point const &ip);
+  int CubicTo (Geom::Point const &ip,  Geom::Point const &iStD,  Geom::Point const &iEnD);
+  int ArcTo (Geom::Point const &ip, double iRx, double iRy, double angle, bool iLargeArc, bool iClockwise);
+  int IntermBezierTo (Geom::Point const &ip);	// add a quadratic bezier spline control point
+  int BezierTo (Geom::Point const &ip);	// quadratic bezier spline to this point (control points can be added after this)
   int TempBezierTo();	// start a quadratic bezier spline (control points can be added after this)
   int EndBezierTo();
-  int EndBezierTo ( Geom::Point const &ip);	// ends a quadratic bezier spline (for curves started with TempBezierTo)
+  int EndBezierTo (Geom::Point const &ip);	// ends a quadratic bezier spline (for curves started with TempBezierTo)
 
   // transforms a description in a polyline (for stroking and filling)
   // treshhold is the max length^2 (sort of)
@@ -133,10 +133,10 @@ public:
   // creation of the polyline (you can tinker with these function if you want)
   void SetBackData (bool nVal);	// has back data?
   void ResetPoints(); // resets to the empty polyline
-  int AddPoint ( Geom::Point const &iPt, bool mvto = false);	// add point
-  int AddPoint ( Geom::Point const &iPt, int ip, double it, bool mvto = false);
-  int AddForcedPoint ( Geom::Point const &iPt);	// add point
-  int AddForcedPoint ( Geom::Point const &iPt, int ip, double it);
+  int AddPoint (Geom::Point const &iPt, bool mvto = false);	// add point
+  int AddPoint (Geom::Point const &iPt, int ip, double it, bool mvto = false);
+  int AddForcedPoint (Geom::Point const &iPt);	// add point
+  int AddForcedPoint (Geom::Point const &iPt, int ip, double it);
   int ReplacePoint(Geom::Point const &iPt);  // replace point
 
   // transform in a polygon (in a graph, in fact; a subsequent call to ConvertToShape is needed)
@@ -250,17 +250,17 @@ public:
 
   // Functions used by the conversion.
   // they append points to the polyline
-  void DoArc ( Geom::Point const &iS,  Geom::Point const &iE, double rx, double ry,
+  void DoArc (Geom::Point const &iS,  Geom::Point const &iE, double rx, double ry,
 	      double angle, bool large, bool wise, double tresh);
-  void RecCubicTo ( Geom::Point const &iS,  Geom::Point const &iSd,  Geom::Point const &iE,  Geom::Point const &iEd, double tresh, int lev,
+  void RecCubicTo (Geom::Point const &iS,  Geom::Point const &iSd,  Geom::Point const &iE,  Geom::Point const &iEd, double tresh, int lev,
 		   double maxL = -1.0);
-  void RecBezierTo ( Geom::Point const &iPt,  Geom::Point const &iS,  Geom::Point const &iE, double treshhold, int lev, double maxL = -1.0);
+  void RecBezierTo (Geom::Point const &iPt,  Geom::Point const &iS,  Geom::Point const &iE, double treshhold, int lev, double maxL = -1.0);
 
-  void DoArc ( Geom::Point const &iS,  Geom::Point const &iE, double rx, double ry,
+  void DoArc (Geom::Point const &iS,  Geom::Point const &iE, double rx, double ry,
 	      double angle, bool large, bool wise, double tresh, int piece);
-  void RecCubicTo ( Geom::Point const &iS,  Geom::Point const &iSd,  Geom::Point const &iE,  Geom::Point const &iEd, double tresh, int lev,
+  void RecCubicTo (Geom::Point const &iS,  Geom::Point const &iSd,  Geom::Point const &iE,  Geom::Point const &iEd, double tresh, int lev,
 		   double st, double et, int piece);
-  void RecBezierTo ( Geom::Point const &iPt,  Geom::Point const &iS, const  Geom::Point &iE, double treshhold, int lev, double st, double et,
+  void RecBezierTo (Geom::Point const &iPt,  Geom::Point const &iS, const  Geom::Point &iE, double treshhold, int lev, double st, double et,
 		    int piece);
 
   // don't pay attention
@@ -271,15 +271,15 @@ public:
     double tSt, tEn;
     double off_dec;
   };
-  void DoArc ( Geom::Point const &iS,  Geom::Point const &iE, double rx, double ry,
+  void DoArc (Geom::Point const &iS,  Geom::Point const &iE, double rx, double ry,
 	      double angle, bool large, bool wise, double tresh, int piece,
 	      offset_orig & orig);
-  void RecCubicTo ( Geom::Point const &iS,  Geom::Point const &iSd,  Geom::Point const &iE,  Geom::Point const &iEd, double tresh, int lev,
+  void RecCubicTo (Geom::Point const &iS,  Geom::Point const &iSd,  Geom::Point const &iE,  Geom::Point const &iEd, double tresh, int lev,
 		   double st, double et, int piece, offset_orig & orig);
-  void RecBezierTo ( Geom::Point const &iPt,  Geom::Point const &iS,  Geom::Point const &iE, double treshhold, int lev, double st, double et,
+  void RecBezierTo (Geom::Point const &iPt,  Geom::Point const &iS,  Geom::Point const &iE, double treshhold, int lev, double st, double et,
 		    int piece, offset_orig & orig);
 
-  static void ArcAngles ( Geom::Point const &iS,  Geom::Point const &iE, double rx,
+  static void ArcAngles (Geom::Point const &iS,  Geom::Point const &iE, double rx,
                          double ry, double angle, bool large, bool wise,
                          double &sang, double &eang);
   static void QuadraticPoint (double t,  Geom::Point &oPt,   Geom::Point const &iS,   Geom::Point const &iM,   Geom::Point const &iE);

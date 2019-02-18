@@ -23,7 +23,7 @@
  */
 void SPTag::moveTo(SPObject *target, gboolean intoafter) {
 
-    Inkscape::XML::Node *target_ref = ( target ? target->getRepr() : nullptr );
+    Inkscape::XML::Node *target_ref = (target ? target->getRepr() : nullptr);
     Inkscape::XML::Node *our_ref = getRepr();
     gboolean first = FALSE;
 
@@ -63,7 +63,7 @@ void SPTag::moveTo(SPObject *target, gboolean intoafter) {
 void
 SPTag::build(SPDocument *document, Inkscape::XML::Node *repr)
 {
-    readAttr( "inkscape:expanded" );
+    readAttr("inkscape:expanded");
     SPObject::build(document, repr);
 }
 
@@ -77,7 +77,7 @@ SPTag::set(SPAttributeEnum key, gchar const *value)
     switch (key)
     {
         case SP_ATTR_INKSCAPE_EXPANDED:
-            if ( value && !strcmp(value, "true") ) {
+            if (value && !strcmp(value, "true")) {
                 setExpanded(true);
             }
             break;
@@ -88,7 +88,7 @@ SPTag::set(SPAttributeEnum key, gchar const *value)
 }
 
 void SPTag::setExpanded(bool isexpanded) {
-    //if ( _expanded != isexpanded ){
+    //if (_expanded != isexpanded){
         _expanded = isexpanded;
     //}
 }

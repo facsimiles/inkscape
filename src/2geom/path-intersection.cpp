@@ -89,7 +89,7 @@ linear_intersect(Point const &A0, Point const &A1, Point const &B0, Point const 
         det_rel /= Bd.length();
     }
 
-    if( fabs(det_rel) < 1e-12 ) { // If the cross product is NEARLY zero,
+    if(fabs(det_rel) < 1e-12) { // If the cross product is NEARLY zero,
         // Then one of the linesegments might have length zero
         if (both_lines_non_zero) {
             // If that's not the case, then we must have either:
@@ -301,7 +301,7 @@ Crossings SimpleCrosser::crossings(Curve const &a, Curve const &b) {
 void mono_intersect(Curve const &A, double Al, double Ah,
                     Curve const &B, double Bl, double Bh,
                     Crossings &ret, double tol = 0.1, unsigned depth = 0) {
-    if( Al >= Ah || Bl >= Bh) return;
+    if(Al >= Ah || Bl >= Bh) return;
     //std::cout << " " << depth << "[" << Al << ", " << Ah << "]" << "[" << Bl << ", " << Bh << "]";
 
     Point A0 = A.pointAt(Al), A1 = A.pointAt(Ah),
@@ -352,7 +352,7 @@ Crossings mono_intersect(Curve const & A, Interval const &Ad,
 void mono_pair(Path const &A, double Al, double Ah,
                Path const &B, double Bl, double Bh,
                Crossings &ret, double /*tol*/, unsigned depth = 0) {
-    if( Al >= Ah || Bl >= Bh) return;
+    if(Al >= Ah || Bl >= Bh) return;
     std::cout << " " << depth << "[" << Al << ", " << Ah << "]" << "[" << Bl << ", " << Bh << "]";
 
     Point A0 = A.pointAt(Al), A1 = A.pointAt(Ah),

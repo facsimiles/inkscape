@@ -358,7 +358,7 @@ SPPattern *SPPattern::clone_if_necessary(SPItem *item, const gchar *property)
 void SPPattern::transform_multiply(Geom::Affine postmul, bool set)
 {
     // this formula is for a different interpretation of pattern transforms as described in (*) in sp-pattern.cpp
-    // for it to work, we also need    sp_object_read_attr( item, "transform");
+    // for it to work, we also need    sp_object_read_attr(item, "transform");
     // pattern->patternTransform = premul * item->transform * pattern->patternTransform * item->transform.inverse() *
     // postmul;
 
@@ -661,11 +661,11 @@ cairo_pattern_t *SPPattern::pattern_new(cairo_t *base_ct, Geom::OptRect const &b
     // Uncomment to debug
     // cairo_surface_t* raw = pattern_surface.raw();
     // std::cout << "  cairo_surface (sp-pattern): "
-    //           << " width: "  << cairo_image_surface_get_width( raw )
-    //           << " height: " << cairo_image_surface_get_height( raw )
+    //           << " width: "  << cairo_image_surface_get_width(raw)
+    //           << " height: " << cairo_image_surface_get_height(raw)
     //           << std::endl;
     // std::string filename = "sp-pattern-" + (std::string)getId() + ".png";
-    // cairo_surface_write_to_png( pattern_surface.raw(), filename.c_str() );
+    // cairo_surface_write_to_png(pattern_surface.raw(), filename.c_str());
 
     if (needs_opacity) {
         dc.popGroupToSource(); // pop raw pattern
@@ -682,7 +682,7 @@ cairo_pattern_t *SPPattern::pattern_new(cairo_t *base_ct, Geom::OptRect const &b
     int h = one_tile[Geom::Y].extent();
     int m = raw_transform[4] / w;
     int n = raw_transform[5] / h;
-    raw_transform *= Geom::Translate( -m*w, -n*h );
+    raw_transform *= Geom::Translate(-m*w, -n*h);
 
     cairo_pattern_t *cp = cairo_pattern_create_for_surface(pattern_surface.raw());
     ink_cairo_pattern_set_matrix(cp, raw_transform);

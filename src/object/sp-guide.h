@@ -70,7 +70,7 @@ public:
 
     char* description(bool const verbose = true) const;
 
-    double angle() const { return std::atan2( - normal_to_line[Geom::X], normal_to_line[Geom::Y] ); }
+    double angle() const { return std::atan2(- normal_to_line[Geom::X], normal_to_line[Geom::Y]); }
     double getDistanceFrom(Geom::Point const &pt) const;
     Geom::Point getPositionFrom(Geom::Point const &pt) const;
 

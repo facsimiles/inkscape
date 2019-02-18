@@ -27,11 +27,11 @@ inline ForwardIterator find_if_before(ForwardIterator start,
                                       UnaryPredicate pred)
 {
     ForwardIterator before=end;
-    while ( start != end && !pred(*start) ) {
+    while (start != end && !pred(*start)) {
         before = start;
         ++start;
     }
-    return ( start != end ) ? before : end;
+    return (start != end) ? before : end;
 }
 
 }

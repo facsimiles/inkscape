@@ -41,9 +41,9 @@ public:
             {-1000, 80}
         };
 
-        for ( unsigned i = 0; i < G_N_ELEMENTS(cases); i++ ) {
-            double result = mod360( cases[i][0] );
-            TS_ASSERT_EQUALS( cases[i][1], result );
+        for (unsigned i = 0; i < G_N_ELEMENTS(cases); i++) {
+            double result = mod360(cases[i][0]);
+            TS_ASSERT_EQUALS(cases[i][1], result);
         }
     }
 

@@ -46,11 +46,11 @@ namespace ege
 
 namespace {
 
-void unhookHandler( gulong &id, GtkWidget *obj )
+void unhookHandler(gulong &id, GtkWidget *obj)
 {
-   if ( id ) {
-        if ( obj ) {
-            g_signal_handler_disconnect( G_OBJECT(obj), id );
+   if (id) {
+        if (obj) {
+            g_signal_handler_disconnect(G_OBJECT(obj), id);
         }
         id = 0;
     }
@@ -73,21 +73,21 @@ AppearTimeTracker::AppearTimeTracker(GTimer *timer, GtkWidget *widget, gchar con
     while (gtk_widget_get_parent(_topMost)) {
         _topMost = gtk_widget_get_parent(_topMost);
     }
-    _mapId = g_signal_connect( G_OBJECT(_topMost), "map-event", G_CALLBACK(mapCB), this );
-    _realizeId = g_signal_connect( G_OBJECT(_topMost), "realize", G_CALLBACK(realizeCB), this );
-    _hierarchyId = g_signal_connect( G_OBJECT(_widget), "hierarchy-changed", G_CALLBACK(hierarchyCB), this );
+    _mapId = g_signal_connect(G_OBJECT(_topMost), "map-event", G_CALLBACK(mapCB), this);
+    _realizeId = g_signal_connect(G_OBJECT(_topMost), "realize", G_CALLBACK(realizeCB), this);
+    _hierarchyId = g_signal_connect(G_OBJECT(_widget), "hierarchy-changed", G_CALLBACK(hierarchyCB), this);
 }
 
 AppearTimeTracker::~AppearTimeTracker()
 {
-    if ( _timer ) {
+    if (_timer) {
         g_timer_destroy(_timer);
         _timer = nullptr;
     }
 
-    unhookHandler( _mapId, _topMost );
-    unhookHandler( _realizeId, _topMost );
-    unhookHandler( _hierarchyId, _widget );
+    unhookHandler(_mapId, _topMost);
+    unhookHandler(_realizeId, _topMost);
+    unhookHandler(_hierarchyId, _widget);
 }
 
 void AppearTimeTracker::stop() {
@@ -98,7 +98,7 @@ void AppearTimeTracker::stop() {
 
 void AppearTimeTracker::setAutodelete(bool autodelete)
 {
-    if ( autodelete != _autodelete ) {
+    if (autodelete != _autodelete) {
         _autodelete = autodelete;
     }
 }
@@ -106,24 +106,24 @@ void AppearTimeTracker::setAutodelete(bool autodelete)
 void AppearTimeTracker::report(gchar const* msg)
 {
     gulong msCount = 0;
-    gdouble secs = g_timer_elapsed( _timer, &msCount );
+    gdouble secs = g_timer_elapsed(_timer, &msCount);
     g_message("Time ended at %2.3f with [%s] on [%s]", secs, msg, _name.c_str());
 }
 
-void AppearTimeTracker::handleHierarchyChange( GtkWidget * /*prevTop*/ )
+void AppearTimeTracker::handleHierarchyChange(GtkWidget * /*prevTop*/)
 {
     GtkWidget *newTop = _widget;
     while (gtk_widget_get_parent(newTop)) {
         newTop = gtk_widget_get_parent(newTop);
     }
 
-    if ( newTop != _topMost ) {
-        unhookHandler( _mapId, _topMost );
-        unhookHandler( _realizeId, _topMost );
+    if (newTop != _topMost) {
+        unhookHandler(_mapId, _topMost);
+        unhookHandler(_realizeId, _topMost);
 
         _topMost = newTop;
-        _mapId = g_signal_connect( G_OBJECT(_topMost), "map-event", G_CALLBACK(mapCB), this );
-        _realizeId = g_signal_connect( G_OBJECT(_topMost), "realize", G_CALLBACK(realizeCB), this );
+        _mapId = g_signal_connect(G_OBJECT(_topMost), "map-event", G_CALLBACK(mapCB), this);
+        _realizeId = g_signal_connect(G_OBJECT(_topMost), "realize", G_CALLBACK(realizeCB), this);
     }
 }
 
@@ -131,7 +131,7 @@ gboolean AppearTimeTracker::mapCB(GtkWidget * /*widget*/, GdkEvent * /*event*/, 
 {
     AppearTimeTracker *tracker = reinterpret_cast<AppearTimeTracker*>(userData);
     tracker->report("MAP");
-    if ( tracker->_autodelete ) {
+    if (tracker->_autodelete) {
         delete tracker;
     }
     return FALSE;
@@ -146,7 +146,7 @@ void AppearTimeTracker::realizeCB(GtkWidget * /*widget*/, gpointer userData)
 void AppearTimeTracker::hierarchyCB(GtkWidget * /*widget*/, GtkWidget *prevTop, gpointer userData)
 {
     AppearTimeTracker *tracker = reinterpret_cast<AppearTimeTracker*>(userData);
-    tracker->handleHierarchyChange( prevTop );
+    tracker->handleHierarchyChange(prevTop);
 }
 
 } // namespace ege

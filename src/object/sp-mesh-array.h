@@ -122,24 +122,24 @@ private:
   int col;
 
 public:
-  SPMeshPatchI( std::vector<std::vector< SPMeshNode* > > *n, int r, int c );
-  Geom::Point getPoint( unsigned int side, unsigned int point );
-  std::vector< Geom::Point > getPointsForSide( unsigned int i );
-  void        setPoint( unsigned int side, unsigned int point, Geom::Point p, bool set = true );
-  char getPathType( unsigned int i );
-  void  setPathType( unsigned int, char t );
-  Geom::Point getTensorPoint( unsigned int i );
-  void        setTensorPoint( unsigned int i, Geom::Point p );
+  SPMeshPatchI(std::vector<std::vector< SPMeshNode* > > *n, int r, int c);
+  Geom::Point getPoint(unsigned int side, unsigned int point);
+  std::vector< Geom::Point > getPointsForSide(unsigned int i);
+  void        setPoint(unsigned int side, unsigned int point, Geom::Point p, bool set = true);
+  char getPathType(unsigned int i);
+  void  setPathType(unsigned int, char t);
+  Geom::Point getTensorPoint(unsigned int i);
+  void        setTensorPoint(unsigned int i, Geom::Point p);
   bool tensorIsSet();
-  bool tensorIsSet( unsigned int i );
-  Geom::Point coonsTensorPoint( unsigned int i );
+  bool tensorIsSet(unsigned int i);
+  Geom::Point coonsTensorPoint(unsigned int i);
   void    updateNodes();
-  SPColor getColor( unsigned int i );
-  void    setColor( unsigned int i, SPColor c );
-  double  getOpacity( unsigned int i );
-  void    setOpacity( unsigned int i, double o );
-  SPStop* getStopPtr( unsigned int i );
-  void    setStopPtr( unsigned int i, SPStop* );
+  SPColor getColor(unsigned int i);
+  void    setColor(unsigned int i, SPColor c);
+  double  getOpacity(unsigned int i);
+  void    setOpacity(unsigned int i, double o);
+  SPStop* getStopPtr(unsigned int i);
+  void    setStopPtr(unsigned int i, SPStop*);
 };
 
 class SPMeshGradient;
@@ -165,39 +165,39 @@ public:
   friend class SPMeshPatchI;
 
   SPMeshNodeArray() { built = false; mg = nullptr; draggers_valid = false; };
-  SPMeshNodeArray( SPMeshGradient *mg );
-  SPMeshNodeArray( const SPMeshNodeArray& rhs );
+  SPMeshNodeArray(SPMeshGradient *mg);
+  SPMeshNodeArray(const SPMeshNodeArray& rhs);
   SPMeshNodeArray& operator=(const SPMeshNodeArray& rhs);
 
   ~SPMeshNodeArray() { clear(); };
   bool built;
 
-  bool read( SPMeshGradient *mg );
-  void write( SPMeshGradient *mg );
-  void create( SPMeshGradient *mg, SPItem *item, Geom::OptRect bbox );
+  bool read(SPMeshGradient *mg);
+  void write(SPMeshGradient *mg);
+  void create(SPMeshGradient *mg, SPItem *item, Geom::OptRect bbox);
   void clear();
   void print();
 
   // Fill 'smooth' with a smoothed version by subdividing each patch.
-  void bicubic( SPMeshNodeArray* smooth, SPMeshType type);
+  void bicubic(SPMeshNodeArray* smooth, SPMeshType type);
 
   // Get size of patch
   unsigned int patch_rows();
   unsigned int patch_columns();
 
-  SPMeshNode * node( unsigned int i, unsigned int j ) { return nodes[i][j]; }
+  SPMeshNode * node(unsigned int i, unsigned int j) { return nodes[i][j]; }
 
   // Operations on corners
-  bool adjacent_corners( unsigned int i, unsigned int j, SPMeshNode* n[4] );
-  unsigned int side_toggle( std::vector< unsigned int > );
-  unsigned int side_arc( std::vector< unsigned int > );
-  unsigned int tensor_toggle( std::vector< unsigned int > );
-  unsigned int color_smooth( std::vector< unsigned int > );
-  unsigned int color_pick( std::vector< unsigned int >, SPItem* );
-  unsigned int insert( std::vector< unsigned int > );
+  bool adjacent_corners(unsigned int i, unsigned int j, SPMeshNode* n[4]);
+  unsigned int side_toggle(std::vector< unsigned int >);
+  unsigned int side_arc(std::vector< unsigned int >);
+  unsigned int tensor_toggle(std::vector< unsigned int >);
+  unsigned int color_smooth(std::vector< unsigned int >);
+  unsigned int color_pick(std::vector< unsigned int >, SPItem*);
+  unsigned int insert(std::vector< unsigned int >);
 
   // Update other nodes in response to a node move.
-  void update_handles( unsigned int corner, std::vector< unsigned int > selected_corners, Geom::Point old_p, MeshNodeOperation op );
+  void update_handles(unsigned int corner, std::vector< unsigned int > selected_corners, Geom::Point old_p, MeshNodeOperation op);
 
   // Return outline path (don't forget to unref() when done with curve)
   SPCurve * outline_path();
@@ -211,10 +211,10 @@ public:
   // Find bounding box
   // Geom::OptRect findBoundingBox();
 
-  void split_row( unsigned int i, unsigned int n );
-  void split_column( unsigned int j, unsigned int n );
-  void split_row( unsigned int i, double coord );
-  void split_column( unsigned int j, double coord );
+  void split_row(unsigned int i, unsigned int n);
+  void split_column(unsigned int j, unsigned int n);
+  void split_row(unsigned int i, double coord);
+  void split_column(unsigned int j, double coord);
 };
 
 #endif /* !SEEN_SP_MESH_ARRAY_H */

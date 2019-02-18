@@ -55,13 +55,13 @@ SPFilterPrimitive::~SPFilterPrimitive() = default;
 void SPFilterPrimitive::build(SPDocument *document, Inkscape::XML::Node *repr) {
     SPFilterPrimitive* object = this;
 
-    object->readAttr( "style" ); // struct not derived from SPItem, we need to do this ourselves.
-    object->readAttr( "in" );
-    object->readAttr( "result" );
-    object->readAttr( "x" );
-    object->readAttr( "y" );
-    object->readAttr( "width" );
-    object->readAttr( "height" );
+    object->readAttr("style"); // struct not derived from SPItem, we need to do this ourselves.
+    object->readAttr("in");
+    object->readAttr("result");
+    object->readAttr("x");
+    object->readAttr("y");
+    object->readAttr("width");
+    object->readAttr("height");
 
     SPObject::build(document, repr);
 }
@@ -136,7 +136,7 @@ void SPFilterPrimitive::update(SPCtx *ctx, guint flags) {
     // Do here since we know viewport (Bounding box case handled during rendering)
     SPFilter *parent = SP_FILTER(this->parent);
 
-    if( parent->primitiveUnits == SP_FILTER_UNITS_USERSPACEONUSE ) {
+    if(parent->primitiveUnits == SP_FILTER_UNITS_USERSPACEONUSE) {
         this->calcDimsFromParentViewport(ictx, true);
     }
 
@@ -253,10 +253,10 @@ void SPFilterPrimitive::renderer_common(Inkscape::Filters::FilterPrimitive *nr_p
 
     /* TODO: place here code to handle input images, filter area etc. */
     // We don't know current viewport or bounding box, this is wrong approach.
-    nr_prim->set_subregion( this->x, this->y, this->width, this->height );
+    nr_prim->set_subregion(this->x, this->y, this->width, this->height);
 
     // Give renderer access to filter properties
-    nr_prim->setStyle( this->style );
+    nr_prim->setStyle(this->style);
 }
 
 

@@ -56,7 +56,7 @@ unsigned int sp_ui_close_all ();
 
 void sp_ui_dialog_title_string (Inkscape::Verb * verb, char* c);
 
-Glib::ustring getLayoutPrefPath( Inkscape::UI::View::View *view );
+Glib::ustring getLayoutPrefPath(Inkscape::UI::View::View *view);
 
 /**
  *

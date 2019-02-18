@@ -70,7 +70,7 @@ These functions are used for development and debugging and should be be includie
 */
 void wchar8show(
       const char *src
-   ){
+){
    if(!src){
       printf("char show <NULL>\n");
    }
@@ -87,7 +87,7 @@ void wchar8show(
 */
 void wchar16show(
       const uint16_t *src
-   ){
+){
    if(!src){
       printf("uint16_t show <NULL>\n");
    }
@@ -103,7 +103,7 @@ void wchar16show(
 */
 void wchar32show(
       const uint32_t *src
-   ){
+){
    if(!src){
       printf("uint32_t show <NULL>\n");
    }
@@ -120,7 +120,7 @@ void wchar32show(
 */
 void wchartshow(
       const wchar_t *src
-   ){
+){
    uint32_t val;
    if(!src){
       printf("wchar_t show <NULL>\n");
@@ -149,7 +149,7 @@ utility operations
 */
 size_t wchar16len(
       const uint16_t *src
-   ){
+){
    size_t srclen = 0;
    if(src){
       while(*src){ srclen++; src++; }
@@ -163,7 +163,7 @@ size_t wchar16len(
 */
 size_t wchar32len(
       const uint32_t *src
-   ){
+){
    size_t srclen = 0;
    if(src){
       while(*src){ srclen++; src++; }
@@ -181,7 +181,7 @@ void   wchar16strncpy(
       uint16_t       *dst,
       const uint16_t *src,
       size_t          nchars
-   ){
+){
    if(src){
       for(;nchars;nchars--,dst++,src++){
         *dst = *src;
@@ -201,7 +201,7 @@ void   wchar16strncpypad(
       uint16_t       *dst,
       const uint16_t *src,
       size_t          nchars
-   ){
+){
    if(src){
       for(;*src && nchars;nchars--,dst++,src++){ *dst = *src; }
       for(;nchars;nchars--,dst++){               *dst = 0;    }  // Pad the remainder
@@ -225,7 +225,7 @@ uint16_t *U_Utf32leToUtf16le(
       const uint32_t *src,
       size_t          max,
       size_t         *len
-   ){
+){
    char *dst,*dst2;
    char *src2 = (char *) src;
    size_t srclen,dstlen,status;
@@ -238,7 +238,7 @@ uint16_t *U_Utf32leToUtf16le(
    dst2  = dst = calloc(dstlen,1);          // so there will be at least one terminator
    if(dst){
       iconv_t conv = iconv_open("UTF-16LE", "UTF-32LE");
-      if ( conv == (iconv_t) -1){
+      if (conv == (iconv_t) -1){
          free(dst2);
          dst2=NULL;
       }
@@ -268,7 +268,7 @@ uint32_t *U_Utf16leToUtf32le(
       const uint16_t *src,
       size_t          max,
       size_t         *len
-   ){
+){
    char *dst,*dst2;
    char *src2 = (char *) src;
    size_t srclen,dstlen,status;
@@ -280,7 +280,7 @@ uint32_t *U_Utf16leToUtf32le(
    dst2 = dst = calloc(dstlen,1);
    if(dst){
       iconv_t conv = iconv_open("UTF-32LE",   "UTF-16LE");
-      if ( conv == (iconv_t) -1){
+      if (conv == (iconv_t) -1){
          free(dst2);
          dst2=NULL;
       }
@@ -316,7 +316,7 @@ uint32_t *U_Latin1ToUtf32le(
       const char *src,
       size_t      max,
       size_t     *len
-   ){
+){
    char *dst,*dst2;
    char *src2 = (char *) src;
    size_t srclen,dstlen,status;
@@ -328,7 +328,7 @@ uint32_t *U_Latin1ToUtf32le(
    dst2 = dst = calloc(dstlen,1);
    if(dst){
       iconv_t conv = iconv_open("UTF-32LE",   "LATIN1");
-      if ( conv == (iconv_t) -1){
+      if (conv == (iconv_t) -1){
          free(dst2);
          dst2=NULL;
       }
@@ -358,7 +358,7 @@ uint32_t *U_Utf8ToUtf32le(
       const char *src,
       size_t      max,
       size_t     *len
-   ){
+){
    char *dst,*dst2;
    char *src2 = (char *) src;
    size_t srclen,dstlen,status;
@@ -370,7 +370,7 @@ uint32_t *U_Utf8ToUtf32le(
    dst2 = dst = calloc(dstlen,1);
    if(dst){
       iconv_t conv = iconv_open("UTF-32LE",   "UTF-8");
-      if ( conv == (iconv_t) -1){
+      if (conv == (iconv_t) -1){
          free(dst2);
          dst2=NULL;
       }
@@ -400,7 +400,7 @@ char *U_Utf32leToUtf8(
       const uint32_t *src,
       size_t          max,
       size_t         *len
-   ){
+){
    char *dst,*dst2;
    char *src2 = (char *) src;
    size_t srclen,dstlen,status;
@@ -412,7 +412,7 @@ char *U_Utf32leToUtf8(
    dst2 = dst = calloc(dstlen,1);
    if(dst){
       iconv_t conv = iconv_open("UTF-8",   "UTF-32LE");
-      if ( conv == (iconv_t) -1){
+      if (conv == (iconv_t) -1){
          free(dst2);
          dst2=NULL;
       }
@@ -442,7 +442,7 @@ uint16_t *U_Utf8ToUtf16le(
       const char   *src,
       size_t        max,
       size_t       *len
-   ){
+){
    char *dst,*dst2;
    char *src2 = (char *) src;
    size_t srclen,dstlen,status;
@@ -454,7 +454,7 @@ uint16_t *U_Utf8ToUtf16le(
    dst2 = dst =calloc(dstlen,1);            // so there will always be a terminator
    if(dst){
       iconv_t conv = iconv_open("UTF-16LE", "UTF-8");
-      if ( conv == (iconv_t) -1){
+      if (conv == (iconv_t) -1){
          free(dst2);
          dst2=NULL;
       }
@@ -484,7 +484,7 @@ char *U_Utf16leToUtf8(
       const uint16_t *src,
       size_t          max,
       size_t         *len
-   ){
+){
    char *dst, *dst2;
    char *src2 = (char *) src;
    size_t srclen,dstlen,status;
@@ -497,7 +497,7 @@ char *U_Utf16leToUtf8(
    dst2 = dst = (char *) calloc(dstlen,1);
    if(dst){
       iconv_t conv = iconv_open("UTF-8", "UTF-16LE");
-      if ( conv == (iconv_t) -1){
+      if (conv == (iconv_t) -1){
          free(dst2);
          dst2=NULL;
       }
@@ -530,7 +530,7 @@ char *U_Utf16leToLatin1(
       const uint16_t *src,
       size_t          max,
       size_t         *len
-   ){
+){
    char *dst, *dst2;
    char *src2 = (char *) src;
    size_t srclen,dstlen,status;
@@ -542,7 +542,7 @@ char *U_Utf16leToLatin1(
    dst2 = dst = (char *) calloc(dstlen,1);
    if(dst){
       iconv_t conv = iconv_open("LATIN1//TRANSLIT",   "UTF-16LE");
-      if ( conv == (iconv_t) -1){
+      if (conv == (iconv_t) -1){
          free(dst2);
          dst2=NULL;
       }
@@ -596,7 +596,7 @@ char *U_Utf8ToLatin1(
       const char *src,
       size_t      max,
       size_t     *len
-   ){
+){
    char *dst,*dst2;
    char *src2 = (char *) src;
    size_t srclen,dstlen,status;
@@ -606,7 +606,7 @@ char *U_Utf8ToLatin1(
    dst2 = dst = calloc(dstlen,1);
    if(dst){
       iconv_t conv = iconv_open("LATIN1//TRANSLIT",   "UTF-8"); // translate what can be, fill in with something close for the rest
-      if ( conv == (iconv_t) -1){
+      if (conv == (iconv_t) -1){
          free(dst2);
          dst2=NULL;
       }
@@ -640,7 +640,7 @@ char *U_Latin1ToUtf8(
       const char *src,
       size_t      max,
       size_t     *len
-   ){
+){
    char *dst,*dst2;
    char *src2 = (char *) src;
    size_t srclen,dstlen,status;
@@ -650,7 +650,7 @@ char *U_Latin1ToUtf8(
    dst2 = dst = calloc(dstlen,1);
    if(dst){
       iconv_t conv = iconv_open("UTF-8", "LATIN1"); // everything should translate
-      if ( conv == (iconv_t) -1){
+      if (conv == (iconv_t) -1){
          free(dst2);
          dst2=NULL;
       }
@@ -685,7 +685,7 @@ int U_Utf16leEdit(
       uint16_t *src,
       uint16_t  find,
       uint16_t  replace
-   ){
+){
    int count=0;
    if(!src)return(-1);
    while(*src){ 

@@ -57,7 +57,7 @@ private:
     /**
      * Callback for combobox image renderer
      */
-    void prepareImageRenderer( Gtk::TreeModel::const_iterator const &row );
+    void prepareImageRenderer(Gtk::TreeModel::const_iterator const &row);
 
     /**
      * Callback for offset adjustment changing

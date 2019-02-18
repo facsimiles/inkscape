@@ -302,8 +302,8 @@ LPEOffset::doEffect_path(Geom::PathVector const & path_in)
             }
             Geom::OptRect painter_bbox = painter.boundsFast();
             if ((eraser_bbox.intersects(painter_bbox) &&
-                 !painter_bbox.contains(eraser_bbox) ) ||
-                 eraser_bbox.contains(painter_bbox) ) 
+                 !painter_bbox.contains(eraser_bbox)) ||
+                 eraser_bbox.contains(painter_bbox)) 
             {
                 re_painter.push_back(painter);
                 painter_it = ret_painter.erase(painter_it);
@@ -322,7 +322,7 @@ LPEOffset::doEffect_path(Geom::PathVector const & path_in)
 Gtk::Widget *LPEOffset::newWidget()
 {
     // use manage here, because after deletion of Effect object, others might still be pointing to this widget.
-    Gtk::VBox * vbox = Gtk::manage( new Gtk::VBox(Effect::newWidget()) );
+    Gtk::VBox * vbox = Gtk::manage(new Gtk::VBox(Effect::newWidget()));
 
     vbox->set_border_width(5);
     vbox->set_homogeneous(false);

@@ -36,7 +36,7 @@ void ObjectHierarchy::clear() {
 void ObjectHierarchy::setTop(SPObject *object) {
     if (object == nullptr) { printf("Assertion object != NULL failed\n"); return; }
 
-    if ( top() == object ) {
+    if (top() == object) {
         return;
     }
 
@@ -44,7 +44,7 @@ void ObjectHierarchy::setTop(SPObject *object) {
         _addTop(object);
     } else if (object->isAncestorOf(top())) {
         _addTop(object, top());
-    } else if ( object == bottom() || object->isAncestorOf(bottom()) ) {
+    } else if (object == bottom() || object->isAncestorOf(bottom())) {
         _trimAbove(object);
     } else {
         _clear();
@@ -62,7 +62,7 @@ void ObjectHierarchy::_addTop(SPObject *senior, SPObject *junior) {
     do {
         _addTop(object);
         object = object->parent;
-    } while ( object != senior );
+    } while (object != senior);
 }
 
 void ObjectHierarchy::_addTop(SPObject *object) {
@@ -72,7 +72,7 @@ void ObjectHierarchy::_addTop(SPObject *object) {
 }
 
 void ObjectHierarchy::_trimAbove(SPObject *limit) {
-    while ( !_hierarchy.empty() && _hierarchy.back().object != limit ) {
+    while (!_hierarchy.empty() && _hierarchy.back().object != limit) {
         SPObject *object=_hierarchy.back().object;
 
         sp_object_ref(object, nullptr);
@@ -86,7 +86,7 @@ void ObjectHierarchy::_trimAbove(SPObject *limit) {
 void ObjectHierarchy::setBottom(SPObject *object) {
     if (object == nullptr) { printf("assertion object != NULL failed\n"); return; }
 
-    if ( bottom() == object ) {
+    if (bottom() == object) {
         return;
     }
 
@@ -94,7 +94,7 @@ void ObjectHierarchy::setBottom(SPObject *object) {
         _addBottom(object);
     } else if (bottom()->isAncestorOf(object)) {
         _addBottom(bottom(), object);
-    } else if ( top() == object ) {
+    } else if (top() == object) {
         _trimBelow(top());
     } else if (top()->isAncestorOf(object)) {
         if (object->isAncestorOf(bottom())) {
@@ -116,7 +116,7 @@ void ObjectHierarchy::setBottom(SPObject *object) {
 }
 
 void ObjectHierarchy::_trimBelow(SPObject *limit) {
-    while ( !_hierarchy.empty() && _hierarchy.front().object != limit ) {
+    while (!_hierarchy.empty() && _hierarchy.front().object != limit) {
         SPObject *object=_hierarchy.front().object;
         sp_object_ref(object, nullptr);
         _detach(_hierarchy.front());
@@ -130,7 +130,7 @@ void ObjectHierarchy::_addBottom(SPObject *senior, SPObject *junior) {
     assert(junior != NULL);
     assert(senior != NULL);
 
-    if ( junior != senior ) {
+    if (junior != senior) {
         _addBottom(senior, junior->parent);
         _addBottom(junior);
     }
@@ -161,7 +161,7 @@ ObjectHierarchy::Record ObjectHierarchy::_attach(SPObject *object) {
     sigc::connection connection
       = object->connectRelease(
           sigc::mem_fun(*this, &ObjectHierarchy::_trim_for_release)
-        );
+);
     return Record(object, connection);
 }
 

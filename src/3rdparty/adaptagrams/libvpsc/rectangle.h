@@ -114,19 +114,19 @@ public:
      */
     double getMinD(unsigned const d) const {
         COLA_ASSERT(d==0||d==1);
-        return ( d == 0 ? getMinX() : getMinY() );
+        return (d == 0 ? getMinX() : getMinY());
     }
     /*
      * @param d axis: 0=horizontal 1=vertical
      */
     double getMaxD(unsigned const d) const {
         COLA_ASSERT(d==0||d==1);
-        return ( d == 0 ? getMaxX() : getMaxY() );
+        return (d == 0 ? getMaxX() : getMaxY());
     }
     void setMinD(unsigned const d, const double val)
-    { if ( d == 0) { minX = val; } else { minY = val; } }
+    { if (d == 0) { minX = val; } else { minY = val; } }
     void setMaxD(unsigned const d, const double val)
-    { if ( d == 0) { maxX = val; } else { maxY = val; } }
+    { if (d == 0) { maxX = val; } else { maxY = val; } }
     double getCentreX() const { return getMinX()+width()/2.0; }
     double getCentreY() const { return getMinY()+height()/2.0; }
     /*
@@ -144,7 +144,7 @@ public:
      */
     double length(unsigned const d) const {
         COLA_ASSERT(d==0||d==1);
-        return ( d == 0 ? width() : height() );
+        return (d == 0 ? width() : height());
     }
     void set_width(double w) { maxX = minX + w - 2.0*xBorder; }
     void set_height(double h) { maxY = minY + h - 2.0*yBorder; }

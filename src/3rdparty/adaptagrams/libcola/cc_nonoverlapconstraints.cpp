@@ -336,15 +336,15 @@ void NonOverlapConstraints::computeOverlapForShapePairInfo(ShapePairInfo& info,
         //     non-overlap constraints that become unsatified and then 
         //     allow them to be rechosen maybe just a single time.
         double penalty = 100000;
-        if ( (left1 >= left2) && (right1 <= right2) &&
-             (bottom1 >= bottom2) && (top1 <= top2) )
+        if ((left1 >= left2) && (right1 <= right2) &&
+             (bottom1 >= bottom2) && (top1 <= top2))
         {
             // Shape 1 is inside shape 2.
             double smallShapeArea = (right1 - left1) * (top1 - bottom1);
             info.overlapMax = penalty + smallShapeArea;
         }
-        else if ( (left2 >= left1) && (right2 <= right1) &&
-             (bottom2 >= bottom1) && (top2 <= top1) )
+        else if ((left2 >= left1) && (right2 <= right1) &&
+             (bottom2 >= bottom1) && (top2 <= top1))
         {
             // Shape 2 is inside shape 1.
             double smallShapeArea = (right2 - left2) * (top2 - bottom2);

@@ -36,8 +36,8 @@ class SVGViewWidget : public Gtk::ScrolledWindow {
 public:
     SVGViewWidget(SPDocument* document);
     ~SVGViewWidget() override;
-    void setDocument(  SPDocument* document);
-    void setResize( int width, int height);
+    void setDocument(SPDocument* document);
+    void setResize(int width, int height);
 
 private:
     void size_allocate(Gtk::Allocation& allocation);

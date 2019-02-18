@@ -28,7 +28,7 @@ namespace Inkscape {
 
 namespace LivePathEffect {
 
-OriginalPathParam::OriginalPathParam( const Glib::ustring& label, const Glib::ustring& tip,
+OriginalPathParam::OriginalPathParam(const Glib::ustring& label, const Glib::ustring& tip,
                       const Glib::ustring& key, Inkscape::UI::Widget::Registry* wr,
                       Effect* effect)
     : PathParam(label, tip, key, wr, effect, "")

@@ -688,7 +688,7 @@ void U_swap2(void *ul, unsigned int count);
 int packed_DIB_safe(
        const char      *record,
        const char      *blimit
-   ){
+){
    int  dibparams = U_BI_UNKNOWN;       // type of image not yet determined
    const char      *px      = NULL;     // DIB pixels
    const U_RGBQUAD *ct      = NULL;     // DIB color table
@@ -744,7 +744,7 @@ int wmr_arc_points(
        U_PAIRF          *start,
        U_PAIRF          *end,
        U_PAIRF          *size
-    ){
+){
     U_RECTL rclBox;
     U_POINTL ArcStart,ArcEnd;
     rclBox.left   = rclBox16.left;
@@ -832,7 +832,7 @@ U_FONT *U_FONT_set(
        uint8_t  Quality,            //!< LF_Quality Enumeration
        uint8_t  PitchAndFamily,     //!< LF_PitchAndFamily Enumeration
        char    *FaceName            //!< Name of font.  ANSI Latin1, null terminated.
-    ){
+){
     U_FONT *font;
     int slen = 1 + strlen(FaceName);  /* include terminator  */
     if(slen & 1)slen++;               /* storage length even */ 
@@ -881,7 +881,7 @@ U_PALETTE *U_PLTENTRY_set(
        uint16_t            Start,              //!< Either 0x0300 or an offset into the Palette table
        uint16_t            NumEntries,         //!< Number of U_LOGPLTNTRY objects
        U_PLTNTRY          *PalEntries          //!< Pointer to array of PaletteEntry Objects
-    ){
+){
     U_PALETTE *Palette = NULL;
     if(NumEntries){
        Palette = malloc(4 + 4*NumEntries);
@@ -905,7 +905,7 @@ U_PEN U_PEN_set(
       uint16_t            Style,              //!< PenStyle Enumeration
       uint16_t            Width,              //!< Width of Pen
       U_COLORREF          Color               //!< Pen Color.
-   ){
+){
    U_PEN p;
    p.Style          = Style;
    p.Widthw[0]      = Width;
@@ -925,7 +925,7 @@ U_PEN U_PEN_set(
 U_RECT16 U_RECT16_set(
       U_POINT16 ul,
       U_POINT16 lr
-   ){
+){
    U_RECT16 rect;
    rect.left     =   ul.x;
    rect.top      =   ul.y;
@@ -951,7 +951,7 @@ U_BITMAP16 *U_BITMAP16_set(
       const int16_t      LineN,
       const uint8_t      BitsPixel,
       const char        *Bits
-   ){
+){
    U_BITMAP16 *bm16;
    uint32_t    irecsize;
    int         cbBits,iHeight;
@@ -959,7 +959,7 @@ U_BITMAP16 *U_BITMAP16_set(
    int16_t     WidthBytes;                                           //  total bytes per scan line (used and padding).
 
    usedbytes  = (Width * BitsPixel + 7)/8;                           // width of line in fully and partially occupied bytes
-   WidthBytes =  (LineN * ((usedbytes + (LineN - 1) ) / LineN));     // Account for padding required by line alignment in the pixel array
+   WidthBytes =  (LineN * ((usedbytes + (LineN - 1)) / LineN));     // Account for padding required by line alignment in the pixel array
    
    iHeight = (Height < 0 ? -Height : Height); /* DIB can use a negative height, but it does not look like a Bitmap16 object can */
    cbBits = WidthBytes * iHeight;
@@ -991,7 +991,7 @@ U_SCAN *U_SCAN_set(
        uint16_t  top,                           //!< Y coordinate of the top scanline
        uint16_t  bottom,                        //!< Y coordinate of the bottom scanline
        uint16_t *ScanLines                      //!< Array of 16 bit left/right pairs, array has 2*count entries
-    ){
+){
     U_SCAN *scan=NULL;
     int size = 6 + count*4;
     scan = malloc(size);
@@ -1019,7 +1019,7 @@ U_REGION *U_REGION_set(
        int16_t             sMax,               //!< largest number of points in any scan
        U_RECT16            sRect,              //!< bounding rectangle
        uint16_t           *aScans              //!< series of U_SCAN objects to append. This is also an array of uint16_t, but should be handled as a bunch of U_SCAN objects tightly packed into the buffer.
-   ){
+){
    U_REGION *region=NULL;
    char *psc;
    int scansize,i,off;
@@ -1055,7 +1055,7 @@ U_WLOGBRUSH U_WLOGBRUSH_set(
       uint16_t            Style,              //!< BrushStyle Enumeration
       U_COLORREF          Color,              //!< Brush Color value 
       uint16_t            Hatch               //!< HatchStyle Enumeration
-   ){
+){
    U_WLOGBRUSH lb;
    lb.Style          = Style;
    lb.Color.Red      = Color.Red;
@@ -1076,7 +1076,7 @@ U_WLOGBRUSH U_WLOGBRUSH_set(
 U_PAIRF *U_PAIRF_set(
       float  x,              //!< x value
       float  y               //!< y value
-   ){
+){
    U_PAIRF *pf=malloc(U_SIZE_PAIRF);
    if(pf){
       pf->x = x;
@@ -1115,7 +1115,7 @@ void dumpwht(
      char         *string, 
      unsigned int *handle,
      WMFHANDLES   *wht
-  ){
+){
   uint32_t i;
   printf("%s\n",string);
   printf("lo: %d hi: %d peak: %d\n", wht->lolimit, wht->hilimit, wht->peak);
@@ -1144,14 +1144,14 @@ int16_t *dx16_set(
       int32_t  height,
       uint32_t weight,
       uint32_t members
-   ){
+){
    uint32_t i, width;
    int16_t *dx;
    dx = (int16_t *) malloc(members * sizeof(int16_t));
    if(dx){
        if(U_FW_DONTCARE == weight)weight=U_FW_NORMAL;
        width = (uint32_t) U_ROUND(((float) (height > 0 ? height : -height)) * 0.6 * (0.00024*(float) weight + 0.904));
-       for ( i = 0; i < members; i++ ){ dx[i] = (width > INT16_MAX ? INT16_MAX : width); }
+       for (i = 0; i < members; i++){ dx[i] = (width > INT16_MAX ? INT16_MAX : width); }
    }
    return(dx);
 }
@@ -1450,7 +1450,7 @@ writing the final data structure out to a file.
 */
 char *wmr_dup(
       const char *wmr
-   ){
+){
    char *dup;
    uint32_t  irecsize;
 
@@ -1480,7 +1480,7 @@ int  wmf_start(
       const uint32_t   initsize,
       const uint32_t   chunksize,
       WMFTRACK       **wt
-   ){
+){
    FILE *fp;
    WMFTRACK *wtl=NULL;
 
@@ -1521,7 +1521,7 @@ int  wmf_start(
 */
 int uwmf_free(
       WMFTRACK **wt
-   ){    
+){    
    WMFTRACK *wtl;
    if(!wt)return(1);
    wtl=*wt;
@@ -1540,7 +1540,7 @@ int uwmf_free(
 */
 int  wmf_finish(
       WMFTRACK   *wt
-   ){
+){
    char *record;
    int off;
    uint32_t tmp;
@@ -1587,7 +1587,7 @@ int wmf_readdata(
       const char   *filename,
       char        **contents,
       size_t       *length
-   ){    
+){    
    FILE     *fp;
    int       status=0;
 
@@ -1632,7 +1632,7 @@ int  wmf_append(
       U_METARECORD     *rec,
       WMFTRACK         *wt,
       int               freerec
-   ){
+){
    size_t deficit;
    uint32_t wp;
    uint32_t size;
@@ -1676,7 +1676,7 @@ int  wmf_header_append(
       U_METARECORD     *rec,
       WMFTRACK         *wt,
       int               freerec
-   ){
+){
    size_t deficit;
    unsigned int hsize;
    
@@ -1737,7 +1737,7 @@ int wmf_htable_create(
       uint32_t     initsize,
       uint32_t     chunksize,
       WMFHANDLES **wht
-   ){
+){
    WMFHANDLES *whtl;
    
    if(initsize<1)return(1);
@@ -1770,7 +1770,7 @@ int wmf_htable_create(
 int wmf_htable_delete(
       uint32_t    *ih,
       WMFHANDLES  *wht
-   ){
+){
    if(!wht)return(1);
    if(!wht->table)return(2);
    if(*ih < 1)return(4);           // invalid handle
@@ -1794,7 +1794,7 @@ int wmf_htable_delete(
 int wmf_htable_insert(
       uint32_t   *ih,
       WMFHANDLES *wht
-   ){
+){
    size_t newsize;
 
    if(!wht)return(1);
@@ -1829,7 +1829,7 @@ int wmf_htable_insert(
 */
 int wmf_htable_free(
       WMFHANDLES **wht
-   ){
+){
    WMFHANDLES *whtl;
    if(!wht)return(1);
    whtl = *wht;
@@ -2065,7 +2065,7 @@ char *U_WMRCORE_8U16_set(
 
 /* records that have
   arg1 an (optional) (u)int16
-  arg2 an (optional( (u)int16
+  arg2 an (optional((u)int16
   N16 number of (u)int16_t cells in array. may be zero
   array of N16 (u)int16_t cells  (or any structure that is 2N bytes in size), should be NULL if N16 is 0.
   like U_WMRCREATEBRUSHINDIRECT with arg1=arg2=NULL
@@ -2076,7 +2076,7 @@ char *U_WMRCORE_2U16_N16_set(
       const uint16_t *arg2,
       const uint16_t  N16,
       const void     *array
-   ){
+){
    char *record=NULL;
    uint32_t  irecsize, off;
    irecsize  = U_SIZE_METARECORD + N16*2;
@@ -2143,7 +2143,7 @@ Each should be called in preference to the underlying "base" WMR function.
 char *wdeleteobject_set(
       uint32_t    *ihObject,
       WMFHANDLES  *wht
-   ){
+){
    uint32_t saveObject=*ihObject;                   /* caller 0->N */
    *ihObject += 1;                                  /* caller 0->N --> 1->N+1 table*/
    if(wmf_htable_delete(ihObject,wht))return(NULL); /* invalid handle or other problem, cannot be deleted */
@@ -2162,7 +2162,7 @@ char *wdeleteobject_set(
 char *wselectobject_set(
       uint32_t    ihObject,
       WMFHANDLES *wht
-   ){
+){
    /* WMF has no stock objects! */
    if(ihObject > wht->hilimit)return(NULL);   // handle this high is not in the table
    /* caller uses 0->N, table uses 1->N+1 */
@@ -2184,7 +2184,7 @@ char *wcreatepenindirect_set(
       uint32_t   *ihPen,
       WMFHANDLES *wht,
       U_PEN       pen
-   ){
+){
    if(wmf_htable_insert(ihPen, wht))return(NULL);
    *ihPen -= 1;  /* 1->N+1 --> 0->N */
    return(U_WMRCREATEPENINDIRECT_set(pen));
@@ -2203,7 +2203,7 @@ char *wcreatebrushindirect_set(
       uint32_t    *ihBrush,
       WMFHANDLES  *wht,
       U_WLOGBRUSH   lb
-   ){
+){
    if(wmf_htable_insert(ihBrush, wht))return(NULL);
    *ihBrush -= 1;  /* 1->N+1 --> 0->N */
    return(U_WMRCREATEBRUSHINDIRECT_set(lb));
@@ -2218,7 +2218,7 @@ char *wcreatebrushindirect_set(
     \param iUsage  DIBColors enumeration
     \param Bmi     Bitmap info
     \param cbPx    Size in bytes of pixel array (row stride * height, there may be some padding at the end of each row)
-    \param Px      (Optional) bitmapbuffer (pixel array section )
+    \param Px      (Optional) bitmapbuffer (pixel array section)
 */
 char *wcreatedibpatternbrush_srcdib_set(
       uint32_t            *ihBrush,
@@ -2228,7 +2228,7 @@ char *wcreatedibpatternbrush_srcdib_set(
       const uint32_t       cbPx,
       const char          *Px
       
-   ){
+){
    if(wmf_htable_insert(ihBrush, wht))return(NULL);
    *ihBrush -= 1;  /* 1->N+1 --> 0->N */
    return(U_WMRDIBCREATEPATTERNBRUSH_set(U_BS_DIBPATTERNPT, iUsage, Bmi, cbPx, Px,NULL));
@@ -2248,7 +2248,7 @@ char *wcreatedibpatternbrush_srcbm16_set(
       WMFHANDLES          *wht,
       const uint32_t       iUsage, 
       const U_BITMAP16    *Bm16
-   ){
+){
    if(wmf_htable_insert(ihBrush, wht))return(NULL);
    *ihBrush -= 1;  /* 1->N+1 --> 0->N */
    return(U_WMRDIBCREATEPATTERNBRUSH_set(U_BS_PATTERN, iUsage, NULL, 0, NULL, Bm16));
@@ -2270,7 +2270,7 @@ char *wcreatepatternbrush_set(
       WMFHANDLES          *wht,
       U_BITMAP16          *Bm16,
       char                *Pattern       
-   ){
+){
    if(wmf_htable_insert(ihBrush, wht))return(NULL);
    *ihBrush -= 1;  /* 1->N+1 --> 0->N */
    return(U_WMRCREATEPATTERNBRUSH_set(Bm16, Pattern));
@@ -2289,7 +2289,7 @@ char *wcreatefontindirect_set(
       uint32_t   *ihFont,
       WMFHANDLES *wht,
       U_FONT     *uf
-   ){
+){
    if(wmf_htable_insert(ihFont, wht))return(NULL);
    *ihFont -= 1;  /* 1->N+1 --> 0->N */
    return(U_WMRCREATEFONTINDIRECT_set(uf));
@@ -2308,7 +2308,7 @@ char *wcreatepalette_set(
       uint32_t     *ihPal,
       WMFHANDLES   *wht,
       U_PALETTE    *up
-   ){
+){
    if(wmf_htable_insert(ihPal, wht))return(NULL);
    *ihPal -= 1;  /* 1->N+1 --> 0->N */
    return(U_WMRCREATEPALETTE_set(up));
@@ -2327,7 +2327,7 @@ char *wsetpaletteentries_set(
       uint32_t               *ihPal,
       WMFHANDLES             *wht,
       const U_PALETTE        *Palettes
-   ){
+){
    if(wmf_htable_insert(ihPal, wht))return(NULL);
    *ihPal -= 1;  /* 1->N+1 --> 0->N */
    return(U_WMRSETPALENTRIES_set(Palettes));
@@ -2346,7 +2346,7 @@ char *wcreateregion_set(
       uint32_t               *ihReg,
       WMFHANDLES             *wht,
       const U_REGION         *Region
-   ){
+){
    if(wmf_htable_insert(ihReg, wht))return(NULL);
    *ihReg -= 1;  /* 1->N+1 --> 0->N */
    return(U_WMRCREATEREGION_set(Region));
@@ -2379,7 +2379,7 @@ char *wend_path_set(void){
 */
 char *wlinecap_set(
       int32_t               Type
-   ){
+){
    char *record =NULL;
    if(Type == U_WPS_CAP_NOTSET || 
       Type == U_WPS_CAP_FLAT   ||
@@ -2396,7 +2396,7 @@ char *wlinecap_set(
 */
 char *wlinejoin_set(
       int32_t               Type
-   ){
+){
    char *record =NULL;
    if(Type == U_WPS_JOIN_NOTSET || 
       Type == U_WPS_JOIN_MITER  ||
@@ -2413,7 +2413,7 @@ char *wlinejoin_set(
 */
 char *wmiterlimit_set(
       int32_t               limit
-   ){
+){
    return(U_WMRESCAPE_set(U_MFE_SETMITERLIMIT,4,&limit));
 }
 
@@ -2435,7 +2435,7 @@ They are listed in order by the corresponding U_WMR_* index number.
 char *U_WMRHEADER_set(
       U_PAIRF     *size,
       unsigned int dpi
-   ){
+){
    char *record=NULL;
    uint32_t  irecsize,off;
    double xmax,ymax;
@@ -2675,7 +2675,7 @@ char *U_WMREXCLUDECLIPRECT_set(U_RECT16 rect){
       U_U16(rect.right),
       U_U16(rect.top),
       U_U16(rect.left)
-   );
+);
 }
 
 /**
@@ -2690,7 +2690,7 @@ char *U_WMRINTERSECTCLIPRECT_set(U_RECT16 rect){
       U_U16(rect.right),
       U_U16(rect.top),
       U_U16(rect.left)
-   );
+);
 }
 
 /**
@@ -2711,7 +2711,7 @@ char *U_WMRARC_set(U_POINT16 StartArc, U_POINT16 EndArc, U_RECT16 rect){
       U_U16(rect.right),
       U_U16(rect.top),
       U_U16(rect.left)
-    );
+);
 }
 
 /**
@@ -2726,7 +2726,7 @@ char *U_WMRELLIPSE_set(U_RECT16 rect){
       U_U16(rect.right),
       U_U16(rect.top),
       U_U16(rect.left)
-   );
+);
 }
 
 /**
@@ -2743,7 +2743,7 @@ char *U_WMRFLOODFILL_set(uint16_t Mode, U_COLORREF Color, U_POINT16 coord){
       Color,
       U_P16(coord.y),
       U_P16(coord.x)
-   );
+);
 }
 
 /**
@@ -2764,7 +2764,7 @@ char *U_WMRPIE_set(U_POINT16 Radial1, U_POINT16 Radial2, U_RECT16 rect){
       U_U16(rect.right),
       U_U16(rect.top),
       U_U16(rect.left)
-    );
+);
 }
 
 /**
@@ -2779,7 +2779,7 @@ char *U_WMRRECTANGLE_set(U_RECT16 rect){
       U_U16(rect.right),
       U_U16(rect.top),
       U_U16(rect.left)
-   );
+);
 }
 
 /**
@@ -2798,7 +2798,7 @@ char *U_WMRROUNDRECT_set(int16_t Width, int16_t Height, U_RECT16 rect){
       U_U16(rect.right),
       U_U16(rect.top),
       U_U16(rect.left)
-   );
+);
 }
 
 /**
@@ -2812,7 +2812,7 @@ char *U_WMRPATBLT_set(
       U_POINT16      Dst,
       U_POINT16      cwh,
       uint32_t       dwRop3
-   ){
+){
    char *record=NULL;
    uint32_t  irecsize;
    U_WMRPATBLT *pmr;
@@ -2852,7 +2852,7 @@ char *U_WMRSETPIXEL_set(U_COLORREF Color, U_POINT16 Coord){
       Color,
       U_P16(Coord.y),
       U_P16(Coord.x)
-   );
+);
 }
 
 /**
@@ -2877,7 +2877,7 @@ char *U_WMRTEXTOUT_set(U_POINT16 Dst, char *string){
    int16_t Length;
    irecsize  = 2 + U_SIZE_METARECORD + 4;  /* core + length + Dst */
    Length = strlen(string);
-   L2 = ( Length & 1 ? Length + 1 : Length);
+   L2 = (Length & 1 ? Length + 1 : Length);
    irecsize += L2;
    record = malloc(irecsize);
    if(record){
@@ -2911,7 +2911,7 @@ char *U_WMRBITBLT_set(
       U_POINT16            Src,
       uint32_t             dwRop3,
       const U_BITMAP16    *Bm16
-   ){
+){
    char *record=NULL;
    uint32_t  irecsize;
    int   cbBm16,cbBm164,off;
@@ -2974,7 +2974,7 @@ char *U_WMRSTRETCHBLT_set(
       U_POINT16            cSrc,
       uint32_t             dwRop3,
       const U_BITMAP16    *Bm16
-   ){
+){
    char *record=NULL;
    uint32_t  irecsize;
    int   cbBm16,cbBm164,off;
@@ -3161,7 +3161,7 @@ char *U_WMRCHORD_set(U_POINT16 Radial1, U_POINT16 Radial2, U_RECT16 rect){
       U_U16(rect.right),
       U_U16(rect.top),
       U_U16(rect.left)
-    );
+);
 }
 
 /**
@@ -3190,7 +3190,7 @@ char *U_WMREXTTEXTOUT_set(U_POINT16 Dst, int16_t Length, uint16_t Opts,
    uint32_t  irecsize,off;
    int  slen;
    irecsize  = U_SIZE_METARECORD + 8; /* 8 = y,x,Length,Opts*/
-   slen = ( Length & 1 ? Length + 1 : Length);
+   slen = (Length & 1 ? Length + 1 : Length);
    irecsize += slen;
    if(dx)irecsize += 2*Length;
    if(Opts & (U_ETO_OPAQUE | U_ETO_CLIPPED)){
@@ -3275,7 +3275,7 @@ char *U_WMRPOLYPOLYGON_set(
       const uint16_t   nPolys,
       const uint16_t  *aPolyCounts,
       const U_POINT16 *Points
-   ){
+){
    char      *record;
    uint32_t   irecsize;
    int        i,cbPolys,cbPoints,off;
@@ -3342,7 +3342,7 @@ char *U_WMR3F_set(void){
     \param dwRop3    RasterOPeration Enumeration
     \param Bmi       (Optional) bitmapbuffer (U_BITMAPINFO section)
     \param cbPx      Size in bytes of pixel array (row STRIDE * height, there may be some padding at the end of each row)
-    \param Px        (Optional) bitmapbuffer (pixel array section )
+    \param Px        (Optional) bitmapbuffer (pixel array section)
 */
 char *U_WMRDIBBITBLT_set(
       U_POINT16            Dst,
@@ -3352,7 +3352,7 @@ char *U_WMRDIBBITBLT_set(
       const U_BITMAPINFO  *Bmi,
       uint32_t             cbPx,
       const char          *Px
-   ){
+){
    char *record=NULL;
    uint32_t  irecsize;
    int   cbImage,cbImage4,cbBmi,off;
@@ -3409,7 +3409,7 @@ char *U_WMRDIBBITBLT_set(
     \param dwRop3    RasterOPeration Enumeration
     \param Bmi       (Optional) bitmapbuffer (U_BITMAPINFO section)
     \param cbPx      Size in bytes of pixel array (row STRIDE * height, there may be some padding at the end of each row)
-    \param Px        (Optional) bitmapbuffer (pixel array section )
+    \param Px        (Optional) bitmapbuffer (pixel array section)
 */
 char *U_WMRDIBSTRETCHBLT_set(
       U_POINT16            Dst,
@@ -3420,7 +3420,7 @@ char *U_WMRDIBSTRETCHBLT_set(
       const U_BITMAPINFO  *Bmi,
       uint32_t             cbPx,
       const char          *Px
-   ){
+){
    char *record=NULL;
    uint32_t  irecsize;
    int   cbImage,cbImage4,cbBmi,off;
@@ -3487,7 +3487,7 @@ char *U_WMRDIBCREATEPATTERNBRUSH_set(
        const uint32_t      cbPx,  
        const char         *Px,     
        const U_BITMAP16   *Bm16  
-   ){
+){
    char *record=NULL;
    uint32_t  irecsize;
    int   cbImage,cbImage4,cbBmi,cbBm16,cbBm164,off;
@@ -3534,7 +3534,7 @@ char *U_WMRDIBCREATEPATTERNBRUSH_set(
     \param dwRop3    RasterOPeration Enumeration
     \param Bmi       (Optional) bitmapbuffer (U_BITMAPINFO section)
     \param cbPx      Size in bytes of pixel array (row STRIDE * height, there may be some padding at the end of each row)
-    \param Px        (Optional) bitmapbuffer (pixel array section )
+    \param Px        (Optional) bitmapbuffer (pixel array section)
 */
 char *U_WMRSTRETCHDIB_set(
       U_POINT16            Dst,
@@ -3546,7 +3546,7 @@ char *U_WMRSTRETCHDIB_set(
       const U_BITMAPINFO  *Bmi,
       uint32_t             cbPx,
       const char          *Px
-   ){
+){
    char *record;
    uint32_t  irecsize;
    int   cbImage,cbImage4,cbBmi,off;
@@ -3611,7 +3611,7 @@ char *U_WMREXTFLOODFILL_set(uint16_t Mode, U_COLORREF Color, U_POINT16 coord){
       Color,
       U_P16(coord.y),
       U_P16(coord.x)
-   );
+);
 }
 
 //! \cond
@@ -4345,7 +4345,7 @@ char *U_WMRF8_set(void){
 char *U_WMRCREATEPATTERNBRUSH_set(
      U_BITMAP16 *Bm16,
      char       *Pattern
-   ){
+){
    char *record;
    uint32_t  irecsize,off,cbPat;
    if(!Bm16 || !Pattern)return(NULL);
@@ -4457,14 +4457,14 @@ int16_t *dx16_get(
       int32_t  height,
       uint32_t weight,
       uint32_t members
-   ){
+){
    uint32_t i, width;
    int16_t *dx;
    dx = (int16_t *) malloc(members * sizeof(int16_t));
    if(dx){
        if(U_FW_DONTCARE == weight)weight=U_FW_NORMAL;
        width = (uint32_t) U_ROUND(((float) (height > 0 ? height : -height)) * 0.6 * (0.00024*(float) weight + 0.904));
-       for ( i = 0; i < members; i++ ){ dx[i] = (width > INT16_MAX ? INT16_MAX : width); }
+       for (i = 0; i < members; i++){ dx[i] = (width > INT16_MAX ? INT16_MAX : width); }
    }
    return(dx);
 }
@@ -4481,7 +4481,7 @@ int16_t *dx16_get(
 size_t U_WMRRECSAFE_get(
       const char *contents, 
       const char *blimit
-   ){
+){
    size_t size=0;
    uint32_t Size16;
    memcpy(&Size16, contents + offsetof(U_METARECORD,Size16_4), 4);
@@ -4532,7 +4532,7 @@ int U_WMRCORE_1U16_CRF_2U16_get(
       U_COLORREF *Color,
       uint16_t   *arg2,
       uint16_t   *arg3
-   ){
+){
    int  size = 0;
    int  off  = U_SIZE_METARECORD;
    if(arg1){  memcpy(arg1,   contents + off, 2); off+=2; size+=2;}
@@ -4548,7 +4548,7 @@ int U_WMRCORE_1U16_get(
       const char *contents, 
       int         minsize,
       uint16_t   *arg1
-   ){
+){
    int  size = U_WMRCORE_RECSAFE_get(contents, minsize);
    int  off  = U_SIZE_METARECORD;
    if(!size)return(0);
@@ -4563,7 +4563,7 @@ int U_WMRCORE_2U16_get(
       int         minsize,
       uint16_t   *arg1,
       uint16_t   *arg2
-   ){
+){
    int  size = U_WMRCORE_RECSAFE_get(contents, minsize);
    int  off  = U_SIZE_METARECORD;
    memcpy(arg1, contents + off, 2); off+=2;
@@ -4580,7 +4580,7 @@ int U_WMRCORE_4U16_get(
       uint16_t   *arg2,
       uint16_t   *arg3,
       uint16_t   *arg4
-   ){
+){
    int  size = U_WMRCORE_RECSAFE_get(contents, minsize);
    int  off  = U_SIZE_METARECORD;
    if(!size)return(0);
@@ -4601,7 +4601,7 @@ int U_WMRCORE_5U16_get(
       uint16_t   *arg3,
       uint16_t   *arg4,
       uint16_t   *arg5
-   ){
+){
    int  size = U_WMRCORE_RECSAFE_get(contents, minsize);
    int  off  = U_SIZE_METARECORD;
    if(!size)return(0);
@@ -4624,7 +4624,7 @@ int U_WMRCORE_6U16_get(
       uint16_t   *arg4,
       uint16_t   *arg5,
       uint16_t   *arg6
-   ){
+){
    int  size = U_WMRCORE_RECSAFE_get(contents, minsize);
    int  off  = U_SIZE_METARECORD;
    if(!size)return(0);
@@ -4650,7 +4650,7 @@ int U_WMRCORE_8U16_get(
       uint16_t   *arg6,
       uint16_t   *arg7,
       uint16_t   *arg8
-   ){
+){
    int  size = U_WMRCORE_RECSAFE_get(contents, minsize);
    int  off  = U_SIZE_METARECORD;
    if(!size)return(0);
@@ -4667,7 +4667,7 @@ int U_WMRCORE_8U16_get(
 
 /* records that have
   arg1 an (optional) (u)int16
-  arg2 an (optional( (u)int16
+  arg2 an (optional((u)int16
   array of data cells or just a bunch of data.  Passed as a char because the structures in the WMF in memory may
     not be aligned properly for those structures.  Caller has to take them apart - carefully.
   like U_WMRCREATEBRUSHINDIRECT with arg1=arg2=NULL
@@ -4678,7 +4678,7 @@ int U_WMRCORE_2U16_N16_get(
       uint16_t   *arg1,
       uint16_t   *arg2,
       const char **array
-   ){
+){
    int  size = U_WMRCORE_RECSAFE_get(contents, minsize);
    int  off  = U_SIZE_METARECORD;
    if(!size)return(0);
@@ -4698,7 +4698,7 @@ int U_WMRCORE_PALETTE_get(
       int         minsize,
       U_PALETTE  *Palette,
       const char **PalEntries 
-   ){
+){
    int  size = U_WMRCORE_RECSAFE_get(contents, minsize);
    if(!size)return(0);
    contents += offsetof(U_WMRANIMATEPALETTE, Palette);
@@ -4726,7 +4726,7 @@ void U_BITMAPCOREHEADER_get(
        int32_t     *Width,
        int32_t     *Height,
        int32_t     *BitCount
-    ){
+){
     uint32_t utmp4;
     uint16_t utmp2;
     memcpy(&utmp4,   BmiCh + offsetof(U_BITMAPCOREHEADER,Size_4),   4); *Size      = utmp4;   
@@ -4767,22 +4767,22 @@ void U_BITMAPINFOHEADER_get(
        int32_t    *YPelsPerMeter, 
        uint32_t   *ClrUsed,       
        uint32_t   *ClrImportant  
-    ){
+){
     int32_t   tmp4;
     uint32_t utmp4;
     uint16_t utmp2;
     
-    memcpy(&utmp4,  Bmih + offsetof(U_BITMAPINFOHEADER,biSize         ),   4);   *Size          = utmp4;
-    memcpy( &tmp4,  Bmih + offsetof(U_BITMAPINFOHEADER,biWidth        ),   4);   *Width         =  tmp4;
-    memcpy( &tmp4,  Bmih + offsetof(U_BITMAPINFOHEADER,biHeight       ),   4);   *Height        =  tmp4;
-    memcpy(&utmp2,  Bmih + offsetof(U_BITMAPINFOHEADER,biPlanes       ),   2);   *Planes        = utmp2;
-    memcpy(&utmp2,  Bmih + offsetof(U_BITMAPINFOHEADER,biBitCount     ),   2);   *BitCount      = utmp2;
-    memcpy(&utmp4,  Bmih + offsetof(U_BITMAPINFOHEADER,biCompression  ),   4);   *Compression   = utmp4;
-    memcpy(&utmp4,  Bmih + offsetof(U_BITMAPINFOHEADER,biSizeImage    ),   4);   *SizeImage     = utmp4;
-    memcpy( &tmp4,  Bmih + offsetof(U_BITMAPINFOHEADER,biXPelsPerMeter),   4);   *XPelsPerMeter =  tmp4;
-    memcpy( &tmp4,  Bmih + offsetof(U_BITMAPINFOHEADER,biYPelsPerMeter),   4);   *YPelsPerMeter =  tmp4;
-    memcpy(&utmp4,  Bmih + offsetof(U_BITMAPINFOHEADER,biClrUsed      ),   4);   *ClrUsed       = utmp4;
-    memcpy(&utmp4,  Bmih + offsetof(U_BITMAPINFOHEADER,biClrImportant ),   4);   *ClrImportant  = utmp4;
+    memcpy(&utmp4,  Bmih + offsetof(U_BITMAPINFOHEADER,biSize),   4);   *Size          = utmp4;
+    memcpy(&tmp4,  Bmih + offsetof(U_BITMAPINFOHEADER,biWidth),   4);   *Width         =  tmp4;
+    memcpy(&tmp4,  Bmih + offsetof(U_BITMAPINFOHEADER,biHeight),   4);   *Height        =  tmp4;
+    memcpy(&utmp2,  Bmih + offsetof(U_BITMAPINFOHEADER,biPlanes),   2);   *Planes        = utmp2;
+    memcpy(&utmp2,  Bmih + offsetof(U_BITMAPINFOHEADER,biBitCount),   2);   *BitCount      = utmp2;
+    memcpy(&utmp4,  Bmih + offsetof(U_BITMAPINFOHEADER,biCompression),   4);   *Compression   = utmp4;
+    memcpy(&utmp4,  Bmih + offsetof(U_BITMAPINFOHEADER,biSizeImage),   4);   *SizeImage     = utmp4;
+    memcpy(&tmp4,  Bmih + offsetof(U_BITMAPINFOHEADER,biXPelsPerMeter),   4);   *XPelsPerMeter =  tmp4;
+    memcpy(&tmp4,  Bmih + offsetof(U_BITMAPINFOHEADER,biYPelsPerMeter),   4);   *YPelsPerMeter =  tmp4;
+    memcpy(&utmp4,  Bmih + offsetof(U_BITMAPINFOHEADER,biClrUsed),   4);   *ClrUsed       = utmp4;
+    memcpy(&utmp4,  Bmih + offsetof(U_BITMAPINFOHEADER,biClrImportant),   4);   *ClrImportant  = utmp4;
 }
 
 /**
@@ -4807,12 +4807,12 @@ int wget_DIB_params(
        int32_t       *height,
        int32_t       *colortype,
        int32_t       *invert
-   ){
+){
    uint32_t bic;
    uint32_t Size;
    bic = U_BI_RGB;  // this information is not in the coreheader;
    U_BITMAPCOREHEADER_get(dib, &Size, width, height, colortype);
-   if(Size != 0xC ){ //BitmapCoreHeader
+   if(Size != 0xC){ //BitmapCoreHeader
        /* if biCompression is not U_BI_RGB some or all of the following might not hold real values.
        Ignore most of the information returned from the bitmapinfoheader.
        */
@@ -4869,7 +4869,7 @@ int wmfheader_get(
       const char      *blimit,
       U_WMRPLACEABLE  *Placeable,
       U_WMRHEADER     *Header
-   ){
+){
    uint32_t Key;
    int size=0;
    if(!contents || !Placeable || !Header || !blimit)return(0);
@@ -4899,7 +4899,7 @@ int wmfheader_get(
 */
 int U_WMREOF_get(
       const char *contents
-   ){
+){
    return(U_WMRCORE_RECSAFE_get(contents, (U_SIZE_WMREOF)));
 }                            
 
@@ -4912,7 +4912,7 @@ int U_WMREOF_get(
 int U_WMRSETBKCOLOR_get(
       const char  *contents, 
       U_COLORREF  *Color
-   ){
+){
    int size = U_WMRCORE_RECSAFE_get(contents, (U_SIZE_WMRSETBKCOLOR));
    if(!size)return(0);
    memcpy(Color,contents + offsetof(U_WMRSETBKCOLOR,Color),U_SIZE_COLORREF);
@@ -4928,7 +4928,7 @@ int U_WMRSETBKCOLOR_get(
 int U_WMRSETBKMODE_get(
       const char *contents, 
       uint16_t   *Mode
-   ){
+){
    return(U_WMRCORE_1U16_get(contents, (U_SIZE_WMRSETBKMODE), Mode));
 }
 
@@ -4941,7 +4941,7 @@ int U_WMRSETBKMODE_get(
 int U_WMRSETMAPMODE_get(
       const char *contents, 
       uint16_t   *Mode
-   ){
+){
    return(U_WMRCORE_1U16_get(contents, (U_SIZE_WMRSETMAPMODE), Mode));
 }
 
@@ -4954,7 +4954,7 @@ int U_WMRSETMAPMODE_get(
 int U_WMRSETROP2_get(
       const char *contents, 
       uint16_t   *Mode
-   ){
+){
    return(U_WMRCORE_1U16_get(contents, (U_SIZE_WMRSETROP2), Mode));
 }
 
@@ -4965,7 +4965,7 @@ int U_WMRSETROP2_get(
 */
 int U_WMRSETRELABS_get(
       const char *contents 
-   ){
+){
    return(U_WMRCORE_RECSAFE_get(contents, (U_SIZE_WMRSETRELABS)));
 }                            
 
@@ -4978,7 +4978,7 @@ int U_WMRSETRELABS_get(
 int U_WMRSETPOLYFILLMODE_get(
       const char *contents, 
       uint16_t   *Mode
-   ){
+){
    return(U_WMRCORE_1U16_get(contents, (U_SIZE_WMRSETPOLYFILLMODE), Mode));
 }
 
@@ -4991,7 +4991,7 @@ int U_WMRSETPOLYFILLMODE_get(
 int U_WMRSETSTRETCHBLTMODE_get(
       const char *contents, 
       uint16_t   *Mode
-   ){
+){
    return(U_WMRCORE_1U16_get(contents, (U_SIZE_WMRSETSTRETCHBLTMODE), Mode));
 }
 
@@ -5004,7 +5004,7 @@ int U_WMRSETSTRETCHBLTMODE_get(
 int U_WMRSETTEXTCHAREXTRA_get(
       const char *contents, 
       uint16_t   *Mode
-   ){
+){
    return(U_WMRCORE_1U16_get(contents, (U_SIZE_WMRSETTEXTCHAREXTRA), Mode));
 }
 
@@ -5017,7 +5017,7 @@ int U_WMRSETTEXTCHAREXTRA_get(
 int U_WMRSETTEXTCOLOR_get(
       const char  *contents, 
       U_COLORREF  *Color
-   ){
+){
    int size = U_WMRCORE_RECSAFE_get(contents, (U_SIZE_WMRSETTEXTCOLOR));
    if(!size)return(0);
    memcpy(Color,contents + offsetof(U_WMRSETTEXTCOLOR,Color),U_SIZE_COLORREF);
@@ -5035,7 +5035,7 @@ int U_WMRSETTEXTJUSTIFICATION_get(
       const char *contents, 
       uint16_t   *Count,
       uint16_t   *Extra
-   ){
+){
    return(U_WMRCORE_2U16_get(contents, (U_SIZE_WMRSETTEXTJUSTIFICATION), Count, Extra));
 }
 
@@ -5048,7 +5048,7 @@ int U_WMRSETTEXTJUSTIFICATION_get(
 int U_WMRSETWINDOWORG_get(
       const char *contents, 
       U_POINT16 * coord
-   ){
+){
    return(U_WMRCORE_2U16_get(contents, (U_SIZE_WMRSETWINDOWORG), U_P16(coord->y), U_P16(coord->x)));
 }
 
@@ -5061,7 +5061,7 @@ int U_WMRSETWINDOWORG_get(
 int U_WMRSETWINDOWEXT_get(
       const char *contents, 
       U_POINT16 * extent
-   ){
+){
    return(U_WMRCORE_2U16_get(contents, (U_SIZE_WMRSETWINDOWEXT), U_P16(extent->y), U_P16(extent->x)));
 }
 
@@ -5074,7 +5074,7 @@ int U_WMRSETWINDOWEXT_get(
 int U_WMRSETVIEWPORTORG_get(
       const char *contents, 
       U_POINT16 * coord
-   ){
+){
    return(U_WMRCORE_2U16_get(contents, (U_SIZE_WMRSETVIEWPORTORG), U_P16(coord->y), U_P16(coord->x)));
 
 }
@@ -5088,7 +5088,7 @@ int U_WMRSETVIEWPORTORG_get(
 int U_WMRSETVIEWPORTEXT_get(
       const char *contents, 
       U_POINT16 * extent
-   ){
+){
    return(U_WMRCORE_2U16_get(contents, (U_SIZE_WMRSETVIEWPORTEXT), U_P16(extent->y), U_P16(extent->x)));
 }
 
@@ -5101,7 +5101,7 @@ int U_WMRSETVIEWPORTEXT_get(
 int U_WMROFFSETWINDOWORG_get(
       const char *contents, 
       U_POINT16 * offset
-   ){
+){
    return(U_WMRCORE_2U16_get(contents, (U_SIZE_WMROFFSETWINDOWORG), U_P16(offset->y), U_P16(offset->x)));
 }
 
@@ -5116,7 +5116,7 @@ int U_WMRSCALEWINDOWEXT_get(
       const char *contents, 
      U_POINT16 *  Denom, 
      U_POINT16 *  Num
-   ){
+){
    return(U_WMRCORE_4U16_get(contents, (U_SIZE_WMRSCALEWINDOWEXT), U_P16(Denom->y), U_P16(Denom->x), U_P16(Num->y), U_P16(Num->x)));
 }
 
@@ -5129,7 +5129,7 @@ int U_WMRSCALEWINDOWEXT_get(
 int U_WMROFFSETVIEWPORTORG_get(
       const char *contents,
       U_POINT16 * offset
-   ){
+){
    return(U_WMRCORE_2U16_get(contents, (U_SIZE_WMROFFSETVIEWPORTORG), U_P16(offset->y), U_P16(offset->x)));
 }
 
@@ -5144,7 +5144,7 @@ int U_WMRSCALEVIEWPORTEXT_get(
       const char *contents, 
      U_POINT16 *  Denom, 
      U_POINT16 *  Num
-   ){
+){
    return(U_WMRCORE_4U16_get(contents, (U_SIZE_WMRSCALEVIEWPORTEXT), U_P16(Denom->y), U_P16(Denom->x), U_P16(Num->y), U_P16(Num->x)));
 }
 
@@ -5157,7 +5157,7 @@ int U_WMRSCALEVIEWPORTEXT_get(
 int U_WMRLINETO_get(
       const char *contents, 
       U_POINT16 * coord
-   ){
+){
    return(U_WMRCORE_2U16_get(contents, (U_SIZE_WMRLINETO), U_P16(coord->y), U_P16(coord->x)));
 }
 
@@ -5170,7 +5170,7 @@ int U_WMRLINETO_get(
 int U_WMRMOVETO_get(
       const char *contents, 
       U_POINT16 * coord
-   ){
+){
    return(U_WMRCORE_2U16_get(contents, (U_SIZE_WMRMOVETO), U_P16(coord->y), U_P16(coord->x)));
 }
 
@@ -5183,7 +5183,7 @@ int U_WMRMOVETO_get(
 int U_WMREXCLUDECLIPRECT_get(
       const char *contents,
       U_RECT16   *rect
-   ){
+){
    return(U_WMRCORE_4U16_get(contents, (U_SIZE_WMREXCLUDECLIPRECT), U_P16(rect->bottom), U_P16(rect->right), U_P16(rect->top), U_P16(rect->left)));
 }
 
@@ -5196,7 +5196,7 @@ int U_WMREXCLUDECLIPRECT_get(
 int U_WMRINTERSECTCLIPRECT_get(
       const char *contents, 
       U_RECT16   *rect
-   ){
+){
    return(U_WMRCORE_4U16_get(contents, (U_SIZE_WMRINTERSECTCLIPRECT), U_P16(rect->bottom), U_P16(rect->right), U_P16(rect->top), U_P16(rect->left)));
 }
 
@@ -5213,7 +5213,7 @@ int U_WMRARC_get(
       U_POINT16  *StartArc,
       U_POINT16  *EndArc,
       U_RECT16   *rect
-   ){
+){
    return U_WMRCORE_8U16_get(
       contents,
       (U_SIZE_WMRARC),
@@ -5225,7 +5225,7 @@ int U_WMRARC_get(
       U_P16(rect->right),
       U_P16(rect->top),
       U_P16(rect->left)
-    );
+);
 }
 
 /**
@@ -5237,7 +5237,7 @@ int U_WMRARC_get(
 int U_WMRELLIPSE_get(
       const char *contents,
       U_RECT16   *rect
-   ){
+){
    return U_WMRCORE_4U16_get(
       contents,
       (U_SIZE_WMRELLIPSE),
@@ -5245,7 +5245,7 @@ int U_WMRELLIPSE_get(
       U_P16(rect->right),
       U_P16(rect->top),
       U_P16(rect->left)
-   );
+);
 }
 
 /**
@@ -5261,14 +5261,14 @@ int U_WMRFLOODFILL_get(
       uint16_t   *Mode, 
       U_COLORREF *Color, 
       U_POINT16  *coord
-   ){
+){
    return  U_WMRCORE_1U16_CRF_2U16_get(
       contents,
       Mode,
       Color,
       U_P16(coord->y),
       U_P16(coord->x)
-   );
+);
 }
 
 /**
@@ -5284,7 +5284,7 @@ int U_WMRPIE_get(
       U_POINT16 *Radial1,
       U_POINT16 *Radial2,
       U_RECT16  *rect
-   ){
+){
    return U_WMRCORE_8U16_get(
       contents,
       (U_SIZE_WMRPIE),
@@ -5296,7 +5296,7 @@ int U_WMRPIE_get(
       U_P16(rect->right),
       U_P16(rect->top),
       U_P16(rect->left)
-    );
+);
 }
 
 /**
@@ -5308,7 +5308,7 @@ int U_WMRPIE_get(
 int U_WMRRECTANGLE_get(
       const char *contents,
       U_RECT16   *rect
-   ){
+){
    return U_WMRCORE_4U16_get(
       contents,
       (U_SIZE_WMRRECTANGLE),
@@ -5316,7 +5316,7 @@ int U_WMRRECTANGLE_get(
       U_P16(rect->right),
       U_P16(rect->top),
       U_P16(rect->left)
-   );
+);
 }
 
 /**
@@ -5332,7 +5332,7 @@ int U_WMRROUNDRECT_get(
       int16_t    *Width, 
       int16_t    *Height,
       U_RECT16   *rect
-   ){
+){
    return U_WMRCORE_6U16_get(
       contents,
       (U_SIZE_WMRROUNDRECT),
@@ -5342,7 +5342,7 @@ int U_WMRROUNDRECT_get(
       U_P16(rect->right),
       U_P16(rect->top),
       U_P16(rect->left)
-   );
+);
 }
 
 /**
@@ -5358,14 +5358,14 @@ int U_WMRPATBLT_get(
       U_POINT16 *     Dst,
       U_POINT16 *     cwh,
       uint32_t       *dwRop3
-   ){
+){
    int  size = U_WMRCORE_RECSAFE_get(contents, (U_SIZE_WMRPATBLT));
    if(!size)return(0);
-   memcpy(dwRop3,                   ( contents + offsetof(U_WMRPATBLT, rop3w)), 4);
-           cwh->y     = *(int16_t *)( contents + offsetof(U_WMRPATBLT, Height    ));
-           cwh->x     = *(int16_t *)( contents + offsetof(U_WMRPATBLT, Width     ));
-           Dst->y     = *(int16_t *)( contents + offsetof(U_WMRPATBLT, yDst      ));
-           Dst->x     = *(int16_t *)( contents + offsetof(U_WMRPATBLT, xDst      ));
+   memcpy(dwRop3,                   (contents + offsetof(U_WMRPATBLT, rop3w)), 4);
+           cwh->y     = *(int16_t *)(contents + offsetof(U_WMRPATBLT, Height));
+           cwh->x     = *(int16_t *)(contents + offsetof(U_WMRPATBLT, Width));
+           Dst->y     = *(int16_t *)(contents + offsetof(U_WMRPATBLT, yDst));
+           Dst->x     = *(int16_t *)(contents + offsetof(U_WMRPATBLT, xDst));
    return(size);
 }
 
@@ -5376,7 +5376,7 @@ int U_WMRPATBLT_get(
 */
 int U_WMRSAVEDC_get(
       const char *contents
-   ){
+){
    return(U_WMRCORE_RECSAFE_get(contents, (U_SIZE_WMRSAVEDC)));
 }
 
@@ -5397,7 +5397,7 @@ int U_WMRSETPIXEL_get(
       Color,
       U_P16(Coord->y),
       U_P16(Coord->x)
-   );
+);
 }
 
 /**
@@ -5409,7 +5409,7 @@ int U_WMRSETPIXEL_get(
 int U_WMROFFSETCLIPRGN_get(
       const char *contents,
       U_POINT16  *offset
-   ){
+){
    return U_WMRCORE_2U16_get(contents, (U_SIZE_WMROFFSETCLIPRGN), U_P16(offset->y), U_P16(offset->x));
 }
 
@@ -5426,7 +5426,7 @@ int U_WMRTEXTOUT_get(
       U_POINT16 *  Dst, 
       int16_t     *Length,
       const char **string
-   ){
+){
    int16_t L2;
    int  off;
    int  size = U_WMRCORE_RECSAFE_get(contents, (U_SIZE_WMRTEXTOUT));
@@ -5462,32 +5462,32 @@ int U_WMRBITBLT_get(
       uint32_t    *dwRop3,
       U_BITMAP16  *Bm16,
       const char **px
-   ){
+){
    uint8_t   xb;
    uint32_t  size = U_WMRCORE_RECSAFE_get(contents, (U_SIZE_WMRBITBLT_NOPX));
    if(!size)return(0);
-   xb               = *(uint8_t *)( contents + offsetof(U_METARECORD, xb));
+   xb               = *(uint8_t *)(contents + offsetof(U_METARECORD, xb));
    if(U_TEST_NOPXB(size,xb)){ /* no bitmap */
-      memcpy(dwRop3,              ( contents + offsetof(U_WMRBITBLT_NOPX, rop3w)), 4);
-             Src->y = *(int16_t *)( contents + offsetof(U_WMRBITBLT_NOPX, ySrc      ));
-             Src->x = *(int16_t *)( contents + offsetof(U_WMRBITBLT_NOPX, xSrc      ));
-             cwh->y = *(int16_t *)( contents + offsetof(U_WMRBITBLT_NOPX, Height    ));
-             cwh->x = *(int16_t *)( contents + offsetof(U_WMRBITBLT_NOPX, Width     ));
-             Dst->y = *(int16_t *)( contents + offsetof(U_WMRBITBLT_NOPX, yDst      ));
-             Dst->x = *(int16_t *)( contents + offsetof(U_WMRBITBLT_NOPX, xDst      ));
+      memcpy(dwRop3,              (contents + offsetof(U_WMRBITBLT_NOPX, rop3w)), 4);
+             Src->y = *(int16_t *)(contents + offsetof(U_WMRBITBLT_NOPX, ySrc));
+             Src->x = *(int16_t *)(contents + offsetof(U_WMRBITBLT_NOPX, xSrc));
+             cwh->y = *(int16_t *)(contents + offsetof(U_WMRBITBLT_NOPX, Height));
+             cwh->x = *(int16_t *)(contents + offsetof(U_WMRBITBLT_NOPX, Width));
+             Dst->y = *(int16_t *)(contents + offsetof(U_WMRBITBLT_NOPX, yDst));
+             Dst->x = *(int16_t *)(contents + offsetof(U_WMRBITBLT_NOPX, xDst));
       memset(Bm16, 0, U_SIZE_BITMAP16);
              *px    = NULL;
    }
    else { /* yes bitmap */
-      memcpy(dwRop3,              ( contents + offsetof(U_WMRBITBLT_PX, rop3w)), 4);
-             Src->y = *(int16_t *)( contents + offsetof(U_WMRBITBLT_PX, ySrc      ));
-             Src->x = *(int16_t *)( contents + offsetof(U_WMRBITBLT_PX, xSrc      ));
-             cwh->y = *(int16_t *)( contents + offsetof(U_WMRBITBLT_PX, Height    ));
-             cwh->x = *(int16_t *)( contents + offsetof(U_WMRBITBLT_PX, Width     ));
-             Dst->y = *(int16_t *)( contents + offsetof(U_WMRBITBLT_PX, yDst      ));
-             Dst->x = *(int16_t *)( contents + offsetof(U_WMRBITBLT_PX, xDst      ));
-      memcpy(Bm16,                ( contents + offsetof(U_WMRBITBLT_PX, bitmap)), U_SIZE_BITMAP16);
-             *px       =          ( contents + offsetof(U_WMRBITBLT_PX, bitmap) + U_SIZE_BITMAP16);
+      memcpy(dwRop3,              (contents + offsetof(U_WMRBITBLT_PX, rop3w)), 4);
+             Src->y = *(int16_t *)(contents + offsetof(U_WMRBITBLT_PX, ySrc));
+             Src->x = *(int16_t *)(contents + offsetof(U_WMRBITBLT_PX, xSrc));
+             cwh->y = *(int16_t *)(contents + offsetof(U_WMRBITBLT_PX, Height));
+             cwh->x = *(int16_t *)(contents + offsetof(U_WMRBITBLT_PX, Width));
+             Dst->y = *(int16_t *)(contents + offsetof(U_WMRBITBLT_PX, yDst));
+             Dst->x = *(int16_t *)(contents + offsetof(U_WMRBITBLT_PX, xDst));
+      memcpy(Bm16,                (contents + offsetof(U_WMRBITBLT_PX, bitmap)), U_SIZE_BITMAP16);
+             *px       =          (contents + offsetof(U_WMRBITBLT_PX, bitmap) + U_SIZE_BITMAP16);
    }
    return(size);
 }
@@ -5513,36 +5513,36 @@ int U_WMRSTRETCHBLT_get(
       uint32_t    *dwRop3,
       U_BITMAP16  *Bm16,
       const char **px
-   ){
+){
    uint8_t   xb;
    uint32_t  size = U_WMRCORE_RECSAFE_get(contents, (U_SIZE_WMRSTRETCHBLT_NOPX));
    if(!size)return(0);
-   xb                = *(uint8_t *)( contents + offsetof(U_METARECORD, xb));
+   xb                = *(uint8_t *)(contents + offsetof(U_METARECORD, xb));
    if(U_TEST_NOPXB(size,xb)){ /* no bitmap */
-      memcpy(dwRop3,               ( contents + offsetof(U_WMRSTRETCHBLT_NOPX, rop3w)), 4);
-             cSrc->y = *(int16_t *)( contents + offsetof(U_WMRSTRETCHBLT_NOPX, hSrc     ));
-             cSrc->x = *(int16_t *)( contents + offsetof(U_WMRSTRETCHBLT_NOPX, wSrc     ));
-             Src->y  = *(int16_t *)( contents + offsetof(U_WMRSTRETCHBLT_NOPX, ySrc     ));
-             Src->x  = *(int16_t *)( contents + offsetof(U_WMRSTRETCHBLT_NOPX, xSrc     ));
-             cDst->y = *(int16_t *)( contents + offsetof(U_WMRSTRETCHBLT_NOPX, hDst     ));
-             cDst->x = *(int16_t *)( contents + offsetof(U_WMRSTRETCHBLT_NOPX, wDst     ));
-             Dst->y  = *(int16_t *)( contents + offsetof(U_WMRSTRETCHBLT_NOPX, yDst     ));
-             Dst->x  = *(int16_t *)( contents + offsetof(U_WMRSTRETCHBLT_NOPX, xDst     ));
+      memcpy(dwRop3,               (contents + offsetof(U_WMRSTRETCHBLT_NOPX, rop3w)), 4);
+             cSrc->y = *(int16_t *)(contents + offsetof(U_WMRSTRETCHBLT_NOPX, hSrc));
+             cSrc->x = *(int16_t *)(contents + offsetof(U_WMRSTRETCHBLT_NOPX, wSrc));
+             Src->y  = *(int16_t *)(contents + offsetof(U_WMRSTRETCHBLT_NOPX, ySrc));
+             Src->x  = *(int16_t *)(contents + offsetof(U_WMRSTRETCHBLT_NOPX, xSrc));
+             cDst->y = *(int16_t *)(contents + offsetof(U_WMRSTRETCHBLT_NOPX, hDst));
+             cDst->x = *(int16_t *)(contents + offsetof(U_WMRSTRETCHBLT_NOPX, wDst));
+             Dst->y  = *(int16_t *)(contents + offsetof(U_WMRSTRETCHBLT_NOPX, yDst));
+             Dst->x  = *(int16_t *)(contents + offsetof(U_WMRSTRETCHBLT_NOPX, xDst));
       memset(Bm16, 0, U_SIZE_BITMAP16);
              *px     = NULL;
    }
    else { /* yes bitmap */
-      memcpy(dwRop3,               ( contents + offsetof(U_WMRSTRETCHBLT_PX, rop3w)), 4);
-             cSrc->y = *(int16_t *)( contents + offsetof(U_WMRSTRETCHBLT_PX, hSrc     ));
-             cSrc->x = *(int16_t *)( contents + offsetof(U_WMRSTRETCHBLT_PX, wSrc     ));
-             Src->y  = *(int16_t *)( contents + offsetof(U_WMRSTRETCHBLT_PX, ySrc     ));
-             Src->x  = *(int16_t *)( contents + offsetof(U_WMRSTRETCHBLT_PX, xSrc     ));
-             cDst->y = *(int16_t *)( contents + offsetof(U_WMRSTRETCHBLT_PX, hDst     ));
-             cDst->x = *(int16_t *)( contents + offsetof(U_WMRSTRETCHBLT_PX, wDst     ));
-             Dst->y  = *(int16_t *)( contents + offsetof(U_WMRSTRETCHBLT_PX, yDst     ));
-             Dst->x  = *(int16_t *)( contents + offsetof(U_WMRSTRETCHBLT_PX, xDst     ));
-      memcpy(Bm16,                 ( contents + offsetof(U_WMRSTRETCHBLT_PX, bitmap)), U_SIZE_BITMAP16);
-             *px     =             ( contents + offsetof(U_WMRSTRETCHBLT_PX, bitmap) + U_SIZE_BITMAP16);
+      memcpy(dwRop3,               (contents + offsetof(U_WMRSTRETCHBLT_PX, rop3w)), 4);
+             cSrc->y = *(int16_t *)(contents + offsetof(U_WMRSTRETCHBLT_PX, hSrc));
+             cSrc->x = *(int16_t *)(contents + offsetof(U_WMRSTRETCHBLT_PX, wSrc));
+             Src->y  = *(int16_t *)(contents + offsetof(U_WMRSTRETCHBLT_PX, ySrc));
+             Src->x  = *(int16_t *)(contents + offsetof(U_WMRSTRETCHBLT_PX, xSrc));
+             cDst->y = *(int16_t *)(contents + offsetof(U_WMRSTRETCHBLT_PX, hDst));
+             cDst->x = *(int16_t *)(contents + offsetof(U_WMRSTRETCHBLT_PX, wDst));
+             Dst->y  = *(int16_t *)(contents + offsetof(U_WMRSTRETCHBLT_PX, yDst));
+             Dst->x  = *(int16_t *)(contents + offsetof(U_WMRSTRETCHBLT_PX, xDst));
+      memcpy(Bm16,                 (contents + offsetof(U_WMRSTRETCHBLT_PX, bitmap)), U_SIZE_BITMAP16);
+             *px     =             (contents + offsetof(U_WMRSTRETCHBLT_PX, bitmap) + U_SIZE_BITMAP16);
    }
    return(size);
 }
@@ -5558,7 +5558,7 @@ int U_WMRPOLYGON_get(
       const char   *contents,
       uint16_t     *Length, 
       const char  **Data
-    ){
+){
     int size = U_WMRCORE_2U16_N16_get(contents, (U_SIZE_WMRPOLYGON), NULL, Length, Data);
     if(size){
         int iLength = (*Length)*sizeof(U_POINT16);
@@ -5578,7 +5578,7 @@ int U_WMRPOLYLINE_get(
       const char  *contents,
       uint16_t    *Length, 
       const char **Data
-    ){
+){
     int size = U_WMRCORE_2U16_N16_get(contents, (U_SIZE_WMRPOLYGON), NULL, Length, Data);
     if(size){
         int iLength = (*Length)*sizeof(U_POINT16);
@@ -5606,7 +5606,7 @@ int U_WMRESCAPE_get(
       uint16_t    *Escape, 
       uint16_t    *Length, 
       const char **Data
-   ){
+){
    int size = U_WMRCORE_2U16_N16_get(contents, (U_SIZE_WMRESCAPE), Escape, Length, Data);
    if(size){
        int iLength=*Length;
@@ -5624,7 +5624,7 @@ int U_WMRESCAPE_get(
 int U_WMRRESTOREDC_get(
       const char *contents,
       int16_t    *DC
-   ){
+){
    return U_WMRCORE_1U16_get(contents, (U_SIZE_WMRRESTOREDC), (uint16_t *)DC); // signed, but it is just a memcpy, so this works
 }
 
@@ -5639,7 +5639,7 @@ int U_WMRFILLREGION_get(
       const char *contents,
       uint16_t   *Region, 
       uint16_t   *Brush
-   ){
+){
    return U_WMRCORE_2U16_get(contents, (U_SIZE_WMRFILLREGION), Region, Brush);
 }
 
@@ -5658,7 +5658,7 @@ int U_WMRFRAMEREGION_get(
       uint16_t   *Brush,
       int16_t    *Height,
       int16_t    *Width
-   ){
+){
    return U_WMRCORE_4U16_get(contents, (U_SIZE_WMRFRAMEREGION), Region, Brush, U_PP16(Height), U_PP16(Width));
 }
 
@@ -5671,7 +5671,7 @@ int U_WMRFRAMEREGION_get(
 int U_WMRINVERTREGION_get(
       const char *contents,
       uint16_t   *Region
-   ){
+){
    return U_WMRCORE_1U16_get(contents, (U_SIZE_WMRINVERTREGION), Region);
 }
 
@@ -5684,7 +5684,7 @@ int U_WMRINVERTREGION_get(
 int U_WMRPAINTREGION_get(
       const char *contents,
       uint16_t   *Region
-   ){
+){
    return U_WMRCORE_1U16_get(contents, (U_SIZE_WMRPAINTREGION), Region);
 }
 
@@ -5697,7 +5697,7 @@ int U_WMRPAINTREGION_get(
 int U_WMRSELECTCLIPREGION_get(
       const char *contents, 
       uint16_t   *Region
-   ){
+){
    return U_WMRCORE_1U16_get(contents, (U_SIZE_WMRSELECTCLIPREGION), Region);
 
 }
@@ -5711,7 +5711,7 @@ int U_WMRSELECTCLIPREGION_get(
 int U_WMRSELECTOBJECT_get(
       const char *contents,
       uint16_t   *Object
-   ){
+){
    return U_WMRCORE_1U16_get(contents, (U_SIZE_WMRSELECTOBJECT), Object);
 }
 
@@ -5724,7 +5724,7 @@ int U_WMRSELECTOBJECT_get(
 int U_WMRSETTEXTALIGN_get(
       const char *contents,
       uint16_t   *Mode
-   ){
+){
    return U_WMRCORE_1U16_get(contents, (U_SIZE_WMRSETTEXTALIGN), Mode);
 }
 
@@ -5747,7 +5747,7 @@ int U_WMRCHORD_get(
       U_POINT16  *Radial1, 
       U_POINT16  *Radial2, 
       U_RECT16   *rect
-   ){
+){
    return U_WMRCORE_8U16_get(
       contents,
       (U_SIZE_WMRCHORD),
@@ -5759,7 +5759,7 @@ int U_WMRCHORD_get(
       U_P16(rect->right),
       U_P16(rect->top),
       U_P16(rect->left)
-    );
+);
 }
 
 /**
@@ -5771,7 +5771,7 @@ int U_WMRCHORD_get(
 int U_WMRSETMAPPERFLAGS_get(
       const char *contents, 
       uint32_t   *Mode
-   ){
+){
    int size = U_WMRCORE_RECSAFE_get(contents, (U_SIZE_WMRSETMAPPERFLAGS));
    if(!size)return(0);
    memcpy(Mode, contents + U_SIZE_METARECORD, 4);
@@ -5797,14 +5797,14 @@ int U_WMREXTTEXTOUT_get(
       const char     **string, 
       const int16_t  **dx, 
       U_RECT16        *rect
-   ){
+){
    int  size = U_WMRCORE_RECSAFE_get(contents, (U_SIZE_WMREXTTEXTOUT));
    int  off  = U_SIZE_METARECORD;
    if(!size)return(0);
-   Dst->y   = *(int16_t *)( contents + offsetof(U_WMREXTTEXTOUT, y      ));
-   Dst->x   = *(int16_t *)( contents + offsetof(U_WMREXTTEXTOUT, x      ));
-   *Length  = *(int16_t *)( contents + offsetof(U_WMREXTTEXTOUT, Length ));
-   *Opts    = *(uint16_t *)(contents + offsetof(U_WMREXTTEXTOUT, Opts   ));
+   Dst->y   = *(int16_t *)(contents + offsetof(U_WMREXTTEXTOUT, y));
+   Dst->x   = *(int16_t *)(contents + offsetof(U_WMREXTTEXTOUT, x));
+   *Length  = *(int16_t *)(contents + offsetof(U_WMREXTTEXTOUT, Length));
+   *Opts    = *(uint16_t *)(contents + offsetof(U_WMREXTTEXTOUT, Opts));
    off      = U_SIZE_WMREXTTEXTOUT;
    if(*Opts & (U_ETO_OPAQUE | U_ETO_CLIPPED)){   memcpy(rect, (contents + off), U_SIZE_RECT16); off += U_SIZE_RECT16; }
    else {                                        memset(rect, 0,                U_SIZE_RECT16);                          }
@@ -5836,19 +5836,19 @@ int U_WMRSETDIBTODEV_get(
       uint16_t    *ScanCount,
       uint16_t    *StartScan,
       const char **dib
-   ){
+){
    int  size = U_WMRCORE_RECSAFE_get(contents, (U_SIZE_WMRSETDIBTODEV));
    if(!size)return(0);
-   *cUsage     = *(uint16_t *)(contents + offsetof(U_WMRSETDIBTODEV, cUsage    ));
-   *ScanCount  = *(uint16_t *)(contents + offsetof(U_WMRSETDIBTODEV, ScanCount ));
-   *StartScan  = *(uint16_t *)(contents + offsetof(U_WMRSETDIBTODEV, StartScan ));
-   Src->y      = *(int16_t *)( contents + offsetof(U_WMRSETDIBTODEV, ySrc      ));
-   Src->x      = *(int16_t *)( contents + offsetof(U_WMRSETDIBTODEV, xSrc      ));
-   cwh->y      = *(int16_t *)( contents + offsetof(U_WMRSETDIBTODEV, Height    ));
-   cwh->x      = *(int16_t *)( contents + offsetof(U_WMRSETDIBTODEV, Width     ));
-   Dst->y      = *(int16_t *)( contents + offsetof(U_WMRSETDIBTODEV, yDst      ));
-   Dst->x      = *(int16_t *)( contents + offsetof(U_WMRSETDIBTODEV, xDst      ));
-   *dib        =             ( contents + offsetof(U_WMRSETDIBTODEV, dib       ));
+   *cUsage     = *(uint16_t *)(contents + offsetof(U_WMRSETDIBTODEV, cUsage));
+   *ScanCount  = *(uint16_t *)(contents + offsetof(U_WMRSETDIBTODEV, ScanCount));
+   *StartScan  = *(uint16_t *)(contents + offsetof(U_WMRSETDIBTODEV, StartScan));
+   Src->y      = *(int16_t *)(contents + offsetof(U_WMRSETDIBTODEV, ySrc));
+   Src->x      = *(int16_t *)(contents + offsetof(U_WMRSETDIBTODEV, xSrc));
+   cwh->y      = *(int16_t *)(contents + offsetof(U_WMRSETDIBTODEV, Height));
+   cwh->x      = *(int16_t *)(contents + offsetof(U_WMRSETDIBTODEV, Width));
+   Dst->y      = *(int16_t *)(contents + offsetof(U_WMRSETDIBTODEV, yDst));
+   Dst->x      = *(int16_t *)(contents + offsetof(U_WMRSETDIBTODEV, xDst));
+   *dib        =             (contents + offsetof(U_WMRSETDIBTODEV, dib));
    if(!packed_DIB_safe(*dib, *dib+size))return(0);
    return(size);
 }
@@ -5862,7 +5862,7 @@ int U_WMRSETDIBTODEV_get(
 int U_WMRSELECTPALETTE_get(
       const char  *contents, 
       uint16_t    *Palette
-   ){
+){
    return U_WMRCORE_1U16_get(contents, (U_SIZE_WMRSELECTPALETTE), Palette);
 }
 
@@ -5873,7 +5873,7 @@ int U_WMRSELECTPALETTE_get(
 */
 int U_WMRREALIZEPALETTE_get(
       const char  *contents
-   ){
+){
    return U_WMRCORE_RECSAFE_get(contents, (U_SIZE_WMRREALIZEPALETTE));
 }
 
@@ -5888,7 +5888,7 @@ int U_WMRANIMATEPALETTE_get(
       const char  *contents,
       U_PALETTE   *Palette,
       const char **PalEntries 
-   ){
+){
    return U_WMRCORE_PALETTE_get(contents, (U_SIZE_WMRANIMATEPALETTE), Palette, PalEntries);
 }
 
@@ -5903,7 +5903,7 @@ int U_WMRSETPALENTRIES_get(
       const char  *contents, 
       U_PALETTE   *Palette,
       const char **PalEntries 
-   ){
+){
    return U_WMRCORE_PALETTE_get(contents, (U_SIZE_WMRSETPALENTRIES), Palette, PalEntries);
 }
 
@@ -5920,7 +5920,7 @@ int U_WMRPOLYPOLYGON_get(
       uint16_t          *nPolys,
       const uint16_t   **aPolyCounts,
       const char       **Points
-   ){
+){
    int        size = U_WMRCORE_RECSAFE_get(contents, (U_SIZE_WMRPOLYPOLYGON));
    if(!size)return(0);
    contents +=                             offsetof(U_WMRPOLYPOLYGON, PPolygon);
@@ -5939,7 +5939,7 @@ int U_WMRPOLYPOLYGON_get(
 int U_WMRRESIZEPALETTE_get(
       const char  *contents, 
       uint16_t    *Palette
-   ){
+){
    return U_WMRCORE_1U16_get(contents, (U_SIZE_WMRRESIZEPALETTE), Palette);
 }
 
@@ -5987,30 +5987,30 @@ int U_WMRDIBBITBLT_get(
       U_POINT16 *  Src,
       uint32_t    *dwRop3,
       const char **dib
-   ){
+){
    uint8_t  xb;
    uint32_t size = U_WMRCORE_RECSAFE_get(contents, (U_SIZE_WMRDIBBITBLT_NOPX));
    if(!size)return(0);
-   xb                    = *(uint8_t *)( contents + offsetof(U_METARECORD, xb));
+   xb                    = *(uint8_t *)(contents + offsetof(U_METARECORD, xb));
    if(U_TEST_NOPXB(size,xb)){ /* no bitmap */
-      memcpy(dwRop3,                   ( contents + offsetof(U_WMRDIBBITBLT_NOPX, rop3w)), 4);
-              Src->y     = *(int16_t *)( contents + offsetof(U_WMRDIBBITBLT_NOPX, ySrc      ));
-              Src->x     = *(int16_t *)( contents + offsetof(U_WMRDIBBITBLT_NOPX, xSrc      ));
-              cwh->y     = *(int16_t *)( contents + offsetof(U_WMRDIBBITBLT_NOPX, Height    ));
-              cwh->x     = *(int16_t *)( contents + offsetof(U_WMRDIBBITBLT_NOPX, Width     ));
-              Dst->y     = *(int16_t *)( contents + offsetof(U_WMRDIBBITBLT_NOPX, yDst      ));
-              Dst->x     = *(int16_t *)( contents + offsetof(U_WMRDIBBITBLT_NOPX, xDst      ));
+      memcpy(dwRop3,                   (contents + offsetof(U_WMRDIBBITBLT_NOPX, rop3w)), 4);
+              Src->y     = *(int16_t *)(contents + offsetof(U_WMRDIBBITBLT_NOPX, ySrc));
+              Src->x     = *(int16_t *)(contents + offsetof(U_WMRDIBBITBLT_NOPX, xSrc));
+              cwh->y     = *(int16_t *)(contents + offsetof(U_WMRDIBBITBLT_NOPX, Height));
+              cwh->x     = *(int16_t *)(contents + offsetof(U_WMRDIBBITBLT_NOPX, Width));
+              Dst->y     = *(int16_t *)(contents + offsetof(U_WMRDIBBITBLT_NOPX, yDst));
+              Dst->x     = *(int16_t *)(contents + offsetof(U_WMRDIBBITBLT_NOPX, xDst));
               *dib       = NULL;
    }
    else { /* yes bitmap */
-      memcpy(dwRop3,                   ( contents + offsetof(U_WMRDIBBITBLT_PX, rop3w)), 4);
-              Src->y     = *(int16_t *)( contents + offsetof(U_WMRDIBBITBLT_PX, ySrc      ));
-              Src->x     = *(int16_t *)( contents + offsetof(U_WMRDIBBITBLT_PX, xSrc      ));
-              cwh->y     = *(int16_t *)( contents + offsetof(U_WMRDIBBITBLT_PX, Height    ));
-              cwh->x     = *(int16_t *)( contents + offsetof(U_WMRDIBBITBLT_PX, Width     ));
-              Dst->y     = *(int16_t *)( contents + offsetof(U_WMRDIBBITBLT_PX, yDst      ));
-              Dst->x     = *(int16_t *)( contents + offsetof(U_WMRDIBBITBLT_PX, xDst      ));
-              *dib       =             ( contents + offsetof(U_WMRDIBBITBLT_PX, dib       ));
+      memcpy(dwRop3,                   (contents + offsetof(U_WMRDIBBITBLT_PX, rop3w)), 4);
+              Src->y     = *(int16_t *)(contents + offsetof(U_WMRDIBBITBLT_PX, ySrc));
+              Src->x     = *(int16_t *)(contents + offsetof(U_WMRDIBBITBLT_PX, xSrc));
+              cwh->y     = *(int16_t *)(contents + offsetof(U_WMRDIBBITBLT_PX, Height));
+              cwh->x     = *(int16_t *)(contents + offsetof(U_WMRDIBBITBLT_PX, Width));
+              Dst->y     = *(int16_t *)(contents + offsetof(U_WMRDIBBITBLT_PX, yDst));
+              Dst->x     = *(int16_t *)(contents + offsetof(U_WMRDIBBITBLT_PX, xDst));
+              *dib       =             (contents + offsetof(U_WMRDIBBITBLT_PX, dib));
               if(!packed_DIB_safe(*dib, *dib+size))return(0);
    }
    return(size);
@@ -6035,34 +6035,34 @@ int U_WMRDIBSTRETCHBLT_get(
       U_POINT16 *  cSrc,
       uint32_t    *dwRop3,
       const char **dib
-   ){
+){
    uint8_t  xb;
    uint32_t size = U_WMRCORE_RECSAFE_get(contents, (U_SIZE_WMRDIBSTRETCHBLT_NOPX));
    if(!size)return(0);
-   xb                    = *(uint8_t *)( contents + offsetof(U_METARECORD, xb));
+   xb                    = *(uint8_t *)(contents + offsetof(U_METARECORD, xb));
    if(U_TEST_NOPXB(size,xb)){ /* no bitmap */
-      memcpy(dwRop3 ,                  ( contents + offsetof(U_WMRDIBSTRETCHBLT_NOPX, rop3w)), 4);
-              Src->y     = *(int16_t *)( contents + offsetof(U_WMRDIBSTRETCHBLT_NOPX, ySrc      ));
-              Src->x     = *(int16_t *)( contents + offsetof(U_WMRDIBSTRETCHBLT_NOPX, xSrc      ));
-              cSrc->y    = *(int16_t *)( contents + offsetof(U_WMRDIBSTRETCHBLT_NOPX, hSrc      ));
-              cSrc->x    = *(int16_t *)( contents + offsetof(U_WMRDIBSTRETCHBLT_NOPX, wSrc      ));
-              Dst->y     = *(int16_t *)( contents + offsetof(U_WMRDIBSTRETCHBLT_NOPX, yDst      ));
-              Dst->x     = *(int16_t *)( contents + offsetof(U_WMRDIBSTRETCHBLT_NOPX, xDst      ));
-              cDst->y    = *(int16_t *)( contents + offsetof(U_WMRDIBSTRETCHBLT_NOPX, hDst      ));
-              cDst->x    = *(int16_t *)( contents + offsetof(U_WMRDIBSTRETCHBLT_NOPX, wDst      ));
+      memcpy(dwRop3 ,                  (contents + offsetof(U_WMRDIBSTRETCHBLT_NOPX, rop3w)), 4);
+              Src->y     = *(int16_t *)(contents + offsetof(U_WMRDIBSTRETCHBLT_NOPX, ySrc));
+              Src->x     = *(int16_t *)(contents + offsetof(U_WMRDIBSTRETCHBLT_NOPX, xSrc));
+              cSrc->y    = *(int16_t *)(contents + offsetof(U_WMRDIBSTRETCHBLT_NOPX, hSrc));
+              cSrc->x    = *(int16_t *)(contents + offsetof(U_WMRDIBSTRETCHBLT_NOPX, wSrc));
+              Dst->y     = *(int16_t *)(contents + offsetof(U_WMRDIBSTRETCHBLT_NOPX, yDst));
+              Dst->x     = *(int16_t *)(contents + offsetof(U_WMRDIBSTRETCHBLT_NOPX, xDst));
+              cDst->y    = *(int16_t *)(contents + offsetof(U_WMRDIBSTRETCHBLT_NOPX, hDst));
+              cDst->x    = *(int16_t *)(contents + offsetof(U_WMRDIBSTRETCHBLT_NOPX, wDst));
               *dib       = NULL;
    }
    else { /* yes bitmap */
-      memcpy(dwRop3 ,                  ( contents + offsetof(U_WMRDIBSTRETCHBLT_PX, rop3w)), 4);
-              Src->y     = *(int16_t *)( contents + offsetof(U_WMRDIBSTRETCHBLT_PX, ySrc      ));
-              Src->x     = *(int16_t *)( contents + offsetof(U_WMRDIBSTRETCHBLT_PX, xSrc      ));
-              cSrc->y    = *(int16_t *)( contents + offsetof(U_WMRDIBSTRETCHBLT_PX, hSrc      ));
-              cSrc->x    = *(int16_t *)( contents + offsetof(U_WMRDIBSTRETCHBLT_PX, wSrc      ));
-              Dst->y     = *(int16_t *)( contents + offsetof(U_WMRDIBSTRETCHBLT_PX, yDst      ));
-              Dst->x     = *(int16_t *)( contents + offsetof(U_WMRDIBSTRETCHBLT_PX, xDst      ));
-              cDst->y    = *(int16_t *)( contents + offsetof(U_WMRDIBSTRETCHBLT_PX, hDst      ));
-              cDst->x    = *(int16_t *)( contents + offsetof(U_WMRDIBSTRETCHBLT_PX, wDst      ));
-              *dib       =             ( contents + offsetof(U_WMRDIBSTRETCHBLT_PX, dib       ));
+      memcpy(dwRop3 ,                  (contents + offsetof(U_WMRDIBSTRETCHBLT_PX, rop3w)), 4);
+              Src->y     = *(int16_t *)(contents + offsetof(U_WMRDIBSTRETCHBLT_PX, ySrc));
+              Src->x     = *(int16_t *)(contents + offsetof(U_WMRDIBSTRETCHBLT_PX, xSrc));
+              cSrc->y    = *(int16_t *)(contents + offsetof(U_WMRDIBSTRETCHBLT_PX, hSrc));
+              cSrc->x    = *(int16_t *)(contents + offsetof(U_WMRDIBSTRETCHBLT_PX, wSrc));
+              Dst->y     = *(int16_t *)(contents + offsetof(U_WMRDIBSTRETCHBLT_PX, yDst));
+              Dst->x     = *(int16_t *)(contents + offsetof(U_WMRDIBSTRETCHBLT_PX, xDst));
+              cDst->y    = *(int16_t *)(contents + offsetof(U_WMRDIBSTRETCHBLT_PX, hDst));
+              cDst->x    = *(int16_t *)(contents + offsetof(U_WMRDIBSTRETCHBLT_PX, wDst));
+              *dib       =             (contents + offsetof(U_WMRDIBSTRETCHBLT_PX, dib));
               if(!packed_DIB_safe(*dib, *dib+size))return(0);
    }
    return(size);
@@ -6086,12 +6086,12 @@ int U_WMRDIBCREATEPATTERNBRUSH_get(
       uint16_t    *cUsage,
       const char **Bm16,
       const char **dib
-   ){
+){
    int  size = U_WMRCORE_RECSAFE_get(contents, (U_SIZE_WMRDIBCREATEPATTERNBRUSH));
    if(!size)return(0);
 
-   *Style   = *(uint16_t *)(contents + offsetof(U_WMRDIBCREATEPATTERNBRUSH, Style  ));
-   *cUsage  = *(uint16_t *)(contents + offsetof(U_WMRDIBCREATEPATTERNBRUSH, cUsage ));
+   *Style   = *(uint16_t *)(contents + offsetof(U_WMRDIBCREATEPATTERNBRUSH, Style));
+   *cUsage  = *(uint16_t *)(contents + offsetof(U_WMRDIBCREATEPATTERNBRUSH, cUsage));
    if(*Style == U_BS_PATTERN){
       *Bm16 = (contents + offsetof(U_WMRDIBCREATEPATTERNBRUSH, Src));
       *dib  = NULL;
@@ -6137,21 +6137,21 @@ int U_WMRSTRETCHDIB_get(
       uint16_t    *cUsage,
       uint32_t    *dwRop3,
       const char **dib
-   ){
+){
    int  size = U_WMRCORE_RECSAFE_get(contents, (U_SIZE_WMRSTRETCHDIB));
    if(!size)return(0);
 
-   memcpy(dwRop3,            ( contents + offsetof(U_WMRSTRETCHDIB, rop3w)), 4);
-   *cUsage    = *(uint16_t *)( contents + offsetof(U_WMRSTRETCHDIB, cUsage    ));
-   cSrc->y    = *(int16_t *)(  contents + offsetof(U_WMRSTRETCHDIB, hSrc      ));
-   cSrc->x    = *(int16_t *)(  contents + offsetof(U_WMRSTRETCHDIB, wSrc      )); 
-   Src->y     = *(int16_t *)(  contents + offsetof(U_WMRSTRETCHDIB, ySrc      ));  
-   Src->x     = *(int16_t *)(  contents + offsetof(U_WMRSTRETCHDIB, xSrc      ));  
-   cDst->y    = *(int16_t *)(  contents + offsetof(U_WMRSTRETCHDIB, hDst      ));
-   cDst->x    = *(int16_t *)(  contents + offsetof(U_WMRSTRETCHDIB, wDst      )); 
-   Dst->y     = *(int16_t *)(  contents + offsetof(U_WMRSTRETCHDIB, yDst      ));  
-   Dst->x     = *(int16_t *)(  contents + offsetof(U_WMRSTRETCHDIB, xDst      ));
-   *dib       =             (  contents + offsetof(U_WMRSTRETCHDIB, dib       ));
+   memcpy(dwRop3,            (contents + offsetof(U_WMRSTRETCHDIB, rop3w)), 4);
+   *cUsage    = *(uint16_t *)(contents + offsetof(U_WMRSTRETCHDIB, cUsage));
+   cSrc->y    = *(int16_t *)(contents + offsetof(U_WMRSTRETCHDIB, hSrc));
+   cSrc->x    = *(int16_t *)(contents + offsetof(U_WMRSTRETCHDIB, wSrc)); 
+   Src->y     = *(int16_t *)(contents + offsetof(U_WMRSTRETCHDIB, ySrc));  
+   Src->x     = *(int16_t *)(contents + offsetof(U_WMRSTRETCHDIB, xSrc));  
+   cDst->y    = *(int16_t *)(contents + offsetof(U_WMRSTRETCHDIB, hDst));
+   cDst->x    = *(int16_t *)(contents + offsetof(U_WMRSTRETCHDIB, wDst)); 
+   Dst->y     = *(int16_t *)(contents + offsetof(U_WMRSTRETCHDIB, yDst));  
+   Dst->x     = *(int16_t *)(contents + offsetof(U_WMRSTRETCHDIB, xDst));
+   *dib       =             (contents + offsetof(U_WMRSTRETCHDIB, dib));
    if(!packed_DIB_safe(*dib, *dib+size))return(0);
    return(size);
 }
@@ -6187,14 +6187,14 @@ int U_WMREXTFLOODFILL_get(
       uint16_t    *Mode, 
       U_COLORREF  *Color, 
       U_POINT16 *  coord
-   ){
+){
    return  U_WMRCORE_1U16_CRF_2U16_get(
       contents,
       Mode,
       Color,
       U_P16(coord->y),
       U_P16(coord->x)
-   );
+);
 }
 
 //! \cond
@@ -6876,7 +6876,7 @@ int U_WMREF_get(void){
 int U_WMRDELETEOBJECT_get(
       const char *contents,
       uint16_t   *Object
-   ){
+){
    return U_WMRCORE_1U16_get(contents, (U_SIZE_WMRDELETEOBJECT), Object);
 }
 
@@ -6917,7 +6917,7 @@ int U_WMRCREATEPALETTE_get(
       const char  *contents,
       U_PALETTE   *Palette,
       const char **PalEntries 
-   ){
+){
    return U_WMRCORE_PALETTE_get(contents, (U_SIZE_WMRCREATEPALETTE), Palette, PalEntries);
 }
 
@@ -6941,7 +6941,7 @@ int U_WMRCREATEPATTERNBRUSH_get(
       U_BITMAP16   *Bm16,
       int          *pasize,
       const char  **Pattern
-   ){
+){
    int off = U_SIZE_METARECORD;
    /* size in next one is 
       6 (core header) + 14 (truncated bitmap16) + 18 bytes reserved + 2 bytes (at least) for data */
@@ -6965,7 +6965,7 @@ int U_WMRCREATEPATTERNBRUSH_get(
 int U_WMRCREATEPENINDIRECT_get(
       const char   *contents,
       U_PEN        *pen
-   ){
+){
    int  size = U_WMRCORE_RECSAFE_get(contents, (U_SIZE_WMRCREATEPENINDIRECT));
    if(!size)return(0);
    memcpy(pen, contents + offsetof(U_WMRCREATEPENINDIRECT, pen), U_SIZE_PEN);
@@ -6981,7 +6981,7 @@ int U_WMRCREATEPENINDIRECT_get(
 int U_WMRCREATEFONTINDIRECT_get(
       const char   *contents,
       const char  **font
-   ){
+){
    int size = U_WMRCORE_2U16_N16_get(contents, (U_SIZE_WMRCREATEFONTINDIRECT), NULL, NULL, font);
    if(size){
        if(IS_MEM_UNSAFE(*font, U_SIZE_FONT_CORE, contents+size))return(0);
@@ -6999,7 +6999,7 @@ int U_WMRCREATEFONTINDIRECT_get(
 int U_WMRCREATEBRUSHINDIRECT_get(
       const char   *contents,
       const char  **brush
-    ){
+){
     // U_SIZE_WMRCREATEBRUSHINDIRECT is everything, no variable part, so the test below is sufficient
     return U_WMRCORE_2U16_N16_get(contents, (U_SIZE_WMRCREATEBRUSHINDIRECT), NULL, NULL, brush);
 }
@@ -7027,7 +7027,7 @@ int U_WMRCREATEBITMAP_get(void){
 int U_WMRCREATEREGION_get(
       const char   *contents,
       const char  **Region
-    ){
+){
    return U_WMRCORE_2U16_N16_get(contents, (U_SIZE_WMRCREATEREGION), NULL, NULL, Region);
 }
 

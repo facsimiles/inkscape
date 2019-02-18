@@ -191,23 +191,23 @@ void CalligraphicTool::set(const Inkscape::Preferences::Entry& val) {
 static double
 flerp(double f0, double f1, double p)
 {
-    return f0 + ( f1 - f0 ) * p;
+    return f0 + (f1 - f0) * p;
 }
 
 ///* Get normalized point */
 //Geom::Point CalligraphicTool::getNormalizedPoint(Geom::Point v) const {
 //    Geom::Rect drect = desktop->get_display_area();
 //
-//    double const max = MAX ( drect.dimensions()[Geom::X], drect.dimensions()[Geom::Y] );
+//    double const max = MAX (drect.dimensions()[Geom::X], drect.dimensions()[Geom::Y]);
 //
-//    return Geom::Point(( v[Geom::X] - drect.min()[Geom::X] ) / max,  ( v[Geom::Y] - drect.min()[Geom::Y] ) / max);
+//    return Geom::Point((v[Geom::X] - drect.min()[Geom::X]) / max,  (v[Geom::Y] - drect.min()[Geom::Y]) / max);
 //}
 //
 ///* Get view point */
 //Geom::Point CalligraphicTool::getViewPoint(Geom::Point n) const {
 //    Geom::Rect drect = desktop->get_display_area();
 //
-//    double const max = MAX ( drect.dimensions()[Geom::X], drect.dimensions()[Geom::Y] );
+//    double const max = MAX (drect.dimensions()[Geom::X], drect.dimensions()[Geom::Y]);
 //
 //    return Geom::Point(n[Geom::X] * max + drect.min()[Geom::X], n[Geom::Y] * max + drect.min()[Geom::Y]);
 //}
@@ -260,7 +260,7 @@ bool CalligraphicTool::apply(Geom::Point p) {
     // This prevents flips, blobs, and jerks caused by microscopic tremor of the tablet pen,
     // especially bothersome at the start of the stroke where we don't yet have the inertia to
     // smooth them out.
-    if ( Geom::L2(force) < DYNA_EPSILON || (this->vel_max < DYNA_VEL_START && Geom::L2(force) < DYNA_EPSILON_START)) {
+    if (Geom::L2(force) < DYNA_EPSILON || (this->vel_max < DYNA_VEL_START && Geom::L2(force) < DYNA_EPSILON_START)) {
         return FALSE;
     }
 
@@ -288,7 +288,7 @@ bool CalligraphicTool::apply(Geom::Point p) {
     }
     else {
         // 1b. fixed dc->angle (absolutely flat nib):
-        double const radians = ( (this->angle - 90) / 180.0 ) * M_PI;
+        double const radians = ((this->angle - 90) / 180.0) * M_PI;
         Geom::Point ang1 = Geom::Point(-sin(radians),  cos(radians));
         ang1.y() *= -this->desktop->yaxisdir();
         a1 = atan2(ang1);
@@ -296,7 +296,7 @@ bool CalligraphicTool::apply(Geom::Point p) {
 
     // 2. perpendicular to dc->vel (absolutely non-flat nib):
     gdouble const mag_vel = Geom::L2(this->vel);
-    if ( mag_vel < DYNA_EPSILON ) {
+    if (mag_vel < DYNA_EPSILON) {
         return FALSE;
     }
     Geom::Point ang2 = Geom::rot90(this->vel) / mag_vel;
@@ -322,7 +322,7 @@ bool CalligraphicTool::apply(Geom::Point p) {
     // Try to detect a sudden flip when the new angle differs too much from the previous for the
     // current velocity; in that case discard this move
     double angle_delta = Geom::L2(Geom::Point (cos (new_ang), sin (new_ang)) - this->ang);
-    if ( angle_delta / Geom::L2(this->vel) > 4000 ) {
+    if (angle_delta / Geom::L2(this->vel) > 4000) {
         return FALSE;
     }
 
@@ -342,7 +342,7 @@ bool CalligraphicTool::apply(Geom::Point p) {
 }
 
 void CalligraphicTool::brush() {
-    g_assert( this->npoints >= 0 && this->npoints < SAMPLING_SIZE );
+    g_assert(this->npoints >= 0 && this->npoints < SAMPLING_SIZE);
 
     // How much velocity thins strokestyle
     double vel_thin = flerp (0, 160, this->vel_thin);
@@ -381,8 +381,8 @@ void CalligraphicTool::brush() {
             x1 = 2.0 * g_random_double_range(0,1) - 1.0;
             x2 = 2.0 * g_random_double_range(0,1) - 1.0;
             w = x1 * x1 + x2 * x2;
-        } while ( w >= 1.0 );
-        w = sqrt( (-2.0 * log( w ) ) / w );
+        } while (w >= 1.0);
+        w = sqrt((-2.0 * log(w)) / w);
         y1 = x1 * w;
         y2 = x2 * w;
 
@@ -395,7 +395,7 @@ void CalligraphicTool::brush() {
         tremble_right = (y2)*this->tremor * (0.15 + 0.8*width) * (0.35 + 14*Geom::L2(this->vel));
     }
 
-    if ( width < 0.02 * this->width ) {
+    if (width < 0.02 * this->width) {
         width = 0.02 * this->width;
     }
 
@@ -461,10 +461,10 @@ bool CalligraphicTool::root_handler(GdkEvent* event) {
                 this->npoints = 0;
 
                 sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
-                                    ( GDK_KEY_PRESS_MASK |
+                                    (GDK_KEY_PRESS_MASK |
                                       GDK_BUTTON_RELEASE_MASK |
                                       GDK_POINTER_MOTION_MASK |
-                                      GDK_BUTTON_PRESS_MASK ),
+                                      GDK_BUTTON_PRESS_MASK),
                                     nullptr,
                                     event->button.time);
 
@@ -526,7 +526,7 @@ bool CalligraphicTool::root_handler(GdkEvent* event) {
                 }
             }
 
-            if ( this->is_drawing && (event->motion.state & GDK_BUTTON1_MASK) && !this->space_panning) {
+            if (this->is_drawing && (event->motion.state & GDK_BUTTON1_MASK) && !this->space_panning) {
                 this->dragging = TRUE;
 
                 if (event->motion.state & GDK_CONTROL_MASK && this->hatch_item) { // hatching
@@ -575,10 +575,10 @@ bool CalligraphicTool::root_handler(GdkEvent* event) {
                         }
                     }
 
-                    if (   this->hatch_escaped  // already escaped, do not reattach
+                    if (this->hatch_escaped  // already escaped, do not reattach
                         || (speed < SPEED_MIN) // stuck; most likely reached end of traced stroke
                         || (this->hatch_spacing > 0 && hatch_dist > 50 * this->hatch_spacing) // went too far from the guide
-                        ) {
+) {
                         // We are NOT attracted to the guide!
 
                         //g_print ("\nlast_nearest %g %g   nearest %g %g  pointer %g %g  pos %d %g\n", dc->last_nearest[Geom::X], dc->last_nearest[Geom::Y], nearest[Geom::X], nearest[Geom::Y], pointer[Geom::X], pointer[Geom::Y], position->piece, position->t);
@@ -673,9 +673,9 @@ bool CalligraphicTool::root_handler(GdkEvent* event) {
                     break;
                 }
 
-                if ( this->cur != this->last ) {
+                if (this->cur != this->last) {
                     this->brush();
-                    g_assert( this->npoints > 0 );
+                    g_assert(this->npoints > 0);
                     this->fit_and_split(false);
                 }
                 ret = TRUE;
@@ -923,7 +923,7 @@ void CalligraphicTool::set_to_accumulated(bool unionize, bool subtract) {
 
         Geom::PathVector pathv = this->accumulated->get_pathvector() * desktop->dt2doc();
         gchar *str = sp_svg_write_path(pathv);
-        g_assert( str != nullptr );
+        g_assert(str != nullptr);
         this->repr->setAttribute("d", str);
         g_free(str);
 
@@ -970,11 +970,11 @@ add_cap(SPCurve *curve,
         Geom::Point const &to,
         double rounding)
 {
-    if (Geom::L2( to - from ) > DYNA_EPSILON) {
-        Geom::Point vel = rounding * Geom::rot90( to - from ) / sqrt(2.0);
+    if (Geom::L2(to - from) > DYNA_EPSILON) {
+        Geom::Point vel = rounding * Geom::rot90(to - from) / sqrt(2.0);
         double mag = Geom::L2(vel);
 
-        Geom::Point v = mag * Geom::rot90( to - from ) / Geom::L2( to - from );
+        Geom::Point v = mag * Geom::rot90(to - from) / Geom::L2(to - from);
         curve->curveto(from + v, to + v, to);
     }
 }
@@ -1035,20 +1035,20 @@ static double square(double const x)
 }
 
 void CalligraphicTool::fit_and_split(bool release) {
-    double const tolerance_sq = square( desktop->w2d().descrim() * TOLERANCE_CALLIGRAPHIC );
+    double const tolerance_sq = square(desktop->w2d().descrim() * TOLERANCE_CALLIGRAPHIC);
 
 #ifdef DYNA_DRAW_VERBOSE
     g_print("[F&S:R=%c]", release?'T':'F');
 #endif
 
-    if (!( this->npoints > 0 && this->npoints < SAMPLING_SIZE )) {
+    if (!(this->npoints > 0 && this->npoints < SAMPLING_SIZE)) {
         return; // just clicked
     }
 
-    if ( this->npoints == SAMPLING_SIZE - 1 || release ) {
+    if (this->npoints == SAMPLING_SIZE - 1 || release) {
 #define BEZIER_SIZE       4
 #define BEZIER_MAX_BEZIERS  8
-#define BEZIER_MAX_LENGTH ( BEZIER_SIZE * BEZIER_MAX_BEZIERS )
+#define BEZIER_MAX_LENGTH (BEZIER_SIZE * BEZIER_MAX_BEZIERS)
 
 #ifdef DYNA_DRAW_VERBOSE
         g_print("[F&S:#] dc->npoints:%d, release:%s\n",
@@ -1056,7 +1056,7 @@ void CalligraphicTool::fit_and_split(bool release) {
 #endif
 
         /* Current calligraphic */
-        if ( this->cal1->is_empty() || this->cal2->is_empty() ) {
+        if (this->cal1->is_empty() || this->cal2->is_empty()) {
             /* dc->npoints > 0 */
             /* g_print("calligraphics(1|2) reset\n"); */
             this->cal1->reset();
@@ -1069,14 +1069,14 @@ void CalligraphicTool::fit_and_split(bool release) {
         Geom::Point b1[BEZIER_MAX_LENGTH];
         gint const nb1 = Geom::bezier_fit_cubic_r(b1, this->point1, this->npoints,
                                                tolerance_sq, BEZIER_MAX_BEZIERS);
-        g_assert( nb1 * BEZIER_SIZE <= gint(G_N_ELEMENTS(b1)) );
+        g_assert(nb1 * BEZIER_SIZE <= gint(G_N_ELEMENTS(b1)));
 
         Geom::Point b2[BEZIER_MAX_LENGTH];
         gint const nb2 = Geom::bezier_fit_cubic_r(b2, this->point2, this->npoints,
                                                tolerance_sq, BEZIER_MAX_BEZIERS);
-        g_assert( nb2 * BEZIER_SIZE <= gint(G_N_ELEMENTS(b2)) );
+        g_assert(nb2 * BEZIER_SIZE <= gint(G_N_ELEMENTS(b2)));
 
-        if ( nb1 != -1 && nb2 != -1 ) {
+        if (nb1 != -1 && nb2 != -1) {
             /* Fit and draw and reset state */
 #ifdef DYNA_DRAW_VERBOSE
             g_print("nb1:%d nb2:%d\n", nb1, nb2);
@@ -1089,7 +1089,7 @@ void CalligraphicTool::fit_and_split(bool release) {
                     this->currentcurve->curveto(bp1[1], bp1[2], bp1[3]);
                 }
                 this->currentcurve->lineto(b2[BEZIER_SIZE*(nb2-1) + 3]);
-                for (Geom::Point *bp2 = b2 + BEZIER_SIZE * ( nb2 - 1 ); bp2 >= b2; bp2 -= BEZIER_SIZE) {
+                for (Geom::Point *bp2 = b2 + BEZIER_SIZE * (nb2 - 1); bp2 >= b2; bp2 -= BEZIER_SIZE) {
                     this->currentcurve->curveto(bp2[2], bp2[1], bp2[0]);
                 }
                 // FIXME: dc->segments is always NULL at this point??

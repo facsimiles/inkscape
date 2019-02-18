@@ -45,7 +45,7 @@ Prototype::Prototype() :
     }
 
     connectionDesktopChanged = desktopTracker.connectDesktopChanged(
-        sigc::mem_fun(*this, &Prototype::handleDesktopChanged) );
+        sigc::mem_fun(*this, &Prototype::handleDesktopChanged));
     desktopTracker.connect(GTK_WIDGET(gobj()));
 
     // This results in calling handleDocumentReplaced twice. Fix me!
@@ -123,7 +123,7 @@ Prototype::handleDesktopChanged(SPDesktop* desktop) {
     connectionSelectionChanged.disconnect();
     connectionDocumentReplaced.disconnect();
 
-    setDesktop( desktop );
+    setDesktop(desktop);
 
     connectionSelectionChanged = desktop->getSelection()->connectChanged(
         sigc::hide(sigc::mem_fun(this, &Prototype::handleSelectionChanged)));

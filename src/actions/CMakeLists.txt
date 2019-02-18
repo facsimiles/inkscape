@@ -7,6 +7,6 @@ set(actions_SRC
   # HEADERS
   # actions-base.h
   # actions-selection.h
-  )
+)
 
 add_inkscape_source("${actions_SRC}")

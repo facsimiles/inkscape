@@ -208,7 +208,7 @@ ConnectorTool::~ConnectorTool()
         this->shref = nullptr;
     }
 
-    g_assert( this->newConnRef == nullptr );
+    g_assert(this->newConnRef == nullptr);
 }
 
 void ConnectorTool::setup()
@@ -220,7 +220,7 @@ void ConnectorTool::setup()
     this->sel_changed_connection.disconnect();
     this->sel_changed_connection = this->selection->connectChanged(
         sigc::mem_fun(this, &ConnectorTool::_selectionChanged)
-    );
+);
 
     /* Create red bpath */
     this->red_bpath = sp_canvas_bpath_new(this->desktop->getSketch(), nullptr);
@@ -291,8 +291,8 @@ void ConnectorTool::cc_clear_active_shape()
     if (this->active_shape == nullptr) {
         return;
     }
-    g_assert( this->active_shape_repr );
-    g_assert( this->active_shape_layer_repr );
+    g_assert(this->active_shape_repr);
+    g_assert(this->active_shape_layer_repr);
 
     this->active_shape = nullptr;
 
@@ -324,7 +324,7 @@ void ConnectorTool::cc_clear_active_conn()
     if (this->active_conn == nullptr) {
         return;
     }
-    g_assert( this->active_conn_repr );
+    g_assert(this->active_conn_repr);
 
     this->active_conn = nullptr;
 
@@ -469,7 +469,7 @@ bool ConnectorTool::_handleButtonPress(GdkEventButton const &bevent)
 
     bool ret = false;
 
-        if ( bevent.button == 1 && !this->space_panning ) {
+        if (bevent.button == 1 && !this->space_panning) {
             if (Inkscape::have_viable_layer(desktop, defaultMessageContext()) == false) {
                 return true;
             }
@@ -489,7 +489,7 @@ bool ConnectorTool::_handleButtonPress(GdkEventButton const &bevent)
                 /* This is allowed, if we just canceled curve */
             case SP_CONNECTOR_CONTEXT_IDLE:
             {
-                if ( this->npoints == 0 ) {
+                if (this->npoints == 0) {
                     this->cc_clear_active_conn();
 
                     this->desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Creating new connector"));
@@ -575,8 +575,8 @@ bool ConnectorTool::_handleMotionNotify(GdkEventMotion const &mevent)
 
     if (this->within_tolerance) {
         this->tolerance = prefs->getIntLimited("/options/dragtolerance/value", 0, 0, 100);
-        if ( ( abs( (gint) mevent.x - this->xp ) < this->tolerance ) &&
-             ( abs( (gint) mevent.y - this->yp ) < this->tolerance ) ) {
+        if ((abs((gint) mevent.x - this->xp) < this->tolerance) &&
+             (abs((gint) mevent.y - this->yp) < this->tolerance)) {
             return false;   // Do not drag if we're within tolerance from origin.
         }
     }
@@ -595,7 +595,7 @@ bool ConnectorTool::_handleMotionNotify(GdkEventMotion const &mevent)
     {
         gobble_motion_events(mevent.state);
         // This is movement during a connector creation.
-        if ( this->npoints > 0 ) {
+        if (this->npoints > 0) {
             m.setup(desktop);
             m.freeSnapReturnByRef(p, Inkscape::SNAPSOURCE_OTHER_HANDLE);
             m.unSetup();
@@ -608,14 +608,14 @@ bool ConnectorTool::_handleMotionNotify(GdkEventMotion const &mevent)
     case SP_CONNECTOR_CONTEXT_REROUTING:
     {
         gobble_motion_events(GDK_BUTTON1_MASK);
-        g_assert( SP_IS_PATH(this->clickeditem));
+        g_assert(SP_IS_PATH(this->clickeditem));
 
         m.setup(desktop);
         m.freeSnapReturnByRef(p, Inkscape::SNAPSOURCE_OTHER_HANDLE);
         m.unSetup();
 
         // Update the hidden path
-        Geom::Affine i2d ( (this->clickeditem)->i2dt_affine() );
+        Geom::Affine i2d ((this->clickeditem)->i2dt_affine());
         Geom::Affine d2i = i2d.inverse();
         SPPath *path = SP_PATH(this->clickeditem);
         SPCurve *curve = path->getCurve(true);
@@ -654,7 +654,7 @@ bool ConnectorTool::_handleButtonRelease(GdkEventButton const &revent)
 {
     bool ret = false;
 
-    if ( revent.button == 1 && !this->space_panning ) {
+    if (revent.button == 1 && !this->space_panning) {
         SPDocument *doc = desktop->getDocument();
         SnapManager &m = desktop->namedview->snap_manager;
 
@@ -732,7 +732,7 @@ bool ConnectorTool::_handleKeyPress(guint const keyval)
             DocumentUndo::undo(doc);
 
             this->state = SP_CONNECTOR_CONTEXT_IDLE;
-            desktop->messageStack()->flash( Inkscape::NORMAL_MESSAGE,
+            desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE,
                     _("Connector endpoint drag cancelled."));
             ret = true;
         } else if (this->npoints != 0) {
@@ -790,7 +790,7 @@ void ConnectorTool::_resetColors()
 
 void ConnectorTool::_setInitialPoint(Geom::Point const p)
 {
-    g_assert( this->npoints == 0 );
+    g_assert(this->npoints == 0);
 
     this->p[0] = p;
     this->p[1] = p;
@@ -800,7 +800,7 @@ void ConnectorTool::_setInitialPoint(Geom::Point const p)
 
 void ConnectorTool::_setSubsequentPoint(Geom::Point const p)
 {
-    g_assert( this->npoints != 0 );
+    g_assert(this->npoints != 0);
 
     Geom::Point o = desktop->dt2doc(this->p[0]);
     Geom::Point d = desktop->dt2doc(p);
@@ -822,7 +822,7 @@ void ConnectorTool::_setSubsequentPoint(Geom::Point const p)
     this->newConnRef->makePathInvalid();
     this->newConnRef->router()->processTransaction();
     // Recreate curve from libavoid route.
-    recreateCurve( this->red_curve, this->newConnRef, this->curvature );
+    recreateCurve(this->red_curve, this->newConnRef, this->curvature);
     this->red_curve->transform(desktop->doc2dt());
     sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->red_bpath), this->red_curve, true);
 }
@@ -877,15 +877,15 @@ void ConnectorTool::_flushWhite(SPCurve *gc)
     SPDocument *doc = desktop->getDocument();
     Inkscape::XML::Document *xml_doc = doc->getReprDoc();
 
-    if ( c && !c->is_empty() ) {
+    if (c && !c->is_empty()) {
         /* We actually have something to write */
 
         Inkscape::XML::Node *repr = xml_doc->createElement("svg:path");
         /* Set style */
         sp_desktop_apply_style_tool(desktop, repr, "/tools/connector", false);
 
-        gchar *str = sp_svg_write_path( c->get_pathvector() );
-        g_assert( str != nullptr );
+        gchar *str = sp_svg_write_path(c->get_pathvector());
+        g_assert(str != nullptr);
         repr->setAttribute("d", str);
         g_free(str);
 
@@ -894,17 +894,17 @@ void ConnectorTool::_flushWhite(SPCurve *gc)
         this->newconn->transform = SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
 
         bool connection = false;
-        this->newconn->setAttribute( "inkscape:connector-type",
-                                   this->isOrthogonal ? "orthogonal" : "polyline", nullptr );
-        this->newconn->setAttribute( "inkscape:connector-curvature",
-                                   Glib::Ascii::dtostr(this->curvature).c_str(), nullptr );
+        this->newconn->setAttribute("inkscape:connector-type",
+                                   this->isOrthogonal ? "orthogonal" : "polyline", nullptr);
+        this->newconn->setAttribute("inkscape:connector-curvature",
+                                   Glib::Ascii::dtostr(this->curvature).c_str(), nullptr);
         if (this->shref) {
-            this->newconn->setAttribute( "inkscape:connection-start", this->shref, nullptr);
+            this->newconn->setAttribute("inkscape:connection-start", this->shref, nullptr);
             connection = true;
         }
 
         if (this->ehref) {
-            this->newconn->setAttribute( "inkscape:connection-end", this->ehref, nullptr);
+            this->newconn->setAttribute("inkscape:connection-end", this->ehref, nullptr);
             connection = true;
         }
         // Process pending updates.
@@ -1016,14 +1016,14 @@ static gboolean cc_generic_knot_handler(SPCanvasItem *, GdkEvent *event, SPKnot 
 
 static gboolean endpt_handler(SPKnot */*knot*/, GdkEvent *event, ConnectorTool *cc)
 {
-    //g_assert( SP_IS_CONNECTOR_CONTEXT(cc) );
+    //g_assert(SP_IS_CONNECTOR_CONTEXT(cc));
 
     gboolean consumed = FALSE;
 
     switch (event->type) {
     case GDK_BUTTON_PRESS:
-        g_assert( (cc->active_handle == cc->endpt_handle[0]) ||
-                  (cc->active_handle == cc->endpt_handle[1]) );
+        g_assert((cc->active_handle == cc->endpt_handle[0]) ||
+                  (cc->active_handle == cc->endpt_handle[1]));
         if (cc->state == SP_CONNECTOR_CONTEXT_IDLE) {
             cc->clickeditem = cc->active_conn;
             cc->clickedhandle = cc->active_handle;
@@ -1088,7 +1088,7 @@ void ConnectorTool::_activeShapeAddKnot(SPItem* item)
 
 void ConnectorTool::_setActiveShape(SPItem *item)
 {
-    g_assert(item != nullptr );
+    g_assert(item != nullptr);
 
     if (this->active_shape != item) {
         // The active shape has changed
@@ -1134,7 +1134,7 @@ void ConnectorTool::_setActiveShape(SPItem *item)
 
 void ConnectorTool::cc_set_active_conn(SPItem *item)
 {
-    g_assert( SP_IS_PATH(item) );
+    g_assert(SP_IS_PATH(item));
 
     const SPCurve *curve = SP_PATH(item)->getCurveForEdit(true);
     Geom::Affine i2dt = item->i2dt_affine();
@@ -1175,7 +1175,7 @@ void ConnectorTool::cc_set_active_conn(SPItem *item)
 
     for (int i = 0; i < 2; ++i) {
         // Create the handle if it doesn't exist
-        if ( this->endpt_handle[i] == nullptr ) {
+        if (this->endpt_handle[i] == nullptr) {
             SPKnot *knot = new SPKnot(this->desktop,
                     _("<b>Connector endpoint</b>: drag to reroute or connect to new shapes"));
 
@@ -1203,7 +1203,7 @@ void ConnectorTool::cc_set_active_conn(SPItem *item)
         if (this->endpt_handler_id[i]) {
             g_signal_handlers_disconnect_by_func(
                     G_OBJECT(this->endpt_handle[i]->item),
-                    (void*)G_CALLBACK(endpt_handler), (gpointer) this );
+                    (void*)G_CALLBACK(endpt_handler), (gpointer) this);
 
             this->endpt_handler_id[i] = 0;
         }
@@ -1236,7 +1236,7 @@ void cc_create_connection_point(ConnectorTool* cc)
 {
     if (cc->active_shape && cc->state == SP_CONNECTOR_CONTEXT_IDLE) {
         if (cc->selected_handle) {
-            cc_deselect_handle( cc->selected_handle );
+            cc_deselect_handle(cc->selected_handle);
         }
 
         SPKnot *knot = new SPKnot(cc->desktop, nullptr);
@@ -1247,7 +1247,7 @@ void cc_create_connection_point(ConnectorTool* cc)
 
         knot->_event_handler_id = 0;
 
-        cc_select_handle( knot );
+        cc_select_handle(knot);
         cc->selected_handle = knot;
         cc->selected_handle->show();
         cc->state = SP_CONNECTOR_CONTEXT_NEWCONNPOINT;
@@ -1258,7 +1258,7 @@ static bool cc_item_is_shape(SPItem *item)
 {
     if (SP_IS_PATH(item)) {
         const SPCurve * curve = (SP_SHAPE(item))->_curve;
-        if ( curve && !(curve->is_closed()) ) {
+        if (curve && !(curve->is_closed())) {
             // Open paths are connectors.
             return false;
         }

@@ -89,11 +89,11 @@ class BaseMatrixImpl
 
 	bool is_positive() const
 	{
-        for ( unsigned int i = 0; i < rows(); ++i )
+        for (unsigned int i = 0; i < rows(); ++i)
         {
-            for ( unsigned int j = 0; j < columns(); ++j )
+            for (unsigned int j = 0; j < columns(); ++j)
             {
-                if ( (*this)(i,j) <= 0 ) return false;
+                if ((*this)(i,j) <= 0) return false;
             }
         }
         return true;
@@ -101,11 +101,11 @@ class BaseMatrixImpl
 
 	bool is_negative() const
 	{
-        for ( unsigned int i = 0; i < rows(); ++i )
+        for (unsigned int i = 0; i < rows(); ++i)
         {
-            for ( unsigned int j = 0; j < columns(); ++j )
+            for (unsigned int j = 0; j < columns(); ++j)
             {
-                if ( (*this)(i,j) >= 0 ) return false;
+                if ((*this)(i,j) >= 0) return false;
             }
         }
         return true;
@@ -113,11 +113,11 @@ class BaseMatrixImpl
 
 	bool is_non_negative() const
 	{
-		for ( unsigned int i = 0; i < rows(); ++i )
+		for (unsigned int i = 0; i < rows(); ++i)
 		{
-			for ( unsigned int j = 0; j < columns(); ++j )
+			for (unsigned int j = 0; j < columns(); ++j)
 			{
-				if ( (*this)(i,j) < 0 ) return false;
+				if ((*this)(i,j) < 0) return false;
 			}
 		}
 		return true;
@@ -222,7 +222,7 @@ class MatrixImpl : public BaseMatrixImpl
 
 	typedef BaseMatrixImpl base_type;
 
-	void set_all( double x )
+	void set_all(double x)
 	{
 		gsl_matrix_set_all(m_matrix, x);
 	}
@@ -368,14 +368,14 @@ class Matrix: public detail::MatrixImpl
 
 	Matrix & operator=(Matrix const& _matrix)
 	{
-		assert( rows() == _matrix.rows() && columns() ==  _matrix.columns() );
+		assert(rows() == _matrix.rows() && columns() ==  _matrix.columns());
 		gsl_matrix_memcpy(m_matrix, _matrix.get_gsl_matrix());
 		return *this;
 	}
 
 	Matrix & operator=(base_type::base_type const& _matrix)
 	{
-		assert( rows() == _matrix.rows() && columns() ==  _matrix.columns() );
+		assert(rows() == _matrix.rows() && columns() ==  _matrix.columns());
 		gsl_matrix_memcpy(m_matrix, _matrix.get_gsl_matrix());
 		return *this;
 	}
@@ -397,27 +397,27 @@ class Matrix: public detail::MatrixImpl
 
 	Matrix & transpose()
 	{
-		return static_cast<Matrix &>( base_type::transpose() );
+		return static_cast<Matrix &>(base_type::transpose());
 	}
 
 	Matrix & scale(double x)
 	{
-		return static_cast<Matrix &>( base_type::scale(x) );
+		return static_cast<Matrix &>(base_type::scale(x));
 	}
 
 	Matrix & translate(double x)
 	{
-		return static_cast<Matrix &>( base_type::translate(x) );
+		return static_cast<Matrix &>(base_type::translate(x));
 	}
 
 	Matrix & operator+=(base_type::base_type const& _matrix)
 	{
-		return static_cast<Matrix &>( base_type::operator+=(_matrix) );
+		return static_cast<Matrix &>(base_type::operator+=(_matrix));
 	}
 
 	Matrix & operator-=(base_type::base_type const& _matrix)
 	{
-		return static_cast<Matrix &>( base_type::operator-=(_matrix) );
+		return static_cast<Matrix &>(base_type::operator-=(_matrix));
 	}
 
 	friend
@@ -454,11 +454,11 @@ class ConstMatrixView : public detail::BaseMatrixImpl
 
   public:
 	ConstMatrixView(const base_type & _matrix, size_t k1, size_t k2, size_t n1, size_t n2)
-		: m_matrix_view( gsl_matrix_const_submatrix(_matrix.get_gsl_matrix(), k1, k2, n1, n2) )
+		: m_matrix_view(gsl_matrix_const_submatrix(_matrix.get_gsl_matrix(), k1, k2, n1, n2))
 	{
 		m_rows = n1;
 		m_columns = n2;
-		m_matrix = const_cast<gsl_matrix*>( &(m_matrix_view.matrix) );
+		m_matrix = const_cast<gsl_matrix*>(&(m_matrix_view.matrix));
 	}
 
 	ConstMatrixView(const ConstMatrixView & _matrix)
@@ -467,7 +467,7 @@ class ConstMatrixView : public detail::BaseMatrixImpl
 	{
 		m_rows = _matrix.rows();
 		m_columns = _matrix.columns();
-		m_matrix = const_cast<gsl_matrix*>( &(m_matrix_view.matrix) );
+		m_matrix = const_cast<gsl_matrix*>(&(m_matrix_view.matrix));
 	}
 
 	ConstMatrixView(const base_type & _matrix)
@@ -475,7 +475,7 @@ class ConstMatrixView : public detail::BaseMatrixImpl
 	{
 		m_rows = _matrix.rows();
 		m_columns = _matrix.columns();
-		m_matrix = const_cast<gsl_matrix*>( &(m_matrix_view.matrix) );
+		m_matrix = const_cast<gsl_matrix*>(&(m_matrix_view.matrix));
 	}
 
   private:
@@ -521,41 +521,41 @@ class MatrixView : public detail::MatrixImpl
 
 	MatrixView & operator=(MatrixView const& _matrix)
 	{
-		assert( rows() == _matrix.rows() && columns() ==  _matrix.columns() );
+		assert(rows() == _matrix.rows() && columns() ==  _matrix.columns());
 		gsl_matrix_memcpy(m_matrix, _matrix.m_matrix);
 		return *this;
 	}
 
 	MatrixView & operator=(base_type::base_type const& _matrix)
 	{
-		assert( rows() == _matrix.rows() && columns() ==  _matrix.columns() );
+		assert(rows() == _matrix.rows() && columns() ==  _matrix.columns());
 		gsl_matrix_memcpy(m_matrix, _matrix.get_gsl_matrix());
 		return *this;
 	}
 
 	MatrixView & transpose()
 	{
-		return static_cast<MatrixView &>( base_type::transpose() );
+		return static_cast<MatrixView &>(base_type::transpose());
 	}
 
 	MatrixView & scale(double x)
 	{
-		return static_cast<MatrixView &>( base_type::scale(x) );
+		return static_cast<MatrixView &>(base_type::scale(x));
 	}
 
 	MatrixView & translate(double x)
 	{
-		return static_cast<MatrixView &>( base_type::translate(x) );
+		return static_cast<MatrixView &>(base_type::translate(x));
 	}
 
 	MatrixView & operator+=(base_type::base_type const& _matrix)
 	{
-		return static_cast<MatrixView &>( base_type::operator+=(_matrix) );
+		return static_cast<MatrixView &>(base_type::operator+=(_matrix));
 	}
 
 	MatrixView & operator-=(base_type::base_type const& _matrix)
 	{
-		return static_cast<MatrixView &>( base_type::operator-=(_matrix) );
+		return static_cast<MatrixView &>(base_type::operator-=(_matrix));
 	}
 
 	friend
@@ -575,11 +575,11 @@ void swap_view(MatrixView & m1, MatrixView & m2)
     swap(m1.m_matrix_view, m2.m_matrix_view);
 }
 
-Vector operator*( detail::BaseMatrixImpl const& A,
-                  detail::BaseVectorImpl const& v );
+Vector operator*(detail::BaseMatrixImpl const& A,
+                  detail::BaseVectorImpl const& v);
 
-Matrix operator*( detail::BaseMatrixImpl const& A,
-                  detail::BaseMatrixImpl const& B );
+Matrix operator*(detail::BaseMatrixImpl const& A,
+                  detail::BaseMatrixImpl const& B);
 
 Matrix pseudo_inverse(detail::BaseMatrixImpl const& A);
 

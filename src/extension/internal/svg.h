@@ -28,12 +28,12 @@ class Svg : public Inkscape::Extension::Implementation::Implementation {
 public:
     void        setDetachBase(bool detach) override { m_detachbase = detach; }
 
-    void        save( Inkscape::Extension::Output *mod,
+    void        save(Inkscape::Extension::Output *mod,
                                SPDocument *doc,
-                               gchar const *filename ) override;
-    SPDocument *open( Inkscape::Extension::Input *mod,
-                                const gchar *uri ) override;
-    static void         init( );
+                               gchar const *filename) override;
+    SPDocument *open(Inkscape::Extension::Input *mod,
+                                const gchar *uri) override;
+    static void         init();
 
 };
 

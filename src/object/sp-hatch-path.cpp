@@ -64,7 +64,7 @@ void SPHatchPath::build(SPDocument* doc, Inkscape::XML::Node* repr)
 
     readAttr("d");
     readAttr("offset");
-    readAttr( "style" );
+    readAttr("style");
 
     style->fill.setNone();
 }

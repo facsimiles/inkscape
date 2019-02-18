@@ -140,19 +140,19 @@ Splines Kopf2011::to_grouped_voronoi(const Glib::RefPtr<Gdk::Pixbuf const> &buf,
     profiling_info[0] = Glib::DateTime::create_now_utc();
 #endif // LIBDEPIXELIZE_PROFILE_KOPF2011
 
-    for ( HomogeneousSplines<Precision>::iterator it = splines.begin(),
-              end = splines.end() ; it != end ; ++it ) {
-        for ( HomogeneousSplines<Precision>::Polygon::points_iter
+    for (HomogeneousSplines<Precision>::iterator it = splines.begin(),
+              end = splines.end() ; it != end ; ++it) {
+        for (HomogeneousSplines<Precision>::Polygon::points_iter
                   it2 = it->vertices.begin(), end2 = it->vertices.end()
-                  ; it2 != end2 ; ++it2 ) {
+                  ; it2 != end2 ; ++it2) {
             it2->smooth = false;
         }
-        for ( HomogeneousSplines<Precision>::Polygon::holes_iter
+        for (HomogeneousSplines<Precision>::Polygon::holes_iter
                   it2 = it->holes.begin(), end2 = it->holes.end()
-                  ; it2 != end2 ; ++it2 ) {
-            for ( HomogeneousSplines<Precision>::Polygon::points_iter
+                  ; it2 != end2 ; ++it2) {
+            for (HomogeneousSplines<Precision>::Polygon::points_iter
                       it3 = it2->begin(), end3 = it2->end()
-                      ; it3 != end3 ; ++it3 ) {
+                      ; it3 != end3 ; ++it3) {
                 it3->smooth = false;
             }
         }
@@ -356,31 +356,31 @@ inline void
 Kopf2011::_disconnect_neighbors_with_dissimilar_colors(PixelGraph &graph)
 {
     using colorspace::similar_colors;
-    for ( PixelGraph::iterator it = graph.begin(), end = graph.end() ; it != end
-              ; ++it ) {
-        if ( it->adj.top )
+    for (PixelGraph::iterator it = graph.begin(), end = graph.end() ; it != end
+              ; ++it) {
+        if (it->adj.top)
             it->adj.top = similar_colors(it->rgba, (it - graph.width())->rgba);
-        if ( it->adj.topright ) {
+        if (it->adj.topright) {
             it->adj.topright
                 = similar_colors(it->rgba, (it - graph.width() + 1)->rgba);
         }
-        if ( it->adj.right )
+        if (it->adj.right)
             it->adj.right = similar_colors(it->rgba, (it + 1)->rgba);
-        if ( it->adj.bottomright ) {
+        if (it->adj.bottomright) {
             it->adj.bottomright
                 = similar_colors(it->rgba, (it + graph.width() + 1)->rgba);
         }
-        if ( it->adj.bottom ) {
+        if (it->adj.bottom) {
             it->adj.bottom
                 = similar_colors(it->rgba, (it + graph.width())->rgba);
         }
-        if ( it->adj.bottomleft ) {
+        if (it->adj.bottomleft) {
             it->adj.bottomleft
                 = similar_colors(it->rgba, (it + graph.width() - 1)->rgba);
         }
-        if ( it->adj.left )
+        if (it->adj.left)
             it->adj.left = similar_colors(it->rgba, (it - 1)->rgba);
-        if ( it->adj.topleft ) {
+        if (it->adj.topleft) {
             it->adj.topleft = similar_colors(it->rgba,
                                              (it - graph.width() - 1)->rgba);
         }
@@ -396,8 +396,8 @@ Kopf2011::_disconnect_neighbors_with_dissimilar_colors(PixelGraph &graph)
 template<class T>
 void Kopf2011::_remove_crossing_edges_safe(T &container)
 {
-    for ( typename T::reverse_iterator it = container.rbegin(),
-              end = container.rend() ; it != end ; ) {
+    for (typename T::reverse_iterator it = container.rbegin(),
+              end = container.rend() ; it != end ;) {
         /* A | B
            --+--
            C | D */
@@ -406,8 +406,8 @@ void Kopf2011::_remove_crossing_edges_safe(T &container)
         PixelGraph::iterator c = it->second.second;
         PixelGraph::iterator d = it->first.second;
 
-        if ( !a->adj.right || !a->adj.bottom || !b->adj.bottom
-             || !c->adj.right ) {
+        if (!a->adj.right || !a->adj.bottom || !b->adj.bottom
+             || !c->adj.right) {
             ++it;
             continue;
         }
@@ -438,7 +438,7 @@ void Kopf2011::_remove_crossing_edges_unsafe(PixelGraph &graph, T &edges,
                                                std::make_pair(0, 0));
 
     // Compute weights
-    for ( typename T::size_type i = 0 ; i != edges.size() ; ++i ) {
+    for (typename T::size_type i = 0 ; i != edges.size() ; ++i) {
         /* A | B
            --+--
            C | D */
@@ -477,7 +477,7 @@ void Kopf2011::_remove_crossing_edges_unsafe(PixelGraph &graph, T &edges,
     }
 
     // Remove edges with lower weight
-    for ( typename T::size_type i = 0 ; i != edges.size() ; ++i ) {
+    for (typename T::size_type i = 0 ; i != edges.size() ; ++i) {
         /* A | B
            --+--
            C | D */
@@ -486,10 +486,10 @@ void Kopf2011::_remove_crossing_edges_unsafe(PixelGraph &graph, T &edges,
         PixelGraph::iterator c = edges[i].second.second;
         PixelGraph::iterator d = edges[i].first.second;
 
-        if ( weights[i].first > weights[i].second ) {
+        if (weights[i].first > weights[i].second) {
             b->adj.bottomleft = 0;
             c->adj.topright = 0;
-        } else if ( weights[i].first < weights[i].second ) {
+        } else if (weights[i].first < weights[i].second) {
             a->adj.bottomright = 0;
             d->adj.topleft = 0;
         } else {
@@ -513,7 +513,7 @@ inline int Heuristics::curves(const PixelGraph &graph,
 
     // b -> a
     // and then a -> b
-    for ( int i = 0 ; i != 2 ; ++i ) {
+    for (int i = 0 ; i != 2 ; ++i) {
         PixelGraph::const_iterator it = i ? a : b;
         PixelGraph::const_iterator prev = i ? b : a;
         int local_count = 0;
@@ -521,7 +521,7 @@ inline int Heuristics::curves(const PixelGraph &graph,
         // Used to avoid inifinite loops in circular-like edges
         const PixelGraph::const_iterator initial = it;
 
-        while ( it->adjsize() == 2 ) {
+        while (it->adjsize() == 2) {
             ++local_count;
 
             // Iterate to next
@@ -550,7 +550,7 @@ inline int Heuristics::curves(const PixelGraph &graph,
             }
 
             // Break infinite loops
-            if ( it == initial )
+            if (it == initial)
                 return local_count;
         }
         count += local_count;
@@ -562,14 +562,14 @@ inline int Heuristics::curves(const PixelGraph &graph,
 inline void Heuristics::SparsePixels::operator ()(const PixelGraph &graph,
                                                   unsigned radius)
 {
-    if ( !graph.width() || !graph.height() )
+    if (!graph.width() || !graph.height())
         return;
 
     // Clear weights
-    for ( int i = 0 ; i != 2 ; ++i )
+    for (int i = 0 ; i != 2 ; ++i)
         diagonals[i].second = 0;
 
-    if ( !radius )
+    if (!radius)
         return;
 
     // Fix radius/bounds
@@ -581,7 +581,7 @@ inline void Heuristics::SparsePixels::operator ()(const PixelGraph &graph,
         {
             unsigned minor = std::min(x, y);
 
-            if ( displace > minor ) {
+            if (displace > minor) {
                 displace = minor;
                 radius = displace + 1;
             }
@@ -589,30 +589,30 @@ inline void Heuristics::SparsePixels::operator ()(const PixelGraph &graph,
 
         displace = radius;
 
-        if ( x + displace >= unsigned(graph.width()) ) {
+        if (x + displace >= unsigned(graph.width())) {
             displace = unsigned(graph.width()) - x - 1;
             radius = displace;
         }
 
-        if ( y + displace >= unsigned(graph.height()) ) {
+        if (y + displace >= unsigned(graph.height())) {
             displace = unsigned(graph.height()) - y - 1;
             radius = displace;
         }
     }
 
-    if ( !radius )
+    if (!radius)
         return;
 
     // Iterate over nodes and count them
     {
         PixelGraph::const_iterator it = diagonals[MAIN_DIAGONAL].first.first;
-        for ( unsigned i = radius - 1 ; i ; --i )
+        for (unsigned i = radius - 1 ; i ; --i)
             it = graph.nodeTopLeft(it);
 
         bool invert = false;
-        for ( unsigned i = 0 ; i != 2 * radius ; ++i ) {
-            for ( unsigned j = 0 ; j != 2 * radius ; ++j ) {
-                for ( int k = 0 ; k != 2 ; ++k ) {
+        for (unsigned i = 0 ; i != 2 * radius ; ++i) {
+            for (unsigned j = 0 ; j != 2 * radius ; ++j) {
+                for (int k = 0 ; k != 2 ; ++k) {
                     diagonals[k].second
                         += similar_colors(it, diagonals[k].first.first->rgba,
                                           diagonals[k].first.second->rgba);
@@ -628,7 +628,7 @@ inline void Heuristics::SparsePixels::operator ()(const PixelGraph &graph,
     }
 
     int minor = std::min(diagonals[0].second, diagonals[1].second);
-    for ( int i = 0 ; i != 2 ; ++i )
+    for (int i = 0 ; i != 2 ; ++i)
         diagonals[i].second -= minor;
     std::swap(diagonals[0].second, diagonals[1].second);
 }
@@ -645,7 +645,7 @@ Heuristics::SparsePixels::similar_colors(PixelGraph::const_iterator n,
 inline bool Heuristics::islands(PixelGraph::const_iterator a,
                                 PixelGraph::const_iterator b)
 {
-    if ( a->adjsize() == 1 || b->adjsize() == 1 )
+    if (a->adjsize() == 1 || b->adjsize() == 1)
         return true;
 
     return false;

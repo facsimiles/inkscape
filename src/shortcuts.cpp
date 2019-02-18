@@ -169,12 +169,12 @@ guint sp_shortcut_translate_event(GdkEventKey const *event, guint *effective_mod
     keyval = Inkscape::UI::Tools::get_latin_keyval(event, &consumed_modifiers);
 
     remaining_modifiers = initial_modifiers & ~consumed_modifiers;
-    resulting_modifiers = ( remaining_modifiers & GDK_SHIFT_MASK ? SP_SHORTCUT_SHIFT_MASK : 0 ) |
-	                      ( remaining_modifiers & GDK_CONTROL_MASK ? SP_SHORTCUT_CONTROL_MASK : 0 ) |
-	                      ( remaining_modifiers & GDK_SUPER_MASK ? SP_SHORTCUT_SUPER_MASK : 0 ) |
-	                      ( remaining_modifiers & GDK_HYPER_MASK ? SP_SHORTCUT_HYPER_MASK : 0 ) |
-	                      ( remaining_modifiers & GDK_META_MASK ? SP_SHORTCUT_META_MASK : 0 ) |
-	                      ( remaining_modifiers & GDK_MOD1_MASK ? SP_SHORTCUT_ALT_MASK : 0 );              
+    resulting_modifiers = (remaining_modifiers & GDK_SHIFT_MASK ? SP_SHORTCUT_SHIFT_MASK : 0) |
+	                      (remaining_modifiers & GDK_CONTROL_MASK ? SP_SHORTCUT_CONTROL_MASK : 0) |
+	                      (remaining_modifiers & GDK_SUPER_MASK ? SP_SHORTCUT_SUPER_MASK : 0) |
+	                      (remaining_modifiers & GDK_HYPER_MASK ? SP_SHORTCUT_HYPER_MASK : 0) |
+	                      (remaining_modifiers & GDK_META_MASK ? SP_SHORTCUT_META_MASK : 0) |
+	                      (remaining_modifiers & GDK_MOD1_MASK ? SP_SHORTCUT_ALT_MASK : 0);              
 
     // enforce the Shift modifier for uppercase letters (otherwise plain A and Shift+A are equivalent)
     // for characters that are not letters both (is_upper and is_lower) return TRUE, so the condition is false
@@ -411,7 +411,7 @@ void sp_shortcut_file_export()
             "",
             "",
             Inkscape::Extension::FILE_SAVE_METHOD_SAVE_AS
-        );
+);
     saveDialog->addFileType(_("Inkscape shortcuts (*.xml)"), ".xml");
     
 
@@ -632,7 +632,7 @@ static void read_shortcuts_file(char const *filename, bool const is_user_set) {
     XML::Node const *root=doc->root();
     g_return_if_fail(!strcmp(root->name(), "keys"));
     XML::NodeConstSiblingIterator iter=root->firstChild();
-    for ( ; iter ; ++iter ) {
+    for (; iter ; ++iter) {
         bool is_primary;
 
         if (!strcmp(iter->name(), "bind")) {
@@ -656,7 +656,7 @@ static void read_shortcuts_file(char const *filename, bool const is_user_set) {
                 && strcmp(verb_name, "SelectionTrace")   != 0
                 && strcmp(verb_name, "PaintBucketPrefs") != 0
 #endif
-           ) {
+) {
             g_warning("Unknown verb name: %s", verb_name);
             continue;
         }
@@ -797,7 +797,7 @@ sp_shortcut_get_modifiers(unsigned int const shortcut)
             ((shortcut & SP_SHORTCUT_HYPER_MASK) ? GDK_HYPER_MASK : 0) |
             ((shortcut & SP_SHORTCUT_META_MASK) ? GDK_META_MASK : 0) |
             ((shortcut & SP_SHORTCUT_ALT_MASK) ? GDK_MOD1_MASK : 0)
-            );
+);
 }
 
 /**

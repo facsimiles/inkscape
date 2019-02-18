@@ -25,7 +25,7 @@ namespace Geom {
  */
 NodeType get_nodetype(Curve const &c_incoming, Curve const &c_outgoing)
 {
-    if ( !are_near(c_incoming.pointAt(1), c_outgoing.pointAt(0)) )
+    if (!are_near(c_incoming.pointAt(1), c_outgoing.pointAt(0)))
         return NODE_NONE;
 
     Geom::Curve *crv = c_incoming.reverse();
@@ -35,9 +35,9 @@ NodeType get_nodetype(Curve const &c_incoming, Curve const &c_outgoing)
     double this_angle_L2 = Geom::L2(deriv_1);
     double next_angle_L2 = Geom::L2(deriv_2);
     double both_angles_L2 = Geom::L2(deriv_1 + deriv_2);
-    if ( (this_angle_L2 > 1e-6) &&
+    if ((this_angle_L2 > 1e-6) &&
          (next_angle_L2 > 1e-6) &&
-         ((this_angle_L2 + next_angle_L2 - both_angles_L2) < 1e-3) )
+         ((this_angle_L2 + next_angle_L2 - both_angles_L2) < 1e-3))
     {
         return NODE_SMOOTH;
     }

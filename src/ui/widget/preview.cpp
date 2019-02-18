@@ -55,7 +55,7 @@ namespace Widget {
 #define PREVIEW_MAX_RATIO 500
 
 void
-Preview::set_color(int r, int g, int b )
+Preview::set_color(int r, int g, int b)
 {
     _r = r;
     _g = g;
@@ -85,7 +85,7 @@ static gboolean setupDone = FALSE;
 static GtkRequisition sizeThings[PREVIEW_SIZE_NEXTFREE];
 
 void
-Preview::set_size_mappings( guint count, GtkIconSize const* sizes )
+Preview::set_size_mappings(guint count, GtkIconSize const* sizes)
 {
     gint width = 0;
     gint height = 0;
@@ -94,13 +94,13 @@ Preview::set_size_mappings( guint count, GtkIconSize const* sizes )
     guint i = 0;
     guint delta = 0;
 
-    for ( i = 0; i < count; ++i ) {
-        gboolean worked = gtk_icon_size_lookup( sizes[i], &width, &height );
-        if ( worked ) {
-            if ( width < smallest ) {
+    for (i = 0; i < count; ++i) {
+        gboolean worked = gtk_icon_size_lookup(sizes[i], &width, &height);
+        if (worked) {
+            if (width < smallest) {
                 smallest = width;
             }
-            if ( width > largest ) {
+            if (width > largest) {
                 largest = width;
             }
         }
@@ -110,8 +110,8 @@ Preview::set_size_mappings( guint count, GtkIconSize const* sizes )
 
     delta = largest - smallest;
 
-    for ( i = 0; i < G_N_ELEMENTS(sizeThings); ++i ) {
-        guint val = smallest + ( (i * delta) / (G_N_ELEMENTS(sizeThings) - 1) );
+    for (i = 0; i < G_N_ELEMENTS(sizeThings); ++i) {
+        guint val = smallest + ((i * delta) / (G_N_ELEMENTS(sizeThings) - 1));
         sizeThings[i].width = val;
         sizeThings[i].height = val;
     }
@@ -125,7 +125,7 @@ Preview::size_request(GtkRequisition* req) const
     int               width   = 0;
     int               height  = 0;
 
-    if ( !setupDone ) {
+    if (!setupDone) {
         GtkIconSize sizes[] = {
             GTK_ICON_SIZE_MENU,
             GTK_ICON_SIZE_SMALL_TOOLBAR,
@@ -133,19 +133,19 @@ Preview::size_request(GtkRequisition* req) const
             GTK_ICON_SIZE_BUTTON,
             GTK_ICON_SIZE_DIALOG
         };
-        set_size_mappings( G_N_ELEMENTS(sizes), sizes );
+        set_size_mappings(G_N_ELEMENTS(sizes), sizes);
     }
 
     width = sizeThings[_size].width;
     height = sizeThings[_size].height;
 
-    if ( _view == VIEW_TYPE_LIST ) {
+    if (_view == VIEW_TYPE_LIST) {
         width *= 3;
     }
 
-    if ( _ratio != 100 ) {
+    if (_ratio != 100) {
         width = (width * _ratio) / 100;
-        if ( width < 0 ) {
+        if (width < 0) {
             width = 1;
         }
     }
@@ -208,11 +208,11 @@ Preview::on_draw(const Cairo::RefPtr<Cairo::Context> &cr)
         cr->fill();
     }
 
-    cr->set_source_rgb(_r/65535.0, _g/65535.0, _b/65535.0 );
+    cr->set_source_rgb(_r/65535.0, _g/65535.0, _b/65535.0);
     cr->rectangle(insetLeft, insetTop, allocation.get_width() - (insetLeft + insetRight), allocation.get_height() - (insetTop + insetBottom));
     cr->fill();
 
-    if (_previewPixbuf )
+    if (_previewPixbuf)
     {
         if ((allocation.get_width() != _scaledW) || (allocation.get_height() != _scaledH)) {
             if (_scaled)
@@ -256,13 +256,13 @@ Preview::on_draw(const Cairo::RefPtr<Cairo::Context> &cr)
                              possible.height / 2 };
 
         /* Make it square */
-        if ( area.width > area.height )
+        if (area.width > area.height)
             area.width = area.height;
-        if ( area.height > area.width )
+        if (area.height > area.width)
             area.height = area.width;
 
         /* Center it horizontally */
-        if ( area.width < possible.width ) {
+        if (area.width < possible.width) {
             int diff = (possible.width - area.width) / 2;
             area.x += diff;
         }
@@ -273,13 +273,13 @@ Preview::on_draw(const Cairo::RefPtr<Cairo::Context> &cr)
                                   G_PI, // Down-pointing arrow
                                   area.x, area.y,
                                   min(area.width, area.height)
-                                 );
+);
         }
 
         if (_linked & PREVIEW_LINK_OUT)
         {
             GdkRectangle otherArea = {area.x, area.y, area.width, area.height};
-            if ( otherArea.height < possible.height ) {
+            if (otherArea.height < possible.height) {
                 otherArea.y = possible.y + (possible.height - otherArea.height);
             }
 
@@ -287,13 +287,13 @@ Preview::on_draw(const Cairo::RefPtr<Cairo::Context> &cr)
                                   G_PI, // Down-pointing arrow
                                   otherArea.x, otherArea.y,
                                   min(otherArea.width, otherArea.height)
-                                 );
+);
         }
 
         if (_linked & PREVIEW_LINK_OTHER)
         {
             GdkRectangle otherArea = {insetLeft, area.y, area.width, area.height};
-            if ( otherArea.height < possible.height ) {
+            if (otherArea.height < possible.height) {
                 otherArea.y = possible.y + (possible.height - otherArea.height) / 2;
             }
 
@@ -301,7 +301,7 @@ Preview::on_draw(const Cairo::RefPtr<Cairo::Context> &cr)
                                   1.5*G_PI, // Left-pointing arrow
                                   otherArea.x, otherArea.y,
                                   min(otherArea.width, otherArea.height)
-                                 );
+);
         }
 
 
@@ -310,12 +310,12 @@ Preview::on_draw(const Cairo::RefPtr<Cairo::Context> &cr)
             GdkRectangle otherArea = {possible.x + ((possible.width / 4) - (area.width / 2)),
                                       area.y,
                                       area.width, area.height};
-            if ( otherArea.height < possible.height ) {
+            if (otherArea.height < possible.height) {
                 otherArea.y = possible.y + (possible.height - otherArea.height) / 2;
             }
             context->render_check(cr,
                                   otherArea.x, otherArea.y,
-                                  otherArea.width, otherArea.height );
+                                  otherArea.width, otherArea.height);
         }
 
         if (_linked & PREVIEW_STROKE)
@@ -323,23 +323,23 @@ Preview::on_draw(const Cairo::RefPtr<Cairo::Context> &cr)
             GdkRectangle otherArea = {possible.x + (((possible.width * 3) / 4) - (area.width / 2)),
                                       area.y,
                                       area.width, area.height};
-            if ( otherArea.height < possible.height ) {
+            if (otherArea.height < possible.height) {
                 otherArea.y = possible.y + (possible.height - otherArea.height) / 2;
             }
             // This should be a diamond too?
             context->render_check(cr,
                                   otherArea.x, otherArea.y,
-                                  otherArea.width, otherArea.height );
+                                  otherArea.width, otherArea.height);
         }
     }
 
 
-    if ( has_focus() ) {
+    if (has_focus()) {
         allocation = get_allocation();
 
         context->render_focus(cr,
                               0 + 1, 0 + 1,
-                              allocation.get_width() - 2, allocation.get_height() - 2 );
+                              allocation.get_width() - 2, allocation.get_height() - 2);
     }
 
     return false;
@@ -347,7 +347,7 @@ Preview::on_draw(const Cairo::RefPtr<Cairo::Context> &cr)
 
 
 bool
-Preview::on_enter_notify_event(GdkEventCrossing* event )
+Preview::on_enter_notify_event(GdkEventCrossing* event)
 {
     _within = true;
     set_state_flags(_hot ? Gtk::STATE_FLAG_ACTIVE : Gtk::STATE_FLAG_PRELIGHT, false);
@@ -367,17 +367,17 @@ Preview::on_leave_notify_event(GdkEventCrossing* event)
 bool
 Preview::on_button_press_event(GdkEventButton *event)
 {
-    if (_takesFocus && !has_focus() )
+    if (_takesFocus && !has_focus())
     {
         grab_focus();
     }
 
-    if ( event->button == PRIME_BUTTON_MAGIC_NUMBER ||
-            event->button == 2 )
+    if (event->button == PRIME_BUTTON_MAGIC_NUMBER ||
+            event->button == 2)
     {
         _hot = true;
 
-        if ( _within )
+        if (_within)
         {
             set_state_flags(Gtk::STATE_FLAG_ACTIVE, false);
         }
@@ -396,10 +396,10 @@ Preview::on_button_release_event(GdkEventButton* event)
          (event->button == PRIME_BUTTON_MAGIC_NUMBER ||
           event->button == 2))
     {
-        gboolean isAlt = ( ((event->state & GDK_SHIFT_MASK) == GDK_SHIFT_MASK) ||
+        gboolean isAlt = (((event->state & GDK_SHIFT_MASK) == GDK_SHIFT_MASK) ||
                 (event->button == 2));
 
-        if ( isAlt )
+        if (isAlt)
         {
             _signal_alt_clicked(2);
         }
@@ -439,14 +439,14 @@ Preview::set_details(ViewType      view,
 {
     _view  = view;
 
-    if ( size > PREVIEW_SIZE_LAST )
+    if (size > PREVIEW_SIZE_LAST)
     {
         size = PREVIEW_SIZE_LAST;
     }
 
     _size = size;
 
-    if ( ratio > PREVIEW_MAX_RATIO )
+    if (ratio > PREVIEW_MAX_RATIO)
     {
         ratio = PREVIEW_MAX_RATIO;
     }
@@ -484,7 +484,7 @@ Preview::Preview()
               |Gdk::KEY_RELEASE_MASK
               |Gdk::FOCUS_CHANGE_MASK
               |Gdk::ENTER_NOTIFY_MASK
-              |Gdk::LEAVE_NOTIFY_MASK );
+              |Gdk::LEAVE_NOTIFY_MASK);
 }
 
 } // namespace Widget

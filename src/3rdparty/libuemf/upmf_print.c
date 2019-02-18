@@ -54,12 +54,12 @@ void U_PMF_VARPOINTS_print(const char **contents, int Flags, uint32_t Elements, 
    unsigned int i;
    U_FLOAT Xpos, Ypos;
    
-   if(     Flags & U_PPF_P){  printf("   +  Points(Relative):"); }
+   if(Flags & U_PPF_P){  printf("   +  Points(Relative):"); }
    else if(Flags & U_PPF_C){  printf("   +  Points(Int16):");    }
    else {                     printf("   +  Points(Float):");    }
    for(Xpos = Ypos = i = 0; i<Elements; i++){
       printf(" %d:",i);
-      if(     Flags & U_PPF_P){  (void) U_PMF_POINTR_print(contents, &Xpos, &Ypos, blimit); }
+      if(Flags & U_PPF_P){  (void) U_PMF_POINTR_print(contents, &Xpos, &Ypos, blimit); }
       else if(Flags & U_PPF_C){  (void) U_PMF_POINT_print(contents, blimit);                }
       else {                     (void) U_PMF_POINTF_print(contents, blimit);               }
    }
@@ -278,11 +278,11 @@ int U_PMF_BRUSHTYPEENUMERATION_print(int otype){
 int U_PMF_COMBINEMODEENUMERATION_print(int otype){
    int status=1;
    switch(otype){
-      case  U_CM_Replace:         printf("Replace"   );        break;
-      case  U_CM_Intersect:       printf("Intersect" );        break;
-      case  U_CM_Union:           printf("Union"     );        break;
-      case  U_CM_XOR:             printf("XOR"       );        break;
-      case  U_CM_Exclude:         printf("Exclude"   );        break;
+      case  U_CM_Replace:         printf("Replace");        break;
+      case  U_CM_Intersect:       printf("Intersect");        break;
+      case  U_CM_Union:           printf("Union");        break;
+      case  U_CM_XOR:             printf("XOR");        break;
+      case  U_CM_Exclude:         printf("Exclude");        break;
       case  U_CM_Complement:      printf("Complement");        break;
       default: status=0;          printf("INVALID(%d)",otype); break;
    }
@@ -444,16 +444,16 @@ int U_PMF_PX_FMT_ENUM_print(int pfe){
     EMF+ manual 2.1.1.27, Microsoft name: RegionNodeDataType Enumeration (U_RNDT_*)
 */
 int U_PMF_NODETYPE_print(int Type){
-   if(     Type == U_RNDT_And       ){ printf("And"       ); }
-   else if(Type == U_RNDT_Or        ){ printf("Or"        ); }
-   else if(Type == U_RNDT_Xor       ){ printf("Xor"       ); }
-   else if(Type == U_RNDT_Exclude   ){ printf("Exclude"   ); }
+   if(Type == U_RNDT_And){ printf("And"); }
+   else if(Type == U_RNDT_Or){ printf("Or"); }
+   else if(Type == U_RNDT_Xor){ printf("Xor"); }
+   else if(Type == U_RNDT_Exclude){ printf("Exclude"); }
    else if(Type == U_RNDT_Complement){ printf("Complement"); }
-   else if(Type == U_RNDT_Rect      ){ printf("Rect"      ); }
-   else if(Type == U_RNDT_Path      ){ printf("Path"      ); }
-   else if(Type == U_RNDT_Empty     ){ printf("Empty"     ); }
-   else if(Type == U_RNDT_Infinite  ){ printf("Infinite"  ); }
-   else {                              printf("Undefined" ); return(0); }
+   else if(Type == U_RNDT_Rect){ printf("Rect"); }
+   else if(Type == U_RNDT_Path){ printf("Path"); }
+   else if(Type == U_RNDT_Empty){ printf("Empty"); }
+   else if(Type == U_RNDT_Infinite){ printf("Infinite"); }
+   else {                              printf("Undefined"); return(0); }
    return(1);
 }
 
@@ -550,10 +550,10 @@ int U_PMF_FONT_print(const char *contents, const char *blimit){
    if(status){      
       printf("   +  Font:");
       (void) U_PMF_GRAPHICSVERSION_memsafe_print((char *)&Version);;
-      printf(" EmSize:%f ",  EmSize  );  
+      printf(" EmSize:%f ",  EmSize);  
       printf(" SizeUnit:%d ",SizeUnit);
-      printf(" FSFlags:%d ", FSFlags ); 
-      printf(" Length:%d",  Length  );  
+      printf(" FSFlags:%d ", FSFlags); 
+      printf(" Length:%d",  Length);  
       string = U_Utf16leToUtf8((uint16_t *)Data, Length, NULL);
       if(string){
          printf(" Family:<%s>\n",string);
@@ -720,21 +720,21 @@ int U_PMF_STRINGFORMAT_print(const char *contents, const char *blimit){
    int status = U_PMF_STRINGFORMAT_get(contents, &Sfs, &Data, blimit);
    if(status){
       printf("   +  StringFormat: ");
-      printf(" Version:%X",          Sfs.Version          );
-      printf(" Flags:%X",            Sfs.Flags            );
+      printf(" Version:%X",          Sfs.Version);
+      printf(" Flags:%X",            Sfs.Flags);
       printf(" Language");           (void) U_PMF_LANGUAGEIDENTIFIER_print(Sfs.Language);
-      printf(" StringAlignment:%X",  Sfs.StringAlignment  );
-      printf(" LineAlign:%X",        Sfs.LineAlign        );
+      printf(" StringAlignment:%X",  Sfs.StringAlignment);
+      printf(" LineAlign:%X",        Sfs.LineAlign);
       printf(" DigitSubstitution:%X",Sfs.DigitSubstitution);
       printf(" DigitLanguage");      (void) U_PMF_LANGUAGEIDENTIFIER_print(Sfs.DigitLanguage);
-      printf(" FirstTabOffset:%f",   Sfs.FirstTabOffset   );
-      printf(" HotkeyPrefix:%d",     Sfs.HotkeyPrefix     );
-      printf(" LeadingMargin:%f",    Sfs.LeadingMargin    );
-      printf(" TrailingMargin:%f",   Sfs.TrailingMargin   );
-      printf(" Tracking:%f",         Sfs.Tracking         );
-      printf(" Trimming:%X",         Sfs.Trimming         );
-      printf(" TabStopCount:%u",     Sfs.TabStopCount     );
-      printf(" RangeCount:%u",       Sfs.RangeCount       );
+      printf(" FirstTabOffset:%f",   Sfs.FirstTabOffset);
+      printf(" HotkeyPrefix:%d",     Sfs.HotkeyPrefix);
+      printf(" LeadingMargin:%f",    Sfs.LeadingMargin);
+      printf(" TrailingMargin:%f",   Sfs.TrailingMargin);
+      printf(" Tracking:%f",         Sfs.Tracking);
+      printf(" Trimming:%X",         Sfs.Trimming);
+      printf(" TabStopCount:%u",     Sfs.TabStopCount);
+      printf(" RangeCount:%u",       Sfs.RangeCount);
       (void) U_PMF_STRINGFORMATDATA_print(Data, Sfs.TabStopCount, Sfs.RangeCount, blimit);
    }
    return(status);
@@ -984,15 +984,15 @@ int U_PMF_CUSTOMLINECAPARROWDATA_print(const char *contents, const char *blimit)
    int status =  U_PMF_CUSTOMLINECAPARROWDATA_get(contents, &Ccad, blimit);
    if(status){
       printf("CustomLineCapArrowData: ");
-      printf(" Width:%f",           Ccad.Width                             );
-      printf(" Height:%f",          Ccad.Height                            );
-      printf(" MiddleInset:%f",     Ccad.MiddleInset                       );
-      printf(" FillState:%u",       Ccad.FillState                         );
-      printf(" StartCap:%X",        Ccad.StartCap                          );
-      printf(" EndCap:%X",          Ccad.EndCap                            );
-      printf(" Join:%X",            Ccad.Join                              );
-      printf(" MiterLimit:%f",      Ccad.MiterLimit                        );
-      printf(" WidthScale:%f",      Ccad.WidthScale                        );
+      printf(" Width:%f",           Ccad.Width);
+      printf(" Height:%f",          Ccad.Height);
+      printf(" MiddleInset:%f",     Ccad.MiddleInset);
+      printf(" FillState:%u",       Ccad.FillState);
+      printf(" StartCap:%X",        Ccad.StartCap);
+      printf(" EndCap:%X",          Ccad.EndCap);
+      printf(" Join:%X",            Ccad.Join);
+      printf(" MiterLimit:%f",      Ccad.MiterLimit);
+      printf(" WidthScale:%f",      Ccad.WidthScale);
       printf(" FillHotSpot:{%f,%f}",Ccad.FillHotSpot[0],Ccad.FillHotSpot[1]);
       printf(" LineHotSpot:{%f,%f}",Ccad.LineHotSpot[0],Ccad.LineHotSpot[1]);
       printf("\n");
@@ -1013,14 +1013,14 @@ int U_PMF_CUSTOMLINECAPDATA_print(const char *contents, const char *blimit){
    int status =  U_PMF_CUSTOMLINECAPDATA_get(contents, &Clcd, &Data, blimit);
    if(status){
       printf("   +  CustomLineCapData: ");
-      printf(" Flags:%X",           Clcd.Flags                             );
-      printf(" Cap:%X",             Clcd.Cap                               );
-      printf(" Inset:%f",           Clcd.Inset                             );
-      printf(" StartCap:%X",        Clcd.StartCap                          );
-      printf(" EndCap:%X",          Clcd.EndCap                            );
-      printf(" Join:%X",            Clcd.Join                              );
-      printf(" MiterLimit:%f",      Clcd.MiterLimit                        );
-      printf(" WidthScale:%f",      Clcd.WidthScale                        );
+      printf(" Flags:%X",           Clcd.Flags);
+      printf(" Cap:%X",             Clcd.Cap);
+      printf(" Inset:%f",           Clcd.Inset);
+      printf(" StartCap:%X",        Clcd.StartCap);
+      printf(" EndCap:%X",          Clcd.EndCap);
+      printf(" Join:%X",            Clcd.Join);
+      printf(" MiterLimit:%f",      Clcd.MiterLimit);
+      printf(" WidthScale:%f",      Clcd.WidthScale);
       printf(" FillHotSpot:{%f,%f}",Clcd.FillHotSpot[0],Clcd.FillHotSpot[1]);
       printf(" LineHotSpot:{%f,%f}\n",Clcd.LineHotSpot[0],Clcd.LineHotSpot[1]);
       (void) U_PMF_CUSTOMLINECAPOPTIONALDATA_print(Data, Clcd.Flags, blimit);
@@ -1159,7 +1159,7 @@ int U_PMF_GRAPHICSVERSION_print(const char *contents, const char *blimit){
    int Signature,GrfVersion;
    int status = U_PMF_GRAPHICSVERSION_get(contents, &Signature, &GrfVersion, blimit);
    if(status){
-      printf(" MetaFileSig:%X",Signature );
+      printf(" MetaFileSig:%X",Signature);
       printf(" GraphicsVersion:%X", GrfVersion);
    }
    return(status);
@@ -1508,15 +1508,15 @@ int U_PMF_PENOPTIONALDATA_print(const char *contents, int Flags, const char *bli
                  blimit);
    if(status){
       if(Flags & U_PD_Transform){      (void) U_PMF_TRANSFORMMATRIX2_print(&Matrix);}
-      if(Flags & U_PD_StartCap){       printf(" StartCap:%d",   StartCap        );}
-      if(Flags & U_PD_EndCap){         printf(" EndCap:%d",     EndCap          );}
-      if(Flags & U_PD_Join){           printf(" Join:%X",       Join            );}
-      if(Flags & U_PD_MiterLimit){     printf(" MiterLimit:%f", MiterLimit      );}
-      if(Flags & U_PD_LineStyle){      printf(" Style:%X",      Style           );}
-      if(Flags & U_PD_DLCap){          printf(" DLCap:%X",      DLCap           );}
-      if(Flags & U_PD_DLOffset){       printf(" DLOffset:%f",   DLOffset        );}
-      if(Flags & U_PD_DLData){         (void) U_PMF_DASHEDLINEDATA_print(DLData, blimit );}
-      if(Flags & U_PD_NonCenter){      printf(" Alignment:%d",  Alignment       );}
+      if(Flags & U_PD_StartCap){       printf(" StartCap:%d",   StartCap);}
+      if(Flags & U_PD_EndCap){         printf(" EndCap:%d",     EndCap);}
+      if(Flags & U_PD_Join){           printf(" Join:%X",       Join);}
+      if(Flags & U_PD_MiterLimit){     printf(" MiterLimit:%f", MiterLimit);}
+      if(Flags & U_PD_LineStyle){      printf(" Style:%X",      Style);}
+      if(Flags & U_PD_DLCap){          printf(" DLCap:%X",      DLCap);}
+      if(Flags & U_PD_DLOffset){       printf(" DLOffset:%f",   DLOffset);}
+      if(Flags & U_PD_DLData){         (void) U_PMF_DASHEDLINEDATA_print(DLData, blimit);}
+      if(Flags & U_PD_NonCenter){      printf(" Alignment:%d",  Alignment);}
       if(Flags & (U_PD_Transform | U_PD_StartCap   | U_PD_EndCap    |
                   U_PD_Join      | U_PD_MiterLimit | U_PD_LineStyle |
                   U_PD_DLCap     | U_PD_DLOffset   |U_PD_DLData     |U_PD_NonCenter)){ printf("\n"); }
@@ -1690,8 +1690,8 @@ int U_PMF_REGIONNODE_print(const char *contents, int Level, const char *blimit){
          len += U_PMF_REGIONNODEPATH_print(Data, blimit);
       }
       /* U_RNDT_Empty and  U_RNDT_Infinite do not change the length */
-      else if(Type == U_RNDT_Empty     ){ printf(" Empty"     ); }
-      else if(Type == U_RNDT_Infinite  ){ printf(" Infinite"  ); }
+      else if(Type == U_RNDT_Empty){ printf(" Empty"); }
+      else if(Type == U_RNDT_Infinite){ printf(" Infinite"); }
       printf("   +  RegionNode(Level:%d) }",Level);
       status = len; /* length of data + length of type */
    }
@@ -2844,8 +2844,8 @@ int U_PMR_OBJECT_print(const char *contents, const char *blimit, U_OBJ_ACCUM *Ob
       printf("   +  ObjID:%u ObjType:%d(", ObjID, otype);
       U_PMF_OBJECTTYPEENUMERATION_print(otype);
       printf(") ntype:%d", ntype);
-      printf(" ContinueD:%c",( ObjCont->used ? 'Y' : 'N'));
-      printf(" ContinueB:%c",( ntype    ? 'Y' : 'N'));
+      printf(" ContinueD:%c",(ObjCont->used ? 'Y' : 'N'));
+      printf(" ContinueB:%c",(ntype    ? 'Y' : 'N'));
       if(ntype){
          U_OA_append(ObjCont, Data, Header.DataSize - 4, otype, ObjID); // The total byte count is not added to the object
          printf(" TotalSize:%u",TSize);

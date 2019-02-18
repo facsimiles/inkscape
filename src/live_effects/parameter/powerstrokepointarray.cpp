@@ -23,7 +23,7 @@ namespace Inkscape {
 
 namespace LivePathEffect {
 
-PowerStrokePointArrayParam::PowerStrokePointArrayParam( const Glib::ustring& label, const Glib::ustring& tip,
+PowerStrokePointArrayParam::PowerStrokePointArrayParam(const Glib::ustring& label, const Glib::ustring& tip,
                         const Glib::ustring& key, Inkscape::UI::Widget::Registry* wr,
                         Effect* effect)
     : ArrayParam<Geom::Point>(label, tip, key, wr, effect, 0)
@@ -189,7 +189,7 @@ PowerStrokePointArrayParamKnotHolderEntity::knot_set(Geom::Point const &p, Geom:
     double t = nearest_time(s, pwd2);
     double offset = dot(s - pwd2.valueAt(t), n.valueAt(t));
     _pparam->_vector.at(_index) = Geom::Point(t, offset/_pparam->_scale_width);
-    if (_pparam->_vector.size() == 1 ) {
+    if (_pparam->_vector.size() == 1) {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         prefs->setDouble("/live_effect/power_stroke/width", offset);
     }
@@ -237,7 +237,7 @@ PowerStrokePointArrayParamKnotHolderEntity::knot_click(guint state)
                 // shift knots down one index
                 for(auto & ent : parent_holder->entity) {
                     PowerStrokePointArrayParamKnotHolderEntity *pspa_ent = dynamic_cast<PowerStrokePointArrayParamKnotHolderEntity *>(ent);
-                    if ( pspa_ent && pspa_ent->_pparam == this->_pparam ) {  // check if the knotentity belongs to this powerstrokepointarray parameter
+                    if (pspa_ent && pspa_ent->_pparam == this->_pparam) {  // check if the knotentity belongs to this powerstrokepointarray parameter
                         if (pspa_ent->_index > this->_index) {
                             --pspa_ent->_index;
                         }
@@ -256,7 +256,7 @@ PowerStrokePointArrayParamKnotHolderEntity::knot_click(guint state)
             // shift knots up one index
             for(auto & ent : parent_holder->entity) {
                 PowerStrokePointArrayParamKnotHolderEntity *pspa_ent = dynamic_cast<PowerStrokePointArrayParamKnotHolderEntity *>(ent);
-                if ( pspa_ent && pspa_ent->_pparam == this->_pparam ) {  // check if the knotentity belongs to this powerstrokepointarray parameter
+                if (pspa_ent && pspa_ent->_pparam == this->_pparam) {  // check if the knotentity belongs to this powerstrokepointarray parameter
                     if (pspa_ent->_index > this->_index) {
                         ++pspa_ent->_index;
                     }
@@ -264,7 +264,7 @@ PowerStrokePointArrayParamKnotHolderEntity::knot_click(guint state)
             };
             // add knot to knotholder
             PowerStrokePointArrayParamKnotHolderEntity *e = new PowerStrokePointArrayParamKnotHolderEntity(_pparam, _index+1);
-            e->create( this->desktop, this->item, parent_holder, Inkscape::CTRL_TYPE_UNKNOWN,
+            e->create(this->desktop, this->item, parent_holder, Inkscape::CTRL_TYPE_UNKNOWN,
                        _("<b>Stroke width control point</b>: drag to alter the stroke width. <b>Ctrl+click</b> adds a control point, <b>Ctrl+Alt+click</b> deletes it, <b>Shift+click</b> launches width dialog."),
                         _pparam->knot_shape, _pparam->knot_mode, _pparam->knot_color);
             parent_holder->add(e);

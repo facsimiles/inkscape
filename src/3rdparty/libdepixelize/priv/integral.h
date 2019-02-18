@@ -39,7 +39,7 @@ Geom::Coord integral(F f, T begin, T end, unsigned samples)
     T ret = 0;
     const T width = (end - begin) / samples;
 
-    for ( unsigned i = 0 ; i != samples ; ++i )
+    for (unsigned i = 0 ; i != samples ; ++i)
         ret += width * f(begin + width * (i + .5));
 
     return ret;

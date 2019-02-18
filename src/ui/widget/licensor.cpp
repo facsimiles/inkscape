@@ -88,7 +88,7 @@ Licensor::~Licensor()
 void Licensor::init (Registry& wr)
 {
     /* add license-specific metadata entry areas */
-    rdf_work_entity_t* entity = rdf_find_entity ( "license_uri" );
+    rdf_work_entity_t* entity = rdf_find_entity ("license_uri");
     _eentry = EntityEntry::create (entity, wr);
 
     LicenseItem *i;

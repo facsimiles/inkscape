@@ -67,10 +67,10 @@ public:
      * @param sweep If true, the clockwise arc is chosen, otherwise the counter-clockwise
      *              arc is chosen
      * @param fp Final point of the arc */
-    EllipticalArc( Point const &ip, Point const &r,
+    EllipticalArc(Point const &ip, Point const &r,
                    Coord rot_angle, bool large_arc, bool sweep,
                    Point const &fp
-                 )
+)
         : _initial_point(ip)
         , _final_point(fp)
         , _ellipse(0, 0, r[X], r[Y], rot_angle)
@@ -81,10 +81,10 @@ public:
     }
 
     /// Create a new elliptical arc, giving the ellipse's rays as separate coordinates.
-    EllipticalArc( Point const &ip, Coord rx, Coord ry,
+    EllipticalArc(Point const &ip, Coord rx, Coord ry,
                    Coord rot_angle, bool large_arc, bool sweep,
                    Point const &fp
-                 )
+)
         : _initial_point(ip)
         , _final_point(fp)
         , _ellipse(0, 0, rx, ry, rot_angle)
@@ -138,10 +138,10 @@ public:
     /// @{
 
     /// Change all of the arc's parameters.
-    void set( Point const &ip, double rx, double ry,
+    void set(Point const &ip, double rx, double ry,
               double rot_angle, bool large_arc, bool sweep,
               Point const &fp
-            )
+)
     {
         _initial_point = ip;
         _final_point = fp;
@@ -153,10 +153,10 @@ public:
     }
 
     /// Change all of the arc's parameters.
-    void set( Point const &ip, Point const &r,
+    void set(Point const &ip, Point const &r,
               Angle rot_angle, bool large_arc, bool sweep,
               Point const &fp
-            )
+)
     {
         _initial_point = ip;
         _final_point = fp;
@@ -276,9 +276,9 @@ public:
     }
     virtual std::vector<double> roots(double v, Dim2 d) const;
 #ifdef HAVE_GSL
-    virtual std::vector<double> allNearestTimes( Point const& p, double from = 0, double to = 1 ) const;
-    virtual double nearestTime( Point const& p, double from = 0, double to = 1 ) const {
-        if ( are_near(ray(X), ray(Y)) && are_near(center(), p) ) {
+    virtual std::vector<double> allNearestTimes(Point const& p, double from = 0, double to = 1) const;
+    virtual double nearestTime(Point const& p, double from = 0, double to = 1) const {
+        if (are_near(ray(X), ray(Y)) && are_near(center(), p)) {
             return from;
         }
         return allNearestTimes(p, from, to).front();

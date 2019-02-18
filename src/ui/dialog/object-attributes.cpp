@@ -83,7 +83,7 @@ ObjectAttributes::ObjectAttributes () :
     attrTable->show();
     widget_setup();
     
-    desktopChangeConn = deskTrack.connectDesktopChanged( sigc::mem_fun(*this, &ObjectAttributes::setTargetDesktop) );
+    desktopChangeConn = deskTrack.connectDesktopChanged(sigc::mem_fun(*this, &ObjectAttributes::setTargetDesktop));
     deskTrack.connect(GTK_WIDGET(gobj()));
 }
 
@@ -132,7 +132,7 @@ void ObjectAttributes::widget_setup ()
     {
         Inkscape::XML::Node *ir = obj->getRepr();
         const gchar *href = ir->attribute("xlink:href");
-        if ( (!href) || ((strncmp(href, "data:", 5) == 0)) )
+        if ((!href) || ((strncmp(href, "data:", 5) == 0)))
         {
             desc = image_nohref_desc;
         }
@@ -192,11 +192,11 @@ void ObjectAttributes::setTargetDesktop(SPDesktop *desktop)
     }
 }
 
-void ObjectAttributes::selectionModifiedCB( guint flags )
+void ObjectAttributes::selectionModifiedCB(guint flags)
 {
-    if (flags & ( SP_OBJECT_MODIFIED_FLAG |
+    if (flags & (SP_OBJECT_MODIFIED_FLAG |
                    SP_OBJECT_PARENT_MODIFIED_FLAG |
-                   SP_OBJECT_STYLE_MODIFIED_FLAG) ) {
+                   SP_OBJECT_STYLE_MODIFIED_FLAG)) {
         attrTable->reread_properties();
     }
 }

@@ -44,7 +44,7 @@
 namespace ege
 {
 
-typedef void (*ColorCallback)( void* data );
+typedef void (*ColorCallback)(void* data);
 
 
 /**
@@ -57,11 +57,11 @@ public:
 
     PaintDef();
     PaintDef(ColorType type);
-    PaintDef( unsigned int r, unsigned int g, unsigned int b, std::string  description );
+    PaintDef(unsigned int r, unsigned int g, unsigned int b, std::string  description);
     virtual ~PaintDef();
 
-    PaintDef( PaintDef const &other );
-    virtual PaintDef& operator=( PaintDef const &other );
+    PaintDef(PaintDef const &other);
+    virtual PaintDef& operator=(PaintDef const &other);
 
     ColorType getType() const { return type; }
 
@@ -69,16 +69,16 @@ public:
     void getMIMEData(std::string const & type, char*& dest, int& len, int& format);
     bool fromMIMEData(std::string const & type, char const * data, int len, int format);
 
-    void setRGB( unsigned int r, unsigned int g, unsigned int b );
+    void setRGB(unsigned int r, unsigned int g, unsigned int b);
     unsigned int getR() const { return r; }
     unsigned int getG() const { return g; }
     unsigned int getB() const { return b; }
 
-    void addCallback( ColorCallback cb, void* data );
-    void removeCallback( ColorCallback cb, void* data );
+    void addCallback(ColorCallback cb, void* data);
+    void removeCallback(ColorCallback cb, void* data);
 
     bool isEditable() const { return editable; }
-    void setEditable( bool edit ) { editable = edit; }
+    void setEditable(bool edit) { editable = edit; }
 
     std::string descr;
 

@@ -301,7 +301,7 @@ void SPSpiral::set_shape() {
             Geom::PathVector pv = sp_svg_read_pathv(this->getRepr()->attribute("d"));
             SPCurve *cold = new SPCurve(pv);
             this->setCurveInsync(cold);
-            this->setCurveBeforeLPE( cold );
+            this->setCurveBeforeLPE(cold);
             cold->unref();
         }
 
@@ -418,7 +418,7 @@ Geom::Affine SPSpiral::set_transform(Geom::Affine const &xform)
     }
 
     /* Calculate spiral start in parent coords. */
-    Geom::Point pos( Geom::Point(this->cx, this->cy) * xform );
+    Geom::Point pos(Geom::Point(this->cx, this->cy) * xform);
 
     /* This function takes care of translation and scaling, we return whatever parts we can't
        handle. */
@@ -523,7 +523,7 @@ Geom::Point SPSpiral::getTangent(gdouble t) const {
         unrotated /= s_len;
 
         /* ret = spiral->exp * (c, s) + t_scaled * (-s, c);
-           alternatively ret = (spiral->exp, t_scaled) * (( c, s),
+           alternatively ret = (spiral->exp, t_scaled) * ((c, s),
                                   (-s, c)).*/
         ret = Geom::Point(dot(unrotated, Geom::Point(c, -s)),
                                   dot(unrotated, Geom::Point(s, c)));

@@ -26,7 +26,7 @@
 // SPDocument*
 // ink_file_new(const std::string &Template)
 // {
-//   SPDocument *doc = SPDocument::createNewDoc( Template, true, true );
+//   SPDocument *doc = SPDocument::createNewDoc(Template, true, true);
 //   return doc;
 // }
 

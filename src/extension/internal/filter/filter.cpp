@@ -68,15 +68,15 @@ Filter::get_filter (Inkscape::Extension::Extension * ext) {
 }
 
 void
-Filter::merge_filters( Inkscape::XML::Node * to, Inkscape::XML::Node * from,
+Filter::merge_filters(Inkscape::XML::Node * to, Inkscape::XML::Node * from,
 		       Inkscape::XML::Document * doc,
 		       gchar const * srcGraphic, gchar const * srcGraphicAlpha)
 {
 	if (from == nullptr) return;
 
 	// copy attributes
-    for ( Inkscape::Util::List<Inkscape::XML::AttributeRecord const> iter = from->attributeList() ;
-          iter ; ++iter ) {
+    for (Inkscape::Util::List<Inkscape::XML::AttributeRecord const> iter = from->attributeList() ;
+          iter ; ++iter) {
 		gchar const * attr = g_quark_to_string(iter->key);
 		//printf("Attribute List: %s\n", attr);
 		if (!strcmp(attr, "id")) continue; // nope, don't copy that one!

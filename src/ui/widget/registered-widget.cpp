@@ -271,9 +271,9 @@ RegisteredScalar::~RegisteredScalar()
     _value_changed_connection.disconnect();
 }
 
-RegisteredScalar::RegisteredScalar ( const Glib::ustring& label, const Glib::ustring& tip,
+RegisteredScalar::RegisteredScalar (const Glib::ustring& label, const Glib::ustring& tip,
                          const Glib::ustring& key, Registry& wr, Inkscape::XML::Node* repr_in,
-                         SPDocument * doc_in )
+                         SPDocument * doc_in)
     : RegisteredWidget<Scalar>(label, tip)
 {
     init_parent(key, wr, repr_in, doc_in);
@@ -319,9 +319,9 @@ RegisteredText::~RegisteredText()
     _activate_connection.disconnect();
 }
 
-RegisteredText::RegisteredText ( const Glib::ustring& label, const Glib::ustring& tip,
+RegisteredText::RegisteredText (const Glib::ustring& label, const Glib::ustring& tip,
                          const Glib::ustring& key, Registry& wr, Inkscape::XML::Node* repr_in,
-                         SPDocument * doc_in )
+                         SPDocument * doc_in)
     : RegisteredWidget<Text>(label, tip)
 {
     init_parent(key, wr, repr_in, doc_in);
@@ -549,9 +549,9 @@ RegisteredPoint::~RegisteredPoint()
     _value_y_changed_connection.disconnect();
 }
 
-RegisteredPoint::RegisteredPoint ( const Glib::ustring& label, const Glib::ustring& tip,
+RegisteredPoint::RegisteredPoint (const Glib::ustring& label, const Glib::ustring& tip,
                         const Glib::ustring& key, Registry& wr, Inkscape::XML::Node* repr_in,
-                        SPDocument* doc_in )
+                        SPDocument* doc_in)
     : RegisteredWidget<Point> (label, tip)
 {
     init_parent(key, wr, repr_in, doc_in);
@@ -594,9 +594,9 @@ RegisteredTransformedPoint::~RegisteredTransformedPoint()
     _value_y_changed_connection.disconnect();
 }
 
-RegisteredTransformedPoint::RegisteredTransformedPoint ( const Glib::ustring& label, const Glib::ustring& tip,
+RegisteredTransformedPoint::RegisteredTransformedPoint (const Glib::ustring& label, const Glib::ustring& tip,
                         const Glib::ustring& key, Registry& wr, Inkscape::XML::Node* repr_in,
-                        SPDocument* doc_in )
+                        SPDocument* doc_in)
     : RegisteredWidget<Point> (label, tip),
       to_svg(Geom::identity())
 {
@@ -620,7 +620,7 @@ void
 RegisteredTransformedPoint::setTransform(Geom::Affine const & canvas_to_svg)
 {
     // check if matrix is singular / has inverse
-    if ( ! canvas_to_svg.isSingular() ) {
+    if (! canvas_to_svg.isSingular()) {
         to_svg = canvas_to_svg;
     } else {
         // set back to default
@@ -661,9 +661,9 @@ RegisteredVector::~RegisteredVector()
     _value_y_changed_connection.disconnect();
 }
 
-RegisteredVector::RegisteredVector ( const Glib::ustring& label, const Glib::ustring& tip,
+RegisteredVector::RegisteredVector (const Glib::ustring& label, const Glib::ustring& tip,
                         const Glib::ustring& key, Registry& wr, Inkscape::XML::Node* repr_in,
-                        SPDocument* doc_in )
+                        SPDocument* doc_in)
     : RegisteredWidget<Point> (label, tip),
       _polar_coords(false)
 {
@@ -745,9 +745,9 @@ RegisteredRandom::~RegisteredRandom()
     _reseeded_connection.disconnect();
 }
 
-RegisteredRandom::RegisteredRandom ( const Glib::ustring& label, const Glib::ustring& tip,
+RegisteredRandom::RegisteredRandom (const Glib::ustring& label, const Glib::ustring& tip,
                          const Glib::ustring& key, Registry& wr, Inkscape::XML::Node* repr_in,
-                         SPDocument * doc_in )
+                         SPDocument * doc_in)
     : RegisteredWidget<Random> (label, tip)
 {
     init_parent(key, wr, repr_in, doc_in);
@@ -797,9 +797,9 @@ RegisteredFontButton::~RegisteredFontButton()
     _signal_font_set.disconnect();
 }
 
-RegisteredFontButton::RegisteredFontButton ( const Glib::ustring& label, const Glib::ustring& tip,
+RegisteredFontButton::RegisteredFontButton (const Glib::ustring& label, const Glib::ustring& tip,
                         const Glib::ustring& key, Registry& wr, Inkscape::XML::Node* repr_in,
-                        SPDocument* doc_in )
+                        SPDocument* doc_in)
     : RegisteredWidget<FontButton>(label, tip)
 {
     init_parent(key, wr, repr_in, doc_in);

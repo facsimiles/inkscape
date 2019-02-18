@@ -502,12 +502,12 @@ private:
     ConfPanel cfgPanel;
 
 
-    static void setupTree( Glib::RefPtr<Gtk::TreeStore> store, Gtk::TreeIter &tablet );
-    void setupValueAndCombo( gint reported, gint actual, Gtk::Label& label, Gtk::ComboBoxText& combo );
-    void updateTestButtons( Glib::ustring const& key, gint hotButton );
-    void updateTestAxes( Glib::ustring const& key, GdkDevice* dev );
-    void mapAxesValues( Glib::ustring const& key, gdouble const * axes, GdkDevice* dev);
-    Glib::ustring getKeyFor( GdkDevice* device );
+    static void setupTree(Glib::RefPtr<Gtk::TreeStore> store, Gtk::TreeIter &tablet);
+    void setupValueAndCombo(gint reported, gint actual, Gtk::Label& label, Gtk::ComboBoxText& combo);
+    void updateTestButtons(Glib::ustring const& key, gint hotButton);
+    void updateTestAxes(Glib::ustring const& key, GdkDevice* dev);
+    void mapAxesValues(Glib::ustring const& key, gdouble const * axes, GdkDevice* dev);
+    Glib::ustring getKeyFor(GdkDevice* device);
     bool eventSnoop(GdkEvent* event);
     void linkComboChanged();
     void resyncToSelection();
@@ -731,7 +731,7 @@ InputDialogImpl::InputDialogImpl() :
     deviceTree.get_selection()->signal_changed().connect(sigc::mem_fun(*this, &InputDialogImpl::resyncToSelection));
 
 
-    setupTree( deviceStore, deviceIter );
+    setupTree(deviceStore, deviceIter);
 
     Inkscape::DeviceManager::getManager().signalDeviceChanged().connect(sigc::mem_fun(*this, &InputDialogImpl::handleDeviceChange));
     Inkscape::DeviceManager::getManager().signalAxesChanged().connect(sigc::mem_fun(*this, &InputDialogImpl::updateDeviceAxes));
@@ -750,19 +750,19 @@ public:
     std::list<Glib::RefPtr<InputDevice const> > devices;
 };
 
-static Glib::ustring getCommon( std::list<Glib::ustring> const &names )
+static Glib::ustring getCommon(std::list<Glib::ustring> const &names)
 {
     Glib::ustring result;
 
-    if ( !names.empty() ) {
+    if (!names.empty()) {
         size_t pos = 0;
         bool match = true;
-        while ( match ) {
-            if ( names.begin()->length() > pos ) {
+        while (match) {
+            if (names.begin()->length() > pos) {
                 gunichar ch = (*names.begin())[pos];
                 for (const auto & name : names) {
-                    if ( (pos >= name.length())
-                         || (name[pos] != ch) ) {
+                    if ((pos >= name.length())
+                         || (name[pos] != ch)) {
                         match = false;
                         break;
                     }
@@ -791,17 +791,17 @@ void InputDialogImpl::ConfPanel::onModeChange()
         Glib::RefPtr<InputDevice const> dev = (*iter)[getCols().device];
         if (dev && (getStringToMode().find(newText) != getStringToMode().end())) {
             Gdk::InputMode mode = getStringToMode()[newText];
-            Inkscape::DeviceManager::getManager().setMode( dev->getId(), mode );
+            Inkscape::DeviceManager::getManager().setMode(dev->getId(), mode);
         }
     }
 
 }
 
 
-void InputDialogImpl::setupTree( Glib::RefPtr<Gtk::TreeStore> store, Gtk::TreeIter &tablet )
+void InputDialogImpl::setupTree(Glib::RefPtr<Gtk::TreeStore> store, Gtk::TreeIter &tablet)
 {
     std::list<Glib::RefPtr<InputDevice const> > devList = Inkscape::DeviceManager::getManager().getDevices();
-    if ( !devList.empty() ) {
+    if (!devList.empty()) {
         //Gtk::TreeModel::Row row = *(store->append());
         //row[getCols().description] = _("Hardware");
 
@@ -811,10 +811,10 @@ void InputDialogImpl::setupTree( Glib::RefPtr<Gtk::TreeStore> store, Gtk::TreeIt
 
         // Phase 1 - figure out which tablets are present
         for (auto dev : devList) {
-            if ( dev ) {
-                if ( dev->getSource() != Gdk::SOURCE_MOUSE ) {
-                    consumed.insert( dev->getId() );
-                    if ( tablets.empty() ) {
+            if (dev) {
+                if (dev->getSource() != Gdk::SOURCE_MOUSE) {
+                    consumed.insert(dev->getId());
+                    if (tablets.empty()) {
                         TabletTmp tmp;
                         tablets.push_back(tmp);
                     }
@@ -829,14 +829,14 @@ void InputDialogImpl::setupTree( Glib::RefPtr<Gtk::TreeStore> store, Gtk::TreeIt
         for (auto & it : tablets) {
             tablet = store->prepend(/*row.children()*/);
             Gtk::TreeModel::Row childrow = *tablet;
-            if ( it.name.empty() ) {
+            if (it.name.empty()) {
                 // Check to see if we can derive one
                 std::list<Glib::ustring> names;
                 for (auto & device : it.devices) {
-                    names.push_back( device->getName() );
+                    names.push_back(device->getName());
                 }
                 Glib::ustring common = getCommon(names);
-                if ( !common.empty() ) {
+                if (!common.empty()) {
                     it.name = common;
                 }
             }
@@ -844,11 +844,11 @@ void InputDialogImpl::setupTree( Glib::RefPtr<Gtk::TreeStore> store, Gtk::TreeIt
             childrow[getCols().thumbnail] = getPix(PIX_TABLET);
 
             // Check if there is an eraser we can link to a pen
-            for ( std::list<Glib::RefPtr<InputDevice const> >::iterator it2 = it.devices.begin(); it2 != it.devices.end(); ++it2 ) {
+            for (std::list<Glib::RefPtr<InputDevice const> >::iterator it2 = it.devices.begin(); it2 != it.devices.end(); ++it2) {
                 Glib::RefPtr<InputDevice const> dev = *it2;
-                if ( dev->getSource() == Gdk::SOURCE_PEN ) {
+                if (dev->getSource() == Gdk::SOURCE_PEN) {
                     for (auto dev2 : it.devices) {
-                        if ( dev2->getSource() == Gdk::SOURCE_ERASER ) {
+                        if (dev2->getSource() == Gdk::SOURCE_ERASER) {
                             DeviceManager::getManager().setLinkedTo(dev->getId(), dev2->getId());                            
                             break; // only check the first eraser... for now
                         }
@@ -862,7 +862,7 @@ void InputDialogImpl::setupTree( Glib::RefPtr<Gtk::TreeStore> store, Gtk::TreeIt
                 deviceRow[getCols().description] = dev->getName();
                 deviceRow[getCols().device] = dev;
                 deviceRow[getCols().mode] = dev->getMode();
-                switch ( dev->getSource() ) {
+                switch (dev->getSource()) {
                     case GDK_SOURCE_MOUSE:
                         deviceRow[getCols().thumbnail] = getPix(PIX_CORE);
                         break;
@@ -886,7 +886,7 @@ void InputDialogImpl::setupTree( Glib::RefPtr<Gtk::TreeStore> store, Gtk::TreeIt
         }
 
         for (auto dev : devList) {
-            if ( dev && (consumed.find( dev->getId() ) == consumed.end()) ) {
+            if (dev && (consumed.find(dev->getId()) == consumed.end())) {
                 Gtk::TreeModel::Row deviceRow = *(store->prepend(/*row.children()*/));
                 deviceRow[getCols().description] = dev->getName();
                 deviceRow[getCols().device] = dev;
@@ -966,11 +966,11 @@ InputDialogImpl::ConfPanel::ConfPanel() :
     confDeviceTree.property_enable_tree_lines() = false;
     confDeviceTree.property_enable_grid_lines() = false;
     confDeviceTree.set_headers_visible(false);
-    //confDeviceTree.set_expander_column( *confDeviceTree.get_column(expPos - 1) );
+    //confDeviceTree.set_expander_column(*confDeviceTree.get_column(expPos - 1));
 
     confDeviceTree.get_selection()->signal_changed().connect(sigc::mem_fun(*this, &InputDialogImpl::ConfPanel::onTreeSelect));
 
-    setupTree( confDeviceStore, confDeviceIter );
+    setupTree(confDeviceStore, confDeviceIter);
 
     Inkscape::DeviceManager::getManager().signalLinkChanged().connect(sigc::bind(sigc::ptr_fun(&InputDialogImpl::updateDeviceLinks), confDeviceIter, &confDeviceTree));
 
@@ -1021,8 +1021,8 @@ InputDialogImpl::ConfPanel::ConfPanel() :
 
     //keysTree.append_column("Value", _kb_shortcut_renderer);
     //keysTree.get_column(1)->add_attribute(_kb_shortcut_renderer.property_text(), keysColumns.value);
-    //_kb_shortcut_renderer.signal_accel_edited().connect( sigc::mem_fun(*this, &InputDialogImpl::onKBTreeEdited) );
-    //_kb_shortcut_renderer.signal_accel_cleared().connect( sigc::mem_fun(*this, &InputDialogImpl::onKBTreeCleared) );
+    //_kb_shortcut_renderer.signal_accel_edited().connect(sigc::mem_fun(*this, &InputDialogImpl::onKBTreeEdited));
+    //_kb_shortcut_renderer.signal_accel_cleared().connect(sigc::mem_fun(*this, &InputDialogImpl::onKBTreeCleared));
 
     axisStore = Gtk::ListStore::create(axisColumns);
 
@@ -1082,7 +1082,7 @@ void InputDialogImpl::ConfPanel::commitCellModeChange(Glib::ustring const &path,
         Glib::RefPtr<InputDevice const> dev = (*iter)[getCols().device];
         if (dev && (getStringToMode().find(newText) != getStringToMode().end())) {
             Gdk::InputMode mode = getStringToMode()[newText];
-            Inkscape::DeviceManager::getManager().setMode( dev->getId(), mode );
+            Inkscape::DeviceManager::getManager().setMode(dev->getId(), mode);
         }
     }
 
@@ -1113,9 +1113,9 @@ void InputDialogImpl::ConfPanel::commitCellStateChange(Glib::ustring const &path
         if (dev) {
             Gdk::InputMode mode = (*iter)[getCols().mode];
             if (mode == Gdk::MODE_DISABLED) {
-                Inkscape::DeviceManager::getManager().setMode( dev->getId(), Gdk::MODE_SCREEN );
+                Inkscape::DeviceManager::getManager().setMode(dev->getId(), Gdk::MODE_SCREEN);
             } else {
-                Inkscape::DeviceManager::getManager().setMode( dev->getId(), Gdk::MODE_DISABLED );
+                Inkscape::DeviceManager::getManager().setMode(dev->getId(), Gdk::MODE_DISABLED);
             }
         }
     }
@@ -1186,11 +1186,11 @@ void InputDialogImpl::handleDeviceChange(Glib::RefPtr<InputDevice const> device)
 
     for (auto & store : stores) {
         Gtk::TreeModel::iterator deviceIter;
-        store->foreach_iter( sigc::bind<Glib::ustring, Gtk::TreeModel::iterator*>(
+        store->foreach_iter(sigc::bind<Glib::ustring, Gtk::TreeModel::iterator*>(
                                  sigc::ptr_fun(&InputDialogImpl::findDevice),
                                  device->getId(),
-                                 &deviceIter) );
-        if ( deviceIter ) {
+                                 &deviceIter));
+        if (deviceIter) {
             Gdk::InputMode mode = device->getMode();
             Gtk::TreeModel::Row row = *deviceIter;
             if (row[getCols().mode] != mode) {
@@ -1206,15 +1206,15 @@ void InputDialogImpl::updateDeviceAxes(Glib::RefPtr<InputDevice const> device)
 
     std::map<guint, std::pair<guint, gdouble> > existing = axesMap[device->getId()];
     gint mask = 0x1;
-    for ( gint num = 0; num < 32; num++, mask <<= 1) {
-        if ( (mask & live) != 0 ) {
-            if ( (existing.find(num) == existing.end()) || (existing[num].first < 2) ) {
+    for (gint num = 0; num < 32; num++, mask <<= 1) {
+        if ((mask & live) != 0) {
+            if ((existing.find(num) == existing.end()) || (existing[num].first < 2)) {
                 axesMap[device->getId()][num].first = 2;
                 axesMap[device->getId()][num].second = 0.0;
             }
         }
     }
-    updateTestAxes( device->getId(), nullptr );
+    updateTestAxes(device->getId(), nullptr);
 }
 
 void InputDialogImpl::updateDeviceButtons(Glib::RefPtr<InputDevice const> device)
@@ -1222,9 +1222,9 @@ void InputDialogImpl::updateDeviceButtons(Glib::RefPtr<InputDevice const> device
     gint live = device->getLiveButtons();
     std::set<guint> existing = buttonMap[device->getId()];
     gint mask = 0x1;
-    for ( gint num = 0; num < 32; num++, mask <<= 1) {
-        if ( (mask & live) != 0 ) {
-            if ( existing.find(num) == existing.end() ) {
+    for (gint num = 0; num < 32; num++, mask <<= 1) {
+        if ((mask & live) != 0) {
+            if (existing.find(num) == existing.end()) {
                 buttonMap[device->getId()].insert(num);
             }
         }
@@ -1239,8 +1239,8 @@ bool InputDialogImpl::findDevice(const Gtk::TreeModel::iterator& iter,
 {
     bool stop = false;
     Glib::RefPtr<InputDevice const> dev = (*iter)[getCols().device];
-    if ( dev && (dev->getId() == id) ) {
-        if ( result ) {
+    if (dev && (dev->getId() == id)) {
+        if (result) {
             *result = iter;
         }
         stop = true;
@@ -1254,8 +1254,8 @@ bool InputDialogImpl::findDeviceByLink(const Gtk::TreeModel::iterator& iter,
 {
     bool stop = false;
     Glib::RefPtr<InputDevice const> dev = (*iter)[getCols().device];
-    if ( dev && (dev->getLink() == link) ) {
-        if ( result ) {
+    if (dev && (dev->getLink() == link)) {
+        if (result) {
             *result = iter;
         }
         stop = true;
@@ -1269,18 +1269,18 @@ void InputDialogImpl::updateDeviceLinks(Glib::RefPtr<InputDevice const> device, 
 
 //     g_message("Links!!!! for %p  hits [%s]  with link of [%s]", &device, device->getId().c_str(), device->getLink().c_str());
     Gtk::TreeModel::iterator deviceIter;
-    deviceStore->foreach_iter( sigc::bind<Glib::ustring, Gtk::TreeModel::iterator*>(
+    deviceStore->foreach_iter(sigc::bind<Glib::ustring, Gtk::TreeModel::iterator*>(
                              sigc::ptr_fun(&InputDialogImpl::findDevice),
                              device->getId(),
-                             &deviceIter) );
+                             &deviceIter));
 
-    if ( deviceIter ) {
+    if (deviceIter) {
         // Found the device concerned. Can proceed.
 
-        if ( device->getLink().empty() ) {
+        if (device->getLink().empty()) {
             // is now unlinked
 //             g_message("Item %s is unlinked", device->getId().c_str());
-            if ( deviceIter->parent() != tabletIter ) {
+            if (deviceIter->parent() != tabletIter) {
                 // Not the child of the tablet. move on up
 
                 Glib::RefPtr<InputDevice const> dev = (*deviceIter)[getCols().device];
@@ -1295,13 +1295,13 @@ void InputDialogImpl::updateDeviceLinks(Glib::RefPtr<InputDevice const> device, 
 
                 Gtk::TreeModel::iterator oldParent = deviceIter->parent();
                 deviceStore->erase(deviceIter);
-                if ( oldParent->children().empty() ) {
+                if (oldParent->children().empty()) {
                     deviceStore->erase(oldParent);
                 }
             }
         } else {
             // is linking
-            if ( deviceIter->parent() == tabletIter ) {
+            if (deviceIter->parent() == tabletIter) {
                 // Simple case. Not already linked
 
                 Gtk::TreeIter newGroup = deviceStore->append(tabletIter->children());
@@ -1320,11 +1320,11 @@ void InputDialogImpl::updateDeviceLinks(Glib::RefPtr<InputDevice const> device, 
 
 
                 Gtk::TreeModel::iterator linkIter;
-                deviceStore->foreach_iter( sigc::bind<Glib::ustring, Gtk::TreeModel::iterator*>(
+                deviceStore->foreach_iter(sigc::bind<Glib::ustring, Gtk::TreeModel::iterator*>(
                                          sigc::ptr_fun(&InputDialogImpl::findDeviceByLink),
                                          device->getId(),
-                                         &linkIter) );
-                if ( linkIter ) {
+                                         &linkIter));
+                if (linkIter) {
                     dev = (*linkIter)[getCols().device];
                     descr = (*linkIter)[getCols().description];
                     thumb = (*linkIter)[getCols().thumbnail];
@@ -1336,14 +1336,14 @@ void InputDialogImpl::updateDeviceLinks(Glib::RefPtr<InputDevice const> device, 
                     deviceRow[getCols().mode] = dev->getMode();
                     Gtk::TreeModel::iterator oldParent = linkIter->parent();
                     deviceStore->erase(linkIter);
-                    if ( oldParent->children().empty() ) {
+                    if (oldParent->children().empty()) {
                         deviceStore->erase(oldParent);
                     }
                 }
 
                 Gtk::TreeModel::iterator oldParent = deviceIter->parent();
                 deviceStore->erase(deviceIter);
-                if ( oldParent->children().empty() ) {
+                if (oldParent->children().empty()) {
                     deviceStore->erase(oldParent);
                 }
                 tree->expand_row(Gtk::TreePath(newGroup), true);
@@ -1359,15 +1359,15 @@ void InputDialogImpl::linkComboChanged() {
         Gtk::TreeModel::Row row = *iter;
         Glib::ustring val = row[getCols().description];
         Glib::RefPtr<InputDevice const> dev = row[getCols().device];
-        if ( dev ) {
-            if ( linkCombo.get_active_row_number() == 0 ) {
+        if (dev) {
+            if (linkCombo.get_active_row_number() == 0) {
                 // It is the "None" entry
                 DeviceManager::getManager().setLinkedTo(dev->getId(), "");
             } else {
                 Glib::ustring linkName = linkCombo.get_active_text();
                 std::list<Glib::RefPtr<InputDevice const> > devList = Inkscape::DeviceManager::getManager().getDevices();
-                for ( std::list<Glib::RefPtr<InputDevice const> >::const_iterator it = devList.begin(); it != devList.end(); ++it ) {
-                    if ( linkName == (*it)->getName() ) {
+                for (std::list<Glib::RefPtr<InputDevice const> >::const_iterator it = devList.begin(); it != devList.end(); ++it) {
+                    if (linkName == (*it)->getName()) {
                         DeviceManager::getManager().setLinkedTo(dev->getId(), (*it)->getId());
                         break;
                     }
@@ -1386,20 +1386,20 @@ void InputDialogImpl::resyncToSelection() {
         Glib::ustring val = row[getCols().description];
         Glib::RefPtr<InputDevice const> dev = row[getCols().device];
 
-        if ( dev ) {
+        if (dev) {
             axisTable.set_sensitive(true);
 
             linkConnection.block();
             linkCombo.remove_all();
             linkCombo.append(_("None"));
             linkCombo.set_active(0);
-            if ( dev->getSource() != Gdk::SOURCE_MOUSE ) {
+            if (dev->getSource() != Gdk::SOURCE_MOUSE) {
                 Glib::ustring linked = dev->getLink();
                 std::list<Glib::RefPtr<InputDevice const> > devList = Inkscape::DeviceManager::getManager().getDevices();
-                for ( std::list<Glib::RefPtr<InputDevice const> >::const_iterator it = devList.begin(); it != devList.end(); ++it ) {
-                    if ( ((*it)->getSource() != Gdk::SOURCE_MOUSE) && ((*it) != dev) ) {
+                for (std::list<Glib::RefPtr<InputDevice const> >::const_iterator it = devList.begin(); it != devList.end(); ++it) {
+                    if (((*it)->getSource() != Gdk::SOURCE_MOUSE) && ((*it) != dev)) {
                         linkCombo.append((*it)->getName().c_str());
-                        if ( (linked.length() > 0) && (linked == (*it)->getId()) ) {
+                        if ((linked.length() > 0) && (linked == (*it)->getId())) {
                             linkCombo.set_active_text((*it)->getName().c_str());
                         }
                     }
@@ -1413,8 +1413,8 @@ void InputDialogImpl::resyncToSelection() {
             clear = false;
             devName.set_label(row[getCols().description]);
             axisFrame.set_label(row[getCols().description]);
-            setupValueAndCombo( dev->getNumAxes(), dev->getNumAxes(), devAxesCount, axesCombo);
-            setupValueAndCombo( dev->getNumKeys(), dev->getNumKeys(), devKeyCount, buttonCombo);
+            setupValueAndCombo(dev->getNumAxes(), dev->getNumAxes(), devAxesCount, axesCombo);
+            setupValueAndCombo(dev->getNumKeys(), dev->getNumKeys(), devKeyCount, buttonCombo);
 
 
         }
@@ -1438,7 +1438,7 @@ void InputDialogImpl::ConfPanel::setAxis(gint count)
 
     static Glib::ustring axesLabels[6] = {_("X"), _("Y"), _("Pressure"), _("X tilt"), _("Y tilt"), _("Wheel")};
 
-    for ( gint barNum = 0; barNum < static_cast<gint>(G_N_ELEMENTS(axesLabels)); barNum++ ) {
+    for (gint barNum = 0; barNum < static_cast<gint>(G_N_ELEMENTS(axesLabels)); barNum++) {
 
             Gtk::TreeModel::Row row = *(axisStore->append());
             row[axisColumns.name] = axesLabels[barNum];
@@ -1466,29 +1466,29 @@ void InputDialogImpl::ConfPanel::setKeys(gint count)
 
 
 }
-void InputDialogImpl::setupValueAndCombo( gint reported, gint actual, Gtk::Label& label, Gtk::ComboBoxText& combo )
+void InputDialogImpl::setupValueAndCombo(gint reported, gint actual, Gtk::Label& label, Gtk::ComboBoxText& combo)
 {
     gchar *tmp = g_strdup_printf("%d", reported);
     label.set_label(tmp);
     g_free(tmp);
 
     combo.remove_all();
-    for ( gint i = 1; i <= reported; ++i ) {
+    for (gint i = 1; i <= reported; ++i) {
         tmp = g_strdup_printf("%d", i);
         combo.append(tmp);
         g_free(tmp);
     }
 
-    if ( (1 <= actual) && (actual <= reported) ) {
+    if ((1 <= actual) && (actual <= reported)) {
         combo.set_active(actual - 1);
     }
 }
 
-void InputDialogImpl::updateTestButtons( Glib::ustring const& key, gint hotButton )
+void InputDialogImpl::updateTestButtons(Glib::ustring const& key, gint hotButton)
 {
-    for ( gint i = 0; i < static_cast<gint>(G_N_ELEMENTS(testButtons)); i++ ) {
-        if ( buttonMap[key].find(i) != buttonMap[key].end() ) {
-            if ( i == hotButton ) {
+    for (gint i = 0; i < static_cast<gint>(G_N_ELEMENTS(testButtons)); i++) {
+        if (buttonMap[key].find(i) != buttonMap[key].end()) {
+            if (i == hotButton) {
                 testButtons[i].set(getPix(PIX_BUTTONS_ON));
             } else {
                 testButtons[i].set(getPix(PIX_BUTTONS_OFF));
@@ -1499,7 +1499,7 @@ void InputDialogImpl::updateTestButtons( Glib::ustring const& key, gint hotButto
     }
 }
 
-void InputDialogImpl::updateTestAxes( Glib::ustring const& key, GdkDevice* dev )
+void InputDialogImpl::updateTestAxes(Glib::ustring const& key, GdkDevice* dev)
 {
     //static gdouble epsilon = 0.0001;
     {
@@ -1509,33 +1509,33 @@ void InputDialogImpl::updateTestAxes( Glib::ustring const& key, GdkDevice* dev )
             Gtk::TreeModel::Row row = *iter;
             Glib::ustring val = row[getCols().description];
             Glib::RefPtr<InputDevice const> idev = row[getCols().device];
-            if ( !idev || (idev->getId() != key) ) {
+            if (!idev || (idev->getId() != key)) {
                 dev = nullptr;
             }
         }
     }
 
-    for ( gint i = 0; i < static_cast<gint>(G_N_ELEMENTS(testAxes)); i++ ) {
-        if ( axesMap[key].find(i) != axesMap[key].end() ) {
-            switch ( axesMap[key][i].first ) {
+    for (gint i = 0; i < static_cast<gint>(G_N_ELEMENTS(testAxes)); i++) {
+        if (axesMap[key].find(i) != axesMap[key].end()) {
+            switch (axesMap[key][i].first) {
                 case 0:
                 case 1:
                     testAxes[i].set(getPix(PIX_AXIS_NONE));
-                    if ( dev && (i < static_cast<gint>(G_N_ELEMENTS(axesValues)) ) ) {
+                    if (dev && (i < static_cast<gint>(G_N_ELEMENTS(axesValues)))) {
                         axesValues[i].set_sensitive(false);
                     }
                     break;
                 case 2:
                     testAxes[i].set(getPix(PIX_AXIS_OFF));
                     axesValues[i].set_sensitive(true);
-                    if ( dev && (i < static_cast<gint>(G_N_ELEMENTS(axesValues)) ) ) {
+                    if (dev && (i < static_cast<gint>(G_N_ELEMENTS(axesValues)))) {
                        // FIXME: Device axis ranges are inaccessible in GTK+ 3 and
                // are deprecated in GTK+ 2. Progress-bar ranges are disabled
                // until we find an alternative solution
              
-                       //   if ( (dev->axes[i].max - dev->axes[i].min) > epsilon ) {
+                       //   if ((dev->axes[i].max - dev->axes[i].min) > epsilon) {
                             axesValues[i].set_sensitive(true);
-                       //       axesValues[i].set_fraction( (axesMap[key][i].second- dev->axes[i].min) / (dev->axes[i].max - dev->axes[i].min) );
+                       //       axesValues[i].set_fraction((axesMap[key][i].second- dev->axes[i].min) / (dev->axes[i].max - dev->axes[i].min));
                        //   }
                         
                         gchar* str = g_strdup_printf("%f", axesMap[key][i].second);
@@ -1546,15 +1546,15 @@ void InputDialogImpl::updateTestAxes( Glib::ustring const& key, GdkDevice* dev )
                 case 3:
                     testAxes[i].set(getPix(PIX_AXIS_ON));
                     axesValues[i].set_sensitive(true);
-                    if ( dev && (i < static_cast<gint>(G_N_ELEMENTS(axesValues)) ) ) {
+                    if (dev && (i < static_cast<gint>(G_N_ELEMENTS(axesValues)))) {
                        
                        // FIXME: Device axis ranges are inaccessible in GTK+ 3 and
                // are deprecated in GTK+ 2. Progress-bar ranges are disabled
                // until we find an alternative solution
                        
-               // if ( (dev->axes[i].max - dev->axes[i].min) > epsilon ) {
+               // if ((dev->axes[i].max - dev->axes[i].min) > epsilon) {
                             axesValues[i].set_sensitive(true);
-                       //     axesValues[i].set_fraction( (axesMap[key][i].second- dev->axes[i].min) / (dev->axes[i].max - dev->axes[i].min) );
+                       //     axesValues[i].set_fraction((axesMap[key][i].second- dev->axes[i].min) / (dev->axes[i].max - dev->axes[i].min));
                        // }
 
                         gchar* str = g_strdup_printf("%f", axesMap[key][i].second);
@@ -1567,7 +1567,7 @@ void InputDialogImpl::updateTestAxes( Glib::ustring const& key, GdkDevice* dev )
             testAxes[i].set(getPix(PIX_AXIS_NONE));
         }
     }
-    if ( !dev ) {
+    if (!dev) {
         for (auto & axesValue : axesValues) {
             axesValue.set_fraction(0.0);
             axesValue.set_text("");
@@ -1576,13 +1576,13 @@ void InputDialogImpl::updateTestAxes( Glib::ustring const& key, GdkDevice* dev )
     }
 }
 
-void InputDialogImpl::mapAxesValues( Glib::ustring const& key, gdouble const * axes, GdkDevice* dev )
+void InputDialogImpl::mapAxesValues(Glib::ustring const& key, gdouble const * axes, GdkDevice* dev)
 {
     guint numAxes = gdk_device_get_n_axes(dev);
 
     static gdouble epsilon = 0.0001;
-    if ( (numAxes > 0) && axes) {
-        for ( guint axisNum = 0; axisNum < numAxes; axisNum++ ) {
+    if ((numAxes > 0) && axes) {
+        for (guint axisNum = 0; axisNum < numAxes; axisNum++) {
             // 0 == new, 1 == set value, 2 == changed value, 3 == active
             gdouble diff = axesMap[key][axisNum].second - axes[axisNum];
             switch(axesMap[key][axisNum].first) {
@@ -1594,7 +1594,7 @@ void InputDialogImpl::mapAxesValues( Glib::ustring const& key, gdouble const * a
                 break;
                 case 1:
                 {
-                    if ( (diff > epsilon) || (diff < -epsilon) ) {
+                    if ((diff > epsilon) || (diff < -epsilon)) {
 //                         g_message("Axis %d changed on %s]", axisNum, key.c_str());
                         axesMap[key][axisNum].first = 3;
                         axesMap[key][axisNum].second = axes[axisNum];
@@ -1605,7 +1605,7 @@ void InputDialogImpl::mapAxesValues( Glib::ustring const& key, gdouble const * a
                 break;
                 case 2:
                 {
-                    if ( (diff > epsilon) || (diff < -epsilon) ) {
+                    if ((diff > epsilon) || (diff < -epsilon)) {
                         axesMap[key][axisNum].first = 3;
                         axesMap[key][axisNum].second = axes[axisNum];
                         updateTestAxes(key, dev);
@@ -1614,7 +1614,7 @@ void InputDialogImpl::mapAxesValues( Glib::ustring const& key, gdouble const * a
                 break;
                 case 3:
                 {
-                    if ( (diff > epsilon) || (diff < -epsilon) ) {
+                    if ((diff > epsilon) || (diff < -epsilon)) {
                         axesMap[key][axisNum].second = axes[axisNum];
                     } else {
                         axesMap[key][axisNum].first = 2;
@@ -1627,14 +1627,14 @@ void InputDialogImpl::mapAxesValues( Glib::ustring const& key, gdouble const * a
     // std::map<Glib::ustring, std::map<guint, std::pair<guint, gdouble> > > axesMap;
 }
 
-Glib::ustring InputDialogImpl::getKeyFor( GdkDevice* device )
+Glib::ustring InputDialogImpl::getKeyFor(GdkDevice* device)
 {
     Glib::ustring key;
 
     GdkInputSource source = gdk_device_get_source(device);
     const gchar *name = gdk_device_get_name(device);
 
-    switch ( source ) {
+    switch (source) {
         case GDK_SOURCE_MOUSE:
             key = "M:";
             break;
@@ -1664,7 +1664,7 @@ bool InputDialogImpl::eventSnoop(GdkEvent* event)
     Glib::ustring key;
     gint hotButton = -1;
 
-    switch ( event->type ) {
+    switch (event->type) {
         case GDK_KEY_PRESS:
         case GDK_KEY_RELEASE:
         {
@@ -1681,13 +1681,13 @@ bool InputDialogImpl::eventSnoop(GdkEvent* event)
         case GDK_BUTTON_RELEASE:
         {
             GdkEventButton* btnEvt = reinterpret_cast<GdkEventButton*>(event);
-            if ( btnEvt->device ) {
+            if (btnEvt->device) {
                 key = getKeyFor(btnEvt->device);
         source = gdk_device_get_source(btnEvt->device);
         devName = gdk_device_get_name(btnEvt->device);
                 mapAxesValues(key, btnEvt->axes, btnEvt->device);
 
-                if ( buttonMap[key].find(btnEvt->button) == buttonMap[key].end() ) {
+                if (buttonMap[key].find(btnEvt->button) == buttonMap[key].end()) {
 //                     g_message("New button found for %s = %d", key.c_str(), btnEvt->button);
                     buttonMap[key].insert(btnEvt->button);
                     DeviceManager::getManager().addButton(key, btnEvt->button);
@@ -1703,14 +1703,14 @@ bool InputDialogImpl::eventSnoop(GdkEvent* event)
 //                       btnEvt->button, name, btnEvt->device,
 //                       (btnEvt->device ? btnEvt->device->name : "null")
 
-//                 );
+//);
             g_free(name);
         }
         break;
         case GDK_MOTION_NOTIFY:
         {
             GdkEventMotion* btnMtn = reinterpret_cast<GdkEventMotion*>(event);
-            if ( btnMtn->device ) {
+            if (btnMtn->device) {
                 key = getKeyFor(btnMtn->device);
         source = gdk_device_get_source(btnMtn->device);
         devName = gdk_device_get_name(btnMtn->device);
@@ -1727,7 +1727,7 @@ bool InputDialogImpl::eventSnoop(GdkEvent* event)
 //                       ((btnMtn->device && btnMtn->axes && (btnMtn->device->num_axes > 3)) ? btnMtn->axes[3]:0),
 //                       ((btnMtn->device && btnMtn->axes && (btnMtn->device->num_axes > 4)) ? btnMtn->axes[4]:0),
 //                       ((btnMtn->device && btnMtn->axes && (btnMtn->device->num_axes > 5)) ? btnMtn->axes[5]:0)
-//                 );
+//);
             g_free(name);
         }
         break;
@@ -1736,7 +1736,7 @@ bool InputDialogImpl::eventSnoop(GdkEvent* event)
     }
 
 
-    if ( (lastSourceSeen != source) || (lastDevnameSeen != devName) ) {
+    if ((lastSourceSeen != source) || (lastDevnameSeen != devName)) {
         switch (source) {
             case GDK_SOURCE_MOUSE: {
                 testThumb.set(getPix(PIX_CORE));

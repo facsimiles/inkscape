@@ -66,8 +66,8 @@ protected:
     gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
-    Brilliance ( ) : Filter() { };
-    ~Brilliance ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
+    Brilliance () : Filter() { };
+    ~Brilliance () override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
         Inkscape::Extension::build_from_mem(
@@ -116,7 +116,7 @@ Brilliance::get_filter_text (Inkscape::Extension::Extension * ext)
         "</filter>\n", brightness.str().c_str(), sat.str().c_str(), sat.str().c_str(),
                        lightness.str().c_str(), sat.str().c_str(), brightness.str().c_str(),
                        sat.str().c_str(), lightness.str().c_str(), sat.str().c_str(),
-                       sat.str().c_str(), brightness.str().c_str(), lightness.str().c_str() );
+                       sat.str().c_str(), brightness.str().c_str(), lightness.str().c_str());
 
     return _filter;
 }; /* Brilliance filter */
@@ -146,8 +146,8 @@ protected:
     gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
-    ChannelPaint ( ) : Filter() { };
-    ~ChannelPaint ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
+    ChannelPaint () : Filter() { };
+    ~ChannelPaint () override { if (_filter != nullptr) g_free((void *)_filter); return; }
     
     static void init () {
         Inkscape::Extension::build_from_mem(
@@ -228,7 +228,7 @@ ChannelPaint::get_filter_text (Inkscape::Extension::Extension * ext)
         "</filter>\n", saturation.str().c_str(), red.str().c_str(), green.str().c_str(),
                        blue.str().c_str(), alpha.str().c_str(), floodRed.str().c_str(),
                        floodGreen.str().c_str(), floodBlue.str().c_str(), floodAlpha.str().c_str(),
-                       invert.str().c_str() );
+                       invert.str().c_str());
 
     return _filter;
 }; /* Channel Painting filter */
@@ -247,8 +247,8 @@ protected:
     gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
-    ColorBlindness ( ) : Filter() { };
-    ~ColorBlindness ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
+    ColorBlindness () : Filter() { };
+    ~ColorBlindness () override { if (_filter != nullptr) g_free((void *)_filter); return; }
     
     static void init () {
         Inkscape::Extension::build_from_mem(
@@ -322,8 +322,8 @@ protected:
     gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
-    ColorShift ( ) : Filter() { };
-    ~ColorShift ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
+    ColorShift () : Filter() { };
+    ~ColorShift () override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
         Inkscape::Extension::build_from_mem(
@@ -361,7 +361,7 @@ ColorShift::get_filter_text (Inkscape::Extension::Extension * ext)
         "<filter xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" style=\"color-interpolation-filters:sRGB;\" inkscape:label=\"Color Shift\">\n"
           "<feColorMatrix type=\"hueRotate\" values=\"%s\" result=\"color1\" />\n"
           "<feColorMatrix type=\"saturate\" values=\"%s\" result=\"color2\" />\n"
-        "</filter>\n", shift.str().c_str(), sat.str().c_str() );
+        "</filter>\n", shift.str().c_str(), sat.str().c_str());
 
     return _filter;
 }; /* ColorShift filter */
@@ -385,8 +385,8 @@ protected:
     gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
-    Colorize ( ) : Filter() { };
-    ~Colorize ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
+    Colorize () : Filter() { };
+    ~Colorize () override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
         Inkscape::Extension::build_from_mem(
@@ -473,7 +473,7 @@ Colorize::get_filter_text (Inkscape::Extension::Extension * ext)
           "<feComposite in=\"colormatrix2\" in2=\"SourceGraphic\" operator=\"in\" k2=\"1\" result=\"composite2\" />\n"
         "</filter>\n", hlight.str().c_str(), nlight.str().c_str(), duotone.str().c_str(),
                        a.str().c_str(), r.str().c_str(), g.str().c_str(), b.str().c_str(),
-                       blend1.str().c_str(), blend2.str().c_str() );
+                       blend1.str().c_str(), blend2.str().c_str());
 
     return _filter;
 }; /* Colorize filter */
@@ -492,8 +492,8 @@ protected:
     gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
-    ComponentTransfer ( ) : Filter() { };
-    ~ComponentTransfer ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
+    ComponentTransfer () : Filter() { };
+    ~ComponentTransfer () override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
         Inkscape::Extension::build_from_mem(
@@ -577,8 +577,8 @@ protected:
     gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
-    Duochrome ( ) : Filter() { };
-    ~Duochrome ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
+    Duochrome () : Filter() { };
+    ~Duochrome () override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
         Inkscape::Extension::build_from_mem(
@@ -681,7 +681,7 @@ Duochrome::get_filter_text (Inkscape::Extension::Extension * ext)
           "<feComposite in2=\"SourceGraphic\" operator=\"in\" />\n"
         "</filter>\n", a1.str().c_str(), r1.str().c_str(), g1.str().c_str(), b1.str().c_str(), swap1.str().c_str(),
                        a2.str().c_str(), r2.str().c_str(), g2.str().c_str(), b2.str().c_str(), swap2.str().c_str(),
-                       fluo.str().c_str() );
+                       fluo.str().c_str());
 
     return _filter;
 }; /* Duochrome filter */
@@ -702,8 +702,8 @@ protected:
     gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
-    ExtractChannel ( ) : Filter() { };
-    ~ExtractChannel ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
+    ExtractChannel () : Filter() { };
+    ~ExtractChannel () override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
         Inkscape::Extension::build_from_mem(
@@ -782,7 +782,7 @@ ExtractChannel::get_filter_text (Inkscape::Extension::Extension * ext)
         "<filter xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" style=\"color-interpolation-filters:sRGB;\" inkscape:label=\"Extract Channel\">\n"
           "<feColorMatrix in=\"SourceGraphic\" values=\"%s 0 \" result=\"colormatrix\" />\n"
           "<feBlend in2=\"BackgroundImage\" mode=\"%s\" result=\"blend\" />\n"
-        "</filter>\n", colors.str().c_str(), blend.str().c_str() );
+        "</filter>\n", colors.str().c_str(), blend.str().c_str());
 
     return _filter;
 }; /* ExtractChannel filter */
@@ -808,8 +808,8 @@ protected:
     gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
-    FadeToBW ( ) : Filter() { };
-    ~FadeToBW ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
+    FadeToBW () : Filter() { };
+    ~FadeToBW () override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
         Inkscape::Extension::build_from_mem(
@@ -858,7 +858,7 @@ FadeToBW::get_filter_text (Inkscape::Extension::Extension * ext)
           "<feColorMatrix values=\"%s 0 0 0 %s 0 %s 0 0 %s 0 0 %s 0 %s 0 0 0 1 0\" />\n"
         "</filter>\n", level.str().c_str(), wlevel.str().c_str(),
                        level.str().c_str(), wlevel.str().c_str(),
-                       level.str().c_str(), wlevel.str().c_str() );
+                       level.str().c_str(), wlevel.str().c_str());
 
     return _filter;
 }; /* Fade to black or white filter */
@@ -887,8 +887,8 @@ protected:
     gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
-    Greyscale ( ) : Filter() { };
-    ~Greyscale ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
+    Greyscale () : Filter() { };
+    ~Greyscale () override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
         Inkscape::Extension::build_from_mem(
@@ -950,7 +950,7 @@ Greyscale::get_filter_text (Inkscape::Extension::Extension * ext)
     _filter = g_strdup_printf(
         "<filter xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" style=\"color-interpolation-filters:sRGB;\" inkscape:label=\"Greyscale\">\n"
           "<feColorMatrix values=\"%s 0 %s 0 %s 0 %s 0 \" />\n"
-        "</filter>\n", line.str().c_str(), line.str().c_str(), line.str().c_str(), transparency.str().c_str() );
+        "</filter>\n", line.str().c_str(), line.str().c_str(), line.str().c_str(), transparency.str().c_str());
     return _filter;
 }; /* Greyscale filter */
 
@@ -973,8 +973,8 @@ protected:
     gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
-    Invert ( ) : Filter() { };
-    ~Invert ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
+    Invert () : Filter() { };
+    ~Invert () override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
         Inkscape::Extension::build_from_mem(
@@ -1088,7 +1088,7 @@ Invert::get_filter_text (Inkscape::Extension::Extension * ext)
                        line1.str().c_str(), col5.str().c_str(),
                        line2.str().c_str(), col5.str().c_str(),
                        line3.str().c_str(), col5.str().c_str(),
-                       transparency.str().c_str() );
+                       transparency.str().c_str());
 
     return _filter;
 }; /* Invert filter */
@@ -1108,8 +1108,8 @@ protected:
     gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
-    Lighting ( ) : Filter() { };
-    ~Lighting ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
+    Lighting () : Filter() { };
+    ~Lighting () override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
         Inkscape::Extension::build_from_mem(
@@ -1154,7 +1154,7 @@ Lighting::get_filter_text (Inkscape::Extension::Extension * ext)
           "</feComponentTransfer>\n"
         "</filter>\n", amplitude.str().c_str(), exponent.str().c_str(), offset.str().c_str(),
                        amplitude.str().c_str(), exponent.str().c_str(), offset.str().c_str(),
-                       amplitude.str().c_str(), exponent.str().c_str(), offset.str().c_str() );
+                       amplitude.str().c_str(), exponent.str().c_str(), offset.str().c_str());
 
     return _filter;
 }; /* Lighting filter */
@@ -1179,8 +1179,8 @@ protected:
     gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
-    LightnessContrast ( ) : Filter() { };
-    ~LightnessContrast ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
+    LightnessContrast () : Filter() { };
+    ~LightnessContrast () override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
         Inkscape::Extension::build_from_mem(
@@ -1228,7 +1228,7 @@ LightnessContrast::get_filter_text (Inkscape::Extension::Extension * ext)
           "<feColorMatrix values=\"%s 0 0 %s %s 0 %s 0 %s %s 0 0 %s %s %s 0 0 0 1 0\" />\n"
         "</filter>\n", contrast.str().c_str(), lightness.str().c_str(), contrast5.str().c_str(),
                        contrast.str().c_str(), lightness.str().c_str(), contrast5.str().c_str(),
-                       contrast.str().c_str(), lightness.str().c_str(), contrast5.str().c_str() );
+                       contrast.str().c_str(), lightness.str().c_str(), contrast5.str().c_str());
 
     return _filter;
 }; /* Lightness-Contrast filter */
@@ -1258,8 +1258,8 @@ protected:
     gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
-    NudgeRGB ( ) : Filter() { };
-    ~NudgeRGB ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
+    NudgeRGB () : Filter() { };
+    ~NudgeRGB () override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
         Inkscape::Extension::build_from_mem(
@@ -1340,7 +1340,7 @@ NudgeRGB::get_filter_text (Inkscape::Extension::Extension * ext)
         "</filter>\n", a.str().c_str(), r.str().c_str(), g.str().c_str(), b.str().c_str(),
                        rx.str().c_str(), ry.str().c_str(),
                        gx.str().c_str(), gy.str().c_str(),
-                       bx.str().c_str(), by.str().c_str() );
+                       bx.str().c_str(), by.str().c_str());
 
     return _filter;
 
@@ -1370,8 +1370,8 @@ protected:
     gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
-    NudgeCMY ( ) : Filter() { };
-    ~NudgeCMY ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
+    NudgeCMY () : Filter() { };
+    ~NudgeCMY () override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
         Inkscape::Extension::build_from_mem(
@@ -1452,7 +1452,7 @@ NudgeCMY::get_filter_text (Inkscape::Extension::Extension * ext)
         "</filter>\n", a.str().c_str(), r.str().c_str(), g.str().c_str(), b.str().c_str(),
                        cx.str().c_str(), cy.str().c_str(),
                        mx.str().c_str(), my.str().c_str(),
-                       yx.str().c_str(), yy.str().c_str() );
+                       yx.str().c_str(), yy.str().c_str());
 
     return _filter;
 
@@ -1476,8 +1476,8 @@ protected:
     gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
-    Quadritone ( ) : Filter() { };
-    ~Quadritone ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
+    Quadritone () : Filter() { };
+    ~Quadritone () override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
         Inkscape::Extension::build_from_mem(
@@ -1539,7 +1539,7 @@ Quadritone::get_filter_text (Inkscape::Extension::Extension * ext)
           "<feColorMatrix type=\"matrix\" values=\"2.5 -0.75 -0.75 0 0 -0.75 2.5 -0.75 0 0 -0.75 -0.75 2.5 0 0 0 0 0 1 0 \" result=\"colormatrix4\" />\n"
           "<feComposite in=\"colormatrix4\" in2=\"blend1\" operator=\"arithmetic\" k2=\"%s\" result=\"composite1\" />\n"
           "<feBlend in2=\"blend1\" mode=\"%s\" result=\"blend2\" />\n"
-        "</filter>\n", dist.str().c_str(), colors.str().c_str(), blend1.str().c_str(), sat.str().c_str(), blend2.str().c_str() );
+        "</filter>\n", dist.str().c_str(), colors.str().c_str(), blend1.str().c_str(), sat.str().c_str(), blend2.str().c_str());
 
     return _filter;
 }; /* Quadritone filter */
@@ -1559,8 +1559,8 @@ protected:
     gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
-    SimpleBlend ( ) : Filter() { };
-    ~SimpleBlend ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
+    SimpleBlend () : Filter() { };
+    ~SimpleBlend () override { if (_filter != nullptr) g_free((void *)_filter); return; }
     
     static void init () {
         Inkscape::Extension::build_from_mem(
@@ -1645,8 +1645,8 @@ protected:
     gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
-    Solarize ( ) : Filter() { };
-    ~Solarize ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
+    Solarize () : Filter() { };
+    ~Solarize () override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
         Inkscape::Extension::build_from_mem(
@@ -1701,7 +1701,7 @@ Solarize::get_filter_text (Inkscape::Extension::Extension * ext)
           "<feBlend in=\"colormatrix3\" in2=\"colormatrix2\" mode=\"%s\" result=\"blend1\" />\n"
           "<feBlend in2=\"blend1\" mode=\"%s\" result=\"blend2\" />\n"
           "<feComposite in2=\"SourceGraphic\" operator=\"in\" />\n"
-        "</filter>\n", rotate.str().c_str(), blend1.str().c_str(), blend2.str().c_str() );
+        "</filter>\n", rotate.str().c_str(), blend1.str().c_str(), blend2.str().c_str());
 
     return _filter;
 }; /* Solarize filter */
@@ -1732,8 +1732,8 @@ protected:
     gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
-    Tritone ( ) : Filter() { };
-    ~Tritone ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
+    Tritone () : Filter() { };
+    ~Tritone () override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
         Inkscape::Extension::build_from_mem(
@@ -1872,7 +1872,7 @@ Tritone::get_filter_text (Inkscape::Extension::Extension * ext)
         "</filter>\n", dist.str().c_str(), globalblend.str().c_str(),
                        a.str().c_str(), r.str().c_str(), g.str().c_str(), b.str().c_str(),
                        c1in2.str().c_str(), glow.str().c_str(), b6in2.str().c_str(), glowblend.str().c_str(),
-                       c2in.str().c_str(), c2in2.str().c_str(), llight.str().c_str(), glight.str().c_str() );
+                       c2in.str().c_str(), c2in2.str().c_str(), llight.str().c_str(), glight.str().c_str());
 
     return _filter;
 }; /* Tritone filter */

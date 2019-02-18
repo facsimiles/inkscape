@@ -19,8 +19,8 @@ using std::vector;
 /* Theory in e-mail from J.F. Barraud
 Let B be the skeleton path, and P the pattern (the path to be deformed).
 
-P is a map t --> P(t) = ( x(t), y(t) ).
-B is a map t --> B(t) = ( a(t), b(t) ).
+P is a map t --> P(t) = (x(t), y(t)).
+B is a map t --> B(t) = (a(t), b(t)).
 
 The first step is to re-parametrize B by its arc length: this is the parametrization in which a point p on B is located by its distance s from start. One obtains a new map s --> U(s) = (a'(s),b'(s)), that still describes the same path B, but where the distance along B from start to
 U(s) is s itself.
@@ -63,10 +63,10 @@ LPEBendPath::LPEBendPath(LivePathEffectObject *lpeobject) :
     vertical_pattern(_("_Original path is vertical"), _("Rotates the original 90 degrees, before bending it along the bend path"), "vertical", &wr, this, false),
     hide_knot(_("Hide width knot"), _("Hide width knot"),"hide_knot", &wr, this, false)
 {
-    registerParameter( &bend_path );
-    registerParameter( &prop_scale);
-    registerParameter( &scale_y_rel);
-    registerParameter( &vertical_pattern);
+    registerParameter(&bend_path);
+    registerParameter(&prop_scale);
+    registerParameter(&scale_y_rel);
+    registerParameter(&vertical_pattern);
     registerParameter(&hide_knot);
 
     prop_scale.param_set_digits(3);
@@ -136,7 +136,7 @@ LPEBendPath::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd
         x*=scaling;
     }
 
-    if ( scale_y_rel.get_value() ) {
+    if (scale_y_rel.get_value()) {
         y*=(scaling*prop_scale);
     } else {
         if (prop_scale != 1.0) y *= prop_scale;
@@ -155,14 +155,14 @@ LPEBendPath::resetDefaults(SPItem const* item)
     Geom::Point start(boundingbox_X.min(), (boundingbox_Y.max()+boundingbox_Y.min())/2);
     Geom::Point end(boundingbox_X.max(), (boundingbox_Y.max()+boundingbox_Y.min())/2);
 
-    if ( Geom::are_near(start,end) ) {
+    if (Geom::are_near(start,end)) {
         end += Geom::Point(1.,0.);
     }
      
     Geom::Path path;
-    path.start( start );
-    path.appendNew<Geom::LineSegment>( end );
-    bend_path.set_new_value( path.toPwSb(), true );
+    path.start(start);
+    path.appendNew<Geom::LineSegment>(end);
+    bend_path.set_new_value(path.toPwSb(), true);
 }
 
 void

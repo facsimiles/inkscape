@@ -66,7 +66,7 @@ Piecewise<SBasis> abs(Piecewise<SBasis> const &f){
 /** Return the greater of the two functions pointwise.
  \param f, g two functions
 */
-Piecewise<SBasis> max(          SBasis  const &f,           SBasis  const &g){
+Piecewise<SBasis> max(SBasis  const &f,           SBasis  const &g){
     return max(Piecewise<SBasis>(f),Piecewise<SBasis>(g));
 }
 /** Return the greater of the two functions pointwise.
@@ -78,7 +78,7 @@ Piecewise<SBasis> max(Piecewise<SBasis> const &f,           SBasis  const &g){
 /** Return the greater of the two functions pointwise.
  \param f, g two functions
 */
-Piecewise<SBasis> max(          SBasis  const &f, Piecewise<SBasis> const &g){
+Piecewise<SBasis> max(SBasis  const &f, Piecewise<SBasis> const &g){
     return max(Piecewise<SBasis>(f),g);
 }
 /** Return the greater of the two functions pointwise.
@@ -98,7 +98,7 @@ Piecewise<SBasis> max(Piecewise<SBasis> const &f, Piecewise<SBasis> const &g){
  \param f, g two functions
 */
 Piecewise<SBasis> 
-min(          SBasis  const &f,           SBasis  const &g){ return -max(-f,-g); }
+min(SBasis  const &f,           SBasis  const &g){ return -max(-f,-g); }
 /** Return the more negative of the two functions pointwise.
  \param f, g two functions
 */
@@ -108,7 +108,7 @@ min(Piecewise<SBasis> const &f,           SBasis  const &g){ return -max(-f,-g);
  \param f, g two functions
 */
 Piecewise<SBasis> 
-min(          SBasis  const &f, Piecewise<SBasis> const &g){ return -max(-f,-g); }
+min(SBasis  const &f, Piecewise<SBasis> const &g){ return -max(-f,-g); }
 /** Return the more negative of the two functions pointwise.
  \param f, g two functions
 */
@@ -206,7 +206,7 @@ Piecewise<SBasis> sqrt(Piecewise<SBasis> const &f, double tol, int order){
  \param tol maximum error
  \param order maximum degree polynomial to use
 */
-Piecewise<SBasis> sin(          SBasis  const &f, double tol, int order){return(cos(-f+M_PI/2,tol,order));}
+Piecewise<SBasis> sin(SBasis  const &f, double tol, int order){return(cos(-f+M_PI/2,tol,order));}
 /** Compute the sine of a function.
  \param f function
  \param tol maximum error
@@ -234,7 +234,7 @@ Piecewise<SBasis> cos(Piecewise<SBasis> const &f, double tol, int order){
  \param tol maximum error
  \param order maximum degree polynomial to use
 */
-Piecewise<SBasis> cos(          SBasis  const &f, double tol, int order){
+Piecewise<SBasis> cos(SBasis  const &f, double tol, int order){
     double alpha = (f.at0()+f.at1())/2.;
     SBasis x = f-alpha;
     double d = x.tailError(0),err=1;
@@ -347,15 +347,15 @@ Piecewise<SBasis> reciprocal(Piecewise<SBasis> const &f, double tol, int order){
  * \param smoothness: (defaults to 1) regularity class of the result: 0=piecewise linear, 1=continuous derivative, etc...
  */
 Piecewise<SBasis> interpolate(std::vector<double> times, std::vector<double> values, unsigned smoothness){
-    assert ( values.size() == times.size() );
-    if ( values.empty() ) return Piecewise<SBasis>();
-    if ( values.size() == 1 ) return Piecewise<SBasis>(values[0]);//what about time??
+    assert (values.size() == times.size());
+    if (values.empty()) return Piecewise<SBasis>();
+    if (values.size() == 1) return Piecewise<SBasis>(values[0]);//what about time??
 
     SBasis sk = shift(Linear(1.),smoothness);
     SBasis bump_in = integral(sk);
     bump_in -= bump_in.at0();
     bump_in /= bump_in.at1();
-    SBasis bump_out = reverse( bump_in );
+    SBasis bump_out = reverse(bump_in);
     
     Piecewise<SBasis> result;
     result.cuts.push_back(times[0]);

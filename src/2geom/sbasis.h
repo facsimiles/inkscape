@@ -394,9 +394,9 @@ inline SBasis& operator*=(SBasis& a, SBasis const & b) {
 inline unsigned 
 valuation(SBasis const &a, double tol=0){
     unsigned val=0;
-    while( val<a.size() &&
+    while(val<a.size() &&
            fabs(a[val][0])<tol &&
-           fabs(a[val][1])<tol ) 
+           fabs(a[val][1])<tol) 
         val++;
     return val;
 }

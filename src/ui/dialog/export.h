@@ -78,7 +78,7 @@ private:
     void updateCheckbuttons ();
     inline void findDefaultSelection();
     void detectSize();
-    void setArea ( double x0, double y0, double x1, double y1);
+    void setArea (double x0, double y0, double x1, double y1);
     /*
      * Getter/setter style functions for the spinbuttons
      */
@@ -108,12 +108,12 @@ private:
      *
      * No unit_selector is stored in the created spinbutton, relies on external unit management
      */
-    Glib::RefPtr<Gtk::Adjustment> createSpinbutton( gchar const *key, float val, float min, float max,
+    Glib::RefPtr<Gtk::Adjustment> createSpinbutton(gchar const *key, float val, float min, float max,
                                                     float step, float page,
                                                     Gtk::Grid *t, int x, int y,
                                                     const Glib::ustring& ll, const Glib::ustring& lr,
                                                     int digits, unsigned int sensitive,
-                                                    void (Export::*cb)() );
+                                                    void (Export::*cb)());
 
     /**
      * One of the area select radio buttons was pressed

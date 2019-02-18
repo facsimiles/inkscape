@@ -127,9 +127,9 @@ Rect EllipticalArc::boundsExact() const
     double sinrot, cosrot;
     sincos(rotationAngle(), sinrot, cosrot);
 
-    extremes[X][0] = std::atan2( -ray(Y) * sinrot, ray(X) * cosrot );
+    extremes[X][0] = std::atan2(-ray(Y) * sinrot, ray(X) * cosrot);
     extremes[X][1] = extremes[X][0] + M_PI;
-    extremes[Y][0] = std::atan2( ray(Y) * cosrot, ray(X) * sinrot );
+    extremes[Y][0] = std::atan2(ray(Y) * cosrot, ray(X) * sinrot);
     extremes[Y][1] = extremes[Y][0] + M_PI;
 
     for (unsigned d = 0; d < 2; ++d) {
@@ -193,7 +193,7 @@ std::vector<Coord> EllipticalArc::roots(Coord v, Dim2 d) const
         if (b != 0)
         {
             double s = 2 * std::atan(-c/(2*b));
-            if ( s < 0 ) s += 2*M_PI;
+            if (s < 0) s += 2*M_PI;
             sol.push_back(s);
         }
     }
@@ -203,23 +203,23 @@ std::vector<Coord> EllipticalArc::roots(Coord v, Dim2 d) const
         //std::cerr << "delta = " << delta << std::endl;
         if (delta == 0) {
             double s = 2 * std::atan(-b/a);
-            if ( s < 0 ) s += 2*M_PI;
+            if (s < 0) s += 2*M_PI;
             sol.push_back(s);
         }
-        else if ( delta > 0 )
+        else if (delta > 0)
         {
             double sq = std::sqrt(delta);
-            double s = 2 * std::atan( (-b - sq) / a );
-            if ( s < 0 ) s += 2*M_PI;
+            double s = 2 * std::atan((-b - sq) / a);
+            if (s < 0) s += 2*M_PI;
             sol.push_back(s);
-            s = 2 * std::atan( (-b + sq) / a );
-            if ( s < 0 ) s += 2*M_PI;
+            s = 2 * std::atan((-b + sq) / a);
+            if (s < 0) s += 2*M_PI;
             sol.push_back(s);
         }
     }
 
     std::vector<double> arc_sol;
-    for (unsigned int i = 0; i < sol.size(); ++i ) {
+    for (unsigned int i = 0; i < sol.size(); ++i) {
         //std::cerr << "s = " << deg_from_rad(sol[i]);
         sol[i] = timeAtAngle(sol[i]);
         //std::cerr << " -> t: " << sol[i] << std::endl;
@@ -245,8 +245,8 @@ Curve *EllipticalArc::derivative() const
     result->_ellipse.setCenter(0, 0);
     result->_angles.setInitial(result->_angles.initialAngle() + M_PI/2);
     result->_angles.setFinal(result->_angles.finalAngle() + M_PI/2);
-    result->_initial_point = result->pointAtAngle( result->initialAngle() );
-    result->_final_point = result->pointAtAngle( result->finalAngle() );
+    result->_initial_point = result->pointAtAngle(result->initialAngle());
+    result->_final_point = result->pointAtAngle(result->finalAngle());
     return result;
 }
 
@@ -262,27 +262,27 @@ EllipticalArc::pointAndDerivatives(Coord t, unsigned int n) const
     std::vector<Point> result;
     result.reserve(nn);
     double angle = angleAt(t);
-    std::auto_ptr<EllipticalArc> ea( static_cast<EllipticalArc*>(duplicate()) );
+    std::auto_ptr<EllipticalArc> ea(static_cast<EllipticalArc*>(duplicate()));
     ea->_ellipse.setCenter(0, 0);
     unsigned int m = std::min(nn, 4u);
-    for ( unsigned int i = 0; i < m; ++i )
+    for (unsigned int i = 0; i < m; ++i)
     {
-        result.push_back( ea->pointAtAngle(angle) );
+        result.push_back(ea->pointAtAngle(angle));
         angle += (sweep() ? M_PI/2 : -M_PI/2);
-        if ( !(angle < 2*M_PI) ) angle -= 2*M_PI;
+        if (!(angle < 2*M_PI)) angle -= 2*M_PI;
     }
     m = nn / 4;
-    for ( unsigned int i = 1; i < m; ++i )
+    for (unsigned int i = 1; i < m; ++i)
     {
-        for ( unsigned int j = 0; j < 4; ++j )
-            result.push_back( result[j] );
+        for (unsigned int j = 0; j < 4; ++j)
+            result.push_back(result[j]);
     }
     m = nn - 4 * m;
-    for ( unsigned int i = 0; i < m; ++i )
+    for (unsigned int i = 0; i < m; ++i)
     {
-        result.push_back( result[i] );
+        result.push_back(result[i]);
     }
-    if ( !result.empty() ) // nn != 0
+    if (!result.empty()) // nn != 0
         result[0] = pointAtAngle(angle);
     return result;
 }
@@ -318,7 +318,7 @@ Curve* EllipticalArc::portion(double f, double t) const
     arc->_final_point = pointAt(t);
     arc->_angles.setAngles(angleAt(f), angleAt(t));
     if (f > t) arc->_angles.setSweep(!sweep());
-    if ( _large_arc && fabs(angularExtent() * (t-f)) <= M_PI) {
+    if (_large_arc && fabs(angularExtent() * (t-f)) <= M_PI) {
         arc->_large_arc = false;
     }
     return arc;
@@ -335,29 +335,29 @@ Curve *EllipticalArc::reverse() const
 }
 
 #ifdef HAVE_GSL  // GSL is required for function "solve_reals"
-std::vector<double> EllipticalArc::allNearestTimes( Point const& p, double from, double to ) const
+std::vector<double> EllipticalArc::allNearestTimes(Point const& p, double from, double to) const
 {
     std::vector<double> result;
 
-    if ( from > to ) std::swap(from, to);
-    if ( from < 0 || to > 1 )
+    if (from > to) std::swap(from, to);
+    if (from < 0 || to > 1)
     {
         THROW_RANGEERROR("[from,to] interval out of range");
     }
 
-    if ( ( are_near(ray(X), 0) && are_near(ray(Y), 0) )  || are_near(from, to) )
+    if ((are_near(ray(X), 0) && are_near(ray(Y), 0))  || are_near(from, to))
     {
         result.push_back(from);
         return result;
     }
-    else if ( are_near(ray(X), 0) || are_near(ray(Y), 0) )
+    else if (are_near(ray(X), 0) || are_near(ray(Y), 0))
     {
         LineSegment seg(pointAt(from), pointAt(to));
-        Point np = seg.pointAt( seg.nearestTime(p) );
-        if ( are_near(ray(Y), 0) )
+        Point np = seg.pointAt(seg.nearestTime(p));
+        if (are_near(ray(Y), 0))
         {
-            if ( are_near(rotationAngle(), M_PI/2)
-                 || are_near(rotationAngle(), 3*M_PI/2) )
+            if (are_near(rotationAngle(), M_PI/2)
+                 || are_near(rotationAngle(), 3*M_PI/2))
             {
                 result = roots(np[Y], Y);
             }
@@ -368,8 +368,8 @@ std::vector<double> EllipticalArc::allNearestTimes( Point const& p, double from,
         }
         else
         {
-            if ( are_near(rotationAngle(), M_PI/2)
-                 || are_near(rotationAngle(), 3*M_PI/2) )
+            if (are_near(rotationAngle(), M_PI/2)
+                 || are_near(rotationAngle(), 3*M_PI/2))
             {
                 result = roots(np[X], X);
             }
@@ -380,10 +380,10 @@ std::vector<double> EllipticalArc::allNearestTimes( Point const& p, double from,
         }
         return result;
     }
-    else if ( are_near(ray(X), ray(Y)) )
+    else if (are_near(ray(X), ray(Y)))
     {
         Point r = p - center();
-        if ( are_near(r, Point(0,0)) )
+        if (are_near(r, Point(0,0)))
         {
             THROW_INFINITESOLUTIONS(0);
         }
@@ -392,7 +392,7 @@ std::vector<double> EllipticalArc::allNearestTimes( Point const& p, double from,
 //      std::vector<double> solX = roots(np[X],X);
 //      std::vector<double> solY = roots(np[Y],Y);
 //      double t;
-//      if ( are_near(solX[0], solY[0]) || are_near(solX[0], solY[1]))
+//      if (are_near(solX[0], solY[0]) || are_near(solX[0], solY[1]))
 //      {
 //          t = solX[0];
 //      }
@@ -400,7 +400,7 @@ std::vector<double> EllipticalArc::allNearestTimes( Point const& p, double from,
 //      {
 //          t = solX[1];
 //      }
-//      if ( !(t < from || t > to) )
+//      if (!(t < from || t > to))
 //      {
 //          result.push_back(t);
 //      }
@@ -432,25 +432,25 @@ std::vector<double> EllipticalArc::allNearestTimes( Point const& p, double from,
     double expr1 = ray(X) * (p_c[X] * cosrot + p_c[Y] * sinrot);
     Poly coeff;
     coeff.resize(5);
-    coeff[4] = ray(Y) * ( p_c[Y] * cosrot - p_c[X] * sinrot );
-    coeff[3] = 2 * ( rx2_ry2 + expr1 );
+    coeff[4] = ray(Y) * (p_c[Y] * cosrot - p_c[X] * sinrot);
+    coeff[3] = 2 * (rx2_ry2 + expr1);
     coeff[2] = 0;
-    coeff[1] = 2 * ( -rx2_ry2 + expr1 );
+    coeff[1] = 2 * (-rx2_ry2 + expr1);
     coeff[0] = -coeff[4];
 
-//  for ( unsigned int i = 0; i < 5; ++i )
+//  for (unsigned int i = 0; i < 5; ++i)
 //      std::cerr << "c[" << i << "] = " << coeff[i] << std::endl;
 
     std::vector<double> real_sol;
     // gsl_poly_complex_solve raises an error
     // if the leading coefficient is zero
-    if ( are_near(coeff[4], 0) )
+    if (are_near(coeff[4], 0))
     {
         real_sol.push_back(0);
-        if ( !are_near(coeff[3], 0) )
+        if (!are_near(coeff[3], 0))
         {
             double sq = -coeff[1] / coeff[3];
-            if ( sq > 0 )
+            if (sq > 0)
             {
                 double s = std::sqrt(sq);
                 real_sol.push_back(s);
@@ -463,14 +463,14 @@ std::vector<double> EllipticalArc::allNearestTimes( Point const& p, double from,
         real_sol = solve_reals(coeff);
     }
 
-    for ( unsigned int i = 0; i < real_sol.size(); ++i )
+    for (unsigned int i = 0; i < real_sol.size(); ++i)
     {
         real_sol[i] = 2 * std::atan(real_sol[i]);
-        if ( real_sol[i] < 0 ) real_sol[i] += 2*M_PI;
+        if (real_sol[i] < 0) real_sol[i] += 2*M_PI;
     }
     // when s -> Infinity then <D(E)|E-p> -> 0 iff coeff[4] == 0
     // so we add M_PI to the solutions being lim arctan(s) = PI when s->Infinity
-    if ( (real_sol.size() % 2) != 0 )
+    if ((real_sol.size() % 2) != 0)
     {
         real_sol.push_back(M_PI);
     }
@@ -479,17 +479,17 @@ std::vector<double> EllipticalArc::allNearestTimes( Point const& p, double from,
     double mindistsq2 = std::numeric_limits<double>::max();
     double dsq = 0;
     unsigned int mi1 = 0, mi2 = 0;
-    for ( unsigned int i = 0; i < real_sol.size(); ++i )
+    for (unsigned int i = 0; i < real_sol.size(); ++i)
     {
         dsq = distanceSq(p, pointAtAngle(real_sol[i]));
-        if ( mindistsq1 > dsq )
+        if (mindistsq1 > dsq)
         {
             mindistsq2 = mindistsq1;
             mi2 = mi1;
             mindistsq1 = dsq;
             mi1 = i;
         }
-        else if ( mindistsq2 > dsq )
+        else if (mindistsq2 > dsq)
         {
             mindistsq2 = dsq;
             mi2 = i;
@@ -497,16 +497,16 @@ std::vector<double> EllipticalArc::allNearestTimes( Point const& p, double from,
     }
 
     double t = timeAtAngle(real_sol[mi1]);
-    if ( !(t < from || t > to) )
+    if (!(t < from || t > to))
     {
         result.push_back(t);
     }
 
     bool second_sol = false;
     t = timeAtAngle(real_sol[mi2]);
-    if ( real_sol.size() == 4 && !(t < from || t > to) )
+    if (real_sol.size() == 4 && !(t < from || t > to))
     {
-        if ( result.empty() || are_near(mindistsq1, mindistsq2) )
+        if (result.empty() || are_near(mindistsq1, mindistsq2))
         {
             result.push_back(t);
             second_sol = true;
@@ -516,24 +516,24 @@ std::vector<double> EllipticalArc::allNearestTimes( Point const& p, double from,
     // we need to test extreme points too
     double dsq1 = distanceSq(p, pointAt(from));
     double dsq2 = distanceSq(p, pointAt(to));
-    if ( second_sol )
+    if (second_sol)
     {
-        if ( mindistsq2 > dsq1 )
+        if (mindistsq2 > dsq1)
         {
             result.clear();
             result.push_back(from);
             mindistsq2 = dsq1;
         }
-        else if ( are_near(mindistsq2, dsq) )
+        else if (are_near(mindistsq2, dsq))
         {
             result.push_back(from);
         }
-        if ( mindistsq2 > dsq2 )
+        if (mindistsq2 > dsq2)
         {
             result.clear();
             result.push_back(to);
         }
-        else if ( are_near(mindistsq2, dsq2) )
+        else if (are_near(mindistsq2, dsq2))
         {
             result.push_back(to);
         }
@@ -541,14 +541,14 @@ std::vector<double> EllipticalArc::allNearestTimes( Point const& p, double from,
     }
     else
     {
-        if ( result.empty() )
+        if (result.empty())
         {
-            if ( are_near(dsq1, dsq2) )
+            if (are_near(dsq1, dsq2))
             {
                 result.push_back(from);
                 result.push_back(to);
             }
-            else if ( dsq2 > dsq1 )
+            else if (dsq2 > dsq1)
             {
                 result.push_back(from);
             }
@@ -714,7 +714,7 @@ D2<SBasis> EllipticalArc::toSBasis() const
     arc[1] = arc_x * sinrot + arc_y * cosrot + Linear(center(Y), center(Y));
 
     // ensure that endpoints remain exact
-    for ( int d = 0 ; d < 2 ; d++ ) {
+    for (int d = 0 ; d < 2 ; d++) {
         arc[d][0][0] = initialPoint()[d];
         arc[d][0][1] = finalPoint()[d];
     }
@@ -828,7 +828,7 @@ int EllipticalArc::winding(Point const &p) const
     double sinrot, cosrot;
     sincos(rotationAngle(), sinrot, cosrot);
 
-    Angle ymin_a = std::atan2( ray(Y) * cosrot, ray(X) * sinrot );
+    Angle ymin_a = std::atan2(ray(Y) * cosrot, ray(X) * sinrot);
     Angle ymax_a = ymin_a + M_PI;
 
     Point ymin = pointAtAngle(ymin_a);

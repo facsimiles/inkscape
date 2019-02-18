@@ -31,7 +31,7 @@ struct SPCanvasRotate : public SPCanvasItem {
     cairo_surface_t *surface_rotated; // Copy of original surface, rotated
 };
 
-void sp_canvas_rotate_start( SPCanvasRotate *canvas_rotate, cairo_surface_t *background );
+void sp_canvas_rotate_start(SPCanvasRotate *canvas_rotate, cairo_surface_t *background);
 
 GType sp_canvas_rotate_get_type ();
 

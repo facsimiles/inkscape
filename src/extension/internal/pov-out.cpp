@@ -296,8 +296,8 @@ bool PovOutput::doCurve(SPItem *item, const String &id)
             // see color.h for how to parse SPColor
             float rgb[3];
             style->fill.value.color.get_rgb_floatv(rgb);
-            double const dopacity = ( SP_SCALE24_TO_FLOAT(style->fill_opacity.value)
-                                      * effective_opacity(shape) );
+            double const dopacity = (SP_SCALE24_TO_FLOAT(style->fill_opacity.value)
+                                      * effective_opacity(shape));
             //gchar *str = g_strdup_printf("rgbf < %1.3f, %1.3f, %1.3f %1.3f>",
             //                             rgb[0], rgb[1], rgb[2], 1.0 - dopacity);
             String rgbf = "rgbf <";
@@ -313,7 +313,7 @@ bool PovOutput::doCurve(SPItem *item, const String &id)
 
     // convert the path to only lineto's and cubic curveto's:
     Geom::Affine tf = item->i2dt_affine();
-    Geom::PathVector pathv = pathv_to_linear_and_cubic_beziers( shape->_curve->get_pathvector() * tf );
+    Geom::PathVector pathv = pathv_to_linear_and_cubic_beziers(shape->_curve->get_pathvector() * tf);
 
     /*
      * We need to know the number of segments (NR_CURVETOs/LINETOs, including
@@ -334,7 +334,7 @@ bool PovOutput::doCurve(SPItem *item, const String &id)
         {
 
             // Skip zero length segments.
-            if( !cit->isDegenerate() ) ++segmentCount;
+            if(!cit->isDegenerate()) ++segmentCount;
         }
     }
 
@@ -354,7 +354,7 @@ bool PovOutput::doCurve(SPItem *item, const String &id)
     /**
      *   at moment of writing, 2geom lacks proper initialization of empty intervals in rect...
      */
-    Geom::Rect cminmax( pathv.front().initialPoint(), pathv.front().initialPoint() );
+    Geom::Rect cminmax(pathv.front().initialPoint(), pathv.front().initialPoint());
 
 
     /**
@@ -372,15 +372,15 @@ bool PovOutput::doCurve(SPItem *item, const String &id)
             {
 
             // Skip zero length segments
-            if( cit->isDegenerate() )
+            if(cit->isDegenerate())
                 continue;
 
-            if( is_straight_curve(*cit) )
+            if(is_straight_curve(*cit))
                 {
                 Geom::Point p0 = cit->initialPoint();
                 Geom::Point p1 = cit->finalPoint();
                 segment(segmentNr++,
-                        p0[X], p0[Y], p0[X], p0[Y], p1[X], p1[Y], p1[X], p1[Y] );
+                        p0[X], p0[Y], p0[X], p0[Y], p1[X], p1[Y], p1[X], p1[Y]);
                 nrNodes += 8;
                 }
             else if(Geom::CubicBezier const *cubic = dynamic_cast<Geom::CubicBezier const*>(&*cit))

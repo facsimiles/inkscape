@@ -59,7 +59,7 @@ Implementation::Implementation *Loader::load_implementation(Inkscape::XML::Docum
                 Dependency dep = Dependency(child_repr);
                 // try to load it
                 bool success = load_dependency(&dep);
-                if( !success ){
+                if(!success){
                     // Could not load dependency, we abort
                     const char *res = g_module_error();
                     g_warning("Unable to load dependency %s of plugin %s.\nDetails: %s\n", dep.get_name(), "<todo>", res);
@@ -106,7 +106,7 @@ Implementation::Implementation *Loader::load_implementation(Inkscape::XML::Docum
                     
                     // Get version and test against this version
                     const gchar* version = GetInkscapeVersion();
-                    if( strcmp(version, version_string) != 0) {
+                    if(strcmp(version, version_string) != 0) {
                         // The versions are different, display warning.
                         g_warning("Plugin was built against Inkscape version %s, this is %s. The plugin might not be compatible.", version, version_string);
                     }

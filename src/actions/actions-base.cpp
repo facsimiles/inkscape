@@ -206,22 +206,22 @@ void
 add_actions_base(ConcreteInkscapeApplication<T>* app)
 {
     // Note: "radio" actions are just an easy way to set type without using templating.
-    app->add_action("inkscape-version",                                                   sigc::ptr_fun(&print_inkscape_version   ));
+    app->add_action("inkscape-version",                                                   sigc::ptr_fun(&print_inkscape_version));
     app->add_action("extension-directory",                                                sigc::ptr_fun(&print_extension_directory));
-    app->add_action("verb-list",                                                          sigc::ptr_fun(&print_verb_list          ));
+    app->add_action("verb-list",                                                          sigc::ptr_fun(&print_verb_list));
 
-    app->add_action_radio_integer( "open-page",                                           sigc::ptr_fun(&pdf_page),                             0);
-    app->add_action_radio_string(  "convert-dpi-method",                                  sigc::ptr_fun(&convert_dpi_method),              "none");
-    app->add_action(               "no-convert-baseline",                                 sigc::ptr_fun(&no_convert_baseline)                    );
+    app->add_action_radio_integer("open-page",                                           sigc::ptr_fun(&pdf_page),                             0);
+    app->add_action_radio_string("convert-dpi-method",                                  sigc::ptr_fun(&convert_dpi_method),              "none");
+    app->add_action("no-convert-baseline",                                 sigc::ptr_fun(&no_convert_baseline));
 
-    app->add_action(               "vacuum-defs",        sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&vacuum_defs),               app)        );
-    app->add_action_radio_string(  "verb",               sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&verbs),                     app), "null");
+    app->add_action("vacuum-defs",        sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&vacuum_defs),               app));
+    app->add_action_radio_string("verb",               sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&verbs),                     app), "null");
 
-    app->add_action(               "query-x",            sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&query_x),                   app)        );
-    app->add_action(               "query-y",            sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&query_y),                   app)        );
-    app->add_action(               "query-width",        sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&query_width),               app)        );
-    app->add_action(               "query-height",       sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&query_height),              app)        );
-    app->add_action(               "query-all",          sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&query_all),                 app)        );
+    app->add_action("query-x",            sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&query_x),                   app));
+    app->add_action("query-y",            sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&query_y),                   app));
+    app->add_action("query-width",        sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&query_width),               app));
+    app->add_action("query-height",       sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&query_height),              app));
+    app->add_action("query-all",          sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&query_all),                 app));
 
 }
 

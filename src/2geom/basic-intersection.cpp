@@ -113,7 +113,7 @@ void split(vector<Point> const &p, double t,
     const unsigned sz = p.size();
     //Geom::Point Vtemp[sz][sz];
     vector<vector<Point> > Vtemp(sz);
-    for ( size_t i = 0; i < sz; ++i )
+    for (size_t i = 0; i < sz; ++i)
         Vtemp[i].reserve(sz);
 
     /* Copy control points	*/
@@ -150,7 +150,7 @@ void find_self_intersections(std::vector<std::pair<double, double> > &xs,
     // We want to be sure that we have no empty segments
     std::sort(dr.begin(), dr.end());
     std::vector<double>::iterator new_end = std::unique(dr.begin(), dr.end());
-    dr.resize( new_end - dr.begin() );
+    dr.resize(new_end - dr.begin());
 
     std::vector< D2<Bezier> > pieces;
     for (unsigned i = 0; i < dr.size() - 1; ++i) {
@@ -176,7 +176,7 @@ void find_self_intersections(std::vector<std::pair<double, double> > &xs,
 // XXX: This condition will prune out false positives, but it might create some false negatives.  Todo: Confirm it is correct.
                 if(j == i+1)
                     //if((l == 1) && (r == 0))
-                    if( ( l > precision ) && (r < precision) )//FIXME: what precision should be used here???
+                    if((l > precision) && (r < precision))//FIXME: what precision should be used here???
                         continue;
                 xs.push_back(std::make_pair((1-l)*dr[i] + l*dr[i+1],
                                                 (1-r)*dr[j] + r*dr[j+1]));

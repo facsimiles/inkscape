@@ -51,7 +51,7 @@ GzipInputStream::GzipInputStream(InputStream &sourceStream)
                       outputBufPos(0),
                       outputBufLen(0)
 {
-    memset( &d_stream, 0, sizeof(d_stream) );
+    memset(&d_stream, 0, sizeof(d_stream));
 }
 
 /**
@@ -60,11 +60,11 @@ GzipInputStream::GzipInputStream(InputStream &sourceStream)
 GzipInputStream::~GzipInputStream()
 {
     close();
-    if ( srcBuf ) {
+    if (srcBuf) {
       delete[] srcBuf;
       srcBuf = nullptr;
     }
-    if ( outputBuf ) {
+    if (outputBuf) {
         delete[] outputBuf;
         outputBuf = nullptr;
     }
@@ -97,11 +97,11 @@ void GzipInputStream::close()
         printf("inflateEnd: Some kind of problem: %d\n", zerr);
     }
 
-    if ( srcBuf ) {
+    if (srcBuf) {
       delete[] srcBuf;
       srcBuf = nullptr;
     }
-    if ( outputBuf ) {
+    if (outputBuf) {
         delete[] outputBuf;
         outputBuf = nullptr;
     }
@@ -122,12 +122,12 @@ int GzipInputStream::get()
     } else {
         loaded = true;
 
-        if ( outputBufPos >= outputBufLen ) {
+        if (outputBufPos >= outputBufLen) {
             // time to read more, if we can
             fetchMore();
         }
 
-        if ( outputBufPos < outputBufLen ) {
+        if (outputBufPos < outputBufLen) {
             ch = (int)outputBuf[outputBufPos++];
         }
     }
@@ -167,7 +167,7 @@ bool GzipInputStream::load()
     }
 
     outputBuf = new (std::nothrow) unsigned char [OUT_SIZE];
-    if ( !outputBuf ) {
+    if (!outputBuf) {
         delete[] srcBuf;
         srcBuf = nullptr;
         return false;
@@ -207,14 +207,14 @@ bool GzipInputStream::load()
     ////OS
     //val = (int)srcBuf[9];
 
-//     if ( flags & FEXTRA ) {
+//     if (flags & FEXTRA) {
 //         headerLen += 2;
 //         int xlen = 
 //         TODO deal with optional header parts
 //     }
-    if ( flags & FNAME ) {
+    if (flags & FNAME) {
         int cur = 10;
-        while ( srcBuf[cur] )
+        while (srcBuf[cur])
         {
             cur++;
             headerLen++;
@@ -250,7 +250,7 @@ bool GzipInputStream::load()
     d_stream.avail_out = OUT_SIZE;
     
     int zerr = inflateInit2(&d_stream, -MAX_WBITS);
-    if ( zerr == Z_OK )
+    if (zerr == Z_OK)
     {
         zerr = fetchMore();
     } else {
@@ -270,14 +270,14 @@ int GzipInputStream::fetchMore()
     outputBufLen = 0;
     outputBufPos = 0;
 
-    int zerr = inflate( &d_stream, Z_SYNC_FLUSH );
-    if ( zerr == Z_OK || zerr == Z_STREAM_END ) {
+    int zerr = inflate(&d_stream, Z_SYNC_FLUSH);
+    if (zerr == Z_OK || zerr == Z_STREAM_END) {
         outputBufLen = OUT_SIZE - d_stream.avail_out;
-        if ( outputBufLen ) {
+        if (outputBufLen) {
             crc = crc32(crc, const_cast<const Bytef *>(outputBuf), outputBufLen);
         }
         //printf("crc:%lx\n", crc);
-//     } else if ( zerr != Z_STREAM_END ) {
+//     } else if (zerr != Z_STREAM_END) {
 //         // TODO check to be sure this won't happen for partial end reads
 //         printf("inflate: Some kind of problem: %d\n", zerr);
     }

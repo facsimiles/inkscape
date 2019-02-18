@@ -43,21 +43,21 @@ template <typename ForwardIterator, typename BinaryPredicate>
 ForwardIterator longest_common_suffix(ForwardIterator a, ForwardIterator b,
                                       ForwardIterator end, BinaryPredicate pred)
 {
-    if ( a == end || b == end ) {
+    if (a == end || b == end) {
         return end;
     }
 
     /* Handle in O(1) time the common cases of identical lists or tails. */
     {
         /* identical lists? */
-        if ( a == b ) {
+        if (a == b) {
             return a;
         }
 
         /* identical tails? */
         ForwardIterator tail_a(a);
         ForwardIterator tail_b(b);
-        if ( ++tail_a == ++tail_b ) {
+        if (++tail_a == ++tail_b) {
             return tail_a;
         }
     }
@@ -69,9 +69,9 @@ ForwardIterator longest_common_suffix(ForwardIterator a, ForwardIterator b,
     ForwardIterator lists[2] = { a, b };
     List<ForwardIterator> suffixes[2];
 
-    for ( int i=0 ; i < 2 ; i++ ) {
-        for ( ForwardIterator iter(lists[i]) ; iter != end ; ++iter ) {
-            if ( iter == lists[1-i] ) {
+    for (int i=0 ; i < 2 ; i++) {
+        for (ForwardIterator iter(lists[i]) ; iter != end ; ++iter) {
+            if (iter == lists[1-i]) {
                 // the other list is a suffix of this one
                 return lists[1-i];
             }
@@ -86,8 +86,8 @@ ForwardIterator longest_common_suffix(ForwardIterator a, ForwardIterator b,
 
     ForwardIterator longest_common(end);
 
-    while ( suffixes[0] && suffixes[1] &&
-            pred(**suffixes[0], **suffixes[1]) )
+    while (suffixes[0] && suffixes[1] &&
+            pred(**suffixes[0], **suffixes[1]))
     {
         longest_common = *suffixes[0];
         ++suffixes[0];

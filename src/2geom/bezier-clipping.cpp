@@ -102,7 +102,7 @@ size_t get_precision(Interval const& I)
 
 void range_assertion(int k, int m, int n, const char* msg)
 {
-    if ( k < m || k > n)
+    if (k < m || k > n)
     {
         std::cerr << "range assertion failed: \n"
                   << msg << std::endl
@@ -278,7 +278,7 @@ void iterate(std::vector<Interval>& domsA,
              std::vector<Point> const& B,
              Interval const& domA,
              Interval const& domB,
-             double precision );
+             double precision);
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -739,7 +739,7 @@ void iterate<intersection_point_tag> (std::vector<Interval>& domsA,
                                       std::vector<Point> const& B,
                                       Interval const& domA,
                                       Interval const& domB,
-                                      double precision )
+                                      double precision)
 {
     // in order to limit recursion
     static size_t counter = 0;
@@ -769,7 +769,7 @@ void iterate<intersection_point_tag> (std::vector<Interval>& domsA,
 
     OptInterval dom;
 
-    if ( is_constant(A, precision) && is_constant(B, precision) ){
+    if (is_constant(A, precision) && is_constant(B, precision)){
         Point M1 = middle_point(C1->front(), C1->back());
         Point M2 = middle_point(C2->front(), C2->back());
         if (are_near(M1,M2)){
@@ -971,7 +971,7 @@ void iterate<collinear_normal_tag> (std::vector<Interval>& domsA,
 
         // if we have clipped less than 20% than we need to subdive the curve
         // with the largest domain into two sub-curves
-        if ( dom->extent() > MIN_CLIPPED_SIZE_THRESHOLD)
+        if (dom->extent() > MIN_CLIPPED_SIZE_THRESHOLD)
         {
 #if VERBOSE
             std::cerr << "clipped less than 20% : " << dom->extent() << std::endl;

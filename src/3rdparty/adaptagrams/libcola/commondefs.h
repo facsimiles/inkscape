@@ -94,7 +94,7 @@ struct delete_object
 template <class InputIterator, class T, class Operation >
 T sum_over(InputIterator beg, InputIterator end, T init, Operation op)
 {
-    for ( ; beg != end; ++beg)
+    for (; beg != end; ++beg)
     init = init + op(*beg);
     return init;
 }

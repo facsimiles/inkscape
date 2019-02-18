@@ -99,7 +99,7 @@ void
 LPESkeleton::addKnotHolderEntities(KnotHolder *knotholder, SPItem *item) {
     {
         KnotHolderEntityMyHandle *e = new KnotHolderEntityMyHandle(this);
-        e->create( NULL, item, knotholder,
+        e->create(NULL, item, knotholder,
                     _("Text describing what this handle does"),
                     //optional: knot_shape, knot_mode, knot_color);
         knotholder->add(e);

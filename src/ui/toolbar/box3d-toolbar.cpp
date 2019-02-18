@@ -97,8 +97,8 @@ Box3DToolbar::Box3DToolbar(SPDesktop *desktop)
                                              _("Toggle VP in X direction between 'finite' and 'infinite' (=parallel)"));
         _vp_x_state_item->set_icon_name(INKSCAPE_ICON("perspective-parallel"));
         _vp_x_state_item->signal_toggled().connect(sigc::bind(sigc::mem_fun(*this, &Box3DToolbar::vp_state_changed), Proj::X));
-        _angle_x_item->set_sensitive( !prefs->getBool("/tools/shapes/3dbox/vp_x_state", true) );
-        _vp_x_state_item->set_active( prefs->getBool("/tools/shapes/3dbox/vp_x_state", true) );
+        _angle_x_item->set_sensitive(!prefs->getBool("/tools/shapes/3dbox/vp_x_state", true));
+        _vp_x_state_item->set_active(prefs->getBool("/tools/shapes/3dbox/vp_x_state", true));
     }
 
     /* Angle Y */
@@ -129,8 +129,8 @@ Box3DToolbar::Box3DToolbar(SPDesktop *desktop)
                                              _("Toggle VP in Y direction between 'finite' and 'infinite' (=parallel)"));
         _vp_y_state_item->set_icon_name(INKSCAPE_ICON("perspective-parallel"));
         _vp_y_state_item->signal_toggled().connect(sigc::bind(sigc::mem_fun(*this, &Box3DToolbar::vp_state_changed), Proj::Y));
-        _angle_y_item->set_sensitive( !prefs->getBool("/tools/shapes/3dbox/vp_y_state", true) );
-        _vp_y_state_item->set_active( prefs->getBool("/tools/shapes/3dbox/vp_y_state", true) );
+        _angle_y_item->set_sensitive(!prefs->getBool("/tools/shapes/3dbox/vp_y_state", true));
+        _vp_y_state_item->set_active(prefs->getBool("/tools/shapes/3dbox/vp_y_state", true));
     }
 
     /* Angle Z */
@@ -162,7 +162,7 @@ Box3DToolbar::Box3DToolbar(SPDesktop *desktop)
         _vp_z_state_item->set_icon_name(INKSCAPE_ICON("perspective-parallel"));
         _vp_z_state_item->signal_toggled().connect(sigc::bind(sigc::mem_fun(*this, &Box3DToolbar::vp_state_changed), Proj::Z));
         _angle_z_item->set_sensitive(!prefs->getBool("/tools/shapes/3dbox/vp_z_state", true));
-        _vp_z_state_item->set_active( prefs->getBool("/tools/shapes/3dbox/vp_z_state", true) );
+        _vp_z_state_item->set_active(prefs->getBool("/tools/shapes/3dbox/vp_z_state", true));
     }
 
     desktop->connectEventContextChanged(sigc::mem_fun(*this, &Box3DToolbar::check_ec));

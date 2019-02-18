@@ -112,7 +112,7 @@ SPFilter *new_filter(SPDocument *document)
     Inkscape::GC::release(repr);
 
     // get corresponding object
-    SPFilter *f = SP_FILTER( document->getObjectByRepr(repr) );
+    SPFilter *f = SP_FILTER(document->getObjectByRepr(repr));
     
     
     g_assert(f != nullptr);
@@ -180,7 +180,7 @@ filter_add_primitive(SPFilter *filter, const Inkscape::Filters::FilterPrimitiveT
     Inkscape::GC::release(repr);
     
     // get corresponding object
-    SPFilterPrimitive *prim = SP_FILTER_PRIMITIVE( filter->document->getObjectByRepr(repr) );
+    SPFilterPrimitive *prim = SP_FILTER_PRIMITIVE(filter->document->getObjectByRepr(repr));
  
     g_assert(prim != nullptr);
     g_assert(SP_IS_FILTER_PRIMITIVE(prim));
@@ -238,8 +238,8 @@ new_filter_gaussian_blur (SPDocument *document, gdouble radius, double expansion
     Inkscape::GC::release(repr);
 
     // get corresponding object
-    SPFilter *f = SP_FILTER( document->getObjectByRepr(repr) );
-    SPGaussianBlur *b = SP_GAUSSIANBLUR( document->getObjectByRepr(b_repr) );
+    SPFilter *f = SP_FILTER(document->getObjectByRepr(repr));
+    SPGaussianBlur *b = SP_GAUSSIANBLUR(document->getObjectByRepr(b_repr));
     
     g_assert(f != nullptr);
     g_assert(SP_IS_FILTER(f));
@@ -283,7 +283,7 @@ new_filter_blend_gaussian_blur (SPDocument *document, const char *blendmode, gdo
     Inkscape::GC::release(repr);
  
     // get corresponding object
-    SPFilter *f = SP_FILTER( document->getObjectByRepr(repr) );
+    SPFilter *f = SP_FILTER(document->getObjectByRepr(repr));
 
     // Gaussian blur primitive
     if(radius != 0) {
@@ -305,7 +305,7 @@ new_filter_blend_gaussian_blur (SPDocument *document, const char *blendmode, gdo
         repr->appendChild(b_repr);
         Inkscape::GC::release(b_repr);
 
-        SPGaussianBlur *b = SP_GAUSSIANBLUR( document->getObjectByRepr(b_repr) );
+        SPGaussianBlur *b = SP_GAUSSIANBLUR(document->getObjectByRepr(b_repr));
         g_assert(b != nullptr);
         g_assert(SP_IS_GAUSSIANBLUR(b));
     }
@@ -356,7 +356,7 @@ new_filter_simple_from_item (SPDocument *document, SPItem *item, const char *mod
         width = height = 0;
     }
 
-    Geom::Affine i2dt (item->i2dt_affine () );
+    Geom::Affine i2dt (item->i2dt_affine ());
 
     return (new_filter_blend_gaussian_blur (document, mode, radius, i2dt.descrim(), i2dt.expansionX(), i2dt.expansionY(), width, height));
 }
@@ -391,7 +391,7 @@ SPFilter *modify_filter_gaussian_blur_from_item(SPDocument *document, SPItem *it
         SPDefs *defs = document->getDefs();
         defs->appendChild(repr);
 
-        filter = SP_FILTER( document->getObjectByRepr(repr) );
+        filter = SP_FILTER(document->getObjectByRepr(repr));
         Inkscape::GC::release(repr);
     }
 

@@ -77,11 +77,11 @@ ustring utf16_to_ustring(const wchar_t *utf16string, int utf16length = -1)
 
 namespace {
 
-int sanitizeWindowSizeParam( int size, int delta, int minimum, int fallback )
+int sanitizeWindowSizeParam(int size, int delta, int minimum, int fallback)
 {
     int result = size;
-    if ( size < minimum ) {
-        g_warning( "Window size %d is less than cutoff.", size );
+    if (size < minimum) {
+        g_warning("Window size %d is less than cutoff.", size);
         result = fallback - delta;
     }
     result += delta;
@@ -298,7 +298,7 @@ void FileOpenDialogImplWin32::createFilterMenu()
             if(all_inkscape_files_filter.length() > 0)
                 all_inkscape_files_filter += ";*";
             all_inkscape_files_filter += file_extension_name;
-            if( strncmp("image", imod->get_mimetype(), 5) == 0)
+            if(strncmp("image", imod->get_mimetype(), 5) == 0)
             {
                 // Add to the "All Image Files" Entry
                 if(all_image_files_filter.length() > 0)
@@ -308,7 +308,7 @@ void FileOpenDialogImplWin32::createFilterMenu()
 
             // I don't know of any other way to define "bitmap" formats other than by listing them
             // if you change it here, do the same change in filedialogimpl-gtkmm
-            if ( 
+            if (
                 strncmp("image/png", imod->get_mimetype(), 9)==0 ||
                 strncmp("image/jpeg", imod->get_mimetype(), 10)==0 ||
                 strncmp("image/gif", imod->get_mimetype(), 9)==0 ||
@@ -322,7 +322,7 @@ void FileOpenDialogImplWin32::createFilterMenu()
                 strncmp("image/x-xbitmap", imod->get_mimetype(), 15)==0 ||
                 strncmp("image/x-tga", imod->get_mimetype(), 11)==0 ||
                 strncmp("image/x-pcx", imod->get_mimetype(), 11)==0 
-                ) {
+) {
                 if(all_bitmaps_filter.length() > 0)
                     all_bitmaps_filter += ";*";
                 all_bitmaps_filter += file_extension_name;
@@ -552,7 +552,7 @@ UINT_PTR CALLBACK FileOpenDialogImplWin32::GetOpenFileName_hookproc(
             GetWindowRect(hParentWnd, &rcRect);
             
             // Don't show the preview when opening executable files
-            if ( pImpl->dialogType == EXE_TYPES) {
+            if (pImpl->dialogType == EXE_TYPES) {
                 MoveWindow(hParentWnd, rcRect.left, rcRect.top,
                            rcRect.right - rcRect.left,
                            rcRect.bottom - rcRect.top,
@@ -568,7 +568,7 @@ UINT_PTR CALLBACK FileOpenDialogImplWin32::GetOpenFileName_hookproc(
             pImpl->_base_window_proc = (WNDPROC)GetWindowLongPtr(hParentWnd, GWLP_WNDPROC);
             SetWindowLongPtr(hParentWnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(file_dialog_subclass_proc));
 
-            if ( pImpl->dialogType != EXE_TYPES) {
+            if (pImpl->dialogType != EXE_TYPES) {
                 // Add a button to the toolbar
                 pImpl->_toolbar_wnd = FindWindowEx(hParentWnd, NULL, "ToolbarWindow32", NULL);
 
@@ -597,7 +597,7 @@ UINT_PTR CALLBACK FileOpenDialogImplWin32::GetOpenFileName_hookproc(
 
             pImpl->_file_dialog_wnd = hParentWnd;
 
-            if ( pImpl->dialogType != EXE_TYPES) {
+            if (pImpl->dialogType != EXE_TYPES) {
                 pImpl->_preview_wnd =
                     CreateWindowA(PreviewWindowClassName, "",
                         WS_CHILD | WS_VISIBLE,
@@ -1093,8 +1093,8 @@ bool FileOpenDialogImplWin32::set_image_preview()
 // be identical to a 16 bit app's version. To do this, we use the #pragma
 // to adjust packing, we use a WORD for the hmf handle, and a SMALL_RECT
 // for the bbox rectangle.
-#pragma pack( push )
-#pragma pack( 2 )
+#pragma pack(push)
+#pragma pack(2)
 struct APMHEADER
 {
     DWORD       dwKey;
@@ -1105,11 +1105,11 @@ struct APMHEADER
     WORD        wCheckSum;
 };
 using PAPMHEADER = APMHEADER *;
-#pragma pack( pop )
+#pragma pack(pop)
 
 
 static HENHMETAFILE
-MyGetEnhMetaFileW( const WCHAR *filename )
+MyGetEnhMetaFileW(const WCHAR *filename)
 {
     // Try open as Enhanced Metafile
     HENHMETAFILE hemf = GetEnhMetaFileW(filename);
@@ -1124,20 +1124,20 @@ MyGetEnhMetaFileW( const WCHAR *filename )
         if (!hmf) {
             WCHAR szTemp[MAX_PATH];
 
-            DWORD dw = GetShortPathNameW( filename, szTemp, MAX_PATH );
+            DWORD dw = GetShortPathNameW(filename, szTemp, MAX_PATH);
             if (dw) {
-                hmf = GetMetaFileW( szTemp );
+                hmf = GetMetaFileW(szTemp);
             }
         }
 
         if (hmf) {
             // Convert Windows Metafile to Enhanced Metafile
-            DWORD nSize = GetMetaFileBitsEx( hmf, 0, NULL );
+            DWORD nSize = GetMetaFileBitsEx(hmf, 0, NULL);
 
             if (nSize) {
                 BYTE *lpvData = new BYTE[nSize];
                 if (lpvData) {
-                    DWORD dw = GetMetaFileBitsEx( hmf, nSize, lpvData );
+                    DWORD dw = GetMetaFileBitsEx(hmf, nSize, lpvData);
                     if (dw) {
                         // Fill out a METAFILEPICT structure
                         mp.mm = MM_ANISOTROPIC;
@@ -1145,55 +1145,55 @@ MyGetEnhMetaFileW( const WCHAR *filename )
                         mp.yExt = 1000;
                         mp.hMF = NULL;
                         // Get a reference DC
-                        hDC = GetDC( NULL );
+                        hDC = GetDC(NULL);
                         // Make an enhanced metafile from the windows metafile
-                        hemf = SetWinMetaFileBits( nSize, lpvData, hDC, &mp );
+                        hemf = SetWinMetaFileBits(nSize, lpvData, hDC, &mp);
                         // Clean up
-                        ReleaseDC( NULL, hDC );
-                        DeleteMetaFile( hmf );
+                        ReleaseDC(NULL, hDC);
+                        DeleteMetaFile(hmf);
                     }
                     delete[] lpvData;
                 }
                 else {
-                    DeleteMetaFile( hmf );
+                    DeleteMetaFile(hmf);
                 }
             }
             else {
-                DeleteMetaFile( hmf );
+                DeleteMetaFile(hmf);
             }
         }
         else {
             // Try open as Aldus Placeable Metafile
             HANDLE hFile;
-            hFile = CreateFileW( filename, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
+            hFile = CreateFileW(filename, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
             if (hFile != INVALID_HANDLE_VALUE) {
-                DWORD nSize = GetFileSize( hFile, NULL );
+                DWORD nSize = GetFileSize(hFile, NULL);
                 if (nSize) {
                     BYTE *lpvData = new BYTE[nSize];
                     if (lpvData) {
-                        DWORD dw = ReadFile( hFile, lpvData, nSize, &nSize, NULL );
+                        DWORD dw = ReadFile(hFile, lpvData, nSize, &nSize, NULL);
                         if (dw) {
-                            if ( ((PAPMHEADER)lpvData)->dwKey == 0x9ac6cdd7l ) {
+                            if (((PAPMHEADER)lpvData)->dwKey == 0x9ac6cdd7l) {
                                 // Fill out a METAFILEPICT structure
                                 mp.mm = MM_ANISOTROPIC;
                                 mp.xExt = ((PAPMHEADER)lpvData)->bbox.Right - ((PAPMHEADER)lpvData)->bbox.Left;
-                                mp.xExt = ( mp.xExt * 2540l ) / (DWORD)(((PAPMHEADER)lpvData)->wInch);
+                                mp.xExt = (mp.xExt * 2540l) / (DWORD)(((PAPMHEADER)lpvData)->wInch);
                                 mp.yExt = ((PAPMHEADER)lpvData)->bbox.Bottom - ((PAPMHEADER)lpvData)->bbox.Top;
-                                mp.yExt = ( mp.yExt * 2540l ) / (DWORD)(((PAPMHEADER)lpvData)->wInch);
+                                mp.yExt = (mp.yExt * 2540l) / (DWORD)(((PAPMHEADER)lpvData)->wInch);
                                 mp.hMF = NULL;
                                 // Get a reference DC
-                                hDC = GetDC( NULL );
+                                hDC = GetDC(NULL);
                                 // Create an enhanced metafile from the bits
-                                hemf = SetWinMetaFileBits( nSize, lpvData+sizeof(APMHEADER), hDC, &mp );
+                                hemf = SetWinMetaFileBits(nSize, lpvData+sizeof(APMHEADER), hDC, &mp);
                                 // Clean up
-                                ReleaseDC( NULL, hDC );
+                                ReleaseDC(NULL, hDC);
                             }
                         }
                         delete[] lpvData;
                     }
                 }
-                CloseHandle( hFile );
+                CloseHandle(hFile);
             }
         }
     }
@@ -1211,7 +1211,7 @@ bool FileOpenDialogImplWin32::set_emf_preview()
     DWORD w = 0;
     DWORD h = 0;
 
-    HENHMETAFILE hemf = MyGetEnhMetaFileW( _path_string );
+    HENHMETAFILE hemf = MyGetEnhMetaFileW(_path_string);
 
     if (hemf)
     {
@@ -1589,10 +1589,10 @@ FileSaveDialogImplWin32::FileSaveDialogImplWin32(Gtk::Window &parent,
             if (dialogType == CUSTOM_TYPE) {
                 myFilename = udir;
             } else {
-                size_t last_slash_index = udir.find_last_of( '\\' );
-                size_t last_period_index = udir.find_last_of( '.' );
+                size_t last_slash_index = udir.find_last_of('\\');
+                size_t last_period_index = udir.find_last_of('.');
                 if (last_period_index > last_slash_index) {
-                    myFilename = udir.substr(0, last_period_index ); 
+                    myFilename = udir.substr(0, last_period_index); 
                 }
             }
 
@@ -1827,7 +1827,7 @@ FileSaveDialogImplWin32::show()
     return _result;
 }
 
-void FileSaveDialogImplWin32::setSelectionType( Inkscape::Extension::Extension * /*key*/ )
+void FileSaveDialogImplWin32::setSelectionType(Inkscape::Extension::Extension * /*key*/)
 {
     // If no pointer to extension is passed in, look up based on filename extension.
 
@@ -1854,7 +1854,7 @@ UINT_PTR CALLBACK FileSaveDialogImplWin32::GetSaveFileName_hookproc(
             GetWindowRect(GetDlgItem(hParentWnd, stc2), &rST);
             GetWindowRect(hdlg, &rROOT);
             int ydelta = rCB1.top - rEDT1.top;
-            if ( ydelta < 0 ) {
+            if (ydelta < 0) {
                 g_warning("Negative dialog ydelta");
                 ydelta = 0;
             }
@@ -1864,8 +1864,8 @@ UINT_PTR CALLBACK FileSaveDialogImplWin32::GetSaveFileName_hookproc(
             RECT rcRect;
             GetWindowRect(hParentWnd, &rcRect);
             MoveWindow(hParentWnd, rcRect.left, rcRect.top,
-                       sanitizeWindowSizeParam( rcRect.right - rcRect.left, 1, WINDOW_WIDTH_MINIMUM, WINDOW_WIDTH_FALLBACK ),
-                       sanitizeWindowSizeParam( rcRect.bottom - rcRect.top, ydelta, WINDOW_HEIGHT_MINIMUM, WINDOW_HEIGHT_FALLBACK ),
+                       sanitizeWindowSizeParam(rcRect.right - rcRect.left, 1, WINDOW_WIDTH_MINIMUM, WINDOW_WIDTH_FALLBACK),
+                       sanitizeWindowSizeParam(rcRect.bottom - rcRect.top, ydelta, WINDOW_HEIGHT_MINIMUM, WINDOW_HEIGHT_FALLBACK),
                        FALSE);
 
             // It is not necessary to delete stock objects by calling DeleteObject

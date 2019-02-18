@@ -1,4 +1,4 @@
-set ( autotrace_SRC
+set (autotrace_SRC
 config.h
 atou.c
 atou.h

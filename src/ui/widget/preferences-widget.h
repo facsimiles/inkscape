@@ -137,7 +137,7 @@ private:
     void on_slider_value_changed();
     void on_spinbutton_value_changed();
     void on_unit_changed();
-    bool on_mnemonic_activate( bool group_cycling ) override;
+    bool on_mnemonic_activate(bool group_cycling) override;
 
     Inkscape::UI::Widget::SpinButton _sb;
     UnitMenu        _unit;
@@ -155,7 +155,7 @@ public:
 private:
     void on_slider_value_changed();
     void on_spinbutton_value_changed();
-    bool on_mnemonic_activate( bool group_cycling ) override;
+    bool on_mnemonic_activate(bool group_cycling) override;
 
     Glib::ustring _prefs_path;
     Inkscape::UI::Widget::SpinButton _sb;
@@ -227,7 +227,7 @@ protected:
     Gtk::Entry *relatedEntry;
     void onRelatedEntryChangedCallback();
     void onRelatedButtonClickedCallback();
-    bool on_mnemonic_activate( bool group_cycling ) override;
+    bool on_mnemonic_activate(bool group_cycling) override;
 };
 
 class PrefEntryFileButtonHBox : public Gtk::HBox
@@ -241,7 +241,7 @@ protected:
     Gtk::Entry *relatedEntry;
     void onRelatedEntryChangedCallback();
     void onRelatedButtonClickedCallback();
-    bool on_mnemonic_activate( bool group_cycling ) override;
+    bool on_mnemonic_activate(bool group_cycling) override;
 };
 
 class PrefOpenFolder : public Gtk::HBox {

@@ -304,7 +304,7 @@ sp_pathvector_boolop_slice_intersect(Geom::PathVector const &pathva, Geom::PathV
 
     gchar *result_str = result_path->svg_dump_path();
     Geom::PathVector outres =  Geom::parse_svg_path(result_str);
-    // CONCEPT TESTING g_warning( "%s", result_str );
+    // CONCEPT TESTING g_warning("%s", result_str);
     g_free(result_str);
     delete result_path;
 
@@ -368,7 +368,7 @@ void LPEBool::doEffect(SPCurve *curve)
         // But it doesn't seem possible to access them from here, because SPCurve is not derived from SPItem.
         // The nearest function in the call stack, where this is available is SPLPEItem::performPathEffect (this is then an SPItem)
         // For the parameter curve, this is possible.
-        // fill_typ fill_this    = fill_type_this.   get_value()!=fill_justDont ? fill_type_this.get_value()    : GetFillTyp( curve ) ;
+        // fill_typ fill_this    = fill_type_this.   get_value()!=fill_justDont ? fill_type_this.get_value()    : GetFillTyp(curve) ;
         fill_typ fill_this    = fill_type_this.get_value();
         fill_typ fill_operand = fill_type_operand.get_value() != fill_justDont ? fill_type_operand.get_value() : GetFillTyp(operand_path.getObject());
 

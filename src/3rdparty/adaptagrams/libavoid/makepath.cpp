@@ -1176,7 +1176,7 @@ void AStarPathPrivate::search(ConnRef *lineRef, VertInf *src, VertInf *tar, Vert
 
     // Create a heap from PENDING for sorting
     using std::make_heap; using std::push_heap; using std::pop_heap;
-    make_heap( PENDING.begin(), PENDING.end(), pendingCmp);
+    make_heap(PENDING.begin(), PENDING.end(), pendingCmp);
 
     // Continue until the queue is empty.
     while (!PENDING.empty())
@@ -1305,12 +1305,12 @@ void AStarPathPrivate::search(ConnRef *lineRef, VertInf *src, VertInf *tar, Vert
             if (node.inf->id.isConnectionPin() && 
                     !node.inf->id.isConnCheckpoint())
             {
-                if ( !( (bestNodeInf == lineRef->src()) &&
+                if (!((bestNodeInf == lineRef->src()) &&
                         lineRef->src()->id.isDummyPinHelper()
-                      ) &&
-                     !( node.inf->hasNeighbour(lineRef->dst(), isOrthogonal) &&
+) &&
+                     !(node.inf->hasNeighbour(lineRef->dst(), isOrthogonal) &&
                         lineRef->dst()->id.isDummyPinHelper())
-                      )
+)
                 {
                     // Don't check connection pins if they don't have the 
                     // target vertex as a direct neighbour, or are directly
@@ -1483,13 +1483,13 @@ void AStarPathPrivate::search(ConnRef *lineRef, VertInf *src, VertInf *tar, Vert
                     {
                         // Replace the existing node in PENDING
                         **currInd = node;
-                        make_heap( PENDING.begin(), PENDING.end(), pendingCmp);
+                        make_heap(PENDING.begin(), PENDING.end(), pendingCmp);
                     }
                     bNodeFound = true;
                     break;
                 }
             }
-            if ( !bNodeFound ) // If Node NOT found on PENDING
+            if (!bNodeFound) // If Node NOT found on PENDING
             {
                 // Check to see if it is already in the Done set for this
                 // vertex.
@@ -1515,13 +1515,13 @@ void AStarPathPrivate::search(ConnRef *lineRef, VertInf *src, VertInf *tar, Vert
                 }
             }
 
-            if (!bNodeFound ) // If Node NOT in either Pending or Done.
+            if (!bNodeFound) // If Node NOT in either Pending or Done.
             {
                 // Push NewNode onto PENDING
                 ANode *newNode = newANode(node);
                 PENDING.push_back(newNode);
                 // Push NewNode onto heap
-                push_heap( PENDING.begin(), PENDING.end(), pendingCmp);
+                push_heap(PENDING.begin(), PENDING.end(), pendingCmp);
 
 #if 0
                 using std::cout; using std::endl;

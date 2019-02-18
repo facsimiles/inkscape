@@ -96,11 +96,11 @@ std::vector<SPMeshGradient *>  ms_get_dt_selected_gradients(Inkscape::Selection 
 /*
  * Get the current selection status from the desktop
  */
-void ms_read_selection( Inkscape::Selection *selection,
+void ms_read_selection(Inkscape::Selection *selection,
                         SPMeshGradient *&ms_selected,
                         bool &ms_selected_multi,
                         SPMeshType &ms_type,
-                        bool &ms_type_multi )
+                        bool &ms_type_multi)
 {
     ms_selected = nullptr;
     ms_selected_multi = false;
@@ -110,7 +110,7 @@ void ms_read_selection( Inkscape::Selection *selection,
     bool first = true;
 
     // Read desktop selection, taking into account fill/stroke toggles
-    std::vector<SPMeshGradient *> meshes = ms_get_dt_selected_gradients( selection );
+    std::vector<SPMeshGradient *> meshes = ms_get_dt_selected_gradients(selection);
     for (auto & meshe : meshes) {
         if (first) {
             ms_selected = meshe;
@@ -138,7 +138,7 @@ void ms_read_selection( Inkscape::Selection *selection,
 static MeshTool *get_mesh_tool()
 {
     MeshTool *tool = nullptr;
-    if (SP_ACTIVE_DESKTOP ) {
+    if (SP_ACTIVE_DESKTOP) {
         Inkscape::UI::Tools::ToolBase *ec = SP_ACTIVE_DESKTOP->event_context;
         if (SP_IS_MESH_CONTEXT(ec)) {
             tool = static_cast<MeshTool*>(ec);
@@ -327,8 +327,8 @@ MeshToolbar::MeshToolbar(SPDesktop *desktop)
 
         // TRANSLATORS: Type of Smoothing. See https://en.wikipedia.org/wiki/Coons_patch
         _select_type_combo->set_tooltip_text(_("Coons: no smothing. Bicubic: smothing across patch boundaries."));
-        _select_type_combo->set_sensitive( false );
-        _select_type_combo->set_active( 0 );
+        _select_type_combo->set_sensitive(false);
+        _select_type_combo->set_active(0);
 
         auto item = Gtk::manage(new Gtk::ToolItem());
         item->add(*_select_type_combo);
@@ -510,7 +510,7 @@ MeshToolbar::selection_changed(Inkscape::Selection * /* selection */)
         SPMeshType ms_type = SP_MESH_TYPE_COONS;
         bool ms_selected_multi = false;
         bool ms_type_multi = false; 
-        ms_read_selection( selection, ms_selected, ms_selected_multi, ms_type, ms_type_multi );
+        ms_read_selection(selection, ms_selected, ms_selected_multi, ms_type, ms_type_multi);
         // std::cout << "   type: " << ms_type << std::endl;
         
         if (_select_type_combo) {
@@ -557,7 +557,7 @@ MeshToolbar::type_changed()
         meshe->type_set = true;
         meshe->updateRepr();
     }
-    if (!meshes.empty() ) {
+    if (!meshes.empty()) {
         DocumentUndo::done(_desktop->getDocument(), SP_VERB_CONTEXT_MESH,_("Set mesh type"));
     }
 }
@@ -567,7 +567,7 @@ MeshToolbar::toggle_sides()
 {
     MeshTool *mt = get_mesh_tool();
     if (mt) {
-        sp_mesh_context_corner_operation( mt, MG_CORNER_SIDE_TOGGLE );
+        sp_mesh_context_corner_operation(mt, MG_CORNER_SIDE_TOGGLE);
     }
 }
 
@@ -576,7 +576,7 @@ MeshToolbar::make_elliptical()
 {
     MeshTool *mt = get_mesh_tool();
     if (mt) {
-        sp_mesh_context_corner_operation( mt, MG_CORNER_SIDE_ARC );
+        sp_mesh_context_corner_operation(mt, MG_CORNER_SIDE_ARC);
     }
 }
 
@@ -585,7 +585,7 @@ MeshToolbar::pick_colors()
 {
     MeshTool *mt = get_mesh_tool();
     if (mt) {
-        sp_mesh_context_corner_operation( mt, MG_CORNER_COLOR_PICK );
+        sp_mesh_context_corner_operation(mt, MG_CORNER_COLOR_PICK);
     }
 }
 
@@ -594,7 +594,7 @@ MeshToolbar::fit_mesh()
 {
     MeshTool *mt = get_mesh_tool();
     if (mt) {
-        sp_mesh_context_fit_mesh_in_bbox( mt );
+        sp_mesh_context_fit_mesh_in_bbox(mt);
     }
 }
 

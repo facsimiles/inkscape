@@ -35,8 +35,8 @@ using Inkscape::Util::unit_table;
 
 namespace Inkscape {
 
-static Inkscape::XML::Document *loadImpl( std::string const& prefsFilename, Glib::ustring & errMsg );
-static void migrateDetails( Inkscape::XML::Document *from, Inkscape::XML::Document *to );
+static Inkscape::XML::Document *loadImpl(std::string const& prefsFilename, Glib::ustring & errMsg);
+static void migrateDetails(Inkscape::XML::Document *from, Inkscape::XML::Document *to);
 
 static Inkscape::XML::Document *migrateFromDoc = nullptr;
 
@@ -195,8 +195,8 @@ void Preferences::_load()
             return;
         }
 
-        if ( migrateFromDoc ) {
-            migrateDetails( migrateFromDoc, _prefs_doc );
+        if (migrateFromDoc) {
+            migrateDetails(migrateFromDoc, _prefs_doc);
         }
 
         // The prefs file was just created.
@@ -207,9 +207,9 @@ void Preferences::_load()
 
     // Yes, the pref file exists.
     Glib::ustring errMsg;
-    Inkscape::XML::Document *prefs_read = loadImpl( _prefs_filename, errMsg );
+    Inkscape::XML::Document *prefs_read = loadImpl(_prefs_filename, errMsg);
 
-    if ( prefs_read ) {
+    if (prefs_read) {
         // Merge the loaded prefs with defaults.
         _prefs_doc->root()->mergeFrom(prefs_read->root(), "id");
         Inkscape::GC::release(prefs_read);
@@ -220,7 +220,7 @@ void Preferences::_load()
 }
 
 //_reportError(msg, not_saved);
-static Inkscape::XML::Document *loadImpl( std::string const& prefsFilename, Glib::ustring & errMsg )
+static Inkscape::XML::Document *loadImpl(std::string const& prefsFilename, Glib::ustring & errMsg)
 {
     // 2. Is it a regular file?
     if (!g_file_test(prefsFilename.c_str(), G_FILE_TEST_IS_REGULAR)) {
@@ -265,7 +265,7 @@ static Inkscape::XML::Document *loadImpl( std::string const& prefsFilename, Glib
     return prefs_read;
 }
 
-static void migrateDetails( Inkscape::XML::Document *from, Inkscape::XML::Document *to )
+static void migrateDetails(Inkscape::XML::Document *from, Inkscape::XML::Document *to)
 {
     // TODO pull in additional prefs with more granularity
     to->root()->mergeFrom(from->root(), "id");
@@ -315,10 +315,10 @@ void Preferences::reset()
     save();
 }
 
-bool Preferences::getLastError( Glib::ustring& primary, Glib::ustring& secondary )
+bool Preferences::getLastError(Glib::ustring& primary, Glib::ustring& secondary)
 {
     bool result = _hasError;
-    if ( _hasError ) {
+    if (_hasError) {
         primary = _lastErrPrimary;
         secondary = _lastErrSecondary;
         _hasError = false;
@@ -331,7 +331,7 @@ bool Preferences::getLastError( Glib::ustring& primary, Glib::ustring& secondary
     return result;
 }
 
-void Preferences::migrate( std::string const& legacyDir, std::string const& prefdir )
+void Preferences::migrate(std::string const& legacyDir, std::string const& prefdir)
 {
     int mode = S_IRWXU;
 #ifdef S_IRGRP
@@ -343,7 +343,7 @@ void Preferences::migrate( std::string const& legacyDir, std::string const& pref
 #ifdef S_IXOTH
     mode |= S_IXOTH;
 #endif
-    if ( g_mkdir_with_parents(prefdir.c_str(), mode) == -1 ) {
+    if (g_mkdir_with_parents(prefdir.c_str(), mode) == -1) {
     } else {
     }
 
@@ -351,7 +351,7 @@ void Preferences::migrate( std::string const& legacyDir, std::string const& pref
     if (oldPrefFile) {
         if (g_file_test(oldPrefFile, G_FILE_TEST_EXISTS)) {
             Glib::ustring errMsg;
-            Inkscape::XML::Document *oldPrefs = loadImpl( oldPrefFile, errMsg );
+            Inkscape::XML::Document *oldPrefs = loadImpl(oldPrefFile, errMsg);
             if (oldPrefs) {
                 Glib::ustring docId("documents");
                 Glib::ustring recentId("recent");
@@ -388,7 +388,7 @@ void Preferences::migrate( std::string const& legacyDir, std::string const& pref
                 //Inkscape::GC::release(oldPrefs);
                 oldPrefs = nullptr;
             } else {
-                g_warning( "%s", errMsg.c_str() );
+                g_warning("%s", errMsg.c_str());
             }
         }
         g_free(oldPrefFile);
@@ -412,7 +412,7 @@ std::vector<Preferences::Entry> Preferences::getAllEntries(Glib::ustring const &
         // argh - purge this Util::List nonsense from XML classes fast
         Inkscape::Util::List<Inkscape::XML::AttributeRecord const> alist = node->attributeList();
         for (; alist; ++alist) {
-            temp.push_back( Entry(path + '/' + g_quark_to_string(alist->key), static_cast<void const*>(alist->value.pointer())) );
+            temp.push_back(Entry(path + '/' + g_quark_to_string(alist->key), static_cast<void const*>(alist->value.pointer())));
         }
     }
     return temp;
@@ -461,7 +461,7 @@ void Preferences::setBool(Glib::ustring const &pref_path, bool value)
     /// @todo Boolean values should be stored as "true" and "false",
     /// but this is not possible due to an interaction with event contexts.
     /// Investigate this in depth.
-    _setRawValue(pref_path, ( value ? "1" : "0" ));
+    _setRawValue(pref_path, (value ? "1" : "0"));
 }
 
 /**
@@ -560,14 +560,14 @@ void Preferences::remove(Glib::ustring const &pref_path)
         node->parent()->removeChild(node);
     } else { //Handle to remove also attributes in path not only the container node
         // verify path
-        g_assert( pref_path.at(0) == '/' );
+        g_assert(pref_path.at(0) == '/');
         if (_prefs_doc == nullptr){
             return;
         }
         node = _prefs_doc->root();
         Inkscape::XML::Node *child = nullptr;
         gchar **splits = g_strsplit(pref_path.c_str(), "/", 0);
-        if ( splits ) {
+        if (splits) {
             for (int part_i = 0; splits[part_i]; ++part_i) {
                 // skip empty path segments
                 if (!splits[part_i][0]) {
@@ -619,7 +619,7 @@ void Preferences::PrefNodeObserver::notifyAttributeChanged(XML::Node &node, GQua
 {
     // filter out attributes we don't watch
     gchar const *attr_name = g_quark_to_string(name);
-    if ( _filter.empty() || (_filter == attr_name) ) {
+    if (_filter.empty() || (_filter == attr_name)) {
         _ObserverData *d = Preferences::_get_pref_observer_data(_observer);
         Glib::ustring notify_path = _observer.observed_path;
 
@@ -678,7 +678,7 @@ XML::Node *Preferences::_findObserverNode(Glib::ustring const &pref_path, Glib::
 void Preferences::addObserver(Observer &o)
 {
     // prevent adding the same observer twice
-    if ( _observer_map.find(&o) == _observer_map.end() ) {
+    if (_observer_map.find(&o) == _observer_map.end()) {
         Glib::ustring node_key, attr_key;
         Inkscape::XML::Node *node;
         node = _findObserverNode(o.observed_path, node_key, attr_key, true);
@@ -690,9 +690,9 @@ void Preferences::addObserver(Observer &o)
 
             // if we watch a single pref, we want to receive notifications only for a single node
             if (o._data->_is_attr) {
-                node->addObserver( *(_observer_map[&o]) );
+                node->addObserver(*(_observer_map[&o]));
             } else {
-                node->addSubtreeObserver( *(_observer_map[&o]) );
+                node->addSubtreeObserver(*(_observer_map[&o]));
             }
         }
     }
@@ -731,9 +731,9 @@ void Preferences::removeObserver(Observer &o)
 Inkscape::XML::Node *Preferences::_getNode(Glib::ustring const &pref_key, bool create)
 {
     // verify path
-    g_assert( pref_key.at(0) == '/' );
+    g_assert(pref_key.at(0) == '/');
     // No longer necessary, can cause problems with input devices which have a dot in the name
-    // g_assert( pref_key.find('.') == Glib::ustring::npos );
+    // g_assert(pref_key.find('.') == Glib::ustring::npos);
 
     if (_prefs_doc == nullptr){
         return nullptr;
@@ -742,7 +742,7 @@ Inkscape::XML::Node *Preferences::_getNode(Glib::ustring const &pref_key, bool c
     Inkscape::XML::Node *child = nullptr;
     gchar **splits = g_strsplit(pref_key.c_str(), "/", 0);
 
-    if ( splits ) {
+    if (splits) {
         for (int part_i = 0; splits[part_i]; ++part_i) {
             // skip empty path segments
             if (!splits[part_i][0]) {
@@ -808,11 +808,11 @@ void Preferences::_getRawValue(Glib::ustring const &path, gchar const *&result)
 
     // retrieve the attribute
     Inkscape::XML::Node *node = _getNode(node_key, false);
-    if ( node == nullptr ) {
+    if (node == nullptr) {
         result = nullptr;
     } else {
         gchar const *attr = node->attribute(attr_key.c_str());
-        if ( attr == nullptr ) {
+        if (attr == nullptr) {
             result = nullptr;
         } else {
             result = attr;
@@ -847,7 +847,7 @@ bool Preferences::_extractBool(Entry const &v)
     if (v.cached_bool) return v.value_bool;
     v.cached_bool = true;
     gchar const *s = static_cast<gchar const *>(v._value);
-    if ( !s[0] || !strcmp(s, "0") || !strcmp(s, "false") ) {
+    if (!s[0] || !strcmp(s, "0") || !strcmp(s, "false")) {
         return false;
     } else {
         v.value_bool = true;
@@ -872,10 +872,10 @@ int Preferences::_extractInt(Entry const &v)
     if (v.cached_int) return v.value_int;
     v.cached_int = true;
     gchar const *s = static_cast<gchar const *>(v._value);
-    if ( !strcmp(s, "true") ) {
+    if (!strcmp(s, "true")) {
         v.value_int = 1;
         return true;
-    } else if ( !strcmp(s, "false") ) {
+    } else if (!strcmp(s, "false")) {
         v.value_int = 0;
         return false;
     } else {

@@ -18,7 +18,7 @@ namespace Inkscape {
 
 namespace LivePathEffect {
 
-MessageParam::MessageParam( const Glib::ustring& label, const Glib::ustring& tip,
+MessageParam::MessageParam(const Glib::ustring& label, const Glib::ustring& tip,
                       const Glib::ustring& key, Inkscape::UI::Widget::Registry* wr,
                       Effect* effect, const gchar * default_message, Glib::ustring  legend, 
                       Gtk::Align halign, Gtk::Align valign, double marginstart, double marginend)

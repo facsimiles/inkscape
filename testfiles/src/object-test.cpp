@@ -69,7 +69,7 @@ public:
     <line id="L" x1="20" y1="100" x2="100" y2="20" stroke="black" stroke-width="2"/>
   </g>
 </svg>
-        )A";
+)A";
         doc = SPDocument::createNewDocFromMem(docString, static_cast<int>(strlen(docString)), false);
     }
 

@@ -283,8 +283,8 @@ public:
     virtual Glib::ustring readWord() = 0;
     
     /* Input formatting */
-    virtual const Reader& readBool (bool& val ) = 0;
-    virtual const Reader& operator>> (bool& val ) = 0;
+    virtual const Reader& readBool (bool& val) = 0;
+    virtual const Reader& operator>> (bool& val) = 0;
         
     virtual const Reader& readShort (short &val) = 0;
     virtual const Reader& operator>> (short &val) = 0;
@@ -338,8 +338,8 @@ public:
     Glib::ustring readWord() override;
     
     /* Input formatting */
-    const Reader& readBool (bool& val ) override;
-    const Reader& operator>> (bool& val ) override
+    const Reader& readBool (bool& val) override;
+    const Reader& operator>> (bool& val) override
         { return readBool(val); }
         
     const Reader& readShort (short &val) override;
@@ -484,23 +484,23 @@ public:
 
     virtual Writer& writeString(const char *str) = 0;
 
-    virtual Writer& writeBool (bool val ) = 0;
+    virtual Writer& writeBool (bool val) = 0;
 
-    virtual Writer& writeShort (short val ) = 0;
+    virtual Writer& writeShort (short val) = 0;
 
-    virtual Writer& writeUnsignedShort (unsigned short val ) = 0;
+    virtual Writer& writeUnsignedShort (unsigned short val) = 0;
 
-    virtual Writer& writeInt (int val ) = 0;
+    virtual Writer& writeInt (int val) = 0;
 
-    virtual Writer& writeUnsignedInt (unsigned int val ) = 0;
+    virtual Writer& writeUnsignedInt (unsigned int val) = 0;
 
-    virtual Writer& writeLong (long val ) = 0;
+    virtual Writer& writeLong (long val) = 0;
 
-    virtual Writer& writeUnsignedLong (unsigned long val ) = 0;
+    virtual Writer& writeUnsignedLong (unsigned long val) = 0;
 
-    virtual Writer& writeFloat (float val ) = 0;
+    virtual Writer& writeFloat (float val) = 0;
 
-    virtual Writer& writeDouble (double val ) = 0;
+    virtual Writer& writeDouble (double val) = 0;
 
  
 
@@ -540,23 +540,23 @@ public:
 
     Writer& writeString(const char *str) override;
 
-    Writer& writeBool (bool val ) override;
+    Writer& writeBool (bool val) override;
 
-    Writer& writeShort (short val ) override;
+    Writer& writeShort (short val) override;
 
-    Writer& writeUnsignedShort (unsigned short val ) override;
+    Writer& writeUnsignedShort (unsigned short val) override;
 
-    Writer& writeInt (int val ) override;
+    Writer& writeInt (int val) override;
 
-    Writer& writeUnsignedInt (unsigned int val ) override;
+    Writer& writeUnsignedInt (unsigned int val) override;
 
-    Writer& writeLong (long val ) override;
+    Writer& writeLong (long val) override;
 
-    Writer& writeUnsignedLong (unsigned long val ) override;
+    Writer& writeUnsignedLong (unsigned long val) override;
 
-    Writer& writeFloat (float val ) override;
+    Writer& writeFloat (float val) override;
 
-    Writer& writeDouble (double val ) override;
+    Writer& writeDouble (double val) override;
 
  
 protected:

@@ -185,7 +185,7 @@ static Geom::Path return_at_first_cusp(Geom::Path const & path_in, double /*smoo
 
     for (unsigned i = 0; i < path_in.size(); i++) {
         temp.append(path_in[i]);
-        if (Geom::get_nodetype(path_in[i], path_in[i + 1]) != Geom::NODE_SMOOTH ) {
+        if (Geom::get_nodetype(path_in[i], path_in[i + 1]) != Geom::NODE_SMOOTH) {
             break;
         }
     }
@@ -213,8 +213,8 @@ Geom::PathVector LPETaperStroke::doEffect_path(Geom::PathVector const& path_in)
     if (size == first_cusp.size()) {
         // check to see if the knots were dragged over each other
         // if so, reset the end offset, but still allow the start offset.
-        if ( attach_start >= (size - attach_end) ) {
-            attach_end.param_set_value( size - attach_start );
+        if (attach_start >= (size - attach_end)) {
+            attach_end.param_set_value(size - attach_start);
             metInMiddle = true;
         }
     }
@@ -251,11 +251,11 @@ Geom::PathVector LPETaperStroke::doEffect_path(Geom::PathVector const& path_in)
     
     // don't let it be zero (this is stupid too!)
     if (attach_start < 0.0000001 || withinRange(double(attach_start), 0.00000001, 0.000001)) {
-        attach_start.param_set_value( 0.0000001 );
+        attach_start.param_set_value(0.0000001);
         zeroStart = true;
     }
     if (attach_end < 0.0000001 || withinRange(double(attach_end), 0.00000001, 0.000001)) {
-        attach_end.param_set_value( 0.0000001 );
+        attach_end.param_set_value(0.0000001);
         zeroEnd = true;
     }
 
@@ -379,7 +379,7 @@ Piecewise<D2<SBasis> > stretch_along(Piecewise<D2<SBasis> > pwd2_in, Geom::Path 
     using namespace Geom;
 
     // Don't allow empty path parameter:
-    if ( pattern.empty() ) {
+    if (pattern.empty()) {
         return pwd2_in;
     }
 
@@ -422,7 +422,7 @@ Piecewise<D2<SBasis> > stretch_along(Piecewise<D2<SBasis> > pwd2_in, Geom::Path 
             if (scaling != 1.0) {
                 x*=scaling;
             }
-            if ( false ) {
+            if (false) {
                 y*=(scaling*prop_scale);
             } else {
                 if (prop_scale != 1.0) y *= prop_scale;
@@ -434,7 +434,7 @@ Piecewise<D2<SBasis> > stretch_along(Piecewise<D2<SBasis> > pwd2_in, Geom::Path 
                 if (false) {
                     Piecewise<D2<SBasis> > output_piece = compose(uskeleton,x+offs)+y*compose(n,x+offs);
                     std::vector<Piecewise<D2<SBasis> > > splited_output_piece = split_at_discontinuities(output_piece);
-                    pre_output.insert(pre_output.end(), splited_output_piece.begin(), splited_output_piece.end() );
+                    pre_output.insert(pre_output.end(), splited_output_piece.begin(), splited_output_piece.end());
                 } else {
                     output.concat(compose(uskeleton,x+offs)+y*compose(n,x+offs));
                 }
@@ -500,13 +500,13 @@ void KnotHolderEntityAttachEnd::knot_set(Geom::Point const &p, Geom::Point const
 
     Geom::Point const s = snap_knot_position(p, state);
 
-    if (!SP_IS_SHAPE(lpe->sp_lpe_item) ) {
+    if (!SP_IS_SHAPE(lpe->sp_lpe_item)) {
         printf("WARNING: LPEItem is not a path!\n");
         return;
     }
     
     SPCurve* curve;
-    if ( !(curve = SP_SHAPE(lpe->sp_lpe_item)->getCurve()) ) {
+    if (!(curve = SP_SHAPE(lpe->sp_lpe_item)->getCurve())) {
         // oops
         return;
     }

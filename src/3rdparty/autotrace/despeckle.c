@@ -86,7 +86,7 @@ static int calc_error_8(unsigned char *color1, unsigned char *color2)
  *   Number of adjacent pixels found having the same color
  */
 
-static int find_size( /* in */ unsigned char *index,
+static int find_size(/* in */ unsigned char *index,
                      /* in */ int x,
                      /* in */ int y,
                      /* in */ int width,
@@ -131,7 +131,7 @@ static int find_size( /* in */ unsigned char *index,
  *   Number of adjacent pixels found having the same color
  */
 
-static int find_size_8( /* in */ unsigned char *index,
+static int find_size_8(/* in */ unsigned char *index,
                        /* in */ int x,
                        /* in */ int y,
                        /* in */ int width,
@@ -179,7 +179,7 @@ static int find_size_8( /* in */ unsigned char *index,
  *   Closest index != index and the error between the two colors squared
  */
 
-static void find_most_similar_neighbor( /* in */ unsigned char *index,
+static void find_most_similar_neighbor(/* in */ unsigned char *index,
                                        /* in/out */ unsigned char **closest_index,
                                        /* in/out */ int *error_amt,
                                        /* in */ int x,
@@ -260,7 +260,7 @@ static void find_most_similar_neighbor( /* in */ unsigned char *index,
  *   Closest index != index and the error between the two colors squared
  */
 
-static void find_most_similar_neighbor_8( /* in */ unsigned char *index,
+static void find_most_similar_neighbor_8(/* in */ unsigned char *index,
                                          /* in/out */ unsigned char **closest_index,
                                          /* in/out */ int *error_amt,
                                          /* in */ int x,
@@ -334,7 +334,7 @@ static void find_most_similar_neighbor_8( /* in */ unsigned char *index,
  *   24 bit pixbuf and its mask (used to prevent backtracking)
  */
 
-static void fill( /* in */ unsigned char *to_index,
+static void fill(/* in */ unsigned char *to_index,
                  /* in */ int x,
                  /* in */ int y,
                  /* in */ int width,
@@ -376,7 +376,7 @@ static void fill( /* in */ unsigned char *to_index,
  *   8 bit pixbuf and its mask (used to prevent backtracking)
  */
 
-static void fill_8( /* in */ unsigned char *to_index,
+static void fill_8(/* in */ unsigned char *to_index,
                    /* in */ int x,
                    /* in */ int y,
                    /* in */ int width,
@@ -413,7 +413,7 @@ static void fill_8( /* in */ unsigned char *to_index,
  *   its mask (used to prevent backtracking)
  */
 
-static void ignore( /* in */ int x,
+static void ignore(/* in */ int x,
                    /* in */ int y,
                    /* in */ int width,
                    /* in */ int height,
@@ -458,7 +458,7 @@ static void ignore( /* in */ int x,
  *   FALSE - feature wasn't recolored
  */
 
-static gboolean recolor( /* in */ double adaptive_tightness,
+static gboolean recolor(/* in */ double adaptive_tightness,
                         /* in */ int x,
                         /* in */ int y,
                         /* in */ int width,
@@ -514,7 +514,7 @@ static gboolean recolor( /* in */ double adaptive_tightness,
  *   FALSE - feature wasn't recolored
  */
 
-static gboolean recolor_8( /* in */ double adaptive_tightness,
+static gboolean recolor_8(/* in */ double adaptive_tightness,
                           /* in */ int x,
                           /* in */ int y,
                           /* in */ int width,
@@ -562,7 +562,7 @@ static gboolean recolor_8( /* in */ double adaptive_tightness,
  *   The 24 bit pixbuf is despeckled
  */
 
-static void despeckle_iteration( /* in */ int level,
+static void despeckle_iteration(/* in */ int level,
                                 /* in */ double adaptive_tightness,
                                 /* in */ double noise_max,
                                 /* in */ int width,
@@ -611,7 +611,7 @@ static void despeckle_iteration( /* in */ int level,
  *   The 8 bit pixbuf is despeckled
  */
 
-static void despeckle_iteration_8( /* in */ int level,
+static void despeckle_iteration_8(/* in */ int level,
                                   /* in */ double adaptive_tightness,
                                   /* in */ double noise_max,
                                   /* in */ int width,
@@ -674,7 +674,7 @@ static void despeckle_iteration_8( /* in */ int level,
  *   The bitmap is despeckled.
  */
 
-void despeckle( /* in/out */ at_bitmap * bitmap,
+void despeckle(/* in/out */ at_bitmap * bitmap,
                /* in */ int level,
                /* in */ gfloat tightness,
                /* in */ gfloat noise_removal,

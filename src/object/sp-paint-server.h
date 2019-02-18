@@ -85,7 +85,7 @@ PaintServer *chase_hrefs(PaintServer *src, sigc::slot<bool, PaintServer const *>
         }
         do1 = !do1;
 
-        if ( p2 == p1 ) {
+        if (p2 == p1) {
             /* We've been here before, so return NULL to indicate that no matching gradient found
              * in the chain. */
             return nullptr;

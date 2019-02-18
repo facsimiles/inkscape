@@ -235,7 +235,7 @@ bool DropperTool::root_handler(GdkEvent* event) {
                     Geom::Point const cd = desktop->w2d(this->centre);
                     Geom::Affine const w2dt = desktop->w2d();
                     const double scale = rw * w2dt.descrim();
-                    Geom::Affine const sm( Geom::Scale(scale, scale) * Geom::Translate(cd) );
+                    Geom::Affine const sm(Geom::Scale(scale, scale) * Geom::Translate(cd));
                     sp_canvas_item_affine_absolute(this->area, sm);
                     sp_canvas_item_show(this->area);
 

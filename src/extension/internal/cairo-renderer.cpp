@@ -103,7 +103,7 @@ CairoRenderContext*
 CairoRenderer::createContext()
 {
     CairoRenderContext *new_context = new CairoRenderContext(this);
-    g_assert( new_context != nullptr );
+    g_assert(new_context != nullptr);
 
     new_context->_state = nullptr;
 
@@ -182,25 +182,25 @@ static void sp_shape_render(SPShape *shape, CairoRenderContext *ctx)
          style->paint_order.layer[1] == SP_CSS_PAINT_ORDER_STROKE)) {
         ctx->renderPathVector(pathv, style, pbox, CairoRenderContext::STROKE_OVER_FILL);
     } else if (style->paint_order.layer[0] == SP_CSS_PAINT_ORDER_STROKE &&
-               style->paint_order.layer[1] == SP_CSS_PAINT_ORDER_FILL ) {
+               style->paint_order.layer[1] == SP_CSS_PAINT_ORDER_FILL) {
         ctx->renderPathVector(pathv, style, pbox, CairoRenderContext::FILL_OVER_STROKE);
     } else if (style->paint_order.layer[0] == SP_CSS_PAINT_ORDER_STROKE &&
-               style->paint_order.layer[1] == SP_CSS_PAINT_ORDER_MARKER ) {
+               style->paint_order.layer[1] == SP_CSS_PAINT_ORDER_MARKER) {
         ctx->renderPathVector(pathv, style, pbox, CairoRenderContext::STROKE_ONLY);
     } else if (style->paint_order.layer[0] == SP_CSS_PAINT_ORDER_FILL &&
-               style->paint_order.layer[1] == SP_CSS_PAINT_ORDER_MARKER ) {
+               style->paint_order.layer[1] == SP_CSS_PAINT_ORDER_MARKER) {
         ctx->renderPathVector(pathv, style, pbox, CairoRenderContext::FILL_ONLY);
     }
 
     // START marker
     for (int i = 0; i < 2; i++) {  // SP_MARKER_LOC and SP_MARKER_LOC_START
-        if ( shape->_marker[i] ) {
+        if (shape->_marker[i]) {
             SPMarker* marker = shape->_marker[i];
             Geom::Affine tr;
             if (marker->orient_mode == MARKER_ORIENT_AUTO) {
                 tr = sp_shape_marker_get_transform_at_start(pathv.begin()->front());
             } else if (marker->orient_mode == MARKER_ORIENT_AUTO_START_REVERSE) {
-                tr = Geom::Rotate::from_degrees( 180.0 ) * sp_shape_marker_get_transform_at_start(pathv.begin()->front());
+                tr = Geom::Rotate::from_degrees(180.0) * sp_shape_marker_get_transform_at_start(pathv.begin()->front());
             } else {
                 tr = Geom::Rotate::from_degrees(marker->orient.computed) * Geom::Translate(pathv.begin()->front().pointAt(0));
             }
@@ -209,12 +209,12 @@ static void sp_shape_render(SPShape *shape, CairoRenderContext *ctx)
     }
     // MID marker
     for (int i = 0; i < 3; i += 2) {  // SP_MARKER_LOC and SP_MARKER_LOC_MID
-        if ( !shape->_marker[i] ) continue;
+        if (!shape->_marker[i]) continue;
         SPMarker* marker = shape->_marker[i];
         for(Geom::PathVector::const_iterator path_it = pathv.begin(); path_it != pathv.end(); ++path_it) {
             // START position
-            if ( path_it != pathv.begin() 
-                 && ! ((path_it == (pathv.end()-1)) && (path_it->size_default() == 0)) ) // if this is the last path and it is a moveto-only, there is no mid marker there
+            if (path_it != pathv.begin() 
+                 && ! ((path_it == (pathv.end()-1)) && (path_it->size_default() == 0))) // if this is the last path and it is a moveto-only, there is no mid marker there
             {
                 Geom::Affine tr;
                 if (marker->orient_mode != MARKER_ORIENT_ANGLE) {
@@ -247,7 +247,7 @@ static void sp_shape_render(SPShape *shape, CairoRenderContext *ctx)
                 }
             }
             // END position
-            if ( path_it != (pathv.end()-1) && !path_it->empty()) {
+            if (path_it != (pathv.end()-1) && !path_it->empty()) {
                 Geom::Curve const &lastcurve = path_it->back_default();
                 Geom::Affine tr;
                 if (marker->orient_mode != MARKER_ORIENT_ANGLE) {
@@ -261,7 +261,7 @@ static void sp_shape_render(SPShape *shape, CairoRenderContext *ctx)
     }
     // END marker
     for (int i = 0; i < 4; i += 3) {  // SP_MARKER_LOC and SP_MARKER_LOC_END
-        if ( shape->_marker[i] ) {
+        if (shape->_marker[i]) {
             SPMarker* marker = shape->_marker[i];
 
             /* Get reference to last curve in the path.
@@ -288,13 +288,13 @@ static void sp_shape_render(SPShape *shape, CairoRenderContext *ctx)
         style->paint_order.layer[2] == SP_CSS_PAINT_ORDER_STROKE) {
         ctx->renderPathVector(pathv, style, pbox, CairoRenderContext::STROKE_OVER_FILL);
     } else if (style->paint_order.layer[1] == SP_CSS_PAINT_ORDER_STROKE &&
-               style->paint_order.layer[2] == SP_CSS_PAINT_ORDER_FILL ) {
+               style->paint_order.layer[2] == SP_CSS_PAINT_ORDER_FILL) {
         ctx->renderPathVector(pathv, style, pbox, CairoRenderContext::FILL_OVER_STROKE);
     } else if (style->paint_order.layer[2] == SP_CSS_PAINT_ORDER_STROKE &&
-               style->paint_order.layer[1] == SP_CSS_PAINT_ORDER_MARKER ) {
+               style->paint_order.layer[1] == SP_CSS_PAINT_ORDER_MARKER) {
         ctx->renderPathVector(pathv, style, pbox, CairoRenderContext::STROKE_ONLY);
     } else if (style->paint_order.layer[2] == SP_CSS_PAINT_ORDER_FILL &&
-               style->paint_order.layer[1] == SP_CSS_PAINT_ORDER_MARKER ) {
+               style->paint_order.layer[1] == SP_CSS_PAINT_ORDER_MARKER) {
         ctx->renderPathVector(pathv, style, pbox, CairoRenderContext::FILL_ONLY);
     }
 
@@ -449,7 +449,7 @@ static void sp_asbitmap_render(SPItem *item, CairoRenderContext *ctx)
     if(res == 0) {
         res = Inkscape::Util::Quantity::convert(1, "in", "px");
     }
-    TRACE(("sp_asbitmap_render: resolution: %f\n", res ));
+    TRACE(("sp_asbitmap_render: resolution: %f\n", res));
 
     // Get the bounding box of the selection in desktop coordinates.
     Geom::OptRect bbox = item->documentVisualBounds();
@@ -503,10 +503,10 @@ static void sp_asbitmap_render(SPItem *item, CairoRenderContext *ctx)
     std::unique_ptr<Inkscape::Pixbuf> pb(
         sp_generate_internal_bitmap(document, nullptr,
             bbox->min()[Geom::X], bbox->min()[Geom::Y], bbox->max()[Geom::X], bbox->max()[Geom::Y], 
-            width, height, res, res, (guint32) 0xffffff00, item ));
+            width, height, res, res, (guint32) 0xffffff00, item));
 
     if (pb) {
-        //TEST(gdk_pixbuf_save( pb, "bitmap.png", "png", NULL, NULL ));
+        //TEST(gdk_pixbuf_save(pb, "bitmap.png", "png", NULL, NULL));
 
         ctx->renderImage(pb.get(), t, item->style);
     }
@@ -602,7 +602,7 @@ void CairoRenderer::renderItem(CairoRenderContext *ctx, SPItem *item)
     setStateForItem(ctx, item);
 
     CairoRenderState *state = ctx->getCurrentState();
-    state->need_layer = ( state->mask || state->clip_path || state->opacity != 1.0 );
+    state->need_layer = (state->mask || state->clip_path || state->opacity != 1.0);
 
     // Draw item on a temporary surface so a mask, clip-path, or opacity can be applied to it.
     if (state->need_layer) {
@@ -638,7 +638,7 @@ CairoRenderer::setupDocument(CairoRenderContext *ctx, SPDocument *doc, bool page
 {
 // PLEASE note when making changes to the boundingbox and transform calculation, corresponding changes should be made to PDFLaTeXRenderer::setupDocument !!!
 
-    g_assert( ctx != nullptr );
+    g_assert(ctx != nullptr);
 
     if (!base) {
         base = doc->getRoot();
@@ -673,7 +673,7 @@ CairoRenderer::setupDocument(CairoRenderContext *ctx, SPDocument *doc, bool page
     if (ret) {
         if (pageBoundingBox) {
             // translate to set bleed/margin
-            Geom::Affine tp( Geom::Translate( bleedmargin_px, bleedmargin_px ) );
+            Geom::Affine tp(Geom::Translate(bleedmargin_px, bleedmargin_px));
             ctx->transform(tp);
         } else {
             // this transform translates the export drawing to a virtual page (0,0)-(width,height)
@@ -689,7 +689,7 @@ CairoRenderer::setupDocument(CairoRenderContext *ctx, SPDocument *doc, bool page
 void
 CairoRenderer::applyClipPath(CairoRenderContext *ctx, SPClipPath const *cp)
 {
-    g_assert( ctx != nullptr && ctx->_is_valid );
+    g_assert(ctx != nullptr && ctx->_is_valid);
 
     if (cp == nullptr)
         return;
@@ -744,7 +744,7 @@ CairoRenderer::applyClipPath(CairoRenderContext *ctx, SPClipPath const *cp)
 void
 CairoRenderer::applyMask(CairoRenderContext *ctx, SPMask const *mask)
 {
-    g_assert( ctx != nullptr && ctx->_is_valid );
+    g_assert(ctx != nullptr && ctx->_is_valid);
 
     if (mask == nullptr)
         return;

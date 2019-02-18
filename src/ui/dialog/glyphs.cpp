@@ -352,7 +352,7 @@ GlyphsPanel::GlyphsPanel() :
     {
         auto label = new Gtk::Label(_("Script: "));
 
-        table->attach( *Gtk::manage(label), 0, row, 1, 1);
+        table->attach(*Gtk::manage(label), 0, row, 1, 1);
 
         scriptCombo = Gtk::manage(new Gtk::ComboBoxText());
         for (auto & it : getScriptToName())
@@ -376,7 +376,7 @@ GlyphsPanel::GlyphsPanel() :
 
     {
         auto label = new Gtk::Label(_("Range: "));
-        table->attach( *Gtk::manage(label), 0, row, 1, 1);
+        table->attach(*Gtk::manage(label), 0, row, 1, 1);
 
         rangeCombo = Gtk::manage(new Gtk::ComboBoxText());
         for (auto & it : getRanges()) {
@@ -446,7 +446,7 @@ GlyphsPanel::GlyphsPanel() :
 
     box->pack_end(*Gtk::manage(insertBtn), Gtk::PACK_SHRINK);
     box->set_hexpand();
-    table->attach( *Gtk::manage(box), 0, row, 3, 1);
+    table->attach(*Gtk::manage(box), 0, row, 3, 1);
 
     row++;
 
@@ -456,7 +456,7 @@ GlyphsPanel::GlyphsPanel() :
     show_all_children();
 
     // Connect this up last
-    conn = deskTrack.connectDesktopChanged( sigc::mem_fun(*this, &GlyphsPanel::setTargetDesktop) );
+    conn = deskTrack.connectDesktopChanged(sigc::mem_fun(*this, &GlyphsPanel::setTargetDesktop));
     instanceConns.push_back(conn);
     deskTrack.connect(GTK_WIDGET(gobj()));
 }
@@ -595,11 +595,11 @@ void GlyphsPanel::glyphSelectionChanged()
 
 void GlyphsPanel::selectionModifiedCB(guint flags)
 {
-    bool style = ((flags & ( SP_OBJECT_CHILD_MODIFIED_FLAG |
-                             SP_OBJECT_STYLE_MODIFIED_FLAG  )) != 0 );
+    bool style = ((flags & (SP_OBJECT_CHILD_MODIFIED_FLAG |
+                             SP_OBJECT_STYLE_MODIFIED_FLAG)) != 0);
 
-    bool content = ((flags & ( SP_OBJECT_CHILD_MODIFIED_FLAG |
-                               SP_TEXT_CONTENT_MODIFIED_FLAG  )) != 0 );
+    bool content = ((flags & (SP_OBJECT_CHILD_MODIFIED_FLAG |
+                               SP_TEXT_CONTENT_MODIFIED_FLAG)) != 0);
 
     readSelection(style, content);
 }
@@ -625,7 +625,7 @@ void GlyphsPanel::calcCanInsert()
     }
 }
 
-void GlyphsPanel::readSelection( bool updateStyle, bool updateContent )
+void GlyphsPanel::readSelection(bool updateStyle, bool updateContent)
 {
     calcCanInsert();
 
@@ -646,8 +646,8 @@ void GlyphsPanel::rebuild()
     Glib::ustring fontspec = fontSelector->get_fontspec();
 
     font_instance* font = nullptr;
-    if( !fontspec.empty() ) {
-        font = font_factory::Default()->FaceFromFontSpecification( fontspec.c_str() );
+    if(!fontspec.empty()) {
+        font = font_factory::Default()->FaceFromFontSpecification(fontspec.c_str());
     }
 
     if (font) {

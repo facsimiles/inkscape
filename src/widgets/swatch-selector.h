@@ -29,10 +29,10 @@ public:
     SwatchSelector();
     ~SwatchSelector() override;
 
-    void connectGrabbedHandler( GCallback handler, void *data );
-    void connectDraggedHandler( GCallback handler, void *data );
-    void connectReleasedHandler( GCallback handler, void *data );
-    void connectchangedHandler( GCallback handler, void *data );
+    void connectGrabbedHandler(GCallback handler, void *data);
+    void connectDraggedHandler(GCallback handler, void *data);
+    void connectReleasedHandler(GCallback handler, void *data);
+    void connectchangedHandler(GCallback handler, void *data);
 
     void setVector(SPDocument *doc, SPGradient *vector);
 

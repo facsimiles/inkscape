@@ -123,7 +123,7 @@ private:
     void reset_missing_glyph_description();
     void add_glyph();
     void glyph_unicode_edit(const Glib::ustring&, const Glib::ustring&);
-    void glyph_name_edit(   const Glib::ustring&, const Glib::ustring&);
+    void glyph_name_edit(const Glib::ustring&, const Glib::ustring&);
     void glyph_advance_edit(const Glib::ustring&, const Glib::ustring&);
     void remove_selected_glyph();
     void remove_selected_font();

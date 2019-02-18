@@ -29,10 +29,10 @@ SPLinearGradient::~SPLinearGradient() = default;
 void SPLinearGradient::build(SPDocument *document, Inkscape::XML::Node *repr) {
     SPGradient::build(document, repr);
 
-    this->readAttr( "x1" );
-    this->readAttr( "y1" );
-    this->readAttr( "x2" );
-    this->readAttr( "y2" );
+    this->readAttr("x1");
+    this->readAttr("y1");
+    this->readAttr("x2");
+    this->readAttr("y2");
 }
 
 /**

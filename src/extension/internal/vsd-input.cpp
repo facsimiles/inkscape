@@ -105,7 +105,7 @@ VsdImportDialog::VsdImportDialog(const std::vector<RVNGString> &vec)
     , _spinning(false)
 {
      int num_pages = _vec.size();
-     if ( num_pages <= 1 )
+     if (num_pages <= 1)
           return;
 
 
@@ -223,7 +223,7 @@ void VsdImportDialog::_setPreviewPage()
             <rect x='18' y='10' width='64' height='64' style='fill:none;stroke:#000000;stroke-width:1.5px;'/>
             <text x='50' y='92' style='font-size:10px;text-anchor:middle;font-family:sans-serif;'>%s</text>
           </svg>
-        )A";
+)A";
         gchar * no_preview = g_strdup_printf(no_preview_template, _("No preview"));
         doc = SPDocument::createNewDocFromMem(no_preview, strlen(no_preview), 0);
         g_free(no_preview);

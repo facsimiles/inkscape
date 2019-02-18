@@ -55,12 +55,12 @@ SPTSpan::SPTSpan() : SPItem() {
 SPTSpan::~SPTSpan() = default;
 
 void SPTSpan::build(SPDocument *doc, Inkscape::XML::Node *repr) {
-    this->readAttr( "x" );
-    this->readAttr( "y" );
-    this->readAttr( "dx" );
-    this->readAttr( "dy" );
-    this->readAttr( "rotate" );
-    this->readAttr( "sodipodi:role" );
+    this->readAttr("x");
+    this->readAttr("y");
+    this->readAttr("dx");
+    this->readAttr("dy");
+    this->readAttr("rotate");
+    this->readAttr("sodipodi:role");
 
     SPItem::build(doc, repr);
 }
@@ -97,16 +97,16 @@ void SPTSpan::update(SPCtx *ctx, guint flags) {
     childflags &= SP_OBJECT_MODIFIED_CASCADE;
 
     for (auto& ochild: children) {
-        if ( flags || ( ochild.uflags & SP_OBJECT_MODIFIED_FLAG )) {
+        if (flags || (ochild.uflags & SP_OBJECT_MODIFIED_FLAG)) {
         	ochild.updateDisplay(ctx, childflags);
         }
     }
 
     SPItem::update(ctx, flags);
 
-    if (flags & ( SP_OBJECT_STYLE_MODIFIED_FLAG |
+    if (flags & (SP_OBJECT_STYLE_MODIFIED_FLAG |
                   SP_OBJECT_CHILD_MODIFIED_FLAG |
-                  SP_TEXT_LAYOUT_MODIFIED_FLAG   ) )
+                  SP_TEXT_LAYOUT_MODIFIED_FLAG))
     {
         SPItemCtx const *ictx = reinterpret_cast<SPItemCtx const *>(ctx);
 
@@ -115,7 +115,7 @@ void SPTSpan::update(SPCtx *ctx, guint flags) {
         double const em = style->font_size.computed;
         double const ex = 0.5 * em;  // fixme: get x height from pango or libnrtype.
 
-        attributes.update( em, ex, w, h );
+        attributes.update(em, ex, w, h);
     }
 }
 
@@ -172,21 +172,21 @@ Inkscape::XML::Node* SPTSpan::write(Inkscape::XML::Document *xml_doc, Inkscape::
 
     this->attributes.writeTo(repr);
 
-    if ( flags&SP_OBJECT_WRITE_BUILD ) {
+    if (flags&SP_OBJECT_WRITE_BUILD) {
         std::vector<Inkscape::XML::Node *> l;
 
         for (auto& child: children) {
             Inkscape::XML::Node* c_repr=nullptr;
 
-            if ( SP_IS_TSPAN(&child) || SP_IS_TREF(&child) ) {
+            if (SP_IS_TSPAN(&child) || SP_IS_TREF(&child)) {
                 c_repr = child.updateRepr(xml_doc, nullptr, flags);
-            } else if ( SP_IS_TEXTPATH(&child) ) {
+            } else if (SP_IS_TEXTPATH(&child)) {
                 //c_repr = child.updateRepr(xml_doc, NULL, flags); // shouldn't happen
-            } else if ( SP_IS_STRING(&child) ) {
+            } else if (SP_IS_STRING(&child)) {
                 c_repr = xml_doc->createTextNode(SP_STRING(&child)->string.c_str());
             }
 
-            if ( c_repr ) {
+            if (c_repr) {
                 l.push_back(c_repr);
             }
         }
@@ -197,11 +197,11 @@ Inkscape::XML::Node* SPTSpan::write(Inkscape::XML::Document *xml_doc, Inkscape::
         }
     } else {
         for (auto& child: children) {
-            if ( SP_IS_TSPAN(&child) || SP_IS_TREF(&child) ) {
+            if (SP_IS_TSPAN(&child) || SP_IS_TREF(&child)) {
                 child.updateRepr(flags);
-            } else if ( SP_IS_TEXTPATH(&child) ) {
+            } else if (SP_IS_TEXTPATH(&child)) {
                 //c_repr = child->updateRepr(xml_doc, NULL, flags); // shouldn't happen
-            } else if ( SP_IS_STRING(&child) ) {
+            } else if (SP_IS_STRING(&child)) {
                 child.getRepr()->setContent(SP_STRING(&child)->string.c_str());
             }
         }
@@ -238,26 +238,26 @@ SPTextPath::~SPTextPath() {
 }
 
 void SPTextPath::build(SPDocument *doc, Inkscape::XML::Node *repr) {
-    this->readAttr( "x" );
-    this->readAttr( "y" );
-    this->readAttr( "dx" );
-    this->readAttr( "dy" );
-    this->readAttr( "rotate" );
-    this->readAttr( "startOffset" );
-    this->readAttr( "side" );
-    this->readAttr( "xlink:href" );
+    this->readAttr("x");
+    this->readAttr("y");
+    this->readAttr("dx");
+    this->readAttr("dy");
+    this->readAttr("rotate");
+    this->readAttr("startOffset");
+    this->readAttr("side");
+    this->readAttr("xlink:href");
 
     bool  no_content = true;
 
     for (Inkscape::XML::Node* rch = repr->firstChild() ; rch != nullptr; rch = rch->next()) {
-        if ( rch->type() == Inkscape::XML::TEXT_NODE )
+        if (rch->type() == Inkscape::XML::TEXT_NODE)
         {
             no_content = false;
             break;
         }
     }
 
-    if ( no_content ) {
+    if (no_content) {
         Inkscape::XML::Document *xml_doc = doc->getReprDoc();
         Inkscape::XML::Node* rch = xml_doc->createTextNode("");
         repr->addChild(rch, nullptr);
@@ -315,7 +315,7 @@ void SPTextPath::set(SPAttributeEnum key, const gchar* value) {
 void SPTextPath::update(SPCtx *ctx, guint flags) {
     this->isUpdating = true;
 
-    if ( this->sourcePath->sourceDirty ) {
+    if (this->sourcePath->sourceDirty) {
         refresh_textpath_source(this);
     }
 
@@ -330,14 +330,14 @@ void SPTextPath::update(SPCtx *ctx, guint flags) {
     flags &= SP_OBJECT_MODIFIED_CASCADE;
 
     for (auto& ochild: children) {
-        if ( flags || ( ochild.uflags & SP_OBJECT_MODIFIED_FLAG )) {
+        if (flags || (ochild.uflags & SP_OBJECT_MODIFIED_FLAG)) {
             ochild.updateDisplay(ctx, flags);
         }
     }
 
-    if (flags & ( SP_OBJECT_STYLE_MODIFIED_FLAG |
+    if (flags & (SP_OBJECT_STYLE_MODIFIED_FLAG |
                   SP_OBJECT_CHILD_MODIFIED_FLAG |
-                  SP_TEXT_LAYOUT_MODIFIED_FLAG   ) )
+                  SP_TEXT_LAYOUT_MODIFIED_FLAG))
     {
         SPItemCtx const *ictx = reinterpret_cast<SPItemCtx const *>(ctx);
 
@@ -346,21 +346,21 @@ void SPTextPath::update(SPCtx *ctx, guint flags) {
         double const em = style->font_size.computed;
         double const ex = 0.5 * em;  // fixme: get x height from pango or libnrtype.
 
-        attributes.update( em, ex, w, h );
+        attributes.update(em, ex, w, h);
     }
 }
 
 
 void refresh_textpath_source(SPTextPath* tp)
 {
-    if ( tp == nullptr ) {
+    if (tp == nullptr) {
     	return;
     }
 
     tp->sourcePath->refresh_source();
     tp->sourcePath->sourceDirty=false;
 
-    if ( tp->sourcePath->originalPath ) {
+    if (tp->sourcePath->originalPath) {
         if (tp->originalPath) {
             delete tp->originalPath;
         }
@@ -420,40 +420,40 @@ Inkscape::XML::Node* SPTextPath::write(Inkscape::XML::Document *xml_doc, Inkscap
         }
     }
 
-    if ( this->sourcePath->sourceHref ) {
+    if (this->sourcePath->sourceHref) {
     	repr->setAttribute("xlink:href", this->sourcePath->sourceHref);
     }
 
-    if ( flags & SP_OBJECT_WRITE_BUILD ) {
+    if (flags & SP_OBJECT_WRITE_BUILD) {
         std::vector<Inkscape::XML::Node *> l;
 
         for (auto& child: children) {
             Inkscape::XML::Node* c_repr=nullptr;
 
-            if ( SP_IS_TSPAN(&child) || SP_IS_TREF(&child) ) {
+            if (SP_IS_TSPAN(&child) || SP_IS_TREF(&child)) {
                 c_repr = child.updateRepr(xml_doc, nullptr, flags);
-            } else if ( SP_IS_TEXTPATH(&child) ) {
+            } else if (SP_IS_TEXTPATH(&child)) {
                 //c_repr = child->updateRepr(xml_doc, NULL, flags); // shouldn't happen
-            } else if ( SP_IS_STRING(&child) ) {
+            } else if (SP_IS_STRING(&child)) {
                 c_repr = xml_doc->createTextNode(SP_STRING(&child)->string.c_str());
             }
 
-            if ( c_repr ) {
+            if (c_repr) {
                 l.push_back(c_repr);
             }
         }
 
-        for( auto i = l.rbegin(); i != l.rend(); ++i ) {
+        for(auto i = l.rbegin(); i != l.rend(); ++i) {
             repr->addChild(*i, nullptr);
             Inkscape::GC::release(*i);
         }
     } else {
         for (auto& child: children) {
-            if ( SP_IS_TSPAN(&child) || SP_IS_TREF(&child) ) {
+            if (SP_IS_TSPAN(&child) || SP_IS_TREF(&child)) {
                 child.updateRepr(flags);
-            } else if ( SP_IS_TEXTPATH(&child) ) {
+            } else if (SP_IS_TEXTPATH(&child)) {
                 //c_repr = child.updateRepr(xml_doc, NULL, flags); // shouldn't happen
-            } else if ( SP_IS_STRING(&child) ) {
+            } else if (SP_IS_STRING(&child)) {
                 child.getRepr()->setContent(SP_STRING(&child)->string.c_str());
             }
         }

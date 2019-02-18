@@ -80,14 +80,14 @@ class make_elliptical_arc
      *                 and the generated elliptical arc; the smaller it is the
      *                 the tolerance the higher it is the likelihood.
      */
-    make_elliptical_arc( EllipticalArc& _ea,
+    make_elliptical_arc(EllipticalArc& _ea,
                          curve_type const& _curve,
                          unsigned int _total_samples,
-                         double _tolerance );
+                         double _tolerance);
 
   private:
-    bool bound_exceeded( unsigned int k, detail::ellipse_equation const & ee,
-                         double e1x, double e1y, double e2 );
+    bool bound_exceeded(unsigned int k, detail::ellipse_equation const & ee,
+                         double e1x, double e1y, double e2);
 
     bool check_bound(double A, double B, double C, double D, double E, double F);
 
@@ -116,9 +116,9 @@ class make_elliptical_arc
         // initialize the reference
         const NL::Vector & coeff = fitter.result();
         fit();
-        if ( !check_bound(1, coeff[0], coeff[1], coeff[2], coeff[3], coeff[4]) )
+        if (!check_bound(1, coeff[0], coeff[1], coeff[2], coeff[3], coeff[4]))
             return false;
-        if ( !(make_elliptiarc()) ) return false;
+        if (!(make_elliptiarc())) return false;
         return true;
     }
 
@@ -174,7 +174,7 @@ struct ellipse_equation
 
     Point normal(double x, double y) const
     {
-        Point n( 2 * A * x + B * y + D, 2 * C * y + B * x + E );
+        Point n(2 * A * x + B * y + D, 2 * C * y + B * x + E);
         return unit_vector(n);
     }
 
@@ -189,12 +189,12 @@ struct ellipse_equation
 } // end namespace detail
 
 make_elliptical_arc::
-make_elliptical_arc( EllipticalArc& _ea,
+make_elliptical_arc(EllipticalArc& _ea,
                      curve_type const& _curve,
                      unsigned int _total_samples,
-                     double _tolerance )
+                     double _tolerance)
     : ea(_ea), curve(_curve),
-      dcurve( unitVector(derivative(curve)) ),
+      dcurve(unitVector(derivative(curve))),
       model(), fitter(model, _total_samples),
       tolerance(_tolerance), tol_at_extr(tolerance/2),
       tol_at_center(0.1), angle_tol(0.1),
@@ -209,17 +209,17 @@ make_elliptical_arc( EllipticalArc& _ea,
  */
 bool
 make_elliptical_arc::
-bound_exceeded( unsigned int k, detail::ellipse_equation const & ee,
-                double e1x, double e1y, double e2 )
+bound_exceeded(unsigned int k, detail::ellipse_equation const & ee,
+                double e1x, double e1y, double e2)
 {
-    dist_err = std::fabs( ee(p[k]) );
-    dist_bound = std::fabs( e1x * p[k][X] + e1y * p[k][Y] + e2 );
+    dist_err = std::fabs(ee(p[k]));
+    dist_bound = std::fabs(e1x * p[k][X] + e1y * p[k][Y] + e2);
     // check that the angle btw the tangent versor to the input curve
     // and the normal versor of the elliptical arc, both evaluate
     // at the k-th sample point, are really othogonal
-    angle_err = std::fabs( dot( dcurve(k/partitions), ee.normal(p[k]) ) );
+    angle_err = std::fabs(dot(dcurve(k/partitions), ee.normal(p[k])));
     //angle_err *= angle_err;
-    return ( dist_err  > dist_bound || angle_err > angle_tol );
+    return (dist_err  > dist_bound || angle_err > angle_tol);
 }
 
 /*
@@ -258,9 +258,9 @@ check_bound(double A, double B, double C, double D, double E, double F)
 //  std::cerr << "e2 = " << e2 << std::endl;
 
     // check error magnitude at sample points
-    for ( unsigned int k = 1; k < last; ++k )
+    for (unsigned int k = 1; k < last; ++k)
     {
-        if ( bound_exceeded(k, ee, e1x, e1y, e2) )
+        if (bound_exceeded(k, ee, e1x, e1y, e2))
         {
             print_bound_error(k);
             return false;
@@ -280,7 +280,7 @@ void make_elliptical_arc::fit()
 {
     for (unsigned int k = 0; k < N; ++k)
     {
-        p[k] = curve( k / partitions );
+        p[k] = curve(k / partitions);
         fitter.append(p[k]);
     }
     fitter.update();
@@ -305,17 +305,17 @@ bool make_elliptical_arc::make_elliptiarc()
     Point inner_point = curve(0.5);
 
 #ifdef CPP11
-    std::unique_ptr<EllipticalArc> arc( e.arc(initial_point, inner_point, final_point) );
+    std::unique_ptr<EllipticalArc> arc(e.arc(initial_point, inner_point, final_point));
 #else
-    std::auto_ptr<EllipticalArc> arc( e.arc(initial_point, inner_point, final_point) );
+    std::auto_ptr<EllipticalArc> arc(e.arc(initial_point, inner_point, final_point));
 #endif
     ea = *arc;
 
-    if ( !are_near( e.center(),
+    if (!are_near(e.center(),
                     ea.center(),
                     tol_at_center * std::min(e.ray(X),e.ray(Y))
-                  )
-       )
+)
+)
     {
         return false;
     }

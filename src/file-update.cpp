@@ -92,7 +92,7 @@ void fix_blank_line(SPObject *o)
         if ((SP_IS_TSPAN(i) && is_line(i)) || SP_IS_FLOWPARA(i) || SP_IS_FLOWDIV(i)) {
             if (sp_text_get_length((SPItem *)i) <= 1) { // empty line
                 Inkscape::Text::Layout::iterator pos = te_get_layout((SPItem*)(o))->charIndexToIterator(
-                        ((SP_IS_FLOWPARA(i) || SP_IS_FLOWDIV(i))?0:((ci==cl.begin())?0:1)) + sp_text_get_length_upto(o,i) );
+                        ((SP_IS_FLOWPARA(i) || SP_IS_FLOWDIV(i))?0:((ci==cl.begin())?0:1)) + sp_text_get_length_upto(o,i));
                 sp_te_insert((SPItem *)o, pos, "\u00a0"); //"\u00a0"
                 gchar *l = g_strdup_printf("%f", lineheight.value);
                 gchar *f = g_strdup_printf("%f", fontsize.value);
@@ -213,7 +213,7 @@ void sp_file_convert_font_name(SPDocument *doc)
 
 
 // Quick and dirty internal backup function
-bool sp_file_save_backup( Glib::ustring uri ) {
+bool sp_file_save_backup(Glib::ustring uri) {
 
     Glib::ustring out = uri;
     out.insert(out.find(".svg"),"_backup");
@@ -227,7 +227,7 @@ bool sp_file_save_backup( Glib::ustring uri ) {
     FILE *fileout = Inkscape::IO::fopen_utf8name(out.c_str(), "wb");
     if (!fileout) {
         std::cerr << "sp_file_save_backup: failed to open: " << out << std::endl;
-        fclose( filein );
+        fclose(filein);
         return false;
     }
 
@@ -331,7 +331,7 @@ void sp_file_convert_dpi(SPDocument *doc)
         bool backup = prefs->getBool("/options/dpifixbackup", true);
         if (INKSCAPE.use_gui() && sp_file_convert_dpi_method_commandline == -1) {
             Gtk::Dialog scale_dialog(_("Convert legacy Inkscape file"));
-            scale_dialog.set_transient_for( *(INKSCAPE.active_desktop()->getToplevel()) );
+            scale_dialog.set_transient_for(*(INKSCAPE.active_desktop()->getToplevel()));
             scale_dialog.set_border_width(10);
             scale_dialog.set_resizable(false);
             Gtk::Label explanation;
@@ -418,16 +418,16 @@ void sp_file_convert_dpi(SPDocument *doc)
             choice2.signal_clicked().connect(sigc::mem_fun(b, &Gtk::Box::show));
 
             response = prefs->getInt("/options/dpiupdatemethod", FILE_DPI_UNCHANGED);
-            if ( response != FILE_DPI_UNCHANGED ) {
+            if (response != FILE_DPI_UNCHANGED) {
                 choice2.set_active();
                 b.show();
-                if ( response == FILE_DPI_DOCUMENT_SCALED)
+                if (response == FILE_DPI_DOCUMENT_SCALED)
                     choice2_2.set_active();
             }
             ok_button->grab_focus();
 
             int status = scale_dialog.run();
-            if ( status == GTK_RESPONSE_ACCEPT ) {
+            if (status == GTK_RESPONSE_ACCEPT) {
                 backup = backup_button.get_active();
                 prefs->setBool("/options/dpifixbackup", backup);
                 response = choice1.get_active() ? FILE_DPI_UNCHANGED : choice2_1.get_active() ? FILE_DPI_VIEWBOX_SCALED : FILE_DPI_DOCUMENT_SCALED;
@@ -505,7 +505,7 @@ void sp_file_convert_dpi(SPDocument *doc)
                 prefs->setBool("/options/kbselection/onlyvisible",   false);
 
                 Inkscape::Selection *selection = desktop->getSelection();
-                Inkscape::SelectionHelper::selectAllInAll( desktop );
+                Inkscape::SelectionHelper::selectAllInAll(desktop);
                             
 //method 1 ...
                 selection->group();
@@ -516,20 +516,20 @@ void sp_file_convert_dpi(SPDocument *doc)
                     std::cerr << "sp_file_open: Failed to get group!" << std::endl;
                 }
                 selection->clear();
-                selection->add( group );
+                selection->add(group);
                 selection->ungroup();
                             
 // OR method 2...                            
 
                 double height = root->height.computed;
-                selection->setScaleRelative( Geom::Point(0,height), Geom::Scale(96.0/90.0,96.0/90.0) );
+                selection->setScaleRelative(Geom::Point(0,height), Geom::Scale(96.0/90.0,96.0/90.0));
 
 ... end method 2
 
                 selection->clear();
 
                 prefs->setBool("/options/kbselection/onlysensitive", onlysensitive);
-                prefs->setBool("/options/kbselection/onlyvisible",   onlyvisible  );
+                prefs->setBool("/options/kbselection/onlyvisible",   onlyvisible);
 
                 did_scaling = true;
 */

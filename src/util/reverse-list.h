@@ -24,7 +24,7 @@ template <typename InputIterator>
 inline typename Traits::ListCopy<InputIterator>::ResultList
 reverse_list(InputIterator start, InputIterator end) {
     typename Traits::ListCopy<InputIterator>::ResultList head;
-    while ( start != end ) {
+    while (start != end) {
         head = cons(*start, head);
         ++start;
     }
@@ -43,7 +43,7 @@ reverse_list_in_place(MutableList<T> start,
                       MutableList<T> end=MutableList<T>())
 {
     MutableList<T> reversed(end); 
-    while ( start != end ) {
+    while (start != end) {
         MutableList<T> temp(start);
         ++start;
         set_rest(temp, reversed);

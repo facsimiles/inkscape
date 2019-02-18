@@ -57,9 +57,9 @@ public:
     virtual void addButton(Glib::ustring const & id, gint button) = 0;
     virtual void setLinkedTo(Glib::ustring const & id, Glib::ustring const& link) = 0;
 
-    virtual void setMode( Glib::ustring const & id, Gdk::InputMode mode ) = 0;
-    virtual void setAxisUse( Glib::ustring const & id, guint index, Gdk::AxisUse use ) = 0;
-    virtual void setKey( Glib::ustring const & id, guint index, guint keyval, Gdk::ModifierType mods ) = 0;
+    virtual void setMode(Glib::ustring const & id, Gdk::InputMode mode) = 0;
+    virtual void setAxisUse(Glib::ustring const & id, guint index, Gdk::AxisUse use) = 0;
+    virtual void setKey(Glib::ustring const & id, guint index, guint keyval, Gdk::ModifierType mods) = 0;
 
 protected:
     DeviceManager();

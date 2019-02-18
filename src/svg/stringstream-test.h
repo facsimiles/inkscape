@@ -34,7 +34,7 @@ public:
 // createSuite and destroySuite get us per-suite setup and teardown
 // without us having to worry about static initialization order, etc.
     static StringStreamTest *createSuite() { return new StringStreamTest(); }
-    static void destroySuite( StringStreamTest *suite ) { delete suite; }
+    static void destroySuite(StringStreamTest *suite) { delete suite; }
 
     void testFloats()
     {

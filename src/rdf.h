@@ -132,9 +132,9 @@ struct rdf_license_t * rdf_get_license(SPDocument *doc);
 void                   rdf_set_license(SPDocument * doc,
                                        struct rdf_license_t const * license);
 
-void rdf_set_defaults ( SPDocument * doc );
+void rdf_set_defaults (SPDocument * doc);
 
-void rdf_add_from_preferences ( SPDocument *doc );
+void rdf_add_from_preferences (SPDocument *doc);
 
 #endif // SEEN_RDF_H
 

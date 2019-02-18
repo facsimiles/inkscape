@@ -50,13 +50,13 @@ Messages::Messages()
     /*
      * Menu replaced with buttons
      *
-    menuBar.items().push_back( Gtk::Menu_Helpers::MenuElem(_("_File"), fileMenu) );
-    fileMenu.items().push_back( Gtk::Menu_Helpers::MenuElem(_("_Clear"),
-           sigc::mem_fun(*this, &Messages::clear) ) );
-    fileMenu.items().push_back( Gtk::Menu_Helpers::MenuElem(_("Capture log messages"),
-           sigc::mem_fun(*this, &Messages::captureLogMessages) ) );
-    fileMenu.items().push_back( Gtk::Menu_Helpers::MenuElem(_("Release log messages"),
-           sigc::mem_fun(*this, &Messages::releaseLogMessages) ) );
+    menuBar.items().push_back(Gtk::Menu_Helpers::MenuElem(_("_File"), fileMenu));
+    fileMenu.items().push_back(Gtk::Menu_Helpers::MenuElem(_("_Clear"),
+           sigc::mem_fun(*this, &Messages::clear)));
+    fileMenu.items().push_back(Gtk::Menu_Helpers::MenuElem(_("Capture log messages"),
+           sigc::mem_fun(*this, &Messages::captureLogMessages)));
+    fileMenu.items().push_back(Gtk::Menu_Helpers::MenuElem(_("Release log messages"),
+           sigc::mem_fun(*this, &Messages::releaseLogMessages)));
     contents->pack_start(menuBar, Gtk::PACK_SHRINK);
     */
 
@@ -144,27 +144,27 @@ void Messages::captureLogMessages()
    GLogLevelFlags flags = (GLogLevelFlags) (G_LOG_LEVEL_ERROR   | G_LOG_LEVEL_CRITICAL |
                              G_LOG_LEVEL_WARNING | G_LOG_LEVEL_MESSAGE  |
                              G_LOG_LEVEL_INFO    | G_LOG_LEVEL_DEBUG);
-    if ( !handlerDefault ) {
+    if (!handlerDefault) {
         handlerDefault = g_log_set_handler(nullptr, flags,
               dialogLoggingCallback, (gpointer)this);
     }
-    if ( !handlerGlibmm ) {
+    if (!handlerGlibmm) {
         handlerGlibmm = g_log_set_handler("glibmm", flags,
               dialogLoggingCallback, (gpointer)this);
     }
-    if ( !handlerAtkmm ) {
+    if (!handlerAtkmm) {
         handlerAtkmm = g_log_set_handler("atkmm", flags,
               dialogLoggingCallback, (gpointer)this);
     }
-    if ( !handlerPangomm ) {
+    if (!handlerPangomm) {
         handlerPangomm = g_log_set_handler("pangomm", flags,
               dialogLoggingCallback, (gpointer)this);
     }
-    if ( !handlerGdkmm ) {
+    if (!handlerGdkmm) {
         handlerGdkmm = g_log_set_handler("gdkmm", flags,
               dialogLoggingCallback, (gpointer)this);
     }
-    if ( !handlerGtkmm ) {
+    if (!handlerGtkmm) {
         handlerGtkmm = g_log_set_handler("gtkmm", flags,
               dialogLoggingCallback, (gpointer)this);
     }
@@ -173,27 +173,27 @@ void Messages::captureLogMessages()
 
 void Messages::releaseLogMessages()
 {
-    if ( handlerDefault ) {
+    if (handlerDefault) {
         g_log_remove_handler(nullptr, handlerDefault);
         handlerDefault = 0;
     }
-    if ( handlerGlibmm ) {
+    if (handlerGlibmm) {
         g_log_remove_handler("glibmm", handlerGlibmm);
         handlerGlibmm = 0;
     }
-    if ( handlerAtkmm ) {
+    if (handlerAtkmm) {
         g_log_remove_handler("atkmm", handlerAtkmm);
         handlerAtkmm = 0;
     }
-    if ( handlerPangomm ) {
+    if (handlerPangomm) {
         g_log_remove_handler("pangomm", handlerPangomm);
         handlerPangomm = 0;
     }
-    if ( handlerGdkmm ) {
+    if (handlerGdkmm) {
         g_log_remove_handler("gdkmm", handlerGdkmm);
         handlerGdkmm = 0;
     }
-    if ( handlerGtkmm ) {
+    if (handlerGtkmm) {
         g_log_remove_handler("gtkmm", handlerGtkmm);
         handlerGtkmm = 0;
     }

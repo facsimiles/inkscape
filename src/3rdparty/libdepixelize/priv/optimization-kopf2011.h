@@ -38,7 +38,7 @@ namespace Tracer {
 template<class T>
 bool is_valid_border_m(T a)
 {
-    if ( a < 0 )
+    if (a < 0)
         a *= -1;
 
     // TODO: alternative behaviour if has no infinity
@@ -55,7 +55,7 @@ bool is_border(const Point<T> (&points)[4])
     T dy[2];
     T dx[2];
     T m[2];
-    if ( points[1].y == points[2].y ) {
+    if (points[1].y == points[2].y) {
         dy[0] = points[1].y - points[0].y;
         dy[1] = points[3].y - points[2].y;
 
@@ -64,7 +64,7 @@ bool is_border(const Point<T> (&points)[4])
 
         m[0] = dy[0] / dx[0];
         m[1] = dy[1] / dx[1];
-    } else if ( points[1].x == points[2].x ) {
+    } else if (points[1].x == points[2].x) {
         // It's easier to have a unified logic, then we'll fake dx and dy
         dy[0] = points[1].x - points[0].x;
         dy[1] = points[3].x - points[2].x;
@@ -86,8 +86,8 @@ typename std::vector< Point<T> >::iterator
 skip1visible(typename std::vector< Point<T> >::iterator it,
              typename std::vector< Point<T> >::iterator end)
 {
-    for ( ++it ; it != end ; ++it ) {
-        if ( it->visible )
+    for (++it ; it != end ; ++it) {
+        if (it->visible)
             return it;
     }
     return end;
@@ -103,30 +103,30 @@ border_detection(typename std::vector< Point<T> >::iterator it,
 {
     typename std::vector< Point<T> >::iterator begin = it;
 
-    if ( end - it < 4 )
+    if (end - it < 4)
         return 0;
 
     Point<T> last[4];
     typename std::vector< Point<T> >::iterator prev = it;
 
-    for ( int i = 0 ; i != 4 ; ++i ) {
-        if ( it == end )
+    for (int i = 0 ; i != 4 ; ++i) {
+        if (it == end)
             return 0;
         last[i] = *it;
         prev = it;
         it = skip1visible<T>(it, end);
     }
 
-    if ( !is_border(last) )
+    if (!is_border(last))
         return 0;
 
-    if ( it == end )
+    if (it == end)
         return prev - begin;
 
     bool got_another = false;
-    for ( it = skip1visible<T>(it, end) ; it != end
-              ; it = skip1visible<T>(it, end) ) {
-        if ( !got_another ) {
+    for (it = skip1visible<T>(it, end) ; it != end
+              ; it = skip1visible<T>(it, end)) {
+        if (!got_another) {
             last[0] = last[2];
             last[1] = last[3];
             last[2] = *it;
@@ -136,7 +136,7 @@ border_detection(typename std::vector< Point<T> >::iterator it,
         }
         last[3] = *it;
 
-        if ( !is_border(last) )
+        if (!is_border(last))
             return prev - begin;
         prev = it;
     }
@@ -200,16 +200,16 @@ std::vector< Point<T> > optimize(const std::vector< Point<T> > &path)
     const unsigned iterations = 4;
     const unsigned nguess_per_iteration = 4;
 
-    for ( unsigned i = 0 ; i != iterations ; ++i ) {
+    for (unsigned i = 0 ; i != iterations ; ++i) {
         n = 0;
 
         /* This iteration bounds is not something to worry about, because the
          * smallest path has size 4. */
-        for ( typename Path::size_type j = 0 ; j != ret.size() ; ++j ) {
-            Point<T> prev = ( j == 0 ) ? ret.back() : ret[j-1];
-            Point<T> next = ( j + 1 == ret.size() ) ? ret.front() : ret[j+1] ;
+        for (typename Path::size_type j = 0 ; j != ret.size() ; ++j) {
+            Point<T> prev = (j == 0) ? ret.back() : ret[j-1];
+            Point<T> next = (j + 1 == ret.size()) ? ret.front() : ret[j+1] ;
 
-            if ( !ret[j].visible || !ret[j].smooth )
+            if (!ret[j].visible || !ret[j].smooth)
                 continue;
 
             {
@@ -217,13 +217,13 @@ std::vector< Point<T> > optimize(const std::vector< Point<T> > &path)
                 typename Path::difference_type skip
                     = border_detection<T>(it, ret.end());
                 j += skip;
-                if ( j == ret.size() )
+                if (j == ret.size())
                     break;
             }
 
             ++n;
 
-            for ( unsigned k = 0 ; k != nguess_per_iteration ; ++k ) {
+            for (unsigned k = 0 ; k != nguess_per_iteration ; ++k) {
                 Point<T> guess = optimization_guess(ret[j]);
 
                 T s = smoothness_energy(prev, guess, next);
@@ -234,7 +234,7 @@ std::vector< Point<T> > optimize(const std::vector< Point<T> > &path)
                 T prev_e = smoothness_energy(prev, ret[j], next)
                     + positional_energy(ret[j], path[j]);
 
-                if ( prev_e > e ) {
+                if (prev_e > e) {
                     // We don't want to screw other metadata, then we manually
                     // assign the new coords
                     ret[j].x = guess.x;

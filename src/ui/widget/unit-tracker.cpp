@@ -93,7 +93,7 @@ void UnitTracker::setActiveUnit(Inkscape::Util::Unit const *unit)
 
         InkSelectOneActionColumns columns;
         int index = 0;
-        for (auto& row: _store->children() ) {
+        for (auto& row: _store->children()) {
             Glib::ustring storedUnit = row[columns.col_label];
             if (!unit->abbr.compare (storedUnit)) {
                 _setActive (index);
@@ -161,13 +161,13 @@ InkSelectOneAction *UnitTracker::createAction(Glib::ustring const &name,
                                      Glib::ustring const &tooltip)
 {
     InkSelectOneAction* act =
-        InkSelectOneAction::create( name, label, tooltip, "NotUsed", _store);
+        InkSelectOneAction::create(name, label, tooltip, "NotUsed", _store);
 
-    act->use_radio( false );
-    act->use_label( true );
-    act->use_icon( false );
-    act->use_group_label( false );
-    act->set_active( _active );
+    act->use_radio(false);
+    act->use_label(true);
+    act->use_icon(false);
+    act->use_group_label(false);
+    act->set_active(_active);
 
     act->signal_changed().connect(sigc::mem_fun(*this, &UnitTracker::_unitChangedCB));
     _actionList.push_back(act);
@@ -230,7 +230,7 @@ void UnitTracker::_adjustmentFinalized(GObject *where_the_object_was)
 
 void UnitTracker::_setActive(gint active)
 {
-    if ( active != _active || !_activeUnitInitialized ) {
+    if (active != _active || !_activeUnitInitialized) {
         gint oldActive = _active;
 
         if (_store) {
@@ -238,9 +238,9 @@ void UnitTracker::_setActive(gint active)
             // Find old and new units
             InkSelectOneActionColumns columns;
             int index = 0;
-            Glib::ustring oldAbbr( "NotFound" );
-            Glib::ustring newAbbr( "NotFound" );
-            for (auto& row: _store->children() ) {
+            Glib::ustring oldAbbr("NotFound");
+            Glib::ustring newAbbr("NotFound");
+            for (auto& row: _store->children()) {
                 if (index == _active) {
                     oldAbbr = row[columns.col_label];
                 }
@@ -287,17 +287,17 @@ void UnitTracker::_setActive(gint active)
 void UnitTracker::_fixupAdjustments(Inkscape::Util::Unit const *oldUnit, Inkscape::Util::Unit const *newUnit)
 {
     _isUpdating = true;
-    for ( auto adj : _adjList ) {
+    for (auto adj : _adjList) {
         gdouble oldVal = gtk_adjustment_get_value(adj);
         gdouble val = oldVal;
 
-        if ( (oldUnit->type != Inkscape::Util::UNIT_TYPE_DIMENSIONLESS)
-            && (newUnit->type == Inkscape::Util::UNIT_TYPE_DIMENSIONLESS) )
+        if ((oldUnit->type != Inkscape::Util::UNIT_TYPE_DIMENSIONLESS)
+            && (newUnit->type == Inkscape::Util::UNIT_TYPE_DIMENSIONLESS))
         {
             val = newUnit->factor * 100;
             _priorValues[adj] = Inkscape::Util::Quantity::convert(oldVal, oldUnit, "px");
-        } else if ( (oldUnit->type == Inkscape::Util::UNIT_TYPE_DIMENSIONLESS)
-            && (newUnit->type != Inkscape::Util::UNIT_TYPE_DIMENSIONLESS) )
+        } else if ((oldUnit->type == Inkscape::Util::UNIT_TYPE_DIMENSIONLESS)
+            && (newUnit->type != Inkscape::Util::UNIT_TYPE_DIMENSIONLESS))
         {
             if (_priorValues.find(adj) != _priorValues.end()) {
                 val = Inkscape::Util::Quantity::convert(_priorValues[adj], "px", newUnit);

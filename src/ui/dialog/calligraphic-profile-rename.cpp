@@ -67,8 +67,8 @@ CalligraphicProfileRename::CalligraphicProfileRename() :
     _apply_button.signal_clicked()
             .connect(sigc::mem_fun(*this, &CalligraphicProfileRename::_apply));
 
-    signal_delete_event().connect( sigc::bind_return(
-        sigc::hide(sigc::mem_fun(*this, &CalligraphicProfileRename::_close)), true ) );
+    signal_delete_event().connect(sigc::bind_return(
+        sigc::hide(sigc::mem_fun(*this, &CalligraphicProfileRename::_close)), true));
 
     add_action_widget(_close_button, Gtk::RESPONSE_CLOSE);
     add_action_widget(_delete_button, Gtk::RESPONSE_DELETE_EVENT);

@@ -160,14 +160,14 @@ void GradientTool::setup() {
 
     this->selcon = new sigc::connection(selection->connectChanged(
     	sigc::mem_fun(this, &GradientTool::selection_changed)
-    ));
+));
 
     this->subselcon = new sigc::connection(this->desktop->connectToolSubselectionChanged(
     	sigc::hide(sigc::bind(
     		sigc::mem_fun(this, &GradientTool::selection_changed),
     		(Inkscape::Selection*)nullptr
     	))
-    ));
+));
 
     this->selection_changed(selection);
 }
@@ -224,7 +224,7 @@ sp_gradient_context_get_stop_intervals (GrDrag *drag, std::vector<SPStop *> &the
     std::vector<Geom::Point> coords;
 
     // for all selected draggers
-    for (std::set<GrDragger *>::const_iterator i = drag->selected.begin(); i != drag->selected.end() ; ++i ) {
+    for (std::set<GrDragger *>::const_iterator i = drag->selected.begin(); i != drag->selected.end() ; ++i) {
         GrDragger *dragger = *i;
         // remember the coord of the dragger to reselect it later
         coords.push_back(dragger->point);
@@ -342,7 +342,7 @@ sp_gradient_context_add_stops_between_selected_stops (GradientTool *rc)
     auto j = next_stops.rbegin();
     std::vector<SPStop *> new_stops;
 
-    for (;i != these_stops.rend() && j != next_stops.rend(); ++i, ++j ) {
+    for (;i != these_stops.rend() && j != next_stops.rend(); ++i, ++j) {
         SPStop *this_stop = *i;
         SPStop *next_stop = *j;
         gfloat offset = 0.5*(this_stop->offset + next_stop->offset);
@@ -418,7 +418,7 @@ sp_gradient_simplify(GradientTool *rc, double tolerance)
     for (auto stop : todel) {
         doc = stop->document;
         Inkscape::XML::Node * parent = stop->getRepr()->parent();
-        parent->removeChild( stop->getRepr() );
+        parent->removeChild(stop->getRepr());
     }
 
     if (!todel.empty()) {
@@ -466,7 +466,7 @@ bool GradientTool::root_handler(GdkEvent* event) {
 
     switch (event->type) {
     case GDK_2BUTTON_PRESS:
-        if ( event->button.button == 1 ) {
+        if (event->button.button == 1) {
             bool over_line = false;
             SPCtrlLine *line = nullptr;
 
@@ -502,7 +502,7 @@ bool GradientTool::root_handler(GdkEvent* event) {
         break;
 
     case GDK_BUTTON_PRESS:
-        if ( event->button.button == 1 && !this->space_panning ) {
+        if (event->button.button == 1 && !this->space_panning) {
             Geom::Point button_w(event->button.x, event->button.y);
 
             // save drag origin
@@ -537,10 +537,10 @@ bool GradientTool::root_handler(GdkEvent* event) {
         break;
 
     case GDK_MOTION_NOTIFY:
-        if (dragging && ( event->motion.state & GDK_BUTTON1_MASK ) && !this->space_panning) {
-            if ( this->within_tolerance
-                 && ( abs( (gint) event->motion.x - this->xp ) < this->tolerance )
-                 && ( abs( (gint) event->motion.y - this->yp ) < this->tolerance ) ) {
+        if (dragging && (event->motion.state & GDK_BUTTON1_MASK) && !this->space_panning) {
+            if (this->within_tolerance
+                 && (abs((gint) event->motion.x - this->xp) < this->tolerance)
+                 && (abs((gint) event->motion.y - this->yp) < this->tolerance)) {
                 break; // do not drag if we're within tolerance from origin
             }
             // Once the user has moved farther than tolerance from the original location
@@ -597,7 +597,7 @@ bool GradientTool::root_handler(GdkEvent* event) {
     case GDK_BUTTON_RELEASE:
         this->xp = this->yp = 0;
 
-        if ( event->button.button == 1 && !this->space_panning ) {
+        if (event->button.button == 1 && !this->space_panning) {
             bool over_line = false;
             SPCtrlLine *line = nullptr;
 
@@ -608,7 +608,7 @@ bool GradientTool::root_handler(GdkEvent* event) {
                 }
             }
 
-            if ( (event->button.state & GDK_CONTROL_MASK) && (event->button.state & GDK_MOD1_MASK ) ) {
+            if ((event->button.state & GDK_CONTROL_MASK) && (event->button.state & GDK_MOD1_MASK)) {
                 if (over_line && line) {
                     sp_gradient_context_add_stop_near_point(this, line->item, this->mousepoint_doc, 0);
                     ret = TRUE;

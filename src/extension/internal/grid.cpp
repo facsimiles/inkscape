@@ -56,7 +56,7 @@ Glib::ustring build_lines(Geom::Rect bounding_area,
 
     SVG::PathString path_data;
 
-    for ( int axis = Geom::X ; axis <= Geom::Y ; ++axis ) {
+    for (int axis = Geom::X ; axis <= Geom::Y ; ++axis) {
         point_offset[axis] = offset[axis];
 
         for (Geom::Point start_point = bounding_area.min();
@@ -89,8 +89,8 @@ Grid::effect (Inkscape::Extension::Effect *module, Inkscape::UI::View::View *doc
     if (selection->isEmpty()) {
         /* get page size */
         SPDocument * doc = document->doc();
-        bounding_area = Geom::Rect(  Geom::Point(0,0),
-                                     Geom::Point(doc->getWidth().value("px"), doc->getHeight().value("px"))  );
+        bounding_area = Geom::Rect(Geom::Point(0,0),
+                                     Geom::Point(doc->getWidth().value("px"), doc->getHeight().value("px")));
     } else {
         Geom::OptRect bounds = selection->visualBounds();
         if (bounds) {
@@ -105,11 +105,11 @@ Grid::effect (Inkscape::Extension::Effect *module, Inkscape::UI::View::View *doc
     double scale = document->doc()->getDocumentScale().inverse()[Geom::X];
 
     bounding_area *= Geom::Scale(scale);
-    Geom::Point spacings( scale * module->get_param_float("xspacing"),
-                          scale * module->get_param_float("yspacing") );
+    Geom::Point spacings(scale * module->get_param_float("xspacing"),
+                          scale * module->get_param_float("yspacing"));
     gdouble line_width = scale * module->get_param_float("lineWidth");
-    Geom::Point offsets( scale * module->get_param_float("xoffset"),
-                         scale * module->get_param_float("yoffset") );
+    Geom::Point offsets(scale * module->get_param_float("xoffset"),
+                         scale * module->get_param_float("yoffset"));
 
     Glib::ustring path_data("");
 

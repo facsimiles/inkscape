@@ -46,8 +46,8 @@ Glib::ustring format_size(std::size_t value) {
         digits = new Digits();
         digits->reserve(places);
 
-        while ( value && places ) {
-            digits->push_back('0' + (char)( value % 10 ));
+        while (value && places) {
+            digits->push_back('0' + (char)(value % 10));
             value /= 10;
             --places;
         }
@@ -120,7 +120,7 @@ void Memory::Private::update() {
 
     row = model->children().begin();
 
-    for ( unsigned i = 0 ; i < Debug::heap_count() ; i++ ) {
+    for (unsigned i = 0 ; i < Debug::heap_count() ; i++) {
         Debug::Heap *heap=Debug::get_heap(i);
         if (heap) {
             Debug::Heap::Stats stats=heap->stats();
@@ -128,25 +128,25 @@ void Memory::Private::update() {
 
             aggregate_features &= features;
 
-            if ( row == model->children().end() ) {
+            if (row == model->children().end()) {
                 row = model->append();
             }
 
             row->set_value(columns.name, Glib::ustring(heap->name()));
-            if ( features & Debug::Heap::SIZE_AVAILABLE ) {
+            if (features & Debug::Heap::SIZE_AVAILABLE) {
                 row->set_value(columns.total, format_size(stats.size));
                 total.size += stats.size;
             } else {
                 row->set_value(columns.total, Glib::ustring(_("Unknown")));
             }
-            if ( features & Debug::Heap::USED_AVAILABLE ) {
+            if (features & Debug::Heap::USED_AVAILABLE) {
                 row->set_value(columns.used, format_size(stats.bytes_used));
                 total.bytes_used += stats.bytes_used;
             } else {
                 row->set_value(columns.used, Glib::ustring(_("Unknown")));
             }
-            if ( features & Debug::Heap::SIZE_AVAILABLE &&
-                 features & Debug::Heap::USED_AVAILABLE )
+            if (features & Debug::Heap::SIZE_AVAILABLE &&
+                 features & Debug::Heap::USED_AVAILABLE)
             {
                 row->set_value(columns.slack, format_size(stats.size - stats.bytes_used));
             } else {
@@ -157,7 +157,7 @@ void Memory::Private::update() {
         }
     }
 
-    if ( row == model->children().end() ) {
+    if (row == model->children().end()) {
         row = model->append();
     }
 
@@ -165,20 +165,20 @@ void Memory::Private::update() {
 
     row->set_value(columns.name, Glib::ustring(_("Combined")));
 
-    if ( aggregate_features & Debug::Heap::SIZE_AVAILABLE ) {
+    if (aggregate_features & Debug::Heap::SIZE_AVAILABLE) {
         row->set_value(columns.total, format_size(total.size));
     } else {
         row->set_value(columns.total, Glib::ustring("> ") + format_size(total.size));
     }
 
-    if ( aggregate_features & Debug::Heap::USED_AVAILABLE ) {
+    if (aggregate_features & Debug::Heap::USED_AVAILABLE) {
         row->set_value(columns.used, format_size(total.bytes_used));
     } else {
         row->set_value(columns.used, Glib::ustring("> ") + format_size(total.bytes_used));
     }
 
-    if ( aggregate_features & Debug::Heap::SIZE_AVAILABLE &&
-         aggregate_features & Debug::Heap::USED_AVAILABLE )
+    if (aggregate_features & Debug::Heap::SIZE_AVAILABLE &&
+         aggregate_features & Debug::Heap::USED_AVAILABLE)
     {
         row->set_value(columns.slack, format_size(total.size - total.bytes_used));
     } else {
@@ -187,7 +187,7 @@ void Memory::Private::update() {
 
     ++row;
 
-    while ( row != model->children().end() ) {
+    while (row != model->children().end()) {
         row = model->erase(row);
     }
 }
@@ -197,7 +197,7 @@ void Memory::Private::start_update_task() {
     update_task = Glib::signal_timeout().connect(
         sigc::bind_return(sigc::mem_fun(*this, &Private::update), true),
         500
-    );
+);
 }
 
 void Memory::Private::stop_update_task() {

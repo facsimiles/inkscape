@@ -270,7 +270,7 @@ SPCanvasItem *ControlManagerImpl::createControl(SPCanvasGroup *parent, ControlTy
 
 void ControlManagerImpl::track(SPCanvasItem *item)
 {
-    g_object_weak_ref( G_OBJECT(item), ControlManagerImpl::thingFinalized, this );
+    g_object_weak_ref(G_OBJECT(item), ControlManagerImpl::thingFinalized, this);
 
     _itemList.push_back(item);
 

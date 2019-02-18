@@ -76,7 +76,7 @@ static Inkscape::XML::NodeEventVector const _repr_events = {
 static void docprops_style_button(Gtk::Button& btn, char const* iconName)
 {
     GtkWidget *child = sp_get_icon_image(iconName, GTK_ICON_SIZE_SMALL_TOOLBAR);
-    gtk_widget_show( child );
+    gtk_widget_show(child);
     btn.add(*Gtk::manage(Glib::wrap(child)));
     btn.set_relief(Gtk::RELIEF_NONE);
 }
@@ -231,7 +231,7 @@ inline void attach_all(Gtk::Grid &table, Gtk::Widget *const arr[], unsigned cons
                 }
                 if (docum_prop_flag) {
                     // this sets the padding for subordinate widgets on the "Page" page
-                    if( indent && (i==(n-6) || i==(n-4) || i==(n-2)) ) {
+                    if(indent && (i==(n-6) || i==(n-4) || i==(n-2))) {
                         arr[i+1]->set_hexpand();
 #if GTKMM_CHECK_VERSION(3,12,0)
                         arr[i+1]->set_margin_start(20);
@@ -413,7 +413,7 @@ void DocumentProperties::build_snap()
 void DocumentProperties::create_guides_around_page()
 {
     SPDesktop *dt = getDesktop();
-    Verb *verb = Verb::get( SP_VERB_EDIT_GUIDES_AROUND_PAGE );
+    Verb *verb = Verb::get(SP_VERB_EDIT_GUIDES_AROUND_PAGE);
     if (verb) {
         SPAction *action = verb->get_action(Inkscape::ActionContext(dt));
         if (action) {
@@ -425,7 +425,7 @@ void DocumentProperties::create_guides_around_page()
 void DocumentProperties::delete_all_guides()
 {
     SPDesktop *dt = getDesktop();
-    Verb *verb = Verb::get( SP_VERB_EDIT_DELETE_ALL_GUIDES );
+    Verb *verb = Verb::get(SP_VERB_EDIT_DELETE_ALL_GUIDES);
     if (verb) {
         SPAction *action = verb->get_action(Inkscape::ActionContext(dt));
         if (action) {
@@ -471,7 +471,7 @@ void DocumentProperties::populate_available_profiles(){
  *
  * @param str the string to clean up.
  */
-static void sanitizeName( Glib::ustring& str )
+static void sanitizeName(Glib::ustring& str)
 {
     if (str.size() > 0) {
         char val = str.at(0);
@@ -517,7 +517,7 @@ void DocumentProperties::linkSelectedProfile()
         Glib::ustring file = (*iter)[_AvailableProfilesListColumns.fileColumn];
         Glib::ustring name = (*iter)[_AvailableProfilesListColumns.nameColumn];
 
-        std::vector<SPObject *> current = SP_ACTIVE_DOCUMENT->getResourceList( "iccprofile" );
+        std::vector<SPObject *> current = SP_ACTIVE_DOCUMENT->getResourceList("iccprofile");
         for (std::vector<SPObject *>::const_iterator it = current.begin(); it != current.end(); ++it) {
             SPObject* obj = *it;
             Inkscape::ColorProfile* prof = reinterpret_cast<Inkscape::ColorProfile*>(obj);
@@ -559,8 +559,8 @@ struct _cmp {
   {
     const Inkscape::ColorProfile &a_prof = reinterpret_cast<const Inkscape::ColorProfile &>(*a);
     const Inkscape::ColorProfile &b_prof = reinterpret_cast<const Inkscape::ColorProfile &>(*b);
-    gchar *a_name_casefold = g_utf8_casefold(a_prof.name, -1 );
-    gchar *b_name_casefold = g_utf8_casefold(b_prof.name, -1 );
+    gchar *a_name_casefold = g_utf8_casefold(a_prof.name, -1);
+    gchar *b_name_casefold = g_utf8_casefold(b_prof.name, -1);
     int result = g_strcmp0(a_name_casefold, b_name_casefold);
     g_free(a_name_casefold);
     g_free(b_name_casefold);
@@ -574,7 +574,7 @@ struct static_caster { To * operator () (From * value) const { return static_cas
 void DocumentProperties::populate_linked_profiles_box()
 {
     _LinkedProfilesListStore->clear();
-    std::vector<SPObject *> current = SP_ACTIVE_DOCUMENT->getResourceList( "iccprofile" );
+    std::vector<SPObject *> current = SP_ACTIVE_DOCUMENT->getResourceList("iccprofile");
     if (! current.empty()) {
         _emb_profiles_observer.set((*(current.begin()))->parent);
     }
@@ -673,7 +673,7 @@ void DocumentProperties::removeSelectedProfile(){
             return;
         }
     }
-    std::vector<SPObject *> current = SP_ACTIVE_DOCUMENT->getResourceList( "iccprofile" );
+    std::vector<SPObject *> current = SP_ACTIVE_DOCUMENT->getResourceList("iccprofile");
     for (std::vector<SPObject *>::const_iterator it = current.begin(); it != current.end(); ++it) {
         SPObject* obj = *it;
         Inkscape::ColorProfile* prof = reinterpret_cast<Inkscape::ColorProfile*>(obj);
@@ -785,12 +785,12 @@ void DocumentProperties::build_cms()
     _link_btn.signal_clicked().connect(sigc::mem_fun(*this, &DocumentProperties::linkSelectedProfile));
     _unlink_btn.signal_clicked().connect(sigc::mem_fun(*this, &DocumentProperties::removeSelectedProfile));
 
-    _LinkedProfilesList.get_selection()->signal_changed().connect( sigc::mem_fun(*this, &DocumentProperties::onColorProfileSelectRow) );
+    _LinkedProfilesList.get_selection()->signal_changed().connect(sigc::mem_fun(*this, &DocumentProperties::onColorProfileSelectRow));
 
     _LinkedProfilesList.signal_button_release_event().connect_notify(sigc::mem_fun(*this, &DocumentProperties::linked_profiles_list_button_release));
     cms_create_popup_menu(_LinkedProfilesList, sigc::mem_fun(*this, &DocumentProperties::removeSelectedProfile));
 
-    std::vector<SPObject *> current = SP_ACTIVE_DOCUMENT->getResourceList( "defs" );
+    std::vector<SPObject *> current = SP_ACTIVE_DOCUMENT->getResourceList("defs");
     if (!current.empty()) {
         _emb_profiles_observer.set((*(current.begin()))->parent);
     }
@@ -947,9 +947,9 @@ void DocumentProperties::build_scripting()
     _EmbeddedContentScroller.set_size_request(-1, 140);
 
     _EmbeddedScriptsList.signal_cursor_changed().connect(sigc::mem_fun(*this, &DocumentProperties::changeEmbeddedScript));
-    _EmbeddedScriptsList.get_selection()->signal_changed().connect( sigc::mem_fun(*this, &DocumentProperties::onEmbeddedScriptSelectRow) );
+    _EmbeddedScriptsList.get_selection()->signal_changed().connect(sigc::mem_fun(*this, &DocumentProperties::onEmbeddedScriptSelectRow));
 
-    _ExternalScriptsList.get_selection()->signal_changed().connect( sigc::mem_fun(*this, &DocumentProperties::onExternalScriptSelectRow) );
+    _ExternalScriptsList.get_selection()->signal_changed().connect(sigc::mem_fun(*this, &DocumentProperties::onExternalScriptSelectRow));
 
     _EmbeddedContent.get_buffer()->signal_changed().connect(sigc::mem_fun(*this, &DocumentProperties::editEmbeddedScript));
 
@@ -982,7 +982,7 @@ void DocumentProperties::build_scripting()
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
 
 //TODO: review this observers code:
-    std::vector<SPObject *> current = SP_ACTIVE_DOCUMENT->getResourceList( "script" );
+    std::vector<SPObject *> current = SP_ACTIVE_DOCUMENT->getResourceList("script");
     if (! current.empty()) {
         _scripts_observer.set((*(current.begin()))->parent);
     }
@@ -1007,7 +1007,7 @@ void DocumentProperties::build_metadata()
     struct rdf_work_entity_t * entity;
     int row = 1;
     for (entity = rdf_work_entities; entity && entity->name; entity++, row++) {
-        if ( entity->editable == RDF_EDIT_GENERIC ) {
+        if (entity->editable == RDF_EDIT_GENERIC) {
             EntityEntry *w = EntityEntry::create (entity, _wr);
             _rdflist.push_back (w);
             Gtk::HBox *space = Gtk::manage (new Gtk::HBox);
@@ -1071,7 +1071,7 @@ void DocumentProperties::addExternalScript(){
         return;
     }
 
-    if (_script_entry.get_text().empty() ) {
+    if (_script_entry.get_text().empty()) {
         // Click Add button with no filename, show a Browse dialog
         browseExternalScript();
     }
@@ -1171,7 +1171,7 @@ void DocumentProperties::removeExternalScript(){
         }
     }
 
-    std::vector<SPObject *> current = SP_ACTIVE_DOCUMENT->getResourceList( "script" );
+    std::vector<SPObject *> current = SP_ACTIVE_DOCUMENT->getResourceList("script");
     for (std::vector<SPObject *>::const_iterator it = current.begin(); it != current.end(); ++it) {
         SPObject* obj = *it;
         if (obj) {
@@ -1249,7 +1249,7 @@ void DocumentProperties::changeEmbeddedScript(){
     }
 
     bool voidscript=true;
-    std::vector<SPObject *> current = SP_ACTIVE_DOCUMENT->getResourceList( "script" );
+    std::vector<SPObject *> current = SP_ACTIVE_DOCUMENT->getResourceList("script");
     for (std::vector<SPObject *>::const_iterator it = current.begin(); it != current.end(); ++it) {
         SPObject* obj = *it;
         if (id == obj->getId()){
@@ -1289,7 +1289,7 @@ void DocumentProperties::editEmbeddedScript(){
     }
 
     Inkscape::XML::Document *xml_doc = SP_ACTIVE_DOCUMENT->getReprDoc();
-    std::vector<SPObject *> current = SP_ACTIVE_DOCUMENT->getResourceList( "script" );
+    std::vector<SPObject *> current = SP_ACTIVE_DOCUMENT->getResourceList("script");
     for (std::vector<SPObject *>::const_iterator it = current.begin(); it != current.end(); ++it) {
         SPObject* obj = *it;
         if (id == obj->getId()){
@@ -1316,7 +1316,7 @@ void DocumentProperties::editEmbeddedScript(){
 void DocumentProperties::populate_script_lists(){
     _ExternalScriptsListStore->clear();
     _EmbeddedScriptsListStore->clear();
-    std::vector<SPObject *> current = SP_ACTIVE_DOCUMENT->getResourceList( "script" );
+    std::vector<SPObject *> current = SP_ACTIVE_DOCUMENT->getResourceList("script");
     if (!current.empty()) {
         SPObject *obj = *(current.begin());
         g_assert(obj != nullptr);
@@ -1397,9 +1397,9 @@ void DocumentProperties::build_gridspage()
     _grids_hbox_crea.pack_start(_grids_button_new, true, true);
 
     for (gint t = 0; t <= GRID_MAXTYPENR; t++) {
-        _grids_combo_gridtype.append( CanvasGrid::getName( (GridType) t ) );
+        _grids_combo_gridtype.append(CanvasGrid::getName((GridType) t));
     }
-    _grids_combo_gridtype.set_active_text( CanvasGrid::getName(GRID_RECTANGULAR) );
+    _grids_combo_gridtype.set_active_text(CanvasGrid::getName(GRID_RECTANGULAR));
 
     _grids_space.set_size_request (SPACE_SIZE_X, SPACE_SIZE_Y);
 
@@ -1631,7 +1631,7 @@ void DocumentProperties::onRemoveGrid()
     SPDesktop *dt = getDesktop();
     SPNamedView *nv = dt->getNamedView();
     Inkscape::CanvasGrid * found_grid = nullptr;
-    if( pagenum < (gint)nv->grids.size())
+    if(pagenum < (gint)nv->grids.size())
         found_grid = nv->grids[pagenum];
 
     if (found_grid) {
@@ -1709,7 +1709,7 @@ void DocumentProperties::onDocUnitChange()
         ShapeEditor::blockSetItem(true);
         gdouble viewscale = 1.0;
         Geom::Rect vb = doc->getRoot()->viewBox;
-        if ( !vb.hasZeroArea() ) {
+        if (!vb.hasZeroArea()) {
             gdouble viewscale_w = doc->getWidth().value("px") / vb.width();
             gdouble viewscale_h = doc->getHeight().value("px")/ vb.height();
             viewscale = std::min(viewscale_h, viewscale_w);

@@ -38,9 +38,9 @@ SPPaintServer::~SPPaintServer() = default;
 
 bool SPPaintServer::isSwatch() const
 {
-    if( this ) // Protect against assumption that "vector" always exists.
+    if(this) // Protect against assumption that "vector" always exists.
         return swatch;
-    return( false );
+    return(false);
 }
 
 
@@ -52,7 +52,7 @@ bool SPPaintServer::isSolid() const
     bool solid = false;
     if (swatch && SP_IS_GRADIENT(this)) {
         SPGradient *grad = SP_GRADIENT(this);
-        if ( grad->hasStops() && (grad->getStopCount() == 0) ) {
+        if (grad->hasStops() && (grad->getStopCount() == 0)) {
             solid = true;
         }
     }

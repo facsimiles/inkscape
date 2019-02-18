@@ -44,8 +44,8 @@ void SPFeBlend::build(SPDocument *document, Inkscape::XML::Node *repr) {
     SPFilterPrimitive::build(document, repr);
 
     /*LOAD ATTRIBUTES FROM REPR HERE*/
-    this->readAttr( "mode" );
-    this->readAttr( "in2" );
+    this->readAttr("mode");
+    this->readAttr("in2");
 
     /* Unlike normal in, in2 is required attribute. Make sure, we can call
      * it by some name. */
@@ -163,8 +163,8 @@ void SPFeBlend::set(SPAttributeEnum key, gchar const *value) {
  */
 void SPFeBlend::update(SPCtx *ctx, guint flags) {
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
-        this->readAttr( "mode" );
-        this->readAttr( "in2" );
+        this->readAttr("mode");
+        this->readAttr("in2");
     }
 
     /* Unlike normal in, in2 is required attribute. Make sure, we can call
@@ -196,7 +196,7 @@ Inkscape::XML::Node* SPFeBlend::write(Inkscape::XML::Document *doc, Inkscape::XM
 
     gchar const *in2_name = parent->name_for_image(this->in2);
 
-    if( !in2_name ) {
+    if(!in2_name) {
 
         // This code is very similar to name_previous_out()
         SPObject *i = parent->firstChild();
@@ -206,7 +206,7 @@ Inkscape::XML::Node* SPFeBlend::write(Inkscape::XML::Document *doc, Inkscape::XM
         	i = i->getNext();
         }
 
-        if( i ) {
+        if(i) {
             SPFilterPrimitive *i_prim = SP_FILTER_PRIMITIVE(i);
             in2_name = parent->name_for_image(i_prim->image_out);
         }

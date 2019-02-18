@@ -47,7 +47,7 @@ void LPEFillBetweenStrokes::doEffect (SPCurve * curve)
         if (transf != Geom::identity()) {
             sp_lpe_item->doWriteTransform(Geom::identity());
         }
-        if ( linked_path.linksToPath() && second_path.linksToPath() && linked_path.getObject() && second_path.getObject() ) {
+        if (linked_path.linksToPath() && second_path.linksToPath() && linked_path.getObject() && second_path.getObject()) {
             SPItem * linked1 = linked_path.getObject();
             if (linked1 && transf != Geom::identity() && selection && !selection->includes(linked1->getRepr())) {
                 SP_ITEM(linked1)->doWriteTransform(transf);
@@ -69,7 +69,7 @@ void LPEFillBetweenStrokes::doEffect (SPCurve * curve)
                 result_second_pathv.push_back(iter);
             }
 
-            if ( !result_linked_pathv.empty() && !result_second_pathv.empty() && !result_linked_pathv.front().closed() ) {
+            if (!result_linked_pathv.empty() && !result_second_pathv.empty() && !result_linked_pathv.front().closed()) {
                 if (reverse_second.get_value()) {
                     result_second_pathv.front() = result_second_pathv.front().reversed();
                 }
@@ -91,13 +91,13 @@ void LPEFillBetweenStrokes::doEffect (SPCurve * curve)
                     result_linked_pathv.push_back(result_second_pathv.front());
                 }
                 curve->set_pathvector(result_linked_pathv);
-            } else if ( !result_linked_pathv.empty() ) {
+            } else if (!result_linked_pathv.empty()) {
                 curve->set_pathvector(result_linked_pathv);
-            } else if ( !result_second_pathv.empty() ) {
+            } else if (!result_second_pathv.empty()) {
                 curve->set_pathvector(result_second_pathv);
             }
         }
-        else if ( linked_path.linksToPath() && linked_path.getObject() ) {
+        else if (linked_path.linksToPath() && linked_path.getObject()) {
             SPItem *linked1 = linked_path.getObject();
             if (linked1 && transf != Geom::identity() && selection && !selection->includes(linked1->getRepr())) {
                 SP_ITEM(linked1)->doWriteTransform(transf);
@@ -108,14 +108,14 @@ void LPEFillBetweenStrokes::doEffect (SPCurve * curve)
             {
                 result_pathv.push_back(iter);
             }
-            if ( !result_pathv.empty() ) {
+            if (!result_pathv.empty()) {
                 if (close) {
                     result_pathv.front().close();
                 }
                 curve->set_pathvector(result_pathv);
             }
         }
-        else if ( second_path.linksToPath() && second_path.getObject() ) {
+        else if (second_path.linksToPath() && second_path.getObject()) {
             SPItem *linked2 = second_path.getObject();
             if (linked2 && transf != Geom::identity() && selection && !selection->includes(linked2->getRepr())) {
                 SP_ITEM(linked2)->doWriteTransform(transf);
@@ -126,7 +126,7 @@ void LPEFillBetweenStrokes::doEffect (SPCurve * curve)
             {
                 result_pathv.push_back(iter);
             }
-            if ( !result_pathv.empty() ) {
+            if (!result_pathv.empty()) {
                 if (close) {
                     result_pathv.front().close();
                 }

@@ -25,14 +25,14 @@ class PointParamKnotHolderEntity;
 
 class PointParam : public Geom::Point, public Parameter {
 public:
-    PointParam( const Glib::ustring& label,
+    PointParam(const Glib::ustring& label,
                 const Glib::ustring& tip,
                 const Glib::ustring& key,
                 Inkscape::UI::Widget::Registry* wr,
                 Effect* effect,
                 const gchar *handle_tip = nullptr,// tip for automatically associated on-canvas handle
                 Geom::Point default_value = Geom::Point(0,0), 
-                bool live_update = true );
+                bool live_update = true);
     ~PointParam() override;
 
     Gtk::Widget * param_newWidget() override;

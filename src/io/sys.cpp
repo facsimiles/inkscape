@@ -38,43 +38,43 @@ void dump_ustr(Glib::ustring const &ustr);
 extern guint update_in_progress;
 
 
-void Inkscape::IO::dump_fopen_call( char const *utf8name, char const *id )
+void Inkscape::IO::dump_fopen_call(char const *utf8name, char const *id)
 {
 #ifdef INK_DUMP_FOPEN
     Glib::ustring str;
-    for ( int i = 0; utf8name[i]; i++ )
+    for (int i = 0; utf8name[i]; i++)
     {
-        if ( utf8name[i] == '\\' )
+        if (utf8name[i] == '\\')
         {
             str += "\\\\";
         }
-        else if ( (utf8name[i] >= 0x20) && ((0x0ff & utf8name[i]) <= 0x7f) )
+        else if ((utf8name[i] >= 0x20) && ((0x0ff & utf8name[i]) <= 0x7f))
         {
             str += utf8name[i];
         }
         else
         {
             gchar tmp[32];
-            g_snprintf( tmp, sizeof(tmp), "\\x%02x", (0x0ff & utf8name[i]) );
+            g_snprintf(tmp, sizeof(tmp), "\\x%02x", (0x0ff & utf8name[i]));
             str += tmp;
         }
     }
-    g_message( "fopen call %s for [%s]", id, str.data() );
+    g_message("fopen call %s for [%s]", id, str.data());
 #else
     (void)utf8name;
     (void)id;
 #endif
 }
 
-FILE *Inkscape::IO::fopen_utf8name( char const *utf8name, char const *mode )
+FILE *Inkscape::IO::fopen_utf8name(char const *utf8name, char const *mode)
 {
     FILE* fp = nullptr;
 
-    if (Glib::ustring( utf8name ) == Glib::ustring("-")) {
+    if (Glib::ustring(utf8name) == Glib::ustring("-")) {
         // user requests to use pipes
 
-        Glib::ustring how( mode );
-        if ( how.find("w") != Glib::ustring::npos ) {
+        Glib::ustring how(mode);
+        if (how.find("w") != Glib::ustring::npos) {
 #ifdef _WIN32
             setmode(fileno(stdout), O_BINARY);
 #endif
@@ -84,17 +84,17 @@ FILE *Inkscape::IO::fopen_utf8name( char const *utf8name, char const *mode )
         }
     }
 
-    gchar *filename = g_filename_from_utf8( utf8name, -1, nullptr, nullptr, nullptr );
-    if ( filename )
+    gchar *filename = g_filename_from_utf8(utf8name, -1, nullptr, nullptr, nullptr);
+    if (filename)
     {
         // ensure we open the file in binary mode (not needed in POSIX but doesn't hurt either)
-        Glib::ustring how( mode );
-        if ( how.find("b") == Glib::ustring::npos )
+        Glib::ustring how(mode);
+        if (how.find("b") == Glib::ustring::npos)
         {
             how.append("b");
         }
         // when opening a file for writing: create parent directories if they don't exist already
-        if ( how.find("w") != Glib::ustring::npos )
+        if (how.find("w") != Glib::ustring::npos)
         {
             gchar *dirname = g_path_get_dirname(utf8name);
             if (g_mkdir_with_parents(dirname, 0777)) {
@@ -110,11 +110,11 @@ FILE *Inkscape::IO::fopen_utf8name( char const *utf8name, char const *mode )
 }
 
 
-int Inkscape::IO::mkdir_utf8name( char const *utf8name )
+int Inkscape::IO::mkdir_utf8name(char const *utf8name)
 {
     int retval = -1;
-    gchar *filename = g_filename_from_utf8( utf8name, -1, nullptr, nullptr, nullptr );
-    if ( filename )
+    gchar *filename = g_filename_from_utf8(utf8name, -1, nullptr, nullptr, nullptr);
+    if (filename)
     {
         retval = g_mkdir(filename, S_IRWXU | S_IRGRP | S_IXGRP); // The mode argument is ignored on Windows.
         g_free(filename);
@@ -123,7 +123,7 @@ int Inkscape::IO::mkdir_utf8name( char const *utf8name )
     return retval;
 }
 
-bool Inkscape::IO::file_test( char const *utf8name, GFileTest test )
+bool Inkscape::IO::file_test(char const *utf8name, GFileTest test)
 {
     bool exists = false;
 
@@ -131,7 +131,7 @@ bool Inkscape::IO::file_test( char const *utf8name, GFileTest test )
     if (g_strcmp0(utf8name, "-") == 0 && G_FILE_TEST_IS_REGULAR)
         return true;
 
-    if ( utf8name ) {
+    if (utf8name) {
         gchar *filename = nullptr;
         if (utf8name && !g_utf8_validate(utf8name, -1, nullptr)) {
             /* FIXME: Trying to guess whether or not a filename is already in utf8 is unreliable.
@@ -142,25 +142,25 @@ bool Inkscape::IO::file_test( char const *utf8name, GFileTest test )
             // Looks like g_get_home_dir isn't safe.
             //g_warning("invalid UTF-8 detected internally. HUNT IT DOWN AND KILL IT!!!");
         } else {
-            filename = g_filename_from_utf8 ( utf8name, -1, nullptr, nullptr, nullptr );
+            filename = g_filename_from_utf8 (utf8name, -1, nullptr, nullptr, nullptr);
         }
-        if ( filename ) {
+        if (filename) {
             exists = g_file_test (filename, test);
             g_free(filename);
             filename = nullptr;
         } else {
-            g_warning( "Unable to convert filename in IO:file_test" );
+            g_warning("Unable to convert filename in IO:file_test");
         }
     }
 
     return exists;
 }
 
-bool Inkscape::IO::file_is_writable( char const *utf8name)
+bool Inkscape::IO::file_is_writable(char const *utf8name)
 {
     bool success = true;
 
-    if ( utf8name) {
+    if (utf8name) {
         gchar *filename = nullptr;
         if (utf8name && !g_utf8_validate(utf8name, -1, nullptr)) {
             /* FIXME: Trying to guess whether or not a filename is already in utf8 is unreliable.
@@ -171,9 +171,9 @@ bool Inkscape::IO::file_is_writable( char const *utf8name)
             // Looks like g_get_home_dir isn't safe.
             //g_warning("invalid UTF-8 detected internally. HUNT IT DOWN AND KILL IT!!!");
         } else {
-            filename = g_filename_from_utf8 ( utf8name, -1, nullptr, nullptr, nullptr );
+            filename = g_filename_from_utf8 (utf8name, -1, nullptr, nullptr, nullptr);
         }
-        if ( filename ) {
+        if (filename) {
             GStatBuf st;
             if (g_file_test (filename, G_FILE_TEST_EXISTS)){ 
                 if (g_lstat (filename, &st) == 0) {
@@ -183,7 +183,7 @@ bool Inkscape::IO::file_is_writable( char const *utf8name)
             g_free(filename);
             filename = nullptr;
         } else {
-            g_warning( "Unable to convert filename in IO:file_test" );
+            g_warning("Unable to convert filename in IO:file_test");
         }
     }
 
@@ -192,10 +192,10 @@ bool Inkscape::IO::file_is_writable( char const *utf8name)
 
 /**Checks if directory of file exists, useful
  * because inkscape doesn't create directories.*/
-bool Inkscape::IO::file_directory_exists( char const *utf8name ){
+bool Inkscape::IO::file_directory_exists(char const *utf8name){
     bool exists = true;
 
-    if ( utf8name) {
+    if (utf8name) {
         gchar *filename = nullptr;
         if (utf8name && !g_utf8_validate(utf8name, -1, nullptr)) {
             /* FIXME: Trying to guess whether or not a filename is already in utf8 is unreliable.
@@ -206,17 +206,17 @@ bool Inkscape::IO::file_directory_exists( char const *utf8name ){
             // Looks like g_get_home_dir isn't safe.
             //g_warning("invalid UTF-8 detected internally. HUNT IT DOWN AND KILL IT!!!");
         } else {
-            filename = g_filename_from_utf8 ( utf8name, -1, nullptr, nullptr, nullptr );
+            filename = g_filename_from_utf8 (utf8name, -1, nullptr, nullptr, nullptr);
         }
-        if ( filename ) {
+        if (filename) {
             gchar *dirname = g_path_get_dirname(filename);
-            exists = Inkscape::IO::file_test( dirname, G_FILE_TEST_EXISTS);
+            exists = Inkscape::IO::file_test(dirname, G_FILE_TEST_EXISTS);
             g_free(filename);
             g_free(dirname);
             filename = nullptr;
             dirname = nullptr;
         } else {
-            g_warning( "Unable to convert filename in IO:file_test" );
+            g_warning("Unable to convert filename in IO:file_test");
         }
     }
 
@@ -259,39 +259,39 @@ Inkscape::IO::dir_read_utf8name(GDir *dir)
 }
 
 
-gchar* Inkscape::IO::locale_to_utf8_fallback( const gchar *opsysstring,
+gchar* Inkscape::IO::locale_to_utf8_fallback(const gchar *opsysstring,
                                               gssize len,
                                               gsize *bytes_read,
                                               gsize *bytes_written,
-                                              GError **error )
+                                              GError **error)
 {
     gchar *result = nullptr;
-    if ( opsysstring ) {
-        gchar *newFileName = g_locale_to_utf8( opsysstring, len, bytes_read, bytes_written, error );
-        if ( newFileName ) {
-            if ( !g_utf8_validate(newFileName, -1, nullptr) ) {
-                g_warning( "input filename did not yield UTF-8" );
-                g_free( newFileName );
+    if (opsysstring) {
+        gchar *newFileName = g_locale_to_utf8(opsysstring, len, bytes_read, bytes_written, error);
+        if (newFileName) {
+            if (!g_utf8_validate(newFileName, -1, nullptr)) {
+                g_warning("input filename did not yield UTF-8");
+                g_free(newFileName);
             } else {
                 result = newFileName;
             }
             newFileName = nullptr;
-        } else if ( g_utf8_validate(opsysstring, -1, nullptr) ) {
+        } else if (g_utf8_validate(opsysstring, -1, nullptr)) {
             // This *might* be a case that we want
-            // g_warning( "input failed filename->utf8, fell back to original" );
+            // g_warning("input failed filename->utf8, fell back to original");
             // TODO handle cases when len >= 0
-            result = g_strdup( opsysstring );
+            result = g_strdup(opsysstring);
         } else {
             gchar const *charset = nullptr;
             g_get_charset(&charset);
-            g_warning( "input filename conversion failed for file with locale charset '%s'", charset );
+            g_warning("input filename conversion failed for file with locale charset '%s'", charset);
         }
     }
     return result;
 }
 
 void
-Inkscape::IO::spawn_async_with_pipes( const std::string& working_directory,
+Inkscape::IO::spawn_async_with_pipes(const std::string& working_directory,
                                       const Glib::ArrayHandle<std::string>& argv,
                                       Glib::SpawnFlags flags,
                                       const sigc::slot<void>& child_setup,
@@ -311,22 +311,22 @@ Inkscape::IO::spawn_async_with_pipes( const std::string& working_directory,
 }
 
 
-gchar* Inkscape::IO::sanitizeString( gchar const * str )
+gchar* Inkscape::IO::sanitizeString(gchar const * str)
 {
     gchar *result = nullptr;
-    if ( str ) {
-        if ( g_utf8_validate(str, -1, nullptr) ) {
+    if (str) {
+        if (g_utf8_validate(str, -1, nullptr)) {
             result = g_strdup(str);
         } else {
             guchar scratch[8];
             Glib::ustring buf;
             guchar const *ptr = (guchar const*)str;
-            while ( *ptr )
+            while (*ptr)
             {
-                if ( *ptr == '\\' )
+                if (*ptr == '\\')
                 {
                     buf.append("\\\\");
-                } else if ( *ptr < 0x80 ) {
+                } else if (*ptr < 0x80) {
                     buf += (char)(*ptr);
                 } else {
                     g_snprintf((gchar*)scratch, sizeof(scratch), "\\x%02x", *ptr);

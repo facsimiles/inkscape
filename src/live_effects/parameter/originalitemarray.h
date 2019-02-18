@@ -53,7 +53,7 @@ class OriginalItemArrayParam : public Parameter {
 public:
     class ModelColumns;
     
-    OriginalItemArrayParam( const Glib::ustring& label,
+    OriginalItemArrayParam(const Glib::ustring& label,
                 const Glib::ustring& tip,
                 const Glib::ustring& key,
                 Inkscape::UI::Widget::Registry* wr,

@@ -52,7 +52,7 @@ public:
 
     // for debugging
     unsigned _anchored_refcount() const {
-        return ( _anchor ? _anchor->refcount : 0 );
+        return (_anchor ? _anchor->refcount : 0);
     }
 
     Anchored(Anchored const &) = delete; // no copy

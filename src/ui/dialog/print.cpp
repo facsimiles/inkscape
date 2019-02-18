@@ -123,7 +123,7 @@ void Print::draw_page(const Glib::RefPtr<Gtk::PrintContext>& context, int /*page
         std::string tmp_base = "inkscape-print-png-XXXXXX";
 
         int tmp_fd;
-        if ( (tmp_fd = Glib::file_open_tmp(tmp_png, tmp_base)) >= 0) {
+        if ((tmp_fd = Glib::file_open_tmp(tmp_png, tmp_base)) >= 0) {
             close(tmp_fd);
 
             guint32 bgcolor = 0x00000000;
@@ -144,12 +144,12 @@ void Print::draw_page(const Glib::RefPtr<Gtk::PrintContext>& context, int /*page
                 dpi, dpi, bgcolor, nullptr, nullptr, true, std::vector<SPItem*>());
 
             // This doesn't seem to work:
-            //context->set_cairo_context ( Cairo::Context::create (Cairo::ImageSurface::create_from_png (tmp_png) ), dpi, dpi );
+            //context->set_cairo_context (Cairo::Context::create (Cairo::ImageSurface::create_from_png (tmp_png)), dpi, dpi);
             //
             // so we'll use a surface pattern blat instead...
             //
             // but the C++ interface isn't implemented in cairomm:
-            //context->get_cairo_context ()->set_source_surface(Cairo::ImageSurface::create_from_png (tmp_png) );
+            //context->get_cairo_context ()->set_source_surface(Cairo::ImageSurface::create_from_png (tmp_png));
             //
             // so do it in C:
             {

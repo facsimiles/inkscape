@@ -22,7 +22,7 @@ namespace Inkscape {
 namespace UI {
 namespace Widget {
 
-ImageToggler::ImageToggler( char const* on, char const* off) :
+ImageToggler::ImageToggler(char const* on, char const* off) :
     Glib::ObjectBase(typeid(ImageToggler)),
     Gtk::CellRendererPixbuf(),
     _pixOnName(on),
@@ -70,14 +70,14 @@ void ImageToggler::get_preferred_width_vfunc(Gtk::Widget& widget,
     }
 }
 
-void ImageToggler::render_vfunc( const Cairo::RefPtr<Cairo::Context>& cr,
+void ImageToggler::render_vfunc(const Cairo::RefPtr<Cairo::Context>& cr,
                                  Gtk::Widget& widget,
                                  const Gdk::Rectangle& background_area,
                                  const Gdk::Rectangle& cell_area,
-                                 Gtk::CellRendererState flags )
+                                 Gtk::CellRendererState flags)
 {
     property_pixbuf() = _property_active.get_value() ? _property_pixbuf_on : _property_pixbuf_off;
-    Gtk::CellRendererPixbuf::render_vfunc( cr, widget, background_area, cell_area, flags );
+    Gtk::CellRendererPixbuf::render_vfunc(cr, widget, background_area, cell_area, flags);
 }
 
 bool

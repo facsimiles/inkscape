@@ -30,7 +30,7 @@ bool Logger::_category_mask[Event::N_CATEGORIES];
 namespace {
 
 static void write_escaped_value(std::ostream &os, char const *value) {
-    for ( char const *current=value ; *current ; ++current ) {
+    for (char const *current=value ; *current ; ++current) {
         switch (*current) {
         case '&':
             os << "&amp;";
@@ -54,7 +54,7 @@ static void write_escaped_value(std::ostream &os, char const *value) {
 }
 
 static void write_indent(std::ostream &os, unsigned depth) {
-    for ( unsigned i = 0 ; i < depth ; i++ ) {
+    for (unsigned i = 0 ; i < depth ; i++) {
         os.write("  ", 2);
     }
 }
@@ -80,12 +80,12 @@ static bool equal_range(char const *c_string,
 
 static void set_category_mask(bool * const mask, char const *filter) {
     if (!filter) {
-        for ( unsigned i = 0 ; i < Event::N_CATEGORIES ; i++ ) {
+        for (unsigned i = 0 ; i < Event::N_CATEGORIES ; i++) {
             mask[i] = true;
         }
         return;
     } else {
-        for ( unsigned i = 0 ; i < Event::N_CATEGORIES ; i++ ) {
+        for (unsigned i = 0 ; i < Event::N_CATEGORIES ; i++) {
             mask[i] = false;
         }
         mask[Event::CORE] = true;
@@ -95,8 +95,8 @@ static void set_category_mask(bool * const mask, char const *filter) {
     char const *end;
     start = end = filter;
     while (*end) {
-        while ( *end && *end != ',' ) { end++; }
-        if ( start != end ) {
+        while (*end && *end != ',') { end++; }
+        if (start != end) {
             struct CategoryName {
                 char const *name;
                 Event::Category category;
@@ -115,7 +115,7 @@ static void set_category_mask(bool * const mask, char const *filter) {
                 { nullptr, Event::OTHER }
             };
             CategoryName const *iter;
-            for ( iter = category_names ; iter->name ; iter++ ) {
+            for (iter = category_names ; iter->name ; iter++) {
                 if (equal_range(iter->name, start, end)) {
                     mask[iter->category] = true;
                     break;
@@ -172,7 +172,7 @@ void Logger::_start(Event const &event) {
     log_stream << "<" << name;
 
     unsigned property_count=event.propertyCount();
-    for ( unsigned i = 0 ; i < property_count ; i++ ) {
+    for (unsigned i = 0 ; i < property_count ; i++) {
         Event::PropertyPair property=event.property(i);
         log_stream << " " << property.name << "=\"";
         write_escaped_value(log_stream, property.value->c_str());

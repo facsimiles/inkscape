@@ -195,7 +195,7 @@ void ColorScales::_recalcColor()
 void ColorScales::_updateDisplay()
 {
 #ifdef DUMP_CHANGE_INFO
-    g_message("ColorScales::_onColorChanged( this=%p, %f, %f, %f,   %f)", this, _color.color().v.c[0],
+    g_message("ColorScales::_onColorChanged(this=%p, %f, %f, %f,   %f)", this, _color.color().v.c[0],
               _color.color().v.c[1], _color.color().v.c[2], _color.alpha());
 #endif
     gfloat tmp[3];

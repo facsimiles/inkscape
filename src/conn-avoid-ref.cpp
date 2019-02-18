@@ -73,7 +73,7 @@ SPAvoidRef::~SPAvoidRef()
 void SPAvoidRef::setAvoid(char const *value)
 {
     // Don't keep avoidance information for cloned objects.
-    if ( !item->cloned ) {
+    if (!item->cloned) {
         new_setting = false;
         if (value && (strcmp(value, "true") == 0)) {
             new_setting = true;
@@ -216,7 +216,7 @@ static std::vector<Geom::Point> approxCurveWithPoints(SPCurve *curve)
             if (dynamic_cast<Geom::CubicBezier const*>(&*cit))
             {
                 at += seg_size;
-                if (at <= 1.0 )
+                if (at <= 1.0)
                     poly_points.push_back(cit->pointAt(at));
                 else
                 {
@@ -332,7 +332,7 @@ std::vector<SPItem *> get_avoided_items(std::vector<SPItem *> &list, SPObject *f
             !SP_ITEM(&child)->isLocked() &&
             !desktop->itemIsHidden(SP_ITEM(&child)) &&
             (!initialised || SP_ITEM(&child)->avoidRef->shapeRef)
-            )
+)
         {
             list.push_back(SP_ITEM(&child));
         }

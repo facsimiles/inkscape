@@ -146,24 +146,24 @@ public:
         return Point(-_pt[X], -_pt[Y]);
     }
     Point &operator+=(Point const &o) {
-        for ( unsigned i = 0 ; i < 2 ; ++i ) {
+        for (unsigned i = 0 ; i < 2 ; ++i) {
             _pt[i] += o._pt[i];
         }
         return *this;
     }
     Point &operator-=(Point const &o) {
-        for ( unsigned i = 0 ; i < 2 ; ++i ) {
+        for (unsigned i = 0 ; i < 2 ; ++i) {
             _pt[i] -= o._pt[i];
         }
         return *this;
     }
     Point &operator*=(Coord s) {
-        for ( unsigned i = 0 ; i < 2 ; ++i ) _pt[i] *= s;
+        for (unsigned i = 0 ; i < 2 ; ++i) _pt[i] *= s;
         return *this;
     }
     Point &operator/=(Coord s) {
         //TODO: s == 0?
-        for ( unsigned i = 0 ; i < 2 ; ++i ) _pt[i] /= s;
+        for (unsigned i = 0 ; i < 2 ; ++i) _pt[i] /= s;
         return *this;
     }
     /// @}
@@ -203,7 +203,7 @@ public:
     /// @{
     /** @brief Check whether both coordinates are finite. */
     bool isFinite() const {
-        for ( unsigned i = 0 ; i < 2 ; ++i ) {
+        for (unsigned i = 0 ; i < 2 ; ++i) {
             if(!IS_FINITE(_pt[i])) return false;
         }
         return true;
@@ -396,7 +396,7 @@ inline bool are_near(Point const &a, Point const &b, double eps = EPSILON) {
 inline bool are_collinear(Point const& p1, Point const& p2, Point const& p3,
                           double eps = EPSILON)
 {
-    return are_near( cross(p3, p2) - cross(p3, p1) + cross(p2, p1), 0, eps);
+    return are_near(cross(p3, p2) - cross(p3, p1) + cross(p2, p1), 0, eps);
 }
 
 Point unit_vector(Point const &a);

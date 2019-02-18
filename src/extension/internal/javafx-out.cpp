@@ -191,7 +191,7 @@ static JavaFXOutput::String getStrokeLineJoin(unsigned value) {
  */
 static JavaFXOutput::String sanatize(const JavaFXOutput::String &badstr){
     JavaFXOutput::String good(badstr);
-    for (int pos = 0; pos < static_cast<int>(badstr.length()); ++pos )
+    for (int pos = 0; pos < static_cast<int>(badstr.length()); ++pos)
         if ((badstr.at(pos)=='-')||(badstr.at(pos)==' ')) {
             good.replace(pos, 1, "_");
         }
@@ -271,7 +271,7 @@ bool JavaFXOutput::doTail()
     // Write the tail of CustomNode
     out("           ] // content\n");
     out("           transforms: Translate { x : %s, y : %s }\n",
-        DSTR((-minx) + border), DSTR((-miny) + border) );
+        DSTR((-minx) + border), DSTR((-miny) + border));
     out("       } // Group\n");
     out("   } // function create()\n");
     out("} // class %s\n", name.c_str());
@@ -335,7 +335,7 @@ bool JavaFXOutput::doGradient(SPGradient *grad, const String &id)
         out("            centerY: %s\n", DSTR(g->cy.value));
         out("            focusX: %s\n",  DSTR(g->fx.value));
         out("            focusY: %s\n",  DSTR(g->fy.value));
-        out("            radius: %s\n",  DSTR(g->r.value ));
+        out("            radius: %s\n",  DSTR(g->r.value));
         std::vector<SPGradientStop> stops = g->vector.stops;
         if (!stops.empty())
             {
@@ -389,7 +389,7 @@ bool JavaFXOutput::doStyle(SPStyle *style)
             rgba(fill.value.color, SP_SCALE24_TO_FLOAT(style->fill_opacity.value)).c_str());
         }
     else if (fill.isPaintserver()){
-        if (fill.value.href && fill.value.href->getURI() ){
+        if (fill.value.href && fill.value.href->getURI()){
             String uri = fill.value.href->getURI()->str();
             /* trim the anchor '#' from the front */
             if (uri.size() > 0 && uri[0]=='#') {
@@ -431,7 +431,7 @@ bool JavaFXOutput::doStyle(SPStyle *style)
                out("            strokeDashOffset: %s\n", DSTR(style->stroke_dashoffset.value));
            }
            out("            strokeDashArray: [ ");
-           for(unsigned i = 0; i < style->stroke_dasharray.values.size(); i++ ) {
+           for(unsigned i = 0; i < style->stroke_dasharray.values.size(); i++) {
                if (i > 0) {
                    out(", %.2lf", style->stroke_dasharray.values[i].value);
                }else {
@@ -485,7 +485,7 @@ bool JavaFXOutput::doCurve(SPItem *item, const String &id)
 
     // convert the path to only lineto's and cubic curveto's:
     Geom::Affine tf = item->i2doc_affine();
-    Geom::PathVector pathv = pathv_to_linear_and_cubic_beziers( shape->_curve->get_pathvector() * tf );
+    Geom::PathVector pathv = pathv_to_linear_and_cubic_beziers(shape->_curve->get_pathvector() * tf);
 
     //Count the NR_CURVETOs/LINETOs (including closing line segment)
     guint segmentCount = 0;
@@ -502,7 +502,7 @@ bool JavaFXOutput::doCurve(SPItem *item, const String &id)
 
     nrNodes += segmentCount;
 
-    Geom::Rect cminmax( pathv.front().initialPoint(), pathv.front().initialPoint() );
+    Geom::Rect cminmax(pathv.front().initialPoint(), pathv.front().initialPoint());
 
     /**
      * For all Subpaths in the <path>
@@ -522,7 +522,7 @@ bool JavaFXOutput::doCurve(SPItem *item, const String &id)
         for (Geom::Path::const_iterator cit = pit->begin(); cit != pit->end_closed(); ++cit)
             {
             //### LINE
-            if ( dynamic_cast<Geom::LineSegment  const *> (&*cit) )
+            if (dynamic_cast<Geom::LineSegment  const *> (&*cit))
                 {
                 Geom::Point p = cit->finalPoint();
                 out("                LineTo {\n");
@@ -624,7 +624,7 @@ bool JavaFXOutput::doCurve(SPItem *item, const String &id)
 
     // convert the path to only lineto's and cubic curveto's:
     Geom::Affine tf = item->i2doc_affine();
-    Geom::PathVector pathv = pathv_to_linear_and_cubic_beziers( curve->get_pathvector() * tf );
+    Geom::PathVector pathv = pathv_to_linear_and_cubic_beziers(curve->get_pathvector() * tf);
 
     //Count the NR_CURVETOs/LINETOs (including closing line segment)
     nrNodes = 0;
@@ -639,7 +639,7 @@ bool JavaFXOutput::doCurve(SPItem *item, const String &id)
     out("        content: \"%s\"\n", dataStr);
     free(dataStr);
 
-    Geom::Rect cminmax( pathv.front().initialPoint(), pathv.front().initialPoint() );
+    Geom::Rect cminmax(pathv.front().initialPoint(), pathv.front().initialPoint());
 
     /**
      * Get the Min and Max X and Y extends for the Path.

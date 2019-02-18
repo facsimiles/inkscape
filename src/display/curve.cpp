@@ -45,7 +45,7 @@ SPCurve::SPCurve(Geom::PathVector  pathv)
 SPCurve::SPCurve(std::list<SPCurve *> const& l) : _refcount(1)
 {
     for (auto c:l) {
-        _pathv.insert( _pathv.end(), c->get_pathvector().begin(), c->get_pathvector().end() );
+        _pathv.insert(_pathv.end(), c->get_pathvector().begin(), c->get_pathvector().end());
     }
 }
 
@@ -219,10 +219,10 @@ void
 SPCurve::lineto(Geom::Point const &p)
 {
     if (_pathv.empty())  g_message("SPCurve::lineto - path is empty!");
-    else _pathv.back().appendNew<Geom::LineSegment>( p );
+    else _pathv.back().appendNew<Geom::LineSegment>(p);
 }
 /**
- * Calls SPCurve::lineto( Geom::Point(x,y) )
+ * Calls SPCurve::lineto(Geom::Point(x,y))
  */
 void
 SPCurve::lineto(double x, double y)
@@ -238,16 +238,16 @@ void
 SPCurve::quadto(Geom::Point const &p1, Geom::Point const &p2)
 {
     if (_pathv.empty())  g_message("SPCurve::quadto - path is empty!");
-    else _pathv.back().appendNew<Geom::QuadraticBezier>( p1, p2);
+    else _pathv.back().appendNew<Geom::QuadraticBezier>(p1, p2);
 }
 /**
- * Calls SPCurve::quadto( Geom::Point(x1,y1), Geom::Point(x2,y2) )
+ * Calls SPCurve::quadto(Geom::Point(x1,y1), Geom::Point(x2,y2))
  * All coordinates must be finite.
  */
 void
 SPCurve::quadto(double x1, double y1, double x2, double y2)
 {
-    quadto( Geom::Point(x1,y1), Geom::Point(x2,y2) );
+    quadto(Geom::Point(x1,y1), Geom::Point(x2,y2));
 }
 
 /**
@@ -258,16 +258,16 @@ void
 SPCurve::curveto(Geom::Point const &p0, Geom::Point const &p1, Geom::Point const &p2)
 {
     if (_pathv.empty())  g_message("SPCurve::curveto - path is empty!");
-    else _pathv.back().appendNew<Geom::CubicBezier>( p0, p1, p2 );
+    else _pathv.back().appendNew<Geom::CubicBezier>(p0, p1, p2);
 }
 /**
- * Calls SPCurve::curveto( Geom::Point(x0,y0), Geom::Point(x1,y1), Geom::Point(x2,y2) )
+ * Calls SPCurve::curveto(Geom::Point(x0,y0), Geom::Point(x1,y1), Geom::Point(x2,y2))
  * All coordinates must be finite.
  */
 void
 SPCurve::curveto(double x0, double y0, double x1, double y1, double x2, double y2)
 {
-    curveto( Geom::Point(x0,y0), Geom::Point(x1,y1), Geom::Point(x2,y2) );
+    curveto(Geom::Point(x0,y0), Geom::Point(x1,y1), Geom::Point(x2,y2));
 }
 
 /**
@@ -328,7 +328,7 @@ SPCurve::is_closed() const
     } 
     
     for (const auto & it : _pathv) {
-        if ( ! it.closed() ) {
+        if (! it.closed()) {
             return false;
         }
     }
@@ -519,20 +519,20 @@ SPCurve::append(SPCurve const *curve2,
 
     if (use_lineto) {
         Geom::PathVector::const_iterator it = curve2->_pathv.begin();
-        if ( ! _pathv.empty() ) {
+        if (! _pathv.empty()) {
             Geom::Path & lastpath = _pathv.back();
-            lastpath.appendNew<Geom::LineSegment>( (*it).initialPoint() );
-            lastpath.append( (*it) );
+            lastpath.appendNew<Geom::LineSegment>((*it).initialPoint());
+            lastpath.append((*it));
         } else {
-            _pathv.push_back( (*it) );
+            _pathv.push_back((*it));
         }
 
         for (++it; it != curve2->_pathv.end(); ++it) {
-            _pathv.push_back( (*it) );
+            _pathv.push_back((*it));
         }
     } else {
         for (const auto & it : curve2->_pathv) {
-            _pathv.push_back( it );
+            _pathv.push_back(it);
         }
     }
 }
@@ -550,7 +550,7 @@ SPCurve::append_continuous(SPCurve const *c1, double tolerance)
     using Geom::Y;
 
     g_return_val_if_fail(c1 != nullptr, NULL);
-    if ( this->is_closed() || c1->is_closed() ) {
+    if (this->is_closed() || c1->is_closed()) {
         return nullptr;
     }
 
@@ -563,8 +563,8 @@ SPCurve::append_continuous(SPCurve const *c1, double tolerance)
         return this;
     }
 
-    if ( (fabs((*this->last_point())[X] - (*c1->first_point())[X]) <= tolerance)
-         && (fabs((*this->last_point())[Y] - (*c1->first_point())[Y]) <= tolerance) )
+    if ((fabs((*this->last_point())[X] - (*c1->first_point())[X]) <= tolerance)
+         && (fabs((*this->last_point())[Y] - (*c1->first_point())[Y]) <= tolerance))
     {
     // c1's first subpath can be appended to this curve's last subpath
         Geom::PathVector::const_iterator path_it = c1->_pathv.begin();
@@ -572,10 +572,10 @@ SPCurve::append_continuous(SPCurve const *c1, double tolerance)
 
         Geom::Path newfirstpath(*path_it);
         newfirstpath.setInitial(lastpath.finalPoint());
-        lastpath.append( newfirstpath );
+        lastpath.append(newfirstpath);
 
         for (++path_it; path_it != c1->_pathv.end(); ++path_it) {
-            _pathv.push_back( (*path_it) );
+            _pathv.push_back((*path_it));
         }
 
     } else {
@@ -592,10 +592,10 @@ SPCurve::append_continuous(SPCurve const *c1, double tolerance)
 void
 SPCurve::backspace()
 {
-    if ( is_empty() )
+    if (is_empty())
         return;
 
-    if ( !_pathv.back().empty() ) {
+    if (!_pathv.back().empty()) {
         _pathv.back().erase_last();
         _pathv.back().close(false);
     }
@@ -617,23 +617,23 @@ SPCurve::stretch_endpoints(Geom::Point const &new_p0, Geom::Point const &new_p1)
         return;
     }
 
-    Geom::Point const offset0( new_p0 - *first_point() );
-    Geom::Point const offset1( new_p1 - *last_point() );
+    Geom::Point const offset0(new_p0 - *first_point());
+    Geom::Point const offset1(new_p1 - *last_point());
 
     Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2 = _pathv.front().toPwSb();
     Geom::Piecewise<Geom::SBasis> arclength = Geom::arcLengthSb(pwd2);
-    if ( arclength.lastValue() <= 0 ) {
+    if (arclength.lastValue() <= 0) {
         g_error("SPCurve::stretch_endpoints - arclength <= 0");
         throw;
     }
     arclength *= 1./arclength.lastValue();
-    Geom::Point const A( offset0 );
-    Geom::Point const B( offset1 );
+    Geom::Point const A(offset0);
+    Geom::Point const B(offset1);
     Geom::Piecewise<Geom::SBasis> offsetx = (arclength*-1.+1)*A[0] + arclength*B[0];
     Geom::Piecewise<Geom::SBasis> offsety = (arclength*-1.+1)*A[1] + arclength*B[1];
-    Geom::Piecewise<Geom::D2<Geom::SBasis> > offsetpath = Geom::sectionize( Geom::D2<Geom::Piecewise<Geom::SBasis> >(offsetx, offsety) );
+    Geom::Piecewise<Geom::D2<Geom::SBasis> > offsetpath = Geom::sectionize(Geom::D2<Geom::Piecewise<Geom::SBasis> >(offsetx, offsety));
     pwd2 += offsetpath;
-    _pathv = Geom::path_from_piecewise( pwd2, 0.001 );
+    _pathv = Geom::path_from_piecewise(pwd2, 0.001);
 }
 
 /**
@@ -678,14 +678,14 @@ SPCurve::last_point_additive_move(Geom::Point const & p)
         return;
     }
 
-    _pathv.back().setFinal( _pathv.back().finalPoint() + p );
+    _pathv.back().setFinal(_pathv.back().finalPoint() + p);
 
     // Move handle as well when the last segment is a cubic bezier segment:
     // TODO: what to do for quadratic beziers?
-    if ( Geom::CubicBezier const *lastcube = dynamic_cast<Geom::CubicBezier const *>(&_pathv.back().back()) ) {
-        Geom::CubicBezier newcube( *lastcube );
+    if (Geom::CubicBezier const *lastcube = dynamic_cast<Geom::CubicBezier const *>(&_pathv.back().back())) {
+        Geom::CubicBezier newcube(*lastcube);
         newcube.setPoint(2, newcube[2] + p);
-        _pathv.back().replace( --_pathv.back().end(), newcube );
+        _pathv.back().replace(--_pathv.back().end(), newcube);
     }
 }
 

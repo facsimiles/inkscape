@@ -104,7 +104,7 @@ SweepTree::Find(Geom::Point const &px, SweepTree *newOne, SweepTree *&insertL,
 
     // compute (px-orig)^dir to know on which side of this edge the point px lies
     double y = 0;
-    //if ( startPoint == newOne->startPoint ) {
+    //if (startPoint == newOne->startPoint) {
     //   y=0;
     //} else {
     y = dot(bNorm, diff);
@@ -534,19 +534,19 @@ void
 SweepTree::Avance(Shape */*dstPts*/, int /*curPoint*/, Shape */*a*/, Shape */*b*/)
 {
     return;
-/*	if ( curPoint != startPoint ) {
+/*	if (curPoint != startPoint) {
 		int nb=-1;
-		if ( sens ) {
+		if (sens) {
 //			nb=dstPts->AddEdge(startPoint,curPoint);
 		} else {
 //			nb=dstPts->AddEdge(curPoint,startPoint);
 		}
-		if ( nb >= 0 ) {
+		if (nb >= 0) {
 			dstPts->swsData[nb].misc=(void*)((src==b)?1:0);
 			int   wp=waitingPoint;
 			dstPts->eData[nb].firstLinkedPoint=waitingPoint;
 			waitingPoint=-1;
-			while ( wp >= 0 ) {
+			while (wp >= 0) {
 				dstPts->pData[wp].edgeOnLeft=nb;
 				wp=dstPts->pData[wp].nextLinkedPoint;
 			}

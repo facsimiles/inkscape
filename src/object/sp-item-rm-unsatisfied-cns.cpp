@@ -25,16 +25,16 @@ void sp_item_rm_unsatisfied_cns(SPItem &item)
     std::vector<Inkscape::SnapCandidatePoint> snappoints;
     item.getSnappoints(snappoints, nullptr);
     for (unsigned i = item.constraints.size(); i--;) {
-        g_assert( i < item.constraints.size() );
+        g_assert(i < item.constraints.size());
         SPGuideConstraint const &cn = item.constraints[i];
         int const snappoint_ix = cn.snappoint_ix;
-        g_assert( snappoint_ix < int(snappoints.size()) );
+        g_assert(snappoint_ix < int(snappoints.size()));
 
         if (!Geom::are_near(cn.g->getDistanceFrom(snappoints[snappoint_ix].getPoint()), 0, 1e-2)) {
 
             remove_last(cn.g->attached_items, SPGuideAttachment(&item, cn.snappoint_ix));
 
-            g_assert( i < item.constraints.size() );
+            g_assert(i < item.constraints.size());
 
             item.constraints.erase(item.constraints.begin() + i);
         }

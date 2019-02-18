@@ -1192,14 +1192,14 @@ void SVGPathParser::_curveTo(Point const &c0, Point const &c1, Point const &p)
 {
     _pushCurve(new CubicBezier(_current, c0, c1, p));
     _quad_tangent = _current = p;
-    _cubic_tangent = p + ( p - c1 );
+    _cubic_tangent = p + (p - c1);
 }
 
 void SVGPathParser::_quadTo(Point const &c, Point const &p)
 {
     _pushCurve(new QuadraticBezier(_current, c, p));
     _cubic_tangent = _current = p;
-    _quad_tangent = p + ( p - c );
+    _quad_tangent = p + (p - c);
 }
 
 void SVGPathParser::_arcTo(Coord rx, Coord ry, Coord angle,
@@ -1251,27 +1251,27 @@ void SVGPathParser::_parse(char const *str, char const *strend, bool finish)
 	unsigned int _nacts;
 	const char *_keys;
 
-	if ( p == pe )
+	if (p == pe)
 		goto _test_eof;
-	if ( cs == 0 )
+	if (cs == 0)
 		goto _out;
 _resume:
 	_keys = _svg_path_trans_keys + _svg_path_key_offsets[cs];
 	_trans = _svg_path_index_offsets[cs];
 
 	_klen = _svg_path_single_lengths[cs];
-	if ( _klen > 0 ) {
+	if (_klen > 0) {
 		const char *_lower = _keys;
 		const char *_mid;
 		const char *_upper = _keys + _klen - 1;
 		while (1) {
-			if ( _upper < _lower )
+			if (_upper < _lower)
 				break;
 
 			_mid = _lower + ((_upper-_lower) >> 1);
-			if ( (*p) < *_mid )
+			if ((*p) < *_mid)
 				_upper = _mid - 1;
-			else if ( (*p) > *_mid )
+			else if ((*p) > *_mid)
 				_lower = _mid + 1;
 			else {
 				_trans += (unsigned int)(_mid - _keys);
@@ -1283,18 +1283,18 @@ _resume:
 	}
 
 	_klen = _svg_path_range_lengths[cs];
-	if ( _klen > 0 ) {
+	if (_klen > 0) {
 		const char *_lower = _keys;
 		const char *_mid;
 		const char *_upper = _keys + (_klen<<1) - 2;
 		while (1) {
-			if ( _upper < _lower )
+			if (_upper < _lower)
 				break;
 
 			_mid = _lower + (((_upper-_lower) >> 1) & ~1);
-			if ( (*p) < _mid[0] )
+			if ((*p) < _mid[0])
 				_upper = _mid - 2;
-			else if ( (*p) > _mid[1] )
+			else if ((*p) > _mid[1])
 				_lower = _mid + 2;
 			else {
 				_trans += (unsigned int)((_mid - _keys)>>1);
@@ -1308,14 +1308,14 @@ _match:
 	_trans = _svg_path_indicies[_trans];
 	cs = _svg_path_trans_targs[_trans];
 
-	if ( _svg_path_trans_actions[_trans] == 0 )
+	if (_svg_path_trans_actions[_trans] == 0)
 		goto _again;
 
 	_acts = _svg_path_actions + _svg_path_trans_actions[_trans];
 	_nacts = (unsigned int) *_acts++;
-	while ( _nacts-- > 0 )
+	while (_nacts-- > 0)
 	{
-		switch ( *_acts++ )
+		switch (*_acts++)
 		{
 	case 0:
 #line 209 "/home/tweenk/src/lib2geom/src/2geom/svg-path-parser.rl"
@@ -1442,17 +1442,17 @@ _match:
 	}
 
 _again:
-	if ( cs == 0 )
+	if (cs == 0)
 		goto _out;
-	if ( ++p != pe )
+	if (++p != pe)
 		goto _resume;
 	_test_eof: {}
-	if ( p == eof )
+	if (p == eof)
 	{
 	const char *__acts = _svg_path_actions + _svg_path_eof_actions[cs];
 	unsigned int __nacts = (unsigned int) *__acts++;
-	while ( __nacts-- > 0 ) {
-		switch ( *__acts++ ) {
+	while (__nacts-- > 0) {
+		switch (*__acts++) {
 	case 1:
 #line 213 "/home/tweenk/src/lib2geom/src/2geom/svg-path-parser.rl"
 	{

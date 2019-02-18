@@ -6,13 +6,13 @@
 
 namespace Inkscape {
 namespace UI {
-SimplePrefPusher::SimplePrefPusher( Gtk::ToggleToolButton *btn, Glib::ustring const &path ) :
+SimplePrefPusher::SimplePrefPusher(Gtk::ToggleToolButton *btn, Glib::ustring const &path) :
     Observer(path),
     _btn(btn),
     freeze(false)
 {
     freeze = true;
-    _btn->set_active( Inkscape::Preferences::get()->getBool(observed_path) );
+    _btn->set_active(Inkscape::Preferences::get()->getBool(observed_path));
     freeze = false;
 
     Inkscape::Preferences::get()->addObserver(*this);

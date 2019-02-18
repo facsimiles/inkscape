@@ -345,7 +345,7 @@ template<typename T>
 T elem_portion(const Piecewise<T> &a, unsigned i, double from, double to) {
     assert(i < a.size());
     double rwidth = 1 / (a.cuts[i+1] - a.cuts[i]);
-    return portion( a[i], (from - a.cuts[i]) * rwidth, (to - a.cuts[i]) * rwidth );
+    return portion(a[i], (from - a.cuts[i]) * rwidth, (to - a.cuts[i]) * rwidth);
 }
 
 /**Piecewise<T> partition(const Piecewise<T> &pw, std::vector<double> const &c);
@@ -380,7 +380,7 @@ Piecewise<T> partition(const Piecewise<T> &pw, std::vector<double> const &c) {
     while(c[ci] < pw.cuts.front() && ci < c.size()) {
         bool isLast = (ci == c.size()-1 || c[ci + 1] >= pw.cuts.front());
         ret.push_cut(c[ci]);
-        ret.push_seg( elem_portion(pw, 0, c[ci], isLast ? pw.cuts.front() : c[ci + 1]) );
+        ret.push_seg(elem_portion(pw, 0, c[ci], isLast ? pw.cuts.front() : c[ci + 1]));
         ci++;
     }
 
@@ -443,7 +443,7 @@ Piecewise<T> portion(const Piecewise<T> &pw, double from, double to) {
         ret.push(elem_portion(pw, i, from, to), to);
         return ret;
     }
-    ret.push_seg(portion( pw[i], pw.segT(from, i), 1.0 ));
+    ret.push_seg(portion(pw[i], pw.segT(from, i), 1.0));
     i++;
     unsigned fi = pw.segN(to, i);
     ret.reserve(fi - i + 1);
@@ -452,7 +452,7 @@ Piecewise<T> portion(const Piecewise<T> &pw, double from, double to) {
     ret.segs.insert(ret.segs.end(), pw.segs.begin() + i, pw.segs.begin() + fi);  //copy segs
     ret.cuts.insert(ret.cuts.end(), pw.cuts.begin() + i, pw.cuts.begin() + fi + 1);  //and their cuts
 
-    ret.push_seg( portion(pw[fi], 0.0, pw.segT(to, fi)));
+    ret.push_seg(portion(pw[fi], 0.0, pw.segT(to, fi)));
     if(to != ret.cuts.back()) ret.push_cut(to);
     ret.invariants();
     return ret;

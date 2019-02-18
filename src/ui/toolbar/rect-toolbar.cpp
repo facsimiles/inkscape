@@ -82,7 +82,7 @@ RectToolbar::RectToolbar(SPDesktop *desktop)
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
     // rx/ry units menu: create
-    //tracker->addUnit( SP_UNIT_PERCENT, 0 );
+    //tracker->addUnit(SP_UNIT_PERCENT, 0);
     // fixme: add % meaning per cent of the width/height
     _tracker->setActiveUnit(unit_table.getUnit("px"));
     _mode_item->set_use_markup(true);

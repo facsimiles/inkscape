@@ -71,7 +71,7 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const gchar *
     if (!document || !origin || !dest) {
         return;
     }
-    if ( SP_IS_GROUP(origin) && SP_IS_GROUP(dest) && SP_GROUP(origin)->getItemCount() == SP_GROUP(dest)->getItemCount() ) {
+    if (SP_IS_GROUP(origin) && SP_IS_GROUP(dest) && SP_GROUP(origin)->getItemCount() == SP_GROUP(dest)->getItemCount()) {
         std::vector< SPObject * > childs = origin->childList(true);
         size_t index = 0;
         for (auto & child : childs) {
@@ -92,7 +92,7 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const gchar *
         std::vector<SPObject*> mask_list_dest = mask_dest->childList(true);
         if (mask_list.size() == mask_list_dest.size()) {
             size_t i = 0;
-            for ( std::vector<SPObject*>::const_iterator iter=mask_list.begin();iter!=mask_list.end();++iter) {
+            for (std::vector<SPObject*>::const_iterator iter=mask_list.begin();iter!=mask_list.end();++iter) {
                 SPObject * mask_data = *iter;
                 SPObject * mask_dest_data = mask_list_dest[i];
                 cloneAttrbutes(mask_data, mask_dest_data, attributes, style_attributes);
@@ -108,7 +108,7 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const gchar *
         std::vector<SPObject*> clippath_list_dest = clippath_dest->childList(true);
         if (clippath_list.size() == clippath_list_dest.size()) {
             size_t i = 0;
-            for ( std::vector<SPObject*>::const_iterator iter=clippath_list.begin();iter!=clippath_list.end();++iter) {
+            for (std::vector<SPObject*>::const_iterator iter=clippath_list.begin();iter!=clippath_list.end();++iter) {
                 SPObject * clippath_data = *iter;
                 SPObject * clippath_dest_data = clippath_list_dest[i];
                 cloneAttrbutes(clippath_data, clippath_dest_data, attributes, style_attributes);
@@ -121,7 +121,7 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const gchar *
     while (*iter != nullptr) {
         const char* attribute = (*iter);
         if (strlen(attribute)) {
-            if ( shape_dest && shape_origin && (std::strcmp(attribute, "d") == 0)) {
+            if (shape_dest && shape_origin && (std::strcmp(attribute, "d") == 0)) {
                 SPCurve *c = nullptr;
                 if (method == CLM_BSPLINESPIRO) {
                     c = shape_origin->getCurveForEdit();
@@ -208,10 +208,10 @@ LPECloneOriginal::doBeforeEffect (SPLPEItem const* lpeitem){
         }
         gchar * style_attributes_str = style_attributes.param_getSVGValue();
         Glib::ustring style_attr = "";
-        if (style_attr.size() && !Glib::ustring( style_attributes_str).size()) {
+        if (style_attr.size() && !Glib::ustring(style_attributes_str).size()) {
             style_attr.erase (style_attr.size()-1, 1);
         }
-        style_attr += Glib::ustring( style_attributes_str) + Glib::ustring(",");
+        style_attr += Glib::ustring(style_attributes_str) + Glib::ustring(",");
 
         SPItem * orig =  SP_ITEM(linkeditem.getObject());
         if(!orig) {
@@ -232,7 +232,7 @@ LPECloneOriginal::doBeforeEffect (SPLPEItem const* lpeitem){
 void
 LPECloneOriginal::start_listening()
 {
-    if ( !sp_lpe_item || listening ) {
+    if (!sp_lpe_item || listening) {
         return;
     }
     quit_listening();
@@ -250,7 +250,7 @@ LPECloneOriginal::quit_listening()
 void
 LPECloneOriginal::modified(SPObject */*obj*/, guint /*flags*/)
 {
-    if ( !sp_lpe_item || is_updating) {
+    if (!sp_lpe_item || is_updating) {
         is_updating = false;
         return;
     }

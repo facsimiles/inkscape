@@ -45,22 +45,22 @@ GdkpixbufInput::open(Inkscape::Extension::Input *mod, char const *uri)
 {
     // Determine whether the image should be embedded
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    bool ask =            prefs->getBool(  "/dialogs/import/ask");
-    bool forcexdpi =      prefs->getBool(  "/dialogs/import/forcexdpi");
+    bool ask =            prefs->getBool("/dialogs/import/ask");
+    bool forcexdpi =      prefs->getBool("/dialogs/import/forcexdpi");
     Glib::ustring link  = prefs->getString("/dialogs/import/link");
     Glib::ustring scale = prefs->getString("/dialogs/import/scale");
 
     // If we asked about import preferences, get values and update preferences.
-    if( ask ) {
+    if(ask) {
         ask       = !mod->get_param_bool("do_not_ask");
         forcexdpi = (mod->get_param_optiongroup("dpi") == "from_default");
         link      =  mod->get_param_optiongroup("link");
         scale     =  mod->get_param_optiongroup("scale");
 
-        prefs->setBool(  "/dialogs/import/ask",       ask      );
-        prefs->setBool(  "/dialogs/import/forcexdpi", forcexdpi);
-        prefs->setString("/dialogs/import/link",      link     );
-        prefs->setString("/dialogs/import/scale",     scale    );
+        prefs->setBool("/dialogs/import/ask",       ask);
+        prefs->setBool("/dialogs/import/forcexdpi", forcexdpi);
+        prefs->setString("/dialogs/import/link",      link);
+        prefs->setString("/dialogs/import/scale",     scale);
     }
 
     bool embed = (link == "embed");
@@ -116,11 +116,11 @@ GdkpixbufInput::open(Inkscape::Extension::Input *mod, char const *uri)
         image_node->setAttribute("preserveAspectRatio", "none");
 
         // This is actually 'image-rendering'.
-        if( scale.compare( "auto" ) != 0 ) {
+        if(scale.compare("auto") != 0) {
             SPCSSAttr *css = sp_repr_css_attr_new();
             sp_repr_css_set_property(css, "image-rendering", scale.c_str());
             sp_repr_css_set(image_node, css, "style");
-            sp_repr_css_attr_unref( css );
+            sp_repr_css_attr_unref(css);
         }
 
         if (embed) {
@@ -226,7 +226,7 @@ GdkpixbufInput::init()
                 name,
                 extensions[i],
                 description
-                );
+);
 
             Inkscape::Extension::build_from_mem(xmlString, new GdkpixbufInput());
             g_free(xmlString);

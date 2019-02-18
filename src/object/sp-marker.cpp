@@ -76,14 +76,14 @@ SPMarker::~SPMarker() = default;
  * \see SPObject::build()
  */
 void SPMarker::build(SPDocument *document, Inkscape::XML::Node *repr) {
-    this->readAttr( "markerUnits" );
-    this->readAttr( "refX" );
-    this->readAttr( "refY" );
-    this->readAttr( "markerWidth" );
-    this->readAttr( "markerHeight" );
-    this->readAttr( "orient" );
-    this->readAttr( "viewBox" );
-    this->readAttr( "preserveAspectRatio" );
+    this->readAttr("markerUnits");
+    this->readAttr("refX");
+    this->readAttr("refY");
+    this->readAttr("markerWidth");
+    this->readAttr("markerHeight");
+    this->readAttr("orient");
+    this->readAttr("viewBox");
+    this->readAttr("preserveAspectRatio");
 
     SPGroup::build(document, repr);
 }
@@ -105,7 +105,7 @@ void SPMarker::release() {
 
     std::map<unsigned int, SPMarkerView>::iterator it;
     for (it = views_map.begin(); it != views_map.end(); ++it) {
-        SPGroup::hide( it->first );
+        SPGroup::hide(it->first);
     }
     views_map.clear();
 
@@ -176,12 +176,12 @@ void SPMarker::set(SPAttributeEnum key, const gchar* value) {
 		break;
 
 	case SP_ATTR_VIEWBOX:
-            set_viewBox( value );
+            set_viewBox(value);
             this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
             break;
 
 	case SP_ATTR_PRESERVEASPECTRATIO:
-            set_preserveAspectRatio( value );
+            set_preserveAspectRatio(value);
             this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
             break;
 
@@ -205,12 +205,12 @@ void SPMarker::update(SPCtx *ctx, guint flags) {
     // Set up viewport
     ictx.viewport = Geom::Rect::from_xywh(0, 0, this->markerWidth.computed, this->markerHeight.computed);
 
-    SPItemCtx rctx = get_rctx( &ictx );
+    SPItemCtx rctx = get_rctx(&ictx);
 
     // Shift according to refX, refY
-    Geom::Point ref( this->refX.computed, this->refY.computed );
+    Geom::Point ref(this->refX.computed, this->refY.computed);
     ref *= c2p;
-    this->c2p = this->c2p * Geom::Translate( -ref );
+    this->c2p = this->c2p * Geom::Translate(-ref);
 
     // And invoke parent method
     SPGroup::update((SPCtx *) &rctx, flags);
@@ -331,7 +331,7 @@ sp_marker_show_dimension (SPMarker *marker, unsigned int key, unsigned int size)
 {
     std::map<unsigned int, SPMarkerView>::iterator it = marker->views_map.find(key);
     if (it != marker->views_map.end()) {
-        if (it->second.items.size() != size ) {
+        if (it->second.items.size() != size) {
             // Need to change size of vector! (We should not really need to do this.)
             marker->hide(key);
             it->second.items.clear();
@@ -352,7 +352,7 @@ sp_marker_show_dimension (SPMarker *marker, unsigned int key, unsigned int size)
  * show and transform a child item in the drawing for all views with the given key.
  */
 Inkscape::DrawingItem *
-sp_marker_show_instance ( SPMarker *marker, Inkscape::DrawingItem *parent,
+sp_marker_show_instance (SPMarker *marker, Inkscape::DrawingItem *parent,
                           unsigned int key, unsigned int pos,
                           Geom::Affine const &base, float linewidth)
 {
@@ -370,7 +370,7 @@ sp_marker_show_instance ( SPMarker *marker, Inkscape::DrawingItem *parent,
     }
 
     SPMarkerView *view = &(it->second);
-    if (pos >= view->items.size() ) {
+    if (pos >= view->items.size()) {
         // Position index too large, doesn't exist.
         return nullptr;
     }
@@ -394,7 +394,7 @@ sp_marker_show_instance ( SPMarker *marker, Inkscape::DrawingItem *parent,
         if (marker->orient_mode == MARKER_ORIENT_AUTO) {
             m = base;
         } else if (marker->orient_mode == MARKER_ORIENT_AUTO_START_REVERSE) {
-            // m = Geom::Rotate::from_degrees( 180.0 ) * base;
+            // m = Geom::Rotate::from_degrees(180.0) * base;
             // Rotating is done at rendering time if necessary
             m = base;
         } else {

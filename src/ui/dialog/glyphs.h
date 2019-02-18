@@ -59,7 +59,7 @@ private:
     void glyphSelectionChanged();
     void setTargetDesktop(SPDesktop *desktop);
     void selectionModifiedCB(guint flags);
-    void readSelection( bool updateStyle, bool updateContent );
+    void readSelection(bool updateStyle, bool updateContent);
     void calcCanInsert();
     void insertText();
 

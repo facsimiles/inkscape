@@ -42,7 +42,7 @@ ErrorFileNotice::ErrorFileNotice () :
             Gtk::MESSAGE_WARNING,  /* dialog type */
             Gtk::BUTTONS_OK,       /* buttons */
             true                   /* modal */
-        )
+)
 
 {
     // \FIXME change this
@@ -68,7 +68,7 @@ ErrorFileNotice::ErrorFileNotice () :
 
     Inkscape::UI::Dialogs::ExtensionsPanel* extens = new Inkscape::UI::Dialogs::ExtensionsPanel();
     extens->set_full(false);
-    vbox->pack_start( *extens, true, true );
+    vbox->pack_start(*extens, true, true);
     extens->show();
 
     return;

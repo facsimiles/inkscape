@@ -143,7 +143,7 @@ void ConstrainedMajorizationLayout::setStickyNodes(
         const double stickyWeight, 
         valarray<double> const & startX,
         valarray<double> const & startY) {
-    COLA_ASSERT( startX.size()==n && startY.size()==n);
+    COLA_ASSERT(startX.size()==n && startY.size()==n);
     stickyNodes = true;
     // not really constrained but we want to use GP solver rather than 
     // ConjugateGradient

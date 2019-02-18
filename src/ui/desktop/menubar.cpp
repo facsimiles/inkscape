@@ -144,7 +144,7 @@ build_menu_item_from_verb(SPAction* action,
 
     menuitem->signal_activate().connect(
         sigc::bind<Gtk::MenuItem*, SPAction*>(sigc::ptr_fun(&item_activate), menuitem, action));
-    menuitem->signal_select().connect(  sigc::bind<SPAction*>(sigc::ptr_fun(&select_action),   action));
+    menuitem->signal_select().connect(sigc::bind<SPAction*>(sigc::ptr_fun(&select_action),   action));
     menuitem->signal_deselect().connect(sigc::bind<SPAction*>(sigc::ptr_fun(&deselect_action), action));
 
     action->signal_set_sensitive.connect(
@@ -254,7 +254,7 @@ build_menu_check_item_from_verb(SPAction* action)
 
     menuitem->signal_toggled().connect(
       sigc::bind<Gtk::CheckMenuItem*, SPAction*>(sigc::ptr_fun(&item_activate), menuitem, action)); 
-    menuitem->signal_select().connect(  sigc::bind<SPAction*>(sigc::ptr_fun(&select_action),   action));
+    menuitem->signal_select().connect(sigc::bind<SPAction*>(sigc::ptr_fun(&select_action),   action));
     menuitem->signal_deselect().connect(sigc::bind<SPAction*>(sigc::ptr_fun(&deselect_action), action));
 
     return menuitem;
@@ -348,7 +348,7 @@ build_menu(Gtk::MenuShell* menu, Inkscape::XML::Node* xml, Inkscape::UI::View::V
     static bool show_icon = false;
     if (show_icon_pref ==  1) {
         show_icon = true;
-    } else if ( show_icon_pref == -1) {
+    } else if (show_icon_pref == -1) {
         show_icon = false;
     }
 
@@ -385,7 +385,7 @@ build_menu(Gtk::MenuShell* menu, Inkscape::XML::Node* xml, Inkscape::UI::View::V
                 if (menu_ptr->attribute("_name") != nullptr) {
                     menuitem = Gtk::manage(new Gtk::MenuItem(_(menu_ptr->attribute("_name")), true));
                 } else {
-                    menuitem = Gtk::manage(new Gtk::MenuItem(  menu_ptr->attribute("name"),   true));
+                    menuitem = Gtk::manage(new Gtk::MenuItem(menu_ptr->attribute("name"),   true));
                 }
                 Gtk::Menu* submenu = Gtk::manage(new Gtk::Menu());
                 build_menu(submenu, menu_ptr->firstChild(), view);
@@ -479,7 +479,7 @@ build_menu(Gtk::MenuShell* menu, Inkscape::XML::Node* xml, Inkscape::UI::View::V
             // Comments and items handled elsewhere.
             if (name == "comment"      ||
                 name == "filters-list" ||
-                name == "effects-list" ) {
+                name == "effects-list") {
                 continue;
             }
 

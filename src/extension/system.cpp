@@ -107,7 +107,7 @@ SPDocument *open(Extension *key, gchar const *filename)
             }
         } else if(strlen(imod->get_id()) > 27) {
             id = Glib::ustring(imod->get_id(), 28);
-            if (!ask && id.compare( "org.inkscape.input.gdkpixbuf") == 0) {
+            if (!ask && id.compare("org.inkscape.input.gdkpixbuf") == 0) {
                 show = false;
                 imod->set_gui(false);
             }
@@ -130,7 +130,7 @@ SPDocument *open(Extension *key, gchar const *filename)
     }
 
     if (last_chance_svg) {
-        if ( INKSCAPE.use_gui() ) {
+        if (INKSCAPE.use_gui()) {
             sp_ui_error_dialog(_("Format autodetect failed. The file is being opened as SVG."));
         } else {
             g_warning("%s", _("Format autodetect failed. The file is being opened as SVG."));
@@ -339,7 +339,7 @@ save(Extension *key, SPDocument *doc, gchar const *filename, bool setextension, 
     }
 
     // If it is an unofficial save, set the modified attributes back to what they were.
-    if ( !official) {
+    if (!official) {
         {
             DocumentUndo::ScopedInsensitive _no_undo(doc);
             store_file_extension_in_prefs (saved_output_extension, save_method);
@@ -492,8 +492,8 @@ build_from_reprdoc(Inkscape::XML::Document *doc, Implementation::Implementation 
             }
             case MODULE_PLUGIN: {
                 Inkscape::Extension::Loader loader = Inkscape::Extension::Loader();
-                if( baseDir != nullptr){
-                    loader.set_base_directory ( *baseDir );
+                if(baseDir != nullptr){
+                    loader.set_base_directory (*baseDir);
                 }
                 imp = loader.load_implementation(doc);
                 break;

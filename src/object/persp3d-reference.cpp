@@ -52,7 +52,7 @@ Persp3DReference::unlink()
 void
 Persp3DReference::start_listening(Persp3D* to)
 {
-    if ( to == nullptr ) {
+    if (to == nullptr) {
         return;
     }
     persp = to;
@@ -64,7 +64,7 @@ Persp3DReference::start_listening(Persp3D* to)
 void
 Persp3DReference::quit_listening()
 {
-    if ( persp == nullptr ) {
+    if (persp == nullptr) {
         return;
     }
     _modified_connection.disconnect();
@@ -78,7 +78,7 @@ persp3dreference_href_changed(SPObject */*old_ref*/, SPObject */*ref*/, Persp3DR
 {
     persp3dref->quit_listening();
     Persp3D *refobj = SP_PERSP3D(persp3dref->getObject());
-    if ( refobj ) {
+    if (refobj) {
         persp3dref->start_listening(refobj);
     }
 

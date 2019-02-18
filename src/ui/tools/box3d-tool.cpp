@@ -141,7 +141,7 @@ void Box3dTool::setup() {
     this->sel_changed_connection.disconnect();
     this->sel_changed_connection = this->desktop->getSelection()->connectChanged(
     	sigc::mem_fun(this, &Box3dTool::selection_changed)
-    );
+);
 
     this->_vpdrag = new Box3D::VPDrag(this->desktop->getDocument());
 
@@ -161,7 +161,7 @@ bool Box3dTool::item_handler(SPItem* item, GdkEvent* event) {
 
     switch (event->type) {
     case GDK_BUTTON_PRESS:
-        if ( event->button.button == 1 && !this->space_panning) {
+        if (event->button.button == 1 && !this->space_panning) {
             Inkscape::setup_for_drag_start(desktop, this, event);
             //ret = TRUE;
         }
@@ -195,7 +195,7 @@ bool Box3dTool::root_handler(GdkEvent* event) {
     gint ret = FALSE;
     switch (event->type) {
     case GDK_BUTTON_PRESS:
-        if ( event->button.button == 1  && !this->space_panning) {
+        if (event->button.button == 1  && !this->space_panning) {
             Geom::Point const button_w(event->button.x, event->button.y);
             Geom::Point button_dt(desktop->w2d(button_w));
 
@@ -233,20 +233,20 @@ bool Box3dTool::root_handler(GdkEvent* event) {
             this->drag_ptC_proj[Proj::Z] = 0.25;
 
             sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
-                                ( GDK_KEY_PRESS_MASK |
+                                (GDK_KEY_PRESS_MASK |
                                   GDK_BUTTON_RELEASE_MASK       |
                                   GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK       |
-                                  GDK_BUTTON_PRESS_MASK ),
+                                  GDK_BUTTON_PRESS_MASK),
                                 nullptr, event->button.time);
             ret = TRUE;
         }
         break;
 
     case GDK_MOTION_NOTIFY:
-        if (dragging && ( event->motion.state & GDK_BUTTON1_MASK )  && !this->space_panning) {
-            if ( this->within_tolerance
-                 && ( abs( (gint) event->motion.x - this->xp ) < this->tolerance )
-                 && ( abs( (gint) event->motion.y - this->yp ) < this->tolerance ) ) {
+        if (dragging && (event->motion.state & GDK_BUTTON1_MASK)  && !this->space_panning) {
+            if (this->within_tolerance
+                 && (abs((gint) event->motion.x - this->xp) < this->tolerance)
+                 && (abs((gint) event->motion.y - this->yp) < this->tolerance)) {
                 break; // do not drag if we're within tolerance from origin
             }
             // Once the user has moved farther than tolerance from the original location

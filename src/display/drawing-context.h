@@ -71,18 +71,18 @@ public:
     }
     // Used in drawing-text.cpp to overwrite glyphs, which have the opposite path rotation as a regular rect
     void revrectangle(Geom::Rect const &r) {
-        cairo_move_to (    _ct, r.left(), r.top()      );
-        cairo_rel_line_to (_ct, 0,        r.height()   );
-        cairo_rel_line_to (_ct,           r.width(), 0 );
-        cairo_rel_line_to (_ct, 0,       -r.height()   );
-        cairo_close_path ( _ct);
+        cairo_move_to (_ct, r.left(), r.top());
+        cairo_rel_line_to (_ct, 0,        r.height());
+        cairo_rel_line_to (_ct,           r.width(), 0);
+        cairo_rel_line_to (_ct, 0,       -r.height());
+        cairo_close_path (_ct);
     }
     void revrectangle(Geom::IntRect const &r) {
-        cairo_move_to (    _ct, r.left(), r.top()      );
-        cairo_rel_line_to (_ct, 0,        r.height()   );
-        cairo_rel_line_to (_ct,           r.width(), 0 );
-        cairo_rel_line_to (_ct, 0,       -r.height()   );
-        cairo_close_path ( _ct);
+        cairo_move_to (_ct, r.left(), r.top());
+        cairo_rel_line_to (_ct, 0,        r.height());
+        cairo_rel_line_to (_ct,           r.width(), 0);
+        cairo_rel_line_to (_ct, 0,       -r.height());
+        cairo_close_path (_ct);
     }
     void newPath() { cairo_new_path(_ct); }
     void newSubpath() { cairo_new_sub_path(_ct); }

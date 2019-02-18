@@ -34,7 +34,7 @@ ComboToolItem*
 ComboToolItem::create(const Glib::ustring &group_label,
                       const Glib::ustring &tooltip,
                       const Glib::ustring &stock_id,
-                      Glib::RefPtr<Gtk::ListStore> store )
+                      Glib::RefPtr<Gtk::ListStore> store)
 {
     return new ComboToolItem(group_label, tooltip, stock_id, store);
 }
@@ -42,15 +42,15 @@ ComboToolItem::create(const Glib::ustring &group_label,
 ComboToolItem::ComboToolItem(Glib::ustring group_label,
                              Glib::ustring tooltip,
                              Glib::ustring stock_id,
-                             Glib::RefPtr<Gtk::ListStore> store ) :
-    _group_label(std::move( group_label )),
-    _tooltip(std::move( tooltip )),
-    _stock_id(std::move( stock_id )),
+                             Glib::RefPtr<Gtk::ListStore> store) :
+    _group_label(std::move(group_label)),
+    _tooltip(std::move(tooltip)),
+    _stock_id(std::move(stock_id)),
     _store (std::move(store)),
     _use_label (true),
     _use_icon  (false),
     _use_pixbuf (true),
-    _icon_size ( Gtk::ICON_SIZE_LARGE_TOOLBAR ),
+    _icon_size (Gtk::ICON_SIZE_LARGE_TOOLBAR),
     _combobox (nullptr),
     _menuitem (nullptr)
 {
@@ -58,8 +58,8 @@ ComboToolItem::ComboToolItem(Glib::ustring group_label,
     add(*box);
 
     if (_use_group_label) {
-        Gtk::Label *group_label = Gtk::manage (new Gtk::Label( _group_label + ": " ));
-        box->add( *group_label );
+        Gtk::Label *group_label = Gtk::manage (new Gtk::Label(_group_label + ": "));
+        box->add(*group_label);
     }
 
     // Create combobox
@@ -71,12 +71,12 @@ ComboToolItem::ComboToolItem(Glib::ustring group_label,
         Gtk::CellRendererPixbuf *renderer = new Gtk::CellRendererPixbuf;
         renderer->set_property ("stock_size", Gtk::ICON_SIZE_LARGE_TOOLBAR);
         _combobox->pack_start (*renderer, false);
-        _combobox->add_attribute (*renderer, "icon_name", columns.col_icon   );
+        _combobox->add_attribute (*renderer, "icon_name", columns.col_icon);
     } else if (_use_pixbuf) {
         Gtk::CellRendererPixbuf *renderer = new Gtk::CellRendererPixbuf;
         //renderer->set_property ("stock_size", Gtk::ICON_SIZE_LARGE_TOOLBAR);
         _combobox->pack_start (*renderer, false);
-        _combobox->add_attribute (*renderer, "pixbuf", columns.col_pixbuf   );
+        _combobox->add_attribute (*renderer, "pixbuf", columns.col_pixbuf);
     }
 
     if (_use_label) {
@@ -148,19 +148,19 @@ ComboToolItem::on_create_menu_proxy()
 
             Gtk::RadioMenuItem* button = Gtk::manage(new Gtk::RadioMenuItem(group));
             button->set_label (label);
-            button->set_tooltip_text( tooltip );
-            button->set_sensitive( sensitive );
+            button->set_tooltip_text(tooltip);
+            button->set_sensitive(sensitive);
 
-            button->signal_toggled().connect( sigc::bind<0>(
+            button->signal_toggled().connect(sigc::bind<0>(
               sigc::mem_fun(*this, &ComboToolItem::on_toggled_radiomenu), index++)
-                );
+);
 
             menu->add (*button);
 
-            _radiomenuitems.push_back( button );
+            _radiomenuitems.push_back(button);
         }
 
-        if ( _active < _radiomenuitems.size()) {
+        if (_active < _radiomenuitems.size()) {
             _radiomenuitems[ _active ]->set_active();
         }
    
@@ -177,7 +177,7 @@ ComboToolItem::on_changed_combobox() {
 
     int row = _combobox->get_active_row_number();
     if (row < 0) row = 0;  // Happens when Gtk::ListStore reconstructed
-    set_active( row );
+    set_active(row);
     _changed.emit (_active);
     _changed_after.emit (_active);
 }
@@ -187,8 +187,8 @@ ComboToolItem::on_toggled_radiomenu(int n) {
 
     // toggled emitted twice, first for button toggled off, second for button toggled on.
     // We want to react only to the button turned on.
-    if ( n < _radiomenuitems.size() &&_radiomenuitems[ n ]->get_active()) {
-        set_active ( n );
+    if (n < _radiomenuitems.size() &&_radiomenuitems[ n ]->get_active()) {
+        set_active (n);
         _changed.emit (_active);
         _changed_after.emit (_active);
     }

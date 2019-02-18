@@ -371,7 +371,7 @@ Effect::EffectVerb::make_action (Inkscape::ActionContext const & context)
 
 /** \brief  Decode the verb code and take appropriate action */
 void
-Effect::EffectVerb::perform( SPAction *action, void * data )
+Effect::EffectVerb::perform(SPAction *action, void * data)
 {
     g_return_if_fail(ensure_desktop_valid(action));
     Inkscape::UI::View::View * current_view = sp_action_get_view(action);

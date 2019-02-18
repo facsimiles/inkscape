@@ -75,7 +75,7 @@ bool Point::operator!=(const Point& rhs) const
 
 bool Point::equals(const Point& rhs, double epsilon) const
 {
-    if ( (fabs(x - rhs.x) < epsilon) && (fabs(y - rhs.y) < epsilon) )
+    if ((fabs(x - rhs.x) < epsilon) && (fabs(y - rhs.y) < epsilon))
     {
         return true;
     }
@@ -541,7 +541,7 @@ Polygon Polygon::simplify(void) const
     if (it != simplified.ps.end()) ++it;
 
     // Combine collinear line segments into single segments:
-    for (size_t j = 2; j < simplified.size(); )
+    for (size_t j = 2; j < simplified.size();)
     {
         if (vecDir(simplified.ps[j - 2], simplified.ps[j - 1], 
                 simplified.ps[j]) == 0)

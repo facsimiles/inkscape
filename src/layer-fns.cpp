@@ -87,7 +87,7 @@ static SPObject *last_elder_layer(SPObject *root, SPObject *layer) {
     using Inkscape::Algorithms::find_last_if;
     SPObject *result = nullptr;
 
-    while ( layer != root ) {
+    while (layer != root) {
         SPObject *sibling(previous_sibling_layer(layer));
         if (sibling) {
             result = sibling;
@@ -115,7 +115,7 @@ SPObject *next_layer(SPObject *root, SPObject *layer) {
     SPObject *sibling = next_sibling_layer(layer);
     if (sibling) {
         result = first_descendant_layer(sibling);
-    } else if ( layer->parent != root ) {
+    } else if (layer->parent != root) {
         result = layer->parent;
     }
 
@@ -137,7 +137,7 @@ SPObject *previous_layer(SPObject *root, SPObject *layer) {
     SPObject *child = last_child_layer(layer);
     if (child) {
         result = child;
-    } else if ( layer != root ) {
+    } else if (layer != root) {
         SPObject *sibling = previous_sibling_layer(layer);
         if (sibling) {
             result = sibling;
@@ -173,21 +173,21 @@ SPObject *create_layer(SPObject *root, SPObject *layer, LayerRelativePosition po
     repr->setAttribute("id", id);
     g_free(id);
 
-    if ( LPOS_CHILD == position ) {
+    if (LPOS_CHILD == position) {
         root = layer;
         SPObject *child_layer = Inkscape::last_child_layer(layer);
-        if ( nullptr != child_layer ) {
+        if (nullptr != child_layer) {
             layer = child_layer;
         }
     }
 
-    if ( root == layer ) {
+    if (root == layer) {
         root->getRepr()->appendChild(repr);
     } else {
         Inkscape::XML::Node *layer_repr = layer->getRepr();
         layer_repr->parent()->addChild(repr, layer_repr);
 
-        if ( LPOS_BELOW == position ) {
+        if (LPOS_BELOW == position) {
             SP_ITEM(document->getObjectByRepr(repr))->lowerOne();
         }
     }

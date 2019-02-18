@@ -56,7 +56,7 @@ void SPGenericEllipse::build(SPDocument *document, Inkscape::XML::Node *repr)
     // std::cout << "SPGenericEllipse::build: Entrance: " << this->type
     //           << "  ("  << g_quark_to_string(repr->code()) << ")" << std::endl;
 
-    switch ( type ) {
+    switch (type) {
         case SP_GENERIC_ELLIPSE_ARC:
             this->readAttr("sodipodi:cx");
             this->readAttr("sodipodi:cy");
@@ -109,38 +109,38 @@ void SPGenericEllipse::set(SPAttributeEnum key, gchar const *value)
     switch (key) {
     case SP_ATTR_CX:
     case SP_ATTR_SODIPODI_CX:
-        if( t.read(value) ) cx = t;
-        cx.update( em, ex, w );
+        if(t.read(value)) cx = t;
+        cx.update(em, ex, w);
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         break;
 
     case SP_ATTR_CY:
     case SP_ATTR_SODIPODI_CY:
-        if( t.read(value) ) cy = t;
-        cy.update( em, ex, h );
+        if(t.read(value)) cy = t;
+        cy.update(em, ex, h);
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         break;
 
     case SP_ATTR_RX:
     case SP_ATTR_SODIPODI_RX:
-        if( t.read(value) && t.value > 0.0 ) rx = t;
-        rx.update( em, ex, w );
+        if(t.read(value) && t.value > 0.0) rx = t;
+        rx.update(em, ex, w);
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         break;
 
     case SP_ATTR_RY:
     case SP_ATTR_SODIPODI_RY:
-        if( t.read(value) && t.value > 0.0 ) ry = t;
-        ry.update( em, ex, h );
+        if(t.read(value) && t.value > 0.0) ry = t;
+        ry.update(em, ex, h);
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         break;
 
     case SP_ATTR_R:
-        if( t.read(value) && t.value > 0.0 ) {
+        if(t.read(value) && t.value > 0.0) {
             this->ry = this->rx = t;
         }
-        rx.update( em, ex, d );
-        ry.update( em, ex, d );
+        rx.update(em, ex, d);
+        ry.update(em, ex, d);
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         break;
 
@@ -222,9 +222,9 @@ Inkscape::XML::Node *SPGenericEllipse::write(Inkscape::XML::Document *xml_doc, I
     //           << ")" << std::endl;
 
     GenericEllipseType new_type = SP_GENERIC_ELLIPSE_UNDEFINED;
-    if (_isSlice() || hasPathEffect() ) {
+    if (_isSlice() || hasPathEffect()) {
         new_type = SP_GENERIC_ELLIPSE_ARC;
-    } else if ( rx.computed == ry.computed ) {
+    } else if (rx.computed == ry.computed) {
         new_type = SP_GENERIC_ELLIPSE_CIRCLE;
     } else {
         new_type = SP_GENERIC_ELLIPSE_ELLIPSE;
@@ -233,7 +233,7 @@ Inkscape::XML::Node *SPGenericEllipse::write(Inkscape::XML::Document *xml_doc, I
 
     if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
 
-        switch ( new_type ) {
+        switch (new_type) {
 
             case SP_GENERIC_ELLIPSE_ARC:
                 repr = xml_doc->createElement("svg:path");
@@ -250,8 +250,8 @@ Inkscape::XML::Node *SPGenericEllipse::write(Inkscape::XML::Document *xml_doc, I
         }
     }
 
-    if( type != new_type ) {
-        switch( new_type ) {
+    if(type != new_type) {
+        switch(new_type) {
             case SP_GENERIC_ELLIPSE_ARC:
                 repr->setCodeUnsafe(g_quark_from_string("svg:path"));
                 break;
@@ -271,21 +271,21 @@ Inkscape::XML::Node *SPGenericEllipse::write(Inkscape::XML::Document *xml_doc, I
         // to trigger a refresh.
     }
 
-    // std::cout << "  type: " << g_quark_to_string( repr->code() ) << std::endl;
+    // std::cout << "  type: " << g_quark_to_string(repr->code()) << std::endl;
     // std::cout << "  cx: " << cx.write() << " " << cx.computed
     //           << "  cy: " << cy.write() << " " << cy.computed
     //           << "  rx: " << rx.write() << " " << rx.computed
     //           << "  ry: " << ry.write() << " " << ry.computed << std::endl;
 
-    switch ( type ) {
+    switch (type) {
         case SP_GENERIC_ELLIPSE_UNDEFINED:
         case SP_GENERIC_ELLIPSE_ARC:
 
-            repr->setAttribute("cx", nullptr );
-            repr->setAttribute("cy", nullptr );
-            repr->setAttribute("rx", nullptr );
-            repr->setAttribute("ry", nullptr );
-            repr->setAttribute("r", nullptr );
+            repr->setAttribute("cx", nullptr);
+            repr->setAttribute("cy", nullptr);
+            repr->setAttribute("rx", nullptr);
+            repr->setAttribute("ry", nullptr);
+            repr->setAttribute("r", nullptr);
 
             if (flags & SP_OBJECT_WRITE_EXT) {
 
@@ -300,7 +300,7 @@ Inkscape::XML::Node *SPGenericEllipse::write(Inkscape::XML::Document *xml_doc, I
                     sp_repr_set_svg_double(repr, "sodipodi:start", start);
                     sp_repr_set_svg_double(repr, "sodipodi:end", end);
 
-                    switch ( arc_type ) {
+                    switch (arc_type) {
                         case SP_GENERIC_ELLIPSE_ARC_TYPE_SLICE:
                             repr->setAttribute("sodipodi:open", nullptr); // For backwards compat.
                             repr->setAttribute("sodipodi:arc-type", "slice");
@@ -333,18 +333,18 @@ Inkscape::XML::Node *SPGenericEllipse::write(Inkscape::XML::Document *xml_doc, I
             sp_repr_set_svg_length(repr, "cx", cx);
             sp_repr_set_svg_length(repr, "cy", cy);
             sp_repr_set_svg_length(repr, "r",  rx);
-            repr->setAttribute("rx", nullptr );
-            repr->setAttribute("ry", nullptr );
-            repr->setAttribute("sodipodi:cx", nullptr );
-            repr->setAttribute("sodipodi:cy", nullptr );
-            repr->setAttribute("sodipodi:rx", nullptr );
-            repr->setAttribute("sodipodi:ry", nullptr );
-            repr->setAttribute("sodipodi:end", nullptr );
-            repr->setAttribute("sodipodi:start", nullptr );
-            repr->setAttribute("sodipodi:open", nullptr );
+            repr->setAttribute("rx", nullptr);
+            repr->setAttribute("ry", nullptr);
+            repr->setAttribute("sodipodi:cx", nullptr);
+            repr->setAttribute("sodipodi:cy", nullptr);
+            repr->setAttribute("sodipodi:rx", nullptr);
+            repr->setAttribute("sodipodi:ry", nullptr);
+            repr->setAttribute("sodipodi:end", nullptr);
+            repr->setAttribute("sodipodi:start", nullptr);
+            repr->setAttribute("sodipodi:open", nullptr);
             repr->setAttribute("sodipodi:arc-type", nullptr);
-            repr->setAttribute("sodipodi:type", nullptr );
-            repr->setAttribute("d", nullptr );
+            repr->setAttribute("sodipodi:type", nullptr);
+            repr->setAttribute("d", nullptr);
             break;
 
         case SP_GENERIC_ELLIPSE_ELLIPSE:
@@ -352,17 +352,17 @@ Inkscape::XML::Node *SPGenericEllipse::write(Inkscape::XML::Document *xml_doc, I
             sp_repr_set_svg_length(repr, "cy", cy);
             sp_repr_set_svg_length(repr, "rx", rx);
             sp_repr_set_svg_length(repr, "ry", ry);
-            repr->setAttribute("r", nullptr );
-            repr->setAttribute("sodipodi:cx", nullptr );
-            repr->setAttribute("sodipodi:cy", nullptr );
-            repr->setAttribute("sodipodi:rx", nullptr );
-            repr->setAttribute("sodipodi:ry", nullptr );
-            repr->setAttribute("sodipodi:end", nullptr );
-            repr->setAttribute("sodipodi:start", nullptr );
-            repr->setAttribute("sodipodi:open", nullptr );
+            repr->setAttribute("r", nullptr);
+            repr->setAttribute("sodipodi:cx", nullptr);
+            repr->setAttribute("sodipodi:cy", nullptr);
+            repr->setAttribute("sodipodi:rx", nullptr);
+            repr->setAttribute("sodipodi:ry", nullptr);
+            repr->setAttribute("sodipodi:end", nullptr);
+            repr->setAttribute("sodipodi:start", nullptr);
+            repr->setAttribute("sodipodi:open", nullptr);
             repr->setAttribute("sodipodi:arc-type", nullptr);
-            repr->setAttribute("sodipodi:type", nullptr );
-            repr->setAttribute("d", nullptr );
+            repr->setAttribute("sodipodi:type", nullptr);
+            repr->setAttribute("d", nullptr);
             break;
 
         default:
@@ -379,12 +379,12 @@ Inkscape::XML::Node *SPGenericEllipse::write(Inkscape::XML::Document *xml_doc, I
 const char *SPGenericEllipse::displayName() const
 {
 
-    switch ( type ) {
+    switch (type) {
         case SP_GENERIC_ELLIPSE_UNDEFINED:
         case SP_GENERIC_ELLIPSE_ARC:
 
             if (_isSlice()) {
-                switch ( arc_type ) {
+                switch (arc_type) {
                     case SP_GENERIC_ELLIPSE_ARC_TYPE_SLICE:
                         return _("Slice");
                         break;
@@ -463,7 +463,7 @@ void SPGenericEllipse::set_shape()
         pb.lineTo(Geom::Point(0, 0));
     }
 
-    if ( !(this->arc_type == SP_GENERIC_ELLIPSE_ARC_TYPE_ARC) ) {
+    if (!(this->arc_type == SP_GENERIC_ELLIPSE_ARC_TYPE_ARC)) {
         pb.closePath();
     } else {
         pb.flush();
@@ -534,11 +534,11 @@ Geom::Affine SPGenericEllipse::set_transform(Geom::Affine const &xform)
     }
 
     if (this->rx._set) {
-        this->rx.scale( sw );
+        this->rx.scale(sw);
     }
 
     if (this->ry._set) {
-        this->ry.scale( sh );
+        this->ry.scale(sh);
     }
 
     /* Find start in item coords */

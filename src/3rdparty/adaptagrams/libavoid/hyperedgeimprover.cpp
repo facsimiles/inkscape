@@ -91,7 +91,7 @@ class HyperedgeShiftSegment : public ShiftSegment
             m_next_pos_lower = minSpaceLimit;
             m_next_pos_upper = maxSpaceLimit;
             m_balance_count = 0;
-            if ( isImmovable )
+            if (isImmovable)
             {
                 m_balance_count_set = true;
                 return;
@@ -127,7 +127,7 @@ class HyperedgeShiftSegment : public ShiftSegment
         }
         int balanceCount(void) const
         {
-            COLA_ASSERT( m_balance_count_set );
+            COLA_ASSERT(m_balance_count_set);
             return m_balance_count;
         }
         void adjustPosition(void)
@@ -187,12 +187,12 @@ class HyperedgeShiftSegment : public ShiftSegment
             const Point& highPt = highPoint();
             const Point& rhsLowPt = rhs->lowPoint();
             const Point& rhsHighPt = rhs->highPoint();
-            if ( (lowPt[altDim] <= rhsHighPt[altDim]) &&
+            if ((lowPt[altDim] <= rhsHighPt[altDim]) &&
                     (rhsLowPt[altDim] <= highPt[altDim]))
             {
                 // The segments overlap.
-                if ( (minSpaceLimit <= rhs->maxSpaceLimit) &&
-                        (rhs->minSpaceLimit <= maxSpaceLimit) )
+                if ((minSpaceLimit <= rhs->maxSpaceLimit) &&
+                        (rhs->minSpaceLimit <= maxSpaceLimit))
                 {
                     return true;
                 }
@@ -214,7 +214,7 @@ class HyperedgeShiftSegment : public ShiftSegment
             const Point& highPt = highPoint();
             const Point& otherLowPt = other->lowPoint();
             const Point& otherHighPt = other->highPoint();
-            if ( (lowPt[dimension] == otherLowPt[dimension]) &&
+            if ((lowPt[dimension] == otherLowPt[dimension]) &&
                     (lowPt[altDim] <= otherHighPt[altDim]) &&
                     (otherLowPt[altDim] <= highPt[altDim]))
             {
@@ -345,7 +345,7 @@ void HyperedgeImprover::mergeOverlappingSegments(ShiftSegmentList& segments)
         HyperedgeShiftSegment *edge1 =
                 static_cast<HyperedgeShiftSegment *> (*curr);
         for (ShiftSegmentList::iterator curr2 = segments.begin();
-                curr2 != segments.end(); )
+                curr2 != segments.end();)
         {
             if (curr2 == curr)
             {
@@ -412,7 +412,7 @@ void HyperedgeImprover::moveJunctionsAlongCommonEdges(void)
 {
     for (JunctionHyperedgeTreeNodeMap::iterator curr = 
             m_hyperedge_tree_junctions.begin(); 
-            curr != m_hyperedge_tree_junctions.end(); )
+            curr != m_hyperedge_tree_junctions.end();)
     {
         HyperedgeTreeNode *node = curr->second;
 
@@ -479,17 +479,17 @@ void HyperedgeImprover::removeZeroLengthEdges(HyperedgeTreeNode *self,
                     target = other;
                     source = self;
                 }
-                else if ( ! other->junction && self->junction)
+                else if (! other->junction && self->junction)
                 {
                     target = self;
                     source = other;
                 }
-                else if ( ! other->junction && ! self->junction)
+                else if (! other->junction && ! self->junction)
                 {
                     target = self;
                     source = other;
                 }
-                else if ( other->junction && self->junction && 
+                else if (other->junction && self->junction && 
                         m_can_make_major_changes)
                 {
                     // Only delete junctions if we can make major changes.
@@ -564,7 +564,7 @@ void HyperedgeImprover::nudgeHyperedgeSegments(size_t dimension,
         // Calculate the balance for each shift segment.
         ShiftSegmentList& segmentList = m_root_shift_segments[*curr];
         for (ShiftSegmentList::iterator currSeg = segmentList.begin();
-                currSeg != segmentList.end(); )
+                currSeg != segmentList.end();)
         {
             HyperedgeShiftSegment *segment =
                     static_cast<HyperedgeShiftSegment *> (*currSeg);
@@ -584,7 +584,7 @@ void HyperedgeImprover::nudgeHyperedgeSegments(size_t dimension,
             HyperedgeShiftSegment *segment =
                     static_cast<HyperedgeShiftSegment *> (*currSeg);
 
-            if ( ! segment->settled() )
+            if (! segment->settled())
             {
                 // The segment is not settled, so move it to the next
                 // ideal position and then merge it with overlapping
@@ -691,7 +691,7 @@ void HyperedgeImprover::outputHyperedgesToSVG(unsigned int pass,
         Obstacle *obstacle = *obstacleIt;
         bool isShape = (NULL != dynamic_cast<ShapeRef *> (obstacle));
 
-        if ( ! isShape )
+        if (! isShape)
         {
             // Don't output obstacles here, for now.
             ++obstacleIt;
@@ -804,7 +804,7 @@ void HyperedgeImprover::execute(bool canMakeMajorChanges)
             jBack = connRef->m_dst_connend->junction();
         }
 
-        if ( ! jFront && ! jBack )
+        if (! jFront && ! jBack)
         {
             ++connRefIt;
             continue;
@@ -820,7 +820,7 @@ void HyperedgeImprover::execute(bool canMakeMajorChanges)
 
         if (jFront)
         {
-            if ( ! seenFront)
+            if (! seenFront)
             {
                 nodeFront = new HyperedgeTreeNode();
                 nodeFront->point = jFront->position();
@@ -840,7 +840,7 @@ void HyperedgeImprover::execute(bool canMakeMajorChanges)
 
         if (jBack)
         {
-            if ( ! seenBack)
+            if (! seenBack)
             {
                 nodeBack = new HyperedgeTreeNode();
                 nodeBack->point = jBack->position();

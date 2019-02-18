@@ -21,7 +21,7 @@
 /// \todo un-inline this function
 inline bool is_straight_curve(Geom::Curve const & c)
 {
-    if( dynamic_cast<Geom::LineSegment const*>(&c) )
+    if(dynamic_cast<Geom::LineSegment const*>(&c))
     {
         return true;
     }

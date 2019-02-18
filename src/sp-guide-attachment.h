@@ -29,8 +29,8 @@ public:
     { }
 
     bool operator==(SPGuideAttachment const &o) const {
-        return ( ( item == o.item )
-                 && ( snappoint_ix == o.snappoint_ix ) );
+        return ((item == o.item)
+                 && (snappoint_ix == o.snappoint_ix));
     }
 
     bool operator!=(SPGuideAttachment const &o) const {

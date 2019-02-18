@@ -48,9 +48,9 @@ guint32 process(unsigned char r, unsigned char g, unsigned char b, unsigned char
      *  (hope this trick works :-) Johan)
      */
 
-    guint32 luminance = ( red_factor * (r << 3)
+    guint32 luminance = (red_factor * (r << 3)
                           + green_factor * (g << 3)
-                          + blue_factor * (b << 3) );
+                          + blue_factor * (b << 3));
     unsigned blue_plus_one = (luminance & 0x01) ? 1 : 0;
     unsigned red_plus_one = (luminance & 0x02) ? 1 : 0;
     unsigned green_plus_one = (luminance & 0x04) ? 1 : 0;
@@ -64,9 +64,9 @@ guint32 process(unsigned char r, unsigned char g, unsigned char b, unsigned char
 }
 
 unsigned char luminance(unsigned char r, unsigned char g, unsigned char b) {
-    guint32 luminance = ( red_factor * r
+    guint32 luminance = (red_factor * r
                           + green_factor * g
-                          + blue_factor * b );
+                          + blue_factor * b);
     if (luminance > 0xff) {
         luminance = 0xff;
     }

@@ -25,7 +25,7 @@ namespace Inkscape {
 
 namespace LivePathEffect {
 
-ToggleButtonParam::ToggleButtonParam( const Glib::ustring& label, const Glib::ustring& tip,
+ToggleButtonParam::ToggleButtonParam(const Glib::ustring& label, const Glib::ustring& tip,
                       const Glib::ustring& key, Inkscape::UI::Widget::Registry* wr,
                       Effect* effect, bool default_value, Glib::ustring  inactive_label,
                       char const * _icon_active, char const * _icon_inactive, 
@@ -94,7 +94,7 @@ ToggleButtonParam::param_newWidget()
                                                          *param_wr,
                                                          false,
                                                          param_effect->getRepr(),
-                                                         param_effect->getSPDoc()) );
+                                                         param_effect->getSPDoc()));
     auto box_button = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
     gtk_box_set_homogeneous(GTK_BOX(box_button), false);
     GtkWidget * label_button = gtk_label_new ("");
@@ -106,7 +106,7 @@ ToggleButtonParam::param_newWidget()
         }
     }
     gtk_widget_show(label_button);
-    if ( _icon_active ) {
+    if (_icon_active) {
         if(!_icon_inactive){
             _icon_inactive = _icon_active;
         }
@@ -159,7 +159,7 @@ ToggleButtonParam::refresh_button()
             lab->set_text(inactive_label.c_str());
         }
     }
-    if ( _icon_active ) {
+    if (_icon_active) {
         GdkPixbuf * icon_pixbuf = nullptr;
         Gtk::Widget *im = dynamic_cast<Gtk::Image *>(children[0]);
         if (!im) return;

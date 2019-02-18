@@ -126,7 +126,7 @@ MultiPathManipulator::MultiPathManipulator(PathSharedData &data, sigc::connectio
     _selection.signal_commit.connect(
         sigc::mem_fun(*this, &MultiPathManipulator::_commit));
     _selection.signal_selection_changed.connect(
-        sigc::hide( sigc::hide(
+        sigc::hide(sigc::hide(
             signal_coords_changed.make_slot())));
 }
 
@@ -138,7 +138,7 @@ MultiPathManipulator::~MultiPathManipulator()
 /** Remove empty manipulators. */
 void MultiPathManipulator::cleanup()
 {
-    for (MapType::iterator i = _mmap.begin(); i != _mmap.end(); ) {
+    for (MapType::iterator i = _mmap.begin(); i != _mmap.end();) {
         if (i->second->empty()) _mmap.erase(i++);
         else ++i;
     }
@@ -682,7 +682,7 @@ bool MultiPathManipulator::event(Inkscape::UI::Tools::ToolBase *event_context, G
                 // Hence xor
                 guint mode = prefs->getInt("/tools/freehand/pen/freehand-mode", 0);
 
-                //if the trace is bspline ( mode 2)
+                //if the trace is bspline (mode 2)
                 if(mode==2){
                     //  is this correct ?
                     if(del_preserves_shape ^ held_control(event->key)){

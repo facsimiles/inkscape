@@ -39,7 +39,7 @@
 #include "ui/widget/button.h"
 #include "widgets/toolbox.h"
 
-static GtkToolItem * sp_toolbox_button_item_new_from_verb_with_doubleclick( GtkWidget *t, GtkIconSize size, Inkscape::UI::Widget::ButtonType type,
+static GtkToolItem * sp_toolbox_button_item_new_from_verb_with_doubleclick(GtkWidget *t, GtkIconSize size, Inkscape::UI::Widget::ButtonType type,
                                                                      Inkscape::Verb *verb, Inkscape::Verb *doubleclick_verb,
                                                                      Inkscape::UI::View::View *view);
 
@@ -70,14 +70,14 @@ GtkToolItem * sp_toolbox_button_item_new_from_verb_with_doubleclick(GtkWidget *t
     if (shortcut != GDK_KEY_VoidSymbol) {
         gchar *key = sp_shortcut_get_label(shortcut);
         gchar *tip = g_strdup_printf ("%s (%s)", action->tip, key);
-        if ( t ) {
+        if (t) {
            gtk_toolbar_insert(GTK_TOOLBAR(t), b_toolitem->gobj(), -1);
            b->set_tooltip_text(tip);
         }
         g_free(tip);
         g_free(key);
     } else {
-        if ( t ) {
+        if (t) {
             gtk_toolbar_insert(GTK_TOOLBAR(t), b_toolitem->gobj(), -1);
             b->set_tooltip_text(action->tip);
         }
@@ -90,7 +90,7 @@ Glib::RefPtr<VerbAction> VerbAction::create(Inkscape::Verb* verb, Inkscape::Verb
 {
     Glib::RefPtr<VerbAction> result;
     SPAction *action = verb->get_action(Inkscape::ActionContext(view));
-    if ( action ) {
+    if (action) {
         //SPAction* action2 = verb2 ? verb2->get_action(Inkscape::ActionContext(view)) : 0;
         result = Glib::RefPtr<VerbAction>(new VerbAction(verb, verb2, view));
     }
@@ -122,15 +122,15 @@ Gtk::Widget* VerbAction::create_tool_item_vfunc()
 //     Gtk::Widget* widg = Gtk::Action::create_tool_item_vfunc();
     GtkIconSize toolboxSize = Inkscape::UI::ToolboxFactory::prefToSize("/toolbox/tools/small");
     GtkWidget* toolbox = nullptr;
-    auto holder = Glib::wrap(sp_toolbox_button_item_new_from_verb_with_doubleclick( toolbox, toolboxSize,
+    auto holder = Glib::wrap(sp_toolbox_button_item_new_from_verb_with_doubleclick(toolbox, toolboxSize,
                                                                                     Inkscape::UI::Widget::BUTTON_TYPE_TOGGLE,
                                                                                     verb,
                                                                                     verb2,
-                                                                                    view ));
+                                                                                    view));
 
     auto button_widget = static_cast<Inkscape::UI::Widget::Button *>(holder->get_child());
 
-    if ( active ) {
+    if (active) {
         button_widget->toggle_set_down(active);
     }
     button_widget->show_all();
@@ -169,9 +169,9 @@ void VerbAction::set_active(bool active)
 
 void VerbAction::on_activate()
 {
-    if ( verb ) {
+    if (verb) {
         SPAction *action = verb->get_action(Inkscape::ActionContext(view));
-        if ( action ) {
+        if (action) {
             sp_action_perform(action, nullptr);
         }
     }

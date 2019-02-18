@@ -59,7 +59,7 @@ void Layout::appendText(Glib::ustring const &text,
     sp_style_ref(style);
 
     new_source->text_length = 0;
-    for ( ; text_begin != text_end && text_begin != text.end() ; ++text_begin)
+    for (; text_begin != text_end && text_begin != text.end() ; ++text_begin)
         new_source->text_length++;        // save this because calculating the length of a UTF-8 string is expensive
 
     if (optional_attributes) {
@@ -125,7 +125,7 @@ void Layout::appendWrapShape(Shape const *shape, DisplayAlign display_align)
 
 Layout::Direction Layout::InputStreamTextSource::styleGetBlockProgression() const
 {
-    switch( style->writing_mode.computed ) {
+    switch(style->writing_mode.computed) {
         case SP_CSS_WRITING_MODE_LR_TB:
         case SP_CSS_WRITING_MODE_RL_TB:
             return TOP_TO_BOTTOM;
@@ -172,7 +172,7 @@ Layout::Alignment Layout::InputStreamTextSource::styleGetAlignment(Layout::Direc
     // to use we'll have to run up the style tree ourselves.
     SPStyle const *this_style = style;
 
-    for ( ; ; ) {
+    for (; ;) {
         // If both text-align and text-anchor are set at the same level, text-align takes
         // precedence because it is the most expressive.
         if (this_style->text_align.set) {
@@ -207,7 +207,7 @@ font_instance *Layout::InputStreamTextSource::styleGetFontInstance() const
 PangoFontDescription *Layout::InputStreamTextSource::styleGetFontDescription() const
 {
     // This use to be done by code here but it duplicated more complete code in FontFactory.cpp.
-    PangoFontDescription *descr = ink_font_description_from_style( style );
+    PangoFontDescription *descr = ink_font_description_from_style(style);
 
     // Font size not yet set
 #ifdef USE_PANGO_WIN32
@@ -215,7 +215,7 @@ PangoFontDescription *Layout::InputStreamTextSource::styleGetFontDescription() c
     // Damn Pango fudges the size, so we need to unfudge. See source of pango_win32_font_map_init()
     pango_font_description_set_size(descr,
         (int) ((font_factory::Default())->fontSize*PANGO_SCALE*72 / GetDeviceCaps(pango_win32_get_dc(),LOGPIXELSY))
-    );
+);
 
     // We unset stretch on Win32, because pango-win32 has no concept of it
     // (Windows doesn't really provide any useful field it could use).

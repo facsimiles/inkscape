@@ -71,16 +71,16 @@ void FilterComposite::render_cairo(FilterSlot &slot)
     // might be used as input to another primitive but it is likely that all the primitives in a given
     // filter use the same color interpolation space so we don't copy the input before converting.
     SPColorInterpolation ci_fp  = SP_CSS_COLOR_INTERPOLATION_AUTO;
-    if( _style ) {
+    if(_style) {
         ci_fp = (SPColorInterpolation)_style->color_interpolation_filters.computed;
     }
-    set_cairo_surface_ci( input1, ci_fp );
-    set_cairo_surface_ci( input2, ci_fp );
+    set_cairo_surface_ci(input1, ci_fp);
+    set_cairo_surface_ci(input2, ci_fp);
 
     cairo_surface_t *out = ink_cairo_surface_create_output(input1, input2);
-    set_cairo_surface_ci(out, ci_fp );
+    set_cairo_surface_ci(out, ci_fp);
 
-    Geom::Rect vp = filter_primitive_area( slot.get_units() );
+    Geom::Rect vp = filter_primitive_area(slot.get_units());
     slot.set_primitive_area(_output, vp); // Needed for tiling
 
     if (op == COMPOSITE_ARITHMETIC) {

@@ -386,22 +386,22 @@ char *profile_path(const char *filename)
         //       should we migrate to AppData\Local? Then we can simply use the portable g_get_user_config_dir()
         if (!prefdir) {
             ITEMIDLIST *pidl = 0;
-            if ( SHGetFolderLocation( NULL, CSIDL_APPDATA, NULL, 0, &pidl ) == S_OK ) {
+            if (SHGetFolderLocation(NULL, CSIDL_APPDATA, NULL, 0, &pidl) == S_OK) {
                 gchar * utf8Path = NULL;
 
                 {
                     wchar_t pathBuf[MAX_PATH+1];
                     g_assert(sizeof(wchar_t) == sizeof(gunichar2));
 
-                    if ( SHGetPathFromIDListW( pidl, pathBuf ) ) {
-                        utf8Path = g_utf16_to_utf8( (gunichar2*)(&pathBuf[0]), -1, NULL, NULL, NULL );
+                    if (SHGetPathFromIDListW(pidl, pathBuf)) {
+                        utf8Path = g_utf16_to_utf8((gunichar2*)(&pathBuf[0]), -1, NULL, NULL, NULL);
                     }
                 }
 
-                if ( utf8Path ) {
+                if (utf8Path) {
                     if (!g_utf8_validate(utf8Path, -1, NULL)) {
-                        g_warning( "SHGetPathFromIDListW() resulted in invalid UTF-8");
-                        g_free( utf8Path );
+                        g_warning("SHGetPathFromIDListW() resulted in invalid UTF-8");
+                        g_free(utf8Path);
                         utf8Path = 0;
                     } else {
                         prefdir = utf8Path;
@@ -429,7 +429,7 @@ char *profile_path(const char *filename)
 #ifdef S_IXOTH
             mode |= S_IXOTH;
 #endif
-            if ( g_mkdir_with_parents(prefdir, mode) == -1 ) {
+            if (g_mkdir_with_parents(prefdir, mode) == -1) {
                 int problem = errno;
                 g_warning("Unable to create profile directory (%s) (%d)", g_strerror(problem), problem);
             } else {

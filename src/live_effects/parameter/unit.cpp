@@ -20,7 +20,7 @@ namespace Inkscape {
 namespace LivePathEffect {
 
 
-UnitParam::UnitParam( const Glib::ustring& label, const Glib::ustring& tip,
+UnitParam::UnitParam(const Glib::ustring& label, const Glib::ustring& tip,
                               const Glib::ustring& key, Inkscape::UI::Widget::Registry* wr,
                               Effect* effect, Glib::ustring default_unit)
     : Parameter(label, tip, key, wr, effect)

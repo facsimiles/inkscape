@@ -368,7 +368,7 @@ sp_ctrl_build_cache (SPCtrl *ctrl, int device_scale)
 
             for (int i = 0; i < width; ++i) {
                 for (int j = 0; j < height; ++j) {
-                    if ( i > device_scale - 1      &&
+                    if (i > device_scale - 1      &&
                          j > device_scale - 1      &&
                          width  - i > device_scale &&
                          height  -j > device_scale) {
@@ -391,16 +391,16 @@ sp_ctrl_build_cache (SPCtrl *ctrl, int device_scale)
 
             for (int i = 0; i < width; ++i) {
                 for (int j = 0; j < height; ++j) {
-                    if (          i  +           j  > m-1+device_scale &&
+                    if (i  +           j  > m-1+device_scale &&
                          (width-1-i) +           j  > m-1+device_scale &&
                          (width-1-i) + (height-1-j) > m-1+device_scale &&
-                                i    + (height-1-j) > m-1+device_scale ) {
+                                i    + (height-1-j) > m-1+device_scale) {
                         *p++ = fill_color;
                     } else
-                    if (          i  +           j  > m-2 &&
+                    if (i  +           j  > m-2 &&
                          (width-1-i) +           j  > m-2 &&
                          (width-1-i) + (height-1-j) > m-2 &&
-                                i    + (height-1-j) > m-2 ) {
+                                i    + (height-1-j) > m-2) {
                         *p++ = stroke_color;
                     } else {
                         *p++ = 0;
@@ -454,13 +454,13 @@ sp_ctrl_build_cache (SPCtrl *ctrl, int device_scale)
             // defined by width and height, assuming width == height.
             double w2 = width/2.0;
             double h2 = height/2.0;
-            double w2cos = w2 * cos( M_PI/6 );
-            double h2sin = h2 * sin( M_PI/6 );
+            double w2cos = w2 * cos(M_PI/6);
+            double h2sin = h2 * sin(M_PI/6);
             Geom::Point p1s(0, h2);
             Geom::Point p2s(w2 + w2cos, h2 + h2sin);
             Geom::Point p3s(w2 + w2cos, h2 - h2sin);
             // Needed for constructing smaller arrowhead below.
-            double theta = atan2( Geom::Point( p2s - p1s ) );
+            double theta = atan2(Geom::Point(p2s - p1s));
             p1s *= m;
             p2s *= m;
             p3s *= m;
@@ -496,8 +496,8 @@ sp_ctrl_build_cache (SPCtrl *ctrl, int device_scale)
             guint* p = ctrl->cache;
             for(int y = 0; y < height; y++) {
                 for(int x = 0; x < width; x++) {
-                    if ( abs(x - y)             < device_scale ||
-                         abs(width - 1 - x - y) < device_scale  ) {
+                    if (abs(x - y)             < device_scale ||
+                         abs(width - 1 - x - y) < device_scale) {
                         *p++ = stroke_color;
                     } else {
                         *p++ = 0;
@@ -615,7 +615,7 @@ sp_ctrl_render (SPCanvasItem *item, SPCanvasBuf *buf)
         cairo_set_source_surface(cr, cairo_get_target(buf->ct), buf->rect.left(), buf->rect.top());
         cairo_paint(cr);
         cairo_destroy(cr);
-        // cairo_surface_write_to_png( work, "ctrl0.png" );
+        // cairo_surface_write_to_png(work, "ctrl0.png");
 
         // 2. Composite the control on a temporary surface
         cairo_surface_flush(work);
@@ -641,7 +641,7 @@ sp_ctrl_render (SPCanvasItem *item, SPCanvasBuf *buf)
             }
         }
         cairo_surface_mark_dirty(work);
-        // cairo_surface_write_to_png( work, "ctrl1.png" );
+        // cairo_surface_write_to_png(work, "ctrl1.png");
 
         // 3. Replace the affected part of output with contents of temporary surface
         cairo_save(buf->ct);

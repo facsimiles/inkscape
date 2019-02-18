@@ -85,7 +85,7 @@ EdgeInf::~EdgeInf()
 static inline int orthogTurnOrder(const Point& a, const Point& b, 
         const Point& c)
 {
-    if ( ((c.x != b.x) && (c.y != b.y)) || ((a.x != b.x) && (a.y != b.y)) )
+    if (((c.x != b.x) && (c.y != b.y)) || ((a.x != b.x) && (a.y != b.y)))
     {
         // Not orthogonally positioned.
         return 4;
@@ -106,8 +106,8 @@ static inline int orthogTurnOrder(const Point& a, const Point& b,
 
     if (b.x == c.x)
     {
-        if ( ((a.y < b.y) && (c.y < b.y)) || 
-             ((a.y > b.y) && (c.y > b.y)) ) 
+        if (((a.y < b.y) && (c.y < b.y)) || 
+             ((a.y > b.y) && (c.y > b.y))) 
         {
             // Behind.
             return 0;
@@ -115,8 +115,8 @@ static inline int orthogTurnOrder(const Point& a, const Point& b,
     }
     else
     {
-        if ( ((a.x < b.x) && (c.x < b.x)) || 
-             ((a.x > b.x) && (c.x > b.x)) ) 
+        if (((a.x < b.x) && (c.x < b.x)) || 
+             ((a.x > b.x) && (c.x > b.x))) 
         {
             // Behind.
             return 0;
@@ -505,7 +505,7 @@ int EdgeInf::firstBlocker(void)
     VertInf *last = m_router->vertices.end();
     unsigned int lastId = 0;
     bool seenIntersectionAtEndpoint = false;
-    for (VertInf *k = m_router->vertices.shapesBegin(); k != last; )
+    for (VertInf *k = m_router->vertices.shapesBegin(); k != last;)
     {
         VertID kID = k->id;
         if (k->id == dummyOrthogID)
@@ -549,8 +549,8 @@ int EdgeInf::firstBlocker(void)
 
 bool EdgeInf::isBetween(VertInf *i, VertInf *j)
 {
-    if ( ((i == m_vert1) && (j == m_vert2)) ||
-         ((i == m_vert2) && (j == m_vert1)) )
+    if (((i == m_vert1) && (j == m_vert2)) ||
+         ((i == m_vert2) && (j == m_vert1)))
     {
         return true;
     }

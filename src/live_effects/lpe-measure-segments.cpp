@@ -202,7 +202,7 @@ Gtk::Widget *
 LPEMeasureSegments::newWidget()
 {
     // use manage here, because after deletion of Effect object, others might still be pointing to this widget.
-    Gtk::VBox * vbox = Gtk::manage( new Gtk::VBox() );
+    Gtk::VBox * vbox = Gtk::manage(new Gtk::VBox());
     vbox->set_border_width(0);
     vbox->set_homogeneous(false);
     vbox->set_spacing(0);
@@ -230,7 +230,7 @@ LPEMeasureSegments::newWidget()
             Gtk::Widget * widg = param->param_newWidget();
             Glib::ustring * tip = param->param_getTooltip();
             if (widg) {
-                if (       param->param_key == "linked_items") {
+                if (param->param_key == "linked_items") {
                     vbox1->pack_start(*widg, true, true, 2);
                 } else if (param->param_key == "active_projection"   ||
                            param->param_key == "distance_projection" ||
@@ -238,7 +238,7 @@ LPEMeasureSegments::newWidget()
                            param->param_key == "maxmin"              ||
                            param->param_key == "centers"              ||
                            param->param_key == "bboxonly"            ||
-                           param->param_key == "onbbox"                )
+                           param->param_key == "onbbox")
                 {
                     vbox1->pack_start(*widg, false, true, 2);
                 } else if (param->param_key == "precision"     ||
@@ -250,7 +250,7 @@ LPEMeasureSegments::newWidget()
                            param->param_key == "showindex"     ||
                            param->param_key == "local_locale"  ||
                            param->param_key == "smallx100"     ||
-                           param->param_key == "hide_arrows"     )
+                           param->param_key == "hide_arrows")
                 {
                     vbox2->pack_start(*widg, false, true, 2);
                 } else if (param->param_key == "helpdata")
@@ -455,7 +455,7 @@ LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double leng
     }
     gchar length_str[64];
     bool x100 = false;
-    if (smallx100 && length < 1 ) {
+    if (smallx100 && length < 1) {
         length *=100;
         x100 = true;
         g_snprintf(length_str, 64, "%.*f", (int)precision - 2, length);
@@ -482,7 +482,7 @@ LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double leng
     if (showindex) {
         label_value = Glib::ustring("[") + Glib::ustring::format(counter) + Glib::ustring("] ") + label_value;
     }
-    if ( !valid ) {
+    if (!valid) {
         label_value = Glib::ustring(_("Non Uniform Scale"));
     }
     Inkscape::XML::Node *rstring = nullptr;
@@ -541,8 +541,8 @@ LPEMeasureSegments::createLine(Geom::Point start,Geom::Point end, Glib::ustring 
     if (!main) {
         Geom::Ray ray(start, end);
         Geom::Coord angle = ray.angle();
-        start = start + Point::polar(angle, helpline_distance );
-        end = end + Point::polar(angle, helpline_overlap );
+        start = start + Point::polar(angle, helpline_distance);
+        end = end + Point::polar(angle, helpline_overlap);
     }
     Geom::PathVector line_pathv;
     
@@ -569,7 +569,7 @@ LPEMeasureSegments::createLine(Geom::Point start,Geom::Point end, Glib::ustring 
     }
     if (elemref) {
         line = elemref->getRepr();
-        gchar * line_str = sp_svg_write_path( line_pathv );
+        gchar * line_str = sp_svg_write_path(line_pathv);
         line->setAttribute("d" , line_str);
         line->setAttribute("transform", nullptr);
         g_free(line_str);
@@ -589,7 +589,7 @@ LPEMeasureSegments::createLine(Geom::Point start,Geom::Point end, Glib::ustring 
             classlinehelper += " measure-helper-lines measure-lines";
             line->setAttribute("class", classlinehelper.c_str());
         }
-        gchar * line_str = sp_svg_write_path( line_pathv );
+        gchar * line_str = sp_svg_write_path(line_pathv);
         line->setAttribute("d" , line_str);
         g_free(line_str);
     }
@@ -915,7 +915,7 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
         //only check constrain viewbox on X
         Geom::Scale scaledoc = document->getDocumentScale();
         display_unit = document->getDisplayUnit()->abbr.c_str();
-        doc_scale = Inkscape::Util::Quantity::convert( scaledoc[Geom::X], "px", display_unit.c_str() );
+        doc_scale = Inkscape::Util::Quantity::convert(scaledoc[Geom::X], "px", display_unit.c_str());
         if (doc_scale > 0) {
             doc_scale= 1.0/doc_scale;
         } else {
@@ -958,7 +958,7 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
         bool previous_fix_overlaps = true;
         for (size_t i = 0; i < pathvector.size(); i++) {
             size_t count = pathvector[i].size_default();
-            if ( pathvector[i].closed()) {
+            if (pathvector[i].closed()) {
               const Geom::Curve &closingline = pathvector[i].back_closed(); 
               if (are_near(closingline.initialPoint(), closingline.finalPoint())) {
                 count = pathvector[i].size_open();
@@ -1120,7 +1120,7 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                             remove = true;
                         }
                     } else if (fix_overlaps_degree != 180) {
-                        start_angle_cross = getAngle( start, prev, end, flip_side, fix_overlaps_degree);
+                        start_angle_cross = getAngle(start, prev, end, flip_side, fix_overlaps_degree);
                         if (prev == Geom::Point(0,0)) {
                             start_angle_cross = 0;
                         }
@@ -1228,7 +1228,7 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                     createLine(end, hend, Glib::ustring("infoline-on-end-"), counter, false, false);
                     if (!arrows_outside) {
                         hstart = hstart + Point::polar(angle, arrow_gap);
-                        hend = hend - Point::polar(angle, arrow_gap );
+                        hend = hend - Point::polar(angle, arrow_gap);
                     }
                     if ((Geom::distance(hstart,hend)/2.0) > (anotation_width/1.9) + arrow_gap)  {
                         createLine(hstart, hend, Glib::ustring("infoline-"), counter, true, false, true);

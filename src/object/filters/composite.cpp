@@ -43,16 +43,16 @@ SPFeComposite::~SPFeComposite() = default;
 void SPFeComposite::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPFilterPrimitive::build(document, repr);
 
-	this->readAttr( "operator" );
+	this->readAttr("operator");
 
 	if (this->composite_operator == COMPOSITE_ARITHMETIC) {
-		this->readAttr( "k1" );
-		this->readAttr( "k2" );
-		this->readAttr( "k3" );
-		this->readAttr( "k4" );
+		this->readAttr("k1");
+		this->readAttr("k2");
+		this->readAttr("k3");
+		this->readAttr("k4");
 	}
 
-	this->readAttr( "in2" );
+	this->readAttr("in2");
 
 	/* Unlike normal in, in2 is required attribute. Make sure, we can call
 	 * it by some name. */
@@ -223,7 +223,7 @@ Inkscape::XML::Node* SPFeComposite::write(Inkscape::XML::Document *doc, Inkscape
 
     gchar const *in2_name = parent->name_for_image(this->in2);
 
-    if( !in2_name ) {
+    if(!in2_name) {
 
         // This code is very similar to name_previous_out()
         SPObject *i = parent->firstChild();
@@ -233,7 +233,7 @@ Inkscape::XML::Node* SPFeComposite::write(Inkscape::XML::Document *doc, Inkscape
         	i = i->getNext();
         }
 
-        if( i ) {
+        if(i) {
             SPFilterPrimitive *i_prim = SP_FILTER_PRIMITIVE(i);
             in2_name = parent->name_for_image(i_prim->image_out);
         }

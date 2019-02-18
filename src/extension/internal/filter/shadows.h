@@ -49,8 +49,8 @@ protected:
     gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
-    ColorizableDropShadow ( ) : Filter() { };
-    ~ColorizableDropShadow ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
+    ColorizableDropShadow () : Filter() { };
+    ~ColorizableDropShadow () override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
         Inkscape::Extension::build_from_mem(

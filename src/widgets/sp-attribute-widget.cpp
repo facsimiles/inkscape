@@ -194,9 +194,9 @@ void SPAttributeTable::set_object(SPObject *object,
             table->attach(*ee, 1, i, 1, 1);
 
             _entries.push_back(ee);
-            g_signal_connect ( ee->gobj(), "changed",
+            g_signal_connect (ee->gobj(), "changed",
                                G_CALLBACK (sp_attribute_table_entry_changed),
-                               this );
+                               this);
         }
         /* Show table */
         table->show ();
@@ -242,9 +242,9 @@ void SPAttributeTable::reread_properties()
 	blocked = false;
 }
 
-static void sp_attribute_table_object_modified ( SPObject */*object*/,
+static void sp_attribute_table_object_modified (SPObject */*object*/,
                                      guint flags,
-                                     SPAttributeTable *spat )
+                                     SPAttributeTable *spat)
 {
     if (flags & SP_OBJECT_MODIFIED_FLAG)
     {
@@ -268,8 +268,8 @@ static void sp_attribute_table_object_modified ( SPObject */*object*/,
 
 } // end of sp_attribute_table_object_modified()
 
-static void sp_attribute_table_entry_changed ( Gtk::Entry *editable,
-                                   SPAttributeTable *spat )
+static void sp_attribute_table_entry_changed (Gtk::Entry *editable,
+                                   SPAttributeTable *spat)
 {
     if (!spat->blocked)
     {

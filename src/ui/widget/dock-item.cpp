@@ -44,9 +44,9 @@ DockItem::DockItem(Dock& dock, const Glib::ustring& name, const Glib::ustring& l
         _icon_pixbuf = sp_get_icon_pixbuf(icon_name, "/toolbox/secondary");
     }
 
-    if ( _icon_pixbuf ) {
-        _gdl_dock_item = gdl_dock_item_new_with_pixbuf_icon( name.c_str(), long_name.c_str(),
-                                                             _icon_pixbuf->gobj(), gdl_dock_behavior );
+    if (_icon_pixbuf) {
+        _gdl_dock_item = gdl_dock_item_new_with_pixbuf_icon(name.c_str(), long_name.c_str(),
+                                                             _icon_pixbuf->gobj(), gdl_dock_behavior);
     } else {
         _gdl_dock_item = gdl_dock_item_new(name.c_str(), long_name.c_str(), gdl_dock_behavior);
     }
@@ -64,7 +64,7 @@ DockItem::DockItem(Dock& dock, const Glib::ustring& name, const Glib::ustring& l
     signal_delete_event().connect(sigc::mem_fun(*this, &Inkscape::UI::Widget::DockItem::_onDeleteEvent));
     signal_realize().connect(sigc::mem_fun(*this, &Inkscape::UI::Widget::DockItem::_onRealize));
 
-    _dock.addItem(*this, ( _prev_state == FLOATING_STATE || _prev_state == ICONIFIED_FLOATING_STATE ) ? GDL_DOCK_FLOATING : placement);
+    _dock.addItem(*this, (_prev_state == FLOATING_STATE || _prev_state == ICONIFIED_FLOATING_STATE) ? GDL_DOCK_FLOATING : placement);
 
     if (_prev_state == ICONIFIED_FLOATING_STATE || _prev_state == ICONIFIED_DOCKED_STATE) {
         iconify();
@@ -495,7 +495,7 @@ DockItem::_signal_delete_event_callback(GtkWidget *self, GdkEventAny *event, voi
     if (Glib::ObjectBase::_get_current_wrapper((GObject *) self)) {
         try {
             if(sigc::slot_base *const slot = Glib::SignalProxyNormal::data_to_slot(data))
-                return static_cast<int>( (*static_cast<SlotType*>(slot))(event) );
+                return static_cast<int>((*static_cast<SlotType*>(slot))(event));
         } catch(...) {
             Glib::exception_handlers_invoke();
         }

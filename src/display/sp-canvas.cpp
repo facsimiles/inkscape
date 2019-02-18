@@ -833,7 +833,7 @@ void SPCanvasGroup::update(SPCanvasItem *item, Geom::Affine const &affine, unsig
 
         sp_canvas_item_invoke_update (i, affine, flags);
 
-        if ( (i->x2 > i->x1) && (i->y2 > i->y1) ) {
+        if ((i->x2 > i->x1) && (i->y2 > i->y1)) {
             bounds.expandTo(Geom::Point(i->x1, i->y1));
             bounds.expandTo(Geom::Point(i->x2, i->y2));
         }
@@ -1129,8 +1129,8 @@ void SPCanvas::handle_realize(GtkWidget *widget)
                              GDK_BUTTON_PRESS_MASK |
                              GDK_BUTTON_RELEASE_MASK |
                              GDK_POINTER_MOTION_MASK |
-                             ( HAS_BROKEN_MOTION_HINTS ?
-                               0 : GDK_POINTER_MOTION_HINT_MASK ) |
+                             (HAS_BROKEN_MOTION_HINTS ?
+                               0 : GDK_POINTER_MOTION_HINT_MASK) |
                              GDK_PROXIMITY_IN_MASK |
                              GDK_PROXIMITY_OUT_MASK |
                              GDK_KEY_PRESS_MASK |
@@ -1192,7 +1192,7 @@ void SPCanvas::handle_size_allocate(GtkWidget *widget, GtkAllocation *allocation
     gtk_widget_get_allocation(widget, &old_allocation);
 
     // For HiDPI monitors.
-    canvas->_device_scale = gtk_widget_get_scale_factor( widget );
+    canvas->_device_scale = gtk_widget_get_scale_factor(widget);
 
     Geom::IntRect new_area = Geom::IntRect::from_xywh(canvas->_x0, canvas->_y0,
         allocation->width, allocation->height);
@@ -1830,7 +1830,7 @@ void SPCanvas::paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect 
 
     // Create a temporary surface that draws directly to _backing_store
     cairo_surface_flush(_backing_store);
-    // cairo_surface_write_to_png( _backing_store, "debug0.png" );
+    // cairo_surface_write_to_png(_backing_store, "debug0.png");
     unsigned char *data = cairo_image_surface_get_data(_backing_store);
     int stride = cairo_image_surface_get_stride(_backing_store);
 
@@ -1860,12 +1860,12 @@ void SPCanvas::paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect 
     cairo_set_operator(buf.ct, CAIRO_OPERATOR_SOURCE);
     cairo_paint(buf.ct);
     cairo_restore(buf.ct);
-    // cairo_surface_write_to_png( imgs, "debug1.png" );
+    // cairo_surface_write_to_png(imgs, "debug1.png");
 
     if (_root->visible) {
         SP_CANVAS_ITEM_GET_CLASS(_root)->render(_root, &buf);
     }
-    // cairo_surface_write_to_png( imgs, "debug2.png" );
+    // cairo_surface_write_to_png(imgs, "debug2.png");
 
     // output to X
     cairo_destroy(buf.ct);
@@ -1874,8 +1874,8 @@ void SPCanvas::paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect 
     if (_enable_cms_display_adj) {
         cmsHTRANSFORM transf = nullptr;
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        bool fromDisplay = prefs->getBool( "/options/displayprofile/from_display");
-        if ( fromDisplay ) {
+        bool fromDisplay = prefs->getBool("/options/displayprofile/from_display");
+        if (fromDisplay) {
             transf = Inkscape::CMSSystem::getDisplayPer(_cms_key);
         } else {
             transf = Inkscape::CMSSystem::getDisplayTransform();
@@ -1895,7 +1895,7 @@ void SPCanvas::paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect 
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
 
     cairo_surface_mark_dirty(_backing_store);
-    // cairo_surface_write_to_png( _backing_store, "debug3.png" );
+    // cairo_surface_write_to_png(_backing_store, "debug3.png");
 
     // Mark the painted rectangle clean
     markRect(paint_rect, 0);
@@ -1938,7 +1938,7 @@ void SPCanvas::paintXRayBuffer(Geom::IntRect const &paint_rect, Geom::IntRect co
     cairo_set_operator(buf.ct, CAIRO_OPERATOR_SOURCE);
     cairo_paint(buf.ct);
     cairo_translate(buf.ct, paint_rect.left(), paint_rect.top());
-        // cairo_surface_write_to_png( copy_backing, "debug1.png" );
+        // cairo_surface_write_to_png(copy_backing, "debug1.png");
 
 
 
@@ -1950,7 +1950,7 @@ void SPCanvas::paintXRayBuffer(Geom::IntRect const &paint_rect, Geom::IntRect co
     cairo_clip(buf.ct);
     cairo_set_operator(buf.ct, CAIRO_OPERATOR_DEST_IN);
     cairo_paint(buf.ct);
-    // cairo_surface_write_to_png( copy_backing, "debug2.png" );
+    // cairo_surface_write_to_png(copy_backing, "debug2.png");
 
     // output to X
     cairo_arc(buf.ct, _xray_radius, _xray_radius, _xray_radius, 0, 2 * M_PI);
@@ -1961,7 +1961,7 @@ void SPCanvas::paintXRayBuffer(Geom::IntRect const &paint_rect, Geom::IntRect co
     cairo_destroy(buf.ct);
 
     cairo_surface_destroy(copy_backing);
-    // cairo_surface_write_to_png( _backing_store, "debug3.png" );
+    // cairo_surface_write_to_png(_backing_store, "debug3.png");
     cairo_surface_mark_dirty(_backing_store);
     // Mark the painted rectangle un-clean to remove old x-ray when mouse change position
     gtk_widget_queue_draw_area(GTK_WIDGET(this), paint_rect.left() - _x0, paint_rect.top() - _y0, paint_rect.width(),
@@ -2415,7 +2415,7 @@ int SPCanvas::paint()
             _spliter = Geom::OptIntRect(coord1x, coord1y, coord2x, coord2y);
             split_x = !_split_vertical ? 0 : _split_value;
             split_y = _split_vertical ? 0 : _split_value;
-            coord1x = allocation.x + (int((allocation.width ) * split_x)) - vruler_gap;
+            coord1x = allocation.x + (int((allocation.width) * split_x)) - vruler_gap;
             coord1y = allocation.y + (int((allocation.height) * split_y)) - hruler_gap;
             split_x = !_split_vertical ? 1 : _split_value;
             split_y = _split_vertical ? 1 : _split_value;
@@ -2569,13 +2569,13 @@ SPCanvasGroup *SPCanvas::getRoot()
 /**
  * Scroll screen to point 'c'. 'c' is measured in screen pixels.
  */
-void SPCanvas::scrollTo( Geom::Point const &c, unsigned int clear, bool is_scrolling)
+void SPCanvas::scrollTo(Geom::Point const &c, unsigned int clear, bool is_scrolling)
 {
     // To do: extract out common code with SPCanvas::handle_size_allocate()
 
     // For HiDPI monitors
     int device_scale = gtk_widget_get_scale_factor(GTK_WIDGET(this));
-    assert( device_scale == _device_scale);
+    assert(device_scale == _device_scale);
 
     double cx = c[Geom::X];
     double cy = c[Geom::Y];
@@ -2623,7 +2623,7 @@ void SPCanvas::scrollTo( Geom::Point const &c, unsigned int clear, bool is_scrol
     cairo_set_source(cr, _background);
     cairo_paint(cr);
 
-    // cairo_surface_write_to_png( _backing_store, "scroll0.png" );
+    // cairo_surface_write_to_png(_backing_store, "scroll0.png");
 
     // Copy the old backing store contents
     cairo_set_source_surface(cr, _backing_store, _x0, _y0);
@@ -2634,7 +2634,7 @@ void SPCanvas::scrollTo( Geom::Point const &c, unsigned int clear, bool is_scrol
     cairo_surface_destroy(_backing_store);
     _backing_store = new_backing_store;
 
-    // cairo_surface_write_to_png( _backing_store, "scroll1.png" );
+    // cairo_surface_write_to_png(_backing_store, "scroll1.png");
 
     _dx0 = cx; // here the 'd' stands for double, not delta!
     _dy0 = cy;
@@ -2693,7 +2693,7 @@ void SPCanvas::requestUpdate()
 
 void SPCanvas::requestRedraw(int x0, int y0, int x1, int y1)
 {
-    if (!gtk_widget_is_drawable( GTK_WIDGET(this) )) {
+    if (!gtk_widget_is_drawable(GTK_WIDGET(this))) {
         return;
     }
     if (x0 >= x1 || y0 >= y1) {
@@ -2792,16 +2792,16 @@ bool sp_canvas_world_pt_inside_window(SPCanvas const *canvas, Geom::Point const 
 {
     GtkAllocation allocation;
 
-    g_assert( canvas != nullptr );
+    g_assert(canvas != nullptr);
     g_assert(SP_IS_CANVAS(canvas));
 
     GtkWidget *w = GTK_WIDGET(canvas);
     gtk_widget_get_allocation (w, &allocation);
 
-    return ( ( canvas->_x0 <= world[Geom::X] )  &&
-             ( canvas->_y0 <= world[Geom::Y] )  &&
-             ( world[Geom::X] < canvas->_x0 + allocation.width )  &&
-             ( world[Geom::Y] < canvas->_y0 + allocation.height ) );
+    return ((canvas->_x0 <= world[Geom::X])  &&
+             (canvas->_y0 <= world[Geom::Y])  &&
+             (world[Geom::X] < canvas->_x0 + allocation.width)  &&
+             (world[Geom::Y] < canvas->_y0 + allocation.height));
 }
 
 /**

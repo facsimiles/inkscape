@@ -26,15 +26,15 @@ class ColorProfile;
 
 class CMSSystem {
 public:
-    static cmsHPROFILE getHandle( SPDocument* document, unsigned int* intent, char const* name );
+    static cmsHPROFILE getHandle(SPDocument* document, unsigned int* intent, char const* name);
 
     static cmsHTRANSFORM getDisplayTransform();
 
-    static Glib::ustring getDisplayId( int monitor );
+    static Glib::ustring getDisplayId(int monitor);
 
-    static Glib::ustring setDisplayPer( void* buf, unsigned int bufLen, int monitor );
+    static Glib::ustring setDisplayPer(void* buf, unsigned int bufLen, int monitor);
 
-    static cmsHTRANSFORM getDisplayPer( Glib::ustring const& id );
+    static cmsHTRANSFORM getDisplayPer(Glib::ustring const& id);
 
     static std::vector<Glib::ustring> getDisplayNames();
 

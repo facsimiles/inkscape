@@ -38,7 +38,7 @@ SPGaussianBlur::~SPGaussianBlur() = default;
 void SPGaussianBlur::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPFilterPrimitive::build(document, repr);
 
-    this->readAttr( "stdDeviation" );
+    this->readAttr("stdDeviation");
 }
 
 /**
@@ -68,7 +68,7 @@ void SPGaussianBlur::set(SPAttributeEnum key, gchar const *value) {
  */
 void SPGaussianBlur::update(SPCtx *ctx, guint flags) {
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
-        this->readAttr( "stdDeviation" );
+        this->readAttr("stdDeviation");
     }
 
     SPFilterPrimitive::update(ctx, flags);

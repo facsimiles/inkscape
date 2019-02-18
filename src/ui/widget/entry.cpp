@@ -16,7 +16,7 @@ namespace Inkscape {
 namespace UI {
 namespace Widget {
 
-Entry::Entry(  Glib::ustring const &label, Glib::ustring const &tooltip,
+Entry::Entry(Glib::ustring const &label, Glib::ustring const &tooltip,
                Glib::ustring const &suffix,
                Glib::ustring const &icon,
                bool mnemonic)

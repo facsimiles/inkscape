@@ -208,7 +208,7 @@ void PathVectorSatellites::recalculateForNewPathVector(Geom::PathVector const pa
     for (const auto & i : pathv) {
         std::vector<Satellite> path_satellites;
         size_t count = i.size_default();
-        if ( i.closed()) {
+        if (i.closed()) {
           const Geom::Curve &closingline = i.back_closed(); 
           if (are_near(closingline.initialPoint(), closingline.finalPoint())) {
             count = i.size_open();
@@ -218,7 +218,7 @@ void PathVectorSatellites::recalculateForNewPathVector(Geom::PathVector const pa
             found = false;
             for (size_t k = 0; k < _pathvector.size(); k++) {
                 size_t count2 = _pathvector[k].size_default();
-                if ( _pathvector[k].closed()) {
+                if (_pathvector[k].closed()) {
                   const Geom::Curve &closingline = _pathvector[k].back_closed(); 
                   if (are_near(closingline.initialPoint(), closingline.finalPoint())) {
                     count2 = _pathvector[k].size_open();

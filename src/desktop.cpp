@@ -155,7 +155,7 @@ SPDesktop::SPDesktop()
     layers->_layer_activated_signal.connect(sigc::bind(sigc::ptr_fun(_layer_activated), this));
     layers->_layer_deactivated_signal.connect(sigc::bind(sigc::ptr_fun(_layer_deactivated), this));
     layers->_layer_changed_signal.connect(sigc::bind(sigc::ptr_fun(_layer_hierarchy_changed), this));
-    selection = Inkscape::GC::release( new Inkscape::Selection(layers, this) );
+    selection = Inkscape::GC::release(new Inkscape::Selection(layers, this));
 }
 
 void
@@ -274,7 +274,7 @@ SPDesktop::init (SPNamedView *nv, SPCanvas *aCanvas, Inkscape::UI::View::EditWid
        0 is used, then the constructor for a shadow is not initialized.
     */
 
-    if ( namedview->pageshadow != 0 && namedview->showpageshadow ) {
+    if (namedview->pageshadow != 0 && namedview->showpageshadow) {
         SP_CTRLRECT(page_border)->setShadow(namedview->pageshadow, 0x3f3f3fff);
     }
 
@@ -318,40 +318,40 @@ SPDesktop::init (SPNamedView *nv, SPCanvas *aCanvas, Inkscape::UI::View::EditWid
         sigc::bind(
             sigc::ptr_fun(_onActivate),
             this
-        )
-    );
+)
+);
      _deactivate_connection = _deactivate_signal.connect(
         sigc::bind(
             sigc::ptr_fun(_onDeactivate),
             this
-        )
-    );
+)
+);
 
     _sel_modified_connection = selection->connectModified(
         sigc::bind(
             sigc::ptr_fun(&_onSelectionModified),
             this
-        )
-    );
+)
+);
     _sel_changed_connection = selection->connectChanged(
         sigc::bind(
             sigc::ptr_fun(&_onSelectionChanged),
             this
-        )
-    );
+)
+);
 
 
     /* setup LayerManager */
     //   (Setting up after the connections are all in place, as it may use some of them)
-    layer_manager = new Inkscape::LayerManager( this );
+    layer_manager = new Inkscape::LayerManager(this);
 
     showGrids(namedview->grids_visible, false);
 
-    temporary_item_list = new Inkscape::Display::TemporaryItemList( this );
-    snapindicator = new Inkscape::Display::SnapIndicator ( this );
+    temporary_item_list = new Inkscape::Display::TemporaryItemList(this);
+    snapindicator = new Inkscape::Display::SnapIndicator (this);
 
     canvas_rotate = sp_canvas_item_new (root, SP_TYPE_CANVAS_ROTATE, nullptr);
-    sp_canvas_item_hide( canvas_rotate );
+    sp_canvas_item_hide(canvas_rotate);
     // canvas_debug = sp_canvas_item_new (main, SP_TYPE_CANVAS_DEBUG, NULL);
 }
 
@@ -522,7 +522,7 @@ void SPDesktop::_setDisplayMode(Inkscape::RenderMode mode) {
         _split_canvas = false;
     }
     redrawDesktop();
-    _widget->setTitle( this->getDocument()->getName() );
+    _widget->setTitle(this->getDocument()->getName());
 }
 void SPDesktop::_setDisplayColorMode(Inkscape::ColorMode mode) {
     // reload grayscale matrix from prefs
@@ -543,7 +543,7 @@ void SPDesktop::_setDisplayColorMode(Inkscape::ColorMode mode) {
     canvas->_colorrendermode = mode;
     _display_color_mode = mode;
     redrawDesktop();
-    _widget->setTitle( this->getDocument()->getName() );
+    _widget->setTitle(this->getDocument()->getName());
 }
 
 void SPDesktop::displayModeToggle() {
@@ -757,7 +757,7 @@ SPItem *SPDesktop::getItemFromListAtPointBottom(const std::vector<SPItem*> &list
 SPItem *SPDesktop::getItemAtPoint(Geom::Point const &p, bool into_groups, SPItem *upto) const
 {
     g_return_val_if_fail (doc() != nullptr, NULL);
-    return doc()->getItemAtPoint( dkey, p, into_groups, upto);
+    return doc()->getItemAtPoint(dkey, p, into_groups, upto);
 }
 
 /**
@@ -808,7 +808,7 @@ SPDesktop::prev_transform()
     }
 
     // Push current transform into future transforms list.
-    transforms_future.push_front( _current_affine );
+    transforms_future.push_front(_current_affine);
 
     // Remove the current transform from the past transforms list.
     transforms_past.pop_front();
@@ -838,7 +838,7 @@ void SPDesktop::next_transform()
     transforms_future.pop_front();
 
     // push current transform into past transforms list
-    transforms_past.push_front( _current_affine );
+    transforms_past.push_front(_current_affine);
 }
 
 
@@ -863,7 +863,7 @@ SPDesktop::set_display_area (bool log)
 {
     // Save the transform
     if (log) {
-        transforms_past.push_front( _current_affine );
+        transforms_past.push_front(_current_affine);
         // if we do a logged transform, our transform-forward list is invalidated, so delete it
         transforms_future.clear();
     }
@@ -899,8 +899,8 @@ SPDesktop::set_display_area (Geom::Point const &c, Geom::Point const &w, bool lo
 {
     // The relative offset needed to keep c at w.
     Geom::Point offset = d2w(c) - w;
-    _current_affine.addOffset( offset );
-    set_display_area( log );
+    _current_affine.addOffset(offset);
+    set_display_area(log);
 }
 
 
@@ -911,29 +911,29 @@ SPDesktop::set_display_area (Geom::Point const &c, Geom::Point const &w, bool lo
  * there is no rotation). 'r' is in document pixel units, 'border' is in screen pixels.
  */
 void
-SPDesktop::set_display_area( Geom::Rect const &r, double border, bool log)
+SPDesktop::set_display_area(Geom::Rect const &r, double border, bool log)
 {
     // Create a rectangle the size of the window aligned with origin.
-    Geom::Rect w( Geom::Point(), canvas->getViewbox().dimensions() ); // Not the SVG 'viewBox'.
+    Geom::Rect w(Geom::Point(), canvas->getViewbox().dimensions()); // Not the SVG 'viewBox'.
 
     // Shrink window to account for border padding.
-    w.expandBy( -border );
+    w.expandBy(-border);
 
     double zoom = 1.0;
     // Determine which direction limits scale:
     //   if (r.width/w.width > r.height/w.height) then zoom using width.
     //   Avoiding division in test:
-    if ( r.width()*w.height() > r.height()*w.width() ) {
+    if (r.width()*w.height() > r.height()*w.width()) {
         zoom = w.width() / r.width();
     } else {
         zoom = w.height() / r.height();
     }
-    _current_affine.setScale( Geom::Scale(zoom, _doc2dt[3] * zoom) );
+    _current_affine.setScale(Geom::Scale(zoom, _doc2dt[3] * zoom));
 
     // Zero offset, actual offset calculated later.
-    _current_affine.setOffset( Geom::Point( 0, 0 ) );
+    _current_affine.setOffset(Geom::Point(0, 0));
 
-    set_display_area( r.midpoint(), w.midpoint(), log );
+    set_display_area(r.midpoint(), w.midpoint(), log);
 }
 
 
@@ -955,9 +955,9 @@ void
 SPDesktop::zoom_absolute_keep_point (Geom::Point const &c, double zoom)
 {
     zoom = CLAMP (zoom, SP_DESKTOP_ZOOM_MIN, SP_DESKTOP_ZOOM_MAX);    
-    Geom::Point w = d2w( c ); // Must be before zoom changed.
-    _current_affine.setScale( Geom::Scale(zoom, _doc2dt[3] * zoom) );
-    set_display_area( c, w );
+    Geom::Point w = d2w(c); // Must be before zoom changed.
+    _current_affine.setScale(Geom::Scale(zoom, _doc2dt[3] * zoom));
+    set_display_area(c, w);
 }
 
 
@@ -965,7 +965,7 @@ void
 SPDesktop::zoom_relative_keep_point (Geom::Point const &c, double zoom)
 {
     double new_zoom = _current_affine.getZoom() * zoom;
-    zoom_absolute_keep_point( c, new_zoom );
+    zoom_absolute_keep_point(c, new_zoom);
 }
 
 
@@ -976,9 +976,9 @@ void
 SPDesktop::zoom_absolute_center_point (Geom::Point const &c, double zoom)
 {
     zoom = CLAMP (zoom, SP_DESKTOP_ZOOM_MIN, SP_DESKTOP_ZOOM_MAX);
-    _current_affine.setScale( Geom::Scale(zoom, _doc2dt[3] * zoom) );
+    _current_affine.setScale(Geom::Scale(zoom, _doc2dt[3] * zoom));
     Geom::Rect viewbox = canvas->getViewbox();
-    set_display_area( c, viewbox.midpoint() );
+    set_display_area(c, viewbox.midpoint());
 }
 
 
@@ -986,7 +986,7 @@ void
 SPDesktop::zoom_relative_center_point (Geom::Point const &c, double zoom)
 {
     double new_zoom = _current_affine.getZoom() * zoom;
-    zoom_absolute_center_point( c, new_zoom );
+    zoom_absolute_center_point(c, new_zoom);
 }
 
 
@@ -1041,7 +1041,7 @@ SPDesktop::zoom_drawing()
     /* Note that the second condition here indicates that
     ** there are no items in the drawing.
     */
-    if ( !d || d->minExtent() < 0.1 ) {
+    if (!d || d->minExtent() < 0.1) {
         return;
     }
 
@@ -1057,7 +1057,7 @@ SPDesktop::zoom_selection()
 {
     Geom::OptRect const d = selection->visualBounds();
 
-    if ( !d || d->minExtent() < 0.1 ) {
+    if (!d || d->minExtent() < 0.1) {
         return;
     }
 
@@ -1111,7 +1111,7 @@ void SPDesktop::zoom_quick(bool enable)
         }
     } else {
         _current_affine = _quick_zoom_affine;
-        set_display_area( false );
+        set_display_area(false);
     }
 
     _quick_zoom_enabled = enable;
@@ -1135,18 +1135,18 @@ SPDesktop::zoom_grab_focus()
 void
 SPDesktop::rotate_absolute_keep_point (Geom::Point const &c, double rotate)
 {
-    Geom::Point w = d2w( c ); // Must be before rotate changed.
-    _current_affine.setRotate( rotate );
-    set_display_area( c, w );
+    Geom::Point w = d2w(c); // Must be before rotate changed.
+    _current_affine.setRotate(rotate);
+    set_display_area(c, w);
 }
 
 
 void 
 SPDesktop::rotate_relative_keep_point (Geom::Point const &c, double rotate)
 {
-    Geom::Point w = d2w( c ); // Must be before rotate changed.
-    _current_affine.addRotate( rotate );
-    set_display_area( c, w );
+    Geom::Point w = d2w(c); // Must be before rotate changed.
+    _current_affine.addRotate(rotate);
+    set_display_area(c, w);
 }
 
 
@@ -1156,18 +1156,18 @@ SPDesktop::rotate_relative_keep_point (Geom::Point const &c, double rotate)
 void 
 SPDesktop::rotate_absolute_center_point (Geom::Point const &c, double rotate)
 {
-    _current_affine.setRotate( rotate );
+    _current_affine.setRotate(rotate);
     Geom::Rect viewbox = canvas->getViewbox();
-    set_display_area( c, viewbox.midpoint() );
+    set_display_area(c, viewbox.midpoint());
 }
 
 
 void 
 SPDesktop::rotate_relative_center_point (Geom::Point const &c, double rotate)
 {
-    _current_affine.addRotate( rotate );
+    _current_affine.addRotate(rotate);
     Geom::Rect viewbox = canvas->getViewbox();
-    set_display_area( c, viewbox.midpoint() );
+    set_display_area(c, viewbox.midpoint());
 }
 
 
@@ -1177,18 +1177,18 @@ SPDesktop::rotate_relative_center_point (Geom::Point const &c, double rotate)
 void
 SPDesktop::flip_absolute_keep_point (Geom::Point const &c, CanvasFlip flip)
 {
-    Geom::Point w = d2w( c ); // Must be before flip.
-    _current_affine.setFlip( flip );
-    set_display_area( c, w );
+    Geom::Point w = d2w(c); // Must be before flip.
+    _current_affine.setFlip(flip);
+    set_display_area(c, w);
 }
 
 
 void
 SPDesktop::flip_relative_keep_point (Geom::Point const &c, CanvasFlip flip)
 {
-    Geom::Point w = d2w( c ); // Must be before flip.
-    _current_affine.addFlip( flip );
-    set_display_area( c, w );
+    Geom::Point w = d2w(c); // Must be before flip.
+    _current_affine.addFlip(flip);
+    set_display_area(c, w);
 }
 
 
@@ -1198,18 +1198,18 @@ SPDesktop::flip_relative_keep_point (Geom::Point const &c, CanvasFlip flip)
 void 
 SPDesktop::flip_absolute_center_point (Geom::Point const &c, CanvasFlip flip)
 {
-    _current_affine.setFlip( flip );
+    _current_affine.setFlip(flip);
     Geom::Rect viewbox = canvas->getViewbox();
-    set_display_area( c, viewbox.midpoint() );
+    set_display_area(c, viewbox.midpoint());
 }
 
 
 void 
 SPDesktop::flip_relative_center_point (Geom::Point const &c, CanvasFlip flip)
 {
-    _current_affine.addFlip( flip );
+    _current_affine.addFlip(flip);
     Geom::Rect viewbox = canvas->getViewbox();
-    set_display_area( c, viewbox.midpoint() );
+    set_display_area(c, viewbox.midpoint());
 }
 
 
@@ -1220,7 +1220,7 @@ void
 SPDesktop::scroll_absolute (Geom::Point const &point, bool is_scrolling)
 {
     canvas->scrollTo(point, FALSE, is_scrolling);
-    _current_affine.setOffset( point );
+    _current_affine.setOffset(point);
 
     /*  update perspective lines if we are in the 3D box tool (so that infinite ones are shown correctly) */
     //sp_box3d_context_update_lines(event_context);
@@ -1240,7 +1240,7 @@ void
 SPDesktop::scroll_relative (Geom::Point const &delta, bool is_scrolling)
 {
     Geom::Rect const viewbox = canvas->getViewbox();
-    scroll_absolute( viewbox.min() - delta, is_scrolling );
+    scroll_absolute(viewbox.min() - delta, is_scrolling);
 }
 
 
@@ -1281,7 +1281,7 @@ SPDesktop::scroll_to_point (Geom::Point const &p, gdouble autoscrollspeed)
             autoscrollspeed = prefs->getDoubleLimited("/options/autoscrollspeed/value", 1, 0, 10);
 
         if (autoscrollspeed != 0)
-            scroll_relative (autoscrollspeed * (c2 - c) );
+            scroll_relative (autoscrollspeed * (c2 - c));
 
         return true;
     }
@@ -1382,13 +1382,13 @@ SPDesktop::setWindowTransient (void *p, int transient_policy)
 }
 
 Gtk::Window*
-SPDesktop::getToplevel( )
+SPDesktop::getToplevel()
 {
     return _widget->getWindow();
 }
 
 InkscapeWindow*
-SPDesktop::getInkscapeWindow( )
+SPDesktop::getInkscapeWindow()
 {
     InkscapeWindow* window = dynamic_cast<InkscapeWindow*>(_widget->getWindow());
     if (!window) {
@@ -1403,9 +1403,9 @@ SPDesktop::presentWindow()
     _widget->present();
 }
 
-bool SPDesktop::showInfoDialog( Glib::ustring const & message )
+bool SPDesktop::showInfoDialog(Glib::ustring const & message)
 {
-    return _widget->showInfoDialog( message );
+    return _widget->showInfoDialog(message);
 }
 
 bool
@@ -1802,7 +1802,7 @@ _onSelectionChanged
     SPItem *item=selection->singleItem();
     if (item) {
         SPObject *layer=desktop->layers->layerForObject(item);
-        if ( layer && layer != desktop->currentLayer() ) {
+        if (layer && layer != desktop->currentLayer()) {
             desktop->layers->setCurrentLayer(layer);
         }
     }
@@ -1858,7 +1858,7 @@ static void _reconstruction_start(SPDesktop * desktop)
 static void _reconstruction_finish(SPDesktop * desktop)
 {
     g_debug("Desktop, finishing reconstruction\n");
-    if ( !desktop->_reconstruction_old_layer_id.empty() ) {
+    if (!desktop->_reconstruction_old_layer_id.empty()) {
         SPObject * newLayer = desktop->namedview->document->getObjectById(desktop->_reconstruction_old_layer_id);
         if (newLayer != nullptr) {
             desktop->layers->setCurrentLayer(newLayer);
@@ -1989,38 +1989,38 @@ SPDesktop::show_dialogs()
      * Map dialog manager's dialog IDs to dialog last visible state preference. FIXME: store this correspondence in dialogs themselves!
      */
     std::map<Glib::ustring, Glib::ustring> mapVerbPreference;
-    mapVerbPreference.insert(std::make_pair ("LayersPanel", "/dialogs/layers") );
-    mapVerbPreference.insert(std::make_pair ("FillAndStroke", "/dialogs/fillstroke") );
-    mapVerbPreference.insert(std::make_pair ("ExtensionEditor", "/dialogs/extensioneditor") );
-    mapVerbPreference.insert(std::make_pair ("AlignAndDistribute", "/dialogs/align") );
-    mapVerbPreference.insert(std::make_pair ("DocumentMetadata", "/dialogs/documentmetadata") );
-    mapVerbPreference.insert(std::make_pair ("DocumentProperties", "/dialogs/documentoptions") );
-    mapVerbPreference.insert(std::make_pair ("FilterEffectsDialog", "/dialogs/filtereffects") );
-    mapVerbPreference.insert(std::make_pair ("Find", "/dialogs/find") );
-    mapVerbPreference.insert(std::make_pair ("Glyphs", "/dialogs/glyphs") );
-    mapVerbPreference.insert(std::make_pair ("Messages", "/dialogs/messages") );
-    mapVerbPreference.insert(std::make_pair ("Memory", "/dialogs/memory") );
-    mapVerbPreference.insert(std::make_pair ("LivePathEffect", "/dialogs/livepatheffect") );
-    mapVerbPreference.insert(std::make_pair ("UndoHistory", "/dialogs/undo-history") );
-    mapVerbPreference.insert(std::make_pair ("Transformation", "/dialogs/transformation") );
-    mapVerbPreference.insert(std::make_pair ("Swatches", "/dialogs/swatches") );
-    mapVerbPreference.insert(std::make_pair ("IconPreviewPanel", "/dialogs/iconpreview") );
-    mapVerbPreference.insert(std::make_pair ("SvgFontsDialog", "/dialogs/svgfonts") );
-    mapVerbPreference.insert(std::make_pair ("InputDevices", "/dialogs/inputdevices") );
-    mapVerbPreference.insert(std::make_pair ("InkscapePreferences", "/dialogs/preferences") );
-    mapVerbPreference.insert(std::make_pair ("TileDialog", "/dialogs/gridtiler") );
-    mapVerbPreference.insert(std::make_pair ("Trace", "/dialogs/trace") );
-    mapVerbPreference.insert(std::make_pair ("PixelArt", "/dialogs/pixelart") );
-    mapVerbPreference.insert(std::make_pair ("TextFont", "/dialogs/textandfont") );
-    mapVerbPreference.insert(std::make_pair ("Export", "/dialogs/export") );
-    mapVerbPreference.insert(std::make_pair ("XmlTree", "/dialogs/xml") );
-    mapVerbPreference.insert(std::make_pair ("CloneTiler", "/dialogs/clonetiler") );
-    mapVerbPreference.insert(std::make_pair ("ObjectProperties", "/dialogs/object") );
-    mapVerbPreference.insert(std::make_pair ("SpellCheck", "/dialogs/spellcheck") );
-    mapVerbPreference.insert(std::make_pair ("Symbols", "/dialogs/symbols") );
-    mapVerbPreference.insert(std::make_pair ("ObjectsPanel", "/dialogs/objects") );
-    mapVerbPreference.insert(std::make_pair ("TagsPanel", "/dialogs/tags") );
-    mapVerbPreference.insert(std::make_pair ("Prototype", "/dialogs/prototype") );
+    mapVerbPreference.insert(std::make_pair ("LayersPanel", "/dialogs/layers"));
+    mapVerbPreference.insert(std::make_pair ("FillAndStroke", "/dialogs/fillstroke"));
+    mapVerbPreference.insert(std::make_pair ("ExtensionEditor", "/dialogs/extensioneditor"));
+    mapVerbPreference.insert(std::make_pair ("AlignAndDistribute", "/dialogs/align"));
+    mapVerbPreference.insert(std::make_pair ("DocumentMetadata", "/dialogs/documentmetadata"));
+    mapVerbPreference.insert(std::make_pair ("DocumentProperties", "/dialogs/documentoptions"));
+    mapVerbPreference.insert(std::make_pair ("FilterEffectsDialog", "/dialogs/filtereffects"));
+    mapVerbPreference.insert(std::make_pair ("Find", "/dialogs/find"));
+    mapVerbPreference.insert(std::make_pair ("Glyphs", "/dialogs/glyphs"));
+    mapVerbPreference.insert(std::make_pair ("Messages", "/dialogs/messages"));
+    mapVerbPreference.insert(std::make_pair ("Memory", "/dialogs/memory"));
+    mapVerbPreference.insert(std::make_pair ("LivePathEffect", "/dialogs/livepatheffect"));
+    mapVerbPreference.insert(std::make_pair ("UndoHistory", "/dialogs/undo-history"));
+    mapVerbPreference.insert(std::make_pair ("Transformation", "/dialogs/transformation"));
+    mapVerbPreference.insert(std::make_pair ("Swatches", "/dialogs/swatches"));
+    mapVerbPreference.insert(std::make_pair ("IconPreviewPanel", "/dialogs/iconpreview"));
+    mapVerbPreference.insert(std::make_pair ("SvgFontsDialog", "/dialogs/svgfonts"));
+    mapVerbPreference.insert(std::make_pair ("InputDevices", "/dialogs/inputdevices"));
+    mapVerbPreference.insert(std::make_pair ("InkscapePreferences", "/dialogs/preferences"));
+    mapVerbPreference.insert(std::make_pair ("TileDialog", "/dialogs/gridtiler"));
+    mapVerbPreference.insert(std::make_pair ("Trace", "/dialogs/trace"));
+    mapVerbPreference.insert(std::make_pair ("PixelArt", "/dialogs/pixelart"));
+    mapVerbPreference.insert(std::make_pair ("TextFont", "/dialogs/textandfont"));
+    mapVerbPreference.insert(std::make_pair ("Export", "/dialogs/export"));
+    mapVerbPreference.insert(std::make_pair ("XmlTree", "/dialogs/xml"));
+    mapVerbPreference.insert(std::make_pair ("CloneTiler", "/dialogs/clonetiler"));
+    mapVerbPreference.insert(std::make_pair ("ObjectProperties", "/dialogs/object"));
+    mapVerbPreference.insert(std::make_pair ("SpellCheck", "/dialogs/spellcheck"));
+    mapVerbPreference.insert(std::make_pair ("Symbols", "/dialogs/symbols"));
+    mapVerbPreference.insert(std::make_pair ("ObjectsPanel", "/dialogs/objects"));
+    mapVerbPreference.insert(std::make_pair ("TagsPanel", "/dialogs/tags"));
+    mapVerbPreference.insert(std::make_pair ("Prototype", "/dialogs/prototype"));
 
 
     for (std::map<Glib::ustring, Glib::ustring>::const_iterator iter = mapVerbPreference.begin(); iter != mapVerbPreference.end(); ++iter) {

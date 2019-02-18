@@ -27,9 +27,9 @@ namespace Inkscape {
 
 namespace LivePathEffect {
 
-TextParam::TextParam( const Glib::ustring& label, const Glib::ustring& tip,
+TextParam::TextParam(const Glib::ustring& label, const Glib::ustring& tip,
                       const Glib::ustring& key, Inkscape::UI::Widget::Registry* wr,
-                      Effect* effect, const Glib::ustring default_value )
+                      Effect* effect, const Glib::ustring default_value)
     : Parameter(label, tip, key, wr, effect),
       value(default_value),
       defvalue(default_value),

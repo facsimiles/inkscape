@@ -57,11 +57,11 @@
  *   expression    ::= term { ('+' | '-') term }*  |
  *                     <empty string> ;
  *
- *   term          ::= exponent { ( '*' | '/' ) exponent }* ;
+ *   term          ::= exponent { ('*' | '/') exponent }* ;
  *
  *   exponent      ::= signed factor { '^' signed factor }* ;
  *
- *   signed factor ::= ( '+' | '-' )? factor ;
+ *   signed factor ::= ('+' | '-')? factor ;
  *
  *   unit factor   ::= factor unit? ;
  *

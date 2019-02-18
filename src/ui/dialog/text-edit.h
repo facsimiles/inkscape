@@ -125,7 +125,7 @@ protected:
      */
     void setPreviewText (Glib::ustring font_spec, Glib::ustring font_features, Glib::ustring phrase);
 
-    void updateObjectText ( SPItem *text );
+    void updateObjectText (SPItem *text);
     SPCSSAttr *fillTextStyle ();
 
     /**

@@ -84,7 +84,7 @@ ParamRadioButton::ParamRadioButton(const gchar * name,
                     newvalue = new Glib::ustring(contents);
                 }
 
-                if ( (newtext) && (newvalue) ) {   // logical error if this is not true here
+                if ((newtext) && (newvalue)) {   // logical error if this is not true here
                     choices.push_back(new optionentry(newvalue, newtext));
                 }
             }
@@ -145,7 +145,7 @@ const gchar *ParamRadioButton::set(const gchar * in, SPDocument * /*doc*/, Inksc
 
     Glib::ustring * settext = nullptr;
     for (auto entr:choices) {
-        if ( !entr->value->compare(in) ) {
+        if (!entr->value->compare(in)) {
             settext = entr->value;
             break;  // break out of for loop
         }
@@ -183,12 +183,12 @@ public:
      * Build a string preference for the given parameter.
      * @param  pref  Where to put the radiobutton's string when it is selected.
      */
-    ParamRadioButtonWdg ( Gtk::RadioButtonGroup& group, const Glib::ustring& label,
-                          ParamRadioButton * pref, SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal ) :
+    ParamRadioButtonWdg (Gtk::RadioButtonGroup& group, const Glib::ustring& label,
+                          ParamRadioButton * pref, SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal) :
         Gtk::RadioButton(group, label), _pref(pref), _doc(doc), _node(node), _changeSignal(changeSignal) {
         add_changesignal();
     };
-    ParamRadioButtonWdg ( const Glib::ustring& label,
+    ParamRadioButtonWdg (const Glib::ustring& label,
                           ParamRadioButton * pref, SPDocument * doc, Inkscape::XML::Node * node , sigc::signal<void> * changeSignal) :
         Gtk::RadioButton(label), _pref(pref), _doc(doc), _node(node), _changeSignal(changeSignal) {
         add_changesignal();
@@ -239,7 +239,7 @@ public:
 
 void ComboWdg::changed()
 {
-    if ( _base ) {
+    if (_base) {
             Glib::ustring value = _base->value_from_label(get_active_text());
             _base->set(value.c_str(), _doc, _node);
     }
@@ -255,8 +255,8 @@ Glib::ustring ParamRadioButton::value_from_label(const Glib::ustring label)
 {
     Glib::ustring value = "";
 
-    for ( auto entr:choices) {
-        if ( !entr->text->compare(label) ) {
+    for (auto entr:choices) {
+        if (!entr->text->compare(label)) {
             value = *(entr->value);
             break;
         }
@@ -297,7 +297,7 @@ Gtk::Widget * ParamRadioButton::get_widget(SPDocument * doc, Inkscape::XML::Node
     Gtk::RadioButtonGroup group;
     for (auto entr:choices) {
         Glib::ustring * text = entr->text;
-        switch ( _mode ) {
+        switch (_mode) {
             case MINIMAL:
             {
                 cbt->append(*text);
@@ -321,7 +321,7 @@ Gtk::Widget * ParamRadioButton::get_widget(SPDocument * doc, Inkscape::XML::Node
         }
     }
 
-    if ( (_mode == MINIMAL) && !comboSet) {
+    if ((_mode == MINIMAL) && !comboSet) {
         cbt->set_active(0);
     }
 

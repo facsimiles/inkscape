@@ -71,7 +71,7 @@ PaintDef::PaintDef() :
 {
 }
 
-PaintDef::PaintDef( ColorType type ) :
+PaintDef::PaintDef(ColorType type) :
     descr(),
     type(type),
     r(0),
@@ -93,7 +93,7 @@ PaintDef::PaintDef( ColorType type ) :
     }
 }
 
-PaintDef::PaintDef( unsigned int r, unsigned int g, unsigned int b, std::string  description ) :
+PaintDef::PaintDef(unsigned int r, unsigned int g, unsigned int b, std::string  description) :
     descr(std::move(description)),
     type(RGB),
     r(r),
@@ -107,16 +107,16 @@ PaintDef::PaintDef( unsigned int r, unsigned int g, unsigned int b, std::string 
 PaintDef::~PaintDef()
 = default;
 
-PaintDef::PaintDef( PaintDef const &other )
+PaintDef::PaintDef(PaintDef const &other)
 {
-    if ( this != &other ) {
+    if (this != &other) {
         *this = other;
     }
 }
 
-PaintDef& PaintDef::operator=( PaintDef const &other )
+PaintDef& PaintDef::operator=(PaintDef const &other)
 {
-    if ( this != & other )
+    if (this != & other)
     {
         type = other.type;
         r = other.r;
@@ -131,7 +131,7 @@ PaintDef& PaintDef::operator=( PaintDef const &other )
 
 class PaintDef::HookData {
 public:
-    HookData( ColorCallback cb, void* data ) {_cb = cb; _data = data;}
+    HookData(ColorCallback cb, void* data) {_cb = cb; _data = data;}
     ColorCallback _cb;
     void* _data;
 };
@@ -148,13 +148,13 @@ std::vector<std::string> PaintDef::getMIMETypes()
 
 void PaintDef::getMIMEData(std::string const & type, char*& dest, int& len, int& format)
 {
-    if ( type == mimeTEXT ) {
+    if (type == mimeTEXT) {
         dest = new char[8];
-        snprintf( dest, 8, "#%02x%02x%02x", getR(), getG(), getB() );
+        snprintf(dest, 8, "#%02x%02x%02x", getR(), getG(), getB());
         dest[7] = 0;
         len = 8;
         format = 8;
-    } else if ( type == mimeX_COLOR ) {
+    } else if (type == mimeX_COLOR) {
         uint16_t* tmp = new uint16_t[4];
         tmp[0] = (getR() << 8) | getR();
         tmp[1] = (getG() << 8) | getG();
@@ -163,9 +163,9 @@ void PaintDef::getMIMEData(std::string const & type, char*& dest, int& len, int&
         dest = reinterpret_cast<char*>(tmp);
         len = 8;
         format = 16;
-    } else if ( type == mimeOSWB_COLOR ) {
+    } else if (type == mimeOSWB_COLOR) {
         std::string tmp("<paint>");
-        switch ( getType() ) {
+        switch (getType()) {
             case ege::PaintDef::NONE:
             {
                 tmp += "<nocolor/>";
@@ -206,15 +206,15 @@ bool PaintDef::fromMIMEData(std::string const & type, char const * data, int len
 {
     bool worked = false;
     bool changed = false;
-    if ( type == mimeTEXT ) {
-    } else if ( type == mimeX_COLOR ) {
-    } else if ( type == mimeOSWB_COLOR ) {
+    if (type == mimeTEXT) {
+    } else if (type == mimeX_COLOR) {
+    } else if (type == mimeOSWB_COLOR) {
         std::string xml(data, len);
-        if ( xml.find("<nocolor/>") != std::string::npos ) {
-            if ( (this->type != ege::PaintDef::NONE)
+        if (xml.find("<nocolor/>") != std::string::npos) {
+            if ((this->type != ege::PaintDef::NONE)
                  || (this->r != 0)
                  || (this->g != 0)
-                 || (this->b != 0) ) {
+                 || (this->b != 0)) {
                 this->type = ege::PaintDef::NONE;
                 this->r = 0;
                 this->g = 0;
@@ -224,7 +224,7 @@ bool PaintDef::fromMIMEData(std::string const & type, char const * data, int len
             worked = true;
         } else {
             size_t pos = xml.find("<sRGB");
-            if ( pos != std::string::npos ) {
+            if (pos != std::string::npos) {
                 size_t endPos = xml.find(">", pos);
                 std::string srgb = xml.substr(pos, endPos);
                 this->type = ege::PaintDef::RGB;
@@ -245,7 +245,7 @@ bool PaintDef::fromMIMEData(std::string const & type, char const * data, int len
                 }
 
                 size_t pos = xml.find("<color ");
-                if ( pos != std::string::npos ) {
+                if (pos != std::string::npos) {
                     size_t endPos = xml.find(">", pos);
                     std::string colorTag = xml.substr(pos, endPos);
 
@@ -261,22 +261,22 @@ bool PaintDef::fromMIMEData(std::string const & type, char const * data, int len
             }
         }
     }
-    if ( changed ) {
+    if (changed) {
         // beware of callbacks changing things
         for (auto & _listener : _listeners)
         {
-            if ( _listener->_cb )
+            if (_listener->_cb)
             {
-                _listener->_cb( _listener->_data );
+                _listener->_cb(_listener->_data);
             }
         }
     }
     return worked;
 }
 
-void PaintDef::setRGB( unsigned int r, unsigned int g, unsigned int b )
+void PaintDef::setRGB(unsigned int r, unsigned int g, unsigned int b)
 {
-    if ( r != this->r || g != this->g || b != this->b ) {
+    if (r != this->r || g != this->g || b != this->b) {
         this->r = r;
         this->g = g;
         this->b = b;
@@ -284,20 +284,20 @@ void PaintDef::setRGB( unsigned int r, unsigned int g, unsigned int b )
         // beware of callbacks changing things
         for (auto & _listener : _listeners)
         {
-            if ( _listener->_cb )
+            if (_listener->_cb)
             {
-                _listener->_cb( _listener->_data );
+                _listener->_cb(_listener->_data);
             }
         }
     }
 }
 
-void PaintDef::addCallback( ColorCallback cb, void* data )
+void PaintDef::addCallback(ColorCallback cb, void* data)
 {
-    _listeners.push_back( new HookData(cb, data) );
+    _listeners.push_back(new HookData(cb, data));
 }
 
-void PaintDef::removeCallback( ColorCallback /*cb*/, void* /*data*/ )
+void PaintDef::removeCallback(ColorCallback /*cb*/, void* /*data*/)
 {
 }
 

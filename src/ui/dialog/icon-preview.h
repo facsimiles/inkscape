@@ -49,7 +49,7 @@ public:
 
     static IconPreviewPanel& getInstance();
 
-    void setDesktop( SPDesktop* desktop ) override;
+    void setDesktop(SPDesktop* desktop) override;
     void refreshPreview();
     void modeToggled();
 
@@ -88,9 +88,9 @@ private:
     sigc::connection selChangedConn;
 
 
-    void setDocument( SPDocument *document );
+    void setDocument(SPDocument *document);
     void on_button_clicked(int which);
-    void renderPreview( SPObject* obj );
+    void renderPreview(SPObject* obj);
     void updateMagnify();
     void queueRefresh();
     bool refreshCB();

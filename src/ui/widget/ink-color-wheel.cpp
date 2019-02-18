@@ -18,7 +18,7 @@ public:
     color_point(double x, double y, guint32 color) : x(x), y(y),
                                                      r(((color & 0xff0000) >> 16)/255.0),
                                                      g(((color &   0xff00) >>  8)/255.0),
-                                                     b(((color &     0xff)      )/255.0) {};
+                                                     b(((color &     0xff))/255.0) {};
     guint32 get_color() { return (int(r*255) << 16 | int(g*255) << 8 | int(b*255)); };
     double x;
     double y;
@@ -87,7 +87,7 @@ guint32 hsv_to_rgb(double h, double s, double v) {
     }
     guint32 rgb = (((int)floor (r*255 + 0.5) << 16) |
                    ((int)floor (g*255 + 0.5) <<  8) |
-                   ((int)floor (b*255 + 0.5)      ));
+                   ((int)floor (b*255 + 0.5)));
     return rgb;
 }
 
@@ -95,7 +95,7 @@ double luminance(guint32 color)
 {
     double r(((color & 0xff0000) >> 16)/255.0);
     double g(((color &   0xff00) >>  8)/255.0);
-    double b(((color &     0xff)      )/255.0);
+    double b(((color &     0xff))/255.0);
     return (r * 0.2125 + g * 0.7154 + b * 0.0721);
 }
 
@@ -115,7 +115,7 @@ ColorWheel::ColorWheel()
     add_events(Gdk::BUTTON_PRESS_MASK   |
                Gdk::BUTTON_RELEASE_MASK |
                Gdk::BUTTON_MOTION_MASK  |
-               Gdk::KEY_PRESS_MASK      );
+               Gdk::KEY_PRESS_MASK);
     set_can_focus();
 }
 
@@ -131,7 +131,7 @@ ColorWheel::set_rgb(const double& r, const double&g, const double&b, bool overri
         }
     } else {
         if (Max == r) {
-            _hue = ((g-b)/(Max-Min)    )/6.0;
+            _hue = ((g-b)/(Max-Min))/6.0;
         } else if (Max == g) {
             _hue = ((b-r)/(Max-Min) + 2)/6.0;
         } else {
@@ -154,7 +154,7 @@ ColorWheel::get_rgb(double& r, double& g, double& b)
     guint32 color = get_rgb();
     r = ((color & 0xff0000) >> 16)/255.0;
     g = ((color & 0x00ff00) >>  8)/255.0;
-    b = ((color & 0x0000ff)      )/255.0;
+    b = ((color & 0x0000ff))/255.0;
 }
 
 guint32
@@ -184,7 +184,7 @@ ColorWheel::on_draw(const::Cairo::RefPtr<::Cairo::Context>& cr) {
 
     // Paint ring
     guint32* buffer_ring = g_new (guint32, height * stride / 4);
-    double r_max = std::min( width, height)/2.0 - 2 * (focus_line_width + focus_padding);
+    double r_max = std::min(width, height)/2.0 - 2 * (focus_line_width + focus_padding);
     double r_min = r_max * (1.0 - _ring_width);
     double r2_max = (r_max+1) * (r_max+1); // Must expand a bit to avoid edge effects.
     double r2_min = (r_min-1) * (r_min-1); // Must shrink a bit to avoid edge effects.
@@ -377,7 +377,7 @@ ColorWheel::triangle_corners(double &x0, double &y0,
     get_style_property("focus-line-width", focus_line_width);
     get_style_property("focus-padding",    focus_padding);
 
-    double r_max = std::min( width, height)/2.0 - 2 * (focus_line_width + focus_padding);
+    double r_max = std::min(width, height)/2.0 - 2 * (focus_line_width + focus_padding);
     double r_min = r_max * (1.0 - _ring_width);
 
     double angle = _hue * 2.0 * M_PI;
@@ -438,7 +438,7 @@ ColorWheel::is_in_ring(const double& x, const double& y)
     get_style_property("focus-line-width", focus_line_width);
     get_style_property("focus-padding",    focus_padding);
 
-    double r_max = std::min( width, height)/2.0 - 2 * (focus_line_width + focus_padding);
+    double r_max = std::min(width, height)/2.0 - 2 * (focus_line_width + focus_padding);
     double r_min = r_max * (1.0 - _ring_width);
     double r2_max = r_max * r_max;
     double r2_min = r_min * r_min;
@@ -508,7 +508,7 @@ ColorWheel::on_button_press_event(GdkEventButton* event)
     double x = event->x;
     double y = event->y;
 
-    if (is_in_ring(x, y) ) {
+    if (is_in_ring(x, y)) {
         _mode = DRAG_H;
         grab_focus();
         _focus_on_ring = true;
@@ -573,10 +573,10 @@ ColorWheel::on_key_press_event(GdkEventKey* key_event)
     bool consumed = false;
 
     unsigned int key = 0;
-    gdk_keymap_translate_keyboard_state( Gdk::Display::get_default()->get_keymap(),
+    gdk_keymap_translate_keyboard_state(Gdk::Display::get_default()->get_keymap(),
                                          key_event->hardware_keycode,
                                          (GdkModifierType)key_event->state,
-                                         0, &key, nullptr, nullptr, nullptr );
+                                         0, &key, nullptr, nullptr, nullptr);
 
     double x0, y0, x1, y1, x2, y2;
     triangle_corners(x0, y0, x1, y1, x2, y2);

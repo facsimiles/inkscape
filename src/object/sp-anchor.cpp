@@ -35,14 +35,14 @@ SPAnchor::~SPAnchor() = default;
 void SPAnchor::build(SPDocument *document, Inkscape::XML::Node *repr) {
     SPGroup::build(document, repr);
 
-    this->readAttr( "xlink:type" );
-    this->readAttr( "xlink:role" );
-    this->readAttr( "xlink:arcrole" );
-    this->readAttr( "xlink:title" );
-    this->readAttr( "xlink:show" );
-    this->readAttr( "xlink:actuate" );
-    this->readAttr( "xlink:href" );
-    this->readAttr( "target" );
+    this->readAttr("xlink:type");
+    this->readAttr("xlink:role");
+    this->readAttr("xlink:arcrole");
+    this->readAttr("xlink:title");
+    this->readAttr("xlink:show");
+    this->readAttr("xlink:actuate");
+    this->readAttr("xlink:href");
+    this->readAttr("target");
 }
 
 void SPAnchor::release() {

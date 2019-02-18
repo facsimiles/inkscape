@@ -22,13 +22,13 @@
 Geom::OptRect bounds_fast_transformed(Geom::PathVector const & pv, Geom::Affine const & t);
 Geom::OptRect bounds_exact_transformed(Geom::PathVector const & pv, Geom::Affine const & t);
 
-void pathv_matrix_point_bbox_wind_distance ( Geom::PathVector const & pathv, Geom::Affine const &m, Geom::Point const &pt,
+void pathv_matrix_point_bbox_wind_distance (Geom::PathVector const & pathv, Geom::Affine const &m, Geom::Point const &pt,
                                              Geom::Rect *bbox, int *wind, Geom::Coord *dist,
                                              Geom::Coord tolerance, Geom::Rect const *viewbox);
 
-Geom::PathVector pathv_to_linear_and_cubic_beziers( Geom::PathVector const &pathv );
-Geom::PathVector pathv_to_linear( Geom::PathVector const &pathv, double maxdisp );
-Geom::PathVector pathv_to_cubicbezier( Geom::PathVector const &pathv);
+Geom::PathVector pathv_to_linear_and_cubic_beziers(Geom::PathVector const &pathv);
+Geom::PathVector pathv_to_linear(Geom::PathVector const &pathv, double maxdisp);
+Geom::PathVector pathv_to_cubicbezier(Geom::PathVector const &pathv);
 void recursive_bezier4(const double x1, const double y1, const double x2, const double y2, 
                        const double x3, const double y3, const double x4, const double y4,
                        std::vector<Geom::Point> &pointlist,

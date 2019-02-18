@@ -6,16 +6,16 @@
 
 namespace Inkscape {
 namespace UI {
-PrefPusher::PrefPusher( GtkToggleAction *act, Glib::ustring const &path, void (*callback)(gpointer), gpointer cbData ) :
+PrefPusher::PrefPusher(GtkToggleAction *act, Glib::ustring const &path, void (*callback)(gpointer), gpointer cbData) :
     Observer(path),
     act(act),
     callback(callback),
     cbData(cbData),
     freeze(false)
 {
-    g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(toggleCB), this);
+    g_signal_connect_after(G_OBJECT(act), "toggled", G_CALLBACK(toggleCB), this);
     freeze = true;
-    gtk_toggle_action_set_active( act, Inkscape::Preferences::get()->getBool(observed_path) );
+    gtk_toggle_action_set_active(act, Inkscape::Preferences::get()->getBool(observed_path));
     freeze = false;
 
     Inkscape::Preferences::get()->addObserver(*this);
@@ -26,7 +26,7 @@ PrefPusher::~PrefPusher()
     Inkscape::Preferences::get()->removeObserver(*this);
 }
 
-void PrefPusher::toggleCB( GtkToggleAction * /*act*/, PrefPusher *self )
+void PrefPusher::toggleCB(GtkToggleAction * /*act*/, PrefPusher *self)
 {
     if (self) {
         self->handleToggled();
@@ -37,7 +37,7 @@ void PrefPusher::handleToggled()
 {
     if (!freeze) {
         freeze = true;
-        Inkscape::Preferences::get()->setBool(observed_path, gtk_toggle_action_get_active( act ));
+        Inkscape::Preferences::get()->setBool(observed_path, gtk_toggle_action_get_active(act));
         if (callback) {
             (*callback)(cbData);
         }
@@ -51,7 +51,7 @@ void PrefPusher::notify(Inkscape::Preferences::Entry const &newVal)
     bool oldBool = gtk_toggle_action_get_active(act);
 
     if (!freeze && (newBool != oldBool)) {
-        gtk_toggle_action_set_active( act, newBool );
+        gtk_toggle_action_set_active(act, newBool);
     }
 }
 

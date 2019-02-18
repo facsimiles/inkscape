@@ -26,10 +26,10 @@ int Inkscape::SVG::PathString::minimumexponent;
 Inkscape::SVG::PATHSTRING_FORMAT Inkscape::SVG::PathString::format;
 
 Inkscape::SVG::PathString::PathString() :
-    force_repeat_commands(!Inkscape::Preferences::get()->getBool("/options/svgoutput/disable_optimizations" ) && Inkscape::Preferences::get()->getBool("/options/svgoutput/forcerepeatcommands"))
+    force_repeat_commands(!Inkscape::Preferences::get()->getBool("/options/svgoutput/disable_optimizations") && Inkscape::Preferences::get()->getBool("/options/svgoutput/forcerepeatcommands"))
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    format = (PATHSTRING_FORMAT)prefs->getIntLimited("/options/svgoutput/pathstring_format", 1, 0, PATHSTRING_FORMAT_SIZE - 1 );
+    format = (PATHSTRING_FORMAT)prefs->getIntLimited("/options/svgoutput/pathstring_format", 1, 0, PATHSTRING_FORMAT_SIZE - 1);
     numericprecision = std::max<int>(minprec,std::min<int>(maxprec, prefs->getInt("/options/svgoutput/numericprecision", 8)));
     minimumexponent = prefs->getInt("/options/svgoutput/minimumexponent", -8);
 }
@@ -43,16 +43,16 @@ void Inkscape::SVG::PathString::_appendOp(char abs_op, char rel_op) {
     // For absolute and relative paths... do nothing.
     switch (format) {
         case PATHSTRING_ABSOLUTE:
-            if ( !abs_op_repeated ) _abs_state.appendOp(abs_op);
+            if (!abs_op_repeated) _abs_state.appendOp(abs_op);
             break;
         case PATHSTRING_RELATIVE:
-            if ( !rel_op_repeated ) _rel_state.appendOp(rel_op);
+            if (!rel_op_repeated) _rel_state.appendOp(rel_op);
             break;
         case PATHSTRING_OPTIMIZE:
             {
             unsigned int const abs_added_size = abs_op_repeated ? 0 : 2;
             unsigned int const rel_added_size = rel_op_repeated ? 0 : 2;
-            if ( _rel_state.str.size()+2 < _abs_state.str.size()+abs_added_size ) {
+            if (_rel_state.str.size()+2 < _abs_state.str.size()+abs_added_size) {
 
                 // Store common prefix
                 commonbase += _rel_state.str;
@@ -65,7 +65,7 @@ void Inkscape::SVG::PathString::_appendOp(char abs_op, char rel_op) {
                 //   _rel_state.str.size()+2 < _abs_state.str.size()+abs_added_size
                 //   _rel_state.str.size()+rel_added_size < _abs_state.str.size()+2
                 //   _abs_state.str.size()+2 > _rel_state.str.size()+rel_added_size
-            } else if ( _abs_state.str.size()+2 < _rel_state.str.size()+rel_added_size ) {
+            } else if (_abs_state.str.size()+2 < _rel_state.str.size()+rel_added_size) {
 
                 // Store common prefix
                 commonbase += _abs_state.str;
@@ -75,8 +75,8 @@ void Inkscape::SVG::PathString::_appendOp(char abs_op, char rel_op) {
                 _abs_state.switches++;
                 rel_op_repeated = false;
             }
-            if ( !abs_op_repeated ) _abs_state.appendOp(abs_op);
-            if ( !rel_op_repeated ) _rel_state.appendOp(rel_op);
+            if (!abs_op_repeated) _abs_state.appendOp(abs_op);
+            if (!rel_op_repeated) _rel_state.appendOp(rel_op);
             }
             break;
         default:

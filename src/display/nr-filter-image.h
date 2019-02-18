@@ -34,10 +34,10 @@ public:
     bool can_handle_affine(Geom::Affine const &) override;
     double complexity(Geom::Affine const &ctm) override;
 
-    void set_document( SPDocument *document );
+    void set_document(SPDocument *document);
     void set_href(char const *href);
-    void set_align( unsigned int align );
-    void set_clip( unsigned int clip );
+    void set_align(unsigned int align);
+    void set_clip(unsigned int clip);
     bool from_element;
     SPItem* SVGElem;
 

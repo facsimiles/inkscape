@@ -29,7 +29,7 @@
 
 namespace Inkscape {
 
-void set_cairo_blend_operator( DrawingContext &dc, unsigned blend_mode ) {
+void set_cairo_blend_operator(DrawingContext &dc, unsigned blend_mode) {
 
     // All of the blend modes are implemented in Cairo as of 1.10.
     // For a detailed description, see:
@@ -306,7 +306,7 @@ void
 DrawingItem::setIsolation(unsigned isolation)
 {
     _isolation = isolation;
-    //if( isolation != 0 ) std::cout << "isolation: " << isolation << std::endl;
+    //if(isolation != 0) std::cout << "isolation: " << isolation << std::endl;
     _markForRendering();
 }
 
@@ -314,7 +314,7 @@ void
 DrawingItem::setBlendMode(unsigned mix_blend_mode)
 {
     _mix_blend_mode = mix_blend_mode;
-    //if( mix_blend_mode != 0 ) std::cout << "setBlendMode: " << mix_blend_mode << std::endl;
+    //if(mix_blend_mode != 0) std::cout << "setBlendMode: " << mix_blend_mode << std::endl;
     _markForRendering();
 }
 
@@ -369,7 +369,7 @@ DrawingItem::setStyle(SPStyle *style, SPStyle *context_style)
     // std::cout << "DrawingItem::setStyle: " << name() << " " << style
     //           << " " << context_style << std::endl;
 
-    if( style != _style ) {
+    if(style != _style) {
         if (style) sp_style_ref(style);
         if (_style) sp_style_unref(_style);
         _style = style;
@@ -419,7 +419,7 @@ DrawingItem::setChildrenStyle(SPStyle* context_style)
 {
     _context_style = context_style;
     for (auto & i : _children) {
-        i.setChildrenStyle( context_style );
+        i.setChildrenStyle(context_style);
     }
 }
 
@@ -568,7 +568,7 @@ DrawingItem::update(Geom::IntRect const &area, UpdateContext const &ctx, unsigne
 
         if (_style->vector_effect.size) {
             double value = sqrt(child_ctx.ctm.det());
-            if (value > 0 ) {
+            if (value > 0) {
                 child_ctx.ctm[0] = child_ctx.ctm[0]/value;
                 child_ctx.ctm[1] = child_ctx.ctm[1]/value;
                 child_ctx.ctm[2] = child_ctx.ctm[2]/value;
@@ -760,7 +760,7 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
     if (_cached) {
         if (_cache) {
             _cache->prepare();
-            set_cairo_blend_operator( dc, _mix_blend_mode );
+            set_cairo_blend_operator(dc, _mix_blend_mode);
 
             _cache->paintFromCache(dc, carea);
             if (!carea) return RENDER_OK;
@@ -901,7 +901,7 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
     }
     dc.rectangle(*carea);
     dc.setSource(&intermediate);
-    set_cairo_blend_operator( dc, _mix_blend_mode );
+    set_cairo_blend_operator(dc, _mix_blend_mode);
     dc.fill();
     dc.setSource(0,0,0,0);
     // the call above is to clear a ref on the intermediate surface held by dc
@@ -1043,7 +1043,7 @@ DrawingItem::name()
 
 // For debugging: Print drawing tree structure.
 void
-DrawingItem::recursivePrintTree( unsigned level )
+DrawingItem::recursivePrintTree(unsigned level)
 {
     if (level == 0) {
         std::cout << "Display Item Tree" << std::endl;
@@ -1054,7 +1054,7 @@ DrawingItem::recursivePrintTree( unsigned level )
     }
     std::cout << name() << std::endl;
     for (auto & i : _children) {
-        i.recursivePrintTree( level+1 );
+        i.recursivePrintTree(level+1);
     }
 }
 

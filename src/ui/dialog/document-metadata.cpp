@@ -120,7 +120,7 @@ DocumentMetadata::build_metadata()
     struct rdf_work_entity_t * entity;
     int row = 1;
     for (entity = rdf_work_entities; entity && entity->name; entity++, row++) {
-        if ( entity->editable == RDF_EDIT_GENERIC ) {
+        if (entity->editable == RDF_EDIT_GENERIC) {
             EntityEntry *w = EntityEntry::create (entity, _wr);
             _rdflist.push_back (w);
             Gtk::HBox *space = Gtk::manage (new Gtk::HBox);

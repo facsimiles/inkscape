@@ -38,7 +38,7 @@ Box3DSide::~Box3DSide() = default;
 void Box3DSide::build(SPDocument * document, Inkscape::XML::Node * repr) {
     SPPolygon::build(document, repr);
 
-    this->readAttr( "inkscape:box3dsidetype" );
+    this->readAttr("inkscape:box3dsidetype");
 }
 
 
@@ -59,11 +59,11 @@ Inkscape::XML::Node* Box3DSide::write(Inkscape::XML::Document *xml_doc, Inkscape
     SPCurve const *curve = this->_curve;
 
     //Nulls might be possible if this called iteratively
-    if ( !curve ) {
+    if (!curve) {
         return nullptr;
     }
 
-    char *d = sp_svg_write_path ( curve->get_pathvector() );
+    char *d = sp_svg_write_path (curve->get_pathvector());
     repr->setAttribute("d", d);
     g_free (d);
 
@@ -180,7 +180,7 @@ void Box3DSide::set_shape() {
     if (!box3d_get_corner_screen(box, corners[0]).isFinite() ||
         !box3d_get_corner_screen(box, corners[1]).isFinite() ||
         !box3d_get_corner_screen(box, corners[2]).isFinite() ||
-        !box3d_get_corner_screen(box, corners[3]).isFinite() )
+        !box3d_get_corner_screen(box, corners[3]).isFinite())
     {
         g_warning ("Trying to draw a 3D box side with invalid coordinates.\n");
         return;

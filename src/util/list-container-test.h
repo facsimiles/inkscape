@@ -19,12 +19,12 @@ static bool check_values(Inkscape::Util::ListContainer<int> const &c, unsigned n
     va_list args;
     va_start(args, n_values);
     Inkscape::Util::ListContainer<int>::const_iterator iter(c.begin());
-    while ( n_values && iter != c.end() ) {
+    while (n_values && iter != c.end()) {
         int const value = va_arg(args, int);
-        if ( value != *iter ) {
+        if (value != *iter) {
             ret = false;
         }
-        if ( n_values == 1 && &c.back() != &*iter ) {
+        if (n_values == 1 && &c.back() != &*iter) {
             ret = false;
         }
         n_values--;
@@ -45,7 +45,7 @@ public:
 // createSuite and destroySuite get us per-suite setup and teardown
 // without us having to worry about static initialization order, etc.
     static ListContainerTest *createSuite() { return new ListContainerTest(); }
-    static void destroySuite( ListContainerTest *suite ) { delete suite; }
+    static void destroySuite(ListContainerTest *suite) { delete suite; }
 
     void testRangeConstructor()
     {
@@ -56,7 +56,7 @@ public:
         Inkscape::Util::ListContainer<int>::iterator container_iter=container.begin();
         int const * values_iter=values;
 
-        while ( values_iter != values_end && container_iter != container.end() ) {
+        while (values_iter != values_end && container_iter != container.end()) {
             TS_ASSERT_EQUALS(*values_iter , *container_iter);
             ++values_iter;
             ++container_iter;
@@ -78,10 +78,10 @@ public:
         Inkscape::Util::ListContainer<int> c_d(ARRAY_RANGE(d));
 
         TS_ASSERT(c_a == c_b);
-        TS_ASSERT(!( c_a != c_b ));
-        TS_ASSERT(!( c_a == c_c ));
+        TS_ASSERT(!(c_a != c_b));
+        TS_ASSERT(!(c_a == c_c));
         TS_ASSERT(c_a != c_c);
-        TS_ASSERT(!( c_a == c_d ));
+        TS_ASSERT(!(c_a == c_d));
         TS_ASSERT(c_a != c_d);
     }
 
@@ -96,10 +96,10 @@ public:
         Inkscape::Util::ListContainer<int> c_c(ARRAY_RANGE(c));
         Inkscape::Util::ListContainer<int> c_d(ARRAY_RANGE(d));
         TS_ASSERT(c_a >= c_b);
-        TS_ASSERT(!( c_a < c_b ));
-        TS_ASSERT(!( c_a >= c_c ));
+        TS_ASSERT(!(c_a < c_b));
+        TS_ASSERT(!(c_a >= c_c));
         TS_ASSERT(c_a < c_c);
-        TS_ASSERT(!( c_a < c_d ));
+        TS_ASSERT(!(c_a < c_d));
         TS_ASSERT(c_a >= c_d);
         TS_ASSERT(c_d < c_a);
     }

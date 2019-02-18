@@ -43,9 +43,9 @@ static Condition _condition_handlers[] = {
 // function which evaluates if item should be displayed
 bool sp_item_evaluate(SPItem const *item) {
     bool needDisplay = true;
-    for ( unsigned int i = 0 ; needDisplay && (i < sizeof(_condition_handlers) / sizeof(_condition_handlers[0])) ; i++ ) {
+    for (unsigned int i = 0 ; needDisplay && (i < sizeof(_condition_handlers) / sizeof(_condition_handlers[0])) ; i++) {
         gchar const *value = item->getAttribute(_condition_handlers[i].attribute);
-        if ( value && !_condition_handlers[i].evaluator(item, value) ) {
+        if (value && !_condition_handlers[i].evaluator(item, value)) {
             needDisplay = false;
         }
     }
@@ -55,18 +55,18 @@ bool sp_item_evaluate(SPItem const *item) {
 #define ISALNUM(c)    (((c) >= 'a' && (c) <= 'z') || ((c) >= 'A' && (c) <= 'Z') || ((c) >= '0' && (c) <= '9'))
 
 static gchar *preprocessLanguageCode(gchar *lngcode) {
-    if ( nullptr == lngcode )
+    if (nullptr == lngcode)
         return nullptr;
 
     lngcode = g_strstrip(lngcode);
-    if ( 0 == *lngcode )
+    if (0 == *lngcode)
         return lngcode;
-    for ( unsigned int i = 0 ; i < strlen(lngcode) ; i++ ) {
-        if ( lngcode[i] >= 'A' && lngcode[i] <= 'Z' ) {
+    for (unsigned int i = 0 ; i < strlen(lngcode) ; i++) {
+        if (lngcode[i] >= 'A' && lngcode[i] <= 'Z') {
             lngcode[i] = g_ascii_tolower(lngcode[i]);
-        } else if ( '_' == lngcode[i] ) {
+        } else if ('_' == lngcode[i]) {
             lngcode[i] = '-';
-        } else if ( !ISALNUM(lngcode[i]) && '-' != lngcode[i] ) {
+        } else if (!ISALNUM(lngcode[i]) && '-' != lngcode[i]) {
             // only alpha numeric characters and '-' may be contained in language code
             lngcode[0] = 0;
             break;
@@ -77,16 +77,16 @@ static gchar *preprocessLanguageCode(gchar *lngcode) {
 }
 
 static bool evaluateSystemLanguage(SPItem const *item, gchar const *value) {
-    if ( nullptr == value )
+    if (nullptr == value)
         return true;
 
     std::set<Glib::ustring> language_codes;
     gchar *str = nullptr;
-    gchar **strlist = g_strsplit( value, ",", 0);
+    gchar **strlist = g_strsplit(value, ",", 0);
 
-    for ( int i = 0 ; (str = strlist[i]) ; i++ ) {
+    for (int i = 0 ; (str = strlist[i]) ; i++) {
         gchar *lngcode = preprocessLanguageCode(str);
-        if ( 0 == *lngcode )
+        if (0 == *lngcode)
             continue;
         language_codes.insert(lngcode);
 
@@ -95,7 +95,7 @@ static bool evaluateSystemLanguage(SPItem const *item, gchar const *value) {
         {
             // if subtag is used, primary tag is still a perfect match
             *pos = 0;
-            if ( language_codes.find(lngcode) == language_codes.end() ) {
+            if (language_codes.find(lngcode) == language_codes.end()) {
                 language_codes.insert(lngcode);
             }
         }
@@ -112,12 +112,12 @@ static bool evaluateSystemLanguage(SPItem const *item, gchar const *value) {
         return false;
 
     bool match = true;
-    strlist = g_strsplit( document_language.c_str(), ",", 0);
-    for ( int i = 0 ; (str = strlist[i]) ; i++ ) {
+    strlist = g_strsplit(document_language.c_str(), ",", 0);
+    for (int i = 0 ; (str = strlist[i]) ; i++) {
         gchar *lngcode = preprocessLanguageCode(str);
-        if ( 0 == *lngcode )
+        if (0 == *lngcode)
             continue;
-        if ( language_codes.find(lngcode) != language_codes.end() ) {
+        if (language_codes.find(lngcode) != language_codes.end()) {
             match = true;
             break;
         }
@@ -130,11 +130,11 @@ static bool evaluateSystemLanguage(SPItem const *item, gchar const *value) {
 static std::vector<Glib::ustring> splitByWhitespace(gchar const *value) {
     std::vector<Glib::ustring> parts;
     gchar *str = nullptr;
-    gchar **strlist = g_strsplit( value, ",", 0);
+    gchar **strlist = g_strsplit(value, ",", 0);
 
-    for ( int i = 0 ; (str = strlist[i]) ; i++ ) {
+    for (int i = 0 ; (str = strlist[i]) ; i++) {
         gchar *part = g_strstrip(str);
-        if ( 0 == *part )
+        if (0 == *part)
             continue;
         parts.emplace_back(part);
     }
@@ -217,8 +217,8 @@ static bool evaluateSVG11Feature(gchar const *feature) {
         "Extensibility", // not sure
     };
     
-    for ( unsigned int i = 0 ; i < sizeof(_supported_features)/sizeof(_supported_features[0]); i++ ) {
-        if ( 0 == strcasecmp(feature, _supported_features[0]) )
+    for (unsigned int i = 0 ; i < sizeof(_supported_features)/sizeof(_supported_features[0]); i++) {
+        if (0 == strcasecmp(feature, _supported_features[0]))
             return true;
     }
     return false;
@@ -235,28 +235,28 @@ static bool evaluateSVG10Feature(gchar const *feature) {
         // "svg.all",
         // "dom.svg.all"
     };
-    for ( unsigned int i = 0 ; i < sizeof(_supported_features)/sizeof(_supported_features[0]); i++ ) {
-        if ( 0 == strcasecmp(feature, _supported_features[0]) )
+    for (unsigned int i = 0 ; i < sizeof(_supported_features)/sizeof(_supported_features[0]); i++) {
+        if (0 == strcasecmp(feature, _supported_features[0]))
             return true;
     }
     return false;
 }
 
 static bool evaluateSingleFeature(gchar const *value) {
-    if ( nullptr == value )
+    if (nullptr == value)
         return false;
     gchar const *found;
     found = strstr(value, SVG11FEATURE);
-    if ( value == found )
+    if (value == found)
         return evaluateSVG11Feature(found + strlen(SVG11FEATURE));
     found = strstr(value, SVG10FEATURE);
-    if ( value == found )
+    if (value == found)
         return evaluateSVG10Feature(found + strlen(SVG10FEATURE));
     return false;
 }
 
 static bool evaluateRequiredFeatures(SPItem const */*item*/, gchar const *value) {
-    if ( nullptr == value )
+    if (nullptr == value)
         return true;
 
     std::vector<Glib::ustring> parts = splitByWhitespace(value);
@@ -275,7 +275,7 @@ static bool evaluateRequiredFeatures(SPItem const */*item*/, gchar const *value)
 }
 
 static bool evaluateRequiredExtensions(SPItem const */*item*/, gchar const *value) {
-    if ( nullptr == value )
+    if (nullptr == value)
         return true;
     return false;
 }

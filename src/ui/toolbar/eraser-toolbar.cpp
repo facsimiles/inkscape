@@ -105,7 +105,7 @@ EraserToolbar::EraserToolbar(SPDesktop *desktop)
         _width->set_custom_numeric_menu_data(values, labels);
         _width_adj->signal_value_changed().connect(sigc::mem_fun(*this, &EraserToolbar::width_value_changed));
         // TODO: Allow SpinButtonToolItem to display as a slider
-        // ege_adjustment_action_set_appearance( toolbar->_width, TOOLBAR_SLIDER_HINT );
+        // ege_adjustment_action_set_appearance(toolbar->_width, TOOLBAR_SLIDER_HINT);
         add(*_width);
         _width->set_sensitive(true);
     }
@@ -172,7 +172,7 @@ EraserToolbar::EraserToolbar(SPDesktop *desktop)
         _tremor_adj->signal_value_changed().connect(sigc::mem_fun(*this, &EraserToolbar::tremor_value_changed));
 
         // TODO: Allow slider appearance
-        //ege_adjustment_action_set_appearance( toolbar->_tremor, TOOLBAR_SLIDER_HINT );
+        //ege_adjustment_action_set_appearance(toolbar->_tremor, TOOLBAR_SLIDER_HINT);
         add(*_tremor);
         _tremor->set_sensitive(true);
     }
@@ -192,7 +192,7 @@ EraserToolbar::EraserToolbar(SPDesktop *desktop)
         _mass->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
         _mass_adj->signal_value_changed().connect(sigc::mem_fun(*this, &EraserToolbar::mass_value_changed));
         // TODO: Allow slider appearance
-        //ege_adjustment_action_set_appearance( toolbar->_mass, TOOLBAR_SLIDER_HINT );
+        //ege_adjustment_action_set_appearance(toolbar->_mass, TOOLBAR_SLIDER_HINT);
         add(*_mass);
         _mass->set_sensitive(true);
     }
@@ -205,7 +205,7 @@ EraserToolbar::EraserToolbar(SPDesktop *desktop)
         _split = add_toggle_button(_("Break apart cut items"),
                                    _("Break apart cut items"));
         _split->set_icon_name(INKSCAPE_ICON("distribute-randomize"));
-        _split->set_active( prefs->getBool("/tools/eraser/break_apart", false) );
+        _split->set_active(prefs->getBool("/tools/eraser/break_apart", false));
         _split->signal_toggled().connect(sigc::mem_fun(*this, &EraserToolbar::toggle_break_apart));
     }
 
@@ -226,7 +226,7 @@ EraserToolbar::mode_changed(int mode)
 {
     if (DocumentUndo::getUndoSensitive(_desktop->getDocument())) {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        prefs->setInt( "/tools/eraser/mode", mode );
+        prefs->setInt("/tools/eraser/mode", mode);
     }
 
     set_eraser_mode_visibility(mode);
@@ -237,7 +237,7 @@ EraserToolbar::mode_changed(int mode)
         _freeze = true;
 
         /*
-        if ( eraser_mode != ERASER_MODE_DELETE ) {
+        if (eraser_mode != ERASER_MODE_DELETE) {
         } else {
         }
         */
@@ -273,35 +273,35 @@ void
 EraserToolbar::width_value_changed()
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setDouble( "/tools/eraser/width", _width_adj->get_value() );
+    prefs->setDouble("/tools/eraser/width", _width_adj->get_value());
 }
 
 void
 EraserToolbar::mass_value_changed()
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setDouble( "/tools/eraser/mass", _mass_adj->get_value() );
+    prefs->setDouble("/tools/eraser/mass", _mass_adj->get_value());
 }
 
 void
 EraserToolbar::velthin_value_changed()
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setDouble("/tools/eraser/thinning", _thinning_adj->get_value() );
+    prefs->setDouble("/tools/eraser/thinning", _thinning_adj->get_value());
 }
 
 void
 EraserToolbar::cap_rounding_value_changed()
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setDouble( "/tools/eraser/cap_rounding", _cap_rounding_adj->get_value() );
+    prefs->setDouble("/tools/eraser/cap_rounding", _cap_rounding_adj->get_value());
 }
 
 void
 EraserToolbar::tremor_value_changed()
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setDouble( "/tools/eraser/tremor", _tremor_adj->get_value() );
+    prefs->setDouble("/tools/eraser/tremor", _tremor_adj->get_value());
 }
 
 void

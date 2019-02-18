@@ -38,7 +38,7 @@ namespace IO
 #define FILE_READ  1
 #define FILE_WRITE 2
 
-static FILE *fopen_utf8name( char const *utf8name, int mode )
+static FILE *fopen_utf8name(char const *utf8name, int mode)
 {
     FILE *fp = nullptr;
     if (!utf8name)
@@ -51,8 +51,8 @@ static FILE *fopen_utf8name( char const *utf8name, int mode )
         }
 
 #ifndef _WIN32
-    gchar *filename = g_filename_from_utf8( utf8name, -1, nullptr, nullptr, nullptr );
-    if ( filename ) {
+    gchar *filename = g_filename_from_utf8(utf8name, -1, nullptr, nullptr, nullptr);
+    if (filename) {
         if (mode == FILE_READ)
             fp = std::fopen(filename, "rb");
         else
@@ -61,13 +61,13 @@ static FILE *fopen_utf8name( char const *utf8name, int mode )
     }
 #else
     {
-        gunichar2 *wideName = g_utf8_to_utf16( utf8name, -1, NULL, NULL, NULL );
-        if ( wideName )  {
+        gunichar2 *wideName = g_utf8_to_utf16(utf8name, -1, NULL, NULL, NULL);
+        if (wideName)  {
             if (mode == FILE_READ)
-                fp = _wfopen( (wchar_t*)wideName, L"rb" );
+                fp = _wfopen((wchar_t*)wideName, L"rb");
             else
-                fp = _wfopen( (wchar_t*)wideName, L"wb" );
-            g_free( wideName );
+                fp = _wfopen((wchar_t*)wideName, L"wb");
+            g_free(wideName);
         } else {
             gchar *safe = Inkscape::IO::sanitizeString(utf8name);
             g_message("Unable to convert filename from UTF-8 to UTF-16 [%s]", safe);
@@ -182,7 +182,7 @@ void FileOutputStream::close()
             if (!outf)
                 return;
             fflush(outf);
-            if ( ownsFile )
+            if (ownsFile)
                 fclose(outf);
             outf=nullptr;
 }

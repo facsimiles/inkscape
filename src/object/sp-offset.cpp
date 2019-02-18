@@ -113,7 +113,7 @@ void SPOffset::build(SPDocument *document, Inkscape::XML::Node *repr) {
 
     //XML Tree being used directly here while it shouldn't be.
     if (this->getRepr()->attribute("inkscape:radius")) {
-        this->readAttr( "inkscape:radius" );
+        this->readAttr("inkscape:radius");
     } else {
         //XML Tree being used directly here (as object->getRepr) 
         //in all the below lines in the block while it shouldn't be.
@@ -121,21 +121,21 @@ void SPOffset::build(SPDocument *document, Inkscape::XML::Node *repr) {
         this->getRepr()->setAttribute("inkscape:radius",oldA);
         this->getRepr()->setAttribute("sodipodi:radius",nullptr);
 
-        this->readAttr( "inkscape:radius" );
+        this->readAttr("inkscape:radius");
     }
 
     if (this->getRepr()->attribute("inkscape:original")) {
-        this->readAttr( "inkscape:original" );
+        this->readAttr("inkscape:original");
     } else {
         gchar const *oldA = this->getRepr()->attribute("sodipodi:original");
         this->getRepr()->setAttribute("inkscape:original",oldA);
         this->getRepr()->setAttribute("sodipodi:original",nullptr);
 
-        this->readAttr( "inkscape:original" );
+        this->readAttr("inkscape:original");
     }
 
     if (this->getRepr()->attribute("xlink:href")) {
-        this->readAttr( "xlink:href" );
+        this->readAttr("xlink:href");
     } else {
         gchar const *oldA = this->getRepr()->attribute("inkscape:href");
 
@@ -155,7 +155,7 @@ void SPOffset::build(SPDocument *document, Inkscape::XML::Node *repr) {
             this->getRepr()->setAttribute("inkscape:href",nullptr);
         }
 
-        this->readAttr( "xlink:href" );
+        this->readAttr("xlink:href");
     }
 }
 
@@ -218,7 +218,7 @@ void SPOffset::release() {
 }
 
 void SPOffset::set(SPAttributeEnum key, const gchar* value) {
-    if ( this->sourceDirty ) {
+    if (this->sourceDirty) {
     	refresh_offset_source(this);
     }
 
@@ -246,7 +246,7 @@ void SPOffset::set(SPAttributeEnum key, const gchar* value) {
 
                 this->knotSet = false;
 
-                if ( this->isUpdating == false ) {
+                if (this->isUpdating == false) {
                 	this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
                 }
             }
@@ -262,25 +262,25 @@ void SPOffset::set(SPAttributeEnum key, const gchar* value) {
                 this->knotSet = false; // knotset=false because it's not set from the context
             }
 
-            if ( this->isUpdating == false ) {
+            if (this->isUpdating == false) {
             	this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             }
             break;
 
         case SP_ATTR_INKSCAPE_HREF:
         case SP_ATTR_XLINK_HREF:
-            if ( value == nullptr ) {
+            if (value == nullptr) {
                 sp_offset_quit_listening(this);
-                if ( this->sourceHref ) {
+                if (this->sourceHref) {
                 	g_free(this->sourceHref);
                 }
 
                 this->sourceHref = nullptr;
                 this->sourceRef->detach();
             } else {
-                if ( this->sourceHref && ( strcmp(value, this->sourceHref) == 0 ) ) {
+                if (this->sourceHref && (strcmp(value, this->sourceHref) == 0)) {
                 } else {
-                    if ( this->sourceHref ) {
+                    if (this->sourceHref) {
                     	g_free(this->sourceHref);
                     }
 
@@ -305,7 +305,7 @@ void SPOffset::set(SPAttributeEnum key, const gchar* value) {
 void SPOffset::update(SPCtx *ctx, guint flags) {
     this->isUpdating=true; // prevent sp_offset_set from requesting updates
     
-    if ( this->sourceDirty ) {
+    if (this->sourceDirty) {
     	refresh_offset_source(this);
     }
     
@@ -322,7 +322,7 @@ void SPOffset::update(SPCtx *ctx, guint flags) {
 }
 
 const char* SPOffset::displayName() const {
-    if ( this->sourceHref ) {
+    if (this->sourceHref) {
         return _("Linked Offset");
     } else {
         return _("Dynamic Offset");
@@ -336,7 +336,7 @@ gchar* SPOffset::description() const {
 }
 
 void SPOffset::set_shape() {
-    if ( this->originalPath == nullptr ) {
+    if (this->originalPath == nullptr) {
         // oops : no path?! (the offset object should do harakiri)
         return;
     }
@@ -345,7 +345,7 @@ void SPOffset::set_shape() {
 #endif
     // au boulot
 
-    if ( fabs(this->rad) < 0.01 ) {
+    if (fabs(this->rad) < 0.01) {
         // grosso modo: 0
         // just put the source of this (almost-non-offsetted) object as being the actual offset, 
         // no one will notice. it's also useless to compute the offset with a 0 radius
@@ -353,7 +353,7 @@ void SPOffset::set_shape() {
         //XML Tree being used directly here while it shouldn't be.
         const char *res_d = this->getRepr()->attribute("inkscape:original");
 
-        if ( res_d ) {
+        if (res_d) {
             Geom::PathVector pv = sp_svg_read_pathv(res_d);
             SPCurve *c = new SPCurve(pv);
             g_assert(c != nullptr);
@@ -375,7 +375,7 @@ void SPOffset::set_shape() {
     Path *orig = new Path;
     orig->Copy ((Path *)this->originalPath);
 
-    if ( use_slow_but_correct_offset_method == false ) {
+    if (use_slow_but_correct_offset_method == false) {
         // version par outline
         Shape *theShape = new Shape;
         Shape *theRes = new Shape;
@@ -414,7 +414,7 @@ void SPOffset::set_shape() {
 
         Geom::OptRect bbox = this->desktopVisualBounds();
 
-        if ( bbox ) {
+        if (bbox) {
             gdouble size = L2(bbox->dimensions());
             gdouble const exp = this->transform.descrim();
 
@@ -501,12 +501,12 @@ void SPOffset::set_shape() {
                     double  bL,bT,bR,bB;
                     parts[i]->PolylineBoundingBox(bL,bT,bR,bB);
                     double  measure=((bR-bL)+(bB-bT))*0.5;
-                    if ( measure < 10.0 ) {
+                    if (measure < 10.0) {
                         parts[i]->Convert(0.02*measure);
                     }
                 }
 
-                if ( partSurf < 0 ) { // inverse par rapport a la realite
+                if (partSurf < 0) { // inverse par rapport a la realite
                     // plein
                     holes[i]=0;
                     parts[i]->Fill(oneCleanPart,0);
@@ -517,13 +517,13 @@ void SPOffset::set_shape() {
                     onePart->CalcBBox();
                     double  typicalSize=0.5*((onePart->rightX-onePart->leftX)+(onePart->bottomY-onePart->topY));
 
-                    if ( typicalSize < 0.05 ) {
+                    if (typicalSize < 0.05) {
                     	typicalSize=0.05;
                     }
 
                     typicalSize*=0.01;
 
-                    if ( typicalSize > 1.0 ) {
+                    if (typicalSize > 1.0) {
                     	typicalSize=1.0;
                     }
 
@@ -533,7 +533,7 @@ void SPOffset::set_shape() {
 
                     double nPartSurf=parts[i]->Surface();
 
-                    if ( nPartSurf >= 0 ) {
+                    if (nPartSurf >= 0) {
                         // inversion de la surface -> disparait
                         delete parts[i];
                         parts[i]=nullptr;
@@ -555,13 +555,13 @@ void SPOffset::set_shape() {
                     onePart->CalcBBox();
                     double  typicalSize=0.5*((onePart->rightX-onePart->leftX)+(onePart->bottomY-onePart->topY));
 
-                    if ( typicalSize < 0.05 ) {
+                    if (typicalSize < 0.05) {
                     	typicalSize=0.05;
                     }
 
                     typicalSize*=0.01;
 
-                    if ( typicalSize > 1.0 ) {
+                    if (typicalSize > 1.0) {
                     	typicalSize=1.0;
                     }
 
@@ -570,7 +570,7 @@ void SPOffset::set_shape() {
                     parts[i]->Simplify (typicalSize);
                     double nPartSurf=parts[i]->Surface();
 
-                    if ( nPartSurf >= 0 ) {
+                    if (nPartSurf >= 0) {
                         // inversion de la surface -> disparait
                         delete parts[i];
                         parts[i]=nullptr;
@@ -588,14 +588,14 @@ void SPOffset::set_shape() {
             delete oneCleanPart;
         }
 
-        if ( nbPart > 1 ) {
+        if (nbPart > 1) {
             theShape->Reset();
 
             for (int i=0;i<nbPart;i++) {
-                if ( parts[i] ) {
+                if (parts[i]) {
                     parts[i]->ConvertWithBackData(1.0);
 
-                    if ( holes[i] ) {
+                    if (holes[i]) {
                         parts[i]->Fill(theShape,i,true,true,true);
                     } else {
                         parts[i]->Fill(theShape,i,true,true,false);
@@ -607,15 +607,15 @@ void SPOffset::set_shape() {
             theRes->ConvertToForme (orig,nbPart,parts);
 
             for (int i=0;i<nbPart;i++) {
-            	if ( parts[i] ) {
+            	if (parts[i]) {
             		delete parts[i];
             	}
             }
-        } else if ( nbPart == 1 ) {
+        } else if (nbPart == 1) {
             orig->Copy(parts[0]);
 
             for (int i=0;i<nbPart;i++) {
-            	if ( parts[i] ) {
+            	if (parts[i]) {
             		delete parts[i];
             	}
             }
@@ -633,11 +633,11 @@ void SPOffset::set_shape() {
       orig->Simplify (1.0 * o_width);
       }*/
 
-        if ( parts ) {
+        if (parts) {
         	free(parts);
         }
 
-        if ( holes ) {
+        if (holes) {
         	free(holes);
         }
 
@@ -985,7 +985,7 @@ sp_offset_top_point (SPOffset const * offset, Geom::Point *px)
 // the listening functions
 static void sp_offset_start_listening(SPOffset *offset,SPObject* to)
 {
-    if ( to == nullptr ) {
+    if (to == nullptr) {
         return;
     }
 
@@ -999,7 +999,7 @@ static void sp_offset_start_listening(SPOffset *offset,SPObject* to)
 
 static void sp_offset_quit_listening(SPOffset *offset)
 {
-    if ( offset->sourceObject == nullptr ) {
+    if (offset->sourceObject == nullptr) {
         return;
     }
 
@@ -1076,7 +1076,7 @@ sp_offset_delete_self(SPObject */*deleted*/, SPOffset *offset)
         // leave it be. just forget about the source
         sp_offset_quit_listening(offset);
 
-        if ( offset->sourceHref ) {
+        if (offset->sourceHref) {
         	g_free(offset->sourceHref);
         }
 
@@ -1101,7 +1101,7 @@ sp_offset_source_modified (SPObject */*iSource*/, guint flags, SPItem *item)
 static void
 refresh_offset_source(SPOffset* offset)
 {
-    if ( offset == nullptr ) {
+    if (offset == nullptr) {
     	return;
     }
 
@@ -1111,7 +1111,7 @@ refresh_offset_source(SPOffset* offset)
     // The bad case: no d attribute.  Must check that it's an SPShape and then take the outline.
     SPObject *refobj=offset->sourceObject;
 
-    if ( refobj == nullptr ) {
+    if (refobj == nullptr) {
     	return;
     }
 

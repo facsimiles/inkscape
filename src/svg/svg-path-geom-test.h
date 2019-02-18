@@ -76,7 +76,7 @@ public:
 // createSuite and destroySuite get us per-suite setup and teardown
 // without us having to worry about static initialization order, etc.
     static SvgPathGeomTest *createSuite() { return new SvgPathGeomTest(); }
-    static void destroySuite( SvgPathGeomTest *suite ) { delete suite; }
+    static void destroySuite(SvgPathGeomTest *suite) { delete suite; }
 
     void testReadRectanglesAbsoluteClosed()
     {
@@ -408,7 +408,7 @@ public:
         prefs->setInt("/options/svgoutput/minimumexponent", -8);
         pv = sp_svg_read_pathv("M 123456781,1.23456781e-8 L 123456782,1.23456782e-8 L 123456785,1.23456785e-8 L 10123456400,1.23456785e-8 L 123456789,1.23456789e-8 L 123456789,101.234564e-8 L 123456789,1.23456789e-8");
         path_str = sp_svg_write_path(pv);
-        TS_ASSERT_RELATION( streq_rel , "m 123456780,1.2345678e-8 0,0 10,1e-15 9999999210,0 -9999999210,0 0,9.99999921e-7 0,-9.99999921e-7" , path_str );
+        TS_ASSERT_RELATION(streq_rel , "m 123456780,1.2345678e-8 0,0 10,1e-15 9999999210,0 -9999999210,0 0,9.99999921e-7 0,-9.99999921e-7" , path_str);
         g_free(path_str);
     }
 
@@ -416,7 +416,7 @@ private:
     bool bpathEqual(Geom::PathVector const &a, Geom::PathVector const &b, double eps = 1e-16) {
         if (a.size() != b.size()) {
             char temp[100];
-            sprintf(temp, "PathVectors not the same size: %u != %u", static_cast<unsigned int>(a.size()),static_cast<unsigned int>( b.size()));
+            sprintf(temp, "PathVectors not the same size: %u != %u", static_cast<unsigned int>(a.size()),static_cast<unsigned int>(b.size()));
             TS_FAIL(temp);
             return false;
         }

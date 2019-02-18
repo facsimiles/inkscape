@@ -282,7 +282,7 @@ inline PixelGraph::PixelGraph(Glib::RefPtr<Gdk::Pixbuf const> pixbuf) :
     _height(pixbuf->get_height()),
     _nodes(size_t(_width) * _height)
 {
-    if ( !_width || !_height )
+    if (!_width || !_height)
         return;
 
     // Initialize the graph using the pixels' color data
@@ -291,10 +291,10 @@ inline PixelGraph::PixelGraph(Glib::RefPtr<Gdk::Pixbuf const> pixbuf) :
     const int n_channels = pixbuf->get_n_channels();
     const int rowpadding = pixbuf->get_rowstride() - _width * n_channels;
 
-    if ( n_channels == 4 ) {
-        for ( int i = 0 ; i != _height ; ++i ) {
-            for ( int j = 0 ; j != _width ; ++j ) {
-                for ( int k = 0 ; k != 4 ; ++k )
+    if (n_channels == 4) {
+        for (int i = 0 ; i != _height ; ++i) {
+            for (int j = 0 ; j != _width ; ++j) {
+                for (int k = 0 ; k != 4 ; ++k)
                     dest->rgba[k] = pixels[k];
                 {
                     dest->adj.top = 0;
@@ -313,9 +313,9 @@ inline PixelGraph::PixelGraph(Glib::RefPtr<Gdk::Pixbuf const> pixbuf) :
         }
     } else {
         assert(n_channels == 3);
-        for ( int i = 0 ; i != _height ; ++i ) {
-            for ( int j = 0 ; j != _width ; ++j ) {
-                for ( int k = 0 ; k != 3 ; ++k )
+        for (int i = 0 ; i != _height ; ++i) {
+            for (int j = 0 ; j != _width ; ++j) {
+                for (int k = 0 ; k != 3 ; ++k)
                     dest->rgba[k] = pixels[k];
                 dest->rgba[3] = '\xFF';
                 {
@@ -339,23 +339,23 @@ inline PixelGraph::PixelGraph(Glib::RefPtr<Gdk::Pixbuf const> pixbuf) :
 inline void PixelGraph::checkConsistency()
 {
     PixelGraph::Node *it = &_nodes.front();
-    for ( int i = 0 ; i != _height ; ++i ) {
-        for ( int j = 0 ; j != _width ; ++j, ++it ) {
-            if ( it->adj.top )
+    for (int i = 0 ; i != _height ; ++i) {
+        for (int j = 0 ; j != _width ; ++j, ++it) {
+            if (it->adj.top)
                 assert((it - _width)->adj.bottom);
-            if ( it->adj.topright )
+            if (it->adj.topright)
                 assert((it - _width + 1)->adj.bottomleft);
-            if ( it->adj.right )
+            if (it->adj.right)
                 assert((it + 1)->adj.left);
-            if ( it->adj.bottomright )
+            if (it->adj.bottomright)
                 assert((it + _width + 1)->adj.topleft);
-            if ( it->adj.bottom )
+            if (it->adj.bottom)
                 assert((it + _width)->adj.top);
-            if ( it->adj.bottomleft )
+            if (it->adj.bottomleft)
                 assert((it + _width - 1)->adj.topright);
-            if ( it->adj.left )
+            if (it->adj.left)
                 assert((it - 1)->adj.right);
-            if ( it->adj.topleft )
+            if (it->adj.topleft)
                 assert((it - _width - 1)->adj.bottomright);
         }
     }
@@ -369,10 +369,10 @@ inline PixelGraph::ColumnView PixelGraph::operator[](int column)
 inline void PixelGraph::connectAllNeighbors()
 {
     //  ...the "center" nodes first...
-    if ( _width > 2 && _height > 2 ) {
+    if (_width > 2 && _height > 2) {
         iterator it = nodeBottomRight(begin()); // [1][1]
-        for ( int i = 1 ; i != _height - 1 ; ++i ) {
-            for ( int j = 1 ; j != _width - 1 ; ++j ) {
+        for (int i = 1 ; i != _height - 1 ; ++i) {
+            for (int j = 1 ; j != _width - 1 ; ++j) {
                 it->adj.top = 1;
                 it->adj.topright = 1;
                 it->adj.right = 1;
@@ -393,10 +393,10 @@ inline void PixelGraph::connectAllNeighbors()
     }
 
     //  ...then the "top" nodes...
-    if ( _width > 2 ) {
+    if (_width > 2) {
         Node *it = &_nodes[1];
-        if ( _height > 1 ) {
-            for ( int i = 1 ; i != _width - 1 ; ++i ) {
+        if (_height > 1) {
+            for (int i = 1 ; i != _width - 1 ; ++i) {
                 it->adj.right = 1;
                 it->adj.bottomright = 1;
                 it->adj.bottom = 1;
@@ -406,7 +406,7 @@ inline void PixelGraph::connectAllNeighbors()
                 ++it;
             }
         } else {
-            for ( int i = 1 ; i != _width - 1 ; ++i ) {
+            for (int i = 1 ; i != _width - 1 ; ++i) {
                 it->adj.right = 1;
                 it->adj.left = 1;
 
@@ -416,9 +416,9 @@ inline void PixelGraph::connectAllNeighbors()
     }
 
     //  ...then the "bottom" nodes...
-    if ( _width > 2 && _height > 1 ) {
+    if (_width > 2 && _height > 1) {
         Node *it = &((*this)[1][_height - 1]);
-        for ( int i = 1 ; i != _width - 1 ; ++i ) {
+        for (int i = 1 ; i != _width - 1 ; ++i) {
             it->adj.left = 1;
             it->adj.topleft = 1;
             it->adj.top = 1;
@@ -430,10 +430,10 @@ inline void PixelGraph::connectAllNeighbors()
     }
 
     //  ...then the "left" nodes...
-    if ( _height > 2 ) {
+    if (_height > 2) {
         iterator it = nodeBottom(begin()); // [0][1]
-        if ( _width > 1 ) {
-            for ( int i = 1 ; i != _height - 1 ; ++i ) {
+        if (_width > 1) {
+            for (int i = 1 ; i != _height - 1 ; ++i) {
                 it->adj.top = 1;
                 it->adj.topright = 1;
                 it->adj.right = 1;
@@ -443,7 +443,7 @@ inline void PixelGraph::connectAllNeighbors()
                 it = nodeBottom(it);
             }
         } else {
-            for ( int i = 1 ; i != _height - 1 ; ++i ) {
+            for (int i = 1 ; i != _height - 1 ; ++i) {
                 it->adj.top = 1;
                 it->adj.bottom = 1;
 
@@ -453,9 +453,9 @@ inline void PixelGraph::connectAllNeighbors()
     }
 
     //  ...then the "right" nodes...
-    if ( _height > 2 && _width > 1 ) {
+    if (_height > 2 && _width > 1) {
         iterator it = nodeBottom(begin() + _width - 1);// [_width - 1][1]
-        for ( int i = 1 ; i != _height - 1 ; ++i ) {
+        for (int i = 1 ; i != _height - 1 ; ++i) {
             it->adj.bottom = 1;
             it->adj.bottomleft = 1;
             it->adj.left = 1;
@@ -470,35 +470,35 @@ inline void PixelGraph::connectAllNeighbors()
     {
         Node *const top_left = &(*this)[0][0];
 
-        if ( _width > 1 )
+        if (_width > 1)
             top_left->adj.right = 1;
 
-        if ( _width > 1 && _height > 1 )
+        if (_width > 1 && _height > 1)
             top_left->adj.bottomright = 1;
 
-        if ( _height > 1 )
+        if (_height > 1)
             top_left->adj.bottom = 1;
     }
-    if ( _width > 1 ) {
+    if (_width > 1) {
         Node *const top_right = &(*this)[_width - 1][0];
 
-        if ( _height > 1 ) {
+        if (_height > 1) {
             top_right->adj.bottom = 1;
             top_right->adj.bottomleft = 1;
         }
 
         top_right->adj.left = 1;
     }
-    if ( _height > 1 ) {
+    if (_height > 1) {
         Node *const down_left = &(*this)[0][_height - 1];
         down_left->adj.top = 1;
 
-        if ( _width > 1 ) {
+        if (_width > 1) {
             down_left->adj.topright = 1;
             down_left->adj.right = 1;
         }
     }
-    if ( _width > 1 && _height > 1 ) {
+    if (_width > 1 && _height > 1) {
         Node *const down_right = &(*this)[_width - 1][_height - 1];
         down_right->adj.left = 1;
         down_right->adj.topleft = 1;
@@ -510,20 +510,20 @@ PixelGraph::EdgePairContainer PixelGraph::crossingEdges()
 {
     EdgePairContainer ret;
 
-    if ( width() < 2 || height() < 2 )
+    if (width() < 2 || height() < 2)
         return ret;
 
     // Iterate over the graph, 2x2 blocks at time
     PixelGraph::iterator it = begin();
-    for (int i = 0 ; i != height() - 1 ; ++i, ++it ) {
-        for ( int j = 0 ; j != width() - 1 ; ++j, ++it ) {
+    for (int i = 0 ; i != height() - 1 ; ++i, ++it) {
+        for (int j = 0 ; j != width() - 1 ; ++j, ++it) {
             EdgePair diagonals(
                 Edge(it, nodeBottomRight(it)),
                 Edge(nodeRight(it), nodeBottom(it)));
 
             // Check if there are crossing edges
-            if ( !diagonals.first.first->adj.bottomright
-                 || !diagonals.second.first->adj.bottomleft ) {
+            if (!diagonals.first.first->adj.bottomright
+                 || !diagonals.second.first->adj.bottomleft) {
                 continue;
             }
 

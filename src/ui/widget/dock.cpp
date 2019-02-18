@@ -32,7 +32,7 @@ namespace {
 
 void hideCallback(GObject * /*object*/, gpointer dock_ptr)
 {
-    g_return_if_fail( dock_ptr != nullptr );
+    g_return_if_fail(dock_ptr != nullptr);
 
     Dock *dock = static_cast<Dock *>(dock_ptr);
     dock->hide();
@@ -40,7 +40,7 @@ void hideCallback(GObject * /*object*/, gpointer dock_ptr)
 
 void unhideCallback(GObject * /*object*/, gpointer dock_ptr)
 {
-    g_return_if_fail( dock_ptr != nullptr );
+    g_return_if_fail(dock_ptr != nullptr);
 
     Dock *dock = static_cast<Dock *>(dock_ptr);
     dock->show();

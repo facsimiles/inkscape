@@ -139,7 +139,7 @@ void Metafile::toPNG(PMEMPNG accum, int width, int height, const char *px){
         PNG_INTERLACE_NONE,
         PNG_COMPRESSION_TYPE_DEFAULT,
         PNG_FILTER_TYPE_DEFAULT
-    );
+);
 
     /* Initialize rows of PNG. */
 
@@ -262,8 +262,8 @@ uint32_t Metafile::sethexcolor(U_COLORREF color){
 
     uint32_t out;
     out = (U_RGBAGetR(color) << 16) +
-          (U_RGBAGetG(color) << 8 ) +
-          (U_RGBAGetB(color)      );
+          (U_RGBAGetG(color) << 8) +
+          (U_RGBAGetB(color));
     return(out);
 }
 

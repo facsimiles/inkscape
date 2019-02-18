@@ -78,7 +78,7 @@ using Inkscape::UI::Widget::UnitTracker;
 // Functions for debugging:
 #ifdef DEBUG_TEXT
 
-static void       sp_print_font( SPStyle *query ) {
+static void       sp_print_font(SPStyle *query) {
 
     bool family_set   = query->font_family.set;
     bool style_set    = query->font_style.set;
@@ -101,37 +101,37 @@ static void       sp_print_font( SPStyle *query ) {
               << std::endl;
 }
 
-static void       sp_print_fontweight( SPStyle *query ) {
+static void       sp_print_fontweight(SPStyle *query) {
     const gchar* names[] = {"100", "200", "300", "400", "500", "600", "700", "800", "900",
                             "NORMAL", "BOLD", "LIGHTER", "BOLDER", "Out of range"};
     // Missing book = 380
     int index = query->font_weight.computed;
-    if( index < 0 || index > 13 ) index = 13;
+    if(index < 0 || index > 13) index = 13;
     std::cout << "    Weight: " << names[ index ]
               << " (" << query->font_weight.computed << ")" << std::endl;
 
 }
 
-static void       sp_print_fontstyle( SPStyle *query ) {
+static void       sp_print_fontstyle(SPStyle *query) {
 
     const gchar* names[] = {"NORMAL", "ITALIC", "OBLIQUE", "Out of range"};
     int index = query->font_style.computed;
-    if( index < 0 || index > 3 ) index = 3;
+    if(index < 0 || index > 3) index = 3;
     std::cout << "    Style:  " << names[ index ] << std::endl;
 
 }
 #endif
 
-static bool is_relative( Unit const *unit ) {
+static bool is_relative(Unit const *unit) {
     return (unit->abbr == "" || unit->abbr == "em" || unit->abbr == "ex" || unit->abbr == "%");
 }
 
 // Set property for object, but unset all descendents
 // Should probably be moved to desktop_style.cpp
-static void recursively_set_properties( SPObject* object, SPCSSAttr *css ) {
+static void recursively_set_properties(SPObject* object, SPCSSAttr *css) {
     object->changeCSS (css, "style");
 
-    SPCSSAttr *css_unset = sp_repr_css_attr_unset_all( css );
+    SPCSSAttr *css_unset = sp_repr_css_attr_unset_all(css);
     std::vector<SPObject *> children = object->childList(false);
     for (auto i: children) {
         recursively_set_properties (i, css_unset);
@@ -150,7 +150,7 @@ static void set_lineheight (SPCSSAttr *css) {
     // Calling sp_desktop_set_style will result in a call to TextTool::_styleSet() which
     // will set the style on selected text inside the <text> element. If we want to set
     // the style on the outer <text> objects we need to bypass this call.
-    if ( mode == 3 && !outer ) {
+    if (mode == 3 && !outer) {
         // This will call sp_te_apply_style via signal
         sp_desktop_set_style (desktop, css, true, true);
     } else {
@@ -166,11 +166,11 @@ static void set_lineheight (SPCSSAttr *css) {
                 sp_repr_css_merge(css_set, css);
                 Geom::Affine const local(item->i2doc_affine());
                 double const ex(local.descrim());
-                if ( (ex != 0.0) && (ex != 1.0) ) {
+                if ((ex != 0.0) && (ex != 1.0)) {
                     sp_css_attr_scale(css_set, 1/ex);
                 }
 
-                if ( mode == 1 || mode == 2 || mode == 3) {  // Minimum, Even, or Adjustable w/ outer.
+                if (mode == 1 || mode == 2 || mode == 3) {  // Minimum, Even, or Adjustable w/ outer.
                     // We change only outer style
                     item->changeCSS(css_set,"style");
                 } else {
@@ -204,16 +204,16 @@ static void sp_text_set_sizes(GtkListStore* model_size, int unit)
     for(int i : sizes) {
         GtkTreeIter iter;
         Glib::ustring size = Glib::ustring::format(i / (float)ratios[unit]);
-        gtk_list_store_append( model_size, &iter );
-        gtk_list_store_set( model_size, &iter, 0, size.c_str(), -1 );
+        gtk_list_store_append(model_size, &iter);
+        gtk_list_store_set(model_size, &iter, 0, size.c_str(), -1);
     }
 }
 
 
 // TODO: possibly share with font-selector by moving most code to font-lister (passing family name)
-static void sp_text_toolbox_select_cb( GtkEntry* entry, GtkEntryIconPosition /*position*/, GdkEvent /*event*/, gpointer /*data*/ ) {
+static void sp_text_toolbox_select_cb(GtkEntry* entry, GtkEntryIconPosition /*position*/, GdkEvent /*event*/, gpointer /*data*/) {
 
-  Glib::ustring family = gtk_entry_get_text ( entry );
+  Glib::ustring family = gtk_entry_get_text (entry);
   //std::cout << "text_toolbox_missing_font_cb: selecting: " << family << std::endl;
 
   // Get all items with matching font-family set (not inherited!).
@@ -239,7 +239,7 @@ static void sp_text_toolbox_select_cb( GtkEntry* entry, GtkEntryIconPosition /*p
 	//std::cout << " family style from font_spec: " << family_style << std::endl;
       }
 
-      if (family_style.compare( family ) == 0 ) {
+      if (family_style.compare(family) == 0) {
         //std::cout << "   found: " << item->getId() << std::endl;
 	selectList.push_back(item);
       }
@@ -249,7 +249,7 @@ static void sp_text_toolbox_select_cb( GtkEntry* entry, GtkEntryIconPosition /*p
   // Update selection
   Inkscape::Selection *selection = desktop->getSelection();
   selection->clear();
-  //std::cout << "   list length: " << g_slist_length ( selectList ) << std::endl;
+  //std::cout << "   list length: " << g_slist_length (selectList) << std::endl;
   selection->setList(selectList);
 }
 
@@ -285,12 +285,12 @@ TextToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
     {
         // Font list
         Inkscape::FontLister* fontlister = Inkscape::FontLister::get_instance();
-        fontlister->update_font_list( SP_ACTIVE_DESKTOP->getDocument());
+        fontlister->update_font_list(SP_ACTIVE_DESKTOP->getDocument());
         Glib::RefPtr<Gtk::ListStore> store = fontlister->get_font_list();
         GtkListStore* model = store->gobj();
 
         toolbar->_font_family_action =
-            ink_comboboxentry_action_new( "TextFontFamilyAction",
+            ink_comboboxentry_action_new("TextFontFamilyAction",
                                           _("Font Family"),
                                           _("Select Font Family (Alt-X to access)"),
                                           nullptr,
@@ -300,20 +300,20 @@ TextToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
                                           (gpointer)font_lister_cell_data_func2, // Cell layout
                                           (gpointer)font_lister_separator_func2,
                                           GTK_WIDGET(desktop->canvas)); // Focus widget
-        ink_comboboxentry_action_popup_enable( toolbar->_font_family_action ); // Enable entry completion
+        ink_comboboxentry_action_popup_enable(toolbar->_font_family_action); // Enable entry completion
 
         gchar *const info = _("Select all text with this font-family");
-        ink_comboboxentry_action_set_info( toolbar->_font_family_action, info ); // Show selection icon
-        ink_comboboxentry_action_set_info_cb( toolbar->_font_family_action, (gpointer)sp_text_toolbox_select_cb );
+        ink_comboboxentry_action_set_info(toolbar->_font_family_action, info); // Show selection icon
+        ink_comboboxentry_action_set_info_cb(toolbar->_font_family_action, (gpointer)sp_text_toolbox_select_cb);
 
         gchar *const warning = _("Font not found on system");
-        ink_comboboxentry_action_set_warning( toolbar->_font_family_action, warning ); // Show icon w/ tooltip if font missing
-        ink_comboboxentry_action_set_warning_cb( toolbar->_font_family_action, (gpointer)sp_text_toolbox_select_cb );
+        ink_comboboxentry_action_set_warning(toolbar->_font_family_action, warning); // Show icon w/ tooltip if font missing
+        ink_comboboxentry_action_set_warning_cb(toolbar->_font_family_action, (gpointer)sp_text_toolbox_select_cb);
 
-        //ink_comboboxentry_action_set_warning_callback( act, sp_text_fontfamily_select_all );
-        ink_comboboxentry_action_set_altx_name( toolbar->_font_family_action, "altx-text" ); // Set Alt-X keyboard shortcut
-        g_signal_connect( G_OBJECT(toolbar->_font_family_action), "changed", G_CALLBACK(fontfamily_value_changed), (gpointer)toolbar );
-        gtk_action_group_add_action( mainActions, GTK_ACTION(toolbar->_font_family_action) );
+        //ink_comboboxentry_action_set_warning_callback(act, sp_text_fontfamily_select_all);
+        ink_comboboxentry_action_set_altx_name(toolbar->_font_family_action, "altx-text"); // Set Alt-X keyboard shortcut
+        g_signal_connect(G_OBJECT(toolbar->_font_family_action), "changed", G_CALLBACK(fontfamily_value_changed), (gpointer)toolbar);
+        gtk_action_group_add_action(mainActions, GTK_ACTION(toolbar->_font_family_action));
 
         // Change style of drop-down from menu to list
         auto css_provider = gtk_css_provider_new();
@@ -332,7 +332,7 @@ TextToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
     /* Font size */
     {
         // List of font sizes for drop-down menu
-        GtkListStore* model_size = gtk_list_store_new( 1, G_TYPE_STRING );
+        GtkListStore* model_size = gtk_list_store_new(1, G_TYPE_STRING);
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         int unit = prefs->getInt("/options/font/unitType", SP_CSS_UNIT_PT);
 
@@ -340,7 +340,7 @@ TextToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
 
         Glib::ustring tooltip = Glib::ustring::format(_("Font size"), " (", sp_style_get_css_unit_string(unit), ")");
 
-        toolbar->_font_size_action = ink_comboboxentry_action_new( "TextFontSizeAction",
+        toolbar->_font_size_action = ink_comboboxentry_action_new("TextFontSizeAction",
                                                                    _("Font Size"),
                                                                    _(tooltip.c_str()),
                                                                    nullptr,
@@ -351,8 +351,8 @@ TextToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
                                                                    nullptr,   // Separator
                                                                    GTK_WIDGET(desktop->canvas)); // Focus widget
 
-        g_signal_connect( G_OBJECT(toolbar->_font_size_action), "changed", G_CALLBACK(fontsize_value_changed), (gpointer)toolbar );
-        gtk_action_group_add_action( mainActions, GTK_ACTION(toolbar->_font_size_action) );
+        g_signal_connect(G_OBJECT(toolbar->_font_size_action), "changed", G_CALLBACK(fontsize_value_changed), (gpointer)toolbar);
+        gtk_action_group_add_action(mainActions, GTK_ACTION(toolbar->_font_size_action));
     }
 
     /* Font styles */
@@ -361,7 +361,7 @@ TextToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
         Glib::RefPtr<Gtk::ListStore> store = fontlister->get_style_list();
         GtkListStore* model_style = store->gobj();
 
-        toolbar->_font_style_action = ink_comboboxentry_action_new( "TextFontStyleAction",
+        toolbar->_font_style_action = ink_comboboxentry_action_new("TextFontStyleAction",
                                                                     _("Font Style"),
                                                                     _("Font style"),
                                                                     nullptr,
@@ -372,32 +372,32 @@ TextToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
                                                                     nullptr,   // Separator
                                                                     GTK_WIDGET(desktop->canvas)); // Focus widget
 
-        g_signal_connect( G_OBJECT(toolbar->_font_style_action), "changed", G_CALLBACK(fontstyle_value_changed), (gpointer)toolbar );
-        gtk_action_group_add_action( mainActions, GTK_ACTION(toolbar->_font_style_action) );
+        g_signal_connect(G_OBJECT(toolbar->_font_style_action), "changed", G_CALLBACK(fontstyle_value_changed), (gpointer)toolbar);
+        gtk_action_group_add_action(mainActions, GTK_ACTION(toolbar->_font_style_action));
     }
 
     /* Style - Superscript */
     {
-        toolbar->_superscript_action = ink_toggle_action_new( "TextSuperscriptAction",             // Name
+        toolbar->_superscript_action = ink_toggle_action_new("TextSuperscriptAction",             // Name
                                                               _("Toggle Superscript"),             // Label
                                                               _("Toggle superscript"),             // Tooltip
                                                               "text_superscript",                  // Icon (inkId)
-                                                              secondarySize );                     // Icon size
-        gtk_action_group_add_action( mainActions, GTK_ACTION( toolbar->_superscript_action ) );
-        g_signal_connect_after( G_OBJECT(toolbar->_superscript_action), "toggled", G_CALLBACK(script_changed), toolbar );
-        gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(toolbar->_superscript_action), prefs->getBool("/tools/text/super", false) );
+                                                              secondarySize);                     // Icon size
+        gtk_action_group_add_action(mainActions, GTK_ACTION(toolbar->_superscript_action));
+        g_signal_connect_after(G_OBJECT(toolbar->_superscript_action), "toggled", G_CALLBACK(script_changed), toolbar);
+        gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(toolbar->_superscript_action), prefs->getBool("/tools/text/super", false));
     }
 
     /* Style - Subscript */
     {
-        toolbar->_subscript_action = ink_toggle_action_new( "TextSubscriptAction",             // Name
+        toolbar->_subscript_action = ink_toggle_action_new("TextSubscriptAction",             // Name
                                                             _("Toggle Subscript"),             // Label
                                                             _("Toggle subscript"),             // Tooltip
                                                             "text_subscript",                  // Icon (inkId)
-                                                            secondarySize );                   // Icon size
-        gtk_action_group_add_action( mainActions, GTK_ACTION( toolbar->_subscript_action ) );
-        g_signal_connect_after( G_OBJECT(toolbar->_subscript_action), "toggled", G_CALLBACK(script_changed), (gpointer)toolbar );
-        gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(toolbar->_subscript_action), prefs->getBool("/tools/text/sub", false) );
+                                                            secondarySize);                   // Icon size
+        gtk_action_group_add_action(mainActions, GTK_ACTION(toolbar->_subscript_action));
+        g_signal_connect_after(G_OBJECT(toolbar->_subscript_action), "toggled", G_CALLBACK(script_changed), (gpointer)toolbar);
+        gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(toolbar->_subscript_action), prefs->getBool("/tools/text/sub", false));
     }
 
     /* Alignment */
@@ -433,17 +433,17 @@ TextToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
         row[columns.col_sensitive] = false;
 
         toolbar->_align_action =
-            InkSelectOneAction::create( "TextAlignAction",   // Name
+            InkSelectOneAction::create("TextAlignAction",   // Name
                                         _("Alignment"),      // Label
                                         _("Text alignment"), // Tooltip
                                         "Not Used",          // Icon
-                                        store );             // Tree store
-        toolbar->_align_action->use_radio( false );
-        toolbar->_align_action->use_label( false );
+                                        store);             // Tree store
+        toolbar->_align_action->use_radio(false);
+        toolbar->_align_action->use_label(false);
         gint mode = prefs->getInt("/tools/text/align_mode", 0);
-        toolbar->_align_action->set_active( mode );
+        toolbar->_align_action->set_active(mode);
 
-        gtk_action_group_add_action( mainActions, GTK_ACTION( toolbar->_align_action->gobj() ));
+        gtk_action_group_add_action(mainActions, GTK_ACTION(toolbar->_align_action->gobj()));
 
         toolbar->_align_action->signal_changed().connect(sigc::mem_fun(*toolbar, &TextToolbar::align_mode_changed));
     }
@@ -475,17 +475,17 @@ TextToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
         row[columns.col_sensitive] = true;
 
         toolbar->_writing_mode_action =
-            InkSelectOneAction::create( "TextWritingModeAction", // Name
+            InkSelectOneAction::create("TextWritingModeAction", // Name
                                         _("Writing mode"),       // Label
                                         _("Block progression"),  // Tooltip
                                         "Not Used",              // Icon
-                                        store );                 // Tree store
-        toolbar->_writing_mode_action->use_radio( false );
-        toolbar->_writing_mode_action->use_label( false );
+                                        store);                 // Tree store
+        toolbar->_writing_mode_action->use_radio(false);
+        toolbar->_writing_mode_action->use_label(false);
         gint mode = prefs->getInt("/tools/text/writing_mode", 0);
-        toolbar->_writing_mode_action->set_active( mode );
+        toolbar->_writing_mode_action->set_active(mode);
 
-        gtk_action_group_add_action( mainActions, GTK_ACTION( toolbar->_writing_mode_action->gobj() ));
+        gtk_action_group_add_action(mainActions, GTK_ACTION(toolbar->_writing_mode_action->gobj()));
 
         toolbar->_writing_mode_action->signal_changed().connect(sigc::mem_fun(*toolbar, &TextToolbar::writing_mode_changed));
     }
@@ -517,17 +517,17 @@ TextToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
         row[columns.col_sensitive] = true;
 
         toolbar->_orientation_action =
-            InkSelectOneAction::create( "TextOrientationAction",  // Name
+            InkSelectOneAction::create("TextOrientationAction",  // Name
                                         _("Text orientation"),    // Label
                                         _("Text (glyph) orientation in vertical text."),  // Tooltip
                                         "Not Used",               // Icon
-                                        store );                  // List store
-        toolbar->_orientation_action->use_radio( false );
-        toolbar->_orientation_action->use_label( false );
+                                        store);                  // List store
+        toolbar->_orientation_action->use_radio(false);
+        toolbar->_orientation_action->use_label(false);
         gint mode = prefs->getInt("/tools/text/text_orientation", 0);
-        toolbar->_orientation_action->set_active( mode );
+        toolbar->_orientation_action->set_active(mode);
 
-        gtk_action_group_add_action( mainActions, GTK_ACTION( toolbar->_orientation_action->gobj() ));
+        gtk_action_group_add_action(mainActions, GTK_ACTION(toolbar->_orientation_action->gobj()));
 
         toolbar->_orientation_action->signal_changed().connect(sigc::mem_fun(*toolbar, &TextToolbar::orientation_changed));
     }
@@ -553,17 +553,17 @@ TextToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
         row[columns.col_sensitive] = true;
 
         toolbar->_direction_action =
-            InkSelectOneAction::create( "TextDirectionAction",  // Name
+            InkSelectOneAction::create("TextDirectionAction",  // Name
                                         _("Text direction"),    // Label
                                         _("Text direction for normally horizontal text."),  // Tooltip
                                         "Not Used",               // Icon
-                                        store );                  // List store
-        toolbar->_direction_action->use_radio( false );
-        toolbar->_direction_action->use_label( false );
+                                        store);                  // List store
+        toolbar->_direction_action->use_radio(false);
+        toolbar->_direction_action->use_label(false);
         gint mode = prefs->getInt("/tools/text/text_direction", 0);
-        toolbar->_direction_action->set_active( mode );
+        toolbar->_direction_action->set_active(mode);
 
-        gtk_action_group_add_action( mainActions, GTK_ACTION( toolbar->_direction_action->gobj() ));
+        gtk_action_group_add_action(mainActions, GTK_ACTION(toolbar->_direction_action->gobj()));
 
         toolbar->_direction_action->signal_changed_after().connect(sigc::mem_fun(*toolbar, &TextToolbar::direction_changed));
     }
@@ -589,24 +589,24 @@ TextToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
             0.1,                                  /* step (used?) */
             2,                                    /* digits to show */
             1.0                                   /* factor (multiplies default) */
-            );
+);
         ege_adjustment_action_set_focuswidget(toolbar->_line_height_action, GTK_WIDGET(desktop->canvas));
 
         toolbar->_line_height_adj = Glib::wrap(ege_adjustment_action_get_adjustment(toolbar->_line_height_action));
         toolbar->_line_height_adj->signal_value_changed().connect(sigc::mem_fun(*toolbar, &TextToolbar::lineheight_value_changed));
 
-        //tracker->addAdjustment( ege_adjustment_action_get_adjustment(eact) );
-        gtk_action_group_add_action( mainActions, GTK_ACTION(toolbar->_line_height_action) );
-        gtk_action_set_sensitive( GTK_ACTION(toolbar->_line_height_action), TRUE );
+        //tracker->addAdjustment(ege_adjustment_action_get_adjustment(eact));
+        gtk_action_group_add_action(mainActions, GTK_ACTION(toolbar->_line_height_action));
+        gtk_action_set_sensitive(GTK_ACTION(toolbar->_line_height_action), TRUE);
 
         // TODO: Create accessor method for this, instead of GObject property
-        g_object_set( G_OBJECT(toolbar->_line_height_action), "iconId", "text_line_spacing", NULL );
+        g_object_set(G_OBJECT(toolbar->_line_height_action), "iconId", "text_line_spacing", NULL);
     }
 
     /* Line height units */
     {
-        toolbar->_line_height_units_action = toolbar->_tracker->createAction( "TextLineHeightUnitsAction", _("Units"), ("") );
-        gtk_action_group_add_action( mainActions, toolbar->_line_height_units_action->gobj() );
+        toolbar->_line_height_units_action = toolbar->_tracker->createAction("TextLineHeightUnitsAction", _("Units"), (""));
+        gtk_action_group_add_action(mainActions, toolbar->_line_height_units_action->gobj());
         toolbar->_line_height_units_action->signal_changed_after().connect(sigc::mem_fun(*toolbar, &TextToolbar::lineheight_unit_changed));
     }
 
@@ -642,17 +642,17 @@ TextToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
         row[columns.col_sensitive] = true;
 
         toolbar->_line_spacing_action =
-            InkSelectOneAction::create( "TextLineSpacingAction", // Name
+            InkSelectOneAction::create("TextLineSpacingAction", // Name
                                         _("Line Spacing Mode"),   // Label
                                         _("How should multiple baselines be spaced?\n Adaptive: Line spacing adapts to font size.\n Minimum: Like Adaptive, but with a set minimum.\n Even: Evenly spaced.\n Adjustable: No restrictions."), // Tooltip
                                         "Not Used",          // Icon
-                                        store );             // Tree store
-        toolbar->_line_spacing_action->use_radio( false );
-        toolbar->_line_spacing_action->use_label( true );
+                                        store);             // Tree store
+        toolbar->_line_spacing_action->use_radio(false);
+        toolbar->_line_spacing_action->use_label(true);
         gint mode = prefs->getInt("/tools/text/line_spacing_mode", 0);
-        toolbar->_line_spacing_action->set_active( mode );
+        toolbar->_line_spacing_action->set_active(mode);
 
-        gtk_action_group_add_action( mainActions, GTK_ACTION( toolbar->_line_spacing_action->gobj() ));
+        gtk_action_group_add_action(mainActions, GTK_ACTION(toolbar->_line_spacing_action->gobj()));
 
         toolbar->_line_spacing_action->signal_changed().connect(sigc::mem_fun(*toolbar, &TextToolbar::line_spacing_mode_changed));
     }
@@ -678,14 +678,14 @@ TextToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
             0.1,                                  /* step (used?) */
             2,                                    /* digits to show */
             1.0                                   /* factor (multiplies default) */
-            );
+);
         ege_adjustment_action_set_focuswidget(toolbar->_word_spacing_action, GTK_WIDGET(desktop->canvas));
 
         toolbar->_word_spacing_adj = Glib::wrap(ege_adjustment_action_get_adjustment(toolbar->_word_spacing_action));
         toolbar->_word_spacing_adj->signal_value_changed().connect(sigc::mem_fun(*toolbar, &TextToolbar::wordspacing_value_changed));
-        gtk_action_group_add_action( mainActions, GTK_ACTION(toolbar->_word_spacing_action) );
-        gtk_action_set_sensitive( GTK_ACTION(toolbar->_word_spacing_action), TRUE );
-        g_object_set( G_OBJECT(toolbar->_word_spacing_action), "iconId", "text_word_spacing", NULL );
+        gtk_action_group_add_action(mainActions, GTK_ACTION(toolbar->_word_spacing_action));
+        gtk_action_set_sensitive(GTK_ACTION(toolbar->_word_spacing_action), TRUE);
+        g_object_set(G_OBJECT(toolbar->_word_spacing_action), "iconId", "text_word_spacing", NULL);
     }
 
     /* Letter spacing */
@@ -709,13 +709,13 @@ TextToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
             0.1,                                  /* step (used?) */
             2,                                    /* digits to show */
             1.0                                   /* factor (multiplies default) */
-            );
+);
         ege_adjustment_action_set_focuswidget(toolbar->_letter_spacing_action, GTK_WIDGET(desktop->canvas));
         toolbar->_letter_spacing_adj = Glib::wrap(ege_adjustment_action_get_adjustment(toolbar->_letter_spacing_action));
         toolbar->_letter_spacing_adj->signal_value_changed().connect(sigc::mem_fun(*toolbar, &TextToolbar::letterspacing_value_changed));
-        gtk_action_group_add_action( mainActions, GTK_ACTION(toolbar->_letter_spacing_action) );
-        gtk_action_set_sensitive( GTK_ACTION(toolbar->_letter_spacing_action), TRUE );
-        g_object_set( G_OBJECT(toolbar->_letter_spacing_action), "iconId", "text_letter_spacing", NULL );
+        gtk_action_group_add_action(mainActions, GTK_ACTION(toolbar->_letter_spacing_action));
+        gtk_action_set_sensitive(GTK_ACTION(toolbar->_letter_spacing_action), TRUE);
+        g_object_set(G_OBJECT(toolbar->_letter_spacing_action), "iconId", "text_letter_spacing", NULL);
     }
 
     /* Character kerning (horizontal shift) */
@@ -739,13 +739,13 @@ TextToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
             0.1,                                  /* step (used?) */
             2,                                    /* digits to show */
             1.0                                   /* factor (multiplies default) */
-            );
+);
         ege_adjustment_action_set_focuswidget(toolbar->_dx_action, GTK_WIDGET(desktop->canvas));
         toolbar->_dx_adj = Glib::wrap(ege_adjustment_action_get_adjustment(toolbar->_dx_action));
         toolbar->_dx_adj->signal_value_changed().connect(sigc::mem_fun(*toolbar, &TextToolbar::dx_value_changed));
-        gtk_action_group_add_action( mainActions, GTK_ACTION(toolbar->_dx_action) );
-        gtk_action_set_sensitive( GTK_ACTION(toolbar->_dx_action), TRUE );
-        g_object_set( G_OBJECT(toolbar->_dx_action), "iconId", "text_horz_kern", NULL );
+        gtk_action_group_add_action(mainActions, GTK_ACTION(toolbar->_dx_action));
+        gtk_action_set_sensitive(GTK_ACTION(toolbar->_dx_action), TRUE);
+        g_object_set(G_OBJECT(toolbar->_dx_action), "iconId", "text_horz_kern", NULL);
     }
 
     /* Character vertical shift */
@@ -769,13 +769,13 @@ TextToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
             0.1,                                  /* step (used?) */
             2,                                    /* digits to show */
             1.0                                   /* factor (multiplies default) */
-            );
+);
         ege_adjustment_action_set_focuswidget(toolbar->_dy_action, GTK_WIDGET(desktop->canvas));
         toolbar->_dy_adj = Glib::wrap(ege_adjustment_action_get_adjustment(toolbar->_dy_action));
         toolbar->_dy_adj->signal_value_changed().connect(sigc::mem_fun(*toolbar, &TextToolbar::dy_value_changed));
-        gtk_action_group_add_action( mainActions, GTK_ACTION(toolbar->_dy_action) );
-        gtk_action_set_sensitive( GTK_ACTION(toolbar->_dy_action), TRUE );
-        g_object_set( G_OBJECT(toolbar->_dy_action), "iconId", "text_vert_kern", NULL );
+        gtk_action_group_add_action(mainActions, GTK_ACTION(toolbar->_dy_action));
+        gtk_action_set_sensitive(GTK_ACTION(toolbar->_dy_action), TRUE);
+        g_object_set(G_OBJECT(toolbar->_dy_action), "iconId", "text_vert_kern", NULL);
     }
 
     /* Character rotation */
@@ -799,37 +799,37 @@ TextToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
             0.1,                                  /* step (used?) */
             2,                                    /* digits to show */
             1.0                                   /* factor (multiplies default) */
-            );
+);
         ege_adjustment_action_set_focuswidget(toolbar->_rotation_action, GTK_WIDGET(desktop->canvas));
         toolbar->_rotation_adj = Glib::wrap(ege_adjustment_action_get_adjustment(toolbar->_rotation_action));
         toolbar->_rotation_adj->signal_value_changed().connect(sigc::mem_fun(*toolbar, &TextToolbar::rotation_value_changed));
-        gtk_action_group_add_action( mainActions, GTK_ACTION(toolbar->_rotation_action) );
-        gtk_action_set_sensitive( GTK_ACTION(toolbar->_rotation_action), TRUE );
-        g_object_set( G_OBJECT(toolbar->_rotation_action), "iconId", "text_rotation", NULL );
+        gtk_action_group_add_action(mainActions, GTK_ACTION(toolbar->_rotation_action));
+        gtk_action_set_sensitive(GTK_ACTION(toolbar->_rotation_action), TRUE);
+        g_object_set(G_OBJECT(toolbar->_rotation_action), "iconId", "text_rotation", NULL);
     }
 
     /* Text line height unset */
     {
-        toolbar->_line_height_unset_action = ink_toggle_action_new( "TextLineHeightUnsetAction",       // Name
+        toolbar->_line_height_unset_action = ink_toggle_action_new("TextLineHeightUnsetAction",       // Name
                                                                     _("Unset line height"),            // Label
                                                                     _("If enabled, line height is set on part of selection. Click to unset."),
                                                                     INKSCAPE_ICON("paint-unknown"),
-                                                                    secondarySize );                   // Icon size
-        gtk_action_group_add_action( mainActions, GTK_ACTION( toolbar->_line_height_unset_action ) );
-        g_signal_connect_after( G_OBJECT(toolbar->_line_height_unset_action), "toggled", G_CALLBACK(lineheight_unset_changed), (gpointer)toolbar );
-        gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(toolbar->_line_height_unset_action), prefs->getBool("/tools/text/line_height_unset", false) );
+                                                                    secondarySize);                   // Icon size
+        gtk_action_group_add_action(mainActions, GTK_ACTION(toolbar->_line_height_unset_action));
+        g_signal_connect_after(G_OBJECT(toolbar->_line_height_unset_action), "toggled", G_CALLBACK(lineheight_unset_changed), (gpointer)toolbar);
+        gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(toolbar->_line_height_unset_action), prefs->getBool("/tools/text/line_height_unset", false));
     }
 
     /* Text outer style */
     {
-        toolbar->_outer_style_action = ink_toggle_action_new( "TextOuterStyleAction",            // Name
+        toolbar->_outer_style_action = ink_toggle_action_new("TextOuterStyleAction",            // Name
                                                               _("Show outer style"),             // Label
                                                               _("Show style of outermost text element. The 'font-size' and 'line-height' values of the outermost text element determine the minimum line spacing in the block."),
                                                               INKSCAPE_ICON("text_outer_style"),
-                                                              secondarySize );                   // Icon size
-        gtk_action_group_add_action( mainActions, GTK_ACTION( toolbar->_outer_style_action ) );
-        g_signal_connect_after( G_OBJECT(toolbar->_outer_style_action), "toggled", G_CALLBACK(outer_style_changed), (gpointer)toolbar );
-        gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(toolbar->_outer_style_action), prefs->getBool("/tools/text/outer_style", false) );
+                                                              secondarySize);                   // Icon size
+        gtk_action_group_add_action(mainActions, GTK_ACTION(toolbar->_outer_style_action));
+        g_signal_connect_after(G_OBJECT(toolbar->_outer_style_action), "toggled", G_CALLBACK(outer_style_changed), (gpointer)toolbar);
+        gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(toolbar->_outer_style_action), prefs->getBool("/tools/text/outer_style", false));
     }
 
     // Is this necessary to call? Shouldn't hurt.
@@ -841,7 +841,7 @@ TextToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
 }
 
 void
-TextToolbar::fontfamily_value_changed( Ink_ComboBoxEntry_Action *act, gpointer data )
+TextToolbar::fontfamily_value_changed(Ink_ComboBoxEntry_Action *act, gpointer data)
 {
     auto toolbar = reinterpret_cast<TextToolbar *>(data);
 
@@ -861,8 +861,8 @@ TextToolbar::fontfamily_value_changed( Ink_ComboBoxEntry_Action *act, gpointer d
     }
     toolbar->_freeze = true;
 
-    Glib::ustring new_family = ink_comboboxentry_action_get_active_text( act );
-    css_font_family_unquote( new_family ); // Remove quotes around font family names.
+    Glib::ustring new_family = ink_comboboxentry_action_get_active_text(act);
+    css_font_family_unquote(new_family); // Remove quotes around font family names.
 
     // TODO: Think about how to handle handle multiple selections. While
     // the font-family may be the same for all, the styles might be different.
@@ -874,23 +874,23 @@ TextToolbar::fontfamily_value_changed( Ink_ComboBoxEntry_Action *act, gpointer d
     std::cout << "  Old active: " << fontlister->get_font_family_row() << std::endl;
     std::cout << "  New active: " << act->active << std::endl;
 #endif
-    if( new_family.compare( fontlister->get_font_family() ) != 0 ) {
+    if(new_family.compare(fontlister->get_font_family()) != 0) {
         // Changed font-family
 
-        if( act->active == -1 ) {
+        if(act->active == -1) {
             // New font-family, not in document, not on system (could be fallback list)
-            fontlister->insert_font_family( new_family );
+            fontlister->insert_font_family(new_family);
             act->active = 0; // New family is always at top of list.
         }
 
-        fontlister->set_font_family( act->active );
+        fontlister->set_font_family(act->active);
         // active text set in sp_text_toolbox_selection_changed()
 
         SPCSSAttr *css = sp_repr_css_attr_new ();
-        fontlister->fill_css( css );
+        fontlister->fill_css(css);
 
         SPDesktop   *desktop    = SP_ACTIVE_DESKTOP;
-        if( desktop->getSelection()->isEmpty() ) {
+        if(desktop->getSelection()->isEmpty()) {
             // Update default
             Inkscape::Preferences *prefs = Inkscape::Preferences::get();
             prefs->mergeStyle("/tools/text/style", css);
@@ -914,7 +914,7 @@ TextToolbar::fontfamily_value_changed( Ink_ComboBoxEntry_Action *act, gpointer d
 }
 
 void
-TextToolbar::fontsize_value_changed( Ink_ComboBoxEntry_Action *act, gpointer data)
+TextToolbar::fontsize_value_changed(Ink_ComboBoxEntry_Action *act, gpointer data)
 {
     auto toolbar = reinterpret_cast<TextToolbar *>(data);
 
@@ -924,16 +924,16 @@ TextToolbar::fontsize_value_changed( Ink_ComboBoxEntry_Action *act, gpointer dat
     }
     toolbar->_freeze = true;
 
-    gchar *text = ink_comboboxentry_action_get_active_text( act );
+    gchar *text = ink_comboboxentry_action_get_active_text(act);
     gchar *endptr;
-    gdouble size = g_strtod( text, &endptr );
+    gdouble size = g_strtod(text, &endptr);
     if (endptr == text) {  // Conversion failed, non-numeric input.
-        g_warning( "Conversion of size text to double failed, input: %s\n", text );
-        g_free( text );
+        g_warning("Conversion of size text to double failed, input: %s\n", text);
+        g_free(text);
         toolbar->_freeze = false;
         return;
     }
-    g_free( text );
+    g_free(text);
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     int max_size = prefs->getInt("/dialogs/textandfont/maxFontSize", 10000); // somewhat arbitrary, but text&font preview freezes with too huge fontsizes
@@ -970,7 +970,7 @@ TextToolbar::fontsize_value_changed( Ink_ComboBoxEntry_Action *act, gpointer dat
                 sp_repr_css_merge(css_set, css);
                 Geom::Affine const local(item->i2doc_affine());
                 double const ex(local.descrim());
-                if ( (ex != 0.0) && (ex != 1.0) ) {
+                if ((ex != 0.0) && (ex != 1.0)) {
                     sp_css_attr_scale(css_set, 1/ex);
                 }
 
@@ -1003,7 +1003,7 @@ TextToolbar::fontsize_value_changed( Ink_ComboBoxEntry_Action *act, gpointer dat
 }
 
 void
-TextToolbar::fontstyle_value_changed( Ink_ComboBoxEntry_Action *act, gpointer data)
+TextToolbar::fontstyle_value_changed(Ink_ComboBoxEntry_Action *act, gpointer data)
 {
     auto toolbar = reinterpret_cast<TextToolbar *>(data);
 
@@ -1013,17 +1013,17 @@ TextToolbar::fontstyle_value_changed( Ink_ComboBoxEntry_Action *act, gpointer da
     }
     toolbar->_freeze = true;
 
-    Glib::ustring new_style = ink_comboboxentry_action_get_active_text( act );
+    Glib::ustring new_style = ink_comboboxentry_action_get_active_text(act);
 
     Inkscape::FontLister* fontlister = Inkscape::FontLister::get_instance();
 
-    if( new_style.compare( fontlister->get_font_style() ) != 0 ) {
+    if(new_style.compare(fontlister->get_font_style()) != 0) {
 
-        fontlister->set_font_style( new_style );
+        fontlister->set_font_style(new_style);
         // active text set in sp_text_toolbox_seletion_changed()
 
         SPCSSAttr *css = sp_repr_css_attr_new ();
-        fontlister->fill_css( css );
+        fontlister->fill_css(css);
 
         SPDesktop   *desktop    = SP_ACTIVE_DESKTOP;
         sp_desktop_set_style (desktop, css, true, true);
@@ -1051,7 +1051,7 @@ TextToolbar::fontstyle_value_changed( Ink_ComboBoxEntry_Action *act, gpointer da
 
 // Handles both Superscripts and Subscripts
 void
-TextToolbar::script_changed( InkToggleAction* act, gpointer data)
+TextToolbar::script_changed(InkToggleAction* act, gpointer data)
 {
     auto toolbar = reinterpret_cast<TextToolbar *>(data);
     // quit if run by the _changed callbacks
@@ -1061,7 +1061,7 @@ TextToolbar::script_changed( InkToggleAction* act, gpointer data)
     toolbar->_freeze = true;
 
     // Called by Superscript or Subscript button?
-    const gchar* name = gtk_action_get_name( GTK_ACTION( act ) );
+    const gchar* name = gtk_action_get_name(GTK_ACTION(act));
     gint prop = (strcmp(name, "TextSuperscriptAction") == 0) ? 0 : 1;
 
 #ifdef DEBUG_TEXT
@@ -1077,7 +1077,7 @@ TextToolbar::script_changed( InkToggleAction* act, gpointer data)
 
     if (Inkscape::is_query_style_updateable(result_baseline)) {
         // If not set or mixed, turn on superscript or subscript
-        if( prop == 0 ) {
+        if(prop == 0) {
             setSuper = true;
         } else {
             setSub = true;
@@ -1086,12 +1086,12 @@ TextToolbar::script_changed( InkToggleAction* act, gpointer data)
         // Superscript
         gboolean superscriptSet = (query.baseline_shift.set &&
                                    query.baseline_shift.type == SP_BASELINE_SHIFT_LITERAL &&
-                                   query.baseline_shift.literal == SP_CSS_BASELINE_SHIFT_SUPER );
+                                   query.baseline_shift.literal == SP_CSS_BASELINE_SHIFT_SUPER);
 
         // Subscript
         gboolean subscriptSet = (query.baseline_shift.set &&
                                  query.baseline_shift.type == SP_BASELINE_SHIFT_LITERAL &&
-                                 query.baseline_shift.literal == SP_CSS_BASELINE_SHIFT_SUB );
+                                 query.baseline_shift.literal == SP_CSS_BASELINE_SHIFT_SUB);
 
         setSuper = !superscriptSet && prop == 0;
         setSub   = !subscriptSet   && prop == 1;
@@ -1099,7 +1099,7 @@ TextToolbar::script_changed( InkToggleAction* act, gpointer data)
 
     // Set css properties
     SPCSSAttr *css = sp_repr_css_attr_new ();
-    if( setSuper || setSub ) {
+    if(setSuper || setSub) {
         // Openoffice 2.3 and Adobe use 58%, Microsoft Word 2002 uses 65%, LaTex about 70%.
         // 58% looks too small to me, especially if a superscript is placed on a superscript.
         // If you make a change here, consider making a change to baseline-shift amount
@@ -1108,9 +1108,9 @@ TextToolbar::script_changed( InkToggleAction* act, gpointer data)
     } else {
         sp_repr_css_set_property (css, "font-size", "");
     }
-    if( setSuper ) {
+    if(setSuper) {
         sp_repr_css_set_property (css, "baseline-shift", "super");
-    } else if( setSub ) {
+    } else if(setSub) {
         sp_repr_css_set_property (css, "baseline-shift", "sub");
     } else {
         sp_repr_css_set_property (css, "baseline-shift", "baseline");
@@ -1459,7 +1459,7 @@ TextToolbar::lineheight_value_changed()
     // Set css line height.
     SPCSSAttr *css = sp_repr_css_attr_new ();
     Inkscape::CSSOStringStream osfs;
-    if ( is_relative(unit) ) {
+    if (is_relative(unit)) {
         osfs << _line_height_adj->get_value() << unit->abbr;
     } else {
         // Inside SVG file, always use "px" for absolute units.
@@ -1549,11 +1549,11 @@ TextToolbar::lineheight_unit_changed(int /* Not Used */)
         // Do nothing
     } else if ((unit->abbr == "" || unit->abbr == "em") && old_unit == SP_CSS_UNIT_EX) {
         line_height *= 0.5;
-    } else if ((unit->abbr) == "ex" && (old_unit == SP_CSS_UNIT_EM || old_unit == SP_CSS_UNIT_NONE) ) {
+    } else if ((unit->abbr) == "ex" && (old_unit == SP_CSS_UNIT_EM || old_unit == SP_CSS_UNIT_NONE)) {
         line_height *= 2.0;
     } else if ((unit->abbr == "" || unit->abbr == "em") && old_unit == SP_CSS_UNIT_PERCENT) {
         line_height /= 100.0;
-    } else if ((unit->abbr) == "%"  && (old_unit == SP_CSS_UNIT_EM || old_unit == SP_CSS_UNIT_NONE) ) {
+    } else if ((unit->abbr) == "%"  && (old_unit == SP_CSS_UNIT_EM || old_unit == SP_CSS_UNIT_NONE)) {
         line_height *= 100;
     } else if ((unit->abbr) == "ex" && old_unit == SP_CSS_UNIT_PERCENT) {
         line_height /= 50.0;
@@ -1620,7 +1620,7 @@ TextToolbar::lineheight_unit_changed(int /* Not Used */)
     // Set css line height.
     SPCSSAttr *css = sp_repr_css_attr_new ();
     Inkscape::CSSOStringStream osfs;
-    if ( is_relative(unit) ) {
+    if (is_relative(unit)) {
         osfs << line_height << unit->abbr;
     } else {
         osfs << Quantity::convert(line_height, unit, "px") << "px";
@@ -1701,7 +1701,7 @@ TextToolbar::line_spacing_mode_changed(int mode)
             std::vector<SPItem *> children_item;
             for (auto j: children) {
                 if (dynamic_cast<SPItem *>(j)) {
-                    children_item.push_back( dynamic_cast<SPItem *>(j) );
+                    children_item.push_back(dynamic_cast<SPItem *>(j));
                 }
             }
 
@@ -1712,7 +1712,7 @@ TextToolbar::line_spacing_mode_changed(int mode)
             if (text_style->line_height.computed != 0 || text_style->line_height.normal) {
 
                 if (mode != 1 || text_style->line_height.unit == SP_CSS_UNIT_NONE || text_style->line_height.normal) {
-                    Glib::ustring line_height_string = text_style->line_height.write( SP_STYLE_FLAG_ALWAYS );
+                    Glib::ustring line_height_string = text_style->line_height.write(SP_STYLE_FLAG_ALWAYS);
                     line_height_string.erase(0, 12); // erase 'line-height:'
                     osfs << line_height_string;
                 } else {
@@ -1722,7 +1722,7 @@ TextToolbar::line_spacing_mode_changed(int mode)
                     if (text_style->line_height.unit == SP_CSS_UNIT_PERCENT) {
                         line_height_value *= 100;
                     }
-                    osfs << sp_style_css_size_units_to_px( line_height_value,
+                    osfs << sp_style_css_size_units_to_px(line_height_value,
                                                            text_style->line_height.unit,
                                                            text_style->font_size.computed) /
                         text_style->font_size.computed;
@@ -1731,7 +1731,7 @@ TextToolbar::line_spacing_mode_changed(int mode)
             } else {
 
                 if (mode != 1 || tspans.line_height.unit == SP_CSS_UNIT_NONE || tspans.line_height.normal) {
-                    Glib::ustring line_height_string = tspans.line_height.write( SP_STYLE_FLAG_ALWAYS );
+                    Glib::ustring line_height_string = tspans.line_height.write(SP_STYLE_FLAG_ALWAYS);
                     line_height_string.erase(0, 12); // erase 'line-height:'
                     osfs << line_height_string;
                 } else {
@@ -1741,7 +1741,7 @@ TextToolbar::line_spacing_mode_changed(int mode)
                     if (tspans.line_height.unit == SP_CSS_UNIT_PERCENT) {
                         line_height_value *= 100;
                     }
-                    osfs << sp_style_css_size_units_to_px( line_height_value,
+                    osfs << sp_style_css_size_units_to_px(line_height_value,
                                                            tspans.line_height.unit,
                                                            tspans.font_size.computed) /
                         tspans.font_size.computed;
@@ -1796,13 +1796,13 @@ TextToolbar::line_spacing_mode_changed(int mode)
     // Set "Outer Style" toggle to match mode.
     switch (mode) {
         case 0: // Adaptive
-            gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(_outer_style_action), false );
+            gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(_outer_style_action), false);
             prefs->setInt("/tools/text/outer_style", false);
             break;
 
         case 1: // Minimum
         case 2: // Even
-            gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(_outer_style_action), true );
+            gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(_outer_style_action), true);
             prefs->setInt("/tools/text/outer_style", true);
             break;
 
@@ -1924,16 +1924,16 @@ TextToolbar::dx_value_changed()
     gdouble new_dx = _dx_adj->get_value();
     bool modmade = false;
 
-    if( SP_IS_TEXT_CONTEXT((SP_ACTIVE_DESKTOP)->event_context) ) {
+    if(SP_IS_TEXT_CONTEXT((SP_ACTIVE_DESKTOP)->event_context)) {
         Inkscape::UI::Tools::TextTool *const tc = SP_TEXT_CONTEXT((SP_ACTIVE_DESKTOP)->event_context);
-        if( tc ) {
+        if(tc) {
             unsigned char_index = -1;
             TextTagAttributes *attributes =
-                text_tag_attributes_at_position( tc->text, std::min(tc->text_sel_start, tc->text_sel_end), &char_index );
-            if( attributes ) {
-                double old_dx = attributes->getDx( char_index );
+                text_tag_attributes_at_position(tc->text, std::min(tc->text_sel_start, tc->text_sel_end), &char_index);
+            if(attributes) {
+                double old_dx = attributes->getDx(char_index);
                 double delta_dx = new_dx - old_dx;
-                sp_te_adjust_dx( tc->text, tc->text_sel_start, tc->text_sel_end, SP_ACTIVE_DESKTOP, delta_dx );
+                sp_te_adjust_dx(tc->text, tc->text_sel_start, tc->text_sel_end, SP_ACTIVE_DESKTOP, delta_dx);
                 modmade = true;
             }
         }
@@ -1959,16 +1959,16 @@ TextToolbar::dy_value_changed()
     gdouble new_dy = _dy_adj->get_value();
     bool modmade = false;
 
-    if( SP_IS_TEXT_CONTEXT((SP_ACTIVE_DESKTOP)->event_context) ) {
+    if(SP_IS_TEXT_CONTEXT((SP_ACTIVE_DESKTOP)->event_context)) {
         Inkscape::UI::Tools::TextTool *const tc = SP_TEXT_CONTEXT((SP_ACTIVE_DESKTOP)->event_context);
-        if( tc ) {
+        if(tc) {
             unsigned char_index = -1;
             TextTagAttributes *attributes =
-                text_tag_attributes_at_position( tc->text, std::min(tc->text_sel_start, tc->text_sel_end), &char_index );
-            if( attributes ) {
-                double old_dy = attributes->getDy( char_index );
+                text_tag_attributes_at_position(tc->text, std::min(tc->text_sel_start, tc->text_sel_end), &char_index);
+            if(attributes) {
+                double old_dy = attributes->getDy(char_index);
                 double delta_dy = new_dy - old_dy;
-                sp_te_adjust_dy( tc->text, tc->text_sel_start, tc->text_sel_end, SP_ACTIVE_DESKTOP, delta_dy );
+                sp_te_adjust_dy(tc->text, tc->text_sel_start, tc->text_sel_end, SP_ACTIVE_DESKTOP, delta_dy);
                 modmade = true;
             }
         }
@@ -1995,16 +1995,16 @@ TextToolbar::rotation_value_changed()
     gdouble new_degrees = _rotation_adj->get_value();
 
     bool modmade = false;
-    if( SP_IS_TEXT_CONTEXT((SP_ACTIVE_DESKTOP)->event_context) ) {
+    if(SP_IS_TEXT_CONTEXT((SP_ACTIVE_DESKTOP)->event_context)) {
         Inkscape::UI::Tools::TextTool *const tc = SP_TEXT_CONTEXT((SP_ACTIVE_DESKTOP)->event_context);
-        if( tc ) {
+        if(tc) {
             unsigned char_index = -1;
             TextTagAttributes *attributes =
-                text_tag_attributes_at_position( tc->text, std::min(tc->text_sel_start, tc->text_sel_end), &char_index );
-            if( attributes ) {
-                double old_degrees = attributes->getRotate( char_index );
+                text_tag_attributes_at_position(tc->text, std::min(tc->text_sel_start, tc->text_sel_end), &char_index);
+            if(attributes) {
+                double old_degrees = attributes->getRotate(char_index);
                 double delta_deg = new_degrees - old_degrees;
-                sp_te_adjust_rotation( tc->text, tc->text_sel_start, tc->text_sel_end, SP_ACTIVE_DESKTOP, delta_deg );
+                sp_te_adjust_rotation(tc->text, tc->text_sel_start, tc->text_sel_end, SP_ACTIVE_DESKTOP, delta_deg);
                 modmade = true;
             }
         }
@@ -2047,10 +2047,10 @@ TextToolbar::lineheight_unset_changed(InkToggleAction*act, gpointer data)
 
 // Changes selection to only text outer elements.
 void
-TextToolbar::outer_style_changed( InkToggleAction *act, gpointer data )
+TextToolbar::outer_style_changed(InkToggleAction *act, gpointer data)
 {
     auto toolbar = reinterpret_cast<TextToolbar *>(data);
-    bool outer = gtk_toggle_action_get_active( GTK_TOGGLE_ACTION(act) );
+    bool outer = gtk_toggle_action_get_active(GTK_TOGGLE_ACTION(act));
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     prefs->setInt("/tools/text/outer_style", outer);
 
@@ -2101,9 +2101,9 @@ TextToolbar::selection_changed(Inkscape::Selection * /*selection*/, bool subsele
     fontlister->selection_update();
 
     // Update font list, but only if widget already created.
-    if( _font_family_action->combobox != nullptr ) {
-        ink_comboboxentry_action_set_active_text( _font_family_action, fontlister->get_font_family().c_str(), fontlister->get_font_family_row() );
-        ink_comboboxentry_action_set_active_text( _font_style_action,  fontlister->get_font_style().c_str()  );
+    if(_font_family_action->combobox != nullptr) {
+        ink_comboboxentry_action_set_active_text(_font_family_action, fontlister->get_font_family().c_str(), fontlister->get_font_family_row());
+        ink_comboboxentry_action_set_active_text(_font_style_action,  fontlister->get_font_style().c_str());
     }
 
     // Only flowed text can be justified, only normal text can be kerned...
@@ -2112,7 +2112,7 @@ TextToolbar::selection_changed(Inkscape::Selection * /*selection*/, bool subsele
     auto itemlist= SP_ACTIVE_DESKTOP->getSelection()->items();
     for(auto i=itemlist.begin();i!=itemlist.end(); ++i){
         // std::cout << "    " << ((*i)->getId()?(*i)->getId():"null") << std::endl;
-        if( SP_IS_FLOWTEXT(*i)) {
+        if(SP_IS_FLOWTEXT(*i)) {
             isFlow = true;
             // std::cout << "   Found flowed text" << std::endl;
             break;
@@ -2157,12 +2157,12 @@ TextToolbar::selection_changed(Inkscape::Selection * /*selection*/, bool subsele
     if (result_family  == QUERY_STYLE_NOTHING ||
         result_style   == QUERY_STYLE_NOTHING ||
         result_numbers == QUERY_STYLE_NOTHING ||
-        result_wmode   == QUERY_STYLE_NOTHING ) {
+        result_wmode   == QUERY_STYLE_NOTHING) {
         // There are no texts in selection, read from preferences.
         query.readFromPrefs("/tools/text");
 #ifdef DEBUG_TEXT
         std::cout << "    read style from prefs:" << std::endl;
-        sp_print_font( &query );
+        sp_print_font(&query);
 #endif
         if (_text_style_from_prefs) {
             // Do not reset the toolbar style from prefs if we already did it last time
@@ -2178,7 +2178,7 @@ TextToolbar::selection_changed(Inkscape::Selection * /*selection*/, bool subsele
 
         // To ensure the value of the combobox is properly set on start-up, only mark
         // the prefs set if the combobox has already been constructed.
-        if( _font_family_action->combobox != nullptr ) {
+        if(_font_family_action->combobox != nullptr) {
             _text_style_from_prefs = true;
         }
     } else {
@@ -2199,32 +2199,32 @@ TextToolbar::selection_changed(Inkscape::Selection * /*selection*/, bool subsele
         os << size;
 
         // Freeze to ignore callbacks.
-        //g_object_freeze_notify( G_OBJECT( fontSizeAction->combobox ) );
+        //g_object_freeze_notify(G_OBJECT(fontSizeAction->combobox));
         sp_text_set_sizes(GTK_LIST_STORE(ink_comboboxentry_action_get_model(_font_size_action)), unit);
-        //g_object_thaw_notify( G_OBJECT( fontSizeAction->combobox ) );
+        //g_object_thaw_notify(G_OBJECT(fontSizeAction->combobox));
 
-        ink_comboboxentry_action_set_active_text( _font_size_action, os.str().c_str() );
+        ink_comboboxentry_action_set_active_text(_font_size_action, os.str().c_str());
 
         Glib::ustring tooltip = Glib::ustring::format(_("Font size"), " (", sp_style_get_css_unit_string(unit), ")");
-        ink_comboboxentry_action_set_tooltip ( _font_size_action, tooltip.c_str());
+        ink_comboboxentry_action_set_tooltip (_font_size_action, tooltip.c_str());
 
         // Superscript
         gboolean superscriptSet =
-            ((result_baseline == QUERY_STYLE_SINGLE || result_baseline == QUERY_STYLE_MULTIPLE_SAME ) &&
+            ((result_baseline == QUERY_STYLE_SINGLE || result_baseline == QUERY_STYLE_MULTIPLE_SAME) &&
              query.baseline_shift.set &&
              query.baseline_shift.type == SP_BASELINE_SHIFT_LITERAL &&
-             query.baseline_shift.literal == SP_CSS_BASELINE_SHIFT_SUPER );
+             query.baseline_shift.literal == SP_CSS_BASELINE_SHIFT_SUPER);
 
-        gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(_superscript_action), superscriptSet );
+        gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(_superscript_action), superscriptSet);
 
         // Subscript
         gboolean subscriptSet =
-            ((result_baseline == QUERY_STYLE_SINGLE || result_baseline == QUERY_STYLE_MULTIPLE_SAME ) &&
+            ((result_baseline == QUERY_STYLE_SINGLE || result_baseline == QUERY_STYLE_MULTIPLE_SAME) &&
              query.baseline_shift.set &&
              query.baseline_shift.type == SP_BASELINE_SHIFT_LITERAL &&
-             query.baseline_shift.literal == SP_CSS_BASELINE_SHIFT_SUB );
+             query.baseline_shift.literal == SP_CSS_BASELINE_SHIFT_SUB);
 
-        gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(_subscript_action), subscriptSet );
+        gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(_subscript_action), subscriptSet);
 
         // Alignment
 
@@ -2248,7 +2248,7 @@ TextToolbar::selection_changed(Inkscape::Selection * /*selection*/, bool subsele
             if (query.text_anchor.computed == SP_CSS_TEXT_ANCHOR_MIDDLE) activeButton = 1;
             if (query.text_anchor.computed == SP_CSS_TEXT_ANCHOR_END)    activeButton = 2;
         }
-        _align_action->set_active( activeButton );
+        _align_action->set_active(activeButton);
 
         // Line height (spacing) and line height unit
         double height;
@@ -2303,7 +2303,7 @@ TextToolbar::selection_changed(Inkscape::Selection * /*selection*/, bool subsele
             _line_height_adj->set_page_increment(1.0);
         }
 
-        if( line_height_unit == SP_CSS_UNIT_NONE ) {
+        if(line_height_unit == SP_CSS_UNIT_NONE) {
             // Function 'sp_style_get_css_unit_string' returns 'px' for unit none.
             // We need to avoid this.
             _tracker->setActiveUnitByAbbr("");
@@ -2314,15 +2314,15 @@ TextToolbar::selection_changed(Inkscape::Selection * /*selection*/, bool subsele
         _lineheight_unit = line_height_unit;
 
         // Enable and turn on only if selection includes an object with line height set.
-        gtk_action_set_sensitive(GTK_ACTION(_line_height_unset_action), query.line_height.set );
-        gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(_line_height_unset_action), query.line_height.set );
+        gtk_action_set_sensitive(GTK_ACTION(_line_height_unset_action), query.line_height.set);
+        gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(_line_height_unset_action), query.line_height.set);
 
         // Line spacing mode: requires calculating mode for each <text> element and the <tspan>s within.
         Inkscape::Selection *selection = desktop->getSelection();
         std::vector<SPItem *> vec(selection->items().begin(), selection->items().end());
         int mode[4] = {0, 0, 0, 0};
         for (auto i: vec) {
-            if (dynamic_cast<SPText*>(i) || dynamic_cast<SPFlowtext*>(i) ) {
+            if (dynamic_cast<SPText*>(i) || dynamic_cast<SPFlowtext*>(i)) {
                 bool text_line_height_set = false;
                 bool text_line_height_zero = false;
                 bool text_line_height_has_units = false;
@@ -2341,7 +2341,7 @@ TextToolbar::selection_changed(Inkscape::Selection * /*selection*/, bool subsele
                 // TO DO: recursively check children
                 std::vector<SPObject*> children = i->childList(false);
                 for (auto j: children) {
-                    if (dynamic_cast<SPTSpan*>(j) || dynamic_cast<SPFlowpara*>(j) || dynamic_cast<SPFlowtspan*>(j) ) {
+                    if (dynamic_cast<SPTSpan*>(j) || dynamic_cast<SPFlowpara*>(j) || dynamic_cast<SPFlowtspan*>(j)) {
                         if (j->style && j->style->line_height.set) {
                             tspan_line_height_all_unset = false;
                             if (j->style->line_height.computed != 0 || j->style->line_height.normal) {
@@ -2353,10 +2353,10 @@ TextToolbar::selection_changed(Inkscape::Selection * /*selection*/, bool subsele
                     }
                 }
 
-                if      ( text_line_height_zero && tspan_line_height_all_non_zero)   mode[0]++;
+                if      (text_line_height_zero && tspan_line_height_all_non_zero)   mode[0]++;
                 else if (!text_line_height_has_units && tspan_line_height_all_unset) mode[1]++;
-                else if ( text_line_height_has_units && tspan_line_height_all_unset) mode[3]++;
-                else if ( tspan_line_height_all_zero )                               mode[2]++;
+                else if (text_line_height_has_units && tspan_line_height_all_unset) mode[3]++;
+                else if (tspan_line_height_all_zero)                               mode[2]++;
                 else                                                                 mode[3]++;
             }
         }
@@ -2369,13 +2369,13 @@ TextToolbar::selection_changed(Inkscape::Selection * /*selection*/, bool subsele
         //           << ", "<< mode[1]
         //           << ", "<< mode[2]
         //           << ", "<< mode[3] << std::endl;
-        _line_spacing_action->set_active( activeButtonLS );
+        _line_spacing_action->set_active(activeButtonLS);
 
         // Enable/disable line height widget based on mode and Outer Style toggle.
-        if ( (activeButtonLS == 0 && outer)  ||   // Adaptive
+        if ((activeButtonLS == 0 && outer)  ||   // Adaptive
              (activeButtonLS == 1 && !outer) ||   // Minimum
              (activeButtonLS == 2 && !outer)      // Even
-            ) {
+) {
             gtk_action_set_sensitive (GTK_ACTION(_line_height_action), false);
         } else {
             gtk_action_set_sensitive (GTK_ACTION(_line_height_action), true);
@@ -2409,24 +2409,24 @@ TextToolbar::selection_changed(Inkscape::Selection * /*selection*/, bool subsele
         if (query.writing_mode.computed == SP_CSS_WRITING_MODE_TB_RL) activeButton2 = 1;
         if (query.writing_mode.computed == SP_CSS_WRITING_MODE_TB_LR) activeButton2 = 2;
 
-        _writing_mode_action->set_active( activeButton2 );
+        _writing_mode_action->set_active(activeButton2);
 
         // Orientation
         int activeButton3 = 0;
-        if (query.text_orientation.computed == SP_CSS_TEXT_ORIENTATION_MIXED   ) activeButton3 = 0;
-        if (query.text_orientation.computed == SP_CSS_TEXT_ORIENTATION_UPRIGHT ) activeButton3 = 1;
+        if (query.text_orientation.computed == SP_CSS_TEXT_ORIENTATION_MIXED) activeButton3 = 0;
+        if (query.text_orientation.computed == SP_CSS_TEXT_ORIENTATION_UPRIGHT) activeButton3 = 1;
         if (query.text_orientation.computed == SP_CSS_TEXT_ORIENTATION_SIDEWAYS) activeButton3 = 2;
 
-        _orientation_action->set_active( activeButton3 );
+        _orientation_action->set_active(activeButton3);
 
         // Disable text orientation for horizontal text...
-        _orientation_action->set_sensitive( activeButton2 != 0 );
+        _orientation_action->set_sensitive(activeButton2 != 0);
 
         // Direction
         int activeButton4 = 0;
-        if (query.direction.computed == SP_CSS_DIRECTION_LTR ) activeButton4 = 0;
-        if (query.direction.computed == SP_CSS_DIRECTION_RTL ) activeButton4 = 1;
-        _direction_action->set_active( activeButton4 );
+        if (query.direction.computed == SP_CSS_DIRECTION_LTR) activeButton4 = 0;
+        if (query.direction.computed == SP_CSS_DIRECTION_RTL) activeButton4 = 1;
+        _direction_action->set_active(activeButton4);
     }
 
 #ifdef DEBUG_TEXT
@@ -2451,26 +2451,26 @@ TextToolbar::selection_changed(Inkscape::Selection * /*selection*/, bool subsele
 #endif
 
     // Kerning (xshift), yshift, rotation.  NB: These are not CSS attributes.
-    if( SP_IS_TEXT_CONTEXT((SP_ACTIVE_DESKTOP)->event_context) ) {
+    if(SP_IS_TEXT_CONTEXT((SP_ACTIVE_DESKTOP)->event_context)) {
         Inkscape::UI::Tools::TextTool *const tc = SP_TEXT_CONTEXT((SP_ACTIVE_DESKTOP)->event_context);
-        if( tc ) {
+        if(tc) {
             unsigned char_index = -1;
             TextTagAttributes *attributes =
-                text_tag_attributes_at_position( tc->text, std::min(tc->text_sel_start, tc->text_sel_end), &char_index );
-            if( attributes ) {
+                text_tag_attributes_at_position(tc->text, std::min(tc->text_sel_start, tc->text_sel_end), &char_index);
+            if(attributes) {
 
                 // Dx
-                double dx = attributes->getDx( char_index );
+                double dx = attributes->getDx(char_index);
                 _dx_adj->set_value(dx);
 
                 // Dy
-                double dy = attributes->getDy( char_index );
+                double dy = attributes->getDy(char_index);
                 _dy_adj->set_value(dy);
 
                 // Rotation
-                double rotation = attributes->getRotate( char_index );
+                double rotation = attributes->getRotate(char_index);
                 /* SVG value is between 0 and 360 but we're using -180 to 180 in widget */
-                if( rotation > 180.0 ) rotation -= 360.0;
+                if(rotation > 180.0) rotation -= 360.0;
                 _rotation_adj->set_value(rotation);
 
 #ifdef DEBUG_TEXT
@@ -2484,9 +2484,9 @@ TextToolbar::selection_changed(Inkscape::Selection * /*selection*/, bool subsele
 
     {
         // Set these here as we don't always have kerning/rotating attributes
-        gtk_action_set_sensitive( GTK_ACTION(_dx_action), !isFlow );
-        gtk_action_set_sensitive( GTK_ACTION(_dy_action), !isFlow );
-        gtk_action_set_sensitive( GTK_ACTION(_rotation_action), !isFlow );
+        gtk_action_set_sensitive(GTK_ACTION(_dx_action), !isFlow);
+        gtk_action_set_sensitive(GTK_ACTION(_dy_action), !isFlow);
+        gtk_action_set_sensitive(GTK_ACTION(_rotation_action), !isFlow);
     }
 
 #ifdef DEBUG_TEXT

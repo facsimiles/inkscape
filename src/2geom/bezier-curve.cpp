@@ -282,15 +282,15 @@ Coord BezierCurveN<1>::nearestTime(Point const& p, Coord from, Coord to) const
 {
     using std::swap;
 
-    if ( from > to ) swap(from, to);
+    if (from > to) swap(from, to);
     Point ip = pointAt(from);
     Point fp = pointAt(to);
     Point v = fp - ip;
     Coord l2v = L2sq(v);
     if (l2v == 0) return 0;
-    Coord t = dot( p - ip, v ) / l2v;
-    if ( t <= 0 )  		return from;
-    else if ( t >= 1 )  return to;
+    Coord t = dot(p - ip, v) / l2v;
+    if (t <= 0)  		return from;
+    else if (t >= 1)  return to;
     else return from + t*(to-from);
 }
 

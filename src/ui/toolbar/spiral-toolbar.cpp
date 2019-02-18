@@ -184,8 +184,8 @@ SpiralToolbar::value_changed(Glib::RefPtr<Gtk::Adjustment> &adj,
         SPItem *item = *i;
         if (SP_IS_SPIRAL(item)) {
             Inkscape::XML::Node *repr = item->getRepr();
-            sp_repr_set_svg_double( repr, namespaced_name,
-                adj->get_value() );
+            sp_repr_set_svg_double(repr, namespaced_name,
+                adj->get_value());
             item->updateRepr();
             modmade = true;
         }
@@ -228,7 +228,7 @@ SpiralToolbar::selection_changed(Inkscape::Selection *selection)
     int n_selected = 0;
     Inkscape::XML::Node *repr = nullptr;
 
-    if ( _repr ) {
+    if (_repr) {
         _repr->removeListenerByData(this);
         GC::release(_repr);
         _repr = nullptr;

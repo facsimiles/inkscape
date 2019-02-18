@@ -46,7 +46,7 @@ Satellite::~Satellite() = default;
 //TODO: find a better place to it
 double timeAtArcLength(double const A, Geom::Curve const &curve_in)
 {
-    if ( A == 0 || curve_in.isDegenerate()) {
+    if (A == 0 || curve_in.isDegenerate()) {
         return 0;
     }
 
@@ -70,7 +70,7 @@ double timeAtArcLength(double const A, Geom::Curve const &curve_in)
 //TODO: find a better place to it
 double arcLengthAt(double const A, Geom::Curve const &curve_in)
 {
-    if ( A == 0 || curve_in.isDegenerate()) {
+    if (A == 0 || curve_in.isDegenerate()) {
         return 0;
     }
 

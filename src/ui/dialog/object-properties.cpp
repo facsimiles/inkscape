@@ -87,7 +87,7 @@ ObjectProperties::ObjectProperties()
 
     _desktop_changed_connection = _desktop_tracker.connectDesktopChanged(
         sigc::mem_fun(*this, &ObjectProperties::_setTargetDesktop)
-    );
+);
     _desktop_tracker.connect(GTK_WIDGET(gobj()));
 
     _init();
@@ -226,7 +226,7 @@ void ObjectProperties::_init()
 
     _combo_image_rendering.signal_changed().connect(
         sigc::mem_fun(this, &ObjectProperties::_imageRenderingChanged)
-    );
+);
 
 
 
@@ -564,10 +564,10 @@ void ObjectProperties::_setTargetDesktop(SPDesktop *desktop)
         if (desktop && desktop->selection) {
             _selection_changed_connection = desktop->selection->connectChanged(
                 sigc::hide(sigc::mem_fun(*this, &ObjectProperties::update))
-            );
+);
             _subselection_changed_connection = desktop->connectToolSubselectionChanged(
                 sigc::hide(sigc::mem_fun(*this, &ObjectProperties::update))
-            );
+);
         }
         update();
     }

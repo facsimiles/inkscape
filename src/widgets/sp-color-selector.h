@@ -18,27 +18,27 @@ struct SPColorSelector;
 class ColorSelector
 {
 public:
-    ColorSelector( SPColorSelector* csel );
+    ColorSelector(SPColorSelector* csel);
     virtual ~ColorSelector();
 
     virtual void init();
 
-    void setColor( const SPColor& color );
+    void setColor(const SPColor& color);
     SPColor getColor() const;
 
-    void setAlpha( gfloat alpha );
+    void setAlpha(gfloat alpha);
     gfloat getAlpha() const;
 
-    void setColorAlpha( const SPColor& color, gfloat alpha, bool emit = false );
-    void getColorAlpha( SPColor &color, gfloat &alpha ) const;
+    void setColorAlpha(const SPColor& color, gfloat alpha, bool emit = false);
+    void getColorAlpha(SPColor &color, gfloat &alpha) const;
 
-    virtual void setSubmode( guint submode );
+    virtual void setSubmode(guint submode);
     virtual guint getSubmode() const;
 
 protected:
     void _grabbed();
     void _released();
-    void _updateInternals( const SPColor& color, gfloat alpha, gboolean held );
+    void _updateInternals(const SPColor& color, gfloat alpha, gboolean held);
     gboolean _isHeld() const { return _held; }
 
     virtual void _colorChanged();
@@ -51,8 +51,8 @@ protected:
 
 private:
     // By default, disallow copy constructor and assignment operator
-    ColorSelector( const ColorSelector& obj ) = delete;
-    ColorSelector& operator=( const ColorSelector& obj ) = delete;
+    ColorSelector(const ColorSelector& obj) = delete;
+    ColorSelector& operator=(const ColorSelector& obj) = delete;
 
     gboolean _held;
 
@@ -87,7 +87,7 @@ struct SPColorSelectorClass {
 
 GType sp_color_selector_get_type();
 
-GtkWidget *sp_color_selector_new( GType selector_type );
+GtkWidget *sp_color_selector_new(GType selector_type);
 
 
 

@@ -94,8 +94,8 @@ void SPFlowdiv::set(SPAttributeEnum key, const gchar* value) {
 
 
 Inkscape::XML::Node* SPFlowdiv::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
-    if ( flags & SP_OBJECT_WRITE_BUILD ) {
-        if ( repr == nullptr ) {
+    if (flags & SP_OBJECT_WRITE_BUILD) {
+        if (repr == nullptr) {
             repr = xml_doc->createElement("svg:flowDiv");
         }
 
@@ -104,15 +104,15 @@ Inkscape::XML::Node* SPFlowdiv::write(Inkscape::XML::Document *xml_doc, Inkscape
         for (auto& child: children) {
             Inkscape::XML::Node* c_repr = nullptr;
 
-            if ( SP_IS_FLOWTSPAN (&child) ) {
+            if (SP_IS_FLOWTSPAN (&child)) {
                 c_repr = child.updateRepr(xml_doc, nullptr, flags);
-            } else if ( SP_IS_FLOWPARA(&child) ) {
+            } else if (SP_IS_FLOWPARA(&child)) {
                 c_repr = child.updateRepr(xml_doc, nullptr, flags);
-            } else if ( SP_IS_STRING(&child) ) {
+            } else if (SP_IS_STRING(&child)) {
                 c_repr = xml_doc->createTextNode(SP_STRING(&child)->string.c_str());
             }
 
-            if ( c_repr ) {
+            if (c_repr) {
                 l.push_back(c_repr);
             }
         }
@@ -122,11 +122,11 @@ Inkscape::XML::Node* SPFlowdiv::write(Inkscape::XML::Document *xml_doc, Inkscape
         }
     } else {
         for (auto& child: children) {
-            if ( SP_IS_FLOWTSPAN (&child) ) {
+            if (SP_IS_FLOWTSPAN (&child)) {
                 child.updateRepr(flags);
-            } else if ( SP_IS_FLOWPARA(&child) ) {
+            } else if (SP_IS_FLOWPARA(&child)) {
                 child.updateRepr(flags);
-            } else if ( SP_IS_STRING(&child) ) {
+            } else if (SP_IS_STRING(&child)) {
                 child.getRepr()->setContent(SP_STRING(&child)->string.c_str());
             }
         }
@@ -216,8 +216,8 @@ void SPFlowtspan::set(SPAttributeEnum key, const gchar* value) {
 }
 
 Inkscape::XML::Node *SPFlowtspan::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
-    if ( flags&SP_OBJECT_WRITE_BUILD ) {
-        if ( repr == nullptr ) {
+    if (flags&SP_OBJECT_WRITE_BUILD) {
+        if (repr == nullptr) {
             repr = xml_doc->createElement("svg:flowSpan");
         }
 
@@ -226,15 +226,15 @@ Inkscape::XML::Node *SPFlowtspan::write(Inkscape::XML::Document *xml_doc, Inksca
         for (auto& child: children) {
             Inkscape::XML::Node* c_repr = nullptr;
 
-            if ( SP_IS_FLOWTSPAN(&child) ) {
+            if (SP_IS_FLOWTSPAN(&child)) {
                 c_repr = child.updateRepr(xml_doc, nullptr, flags);
-            } else if ( SP_IS_FLOWPARA(&child) ) {
+            } else if (SP_IS_FLOWPARA(&child)) {
                 c_repr = child.updateRepr(xml_doc, nullptr, flags);
-            } else if ( SP_IS_STRING(&child) ) {
+            } else if (SP_IS_STRING(&child)) {
                 c_repr = xml_doc->createTextNode(SP_STRING(&child)->string.c_str());
             }
 
-            if ( c_repr ) {
+            if (c_repr) {
                 l.push_back(c_repr);
             }
         }
@@ -244,11 +244,11 @@ Inkscape::XML::Node *SPFlowtspan::write(Inkscape::XML::Document *xml_doc, Inksca
         }
     } else {
         for (auto& child: children) {
-            if ( SP_IS_FLOWTSPAN(&child) ) {
+            if (SP_IS_FLOWTSPAN(&child)) {
                 child.updateRepr(flags);
-            } else if ( SP_IS_FLOWPARA(&child) ) {
+            } else if (SP_IS_FLOWPARA(&child)) {
                 child.updateRepr(flags);
-            } else if ( SP_IS_STRING(&child) ) {
+            } else if (SP_IS_STRING(&child)) {
                 child.getRepr()->setContent(SP_STRING(&child)->string.c_str());
             }
         }
@@ -338,8 +338,8 @@ void SPFlowpara::set(SPAttributeEnum key, const gchar* value) {
 }
 
 Inkscape::XML::Node *SPFlowpara::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
-    if ( flags&SP_OBJECT_WRITE_BUILD ) {
-        if ( repr == nullptr ) {
+    if (flags&SP_OBJECT_WRITE_BUILD) {
+        if (repr == nullptr) {
         	repr = xml_doc->createElement("svg:flowPara");
         }
 
@@ -348,15 +348,15 @@ Inkscape::XML::Node *SPFlowpara::write(Inkscape::XML::Document *xml_doc, Inkscap
         for (auto& child: children) {
             Inkscape::XML::Node* c_repr = nullptr;
 
-            if ( SP_IS_FLOWTSPAN(&child) ) {
+            if (SP_IS_FLOWTSPAN(&child)) {
                 c_repr = child.updateRepr(xml_doc, nullptr, flags);
-            } else if ( SP_IS_FLOWPARA(&child) ) {
+            } else if (SP_IS_FLOWPARA(&child)) {
                 c_repr = child.updateRepr(xml_doc, nullptr, flags);
-            } else if ( SP_IS_STRING(&child) ) {
+            } else if (SP_IS_STRING(&child)) {
                 c_repr = xml_doc->createTextNode(SP_STRING(&child)->string.c_str());
             }
 
-            if ( c_repr ) {
+            if (c_repr) {
                 l.push_back(c_repr);
             }
         }
@@ -367,11 +367,11 @@ Inkscape::XML::Node *SPFlowpara::write(Inkscape::XML::Document *xml_doc, Inkscap
         }
     } else {
         for (auto& child: children) {
-            if ( SP_IS_FLOWTSPAN(&child) ) {
+            if (SP_IS_FLOWTSPAN(&child)) {
                 child.updateRepr(flags);
-            } else if ( SP_IS_FLOWPARA(&child) ) {
+            } else if (SP_IS_FLOWPARA(&child)) {
                 child.updateRepr(flags);
-            } else if ( SP_IS_STRING(&child) ) {
+            } else if (SP_IS_STRING(&child)) {
                 child.getRepr()->setContent(SP_STRING(&child)->string.c_str());
             }
         }
@@ -407,8 +407,8 @@ void SPFlowline::modified(unsigned int flags) {
 }
 
 Inkscape::XML::Node *SPFlowline::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
-    if ( flags & SP_OBJECT_WRITE_BUILD ) {
-        if ( repr == nullptr ) {
+    if (flags & SP_OBJECT_WRITE_BUILD) {
+        if (repr == nullptr) {
             repr = xml_doc->createElement("svg:flowLine");
         }
     }
@@ -443,8 +443,8 @@ void SPFlowregionbreak::modified(unsigned int flags) {
 }
 
 Inkscape::XML::Node *SPFlowregionbreak::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
-    if ( flags & SP_OBJECT_WRITE_BUILD ) {
-        if ( repr == nullptr ) {
+    if (flags & SP_OBJECT_WRITE_BUILD) {
+        if (repr == nullptr) {
             repr = xml_doc->createElement("svg:flowLine");
         }
     }

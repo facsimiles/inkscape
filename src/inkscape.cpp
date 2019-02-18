@@ -104,7 +104,7 @@ public:
     {}
     ~InkErrorHandler() override = default;
 
-    void handleError( Glib::ustring const& primary, Glib::ustring const& secondary ) const override
+    void handleError(Glib::ustring const& primary, Glib::ustring const& secondary) const override
     {
         if (_useGui) {
             Gtk::MessageDialog err(primary, false, Gtk::MESSAGE_WARNING, Gtk::BUTTONS_OK, true);
@@ -224,7 +224,7 @@ int Application::autosave()
         g_mkdir(autosave_dir.c_str(), 0755);
         // Try to read dir again
         autosave_dir_ptr = g_dir_open(autosave_dir.c_str(), 0, nullptr);
-        if( !autosave_dir_ptr ){
+        if(!autosave_dir_ptr){
             Glib::ustring msg = Glib::ustring::compose(
                     _("Autosave failed! Cannot open directory %1."), Glib::filename_to_utf8(autosave_dir));
             g_warning("%s", msg.c_str());
@@ -261,16 +261,16 @@ int Application::autosave()
             gint count = 0;
 
             // Look for previous autosaves
-            gchar* baseName = g_strdup_printf( "inkscape-autosave-%d", uid );
+            gchar* baseName = g_strdup_printf("inkscape-autosave-%d", uid);
             g_dir_rewind(autosave_dir_ptr);
-            while( (filename = g_dir_read_name(autosave_dir_ptr)) != nullptr ){
-                if ( strncmp(filename, baseName, strlen(baseName)) == 0 ){
-                    gchar* full_path = g_build_filename( autosave_dir.c_str(), filename, NULL );
+            while((filename = g_dir_read_name(autosave_dir_ptr)) != nullptr){
+                if (strncmp(filename, baseName, strlen(baseName)) == 0){
+                    gchar* full_path = g_build_filename(autosave_dir.c_str(), filename, NULL);
                     if (g_file_test (full_path, G_FILE_TEST_EXISTS)){
-                        if ( g_stat(full_path, &sb) != -1 ) {
-                            if ( difftime(sb.st_ctime, min_time) < 0 || min_time == 0 ){
+                        if (g_stat(full_path, &sb) != -1) {
+                            if (difftime(sb.st_ctime, min_time) < 0 || min_time == 0){
                                 min_time = sb.st_ctime;
-                                if ( oldest_autosave ) {
+                                if (oldest_autosave) {
                                     g_free(oldest_autosave);
                                 }
                                 oldest_autosave = g_strdup(full_path);
@@ -283,14 +283,14 @@ int Application::autosave()
             }
 
             // Have we reached the limit for number of autosaves?
-            if ( count >= autosave_max ){
+            if (count >= autosave_max){
                 // Remove the oldest file
-                if ( oldest_autosave ) {
+                if (oldest_autosave) {
                     unlink(oldest_autosave);
                 }
             }
 
-            if ( oldest_autosave ) {
+            if (oldest_autosave) {
                 g_free(oldest_autosave);
                 oldest_autosave = nullptr;
             }
@@ -346,7 +346,7 @@ void Application::autosave_init()
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
     // Turn off any previously initiated timeouts
-    if ( autosave_timeout_id ) {
+    if (autosave_timeout_id) {
         g_source_remove(autosave_timeout_id);
         autosave_timeout_id = 0;
     }
@@ -533,7 +533,7 @@ Application::Application(const char* argv, bool use_gui) :
     {
         Glib::ustring msg;
         Glib::ustring secondary;
-        if (prefs->getLastError( msg, secondary )) {
+        if (prefs->getLastError(msg, secondary)) {
             handler->handleError(msg, secondary);
         }
     }
@@ -632,7 +632,7 @@ Application::~Application()
  */
 void Application::mapalt(guint maskvalue)
 {
-    if ( maskvalue < 2 || maskvalue > 5 ) {  // MOD5 is the highest defined in gdktypes.h
+    if (maskvalue < 2 || maskvalue > 5) {  // MOD5 is the highest defined in gdktypes.h
         _mapalt = 0;
     } else {
         _mapalt = (GDK_MOD1_MASK << (maskvalue-1));
@@ -652,12 +652,12 @@ Application::crash_handler (int /*signum*/)
      * reset all signal handlers: any further crashes should just be allowed
      * to crash normally.
      * */
-    signal (SIGSEGV, segv_handler );
-    signal (SIGABRT, abrt_handler );
-    signal (SIGFPE,  fpe_handler  );
-    signal (SIGILL,  ill_handler  );
+    signal (SIGSEGV, segv_handler);
+    signal (SIGABRT, abrt_handler);
+    signal (SIGFPE,  fpe_handler);
+    signal (SIGILL,  ill_handler);
 #ifndef _WIN32
-    signal (SIGBUS,  bus_handler  );
+    signal (SIGBUS,  bus_handler);
 #endif
 
     /* Stop bizarre loops */
@@ -823,14 +823,14 @@ Application::crash_handler (int /*signum*/)
     }
     *(b + pos) = '\0';
 
-    if ( exists() && instance().use_gui() ) {
+    if (exists() && instance().use_gui()) {
         GtkWidget *msgbox = gtk_message_dialog_new (nullptr, GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "%s", b);
         gtk_dialog_run (GTK_DIALOG (msgbox));
         gtk_widget_destroy (msgbox);
     }
     else
     {
-        g_message( "Error: %s", b );
+        g_message("Error: %s", b);
     }
     g_free (b);
 
@@ -850,7 +850,7 @@ bool Application::load_menus()
     Glib::ustring filename = get_filename(UIS, MENUS_FILE);
 
     _menus = sp_repr_read_file(filename.c_str(), nullptr);
-    if ( !_menus ) {
+    if (!_menus) {
         _menus = sp_repr_read_mem(menus_skeleton, MENUS_SKELETON_SIZE, nullptr);
     }
     return (_menus != nullptr);
@@ -940,7 +940,7 @@ Application::remove_desktop (SPDesktop * desktop)
 {
     g_return_if_fail (desktop != nullptr);
 
-    if (std::find (_desktops->begin(), _desktops->end(), desktop) == _desktops->end() ) {
+    if (std::find (_desktops->begin(), _desktops->end(), desktop) == _desktops->end()) {
         g_error("Attempted to remove desktop not in list.");
     }
 
@@ -1242,7 +1242,7 @@ Application::sole_desktop_for_document(SPDesktop const &desktop) {
     }
     for (auto other_desktop : *_desktops) {
         SPDocument *other_document = other_desktop->doc();
-        if ( other_document == document && other_desktop != &desktop ) {
+        if (other_document == document && other_desktop != &desktop) {
             return false;
         }
     }

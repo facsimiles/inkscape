@@ -57,7 +57,7 @@ namespace Inkscape {
 
 namespace LivePathEffect {
 
-PathParam::PathParam( const Glib::ustring& label, const Glib::ustring& tip,
+PathParam::PathParam(const Glib::ustring& label, const Glib::ustring& tip,
                       const Glib::ustring& key, Inkscape::UI::Widget::Registry* wr,
                       Effect* effect, const gchar * default_value)
     : Parameter(label, tip, key, wr, effect),
@@ -66,7 +66,7 @@ PathParam::PathParam( const Glib::ustring& label, const Glib::ustring& tip,
       _pwd2(),
       must_recalculate_pwd2(false),
       href(nullptr),
-      ref( (SPObject*)effect->getLPEObj() )
+      ref((SPObject*)effect->getLPEObj())
 {
     defvalue = g_strdup(default_value);
     param_readSVGValue(defvalue);
@@ -179,7 +179,7 @@ PathParam::param_getSVGValue() const
     if (href) {
         return g_strdup(href);
     } else {
-        gchar * svgd = sp_svg_write_path( _pathvector );
+        gchar * svgd = sp_svg_write_path(_pathvector);
         return svgd;
     }
 }
@@ -319,7 +319,7 @@ PathParam::param_transform_multiply(Geom::Affine const& postmul, bool /*set*/)
 {
     // only apply transform when not referring to other path
     if (!href) {
-        set_new_value( _pathvector * postmul, true );
+        set_new_value(_pathvector * postmul, true);
     }
 }
 
@@ -333,7 +333,7 @@ PathParam::set_new_value (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & newpa
     _pathvector = Geom::path_from_piecewise(newpath, LPE_CONVERSION_TOLERANCE);
 
     if (write_to_svg) {
-        gchar * svgd = sp_svg_write_path( _pathvector );
+        gchar * svgd = sp_svg_write_path(_pathvector);
         param_write_to_repr(svgd);
         g_free(svgd);
 
@@ -372,7 +372,7 @@ PathParam::set_new_value (Geom::PathVector const &newpath, bool write_to_svg)
     must_recalculate_pwd2 = true;
 
     if (write_to_svg) {
-        gchar * svgd = sp_svg_write_path( _pathvector );
+        gchar * svgd = sp_svg_write_path(_pathvector);
         param_write_to_repr(svgd);
         g_free(svgd);
     } else {
@@ -386,7 +386,7 @@ PathParam::ensure_pwd2()
     if (must_recalculate_pwd2) {
         _pwd2.clear();
         for (const auto & i : _pathvector) {
-            _pwd2.concat( i.toPwSb() );
+            _pwd2.concat(i.toPwSb());
         }
 
         must_recalculate_pwd2 = false;
@@ -403,7 +403,7 @@ PathParam::emit_changed()
 void
 PathParam::start_listening(SPObject * to)
 {
-    if ( to == nullptr ) {
+    if (to == nullptr) {
         return;
     }
     linked_delete_connection = to->connectDelete(sigc::mem_fun(*this, &PathParam::linked_delete));
@@ -426,7 +426,7 @@ void
 PathParam::ref_changed(SPObject */*old_ref*/, SPObject *new_ref)
 {
     quit_listening();
-    if ( new_ref ) {
+    if (new_ref) {
         start_listening(new_ref);
     }
 }
@@ -513,7 +513,7 @@ PathParam::paste_param_path(const char *svgd)
         if (item != nullptr) {
             Geom::PathVector path_clipboard =  sp_svg_read_pathv(svgd);
             path_clipboard *= item->i2doc_affine().inverse();
-            svgd = sp_svg_write_path( path_clipboard );
+            svgd = sp_svg_write_path(path_clipboard);
         }
         
         param_write_to_repr(svgd);
@@ -550,7 +550,7 @@ PathParam::on_link_button_click()
 
     // add '#' at start to make it an uri.
     pathid.insert(pathid.begin(), '#');
-    if ( href && strcmp(pathid.c_str(), href) == 0 ) {
+    if (href && strcmp(pathid.c_str(), href) == 0) {
         // no change, do nothing
         return;
     } else {

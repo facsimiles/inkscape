@@ -23,14 +23,14 @@ DocPerCaseTest::DocPerCaseTest() :
 
 void DocPerCaseTest::SetUpTestCase()
 {
-    if ( !Inkscape::Application::exists() )
+    if (!Inkscape::Application::exists())
     {
         // Create the global inkscape object.
         Inkscape::Application::create("", false);
     }
 
-    _doc = SPDocument::createNewDoc( NULL, TRUE, true );
-    ASSERT_TRUE( _doc != NULL );
+    _doc = SPDocument::createNewDoc(NULL, TRUE, true);
+    ASSERT_TRUE(_doc != NULL);
 }
 
 void DocPerCaseTest::TearDownTestCase()

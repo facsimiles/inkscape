@@ -210,7 +210,7 @@ change_clashing_ids(SPDocument *imported_doc, SPDocument *current_doc,
 
             if (cd_obj && SP_IS_GRADIENT(cd_obj)) {
                 SPGradient *cd_gr = SP_GRADIENT(cd_obj);
-                if ( cd_gr->isEquivalent(SP_GRADIENT(elem))) {
+                if (cd_gr->isEquivalent(SP_GRADIENT(elem))) {
                     fix_clashing_ids = false;
                  }
              }

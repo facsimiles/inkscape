@@ -105,7 +105,7 @@ LPEPowerClip::doBeforeEffect (SPLPEItem const* lpeitem){
         clip_box.close();
 
         std::vector<SPObject*> clip_path_list = clip_path->childList(true);
-        for ( std::vector<SPObject*>::const_iterator iter=clip_path_list.begin();iter!=clip_path_list.end();++iter) {
+        for (std::vector<SPObject*>::const_iterator iter=clip_path_list.begin();iter!=clip_path_list.end();++iter) {
             SPObject * clip_data = *iter;
             gchar * is_inverse_str = is_inverse.param_getSVGValue();
             if(!strcmp(is_inverse_str,"false") && inverse && isVisible()) {
@@ -154,7 +154,7 @@ LPEPowerClip::addInverse (SPItem * clip_data, SPCurve * clipcurve, Geom::Affine 
     if(!strcmp(is_inverse_str,"false")) {
         if (SP_IS_GROUP(clip_data)) {
             std::vector<SPItem*> item_list = sp_item_group_item_list(SP_GROUP(clip_data));
-            for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
+            for (std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
                 SPItem *subitem = *iter;
                 Geom::Affine affine_group = SP_ITEM(clip_data)->transform;
                 addInverse(subitem, clipcurve, affine_group, false);
@@ -206,7 +206,7 @@ LPEPowerClip::updateInverse (SPItem * clip_data) {
     if(inverse && isVisible()) {
         if (SP_IS_GROUP(clip_data)) {
             std::vector<SPItem*> item_list = sp_item_group_item_list(SP_GROUP(clip_data));
-            for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
+            for (std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
                 SPItem *subitem = *iter;
                 updateInverse(subitem);
             }
@@ -246,7 +246,7 @@ LPEPowerClip::removeInverse (SPItem * clip_data){
     if(!strcmp(is_inverse_str,"true")) {
         if (SP_IS_GROUP(clip_data)) {
              std::vector<SPItem*> item_list = sp_item_group_item_list(SP_GROUP(clip_data));
-             for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
+             for (std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
                  SPItem *subitem = *iter;
                  removeInverse(subitem);
              }
@@ -274,7 +274,7 @@ LPEPowerClip::doOnRemove (SPLPEItem const* /*lpeitem*/)
         if(!keep_paths) {
             gchar * is_inverse_str = is_inverse.param_getSVGValue();
             std::vector<SPObject*> clip_path_list = clip_path->childList(true);
-            for ( std::vector<SPObject*>::const_iterator iter=clip_path_list.begin();iter!=clip_path_list.end();++iter) {
+            for (std::vector<SPObject*>::const_iterator iter=clip_path_list.begin();iter!=clip_path_list.end();++iter) {
                 SPObject * clip_data = *iter;
                 if(!strcmp(is_inverse_str,"true")) {
                     removeInverse(SP_ITEM(clip_data));
@@ -314,7 +314,7 @@ LPEPowerClip::doEffect_path(Geom::PathVector const & path_in){
         } else {
             if(clip_path) {
                 std::vector<SPObject*> clip_path_list = clip_path->childList(true);
-                for ( std::vector<SPObject*>::const_iterator iter=clip_path_list.begin();iter!=clip_path_list.end();++iter) {
+                for (std::vector<SPObject*>::const_iterator iter=clip_path_list.begin();iter!=clip_path_list.end();++iter) {
                     SPObject * clip_data = *iter;
                     flattenClip(SP_ITEM(clip_data), path_out);
                 }
@@ -337,7 +337,7 @@ LPEPowerClip::flattenClip(SPItem * clip_data, Geom::PathVector &path_in)
     SPClipPath *clip_path = SP_ITEM(sp_lpe_item)->clip_ref->getObject();
     if (SP_IS_GROUP(clip_data)) {
         std::vector<SPItem*> item_list = sp_item_group_item_list(SP_GROUP(clip_data));
-        for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
+        for (std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
             SPItem *subitem = *iter;
             flattenClip(subitem, path_in);
         }

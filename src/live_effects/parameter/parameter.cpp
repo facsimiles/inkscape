@@ -26,9 +26,9 @@ namespace Inkscape {
 namespace LivePathEffect {
 
 
-Parameter::Parameter( Glib::ustring  label, Glib::ustring  tip,
+Parameter::Parameter(Glib::ustring  label, Glib::ustring  tip,
                       Glib::ustring  key, Inkscape::UI::Widget::Registry* wr,
-                      Effect* effect )
+                      Effect* effect)
     : param_key(std::move(key)),
       param_wr(wr),
       param_label(std::move(label)),
@@ -55,7 +55,7 @@ void Parameter::write_to_SVG()
 /*###########################################
  *   REAL PARAM
  */
-ScalarParam::ScalarParam( const Glib::ustring& label, const Glib::ustring& tip,
+ScalarParam::ScalarParam(const Glib::ustring& label, const Glib::ustring& tip,
                       const Glib::ustring& key, Inkscape::UI::Widget::Registry* wr,
                       Effect* effect, gdouble default_value)
     : Parameter(label, tip, key, wr, effect),
@@ -177,8 +177,8 @@ Gtk::Widget *
 ScalarParam::param_newWidget()
 {
     if (widget_is_visible) {
-        Inkscape::UI::Widget::RegisteredScalar *rsu = Gtk::manage( new Inkscape::UI::Widget::RegisteredScalar(
-            param_label, param_tooltip, param_key, *param_wr, param_effect->getRepr(), param_effect->getSPDoc() ) );
+        Inkscape::UI::Widget::RegisteredScalar *rsu = Gtk::manage(new Inkscape::UI::Widget::RegisteredScalar(
+            param_label, param_tooltip, param_key, *param_wr, param_effect->getRepr(), param_effect->getSPDoc()));
         
         rsu->setValue(value);
         rsu->setDigits(digits);

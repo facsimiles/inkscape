@@ -61,11 +61,11 @@ void HighlightPicker::get_preferred_width_vfunc(Gtk::Widget& widget,
     }
 }
 
-void HighlightPicker::render_vfunc( const Cairo::RefPtr<Cairo::Context>& cr,
+void HighlightPicker::render_vfunc(const Cairo::RefPtr<Cairo::Context>& cr,
                                  Gtk::Widget& widget,
                                  const Gdk::Rectangle& background_area,
                                  const Gdk::Rectangle& cell_area,
-                                 Gtk::CellRendererState flags )
+                                 Gtk::CellRendererState flags)
 {
     GdkRectangle carea;
 
@@ -100,14 +100,14 @@ void HighlightPicker::render_vfunc( const Cairo::RefPtr<Cairo::Context>& cr,
     cairo_destroy(ct);
     cairo_surface_flush(s);
     
-    GdkPixbuf* pixbuf = gdk_pixbuf_new_from_data( cairo_image_surface_get_data(s),
+    GdkPixbuf* pixbuf = gdk_pixbuf_new_from_data(cairo_image_surface_get_data(s),
                                                GDK_COLORSPACE_RGB, TRUE, 8,
                                                10, 20, cairo_image_surface_get_stride(s),
                                                ink_cairo_pixbuf_cleanup, s);
     convert_pixbuf_argb32_to_normal(pixbuf);
     
     property_pixbuf() = Glib::wrap(pixbuf);
-    Gtk::CellRendererPixbuf::render_vfunc( cr, widget, background_area, cell_area, flags );
+    Gtk::CellRendererPixbuf::render_vfunc(cr, widget, background_area, cell_area, flags);
 }
 
 bool HighlightPicker::activate_vfunc(GdkEvent* /*event*/,

@@ -30,11 +30,11 @@ SPMissingGlyph::~SPMissingGlyph() = default;
 void SPMissingGlyph::build(SPDocument* doc, Inkscape::XML::Node* repr) {
     SPObject::build(doc, repr);
 
-    this->readAttr( "d" );
-    this->readAttr( "horiz-adv-x" );
-    this->readAttr( "vert-origin-x" );
-    this->readAttr( "vert-origin-y" );
-    this->readAttr( "vert-adv-y" );
+    this->readAttr("d");
+    this->readAttr("horiz-adv-x");
+    this->readAttr("vert-origin-x");
+    this->readAttr("vert-origin-y");
+    this->readAttr("vert-adv-y");
 }
 
 void SPMissingGlyph::release() {

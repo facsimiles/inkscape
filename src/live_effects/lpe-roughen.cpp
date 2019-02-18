@@ -187,7 +187,7 @@ Geom::Point LPERoughen::randomize(double max_lenght, bool is_node)
     double displace_x_parsed = displace_x * global_randomize * factor;
     double displace_y_parsed = displace_y * global_randomize * factor;
     Geom::Point output = Geom::Point(sign(displace_x_parsed), sign(displace_y_parsed));
-    if( fixed_displacement ){
+    if(fixed_displacement){
         Geom::Ray ray(Geom::Point(0,0),output);
         output  = Geom::Point::polar(ray.angle(), max_lenght);
     }
@@ -346,7 +346,7 @@ SPCurve const * LPERoughen::addNodesAndJitter(Geom::Curve const * A, Geom::Point
                                      seg2 = div.second.controlPoints();
             Geom::Ray ray(seg1[3] + point_a3, seg2[1] + point_a3);
             double lenght = max_lenght;
-            if(!fixed_displacement ){
+            if(!fixed_displacement){
                 lenght = Geom::distance(seg1[3] + point_a3, seg2[1] + point_a3);
             }
             point_b1  = seg1[3] + point_a3 + Geom::Point::polar(ray.angle() , lenght);
@@ -360,7 +360,7 @@ SPCurve const * LPERoughen::addNodesAndJitter(Geom::Curve const * A, Geom::Point
                 b2.appendNew<Geom::LineSegment>(point_a3);
                 lenght = max_lenght;
                 ray.setPoints(point_b3, point_b2);
-                if(!fixed_displacement ){
+                if(!fixed_displacement){
                     lenght = Geom::distance(b2.pointAt(1.0/3.0), point_b3);
                 }
                 point_b2  = point_b3 + Geom::Point::polar(ray.angle() , lenght);
@@ -378,7 +378,7 @@ SPCurve const * LPERoughen::addNodesAndJitter(Geom::Curve const * A, Geom::Point
         } else {
             Geom::Ray ray(A->pointAt(t) + point_a3,  A->pointAt(t + (t / 3)));
             double lenght = max_lenght;
-            if(!fixed_displacement ){
+            if(!fixed_displacement){
                 lenght = Geom::distance(A->pointAt(t) + point_a3,  A->pointAt(t + (t / 3)));
             }
             point_b1  = A->pointAt(t) + point_a3 + Geom::Point::polar(ray.angle() , lenght);
@@ -395,7 +395,7 @@ SPCurve const * LPERoughen::addNodesAndJitter(Geom::Curve const * A, Geom::Point
                 b2.appendNew<Geom::LineSegment>(point_a3);
                 lenght = max_lenght;
                 ray.setPoints(point_b3, point_b2);
-                if(!fixed_displacement ){
+                if(!fixed_displacement){
                     lenght = Geom::distance(b2.pointAt(1.0/3.0), point_b3);
                 }
                 point_b2  = point_b3 + Geom::Point::polar(ray.angle() , lenght);

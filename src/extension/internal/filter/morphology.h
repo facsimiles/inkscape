@@ -50,8 +50,8 @@ protected:
     gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
-    Crosssmooth ( ) : Filter() { };
-    ~Crosssmooth ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
+    Crosssmooth () : Filter() { };
+    ~Crosssmooth () override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
         Inkscape::Extension::build_from_mem(
@@ -158,8 +158,8 @@ protected:
     gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
-    Outline ( ) : Filter() { };
-    ~Outline ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
+    Outline () : Filter() { };
+    ~Outline () override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
         Inkscape::Extension::build_from_mem(
@@ -312,7 +312,7 @@ Outline::get_filter_text (Inkscape::Extension::Extension * ext)
                        width2.str().c_str(), c2in.str().c_str(), c2op.str().c_str(),
                        dilat2.str().c_str(), erosion2.str().c_str(), antialias.str().c_str(), smooth.str().c_str(),
                        a.str().c_str(), r.str().c_str(), g.str().c_str(), b.str().c_str(),
-                       c4in.str().c_str(), fopacity.str().c_str(), sopacity.str().c_str() );
+                       c4in.str().c_str(), fopacity.str().c_str(), sopacity.str().c_str());
 
     return _filter;
 }; /* Outline filter */

@@ -295,7 +295,7 @@ static Inkscape::XML::Node* duplicate_node_without_children(Inkscape::XML::Docum
             Inkscape::XML::Node *new_node = xml_doc->createElement(old_node->name());
             Inkscape::Util::List<Inkscape::XML::AttributeRecord const> attributes = old_node->attributeList();
             GQuark const id_key = g_quark_from_string("id");
-            for ( ; attributes ; attributes++) {
+            for (; attributes ; attributes++) {
                 if (attributes->key == id_key) continue;
                 new_node->setAttribute(g_quark_to_string(attributes->key), attributes->value);
             }
@@ -481,7 +481,7 @@ static void insert_into_spstring(SPString *string_item, Glib::ustring::iterator 
     string->replace(iter_at, iter_at, utf8);
 
     SPObject *parent_item = string_item;
-    for ( ; ; ) {
+    for (; ;) {
         char_index += sum_sibling_text_lengths_before(parent_item);
         parent_item = parent_item->parent;
         TextTagAttributes *attributes = attributes_for_object(parent_item);
@@ -679,7 +679,7 @@ static SPObject* delete_line_break(SPObject *root, SPObject *item, bool *next_is
     SPCSSAttr *this_node_attrs = sp_repr_css_attr(this_repr, "style");
     SPCSSAttr *this_node_attrs_inherited = sp_repr_css_attr_inherited(this_repr, "style");
     Inkscape::Util::List<Inkscape::XML::AttributeRecord const> attrs = dest_node_attrs->attributeList();
-    for ( ; attrs ; attrs++) {
+    for (; attrs ; attrs++) {
         gchar const *key = g_quark_to_string(attrs->key);
         gchar const *this_attr = this_node_attrs_inherited->attribute(key);
         if ((this_attr == nullptr || strcmp(attrs->value, this_attr)) && this_node_attrs->attribute(key) == nullptr)
@@ -716,7 +716,7 @@ static void erase_from_spstring(SPString *string_item, Glib::ustring::iterator i
     string_item->getRepr()->setContent(string->c_str());
 
     SPObject *parent_item = string_item;
-    for ( ; ; ) {
+    for (; ;) {
         char_index += sum_sibling_text_lengths_before(parent_item);
         parent_item = parent_item->parent;
         TextTagAttributes *attributes = attributes_for_object(parent_item);
@@ -903,7 +903,7 @@ sp_te_get_string_multiline (SPItem const *text, Inkscape::Text::Layout::iterator
     Inkscape::Text::Layout const *layout = te_get_layout(text);
     Glib::ustring result;
     // not a particularly fast piece of code. I'll optimise it if people start to notice.
-    for ( ; first < last ; first.nextCharacter()) {
+    for (; first < last ; first.nextCharacter()) {
         SPObject *char_item = nullptr;
         void *rawptr = nullptr;
         Glib::ustring::iterator text_iter;
@@ -1393,7 +1393,7 @@ static bool objects_have_equal_style(SPObject const *parent, SPObject const *chi
     // requires that the computed value is inherited, not the specified value.
     g_assert(parent->isAncestorOf(child));
 
-    Glib::ustring parent_style = parent->style->write( SP_STYLE_FLAG_ALWAYS );
+    Glib::ustring parent_style = parent->style->write(SP_STYLE_FLAG_ALWAYS);
 
     // we have to write parent_style then read it again, because some properties format their values
     // differently depending on whether they're set or not (*cough*dash-offset*cough*)
@@ -1428,13 +1428,13 @@ in one but not the other. */
 static bool css_attrs_are_equal(SPCSSAttr const *first, SPCSSAttr const *second)
 {
     Inkscape::Util::List<Inkscape::XML::AttributeRecord const> attrs = first->attributeList();
-    for ( ; attrs ; attrs++) {
+    for (; attrs ; attrs++) {
         gchar const *other_attr = second->attribute(g_quark_to_string(attrs->key));
         if (other_attr == nullptr || strcmp(attrs->value, other_attr))
             return false;
     }
     attrs = second->attributeList();
-    for ( ; attrs ; attrs++) {
+    for (; attrs ; attrs++) {
         gchar const *other_attr = first->attribute(g_quark_to_string(attrs->key));
         if (other_attr == nullptr || strcmp(attrs->value, other_attr))
             return false;
@@ -1584,7 +1584,7 @@ static SPObject* ascend_while_first(SPObject *item, Glib::ustring::iterator text
     if (SP_IS_STRING(item))
         if (text_iter != SP_STRING(item)->string.begin())
             return item;
-    for ( ; ; ) {
+    for (; ;) {
         SPObject *parent = item->parent;
         if (parent == common_ancestor) {
             break;
@@ -1603,10 +1603,10 @@ static SPObject* ascend_while_first(SPObject *item, Glib::ustring::iterator text
 static bool tidy_operator_empty_spans(SPObject **item, bool /*has_text_decoration*/)
 {
     bool result = false;
-    if ( !(*item)->hasChildren()
+    if (!(*item)->hasChildren()
          && !is_line_break_object(*item)
          && !(SP_IS_STRING(*item) && !SP_STRING(*item)->string.empty())
-        ) {
+) {
         SPObject *next = (*item)->getNext();
         (*item)->deleteObject();
         *item = next;
@@ -1887,7 +1887,7 @@ static SPString* find_last_string_child_not_equal_to(SPObject *root, SPObject *n
 static bool tidy_operator_styled_whitespace(SPObject **item, bool has_text_decoration)
 {
     // any type of visible text decoration is OK as pure spaces, so do nothing here in that case.
-    if (!SP_IS_STRING(*item) ||  has_text_decoration ) {
+    if (!SP_IS_STRING(*item) ||  has_text_decoration) {
         return false;
     }
     Glib::ustring const &str = SP_STRING(*item)->string;
@@ -1900,13 +1900,13 @@ static bool tidy_operator_styled_whitespace(SPObject **item, bool has_text_decor
 
     SPObject *test_item = *item;
     SPString *next_string;
-    for ( ; ; ) {  // find the next string
+    for (; ;) {  // find the next string
         next_string = sp_te_seek_next_string_recursive(test_item->getNext());
         if (next_string) {
             next_string->string.insert(0, str);
             break;
         }
-        for ( ; ; ) {   // go up one item in the xml
+        for (; ;) {   // go up one item in the xml
             test_item = test_item->parent;
             if (is_line_break_object(test_item)) {
                 break;
@@ -1974,7 +1974,7 @@ static bool tidy_xml_tree_recursively(SPObject *root, bool has_text_decoration)
     };
     bool changes = false;
 
-    for (SPObject *child = root->firstChild() ; child != nullptr ; ) {
+    for (SPObject *child = root->firstChild() ; child != nullptr ;) {
         if (SP_IS_FLOWREGION(child) || SP_IS_FLOWREGIONEXCLUDE(child) || SP_IS_TREF(child)) {
             child = child->getNext();
             continue;
@@ -2060,8 +2060,8 @@ void sp_te_apply_style(SPItem *text, Inkscape::Text::Layout::iterator const &sta
     {
         Geom::Affine const local(SP_ITEM(common_ancestor)->i2doc_affine());
         double const ex(local.descrim());
-        if ( ( ex != 0. )
-             && ( ex != 1. ) ) {
+        if ((ex != 0.)
+             && (ex != 1.)) {
             sp_css_attr_scale(css_set, 1/ex);
         }
     }

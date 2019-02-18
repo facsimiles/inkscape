@@ -98,7 +98,7 @@ CalligraphyToolbar::CalligraphyToolbar(SPDesktop *desktop)
         width_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
         _width_adj->signal_value_changed().connect(sigc::mem_fun(*this, &CalligraphyToolbar::width_value_changed));
         _widget_map["width"] = G_OBJECT(_width_adj->gobj());
-        // ege_adjustment_action_set_appearance( eact, TOOLBAR_SLIDER_HINT );
+        // ege_adjustment_action_set_appearance(eact, TOOLBAR_SLIDER_HINT);
         add(*width_item);
         width_item->set_sensitive(true);
     }
@@ -223,7 +223,7 @@ CalligraphyToolbar::CalligraphyToolbar(SPDesktop *desktop)
         tremor_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
         _tremor_adj->signal_value_changed().connect(sigc::mem_fun(*this, &CalligraphyToolbar::tremor_value_changed));
         _widget_map["tremor"] = G_OBJECT(_tremor_adj->gobj());
-        // ege_adjustment_action_set_appearance( eact, TOOLBAR_SLIDER_HINT );
+        // ege_adjustment_action_set_appearance(eact, TOOLBAR_SLIDER_HINT);
         add(*tremor_item);
         tremor_item->set_sensitive(true);
     }
@@ -240,7 +240,7 @@ CalligraphyToolbar::CalligraphyToolbar(SPDesktop *desktop)
         wiggle_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
         _wiggle_adj->signal_value_changed().connect(sigc::mem_fun(*this, &CalligraphyToolbar::wiggle_value_changed));
         _widget_map["wiggle"] = G_OBJECT(_wiggle_adj->gobj());
-        // ege_adjustment_action_set_appearance( eact, TOOLBAR_SLIDER_HINT );
+        // ege_adjustment_action_set_appearance(eact, TOOLBAR_SLIDER_HINT);
         add(*wiggle_item);
         wiggle_item->set_sensitive(true);
     }
@@ -257,7 +257,7 @@ CalligraphyToolbar::CalligraphyToolbar(SPDesktop *desktop)
         mass_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
         _mass_adj->signal_value_changed().connect(sigc::mem_fun(*this, &CalligraphyToolbar::mass_value_changed));
         _widget_map["mass"] = G_OBJECT(_mass_adj->gobj());
-        // ege_adjustment_action_set_appearance( eact, TOOLBAR_SLIDER_HINT );
+        // ege_adjustment_action_set_appearance(eact, TOOLBAR_SLIDER_HINT);
         add(*mass_item);
         mass_item->set_sensitive(true);
     }
@@ -276,7 +276,7 @@ void
 CalligraphyToolbar::width_value_changed()
 {
     auto prefs = Inkscape::Preferences::get();
-    prefs->setDouble( "/tools/calligraphic/width", _width_adj->get_value() );
+    prefs->setDouble("/tools/calligraphic/width", _width_adj->get_value());
     update_presets_list();
 }
 
@@ -284,7 +284,7 @@ void
 CalligraphyToolbar::velthin_value_changed()
 {
     auto prefs = Inkscape::Preferences::get();
-    prefs->setDouble("/tools/calligraphic/thinning", _thinning_adj->get_value() );
+    prefs->setDouble("/tools/calligraphic/thinning", _thinning_adj->get_value());
     update_presets_list();
 }
 
@@ -292,7 +292,7 @@ void
 CalligraphyToolbar::angle_value_changed()
 {
     auto prefs = Inkscape::Preferences::get();
-    prefs->setDouble( "/tools/calligraphic/angle", _angle_adj->get_value() );
+    prefs->setDouble("/tools/calligraphic/angle", _angle_adj->get_value());
     update_presets_list();
 }
 
@@ -300,7 +300,7 @@ void
 CalligraphyToolbar::flatness_value_changed()
 {
     auto prefs = Inkscape::Preferences::get();
-    prefs->setDouble( "/tools/calligraphic/flatness", _fixation_adj->get_value() );
+    prefs->setDouble("/tools/calligraphic/flatness", _fixation_adj->get_value());
     update_presets_list();
 }
 
@@ -308,7 +308,7 @@ void
 CalligraphyToolbar::cap_rounding_value_changed()
 {
     auto prefs = Inkscape::Preferences::get();
-    prefs->setDouble( "/tools/calligraphic/cap_rounding", _cap_rounding_adj->get_value() );
+    prefs->setDouble("/tools/calligraphic/cap_rounding", _cap_rounding_adj->get_value());
     update_presets_list();
 }
 
@@ -316,7 +316,7 @@ void
 CalligraphyToolbar::tremor_value_changed()
 {
     auto prefs = Inkscape::Preferences::get();
-    prefs->setDouble( "/tools/calligraphic/tremor", _tremor_adj->get_value() );
+    prefs->setDouble("/tools/calligraphic/tremor", _tremor_adj->get_value());
     update_presets_list();
 }
 
@@ -324,7 +324,7 @@ void
 CalligraphyToolbar::wiggle_value_changed()
 {
     auto prefs = Inkscape::Preferences::get();
-    prefs->setDouble( "/tools/calligraphic/wiggle", _wiggle_adj->get_value() );
+    prefs->setDouble("/tools/calligraphic/wiggle", _wiggle_adj->get_value());
     update_presets_list();
 }
 
@@ -332,7 +332,7 @@ void
 CalligraphyToolbar::mass_value_changed()
 {
     auto prefs = Inkscape::Preferences::get();
-    prefs->setDouble( "/tools/calligraphic/mass", _mass_adj->get_value() );
+    prefs->setDouble("/tools/calligraphic/mass", _mass_adj->get_value());
     update_presets_list();
 }
 
@@ -380,7 +380,7 @@ CalligraphyToolbar::update_presets_list()
                     bool v = j.getBool();
                     auto toggle = GTK_TOGGLE_TOOL_BUTTON(widget);
                     //std::cout << "compared toggle " << attr_name << gtk_toggle_action_get_active(toggle) << " to " << v << "\n";
-                    if ( static_cast<bool>(gtk_toggle_tool_button_get_active(toggle)) != v ) {
+                    if (static_cast<bool>(gtk_toggle_tool_button_get_active(toggle)) != v) {
                         match = false;
                         break;
                     }
@@ -510,7 +510,7 @@ CalligraphyToolbar::save_profile(GtkWidget * /*widget*/)
     }
 
     CalligraphicProfileRename::show(_desktop, current_profile_name);
-    if ( !CalligraphicProfileRename::applied()) {
+    if (!CalligraphicProfileRename::applied()) {
         // dialog cancelled
         update_presets_list();
         return;
@@ -541,7 +541,7 @@ CalligraphyToolbar::save_profile(GtkWidget * /*widget*/)
         }
     }
 
-    if ( CalligraphicProfileRename::deleted() && new_index != -1) {
+    if (CalligraphicProfileRename::deleted() && new_index != -1) {
         prefs->remove(save_path);
         _presets_blocked = false;
         build_presets_list();

@@ -36,7 +36,7 @@ InkSelectOneAction* InkSelectOneAction::create(const Glib::ustring &name,
                                                const Glib::ustring &group_label,
                                                const Glib::ustring &tooltip,
                                                const Glib::ustring &stock_id,
-                                               Glib::RefPtr<Gtk::ListStore> store ) {
+                                               Glib::RefPtr<Gtk::ListStore> store) {
 
     return new InkSelectOneAction(name, group_label, tooltip, stock_id, store);
 }
@@ -45,18 +45,18 @@ InkSelectOneAction::InkSelectOneAction (const Glib::ustring &name,
                                         const Glib::ustring &group_label,
                                         const Glib::ustring &tooltip,
                                         const Glib::ustring &stock_id,
-                                        Glib::RefPtr<Gtk::ListStore> store ) :
+                                        Glib::RefPtr<Gtk::ListStore> store) :
     Gtk::Action(name, stock_id, group_label, tooltip),
-    _name( name ),
-    _group_label( group_label ),
-    _tooltip( tooltip ),
-    _stock_id( stock_id ),
+    _name(name),
+    _group_label(group_label),
+    _tooltip(tooltip),
+    _stock_id(stock_id),
     _store (std::move(store)),
     _use_radio (true),
     _use_label (true),
     _use_icon  (true),
     _use_pixbuf (false),
-    _icon_size ( Gtk::ICON_SIZE_LARGE_TOOLBAR ),
+    _icon_size (Gtk::ICON_SIZE_LARGE_TOOLBAR),
     _combobox (nullptr),
     _radioaction (nullptr),
     _menuitem (nullptr)
@@ -114,19 +114,19 @@ Gtk::Widget* InkSelectOneAction::create_menu_item_vfunc() {
 
             Gtk::RadioMenuItem* button = Gtk::manage(new Gtk::RadioMenuItem(group));
             button->set_label (label);
-            button->set_tooltip_text( tooltip );
-            button->set_sensitive( sensitive );
+            button->set_tooltip_text(tooltip);
+            button->set_sensitive(sensitive);
 
-            button->signal_toggled().connect( sigc::bind<0>(
+            button->signal_toggled().connect(sigc::bind<0>(
               sigc::mem_fun(*this, &InkSelectOneAction::on_toggled_radiomenu), index++)
-                );
+);
 
             menu->add (*button);
 
-            _radiomenuitems.push_back( button );
+            _radiomenuitems.push_back(button);
         }
 
-        if ( _active < _radiomenuitems.size()) {
+        if (_active < _radiomenuitems.size()) {
             _radiomenuitems[ _active ]->set_active();
         }
    
@@ -147,8 +147,8 @@ Gtk::Widget* InkSelectOneAction::create_tool_item_vfunc() {
     tool_item->add (*box);
 
     if (_use_group_label) {
-        Gtk::Label *group_label = Gtk::manage (new Gtk::Label( _group_label + ": " ));
-        box->add( *group_label );
+        Gtk::Label *group_label = Gtk::manage (new Gtk::Label(_group_label + ": "));
+        box->add(*group_label);
     }
 
     if (_use_radio) {
@@ -171,8 +171,8 @@ Gtk::Widget* InkSelectOneAction::create_tool_item_vfunc() {
                 action =
                     Gtk::RadioAction::create (group, "Anonymous", label, tooltip);
             }
-            action->set_property( "value", index++ ); // To identify uniquely each radioaction.
-            action->set_sensitive( sensitive );
+            action->set_property("value", index++); // To identify uniquely each radioaction.
+            action->set_sensitive(sensitive);
 
             // Save first action for use in setting/getting active value.
             if (!_radioaction) {
@@ -187,7 +187,7 @@ Gtk::Widget* InkSelectOneAction::create_tool_item_vfunc() {
             _radioaction->set_current_value (_active);
         }
 
-        _radioaction->signal_changed().connect( sigc::mem_fun(*this, &InkSelectOneAction::on_changed_radioaction));
+        _radioaction->signal_changed().connect(sigc::mem_fun(*this, &InkSelectOneAction::on_changed_radioaction));
 
     } else {
         // Create combobox
@@ -200,12 +200,12 @@ Gtk::Widget* InkSelectOneAction::create_tool_item_vfunc() {
             Gtk::CellRendererPixbuf *renderer = new Gtk::CellRendererPixbuf;
             renderer->set_property ("stock_size", Gtk::ICON_SIZE_LARGE_TOOLBAR);
             _combobox->pack_start (*renderer, false);
-            _combobox->add_attribute (*renderer, "icon_name", columns.col_icon   );
+            _combobox->add_attribute (*renderer, "icon_name", columns.col_icon);
         } else if (_use_pixbuf) {
             Gtk::CellRendererPixbuf *renderer = new Gtk::CellRendererPixbuf;
             //renderer->set_property ("stock_size", Gtk::ICON_SIZE_LARGE_TOOLBAR);
             _combobox->pack_start (*renderer, false);
-            _combobox->add_attribute (*renderer, "pixbuf", columns.col_pixbuf   );
+            _combobox->add_attribute (*renderer, "pixbuf", columns.col_pixbuf);
         }
   
         if (_use_label) {
@@ -234,14 +234,14 @@ void InkSelectOneAction::on_changed_combobox() {
 
     int row = _combobox->get_active_row_number();
     if (row < 0) row = 0;  // Happens when Gtk::ListStore reconstructed
-    set_active( row );
+    set_active(row);
     _changed.emit (_active);
     _changed_after.emit (_active);
 }
 
 void InkSelectOneAction::on_changed_radioaction(const Glib::RefPtr<Gtk::RadioAction>& current) {
 
-    set_active( current->get_current_value() );
+    set_active(current->get_current_value());
     _changed.emit (_active);
     _changed_after.emit (_active);
 }
@@ -250,8 +250,8 @@ void InkSelectOneAction::on_toggled_radiomenu(int n) {
 
     // toggled emitted twice, first for button toggled off, second for button toggled on.
     // We want to react only to the button turned on.
-    if ( n < _radiomenuitems.size() &&_radiomenuitems[ n ]->get_active()) {
-        set_active ( n );
+    if (n < _radiomenuitems.size() &&_radiomenuitems[ n ]->get_active()) {
+        set_active (n);
         _changed.emit (_active);
         _changed_after.emit (_active);
     }

@@ -18,7 +18,7 @@ template<class T>
 inline void remove_last(std::vector<T> &seq, T const &elem)
 {
     typename std::vector<T>::reverse_iterator i(find(seq.rbegin(), seq.rend(), elem));
-    g_assert( i != seq.rend() );
+    g_assert(i != seq.rend());
     seq.erase(i.base());
 }
 

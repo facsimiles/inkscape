@@ -40,13 +40,13 @@ void SPFeFuncNode::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPObject::build(document, repr);
 
     //Read values of key attributes from XML nodes into object.
-    this->readAttr( "type" );
-    this->readAttr( "tableValues" );
-    this->readAttr( "slope" );
-    this->readAttr( "intercept" );
-    this->readAttr( "amplitude" );
-    this->readAttr( "exponent" );
-    this->readAttr( "offset" );
+    this->readAttr("type");
+    this->readAttr("tableValues");
+    this->readAttr("slope");
+    this->readAttr("intercept");
+    this->readAttr("amplitude");
+    this->readAttr("exponent");
+    this->readAttr("offset");
 
 
 //is this necessary?
@@ -57,7 +57,7 @@ void SPFeFuncNode::build(SPDocument *document, Inkscape::XML::Node *repr) {
  * Drops any allocated memory.
  */
 void SPFeFuncNode::release() {
-    if ( this->document ) {
+    if (this->document) {
         // Unregister ourselves
         this->document->removeResource("fefuncnode", this);
     }
@@ -175,13 +175,13 @@ void SPFeFuncNode::set(SPAttributeEnum key, gchar const *value) {
 void SPFeFuncNode::update(SPCtx *ctx, guint flags) {
     std::cout << "SPFeFuncNode::update" << std::endl;
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
-        this->readAttr( "type" );
-        this->readAttr( "tableValues" );
-        this->readAttr( "slope" );
-        this->readAttr( "intercept" );
-        this->readAttr( "amplitude" );
-        this->readAttr( "exponent" );
-        this->readAttr( "offset" );
+        this->readAttr("type");
+        this->readAttr("tableValues");
+        this->readAttr("slope");
+        this->readAttr("intercept");
+        this->readAttr("amplitude");
+        this->readAttr("exponent");
+        this->readAttr("offset");
     }
 
     SPObject::update(ctx, flags);

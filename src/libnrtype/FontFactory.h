@@ -65,10 +65,10 @@ class StyleNames {
 
 public:
     StyleNames() = default;;
-    StyleNames( Glib::ustring name ) :
-        CssName( name ), DisplayName( name ) {};
-    StyleNames( Glib::ustring cssname, Glib::ustring displayname ) :
-        CssName(std::move( cssname )), DisplayName(std::move( displayname )) {};
+    StyleNames(Glib::ustring name) :
+        CssName(name), DisplayName(name) {};
+    StyleNames(Glib::ustring cssname, Glib::ustring displayname) :
+        CssName(std::move(cssname)), DisplayName(std::move(displayname)) {};
 
 public:
     Glib::ustring CssName;     // Style as Pango/CSS would write it.

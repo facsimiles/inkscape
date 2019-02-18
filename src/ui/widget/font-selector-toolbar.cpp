@@ -31,7 +31,7 @@
  *   Fix altx. Need to store
  */
 
-void family_cell_data_func(const Gtk::TreeModel::const_iterator iter, Gtk::CellRendererText* cell ) {
+void family_cell_data_func(const Gtk::TreeModel::const_iterator iter, Gtk::CellRendererText* cell) {
 
     Inkscape::FontLister* font_lister = Inkscape::FontLister::get_instance();
     Glib::ustring markup = font_lister->get_font_family_markup(iter);
@@ -235,7 +235,7 @@ FontSelectorToolbar::on_icon_pressed (Gtk::EntryIconPosition icon_position, cons
     std::cout << "FontSelectorToolbar::on_entry_icon_pressed" << std::endl;
     std::cout << "    .... Should select all items with same font-family. FIXME" << std::endl;
     // Call equivalent of sp_text_toolbox_select_cb() in text-toolbar.cpp
-    // Should be action!  (Maybe: select_all_fontfamily( Glib::ustring font_family );).
+    // Should be action!  (Maybe: select_all_fontfamily(Glib::ustring font_family);).
     // Check how Find dialog works.
 }
 
@@ -257,12 +257,12 @@ FontSelectorToolbar::on_key_press_event (GdkEventKey* key_event)
     bool consumed = false;
 
     unsigned int key = 0;
-    gdk_keymap_translate_keyboard_state( Gdk::Display::get_default()->get_keymap(),
+    gdk_keymap_translate_keyboard_state(Gdk::Display::get_default()->get_keymap(),
                                          key_event->hardware_keycode,
                                          (GdkModifierType)key_event->state,
-                                         0, &key, nullptr, nullptr, nullptr );
+                                         0, &key, nullptr, nullptr, nullptr);
 
-    switch ( key ) {
+    switch (key) {
 
         case GDK_KEY_Escape:
         case GDK_KEY_Return:

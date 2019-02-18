@@ -36,13 +36,13 @@ namespace Inkscape {
 
 namespace LivePathEffect {
 
-ItemParam::ItemParam( const Glib::ustring& label, const Glib::ustring& tip,
+ItemParam::ItemParam(const Glib::ustring& label, const Glib::ustring& tip,
                       const Glib::ustring& key, Inkscape::UI::Widget::Registry* wr,
                       Effect* effect, const gchar * default_value)
     : Parameter(label, tip, key, wr, effect),
       changed(true),
       href(nullptr),
-      ref( (SPObject*)effect->getLPEObj() )
+      ref((SPObject*)effect->getLPEObj())
 {
     last_transform = Geom::identity();
     defvalue = g_strdup(default_value);
@@ -154,7 +154,7 @@ ItemParam::addCanvasIndicators(SPLPEItem const*/*lpeitem*/, std::vector<Geom::Pa
 void
 ItemParam::start_listening(SPObject * to)
 {
-    if ( to == nullptr ) {
+    if (to == nullptr) {
         return;
     }
     linked_delete_connection = to->connectDelete(sigc::mem_fun(*this, &ItemParam::linked_delete));
@@ -177,7 +177,7 @@ void
 ItemParam::ref_changed(SPObject */*old_ref*/, SPObject *new_ref)
 {
     quit_listening();
-    if ( new_ref ) {
+    if (new_ref) {
         start_listening(new_ref);
     }
 }
@@ -242,7 +242,7 @@ ItemParam::on_link_button_click()
 
     // add '#' at start to make it an uri.
     itemid.insert(itemid.begin(), '#');
-    if ( href && strcmp(itemid.c_str(), href) == 0 ) {
+    if (href && strcmp(itemid.c_str(), href) == 0) {
         // no change, do nothing
         return;
     } else {

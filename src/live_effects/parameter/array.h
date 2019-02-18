@@ -27,12 +27,12 @@ namespace LivePathEffect {
 template <typename StorageType>
 class ArrayParam : public Parameter {
 public:
-    ArrayParam( const Glib::ustring& label,
+    ArrayParam(const Glib::ustring& label,
                 const Glib::ustring& tip,
                 const Glib::ustring& key,
                 Inkscape::UI::Widget::Registry* wr,
                 Effect* effect,
-                size_t n = 0 )
+                size_t n = 0)
         : Parameter(label, tip, key, wr, effect), _vector(n), _default_size(n)
     {
 
@@ -53,7 +53,7 @@ public:
         gchar ** strarray = g_strsplit(strvalue, "|", 0);
         gchar ** iter = strarray;
         while (*iter != nullptr) {
-            _vector.push_back( readsvg(*iter) );
+            _vector.push_back(readsvg(*iter));
             iter++;
         }
         g_strfreev (strarray);
@@ -75,7 +75,7 @@ public:
     }
 
     void param_set_default() override {
-        param_setValue( std::vector<StorageType>(_default_size) );
+        param_setValue(std::vector<StorageType>(_default_size));
     }
 
     void param_set_and_write_new_value(std::vector<StorageType> const &new_vector) {

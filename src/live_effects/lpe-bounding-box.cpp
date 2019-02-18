@@ -31,7 +31,7 @@ LPEBoundingBox::~LPEBoundingBox()
 void LPEBoundingBox::doEffect (SPCurve * curve)
 {
     if (curve) {
-        if ( linked_path.linksToPath() && linked_path.getObject() ) {
+        if (linked_path.linksToPath() && linked_path.getObject()) {
             SPItem * item = linked_path.getObject();
             Geom::OptRect bbox = visual_bounds.get_value() ? item->visualBounds() : item->geometricBounds();
             Geom::Path p(Geom::Point(bbox->left(), bbox->top()));

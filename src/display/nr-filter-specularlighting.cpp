@@ -163,20 +163,20 @@ void FilterSpecularLighting::render_cairo(FilterSlot &slot)
 
     // Only alpha channel of input is used, no need to check input color_interpolation_filter value.
     SPColorInterpolation ci_fp  = SP_CSS_COLOR_INTERPOLATION_AUTO;
-    if( _style ) {
+    if(_style) {
         ci_fp = (SPColorInterpolation)_style->color_interpolation_filters.computed;
 
         // Lighting color is always defined in terms of sRGB, preconvert to linearRGB
         // if color_interpolation_filters set to linearRGB (for efficiency assuming
         // next filter primitive has same value of cif).
-        if( ci_fp == SP_CSS_COLOR_INTERPOLATION_LINEARRGB ) {
-            r = srgb_to_linear( r );
-            g = srgb_to_linear( g );
-            b = srgb_to_linear( b );
+        if(ci_fp == SP_CSS_COLOR_INTERPOLATION_LINEARRGB) {
+            r = srgb_to_linear(r);
+            g = srgb_to_linear(g);
+            b = srgb_to_linear(b);
         }
     }
-    set_cairo_surface_ci(out, ci_fp );
-    guint32 color = SP_RGBA32_F_COMPOSE( r, g, b, 1.0 ); 
+    set_cairo_surface_ci(out, ci_fp);
+    guint32 color = SP_RGBA32_F_COMPOSE(r, g, b, 1.0); 
 
     int device_scale = slot.get_device_scale();
 

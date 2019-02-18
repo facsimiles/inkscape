@@ -76,10 +76,10 @@ void SPConnEndPair::release()
 
 void sp_conn_end_pair_build(SPObject *object)
 {
-    object->readAttr( "inkscape:connector-type" );
-    object->readAttr( "inkscape:connection-start" );
-    object->readAttr( "inkscape:connection-end" );
-    object->readAttr( "inkscape:connector-curvature" );
+    object->readAttr("inkscape:connector-type");
+    object->readAttr("inkscape:connection-start");
+    object->readAttr("inkscape:connection-end");
+    object->readAttr("inkscape:connector-curvature");
 }
 
 
@@ -150,7 +150,7 @@ void SPConnEndPair::writeRepr(Inkscape::XML::Node *const repr) const
     }
     repr->setAttribute("inkscape:connector-curvature", Glib::Ascii::dtostr(_connCurvature).c_str());
     if (_connType == SP_CONNECTOR_POLYLINE || _connType == SP_CONNECTOR_ORTHOGONAL)
-        repr->setAttribute("inkscape:connector-type", _connType == SP_CONNECTOR_POLYLINE ? "polyline" : "orthogonal" );
+        repr->setAttribute("inkscape:connector-type", _connType == SP_CONNECTOR_POLYLINE ? "polyline" : "orthogonal");
 }
 
 void SPConnEndPair::getAttachedItems(SPItem *h2attItem[2]) const {
@@ -273,24 +273,24 @@ void recreateCurve(SPCurve *curve, Avoid::ConnRef *connRef, const gdouble curvat
 
     curve->reset();
 
-    curve->moveto( Geom::Point(route.ps[0].x, route.ps[0].y) );
+    curve->moveto(Geom::Point(route.ps[0].x, route.ps[0].y));
     int pn = route.size();
     for (int i = 1; i < pn; ++i) {
         Geom::Point p(route.ps[i].x, route.ps[i].y);
         if (straight) {
-            curve->lineto( p );
+            curve->lineto(p);
         } else {
             switch (route.ts[i]) {
                 case 'M':
-                    curve->moveto( p );
+                    curve->moveto(p);
                     break;
                 case 'L':
-                    curve->lineto( p );
+                    curve->lineto(p);
                     break;
                 case 'C':
-                    g_assert( i+2<pn );
-                    curve->curveto( p, Geom::Point(route.ps[i+1].x, route.ps[i+1].y),
-                            Geom::Point(route.ps[i+2].x, route.ps[i+2].y) );
+                    g_assert(i+2<pn);
+                    curve->curveto(p, Geom::Point(route.ps[i+1].x, route.ps[i+1].y),
+                            Geom::Point(route.ps[i+2].x, route.ps[i+2].y));
                     i+=2;
                     break;
             }

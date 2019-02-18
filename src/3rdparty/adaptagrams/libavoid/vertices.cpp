@@ -481,9 +481,9 @@ VertInfList::VertInfList()
             COLA_ASSERT(!_lastShapeVert || (_lastShapeVert->lstNext == NULL)); \
             COLA_ASSERT(!_lastConnVert || (_lastConnVert->lstNext == _firstShapeVert)); \
             COLA_ASSERT((!_firstConnVert && !_lastConnVert) || \
-                    (_firstConnVert &&  _lastConnVert) ); \
+                    (_firstConnVert &&  _lastConnVert)); \
             COLA_ASSERT((!_firstShapeVert && !_lastShapeVert) || \
-                    (_firstShapeVert &&  _lastShapeVert) ); \
+                    (_firstShapeVert &&  _lastShapeVert)); \
             COLA_ASSERT(!_firstShapeVert || !(_firstShapeVert->id.isConnPt())); \
             COLA_ASSERT(!_lastShapeVert || !(_lastShapeVert->id.isConnPt())); \
             COLA_ASSERT(!_firstConnVert || _firstConnVert->id.isConnPt()); \

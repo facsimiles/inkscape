@@ -279,7 +279,7 @@ int TR_find_alternate_font(FT_INFO *fti, FNT_SPECS **efsp, uint32_t wc){
    fsp = *efsp;
    for(i=0;i<fsp->used;i++){                             /* first check in alts                                 */
       fsp2 = &fti->fonts[fsp->alts[i].fi_idx];           /* these are in order of descending previous usage     */
-      glyph_index = FT_Get_Char_Index( fsp2->face, wc);  /* we have the face, might as well check that directly */
+      glyph_index = FT_Get_Char_Index(fsp2->face, wc);  /* we have the face, might as well check that directly */
       if (glyph_index){                                  /* found a glyph for the character in this font        */
          (void) fsp_alts_weight(fsp, i);
          *efsp = fsp2;
@@ -300,13 +300,13 @@ int TR_find_alternate_font(FT_INFO *fti, FNT_SPECS **efsp, uint32_t wc){
          if(
             !(pattern = FcNameParse((const FcChar8 *)&(fsp->fontspec))) ||
             !FcConfigSubstitute(NULL, pattern, FcMatchPattern)
-         )return(0);
+)return(0);
          FcDefaultSubstitute(pattern);
          if(
               !(fpat = FcFontRenderPrepare(NULL, pattern, fsp->fontset->fonts[i])) ||
-              (FcPatternGetString(  fpat, FC_FILE,       0, (FcChar8 **)&filename)  != FcResultMatch) ||
-              (FcPatternGetString(  fsp->fontset->fonts[i], FC_FULLNAME,   0, (FcChar8 **)&fontname)  != FcResultMatch)
-         )return(0);
+              (FcPatternGetString(fpat, FC_FILE,       0, (FcChar8 **)&filename)  != FcResultMatch) ||
+              (FcPatternGetString(fsp->fontset->fonts[i], FC_FULLNAME,   0, (FcChar8 **)&fontname)  != FcResultMatch)
+)return(0);
 
          /* find the font (added from an unrelated fontset, for instance) or insert it as new */
          fi_idx = ftinfo_find_loaded_by_src(fti, (uint8_t *) filename); 
@@ -355,15 +355,15 @@ int TR_getadvance(FT_INFO *fti, FNT_SPECS *fsp, uint32_t wc, uint32_t pc, int lo
  
    if(is_mn_unicode(wc))return(0);                            /* no advance on Unicode Mn characters   */
 
-   glyph_index = FT_Get_Char_Index( fsp->face, wc);
+   glyph_index = FT_Get_Char_Index(fsp->face, wc);
    if(!glyph_index){                                          /* not in primary font, check alternates */
       glyph_index = TR_find_alternate_font(fti, &fsp, wc);
    }
    if(glyph_index){
-      if (!FT_Load_Glyph( fsp->face, glyph_index,  load_flags )){
-         if ( !FT_Get_Glyph( fsp->face->glyph, &glyph ) ) {
+      if (!FT_Load_Glyph(fsp->face, glyph_index,  load_flags)){
+         if (!FT_Get_Glyph(fsp->face->glyph, &glyph)) {
             advance = fsp->face->glyph->advance.x;
-            FT_Glyph_Get_CBox( glyph, FT_GLYPH_BBOX_UNSCALED, &bbox );
+            FT_Glyph_Get_CBox(glyph, FT_GLYPH_BBOX_UNSCALED, &bbox);
             if(ymin && (bbox.yMin < *ymin))*ymin=bbox.yMin;
             if(ymax && (bbox.yMax > *ymax))*ymax=bbox.yMax;
             if(pc)advance +=  TR_getkern2(fsp, wc, pc, kern_mode);
@@ -389,13 +389,13 @@ int TR_getkern2(FNT_SPECS *fsp, uint32_t wc, uint32_t pc, int kern_mode){
    int        kern=0;
    FT_Vector  akerning;
  
-   this_glyph_index = FT_Get_Char_Index( fsp->face, wc);
-   prev_glyph_index = FT_Get_Char_Index( fsp->face, pc);
-   if(!FT_Get_Kerning( fsp->face, 
+   this_glyph_index = FT_Get_Char_Index(fsp->face, wc);
+   prev_glyph_index = FT_Get_Char_Index(fsp->face, pc);
+   if(!FT_Get_Kerning(fsp->face, 
        prev_glyph_index,
        this_glyph_index,
        kern_mode,
-       &akerning )){
+       &akerning)){
        kern = akerning.x; /* Is sign correct? */
    }
    return(kern);
@@ -587,7 +587,7 @@ FT_INFO *ftinfo_init(void){
    if(FcInit()){
       fti = (FT_INFO *)calloc(1,sizeof(FT_INFO));
       if(fti){
-         if(!FT_Init_FreeType( &(fti->library))){
+         if(!FT_Init_FreeType(&(fti->library))){
             fti->space=0;
             fti->used=0;
 
@@ -618,7 +618,7 @@ int ftinfo_make_insertable(FT_INFO *fti){
    if(!fti)return(2);
    if(fti->used >= fti->space){
       fti->space += ALLOCINFO_CHUNK;
-      tmp = (FNT_SPECS *) realloc(fti->fonts, fti->space * sizeof(FNT_SPECS) );
+      tmp = (FNT_SPECS *) realloc(fti->fonts, fti->space * sizeof(FNT_SPECS));
       if(tmp){
          fti->fonts = tmp;
          memset(&fti->fonts[fti->used],0,(fti->space - fti->used)*sizeof(FNT_SPECS));
@@ -770,8 +770,8 @@ int ftinfo_load_fontname(FT_INFO *fti, const char *fontspec){
       /*  get a fontset, trimmed to only those with new glyphs as needed, so that missing glyph's may be handled */
       if(!(fontset = FcFontSort (NULL,pattern, FcTrue, NULL, &result)) || (result != FcResultMatch)){ status = -4;   break; }
       if(!(fpat = FcFontRenderPrepare(NULL, pattern, fontset->fonts[0]))){                            status = -405; break; }
-      if(FcPatternGetString(  fpat, FC_FILE,   0, (FcChar8 **)&filename)  != FcResultMatch){          status = -5;   break; }
-      if(FcPatternGetDouble(  fpat, FC_SIZE,   0,  &fd)                   != FcResultMatch){          status = -6;   break; }
+      if(FcPatternGetString(fpat, FC_FILE,   0, (FcChar8 **)&filename)  != FcResultMatch){          status = -5;   break; }
+      if(FcPatternGetDouble(fpat, FC_SIZE,   0,  &fd)                   != FcResultMatch){          status = -6;   break; }
 
       /* copy these into memory for external use */
       fsp                   = &(fti->fonts[fti->used]);
@@ -793,15 +793,15 @@ int ftinfo_load_fontname(FT_INFO *fti, const char *fontspec){
    }
 
    /* get the current face */
-   if(FT_New_Face( fti->library, (const char *) fsp->file, 0, &(fsp->face) )){ return(-8); }
+   if(FT_New_Face(fti->library, (const char *) fsp->file, 0, &(fsp->face))){ return(-8); }
 
-   if(FT_Set_Char_Size( 
+   if(FT_Set_Char_Size(
       fsp->face,       /* handle to face object             */ 
       0,               /* char_width in 1/64th of points    */
       fd*64,           /* char_height in 1/64th of points   */ 
       72,              /* horizontal device resolution, DPI */ 
       72)              /* vebrical   device resolution, DPI */ 
-      ){ return(-9); }
+){ return(-9); }
 
    /* The space advance is needed in various places.  Get it now, and get it in the font units,
       so that it can be scaled later with the text size */
@@ -814,19 +814,19 @@ int ftinfo_load_fontname(FT_INFO *fti, const char *fontspec){
 /*
    char *fs;
    int fb;
-   if(FcPatternGetBool(    fpat, FC_OUTLINE,     0, &fb)== FcResultMatch){  printf("outline:     %d\n",fb);fflush(stdout); }
-   if(FcPatternGetBool(    fpat, FC_SCALABLE,    0, &fb)== FcResultMatch){  printf("scalable:    %d\n",fb);fflush(stdout); }
-   if(FcPatternGetDouble(  fpat, FC_DPI,         0, &fd)== FcResultMatch){  printf("DPI:         %f\n",fd);fflush(stdout); }
-   if(FcPatternGetInteger( fpat, FC_FONTVERSION, 0, &fb)== FcResultMatch){  printf("fontversion: %d\n",fb);fflush(stdout); }
-   if(FcPatternGetString(  fpat, FC_FULLNAME    ,     0,  (FcChar8 **)&fs)== FcResultMatch){  printf("FULLNAME    :    %s\n",fs);fflush(stdout); }
-   if(FcPatternGetString(  fpat, FC_FAMILY      ,     0,  (FcChar8 **)&fs)== FcResultMatch){  printf("FAMILY      :    %s\n",fs);fflush(stdout); }
-   if(FcPatternGetString(  fpat, FC_STYLE       ,     0,  (FcChar8 **)&fs)== FcResultMatch){  printf("STYLE       :    %s\n",fs);fflush(stdout); }
-   if(FcPatternGetString(  fpat, FC_FOUNDRY     ,     0,  (FcChar8 **)&fs)== FcResultMatch){  printf("FOUNDRY     :    %s\n",fs);fflush(stdout); }
-   if(FcPatternGetString(  fpat, FC_FAMILYLANG  ,     0,  (FcChar8 **)&fs)== FcResultMatch){  printf("FAMILYLANG  :    %s\n",fs);fflush(stdout); }
-   if(FcPatternGetString(  fpat, FC_STYLELANG   ,     0,  (FcChar8 **)&fs)== FcResultMatch){  printf("STYLELANG   :    %s\n",fs);fflush(stdout); }
-   if(FcPatternGetString(  fpat, FC_FULLNAMELANG,     0,  (FcChar8 **)&fs)== FcResultMatch){  printf("FULLNAMELANG:    %s\n",fs);fflush(stdout); }
-   if(FcPatternGetString(  fpat, FC_CAPABILITY  ,     0,  (FcChar8 **)&fs)== FcResultMatch){  printf("CAPABILITY  :    %s\n",fs);fflush(stdout); }
-   if(FcPatternGetString(  fpat, FC_FONTFORMAT  ,     0,  (FcChar8 **)&fs)== FcResultMatch){  printf("FONTFORMAT  :    %s\n",fs);fflush(stdout); }
+   if(FcPatternGetBool(fpat, FC_OUTLINE,     0, &fb)== FcResultMatch){  printf("outline:     %d\n",fb);fflush(stdout); }
+   if(FcPatternGetBool(fpat, FC_SCALABLE,    0, &fb)== FcResultMatch){  printf("scalable:    %d\n",fb);fflush(stdout); }
+   if(FcPatternGetDouble(fpat, FC_DPI,         0, &fd)== FcResultMatch){  printf("DPI:         %f\n",fd);fflush(stdout); }
+   if(FcPatternGetInteger(fpat, FC_FONTVERSION, 0, &fb)== FcResultMatch){  printf("fontversion: %d\n",fb);fflush(stdout); }
+   if(FcPatternGetString(fpat, FC_FULLNAME    ,     0,  (FcChar8 **)&fs)== FcResultMatch){  printf("FULLNAME    :    %s\n",fs);fflush(stdout); }
+   if(FcPatternGetString(fpat, FC_FAMILY      ,     0,  (FcChar8 **)&fs)== FcResultMatch){  printf("FAMILY      :    %s\n",fs);fflush(stdout); }
+   if(FcPatternGetString(fpat, FC_STYLE       ,     0,  (FcChar8 **)&fs)== FcResultMatch){  printf("STYLE       :    %s\n",fs);fflush(stdout); }
+   if(FcPatternGetString(fpat, FC_FOUNDRY     ,     0,  (FcChar8 **)&fs)== FcResultMatch){  printf("FOUNDRY     :    %s\n",fs);fflush(stdout); }
+   if(FcPatternGetString(fpat, FC_FAMILYLANG  ,     0,  (FcChar8 **)&fs)== FcResultMatch){  printf("FAMILYLANG  :    %s\n",fs);fflush(stdout); }
+   if(FcPatternGetString(fpat, FC_STYLELANG   ,     0,  (FcChar8 **)&fs)== FcResultMatch){  printf("STYLELANG   :    %s\n",fs);fflush(stdout); }
+   if(FcPatternGetString(fpat, FC_FULLNAMELANG,     0,  (FcChar8 **)&fs)== FcResultMatch){  printf("FULLNAMELANG:    %s\n",fs);fflush(stdout); }
+   if(FcPatternGetString(fpat, FC_CAPABILITY  ,     0,  (FcChar8 **)&fs)== FcResultMatch){  printf("CAPABILITY  :    %s\n",fs);fflush(stdout); }
+   if(FcPatternGetString(fpat, FC_FONTFORMAT  ,     0,  (FcChar8 **)&fs)== FcResultMatch){  printf("FONTFORMAT  :    %s\n",fs);fflush(stdout); }
 */
    
    return(fi_idx);
@@ -864,7 +864,7 @@ int fsp_alts_make_insertable(FNT_SPECS *fsp){
    if(!fsp)return(2);
    if(fsp->used >= fsp->space){
       fsp->space += ALLOCINFO_CHUNK;
-      tmp = (ALT_SPECS *) realloc(fsp->alts, fsp->space * sizeof(ALT_SPECS) );
+      tmp = (ALT_SPECS *) realloc(fsp->alts, fsp->space * sizeof(ALT_SPECS));
       if(tmp){
          fsp->alts = tmp;
          memset(&fsp->alts[fsp->used],0,(fsp->space - fsp->used)*sizeof(ALT_SPECS));
@@ -935,7 +935,7 @@ int csp_make_insertable(CHILD_SPECS *csp){
    if(!csp)return(2);
    if(csp->used >= csp->space){
       csp->space += ALLOCINFO_CHUNK;
-      tmp = (int *) realloc(csp->members, csp->space * sizeof(int) );
+      tmp = (int *) realloc(csp->members, csp->space * sizeof(int));
       if(tmp){
          csp->members = tmp;
          memset(&csp->members[csp->used],0,(csp->space - csp->used)*sizeof(int));
@@ -1032,7 +1032,7 @@ int cxinfo_make_insertable(CX_INFO *cxi){
    CX_SPECS *tmp;
    if(cxi->used >= cxi->space){
       cxi->space += ALLOCINFO_CHUNK;
-      tmp = (CX_SPECS *) realloc(cxi->cx, cxi->space * sizeof(CX_SPECS) );
+      tmp = (CX_SPECS *) realloc(cxi->cx, cxi->space * sizeof(CX_SPECS));
       if(tmp){
          cxi->cx = tmp;
          memset(&cxi->cx[cxi->used],0,(cxi->space - cxi->used)*sizeof(CX_SPECS));
@@ -1151,7 +1151,7 @@ void cxinfo_dump(const TR_INFO *tri){
                   bsp->xll,bsp->yll,bsp->xur,bsp->yur, 
                   tpi->chunks[k].x, tpi->chunks[k].y,
                   tpi->chunks[k].xkern,  tpi->chunks[k].ykern,
-                  tpi->chunks[k].string, tpi->chunks[k].decoration );
+                  tpi->chunks[k].string, tpi->chunks[k].decoration);
             }
             else { /* TR_PARA_* */
                 printf("cxi  cx[%d] member:%d cx_idx:%d\n",i, j, k);
@@ -1206,7 +1206,7 @@ int tpinfo_make_insertable(TP_INFO *tpi){
    TCHUNK_SPECS *tmp;
    if(tpi->used >= tpi->space){
       tpi->space += ALLOCINFO_CHUNK;
-      tmp = (TCHUNK_SPECS *) realloc(tpi->chunks, tpi->space * sizeof(TCHUNK_SPECS) );
+      tmp = (TCHUNK_SPECS *) realloc(tpi->chunks, tpi->space * sizeof(TCHUNK_SPECS));
       if(tmp){
          tpi->chunks = tmp;
          memset(&tpi->chunks[tpi->used],0,(tpi->space - tpi->used)*sizeof(TCHUNK_SPECS));
@@ -1283,7 +1283,7 @@ int brinfo_make_insertable(BR_INFO *bri){
    if(!bri)return(2);
    if(bri->used >= bri->space){
       bri->space += ALLOCINFO_CHUNK;
-      tmp = (BRECT_SPECS *) realloc(bri->rects, bri->space * sizeof(BRECT_SPECS) );
+      tmp = (BRECT_SPECS *) realloc(bri->rects, bri->space * sizeof(BRECT_SPECS));
       if(tmp){ bri->rects = tmp; }
       else { status = 1;}
    }
@@ -1361,12 +1361,12 @@ int brinfo_overlap(const BR_INFO *bri, int dst, int src, RT_PAD *rp_dst, RT_PAD 
    if(src<0 || src>= (int) bri->used)return(5);
    br_dst=&bri->rects[dst];
    br_src=&bri->rects[src];
-   if(   /* Test all conditions that exclude overlap, if any are true, then no overlap */
-      ((br_dst->xur + rp_dst->right) < (br_src->xll - rp_src->left)  ) ||  /* dst fully to the left */
-      ((br_dst->xll - rp_dst->left)  > (br_src->xur + rp_src->right) ) ||  /* dst fully to the right */
-      ((br_dst->yur - rp_dst->up)    > (br_src->yll + rp_src->down)  ) ||  /* dst fully below (Y is positive DOWN) */
-      ((br_dst->yll + rp_dst->down)  < (br_src->yur - rp_src->up)    )     /* dst fully above (Y is positive DOWN) */
-      ){
+   if(/* Test all conditions that exclude overlap, if any are true, then no overlap */
+      ((br_dst->xur + rp_dst->right) < (br_src->xll - rp_src->left)) ||  /* dst fully to the left */
+      ((br_dst->xll - rp_dst->left)  > (br_src->xur + rp_src->right)) ||  /* dst fully to the right */
+      ((br_dst->yur - rp_dst->up)    > (br_src->yll + rp_src->down)) ||  /* dst fully below (Y is positive DOWN) */
+      ((br_dst->yll + rp_dst->down)  < (br_src->yur - rp_src->up))     /* dst fully above (Y is positive DOWN) */
+){
       status = 1;  
    }
    else {   
@@ -1378,7 +1378,7 @@ int brinfo_overlap(const BR_INFO *bri, int dst, int src, RT_PAD *rp_dst, RT_PAD 
       if(
          (br_src->xll >= br_dst->xur - rp_dst->right) ||  /*  src overlaps just a little on the right (L->R language) */
          (br_src->xur <= br_dst->xll + rp_dst->left)      /*  src overlaps just a little on the left  (R->L language) */
-      ){
+){
          status = 0;
       }
       else {  /* Too much overlap, reject the overlap */
@@ -1388,14 +1388,14 @@ int brinfo_overlap(const BR_INFO *bri, int dst, int src, RT_PAD *rp_dst, RT_PAD 
 /*
 printf("Overlap status:%d\nOverlap trects (LL,UR) dst:(%f,%f),(%f,%f) src:(%f,%f),(%f,%f)\n",
 status,
-(br_dst->xll - rp_dst->left ),
-(br_dst->yll - rp_dst->down ),
+(br_dst->xll - rp_dst->left),
+(br_dst->yll - rp_dst->down),
 (br_dst->xur + rp_dst->right),
-(br_dst->yur + rp_dst->up   ),
-(br_src->xll - rp_src->left ),
-(br_src->yll - rp_src->down ),
+(br_dst->yur + rp_dst->up),
+(br_src->xll - rp_src->left),
+(br_src->yll - rp_src->down),
 (br_src->xur + rp_src->right),
-(br_src->yur + rp_src->up   ));
+(br_src->yur + rp_src->up));
 printf("Overlap brects (LL,UR) dst:(%f,%f),(%f,%f) src:(%f,%f),(%f,%f)\n",
 (br_dst->xll),
 (br_dst->yll),
@@ -1438,17 +1438,17 @@ int brinfo_upstream(BR_INFO *bri, int dst, int src, int ddir, int sdir){
    if(src<0 || src>= (int) bri->used)return(5);
    br_dst=&bri->rects[dst];
    br_src=&bri->rects[src];
-   if(      ddir == LDIR_RL && sdir == LDIR_LR){
+   if(ddir == LDIR_RL && sdir == LDIR_LR){
       if(br_dst->xur                     <= (br_src->xll + br_src->xur)/2.0){ status = 1; }
    }
-   else if( ddir == LDIR_LR && sdir == LDIR_RL){
-      if((br_src->xll + br_src->xur)/2.0 <= br_dst->xll                    ){ status = 1; }
+   else if(ddir == LDIR_LR && sdir == LDIR_RL){
+      if((br_src->xll + br_src->xur)/2.0 <= br_dst->xll){ status = 1; }
    }
-   else if( ddir == LDIR_RL && sdir == LDIR_RL){
+   else if(ddir == LDIR_RL && sdir == LDIR_RL){
       if(br_dst->xur                     <= (br_src->xll + br_src->xur)/2.0){ status = 1; }
    }
-   else if( ddir == LDIR_LR && sdir == LDIR_LR){
-      if((br_src->xll + br_src->xur)/2.0 <= br_dst->xll                    ){ status = 1; }
+   else if(ddir == LDIR_LR && sdir == LDIR_LR){
+      if((br_src->xll + br_src->xur)/2.0 <= br_dst->xll){ status = 1; }
    }
    return(status);
 }
@@ -1480,7 +1480,7 @@ enum tr_classes brinfo_pp_alignment(const BR_INFO *bri, int dst, int src, double
       /* RJ */
       newtype = TR_PARA_RJ;
    }
-   else if(fabs( (br_dst->xur + br_dst->xll)/2.0 - (br_src->xur + br_src->xll)/2.0 ) < slop){
+   else if(fabs((br_dst->xur + br_dst->xll)/2.0 - (br_src->xur + br_src->xll)/2.0) < slop){
       /* CJ */
       newtype = TR_PARA_CJ;
    }
@@ -1534,7 +1534,7 @@ TR_INFO *trinfo_init(TR_INFO *tri){
       !(tri->tpi = tpinfo_init()) ||
       !(tri->bri = brinfo_init()) ||
       !(tri->cxi = cxinfo_init())
-      ){   tri = trinfo_release(tri);  }
+){   tri = trinfo_release(tri);  }
    tri->out        = NULL;                 /* This will allocate as needed, it might not ever be needed. */
    tri->qe         = 0.0;
    tri->esc        = 0.0;
@@ -1621,7 +1621,7 @@ TR_INFO *trinfo_clear(TR_INFO *tri){
       if(!(tri->tpi = tpinfo_init()) ||     /* re-init the pieces just released */
          !(tri->bri = brinfo_init()) ||
          !(tri->cxi = cxinfo_init())
-         ){
+){
             tri = trinfo_release(tri);      /* something horrible happened, clean out tri and return NULL */
          }
    }
@@ -1680,7 +1680,7 @@ int trinfo_load_bk(TR_INFO *tri, int usebk, TRCOLORREF bkcolor){
 */
 int trinfo_check_bk(TR_INFO *tri, int usebk, TRCOLORREF bkcolor){
    int status = 0;
-   if( (tri->usebk != usebk)  ||  memcmp(&tri->bkcolor,&bkcolor,sizeof(TRCOLORREF))){ status = -1; }
+   if((tri->usebk != usebk)  ||  memcmp(&tri->bkcolor,&bkcolor,sizeof(TRCOLORREF))){ status = -1; }
    return(status);
 }
 
@@ -1716,7 +1716,7 @@ int trinfo_append_out(TR_INFO *tri, const char *src){
    slen = strlen(src);
    if(tri->outused + (int) slen + 1 >= tri->outspace){
       tri->outspace += TEREMAX(ALLOCOUT_CHUNK,slen+1);
-      tmp = realloc(tri->out, tri->outspace * sizeof(uint8_t) );
+      tmp = realloc(tri->out, tri->outspace * sizeof(uint8_t));
       if(tmp){ tri->out = tmp; }
       else { return(-1); }
    }
@@ -1823,14 +1823,14 @@ printf("Face idx:%d bbox: xMax/Min:%ld,%ld yMax/Min:%ld,%ld UpEM:%d asc/des:%d,%
    dsc = ((double)  (ymin))/64.0;  /* This is negative */
 /*  This did not work very well because the ascender/descender went well beyond the actual characters, causing
     overlaps on lines that did not actually overlap (vertically).
-   asc = ((double) (fsp->face->ascender) )/64.0;
+   asc = ((double) (fsp->face->ascender))/64.0;
    dsc = ((double) (fsp->face->descender))/64.0;
 */
 
    free(text32);
 
    /* find the font ascender descender (general one, not specific for current text) */
-   fasc = ((double) (fsp->face->ascender) )/64.0;
+   fasc = ((double) (fsp->face->ascender))/64.0;
    fdsc = ((double) (fsp->face->descender))/64.0;
       
    /* originally the denominator was just 32.0, but it broke when units_per_EM wasn't 2048 */
@@ -1838,11 +1838,11 @@ printf("Face idx:%d bbox: xMax/Min:%ld,%ld yMax/Min:%ld,%ld UpEM:%d asc/des:%d,%
    if(tri->load_flags & FT_LOAD_NO_SCALE) xe *= fixscale;
 
    /* now place the rectangle using ALN information */
-   if(      taln & ALIHORI & ALILEFT  ){
+   if(taln & ALIHORI & ALILEFT){
       bsp.xll = tpi->chunks[current].x;
       bsp.xur = tpi->chunks[current].x + xe;
    }
-   else if( taln & ALIHORI & ALICENTER){
+   else if(taln & ALIHORI & ALICENTER){
       bsp.xll = tpi->chunks[current].x - xe/2.0;
       bsp.xur = tpi->chunks[current].x + xe/2.0;
    }
@@ -1862,8 +1862,8 @@ printf("Face idx:%d bbox: xMax/Min:%ld,%ld yMax/Min:%ld,%ld UpEM:%d asc/des:%d,%
 
    /* From this point forward y is on the baseline, so need to correct it in chunks.  The asc/dsc are the general
       ones for the font, else the text content will muck around with the baseline in BAD ways. */
-   if(      taln & ALIVERT & ALITOP  ){  tpi->chunks[current].y += fasc;           }
-   else if( taln & ALIVERT & ALIBASE){                                             } /* no correction required */
+   if(taln & ALIVERT & ALITOP){  tpi->chunks[current].y += fasc;           }
+   else if(taln & ALIVERT & ALIBASE){                                             } /* no correction required */
    else{ /* taln & ALIVERT & ALIBOT */
        if(flags & TR_EMFBOT){            tpi->chunks[current].y -= 0.35 * tsp->fs; } /* compatible with EMF implementations */
        else {                            tpi->chunks[current].y += fdsc;           }
@@ -1891,7 +1891,7 @@ printf("Face idx:%d bbox: xMax/Min:%ld,%ld yMax/Min:%ld,%ld UpEM:%d asc/des:%d,%
 */
 int TR_weight_FC_to_SVG(int weight){
   int ret=400;
-  if(     weight ==      0){ ret = 100; }
+  if(weight ==      0){ ret = 100; }
   else if(weight ==     40){ ret = 200; }
   else if(weight ==     50){ ret = 300; }
   else if(weight ==     80){ ret = 400; }
@@ -2005,7 +2005,7 @@ void TR_layout_2_svg(TR_INFO *tri){
             TRPRINT(tri, "/>\n");
 
             newy = 1.25*(bri->rects[tsp->rt_tidx].yll - tsp->boff);
-               sprintf(obuf,"<text x=\"%f\" y=\"%f\"\n",newx, newy );
+               sprintf(obuf,"<text x=\"%f\" y=\"%f\"\n",newx, newy);
             TRPRINT(tri, obuf);
                sprintf(obuf,"xml:space=\"preserve\"\n");
             TRPRINT(tri, obuf);
@@ -2216,9 +2216,9 @@ void TR_layout_2_svg(TR_INFO *tri){
                 sprintf(obuf,"text-decoration:");
                 /* multiple text decoration styles may be set */
                 utmp = tsp->decoration & TXTDECOR_TMASK;
-                if(utmp & TXTDECOR_UNDER ){ strcat(obuf," underline");   }
-                if(utmp & TXTDECOR_OVER  ){ strcat(obuf," overline");    }
-                if(utmp & TXTDECOR_BLINK ){ strcat(obuf," blink");       }
+                if(utmp & TXTDECOR_UNDER){ strcat(obuf," underline");   }
+                if(utmp & TXTDECOR_OVER){ strcat(obuf," overline");    }
+                if(utmp & TXTDECOR_BLINK){ strcat(obuf," blink");       }
                 if(utmp & TXTDECOR_STRIKE){ strcat(obuf," line-through");}
                 if(*obuf){
                    /* only a single text decoration line type may be set */
@@ -2227,7 +2227,7 @@ void TR_layout_2_svg(TR_INFO *tri){
                       case TXTDECOR_DOUBLE:    strcat(obuf," double"); break;  // these are all CSS3
                       case TXTDECOR_DOTTED:    strcat(obuf," dotted"); break;
                       case TXTDECOR_DASHED:    strcat(obuf," dashed"); break;
-                      case TXTDECOR_WAVY:      strcat(obuf," wavy"  ); break;
+                      case TXTDECOR_WAVY:      strcat(obuf," wavy"); break;
                       default:                                         break;
                    }
                    if((tsp->decoration & TXTDECOR_CLRSET) && memcmp(&(tsp->decColor),&(tsp->color),sizeof(TRCOLORREF))){  
@@ -2454,7 +2454,7 @@ int TR_layout_analyze(TR_INFO *tri){
                                                    (bri->rects[tspRevStart->rt_tidx].yll - tspRevStart->boff);
             }
             else {             /* now in reversed orientation */
-               tspRevStart = tspj;    /* Save the beginning of this run (length >=1 ) */
+               tspRevStart = tspj;    /* Save the beginning of this run (length >=1) */
                /* scan forward for the last text object in this orientation, include the first */
                for(k=j; k <csp->kids.used; k++){ 
                   if(tpi->chunks[csp->kids.members[k]].ldir == ldir){ tspRevEnd = &tpi->chunks[csp->kids.members[k]]; }
@@ -2463,7 +2463,7 @@ int TR_layout_analyze(TR_INFO *tri){
                if(lastldir == LDIR_RL){  tspj->xkern =  bri->rects[tspRevEnd->rt_tidx].xur - bri->rects[tspi->rt_tidx].xll; }
                else {                    tspj->xkern =  bri->rects[tspRevEnd->rt_tidx].xll - bri->rects[tspi->rt_tidx].xur; }
                                    tspj->ykern = (bri->rects[tspRevEnd->rt_tidx].yll - tspRevEnd->boff) -
-                                                       (bri->rects[     tspi->rt_tidx].yll - tspi->boff     );
+                                                       (bri->rects[     tspi->rt_tidx].yll - tspi->boff);
             }
          }
          else {
@@ -2504,7 +2504,7 @@ int TR_layout_analyze(TR_INFO *tri){
          if(tspj->ykern == 0.0){
             double spaces = tspj->xkern/spcadv; /* negative on RL language, positive on LR */
             if((ldir == LDIR_RL && (spaces <= -0.9 && spaces >= -2.1)) ||
-               (ldir == LDIR_LR && (spaces >=  0.9 && spaces <=  2.1)) ){ 
+               (ldir == LDIR_LR && (spaces >=  0.9 && spaces <=  2.1))){ 
                int ispaces = lround(spaces);
                tspj->xkern -= ((double)ispaces*spcadv);
                if(ispaces<0)ispaces=-ispaces;
@@ -2600,24 +2600,24 @@ int parseit(char *buffer,char **data){
    if(!pre)return(OPOOPS);
    *data=&buffer[pre+1];
    buffer[pre]='\0';
-   if(*buffer=='#'            )return(OPCOM );
+   if(*buffer=='#')return(OPCOM);
    if(0==strcmp("FONT",buffer))return(OPFONT);
-   if(0==strcmp("ESC" ,buffer))return(OPESC );
-   if(0==strcmp("ORI", buffer))return(OPORI );
-   if(0==strcmp("XY",  buffer))return(OPXY  );
-   if(0==strcmp("FS",  buffer))return(OPFS  );
+   if(0==strcmp("ESC" ,buffer))return(OPESC);
+   if(0==strcmp("ORI", buffer))return(OPORI);
+   if(0==strcmp("XY",  buffer))return(OPXY);
+   if(0==strcmp("FS",  buffer))return(OPFS);
    if(0==strcmp("TEXT",buffer))return(OPTEXT);
-   if(0==strcmp("ALN", buffer))return(OPALN );
+   if(0==strcmp("ALN", buffer))return(OPALN);
    if(0==strcmp("LDIR",buffer))return(OPLDIR);
-   if(0==strcmp("MUL", buffer))return(OPMUL );
-   if(0==strcmp("ITA", buffer))return(OPITA );
-   if(0==strcmp("WGT", buffer))return(OPWGT );
-   if(0==strcmp("DEC", buffer))return(OPDEC );
-   if(0==strcmp("CND", buffer))return(OPCND );
-   if(0==strcmp("BKG", buffer))return(OPBKG );
-   if(0==strcmp("CLR", buffer))return(OPCLR );
-   if(0==strcmp("DCLR", buffer))return(OPDCLR );
-   if(0==strcmp("BCLR",buffer))return(OPBCLR );
+   if(0==strcmp("MUL", buffer))return(OPMUL);
+   if(0==strcmp("ITA", buffer))return(OPITA);
+   if(0==strcmp("WGT", buffer))return(OPWGT);
+   if(0==strcmp("DEC", buffer))return(OPDEC);
+   if(0==strcmp("CND", buffer))return(OPCND);
+   if(0==strcmp("BKG", buffer))return(OPBKG);
+   if(0==strcmp("CLR", buffer))return(OPCLR);
+   if(0==strcmp("DCLR", buffer))return(OPDCLR);
+   if(0==strcmp("BCLR",buffer))return(OPBCLR);
    if(0==strcmp("FLAG",buffer))return(OPFLAGS);
    if(0==strcmp("EMIT",buffer))return(OPEMIT);
    if(0==strcmp("DONE",buffer))return(OPDONE);
@@ -2826,7 +2826,7 @@ int main(int argc, char *argv[]){
                tsp.co=0;
             }
             fontspec = TR_construct_fontspec(&tsp, data);
-            if((tsp.fi_idx = ftinfo_load_fontname(tri->fti, fontspec)) < 0 )boom("Font load failed",lineno);
+            if((tsp.fi_idx = ftinfo_load_fontname(tri->fti, fontspec)) < 0)boom("Font load failed",lineno);
             free(fontspec);
             break;
          case OPESC:
@@ -2840,7 +2840,7 @@ int main(int argc, char *argv[]){
             tsp.fs *= fact;
             break;
          case OPXY:
-            if(2 != sscanf(data,"%lf,%lf",&tsp.x,&tsp.y) )boom("Invalid XY:",lineno);
+            if(2 != sscanf(data,"%lf,%lf",&tsp.x,&tsp.y))boom("Invalid XY:",lineno);
             tsp.x *= fact;
             tsp.y *= fact;
             break;
@@ -2896,18 +2896,18 @@ int main(int argc, char *argv[]){
             if(1 != sscanf(data,"%d",&tsp.condensed) || tsp.condensed < 50 || tsp.condensed > 200)boom("Invalid CND:",lineno);
             break;
          case OPBKG:
-            if(1 != sscanf(data,"%d",&bkmode) )boom("Invalid BKG:",lineno);
+            if(1 != sscanf(data,"%d",&bkmode))boom("Invalid BKG:",lineno);
             (void) trinfo_load_bk(tri,bkmode,bkcolor);
             break;
          case OPCLR:
-            if(1 != sscanf(data,"%x",&utmp32) )boom("Invalid CLR:",lineno);
+            if(1 != sscanf(data,"%x",&utmp32))boom("Invalid CLR:",lineno);
             tsp.color.Red      = (utmp32 >> 16) & 0xFF;
             tsp.color.Green    = (utmp32 >> 8) & 0xFF;
             tsp.color.Blue     = (utmp32 >> 0) & 0xFF;
             tsp.color.Reserved = 0;
             break;
          case OPDCLR:
-            if(1 != sscanf(data,"%x",&utmp32) )boom("Invalid DCLR:",lineno);
+            if(1 != sscanf(data,"%x",&utmp32))boom("Invalid DCLR:",lineno);
             if(utmp32 >= 0x1000000){
                tsp.decColor.Red = tsp.decColor.Green = tsp.decColor.Blue = tsp.decColor.Reserved = 0;
                tsp.decoration &= ~TXTDECOR_CLRSET;
@@ -2921,14 +2921,14 @@ int main(int argc, char *argv[]){
             }
             break;
          case OPBCLR:
-            if(1 != sscanf(data,"%x",&utmp32) )boom("Invalid BCLR:",lineno);
+            if(1 != sscanf(data,"%x",&utmp32))boom("Invalid BCLR:",lineno);
             bkcolor.Red      = (utmp32 >> 16) & 0xFF;
             bkcolor.Green    = (utmp32 >> 8) & 0xFF;
             bkcolor.Blue     = (utmp32 >> 0) & 0xFF;
             bkcolor.Reserved = 0;
             break;
          case OPFLAGS:
-            if(1 != sscanf(data,"%d",&flags) )boom("Invalid FLAG:",lineno);
+            if(1 != sscanf(data,"%d",&flags))boom("Invalid FLAG:",lineno);
             break;
          case OPEMIT:
             TR_layout_analyze(tri);

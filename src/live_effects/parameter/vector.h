@@ -24,12 +24,12 @@ namespace LivePathEffect {
 
 class VectorParam : public Parameter {
 public:
-    VectorParam( const Glib::ustring& label,
+    VectorParam(const Glib::ustring& label,
                 const Glib::ustring& tip,
                 const Glib::ustring& key,
                 Inkscape::UI::Widget::Registry* wr,
                 Effect* effect,
-                Geom::Point default_vector = Geom::Point(1,0) );
+                Geom::Point default_vector = Geom::Point(1,0));
     ~VectorParam() override;
 
     Gtk::Widget * param_newWidget() override;

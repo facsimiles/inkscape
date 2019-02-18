@@ -80,7 +80,7 @@ public:
     : DebugXMLNode(node, "add-child")
     {
         _addProperty("child", stringify_node(child));
-        _addProperty("position", prev ? prev->position() + 1 : 0 );
+        _addProperty("position", prev ? prev->position() + 1 : 0);
     }
 };
 
@@ -101,9 +101,9 @@ public:
     {
         _addProperty("child", stringify_node(child));
 
-        unsigned old_position = ( old_prev ? old_prev->position() : 0 );
-        unsigned position = ( new_prev ? new_prev->position() : 0 );
-        if ( position > old_position ) {
+        unsigned old_position = (old_prev ? old_prev->position() : 0);
+        unsigned position = (new_prev ? new_prev->position() : 0);
+        if (position > old_position) {
             --position;
         }
 
@@ -186,8 +186,8 @@ SimpleNode::SimpleNode(SimpleNode const &node, Document *document)
     _parent = _next = _prev = nullptr;
     _first_child = _last_child = nullptr;
 
-    for ( SimpleNode *child = node._first_child ;
-          child != nullptr ; child = child->_next )
+    for (SimpleNode *child = node._first_child ;
+          child != nullptr ; child = child->_next)
     {
         SimpleNode *child_copy=dynamic_cast<SimpleNode *>(child->duplicate(document));
 
@@ -203,8 +203,8 @@ SimpleNode::SimpleNode(SimpleNode const &node, Document *document)
         child_copy->release(); // release to avoid a leak
     }
 
-    for ( List<AttributeRecord const> iter = node._attributes ;
-          iter ; ++iter )
+    for (List<AttributeRecord const> iter = node._attributes ;
+          iter ; ++iter)
     {
         _attributes = cons(*iter, _attributes);
     }
@@ -225,10 +225,10 @@ gchar const *SimpleNode::attribute(gchar const *name) const {
 
     GQuark const key = g_quark_from_string(name);
 
-    for ( List<AttributeRecord const> iter = _attributes ;
-          iter ; ++iter )
+    for (List<AttributeRecord const> iter = _attributes ;
+          iter ; ++iter)
     {
-        if ( iter->key == key ) {
+        if (iter->key == key) {
             return iter->value;
         }
     }
@@ -244,8 +244,8 @@ unsigned SimpleNode::position() const {
 unsigned SimpleNode::_childPosition(SimpleNode const &child) const {
     if (!_cached_positions_valid) {
         unsigned position=0;
-        for ( SimpleNode *sibling = _first_child ;
-              sibling ; sibling = sibling->_next )
+        for (SimpleNode *sibling = _first_child ;
+              sibling ; sibling = sibling->_next)
         {
             sibling->_cached_position = position;
             position++;
@@ -257,7 +257,7 @@ unsigned SimpleNode::_childPosition(SimpleNode const &child) const {
 
 Node *SimpleNode::nthChild(unsigned index) {
     SimpleNode *child = _first_child;
-    for ( ; index > 0 && child ; child = child->_next ) {
+    for (; index > 0 && child ; child = child->_next) {
         index--;
     }
     return child;
@@ -266,8 +266,8 @@ Node *SimpleNode::nthChild(unsigned index) {
 bool SimpleNode::matchAttributeName(gchar const *partial_name) const {
     g_return_val_if_fail(partial_name != nullptr, false);
 
-    for ( List<AttributeRecord const> iter = _attributes ;
-          iter ; ++iter )
+    for (List<AttributeRecord const> iter = _attributes ;
+          iter ; ++iter)
     {
         gchar const *name = g_quark_to_string(iter->key);
         if (std::strstr(name, partial_name)) {
@@ -290,7 +290,7 @@ void SimpleNode::_setParent(SimpleNode *parent) {
 
 void SimpleNode::setContent(gchar const *content) {
     ptr_shared old_content=_content;
-    ptr_shared new_content = ( content ? share_string(content) : ptr_shared() );
+    ptr_shared new_content = (content ? share_string(content) : ptr_shared());
 
     Debug::EventTracker<> tracker;
     if (new_content) {
@@ -301,7 +301,7 @@ void SimpleNode::setContent(gchar const *content) {
 
     _content = new_content;
 
-    if ( _content != old_content ) {
+    if (_content != old_content) {
         _document->logger()->notifyContentChanged(*this, old_content, _content);
         _observers.notifyContentChanged(*this, old_content, _content);
     }
@@ -315,38 +315,38 @@ SimpleNode::setAttribute(gchar const *name, gchar const *value, bool const /*is_
     // Check usefulness of attributes on elements in the svg namespace, optionally don't add them to tree.
     Glib::ustring element = g_quark_to_string(_name);
     //g_message("setAttribute:  %s: %s: %s", element.c_str(), name, value);
-    gchar* cleaned_value = g_strdup( value );
+    gchar* cleaned_value = g_strdup(value);
 
     // Only check elements in SVG name space and don't block setting attribute to NULL.
-    if( element.substr(0,4) == "svg:" && value != nullptr) {
+    if(element.substr(0,4) == "svg:" && value != nullptr) {
 
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        if( prefs->getBool("/options/svgoutput/check_on_editing") ) {
+        if(prefs->getBool("/options/svgoutput/check_on_editing")) {
 
             gchar const *id_char = attribute("id");
-            Glib::ustring id = (id_char == nullptr ? "" : id_char );
+            Glib::ustring id = (id_char == nullptr ? "" : id_char);
             unsigned int flags = sp_attribute_clean_get_prefs();
             bool attr_warn   = flags & SP_ATTR_CLEAN_ATTR_WARN;
             bool attr_remove = flags & SP_ATTR_CLEAN_ATTR_REMOVE;
 
             // Check attributes
-            if( (attr_warn || attr_remove) && value != nullptr ) {
-                bool is_useful = sp_attribute_check_attribute( element, id, name, attr_warn );
-                if( !is_useful && attr_remove ) {
-                    g_free( cleaned_value );
+            if((attr_warn || attr_remove) && value != nullptr) {
+                bool is_useful = sp_attribute_check_attribute(element, id, name, attr_warn);
+                if(!is_useful && attr_remove) {
+                    g_free(cleaned_value);
                     return; // Don't add to tree.
                 }
             }
 
             // Check style properties -- Note: if element is not yet inserted into
             // tree (and thus has no parent), default values will not be tested.
-            if( !strcmp( name, "style" ) && (flags >= SP_ATTR_CLEAN_STYLE_WARN) ) {
-                g_free( cleaned_value );
-                cleaned_value = g_strdup( sp_attribute_clean_style( this, value, flags ).c_str() );
-                // if( g_strcmp0( value, cleaned_value ) ) {
-                //     g_warning( "SimpleNode::setAttribute: %s", id.c_str() );
-                //     g_warning( "     original: %s", value);
-                //     g_warning( "      cleaned: %s", cleaned_value);
+            if(!strcmp(name, "style") && (flags >= SP_ATTR_CLEAN_STYLE_WARN)) {
+                g_free(cleaned_value);
+                cleaned_value = g_strdup(sp_attribute_clean_style(this, value, flags).c_str());
+                // if(g_strcmp0(value, cleaned_value)) {
+                //     g_warning("SimpleNode::setAttribute: %s", id.c_str());
+                //     g_warning("     original: %s", value);
+                //     g_warning("      cleaned: %s", cleaned_value);
                 // }
             }
         }
@@ -356,15 +356,15 @@ SimpleNode::setAttribute(gchar const *name, gchar const *value, bool const /*is_
 
     MutableList<AttributeRecord> ref;
     MutableList<AttributeRecord> existing;
-    for ( existing = _attributes ; existing ; ++existing ) {
-        if ( existing->key == key ) {
+    for (existing = _attributes ; existing ; ++existing) {
+        if (existing->key == key) {
             break;
         }
         ref = existing;
     }
     Debug::EventTracker<> tracker;
 
-    ptr_shared old_value=( existing ? existing->value : ptr_shared() );
+    ptr_shared old_value=(existing ? existing->value : ptr_shared());
 
     ptr_shared new_value=ptr_shared();
     if (cleaned_value) {
@@ -391,12 +391,12 @@ SimpleNode::setAttribute(gchar const *name, gchar const *value, bool const /*is_
         }
     }
 
-    if ( new_value != old_value && (!old_value || !new_value || strcmp(old_value, new_value))) {
+    if (new_value != old_value && (!old_value || !new_value || strcmp(old_value, new_value))) {
         _document->logger()->notifyAttributeChanged(*this, key, old_value, new_value);
         _observers.notifyAttributeChanged(*this, key, old_value, new_value);
-        //g_warning( "setAttribute notified: %s: %s: %s: %s", name, element.c_str(), old_value, new_value ); 
+        //g_warning("setAttribute notified: %s: %s: %s: %s", name, element.c_str(), old_value, new_value); 
     }
-    g_free( cleaned_value );
+    g_free(cleaned_value);
 }
 
 void SimpleNode::addChild(Node *generic_child, Node *generic_ref) {
@@ -546,10 +546,10 @@ void SimpleNode::setPosition(int pos) {
     // a negative position is the same as an infinitely large position
 
     SimpleNode *ref=nullptr;
-    for ( SimpleNode *sibling = _parent->_first_child ;
-          sibling && pos ; sibling = sibling->_next )
+    for (SimpleNode *sibling = _parent->_first_child ;
+          sibling && pos ; sibling = sibling->_next)
     {
-        if ( sibling != this ) {
+        if (sibling != this) {
             ref = sibling;
             pos--;
         }
@@ -592,16 +592,16 @@ const NodeEventVector OBSERVER_EVENT_VECTOR = {
 
 void SimpleNode::synthesizeEvents(NodeEventVector const *vector, void *data) {
     if (vector->attr_changed) {
-        for ( List<AttributeRecord const> iter = _attributes ;
-              iter ; ++iter )
+        for (List<AttributeRecord const> iter = _attributes ;
+              iter ; ++iter)
         {
             vector->attr_changed(this, g_quark_to_string(iter->key), nullptr, iter->value, false, data);
         }
     }
     if (vector->child_added) {
         SimpleNode *ref = nullptr;
-        for ( SimpleNode *child = this->_first_child ;
-              child ; child = child->_next )
+        for (SimpleNode *child = this->_first_child ;
+              child ; child = child->_next)
         {
             vector->child_added(this, child, ref, data);
             ref = child;
@@ -632,7 +632,7 @@ void SimpleNode::recursivePrintTree(unsigned level) {
         std::cout << name() << std::endl;
     }
     for (SimpleNode *child = _first_child; child != nullptr; child = child->_next) {
-        child->recursivePrintTree( level+1 );
+        child->recursivePrintTree(level+1);
     }
 }
 
@@ -642,16 +642,16 @@ Node *SimpleNode::root() {
         parent = parent->parent();
     }
 
-    if ( parent->type() == DOCUMENT_NODE ) {
-        for ( Node *child = _document->firstChild() ;
-              child ; child = child->next() )
+    if (parent->type() == DOCUMENT_NODE) {
+        for (Node *child = _document->firstChild() ;
+              child ; child = child->next())
         {
-            if ( child->type() == ELEMENT_NODE ) {
+            if (child->type() == ELEMENT_NODE) {
                 return child;
             }
         }
         return nullptr;
-    } else if ( parent->type() == ELEMENT_NODE ) {
+    } else if (parent->type() == ELEMENT_NODE) {
         return parent;
     } else {
         return nullptr;
@@ -660,7 +660,7 @@ Node *SimpleNode::root() {
 
 void SimpleNode::cleanOriginal(Node *src, gchar const *key){
     std::vector<Node *> to_delete;
-    for ( Node *child = this->firstChild() ; child != nullptr ; child = child->next() )
+    for (Node *child = this->firstChild() ; child != nullptr ; child = child->next())
     {
         gchar const *id = child->attribute(key);
         if (id) {
@@ -711,7 +711,7 @@ bool SimpleNode::equal(Node const *other, bool recursive) {
     if (recursive) {
         //NOTE: for faster the childs need to be in the same order
         Node const *other_child = other->firstChild();
-        for ( Node *child = firstChild();
+        for (Node *child = firstChild();
               child; 
               child = child->next())
         {
@@ -742,7 +742,7 @@ void SimpleNode::mergeFrom(Node const *src, gchar const *key, bool extension, bo
         cleanOriginal(srcp, key);
     }
 
-    for ( Node const *child = src->firstChild() ; child != nullptr ; child = child->next() )
+    for (Node const *child = src->firstChild() ; child != nullptr ; child = child->next())
     {
         gchar const *id = child->attribute(key);
         if (id) {
@@ -768,8 +768,8 @@ void SimpleNode::mergeFrom(Node const *src, gchar const *key, bool extension, bo
         }
     }
 
-    for ( List<AttributeRecord const> iter = src->attributeList() ;
-          iter ; ++iter )
+    for (List<AttributeRecord const> iter = src->attributeList() ;
+          iter ; ++iter)
     {
         setAttribute(g_quark_to_string(iter->key), iter->value);
     }

@@ -57,7 +57,7 @@ ControlPointSelection::ControlPointSelection(SPDesktop *d, SPCanvasGroup *th_gro
     , _handles_visible(true)
     , _one_node_handles(false)
 {
-    signal_update.connect( sigc::bind(
+    signal_update.connect(sigc::bind(
         sigc::mem_fun(*this, &ControlPointSelection::_updateTransformHandles),
         true));
     ControlPoint::signal_mouseover_change.connect(
@@ -127,7 +127,7 @@ void ControlPointSelection::erase(iterator first, iterator last)
 void ControlPointSelection::clear()
 {
     std::vector<SelectableControlPoint *> out(begin(), end());
-    for (iterator i = begin(); i != end(); )
+    for (iterator i = begin(); i != end();)
         erase(i++);
     if (!out.empty())
         signal_selection_changed.emit(out, false);

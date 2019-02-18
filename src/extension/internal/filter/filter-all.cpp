@@ -30,7 +30,7 @@ namespace Filter {
 
 
 void
-Filter::filters_all ( )
+Filter::filters_all ()
 {
 	// Here come the filters which are coded in C++ in order to present a parameters dialog
 

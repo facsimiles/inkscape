@@ -374,7 +374,7 @@ void ConstrainedFDLayout::recGenerateClusterVariablesAndConstraints(
                 noc, *curr, idleConstraints);
     }
 
-    if ( (noc == NULL) && (dynamic_cast<RootCluster *> (cluster) == NULL) )
+    if ((noc == NULL) && (dynamic_cast<RootCluster *> (cluster) == NULL))
     {
         double freeWeight = 0.00000000001;
         // Then create left and right variables for the boundary of this 
@@ -1119,7 +1119,7 @@ double ConstrainedFDLayout::applyDescentVector(
         valarray<double> &coords,
         const double oldStress,
         double stepsize
-        )
+)
 {
     COLA_UNUSED(oldStress);
 

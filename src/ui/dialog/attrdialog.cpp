@@ -166,7 +166,7 @@ void AttrDialog::setDesktop(SPDesktop* desktop)
  */
 void AttrDialog::setRepr(Inkscape::XML::Node * repr)
 {
-    if ( repr == _repr ) return;
+    if (repr == _repr) return;
     if (_repr) {
         _store->clear();
         _repr->removeListenerByData(this);

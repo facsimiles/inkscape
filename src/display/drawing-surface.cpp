@@ -84,7 +84,7 @@ DrawingSurface::DrawingSurface(cairo_surface_t *surface, Geom::Point const &orig
 
     double x_scale = 0;
     double y_scale = 0;
-    cairo_surface_get_device_scale( surface, &x_scale, &y_scale);
+    cairo_surface_get_device_scale(surface, &x_scale, &y_scale);
     if (x_scale != y_scale) {
         std::cerr << "DrawingSurface::DrawingSurface: non-uniform device scale!" << std::endl;
     }

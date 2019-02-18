@@ -160,7 +160,7 @@ SpellCheck::SpellCheck () :
     start_button.signal_clicked().connect(sigc::mem_fun(*this, &SpellCheck::onStart));
     stop_button.signal_clicked().connect(sigc::mem_fun(*this, &SpellCheck::onStop));
     tree_view.get_selection()->signal_changed().connect(sigc::mem_fun(*this, &SpellCheck::onTreeSelectionChange));
-    desktopChangeConn = deskTrack.connectDesktopChanged( sigc::mem_fun(*this, &SpellCheck::setTargetDesktop) );
+    desktopChangeConn = deskTrack.connectDesktopChanged(sigc::mem_fun(*this, &SpellCheck::setTargetDesktop));
     deskTrack.connect(GTK_WIDGET(gobj()));
 
     show_all_children ();

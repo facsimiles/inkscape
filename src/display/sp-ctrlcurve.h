@@ -25,10 +25,10 @@ class SPItem;
 #define SP_IS_CTRLCURVE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_CTRLCURVE))
 
 struct SPCtrlCurve : public SPCtrlLine {
-    void setCoords( gdouble x0, gdouble y0, gdouble x1, gdouble y1,
-                    gdouble x2, gdouble y2, gdouble x3, gdouble y3 );
+    void setCoords(gdouble x0, gdouble y0, gdouble x1, gdouble y1,
+                    gdouble x2, gdouble y2, gdouble x3, gdouble y3);
 
-    void setCoords( Geom::Point const &q0, Geom::Point const &q1,
+    void setCoords(Geom::Point const &q0, Geom::Point const &q1,
                     Geom::Point const &q2, Geom::Point const &q3);
 
     Geom::Point p0, p1, p2, p3;

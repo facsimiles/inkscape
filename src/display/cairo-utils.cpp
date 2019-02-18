@@ -777,7 +777,7 @@ feed_path_to_cairo (cairo_t *ct, Geom::Path const &path)
     if (path.empty())
         return;
 
-    cairo_move_to(ct, path.initialPoint()[0], path.initialPoint()[1] );
+    cairo_move_to(ct, path.initialPoint()[0], path.initialPoint()[1]);
 
     for (Geom::Path::const_iterator cit = path.begin(); cit != path.end_open(); ++cit) {
         feed_curve_to_cairo(ct, *cit, Geom::identity(), Geom::Rect(), false); // optimize_stroke is false, so the view rect is not used
@@ -806,7 +806,7 @@ feed_path_to_cairo (cairo_t *ct, Geom::Path const &path, Geom::Affine trans, Geo
     Geom::Affine transshift(trans * Geom::Translate(-shift));
 
     Geom::Point initial = path.initialPoint() * transshift;
-    cairo_move_to(ct, initial[0], initial[1] );
+    cairo_move_to(ct, initial[0], initial[1]);
 
     for(Geom::Path::const_iterator cit = path.begin(); cit != path.end_open(); ++cit) {
         feed_curve_to_cairo(ct, *cit, transshift, view, optimize_stroke);
@@ -865,9 +865,9 @@ feed_pathvector_to_cairo (cairo_t *ct, Geom::PathVector const &pathv)
 
 SPColorInterpolation
 get_cairo_surface_ci(cairo_surface_t *surface) {
-    void* data = cairo_surface_get_user_data( surface, &ink_color_interpolation_key );
-    if( data != nullptr ) {
-        return (SPColorInterpolation)GPOINTER_TO_INT( data );
+    void* data = cairo_surface_get_user_data(surface, &ink_color_interpolation_key);
+    if(data != nullptr) {
+        return (SPColorInterpolation)GPOINTER_TO_INT(data);
     } else {
         return SP_CSS_COLOR_INTERPOLATION_AUTO;
     }
@@ -878,17 +878,17 @@ get_cairo_surface_ci(cairo_surface_t *surface) {
 void
 set_cairo_surface_ci(cairo_surface_t *surface, SPColorInterpolation ci) {
 
-    if( cairo_surface_get_content( surface ) != CAIRO_CONTENT_ALPHA ) {
+    if(cairo_surface_get_content(surface) != CAIRO_CONTENT_ALPHA) {
 
-        SPColorInterpolation ci_in = get_cairo_surface_ci( surface );
+        SPColorInterpolation ci_in = get_cairo_surface_ci(surface);
 
-        if( ci_in == SP_CSS_COLOR_INTERPOLATION_SRGB &&
-            ci    == SP_CSS_COLOR_INTERPOLATION_LINEARRGB ) {
-            ink_cairo_surface_srgb_to_linear( surface );
+        if(ci_in == SP_CSS_COLOR_INTERPOLATION_SRGB &&
+            ci    == SP_CSS_COLOR_INTERPOLATION_LINEARRGB) {
+            ink_cairo_surface_srgb_to_linear(surface);
         }
-        if( ci_in == SP_CSS_COLOR_INTERPOLATION_LINEARRGB &&
-            ci    == SP_CSS_COLOR_INTERPOLATION_SRGB ) {
-            ink_cairo_surface_linear_to_srgb( surface );
+        if(ci_in == SP_CSS_COLOR_INTERPOLATION_LINEARRGB &&
+            ci    == SP_CSS_COLOR_INTERPOLATION_SRGB) {
+            ink_cairo_surface_linear_to_srgb(surface);
         }
 
         cairo_surface_set_user_data(surface, &ink_color_interpolation_key, GINT_TO_POINTER (ci), nullptr);
@@ -997,7 +997,7 @@ ink_cairo_surface_create_same_size(cairo_surface_t *s, cairo_content_t c)
     // cairo_surface_create_similar() uses device units
     double x_scale = 0;
     double y_scale = 0;
-    cairo_surface_get_device_scale( s, &x_scale, &y_scale );
+    cairo_surface_get_device_scale(s, &x_scale, &y_scale);
 
     assert (x_scale > 0);
     assert (y_scale > 0);
@@ -1157,50 +1157,50 @@ void ink_cairo_surface_average_color_premul(cairo_surface_t *surface, double &r,
     a = CLAMP(a, 0.0, 1.0);
 }
 
-static guint32 srgb_to_linear( const guint32 c, const guint32 a ) {
+static guint32 srgb_to_linear(const guint32 c, const guint32 a) {
 
-    const guint32 c1 = unpremul_alpha( c, a );
+    const guint32 c1 = unpremul_alpha(c, a);
 
     double cc = c1/255.0;
 
-    if( cc < 0.04045 ) {
+    if(cc < 0.04045) {
         cc /= 12.92;
     } else {
-        cc = pow( (cc+0.055)/1.055, 2.4 );
+        cc = pow((cc+0.055)/1.055, 2.4);
     }
     cc *= 255.0;
 
     const guint32 c2 = (int)cc;
 
-    return premul_alpha( c2, a );
+    return premul_alpha(c2, a);
 }
 
-static guint32 linear_to_srgb( const guint32 c, const guint32 a ) {
+static guint32 linear_to_srgb(const guint32 c, const guint32 a) {
 
-    const guint32 c1 = unpremul_alpha( c, a );
+    const guint32 c1 = unpremul_alpha(c, a);
 
     double cc = c1/255.0;
 
-    if( cc < 0.0031308 ) {
+    if(cc < 0.0031308) {
         cc *= 12.92;
     } else {
-        cc = pow( cc, 1.0/2.4 )*1.055-0.055;
+        cc = pow(cc, 1.0/2.4)*1.055-0.055;
     }
     cc *= 255.0;
 
     const guint32 c2 = (int)cc;
 
-    return premul_alpha( c2, a );
+    return premul_alpha(c2, a);
 }
 
 struct SurfaceSrgbToLinear {
 
     guint32 operator()(guint32 in) {
         EXTRACT_ARGB32(in, a,r,g,b)    ; // Unneeded semi-colon for indenting
-        if( a != 0 ) {
-            r = srgb_to_linear( r, a );
-            g = srgb_to_linear( g, a );
-            b = srgb_to_linear( b, a );
+        if(a != 0) {
+            r = srgb_to_linear(r, a);
+            g = srgb_to_linear(g, a);
+            b = srgb_to_linear(b, a);
         }
         ASSEMBLE_ARGB32(out, a,r,g,b);
         return out;
@@ -1217,17 +1217,17 @@ int ink_cairo_surface_srgb_to_linear(cairo_surface_t *surface)
     // int stride = cairo_image_surface_get_stride(surface);
     // unsigned char *data = cairo_image_surface_get_data(surface);
 
-    ink_cairo_surface_filter( surface, surface, SurfaceSrgbToLinear() );
+    ink_cairo_surface_filter(surface, surface, SurfaceSrgbToLinear());
 
     /* TODO convert this to OpenMP somehow */
     // for (int y = 0; y < height; ++y, data += stride) {
     //     for (int x = 0; x < width; ++x) {
     //         guint32 px = *reinterpret_cast<guint32*>(data + 4*x);
     //         EXTRACT_ARGB32(px, a,r,g,b)    ; // Unneeded semi-colon for indenting
-    //         if( a != 0 ) {
-    //             r = srgb_to_linear( r, a );
-    //             g = srgb_to_linear( g, a );
-    //             b = srgb_to_linear( b, a );
+    //         if(a != 0) {
+    //             r = srgb_to_linear(r, a);
+    //             g = srgb_to_linear(g, a);
+    //             b = srgb_to_linear(b, a);
     //         }
     //         ASSEMBLE_ARGB32(px2, a,r,g,b);
     //         *reinterpret_cast<guint32*>(data + 4*x) = px2;
@@ -1240,10 +1240,10 @@ struct SurfaceLinearToSrgb {
 
     guint32 operator()(guint32 in) {
         EXTRACT_ARGB32(in, a,r,g,b)    ; // Unneeded semi-colon for indenting
-        if( a != 0 ) {
-            r = linear_to_srgb( r, a );
-            g = linear_to_srgb( g, a );
-            b = linear_to_srgb( b, a );
+        if(a != 0) {
+            r = linear_to_srgb(r, a);
+            g = linear_to_srgb(g, a);
+            b = linear_to_srgb(b, a);
         }
         ASSEMBLE_ARGB32(out, a,r,g,b);
         return out;
@@ -1260,17 +1260,17 @@ int ink_cairo_surface_linear_to_srgb(cairo_surface_t *surface)
     // int stride = cairo_image_surface_get_stride(surface);
     // unsigned char *data = cairo_image_surface_get_data(surface);
 
-    ink_cairo_surface_filter( surface, surface, SurfaceLinearToSrgb() );
+    ink_cairo_surface_filter(surface, surface, SurfaceLinearToSrgb());
 
     // /* TODO convert this to OpenMP somehow */
     // for (int y = 0; y < height; ++y, data += stride) {
     //     for (int x = 0; x < width; ++x) {
     //         guint32 px = *reinterpret_cast<guint32*>(data + 4*x);
     //         EXTRACT_ARGB32(px, a,r,g,b)    ; // Unneeded semi-colon for indenting
-    //         if( a != 0 ) {
-    //             r = linear_to_srgb( r, a );
-    //             g = linear_to_srgb( g, a );
-    //             b = linear_to_srgb( b, a );
+    //         if(a != 0) {
+    //             r = linear_to_srgb(r, a);
+    //             g = linear_to_srgb(g, a);
+    //             b = linear_to_srgb(b, a);
     //         }
     //         ASSEMBLE_ARGB32(px2, a,r,g,b);
     //         *reinterpret_cast<guint32*>(data + 4*x) = px2;
@@ -1535,7 +1535,7 @@ const guchar* pixbuf_to_png(guchar const**rows, guchar* px, int num_rows, int nu
             } else { //Grayscale
                 if(bit_depth==16) 
                     *(guint16*)ptr= ((gray & 0xff00)>>8) + ((gray &0x00ff)<<8);
-                else *((guint16*)ptr) += guint16(((gray >> (16-bit_depth))<<pad) ); //note the "+="
+                else *((guint16*)ptr) += guint16(((gray >> (16-bit_depth))<<pad)); //note the "+="
                 
                 if(color_type & 4) { //Alpha channel
                     if (bit_depth == 16)

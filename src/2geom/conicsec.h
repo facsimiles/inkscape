@@ -478,7 +478,7 @@ public:
     Point nearestTime (const Point &P) const
     {
         std::vector<Point> points = allNearestTimes (P);
-        if ( !points.empty() )
+        if (!points.empty())
         {
             return points.front();
         }

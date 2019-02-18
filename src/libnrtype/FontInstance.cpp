@@ -132,32 +132,32 @@ font_instance::font_instance() :
 
 font_instance::~font_instance()
 {
-    if ( parent ) {
+    if (parent) {
         parent->UnrefFace(this);
         parent = nullptr;
     }
 
     //printf("font instance death\n");
-    if ( pFont ) {
+    if (pFont) {
         FreeTheFace();
         g_object_unref(pFont);
         pFont = nullptr;
     }
 
-    if ( descr ) {
+    if (descr) {
         pango_font_description_free(descr);
         descr = nullptr;
     }
 
-    //    if ( theFace ) FT_Done_Face(theFace); // owned by pFont. don't touch
+    //    if (theFace) FT_Done_Face(theFace); // owned by pFont. don't touch
     theFace = nullptr;
 
     for (int i=0;i<nbGlyph;i++) {
-        if ( glyphs[i].pathvector ) {
+        if (glyphs[i].pathvector) {
             delete glyphs[i].pathvector;
         }
     }
-    if ( glyphs ) {
+    if (glyphs) {
         free(glyphs);
         glyphs = nullptr;
     }
@@ -179,7 +179,7 @@ void font_instance::Unref()
     //char *tc=pango_font_description_to_string(descr);
     //printf("font %x %s unref'd %i\n",this,tc,refCount);
     //free(tc);
-    if ( refCount <= 0 ) {
+    if (refCount <= 0) {
         delete this;
     }
 }
@@ -203,7 +203,7 @@ void font_instance::InitTheFace()
 #else
 
         theFace = pango_fc_font_lock_face(PANGO_FC_FONT(pFont));
-        if ( theFace ) {
+        if (theFace) {
             FT_Select_Charmap(theFace, ft_encoding_unicode);
             FT_Select_Charmap(theFace, ft_encoding_symbol);
         }
@@ -212,8 +212,8 @@ void font_instance::InitTheFace()
 
 #ifndef USE_PANGO_WIN32
 
-        readOpenTypeGsubTable( theFace, openTypeTables );
-        readOpenTypeFvarAxes(  theFace, openTypeVarAxes );
+        readOpenTypeGsubTable(theFace, openTypeTables);
+        readOpenTypeFvarAxes(theFace, openTypeVarAxes);
 
 #if PANGO_VERSION_CHECK(1,41,1)
 #if FREETYPE_MAJOR == 2 && FREETYPE_MINOR >= 8  // 2.8 does not seem to work even though it has some support.
@@ -225,14 +225,14 @@ void font_instance::InitTheFace()
         //   Extract axes with values from Pango font description.
         //   Replace default axis values with extracted values.
 
-        char const *var = pango_font_description_get_variations( descr );
+        char const *var = pango_font_description_get_variations(descr);
         if (var) {
 
             Glib::ustring variations(var);
 
             FT_MM_Var* mmvar = nullptr;
             FT_Multi_Master mmtype;
-            if (FT_HAS_MULTIPLE_MASTERS( theFace )    &&    // Font has variables
+            if (FT_HAS_MULTIPLE_MASTERS(theFace)    &&    // Font has variables
                 FT_Get_MM_Var(theFace, &mmvar) == 0   &&    // We found the data
                 FT_Get_Multi_Master(theFace, &mmtype) !=0) {  // It's not an Adobe MM font
 
@@ -314,7 +314,7 @@ void font_instance::FreeTheFace()
 
 void font_instance::InstallFace(PangoFont* iFace)
 {
-    if ( !iFace ) {
+    if (!iFace) {
         return;
     }
     pFont=iFace;
@@ -322,9 +322,9 @@ void font_instance::InstallFace(PangoFont* iFace)
 
     InitTheFace();
 
-    if ( pFont && IsOutlineFont() == false ) {
+    if (pFont && IsOutlineFont() == false) {
         FreeTheFace();
-        if ( pFont ) {
+        if (pFont) {
             g_object_unref(pFont);
         }
         pFont=nullptr;
@@ -333,7 +333,7 @@ void font_instance::InstallFace(PangoFont* iFace)
 
 bool font_instance::IsOutlineFont()
 {
-    if ( pFont == nullptr ) {
+    if (pFont == nullptr) {
         return false;
     }
     InitTheFace();
@@ -348,12 +348,12 @@ bool font_instance::IsOutlineFont()
 int font_instance::MapUnicodeChar(gunichar c)
 {
     int res = 0;
-    if ( pFont  ) {
+    if (pFont) {
 #ifdef USE_PANGO_WIN32
         res = pango_win32_font_get_glyph_index(pFont, c);
 #else
         theFace = pango_fc_font_lock_face(PANGO_FC_FONT(pFont));
-        if ( c > 0xf0000 ) {
+        if (c > 0xf0000) {
             res = CLAMP(c, 0xf0000, 0x1fffff) - 0xf0000;
         } else {
             res = FT_Get_Char_Index(theFace, c);
@@ -375,20 +375,20 @@ static inline Geom::Point pointfx_to_nrpoint(const POINTFX &p, double scale)
 
 void font_instance::LoadGlyph(int glyph_id)
 {
-    if ( pFont == nullptr ) {
+    if (pFont == nullptr) {
         return;
     }
     InitTheFace();
 #ifndef USE_PANGO_WIN32
-    if ( !FT_IS_SCALABLE(theFace) ) {
+    if (!FT_IS_SCALABLE(theFace)) {
         return; // bitmap font
     }
 #endif
 
-    if ( id_to_no.find(glyph_id) == id_to_no.end() ) {
+    if (id_to_no.find(glyph_id) == id_to_no.end()) {
         Geom::PathBuilder path_builder;
 
-        if ( nbGlyph >= maxGlyph ) {
+        if (nbGlyph >= maxGlyph) {
             maxGlyph=2*nbGlyph+1;
             glyphs=(font_glyph*)realloc(glyphs,maxGlyph*sizeof(font_glyph));
         }
@@ -417,19 +417,19 @@ void font_instance::LoadGlyph(int glyph_id)
         n_g.v_advance = otm.otmTextMetrics.tmHeight * scale;
         n_g.h_width   = metrics.gmBlackBoxX         * scale;
         n_g.v_width   = metrics.gmBlackBoxY         * scale;
-        if ( bufferSize == GDI_ERROR) {
+        if (bufferSize == GDI_ERROR) {
             // shit happened
-        } else if ( bufferSize == 0) {
+        } else if (bufferSize == 0) {
             // character has no visual representation, but is valid (eg whitespace)
             doAdd=true;
         } else {
             char *buffer = new char[bufferSize];
-            if ( GetGlyphOutline (parent->hScreenDC, glyph_id, GGO_GLYPH_INDEX | GGO_NATIVE | GGO_UNHINTED, &metrics, bufferSize, buffer, &identity) <= 0 ) {
+            if (GetGlyphOutline (parent->hScreenDC, glyph_id, GGO_GLYPH_INDEX | GGO_NATIVE | GGO_UNHINTED, &metrics, bufferSize, buffer, &identity) <= 0) {
                 // shit happened
             } else {
                 // Platform SDK is rubbish, read KB87115 instead
                 DWORD polyOffset=0;
-                while ( polyOffset < bufferSize ) {
+                while (polyOffset < bufferSize) {
                     TTPOLYGONHEADER const *polyHeader=(TTPOLYGONHEADER const *)(buffer+polyOffset);
                     if (polyOffset+polyHeader->cb > bufferSize) break;
 
@@ -437,14 +437,14 @@ void font_instance::LoadGlyph(int glyph_id)
                         path_builder.moveTo(pointfx_to_nrpoint(polyHeader->pfxStart, scale));
                         DWORD curveOffset=polyOffset+sizeof(TTPOLYGONHEADER);
 
-                        while ( curveOffset < polyOffset+polyHeader->cb ) {
+                        while (curveOffset < polyOffset+polyHeader->cb) {
                             TTPOLYCURVE const *polyCurve=(TTPOLYCURVE const *)(buffer+curveOffset);
                             POINTFX const *p=polyCurve->apfx;
                             POINTFX const *endp=p+polyCurve->cpfx;
 
                             switch (polyCurve->wType) {
                             case TT_PRIM_LINE:
-                                while ( p != endp )
+                                while (p != endp)
                                     path_builder.lineTo(pointfx_to_nrpoint(*p++, scale));
                                 break;
 
@@ -455,7 +455,7 @@ void font_instance::LoadGlyph(int glyph_id)
                                     // The list of points specifies one or more control points and ends with the end point.
                                     // The intermediate points (on the curve) are the points between the control points.
                                     Geom::Point this_control = pointfx_to_nrpoint(*p++, scale);
-                                    while ( p+1 != endp ) { // Process all "midpoints" (all points except the last)
+                                    while (p+1 != endp) { // Process all "midpoints" (all points except the last)
                                         Geom::Point new_control = pointfx_to_nrpoint(*p++, scale);
                                         path_builder.quadTo(this_control, (new_control+this_control)/2);
                                         this_control = new_control;
@@ -467,7 +467,7 @@ void font_instance::LoadGlyph(int glyph_id)
 
                             case 3:  // TT_PRIM_CSPLINE
                                 g_assert(polyCurve->cpfx % 3 == 0);
-                                while ( p != endp ) {
+                                while (p != endp) {
                                     path_builder.curveTo(pointfx_to_nrpoint(p[0], scale),
                                                          pointfx_to_nrpoint(p[1], scale),
                                                          pointfx_to_nrpoint(p[2], scale));
@@ -488,13 +488,13 @@ void font_instance::LoadGlyph(int glyph_id)
         if (FT_Load_Glyph (theFace, glyph_id, FT_LOAD_NO_SCALE | FT_LOAD_NO_HINTING | FT_LOAD_NO_BITMAP)) {
             // shit happened
         } else {
-            if ( FT_HAS_HORIZONTAL(theFace) ) {
+            if (FT_HAS_HORIZONTAL(theFace)) {
                 n_g.h_advance=((double)theFace->glyph->metrics.horiAdvance)/((double)theFace->units_per_EM);
                 n_g.h_width=((double)theFace->glyph->metrics.width)/((double)theFace->units_per_EM);
             } else {
                 n_g.h_width=n_g.h_advance=((double)(theFace->bbox.xMax-theFace->bbox.xMin))/((double)theFace->units_per_EM);
             }
-            if ( FT_HAS_VERTICAL(theFace) ) {
+            if (FT_HAS_VERTICAL(theFace)) {
                 n_g.v_advance=((double)theFace->glyph->metrics.vertAdvance)/((double)theFace->units_per_EM);
                 n_g.v_width=((double)theFace->glyph->metrics.height)/((double)theFace->units_per_EM);
             } else {
@@ -506,7 +506,7 @@ void font_instance::LoadGlyph(int glyph_id)
                 // solid" which implies that vertical (and horizontal) advance should be 1em.
                 n_g.v_width=n_g.v_advance= 1.0;
             }
-            if ( theFace->glyph->format == ft_glyph_format_outline ) {
+            if (theFace->glyph->format == ft_glyph_format_outline) {
                 FT_Outline_Funcs ft2_outline_funcs = {
                     ft2_move_to,
                     ft2_line_to,
@@ -522,13 +522,13 @@ void font_instance::LoadGlyph(int glyph_id)
 #endif
         path_builder.flush();
 
-        if ( doAdd ) {
+        if (doAdd) {
             Geom::PathVector pv = path_builder.peek();
             // close all paths
             for (auto & i : pv) {
                 i.close();
             }
-            if ( !pv.empty() ) {
+            if (!pv.empty()) {
                 n_g.pathvector = new Geom::PathVector(pv);
                 Geom::OptRect bounds = bounds_exact(*n_g.pathvector);
                 if (bounds) {
@@ -548,11 +548,11 @@ void font_instance::LoadGlyph(int glyph_id)
 
 bool font_instance::FontMetrics(double &ascent,double &descent,double &xheight)
 {
-    if ( pFont == nullptr ) {
+    if (pFont == nullptr) {
         return false;
     }
     InitTheFace();
-    if ( theFace == nullptr ) {
+    if (theFace == nullptr) {
         return false;
     }
 
@@ -563,19 +563,19 @@ bool font_instance::FontMetrics(double &ascent,double &descent,double &xheight)
     return true;
 }
 
-bool font_instance::FontDecoration( double &underline_position,   double &underline_thickness,
+bool font_instance::FontDecoration(double &underline_position,   double &underline_thickness,
                                     double &linethrough_position, double &linethrough_thickness)
 {
-    if ( pFont == nullptr ) {
+    if (pFont == nullptr) {
         return false;
     }
     InitTheFace();
-    if ( theFace == nullptr ) {
+    if (theFace == nullptr) {
         return false;
     }
 #ifdef USE_PANGO_WIN32
     OUTLINETEXTMETRIC otm;
-    if ( !GetOutlineTextMetrics(parent->hScreenDC,sizeof(otm),&otm) ) {
+    if (!GetOutlineTextMetrics(parent->hScreenDC,sizeof(otm),&otm)) {
         return false;
     }
     double scale=1.0/parent->fontSize;
@@ -584,13 +584,13 @@ bool font_instance::FontDecoration( double &underline_position,   double &underl
     linethrough_position  = fabs(otm.otmsStrikeoutPosition  *scale);
     linethrough_thickness = fabs(otm.otmsStrikeoutSize      *scale);
 #else
-    if ( theFace->units_per_EM == 0 ) {
+    if (theFace->units_per_EM == 0) {
         return false; // bitmap font
     }
-    underline_position    = fabs(((double)theFace->underline_position )/((double)theFace->units_per_EM));
+    underline_position    = fabs(((double)theFace->underline_position)/((double)theFace->units_per_EM));
     underline_thickness   = fabs(((double)theFace->underline_thickness)/((double)theFace->units_per_EM));
     // there is no specific linethrough information, mock it up from other font fields
-    linethrough_position  = fabs(((double)theFace->ascender / 3.0     )/((double)theFace->units_per_EM));
+    linethrough_position  = fabs(((double)theFace->ascender / 3.0)/((double)theFace->units_per_EM));
     linethrough_thickness = fabs(((double)theFace->underline_thickness)/((double)theFace->units_per_EM));
 #endif
     return true;
@@ -602,21 +602,21 @@ bool font_instance::FontSlope(double &run, double &rise)
     run = 0.0;
     rise = 1.0;
 
-    if ( pFont == nullptr ) {
+    if (pFont == nullptr) {
         return false;
     }
     InitTheFace();
-    if ( theFace == nullptr ) {
+    if (theFace == nullptr) {
         return false;
     }
 
 #ifdef USE_PANGO_WIN32
     OUTLINETEXTMETRIC otm;
-    if ( !GetOutlineTextMetrics(parent->hScreenDC,sizeof(otm),&otm) ) return false;
+    if (!GetOutlineTextMetrics(parent->hScreenDC,sizeof(otm),&otm)) return false;
     run=otm.otmsCharSlopeRun;
     rise=otm.otmsCharSlopeRise;
 #else
-    if ( !FT_IS_SCALABLE(theFace) ) {
+    if (!FT_IS_SCALABLE(theFace)) {
         return false; // bitmap font
     }
 
@@ -633,9 +633,9 @@ bool font_instance::FontSlope(double &run, double &rise)
 Geom::OptRect font_instance::BBox(int glyph_id)
 {
     int no = -1;
-    if ( id_to_no.find(glyph_id) == id_to_no.end() ) {
+    if (id_to_no.find(glyph_id) == id_to_no.end()) {
         LoadGlyph(glyph_id);
-        if ( id_to_no.find(glyph_id) == id_to_no.end() ) {
+        if (id_to_no.find(glyph_id) == id_to_no.end()) {
             // didn't load
         } else {
             no = id_to_no[glyph_id];
@@ -643,7 +643,7 @@ Geom::OptRect font_instance::BBox(int glyph_id)
     } else {
         no = id_to_no[glyph_id];
     }
-    if ( no < 0 ) {
+    if (no < 0) {
         return Geom::OptRect();
     } else {
         Geom::Point rmin(glyphs[no].bbox[0],glyphs[no].bbox[1]);
@@ -655,9 +655,9 @@ Geom::OptRect font_instance::BBox(int glyph_id)
 Geom::PathVector* font_instance::PathVector(int glyph_id)
 {
     int no = -1;
-    if ( id_to_no.find(glyph_id) == id_to_no.end() ) {
+    if (id_to_no.find(glyph_id) == id_to_no.end()) {
         LoadGlyph(glyph_id);
-        if ( id_to_no.find(glyph_id) == id_to_no.end() ) {
+        if (id_to_no.find(glyph_id) == id_to_no.end()) {
             // didn't load
         } else {
             no = id_to_no[glyph_id];
@@ -665,16 +665,16 @@ Geom::PathVector* font_instance::PathVector(int glyph_id)
     } else {
         no = id_to_no[glyph_id];
     }
-    if ( no < 0 ) return nullptr;
+    if (no < 0) return nullptr;
     return glyphs[no].pathvector;
 }
 
 double font_instance::Advance(int glyph_id,bool vertical)
 {
     int no = -1;
-    if ( id_to_no.find(glyph_id) == id_to_no.end() ) {
+    if (id_to_no.find(glyph_id) == id_to_no.end()) {
         LoadGlyph(glyph_id);
-        if ( id_to_no.find(glyph_id) == id_to_no.end() ) {
+        if (id_to_no.find(glyph_id) == id_to_no.end()) {
             // didn't load
         } else {
             no=id_to_no[glyph_id];
@@ -682,8 +682,8 @@ double font_instance::Advance(int glyph_id,bool vertical)
     } else {
         no = id_to_no[glyph_id];
     }
-    if ( no >= 0 ) {
-        if ( vertical ) {
+    if (no >= 0) {
+        if (vertical) {
             return glyphs[no].v_advance;
         } else {
             return glyphs[no].h_advance;
@@ -703,11 +703,11 @@ void font_instance::FindFontMetrics() {
     //   http://microsoft.public.win32.programmer.gdi.narkive.com/LV6k4BDh/msdn-documentation-outlinetextmetrics-clarification
     // The otmAscent and otmDescent values are the maximum ascent and maximum descent of all the
     // glyphs in a font.
-    if ( theFace ) {
+    if (theFace) {
 
 #ifdef USE_PANGO_WIN32
         OUTLINETEXTMETRIC otm;
-        if ( GetOutlineTextMetrics(parent->hScreenDC,sizeof(otm),&otm) ) {
+        if (GetOutlineTextMetrics(parent->hScreenDC,sizeof(otm),&otm)) {
             double scale=1.0/parent->fontSize;
             _ascent      = fabs(otm.otmMacAscent  * scale);
             _descent     = fabs(otm.otmMacDescent * scale);
@@ -718,14 +718,14 @@ void font_instance::FindFontMetrics() {
             // In CSS em size is ascent + descent... which should be 1. If not,
             // adjust so it is.
             double em = _ascent + _descent;
-            if( em > 0 ) {
+            if(em > 0) {
                 _ascent /= em;
                 _descent /= em;
             }
 
             // May not be necessary but if OS/2 table missing or not version 2 or higher,
             // xheight might be zero.
-            if( _xheight == 0.0 ) {
+            if(_xheight == 0.0) {
                 _xheight = 0.5;
             }
 
@@ -747,17 +747,17 @@ void font_instance::FindFontMetrics() {
             // Try center of minus sign
             retval =  GetGlyphOutline (parent->hScreenDC, 0x2212, GGO_NATIVE | GGO_UNHINTED, &metrics, 0, NULL, &identity);
             // If no minus sign, try hyphen
-            if( retval <= 0 )
+            if(retval <= 0)
                 retval =  GetGlyphOutline (parent->hScreenDC, '-', GGO_NATIVE | GGO_UNHINTED, &metrics, 0, NULL, &identity);
 
-            if( retval > 0 ) {
+            if(retval > 0) {
                 double math = (metrics.gmptGlyphOrigin.y + 0.5 * metrics.gmBlackBoxY) * scale;
                 _baselines[ SP_CSS_BASELINE_MATHEMATICAL ] = math;
             }
 
             // Find hanging baseline... assume it is at top of 'म'.
             retval =  GetGlyphOutline (parent->hScreenDC, 0x092E, GGO_NATIVE | GGO_UNHINTED, &metrics, 0, NULL, &identity);
-            if( retval > 0 ) {
+            if(retval > 0) {
                 double hanging = metrics.gmptGlyphOrigin.y * scale;
                 _baselines[ SP_CSS_BASELINE_MATHEMATICAL ] = hanging;
             }
@@ -765,10 +765,10 @@ void font_instance::FindFontMetrics() {
 
 #else
 
-        if ( theFace->units_per_EM != 0 ) {  // If zero then it's a bitmap font.
+        if (theFace->units_per_EM != 0) {  // If zero then it's a bitmap font.
 
-            TT_OS2*  os2 = (TT_OS2*)FT_Get_Sfnt_Table( theFace, ft_sfnt_os2 );       
-            if( os2 ) {
+            TT_OS2*  os2 = (TT_OS2*)FT_Get_Sfnt_Table(theFace, ft_sfnt_os2);       
+            if(os2) {
                 _ascent  = fabs(((double)os2->sTypoAscender) / ((double)theFace->units_per_EM));
                 _descent = fabs(((double)os2->sTypoDescender)/ ((double)theFace->units_per_EM));
             } else {
@@ -781,20 +781,20 @@ void font_instance::FindFontMetrics() {
             // In CSS em size is ascent + descent... which should be 1. If not,
             // adjust so it is.
             double em = _ascent + _descent;
-            if( em > 0 ) {
+            if(em > 0) {
                 _ascent /= em;
                 _descent /= em;
             }
 
             // x-height
-            if( os2 && os2->version >= 0x0002 && os2->version != 0xffffu ) {
+            if(os2 && os2->version >= 0x0002 && os2->version != 0xffffu) {
                 // Only os/2 version 2 and above have sxHeight, 0xffff marks "old Mac fonts" without table
                 _xheight = fabs(((double)os2->sxHeight) / ((double)theFace->units_per_EM));
             } else {
                 // Measure 'x' height in font. Recommended option by XSL standard if no sxHeight.
-                FT_UInt index = FT_Get_Char_Index( theFace, 'x' );
-                if( index != 0 ) {
-                    FT_Load_Glyph( theFace, index, FT_LOAD_NO_SCALE );
+                FT_UInt index = FT_Get_Char_Index(theFace, 'x');
+                if(index != 0) {
+                    FT_Load_Glyph(theFace, index, FT_LOAD_NO_SCALE);
                     _xheight = (fabs)(((double)theFace->glyph->metrics.height/(double)theFace->units_per_EM));
                 } else {
                     // No 'x' in font!
@@ -813,17 +813,17 @@ void font_instance::FindFontMetrics() {
 
             // Better math baseline:
             // Try center of minus sign
-            FT_UInt index = FT_Get_Char_Index( theFace, 0x2212 ); //'−'
+            FT_UInt index = FT_Get_Char_Index(theFace, 0x2212); //'−'
             // If no minus sign, try hyphen
-            if( index == 0 )
-                index = FT_Get_Char_Index( theFace, '-' );
+            if(index == 0)
+                index = FT_Get_Char_Index(theFace, '-');
 
-            if( index != 0 ) {
-                FT_Load_Glyph( theFace, index, FT_LOAD_NO_SCALE );
+            if(index != 0) {
+                FT_Load_Glyph(theFace, index, FT_LOAD_NO_SCALE);
                 FT_Glyph aglyph;
-                FT_Get_Glyph( theFace->glyph, &aglyph );
+                FT_Get_Glyph(theFace->glyph, &aglyph);
                 FT_BBox acbox;
-                FT_Glyph_Get_CBox( aglyph, FT_GLYPH_BBOX_UNSCALED, &acbox );
+                FT_Glyph_Get_CBox(aglyph, FT_GLYPH_BBOX_UNSCALED, &acbox);
                 double math = (acbox.yMin + acbox.yMax)/2.0/(double)theFace->units_per_EM;
                 _baselines[ SP_CSS_BASELINE_MATHEMATICAL ] = math;
                 // std::cout << "Math baseline: - bbox: y_min: " << acbox.yMin
@@ -832,13 +832,13 @@ void font_instance::FindFontMetrics() {
             }
 
             // Find hanging baseline... assume it is at top of 'म'.
-            index = FT_Get_Char_Index( theFace, 0x092E ); // 'म'
-            if( index != 0 ) {
-                FT_Load_Glyph( theFace, index, FT_LOAD_NO_SCALE );
+            index = FT_Get_Char_Index(theFace, 0x092E); // 'म'
+            if(index != 0) {
+                FT_Load_Glyph(theFace, index, FT_LOAD_NO_SCALE);
                 FT_Glyph aglyph;
-                FT_Get_Glyph( theFace->glyph, &aglyph );
+                FT_Get_Glyph(theFace->glyph, &aglyph);
                 FT_BBox acbox;
-                FT_Glyph_Get_CBox( aglyph, FT_GLYPH_BBOX_UNSCALED, &acbox );
+                FT_Glyph_Get_CBox(aglyph, FT_GLYPH_BBOX_UNSCALED, &acbox);
                 double hanging = (double)acbox.yMax/(double)theFace->units_per_EM;
                 _baselines[ SP_CSS_BASELINE_HANGING ] = hanging;
                 // std::cout << "Hanging baseline:  प: " << hanging << std::endl;

@@ -71,16 +71,16 @@ public:
     }
     virtual void notify(Inkscape::Preferences::Entry const &val) {
         GObject* tbl = _obj;
-        if (g_object_get_data( tbl, "freeze" )) {
+        if (g_object_get_data(tbl, "freeze")) {
             return;
         }
-        g_object_set_data( tbl, "freeze", GINT_TO_POINTER(TRUE) );
+        g_object_set_data(tbl, "freeze", GINT_TO_POINTER(TRUE));
 
         GtkAdjustment * adj = GTK_ADJUSTMENT(g_object_get_data(tbl, "tolerance"));
 
         double v = val.getDouble(adj->value);
         gtk_adjustment_set_value(adj, v);
-        g_object_set_data( tbl, "freeze", GINT_TO_POINTER(FALSE) );
+        g_object_set_data(tbl, "freeze", GINT_TO_POINTER(FALSE));
     }
 private:
     GObject *_obj;
@@ -167,7 +167,7 @@ PencilToolbar::PencilToolbar(SPDesktop *desktop,
             tolerance_item->set_custom_numeric_menu_data(values, labels);
             tolerance_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
             _tolerance_adj->signal_value_changed().connect(sigc::mem_fun(*this, &PencilToolbar::tolerance_value_changed));
-            //ege_adjustment_action_set_appearance( eact, TOOLBAR_SLIDER_HINT );
+            //ege_adjustment_action_set_appearance(eact, TOOLBAR_SLIDER_HINT);
             add(*tolerance_item);
         }
 
@@ -252,9 +252,9 @@ PencilToolbar::mode_changed(int mode)
 Glib::ustring const
 PencilToolbar::freehand_tool_name()
 {
-    return ( tools_isactive(_desktop, TOOLS_FREEHAND_PEN)
+    return (tools_isactive(_desktop, TOOLS_FREEHAND_PEN)
              ? "/tools/freehand/pen"
-             : "/tools/freehand/pencil" );
+             : "/tools/freehand/pencil");
 }
 
 void
@@ -302,9 +302,9 @@ PencilToolbar::add_freehand_mode_toggle(bool tool_is_pencil)
     }
 
     auto prefs = Inkscape::Preferences::get();
-    guint freehandMode = prefs->getInt(( tool_is_pencil ?
+    guint freehandMode = prefs->getInt((tool_is_pencil ?
                                          "/tools/freehand/pencil/freehand-mode" :
-                                         "/tools/freehand/pen/freehand-mode" ), 0);
+                                         "/tools/freehand/pen/freehand-mode"), 0);
 
     add(* Gtk::manage(new Gtk::SeparatorToolItem()));
 
@@ -333,7 +333,7 @@ PencilToolbar::minpressure_value_changed()
     }
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setDouble( "/tools/freehand/pencil/minpressure", _minpressure_adj->get_value());
+    prefs->setDouble("/tools/freehand/pencil/minpressure", _minpressure_adj->get_value());
 }
 
 void
@@ -345,7 +345,7 @@ PencilToolbar::maxpressure_value_changed()
     }
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setDouble( "/tools/freehand/pencil/maxpressure", _maxpressure_adj->get_value());
+    prefs->setDouble("/tools/freehand/pencil/maxpressure", _maxpressure_adj->get_value());
 }
 
 void
@@ -396,16 +396,16 @@ PencilToolbar::add_advanced_shape_options(bool tool_is_pencil)
     }
 
     _shape_combo->set_tooltip_text(_("Shape of new paths drawn by this tool"));
-    int shape = prefs->getInt( (tool_is_pencil ?
+    int shape = prefs->getInt((tool_is_pencil ?
                                 "/tools/freehand/pencil/shape" :
-                                "/tools/freehand/pen/shape" ), 0);
-    _shape_combo->set_active( shape );
+                                "/tools/freehand/pen/shape"), 0);
+    _shape_combo->set_active(shape);
 
     hbox->add(*_shape_combo);
 
     bool hide = prefs->getInt("/tools/freehand/pencil/freehand-mode", 0) == 3 ||
         (tool_is_pencil && prefs->getBool("/tools/freehand/pencil/pressure", false));
-    _shape_item->set_visible( !hide );
+    _shape_item->set_visible(!hide);
 
     _shape_combo->signal_changed().connect(sigc::mem_fun(*this, &PencilToolbar::change_shape));
 

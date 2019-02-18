@@ -27,7 +27,7 @@
 // until i find something better
 #define MiscNormalize(v) {\
   double _l=sqrt(dot(v,v)); \
-    if ( _l < 0.0000001 ) { \
+    if (_l < 0.0000001) { \
       v[0]=v[1]=0; \
     } else { \
       v/=_l; \
@@ -167,7 +167,7 @@ Shape::ConvertToForme (Path * dest)
           }
         }
 	    }
-      while (true /*swdData[curBord].precParc >= 0 */ );
+      while (true /*swdData[curBord].precParc >= 0 */);
       // fin du cas non-oriente
     }
   }
@@ -305,7 +305,7 @@ Shape::ConvertToForme (Path * dest, int nbP, Path * *orig, bool splitWhenForced)
             startBord = nb;
             curStartPt=getEdge(nb).st;
           } else {
-            if ( getEdge(curBord).en == curStartPt ) {
+            if (getEdge(curBord).en == curStartPt) {
               //printf("contour %i ",curStartPt);
               swdData[curBord].suivParc = -1;
               AddContour (dest, nbP, orig, startBord, curBord,splitWhenForced);
@@ -320,7 +320,7 @@ Shape::ConvertToForme (Path * dest, int nbP, Path * *orig, bool splitWhenForced)
           //printf("suite %d\n",curBord);
         }
 	    }
-      while (true /*swdData[curBord].precParc >= 0 */ );
+      while (true /*swdData[curBord].precParc >= 0 */);
       // fin du cas non-oriente
     }
   }
@@ -390,7 +390,7 @@ Shape::ConvertToFormeNested (Path * dest, int nbP, Path * *orig, int /*wildPath*
       }
       {
         int askTo = pData[fi].askForWindingB;
-        if (askTo < 0 || askTo >= numberOfEdges() ) {
+        if (askTo < 0 || askTo >= numberOfEdges()) {
           parentContour=-1;
         } else {
           if (getEdge(askTo).prevS >= 0) {
@@ -458,8 +458,8 @@ Shape::ConvertToFormeNested (Path * dest, int nbP, Path * *orig, int /*wildPath*
             {
 //              bool escapePath=false;
 //              int tb=curBord;
-//              while ( tb >= 0 && tb < numberOfEdges() ) {
-//                if ( ebData[tb].pathID == wildPath ) {
+//              while (tb >= 0 && tb < numberOfEdges()) {
+//                if (ebData[tb].pathID == wildPath) {
 //                  escapePath=true;
 //                  break;
 //                }
@@ -494,13 +494,13 @@ Shape::ConvertToFormeNested (Path * dest, int nbP, Path * *orig, int /*wildPath*
             startBord = nb;
             curStartPt=getEdge(nb).st;
           } else {
-            if ( getEdge(curBord).en == curStartPt ) {
+            if (getEdge(curBord).en == curStartPt) {
               //printf("contour %i ",curStartPt);
               
 //              bool escapePath=false;
 //              int tb=curBord;
-//              while ( tb >= 0 && tb < numberOfEdges() ) {
-//                if ( ebData[tb].pathID == wildPath ) {
+//              while (tb >= 0 && tb < numberOfEdges()) {
+//                if (ebData[tb].pathID == wildPath) {
 //                  escapePath=true;
 //                  break;
 //                }
@@ -531,7 +531,7 @@ Shape::ConvertToFormeNested (Path * dest, int nbP, Path * *orig, int /*wildPath*
           //printf("suite %d\n",curBord);
         }
 	    }
-      while (true /*swdData[curBord].precParc >= 0 */ );
+      while (true /*swdData[curBord].precParc >= 0 */);
       // fin du cas non-oriente
     }
   }
@@ -667,9 +667,9 @@ Shape::MakeTweak (int mode, Shape *a, double power, JoinType join, double miter,
     int   usePathID=-1;
     int   usePieceID=0;
     double useT=0.0;
-    if ( a->_has_back_data ) {
-      if ( a->ebData[i].pathID >= 0 && a->ebData[stB].pathID == a->ebData[i].pathID && a->ebData[stB].pieceID == a->ebData[i].pieceID
-           && a->ebData[stB].tEn == a->ebData[i].tSt ) {
+    if (a->_has_back_data) {
+      if (a->ebData[i].pathID >= 0 && a->ebData[stB].pathID == a->ebData[i].pathID && a->ebData[stB].pieceID == a->ebData[i].pieceID
+           && a->ebData[stB].tEn == a->ebData[i].tSt) {
         usePathID=a->ebData[i].pathID;
         usePieceID=a->ebData[i].pieceID;
         useT=a->ebData[i].tSt;
@@ -706,7 +706,7 @@ Shape::MakeTweak (int mode, Shape *a, double power, JoinType join, double miter,
       Inverse (i);
   }
 
-  if ( _has_back_data ) {
+  if (_has_back_data) {
     for (int i = 0; i < a->numberOfEdges(); i++)
     {
       int nEd=AddEdge (a->swsData[i].stPt, a->swsData[i].enPt);
@@ -828,9 +828,9 @@ Shape::MakeOffset (Shape * a, double dec, JoinType join, double miter, bool do_p
     int   usePathID=-1;
     int   usePieceID=0;
     double useT=0.0;
-    if ( a->_has_back_data ) {
-      if ( a->ebData[i].pathID >= 0 && a->ebData[stB].pathID == a->ebData[i].pathID && a->ebData[stB].pieceID == a->ebData[i].pieceID
-           && a->ebData[stB].tEn == a->ebData[i].tSt ) {
+    if (a->_has_back_data) {
+      if (a->ebData[i].pathID >= 0 && a->ebData[stB].pathID == a->ebData[i].pathID && a->ebData[stB].pieceID == a->ebData[i].pieceID
+           && a->ebData[stB].tEn == a->ebData[i].tSt) {
         usePathID=a->ebData[i].pathID;
         usePieceID=a->ebData[i].pieceID;
         useT=a->ebData[i].tSt;
@@ -862,7 +862,7 @@ Shape::MakeOffset (Shape * a, double dec, JoinType join, double miter, bool do_p
       Inverse (i);
   }
 
-  if ( _has_back_data ) {
+  if (_has_back_data) {
     for (int i = 0; i < a->numberOfEdges(); i++)
     {
       int nEd=AddEdge (a->swsData[i].stPt, a->swsData[i].enPt);
@@ -961,21 +961,21 @@ Shape::AddContour (Path * dest, int nbP, Path * *orig, int startBord, int curBor
           dest->LineTo (getPoint(getEdge(bord).en).x);
           bord = swdData[bord].suivParc;
         }
-	      if (bord >= 0 && getPoint(getEdge(bord).st).totalDegree() > 2 ) {
+	      if (bord >= 0 && getPoint(getEdge(bord).st).totalDegree() > 2) {
           dest->ForcePoint ();
-        } else if ( bord >= 0 && getPoint(getEdge(bord).st).oldDegree > 2 && getPoint(getEdge(bord).st).totalDegree() == 2)  {
-          if ( splitWhenForced ) {
+        } else if (bord >= 0 && getPoint(getEdge(bord).st).oldDegree > 2 && getPoint(getEdge(bord).st).totalDegree() == 2)  {
+          if (splitWhenForced) {
             // pour les coupures
             dest->ForcePoint ();
          } else {
-            if ( _has_back_data ) {
+            if (_has_back_data) {
               int   prevEdge=getPoint(getEdge(bord).st).incidentEdge[FIRST];
               int   nextEdge=getPoint(getEdge(bord).st).incidentEdge[LAST];
-              if ( getEdge(prevEdge).en != getEdge(bord).st ) {
+              if (getEdge(prevEdge).en != getEdge(bord).st) {
                 int  swai=prevEdge;prevEdge=nextEdge;nextEdge=swai;
               }
-              if ( ebData[prevEdge].pieceID == ebData[nextEdge].pieceID  && ebData[prevEdge].pathID == ebData[nextEdge].pathID ) {
-                if ( fabs(ebData[prevEdge].tEn-ebData[nextEdge].tSt) < 0.05 ) {
+              if (ebData[prevEdge].pieceID == ebData[nextEdge].pieceID  && ebData[prevEdge].pathID == ebData[nextEdge].pathID) {
+                if (fabs(ebData[prevEdge].tEn-ebData[nextEdge].tSt) < 0.05) {
                 } else {
                   dest->ForcePoint ();
                 }
@@ -1083,17 +1083,17 @@ Shape::ReFormeArcTo (int bord, int /*curBord*/, Path * dest, Path * from)
     nLarge = true;
   else
     nLarge = false;
-  /*	if ( delta < 0 ) delta=-delta;
-	if ( ndelta < 0 ) ndelta=-ndelta;
-	if ( ( delta < M_PI && ndelta < M_PI ) || ( delta >= M_PI && ndelta >= M_PI ) ) {
-		if ( ts < te ) {
+  /*	if (delta < 0) delta=-delta;
+	if (ndelta < 0) ndelta=-ndelta;
+	if ((delta < M_PI && ndelta < M_PI) || (delta >= M_PI && ndelta >= M_PI)) {
+		if (ts < te) {
 		} else {
 			nClockwise=!(nClockwise);
 		}
 	} else {
     //		nLarge=!(nLarge);
 		nLarge=false; // c'est un sous-segment -> l'arc ne peut que etre plus petit
-		if ( ts < te ) {
+		if (ts < te) {
 		} else {
 			nClockwise=!(nClockwise);
 		}

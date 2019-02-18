@@ -60,7 +60,7 @@ public:
     void setMeasureCanvasText(bool is_angle, double precision, double amount, double fontsize, Glib::ustring unit_name, Geom::Point position, guint32 background, CanvasTextAnchorPositionEnum text_anchor, bool to_item, bool to_phantom, Inkscape::XML::Node *measure_repr);
     void setMeasureCanvasItem(Geom::Point position, bool to_item, bool to_phantom, Inkscape::XML::Node *measure_repr);
     void setMeasureCanvasControlLine(Geom::Point start, Geom::Point end, bool to_item, bool to_phantom, Inkscape::CtrlLineType ctrl_line_type, Inkscape::XML::Node *measure_repr);
-    void setLabelText(const char *value, Geom::Point pos, double fontsize, Geom::Coord angle, guint32 background , Inkscape::XML::Node *measure_repr = nullptr, CanvasTextAnchorPositionEnum text_anchor = TEXT_ANCHOR_CENTER );
+    void setLabelText(const char *value, Geom::Point pos, double fontsize, Geom::Coord angle, guint32 background , Inkscape::XML::Node *measure_repr = nullptr, CanvasTextAnchorPositionEnum text_anchor = TEXT_ANCHOR_CENTER);
     void knotStartMovedHandler(SPKnot */*knot*/, Geom::Point const &ppointer, guint state);
     void knotEndMovedHandler(SPKnot */*knot*/, Geom::Point const &ppointer, guint state);
     void knotClickHandler(SPKnot *knot, guint state);

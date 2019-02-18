@@ -167,7 +167,7 @@ void ToolBase::sp_event_context_update_cursor() {
 		this->cursor_shape,
                 SP_RGBA32_C_COMPOSE(fillColor, fillOpacity),
                 SP_RGBA32_C_COMPOSE(strokeColor, strokeOpacity)
-            ));
+));
         }
         w->get_window()->set_cursor(cursor);
         w->get_display()->flush();
@@ -405,7 +405,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
                                      GDK_KEY_PRESS_MASK    | GDK_KEY_RELEASE_MASK    |
                                      GDK_BUTTON_RELEASE_MASK |
                                      GDK_POINTER_MOTION_MASK,
-                                     nullptr, event->button.time );
+                                     nullptr, event->button.time);
                 // sp_canvas_item_hide (desktop->drawing);
 
             } else if (event->button.state & GDK_SHIFT_MASK) {
@@ -453,7 +453,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
 
     case GDK_MOTION_NOTIFY:
         if (panning) {
-            if (panning == 4 && !xp && !yp ) {
+            if (panning == 4 && !xp && !yp) {
                 // <Space> + mouse panning started, save location and grab canvas
                 xp = event->motion.x;
                 yp = event->motion.y;
@@ -469,7 +469,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
             if ((panning == 2 && !(event->motion.state & GDK_BUTTON2_MASK))
                     || (panning == 1 && !(event->motion.state & GDK_BUTTON1_MASK))
                     || (panning == 3 && !(event->motion.state & GDK_BUTTON3_MASK))) {
-                /* Gdk seems to lose button release for us sometimes :-( */
+                /* Gdk seems to lose button release for us sometimes :-(*/
                 panning = 0;
                 sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate), event->button.time);
                 ret = TRUE;
@@ -791,7 +791,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
             /* ctrl + shift, rotate */
 
             double rotate_inc = prefs->getDoubleLimited(
-                    "/options/rotateincrement/value", 15, 1, 90, "°" );
+                    "/options/rotateincrement/value", 15, 1, 90, "°");
             rotate_inc *= M_PI/180.0;
 
             switch (event->scroll.direction) {

@@ -129,7 +129,7 @@ StarToolbar::StarToolbar(SPDesktop *desktop) :
         _spoke_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
         _spoke_adj->signal_value_changed().connect(sigc::mem_fun(*this, &StarToolbar::proportion_value_changed));
 
-        if ( !isFlatSided ) {
+        if (!isFlatSided) {
             _spoke_item->set_visible(true);
         } else {
             _spoke_item->set_visible(false);
@@ -209,7 +209,7 @@ StarToolbar::side_mode_changed(int mode)
 
     if (DocumentUndo::getUndoSensitive(_desktop->getDocument())) {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        prefs->setBool( "/tools/shapes/star/isflatsided", flat );
+        prefs->setBool("/tools/shapes/star/isflatsided", flat);
     }
 
     // quit if run by the attr_changed listener
@@ -232,7 +232,7 @@ StarToolbar::side_mode_changed(int mode)
         SPItem *item = *i;
         if (SP_IS_STAR(item)) {
             Inkscape::XML::Node *repr = item->getRepr();
-            repr->setAttribute("inkscape:flatsided", flat ? "true" : "false" );
+            repr->setAttribute("inkscape:flatsided", flat ? "true" : "false");
             item->updateRepr();
             modmade = true;
         }
@@ -533,14 +533,14 @@ StarToolbar::event_attr_changed(Inkscape::XML::Node *repr, gchar const *name,
         toolbar->_roundedness_adj->set_value(rounded);
     } else if (!strcmp(name, "inkscape:flatsided")) {
         char const *flatsides = repr->attribute("inkscape:flatsided");
-        if ( flatsides && !strcmp(flatsides,"false") ) {
+        if (flatsides && !strcmp(flatsides,"false")) {
             toolbar->_flat_item_buttons[1]->set_active();
             toolbar->_spoke_item->set_visible(true);
         } else {
             toolbar->_flat_item_buttons[0]->set_active();
             toolbar->_spoke_item->set_visible(false);
         }
-    } else if ((!strcmp(name, "sodipodi:r1") || !strcmp(name, "sodipodi:r2")) && (!isFlatSided) ) {
+    } else if ((!strcmp(name, "sodipodi:r1") || !strcmp(name, "sodipodi:r2")) && (!isFlatSided)) {
         gdouble r1 = 1.0;
         gdouble r2 = 1.0;
         sp_repr_get_double(repr, "sodipodi:r1", &r1);

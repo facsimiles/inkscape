@@ -127,7 +127,7 @@ SPDocument * XSLT::open(Inkscape::Extension::Input */*module*/,
     xmlDocPtr result = xsltApplyStylesheet(_stylesheet, filein, params);
     xmlFreeDoc(filein);
 
-    Inkscape::XML::Document * rdoc = sp_repr_do_read( result, SP_SVG_NS_URI);
+    Inkscape::XML::Document * rdoc = sp_repr_do_read(result, SP_SVG_NS_URI);
     xmlFreeDoc(result);
 
     if (rdoc == nullptr) {

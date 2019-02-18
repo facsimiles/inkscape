@@ -72,7 +72,7 @@ void lpeeditor_selection_modified (Inkscape::Selection * selection, guint /*flag
 static void lpe_style_button(Gtk::Button& btn, char const* iconName)
 {
     GtkWidget *child = sp_get_icon_image(iconName, GTK_ICON_SIZE_SMALL_TOOLBAR);
-    gtk_widget_show( child );
+    gtk_widget_show(child);
     btn.add(*Gtk::manage(Glib::wrap(child)));
     btn.set_relief(Gtk::RELIEF_NONE);
 }
@@ -115,7 +115,7 @@ LivePathEffectEditor::LivePathEffectEditor()
     effectlist_vbox.pack_start(scrolled_window, Gtk::PACK_EXPAND_WIDGET);
     effectlist_vbox.pack_end(toolbar_hbox, Gtk::PACK_SHRINK);
     effectcontrol_eventbox.add_events(Gdk::BUTTON_RELEASE_MASK);
-    effectcontrol_eventbox.signal_button_release_event().connect(sigc::mem_fun(*this, &LivePathEffectEditor::_on_button_release) );
+    effectcontrol_eventbox.signal_button_release_event().connect(sigc::mem_fun(*this, &LivePathEffectEditor::_on_button_release));
     effectcontrol_eventbox.add(effectcontrol_vbox);
     effectcontrol_frame.add(effectcontrol_eventbox);
 
@@ -137,12 +137,12 @@ LivePathEffectEditor::LivePathEffectEditor()
 
     // Add toolbar items to toolbar
     toolbar_hbox.set_layout (Gtk::BUTTONBOX_END);
-    toolbar_hbox.add( button_add );
-    toolbar_hbox.set_child_secondary( button_add , true);
-    toolbar_hbox.add( button_remove );
-    toolbar_hbox.set_child_secondary( button_remove , true);
-    toolbar_hbox.add( button_up );
-    toolbar_hbox.add( button_down );
+    toolbar_hbox.add(button_add);
+    toolbar_hbox.set_child_secondary(button_add , true);
+    toolbar_hbox.add(button_remove);
+    toolbar_hbox.set_child_secondary(button_remove , true);
+    toolbar_hbox.add(button_up);
+    toolbar_hbox.add(button_down);
 
     //Create the Tree model:
     effectlist_store = Gtk::ListStore::create(columns);
@@ -151,17 +151,17 @@ LivePathEffectEditor::LivePathEffectEditor()
 
     // Handle tree selections
     effectlist_selection = effectlist_view.get_selection();
-    effectlist_selection->signal_changed().connect( sigc::mem_fun(*this, &LivePathEffectEditor::on_effect_selection_changed) );
+    effectlist_selection->signal_changed().connect(sigc::mem_fun(*this, &LivePathEffectEditor::on_effect_selection_changed));
 
     //Add the visibility icon column:
-    Inkscape::UI::Widget::ImageToggler *eyeRenderer = Gtk::manage( new Inkscape::UI::Widget::ImageToggler(
-        INKSCAPE_ICON("object-visible"), INKSCAPE_ICON("object-hidden")) );
+    Inkscape::UI::Widget::ImageToggler *eyeRenderer = Gtk::manage(new Inkscape::UI::Widget::ImageToggler(
+        INKSCAPE_ICON("object-visible"), INKSCAPE_ICON("object-hidden")));
     int visibleColNum = effectlist_view.append_column("is_visible", *eyeRenderer) - 1;
-    eyeRenderer->signal_toggled().connect( sigc::mem_fun(*this, &LivePathEffectEditor::on_visibility_toggled) );
+    eyeRenderer->signal_toggled().connect(sigc::mem_fun(*this, &LivePathEffectEditor::on_visibility_toggled));
     eyeRenderer->property_activatable() = true;
     Gtk::TreeViewColumn* col = effectlist_view.get_column(visibleColNum);
-    if ( col ) {
-        col->add_attribute( eyeRenderer->property_active(), columns.col_visible );
+    if (col) {
+        col->add_attribute(eyeRenderer->property_active(), columns.col_visible);
     }
 
     //Add the effect name column:
@@ -179,7 +179,7 @@ LivePathEffectEditor::LivePathEffectEditor()
     button_up.signal_clicked().connect(sigc::mem_fun(*this, &LivePathEffectEditor::onUp));
     button_down.signal_clicked().connect(sigc::mem_fun(*this, &LivePathEffectEditor::onDown));
 
-    desktopChangeConn = deskTrack.connectDesktopChanged( sigc::mem_fun(*this, &LivePathEffectEditor::setDesktop) );
+    desktopChangeConn = deskTrack.connectDesktopChanged(sigc::mem_fun(*this, &LivePathEffectEditor::setDesktop));
     deskTrack.connect(GTK_WIDGET(gobj()));
 
     show_all_children();
@@ -291,15 +291,15 @@ LivePathEffectEditor::onSelectionChanged(Inkscape::Selection *sel)
     current_lpeitem = nullptr;
     effectlist_store->clear();
 
-    if ( sel && !sel->isEmpty() ) {
+    if (sel && !sel->isEmpty()) {
         SPItem *item = sel->singleItem();
-        if ( item ) {
+        if (item) {
             SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(item);
-            if ( lpeitem ) {
+            if (lpeitem) {
                 effect_list_reload(lpeitem);
                 current_lpeitem = lpeitem;
                 set_sensitize_all(true);
-                if ( lpeitem->hasPathEffect() ) {
+                if (lpeitem->hasPathEffect()) {
                     Inkscape::LivePathEffect::Effect *lpe = lpeitem->getCurrentLPE();
                     if (lpe) {
                         showParams(*lpe);
@@ -316,11 +316,11 @@ LivePathEffectEditor::onSelectionChanged(Inkscape::Selection *sel)
                 }
             } else {
                 SPUse *use = dynamic_cast<SPUse *>(item);
-                if ( use ) {
+                if (use) {
                     // test whether linked object is supported by the CLONE_ORIGINAL LPE
                     SPItem *orig = use->get_original();
-                    if ( dynamic_cast<SPShape *>(orig) ||
-                         dynamic_cast<SPText *>(orig) )
+                    if (dynamic_cast<SPShape *>(orig) ||
+                         dynamic_cast<SPText *>(orig))
                     {
                         // Note that an SP_USE cannot have an LPE applied, so we only need to worry about the "add effect" case.
                         set_sensitize_all(true);
@@ -357,9 +357,9 @@ LivePathEffectEditor::effect_list_reload(SPLPEItem *lpeitem)
 
     PathEffectList effectlist = lpeitem->getEffectList();
     PathEffectList::iterator it;
-    for( it = effectlist.begin() ; it!=effectlist.end(); ++it)
+    for(it = effectlist.begin() ; it!=effectlist.end(); ++it)
     {
-        if ( !(*it)->lpeobject ) {
+        if (!(*it)->lpeobject) {
             continue;
         }
 
@@ -383,7 +383,7 @@ LivePathEffectEditor::setDesktop(SPDesktop *desktop)
 {
     Panel::setDesktop(desktop);
 
-    if ( desktop == current_desktop ) {
+    if (desktop == current_desktop) {
         return;
     }
 
@@ -397,9 +397,9 @@ LivePathEffectEditor::setDesktop(SPDesktop *desktop)
     if (desktop) {
         Inkscape::Selection *selection = desktop->getSelection();
         selection_changed_connection = selection->connectChanged(
-            sigc::bind (sigc::ptr_fun(&lpeeditor_selection_changed), this ) );
+            sigc::bind (sigc::ptr_fun(&lpeeditor_selection_changed), this));
         selection_modified_connection = selection->connectModified(
-            sigc::bind (sigc::ptr_fun(&lpeeditor_selection_modified), this ) );
+            sigc::bind (sigc::ptr_fun(&lpeeditor_selection_modified), this));
 
         onSelectionChanged(selection);
     } else {
@@ -419,14 +419,14 @@ void
 LivePathEffectEditor::onAdd()
 {
     Inkscape::Selection *sel = _getSelection();
-    if ( sel && !sel->isEmpty() ) {
+    if (sel && !sel->isEmpty()) {
         SPItem *item = sel->singleItem();
         if (item) {
-            if ( dynamic_cast<SPLPEItem *>(item) ) {
+            if (dynamic_cast<SPLPEItem *>(item)) {
                 // show effectlist dialog
                 using Inkscape::UI::Dialog::LivePathEffectAdd;
                 LivePathEffectAdd::show(current_desktop);
-                if ( !LivePathEffectAdd::isApplied()) {
+                if (!LivePathEffectAdd::isApplied()) {
                     return;
                 }
 
@@ -438,7 +438,7 @@ LivePathEffectEditor::onAdd()
                 }
 
                 // If item is a SPRect, convert it to path first:
-                if ( dynamic_cast<SPRect *>(item) ) {
+                if (dynamic_cast<SPRect *>(item)) {
                     sel->toCurves();
                     item = sel->singleItem(); // get new item
                 }
@@ -452,14 +452,14 @@ LivePathEffectEditor::onAdd()
                 onSelectionChanged(sel);
             } else {
                 SPUse *use = dynamic_cast<SPUse *>(item);
-                if ( use ) {
+                if (use) {
                     // item is a clone. do not show effectlist dialog.
                     // convert to path, apply CLONE_ORIGINAL LPE, link it to the cloned path
 
                     // test whether linked object is supported by the CLONE_ORIGINAL LPE
                     SPItem *orig = use->get_original();
-                    if ( dynamic_cast<SPShape *>(orig) ||
-                         dynamic_cast<SPText *>(orig) )
+                    if (dynamic_cast<SPShape *>(orig) ||
+                         dynamic_cast<SPText *>(orig))
                     {
                         // select original
                         sel->set(orig);
@@ -501,14 +501,14 @@ void
 LivePathEffectEditor::onRemove()
 {
     Inkscape::Selection *sel = _getSelection();
-    if ( sel && !sel->isEmpty() ) {
+    if (sel && !sel->isEmpty()) {
         SPItem *item = sel->singleItem();
         SPLPEItem *lpeitem  = dynamic_cast<SPLPEItem *>(item);
-        if ( lpeitem ) {
+        if (lpeitem) {
             lpeitem->removeCurrentPathEffect(false);
             current_lperef = nullptr;
-            DocumentUndo::done( current_desktop->getDocument(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
-                                _("Remove path effect") );
+            DocumentUndo::done(current_desktop->getDocument(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
+                                _("Remove path effect"));
             lpe_list_locked = false;
             onSelectionChanged(sel);
         }
@@ -519,14 +519,14 @@ LivePathEffectEditor::onRemove()
 void LivePathEffectEditor::onUp()
 {
     Inkscape::Selection *sel = _getSelection();
-    if ( sel && !sel->isEmpty() ) {
+    if (sel && !sel->isEmpty()) {
         SPItem *item = sel->singleItem();
         SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(item);
-        if ( lpeitem ) {
+        if (lpeitem) {
             lpeitem->upCurrentPathEffect();
 
-            DocumentUndo::done( current_desktop->getDocument(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
-                                _("Move path effect up") );
+            DocumentUndo::done(current_desktop->getDocument(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
+                                _("Move path effect up"));
             
             effect_list_reload(lpeitem);
         }
@@ -536,14 +536,14 @@ void LivePathEffectEditor::onUp()
 void LivePathEffectEditor::onDown()
 {
     Inkscape::Selection *sel = _getSelection();
-    if ( sel && !sel->isEmpty() ) {
+    if (sel && !sel->isEmpty()) {
         SPItem *item = sel->singleItem();
         SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(item);
-        if ( lpeitem ) {
+        if (lpeitem) {
             lpeitem->downCurrentPathEffect();
 
-            DocumentUndo::done( current_desktop->getDocument(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
-                                _("Move path effect down") );
+            DocumentUndo::done(current_desktop->getDocument(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
+                                _("Move path effect down"));
             effect_list_reload(lpeitem);
         }
     }
@@ -572,7 +572,7 @@ void LivePathEffectEditor::on_effect_selection_changed()
                 showParams(*effect);
                 //To reload knots and helper paths
                 Inkscape::Selection *sel = _getSelection();
-                if ( sel && !sel->isEmpty() ) {
+                if (sel && !sel->isEmpty()) {
                     SPItem *item = sel->singleItem();
                     if (item) {
                         sel->clear();
@@ -585,7 +585,7 @@ void LivePathEffectEditor::on_effect_selection_changed()
     }
 }
 
-void LivePathEffectEditor::on_visibility_toggled( Glib::ustring const& str )
+void LivePathEffectEditor::on_visibility_toggled(Glib::ustring const& str)
 {
 
     Gtk::TreeModel::Children::iterator iter = effectlist_view.get_model()->get_iter(str);
@@ -593,21 +593,21 @@ void LivePathEffectEditor::on_visibility_toggled( Glib::ustring const& str )
 
     LivePathEffect::LPEObjectReference * lpeobjref = row[columns.lperef];
 
-    if ( lpeobjref && lpeobjref->lpeobject->get_lpe() ) {
+    if (lpeobjref && lpeobjref->lpeobject->get_lpe()) {
         bool newValue = !row[columns.col_visible];
         row[columns.col_visible] = newValue;
         /* FIXME: this explicit writing to SVG is wrong. The lpe_item should have a method to disable/enable an effect within its stack.
          * So one can call:  lpe_item->setActive(lpeobjref->lpeobject); */
         lpeobjref->lpeobject->get_lpe()->getRepr()->setAttribute("is_visible", newValue ? "true" : "false");
         Inkscape::Selection *sel = _getSelection();
-        if ( sel && !sel->isEmpty() ) {
+        if (sel && !sel->isEmpty()) {
             SPItem *item = sel->singleItem();
             SPLPEItem *lpeitem  = dynamic_cast<SPLPEItem *>(item);
-            if ( lpeitem ) {
+            if (lpeitem) {
                 lpeobjref->lpeobject->get_lpe()->doOnVisibilityToggled(lpeitem);
             }
         }
-        DocumentUndo::done( current_desktop->getDocument(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
+        DocumentUndo::done(current_desktop->getDocument(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
                             newValue ? _("Activate path effect") : _("Deactivate path effect"));
     }
 }
