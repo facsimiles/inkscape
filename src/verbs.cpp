@@ -1422,23 +1422,39 @@ void LayerVerb::perform(SPAction *action, void *data)
         case SP_VERB_LAYER_DELETE: {
             if ( dt->currentLayer() != dt->currentRoot() ) {
                 dt->getSelection()->clear();
-                SPObject *old_layer=dt->currentLayer();
+                SPObject *old_layer = dt->currentLayer();
+                SPObject *old_parent = old_layer->parent;
 
-                SPObject *survivor=Inkscape::next_layer(dt->currentRoot(), old_layer);
-                if (!survivor) {
-                    survivor = Inkscape::previous_layer(dt->currentRoot(), old_layer);
-                }
+                SPObject *survivor = Inkscape::next_layer(dt->currentRoot(), old_layer);
 
-                if (survivor == old_layer->lastChild()) {
-                    //oops: layer_fns messed up. BADLY.
-		    survivor = nullptr;
-	       	}
                 // Deleting the old layer before switching layers is a hack to trigger the
                 // listeners of the deletion event (as happens when old_layer is deleted using the
                 // xml editor).  See
                 // http://sourceforge.net/tracker/index.php?func=detail&aid=1339397&group_id=93438&atid=604306
                 //
                 old_layer->deleteObject();
+                if (survivor != nullptr) {
+                    // There is a next layer.
+                    // Keep going forward till we find a layer with the same depth as old_layer
+                    if (survivor == old_parent) {
+                        auto prev = Inkscape::previous_layer(dt->currentRoot(), survivor);
+                        if (prev != nullptr && prev->parent == old_parent) {
+                            survivor = prev;
+                        }
+                    } else {
+                        while (survivor->parent != old_parent) {
+                            survivor = Inkscape::next_layer(dt->currentRoot(), survivor);
+                        }
+                    }
+                } else {
+                    // There is no next layer.
+                    // Go to the previous layer, if it exists.
+                    survivor = old_parent;
+                    if (survivor != nullptr) {
+                        survivor = Inkscape::previous_layer(dt->currentRoot(), survivor);
+                    }
+                }
+
                 if (survivor) {
                     dt->setCurrentLayer(survivor);
                 }
