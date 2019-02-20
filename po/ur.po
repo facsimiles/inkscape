@@ -24780,7 +24780,7 @@ msgstr ""
 
 #: ../src/ui/dialog/pixelartdialog.cpp:192
 msgid "Favors connections that are part of a long curve"
-msgstr ""
+msgstr "رابطوں میں مدد کرتا ہے جو لمبی وکر کا حصہ ہیں"
 
 #: ../src/ui/dialog/pixelartdialog.cpp:203
 msgid "_Islands (weight):"
@@ -24876,7 +24876,7 @@ msgid ""
 "document before continuing.\n"
 "\n"
 "Continue the procedure (without saving)?"
-msgstr ""
+msgstr "عمل (بغیر بچانے کے بغیر) جاری رکھیں؟"
 
 #: ../src/ui/dialog/pixelartdialog.cpp:498
 #, fuzzy
@@ -25430,7 +25430,7 @@ msgstr "سائز"
 #: ../src/ui/dialog/swatches.cpp:731
 msgctxt "Swatches height"
 msgid "Tiny"
-msgstr ""
+msgstr "ٹنی"
 
 #: ../src/ui/dialog/swatches.cpp:732
 #, fuzzy
@@ -25453,7 +25453,7 @@ msgstr "بڑا"
 #: ../src/ui/dialog/swatches.cpp:735
 msgctxt "Swatches height"
 msgid "Huge"
-msgstr ""
+msgstr "بہت بڑا"
 
 #: ../src/ui/dialog/swatches.cpp:757
 #, fuzzy
@@ -25506,7 +25506,7 @@ msgstr "كوئی نہیں"
 #: ../src/ui/dialog/swatches.cpp:800
 msgctxt "Swatches border"
 msgid "Solid"
-msgstr ""
+msgstr "ٹھوس"
 
 #: ../src/ui/dialog/swatches.cpp:801
 #, fuzzy
@@ -25528,7 +25528,7 @@ msgstr "دستاویز كو پرنٹ كریں"
 
 #: ../src/ui/dialog/symbols.cpp:76
 msgid "All symbol sets"
-msgstr ""
+msgstr "تمام علامات کا تعین"
 
 #. ******************* Symbol Sets ************************
 #: ../src/ui/dialog/symbols.cpp:134
