@@ -36,7 +36,7 @@ msgstr "اسكیلیبل ویكٹر گرافیكس امیجس تخلیق اور 
 
 #: ../org.inkscape.Inkscape.desktop.in.h:5
 msgid "image;editor;vector;drawing;"
-msgstr ""
+msgstr "تصویر، ایڈیٹر؛ ویکٹر؛ ڈرائنگ؛"
 
 #: ../org.inkscape.Inkscape.desktop.in.h:6
 #, fuzzy
@@ -301,7 +301,7 @@ msgstr "اوئل پینٹینگ"
 #: ../src/extension/internal/filter/paint.h:878
 #: ../src/extension/internal/filter/paint.h:982
 msgid "Image Paint and Draw"
-msgstr ""
+msgstr "تصویر پینٹ اور ڈرا"
 
 #: ../share/filters/filters.svg.h:76
 msgid "Simulate oil painting style"
@@ -573,7 +573,7 @@ msgstr "دھنك موم"
 
 #: ../share/filters/filters.svg.h:176
 msgid "Waxy texture which keeps its iridescence through color fill change"
-msgstr ""
+msgstr "مکی ساخت جسے رنگ بھرنے میں تبدیلی کی طرف سے اس کی عدم اطمینان رکھتا ہے"
 "موم جیسی بناوٹ جو رنگ بھركر كیے جانے والے بدلاؤ سے اس كی دھنك جیسی چمك كو "
 "بنائے ركھتا ہے۔"
 
@@ -618,8 +618,8 @@ msgstr "پتھر كی دیوار"
 
 #: ../share/filters/filters.svg.h:196
 msgid "Stone wall texture to use with not too saturated colors"
-msgstr ""
-"پتھر كی دیوار جیسی بناوٹ جس كا استعمال كم سیچوریٹڈ رنگوں كے ساتھ كیا جاتا ہے۔"
+msgstr "پتھروں کی دیواروں کی ساخت بھی نہیں سنتری ہوئی رنگوں کے ساتھ استعمال کرنے کے لئے"
+
 
 #: ../share/filters/filters.svg.h:198
 #, fuzzy
@@ -654,8 +654,7 @@ msgid "Metallized Paint"
 msgstr " فلزاتی پینٹ"
 
 #: ../share/filters/filters.svg.h:212
-msgid ""
-"Metallized effect with a soft lighting, slightly translucent at the edges"
+msgid "Metallized effect with a soft lighting, slightly translucent at the edges"
 msgstr "ایك سافٹ لائٹینگ كے ساتھ  فلزاتی اثر، كناروں پر ہلكہ خالص"
 
 #: ../share/filters/filters.svg.h:214
@@ -716,8 +715,7 @@ msgstr "مكعب"
 
 #: ../share/filters/filters.svg.h:236
 msgid "Scattered cubes; adjust the Morphology primitive to vary size"
-msgstr ""
-"بكھرے ہوئے مكعب; سائز میں تبدیلی كے لئے پہلے مارفولوجی پریمیٹیو كو ایڈجسٹ "
+msgstr "بكھرے ہوئے مكعب; سائز میں تبدیلی كے لئے پہلے مارفولوجی پریمیٹیو كو ایڈجسٹ "
 "كریں۔"
 
 #: ../share/filters/filters.svg.h:238
@@ -772,8 +770,7 @@ msgstr "كھردرا كاغذ"
 
 #: ../share/filters/filters.svg.h:260
 msgid "Aquarelle paper effect which can be used for pictures as for objects"
-msgstr ""
-"اكیورل كاغذ اثر جس كا استعمال تصویروں كے لئے كیا جاسكتا ہے جیسا كہ آبجیكٹ كے "
+msgstr "اكیورل كاغذ اثر جس كا استعمال تصویروں كے لئے كیا جاسكتا ہے جیسا كہ آبجیكٹ كے "
 "لئے ہوتا ہے۔"
 
 #: ../share/filters/filters.svg.h:262
@@ -784,8 +781,7 @@ msgstr "كھردرا اور چمكدار"
 #: ../share/filters/filters.svg.h:264
 msgid ""
 "Crumpled glossy paper effect which can be used for pictures as for objects"
-msgstr ""
-"سلوٹ دار چمكیلا كاغذ كا اثر جس كا استعمال تصویروں كے لئے كیا جاسكتا ہے جیسا "
+msgstr "سلوٹ دار چمكیلا كاغذ كا اثر جس كا استعمال تصویروں كے لئے كیا جاسكتا ہے جیسا "
 "كہ آبجیكٹ كے لئے ہوتا ہے۔"
 
 #: ../share/filters/filters.svg.h:266
@@ -831,8 +827,7 @@ msgstr "الیكٹرونك مائكرواسكوپی"
 #: ../share/filters/filters.svg.h:284
 msgid ""
 "Bevel, crude light, discoloration and glow like in electronic microscopy"
-msgstr ""
-"بیول، خام روشنی، دھبا اور چمك جیسا كہ الیكٹرونك مائكرواسكوپی میں ہوتا ہے۔"
+msgstr "بیول، خام روشنی، دھبا اور چمك جیسا كہ الیكٹرونك مائكرواسكوپی میں ہوتا ہے۔"
 
 #: ../share/filters/filters.svg.h:286
 msgid "Tartan"
@@ -921,11 +916,9 @@ msgid "Evanescent"
 msgstr "جلد مرجھا جانے والا"
 
 #: ../share/filters/filters.svg.h:324
-msgid ""
-"Blur the contents of objects, preserving the outline and adding progressive "
+msgid "Blur the contents of objects, preserving the outline and adding progressive "
 "transparency at edges"
-msgstr ""
-"آوٹ لائن كو محفوظ كرتے ہوئے اور كناروں پر بڑھتی شفافیت جوڑتے ہوئے آبجیكٹ كے "
+msgstr "آوٹ لائن كو محفوظ كرتے ہوئے اور كناروں پر بڑھتی شفافیت جوڑتے ہوئے آبجیكٹ كے "
 "كنٹینٹ كو دھندلا كریں۔"
 
 #: ../share/filters/filters.svg.h:326
@@ -969,8 +962,7 @@ msgstr "كٹ آوٹ گلو"
 
 #: ../share/filters/filters.svg.h:344
 msgid "In and out glow with a possible offset and colorizable flood"
-msgstr ""
-"ایك ممكن آف سیٹ اور رنگین كرنے كے قابل فلڈ كے ساتھ اندرونی اور باہری چمك"
+msgstr "ایك ممكن آف سیٹ اور رنگین كرنے كے قابل فلڈ كے ساتھ اندرونی اور باہری چمك"
 
 #: ../share/filters/filters.svg.h:346
 msgid "Dark Emboss"
@@ -1083,7 +1075,7 @@ msgstr "3D ٹیڑھا كیا گیا سنگ مرمر كی بناوٹ "
 
 #: ../share/filters/filters.svg.h:398
 msgid "3D Wood"
-msgstr ""
+msgstr "3D لکڑی"
 
 #: ../share/filters/filters.svg.h:400
 msgid "3D warped, fibered wood texture"
@@ -1240,8 +1232,7 @@ msgstr "چوینگ گم"
 msgid ""
 "Creates colorizable blotches which smoothly flow over the edges of the lines "
 "at their crossings"
-msgstr ""
-"رنگ كے قابل دانے بناتا ہے جو لائنوں كے كناروں میں اُن كے كراسینگس پر آسانی سے "
+msgstr "رنگ كے قابل دانے بناتا ہے جو لائنوں كے كناروں میں اُن كے كراسینگس پر آسانی سے "
 "تخلیق كرتا ہے۔"
 
 #: ../share/filters/filters.svg.h:434
@@ -1251,8 +1242,7 @@ msgstr "گہرا اور چمك"
 
 #: ../share/filters/filters.svg.h:436
 msgid "Darkens the edge with an inner blur and adds a flexible glow"
-msgstr ""
-"ایك اندرونی دھنلاپن كے ساتھ كنارے كو كالا كرتا ہے اور ایك لچیلا چمك شامل "
+msgstr "ایك اندرونی دھنلاپن كے ساتھ كنارے كو كالا كرتا ہے اور ایك لچیلا چمك شامل "
 "كرتا ہے۔"
 
 #: ../share/filters/filters.svg.h:438
@@ -1280,8 +1270,7 @@ msgstr "پُرانا پوسٹ كارڈ"
 
 #: ../share/filters/filters.svg.h:448
 msgid "Slightly posterize and draw edges like on old printed postcards"
-msgstr ""
-"ہلكے پوسٹر كی شكل دیں اور پُرانے پرنٹ كیے گئے پوسٹ كارڈوں كی طرہ كناروں كو "
+msgstr "ہلكے پوسٹر كی شكل دیں اور پُرانے پرنٹ كیے گئے پوسٹ كارڈوں كی طرہ كناروں كو "
 "ڈرا كریں۔"
 
 #: ../share/filters/filters.svg.h:450
@@ -1308,10 +1297,8 @@ msgid "Smear Transparency"
 msgstr "سمیر شفافیت"
 
 #: ../share/filters/filters.svg.h:460
-msgid ""
-"Paint objects with a transparent turbulence which turns around color edges"
-msgstr ""
-"آبجیكٹس كو ایك شفاف ٹربولنس كے ساتھ پینٹ كرتا ہے جو رنگین كناروں كے اطراف "
+msgid "Paint objects with a transparent turbulence which turns around color edges"
+msgstr "آبجیكٹس كو ایك شفاف ٹربولنس كے ساتھ پینٹ كرتا ہے جو رنگین كناروں كے اطراف "
 "بدل جاتا ہے۔ "
 
 #: ../share/filters/filters.svg.h:462
@@ -1337,11 +1324,9 @@ msgid "Embossed Leather"
 msgstr "نقشی دار چمڑا"
 
 #: ../share/filters/filters.svg.h:472
-msgid ""
-"Combine a HSL edges detection bump with a leathery or woody and colorizable "
+msgid "Combine a HSL edges detection bump with a leathery or woody and colorizable "
 "texture"
-msgstr ""
-"ایك HSL كناروں كو دریافت كرنے والے بمپ كو ایك چمڑی جیسے یا لكڑی جیسے اور "
+msgstr "ایك HSL كناروں كو دریافت كرنے والے بمپ كو ایك چمڑی جیسے یا لكڑی جیسے اور "
 "رنگنے كے قابل بناوٹ كے ساتھ جوڑیں۔"
 
 #: ../share/filters/filters.svg.h:474
@@ -1357,11 +1342,9 @@ msgid "Plastify"
 msgstr "پلاسٹك جیسا بنائیں"
 
 #: ../share/filters/filters.svg.h:480
-msgid ""
-"HSL edges detection bump with a wavy reflective surface effect and variable "
+msgid "HSL edges detection bump with a wavy reflective surface effect and variable "
 "crumple"
-msgstr ""
-"لہرے دار عكسی سطح كے اثر اور متغیر سلوٹ كے ساتھ HSL  كناروں كو دریافت كرنے "
+msgstr "لہرے دار عكسی سطح كے اثر اور متغیر سلوٹ كے ساتھ HSL  كناروں كو دریافت كرنے "
 "والا بمپ"
 
 #: ../share/filters/filters.svg.h:482
@@ -1369,10 +1352,8 @@ msgid "Plaster"
 msgstr "پلاسٹر"
 
 #: ../share/filters/filters.svg.h:484
-msgid ""
-"Combine a HSL edges detection bump with a matte and crumpled surface effect"
-msgstr ""
-"ایك HSL  كناروں كو دریافت كرنے والے بمپ كو ایك میٹے اور سلوٹوں والی سظہ كے "
+msgid "Combine a HSL edges detection bump with a matte and crumpled surface effect"
+msgstr "ایك HSL  كناروں كو دریافت كرنے والے بمپ كو ایك میٹے اور سلوٹوں والی سظہ كے "
 "اثر كے ساتھ شامل كریں۔"
 
 #: ../share/filters/filters.svg.h:486
@@ -1382,8 +1363,7 @@ msgstr "كھردری شفافیت"
 
 #: ../share/filters/filters.svg.h:488
 msgid "Adds a turbulent transparency which displaces pixels at the same time"
-msgstr ""
-"ایك ٹربولنٹ شفافیت كو  شامل كرتا ہے جو اس كے ساتھ ہی پكسلس كو بے دخل كرتا ہے۔"
+msgstr "ایك ٹربولنٹ شفافیت كو  شامل كرتا ہے جو اس كے ساتھ ہی پكسلس كو بے دخل كرتا ہے۔"
 
 #: ../share/filters/filters.svg.h:490
 msgid "Gouache"
@@ -1636,11 +1616,11 @@ msgstr "پكسیلس"
 
 #: ../share/filters/filters.svg.h:592
 msgid "Reduce or remove antialiasing around shapes"
-msgstr ""
+msgstr "شکلوں کے ارد گرد اینٹیلائزیشن کو کم یا ہٹا دیں"
 
 #: ../share/filters/filters.svg.h:594
 msgid "Basic Diffuse Bump"
-msgstr ""
+msgstr "بنیادی ڈفیوائس ٹمپ"
 
 #: ../share/filters/filters.svg.h:596
 #, fuzzy
@@ -1649,7 +1629,7 @@ msgstr " اثرات نكالیں"
 
 #: ../share/filters/filters.svg.h:598
 msgid "Basic Specular Bump"
-msgstr ""
+msgstr "بنیادی نردجیکرن ٹمپ"
 
 #: ../share/filters/filters.svg.h:600
 #, fuzzy
@@ -1658,11 +1638,11 @@ msgstr "اسپیكولر اكسپوننٹ"
 
 #: ../share/filters/filters.svg.h:602
 msgid "Basic Two Lights Bump"
-msgstr ""
+msgstr "بنیادی دو لائٹس بمپ"
 
 #: ../share/filters/filters.svg.h:604
 msgid "Two types of lighting emboss effect"
-msgstr ""
+msgstr "دو قسم کے روشنی کے علاوہ آلودگی کا اثر"
 
 #: ../share/filters/filters.svg.h:606
 #, fuzzy
@@ -1671,7 +1651,7 @@ msgstr "كینوس"
 
 #: ../share/filters/filters.svg.h:608 ../share/filters/filters.svg.h:616
 msgid "Painting canvas emboss effect"
-msgstr ""
+msgstr "کینوس پینٹنگ اثر اثر انداز"
 
 #: ../share/filters/filters.svg.h:610
 #, fuzzy
@@ -1685,11 +1665,11 @@ msgstr "لائیو پاتھ اثر كو چسپاں كریں۔"
 
 #: ../share/filters/filters.svg.h:614
 msgid "Rough Canvas Painting"
-msgstr ""
+msgstr "کسی نہ کسی طرح کینوس پینٹنگ"
 
 #: ../share/filters/filters.svg.h:618
 msgid "Paper Bump"
-msgstr ""
+msgstr "کاغذ ٹمپ"
 
 #: ../share/filters/filters.svg.h:620
 #, fuzzy
@@ -1708,11 +1688,11 @@ msgstr "پاتھس میں متن كو تبدیل كریں"
 
 #: ../share/filters/filters.svg.h:626
 msgid "Blend Opposites"
-msgstr ""
+msgstr "جھگڑا متنازعہ"
 
 #: ../share/filters/filters.svg.h:628
 msgid "Blend an image with its hue opposite"
-msgstr ""
+msgstr "اس تصویر پر غلط استعمال کی اطلاع دیتے ہوئے ایرر آ گیا ہے "
 
 #: ../share/filters/filters.svg.h:630
 #, fuzzy
@@ -1721,7 +1701,7 @@ msgstr "ہیو روٹیٹ"
 
 #: ../share/filters/filters.svg.h:632
 msgid "Fades hue progressively to white"
-msgstr ""
+msgstr "سفید ہونے کے لئے آہستہ آہستہ دھندلا"
 
 #: ../share/filters/filters.svg.h:634
 #: ../src/extension/internal/bitmap/swirl.cpp:38
@@ -1771,7 +1751,7 @@ msgstr "كینوس شفافیت"
 
 #: ../share/filters/filters.svg.h:652
 msgid "Adds a white opaque background"
-msgstr ""
+msgstr "ایک سفید اوپیرا پس منظر جوڑتا ہے"
 
 #: ../share/filters/filters.svg.h:654
 #, fuzzy
@@ -1782,31 +1762,31 @@ msgstr "بلر موڈ "
 msgid ""
 "Overlays two copies with different blur amounts and modifiable blend and "
 "composite"
-msgstr ""
-
+msgstr "مختلف دھندلاہٹ کے ساتھ دو کاپیاں اور ترمیم کرنے والی مرکب اور ""
+"جامع"
 #: ../share/filters/filters.svg.h:658
 msgid "Image Drawing Basic"
-msgstr ""
+msgstr "تصویری ڈرائنگ بنیادی"
 
 #: ../share/filters/filters.svg.h:660
 msgid "Enhance and redraw color edges in 1 bit black and white"
-msgstr ""
+msgstr "1 سا سیاہ اور سفید میں رنگ کناروں کو بڑھانے اور ریڈرا"
 
 #: ../share/filters/filters.svg.h:662
 msgid "Poster Draw"
-msgstr ""
+msgstr "پوسٹر ڈرا"
 
 #: ../share/filters/filters.svg.h:664
 msgid "Enhance and redraw edges around posterized areas"
-msgstr ""
+msgstr "پوسٹر علاقوں کے ارد گرد کناروں کو بڑھانے اور ریڑھائیں"
 
 #: ../share/filters/filters.svg.h:666
 msgid "Cross Noise Poster"
-msgstr ""
+msgstr "کراس شور پوسٹر "
 
 #: ../share/filters/filters.svg.h:668
 msgid "Overlay with a small scale screen like noise"
-msgstr ""
+msgstr ""شور کی طرح ایک چھوٹے پیمانے پر اسکرین کے ساتھ اوورلے"
 
 #: ../share/filters/filters.svg.h:670
 msgid "Cross Noise Poster B"
