@@ -24,3 +24,6 @@ inkscape_devel_source.tar.bz2
 /*.snap
 /*_source.tar.bz2
 
+
+# @truckmonth
+_build_macos_native/
