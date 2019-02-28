@@ -12,11 +12,23 @@
 #ifndef INKSCAPE_DIALOG_LIVEPATHEFFECT_ADD_H
 #define INKSCAPE_DIALOG_LIVEPATHEFFECT_ADD_H
 
-#include <gtkmm/dialog.h>
-#include <gtkmm/liststore.h>
-#include <gtkmm/treeview.h>
-#include <gtkmm/scrolledwindow.h>
 #include "live_effects/effect-enum.h"
+#include <gtkmm/adjustment.h>
+#include <gtkmm/box.h>
+#include <gtkmm/builder.h>
+#include <gtkmm/dialog.h>
+#include <gtkmm/eventbox.h>
+#include <gtkmm/flowbox.h>
+#include <gtkmm/flowboxchild.h>
+#include <gtkmm/image.h>
+#include <gtkmm/label.h>
+#include <gtkmm/overlay.h>
+#include <gtkmm/popover.h>
+#include <gtkmm/scrolledwindow.h>
+#include <gtkmm/searchentry.h>
+#include <gtkmm/stylecontext.h>
+#include <gtkmm/switch.h>
+#include <gtkmm/viewport.h>
 
 class SPDesktop;
 
@@ -28,40 +40,45 @@ namespace Dialog {
  * A dialog widget to list the live path effects that can be added
  *
  */
-class LivePathEffectAdd : public Gtk::Dialog {
-public:
+class LivePathEffectAdd {
+  public:
     LivePathEffectAdd();
-    ~LivePathEffectAdd() override = default;
+    ~LivePathEffectAdd() = default;
+    ;
 
     /**
      * Show the dialog
      */
     static void show(SPDesktop *desktop);
-
     /**
      * Returns true is the "Add" button was pressed
      */
-    static bool isApplied() {
-        return instance().applied;
-    }
+    static bool isApplied() { return instance()._applied; }
 
-    /**
-     * Return the data associated with the currently selected item
-     */
-    static const Util::EnumData<LivePathEffect::EffectType>* getActiveData();
+    static const LivePathEffect::EnumEffectData<LivePathEffect::EffectType> *getActiveData();
 
-protected:
-
+  protected:
     /**
      * Close button was clicked
      */
     void onClose();
-
+    bool on_filter(Gtk::FlowBoxChild *child);
+    int on_sort(Gtk::FlowBoxChild *child1, Gtk::FlowBoxChild *child2);
+    void on_search();
+    void on_activate(Gtk::FlowBoxChild *child);
+    bool pop_description(GdkEventButton *evt, Glib::RefPtr<Gtk::Builder> builder_effect);
+    bool hide_pop_description(GdkEventButton *evt);
+    bool fav_toggler(GdkEventButton *evt, Glib::RefPtr<Gtk::Builder> builder_effect);
+    bool apply(GdkEventButton *evt, Glib::RefPtr<Gtk::Builder> builder_effect,
+               const LivePathEffect::EnumEffectData<LivePathEffect::EffectType> *to_add);
+    bool show_fav_toggler(GdkEventButton *evt);
+    bool mouseover(GdkEventCrossing *evt, GtkWidget *wdg);
+    bool mouseout(GdkEventCrossing *evt, GtkWidget *wdg);
+    void reload_effect_list();
     /**
      * Add button was clicked
      */
     void onAdd();
-
     /**
      * Tree was clicked
      */
@@ -72,43 +89,33 @@ protected:
      */
     void onKeyEvent(GdkEventKey* evt);
 private:
-
-    Gtk::TreeView     effectlist_treeview;
-    Gtk::ScrolledWindow scrolled_window;
-    Gtk::Button       add_button;
-    Gtk::Button       close_button;
-
-    class ModelColumns : public Gtk::TreeModel::ColumnRecord
-    {
-      public:
-        ModelColumns()
-        {
-            add(name);
-            //add(desc);
-            add(data);
-        }
-        ~ModelColumns() override = default;
-
-        Gtk::TreeModelColumn<Glib::ustring> name;
-        /**
-         * TODO - Get detailed descriptions of each Effect to show in the dialog
-         */
-        //Gtk::TreeModelColumn<Glib::ustring> desc;
-        Gtk::TreeModelColumn<const Util::EnumData<LivePathEffect::EffectType>*> data;
-    };
-
-    ModelColumns _columns;
-    Glib::RefPtr<Gtk::ListStore> effectlist_store;
-    const Util::EnumDataConverter<LivePathEffect::EffectType>& converter;
-
-    bool applied;
-
-    static LivePathEffectAdd &instance() {
-        static LivePathEffectAdd instance_;
-        return instance_;
-    }
-    LivePathEffectAdd(LivePathEffectAdd const &) = delete; // no copy
-    LivePathEffectAdd &operator=(LivePathEffectAdd const &) = delete; // no assign
+  Gtk::Button _add_button;
+  Gtk::Button _close_button;
+  Gtk::Dialog *_LPEDialogSelector;
+  Glib::RefPtr<Gtk::Builder> _builder;
+  Gtk::FlowBox *_LPESelectorFlowBox;
+  Gtk::Popover *_LPESelectorEffectInfoPop;
+  Gtk::EventBox *_LPESelectorEffectEventFavShow;
+  Gtk::EventBox *_LPESelectorEffectInfoEventBox;
+  Gtk::Switch *_LPEExperimental;
+  Gtk::SearchEntry *_LPEFilter;
+  Gtk::ScrolledWindow *_LPEScrolled;
+  Gtk::Label *_LPEInfo;
+  Gtk::Box *_LPESelector;
+  guint _visiblelpe;
+  Glib::ustring _item_type;
+  const LivePathEffect::EnumEffectData<LivePathEffect::EffectType> *_to_add;
+  bool _showfavs;
+  bool _applied;
+  class Effect;
+  const LivePathEffect::EnumEffectDataConverter<LivePathEffect::EffectType> &converter;
+  static LivePathEffectAdd &instance()
+  {
+      static LivePathEffectAdd instance_;
+      return instance_;
+  }
+  LivePathEffectAdd(LivePathEffectAdd const &) = delete;            // no copy
+  LivePathEffectAdd &operator=(LivePathEffectAdd const &) = delete; // no assign
 };
  
 } // namespace Dialog

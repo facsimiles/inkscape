@@ -687,7 +687,6 @@ void InkscapePreferences::symbolicAddClass()
     auto const screen = Gdk::Screen::get_default();
     auto provider = Gtk::CssProvider::create();
     Glib::ustring css_str = "";
-
     gchar colornamed[64];
     gchar colornamed_inverse[64];
     int colorset = prefs->getInt("/theme/symbolicColor", 0x000000ff);

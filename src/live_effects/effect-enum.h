@@ -57,7 +57,7 @@ enum EffectType {
     POWERMASK,
     PTS2ELLIPSE,
     OFFSET,
-    DASH_STROKE,
+    DASHED_STROKE,
     DOEFFECTSTACK_TEST,
     ANGLE_BISECTOR,
     CIRCLE_WITH_RADIUS,
@@ -72,11 +72,204 @@ enum EffectType {
     RECURSIVE_SKELETON,
     TANGENT_TO_CURVE,
     TEXT_LABEL,
-    INVALID_LPE // This must be last (I made it such that it is not needed anymore I think..., Don't trust on it being last. - johan)
+    INVALID_LPE // This must be last (I made it such that it is not needed anymore I think..., Don't trust on it being
+                // last. - johan)
 };
 
-extern const Util::EnumData<EffectType> LPETypeData[];  /// defined in effect.cpp
-extern const Util::EnumDataConverter<EffectType> LPETypeConverter; /// defined in effect.cpp
+template <typename E>
+struct EnumEffectData {
+    E id;
+    const Glib::ustring label;
+    const Glib::ustring key;
+    const Glib::ustring icon;
+    const Glib::ustring untranslated_label;
+    const Glib::ustring description;
+    const bool on_path;
+    const bool on_shape;
+    const bool on_group;
+    const bool on_image;
+    const bool on_text;
+    const bool experimental;
+};
+
+const Glib::ustring empty_string("");
+
+/**
+ * Simplified management of enumerations of LPE items with UI labels.
+ *
+ * @note that get_id_from_key and get_id_from_label return 0 if it cannot find an entry for that key string.
+ * @note that get_label and get_key return an empty string when the requested id is not in the list.
+ */
+template <typename E>
+class EnumEffectDataConverter {
+  public:
+    typedef EnumEffectData<E> Data;
+
+    EnumEffectDataConverter(const EnumEffectData<E> *cd, const unsigned int length)
+        : _length(length)
+        , _data(cd)
+    {
+    }
+
+    E get_id_from_label(const Glib::ustring &label) const
+    {
+        for (unsigned int i = 0; i < _length; ++i) {
+            if (_data[i].label == label)
+                return _data[i].id;
+        }
+
+        return (E)0;
+    }
+
+    E get_id_from_key(const Glib::ustring &key) const
+    {
+        for (unsigned int i = 0; i < _length; ++i) {
+            if (_data[i].key == key)
+                return _data[i].id;
+        }
+
+        return (E)0;
+    }
+
+    bool is_valid_key(const Glib::ustring &key) const
+    {
+        for (unsigned int i = 0; i < _length; ++i) {
+            if (_data[i].key == key)
+                return true;
+        }
+
+        return false;
+    }
+
+    bool is_valid_id(const E id) const
+    {
+        for (unsigned int i = 0; i < _length; ++i) {
+            if (_data[i].id == id)
+                return true;
+        }
+        return false;
+    }
+
+    const Glib::ustring &get_label(const E id) const
+    {
+        for (unsigned int i = 0; i < _length; ++i) {
+            if (_data[i].id == id)
+                return _data[i].label;
+        }
+
+        return empty_string;
+    }
+
+    const Glib::ustring &get_key(const E id) const
+    {
+        for (unsigned int i = 0; i < _length; ++i) {
+            if (_data[i].id == id)
+                return _data[i].key;
+        }
+
+        return empty_string;
+    }
+
+    const Glib::ustring &get_icon(const E id) const
+    {
+        for (unsigned int i = 0; i < _length; ++i) {
+            if (_data[i].id == id)
+                return _data[i].icon;
+        }
+
+        return empty_string;
+    }
+
+    const Glib::ustring &get_untranslated_label(const E id) const
+    {
+        for (unsigned int i = 0; i < _length; ++i) {
+            if (_data[i].id == id)
+                return _data[i].untranslated_label;
+        }
+
+        return empty_string;
+    }
+
+    const Glib::ustring &get_description(const E id) const
+    {
+        for (unsigned int i = 0; i < _length; ++i) {
+            if (_data[i].id == id)
+                return _data[i].description;
+        }
+
+        return empty_string;
+    }
+
+    const bool get_on_path(const E id) const
+    {
+        for (unsigned int i = 0; i < _length; ++i) {
+            if (_data[i].id == id)
+                return _data[i].on_path;
+        }
+
+        return false;
+    }
+
+    const bool get_on_shape(const E id) const
+    {
+        for (unsigned int i = 0; i < _length; ++i) {
+            if (_data[i].id == id)
+                return _data[i].on_shape;
+        }
+
+        return false;
+    }
+
+    const bool get_on_group(const E id) const
+    {
+        for (unsigned int i = 0; i < _length; ++i) {
+            if (_data[i].id == id)
+                return _data[i].on_group;
+        }
+
+        return false;
+    }
+
+    const bool get_on_image(const E id) const
+    {
+        for (unsigned int i = 0; i < _length; ++i) {
+            if (_data[i].id == id)
+                return _data[i].on_image;
+        }
+
+        return false;
+    }
+
+    const bool get_on_text(const E id) const
+    {
+        for (unsigned int i = 0; i < _length; ++i) {
+            if (_data[i].id == id)
+                return _data[i].on_text;
+        }
+
+        return false;
+    }
+
+    const bool get_experimental(const E id) const
+    {
+        for (unsigned int i = 0; i < _length; ++i) {
+            if (_data[i].id == id)
+                return _data[i].experimental;
+        }
+
+        return false;
+    }
+
+    const EnumEffectData<E> &data(const unsigned int i) const { return _data[i]; }
+
+    const unsigned int _length;
+
+  private:
+    const EnumEffectData<E> *_data;
+};
+
+extern const EnumEffectData<EffectType> LPETypeData[];             /// defined in effect.cpp
+extern const EnumEffectDataConverter<EffectType> LPETypeConverter; /// defined in effect.cpp
 
 } //namespace LivePathEffect
 } //namespace Inkscape

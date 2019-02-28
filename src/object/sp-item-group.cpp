@@ -939,27 +939,7 @@ sp_group_perform_patheffect(SPGroup *group, SPGroup *top_group, Inkscape::LivePa
                 top_group->applyToMask(clipmaskto, lpe);
             }
             if (sub_shape) {
-                SPCurve * c = nullptr;
-                // If item is a SPRect, convert it to path first:
-                if ( dynamic_cast<SPRect *>(sub_shape) ) {
-                    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-                    if (desktop) {
-                        Inkscape::Selection *sel = desktop->getSelection();
-                        if ( sel && !sel->isEmpty() ) {
-                            sel->clear();
-                            sel->add(SP_ITEM(sub_shape));
-                            sel->toCurves();
-                            sub_item = sel->singleItem();
-                            sub_shape = dynamic_cast<SPShape *>(sub_item);
-                            if (!sub_shape) {
-                                continue;
-                            }
-                            sel->clear();
-                            sel->add(SP_ITEM(top_group));
-                        }
-                    }
-                }
-                c = sub_shape->getCurve();
+                SPCurve * c = sub_shape->getCurve();
                 bool success = false;
                 // only run LPEs when the shape has a curve defined
                 if (c) {

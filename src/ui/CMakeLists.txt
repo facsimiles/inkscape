@@ -104,7 +104,7 @@ set(ui_SRC
 	dialog/filedialog.cpp
 	dialog/filedialogimpl-gtkmm.cpp
 	dialog/fill-and-stroke.cpp
-    dialog/filter-editor.cpp
+        dialog/filter-editor.cpp
 	dialog/filter-effects-dialog.cpp
 	dialog/find.cpp
 	dialog/floating-behavior.cpp
@@ -137,9 +137,9 @@ set(ui_SRC
 	dialog/spellcheck.cpp
     dialog/styledialog.cpp
 	dialog/svg-fonts-dialog.cpp
+        dialog/svg-preview.cpp
 	dialog/swatches.cpp
 	dialog/symbols.cpp
-	dialog/tags.cpp
 	dialog/template-load-tab.cpp
 	dialog/template-widget.cpp
 	dialog/text-edit.cpp
@@ -302,11 +302,11 @@ set(ui_SRC
 	dialog/print.h
 	dialog/prototype.h
 	dialog/spellcheck.h
-    dialog/styledialog.h
+        dialog/styledialog.h
 	dialog/svg-fonts-dialog.h
+        dialog/svg-preview.h
 	dialog/swatches.h
 	dialog/symbols.h
-	dialog/tags.h
 	dialog/template-load-tab.h
 	dialog/template-widget.h
 	dialog/text-edit.h

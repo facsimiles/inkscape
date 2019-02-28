@@ -38,12 +38,9 @@
 #include "ui/dialog-events.h"
 #include "ui/icon-loader.h"
 #include "ui/icon-names.h"
-#include "ui/interface.h"
 #include "ui/tools/tool-base.h"
 
 #include "widgets/sp-xmlview-tree.h"
-#include "ui/dialog/attrdialog.h"
-#include "ui/dialog/cssdialog.h"
 
 namespace Inkscape {
 namespace UI {
@@ -188,9 +185,6 @@ XmlTree::XmlTree() :
     g_signal_connect (G_OBJECT(selection), "changed", G_CALLBACK (on_tree_select_row), this);
     g_signal_connect_after( G_OBJECT(tree), "tree_move", G_CALLBACK(after_tree_move), this);
 
-    //g_signal_connect( G_OBJECT(attributes), "row-value-changed", G_CALLBACK(on_attr_row_changed), this);
-    //g_signal_connect( G_OBJECT(attributes), "attr-value-edited", G_CALLBACK(on_attr_edited), this);
-
     xml_element_new_button.signal_clicked().connect(sigc::mem_fun(*this, &XmlTree::cmd_new_element_node));
     xml_text_new_button.signal_clicked().connect(sigc::mem_fun(*this, &XmlTree::cmd_new_text_node));
     xml_node_duplicate_button.signal_clicked().connect(sigc::mem_fun(*this, &XmlTree::cmd_duplicate_node));
@@ -201,8 +195,12 @@ XmlTree::XmlTree() :
     lower_node_button.signal_clicked().connect(sigc::mem_fun(*this, &XmlTree::cmd_lower_node));
 
     styles = new CssDialog;
-    css_box.pack_start(*styles);
-    flowbox_content->insert(&css_box, _("_Styles"), FLOWBOX_PAGE_STYLES, false, 200);
+    styles_box.pack_start(*styles);
+    flowbox_content->insert(&styles_box, _("_Styles"), FLOWBOX_PAGE_STYLES, false, 200);
+
+    selectors = new StyleDialog;
+    selectors_box.pack_start(*selectors);
+    flowbox_content->insert(&selectors_box, _("S_electors"), FLOWBOX_PAGE_SELECTORS, false, 200);
 
     desktopChangeConn = deskTrack.connectDesktopChanged( sigc::mem_fun(*this, &XmlTree::set_tree_desktop) );
     deskTrack.connect(GTK_WIDGET(gobj()));
@@ -285,7 +283,7 @@ void XmlTree::set_tree_document(SPDocument *document)
     if (current_document) {
 
         document_uri_set_connection = current_document->connectURISet(sigc::bind(sigc::ptr_fun(&on_document_uri_set), current_document));
-        on_document_uri_set( current_document->getURI(), current_document );
+        on_document_uri_set( current_document->getDocumentURI(), current_document );
         set_tree_repr(current_document->getReprRoot());
     } else {
         set_tree_repr(nullptr);
@@ -359,8 +357,12 @@ void XmlTree::propagate_tree_select(Inkscape::XML::Node *repr)
         repr->type() == Inkscape::XML::COMMENT_NODE)) 
     {
         attributes->setRepr(repr);
+        styles->setRepr(repr);
+        // selectors->setRepr(repr);
     } else {
         attributes->setRepr(nullptr);
+        styles->setRepr(nullptr);
+        // selectors->setRepr(nullptr);
     }
 }
 
@@ -410,10 +412,6 @@ void XmlTree::set_dt_select(Inkscape::XML::Node *repr)
 } // end of set_dt_select()
 
 
-/*void XmlTree::on_tree_select_row(GtkCTree *tree,
-                                 GtkCTreeNode *node,
-                                 gint column,
-                                 gpointer data)*/
 void XmlTree::on_tree_select_row(GtkTreeSelection *selection, gpointer data)
 {
     XmlTree *self = static_cast<XmlTree *>(data);
@@ -600,56 +598,6 @@ void XmlTree::on_tree_unselect_row_disable()
     raise_node_button.set_sensitive(false);
     lower_node_button.set_sensitive(false);
 }
-
-/*void XmlTree::on_attr_edited(SPXMLViewAttrList *attributes, const gchar * name, const gchar * value, gpointer data)
-{
-    XmlTree *self = static_cast<XmlTree *>(data);
-    g_assert(self->selected_repr != nullptr);
-
-    if(value) {
-        self->selected_repr->setAttribute(name, value, false);
-    } else {
-        self->selected_repr->setAttribute(name, nullptr, false);
-    }
-
-    SPObject *updated = self->current_document->getObjectByRepr(self->selected_repr);
-    if (updated) {
-        // force immediate update of dependent attributes
-        updated->updateRepr();
-    }
-
-    reinterpret_cast<SPObject *>(self->current_desktop->currentLayer())->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-
-    if(value) {
-        DocumentUndo::done(self->current_document, SP_VERB_DIALOG_XML_EDITOR, _("Change attribute"));
-        sp_xmlview_attr_list_select_row_by_key(attributes, name);
-    } else {
-        DocumentUndo::done(self->current_document, SP_VERB_DIALOG_XML_EDITOR, _("Delete attribute"));
-    }
-}*/
-
-//void XmlTree::on_attr_row_changed(SPXMLViewAttrList *attributes, const gchar * name, gpointer /*data*/)
-/*{
-    // Reselect the selected row if the data changes to refresh the attribute and value edit boxes.
-    GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(attributes));
-    GtkTreeIter   iter;
-    GtkTreeModel *model;
-    gchar *attr_name = nullptr;
-    if (gtk_tree_selection_get_selected (selection, &model, &iter)) {
-        gtk_tree_model_get (model, &iter, 0, &attr_name, -1);
-        if (gtk_list_store_iter_is_valid(GTK_LIST_STORE(model), &iter) ) {
-            if (!strcmp(name, attr_name)) {
-                gtk_tree_selection_unselect_all(selection);
-                gtk_tree_selection_select_iter(selection, &iter);
-            }
-        }
-    }
-
-    if (attr_name) {
-        g_free(attr_name);
-        attr_name = nullptr;
-    }
-}*/
 
 void XmlTree::onCreateNameChanged()
 {

@@ -63,10 +63,10 @@ namespace Dialog {
  * A treeview whose each row corresponds to an XML attribute of a selected node
  * New attribute can be added by clicking '+' at bottom of the attr pane. '-'
  */
-AttrDialog::AttrDialog():
-    UI::Widget::Panel("/dialogs/attr", SP_VERB_DIALOG_CSS),
-    _desktop(nullptr),
-    _repr(nullptr)
+AttrDialog::AttrDialog()
+    : UI::Widget::Panel("/dialogs/attr", SP_VERB_DIALOG_ATTR)
+    , _desktop(nullptr)
+    , _repr(nullptr)
 {
     set_size_request(20, 15);
     _mainBox.pack_start(_scrolledWindow, Gtk::PACK_EXPAND_WIDGET);
@@ -236,7 +236,7 @@ void AttrDialog::onAttrChanged(Inkscape::XML::Node *repr, const gchar * name, co
     }
     if (new_value) {
         if ((repr->type() == Inkscape::XML::TEXT_NODE || repr->type() == Inkscape::XML::COMMENT_NODE) &&
-             name != "content") 
+             strcmp(name, "content") != 0)
         {
             return;   
         } else {

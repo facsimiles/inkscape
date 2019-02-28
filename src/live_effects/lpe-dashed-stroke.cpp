@@ -2,9 +2,9 @@
 /*
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-#include "live_effects/lpe-dash-stroke.h"
-#include "2geom/pathvector.h"
+#include "live_effects/lpe-dashed-stroke.h"
 #include "2geom/path.h"
+#include "2geom/pathvector.h"
 #include "helper/geom.h"
 
 // TODO due to internal breakage in glibmm headers, this must be last:
@@ -13,14 +13,16 @@
 namespace Inkscape {
 namespace LivePathEffect {
 
-LPEDashStroke::LPEDashStroke(LivePathEffectObject *lpeobject)
-    : Effect(lpeobject),
-    numberdashes(_("Number of dashes"), _("Number of dashes"), "numberdashes", &wr, this, 3),
-    holefactor(_("Hole factor"), _("Hole factor"), "holefactor", &wr, this, 0.0),
-    splitsegments(_("Use segments"), _("Use segments"), "splitsegments", &wr, this, true),
-    halfextreme(_("Half start/end"), _("Start and end of each segment has half size"), "halfextreme", &wr, this, true),
-    unifysegment(_("Unify dashes"), _("Approximately unify the dashes length using the minimal length segment"), "unifysegment", &wr, this, true),
-    message(_("Info Box"), _("Important messages"), "message", &wr, this, _("Add <b>\"Fill Between Many LPE\"</b> to add fill."))
+LPEDashedStroke::LPEDashedStroke(LivePathEffectObject *lpeobject)
+    : Effect(lpeobject)
+    , numberdashes(_("Number of dashes"), _("Number of dashes"), "numberdashes", &wr, this, 3)
+    , holefactor(_("Hole factor"), _("Hole factor"), "holefactor", &wr, this, 0.0)
+    , splitsegments(_("Use segments"), _("Use segments"), "splitsegments", &wr, this, true)
+    , halfextreme(_("Half start/end"), _("Start and end of each segment has half size"), "halfextreme", &wr, this, true)
+    , unifysegment(_("Unify dashes"), _("Approximately unify the dashes length using the minimal length segment"),
+                   "unifysegment", &wr, this, true)
+    , message(_("Info Box"), _("Important messages"), "message", &wr, this,
+              _("Add <b>\"Fill Between Many LPE\"</b> to add fill."))
 {
     registerParameter(&numberdashes);
     registerParameter(&holefactor);
@@ -37,16 +39,13 @@ LPEDashStroke::LPEDashStroke(LivePathEffectObject *lpeobject)
     message.param_set_min_height(30);
 }
 
-LPEDashStroke::~LPEDashStroke() = default;
+LPEDashedStroke::~LPEDashedStroke() = default;
 
-void
-LPEDashStroke::doBeforeEffect (SPLPEItem const* lpeitem){
-}
+void LPEDashedStroke::doBeforeEffect(SPLPEItem const *lpeitem) {}
 
 ///Calculate the time in curve_in with a real time of A
 //TODO: find a better place to it
-double 
-LPEDashStroke::timeAtLength(double const A, Geom::Path const &segment)
+double LPEDashedStroke::timeAtLength(double const A, Geom::Path const &segment)
 {
     if ( A == 0 || segment[0].isDegenerate()) {
         return 0;
@@ -58,8 +57,7 @@ LPEDashStroke::timeAtLength(double const A, Geom::Path const &segment)
 
 ///Calculate the time in curve_in with a real time of A
 //TODO: find a better place to it
-double 
-LPEDashStroke::timeAtLength(double const A, Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2)
+double LPEDashedStroke::timeAtLength(double const A, Geom::Piecewise<Geom::D2<Geom::SBasis>> pwd2)
 {
     if ( A == 0 || pwd2.size() == 0) {
         return 0;
@@ -73,8 +71,8 @@ LPEDashStroke::timeAtLength(double const A, Geom::Piecewise<Geom::D2<Geom::SBasi
     return t;
 }
 
-Geom::PathVector
-LPEDashStroke::doEffect_path(Geom::PathVector const & path_in){
+Geom::PathVector LPEDashedStroke::doEffect_path(Geom::PathVector const &path_in)
+{
     Geom::PathVector const pv = pathv_to_linear_and_cubic_beziers(path_in);
     Geom::PathVector result;
     for (const auto & path_it : pv) {

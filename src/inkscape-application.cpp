@@ -13,6 +13,7 @@
 #include <glibmm/i18n.h>  // Internationalization
 
 #include "inkscape-application.h"
+#include "inkscape-window.h"
 
 #include "inkscape.h"             // Inkscape::Application
 #include "inkgc/gc-core.h"        // Garbage Collecting init
@@ -52,6 +53,153 @@ InkscapeApplication::InkscapeApplication()
     , _active_view(nullptr)
 {}
 
+ // Open a document, add it to app.
+SPDocument*
+InkscapeApplication::open_document(const Glib::RefPtr<Gio::File>& file)
+{
+    // Open file
+    bool cancelled = false;
+    SPDocument *document = ink_file_open(file, cancelled);
+
+    if (document) {
+        auto it = _documents.find(document);
+        if (it == _documents.end()) {
+            _documents[document] = std::vector<InkscapeWindow*>();
+        } else {
+            std::cerr << "ConcreteInkscapeApplication<T>::open_document: Document already opened: " << file->get_parse_name() << std::endl;
+        }
+    } else {
+        std::cerr << "ConcreteInkscapeApplication<T>::open_document: Failed to open: " << file->get_parse_name() << std::endl;
+    }
+
+    return document;
+}
+
+// Close a document, remove from app. No checking is done on modified status, etc.
+void
+InkscapeApplication::close_document(SPDocument* document)
+{
+    if (document) {
+        auto it = _documents.find(document);
+        if (it != _documents.end()) {
+            if (it->second.size() != 0) {
+                std::cerr << "ConcreteInkscapeApplication<T>::close_document: Window vector not empty!" << std::endl;
+            }
+            _documents.erase(it);
+        } else {
+            std::cerr << "ConcreteInkscapeApplication<T>::close_document: Document not registered with application." << std::endl;
+        }
+
+        delete document;
+
+    } else {
+        std::cerr << "ConcreteInkscapeApplication<T>::close_document: No document!" << std::endl;
+    }
+}
+
+// Fix up a document if necessary.
+void
+InkscapeApplication::fix_document(SPDocument* document)
+{
+    // TODO
+}
+
+// Take an already open document and create a new window, adding window to document map.
+// Document fix-up should already be done.
+InkscapeWindow*
+InkscapeApplication::open_window(SPDocument* document)
+{
+    InkscapeWindow* window = new InkscapeWindow(document);
+    // TODO Add window to application. (Instead of in InkscapeWindow constructor.)
+
+    SPDesktop* desktop = window->get_desktop();
+
+    // To be removed (add once per window)!
+    INKSCAPE.add_document(document);
+
+    // ActionContext should be removed once verbs are gone but we use it for now.
+    Inkscape::ActionContext context = INKSCAPE.action_context_for_document(document);
+    _active_selection = context.getSelection();
+    _active_view      = context.getView();
+    _active_document  = document;
+
+    auto it = _documents.find(document);
+    if (it != _documents.end()) {
+        it->second.push_back(window);
+    } else {
+        std::cerr << "ConcreteInkscapeApplication<T>::add_window: document not in map!" << std::endl;
+    }
+
+    return window;
+}
+
+
+void
+InkscapeApplication::close_window(InkscapeWindow* window)
+{
+    if (window) {
+
+        SPDocument* document = window->get_document();
+        if (document) {
+
+            // To be removed!
+            INKSCAPE.remove_document(document);
+
+            _active_selection = nullptr;
+            _active_view      = nullptr;
+            _active_document  = nullptr;
+
+            auto it = _documents.find(document);
+            if (it != _documents.end()) {
+                auto it2 = std::find(it->second.begin(), it->second.end(), window);
+                if (it2 != it->second.end()) {
+                    it->second.erase(it2);
+                } else {
+                    std::cerr << "ConcreteInkscapeApplication<T>::close_window: window not found!" << std::endl;
+                }
+            } else {
+                std::cerr << "ConcreteInkscapeApplication<T>::close_window: document not in map!" << std::endl;
+            }
+        } else {
+            std::cerr << "ConcreteInkscapeApplication<T>::close_window: No document!" << std::endl;
+        }
+
+        // TODO Remove window from application.
+
+    } else {
+        std::cerr << "ConcreteInkscapeApplication<T>::close_window: No window!" << std::endl;
+    }
+}
+
+
+/** Update windows in response to:
+ *  - New active window
+ *  - Document change
+ *  - Selection change
+ */
+void
+InkscapeApplication::update_windows(SPDocument* document)
+{
+    // Find windows:
+    auto it = _documents.find( document );
+    if (it != _documents.end()) {
+        std::vector<InkscapeWindow*> windows = it->second;
+        std::cout << "InkscapeApplication::update_windows: windows: " << windows.size() << std::endl;
+        // Loop over InkscapeWindows.
+        // Loop over DialogWindows. TBD
+    } else {
+        std::cout << "InkscapeApplication::update_windows: no windows found" << std::endl;
+    }
+}
+
+template<class T>
+ConcreteInkscapeApplication<T>&
+ConcreteInkscapeApplication<T>::get_instance()
+{
+    static ConcreteInkscapeApplication<T> instance;
+    return instance;
+}
+
 template<class T>
 ConcreteInkscapeApplication<T>::ConcreteInkscapeApplication()
     : T("org.inkscape.application.with_gui",
@@ -88,7 +236,7 @@ ConcreteInkscapeApplication<T>::ConcreteInkscapeApplication()
 
     // Query
     this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "version",             'V', N_("Print: Inkscape version."),                                                          "");
-    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "extensions-directory",'x', N_("Print: Extensions directory."),                                                      "");
+    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "extension-directory", 'x', N_("Print: Extensions directory."),                                                      "");
     this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "verb-list",          '\0', N_("Print: List verbs."),                                                                "");
 
     // Interface
@@ -252,6 +400,52 @@ ConcreteInkscapeApplication<T>::on_open(const Gio::Application::type_vec_files& 
     on_startup2();
 
     for (auto file : files) {
+        // Open file
+        SPDocument *document = open_document(file);
+        if (!document) continue;
+
+        // Add to Inkscape::Application...
+        INKSCAPE.add_document(document);
+        // ActionContext should be removed once verbs are gone but we use it for now.
+        Inkscape::ActionContext context = INKSCAPE.action_context_for_document(document);
+        _active_document  = document;
+        _active_selection = context.getSelection();
+        _active_view      = context.getView();
+
+        document->ensureUpToDate(); // Or queries don't work!
+
+        // process_file(file);
+        for (auto action: _command_line_actions) {
+            Gio::Application::activate_action( action.first, action.second );
+        }
+
+        if (_use_shell) {
+            shell2();
+        } else {
+            // Save... can't use action yet.
+            _file_export.do_export(document, file->get_path());
+        }
+
+        _active_document = nullptr;
+        _active_selection = nullptr;
+        _active_view = nullptr;
+
+        // Close file
+        INKSCAPE.remove_document(document);
+
+        close_document(document);
+    }
+}
+
+// Open document window for each file. Either this or on_activate() is called.
+// type_vec_files == std::vector<Glib::RefPtr<Gio::File> >
+template<>
+void
+ConcreteInkscapeApplication<Gtk::Application>::on_open(const Gio::Application::type_vec_files& files, const Glib::ustring& hint)
+{
+    on_startup2();
+
+    for (auto file : files) {
         if (_with_gui) {
             // Create a window for each file.
             SPDesktop* desktop = create_window(file);
@@ -264,27 +458,26 @@ ConcreteInkscapeApplication<T>::on_open(const Gio::Application::type_vec_files& 
             // Close window after we're done with file. This may not be the best way...
             // but we need to rewrite most of the window handling code so do this for now.
             if (_batch_process) {
-                desktop->getToplevel()->hide();
+                std::vector<Gtk::Window*> windows = get_windows();
+                remove_window(*windows[0]);  // There should be only one window (added in InkscapeWindow constructor).
+                                             // Eventually create_window() should return a pointer to the window, not the desktop.
             }
 
         } else {
 
             // Open file
-            bool cancelled = false;
-            SPDocument *doc = ink_file_open(file, cancelled);
-            if (!doc) continue;
+            SPDocument *document = open_document(file);
+            if (!document) continue;
 
             // Add to Inkscape::Application...
-            INKSCAPE.add_document(doc);
+            INKSCAPE.add_document(document);
             // ActionContext should be removed once verbs are gone but we use it for now.
-            Inkscape::ActionContext context = INKSCAPE.action_context_for_document(doc);
-            set_active_selection(context.getSelection());
-            set_active_view(     context.getView()     );
+            Inkscape::ActionContext context = INKSCAPE.action_context_for_document(document);
+            _active_document  = document;
+            _active_selection = context.getSelection();
+            _active_view      = context.getView();
 
-            doc->ensureUpToDate(); // Or queries don't work!
-
-            // Add to our application
-            _active_document = doc;
+            document->ensureUpToDate(); // Or queries don't work!
 
             // process_file(file);
             for (auto action: _command_line_actions) {
@@ -295,7 +488,7 @@ ConcreteInkscapeApplication<T>::on_open(const Gio::Application::type_vec_files& 
                 shell2();
             } else {
                 // Save... can't use action yet.
-                _file_export.do_export(doc, file->get_path());
+                _file_export.do_export(document, file->get_path());
             }
 
             _active_document = nullptr;
@@ -303,13 +496,11 @@ ConcreteInkscapeApplication<T>::on_open(const Gio::Application::type_vec_files& 
             _active_view = nullptr;
 
             // Close file
-            INKSCAPE.remove_document(doc);
-            delete doc;
+            INKSCAPE.remove_document(document);
+
+            close_document(document);
         }
     }
-
-    //Call the base class's implementation:
-    // Gtk::Application::on_open(files, hint);
 }
 
 
@@ -333,24 +524,25 @@ ConcreteInkscapeApplication<T>::create_window(const Glib::RefPtr<Gio::File>& fil
 }
 
 
+// This is identical to the function above. We comment it out for now (otherwise it must be moved before on_open().
+// template<>
+// SPDesktop*
+// ConcreteInkscapeApplication<Gtk::Application>::create_window(const Glib::RefPtr<Gio::File>& file)
+// {
+//     SPDesktop* desktop = nullptr;
+//     if (file) {
+//         sp_file_open(file->get_parse_name(), nullptr, false, true);
+//         desktop = SP_ACTIVE_DESKTOP;
+//     } else {
+//         desktop = sp_file_new_default();
+//     }
 
-template<>
-SPDesktop*
-ConcreteInkscapeApplication<Gtk::Application>::create_window(const Glib::RefPtr<Gio::File>& file)
-{
-    SPDesktop* desktop = nullptr;
-    if (file) {
-        sp_file_open(file->get_parse_name(), nullptr, false, true);
-        desktop = SP_ACTIVE_DESKTOP;
-    } else {
-        desktop = sp_file_new_default();
-    }
+//     _active_document = desktop->getDocument();
+//     // _documents.push_back(desktop->getDocument());
 
-    _active_document = desktop->getDocument();
-    // _documents.push_back(desktop->getDocument());
+//     return (desktop); // Temp: Need to track desktop for shell mode.
+// }
 
-    return (desktop); // Temp: Need to track desktop for shell mode.
-}
 
 template<class T>
 void
@@ -518,8 +710,8 @@ ConcreteInkscapeApplication<T>::on_handle_local_options(const Glib::RefPtr<Glib:
         return EXIT_SUCCESS;
     }
 
-    if (options->contains("extensions-directory")) {
-        T::activate_action("extensions-directory");
+    if (options->contains("extension-directory")) {
+        T::activate_action("extension-directory");
         return EXIT_SUCCESS;
     }
 

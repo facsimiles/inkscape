@@ -100,12 +100,16 @@ using Inkscape::UI::Dialog::ActionAlign;
 gchar *sp_action_get_title(SPAction const *action)
 {
     char const *src = action->name;
-    gchar *ret = g_new(gchar, strlen(src) + 1);
+    size_t const len = strlen(src);
+    gchar *ret = g_new(gchar, len + 1);
     unsigned ri = 0;
 
     for (unsigned si = 0 ; ; si++)  {
         int const c = src[si];
-        if ( c != '_' && c != '.' ) {
+        // Ignore Unicode Character "…" (U+2026)
+        if ( c == '\xE2' && si + 2 < len && src[si+1] == '\x80' && src[si+2] == '\xA6' ) {
+            si += 2;
+        } else if ( c != '_' && c != '.' ) {
             ret[ri] = c;
             ri++;
             if (c == '\0') {
@@ -212,25 +216,6 @@ public:
         Verb(code, id, name, tip, image, _("Object"))
     { }
 }; // ObjectVerb class
-
-/**
- * A class to encompass all of the verbs which deal with operations related to tags.
- */
-class TagVerb : public Verb {
-private:
-    static void perform(SPAction *action, void *mydata);
-protected:
-    SPAction *make_action(Inkscape::ActionContext const & context) override;
-public:
-    /** Use the Verb initializer with the same parameters. */
-    TagVerb(unsigned int const code,
-               gchar const *id,
-               gchar const *name,
-               gchar const *tip,
-               gchar const *image) :
-        Verb(code, id, name, tip, image, _("Tag"))
-    { }
-}; // TagVerb class
 
 /**
  * A class to encompass all of the verbs which deal with operations relative to context.
@@ -473,19 +458,6 @@ SPAction *LayerVerb::make_action(Inkscape::ActionContext const & context)
  * @return The built action.
  */
 SPAction *ObjectVerb::make_action(Inkscape::ActionContext const & context)
-{
-    return make_action_helper(context, &perform);
-}
-
-/**
- * Create an action for a \c TagVerb.
- *
- * Calls \c make_action_helper with the \c vector.
- *
- * @param  view  Which view the action should be created for.
- * @return The built action.
- */
-SPAction *TagVerb::make_action(Inkscape::ActionContext const & context)
 {
     return make_action_helper(context, &perform);
 }
@@ -1647,43 +1619,6 @@ void ObjectVerb::perform( SPAction *action, void *data)
 /**
  * Decode the verb code and take appropriate action.
  */
-void TagVerb::perform( SPAction *action, void *data)
-{
-    SPDesktop *dt = static_cast<SPDesktop*>(sp_action_get_view(action));
-    if (!dt)
-        return;
-
-    Inkscape::XML::Document * doc;
-    Inkscape::XML::Node * repr;
-    gchar *id;
-
-    switch (reinterpret_cast<std::size_t>(data)) {
-        case SP_VERB_TAG_NEW:
-            static int tag_suffix=1;
-            id=nullptr;
-            do {
-                g_free(id);
-                id = g_strdup_printf(_("Set %d"), tag_suffix++);
-            } while (dt->doc()->getObjectById(id));
-
-            doc = dt->doc()->getReprDoc();
-            repr = doc->createElement("inkscape:tag");
-            repr->setAttribute("id", id);
-            g_free(id);
-
-            dt->doc()->getDefs()->addChild(repr, nullptr);
-            Inkscape::DocumentUndo::done(dt->doc(), SP_VERB_DIALOG_TAGS, _("Create new selection set"));
-            break;
-        default:
-            break;
-    }
-
-} // end of sp_verb_action_tag_perform()
-
-
-/**
- * Decode the verb code and take appropriate action.
- */
 void ContextVerb::perform(SPAction *action, void *data)
 {
     SPDesktop *dt;
@@ -1882,7 +1817,15 @@ void ContextVerb::perform(SPAction *action, void *data)
         case SP_VERB_ALIGN_VERTICAL_CENTER:
         case SP_VERB_ALIGN_VERTICAL_BOTTOM:
         case SP_VERB_ALIGN_VERTICAL_TOP_TO_ANCHOR:
-        case SP_VERB_ALIGN_VERTICAL_HORIZONTAL_CENTER:
+        case SP_VERB_ALIGN_BOTH_TOP_LEFT:
+        case SP_VERB_ALIGN_BOTH_TOP_RIGHT:
+        case SP_VERB_ALIGN_BOTH_BOTTOM_RIGHT:
+        case SP_VERB_ALIGN_BOTH_BOTTOM_LEFT:
+        case SP_VERB_ALIGN_BOTH_TOP_LEFT_TO_ANCHOR:
+        case SP_VERB_ALIGN_BOTH_TOP_RIGHT_TO_ANCHOR:
+        case SP_VERB_ALIGN_BOTH_BOTTOM_RIGHT_TO_ANCHOR:
+        case SP_VERB_ALIGN_BOTH_BOTTOM_LEFT_TO_ANCHOR:
+        case SP_VERB_ALIGN_BOTH_CENTER:
             ActionAlign::do_verb_action(dt, verb);
             break;
 
@@ -2265,9 +2208,6 @@ void DialogVerb::perform(SPAction *action, void *data)
         case SP_VERB_DIALOG_OBJECTS:
             dt->_dlg_mgr->showDialog("ObjectsPanel");
             break;
-        case SP_VERB_DIALOG_TAGS:
-            dt->_dlg_mgr->showDialog("TagsPanel");
-            break;
         case SP_VERB_DIALOG_LIVE_PATH_EFFECT:
             dt->_dlg_mgr->showDialog("LivePathEffect");
             break;
@@ -2305,20 +2245,11 @@ void HelpVerb::perform(SPAction *action, void *data)
         case SP_VERB_HELP_ABOUT:
             sp_help_about();
             break;
-        case SP_VERB_HELP_ABOUT_EXTENSIONS: {
+        case SP_VERB_HELP_ABOUT_EXTENSIONS:
             // Inkscape::UI::Dialogs::ExtensionsPanel *panel = new Inkscape::UI::Dialogs::ExtensionsPanel();
             // panel->set_full(true);
             // show_panel( *panel, "dialogs.aboutextensions", SP_VERB_HELP_ABOUT_EXTENSIONS );
             break;
-        }
-
-        /*
-        case SP_VERB_SHOW_LICENSE:
-            // TRANSLATORS: See "tutorial-basic.svg" comment.
-            sp_help_open_tutorial(NULL, (gpointer) _("gpl-2.svg"));
-            break;
-        */
-
         case SP_VERB_HELP_MEMORY:
             INKSCAPE.dialogs_unhide();
             dt->_dlg_mgr->showDialog("Memory");
@@ -2336,45 +2267,35 @@ void TutorialVerb::perform(SPAction *action, void *data)
     g_return_if_fail(ensure_desktop_valid(action));
     switch (reinterpret_cast<std::size_t>(data)) {
         case SP_VERB_TUTORIAL_BASIC:
-            // TRANSLATORS: If you have translated the tutorial-basic.en.svgz file to your language,
-            // then translate this string as "tutorial-basic.LANG.svgz" (where LANG is your language
-            // code); otherwise leave as "tutorial-basic.svg".
-            sp_help_open_tutorial(nullptr, (gpointer)_("tutorial-basic.svg"));
+            sp_help_open_tutorial("tutorial-basic");
             break;
         case SP_VERB_TUTORIAL_SHAPES:
-            // TRANSLATORS: See "tutorial-basic.svg" comment.
-            sp_help_open_tutorial(nullptr, (gpointer)_("tutorial-shapes.svg"));
+            sp_help_open_tutorial("tutorial-shapes");
             break;
         case SP_VERB_TUTORIAL_ADVANCED:
-            // TRANSLATORS: See "tutorial-basic.svg" comment.
-            sp_help_open_tutorial(nullptr, (gpointer)_("tutorial-advanced.svg"));
+            sp_help_open_tutorial("tutorial-advanced");
             break;
 
 #if HAVE_POTRACE
         case SP_VERB_TUTORIAL_TRACING:
-            // TRANSLATORS: See "tutorial-basic.svg" comment.
-            sp_help_open_tutorial(nullptr, (gpointer)_("tutorial-tracing.svg"));
+            sp_help_open_tutorial("tutorial-tracing");
             break;
 #endif
 
         case SP_VERB_TUTORIAL_TRACING_PIXELART:
-            sp_help_open_tutorial(nullptr, (gpointer)_("tutorial-tracing-pixelart.svg"));
+            sp_help_open_tutorial("tutorial-tracing-pixelart");
             break;
         case SP_VERB_TUTORIAL_CALLIGRAPHY:
-            // TRANSLATORS: See "tutorial-basic.svg" comment.
-            sp_help_open_tutorial(nullptr, (gpointer)_("tutorial-calligraphy.svg"));
+            sp_help_open_tutorial("tutorial-calligraphy");
             break;
         case SP_VERB_TUTORIAL_INTERPOLATE:
-            // TRANSLATORS: See "tutorial-basic.svg" comment.
-            sp_help_open_tutorial(nullptr, (gpointer)_("tutorial-interpolate.svg"));
+            sp_help_open_tutorial("tutorial-interpolate");
             break;
         case SP_VERB_TUTORIAL_DESIGN:
-            // TRANSLATORS: See "tutorial-basic.svg" comment.
-            sp_help_open_tutorial(nullptr, (gpointer)_("tutorial-elements.svg"));
+            sp_help_open_tutorial("tutorial-elements");
             break;
         case SP_VERB_TUTORIAL_TIPS:
-            // TRANSLATORS: See "tutorial-basic.svg" comment.
-            sp_help_open_tutorial(nullptr, (gpointer)_("tutorial-tips.svg"));
+            sp_help_open_tutorial("tutorial-tips");
             break;
         default:
             break;
@@ -2602,13 +2523,13 @@ Verb *Verb::_base_verbs[] = {
                  INKSCAPE_ICON("document-save-as")),
     new FileVerb(SP_VERB_FILE_SAVE_A_COPY, "FileSaveACopy", N_("Save a Cop_y..."),
                  N_("Save a copy of the document under a new name"), nullptr),
-    new FileVerb(SP_VERB_FILE_SAVE_TEMPLATE, "FileSaveTemplate", N_("Save template ..."),
+    new FileVerb(SP_VERB_FILE_SAVE_TEMPLATE, "FileSaveTemplate", N_("Save Template..."),
                  N_("Save a copy of the document as template"), nullptr),
     new FileVerb(SP_VERB_FILE_PRINT, "FilePrint", N_("_Print..."), N_("Print document"),
                  INKSCAPE_ICON("document-print")),
     // TRANSLATORS: "Vacuum Defs" means "Clean up defs" (so as to remove unused definitions)
     new FileVerb(
-        SP_VERB_FILE_VACUUM, "FileVacuum", N_("Clean _up document"),
+        SP_VERB_FILE_VACUUM, "FileVacuum", N_("Clean _Up Document"),
         N_("Remove unused definitions (such as gradients or clipping paths) from the &lt;defs&gt; of the document"),
         INKSCAPE_ICON("document-cleanup")),
     new FileVerb(SP_VERB_FILE_IMPORT, "FileImport", N_("_Import..."),
@@ -2662,7 +2583,7 @@ Verb *Verb::_base_verbs[] = {
                  N_("Remove any filters from selected objects"), nullptr),
     new EditVerb(SP_VERB_EDIT_DELETE, "EditDelete", N_("_Delete"), N_("Delete selection"),
                  INKSCAPE_ICON("edit-delete")),
-    new EditVerb(SP_VERB_EDIT_DUPLICATE, "EditDuplicate", N_("Duplic_ate"), N_("Duplicate selected objects"),
+    new EditVerb(SP_VERB_EDIT_DUPLICATE, "EditDuplicate", N_("Duplic_ate"), N_("Duplicate Selected Objects"),
                  INKSCAPE_ICON("edit-duplicate")),
     new EditVerb(SP_VERB_EDIT_CLONE, "EditClone", N_("Create Clo_ne"),
                  N_("Create a clone (a copy linked to the original) of selected object"), INKSCAPE_ICON("edit-clone")),
@@ -2756,7 +2677,7 @@ Verb *Verb::_base_verbs[] = {
     new SelectionVerb(SP_VERB_SELECTION_UNGROUP, "SelectionUnGroup", N_("_Ungroup"), N_("Ungroup selected groups"),
                       INKSCAPE_ICON("object-ungroup")),
     new SelectionVerb(SP_VERB_SELECTION_UNGROUP_POP_SELECTION, "SelectionUnGroupPopSelection",
-                      N_("_Pop selected objects out of group"), N_("Pop selected objects out of group"),
+                      N_("_Pop Selected Objects out of Group"), N_("Pop selected objects out of group"),
                       INKSCAPE_ICON("object-ungroup-pop-selection")),
 
     new SelectionVerb(SP_VERB_SELECTION_TEXTTOPATH, "SelectionTextToPath", N_("_Put on Path"), N_("Put text on path"),
@@ -2887,7 +2808,7 @@ Verb *Verb::_base_verbs[] = {
                   nullptr),
     new LayerVerb(SP_VERB_LAYER_TOGGLE_LOCK, "LayerToggleLock", N_("_Lock/Unlock Current Layer"),
                   N_("Toggle lock on current layer"), nullptr),
-    new LayerVerb(SP_VERB_LAYER_TOGGLE_HIDE, "LayerToggleHide", N_("_Show/hide Current Layer"),
+    new LayerVerb(SP_VERB_LAYER_TOGGLE_HIDE, "LayerToggleHide", N_("_Show/Hide Current Layer"),
                   N_("Toggle visibility of current layer"), nullptr),
 
     // Object
@@ -2933,8 +2854,6 @@ Verb *Verb::_base_verbs[] = {
                    INKSCAPE_ICON("path-clip-edit")),
     new ObjectVerb(SP_VERB_OBJECT_UNSET_CLIPPATH, "ObjectUnSetClipPath", N_("_Release"),
                    N_("Remove clipping path from selection"), nullptr),
-    // Tag
-    new TagVerb(SP_VERB_TAG_NEW, "TagNew", N_("_New"), N_("Create new selection set"), nullptr),
     // Tools
     new ContextVerb(SP_VERB_CONTEXT_SELECT, "ToolSelector", NC_("ContextVerb", "Select"),
                     N_("Select and transform objects"), INKSCAPE_ICON("tool-pointer")),
@@ -3126,7 +3045,7 @@ Verb *Verb::_base_verbs[] = {
     new ZoomVerb(SP_VERB_VIEW_TOGGLE_XRAY, "ViewXRayToggle", N_("Toggle _XRay Mode"), N_("XRay around cursor"),
                  nullptr),
 
-    new ZoomVerb(SP_VERB_VIEW_CMS_TOGGLE, "ViewCmsToggle", N_("Color-managed view"),
+    new ZoomVerb(SP_VERB_VIEW_CMS_TOGGLE, "ViewCmsToggle", N_("Color-Managed View"),
                  N_("Toggle color-managed display for this document window"), INKSCAPE_ICON("color-management")),
 
     new ZoomVerb(SP_VERB_VIEW_ICON_PREVIEW, "ViewIconPreview", N_("Ico_n Preview..."),
@@ -3197,11 +3116,9 @@ Verb *Verb::_base_verbs[] = {
                    INKSCAPE_ICON("dialog-layers")),
     new DialogVerb(SP_VERB_DIALOG_OBJECTS, "DialogObjects", N_("Object_s..."), N_("View Objects"),
                    INKSCAPE_ICON("dialog-layers")),
-    new DialogVerb(SP_VERB_DIALOG_TAGS, "DialogTags", N_("Selection se_ts..."), N_("View Tags"),
-                   INKSCAPE_ICON("edit-select-all-layers")),
     new DialogVerb(SP_VERB_DIALOG_STYLE, "DialogStyle", N_("Style Dialog..."), N_("View Style Dialog"), nullptr),
     new DialogVerb(SP_VERB_DIALOG_CSS, "DialogCss", N_("Css Dialog..."), N_("View Css Dialog"), nullptr),
-    new DialogVerb(SP_VERB_DIALOG_LIVE_PATH_EFFECT, "DialogLivePathEffect", N_("Path E_ffects ..."),
+    new DialogVerb(SP_VERB_DIALOG_LIVE_PATH_EFFECT, "DialogLivePathEffect", N_("Path E_ffects..."),
                    N_("Manage, edit, and apply path effects"), INKSCAPE_ICON("dialog-path-effects")),
     new DialogVerb(SP_VERB_DIALOG_FILTER_EFFECTS, "DialogFilterEffects", N_("Filter _Editor..."),
                    N_("Manage, edit, and apply SVG filters"), INKSCAPE_ICON("dialog-filters")),
@@ -3312,8 +3229,40 @@ Verb *Verb::_base_verbs[] = {
     new ContextVerb(SP_VERB_ALIGN_VERTICAL_TOP_TO_ANCHOR, "AlignVerticalTopToAnchor",
                     N_("Align top edges of objects to the bottom edge of the anchor"),
                     N_("Align top edges of objects to the bottom edge of the anchor"),
+                    INKSCAPE_ICON("align-vertical-top")),
+    new ContextVerb(SP_VERB_ALIGN_BOTH_TOP_LEFT, "AlignBothTopLeft",
+                    N_("Align edges of objects to the top-left corner of the anchor"),
+                    N_("Align edges of objects to the top-left corner of the anchor"),
                     INKSCAPE_ICON("align-vertical-top-to-anchor")),
-    new ContextVerb(SP_VERB_ALIGN_VERTICAL_HORIZONTAL_CENTER, "AlignVerticalHorizontalCenter",
+    new ContextVerb(SP_VERB_ALIGN_BOTH_TOP_RIGHT, "AlignBothTopRight",
+                    N_("Align edges of objects to the top-right corner of the anchor"),
+                    N_("Align edges of objects to the top-right corner of the anchor"),
+                    INKSCAPE_ICON("align-vertical-top-to-anchor")),
+    new ContextVerb(SP_VERB_ALIGN_BOTH_BOTTOM_RIGHT, "AlignBothBottomRight",
+                    N_("Align edges of objects to the bottom-right corner of the anchor"),
+                    N_("Align edges of objects to the bottom-right corner of the anchor"),
+                    INKSCAPE_ICON("align-vertical-bottom-to-anchor")),
+    new ContextVerb(SP_VERB_ALIGN_BOTH_BOTTOM_LEFT, "AlignBothBottomLeft",
+                    N_("Align edges of objects to the bottom-left corner of the anchor"),
+                    N_("Align edges of objects to the bottom-left corner of the anchor"),
+                    INKSCAPE_ICON("align-vertical-bottom-to-anchor")),
+    new ContextVerb(SP_VERB_ALIGN_BOTH_TOP_LEFT_TO_ANCHOR, "AlignBothTopLeftToAnchor",
+                    N_("Align edges of objects to the top-left corner of the anchor"),
+                    N_("Align edges of objects to the top-left corner of the anchor"),
+                    INKSCAPE_ICON("align-vertical-top-to-anchor")),
+    new ContextVerb(SP_VERB_ALIGN_BOTH_TOP_RIGHT_TO_ANCHOR, "AlignBothTopRightToAnchor",
+                    N_("Align edges of objects to the top-right corner of the anchor"),
+                    N_("Align edges of objects to the top-right corner of the anchor"),
+                    INKSCAPE_ICON("align-vertical-top-to-anchor")),
+    new ContextVerb(SP_VERB_ALIGN_BOTH_BOTTOM_RIGHT_TO_ANCHOR, "AlignBothBottomRightToAnchor",
+                    N_("Align edges of objects to the bottom-right corner of the anchor"),
+                    N_("Align edges of objects to the bottom-right corner of the anchor"),
+                    INKSCAPE_ICON("align-vertical-bottom-to-anchor")),
+    new ContextVerb(SP_VERB_ALIGN_BOTH_BOTTOM_LEFT_TO_ANCHOR, "AlignBothBottomLeftToAnchor",
+                    N_("Align edges of objects to the bottom-left corner of the anchor"),
+                    N_("Align edges of objects to the bottom-left corner of the anchor"),
+                    INKSCAPE_ICON("align-vertical-bottom-to-anchor")),
+    new ContextVerb(SP_VERB_ALIGN_BOTH_CENTER, "AlignVerticalHorizontalCenter",
                     N_("Center on horizontal and vertical axis"), N_("Center on horizontal and vertical axis"),
                     INKSCAPE_ICON("align-vertical-center")),
 

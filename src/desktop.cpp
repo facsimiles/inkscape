@@ -62,7 +62,7 @@
 #include "object/sp-root.h"
 
 #include "ui/dialog/dialog-manager.h"
-#include "ui/interface.h"
+#include "ui/interface.h"  // Only for getLayoutPrefPath
 #include "ui/tool-factory.h"
 #include "ui/tools/box3d-tool.h"
 #include "ui/tools/select-tool.h"
@@ -522,7 +522,7 @@ void SPDesktop::_setDisplayMode(Inkscape::RenderMode mode) {
         _split_canvas = false;
     }
     redrawDesktop();
-    _widget->setTitle( this->getDocument()->getName() );
+    _widget->setTitle( this->getDocument()->getDocumentName() );
 }
 void SPDesktop::_setDisplayColorMode(Inkscape::ColorMode mode) {
     // reload grayscale matrix from prefs
@@ -543,7 +543,7 @@ void SPDesktop::_setDisplayColorMode(Inkscape::ColorMode mode) {
     canvas->_colorrendermode = mode;
     _display_color_mode = mode;
     redrawDesktop();
-    _widget->setTitle( this->getDocument()->getName() );
+    _widget->setTitle( this->getDocument()->getDocumentName() );
 }
 
 void SPDesktop::displayModeToggle() {
@@ -1294,17 +1294,13 @@ SPDesktop::is_iconified()
     return 0!=(window_state & GDK_WINDOW_STATE_ICONIFIED);
 }
 
-bool
-SPDesktop::is_darktheme()
-{
-    return getToplevel()->get_style_context()->has_class("dark");
-}
-
 void
 SPDesktop::iconify()
 {
     _widget->setIconified();
 }
+
+bool SPDesktop::is_darktheme() { return getToplevel()->get_style_context()->has_class("dark"); }
 
 bool
 SPDesktop::is_maximized()
@@ -1878,7 +1874,7 @@ static void _namedview_modified (SPObject *obj, guint flags, SPDesktop *desktop)
 
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         if (nv->pagecheckerboard) {
-            desktop->canvas->setBackgroundCheckerboard();
+            desktop->canvas->setBackgroundCheckerboard(nv->pagecolor);
         } else {
             desktop->canvas->setBackgroundColor(nv->pagecolor);
         }
@@ -2019,7 +2015,6 @@ SPDesktop::show_dialogs()
     mapVerbPreference.insert(std::make_pair ("SpellCheck", "/dialogs/spellcheck") );
     mapVerbPreference.insert(std::make_pair ("Symbols", "/dialogs/symbols") );
     mapVerbPreference.insert(std::make_pair ("ObjectsPanel", "/dialogs/objects") );
-    mapVerbPreference.insert(std::make_pair ("TagsPanel", "/dialogs/tags") );
     mapVerbPreference.insert(std::make_pair ("Prototype", "/dialogs/prototype") );
 
 

@@ -86,10 +86,11 @@ void Script::pump_events () {
     the given interpreter to a custom one per user.
 */
 Script::interpreter_t const Script::interpreterTab[] = {
-        {"perl",   "perl-interpreter",   "perl"   },
 #ifdef _WIN32
+        {"perl",   "perl-interpreter",   "wperl"   },
         {"python", "python-interpreter", "pythonw" },
 #else
+        {"perl",   "perl-interpreter",   "perl"   },
         {"python", "python-interpreter", "python" },
 #endif
         {"ruby",   "ruby-interpreter",   "ruby"   },
@@ -522,7 +523,7 @@ SPDocument *Script::open(Inkscape::Extension::Input *module,
     } // data_read
 
     if (mydoc != nullptr) {
-        mydoc->setBase(nullptr);
+        mydoc->setDocumentBase(nullptr);
         mydoc->changeUriAndHrefs(filenameArg);
     }
 
