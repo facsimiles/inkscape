@@ -190,6 +190,7 @@ clangtidy:linux:
   stage: build
   except:
     - schedules
+    - branches@inkscape/inkscape
   script:
     - mkdir -p build && cd build
     - cmake .. -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX:PATH=$PWD/install_dir/ -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
@@ -206,8 +207,7 @@ clangtidy:linux:
 clangtidyfull:linux:
   stage: build
   only:
-    variables:
-      - $SCHEDULED_JOB_NAME == "clangtidyfull"
+    - branches@inkscape/inkscape
   script:
     - mkdir -p build && cd build
     - cmake .. -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
