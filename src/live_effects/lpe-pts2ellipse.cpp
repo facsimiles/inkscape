@@ -32,8 +32,10 @@ namespace LivePathEffect {
 
 static const Util::EnumData<EllipseMethod> EllipseMethodData[] = {
     { EM_AUTO, N_("Auto ellipse"), "auto" }, //!< (2..4 points: circle, from 5 points: ellipse)
-    { EM_CIRCLE, N_("Force circle"), "circle" },
-    { EM_ISOMETRIC_CIRCLE, N_("Isometric circle"), "iso_circle" }
+    { EM_CIRCLE, N_("Force circle"), "circle" }, //!< always fit a circle
+    { EM_ISOMETRIC_CIRCLE, N_("Isometric circle"), "iso_circle" }, //!< use first two edges to generate a sheared ellipse
+    { EM_STEINER_ELLIPSE, N_("Steiner ellipse"), "steiner_ellipse" }, //!< generate a steiner ellipse from the first three points
+    { EM_STEINER_INELLIPSE, N_("Steiner inellipse"), "steiner_inellipse" } //!< generate a steiner inellipse from the first three points
 };
 static const Util::EnumDataConverter<EllipseMethod> EMConverter(EllipseMethodData, EM_END);
 
@@ -41,11 +43,11 @@ LPEPts2Ellipse::LPEPts2Ellipse(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
     method(_("Method:"), _("Methods to generate the ellipse"),
            "method", EMConverter, &wr, this, EM_AUTO),
-    gen_isometric_frame(_("_Frame (isometric rectangle)"), _("Draw Parallelogram around the ellipse"),
+    gen_isometric_frame(_("_Frame (isometric rectangle)"), _("Draw parallelogram around the ellipse"),
                         "gen_isometric_frame", &wr, this, false),
     gen_arc(_("_Arc"), _("Generate open arc (open ellipse)"), "gen_arc", &wr, this, false),
-    other_arc(_("_Other Arc side"), _("switch sides of the arc"), "arc_other", &wr, this, false),
-    slice_arc(_("_Slice Arc"), _("slice the arc"), "slice_arc", &wr, this, false),
+    other_arc(_("_Other Arc side"), _("Switch sides of the arc"), "arc_other", &wr, this, false),
+    slice_arc(_("_Slice Arc"), _("Slice the arc"), "slice_arc", &wr, this, false),
     draw_axes(_("A_xes"), _("Draw both semi-major and semi-minor axes"), "draw_axes", &wr, this, false),
     rot_axes(_("Axes Rotation"), _("Axes rotation angle [deg]"), "rot_axes", &wr, this, 0),
     draw_ori_path(_("Source _Path"), _("Show the original source path"), "draw_ori_path", &wr, this, false)
@@ -275,15 +277,23 @@ LPEPts2Ellipse::doEffect_path(Geom::PathVector const &path_in)
     // special mode: Use first two edges, interpret them as two sides of a parallelogram and
     // generate an ellipse residing inside the parallelogram. This effect is quite useful when
     // generating isometric views. Hence, the name.
-    //if(gen_isometric.get_value())
-    if (EM_ISOMETRIC_CIRCLE == method) {
-        if (0 != genIsometricEllipse(pts, path_out)) {
-            return path_in;
-        }
-    } else {
-        if (0 != genFitEllipse(pts, path_out)) {
-            return path_in;
-        }
+    switch(method) {
+        case EM_ISOMETRIC_CIRCLE:
+            if (0 != genIsometricEllipse(pts, path_out)) {
+                return path_in;
+            } break;
+        case EM_STEINER_ELLIPSE:
+            if (0 != genSteinerEllipse(pts, false, path_out)) {
+                return path_in;
+            } break;
+        case EM_STEINER_INELLIPSE:
+            if (0 != genSteinerEllipse(pts, true, path_out)) {
+                return path_in;
+            } break;
+        default:
+            if (0 != genFitEllipse(pts, path_out)) {
+                return path_in;
+            }
     }
     return path_out;
 }
@@ -446,6 +456,94 @@ LPEPts2Ellipse::genIsometricEllipse(std::vector<Geom::Point> const &pts,
 
     return 0;
 }
+
+void
+evalSteinerEllipse(Geom::Point const &pCenter,
+                   Geom::Point const &pCenter_Pt2,
+                   Geom::Point const &pPt0_Pt1,
+                   const double &angle,
+                   Geom::Point &pRes)
+{
+    // formula for the evaluation of points on the steiner ellipse using parameter angle
+    pRes = pCenter
+        + pCenter_Pt2*cos(angle)
+        + pPt0_Pt1*sin(angle)/sqrt(3);
+}
+
+int
+LPEPts2Ellipse::genSteinerEllipse(std::vector<Geom::Point> const &pts,
+                                  bool gen_inellipse,
+                                  Geom::PathVector &path_out)
+{
+    // take the first 3 vertices for the edges
+    if (pts.size() < 3) {
+        return -1;
+    }
+    // calc center
+    Geom::Point pCenter = (pts[0]+pts[1]+pts[2])/3;
+    // calc main directions of affine triangle
+    Geom::Point f1 = pts[2]-pCenter;
+    Geom::Point f2 = (pts[1]-pts[0])/sqrt(3);
+
+    // calc zero angle t0
+    const double denominator = dot(f1, f1) - dot(f2, f2);
+    double t0=0;
+    if(fabs(denominator) > 1e-12) {
+        const double cot2t0 = 2.0 * dot(f1, f2) / denominator;
+        t0 = atan(cot2t0)/2.0;
+    }
+
+    // calc relative points of main axes (for axis directions)
+    Geom::Point p0(0,0), pRel0, pRel1;
+    evalSteinerEllipse(p0, pts[2]-pCenter, pts[1]-pts[0], t0, pRel0);
+    evalSteinerEllipse(p0, pts[2]-pCenter, pts[1]-pts[0], t0+M_PI_2, pRel1);
+    Geom::Coord l0 = pRel0.length();
+    Geom::Coord l1 = pRel1.length();
+
+    // basic rotation
+    double a0 = atan2(pRel0);
+
+    bool swapped=false;
+
+    if (l1 > l0) {
+        std::swap(l0,l1);
+        a0 += M_PI_2;
+        swapped = true;
+    }
+
+    // the steiner inellipse is just scaled down by 2
+    if(gen_inellipse) {
+        l0/=2;
+        l1/=2;
+    }
+
+    // rotation angle based on user provided rot_axes to position the vertices
+    const double rot_angle = -deg2rad(rot_axes); // negative for ccw rotation
+
+    // build up the affine transformation
+    Geom::Affine affine;
+    affine *= Geom::Rotate(rot_angle);
+    affine *= Geom::Scale(l0, l1);
+    affine *= Geom::Rotate(a0);
+    affine *= Geom::Translate(pCenter);
+
+    Geom::Path path;
+    unit_arc_path(path, affine);
+    path_out.push_back(path);
+
+    // draw frame?
+    if (gen_isometric_frame.get_value()) {
+        gen_iso_frame_paths(path_out, affine);
+    }
+
+    // draw axes?
+    if (draw_axes.get_value()) {
+        gen_axes_paths(path_out, affine);
+    }
+
+    return 0;
+}
+
 
 /* ######################## */
 

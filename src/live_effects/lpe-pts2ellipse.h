@@ -27,6 +27,8 @@ enum EllipseMethod {
     EM_AUTO,
     EM_CIRCLE,
     EM_ISOMETRIC_CIRCLE,
+    EM_STEINER_ELLIPSE,
+    EM_STEINER_INELLIPSE,
     EM_END
 };
 
@@ -45,8 +47,12 @@ private:
     int genIsometricEllipse(std::vector<Geom::Point> const &points_in,
                             Geom::PathVector &path_out);
 
-    int  genFitEllipse(std::vector<Geom::Point> const &points_in,
-                       Geom::PathVector &path_out);
+    int genFitEllipse(std::vector<Geom::Point> const &points_in,
+                      Geom::PathVector &path_out);
+
+    int genSteinerEllipse(std::vector<Geom::Point> const &points_in,
+                          bool gen_inellipse,
+                          Geom::PathVector &path_out);
 
     EnumParam<EllipseMethod> method;
     BoolParam gen_isometric_frame;
