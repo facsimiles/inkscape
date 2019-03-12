@@ -24,30 +24,25 @@
 namespace Inkscape {
 namespace LivePathEffect {
 
-enum EllipseMethod {
-    EM_AUTO,
-    EM_CIRCLE,
-    EM_ISONOMETRIC_CIRCLE,
-    EM_END
-};
+enum EllipseMethod { EM_AUTO, EM_CIRCLE, EM_ISOMETRIC_CIRCLE, EM_STEINER_ELLIPSE, EM_STEINER_INELLIPSE, EM_END };
 
 class LPEPts2Ellipse : public Effect {
-public:
+  public:
     LPEPts2Ellipse(LivePathEffectObject *lpeobject);
     ~LPEPts2Ellipse() override;
 
-    Geom::PathVector doEffect_path (Geom::PathVector const & path_in) override;
+    Geom::PathVector doEffect_path(Geom::PathVector const &path_in) override;
 
-private:
-    LPEPts2Ellipse(const LPEPts2Ellipse&) = delete;
-    LPEPts2Ellipse& operator=(const LPEPts2Ellipse&) = delete;
+  private:
+    LPEPts2Ellipse(const LPEPts2Ellipse &) = delete;
+    LPEPts2Ellipse &operator=(const LPEPts2Ellipse &) = delete;
 
 
-    int genIsometricEllipse (std::vector<Geom::Point> const & points_in,
-                             Geom::PathVector & path_out);
+    int genIsometricEllipse(std::vector<Geom::Point> const &points_in, Geom::PathVector &path_out);
 
-    int  genFitEllipse (std::vector<Geom::Point> const & points_in,
-                        Geom::PathVector & path_out);
+    int genFitEllipse(std::vector<Geom::Point> const &points_in, Geom::PathVector &path_out);
+
+    int genSteinerEllipse(std::vector<Geom::Point> const &points_in, bool gen_inellipse, Geom::PathVector &path_out);
 
     EnumParam<EllipseMethod> method;
     BoolParam gen_isometric_frame;
@@ -61,8 +56,8 @@ private:
     std::vector<Geom::Point> points;
 };
 
-} //namespace LivePathEffect
-} //namespace Inkscape
+} // namespace LivePathEffect
+} // namespace Inkscape
 
 #endif
 
