@@ -36,6 +36,9 @@ Inkscape::XML::Node *sp_selected_item_to_curved_repr(SPItem *item, guint32 text_
 //void sp_selected_path_reverse (SPDesktop *desktop);
 bool sp_item_list_to_curves(const std::vector<SPItem*> &items, std::vector<SPItem*> &selected, std::vector<Inkscape::XML::Node*> &to_select, bool skip_all_lpeitems = false);
 
+void ink_copy_generic_attributes(Inkscape::XML::Node *dest, Inkscape::XML::Node const *src);
+void ink_copy_generic_children(Inkscape::XML::Node *dest, Inkscape::XML::Node const *src);
+
 #endif // SEEN_PATH_CHEMISTRY_H
 
 /*

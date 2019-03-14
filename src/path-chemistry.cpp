@@ -95,9 +95,7 @@ ObjectSet::combine(bool skip_undo)
 
     // remember the position, id, transform and style of the topmost path, they will be assigned to the combined one
     gint position = 0;
-    char const *id = nullptr;
     char const *transform = nullptr;
-    char const *style = nullptr;
     char const *path_effect = nullptr;
 
     SPCurve* curve = nullptr;
@@ -126,10 +124,8 @@ ObjectSet::combine(bool skip_undo)
             first = item;
             parent = first->getRepr()->parent();
             position = first->getRepr()->position();
-            id = first->getRepr()->attribute("id");
             transform = first->getRepr()->attribute("transform");
             // FIXME: merge styles of combined objects instead of using the first one's style
-            style = first->getRepr()->attribute("style");
             path_effect = first->getRepr()->attribute("inkscape:path-effect");
             //c->transform(item->transform);
             curve = c;
@@ -149,18 +145,19 @@ ObjectSet::combine(bool skip_undo)
 
 
     if (did) {
-        first->deleteObject(false);
-        // delete the topmost.
-
         Inkscape::XML::Document *xml_doc = doc->getReprDoc();
         Inkscape::XML::Node *repr = xml_doc->createElement("svg:path");
 
+        ink_copy_generic_attributes(repr, first->getRepr());
+        ink_copy_generic_children(repr, first->getRepr());
+
+        // delete the topmost.
+        first->deleteObject(false);
+
         // restore id, transform, path effect, and style
-        repr->setAttribute("id", id);
         if (transform) {
             repr->setAttribute("transform", transform);
         }
-        repr->setAttribute("style", style);
 
         repr->setAttribute("inkscape:path-effect", path_effect);
 
@@ -511,17 +508,8 @@ sp_selected_item_to_curved_repr(SPItem *item, guint32 /*text_grouping_policy*/)
         }
 
         g_repr->setAttribute("transform", item->getRepr()->attribute("transform"));
-        /* Mask */
-        gchar *mask_str = (gchar *) item->getRepr()->attribute("mask");
-        if ( mask_str )
-            g_repr->setAttribute("mask", mask_str);
-        /* Clip path */
-        gchar *clip_path_str = (gchar *) item->getRepr()->attribute("clip-path");
-        if ( clip_path_str )
-            g_repr->setAttribute("clip-path", clip_path_str);
-        /* Rotation center */
-        g_repr->setAttribute("inkscape:transform-center-x", item->getRepr()->attribute("inkscape:transform-center-x"), false);
-        g_repr->setAttribute("inkscape:transform-center-y", item->getRepr()->attribute("inkscape:transform-center-y"), false);
+
+        ink_copy_generic_attributes(g_repr, item->getRepr());
 
         /* Whole text's style */
         Glib::ustring style_str =
@@ -599,6 +587,10 @@ sp_selected_item_to_curved_repr(SPItem *item, guint32 /*text_grouping_policy*/)
     }
 
     Inkscape::XML::Node *repr = xml_doc->createElement("svg:path");
+
+    ink_copy_generic_attributes(repr, item->getRepr());
+    ink_copy_generic_children(repr, item->getRepr());
+
     /* Transformation */
     repr->setAttribute("transform", item->getRepr()->attribute("transform"));
 
@@ -606,20 +598,6 @@ sp_selected_item_to_curved_repr(SPItem *item, guint32 /*text_grouping_policy*/)
     Glib::ustring style_str =
         item->style->write( SP_STYLE_FLAG_IFDIFF, SP_STYLE_SRC_UNSET, item->parent ? item->parent->style : nullptr); // TODO investigate possibility
     repr->setAttribute("style", style_str.c_str());
-
-    /* Mask */
-    gchar *mask_str = (gchar *) item->getRepr()->attribute("mask");
-    if ( mask_str )
-        repr->setAttribute("mask", mask_str);
-
-    /* Clip path */
-    gchar *clip_path_str = (gchar *) item->getRepr()->attribute("clip-path");
-    if ( clip_path_str )
-        repr->setAttribute("clip-path", clip_path_str);
-
-    /* Rotation center */
-    repr->setAttribute("inkscape:transform-center-x", item->getRepr()->attribute("inkscape:transform-center-x"), false);
-    repr->setAttribute("inkscape:transform-center-y", item->getRepr()->attribute("inkscape:transform-center-y"), false);
 
     /* Definition */
     gchar *def_str = sp_svg_write_path(curve->get_pathvector());
@@ -687,6 +665,84 @@ ObjectSet::pathReverse()
             desktop()->getMessageStack()->flash(Inkscape::ERROR_MESSAGE, _("<b>No paths</b> to reverse in the selection."));
     }
 }
+
+
+/**
+ * Copy generic attributes, like those from the "Object Properties" dialog,
+ * but also style and transformation center.
+ *
+ * @param dest XML node to copy attributes to
+ * @param src XML node to copy attributes from
+ */
+void ink_copy_generic_attributes( //
+    Inkscape::XML::Node *dest,    //
+    Inkscape::XML::Node const *src)
+{
+    static char const *const keys[] = {
+        // core
+        "id",
+
+        // clip & mask
+        "clip-path",
+        "mask",
+
+        // style
+        "style",
+
+        // inkscape
+        "inkscape:label",
+        "inkscape:transform-center-x",
+        "inkscape:transform-center-y",
+
+        // interactivity
+        "onclick",
+        "onmouseover",
+        "onmouseout",
+        "onmousedown",
+        "onmouseup",
+        "onmousemove",
+        "onfocusin",
+        "onfocusout",
+        "onload",
+    };
+
+    for (auto *key : keys) {
+        auto *value = src->attribute(key);
+        if (value) {
+            dest->setAttribute(key, value);
+        }
+    }
+}
+
+
+/**
+ * Copy generic child elements, like those from the "Object Properties" dialog.
+ *
+ * Does not check if children of the same type already exist in dest.
+ *
+ * @param dest XML node to copy children to
+ * @param src XML node to copy children from
+ */
+void ink_copy_generic_children( //
+    Inkscape::XML::Node *dest,  //
+    Inkscape::XML::Node const *src)
+{
+    static std::set<std::string> const names{
+        "svg:title",
+        "svg:desc",
+    };
+
+    for (const auto *child = src->firstChild(); child != nullptr; child = child->next()) {
+        if (!(child->name() && names.count(child->name()))) {
+            continue;
+        }
+
+        auto dchild = child->duplicate(dest->document());
+        dest->appendChild(dchild);
+        dchild->release();
+    }
+}
+
 
 /*
   Local Variables:
