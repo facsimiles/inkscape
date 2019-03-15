@@ -716,7 +716,8 @@ void ink_copy_generic_attributes( //
 
 
 /**
- * Copy generic child elements, like those from the "Object Properties" dialog.
+ * Copy generic child elements, like those from the "Object Properties" dialog
+ * (title and description) but also XML comments.
  *
  * Does not check if children of the same type already exist in dest.
  *
@@ -728,12 +729,14 @@ void ink_copy_generic_children( //
     Inkscape::XML::Node const *src)
 {
     static std::set<std::string> const names{
+        // descriptive elements
         "svg:title",
         "svg:desc",
     };
 
     for (const auto *child = src->firstChild(); child != nullptr; child = child->next()) {
-        if (!(child->name() && names.count(child->name()))) {
+        if (!(child->type() == Inkscape::XML::COMMENT_NODE || //
+              child->name() && names.count(child->name()))) {
             continue;
         }
 
