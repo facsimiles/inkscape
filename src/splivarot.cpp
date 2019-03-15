@@ -1739,9 +1739,6 @@ void sp_selected_path_create_offset_object(SPDesktop *desktop, int expand, bool 
 
     item->doWriteTransform(Geom::identity());
 
-    //XML Tree being used directly here while it shouldn't be...
-    gchar *style = g_strdup(item->getRepr()->attribute("style"));
-
     // remember the position of the item
     gint pos = item->getRepr()->position();
 
@@ -1763,7 +1760,6 @@ void sp_selected_path_create_offset_object(SPDesktop *desktop, int expand, bool 
     Path *orig = Path_for_item(item, true, false);
     if (orig == nullptr)
     {
-        g_free(style);
         curve->unref();
         return;
     }
@@ -1816,7 +1812,6 @@ void sp_selected_path_create_offset_object(SPDesktop *desktop, int expand, bool 
 
         delete res;
         delete orig;
-        g_free(style);
         return;
     }
 
@@ -1824,8 +1819,13 @@ void sp_selected_path_create_offset_object(SPDesktop *desktop, int expand, bool 
         Inkscape::XML::Document *xml_doc = desktop->doc()->getReprDoc();
         Inkscape::XML::Node *repr = xml_doc->createElement("svg:path");
 
-        ink_copy_generic_attributes(repr, item->getRepr());
-        ink_copy_generic_children(repr, item->getRepr());
+        if (!updating) {
+            ink_copy_generic_attributes(repr, item->getRepr());
+            ink_copy_generic_children(repr, item->getRepr());
+        } else {
+            gchar const *style = item->getRepr()->attribute("style");
+            repr->setAttribute("style", style);
+        }
 
         repr->setAttribute("sodipodi:type", "inkscape:offset");
         sp_repr_set_svg_double(repr, "inkscape:radius", ( expand > 0
@@ -1846,8 +1846,6 @@ void sp_selected_path_create_offset_object(SPDesktop *desktop, int expand, bool 
             char const *id = item->getRepr()->attribute("id");
             char const *uri = g_strdup_printf("#%s", id);
             repr->setAttribute("xlink:href", uri);
-            // "id" was copied as a generic attribute, but is still being used by the original
-            repr->setAttribute("id", nullptr);
             g_free((void *) uri);
         } else {
             repr->setAttribute("inkscape:href", nullptr);
@@ -1885,8 +1883,6 @@ void sp_selected_path_create_offset_object(SPDesktop *desktop, int expand, bool 
 
     delete res;
     delete orig;
-
-    g_free(style);
 }
 
 
