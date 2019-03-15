@@ -1376,6 +1376,7 @@ sp_item_path_outline(SPItem *item, SPDesktop *desktop, bool legacy)
                 Inkscape::XML::Node *g_repr = xml_doc->createElement("svg:g");
                 ink_copy_generic_attributes(g_repr, item->getRepr());
                 ink_copy_generic_children(g_repr, item->getRepr());
+                // drop copied style, children will be re-styled (stroke becomes fill)
                 g_repr->setAttribute("style", nullptr);
 
                 // add the group to the parent
@@ -1845,6 +1846,7 @@ void sp_selected_path_create_offset_object(SPDesktop *desktop, int expand, bool 
             char const *id = item->getRepr()->attribute("id");
             char const *uri = g_strdup_printf("#%s", id);
             repr->setAttribute("xlink:href", uri);
+            // "id" was copied as a generic attribute, but is still being used by the original
             repr->setAttribute("id", nullptr);
             g_free((void *) uri);
         } else {
