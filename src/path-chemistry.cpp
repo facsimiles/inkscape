@@ -737,7 +737,7 @@ void ink_copy_generic_children( //
     for (const auto *child = src->firstChild(); child != nullptr; child = child->next()) {
         // check if this child should be copied
         if (!(child->type() == Inkscape::XML::COMMENT_NODE || //
-              child->name() && names.count(child->name()))) {
+              (child->name() && names.count(child->name())))) {
             continue;
         }
 
