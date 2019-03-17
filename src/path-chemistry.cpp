@@ -444,14 +444,6 @@ sp_item_list_to_curves(const std::vector<SPItem*> &items, std::vector<SPItem*>& 
         Inkscape::XML::Node *parent = item->getRepr()->parent();
         // remember class
         char const *class_attr = item->getRepr()->attribute("class");
-        // remember title
-        gchar *title = item->title();
-        // remember description
-        gchar *desc = item->desc();
-        // remember highlight color
-        guint32 highlight_color = 0;
-        if (item->isHighlightSet())
-            highlight_color = item->highlight_color();
 
         // It's going to resurrect, so we delete without notifying listeners.
         item->deleteObject(false);
@@ -462,18 +454,6 @@ sp_item_list_to_curves(const std::vector<SPItem*> &items, std::vector<SPItem*>& 
         repr->setAttribute("class", class_attr);
         // add the new repr to the parent
         parent->appendChild(repr);
-        SPObject* newObj = document->getObjectByRepr(repr);
-        if (title && newObj) {
-            newObj->setTitle(title);
-            g_free(title);
-        }
-        if (desc && newObj) {
-            newObj->setDesc(desc);
-            g_free(desc);
-        }
-        if (highlight_color && newObj) {
-                SP_ITEM(newObj)->setHighlightColor( highlight_color );
-        }
 
         // move to the saved position
         repr->setPosition(pos > 0 ? pos : 0);
@@ -510,6 +490,7 @@ sp_selected_item_to_curved_repr(SPItem *item, guint32 /*text_grouping_policy*/)
         g_repr->setAttribute("transform", item->getRepr()->attribute("transform"));
 
         ink_copy_generic_attributes(g_repr, item->getRepr());
+        ink_copy_generic_children(g_repr, item->getRepr());
 
         /* Whole text's style */
         Glib::ustring style_str =
@@ -690,6 +671,7 @@ void ink_copy_generic_attributes( //
         "style",
 
         // inkscape
+        "inkscape:highlight-color",
         "inkscape:label",
         "inkscape:transform-center-x",
         "inkscape:transform-center-y",

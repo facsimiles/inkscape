@@ -731,11 +731,7 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, 
     // remove source paths
     clear();
     for (std::vector<SPItem*>::const_iterator l = il.begin(); l != il.end(); l++){
-        // if this is the bottommost object,
-        if (!strcmp(reinterpret_cast<SPObject *>(*l)->getRepr()->attribute("id"), id)) {
-            // delete it so that its clones don't get alerted; this object will be restored shortly, with the same id
-            (*l)->deleteObject(false);
-        } else {
+        if ((*l) != item_source) {
             // delete the object for real, so that its clones can take appropriate action
             (*l)->deleteObject();
         }
@@ -776,6 +772,13 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, 
             Inkscape::XML::Node *repr = xml_doc->createElement("svg:path");
 
             ink_copy_generic_attributes(repr, repr_source);
+            ink_copy_generic_children(repr, repr_source);
+
+            // Delete source on last iteration (after we don't need repr_source anymore). As a consequence, the last
+            // item will inherit the original's id.
+            if (i + 1 == nbRP) {
+                item_source->deleteObject(false);
+            }
 
             repr->setAttribute("d", d);
             g_free(d);
@@ -791,10 +794,6 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, 
 
                 sp_repr_css_attr_unref(css);
             }
-
-            // we assign the same id on all pieces, but it on adding to document, it will be changed on all except one
-            // this means it's basically random which of the pieces inherits the original's id and clones
-            // a better algorithm might figure out e.g. the biggest piece
 
             repr->setAttribute("transform", transform);
 
@@ -819,6 +818,9 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, 
 
         ink_copy_generic_attributes(repr, repr_source);
         ink_copy_generic_children(repr, repr_source);
+
+        // delete it so that its clones don't get alerted; this object will be restored shortly, with the same id
+        item_source->deleteObject(false);
 
         repr->setAttribute("d", d);
         g_free(d);
@@ -2192,7 +2194,6 @@ sp_selected_path_simplify_item(SPDesktop *desktop,
     // reapply the transform
     newitem->doWriteTransform(transform);
 
-    
     //If we are not in a selected group
     if (modifySelection)
         selection->add(repr);
