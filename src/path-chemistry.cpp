@@ -148,8 +148,7 @@ ObjectSet::combine(bool skip_undo)
         Inkscape::XML::Document *xml_doc = doc->getReprDoc();
         Inkscape::XML::Node *repr = xml_doc->createElement("svg:path");
 
-        ink_copy_generic_attributes(repr, first->getRepr());
-        ink_copy_generic_children(repr, first->getRepr());
+        Inkscape::copy_object_properties(repr, first->getRepr());
 
         // delete the topmost.
         first->deleteObject(false);
@@ -489,8 +488,7 @@ sp_selected_item_to_curved_repr(SPItem *item, guint32 /*text_grouping_policy*/)
 
         g_repr->setAttribute("transform", item->getRepr()->attribute("transform"));
 
-        ink_copy_generic_attributes(g_repr, item->getRepr());
-        ink_copy_generic_children(g_repr, item->getRepr());
+        Inkscape::copy_object_properties(g_repr, item->getRepr());
 
         /* Whole text's style */
         Glib::ustring style_str =
@@ -569,8 +567,7 @@ sp_selected_item_to_curved_repr(SPItem *item, guint32 /*text_grouping_policy*/)
 
     Inkscape::XML::Node *repr = xml_doc->createElement("svg:path");
 
-    ink_copy_generic_attributes(repr, item->getRepr());
-    ink_copy_generic_children(repr, item->getRepr());
+    Inkscape::copy_object_properties(repr, item->getRepr());
 
     /* Transformation */
     repr->setAttribute("transform", item->getRepr()->attribute("transform"));
@@ -655,8 +652,8 @@ ObjectSet::pathReverse()
  * @param dest XML node to copy attributes to
  * @param src XML node to copy attributes from
  */
-void ink_copy_generic_attributes( //
-    Inkscape::XML::Node *dest,    //
+static void ink_copy_generic_attributes( //
+    Inkscape::XML::Node *dest,           //
     Inkscape::XML::Node const *src)
 {
     static char const *const keys[] = {
@@ -706,8 +703,8 @@ void ink_copy_generic_attributes( //
  * @param dest XML node to copy children to
  * @param src XML node to copy children from
  */
-void ink_copy_generic_children( //
-    Inkscape::XML::Node *dest,  //
+static void ink_copy_generic_children( //
+    Inkscape::XML::Node *dest,         //
     Inkscape::XML::Node const *src)
 {
     static std::set<std::string> const names{
@@ -727,6 +724,31 @@ void ink_copy_generic_children( //
         dest->appendChild(dchild);
         dchild->release();
     }
+}
+
+
+/**
+ * Copy generic object properties, like:
+ * - id
+ * - label
+ * - title
+ * - description
+ * - style
+ * - clip
+ * - mask
+ * - transformation center
+ * - highlight color
+ * - interactivity (event attributes)
+ *
+ * @param dest XML node to copy to
+ * @param src XML node to copy from
+ */
+void Inkscape::copy_object_properties( //
+    Inkscape::XML::Node *dest,         //
+    Inkscape::XML::Node const *src)
+{
+    ink_copy_generic_attributes(dest, src);
+    ink_copy_generic_children(dest, src);
 }
 
 

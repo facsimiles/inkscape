@@ -771,8 +771,7 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, 
             Inkscape::XML::Document *xml_doc = doc->getReprDoc();
             Inkscape::XML::Node *repr = xml_doc->createElement("svg:path");
 
-            ink_copy_generic_attributes(repr, repr_source);
-            ink_copy_generic_children(repr, repr_source);
+            Inkscape::copy_object_properties(repr, repr_source);
 
             // Delete source on last iteration (after we don't need repr_source anymore). As a consequence, the last
             // item will inherit the original's id.
@@ -816,8 +815,7 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, 
         Inkscape::XML::Document *xml_doc = doc->getReprDoc();
         Inkscape::XML::Node *repr = xml_doc->createElement("svg:path");
 
-        ink_copy_generic_attributes(repr, repr_source);
-        ink_copy_generic_children(repr, repr_source);
+        Inkscape::copy_object_properties(repr, repr_source);
 
         // delete it so that its clones don't get alerted; this object will be restored shortly, with the same id
         item_source->deleteObject(false);
@@ -1376,8 +1374,7 @@ sp_item_path_outline(SPItem *item, SPDesktop *desktop, bool legacy)
 
             if (SP_IS_SHAPE(item)) {
                 Inkscape::XML::Node *g_repr = xml_doc->createElement("svg:g");
-                ink_copy_generic_attributes(g_repr, item->getRepr());
-                ink_copy_generic_children(g_repr, item->getRepr());
+                Inkscape::copy_object_properties(g_repr, item->getRepr());
                 // drop copied style, children will be re-styled (stroke becomes fill)
                 g_repr->setAttribute("style", nullptr);
 
@@ -1822,8 +1819,7 @@ void sp_selected_path_create_offset_object(SPDesktop *desktop, int expand, bool 
         Inkscape::XML::Node *repr = xml_doc->createElement("svg:path");
 
         if (!updating) {
-            ink_copy_generic_attributes(repr, item->getRepr());
-            ink_copy_generic_children(repr, item->getRepr());
+            Inkscape::copy_object_properties(repr, item->getRepr());
         } else {
             gchar const *style = item->getRepr()->attribute("style");
             repr->setAttribute("style", style);
@@ -2054,8 +2050,7 @@ sp_selected_path_do_offset(SPDesktop *desktop, bool expand, double prefOffset)
             Inkscape::XML::Document *xml_doc = desktop->doc()->getReprDoc();
             repr = xml_doc->createElement("svg:path");
 
-            ink_copy_generic_attributes(repr, item->getRepr());
-            ink_copy_generic_children(repr, item->getRepr());
+            Inkscape::copy_object_properties(repr, item->getRepr());
         }
 
         item->deleteObject(false);
@@ -2167,8 +2162,7 @@ sp_selected_path_simplify_item(SPDesktop *desktop,
     Inkscape::XML::Node *repr = xml_doc->createElement("svg:path");
 
     // restore attributes
-    ink_copy_generic_attributes(repr, item->getRepr());
-    ink_copy_generic_children(repr, item->getRepr());
+    Inkscape::copy_object_properties(repr, item->getRepr());
 
     item->deleteObject(false);
 
