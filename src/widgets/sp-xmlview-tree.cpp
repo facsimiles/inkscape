@@ -341,10 +341,6 @@ void on_drag_data_received(GtkWidget * /*wgt*/, GdkDragContext * /*context*/, in
         return;
     }
 
-    if (tree->dndactive) {
-       return;
-    }
-
     GtkTreeModel *model = nullptr;
     GtkTreeIter iter;
     GtkTreeSelection *selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(tree));
@@ -541,7 +537,7 @@ gboolean do_drag_motion(GtkWidget *widget, GdkDragContext *context, gint x, gint
 {
     GtkTreePath *path = nullptr;
     GtkTreeViewDropPosition pos;
-    gtk_tree_view_get_dest_row_at_pos (GTK_TREE_VIEW(widget), x, y, &path, &pos);
+    if (!gtk_tree_view_get_dest_row_at_pos (GTK_TREE_VIEW(widget), x, y, &path, &pos)) return true;
 
     int action = 0;
 
@@ -554,15 +550,13 @@ gboolean do_drag_motion(GtkWidget *widget, GdkDragContext *context, gint x, gint
         if (sp_xmlview_tree_node_get_repr (GTK_TREE_MODEL(tree->store), &iter)->type() != Inkscape::XML::ELEMENT_NODE) {
             action = 0;
         }
-
-        if (!gtk_tree_path_up(path)) {
-            action = 0;
-        }
-        if (!gtk_tree_path_up(path)) {
-            action = 0;
-        }
-        if (!path) {
-            action = 0;
+        else 
+        {
+            if (!path) {
+                action = 0;
+            } else if (!gtk_tree_path_up(path)) {
+                action = 0;
+            }
         }
     }
 
