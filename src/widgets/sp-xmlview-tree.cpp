@@ -528,7 +528,6 @@ gboolean tree_model_iter_compare(GtkTreeModel* store, GtkTreeIter * iter1, GtkTr
 
 }
 
-
 /*
  * Disable drag and drop target on : root node and non-element nodes
  */
@@ -549,13 +548,14 @@ gboolean do_drag_motion(GtkWidget *widget, GdkDragContext *context, gint x, gint
         if (sp_xmlview_tree_node_get_repr (GTK_TREE_MODEL(tree->store), &iter)->type() != Inkscape::XML::ELEMENT_NODE) {
             action = 0;
         }
-        else 
-        {
-            if (!path) {
-                action = 0;
-            } else if (!gtk_tree_path_up(path)) {
-                action = 0;
-            }
+        if (!gtk_tree_path_up(path)) {
+            action = 0;
+        }
+        if (!gtk_tree_path_up(path)) {
+            action = 0;
+        }
+        if (!path) {
+            action = 0;
         }
     }
 
@@ -614,7 +614,6 @@ sp_xmlview_tree_node_get_repr (GtkTreeModel *model, GtkTreeIter * iter)
 
     return repr;
 }
-
 
 /*
  * Find a GtkTreeIter position in the tree by repr
