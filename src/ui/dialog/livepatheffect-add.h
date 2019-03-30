@@ -71,6 +71,7 @@ class LivePathEffectAdd {
     bool fav_toggler(GdkEventButton *evt, Glib::RefPtr<Gtk::Builder> builder_effect);
     bool apply(GdkEventButton *evt, Glib::RefPtr<Gtk::Builder> builder_effect,
                const LivePathEffect::EnumEffectData<LivePathEffect::EffectType> *to_add);
+    bool expand(GdkEventButton *evt, Glib::RefPtr<Gtk::Builder> builder_effect);
     bool show_fav_toggler(GdkEventButton *evt);
     bool mouseover(GdkEventCrossing *evt, GtkWidget *wdg);
     bool mouseout(GdkEventCrossing *evt, GtkWidget *wdg);

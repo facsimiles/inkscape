@@ -76,7 +76,7 @@ FontVariations::update (Glib::ustring& font_spec) {
         remove ( *child );
     }
     axes.clear();
-    
+
     for (auto a: res->openTypeVarAxes) {
         // std::cout << "Creating axis: " << a.first << std::endl;
         FontVariationAxis* axis = Gtk::manage( new FontVariationAxis( a.first, a.second ));
@@ -93,7 +93,6 @@ FontVariations::update (Glib::ustring& font_spec) {
 
 void
 FontVariations::fill_css( SPCSSAttr *css ) {
-    std::cout << "FontVariations::fill_css" << std::endl;
 
     // Eventually will want to favor using 'font-weight', etc. but at the moment these
     // can't handle "fractional" values. See CSS Fonts Module Level 4.
@@ -111,7 +110,7 @@ FontVariations::get_css_string() {
         // Translate the "named" axes. (Additional names in 'stat' table, may need to handle them.)
         if (name == "Width")  name = "wdth";       // 'font-stretch'
         if (name == "Weight") name = "wght";       // 'font-weight'
-        if (name == "Optical size") name = "opsz"; // 'font-optical-sizing' Can trigger glyph substition.
+        if (name == "Optical size") name = "opsz"; // 'font-optical-sizing' Can trigger glyph substitution.
         if (name == "Slant")  name = "slnt";       // 'font-style'
         if (name == "Italic") name = "ital";       // 'font-style' Toggles from Roman to Italic.
 
@@ -139,7 +138,7 @@ FontVariations::get_pango_string() {
             // Translate the "named" axes. (Additional names in 'stat' table, may need to handle them.)
             if (name == "Width")  name = "wdth";       // 'font-stretch'
             if (name == "Weight") name = "wght";       // 'font-weight'
-            if (name == "Optical size") name = "opsz"; // 'font-optical-sizing' Can trigger glyph substition.
+            if (name == "Optical size") name = "opsz"; // 'font-optical-sizing' Can trigger glyph substitution.
             if (name == "Slant")  name = "slnt";       // 'font-style'
             if (name == "Italic") name = "ital";       // 'font-style' Toggles from Roman to Italic.
 

@@ -452,7 +452,7 @@ void SPText::_buildLayoutInit()
         }
         layout.strut *= style->font_size.computed;
         if (style->line_height.normal ) {
-            layout.strut.computeEffective( Inkscape::Text::Layout::LINE_HEIGHT_NORMAL ); 
+            layout.strut.computeEffective( Inkscape::Text::Layout::LINE_HEIGHT_NORMAL );
         } else if (style->line_height.unit == SP_CSS_UNIT_NONE) {
             layout.strut.computeEffective( style->line_height.computed );
         } else {
@@ -617,7 +617,7 @@ unsigned SPText::_buildLayoutInput(SPObject *object, Inkscape::Text::Layout::Opt
             // we've found 'x' and 'y' and then creating the Shape at the end.)
             if (is_horizontal()) {
                 // Horizontal text
-                SVGLength* y = attributes.getFirstYLength();
+                SVGLength* y = _getFirstYLength();
                 if (y) {
                     optional_attrs.y.push_back(*y);
                 } else {
@@ -625,14 +625,13 @@ unsigned SPText::_buildLayoutInput(SPObject *object, Inkscape::Text::Layout::Opt
                 }
             } else {
                 // Vertical text
-                SVGLength* x = attributes.getFirstXLength();
+                SVGLength* x = _getFirstXLength();
                 if (x) {
                     optional_attrs.x.push_back(*x);
                 } else {
                     std::cerr << "SPText::_buildLayoutInput: No 'x' attribute value with vertical 'inline-size'!" << std::endl;
                 }
             }
-
         }
 
         // set textLength on the entire layout, see note in TNG-Layout.h
@@ -719,7 +718,7 @@ unsigned SPText::_buildLayoutInput(SPObject *object, Inkscape::Text::Layout::Opt
 
 Shape* SPText::_buildExclusionShape() const
 {
-    Shape *result = new Shape(); // Union of all exlusion shapes
+    Shape *result = new Shape(); // Union of all exclusion shapes
     Shape *shape_temp = new Shape();
 
     Glib::ustring shapeSubtract_value = style->shape_subtract.value;
@@ -733,7 +732,7 @@ Shape* SPText::_buildExclusionShape() const
         } else {
             shape_url.erase(0,5);
             shape_url.erase(shape_url.size()-1,1);
-            // std::cout << "SPText::_buildExlusionShape(): shape-inside: " << shape_url << std::endl;
+            // std::cout << "SPText::_buildExclusionShape(): shape-inside: " << shape_url << std::endl;
             SPShape *shape = dynamic_cast<SPShape *>(document->getObjectById( shape_url ));
             if ( shape ) {
                 // This code adapted from sp-flowregion.cpp: GetDest()
@@ -772,6 +771,47 @@ Shape* SPText::_buildExclusionShape() const
     }
     return result;
 }
+
+
+// SVG requires one to use the first x/y value found on a child element if x/y not given on text
+// element. TODO: Recurse.
+SVGLength*
+SPText::_getFirstXLength()
+{
+    SVGLength* x = attributes.getFirstXLength();
+
+    if (!x) {
+        for (auto& child: children) {
+            if (SP_IS_TSPAN(&child)) {
+                SPTSpan *tspan = SP_TSPAN(&child);
+                x = tspan->attributes.getFirstXLength();
+                break;
+            }
+        }
+    }
+
+    return x;
+}
+
+
+SVGLength*
+SPText::_getFirstYLength()
+{
+    SVGLength* y = attributes.getFirstYLength();
+
+    if (!y) {
+        for (auto& child: children) {
+            if (SP_IS_TSPAN(&child)) {
+                SPTSpan *tspan = SP_TSPAN(&child);
+                y = tspan->attributes.getFirstYLength();
+                break;
+            }
+        }
+    }
+
+    return y;
+}
+
 
 void SPText::rebuildLayout()
 {

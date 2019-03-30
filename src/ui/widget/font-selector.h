@@ -88,6 +88,7 @@ protected:
     Gtk::ComboBoxText   size_combobox;
 
     // Font variations
+    Gtk::ScrolledWindow font_variations_scroll;
     FontVariations      font_variations;
 
 private:
@@ -124,7 +125,7 @@ public:
     /**
      * Get fontspec based on current settings. (Does not handle size, yet.)
      */
-    Glib::ustring get_fontspec();
+    Glib::ustring get_fontspec(bool use_variations = true);
 
     /**
      * Get font size. Could be merged with fontspec.

@@ -98,6 +98,7 @@ CssDialog::CssDialog()
     }
 
     Gtk::CellRendererText *renderer = Gtk::manage(new Gtk::CellRendererText());
+    _treeView.set_reorderable(false);
     renderer->property_editable() = true;
     int nameColNum = _treeView.append_column("Property", *renderer) - 1;
     _propCol = _treeView.get_column(nameColNum);
@@ -129,7 +130,7 @@ CssDialog::CssDialog()
         _sheetCol->set_sort_column(_cssColumns._styleSheetVal);
     }
 
-    // Set the inital sort column (and direction) to place real attributes at the top.
+    // Set the initial sort column (and direction) to place real attributes at the top.
     _store->set_sort_column(_cssColumns.deleteButton, Gtk::SORT_DESCENDING);
 
     _getContents()->pack_start(*_scrolledWindow, Gtk::PACK_EXPAND_WIDGET);
@@ -312,7 +313,7 @@ bool CssDialog::setStyleProperty(Glib::ustring name, Glib::ustring value)
     std::map<Glib::ustring, Glib::ustring> properties = parseStyle(original);
 
     bool updated = false;
-    if (value != nullptr && !value.empty()) {
+    if (!value.empty()) {
         if (properties[name] != value) {
             // Set value (create or update)
             properties[name] = value;
@@ -341,7 +342,7 @@ void CssDialog::onPropertyDelete(Glib::ustring path)
 {
     Gtk::TreeModel::Row row = *_store->get_iter(path);
     if (row) {
-        this->setStyleProperty(row[_cssColumns.label], nullptr);
+        this->setStyleProperty(row[_cssColumns.label], "");
     }
 }
 
