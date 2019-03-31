@@ -559,27 +559,24 @@ gboolean do_drag_motion(GtkWidget *widget, GdkDragContext *context, gint x, gint
 {
     GtkTreePath *path = nullptr;
     GtkTreeViewDropPosition pos;
-    if (!gtk_tree_view_get_dest_row_at_pos (GTK_TREE_VIEW(widget), x, y, &path, &pos)) return true;
+    gtk_tree_view_get_dest_row_at_pos (GTK_TREE_VIEW(widget), x, y, &path, &pos);
 
     int action = 0;
 
     if (path) {
-        action = GDK_ACTION_MOVE;
-
         SPXMLViewTree *tree = SP_XMLVIEW_TREE(user_data);
         GtkTreeIter iter;
         gtk_tree_model_get_iter(GTK_TREE_MODEL(tree->store), &iter, path);
-        if (sp_xmlview_tree_node_get_repr (GTK_TREE_MODEL(tree->store), &iter)->type() != Inkscape::XML::ELEMENT_NODE) {
-            action = 0;
-        }
-        if (!gtk_tree_path_up(path)) {
-            action = 0;
-        }
-        if (!gtk_tree_path_up(path)) {
-            action = 0;
-        }
-        if (!path) {
-            action = 0;
+
+        // 1. only xml elements can be dragged
+        if (sp_xmlview_tree_node_get_repr (GTK_TREE_MODEL(tree->store), &iter)->type() == Inkscape::XML::ELEMENT_NODE) {
+            // 2. new roots cannot be created eg. by dragging a node off into space
+            if (gtk_tree_path_get_depth(path) > 0) {
+                // 3. elements must be at least children of the root <svg:svg> element
+                if (gtk_tree_path_up(path) && gtk_tree_path_up(path)) {
+                    action = GDK_ACTION_MOVE;
+                }
+            }
         }
     }
 
