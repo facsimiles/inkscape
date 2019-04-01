@@ -4,7 +4,7 @@
  *//*
  * Authors:
  * see git history
- *   Eduard Braun <eduard.braun2@gmx.de>
+ *   Patrick Storz <eduard.braun2@gmx.de>
  *
  * Copyright (C) 2018 Authors
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
@@ -47,8 +47,6 @@ void initialize_gettext() {
     bindtextdomain(GETTEXT_PACKAGE, BR_LOCALEDIR(""));
 # else
     bindtextdomain(GETTEXT_PACKAGE, PACKAGE_LOCALE_DIR_ABSOLUTE);
-    // needed by Python/Gettext
-    g_setenv("PACKAGE_LOCALE_DIR", PACKAGE_LOCALE_DIR_ABSOLUTE, TRUE);
 # endif
 #endif
 

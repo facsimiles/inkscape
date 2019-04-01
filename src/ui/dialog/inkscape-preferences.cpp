@@ -2309,21 +2309,7 @@ void InkscapePreferences::initPageSpellcheck()
     std::vector<Glib::ustring> languages;
     std::vector<Glib::ustring> langValues;
 
-  AspellConfig *config = new_aspell_config();
-
-#ifdef _WIN32
-    // on windows, dictionaries are in a lib/aspell-0.60 subdir off inkscape's executable dir;
-    // this is some black magick to find out the executable path to give it to aspell
-    char exeName[MAX_PATH+1];
-    GetModuleFileName(NULL, exeName, MAX_PATH);
-    char *slashPos = strrchr(exeName, '\\');
-    if (slashPos)
-    {
-        *slashPos = '\0';
-    }
-    // g_print ("%s\n", exeName);
-    aspell_config_replace(config, "prefix", exeName);
-#endif
+    AspellConfig *config = new_aspell_config();
 
     /* the returned pointer should _not_ need to be deleted */
     AspellDictInfoList *dlist = get_aspell_dict_info_list(config);
@@ -2456,7 +2442,7 @@ void InkscapePreferences::initPageSystem()
     _sys_tmp_files.set_editable(false);
     _page_system.add_line(true, _("Temporary files: "), _sys_tmp_files, "", _("Location of the temporary files used for autosave"), true);
 
-    _sys_data.set_text( INKSCAPE_DATADIR );
+    _sys_data.set_text( INKSCAPE_DATADIR_REAL );
     _sys_data.set_editable(false);
     _page_system.add_line(true, _("Inkscape data: "), _sys_data, "", _("Location of Inkscape data"), true);
 

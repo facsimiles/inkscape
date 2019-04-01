@@ -44,7 +44,6 @@ gchar *_get_path(Domain domain, Type type, char const *filename)
         case SYSTEM: {
             gchar const* temp = nullptr;
             switch (type) {
-                case APPICONS: temp = INKSCAPE_APPICONDIR; break;
                 case EXTENSIONS: temp = INKSCAPE_EXTENSIONDIR; break;
                 case FILTERS: temp = INKSCAPE_FILTERDIR; break;
                 case FONTS: temp = INKSCAPE_FONTSDIR; break;
@@ -62,9 +61,6 @@ gchar *_get_path(Domain domain, Type type, char const *filename)
                 case TUTORIALS: temp = INKSCAPE_TUTORIALSDIR; break;
                 case UIS: temp = INKSCAPE_UIDIR; break;
                 case PIXMAPS: temp = INKSCAPE_PIXMAPSDIR; break;
-#ifdef INKSCAPE_DATADIR
-                case DATA_DIR: temp = INKSCAPE_DATADIR; break;
-#endif
                 default: temp = "";
             }
             path = g_strdup(temp);
@@ -100,7 +96,6 @@ gchar *_get_path(Domain domain, Type type, char const *filename)
                 case THEMES: name = "themes"; break;
                 case UIS: name = "ui"; break;
                 case PIXMAPS: name = "pixmaps"; break;
-                case DATA_DIR: name = ""; break;
                 default: return _get_path(SYSTEM, type, filename);
             }
             path = profile_path(name);
