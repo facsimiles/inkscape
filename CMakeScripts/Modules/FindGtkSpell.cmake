@@ -23,6 +23,6 @@ else (GTKSPELL_LIBRARIES AND GTKSPELL_INCLUDE_DIRS)
 	# in the FIND_PATH() and FIND_LIBRARY() calls
 	find_package(PkgConfig)
 	if (PKG_CONFIG_FOUND)
-		INKSCAPE_PKG_CONFIG_FIND(GTKSPELL gtkspell-2.0 0 gtkspell/gtkspell.h gtkspell-2.0 gtkspell)
+		INKSCAPE_PKG_CONFIG_FIND(GTKSPELL gtkspell3-3.0 0 gtkspell/gtkspell.h gtkspell-3.0 gtkspell)
 	endif (PKG_CONFIG_FOUND)
 endif (GTKSPELL_LIBRARIES AND GTKSPELL_INCLUDE_DIRS)
