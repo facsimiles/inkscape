@@ -35,7 +35,7 @@ set(object_SRC
   sp-item-group.cpp
   sp-item-rm-unsatisfied-cns.cpp
   sp-item-transform.cpp
-  sp-item-update-cns.cpp
+  #sp-item-update-cns.cpp
   sp-item.cpp
   sp-line.cpp
   sp-linear-gradient.cpp
