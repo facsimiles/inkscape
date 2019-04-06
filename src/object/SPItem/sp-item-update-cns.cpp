@@ -12,7 +12,7 @@
 #include "satisfied-guide-cns.h"
 
 #include "sp-item-update-cns.h"
-#include "sp-guide.h"
+#include "../sp-guide.h"
 
 void sp_item_update_cns(SPItem &item, SPDesktop const &desktop)
 {
