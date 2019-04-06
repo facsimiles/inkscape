@@ -123,7 +123,7 @@ set(object_SRC
   sp-item-group.h
   sp-item-rm-unsatisfied-cns.h
   sp-item-transform.h
-  #sp-item-update-cns.h
+  sp-item-update-cns.h
   sp-item.h
   sp-line.h
   sp-linear-gradient.h
