@@ -9,7 +9,7 @@
  */
 
 #include <vector>
-#include "satisfied-guide-cns.h"
+#include "../satisfied-guide-cns.h"
 
 #include "sp-item-update-cns.h"
 #include "../sp-guide.h"
