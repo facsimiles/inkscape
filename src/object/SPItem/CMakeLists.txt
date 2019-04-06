@@ -2,6 +2,7 @@
 
 set(spitem_SRC
 
+    sp-item-update-cns.cpp
     sp-item-update-cns.h
     )
     
