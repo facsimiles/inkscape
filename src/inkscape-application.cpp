@@ -12,6 +12,10 @@
 
 #include <glibmm/i18n.h>  // Internationalization
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"      // Defines ENABLE_NLS
+#endif
+
 #include "inkscape-application.h"
 #include "inkscape-window.h"
 
@@ -113,7 +117,7 @@ InkscapeApplication::document_open(const Glib::RefPtr<Gio::File>& file)
     SPDocument *document = ink_file_open(file, cancelled);
 
     if (document) {
-        document->virgin = false; // Prevents replacing document in same window during file open.
+        document->setVirgin(false); // Prevents replacing document in same window during file open.
 
         document_add (document);
     } else {
@@ -200,7 +204,7 @@ InkscapeApplication::document_revert(SPDocument* document)
     }
 
     // Allow overwriting current document.
-    document->virgin = true;
+    document->setVirgin(true);
 
     auto it = _documents.find(document);
     if (it != _documents.end()) {
@@ -432,7 +436,11 @@ template<class T>
 ConcreteInkscapeApplication<T>::ConcreteInkscapeApplication()
     : T("org.inkscape.application.with_gui",
                        Gio::APPLICATION_HANDLES_OPEN | // Use default file opening.
-                       Gio::APPLICATION_NON_UNIQUE   ) // Allows different instances of Inkscape to run at same time.
+                       Gio::APPLICATION_CAN_OVERRIDE_APP_ID ) // Allows different instances of
+                                                              // Inkscape to run at same time using
+                                                              // --gapplication-app-id (useful for
+                                                              // debugging different versions of
+                                                              // Inkscape).
     , InkscapeApplication()
 {
 
@@ -634,7 +642,7 @@ ConcreteInkscapeApplication<Gtk::Application>::create_window(const Glib::RefPtr<
 
             // TODO Remove this code... handle document replacement elsewhere.
             SPDocument* old_document = _active_document;
-            if (replace_empty && old_document && old_document->virgin) {
+            if (replace_empty && old_document && old_document->getVirgin()) {
                 // virgin == true => an empty document (template).
 
                 // Is there a better place for this? It requires GUI.

@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
-cmake_minimum_required(VERSION 2.8.8)
+cmake_minimum_required(VERSION 3.1.0)
 
 cmake_policy(SET CMP0003 NEW) # don't be prolific with library paths
 cmake_policy(SET CMP0005 NEW) # proper define quoting
@@ -18,9 +18,10 @@ message("Binary Dir: ${CMAKE_CURRENT_BINARY_DIR}")
 # -----------------------------------------------------------------------------
 # CMake Configuration
 # -----------------------------------------------------------------------------
-# Used in cmake 3.1+
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+# set(CMAKE_CXX_EXTENSIONS OFF) # enforces -std=c++11 instead of -std=gnu++11
+                                # TODO: build currently fails with it as we actually depend on GNU compiler extensions...
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/CMakeScripts/Modules")
 
@@ -127,9 +128,6 @@ include(CMakeScripts/HelperMacros.cmake) # Misc Utility Macros
 
 # -----------------------------------------------------------------------------
 # BAD HACKS, NEED TO INVESTIGATE MAKING THESE LESS BAD
-if (NOT CMAKE_BUILD_TYPE MATCHES Debug)
-  add_definitions(-D_FORTIFY_SOURCE=2)
-endif()
 if(BUILD_SHARED_LIBS AND NOT WIN32)
     add_definitions(-fPIC)
 endif()
@@ -232,11 +230,7 @@ install(FILES
 	TRANSLATORS
 	DESTINATION ${INKSCAPE_SHARE_INSTALL}/doc)
 
-if(HAVE_MSYS2)
-  include(CMakeScripts/InstallMSYS2.cmake)
-else()
-  include(CMakeScripts/Install.cmake)
-endif()
+include(CMakeScripts/Install.cmake)
 
 # -----------------------------------------------------------------------------
 # Uninstall Target
@@ -317,17 +311,10 @@ message("WITH_JEMALLOC:           ${WITH_JEMALLOC}")
 
 if(WIN32)
 message("")
-message("HAVE_MINGW:              ${HAVE_MINGW}")
 message("HAVE_MINGW64:            ${HAVE_MINGW64}")
 message("MINGW_PATH:              ${MINGW_PATH}")
 message("MINGW_ARCH:              ${MINGW_ARCH}")
 message("MINGW_ARCH_PATH:         ${MINGW_ARCH_PATH}")
-if(NOT HAVE_MSYS2)
-message("DEVLIBS_PATH:            ${DEVLIBS_PATH}")
-message("DEVLIBS_LIB:             ${DEVLIBS_LIB}")
-message("DEVLIBS_BIN:             ${DEVLIBS_BIN}")
-message("PKG_CONFIG_PATH:         ${PKG_CONFIG_PATH}")
-endif()
 endif()
 
 message("------------------------------------------------------------------------")

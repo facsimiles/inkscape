@@ -2137,7 +2137,26 @@ void InkscapePreferences::onKBTreeEdited (const Glib::ustring& path, guint accel
     }
 
     unsigned int const new_shortcut_id =  sp_shortcut_get_from_gdk_event(accel_key, accel_mods, hardware_keycode);
-    if (new_shortcut_id) {
+    if (new_shortcut_id && (new_shortcut_id != current_shortcut_id)) {
+        // check if there is currently a verb assigned to this shortcut; if yes ask if the shortcut should be reassigned
+        Inkscape::Verb *current_verb = sp_shortcut_get_verb(new_shortcut_id);
+        if (current_verb) {
+            Glib::ustring verb_name = _(current_verb->get_name());
+            Glib::ustring::size_type pos = 0;
+            while ((pos = verb_name.find('_', pos)) != verb_name.npos) { // strip mnemonics
+                verb_name.erase(pos, 1);
+            }
+            Glib::ustring message = Glib::ustring::compose(_("Keyboard shortcut \"%1\"\nis already assigned to \"%2\""),
+                                                           sp_shortcut_get_label(new_shortcut_id), verb_name);
+            Gtk::MessageDialog dialog(message, false, Gtk::MESSAGE_QUESTION, Gtk::BUTTONS_YES_NO, true);
+            dialog.set_title(_("Reassign shortcut?"));
+            dialog.set_secondary_text(_("Are you sure you want to reassign this shortcut?"));
+            dialog.set_transient_for(*dynamic_cast<Gtk::Window *>(get_toplevel()));
+            int response = dialog.run();
+            if (response != Gtk::RESPONSE_YES) {
+                return;
+            }
+        }
 
         // Delete current shortcut if it existed
         sp_shortcut_delete_from_file(id.c_str(), current_shortcut_id);
@@ -2309,21 +2328,7 @@ void InkscapePreferences::initPageSpellcheck()
     std::vector<Glib::ustring> languages;
     std::vector<Glib::ustring> langValues;
 
-  AspellConfig *config = new_aspell_config();
-
-#ifdef _WIN32
-    // on windows, dictionaries are in a lib/aspell-0.60 subdir off inkscape's executable dir;
-    // this is some black magick to find out the executable path to give it to aspell
-    char exeName[MAX_PATH+1];
-    GetModuleFileName(NULL, exeName, MAX_PATH);
-    char *slashPos = strrchr(exeName, '\\');
-    if (slashPos)
-    {
-        *slashPos = '\0';
-    }
-    // g_print ("%s\n", exeName);
-    aspell_config_replace(config, "prefix", exeName);
-#endif
+    AspellConfig *config = new_aspell_config();
 
     /* the returned pointer should _not_ need to be deleted */
     AspellDictInfoList *dlist = get_aspell_dict_info_list(config);
@@ -2456,7 +2461,7 @@ void InkscapePreferences::initPageSystem()
     _sys_tmp_files.set_editable(false);
     _page_system.add_line(true, _("Temporary files: "), _sys_tmp_files, "", _("Location of the temporary files used for autosave"), true);
 
-    _sys_data.set_text( INKSCAPE_DATADIR );
+    _sys_data.set_text( INKSCAPE_DATADIR_REAL );
     _sys_data.set_editable(false);
     _page_system.add_line(true, _("Inkscape data: "), _sys_data, "", _("Location of Inkscape data"), true);
 

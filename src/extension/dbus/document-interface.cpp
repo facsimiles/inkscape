@@ -993,7 +993,7 @@ gboolean document_interface_mark_as_unmodified(DocumentInterface *doc_interface,
 {
     SPDocument * doc = doc_interface->target.getDocument();
     if (doc) {
-        doc->modified_since_save = FALSE;
+        doc->setModifiedSinceSave(FALSE);
     }
     return TRUE;
 }
@@ -1071,7 +1071,7 @@ void document_interface_update(DocumentInterface *doc_interface, GError ** error
     doc->getRoot()->uflags = TRUE;
     doc->getRoot()->mflags = TRUE;
     desk->enableInteraction();
-    doc->_updateDocument();
+    doc->ensureUpToDate();
     desk->disableInteraction();
     doc->getRoot()->uflags = FALSE;
     doc->getRoot()->mflags = FALSE;

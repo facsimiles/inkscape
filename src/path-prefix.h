@@ -28,24 +28,14 @@
 
 #include "prefix.h"
 
-
-char *append_inkscape_datadir(const char *relative_path);
-char *get_datadir_path();
-char *get_extensions_path();
-#ifdef _WIN32
-#undef INKSCAPE_DATADIR
-#define INKSCAPE_DATADIR append_inkscape_datadir(NULL)
-#endif
-
 #ifdef ENABLE_BINRELOC
 /* The way that we're building now is with a shared library between Inkscape
    and Inkview, and the code will find the path to the library then. But we
    don't really want that. This prefix then pulls things out of the lib directory
    and back into the root install dir. */
 #  define INKSCAPE_LIBPREFIX      "/../.."
-#  define INKSCAPE_APPICONDIR     BR_DATADIR( INKSCAPE_LIBPREFIX "/share/pixmaps" )
+#  define INKSCAPE_DATADIR_REAL   BR_DATADIR( INKSCAPE_LIBPREFIX "/share")
 #  define INKSCAPE_ATTRRELDIR     BR_DATADIR( INKSCAPE_LIBPREFIX "/share/inkscape/attributes" )
-#  define INKSCAPE_BINDDIR        BR_DATADIR( INKSCAPE_LIBPREFIX "/share/inkscape/bind" )
 #  define INKSCAPE_DOCDIR         BR_DATADIR( INKSCAPE_LIBPREFIX "/share/inkscape/doc" )
 #  define INKSCAPE_EXAMPLESDIR    BR_DATADIR( INKSCAPE_LIBPREFIX "/share/inkscape/examples" )
 #  define INKSCAPE_EXTENSIONDIR   BR_DATADIR( INKSCAPE_LIBPREFIX "/share/inkscape/extensions" )
@@ -70,9 +60,8 @@ char *get_extensions_path();
 #    define CREATE_PATTERNSDIR    BR_DATADIR( INKSCAPE_LIBPREFIX "/share/create/patterns/vector" )
 #else
 #  ifdef _WIN32
-#    define INKSCAPE_APPICONDIR   append_inkscape_datadir("pixmaps")
+#    define INKSCAPE_DATADIR_REAL append_inkscape_datadir()
 #    define INKSCAPE_ATTRRELDIR   append_inkscape_datadir("attributes")
-#    define INKSCAPE_BINDDIR      append_inkscape_datadir("bind")
 #    define INKSCAPE_DOCDIR       append_inkscape_datadir("doc")
 #    define INKSCAPE_EXAMPLESDIR  append_inkscape_datadir("examples")
 #    define INKSCAPE_EXTENSIONDIR append_inkscape_datadir("extensions")
@@ -95,10 +84,9 @@ char *get_extensions_path();
 #    define CREATE_GRADIENTSDIR   append_inkscape_datadir("create\\gradients\\gimp")
 #    define CREATE_PALETTESDIR    append_inkscape_datadir("create\\swatches")
 #    define CREATE_PATTERNSDIR    append_inkscape_datadir("create\\patterns\\vector")
-#  elif defined ENABLE_OSX_APP_LOCATIONS
-#    define INKSCAPE_APPICONDIR   "Contents/Resources/share/pixmaps"
+#  elif defined ENABLE_OSX_APP_LOCATIONS // TODO: Is ENABLE_OSX_APP_LOCATIONS still in use?
+#    define INKSCAPE_DATADIR_REAL "Contents/Resources/share"
 #    define INKSCAPE_ATTRRELDIR   "Contents/Resources/share/inkscape/attributes"
-#    define INKSCAPE_BINDDIR      "Contents/Resources/share/inkscape/bind"
 #    define INKSCAPE_DOCDIR       "Contents/Resources/share/inkscape/doc"
 #    define INKSCAPE_EXAMPLESDIR  "Contents/Resources/share/inkscape/examples"
 #    define INKSCAPE_EXTENSIONDIR "Contents/Resources/share/inkscape/extensions"
@@ -122,7 +110,7 @@ char *get_extensions_path();
 #    define CREATE_PALETTESDIR   "/Library/Application Support/create/swatches"
 #    define CREATE_PATTERNSDIR   "/Library/Application Support/create/patterns/vector"
 #  else
-#    define INKSCAPE_APPICONDIR   append_inkscape_datadir("pixmaps")
+#    define INKSCAPE_DATADIR_REAL append_inkscape_datadir()
 #    define INKSCAPE_ATTRRELDIR   append_inkscape_datadir("inkscape/attributes")
 #    define INKSCAPE_BINDDIR      append_inkscape_datadir("inkscape/bind")
 #    define INKSCAPE_DOCDIR       append_inkscape_datadir("inkscape/doc")
@@ -149,5 +137,11 @@ char *get_extensions_path();
 #    define CREATE_PATTERNSDIR    append_inkscape_datadir("create/patterns/vector")
 #  endif
 #endif
+
+
+char *append_inkscape_datadir(const char *relative_path=nullptr);
+char *get_program_name();
+char *get_program_dir();
+
 
 #endif /* _PATH_PREFIX_H_ */

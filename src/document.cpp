@@ -84,8 +84,6 @@ using Inkscape::Util::unit_table;
 #define SP_DOCUMENT_REROUTING_PRIORITY (G_PRIORITY_HIGH_IDLE - 1)
 
 bool sp_no_convert_text_baseline_spacing = false;
-static gint sp_document_idle_handler(gpointer data);
-static gint sp_document_rerouting_handler(gpointer data);
 
 //gboolean sp_document_resource_list_free(gpointer key, gpointer value, gpointer data);
 
@@ -95,9 +93,9 @@ static gint doc_mem_count = 0;
 static unsigned long next_serial = 0;
 
 SPDocument::SPDocument() :
-    keepalive(FALSE),
-    virgin(TRUE),
-    modified_since_save(FALSE),
+    keepalive(false),
+    virgin(true),
+    modified_since_save(false),
     rdoc(nullptr),
     rroot(nullptr),
     root(nullptr),
@@ -108,8 +106,6 @@ SPDocument::SPDocument() :
     document_base(nullptr),
     document_name(nullptr),
     actionkey(),
-    modified_id(0),
-    rerouting_handler_id(0),
     profileManager(nullptr), // deferred until after other initialization
     router(new Avoid::Router(Avoid::PolyLineRouting|Avoid::OrthogonalRouting)),
     oldSignalsConnected(false),
@@ -195,22 +191,15 @@ SPDocument::~SPDocument() {
         document_uri = nullptr;
     }
 
-    if (modified_id) {
-        g_source_remove(modified_id);
-        modified_id = 0;
-    }
-
-    if (rerouting_handler_id) {
-        g_source_remove(rerouting_handler_id);
-        rerouting_handler_id = 0;
-    }
+    modified_connection.disconnect();
+    rerouting_connection.disconnect();
 
     if (keepalive) {
         inkscape_unref(INKSCAPE);
-        keepalive = FALSE;
+        keepalive = false;
     }
 
-    if (this->current_persp3d_impl) 
+    if (this->current_persp3d_impl)
         delete this->current_persp3d_impl;
     this->current_persp3d_impl = nullptr;
 
@@ -218,9 +207,9 @@ SPDocument::~SPDocument() {
     collectOrphans();
 }
 
-sigc::connection SPDocument::connectDestroy(sigc::signal<void>::slot_type slot)
+Inkscape::XML::Node *SPDocument::getReprNamedView()
 {
-    return destroySignal.connect(slot);
+    return sp_repr_lookup_name (rroot, "sodipodi:namedview");
 }
 
 SPDefs *SPDocument::getDefs()
@@ -244,10 +233,6 @@ Persp3D *SPDocument::getCurrentPersp3D() {
     current_persp3d = persp3d_document_first_persp (this);
 
     return current_persp3d;
-}
-
-Persp3DImpl *SPDocument::getCurrentPersp3DImpl() {
-    return current_persp3d_impl;
 }
 
 void SPDocument::setCurrentPersp3D(Persp3D * const persp) {
@@ -274,10 +259,6 @@ void SPDocument::initialize_current_persp3d()
 }
 **/
 
-unsigned long SPDocument::serial() const {
-    return _serial;
-}
-
 void SPDocument::queueForOrphanCollection(SPObject *object) {
     g_return_if_fail(object != nullptr);
     g_return_if_fail(object->document == this);
@@ -298,16 +279,11 @@ void SPDocument::collectOrphans() {
     }
 }
 
-void SPDocument::reset_key (void */*dummy*/)
-{
-    actionkey.clear();
-}
-
 SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
                                   gchar const *document_uri,
                                   gchar const *document_base,
                                   gchar const *document_name,
-                                  unsigned int keepalive,
+                                  bool keepalive,
                                   SPDocument *parent)
 {
     SPDocument *document = new SPDocument();
@@ -530,7 +506,7 @@ SPDocument *SPDocument::createChildDoc(std::string const &document_uri)
  * Fetches document from URI, or creates new, if NULL; public document
  * appears in document list.
  */
-SPDocument *SPDocument::createNewDoc(gchar const *document_uri, unsigned int keepalive, bool make_new, SPDocument *parent)
+SPDocument *SPDocument::createNewDoc(gchar const *document_uri, bool keepalive, bool make_new, SPDocument *parent)
 {
     Inkscape::XML::Document *rdoc = nullptr;
     gchar *document_base = nullptr;
@@ -582,7 +558,7 @@ SPDocument *SPDocument::createNewDoc(gchar const *document_uri, unsigned int kee
     return doc;
 }
 
-SPDocument *SPDocument::createNewDocFromMem(gchar const *buffer, gint length, unsigned int keepalive)
+SPDocument *SPDocument::createNewDocFromMem(gchar const *buffer, gint length, bool keepalive)
 {
     SPDocument *doc = nullptr;
 
@@ -640,7 +616,7 @@ void SPDocument::setDocumentScale( double scaleX, double scaleY ) {
     root->updateRepr();
 }
 
-/// Sets document scale (by changing viewBox, x and y scaling equal) 
+/// Sets document scale (by changing viewBox, x and y scaling equal)
 void SPDocument::setDocumentScale( double scale ) {
     setDocumentScale( scale, scale );
 }
@@ -837,13 +813,13 @@ void SPDocument::fitToRect(Geom::Rect const &rect, bool with_margins)
     if (root->height.unit && (root->height.unit != SVGLength::PERCENT))
         nv_units = unit_table.getUnit(root->height.unit);
     SPNamedView *nv = sp_document_namedview(this, nullptr);
-    
+
     /* in px */
     double margin_top = 0.0;
     double margin_left = 0.0;
     double margin_right = 0.0;
     double margin_bottom = 0.0;
-    
+
     if (with_margins && nv) {
         if (nv != nullptr) {
             margin_top = nv->getMarginLength("fit-margin-top", nv_units, unit_table.getUnit("px"), w, h, false);
@@ -862,11 +838,11 @@ void SPDocument::fitToRect(Geom::Rect const &rect, bool with_margins)
     if (y_dir > 0) {
         std::swap(margin_top, margin_bottom);
     }
-    
+
     Geom::Rect const rect_with_margins(
             rect.min() - Geom::Point(margin_left, margin_bottom),
             rect.max() + Geom::Point(margin_right, margin_top));
-    
+
     setWidthAndHeight(
         Inkscape::Util::Quantity(Inkscape::Util::Quantity::convert(rect_with_margins.width(),  "px", nv_units), nv_units),
         Inkscape::Util::Quantity(Inkscape::Util::Quantity::convert(rect_with_margins.height(), "px", nv_units), nv_units)
@@ -969,78 +945,6 @@ void SPDocument::changeUriAndHrefs(gchar const *filename)
     do_change_uri(filename, true);
 }
 
-void SPDocument::emitResizedSignal(gdouble width, gdouble height)
-{
-    this->resized_signal.emit(width, height);
-}
-
-sigc::connection SPDocument::connectModified(SPDocument::ModifiedSignal::slot_type slot)
-{
-    return modified_signal.connect(slot);
-}
-
-sigc::connection SPDocument::connectURISet(SPDocument::URISetSignal::slot_type slot)
-{
-    return uri_set_signal.connect(slot);
-}
-
-sigc::connection SPDocument::connectResized(SPDocument::ResizedSignal::slot_type slot)
-{
-    return resized_signal.connect(slot);
-}
-
-sigc::connection
-SPDocument::connectReconstructionStart(SPDocument::ReconstructionStart::slot_type slot)
-{
-    return _reconstruction_start_signal.connect(slot);
-}
-
-void
-SPDocument::emitReconstructionStart()
-{
-    // printf("Starting Reconstruction\n");
-    _reconstruction_start_signal.emit();
-    return;
-}
-
-sigc::connection
-SPDocument::connectReconstructionFinish(SPDocument::ReconstructionFinish::slot_type  slot)
-{
-    return _reconstruction_finish_signal.connect(slot);
-}
-
-void
-SPDocument::emitReconstructionFinish()
-{
-    // printf("Finishing Reconstruction\n");
-    _reconstruction_finish_signal.emit();
-    // indicates that gradients are reloaded (to rebuild the Auto palette)
-    resources_changed_signals[g_quark_from_string("gradient")].emit();
-    resources_changed_signals[g_quark_from_string("filter")].emit();
-
-
-/**    
-    // Reference to the old persp3d object is invalid after reconstruction.
-    initialize_current_persp3d();
-    
-    return;
-**/
-}
-
-sigc::connection SPDocument::connectCommit(SPDocument::CommitSignal::slot_type slot)
-{
-    return commit_signal.connect(slot);
-}
-
-
-
-void SPDocument::_emitModified() {
-    static guint const flags = SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG | SP_OBJECT_PARENT_MODIFIED_FLAG;
-    root->emitModified(0);
-    modified_signal.emit(flags);
-    _node_cache_valid=false;
-}
-
 void SPDocument::bindObjectToId(gchar const *id, SPObject *object) {
     GQuark idq = g_quark_from_string(id);
 
@@ -1064,18 +968,6 @@ void SPDocument::bindObjectToId(gchar const *id, SPObject *object) {
             id_changed_signals.erase(pos);
         }
     }
-}
-
-void
-SPDocument::addUndoObserver(Inkscape::UndoStackObserver& observer)
-{
-    this->undoStackObservers.add(observer);
-}
-
-void
-SPDocument::removeUndoObserver(Inkscape::UndoStackObserver& observer)
-{
-    this->undoStackObservers.remove(observer);
 }
 
 SPObject *SPDocument::getObjectById(Glib::ustring const &id) const
@@ -1103,12 +995,6 @@ SPObject *SPDocument::getObjectById(gchar const *id) const
     }
 
     return getObjectById(Glib::ustring(id));
-}
-
-sigc::connection SPDocument::connectIdChanged(gchar const *id,
-                                              SPDocument::IDChangedSignal::slot_type slot)
-{
-    return id_changed_signals[g_quark_from_string(id)].connect(slot);
 }
 
 void _getObjectsByClassRecursive(Glib::ustring const &klass, SPObject *parent, std::vector<SPObject *> &objects)
@@ -1249,7 +1135,7 @@ Glib::ustring SPDocument::getLanguage() const
         if ( nullptr == document_language || *document_language == 0 ) {
             document_language = getenv ("LANGUAGE");
         }
-        
+
         if ( nullptr != document_language ) {
             const char *pos = strchr(document_language, '_');
             if ( nullptr != pos ) {
@@ -1267,13 +1153,16 @@ Glib::ustring SPDocument::getLanguage() const
 
 void SPDocument::requestModified()
 {
-    if (!modified_id) {
-        modified_id = g_idle_add_full(SP_DOCUMENT_UPDATE_PRIORITY, 
-                sp_document_idle_handler, this, nullptr);
+    if (modified_connection.empty()) {
+        modified_connection =
+            Glib::signal_idle().connect(sigc::mem_fun(*this, &SPDocument::idle_handler),
+                                        SP_DOCUMENT_UPDATE_PRIORITY);
     }
-    if (!rerouting_handler_id) {
-        rerouting_handler_id = g_idle_add_full(SP_DOCUMENT_REROUTING_PRIORITY, 
-                sp_document_rerouting_handler, this, nullptr);
+
+    if (rerouting_connection.empty()) {
+        rerouting_connection =
+            Glib::signal_idle().connect(sigc::mem_fun(*this, &SPDocument::rerouting_handler),
+                                        SP_DOCUMENT_REROUTING_PRIORITY);
     }
 }
 
@@ -1343,57 +1232,48 @@ gint SPDocument::ensureUpToDate()
             break;
         }
 
-        // After updates on the first pass we get libavoid to process all the 
+        // After updates on the first pass we get libavoid to process all the
         // changed objects and provide new routings.  This may cause some objects
             // to be modified, hence the second update pass.
         if (pass == 1) {
             router->processTransaction();
         }
     }
-    
-    if (modified_id) {
-        // Remove handler
-        g_source_remove(modified_id);
-        modified_id = 0;
-    }
-    if (rerouting_handler_id) {
-        // Remove handler
-        g_source_remove(rerouting_handler_id);
-        rerouting_handler_id = 0;
-    }
-    return counter>0;
+
+    // Remove handlers
+    modified_connection.disconnect();
+    rerouting_connection.disconnect();
+
+    return (counter > 0);
 }
 
 /**
  * An idle handler to update the document.  Returns true if
  * the document needs further updates.
  */
-static gint
-sp_document_idle_handler(gpointer data)
+bool
+SPDocument::idle_handler()
 {
-    SPDocument *doc = static_cast<SPDocument *>(data);
-    bool status = !doc->_updateDocument(); // method TRUE if it does NOT need further modification, so invert
+    bool status = !_updateDocument(); // method TRUE if it does NOT need further modification, so invert
     if (!status) {
-        doc->modified_id = 0;
+        modified_connection.disconnect();
     }
     return status;
 }
 
 /**
- * An idle handler to reroute connectors in the document.  
+ * An idle handler to reroute connectors in the document.
  */
-static gint
-sp_document_rerouting_handler(gpointer data)
+bool
+SPDocument::rerouting_handler()
 {
-    // Process any queued movement actions and determine new routings for 
-    // object-avoiding connectors.  Callbacks will be used to update and 
+    // Process any queued movement actions and determine new routings for
+    // object-avoiding connectors.  Callbacks will be used to update and
     // redraw affected connectors.
-    SPDocument *doc = static_cast<SPDocument *>(data);
-    doc->router->processTransaction();
-    
-    // We don't need to handle rerouting again until there are further 
+    router->processTransaction();
+
+    // We don't need to handle rerouting again until there are further
     // diagram updates.
-    doc->rerouting_handler_id = 0;
     return false;
 }
 
@@ -1407,11 +1287,11 @@ static bool overlaps(Geom::Rect const &area, Geom::Rect const &box)
     return area.intersects(box);
 }
 
-static std::vector<SPItem*> &find_items_in_area(std::vector<SPItem*> &s, 
-                                                SPGroup *group, unsigned int dkey, 
+static std::vector<SPItem*> &find_items_in_area(std::vector<SPItem*> &s,
+                                                SPGroup *group, unsigned int dkey,
                                                 Geom::Rect const &area,
-                                                bool (*test)(Geom::Rect const &, Geom::Rect const &), 
-                                                bool take_hidden = false, 
+                                                bool (*test)(Geom::Rect const &, Geom::Rect const &),
+                                                bool take_hidden = false,
                                                 bool take_insensitive = false,
                                                 bool take_groups = true,
                                                 bool enter_groups = false)
@@ -1430,7 +1310,7 @@ static std::vector<SPItem*> &find_items_in_area(std::vector<SPItem*> &s,
                 }
             }
             Geom::OptRect box = item->desktopVisualBounds();
-            if (box && test(area, *box)                    
+            if (box && test(area, *box)
                 && (take_insensitive || !item->isLocked())
                 && (take_hidden || !item->isHidden()))
             {
@@ -1617,7 +1497,7 @@ std::vector<SPItem*> SPDocument::getItemsPartiallyInBox(unsigned int dkey, Geom:
     return find_items_in_area(x, SP_GROUP(this->root), dkey, box, overlaps, take_hidden, take_insensitive, take_groups, enter_groups);
 }
 
-std::vector<SPItem*> SPDocument::getItemsAtPoints(unsigned const key, std::vector<Geom::Point> points, bool all_layers, size_t limit) const 
+std::vector<SPItem*> SPDocument::getItemsAtPoints(unsigned const key, std::vector<Geom::Point> points, bool all_layers, size_t limit) const
 {
     std::vector<SPItem*> items;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -1663,7 +1543,7 @@ std::vector<SPItem*> SPDocument::getItemsAtPoints(unsigned const key, std::vecto
 }
 
 SPItem *SPDocument::getItemAtPoint( unsigned const key, Geom::Point const &p,
-                                    bool const into_groups, SPItem *upto) const 
+                                    bool const into_groups, SPItem *upto) const
 {
     // Build a flattened SVG DOM for find_item_at_point.
     std::deque<SPItem*> bak(_node_cache);
@@ -1676,7 +1556,7 @@ SPItem *SPDocument::getItemAtPoint( unsigned const key, Geom::Point const &p,
         build_flat_item_list(key, SP_GROUP(this->root), true);
         _node_cache_valid=true;
     }
-    
+
     SPItem *res = find_item_at_point(&_node_cache, key, p, upto);
     if(!into_groups)
         _node_cache = bak;
@@ -1709,7 +1589,7 @@ bool SPDocument::addResource(gchar const *key, SPObject *object)
         /*in general, do not send signal if the object has no id (yet),
         it means the object is not completely built.
         (happens when pasting swatches across documents, cf bug 1495106)
-        [this check should be more generally presend on emit() calls since 
+        [this check should be more generally presend on emit() calls since
         the backtrace is unusable with crashed from this cause]
         */
         if(object->getId() || dynamic_cast<SPGroup*>(object) )
@@ -1755,13 +1635,6 @@ std::vector<SPObject *> const SPDocument::getResourceList(gchar const *key)
     return resources[key];
 }
 
-sigc::connection SPDocument::connectResourcesChanged(gchar const *key,
-                                                     SPDocument::ResourcesChangedSignal::slot_type slot)
-{
-    GQuark q = g_quark_from_string(key);
-    return resources_changed_signals[q].connect(slot);
-}
-
 /* Helpers */
 
 static unsigned int count_objects_recursive(SPObject *obj, unsigned int count)
@@ -1777,7 +1650,7 @@ static unsigned int count_objects_recursive(SPObject *obj, unsigned int count)
 
 /**
  * Count the number of objects in a given document recursively using the count_objects_recursive helper function
- * 
+ *
  * @param[in] document Pointer to the document for counting objects
  * @return Number of objects in the document
  */
@@ -1833,10 +1706,6 @@ unsigned int SPDocument::vacuumDocument()
     return start - newend;
 }
 
-bool SPDocument::isSeeking() const {
-    return seeking;
-}
-
 /**
  * Indicate to the user if the document has been modified since the last save by displaying a "*" in front of the name of the file in the window title.
  *
@@ -1866,34 +1735,34 @@ void SPDocument::importDefs(SPDocument *source)
     std::vector<Inkscape::XML::Node const *> defsNodes = sp_repr_lookup_name_many(root, "svg:defs");
 
     prevent_id_clashes(source, this);
-    
+
     for (auto & defsNode : defsNodes) {
-       importDefsNode(source, const_cast<Inkscape::XML::Node *>(defsNode), target_defs);
+       _importDefsNode(source, const_cast<Inkscape::XML::Node *>(defsNode), target_defs);
     }
 }
 
-void SPDocument::importDefsNode(SPDocument *source, Inkscape::XML::Node *defs, Inkscape::XML::Node *target_defs)
-{    
+void SPDocument::_importDefsNode(SPDocument *source, Inkscape::XML::Node *defs, Inkscape::XML::Node *target_defs)
+{
     int stagger=0;
 
     /*  Note, "clipboard" throughout the comments means "the document that is either the clipboard
         or an imported document", as importDefs is called in both contexts.
-        
+
         The order of the records in the clipboard is unpredictable and there may be both
         forward and backwards references to other records within it.  There may be definitions in
         the clipboard that duplicate definitions in the present document OR that duplicate other
         definitions in the clipboard.  (Inkscape will not have created these, but they may be read
         in from other SVG sources.)
-         
+
         There are 3 passes to clean this up:
 
         In the first find and mark definitions in the clipboard that are duplicates of those in the
         present document.  Change the ID to "RESERVED_FOR_INKSCAPE_DUPLICATE_DEF_XXXXXXXXX".
         (Inkscape will not reuse an ID, and the XXXXXXXXX keeps it from automatically creating new ones.)
         References in the clipboard to the old clipboard name are converted to the name used
-        in the current document. 
+        in the current document.
 
-        In the second find and mark definitions in the clipboard that are duplicates of earlier 
+        In the second find and mark definitions in the clipboard that are duplicates of earlier
         definitions in the clipbard.  Unfortunately this is O(n^2) and could be very slow for a large
         SVG with thousands of definitions.  As before, references are adjusted to reflect the name
         going forward.
@@ -1901,7 +1770,7 @@ void SPDocument::importDefsNode(SPDocument *source, Inkscape::XML::Node *defs, I
         In the final cycle copy over those records not marked with that ID.
 
         If an SVG file uses the special ID it will cause problems!
-        
+
         If this function is called because of the paste of a true clipboard the caller will have passed in a
         COPY of the clipboard items.  That is good, because this routine modifies that document.  If the calling
         behavior ever changes, so that the same document is passed in on multiple pastes, this routine will break
@@ -1913,12 +1782,12 @@ void SPDocument::importDefsNode(SPDocument *source, Inkscape::XML::Node *defs, I
     */
 
     std::string DuplicateDefString = "RESERVED_FOR_INKSCAPE_DUPLICATE_DEF";
-    
+
     /* First pass: remove duplicates in clipboard of definitions in document */
     for (Inkscape::XML::Node *def = defs->firstChild() ; def ; def = def->next()) {
         if(def->type() != Inkscape::XML::ELEMENT_NODE)continue;
         /* If this  clipboard has been pasted into one document, and is now being pasted into another,
-        or pasted again into the same, it will already have been processed.  If we detect that then 
+        or pasted again into the same, it will already have been processed.  If we detect that then
         skip the rest of this pass. */
         Glib::ustring defid = def->attribute("id");
         if( defid.find( DuplicateDefString ) != Glib::ustring::npos )break;
@@ -1987,7 +1856,7 @@ void SPDocument::importDefsNode(SPDocument *source, Inkscape::XML::Node *defs, I
         SPObject *src = source->getObjectByRepr(def);
 
         // Prevent duplication of symbols... could be more clever.
-        // The tag "_inkscape_duplicate" is added to "id" by ClipboardManagerImpl::copySymbol(). 
+        // The tag "_inkscape_duplicate" is added to "id" by ClipboardManagerImpl::copySymbol().
         // We assume that symbols are in defs section (not required by SVG spec).
         if (src && SP_IS_SYMBOL(src)) {
 
@@ -1996,7 +1865,7 @@ void SPDocument::importDefsNode(SPDocument *source, Inkscape::XML::Node *defs, I
             if( pos != Glib::ustring::npos ) {
 
                 // This is our symbol, now get rid of tag
-                id.erase( pos ); 
+                id.erase( pos );
 
                 // Check that it really is a duplicate
                 for (auto& trg: getDefs()->children) {
@@ -2022,6 +1891,105 @@ void SPDocument::importDefsNode(SPDocument *source, Inkscape::XML::Node *defs, I
         }
     }
 }
+
+// Signals ------------------------------
+
+void
+SPDocument::addUndoObserver(Inkscape::UndoStackObserver& observer)
+{
+    this->undoStackObservers.add(observer);
+}
+
+void
+SPDocument::removeUndoObserver(Inkscape::UndoStackObserver& observer)
+{
+    this->undoStackObservers.remove(observer);
+}
+
+sigc::connection SPDocument::connectDestroy(sigc::signal<void>::slot_type slot)
+{
+    return destroySignal.connect(slot);
+}
+
+sigc::connection SPDocument::connectModified(SPDocument::ModifiedSignal::slot_type slot)
+{
+    return modified_signal.connect(slot);
+}
+
+sigc::connection SPDocument::connectURISet(SPDocument::URISetSignal::slot_type slot)
+{
+    return uri_set_signal.connect(slot);
+}
+
+sigc::connection SPDocument::connectResized(SPDocument::ResizedSignal::slot_type slot)
+{
+    return resized_signal.connect(slot);
+}
+
+sigc::connection SPDocument::connectCommit(SPDocument::CommitSignal::slot_type slot)
+{
+    return commit_signal.connect(slot);
+}
+
+sigc::connection SPDocument::connectIdChanged(gchar const *id,
+                                              SPDocument::IDChangedSignal::slot_type slot)
+{
+    return id_changed_signals[g_quark_from_string(id)].connect(slot);
+}
+
+sigc::connection SPDocument::connectResourcesChanged(gchar const *key,
+                                                     SPDocument::ResourcesChangedSignal::slot_type slot)
+{
+    GQuark q = g_quark_from_string(key);
+    return resources_changed_signals[q].connect(slot);
+}
+
+sigc::connection
+SPDocument::connectReconstructionStart(SPDocument::ReconstructionStart::slot_type slot)
+{
+    return _reconstruction_start_signal.connect(slot);
+}
+
+sigc::connection
+SPDocument::connectReconstructionFinish(SPDocument::ReconstructionFinish::slot_type  slot)
+{
+    return _reconstruction_finish_signal.connect(slot);
+}
+
+void SPDocument::_emitModified() {
+    static guint const flags = SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG | SP_OBJECT_PARENT_MODIFIED_FLAG;
+    root->emitModified(0);
+    modified_signal.emit(flags);
+    _node_cache_valid=false;
+}
+
+void
+SPDocument::emitReconstructionStart()
+{
+    // printf("Starting Reconstruction\n");
+    _reconstruction_start_signal.emit();
+}
+
+void
+SPDocument::emitReconstructionFinish()
+{
+    // printf("Finishing Reconstruction\n");
+    _reconstruction_finish_signal.emit();
+    // indicates that gradients are reloaded (to rebuild the Auto palette)
+    resources_changed_signals[g_quark_from_string("gradient")].emit();
+    resources_changed_signals[g_quark_from_string("filter")].emit();
+
+/**
+    // Reference to the old persp3d object is invalid after reconstruction.
+    initialize_current_persp3d();
+**/
+}
+
+void SPDocument::emitResizedSignal(gdouble width, gdouble height)
+{
+    this->resized_signal.emit(width, height);
+}
+
 
 /*
   Local Variables:

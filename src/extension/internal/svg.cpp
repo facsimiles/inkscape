@@ -822,7 +822,7 @@ Svg::open (Inkscape::Extension::Input *mod, const gchar *uri)
                 char *contents;
                 gsize length;
                 file->load_contents(contents, length);
-                return SPDocument::createNewDocFromMem(contents, length, 1);
+                return SPDocument::createNewDocFromMem(contents, length, true);
             } catch (Gio::Error &e) {
                 g_warning("Could not load contents of non-local URI %s\n", uri);
                 return nullptr;
@@ -867,7 +867,7 @@ Svg::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar const *filena
 {
     g_return_if_fail(doc != nullptr);
     g_return_if_fail(filename != nullptr);
-    Inkscape::XML::Document *rdoc = doc->rdoc;
+    Inkscape::XML::Document *rdoc = doc->getReprDoc();
 
     bool const exportExtensions = ( !mod->get_id()
       || !strcmp (mod->get_id(), SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE)

@@ -131,3 +131,5 @@ set(2geom_SRC
 
 # make lib for 2geom_LIB
 add_inkscape_lib(2geom_LIB "${2geom_SRC}")
+target_include_directories(2geom_LIB PRIVATE ${DoubleConversion_INCLUDE_DIRS})
+target_link_libraries(2geom_LIB PRIVATE ${DoubleConversion_LIBRARIES})

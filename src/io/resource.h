@@ -27,7 +27,6 @@ namespace IO {
 namespace Resource {
 
 enum Type {
-    APPICONS,
     EXTENSIONS,
     FONTS,
     GRADIENTS,
@@ -45,7 +44,6 @@ enum Type {
     THEMES,
     UIS,
     PIXMAPS,
-    DATA_DIR
 };
 
 enum Domain {
