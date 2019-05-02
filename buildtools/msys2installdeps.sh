@@ -97,3 +97,32 @@ for arch in $(eval echo $ARCH); do
       ;;
   esac
 done
+
+
+
+
+
+# SHOULD BE TEMPORARY ! (Mc, 2019-05-02)
+# PIN GLIB VERSION TO A WORKING ONE
+
+eval wget\
+  http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-glib-networking-2.58.0-3-any.pkg.tar.xz\
+  http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-glib2-2.58.3-1-any.pkg.tar.xz\
+  http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-glibmm-2.58.0-1-any.pkg.tar.xz\
+  http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-libsoup-2.64.2-1-any.pkg.tar.xz\
+  http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-poppler-0.74.0-1-any.pkg.tar.xz
+
+eval pacman -U $PACMAN_OPTIONS mingw-w64-x86_64-glib-networking-2.58.0-3-any.pkg.tar.xz mingw-w64-x86_64-glib2-2.58.3-1-any.pkg.tar.xz mingw-w64-x86_64-glibmm-2.58.0-1-any.pkg.tar.xz mingw-w64-x86_64-libsoup-2.64.2-1-any.pkg.tar.xz mingw-w64-x86_64-poppler-0.74.0-1-any.pkg.tar.xz
+
+
+eval wget\
+  http://repo.msys2.org/mingw/i686/mingw-w64-i686-glib-networking-2.58.0-3-any.pkg.tar.xz\
+  http://repo.msys2.org/mingw/i686/mingw-w64-i686-glib2-2.58.3-1-any.pkg.tar.xz\
+  http://repo.msys2.org/mingw/i686/mingw-w64-i686-glibmm-2.58.0-1-any.pkg.tar.xz\
+  http://repo.msys2.org/mingw/i686/mingw-w64-i686-libsoup-2.64.2-1-any.pkg.tar.xz\
+  http://repo.msys2.org/mingw/i686/mingw-w64-i686-poppler-0.74.0-1-any.pkg.tar.xz
+
+eval pacman -U $PACMAN_OPTIONS mingw-w64-i686-glib-networking-2.58.0-3-any.pkg.tar.xz mingw-w64-i686-glib2-2.58.3-1-any.pkg.tar.xz mingw-w64-i686-glibmm-2.58.0-1-any.pkg.tar.xz mingw-w64-i686-libsoup-2.64.2-1-any.pkg.tar.xz mingw-w64-i686-poppler-0.74.0-1-any.pkg.tar.xz
+
+# END TEMPORARY SECTION
+
