@@ -292,13 +292,13 @@ Geom::Point Layout::chunkAnchorPoint(iterator const &it) const
 
     Alignment alignment = _paragraphs[_lines[_chunks[chunk_index].in_line].in_paragraph].alignment;
     if (alignment == LEFT || alignment == FULL)
-        return Geom::Point(_chunks[chunk_index].left_x, _lines[chunk_index].baseline_y);
+        return Geom::Point(_chunks[chunk_index].left_x, _lines[_chunks[chunk_index].in_line].baseline_y);
 
     double chunk_width = _getChunkWidth(chunk_index);
     if (alignment == RIGHT)
-        return Geom::Point(_chunks[chunk_index].left_x + chunk_width, _lines[chunk_index].baseline_y);
+        return Geom::Point(_chunks[chunk_index].left_x + chunk_width, _lines[_chunks[chunk_index].in_line].baseline_y);
     //centre
-    return Geom::Point(_chunks[chunk_index].left_x + chunk_width * 0.5, _lines[chunk_index].baseline_y);
+    return Geom::Point(_chunks[chunk_index].left_x + chunk_width * 0.5, _lines[_chunks[chunk_index].in_line].baseline_y);
 }
 
 Geom::Rect Layout::characterBoundingBox(iterator const &it, double *rotation) const
@@ -308,8 +308,10 @@ Geom::Rect Layout::characterBoundingBox(iterator const &it, double *rotation) co
 
     if (_path_fitted) {
         double cluster_half_width = 0.0;
-        for (int glyph_index = _characters[char_index].in_glyph ; _glyphs[glyph_index].in_character == char_index ; glyph_index++)
+        for (int glyph_index = _characters[char_index].in_glyph ; _glyphs.size() != glyph_index ; glyph_index++) {
+            if (_glyphs[glyph_index].in_character != char_index) break;
             cluster_half_width += _glyphs[glyph_index].width;
+        }
         cluster_half_width *= 0.5;
 
         double midpoint_offset = _characters[char_index].span(this).x_start + _characters[char_index].x + cluster_half_width;
