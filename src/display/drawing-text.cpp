@@ -575,7 +575,7 @@ unsigned DrawingText::_renderItem(DrawingContext &dc, Geom::IntRect const &/*are
             dc.newPath(); // Clear text-decoration path
         }
 
-        // accumulate the path that represents the glyphs
+        // Accumulate the path that represents the glyphs and/or draw SVG glyphs.
         for (auto & i : _children) {
             DrawingGlyphs *g = dynamic_cast<DrawingGlyphs *>(&i);
             if (!g) throw InvalidItemException();
@@ -584,11 +584,38 @@ unsigned DrawingText::_renderItem(DrawingContext &dc, Geom::IntRect const &/*are
             if (g->_ctm.isSingular()) continue;
             dc.transform(g->_ctm);
             if (g->_drawable) {
-                dc.path(*g->_font->PathVector(g->_glyph));
+                if (g->_font->FontHasSVG()) {
+                    Inkscape::Pixbuf* pixbuf = g->_font->PixBuf(g->_glyph);
+                    if (pixbuf) {
+                        // Geom::OptRect box = bounds_exact(*g->_font->PathVector(g->_glyph));
+                        // if (box) {
+                        //     Inkscape::DrawingContext::Save save(dc);
+                        //     dc.newPath();
+                        //     dc.rectangle(*box);
+                        //     dc.setLineWidth(0.01);
+                        //     dc.setSource(0x8080ffff);
+                        //     dc.stroke();
+                        // }
+                        {
+                            // pixbuf is in font design units, scale to embox.
+                            double scale = g->_font->GetDesignUnits();
+                            if (scale <= 0) scale = 1000;
+                            Inkscape::DrawingContext::Save save(dc);
+                            dc.translate(0, 1);
+                            dc.scale(1.0/scale, -1.0/scale);
+                            dc.setSource(pixbuf->getSurfaceRaw(), 0, 0);
+                            dc.paint(1);
+                        }
+                    } else {
+                        dc.path(*g->_font->PathVector(g->_glyph));
+                    }
+                } else {
+                    dc.path(*g->_font->PathVector(g->_glyph));
+                }
             }
         }
 
-        // Draw the glyphs.
+        // Draw the glyphs (non-SVG glyphs).
         {
             Inkscape::DrawingContext::Save save(dc);
             dc.transform(_ctm);

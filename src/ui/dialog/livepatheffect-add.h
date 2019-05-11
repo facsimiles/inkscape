@@ -65,12 +65,14 @@ class LivePathEffectAdd {
     bool on_filter(Gtk::FlowBoxChild *child);
     int on_sort(Gtk::FlowBoxChild *child1, Gtk::FlowBoxChild *child2);
     void on_search();
-    void on_activate(Gtk::FlowBoxChild *child);
+    void on_focus(Gtk::Widget *widg);
     bool pop_description(GdkEventCrossing *evt, Glib::RefPtr<Gtk::Builder> builder_effect);
     bool hide_pop_description(GdkEventCrossing *evt);
     bool fav_toggler(GdkEventButton *evt, Glib::RefPtr<Gtk::Builder> builder_effect);
     bool apply(GdkEventButton *evt, Glib::RefPtr<Gtk::Builder> builder_effect,
                const LivePathEffect::EnumEffectData<LivePathEffect::EffectType> *to_add);
+    bool on_press_enter(GdkEventKey *key, Glib::RefPtr<Gtk::Builder> builder_effect,
+                        const LivePathEffect::EnumEffectData<LivePathEffect::EffectType> *to_add);
     bool expand(GdkEventButton *evt, Glib::RefPtr<Gtk::Builder> builder_effect);
     bool show_fav_toggler(GdkEventButton *evt);
     bool mouseover(GdkEventCrossing *evt, GtkWidget *wdg);
