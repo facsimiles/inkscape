@@ -1981,6 +1981,7 @@ versions can be removed. I haven't analysed my work in detail to figure
 out if this is so. */
 static bool tidy_xml_tree_recursively(SPObject *root, bool has_text_decoration)
 {
+    if (SP_IS_TEXTPATH(root)) return false;
     gchar const *root_style = (root)->getRepr()->attribute("style");
     if(root_style && strstr(root_style,"text-decoration"))has_text_decoration = true;
     static bool (* const tidy_operators[])(SPObject**, bool) = {
