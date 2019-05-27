@@ -844,10 +844,10 @@ private :
             switch (AlignTarget(prefs->getInt("/dialogs/align/align-to", 6)))
             {
                 case LAST:
-                    focus = SP_ITEM(*selected.begin());
+                    focus = SP_ITEM(*--(selected.end()));
                     break;
                 case FIRST:
-                    focus = SP_ITEM(*--(selected.end()));
+                    focus = SP_ITEM(*selected.begin());
                     break;
                 case BIGGEST:
                     focus = selection->largestItem(Selection::AREA);
@@ -867,7 +867,7 @@ private :
                 default:
                     g_assert_not_reached ();
                     break;
-            };  
+            };
 
             if(focus) {
                 if (SP_IS_TEXT (focus) || SP_IS_FLOWTEXT (focus)) {
