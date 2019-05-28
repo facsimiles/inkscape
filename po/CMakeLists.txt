@@ -36,11 +36,11 @@ if(UNIX)
 		COMMAND ${GETTEXT_XGETTEXT_EXECUTABLE} ${xgettext_options} -C -f POTFILES.src.in
 		COMMAND ${GETTEXT_XGETTEXT_EXECUTABLE} ${xgettext_options} -L Glade -f POTFILES.ui.in
 		COMMAND ${GETTEXT_XGETTEXT_EXECUTABLE} ${xgettext_options} -L Python -f POTFILES.py.in
-		COMMAND ${GETTEXT_XGETTEXT_EXECUTABLE} ${xgettext_options} -f POTFILES.inx.in --from-code=UTF-8 --its its/inx.its 
+		COMMAND ${GETTEXT_XGETTEXT_EXECUTABLE} ${xgettext_options} -f POTFILES.inx.in --from-code=UTF-8 --its its/inx.its || true
 		COMMAND ${GETTEXT_XGETTEXT_EXECUTABLE} ${xgettext_options} -L AppData ../org.inkscape.Inkscape.appdata.xml.in 
 		COMMAND ${GETTEXT_XGETTEXT_EXECUTABLE} ${xgettext_options} -L Desktop ../org.inkscape.Inkscape.desktop.template 
-		COMMAND ${GETTEXT_XGETTEXT_EXECUTABLE} ${xgettext_options} --its its/menus.its ../share/ui/menus.xml
-		COMMAND ${GETTEXT_XGETTEXT_EXECUTABLE} ${xgettext_options} --its its/units.its ../share/ui/units.xml
+		COMMAND ${GETTEXT_XGETTEXT_EXECUTABLE} ${xgettext_options} --its its/menus.its ../share/ui/menus.xml || true
+		COMMAND ${GETTEXT_XGETTEXT_EXECUTABLE} ${xgettext_options} --its its/units.its ../share/ui/units.xml || true
 		COMMENT "Extract translatable messages to ${_potFile}"
 		WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 		)
