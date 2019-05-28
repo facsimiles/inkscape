@@ -211,6 +211,12 @@ else()
     set(LPE_ENABLE_TEST_EFFECTS OFF)
 endif()
 
+if(APPLE)
+    find_package(MacIntegration REQUIRED)
+    list(APPEND INKSCAPE_INCS_SYS ${MacIntegration_INCLUDE_DIRS})
+    list(APPEND INKSCAPE_LIBS ${MacIntegration_LIBRARIES})
+endif()
+
 # ----------------------------------------------------------------------------
 # CMake's builtin
 # ----------------------------------------------------------------------------

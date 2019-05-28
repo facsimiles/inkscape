@@ -79,6 +79,9 @@
 #include "toolbox.h"
 #include "widget-sizes.h"
 
+#ifdef GDK_WINDOWING_QUARTZ
+#include <gtkosxapplication.h>
+#endif
 
 using Inkscape::DocumentUndo;
 using Inkscape::UI::Widget::UnitTracker;
@@ -928,6 +931,14 @@ sp_desktop_widget_realize (GtkWidget *widget)
             window->get_style_context()->remove_class("symbolic");
         }
     }
+
+#ifdef GDK_WINDOWING_QUARTZ
+    auto osxapp = gtkosx_application_get();
+    auto menushell = dynamic_cast<Gtk::MenuShell *>(dtw->menubar());
+    if (osxapp && menushell) {
+        gtkosx_application_set_menu_bar(osxapp, menushell->gobj());
+    }
+#endif
 }
 
 /* This is just to provide access to common functionality from sp_desktop_widget_realize() above
@@ -1691,7 +1702,12 @@ SPDesktopWidget* SPDesktopWidget::createInstance(SPDocument *document)
     dtw->_menubar = build_menubar(dtw->desktop);
     dtw->_menubar->set_name("MenuBar");
     dtw->_menubar->show_all();
+
+#ifdef GDK_WINDOWING_QUARTZ
+    // register as native macOS menu: do this later
+#else
     dtw->_vbox->pack_start(*dtw->_menubar, false, false);
+#endif
 
     dtw->layoutWidgets();
 
