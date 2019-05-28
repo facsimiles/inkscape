@@ -933,9 +933,11 @@ sp_desktop_widget_realize (GtkWidget *widget)
     }
 
 #ifdef GDK_WINDOWING_QUARTZ
+    // native macOS menu
     auto osxapp = gtkosx_application_get();
-    auto menushell = dynamic_cast<Gtk::MenuShell *>(dtw->menubar());
-    if (osxapp && menushell) {
+    auto menushell = static_cast<Gtk::MenuShell *>(dtw->menubar());
+    if (osxapp && menushell && window) {
+        menushell->set_parent(*window);
         gtkosx_application_set_menu_bar(osxapp, menushell->gobj());
     }
 #endif
@@ -1704,7 +1706,7 @@ SPDesktopWidget* SPDesktopWidget::createInstance(SPDocument *document)
     dtw->_menubar->show_all();
 
 #ifdef GDK_WINDOWING_QUARTZ
-    // register as native macOS menu: do this later
+    // native macOS menu: do this later because we don't have the window handle yet
 #else
     dtw->_vbox->pack_start(*dtw->_menubar, false, false);
 #endif

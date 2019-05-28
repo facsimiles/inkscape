@@ -577,7 +577,8 @@ ConcreteInkscapeApplication<Gio::Application>::on_startup2()
 }
 
 #ifdef GDK_WINDOWING_QUARTZ
-static gboolean osx_openfile_callback(GtkosxApplication *, gchar const *, gpointer);
+static gboolean osx_openfile_callback(GtkosxApplication *, gchar const *,
+                                      ConcreteInkscapeApplication<Gtk::Application> *);
 #endif
 
 template<>
@@ -723,9 +724,12 @@ ConcreteInkscapeApplication<Gtk::Application>::create_window(const Glib::RefPtr<
 }
 
 #ifdef GDK_WINDOWING_QUARTZ
-static gboolean osx_openfile_callback(GtkosxApplication *osxapp, gchar const *path, gpointer user_data)
+/**
+ * On macOS, handle dropping files on Inkscape.app icon and "Open With" file association.
+ */
+static gboolean osx_openfile_callback(GtkosxApplication *osxapp, gchar const *path,
+                                      ConcreteInkscapeApplication<Gtk::Application> *app)
 {
-    auto app = static_cast<ConcreteInkscapeApplication<Gtk::Application> *>(user_data);
     auto ptr = Gio::File::create_for_path(path);
     g_return_val_if_fail(ptr, false);
     app->create_window(ptr);
