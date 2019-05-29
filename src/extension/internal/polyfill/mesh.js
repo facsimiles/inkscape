@@ -10,6 +10,11 @@
   const svgNS = 'http://www.w3.org/2000/svg';
   const xlinkNS = 'http://www.w3.org/1999/xlink';
   const xhtmlNS = 'http://www.w3.org/1999/xhtml';
+  /*
+   * Maximum threshold for Bezier step size
+   * Larger values leave holes, smaller take longer to render.
+   */
+  const maxBezierStep = 2.0;
 
   // Test if mesh gradients are supported.
   if (document.createElementNS(svgNS, 'meshgradient').x) {
@@ -17,7 +22,7 @@
   }
 
   // Test above test using known good SVG element
-  // var l = document.createElementNS( svgNS, "linearGradient" );
+  // let l = document.createElementNS( svgNS, "linearGradient" );
   // if (l.x1) {
   //   console.log( "linearGradient has x1" );
   //   return;
@@ -73,31 +78,29 @@
   // Browsers return a string rather than a transform list for gradientTransform!
   const parseTransform = (t) => {
     // console.log( "parseTransform: " + t );
-    var affine = new Affine();
-    let trans, radian, tan, skewx, skewy;
-    for (var i in t = t.match(/(\w+\(\s*(-?\d+\.?\d*e?-?\d*\s*,?\s*)+\))+/g)) {
-      var c = t[i].match(/[\w.-]+/g);
-      var type = c.shift();
+    let affine = new Affine();
+    let trans, scale, radian, tan, skewx, skewy, rotate;
+    for (let i in t = t.match(/(\w+\(\s*(-?\d+\.?\d*e?-?\d*\s*,?\s*)+\))+/g)) {
+      let c = t[i].match(/[\w.-]+/g);
+      let type = c.shift();
       switch (type) {
         case 'translate':
           if (c.length === 2) {
             trans = new Affine(1, 0, 0, 1, c[0], c[1]);
           } else {
-            console.log('mesh.js: translate does not have 2 arguments!');
+            console.error('mesh.js: translate does not have 2 arguments!');
             trans = new Affine(1, 0, 0, 1, 0, 0);
           }
-          console.log(trans.toString());
           affine = affine.append(trans);
           break;
 
         case 'scale':
-          let scale;
           if (c.length === 1) {
             scale = new Affine(c[0], 0, 0, c[0], 0, 0);
           } else if (c.length === 2) {
             scale = new Affine(c[0], 0, 0, c[1], 0, 0);
           } else {
-            console.log('mesh.js: scale does not have 1 or 2 arguments!');
+            console.error('mesh.js: scale does not have 1 or 2 arguments!');
             scale = new Affine(1, 0, 0, 1, 0, 0);
           }
           affine = affine.append(scale);
@@ -110,18 +113,18 @@
           }
           if (c[0]) {
             radian = c[0] * Math.PI / 180.0;
-            var cos = Math.cos(radian);
-            var sin = Math.sin(radian);
+            let cos = Math.cos(radian);
+            let sin = Math.sin(radian);
             if (Math.abs(cos) < 1e-16) { // I hate rounding errors...
               cos = 0;
             }
             if (Math.abs(sin) < 1e-16) { // I hate rounding errors...
               sin = 0;
             }
-            var rotate = new Affine(cos, sin, -sin, cos, 0, 0);
+            rotate = new Affine(cos, sin, -sin, cos, 0, 0);
             affine = affine.append(rotate);
           } else {
-            console.log('math.js: No argument to rotate transform!');
+            console.error('math.js: No argument to rotate transform!');
           }
           if (c.length === 3) {
             trans = new Affine(1, 0, 0, 1, -c[1], -c[2]);
@@ -136,7 +139,7 @@
             skewx = new Affine(1, 0, tan, 1, 0, 0);
             affine = affine.append(skewx);
           } else {
-            console.log('math.js: No argument to skewX transform!');
+            console.error('math.js: No argument to skewX transform!');
           }
           break;
 
@@ -147,21 +150,20 @@
             skewy = new Affine(1, tan, 0, 1, 0, 0);
             affine = affine.append(skewy);
           } else {
-            console.log('math.js: No argument to skewY transform!');
+            console.error('math.js: No argument to skewY transform!');
           }
           break;
 
         case 'matrix':
           if (c.length === 6) {
-            var matrix = new Affine(c[0], c[1], c[2], c[3], c[4], c[5]);
-            affine = affine.append(matrix);
+            affine = affine.append(new Affine(...c));
           } else {
-            console.log('math.js: Incorrect number of arguments for matrix!');
+            console.error('math.js: Incorrect number of arguments for matrix!');
           }
           break;
 
         default:
-          console.log('mesh.js: Unhandled transform type: ' + type);
+          console.error('mesh.js: Unhandled transform type: ' + type);
           break;
       }
     }
@@ -170,8 +172,8 @@
   };
 
   const parsePoints = (s) => {
-    var points = [];
-    var values = s.split(/[ ,]+/);
+    let points = [];
+    let values = s.split(/[ ,]+/);
     for (let i = 0; i < values.length - 1; i += 2) {
       points.push(new Point(parseFloat(values[i]), parseFloat(values[i + 1])));
     }
@@ -275,17 +277,14 @@
 
     // Paint a Bezier curve. w is width of Canvas window.
     paint_curve (v, w) {
-      // Maximum threshold that fits
-      // Larger values leave holes, smaller take longer to render.
-      const max = 2.0;
 
-      if (bezier_steps_sq(this.nodes) > max) { // If inside, see if we need to split
+      if (bezier_steps_sq(this.nodes) > maxBezierStep) { // If inside, see if we need to split
         const beziers = splitBezier(this.nodes[0], this.nodes[1], this.nodes[2], this.nodes[3]);
-        var colors0 = [
+        let colors0 = [
           [],
           []
         ]; // ([start][end])
-        var colors1 = [
+        let colors1 = [
           [],
           []
         ];
@@ -295,18 +294,18 @@
           colors1[0][i] = (this.colors[0][i] + this.colors[1][i]) / 2;
           colors1[1][i] = this.colors[1][i];
         }
-        var curve0 = new Curve(beziers[0], colors0);
-        var curve1 = new Curve(beziers[1], colors1);
+        let curve0 = new Curve(beziers[0], colors0);
+        let curve1 = new Curve(beziers[1], colors1);
         curve0.paint_curve(v, w);
         curve1.paint_curve(v, w);
       } else {
         counter++;
 
         // Directly write data
-        var x = Math.round(this.nodes[0].x);
-        var y = Math.round(this.nodes[0].y);
+        let x = Math.round(this.nodes[0].x);
+        let y = Math.round(this.nodes[0].y);
         if (x >= 0 && x < w) {
-          var index = (y * w + x) * 4;
+          let index = (y * w + x) * 4;
           v[index] = Math.round(this.colors[0][0]);
           v[index + 1] = Math.round(this.colors[0][1]);
           v[index + 2] = Math.round(this.colors[0][2]);
@@ -370,19 +369,19 @@
     split () {
       // console.log( "Patch.split" );
 
-      var nodes0 = [
+      let nodes0 = [
         [],
         [],
         [],
         []
       ];
-      var nodes1 = [
+      let nodes1 = [
         [],
         [],
         [],
         []
       ];
-      var colors0 = [
+      let colors0 = [
         [
           [],
           []
@@ -392,7 +391,7 @@
           []
         ]
       ];
-      var colors1 = [
+      let colors1 = [
         [
           [],
           []
@@ -404,7 +403,7 @@
       ];
 
       for (let i = 0; i < 4; ++i) {
-        var beziers = splitBezier(this.nodes[0][i], this.nodes[1][i], this.nodes[2][i], this.nodes[3][i]);
+        let beziers = splitBezier(this.nodes[0][i], this.nodes[1][i], this.nodes[2][i], this.nodes[3][i]);
         for (let j = 0; j < 4; ++j) {
           nodes0[0][i] = beziers[0][0];
           nodes0[1][i] = beziers[0][1];
@@ -428,8 +427,8 @@
         colors1[1][1][i] = this.colors[1][1][i];
       }
 
-      var patch0 = new Patch(nodes0, colors0);
-      var patch1 = new Patch(nodes1, colors1);
+      let patch0 = new Patch(nodes0, colors0);
+      let patch1 = new Patch(nodes1, colors1);
 
       return ([patch0, patch1]);
     }
@@ -442,19 +441,19 @@
       // To be done.....
 
       // If inside, see if we need to split
-      var tmp = [];
+      let tmp = [];
       for (let i = 0; i < 4; ++i) {
         tmp[i] = bezier_steps_sq([this.nodes[0][i], this.nodes[1][i],
           this.nodes[2][i], this.nodes[3][i]
         ]);
       }
 
-      var max = Math.max.apply(null, tmp);
+      let max = Math.max.apply(null, tmp);
       // console.log( "Max: " + max );
 
-      if (max > 2.0) { // Larger values leave holes, smaller take longer to render.
+      if (max > maxBezierStep) {
         // console.log( "Paint: Splitting" );
-        var patches = this.split();
+        let patches = this.split();
         // console.log( patches );
         patches[0].paint(v, w);
         patches[1].paint(v, w);
@@ -471,9 +470,7 @@
       // Paint a Bezier curve using just the top of the patch. If
       // the patch is thin enough this should work. We leave this
       // function here in case we want to do something more fancy.
-      var curve = new Curve(
-        [this.nodes[0][0], this.nodes[0][1], this.nodes[0][2], this.nodes[0][3]],
-        [this.colors[0][0], this.colors[0][1]]);
+      let curve = new Curve([...this.nodes[0]], [...this.colors[0]]);
       curve.paint_curve(v, w);
     }
   }
@@ -482,8 +479,8 @@
   class Mesh {
     constructor (id) {
       // console.log( "Mesh: " + id );
+      let raw = this.readMesh(id);
       this.id = id;
-      var raw = this.readMesh(id);
       this.nodes = raw.nodes; // (m*3+1) x (n*3+1) points
       this.colors = raw.colors; // (m+1) x (n+1) x 4  colors (R+G+B+A)
       // console.log( this.nodes );
@@ -492,25 +489,25 @@
 
     // Function to parse an SVG mesh and return an array of nodes (points) and an array of colors.
     readMesh (id) {
-      var nodes = [];
-      var colors = [];
+      let nodes = [];
+      let colors = [];
 
       // First, find the mesh
-      var theMesh = document.getElementById(id);
+      let theMesh = document.getElementById(id);
       if (theMesh == null) {
-        console.log('mesh.js: Could not find mesh: ' + id);
+        console.error('mesh.js: Could not find mesh: ' + id);
       } else {
         // console.log( "Reading mesh: " + id);
 
         nodes[0] = []; // Top row
         colors[0] = []; // Top row
 
-        var x = Number(theMesh.getAttribute('x'));
-        var y = Number(theMesh.getAttribute('y'));
+        let x = Number(theMesh.getAttribute('x'));
+        let y = Number(theMesh.getAttribute('y'));
         // console.log( " x: " + x + " y: " + y );
         nodes[0][0] = new Point(x, y);
 
-        var rows = theMesh.children;
+        let rows = theMesh.children;
         for (let i = 0; i < rows.length; ++i) {
           // Need to validate if meshrow...
           nodes[3 * i + 1] = []; // Need three extra rows for each meshrow.
@@ -518,24 +515,25 @@
           nodes[3 * i + 3] = [];
           colors[i + 1] = []; // Need one more row than number of meshrows.
           // console.log( " row: " + i);
-          var patches = rows[i].children;
+          let patches = rows[i].children;
           for (let j = 0; j < patches.length; ++j) {
             // console.log( "  patch: " + j);
-            var stops = patches[j].children;
+            let stops = patches[j].children;
             for (let k = 0; k < stops.length; ++k) {
-              var l = k;
+              let l = k;
               if (i !== 0) {
                 ++l; // There is no top if row isn't first row.
               }
               // console.log( "   stop: " + k);
-              var path = stops[k].getAttribute('path');
+              let path = stops[k].getAttribute('path');
+              let parts;
 
-              var type = 'l'; // We need to still find mid-points even if no path.
+              let type = 'l'; // We need to still find mid-points even if no path.
               if (path != null) {
-                var parts = path.match(/\s*([lLcC])\s*(.*)/);
+                parts = path.match(/\s*([lLcC])\s*(.*)/);
                 type = parts[1];
               }
-              var stopNodes = parsePoints(parts[2]);
+              let stopNodes = parsePoints(parts[2]);
 
               switch (type) {
                 case 'l':
@@ -619,16 +617,16 @@
                   }
                   break;
                 default:
-                  console.log('mesh.js: ' + type + ' invalid path type.');
+                  console.error('mesh.js: ' + type + ' invalid path type.');
               }
 
               if ((i === 0 && j === 0) || k > 0) {
-                var colorRaw = window.getComputedStyle(stops[k])
+                let colorRaw = window.getComputedStyle(stops[k])
                   .stopColor.match(/^rgb\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)$/i);
-                var alphaRaw = window.getComputedStyle(stops[k])
+                let alphaRaw = window.getComputedStyle(stops[k])
                   .stopOpacity;
                 // console.log( "   colorRaw: " + colorRaw + " alphaRaw: " + alphaRaw);
-                var alpha = 255;
+                let alpha = 255;
                 if (alphaRaw) {
                   alpha = parseInt(alphaRaw * 255);
                 }
@@ -732,16 +730,16 @@
     paint (v, w) {
       for (let i = 0; i < (this.nodes.length - 1) / 3; ++i) {
         for (let j = 0; j < (this.nodes[0].length - 1) / 3; ++j) {
-          var sliceNodes = [];
+          let sliceNodes = [];
           for (let k = i * 3; k < (i * 3) + 4; ++k) {
             sliceNodes.push(this.nodes[k].slice(j * 3, (j * 3) + 4));
           }
 
-          var sliceColors = [];
+          let sliceColors = [];
           sliceColors.push(this.colors[i].slice(j, j + 2));
           sliceColors.push(this.colors[i + 1].slice(j, j + 2));
 
-          var patch = new Patch(sliceNodes, sliceColors);
+          let patch = new Patch(sliceNodes, sliceColors);
           patch.paint(v, w);
         }
       }
@@ -778,44 +776,43 @@
 
   // Start of document processing ---------------------
 
-  var shapes = document.querySelectorAll('rect,circle,ellipse,path,text');
+  let shapes = document.querySelectorAll('rect,circle,ellipse,path,text');
   // console.log("Shapes: " + shapes.length);
 
   shapes.forEach((shape, i) => {
     // console.log( shape.nodeName );
     // Get id. If no id, create one.
-    var shapeId = shape.getAttribute('id');
+    let shapeId = shape.getAttribute('id');
     if (!shapeId) {
       shapeId = 'patchjs_shape' + i;
       shape.setAttribute('id', shapeId);
     }
-    // console.log( "id: " + shapeId );
 
-    var urlValue = shape.style.fill.match(/^url\(\s*"?\s*#([^\s"]+)"?\s*\)/);
+    let urlValue = shape.style.fill.match(/^url\(\s*"?\s*#([^\s"]+)"?\s*\)/);
+
     if (urlValue && urlValue[1]) {
       // console.log( "Got url! " + urlValue[1]);
-      var mesh = document.getElementById(urlValue[1]);
+      let mesh = document.getElementById(urlValue[1]);
       // console.log( mesh );
       // console.log( mesh.nodeName );
       if (mesh.nodeName === 'meshgradient') {
         // console.log( "Got mesh" );
-        var bbox = shape.getBBox();
+        let bbox = shape.getBBox();
         // console.log( bbox );
 
         // Create temporary canvas
-        var myCanvas = document.createElementNS(xhtmlNS, 'canvas');
-        // var myCanvas = document.createElement( "canvas" );  // Both work for HTML...
+        let myCanvas = document.createElementNS(xhtmlNS, 'canvas');
+        // let myCanvas = document.createElement( "canvas" );  // Both work for HTML...
         myCanvas.width = bbox.width;
         myCanvas.height = bbox.height;
 
         // console.log ( "Canvas: " + myCanvas.width + "x" + myCanvas.height );
-        var myContext = myCanvas.getContext('2d');
-
-        var myCanvasImage = myContext.getImageData(0, 0, myCanvas.width, myCanvas.height);
-        var myData = myCanvasImage.data;
+        let myContext = myCanvas.getContext('2d');
+        let myCanvasImage = myContext.getImageData(0, 0, myCanvas.width, myCanvas.height);
+        let myData = myCanvasImage.data;
 
         // Draw a mesh
-        var myMesh = new Mesh(urlValue[1]);
+        let myMesh = new Mesh(urlValue[1]);
 
         // Adjust for bounding box if necessary.
         if (mesh.getAttribute('gradientUnits') === 'objectBoundingBox') {
@@ -823,15 +820,14 @@
         }
 
         // Apply gradient transform.
-        var gradientTransform = mesh.getAttribute('gradientTransform');
-        // console.log( typeof gradientTransform );
+        let gradientTransform = mesh.getAttribute('gradientTransform');
         if (gradientTransform != null) {
-          var affine = parseTransform(gradientTransform);
+          let affine = parseTransform(gradientTransform);
           myMesh.transform(affine);
         }
 
         // Position to Canvas coordinate.
-        var t = new Point(-bbox.x, -bbox.y);
+        let t = new Point(-bbox.x, -bbox.y);
         if (mesh.getAttribute('gradientUnits') === 'userSpaceOnUse') {
           myMesh.transform(t);
         }
@@ -842,14 +838,14 @@
         myContext.putImageData(myCanvasImage, 0, 0);
 
         // Create image element of correct size
-        var myImage = document.createElementNS(svgNS, 'image');
+        let myImage = document.createElementNS(svgNS, 'image');
         myImage.setAttribute('width', myCanvas.width);
         myImage.setAttribute('height', myCanvas.height);
         myImage.setAttribute('x', bbox.x);
         myImage.setAttribute('y', bbox.y);
 
         // Set image to data url
-        var myPNG = myCanvas.toDataURL();
+        let myPNG = myCanvas.toDataURL();
         myImage.setAttributeNS(xlinkNS, 'xlink:href', myPNG);
 
         // Insert image into document
@@ -857,10 +853,10 @@
         shape.style.fill = 'none';
 
         // Create clip referencing shape and insert into document
-        var clip = document.createElementNS(svgNS, 'clipPath');
-        var clipId = 'patchjs_clip' + i;
+        let clip = document.createElementNS(svgNS, 'clipPath');
+        let clipId = 'patchjs_clip' + i;
         clip.setAttribute('id', clipId);
-        var use = document.createElementNS(svgNS, 'use');
+        let use = document.createElementNS(svgNS, 'use');
         use.setAttributeNS(xlinkNS, 'xlink:href', '#' + shapeId);
         clip.appendChild(use);
         shape.parentElement.insertBefore(clip, shape);
