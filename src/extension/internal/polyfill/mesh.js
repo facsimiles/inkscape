@@ -279,7 +279,8 @@
     paint_curve (v, w) {
 
       if (bezier_steps_sq(this.nodes) > maxBezierStep) { // If inside, see if we need to split
-        const beziers = splitBezier(this.nodes[0], this.nodes[1], this.nodes[2], this.nodes[3]);
+        const beziers = splitBezier(this.nodes[0], this.nodes[1],
+          this.nodes[2], this.nodes[3]);
         let colors0 = [
           [],
           []
@@ -403,17 +404,17 @@
       ];
 
       for (let i = 0; i < 4; ++i) {
-        let beziers = splitBezier(this.nodes[0][i], this.nodes[1][i], this.nodes[2][i], this.nodes[3][i]);
-        for (let j = 0; j < 4; ++j) {
-          nodes0[0][i] = beziers[0][0];
-          nodes0[1][i] = beziers[0][1];
-          nodes0[2][i] = beziers[0][2];
-          nodes0[3][i] = beziers[0][3];
-          nodes1[0][i] = beziers[1][0];
-          nodes1[1][i] = beziers[1][1];
-          nodes1[2][i] = beziers[1][2];
-          nodes1[3][i] = beziers[1][3];
-        }
+        const beziers = splitBezier(this.nodes[0][i], this.nodes[1][i],
+          this.nodes[2][i], this.nodes[3][i]);
+
+        nodes0[0][i] = beziers[0][0];
+        nodes0[1][i] = beziers[0][1];
+        nodes0[2][i] = beziers[0][2];
+        nodes0[3][i] = beziers[0][3];
+        nodes1[0][i] = beziers[1][0];
+        nodes1[1][i] = beziers[1][1];
+        nodes1[2][i] = beziers[1][2];
+        nodes1[3][i] = beziers[1][3];
       }
 
       for (let i = 0; i < 4; ++i) {
