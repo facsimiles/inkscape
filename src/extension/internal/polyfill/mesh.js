@@ -4,8 +4,6 @@
 // Distributed under GNU General Public License version 2 or later. See <http://fsf.org/>.
 
 (function () {
-  var counter = 0; // Temp, number of calls to Canvas
-
   // Name spaces -----------------------------------
   const svgNS = 'http://www.w3.org/2000/svg';
   const xlinkNS = 'http://www.w3.org/1999/xlink';
@@ -33,10 +31,12 @@
   /*
    * Utility functions -----------------------------
    */
-  const colorToString = (c) => `rgb(${Math.round(c[0])},${Math.round(c[1])},${Math.round(c[2])})`;
+  function colorToString (c) {
+    return `rgb(${Math.round(c[0])},${Math.round(c[1])},${Math.round(c[2])})`;
+  }
 
   // Split Bezier using de Casteljau's method.
-  const splitBezier = (p0, p1, p2, p3) => {
+  function splitBezier (p0, p1, p2, p3) {
     let p00 = p0.clone();
     let p13 = p3.clone();
 
@@ -60,23 +60,23 @@
       [p00, p01, p02, p03],
       [p10, p11, p12, p13]
     ]);
-  };
+  }
 
   // See Cairo: cairo-mesh-pattern-rasterizer.c
-  const bezier_steps_sq = (points) => {
+  function bezier_steps_sq (points) {
     let tmp = [];
     tmp[0] = points[0].distSquared(points[1]);
     tmp[1] = points[2].distSquared(points[3]);
     tmp[2] = points[0].distSquared(points[2]) * 0.25;
     tmp[3] = points[1].distSquared(points[3]) * 0.25;
     return Math.max.apply(null, tmp) * 18;
-  };
+  }
 
   // Weighted average to find Bezier points for linear sides.
-  const w_ave = (p0, p1) => p0.scale(2.0 / 3.0).add(p1.scale(1.0 / 3.0));
+  function w_ave (p0, p1) { return p0.scale(2.0 / 3.0).add(p1.scale(1.0 / 3.0)); }
 
   // Browsers return a string rather than a transform list for gradientTransform!
-  const parseTransform = (t) => {
+  function parseTransform (t) {
     // console.log( "parseTransform: " + t );
     let affine = new Affine();
     let trans, scale, radian, tan, skewx, skewy, rotate;
@@ -169,16 +169,16 @@
     }
     // console.log( "  affine:\n" + affine.toString() );
     return affine;
-  };
+  }
 
-  const parsePoints = (s) => {
+  function parsePoints (s) {
     let points = [];
     let values = s.split(/[ ,]+/);
     for (let i = 0; i < values.length - 1; i += 2) {
       points.push(new Point(parseFloat(values[i]), parseFloat(values[i + 1])));
     }
     return points;
-  };
+  }
 
   // Point class -----------------------------------
   class Point {
@@ -188,7 +188,7 @@
     }
 
     toString () {
-      return `(x=${this.x}, y=${this.x})`;
+      return `(x=${this.x}, y=${this.y})`;
     }
 
     clone () {
@@ -200,10 +200,10 @@
     }
 
     scale (v) {
-      if (v instanceof Point) {
-        return new Point(this.x * v.x, this.y * v.y);
+      if (v.x === undefined) {
+        return new Point(this.x * v, this.y * v);
       }
-      return new Point(this.x * v, this.y * v);
+      return new Point(this.x * v.x, this.y * v.y);
     }
 
     distSquared (v) {
@@ -277,7 +277,6 @@
 
     // Paint a Bezier curve. w is width of Canvas window.
     paint_curve (v, w) {
-
       if (bezier_steps_sq(this.nodes) > maxBezierStep) { // If inside, see if we need to split
         const beziers = splitBezier(this.nodes[0], this.nodes[1],
           this.nodes[2], this.nodes[3]);
@@ -300,8 +299,6 @@
         curve0.paint_curve(v, w);
         curve1.paint_curve(v, w);
       } else {
-        counter++;
-
         // Directly write data
         let x = Math.round(this.nodes[0].x);
         let y = Math.round(this.nodes[0].y);
@@ -428,10 +425,7 @@
         colors1[1][1][i] = this.colors[1][1][i];
       }
 
-      let patch0 = new Patch(nodes0, colors0);
-      let patch1 = new Patch(nodes1, colors1);
-
-      return ([patch0, patch1]);
+      return ([new Patch(nodes0, colors0), new Patch(nodes1, colors1)]);
     }
 
     paint (v, w) {
@@ -809,7 +803,7 @@
 
         // console.log ( "Canvas: " + myCanvas.width + "x" + myCanvas.height );
         let myContext = myCanvas.getContext('2d');
-        let myCanvasImage = myContext.getImageData(0, 0, myCanvas.width, myCanvas.height);
+        let myCanvasImage = myContext.createImageData(myCanvas.width, myCanvas.height);
         let myData = myCanvasImage.data;
 
         // Draw a mesh
