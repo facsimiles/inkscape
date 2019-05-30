@@ -31,58 +31,58 @@
   /*
    * Utility functions -----------------------------
    */
-  function colorToString (c) {
-    return `rgb(${Math.round(c[0])},${Math.round(c[1])},${Math.round(c[2])})`;
-  }
+  const colorToString = (c) =>
+    `rgb(${Math.round(c[0])},${Math.round(c[1])},${Math.round(c[2])})`;
 
   // Split Bezier using de Casteljau's method.
-  function splitBezier (p0, p1, p2, p3) {
+  const splitBezier = (p0, p1, p2, p3) => {
+    let tmp = new Point((p1.x + p2.x) * 0.5, (p1.y + p2.y) * 0.5);
+    let p01 = new Point((p0.x + p1.x) * 0.5, (p0.y + p1.y) * 0.5);
+    let p12 = new Point((p2.x + p3.x) * 0.5, (p2.y + p3.y) * 0.5);
+    let p02 = new Point((tmp.x + p01.x) * 0.5, (tmp.y + p01.y) * 0.5);
+    let p11 = new Point((tmp.x + p12.x) * 0.5, (tmp.y + p12.y) * 0.5);
+    let p03 = new Point((p02.x + p11.x) * 0.5, (p02.y + p11.y) * 0.5);
+
+    let p10 = p03.clone();
     let p00 = p0.clone();
     let p13 = p3.clone();
-
-    let tmp = p1.add(p2)
-      .scale(0.5);
-    let p01 = p0.add(p1)
-      .scale(0.5);
-    let p12 = p2.add(p3)
-      .scale(0.5);
-
-    let p02 = p01.add(tmp)
-      .scale(0.5);
-    let p11 = tmp.add(p12)
-      .scale(0.5);
-
-    let p03 = p02.add(p11)
-      .scale(0.5);
-    let p10 = p03.clone();
 
     return ([
       [p00, p01, p02, p03],
       [p10, p11, p12, p13]
     ]);
-  }
+  };
 
   // See Cairo: cairo-mesh-pattern-rasterizer.c
-  function bezier_steps_sq (points) {
-    let tmp = [];
-    tmp[0] = points[0].distSquared(points[1]);
-    tmp[1] = points[2].distSquared(points[3]);
-    tmp[2] = points[0].distSquared(points[2]) * 0.25;
-    tmp[3] = points[1].distSquared(points[3]) * 0.25;
-    return Math.max.apply(null, tmp) * 18;
-  }
+  const bezierStepsSquared = (points) => {
+    let tmp0 = points[0].distSquared(points[1]);
+    let tmp1 = points[2].distSquared(points[3]);
+    let tmp2 = points[0].distSquared(points[2]) * 0.25;
+    let tmp3 = points[1].distSquared(points[3]) * 0.25;
+
+    let max1 = (tmp0 > tmp1 ? tmp0 : tmp1);
+
+    let max2 = (tmp2 > tmp3 ? tmp2 : tmp3);
+
+    let max = (max1 > max2 ? max1 : max2);
+
+    return max * 18;
+  };
 
   // Weighted average to find Bezier points for linear sides.
-  function w_ave (p0, p1) { return p0.scale(2.0 / 3.0).add(p1.scale(1.0 / 3.0)); }
+  const wAvg = (p0, p1) => p0.scale(2.0 / 3.0).add(p1.scale(1.0 / 3.0));
 
   // Browsers return a string rather than a transform list for gradientTransform!
-  function parseTransform (t) {
+  const parseTransform = (t) => {
     // console.log( "parseTransform: " + t );
     let affine = new Affine();
     let trans, scale, radian, tan, skewx, skewy, rotate;
-    for (let i in t = t.match(/(\w+\(\s*(-?\d+\.?\d*e?-?\d*\s*,?\s*)+\))+/g)) {
-      let c = t[i].match(/[\w.-]+/g);
+    let transforms = t.match(/(\w+\(\s*[^)]+\))+/g);
+
+    transforms.forEach((i) => {
+      let c = i.match(/[\w.-]+/g);
       let type = c.shift();
+
       switch (type) {
         case 'translate':
           if (c.length === 2) {
@@ -166,19 +166,19 @@
           console.error('mesh.js: Unhandled transform type: ' + type);
           break;
       }
-    }
+    });
     // console.log( "  affine:\n" + affine.toString() );
     return affine;
-  }
+  };
 
-  function parsePoints (s) {
+  const parsePoints = (s) => {
     let points = [];
     let values = s.split(/[ ,]+/);
-    for (let i = 0; i < values.length - 1; i += 2) {
+    for (let i = 0, imax = values.length - 1; i < imax; i += 2) {
       points.push(new Point(parseFloat(values[i]), parseFloat(values[i + 1])));
     }
     return points;
-  }
+  };
 
   // Point class -----------------------------------
   class Point {
@@ -276,8 +276,9 @@
     }
 
     // Paint a Bezier curve. w is width of Canvas window.
-    paint_curve (v, w) {
-      if (bezier_steps_sq(this.nodes) > maxBezierStep) { // If inside, see if we need to split
+    paintCurve (v, w) {
+      // If inside, see if we need to split
+      if (bezierStepsSquared(this.nodes) > maxBezierStep) {
         const beziers = splitBezier(this.nodes[0], this.nodes[1],
           this.nodes[2], this.nodes[3]);
         let colors0 = [
@@ -296,8 +297,8 @@
         }
         let curve0 = new Curve(beziers[0], colors0);
         let curve1 = new Curve(beziers[1], colors1);
-        curve0.paint_curve(v, w);
-        curve1.paint_curve(v, w);
+        curve0.paintCurve(v, w);
+        curve1.paintCurve(v, w);
       } else {
         // Directly write data
         let x = Math.round(this.nodes[0].x);
@@ -436,37 +437,39 @@
       // To be done.....
 
       // If inside, see if we need to split
-      let tmp = [];
+      let larger = false;
+      let step;
       for (let i = 0; i < 4; ++i) {
-        tmp[i] = bezier_steps_sq([this.nodes[0][i], this.nodes[1][i],
+        step = bezierStepsSquared([this.nodes[0][i], this.nodes[1][i],
           this.nodes[2][i], this.nodes[3][i]
         ]);
+
+        if (step > maxBezierStep) {
+          larger = true;
+          break;
+        }
       }
 
-      let max = Math.max.apply(null, tmp);
-      // console.log( "Max: " + max );
-
-      if (max > maxBezierStep) {
+      if (larger) {
         // console.log( "Paint: Splitting" );
         let patches = this.split();
-        // console.log( patches );
         patches[0].paint(v, w);
         patches[1].paint(v, w);
       } else {
         // console.log( "Paint: Filling" );
         // this.fillOutline(v);
-        this.paint_curve(v, w);
+        this.paintCurve(v, w);
       }
     }
 
-    paint_curve (v, w) {
-      // console.log( "Patch.paint_curve" );
+    paintCurve (v, w) {
+      // console.log( "Patch.paintCurve" );
 
       // Paint a Bezier curve using just the top of the patch. If
       // the patch is thin enough this should work. We leave this
       // function here in case we want to do something more fancy.
       let curve = new Curve([...this.nodes[0]], [...this.colors[0]]);
-      curve.paint_curve(v, w);
+      curve.paintCurve(v, w);
     }
   }
 
@@ -503,7 +506,7 @@
         nodes[0][0] = new Point(x, y);
 
         let rows = theMesh.children;
-        for (let i = 0; i < rows.length; ++i) {
+        for (let i = 0, imax = rows.length; i < imax; ++i) {
           // Need to validate if meshrow...
           nodes[3 * i + 1] = []; // Need three extra rows for each meshrow.
           nodes[3 * i + 2] = [];
@@ -511,10 +514,10 @@
           colors[i + 1] = []; // Need one more row than number of meshrows.
           // console.log( " row: " + i);
           let patches = rows[i].children;
-          for (let j = 0; j < patches.length; ++j) {
+          for (let j = 0, jmax = patches.length; j < jmax; ++j) {
             // console.log( "  patch: " + j);
             let stops = patches[j].children;
-            for (let k = 0; k < stops.length; ++k) {
+            for (let k = 0, kmax = stops.length; k < kmax; ++k) {
               let l = k;
               if (i !== 0) {
                 ++l; // There is no top if row isn't first row.
@@ -534,41 +537,41 @@
                 case 'l':
                   if (l === 0) { // Top
                     nodes[3 * i][3 * j + 3] = stopNodes[0].add(nodes[3 * i][3 * j]);
-                    nodes[3 * i][3 * j + 1] = w_ave(nodes[3 * i][3 * j], nodes[3 * i][3 * j + 3]);
-                    nodes[3 * i][3 * j + 2] = w_ave(nodes[3 * i][3 * j + 3], nodes[3 * i][3 * j]);
+                    nodes[3 * i][3 * j + 1] = wAvg(nodes[3 * i][3 * j], nodes[3 * i][3 * j + 3]);
+                    nodes[3 * i][3 * j + 2] = wAvg(nodes[3 * i][3 * j + 3], nodes[3 * i][3 * j]);
                   } else if (l === 1) { // Right
                     nodes[3 * i + 3][3 * j + 3] = stopNodes[0].add(nodes[3 * i][3 * j + 3]);
-                    nodes[3 * i + 1][3 * j + 3] = w_ave(nodes[3 * i][3 * j + 3], nodes[3 * i + 3][3 * j + 3]);
-                    nodes[3 * i + 2][3 * j + 3] = w_ave(nodes[3 * i + 3][3 * j + 3], nodes[3 * i][3 * j + 3]);
+                    nodes[3 * i + 1][3 * j + 3] = wAvg(nodes[3 * i][3 * j + 3], nodes[3 * i + 3][3 * j + 3]);
+                    nodes[3 * i + 2][3 * j + 3] = wAvg(nodes[3 * i + 3][3 * j + 3], nodes[3 * i][3 * j + 3]);
                   } else if (l === 2) { // Bottom
                     if (j === 0) {
                       nodes[3 * i + 3][3 * j + 0] = stopNodes[0].add(nodes[3 * i + 3][3 * j + 3]);
                     }
-                    nodes[3 * i + 3][3 * j + 1] = w_ave(nodes[3 * i + 3][3 * j], nodes[3 * i + 3][3 * j + 3]);
-                    nodes[3 * i + 3][3 * j + 2] = w_ave(nodes[3 * i + 3][3 * j + 3], nodes[3 * i + 3][3 * j]);
+                    nodes[3 * i + 3][3 * j + 1] = wAvg(nodes[3 * i + 3][3 * j], nodes[3 * i + 3][3 * j + 3]);
+                    nodes[3 * i + 3][3 * j + 2] = wAvg(nodes[3 * i + 3][3 * j + 3], nodes[3 * i + 3][3 * j]);
                   } else { // Left
-                    nodes[3 * i + 1][3 * j] = w_ave(nodes[3 * i][3 * j], nodes[3 * i + 3][3 * j]);
-                    nodes[3 * i + 2][3 * j] = w_ave(nodes[3 * i + 3][3 * j], nodes[3 * i][3 * j]);
+                    nodes[3 * i + 1][3 * j] = wAvg(nodes[3 * i][3 * j], nodes[3 * i + 3][3 * j]);
+                    nodes[3 * i + 2][3 * j] = wAvg(nodes[3 * i + 3][3 * j], nodes[3 * i][3 * j]);
                   }
                   break;
                 case 'L':
                   if (l === 0) { // Top
                     nodes[3 * i][3 * j + 3] = stopNodes[0];
-                    nodes[3 * i][3 * j + 1] = w_ave(nodes[3 * i][3 * j], nodes[3 * i][3 * j + 3]);
-                    nodes[3 * i][3 * j + 2] = w_ave(nodes[3 * i][3 * j + 3], nodes[3 * i][3 * j]);
+                    nodes[3 * i][3 * j + 1] = wAvg(nodes[3 * i][3 * j], nodes[3 * i][3 * j + 3]);
+                    nodes[3 * i][3 * j + 2] = wAvg(nodes[3 * i][3 * j + 3], nodes[3 * i][3 * j]);
                   } else if (l === 1) { // Right
                     nodes[3 * i + 3][3 * j + 3] = stopNodes[0];
-                    nodes[3 * i + 1][3 * j + 3] = w_ave(nodes[3 * i][3 * j + 3], nodes[3 * i + 3][3 * j + 3]);
-                    nodes[3 * i + 2][3 * j + 3] = w_ave(nodes[3 * i + 3][3 * j + 3], nodes[3 * i][3 * j + 3]);
+                    nodes[3 * i + 1][3 * j + 3] = wAvg(nodes[3 * i][3 * j + 3], nodes[3 * i + 3][3 * j + 3]);
+                    nodes[3 * i + 2][3 * j + 3] = wAvg(nodes[3 * i + 3][3 * j + 3], nodes[3 * i][3 * j + 3]);
                   } else if (l === 2) { // Bottom
                     if (j === 0) {
                       nodes[3 * i + 3][3 * j + 0] = stopNodes[0];
                     }
-                    nodes[3 * i + 3][3 * j + 1] = w_ave(nodes[3 * i + 3][3 * j], nodes[3 * i + 3][3 * j + 3]);
-                    nodes[3 * i + 3][3 * j + 2] = w_ave(nodes[3 * i + 3][3 * j + 3], nodes[3 * i + 3][3 * j]);
+                    nodes[3 * i + 3][3 * j + 1] = wAvg(nodes[3 * i + 3][3 * j], nodes[3 * i + 3][3 * j + 3]);
+                    nodes[3 * i + 3][3 * j + 2] = wAvg(nodes[3 * i + 3][3 * j + 3], nodes[3 * i + 3][3 * j]);
                   } else { // Left
-                    nodes[3 * i + 1][3 * j] = w_ave(nodes[3 * i][3 * j], nodes[3 * i + 3][3 * j]);
-                    nodes[3 * i + 2][3 * j] = w_ave(nodes[3 * i + 3][3 * j], nodes[3 * i][3 * j]);
+                    nodes[3 * i + 1][3 * j] = wAvg(nodes[3 * i][3 * j], nodes[3 * i + 3][3 * j]);
+                    nodes[3 * i + 2][3 * j] = wAvg(nodes[3 * i + 3][3 * j], nodes[3 * i][3 * j]);
                   }
                   break;
                 case 'c':
@@ -722,11 +725,11 @@
     }
 
     // Extracts out each patch and then paints it
-    paint (v, w) {
-      for (let i = 0; i < (this.nodes.length - 1) / 3; ++i) {
-        for (let j = 0; j < (this.nodes[0].length - 1) / 3; ++j) {
+    paintMesh (v, w) {
+      for (let i = 0, imax = (this.nodes.length - 1) / 3; i < imax; ++i) {
+        for (let j = 0, jmax = (this.nodes[0].length - 1) / 3; j < jmax; ++j) {
           let sliceNodes = [];
-          for (let k = i * 3; k < (i * 3) + 4; ++k) {
+          for (let k = i * 3, kmax = (i * 3) + 4; k < kmax; ++k) {
             sliceNodes.push(this.nodes[k].slice(j * 3, (j * 3) + 4));
           }
 
@@ -742,17 +745,15 @@
 
     // Transforms mesh into coordinate space of canvas (t is either Point or Affine).
     transform (t) {
-      // console.log( "t: " + t );
       if (t instanceof Point) {
-        for (let i = 0; i < this.nodes.length; ++i) {
-          for (let j = 0; j < this.nodes[0].length; ++j) {
+        for (let i = 0, imax = this.nodes.length; i < imax; ++i) {
+          for (let j = 0, jmax = this.nodes[0].length; j < jmax; ++j) {
             this.nodes[i][j] = this.nodes[i][j].add(t);
           }
         }
-      }
-      if (t instanceof Affine) {
-        for (let i = 0; i < this.nodes.length; ++i) {
-          for (let j = 0; j < this.nodes[0].length; ++j) {
+      } else if (t instanceof Affine) {
+        for (let i = 0, imax = this.nodes.length; i < imax; ++i) {
+          for (let j = 0, jmax = this.nodes[0].length; j < jmax; ++j) {
             this.nodes[i][j] = this.nodes[i][j].transform(t);
           }
         }
@@ -761,8 +762,8 @@
 
     // Scale mesh into coordinate space of canvas (t is a Point).
     scale (t) {
-      for (let i = 0; i < this.nodes.length; ++i) {
-        for (let j = 0; j < this.nodes[0].length; ++j) {
+      for (let i = 0, imax = this.nodes.length; i < imax; ++i) {
+        for (let j = 0, jmax = this.nodes[0].length; j < jmax; ++j) {
           this.nodes[i][j] = this.nodes[i][j].scale(t);
         }
       }
@@ -771,7 +772,7 @@
 
   // Start of document processing ---------------------
 
-  let shapes = document.querySelectorAll('rect,circle,ellipse,path,text');
+  const shapes = document.querySelectorAll('rect,circle,ellipse,path,text');
   // console.log("Shapes: " + shapes.length);
 
   shapes.forEach((shape, i) => {
@@ -791,20 +792,15 @@
       // console.log( mesh );
       // console.log( mesh.nodeName );
       if (mesh.nodeName === 'meshgradient') {
-        // console.log( "Got mesh" );
         let bbox = shape.getBBox();
-        // console.log( bbox );
 
         // Create temporary canvas
         let myCanvas = document.createElementNS(xhtmlNS, 'canvas');
-        // let myCanvas = document.createElement( "canvas" );  // Both work for HTML...
         myCanvas.width = bbox.width;
         myCanvas.height = bbox.height;
 
-        // console.log ( "Canvas: " + myCanvas.width + "x" + myCanvas.height );
         let myContext = myCanvas.getContext('2d');
         let myCanvasImage = myContext.createImageData(myCanvas.width, myCanvas.height);
-        let myData = myCanvasImage.data;
 
         // Draw a mesh
         let myMesh = new Mesh(urlValue[1]);
@@ -822,14 +818,12 @@
         }
 
         // Position to Canvas coordinate.
-        let t = new Point(-bbox.x, -bbox.y);
         if (mesh.getAttribute('gradientUnits') === 'userSpaceOnUse') {
-          myMesh.transform(t);
+          myMesh.transform(new Point(-bbox.x, -bbox.y));
         }
 
         // Paint
-        myMesh.paint(myData, myCanvas.width);
-
+        myMesh.paintMesh(myCanvasImage.data, myCanvas.width);
         myContext.putImageData(myCanvasImage, 0, 0);
 
         // Create image element of correct size
@@ -856,6 +850,11 @@
         clip.appendChild(use);
         shape.parentElement.insertBefore(clip, shape);
         myImage.setAttribute('clip-path', 'url(#' + clipId + ')');
+
+        // Force the Garbage Collector to free the space
+        myCanvasImage = null;
+        myCanvas = null;
+        myPNG = null;
       }
     }
   });
