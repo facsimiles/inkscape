@@ -36,10 +36,10 @@ static Point intersection_point(Point origin_a, Point vector_a, Point origin_b, 
 static Circle touching_circle( D2<SBasis> const &curve, double t, double tol=0.01 )
 {
     D2<SBasis> dM=derivative(curve);
-    if ( are_near(L2sq(dM(t)),0.) ) {
+    if ( are_near(L2sq(dM(t)), tol) ) {
         dM=derivative(dM);
     }
-    if ( are_near(L2sq(dM(t)),0.) ) {   // try second time
+    if ( are_near(L2sq(dM(t)), tol) ) {   // try second time
         dM=derivative(dM);
     }
     Piecewise<D2<SBasis> > unitv = unitVector(dM,tol);
@@ -657,46 +657,6 @@ void extrapolate_join_alt2(join_data jd) { extrapolate_join_internal(jd, 2); }
 void extrapolate_join_alt3(join_data jd) { extrapolate_join_internal(jd, 3); }
 
 
-void join_inside(join_data jd)
-{
-    Geom::Path &res = jd.res;
-    Geom::Path const& temp = jd.outgoing;
-    Geom::Crossings cross = Geom::crossings(res, temp);
-
-    int solution = -1; // lol, really hope there aren't more than INT_MAX crossings
-    if (cross.size() == 1) solution = 0;
-    else if (cross.size() > 1) {
-        // I am not sure how well this will work -- we pick the join node closest
-        // to the cross point of the paths
-        /*Geom::Point original = res.finalPoint()+Geom::rot90(jd.in_tang)*jd.width;
-        Geom::Coord trial = Geom::L2(res.pointAt(cross[0].ta)-original);
-        solution = 0;
-        for (size_t i = 1; i < cross.size(); ++i) {
-            //printf("Trying %d\n", i);
-            Geom::Coord test = Geom::L2(res.pointAt(cross[i].ta)-original);
-            if (test < trial) {
-                trial = test;
-                solution = i;
-                //printf("Found improved solution: %f\n", trial);
-            }
-        }*/
-    }
-
-    if (solution != -1) {
-        Geom::Path d1 = res.portion(0., cross[solution].ta);
-        Geom::Path d2 = temp.portion(cross[solution].tb, temp.size());
-
-        // Watch for bugs in 2geom crossing regarding severe inflection points
-        res.clear();
-        res.append(d1);
-        res.setFinal(d2.initialPoint());
-        res.append(d2);
-    } else {
-        res.appendNew<Geom::LineSegment>(temp.initialPoint());
-        res.append(temp);
-    }
-}
-
 void tangents(Geom::Point tang[2], Geom::Curve const& incoming, Geom::Curve const& outgoing)
 {
     Geom::Point tang1 = Geom::unitTangentAt(reverse(incoming.toSBasis()), 0.);
@@ -1033,7 +993,6 @@ Geom::PathVector outline(
     Geom::PathBuilder res;
     Geom::Path with_dir = half_outline(input, width/2., miter, join, tolerance);
     Geom::Path against_dir = half_outline(input.reversed(), width/2., miter, join, tolerance);
-
     res.moveTo(with_dir[0].initialPoint());
     res.append(with_dir);
 
@@ -1103,6 +1062,7 @@ Geom::Path half_outline(
     const Geom::Curve &closingline = input.back_closed();
     const size_t k = (are_near(closingline.initialPoint(), closingline.finalPoint()) && input.closed() )
             ?input.size_open():input.size_default();
+    
     for (size_t u = 0; u < k; u += 2) {
         temp.clear();
 
@@ -1138,7 +1098,6 @@ Geom::Path half_outline(
         res.append(temp);
         res.close();
     }
-
     return res;
 }
 
@@ -1155,41 +1114,37 @@ void outline_join(Geom::Path &res, Geom::Path const& temp, Geom::Point in_tang, 
     }
 
     join_data jd(res, temp, in_tang, out_tang, miter, width);
-
-    bool on_outside = (Geom::cross(in_tang, out_tang) > 0);
-
-    if (on_outside) {
-        join_func *jf;
-        switch (join) {
-            case Inkscape::JOIN_BEVEL:
-                jf = &bevel_join;
-                break;
-            case Inkscape::JOIN_ROUND:
-                jf = &round_join;
-                break;
-            case Inkscape::JOIN_EXTRAPOLATE:
-                jf = &extrapolate_join;
-                break;
-            case Inkscape::JOIN_EXTRAPOLATE1:
-                jf = &extrapolate_join_alt1;
-                break;
-            case Inkscape::JOIN_EXTRAPOLATE2:
-                jf = &extrapolate_join_alt2;
-                break;
-            case Inkscape::JOIN_EXTRAPOLATE3:
-                jf = &extrapolate_join_alt3;
-                break;
-            case Inkscape::JOIN_MITER_CLIP:
-                jf = &miter_clip_join;
-                break;
-            default:
-                jf = &miter_join;
-        }
-        jf(jd);
-    } else {
-        join_inside(jd);
+    if (!(Geom::cross(in_tang, out_tang) > 0)) {
+        join = Inkscape::JOIN_ROUND;
     }
-}
+    join_func *jf;
+    switch (join) {
+        case Inkscape::JOIN_BEVEL:
+            jf = &bevel_join;
+            break;
+        case Inkscape::JOIN_ROUND:
+            jf = &round_join;
+            break;
+        case Inkscape::JOIN_EXTRAPOLATE:
+            jf = &extrapolate_join;
+            break;
+        case Inkscape::JOIN_EXTRAPOLATE1:
+            jf = &extrapolate_join_alt1;
+            break;
+        case Inkscape::JOIN_EXTRAPOLATE2:
+            jf = &extrapolate_join_alt2;
+            break;
+        case Inkscape::JOIN_EXTRAPOLATE3:
+            jf = &extrapolate_join_alt3;
+            break;
+        case Inkscape::JOIN_MITER_CLIP:
+            jf = &miter_clip_join;
+            break;
+        default:
+            jf = &miter_join;
+    }
+    jf(jd);
+ }
 
 } // namespace Inkscape
 

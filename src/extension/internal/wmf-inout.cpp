@@ -213,6 +213,28 @@ int Wmf::in_hatches(PWMF_CALLBACK_DATA d, char *test){
     return(0);
 }
 
+class TagEmitter
+{
+public:
+    TagEmitter(Glib::ustring & p_defs, char * p_tmpcolor, char * p_hpathname):
+        defs(p_defs), tmpcolor(p_tmpcolor), hpathname(p_hpathname)
+    {
+    };
+    void append(const char *prefix, const char * inner)
+    {
+        defs += "   ";
+        defs += prefix;
+        defs += hpathname;
+        defs += inner;
+        defs += tmpcolor;
+        defs += "\" />\n";
+    }
+
+protected:
+    Glib::ustring & defs;
+    char * tmpcolor, * hpathname;
+};
+
 /*  (Conditionally) add a hatch.  If a matching hatch already exists nothing happens.  If one
     does not exist it is added to the hatches list and also entered into <defs>.
     This is also used to add the path part of the hatches, which they reference with a xlink:href
@@ -238,6 +260,8 @@ uint32_t Wmf::add_hatch(PWMF_CALLBACK_DATA d, uint32_t hatchType, U_COLORREF hat
             sprintf(tmpcolor,"%6.6X",sethexcolor(hatchColor));
             break;
     }
+    auto & defs = d->defs;
+    TagEmitter a(defs, tmpcolor, hpathname);
 
     /*  For both bkMode types set the PATH + FOREGROUND COLOR for the indicated standard hatch.
         This will be used late to compose, or recompose  the transparent or opaque final hatch.*/
@@ -249,54 +273,33 @@ uint32_t Wmf::add_hatch(PWMF_CALLBACK_DATA d, uint32_t hatchType, U_COLORREF hat
         if(d->hatches.count == d->hatches.size){  enlarge_hatches(d); }
         d->hatches.strings[d->hatches.count++]=strdup(hpathname);
 
-        d->defs += "\n";
+        defs += "\n";
         switch(hatchType){
             case U_HS_HORIZONTAL:
-                d->defs += "   <path id=\"";
-                d->defs += hpathname;
-                d->defs += "\" d=\"M 0 0 6 0\" style=\"fill:none;stroke:#";
-                d->defs += tmpcolor;
-                d->defs += "\" />\n";
+                a.append("<path id=\"",
+                "\" d=\"M 0 0 6 0\" style=\"fill:none;stroke:#");
                 break;
             case U_HS_VERTICAL:
-                d->defs += "   <path id=\"";
-                d->defs += hpathname;
-                d->defs += "\" d=\"M 0 0 0 6\" style=\"fill:none;stroke:#";
-                d->defs += tmpcolor;
-                d->defs += "\" />\n";
+                a.append("<path id=\"",
+                "\" d=\"M 0 0 0 6\" style=\"fill:none;stroke:#");
                 break;
             case U_HS_FDIAGONAL:
-                d->defs += "   <line  id=\"sub";
-                d->defs += hpathname;
-                d->defs += "\" x1=\"-1\" y1=\"-1\" x2=\"7\" y2=\"7\" stroke=\"#";
-                d->defs += tmpcolor;
-                d->defs += "\"/>\n";
+                a.append("<line  id=\"sub",
+                "\" x1=\"-1\" y1=\"-1\" x2=\"7\" y2=\"7\" stroke=\"#");
                 break;
             case U_HS_BDIAGONAL:
-                d->defs += "   <line  id=\"sub";
-                d->defs += hpathname;
-                d->defs += "\" x1=\"-1\" y1=\"7\" x2=\"7\" y2=\"-1\" stroke=\"#";
-                d->defs += tmpcolor;
-                d->defs += "\"/>\n";
+                a.append("<line  id=\"sub",
+                "\" x1=\"-1\" y1=\"7\" x2=\"7\" y2=\"-1\" stroke=\"#");
                 break;
             case U_HS_CROSS:
-                d->defs += "   <path   id=\"";
-                d->defs += hpathname;
-                d->defs += "\" d=\"M 0 0 6 0 M 0 0 0 6\" style=\"fill:none;stroke:#";
-                d->defs += tmpcolor;
-                d->defs += "\" />\n";
+                a.append("<path   id=\"",
+                "\" d=\"M 0 0 6 0 M 0 0 0 6\" style=\"fill:none;stroke:#");
                  break;
             case U_HS_DIAGCROSS:
-                d->defs += "   <line   id=\"subfd";
-                d->defs += hpathname;
-                d->defs += "\" x1=\"-1\" y1=\"-1\" x2=\"7\" y2=\"7\" stroke=\"#";
-                d->defs += tmpcolor;
-                d->defs += "\"/>\n";
-                d->defs += "   <line   id=\"subbd";
-                d->defs += hpathname;
-                d->defs += "\" x1=\"-1\" y1=\"7\" x2=\"7\" y2=\"-1\" stroke=\"#";
-                d->defs += tmpcolor;
-                d->defs += "\"/>\n";
+                a.append("<line   id=\"subfd",
+                "\" x1=\"-1\" y1=\"-1\" x2=\"7\" y2=\"7\" stroke=\"#");
+                a.append("<line   id=\"subbd",
+                "\" x1=\"-1\" y1=\"7\" x2=\"7\" y2=\"-1\" stroke=\"#");
                 break;
             case U_HS_SOLIDCLR:
             case U_HS_DITHEREDCLR:
@@ -305,12 +308,8 @@ uint32_t Wmf::add_hatch(PWMF_CALLBACK_DATA d, uint32_t hatchType, U_COLORREF hat
             case U_HS_SOLIDBKCLR:
             case U_HS_DITHEREDBKCLR:
             default:
-                d->defs += "   <path   id=\"";
-                d->defs += hpathname;
-                d->defs += "\" d=\"M 0 0 6 0 6 6 0 6 z\" style=\"fill:#";
-                d->defs += tmpcolor;
-                d->defs += ";stroke:none";
-                d->defs += "\" />\n";
+                a.append("<path   id=\"",
+                "\" d=\"M 0 0 6 0 6 6 0 6 z\" style=\"stroke:none;fill:#");
                 break;
         }
     }
@@ -372,12 +371,12 @@ uint32_t Wmf::add_hatch(PWMF_CALLBACK_DATA d, uint32_t hatchType, U_COLORREF hat
         if(!idx){  // add it if not already present
             if(d->hatches.count == d->hatches.size){  enlarge_hatches(d); }
             d->hatches.strings[d->hatches.count++]=strdup(hatchname);
-            d->defs += "\n";
-            d->defs += "   <pattern id=\"";
-            d->defs += hatchname;
-            d->defs += "\"  xlink:href=\"#WMFhbasepattern\">\n";
-            d->defs += refpath;
-            d->defs += "   </pattern>\n";
+            defs += "\n";
+            defs += "   <pattern id=\"";
+            defs += hatchname;
+            defs += "\"  xlink:href=\"#WMFhbasepattern\">\n";
+            defs += refpath;
+            defs += "   </pattern>\n";
             idx = d->hatches.count;
         }
     }
@@ -390,12 +389,12 @@ uint32_t Wmf::add_hatch(PWMF_CALLBACK_DATA d, uint32_t hatchType, U_COLORREF hat
             if(d->hatches.count == d->hatches.size){  enlarge_hatches(d); }
             d->hatches.strings[d->hatches.count++]=strdup(hbkname);
 
-            d->defs += "\n";
-            d->defs += "   <rect id=\"";
-            d->defs += hbkname;
-            d->defs += "\" x=\"0\" y=\"0\" width=\"6\" height=\"6\" fill=\"#";
-            d->defs += bkcolor;
-            d->defs += "\" />\n";
+            defs += "\n";
+            defs += "   <rect id=\"";
+            defs += hbkname;
+            defs += "\" x=\"0\" y=\"0\" width=\"6\" height=\"6\" fill=\"#";
+            defs += bkcolor;
+            defs += "\" />\n";
         }
 
         // this is the pattern, its name will show up in Inkscape's pattern selector
@@ -404,15 +403,15 @@ uint32_t Wmf::add_hatch(PWMF_CALLBACK_DATA d, uint32_t hatchType, U_COLORREF hat
         if(!idx){  // add it if not already present
             if(d->hatches.count == d->hatches.size){  enlarge_hatches(d); }
             d->hatches.strings[d->hatches.count++]=strdup(hatchname);
-            d->defs += "\n";
-            d->defs += "   <pattern id=\"";
-            d->defs += hatchname;
-            d->defs += "\"  xlink:href=\"#WMFhbasepattern\">\n";
-            d->defs += "      <use xlink:href=\"#";
-            d->defs += hbkname;
-            d->defs += "\" />\n";
-            d->defs += refpath;
-            d->defs += "   </pattern>\n";
+            defs += "\n";
+            defs += "   <pattern id=\"";
+            defs += hatchname;
+            defs += "\"  xlink:href=\"#WMFhbasepattern\">\n";
+            defs += "      <use xlink:href=\"#";
+            defs += hbkname;
+            defs += "\" />\n";
+            defs += refpath;
+            defs += "   </pattern>\n";
             idx = d->hatches.count;
         }
     }
@@ -494,6 +493,7 @@ uint32_t Wmf::add_dib_image(PWMF_CALLBACK_DATA d, const char *dib, uint32_t iUsa
         base64String = bad_image_png();
     }
     idx = in_images(d, (char *) base64String);
+    auto & defs = d->defs;
     if(!idx){  // add it if not already present - we looked at the actual data for comparison
         if(d->images.count == d->images.size){  enlarge_images(d); }
         idx = d->images.count;
@@ -502,35 +502,35 @@ uint32_t Wmf::add_dib_image(PWMF_CALLBACK_DATA d, const char *dib, uint32_t iUsa
         sprintf(imagename,"WMFimage%d",idx++);
         sprintf(xywh," x=\"0\" y=\"0\" width=\"%d\" height=\"%d\" ",width,height); // reuse this buffer
 
-        d->defs += "\n";
-        d->defs += "   <image id=\"";
-        d->defs += imagename;
-        d->defs += "\"\n      ";
-        d->defs += xywh;
-        d->defs += "\n";
-        if(dibparams == U_BI_JPEG){    d->defs += "       xlink:href=\"data:image/jpeg;base64,"; }
-        else {                         d->defs += "       xlink:href=\"data:image/png;base64,";  }
-        d->defs += base64String;
-        d->defs += "\"\n";
-        d->defs += " preserveAspectRatio=\"none\"\n";
-        d->defs += "   />\n";
+        defs += "\n";
+        defs += "   <image id=\"";
+        defs += imagename;
+        defs += "\"\n      ";
+        defs += xywh;
+        defs += "\n";
+        if(dibparams == U_BI_JPEG){    defs += "       xlink:href=\"data:image/jpeg;base64,"; }
+        else {                         defs += "       xlink:href=\"data:image/png;base64,";  }
+        defs += base64String;
+        defs += "\"\n";
+        defs += " preserveAspectRatio=\"none\"\n";
+        defs += "   />\n";
 
 
-        d->defs += "\n";
-        d->defs += "   <pattern id=\"";
-        d->defs += imagename;
-        d->defs += "_ref\"\n      ";
-        d->defs += xywh;
-        d->defs += "\n       patternUnits=\"userSpaceOnUse\"";
-        d->defs += " >\n";
-        d->defs += "      <use id=\"";
-        d->defs += imagename;
-        d->defs += "_ign\" ";
-        d->defs += " xlink:href=\"#";
-        d->defs += imagename;
-        d->defs += "\" />\n";
-        d->defs += "    ";
-        d->defs += "   </pattern>\n";
+        defs += "\n";
+        defs += "   <pattern id=\"";
+        defs += imagename;
+        defs += "_ref\"\n      ";
+        defs += xywh;
+        defs += "\n       patternUnits=\"userSpaceOnUse\"";
+        defs += " >\n";
+        defs += "      <use id=\"";
+        defs += imagename;
+        defs += "_ign\" ";
+        defs += " xlink:href=\"#";
+        defs += imagename;
+        defs += "\" />\n";
+        defs += "    ";
+        defs += "   </pattern>\n";
     }
     g_free(base64String); //wait until this point to free because it might be a duplicate image
     return(idx-1);
@@ -590,6 +590,7 @@ uint32_t Wmf::add_bm16_image(PWMF_CALLBACK_DATA d, U_BITMAP16 Bm16, const char *
     }
 
     idx = in_images(d, (char *) base64String);
+    auto & defs = d->defs;
     if(!idx){  // add it if not already present - we looked at the actual data for comparison
         if(d->images.count == d->images.size){  enlarge_images(d); }
         idx = d->images.count;
@@ -598,33 +599,33 @@ uint32_t Wmf::add_bm16_image(PWMF_CALLBACK_DATA d, U_BITMAP16 Bm16, const char *
         sprintf(imagename,"WMFimage%d",idx++);
         sprintf(xywh," x=\"0\" y=\"0\" width=\"%d\" height=\"%d\" ",width,height); // reuse this buffer
 
-        d->defs += "\n";
-        d->defs += "   <image id=\"";
-        d->defs += imagename;
-        d->defs += "\"\n      ";
-        d->defs += xywh;
-        d->defs += "\n";
-        d->defs += "       xlink:href=\"data:image/png;base64,";
-        d->defs += base64String;
-        d->defs += "\"\n";
-        d->defs += " preserveAspectRatio=\"none\"\n";
-        d->defs += "   />\n";
+        defs += "\n";
+        defs += "   <image id=\"";
+        defs += imagename;
+        defs += "\"\n      ";
+        defs += xywh;
+        defs += "\n";
+        defs += "       xlink:href=\"data:image/png;base64,";
+        defs += base64String;
+        defs += "\"\n";
+        defs += " preserveAspectRatio=\"none\"\n";
+        defs += "   />\n";
 
 
-        d->defs += "\n";
-        d->defs += "   <pattern id=\"";
-        d->defs += imagename;
-        d->defs += "_ref\"\n      ";
-        d->defs += xywh;
-        d->defs += "\n       patternUnits=\"userSpaceOnUse\"";
-        d->defs += " >\n";
-        d->defs += "      <use id=\"";
-        d->defs += imagename;
-        d->defs += "_ign\" ";
-        d->defs += " xlink:href=\"#";
-        d->defs += imagename;
-        d->defs += "\" />\n";
-        d->defs += "   </pattern>\n";
+        defs += "\n";
+        defs += "   <pattern id=\"";
+        defs += imagename;
+        defs += "_ref\"\n      ";
+        defs += xywh;
+        defs += "\n       patternUnits=\"userSpaceOnUse\"";
+        defs += " >\n";
+        defs += "      <use id=\"";
+        defs += imagename;
+        defs += "_ign\" ";
+        defs += " xlink:href=\"#";
+        defs += imagename;
+        defs += "\" />\n";
+        defs += "   </pattern>\n";
     }
     g_free(base64String); //wait until this point to free because it might be a duplicate image
     return(idx-1);

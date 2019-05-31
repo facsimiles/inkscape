@@ -9,7 +9,6 @@
 #include <2geom/intersection-graph.h>
 #include "display/curve.h"
 #include "helper/geom.h"
-#include "ui/tools-switch.h"
 #include "path-chemistry.h"
 #include "extract-uri.h"
 #include <bad-uri-exception.h>
@@ -128,6 +127,7 @@ LPEPowerClip::doBeforeEffect (SPLPEItem const* lpeitem){
 
 void
 LPEPowerClip::doAfterEffect (SPLPEItem const* lpeitem){
+    is_load = false;
     if (!hide_clip && flatten && isVisible()) {
         SP_ITEM(sp_lpe_item)->clip_ref->detach();
     }

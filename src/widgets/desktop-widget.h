@@ -269,6 +269,8 @@ public:
     void updateTitle(gchar const *uri);
     bool onFocusInEvent(GdkEventFocus*);
 
+    Gtk::MenuBar *menubar() { return _menubar; }
+
     Inkscape::UI::Widget::Dock* getDock();
 
     static GType getType();
@@ -321,7 +323,7 @@ public:
     void rotation_populate_popup(Gtk::Menu *menu);
     void canvas_tbl_size_allocate(Gtk::Allocation &allocation);
 
-#if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#if defined(HAVE_LIBLCMS2)
     static void cms_adjust_toggled( GtkWidget *button, gpointer data );
     static void color_profile_event(EgeColorProfTracker *tracker, SPDesktopWidget *dtw);
 #endif

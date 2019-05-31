@@ -423,9 +423,7 @@ bool ResourceManagerImpl::searchUpwards( std::string const &base, std::string co
 static ResourceManagerImpl* theInstance = nullptr;
 
 ResourceManager::ResourceManager()
-    : Glib::Object()
-{
-}
+= default;
 
 ResourceManager::~ResourceManager() = default;
 

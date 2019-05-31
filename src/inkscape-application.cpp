@@ -42,6 +42,10 @@
 #include "actions/actions-selection.h" // Actions
 #include "actions/actions-transform.h" // Actions
 
+#ifdef GDK_WINDOWING_QUARTZ
+#include <gtkosxapplication.h>
+#endif
+
 #ifdef WITH_DBUS
 # include "extension/dbus/dbus-init.h"
 #endif
@@ -66,7 +70,7 @@ InkscapeApplication::InkscapeApplication()
     , _active_document(nullptr)
     , _active_selection(nullptr)
     , _active_view(nullptr)
-    , _pdf_page(0)
+    , _pdf_page(1)
     , _pdf_poppler(false)
 {}
 
@@ -434,15 +438,21 @@ ConcreteInkscapeApplication<T>::get_instance()
     return instance;
 }
 
+// Note: We tried using Gio::APPLICATION_CAN_OVERRIDE_APP_ID instead of
+// Gio::APPLICATION_NON_UNIQUE. The advantages of this is that copy/paste between windows would be
+// more reliable and that we wouldn't have multiple Inkscape instance writing to the preferences
+// file at the same time (if started as separate processes). This caused problems with batch
+// processing files and with extensions as they rely on having multiple instances of Inkscape
+// running independently. In principle one can use --gapplication-app-id to run a new instance of
+// Inkscape but this with our current structure fails with the error message:
+// "g_application_set_application_id: assertion '!application->priv->is_registered' failed".
+// It also require generating new id's for each separate Inkscape instance required.
+
 template<class T>
 ConcreteInkscapeApplication<T>::ConcreteInkscapeApplication()
     : T("org.inkscape.application.with_gui",
                        Gio::APPLICATION_HANDLES_OPEN | // Use default file opening.
-                       Gio::APPLICATION_CAN_OVERRIDE_APP_ID ) // Allows different instances of
-                                                              // Inkscape to run at same time using
-                                                              // --gapplication-app-id (useful for
-                                                              // debugging different versions of
-                                                              // Inkscape).
+                       Gio::APPLICATION_NON_UNIQUE )
     , InkscapeApplication()
 {
 
@@ -566,6 +576,11 @@ ConcreteInkscapeApplication<Gio::Application>::on_startup2()
     Inkscape::Application::create(nullptr, false);
 }
 
+#ifdef GDK_WINDOWING_QUARTZ
+static gboolean osx_openfile_callback(GtkosxApplication *, gchar const *,
+                                      ConcreteInkscapeApplication<Gtk::Application> *);
+#endif
+
 template<>
 void
 ConcreteInkscapeApplication<Gtk::Application>::on_startup2()
@@ -590,7 +605,7 @@ ConcreteInkscapeApplication<Gtk::Application>::on_startup2()
     // removed after confirming this code isn't required.
     _builder = Gtk::Builder::create();
 
-    Glib::ustring app_builder_file = get_filename(UIS, "inkscape-application.xml");
+    Glib::ustring app_builder_file = get_filename(UIS, "inkscape-application.glade");
 
     try
     {
@@ -608,6 +623,11 @@ ConcreteInkscapeApplication<Gtk::Application>::on_startup2()
     } else {
         // set_app_menu(menu);
     }
+
+#ifdef GDK_WINDOWING_QUARTZ
+    GtkosxApplication *osxapp = gtkosx_application_get();
+    g_signal_connect(G_OBJECT(osxapp), "NSApplicationOpenFile", G_CALLBACK(osx_openfile_callback), this);
+#endif
 }
 
 /** We should not create a window if T is Gio::Applicaton.
@@ -702,6 +722,20 @@ ConcreteInkscapeApplication<Gtk::Application>::create_window(const Glib::RefPtr<
 
     return (desktop); // Temp: Need to track desktop for shell mode.
 }
+
+#ifdef GDK_WINDOWING_QUARTZ
+/**
+ * On macOS, handle dropping files on Inkscape.app icon and "Open With" file association.
+ */
+static gboolean osx_openfile_callback(GtkosxApplication *osxapp, gchar const *path,
+                                      ConcreteInkscapeApplication<Gtk::Application> *app)
+{
+    auto ptr = Gio::File::create_for_path(path);
+    g_return_val_if_fail(ptr, false);
+    app->create_window(ptr);
+    return true;
+}
+#endif
 
 /** No need to destroy window if T is Gio::Application.
  */

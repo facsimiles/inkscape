@@ -139,7 +139,7 @@ Inkscape::SelTrans::SelTrans(SPDesktop *desktop) :
                                "anchor", SP_ANCHOR_CENTER,
                                "mode", SP_CTRL_MODE_XOR,
                                "shape", SP_CTRL_SHAPE_BITMAP,
-                               "size", 13.0,
+                               "size", 13,
                                "filled", TRUE,
                                "fill_color", 0x00000000,
                                "stroked", TRUE,
@@ -152,7 +152,7 @@ Inkscape::SelTrans::SelTrans(SPDesktop *desktop) :
                                "anchor", SP_ANCHOR_CENTER,
                                "mode", SP_CTRL_MODE_XOR,
                                "shape", SP_CTRL_SHAPE_CROSS,
-                               "size", 7.0,
+                               "size", 7,
                                "filled", TRUE,
                                "fill_color", 0xffffff7f,
                                "stroked", TRUE,
@@ -677,8 +677,8 @@ void Inkscape::SelTrans::_makeHandles()
         knots[i]->setSize(13);
         knots[i]->setAnchor(hands[i].anchor);
         knots[i]->setMode(SP_CTRL_MODE_XOR);
-        knots[i]->setFill(info.color[0], info.color[1], info.color[2], info.color[1]);
-        knots[i]->setStroke(info.color[3], info.color[4], info.color[5], info.color[4]);
+        knots[i]->setFill(info.color[0], info.color[1], info.color[1], info.color[1]);
+        knots[i]->setStroke(info.color[2], info.color[3], info.color[3], info.color[3]);
 
         knots[i]->setPixbuf(handles[hands[i].control]);
         knots[i]->updateCtrl();
@@ -762,7 +762,7 @@ void Inkscape::SelTrans::handleGrab(SPKnot *knot, guint /*state*/, SPSelTransHan
         case HANDLE_CENTER:
             g_object_set(G_OBJECT(_grip),
                          "shape", SP_CTRL_SHAPE_BITMAP,
-                         "size", 13.0,
+                         "size", 13,
                          NULL);
             sp_canvas_item_hide(_norm);
             sp_canvas_item_show(_grip);
@@ -770,7 +770,7 @@ void Inkscape::SelTrans::handleGrab(SPKnot *knot, guint /*state*/, SPSelTransHan
         default:
             g_object_set(G_OBJECT(_grip),
                          "shape", SP_CTRL_SHAPE_CROSS,
-                         "size", 7.0,
+                         "size", 7,
                          NULL);
             sp_canvas_item_show(_norm);
             sp_canvas_item_show(_grip);

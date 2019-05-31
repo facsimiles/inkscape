@@ -12,19 +12,21 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <gtkmm.h>
-#include <gdk/gdk.h>
-#include <2geom/path-intersection.h>
-#include <2geom/sbasis-to-bezier.h>
-#include <2geom/intersection-graph.h>
 #include "live_effects/lpe-copy_rotate.h"
-#include "live_effects/lpeobject.h"
 #include "display/curve.h"
+#include "helper/geom.h"
+#include "live_effects/lpeobject.h"
+#include "object/sp-text.h"
+#include "path-chemistry.h"
+#include "style.h"
 #include "svg/path-string.h"
 #include "svg/svg.h"
-#include "helper/geom.h"
 #include "xml/sp-css-attr.h"
-#include "path-chemistry.h"
+#include <2geom/intersection-graph.h>
+#include <2geom/path-intersection.h>
+#include <2geom/sbasis-to-bezier.h>
+#include <gdk/gdk.h>
+#include <gtkmm.h>
 
 #include "object/sp-path.h"
 #include "object/sp-shape.h"
@@ -65,7 +67,7 @@ LPECopyRotate::LPECopyRotate(LivePathEffectObject *lpeobject) :
     starting_angle(_("Starting angle"), _("Angle of the first copy"), "starting_angle", &wr, this, 0.0),
     rotation_angle(_("Rotation angle"), _("Angle between two successive copies"), "rotation_angle", &wr, this, 60.0),
     num_copies(_("Number of copies"), _("Number of copies of the original path"), "num_copies", &wr, this, 6),
-    gap(_("Gap"), _("Gap"), "gap", &wr, this, -0.0001),
+    gap(_("Gap"), _("Gap"), _("Gap space between copies, use small negative gaps to fix some joins"), &wr, this, 0.05),
     copies_to_360(_("360º Copies"), _("No rotation angle, fixed to 360º"), "copies_to_360", &wr, this, true),
     mirror_copies(_("Mirror copies"), _("Mirror between copies"), "mirror_copies", &wr, this, false),
     split_items(_("Split elements"), _("Split elements, this allow gradients and other paints."), "split_items", &wr, this, false),
@@ -92,7 +94,7 @@ LPECopyRotate::LPECopyRotate(LivePathEffectObject *lpeobject) :
     registerParameter(&split_items);
 
     gap.param_set_range(-99999.0, 99999.0);
-    gap.param_set_increments(0.1, 0.1);
+    gap.param_set_increments(0.01, 0.01);
     gap.param_set_digits(5);
     num_copies.param_set_range(1, 999999);
     num_copies.param_make_integer(true);
@@ -110,8 +112,8 @@ LPECopyRotate::~LPECopyRotate()
 void
 LPECopyRotate::doAfterEffect (SPLPEItem const* lpeitem)
 {
+    is_load = false;
     if (split_items) {
-        is_load = false;
         SPDocument * document = SP_ACTIVE_DOCUMENT;
         if (!document) {
             return;
@@ -189,6 +191,21 @@ LPECopyRotate::doAfterEffect (SPLPEItem const* lpeitem)
     }
 }
 
+void LPECopyRotate::cloneStyle(SPObject *orig, SPObject *dest)
+{
+    dest->getRepr()->setAttribute("style", orig->getRepr()->attribute("style"));
+    for (auto iter : orig->style->properties()) {
+        if (iter->style_src != SP_STYLE_SRC_UNSET) {
+            if (iter->name != "font" && iter->name != "d" && iter->name != "marker") {
+                const gchar *attr = orig->getRepr()->attribute(iter->name.c_str());
+                if (attr) {
+                    dest->getRepr()->setAttribute(iter->name.c_str(), attr);
+                }
+            }
+        }
+    }
+}
+
 void
 LPECopyRotate::cloneD(SPObject *orig, SPObject *dest, Geom::Affine transform, bool reset) 
 {
@@ -198,6 +215,9 @@ LPECopyRotate::cloneD(SPObject *orig, SPObject *dest, Geom::Affine transform, bo
     }
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
     if ( SP_IS_GROUP(orig) && SP_IS_GROUP(dest) && SP_GROUP(orig)->getItemCount() == SP_GROUP(dest)->getItemCount() ) {
+        if (reset) {
+            cloneStyle(orig, dest);
+        }
         std::vector< SPObject * > childs = orig->childList(true);
         size_t index = 0;
         for (auto & child : childs) {
@@ -207,6 +227,19 @@ LPECopyRotate::cloneD(SPObject *orig, SPObject *dest, Geom::Affine transform, bo
         }
         return;
     }
+
+    if ( SP_IS_TEXT(orig) && SP_IS_TEXT(dest) && SP_TEXT(orig)->children.size() == SP_TEXT(dest)->children.size()) {
+        if (reset) {
+            cloneStyle(orig, dest);
+        }
+        size_t index = 0;
+        for (auto & child : SP_TEXT(orig)->children) {
+            SPObject *dest_child = dest->nthChild(index); 
+            cloneD(&child, dest_child, transform, reset); 
+            index++;
+        }
+    }
+    
     SPShape * shape =  SP_SHAPE(orig);
     SPPath * path =  SP_PATH(dest);
     if (shape) {
@@ -218,10 +251,10 @@ LPECopyRotate::cloneD(SPObject *orig, SPObject *dest, Geom::Affine transform, bo
                 const char * style = dest->getRepr()->attribute("style");
                 Inkscape::XML::Document *xml_doc = dest->document->getReprDoc();
                 Inkscape::XML::Node *dest_node = xml_doc->createElement("svg:path");;
-                dest->updateRepr(xml_doc, dest_node, SP_OBJECT_WRITE_ALL);
                 dest_node->setAttribute("id", id);
                 dest_node->setAttribute("inkscape:connector-curvature", "0");
                 dest_node->setAttribute("style", style);
+                dest->updateRepr(xml_doc, dest_node, SP_OBJECT_WRITE_ALL);
                 path =  SP_PATH(dest);
             }
             path->getRepr()->setAttribute("d", str);
@@ -230,9 +263,10 @@ LPECopyRotate::cloneD(SPObject *orig, SPObject *dest, Geom::Affine transform, bo
         } else {
             path->getRepr()->setAttribute("d", nullptr);
         }
-        if (reset) {
-            dest->getRepr()->setAttribute("style", shape->getRepr()->attribute("style"));
-        }
+        
+    }
+    if (reset) {
+        cloneStyle(orig, dest);
     }
 }
 
@@ -259,6 +293,7 @@ LPECopyRotate::createPathBase(SPObject *elemref) {
     }
     Inkscape::XML::Node *resultnode = xml_doc->createElement("svg:path");
     resultnode->setAttribute("transform", prev->attribute("transform"));
+    resultnode->setAttribute("style", prev->attribute("style"));
     return resultnode;
 }
 
@@ -474,119 +509,6 @@ LPECopyRotate::split(Geom::PathVector &path_on, Geom::Path const &divider)
     path_on = tmp_path;
 }
 
-//void
-//LPECopyRotate::setFusion(Geom::PathVector &path_on, Geom::Path divider, double size_divider)
-//{
-//    split(path_on,divider);
-//    Geom::PathVector tmp_path;
-//    Geom::Affine pre = Geom::Translate(-origin);
-//    for (Geom::PathVector::const_iterator path_it = path_on.begin(); path_it != path_on.end(); ++path_it) {
-//        Geom::Path original = *path_it;
-//        if (path_it->empty()) {
-//            continue;
-//        }
-//        Geom::PathVector tmp_path_helper;
-//        Geom::Path append_path = original;
-//        Geom::Point previous = original.finalPoint();
-//        for (int i = 0; i < num_copies; ++i) {
-//            Geom::Rotate rot(-Geom::rad_from_deg(rotation_angle * (i)));
-//            Geom::Affine m = pre * rot * Geom::Translate(origin);
-//            if (i%2 != 0 && mirror_copies) {
-//                Geom::Point point_a = (Geom::Point)origin;
-//                Geom::Point point_b = origin + dir * Geom::Rotate(-Geom::rad_from_deg((rotation_angle*i)+starting_angle)) * size_divider;
-//                Geom::Line ls(point_a, point_b);
-//                m = Geom::reflection (ls.vector(), point_a);
-//                append_path *= m;
-//            } else {
-//                append_path = original;
-//                append_path *= m;
-//            }
-//            previous = append_path.finalPoint();
-//            if (tmp_path_helper.size() > 0) {
-//                if (Geom::are_near(tmp_path_helper[tmp_path_helper.size()-1].finalPoint(), append_path.finalPoint())) {
-//                    Geom::Path tmp_append = append_path.reversed();
-//                    tmp_append.setInitial(tmp_path_helper[tmp_path_helper.size()-1].finalPoint());
-//                    tmp_path_helper[tmp_path_helper.size()-1].append(tmp_append);
-//                } else if (Geom::are_near(tmp_path_helper[tmp_path_helper.size()-1].initialPoint(), append_path.initialPoint())) {
-//                    Geom::Path tmp_append = append_path;
-//                    tmp_path_helper[tmp_path_helper.size()-1] = tmp_path_helper[tmp_path_helper.size()-1].reversed();
-//                    tmp_append.setInitial(tmp_path_helper[tmp_path_helper.size()-1].finalPoint());
-//                    tmp_path_helper[tmp_path_helper.size()-1].append(tmp_append);
-//                } else if (Geom::are_near(tmp_path_helper[tmp_path_helper.size()-1].finalPoint(), append_path.initialPoint())) {
-//                    Geom::Path tmp_append = append_path;
-//                    tmp_append.setInitial(tmp_path_helper[tmp_path_helper.size()-1].finalPoint());
-//                    tmp_path_helper[tmp_path_helper.size()-1].append(tmp_append);
-//                } else if (Geom::are_near(tmp_path_helper[tmp_path_helper.size()-1].initialPoint(), append_path.finalPoint())) {
-//                    Geom::Path tmp_append = append_path.reversed();
-//                    tmp_path_helper[tmp_path_helper.size()-1] = tmp_path_helper[tmp_path_helper.size()-1].reversed();
-//                    tmp_append.setInitial(tmp_path_helper[tmp_path_helper.size()-1].finalPoint());
-//                    tmp_path_helper[tmp_path_helper.size()-1].append(tmp_append);
-//                } else if (Geom::are_near(tmp_path_helper[0].finalPoint(), append_path.finalPoint())) {
-//                    Geom::Path tmp_append = append_path.reversed();
-//                    tmp_append.setInitial(tmp_path_helper[0].finalPoint());
-//                    tmp_path_helper[0].append(tmp_append);
-//                } else if (Geom::are_near(tmp_path_helper[0].initialPoint(), append_path.initialPoint())) {
-//                    Geom::Path tmp_append = append_path;
-//                    tmp_path_helper[0] = tmp_path_helper[0].reversed();
-//                    tmp_append.setInitial(tmp_path_helper[0].finalPoint());
-//                    tmp_path_helper[0].append(tmp_append);
-//                } else {
-//                    tmp_path_helper.push_back(append_path);
-//                }
-//                if ( Geom::are_near(tmp_path_helper[tmp_path_helper.size()-1].finalPoint(),tmp_path_helper[tmp_path_helper.size()-1].initialPoint())) {
-//                    tmp_path_helper[tmp_path_helper.size()-1].close();
-//                }
-//            } else {
-//                tmp_path_helper.push_back(append_path);
-//            }
-//        }
-//        if (tmp_path_helper.size() > 0) {
-//            tmp_path_helper[tmp_path_helper.size()-1] = tmp_path_helper[tmp_path_helper.size()-1];
-//            tmp_path_helper[0] = tmp_path_helper[0];
-//            if (rotation_angle * num_copies != 360) {
-//                Geom::Ray base_a(divider.pointAt(1),divider.pointAt(0));
-//                double diagonal = Geom::distance(Geom::Point(boundingbox_X.min(),boundingbox_Y.min()),Geom::Point(boundingbox_X.max(),boundingbox_Y.max()));
-//                Geom::Rect bbox(Geom::Point(boundingbox_X.min(),boundingbox_Y.min()),Geom::Point(boundingbox_X.max(),boundingbox_Y.max()));
-//                double size_divider = Geom::distance(origin,bbox) + (diagonal * 2);
-//                Geom::Point base_point = origin + dir * Geom::Rotate(-Geom::rad_from_deg((rotation_angle * num_copies) + starting_angle)) * size_divider;
-//                Geom::Ray base_b(divider.pointAt(1), base_point);
-//                if (Geom::are_near(tmp_path_helper[0].initialPoint(),base_a) && 
-//                    Geom::are_near(tmp_path_helper[0].finalPoint(),base_a)) 
-//                {
-//                    tmp_path_helper[0].close();
-//                    if (tmp_path_helper.size() > 1) {
-//                        tmp_path_helper[tmp_path_helper.size()-1].close();
-//                    }
-//                } else if (Geom::are_near(tmp_path_helper[tmp_path_helper.size()-1].initialPoint(),base_b) && 
-//                           Geom::are_near(tmp_path_helper[tmp_path_helper.size()-1].finalPoint(),base_b)) 
-//                {
-//                    tmp_path_helper[0].close();
-//                    if (tmp_path_helper.size() > 1) {
-//                        tmp_path_helper[tmp_path_helper.size()-1].close();
-//                    }
-//                } else if ((Geom::are_near(tmp_path_helper[0].initialPoint(),base_a) && 
-//                           Geom::are_near(tmp_path_helper[tmp_path_helper.size()-1].finalPoint(),base_b)) ||
-//                           (Geom::are_near(tmp_path_helper[0].initialPoint(),base_b) && 
-//                           Geom::are_near(tmp_path_helper[tmp_path_helper.size()-1].finalPoint(),base_a))) 
-//                {
-//                    Geom::Path close_path = Geom::Path(tmp_path_helper[tmp_path_helper.size()-1].finalPoint());
-//                    close_path.appendNew<Geom::LineSegment>((Geom::Point)origin);
-//                    close_path.appendNew<Geom::LineSegment>(tmp_path_helper[0].initialPoint());
-//                    tmp_path_helper[0].append(close_path);
-//                }
-//            }
-
-//            if (Geom::are_near(tmp_path_helper[0].finalPoint(),tmp_path_helper[0].initialPoint())) {
-//                tmp_path_helper[0].close();
-//            }
-//        }
-//        tmp_path.insert(tmp_path.end(), tmp_path_helper.begin(), tmp_path_helper.end());
-//        tmp_path_helper.clear();
-//    }
-//    path_on = tmp_path;
-//    tmp_path.clear();
-//}
-
 Geom::PathVector
 LPECopyRotate::doEffect_path (Geom::PathVector const & path_in)
 {
@@ -599,6 +521,7 @@ LPECopyRotate::doEffect_path (Geom::PathVector const & path_in)
     divider = Geom::Path(line_start);
     divider.appendNew<Geom::LineSegment>((Geom::Point)origin);
     divider.appendNew<Geom::LineSegment>(line_end);
+    Geom::OptRect trianglebounds = divider.boundsFast();
     divider.close();
     half_dir = unit_vector(Geom::middle_point(line_start,line_end) - (Geom::Point)origin);
     if (method != RM_NORMAL) {
@@ -710,7 +633,7 @@ LPECopyRotate::doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/)
 }
 
 void 
-LPECopyRotate::doOnRemove (SPLPEItem const* /*lpeitem*/)
+LPECopyRotate::doOnRemove (SPLPEItem const* lpeitem)
 {
     //set "keep paths" hook on sp-lpe-item.cpp
     if (keep_paths) {

@@ -79,6 +79,9 @@
 #include "toolbox.h"
 #include "widget-sizes.h"
 
+#ifdef GDK_WINDOWING_QUARTZ
+#include <gtkosxapplication.h>
+#endif
 
 using Inkscape::DocumentUndo;
 using Inkscape::UI::Widget::UnitTracker;
@@ -165,7 +168,7 @@ private:
     friend class SoftproofWatcher;
 };
 
-#if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#if defined(HAVE_LIBLCMS2)
 void CMSPrefWatcher::hook(EgeColorProfTracker * /*tracker*/, gint monitor, CMSPrefWatcher * /*watcher*/)
 {
     unsigned char* buf = nullptr;
@@ -178,22 +181,22 @@ void CMSPrefWatcher::hook(EgeColorProfTracker * /*tracker*/, gint monitor, CMSPr
 void CMSPrefWatcher::hook(EgeColorProfTracker * /*tracker*/, gint /*monitor*/, CMSPrefWatcher * /*watcher*/)
 {
 }
-#endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#endif // defined(HAVE_LIBLCMS2)
 
 /// @todo Use conditional compilation in saner places. The whole PrefWatcher
-/// object is unnecessary if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2) is not defined.
+/// object is unnecessary if defined(HAVE_LIBLCMS2) is not defined.
 void CMSPrefWatcher::_refreshAll()
 {
-#if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#if defined(HAVE_LIBLCMS2)
     for (auto & it : _widget_list) {
         it->requestCanvasUpdate();
     }
-#endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#endif // defined(HAVE_LIBLCMS2)
 }
 
 void CMSPrefWatcher::_setCmsSensitive(bool enabled)
 {
-#if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#if defined(HAVE_LIBLCMS2)
     for ( auto dtw : _widget_list ) {
         auto cms_adj = dtw->get_cms_adjust();
         if ( cms_adj->get_sensitive() != enabled ) {
@@ -202,7 +205,7 @@ void CMSPrefWatcher::_setCmsSensitive(bool enabled)
     }
 #else
     (void) enabled;
-#endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#endif // defined(HAVE_LIBLCMS2)
 }
 
 static CMSPrefWatcher* watcher = nullptr;
@@ -455,7 +458,7 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
                                                                     tip ));
     dtw->_cms_adjust->set_name("CMS_Adjust");
 
-#if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#if defined(HAVE_LIBLCMS2)
     {
         Glib::ustring current = prefs->getString("/options/displayprofile/uri");
         bool enabled = current.length() > 0;
@@ -470,7 +473,7 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     g_signal_connect_after( G_OBJECT(dtw->_cms_adjust->gobj()), "clicked", G_CALLBACK(SPDesktopWidget::cms_adjust_toggled), dtw );
 #else
     dtw->cms_adjust_set_sensitive(false);
-#endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#endif // defined(HAVE_LIBLCMS2)
 
     dtw->_canvas_tbl->attach(*dtw->_cms_adjust, 2, 2, 1, 1);
     {
@@ -481,9 +484,9 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     }
     /* Canvas */
     dtw->_canvas = SP_CANVAS(SPCanvas::createAA());
-#if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#if defined(HAVE_LIBLCMS2)
     dtw->_canvas->_enable_cms_display_adj = prefs->getBool("/options/displayprofile/enable");
-#endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#endif // defined(HAVE_LIBLCMS2)
     gtk_widget_set_can_focus (GTK_WIDGET (dtw->_canvas), TRUE);
 
     sp_ruler_add_track_widget(SP_RULER(dtw->_hruler->gobj()), GTK_WIDGET(dtw->_canvas));
@@ -667,7 +670,7 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
 
     // --------------- Color Management ---------------- //
     dtw->_tracker = ege_color_prof_tracker_new(GTK_WIDGET(dtw->layer_selector->gobj()));
-#if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#if defined(HAVE_LIBLCMS2)
     bool fromDisplay = prefs->getBool( "/options/displayprofile/from_display");
     if ( fromDisplay ) {
         Glib::ustring id = Inkscape::CMSSystem::getDisplayId( 0 );
@@ -678,7 +681,7 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
         dtw->cms_adjust_set_sensitive(enabled);
     }
     g_signal_connect( G_OBJECT(dtw->_tracker), "changed", G_CALLBACK(SPDesktopWidget::color_profile_event), dtw );
-#endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#endif // defined(HAVE_LIBLCMS2)
 
     // ------------------ Finish Up -------------------- //
     dtw->_vbox->show_all();
@@ -928,6 +931,17 @@ sp_desktop_widget_realize (GtkWidget *widget)
             window->get_style_context()->remove_class("symbolic");
         }
     }
+
+#ifdef GDK_WINDOWING_QUARTZ
+    // native macOS menu
+    auto osxapp = gtkosx_application_get();
+    auto menushell = static_cast<Gtk::MenuShell *>(dtw->menubar());
+    if (osxapp && menushell && window) {
+        menushell->set_parent(*window);
+        gtkosx_application_set_menu_bar(osxapp, menushell->gobj());
+        gtkosx_application_set_use_quartz_accelerators(osxapp, false);
+    }
+#endif
 }
 
 /* This is just to provide access to common functionality from sp_desktop_widget_realize() above
@@ -982,7 +996,7 @@ SPDesktopWidget::event(GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw)
 }
 
 
-#if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#if defined(HAVE_LIBLCMS2)
 void
 SPDesktopWidget::color_profile_event(EgeColorProfTracker */*tracker*/, SPDesktopWidget *dtw)
 {
@@ -1016,11 +1030,11 @@ SPDesktopWidget::color_profile_event(EgeColorProfTracker */*tracker*/, SPDesktop
     enabled = !dtw->_canvas->_cms_key.empty();
     dtw->cms_adjust_set_sensitive(enabled);
 }
-#else // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#else // defined(HAVE_LIBLCMS2)
 void sp_dtw_color_profile_event(EgeColorProfTracker */*tracker*/, SPDesktopWidget * /*dtw*/)
 {
 }
-#endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#endif // defined(HAVE_LIBLCMS2)
 
 void
 SPDesktopWidget::update_guides_lock()
@@ -1042,7 +1056,7 @@ SPDesktopWidget::update_guides_lock()
     }
 }
 
-#if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#if defined(HAVE_LIBLCMS2)
 void
 SPDesktopWidget::cms_adjust_toggled( GtkWidget */*button*/, gpointer data )
 {
@@ -1061,7 +1075,7 @@ SPDesktopWidget::cms_adjust_toggled( GtkWidget */*button*/, gpointer data )
         }
     }
 }
-#endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#endif // defined(HAVE_LIBLCMS2)
 
 void
 SPDesktopWidget::cms_adjust_set_sensitive(bool enabled)
@@ -1691,7 +1705,12 @@ SPDesktopWidget* SPDesktopWidget::createInstance(SPDocument *document)
     dtw->_menubar = build_menubar(dtw->desktop);
     dtw->_menubar->set_name("MenuBar");
     dtw->_menubar->show_all();
+
+#ifdef GDK_WINDOWING_QUARTZ
+    // native macOS menu: do this later because we don't have the window handle yet
+#else
     dtw->_vbox->pack_start(*dtw->_menubar, false, false);
+#endif
 
     dtw->layoutWidgets();
 
@@ -1713,14 +1732,19 @@ SPDesktopWidget* SPDesktopWidget::createInstance(SPDocument *document)
 void
 SPDesktopWidget::update_rulers()
 {
-    Geom::Rect viewbox = desktop->get_display_area();
+    Geom::Rect viewbox = desktop->get_display_area(true); 
+    // "true" means: Use integer values of the canvas for calculating the display area, similar
+    // to the integer values used for positioning the grid lines. (see SPCanvas::scrollTo(), 
+    // where ix and iy are rounded integer values; these values are stored in SPCanvasBuf->rect,
+    // and used for drawing the grid). By using the integer values here too, the ruler ticks 
+    // will be perfectly aligned to the grid
 
     double lower_x = _dt2r * (viewbox.left()  - _ruler_origin[Geom::X]);
     double upper_x = _dt2r * (viewbox.right() - _ruler_origin[Geom::X]);
     sp_ruler_set_range(SP_RULER(_hruler->gobj()),
-	      	       lower_x,
-		       upper_x,
-		       (upper_x - lower_x));
+                       lower_x,
+                       upper_x,
+                       upper_x - lower_x);
 
     double lower_y = _dt2r * (viewbox.bottom() - _ruler_origin[Geom::Y]);
     double upper_y = _dt2r * (viewbox.top()    - _ruler_origin[Geom::Y]);
@@ -1729,8 +1753,8 @@ SPDesktopWidget::update_rulers()
     }
     sp_ruler_set_range(SP_RULER(_vruler->gobj()),
                        lower_y,
-		       upper_y,
-		       (upper_y - lower_y));
+                       upper_y,
+                       upper_y - lower_y);
 }
 
 

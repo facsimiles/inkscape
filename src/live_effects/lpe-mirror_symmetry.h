@@ -49,6 +49,7 @@ public:
     void doOnRemove (SPLPEItem const* /*lpeitem*/) override;
     void doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/) override;
     Gtk::Widget * newWidget() override;
+    void cloneStyle(SPObject *orig, SPObject *dest);
     void toMirror(Geom::Affine transform, bool reset);
     void cloneD(SPObject *orig, SPObject *dest, bool reset);
     Inkscape::XML::Node * createPathBase(SPObject *elemref);
@@ -61,7 +62,6 @@ protected:
 
 private:
     EnumParam<ModeType> mode;
-    ScalarParam split_gap;
     BoolParam discard_orig_path;
     BoolParam fuse_paths;
     BoolParam oposite_fuse;

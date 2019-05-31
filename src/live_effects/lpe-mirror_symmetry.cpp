@@ -15,22 +15,21 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <gtkmm.h>
 #include "live_effects/lpe-mirror_symmetry.h"
-#include "display/curve.h"
-#include "svg/path-string.h"
-#include "svg/svg.h"
-#include "helper/geom.h"
-#include "2geom/intersection-graph.h"
-#include "2geom/path-intersection.h"
 #include "2geom/affine.h"
+#include "2geom/path-intersection.h"
+#include "display/curve.h"
 #include "helper/geom.h"
 #include "path-chemistry.h"
+#include "style.h"
+#include "svg/path-string.h"
+#include "svg/svg.h"
+#include <gtkmm.h>
 
 #include "object/sp-defs.h"
-#include "object/sp-path.h"
 #include "object/sp-lpe-item.h"
-#include "style.h"
+#include "object/sp-path.h"
+#include "object/sp-text.h"
 
 #include "xml/sp-css-attr.h"
 
@@ -54,7 +53,6 @@ MTConverter(ModeTypeData, MT_END);
 LPEMirrorSymmetry::LPEMirrorSymmetry(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
     mode(_("Mode"), _("Set mode of transformation. Either freely defined by mirror line or constrained to certain symmetry points."), "mode", MTConverter, &wr, this, MT_FREE),
-    split_gap(_("Gap on splitting"), _("Add attitional space in between split objects."), "split_gap", &wr, this, -0.001),
     discard_orig_path(_("Discard original path"), _("Only keep mirrored part of the path, remove the original."), "discard_orig_path", &wr, this, false),
     fuse_paths(_("Fuse paths"), _("Fuse original path and mirror image into a single path"), "fuse_paths", &wr, this, false),
     oposite_fuse(_("Fuse opposite sides"), _("Picks the part on the other side of the mirror line as the original."), "oposite_fuse", &wr, this, false),
@@ -65,7 +63,6 @@ LPEMirrorSymmetry::LPEMirrorSymmetry(LivePathEffectObject *lpeobject) :
 {
     show_orig_path = true;
     registerParameter(&mode);
-    registerParameter(&split_gap);
     registerParameter(&discard_orig_path);
     registerParameter(&fuse_paths);
     registerParameter(&oposite_fuse);
@@ -73,9 +70,6 @@ LPEMirrorSymmetry::LPEMirrorSymmetry(LivePathEffectObject *lpeobject) :
     registerParameter(&start_point);
     registerParameter(&end_point);
     registerParameter(&center_point);
-    split_gap.param_set_range(-999999.0, 999999.0);
-    split_gap.param_set_increments(0.1, 0.1);
-    split_gap.param_set_digits(5);
     apply_to_clippath_and_mask = true;
     previous_center = Geom::Point(0,0);
     center_point.param_widget_is_visible(false);
@@ -105,7 +99,7 @@ LPEMirrorSymmetry::doAfterEffect (SPLPEItem const* lpeitem)
     if (split_items && !discard_orig_path) {
         Geom::Line ls((Geom::Point)start_point, (Geom::Point)end_point);
         Geom::Affine m = Geom::reflection (ls.vector(), (Geom::Point)start_point);
-        m = m * sp_lpe_item->transform;
+        m *= sp_lpe_item->transform;
         toMirror(m, reset);
         reset = false;
     } else {
@@ -271,6 +265,21 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
     previous_center = center_point;
 }
 
+void LPEMirrorSymmetry::cloneStyle(SPObject *orig, SPObject *dest)
+{
+    dest->getRepr()->setAttribute("style", orig->getRepr()->attribute("style"));
+    for (auto iter : orig->style->properties()) {
+        if (iter->style_src != SP_STYLE_SRC_UNSET) {
+            if (iter->name != "font" && iter->name != "d" && iter->name != "marker") {
+                const gchar *attr = orig->getRepr()->attribute(iter->name.c_str());
+                if (attr) {
+                    dest->getRepr()->setAttribute(iter->name.c_str(), attr);
+                }
+            }
+        }
+    }
+}
+
 void
 LPEMirrorSymmetry::cloneD(SPObject *orig, SPObject *dest, bool reset) 
 {
@@ -280,6 +289,9 @@ LPEMirrorSymmetry::cloneD(SPObject *orig, SPObject *dest, bool reset)
     }
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
     if ( SP_IS_GROUP(orig) && SP_IS_GROUP(dest) && SP_GROUP(orig)->getItemCount() == SP_GROUP(dest)->getItemCount() ) {
+        if (reset) {
+            cloneStyle(orig, dest);
+        }
         std::vector< SPObject * > childs = orig->childList(true);
         size_t index = 0;
         for (auto & child : childs) {
@@ -289,6 +301,19 @@ LPEMirrorSymmetry::cloneD(SPObject *orig, SPObject *dest, bool reset)
         }
         return;
     }
+
+    if (SP_IS_TEXT(orig) && SP_IS_TEXT(dest) && SP_TEXT(orig)->children.size() == SP_TEXT(dest)->children.size()) {
+        if (reset) {
+            cloneStyle(orig, dest);
+        }
+        size_t index = 0;
+        for (auto &child : SP_TEXT(orig)->children) {
+            SPObject *dest_child = dest->nthChild(index);
+            cloneD(&child, dest_child, reset);
+            index++;
+        }
+    }
+
     SPShape * shape =  SP_SHAPE(orig);
     SPPath * path =  SP_PATH(dest);
     if (path && shape) {
@@ -301,9 +326,9 @@ LPEMirrorSymmetry::cloneD(SPObject *orig, SPObject *dest, bool reset)
         } else {
             dest->getRepr()->setAttribute("d", nullptr);
         }
-        if (reset) {
-            dest->getRepr()->setAttribute("style", shape->getRepr()->attribute("style"));
-        }
+    }
+    if (reset) {
+        cloneStyle(orig, dest);
     }
 }
 
@@ -431,44 +456,7 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
 
     Geom::Line line_separation((Geom::Point)start_point, (Geom::Point)end_point);
     Geom::Affine m = Geom::reflection (line_separation.vector(), (Geom::Point)start_point);
-    if (split_items && fuse_paths) {
-        Geom::OptRect bbox = sp_lpe_item->geometricBounds();
-        Geom::Path p(Geom::Point(bbox->left(), bbox->top()));
-        p.appendNew<Geom::LineSegment>(Geom::Point(bbox->right(), bbox->top()));
-        p.appendNew<Geom::LineSegment>(Geom::Point(bbox->right(), bbox->bottom()));
-        p.appendNew<Geom::LineSegment>(Geom::Point(bbox->left(), bbox->bottom()));
-        p.appendNew<Geom::LineSegment>(Geom::Point(bbox->left(), bbox->top()));
-        p.close();
-        p *= Geom::Translate(bbox->midpoint()).inverse();
-        p *= Geom::Scale(1.2);
-        p *= Geom::Rotate(line_separation.angle());
-        p *= Geom::Translate(bbox->midpoint());
-        bbox = p.boundsFast();
-        p.clear();
-        p.start(Geom::Point(bbox->left(), bbox->top()));
-        p.appendNew<Geom::LineSegment>(Geom::Point(bbox->right(), bbox->top()));
-        p.appendNew<Geom::LineSegment>(Geom::Point(bbox->right(), bbox->bottom()));
-        p.appendNew<Geom::LineSegment>(Geom::Point(bbox->left(), bbox->bottom()));
-        p.appendNew<Geom::LineSegment>(Geom::Point(bbox->left(), bbox->top()));
-        p.close();
-        p *= Geom::Translate(bbox->midpoint()).inverse();
-        p *= Geom::Rotate(line_separation.angle());
-        p *= Geom::Translate(bbox->midpoint());
-        Geom::Point base(p.pointAt(3));
-        if (oposite_fuse) {
-            base = p.pointAt(0);
-        }
-        p *= Geom::Translate(line_separation.pointAt(line_separation.nearestTime(base)) - base);
-        Geom::PathVector pv_bbox;
-        pv_bbox.push_back(p);
-        Geom::PathIntersectionGraph *pig = new Geom::PathIntersectionGraph(pv_bbox, original_pathv);
-        if (pig && !original_pathv.empty() && !pv_bbox.empty()) {
-            path_out = pig->getBminusA();
-        }
-        Geom::Point dir = rot90(unit_vector((Geom::Point)end_point - (Geom::Point)start_point));
-        Geom::Point gap = dir * split_gap;
-        path_out *= Geom::Translate(gap);
-    } else if (fuse_paths && !discard_orig_path) {
+    if (fuse_paths && !discard_orig_path) {
         for (const auto & path_it : original_pathv) 
         {
             if (path_it.empty()) {
@@ -517,12 +505,18 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
                             position *= -1;
                         }
                         if (position == 1) {
-                            Geom::Path mirror = portion.reversed() * m;
-                            mirror.setInitial(portion.finalPoint());
-                            portion.append(mirror);
-                            if(i != 0) {
-                                portion.setFinal(portion.initialPoint());
-                                portion.close();
+                            if (!split_items) {
+                                Geom::Path mirror = portion.reversed() * m;
+                                mirror.setInitial(portion.finalPoint());
+                                portion.append(mirror);
+                                if(i != 0) {
+                                    portion.setFinal(portion.initialPoint());
+                                    portion.close();
+                                }
+                            } else {
+                                if (path_it.closed()) {
+                                    portion.close();
+                                }
                             }
                             tmp_pathvector.push_back(portion);
                         }
@@ -540,9 +534,11 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
                     Geom::Path portion = original.portion(time_start, original.size());
                     if (!portion.empty()) {
                         portion = portion.reversed();
-                        Geom::Path mirror = portion.reversed() * m;
-                        mirror.setInitial(portion.finalPoint());
-                        portion.append(mirror);
+                        if (!split_items) {
+                            Geom::Path mirror = portion.reversed() * m;
+                            mirror.setInitial(portion.finalPoint());
+                            portion.append(mirror);
+                        }
                         portion = portion.reversed();
                         if (!original.closed()) {
                             tmp_pathvector.push_back(portion);
