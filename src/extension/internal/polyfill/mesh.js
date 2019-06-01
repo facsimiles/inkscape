@@ -275,8 +275,17 @@
       this.colors = colors; // 2 x 4 colors (two ends x R+G+B+A)
     }
 
-    // Paint a Bezier curve. w is width of Canvas window.
-    paintCurve (v, w) {
+    /*
+     * Paint a Bezier curve
+     * w is canvas.width
+     * h is canvas.height
+     */
+    paintCurve (v, w, h) {
+      if (this.nodes[3].x < 0 || this.nodes[0].x > w
+        || this.nodes[3].y < 0 || this.nodes[0].y > h) {
+        return;
+      }
+
       // If inside, see if we need to split
       if (bezierStepsSquared(this.nodes) > maxBezierStep) {
         const beziers = splitBezier(this.nodes[0], this.nodes[1],
@@ -429,12 +438,15 @@
       return ([new Patch(nodes0, colors0), new Patch(nodes1, colors1)]);
     }
 
-    paint (v, w) {
+    paint (v, w, h) {
       // console.log( "Patch.paint" );
       // console.log( this.nodes );
 
-      // Check if patch is inside canvas (need canvas dimensions)
-      // To be done.....
+      // Check if patch is inside canvas
+      if (this.nodes[3][3].x < 0 || this.nodes[0][0].x > w
+        || this.nodes[3][3].y < 0 || this.nodes[0][0].y > h) {
+        return;
+      }
 
       // If inside, see if we need to split
       let larger = false;
@@ -453,12 +465,12 @@
       if (larger) {
         // console.log( "Paint: Splitting" );
         let patches = this.split();
-        patches[0].paint(v, w);
-        patches[1].paint(v, w);
+        patches[0].paint(v, w, h);
+        patches[1].paint(v, w, h);
       } else {
         // console.log( "Paint: Filling" );
         // this.fillOutline(v);
-        this.paintCurve(v, w);
+        this.paintCurve(v, w, h);
       }
     }
 
@@ -477,15 +489,13 @@
   class Mesh {
     constructor (id) {
       // console.log( "Mesh: " + id );
-      let raw = this.readMesh(id);
       this.id = id;
-      this.nodes = raw.nodes; // (m*3+1) x (n*3+1) points
-      this.colors = raw.colors; // (m+1) x (n+1) x 4  colors (R+G+B+A)
+      this.readMesh(id);
       // console.log( this.nodes );
       // console.log( this.colors );
     }
 
-    // Function to parse an SVG mesh and return an array of nodes (points) and an array of colors.
+    // Function to parse an SVG mesh and set the nodes (points) and colors
     readMesh (id) {
       let nodes = [];
       let colors = [];
@@ -502,7 +512,6 @@
 
         let x = Number(theMesh.getAttribute('x'));
         let y = Number(theMesh.getAttribute('y'));
-        // console.log( " x: " + x + " y: " + y );
         nodes[0][0] = new Point(x, y);
 
         let rows = theMesh.children;
@@ -718,14 +727,12 @@
         }
         // console.log( nodes );
       }
-      return {
-        nodes: nodes,
-        colors: colors
-      };
+      this.nodes = nodes; // (m*3+1) x (n*3+1) points
+      this.colors = colors; // (m+1) x (n+1) x 4  colors (R+G+B+A)
     }
 
     // Extracts out each patch and then paints it
-    paintMesh (v, w) {
+    paintMesh (v, w, h) {
       for (let i = 0, imax = (this.nodes.length - 1) / 3; i < imax; ++i) {
         for (let j = 0, jmax = (this.nodes[0].length - 1) / 3; j < jmax; ++j) {
           let sliceNodes = [];
@@ -738,7 +745,7 @@
           sliceColors.push(this.colors[i + 1].slice(j, j + 2));
 
           let patch = new Patch(sliceNodes, sliceColors);
-          patch.paint(v, w);
+          patch.paint(v, w, h);
         }
       }
     }
@@ -784,11 +791,11 @@
       shape.setAttribute('id', shapeId);
     }
 
-    let urlValue = shape.style.fill.match(/^url\(\s*"?\s*#([^\s"]+)"?\s*\)/);
+    let fillURL = shape.style.fill.match(/^url\(\s*"?\s*#([^\s"]+)"?\s*\)/);
 
-    if (urlValue && urlValue[1]) {
-      // console.log( "Got url! " + urlValue[1]);
-      let mesh = document.getElementById(urlValue[1]);
+    if (fillURL && fillURL[1]) {
+      // console.log( "Got url! " + fillURL[1]);
+      let mesh = document.getElementById(fillURL[1]);
       // console.log( mesh );
       // console.log( mesh.nodeName );
       if (mesh.nodeName === 'meshgradient') {
@@ -803,7 +810,7 @@
         let myCanvasImage = myContext.createImageData(myCanvas.width, myCanvas.height);
 
         // Draw a mesh
-        let myMesh = new Mesh(urlValue[1]);
+        let myMesh = new Mesh(fillURL[1]);
 
         // Adjust for bounding box if necessary.
         if (mesh.getAttribute('gradientUnits') === 'objectBoundingBox') {
@@ -823,7 +830,7 @@
         }
 
         // Paint
-        myMesh.paintMesh(myCanvasImage.data, myCanvas.width);
+        myMesh.paintMesh(myCanvasImage.data, myCanvas.width, myCanvas.height);
         myContext.putImageData(myCanvasImage, 0, 0);
 
         // Create image element of correct size
