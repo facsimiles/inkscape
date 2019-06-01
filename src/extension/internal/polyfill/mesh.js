@@ -19,15 +19,6 @@
     return;
   }
 
-  // Test above test using known good SVG element
-  // let l = document.createElementNS( svgNS, "linearGradient" );
-  // if (l.x1) {
-  //   console.log( "linearGradient has x1" );
-  //   return;
-  // } else {
-  //   console.log( "linearGradient does not have x1" );
-  // }
-
   /*
    * Utility functions -----------------------------
    */
@@ -281,23 +272,21 @@
      * h is canvas.height
      */
     paintCurve (v, w, h) {
-      if (this.nodes[3].x < 0 || this.nodes[0].x > w
-        || this.nodes[3].y < 0 || this.nodes[0].y > h) {
-        return;
-      }
-
       // If inside, see if we need to split
       if (bezierStepsSquared(this.nodes) > maxBezierStep) {
-        const beziers = splitBezier(this.nodes[0], this.nodes[1],
-          this.nodes[2], this.nodes[3]);
-        let colors0 = [
-          [],
-          []
-        ]; // ([start][end])
-        let colors1 = [
-          [],
-          []
-        ];
+        const beziers = splitBezier(
+          this.nodes[0], this.nodes[1],
+          this.nodes[2], this.nodes[3]
+        );
+        // ([start][end])
+        let colors0 = [[],[]];
+        let colors1 = [[],[]];
+
+        /*
+         * TODO turn into cubic 1D interpolation of the midpoint
+         * Linear horizontal interpolation of the middle value for every
+         * patch exceeding thereshold
+         */
         for (let i = 0; i < 4; ++i) {
           colors0[0][i] = this.colors[0][i];
           colors0[1][i] = (this.colors[0][i] + this.colors[1][i]) / 2;
@@ -319,15 +308,6 @@
           v[index + 2] = Math.round(this.colors[0][2]);
           v[index + 3] = Math.round(this.colors[0][3]); // Alpha
         }
-
-        // Draw curve, quick and dirty (via canvas context)
-        // v.beginPath();
-        // v.moveTo(        this.nodes[0].x, this.nodes[0].y );
-        // v.bezierCurveTo( this.nodes[1].x, this.nodes[1].y,
-        //      this.nodes[2].x, this.nodes[2].y,
-        //      this.nodes[3].x, this.nodes[3].y );
-        // v.strokeStyle = colorToString( this.colors[0] );
-        // v.stroke();
       }
     }
   }
@@ -377,42 +357,22 @@
     split () {
       // console.log( "Patch.split" );
 
-      let nodes0 = [
-        [],
-        [],
-        [],
-        []
-      ];
-      let nodes1 = [
-        [],
-        [],
-        [],
-        []
-      ];
+      let nodes0 = [[],[],[],[]];
+      let nodes1 = [[],[],[],[]];
       let colors0 = [
-        [
-          [],
-          []
-        ],
-        [
-          [],
-          []
-        ]
+        [[],[]],
+        [[],[]]
       ];
       let colors1 = [
-        [
-          [],
-          []
-        ],
-        [
-          [],
-          []
-        ]
+        [[],[]],
+        [[],[]]
       ];
 
       for (let i = 0; i < 4; ++i) {
-        const beziers = splitBezier(this.nodes[0][i], this.nodes[1][i],
-          this.nodes[2][i], this.nodes[3][i]);
+        const beziers = splitBezier(
+          this.nodes[0][i], this.nodes[1][i],
+          this.nodes[2][i], this.nodes[3][i]
+        );
 
         nodes0[0][i] = beziers[0][0];
         nodes0[1][i] = beziers[0][1];
@@ -424,6 +384,11 @@
         nodes1[3][i] = beziers[1][3];
       }
 
+      /*
+       * TODO turn into cubic 1D interpolation of the midpoint
+       * Linear vertical interpolation of the middle value for every
+       * patch exceeding thereshold
+       */
       for (let i = 0; i < 4; ++i) {
         colors0[0][0][i] = this.colors[0][0][i];
         colors0[0][1][i] = this.colors[0][1][i];
@@ -452,7 +417,8 @@
       let larger = false;
       let step;
       for (let i = 0; i < 4; ++i) {
-        step = bezierStepsSquared([this.nodes[0][i], this.nodes[1][i],
+        step = bezierStepsSquared([
+          this.nodes[0][i], this.nodes[1][i],
           this.nodes[2][i], this.nodes[3][i]
         ]);
 
@@ -464,12 +430,12 @@
 
       if (larger) {
         // console.log( "Paint: Splitting" );
+        // TODO split into two patches using cubic interpolation
         let patches = this.split();
         patches[0].paint(v, w, h);
         patches[1].paint(v, w, h);
       } else {
         // console.log( "Paint: Filling" );
-        // this.fillOutline(v);
         this.paintCurve(v, w, h);
       }
     }
