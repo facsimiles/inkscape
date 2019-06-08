@@ -171,6 +171,12 @@
     return points;
   };
 
+  const setAttributes = (el, attrs) => {
+    for (let key in attrs) {
+      el.setAttribute(key, attrs[key]);
+    }
+  };
+
   // Point class -----------------------------------
   class Point {
     constructor (x, y) {
@@ -274,13 +280,10 @@
     paintCurve (v, w, h) {
       // If inside, see if we need to split
       if (bezierStepsSquared(this.nodes) > maxBezierStep) {
-        const beziers = splitBezier(
-          this.nodes[0], this.nodes[1],
-          this.nodes[2], this.nodes[3]
-        );
+        const beziers = splitBezier(...this.nodes);
         // ([start][end])
-        let colors0 = [[],[]];
-        let colors1 = [[],[]];
+        let colors0 = [[], []];
+        let colors1 = [[], []];
 
         /*
          * TODO turn into cubic 1D interpolation of the midpoint
@@ -357,15 +360,15 @@
     split () {
       // console.log( "Patch.split" );
 
-      let nodes0 = [[],[],[],[]];
-      let nodes1 = [[],[],[],[]];
+      let nodes0 = [[], [], [], []];
+      let nodes1 = [[], [], [], []];
       let colors0 = [
-        [[],[]],
-        [[],[]]
+        [[], []],
+        [[], []]
       ];
       let colors1 = [
-        [[],[]],
-        [[],[]]
+        [[], []],
+        [[], []]
       ];
 
       for (let i = 0; i < 4; ++i) {
@@ -408,8 +411,8 @@
       // console.log( this.nodes );
 
       // Check if patch is inside canvas
-      if (this.nodes[3][3].x < 0 || this.nodes[0][0].x > w
-        || this.nodes[3][3].y < 0 || this.nodes[0][0].y > h) {
+      if (this.nodes[3][3].x < 0 || this.nodes[0][0].x > w ||
+        this.nodes[3][3].y < 0 || this.nodes[0][0].y > h) {
         return;
       }
 
@@ -757,26 +760,27 @@
       shape.setAttribute('id', shapeId);
     }
 
-    let fillURL = shape.style.fill.match(/^url\(\s*"?\s*#([^\s"]+)"?\s*\)/);
+    const fillURL = shape.style.fill.match(/^url\(\s*"?\s*#([^\s"]+)"?\s*\)/);
+    const strokeURL = shape.style.stroke.match(/^url\(\s*"?\s*#([^\s"]+)"?\s*\)/);
 
     if (fillURL && fillURL[1]) {
-      // console.log( "Got url! " + fillURL[1]);
-      let mesh = document.getElementById(fillURL[1]);
-      // console.log( mesh );
-      // console.log( mesh.nodeName );
+      const mesh = document.getElementById(fillURL[1]);
+
       if (mesh.nodeName === 'meshgradient') {
-        let bbox = shape.getBBox();
+        const bbox = shape.getBBox();
 
         // Create temporary canvas
         let myCanvas = document.createElementNS(xhtmlNS, 'canvas');
-        myCanvas.width = bbox.width;
-        myCanvas.height = bbox.height;
+        setAttributes(myCanvas, {
+          'width': bbox.width,
+          'height': bbox.height
+        });
 
-        let myContext = myCanvas.getContext('2d');
-        let myCanvasImage = myContext.createImageData(myCanvas.width, myCanvas.height);
+        const myContext = myCanvas.getContext('2d');
+        let myCanvasImage = myContext.createImageData(bbox.width, bbox.height);
 
         // Draw a mesh
-        let myMesh = new Mesh(fillURL[1]);
+        const myMesh = new Mesh(fillURL[1]);
 
         // Adjust for bounding box if necessary.
         if (mesh.getAttribute('gradientUnits') === 'objectBoundingBox') {
@@ -784,10 +788,9 @@
         }
 
         // Apply gradient transform.
-        let gradientTransform = mesh.getAttribute('gradientTransform');
+        const gradientTransform = mesh.getAttribute('gradientTransform');
         if (gradientTransform != null) {
-          let affine = parseTransform(gradientTransform);
-          myMesh.transform(affine);
+          myMesh.transform(parseTransform(gradientTransform));
         }
 
         // Position to Canvas coordinate.
@@ -800,11 +803,13 @@
         myContext.putImageData(myCanvasImage, 0, 0);
 
         // Create image element of correct size
-        let myImage = document.createElementNS(svgNS, 'image');
-        myImage.setAttribute('width', myCanvas.width);
-        myImage.setAttribute('height', myCanvas.height);
-        myImage.setAttribute('x', bbox.x);
-        myImage.setAttribute('y', bbox.y);
+        const myImage = document.createElementNS(svgNS, 'image');
+        setAttributes(myImage, {
+          'width': bbox.width,
+          'height': bbox.height,
+          'x': bbox.x,
+          'y': bbox.y
+        });
 
         // Set image to data url
         let myPNG = myCanvas.toDataURL();
@@ -815,14 +820,99 @@
         shape.style.fill = 'none';
 
         // Create clip referencing shape and insert into document
-        let clip = document.createElementNS(svgNS, 'clipPath');
-        let clipId = 'patchjs_clip' + i;
-        clip.setAttribute('id', clipId);
-        let use = document.createElementNS(svgNS, 'use');
+        const use = document.createElementNS(svgNS, 'use');
         use.setAttributeNS(xlinkNS, 'xlink:href', '#' + shapeId);
+
+        const clipId = 'patchjs_clip' + i;
+        const clip = document.createElementNS(svgNS, 'clipPath');
+        clip.setAttribute('id', clipId);
         clip.appendChild(use);
         shape.parentElement.insertBefore(clip, shape);
         myImage.setAttribute('clip-path', 'url(#' + clipId + ')');
+
+        // Force the Garbage Collector to free the space
+        myCanvasImage = null;
+        myCanvas = null;
+        myPNG = null;
+      }
+    }
+
+    if (strokeURL && strokeURL[1]) {
+      const mesh = document.getElementById(strokeURL[1]);
+
+      if (mesh.nodeName === 'meshgradient') {
+        const strokeWidth = parseFloat(shape.style.strokeWidth.slice(0, -2));
+        const strokeMiterlimit = parseFloat(shape.style.strokeMiterlimit);
+        const phase = strokeWidth * strokeMiterlimit;
+
+        const bbox = shape.getBBox();
+        const boxWidth = Math.trunc(bbox.width + phase);
+        const boxHeight = Math.trunc(bbox.height + phase);
+        const boxX = Math.trunc(bbox.x - phase / 2);
+        const boxY = Math.trunc(bbox.y - phase / 2);
+
+        // Create temporary canvas
+        let myCanvas = document.createElementNS(xhtmlNS, 'canvas');
+        setAttributes(myCanvas, {
+          'width': boxWidth,
+          'height': boxHeight
+        });
+
+        const myContext = myCanvas.getContext('2d');
+        let myCanvasImage = myContext.createImageData(boxWidth, boxHeight);
+
+        // Draw a mesh
+        const myMesh = new Mesh(strokeURL[1]);
+
+        // Adjust for bounding box if necessary.
+        if (mesh.getAttribute('gradientUnits') === 'objectBoundingBox') {
+          myMesh.scale(new Point(boxWidth, boxHeight));
+        }
+
+        // Apply gradient transform.
+        const gradientTransform = mesh.getAttribute('gradientTransform');
+        if (gradientTransform != null) {
+          myMesh.transform(parseTransform(gradientTransform));
+        }
+
+        // Position to Canvas coordinate.
+        if (mesh.getAttribute('gradientUnits') === 'userSpaceOnUse') {
+          myMesh.transform(new Point(-boxX, -boxY));
+        }
+
+        // Paint
+        myMesh.paintMesh(myCanvasImage.data, myCanvas.width, myCanvas.height);
+        myContext.putImageData(myCanvasImage, 0, 0);
+
+        // Create image element of correct size
+        const myImage = document.createElementNS(svgNS, 'image');
+        setAttributes(myImage, {
+          'width': boxWidth,
+          'height': boxHeight,
+          'x': 0,
+          'y': 0
+        });
+
+        // Set image to data url
+        let myPNG = myCanvas.toDataURL();
+        myImage.setAttributeNS(xlinkNS, 'xlink:href', myPNG);
+
+        // Create pattern to hold the stroke image
+        const patternId = 'pattern_clip' + i;
+        const myPattern = document.createElementNS(svgNS, 'pattern');
+        setAttributes(myPattern, {
+          'id': patternId,
+          'patternUnits': 'userSpaceOnUse',
+          'width': boxWidth,
+          'height': boxHeight,
+          'x': boxX,
+          'y': boxY
+        });
+        myPattern.appendChild(myImage);
+
+        // Insert image into document
+        mesh.parentNode.appendChild(myPattern);
+        shape.style.stroke = 'url(#' + patternId + ')';
 
         // Force the Garbage Collector to free the space
         myCanvasImage = null;
