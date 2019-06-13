@@ -182,8 +182,9 @@
   };
 
   // Find the slope of point p_k by the values in p_k-1 and p_k+1
-  const finite_differences = (c0, c1, c2, d01, d12) => {
-    let slope = [0, 0, 0, 0], slow, shigh;
+  const finiteDifferences = (c0, c1, c2, d01, d12) => {
+    let slope = [0, 0, 0, 0];
+    let slow, shigh;
 
     for (let k = 0; k < 3; ++k) {
       if ((c1[k] < c0[k] && c1[k] < c2[k]) || (c0[k] < c1[k] && c2[k] < c1[k])) {
@@ -205,24 +206,24 @@
   };
 
   // Solve the linear system for bicubic interpolation
-  const solve_linear_system = (v) => {
+  const solveLinearSystem = (v) => {
     const A = [
-      [ 1, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0 ],
-      [ 0, 0, 0, 0,  1, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0 ],
-      [-3, 3, 0, 0, -2,-1, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0 ],
-      [ 2,-2, 0, 0,  1, 1, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0 ],
-      [ 0, 0, 0, 0,  0, 0, 0, 0,  1, 0, 0, 0,  0, 0, 0, 0 ],
-      [ 0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  1, 0, 0, 0 ],
-      [ 0, 0, 0, 0,  0, 0, 0, 0, -3, 3, 0, 0, -2,-1, 0, 0 ],
-      [ 0, 0, 0, 0,  0, 0, 0, 0,  2,-2, 0, 0,  1, 1, 0, 0 ],
-      [-3, 0, 3, 0,  0, 0, 0, 0, -2, 0,-1, 0,  0, 0, 0, 0 ],
-      [ 0, 0, 0, 0, -3, 0, 3, 0,  0, 0, 0, 0, -2, 0,-1, 0 ],
-      [ 9,-9,-9, 9,  6, 3,-6,-3,  6,-6, 3,-3,  4, 2, 2, 1 ],
-      [-6, 6, 6,-6, -3,-3, 3, 3, -4, 4,-2, 2, -2,-2,-1,-1 ],
-      [ 2, 0,-2, 0,  0, 0, 0, 0,  1, 0, 1, 0,  0, 0, 0, 0 ],
-      [ 0, 0, 0, 0,  2, 0,-2, 0,  0, 0, 0, 0,  1, 0, 1, 0 ],
-      [-6, 6, 6,-6, -4,-2, 4, 2, -3, 3,-3, 3, -2,-1,-2,-1 ],
-      [ 4,-4,-4, 4,  2, 2,-2,-2,  2,-2, 2,-2,  1, 1, 1, 1 ]
+      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [-3, 3, 0, 0, -2, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [2, -2, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, -3, 3, 0, 0, -2, -1, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 2, -2, 0, 0, 1, 1, 0, 0],
+      [-3, 0, 3, 0, 0, 0, 0, 0, -2, 0, -1, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, -3, 0, 3, 0, 0, 0, 0, 0, -2, 0, -1, 0],
+      [9, -9, -9, 9, 6, 3, -6, -3, 6, -6, 3, -3, 4, 2, 2, 1],
+      [-6, 6, 6, -6, -3, -3, 3, 3, -4, 4, -2, 2, -2, -2, -1, -1],
+      [2, 0, -2, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 2, 0, -2, 0, 0, 0, 0, 0, 1, 0, 1, 0],
+      [-6, 6, 6, -6, -4, -2, 4, 2, -3, 3, -3, 3, -2, -1, -2, -1],
+      [4, -4, -4, 4, 2, 2, -2, -2, 2, -2, 2, -2, 1, 1, 1, 1]
     ];
     let alpha = [];
 
@@ -237,7 +238,7 @@
   };
 
   // Evaluate the interpolation parameters at (y, x)
-  const evaluate_solution = (alpha, x, y) => {
+  const evaluateSolution = (alpha, x, y) => {
     const xx = x * x;
     const yy = y * y;
     const xxx = x * x * x;
@@ -246,7 +247,7 @@
     let result =
       alpha[0] +
       alpha[1] * x +
-      alpha[2] * xx  +
+      alpha[2] * xx +
       alpha[3] * xxx +
       alpha[4] * y +
       alpha[5] * y * x +
@@ -262,6 +263,70 @@
       alpha[15] * yyy * xxx;
 
     return result;
+  };
+
+  // Split a patch into 8x8 smaller patches
+  const splitPatch = (patch) => {
+    let yPatches = [];
+    let xPatches = [];
+    let patches = [];
+
+    // Horizontal splitting
+    for (let i = 0; i < 4; ++i) {
+      yPatches[i] = [];
+      yPatches[i][0] = splitBezier(
+        patch[0][i], patch[1][i],
+        patch[2][i], patch[3][i]
+      );
+
+      yPatches[i][1] = [];
+      yPatches[i][1].push(...splitBezier(...yPatches[i][0][0]));
+      yPatches[i][1].push(...splitBezier(...yPatches[i][0][1]));
+
+      yPatches[i][2] = [];
+      yPatches[i][2].push(...splitBezier(...yPatches[i][1][0]));
+      yPatches[i][2].push(...splitBezier(...yPatches[i][1][1]));
+      yPatches[i][2].push(...splitBezier(...yPatches[i][1][2]));
+      yPatches[i][2].push(...splitBezier(...yPatches[i][1][3]));
+    }
+
+    // Vertical splitting
+    for (let i = 0; i < 8; ++i) {
+      xPatches[i] = [];
+
+      for (let j = 0; j < 4; ++j) {
+        xPatches[i][j] = [];
+        xPatches[i][j][0] = splitBezier(
+          yPatches[0][2][i][j], yPatches[1][2][i][j],
+          yPatches[2][2][i][j], yPatches[3][2][i][j]
+        );
+
+        xPatches[i][j][1] = [];
+        xPatches[i][j][1].push(...splitBezier(...xPatches[i][j][0][0]));
+        xPatches[i][j][1].push(...splitBezier(...xPatches[i][j][0][1]));
+
+        xPatches[i][j][2] = [];
+        xPatches[i][j][2].push(...splitBezier(...xPatches[i][j][1][0]));
+        xPatches[i][j][2].push(...splitBezier(...xPatches[i][j][1][1]));
+        xPatches[i][j][2].push(...splitBezier(...xPatches[i][j][1][2]));
+        xPatches[i][j][2].push(...splitBezier(...xPatches[i][j][1][3]));
+      }
+    }
+
+    for (let i = 0; i < 8; ++i) {
+      patches[i] = [];
+
+      for (let j = 0; j < 8; ++j) {
+        patches[i][j] = [];
+
+        patches[i][j][0] = xPatches[i][0][2][j];
+        patches[i][j][1] = xPatches[i][1][2][j];
+        patches[i][j][2] = xPatches[i][2][2][j];
+        patches[i][j][3] = xPatches[i][3][2][j];
+      }
+    }
+
+    return patches;
   };
 
   // Point class -----------------------------------
@@ -408,24 +473,6 @@
       this.colors = colors; // 2x2x4 colors (four corners x R+G+B+A)
     }
 
-    static generate (p0, p1, p2, p3, c0, c1, c2, c3) {
-      let t0 = wAvg(p0, p2);
-      let t1 = wAvg(p1, p3);
-      let t2 = wAvg(p2, p0);
-      let t3 = wAvg(p3, p1);
-
-      let nodes = [
-        [p0.clone(), wAvg(p0, p1), wAvg(p1, p0), p1.clone()],
-        [t0, wAvg(t0, t1), wAvg(t1, t0), t1],
-        [t2, wAvg(t2, t3), wAvg(t3, t2), t3],
-        [p2.clone(), wAvg(p2, p3), wAvg(p3, p2), p3.clone()]
-      ];
-
-      let colors = [[c0, c1], [c2, c3]];
-
-      return new Patch(nodes, colors);
-    }
-
     // Set path for future stroking or filling... useful for debugging.
     setOutline (v) {
       // Draw patch outline
@@ -561,8 +608,6 @@
     constructor (id) {
       this.id = id;
       this.readMesh(id);
-      // console.log( this.nodes );
-      // console.log( this.colors );
     }
 
     // Function to parse an SVG mesh and set the nodes (points) and colors
@@ -823,10 +868,9 @@
           }
         }
       } else {
-        console.log(`bicubic`);
         // Reference:
         // https://en.wikipedia.org/wiki/Bicubic_interpolation#Computation
-        let d01, d12;
+        let d01, d12, patch, sliceNodes, nodes;
         const ilast = imax;
         const jlast = jmax;
         imax++;
@@ -848,7 +892,7 @@
           d[i] = new Array(jmax);
           for (let j = 0; j < jmax; ++j) {
             d[i][j] = [];
-            d[i][j][0] = this.nodes[3 * i][3 * j]
+            d[i][j][0] = this.nodes[3 * i][3 * j];
             d[i][j][1] = this.colors[i][j];
           }
         }
@@ -857,18 +901,18 @@
         for (let i = 0; i < imax; ++i) {
           for (let j = 0; j < jmax; ++j) {
             // dx
-            if (i != 0 && i != ilast) {
+            if (i !== 0 && i !== ilast) {
               d01 = distance(d[i - 1][j][0], d[i][j][0]);
               d12 = distance(d[i + 1][j][0], d[i][j][0]);
-              d[i][j][2] = finite_differences(d[i - 1][j][1], d[i][j][1],
+              d[i][j][2] = finiteDifferences(d[i - 1][j][1], d[i][j][1],
                 d[i + 1][j][1], d01, d12);
             }
 
             // dy
-            if (j != 0 && j != jlast) {
+            if (j !== 0 && j !== jlast) {
               d01 = distance(d[i][j - 1][0], d[i][j][0]);
               d12 = distance(d[i][j + 1][0], d[i][j][0]);
-              d[i][j][3] = finite_differences(d[i][j - 1][1], d[i][j][1],
+              d[i][j][3] = finiteDifferences(d[i][j - 1][1], d[i][j][1],
                 d[i][j + 1][1], d01, d12);
             }
 
@@ -933,55 +977,46 @@
           }
         }
 
+        // Fill patches
         for (let i = 0; i < ilast; ++i) {
           for (let j = 0; j < jlast; ++j) {
-            let d_left = distance(d[i][j][0], d[i + 1][j][0]);
-            let d_right = distance(d[i][j + 1][0], d[i + 1][j + 1][0]);
-            let d_top = distance(d[i][j][0], d[i][j + 1][0]);
-            let d_bottom = distance(d[i + 1][j][0], d[i + 1][j + 1][0]);
+            let dLeft = distance(d[i][j][0], d[i + 1][j][0]);
+            let dRight = distance(d[i][j + 1][0], d[i + 1][j + 1][0]);
+            let dTop = distance(d[i][j][0], d[i][j + 1][0]);
+            let dBottom = distance(d[i + 1][j][0], d[i + 1][j + 1][0]);
             let r = [[], [], [], []];
-            let n = [];
+            let f, alpha;
 
             for (let k = 0; k < 4; ++k) {
-              let f = [];
+              f = [];
 
-              f[0]  = d[i][j][1][k];
-              f[1]  = d[i + 1][j][1][k];
-              f[2]  = d[i][j + 1][1][k];
-              f[3]  = d[i + 1][j + 1][1][k];
-              f[4]  = d[i][j][2][k] * d_left;
-              f[5]  = d[i + 1][j][2][k] * d_left;
-              f[6]  = d[i][j + 1][2][k] * d_right;
-              f[7]  = d[i + 1][j + 1][2][k] * d_right;
-              f[8]  = d[i][j][3][k] * d_top;
-              f[9]  = d[i + 1][j][3][k] * d_bottom;
-              f[10] = d[i][j + 1][3][k] * d_top;
-              f[11] = d[i + 1][j + 1][3][k] * d_bottom;
+              f[0] = d[i][j][1][k];
+              f[1] = d[i + 1][j][1][k];
+              f[2] = d[i][j + 1][1][k];
+              f[3] = d[i + 1][j + 1][1][k];
+              f[4] = d[i][j][2][k] * dLeft;
+              f[5] = d[i + 1][j][2][k] * dLeft;
+              f[6] = d[i][j + 1][2][k] * dRight;
+              f[7] = d[i + 1][j + 1][2][k] * dRight;
+              f[8] = d[i][j][3][k] * dTop;
+              f[9] = d[i + 1][j][3][k] * dBottom;
+              f[10] = d[i][j + 1][3][k] * dTop;
+              f[11] = d[i + 1][j + 1][3][k] * dBottom;
               f[12] = 0; // dxy
               f[13] = 0; // dxy
               f[14] = 0; // dxy
               f[15] = 0; // dxy
 
               // get alpha values
-              let alpha = solve_linear_system(f);
+              alpha = solveLinearSystem(f);
 
-              // TODO not finished
               for (let l = 0; l < 9; ++l) {
                 r[k][l] = [];
-                n[l] = [];
 
                 for (let m = 0; m < 9; ++m) {
                   // evaluation
-                  let y = l / 8.0;
-                  let x = m / 8.0;
-                  r[k][l][m] = evaluate_solution(alpha, y, x);
+                  r[k][l][m] = evaluateSolution(alpha, l / 8, m / 8);
 
-                  n[l][m] = new Point(
-                    d[i][j][0].x * (1 - x) + d[i + 1][j + 1][0].x * x,
-                    d[i][j][0].y * (1 - y) + d[i + 1][j + 1][0].y * y
-                  );
-
-                  // why [0.0, 1.0] not [0, 255] ?
                   if (r[k][l][m] > 255) {
                     r[k][l][m] = 255;
                   } else if (r[k][l][m] < 0.0) {
@@ -991,19 +1026,26 @@
               }
             }
 
+            // split the bezier patch into 8x8 patches
+            sliceNodes = [];
+            for (let k = i * 3, kmax = (i * 3) + 4; k < kmax; ++k) {
+              sliceNodes.push(this.nodes[k].slice(j * 3, (j * 3) + 4));
+            }
+
+            nodes = splitPatch(sliceNodes);
+
             // Create patches and paint the bilinearliy
-            let patch;
             for (let l = 0; l < 8; ++l) {
               for (let m = 0; m < 8; ++m) {
-                patch = Patch.generate(
-                  n[l][m], n[l][m + 1], n[l + 1][m], n[l + 1][m + 1],
-                  [r[0][l][m], r[1][l][m], r[2][l][m], r[3][l][m]],
-                  [r[0][l][m + 1], r[1][l][m + 1], r[2][l][m + 1], r[3][l][m + 1]],
-                  [r[0][l + 1][m], r[1][l + 1][m], r[2][l + 1][m], r[3][l + 1][m]],
-                  [
-                    r[0][l + 1][m + 1], r[1][l + 1][m + 1],
-                    r[2][l + 1][m + 1], r[3][l + 1][m + 1]
-                  ]
+                patch = new Patch(
+                  nodes[l][m],
+                  [[
+                    [r[0][l][m], r[1][l][m], r[2][l][m], r[3][l][m]],
+                    [r[0][l][m + 1], r[1][l][m + 1], r[2][l][m + 1], r[3][l][m + 1]]
+                  ], [
+                    [r[0][l + 1][m], r[1][l + 1][m], r[2][l + 1][m], r[3][l + 1][m]],
+                    [r[0][l + 1][m + 1], r[1][l + 1][m + 1], r[2][l + 1][m + 1], r[3][l + 1][m + 1]]
+                  ]]
                 );
 
                 patch.paint(v, w, h);
@@ -1042,12 +1084,9 @@
   }
 
   // Start of document processing ---------------------
-
   const shapes = document.querySelectorAll('rect,circle,ellipse,path,text');
-  // console.log("Shapes: " + shapes.length);
 
   shapes.forEach((shape, i) => {
-    // console.log( shape.nodeName );
     // Get id. If no id, create one.
     let shapeId = shape.getAttribute('id');
     if (!shapeId) {
