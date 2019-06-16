@@ -50,16 +50,23 @@ Build Options
 A number of configuration settings can be overridden through cmake.  To
 see a list of the options available for inkscape, run:
 
- $ cmake -L
-
+```bash
+cmake -L
+```
 or, for more advanced cmake settings:
 
- $ cmake --help
+```bash
+cmake --help
+```
 
 For example, to build inkscape with only SVG 1 support, and no SVG 2, do:
 
- $ cmake .. -DWITH_SVG2=OFF
+```bash
+cmake .. -DWITH_SVG2=OFF
+```
 
 Or, to build inkscape with debugging symbols, do:
 
- $ cmake -DCMAKE_BUILD_TYPE=Debug ..
+```bash
+cmake -DCMAKE_BUILD_TYPE=Debug ..
+```
