@@ -34,13 +34,13 @@
     let p11 = new Point((tmp.x + p12.x) * 0.5, (tmp.y + p12.y) * 0.5);
     let p03 = new Point((p02.x + p11.x) * 0.5, (p02.y + p11.y) * 0.5);
 
-    let p10 = p03.clone();
-    let p00 = p0.clone();
-    let p13 = p3.clone();
+    // let p10 = p03.clone();
+    // let p00 = p0.clone();
+    // let p13 = p3.clone();
 
     return ([
-      [p00, p01, p02, p03],
-      [p10, p11, p12, p13]
+      [p0, p01, p02, p03],
+      [p03, p11, p12, p3]
     ]);
   };
 
@@ -51,11 +51,11 @@
     let tmp2 = points[0].distSquared(points[2]) * 0.25;
     let tmp3 = points[1].distSquared(points[3]) * 0.25;
 
-    let max1 = (tmp0 > tmp1 ? tmp0 : tmp1);
+    let max1 = tmp0 > tmp1 ? tmp0 : tmp1;
 
-    let max2 = (tmp2 > tmp3 ? tmp2 : tmp3);
+    let max2 = tmp2 > tmp3 ? tmp2 : tmp3;
 
-    let max = (max1 > max2 ? max1 : max2);
+    let max = max1 > max2 ? max1 : max2;
 
     return max * 18;
   };
@@ -161,7 +161,7 @@
           break;
       }
     });
-    // console.log( "  affine:\n" + affine.toString() );
+
     return affine;
   };
 
@@ -191,8 +191,8 @@
         slope[k] = 0;
       } else {
         slope[k] = 0.5 * ((c1[k] - c0[k]) / d01 + (c2[k] - c1[k]) / d12);
-        slow = 3.0 * (c1[k] - c0[k]) / d01;
-        slow = 3.0 * (c2[k] - c1[k]) / d12;
+        slow = Math.abs(3.0 * (c1[k] - c0[k]) / d01);
+        shigh = Math.abs(3.0 * (c2[k] - c1[k]) / d12);
 
         if (slope[k] > slow) {
           slope[k] = slow;
@@ -205,26 +205,28 @@
     return slope;
   };
 
+  // Coefficient matrix used for solving linear system
+  const A = [
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [-3, 3, 0, 0, -2, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [2, -2, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, -3, 3, 0, 0, -2, -1, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 2, -2, 0, 0, 1, 1, 0, 0],
+    [-3, 0, 3, 0, 0, 0, 0, 0, -2, 0, -1, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, -3, 0, 3, 0, 0, 0, 0, 0, -2, 0, -1, 0],
+    [9, -9, -9, 9, 6, 3, -6, -3, 6, -6, 3, -3, 4, 2, 2, 1],
+    [-6, 6, 6, -6, -3, -3, 3, 3, -4, 4, -2, 2, -2, -2, -1, -1],
+    [2, 0, -2, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 2, 0, -2, 0, 0, 0, 0, 0, 1, 0, 1, 0],
+    [-6, 6, 6, -6, -4, -2, 4, 2, -3, 3, -3, 3, -2, -1, -2, -1],
+    [4, -4, -4, 4, 2, 2, -2, -2, 2, -2, 2, -2, 1, 1, 1, 1]
+  ];
+
   // Solve the linear system for bicubic interpolation
   const solveLinearSystem = (v) => {
-    const A = [
-      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [-3, 3, 0, 0, -2, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [2, -2, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, -3, 3, 0, 0, -2, -1, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 2, -2, 0, 0, 1, 1, 0, 0],
-      [-3, 0, 3, 0, 0, 0, 0, 0, -2, 0, -1, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, -3, 0, 3, 0, 0, 0, 0, 0, -2, 0, -1, 0],
-      [9, -9, -9, 9, 6, 3, -6, -3, 6, -6, 3, -3, 4, 2, 2, 1],
-      [-6, 6, 6, -6, -3, -3, 3, 3, -4, 4, -2, 2, -2, -2, -1, -1],
-      [2, 0, -2, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 2, 0, -2, 0, 0, 0, 0, 0, 1, 0, 1, 0],
-      [-6, 6, 6, -6, -4, -2, 4, 2, -3, 3, -3, 3, -2, -1, -2, -1],
-      [4, -4, -4, 4, 2, 2, -2, -2, 2, -2, 2, -2, 1, 1, 1, 1]
-    ];
     let alpha = [];
 
     for (let i = 0; i < 16; ++i) {
@@ -429,7 +431,7 @@
      * w is canvas.width
      * h is canvas.height
      */
-    paintCurve (v, w, h) {
+    paintCurve (v, w) {
       // If inside, see if we need to split
       if (bezierStepsSquared(this.nodes) > maxBezierStep) {
         const beziers = splitBezier(...this.nodes);
@@ -444,7 +446,7 @@
         for (let i = 0; i < 4; ++i) {
           colors0[0][i] = this.colors[0][i];
           colors0[1][i] = (this.colors[0][i] + this.colors[1][i]) / 2;
-          colors1[0][i] = (this.colors[0][i] + this.colors[1][i]) / 2;
+          colors1[0][i] = colors0[1][i];
           colors1[1][i] = this.colors[1][i];
         }
         let curve0 = new Curve(beziers[0], colors0);
@@ -454,9 +456,8 @@
       } else {
         // Directly write data
         let x = Math.round(this.nodes[0].x);
-        let y = Math.round(this.nodes[0].y);
         if (x >= 0 && x < w) {
-          let index = (y * w + x) * 4;
+          let index = (~~this.nodes[0].y * w + x) * 4;
           v[index] = Math.round(this.colors[0][0]);
           v[index + 1] = Math.round(this.colors[0][1]);
           v[index + 2] = Math.round(this.colors[0][2]);
@@ -547,8 +548,8 @@
         colors0[0][1][i] = this.colors[0][1][i];
         colors0[1][0][i] = (this.colors[0][0][i] + this.colors[1][0][i]) / 2;
         colors0[1][1][i] = (this.colors[0][1][i] + this.colors[1][1][i]) / 2;
-        colors1[0][0][i] = (this.colors[0][0][i] + this.colors[1][0][i]) / 2;
-        colors1[0][1][i] = (this.colors[0][1][i] + this.colors[1][1][i]) / 2;
+        colors1[0][0][i] = colors0[1][0][i];
+        colors1[0][1][i] = colors0[1][1][i];
         colors1[1][0][i] = this.colors[1][0][i];
         colors1[1][1][i] = this.colors[1][1][i];
       }
@@ -588,260 +589,244 @@
         patches[1].paint(v, w, h);
       } else {
         // console.log( "Paint: Filling" );
-        this.paintCurve(v, w, h);
+
+        /*
+         * Paint a Bezier curve using just the top of the patch. If
+         * the patch is thin enough this should work. We leave this
+         * function here in case we want to do something more fancy.
+         */
+        let curve = new Curve([...this.nodes[0]], [...this.colors[0]]);
+        curve.paintCurve(v, w);
       }
-    }
-
-    paintCurve (v, w) {
-      // console.log( "Patch.paintCurve" );
-
-      // Paint a Bezier curve using just the top of the patch. If
-      // the patch is thin enough this should work. We leave this
-      // function here in case we want to do something more fancy.
-      let curve = new Curve([...this.nodes[0]], [...this.colors[0]]);
-      curve.paintCurve(v, w);
     }
   }
 
   // Mesh class ---------------------------------------
   class Mesh {
-    constructor (id) {
-      this.id = id;
-      this.readMesh(id);
+    constructor (mesh) {
+      this.readMesh(mesh);
     }
 
     // Function to parse an SVG mesh and set the nodes (points) and colors
-    readMesh (id) {
-      let nodes = [];
-      let colors = [];
+    readMesh (mesh) {
+      // console.log( "Reading mesh: " + mesh);
+      let nodes = [[]];
+      let colors = [[]];
 
-      // First, find the mesh
-      let theMesh = document.getElementById(id);
-      if (theMesh == null) {
-        console.error('mesh.js: Could not find mesh: ' + id);
-      } else {
-        // console.log( "Reading mesh: " + id);
+      let x = Number(mesh.getAttribute('x'));
+      let y = Number(mesh.getAttribute('y'));
+      nodes[0][0] = new Point(x, y);
 
-        nodes[0] = []; // Top row
-        colors[0] = []; // Top row
+      let rows = mesh.children;
+      for (let i = 0, imax = rows.length; i < imax; ++i) {
+        // Need to validate if meshrow...
+        nodes[3 * i + 1] = []; // Need three extra rows for each meshrow.
+        nodes[3 * i + 2] = [];
+        nodes[3 * i + 3] = [];
+        colors[i + 1] = []; // Need one more row than number of meshrows.
+        // console.log( " row: " + i);
+        let patches = rows[i].children;
+        for (let j = 0, jmax = patches.length; j < jmax; ++j) {
+          // console.log( "  patch: " + j);
+          let stops = patches[j].children;
+          for (let k = 0, kmax = stops.length; k < kmax; ++k) {
+            let l = k;
+            if (i !== 0) {
+              ++l; // There is no top if row isn't first row.
+            }
+            // console.log( "   stop: " + k);
+            let path = stops[k].getAttribute('path');
+            let parts;
 
-        let x = Number(theMesh.getAttribute('x'));
-        let y = Number(theMesh.getAttribute('y'));
-        nodes[0][0] = new Point(x, y);
+            let type = 'l'; // We need to still find mid-points even if no path.
+            if (path != null) {
+              parts = path.match(/\s*([lLcC])\s*(.*)/);
+              type = parts[1];
+            }
+            let stopNodes = parsePoints(parts[2]);
 
-        let rows = theMesh.children;
-        for (let i = 0, imax = rows.length; i < imax; ++i) {
-          // Need to validate if meshrow...
-          nodes[3 * i + 1] = []; // Need three extra rows for each meshrow.
-          nodes[3 * i + 2] = [];
-          nodes[3 * i + 3] = [];
-          colors[i + 1] = []; // Need one more row than number of meshrows.
-          // console.log( " row: " + i);
-          let patches = rows[i].children;
-          for (let j = 0, jmax = patches.length; j < jmax; ++j) {
-            // console.log( "  patch: " + j);
-            let stops = patches[j].children;
-            for (let k = 0, kmax = stops.length; k < kmax; ++k) {
-              let l = k;
-              if (i !== 0) {
-                ++l; // There is no top if row isn't first row.
-              }
-              // console.log( "   stop: " + k);
-              let path = stops[k].getAttribute('path');
-              let parts;
-
-              let type = 'l'; // We need to still find mid-points even if no path.
-              if (path != null) {
-                parts = path.match(/\s*([lLcC])\s*(.*)/);
-                type = parts[1];
-              }
-              let stopNodes = parsePoints(parts[2]);
-
-              switch (type) {
-                case 'l':
-                  if (l === 0) { // Top
-                    nodes[3 * i][3 * j + 3] = stopNodes[0].add(nodes[3 * i][3 * j]);
-                    nodes[3 * i][3 * j + 1] = wAvg(nodes[3 * i][3 * j], nodes[3 * i][3 * j + 3]);
-                    nodes[3 * i][3 * j + 2] = wAvg(nodes[3 * i][3 * j + 3], nodes[3 * i][3 * j]);
-                  } else if (l === 1) { // Right
-                    nodes[3 * i + 3][3 * j + 3] = stopNodes[0].add(nodes[3 * i][3 * j + 3]);
-                    nodes[3 * i + 1][3 * j + 3] = wAvg(nodes[3 * i][3 * j + 3], nodes[3 * i + 3][3 * j + 3]);
-                    nodes[3 * i + 2][3 * j + 3] = wAvg(nodes[3 * i + 3][3 * j + 3], nodes[3 * i][3 * j + 3]);
-                  } else if (l === 2) { // Bottom
-                    if (j === 0) {
-                      nodes[3 * i + 3][3 * j + 0] = stopNodes[0].add(nodes[3 * i + 3][3 * j + 3]);
-                    }
-                    nodes[3 * i + 3][3 * j + 1] = wAvg(nodes[3 * i + 3][3 * j], nodes[3 * i + 3][3 * j + 3]);
-                    nodes[3 * i + 3][3 * j + 2] = wAvg(nodes[3 * i + 3][3 * j + 3], nodes[3 * i + 3][3 * j]);
-                  } else { // Left
-                    nodes[3 * i + 1][3 * j] = wAvg(nodes[3 * i][3 * j], nodes[3 * i + 3][3 * j]);
-                    nodes[3 * i + 2][3 * j] = wAvg(nodes[3 * i + 3][3 * j], nodes[3 * i][3 * j]);
+            switch (type) {
+              case 'l':
+                if (l === 0) { // Top
+                  nodes[3 * i][3 * j + 3] = stopNodes[0].add(nodes[3 * i][3 * j]);
+                  nodes[3 * i][3 * j + 1] = wAvg(nodes[3 * i][3 * j], nodes[3 * i][3 * j + 3]);
+                  nodes[3 * i][3 * j + 2] = wAvg(nodes[3 * i][3 * j + 3], nodes[3 * i][3 * j]);
+                } else if (l === 1) { // Right
+                  nodes[3 * i + 3][3 * j + 3] = stopNodes[0].add(nodes[3 * i][3 * j + 3]);
+                  nodes[3 * i + 1][3 * j + 3] = wAvg(nodes[3 * i][3 * j + 3], nodes[3 * i + 3][3 * j + 3]);
+                  nodes[3 * i + 2][3 * j + 3] = wAvg(nodes[3 * i + 3][3 * j + 3], nodes[3 * i][3 * j + 3]);
+                } else if (l === 2) { // Bottom
+                  if (j === 0) {
+                    nodes[3 * i + 3][3 * j + 0] = stopNodes[0].add(nodes[3 * i + 3][3 * j + 3]);
                   }
-                  break;
-                case 'L':
-                  if (l === 0) { // Top
-                    nodes[3 * i][3 * j + 3] = stopNodes[0];
-                    nodes[3 * i][3 * j + 1] = wAvg(nodes[3 * i][3 * j], nodes[3 * i][3 * j + 3]);
-                    nodes[3 * i][3 * j + 2] = wAvg(nodes[3 * i][3 * j + 3], nodes[3 * i][3 * j]);
-                  } else if (l === 1) { // Right
-                    nodes[3 * i + 3][3 * j + 3] = stopNodes[0];
-                    nodes[3 * i + 1][3 * j + 3] = wAvg(nodes[3 * i][3 * j + 3], nodes[3 * i + 3][3 * j + 3]);
-                    nodes[3 * i + 2][3 * j + 3] = wAvg(nodes[3 * i + 3][3 * j + 3], nodes[3 * i][3 * j + 3]);
-                  } else if (l === 2) { // Bottom
-                    if (j === 0) {
-                      nodes[3 * i + 3][3 * j + 0] = stopNodes[0];
-                    }
-                    nodes[3 * i + 3][3 * j + 1] = wAvg(nodes[3 * i + 3][3 * j], nodes[3 * i + 3][3 * j + 3]);
-                    nodes[3 * i + 3][3 * j + 2] = wAvg(nodes[3 * i + 3][3 * j + 3], nodes[3 * i + 3][3 * j]);
-                  } else { // Left
-                    nodes[3 * i + 1][3 * j] = wAvg(nodes[3 * i][3 * j], nodes[3 * i + 3][3 * j]);
-                    nodes[3 * i + 2][3 * j] = wAvg(nodes[3 * i + 3][3 * j], nodes[3 * i][3 * j]);
-                  }
-                  break;
-                case 'c':
-                  if (l === 0) { // Top
-                    nodes[3 * i][3 * j + 1] = stopNodes[0].add(nodes[3 * i][3 * j]);
-                    nodes[3 * i][3 * j + 2] = stopNodes[1].add(nodes[3 * i][3 * j]);
-                    nodes[3 * i][3 * j + 3] = stopNodes[2].add(nodes[3 * i][3 * j]);
-                  } else if (l === 1) { // Right
-                    nodes[3 * i + 1][3 * j + 3] = stopNodes[0].add(nodes[3 * i][3 * j + 3]);
-                    nodes[3 * i + 2][3 * j + 3] = stopNodes[1].add(nodes[3 * i][3 * j + 3]);
-                    nodes[3 * i + 3][3 * j + 3] = stopNodes[2].add(nodes[3 * i][3 * j + 3]);
-                  } else if (l === 2) { // Bottom
-                    nodes[3 * i + 3][3 * j + 2] = stopNodes[0].add(nodes[3 * i + 3][3 * j + 3]);
-                    nodes[3 * i + 3][3 * j + 1] = stopNodes[1].add(nodes[3 * i + 3][3 * j + 3]);
-                    if (j === 0) {
-                      nodes[3 * i + 3][3 * j + 0] = stopNodes[2].add(nodes[3 * i + 3][3 * j + 3]);
-                    }
-                  } else { // Left
-                    nodes[3 * i + 2][3 * j] = stopNodes[0].add(nodes[3 * i + 3][3 * j]);
-                    nodes[3 * i + 1][3 * j] = stopNodes[1].add(nodes[3 * i + 3][3 * j]);
-                  }
-                  break;
-                case 'C':
-                  if (l === 0) { // Top
-                    nodes[3 * i][3 * j + 1] = stopNodes[0];
-                    nodes[3 * i][3 * j + 2] = stopNodes[1];
-                    nodes[3 * i][3 * j + 3] = stopNodes[2];
-                  } else if (l === 1) { // Right
-                    nodes[3 * i + 1][3 * j + 3] = stopNodes[0];
-                    nodes[3 * i + 2][3 * j + 3] = stopNodes[1];
-                    nodes[3 * i + 3][3 * j + 3] = stopNodes[2];
-                  } else if (l === 2) { // Bottom
-                    nodes[3 * i + 3][3 * j + 2] = stopNodes[0];
-                    nodes[3 * i + 3][3 * j + 1] = stopNodes[1];
-                    if (j === 0) {
-                      nodes[3 * i + 3][3 * j + 0] = stopNodes[2];
-                    }
-                  } else { // Left
-                    nodes[3 * i + 2][3 * j] = stopNodes[0];
-                    nodes[3 * i + 1][3 * j] = stopNodes[1];
-                  }
-                  break;
-                default:
-                  console.error('mesh.js: ' + type + ' invalid path type.');
-              }
-
-              if ((i === 0 && j === 0) || k > 0) {
-                let colorRaw = window.getComputedStyle(stops[k])
-                  .stopColor.match(/^rgb\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)$/i);
-                let alphaRaw = window.getComputedStyle(stops[k])
-                  .stopOpacity;
-                // console.log( "   colorRaw: " + colorRaw + " alphaRaw: " + alphaRaw);
-                let alpha = 255;
-                if (alphaRaw) {
-                  alpha = parseInt(alphaRaw * 255);
+                  nodes[3 * i + 3][3 * j + 1] = wAvg(nodes[3 * i + 3][3 * j], nodes[3 * i + 3][3 * j + 3]);
+                  nodes[3 * i + 3][3 * j + 2] = wAvg(nodes[3 * i + 3][3 * j + 3], nodes[3 * i + 3][3 * j]);
+                } else { // Left
+                  nodes[3 * i + 1][3 * j] = wAvg(nodes[3 * i][3 * j], nodes[3 * i + 3][3 * j]);
+                  nodes[3 * i + 2][3 * j] = wAvg(nodes[3 * i + 3][3 * j], nodes[3 * i][3 * j]);
                 }
-                // console.log( "   alpha: " + alpha );
-                if (colorRaw) {
-                  if (l === 0) { // upper left corner
-                    colors[i][j] = [];
-                    colors[i][j][0] = parseInt(colorRaw[1]);
-                    colors[i][j][1] = parseInt(colorRaw[2]);
-                    colors[i][j][2] = parseInt(colorRaw[3]);
-                    colors[i][j][3] = alpha; // Alpha
-                  } else if (l === 1) { // upper right corner
-                    colors[i][j + 1] = [];
-                    colors[i][j + 1][0] = parseInt(colorRaw[1]);
-                    colors[i][j + 1][1] = parseInt(colorRaw[2]);
-                    colors[i][j + 1][2] = parseInt(colorRaw[3]);
-                    colors[i][j + 1][3] = alpha; // Alpha
-                  } else if (l === 2) { // lower right corner
-                    colors[i + 1][j + 1] = [];
-                    colors[i + 1][j + 1][0] = parseInt(colorRaw[1]);
-                    colors[i + 1][j + 1][1] = parseInt(colorRaw[2]);
-                    colors[i + 1][j + 1][2] = parseInt(colorRaw[3]);
-                    colors[i + 1][j + 1][3] = alpha; // Alpha
-                  } else if (l === 3) { // lower left corner
-                    colors[i + 1][j] = [];
-                    colors[i + 1][j][0] = parseInt(colorRaw[1]);
-                    colors[i + 1][j][1] = parseInt(colorRaw[2]);
-                    colors[i + 1][j][2] = parseInt(colorRaw[3]);
-                    colors[i + 1][j][3] = alpha; // Alpha
+                break;
+              case 'L':
+                if (l === 0) { // Top
+                  nodes[3 * i][3 * j + 3] = stopNodes[0];
+                  nodes[3 * i][3 * j + 1] = wAvg(nodes[3 * i][3 * j], nodes[3 * i][3 * j + 3]);
+                  nodes[3 * i][3 * j + 2] = wAvg(nodes[3 * i][3 * j + 3], nodes[3 * i][3 * j]);
+                } else if (l === 1) { // Right
+                  nodes[3 * i + 3][3 * j + 3] = stopNodes[0];
+                  nodes[3 * i + 1][3 * j + 3] = wAvg(nodes[3 * i][3 * j + 3], nodes[3 * i + 3][3 * j + 3]);
+                  nodes[3 * i + 2][3 * j + 3] = wAvg(nodes[3 * i + 3][3 * j + 3], nodes[3 * i][3 * j + 3]);
+                } else if (l === 2) { // Bottom
+                  if (j === 0) {
+                    nodes[3 * i + 3][3 * j + 0] = stopNodes[0];
                   }
+                  nodes[3 * i + 3][3 * j + 1] = wAvg(nodes[3 * i + 3][3 * j], nodes[3 * i + 3][3 * j + 3]);
+                  nodes[3 * i + 3][3 * j + 2] = wAvg(nodes[3 * i + 3][3 * j + 3], nodes[3 * i + 3][3 * j]);
+                } else { // Left
+                  nodes[3 * i + 1][3 * j] = wAvg(nodes[3 * i][3 * j], nodes[3 * i + 3][3 * j]);
+                  nodes[3 * i + 2][3 * j] = wAvg(nodes[3 * i + 3][3 * j], nodes[3 * i][3 * j]);
+                }
+                break;
+              case 'c':
+                if (l === 0) { // Top
+                  nodes[3 * i][3 * j + 1] = stopNodes[0].add(nodes[3 * i][3 * j]);
+                  nodes[3 * i][3 * j + 2] = stopNodes[1].add(nodes[3 * i][3 * j]);
+                  nodes[3 * i][3 * j + 3] = stopNodes[2].add(nodes[3 * i][3 * j]);
+                } else if (l === 1) { // Right
+                  nodes[3 * i + 1][3 * j + 3] = stopNodes[0].add(nodes[3 * i][3 * j + 3]);
+                  nodes[3 * i + 2][3 * j + 3] = stopNodes[1].add(nodes[3 * i][3 * j + 3]);
+                  nodes[3 * i + 3][3 * j + 3] = stopNodes[2].add(nodes[3 * i][3 * j + 3]);
+                } else if (l === 2) { // Bottom
+                  nodes[3 * i + 3][3 * j + 2] = stopNodes[0].add(nodes[3 * i + 3][3 * j + 3]);
+                  nodes[3 * i + 3][3 * j + 1] = stopNodes[1].add(nodes[3 * i + 3][3 * j + 3]);
+                  if (j === 0) {
+                    nodes[3 * i + 3][3 * j + 0] = stopNodes[2].add(nodes[3 * i + 3][3 * j + 3]);
+                  }
+                } else { // Left
+                  nodes[3 * i + 2][3 * j] = stopNodes[0].add(nodes[3 * i + 3][3 * j]);
+                  nodes[3 * i + 1][3 * j] = stopNodes[1].add(nodes[3 * i + 3][3 * j]);
+                }
+                break;
+              case 'C':
+                if (l === 0) { // Top
+                  nodes[3 * i][3 * j + 1] = stopNodes[0];
+                  nodes[3 * i][3 * j + 2] = stopNodes[1];
+                  nodes[3 * i][3 * j + 3] = stopNodes[2];
+                } else if (l === 1) { // Right
+                  nodes[3 * i + 1][3 * j + 3] = stopNodes[0];
+                  nodes[3 * i + 2][3 * j + 3] = stopNodes[1];
+                  nodes[3 * i + 3][3 * j + 3] = stopNodes[2];
+                } else if (l === 2) { // Bottom
+                  nodes[3 * i + 3][3 * j + 2] = stopNodes[0];
+                  nodes[3 * i + 3][3 * j + 1] = stopNodes[1];
+                  if (j === 0) {
+                    nodes[3 * i + 3][3 * j + 0] = stopNodes[2];
+                  }
+                } else { // Left
+                  nodes[3 * i + 2][3 * j] = stopNodes[0];
+                  nodes[3 * i + 1][3 * j] = stopNodes[1];
+                }
+                break;
+              default:
+                console.error('mesh.js: ' + type + ' invalid path type.');
+            }
+
+            if ((i === 0 && j === 0) || k > 0) {
+              let colorRaw = stops[k].style.stopColor
+                .match(/^rgb\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)$/i);
+              let alphaRaw = stops[k].style.stopOpacity;
+              let alpha = 255;
+              if (alphaRaw) {
+                alpha = Math.floor(alphaRaw * 255);
+              }
+
+              if (colorRaw) {
+                if (l === 0) { // upper left corner
+                  colors[i][j] = [];
+                  colors[i][j][0] = Math.floor(colorRaw[1]);
+                  colors[i][j][1] = Math.floor(colorRaw[2]);
+                  colors[i][j][2] = Math.floor(colorRaw[3]);
+                  colors[i][j][3] = alpha; // Alpha
+                } else if (l === 1) { // upper right corner
+                  colors[i][j + 1] = [];
+                  colors[i][j + 1][0] = Math.floor(colorRaw[1]);
+                  colors[i][j + 1][1] = Math.floor(colorRaw[2]);
+                  colors[i][j + 1][2] = Math.floor(colorRaw[3]);
+                  colors[i][j + 1][3] = alpha; // Alpha
+                } else if (l === 2) { // lower right corner
+                  colors[i + 1][j + 1] = [];
+                  colors[i + 1][j + 1][0] = Math.floor(colorRaw[1]);
+                  colors[i + 1][j + 1][1] = Math.floor(colorRaw[2]);
+                  colors[i + 1][j + 1][2] = Math.floor(colorRaw[3]);
+                  colors[i + 1][j + 1][3] = alpha; // Alpha
+                } else if (l === 3) { // lower left corner
+                  colors[i + 1][j] = [];
+                  colors[i + 1][j][0] = Math.floor(colorRaw[1]);
+                  colors[i + 1][j][1] = Math.floor(colorRaw[2]);
+                  colors[i + 1][j][2] = Math.floor(colorRaw[3]);
+                  colors[i + 1][j][3] = alpha; // Alpha
                 }
               }
             }
-
-            // SVG doesn't use tensor points but we need them for rendering.
-            nodes[3 * i + 1][3 * j + 1] = new Point();
-            nodes[3 * i + 1][3 * j + 2] = new Point();
-            nodes[3 * i + 2][3 * j + 1] = new Point();
-            nodes[3 * i + 2][3 * j + 2] = new Point();
-
-            nodes[3 * i + 1][3 * j + 1].x =
-              (-4.0 * nodes[3 * i][3 * j].x +
-                6.0 * (nodes[3 * i][3 * j + 1].x + nodes[3 * i + 1][3 * j].x) +
-                -2.0 * (nodes[3 * i][3 * j + 3].x + nodes[3 * i + 3][3 * j].x) +
-                3.0 * (nodes[3 * i + 3][3 * j + 1].x + nodes[3 * i + 1][3 * j + 3].x) +
-                -1.0 * nodes[3 * i + 3][3 * j + 3].x) / 9.0;
-            nodes[3 * i + 1][3 * j + 2].x =
-              (-4.0 * nodes[3 * i][3 * j + 3].x +
-                6.0 * (nodes[3 * i][3 * j + 2].x + nodes[3 * i + 1][3 * j + 3].x) +
-                -2.0 * (nodes[3 * i][3 * j].x + nodes[3 * i + 3][3 * j + 3].x) +
-                3.0 * (nodes[3 * i + 3][3 * j + 2].x + nodes[3 * i + 1][3 * j].x) +
-                -1.0 * nodes[3 * i + 3][3 * j].x) / 9.0;
-            nodes[3 * i + 2][3 * j + 1].x =
-              (-4.0 * nodes[3 * i + 3][3 * j].x +
-                6.0 * (nodes[3 * i + 3][3 * j + 1].x + nodes[3 * i + 2][3 * j].x) +
-                -2.0 * (nodes[3 * i + 3][3 * j + 3].x + nodes[3 * i][3 * j].x) +
-                3.0 * (nodes[3 * i][3 * j + 1].x + nodes[3 * i + 2][3 * j + 3].x) +
-                -1.0 * nodes[3 * i][3 * j + 3].x) / 9.0;
-            nodes[3 * i + 2][3 * j + 2].x =
-              (-4.0 * nodes[3 * i + 3][3 * j + 3].x +
-                6.0 * (nodes[3 * i + 3][3 * j + 2].x + nodes[3 * i + 2][3 * j + 3].x) +
-                -2.0 * (nodes[3 * i + 3][3 * j].x + nodes[3 * i][3 * j + 3].x) +
-                3.0 * (nodes[3 * i][3 * j + 2].x + nodes[3 * i + 2][3 * j].x) +
-                -1.0 * nodes[3 * i][3 * j].x) / 9.0;
-
-            nodes[3 * i + 1][3 * j + 1].y =
-              (-4.0 * nodes[3 * i][3 * j].y +
-                6.0 * (nodes[3 * i][3 * j + 1].y + nodes[3 * i + 1][3 * j].y) +
-                -2.0 * (nodes[3 * i][3 * j + 3].y + nodes[3 * i + 3][3 * j].y) +
-                3.0 * (nodes[3 * i + 3][3 * j + 1].y + nodes[3 * i + 1][3 * j + 3].y) +
-                -1.0 * nodes[3 * i + 3][3 * j + 3].y) / 9.0;
-            nodes[3 * i + 1][3 * j + 2].y =
-              (-4.0 * nodes[3 * i][3 * j + 3].y +
-                6.0 * (nodes[3 * i][3 * j + 2].y + nodes[3 * i + 1][3 * j + 3].y) +
-                -2.0 * (nodes[3 * i][3 * j].y + nodes[3 * i + 3][3 * j + 3].y) +
-                3.0 * (nodes[3 * i + 3][3 * j + 2].y + nodes[3 * i + 1][3 * j].y) +
-                -1.0 * nodes[3 * i + 3][3 * j].y) / 9.0;
-            nodes[3 * i + 2][3 * j + 1].y =
-              (-4.0 * nodes[3 * i + 3][3 * j].y +
-                6.0 * (nodes[3 * i + 3][3 * j + 1].y + nodes[3 * i + 2][3 * j].y) +
-                -2.0 * (nodes[3 * i + 3][3 * j + 3].y + nodes[3 * i][3 * j].y) +
-                3.0 * (nodes[3 * i][3 * j + 1].y + nodes[3 * i + 2][3 * j + 3].y) +
-                -1.0 * nodes[3 * i][3 * j + 3].y) / 9.0;
-            nodes[3 * i + 2][3 * j + 2].y =
-              (-4.0 * nodes[3 * i + 3][3 * j + 3].y +
-                6.0 * (nodes[3 * i + 3][3 * j + 2].y + nodes[3 * i + 2][3 * j + 3].y) +
-                -2.0 * (nodes[3 * i + 3][3 * j].y + nodes[3 * i][3 * j + 3].y) +
-                3.0 * (nodes[3 * i][3 * j + 2].y + nodes[3 * i + 2][3 * j].y) +
-                -1.0 * nodes[3 * i][3 * j].y) / 9.0;
           }
+
+          // SVG doesn't use tensor points but we need them for rendering.
+          nodes[3 * i + 1][3 * j + 1] = new Point();
+          nodes[3 * i + 1][3 * j + 2] = new Point();
+          nodes[3 * i + 2][3 * j + 1] = new Point();
+          nodes[3 * i + 2][3 * j + 2] = new Point();
+
+          nodes[3 * i + 1][3 * j + 1].x =
+            (-4.0 * nodes[3 * i][3 * j].x +
+              6.0 * (nodes[3 * i][3 * j + 1].x + nodes[3 * i + 1][3 * j].x) +
+              -2.0 * (nodes[3 * i][3 * j + 3].x + nodes[3 * i + 3][3 * j].x) +
+              3.0 * (nodes[3 * i + 3][3 * j + 1].x + nodes[3 * i + 1][3 * j + 3].x) +
+              -1.0 * nodes[3 * i + 3][3 * j + 3].x) / 9.0;
+          nodes[3 * i + 1][3 * j + 2].x =
+            (-4.0 * nodes[3 * i][3 * j + 3].x +
+              6.0 * (nodes[3 * i][3 * j + 2].x + nodes[3 * i + 1][3 * j + 3].x) +
+              -2.0 * (nodes[3 * i][3 * j].x + nodes[3 * i + 3][3 * j + 3].x) +
+              3.0 * (nodes[3 * i + 3][3 * j + 2].x + nodes[3 * i + 1][3 * j].x) +
+              -1.0 * nodes[3 * i + 3][3 * j].x) / 9.0;
+          nodes[3 * i + 2][3 * j + 1].x =
+            (-4.0 * nodes[3 * i + 3][3 * j].x +
+              6.0 * (nodes[3 * i + 3][3 * j + 1].x + nodes[3 * i + 2][3 * j].x) +
+              -2.0 * (nodes[3 * i + 3][3 * j + 3].x + nodes[3 * i][3 * j].x) +
+              3.0 * (nodes[3 * i][3 * j + 1].x + nodes[3 * i + 2][3 * j + 3].x) +
+              -1.0 * nodes[3 * i][3 * j + 3].x) / 9.0;
+          nodes[3 * i + 2][3 * j + 2].x =
+            (-4.0 * nodes[3 * i + 3][3 * j + 3].x +
+              6.0 * (nodes[3 * i + 3][3 * j + 2].x + nodes[3 * i + 2][3 * j + 3].x) +
+              -2.0 * (nodes[3 * i + 3][3 * j].x + nodes[3 * i][3 * j + 3].x) +
+              3.0 * (nodes[3 * i][3 * j + 2].x + nodes[3 * i + 2][3 * j].x) +
+              -1.0 * nodes[3 * i][3 * j].x) / 9.0;
+
+          nodes[3 * i + 1][3 * j + 1].y =
+            (-4.0 * nodes[3 * i][3 * j].y +
+              6.0 * (nodes[3 * i][3 * j + 1].y + nodes[3 * i + 1][3 * j].y) +
+              -2.0 * (nodes[3 * i][3 * j + 3].y + nodes[3 * i + 3][3 * j].y) +
+              3.0 * (nodes[3 * i + 3][3 * j + 1].y + nodes[3 * i + 1][3 * j + 3].y) +
+              -1.0 * nodes[3 * i + 3][3 * j + 3].y) / 9.0;
+          nodes[3 * i + 1][3 * j + 2].y =
+            (-4.0 * nodes[3 * i][3 * j + 3].y +
+              6.0 * (nodes[3 * i][3 * j + 2].y + nodes[3 * i + 1][3 * j + 3].y) +
+              -2.0 * (nodes[3 * i][3 * j].y + nodes[3 * i + 3][3 * j + 3].y) +
+              3.0 * (nodes[3 * i + 3][3 * j + 2].y + nodes[3 * i + 1][3 * j].y) +
+              -1.0 * nodes[3 * i + 3][3 * j].y) / 9.0;
+          nodes[3 * i + 2][3 * j + 1].y =
+            (-4.0 * nodes[3 * i + 3][3 * j].y +
+              6.0 * (nodes[3 * i + 3][3 * j + 1].y + nodes[3 * i + 2][3 * j].y) +
+              -2.0 * (nodes[3 * i + 3][3 * j + 3].y + nodes[3 * i][3 * j].y) +
+              3.0 * (nodes[3 * i][3 * j + 1].y + nodes[3 * i + 2][3 * j + 3].y) +
+              -1.0 * nodes[3 * i][3 * j + 3].y) / 9.0;
+          nodes[3 * i + 2][3 * j + 2].y =
+            (-4.0 * nodes[3 * i + 3][3 * j + 3].y +
+              6.0 * (nodes[3 * i + 3][3 * j + 2].y + nodes[3 * i + 2][3 * j + 3].y) +
+              -2.0 * (nodes[3 * i + 3][3 * j].y + nodes[3 * i][3 * j + 3].y) +
+              3.0 * (nodes[3 * i][3 * j + 2].y + nodes[3 * i + 2][3 * j].y) +
+              -1.0 * nodes[3 * i][3 * j].y) / 9.0;
         }
-        // console.log( nodes );
       }
+
       this.nodes = nodes; // (m*3+1) x (n*3+1) points
       this.colors = colors; // (m+1) x (n+1) x 4  colors (R+G+B+A)
     }
@@ -852,6 +837,8 @@
       let jmax = (this.nodes[0].length - 1) / 3;
 
       if (imax < 2 || jmax < 2) {
+        let patch;
+
         for (let i = 0; i < imax; ++i) {
           for (let j = 0; j < jmax; ++j) {
             let sliceNodes = [];
@@ -863,14 +850,14 @@
             sliceColors.push(this.colors[i].slice(j, j + 2));
             sliceColors.push(this.colors[i + 1].slice(j, j + 2));
 
-            let patch = new Patch(sliceNodes, sliceColors);
+            patch = new Patch(sliceNodes, sliceColors);
             patch.paint(v, w, h);
           }
         }
       } else {
         // Reference:
         // https://en.wikipedia.org/wiki/Bicubic_interpolation#Computation
-        let d01, d12, patch, sliceNodes, nodes;
+        let d01, d12, patch, sliceNodes, nodes, f, alpha;
         const ilast = imax;
         const jlast = jmax;
         imax++;
@@ -985,7 +972,6 @@
             let dTop = distance(d[i][j][0], d[i][j + 1][0]);
             let dBottom = distance(d[i + 1][j][0], d[i + 1][j + 1][0]);
             let r = [[], [], [], []];
-            let f, alpha;
 
             for (let k = 0; k < 4; ++k) {
               f = [];
@@ -1100,7 +1086,7 @@
     if (fillURL && fillURL[1]) {
       const mesh = document.getElementById(fillURL[1]);
 
-      if (mesh.nodeName === 'meshgradient') {
+      if (mesh && mesh.nodeName === 'meshgradient') {
         const bbox = shape.getBBox();
 
         // Create temporary canvas
@@ -1114,7 +1100,7 @@
         let myCanvasImage = myContext.createImageData(bbox.width, bbox.height);
 
         // Draw a mesh
-        const myMesh = new Mesh(fillURL[1]);
+        const myMesh = new Mesh(mesh);
 
         // Adjust for bounding box if necessary.
         if (mesh.getAttribute('gradientUnits') === 'objectBoundingBox') {
@@ -1174,7 +1160,7 @@
     if (strokeURL && strokeURL[1]) {
       const mesh = document.getElementById(strokeURL[1]);
 
-      if (mesh.nodeName === 'meshgradient') {
+      if (mesh && mesh.nodeName === 'meshgradient') {
         const strokeWidth = parseFloat(shape.style.strokeWidth.slice(0, -2));
         const strokeMiterlimit = parseFloat(shape.style.strokeMiterlimit);
         const phase = strokeWidth * strokeMiterlimit;
@@ -1196,7 +1182,7 @@
         let myCanvasImage = myContext.createImageData(boxWidth, boxHeight);
 
         // Draw a mesh
-        const myMesh = new Mesh(strokeURL[1]);
+        const myMesh = new Mesh(mesh);
 
         // Adjust for bounding box if necessary.
         if (mesh.getAttribute('gradientUnits') === 'objectBoundingBox') {
