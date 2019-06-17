@@ -731,9 +731,9 @@
             }
 
             if ((i === 0 && j === 0) || k > 0) {
-              let colorRaw = stops[k].style.stopColor
+              let colorRaw = window.getComputedStyle(stops[k]).stopColor
                 .match(/^rgb\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)$/i);
-              let alphaRaw = stops[k].style.stopOpacity;
+              let alphaRaw = window.getComputedStyle(stops[k]).stopOpacity;
               let alpha = 255;
               if (alphaRaw) {
                 alpha = Math.floor(alphaRaw * 255);
@@ -835,6 +835,7 @@
     paintMesh (v, w, h) {
       let imax = (this.nodes.length - 1) / 3;
       let jmax = (this.nodes[0].length - 1) / 3;
+      console.log(`q`)
 
       if (imax < 2 || jmax < 2) {
         let patch;
