@@ -4,6 +4,14 @@ macro(SANITIZE_PATH _string_var)
 endmacro()
 
 
+# Turns linker arguments like "-framework Foo" into "-Wl,-framework,Foo"
+# to make them safe for appending to INKSCAPE_LIBS
+macro(sanitize_ldflags_for_libs ldflags_var)
+    # matches dash-argument followed by non-dash-argument
+    string(REGEX REPLACE "(^|;)(-[^;]*);([^-])" "\\1-Wl,\\2,\\3" ${ldflags_var} "${${ldflags_var}}")
+endmacro()
+
+
 macro(inkscape_source_group
 	sources)
 
