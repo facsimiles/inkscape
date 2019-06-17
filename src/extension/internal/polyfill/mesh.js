@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Use Canvas to render a mesh gradient, passing the rendering to an image via a data stream.
 // Copyright: Tavmjong Bah 2018
+// Contributor: Valentin Ionita 2019
 // Distributed under GNU General Public License version 2 or later. See <http://fsf.org/>.
 
 (function () {
@@ -22,9 +23,6 @@
   /*
    * Utility functions -----------------------------
    */
-  const colorToString = (c) =>
-    `rgb(${Math.round(c[0])},${Math.round(c[1])},${Math.round(c[2])})`;
-
   // Split Bezier using de Casteljau's method.
   const splitBezier = (p0, p1, p2, p3) => {
     let tmp = new Point((p1.x + p2.x) * 0.5, (p1.y + p2.y) * 0.5);
@@ -474,40 +472,6 @@
       this.colors = colors; // 2x2x4 colors (four corners x R+G+B+A)
     }
 
-    // Set path for future stroking or filling... useful for debugging.
-    setOutline (v) {
-      // Draw patch outline
-      v.beginPath();
-      v.moveTo(this.nodes[0][0].x, this.nodes[0][0].y);
-      v.bezierCurveTo(this.nodes[0][1].x, this.nodes[0][1].y,
-        this.nodes[0][2].x, this.nodes[0][2].y,
-        this.nodes[0][3].x, this.nodes[0][3].y);
-      v.bezierCurveTo(this.nodes[1][3].x, this.nodes[1][3].y,
-        this.nodes[2][3].x, this.nodes[2][3].y,
-        this.nodes[3][3].x, this.nodes[3][3].y);
-      v.bezierCurveTo(this.nodes[3][2].x, this.nodes[3][2].y,
-        this.nodes[3][1].x, this.nodes[3][1].y,
-        this.nodes[3][0].x, this.nodes[3][0].y);
-      v.bezierCurveTo(this.nodes[2][0].x, this.nodes[2][0].y,
-        this.nodes[1][0].x, this.nodes[1][0].y,
-        this.nodes[0][0].x, this.nodes[0][0].y);
-      v.closePath();
-    }
-
-    // Draw stroke patch... useful if debugging.
-    drawOutline (v) {
-      this.setOutline(v);
-      v.strokeStyle = 'black';
-      v.stroke();
-    }
-
-    // Fill patch... useful if debugging.
-    fillOutline (v) {
-      this.setOutline(v);
-      v.fillStyle = colorToString(this.colors[0]);
-      v.fill();
-    }
-
     // Split patch horizontally into two patches.
     split () {
       // console.log( "Patch.split" );
@@ -557,17 +521,10 @@
       return ([new Patch(nodes0, colors0), new Patch(nodes1, colors1)]);
     }
 
-    paint (v, w, h) {
+    paint (v, w) {
       // console.log( "Patch.paint" );
-      // console.log( this.nodes );
 
-      // Check if patch is inside canvas
-      if (this.nodes[3][3].x < 0 || this.nodes[0][0].x > w ||
-        this.nodes[3][3].y < 0 || this.nodes[0][0].y > h) {
-        return;
-      }
-
-      // If inside, see if we need to split
+      // Check if we need to split
       let larger = false;
       let step;
       for (let i = 0; i < 4; ++i) {
@@ -585,8 +542,8 @@
       if (larger) {
         // console.log( "Paint: Splitting" );
         let patches = this.split();
-        patches[0].paint(v, w, h);
-        patches[1].paint(v, w, h);
+        patches[0].paint(v, w);
+        patches[1].paint(v, w);
       } else {
         // console.log( "Paint: Filling" );
 
@@ -832,10 +789,9 @@
     }
 
     // Extracts out each patch and then paints it
-    paintMesh (v, w, h) {
+    paintMesh (v, w) {
       let imax = (this.nodes.length - 1) / 3;
       let jmax = (this.nodes[0].length - 1) / 3;
-      console.log(`q`)
 
       if (imax < 2 || jmax < 2) {
         let patch;
@@ -852,7 +808,7 @@
             sliceColors.push(this.colors[i + 1].slice(j, j + 2));
 
             patch = new Patch(sliceNodes, sliceColors);
-            patch.paint(v, w, h);
+            patch.paint(v, w);
           }
         }
       } else {
@@ -1035,7 +991,7 @@
                   ]]
                 );
 
-                patch.paint(v, w, h);
+                patch.paint(v, w);
               }
             }
           }
@@ -1120,7 +1076,7 @@
         }
 
         // Paint
-        myMesh.paintMesh(myCanvasImage.data, myCanvas.width, myCanvas.height);
+        myMesh.paintMesh(myCanvasImage.data, myCanvas.width);
         myContext.putImageData(myCanvasImage, 0, 0);
 
         // Create image element of correct size
@@ -1202,7 +1158,7 @@
         }
 
         // Paint
-        myMesh.paintMesh(myCanvasImage.data, myCanvas.width, myCanvas.height);
+        myMesh.paintMesh(myCanvasImage.data, myCanvas.width);
         myContext.putImageData(myCanvasImage, 0, 0);
 
         // Create image element of correct size
