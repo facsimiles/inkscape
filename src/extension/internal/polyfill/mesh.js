@@ -32,10 +32,6 @@
     let p11 = new Point((tmp.x + p12.x) * 0.5, (tmp.y + p12.y) * 0.5);
     let p03 = new Point((p02.x + p11.x) * 0.5, (p02.y + p11.y) * 0.5);
 
-    // let p10 = p03.clone();
-    // let p00 = p0.clone();
-    // let p13 = p3.clone();
-
     return ([
       [p0, p01, p02, p03],
       [p03, p11, p12, p3]
@@ -66,7 +62,6 @@
 
   // Browsers return a string rather than a transform list for gradientTransform!
   const parseTransform = (t) => {
-    // console.log( "parseTransform: " + t );
     let affine = new Affine();
     let trans, scale, radian, tan, skewx, skewy, rotate;
     let transforms = t.match(/(\w+\(\s*[^)]+\))+/g);
@@ -474,8 +469,6 @@
 
     // Split patch horizontally into two patches.
     split () {
-      // console.log( "Patch.split" );
-
       let nodes0 = [[], [], [], []];
       let nodes1 = [[], [], [], []];
       let colors0 = [
@@ -522,8 +515,6 @@
     }
 
     paint (v, w) {
-      // console.log( "Patch.paint" );
-
       // Check if we need to split
       let larger = false;
       let step;
@@ -540,13 +531,10 @@
       }
 
       if (larger) {
-        // console.log( "Paint: Splitting" );
         let patches = this.split();
         patches[0].paint(v, w);
         patches[1].paint(v, w);
       } else {
-        // console.log( "Paint: Filling" );
-
         /*
          * Paint a Bezier curve using just the top of the patch. If
          * the patch is thin enough this should work. We leave this
@@ -566,7 +554,6 @@
 
     // Function to parse an SVG mesh and set the nodes (points) and colors
     readMesh (mesh) {
-      // console.log( "Reading mesh: " + mesh);
       let nodes = [[]];
       let colors = [[]];
 
@@ -581,17 +568,14 @@
         nodes[3 * i + 2] = [];
         nodes[3 * i + 3] = [];
         colors[i + 1] = []; // Need one more row than number of meshrows.
-        // console.log( " row: " + i);
         let patches = rows[i].children;
         for (let j = 0, jmax = patches.length; j < jmax; ++j) {
-          // console.log( "  patch: " + j);
           let stops = patches[j].children;
           for (let k = 0, kmax = stops.length; k < kmax; ++k) {
             let l = k;
             if (i !== 0) {
               ++l; // There is no top if row isn't first row.
             }
-            // console.log( "   stop: " + k);
             let path = stops[k].getAttribute('path');
             let parts;
 
