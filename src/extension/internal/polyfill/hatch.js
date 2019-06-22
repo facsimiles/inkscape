@@ -87,19 +87,15 @@
           offset = offset > pitch ? (offset % pitch) : offset;
           let currentXPositions = xPositions.map(p => p + offset);
 
-          let tempPath = document.createElementNS(svgNS, 'path');
           let path = document.createElementNS(svgNS, 'path');
-          let hatchpathData = hatchpath.getAttribute('d');
+          let data = hatchpath.getAttribute('d');
           let d = '';
 
           for (let j = 0; j < hatchpath.attributes.length; ++j) {
             let attr = hatchpath.attributes.item(j);
-
-            if (attr.name === 'd' && attr.value[0] != 'M') {
-              attr.value = 'M 0 0 ' + attr.value;
-              hatchpathData = attr.value;
+            if (attr.name !== 'd') {
+              path.setAttribute(attr.name, attr.value);
             }
-            path.setAttribute(attr.name, attr.value);
           }
 
           if (hatchpath.getAttribute('d') === null) {
@@ -107,35 +103,13 @@
               d += `M ${xPos} ${y} V ${hatchDiagonal} `;
             });
           } else {
-            let paths = [];
-            tempPath.setAttribute('d', hatchpathData);
-            const pathLength = tempPath.pathSegList.length;
-            const yDistance = tempPath.pathSegList[pathLength - 1].y - tempPath.pathSegList[0].y;
-
-            currentXPositions.forEach((xPos) => {
-              tempPath.setAttribute('d', hatchpathData);
-              for (let j = 0; j < pathLength; ++j) {
-                tempPath.pathSegList[j].x += xPos;
-              }
-              paths.push(tempPath.cloneNode())
-
-            });
-
-            for (let j = 0; j < paths.length; ++j) {
-              d += paths[j].getAttribute('d');
-            }
-
-            while (paths[0].pathSegList[0].y < bbox.height) {
-              for (let j = 0; j < paths.length; ++j) {
-                for (let k = 0; k < pathLength; ++k) {
-                  paths[j].pathSegList[k].y += yDistance;
-                }
-              }
-
-              for (let j = 0; j < paths.length; ++j) {
-                d += paths[j].getAttribute('d');
-              }
-            }
+            // TODO create Point class (x, y)
+            // break data into Points (regex parsing)
+            // const startsWithM
+            // const endsWithZ
+            // const connectedEnds = !startsWithM && !endsWithZ;
+            // add starting point (0, 0) if missing
+            // duplicate d for x in currentXPosition and y [0 - pathHeight, hatchDiagonal]
           }
 
           path.setAttribute('d', d);
