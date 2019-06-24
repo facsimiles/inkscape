@@ -11,6 +11,17 @@
     }
   };
 
+  // Order pain-order of hatchpaths relative to their pitch
+  const orderHatchPaths = (paths) => {
+    const nodeArray = [];
+    paths.forEach(p => nodeArray.push(p));
+
+    return nodeArray.sort((a, b) =>
+      // (pitch - a.offset) - (pitch - b.offset)
+      Number(b.getAttribute('offset')) - Number(a.getAttribute('offset'))
+    );
+  };
+
   // Generate x-axis coordinates for the pattern paths
   const generatePositions = (width, diagonal, initial, distance) => {
     const offset = (diagonal - width) / 2;
@@ -26,6 +37,167 @@
     return array;
   };
 
+  // Turn a path array into a tokenized version of it
+  const parsePath = (data) => {
+    let array = [];
+    let i = 0;
+    let len = data.length;
+    let last = 0;
+
+    /*
+     * Last state (last) index map
+     * 0 => ()
+     * 1 => (x y)
+     * 2 => (x)
+     * 3 => (y)
+     * 4 => (x1 y1 x2 y2 x y)
+     * 5 => (x2 y2 x y)
+     * 6 => (_ _ _ _ _ x y)
+     * 7 => (_)
+     */
+
+    while (i < len) {
+      switch (data[i].toUpperCase()) {
+        case 'Z':
+          array.push(data[i]);
+          i += 1;
+          last = 0;
+          break;
+        case 'M':
+        case 'L':
+        case 'T':
+          array.push(data[i], new Point(Number(data[i + 1]), Number(data[i + 2])));
+          i += 3;
+          last = 1;
+          break;
+        case 'H':
+          array.push(data[i], new Point(Number(data[i + 1]), null));
+          i += 2;
+          last = 2;
+          break;
+        case 'V':
+          array.push(data[i], new Point(null, Number(data[i + 1])));
+          i += 2;
+          last = 3;
+          break;
+        case 'C':
+          array.push(
+            data[i], new Point(Number(data[i + 1]), Number(data[i + 2])),
+            new Point(Number(data[i + 3]), Number(data[i + 4])),
+            new Point(Number(data[i + 5]), Number(data[i + 6]))
+          );
+          i += 7;
+          last = 4;
+          break;
+        case 'S':
+        case 'Q':
+          array.push(
+            data[i], new Point(Number(data[i + 1]), Number(data[i + 2])),
+            new Point(Number(data[i + 3]), Number(data[i + 4]))
+          );
+          i += 5;
+          last = 5;
+          break;
+        case 'A':
+          array.push(
+            data[i], data[i + 1], data[i + 2], data[i + 3], data[i + 4],
+            data[i + 5], new Point(Number(data[i + 6]), Number(data[i + 7]))
+          );
+          i += 8;
+          last = 6;
+          break;
+        case 'B':
+          array.push(data[i], data[i + 1]);
+          i += 2;
+          last = 7;
+          break;
+        default:
+          switch (last) {
+            case 1:
+              array.push(new Point(Number(data[i]), Number(data[i + 1])));
+              i += 2;
+              break;
+            case 2:
+              array.push(new Point(Number(data[i]), null));
+              i += 1;
+              break;
+            case 3:
+              array.push(new Point(null, Number(data[i])));
+              i += 1;
+              break;
+            case 4:
+              array.push(
+                new Point(Number(data[i]), Number(data[i + 1])),
+                new Point(Number(data[i + 2]), Number(data[i + 3])),
+                new Point(Number(data[i + 4]), Number(data[i + 5]))
+              );
+              i += 6;
+              break;
+            case 5:
+              array.push(
+                new Point(Number(data[i]), Number(data[i + 1])),
+                new Point(Number(data[i + 2]), Number(data[i + 3]))
+              );
+              i += 4;
+              break;
+            case 6:
+              array.push(
+                data[i], data[i + 1], data[i + 2], data[i + 3], data[i + 4],
+                new Point(Number(data[i + 5]), Number(data[i + 6]))
+              );
+              i += 7;
+              break;
+            default:
+              array.push(data[i]);
+              i += 1;
+          }
+      }
+    }
+
+    return array;
+  };
+
+  const getYDistance = (data) => {
+    let lastY = 0;
+    for (let j = data.length - 1; j > 0; --j) {
+      if (data[j].isPoint()) {
+        lastY = data[j].y;
+        break;
+      }
+    }
+
+    return lastY - 0;
+  };
+
+  // Point class --------------------------------------
+  class Point {
+    constructor (x, y) {
+      this.x = x;
+      this.y = y;
+    }
+
+    toString () {
+      return `${this.x} ${this.y}`;
+    }
+
+    isPoint () {
+      return true;
+    }
+
+    clone () {
+      return new Point(this.x, this.y);
+    }
+
+    add (v) {
+      return new Point(this.x + v.x, this.y + v.y);
+    }
+
+    distSquared (v) {
+      let x = this.x - v.x;
+      let y = this.y - v.y;
+      return (x * x + y * y);
+    }
+  }
 
   // Start of document processing ---------------------
   const svg = document.querySelectorAll('svg')[0];
@@ -47,74 +219,111 @@
 
       if (hatch && hatch.nodeName === 'hatch') {
         const bbox = shape.getBBox();
+        // Hatch variables
         const x = Number(hatch.getAttribute('x')) || 0;
         const y = Number(hatch.getAttribute('y')) || 0;
         const pitch = Number(hatch.getAttribute('pitch')) || 0;
         const rotate = Number(hatch.getAttribute('rotate')) || 0;
-        const hatchUnits = hatch.getAttribute('hatchUnits') || 'objectBoundingBox';
-        const hatchContentUnits = hatch.getAttribute('hatchContentUnits') || 'userSpaceOnUse';
-        let transform = hatch.getAttribute('transform');
-
-        const hatchpaths = hatch.querySelectorAll('hatchpath,hatchPath');
-
-        // if (hatchUnits === 'objectBoundingBox') {
-        //   myMesh.scale(new Point(boxWidth, boxHeight));
-        // }
-
-        const pattern = document.createElementNS(svgNS, 'pattern');
-        const patternId = `${fillURL[1]}_pattern`;
-        setAttributes(pattern, {
-          'id': patternId,
-          'patternUnits': 'userSpaceOnUse',
-          'width': bbox.width,
-          'height': bbox.height,
-          'x': bbox.x,
-          'y': bbox.y
-        });
-        hatch.parentElement.insertBefore(pattern, hatch);
-
-        const hatchDiagonal = Math.ceil(Math.sqrt(
+        const units = hatch.getAttribute('hatchUnits') || 'objectBoundingBox';
+        const contentUnits = hatch.getAttribute('hatchContentUnits') || 'userSpaceOnUse';
+        const transform = hatch.getAttribute('transform') ||
+          hatch.getAttribute('hatchTransform') || '';
+        const hatchpaths = orderHatchPaths(hatch.querySelectorAll('hatchpath,hatchPath'));
+        const hatchDiag = Math.ceil(Math.sqrt(
           bbox.width * bbox.width + bbox.height * bbox.height
         ));
+        const xPositions = generatePositions(bbox.width, hatchDiag, x, pitch);
 
-        const xPositions = generatePositions(
-          bbox.width, hatchDiagonal, x, pitch
-        );
+        // Pattern variables
+        const pattern = document.createElementNS(svgNS, 'pattern');
+        const patternId = `${fillURL[1]}_pattern`;
+        let patternWidth = hatchDiag - hatchDiag % pitch;
+        let patternHeight;
 
-        hatchpaths.forEach((hatchpath) => {
+        // A negative value is an error.
+        // A value of zero disables rendering of the element
+        if (pitch <= 0) {
+          console.error('Non-positive pitch');
+          return;
+        }
+
+        hatchpaths.forEach(hatchpath => {
           let offset = Number(hatchpath.getAttribute('offset')) || 0;
-
           offset = offset > pitch ? (offset % pitch) : offset;
-          let currentXPositions = xPositions.map(p => p + offset);
+          const currentXPositions = xPositions.map(p => p + offset);
 
-          let path = document.createElementNS(svgNS, 'path');
-          let data = hatchpath.getAttribute('d');
+          const path = document.createElementNS(svgNS, 'path');
           let d = '';
 
           for (let j = 0; j < hatchpath.attributes.length; ++j) {
-            let attr = hatchpath.attributes.item(j);
+            const attr = hatchpath.attributes.item(j);
             if (attr.name !== 'd') {
               path.setAttribute(attr.name, attr.value);
             }
           }
 
           if (hatchpath.getAttribute('d') === null) {
-            currentXPositions.forEach((xPos) => {
-              d += `M ${xPos} ${y} V ${hatchDiagonal} `;
-            });
+            d += currentXPositions.reduce(
+              (acc, xPos) => `${acc}M ${xPos} ${y} V ${hatchDiag} `, ''
+            );
+            patternHeight = hatchDiag;
           } else {
-            // TODO create Point class (x, y)
-            // break data into Points (regex parsing)
-            // const startsWithM
-            // const endsWithZ
-            // const connectedEnds = !startsWithM && !endsWithZ;
-            // add starting point (0, 0) if missing
-            // duplicate d for x in currentXPosition and y [0 - pathHeight, hatchDiagonal]
+            const data = parsePath(hatchpath.getAttribute('d')
+              .match(/([+-]?([0-9]+([.][0-9]+)?))|[MmZzLlHhVvCcSsQqTtAaBb]/g));
+            const len = data.length;
+            const startsWithM = data[0].toUpperCase() === 'M';
+            const endsWithZ = typeof data[len - 1] === 'string' &&
+              data[len - 1].toUpperCase() === 'Z';
+            const connectedEnds = !startsWithM && !endsWithZ;
+            const yOffset = getYDistance(data);
+            patternHeight = hatchDiag - hatchDiag % yOffset;
+
+            // The offset must be positive
+            if (yOffset <= 0) {
+              console.error('y offset is non-positive');
+              return;
+            }
+            const point = new Point(0, 0);
+
+            const currentYPositions = generatePositions(
+              bbox.height, hatchDiag, y, yOffset
+            );
+
+            currentXPositions.forEach(xPos => {
+              point.x = xPos;
+
+              if (!startsWithM) {
+                d += `M ${xPos} 0`;
+              }
+
+              currentYPositions.forEach(yPos => {
+                point.y = yPos;
+
+                d += data.map(e => e.isPoint && e.isPoint() ? e.add(point) : e)
+                  .map(e => e.isPoint && e.isPoint() ? e.toString() : e)
+                  .reduce((acc, e) => `${acc} ${e}`, '');
+              });
+            });
+
+            // FIXME Probalby not everytime
+            path.style.fill = 'none';
           }
 
           path.setAttribute('d', d);
           pattern.appendChild(path);
         });
+
+        setAttributes(pattern, {
+          'id': patternId,
+          'patternUnits': 'userSpaceOnUse',
+          'width': patternWidth,
+          'height': patternHeight,
+          'x': bbox.x,
+          'y': bbox.y,
+          // FIXME the base rotation doesn't seem right
+          'patternTransform': `rotate(${rotate} ${bbox.x} ${bbox.y}) ${transform}`
+        });
+        hatch.parentElement.insertBefore(pattern, hatch);
 
         shape.style.fill = `url(#${patternId})`;
         shape.setAttribute('fill', `url(#${patternId})`);
