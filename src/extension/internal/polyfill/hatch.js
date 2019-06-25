@@ -32,8 +32,6 @@
           el.appendChild(c.cloneNode(true));
         });
       }
-    } else {
-      return;
     }
   };
 
@@ -183,16 +181,18 @@
     return array;
   };
 
-  const getYDistance = (data) => {
-    let lastY = 0;
-    for (let j = data.length - 1; j > 0; --j) {
-      if (data[j].isPoint()) {
-        lastY = data[j].y;
-        break;
-      }
+  const getYDistance = (hatchpath) => {
+    const path = document.createElementNS(svgNS, 'path');
+    let d = hatchpath.getAttribute('d');
+
+    if (d[0].toUpperCase() !== 'M') {
+      d = `M 0,0 ${d}`;
     }
 
-    return lastY - 0;
+    path.setAttribute('d', d);
+
+    return path.getPointAtLength(path.getTotalLength()).y -
+      path.getPointAtLength(0).y;
   };
 
   // Point class --------------------------------------
@@ -246,7 +246,7 @@
       if (hatch && hatch.nodeName === 'hatch') {
         const href = hatch.getAttributeNS(xlinkNS, 'href');
 
-        if (href !== null && href !== "") {
+        if (href !== null && href !== '') {
           setReference(hatch, href);
         }
 
@@ -266,6 +266,13 @@
           hatch.getAttribute('hatchTransform') || '';
         const hatchpaths = orderHatchPaths(hatch.querySelectorAll('hatchpath,hatchPath'));
 
+        // A negative value is an error.
+        // A value of zero disables rendering of the element
+        if (pitch <= 0) {
+          console.error('Non-positive pitch');
+          return;
+        }
+
         const bbox = shape.getBBox();
         const hatchDiag = Math.ceil(Math.sqrt(
           bbox.width * bbox.width + bbox.height * bbox.height
@@ -277,13 +284,6 @@
         const patternId = `${fillURL[1]}_pattern`;
         let patternWidth = hatchDiag - hatchDiag % pitch;
         let patternHeight;
-
-        // A negative value is an error.
-        // A value of zero disables rendering of the element
-        if (pitch <= 0) {
-          console.error('Non-positive pitch');
-          return;
-        }
 
         hatchpaths.forEach(hatchpath => {
           let offset = Number(hatchpath.getAttribute('offset')) || 0;
@@ -306,14 +306,18 @@
             );
             patternHeight = hatchDiag;
           } else {
-            const data = parsePath(hatchpath.getAttribute('d')
-              .match(/([+-]?([0-9]+([.][0-9]+)?))|[MmZzLlHhVvCcSsQqTtAaBb]/g));
+            const hatchData = hatchpath.getAttribute('d');
+            const data = parsePath(
+              hatchData.match(/([+-]?([0-9]+([.][0-9]+)?))|[MmZzLlHhVvCcSsQqTtAaBb]/g)
+            );
             const len = data.length;
-            const startsWithM = data[0].toUpperCase() === 'M';
+            const startsWithM = data[0] === 'M';
             const endsWithZ = typeof data[len - 1] === 'string' &&
               data[len - 1].toUpperCase() === 'Z';
             const connectedEnds = !startsWithM && !endsWithZ;
-            const yOffset = getYDistance(data);
+            const relative = data[0].toLowerCase() === data[0];
+            const point = new Point(0, 0);
+            const yOffset = getYDistance(hatchpath);
             patternHeight = hatchDiag - hatchDiag % yOffset;
 
             // The offset must be positive
@@ -321,7 +325,6 @@
               console.error('y offset is non-positive');
               return;
             }
-            const point = new Point(0, 0);
 
             const currentYPositions = generatePositions(
               bbox.height, hatchDiag, y, yOffset
@@ -330,16 +333,22 @@
             currentXPositions.forEach(xPos => {
               point.x = xPos;
 
-              if (!startsWithM) {
+              if (!startsWithM && !relative) {
                 d += `M ${xPos} 0`;
               }
 
               currentYPositions.forEach(yPos => {
                 point.y = yPos;
 
-                d += data.map(e => e.isPoint && e.isPoint() ? e.add(point) : e)
-                  .map(e => e.isPoint && e.isPoint() ? e.toString() : e)
-                  .reduce((acc, e) => `${acc} ${e}`, '');
+                if (relative) {
+                  // Path is relative, set the first point in each path render
+                  d += `M ${xPos} ${yPos} ${hatchData}`;
+                } else {
+                  // Path is absolute, translate every point
+                  d += data.map(e => e.isPoint && e.isPoint() ? e.add(point) : e)
+                    .map(e => e.isPoint && e.isPoint() ? e.toString() : e)
+                    .reduce((acc, e) => `${acc} ${e}`, '');
+                }
               });
             });
 
@@ -359,7 +368,7 @@
           'x': bbox.x,
           'y': bbox.y,
           // FIXME the base rotation doesn't seem right
-          'patternTransform': `rotate(${rotate} ${bbox.x} ${bbox.y}) ${transform}`
+          'patternTransform': `rotate(${rotate} ${0} ${0}) ${transform}`
         });
         hatch.parentElement.insertBefore(pattern, hatch);
 
