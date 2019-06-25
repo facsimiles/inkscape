@@ -11,6 +11,32 @@
     }
   };
 
+  // Copy attributes from the hatch with 'id' to the current element
+  const setReference = (el, id) => {
+    const attr = [
+      'x', 'y', 'pitch', 'rotate',
+      'hatchUnits', 'hatchContentUnits', 'transform'
+    ];
+    const template = document.getElementById(id.slice(1));
+
+    if (template && template.nodeName === 'hatch') {
+      attr.forEach(a => {
+        let t = template.getAttribute(a);
+        if (el.getAttribute(a) === null && t !== null) {
+          el.setAttribute(a, t);
+        }
+      });
+
+      if (el.children.length === 0) {
+        Array.from(template.children).forEach(c => {
+          el.appendChild(c.cloneNode(true));
+        });
+      }
+    } else {
+      return;
+    }
+  };
+
   // Order pain-order of hatchpaths relative to their pitch
   const orderHatchPaths = (paths) => {
     const nodeArray = [];
@@ -218,7 +244,17 @@
       const hatch = document.getElementById(fillURL[1]);
 
       if (hatch && hatch.nodeName === 'hatch') {
-        const bbox = shape.getBBox();
+        const href = hatch.getAttributeNS(xlinkNS, 'href');
+
+        if (href !== null && href !== "") {
+          setReference(hatch, href);
+        }
+
+        // Degenerate hatch, with no hatchpath children
+        if (hatch.children.length === 0) {
+          return;
+        }
+
         // Hatch variables
         const x = Number(hatch.getAttribute('x')) || 0;
         const y = Number(hatch.getAttribute('y')) || 0;
@@ -229,6 +265,8 @@
         const transform = hatch.getAttribute('transform') ||
           hatch.getAttribute('hatchTransform') || '';
         const hatchpaths = orderHatchPaths(hatch.querySelectorAll('hatchpath,hatchPath'));
+
+        const bbox = shape.getBBox();
         const hatchDiag = Math.ceil(Math.sqrt(
           bbox.width * bbox.width + bbox.height * bbox.height
         ));

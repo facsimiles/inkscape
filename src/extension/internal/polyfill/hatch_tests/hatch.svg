@@ -59,9 +59,12 @@
          d="L 0,0 5,10 0,20"
          id="hatchPath38" />
     </hatch>
+    <hatch
+      id="degenerate1"
+      pitch="45" />
   </defs>
   <rect fill="url(#simple6)" stroke="black" stroke-width="2" x="25" y="25" width="150" height="150"/>
-  <rect fill="url(#transform9) #ff0000;" stroke="black" stroke-width="1" width="115" height="115" x="25" y="200" />
+  <rect fill="url(#degenerate1) #ff0000;" stroke="black" stroke-width="1" width="115" height="115" x="25" y="200" />
 
   <script type="text/javascript" xlink:href="../hatch.js"></script>
 </svg>
