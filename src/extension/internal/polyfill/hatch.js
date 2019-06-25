@@ -2,7 +2,6 @@
   // Name spaces -----------------------------------
   const svgNS = 'http://www.w3.org/2000/svg';
   const xlinkNS = 'http://www.w3.org/1999/xlink';
-  const xhtmlNS = 'http://www.w3.org/1999/xhtml';
 
   // Set multiple attributes to an element
   const setAttributes = (el, attrs) => {
@@ -226,7 +225,6 @@
   }
 
   // Start of document processing ---------------------
-  const svg = document.querySelectorAll('svg')[0];
   const shapes = document.querySelectorAll('rect,circle,ellipse,path,text');
 
   shapes.forEach((shape, i) => {
@@ -283,7 +281,7 @@
         const pattern = document.createElementNS(svgNS, 'pattern');
         const patternId = `${fillURL[1]}_pattern`;
         let patternWidth = hatchDiag - hatchDiag % pitch;
-        let patternHeight;
+        let patternHeight = 0;
 
         hatchpaths.forEach(hatchpath => {
           let offset = Number(hatchpath.getAttribute('offset')) || 0;
@@ -308,23 +306,19 @@
           } else {
             const hatchData = hatchpath.getAttribute('d');
             const data = parsePath(
-              hatchData.match(/([+-]?([0-9]+([.][0-9]+)?))|[MmZzLlHhVvCcSsQqTtAaBb]/g)
+              hatchData.match(/([+-]?(\d+(\.\d+)?))|[MmZzLlHhVvCcSsQqTtAaBb]/g)
             );
-            const len = data.length;
             const startsWithM = data[0] === 'M';
-            const endsWithZ = typeof data[len - 1] === 'string' &&
-              data[len - 1].toUpperCase() === 'Z';
-            const connectedEnds = !startsWithM && !endsWithZ;
             const relative = data[0].toLowerCase() === data[0];
             const point = new Point(0, 0);
             const yOffset = getYDistance(hatchpath);
-            patternHeight = hatchDiag - hatchDiag % yOffset;
 
             // The offset must be positive
             if (yOffset <= 0) {
               console.error('y offset is non-positive');
               return;
             }
+            patternHeight = hatchDiag - hatchDiag % yOffset;
 
             const currentYPositions = generatePositions(
               bbox.height, hatchDiag, y, yOffset
@@ -352,7 +346,7 @@
               });
             });
 
-            // FIXME Probalby not everytime
+            // The hatchpaths are infinite, so they have no fill
             path.style.fill = 'none';
           }
 
@@ -362,12 +356,12 @@
 
         setAttributes(pattern, {
           'id': patternId,
-          'patternUnits': 'userSpaceOnUse',
+          'patternUnits': units,
+          'patternContentUnits': contentUnits,
           'width': patternWidth,
           'height': patternHeight,
           'x': bbox.x,
           'y': bbox.y,
-          // FIXME the base rotation doesn't seem right
           'patternTransform': `rotate(${rotate} ${0} ${0}) ${transform}`
         });
         hatch.parentElement.insertBefore(pattern, hatch);
