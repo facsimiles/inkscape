@@ -550,6 +550,7 @@
   class Mesh {
     constructor (mesh) {
       this.readMesh(mesh);
+      this.type = mesh.getAttribute('type') || 'bilinear';
     }
 
     // Function to parse an SVG mesh and set the nodes (points) and colors
@@ -568,6 +569,7 @@
         nodes[3 * i + 2] = [];
         nodes[3 * i + 3] = [];
         colors[i + 1] = []; // Need one more row than number of meshrows.
+
         let patches = rows[i].children;
         for (let j = 0, jmax = patches.length; j < jmax; ++j) {
           let stops = patches[j].children;
@@ -777,7 +779,7 @@
       let imax = (this.nodes.length - 1) / 3;
       let jmax = (this.nodes[0].length - 1) / 3;
 
-      if (imax < 2 || jmax < 2) {
+      if (this.type === 'bilinear' || imax < 2 || jmax < 2) {
         let patch;
 
         for (let i = 0; i < imax; ++i) {
@@ -1103,7 +1105,8 @@
 
       if (mesh && mesh.nodeName === 'meshgradient') {
         const strokeWidth = parseFloat(shape.style.strokeWidth.slice(0, -2));
-        const strokeMiterlimit = parseFloat(shape.style.strokeMiterlimit);
+        const strokeMiterlimit = parseFloat(shape.style.strokeMiterlimit) ||
+          parseFloat(shape.getAttribute('stroke-miterlimit')) || 1;
         const phase = strokeWidth * strokeMiterlimit;
 
         const bbox = shape.getBBox();
