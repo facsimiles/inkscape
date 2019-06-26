@@ -67,6 +67,7 @@ InkscapeApplication::InkscapeApplication()
     : _with_gui(true)
     , _batch_process(false)
     , _use_shell(false)
+    , _use_pipe(false)
     , _active_document(nullptr)
     , _active_selection(nullptr)
     , _active_view(nullptr)
@@ -127,7 +128,26 @@ InkscapeApplication::document_open(const Glib::RefPtr<Gio::File>& file)
 
         document_add (document);
     } else {
-        std::cerr << "InkscapeApplication::open_document: Failed to open: " << file->get_parse_name() << std::endl;
+        std::cerr << "InkscapeApplication::document_open: Failed to open: " << file->get_parse_name() << std::endl;
+    }
+
+    return document;
+}
+
+
+// Open a document, add it to app.
+SPDocument*
+InkscapeApplication::document_open(const std::string& data)
+{
+    // Open file
+    SPDocument *document = ink_file_open(data);
+
+    if (document) {
+        document->setVirgin(false); // Prevents replacing document in same window during file open.
+
+        document_add (document);
+    } else {
+        std::cerr << "InkscapeApplication::document_open: Failed to open memory document." << std::endl;
     }
 
     return document;
@@ -234,12 +254,11 @@ InkscapeApplication::document_revert(SPDocument* document)
         }
 
         document_close (document);
-
     } else {
         std::cerr << "InkscapeApplication::revert_document: Document not found!" << std::endl;
         return false;
     }
-
+    INKSCAPE.readStyleSheets();
     return true;
 }
 
@@ -512,7 +531,8 @@ ConcreteInkscapeApplication<T>::ConcreteInkscapeApplication()
     this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "vacuum-defs",        '\0', N_("Process: Remove unused definitions from the <defs> section(s) of document."),        "");
     this->add_main_option_entry(T::OPTION_TYPE_STRING,   "select",             '\0', N_("Process: Select objects: comma separated list of IDs."),   N_("OBJECT-ID[,OBJECT-ID]*"));
     this->add_main_option_entry(T::OPTION_TYPE_STRING,   "verb",               '\0', N_("Process: Verb(s) to call when Inkscape opens."),               N_("VERB-ID[;VERB-ID]*"));
-    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "shell",              '\0', N_("Process: Start Inkscape in interactive shell mode."),                                 "");
+    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "shell",              '\0', N_("Process: Start Inkscape in interactive shell mode."),                                "");
+    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "pipe",                'p', N_("Process: Read file from pipe."),                                                     "");
 
     // Export - File and File Type
     this->add_main_option_entry(T::OPTION_TYPE_STRING,   "export-type",        '\0', N_("Export: File type:[svg,png,ps,psf,tex,emf,wmf,xaml]"),                          "[...]");
@@ -575,6 +595,7 @@ ConcreteInkscapeApplication<Gio::Application>::on_startup2()
 #ifdef GDK_WINDOWING_QUARTZ
 static gboolean osx_openfile_callback(GtkosxApplication *, gchar const *,
                                       ConcreteInkscapeApplication<Gtk::Application> *);
+static gboolean osx_quit_callback(GtkosxApplication *, ConcreteInkscapeApplication<Gtk::Application> *);
 #endif
 
 template<>
@@ -623,6 +644,7 @@ ConcreteInkscapeApplication<Gtk::Application>::on_startup2()
 #ifdef GDK_WINDOWING_QUARTZ
     GtkosxApplication *osxapp = gtkosx_application_get();
     g_signal_connect(G_OBJECT(osxapp), "NSApplicationOpenFile", G_CALLBACK(osx_openfile_callback), this);
+    g_signal_connect(G_OBJECT(osxapp), "NSApplicationBlockTermination", G_CALLBACK(osx_quit_callback), this);
 #endif
 }
 
@@ -665,6 +687,7 @@ ConcreteInkscapeApplication<Gtk::Application>::create_window(const Glib::RefPtr<
                 // virgin == true => an empty document (template).
 
                 // Is there a better place for this? It requires GUI.
+
                 document->ensureUpToDate(); // TODO this will trigger broken line warnings, etc.
 
                 InkscapeWindow* window = dynamic_cast<InkscapeWindow*>(get_active_window());
@@ -688,6 +711,7 @@ ConcreteInkscapeApplication<Gtk::Application>::create_window(const Glib::RefPtr<
                 InkscapeWindow* window = window_open (document);
                 desktop = window->get_desktop();
             }
+            INKSCAPE.readStyleSheets();
 
 
         } else {
@@ -715,23 +739,8 @@ ConcreteInkscapeApplication<Gtk::Application>::create_window(const Glib::RefPtr<
     } else {
         std::cerr << "ConcreteInkscapeApplication<T>::create_window: Failed to create desktop!" << std::endl;
     }
-
     return (desktop); // Temp: Need to track desktop for shell mode.
 }
-
-#ifdef GDK_WINDOWING_QUARTZ
-/**
- * On macOS, handle dropping files on Inkscape.app icon and "Open With" file association.
- */
-static gboolean osx_openfile_callback(GtkosxApplication *osxapp, gchar const *path,
-                                      ConcreteInkscapeApplication<Gtk::Application> *app)
-{
-    auto ptr = Gio::File::create_for_path(path);
-    g_return_val_if_fail(ptr, false);
-    app->create_window(ptr);
-    return true;
-}
-#endif
 
 /** No need to destroy window if T is Gio::Application.
  */
@@ -806,6 +815,48 @@ ConcreteInkscapeApplication<Gtk::Application>::destroy_all()
     }
 }
 
+/** Process document (headless operation).
+ * 'output_path' is path or "-" for pipe.
+ */
+template<class T>
+void
+ConcreteInkscapeApplication<T>::process(SPDocument* document, std::string output_path)
+{
+    // Add to Inkscape::Application...
+    INKSCAPE.add_document(document);
+    // ActionContext should be removed once verbs are gone but we use it for now.
+    Inkscape::ActionContext context = INKSCAPE.action_context_for_document(document);
+    _active_document  = document;
+    _active_selection = context.getSelection();
+    _active_view      = context.getView();
+
+    if (_active_selection == nullptr) {
+        std::cerr << "ConcreteInkscapeApplication<T>::process: _active_selection in null!" << std::endl;
+        std::cerr << "  Must use --without_gui with --pipe!" << std::endl;
+        return; // Avoid segfault
+    }
+    INKSCAPE.readStyleSheets();
+    document->ensureUpToDate(); // Or queries don't work!
+
+    // process_file
+    for (auto action: _command_line_actions) {
+        Gio::Application::activate_action( action.first, action.second );
+    }
+
+    if (_use_shell) {
+        shell2();
+    } else {
+        // Save... can't use action yet.
+        _file_export.do_export(document, output_path);
+    }
+
+    _active_document = nullptr;
+    _active_selection = nullptr;
+    _active_view = nullptr;
+
+    // Close file
+    INKSCAPE.remove_document(document);
+}
 
 // Open document window with default document. Either this or on_open() is called.
 template<class T>
@@ -813,6 +864,26 @@ void
 ConcreteInkscapeApplication<T>::on_activate()
 {
     on_startup2();
+
+    if (_use_pipe) {
+
+        if (_with_gui) {
+            std::cerr << "Must use --without-gui with --pipe!" << std::endl;
+            return;
+        }
+
+        // Create document from pipe in.
+        std::istreambuf_iterator<char> begin(std::cin), end;
+        std::string s(begin, end);
+        SPDocument *document = document_open (s);
+        if (!document) return;
+
+        // Process
+        process (document, "-");
+
+        document_close (document);
+        return;
+    }
 
     if (_with_gui) {
         if (_use_shell) {
@@ -846,35 +917,7 @@ ConcreteInkscapeApplication<T>::on_open(const Gio::Application::type_vec_files& 
         SPDocument *document = document_open (file);
         if (!document) continue;
 
-        // Add to Inkscape::Application...
-        INKSCAPE.add_document(document);
-        // ActionContext should be removed once verbs are gone but we use it for now.
-        Inkscape::ActionContext context = INKSCAPE.action_context_for_document(document);
-        _active_document  = document;
-        _active_selection = context.getSelection();
-        _active_view      = context.getView();
-
-        document->ensureUpToDate(); // Or queries don't work!
-
-        // process_file(file);
-        for (auto action: _command_line_actions) {
-            Gio::Application::activate_action( action.first, action.second );
-        }
-
-        if (_use_shell) {
-            shell2();
-        } else {
-            // Save... can't use action yet.
-            _file_export.do_export(document, file->get_path());
-        }
-
-        _active_document = nullptr;
-        _active_selection = nullptr;
-        _active_view = nullptr;
-
-        // Close file
-        INKSCAPE.remove_document(document);
-
+        process (document, file->get_path());
         document_close (document);
     }
 }
@@ -885,6 +928,7 @@ template<>
 void
 ConcreteInkscapeApplication<Gtk::Application>::on_open(const Gio::Application::type_vec_files& files, const Glib::ustring& hint)
 {
+    std::cout << "on_open" << std::endl;
     on_startup2();
     if(_pdf_poppler)
         INKSCAPE.set_pdf_poppler(_pdf_poppler);
@@ -898,7 +942,7 @@ ConcreteInkscapeApplication<Gtk::Application>::on_open(const Gio::Application::t
 
             // Process each file.
             for (auto action: _command_line_actions) {
-		    Gio::Application::activate_action( action.first, action.second );
+                Gio::Application::activate_action( action.first, action.second );
             }
 
             // Close window after we're done with file. This may not be the best way...
@@ -910,40 +954,12 @@ ConcreteInkscapeApplication<Gtk::Application>::on_open(const Gio::Application::t
             }
 
         } else {
-
             // Open file
             SPDocument *document = document_open (file);
             if (!document) continue;
 
-            // Add to Inkscape::Application...
-            INKSCAPE.add_document(document);
-            // ActionContext should be removed once verbs are gone but we use it for now.
-            Inkscape::ActionContext context = INKSCAPE.action_context_for_document(document);
-            _active_document  = document;
-            _active_selection = context.getSelection();
-            _active_view      = context.getView();
 
-            document->ensureUpToDate(); // Or queries don't work!
-
-            // process_file(file);
-            for (auto action: _command_line_actions) {
-		    Gio::Application::activate_action( action.first, action.second );
-            }
-
-            if (_use_shell) {
-                shell2();
-            } else {
-                // Save... can't use action yet.
-                _file_export.do_export(document, file->get_path());
-            }
-
-            _active_document = nullptr;
-            _active_selection = nullptr;
-            _active_view = nullptr;
-
-            // Close file
-            INKSCAPE.remove_document(document);
-
+            process (document, file->get_path());
             document_close (document);
         }
     }
@@ -1083,7 +1099,7 @@ ConcreteInkscapeApplication<T>::shell2()
         action_vector_t action_vector;
         parse_actions(input, action_vector);
         for (auto action: action_vector) {
-            T::activate_action( action.first, action.second );
+            Gio::Application::activate_action( action.first, action.second );
         }
     }
 }
@@ -1142,6 +1158,7 @@ ConcreteInkscapeApplication<T>::on_handle_local_options(const Glib::RefPtr<Glib:
     if (options->contains("with-gui"))       _with_gui = true;
     if (options->contains("batch-process"))  _batch_process = true;
     if (options->contains("shell"))          _use_shell = true;
+    if (options->contains("pipe"))           _use_pipe  = true;
 
     // Some options should preclude using gui!
     if (options->contains("query-id")         ||
@@ -1155,7 +1172,8 @@ ConcreteInkscapeApplication<T>::on_handle_local_options(const Glib::RefPtr<Glib:
         options->contains("export-overwrite") ||
         options->contains("export-id")        ||
         options->contains("export-plain-svg") ||
-        options->contains("export-text-to_path")
+        options->contains("export-text-to_path") ||
+        options->contains("pipe")
         ) {
         _with_gui = false;
     }
@@ -1344,6 +1362,31 @@ ConcreteInkscapeApplication<Gtk::Application>::on_quit()
 
     quit();
 }
+
+//   ======================== macOS =============================
+
+#ifdef GDK_WINDOWING_QUARTZ
+/**
+ * On macOS, handle dropping files on Inkscape.app icon and "Open With" file association.
+ */
+static gboolean osx_openfile_callback(GtkosxApplication *osxapp, gchar const *path,
+                                      ConcreteInkscapeApplication<Gtk::Application> *app)
+{
+    auto ptr = Gio::File::create_for_path(path);
+    g_return_val_if_fail(ptr, false);
+    app->create_window(ptr);
+    return true;
+}
+
+/**
+ * Handle macOS terminating the application
+ */
+static gboolean osx_quit_callback(GtkosxApplication *, ConcreteInkscapeApplication<Gtk::Application> *app)
+{
+    app->destroy_all();
+    return true;
+}
+#endif
 
 template class ConcreteInkscapeApplication<Gio::Application>;
 template class ConcreteInkscapeApplication<Gtk::Application>;

@@ -920,6 +920,7 @@ sp_desktop_widget_realize (GtkWidget *widget)
             window->get_style_context()->add_class("regular");
             window->get_style_context()->remove_class("symbolic");
         }
+        INKSCAPE.signal_change_theme.emit();
     }
 
 #ifdef GDK_WINDOWING_QUARTZ
@@ -930,6 +931,7 @@ sp_desktop_widget_realize (GtkWidget *widget)
         menushell->set_parent(*window);
         gtkosx_application_set_menu_bar(osxapp, menushell->gobj());
         gtkosx_application_set_use_quartz_accelerators(osxapp, false);
+        gtkosx_application_set_window_menu(osxapp, nullptr);
     }
 #endif
 }

@@ -80,6 +80,7 @@ class SelectorsDialog : public Widget::Panel {
             add(_colObj);
             add(_colProperties);
             add(_colVisible);
+            add(_colSelected);
         }
         Gtk::TreeModelColumn<Glib::ustring> _colSelector;       // Selector or matching object id.
         Gtk::TreeModelColumn<bool> _colExpand;                  // Open/Close store row.
@@ -87,6 +88,7 @@ class SelectorsDialog : public Widget::Panel {
         Gtk::TreeModelColumn<std::vector<SPObject *> > _colObj; // List of matching objects.
         Gtk::TreeModelColumn<Glib::ustring> _colProperties;     // List of properties.
         Gtk::TreeModelColumn<bool> _colVisible;                 // Make visible or not.
+        Gtk::TreeModelColumn<gint> _colSelected;                // Make selected.
     };
     ModelColumns _mColumns;
 
@@ -117,10 +119,10 @@ class SelectorsDialog : public Widget::Panel {
     Gtk::TreeView _treeView;
     // Widgets
     Gtk::Paned _paned;
+    Glib::RefPtr<Gtk::Adjustment> _vadj;
     Gtk::Switch _direction;
     Gtk::Box _button_box;
     Gtk::Box _selectors_box;
-    Gtk::ScrolledWindow _scrolled_window_style;
     Gtk::ScrolledWindow _scrolled_window_selectors;
 
     Gtk::Button _del;
@@ -151,6 +153,8 @@ class SelectorsDialog : public Widget::Panel {
     void _selectObjects(int, int);
     // Variables
     bool _updating;  // Prevent cyclic actions: read <-> write, select via dialog <-> via desktop
+    double _scroolpos;
+    bool _scroollock;
     Inkscape::XML::Node *_textNode; // Track so we know when to add a NodeObserver.
 
     // Signals and handlers - External
@@ -175,6 +179,7 @@ class SelectorsDialog : public Widget::Panel {
     bool _handleButtonEvent(GdkEventButton *event);
     void _buttonEventsSelectObjs(GdkEventButton *event);
     void _selectRow(); // Select row in tree when selection changed.
+    void _vscrool();
 
     // GUI
     void _styleButton(Gtk::Button& btn, char const* iconName, char const* tooltip);
