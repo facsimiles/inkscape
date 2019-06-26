@@ -159,19 +159,11 @@ void PenTool::setPolylineMode() {
     // change the nodes to make space for bspline mode
     this->polylines_only = (mode == 3 || mode == 4);
     this->polylines_paraxial = (mode == 4);
-    //we call the function which defines the Spiro modes and the BSpline
-    //todo: merge to one function only
-    this->_penContextSetMode(mode);
-}
-
-/*
-*.Set the mode of draw spiro, and bsplines
-*/
-void PenTool::_penContextSetMode(guint mode) {
-    // define the nodes
     this->spiro = (mode == 1);
     this->bspline = (mode == 2);
     this->_bsplineSpiroColor();
+    if (!this->green_bpaths.empty())
+        this->_redrawAll();
 }
 
 /**
@@ -1307,8 +1299,8 @@ void PenTool::_bsplineSpiroColor()
 {
     static Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     if(this->spiro){
-        this->red_color = 0xff00000;
-        this->green_color = 0x00ff000;
+        this->red_color = 0xff000000;
+        this->green_color = 0x00ff0000;
     }else if(this->bspline){
         this->highlight_color = SP_ITEM(this->desktop->currentLayer())->highlight_color();
         if((unsigned int)prefs->getInt("/tools/nodes/highlight_color", 0xff0000ff) == this->highlight_color){
@@ -1529,6 +1521,7 @@ void PenTool::_bsplineSpiroMotion(guint const state){
             if (this->sa && this->green_curve->is_unset()) {
                 this->sa_overwrited = tmp_curve->copy();
             }
+            this->green_curve = tmp_curve->copy();
         }
         if (cubic) {
             if (this->bspline) {

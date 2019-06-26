@@ -1,10 +1,11 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 /** @file
- * @brief A dialog for CSS selectors
+ * @brief A dialog for CSS styles
  */
 /* Authors:
  *   Kamalpreet Kaur Grewal
  *   Tavmjong Bah
+ *   Jabiertxof
  *
  * Copyright (C) Kamalpreet Kaur Grewal 2016 <grewalkamal005@gmail.com>
  * Copyright (C) Tavmjong Bah 2017 <tavmjong@free.fr>
@@ -35,8 +36,9 @@
 #include <gdk/gdkkeysyms.h>
 #include <glibmm/i18n.h>
 
-//#define DEBUG_STYLEDIALOG
-//#define G_LOG_DOMAIN "STYLEDIALOG"
+// G_MESSAGES_DEBUG=DEBUG_STYLEDIALOG  gdb ./inkscape
+// #define DEBUG_STYLEDIALOG
+// #define G_LOG_DOMAIN "STYLEDIALOG"
 
 using Inkscape::DocumentUndo;
 using Inkscape::Util::List;
@@ -130,17 +132,6 @@ class StyleDialog::NodeWatcher : public Inkscape::XML::NodeObserver {
             if (name == "id" || name == "class" || name == "style") {
                 _styledialog->_nodeChanged(node);
             }
-            SPObject *obj = SP_ACTIVE_DOCUMENT->getObjectById(node.attribute("id"));
-            if (obj) {
-                for (auto iter : obj->style->properties()) {
-                    if (iter->name == name) {
-                        obj->style->readFromObject(obj);
-                        obj->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
-                        _styledialog->_nodeChanged(node);
-                        break;
-                    }
-                }
-            }
         }
     }
 
@@ -150,6 +141,8 @@ class StyleDialog::NodeWatcher : public Inkscape::XML::NodeObserver {
 
 void StyleDialog::_nodeAdded(Inkscape::XML::Node &node)
 {
+
+    g_debug("StyleDialog::_nodeAdded");
 
     StyleDialog::NodeWatcher *w = new StyleDialog::NodeWatcher(this, &node);
     node.addObserver(*w);
@@ -161,6 +154,8 @@ void StyleDialog::_nodeAdded(Inkscape::XML::Node &node)
 void StyleDialog::_nodeRemoved(Inkscape::XML::Node &repr)
 {
 
+    g_debug("StyleDialog::_nodeRemoved");
+
     for (auto it = _nodeWatchers.begin(); it != _nodeWatchers.end(); ++it) {
         if ((*it)->_repr == &repr) {
             (*it)->_repr->removeObserver(**it);
@@ -171,7 +166,11 @@ void StyleDialog::_nodeRemoved(Inkscape::XML::Node &repr)
     _readStyleElement();
 }
 
-void StyleDialog::_nodeChanged(Inkscape::XML::Node &object) { _readStyleElement(); }
+void StyleDialog::_nodeChanged(Inkscape::XML::Node &object)
+{
+    g_debug("StyleDialog::_nodeChanged");
+    _readStyleElement();
+}
 
 /* void
 StyleDialog::_stylesheetChanged( Inkscape::XML::Node &repr ) {
@@ -189,6 +188,7 @@ StyleDialog::StyleDialog()
     : UI::Widget::Panel("/dialogs/style", SP_VERB_DIALOG_STYLE)
     , _updating(false)
     , _textNode(nullptr)
+    , _scroolpos(0)
     , _desktopTracker()
 {
     g_debug("StyleDialog::StyleDialog");
@@ -202,9 +202,8 @@ StyleDialog::StyleDialog()
     Gtk::Label *infotoggler = Gtk::manage(new Gtk::Label(_("Edit Full Stylesheet")));
     infotoggler->get_style_context()->add_class("inksmall");
     _all_css = Gtk::manage(new Gtk::Switch());
-    _scroolpos = 0;
-    vadj = _scrolledWindow.get_vadjustment();
-    vadj->signal_changed().connect(sigc::mem_fun(*this, &StyleDialog::_vscrool));
+    _vadj = _scrolledWindow.get_vadjustment();
+    _vadj->signal_value_changed().connect(sigc::mem_fun(*this, &StyleDialog::_vscrool));
     //_all_css->property_active().signal_changed().connect(sigc::mem_fun(*this, &StyleDialog::_reload));
     // alltoggler->pack_start(*_all_css, false, false, 0);
     // alltoggler->pack_start(*infotoggler, false, false, 0);
@@ -233,8 +232,11 @@ StyleDialog::StyleDialog()
 
 void StyleDialog::_vscrool()
 {
-    if (!_updating) {
-        _scroolpos = vadj->get_value();
+    if (!_scroollock) {
+        _scroolpos = _vadj->get_value();
+    } else {
+        _vadj->set_value(_scroolpos);
+        _scroollock = false;
     }
 }
 
@@ -258,6 +260,7 @@ void StyleDialog::_reload() { _readStyleElement(); }
  */
 Inkscape::XML::Node *StyleDialog::_getStyleTextNode()
 {
+    g_debug("StyleDialog::_getStyleTextNoded");
 
     Inkscape::XML::Node *styleNode = nullptr;
     Inkscape::XML::Node *textNode = nullptr;
@@ -291,11 +294,11 @@ Inkscape::XML::Node *StyleDialog::_getStyleTextNode()
         styleNode = SP_ACTIVE_DOCUMENT->getReprDoc()->createElement("svg:style");
         textNode = SP_ACTIVE_DOCUMENT->getReprDoc()->createTextNode("");
 
-        styleNode->appendChild(textNode);
-        Inkscape::GC::release(textNode);
-
         root->addChild(styleNode, nullptr);
         Inkscape::GC::release(styleNode);
+
+        styleNode->appendChild(textNode);
+        Inkscape::GC::release(textNode);
     }
 
     if (_textNode != textNode) {
@@ -307,8 +310,11 @@ Inkscape::XML::Node *StyleDialog::_getStyleTextNode()
     return textNode;
 }
 
+
 Glib::RefPtr<Gtk::TreeModel> StyleDialog::_selectTree(Glib::ustring selector)
 {
+    g_debug("StyleDialog::_selectTree");
+
     Gtk::Label *selectorlabel;
     Glib::RefPtr<Gtk::TreeModel> model;
     for (auto fullstyle : _styleBox.get_children()) {
@@ -344,6 +350,7 @@ Glib::RefPtr<Gtk::TreeModel> StyleDialog::_selectTree(Glib::ustring selector)
 
 void StyleDialog::setCurrentSelector(Glib::ustring current_selector)
 {
+    g_debug("StyleDialog::setCurrentSelector");
     _current_selector = current_selector;
     _readStyleElement();
 }
@@ -357,6 +364,7 @@ void StyleDialog::_readStyleElement()
     if (_updating)
         return; // Don't read if we wrote style element.
     _updating = true;
+    _scroollock = true;
     Inkscape::XML::Node *textNode = _getStyleTextNode();
     if (textNode == nullptr) {
         std::cerr << "StyleDialog::_readStyleElement: No text node!" << std::endl;
@@ -786,6 +794,8 @@ void StyleDialog::_readStyleElement()
 
 bool StyleDialog::_on_foreach_iter(const Gtk::TreeModel::iterator &iter)
 {
+    g_debug("StyleDialog::_on_foreach_iter");
+
     Gtk::TreeModel::Row row = *(iter);
     Glib::ustring owner = row[_mColumns._colOwner];
     if (owner.empty()) {
@@ -807,6 +817,8 @@ bool StyleDialog::_on_foreach_iter(const Gtk::TreeModel::iterator &iter)
  */
 void StyleDialog::_onPropDelete(Glib::ustring path, Glib::RefPtr<Gtk::TreeStore> store)
 {
+    g_debug("StyleDialog::_onPropDelete");
+
     Gtk::TreeModel::Row row = *store->get_iter(path);
     if (row) {
         Glib::ustring selector = row[_mColumns._colSelector];
@@ -818,6 +830,8 @@ void StyleDialog::_onPropDelete(Glib::ustring path, Glib::RefPtr<Gtk::TreeStore>
 
 void StyleDialog::_addOwnerStyle(Glib::ustring name, Glib::ustring selector)
 {
+    g_debug("StyleDialog::_addOwnerStyle");
+
     if (_owner_style.find(name) == _owner_style.end()) {
         _owner_style[name] = selector;
     }
@@ -832,6 +846,8 @@ void StyleDialog::_addOwnerStyle(Glib::ustring name, Glib::ustring selector)
  */
 std::map<Glib::ustring, Glib::ustring> StyleDialog::parseStyle(Glib::ustring style_string)
 {
+    g_debug("StyleDialog::parseStyle");
+
     std::map<Glib::ustring, Glib::ustring> ret;
 
     REMOVE_SPACES(style_string); // We'd use const, but we need to trip spaces
@@ -857,9 +873,11 @@ std::map<Glib::ustring, Glib::ustring> StyleDialog::parseStyle(Glib::ustring sty
  */
 void StyleDialog::_writeStyleElement(Glib::RefPtr<Gtk::TreeStore> store, Glib::ustring selector)
 {
+    g_debug("StyleDialog::_writeStyleElemen");
     if (_updating) {
         return;
     }
+    _scroollock = true;
     Inkscape::Selection *selection = getDesktop()->getSelection();
     SPObject *obj = nullptr;
     if (selection->objects().size() == 1) {
@@ -915,7 +933,6 @@ void StyleDialog::_writeStyleElement(Glib::RefPtr<Gtk::TreeStore> store, Glib::u
         // We could test if styleContent is empty and then delete the style node here but there is no
         // harm in keeping it around ...
         SPDocument *document = SP_ACTIVE_DOCUMENT;
-        document->setStyleSheet(nullptr);
         std::string pos = std::to_string(selectorpos);
         std::string selectormatch = "(";
         for (selectorpos; selectorpos > 1; selectorpos--) {
@@ -928,6 +945,7 @@ void StyleDialog::_writeStyleElement(Glib::RefPtr<Gtk::TreeStore> store, Glib::u
         std::string result;
         std::regex_replace(std::back_inserter(result), content.begin(), content.end(), e, "$1" + styleContent + "$3");
         textNode->setContent(result.c_str());
+        INKSCAPE.readStyleSheets(true);
         for (auto iter : document->getObjectsBySelector(selector)) {
             iter->style->readFromObject(iter);
             iter->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
@@ -943,8 +961,9 @@ void StyleDialog::_writeStyleElement(Glib::RefPtr<Gtk::TreeStore> store, Glib::u
 bool StyleDialog::_addRow(GdkEventButton *evt, Glib::RefPtr<Gtk::TreeStore> store, Gtk::TreeView *css_tree,
                           Glib::ustring selector, gint pos)
 {
+    g_debug("StyleDialog::_addRow");
+
     if (evt->type == GDK_BUTTON_RELEASE && evt->button == 1) {
-        _vscrool();
         Gtk::TreeIter iter = store->append();
         Gtk::TreeModel::Path path = (Gtk::TreeModel::Path)iter;
         Gtk::TreeModel::Row row = *(iter);
@@ -967,6 +986,8 @@ bool StyleDialog::_addRow(GdkEventButton *evt, Glib::RefPtr<Gtk::TreeStore> stor
 
 void StyleDialog::_setAutocompletion(Gtk::Entry *entry, SPStyleEnum const cssenum[])
 {
+    g_debug("StyleDialog::_setAutocompletion");
+
     Glib::RefPtr<Gtk::ListStore> completionModel = Gtk::ListStore::create(_mCSSData);
     Glib::RefPtr<Gtk::EntryCompletion> entry_completion = Gtk::EntryCompletion::create();
     entry_completion->set_model(completionModel);
@@ -986,6 +1007,8 @@ void StyleDialog::_setAutocompletion(Gtk::Entry *entry, SPStyleEnum const cssenu
 /*Harcode values non in enum*/
 void StyleDialog::_setAutocompletion(Gtk::Entry *entry, Glib::ustring name)
 {
+    g_debug("StyleDialog::_setAutocompletion");
+
     Glib::RefPtr<Gtk::ListStore> completionModel = Gtk::ListStore::create(_mCSSData);
     Glib::RefPtr<Gtk::EntryCompletion> entry_completion = Gtk::EntryCompletion::create();
     entry_completion->set_model(completionModel);
@@ -1013,7 +1036,9 @@ void StyleDialog::_setAutocompletion(Gtk::Entry *entry, Glib::ustring name)
 void
 StyleDialog::_startValueEdit(Gtk::CellEditable* cell, const Glib::ustring& path, Glib::RefPtr<Gtk::TreeStore> store)
 {
-    vadj->set_value(_scroolpos);
+    g_debug("StyleDialog::_startValueEdit");
+
+    _scroollock = true;
     Gtk::TreeModel::Row row = *store->get_iter(path);
     if (row) {
         Gtk::Entry *entry = dynamic_cast<Gtk::Entry *>(cell);
@@ -1072,7 +1097,9 @@ StyleDialog::_startValueEdit(Gtk::CellEditable* cell, const Glib::ustring& path,
 
 void StyleDialog::_startNameEdit(Gtk::CellEditable *cell, const Glib::ustring &path)
 {
-    vadj->set_value(_scroolpos);
+    g_debug("StyleDialog::_startNameEdit");
+
+    _scroollock = true;
     Glib::RefPtr<Gtk::ListStore> completionModel = Gtk::ListStore::create(_mCSSData);
     Glib::RefPtr<Gtk::EntryCompletion> entry_completion = Gtk::EntryCompletion::create();
     entry_completion->set_model(completionModel);
@@ -1097,11 +1124,13 @@ void StyleDialog::_startNameEdit(Gtk::CellEditable *cell, const Glib::ustring &p
 void StyleDialog::_nameEdited(const Glib::ustring &path, const Glib::ustring &name, Glib::RefPtr<Gtk::TreeStore> store,
                               Gtk::TreeView *css_tree)
 {
+    g_debug("StyleDialog::_nameEdited");
+
+    _scroollock = true;
     Gtk::TreeModel::Row row = *store->get_iter(path);
     Gtk::TreeModel::Path pathel = (Gtk::TreeModel::Path)*store->get_iter(path);
 
     if (row) {
-        _vscrool();
         Glib::ustring finalname = name;
         auto i = std::min(finalname.find(";"), finalname.find(":"));
         if (i != std::string::npos) {
@@ -1130,7 +1159,6 @@ void StyleDialog::_nameEdited(const Glib::ustring &path, const Glib::ustring &na
             css_tree->set_cursor(pathel, *(css_tree->get_column(col)), true);
             grab_focus();
         }
-        vadj->set_value(_scroolpos);
     }
 }
 
@@ -1143,9 +1171,12 @@ void StyleDialog::_nameEdited(const Glib::ustring &path, const Glib::ustring &na
 void StyleDialog::_valueEdited(const Glib::ustring &path, const Glib::ustring &value,
                                Glib::RefPtr<Gtk::TreeStore> store)
 {
+    g_debug("StyleDialog::_valueEdited");
+
+    _scroollock = true;
+
     Gtk::TreeModel::Row row = *store->get_iter(path);
     if (row) {
-        _vscrool();
         Glib::ustring finalvalue = value;
         auto i = std::min(finalvalue.find(";"), finalvalue.find(":"));
         if (i != std::string::npos) {
@@ -1158,24 +1189,26 @@ void StyleDialog::_valueEdited(const Glib::ustring &path, const Glib::ustring &v
             store->erase(row);
         }
         _writeStyleElement(store, selector);
-        vadj->set_value(_scroolpos);
     }
 }
 
 void StyleDialog::_activeToggled(const Glib::ustring &path, Glib::RefPtr<Gtk::TreeStore> store)
 {
+    g_debug("StyleDialog::_activeToggled");
+
+    _scroollock = true;
     Gtk::TreeModel::Row row = *store->get_iter(path);
     if (row) {
         row[_mColumns._colActive] = !row[_mColumns._colActive];
         Glib::ustring selector = row[_mColumns._colSelector];
-        _vscrool();
         _writeStyleElement(store, selector);
-        vadj->set_value(_scroolpos);
     }
 }
 
 bool StyleDialog::_onNameKeyReleased(GdkEventKey *event, Gtk::CellEditable *cell)
 {
+    g_debug("StyleDialog::_onNameKeyReleased");
+
     switch (event->keyval) {
         case GDK_KEY_Tab:
         case GDK_KEY_KP_Tab:
@@ -1200,6 +1233,8 @@ bool StyleDialog::_onNameKeyReleased(GdkEventKey *event, Gtk::CellEditable *cell
 
 bool StyleDialog::_onValueKeyReleased(GdkEventKey *event, Gtk::CellEditable *cell)
 {
+    g_debug("StyleDialog::_onValueKeyReleased");
+
     switch (event->keyval) {
         case GDK_KEY_Tab:
         case GDK_KEY_KP_Tab:
@@ -1241,6 +1276,8 @@ void StyleDialog::_addWatcherRecursive(Inkscape::XML::Node *node)
  */
 void StyleDialog::_updateWatchers()
 {
+    g_debug("StyleDialog::_updateWatchers");
+
     _updating = true;
 
     // Remove old document watchers
@@ -1268,6 +1305,7 @@ void StyleDialog::_updateWatchers()
  */
 std::vector<SPObject *> StyleDialog::_getObjVec(Glib::ustring selector)
 {
+    g_debug("StyleDialog::_getObjVec");
 
     std::vector<SPObject *> objVec = SP_ACTIVE_DOCUMENT->getObjectsBySelector(selector);
 
@@ -1315,7 +1353,6 @@ void StyleDialog::_handleDesktopChanged(SPDesktop *desktop)
 
     _selection_changed_connection.disconnect();
     _document_replaced_connection.disconnect();
-
     setDesktop(desktop);
 
     _selection_changed_connection =
@@ -1334,6 +1371,8 @@ void StyleDialog::_handleDesktopChanged(SPDesktop *desktop)
 void StyleDialog::_handleSelectionChanged()
 {
     g_debug("StyleDialog::_handleSelectionChanged()");
+    _scroolpos = 0;
+    _vadj->set_value(0);
     _readStyleElement();
 }
 
