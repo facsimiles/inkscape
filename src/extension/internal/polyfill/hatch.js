@@ -10,6 +10,8 @@
   // Name spaces -----------------------------------
   const svgNS = 'http://www.w3.org/2000/svg';
   const xlinkNS = 'http://www.w3.org/1999/xlink';
+  const unitObjectBoundingBox = 'objectBoundingBox';
+  const unitUserSpace = 'userSpaceOnUse';
 
   // Set multiple attributes to an element
   const setAttributes = (el, attrs) => {
@@ -261,13 +263,24 @@
           return;
         }
 
+        const bbox = shape.getBBox();
+        const hatchDiag = Math.ceil(Math.sqrt(
+          bbox.width * bbox.width + bbox.height * bbox.height
+        ));
+
         // Hatch variables
-        const x = Number(hatch.getAttribute('x')) || 0;
-        const y = Number(hatch.getAttribute('y')) || 0;
-        const pitch = Number(hatch.getAttribute('pitch')) || 0;
+        const units = hatch.getAttribute('hatchUnits') || unitObjectBoundingBox;
+        const contentUnits = hatch.getAttribute('hatchContentUnits') || unitUserSpace;
+        const x = units === unitObjectBoundingBox
+          ? (Number(hatch.getAttribute('x')) * bbox.width) || 0
+          : Number(hatch.getAttribute('x')) || 0;
+        const y = units === unitObjectBoundingBox
+          ? (Number(hatch.getAttribute('y')) * bbox.width) || 0
+          : Number(hatch.getAttribute('y')) || 0;
+        const pitch = units === unitObjectBoundingBox
+          ? (Number(hatch.getAttribute('pitch')) * bbox.width) || 0
+          : Number(hatch.getAttribute('pitch')) || 0;
         const rotate = Number(hatch.getAttribute('rotate')) || 0;
-        const units = hatch.getAttribute('hatchUnits') || 'objectBoundingBox';
-        const contentUnits = hatch.getAttribute('hatchContentUnits') || 'userSpaceOnUse';
         const transform = hatch.getAttribute('transform') ||
           hatch.getAttribute('hatchTransform') || '';
         const hatchpaths = orderHatchPaths(hatch.querySelectorAll('hatchpath,hatchPath'));
@@ -279,17 +292,13 @@
           return;
         }
 
-        const bbox = shape.getBBox();
-        const hatchDiag = Math.ceil(Math.sqrt(
-          bbox.width * bbox.width + bbox.height * bbox.height
-        ));
-        const xPositions = generatePositions(bbox.width, hatchDiag, x, pitch);
-
         // Pattern variables
         const pattern = document.createElementNS(svgNS, 'pattern');
         const patternId = `${fillURL[1]}_pattern`;
         let patternWidth = hatchDiag - hatchDiag % pitch;
         let patternHeight = 0;
+
+        const xPositions = generatePositions(patternWidth, hatchDiag, x, pitch);
 
         hatchpaths.forEach(hatchpath => {
           let offset = Number(hatchpath.getAttribute('offset')) || 0;
@@ -329,7 +338,7 @@
             patternHeight = hatchDiag - hatchDiag % yOffset;
 
             const currentYPositions = generatePositions(
-              bbox.height, hatchDiag, y, yOffset
+              patternHeight, hatchDiag, y, yOffset
             );
 
             currentXPositions.forEach(xPos => {
@@ -364,7 +373,7 @@
 
         setAttributes(pattern, {
           'id': patternId,
-          'patternUnits': units,
+          'patternUnits': unitUserSpace,
           'patternContentUnits': contentUnits,
           'width': patternWidth,
           'height': patternHeight,

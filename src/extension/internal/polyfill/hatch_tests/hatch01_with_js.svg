@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   inkscape:version="1.0alpha2 (5c5a8378bf, 2019-06-27, custom)"
+   sodipodi:docname="hatch01_with_js.svg"
+   id="svg14"
+   version="1.1"
+   height="200"
+   width="400">
+  <metadata
+     id="metadata18">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     inkscape:current-layer="svg14"
+     inkscape:window-maximized="0"
+     inkscape:window-y="23"
+     inkscape:window-x="26"
+     inkscape:cy="100"
+     inkscape:cx="200"
+     inkscape:zoom="1.205"
+     showgrid="false"
+     id="namedview16"
+     inkscape:window-height="480"
+     inkscape:window-width="712"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0"
+     guidetolerance="10"
+     gridtolerance="10"
+     objecttolerance="10"
+     borderopacity="1"
+     inkscape:document-rotation="0"
+     bordercolor="#666666"
+     pagecolor="#ffffff" />
+  <defs
+     id="defs8">
+    <hatch
+       rotate="135"
+       pitch="5"
+       hatchUnits="userSpaceOnUse"
+       id="hatch1">
+      <hatchpath
+         id="hatchpath2"
+         stroke-width="2"
+         stroke="#a080ff" />
+    </hatch>
+    <hatch
+       rotate="135"
+       pitch="0.05"
+       hatchUnits="objectBoundingBox"
+       id="hatch2">
+      <hatchpath
+         id="hatchpath5"
+         stroke-width="2"
+         stroke="#a080ff" />
+    </hatch>
+  </defs>
+  <rect
+     id="rect10"
+     height="100"
+     width="100"
+     y="50"
+     x="50"
+     stroke-width="2"
+     stroke="black"
+     fill="url(#hatch1)" />
+  <rect
+     id="rect12"
+     height="100"
+     width="100"
+     y="50"
+     x="250"
+     stroke-width="2"
+     stroke="black"
+     fill="url(#hatch2)" />
+  <script type="text/javascript" xlink:href="../hatch.js"></script>
+</svg>
