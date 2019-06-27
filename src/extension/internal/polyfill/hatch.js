@@ -271,19 +271,23 @@
         // Hatch variables
         const units = hatch.getAttribute('hatchUnits') || unitObjectBoundingBox;
         const contentUnits = hatch.getAttribute('hatchContentUnits') || unitUserSpace;
+        const rotate = Number(hatch.getAttribute('rotate')) || 0;
+        const transform = hatch.getAttribute('transform') ||
+        hatch.getAttribute('hatchTransform') || '';
+        const hatchpaths = orderHatchPaths(hatch.querySelectorAll('hatchpath,hatchPath'));
         const x = units === unitObjectBoundingBox
           ? (Number(hatch.getAttribute('x')) * bbox.width) || 0
           : Number(hatch.getAttribute('x')) || 0;
         const y = units === unitObjectBoundingBox
           ? (Number(hatch.getAttribute('y')) * bbox.width) || 0
           : Number(hatch.getAttribute('y')) || 0;
-        const pitch = units === unitObjectBoundingBox
+        let pitch = units === unitObjectBoundingBox
           ? (Number(hatch.getAttribute('pitch')) * bbox.width) || 0
           : Number(hatch.getAttribute('pitch')) || 0;
-        const rotate = Number(hatch.getAttribute('rotate')) || 0;
-        const transform = hatch.getAttribute('transform') ||
-          hatch.getAttribute('hatchTransform') || '';
-        const hatchpaths = orderHatchPaths(hatch.querySelectorAll('hatchpath,hatchPath'));
+
+        if (contentUnits === unitObjectBoundingBox && bbox.height) {
+          pitch /= bbox.height;
+        }
 
         // A negative value is an error.
         // A value of zero disables rendering of the element
@@ -295,7 +299,7 @@
         // Pattern variables
         const pattern = document.createElementNS(svgNS, 'pattern');
         const patternId = `${fillURL[1]}_pattern`;
-        let patternWidth = hatchDiag - hatchDiag % pitch;
+        let patternWidth = bbox.width - bbox.width % pitch;
         let patternHeight = 0;
 
         const xPositions = generatePositions(patternWidth, hatchDiag, x, pitch);
@@ -325,17 +329,22 @@
             const data = parsePath(
               hatchData.match(/([+-]?(\d+(\.\d+)?))|[MmZzLlHhVvCcSsQqTtAaBb]/g)
             );
+            const len = data.length;
             const startsWithM = data[0] === 'M';
             const relative = data[0].toLowerCase() === data[0];
             const point = new Point(0, 0);
-            const yOffset = getYDistance(hatchpath);
+            let yOffset = getYDistance(hatchpath);
+
+            if (data[len - 1].y !== undefined && yOffset < data[len - 1].y) {
+              yOffset = data[len - 1].y;
+            }
 
             // The offset must be positive
             if (yOffset <= 0) {
               console.error('y offset is non-positive');
               return;
             }
-            patternHeight = hatchDiag - hatchDiag % yOffset;
+            patternHeight = bbox.height - bbox.height % yOffset;
 
             const currentYPositions = generatePositions(
               patternHeight, hatchDiag, y, yOffset

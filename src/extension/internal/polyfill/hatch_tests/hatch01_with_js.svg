@@ -10,12 +10,12 @@
    xmlns:xlink="http://www.w3.org/1999/xlink"
    inkscape:version="1.0alpha2 (5c5a8378bf, 2019-06-27, custom)"
    sodipodi:docname="hatch01_with_js.svg"
-   id="svg14"
+   id="svg24"
    version="1.1"
-   height="200"
+   height="400"
    width="400">
   <metadata
-     id="metadata18">
+     id="metadata28">
     <rdf:RDF>
       <cc:Work
          rdf:about="">
@@ -27,17 +27,17 @@
     </rdf:RDF>
   </metadata>
   <sodipodi:namedview
-     inkscape:current-layer="svg14"
+     inkscape:current-layer="svg24"
      inkscape:window-maximized="0"
      inkscape:window-y="23"
      inkscape:window-x="26"
-     inkscape:cy="100"
+     inkscape:cy="200"
      inkscape:cx="200"
-     inkscape:zoom="1.205"
+     inkscape:zoom="0.6025"
      showgrid="false"
-     id="namedview16"
+     id="namedview26"
      inkscape:window-height="480"
-     inkscape:window-width="712"
+     inkscape:window-width="686"
      inkscape:pageshadow="2"
      inkscape:pageopacity="0"
      guidetolerance="10"
@@ -48,10 +48,11 @@
      bordercolor="#666666"
      pagecolor="#ffffff" />
   <defs
-     id="defs8">
+     id="defs14">
     <hatch
        rotate="135"
        pitch="5"
+       hatchContentUnits="userSpaceOnUse"
        hatchUnits="userSpaceOnUse"
        id="hatch1">
       <hatchpath
@@ -62,6 +63,7 @@
     <hatch
        rotate="135"
        pitch="0.05"
+       hatchContentUnits="userSpaceOnUse"
        hatchUnits="objectBoundingBox"
        id="hatch2">
       <hatchpath
@@ -69,9 +71,31 @@
          stroke-width="2"
          stroke="#a080ff" />
     </hatch>
+    <hatch
+       rotate="135"
+       pitch="5"
+       hatchContentUnits="objectBoundingBox"
+       hatchUnits="userSpaceOnUse"
+       id="hatch3">
+      <hatchpath
+         id="hatchpath8"
+         stroke-width="0.02"
+         stroke="#a080ff" />
+    </hatch>
+    <hatch
+       rotate="135"
+       pitch="0.05"
+       hatchContentUnits="objectBoundingBox"
+       hatchUnits="objectBoundingBox"
+       id="hatch4">
+      <hatchpath
+         id="hatchpath11"
+         stroke-width="0.02"
+         stroke="#a080ff" />
+    </hatch>
   </defs>
   <rect
-     id="rect10"
+     id="rect16"
      height="100"
      width="100"
      y="50"
@@ -80,7 +104,7 @@
      stroke="black"
      fill="url(#hatch1)" />
   <rect
-     id="rect12"
+     id="rect18"
      height="100"
      width="100"
      y="50"
@@ -88,5 +112,23 @@
      stroke-width="2"
      stroke="black"
      fill="url(#hatch2)" />
+  <rect
+     id="rect20"
+     height="100"
+     width="100"
+     y="250"
+     x="50"
+     stroke-width="2"
+     stroke="black"
+     fill="url(#hatch3)" />
+  <rect
+     id="rect22"
+     height="100"
+     width="100"
+     y="250"
+     x="250"
+     stroke-width="2"
+     stroke="black"
+     fill="url(#hatch4)" />
   <script type="text/javascript" xlink:href="../hatch.js"></script>
 </svg>
