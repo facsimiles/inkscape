@@ -1,3 +1,11 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
+ * Use patterns to render a hatch paint server via this polyfill
+ *//*
+ * Copyright (C) 2019 Valentin Ionita
+ * Distributed under GNU General Public License version 2 or later. See <http://fsf.org/>.
+ */
+
 (function () {
   // Name spaces -----------------------------------
   const svgNS = 'http://www.w3.org/2000/svg';
