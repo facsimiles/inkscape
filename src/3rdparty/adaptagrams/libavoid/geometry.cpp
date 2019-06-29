@@ -154,7 +154,7 @@ bool segmentIntersect(const Point& a, const Point& b, const Point& c,
     // and c and d are on opposite sides of the line ab.
     //
     // Note: this is safe even though the textbook warns about it
-    // since, unlike them, our vecDir is equivilent to 'AreaSign'
+    // since, unlike them, our vecDir is equivalent to 'AreaSign'
     // rather than 'Area2'.
     return (((ab_c * ab_d) < 0) && ((cd_a * cd_b) < 0));
 }

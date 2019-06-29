@@ -70,7 +70,7 @@ class AVOID_EXPORT Point
         bool operator==(const Point& rhs) const;
         //! @brief  Comparison operator. Returns true if at same position,
         //!         or at effectively the same position for a given value of
-        //!         epsilson.
+        //!         epsilon.
         //!
         //! @param[in]  rhs      The point to compare with this one.
         //! @param[in]  epsilon  Value of epsilon to use during comparison.

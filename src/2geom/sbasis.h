@@ -265,7 +265,7 @@ OptInterval bounds_local(SBasis const &a, const OptInterval &t, int order = 0);
  \param a sbasis function
  \relates SBasis
 
-useful for reversing a parameteric curve.
+useful for reversing a parametric curve.
 */
 inline SBasis reverse(SBasis const &a) {
     SBasis result(a.size(), Linear());

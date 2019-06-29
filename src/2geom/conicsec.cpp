@@ -1270,7 +1270,7 @@ bool xAx::decompose (Line& l1, Line& l2) const
 
             /*
              *  This case should be impossible because any diagonal element
-             *  of D is a square, but due to non exact aritmethic computation
+             *  of D is a square, but due to non exact arithmetic computation
              *  it can actually happen; however the algorithm seems to work
              *  correctly even if some diagonal term is negative, the only
              *  difference is that we should compute the absolute value of

@@ -518,7 +518,7 @@ inline int Heuristics::curves(const PixelGraph &graph,
         PixelGraph::const_iterator prev = i ? b : a;
         int local_count = 0;
 
-        // Used to avoid inifinite loops in circular-like edges
+        // Used to avoid infinite loops in circular-like edges
         const PixelGraph::const_iterator initial = it;
 
         while ( it->adjsize() == 2 ) {

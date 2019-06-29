@@ -1,6 +1,6 @@
 /**
  * \file
- * \brief Calculation of binomial cefficients
+ * \brief Calculation of binomial coefficients
  *//*
  * Copyright 2006 Nathan Hurst <njh@mail.csse.monash.edu.au>
  *

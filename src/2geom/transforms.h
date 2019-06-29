@@ -90,7 +90,7 @@ public:
 /** @brief Integer exponentiation for transforms.
  * Negative exponents will yield the corresponding power of the inverse. This function
  * can also be applied to matrices.
- * @param t Affine or transform to exponantiate
+ * @param t Affine or transform to exponentiate
  * @param n Exponent
  * @return \f$A^n\f$ if @a n is positive, \f$(A^{-1})^n\f$ if negative, identity if zero.
  * @ingroup Transforms */
