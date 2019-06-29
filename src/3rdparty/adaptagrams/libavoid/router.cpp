@@ -1104,7 +1104,7 @@ class CrossingConnectorsInfo
         // This method builds and returns a list of non-interacting sets of
         // connectors (with crossing counts) that need to be removed so there
         // are no crossings.  These are the connectors we reroute.  Where 
-        // these connectors attach to exclusive connection pins, we return
+        // these connectors attach to exlcusive connection pins, we return
         // and thus reroute all connectors attached to the exclusive pins.  We 
         // do this so we are no so committed to possible bad pin assignemnts.
         ConnCostRefSetList crossingSetsListToRemoveCrossingsFromGroups(void)

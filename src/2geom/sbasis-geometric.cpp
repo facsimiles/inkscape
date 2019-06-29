@@ -148,7 +148,7 @@ Geom::cutAtRoots(Piecewise<D2<SBasis> > const &M, double ZERO){
 }
 
 /** Return a function which gives the angle of vect at each point.
- \param vect a piecewise parametric curve.
+ \param vect a piecewise parameteric curve.
  \param tol the maximum error allowed.
  \param order the maximum degree to use for approximation
  \relates Piecewise

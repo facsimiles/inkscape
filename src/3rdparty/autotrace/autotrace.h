@@ -195,8 +195,8 @@ N_("centerline: trace a character's centerline, rather than its outline. ")
     gboolean centerline;
 
 #define at_doc__preserve_width							\
-N_("preserve-width: whether to preserve linewidth with centerline fitting; "	\
-"don't preserve by default.")
+N_("preserve-width: whether to preserve linewith with centerline fitting; "	\
+"default doesn't preserve.")
     gboolean preserve_width;
 
 #define  at_doc__width_weight_factor				\

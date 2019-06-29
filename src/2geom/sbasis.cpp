@@ -393,7 +393,7 @@ SBasis sqrt(SBasis const &a, int k) {
     return c;
 }
 
-/** Compute the reciprocal of a
+/** Compute the recpirocal of a
  \param a sbasis functions
  \returns sbasis 1/a
 

@@ -51,7 +51,7 @@ namespace Geom { namespace NL {
 /*
  * A model is an abstraction for an expression dependent from a parameter where
  * the coefficients of this expression are the unknowns of the fitting problem.
- * For a certain number of parameter values we know the related values
+ * For a ceratain number of parameter values we know the related values
  * the expression evaluates to: from each parameter value we get a row of
  * the matrix of the fitting problem, from each expression value we get
  * the related constant term.

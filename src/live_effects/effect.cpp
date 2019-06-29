@@ -626,7 +626,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , "powermask" //key
         , "powermask" //icon
         , "Power mask" //untranslated name
-        , N_("Power mask allows inversing the mask, make negative..") //description
+        , N_("Power mask allows inversing the mask, make negative...") //description
         , true  //on_path
         , true  //on_shape
         , true  //on_group
