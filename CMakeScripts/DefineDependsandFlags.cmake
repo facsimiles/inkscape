@@ -11,6 +11,9 @@ list(APPEND INKSCAPE_INCS ${PROJECT_SOURCE_DIR}
 )
 
 # AddressSanitizer
+# Clang's AddressSanitizer can detect more memory errors and is more powerful
+# than compiling with _FORTIFY_SOURCE but has a performance impact (approx. 2x
+# slower), so it's not suitable for release builds.
 if(WITH_ASAN)
     if(NOT (CMAKE_CXX_COMPILER_ID MATCHES "Clang"))
         message(FATAL_ERROR "Compiler must be Clang for WITH_ASAN=ON")
