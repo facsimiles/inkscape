@@ -30,12 +30,12 @@ export MAKEFLAGS="-j $CORES"
 
 ### target OS version ##########################################################
 
-# There are a lot of ways to appraoch this. I recommend:
+# There are a lot of ways to appraoch this. Recommendation:
 #   - OS X El Capitan (10.11)
 #   - Xcode 8.2.1 (latest Xcode to support 10.11) for its clang 8.x
 #   - MacOSX10.11.sdk from Xcode 7.3.1
 
-export MACOSX_DEPLOYMENT_TARGET=10.11   # minimum version Mavericks
+export MACOSX_DEPLOYMENT_TARGET=10.11   # minimum version El Capitan
 
 FLAG_MMACOSXVERSIONMIN="-mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET"
 
@@ -152,6 +152,7 @@ APP_PLIST=$APP_CON_DIR/Info.plist
 URL_BOOST=https://dl.bintray.com/boostorg/release/1.69.0/source/boost_1_69_0.tar.bz2
 URL_CPPUNIT=https://dev-www.libreoffice.org/src/cppunit-1.14.0.tar.gz
 URL_CURL_CACERT=https://curl.haxx.se/ca/cacert.pem
+URL_CREATEDMG=https://github.com/andreyvit/create-dmg/archive/v1.0.0.5.tar.gz
 URL_DOUBLE_CONVERSION=https://github.com/google/double-conversion/archive/v3.1.4.tar.gz
 URL_FREETYPE=https://download.savannah.gnu.org/releases/freetype/freetype-2.10.0.tar.bz2
 URL_GC=https://github.com/ivmai/bdwgc/releases/download/v8.0.4/gc-8.0.4.tar.gz
@@ -178,7 +179,7 @@ URL_OPENSSL=https://www.openssl.org/source/old/1.1.0/openssl-1.1.0g.tar.gz
 URL_PNG2ICNS=https://github.com/bitboss-ca/png2icns/archive/v0.1.tar.gz
 URL_POPPLER=https://gitlab.freedesktop.org/poppler/poppler/-/archive/poppler-0.74.0/poppler-poppler-0.74.0.tar.gz
 URL_POTRACE=http://potrace.sourceforge.net/download/1.15/potrace-1.15.tar.gz
-URL_PYTHON3=https://github.com/dehesselle/py3framework/releases/download/py368.4/py368_framework_4.tar.xz
+URL_PYTHON3=https://github.com/dehesselle/py3framework/releases/download/py368.5/py368_framework_5.tar.xz
 # A pre-built version of the complete toolset.
-URL_TOOLSET_CACHE=https://github.com/dehesselle/mibap/releases/download/v0.11/mibap_v0.11.tar.xz
+URL_TOOLSET_CACHE=https://github.com/dehesselle/mibap/releases/download/v0.14/mibap_v0.14.tar.xz
 

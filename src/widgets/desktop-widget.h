@@ -48,6 +48,7 @@ namespace Widget {
 class Button;
 class LayerSelector;
 class SelectedStyle;
+class Ruler;
 } // namespace Widget
 } // namespace UI
 } // namespace Inkscape
@@ -147,8 +148,9 @@ private:
     Gtk::EventBox *_vruler_box; // eventboxes for setting tooltips
 
     /* Rulers */
-    Gtk::Widget *_hruler;
-    Gtk::Widget *_vruler;
+    Inkscape::UI::Widget::Ruler *_hruler;
+    Inkscape::UI::Widget::Ruler *_vruler;
+    Gtk::Allocation _allocation;
 
     unsigned int _interaction_disabled_counter;
 
