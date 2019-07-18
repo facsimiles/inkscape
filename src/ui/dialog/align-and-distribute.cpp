@@ -49,6 +49,8 @@
 #include "ui/tools/node-tool.h"
 #include "ui/widget/spinbutton.h"
 
+#include "xml/repr.h"
+
 namespace Inkscape {
 namespace UI {
 namespace Dialog {
@@ -274,7 +276,11 @@ BBoxSort::BBoxSort(const BBoxSort &rhs)
 
 bool operator< (const BBoxSort &a, const BBoxSort &b)
 {
-    return (a.anchor < b.anchor);
+    if (a.anchor == b.anchor) {
+        return sp_repr_compare_position_bool(a.item->getRepr(), b.item->getRepr());
+    } else {
+        return (a.anchor < b.anchor);
+    }
 }
 
 class ActionDistribute : public Action {
@@ -755,7 +761,11 @@ struct Baselines
 
 static bool operator< (const Baselines &a, const Baselines &b)
 {
-    return (a._base[a._orientation] < b._base[b._orientation]);
+    if (a._base[a._orientation] == b._base[b._orientation]) {
+        return sp_repr_compare_position_bool(a._item->getRepr(), b._item->getRepr());
+    } else {
+        return (a._base[a._orientation] < b._base[b._orientation]);
+    }
 }
 
 class ActionBaseline : public Action {
