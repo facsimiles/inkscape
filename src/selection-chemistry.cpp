@@ -4343,7 +4343,13 @@ fit_canvas_to_drawing(SPDocument *doc, bool with_margins)
 
     doc->ensureUpToDate();
     SPItem const *const root = doc->getRoot();
-    Geom::OptRect bbox = root->desktopVisualBounds();
+    Geom::OptRect bbox;
+    if (SP_ACTIVE_DESKTOP && doc != SP_ACTIVE_DESKTOP->getDocument()) {
+        // case: opening bitmap when inkscape is already open.
+        bbox = root->documentVisualBounds();
+    } else {
+        bbox = root->desktopVisualBounds();
+    }
     if (bbox) {
         doc->fitToRect(*bbox, with_margins);
         return true;
