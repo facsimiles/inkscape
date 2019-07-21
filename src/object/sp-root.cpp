@@ -143,6 +143,7 @@ void SPRoot::set(SPAttributeEnum key, const gchar *value)
         if (!this->height.read(value) || !(this->height.computed > 0.0)) {
             this->height.unset(SVGLength::PERCENT, 1.0, 1.0);
         }
+        document->updateDoc2dt();
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
         break;
 
