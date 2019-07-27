@@ -64,6 +64,7 @@ function get_source
   [ ! -d $TMP_DIR ] && mkdir -p $TMP_DIR
   local log=$(mktemp $TMP_DIR/$FUNCNAME.XXXX)
   [ -z $target_dir ] && target_dir=$SRC_DIR
+  [ ! -d $SRC_DIR ] && mkdir -p $SRC_DIR
 
   cd $target_dir
 
@@ -163,5 +164,57 @@ function relocate_dependency
   local source=$(otool -L $library | grep $source_lib | awk '{ print $1 }')
 
   install_name_tool -change $source $target $library
+}
+
+### 'readlink -f' replacement ##################################################
+
+# This is what the oneliner used to set SELF_DIR is based on.
+
+function readlinkf
+{
+  # 'readlink -f' replacement: https://stackoverflow.com/a/1116890
+  # 'do while' replacement: https://stackoverflow.com/a/16491478
+
+  local file=$1
+
+  # iterate down a (possible) chain of symlinks
+  while
+      [ ! -z $(readlink $file) ] && file=$(readlink $file)
+      cd $(dirname $file)
+      file=$(basename $file)
+      [ -L "$file" ]
+      do
+    :
+  done
+
+  # Compute the canonicalized name by finding the physical path 
+  # for the directory we're in and appending the target file.
+  echo $(pwd -P)/$file
+}
+
+### run script and echo comments prefixed with three hashes ####################
+
+# This little magic trick
+#   - reads the current file
+#   - turns every line that matches "### text here ###" into an echo statement
+#     (whatever follows after the last three hashes is ignored)
+#   - adds script name and line number as prefix
+#   - sets background color for that "echo" to blue
+#   - removes the call to run_annotated to avoid recursion
+#   - set SELF_DIR to correct value (piping into bash breaks existing one)
+#
+# Known side effects:
+#   - SELF_NAME no longer works (is now "bash")
+#   - interactive JHBuild (e.g. on error) breaks
+
+function run_annotated
+{
+  # The newlines in the last 'sed' statement are significant!
+
+  sed 's/\(^### .* ###\).*/echo \-e "\\033[1;44m['$SELF_NAME':$(printf '%03d' $LINENO)] \1\\033[0m"/g' $SELF_DIR/$SELF_NAME | sed 's/^run_annotated/#run_annotated/' | sed '/SELF_DIR=/a\
+SELF_DIR='$SELF_DIR'\
+' | bash
+
+  exit $?
 }
 
