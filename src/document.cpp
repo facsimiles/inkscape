@@ -689,7 +689,6 @@ void SPDocument::setWidthAndHeight(const Inkscape::Util::Quantity &width, const 
         root->viewBox.left() + (root->width.value /  old_width_converted ) * root->viewBox.width(),
         root->viewBox.top()  + (root->height.value / old_height_converted) * root->viewBox.height()));
     }
-
     root->updateRepr();
 }
 
