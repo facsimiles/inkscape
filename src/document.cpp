@@ -115,7 +115,11 @@ SPDocument::SPDocument() :
     _node_cache_valid(false),
     _activexmltree(nullptr)
 {
-    updateDoc2dt();
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+
+    if (!prefs->getBool("/options/yaxisdown", true)) {
+        _doc2dt[3] = -1;
+    }
 
     // Penalise libavoid for choosing paths with needless extra segments.
     // This results in much better looking orthogonal connector paths.
@@ -686,8 +690,6 @@ void SPDocument::setWidthAndHeight(const Inkscape::Util::Quantity &width, const 
         root->viewBox.top()  + (root->height.value / old_height_converted) * root->viewBox.height()));
     }
 
-    updateDoc2dt();
-
     root->updateRepr();
 }
 
@@ -763,29 +765,13 @@ void SPDocument::setHeight(const Inkscape::Util::Quantity &height, bool changeSi
     if (root->viewBox_set && changeSize)
         root->viewBox.setMax(Geom::Point(root->viewBox.right(), root->viewBox.top() + (root->height.value / old_height_converted) * root->viewBox.height()));
 
-    updateDoc2dt();
-
     root->updateRepr();
-}
-
-void SPDocument::updateDoc2dt()
-{
-    // defer update to the next doc2dt() call
-    _doc2dt[3] = 0;
 }
 
 const Geom::Affine &SPDocument::doc2dt() const
 {
-    if (!_doc2dt[3]) {
-        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-
-        if (!prefs->getBool("/options/yaxisdown", true)) {
-            _doc2dt[3] = -1;
-            _doc2dt[5] = getHeight().value("px");
-        } else {
-            _doc2dt[3] = 1;
-            _doc2dt[5] = 0;
-        }
+    if (root && !is_yaxisdown()) {
+        _doc2dt[5] = root->height.computed;
     }
 
     return _doc2dt;

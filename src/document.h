@@ -394,8 +394,6 @@ private:
     mutable Geom::Affine _doc2dt;
 
 public:
-    /// Update the doc2dt transformation based on preferences and document dimensions.
-    void updateDoc2dt();
     /// Document to desktop coordinate transformation.
     const Geom::Affine &doc2dt() const;
     /// Desktop to document coordinate transformation.
@@ -405,9 +403,9 @@ public:
         return doc2dt();
     }
     /// True if the desktop Y-axis points down, false if it points up.
-    bool is_yaxisdown() const { return doc2dt()[3] > 0; }
+    bool is_yaxisdown() const { return yaxisdir() > 0; }
     /// "1" if the desktop Y-axis points down, "-1" if it points up.
-    double yaxisdir() const { return doc2dt()[3]; }
+    double yaxisdir() const { return _doc2dt[3]; }
 
     void addUndoObserver(Inkscape::UndoStackObserver& observer);
     void removeUndoObserver(Inkscape::UndoStackObserver& observer);
