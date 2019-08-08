@@ -1017,13 +1017,12 @@ SPDesktopWidget::event(GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw)
 gint
 SPDesktopWidget::eventoutside(GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw)
 {
-    if ((event->type == GDK_MOTION_NOTIFY || event->type == GDK_BUTTON_RELEASE) && 
-        !dtw->_canvas->_inside && 
-         dtw->desktop->event_context->_button1on) 
-    {
+    if ((event->type == GDK_MOTION_NOTIFY || event->type == GDK_BUTTON_RELEASE) && !dtw->_canvas->_inside &&
+        dtw->desktop->event_context->_button1on) {
         sp_desktop_root_handler(nullptr, event, dtw->desktop);
     }
-    return TRUE;
+
+    return FALSE;
 }
 
 #if defined(HAVE_LIBLCMS2)

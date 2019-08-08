@@ -216,9 +216,9 @@ static bool evaluateSVG11Feature(gchar const *feature) {
         "BasicFont",
         "Extensibility", // not sure
     };
-    
-    for (auto & _supported_feature : _supported_features) {
-        if ( 0 == strcasecmp(feature, _supported_feature) )
+
+    for (auto &_supported_feature : _supported_features) {
+        if (0 == strcasecmp(feature, _supported_feature))
             return true;
     }
     return false;
@@ -235,8 +235,8 @@ static bool evaluateSVG10Feature(gchar const *feature) {
         // "svg.all",
         // "dom.svg.all"
     };
-    for (auto & _supported_feature : _supported_features) {
-        if ( 0 == strcasecmp(feature, _supported_feature) )
+    for (auto &_supported_feature : _supported_features) {
+        if (0 == strcasecmp(feature, _supported_feature))
             return true;
     }
     return false;
