@@ -12016,7 +12016,7 @@ msgstr ""
 msgid "Background color of exported bitmap (any SVG-supported color string)"
 msgstr ""
 "Boja pozadine izvezenog bitmapa (bilo koji znakovni niz za boje, koji SVG "
-"podržava)."
+"podržava)"
 
 #: ../src/main.cpp:396
 msgid "COLOR"
@@ -12196,7 +12196,7 @@ msgid ""
 "([none|scale-viewbox|scale-document])"
 msgstr ""
 "Metoda za konvertiranje dpi-veličina za dokumente, stvorenih ranijim "
-"verzijama od 0.92. Ako je potrebno: [none|scale-viewbox|scale-document]."
+"verzijama od 0.92. Ako je potrebno: ([none|scale-viewbox|scale-document])"
 
 #: ../src/main.cpp:899 ../src/main.cpp:1393
 msgid ""
@@ -38451,7 +38451,7 @@ msgid ""
 "(e.g. fill-color, stroke-opacity, ...)."
 msgstr ""
 "Stvori grupe s nizom elemenata, koji imaju barem jedno zajedničko svojstvo "
-"(nrp. boju ispune, neprozirnost linije, …)"
+"(nrp. boju ispune, neprozirnost linije, …)."
 
 #: ../share/extensions/scour.inx.h:13
 msgid "Keep editor data"
