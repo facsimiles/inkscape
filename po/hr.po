@@ -10,7 +10,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Inkcscape 0.92.x\n"
+"Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
 "POT-Creation-Date: 2019-06-26 19:57+0200\n"
 "PO-Revision-Date: 2019-08-08 23:42+0200\n"
