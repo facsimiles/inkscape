@@ -55,11 +55,7 @@ class SVGViewWidget;
 
 // TODO make a completely new function that transforms either the fill or
 // stroke of any SPItem  without adding an extra parameter to adjust_pattern.
-enum PatternTransform {
-    TRANSFORM_BOTH,
-    TRANSFORM_FILL,
-    TRANSFORM_STROKE
-};
+enum PaintServerTransform { TRANSFORM_BOTH, TRANSFORM_FILL, TRANSFORM_STROKE };
 
 /**
  * Event structure.
@@ -141,6 +137,8 @@ public:
         VISUAL_BBOX
     };
 
+    enum PaintServerType { PATTERN, HATCH, GRADIENT };
+
     SPItem();
     ~SPItem() override;
 
@@ -180,9 +178,9 @@ public:
 
     bool isHighlightSet() const;
     guint32 highlight_color() const;
-    
+
     void setHighlightColor(guint32 color);
-    
+
     void unsetHighlightColor();
     //====================
 
@@ -306,7 +304,7 @@ public:
 
     /**
      * Allocates unique integer keys.
-     * 
+     *
      * @param numkeys Number of keys required.
      * @return First allocated key; hence if the returned key is n
      * you can use n, n + 1, ..., n + (numkeys - 1)
@@ -319,7 +317,10 @@ public:
     void invoke_hide(unsigned int key);
 
     void getSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs=nullptr) const;
-    void adjust_pattern(/* Geom::Affine const &premul, */ Geom::Affine const &postmul, bool set = false, PatternTransform = TRANSFORM_BOTH);
+    void adjust_pattern(/* Geom::Affine const &premul, */ Geom::Affine const &postmul, bool set = false,
+                        PaintServerTransform = TRANSFORM_BOTH);
+    void adjust_hatch(/* Geom::Affine const &premul, */ Geom::Affine const &postmul, bool set = false,
+                      PaintServerTransform = TRANSFORM_BOTH);
     void adjust_gradient(/* Geom::Affine const &premul, */ Geom::Affine const &postmul, bool set = false);
     void adjust_stroke(double ex);
 
@@ -333,7 +334,8 @@ public:
     /**
      * Recursively compensate pattern or gradient transform.
      */
-    void adjust_paint_recursive(Geom::Affine advertized_transform, Geom::Affine t_ancestors, bool is_pattern);
+    void adjust_paint_recursive(Geom::Affine advertized_transform, Geom::Affine t_ancestors,
+                                PaintServerType type = GRADIENT);
 
     /**
      * Set a new transform on an object.

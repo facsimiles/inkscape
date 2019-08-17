@@ -34,11 +34,12 @@
 #include "sp-clippath.h"
 #include "sp-desc.h"
 #include "sp-guide.h"
+#include "sp-hatch.h"
 #include "sp-item-rm-unsatisfied-cns.h"
 #include "sp-mask.h"
 #include "sp-pattern.h"
-#include "sp-root.h"
 #include "sp-rect.h"
+#include "sp-root.h"
 #include "sp-switch.h"
 #include "sp-text.h"
 #include "sp-textpath.h"
@@ -730,7 +731,7 @@ Inkscape::XML::Node* SPItem::write(Inkscape::XML::Document *xml_doc, Inkscape::X
             }
         }
     }
-    
+
     gchar *c = sp_svg_transform_write(item->transform);
     repr->setAttribute("transform", c);
     g_free(c);
@@ -825,7 +826,7 @@ Geom::OptRect SPItem::visualBounds(Geom::Affine const &transform) const
 
         double len_x = bbox ? bbox->width() : 0;
         double len_y = bbox ? bbox->height() : 0;
-        
+
         x.update(12, 6, len_x);
         y.update(12, 6, len_y);
         w.update(12, 6, len_x);
@@ -1233,7 +1234,7 @@ void SPItem::invoke_hide(unsigned key)
 
 // Adjusters
 
-void SPItem::adjust_pattern(Geom::Affine const &postmul, bool set, PatternTransform pt)
+void SPItem::adjust_pattern(Geom::Affine const &postmul, bool set, PaintServerTransform pt)
 {
     bool fill = (pt == TRANSFORM_FILL || pt == TRANSFORM_BOTH);
     if (fill && style && (style->fill.isPaintserver())) {
@@ -1252,6 +1253,29 @@ void SPItem::adjust_pattern(Geom::Affine const &postmul, bool set, PatternTransf
         if ( serverPatt ) {
             SPPattern *pattern = serverPatt->clone_if_necessary(this, "stroke");
             pattern->transform_multiply(postmul, set);
+        }
+    }
+}
+
+void SPItem::adjust_hatch(Geom::Affine const &postmul, bool set, PaintServerTransform pt)
+{
+    bool fill = (pt == TRANSFORM_FILL || pt == TRANSFORM_BOTH);
+    if (fill && style && (style->fill.isPaintserver())) {
+        SPObject *server = style->getFillPaintServer();
+        SPHatch *serverHatch = dynamic_cast<SPHatch *>(server);
+        if (serverHatch) {
+            SPHatch *hatch = serverHatch->clone_if_necessary(this, "fill");
+            hatch->transform_multiply(postmul, set);
+        }
+    }
+
+    bool stroke = (pt == TRANSFORM_STROKE || pt == TRANSFORM_BOTH);
+    if (stroke && style && (style->stroke.isPaintserver())) {
+        SPObject *server = style->getStrokePaintServer();
+        SPHatch *serverHatch = dynamic_cast<SPHatch *>(server);
+        if (serverHatch) {
+            SPHatch *hatch = serverHatch->clone_if_necessary(this, "stroke");
+            hatch->transform_multiply(postmul, set);
         }
     }
 }
@@ -1380,7 +1404,7 @@ sp_item_adjust_rects_recursive(SPItem *item, Geom::Affine advertized_transform)
     }
 }
 
-void SPItem::adjust_paint_recursive (Geom::Affine advertized_transform, Geom::Affine t_ancestors, bool is_pattern)
+void SPItem::adjust_paint_recursive(Geom::Affine advertized_transform, Geom::Affine t_ancestors, PaintServerType type)
 {
 // _Before_ full pattern/gradient transform: t_paint * t_item * t_ancestors
 // _After_ full pattern/gradient transform: t_paint_new * t_item * t_ancestors * advertised_transform
@@ -1395,9 +1419,9 @@ void SPItem::adjust_paint_recursive (Geom::Affine advertized_transform, Geom::Af
         for (auto& o: children) {
             SPItem *item = dynamic_cast<SPItem *>(&o);
             if (item) {
-// At the level of the transformed item, t_ancestors is identity;
-// below it, it is the accumulated chain of transforms from this level to the top level
-                item->adjust_paint_recursive (advertized_transform, t_item * t_ancestors, is_pattern);
+                // At the level of the transformed item, t_ancestors is identity;
+                // below it, it is the accumulated chain of transforms from this level to the top level
+                item->adjust_paint_recursive(advertized_transform, t_item * t_ancestors, type);
             }
         }
     }
@@ -1407,10 +1431,18 @@ void SPItem::adjust_paint_recursive (Geom::Affine advertized_transform, Geom::Af
 // and paintservers on leaves inheriting their values from ancestors could adjust themselves properly
 // before ancestors themselves are adjusted, probably differently (bug 1286535)
 
-    if (is_pattern) {
-        adjust_pattern(paint_delta);
-    } else {
-        adjust_gradient(paint_delta);
+    switch (type) {
+        case PATTERN: {
+            adjust_pattern(paint_delta);
+            break;
+        }
+        case HATCH: {
+            adjust_hatch(paint_delta);
+            break;
+        }
+        default: {
+            adjust_gradient(paint_delta);
+        }
     }
 }
 
@@ -1459,16 +1491,20 @@ void SPItem::doWriteTransform(Geom::Affine const &transform, Geom::Affine const 
 
         // recursively compensate pattern fill if it's not to be transformed
         if (!prefs->getBool("/options/transform/pattern", true)) {
-            adjust_paint_recursive (advertized_transform.inverse(), Geom::identity(), true);
+            adjust_paint_recursive(advertized_transform.inverse(), Geom::identity(), PATTERN);
         }
+        if (!prefs->getBool("/options/transform/hatch", true)) {
+            adjust_paint_recursive(advertized_transform.inverse(), Geom::identity(), HATCH);
+        }
+
         /// \todo FIXME: add the same else branch as for gradients below, to convert patterns to userSpaceOnUse as well
         /// recursively compensate gradient fill if it's not to be transformed
         if (!prefs->getBool("/options/transform/gradient", true)) {
-            adjust_paint_recursive (advertized_transform.inverse(), Geom::identity(), false);
+            adjust_paint_recursive(advertized_transform.inverse(), Geom::identity(), GRADIENT);
         } else {
             // this converts the gradient/pattern fill/stroke, if any, to userSpaceOnUse; we need to do
             // it here _before_ the new transform is set, so as to use the pre-transform bbox
-            adjust_paint_recursive (Geom::identity(), Geom::identity(), false);
+            adjust_paint_recursive(Geom::identity(), Geom::identity(), GRADIENT);
         }
 
     } // endif(compensate)

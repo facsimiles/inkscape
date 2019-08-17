@@ -52,7 +52,8 @@ enum {
     SS_MGRADIENT,
 #endif
     SS_MANY,
-    SS_COLOR
+    SS_COLOR,
+    SS_HATCH
 };
 
 enum {
@@ -62,9 +63,8 @@ enum {
 
 class SelectedStyle;
 
-class RotateableSwatch: public Rotateable 
-{
-public:
+class RotateableSwatch : public Rotateable {
+  public:
     RotateableSwatch(SelectedStyle *parent, guint mode);
     ~RotateableSwatch() override;
 
@@ -88,9 +88,8 @@ private:
     bool cr_set;
 };
 
-class RotateableStrokeWidth: public Rotateable 
-{
-public:
+class RotateableStrokeWidth : public Rotateable {
+  public:
     RotateableStrokeWidth(SelectedStyle *parent);
     ~RotateableStrokeWidth() override;
 
@@ -157,6 +156,9 @@ protected:
 
     Gtk::Label _pattern[2];
     Glib::ustring __pattern[2];
+
+    Gtk::Label _hatch[2];
+    Glib::ustring __hatch[2];
 
     Gtk::Label _lgradient[2];
     Glib::ustring __lgradient[2];
@@ -264,7 +266,7 @@ protected:
     Gtk::MenuItem _popup_unset[2];
     Gtk::MenuItem _popup_remove[2];
 
-    Gtk::Menu _popup_sw; 
+    Gtk::Menu _popup_sw;
     Gtk::RadioButtonGroup _sw_group;
     std::vector<Gtk::RadioMenuItem*> _unit_mis;
     void on_popup_units(Inkscape::Util::Unit const *u);
