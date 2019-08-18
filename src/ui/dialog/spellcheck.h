@@ -23,6 +23,7 @@
 #include <gtkmm/box.h>
 #include <gtkmm/button.h>
 #include <gtkmm/buttonbox.h>
+#include <gtkmm/comboboxtext.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/separator.h>
 #include <gtkmm/liststore.h>
@@ -60,6 +61,8 @@ public:
     ~SpellCheck () override;
 
     static SpellCheck &getInstance() { return *new SpellCheck(); }
+
+    static std::vector<std::string> get_available_langs();
 
 private:
 
@@ -138,6 +141,11 @@ private:
     void    onStart ();
 
     /**
+     * Language selection changed
+     */
+    void    onLanguageChanged();
+
+    /**
      * Selected object modified on canvas
      */
     void    onObjModified (SPObject* /* blah */, unsigned int /* bleh */);
@@ -165,9 +173,7 @@ private:
     SPObject *_root;
 
 #if HAVE_ASPELL
-    AspellSpeller *_speller;
-    AspellSpeller *_speller2;
-    AspellSpeller *_speller3;
+    AspellSpeller *_speller = nullptr;
 #endif  /* HAVE_ASPELL */
 
     /**
@@ -225,9 +231,7 @@ private:
 
     Inkscape::Preferences *_prefs;
 
-    Glib::ustring _lang;
-    Glib::ustring _lang2;
-    Glib::ustring _lang3;
+    std::vector<std::string> _langs;
 
     /*
      *  Dialogs widgets
@@ -245,7 +249,9 @@ private:
     Gtk::Button     ignore_button;
 
     Gtk::Button     add_button;
-    GtkWidget *     dictionary_combo;
+    Gtk::Button     pref_button;
+    Gtk::Label      dictionary_label;
+    Gtk::ComboBoxText dictionary_combo;
     Gtk::HBox       dictionary_hbox;
     Gtk::Separator  action_sep;
     Gtk::Button     stop_button;
