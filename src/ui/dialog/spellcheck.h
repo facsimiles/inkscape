@@ -111,6 +111,13 @@ private:
     void    doSpellcheck ();
 
     /**
+     * Update speller from language combobox
+     * @return true if update was successful
+     */
+    bool updateSpeller();
+    void deleteSpeller();
+
+    /**
      * Accept button clicked
      */
     void    onAccept ();

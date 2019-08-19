@@ -66,6 +66,11 @@ std::vector<std::string> SpellCheck::get_available_langs()
     auto *elements = aspell_dict_info_list_elements(dlist);
 
     for (AspellDictInfo const *entry; (entry = aspell_dict_info_enumeration_next(elements)) != nullptr;) {
+        // skip duplicates (I get "de_DE" twice)
+        if (!langs.empty() && langs.back() == entry->name) {
+            continue;
+        }
+
         langs.emplace_back(entry->name);
     }
 
@@ -327,6 +332,41 @@ SpellCheck::nextText()
     _word.clear();
 }
 
+void SpellCheck::deleteSpeller() {
+#if HAVE_ASPELL
+    if (_speller) {
+        aspell_speller_save_all_word_lists(_speller);
+        delete_aspell_speller(_speller);
+        _speller = nullptr;
+    }
+#endif
+}
+
+bool SpellCheck::updateSpeller() {
+#if HAVE_ASPELL
+    deleteSpeller();
+
+    auto lang = dictionary_combo.get_active_text();
+    if (!lang.empty()) {
+        AspellConfig *config = new_aspell_config();
+        aspell_config_replace(config, "lang", lang.c_str());
+        aspell_config_replace(config, "encoding", "UTF-8");
+        AspellCanHaveError *ret = new_aspell_speller(config);
+        delete_aspell_config(config);
+        if (aspell_error(ret) != nullptr) {
+            banner_label.set_text(aspell_error_message(ret));
+            delete_aspell_can_have_error(ret);
+        } else {
+            _speller = to_aspell_speller(ret);
+        }
+    }
+
+    return _speller != nullptr;
+#else
+    return false;
+#endif
+}
+
 bool
 SpellCheck::init(SPDesktop *d)
 {
@@ -344,22 +384,8 @@ SpellCheck::init(SPDesktop *d)
     _adds = 0;
     clearRects();
 
-#if HAVE_ASPELL
-    auto lang = dictionary_combo.get_active_text();
-    if (!lang.empty()) {
-        AspellConfig *config = new_aspell_config();
-        aspell_config_replace(config, "lang", lang.c_str());
-        aspell_config_replace(config, "encoding", "UTF-8");
-        AspellCanHaveError *ret = new_aspell_speller(config);
-        delete_aspell_config(config);
-        if (aspell_error(ret) != nullptr) {
-            banner_label.set_text(aspell_error_message(ret));
-            delete_aspell_can_have_error(ret);
-            return false;
-        }
-        _speller = to_aspell_speller(ret);
-    }
-#endif  /* HAVE_ASPELL */
+    if (!updateSpeller())
+        return false;
 
     _root = desktop->getDocument()->getRoot();
 
@@ -377,19 +403,14 @@ SpellCheck::init(SPDesktop *d)
 void
 SpellCheck::finished ()
 {
-#if HAVE_ASPELL
-    if (_speller) {
-        aspell_speller_save_all_word_lists(_speller);
-        delete_aspell_speller(_speller);
-        _speller = nullptr;
-    }
-#endif  /* HAVE_ASPELL */
+    deleteSpeller();
 
     clearRects();
     disconnect();
 
     //desktop->clearWaitingCursor();
 
+    tree_view.unset_model();
     tree_view.set_sensitive(false);
     accept_button.set_sensitive(false);
     ignore_button.set_sensitive(false);
@@ -768,8 +789,19 @@ SpellCheck::onStart ()
 
 void SpellCheck::onLanguageChanged()
 {
-    onStop();
-    onStart();
+    if (!_working) {
+        onStart();
+        return;
+    }
+
+    if (!updateSpeller()) {
+        return;
+    }
+
+    // recheck current word
+    _end_w = _begin_w;
+    deleteLastRect();
+    doSpellcheck();
 }
 }
 }
