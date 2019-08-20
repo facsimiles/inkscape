@@ -41,7 +41,7 @@
 
 // ================= Common ====================
 
-std::vector<std::pair< std::pair<unsigned int, Gtk::CheckMenuItem *>,Inkscape::UI::View::View*> > checkmenuitems;
+std::vector<std::pair<std::pair<unsigned int, Gtk::CheckMenuItem *>, Inkscape::UI::View::View *>> checkmenuitems;
 unsigned int lastverb = -1;
 ;
 
@@ -452,7 +452,8 @@ build_menu(Gtk::MenuShell* menu, Inkscape::XML::Node* xml, Inkscape::UI::View::V
 
                             Gtk::CheckMenuItem* menuitem = build_menu_check_item_from_verb(action);
                             if (menuitem) {
-                                std::pair< std::pair<unsigned int, Gtk::CheckMenuItem *>,Inkscape::UI::View::View*> checkitem = std::make_pair(std::make_pair(verb->get_code(), menuitem),view);
+                                std::pair<std::pair<unsigned int, Gtk::CheckMenuItem *>, Inkscape::UI::View::View *>
+                                    checkitem = std::make_pair(std::make_pair(verb->get_code(), menuitem), view);
                                 checkmenuitems.push_back(checkitem);
                                 menu->append(*menuitem);
                             }
