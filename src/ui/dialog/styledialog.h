@@ -70,7 +70,9 @@ class StyleDialog : public Widget::Panel {
     Gtk::TreeView *_current_css_tree;
     Gtk::TreeViewColumn *_current_value_col;
     Gtk::TreeModel::Path _current_path;
+    bool _deletion;
     Glib::ustring fixCSSSelectors(Glib::ustring selector);
+    void readStyleElement();
 
   private:
     // Monitor <style> element for changes.
@@ -117,7 +119,7 @@ class StyleDialog : public Widget::Panel {
         Gtk::TreeModelColumn<Glib::ustring> _colCSSData; // Name of the property.
     };
     CSSData _mCSSData;
-
+    guint _deleted_pos;
     // Widgets
     Gtk::ScrolledWindow _scrolledWindow;
     Glib::RefPtr<Gtk::Adjustment> _vadj;
@@ -125,7 +127,6 @@ class StyleDialog : public Widget::Panel {
     Gtk::Box _styleBox;
     // Reading and writing the style element.
     Inkscape::XML::Node *_getStyleTextNode();
-    void _readStyleElement();
     Glib::RefPtr<Gtk::TreeModel> _selectTree(Glib::ustring selector);
     void _writeStyleElement(Glib::RefPtr<Gtk::TreeStore> store, Glib::ustring selector,
                             Glib::ustring new_selector = "");

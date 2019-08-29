@@ -28,6 +28,7 @@
 #include "verbs.h"
 #include "xml/attribute-record.h"
 #include "xml/node-observer.h"
+#include "xml/sp-css-attr.h"
 
 #include <map>
 #include <regex>
@@ -79,7 +80,7 @@ void StyleDialog::NodeObserver::notifyContentChanged(Inkscape::XML::Node & /*nod
 
     g_debug("StyleDialog::NodeObserver::notifyContentChanged");
     _styledialog->_updating = false;
-    _styledialog->_readStyleElement();
+    _styledialog->readStyleElement();
 }
 
 
@@ -148,7 +149,7 @@ void StyleDialog::_nodeAdded(Inkscape::XML::Node &node)
     node.addObserver(*w);
     _nodeWatchers.push_back(w);
 
-    _readStyleElement();
+    readStyleElement();
 }
 
 void StyleDialog::_nodeRemoved(Inkscape::XML::Node &repr)
@@ -163,19 +164,19 @@ void StyleDialog::_nodeRemoved(Inkscape::XML::Node &repr)
             break;
         }
     }
-    _readStyleElement();
+    readStyleElement();
 }
 
 void StyleDialog::_nodeChanged(Inkscape::XML::Node &object)
 {
     g_debug("StyleDialog::_nodeChanged");
-    _readStyleElement();
+    readStyleElement();
 }
 
 /* void
 StyleDialog::_stylesheetChanged( Inkscape::XML::Node &repr ) {
     std::cout << "Style tag modified" << std::endl;
-    _readStyleElement();
+    readStyleElement();
 } */
 
 /**
@@ -190,6 +191,8 @@ StyleDialog::StyleDialog()
     , _textNode(nullptr)
     , _scroolpos(0)
     , _desktopTracker()
+    , _deleted_pos(0)
+    , _deletion(false)
 {
     g_debug("StyleDialog::StyleDialog");
     // Pack widgets
@@ -221,7 +224,7 @@ StyleDialog::StyleDialog()
     _updateWatchers();
 
     // Load tree
-    _readStyleElement();
+    readStyleElement();
 }
 
 void StyleDialog::_vscrool()
@@ -238,12 +241,10 @@ Glib::ustring StyleDialog::fixCSSSelectors(Glib::ustring selector)
 {
     g_debug("SelectorsDialog::fixCSSSelectors");
     REMOVE_SPACES(selector);
-    Glib::ustring selector_out = "";
     std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("[,]+", selector);
+    Glib::ustring my_selector = selector + " {"; // Parsing fails sometimes without '{'. Fix me
+    CRSelector *cr_selector = cr_selector_parse_from_buf((guchar *)my_selector.c_str(), CR_UTF_8);
     for (auto token : tokens) {
-        if (!selector_out.empty()) {
-            selector_out += ",";
-        }
         REMOVE_SPACES(token);
         std::vector<Glib::ustring> subtokens = Glib::Regex::split_simple("[ ]+", token);
         for (auto subtoken : subtokens) {
@@ -261,14 +262,21 @@ Glib::ustring StyleDialog::fixCSSSelectors(Glib::ustring selector)
                         tag = tag.substr(0, i);
                     }
                     if (!SPAttributeRelSVG::isSVGElement(tag)) {
-                        return "";
+                        if (tokens.size() == 1) {
+                            tag = "." + tag;
+                            return tag;
+                        } else {
+                            return "";
+                        }
                     }
                 }
-                selector_out = selector_out.empty() ? toadd : selector_out + " " + toadd;
             }
         }
     }
-    return selector_out;
+    if (cr_selector) {
+        return selector;
+    }
+    return "";
 }
 
 /**
@@ -282,7 +290,7 @@ StyleDialog::~StyleDialog()
     _selection_changed_connection.disconnect();
 }
 
-void StyleDialog::_reload() { _readStyleElement(); }
+void StyleDialog::_reload() { readStyleElement(); }
 
 /**
  * @return Inkscape::XML::Node* pointing to a style element's text node.
@@ -379,7 +387,7 @@ void StyleDialog::setCurrentSelector(Glib::ustring current_selector)
 {
     g_debug("StyleDialog::setCurrentSelector");
     _current_selector = current_selector;
-    _readStyleElement();
+    readStyleElement();
 }
 
 // copied from style.cpp:1499
@@ -397,9 +405,9 @@ static bool is_url(char const *p)
 /**
  * Fill the Gtk::TreeStore from the svg:style element.
  */
-void StyleDialog::_readStyleElement()
+void StyleDialog::readStyleElement()
 {
-    g_debug("StyleDialog::_readStyleElement");
+    g_debug("StyleDialog::readStyleElement");
 
     if (_updating)
         return; // Don't read if we wrote style element.
@@ -407,7 +415,7 @@ void StyleDialog::_readStyleElement()
     _scroollock = true;
     Inkscape::XML::Node *textNode = _getStyleTextNode();
     if (textNode == nullptr) {
-        std::cerr << "StyleDialog::_readStyleElement: No text node!" << std::endl;
+        std::cerr << "StyleDialog::readStyleElement: No text node!" << std::endl;
     }
     SPDocument *document = SP_ACTIVE_DOCUMENT;
 
@@ -505,7 +513,7 @@ void StyleDialog::_readStyleElement()
             sigc::mem_fun(*this, &StyleDialog::_addRow), store, css_tree, "style_properties", selectorpos));
     Inkscape::UI::Widget::IconRenderer *addRenderer = manage(new Inkscape::UI::Widget::IconRenderer());
     addRenderer->add_icon("edit-delete");
-    int addCol = css_tree->append_column("", *addRenderer) - 1;
+    int addCol = css_tree->append_column(" ", *addRenderer) - 1;
     Gtk::TreeViewColumn *col = css_tree->get_column(addCol);
     if (col) {
         addRenderer->signal_activated().connect(
@@ -517,7 +525,7 @@ void StyleDialog::_readStyleElement()
     label->signal_edited().connect(sigc::bind<Glib::RefPtr<Gtk::TreeStore>, Gtk::TreeView *>(
         sigc::mem_fun(*this, &StyleDialog::_nameEdited), store, css_tree));
     label->signal_editing_started().connect(sigc::mem_fun(*this, &StyleDialog::_startNameEdit));
-    addCol = css_tree->append_column("", *label) - 1;
+    addCol = css_tree->append_column(" ", *label) - 1;
     col = css_tree->get_column(addCol);
     if (col) {
         col->set_resizable(true);
@@ -530,7 +538,7 @@ void StyleDialog::_readStyleElement()
         sigc::bind<Glib::RefPtr<Gtk::TreeStore>>(sigc::mem_fun(*this, &StyleDialog::_valueEdited), store));
     value->signal_editing_started().connect(
         sigc::bind<Glib::RefPtr<Gtk::TreeStore>>(sigc::mem_fun(*this, &StyleDialog::_startValueEdit), store));
-    addCol = css_tree->append_column("", *value) - 1;
+    addCol = css_tree->append_column(" ", *value) - 1;
     col = css_tree->get_column(addCol);
     if (col) {
         col->add_attribute(value->property_text(), _mColumns._colValue);
@@ -540,7 +548,7 @@ void StyleDialog::_readStyleElement()
     Inkscape::UI::Widget::IconRenderer *urlRenderer = manage(new Inkscape::UI::Widget::IconRenderer());
     urlRenderer->add_icon("empty-icon");
     urlRenderer->add_icon("edit-redo");
-    int urlCol = css_tree->append_column("", *urlRenderer) - 1;
+    int urlCol = css_tree->append_column(" ", *urlRenderer) - 1;
     Gtk::TreeViewColumn *urlcol = css_tree->get_column(urlCol);
     if (urlcol) {
         urlcol->set_min_width(40);
@@ -610,17 +618,38 @@ void StyleDialog::_readStyleElement()
                 continue;
             }
         }
-        if (!obj && _current_selector != selector) {
+        if (!obj && _current_selector != "" && _current_selector != selector) {
             _updating = false;
             selectorpos++;
             continue;
+        }
+        if (!obj) {
+            bool present = false;
+            for (auto objv : objVec) {
+                Glib::ustring id = objv->getId();
+                for (auto objsel : selection->objects()) {
+                    Glib::ustring idsel = objsel->getId();
+                    if (idsel == id) {
+                        present = true;
+                        break;
+                    }
+                }
+                if (present) {
+                    break;
+                }
+            }
+            if (!present) {
+                _updating = false;
+                selectorpos++;
+                continue;
+            }
         }
         Glib::ustring properties;
         // Check to make sure we do have a value to match selector.
         if ((i + 1) < tokens.size()) {
             properties = tokens[i + 1];
         } else {
-            std::cerr << "StyleDialog::_readStyleElement: Missing values "
+            std::cerr << "StyleDialog::readStyleElement: Missing values "
                          "for last selector!"
                       << std::endl;
         }
@@ -659,18 +688,19 @@ void StyleDialog::_readStyleElement()
          */
         Inkscape::UI::Widget::IconRenderer *addRenderer = manage(new Inkscape::UI::Widget::IconRenderer());
         addRenderer->add_icon("edit-delete");
-        int addCol = css_tree->append_column("Delete row", *addRenderer) - 1;
+        int addCol = css_tree->append_column(" ", *addRenderer) - 1;
         Gtk::TreeViewColumn *col = css_tree->get_column(addCol);
         if (col) {
             addRenderer->signal_activated().connect(
                 sigc::bind<Glib::RefPtr<Gtk::TreeStore>>(sigc::mem_fun(*this, &StyleDialog::_onPropDelete), store));
         }
-        Gtk::CellRendererToggle *active = Gtk::manage(new Gtk::CellRendererToggle);
-        addCol = css_tree->append_column("Active Property", *active) - 1;
+        Gtk::CellRendererToggle *isactive = Gtk::manage(new Gtk::CellRendererToggle());
+        isactive->property_activatable() = true;
+        addCol = css_tree->append_column(" ", *isactive) - 1;
         col = css_tree->get_column(addCol);
         if (col) {
-            col->add_attribute(active->property_active(), _mColumns._colActive);
-            active->signal_toggled().connect(
+            col->add_attribute(isactive->property_active(), _mColumns._colActive);
+            isactive->signal_toggled().connect(
                 sigc::bind<Glib::RefPtr<Gtk::TreeStore>>(sigc::mem_fun(*this, &StyleDialog::_activeToggled), store));
         }
         Gtk::CellRendererText *label = Gtk::manage(new Gtk::CellRendererText());
@@ -679,7 +709,7 @@ void StyleDialog::_readStyleElement()
         label->signal_edited().connect(sigc::bind<Glib::RefPtr<Gtk::TreeStore>, Gtk::TreeView *>(
             sigc::mem_fun(*this, &StyleDialog::_nameEdited), store, css_tree));
         label->signal_editing_started().connect(sigc::mem_fun(*this, &StyleDialog::_startNameEdit));
-        addCol = css_tree->append_column("CSS Selector", *label) - 1;
+        addCol = css_tree->append_column(" ", *label) - 1;
         col = css_tree->get_column(addCol);
         if (col) {
             col->set_resizable(true);
@@ -692,7 +722,7 @@ void StyleDialog::_readStyleElement()
             sigc::bind<Glib::RefPtr<Gtk::TreeStore>>(sigc::mem_fun(*this, &StyleDialog::_valueEdited), store));
         value->signal_editing_started().connect(
             sigc::bind<Glib::RefPtr<Gtk::TreeStore>>(sigc::mem_fun(*this, &StyleDialog::_startValueEdit), store));
-        addCol = css_tree->append_column("CSS Value", *value) - 1;
+        addCol = css_tree->append_column(" ", *value) - 1;
         col = css_tree->get_column(addCol);
         if (col) {
             col->add_attribute(value->property_text(), _mColumns._colValue);
@@ -808,7 +838,7 @@ void StyleDialog::_readStyleElement()
                             Inkscape::UI::Widget::IconRenderer *addRenderer =
                                 manage(new Inkscape::UI::Widget::IconRenderer());
                             addRenderer->add_icon("edit-delete");
-                            int addCol = css_tree->append_column("Delete row", *addRenderer) - 1;
+                            int addCol = css_tree->append_column(" ", *addRenderer) - 1;
                             Gtk::TreeViewColumn *col = css_tree->get_column(addCol);
                             if (col) {
                                 addRenderer->signal_activated().connect(sigc::bind<Glib::RefPtr<Gtk::TreeStore>>(
@@ -820,7 +850,7 @@ void StyleDialog::_readStyleElement()
                             label->signal_edited().connect(sigc::bind<Glib::RefPtr<Gtk::TreeStore>, Gtk::TreeView *>(
                                 sigc::mem_fun(*this, &StyleDialog::_nameEdited), store, css_tree));
                             label->signal_editing_started().connect(sigc::mem_fun(*this, &StyleDialog::_startNameEdit));
-                            addCol = css_tree->append_column("CSS Property", *label) - 1;
+                            addCol = css_tree->append_column(" ", *label) - 1;
                             col = css_tree->get_column(addCol);
                             if (col) {
                                 col->set_resizable(true);
@@ -834,7 +864,7 @@ void StyleDialog::_readStyleElement()
                             value->signal_editing_started().connect(sigc::bind<Glib::RefPtr<Gtk::TreeStore>>(
                                 sigc::mem_fun(*this, &StyleDialog::_startValueEdit), store));
 
-                            addCol = css_tree->append_column("CSS Value", *value) - 1;
+                            addCol = css_tree->append_column(" ", *value) - 1;
                             col = css_tree->get_column(addCol);
                             if (col) {
                                 col->add_attribute(value->property_text(), _mColumns._colValue);
@@ -976,12 +1006,13 @@ void StyleDialog::_onLinkObj(Glib::ustring path, Glib::RefPtr<Gtk::TreeStore> st
 void StyleDialog::_onPropDelete(Glib::ustring path, Glib::RefPtr<Gtk::TreeStore> store)
 {
     g_debug("StyleDialog::_onPropDelete");
-
     Gtk::TreeModel::Row row = *store->get_iter(path);
     if (row) {
         Glib::ustring selector = row[_mColumns._colSelector];
         row[_mColumns._colName] = "";
+        _deleted_pos = row[_mColumns._colSelectorPos];
         store->erase(row);
+        _deletion = true;
         _writeStyleElement(store, selector);
     }
 }
@@ -1046,7 +1077,7 @@ void StyleDialog::_writeStyleElement(Glib::RefPtr<Gtk::TreeStore> store, Glib::u
         obj = getDesktop()->getDocument()->getXMLDialogSelectedObject();
     }
     if (selection->objects().size() < 2 && !obj) {
-        _readStyleElement();
+        readStyleElement();
         return;
     }
     _updating = true;
@@ -1058,6 +1089,7 @@ void StyleDialog::_writeStyleElement(Glib::RefPtr<Gtk::TreeStore> store, Glib::u
         }
         styleContent = "\n" + selector + " { \n";
     }
+    selectorpos = _deleted_pos;
     for (auto &row : store->children()) {
         selector = row[_mColumns._colSelector];
         selectorpos = row[_mColumns._colSelectorPos];
@@ -1110,22 +1142,30 @@ void StyleDialog::_writeStyleElement(Glib::RefPtr<Gtk::TreeStore> store, Glib::u
             selectormatch = selectormatch + "[^}]*?}";
         }
         selectormatch = selectormatch + ")([^}]*?})((.|\n)*)";
+
         Inkscape::XML::Node *textNode = _getStyleTextNode();
         std::regex e(selectormatch.c_str());
         std::string content = (textNode->content() ? textNode->content() : "");
         std::string result;
         std::regex_replace(std::back_inserter(result), content.begin(), content.end(), e, "$1" + styleContent + "$3");
+        bool empty = false;
+        if (result.empty()) {
+            empty = true;
+            result = "* > .inkscapehacktmp{}";
+        }
         textNode->setContent(result.c_str());
         INKSCAPE.readStyleSheets(true);
+        if (empty) {
+            textNode->setContent("");
+        }
     }
     _updating = false;
-    _readStyleElement();
-    /*     SPDocument *document = SP_ACTIVE_DOCUMENT;
-        for (auto iter : document->getObjectsBySelector(selector)) {
-            std::cout << std::endl;
-            iter->style->readFromObject(iter);
-            iter->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
-        } */
+    readStyleElement();
+    SPDocument *document = SP_ACTIVE_DOCUMENT;
+    for (auto iter : document->getObjectsBySelector(selector)) {
+        iter->style->readFromObject(iter);
+        iter->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
+    }
     DocumentUndo::done(SP_ACTIVE_DOCUMENT, SP_VERB_DIALOG_STYLE, _("Edited style element."));
 
     g_debug("StyleDialog::_writeStyleElement(): | %s |", styleContent.c_str());
@@ -1211,7 +1251,7 @@ void
 StyleDialog::_startValueEdit(Gtk::CellEditable* cell, const Glib::ustring& path, Glib::RefPtr<Gtk::TreeStore> store)
 {
     g_debug("StyleDialog::_startValueEdit");
-
+    _deletion = false;
     _scroollock = true;
     Gtk::TreeModel::Row row = *store->get_iter(path);
     if (row) {
@@ -1273,8 +1313,8 @@ StyleDialog::_startValueEdit(Gtk::CellEditable* cell, const Glib::ustring& path,
 
 void StyleDialog::_startNameEdit(Gtk::CellEditable *cell, const Glib::ustring &path)
 {
+    _deletion = false;
     g_debug("StyleDialog::_startNameEdit");
-
     _scroollock = true;
     Glib::RefPtr<Gtk::ListStore> completionModel = Gtk::ListStore::create(_mCSSData);
     Glib::RefPtr<Gtk::EntryCompletion> entry_completion = Gtk::EntryCompletion::create();
@@ -1297,11 +1337,14 @@ void StyleDialog::_startNameEdit(Gtk::CellEditable *cell, const Glib::ustring &p
 gboolean sp_styledialog_store_move_to_next(gpointer data)
 {
     StyleDialog *styledialog = reinterpret_cast<StyleDialog *>(data);
-    auto selection = styledialog->_current_css_tree->get_selection();
-    Gtk::TreeIter iter = *(selection->get_selected());
-    Gtk::TreeModel::Path model = (Gtk::TreeModel::Path)iter;
-    if (model == styledialog->_current_path) {
-        styledialog->_current_css_tree->set_cursor(styledialog->_current_path, *styledialog->_current_value_col, true);
+    if (!styledialog->_deletion) {
+        auto selection = styledialog->_current_css_tree->get_selection();
+        Gtk::TreeIter iter = *(selection->get_selected());
+        Gtk::TreeModel::Path model = (Gtk::TreeModel::Path)iter;
+        if (model == styledialog->_current_path) {
+            styledialog->_current_css_tree->set_cursor(styledialog->_current_path, *styledialog->_current_value_col,
+                                                       true);
+        }
     }
     return FALSE;
 }
@@ -1339,6 +1382,7 @@ void StyleDialog::_nameEdited(const Glib::ustring &path, const Glib::ustring &na
         Glib::ustring old_name = row[_mColumns._colName];
         row[_mColumns._colName] = finalname;
         if (finalname.empty() && value.empty()) {
+            _deleted_pos = row[_mColumns._colSelectorPos];
             store->erase(row);
         }
         gint col = 3;
@@ -1348,6 +1392,21 @@ void StyleDialog::_nameEdited(const Glib::ustring &path, const Glib::ustring &na
         _current_value_col = css_tree->get_column(col);
         if (write && old_name != name) {
             _writeStyleElement(store, selector);
+            /*
+            I think is better comment this, is enoght update on value change
+            if (selector != "style_properties" && selector != "attributes") {
+            std::vector<SPObject *> objs = _getObjVec(selector);
+            for (auto obj : objs){
+                Glib::ustring css_str = "";
+                SPCSSAttr *css = sp_repr_css_attr_new();
+                sp_repr_css_attr_add_from_string(css, obj->getRepr()->attribute("style"));
+                css->setAttribute(name.c_str(), nullptr);
+                sp_repr_css_write_string(css, css_str);
+                obj->getRepr()->setAttribute("style", css_str.c_str());
+                obj->style->readFromObject(obj);
+                obj->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
+            }
+            } */
         } else {
             g_timeout_add(50, &sp_styledialog_store_move_to_next, this);
             grab_focus();
@@ -1383,9 +1442,23 @@ void StyleDialog::_valueEdited(const Glib::ustring &path, const Glib::ustring &v
         Glib::ustring selector = row[_mColumns._colSelector];
         Glib::ustring name = row[_mColumns._colName];
         if (name.empty() && finalvalue.empty()) {
+            _deleted_pos = row[_mColumns._colSelectorPos];
             store->erase(row);
         }
         _writeStyleElement(store, selector);
+        if (selector != "style_properties" && selector != "attributes") {
+            std::vector<SPObject *> objs = _getObjVec(selector);
+            for (auto obj : objs) {
+                Glib::ustring css_str = "";
+                SPCSSAttr *css = sp_repr_css_attr_new();
+                sp_repr_css_attr_add_from_string(css, obj->getRepr()->attribute("style"));
+                css->setAttribute(name.c_str(), nullptr);
+                sp_repr_css_write_string(css, css_str);
+                obj->getRepr()->setAttribute("style", css_str.c_str());
+                obj->style->readFromObject(obj);
+                obj->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
+            }
+        }
     }
 }
 
@@ -1556,7 +1629,7 @@ void StyleDialog::_handleDocumentReplaced(SPDesktop *desktop, SPDocument * /* do
         desktop->getSelection()->connectChanged(sigc::hide(sigc::mem_fun(this, &StyleDialog::_handleSelectionChanged)));
 
     _updateWatchers();
-    _readStyleElement();
+    readStyleElement();
 }
 
 
@@ -1583,7 +1656,7 @@ void StyleDialog::_handleDesktopChanged(SPDesktop *desktop)
         desktop->connectDocumentReplaced(sigc::mem_fun(this, &StyleDialog::_handleDocumentReplaced));
 
     _updateWatchers();
-    _readStyleElement();
+    readStyleElement();
 }
 
 
@@ -1595,7 +1668,7 @@ void StyleDialog::_handleSelectionChanged()
     g_debug("StyleDialog::_handleSelectionChanged()");
     _scroolpos = 0;
     _vadj->set_value(0);
-    _readStyleElement();
+    readStyleElement();
 }
 
 } // namespace Dialog

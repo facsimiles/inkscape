@@ -26,6 +26,7 @@
 
 #include "xml/attribute-record.h"
 #include "xml/node-observer.h"
+#include "xml/sp-css-attr.h"
 
 #include <glibmm/i18n.h>
 #include <glibmm/regex.h>
@@ -34,9 +35,9 @@
 #include <regex>
 #include <utility>
 
-// G_MESSAGES_DEBUG=DEBUG_STYLEDIALOG  gdb ./inkscape
-//#define DEBUG_SELECTORSDIALOG
-//#define G_LOG_DOMAIN "SELECTORSDIALOG"
+// G_MESSAGES_DEBUG=DEBUG_SELECTORSDIALOG  gdb ./inkscape
+// #define DEBUG_SELECTORSDIALOG
+// #define G_LOG_DOMAIN "SELECTORSDIALOG"
 
 using Inkscape::DocumentUndo;
 using Inkscape::Util::List;
@@ -380,6 +381,7 @@ void SelectorsDialog::_showWidgets()
     int panedpos = prefs->getInt("/dialogs/selectors/panedpos", widthpos / 2);
     _paned.property_position().signal_changed().connect(sigc::mem_fun(*this, &SelectorsDialog::_childresized));
     _paned.signal_size_allocate().connect(sigc::mem_fun(*this, &SelectorsDialog::_panedresized));
+    _paned.signal_realize().connect(sigc::mem_fun(*this, &SelectorsDialog::_panedrealized));
     _updating = true;
     _paned.property_position() = panedpos;
     _updating = false;
@@ -392,6 +394,8 @@ void SelectorsDialog::_panedresized(Gtk::Allocation allocation)
     g_debug("SelectorsDialog::_panedresized");
     _resized();
 }
+
+void SelectorsDialog::_panedrealized() { _style_dialog->readStyleElement(); }
 
 void SelectorsDialog::_childresized()
 {
@@ -417,6 +421,7 @@ void SelectorsDialog::_resized()
     if (_paned.property_position() < min) {
         _paned.property_position() = min;
     }
+
     prefs->setInt("/dialogs/selectors/panedpos", _paned.property_position());
     _updating = false;
 }
@@ -504,14 +509,14 @@ Inkscape::XML::Node *SelectorsDialog::_getStyleTextNode()
  */
 void SelectorsDialog::_readStyleElement()
 {
-    g_debug("SelectorsDialog::_readStyleElement: updating %s", (_updating ? "true" : "false"));
+    g_debug("SelectorsDialog::_readStyleElement(): updating %s", (_updating ? "true" : "false"));
 
     if (_updating) return; // Don't read if we wrote style element.
     _updating = true;
     _scroollock = true;
     Inkscape::XML::Node * textNode = _getStyleTextNode();
     if (textNode == nullptr) {
-        std::cerr << "SelectorsDialog::_readStyleElement: No text node!" << std::endl;
+        std::cerr << "SelectorsDialog::_readStyleElement(): No text node!" << std::endl;
     }
 
     // Get content from style text node.
@@ -562,7 +567,6 @@ void SelectorsDialog::_readStyleElement()
     bool rewrite = false;
 
     for (unsigned i = 0; i < tokens.size()-1; i += 2) {
-
         Glib::ustring selector = tokens[i];
         REMOVE_SPACES(selector); // Remove leading/trailing spaces
         Glib::ustring selector_old = selector;
@@ -570,7 +574,7 @@ void SelectorsDialog::_readStyleElement()
         if (selector_old != selector) {
             rewrite = true;
         }
-        if (selector.empty()) {
+        if (selector.empty() || selector == "* > .inkscapehacktmp") {
             continue;
         }
         std::vector<Glib::ustring> tokensplus = Glib::Regex::split_simple("[,]+", selector);
@@ -583,7 +587,7 @@ void SelectorsDialog::_readStyleElement()
         if ((i+1) < tokens.size()) {
             properties = tokens[i+1];
         } else {
-            std::cerr << "SelectorsDialog::_readStyleElement: Missing values "
+            std::cerr << "SelectorsDialog::_readStyleElement(): Missing values "
                          "for last selector!"
                       << std::endl;
         }
@@ -653,7 +657,7 @@ void SelectorsDialog::_writeStyleElement()
     _scroollock = true;
     _updating = true;
     SPDocument *document = SP_ACTIVE_DOCUMENT;
-    Glib::ustring styleContent;
+    Glib::ustring styleContent = "";
     for (auto& row: _store->children()) {
         Glib::ustring selector = row[_mColumns._colSelector];
         /*
@@ -668,8 +672,18 @@ void SelectorsDialog::_writeStyleElement()
     // We could test if styleContent is empty and then delete the style node here but there is no
     // harm in keeping it around ...
     Inkscape::XML::Node *textNode = _getStyleTextNode();
+    bool empty = false;
+    if (styleContent.empty()) {
+        empty = true;
+        styleContent = "* > .inkscapehacktmp{}";
+    }
     textNode->setContent(styleContent.c_str());
-    INKSCAPE.readStyleSheets();
+    INKSCAPE.readStyleSheets(true);
+    if (empty) {
+        styleContent = "";
+        textNode->setContent(styleContent.c_str());
+    }
+    textNode->setContent(styleContent.c_str());
     DocumentUndo::done(SP_ACTIVE_DOCUMENT, SP_VERB_DIALOG_SELECTORS, _("Edited style element."));
 
     _updating = false;
@@ -853,6 +867,24 @@ void SelectorsDialog::_addToSelector(Gtk::TreeModel::Row row)
         _updating = false;
 
         // Add entry to style element
+        for (auto &obj : toAddObjVec) {
+            Glib::ustring css_str = "";
+            SPCSSAttr *css = sp_repr_css_attr_new();
+            SPCSSAttr *css_selector = sp_repr_css_attr_new();
+            sp_repr_css_attr_add_from_string(css, obj->getRepr()->attribute("style"));
+            Glib::ustring selprops = row[_mColumns._colProperties];
+            sp_repr_css_attr_add_from_string(css_selector, selprops.c_str());
+            for (List<AttributeRecord const> iter = css_selector->attributeList(); iter; ++iter) {
+                gchar const *key = g_quark_to_string(iter->key);
+                css->setAttribute(key, nullptr);
+            }
+            sp_repr_css_write_string(css, css_str);
+            sp_repr_css_attr_unref(css);
+            sp_repr_css_attr_unref(css_selector);
+            obj->getRepr()->setAttribute("style", css_str.c_str());
+            obj->style->readFromObject(obj);
+            obj->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
+        }
         _writeStyleElement();
     }
 }
@@ -907,6 +939,8 @@ void SelectorsDialog::_removeFromSelector(Gtk::TreeModel::Row row)
 
         // Add entry to style element
         _writeStyleElement();
+        obj->style->readFromObject(obj);
+        obj->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
         _scroollock = false;
         _vadj->set_value(std::min(_scroolpos, _vadj->get_upper()));
     }
