@@ -26,7 +26,6 @@
 
 #include <gdk/gdkkeysyms.h>
 #include <glibmm/i18n.h>
-#include <string>
 
 static void on_attr_changed (Inkscape::XML::Node * repr,
                          const gchar * name,
@@ -364,17 +363,27 @@ void AttrDialog::attr_reset_context(gint attr)
             _("Attribute <b>%s</b> selected. Press <b>Ctrl+Enter</b> when done editing to commit changes."), name);
     }
 }
+
+// TODO: improve and find a good location
+// duplicated in sp-xmlview.cpp:315
 Glib::ustring sp_remove_newlines_and_tabs(Glib::ustring val)
 {
-    int pos;
+    int pos = 0;
+    Glib::ustring newlinesign = "␤";
+    Glib::ustring tabsign = "⇥";
+    while ((pos = val.find("\r\n")) != std::string::npos) {
+        val.erase(pos,2);
+        val.insert(pos, newlinesign);
+    }
+    pos = 0;
     while ((pos = val.find('\n')) != std::string::npos) {
-        val.erase(pos);
+        val.erase(pos,1);
+        val.insert(pos, newlinesign);
     }
-    while ((pos = val.find('\r')) != std::string::npos) {
-        val.erase(pos);
-    }
+    pos = 0;
     while ((pos = val.find('\t')) != std::string::npos) {
-        val.erase(pos);
+        val.erase(pos,1);
+        val.insert(pos, tabsign);
     }
     return val;
 }
