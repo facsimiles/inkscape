@@ -51,7 +51,7 @@ public:
 	  add(_attributeName);
 	  add(_attributeValue);
       add(_attributeValueRender);
-    }
+        }
         Gtk::TreeModelColumn<Glib::ustring> _attributeName;
         Gtk::TreeModelColumn<Glib::ustring> _attributeValue;
         Gtk::TreeModelColumn<Glib::ustring> _attributeValueRender;
