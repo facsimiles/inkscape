@@ -301,9 +301,9 @@ ParamOptionGroup::ParamOptionGroupOption::ParamOptionGroupOption(Inkscape::XML::
     const char *value = xml->attribute("value");
     if (value) {
         _value = value;
-    } else {
-        g_warning("Missing value for option '%s' of parameter '%s' in extension '%s'.",
-                  _text.c_str(), parent->_name, _extension->get_id());
+    } else if (text) {
+        // untranslated text as value
+        _value = text;
     }
 }
 
