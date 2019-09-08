@@ -42,6 +42,7 @@ extern "C" {
 #include "verbs.h"
 
 #include <libnrtype/font-instance.h>
+#include <libnrtype/FontFactory.h>
 #include <libnrtype/font-lister.h>
 
 #include "object/sp-flowtext.h"
@@ -417,13 +418,19 @@ void TextEdit::onSetDefault()
 void TextEdit::onApply()
 {
     blocked = true;
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setBool("/options/addgsubtable", true);
+    Glib::ustring fontspec = font_selector.get_fontspec();
+    if( !fontspec.empty() ) {
+        font_instance* res = font_factory::Default()->FaceFromFontSpecification( fontspec.c_str(), true);
+        if( res ) {
+            res->block = false;
+        }
+    }
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 
     unsigned items = 0;
     auto item_list = desktop->getSelection()->items();
     SPCSSAttr *css = fillTextStyle ();
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     for(auto i=item_list.begin();i!=item_list.end();++i){
         // apply style to the reprs of all text objects in the selection
         if (SP_IS_TEXT (*i) || (SP_IS_FLOWTEXT (*i)) ) {
@@ -456,7 +463,6 @@ void TextEdit::onApply()
     }
 
     // Update FontLister
-    Glib::ustring fontspec = font_selector.get_fontspec();
     if( !fontspec.empty() ) {
         Inkscape::FontLister *fontlister = Inkscape::FontLister::get_instance();
         fontlister->set_fontspec( fontspec, false );
@@ -480,8 +486,6 @@ void TextEdit::onChange()
     if (blocked) {
         return;
     }
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setBool("/options/addgsubtable", false);
 
     GtkTextIter start;
     GtkTextIter end;
@@ -490,6 +494,10 @@ void TextEdit::onChange()
 
     Glib::ustring fontspec = font_selector.get_fontspec();
     Glib::ustring features = font_features.get_markup();
+    font_instance* res = font_factory::Default()->FaceFromFontSpecification( fontspec.c_str(), true);
+    if( res ) {
+        res->block = true;
+    }
     const gchar *phrase = str && *str ? str : samplephrase.c_str();
     setPreviewText(fontspec, features, phrase);
     g_free (str);

@@ -18,7 +18,6 @@
 #define PANGO_ENABLE_ENGINE
 #endif
 
-#include "preferences.h"
 #include <ft2build.h>
 #include FT_OUTLINE_H
 #include FT_BBOX_H
@@ -115,6 +114,7 @@ font_instance::font_instance()
     , glyphs(nullptr)
     , theFace(nullptr)
     , fontHasSVG(false)
+    , block(true)
     , _halfload(false)
 {
     //printf("font instance born\n");
@@ -190,8 +190,7 @@ void font_instance::Unref()
 
 void font_instance::InitTheFace()
 {
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    if (pFont != nullptr && (theFace == nullptr || (prefs->getBool("/options/addgsubtable", false) && _halfload))) {
+    if (pFont != nullptr && (theFace == nullptr || (!block && _halfload))) {
         if (theFace) {
             theFace = nullptr;
         }

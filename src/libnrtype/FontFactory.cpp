@@ -600,7 +600,7 @@ font_instance *font_factory::FaceFromDescr(char const *family, char const *style
     return res;
 }
 
-font_instance* font_factory::FaceFromPangoString(char const *pangoString)
+font_instance* font_factory::FaceFromPangoString(char const *pangoString, bool init)
 {
     font_instance *fontInstance = nullptr;
 
@@ -614,7 +614,7 @@ font_instance* font_factory::FaceFromPangoString(char const *pangoString)
 
         if (descr) {
             if (sp_font_description_get_family(descr) != nullptr) {
-                fontInstance = Face(descr);
+                fontInstance = Face(descr, init);
             }
             pango_font_description_free(descr);
         }
@@ -623,7 +623,7 @@ font_instance* font_factory::FaceFromPangoString(char const *pangoString)
     return fontInstance;
 }
 
-font_instance* font_factory::FaceFromFontSpecification(char const *fontSpecification)
+font_instance* font_factory::FaceFromFontSpecification(char const *fontSpecification, bool init)
 {
     font_instance *font = nullptr;
 
@@ -633,13 +633,13 @@ font_instance* font_factory::FaceFromFontSpecification(char const *fontSpecifica
         // How the string is used to reconstruct a font depends on how it
         // was constructed in ConstructFontSpecification.  As it stands,
         // the font specification is a pango-created string
-        font = FaceFromPangoString(fontSpecification);
+        font = FaceFromPangoString(fontSpecification, init);
     }
 
     return font;
 }
 
-font_instance *font_factory::Face(PangoFontDescription *descr, bool canFail)
+font_instance *font_factory::Face(PangoFontDescription *descr, bool canFail, bool init)
 {
 #ifdef USE_PANGO_WIN32
     // damn Pango fudges the size, so we need to unfudge. See source of pango_win32_font_map_init()
@@ -712,7 +712,7 @@ font_instance *font_factory::Face(PangoFontDescription *descr, bool canFail)
         res->Ref();
         AddInCache(res);
     }
-    if (res) {
+    if (res && init) {
         res->InitTheFace();
     }
     return res;

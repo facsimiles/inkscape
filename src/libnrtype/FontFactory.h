@@ -131,9 +131,9 @@ public:
     // Various functions to get a font_instance from different descriptions.
     font_instance*        FaceFromDescr(char const *family, char const *style);
     font_instance*        FaceFromUIStrings(char const *uiFamily, char const *uiStyle);
-    font_instance*        FaceFromPangoString(char const *pangoString);
-    font_instance*        FaceFromFontSpecification(char const *fontSpecification);
-    font_instance*        Face(PangoFontDescription *descr, bool canFail=true);
+    font_instance*        FaceFromPangoString(char const *pangoString, bool init = true);
+    font_instance*        FaceFromFontSpecification(char const *fontSpecification, bool init = true);
+    font_instance*        Face(PangoFontDescription *descr, bool canFail = true, bool init = true);
     font_instance*        Face(char const *family,
                                int variant=PANGO_VARIANT_NORMAL, int style=PANGO_STYLE_NORMAL,
                                int weight=PANGO_WEIGHT_NORMAL, int stretch=PANGO_STRETCH_NORMAL,
