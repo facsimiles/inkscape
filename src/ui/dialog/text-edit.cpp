@@ -417,13 +417,13 @@ void TextEdit::onSetDefault()
 void TextEdit::onApply()
 {
     blocked = true;
-
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    prefs->setBool("/options/addgsubtable", true);
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 
     unsigned items = 0;
     auto item_list = desktop->getSelection()->items();
     SPCSSAttr *css = fillTextStyle ();
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     for(auto i=item_list.begin();i!=item_list.end();++i){
         // apply style to the reprs of all text objects in the selection
         if (SP_IS_TEXT (*i) || (SP_IS_FLOWTEXT (*i)) ) {
@@ -480,6 +480,8 @@ void TextEdit::onChange()
     if (blocked) {
         return;
     }
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    prefs->setBool("/options/addgsubtable", false);
 
     GtkTextIter start;
     GtkTextIter end;

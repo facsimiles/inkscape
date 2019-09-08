@@ -218,6 +218,7 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
     , _tracker(new UnitTracker(Inkscape::Util::UNIT_TYPE_LINEAR))
     , _tracker_fs(new UnitTracker(Inkscape::Util::UNIT_TYPE_LINEAR))
     , _cusor_numbers(0)
+    , _origin(0)
 {
     /* Line height unit tracker */
     _tracker->prependUnit(unit_table.getUnit("")); // Ratio
@@ -652,6 +653,9 @@ TextToolbar::fontfamily_value_changed()
         return;
     }
     _freeze = true;
+
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    prefs->setBool("/options/addgsubtable", false);
 
     Glib::ustring new_family = _font_family_item->get_active_text();
     css_font_family_unquote( new_family ); // Remove quotes around font family names.
@@ -2423,6 +2427,8 @@ void TextToolbar::subselection_changed(gpointer texttool)
                 // realy it decrease preformance and dont be important live update,
                 return;
             }
+
+
             Inkscape::Text::Layout::iterator start = layout->begin();
             Inkscape::Text::Layout::iterator end = layout->end();
             Inkscape::Text::Layout::iterator start_selection = tc->text_sel_start;
@@ -2432,6 +2438,12 @@ void TextToolbar::subselection_changed(gpointer texttool)
             }
             start_selection = tc->text_sel_start;
             Inkscape::Text::Layout::iterator end_selection = tc->text_sel_end;
+            Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+            if (_origin != layout->iteratorToCharIndex(start_selection)) {
+                prefs->setBool("/options/addgsubtable", true);
+            }
+            _origin = layout->iteratorToCharIndex(start_selection);
+
 #ifdef DEBUG_TEXT
             std::cout << "    GUI: Start of text: " << layout->iteratorToCharIndex(start) << std::endl;
             std::cout << "    GUI: End of text: " << layout->iteratorToCharIndex(end) << std::endl;

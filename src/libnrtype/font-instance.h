@@ -132,7 +132,7 @@ private:
     double  _ascent_max;   // Maximum ascent of all glyphs in font.
     double  _descent_max;  // Maximum descent of all glyphs in font.
     int     _design_units; // Design units, (units per em, typically 1000 or 2048).
-
+    bool _halfload;        // We load font without GSUB tables for fast it
     // Baselines
     double _baselines[SP_CSS_BASELINE_SIZE];
 };

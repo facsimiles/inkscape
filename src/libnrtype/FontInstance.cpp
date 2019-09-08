@@ -18,6 +18,7 @@
 #define PANGO_ENABLE_ENGINE
 #endif
 
+#include "preferences.h"
 #include <ft2build.h>
 #include FT_OUTLINE_H
 #include FT_BBOX_H
@@ -104,16 +105,17 @@ static int ft2_cubic_to(FT_Vector const *control1, FT_Vector const *control2, FT
  *
  */
 
-font_instance::font_instance() :
-    pFont(nullptr),
-    descr(nullptr),
-    refCount(0),
-    parent(nullptr),
-    nbGlyph(0),
-    maxGlyph(0),
-    glyphs(nullptr),
-    theFace(nullptr),
-    fontHasSVG(false)
+font_instance::font_instance()
+    : pFont(nullptr)
+    , descr(nullptr)
+    , refCount(0)
+    , parent(nullptr)
+    , nbGlyph(0)
+    , maxGlyph(0)
+    , glyphs(nullptr)
+    , theFace(nullptr)
+    , fontHasSVG(false)
+    , _halfload(false)
 {
     //printf("font instance born\n");
     _ascent  = _ascent_max  = 0.8;
@@ -188,8 +190,11 @@ void font_instance::Unref()
 
 void font_instance::InitTheFace()
 {
-    if (theFace == nullptr && pFont != nullptr) {
-
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    if (pFont != nullptr && (theFace == nullptr || (prefs->getBool("/options/addgsubtable", false) && _halfload))) {
+        if (theFace) {
+            theFace = nullptr;
+        }
 #ifdef USE_PANGO_WIN32
 
         LOGFONT *lf=pango_win32_font_logfont(pFont);
@@ -213,8 +218,12 @@ void font_instance::InitTheFace()
 #endif
 
 #ifndef USE_PANGO_WIN32
-
-        readOpenTypeGsubTable( theFace, openTypeTables );
+        if (_halfload) {
+            _halfload = false;
+            readOpenTypeGsubTable(theFace, openTypeTables);
+        } else {
+            _halfload = true;
+        }
         readOpenTypeFvarAxes(  theFace, openTypeVarAxes );
         readOpenTypeSVGTable(  theFace, openTypeSVGGlyphs );
 
@@ -296,7 +305,7 @@ void font_instance::InitTheFace()
 
        FindFontMetrics();
     }
-    
+
 #ifdef USE_PANGO_WIN32
     // Someone (probably pango or cairo) sets the world transform during initialization and does not reset it.
     // Work around this by explicitly setting it again (even if the font is already initialized)

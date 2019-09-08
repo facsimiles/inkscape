@@ -100,6 +100,7 @@ private:
     int _lineheight_unit;
     Inkscape::Text::Layout::iterator wrap_start;
     Inkscape::Text::Layout::iterator wrap_end;
+    size_t _origin;
     bool _subselection;
     bool _fullsubselection;
     bool _updating;
