@@ -484,7 +484,7 @@ void TextEdit::onFontFeatures(Gtk::Widget * widgt, int pos)
             font_instance *res = font_factory::Default()->FaceFromFontSpecification(fontspec.c_str());
             if (res && !res->fulloaded) {
                 res->InitTheFace(true);
-                onReadSelection(true, true);
+                font_features.update_opentype(fontspec);
             }
         }
     }
