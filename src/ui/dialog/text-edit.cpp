@@ -161,7 +161,7 @@ TextEdit::TextEdit()
     close_button.signal_clicked().connect(sigc::bind(_signal_response.make_slot(), GTK_RESPONSE_CLOSE));
     fontChangedConn = font_selector.connectChanged (sigc::mem_fun(*this, &TextEdit::onFontChange));
     fontFeaturesChangedConn = font_features.connectChanged(sigc::mem_fun(*this, &TextEdit::onChange));
-
+    notebook.signal_switch_page().connect(sigc::mem_fun(*this, &TextEdit::onFontFeatures));
     desktopChangeConn = deskTrack.connectDesktopChanged( sigc::mem_fun(*this, &TextEdit::setTargetDesktop) );
     deskTrack.connect(GTK_WIDGET(gobj()));
 
@@ -418,13 +418,7 @@ void TextEdit::onSetDefault()
 void TextEdit::onApply()
 {
     blocked = true;
-    Glib::ustring fontspec = font_selector.get_fontspec();
-    if (!fontspec.empty()) {
-        font_instance *res = font_factory::Default()->FaceFromFontSpecification(fontspec.c_str(), true);
-        if (res) {
-            res->block = false;
-        }
-    }
+
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 
     unsigned items = 0;
@@ -463,6 +457,7 @@ void TextEdit::onApply()
     }
 
     // Update FontLister
+    Glib::ustring fontspec = font_selector.get_fontspec();
     if( !fontspec.empty() ) {
         Inkscape::FontLister *fontlister = Inkscape::FontLister::get_instance();
         fontlister->set_fontspec( fontspec, false );
@@ -481,6 +476,20 @@ void TextEdit::onApply()
     blocked = false;
 }
 
+void TextEdit::onFontFeatures(Gtk::Widget * widgt, int pos)
+{
+    if (pos == 1) {
+        Glib::ustring fontspec = font_selector.get_fontspec();
+        if (!fontspec.empty()) {
+            font_instance *res = font_factory::Default()->FaceFromFontSpecification(fontspec.c_str());
+            if (res && !res->fulloaded) {
+                res->InitTheFace(true);
+                onReadSelection(true, true);
+            }
+        }
+    }
+}
+
 void TextEdit::onChange()
 {
     if (blocked) {
@@ -494,10 +503,6 @@ void TextEdit::onChange()
 
     Glib::ustring fontspec = font_selector.get_fontspec();
     Glib::ustring features = font_features.get_markup();
-    font_instance *res = font_factory::Default()->FaceFromFontSpecification(fontspec.c_str(), true);
-    if (res) {
-        res->block = true;
-    }
     const gchar *phrase = str && *str ? str : samplephrase.c_str();
     setPreviewText(fontspec, features, phrase);
     g_free (str);

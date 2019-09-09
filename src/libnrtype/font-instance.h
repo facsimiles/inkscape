@@ -47,7 +47,11 @@ public:
     // common glyph definitions for all the rasterfonts
     std::map<int, int>    id_to_no;
     int                   nbGlyph, maxGlyph;
+
     font_glyph*           glyphs;
+
+    // font is loaded with GSUB in 2 pass
+    bool    fulloaded;    
 
     // Map of OpenType tables found in font.
     std::map<Glib::ustring, OTSubstitution> openTypeTables;
@@ -71,7 +75,7 @@ public:
     void                 InstallFace(PangoFont* iFace); // utility; should reset the pFont field if loading failed
     // in case the PangoFont is a bitmap font, for example. that way, the calling function
     // will be able to check the validity of the font before installing it in loadedFaces
-    void                 InitTheFace();
+    void                 InitTheFace(bool loadgsub = false);
 
     int                  MapUnicodeChar(gunichar c); // calls the relevant unicode->glyph index function
     void                 LoadGlyph(int glyph_id);    // the main backend-dependent function
@@ -115,7 +119,6 @@ private:
 
     // Temp: make public
 public:
-  bool block; // We block the filal halfload of font
 #ifdef USE_PANGO_WIN32
     HFONT                 theFace;
 #else
@@ -125,7 +128,6 @@ public:
 #endif
 
 private:
-
     // Font metrics in em-box units
     double  _ascent;       // Typographic ascent.
     double  _descent;      // Typographic descent.
@@ -133,7 +135,7 @@ private:
     double  _ascent_max;   // Maximum ascent of all glyphs in font.
     double  _descent_max;  // Maximum descent of all glyphs in font.
     int     _design_units; // Design units, (units per em, typically 1000 or 2048).
-    bool _halfload;        // We load font without GSUB tables for fast it
+
     // Baselines
     double _baselines[SP_CSS_BASELINE_SIZE];
 };
