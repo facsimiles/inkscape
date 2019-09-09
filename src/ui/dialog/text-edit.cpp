@@ -41,8 +41,8 @@ extern "C" {
 #include "text-editing.h"
 #include "verbs.h"
 
-#include <libnrtype/font-instance.h>
 #include <libnrtype/FontFactory.h>
+#include <libnrtype/font-instance.h>
 #include <libnrtype/font-lister.h>
 
 #include "object/sp-flowtext.h"
@@ -419,9 +419,9 @@ void TextEdit::onApply()
 {
     blocked = true;
     Glib::ustring fontspec = font_selector.get_fontspec();
-    if( !fontspec.empty() ) {
-        font_instance* res = font_factory::Default()->FaceFromFontSpecification( fontspec.c_str(), true);
-        if( res ) {
+    if (!fontspec.empty()) {
+        font_instance *res = font_factory::Default()->FaceFromFontSpecification(fontspec.c_str(), true);
+        if (res) {
             res->block = false;
         }
     }
@@ -494,8 +494,8 @@ void TextEdit::onChange()
 
     Glib::ustring fontspec = font_selector.get_fontspec();
     Glib::ustring features = font_features.get_markup();
-    font_instance* res = font_factory::Default()->FaceFromFontSpecification( fontspec.c_str(), true);
-    if( res ) {
+    font_instance *res = font_factory::Default()->FaceFromFontSpecification(fontspec.c_str(), true);
+    if (res) {
         res->block = true;
     }
     const gchar *phrase = str && *str ? str : samplephrase.c_str();

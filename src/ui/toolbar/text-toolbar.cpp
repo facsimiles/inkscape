@@ -40,9 +40,9 @@
 #include "verbs.h"
 
 
-#include "libnrtype/font-lister.h"
-#include "libnrtype/font-instance.h"
 #include "libnrtype/FontFactory.h"
+#include "libnrtype/font-instance.h"
+#include "libnrtype/font-lister.h"
 
 #include "display/sp-canvas.h"
 #include "object/sp-flowdiv.h"
@@ -221,7 +221,7 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
     , _tracker(new UnitTracker(Inkscape::Util::UNIT_TYPE_LINEAR))
     , _tracker_fs(new UnitTracker(Inkscape::Util::UNIT_TYPE_LINEAR))
     , _cusor_numbers(0)
-    , _origin(0)    
+    , _origin(0)
 {
     /* Line height unit tracker */
     _tracker->prependUnit(unit_table.getUnit("")); // Ratio
@@ -234,7 +234,7 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
     _tracker_fs->setActiveUnit(unit_table.getUnit("mm"));
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    
+
     /* Font family */
     {
         // Font list
@@ -659,14 +659,13 @@ TextToolbar::fontfamily_value_changed()
 
     Glib::ustring new_family = _font_family_item->get_active_text();
     css_font_family_unquote( new_family ); // Remove quotes around font family names.
-    if( !new_family.empty() ) {
-        font_instance* res = font_factory::Default()->FaceFromFontSpecification( new_family.c_str(), false);
-        if( res ) {
-            std::cout << "blocked" << std::endl;
+    if (!new_family.empty()) {
+        font_instance *res = font_factory::Default()->FaceFromFontSpecification(new_family.c_str(), false);
+        if (res) {
             res->block = true;
         }
     }
-    
+
 
     // TODO: Think about how to handle handle multiple selections. While
     // the font-family may be the same for all, the styles might be different.
@@ -866,7 +865,7 @@ TextToolbar::fontstyle_value_changed()
         sp_repr_css_attr_unref (css);
 
     }
-           
+
     _freeze = false;
 }
 
@@ -2446,9 +2445,10 @@ void TextToolbar::subselection_changed(gpointer texttool)
             Inkscape::Text::Layout::iterator end_selection = tc->text_sel_end;
             if (_origin != layout->iteratorToCharIndex(start_selection)) {
                 Glib::ustring new_family = _font_family_item->get_active_text();
-                if( !new_family.empty() ) {
-                    font_instance* res = font_factory::Default()->FaceFromFontSpecification( new_family.c_str(), false);
-                    if( res ) {
+                css_font_family_unquote(new_family); // Remove quotes around font family names.
+                if (!new_family.empty()) {
+                    font_instance *res = font_factory::Default()->FaceFromFontSpecification(new_family.c_str(), false);
+                    if (res) {
                         res->block = false;
                     }
                 }

@@ -115,7 +115,7 @@ private:
 
     // Temp: make public
 public:
-    bool block;            // We block the filal halfload of font
+  bool block; // We block the filal halfload of font
 #ifdef USE_PANGO_WIN32
     HFONT                 theFace;
 #else

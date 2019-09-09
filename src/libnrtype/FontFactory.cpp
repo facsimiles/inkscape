@@ -600,7 +600,7 @@ font_instance *font_factory::FaceFromDescr(char const *family, char const *style
     return res;
 }
 
-font_instance* font_factory::FaceFromPangoString(char const *pangoString, bool init)
+font_instance *font_factory::FaceFromPangoString(char const *pangoString, bool init)
 {
     font_instance *fontInstance = nullptr;
 
@@ -623,7 +623,7 @@ font_instance* font_factory::FaceFromPangoString(char const *pangoString, bool i
     return fontInstance;
 }
 
-font_instance* font_factory::FaceFromFontSpecification(char const *fontSpecification, bool init)
+font_instance *font_factory::FaceFromFontSpecification(char const *fontSpecification, bool init)
 {
     font_instance *font = nullptr;
 
