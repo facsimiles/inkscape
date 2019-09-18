@@ -97,6 +97,11 @@ LivePathEffectAdd::LivePathEffectAdd()
     _builder->get_widget("LPEScrolled", _LPEScrolled);
     _builder->get_widget("LPESelectorEffectEventFavShow", _LPESelectorEffectEventFavShow);
     _builder->get_widget("LPESelectorEffectInfoEventBox", _LPESelectorEffectInfoEventBox);
+    _builder->get_widget("LPESelectorEffectRadioList", _LPESelectorEffectRadioList);
+    _builder->get_widget("LPESelectorEffectRadioPackLess", _LPESelectorEffectRadioPackLess);
+    _builder->get_widget("LPESelectorEffectRadioPackMore", _LPESelectorEffectRadioPackMore);
+
+
     _LPEFilter->signal_search_changed().connect(sigc::mem_fun(*this, &LivePathEffectAdd::on_search));
     _LPEDialogSelector->add_events(Gdk::POINTER_MOTION_MASK | Gdk::BUTTON_PRESS_MASK | Gdk::BUTTON_RELEASE_MASK |
                                    Gdk::ENTER_NOTIFY_MASK | Gdk::LEAVE_NOTIFY_MASK | Gdk::KEY_PRESS_MASK);
@@ -148,9 +153,11 @@ LivePathEffectAdd::LivePathEffectAdd()
             sigc::mem_fun(*this, &LivePathEffectAdd::pop_description), builder_effect));
         Gtk::EventBox *LPESelectorEffectEventFav;
         builder_effect->get_widget("LPESelectorEffectEventFav", LPESelectorEffectEventFav);
+        Gtk::Image *fav = dynamic_cast<Gtk::Image *>(LPESelectorEffectEventFav->get_child());
         if (sp_has_fav(LPEName->get_text())) {
-            Gtk::Image *fav = dynamic_cast<Gtk::Image *>(LPESelectorEffectEventFav->get_child());
             fav->set_from_icon_name("draw-star", Gtk::IconSize(Gtk::ICON_SIZE_SMALL_TOOLBAR));
+        } else {
+            fav->set_from_icon_name("draw-star-outline", Gtk::IconSize(Gtk::ICON_SIZE_SMALL_TOOLBAR));
         }
         Gtk::EventBox *LPESelectorEffectEventFavTop;
         builder_effect->get_widget("LPESelectorEffectEventFavTop", LPESelectorEffectEventFavTop);
@@ -158,7 +165,12 @@ LivePathEffectAdd::LivePathEffectAdd()
             sigc::mem_fun(*this, &LivePathEffectAdd::fav_toggler), builder_effect));
         LPESelectorEffectEventFavTop->signal_button_press_event().connect(sigc::bind<Glib::RefPtr<Gtk::Builder>>(
             sigc::mem_fun(*this, &LivePathEffectAdd::fav_toggler), builder_effect));
-
+        Gtk::Image *favtop = dynamic_cast<Gtk::Image *>(LPESelectorEffectEventFavTop->get_child());
+        if (sp_has_fav(LPEName->get_text())) {
+            favtop->set_from_icon_name("draw-star", Gtk::IconSize(Gtk::ICON_SIZE_SMALL_TOOLBAR));
+        } else {
+            favtop->set_from_icon_name("draw-star-outline", Gtk::IconSize(Gtk::ICON_SIZE_SMALL_TOOLBAR));
+        }
         Gtk::EventBox *LPESelectorEffectEventApply;
         builder_effect->get_widget("LPESelectorEffectEventApply", LPESelectorEffectEventApply);
         LPESelectorEffectEventApply->signal_button_press_event().connect(
@@ -188,6 +200,12 @@ LivePathEffectAdd::LivePathEffectAdd()
     _LPESelectorFlowBox->set_activate_on_single_click(false);
     _visiblelpe = _LPESelectorFlowBox->get_children().size();
     _LPEInfo->set_visible(false);
+    _LPESelectorEffectRadioList->signal_clicked().connect(
+        sigc::bind(sigc::mem_fun(*this, &LivePathEffectAdd::viewChanged), 2));
+    _LPESelectorEffectRadioPackLess->signal_clicked().connect(
+        sigc::bind(sigc::mem_fun(*this, &LivePathEffectAdd::viewChanged), 1));
+    _LPESelectorEffectRadioPackMore->signal_clicked().connect(
+        sigc::bind(sigc::mem_fun(*this, &LivePathEffectAdd::viewChanged), 0));
     _LPESelectorEffectEventFavShow->signal_enter_notify_event().connect(sigc::bind<GtkWidget *>(
         sigc::mem_fun(*this, &LivePathEffectAdd::mouseover), GTK_WIDGET(_LPESelectorEffectEventFavShow->gobj())));
     _LPESelectorEffectEventFavShow->signal_leave_notify_event().connect(sigc::bind<GtkWidget *>(
@@ -211,16 +229,75 @@ LivePathEffectAdd::LivePathEffectAdd()
     _LPESelectorFlowBox->set_focus_vadjustment(_LPEScrolled->get_vadjustment());
     _LPEDialogSelector->show_all_children();
     _lasteffect = nullptr;
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    gint mode = prefs->getInt("/dialogs/livepatheffect/dialogmode", 0);
+    switch (mode) {
+        case 0:
+            _LPESelectorEffectRadioPackLess->set_active();
+            break;
+        case 1:
+            _LPESelectorEffectRadioPackMore->set_active();
+            break;
+        default:
+            _LPESelectorEffectRadioList->set_active();
+    }
 }
 const LivePathEffect::EnumEffectData<LivePathEffect::EffectType> *LivePathEffectAdd::getActiveData()
 {
     return instance()._to_add;
 }
 
+void LivePathEffectAdd::viewChanged(gint mode)
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    bool changed = false;
+    if (mode == 2 && !_LPEDialogSelector->get_style_context()->has_class("LPEList")) {
+        prefs->setInt("/dialogs/livepatheffect/dialogmode", 2);
+        _LPEDialogSelector->get_style_context()->add_class("LPEList");
+        _LPEDialogSelector->get_style_context()->remove_class("LPEPackLess");
+        _LPEDialogSelector->get_style_context()->remove_class("LPEPackMore");
+        _LPESelectorEffectRadioList->get_style_context()->add_class("active");
+        _LPESelectorEffectRadioPackLess->get_style_context()->remove_class("active");
+        _LPESelectorEffectRadioPackMore->get_style_context()->remove_class("active");
+        _LPESelectorFlowBox->set_max_children_per_line(1);
+        changed = true;
+    } else if (mode == 1 && !_LPEDialogSelector->get_style_context()->has_class("LPEPackMore")) {
+        prefs->setInt("/dialogs/livepatheffect/dialogmode", 1);
+        _LPESelectorEffectRadioList->get_style_context()->remove_class("active");
+        _LPESelectorEffectRadioPackLess->get_style_context()->remove_class("active");
+        _LPESelectorEffectRadioPackMore->get_style_context()->add_class("active");
+        _LPEDialogSelector->get_style_context()->remove_class("LPEList");
+        _LPEDialogSelector->get_style_context()->remove_class("LPEPackLess");
+        _LPEDialogSelector->get_style_context()->add_class("LPEPackMore");
+        _LPESelectorFlowBox->set_max_children_per_line(30);
+        changed = true;
+    } else if (mode == 0 && !_LPEDialogSelector->get_style_context()->has_class("LPEPackLess")) {
+        prefs->setInt("/dialogs/livepatheffect/dialogmode", 0);
+        _LPESelectorEffectRadioList->get_style_context()->remove_class("active");
+        _LPESelectorEffectRadioPackLess->get_style_context()->add_class("active");
+        _LPESelectorEffectRadioPackMore->get_style_context()->remove_class("active");
+        _LPEDialogSelector->get_style_context()->remove_class("LPEList");
+        _LPEDialogSelector->get_style_context()->add_class("LPEPackLess");
+        _LPEDialogSelector->get_style_context()->remove_class("LPEPackMore");
+        _LPESelectorFlowBox->set_max_children_per_line(30);
+        changed = true;
+    }
+    if (changed) {
+        _LPESelectorFlowBox->unset_sort_func();
+        _LPESelectorFlowBox->set_sort_func(sigc::mem_fun(this, &LivePathEffectAdd::on_sort));
+        std::vector<Gtk::FlowBoxChild *> selected = _LPESelectorFlowBox->get_selected_children();
+        if (selected.size() == 1) {
+            _LPESelectorFlowBox->get_selected_children()[0]->grab_focus();
+        }
+    }
+}
+
 void LivePathEffectAdd::on_focus(Gtk::Widget *widget)
 {
     Gtk::FlowBoxChild *child = dynamic_cast<Gtk::FlowBoxChild *>(widget);
-    if (child) {
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    gint mode = prefs->getInt("/dialogs/livepatheffect/dialogmode", 0);
+    if (child && mode != 2) {
         for (auto i : _LPESelectorFlowBox->get_children()) {
             Gtk::FlowBoxChild *leitem = dynamic_cast<Gtk::FlowBoxChild *>(i);
             Gtk::EventBox *eventbox = dynamic_cast<Gtk::EventBox *>(leitem->get_child());
@@ -300,12 +377,23 @@ bool LivePathEffectAdd::fav_toggler(GdkEventButton *evt, Glib::RefPtr<Gtk::Build
     builder_effect->get_widget("LPEName", LPEName);
     Gtk::Image *LPESelectorEffectFav;
     builder_effect->get_widget("LPESelectorEffectFav", LPESelectorEffectFav);
+    Gtk::Image *LPESelectorEffectFavTop;
+    builder_effect->get_widget("LPESelectorEffectFavTop", LPESelectorEffectFavTop);
     Gtk::EventBox *LPESelectorEffectEventFavTop;
     builder_effect->get_widget("LPESelectorEffectEventFavTop", LPESelectorEffectEventFavTop);
     if (LPESelectorEffectFav && LPESelectorEffectEventFavTop) {
         if (sp_has_fav(LPEName->get_text())) {
-            LPESelectorEffectEventFavTop->set_visible(false);
-            LPESelectorEffectEventFavTop->hide();
+            Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+            gint mode = prefs->getInt("/dialogs/livepatheffect/dialogmode", 0);
+            if (mode == 2) {
+                LPESelectorEffectEventFavTop->set_visible(true);
+                LPESelectorEffectEventFavTop->show();
+            } else {
+                LPESelectorEffectEventFavTop->set_visible(false);
+                LPESelectorEffectEventFavTop->hide();
+            }
+            LPESelectorEffectFavTop->set_from_icon_name("draw-star-outline",
+                                                        Gtk::IconSize(Gtk::ICON_SIZE_SMALL_TOOLBAR));
             LPESelectorEffectFav->set_from_icon_name("draw-star-outline", Gtk::IconSize(Gtk::ICON_SIZE_SMALL_TOOLBAR));
             sp_remove_fav(LPEName->get_text());
             LPESelectorEffect->get_parent()->get_style_context()->remove_class("lpefav");
@@ -317,6 +405,7 @@ bool LivePathEffectAdd::fav_toggler(GdkEventButton *evt, Glib::RefPtr<Gtk::Build
         } else {
             LPESelectorEffectEventFavTop->set_visible(true);
             LPESelectorEffectEventFavTop->show();
+            LPESelectorEffectFavTop->set_from_icon_name("draw-star", Gtk::IconSize(Gtk::ICON_SIZE_SMALL_TOOLBAR));
             LPESelectorEffectFav->set_from_icon_name("draw-star", Gtk::IconSize(Gtk::ICON_SIZE_SMALL_TOOLBAR));
             sp_add_fav(LPEName->get_text());
             LPESelectorEffect->get_parent()->get_style_context()->add_class("lpefav");
@@ -424,14 +513,25 @@ bool LivePathEffectAdd::on_filter(Gtk::FlowBoxChild *child)
         Gtk::Box *box = dynamic_cast<Gtk::Box *>(eventbox->get_child());
         if (box) {
             std::vector<Gtk::Widget *> contents = box->get_children();
+            Gtk::Overlay *overlay = dynamic_cast<Gtk::Overlay *>(contents[0]);
+            std::vector<Gtk::Widget *> content_overlay = overlay->get_children();
+
             Gtk::Label *lpename = dynamic_cast<Gtk::Label *>(contents[1]);
             if (!sp_has_fav(lpename->get_text()) && _showfavs) {
                 return false;
             }
             Gtk::ToggleButton *experimental = dynamic_cast<Gtk::ToggleButton *>(contents[3]);
             if (experimental) {
-                if (experimental->get_active() && _LPEExperimental->get_active()) {
+                if (experimental->get_active() && !_LPEExperimental->get_active()) {
                     return false;
+                }
+            }
+            Gtk::Label *lpedesc = dynamic_cast<Gtk::Label *>(contents[2]);
+            if (lpedesc) {
+                size_t s = lpedesc->get_text().uppercase().find(_LPEFilter->get_text().uppercase(), 0);
+                if (s != -1) {
+                    _visiblelpe++;
+                    return true;
                 }
             }
             if (_LPEFilter->get_text().length() < 1) {
@@ -440,14 +540,6 @@ bool LivePathEffectAdd::on_filter(Gtk::FlowBoxChild *child)
             }
             if (lpename) {
                 size_t s = lpename->get_text().uppercase().find(_LPEFilter->get_text().uppercase(), 0);
-                if (s != -1) {
-                    _visiblelpe++;
-                    return true;
-                }
-            }
-            Gtk::Label *lpedesc = dynamic_cast<Gtk::Label *>(contents[2]);
-            if (lpedesc) {
-                size_t s = lpedesc->get_text().uppercase().find(_LPEFilter->get_text().uppercase(), 0);
                 if (s != -1) {
                     _visiblelpe++;
                     return true;
@@ -494,11 +586,6 @@ void LivePathEffectAdd::on_search()
             _LPEInfo->set_visible(true);
             _LPEInfo->get_style_context()->add_class("lpeinfowarn");
         } else {
-            if (_LPEFilter->get_text().empty()) {
-                _LPEInfo->set_text(_("This is your favorite effects"));
-            } else {
-                _LPEInfo->set_text(_("This is your favorite effects search result"));
-            }
             _LPEInfo->set_visible(true);
             _LPEInfo->get_style_context()->add_class("lpeinfowarn");
         }
@@ -519,27 +606,118 @@ int LivePathEffectAdd::on_sort(Gtk::FlowBoxChild *child1, Gtk::FlowBoxChild *chi
     Glib::ustring name1 = "";
     Glib::ustring name2 = "";
     Gtk::EventBox *eventbox = dynamic_cast<Gtk::EventBox *>(child1->get_child());
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    gint mode = prefs->getInt("/dialogs/livepatheffect/dialogmode", 0);
+    if (mode == 2) {
+        eventbox->set_halign(Gtk::ALIGN_START);
+    } else {
+        eventbox->set_halign(Gtk::ALIGN_CENTER);
+    }
     if (eventbox) {
         Gtk::Box *box = dynamic_cast<Gtk::Box *>(eventbox->get_child());
+        if (mode == 2) {
+            box->set_orientation(Gtk::ORIENTATION_HORIZONTAL);
+        } else {
+            box->set_orientation(Gtk::ORIENTATION_VERTICAL);
+        }
         if (box) {
             std::vector<Gtk::Widget *> contents = box->get_children();
             Gtk::Label *lpename = dynamic_cast<Gtk::Label *>(contents[1]);
             name1 = lpename->get_text();
+            if (lpename) {
+                if (mode == 2) {
+                    lpename->set_justify(Gtk::JUSTIFY_LEFT);
+                    lpename->set_halign(Gtk::ALIGN_START);
+                    lpename->set_valign(Gtk::ALIGN_CENTER);
+                    lpename->set_width_chars(-1);
+                    lpename->set_max_width_chars(-1);
+                } else {
+                    lpename->set_justify(Gtk::JUSTIFY_CENTER);
+                    lpename->set_halign(Gtk::ALIGN_CENTER);
+                    lpename->set_valign(Gtk::ALIGN_CENTER);
+                    lpename->set_width_chars(14);
+                    lpename->set_max_width_chars(23);
+                }
+            }
+            Gtk::EventBox *lpemore = dynamic_cast<Gtk::EventBox *>(contents[4]);
+            if (lpemore) {
+                if (mode == 2) {
+                    lpemore->hide();
+                } else {
+                    if (child1->is_selected()) {
+                        lpemore->hide();
+                    } else {
+                        lpemore->show();
+                    }
+                }
+            }
+            Gtk::ButtonBox *lpebuttonbox = dynamic_cast<Gtk::ButtonBox *>(contents[5]);
+            if (lpebuttonbox) {
+                if (mode == 2) {
+                    lpebuttonbox->hide();
+                } else {
+                    if (child1->is_selected()) {
+                        lpebuttonbox->show();
+                    } else {
+                        lpebuttonbox->hide();
+                    }
+                }
+            }
+            Gtk::Label *lpedesc = dynamic_cast<Gtk::Label *>(contents[2]);
+            if (lpedesc) {
+                if (mode == 2) {
+                    lpedesc->show();
+                    lpedesc->set_justify(Gtk::JUSTIFY_LEFT);
+                    lpedesc->set_halign(Gtk::ALIGN_START);
+                    lpedesc->set_valign(Gtk::ALIGN_CENTER);
+                    lpedesc->set_ellipsize(Pango::ELLIPSIZE_END);
+                } else {
+                    lpedesc->hide();
+                    lpedesc->set_justify(Gtk::JUSTIFY_CENTER);
+                    lpedesc->set_halign(Gtk::ALIGN_CENTER);
+                    lpedesc->set_valign(Gtk::ALIGN_CENTER);
+                    lpedesc->set_ellipsize(Pango::ELLIPSIZE_NONE);
+                }
+            }
             Gtk::Overlay *overlay = dynamic_cast<Gtk::Overlay *>(contents[0]);
             if (overlay) {
                 std::vector<Gtk::Widget *> contents_overlay = overlay->get_children();
+                Gtk::Image *icon = dynamic_cast<Gtk::Image *>(contents_overlay[0]);
+                if (icon) {
+                    if (mode == 2) {
+                        icon->set_pixel_size(40);
+                        icon->set_margin_right(25);
+                        overlay->set_margin_right(5);
+                    } else {
+                        icon->set_pixel_size(60);
+                        icon->set_margin_right(0);
+                        overlay->set_margin_right(0);
+                    }
+                }
                 Gtk::EventBox *LPESelectorEffectEventFavTop = dynamic_cast<Gtk::EventBox *>(contents_overlay[1]);
                 if (LPESelectorEffectEventFavTop) {
+                    Gtk::Image *fav = dynamic_cast<Gtk::Image *>(LPESelectorEffectEventFavTop->get_child());
                     if (sp_has_fav(name1)) {
+                        fav->set_from_icon_name("draw-star", Gtk::IconSize(Gtk::ICON_SIZE_SMALL_TOOLBAR));
                         LPESelectorEffectEventFavTop->set_visible(true);
                         LPESelectorEffectEventFavTop->show();
                         child1->get_style_context()->add_class("lpefav");
                         child1->get_style_context()->remove_class("lpenormal");
                     } else if (!sp_has_fav(name1)) {
+                        fav->set_from_icon_name("draw-star-outline", Gtk::IconSize(Gtk::ICON_SIZE_SMALL_TOOLBAR));
                         LPESelectorEffectEventFavTop->set_visible(false);
                         LPESelectorEffectEventFavTop->hide();
                         child1->get_style_context()->remove_class("lpefav");
                         child1->get_style_context()->add_class("lpenormal");
+                    }
+                    if (mode == 2) {
+                        LPESelectorEffectEventFavTop->set_visible(true);
+                        LPESelectorEffectEventFavTop->show();
+                        LPESelectorEffectEventFavTop->set_halign(Gtk::ALIGN_END);
+                        LPESelectorEffectEventFavTop->set_valign(Gtk::ALIGN_CENTER);
+                    } else {
+                        LPESelectorEffectEventFavTop->set_halign(Gtk::ALIGN_END);
+                        LPESelectorEffectEventFavTop->set_valign(Gtk::ALIGN_START);
                     }
                     child1->get_style_context()->add_class("lpe");
                 }
@@ -547,27 +725,114 @@ int LivePathEffectAdd::on_sort(Gtk::FlowBoxChild *child1, Gtk::FlowBoxChild *chi
         }
     }
     eventbox = dynamic_cast<Gtk::EventBox *>(child2->get_child());
+    if (mode == 2) {
+        eventbox->set_halign(Gtk::ALIGN_START);
+    } else {
+        eventbox->set_halign(Gtk::ALIGN_CENTER);
+    }
     if (eventbox) {
         Gtk::Box *box = dynamic_cast<Gtk::Box *>(eventbox->get_child());
+        if (mode == 2) {
+            box->set_orientation(Gtk::ORIENTATION_HORIZONTAL);
+        } else {
+            box->set_orientation(Gtk::ORIENTATION_VERTICAL);
+        }
         if (box) {
             std::vector<Gtk::Widget *> contents = box->get_children();
             Gtk::Label *lpename = dynamic_cast<Gtk::Label *>(contents[1]);
             name2 = lpename->get_text();
+            if (lpename) {
+                if (mode == 2) {
+                    lpename->set_justify(Gtk::JUSTIFY_LEFT);
+                    lpename->set_halign(Gtk::ALIGN_START);
+                    lpename->set_valign(Gtk::ALIGN_CENTER);
+                    lpename->set_width_chars(-1);
+                    lpename->set_max_width_chars(-1);
+                } else {
+                    lpename->set_justify(Gtk::JUSTIFY_CENTER);
+                    lpename->set_halign(Gtk::ALIGN_CENTER);
+                    lpename->set_valign(Gtk::ALIGN_CENTER);
+                    lpename->set_width_chars(14);
+                    lpename->set_max_width_chars(23);
+                }
+            }
+            Gtk::EventBox *lpemore = dynamic_cast<Gtk::EventBox *>(contents[4]);
+            if (lpemore) {
+                if (mode == 2) {
+                    lpemore->hide();
+                } else {
+                    if (child2->is_selected()) {
+                        lpemore->hide();
+                    } else {
+                        lpemore->show();
+                    }
+                }
+            }
+            Gtk::ButtonBox *lpebuttonbox = dynamic_cast<Gtk::ButtonBox *>(contents[5]);
+            if (lpebuttonbox) {
+                if (mode == 2) {
+                    lpebuttonbox->hide();
+                } else {
+                    if (child2->is_selected()) {
+                        lpebuttonbox->show();
+                    } else {
+                        lpebuttonbox->hide();
+                    }
+                }
+            }
+            Gtk::Label *lpedesc = dynamic_cast<Gtk::Label *>(contents[2]);
+            if (lpedesc) {
+                if (mode == 2) {
+                    lpedesc->show();
+                    lpedesc->set_justify(Gtk::JUSTIFY_LEFT);
+                    lpedesc->set_halign(Gtk::ALIGN_START);
+                    lpedesc->set_valign(Gtk::ALIGN_CENTER);
+                    lpedesc->set_ellipsize(Pango::ELLIPSIZE_END);
+                } else {
+                    lpedesc->hide();
+                    lpedesc->set_justify(Gtk::JUSTIFY_CENTER);
+                    lpedesc->set_halign(Gtk::ALIGN_CENTER);
+                    lpedesc->set_valign(Gtk::ALIGN_CENTER);
+                    lpedesc->set_ellipsize(Pango::ELLIPSIZE_NONE);
+                }
+            }
             Gtk::Overlay *overlay = dynamic_cast<Gtk::Overlay *>(contents[0]);
             if (overlay) {
                 std::vector<Gtk::Widget *> contents_overlay = overlay->get_children();
+                Gtk::Image *icon = dynamic_cast<Gtk::Image *>(contents_overlay[0]);
+                if (icon) {
+                    if (mode == 2) {
+                        icon->set_pixel_size(33);
+                        icon->set_margin_right(40);
+                    } else {
+                        icon->set_pixel_size(60);
+                        icon->set_margin_right(0);
+                    }
+                }
                 Gtk::EventBox *LPESelectorEffectEventFavTop = dynamic_cast<Gtk::EventBox *>(contents_overlay[1]);
+                Gtk::Image *fav = dynamic_cast<Gtk::Image *>(LPESelectorEffectEventFavTop->get_child());
                 if (LPESelectorEffectEventFavTop) {
                     if (sp_has_fav(name2)) {
+                        fav->set_from_icon_name("draw-star", Gtk::IconSize(Gtk::ICON_SIZE_SMALL_TOOLBAR));
                         LPESelectorEffectEventFavTop->set_visible(true);
                         LPESelectorEffectEventFavTop->show();
                         child2->get_style_context()->add_class("lpefav");
                         child2->get_style_context()->remove_class("lpenormal");
                     } else if (!sp_has_fav(name2)) {
+                        fav->set_from_icon_name("draw-star-outline", Gtk::IconSize(Gtk::ICON_SIZE_SMALL_TOOLBAR));
                         LPESelectorEffectEventFavTop->set_visible(false);
                         LPESelectorEffectEventFavTop->hide();
                         child2->get_style_context()->remove_class("lpefav");
                         child2->get_style_context()->add_class("lpenormal");
+                    }
+                    if (mode == 2) {
+                        LPESelectorEffectEventFavTop->set_visible(true);
+                        LPESelectorEffectEventFavTop->show();
+                        LPESelectorEffectEventFavTop->set_halign(Gtk::ALIGN_END);
+                        LPESelectorEffectEventFavTop->set_valign(Gtk::ALIGN_CENTER);
+                    } else {
+                        LPESelectorEffectEventFavTop->set_halign(Gtk::ALIGN_END);
+                        LPESelectorEffectEventFavTop->set_valign(Gtk::ALIGN_START);
                     }
                     child2->get_style_context()->add_class("lpe");
                 }
