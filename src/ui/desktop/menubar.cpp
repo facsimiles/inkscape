@@ -41,7 +41,7 @@
 
 // ================= Common ====================
 
-std::vector<std::pair<std::pair<unsigned int, Gtk::CheckMenuItem *>, Inkscape::UI::View::View *>> checkmenuitems;
+std::vector<std::pair<std::pair<unsigned int, Gtk::MenuItem *>, Inkscape::UI::View::View *>> menuitems;
 unsigned int lastverb = -1;
 ;
 
@@ -71,9 +71,9 @@ static void item_activate(Gtk::MenuItem *menuitem, SPAction *action)
     lastverb = -1;
 }
 
-static void toggle_checkmenu(unsigned int emitting_verb, bool value)
+static void set_menuitems(unsigned int emitting_verb, bool value)
 {
-    for (auto menu : checkmenuitems) {
+    for (auto menu : menuitems) {
         if (menu.second == SP_ACTIVE_DESKTOP) {
             if (emitting_verb == menu.first.first) {
                 if (emitting_verb == lastverb) {
@@ -81,7 +81,13 @@ static void toggle_checkmenu(unsigned int emitting_verb, bool value)
                     return;
                 }
                 lastverb = emitting_verb;
-                menu.first.second->property_active() = value;
+                Gtk::CheckMenuItem *check = dynamic_cast<Gtk::CheckMenuItem *>(menu.first.second);
+                Gtk::RadioMenuItem *radio = dynamic_cast<Gtk::RadioMenuItem *>(menu.first.second);
+                if (check) {
+                    check->property_active() = value;
+                } else if (radio) {
+                    radio->property_active() = value;
+                }
                 lastverb = -1;
             }
         }
@@ -168,7 +174,6 @@ build_menu_item_from_verb(SPAction* action,
     } else {
         menuitem->add(*label);
     }
-
     menuitem->signal_activate().connect(
         sigc::bind<Gtk::MenuItem*, SPAction*>(sigc::ptr_fun(&item_activate), menuitem, action));
     menuitem->signal_select().connect(  sigc::bind<SPAction*>(sigc::ptr_fun(&select_action),   action));
@@ -450,31 +455,28 @@ build_menu(Gtk::MenuShell* menu, Inkscape::XML::Node* xml, Inkscape::UI::View::V
                         SPAction* action = verb->get_action(Inkscape::ActionContext(view));
 
                         if (menu_ptr->attribute("check") != nullptr) {
-
-                            Gtk::CheckMenuItem* menuitem = build_menu_check_item_from_verb(action);
+                            Gtk::MenuItem *menuitem = build_menu_check_item_from_verb(action);
                             if (menuitem) {
-                                std::pair<std::pair<unsigned int, Gtk::CheckMenuItem *>, Inkscape::UI::View::View *>
-                                    checkitem = std::make_pair(std::make_pair(verb->get_code(), menuitem), view);
-                                checkmenuitems.push_back(checkitem);
+                                std::pair<std::pair<unsigned int, Gtk::MenuItem *>, Inkscape::UI::View::View *>
+                                    verbmenuitem = std::make_pair(std::make_pair(verb->get_code(), menuitem), view);
+                                menuitems.push_back(verbmenuitem);
                                 menu->append(*menuitem);
                             }
-
                         } else if (menu_ptr->attribute("radio") != nullptr) {
-
                             Gtk::MenuItem* menuitem = build_menu_item_from_verb(action, show_icons_curr, true, &group);
                             if (menuitem) {
-                                // TODO: if necesary update a radio in the future we can follow the previus checkbutton
                                 if (menu_ptr->attribute("default") != nullptr) {
                                     auto radiomenuitem = dynamic_cast<Gtk::RadioMenuItem*>(menuitem);
                                     if (radiomenuitem) {
                                         radiomenuitem->set_active(true);
                                     }
                                 }
+                                std::pair<std::pair<unsigned int, Gtk::MenuItem *>, Inkscape::UI::View::View *>
+                                    verbmenuitem = std::make_pair(std::make_pair(verb->get_code(), menuitem), view);
+                                menuitems.push_back(verbmenuitem);
                                 menu->append(*menuitem);
                             }
-
                         } else {
-
                             Gtk::MenuItem* menuitem = build_menu_item_from_verb(action, show_icons_curr);
                             if (menuitem) {
                                 menu->append(*menuitem);
@@ -539,7 +541,6 @@ build_menu(Gtk::MenuShell* menu, Inkscape::XML::Node* xml, Inkscape::UI::View::V
             std::cerr << "build_menu: xml node has no name!" << std::endl;
         }
     }
-    SP_ACTIVE_DESKTOP->_menu_update.connect(sigc::ptr_fun(&toggle_checkmenu));
 }
 
 Gtk::MenuBar*
@@ -547,6 +548,7 @@ build_menubar(Inkscape::UI::View::View* view)
 {
     Gtk::MenuBar* menubar = Gtk::manage(new Gtk::MenuBar());
     build_menu(menubar, INKSCAPE.get_menus()->parent(), view);
+    SP_ACTIVE_DESKTOP->_menu_update.connect(sigc::ptr_fun(&set_menuitems));
     return menubar;
 }
 
