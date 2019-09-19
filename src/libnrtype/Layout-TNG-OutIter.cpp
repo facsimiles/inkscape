@@ -459,16 +459,16 @@ std::vector<Geom::Point> Layout::createSelectionShape(iterator const &it_start, 
 
             double baseline_y = _spans[span_index].line(this).baseline_y + _spans[span_index].baseline_shift;
             double vertical_scale = _glyphs.back().vertical_scale;
-            double offset_y =  _spans[span_index].y_offset;
-            
+            double offset_y = _spans[span_index].y_offset;
+
             if (_directions_are_orthogonal(_blockProgression(), TOP_TO_BOTTOM)) {
-	            double span_height = vertical_scale * _spans[span_index].line_height.emSize();
+                double span_height = vertical_scale * _spans[span_index].line_height.emSize();
                 top_left[Geom::Y] = top_left[Geom::X];
                 top_left[Geom::X] = offset_y + baseline_y - span_height * 0.5;
-                bottom_right[Geom::Y] =bottom_right[Geom::X];
+                bottom_right[Geom::Y] = bottom_right[Geom::X];
                 bottom_right[Geom::X] = offset_y + baseline_y + span_height * 0.5;
             } else {
-                top_left[Geom::Y] =  offset_y + baseline_y - vertical_scale * _spans[span_index].line_height.ascent;
+                top_left[Geom::Y] = offset_y + baseline_y - vertical_scale * _spans[span_index].line_height.ascent;
                 bottom_right[Geom::Y] = offset_y + baseline_y + vertical_scale * _spans[span_index].line_height.descent;
             }
         }
