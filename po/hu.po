@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hu\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
-"POT-Creation-Date: 2019-09-10 23:00+0200\n"
+"POT-Creation-Date: 2019-09-11 00:46+0200\n"
 "PO-Revision-Date: 2017-08-20 17:58+0000\n"
 "Last-Translator: Gyuris Gellért <bubu@ujevangelizacio.hu>, 2019\n"
 "Language-Team: Hungarian (https://www.transifex.com/fsf-hu/teams/77907/hu/)\n"
@@ -23667,7 +23667,7 @@ msgid ""
 "Layer/Group/Object label (inkscape:label). Double-click to set. Default "
 "value is object 'id'."
 msgstr ""
-"Réteg, csoport, objektum címke (inkscape:label). Dupla kattintásra "
+"Réteg, csoport, objektum címkéje (inkscape:label). Dupla kattintásra "
 "szerkeszthető. Az alapértelmezett érték az objektum ID-je."
 
 #: ../src/ui/dialog/objects.cpp:1795
@@ -24767,71 +24767,97 @@ msgstr "Transzformációs mátrix módosítása"
 msgid "Rotation angle (positive = clockwise)"
 msgstr "Forgatási szög (pozitív = az óramutató járásának irányában)"
 
-#: ../src/ui/dialog/xml-tree.cpp:61 ../src/ui/dialog/xml-tree.cpp:106
-msgid "New element node"
-msgstr "Új elemcsomópont"
-
-#: ../src/ui/dialog/xml-tree.cpp:62 ../src/ui/dialog/xml-tree.cpp:113
-msgid "New text node"
-msgstr "Új szövegcsomópont"
-
-#: ../src/ui/dialog/xml-tree.cpp:63 ../src/ui/dialog/xml-tree.cpp:129
-msgid "nodeAsInXMLdialogTooltip|Delete node"
-msgstr "Csomópont törlése"
-
-#: ../src/ui/dialog/xml-tree.cpp:64 ../src/ui/dialog/xml-tree.cpp:120
-#: ../src/ui/dialog/xml-tree.cpp:803
-msgid "Duplicate node"
-msgstr "Csomópont kettőzése"
-
-#: ../src/ui/dialog/xml-tree.cpp:99
+#: ../src/ui/dialog/xml-tree.cpp:90
 msgid "Drag to reorder nodes"
 msgstr "A csomópontok átrendezhetők az egérrel"
 
-#: ../src/ui/dialog/xml-tree.cpp:138 ../src/ui/dialog/xml-tree.cpp:139
-#: ../src/ui/dialog/xml-tree.cpp:913
+#: ../src/ui/dialog/xml-tree.cpp:97 ../src/ui/dialog/xml-tree.cpp:98
+msgid "New element node"
+msgstr "Új elemcsomópont"
+
+#: ../src/ui/dialog/xml-tree.cpp:105 ../src/ui/dialog/xml-tree.cpp:106
+msgid "New text node"
+msgstr "Új szövegcsomópont"
+
+#: ../src/ui/dialog/xml-tree.cpp:113 ../src/ui/dialog/xml-tree.cpp:114
+msgid "Duplicate node"
+msgstr "Csomópont kettőzése"
+
+#: ../src/ui/dialog/xml-tree.cpp:123 ../src/ui/dialog/xml-tree.cpp:124
+#: ../src/ui/tool/path-manipulator.cpp:1570
+#: ../src/ui/toolbar/node-toolbar.cpp:146
+msgid "Delete node"
+msgstr "Csomópont törlése"
+
+#: ../src/ui/dialog/xml-tree.cpp:133 ../src/ui/dialog/xml-tree.cpp:134
 msgid "Unindent node"
 msgstr "Csomópontot egy szinttel kijjebb"
 
-#: ../src/ui/dialog/xml-tree.cpp:146 ../src/ui/dialog/xml-tree.cpp:147
-#: ../src/ui/dialog/xml-tree.cpp:891
+#: ../src/ui/dialog/xml-tree.cpp:141 ../src/ui/dialog/xml-tree.cpp:142
 msgid "Indent node"
 msgstr "Csomópontot egy szinttel beljebb"
 
-#: ../src/ui/dialog/xml-tree.cpp:154 ../src/ui/dialog/xml-tree.cpp:155
-#: ../src/ui/dialog/xml-tree.cpp:842
+#: ../src/ui/dialog/xml-tree.cpp:149 ../src/ui/dialog/xml-tree.cpp:150
 msgid "Raise node"
 msgstr "Csomópontot eggyel feljebb"
 
-#: ../src/ui/dialog/xml-tree.cpp:162 ../src/ui/dialog/xml-tree.cpp:163
-#: ../src/ui/dialog/xml-tree.cpp:860
+#: ../src/ui/dialog/xml-tree.cpp:157 ../src/ui/dialog/xml-tree.cpp:158
 msgid "Lower node"
 msgstr "Csomópontot eggyel lejjebb"
 
-#: ../src/ui/dialog/xml-tree.cpp:188
+#: ../src/ui/dialog/xml-tree.cpp:183
 msgid "Show attributes"
 msgstr "Tulajdonságok megjelenítése"
 
-#: ../src/ui/dialog/xml-tree.cpp:340
+#: ../src/ui/dialog/xml-tree.cpp:335
 msgid "<b>Click</b> to select nodes, <b>drag</b> to rearrange."
 msgstr ""
 "Csomópontok kijelölése: <b>kattintással</b>. Átrendezés: <b>húzással</b>."
 
-#: ../src/ui/dialog/xml-tree.cpp:557
+#: ../src/ui/dialog/xml-tree.cpp:552
+msgctxt "Undo History / XML dialog"
 msgid "Drag XML subtree"
 msgstr "XML-al-fa húzása"
 
-#: ../src/ui/dialog/xml-tree.cpp:773
+#: ../src/ui/dialog/xml-tree.cpp:768
+msgctxt "Undo History / XML dialog"
 msgid "Create new element node"
 msgstr "Új elemcsomópont létrehozása"
 
-#: ../src/ui/dialog/xml-tree.cpp:788
+#: ../src/ui/dialog/xml-tree.cpp:783
+msgctxt "Undo History / XML dialog"
 msgid "Create new text node"
 msgstr "Új szövegcsomópont létrehozása"
 
-#: ../src/ui/dialog/xml-tree.cpp:820
-msgid "nodeAsInXMLinHistoryDialog|Delete node"
+#: ../src/ui/dialog/xml-tree.cpp:797
+msgctxt "Undo History / XML dialog"
+msgid "Duplicate node"
+msgstr "Csomópont kettőzése"
+
+#: ../src/ui/dialog/xml-tree.cpp:813
+msgctxt "Undo History / XML dialog"
+msgid "Delete node"
 msgstr "Csomópont törlése"
+
+#: ../src/ui/dialog/xml-tree.cpp:834
+msgctxt "Undo History / XML dialog"
+msgid "Raise node"
+msgstr "Csomópontot eggyel feljebb"
+
+#: ../src/ui/dialog/xml-tree.cpp:851
+msgctxt "Undo History / XML dialog"
+msgid "Lower node"
+msgstr "Csomópontot eggyel lejjebb"
+
+#: ../src/ui/dialog/xml-tree.cpp:881
+msgctxt "Undo History / XML dialog"
+msgid "Indent node"
+msgstr "Csomópontot egy szinttel beljebb"
+
+#: ../src/ui/dialog/xml-tree.cpp:902
+msgctxt "Undo History / XML dialog"
+msgid "Unindent node"
+msgstr "Csomópontot egy szinttel kijjebb"
 
 #: ../src/ui/drag-and-drop.cpp:159 ../src/ui/drag-and-drop.cpp:245
 #: ../src/ui/drag-and-drop.cpp:348 ../src/ui/widget/selected-style.cpp:539
@@ -25375,11 +25401,6 @@ msgstr "Méretezési fogantyú"
 #: ../src/ui/tool/path-manipulator.cpp:878
 msgid "Rotate handle"
 msgstr "Forgatási fogantyú"
-
-#: ../src/ui/tool/path-manipulator.cpp:1570
-#: ../src/ui/toolbar/node-toolbar.cpp:146
-msgid "Delete node"
-msgstr "Csomópont törlése"
 
 #: ../src/ui/tool/path-manipulator.cpp:1578
 msgid "Cycle node type"
@@ -30045,7 +30066,8 @@ msgid "Proprietary"
 msgstr "Zárt (proprietary)"
 
 #: ../src/ui/widget/licensor.cpp:39
-msgid "MetadataLicence|Other"
+msgctxt "MetadataLicence"
+msgid "Other"
 msgstr "Egyéb"
 
 #: ../src/ui/widget/licensor.cpp:68
@@ -33009,11 +33031,11 @@ msgstr ""
 
 #: ../src/verbs.cpp:3115
 msgid "_Export PNG Image..."
-msgstr "_PNG kép exportálása..."
+msgstr "_PNG-kép exportálása..."
 
 #: ../src/verbs.cpp:3116
 msgid "Export this document or a selection as a PNG image"
-msgstr "A dokumentum vagy a kijelölés exportálása PNG képbe"
+msgstr "A dokumentum vagy a kijelölés exportálása PNG-képbe"
 
 #: ../src/verbs.cpp:3118
 msgid "About E_xtensions"
