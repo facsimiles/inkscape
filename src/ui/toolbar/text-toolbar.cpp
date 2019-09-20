@@ -1824,7 +1824,7 @@ void TextToolbar::selection_changed(Inkscape::Selection *selection) // don't bot
         return;
     }
     _freeze = true;
-        // Only flowed text can be justified, only normal text can be kerned...
+    // Only flowed text can be justified, only normal text can be kerned...
     // Find out if we have flowed text now so we can use it several places
     gboolean isFlow = false;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -1847,13 +1847,13 @@ void TextToolbar::selection_changed(Inkscape::Selection *selection) // don't bot
     if (selection && to_work.size() == 0) {
         outside = true;
     }
-    
-    Inkscape::FontLister* fontlister = Inkscape::FontLister::get_instance();
+
+    Inkscape::FontLister *fontlister = Inkscape::FontLister::get_instance();
     fontlister->selection_update();
     // Update font list, but only if widget already created.
-    if( _font_family_item->get_combobox() != nullptr ) {
-        _font_family_item->set_active_text( fontlister->get_font_family().c_str(), fontlister->get_font_family_row() );
-        _font_style_item->set_active_text( fontlister->get_font_style().c_str() );
+    if (_font_family_item->get_combobox() != nullptr) {
+        _font_family_item->set_active_text(fontlister->get_font_family().c_str(), fontlister->get_font_family_row());
+        _font_style_item->set_active_text(fontlister->get_font_style().c_str());
     }
 
     /*
