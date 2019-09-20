@@ -15400,7 +15400,7 @@ msgstr "Elem ki_jelölése"
 
 #: ../src/ui/contextmenu.cpp:374
 msgid "Select Same"
-msgstr "Azonosak kiválasztása"
+msgstr "Azonosak kijelölése"
 
 #: ../src/ui/contextmenu.cpp:384
 msgid "Fill and Stroke"
@@ -41839,7 +41839,7 @@ msgstr "Klón_ozás"
 
 #: ../share/ui/menus.xml:69
 msgid "Select Sa_me"
-msgstr "_Azonosak kiválasztása"
+msgstr "_Azonosak kijelölése"
 
 #: ../share/ui/menus.xml:91
 msgid "_View"
