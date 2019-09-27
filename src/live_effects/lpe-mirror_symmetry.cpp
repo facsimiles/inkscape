@@ -241,7 +241,7 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
 
             }
         } else if ( mode == MT_V){
-            SPDocument * document = SP_ACTIVE_DOCUMENT;
+            SPDocument *document = lpeitem->document;
             if (document) {
                 Geom::Affine transform = i2anc_affine(SP_OBJECT(lpeitem), nullptr).inverse();
                 Geom::Point sp = Geom::Point(document->getWidth().value("px")/2.0, 0) * transform;
@@ -251,7 +251,7 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
                 center_point.param_setValue(Geom::middle_point((Geom::Point)start_point, (Geom::Point)end_point));
             }
         } else { //horizontal page
-            SPDocument * document = SP_ACTIVE_DOCUMENT;
+            SPDocument *document = lpeitem->document;
             if (document) {
                 Geom::Affine transform = i2anc_affine(SP_OBJECT(lpeitem), nullptr).inverse();
                 Geom::Point sp = Geom::Point(0, document->getHeight().value("px")/2.0) * transform;
