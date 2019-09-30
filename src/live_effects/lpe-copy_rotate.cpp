@@ -114,7 +114,7 @@ LPECopyRotate::doAfterEffect (SPLPEItem const* lpeitem)
 {
     is_load = false;
     if (split_items) {
-        SPDocument * document = getSPDoc();
+        SPDocument *document = getSPDoc();
         if (!document) {
             return;
         }
@@ -205,7 +205,7 @@ void LPECopyRotate::cloneStyle(SPObject *orig, SPObject *dest)
 void
 LPECopyRotate::cloneD(SPObject *orig, SPObject *dest, Geom::Affine transform, bool reset) 
 {
-    SPDocument * document = getSPDoc();
+    SPDocument *document = getSPDoc();
     if (!document) {
         return;
     }
@@ -268,7 +268,7 @@ LPECopyRotate::cloneD(SPObject *orig, SPObject *dest, Geom::Affine transform, bo
 
 Inkscape::XML::Node *
 LPECopyRotate::createPathBase(SPObject *elemref) {
-    SPDocument * document = getSPDoc();
+    SPDocument *document = getSPDoc();
     if (!document) {
         return nullptr;
     }
@@ -296,7 +296,7 @@ LPECopyRotate::createPathBase(SPObject *elemref) {
 void
 LPECopyRotate::toItem(Geom::Affine transform, size_t i, bool reset)
 {
-    SPDocument * document = getSPDoc();
+    SPDocument *document = getSPDoc();
     if (!document) {
         return;
     }

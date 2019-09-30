@@ -199,7 +199,7 @@ void
 LPEOffset::doBeforeEffect (SPLPEItem const* lpeitem)
 {
     original_bbox(lpeitem);
-    SPDocument * document = getSPDoc();
+    SPDocument *document = getSPDoc();
     if (!document) {
         return;
     }

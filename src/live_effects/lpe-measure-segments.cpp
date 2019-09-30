@@ -310,7 +310,7 @@ LPEMeasureSegments::on_my_switch_page(Gtk::Widget* page, guint page_number)
 void
 LPEMeasureSegments::createArrowMarker(Glib::ustring mode)
 {
-    SPDocument * document = getSPDoc();
+    SPDocument *document = getSPDoc();
     if (!document || !sp_lpe_item|| !sp_lpe_item->getId()) {
         return;
     }
@@ -380,7 +380,7 @@ LPEMeasureSegments::createArrowMarker(Glib::ustring mode)
 void
 LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double length, Geom::Coord angle, bool remove, bool valid)
 {
-    SPDocument * document = getSPDoc();
+    SPDocument *document = getSPDoc();
     if (!document || !sp_lpe_item || !sp_lpe_item->getId()) {
         return;
     }
@@ -528,7 +528,7 @@ LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double leng
 void
 LPEMeasureSegments::createLine(Geom::Point start,Geom::Point end, Glib::ustring name, size_t counter, bool main, bool remove, bool arrows)
 {
-    SPDocument * document = getSPDoc();
+    SPDocument *document = getSPDoc();
     if (!document || !sp_lpe_item || !sp_lpe_item->getId()) {
         return;
     }
@@ -681,7 +681,7 @@ LPEMeasureSegments::doOnApply(SPLPEItem const* lpeitem)
     if (styleNode == nullptr) {
         // Style element not found, create one
         styleNode = root->createElement("svg:style");
-        textNode  = root->createTextNode("");
+        textNode = root->createTextNode("");
         root->addChild(styleNode, nullptr);
         Inkscape::GC::release(styleNode);
 
@@ -819,7 +819,7 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
 {
     SPLPEItem * splpeitem = const_cast<SPLPEItem *>(lpeitem);
     Glib::ustring lpobjid = this->lpeobj->getId();
-    SPDocument * document = getSPDoc();
+    SPDocument *document = getSPDoc();
     if (!document) {
         return;
     }

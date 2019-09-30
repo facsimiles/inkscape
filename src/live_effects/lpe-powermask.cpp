@@ -125,7 +125,7 @@ void
 LPEPowerMask::setMask(){
     SPMask *mask = SP_ITEM(sp_lpe_item)->mask_ref->getObject();
     SPObject *elemref = nullptr;
-    SPDocument * document = getSPDoc();
+    SPDocument *document = getSPDoc();
     if (!document || !mask) {
         return;
     }
@@ -310,7 +310,7 @@ LPEPowerMask::doOnRemove (SPLPEItem const* lpeitem)
             background.param_setValue(false);
             setMask();
             SPObject *elemref = nullptr;
-            SPDocument * document = getSPDoc();
+            SPDocument *document = getSPDoc();
             Glib::ustring mask_id = (Glib::ustring)mask->getId();
             Glib::ustring filter_id = mask_id + (Glib::ustring)"_inverse";
             if ((elemref = document->getObjectById(filter_id))) {
