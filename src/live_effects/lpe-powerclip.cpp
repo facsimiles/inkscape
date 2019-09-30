@@ -373,7 +373,7 @@ void sp_inverse_powerclip(Inkscape::Selection *sel) {
                             return;
                         }
                     }
-                    Effect::createAndApply(POWERCLIP, getSPDoc(), lpeitem);
+                    Effect::createAndApply(POWERCLIP, SP_ACTIVE_DOCUMENT, lpeitem);
                     Effect* lpe = lpeitem->getCurrentLPE();
                     lpe->getRepr()->setAttribute("is_inverse", "false");
                     lpe->getRepr()->setAttribute("is_visible", "true");

@@ -129,11 +129,7 @@ LPEPowerMask::setMask(){
     if (!document || !mask) {
         return;
     }
-    Inkscape::XML::Node *root = sp_lpe_item->document->getReprRoot();
-    Inkscape::XML::Node *root_origin = document->getReprRoot();
-    if (root_origin != root) {
-        return;
-    }
+    Inkscape::XML::Node *root = document->getReprRoot();
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
     Inkscape::XML::Node *box = nullptr;
     Inkscape::XML::Node *filter = nullptr;
@@ -332,7 +328,7 @@ void sp_inverse_powermask(Inkscape::Selection *sel) {
             if (lpeitem) {
                 SPMask *mask = lpeitem->mask_ref->getObject();
                 if (mask) {
-                    Effect::createAndApply(POWERMASK, getSPDoc(), lpeitem);
+                    Effect::createAndApply(POWERMASK, SP_ACTIVE_DOCUMENT, lpeitem);
                     Effect* lpe = lpeitem->getCurrentLPE();
                     lpe->getRepr()->setAttribute("invert", "false");
                     lpe->getRepr()->setAttribute("is_visible", "true");

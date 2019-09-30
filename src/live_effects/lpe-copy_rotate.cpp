@@ -120,11 +120,7 @@ LPECopyRotate::doAfterEffect (SPLPEItem const* lpeitem)
         }
         items.clear();
         container = dynamic_cast<SPObject *>(sp_lpe_item->parent);
-        Inkscape::XML::Node *root = sp_lpe_item->document->getReprRoot();
-        Inkscape::XML::Node *root_origin = document->getReprRoot();
-        if (root_origin != root) {
-            return;
-        }
+        Inkscape::XML::Node *root = getSPDoc()->getReprRoot();
         if (previous_num_copies != num_copies) {
             gint numcopies_gap = previous_num_copies - num_copies;
             if (numcopies_gap > 0 && num_copies != 0) {

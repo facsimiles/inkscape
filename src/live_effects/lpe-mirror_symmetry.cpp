@@ -90,11 +90,7 @@ LPEMirrorSymmetry::doAfterEffect (SPLPEItem const* lpeitem)
         return;
     }
     container = dynamic_cast<SPObject *>(sp_lpe_item->parent);
-    Inkscape::XML::Node *root = sp_lpe_item->document->getReprRoot();
-    Inkscape::XML::Node *root_origin = document->getReprRoot();
-    if (root_origin != root) {
-        return;
-    }
+    Inkscape::XML::Node *root = document->getReprRoot();
 
     if (split_items && !discard_orig_path) {
         Geom::Line ls((Geom::Point)start_point, (Geom::Point)end_point);

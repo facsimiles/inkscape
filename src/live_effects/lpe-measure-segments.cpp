@@ -656,7 +656,7 @@ LPEMeasureSegments::doOnApply(SPLPEItem const* lpeitem)
     DocumentUndo::setUndoSensitive(document, false);
     Inkscape::XML::Node *styleNode = nullptr;
     Inkscape::XML::Node* textNode = nullptr;
-    Inkscape::XML::Node *root = getSPDoc()->getReprRoot();
+    Inkscape::XML::Node *root = document->getReprRoot();
     for (unsigned i = 0; i < root->childCount(); ++i) {
         if (Glib::ustring(root->nthChild(i)->name()) == "svg:style") {
 
@@ -671,7 +671,7 @@ LPEMeasureSegments::doOnApply(SPLPEItem const* lpeitem)
             if (textNode == nullptr) {
                 // Style element found but does not contain text node!
                 std::cerr << "StyleDialog::_getStyleTextNode(): No text node!" << std::endl;
-                textNode = getSPDoc()->getReprDoc()->createTextNode("");
+                textNode = root->createTextNode("");
                 styleNode->appendChild(textNode);
                 Inkscape::GC::release(textNode);
             }
@@ -680,8 +680,8 @@ LPEMeasureSegments::doOnApply(SPLPEItem const* lpeitem)
 
     if (styleNode == nullptr) {
         // Style element not found, create one
-        styleNode = getSPDoc()->getReprDoc()->createElement("svg:style");
-        textNode  = getSPDoc()->getReprDoc()->createTextNode("");
+        styleNode = root->createElement("svg:style");
+        textNode  = root->createTextNode("");
         root->addChild(styleNode, nullptr);
         Inkscape::GC::release(styleNode);
 
@@ -824,11 +824,7 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
         return;
     }
     //Avoid crashes on previews
-    Inkscape::XML::Node *root = splpeitem->document->getReprRoot();
-    Inkscape::XML::Node *root_origin = document->getReprRoot();
-    if (root_origin != root) {
-        return;
-    }
+    Inkscape::XML::Node *root = document->getReprRoot();
     Geom::Affine parentaffinetransform = i2anc_affine(SP_OBJECT(lpeitem->parent), SP_OBJECT(document->getRoot()));
     Geom::Affine affinetransform = i2anc_affine(SP_OBJECT(lpeitem), SP_OBJECT(document->getRoot()));
     Geom::Affine itemtransform = affinetransform * parentaffinetransform.inverse();
