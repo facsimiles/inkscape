@@ -125,7 +125,7 @@ void
 LPEPowerMask::setMask(){
     SPMask *mask = SP_ITEM(sp_lpe_item)->mask_ref->getObject();
     SPObject *elemref = nullptr;
-    SPDocument * document = SP_ACTIVE_DOCUMENT;
+    SPDocument * document = getSPDoc();
     if (!document || !mask) {
         return;
     }
@@ -314,7 +314,7 @@ LPEPowerMask::doOnRemove (SPLPEItem const* lpeitem)
             background.param_setValue(false);
             setMask();
             SPObject *elemref = nullptr;
-            SPDocument * document = SP_ACTIVE_DOCUMENT;
+            SPDocument * document = getSPDoc();
             Glib::ustring mask_id = (Glib::ustring)mask->getId();
             Glib::ustring filter_id = mask_id + (Glib::ustring)"_inverse";
             if ((elemref = document->getObjectById(filter_id))) {
@@ -332,7 +332,7 @@ void sp_inverse_powermask(Inkscape::Selection *sel) {
             if (lpeitem) {
                 SPMask *mask = lpeitem->mask_ref->getObject();
                 if (mask) {
-                    Effect::createAndApply(POWERMASK, SP_ACTIVE_DOCUMENT, lpeitem);
+                    Effect::createAndApply(POWERMASK, getSPDoc(), lpeitem);
                     Effect* lpe = lpeitem->getCurrentLPE();
                     lpe->getRepr()->setAttribute("invert", "false");
                     lpe->getRepr()->setAttribute("is_visible", "true");
