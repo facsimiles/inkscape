@@ -671,7 +671,7 @@ LPEMeasureSegments::doOnApply(SPLPEItem const* lpeitem)
             if (textNode == nullptr) {
                 // Style element found but does not contain text node!
                 std::cerr << "StyleDialog::_getStyleTextNode(): No text node!" << std::endl;
-                textNode = root->createTextNode("");
+                textNode = document->getReprDoc()->createTextNode("");
                 styleNode->appendChild(textNode);
                 Inkscape::GC::release(textNode);
             }
@@ -680,8 +680,8 @@ LPEMeasureSegments::doOnApply(SPLPEItem const* lpeitem)
 
     if (styleNode == nullptr) {
         // Style element not found, create one
-        styleNode = root->createElement("svg:style");
-        textNode = root->createTextNode("");
+        styleNode = document->getReprDoc()->createElement("svg:style");
+        textNode = document->getReprDoc()->createTextNode("");
         root->addChild(styleNode, nullptr);
         Inkscape::GC::release(styleNode);
 
