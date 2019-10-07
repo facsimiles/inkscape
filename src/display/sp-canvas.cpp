@@ -2425,6 +2425,7 @@ int SPCanvas::paint()
                                             _y0 + int(allocation.height * split_y),
                                             int(allocation.width * (1 - split_x)),
                                             int(allocation.height * (1 - split_y)) };
+    cairo_region_t *draw = nullptr;
     cairo_region_t *to_draw = nullptr;
     cairo_region_t *to_draw_outline = nullptr;
     if (_split_inverse && split) {
@@ -2434,9 +2435,14 @@ int SPCanvas::paint()
         to_draw = cairo_region_create_rectangle(&crect);
         to_draw_outline = cairo_region_create_rectangle(&crect_outline);
     }
+    cairo_region_get_extents(_clean_region, &crect);
+    draw = cairo_region_create_rectangle(&crect);
+    cairo_region_subtract(draw, _clean_region);
+    cairo_region_get_extents(draw, &crect);
+    cairo_region_subtract_rectangle(_clean_region, &crect); 
     cairo_region_subtract(to_draw, _clean_region);
     cairo_region_subtract(to_draw_outline, _clean_region);
-
+    cairo_region_destroy(draw);
     int n_rects = cairo_region_num_rectangles(to_draw);
     for (int i = 0; i < n_rects; ++i) {
         cairo_rectangle_int_t crect;
@@ -2530,6 +2536,12 @@ gint SPCanvas::idle_handler(gpointer data)
 {
     SPCanvas *canvas = SP_CANVAS (data);
     int const ret = canvas->doUpdate();
+#ifdef DEBUG_PERFORMANCE
+    static gint totaloops = 1;
+    if (!ret) {
+        totaloops++;
+    }
+#endif
     if (ret) {
         // Reset idle id
         canvas->_idle_id = 0;
@@ -2548,11 +2560,12 @@ gint SPCanvas::idle_handler(gpointer data)
                 totalelapsed = 0;
                 g_message("Outline mode, we reset and stop total counter");
             }
-            g_message("%i splits in last idle loop", canvas->_splits);
+            g_message("%i loops in last idle", totaloops);
+            g_message("%i splits in last idle", canvas->_splits);
             g_message("%f last idle loop duration", elapsed/(double)1000000);
             g_message("%f total rendering duration (change to outline mode to reset)", totalelapsed/(double)1000000);
         }
-        
+        totaloops = 1;
         canvas->_splits = 0;
 #endif
     }
