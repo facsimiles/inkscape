@@ -2444,7 +2444,6 @@ int SPCanvas::paint()
     cairo_region_subtract(to_draw_outline, _clean_region);
     cairo_region_destroy(draw);
     int n_rects = cairo_region_num_rectangles(to_draw);
-    std::cout << n_rects << std::endl;
     for (int i = 0; i < n_rects; ++i) {
         cairo_rectangle_int_t crect;
         cairo_region_get_rectangle(to_draw, i, &crect);
@@ -2537,9 +2536,9 @@ gint SPCanvas::idle_handler(gpointer data)
 {
     SPCanvas *canvas = SP_CANVAS (data);
     int ret = canvas->doUpdate();
-    // Cause the update if necessary
-    if (canvas->_need_update) {
-        ret = canvas->doUpdate();
+    int n_rects = cairo_region_num_rectangles(_clean_region);
+    if (n_rects != 1) { // not full painted, maibe clean region is updated in middle idle, reload again
+        ret = 0;
     }
 #ifdef DEBUG_PERFORMANCE
     static int totaloops = 1;
