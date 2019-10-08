@@ -458,7 +458,8 @@ void NodeTool::selection_changed(Inkscape::Selection *sel) {
 
     this->_multipath->setItems(shapes);
     this->update_tip(nullptr);
-    this->desktop->updateNow();
+    // This not need to be called canvas is updated on selection change on setItems
+    // this->desktop->updateNow();
 }
 
 bool NodeTool::root_handler(GdkEvent* event) {
@@ -777,8 +778,8 @@ void NodeTool::select_point(Geom::Point const &/*sel*/, GdkEventButton *event) {
         } else {
             selection->set(item_clicked);
         }
-
-        this->desktop->updateNow();
+        // This not need to be called canvas is updated on selection change
+        // this->desktop->updateNow();
     }
 }
 

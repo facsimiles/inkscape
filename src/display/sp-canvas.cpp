@@ -2444,6 +2444,7 @@ int SPCanvas::paint()
     cairo_region_subtract(to_draw_outline, _clean_region);
     cairo_region_destroy(draw);
     int n_rects = cairo_region_num_rectangles(to_draw);
+    std::cout << n_rects << std::endl;
     for (int i = 0; i < n_rects; ++i) {
         cairo_rectangle_int_t crect;
         cairo_region_get_rectangle(to_draw, i, &crect);
@@ -2535,17 +2536,19 @@ int SPCanvas::doUpdate()
 gint SPCanvas::idle_handler(gpointer data)
 {
     SPCanvas *canvas = SP_CANVAS (data);
-    int const ret = canvas->doUpdate();
-#ifdef DEBUG_PERFORMANCE
-    static gint totaloops = 1;
-    if (!ret) {
-        totaloops++;
+    int ret = canvas->doUpdate();
+    // Cause the update if necessary
+    if (canvas->_need_update) {
+        ret = canvas->doUpdate();
     }
-#endif
+#ifdef DEBUG_PERFORMANCE
+    static int totaloops = 1;
+    if (ret == 0) {
+        totaloops += 1;
+    }
     if (ret) {
         // Reset idle id
         canvas->_idle_id = 0;
-#ifdef DEBUG_PERFORMANCE
         static glong totalelapsed = 0;
         GTimeVal now;
         g_get_current_time (&now);
@@ -2567,6 +2570,10 @@ gint SPCanvas::idle_handler(gpointer data)
         }
         totaloops = 1;
         canvas->_splits = 0;
+#else
+    if (ret) {
+        // Reset idle id
+        canvas->_idle_id = 0;
 #endif
     }
     return !ret;
@@ -2713,7 +2720,20 @@ void SPCanvas::scrollTo( Geom::Point const &c, unsigned int clear, bool is_scrol
 void SPCanvas::updateNow()
 {
     if (_need_update) {
+#ifdef DEBUG_PERFORMANCE
+    GTimeVal now;
+    g_get_current_time (&now);
+    glong elapsed = (now.tv_sec - _idle_time.tv_sec) * 1000000
+    + (now.tv_usec - _idle_time.tv_usec);
+    g_message("updateNow() started %f", elapsed/(double)1000000);
+#endif
         doUpdate();
+#ifdef DEBUG_PERFORMANCE
+    g_get_current_time (&now);
+    elapsed = (now.tv_sec - _idle_time.tv_sec) * 1000000
+    + (now.tv_usec - _idle_time.tv_usec);
+    g_message("updateNow() ended %f", elapsed/(double)1000000);
+#endif
     }
 }
 
