@@ -115,7 +115,6 @@
 ../src/live_effects/lpe-bounding-box.cpp
 ../src/live_effects/lpe-bspline.cpp
 ../src/live_effects/lpe-circle_with_radius.cpp
-../src/live_effects/lpe-circle_3pts.cpp
 ../src/live_effects/lpe-clone-original.cpp
 ../src/live_effects/lpe-constructgrid.cpp
 ../src/live_effects/lpe-copy_rotate.cpp

@@ -8,6 +8,7 @@
 ../src/live_effects/lpe-lattice.cpp
 ../src/live_effects/lpe-path_length.cpp
 ../src/live_effects/lpe-recursiveskeleton.cpp
+../src/live_effects/lpe-skeleton.cpp
 ../src/live_effects/lpe-test-doEffect-stack.cpp
 ../src/live_effects/lpe-text_label.cpp
 
