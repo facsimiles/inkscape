@@ -102,6 +102,7 @@ option(WITH_DBUS "Compile with support for DBus interface" OFF)
 option(ENABLE_LCMS "Compile with LCMS support" ON)
 option(WITH_SVG2 "Compile with support for new SVG2 features" ON)
 option(WITH_LPETOOL "Compile with LPE Tool" ON)
+option(LPE_ENABLE_TEST_EFFECTS "Compile with test experimental LPEs enabled" ON)
 option(WITH_OPENMP "Compile with OpenMP support" ON)
 
 option(WITH_PROFILING "Turn on profiling" OFF) # Set to true if compiler/linker should enable profiling
