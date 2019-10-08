@@ -2558,7 +2558,7 @@ void InkscapePreferences::initPageSystem()
     _page_system.add_line(true, _("User extensions: "), _sys_user_extension_dir, "",
                           _("Location of the user’s extensions"), true);
 
-    _sys_user_themes_dir.init(g_build_filename(g_get_user_data_dir(), "themes", NULL), _("Open themes folder"));
+    _sys_user_themes_dir.init(g_build_filename(char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::THEMES, ""), _("Open themes folder"));
     _page_system.add_line(true, _("User themes: "), _sys_user_themes_dir, "", _("Location of the user’s themes"), true);
 
     _sys_user_icons_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::ICONS, ""),
