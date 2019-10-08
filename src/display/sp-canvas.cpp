@@ -57,7 +57,7 @@ static bool const HAS_BROKEN_MOTION_HINTS = true;
 // Define this to visualize the regions to be redrawn
 //#define DEBUG_REDRAW 1;
 
-// Define this to output the time spent in a full iddle loop and the number of "tiles" painted
+// Define this to output the time spent in a full idle loop and the number of "tiles" painted
 //#define DEBUG_PERFORMANCE 1;
 
 // Tiles are a way to minimize the number of redraws, eliminating too small redraws.

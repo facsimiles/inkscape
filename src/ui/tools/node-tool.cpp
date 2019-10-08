@@ -549,7 +549,7 @@ bool NodeTool::root_handler(GdkEvent* event) {
                 SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
 
             sp_canvas_bpath_set_fill(SP_CANVAS_BPATH(flash), 0, SP_WIND_RULE_NONZERO);
-
+            desktop->canvas->forceFullRedrawAfterInterruptions(5);
             this->flash_tempitem = desktop->add_temporary_canvasitem(flash,
                 prefs->getInt("/tools/nodes/pathflash_timeout", 500));
 
@@ -632,6 +632,7 @@ bool NodeTool::root_handler(GdkEvent* event) {
                 }
             }
         }
+        desktop->canvas->forceFullRedrawAfterInterruptions(5);
         break;
 
     default:
