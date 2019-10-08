@@ -2536,7 +2536,7 @@ gint SPCanvas::idle_handler(gpointer data)
 {
     SPCanvas *canvas = SP_CANVAS (data);
     int ret = canvas->doUpdate();
-    int n_rects = cairo_region_num_rectangles(_clean_region);
+    int n_rects = cairo_region_num_rectangles(canvas->_clean_region);
     if (n_rects != 1) { // not full painted, maibe clean region is updated in middle idle, reload again
         ret = 0;
     }
