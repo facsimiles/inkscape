@@ -747,7 +747,7 @@ void sp_canvas_item_request_update(SPCanvasItem *item)
         bbox *= item->xform;
         Geom::IntRect intbbox = bbox.roundOutwards();
         //Force render in one loop if rendering tiles split the item
-        dirtyRect(intbbox);
+        item->canvas->dirtyRect(intbbox);
         item->canvas->requestUpdate();
     }
 }
