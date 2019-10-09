@@ -76,7 +76,7 @@ ControlPointSelection::~ControlPointSelection()
 }
 
 /** Add a control point to the selection. */
-std::pair<ControlPointSelection::iterator, bool> ControlPointSelection::insert(const value_type &x, bool notify)
+std::pair<ControlPointSelection::iterator, bool> ControlPointSelection::insert(const value_type &x, bool notify, bool to_update)
 {
     iterator found = _points.find(x);
     if (found != _points.end()) {
@@ -87,8 +87,10 @@ std::pair<ControlPointSelection::iterator, bool> ControlPointSelection::insert(c
     _points_list.push_back(x);
 
     x->updateState();
-    _pointChanged(x, true);
 
+    if (to_update) {
+        _update();
+    }
     if (notify) {
         signal_selection_changed.emit(std::vector<key_type>(1, x), true);
     }
@@ -97,13 +99,15 @@ std::pair<ControlPointSelection::iterator, bool> ControlPointSelection::insert(c
 }
 
 /** Remove a point from the selection. */
-void ControlPointSelection::erase(iterator pos)
+void ControlPointSelection::erase(iterator pos, bool to_update)
 {
     SelectableControlPoint *erased = *pos;
     _points_list.remove(*pos);
     _points.erase(pos);
     erased->updateState();
-    _pointChanged(erased, false);
+    if (to_update) {
+        _update();
+    }
 }
 ControlPointSelection::size_type ControlPointSelection::erase(const key_type &k, bool notify)
 {
@@ -119,29 +123,40 @@ ControlPointSelection::size_type ControlPointSelection::erase(const key_type &k,
 void ControlPointSelection::erase(iterator first, iterator last)
 {
     std::vector<SelectableControlPoint *> out(first, last);
-    while (first != last) erase(first++);
+    while (first != last) {
+        erase(first++, false);
+    }
+    _update();
     signal_selection_changed.emit(out, false);
 }
 
 /** Remove all points from the selection, making it empty. */
 void ControlPointSelection::clear()
 {
-    std::vector<SelectableControlPoint *> out(begin(), end());
-    for (iterator i = begin(); i != end(); )
-        erase(i++);
-    if (!out.empty())
-        signal_selection_changed.emit(out, false);
+    if (empty()) {
+        return;
+    }
+
+    std::vector<SelectableControlPoint *> out(begin(), end()); // begin() takes from _points
+    _points.clear();
+    _points_list.clear();
+    for (auto erased : out) {
+        erased->updateState();
+    }
+    signal_selection_changed.emit(out, false);
 }
 
 /** Select all points that this selection can contain. */
 void ControlPointSelection::selectAll()
 {
     for (auto _all_point : _all_points) {
-        insert(_all_point, false);
+        insert(_all_point, false, false);
     }
     std::vector<SelectableControlPoint *> out(_all_points.begin(), _all_points.end());
-    if (!out.empty())
+    if (!out.empty()) {
+        _update();
         signal_selection_changed.emit(out, true);
+    }
 }
 /** Select all points inside the given rectangle (in desktop coordinates). */
 void ControlPointSelection::selectArea(Geom::Rect const &r)
@@ -149,12 +164,14 @@ void ControlPointSelection::selectArea(Geom::Rect const &r)
     std::vector<SelectableControlPoint *> out;
     for (auto _all_point : _all_points) {
         if (r.contains(*_all_point)) {
-            insert(_all_point, false);
+            insert(_all_point, false, false);
             out.push_back(_all_point);
         }
     }
-    if (!out.empty())
+    if (!out.empty()) {
+        _update();
         signal_selection_changed.emit(out, true);
+    }
 }
 /** Unselect all selected points and select all unselected points. */
 void ControlPointSelection::invertSelection()
@@ -167,9 +184,10 @@ void ControlPointSelection::invertSelection()
         }
         else {
             out.push_back(_all_point);
-            insert(_all_point, false); 
+            insert(_all_point, false, false); 
         }
     }
+    _update();
     if (!in.empty())
         signal_selection_changed.emit(in, false);
     if (!out.empty())
@@ -438,20 +456,18 @@ bool ControlPointSelection::_pointClicked(SelectableControlPoint *p, GdkEventBut
     return false;
 }
 
-void ControlPointSelection::_pointChanged(SelectableControlPoint *p, bool selected)
+void ControlPointSelection::_mouseoverChanged()
+{
+    _mouseover_rot_radius = boost::none;
+}
+
+void ControlPointSelection::_update()
 {
     _updateBounds();
     _updateTransformHandles(false);
     if (_bounds) {
         _handles->rotationCenter().move(_bounds->midpoint());
     }
-
-    //signal_point_changed.emit(p, selected);
-}
-
-void ControlPointSelection::_mouseoverChanged()
-{
-    _mouseover_rot_radius = boost::none;
 }
 
 void ControlPointSelection::_updateBounds()
