@@ -2537,7 +2537,7 @@ gint SPCanvas::idle_handler(gpointer data)
     SPCanvas *canvas = SP_CANVAS (data);
     int ret = canvas->doUpdate();
     int n_rects = cairo_region_num_rectangles(canvas->_clean_region);
-    if (n_rects != 1) { // not full painted, maibe clean region is updated in middle idle, reload again
+    if (n_rects > 1) { // not full painted, maibe clean region is updated in middle idle, reload again
         ret = 0;
     }
 #ifdef DEBUG_PERFORMANCE
@@ -2720,18 +2720,18 @@ void SPCanvas::updateNow()
 {
     if (_need_update) {
 #ifdef DEBUG_PERFORMANCE
-    GTimeVal now;
-    g_get_current_time (&now);
-    glong elapsed = (now.tv_sec - _idle_time.tv_sec) * 1000000
-    + (now.tv_usec - _idle_time.tv_usec);
-    g_message("updateNow() started %f", elapsed/(double)1000000);
+        GTimeVal now;
+        g_get_current_time (&now);
+        glong elapsed = (now.tv_sec - _idle_time.tv_sec) * 1000000
+        + (now.tv_usec - _idle_time.tv_usec);
+        g_message("updateNow() started %f", elapsed/(double)1000000);
 #endif
         doUpdate();
 #ifdef DEBUG_PERFORMANCE
-    g_get_current_time (&now);
-    elapsed = (now.tv_sec - _idle_time.tv_sec) * 1000000
-    + (now.tv_usec - _idle_time.tv_usec);
-    g_message("updateNow() ended %f", elapsed/(double)1000000);
+        g_get_current_time (&now);
+        elapsed = (now.tv_sec - _idle_time.tv_sec) * 1000000
+        + (now.tv_usec - _idle_time.tv_usec);
+        g_message("updateNow() ended %f", elapsed/(double)1000000);
 #endif
     }
 }
