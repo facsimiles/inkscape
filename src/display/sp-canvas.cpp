@@ -743,6 +743,11 @@ void sp_canvas_item_request_update(SPCanvasItem *item)
         sp_canvas_item_request_update (item->parent);
     } else {
         // Have reached the top of the tree, make sure the update call gets scheduled.
+        Geom::Rect bbox = item->bounds;
+        bbox *= item->xform;
+        Geom::IntRect intbbox = bbox.roundOutwards();
+        //Force render in one loop if rendering tiles split the item
+        item->canvas->dirtyRect(intbbox);
         item->canvas->requestUpdate();
     }
 }
