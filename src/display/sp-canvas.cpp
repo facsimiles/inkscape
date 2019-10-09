@@ -743,7 +743,7 @@ void sp_canvas_item_request_update(SPCanvasItem *item)
         sp_canvas_item_request_update (item->parent);
     } else {
         // Have reached the top of the tree, make sure the update call gets scheduled.
-        Geom::Rect bbox = item->bounds->roundOutwards();
+        Geom::Rect bbox = item->bounds.roundOutwards();
         bbox *= item->xform;
         //Force render in one loop if rendering tiles split the item
         dirtyRect(bbox);
