@@ -600,8 +600,9 @@ void Application::add_gtk_css()
         }
         Gtk::StyleContext::add_provider_for_screen(screen, provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     }
-
-    style = get_filename(UIS, prefs->getString("/theme/gtkTheme") + ".css");
+    Glib::ustring gtkthemename = prefs->getString("/theme/gtkTheme");
+    gtkthemename += ".css";
+    style = get_filename(UIS, gtkthemename.c_str());
     if (!style.empty()) {
         auto provider = Gtk::CssProvider::create();
         try {
