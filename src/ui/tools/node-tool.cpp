@@ -496,10 +496,13 @@ bool NodeTool::root_handler(GdkEvent* event) {
     switch (event->type)
     {
     case GDK_MOTION_NOTIFY: {
-        sp_update_helperpath(); 
-        combine_motion_events(desktop->canvas, event->motion, 0);
-        SPItem *over_item = sp_event_context_find_item (desktop, event_point(event->button),
-                FALSE, TRUE);
+        sp_update_helperpath();
+        SPItem *over_item = nullptr;
+        if (!desktop->canvas->_scrooling) {
+            combine_motion_events(desktop->canvas, event->motion, 0);
+            over_item = sp_event_context_find_item (desktop, event_point(event->button),
+                    FALSE, TRUE);
+        }
 
         Geom::Point const motion_w(event->motion.x, event->motion.y);
         Geom::Point const motion_dt(this->desktop->w2d(motion_w));
@@ -517,14 +520,14 @@ bool NodeTool::root_handler(GdkEvent* event) {
             }
         }
 
-        if (over_item != this->_last_over) {
+        if (over_item && over_item != this->_last_over) {
             this->_last_over = over_item;
             //ink_node_tool_update_tip(nt, event);
             this->update_tip(event);
         }
         // create pathflash outline
         if (prefs->getBool("/tools/nodes/pathflash_enabled")) {
-            if (over_item == this->flashed_item) {
+            if (!over_item || over_item == this->flashed_item) {
                 break;
             }
 

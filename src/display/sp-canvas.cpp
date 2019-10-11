@@ -897,9 +897,6 @@ void SPCanvasGroup::render(SPCanvasItem *item, SPCanvasBuf *buf)
 void SPCanvasGroup::viewboxChanged(SPCanvasItem *item, Geom::IntRect const &new_area)
 {
     SPCanvasGroup *group = SP_CANVAS_GROUP(item);
-    if (SP_ACTIVE_DESKTOP->canvas->_backing_store) {
-        SP_ACTIVE_DESKTOP->canvas->_delayrendering = 20;
-    }
     for (auto & item : group->items) {
         SPCanvasItem *child = &item;
         if (child->visible) {
@@ -1024,6 +1021,7 @@ static void sp_canvas_init(SPCanvas *canvas)
     canvas->_forcefull = false;
     canvas->_delayrendering = 0;
     canvas->_totalelapsed = 0;
+    canvas->_scrooling = false;
     GTimeZone *tz = g_time_zone_new(nullptr);
     canvas->_idle_time = g_date_time_new_now(tz);
     g_time_zone_unref(tz);
@@ -1182,7 +1180,7 @@ void SPCanvas::handle_get_preferred_height(GtkWidget *widget, gint *minimum_heig
 void SPCanvas::handle_size_allocate(GtkWidget *widget, GtkAllocation *allocation)
 {
     SPCanvas *canvas = SP_CANVAS (widget);
-
+    canvas->_delayrendering = 20;
     // Allocation does not depend on device scale.
     GtkAllocation old_allocation;
     gtk_widget_get_allocation(widget, &old_allocation);
@@ -2593,6 +2591,7 @@ gint SPCanvas::idle_handler(gpointer data)
     }
     if (ret) {
         // Reset idle id
+        canvas->_scrooling = false;
         canvas->_forcefull = false;
         canvas->_delayrendering = 0;
         tz = g_time_zone_new(nullptr);
@@ -2738,18 +2737,6 @@ void SPCanvas::scrollTo( Geom::Point const &c, unsigned int clear, bool is_scrol
     _x0 = ix;
     _y0 = iy;
 
-    // Boring hack thar fix a issue rendering filers when user scrooll up-down super fast with node tool
-    // The bug tealy is done in motion event on node tool when mixing with
-    // canvas event
-    Inkscape::UI::Tools::NodeTool *tool = nullptr;
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    if (desktop) {
-        Inkscape::UI::Tools::ToolBase *ec = desktop->event_context;
-        if (INK_IS_NODE_TOOL(ec)) {
-            requestFullRedraw();
-        }
-    }
-
     // Adjust the clean region
     if (clear || _spliter || _xray) {
         requestFullRedraw();
@@ -2780,6 +2767,7 @@ void SPCanvas::scrollTo( Geom::Point const &c, unsigned int clear, bool is_scrol
                         }
                     }
                 }
+                canvas->_scrooling = true;
                 gdk_window_scroll(getWindow(this), -dx, -dy);
             }
         }
