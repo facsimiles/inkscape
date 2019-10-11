@@ -359,7 +359,7 @@ checkitem_update(Gtk::CheckMenuItem* menuitem, SPAction* action)
         } else if (id == "ViewColorModeGrayscale") {
             active = false;
         }            
-+#endif
+#endif
         else if (id == "ViewSplitModeToggle") {
             active = dt->splitMode();
 
