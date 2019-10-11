@@ -340,12 +340,26 @@ checkitem_update(Gtk::CheckMenuItem* menuitem, SPAction* action)
         } else if (id == "ViewCmsToggle") {
             active = dt->colorProfAdjustEnabled();
 
+#ifdef GDK_WINDOWING_QUARTZ
         } else if (id == "ViewModeNormal") {
             active = true;
+
+        } else if (id == "ViewModeNoFilters") {
+            active = false;
+
+        } else if (id == "ViewModeOutline") {
+            active = false;
+
+        } else if (id == "ViewModeVisibleHairlines") {
+            active = false;
 
         } else if (id == "ViewColorModeNormal") {
             active = true;
 
+        } else if (id == "ViewColorModeGrayscale") {
+            active = false;
+            
++#endif
         } else if (id == "ViewSplitModeToggle") {
             active = dt->splitMode();
 
