@@ -212,7 +212,9 @@ namespace Toolbar {
 TextToolbar::TextToolbar(SPDesktop *desktop)
     : Toolbar(desktop)
     , _freeze(false)
+    , _text_style_from_prefs(false)
     , _outer(true)
+    , _updating(false)
     , _tracker(new UnitTracker(Inkscape::Util::UNIT_TYPE_LINEAR))
     , _tracker_fs(new UnitTracker(Inkscape::Util::UNIT_TYPE_LINEAR))
     , _cusor_numbers(0)
@@ -657,7 +659,9 @@ TextToolbar::fontfamily_value_changed()
     }
     _freeze = true;
 
-    Glib::ustring new_family = _font_family_item->get_active_text();
+    gchar *temp_family = _font_family_item->get_active_text();
+    Glib::ustring new_family(temp_family);
+    g_free(temp_family);
     css_font_family_unquote( new_family ); // Remove quotes around font family names.
 
     // TODO: Think about how to handle handle multiple selections. While
@@ -2183,28 +2187,32 @@ void TextToolbar::selection_changed(Inkscape::Selection *selection) // don't bot
 }
 
 void
-TextToolbar::watch_ec(SPDesktop* desktop, Inkscape::UI::Tools::ToolBase* ec) {https://gitlab.com/inkscape/inkscape/merge_requests/796
-    if (SP_IS_TEXT_CONTEXT(ec)) {
+TextToolbar::watch_ec(SPDesktop* desktop, Inkscape::UI::Tools::ToolBase* ec) {
+    bool is_text_toolbar = SP_IS_TEXT_CONTEXT(ec);
+    bool is_select_toolbar = !is_text_toolbar && SP_IS_SELECT_CONTEXT(ec);
+    if (is_text_toolbar) {
         // Watch selection
-        // Ensure FontLister is updated here first.................. VVVVV
+        // Ensure FontLister is updated here first..................
         c_selection_changed =
             desktop->getSelection()->connectChangedFirst(sigc::mem_fun(*this, &TextToolbar::selection_changed));
         c_selection_modified = desktop->getSelection()->connectModifiedFirst(sigc::mem_fun(*this, &TextToolbar::selection_modified));
         c_subselection_changed = desktop->connectToolSubselectionChanged(sigc::mem_fun(*this, &TextToolbar::subselection_changed));
         this->_sub_active_item = nullptr;
         selection_changed(desktop->getSelection());
-    } else if (SP_IS_SELECT_CONTEXT(ec)) {
+    } else if (is_select_toolbar) {
         c_selection_modified_select_tool = desktop->getSelection()->connectModifiedFirst(
             sigc::mem_fun(*this, &TextToolbar::selection_modified_select_tool));
-    } else {
-        if (c_selection_changed)
-            c_selection_changed.disconnect();
-        if (c_selection_modified)
-            c_selection_modified.disconnect();
-        if (c_subselection_changed)
-            c_subselection_changed.disconnect();
-        if (c_selection_modified_select_tool)
-            c_selection_modified_select_tool.disconnect();
+    }
+
+
+    if (!is_text_toolbar) {
+        c_selection_changed.disconnect();
+        c_selection_modified.disconnect();
+        c_subselection_changed.disconnect();
+    }
+
+    if (!is_select_toolbar) {
+        c_selection_modified_select_tool.disconnect();
     }
 }
 
