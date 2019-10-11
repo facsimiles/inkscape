@@ -25,12 +25,12 @@
 # include "config.h"  // only include where actually required!
 #endif
 
-#include <gtk/gtk.h>
-#include <glib.h>
-#include <cstdint>
-#include <glibmm/ustring.h>
 #include <2geom/affine.h>
 #include <2geom/rect.h>
+#include <cstdint>
+#include <glib.h>
+#include <glibmm/ustring.h>
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
