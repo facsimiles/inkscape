@@ -556,7 +556,7 @@ bool NodeTool::root_handler(GdkEvent* event) {
                 //prefs->getInt("/tools/nodes/highlight_color", 0xff0000ff), 1.0,
                 over_item->highlight_color(), 1.0,
                 SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
-            
+            this->desktop->canvas->_forcefull = true;
             sp_canvas_bpath_set_fill(SP_CANVAS_BPATH(flash), 0, SP_WIND_RULE_NONZERO);
             this->flash_tempitem = desktop->add_temporary_canvasitem(flash,
                 prefs->getInt("/tools/nodes/pathflash_timeout", 500));
@@ -612,6 +612,9 @@ bool NodeTool::root_handler(GdkEvent* event) {
         break;
 
     case GDK_BUTTON_RELEASE:
+        if (event->button.button == 1) {
+            this->desktop->canvas->_forcefull = true;
+        }
         if (this->_selector->doubleClicked()) {
             // If the selector received the doubleclick event, then we're at some distance from
             // the path; otherwise, the doubleclick event would have been received by
@@ -647,7 +650,7 @@ bool NodeTool::root_handler(GdkEvent* event) {
         break;
     }
     // we realy dont want to stop any node operation we want to success all even the time consume it
-    this->desktop->canvas->forceFullRedrawAfterInterruptions(0);
+    
     return ToolBase::root_handler(event);
 }
 
