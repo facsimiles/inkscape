@@ -2591,7 +2591,7 @@ gint SPCanvas::idle_handler(gpointer data)
             g_message("[%i] splits %i", canvas->_idle_id, canvas->_splits);
             g_message("[%i] duration %f", canvas->_idle_id, elapsed/(double)1000000);
             g_message("[%i] total %f (toggle outline mode to reset)", canvas->_idle_id, canvas->_totalelapsed/(double)1000000);
-            g_message("[%i] :::::::::::::::::::::::::::::::::::::::");
+            g_message("[%i] :::::::::::::::::::::::::::::::::::::::", canvas->_idle_id);
         }
         canvas->_idle_id = 0;
         totaloops = 1;
