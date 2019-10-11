@@ -388,7 +388,7 @@ DrawingShape::_pickItem(Geom::Point const &p, double delta, unsigned flags)
     g_time_zone_unref(tz);
     g_date_time_unref(tstart);
     g_date_time_unref(tfinish);
-    
+
     if (this_pick > 10000) { // slow picking, remember to skip several new picks
         _repick_after = this_pick / 5000;
     }

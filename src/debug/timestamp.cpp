@@ -28,7 +28,7 @@ std::shared_ptr<std::string> timestamp() {
     g_time_zone_unref(tz);
     gint micr = g_date_time_get_microsecond(timestamp);
     g_date_time_unref(timestamp);
-    gchar *value = g_strdup_printf( "%d", micr / 1000000 );
+    gchar *value = g_strdup_printf("%d", micr / 1000000);
     std::shared_ptr<std::string> result = std::make_shared<std::string>(value);
     g_free(value);
     return result;

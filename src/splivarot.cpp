@@ -2261,7 +2261,7 @@ sp_selected_path_simplify_selection(SPDesktop *desktop, float threshold, bool ju
 
 
 // globals for keeping track of accelerated simplify
-static double previous_time     = 0.0;
+static double previous_time = 0.0;
 static gdouble simplifyMultiply = 1.0;
 
 void
