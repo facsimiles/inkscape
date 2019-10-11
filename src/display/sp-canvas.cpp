@@ -39,12 +39,12 @@
 #include "display/sp-canvas-group.h"
 #include "display/sp-canvas.h"
 #include "helper/sp-marshal.h"
-#include "inkscape.h"
 #include "inkscape-window.h"
+#include "inkscape.h"
 #include "preferences.h"
 #include "sodipodi-ctrlrect.h"
-#include "ui/tools/tool-base.h"
 #include "ui/tools/node-tool.h"
+#include "ui/tools/tool-base.h"
 #include "widgets/desktop-widget.h"
 #include <2geom/affine.h>
 #include <2geom/rect.h>
@@ -1024,10 +1024,10 @@ static void sp_canvas_init(SPCanvas *canvas)
     canvas->_forcefull = false;
     canvas->_delayrendering = 0;
     canvas->_totalelapsed = 0;
-    GTimeZone *tz = g_time_zone_new (nullptr);
+    GTimeZone *tz = g_time_zone_new(nullptr);
     canvas->_idle_time = g_date_time_new_now(tz);
     g_time_zone_unref(tz);
-    
+
     bool _is_dragging;
 
 #if defined(HAVE_LIBLCMS2)
@@ -2086,8 +2086,8 @@ int SPCanvas::paintRectInternal(PaintRectSetup const *setup, Geom::IntRect const
     gint64 elapsed = (gint64)g_date_time_difference(now, setup->start_time);
     g_date_time_unref(now);
 
-    // if we do canvas resize or panning we want the canvas not redraw in enought times 
-    // to make a smooth response.    
+    // if we do canvas resize or panning we want the canvas not redraw in enought times
+    // to make a smooth response.
     if (_delayrendering != 0) {
         --_delayrendering;
         return false;
@@ -2563,12 +2563,13 @@ gint SPCanvas::idle_handler(gpointer data)
     GDateTime *now = nullptr;
     gint64 elapsed = 0;
     if (!canvas->_delayrendering) {
-        tz = g_time_zone_new (nullptr);
+        tz = g_time_zone_new(nullptr);
         now = g_date_time_new_now(tz);
         g_time_zone_unref(tz);
         elapsed = (gint64)g_date_time_difference(now, canvas->_idle_time);
         g_date_time_unref(now);
-        g_message("[%i] start loop %i in split %i at %f", canvas->_idle_id, totaloops, canvas->_splits, canvas->_totalelapsed/(double)1000000 + elapsed/(double)1000000);
+        g_message("[%i] start loop %i in split %i at %f", canvas->_idle_id, totaloops, canvas->_splits,
+                  canvas->_totalelapsed / (double)1000000 + elapsed / (double)1000000);
     }
 #endif
     int ret = canvas->doUpdate();
@@ -2579,7 +2580,7 @@ gint SPCanvas::idle_handler(gpointer data)
 
 #ifdef DEBUG_PERFORMANCE
     if (ret == 0 && !canvas->_delayrendering) {
-        tz = g_time_zone_new (nullptr);
+        tz = g_time_zone_new(nullptr);
         now = g_date_time_new_now(tz);
         g_time_zone_unref(tz);
         elapsed = (gint64)g_date_time_difference(now, canvas->_idle_time);
@@ -2594,7 +2595,7 @@ gint SPCanvas::idle_handler(gpointer data)
         // Reset idle id
         canvas->_forcefull = false;
         canvas->_delayrendering = 0;
-        tz = g_time_zone_new (nullptr);
+        tz = g_time_zone_new(nullptr);
         now = g_date_time_new_now(tz);
         g_time_zone_unref(tz);
         elapsed = (gint64)g_date_time_difference(now, canvas->_idle_time);

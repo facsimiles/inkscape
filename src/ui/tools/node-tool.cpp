@@ -650,7 +650,7 @@ bool NodeTool::root_handler(GdkEvent* event) {
         break;
     }
     // we realy dont want to stop any node operation we want to success all even the time consume it
-    
+
     return ToolBase::root_handler(event);
 }
 
