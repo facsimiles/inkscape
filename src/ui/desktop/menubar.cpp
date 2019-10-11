@@ -339,9 +339,9 @@ checkitem_update(Gtk::CheckMenuItem* menuitem, SPAction* action)
 
         } else if (id == "ViewCmsToggle") {
             active = dt->colorProfAdjustEnabled();
-
+        }
 #ifdef GDK_WINDOWING_QUARTZ
-        } else if (id == "ViewModeNormal") {
+        else if (id == "ViewModeNormal") {
             active = true;
 
         } else if (id == "ViewModeNoFilters") {
@@ -358,9 +358,9 @@ checkitem_update(Gtk::CheckMenuItem* menuitem, SPAction* action)
 
         } else if (id == "ViewColorModeGrayscale") {
             active = false;
-            
+        }            
 +#endif
-        } else if (id == "ViewSplitModeToggle") {
+        else if (id == "ViewSplitModeToggle") {
             active = dt->splitMode();
 
         } else if (id == "ViewXRayToggle") {
