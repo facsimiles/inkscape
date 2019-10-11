@@ -281,11 +281,14 @@ IconPreviewPanel::~IconPreviewPanel()
 static Glib::ustring getTimestr()
 {
     Glib::ustring str;
-    GTimeVal now = {0, 0};
-    g_get_current_time(&now);
-    glong secs = now.tv_sec % 60;
-    glong mins = (now.tv_sec / 60) % 60;
-    gchar *ptr = g_strdup_printf(":%02ld:%02ld.%06ld", mins, secs, now.tv_usec);
+    GTimeZone *tz = g_time_zone_new(nullptr);
+    GDateTime *now = g_date_time_new_now(tz);
+    g_time_zone_unref(tz);
+    gint micr = g_date_time_get_microsecond(now);
+    gdouble dsecs = g_date_time_get_seconds(now)
+    gint mins = g_date_time_get_minute(now);
+    g_date_time_unref(now);
+    gchar *ptr = g_strdup_printf(":%02u:%f", mins, dsecs);
     str = ptr;
     g_free(ptr);
     ptr = 0;

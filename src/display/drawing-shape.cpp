@@ -345,8 +345,11 @@ DrawingShape::_pickItem(Geom::Point const &p, double delta, unsigned flags)
         // fully transparent, no pick unless outline mode
         return nullptr;
 
-    GTimeVal tstart, tfinish;
-    g_get_current_time (&tstart);
+
+    GTimeZone *tz = g_time_zone_new(nullptr);
+    GDateTime *tstart = g_date_time_new_now(tz);
+    GDateTime *tfinish = nullptr;
+
 
     double width;
     if (pick_as_clip) {
@@ -379,10 +382,13 @@ DrawingShape::_pickItem(Geom::Point const &p, double delta, unsigned flags)
         pathv_matrix_point_bbox_wind_distance(_curve->get_pathvector(), _ctm, p, nullptr, needfill? &wind : nullptr, &dist, 0.5, nullptr);
     }
 
-    g_get_current_time (&tfinish);
-    glong this_pick = (tfinish.tv_sec - tstart.tv_sec) * 1000000 + (tfinish.tv_usec - tstart.tv_usec);
+    tfinish = g_date_time_new_now(tz);
+    gint64 this_pick = (gint64)g_date_time_difference(tfinish, tstart);
     //g_print ("pick time %lu\n", this_pick);
-
+    g_time_zone_unref(tz);
+    g_date_time_unref(tstart);
+    g_date_time_unref(tfinish);
+    
     if (this_pick > 10000) { // slow picking, remember to skip several new picks
         _repick_after = this_pick / 5000;
     }
