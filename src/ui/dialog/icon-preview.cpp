@@ -285,7 +285,7 @@ static Glib::ustring getTimestr()
     GDateTime *now = g_date_time_new_now(tz);
     g_time_zone_unref(tz);
     gint micr = g_date_time_get_microsecond(now);
-    gdouble dsecs = g_date_time_get_seconds(now)
+    gdouble dsecs = g_date_time_get_seconds(now);
     gint mins = g_date_time_get_minute(now);
     g_date_time_unref(now);
     gchar *ptr = g_strdup_printf(":%02u:%f", mins, dsecs);
