@@ -75,6 +75,7 @@
 #include "xml/sp-css-attr.h"
 
 #include "message-stack.h"
+#include "ui/icon-loader.h"
 #include "ui/tools/pen-tool.h"
 #include "ui/tools/node-tool.h"
 #include "ui/tools-switch.h"
@@ -1561,12 +1562,14 @@ Effect::defaultParamSet()
                 ove = Glib::ustring(_("<b>Default value overridden:</b> None\n"));
             }
             Gtk::HBox * vbox_param = Gtk::manage( new Gtk::HBox(true) );
+            Gtk::Image *info = sp_get_icon_image(Glib::ustring("infopop"), 30);
+            Glib::ustring tooltip = Glib::ustring("<b>") + parameter_label->get_text () + Glib::ustring("</b>\n") + param->param_tooltip + Glib::ustring("\n\n");
+            info->set_tooltip_markup((tooltip + def + ove).c_str());
+            vbox_param->pack_start(*info, true, true, 2);
             Gtk::Label *parameter_label = Gtk::manage(new Gtk::Label(label, Gtk::ALIGN_START));
             parameter_label->set_use_markup(true);
             parameter_label->set_use_underline(true);
-            Glib::ustring tooltip = Glib::ustring("<b>") + parameter_label->get_text () + Glib::ustring("</b>\n") + param->param_tooltip + Glib::ustring("\n\n");
             parameter_label->set_ellipsize(Pango::ELLIPSIZE_END);
-            parameter_label->set_tooltip_markup((tooltip + def + ove).c_str());
             vbox_param->pack_start(*parameter_label, true, true, 2);
             Gtk::Button *set = Gtk::manage(new Gtk::Button((Glib::ustring)set_or_upd));
             Gtk::Button *unset = Gtk::manage(new Gtk::Button(Glib::ustring(_("Unset"))));
