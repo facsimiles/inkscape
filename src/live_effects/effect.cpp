@@ -1562,20 +1562,20 @@ Effect::defaultParamSet()
                 ove = Glib::ustring(_("<b>Default value overridden:</b> None\n"));
             }
             Gtk::HBox * vbox_param = Gtk::manage( new Gtk::HBox(true) );
-            Gtk::Image *info = sp_get_icon_image(Glib::ustring("infopop"), 30);
-            Glib::ustring tooltip = Glib::ustring("<b>") + parameter_label->get_text () + Glib::ustring("</b>\n") + param->param_tooltip + Glib::ustring("\n\n");
-            info->set_tooltip_markup((tooltip + def + ove).c_str());
-            vbox_param->pack_start(*info, true, true, 2);
             Gtk::Label *parameter_label = Gtk::manage(new Gtk::Label(label, Gtk::ALIGN_START));
             parameter_label->set_use_markup(true);
             parameter_label->set_use_underline(true);
             parameter_label->set_ellipsize(Pango::ELLIPSIZE_END);
+            Glib::ustring tooltip = Glib::ustring("<b>") + parameter_label->get_text () + Glib::ustring("</b>\n") + param->param_tooltip + Glib::ustring("\n\n");
+            Gtk::Image *info = sp_get_icon_image(Glib::ustring("infopop"), 30);
+            info->set_tooltip_markup((tooltip + def + ove).c_str());
+            vbox_param->pack_start(*info, true, true, 2);
             vbox_param->pack_start(*parameter_label, true, true, 2);
             Gtk::Button *set = Gtk::manage(new Gtk::Button((Glib::ustring)set_or_upd));
             Gtk::Button *unset = Gtk::manage(new Gtk::Button(Glib::ustring(_("Unset"))));
-            unset->signal_clicked().connect(sigc::bind<Glib::ustring, Glib::ustring, Parameter *, Gtk::Label *, Gtk::Button *, Gtk::Button *>(sigc::mem_fun(*this, &Effect::unsetDefaultParam), pref_path, tooltip, param, parameter_label, set, unset));
+            unset->signal_clicked().connect(sigc::bind<Glib::ustring, Glib::ustring, Parameter *, Gtk::Label *, Gtk::Button *, Gtk::Button *>(sigc::mem_fun(*this, &Effect::unsetDefaultParam), pref_path, tooltip, param, info, set, unset));
 
-            set->signal_clicked().connect(sigc::bind<Glib::ustring, Glib::ustring, Parameter *, Gtk::Label *, Gtk::Button *, Gtk::Button *>(sigc::mem_fun(*this, &Effect::setDefaultParam), pref_path, tooltip, param, parameter_label, set, unset));
+            set->signal_clicked().connect(sigc::bind<Glib::ustring, Glib::ustring, Parameter *, Gtk::Label *, Gtk::Button *, Gtk::Button *>(sigc::mem_fun(*this, &Effect::setDefaultParam), pref_path, tooltip, param, info, set, unset));
             if (!valid) {
                 unset->set_sensitive(false);
             }
@@ -1609,7 +1609,7 @@ Effect::onDefaultsExpanderChanged(Gtk::Expander * expander)
 }
 
 void
-Effect::setDefaultParam(Glib::ustring pref_path, Glib::ustring tooltip, Parameter *param, Gtk::Label *parameter_label, Gtk::Button *set , Gtk::Button *unset)
+Effect::setDefaultParam(Glib::ustring pref_path, Glib::ustring tooltip, Parameter *param, Gtk::Image *info, Gtk::Button *set , Gtk::Button *unset)
 {
     Glib::ustring value = param->param_getSVGValue();
     Glib::ustring defvalue  = param->param_getDefaultSVGValue();
@@ -1620,11 +1620,11 @@ Effect::setDefaultParam(Glib::ustring pref_path, Glib::ustring tooltip, Paramete
     unset->set_sensitive(true);
     Glib::ustring def = Glib::ustring(_("<b>Default value:</b> <s>")) + defvalue + Glib::ustring("</s>\n");
     Glib::ustring ove = Glib::ustring(_("<b>Default value overridden:</b> ")) + value + Glib::ustring("\n");
-    parameter_label->set_tooltip_markup((tooltip + def + ove).c_str());
+    info->set_tooltip_markup((tooltip + def + ove).c_str());
 }
 
 void
-Effect::unsetDefaultParam(Glib::ustring pref_path, Glib::ustring tooltip, Parameter *param, Gtk::Label *parameter_label, Gtk::Button *set, Gtk::Button *unset)
+Effect::unsetDefaultParam(Glib::ustring pref_path, Glib::ustring tooltip, Parameter *param, Gtk::Image *info, Gtk::Button *set, Gtk::Button *unset)
 {
     Glib::ustring value = param->param_getSVGValue();
     Glib::ustring defvalue  = param->param_getDefaultSVGValue();
@@ -1635,7 +1635,7 @@ Effect::unsetDefaultParam(Glib::ustring pref_path, Glib::ustring tooltip, Parame
     unset->set_sensitive(false);
     Glib::ustring def = Glib::ustring(_("<b>Default value:</b> ")) + defvalue + Glib::ustring("\n");
     Glib::ustring ove = Glib::ustring(_("<b>Default value overridden:</b> None\n"));
-    parameter_label->set_tooltip_markup((tooltip + def + ove).c_str());
+    infor->set_tooltip_markup((tooltip + def + ove).c_str());
 }
 
 Inkscape::XML::Node *Effect::getRepr()
