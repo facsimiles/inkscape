@@ -8,13 +8,13 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <glibmm/ustring.h>
-#include <2geom/forward.h>
-#include "ui/widget/registry.h"
-#include <gtkmm/expander.h>
-#include <gtkmm/eventbox.h>
-#include "parameter/bool.h"
 #include "effect-enum.h"
+#include "parameter/bool.h"
+#include "ui/widget/registry.h"
+#include <2geom/forward.h>
+#include <glibmm/ustring.h>
+#include <gtkmm/eventbox.h>
+#include <gtkmm/expander.h>
 
 
 #define  LPE_CONVERSION_TOLERANCE 0.01    // FIXME: find good solution for this.
