@@ -1577,11 +1577,11 @@ Effect::defaultParamSet()
                                     param->param_tooltip + Glib::ustring("\n\n");
             Gtk::Image *info = sp_get_icon_image("info-outline", 25);
 
-            Gtk::EventBox *infoeventbox = Gtk::manage(new Gtk::EventBox());
+            Gtk::Widget *infoeventbox = dynamic_cast<Gtk::Widget *>(Gtk::manage(new Gtk::EventBox()));
             infoeventbox->add(*info);
             infoeventbox->set_tooltip_markup((tooltip + def + ove).c_str());
             infoeventbox->signal_enter_notify_event().connect(
-                sigc::bind(sigc::ptr_fun(sp_enter_tooltip), *infoeventbox));
+                sigc::bind(sigc::ptr_fun(sp_enter_tooltip), infoeventbox));
             namedicon->pack_start(*infoeventbox, false, false, 2);
             namedicon->pack_start(*parameter_label, true, true, 2);
             namedicon->set_homogeneous(false);
