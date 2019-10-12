@@ -185,8 +185,10 @@ public:
 
 private:
     void onDefaultsExpanderChanged(Gtk::Expander * expander);
-    void setDefaultParam(Glib::ustring pref_path, Glib::ustring tooltip, Parameter *param, Gtk::Image *info, Gtk::Button *set , Gtk::Button *unset);
-    void unsetDefaultParam(Glib::ustring pref_path, Glib::ustring tooltip, Parameter *param, Gtk::Image *info, Gtk::Button *set , Gtk::Button *unset);
+    void setDefaultParam(Glib::ustring pref_path, Glib::ustring tooltip, Parameter *param, Gtk::Image *info,
+                         Gtk::Button *set, Gtk::Button *unset);
+    void unsetDefaultParam(Glib::ustring pref_path, Glib::ustring tooltip, Parameter *param, Gtk::Image *info,
+                           Gtk::Button *set, Gtk::Button *unset);
     bool provides_own_flash_paths; // if true, the standard flash path is suppressed
 
     bool is_ready;
