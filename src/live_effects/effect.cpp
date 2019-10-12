@@ -1635,7 +1635,7 @@ Effect::unsetDefaultParam(Glib::ustring pref_path, Glib::ustring tooltip, Parame
     unset->set_sensitive(false);
     Glib::ustring def = Glib::ustring(_("<b>Default value:</b> ")) + defvalue + Glib::ustring("\n");
     Glib::ustring ove = Glib::ustring(_("<b>Default value overridden:</b> None\n"));
-    infor->set_tooltip_markup((tooltip + def + ove).c_str());
+    info->set_tooltip_markup((tooltip + def + ove).c_str());
 }
 
 Inkscape::XML::Node *Effect::getRepr()
