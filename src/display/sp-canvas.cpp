@@ -2073,7 +2073,7 @@ struct PaintRectSetup {
 int SPCanvas::paintRectInternal(PaintRectSetup const *setup, Geom::IntRect const &this_rect)
 {
     gint64 now = g_get_monotonic_time();
-    gint64 elapsed = now -setup->start_time;
+    gint64 elapsed = now - setup->start_time;
 
     // if we do canvas resize or panning we want the canvas not redraw in enought times
     // to make a smooth response.
