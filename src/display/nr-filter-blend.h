@@ -65,7 +65,6 @@ public:
 private:
     static const std::set<FilterBlendMode> _valid_modes;
     FilterBlendMode _blend_mode;
-    int _input;
     int _input2;
 };
 

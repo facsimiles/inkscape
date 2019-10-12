@@ -42,8 +42,7 @@ const std::set<FilterBlendMode> FilterBlend::_valid_modes {
 
 FilterBlend::FilterBlend()
     : _blend_mode(BLEND_NORMAL),
-      _input2(NR_FILTER_SLOT_NOT_SET),
-      _input(NR_FILTER_SLOT_NOT_SET)
+      _input2(NR_FILTER_SLOT_NOT_SET)
 {}
 
 FilterPrimitive * FilterBlend::create() {
