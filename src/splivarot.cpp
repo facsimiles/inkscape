@@ -2261,7 +2261,7 @@ sp_selected_path_simplify_selection(SPDesktop *desktop, float threshold, bool ju
 
 
 // globals for keeping track of accelerated simplify
-static double previous_time = 0.0;
+static gint64 previous_time = 0;
 static gdouble simplifyMultiply = 1.0;
 
 void
@@ -2273,13 +2273,9 @@ sp_selected_path_simplify(SPDesktop *desktop)
     bool simplifyJustCoalesce = prefs->getBool("/options/simplifyjustcoalesce/value", false);
 
     //Get the current time
-    GTimeZone *tz = g_time_zone_new(nullptr);
-    GDateTime *now = g_date_time_new_now(tz);
-    g_time_zone_unref(tz);
-    double current_time = (double)g_date_time_get_microsecond(now);
-    g_date_time_unref(now);
+    gint64 current_time = g_get_monotonic_time();
     //Was the previous call to this function recent? (<0.5 sec)
-    if (previous_time > 0.0 && current_time - previous_time < 500000.0) {
+    if (previous_time > 0 && current_time - previous_time < 500000) {
 
         // add to the threshold 1/2 of its original value
         simplifyMultiply  += 0.5;

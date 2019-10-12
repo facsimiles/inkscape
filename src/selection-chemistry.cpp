@@ -3626,11 +3626,7 @@ void ObjectSet::createBitmapCopy()
 
     // Generate a random value from the current time (you may create bitmap from the same object(s)
     // multiple times, and this is done so that they don't clash)
-    GTimeZone *tz = g_time_zone_new(nullptr);
-    GDateTime *now = g_date_time_new_now(tz);
-    g_time_zone_unref(tz);
-    guint current = (guint)g_date_time_get_microsecond(now) % 1024;
-    g_date_time_unref(now);
+    guint current = guint(g_get_monotonic_time() % 1024);
     // Create the filename.
     gchar *const basename = g_strdup_printf("%s-%s-%u.png",
                                             doc->getDocumentName(),
