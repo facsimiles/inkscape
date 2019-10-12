@@ -1575,7 +1575,7 @@ Effect::defaultParamSet()
             parameter_label->set_ellipsize(Pango::ELLIPSIZE_END);
             Glib::ustring tooltip = Glib::ustring("<b>") + parameter_label->get_text() + Glib::ustring("</b>\n") +
                                     param->param_tooltip + Glib::ustring("\n\n");
-            Gtk::Image *info = sp_get_icon_image("info-outline", 18);
+            Gtk::Image *info = sp_get_icon_image("info", 20);
             Gtk::EventBox *infoeventbox = Gtk::manage(new Gtk::EventBox());
             infoeventbox->add(*info);
             infoeventbox->set_tooltip_markup((tooltip + def + ove).c_str());
