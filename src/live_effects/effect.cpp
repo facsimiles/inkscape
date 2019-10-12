@@ -1524,6 +1524,11 @@ Effect::newWidget()
     return dynamic_cast<Gtk::Widget *>(vbox);
 }
 
+bool sp_enter_tooltip(GdkEventCrossing *evt, Gtk::Widget *widg){
+    widg->trigger_tooltip_query();
+    return true;
+}
+
 /**
  * This *creates* a new widget, with default values setter
  */
@@ -1562,24 +1567,29 @@ Effect::defaultParamSet()
                 ove = Glib::ustring(_("<b>Default value overridden:</b> None\n"));
             }
             Gtk::HBox * vbox_param = Gtk::manage( new Gtk::HBox(true) );
+            Gtk::HBox * namedicon = Gtk::manage( new Gtk::HBox(true) );
             Gtk::Label *parameter_label = Gtk::manage(new Gtk::Label(label, Gtk::ALIGN_START));
             parameter_label->set_use_markup(true);
             parameter_label->set_use_underline(true);
             parameter_label->set_ellipsize(Pango::ELLIPSIZE_END);
             Glib::ustring tooltip = Glib::ustring("<b>") + parameter_label->get_text() + Glib::ustring("</b>\n") +
                                     param->param_tooltip + Glib::ustring("\n\n");
-            Gtk::Image *info = sp_get_icon_image(Glib::ustring("infopop"), 30);
-            info->set_tooltip_markup((tooltip + def + ove).c_str());
-            vbox_param->pack_start(*info, true, true, 2);
-            vbox_param->pack_start(*parameter_label, true, true, 2);
+            Gtk::Image *info = sp_get_icon_image(Glib::ustring("infopop"), 26);
+            
+            Gtk::EventBox *infoeventbox = Gtk::manage(new Gtk::EventBox());
+            infoeventbox->signal_enter_notify_event().connect(sigc::bind(
+            sigc::ptr_fun(&sp_enter_tooltip), *infoeventbox)));
+            infoeventbox->set_tooltip_markup((tooltip + def + ove).c_str());
+            infoeventbox->add(*info);
+            namedicon->pack_start(*infoeventbox, false, false, 2);
+            namedicon->pack_start(*parameter_label, true, true, 2)
+            namedicon->set_homogeneous(false);
+            vbox_param->pack_start(*namedicon, true, true, 2);
             Gtk::Button *set = Gtk::manage(new Gtk::Button((Glib::ustring)set_or_upd));
             Gtk::Button *unset = Gtk::manage(new Gtk::Button(Glib::ustring(_("Unset"))));
-            unset->signal_clicked().connect(
-                sigc::bind<Glib::ustring, Glib::ustring, Parameter *, Gtk::Label *, Gtk::Button *, Gtk::Button *>(
+            unset->signal_clicked().connect(sigc::bind(
                     sigc::mem_fun(*this, &Effect::unsetDefaultParam), pref_path, tooltip, param, info, set, unset));
-
-            set->signal_clicked().connect(
-                sigc::bind<Glib::ustring, Glib::ustring, Parameter *, Gtk::Label *, Gtk::Button *, Gtk::Button *>(
+            set->signal_clicked().connect(sigc::bind(
                     sigc::mem_fun(*this, &Effect::setDefaultParam), pref_path, tooltip, param, info, set, unset));
             if (!valid) {
                 unset->set_sensitive(false);
