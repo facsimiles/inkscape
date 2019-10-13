@@ -404,6 +404,7 @@ sp_desktop_apply_style_tool(SPDesktop *desktop, Inkscape::XML::Node *repr, Glib:
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
     if (prefs->getBool(tool_path + "/usecurrent") && css_current) {
+        sp_repr_css_unset_property(css_current, "mix-blend-mode");
         sp_repr_css_set(repr, css_current, "style");
     } else {
         SPCSSAttr *css = prefs->getInheritedStyle(tool_path + "/style");
@@ -1704,7 +1705,6 @@ static int
 objects_query_blend (const std::vector<SPItem*> &objects, SPStyle *style_res)
 {
     const int empty_prev = -2;
-    const int complex_filter = 5;
     int blend = 0;
     float blend_prev = empty_prev;
     bool same_blend = true;
@@ -1721,43 +1721,8 @@ objects_query_blend (const std::vector<SPItem*> &objects, SPStyle *style_res)
 
         items++;
 
-        //if object has a filter
-        if (style->filter.set && style->getFilter()) {
-            int blurcount = 0;
-            int blendcount = 0;
-
-            // determine whether filter is simple (blend and/or blur) or complex
-            for(auto& primitive_obj: style->getFilter()->children) {
-                SPFilterPrimitive *primitive = dynamic_cast<SPFilterPrimitive *>(&primitive_obj);
-                if (!primitive) {
-                    break;
-                }
-                if (dynamic_cast<SPFeBlend *>(primitive)) {
-                    ++blendcount;
-                } else if (dynamic_cast<SPGaussianBlur *>(primitive)) {
-                    ++blurcount;
-                } else {
-                    blurcount = complex_filter;
-                    break;
-                }
-            }
-
-            // simple filter
-            if(blurcount == 1 || blendcount == 1) {
-                for(auto& primitive_obj: style->getFilter()->children) {
-                    SPFilterPrimitive *primitive = dynamic_cast<SPFilterPrimitive *>(&primitive_obj);
-                    if (!primitive) {
-                        break;
-                    }
-                    SPFeBlend *spblend = dynamic_cast<SPFeBlend *>(&primitive_obj);
-                    if (spblend) {
-                        blend = spblend->blend_mode;
-                    }
-                }
-            }
-            else {
-                blend = complex_filter;
-            }
+        if(style->mix_blend_mode.set) {
+            blend = style->mix_blend_mode.value;
         }
         // defaults to blend mode = "normal"
         else {
@@ -1770,7 +1735,7 @@ objects_query_blend (const std::vector<SPItem*> &objects, SPStyle *style_res)
     }
 
     if (items > 0) {
-        style_res->filter_blend_mode.value = blend;
+        style_res->mix_blend_mode.value = blend;
     }
 
     if (items == 0) {
