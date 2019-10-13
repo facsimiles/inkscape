@@ -585,8 +585,9 @@ void ObjectsPanel::_setCompositingValues(SPItem *item)
     double opacity = (item->style->opacity.set ? SP_SCALE24_TO_FLOAT(item->style->opacity.value) : 1);
     opacity *= 100; // Display in percent.
     _filter_modifier.set_opacity_value(opacity);
-    //Set the blend mode
-    _filter_modifier.set_blend_mode(item->style->mix_blend_mode.set ? item->style->mix_blend_mode.value : Inkscape::SP_CSS_BLEND_NORMAL);
+    // Set the blend mode
+    _filter_modifier.set_blend_mode(item->style->mix_blend_mode.set ? item->style->mix_blend_mode.value
+                                                                    : Inkscape::SP_CSS_BLEND_NORMAL);
     SPGaussianBlur *spblur = nullptr;
     if (item->style->getFilter()) {
         for (auto& primitive_obj: item->style->getFilter()->children) {
@@ -1625,7 +1626,7 @@ void ObjectsPanel::_blendChangedIter(const Gtk::TreeIter& iter, Glib::ustring bl
         //Since blur and blend are both filters, we need to set both at the same time
         SPStyle *style = item->style;
         g_assert(style != nullptr);
-        SPCSSAttr *css = sp_css_attr_from_style(style, SP_STYLE_FLAG_ALWAYS | SP_STYLE_FLAG_IFSRC);  
+        SPCSSAttr *css = sp_css_attr_from_style(style, SP_STYLE_FLAG_ALWAYS | SP_STYLE_FLAG_IFSRC);
         if (blendmode == "normal") {
             sp_repr_css_unset_property(css, "mix-blend-mode");
         } else {

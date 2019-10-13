@@ -21,41 +21,41 @@ using Inkscape::Util::EnumDataConverter;
 
 
 namespace Inkscape {
-    
-    const EnumData<Inkscape::CSSBlendMode> CSSBlendModeData[SP_CSS_BLEND_ENDMODE] = {
-        {SP_CSS_BLEND_NORMAL,       _("Normal"),      "normal"},
-        {SP_CSS_BLEND_MULTIPLY,     _("Multiply"),    "multiply"},
-        {SP_CSS_BLEND_SCREEN,       _("Screen"),      "screen"},
-        {SP_CSS_BLEND_DARKEN,       _("Darken"),      "darken"},
-        {SP_CSS_BLEND_LIGHTEN,      _("Lighten"),     "lighten"},
+
+const EnumData<Inkscape::CSSBlendMode> CSSBlendModeData[SP_CSS_BLEND_ENDMODE] = {
+    { SP_CSS_BLEND_NORMAL, _("Normal"), "normal" },
+    { SP_CSS_BLEND_MULTIPLY, _("Multiply"), "multiply" },
+    { SP_CSS_BLEND_SCREEN, _("Screen"), "screen" },
+    { SP_CSS_BLEND_DARKEN, _("Darken"), "darken" },
+    { SP_CSS_BLEND_LIGHTEN, _("Lighten"), "lighten" },
     // New in Compositing and Blending Level 1
-        {SP_CSS_BLEND_OVERLAY,      _("Overlay"),     "overlay"},
-        {SP_CSS_BLEND_COLORDODGE,   _("Color Dodge"), "color-dodge"},
-        {SP_CSS_BLEND_COLORBURN,    _("Color Burn"),  "color-burn"},
-        {SP_CSS_BLEND_HARDLIGHT,    _("Hard Light"),  "hard-light"},
-        {SP_CSS_BLEND_SOFTLIGHT,    _("Soft Light"),  "soft-light"},
-        {SP_CSS_BLEND_DIFFERENCE,   _("Difference"),  "difference"},
-        {SP_CSS_BLEND_EXCLUSION,    _("Exclusion"),   "exclusion"},
-        {SP_CSS_BLEND_HUE,          _("Hue"),         "hue"},
-        {SP_CSS_BLEND_SATURATION,   _("Saturation"),  "saturation"},
-        {SP_CSS_BLEND_COLOR,        _("Color"),       "color"},
-        {SP_CSS_BLEND_LUMINOSITY,   _("Luminosity"),  "luminosity"}
-    };
+    { SP_CSS_BLEND_OVERLAY, _("Overlay"), "overlay" },
+    { SP_CSS_BLEND_COLORDODGE, _("Color Dodge"), "color-dodge" },
+    { SP_CSS_BLEND_COLORBURN, _("Color Burn"), "color-burn" },
+    { SP_CSS_BLEND_HARDLIGHT, _("Hard Light"), "hard-light" },
+    { SP_CSS_BLEND_SOFTLIGHT, _("Soft Light"), "soft-light" },
+    { SP_CSS_BLEND_DIFFERENCE, _("Difference"), "difference" },
+    { SP_CSS_BLEND_EXCLUSION, _("Exclusion"), "exclusion" },
+    { SP_CSS_BLEND_HUE, _("Hue"), "hue" },
+    { SP_CSS_BLEND_SATURATION, _("Saturation"), "saturation" },
+    { SP_CSS_BLEND_COLOR, _("Color"), "color" },
+    { SP_CSS_BLEND_LUMINOSITY, _("Luminosity"), "luminosity" }
+};
 #ifdef WITH_CSSBLEND
-    const EnumDataConverter<Inkscape::CSSBlendMode> CSSBlendModeConverter(CSSBlendModeData, SP_CSS_BLEND_ENDMODE);
+const EnumDataConverter<Inkscape::CSSBlendMode> CSSBlendModeConverter(CSSBlendModeData, SP_CSS_BLEND_ENDMODE);
 #else
-    // Disable new blend modes in GUI until widely implemented.
-    const EnumDataConverter<Inkscape::CSSBlendMode> CSSBlendModeConverter(CSSBlendModeData, SP_CSS_BLEND_LUMINOSITY);
+// Disable new blend modes in GUI until widely implemented.
+const EnumDataConverter<Inkscape::CSSBlendMode> CSSBlendModeConverter(CSSBlendModeData, SP_CSS_BLEND_LUMINOSITY);
 #endif
 
 namespace UI {
 namespace Widget {
 
 SimpleFilterModifier::SimpleFilterModifier(int flags)
-    : _flags( flags )
+    : _flags(flags)
     , _lb_blend(_("Blend mode:"))
     , _blend(CSSBlendModeConverter, SP_ATTR_INVALID, false)
-    , _blur(   _("Blur (%)"   ), 0, 0, 100, 1, 0.1, 1)
+    , _blur(_("Blur (%)"), 0, 0, 100, 1, 0.1, 1)
     , _opacity(_("Opacity (%)"), 0, 0, 100, 1, 0.1, 1)
 {
     set_name("SimpleFilterModifier");

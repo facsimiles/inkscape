@@ -19,11 +19,11 @@
 #include <gtkmm/separator.h>
 
 #include "combo-enums.h"
-#include "style-enums.h"
 #include "spin-scale.h"
+#include "style-enums.h"
 
 namespace Inkscape {
-  enum CSSBlendMode {
+enum CSSBlendMode {
     SP_CSS_BLEND_NORMAL,
     SP_CSS_BLEND_MULTIPLY,
     SP_CSS_BLEND_SCREEN,

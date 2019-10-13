@@ -1721,7 +1721,7 @@ objects_query_blend (const std::vector<SPItem*> &objects, SPStyle *style_res)
 
         items++;
 
-        if(style->mix_blend_mode.set) {
+        if (style->mix_blend_mode.set) {
             blend = style->mix_blend_mode.value;
         }
         // defaults to blend mode = "normal"
