@@ -217,7 +217,7 @@ ObjectCompositeSettings::_subjectChanged() {
             break;
         case QUERY_STYLE_SINGLE:
         case QUERY_STYLE_MULTIPLE_SAME:
-            _filter_modifier.set_blend_mode(query.mix_blend_mode.value); //here dont work mix_blend_mode.set
+            _filter_modifier.set_blend_mode(query.mix_blend_mode.value); // here dont work mix_blend_mode.set
             break;
         case QUERY_STYLE_MULTIPLE_DIFFERENT:
             // TODO: set text
