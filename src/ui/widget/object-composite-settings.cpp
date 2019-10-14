@@ -197,7 +197,6 @@ ObjectCompositeSettings::_subjectChanged() {
     if (_blocked)
         return;
     _blocked = true;
-
     SPStyle query(desktop->getDocument());
     int result = _subject->queryStyle(&query, QUERY_STYLE_PROPERTY_MASTEROPACITY);
 
@@ -218,8 +217,7 @@ ObjectCompositeSettings::_subjectChanged() {
             break;
         case QUERY_STYLE_SINGLE:
         case QUERY_STYLE_MULTIPLE_SAME:
-            _filter_modifier.set_blend_mode(query.mix_blend_mode.set ? query.mix_blend_mode.value
-                                                                     : Inkscape::SP_CSS_BLEND_NORMAL);
+            _filter_modifier.set_blend_mode(query.mix_blend_mode.value); //here dont work mix_blend_mode.set
             break;
         case QUERY_STYLE_MULTIPLE_DIFFERENT:
             // TODO: set text

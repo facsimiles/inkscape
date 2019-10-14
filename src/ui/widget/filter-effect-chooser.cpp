@@ -67,6 +67,7 @@ SimpleFilterModifier::SimpleFilterModifier(int flags)
         _lb_blend.set_use_underline();
         _hb_blend.set_halign(Gtk::ALIGN_END);
         _hb_blend.set_valign(Gtk::ALIGN_CENTER);
+        _hb_blend.set_margin_top(2);
         _hb_blend.set_margin_end(5);
         _lb_blend.set_mnemonic_widget(_blend);
         _hb_blend.pack_start(_lb_blend, false, false, 5);

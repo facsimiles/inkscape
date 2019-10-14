@@ -1701,7 +1701,7 @@ objects_query_fontspecification (const std::vector<SPItem*> &objects, SPStyle *s
     }
 }
 
-static int
+int
 objects_query_blend (const std::vector<SPItem*> &objects, SPStyle *style_res)
 {
     const int empty_prev = -2;
@@ -1923,6 +1923,7 @@ sp_desktop_query_style_all (SPDesktop *desktop, SPStyle *query)
 
         int result_opacity = sp_desktop_query_style (desktop, query, QUERY_STYLE_PROPERTY_MASTEROPACITY);
         int result_blur = sp_desktop_query_style (desktop, query, QUERY_STYLE_PROPERTY_BLUR);
+        int result_blend = sp_desktop_query_style (desktop, query, QUERY_STYLE_PROPERTY_BLEND);
 
         return (result_family != QUERY_STYLE_NOTHING ||
                 result_fstyle != QUERY_STYLE_NOTHING ||
@@ -1935,7 +1936,8 @@ sp_desktop_query_style_all (SPDesktop *desktop, SPStyle *query)
                 result_strokecap != QUERY_STYLE_NOTHING ||
                 result_strokejoin != QUERY_STYLE_NOTHING ||
                 result_paintorder != QUERY_STYLE_NOTHING ||
-                result_blur != QUERY_STYLE_NOTHING);
+                result_blur != QUERY_STYLE_NOTHING ||
+                result_blend != QUERY_STYLE_NOTHING);
 }
 
 
