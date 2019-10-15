@@ -28,7 +28,7 @@
 #include "object/sp-item.h"
 
 namespace Inkscape {
-
+// TODO find a way to use cairo utils one
 void set_cairo_blend_operator( DrawingContext &dc, unsigned blend_mode ) {
 
     // All of the blend modes are implemented in Cairo as of 1.10.

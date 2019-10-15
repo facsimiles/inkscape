@@ -1252,6 +1252,64 @@ private:
     /* None */
 };
 
+void ink_cairo_css_blend_operator(cairo_t *ct, unsigned blend_mode ) {
+
+    // All of the blend modes are implemented in Cairo as of 1.10.
+    // For a detailed description, see:
+    // http://cairographics.org/operators/
+    switch (blend_mode) {
+    case SP_CSS_BLEND_MULTIPLY:
+        cairo_set_operator(ct, CAIRO_OPERATOR_MULTIPLY);
+        break;
+    case SP_CSS_BLEND_SCREEN:
+        cairo_set_operator(ct, CAIRO_OPERATOR_SCREEN);
+        break;
+    case SP_CSS_BLEND_DARKEN:
+        cairo_set_operator(ct, CAIRO_OPERATOR_DARKEN);
+        break;
+    case SP_CSS_BLEND_LIGHTEN:
+        cairo_set_operator(ct, CAIRO_OPERATOR_LIGHTEN);
+        break;
+    case SP_CSS_BLEND_OVERLAY:   
+        cairo_set_operator(ct, CAIRO_OPERATOR_OVERLAY);
+        break;
+    case SP_CSS_BLEND_COLORDODGE:
+        cairo_set_operator(ct, CAIRO_OPERATOR_COLOR_DODGE);
+        break;
+    case SP_CSS_BLEND_COLORBURN:
+        cairo_set_operator(ct, CAIRO_OPERATOR_COLOR_BURN);
+        break;
+    case SP_CSS_BLEND_HARDLIGHT:
+        cairo_set_operator(ct, CAIRO_OPERATOR_HARD_LIGHT);
+        break;
+    case SP_CSS_BLEND_SOFTLIGHT:
+        cairo_set_operator(ct, CAIRO_OPERATOR_SOFT_LIGHT);
+        break;
+    case SP_CSS_BLEND_DIFFERENCE:
+        cairo_set_operator(ct, CAIRO_OPERATOR_DIFFERENCE);
+        break;
+    case SP_CSS_BLEND_EXCLUSION:
+        cairo_set_operator(ct, CAIRO_OPERATOR_EXCLUSION);
+        break;
+    case SP_CSS_BLEND_HUE:       
+        cairo_set_operator(ct, CAIRO_OPERATOR_HSL_HUE);
+        break;
+    case SP_CSS_BLEND_SATURATION:
+        cairo_set_operator(ct, CAIRO_OPERATOR_HSL_SATURATION);
+        break;
+    case SP_CSS_BLEND_COLOR:
+        cairo_set_operator(ct, CAIRO_OPERATOR_HSL_COLOR);
+        break;
+    case SP_CSS_BLEND_LUMINOSITY:
+        cairo_set_operator(ct, CAIRO_OPERATOR_HSL_LUMINOSITY);
+        break;
+    case SP_CSS_BLEND_NORMAL:
+    default:
+        cairo_set_operator(ct, CAIRO_OPERATOR_OVER);
+        break;
+    }
+}
+
 int ink_cairo_surface_linear_to_srgb(cairo_surface_t *surface)
 {
     cairo_surface_flush(surface);
