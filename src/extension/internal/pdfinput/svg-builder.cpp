@@ -415,7 +415,6 @@ void SvgBuilder::_setFillStyle(SPCSSAttr *css, GfxState *state, bool even_odd) {
 void SvgBuilder::_setBlendMode(Inkscape::XML::Node *node, GfxState *state) {
     SPCSSAttr *css = sp_repr_css_attr( node, "style" );
     GfxBlendMode blendmode = state->getBlendMode();
-    std::cout << blendmode << enum_blend_mode[blendmode].key << std::endl;
     if (blendmode) {
         sp_repr_css_set_property(css, "mix-blend-mode", enum_blend_mode[blendmode].key);
     }
@@ -1447,6 +1446,11 @@ void SvgBuilder::addChar(GfxState *state, double x, double y,
         bool has_fill = !( render_mode & 1 );
         bool has_stroke = ( render_mode & 3 ) == 1 || ( render_mode & 3 ) == 2;
         new_glyph.style = _setStyle(state, has_fill, has_stroke);
+        // Find a way to handle blend modes on text
+        /* GfxBlendMode blendmode = state->getBlendMode();
+        if (blendmode) {
+            sp_repr_css_set_property(new_glyph.style, "mix-blend-mode", enum_blend_mode[blendmode].key);
+        } */
         new_glyph.render_mode = render_mode;
         sp_repr_css_merge(new_glyph.style, _font_style); // Merge with font style
         _invalidated_style = false;
@@ -1455,6 +1459,10 @@ void SvgBuilder::addChar(GfxState *state, double x, double y,
         // Point to previous glyph's style information
         const SvgGlyph& prev_glyph = _glyphs.back();
         new_glyph.style = prev_glyph.style;
+        /* GfxBlendMode blendmode = state->getBlendMode();
+        if (blendmode) {
+            sp_repr_css_set_property(new_glyph.style, "mix-blend-mode", enum_blend_mode[blendmode].key);
+        } */
         new_glyph.render_mode = prev_glyph.render_mode;
     }
     new_glyph.font_specification = _font_specification;
@@ -1756,6 +1764,7 @@ void SvgBuilder::addImageMask(GfxState *state, Stream *str, int width, int heigh
     _setFillStyle(css, state, false);
     sp_repr_css_change(rect, css, "style");
     sp_repr_css_attr_unref(css);
+    _setBlendMode(rect, state);
 
     // Scaling 1x1 surfaces might not work so skip setting a mask with this size
     if ( width > 1 || height > 1 ) {
@@ -1779,7 +1788,7 @@ void SvgBuilder::addImageMask(GfxState *state, Stream *str, int width, int heigh
     Inkscape::GC::release(rect);
 }
 
-void SvgBuilder::addMaskedImage(GfxState * /*state*/, Stream *str, int width, int height,
+void SvgBuilder::addMaskedImage(GfxState *state, Stream *str, int width, int height,
                                 GfxImageColorMap *color_map, bool interpolate,
                                 Stream *mask_str, int mask_width, int mask_height,
                                 bool invert_mask, bool mask_interpolate) {
@@ -1808,11 +1817,12 @@ void SvgBuilder::addMaskedImage(GfxState * /*state*/, Stream *str, int width, in
         Inkscape::GC::release(mask_image_node);
     }
     if (image_node) {
+        _setBlendMode(image_node, state);
         Inkscape::GC::release(image_node);
     }
 }
     
-void SvgBuilder::addSoftMaskedImage(GfxState * /*state*/, Stream *str, int width, int height,
+void SvgBuilder::addSoftMaskedImage(GfxState * state, Stream *str, int width, int height,
                                     GfxImageColorMap *color_map, bool interpolate,
                                     Stream *mask_str, int mask_width, int mask_height,
                                     GfxImageColorMap *mask_color_map, bool mask_interpolate) {
@@ -1836,6 +1846,7 @@ void SvgBuilder::addSoftMaskedImage(GfxState * /*state*/, Stream *str, int width
         Inkscape::GC::release(mask_image_node);
     }
     if (image_node) {
+        _setBlendMode(image_node, state);
         Inkscape::GC::release(image_node);
     }
 }
