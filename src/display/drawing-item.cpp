@@ -87,62 +87,63 @@ void set_cairo_blend_operator( DrawingContext &dc, unsigned blend_mode ) {
     }
 }
 
-cairo_operator_t get_cairo_blend_operator(unsigned blend_mode) {
+cairo_operator_t get_cairo_blend_operator(unsigned blend_mode)
+{
 
     // All of the blend modes are implemented in Cairo as of 1.10.
     // For a detailed description, see:
     // http://cairographics.org/operators/
     cairo_operator_t ret = CAIRO_OPERATOR_OVER;
     switch (blend_mode) {
-    case SP_CSS_BLEND_MULTIPLY:
-        ret = CAIRO_OPERATOR_MULTIPLY;
-        break;
-    case SP_CSS_BLEND_SCREEN:
-        ret = CAIRO_OPERATOR_SCREEN;
-        break;
-    case SP_CSS_BLEND_DARKEN:
-        ret = CAIRO_OPERATOR_DARKEN;
-        break;
-    case SP_CSS_BLEND_LIGHTEN:
-        ret = CAIRO_OPERATOR_LIGHTEN;
-        break;
-    case SP_CSS_BLEND_OVERLAY:   
-        ret = CAIRO_OPERATOR_OVERLAY;
-        break;
-    case SP_CSS_BLEND_COLORDODGE:
-        ret = CAIRO_OPERATOR_COLOR_DODGE;
-        break;
-    case SP_CSS_BLEND_COLORBURN:
-        ret = CAIRO_OPERATOR_COLOR_BURN;
-        break;
-    case SP_CSS_BLEND_HARDLIGHT:
-        ret = CAIRO_OPERATOR_HARD_LIGHT;
-        break;
-    case SP_CSS_BLEND_SOFTLIGHT:
-        ret = CAIRO_OPERATOR_SOFT_LIGHT;
-        break;
-    case SP_CSS_BLEND_DIFFERENCE:
-        ret = CAIRO_OPERATOR_DIFFERENCE;
-        break;
-    case SP_CSS_BLEND_EXCLUSION:
-        ret = CAIRO_OPERATOR_EXCLUSION;
-        break;
-    case SP_CSS_BLEND_HUE:       
-        ret = CAIRO_OPERATOR_HSL_HUE;
-        break;
-    case SP_CSS_BLEND_SATURATION:
-        ret = CAIRO_OPERATOR_HSL_SATURATION;
-        break;
-    case SP_CSS_BLEND_COLOR:
-        ret = CAIRO_OPERATOR_HSL_COLOR;
-        break;
-    case SP_CSS_BLEND_LUMINOSITY:
-        ret = CAIRO_OPERATOR_HSL_LUMINOSITY;
-        break;
-    case SP_CSS_BLEND_NORMAL:
-    default:
-        ret = CAIRO_OPERATOR_OVER;
-        break;
+        case SP_CSS_BLEND_MULTIPLY:
+            ret = CAIRO_OPERATOR_MULTIPLY;
+            break;
+        case SP_CSS_BLEND_SCREEN:
+            ret = CAIRO_OPERATOR_SCREEN;
+            break;
+        case SP_CSS_BLEND_DARKEN:
+            ret = CAIRO_OPERATOR_DARKEN;
+            break;
+        case SP_CSS_BLEND_LIGHTEN:
+            ret = CAIRO_OPERATOR_LIGHTEN;
+            break;
+        case SP_CSS_BLEND_OVERLAY:
+            ret = CAIRO_OPERATOR_OVERLAY;
+            break;
+        case SP_CSS_BLEND_COLORDODGE:
+            ret = CAIRO_OPERATOR_COLOR_DODGE;
+            break;
+        case SP_CSS_BLEND_COLORBURN:
+            ret = CAIRO_OPERATOR_COLOR_BURN;
+            break;
+        case SP_CSS_BLEND_HARDLIGHT:
+            ret = CAIRO_OPERATOR_HARD_LIGHT;
+            break;
+        case SP_CSS_BLEND_SOFTLIGHT:
+            ret = CAIRO_OPERATOR_SOFT_LIGHT;
+            break;
+        case SP_CSS_BLEND_DIFFERENCE:
+            ret = CAIRO_OPERATOR_DIFFERENCE;
+            break;
+        case SP_CSS_BLEND_EXCLUSION:
+            ret = CAIRO_OPERATOR_EXCLUSION;
+            break;
+        case SP_CSS_BLEND_HUE:
+            ret = CAIRO_OPERATOR_HSL_HUE;
+            break;
+        case SP_CSS_BLEND_SATURATION:
+            ret = CAIRO_OPERATOR_HSL_SATURATION;
+            break;
+        case SP_CSS_BLEND_COLOR:
+            ret = CAIRO_OPERATOR_HSL_COLOR;
+            break;
+        case SP_CSS_BLEND_LUMINOSITY:
+            ret = CAIRO_OPERATOR_HSL_LUMINOSITY;
+            break;
+        case SP_CSS_BLEND_NORMAL:
+        default:
+            ret = CAIRO_OPERATOR_OVER;
+            break;
     }
     return ret;
 }
@@ -885,16 +886,13 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
     // filters and opacity do not apply when rendering the ancestors of the filtered
     // element
     if ((flags & RENDER_FILTER_BACKGROUND) || !needs_intermediate_rendering) {
-        if (parent() && 
-            parent()->_isolation == SP_CSS_ISOLATION_ISOLATE &&
-            cairo_get_operator(dc.raw()) != get_cairo_blend_operator(SP_CSS_BLEND_NORMAL)) 
-        {
+        if (parent() && parent()->_isolation == SP_CSS_ISOLATION_ISOLATE &&
+            cairo_get_operator(dc.raw()) != get_cairo_blend_operator(SP_CSS_BLEND_NORMAL)) {
             set_cairo_blend_operator(dc, SP_CSS_BLEND_NORMAL);
         } else if (cairo_get_operator(dc.raw()) != get_cairo_blend_operator(_mix_blend_mode)) {
             set_cairo_blend_operator(dc, _mix_blend_mode);
         }
         return _renderItem(dc, *carea, flags & ~RENDER_FILTER_BACKGROUND, stop_at);
-
     }
 
     // iarea is the bounding box for intermediate rendering
@@ -988,7 +986,7 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
     ict.paint();
 
     // 6. Paint the completed rendering onto the base context (or into cache)
-    if (!_mix_blend_mode &&_cached && _cache) {
+    if (!_mix_blend_mode && _cached && _cache) {
         DrawingContext cachect(*_cache);
         cachect.rectangle(*carea);
         cachect.setOperator(CAIRO_OPERATOR_SOURCE);
@@ -1193,7 +1191,7 @@ DrawingItem::_markForRendering()
             bkg_root = i;
         }
     }
-   
+
     if (bkg_root) {
         bkg_root->_invalidateFilterBackground(*dirty);
     }

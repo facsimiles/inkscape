@@ -1748,7 +1748,7 @@ void SvgBuilder::addImage(GfxState *state, Stream *str, int width, int height, G
         _setBlendMode(image_node, state);
         _container->appendChild(image_node);
         Inkscape::GC::release(image_node);
-     }
+    }
 }
 
 void SvgBuilder::addImageMask(GfxState *state, Stream *str, int width, int height,
@@ -1790,10 +1790,10 @@ void SvgBuilder::addImageMask(GfxState *state, Stream *str, int width, int heigh
     Inkscape::GC::release(rect);
 }
 
-void SvgBuilder::addMaskedImage(GfxState *state, Stream *str, int width, int height,
-                                GfxImageColorMap *color_map, bool interpolate,
-                                Stream *mask_str, int mask_width, int mask_height,
-                                bool invert_mask, bool mask_interpolate) {
+void SvgBuilder::addMaskedImage(GfxState *state, Stream *str, int width, int height, GfxImageColorMap *color_map,
+                                bool interpolate, Stream *mask_str, int mask_width, int mask_height, bool invert_mask,
+                                bool mask_interpolate)
+{
 
     Inkscape::XML::Node *mask_image_node = _createImage(mask_str, mask_width, mask_height,
                                           nullptr, mask_interpolate, nullptr, true, invert_mask);
@@ -1823,11 +1823,11 @@ void SvgBuilder::addMaskedImage(GfxState *state, Stream *str, int width, int hei
         Inkscape::GC::release(image_node);
     }
 }
-    
-void SvgBuilder::addSoftMaskedImage(GfxState * state, Stream *str, int width, int height,
-                                    GfxImageColorMap *color_map, bool interpolate,
-                                    Stream *mask_str, int mask_width, int mask_height,
-                                    GfxImageColorMap *mask_color_map, bool mask_interpolate) {
+
+void SvgBuilder::addSoftMaskedImage(GfxState *state, Stream *str, int width, int height, GfxImageColorMap *color_map,
+                                    bool interpolate, Stream *mask_str, int mask_width, int mask_height,
+                                    GfxImageColorMap *mask_color_map, bool mask_interpolate)
+{
 
     Inkscape::XML::Node *mask_image_node = _createImage(mask_str, mask_width, mask_height,
                                                         mask_color_map, mask_interpolate, nullptr, true);

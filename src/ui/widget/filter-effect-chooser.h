@@ -33,32 +33,26 @@ namespace Widget {
 class SimpleFilterModifier : public Gtk::VBox
 {
 public:
-    enum Flags {
-      NONE   = 0,
-      BLUR   = 1,
-      OPACITY= 2,
-      BLEND  = 4,
-      ISOLATION  = 16
-    };
+  enum Flags { NONE = 0, BLUR = 1, OPACITY = 2, BLEND = 4, ISOLATION = 16 };
 
-    SimpleFilterModifier(int flags);
+  SimpleFilterModifier(int flags);
 
-    sigc::signal<void>& signal_blend_changed();
-    sigc::signal<void>& signal_blur_changed();
-    sigc::signal<void>& signal_opacity_changed();
-    sigc::signal<void>& signal_isolation_changed();
+  sigc::signal<void> &signal_blend_changed();
+  sigc::signal<void> &signal_blur_changed();
+  sigc::signal<void> &signal_opacity_changed();
+  sigc::signal<void> &signal_isolation_changed();
 
-    int get_isolation_mode();
-    void set_isolation_mode(const int, bool notifi);
+  int get_isolation_mode();
+  void set_isolation_mode(const int, bool notifi);
 
-    int get_blend_mode();
-    void set_blend_mode(const int, bool notifi);
+  int get_blend_mode();
+  void set_blend_mode(const int, bool notifi);
 
-    double get_blur_value() const;
-    void   set_blur_value(const double);
+  double get_blur_value() const;
+  void set_blur_value(const double);
 
-    double get_opacity_value() const;
-    void   set_opacity_value(const double);
+  double get_opacity_value() const;
+  void set_opacity_value(const double);
 
 private:
     int _flags;

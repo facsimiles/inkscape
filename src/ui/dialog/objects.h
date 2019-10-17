@@ -224,8 +224,8 @@ private:
 
     void _opacityChangedIter(const Gtk::TreeIter& iter);
     void _opacityValueChanged();
-    
-    void _blendChangedIter(const Gtk::TreeIter& iter);
+
+    void _blendChangedIter(const Gtk::TreeIter &iter);
     void _blendValueChanged();
 
     void _blurChangedIter(const Gtk::TreeIter& iter, double blur);

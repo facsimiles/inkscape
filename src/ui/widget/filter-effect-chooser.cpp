@@ -102,7 +102,7 @@ SimpleFilterModifier::SimpleFilterModifier(int flags)
     _isolation.signal_toggled().connect(signal_isolation_changed());
 }
 
-sigc::signal<void>& SimpleFilterModifier::signal_isolation_changed()
+sigc::signal<void> &SimpleFilterModifier::signal_isolation_changed()
 {
     if (_notify) {
         return _signal_isolation_changed;
@@ -128,7 +128,7 @@ sigc::signal<void>& SimpleFilterModifier::signal_blur_changed()
 
 sigc::signal<void>& SimpleFilterModifier::signal_opacity_changed()
 {
-    //we dont use notifi to block use averaje for multiple
+    // we dont use notifi to block use averaje for multiple
     return _signal_opacity_changed;
 }
 

@@ -1625,8 +1625,7 @@ void ObjectsPanel::_isolationChangedIter(const Gtk::TreeIter &iter)
     SPItem *item = row[_model->_colObject];
     if (item) {
         item->style->isolation.set = TRUE;
-        item->style->isolation.value =
-            _filter_modifier.get_isolation_mode();
+        item->style->isolation.value = _filter_modifier.get_isolation_mode();
         item->updateRepr(SP_OBJECT_WRITE_NO_CHILDREN | SP_OBJECT_WRITE_EXT);
     }
 }
@@ -1647,7 +1646,7 @@ void ObjectsPanel::_blendValueChanged()
  * @param iter Current tree item
  * @param blendmode Blend mode to set
  */
-void ObjectsPanel::_blendChangedIter(const Gtk::TreeIter& iter)
+void ObjectsPanel::_blendChangedIter(const Gtk::TreeIter &iter)
 {
     Gtk::TreeModel::Row row = *iter;
     SPItem* item = row[_model->_colObject];
