@@ -58,6 +58,7 @@ SimpleFilterModifier::SimpleFilterModifier(int flags)
     , _blend(SPBlendModeConverter, SP_ATTR_INVALID, false)
     , _blur(_("Blur (%)"), 0, 0, 100, 1, 0.1, 1)
     , _opacity(_("Opacity (%)"), 0, 0, 100, 1, 0.1, 1)
+    , _notify(true)
 {
     set_name("SimpleFilterModifier");
 
@@ -103,45 +104,57 @@ SimpleFilterModifier::SimpleFilterModifier(int flags)
 
 sigc::signal<void>& SimpleFilterModifier::signal_isolation_changed()
 {
-    return _signal_isolation_changed;
+    if (_notify) {
+        return _signal_isolation_changed;
+    }
+    _notify = true;
+    return _signal_null;
 }
 
 sigc::signal<void>& SimpleFilterModifier::signal_blend_changed()
 {
-    return _signal_blend_changed;
+    if (_notify) {
+        return _signal_blend_changed;
+    }
+    _notify = true;
+    return _signal_null;
 }
 
 sigc::signal<void>& SimpleFilterModifier::signal_blur_changed()
 {
+    // we dont use notifi to block use aberaje for multiple
     return _signal_blur_changed;
 }
 
 sigc::signal<void>& SimpleFilterModifier::signal_opacity_changed()
 {
+    //we dont use notifi to block use averaje for multiple
     return _signal_opacity_changed;
 }
 
-bool SimpleFilterModifier::get_isolation_active()
+int SimpleFilterModifier::get_isolation_mode()
 {
-    return _isolation.get_active();
+    return _isolation.get_active() ? SP_CSS_ISOLATION_ISOLATE : SP_CSS_ISOLATION_AUTO;
 }
 
-void SimpleFilterModifier::set_isolation_active(bool active)
+void SimpleFilterModifier::set_isolation_mode(const int val, bool notify)
 {
-    _isolation.set_active(active);
+    _notify = notify;
+    _isolation.set_active(val == SP_CSS_ISOLATION_ISOLATE);
 }
 
-const Glib::ustring SimpleFilterModifier::get_blend_mode()
+int SimpleFilterModifier::get_blend_mode()
 {
     const Util::EnumData<SPBlendMode> *d = _blend.get_active_data();
     if (d) {
-        return _blend.get_active_data()->key;
+        return _blend.get_active_data()->id;
     } else
-        return "normal";
+        return SP_CSS_BLEND_NORMAL;
 }
 
-void SimpleFilterModifier::set_blend_mode(const int val)
+void SimpleFilterModifier::set_blend_mode(const int val, bool notify)
 {
+    _notify = notify;
     _blend.set_active(val);
 }
 

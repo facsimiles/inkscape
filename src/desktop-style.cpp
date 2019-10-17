@@ -1750,8 +1750,7 @@ objects_query_blend (const std::vector<SPItem*> &objects, SPStyle *style_res)
     }
 }
 
-int
-objects_query_isolation (const std::vector<SPItem*> &objects, SPStyle *style_res)
+int objects_query_isolation(const std::vector<SPItem *> &objects, SPStyle *style_res)
 {
     const int empty_prev = -2;
     int isolation = 0;
@@ -1778,7 +1777,7 @@ objects_query_isolation (const std::vector<SPItem*> &objects, SPStyle *style_res
             isolation = 0;
         }
 
-        if(isolation_prev != empty_prev && isolation_prev != isolation)
+        if (isolation_prev != empty_prev && isolation_prev != isolation)
             same_isolation = false;
         isolation_prev = isolation;
     }
@@ -1792,7 +1791,7 @@ objects_query_isolation (const std::vector<SPItem*> &objects, SPStyle *style_res
     } else if (items == 1) {
         return QUERY_STYLE_SINGLE;
     } else {
-        if(same_isolation)
+        if (same_isolation)
             return QUERY_STYLE_MULTIPLE_SAME;
         else
             return QUERY_STYLE_MULTIPLE_DIFFERENT;
@@ -1923,7 +1922,7 @@ sp_desktop_query_style_from_list (const std::vector<SPItem*> &list, SPStyle *sty
     } else if (property == QUERY_STYLE_PROPERTY_BLEND) {
         return objects_query_blend (list, style);
     } else if (property == QUERY_STYLE_PROPERTY_ISOLATION) {
-        return objects_query_isolation (list, style);
+        return objects_query_isolation(list, style);
     } else if (property == QUERY_STYLE_PROPERTY_BLUR) {
         return objects_query_blur (list, style);
     }

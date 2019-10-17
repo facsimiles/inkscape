@@ -412,20 +412,21 @@ void SvgBuilder::_setFillStyle(SPCSSAttr *css, GfxState *state, bool even_odd) {
  * \brief Sets blend style properties from poppler's GfxState data structure
  * \update a SPCSSAttr with all mix-blend-mode set
  */
-void SvgBuilder::_setBlendMode(Inkscape::XML::Node *node, GfxState *state) {
-    SPCSSAttr *css = sp_repr_css_attr( node, "style" );
+void SvgBuilder::_setBlendMode(Inkscape::XML::Node *node, GfxState *state)
+{
+    SPCSSAttr *css = sp_repr_css_attr(node, "style");
     GfxBlendMode blendmode = state->getBlendMode();
     if (blendmode) {
         sp_repr_css_set_property(css, "mix-blend-mode", enum_blend_mode[blendmode].key);
     }
     Glib::ustring value;
     sp_repr_css_write_string(css, value);
-    if( value.empty() ) {
-        node->setAttribute("style", nullptr );
+    if (value.empty()) {
+        node->setAttribute("style", nullptr);
     } else {
         node->setAttribute("style", value.c_str());
     }
-    sp_repr_css_attr_unref( css );
+    sp_repr_css_attr_unref(css);
 }
 /**
  * \brief Sets style properties from poppler's GfxState data structure
@@ -1170,7 +1171,7 @@ void SvgBuilder::updateFont(GfxState *state) {
     }
     os_font_size << css_font_size;
     sp_repr_css_set_property(_font_style, "font-size", os_font_size.str().c_str());
-    
+
     // Writing mode
     if ( font->getWMode() == 0 ) {
         sp_repr_css_set_property(_font_style, "writing-mode", "lr");
@@ -1678,7 +1679,7 @@ Inkscape::XML::Node *SvgBuilder::_createImage(Stream *str, int width, int height
         sp_repr_css_change(image_node, css, "style");
         sp_repr_css_attr_unref(css);
     }
-    
+
     // PS/PDF images are placed via a transformation matrix, no preserveAspectRatio used
     image_node->setAttribute("preserveAspectRatio", "none");
 
@@ -1738,11 +1739,12 @@ Inkscape::XML::Node *SvgBuilder::_createMask(double width, double height) {
     }
 }
 
-void SvgBuilder::addImage(GfxState *state, Stream *str, int width, int height,
-                          GfxImageColorMap *color_map, bool interpolate, int *mask_colors) {
+void SvgBuilder::addImage(GfxState *state, Stream *str, int width, int height, GfxImageColorMap *color_map,
+                          bool interpolate, int *mask_colors)
+{
 
-     Inkscape::XML::Node *image_node = _createImage(str, width, height, color_map, interpolate, mask_colors);
-     if (image_node) {
+    Inkscape::XML::Node *image_node = _createImage(str, width, height, color_map, interpolate, mask_colors);
+    if (image_node) {
         _setBlendMode(image_node, state);
         _container->appendChild(image_node);
         Inkscape::GC::release(image_node);

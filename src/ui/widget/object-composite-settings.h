@@ -61,7 +61,6 @@ private:
     void _blendBlurValueChanged();
     void _opacityValueChanged();
     void _isolationValueChanged();
-
 };
 
 }

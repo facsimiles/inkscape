@@ -15,9 +15,9 @@
  */
 
 #include <gtkmm/box.h>
+#include <gtkmm/checkbutton.h>
 #include <gtkmm/combobox.h>
 #include <gtkmm/separator.h>
-#include <gtkmm/checkbutton.h>
 
 #include "combo-enums.h"
 #include "spin-scale.h"
@@ -48,9 +48,11 @@ public:
     sigc::signal<void>& signal_opacity_changed();
     sigc::signal<void>& signal_isolation_changed();
 
-    const Glib::ustring get_blend_mode();
-    // Uses blend mode enum values, or -1 for a complex filter
-    void set_blend_mode(const int);
+    int get_isolation_mode();
+    void set_isolation_mode(const int, bool notifi);
+
+    int get_blend_mode();
+    void set_blend_mode(const int, bool notifi);
 
     double get_blur_value() const;
     void   set_blur_value(const double);
@@ -58,11 +60,9 @@ public:
     double get_opacity_value() const;
     void   set_opacity_value(const double);
 
-    bool get_isolation_active();
-    void set_isolation_active(bool active);
-
 private:
     int _flags;
+    bool _notify;
 
     Gtk::HBox _hb_blend;
     Gtk::Label _lb_blend;
@@ -72,6 +72,7 @@ private:
     SpinScale _opacity;
     Gtk::CheckButton _isolation;
 
+    sigc::signal<void> _signal_null;
     sigc::signal<void> _signal_blend_changed;
     sigc::signal<void> _signal_blur_changed;
     sigc::signal<void> _signal_opacity_changed;
