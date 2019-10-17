@@ -54,6 +54,7 @@ namespace Widget {
 SimpleFilterModifier::SimpleFilterModifier(int flags)
     : _flags(flags)
     , _lb_blend(_("Blend mode:"))
+    , _lb_isolation("Isolate") // Translate for 1.1
     , _blend(SPBlendModeConverter, SP_ATTR_INVALID, false)
     , _blur(_("Blur (%)"), 0, 0, 100, 1, 0.1, 1)
     , _opacity(_("Opacity (%)"), 0, 0, 100, 1, 0.1, 1)
@@ -70,6 +71,13 @@ SimpleFilterModifier::SimpleFilterModifier(int flags)
         _hb_blend.set_margin_top(3);
         _hb_blend.set_margin_end(5);
         _lb_blend.set_mnemonic_widget(_blend);
+        _hb_blend.pack_start(_lb_blend, false, false, 5);
+        _hb_blend.pack_start(_blend, false, false, 5);
+        if (flags & ISOLATION) {
+            _isolation.property_active() = false;
+            _hb_blend.pack_start(_isolation, false, false, 5);
+            _hb_blend.pack_start(_lb_isolation, false, false, 5);
+        }
         _hb_blend.pack_start(_lb_blend, false, false, 5);
         _hb_blend.pack_start(_blend, false, false, 5);
         Gtk::Separator *separator = Gtk::manage(new Gtk::Separator());
@@ -90,6 +98,12 @@ SimpleFilterModifier::SimpleFilterModifier(int flags)
     _blend.signal_changed().connect(signal_blend_changed());
     _blur.signal_value_changed().connect(signal_blur_changed());
     _opacity.signal_value_changed().connect(signal_opacity_changed());
+    _isolation.signal_toggled().connect(signal_isolation_changed());
+}
+
+sigc::signal<void>& SimpleFilterModifier::signal_isolation_changed()
+{
+    return _signal_isolation_changed;
 }
 
 sigc::signal<void>& SimpleFilterModifier::signal_blend_changed()
@@ -105,6 +119,16 @@ sigc::signal<void>& SimpleFilterModifier::signal_blur_changed()
 sigc::signal<void>& SimpleFilterModifier::signal_opacity_changed()
 {
     return _signal_opacity_changed;
+}
+
+bool SimpleFilterModifier::get_isolation_active()
+{
+    return _isolation.get_active();
+}
+
+void SimpleFilterModifier::set_isolation_active(bool active)
+{
+    _isolation.set_active(active);
 }
 
 const Glib::ustring SimpleFilterModifier::get_blend_mode()

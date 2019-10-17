@@ -37,6 +37,7 @@ ObjectCompositeSettings::ObjectCompositeSettings(unsigned int verb_code, char co
   _blend_tag(Glib::ustring(history_prefix) + ":blend"),
   _blur_tag(Glib::ustring(history_prefix) + ":blur"),
   _opacity_tag(Glib::ustring(history_prefix) + ":opacity"),
+  _isolation_tag(Glib::ustring(history_prefix) + ":isolation"),
   _filter_modifier(flags),
   _blocked(false)
 {
@@ -48,6 +49,7 @@ ObjectCompositeSettings::ObjectCompositeSettings(unsigned int verb_code, char co
     _filter_modifier.signal_blend_changed().connect(sigc::mem_fun(*this, &ObjectCompositeSettings::_blendBlurValueChanged));
     _filter_modifier.signal_blur_changed().connect(sigc::mem_fun(*this, &ObjectCompositeSettings::_blendBlurValueChanged));
     _filter_modifier.signal_opacity_changed().connect(sigc::mem_fun(*this, &ObjectCompositeSettings::_opacityValueChanged));
+    _filter_modifier.signal_isolation_changed().connect(sigc::mem_fun(*this, &ObjectCompositeSettings::_isolationValueChanged));
 
     show_all_children();
 }
@@ -113,16 +115,13 @@ ObjectCompositeSettings::_blendBlurValueChanged()
         SPStyle *style = item->style;
         g_assert(style != nullptr);
 
-        SPCSSAttr *css = sp_repr_css_attr_new();
-
+        SPCSSAttr* css = sp_repr_css_attr (item->getRepr(), "style");
         if (blendmode == "normal") {
             sp_repr_css_unset_property(css, "mix-blend-mode");
         } else {
             sp_repr_css_set_property(css, "mix-blend-mode", blendmode.c_str());
         }
-
-        _subject->setCSS(css);
-
+        sp_repr_css_set(item->getRepr(), css, "style");
         sp_repr_css_attr_unref(css);
 
         if (radius == 0 && item->style->filter.set
@@ -184,6 +183,42 @@ ObjectCompositeSettings::_opacityValueChanged()
 }
 
 void
+ObjectCompositeSettings::_isolationValueChanged()
+{
+    if (!_subject) {
+        return;
+    }
+
+    SPDesktop *desktop = _subject->getDesktop();
+    if (!desktop) {
+        return;
+    }
+
+    if (_blocked)
+        return;
+    _blocked = true;
+
+    for (auto item:_subject->list()) {
+        SPCSSAttr* css = sp_repr_css_attr (item->getRepr(), "style");
+        if (_filter_modifier.get_isolation_active()) {
+            sp_repr_css_set_property (css, "isolation", "isolate");
+        } else {
+            sp_repr_css_unset_property(css, "isolation");
+        }
+        sp_repr_css_set(item->getRepr(), css, "style");
+        sp_repr_css_attr_unref(css);
+    }
+
+    DocumentUndo::maybeDone(desktop->getDocument(), _isolation_tag.c_str(), _verb_code,
+                            _("Change isolation"));
+
+    // resume interruptibility
+    //sp_canvas_end_forced_full_redraws(desktop->getCanvas());
+
+    _blocked = false;
+}
+
+void
 ObjectCompositeSettings::_subjectChanged() {
     if (!_subject) {
         return;
@@ -211,6 +246,20 @@ ObjectCompositeSettings::_subjectChanged() {
     }
 
     //query now for current filter mode and average blurring of selection
+    const int isolation_result = _subject->queryStyle(&query, QUERY_STYLE_PROPERTY_ISOLATION);
+    switch(isolation_result) {
+        case QUERY_STYLE_NOTHING:
+            break;
+        case QUERY_STYLE_SINGLE:
+        case QUERY_STYLE_MULTIPLE_SAME:
+            _filter_modifier.set_isolation_active(query.isolation.value == SP_CSS_ISOLATION_ISOLATE); // here dont work mix_blend_mode.set
+            break;
+        case QUERY_STYLE_MULTIPLE_DIFFERENT:
+            // TODO: set text
+            break;
+    }
+
+        //query now for current filter mode and average blurring of selection
     const int blend_result = _subject->queryStyle(&query, QUERY_STYLE_PROPERTY_BLEND);
     switch(blend_result) {
         case QUERY_STYLE_NOTHING:

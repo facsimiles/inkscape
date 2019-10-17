@@ -577,10 +577,14 @@ void ObjectsPanel::_objectsSelected( Selection *sel ) {
 void ObjectsPanel::_setCompositingValues(SPItem *item)
 {
     // Block the connections to avoid interference
+    _isolationConnection.block();
     _opacityConnection.block();
     _blendConnection.block();
     _blurConnection.block();
 
+    // Set the isolation
+    bool isolation = item->style->isolation.set && item->style->isolation.value == SP_CSS_ISOLATION_ISOLATE;
+    _filter_modifier.set_isolation_active(isolation);
     // Set the opacity
     double opacity = (item->style->opacity.set ? SP_SCALE24_TO_FLOAT(item->style->opacity.value) : 1);
     opacity *= 100; // Display in percent.
@@ -613,6 +617,7 @@ void ObjectsPanel::_setCompositingValues(SPItem *item)
     _filter_modifier.set_blur_value(blur_value);
 
     //Unblock connections
+    _isolationConnection.unblock();
     _blurConnection.unblock();
     _blendConnection.unblock();
     _opacityConnection.unblock();
@@ -1185,6 +1190,7 @@ void ObjectsPanel::_blockAllSignals(bool should_block = true) {
 
     // incoming signals
     _documentChangedCurrentLayer.block(should_block);
+    _isolationConnection.block(should_block);
     _opacityConnection.block(should_block);
     _blendConnection.block(should_block);
     _blurConnection.block(should_block);
@@ -1600,6 +1606,33 @@ void ObjectsPanel::_opacityChangedIter(const Gtk::TreeIter& iter)
 }
 
 /**
+ * Callback for when the isolation value is changed
+ */
+void ObjectsPanel::_isolationValueChanged()
+{
+    _blockCompositeUpdate = true;
+    _tree.get_selection()->selected_foreach_iter(sigc::mem_fun(*this, &ObjectsPanel::_isolationChangedIter));
+    DocumentUndo::maybeDone(_document, "isolation", SP_VERB_DIALOG_OBJECTS, _("Set object isolation"));
+    _blockCompositeUpdate = false;
+}
+
+/**
+ * Change the isolation of the selected items in the tree
+ * @param iter Current tree item
+ */
+void ObjectsPanel::_isolationChangedIter(const Gtk::TreeIter& iter)
+{
+    Gtk::TreeModel::Row row = *iter;
+    SPItem* item = row[_model->_colObject];
+    if (item)
+    {
+        item->style->isolation.set = TRUE;
+        item->style->isolation.value = _filter_modifier.get_isolation_active() ? SP_CSS_ISOLATION_ISOLATE : SP_CSS_ISOLATION_AUTO;
+        item->updateRepr(SP_OBJECT_WRITE_NO_CHILDREN | SP_OBJECT_WRITE_EXT);
+    }
+}
+
+/**
  * Callback for when the blend mode is changed
  */
 void ObjectsPanel::_blendValueChanged()
@@ -1717,7 +1750,8 @@ ObjectsPanel::ObjectsPanel() :
     _clipmaskHeader(C_("Clip and mask", "CM")),
     _highlightHeader(C_("Highlight", "HL")),
     _nameHeader(_("Label")),
-    _filter_modifier( UI::Widget::SimpleFilterModifier::BLEND   |
+    _filter_modifier( UI::Widget::SimpleFilterModifier::ISOLATION   |
+                      UI::Widget::SimpleFilterModifier::BLEND   |
                       UI::Widget::SimpleFilterModifier::BLUR    |
                       UI::Widget::SimpleFilterModifier::OPACITY ),
     _colorSelectorDialog("dialogs.colorpickerwindow")
@@ -1859,7 +1893,7 @@ ObjectsPanel::ObjectsPanel() :
     _blendConnection   = _filter_modifier.signal_blend_changed().connect(sigc::mem_fun(*this, &ObjectsPanel::_blendValueChanged));
     _blurConnection    = _filter_modifier.signal_blur_changed().connect(sigc::mem_fun(*this, &ObjectsPanel::_blurValueChanged));
     _opacityConnection = _filter_modifier.signal_opacity_changed().connect(   sigc::mem_fun(*this, &ObjectsPanel::_opacityValueChanged));
-
+    _isolationConnection = _filter_modifier.signal_isolation_changed().connect(   sigc::mem_fun(*this, &ObjectsPanel::_isolationValueChanged));
     //Pack the compositing functions and the button row
     _page.pack_end(_filter_modifier, Gtk::PACK_SHRINK);
     _page.pack_end(_buttonsRow, Gtk::PACK_SHRINK);

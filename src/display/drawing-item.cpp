@@ -773,8 +773,11 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
     if (_cached && !(flags & RENDER_BYPASS_CACHE)) {
         if (_cache) {
             _cache->prepare();
-            set_cairo_blend_operator( dc, _mix_blend_mode );
-
+            if (_isolation != SP_CSS_ISOLATION_ISOLATE || _mix_blend_mode) {
+                set_cairo_blend_operator( dc, _mix_blend_mode );
+            } else {
+                set_cairo_blend_operator( dc, SP_CSS_BLEND_NORMAL );
+            }
             _cache->paintFromCache(dc, carea);
             if (!carea) {
                 return RENDER_OK;
@@ -925,11 +928,16 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
         cachect.fill();
         _cache->markClean(*carea);
     }
+    set_cairo_blend_operator( dc, SP_CSS_BLEND_NORMAL );
     dc.rectangle(*carea);
     dc.setSource(&intermediate);
-    set_cairo_blend_operator( dc, _mix_blend_mode );
+    // 7. Render blend mode
+    if (_isolation != SP_CSS_ISOLATION_ISOLATE || _mix_blend_mode) {
+        set_cairo_blend_operator( dc, _mix_blend_mode );
+    }
     dc.fill();
     dc.setSource(0,0,0,0);
+
     // the call above is to clear a ref on the intermediate surface held by dc
 
     return render_result;
