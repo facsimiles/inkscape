@@ -148,8 +148,9 @@ int SimpleFilterModifier::get_blend_mode()
     const Util::EnumData<SPBlendMode> *d = _blend.get_active_data();
     if (d) {
         return _blend.get_active_data()->id;
-    } else
+    } else {
         return SP_CSS_BLEND_NORMAL;
+    }
 }
 
 void SimpleFilterModifier::set_blend_mode(const int val, bool notify)

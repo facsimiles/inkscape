@@ -886,12 +886,13 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
     // filters and opacity do not apply when rendering the ancestors of the filtered
     // element
     if ((flags & RENDER_FILTER_BACKGROUND) || !needs_intermediate_rendering) {
-        if (parent() && parent()->_isolation == SP_CSS_ISOLATION_ISOLATE &&
+/*         if (parent() && parent()->_isolation == SP_CSS_ISOLATION_ISOLATE &&
             cairo_get_operator(dc.raw()) != get_cairo_blend_operator(SP_CSS_BLEND_NORMAL)) {
             set_cairo_blend_operator(dc, SP_CSS_BLEND_NORMAL);
         } else if (cairo_get_operator(dc.raw()) != get_cairo_blend_operator(_mix_blend_mode)) {
             set_cairo_blend_operator(dc, _mix_blend_mode);
-        }
+        } */
+        
         return _renderItem(dc, *carea, flags & ~RENDER_FILTER_BACKGROUND, stop_at);
     }
 
@@ -1002,7 +1003,7 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
     dc.fill();
     dc.setSource(0,0,0,0);
     // Web isolation only works if parent doesnt have transform
-    if (parent() && parent()->_isolation == SP_CSS_ISOLATION_ISOLATE) {
+    if (is_drawing_group(this) || (parent() && parent()->_isolation == SP_CSS_ISOLATION_ISOLATE)) {
         set_cairo_blend_operator(dc, SP_CSS_BLEND_NORMAL);
     }
 

@@ -1839,17 +1839,17 @@ void SPCanvas::paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect 
 
     buf.ct = cairo_create(imgs);
 
-    cairo_save(buf.ct);
-    cairo_translate(buf.ct, -paint_rect.left(), -paint_rect.top());
-    cairo_set_source(buf.ct, _background);
-    cairo_set_operator(buf.ct, CAIRO_OPERATOR_SOURCE);
-    cairo_paint(buf.ct);
-    cairo_restore(buf.ct);
     // cairo_surface_write_to_png( imgs, "debug1.png" );
 
     if (_root->visible) {
         SP_CANVAS_ITEM_GET_CLASS(_root)->render(_root, &buf);
     }
+    cairo_save(buf.ct);
+    cairo_translate(buf.ct, -paint_rect.left(), -paint_rect.top());
+    cairo_set_source(buf.ct, _background);
+    cairo_set_operator(buf.ct, CAIRO_OPERATOR_DEST_OVER);
+    cairo_paint(buf.ct);
+    cairo_restore(buf.ct);
     // cairo_surface_write_to_png( imgs, "debug2.png" );
 
     // output to X
