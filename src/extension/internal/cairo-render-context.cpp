@@ -1570,7 +1570,7 @@ CairoRenderContext::renderPathVector(Geom::PathVector const & pathv, SPStyle con
                 cairo_set_fill_rule(_cr, CAIRO_FILL_RULE_WINDING);
             }
             if (style->mix_blend_mode.set && style->mix_blend_mode.value) {
-                ink_cairo_css_blend_operator(_cr, style->mix_blend_mode.value);
+                cairo_set_operator(_cr, ink_css_blend_to_cairo_operator(style->mix_blend_mode.value));
             }
             cairo_fill(_cr);
             TEST(cairo_surface_write_to_png (_surface, "pathmask.png"));
@@ -1603,7 +1603,7 @@ CairoRenderContext::renderPathVector(Geom::PathVector const & pathv, SPStyle con
     }
 
     if (style->mix_blend_mode.set && style->mix_blend_mode.value) {
-        ink_cairo_css_blend_operator(_cr, style->mix_blend_mode.value);
+        cairo_set_operator(_cr, ink_css_blend_to_cairo_operator(style->mix_blend_mode.value));
     }
 
     setPathVector(pathv);
@@ -1703,7 +1703,7 @@ bool CairoRenderContext::renderImage(Inkscape::Pixbuf *pb,
     }
 
     if (style->mix_blend_mode.set && style->mix_blend_mode.value) {
-        ink_cairo_css_blend_operator(_cr, style->mix_blend_mode.value);
+        cairo_set_operator(_cr, ink_css_blend_to_cairo_operator(style->mix_blend_mode.value));
     }
 
     cairo_paint(_cr);

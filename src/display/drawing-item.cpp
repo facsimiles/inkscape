@@ -28,126 +28,6 @@
 #include "object/sp-item.h"
 
 namespace Inkscape {
-// TODO find a way to use cairo utils one
-void set_cairo_blend_operator( DrawingContext &dc, unsigned blend_mode ) {
-
-    // All of the blend modes are implemented in Cairo as of 1.10.
-    // For a detailed description, see:
-    // http://cairographics.org/operators/
-    switch (blend_mode) {
-    case SP_CSS_BLEND_MULTIPLY:
-        dc.setOperator(CAIRO_OPERATOR_MULTIPLY);
-        break;
-    case SP_CSS_BLEND_SCREEN:
-        dc.setOperator(CAIRO_OPERATOR_SCREEN);
-        break;
-    case SP_CSS_BLEND_DARKEN:
-        dc.setOperator(CAIRO_OPERATOR_DARKEN);
-        break;
-    case SP_CSS_BLEND_LIGHTEN:
-        dc.setOperator(CAIRO_OPERATOR_LIGHTEN);
-        break;
-    case SP_CSS_BLEND_OVERLAY:   
-        dc.setOperator(CAIRO_OPERATOR_OVERLAY);
-        break;
-    case SP_CSS_BLEND_COLORDODGE:
-        dc.setOperator(CAIRO_OPERATOR_COLOR_DODGE);
-        break;
-    case SP_CSS_BLEND_COLORBURN:
-        dc.setOperator(CAIRO_OPERATOR_COLOR_BURN);
-        break;
-    case SP_CSS_BLEND_HARDLIGHT:
-        dc.setOperator(CAIRO_OPERATOR_HARD_LIGHT);
-        break;
-    case SP_CSS_BLEND_SOFTLIGHT:
-        dc.setOperator(CAIRO_OPERATOR_SOFT_LIGHT);
-        break;
-    case SP_CSS_BLEND_DIFFERENCE:
-        dc.setOperator(CAIRO_OPERATOR_DIFFERENCE);
-        break;
-    case SP_CSS_BLEND_EXCLUSION:
-        dc.setOperator(CAIRO_OPERATOR_EXCLUSION);
-        break;
-    case SP_CSS_BLEND_HUE:       
-        dc.setOperator(CAIRO_OPERATOR_HSL_HUE);
-        break;
-    case SP_CSS_BLEND_SATURATION:
-        dc.setOperator(CAIRO_OPERATOR_HSL_SATURATION);
-        break;
-    case SP_CSS_BLEND_COLOR:
-        dc.setOperator(CAIRO_OPERATOR_HSL_COLOR);
-        break;
-    case SP_CSS_BLEND_LUMINOSITY:
-        dc.setOperator(CAIRO_OPERATOR_HSL_LUMINOSITY);
-        break;
-    case SP_CSS_BLEND_NORMAL:
-    default:
-        dc.setOperator(CAIRO_OPERATOR_OVER);
-        break;
-    }
-}
-
-cairo_operator_t get_cairo_blend_operator(unsigned blend_mode)
-{
-
-    // All of the blend modes are implemented in Cairo as of 1.10.
-    // For a detailed description, see:
-    // http://cairographics.org/operators/
-    cairo_operator_t ret = CAIRO_OPERATOR_OVER;
-    switch (blend_mode) {
-        case SP_CSS_BLEND_MULTIPLY:
-            ret = CAIRO_OPERATOR_MULTIPLY;
-            break;
-        case SP_CSS_BLEND_SCREEN:
-            ret = CAIRO_OPERATOR_SCREEN;
-            break;
-        case SP_CSS_BLEND_DARKEN:
-            ret = CAIRO_OPERATOR_DARKEN;
-            break;
-        case SP_CSS_BLEND_LIGHTEN:
-            ret = CAIRO_OPERATOR_LIGHTEN;
-            break;
-        case SP_CSS_BLEND_OVERLAY:
-            ret = CAIRO_OPERATOR_OVERLAY;
-            break;
-        case SP_CSS_BLEND_COLORDODGE:
-            ret = CAIRO_OPERATOR_COLOR_DODGE;
-            break;
-        case SP_CSS_BLEND_COLORBURN:
-            ret = CAIRO_OPERATOR_COLOR_BURN;
-            break;
-        case SP_CSS_BLEND_HARDLIGHT:
-            ret = CAIRO_OPERATOR_HARD_LIGHT;
-            break;
-        case SP_CSS_BLEND_SOFTLIGHT:
-            ret = CAIRO_OPERATOR_SOFT_LIGHT;
-            break;
-        case SP_CSS_BLEND_DIFFERENCE:
-            ret = CAIRO_OPERATOR_DIFFERENCE;
-            break;
-        case SP_CSS_BLEND_EXCLUSION:
-            ret = CAIRO_OPERATOR_EXCLUSION;
-            break;
-        case SP_CSS_BLEND_HUE:
-            ret = CAIRO_OPERATOR_HSL_HUE;
-            break;
-        case SP_CSS_BLEND_SATURATION:
-            ret = CAIRO_OPERATOR_HSL_SATURATION;
-            break;
-        case SP_CSS_BLEND_COLOR:
-            ret = CAIRO_OPERATOR_HSL_COLOR;
-            break;
-        case SP_CSS_BLEND_LUMINOSITY:
-            ret = CAIRO_OPERATOR_HSL_LUMINOSITY;
-            break;
-        case SP_CSS_BLEND_NORMAL:
-        default:
-            ret = CAIRO_OPERATOR_OVER;
-            break;
-    }
-    return ret;
-}
-
 /**
  * @class DrawingItem
  * SVG drawing item for display.
@@ -690,11 +570,7 @@ DrawingItem::update(Geom::IntRect const &area, UpdateContext const &ctx, unsigne
             }
         }
     }
-    bool nocache = _mix_blend_mode != SP_CSS_BLEND_NORMAL;
-    if (parent() && parent()->_isolation == SP_CSS_ISOLATION_ISOLATE) {
-        nocache = true;
-    }
-    if (to_update & STATE_CACHE && !nocache) {
+    if (to_update & STATE_CACHE) {
         // Update cache score for this item
         if (_has_cache_iterator) {
             // remove old score information
@@ -834,9 +710,10 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
 
     // Render from cache if possible
     // Bypass in case of pattern, see below.
-    if (!_mix_blend_mode && _cached && !(flags & RENDER_BYPASS_CACHE)) {
+    if (_cached && !(flags & RENDER_BYPASS_CACHE)) {
         if (_cache) {
             _cache->prepare();
+            dc.setOperator(ink_css_blend_to_cairo_operator(_mix_blend_mode));
             _cache->paintFromCache(dc, carea);
             if (!carea) {
                 return RENDER_OK;
@@ -860,14 +737,15 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
     bool needs_opacity = (_opacity < 0.995);
 
     // this item needs an intermediate rendering if:
-    nir |= (_clip != nullptr);                                             // 1. it has a clipping path
-    nir |= (_mask != nullptr);                                             // 2. it has a mask
-    nir |= (_filter != nullptr && render_filters);                         // 3. it has a filter
-    nir |= needs_opacity;                                                  // 4. it is non-opaque
-    nir |= (_cache != nullptr);                                            // 5. it is to be cached
-    nir |= (_mix_blend_mode != SP_CSS_BLEND_NORMAL);                       // 6. Blend mode not normal
-    nir |= (_isolation == SP_CSS_ISOLATION_ISOLATE);                       // 7. Explicit isolatiom
-    nir |= (parent() && parent()->_isolation == SP_CSS_ISOLATION_ISOLATE); // 8. Explicit parent isolatiom
+    nir |= (_clip != nullptr);                                              // 1. it has a clipping path
+    nir |= (_mask != nullptr);                                              // 2. it has a mask
+    nir |= (_filter != nullptr && render_filters);                          // 3. it has a filter
+    nir |= needs_opacity;                                                   // 4. it is non-opaque
+    nir |= (_cache != nullptr);                                             // 5. it is to be cached
+    nir |= (_mix_blend_mode != SP_CSS_BLEND_NORMAL);                        // 6. Blend mode not normal
+/*     nir |= (_isolation == SP_CSS_ISOLATION_ISOLATE);                        // 7. Explicit isolatiom
+    nir |= (!parent() || parent()->_isolation == SP_CSS_ISOLATION_ISOLATE); // 8. Explicit parent isolatiom
+    nir |= (!parent() || parent()->_mix_blend_mode != SP_CSS_BLEND_NORMAL); // 8. Explicit parent isolatiom */
 
     /* How the rendering is done.
      *
@@ -880,19 +758,12 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
      * the entire intermediate surface is painted with alpha corresponding
      * to the opacity value.
      */
-
     // Short-circuit the simple case.
     // We also use this path for filter background rendering, because masking, clipping,
     // filters and opacity do not apply when rendering the ancestors of the filtered
     // element
     if ((flags & RENDER_FILTER_BACKGROUND) || !needs_intermediate_rendering) {
-/*         if (parent() && parent()->_isolation == SP_CSS_ISOLATION_ISOLATE &&
-            cairo_get_operator(dc.raw()) != get_cairo_blend_operator(SP_CSS_BLEND_NORMAL)) {
-            set_cairo_blend_operator(dc, SP_CSS_BLEND_NORMAL);
-        } else if (cairo_get_operator(dc.raw()) != get_cairo_blend_operator(_mix_blend_mode)) {
-            set_cairo_blend_operator(dc, _mix_blend_mode);
-        } */
-        
+        dc.setOperator(ink_css_blend_to_cairo_operator(_mix_blend_mode));
         return _renderItem(dc, *carea, flags & ~RENDER_FILTER_BACKGROUND, stop_at);
     }
 
@@ -987,7 +858,7 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
     ict.paint();
 
     // 6. Paint the completed rendering onto the base context (or into cache)
-    if (!_mix_blend_mode && _cached && _cache) {
+    if (_cached && _cache) {
         DrawingContext cachect(*_cache);
         cachect.rectangle(*carea);
         cachect.setOperator(CAIRO_OPERATOR_SOURCE);
@@ -999,13 +870,11 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
     dc.rectangle(*carea);
     dc.setSource(&intermediate);
     // 7. Render blend mode
-    set_cairo_blend_operator(dc, _mix_blend_mode);
+    dc.setOperator(ink_css_blend_to_cairo_operator(_mix_blend_mode));
     dc.fill();
     dc.setSource(0,0,0,0);
     // Web isolation only works if parent doesnt have transform
-    if (is_drawing_group(this) || (parent() && parent()->_isolation == SP_CSS_ISOLATION_ISOLATE)) {
-        set_cairo_blend_operator(dc, SP_CSS_BLEND_NORMAL);
-    }
+
 
     // the call above is to clear a ref on the intermediate surface held by dc
 

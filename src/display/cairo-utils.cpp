@@ -1252,64 +1252,128 @@ private:
     /* None */
 };
 
-void ink_cairo_css_blend_operator(cairo_t *ct, unsigned blend_mode)
+unsigned ink_cairo_operator_to_css_blend(cairo_operator_t cairo_operator)
 {
-
     // All of the blend modes are implemented in Cairo as of 1.10.
     // For a detailed description, see:
     // http://cairographics.org/operators/
-    switch (blend_mode) {
+    unsigned res = SP_CSS_BLEND_NORMAL;
+    switch (cairo_operator) {
+        case CAIRO_OPERATOR_MULTIPLY:
+            res = SP_CSS_BLEND_MULTIPLY;
+            break;
+        case CAIRO_OPERATOR_SCREEN:
+            res = SP_CSS_BLEND_SCREEN;
+            break;
+        case CAIRO_OPERATOR_DARKEN:
+            res = SP_CSS_BLEND_DARKEN;
+            break;
+        case CAIRO_OPERATOR_LIGHTEN:
+            res = SP_CSS_BLEND_LIGHTEN;
+            break;
+        case CAIRO_OPERATOR_OVERLAY:
+            res = SP_CSS_BLEND_OVERLAY;
+            break;
+        case CAIRO_OPERATOR_COLOR_DODGE:
+            res = SP_CSS_BLEND_COLORDODGE;
+            break;
+        case CAIRO_OPERATOR_COLOR_BURN:
+            res = SP_CSS_BLEND_COLORBURN;
+            break;
+        case CAIRO_OPERATOR_HARD_LIGHT:
+            res = SP_CSS_BLEND_HARDLIGHT;
+            break;
+        case CAIRO_OPERATOR_SOFT_LIGHT:
+            res = SP_CSS_BLEND_SOFTLIGHT;
+            break;
+        case CAIRO_OPERATOR_DIFFERENCE:
+            res = SP_CSS_BLEND_DIFFERENCE;
+            break;
+        case CAIRO_OPERATOR_EXCLUSION:
+            res = SP_CSS_BLEND_EXCLUSION;
+            break;
+        case CAIRO_OPERATOR_HSL_HUE:
+            res = SP_CSS_BLEND_HUE;
+            break;
+        case CAIRO_OPERATOR_HSL_SATURATION:
+            res = SP_CSS_BLEND_SATURATION;
+            break;
+        case CAIRO_OPERATOR_HSL_COLOR:
+            res = SP_CSS_BLEND_COLOR;
+            break;
+        case CAIRO_OPERATOR_HSL_LUMINOSITY:
+            res = SP_CSS_BLEND_LUMINOSITY;
+            break;
+        case CAIRO_OPERATOR_OVER:
+        default:
+            res = SP_CSS_BLEND_NORMAL;
+            break;
+    }
+    return res;
+}
+
+cairo_operator_t ink_css_blend_to_cairo_operator(unsigned css_blend)
+{
+    // All of the blend modes are implemented in Cairo as of 1.10.
+    // For a detailed description, see:
+    // http://cairographics.org/operators/
+
+    cairo_operator_t res = CAIRO_OPERATOR_OVER;
+    switch (css_blend) {
         case SP_CSS_BLEND_MULTIPLY:
-            cairo_set_operator(ct, CAIRO_OPERATOR_MULTIPLY);
+            res = CAIRO_OPERATOR_MULTIPLY;
             break;
         case SP_CSS_BLEND_SCREEN:
-            cairo_set_operator(ct, CAIRO_OPERATOR_SCREEN);
+            res = CAIRO_OPERATOR_SCREEN;
             break;
         case SP_CSS_BLEND_DARKEN:
-            cairo_set_operator(ct, CAIRO_OPERATOR_DARKEN);
+            res = CAIRO_OPERATOR_DARKEN;
             break;
         case SP_CSS_BLEND_LIGHTEN:
-            cairo_set_operator(ct, CAIRO_OPERATOR_LIGHTEN);
+            res = CAIRO_OPERATOR_LIGHTEN;
             break;
         case SP_CSS_BLEND_OVERLAY:
-            cairo_set_operator(ct, CAIRO_OPERATOR_OVERLAY);
+            res = CAIRO_OPERATOR_OVERLAY;
             break;
         case SP_CSS_BLEND_COLORDODGE:
-            cairo_set_operator(ct, CAIRO_OPERATOR_COLOR_DODGE);
+            res = CAIRO_OPERATOR_COLOR_DODGE;
             break;
         case SP_CSS_BLEND_COLORBURN:
-            cairo_set_operator(ct, CAIRO_OPERATOR_COLOR_BURN);
+            res = CAIRO_OPERATOR_COLOR_BURN;
             break;
         case SP_CSS_BLEND_HARDLIGHT:
-            cairo_set_operator(ct, CAIRO_OPERATOR_HARD_LIGHT);
+            res = CAIRO_OPERATOR_HARD_LIGHT;
             break;
         case SP_CSS_BLEND_SOFTLIGHT:
-            cairo_set_operator(ct, CAIRO_OPERATOR_SOFT_LIGHT);
+            res = CAIRO_OPERATOR_SOFT_LIGHT;
             break;
         case SP_CSS_BLEND_DIFFERENCE:
-            cairo_set_operator(ct, CAIRO_OPERATOR_DIFFERENCE);
+            res = CAIRO_OPERATOR_DIFFERENCE;
             break;
         case SP_CSS_BLEND_EXCLUSION:
-            cairo_set_operator(ct, CAIRO_OPERATOR_EXCLUSION);
+            res = CAIRO_OPERATOR_EXCLUSION;
             break;
         case SP_CSS_BLEND_HUE:
-            cairo_set_operator(ct, CAIRO_OPERATOR_HSL_HUE);
+            res = CAIRO_OPERATOR_HSL_HUE;
             break;
         case SP_CSS_BLEND_SATURATION:
-            cairo_set_operator(ct, CAIRO_OPERATOR_HSL_SATURATION);
+            res = CAIRO_OPERATOR_HSL_SATURATION;
             break;
         case SP_CSS_BLEND_COLOR:
-            cairo_set_operator(ct, CAIRO_OPERATOR_HSL_COLOR);
+            res = CAIRO_OPERATOR_HSL_COLOR;
             break;
         case SP_CSS_BLEND_LUMINOSITY:
-            cairo_set_operator(ct, CAIRO_OPERATOR_HSL_LUMINOSITY);
+            res = CAIRO_OPERATOR_HSL_LUMINOSITY;
             break;
         case SP_CSS_BLEND_NORMAL:
         default:
-            cairo_set_operator(ct, CAIRO_OPERATOR_OVER);
+            res = CAIRO_OPERATOR_OVER;
             break;
     }
+    return res;
 }
+
+
 
 int ink_cairo_surface_linear_to_srgb(cairo_surface_t *surface)
 {
