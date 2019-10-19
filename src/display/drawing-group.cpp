@@ -10,12 +10,12 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include "display/drawing.h"
-#include "display/drawing-context.h"
-#include "display/drawing-surface.h"
-#include "display/drawing-item.h"
 #include "display/drawing-group.h"
 #include "display/cairo-utils.h"
+#include "display/drawing-context.h"
+#include "display/drawing-item.h"
+#include "display/drawing-surface.h"
+#include "display/drawing.h"
 #include "style.h"
 
 namespace Inkscape {
@@ -103,14 +103,15 @@ DrawingGroup::_renderItem(DrawingContext &dc, Geom::IntRect const &area, unsigne
         }
         if (stop_at == nullptr) {
             // normal rendering
-            for (auto & i : _children) {
+            for (auto &i : _children) {
                 i.setAntialiasing(_antialias);
                 i.render(ict, area, flags, stop_at);
             }
         } else {
             // background rendering
-            for (auto & i : _children) {
-                if (&i == stop_at) return RENDER_OK; // do not render the stop_at item at all
+            for (auto &i : _children) {
+                if (&i == stop_at)
+                    return RENDER_OK; // do not render the stop_at item at all
                 if (i.isAncestorOf(stop_at)) {
                     // render its ancestors without masks, opacity or filters
                     i.setAntialiasing(_antialias);
@@ -134,14 +135,15 @@ DrawingGroup::_renderItem(DrawingContext &dc, Geom::IntRect const &area, unsigne
         } */
         if (stop_at == nullptr) {
             // normal rendering
-            for (auto & i : _children) {
+            for (auto &i : _children) {
                 i.setAntialiasing(_antialias);
                 i.render(dc, area, flags, stop_at);
             }
         } else {
             // background rendering
-            for (auto & i : _children) {
-                if (&i == stop_at) return RENDER_OK; // do not render the stop_at item at all
+            for (auto &i : _children) {
+                if (&i == stop_at)
+                    return RENDER_OK; // do not render the stop_at item at all
                 if (i.isAncestorOf(stop_at)) {
                     // render its ancestors without masks, opacity or filters
                     i.setAntialiasing(_antialias);

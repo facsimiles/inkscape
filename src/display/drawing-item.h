@@ -93,7 +93,7 @@ public:
 
     DrawingItem(Drawing &drawing);
     virtual ~DrawingItem();
-    
+
     unsigned _isolation : 1;
     unsigned _mix_blend_mode : 4;
 

@@ -743,9 +743,7 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
     nir |= needs_opacity;                                                   // 4. it is non-opaque
     nir |= (_cache != nullptr);                                             // 5. it is to be cached
     nir |= (_mix_blend_mode != SP_CSS_BLEND_NORMAL);                        // 6. Blend mode not normal
-/*     nir |= (_isolation == SP_CSS_ISOLATION_ISOLATE);                        // 7. Explicit isolatiom
-    nir |= (!parent() || parent()->_isolation == SP_CSS_ISOLATION_ISOLATE); // 8. Explicit parent isolatiom
-    nir |= (!parent() || parent()->_mix_blend_mode != SP_CSS_BLEND_NORMAL); // 8. Explicit parent isolatiom */
+    // Isolation is handled by the drawing-group
 
     /* How the rendering is done.
      *
