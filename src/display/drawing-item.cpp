@@ -739,7 +739,7 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
     nir |= needs_opacity;                            // 4. it is non-opaque
     nir |= (_mix_blend_mode != SP_CSS_BLEND_NORMAL); // 5. it has blend mode           
     nir |= (_isolation == SP_CSS_ISOLATION_ISOLATE); // 6. it is isolated    
-    nir |= !parent();                                 // 7. is root need isolation from background                            
+                    
     if (prev_nir && !needs_intermediate_rendering) {
         setCached(false, true);
         if (_has_cache_iterator) {
