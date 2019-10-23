@@ -799,11 +799,7 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
     unsigned render_result = RENDER_OK;
 
     // 1. Render clipping path with alpha = opacity.
-    if (parent()) {
-        ict.setSource(0,0,0,_opacity);
-    } else {
-        ict.setSource(255, 255, 255, 1);
-    }
+    ict.setSource(0,0,0,_opacity);
     // Since clip can be combined with opacity, the result could be incorrect
     // for overlapping clip children. To fix this we use the SOURCE operator
     // instead of the default OVER.
@@ -881,9 +877,6 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
     dc.setOperator(ink_css_blend_to_cairo_operator(_mix_blend_mode));
     dc.fill();
     dc.setSource(0,0,0,0);
-    // Web isolation only works if parent doesnt have transform
-
-
     // the call above is to clear a ref on the intermediate surface held by dc
 
     return render_result;

@@ -1928,6 +1928,7 @@ void SPCanvas::paintXRayBuffer(Geom::IntRect const &paint_rect, Geom::IntRect co
     cairo_set_operator(buf.ct, CAIRO_OPERATOR_SOURCE);
     cairo_paint(buf.ct);
     cairo_translate(buf.ct, paint_rect.left(), paint_rect.top());
+    cairo_set_operator(buf.ct, CAIRO_OPERATOR_OVER);
         // cairo_surface_write_to_png( copy_backing, "debug1.png" );
 
 
