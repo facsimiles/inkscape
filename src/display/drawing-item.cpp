@@ -739,7 +739,7 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
     nir |= needs_opacity;                            // 4. it is non-opaque
     nir |= (_mix_blend_mode != SP_CSS_BLEND_NORMAL); // 5. it has blend mode           
     nir |= (_isolation == SP_CSS_ISOLATION_ISOLATE); // 6. it is isolated    
-    nir |= !parent();                                 // 7. is root need isolation from background                            
+                    
     if (prev_nir && !needs_intermediate_rendering) {
         setCached(false, true);
         if (_has_cache_iterator) {
@@ -877,9 +877,6 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
     dc.setOperator(ink_css_blend_to_cairo_operator(_mix_blend_mode));
     dc.fill();
     dc.setSource(0,0,0,0);
-    // Web isolation only works if parent doesnt have transform
-
-
     // the call above is to clear a ref on the intermediate surface held by dc
 
     return render_result;
