@@ -89,6 +89,7 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     rotate_anotation(_("Rotate labels"), _("Labels are parallel to the dimension line"), "rotate_anotation", &wr, this, true),
     hide_back(_("Hide line under label"), _("Hide the dimension line where the label overlaps it"), "hide_back", &wr, this, true),
     hide_arrows(_("Hide arrows"), _("Don't show any arrows"), "hide_arrows", &wr, this, false),
+    // active for 1.1
     smallx100(_("Multiply values < 1"), _("Multiply values smaller than 1 by 100 and leave out the unit"), "smallx100", &wr, this, false),
     linked_items(_("Linked objects:"), _("Objects whose nodes are projected onto the path and generate new measurements"), "linked_items", &wr, this),
     distance_projection(_("Distance"), _("Distance of the dimension lines from the outermost node"), "distance_projection", &wr, this, 20.0),
@@ -126,6 +127,7 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     registerParameter(&rotate_anotation);
     registerParameter(&hide_back);
     registerParameter(&hide_arrows);
+    // active for 1.1
     registerParameter(&smallx100);
     registerParameter(&linked_items);
     registerParameter(&distance_projection);
@@ -181,20 +183,26 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     locale_base = strdup(setlocale(LC_NUMERIC, nullptr));
     previous_size = 0;
     pagenumber = 0;
+    anotation_width = 0;
+    fontsize = 0;
+    rgb32 = 0;
+    arrow_gap = 0;
+    load_end = false;
+    //TODO: add newlines for 1.1 (not easy)
     helpdata.param_update_default(_("<b><big>General</big></b>\n"
-                        "Display and position dimension lines and labels\n\n"
-                        "<b><big>Projection</big></b>\n"
-                        "Show a line with measurements based on the selected items\n\n"
-                        "<b><big>Options</big></b>\n"
-                        "Options for color, precision, label formatting and display\n\n"
-                        "<b><big>Tips</big></b>\n"
-                        "<b><i>Custom styling:</i></b> To further customize the styles, "
-                        "use the XML editor to find out the class or ID, then use the "
-                        "Style dialog to apply a new style.\n"
-                        "<b><i>Blacklists:</i></b> allow to hide some segments or projection steps.\n"
-                        "<b><i>Multiple Measure LPEs:</i></b> In the same object, in conjunction with blacklists,"
-                        "this allows for labels and measurements with different orientations or additional projections.\n"
-                        "<b><i>Set Defaults:</i></b> For every LPE, default values can be set at the bottom."));
+                    "Display and position dimension lines and labels\n\n"
+                    "<b><big>Projection</big></b>\n"
+                    "Show a line with measurements based on the selected items\n\n"
+                    "<b><big>Options</big></b>\n"
+                    "Options for color, precision, label formatting and display\n\n"
+                    "<b><big>Tips</big></b>\n"
+                    "<b><i>Custom styling:</i></b> To further customize the styles, "
+                    "use the XML editor to find out the class or ID, then use the "
+                    "Style dialog to apply a new style.\n"
+                    "<b><i>Blacklists:</i></b> allow to hide some segments or projection steps.\n"
+                    "<b><i>Multiple Measure LPEs:</i></b> In the same object, in conjunction with blacklists,"
+                    "this allows for labels and measurements with different orientations or additional projections.\n"
+                    "<b><i>Set Defaults:</i></b> For every LPE, default values can be set at the bottom."));
 }
 
 LPEMeasureSegments::~LPEMeasureSegments() {
@@ -252,9 +260,19 @@ LPEMeasureSegments::newWidget()
                            param->param_key == "whitelist"     ||
                            param->param_key == "showindex"     ||
                            param->param_key == "local_locale"  ||
-                           param->param_key == "smallx100"     ||
                            param->param_key == "hide_arrows"     )
                 {
+                    vbox2->pack_start(*widg, false, true, 2);
+                } else if (//TOD: unhack for 1.1
+                           param->param_key == "smallx100" )
+                {
+                    Glib::ustring widgl =  param->param_label;
+                    size_t pos = widgl.find("<");
+                    if (pos != std::string::npos ) {
+                        widgl.erase(pos, 1);
+                        widgl.insert(pos, "&lt;");
+                    }
+                    param->param_label = widgl.c_str();
                     vbox2->pack_start(*widg, false, true, 2);
                 } else if (param->param_key == "helpdata")
                 {
@@ -385,8 +403,6 @@ LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double leng
         return;
     }
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
-    Inkscape::XML::Node *rtext = nullptr;
-
     Glib::ustring lpobjid = this->lpeobj->getId();
     Glib::ustring itemid  = sp_lpe_item->getId();
     Glib::ustring id = Glib::ustring("text-on-");
@@ -394,7 +410,9 @@ LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double leng
     id += "-";
     id += lpobjid;
     SPObject *elemref = nullptr;
+    Inkscape::XML::Node *rtext = nullptr;
     Inkscape::XML::Node *rtspan = nullptr;
+    Inkscape::XML::Node *rstring = nullptr;
     elemref = document->getObjectById(id.c_str());
     if (elemref) {
         rtext = elemref->getRepr();
@@ -402,6 +420,8 @@ LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double leng
         sp_repr_set_svg_double(rtext, "y", pos[Geom::Y]);
         rtext->setAttribute("sodipodi:insensitive", "true");
         rtext->setAttribute("transform", nullptr);
+        rtspan = rtext->firstChild();
+        rstring = rtspan->firstChild();
     } else {
         rtext = xml_doc->createElement("svg:text");
         rtext->setAttribute("xml:space", "preserve");
@@ -412,10 +432,18 @@ LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double leng
         classlabel += " measure-labels";
         rtext->setAttribute("class", classlabel.c_str());
         rtext->setAttribute("sodipodi:insensitive", "true");
+        rtext->setAttribute("transform", nullptr);
         sp_repr_set_svg_double(rtext, "x", pos[Geom::X]);
         sp_repr_set_svg_double(rtext, "y", pos[Geom::Y]);
         rtspan = xml_doc->createElement("svg:tspan");
         rtspan->setAttribute("sodipodi:role", "line");
+        elemref = document->getRoot()->appendChildRepr(rtext);
+        Inkscape::GC::release(rtext);
+        rtext->addChild(rtspan, nullptr);
+        Inkscape::GC::release(rtspan);
+        rstring = xml_doc->createTextNode("");
+        rtspan->addChild(rstring, nullptr);
+        Inkscape::GC::release(rstring);
     }
     SPCSSAttr *css = sp_repr_css_attr_new();
     Inkscape::FontLister *fontlister = Inkscape::FontLister::get_instance();
@@ -432,9 +460,7 @@ LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double leng
     Inkscape::SVGOStringStream os;
     os << SP_RGBA32_A_F(coloropacity.get_value());
     sp_repr_css_set_property (css, "fill-opacity",os.str().c_str());
-    if (!rtspan) {
-        rtspan = rtext->firstChild();
-    }
+
     sp_repr_css_set_property (css, "font-size",font_size.str().c_str());
     if (remove) {
         sp_repr_css_set_property (css, "display","none");
@@ -446,10 +472,6 @@ LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double leng
     rtspan->setAttribute("style", css_str.c_str());
     rtspan->setAttribute("transform", nullptr);
     sp_repr_css_attr_unref (css);
-    if (!elemref) {
-        rtext->addChild(rtspan, nullptr);
-        Inkscape::GC::release(rtspan);
-    }
     length = Inkscape::Util::Quantity::convert(length, display_unit.c_str(), unit.get_abbreviation());
     if (local_locale) {
         setlocale (LC_NUMERIC, "");
@@ -458,11 +480,12 @@ LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double leng
     }
     gchar length_str[64];
     bool x100 = false;
+    // active for 1.1
     if (smallx100 && length < 1 ) {
         length *=100;
         x100 = true;
         g_snprintf(length_str, 64, "%.*f", (int)precision - 2, length);
-    } else {
+    } else { 
         g_snprintf(length_str, 64, "%.*f", (int)precision, length);
     }
     setlocale (LC_NUMERIC, locale_base);
@@ -482,30 +505,27 @@ LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double leng
             label_value.replace(s,s+6,unit.get_abbreviation());
         }
     }
+
     if (showindex) {
         label_value = Glib::ustring("[") + Glib::ustring::format(counter) + Glib::ustring("] ") + label_value;
     }
-    if ( !valid ) {
+    if (!valid) {
         label_value = Glib::ustring(_("Non Uniform Scale"));
     }
-    Inkscape::XML::Node *rstring = nullptr;
-    if (!elemref) {
-        rstring = xml_doc->createTextNode(label_value.c_str());
-        rtspan->addChild(rstring, nullptr);
-        Inkscape::GC::release(rstring);
-    } else {
-        rstring = rtspan->firstChild();
-        rstring->setContent(label_value.c_str());
+    rstring->setContent(label_value.c_str());
+
+    if (is_load) {
+        load_end = true;
     }
-    if (!elemref) {
-        elemref = document->getRoot()->appendChildRepr(rtext);
-        Inkscape::GC::release(rtext);
-    } 
-    Geom::OptRect bounds = SP_ITEM(elemref)->bounds(SPItem::GEOMETRIC_BBOX);
+    // this boring hack is to update the text with document scale inituialy loaded without root transform
+    Geom::Affine initial_load_transform = load_end ? i2anc_affine(SP_OBJECT(elemref), nullptr).inverse() : Geom::identity();
+    
+    Geom::OptRect bounds = SP_ITEM(elemref)->geometricBounds(initial_load_transform);
     if (bounds) {
-        anotation_width = bounds->width() * 1.15;
+        anotation_width = bounds->width();
         rtspan->setAttribute("style", nullptr);
     }
+
     gchar * transform;
     if (rotate_anotation) {
         Geom::Affine affine = Geom::Affine(Geom::Translate(pos).inverse());
@@ -549,7 +569,7 @@ LPEMeasureSegments::createLine(Geom::Point start,Geom::Point end, Glib::ustring 
     }
     Geom::PathVector line_pathv;
     
-    double k = (Geom::distance(start,end)/2.0) - (anotation_width/10.0) - (anotation_width/2.0);
+    double k = (Geom::distance(start,end)/2.0) - (anotation_width/1.7);
     if (main && 
         std::abs(text_top_bottom) < fontsize/1.5 && 
         hide_back &&
@@ -698,11 +718,6 @@ LPEMeasureSegments::doOnApply(SPLPEItem const* lpeitem)
     DocumentUndo::setUndoSensitive(document, saved);
 }
 
-Geom::PathVector 
-LPEMeasureSegments::doEffect_path (Geom::PathVector const & path_in) {
-    return path_in;
-}
-
 bool
 LPEMeasureSegments::isWhitelist (size_t i, std::string listsegments, bool whitelist)
 {
@@ -765,7 +780,7 @@ getNodes(SPItem * item, Geom::Affine transform, bool onbbox, bool centers, bool 
             current_nodes.insert(current_nodes.end(), nodes.begin(), nodes.end());
         }
     } else if (shape && !bboxonly) {
-        SPCurve * c = shape->getCurve();
+        SPCurve * c = shape->getCurveForEdit();
         current_nodes = transformNodes(c->get_pathvector().nodes(), transform);
         c->unref();
     } else if ((text || flowtext) && !bboxonly) {
@@ -917,15 +932,18 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
             colorchanged = true;
         }
         rgb32 = color32;
-        SPCurve * c = nullptr;
         gchar * fontbutton_str = fontbutton.param_getSVGValue();
         Glib::ustring fontdesc_ustring = Glib::ustring(fontbutton_str);
         Pango::FontDescription fontdesc(fontdesc_ustring);
-        fontsize = fontdesc.get_size()/(double)Pango::SCALE;
-        fontsize *= document->getRoot()->c2p.inverse().expansionX();
+        double newfontsize = fontdesc.get_size() / (double)Pango::SCALE;
+        newfontsize *= document->getRoot()->c2p.inverse().expansionX();
         g_free(fontbutton_str);
-        fontsize *= document->getRoot()->c2p.inverse().expansionX();
-        c = shape->getCurve();
+        bool fontsizechanged = false;
+        if (newfontsize != fontsize) {
+            fontsize = newfontsize;
+            fontsizechanged = true;
+        }
+        SPCurve *c = shape->getCurveForEdit();
         Geom::Point prev_stored = Geom::Point(0,0);
         Geom::Point start_stored = Geom::Point(0,0);
         Geom::Point end_stored = Geom::Point(0,0); 
@@ -985,7 +1003,7 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                     if (elemref){
                         SPPath* path = dynamic_cast<SPPath *>(elemref);
                         if (path) {
-                            SPCurve* prevcurve = path->getCurve();
+                            SPCurve* prevcurve = path->getCurveForEdit();
                             if (prevcurve) {
                                 prev_stored = *prevcurve->first_point();
                             }
@@ -1000,7 +1018,7 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                     if (elemref) {
                         SPPath* path = dynamic_cast<SPPath *>(elemref);
                         if (path) {
-                            SPCurve* startcurve = path->getCurve();
+                            SPCurve* startcurve = path->getCurveForEdit();
                             if (startcurve) {
                                 start_stored = *startcurve->first_point();
                             }
@@ -1015,7 +1033,7 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                     if (elemref) {
                         SPPath* path = dynamic_cast<SPPath *>(elemref);
                         if (path) {
-                            SPCurve* endcurve = path->getCurve();
+                            SPCurve* endcurve = path->getCurveForEdit();
                             if (endcurve) {
                                 end_stored = *endcurve->first_point();
                             }
@@ -1030,7 +1048,7 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                     if (elemref) {
                         SPPath* path = dynamic_cast<SPPath *>(elemref);
                         if (path) {
-                            SPCurve* nextcurve = path->getCurve();
+                            SPCurve* nextcurve = path->getCurveForEdit();
                             if (nextcurve) {
                                 next_stored = *nextcurve->first_point();
                             }
@@ -1072,7 +1090,8 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                     if (((Geom::are_near(prev, prev_stored, 0.01) && Geom::are_near(next, next_stored, 0.01)) ||
                          fix_overlaps_degree == 180) &&
                         Geom::are_near(start, start_stored, 0.01) && Geom::are_near(end, end_stored, 0.01) &&
-                        !this->refresh_widgets && !colorchanged) {
+                        !this->refresh_widgets && !colorchanged && !fontsizechanged && !is_load && anotation_width) 
+                    {
                         continue;
                     }
                     Geom::Point hstart = start;
@@ -1165,7 +1184,7 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                         previous_fix_overlaps = false;
                     }
                     length = Geom::distance(start,end)  * scale;
-                    Geom::Point pos = Geom::middle_point(hstart,hend);
+                    Geom::Point pos = Geom::middle_point(hstart, hend);
                     if (!hide_arrows) {
                         if (arrows_outside) {
                             createArrowMarker(Glib::ustring("ArrowDINout-start"));
@@ -1217,7 +1236,7 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                         hstart = hstart + Point::polar(angle, arrow_gap);
                         hend = hend - Point::polar(angle, arrow_gap );
                     }
-                    if ((Geom::distance(hstart,hend)/2.0) > (anotation_width/1.9) + arrow_gap)  {
+                    if ((Geom::distance(hstart, hend) / 2.0) > (anotation_width / 1.9) + arrow_gap) {
                         createLine(hstart, hend, Glib::ustring("infoline-"), counter, true, false, true);
                     } else {
                         createLine(hstart, hend, Glib::ustring("infoline-"), counter, true, true, true);
@@ -1229,6 +1248,12 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                     createTextLabel(Geom::Point(), counter, 0, 0, true, true);
                 }
             }
+        }
+        if (load_end) {
+            load_end = false;
+        }
+        if (is_load) {
+            load_end = true;
         }
         if (previous_size) {
             for (size_t counter = ncurves; counter < previous_size; counter++) {
