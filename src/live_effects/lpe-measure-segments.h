@@ -87,7 +87,6 @@ private:
     double anotation_width;
     double previous_size;
     guint32 rgb32;
-    bool load_end;
     double arrow_gap;
     guint pagenumber;
     gchar const* locale_base;

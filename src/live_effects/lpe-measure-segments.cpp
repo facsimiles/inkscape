@@ -41,6 +41,7 @@
 #include "inkscape.h"
 #include "preferences.h"
 #include "path-chemistry.h"
+#include "style.h"
 
 #include <cmath>
 #include <iomanip>
@@ -187,7 +188,6 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     fontsize = 0;
     rgb32 = 0;
     arrow_gap = 0;
-    load_end = false;
     //TODO: add newlines for 1.1 (not easy)
     helpdata.param_update_default(_("<b><big>General</big></b>\n"
                     "Display and position dimension lines and labels\n\n"
@@ -422,6 +422,8 @@ LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double leng
         rtext->setAttribute("transform", nullptr);
         rtspan = rtext->firstChild();
         rstring = rtspan->firstChild();
+        rtspan->setAttribute("x", nullptr);
+        rtspan->setAttribute("y", nullptr);
     } else {
         rtext = xml_doc->createElement("svg:text");
         rtext->setAttribute("xml:space", "preserve");
@@ -437,6 +439,8 @@ LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double leng
         sp_repr_set_svg_double(rtext, "y", pos[Geom::Y]);
         rtspan = xml_doc->createElement("svg:tspan");
         rtspan->setAttribute("sodipodi:role", "line");
+        rtspan->setAttribute("x", nullptr);
+        rtspan->setAttribute("y", nullptr);
         elemref = document->getRoot()->appendChildRepr(rtext);
         Inkscape::GC::release(rtext);
         rtext->addChild(rtspan, nullptr);
@@ -452,20 +456,19 @@ LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double leng
     g_free(fontbutton_str);
     std::stringstream font_size;
     setlocale (LC_NUMERIC, "C");
-    font_size <<  fontsize << "pt";
-    setlocale (LC_NUMERIC, locale_base);
+    font_size <<  fontsize << "px";
+    setlocale (LC_NUMERIC, locale_base);           
     gchar c[32];
     sprintf(c, "#%06x", rgb32 >> 8);
     sp_repr_css_set_property (css, "fill",c);
     Inkscape::SVGOStringStream os;
     os << SP_RGBA32_A_F(coloropacity.get_value());
     sp_repr_css_set_property (css, "fill-opacity",os.str().c_str());
-
     sp_repr_css_set_property (css, "font-size",font_size.str().c_str());
+    sp_repr_css_unset_property (css, "-inkscape-font-specification");
     if (remove) {
         sp_repr_css_set_property (css, "display","none");
     }
-    sp_repr_css_set_property (css, "font-size",font_size.str().c_str());
     Glib::ustring css_str;
     sp_repr_css_write_string(css,css_str);
     rtext->setAttribute("style", css_str.c_str());
@@ -494,15 +497,15 @@ LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double leng
     g_free(format_str);
     size_t s = label_value.find(Glib::ustring("{measure}"),0);
     if(s < label_value.length()) {
-        label_value.replace(s,s+9,length_str);
+        label_value.replace(s, 9, length_str);
     }
     
     s = label_value.find(Glib::ustring("{unit}"),0);
     if(s < label_value.length()) {
         if (x100) {
-            label_value.replace(s,s+6,"");
+            label_value.replace(s, 6, "");
         } else {
-            label_value.replace(s,s+6,unit.get_abbreviation());
+            label_value.replace(s, 6, unit.get_abbreviation());
         }
     }
 
@@ -513,16 +516,11 @@ LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double leng
         label_value = Glib::ustring(_("Non Uniform Scale"));
     }
     rstring->setContent(label_value.c_str());
-
-    if (is_load) {
-        load_end = true;
-    }
     // this boring hack is to update the text with document scale inituialy loaded without root transform
-    Geom::Affine initial_load_transform = load_end ? i2anc_affine(SP_OBJECT(elemref), nullptr).inverse() : Geom::identity();
-    
-    Geom::OptRect bounds = SP_ITEM(elemref)->geometricBounds(initial_load_transform);
+    Geom::OptRect bounds = SP_ITEM(elemref)->geometricBounds();
     if (bounds) {
         anotation_width = bounds->width();
+        sp_repr_set_svg_double(rtext, "x", pos[Geom::X] - (anotation_width / 2.0));
         rtspan->setAttribute("style", nullptr);
     }
 
@@ -679,15 +677,12 @@ LPEMeasureSegments::doOnApply(SPLPEItem const* lpeitem)
     Inkscape::XML::Node *root = document->getReprRoot();
     for (unsigned i = 0; i < root->childCount(); ++i) {
         if (Glib::ustring(root->nthChild(i)->name()) == "svg:style") {
-
             styleNode = root->nthChild(i);
-
             for (unsigned j = 0; j < styleNode->childCount(); ++j) {
                 if (styleNode->nthChild(j)->type() == Inkscape::XML::TEXT_NODE) {
                     textNode = styleNode->nthChild(j);
                 }
             }
-
             if (textNode == nullptr) {
                 // Style element found but does not contain text node!
                 std::cerr << "StyleDialog::_getStyleTextNode(): No text node!" << std::endl;
@@ -711,7 +706,7 @@ LPEMeasureSegments::doOnApply(SPLPEItem const* lpeitem)
     Glib::ustring styleContent = Glib::ustring(textNode->content());
     if (styleContent.find(".measure-arrows\n{\n") == -1) {
         styleContent = styleContent + Glib::ustring("\n.measure-arrows") + Glib::ustring("\n{\n}");
-        styleContent = styleContent + Glib::ustring("\n.measure-labels") + Glib::ustring("\n{\nline-height:125%;\nletter-spacing:0;\nword-spacing:0;\ntext-align:center;\ntext-anchor:middle;\nstroke:none;\n}");
+        styleContent = styleContent + Glib::ustring("\n.measure-labels") + Glib::ustring("\n{\n\n}");
         styleContent = styleContent + Glib::ustring("\n.measure-lines") + Glib::ustring("\n{\n}");
         textNode->setContent(styleContent.c_str());
     }
@@ -936,11 +931,10 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
         Glib::ustring fontdesc_ustring = Glib::ustring(fontbutton_str);
         Pango::FontDescription fontdesc(fontdesc_ustring);
         double newfontsize = fontdesc.get_size() / (double)Pango::SCALE;
-        newfontsize *= document->getRoot()->c2p.inverse().expansionX();
         g_free(fontbutton_str);
         bool fontsizechanged = false;
         if (newfontsize != fontsize) {
-            fontsize = newfontsize;
+            fontsize = Inkscape::Util::Quantity::convert(newfontsize, "pt", display_unit.c_str());
             fontsizechanged = true;
         }
         SPCurve *c = shape->getCurveForEdit();
@@ -1248,12 +1242,6 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                     createTextLabel(Geom::Point(), counter, 0, 0, true, true);
                 }
             }
-        }
-        if (load_end) {
-            load_end = false;
-        }
-        if (is_load) {
-            load_end = true;
         }
         if (previous_size) {
             for (size_t counter = ncurves; counter < previous_size; counter++) {
