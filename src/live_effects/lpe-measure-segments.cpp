@@ -360,7 +360,7 @@ LPEMeasureSegments::createArrowMarker(Glib::ustring mode)
         Glib::ustring classarrow = itemid;
         classarrow += " ";
         classarrow += lpobjid;
-        classarrow += " measure-arrows-marker";
+        classarrow += " measure-arrow-marker";
         arrow->setAttribute("class", classarrow.c_str());
         arrow->setAttribute("inkscape:stockid", mode.c_str());
         arrow->setAttribute("orient", "auto");
@@ -382,7 +382,7 @@ LPEMeasureSegments::createArrowMarker(Glib::ustring mode)
         Glib::ustring classarrowpath = itemid;
         classarrowpath += " ";
         classarrowpath += lpobjid;
-        classarrowpath += " measure-arrows";
+        classarrowpath += " measure-arrow";
         arrow_path->setAttribute("class", classarrowpath.c_str());
         Glib::ustring arrowpath = mode + Glib::ustring("_path");
         arrow_path->setAttribute("id", arrowpath.c_str());
@@ -424,6 +424,11 @@ LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double leng
         rstring = rtspan->firstChild();
         rtspan->setAttribute("x", nullptr);
         rtspan->setAttribute("y", nullptr);
+        Glib::ustring classlabel = itemid;
+        classlabel += " ";
+        classlabel += lpobjid;
+        classlabel += " measure-label";
+        rtext->setAttribute("class", classlabel.c_str());
     } else {
         rtext = xml_doc->createElement("svg:text");
         rtext->setAttribute("xml:space", "preserve");
@@ -431,7 +436,7 @@ LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double leng
         Glib::ustring classlabel = itemid;
         classlabel += " ";
         classlabel += lpobjid;
-        classlabel += " measure-labels";
+        classlabel += " measure-label";
         rtext->setAttribute("class", classlabel.c_str());
         rtext->setAttribute("sodipodi:insensitive", "true");
         rtext->setAttribute("transform", nullptr);
@@ -601,13 +606,13 @@ LPEMeasureSegments::createLine(Geom::Point start,Geom::Point end, Glib::ustring 
             Glib::ustring classlinedim = itemid;
             classlinedim += " ";
             classlinedim += lpobjid;
-            classlinedim += " measure-DIM-lines measure-lines";
+            classlinedim += " measure-DIM-line measure-line";
             line->setAttribute("class", classlinedim.c_str());
         } else {
             Glib::ustring classlinehelper = itemid;
             classlinehelper += " ";
             classlinehelper += lpobjid;
-            classlinehelper += " measure-helper-lines measure-lines";
+            classlinehelper += " measure-helper-line measure-line";
             line->setAttribute("class", classlinehelper.c_str());
         }
         gchar * line_str = sp_svg_write_path( line_pathv );
@@ -703,11 +708,12 @@ LPEMeasureSegments::doOnApply(SPLPEItem const* lpeitem)
         styleNode->appendChild(textNode);
         Inkscape::GC::release(textNode);
     }
+    // To fix old meassuring files pre 1.0
     Glib::ustring styleContent = Glib::ustring(textNode->content());
-    if (styleContent.find(".measure-arrows\n{\n") == -1) {
-        styleContent = styleContent + Glib::ustring("\n.measure-arrows") + Glib::ustring("\n{\n}");
-        styleContent = styleContent + Glib::ustring("\n.measure-labels") + Glib::ustring("\n{\n\n}");
-        styleContent = styleContent + Glib::ustring("\n.measure-lines") + Glib::ustring("\n{\n}");
+    if (styleContent.find(".measure-arrow\n{\n") ==  std::string::npos) {
+        styleContent = styleContent + Glib::ustring("\n.measure-arrow") + Glib::ustring("\n{\n}");
+        styleContent = styleContent + Glib::ustring("\n.measure-label") + Glib::ustring("\n{\n\n}");
+        styleContent = styleContent + Glib::ustring("\n.measure-line") + Glib::ustring("\n{\n}");
         textNode->setContent(styleContent.c_str());
     }
     DocumentUndo::setUndoSensitive(document, saved);
@@ -760,7 +766,7 @@ transformNodes(std::vector< Point > nodes, Geom::Affine transform)
 }
 
 std::vector< Point > 
-getNodes(SPItem * item, Geom::Affine transform, bool onbbox, bool centers, bool bboxonly)
+getNodes(SPItem * item, Geom::Affine transform, bool onbbox, bool centers, bool bboxonly, double angle_projection)
 {
     std::vector< Point > current_nodes;
     SPShape    * shape    = dynamic_cast<SPShape     *> (item);
@@ -768,10 +774,11 @@ getNodes(SPItem * item, Geom::Affine transform, bool onbbox, bool centers, bool 
     SPGroup    * group    = dynamic_cast<SPGroup     *> (item);
     SPFlowtext * flowtext = dynamic_cast<SPFlowtext  *> (item);
     //TODO handle clones/use
+
     if (group) {
         std::vector<SPItem*> const item_list = sp_item_group_item_list(group);
         for (auto sub_item : item_list) {
-            std::vector< Point > nodes = transformNodes(getNodes(sub_item, sub_item->transform, onbbox, centers, bboxonly), transform);
+            std::vector< Point > nodes = transformNodes(getNodes(sub_item, sub_item->transform, onbbox, centers, bboxonly, angle_projection), transform);
             current_nodes.insert(current_nodes.end(), nodes.begin(), nodes.end());
         }
     } else if (shape && !bboxonly) {
@@ -809,9 +816,16 @@ getNodes(SPItem * item, Geom::Affine transform, bool onbbox, bool centers, bool 
         Geom::OptRect bbox = item->geometricBounds();
         if (bbox && onbbox) {
             current_nodes.push_back((*bbox).corner(0) * transform);
-            current_nodes.push_back((*bbox).corner(1) * transform);
             current_nodes.push_back((*bbox).corner(2) * transform);
-            current_nodes.push_back((*bbox).corner(3) * transform);
+            if (!Geom::are_near(angle_projection,   0.0) &&
+                !Geom::are_near(angle_projection,  90.0) &&
+                !Geom::are_near(angle_projection, 180.0) &&
+                !Geom::are_near(angle_projection, 360.0)) 
+            {
+                current_nodes.push_back((*bbox).corner(1) * transform);
+                current_nodes.push_back((*bbox).corner(3) * transform);
+            }
+
         }
         if (bbox && centers) {
             current_nodes.push_back((*bbox).midpoint() * transform);
@@ -820,9 +834,6 @@ getNodes(SPItem * item, Geom::Affine transform, bool onbbox, bool centers, bool 
     return current_nodes;
 }
 
-bool sortPoints (Geom::Point a,Geom::Point b) { 
-    return (a[Geom::Y] < b[Geom::Y]); 
-}
 
 void
 LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
@@ -843,7 +854,6 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
     std::vector< Point > nodes;
     if (active_projection) {
         Geom::OptRect bbox = sp_lpe_item->geometricBounds();
-        Geom::Point pojpoint = Geom::Point();
         if (bbox) {
             Geom::Point mid =  bbox->midpoint();
             double angle = Geom::rad_from_deg(angle_projection);
@@ -851,17 +861,8 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
             transform *= Geom::Translate(mid).inverse();
             transform *= Geom::Rotate(angle).inverse();
             transform *= Geom::Translate(mid);
-            std::vector< Point > current_nodes = getNodes(splpeitem, transform, onbbox, centers, bboxonly);
+            std::vector< Point > current_nodes = getNodes(splpeitem, transform, onbbox, centers, bboxonly, angle_projection);
             nodes.insert(nodes.end(),current_nodes.begin(), current_nodes.end());
-            std::vector<Point> result;
-            Geom::Point pojpoint = Geom::Point();
-            double maxdistance = -std::numeric_limits<double>::max();
-            for (auto & node : nodes) {
-                Geom::Point point = node;
-                if (point[Geom::X] > maxdistance) {
-                    maxdistance = point[Geom::X];
-                }
-            }
             for (auto & iter : linked_items._vector) {
                 SPObject *obj;
                 if (iter->ref.isAttached() &&  iter->actived && (obj = iter->ref.getObject()) && SP_IS_ITEM(obj)) {
@@ -872,27 +873,30 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                         transform *= Geom::Translate(-mid);
                         transform *= Geom::Rotate(angle).inverse();
                         transform *= Geom::Translate(mid);
-                        std::vector< Point > current_nodes = getNodes(item, transform, onbbox, centers, bboxonly);
+                        std::vector< Point > current_nodes = getNodes(item, transform, onbbox, centers, bboxonly, angle_projection);
                         nodes.insert(nodes.end(),current_nodes.begin(), current_nodes.end());
                     }
                 }
             }
-
+            double maxdistance = -std::numeric_limits<double>::max();
+            std::vector<double> result;
             for (auto & node : nodes) {
                 Geom::Point point = node;
-                double dproj = Inkscape::Util::Quantity::convert(distance_projection, display_unit.c_str(), unit.get_abbreviation());
-                Geom::Coord xpos = maxdistance + dproj;
-                result.emplace_back(xpos, point[Geom::Y]);
+                if (point[Geom::X] > maxdistance) {
+                    maxdistance = point[Geom::X];
+                }
+                result.push_back(point[Geom::Y]);
             }
-            std::sort (result.begin(), result.end(), sortPoints);
-            result.erase( unique(result.begin(), result.end() ), result.end() );
+            double dproj = Inkscape::Util::Quantity::convert(distance_projection, display_unit.c_str(), unit.get_abbreviation());
+            Geom::Coord xpos = maxdistance + dproj;
+            std::sort (result.begin(), result.end());
             Geom::Path path;
-            Geom::Point prevpoint(0,0);
+            Geom::Point prevpoint(Geom::infinity(),Geom::infinity());
             size_t counter = 0;
             bool started = false;
             Geom::Point point = Geom::Point();
             for (auto & iter : result) {
-                point = iter;
+                point = Geom::Point(xpos, iter);
                 if (Geom::are_near(prevpoint, point)){
                     continue;
                 }
