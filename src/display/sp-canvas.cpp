@@ -59,7 +59,7 @@ static bool const HAS_BROKEN_MOTION_HINTS = true;
 //#define DEBUG_REDRAW 1;
 
 // Define this to output the time spent in a full idle loop and the number of "tiles" painted
-//#define DEBUG_PERFORMANCE 1;
+#define DEBUG_PERFORMANCE 1;
 
 // Tiles are a way to minimize the number of redraws, eliminating too small redraws.
 // The canvas stores a 2D array of ints, each representing a TILE_SIZExTILE_SIZE pixels tile.
@@ -2120,8 +2120,9 @@ int SPCanvas::paintRectInternal(PaintRectSetup const *setup, Geom::IntRect const
     // Find the optimal buffer dimensions
     int bw = this_rect.width();
     int bh = this_rect.height();
+    // we dont want to stop the idle process if the area is empty
     if ((bw < 1) || (bh < 1))
-        return 0;
+        return 1;
 
     if (bw * bh < setup->max_pixels) {
         // We are small enough
@@ -2208,7 +2209,8 @@ bool SPCanvas::paintRect(int xx0, int yy0, int xx1, int yy1)
     Geom::IntRect paint_rect(xx0, yy0, xx1, yy1);
 
     Geom::OptIntRect area = paint_rect & canvas_rect;
-    if (!area || area->hasZeroArea()) return false;
+    // we dont want to stop the idle process if the area is empty
+    if (!area || area->hasZeroArea()) return true;
     paint_rect = *area;
 
     PaintRectSetup setup;
