@@ -964,7 +964,12 @@ SPDesktop::set_display_area( Geom::Rect const &r, double border, bool log)
         zoom = w.height() / r.height();
     }
     _current_affine.setScale( Geom::Scale(zoom, yaxisdir() * zoom) );
-
+    double const scale = _current_affine.getZoom();
+    // Dont zoom more than inkscape zoom limit
+    if (scale > 256) {
+        double gap = (zoom * 256 / scale);
+        _current_affine.setScale(Geom::Scale(gap, yaxisdir() * gap));
+    }
     // Zero offset, actual offset calculated later.
     _current_affine.setOffset( Geom::Point( 0, 0 ) );
 

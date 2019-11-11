@@ -78,6 +78,7 @@ DrawingItem::DrawingItem(Drawing &drawing)
 //    , _renders_opacity(0)
     , _pick_children(0)
     , _antialias(2)
+    , _prev_nir(false)
     , _isolation(SP_CSS_ISOLATION_AUTO)
     , _mix_blend_mode(SP_CSS_BLEND_NORMAL)
 {}
@@ -91,9 +92,6 @@ DrawingItem::~DrawingItem()
 
     // remove from the set of cached items and delete cache
     setCached(false, true);
-    if (_has_cache_iterator) {
-        _drawing._candidate_items.erase(_cache_iterator);
-    }
     // remove this item from parent's children list
     // due to the effect of clearChildren(), this only happens for the top-level deleted item
     if (_parent) {
@@ -296,6 +294,10 @@ DrawingItem::setCached(bool cached, bool persistent)
         _drawing._cached_items.erase(this);
         delete _cache;
         _cache = nullptr;
+        if (_has_cache_iterator) {
+            _drawing._candidate_items.erase(_cache_iterator);
+            _has_cache_iterator = false;
+        }
     }
 }
 
@@ -588,22 +590,21 @@ DrawingItem::update(Geom::IntRect const &area, UpdateContext const &ctx, unsigne
         }
 
         /* Update cache if enabled.
-         * General note: here we only tell the cache how it has to transform
-         * during the render phase. The transformation is deferred because
-         * after the update the item can have its caching turned off,
-         * e.g. because its filter was removed. This way we avoid tempoerarily
-         * using more memory than the cache budget */
+        * General note: here we only tell the cache how it has to transform
+        * during the render phase. The transformation is deferred because
+        * after the update the item can have its caching turned off,
+        * e.g. because its filter was removed. This way we avoid tempoerarily
+        * using more memory than the cache budget */
         if (_cache) {
             Geom::OptIntRect cl = _cacheRect();
-            if (_visible && cl) { // never create cache for invisible items
+            if (_visible && cl && _has_cache_iterator) { // never create cache for invisible items
                 // this takes care of invalidation on transform
                 _cache->scheduleTransform(*cl, ctm_change);
             } else {
                 // Destroy cache for this item - outside of canvas or invisible.
                 // The opposite transition (invisible -> visible or object
                 // entering the canvas) is handled during the render phase
-                delete _cache;
-                _cache = nullptr;
+                setCached(false, true);
             }
         }
     }
@@ -673,18 +674,20 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
 
     // carea is the area to paint
     Geom::OptIntRect carea = Geom::intersect(area, _drawbox);
-
-    // expand render on filtered items
-    Geom::OptIntRect cl = _cacheRect();
-    if (_filter != nullptr && render_filters && cl) {
+    // iarea is the bounding box for intermediate rendering
+    // Note 1: Pixels inside iarea but outside carea are invalid
+    //         (incomplete filter dependence region).
+    // Note 2: We only need to render carea of clip and mask, but
+    //         iarea of the object.
+    Geom::OptIntRect iarea = carea;
+    // expand carea to contain the dependent area of filters.
+    if (_filter && render_filters) {
+        iarea = _cacheRect();
         setCached(_cached, true);
-        carea = cl;
     }
-    
-    if (!carea) {
+    if (!iarea) {
         return RENDER_OK;
     }
-
     // Device scale for HiDPI screens (typically 1 or 2)
     int device_scale = dc.surface()->device_scale();
 
@@ -711,17 +714,16 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
         if (_cache) {
             _cache->prepare();
             dc.setOperator(ink_css_blend_to_cairo_operator(_mix_blend_mode));
-            _cache->paintFromCache(dc, carea);
+            _cache->paintFromCache(dc, carea, _filter && render_filters);
             if (!carea) {
+                dc.setSource(0,0,0,0);
                 return RENDER_OK;
             }
         } else {
             // There is no cache. This could be because caching of this item
             // was just turned on after the last update phase, or because
             // we were previously outside of the canvas.
-            if (cl) {
-                _cache = new DrawingCache(*cl, device_scale);
-            }
+            _cache = new DrawingCache(*iarea, device_scale);
         }
     } else {
         // if our caching was turned off after the last update, it was already
@@ -741,14 +743,10 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
     nir |= (_mix_blend_mode != SP_CSS_BLEND_NORMAL); // 5. it has blend mode           
     nir |= (_isolation == SP_CSS_ISOLATION_ISOLATE); // 6. it is isolated    
     nir |= !parent();                                // 7. is root, need isolation from background                            
-    if (prev_nir && !needs_intermediate_rendering) {
+    if (_prev_nir && !needs_intermediate_rendering) {
         setCached(false, true);
-        if (_has_cache_iterator) {
-            _drawing._candidate_items.erase(_cache_iterator);
-            _has_cache_iterator = false;
-        }
     }
-    prev_nir = needs_intermediate_rendering;
+    _prev_nir = needs_intermediate_rendering;
     nir |= (_cache != nullptr);                      // 5. it is to be cached
 
     /* How the rendering is done.
@@ -770,20 +768,9 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
 
     if ((flags & RENDER_FILTER_BACKGROUND) || !needs_intermediate_rendering) {
         dc.setOperator(ink_css_blend_to_cairo_operator(SP_CSS_BLEND_NORMAL));
-        return _renderItem(dc, *carea, flags & ~RENDER_FILTER_BACKGROUND, stop_at);
+        return _renderItem(dc, *iarea, flags & ~RENDER_FILTER_BACKGROUND, stop_at);
     }
 
-    // iarea is the bounding box for intermediate rendering
-    // Note 1: Pixels inside iarea but outside carea are invalid
-    //         (incomplete filter dependence region).
-    // Note 2: We only need to render carea of clip and mask, but
-    //         iarea of the object.
-    Geom::OptIntRect iarea = carea;
-    // expand carea to contain the dependent area of filters.
-    if (_filter && render_filters) {
-        _filter->area_enlarge(*iarea, this);
-        iarea.intersectWith(_drawbox);
-    }
 
     DrawingSurface intermediate(*iarea, device_scale);
     DrawingContext ict(intermediate);
@@ -866,11 +853,15 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
     // 6. Paint the completed rendering onto the base context (or into cache)
     if (_cached && _cache) {
         DrawingContext cachect(*_cache);
-        cachect.rectangle(*carea);
+        cachect.rectangle(*iarea);
         cachect.setOperator(CAIRO_OPERATOR_SOURCE);
         cachect.setSource(&intermediate);
         cachect.fill();
-        _cache->markClean(*carea);
+        if (_filter && render_filters) {
+            _cache->markClean(*_cacheRect(true));
+        } else {
+            _cache->markClean(*iarea);
+        }
     }
 
     dc.rectangle(*carea);
@@ -1141,10 +1132,6 @@ DrawingItem::_cacheScore()
 {
     Geom::OptIntRect cache_rect = _cacheRect();
     if (!cache_rect) return -1.0;
-    if (is_drawing_group(this) && !prev_nir) {
-        return -1.0;
-    }
-
     // a crude first approximation:
     // the basic score is the number of pixels in the drawbox
     double score = cache_rect->area();
@@ -1172,9 +1159,31 @@ DrawingItem::_cacheScore()
 }
 
 Geom::OptIntRect
-DrawingItem::_cacheRect()
+DrawingItem::_cacheRect(bool cropped)
 {
     Geom::OptIntRect r = _drawbox & _drawing.cacheLimit();
+    if (_filter && _drawing.renderFilters()) {
+        // we check unfiltered item is emought inside the cache area to  render properly
+        Geom::OptIntRect canvas = r;
+        (*canvas).expandBy(-(*canvas).width() / 4,-(*canvas).height() / 4);
+        (*r).expandBy((*r).width() / 2,(*r).height() / 2);
+        Geom::OptIntRect valid = Geom::intersect(canvas, _bbox);
+        if (!valid) {
+            valid = _bbox;
+            // contract the item _bbox to get reduced size to render. $ seems good enought
+            (*valid).expandBy(-(*valid).width() / 4,-(*valid).height() / 4);
+            // now we get the nearest point to cache area
+            Geom::IntPoint center = (*r).midpoint();
+            Geom::IntPoint nearest = (*valid).nearestEdgePoint(center);
+            r.expandTo(nearest);
+        }
+        valid = _drawbox & r;
+        // to reduce banding if item filtered overflow iarea area
+        if (cropped && r && _drawbox != valid) {
+           (*r).expandBy(-(*r).width() / 12,-(*r).height() / 12);
+        }
+        return _drawbox & r;
+    }
     return r;
 }
 
