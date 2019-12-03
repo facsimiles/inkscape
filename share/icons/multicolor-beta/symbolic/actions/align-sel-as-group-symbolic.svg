@@ -15,9 +15,9 @@
    inkscape:version="1.0beta0 (1b5d333, 2019-09-08)">
      <style id="s0">
    .base    { fill: #000000; }
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
+   .create { fill: #009909; }
+   .shape { fill: #FF1990; }
+   .color   { fill: #00AAFF; }
    .dark    {  }
   </style>
   <style id="s2"> 
@@ -109,19 +109,19 @@
        d="m 1044,595.36218 h 24 v 24 h -24 z"
        style="opacity:0;fill:none" />
     <path
-       class="success"
+       class="create"
        style="opacity:1;"
        d="m 1064,595.36218 h 4 v 3.99999 h -4 z"
        id="path983"
        inkscape:connector-curvature="0" />
     <path
-       class="success"
+       class="create"
        style="opacity:1;"
        d="m 1044,595.36218 h 4 v 4 h -4 z"
        id="path985"
        inkscape:connector-curvature="0" />
     <path
-       class="success"
+       class="create"
        style="opacity:1;"
        d="m 1064,615.36218 h 4 v 3.99999 h -4 z"
        id="path987"
@@ -131,7 +131,7 @@
        id="rect22038"
        d="m 1044,615.36217 h 4 v 4 h -4 z"
        style="opacity:1;"
-       class="success" />
+       class="create" />
     <path
        inkscape:connector-curvature="0"
        id="rect22042"

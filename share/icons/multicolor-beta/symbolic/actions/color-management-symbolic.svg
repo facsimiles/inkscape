@@ -16,9 +16,9 @@
    version="1.1">
      <style id="s0">
    .base    { fill: #000000; }
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
+   .create { fill: #009909; }
+   .shape { fill: #FF1990; }
+   .color   { fill: #00AAFF; }
    .dark    {  }
   </style>
   <style id="s2"> 
@@ -87,12 +87,12 @@
          id="path8593"
          inkscape:connector-curvature="0" />
       <path
-         class="success"
+         class="create"
          d="m 41,-8.000001 a 2,2 0 0 1 -2,2 2,2 0 0 1 -2,-2 2,2 0 0 1 2,-2 2,2 0 0 1 2,2 z"
          id="path14494"
          inkscape:connector-curvature="0" />
       <path
-         class="warning"
+         class="shape"
          style="opacity:1"
          d="m 49,-8 a 2,2 0 0 1 -2,2 2,2 0 0 1 -2,-2 2,2 0 0 1 2,-2 2,2 0 0 1 2,2 z"
          id="path14496"

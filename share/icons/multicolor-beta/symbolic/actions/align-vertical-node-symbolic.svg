@@ -16,9 +16,9 @@
    version="1.1">
      <style id="s0">
    .base    { fill: #000000; }
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
+   .create { fill: #009909; }
+   .shape { fill: #FF1990; }
+   .color   { fill: #00AAFF; }
    .dark    {  }
   </style>
   <style id="s2"> 
@@ -115,7 +115,7 @@
            transform="matrix(0.86350874,0,0,0.86368623,213.4531,670.61281)"
            sodipodi:nodetypes="csssc" />
         <path
-           class="success"
+           class="create"
            sodipodi:nodetypes="ccccc"
            style="opacity:1;fill-opacity:1;"
            d="m 1054.7678,861.35742 v 24.00492 h 1.5 v -24.00492 z"

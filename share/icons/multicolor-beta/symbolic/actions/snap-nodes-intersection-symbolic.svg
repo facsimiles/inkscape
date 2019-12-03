@@ -16,9 +16,9 @@
    version="1.1">
    <style id="s0">
    .base    { fill: #000000; }
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
+   .create { fill: #009909; }
+   .shape { fill: #FF1990; }
+   .color   { fill: #00AAFF; }
    .dark    {  }
   </style>
   <style id="s2"> 
@@ -81,7 +81,7 @@
        style="opacity:1"
        id="path22823" />
     <path
-       class="success"
+       class="create"
        style="opacity:1;stroke-width:1.15749"
        d="m 899.31528,514.36224 a 2.3149964,2.3149563 0 0 1 -2.315,2.31496 2.3149964,2.3149563 0 0 1 -2.31499,-2.31496 2.3149964,2.3149563 0 0 1 2.31499,-2.31496 2.3149964,2.3149563 0 0 1 2.315,2.31496 z"
        id="path22825"

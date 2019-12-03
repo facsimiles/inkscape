@@ -16,9 +16,9 @@
    version="1.1">
      <style id="s0">
    .base    { fill: #000000; }
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
+   .create { fill: #009909; }
+   .shape { fill: #FF1990; }
+   .color   { fill: #00AAFF; }
    .dark    {  }
   </style>
   <style id="s2"> 
@@ -95,19 +95,19 @@
        id="path19480"
        inkscape:connector-curvature="0" />
     <path
-       class="success"
+       class="create"
        style="opacity:1;fill-opacity:1"
        d="m 1209.72,826.5042 1.176,1.2264 -2.248,2.1781 1.475,1.4485 -4.123,0.005 v 0 l -0.01,-4.1231 1.477,1.443 z"
        id="path19568"
        inkscape:connector-curvature="0" />
     <path
-       class="success"
+       class="create"
        style="opacity:1;fill-opacity:1"
        d="m 1205,837.3622 h -2 v 2 h -2 l 3,3 v 0 l 3.064,-2.9298 -2.064,-0.0702 z"
        id="path19570"
        inkscape:connector-curvature="0" />
     <path
-       class="success"
+       class="create"
        inkscape:connector-curvature="0"
        id="path19572"
        d="m 1198.28,826.5042 -1.176,1.2264 2.248,2.1781 -1.475,1.4485 4.123,0.005 v 0 l 0.01,-4.1231 -1.477,1.443 z"
@@ -118,5 +118,5 @@
      id="rect22390"
      d="M 35.460611,7.6666615 V 8.666662 H 19.460603 V 7.6666615 Z"
      style="opacity:1;fill-opacity:1;"
-     class="success" />
+     class="create" />
 </svg>

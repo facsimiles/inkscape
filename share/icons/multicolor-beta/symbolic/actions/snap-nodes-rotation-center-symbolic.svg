@@ -16,9 +16,9 @@
    version="1.1">
    <style id="s0">
    .base    { fill: #000000; }
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
+   .create { fill: #009909; }
+   .shape { fill: #FF1990; }
+   .color   { fill: #00AAFF; }
    .dark    {  }
   </style>
   <style id="s2"> 
@@ -89,7 +89,7 @@
        style="opacity:1;fill-opacity:1"
        d="m 952,506.3622 v 5 l 4,1.9e-4 -1.16556,-1.53953 c 0.34776,-0.46047 1.36078,-1.58546 2.60306,-1.58546 1.4929,0 2.5625,1.0047 2.5625,2.0625 v 1.06249 h 2 c 0,0 0.0121,-0.42166 -0.005,-0.97046 -0.0718,-2.25466 -2.18403,-4.02953 -4.55713,-4.02953 -1.5399,0 -3.06023,0.88639 -3.86043,1.99999 z"
        id="path2899"
-       class="success"
+       class="create"
        sodipodi:nodetypes="ccccssccsscc" />
   </g>
 </svg>

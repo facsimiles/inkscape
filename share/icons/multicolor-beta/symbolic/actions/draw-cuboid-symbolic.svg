@@ -16,9 +16,9 @@
    inkscape:version="1.0beta0 (1d85f8e, 2019-09-11)">
   <style id="s0">
    .base    { fill: #000000; }
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
+   .create { fill: #009909; }
+   .shape { fill: #FF1990; }
+   .color   { fill: #00AAFF; }
    .dark    {  }
   </style>
   <style id="s2"> 
@@ -78,7 +78,7 @@
        style="opacity:0"
        inkscape:connector-curvature="0" />
     <path
-       class="warning"
+       class="shape"
        d="m 993.53,404.59 -12.23,7.09 v -14.31 l 12.23,-7.1 z"
        transform="matrix(0.49102052,0,0,0.49102052,-473.83817,-187.11363)"
        inkscape:label="right"
@@ -86,7 +86,7 @@
        id="polygon1116"
        inkscape:connector-curvature="0" />
     <path
-       class="warning"
+       class="shape"
        d="m 969.08,390.27 v 14.32 l 12.22,7.09 v -14.31 z"
        transform="matrix(0.49102052,0,0,0.49102052,-473.83817,-187.11363)"
        inkscape:label="left"
@@ -100,7 +100,7 @@
        style="display:inline;opacity:0.15"
        id="polygon1122"
        inkscape:connector-curvature="0"
-       class="warning" />
+       class="shape" />
     <path
        sodipodi:nodetypes="cccccccccccc"
        inkscape:connector-curvature="0"

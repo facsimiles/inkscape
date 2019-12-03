@@ -16,9 +16,9 @@
    version="1.1">
      <style id="s0">
    .base    { fill: #000000; }
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
+   .create { fill: #009909; }
+   .shape { fill: #FF1990; }
+   .color   { fill: #00AAFF; }
    .dark    {  }
   </style>
   <style id="s2"> 
@@ -85,6 +85,6 @@
        id="rect17564"
        d="m 1106,684.36218 v 1.5 h -24 v -1.5 z"
        style="opacity:1;fill-opacity:1;"
-       class="success" />
+       class="create" />
   </g>
 </svg>

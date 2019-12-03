@@ -16,9 +16,9 @@
    version="1.1">
    <style id="s0">
    .base    { fill: #000000; }
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
+   .create { fill: #009909; }
+   .shape { fill: #FF1990; }
+   .color   { fill: #00AAFF; }
    .dark    {  }
   </style>
   <style id="s2"> 
@@ -83,6 +83,6 @@
        id="path16610"
        d="m 1015.6251,534.86217 a 2.125008,2.124992 0 0 1 -2.125,2.12499 2.125008,2.124992 0 0 1 -2.125,-2.12499 2.125008,2.124992 0 0 1 2.125,-2.12499 2.125008,2.124992 0 0 1 2.125,2.12499 z"
        style="opacity:1;stroke-width:1.0625"
-       class="success" />
+       class="create" />
   </g>
 </svg>

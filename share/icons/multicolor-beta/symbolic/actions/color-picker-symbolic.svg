@@ -16,9 +16,9 @@
    inkscape:version="1.0alpha2 (119fb3b5e8, 2019-06-21, custom)">
    <style id="s0">
    .base    { fill: #000000; }
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
+   .create { fill: #009909; }
+   .shape { fill: #FF1990; }
+   .color   { fill: #00AAFF; }
    .dark    {  }
   </style>
   <style id="s2"> 
@@ -94,7 +94,7 @@
        inkscape:connector-curvature="0"
        id="path1172"
        d="M 6,5 C 6,6.367167 4.8888363,7.4783307 3.5216693,7.4783307 2.1545023,7.4783307 1.0433386,6.367167 1.0433386,5 c 0,-1.3671671 2.4783307,-4.1995449 2.4783307,-4.1995449 C 3.5216693,0.8004551 6,3.6328329 6,5 Z"
-       class="error"
+       class="color"
        inkscape:label="drop" />
   </g>
 </svg>

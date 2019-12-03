@@ -16,9 +16,9 @@
    version="1.1">
    <style id="s0">
    .base    { fill: #000000; }
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
+   .create { fill: #009909; }
+   .shape { fill: #FF1990; }
+   .color   { fill: #00AAFF; }
    .dark    {  }
   </style>
   <style id="s2"> 
@@ -73,32 +73,32 @@
        style="opacity:1"
        inkscape:connector-curvature="0" />
     <path
-       class="warning"
+       class="shape"
        style="opacity:1"
        d="m 625,566.36218 h 4 v 5 h -4 z"
        id="rect16760"
        inkscape:connector-curvature="0" />
     <path
-       class="warning"
+       class="shape"
        style="opacity:1"
        d="m 630,569.36218 h 2 v 1 h -2 z"
        id="rect16762"
        inkscape:connector-curvature="0" />
     <path
-       class="warning"
+       class="shape"
        style="opacity:1"
        d="m 622,569.36218 h 2 v 1 h -2 z"
        id="rect16764"
        inkscape:connector-curvature="0" />
     <path
-       class="warning"
+       class="shape"
        transform="matrix(1,0,0,1.010417,-0.5000034,512.8205)"
        style="opacity:1"
        d="M 635,56.5 A 1.5,1.5 0 0 1 633.5,58 1.5,1.5 0 0 1 632,56.5 1.5,1.5 0 0 1 633.5,55 1.5,1.5 0 0 1 635,56.5 Z"
        id="path16766"
        inkscape:connector-curvature="0" />
     <path
-       class="warning"
+       class="shape"
        transform="matrix(1,0,0,1.010417,-12.5,512.7893)"
        style="opacity:1"
        d="M 635,56.5 A 1.5,1.5 0 0 1 633.5,58 1.5,1.5 0 0 1 632,56.5 1.5,1.5 0 0 1 633.5,55 1.5,1.5 0 0 1 635,56.5 Z"

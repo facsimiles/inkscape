@@ -16,9 +16,9 @@
    version="1.1">
    <style id="s0">
    .base    { fill: #000000; }
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
+   .create { fill: #009909; }
+   .shape { fill: #FF1990; }
+   .color   { fill: #00AAFF; }
    .dark    {  }
   </style>
   <style id="s2"> 
@@ -96,7 +96,7 @@
        id="path22512"
        inkscape:connector-curvature="0" />
     <path
-       class="success"
+       class="create"
        transform="matrix(0.687668,0.7260253,-0.7260156,0.6876782,0,0)"
        style="opacity:1"
        d="m 831.24652,-125.2675 h 3.53681 v 3.53681 h -3.53681 z"

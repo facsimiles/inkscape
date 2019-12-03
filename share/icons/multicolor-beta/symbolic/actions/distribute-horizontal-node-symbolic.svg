@@ -16,9 +16,9 @@
    inkscape:version="0.92.4 (5da689c313, 2019-01-14)">
      <style id="s0">
    .base    { fill: #000000; }
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
+   .create { fill: #009909; }
+   .shape { fill: #FF1990; }
+   .color   { fill: #00AAFF; }
    .dark    {  }
   </style>
   <style id="s2"> 
@@ -111,17 +111,17 @@
        d="m 1052.639,861.35742 v 24.00492 h 1.5 v -24.00492 z"
        style="opacity:0;fill-opacity:1;"
        sodipodi:nodetypes="ccccc"
-       class="success" />
+       class="create" />
     <path
        sodipodi:nodetypes="ccccccccc"
-       class="success"
+       class="create"
        id="path1584"
        d="m 1068,865.30705 h -5.5242 -3.1125 -0.5587 l -1.3983,-1.50031 h 1.957 3.1125 5.5242 z"
        style="opacity:1;fill-opacity:1;"
        inkscape:connector-curvature="0" />
     <path
        sodipodi:nodetypes="cccccccccc"
-       class="success"
+       class="create"
        id="path1586"
        d="m 1068,874.09797 h -5.5242 -3.1125 -2.1604 l 1.6017,-1.50031 h 0.5587 3.1125 5.5242 v 0.75015 z"
        style="opacity:1;fill-opacity:1;"
@@ -131,7 +131,7 @@
        style="opacity:1;fill-opacity:1;"
        d="m 1068,882.88889 h -5.5242 -3.1125 -0.1835 l -1.3301,-1.5003 h 1.5136 3.1125 5.5242 z"
        id="use5269"
-       class="success"
+       class="create"
        sodipodi:nodetypes="ccccccccc" />
     <rect
        transform="rotate(90)"

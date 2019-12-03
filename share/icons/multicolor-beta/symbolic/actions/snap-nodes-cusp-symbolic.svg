@@ -16,9 +16,9 @@
    version="1.1">
    <style id="s0">
    .base    { fill: #000000; }
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
+   .create { fill: #009909; }
+   .shape { fill: #FF1990; }
+   .color   { fill: #00AAFF; }
    .dark    {  }
   </style>
   <style id="s2"> 
@@ -76,7 +76,7 @@
        style="opacity:1"
        id="path17721" />
     <path
-       class="success"
+       class="create"
        transform="rotate(135.0001)"
        style="opacity:1"
        d="m -190.606,-954.81677 h 4.13284 v 4.17568 h -4.13284 z"

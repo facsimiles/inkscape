@@ -16,9 +16,9 @@
    inkscape:version="1.0beta0 (1b5d333, 2019-09-08)">
      <style id="s0">
    .base    { fill: #000000; }
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
+   .create { fill: #009909; }
+   .shape { fill: #FF1990; }
+   .color   { fill: #00AAFF; }
    .dark    {  }
   </style>
   <style id="s2"> 
@@ -106,6 +106,6 @@
        d="m 1054.7678,861.35742 v 24.00492 h 1.5 v -24.00492 z"
        style="opacity:1;fill-opacity:1;"
        sodipodi:nodetypes="ccccc"
-       class="success" />
+       class="create" />
   </g>
 </svg>

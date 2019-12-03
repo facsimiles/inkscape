@@ -241,11 +241,11 @@ protected:
     UI::Widget::PrefCombo _icon_theme;
     UI::Widget::PrefCheckButton _dark_theme;
     UI::Widget::PrefCheckButton _symbolic_icons;
-    UI::Widget::PrefCheckButton _symbolic_base_colors;
-    UI::Widget::PrefColorPicker _symbolic_base_color;
-    UI::Widget::PrefColorPicker _symbolic_warning_color;
-    UI::Widget::PrefColorPicker _symbolic_error_color;
-    UI::Widget::PrefColorPicker _symbolic_success_color;
+    UI::Widget::PrefCheckButton _symbolic_default_colors;
+    UI::Widget::PrefColorPicker _symbolic_color_2;
+    UI::Widget::PrefColorPicker _symbolic_color_4;
+    UI::Widget::PrefColorPicker _symbolic_color_5;
+    UI::Widget::PrefColorPicker _symbolic_color_3;
     /*     Gtk::Image *_complementary_colors; */
     UI::Widget::PrefCombo _misc_small_toolbar;
     UI::Widget::PrefCombo _misc_small_secondary;
@@ -593,8 +593,6 @@ private:
   void resetIconsColors(bool themechange = false);
   void resetIconsColorsWrapper();
   void changeIconsColor(guint32 /*color*/);
-  void get_highlight_colors(guint32 &colorsetbase, guint32 &colorsetsuccess, guint32 &colorsetwarning,
-                            guint32 &colorseterror);
 
   InkscapePreferences();
   InkscapePreferences(InkscapePreferences const &d);

@@ -1,43 +1,11 @@
-/*
-* Change only colors, do not add more class, order or remove 
-* also dont chage selectors definition
-*/
-
-.base {
-    fill: #000000;
-}
-
-.success {
-    fill: #009909;
-}
-
-.warning {
-    fill: #FF1990;
-}
-
-.error {
-    fill: #00AAFF;
-}
-
-.dark .base {
-    fill: #ffffff;
-}
-
-.dark .success {
-    fill: #00990A;
-}
-
-.dark .warning {
-    fill: #FF1990;
-}
-
-.dark .error {
-    fill: #00AAFF;
-}
+@define-color symbolicColor1 #222222; /*base color bright*/
+@define-color symbolicColor2 #efefef; /*base color dark*/
+@define-color symbolicColor3 #009909; /*create*/
+@define-color symbolicColor4 #00AAFF; /*color*/
+@define-color symbolicColor5 #FF1990; /*shape*/
+@define-color symbolicColor6 #00AAFF; /*select*/
+.dark image{-gtk-icon-theme: @base @symbolicColor2, @create symbolicColor2, @color @symbolicColor3, @select @symbolicColor4;}
+.bright image{-gtk-icon-theme: @base @symbolicColor1, @create symbolicColor2, @color @symbolicColor3, @select @symbolicColor4;}
 
 
-/* do not change */
-
-.dark #background {
-    opacity: 0.8 !important;
 }

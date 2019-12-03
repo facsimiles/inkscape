@@ -16,9 +16,9 @@
    inkscape:version="1.0beta0 (1b5d333, 2019-09-08)">
    <style id="s0">
    .base    { fill: #000000; }
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
+   .create { fill: #009909; }
+   .shape { fill: #FF1990; }
+   .color   { fill: #00AAFF; }
    .dark    {  }
   </style>
   <style id="s2"> 
@@ -73,7 +73,7 @@
        id="rect22219"
        d="m 1132.7494,595.36218 h -1.5 v 24 h 1.5 z"
        style="opacity:1;fill-opacity:1"
-       class="success" />
+       class="create" />
     <path
        d="m 1123.9994,607.3622 v 4 h 6 v -4 z m 9.95,0 v 4 h 6 v -4 z m -7.95,-5 v 3 h 4 v -3 z m 7.95,0 v 3 h 4 v -3 z m -10.95,-7 v 5 h 7 v -5 z m 10.95,0 v 5 h 7 v -5 z"
        style="opacity:1"

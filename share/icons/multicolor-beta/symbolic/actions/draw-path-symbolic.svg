@@ -16,9 +16,9 @@
    version="1.1">
   <style id="s0">
    .base    { fill: #000000; }
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
+   .create { fill: #009909; }
+   .shape { fill: #FF1990; }
+   .color   { fill: #00AAFF; }
    .dark    {  }
   </style>
   <style id="s2"> 
@@ -90,14 +90,14 @@
     <path
        style="fill-opacity:1;stroke-width:1.02509"
        inkscape:connector-curvature="0"
-       class="success"
+       class="create"
        d="m 0,9 h 4 v 4 H 0 Z"
        id="rect1023" />
     <path
        sodipodi:nodetypes="ccccc"
        style="fill-opacity:1;stroke-width:1.15169"
        inkscape:connector-curvature="0"
-       class="success"
+       class="create"
        d="m 1.5639419,2 h 0.8 v 11 h -0.8 z"
        id="rect946" />
     <path
@@ -109,7 +109,7 @@
     <path
        style="fill-opacity:1"
        inkscape:connector-curvature="0"
-       class="success"
+       class="create"
        d="M 3.9078723,1.9670688 A 1.9439304,1.9439304 0 0 1 1.9639419,3.9109992 1.9439304,1.9439304 0 0 1 0.0200115,1.9670688 1.9439304,1.9439304 0 0 1 1.9639419,0.02313839 1.9439304,1.9439304 0 0 1 3.9078723,1.9670688"
        id="circle1027" />
   </g>

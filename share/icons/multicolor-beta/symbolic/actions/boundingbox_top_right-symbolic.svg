@@ -16,9 +16,9 @@
    version="1.1">
      <style id="s0">
    .base    { fill: #000000; }
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
+   .create { fill: #009909; }
+   .shape { fill: #FF1990; }
+   .color   { fill: #00AAFF; }
    .dark    {  }
   </style>
   <style id="s2"> 
@@ -78,7 +78,7 @@
          id="path40656"
          d="M 4,14 V 4 H 14 V 6 H 6 v 8 z" />
       <path
-         class="success"
+         class="create"
          style="stroke-linecap:butt;"
          d="M 5,0 C 2.2444986,0 0,2.2444986 0,5 0,7.7555014 2.2444986,10 5,10 7.7555014,10 10,7.7555014 10,5 10,2.2444986 7.7555014,0 5,0 Z M 5,1 C 7.2150613,1 9,2.7849387 9,5 9,7.2150613 7.2150613,9 5,9 2.7849387,9 1,7.2150613 1,5 1,2.7849387 2.7849387,1 5,1 Z"
          id="circle40654"

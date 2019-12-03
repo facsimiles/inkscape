@@ -16,9 +16,9 @@
    inkscape:version="0.92.4 (5da689c313, 2019-01-14)">
      <style id="s0">
    .base    { fill: #000000; }
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
+   .create { fill: #009909; }
+   .shape { fill: #FF1990; }
+   .color   { fill: #00AAFF; }
    .dark    {  }
   </style>
   <style id="s2"> 
@@ -72,7 +72,7 @@
        inkscape:connector-curvature="0"
        id="path3292"
        d="M 5.8671104,12.456846 C 5.4166091,14.671305 2.6268334,15.024111 0.74344921,14.62246 2.4911408,14.182815 2.6702485,11.11081 4.7707292,11.365899 Z"
-       class="success"
+       class="create"
        inkscape:label="tip"
        style="fill-opacity:1;"/>
     <path
@@ -94,7 +94,7 @@
        inkscape:connector-curvature="0"
        id="path3294"
        d="M 2.8778312,0.73255557 C 8.1341662,0.94864999 7.7952653,7.839176 3.4851527,7.4855386 1.3323459,7.3089049 1.6541403,9.3981295 1.6541403,9.3981295 0.3533948,8.3738464 0.96554799,5.6055766 3.3899728,5.8086186 6.4313826,6.0633296 5.73521,1.2233992 2.8778312,0.73255557 Z"
-       class="success"
+       class="create"
        inkscape:label="swush"
        style="fill-opacity:1;"/>
   </g>

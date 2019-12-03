@@ -493,62 +493,6 @@ Application::~Application()
 }
 
 
-Glib::ustring Application::get_symbolic_colors()
-{
-    Glib::ustring css_str;
-    gchar colornamed[64];
-    gchar colornamedsuccess[64];
-    gchar colornamedwarning[64];
-    gchar colornamederror[64];
-    gchar colornamed_inverse[64];
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    Glib::ustring themeiconname = prefs->getString("/theme/iconTheme");
-    guint32 colorsetbase = 0x2E3436ff;
-    guint32 colorsetbase_inverse = colorsetbase ^ 0xffffff00;
-    guint32 colorsetsuccess = 0x4AD589ff;
-    guint32 colorsetwarning = 0xF57900ff;
-    guint32 colorseterror = 0xcc0000ff;
-    colorsetbase = prefs->getInt("/theme/" + themeiconname + "/symbolicBaseColor", colorsetbase);
-    colorsetsuccess = prefs->getInt("/theme/" + themeiconname + "/symbolicSuccessColor", colorsetsuccess);
-    colorsetwarning = prefs->getInt("/theme/" + themeiconname + "/symbolicWarningColor", colorsetwarning);
-    colorseterror = prefs->getInt("/theme/" + themeiconname + "/symbolicErrorColor", colorseterror);
-    sp_svg_write_color(colornamed, sizeof(colornamed), colorsetbase);
-    sp_svg_write_color(colornamedsuccess, sizeof(colornamedsuccess), colorsetsuccess);
-    sp_svg_write_color(colornamedwarning, sizeof(colornamedwarning), colorsetwarning);
-    sp_svg_write_color(colornamederror, sizeof(colornamederror), colorseterror);
-    colorsetbase_inverse = colorsetbase ^ 0xffffff00;
-    sp_svg_write_color(colornamed_inverse, sizeof(colornamed_inverse), colorsetbase_inverse);
-    css_str += "*{-gtk-icon-palette: success ";
-    css_str += colornamedsuccess;
-    css_str += ", warning ";
-    css_str += colornamedwarning;
-    css_str += ", error ";
-    css_str += colornamederror;
-    css_str += ";}";
-    css_str += "#InkRuler,";
-    /* ":not(.rawstyle) > image" works only on images in first level of widget container
-    if in the future we use a complex widget with more levels and we dont want to tweak the color
-    here, retaining default we can add more lines like ":not(.rawstyle) > > image" */
-    css_str += ":not(.rawstyle) > image";
-    css_str += "{color:";
-    css_str += colornamed;
-    css_str += ";}";
-    css_str += ".dark .forcebright :not(.rawstyle) > image,";
-    css_str += ".dark .forcebright image:not(.rawstyle),";
-    css_str += ".bright .forcedark :not(.rawstyle) > image,";
-    css_str += ".bright .forcedark image:not(.rawstyle),";
-    css_str += ".dark :not(.rawstyle) > image.forcebright,";
-    css_str += ".dark image.forcebright:not(.rawstyle),";
-    css_str += ".bright :not(.rawstyle) > image.forcedark,";
-    css_str += ".bright image.forcedark:not(.rawstyle),";
-    css_str += ".inverse :not(.rawstyle) > image,";
-    css_str += ".inverse image:not(.rawstyle)";
-    css_str += "{color:";
-    css_str += colornamed_inverse;
-    css_str += ";}";
-    return css_str;
-}
-
 /**
  * \brief Add our CSS style sheets
  */
@@ -600,6 +544,16 @@ void Application::add_gtk_css()
         }
         Gtk::StyleContext::add_provider_for_screen(screen, provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     }
+    using namespace Inkscape::IO::Resource;
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    Glib::ustring themeiconname = prefs->getString("/theme/iconTheme");
+    if (themeiconname == prefs->getString("/theme/defaultIconTheme")) {
+        themeiconname = "hicolor";
+    }
+    Glib::ustring prefix = "";
+    if (prefs->getBool("/theme/darkTheme", false)) {
+        prefix = ".dark ";
+    }
 
     Glib::ustring gtkthemename = prefs->getString("/theme/gtkTheme");
     gtkthemename += ".css";
@@ -619,20 +573,20 @@ void Application::add_gtk_css()
         }
         Gtk::StyleContext::add_provider_for_screen(screen, themeprovider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     }
-
     if (!colorizeprovider) {
         colorizeprovider = Gtk::CssProvider::create();
     }
-    Glib::ustring css_str = "";
-    if (prefs->getBool("/theme/symbolicIcons", false)) {
-        css_str = get_symbolic_colors();
+    Glib::ustring highlight = get_filename(ICONS, Glib::ustring(themeiconname + "/highlights.css").c_str(), false, true);
+    if (!highlight.empty()) {
+        colorizeprovider = Gtk::CssProvider::create();
+        try {
+            colorizeprovider->load_from_path(highlight);
+        } catch (const Gtk::CssProviderError &ex) {
+            g_critical("CSSProviderError::load_from_path(): failed to load '%s'\n(%s)", style.c_str(),
+                       ex.what().c_str());
+        }
+        Gtk::StyleContext::add_provider_for_screen(screen, colorizeprovider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     }
-    try {
-        colorizeprovider->load_from_data(css_str);
-    } catch (const Gtk::CssProviderError &ex) {
-        g_critical("CSSProviderError::load_from_data(): failed to load '%s'\n(%s)", css_str.c_str(), ex.what().c_str());
-    }
-    Gtk::StyleContext::add_provider_for_screen(screen, colorizeprovider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 }
 
 void Application::readStyleSheets(bool forceupd)

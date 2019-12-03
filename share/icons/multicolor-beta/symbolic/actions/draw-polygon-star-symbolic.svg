@@ -17,9 +17,9 @@
 
      <style id="s0">
    .base    { fill: #000000; }
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
+   .create { fill: #009909; }
+   .shape { fill: #FF1990; }
+   .color   { fill: #00AAFF; }
    .dark    {  }
   </style>
   <style id="s2"> 
@@ -91,7 +91,7 @@
     <path
        inkscape:label="poly"
        inkscape:connector-curvature="0"
-       class="warning"
+       class="shape"
        d="M 9.0273366,7.7539255 10.156824,5.4662337 5.6340869,2.1734892 0.75240167,5.71989 2.6141424,11.458263 H 7.9600663 L 8.1132171,10.57286 5.7106623,8.232522 Z"
        style="opacity:0.4;"
        id="polygon1130" />
@@ -107,7 +107,7 @@
     <path
        inkscape:label="star"
        inkscape:connector-curvature="0"
-       class="warning"
+       class="shape"
        d="m 5.7106623,8.232522 3.3166743,-0.4785965 1.4836494,-3.0055867 1.483649,3.0055867 3.316675,0.4785965 -2.397769,2.340338 0.564744,3.302316 -2.967299,-1.55544 -2.9672988,1.55544 0.5695299,-3.302316 z"
        style="opacity:0.2;"
        id="polygon1136" />

@@ -16,9 +16,9 @@
    version="1.1">
    <style id="s0">
    .base    { fill: #000000; }
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
+   .create { fill: #009909; }
+   .shape { fill: #FF1990; }
+   .color   { fill: #00AAFF; }
    .dark    {  }
   </style>
   <style id="s2"> 
@@ -79,13 +79,13 @@
        d="m 686,508.4169 v -1.99222 h 3 v 1.99222 z"
        style="opacity:1" />
     <path
-       class="success"
+       class="create"
        inkscape:connector-curvature="0"
        id="path2943"
        d="m 686,508.4169 v -1.99222 h 3 v 1.99222 z"
        style="opacity:1" />
     <path
-       class="success"
+       class="create"
        style="opacity:1"
        d="m 686,520.43246 v 1.99222 h 3 v -1.99222 z"
        id="rect22541"
@@ -104,7 +104,7 @@
        d="m 688,511.4052 v 5.9767 l 4,-2.9884 z"
        style="opacity:1" />
     <path
-       class="success"
+       class="create"
        style="opacity:1;stroke-width:1.00195"
        d="m 693,512.42468 h 2 v 4 h -2 z"
        id="rect22646"

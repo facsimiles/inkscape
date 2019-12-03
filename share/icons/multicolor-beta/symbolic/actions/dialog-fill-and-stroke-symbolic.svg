@@ -16,9 +16,9 @@
    version="1.1">
   <style id="s0">
    .base    { fill: #000000; }
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
+   .create { fill: #009909; }
+   .shape { fill: #FF1990; }
+   .color   { fill: #00AAFF; }
    .dark    {  }
   </style>
   <style id="s2"> 
@@ -69,7 +69,7 @@
     <!--Add this to all icons at dirst place and do not change the id or style-->
     <path
        inkscape:label="tip"
-       class="error"
+       class="color"
        d="M 5.384614,12.785273 C 4.9111683,15.112517 1.9793067,15.483291 0,15.061183 1.8367031,14.599147 2.024933,11.370682 4.2323932,11.638763 Z"
        id="path3292"
        inkscape:connector-curvature="0" />

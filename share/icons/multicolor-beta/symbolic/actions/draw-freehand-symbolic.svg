@@ -17,9 +17,9 @@
 
      <style id="s0">
    .base    { fill: #000000; }
-   .success { fill: #009909; }
-   .warning { fill: #FF1990; }
-   .error   { fill: #00AAFF; }
+   .create { fill: #009909; }
+   .shape { fill: #FF1990; }
+   .color   { fill: #00AAFF; }
    .dark    {  }
   </style>
   <style id="s2"> 
@@ -97,9 +97,9 @@
          style="fill-opacity:1"
          id="polygon2257"
          d="m 977.92472,242.5115 -2.3281,6.99338 6.99339,-2.3281 z"
-         class="success" />
+         class="create" />
       <path
-         class="success"
+         class="create"
          style="opacity:1;fill-opacity:1;"
          d="m 1005.39,233.88555 h 1.6978 v 27.1649 h -1.6978 z"
          id="rect22335"
@@ -114,6 +114,6 @@
        inkscape:connector-curvature="0"
        transform="matrix(0.57567278,0,0,0.57567278,-555.77721,-130.15265)"
        sodipodi:nodetypes="cssssc"
-       class="success" />
+       class="create" />
   </g>
 </svg>
