@@ -2152,9 +2152,10 @@ SPDesktop::show_dialogs()
 #ifdef GDK_WINDOWING_WAYLAND
             // Hack to prevent crash with Wayland. See: https://gitlab.com/inkscape/inkscape/issues/454
             if (iter->first == "InkscapePreferences") {
-                Glib::ustring session_type = Glib::getenv("XDG_SESSION_TYPE");
-                if (session_type == "wayland") {
-                    std::cerr << "SPDesktop::show_dialog: cannot restore InkscapePreferences dialog due to GTK Wayland bug." << std::endl;
+                Glib::ustring session_type  = Glib::getenv("XDG_SESSION_TYPE");  // Window session
+                Glib::ustring session_type2 = Glib::getenv("GDK_BACKEND");       // Possible override
+                if (session_type == "wayland" && session_type2 != "x11") {
+                    std::cerr << "SPDesktop::show_dialog: Cannot restore InkscapePreferences dialog due to GTK Wayland bug." << std::endl;
                     continue;
                 }
             }
