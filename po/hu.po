@@ -9,7 +9,6 @@
 # Meskó Balázs <mesko.balazs@fsf.hu>, 2018-2019.
 # Gyuris Gellért <bubu@ujevangelizacio.hu>, 2017-2019.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: hu\n"
