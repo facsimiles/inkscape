@@ -24,6 +24,7 @@
 #include "document.h"
 #include "object/sp-object.h"
 #include "selection.h"
+#include "xml/attribute-record.h"
 
 #include "svg/path-string.h"
 
@@ -57,6 +58,57 @@ void XMPPObserver::notifyUndoCommitEvent(Event *ee)
         if ((eadd = dynamic_cast<XML::EventAdd *>(e))) {
             std::cout << "EventAdd" << std::endl;
             sp_repr_write_stream(eadd->child, *writer, 0, false, GQuark(0), 0, 0);
+            XML::Node *node = eadd->child;
+
+            // TODO: use a real UUID.
+            char rid[11];
+            snprintf(rid, 11, "%d", rand());
+
+            std::string name = node->name();
+            if (name.substr(0, 4) != "svg:") {
+                printf("Wrong prefix \"%s\"!\n", name.substr(0, 4).c_str());
+                abort();
+            }
+            name = name.substr(4);
+
+            gloox::New new_ = {
+                .rid = rid,
+                .type = "element",
+                .name = name.c_str(),
+                .ns = "http://www.w3.org/2000/svg",
+                .parent = "",
+                .chdata = "",
+            };
+            gloox::StateChange change = {
+                .type = gloox::StateChangeNew,
+                .new_ = new_,
+            };
+            std::vector<gloox::StateChange> state_changes = {};
+            state_changes.push_back(change);
+
+            for (Util::List<XML::AttributeRecord const> it = node->attributeList(); it; ++it) {
+                // TODO: use a real UUID.
+                char attr_rid[11];
+                snprintf(attr_rid, 11, "%d", rand());
+
+                gloox::New new_ = {
+                    .rid = attr_rid,
+                    .type = "attr",
+                    .name = g_quark_to_string(it->key),
+                    .ns = "",
+                    .parent = rid,
+                    .chdata = it->value,
+                };
+                gloox::StateChange change = {
+                    .type = gloox::StateChangeNew,
+                    .new_ = new_,
+                };
+                state_changes.push_back(change);
+            }
+
+            gloox::Sxe sxe("session", "id", gloox::SxeState, {}, state_changes);
+
+            printf("gloox %s\n", sxe.tag()->xml().c_str());
             printf("\n");
         } else if ((edel = dynamic_cast<XML::EventDel *>(e))) {
             std::cout << "EventDel" << std::endl;
