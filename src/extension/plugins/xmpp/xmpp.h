@@ -30,7 +30,7 @@ class Extension;
 
 namespace Internal {
 
-class TrucObserver : public UndoStackObserver {
+class XMPPObserver : public UndoStackObserver {
 void notifyUndoCommitEvent(Event* log) override;
 void notifyUndoEvent(Event* log) override;
 void notifyRedoEvent(Event* log) override;
@@ -43,7 +43,7 @@ IO::StdWriter *writer;
 
 
 
-class Truc : public Inkscape::Extension::Implementation::Implementation {
+class XMPP : public Inkscape::Extension::Implementation::Implementation {
 
 
 public:
@@ -51,7 +51,7 @@ public:
     void effect(Inkscape::Extension::Effect *module, Inkscape::UI::View::View *document, Inkscape::Extension::Implementation::ImplementationDocumentCache * docCache) override;
 
 private:
-    TrucObserver *obs;
+    XMPPObserver *obs;
     bool enabled;
 };
 
@@ -59,7 +59,7 @@ private:
 }; /* namespace Extension */
 }; /* namespace Inkscape */
 
-extern "C" G_MODULE_EXPORT Inkscape::Extension::Implementation::Implementation* GetImplementation() { return new Inkscape::Extension::Internal::Truc(); }
+extern "C" G_MODULE_EXPORT Inkscape::Extension::Implementation::Implementation* GetImplementation() { return new Inkscape::Extension::Internal::XMPP(); }
 extern "C" G_MODULE_EXPORT const gchar* GetInkscapeVersion() { return Inkscape::version_string; }
 #endif
 

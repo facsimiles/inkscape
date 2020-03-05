@@ -34,7 +34,7 @@ namespace Inkscape {
 namespace Extension {
 namespace Internal {
 
-void TrucObserver::notifyUndoCommitEvent(Event *ee)
+void XMPPObserver::notifyUndoCommitEvent(Event *ee)
 {
     XML::Event *e = ee->event;
     std::cout << "UndoCommitEvent" << std::endl;
@@ -77,27 +77,27 @@ void TrucObserver::notifyUndoCommitEvent(Event *ee)
         e = e->next;
     }
 }
-void TrucObserver::notifyUndoEvent(Event *e)
+void XMPPObserver::notifyUndoEvent(Event *e)
 {
     std::cout << "UndoEvent" << std::endl;
     this->notifyUndoCommitEvent(e);
 }
-void TrucObserver::notifyRedoEvent(Event *e)
+void XMPPObserver::notifyRedoEvent(Event *e)
 {
     std::cout << "RedoEvent" << std::endl;
     this->notifyUndoCommitEvent(e);
 }
-void TrucObserver::notifyClearUndoEvent() { std::cout << "ClearUndoEvent" << std::endl; }
-void TrucObserver::notifyClearRedoEvent() { std::cout << "ClearRedoEvent" << std::endl; }
+void XMPPObserver::notifyClearUndoEvent() { std::cout << "ClearUndoEvent" << std::endl; }
+void XMPPObserver::notifyClearRedoEvent() { std::cout << "ClearRedoEvent" << std::endl; }
 
 /**
     \brief  A function to allocated anything -- just an example here
     \param  module  Unused
     \return Whether the load was successful
 */
-bool Truc::load(Inkscape::Extension::Extension * /*module*/)
+bool XMPP::load(Inkscape::Extension::Extension * /*module*/)
 {
-    this->obs = new TrucObserver();
+    this->obs = new XMPPObserver();
     this->obs->writer = new IO::StdWriter();
     this->enabled = false;
     std::cout << "Hey, I'm TRUE, I'm loading!" << std::endl;
@@ -109,7 +109,7 @@ bool Truc::load(Inkscape::Extension::Extension * /*module*/)
     \param  module   The effect that was called (unused)
     \param  document What should be edited.
 */
-void Truc::effect(Inkscape::Extension::Effect *module, Inkscape::UI::View::View *document,
+void XMPP::effect(Inkscape::Extension::Effect *module, Inkscape::UI::View::View *document,
                   Inkscape::Extension::Implementation::ImplementationDocumentCache * /*docCache*/)
 {
     std::cout << (enabled ? "disabling" : "enabling") << std::endl;
