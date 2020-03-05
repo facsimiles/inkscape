@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- SPDX-License-Identifier: GPL-2.0-or-later -->
+<inkscape-extension xmlns="http://www.inkscape.org/namespace/inkscape/extension">
+<_name>TRUC</_name>
+<id>org.inkscape.effect.truc</id>
+<effect>
+    <object-type>all</object-type>
+        <effects-menu>
+          <submenu _name="LALA" >
+          </submenu>
+        </effects-menu>
+<_menu-tip>Draw a path which is a grid</_menu-tip>
+</effect>
+<plugin name="libtruc" />
+</inkscape-extension>
