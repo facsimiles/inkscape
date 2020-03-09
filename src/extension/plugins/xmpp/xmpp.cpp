@@ -13,6 +13,9 @@
 
 #include <gloox/sxe.h>
 #include <gloox/tag.h>
+#include <gloox/jid.h>
+#include <gloox/client.h>
+#include <gloox/disco.h>
 
 #include <gtkmm/adjustment.h>
 #include <gtkmm/box.h>
@@ -39,6 +42,73 @@ namespace Inkscape {
 namespace Extension {
 namespace Internal {
 
+using namespace gloox;
+
+std::string get_uuid()
+{
+    // TODO: use a real UUID.
+    char attr_rid[11];
+    snprintf(attr_rid, 11, "%d", rand());
+    return std::string(attr_rid);
+}
+
+InkscapeClient::InkscapeClient(JID jid, const std::string& password)
+{
+    client = new Client(jid, password);
+    client->setSASLMechanisms(SaslMechPlain);
+    client->disco()->setVersion("Inkscape", "version TODO", "Linux");
+    client->registerConnectionListener(this);
+    client->logInstance().registerLogHandler(LogLevelDebug, LogAreaXmlOutgoing | LogAreaXmlIncoming, this);
+}
+
+bool InkscapeClient::connect()
+{
+    return client->connect(false);
+}
+
+void InkscapeClient::disconnect()
+{
+    client->disconnect();
+    connected = false;
+}
+
+bool InkscapeClient::isConnected()
+{
+    return connected;
+}
+
+ConnectionError InkscapeClient::recv()
+{
+    // Timeout every 16ms.
+    return client->recv(16667);
+}
+
+// From ConnectionListener
+void InkscapeClient::onConnect()
+{
+    printf("connected!\n");
+    connected = true;
+}
+
+void InkscapeClient::onDisconnect(ConnectionError e)
+{
+    printf("disconnected\n");
+    connected = false;
+}
+
+bool InkscapeClient::onTLSConnect(const CertInfo& info)
+{
+    printf("accept cert? yes of course\n");
+    return true;
+}
+
+// From LogHandler
+void InkscapeClient::handleLog(LogLevel level, LogArea area, const std::string& message)
+{
+    printf("gloox: %s\n", message.c_str());
+    fflush(stdout);
+}
+
 void XMPPObserver::notifyUndoCommitEvent(Event *ee)
 {
     XML::Event *e = ee->event;
@@ -60,10 +130,7 @@ void XMPPObserver::notifyUndoCommitEvent(Event *ee)
             sp_repr_write_stream(eadd->child, *writer, 0, false, GQuark(0), 0, 0);
             XML::Node *node = eadd->child;
 
-            // TODO: use a real UUID.
-            char rid[11];
-            snprintf(rid, 11, "%d", rand());
-
+            std::string rid = get_uuid();
             std::string name = node->name();
             if (name.substr(0, 4) != "svg:") {
                 printf("Wrong prefix \"%s\"!\n", name.substr(0, 4).c_str());
@@ -71,52 +138,62 @@ void XMPPObserver::notifyUndoCommitEvent(Event *ee)
             }
             name = name.substr(4);
 
-            gloox::New new_ = {
-                .rid = rid,
+            SxeNew new_ = {
+                .rid = rid.c_str(),
                 .type = "element",
                 .name = name.c_str(),
                 .ns = "http://www.w3.org/2000/svg",
                 .parent = "",
                 .chdata = "",
             };
-            gloox::StateChange change = {
-                .type = gloox::StateChangeNew,
+            SxeStateChange change = {
+                .type = SxeStateChangeNew,
                 .new_ = new_,
             };
-            std::vector<gloox::StateChange> state_changes = {};
+            std::vector<SxeStateChange> state_changes = {};
             state_changes.push_back(change);
 
             for (Util::List<XML::AttributeRecord const> it = node->attributeList(); it; ++it) {
-                // TODO: use a real UUID.
-                char attr_rid[11];
-                snprintf(attr_rid, 11, "%d", rand());
+                std::string attr_rid = get_uuid();
 
-                gloox::New new_ = {
-                    .rid = attr_rid,
+                SxeNew new_ = {
+                    .rid = attr_rid.c_str(),
                     .type = "attr",
                     .name = g_quark_to_string(it->key),
                     .ns = "",
-                    .parent = rid,
+                    .parent = rid.c_str(),
                     .chdata = it->value,
                 };
-                gloox::StateChange change = {
-                    .type = gloox::StateChangeNew,
+                SxeStateChange change = {
+                    .type = SxeStateChangeNew,
                     .new_ = new_,
                 };
                 state_changes.push_back(change);
             }
 
-            gloox::Sxe sxe("session", "id", gloox::SxeState, {}, state_changes);
+            Sxe sxe("session", "id", SxeState, {}, state_changes);
 
             printf("gloox %s\n", sxe.tag()->xml().c_str());
             printf("\n");
         } else if ((edel = dynamic_cast<XML::EventDel *>(e))) {
             std::cout << "EventDel" << std::endl;
             sp_repr_write_stream(edel->child, *writer, 0, false, GQuark(0), 0, 0);
+
+            SxeStateChange change = {
+                .type = SxeStateChangeRemove,
+                .remove = SxeRemove {
+                    .target = "coucou",
+                },
+            };
+            std::vector<SxeStateChange> state_changes = {};
+            state_changes.push_back(change);
+            Sxe sxe("session", "id", SxeState, {}, state_changes);
+
+            printf("gloox %s\n", sxe.tag()->xml().c_str());
             printf("\n");
         } else if ((echga = dynamic_cast<XML::EventChgAttr *>(e))) {
             std::cout << "EventChgAttr" << std::endl;
-            printf("%s to %s", &*(echga->oldval), &*(echga->newval));
+            printf("%s from %s to %s", g_quark_to_string(echga->key), &*(echga->oldval), &*(echga->newval));
             printf("\n");
         } else if ((echgc = dynamic_cast<XML::EventChgContent *>(e))) {
             std::cout << "EventChgContent" << std::endl;
@@ -156,7 +233,26 @@ bool XMPP::load(Inkscape::Extension::Extension * /*module*/)
     this->obs = new XMPPObserver();
     this->obs->writer = new IO::StdWriter();
     this->enabled = false;
-    std::cout << "Hey, I'm TRUE, I'm loading!" << std::endl;
+
+    // TODO: fetch these from the preferences.
+    JID jid("test@linkmauve.fr");
+    const char *password = "test";
+
+    //client = std::unique_ptr<InkscapeClient>(new InkscapeClient(jid, password));
+    InkscapeClient *client = new InkscapeClient(jid, password);
+    bool connected = client->connect();
+    printf("just attempted to connect, should be 0: %d\n", connected);
+    while (true) {
+        ConnectionError err = client->recv();
+        if (err != ConnNoError)
+            break;
+
+        // Only read the queue if we are connected.
+        if (!client->isConnected())
+            continue;
+    }
+    printf("finished? :(\n");
+    fflush(stdout);
     return TRUE;
 }
 
