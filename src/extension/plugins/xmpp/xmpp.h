@@ -53,6 +53,7 @@ public:
     void disconnect();
     bool isConnected();
     gloox::ConnectionError recv();
+    static int runLoop(void *data);
 
 private:
     // From ConnectionListener

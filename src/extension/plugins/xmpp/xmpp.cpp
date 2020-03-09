@@ -79,8 +79,20 @@ bool InkscapeClient::isConnected()
 
 ConnectionError InkscapeClient::recv()
 {
-    // Timeout every 16ms.
-    return client->recv(16667);
+    // Return immediately if no data was available on the socket.
+    return client->recv(0);
+}
+
+int InkscapeClient::runLoop(void *data)
+{
+    InkscapeClient *client = static_cast<InkscapeClient*>(data);
+    ConnectionError err = client->recv();
+    if (err != ConnNoError) {
+        printf("Error while receiving on gloox socket: %d\n", err);
+        return FALSE;
+    }
+
+    return TRUE;
 }
 
 // From ConnectionListener
@@ -242,17 +254,9 @@ bool XMPP::load(Inkscape::Extension::Extension * /*module*/)
     InkscapeClient *client = new InkscapeClient(jid, password);
     bool connected = client->connect();
     printf("just attempted to connect, should be 0: %d\n", connected);
-    while (true) {
-        ConnectionError err = client->recv();
-        if (err != ConnNoError)
-            break;
 
-        // Only read the queue if we are connected.
-        if (!client->isConnected())
-            continue;
-    }
-    printf("finished? :(\n");
-    fflush(stdout);
+    // TODO: find a better way to integrate gloox’s fd into the main loop.
+    g_timeout_add(16, &InkscapeClient::runLoop, client);
     return TRUE;
 }
 
