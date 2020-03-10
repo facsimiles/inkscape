@@ -59,6 +59,9 @@ InkscapeClient::InkscapeClient(JID jid, const std::string& password)
     client = std::unique_ptr<Client>(new Client(jid, password));
     client->setSASLMechanisms(SaslMechPlain);
     client->disco()->setVersion("Inkscape", "version TODO", "Linux");
+    client->disco()->addFeature("urn:xmpp:jingle:1");
+    client->disco()->addFeature("urn:xmpp:jingle:transports:sxe");
+    client->disco()->addFeature("urn:xmpp:sxe:0");
     client->registerConnectionListener(this);
     //client->logInstance().registerLogHandler(LogLevelDebug, LogAreaXmlOutgoing | LogAreaXmlIncoming, this);
     client->logInstance().registerLogHandler(LogLevelDebug, ~0, this);
