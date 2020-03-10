@@ -34,18 +34,6 @@ class Extension;
 
 namespace Internal {
 
-class XMPPObserver : public UndoStackObserver {
-void notifyUndoCommitEvent(Event* log) override;
-void notifyUndoEvent(Event* log) override;
-void notifyRedoEvent(Event* log) override;
-void notifyClearUndoEvent() override;
-void notifyClearRedoEvent() override;
-  public:
-
-IO::StdWriter *writer;
-};
-
-
 class InkscapeClient : gloox::ConnectionListener, gloox::LogHandler {
 public:
     InkscapeClient(gloox::JID jid, const std::string& password);
@@ -53,6 +41,7 @@ public:
     void disconnect();
     bool isConnected();
     gloox::ConnectionError recv();
+    void send(gloox::Tag *tag);
     static int runLoop(void *data);
 
 private:
@@ -65,9 +54,23 @@ private:
     void handleLog(gloox::LogLevel level, gloox::LogArea area, const std::string& message) override;
 
 private:
-    //std::unique_ptr<gloox::Client> client;
-    gloox::Client *client;
+    std::unique_ptr<gloox::Client> client;
     bool connected;
+};
+
+
+class XMPPObserver : public UndoStackObserver {
+    void notifyUndoCommitEvent(Event* log) override;
+    void notifyUndoEvent(Event* log) override;
+    void notifyRedoEvent(Event* log) override;
+    void notifyClearUndoEvent() override;
+    void notifyClearRedoEvent() override;
+
+public:
+    XMPPObserver(std::shared_ptr<InkscapeClient> client);
+
+    IO::StdWriter *writer;
+    std::shared_ptr<InkscapeClient> client;
 };
 
 
@@ -80,7 +83,7 @@ public:
 
 private:
     XMPPObserver *obs;
-    std::unique_ptr<InkscapeClient> client;
+    std::shared_ptr<InkscapeClient> client;
     bool enabled;
 };
 

@@ -16,6 +16,7 @@
 #include <gloox/jid.h>
 #include <gloox/client.h>
 #include <gloox/disco.h>
+#include <gloox/message.h>
 
 #include <gtkmm/adjustment.h>
 #include <gtkmm/box.h>
@@ -54,11 +55,13 @@ std::string get_uuid()
 
 InkscapeClient::InkscapeClient(JID jid, const std::string& password)
 {
-    client = new Client(jid, password);
+    // TODO: use std::make_unique() once we’re C++14.
+    client = std::unique_ptr<Client>(new Client(jid, password));
     client->setSASLMechanisms(SaslMechPlain);
     client->disco()->setVersion("Inkscape", "version TODO", "Linux");
     client->registerConnectionListener(this);
-    client->logInstance().registerLogHandler(LogLevelDebug, LogAreaXmlOutgoing | LogAreaXmlIncoming, this);
+    //client->logInstance().registerLogHandler(LogLevelDebug, LogAreaXmlOutgoing | LogAreaXmlIncoming, this);
+    client->logInstance().registerLogHandler(LogLevelDebug, ~0, this);
 }
 
 bool InkscapeClient::connect()
@@ -81,6 +84,11 @@ ConnectionError InkscapeClient::recv()
 {
     // Return immediately if no data was available on the socket.
     return client->recv(0);
+}
+
+void InkscapeClient::send(Tag *tag)
+{
+    client->send(tag);
 }
 
 int InkscapeClient::runLoop(void *data)
@@ -117,7 +125,17 @@ bool InkscapeClient::onTLSConnect(const CertInfo& info)
 // From LogHandler
 void InkscapeClient::handleLog(LogLevel level, LogArea area, const std::string& message)
 {
-    printf("gloox: %s\n", message.c_str());
+    switch (area) {
+    case LogAreaXmlIncoming:
+        printf("RECV %s\n", message.c_str());
+        break;
+    case LogAreaXmlOutgoing:
+        printf("SEND %s\n", message.c_str());
+        break;
+    default:
+        printf("gloox: %s\n", message.c_str());
+        break;
+    }
     fflush(stdout);
 }
 
@@ -140,6 +158,7 @@ void XMPPObserver::notifyUndoCommitEvent(Event *ee)
         if ((eadd = dynamic_cast<XML::EventAdd *>(e))) {
             std::cout << "EventAdd" << std::endl;
             sp_repr_write_stream(eadd->child, *writer, 0, false, GQuark(0), 0, 0);
+            printf("\n");
             XML::Node *node = eadd->child;
 
             std::string rid = get_uuid();
@@ -183,13 +202,15 @@ void XMPPObserver::notifyUndoCommitEvent(Event *ee)
                 state_changes.push_back(change);
             }
 
-            Sxe sxe("session", "id", SxeState, {}, state_changes);
-
-            printf("gloox %s\n", sxe.tag()->xml().c_str());
-            printf("\n");
+            Message msg(Message::Normal, JID("linkmauve@linkmauve.fr"));
+            msg.addExtension(new Sxe("session", "id", SxeState, {}, state_changes));
+            printf("gloox %s\n", msg.tag()->xml().c_str());
+            fflush(stdout);
+            client->send(msg.tag());
         } else if ((edel = dynamic_cast<XML::EventDel *>(e))) {
             std::cout << "EventDel" << std::endl;
             sp_repr_write_stream(edel->child, *writer, 0, false, GQuark(0), 0, 0);
+            printf("\n");
 
             SxeStateChange change = {
                 .type = SxeStateChangeRemove,
@@ -199,18 +220,18 @@ void XMPPObserver::notifyUndoCommitEvent(Event *ee)
             };
             std::vector<SxeStateChange> state_changes = {};
             state_changes.push_back(change);
-            Sxe sxe("session", "id", SxeState, {}, state_changes);
 
-            printf("gloox %s\n", sxe.tag()->xml().c_str());
-            printf("\n");
+            Message msg(Message::Normal, JID("linkmauve@linkmauve.fr"));
+            msg.addExtension(new Sxe("session", "id", SxeState, {}, state_changes));
+            printf("gloox %s\n", msg.tag()->xml().c_str());
+            fflush(stdout);
+            client->send(msg.tag());
         } else if ((echga = dynamic_cast<XML::EventChgAttr *>(e))) {
             std::cout << "EventChgAttr" << std::endl;
-            printf("%s from %s to %s", g_quark_to_string(echga->key), &*(echga->oldval), &*(echga->newval));
-            printf("\n");
+            printf("%s from %s to %s\n", g_quark_to_string(echga->key), &*(echga->oldval), &*(echga->newval));
         } else if ((echgc = dynamic_cast<XML::EventChgContent *>(e))) {
             std::cout << "EventChgContent" << std::endl;
-            printf("%s to %s", &*(echgc->oldval), &*(echgc->newval));
-            printf("\n");
+            printf("%s to %s\n", &*(echgc->oldval), &*(echgc->newval));
         } else if ((echgo = dynamic_cast<XML::EventChgOrder *>(e))) {
             std::cout << "EventChgOrder" << std::endl;
         } else if ((echgn = dynamic_cast<XML::EventChgElementName *>(e))) {
@@ -235,6 +256,10 @@ void XMPPObserver::notifyRedoEvent(Event *e)
 void XMPPObserver::notifyClearUndoEvent() { std::cout << "ClearUndoEvent" << std::endl; }
 void XMPPObserver::notifyClearRedoEvent() { std::cout << "ClearRedoEvent" << std::endl; }
 
+XMPPObserver::XMPPObserver(std::shared_ptr<InkscapeClient> client)
+    : client(client)
+{}
+
 /**
     \brief  A function to allocated anything -- just an example here
     \param  module  Unused
@@ -242,21 +267,21 @@ void XMPPObserver::notifyClearRedoEvent() { std::cout << "ClearRedoEvent" << std
 */
 bool XMPP::load(Inkscape::Extension::Extension * /*module*/)
 {
-    this->obs = new XMPPObserver();
-    this->obs->writer = new IO::StdWriter();
     this->enabled = false;
 
     // TODO: fetch these from the preferences.
     JID jid("test@linkmauve.fr");
     const char *password = "test";
 
-    //client = std::unique_ptr<InkscapeClient>(new InkscapeClient(jid, password));
-    InkscapeClient *client = new InkscapeClient(jid, password);
+    client = std::make_shared<InkscapeClient>(jid, password);
     bool connected = client->connect();
     printf("just attempted to connect, should be 0: %d\n", connected);
 
     // TODO: find a better way to integrate gloox’s fd into the main loop.
-    g_timeout_add(16, &InkscapeClient::runLoop, client);
+    g_timeout_add(16, &InkscapeClient::runLoop, client.get());
+
+    this->obs = new XMPPObserver(client);
+    this->obs->writer = new IO::StdWriter();
     return TRUE;
 }
 
