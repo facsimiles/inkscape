@@ -1,9 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 /*
- * Authors:
- *   Marc Jeanmougin <marc.jeanmougin@telecom-paris.fr>
- *
- * Copyright (C) 2019 Authors
+ * Copyright (C) 2019 Marc Jeanmougin <marc.jeanmougin@telecom-paris.fr>
+ * Copyright (C) 2020 Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>
  *
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
