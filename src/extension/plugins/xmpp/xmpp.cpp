@@ -29,6 +29,7 @@
 #include "object/sp-object.h"
 #include "selection.h"
 #include "xml/attribute-record.h"
+#include "inkscape-version.h"
 
 #include "svg/path-string.h"
 
@@ -57,8 +58,11 @@ InkscapeClient::InkscapeClient(JID jid, const std::string& password)
 {
     // TODO: use std::make_unique() once we’re C++14.
     client = std::unique_ptr<Client>(new Client(jid, password));
+    // TODO: figure out why SCRAM-SHA-1 isn’t working.
     client->setSASLMechanisms(SaslMechPlain);
-    client->disco()->setVersion("Inkscape", "version TODO", "Linux");
+    // TODO: fetch the OS properly, instead of hardcoding it to Linux.
+    client->disco()->setVersion("Inkscape", version_string_without_revision, "Linux");
+    client->disco()->setIdentity("collaboration", "whiteboard", "Inkscape");
     client->disco()->addFeature("urn:xmpp:jingle:1");
     client->disco()->addFeature("urn:xmpp:jingle:transports:sxe");
     client->disco()->addFeature("urn:xmpp:sxe:0");
@@ -207,8 +211,6 @@ void XMPPObserver::notifyUndoCommitEvent(Event *ee)
 
             Message msg(Message::Normal, JID("linkmauve@linkmauve.fr"));
             msg.addExtension(new Sxe("session", "id", SxeState, {}, state_changes));
-            printf("gloox %s\n", msg.tag()->xml().c_str());
-            fflush(stdout);
             client->send(msg.tag());
         } else if ((edel = dynamic_cast<XML::EventDel *>(e))) {
             std::cout << "EventDel" << std::endl;
@@ -226,8 +228,6 @@ void XMPPObserver::notifyUndoCommitEvent(Event *ee)
 
             Message msg(Message::Normal, JID("linkmauve@linkmauve.fr"));
             msg.addExtension(new Sxe("session", "id", SxeState, {}, state_changes));
-            printf("gloox %s\n", msg.tag()->xml().c_str());
-            fflush(stdout);
             client->send(msg.tag());
         } else if ((echga = dynamic_cast<XML::EventChgAttr *>(e))) {
             std::cout << "EventChgAttr" << std::endl;
@@ -270,21 +270,20 @@ XMPPObserver::XMPPObserver(std::shared_ptr<InkscapeClient> client)
 */
 bool XMPP::load(Inkscape::Extension::Extension * /*module*/)
 {
-    this->enabled = false;
+    enabled = false;
 
     // TODO: fetch these from the preferences.
     JID jid("test@linkmauve.fr");
     const char *password = "test";
 
     client = std::make_shared<InkscapeClient>(jid, password);
-    bool connected = client->connect();
-    printf("just attempted to connect, should be 0: %d\n", connected);
+    client->connect();
 
     // TODO: find a better way to integrate gloox’s fd into the main loop.
     g_timeout_add(16, &InkscapeClient::runLoop, client.get());
 
-    this->obs = new XMPPObserver(client);
-    this->obs->writer = new IO::StdWriter();
+    obs = std::unique_ptr<XMPPObserver>(new XMPPObserver(client));
+    obs->writer = std::unique_ptr<IO::StdWriter>(new IO::StdWriter());
     return TRUE;
 }
 
@@ -297,11 +296,11 @@ void XMPP::effect(Inkscape::Extension::Effect *module, Inkscape::UI::View::View 
                   Inkscape::Extension::Implementation::ImplementationDocumentCache * /*docCache*/)
 {
     std::cout << (enabled ? "disabling" : "enabling") << std::endl;
-    if (!this->enabled)
+    if (!enabled)
         document->doc()->addUndoObserver(*obs);
     else
         document->doc()->removeUndoObserver(*obs);
-    this->enabled = !this->enabled;
+    enabled = !enabled;
 }
 
 

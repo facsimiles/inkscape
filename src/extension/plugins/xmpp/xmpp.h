@@ -69,7 +69,7 @@ class XMPPObserver : public UndoStackObserver {
 public:
     XMPPObserver(std::shared_ptr<InkscapeClient> client);
 
-    IO::StdWriter *writer;
+    std::unique_ptr<IO::StdWriter> writer;
     std::shared_ptr<InkscapeClient> client;
 };
 
@@ -82,7 +82,7 @@ public:
     void effect(Inkscape::Extension::Effect *module, Inkscape::UI::View::View *document, Inkscape::Extension::Implementation::ImplementationDocumentCache * docCache) override;
 
 private:
-    XMPPObserver *obs;
+    std::unique_ptr<XMPPObserver> obs;
     std::shared_ptr<InkscapeClient> client;
     bool enabled;
 };
