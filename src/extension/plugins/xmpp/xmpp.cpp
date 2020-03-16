@@ -17,6 +17,9 @@
 #include <gloox/client.h>
 #include <gloox/disco.h>
 #include <gloox/message.h>
+#include <gloox/jinglesessionmanager.h>
+#include <gloox/jinglecontent.h>
+#include <gloox/jinglesxe.h>
 
 #include <gtkmm/adjustment.h>
 #include <gtkmm/box.h>
@@ -54,6 +57,51 @@ std::string get_uuid()
     return std::string(attr_rid);
 }
 
+
+// TODO: this is a hack, this namespace isn’t reserved so shouldn’t be used, we
+// probably want to change the XEP to use an application based on the MIME type
+// of the document or something like that.
+class SvgApplication : public Jingle::Plugin
+{
+public:
+    SvgApplication(const Tag* tag = 0)
+        : Jingle::Plugin(Jingle::PluginUser)
+    {}
+
+    // reimplemented from Plugin
+    const StringList features() const override
+    {
+        StringList sl;
+        sl.push_back("urn:xmpp:jingle:apps:svg");
+        return sl;
+    }
+
+    // reimplemented from Plugin
+    const std::string& filterString() const override
+    {
+        static const std::string filter = "content[@xmlns='" + XMLNS_JINGLE + "']/transport[@xmlns='urn:xmpp:jingle:apps:svg']";
+        return filter;
+    }
+
+    // reimplemented from Plugin
+    Tag* tag() const override
+    {
+        return new Tag("description", XMLNS, "urn:xmpp:jingle:apps:svg");
+    }
+
+    // reimplemented from Plugin
+    Jingle::Plugin* newInstance(const Tag* tag) const override
+    {
+        return new SvgApplication(tag);
+    }
+
+    // reimplemented from Plugin
+    Jingle::Plugin* clone() const override
+    {
+	return new SvgApplication(*this);
+    }
+};
+
 InkscapeClient::InkscapeClient(JID jid, const std::string& password)
 {
     // TODO: use std::make_unique() once we’re C++14.
@@ -63,9 +111,9 @@ InkscapeClient::InkscapeClient(JID jid, const std::string& password)
     // TODO: fetch the OS properly, instead of hardcoding it to Linux.
     client->disco()->setVersion("Inkscape", version_string_without_revision, "Linux");
     client->disco()->setIdentity("collaboration", "whiteboard", "Inkscape");
-    client->disco()->addFeature("urn:xmpp:jingle:1");
-    client->disco()->addFeature("urn:xmpp:jingle:transports:sxe");
-    client->disco()->addFeature("urn:xmpp:sxe:0");
+    session_manager = std::unique_ptr<Jingle::SessionManager>(new Jingle::SessionManager(client.get(), this));
+    session_manager->registerPlugin(new Jingle::Content());
+    session_manager->registerPlugin(new Jingle::SxePlugin());
     client->registerConnectionListener(this);
     //client->logInstance().registerLogHandler(LogLevelDebug, LogAreaXmlOutgoing | LogAreaXmlIncoming, this);
     client->logInstance().registerLogHandler(LogLevelDebug, ~0, this);
@@ -144,6 +192,54 @@ void InkscapeClient::handleLog(LogLevel level, LogArea area, const std::string& 
         break;
     }
     fflush(stdout);
+}
+
+void InkscapeClient::handleSessionAction(Jingle::Action action, Jingle::Session* session, const Jingle::Session::Jingle* jingle)
+{
+    printf("handleSessionAction(action=%d, session=%p, jingle=%p)\n", action, session, jingle);
+
+    switch (action) {
+    case Jingle::SessionInitiate: {
+        std::string name;
+        printf("plugins: %zd\n", jingle->plugins().size());
+        for (const Jingle::Plugin* p : jingle->plugins()) {
+            printf("- %p\n", p);
+            // XXX: Don’t assume this is a Jingle::Content…
+            const Jingle::Content* content = reinterpret_cast<const Jingle::Content*>(p);
+            name = content->name();
+            break;
+        }
+        printf("that’s it!\n");
+        fflush(stdout);
+        if (true/*accept*/) {
+            std::list<const Jingle::Plugin*> plugins_list;
+            SvgApplication* description = new SvgApplication();
+            Jingle::SxePlugin* transport = new Jingle::SxePlugin(client->jid());
+            plugins_list.push_front(transport);
+            plugins_list.push_front(description);
+            bool ret = session->sessionAccept(new Jingle::Content(name, plugins_list));
+            printf("accepted? %d\n", ret);
+        } else {
+            bool ret = session->sessionTerminate(new Jingle::Session::Reason(Jingle::Session::Reason::UnsupportedApplications));
+            printf("terminated? %d\n", ret);
+        }
+        fflush(stdout);
+        break;
+    }
+    default:
+        printf("Unhandled…\n");
+        break;
+    }
+}
+
+void InkscapeClient::handleSessionActionError(Jingle::Action action, Jingle::Session* session, const Error* error )
+{
+    printf("handleSessionActionError(action=%d, session=%p, error=%p)\n", action, session, error);
+}
+
+void InkscapeClient::handleIncomingSession(Jingle::Session* session)
+{
+    printf("handleIncomingSession(session=%p)\n", session);
 }
 
 void XMPPObserver::notifyUndoCommitEvent(Event *ee)

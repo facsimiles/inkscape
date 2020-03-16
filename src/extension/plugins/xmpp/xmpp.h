@@ -14,6 +14,9 @@
 #include <gloox/client.h>
 #include <gloox/loghandler.h>
 #include <gloox/connectionlistener.h>
+#include <gloox/jinglesessionhandler.h>
+#include <gloox/jinglesessionmanager.h>
+#include <gloox/jinglesession.h>
 #include <glib.h>
 #include <gmodule.h>
 #include <memory>
@@ -34,7 +37,7 @@ class Extension;
 
 namespace Internal {
 
-class InkscapeClient : gloox::ConnectionListener, gloox::LogHandler {
+class InkscapeClient : gloox::ConnectionListener, gloox::LogHandler, gloox::Jingle::SessionHandler {
 public:
     InkscapeClient(gloox::JID jid, const std::string& password);
     bool connect();
@@ -53,8 +56,14 @@ private:
     // From LogHandler
     void handleLog(gloox::LogLevel level, gloox::LogArea area, const std::string& message) override;
 
+    // From Jingle::SessionHandler
+    void handleSessionAction(gloox::Jingle::Action action, gloox::Jingle::Session* session, const gloox::Jingle::Session::Jingle* jingle) override;
+    void handleSessionActionError(gloox::Jingle::Action action, gloox::Jingle::Session* session, const gloox::Error* error) override;
+    void handleIncomingSession(gloox::Jingle::Session* session) override;
+
 private:
     std::unique_ptr<gloox::Client> client;
+    std::unique_ptr<gloox::Jingle::SessionManager> session_manager;
     bool connected;
 };
 
