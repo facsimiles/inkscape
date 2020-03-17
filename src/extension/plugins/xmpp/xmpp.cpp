@@ -176,7 +176,7 @@ void XMPPObserver::notifyUndoCommitEvent(Event *ee)
             }
             name = name.substr(4);
 
-            SxeNew new_ = {
+            Sxe::New new_ = {
                 .rid = rid.c_str(),
                 .type = "element",
                 .name = name.c_str(),
@@ -184,17 +184,17 @@ void XMPPObserver::notifyUndoCommitEvent(Event *ee)
                 .parent = "",
                 .chdata = "",
             };
-            SxeStateChange change = {
-                .type = SxeStateChangeNew,
+            Sxe::StateChange change = {
+                .type = Sxe::StateChangeNew,
                 .new_ = new_,
             };
-            std::vector<SxeStateChange> state_changes = {};
+            std::vector<Sxe::StateChange> state_changes = {};
             state_changes.push_back(change);
 
             for (Util::List<XML::AttributeRecord const> it = node->attributeList(); it; ++it) {
                 std::string attr_rid = get_uuid();
 
-                SxeNew new_ = {
+                Sxe::New new_ = {
                     .rid = attr_rid.c_str(),
                     .type = "attr",
                     .name = g_quark_to_string(it->key),
@@ -202,32 +202,32 @@ void XMPPObserver::notifyUndoCommitEvent(Event *ee)
                     .parent = rid.c_str(),
                     .chdata = it->value,
                 };
-                SxeStateChange change = {
-                    .type = SxeStateChangeNew,
+                Sxe::StateChange change = {
+                    .type = Sxe::StateChangeNew,
                     .new_ = new_,
                 };
                 state_changes.push_back(change);
             }
 
             Message msg(Message::Normal, JID("linkmauve@linkmauve.fr"));
-            msg.addExtension(new Sxe("session", "id", SxeState, {}, state_changes));
+            msg.addExtension(new Sxe("session", "id", Sxe::TypeState, {}, state_changes));
             client->send(msg.tag());
         } else if ((edel = dynamic_cast<XML::EventDel *>(e))) {
             std::cout << "EventDel" << std::endl;
             sp_repr_write_stream(edel->child, *writer, 0, false, GQuark(0), 0, 0);
             printf("\n");
 
-            SxeStateChange change = {
-                .type = SxeStateChangeRemove,
-                .remove = SxeRemove {
+            Sxe::StateChange change = {
+                .type = Sxe::StateChangeRemove,
+                .remove = Sxe::Remove {
                     .target = "coucou",
                 },
             };
-            std::vector<SxeStateChange> state_changes = {};
+            std::vector<Sxe::StateChange> state_changes = {};
             state_changes.push_back(change);
 
             Message msg(Message::Normal, JID("linkmauve@linkmauve.fr"));
-            msg.addExtension(new Sxe("session", "id", SxeState, {}, state_changes));
+            msg.addExtension(new Sxe("session", "id", Sxe::TypeState, {}, state_changes));
             client->send(msg.tag());
         } else if ((echga = dynamic_cast<XML::EventChgAttr *>(e))) {
             std::cout << "EventChgAttr" << std::endl;
