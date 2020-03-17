@@ -79,6 +79,7 @@ PERMITTED_LICENSES = [
     "LGPL-2.1-or-later",
     "LGPL-3.0-or-later",
     "CC0",
+    "MIT",
 ]
 
 
