@@ -15,6 +15,8 @@ const NS = {
     hashes: 'urn:xmpp:hashes:2',
     xhtml: 'http://www.w3.org/1999/xhtml',
     svg: 'http://www.w3.org/2000/svg',
+    jingle: 'urn:xmpp:jingle:1',
+    jingle_sxe: 'urn:xmpp:jingle:transports:sxe',
 };
 
 function nsResolver(prefix) {
@@ -187,7 +189,69 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function initRoster(connection)
     {
+        const resources_dict = {};
         const tr_dict = {};
+        const [bare, resource] = connection.jid.split('/', 2);
+        addContact(bare);
+
+        function onJingle(result_iq)
+        {
+            // TODO: don’t assume this is a session-accept.
+            console.log('Assuming session-accept:', result_iq);
+            const jid = result_iq.getAttributeNS(null, 'from');
+            const [bare, resource] = jid.split('/', 2);
+            const message = $msg({to: jid})
+                .c('sxe', {xmlns: 'urn:xmpp:sxe:0', id: 'what-should-this-be?', session: 'foo'})
+                    .c('connect');
+            connection.send(message);
+        }
+
+        function onJingleError(string)
+        {
+            console.log('Failed to initiate Jingle session: ' + string);
+        }
+
+        function addContact(jid)
+        {
+            const tr = document.createElementNS(NS.xhtml, 'tr');
+            tr.setAttributeNS(null, 'style', 'opacity: 50%');
+            resources_dict[jid] = {};
+            console.log(resources_dict);
+            tr_dict[jid] = tr;
+            const td = document.createElementNS(NS.xhtml, 'td');
+            const a = document.createElementNS(NS.xhtml, 'a');
+            a.setAttributeNS(null, 'href', 'xmpp:' + jid);
+            a.addEventListener('click', function(evt) {
+                evt.preventDefault();
+                const bare = evt.target.href.substr(5);
+                console.log(bare);
+                const resources = resources_dict[bare];
+                let good_resource = null;
+                for (let resource in resources) {
+                    if (resources[resource]) {
+                        good_resource = resource;
+                        break;
+                    }
+                }
+                if (good_resource === null)
+                    return;
+                const jid = bare + '/' + good_resource;
+                const iq = $iq({type: 'set', to: jid})
+                    .c('jingle', {xmlns: NS.jingle, action: 'session-initiate', initiator: connection.jid, sid: 'foo'})
+                        .c('content', {creator: 'initiator', name: 'collaborative edition'})
+                            // XXX: Standardise the application namespaces!
+                            .c('description', {xmlns: 'urn:xmpp:jingle:apps:svg'}).up()
+                            .c('transport', {xmlns: NS.jingle_sxe})
+                                .c('host')
+                                    .t(jid)
+                connection.sendIQ(iq, onJingle, onJingleError.bind(null, 'Jingle session-initiate failed.'));
+            });
+            const text = document.createTextNode(jid);
+            a.appendChild(text);
+            td.appendChild(a);
+            tr.appendChild(td);
+            roster_table.lastChild.appendChild(tr);
+        }
 
         function onRoster(result_iq)
         {
@@ -201,18 +265,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const name = item.getAttributeNS(null, 'name');
                 const groups = item.children;
                 console.log("got contact:", jid, subscription, name, groups);
-
-                const tr = document.createElementNS(NS.xhtml, 'tr');
-                tr.setAttributeNS(null, 'style', 'opacity: 50%');
-                tr_dict[jid] = tr;
-                const td = document.createElementNS(NS.xhtml, 'td');
-                const a = document.createElementNS(NS.xhtml, 'a');
-                a.setAttributeNS(null, 'href', 'xmpp:' + jid);
-                const text = document.createTextNode(jid);
-                a.appendChild(text);
-                td.appendChild(a);
-                tr.appendChild(td);
-                roster_table.lastChild.appendChild(tr);
+                addContact(jid);
             }
         }
 
@@ -239,7 +292,9 @@ document.addEventListener('DOMContentLoaded', function () {
                         has_sxe = true;
                 }
                 if (has_jingle_transport && has_sxe) {
-                    console.log("Hello Inkscape!");
+                    console.log('Hello Inkscape!', jid);
+                    resources_dict[bare][resource] = true;
+                    console.log(resources_dict);
                 }
             }
 
@@ -250,6 +305,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const jid = presence.getAttributeNS(null, 'from');
             const [bare, resource] = jid.split('/', 2);
+            if (resource !== undefined) {
+                resources_dict[bare][resource] = false;
+                console.log(resources_dict);
+            }
             const type = presence.getAttributeNS(null, 'type');
             console.log("got presence:", bare, resource, type);
 
