@@ -17,6 +17,7 @@ const NS = {
     svg: 'http://www.w3.org/2000/svg',
     jingle: 'urn:xmpp:jingle:1',
     jingle_sxe: 'urn:xmpp:jingle:transports:sxe',
+    sxe: 'urn:xmpp:sxe:0',
 };
 
 function nsResolver(prefix) {
@@ -84,6 +85,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const connected_div = document.getElementById('connected');
     const roster_table = document.getElementById('roster');
+    const canvas_div = document.getElementById('canvas');
 
     const avatar_img = document.getElementById('avatar');
 
@@ -104,7 +106,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 connection = new Strophe.Connection(bosh_service);
                 connection.rawInput = rawInput;
                 connection.rawOutput = rawOutput;
-                connection.connect(jid,
+                connection.connect(jid + '/coucou',
                                    pass_element.value,
                                    onConnect);
             });
@@ -191,6 +193,7 @@ document.addEventListener('DOMContentLoaded', function () {
     {
         const resources_dict = {};
         const tr_dict = {};
+        const rid_dict = {};
         const [bare, resource] = connection.jid.split('/', 2);
         addContact(bare);
 
@@ -200,7 +203,7 @@ document.addEventListener('DOMContentLoaded', function () {
             console.log('Assuming session-accept:', result_iq);
             const jid = result_iq.getAttributeNS(null, 'from');
             const [bare, resource] = jid.split('/', 2);
-            const message = $msg({to: jid})
+            const message = $msg({to: jid, type: 'chat', id: 'connect'})
                 .c('sxe', {xmlns: 'urn:xmpp:sxe:0', id: 'what-should-this-be?', session: 'foo'})
                     .c('connect');
             connection.send(message);
@@ -293,6 +296,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
                 if (has_jingle_transport && has_sxe) {
                     console.log('Hello Inkscape!', jid);
+                    const tr = tr_dict[bare];
+                    tr.setAttributeNS(null, 'style', 'opacity: 100%');
                     resources_dict[bare][resource] = true;
                     console.log(resources_dict);
                 }
@@ -316,9 +321,6 @@ document.addEventListener('DOMContentLoaded', function () {
             // TODO: handle more than one resource per contact.
             const tr = tr_dict[bare];
             if (type === null) {
-                if (tr !== undefined) {
-                    tr.setAttributeNS(null, 'style', 'opacity: 100%');
-                }
                 const caps = parseXPath(presence, './caps:c', XPathResult.ORDERED_NODE_ITERATOR_TYPE).iterateNext();
                 if (caps !== null) {
                     const node = caps.getAttributeNS(null, 'node');
@@ -340,8 +342,91 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
                 */
             } else if (type === 'unavailable') {
-                if (tr !== undefined) {
+                const resources = resources_dict[bare];
+                delete resources[resource];
+                let disconnect = true;
+                for (let resource in resources) {
+                    if (resources[resource]) {
+                        disconnect = true;
+                        break;
+                    }
+                }
+                console.log('disconnect?', disconnect);
+                if (tr !== undefined && disconnect) {
                     tr.setAttributeNS(null, 'style', 'opacity: 50%');
+                }
+            }
+
+            return true;
+        }
+
+        function onMessage(message)
+        {
+            const jid = message.getAttributeNS(null, 'from');
+            const [bare, resource] = jid.split('/', 2);
+            if (resource !== undefined) {
+                resources_dict[bare][resource] = false;
+                console.log(resources_dict);
+            }
+            const type = message.getAttributeNS(null, 'type');
+            console.log("got message:", bare, resource, type);
+
+            const sxe = parseXPath(message, './sxe:sxe', XPathResult.ORDERED_NODE_ITERATOR_TYPE).iterateNext();
+            console.log(sxe);
+            if (sxe !== null) {
+                const child = sxe.firstChild;
+                console.log(child);
+                if (child.localName == 'state-offer') {
+                    const message = $msg({to: jid, type: 'chat', id: 'state-accept'})
+                        .c('sxe', {xmlns: 'urn:xmpp:sxe:0', id: 'coucou', session: 'foo'})
+                            .c('accept-state');
+                    connection.send(message);
+                } else if (child.localName == 'state') {
+                    for (let change of child.children) {
+                        console.log(change);
+                        if (change.localName == 'new') {
+                            const rid = change.getAttributeNS(null, 'rid');
+                            const type = change.getAttributeNS(null, 'type');
+                            const version = change.getAttributeNS(null, 'version');
+                            let parent = change.getAttributeNS(null, 'parent');
+                            const primary_weight = change.getAttributeNS(null, 'primary-weight');
+                            const ns = change.getAttributeNS(null, 'ns');
+                            const name = change.getAttributeNS(null, 'name');
+                            const chdata = change.getAttributeNS(null, 'chdata');
+                            const pitarget = change.getAttributeNS(null, 'pitarget');
+                            const pidata = change.getAttributeNS(null, 'pidata');
+                            const creator = change.getAttributeNS(null, 'creator');
+                            const last_modified_by = change.getAttributeNS(null, 'last-modified-by');
+
+                            console.log('parent', parent);
+                            if (parent !== null) {
+                                parent = rid_dict[parent];
+                                if (parent === null) {
+                                    console.warn('Invalid parent!');
+                                    return;
+                                }
+                            } else
+                                parent = canvas_div;
+                            console.log('parent2', parent);
+
+                            if (type == 'element') {
+                                const elem = document.createElementNS(ns, name);
+                                parent.appendChild(elem);
+                                rid_dict[rid] = elem;
+                            } else if (type == 'attr') {
+                                parent.setAttributeNS(ns, name, chdata);
+                                // TODO: store rid.
+                            } else if (type == 'text') {
+                                const text = document.createTextNode(chdata);
+                                parent.appendChild(text);
+                                rid_dict[rid] = text;
+                            } else if (type == 'comment') {
+                            } else if (type == 'processinginstruction') {
+                            } else {
+                                // TODO: Invalid!
+                            }
+                        }
+                    }
                 }
             }
 
@@ -355,5 +440,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const presence = $pres();
         connection.addHandler(onPresence, null, 'presence');
         connection.send(presence);
+
+        connection.addHandler(onMessage, null, 'message');
     }
 });
