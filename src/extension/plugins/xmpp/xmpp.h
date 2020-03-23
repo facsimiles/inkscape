@@ -17,6 +17,7 @@
 #include <gloox/jinglesessionhandler.h>
 #include <gloox/jinglesessionmanager.h>
 #include <gloox/jinglesession.h>
+#include <gloox/sxesession.h>
 #include <glib.h>
 #include <gmodule.h>
 #include <memory>
@@ -37,7 +38,7 @@ class Extension;
 
 namespace Internal {
 
-class InkscapeClient : gloox::ConnectionListener, gloox::LogHandler, gloox::Jingle::SessionHandler {
+class InkscapeClient : gloox::ConnectionListener, gloox::LogHandler, gloox::Jingle::SessionHandler, gloox::SxeSessionHandler {
 public:
     InkscapeClient(gloox::JID jid, const std::string& password);
     bool connect();
@@ -45,6 +46,7 @@ public:
     bool isConnected();
     gloox::ConnectionError recv();
     void send(gloox::Tag *tag);
+    void sendChanges(gloox::JID recipient, std::string& sid, std::vector<gloox::Sxe::StateChange> state_changes);
     static int runLoop(void *data);
 
 private:
@@ -61,10 +63,18 @@ private:
     void handleSessionActionError(gloox::Jingle::Action action, gloox::Jingle::Session* session, const gloox::Error* error) override;
     void handleIncomingSession(gloox::Jingle::Session* session) override;
 
+    // From SxeSessionHandler
+    std::vector<gloox::Sxe::StateChange> getCurrentState(const std::string& session, const std::string& id) override;
+
 private:
     std::unique_ptr<gloox::Client> client;
     std::unique_ptr<gloox::Jingle::SessionManager> session_manager;
+    std::unique_ptr<gloox::SxeSessionManager> sxe_manager;
     bool connected;
+
+// XXX: hack
+public:
+    std::string m_rid;
 };
 
 

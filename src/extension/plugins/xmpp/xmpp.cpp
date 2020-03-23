@@ -11,7 +11,6 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <gloox/sxe.h>
 #include <gloox/tag.h>
 #include <gloox/jid.h>
 #include <gloox/client.h>
@@ -19,6 +18,8 @@
 #include <gloox/message.h>
 #include <gloox/jinglesessionmanager.h>
 #include <gloox/jinglecontent.h>
+#include <gloox/sxe.h>
+#include <gloox/sxesession.h>
 #include <gloox/jinglesxe.h>
 
 #include <gtkmm/adjustment.h>
@@ -114,6 +115,7 @@ InkscapeClient::InkscapeClient(JID jid, const std::string& password)
     session_manager = std::unique_ptr<Jingle::SessionManager>(new Jingle::SessionManager(client.get(), this));
     session_manager->registerPlugin(new Jingle::Content());
     session_manager->registerPlugin(new Jingle::SxePlugin());
+    sxe_manager = std::unique_ptr<SxeSessionManager>(new SxeSessionManager(client.get(), this));
     client->registerConnectionListener(this);
     //client->logInstance().registerLogHandler(LogLevelDebug, LogAreaXmlOutgoing | LogAreaXmlIncoming, this);
     client->logInstance().registerLogHandler(LogLevelDebug, ~0, this);
@@ -144,6 +146,11 @@ ConnectionError InkscapeClient::recv()
 void InkscapeClient::send(Tag *tag)
 {
     client->send(tag);
+}
+
+void InkscapeClient::sendChanges(JID recipient, std::string& sid, std::vector<Sxe::StateChange> state_changes)
+{
+    sxe_manager->sendChanges(recipient, sid, state_changes);
 }
 
 int InkscapeClient::runLoop(void *data)
@@ -242,6 +249,41 @@ void InkscapeClient::handleIncomingSession(Jingle::Session* session)
     printf("handleIncomingSession(session=%p)\n", session);
 }
 
+std::vector<Sxe::StateChange> InkscapeClient::getCurrentState(const std::string& session, const std::string& id)
+{
+    printf("getCurrentState(session=%s, id=%s)\n", session.c_str(), id.c_str());
+    std::vector<Sxe::StateChange> state;
+    Sxe::DocumentBegin document_begin = {
+        .prolog = "data:image/svg+xml,<?xml version=\"1.0\" encoding=\"UTF-8\"?>",
+    };
+    Sxe::StateChange begin = {
+        .type = Sxe::StateChangeDocumentBegin,
+        .document_begin = document_begin,
+    };
+    state.push_back(begin);
+    m_rid = get_uuid();
+    Sxe::New new_ = Sxe::New::Element(
+        /*rid*/  m_rid.c_str(),
+        /*ns*/   "http://www.w3.org/2000/svg",
+        /*name*/ "svg"
+    );
+    Sxe::StateChange change = {
+        .type = Sxe::StateChangeNew,
+        .new_ = new_,
+    };
+    state.push_back(change);
+    Sxe::DocumentEnd document_end = {
+        .last_sender = "foo@bar/baz",
+        .last_id = "unknown",
+    };
+    Sxe::StateChange end = {
+        .type = Sxe::StateChangeDocumentEnd,
+        .document_end = document_end,
+    };
+    state.push_back(end);
+    return state;
+}
+
 void XMPPObserver::notifyUndoCommitEvent(Event *ee)
 {
     XML::Event *e = ee->event;
@@ -272,14 +314,12 @@ void XMPPObserver::notifyUndoCommitEvent(Event *ee)
             }
             name = name.substr(4);
 
-            Sxe::New new_ = {
-                .rid = rid.c_str(),
-                .type = "element",
-                .name = name.c_str(),
-                .ns = "http://www.w3.org/2000/svg",
-                .parent = "",
-                .chdata = "",
-            };
+            Sxe::New new_ = Sxe::New::Element(
+                /*rid*/  rid.c_str(),
+                /*parent*/  client->m_rid.c_str(),
+                /*ns*/   "http://www.w3.org/2000/svg",
+                /*name*/ name.c_str()
+            );
             Sxe::StateChange change = {
                 .type = Sxe::StateChangeNew,
                 .new_ = new_,
@@ -287,27 +327,41 @@ void XMPPObserver::notifyUndoCommitEvent(Event *ee)
             std::vector<Sxe::StateChange> state_changes = {};
             state_changes.push_back(change);
 
+            // XXX: huge hack to keep all rids on the stack…
+            size_t num_attrs = 0;
             for (Util::List<XML::AttributeRecord const> it = node->attributeList(); it; ++it) {
-                std::string attr_rid = get_uuid();
+                ++num_attrs;
+            }
+            std::vector<std::string> rids;
+            rids.reserve(num_attrs);
 
-                Sxe::New new_ = {
-                    .rid = attr_rid.c_str(),
-                    .type = "attr",
-                    .name = g_quark_to_string(it->key),
-                    .ns = "",
-                    .parent = rid.c_str(),
-                    .chdata = it->value,
-                };
+            size_t cur_attr = 0;
+            for (Util::List<XML::AttributeRecord const> it = node->attributeList(); it; ++it) {
+                rids.push_back(get_uuid());
+
+                Sxe::New new_ = Sxe::New::Attr(
+                    /*rid*/    rids[cur_attr].c_str(),
+                    /*parent*/ rid.c_str(),
+                    /*name*/   g_quark_to_string(it->key),
+                    /*chdata*/ it->value
+                );
                 Sxe::StateChange change = {
                     .type = Sxe::StateChangeNew,
                     .new_ = new_,
                 };
                 state_changes.push_back(change);
+                ++cur_attr;
             }
 
-            Message msg(Message::Normal, JID("linkmauve@linkmauve.fr"));
-            msg.addExtension(new Sxe("session", "id", Sxe::TypeState, {}, state_changes));
-            client->send(msg.tag());
+            std::vector<Sxe::StateChange> copy(state_changes);
+            Sxe* coucou = new Sxe("session", "id", copy);
+            fprintf(stderr, "coucou: %s\n", coucou->tag()->xml().c_str());
+
+            //Message msg(Message::Normal, JID("linkmauve@linkmauve.fr"));
+            //msg.addExtension(new Sxe("session", "id", Sxe::TypeState, {}, state_changes));
+            std::string sid = "foo";
+            client->sendChanges(JID("test@linkmauve.fr/coucou"), sid, state_changes);
+            printf("coucou\n");
         } else if ((edel = dynamic_cast<XML::EventDel *>(e))) {
             std::cout << "EventDel" << std::endl;
             sp_repr_write_stream(edel->child, *writer, 0, false, GQuark(0), 0, 0);
