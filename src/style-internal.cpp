@@ -1265,6 +1265,17 @@ SPIString::operator==(const SPIBase& rhs) {
 
 // SPIShapes ------------------------------------------------------------
 
+SPIShapes::SPIShapes()
+    : SPIString(false)
+{
+}
+
+
+//SPIShapes::~SPIShapes() {
+//    clear(); // Will segfault if called here. Seems to be already cleared.
+//}
+
+
 // Used to add/remove listeners for text wrapped in shapes.
 // Note: this is done differently than for patterns, etc. where presentation attributes can be used.
 // 'shape-inside' and 'shape-subtract' are only properties.
@@ -1283,28 +1294,22 @@ SPIShapes::read( gchar const *str) {
     // The object/repr this property is connected to..
     SPObject* object = style->object;
     if (!object) {
+        std::cout << "  No object" << std::endl;
         return;
     }
     SPDocument* document = object->document;
     Inkscape::XML::Node *text_repr = object->getRepr();
 
-    // Clear previously set listeners
-    for (auto shape_id : shape_ids) {
-        SPObject* shape_object = document->getObjectById (shape_id);
-        if (shape_object) {
-            Inkscape::XML::Node *shape_node = shape_object->getRepr();
-            shape_node->removeListenerByData(object);
-        }
-    }
-    shape_ids.clear();
+    // clear(); // Already cleared! (In SPStyle::read.) Calling again causes segfault.
 
     // Add new listeners
     std::vector<Glib::ustring> shapes_url = Glib::Regex::split_simple(" ", str);
     for (auto shape_url : shapes_url) {
-
         if ( shape_url.compare(0,5,"url(#") != 0 || shape_url.compare(shape_url.size()-1,1,")") != 0 ){
             std::cerr << "SPIShapes::read: Invalid shape value: " << shape_url << std::endl;
         } else {
+            auto uri = extract_uri(shape_url.c_str()); // Do before we erase "url(#"
+
             shape_url.erase(0,5);
             shape_url.erase(shape_url.size()-1,1);
 
@@ -1314,11 +1319,63 @@ SPIShapes::read( gchar const *str) {
             if (shape_object) {
                 Inkscape::XML::Node *shape_node = shape_object->getRepr();
                 shape_node->addListener(&text_shape_events, object);
+
+                // This ups the href count of the shape. This is required so that vacuuming a
+                // document does not delete shapes stored in <defs>. Since this is required, it
+                // might make sense to follow the filter or pattern pattern (no pun intended)
+                // rather than add the listner above.
+                SPShapeReference *href = new SPShapeReference(object);
+                // ref->changedSignal().connect(sigc::bind(sigc::ptr_func(sp_shape_ref_changed), style));
+                try {
+                    href->attach(Inkscape::URI(uri.c_str()));
+                } catch (Inkscape::BadURIException &e) {
+                    g_warning("%s", e.what());
+                    href->detach();
+                    delete href;
+                    href = nullptr;
+                }
+                if (href) {
+                    hrefs.emplace_back(href);
+                }
             }
         }
     }
 }
 
+void
+SPIShapes::clear() {
+
+    SPIBase::clear();
+
+    // The object/repr this property is connected to..
+    SPObject* object = style->object;
+    if (!object) {
+        return;
+    }
+    SPDocument* document = object->document;
+
+    // Clear listeners
+    for (auto shape_id : shape_ids) {
+        SPObject* shape_object = document->getObjectById (shape_id);
+        if (shape_object) {
+            Inkscape::XML::Node *shape_node = shape_object->getRepr();
+            shape_node->removeListenerByData(object);
+        }
+    }
+    shape_ids.clear();
+
+    for (auto href : hrefs) {
+        if (href->getObject()) {
+            SPObject* shape_object = href->getObject();
+            if (SP_IS_OBJECT(shape_object)) {
+                href->detach(); // Decreases href count of shape.
+            }
+        }
+        delete href;
+        href = nullptr;
+    }
+    hrefs.clear();
+}
 
 // SPIColor -------------------------------------------------------------
 
