@@ -413,9 +413,9 @@ foreach(flag ${INKSCAPE_CXX_FLAGS_DEBUG})
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ${flag}")
 endforeach()
 
-# Add color output to ninja on Mac
-if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
-    add_compile_options (-fcolor-diagnostics)
+# Add color output to ninja
+if ("${CMAKE_GENERATOR}" MATCHES "Ninja")
+    add_compile_options (-fdiagnostics-color)
 endif ()
 
 list(REMOVE_DUPLICATES INKSCAPE_LIBS)
