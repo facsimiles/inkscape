@@ -14,11 +14,12 @@ set(extension_SRC
 	print.cpp
 	system.cpp
 	timer.cpp
-    loader.cpp
+	loader.cpp
 
 	implementation/implementation.cpp
-	implementation/xslt.cpp
 	implementation/script.cpp
+	implementation/wasmer.cpp
+	implementation/xslt.cpp
 
 	internal/bluredge.cpp
 	internal/cairo-ps-out.cpp
@@ -84,10 +85,11 @@ set(extension_SRC
 	print.h
 	system.h
 	timer.h
-    loader.h
+	loader.h
 
 	implementation/implementation.h
 	implementation/script.h
+	implementation/wasmer.h
 	implementation/xslt.h
 
 	internal/bluredge.h
