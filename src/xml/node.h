@@ -14,16 +14,17 @@
 #define SEEN_INKSCAPE_XML_NODE_H
 
 #include "gc-anchored.h"
-#include "util/list.h"
 #include "util/const_char_ptr.h"
+#include "util/list.h"
+#include <glibmm/ustring.h>
 
 namespace Inkscape {
 namespace XML {
 
 struct AttributeRecord;
 struct Document;
-class  Event;
-class  NodeObserver;
+class Event;
+class NodeObserver;
 struct NodeEventVector;
 
 /**
@@ -31,10 +32,10 @@ struct NodeEventVector;
  */
 enum NodeType {
     DOCUMENT_NODE, ///< Top-level document node. Do not confuse with the root node.
-    ELEMENT_NODE, ///< Regular element node, e.g. &lt;group /&gt;.
+    ELEMENT_NODE,  ///< Regular element node, e.g. &lt;group /&gt;.
     TEXT_NODE, ///< Text node, e.g. "Some text" in &lt;group&gt;Some text&lt;/group&gt; is represented by a text node.
     COMMENT_NODE, ///< Comment node, e.g. &lt;!-- some comment --&gt;
-    PI_NODE ///< Processing instruction node, e.g. &lt;?xml version="1.0" encoding="utf-8" standalone="no"?&gt;
+    PI_NODE       ///< Processing instruction node, e.g. &lt;?xml version="1.0" encoding="utf-8" standalone="no"?&gt;
 };
 
 // careful; GC::Anchored should only appear once in the inheritance
@@ -71,7 +72,7 @@ enum NodeType {
  * @see Inkscape::XML::NodeObserver
  */
 class Node : public Inkscape::GC::Anchored {
-public:
+  public:
     Node() = default;
     ~Node() override = default;
 
@@ -84,7 +85,7 @@ public:
      * @brief Get the type of the node
      * @return NodeType enumeration member corresponding to the type of the node.
      */
-    virtual NodeType type() const=0;
+    virtual NodeType type() const = 0;
 
     /**
      * @brief Get the name of the element node
@@ -94,13 +95,13 @@ public:
      *
      * @return Name for element nodes, NULL for others
      */
-    virtual char const *name() const=0;
+    virtual char const *name() const = 0;
     /**
      * @brief Get the integer code corresponding to the node's name
      * @return GQuark code corresponding to the name
      */
-    virtual int code() const=0;
-    
+    virtual int code() const = 0;
+
     /**
      * @brief Get the index of this node in parent's child order
      *
@@ -109,14 +110,14 @@ public:
      *
      * @return The node's index, or 0 if the node does not have a parent
      */
-    virtual unsigned position() const=0;
+    virtual unsigned position() const = 0;
 
     /**
      * @brief Get the number of children of this node
      * @return The number of children
      */
-    virtual unsigned childCount() const=0;
-    
+    virtual unsigned childCount() const = 0;
+
     /**
      * @brief Get the content of a text or comment node
      *
@@ -125,8 +126,8 @@ public:
      *
      * @return The node's content
      */
-    virtual char const *content() const=0;
-    
+    virtual char const *content() const = 0;
+
     /**
      * @brief Get the string representation of a node's attribute
      *
@@ -138,8 +139,8 @@ public:
      *
      * @param key The name of the node's attribute
      */
-    virtual char const *attribute(char const *key) const=0;
-    
+    virtual char const *attribute(char const *key) const = 0;
+
     /**
      * @brief Get a list of the node's attributes
      *
@@ -149,7 +150,7 @@ public:
      * @todo This method should return std::map<Glib::Quark const, gchar const *>
      *       or something similar with a custom allocator
      */
-    virtual Inkscape::Util::List<AttributeRecord const> attributeList() const=0;
+    virtual Inkscape::Util::List<AttributeRecord const> attributeList() const = 0;
 
     /**
      * @brief Check whether this node has any attribute that matches a string
@@ -162,15 +163,15 @@ public:
      * @param partial_name The string to match against all attributes
      * @return true if there is such an attribute, false otherwise
      */
-    virtual bool matchAttributeName(char const *partial_name) const=0;
+    virtual bool matchAttributeName(char const *partial_name) const = 0;
 
     /*@}*/
-    
+
     /**
      * @name Modify the node
      * @{
      */
-    
+
     /**
      * @brief Set the position of this node in parent's child order
      *
@@ -178,8 +179,8 @@ public:
      *
      * @param pos The new position in parent's child order
      */
-    virtual void setPosition(int pos)=0;
-    
+    virtual void setPosition(int pos) = 0;
+
     /**
      * @brief Set the content of a text or comment node
      *
@@ -187,8 +188,8 @@ public:
      *
      * @param value The node's new content
      */
-    virtual void setContent(char const *value)=0;
-    
+    virtual void setContent(char const *value) = 0;
+
     //@{
     /**
      * @brief Change an attribute of this node
@@ -200,8 +201,8 @@ public:
      * @param is_interactive Ignored
      */
 
-    void setAttribute(Inkscape::Util::const_char_ptr key,
-                      Inkscape::Util::const_char_ptr value) {
+    void setAttribute(Inkscape::Util::const_char_ptr key, Inkscape::Util::const_char_ptr value)
+    {
         this->setAttributeImpl(key.data(), value.data());
     }
 
@@ -212,10 +213,10 @@ public:
      * @param value The new value of the attribute
      *
      */
-    void setAttributeOrRemoveIfEmpty(Inkscape::Util::const_char_ptr key,
-                                     Inkscape::Util::const_char_ptr value) {
+    void setAttributeOrRemoveIfEmpty(Inkscape::Util::const_char_ptr key, Inkscape::Util::const_char_ptr value)
+    {
         this->setAttributeImpl(key.data(),
-                (value.data() == nullptr || value.data()[0]=='\0') ? nullptr : value.data());
+                               (value.data() == nullptr || value.data()[0] == '\0') ? nullptr : value.data());
     }
 
 
@@ -225,9 +226,7 @@ public:
      * @param key Name of the attribute to delete
      *
      */
-    void removeAttribute(Inkscape::Util::const_char_ptr key) {
-        this->setAttributeImpl(key.data(), nullptr);
-    }
+    void removeAttribute(Inkscape::Util::const_char_ptr key) { this->setAttributeImpl(key.data(), nullptr); }
 
     //@}
     /**
@@ -239,22 +238,22 @@ public:
      *        the name of this node
      */
     virtual void setCodeUnsafe(int code) = 0;
-    
+
     /*@}*/
 
-    
+
     /**
      * @name Traverse the XML tree
      * @{
      */
-     
+
     //@{
     /**
      * @brief Get the node's associated document
      * @return The document to which the node belongs. Never NULL.
      */
-    virtual Document *document()=0;
-    virtual Document const *document() const=0;
+    virtual Document *document() = 0;
+    virtual Document const *document() const = 0;
     //@}
 
     //@{
@@ -269,8 +268,8 @@ public:
      *
      * @return A pointer to the root element node, or NULL if the node is detached
      */
-    virtual Node *root()=0;
-    virtual Node const *root() const=0;
+    virtual Node *root() = 0;
+    virtual Node const *root() const = 0;
     //@}
 
     //@{
@@ -281,8 +280,8 @@ public:
      *
      * @return Pointer to the parent, or NULL
      */
-    virtual Node *parent()=0;
-    virtual Node const *parent() const=0;
+    virtual Node *parent() = 0;
+    virtual Node const *parent() const = 0;
     //@}
 
     //@{
@@ -296,10 +295,10 @@ public:
      * @return Pointer to the next sibling, or NULL
      * @see Inkscape::XML::previous_node()
      */
-    virtual Node *next()=0;
-    virtual Node const *next() const=0;
-    virtual Node *prev()=0;
-    virtual Node const *prev() const=0;
+    virtual Node *next() = 0;
+    virtual Node const *next() const = 0;
+    virtual Node *prev() = 0;
+    virtual Node const *prev() const = 0;
     //@}
 
     //@{
@@ -310,10 +309,10 @@ public:
      *
      * @return Pointer to the first child, or NULL
      */
-    virtual Node *firstChild()=0;
-    virtual Node const *firstChild() const=0;
+    virtual Node *firstChild() = 0;
+    virtual Node const *firstChild() const = 0;
     //@}
-    
+
     //@{
     /**
      * @brief Get the last child of this node
@@ -322,10 +321,10 @@ public:
      *
      * @return Pointer to the last child, or NULL
      */
-    virtual Node *lastChild()=0;
-    virtual Node const *lastChild() const=0;
+    virtual Node *lastChild() = 0;
+    virtual Node const *lastChild() const = 0;
     //@}
-    
+
     //@{
     /**
      * @brief Get the child of this node with a given index
@@ -335,12 +334,12 @@ public:
      * @param index The zero-based index of the child to retrieve
      * @return Pointer to the appropriate child, or NULL
      */
-    virtual Node *nthChild(unsigned index)=0;
-    virtual Node const *nthChild(unsigned index) const=0;
+    virtual Node *nthChild(unsigned index) = 0;
+    virtual Node const *nthChild(unsigned index) const = 0;
     //@}
-    
+
     /*@}*/
-    
+
     /**
      * @name Manipulate the XML tree
      * @{
@@ -357,7 +356,7 @@ public:
      * @param doc The document in which the duplicate should be created
      * @return A pointer to the duplicated node
      */
-    virtual Node *duplicate(Document *doc) const=0;
+    virtual Node *duplicate(Document *doc) const = 0;
 
     /**
      * @brief Insert another node as a child of this node
@@ -368,7 +367,7 @@ public:
      * @param child The node to insert
      * @param after The node after which the inserted node should be placed, or NULL
      */
-    virtual void addChild(Node *child, Node *after)=0;
+    virtual void addChild(Node *child, Node *after) = 0;
 
     /**
      * @brief Insert another node as a child of this node
@@ -388,8 +387,8 @@ public:
      * @brief Append a node as the last child of this node
      * @param child The node to append
      */
-    virtual void appendChild(Node *child)=0;
-    
+    virtual void appendChild(Node *child) = 0;
+
     /**
      * @brief Remove a child of this node
      *
@@ -400,8 +399,8 @@ public:
      *
      * @param child The child to remove
      */
-    virtual void removeChild(Node *child)=0;
-    
+    virtual void removeChild(Node *child) = 0;
+
     /**
      * @brief Move a given node in this node's child order
      *
@@ -410,22 +409,22 @@ public:
      * @param child The node to move in the order
      * @param after The sibling node after which the moved node should be placed
      */
-    virtual void changeOrder(Node *child, Node *after)=0;
+    virtual void changeOrder(Node *child, Node *after) = 0;
 
-     /**
+    /**
      * @brief Remove all elements that not in src node
      * @param src The node to check for elements into this node
      * @param key The attribute to use as the identity attribute
      */
-    virtual void cleanOriginal(Node *src, gchar const *key)=0;
+    virtual void cleanOriginal(Node *src, gchar const *key) = 0;
 
 
-     /**
+    /**
      * @brief Compare 2 nodes equality
      * @param other The other node to compare
      * @param recursive Recursive mode check
      */
-    virtual bool equal(Node const *other, bool recursive)=0; 
+    virtual bool equal(Node const *other, bool recursive) = 0;
     /**
      * @brief Merge all children of another node with the current
      *
@@ -443,8 +442,8 @@ public:
      * @param key If clean callback to cleanOriginal
      */
 
-    virtual void mergeFrom(Node const *src, char const *key, bool extension = false, bool clean = false)=0;
-    
+    virtual void mergeFrom(Node const *src, char const *key, bool extension = false, bool clean = false) = 0;
+
     /*@}*/
 
 
@@ -463,12 +462,12 @@ public:
      *
      * @param observer The observer object
      */
-    virtual void addObserver(NodeObserver &observer)=0;
+    virtual void addObserver(NodeObserver &observer) = 0;
     /**
      * @brief Remove an object from the list of observers
      * @param observer The object to be removed
      */
-    virtual void removeObserver(NodeObserver &observer)=0;
+    virtual void removeObserver(NodeObserver &observer) = 0;
     /**
      * @brief Generate a sequence of events corresponding to the state of this node
      *
@@ -479,7 +478,7 @@ public:
      *
      * @param observer The node observer to notify of the events
      */
-    virtual void synthesizeEvents(NodeObserver &observer)=0;
+    virtual void synthesizeEvents(NodeObserver &observer) = 0;
 
     /**
      * @brief Add an object that will be notified of the changes to this node and its descendants
@@ -491,42 +490,86 @@ public:
      *
      * @param observer The observer object
      */
-    virtual void addSubtreeObserver(NodeObserver &observer)=0;
-    
+    virtual void addSubtreeObserver(NodeObserver &observer) = 0;
+
     /**
      * @brief Remove an object from the subtree observers list
      * @param observer The object to be removed
      */
-    virtual void removeSubtreeObserver(NodeObserver &observer)=0;
+    virtual void removeSubtreeObserver(NodeObserver &observer) = 0;
 
     /**
      * @brief Add a set node change callbacks with an associated data
      * @deprecated Use addObserver(NodeObserver &) instead
      */
-    virtual void addListener(NodeEventVector const *vector, void *data)=0;
+    virtual void addListener(NodeEventVector const *vector, void *data) = 0;
     /**
      * @brief Remove a set of node change callbacks by their associated data
      * @deprecated Use removeObserver(NodeObserver &) instead
      */
-    virtual void removeListenerByData(void *data)=0;
+    virtual void removeListenerByData(void *data) = 0;
     /**
      * @brief Generate a sequence of events corresponding to the state of this node
      * @deprecated Use synthesizeEvents(NodeObserver &) instead
      */
-    virtual void synthesizeEvents(NodeEventVector const *vector, void *data)=0;
+    virtual void synthesizeEvents(NodeEventVector const *vector, void *data) = 0;
 
-    virtual void recursivePrintTree(unsigned level)=0;
-    
+    virtual void recursivePrintTree(unsigned level) = 0;
+
     /*@}*/
 
-protected:
-    Node(Node const &) : Anchored() {}
+    /**
+     * @brief A simple forward iterator class to make it so we can use stdlib algorithms
+     *
+     * What I really want is to see clearer code that looks a bit like this:
+     *
+     * for (auto child : *node->firstChild()) {}
+     *
+     * This cleans up the checks and makes it so there can be fewer errors.
+     */
+    class iterator {
+      private:
+        Node *itnode;
 
-    virtual void setAttributeImpl(char const *key, char const *value)=0;
+      public:
+        iterator(Node *innode)
+            : itnode(innode)
+        {
+        }
+        iterator &operator++()
+        {
+            if (itnode != nullptr) {
+                itnode = itnode->next();
+            }
+            return *this;
+        }
+        Node *operator*() const { return itnode; }
+        bool operator==(const iterator &rhs) const { return this->itnode == rhs.itnode; }
+        bool operator!=(const iterator &rhs) const { return this->itnode != rhs.itnode; }
+        // iterator traits
+        using difference_type = Node *;
+        using value_type = Node *;
+        using pointer = const Node *;
+        using reference = const Node &;
+        using iterator_category = std::forward_iterator_tag;
+    };
+
+    /** @brief Helper to use the standard lib container functions */
+    iterator begin() { return iterator(this); }
+    /** @brief Helper to use the standard lib container functions */
+    iterator end() { return iterator(nullptr); }
+
+  protected:
+    Node(Node const &)
+        : Anchored()
+    {
+    }
+
+    virtual void setAttributeImpl(char const *key, char const *value) = 0;
 };
 
-}
-}
+} // namespace XML
+} // namespace Inkscape
 
 #endif
 /*
