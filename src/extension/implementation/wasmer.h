@@ -22,9 +22,7 @@ namespace Implementation {
 
 class Wasmer : public Implementation {
   public:
-    // ----- Constructor / destructor -----
     Wasmer() = default;
-
     virtual ~Wasmer() = default;
 
     bool load(Inkscape::Extension::Extension * /*module*/);
@@ -32,7 +30,6 @@ class Wasmer : public Implementation {
 
     bool check(Inkscape::Extension::Extension * /*module*/);
 
-    bool cancelProcessing();
     void effect(Inkscape::Extension::Effect * /*module*/, Inkscape::UI::View::View * /*document*/,
                 ImplementationDocumentCache * /*docCache*/);
 

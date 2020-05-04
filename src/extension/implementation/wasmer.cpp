@@ -19,6 +19,19 @@ namespace Inkscape {
 namespace Extension {
 namespace Implementation {
 
+class WasmerDocCache : public ImplementationDocumentCache {
+    std::string xmldoc;
+
+  public:
+    WasmerDocCache(Inkscape::UI::View::View *view);
+    std::string &getDoc() { return xmldoc; }
+};
+
+WasmerDocCache::WasmerDocCache(Inkscape::UI::View::View *view)
+    : ImplementationDocumentCache(view)
+{
+    xmldoc = "";
+}
 
 bool Wasmer::load(Inkscape::Extension::Extension *module)
 {
@@ -88,10 +101,23 @@ bool Wasmer::check(Inkscape::Extension::Extension *module)
     return true;
 }
 
-bool Wasmer::cancelProcessing() { return false; }
-void Wasmer::effect(Inkscape::Extension::Effect * /*module*/, Inkscape::UI::View::View * /*document*/,
-                    ImplementationDocumentCache * /*docCache*/)
+void Wasmer::effect(Inkscape::Extension::Effect *module, Inkscape::UI::View::View *doc,
+                    ImplementationDocumentCache *docCache)
 {
+    if (docCache == nullptr) {
+        docCache = new WasmerDocCache(doc);
+    }
+
+    WasmerDocCache *dc = dynamic_cast<WasmerDocCache *>(docCache);
+    if (dc == nullptr) {
+        g_warning("Wasmer::effect: Unable to create usable document cache");
+        return;
+    }
+
+    if (doc == nullptr) {
+        g_warning("Wasmer::effect: View not defined");
+        return;
+    }
 }
 
 } // namespace Implementation
