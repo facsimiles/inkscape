@@ -13,12 +13,15 @@
 
 #include "implementation.h"
 
+#include <memory>
+#include <wasmer.hh>
+
 namespace Inkscape {
 namespace Extension {
 namespace Implementation {
 
 class Wasmer : public Implementation {
-public:
+  public:
     // ----- Constructor / destructor -----
     Wasmer() = default;
 
@@ -29,15 +32,19 @@ public:
 
     bool check(Inkscape::Extension::Extension * /*module*/);
 
-    bool cancelProcessing ();
-    void effect(Inkscape::Extension::Effect * /*module*/,
-                        Inkscape::UI::View::View * /*document*/,
-                        ImplementationDocumentCache * /*docCache*/);
+    bool cancelProcessing();
+    void effect(Inkscape::Extension::Effect * /*module*/, Inkscape::UI::View::View * /*document*/,
+                ImplementationDocumentCache * /*docCache*/);
+
+  private:
+    std::shared_ptr<wasmer_instance_t> instance;
+
+    std::string get_module_path(Inkscape::Extension::Extension *module);
 };
 
-}  // namespace Implementation
-}  // namespace Extension
-}  // namespace Inkscape
+} // namespace Implementation
+} // namespace Extension
+} // namespace Inkscape
 
 #endif // __INKSCAPE_EXTENSION_IMPLEMENTATION_WASMER_H__
 
