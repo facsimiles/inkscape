@@ -18,7 +18,6 @@ set(extension_SRC
 
 	implementation/implementation.cpp
 	implementation/script.cpp
-	implementation/wasmer.cpp
 	implementation/xslt.cpp
 
 	internal/bluredge.cpp
@@ -89,7 +88,6 @@ set(extension_SRC
 
 	implementation/implementation.h
 	implementation/script.h
-	implementation/wasmer.h
 	implementation/xslt.h
 
 	internal/bluredge.h
@@ -168,6 +166,13 @@ if(WITH_LIBVISIO)
 	list(APPEND extension_SRC
 		internal/vsd-input.cpp
 		internal/vsd-input.h
+	)
+endif()
+
+if(WITH_WASMER)
+	list(APPEND extension_SRC
+		implementation/wasmer.cpp
+		implementation/wasmer.h
 	)
 endif()
 
