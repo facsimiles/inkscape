@@ -559,6 +559,30 @@ class Node : public Inkscape::GC::Anchored {
     /** @brief Helper to use the standard lib container functions */
     iterator end() { return iterator(nullptr); }
 
+    bool operator==(const std::string &name) const { return this->name() == name; }
+
+    template <typename T>
+    Node *findChildPath(T list)
+    {
+        return findChildPath(list.cbegin(), list.cend());
+    }
+
+    template <typename iterT>
+    Node *findChildPath(iterT itr, iterT end)
+    {
+        if (itr == end) {
+            return this;
+        }
+
+        for (auto child : *this->firstChild()) {
+            if (*child == *itr) {
+                return child->findChildPath(itr++, end);
+            }
+        }
+
+        return nullptr;
+    }
+
   protected:
     Node(Node const &)
         : Anchored()
@@ -567,6 +591,8 @@ class Node : public Inkscape::GC::Anchored {
 
     virtual void setAttributeImpl(char const *key, char const *value) = 0;
 };
+
+
 
 } // namespace XML
 } // namespace Inkscape
