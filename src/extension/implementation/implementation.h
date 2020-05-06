@@ -13,6 +13,7 @@
 #ifndef SEEN_INKSCAPE_EXTENSION_IMPLEMENTATION_H
 #define SEEN_INKSCAPE_EXTENSION_IMPLEMENTATION_H
 
+#include <memory>
 #include <vector>
 #include <sigc++/signal.h>
 #include <glibmm/value.h>
@@ -57,10 +58,10 @@ class ImplementationDocumentCache {
          */
     Inkscape::UI::View::View * _view;
 public:
-    ImplementationDocumentCache (Inkscape::UI::View::View * view) { return; };
+    ImplementationDocumentCache (Inkscape::UI::View::View * view) : _view(view) { return; };
 
     virtual ~ImplementationDocumentCache ( ) { return; };
-    Inkscape::UI::View::View const * view ( ) { return _view; };
+    Inkscape::UI::View::View * view ( ) { return _view; };
 };
 
 /**
@@ -89,7 +90,7 @@ public:
      * @return A new document cache that is valid as long as the document
      *         is not changed.
      */
-    virtual ImplementationDocumentCache * newDocCache (Inkscape::Extension::Extension * /*ext*/, Inkscape::UI::View::View * /*doc*/) { return nullptr; }
+    virtual std::shared_ptr<ImplementationDocumentCache> newDocCache (Inkscape::UI::View::View * doc) { return std::make_shared<ImplementationDocumentCache>(doc); }
 
     /** Verify any dependencies. */
     virtual bool check(Inkscape::Extension::Extension * /*module*/) { return true; }
@@ -113,12 +114,17 @@ public:
     // ----- Effect functions -----
     /** Find out information about the file. */
     virtual Gtk::Widget * prefs_effect(Inkscape::Extension::Effect *module,
-                                       Inkscape::UI::View::View *view,
                                        sigc::signal<void> *changeSignal,
-                                       ImplementationDocumentCache *docCache);
+                                       std::shared_ptr<ImplementationDocumentCache> docCache);
+    virtual Gtk::Widget * prefs_effect(Inkscape::Extension::Effect *module,
+                                       Inkscape::UI::View::View * doc,
+                                       sigc::signal<void> *changeSignal) {
+	    return this->prefs_effect(module, changeSignal, this->newDocCache(doc));
+    }
     virtual void effect(Inkscape::Extension::Effect * /*module*/,
-                        Inkscape::UI::View::View * /*document*/,
-                        ImplementationDocumentCache * /*docCache*/) {}
+                        std::shared_ptr<ImplementationDocumentCache> /*docCache*/) {}
+    virtual void effect(Inkscape::Extension::Effect *module,
+                        Inkscape::UI::View::View * doc) { this->effect(module, this->newDocCache(doc)); }
 
     // ----- Print functions -----
     virtual unsigned setup(Inkscape::Extension::Print * /*module*/) { return 0; }

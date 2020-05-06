@@ -59,7 +59,7 @@ PrefDialog::PrefDialog (Glib::ustring name, Gtk::Widget * controls, Effect * eff
             std::cout << "AH!!!  No controls and no effect!!!" << std::endl;
             return;
         }
-        controls = _effect->get_imp()->prefs_effect(_effect, SP_ACTIVE_DESKTOP, &_signal_param_change, nullptr);
+        controls = _effect->get_imp()->prefs_effect(_effect, SP_ACTIVE_DESKTOP, &_signal_param_change);
         _signal_param_change.connect(sigc::mem_fun(this, &PrefDialog::param_change));
     }
 

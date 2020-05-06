@@ -54,7 +54,7 @@ private:
     /** \brief  The document that we're working on. */
     Inkscape::UI::View::View * _doc;
     /** \brief  A document cache if we were passed one. */
-    Implementation::ImplementationDocumentCache * _docCache;
+    std::shared_ptr<Implementation::ImplementationDocumentCache> _docCache;
 
     /** \brief  The effect that we're executing in this context. */
     Effect * _effect;

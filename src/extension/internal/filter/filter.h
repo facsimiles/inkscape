@@ -42,8 +42,7 @@ public:
 	~Filter() override;
 
 	bool load(Inkscape::Extension::Extension *module) override;
-	Inkscape::Extension::Implementation::ImplementationDocumentCache * newDocCache (Inkscape::Extension::Extension * ext, Inkscape::UI::View::View * doc) override;
-	void effect(Inkscape::Extension::Effect *module, Inkscape::UI::View::View *document, Inkscape::Extension::Implementation::ImplementationDocumentCache * docCache) override;
+	void effect(Inkscape::Extension::Effect *module, std::shared_ptr<Inkscape::Extension::Implementation::ImplementationDocumentCache> docCache) override;
 
 	static void filter_init(gchar const * id, gchar const * name, gchar const * submenu, gchar const * tip, gchar const * filter);
 	static void filters_all();
@@ -51,7 +50,6 @@ public:
 	/* File loader related */
 	static void filters_all_files();
 	static void filters_load_node(Inkscape::XML::Node *node, gchar * menuname);
-
 };
 
 }; /* namespace Filter */

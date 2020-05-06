@@ -99,7 +99,7 @@ void TemplateWidget::display(TemplateLoadTab::TemplateData data)
     }
 
     if (data.is_procedural){
-        _effect_prefs = data.tpl_effect->get_imp()->prefs_effect(data.tpl_effect, SP_ACTIVE_DESKTOP, nullptr, nullptr);
+        _effect_prefs = data.tpl_effect->get_imp()->prefs_effect(data.tpl_effect, SP_ACTIVE_DESKTOP, nullptr);
         pack_start(*_effect_prefs);
     }
     _more_info_button.set_sensitive(true);

@@ -40,10 +40,9 @@ namespace Internal {
     \return Whether the load was successful
 */
 bool
-BlurEdge::load (Inkscape::Extension::Extension */*module*/)
+BlurEdge::load (Inkscape::Extension::Extension * /*module*/)
 {
-    // std::cout << "Hey, I'm Blur Edge, I'm loading!" << std::endl;
-    return TRUE;
+    return true;
 }
 
 /**
@@ -52,9 +51,12 @@ BlurEdge::load (Inkscape::Extension::Extension */*module*/)
     \param  desktop What should be edited.
 */
 void
-BlurEdge::effect (Inkscape::Extension::Effect *module, Inkscape::UI::View::View *desktop, Inkscape::Extension::Implementation::ImplementationDocumentCache * /*docCache*/)
+BlurEdge::effect (Inkscape::Extension::Effect *module, std::shared_ptr<Inkscape::Extension::Implementation::ImplementationDocumentCache> docCache)
 {
-    Inkscape::Selection * selection     = static_cast<SPDesktop *>(desktop)->selection;
+	auto view = docCache->view();
+	auto desktop = static_cast<SPDesktop *>(docCache->view());
+
+    Inkscape::Selection * selection     = desktop->selection;
 
     float width = module->get_param_float("blur-width");
     int   steps = module->get_param_int("num-steps");
@@ -68,7 +70,7 @@ BlurEdge::effect (Inkscape::Extension::Effect *module, Inkscape::UI::View::View 
 
     for(auto spitem : items) {
         std::vector<Inkscape::XML::Node *> new_items(steps);
-        Inkscape::XML::Document *xml_doc = desktop->doc()->getReprDoc();
+        Inkscape::XML::Document *xml_doc = view->doc()->getReprDoc();
         Inkscape::XML::Node * new_group = xml_doc->createElement("svg:g");
         spitem->getRepr()->parent()->appendChild(new_group);
 
@@ -94,10 +96,10 @@ BlurEdge::effect (Inkscape::Extension::Effect *module, Inkscape::UI::View::View 
                 /* Doing an inset here folks */
                 offset *= -1.0;
                 prefs->setDoubleUnit("/options/defaultoffsetwidth/value", offset, "px");
-                sp_action_perform(Inkscape::Verb::get(SP_VERB_SELECTION_INSET)->get_action(Inkscape::ActionContext(desktop)), nullptr);
+                sp_action_perform(Inkscape::Verb::get(SP_VERB_SELECTION_INSET)->get_action(Inkscape::ActionContext(view)), nullptr);
             } else if (offset > 0.0) {
                 prefs->setDoubleUnit("/options/defaultoffsetwidth/value", offset, "px");
-                sp_action_perform(Inkscape::Verb::get(SP_VERB_SELECTION_OFFSET)->get_action(Inkscape::ActionContext(desktop)), nullptr);
+                sp_action_perform(Inkscape::Verb::get(SP_VERB_SELECTION_OFFSET)->get_action(Inkscape::ActionContext(view)), nullptr);
             }
 
             selection->clear();
@@ -115,7 +117,7 @@ BlurEdge::effect (Inkscape::Extension::Effect *module, Inkscape::UI::View::View 
 }
 
 Gtk::Widget *
-BlurEdge::prefs_effect(Inkscape::Extension::Effect * module, Inkscape::UI::View::View * /*view*/, sigc::signal<void> * changeSignal, Inkscape::Extension::Implementation::ImplementationDocumentCache * /*docCache*/)
+BlurEdge::prefs_effect(Inkscape::Extension::Effect * module, sigc::signal<void> * changeSignal, std::shared_ptr<Inkscape::Extension::Implementation::ImplementationDocumentCache> /*docCache*/)
 {
     return module->autogui(nullptr, nullptr, changeSignal);
 }

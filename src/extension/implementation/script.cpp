@@ -313,10 +313,10 @@ ScriptDocCache::~ScriptDocCache ( )
     unlink(_filename.c_str());
 }
 
-ImplementationDocumentCache *Script::newDocCache( Inkscape::Extension::Extension * /*ext*/, Inkscape::UI::View::View * view ) {
-    return new ScriptDocCache(view);
+std::shared_ptr<ImplementationDocumentCache>
+Script::newDocCache(Inkscape::UI::View::View * doc) {
+	return std::make_shared<ScriptDocCache>(doc);
 }
-
 
 /**
     \return   A dialog for preferences
@@ -525,24 +525,15 @@ void Script::save(Inkscape::Extension::Output *module,
     point both should be full, and the second one is loaded.
 */
 void Script::effect(Inkscape::Extension::Effect *module,
-               Inkscape::UI::View::View *doc,
-               ImplementationDocumentCache * docCache)
+               std::shared_ptr<ImplementationDocumentCache> docCache)
 {
-    if (docCache == nullptr) {
-        docCache = newDocCache(module, doc);
-    }
-    ScriptDocCache * dc = dynamic_cast<ScriptDocCache *>(docCache);
+    auto dc = std::dynamic_pointer_cast<ScriptDocCache>(docCache);
     if (dc == nullptr) {
-        printf("TOO BAD TO LIVE!!!");
-        exit(1);
-    }
-    if (doc == nullptr)
-    {
-        g_warning("Script::effect: View not defined");
-        return;
+	    g_warning("Script::effect: Invalid document cache");
+	    return;
     }
 
-    SPDesktop *desktop = reinterpret_cast<SPDesktop *>(doc);
+    auto desktop = reinterpret_cast<SPDesktop *>(dc->view());
     sp_namedview_document_from_window(desktop);
 
     std::list<std::string> params;
@@ -610,7 +601,7 @@ void Script::effect(Inkscape::Extension::Effect *module,
     g_unlink(tempfilename_out.c_str());
 
     if (mydoc) {
-        SPDocument* vd=doc->doc();
+        SPDocument* vd=dc->view()->doc();
         if (vd != nullptr)
         {
             mydoc->changeUriAndHrefs(vd->getDocumentURI());

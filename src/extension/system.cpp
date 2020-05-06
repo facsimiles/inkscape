@@ -29,7 +29,9 @@
 #include "patheffect.h"
 #include "print.h"
 #include "implementation/script.h"
+#ifdef WITH_WASMER
 #include "implementation/wasmer.h"
+#endif
 #include "implementation/xslt.h"
 #include "xml/rebase-hrefs.h"
 #include "io/sys.h"
@@ -432,7 +434,9 @@ build_from_reprdoc(Inkscape::XML::Document *doc, Implementation::Implementation 
         MODULE_EXTENSION,
         MODULE_XSLT,
         MODULE_PLUGIN,
+#ifdef WITH_WASMER
         MODULE_WASMER,
+#endif
         MODULE_UNKNOWN_IMP
     } module_implementation_type = MODULE_UNKNOWN_IMP;
     enum {
@@ -473,8 +477,10 @@ build_from_reprdoc(Inkscape::XML::Document *doc, Implementation::Implementation 
             module_implementation_type = MODULE_XSLT;
         } else if (!strcmp(element_name,  INKSCAPE_EXTENSION_NS "plugin")) {
             module_implementation_type = MODULE_PLUGIN;
+#ifdef WITH_WASMER
         } else if (!strcmp(element_name, INKSCAPE_EXTENSION_NS "wasm")) {
             module_implementation_type = MODULE_WASMER;
+#endif
         }
 
         //Inkscape::XML::Node *old_repr = child_repr;
@@ -503,11 +509,13 @@ build_from_reprdoc(Inkscape::XML::Document *doc, Implementation::Implementation 
                 imp = loader.load_implementation(doc);
                 break;
             }
+#ifdef WITH_WASMER
             case MODULE_WASMER: {
                 Implementation::Wasmer * wasmer = new Implementation::Wasmer();
                 imp = static_cast<Implementation::Implementation *>(wasmer);
                 break;
             }
+#endif
             default: {
                 imp = nullptr;
                 break;

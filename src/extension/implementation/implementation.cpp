@@ -35,13 +35,14 @@ Implementation::prefs_output(Inkscape::Extension::Output *module) {
     return module->autogui(nullptr, nullptr);
 }
 
-Gtk::Widget *Implementation::prefs_effect(Inkscape::Extension::Effect *module, Inkscape::UI::View::View * view, sigc::signal<void> * changeSignal, ImplementationDocumentCache * /*docCache*/)
+Gtk::Widget *Implementation::prefs_effect(Inkscape::Extension::Effect *module, sigc::signal<void> * changeSignal, std::shared_ptr<ImplementationDocumentCache> docCache)
 {
     if (module->widget_visible_count() == 0) {
         return nullptr;
     }
 
-    SPDocument * current_document = view->doc();
+    auto view = docCache->view();
+    auto current_document = view->doc();
 
     auto selected = ((SPDesktop *) view)->getSelection()->items();
     Inkscape::XML::Node const* first_select = nullptr;
