@@ -19,6 +19,8 @@
 #include <map>
 #include <list>
 #include <cstring>
+#include <algorithm>
+#include <functional>
 
 #include <glib.h>
 
@@ -49,25 +51,18 @@ private:
     /** This is the actual database.  It has all of the modules in it,
         indexed by their ids.  It's a hash table for faster lookups */
     std::map <const char *, Extension *, ltstr> moduledict;
-    /** Maintain an ordered list of modules for generating the extension
-        lists via "foreach" */
-    std::list <Extension *> modulelist;
-
-    static void foreach_internal (gpointer in_key, gpointer in_value, gpointer in_data);
 
 public:
     DB ();
     Extension * get (const gchar *key);
     void register_ext (Extension *module);
     void unregister_ext (Extension *module);
-    void foreach (void (*in_func)(Extension * in_plug, gpointer in_data), gpointer in_data);
+    void foreach (std::function<void(Extension*)> func) {
+	    for (auto& entry : moduledict) {
+		    func(entry.second);
+	    }
+    }
 
-private:
-    static void input_internal (Extension * in_plug, gpointer data);
-    static void output_internal (Extension * in_plug, gpointer data);
-    static void effect_internal (Extension * in_plug, gpointer data);
-
-public:
     typedef std::list<Output *> OutputList;
     typedef std::list<Input *> InputList;
     typedef std::list<Effect *> EffectList;

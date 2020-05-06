@@ -75,7 +75,7 @@ ExtensionEditor::ExtensionEditor()
     notebook->append_page(_notebook_params, *Gtk::manage(new Gtk::Label(_("Parameters"))));
     vbox_page->pack_start(*notebook, true, true, 0);
 
-    Inkscape::Extension::db.foreach(dbfunc, this);
+    Inkscape::Extension::db.foreach([this] (Inkscape::Extension::Extension * ext) { add_extension(ext); });
     
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     Glib::ustring defaultext = prefs->getString("/dialogs/extensioneditor/selected-extension");
@@ -161,25 +161,6 @@ void ExtensionEditor::on_pagelist_selection_changed()
 
     }
 
-    return;
-}
-
-/**
- * A function to pass to the iterator in the Extensions Database.
- *
- * This function is a static function with the prototype required for
- * the Extension Database's foreach function.  It will get called for
- * every extension in the database, and will then turn around and
- * call the more object oriented function \c add_extension in the
- * ExtensionEditor.
- *
- * @param  in_plug  The extension to evaluate.
- * @param  in_data  A pointer to the Extension Editor class.
- */
-void ExtensionEditor::dbfunc(Inkscape::Extension::Extension * in_plug, gpointer in_data)
-{
-    ExtensionEditor * ee = static_cast<ExtensionEditor *>(in_data);
-    ee->add_extension(in_plug);
     return;
 }
 
