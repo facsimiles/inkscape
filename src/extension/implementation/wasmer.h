@@ -25,16 +25,17 @@ class Wasmer : public Implementation {
     Wasmer() = default;
     virtual ~Wasmer() = default;
 
-    bool load(Inkscape::Extension::Extension * /*module*/);
-    void unload(Inkscape::Extension::Extension * /*module*/);
+    virtual std::shared_ptr<ImplementationDocumentCache> newDocCache(Inkscape::UI::View::View *doc) override;
 
-    bool check(Inkscape::Extension::Extension * /*module*/);
+    bool load(Inkscape::Extension::Extension * /*module*/) override;
+    void unload(Inkscape::Extension::Extension * /*module*/) override;
 
-    void effect(Inkscape::Extension::Effect * /*module*/, Inkscape::UI::View::View * /*document*/,
-                ImplementationDocumentCache * /*docCache*/);
+    bool check(Inkscape::Extension::Extension * /*module*/) override;
+
+    void effect(Inkscape::Extension::Effect *, std::shared_ptr<ImplementationDocumentCache>) override;
 
   private:
-    std::shared_ptr<wasmer_instance_t> instance;
+    std::string moduleContent;
 
     std::string get_module_path(Inkscape::Extension::Extension *module);
 };
