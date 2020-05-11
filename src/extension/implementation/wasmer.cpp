@@ -10,6 +10,7 @@
 
 #include "wasmer.h"
 
+#include "extension/effect.h"
 #include "extension/extension.h"
 #include "object/sp-namedview.h"
 #include "ui/view/view.h"
@@ -59,46 +60,51 @@ bool Wasmer::load(Inkscape::Extension::Extension *module)
         return true;
     }
 
-    auto modulePath = get_module_path(module);
-    if (modulePath.empty()) {
+    if (!moduleDep) {
+        moduleDep = build_dep(module);
+    }
+
+    if (!moduleDep) {
         return false;
     }
+
+    if (!moduleDep->check()) {
+        return false;
+    }
+
+    auto modulePath = moduleDep->get_path();
 
     moduleContent = Glib::file_get_contents(modulePath);
     if (moduleContent.empty()) {
         return false;
     }
 
-    return false;
+    return true;
 }
 
 /**
  * \brief looks through the INX file to find the path to the WASM module
  */
-std::string Wasmer::get_module_path(Inkscape::Extension::Extension *module)
+std::shared_ptr<Inkscape::Extension::Dependency> Wasmer::build_dep(Inkscape::Extension::Extension *module)
 {
-    if (module == nullptr) {
-        return "";
+    if (!module) {
+        return {};
     }
 
     auto inx = module->get_repr();
-    if (inx == nullptr) {
-        return "";
+    if (!inx) {
+        return {};
     }
 
     auto moduleNode =
         inx->findChildPath(std::vector<std::string>{ INKSCAPE_EXTENSION_NS "wasm", INKSCAPE_EXTENSION_NS "module" });
 
-    if (moduleNode == nullptr) {
-        return "";
+    if (!moduleNode) {
+        return {};
     }
 
-    auto modulePath = module->get_dependency_location(moduleNode->content());
-    if (!Glib::file_test(modulePath, Glib::FILE_TEST_EXISTS)) {
-        return "";
-    }
-
-    return modulePath;
+    return std::make_shared<Inkscape::Extension::Dependency>(moduleNode, module,
+                                                             Inkscape::Extension::Dependency::TYPE_FILE);
 }
 
 /**
@@ -111,30 +117,34 @@ void Wasmer::unload(Inkscape::Extension::Extension * /*module*/) { this->moduleC
  */
 bool Wasmer::check(Inkscape::Extension::Extension *module)
 {
-    auto modulePath = get_module_path(module);
-    if (modulePath.empty()) {
+    if (!moduleDep) {
+        moduleDep = build_dep(module);
+    }
+
+    if (!moduleDep) {
         return false;
     }
-    return true;
+
+    return moduleDep->check();
 }
 
 std::shared_ptr<wasmer_memory_t> wasmerMemory(const void *data, unsigned int size)
 {
     /* Allocate memory for our string */
-    wasmer_memory_t *pmem = nullptr;
+    wasmer_memory_t *pmem;
     auto memres = wasmer_memory_new(
         &pmem, wasmer_limits_t{ .min = size, .max = wasmer_limit_option_t{ .has_some = true, .some = size } });
 
     if (memres == wasmer_result_t::WASMER_ERROR) {
         g_warning("WASMER FAIL");
-        return nullptr;
+        return {};
     }
 
     auto mdata = wasmer_memory_data(pmem);
     memcpy(mdata, data, size);
 
     return std::shared_ptr<wasmer_memory_t>(pmem, [](void *inptr) {
-        if (inptr != nullptr) {
+        if (inptr) {
             wasmer_memory_destroy(static_cast<wasmer_memory_t *>(inptr));
         }
     });
@@ -146,6 +156,9 @@ const std::string importName{ "document" };
 std::shared_ptr<wasmer_instance_t> wasmerInstance(std::string &moduleContent,
                                                   std::shared_ptr<wasmer_memory_t> &strmemory)
 {
+    if (moduleContent.empty()) {
+        return {};
+    }
 
     std::array<wasmer_import_t, 1> imports = { wasmer_import_t{
         .module_name = wasmer_byte_array{ .bytes = (const unsigned char *)moduleName.c_str(),
@@ -155,15 +168,15 @@ std::shared_ptr<wasmer_instance_t> wasmerInstance(std::string &moduleContent,
         .tag = wasmer_import_export_kind::WASM_MEMORY,
         .value = wasmer_import_export_value{ .memory = &(*strmemory) } } };
 
-    wasmer_instance_t *instancep = nullptr;
+    wasmer_instance_t *instancep;
     auto result = wasmer_instantiate(&instancep, (uint8_t *)(moduleContent.c_str()), moduleContent.size(),
                                      imports.data(), imports.size());
     if (result != wasmer_result_t::WASMER_OK) {
-        return nullptr;
+        return {};
     }
 
     auto instance = std::shared_ptr<wasmer_instance_t>(instancep, [](void *input) {
-        if (input != nullptr) {
+        if (input) {
             wasmer_instance_destroy(static_cast<wasmer_instance_t *>(input));
         }
     });
@@ -177,17 +190,26 @@ std::shared_ptr<wasmer_instance_t> wasmerInstance(std::string &moduleContent,
 void Wasmer::effect(Inkscape::Extension::Effect *module, std::shared_ptr<ImplementationDocumentCache> docCache)
 {
     auto dc = std::dynamic_pointer_cast<WasmerDocCache>(docCache);
-    if (dc == nullptr) {
+    if (!dc) {
         g_warning("Wasmer::effect: Unable to create usable document cache");
         return;
     }
 
     /* Allocate memory for our string */
     auto mem = wasmerMemory(dc->doc().c_str(), dc->doc().length() + 1);
+    if (!mem) {
+        g_warning("Unable to allocate Wasmer memory");
+        return;
+    }
     auto inst = wasmerInstance(moduleContent, mem);
+    if (!inst) {
+        g_warning("Unable to allocate Wasmer instance");
+        return;
+    }
 
     /* Run script */
-    std::array<wasmer_value_t, 2> params{
+    std::array<wasmer_value_t, 3> params{
+        wasmer_value_t{ .tag = wasmer_value_tag::WASM_I32, .value = wasmer_value{ .I32 = 8 } }, // no clue what this is
         wasmer_value_t{ .tag = wasmer_value_tag::WASM_I32, .value = wasmer_value{ .I32 = 0 } },
         wasmer_value_t{ .tag = wasmer_value_tag::WASM_I32, .value = wasmer_value{ .I32 = (int)dc->doc().length() } }
     };
@@ -201,9 +223,11 @@ void Wasmer::effect(Inkscape::Extension::Effect *module, std::shared_ptr<Impleme
     }
 
     if (returns[0].tag != wasmer_value_tag::WASM_I32) {
+        g_warning("Function didn't return i32 for param 0");
         return;
     }
     if (returns[1].tag != wasmer_value_tag::WASM_I32) {
+        g_warning("Function didn't return i32 for param 1");
         return;
     }
 
@@ -220,6 +244,8 @@ void Wasmer::effect(Inkscape::Extension::Effect *module, std::shared_ptr<Impleme
     if (newdoc) {
         replace_document(dc->view(), newdoc);
         newdoc->release();
+    } else {
+        g_warning("Unable to build doc");
     }
 }
 

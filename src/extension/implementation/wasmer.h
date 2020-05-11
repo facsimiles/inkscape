@@ -12,6 +12,7 @@
 #define __INKSCAPE_EXTENSION_IMPLEMENTATION_WASMER_H__ 1
 
 #include "implementation.h"
+#include "extension/dependency.h"
 
 #include <memory>
 #include <wasmer.hh>
@@ -36,8 +37,9 @@ class Wasmer : public Implementation {
 
   private:
     std::string moduleContent;
+    std::shared_ptr<Inkscape::Extension::Dependency> moduleDep;
 
-    std::string get_module_path(Inkscape::Extension::Extension *module);
+    std::shared_ptr<Inkscape::Extension::Dependency> build_dep(Inkscape::Extension::Extension *module);
 };
 
 } // namespace Implementation
