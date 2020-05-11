@@ -576,7 +576,7 @@ class Node : public Inkscape::GC::Anchored {
 
         for (auto child : *this->firstChild()) {
             if (*child == *itr) {
-                return child->findChildPath(itr++, end);
+                return child->findChildPath(++itr, end);
             }
         }
 
