@@ -128,6 +128,22 @@ bool Wasmer::check(Inkscape::Extension::Extension *module)
     return moduleDep->check();
 }
 
+class wasmer_error : std::exception {
+    std::string error;
+
+  public:
+    wasmer_error(const std::string &explainer)
+    {
+        int error_len = wasmer_last_error_length();
+        char *error_str = (char *)malloc(error_len);
+        wasmer_last_error_message(error_str, error_len);
+
+        error = explainer + ": " + error_str;
+        free(error_str);
+    }
+    virtual const char *what() const noexcept override { return error.c_str(); }
+};
+
 std::shared_ptr<wasmer_memory_t> wasmerMemory(const void *data, unsigned int size)
 {
     /* Allocate memory for our string */
@@ -136,8 +152,7 @@ std::shared_ptr<wasmer_memory_t> wasmerMemory(const void *data, unsigned int siz
         &pmem, wasmer_limits_t{ .min = size, .max = wasmer_limit_option_t{ .has_some = true, .some = size } });
 
     if (memres == wasmer_result_t::WASMER_ERROR) {
-        g_warning("WASMER FAIL");
-        return {};
+        throw wasmer_error{ "Unable to allocate wasmer memory" };
     }
 
     auto mdata = wasmer_memory_data(pmem);
@@ -157,7 +172,7 @@ std::shared_ptr<wasmer_instance_t> wasmerInstance(std::string &moduleContent,
                                                   std::shared_ptr<wasmer_memory_t> &strmemory)
 {
     if (moduleContent.empty()) {
-        return {};
+        throw std::runtime_error{ "Module content empty" };
     }
 
     std::array<wasmer_import_t, 1> imports = { wasmer_import_t{
@@ -172,7 +187,7 @@ std::shared_ptr<wasmer_instance_t> wasmerInstance(std::string &moduleContent,
     auto result = wasmer_instantiate(&instancep, (uint8_t *)(moduleContent.c_str()), moduleContent.size(),
                                      imports.data(), imports.size());
     if (result != wasmer_result_t::WASMER_OK) {
-        return {};
+        throw wasmer_error{ "Unable to create instance" };
     }
 
     auto instance = std::shared_ptr<wasmer_instance_t>(instancep, [](void *input) {
@@ -195,57 +210,56 @@ void Wasmer::effect(Inkscape::Extension::Effect *module, std::shared_ptr<Impleme
         return;
     }
 
-    /* Allocate memory for our string */
-    auto mem = wasmerMemory(dc->doc().c_str(), dc->doc().length() + 1);
-    if (!mem) {
-        g_warning("Unable to allocate Wasmer memory");
-        return;
-    }
-    auto inst = wasmerInstance(moduleContent, mem);
-    if (!inst) {
-        g_warning("Unable to allocate Wasmer instance");
-        return;
-    }
+    try {
+        auto mem = wasmerMemory(dc->doc().c_str(), dc->doc().length() + 1);
+        auto inst = wasmerInstance(moduleContent, mem);
 
-    /* Run script */
-    std::array<wasmer_value_t, 3> params{
-        wasmer_value_t{ .tag = wasmer_value_tag::WASM_I32, .value = wasmer_value{ .I32 = 8 } }, // no clue what this is
-        wasmer_value_t{ .tag = wasmer_value_tag::WASM_I32, .value = wasmer_value{ .I32 = 0 } },
-        wasmer_value_t{ .tag = wasmer_value_tag::WASM_I32, .value = wasmer_value{ .I32 = (int)dc->doc().length() } }
-    };
-    std::array<wasmer_value_t, 2> returns{ 0 };
+        /* Run script */
+        std::array<wasmer_value_t, 3> params{
+            wasmer_value_t{ .tag = wasmer_value_tag::WASM_I32, .value = wasmer_value{ .I32 = 8 } }, // no clue what this
+                                                                                                    // is
+            wasmer_value_t{ .tag = wasmer_value_tag::WASM_I32, .value = wasmer_value{ .I32 = 0 } },
+            wasmer_value_t{ .tag = wasmer_value_tag::WASM_I32, .value = wasmer_value{ .I32 = (int)dc->doc().length() } }
+        };
+        std::array<wasmer_value_t, 2> returns{ 0 };
 
-    auto result = wasmer_instance_call(inst.get(), "inkscape_effect", params.data(), params.size(), returns.data(),
-                                       returns.size());
-    if (result == wasmer_result_t::WASMER_ERROR) {
-        g_warning("WASMER FAIL");
-        return;
-    }
+        auto result = wasmer_instance_call(inst.get(), "inkscape_effect", params.data(), params.size(), returns.data(),
+                                           returns.size());
+        if (result == wasmer_result_t::WASMER_ERROR) {
+            throw wasmer_error{ "Instance execution error" };
+        }
 
-    if (returns[0].tag != wasmer_value_tag::WASM_I32) {
-        g_warning("Function didn't return i32 for param 0");
-        return;
-    }
-    if (returns[1].tag != wasmer_value_tag::WASM_I32) {
-        g_warning("Function didn't return i32 for param 1");
-        return;
-    }
+        if (returns[0].tag != wasmer_value_tag::WASM_I32) {
+            throw std::runtime_error{ "Function didn't return i32 for param 0" };
+        }
+        if (returns[1].tag != wasmer_value_tag::WASM_I32) {
+            throw std::runtime_error{ "Function didn't return i32 for param 1" };
+        }
 
-    auto addr = returns[0].value.I32;
-    auto len = returns[1].value.I32;
+        auto addr = returns[0].value.I32;
+        auto len = returns[1].value.I32;
 
-    auto ctx = wasmer_instance_context_get(inst.get());
+        auto ctx = wasmer_instance_context_get(inst.get());
 
-    auto retmem = wasmer_instance_context_memory(ctx, 0);
-    auto retdata = wasmer_memory_data(retmem);
-    retdata += addr;
+        auto retmem = wasmer_instance_context_memory(ctx, 0);
+        auto retdata = wasmer_memory_data(retmem);
+        retdata += addr;
 
-    auto newdoc = SPDocument::createNewDocFromMem((const char *)retdata, len, true);
-    if (newdoc) {
-        replace_document(dc->view(), newdoc);
-        newdoc->release();
-    } else {
-        g_warning("Unable to build doc");
+        auto newdoc = std::shared_ptr<SPDocument>(SPDocument::createNewDocFromMem((const char *)retdata, len, true),
+                                                  [](void *doc) {
+                                                      if (doc) {
+                                                          static_cast<SPDocument *>(doc)->release();
+                                                      }
+                                                  });
+        if (newdoc) {
+            replace_document(dc->view(), newdoc.get());
+        } else {
+            throw std::runtime_error{ "Unable to build document" };
+        }
+    } catch (std::exception const &e) {
+        g_warning("Wasmer Execution Failure: %s", e.what());
+    } catch (wasmer_error const &e) {
+        g_warning("Wasmer Execution Failure: %s", e.what());
     }
 }
 
