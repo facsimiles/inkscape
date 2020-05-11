@@ -129,40 +129,41 @@ bool Wasmer::check(Inkscape::Extension::Extension *module)
 }
 
 class wasmer_error : std::exception {
-    std::string error;
+    std::string _error;
 
   public:
-    wasmer_error(const std::string &explainer)
+    wasmer_error(const std::string &explainer = "Wasmer error")
     {
         int error_len = wasmer_last_error_length();
         char *error_str = (char *)malloc(error_len);
         wasmer_last_error_message(error_str, error_len);
-
-        error = explainer + ": " + error_str;
+        _error = explainer + ": " + error_str;
         free(error_str);
     }
-    virtual const char *what() const noexcept override { return error.c_str(); }
+    virtual const char *what() const noexcept override { return _error.c_str(); }
+    static void check(wasmer_result_t result, const std::string &text)
+    {
+        if (result != wasmer_result_t::WASMER_OK) {
+            throw wasmer_error{ text };
+        }
+    }
 };
 
-std::shared_ptr<wasmer_memory_t> wasmerMemory(const void *data, unsigned int size)
+std::shared_ptr<wasmer_memory_t> wasmerMemory(unsigned int size)
 {
     /* Allocate memory for our string */
     wasmer_memory_t *pmem;
     auto memres = wasmer_memory_new(
         &pmem, wasmer_limits_t{ .min = size, .max = wasmer_limit_option_t{ .has_some = true, .some = size } });
 
-    if (memres == wasmer_result_t::WASMER_ERROR) {
-        throw wasmer_error{ "Unable to allocate wasmer memory" };
-    }
-
-    auto mdata = wasmer_memory_data(pmem);
-    memcpy(mdata, data, size);
-
-    return std::shared_ptr<wasmer_memory_t>(pmem, [](void *inptr) {
+    wasmer_error::check(memres, "Wasmer unable to allocate memory");
+    auto mem = std::shared_ptr<wasmer_memory_t>(pmem, [](void *inptr) {
         if (inptr) {
             wasmer_memory_destroy(static_cast<wasmer_memory_t *>(inptr));
         }
     });
+
+    return mem;
 }
 
 const std::string moduleName{ "inkscape" };
@@ -181,14 +182,12 @@ std::shared_ptr<wasmer_instance_t> wasmerInstance(std::string &moduleContent,
         .import_name = wasmer_byte_array{ .bytes = (const unsigned char *)importName.c_str(),
                                           .bytes_len = (unsigned int)importName.length() },
         .tag = wasmer_import_export_kind::WASM_MEMORY,
-        .value = wasmer_import_export_value{ .memory = &(*strmemory) } } };
+        .value = wasmer_import_export_value{ .memory = strmemory.get() } } };
 
     wasmer_instance_t *instancep;
     auto result = wasmer_instantiate(&instancep, (uint8_t *)(moduleContent.c_str()), moduleContent.size(),
                                      imports.data(), imports.size());
-    if (result != wasmer_result_t::WASMER_OK) {
-        throw wasmer_error{ "Unable to create instance" };
-    }
+    wasmer_error::check(result, "Wasmer unable to create instance");
 
     auto instance = std::shared_ptr<wasmer_instance_t>(instancep, [](void *input) {
         if (input) {
@@ -211,8 +210,16 @@ void Wasmer::effect(Inkscape::Extension::Effect *module, std::shared_ptr<Impleme
     }
 
     try {
-        auto mem = wasmerMemory(dc->doc().c_str(), dc->doc().length() + 1);
+        auto mem = wasmerMemory(dc->doc().length() + 1);
         auto inst = wasmerInstance(moduleContent, mem);
+
+        /* Copy data */
+        auto mdata = wasmer_memory_data(mem.get());
+        if (!mdata) {
+            throw std::runtime_error("Memory doesn't have data");
+        }
+        memcpy(mdata, dc->doc().c_str(), dc->doc().length() + 1);
+
 
         /* Run script */
         std::array<wasmer_value_t, 3> params{
@@ -225,9 +232,7 @@ void Wasmer::effect(Inkscape::Extension::Effect *module, std::shared_ptr<Impleme
 
         auto result = wasmer_instance_call(inst.get(), "inkscape_effect", params.data(), params.size(), returns.data(),
                                            returns.size());
-        if (result == wasmer_result_t::WASMER_ERROR) {
-            throw wasmer_error{ "Instance execution error" };
-        }
+        wasmer_error::check(result, "Wasmer instance execution error");
 
         if (returns[0].tag != wasmer_value_tag::WASM_I32) {
             throw std::runtime_error{ "Function didn't return i32 for param 0" };
