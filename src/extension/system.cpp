@@ -462,9 +462,11 @@ build_from_reprdoc(Inkscape::XML::Document *doc, Implementation::Implementation 
             module_implementation_type = MODULE_XSLT;
         } else if (!strcmp(element_name,  INKSCAPE_EXTENSION_NS "plugin")) {
             module_implementation_type = MODULE_PLUGIN;
-#ifdef WITH_WASMER
         } else if (!strcmp(element_name, INKSCAPE_EXTENSION_NS "wasm")) {
+#ifdef WITH_WASMER
             module_implementation_type = MODULE_WASMER;
+#else
+	    g_warning("WASM not supported\n");
 #endif
         }
 
@@ -510,6 +512,10 @@ build_from_reprdoc(Inkscape::XML::Document *doc, Implementation::Implementation 
         imp = in_imp;
     }
 
+    if (imp == nullptr) {
+	    return false;
+    }
+
     Extension *module = nullptr;
     try {
         switch (module_functional_type) {
@@ -534,8 +540,7 @@ build_from_reprdoc(Inkscape::XML::Document *doc, Implementation::Implementation 
                 break;
             }
             default: {
-                g_warning("Extension of unknown type!"); // TODO: Should not happen! Is this even useful?
-                module = new Extension(repr, imp, baseDir);
+                g_warning("Extension of unknown type!");
                 break;
             }
         }
