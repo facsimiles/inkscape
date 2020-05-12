@@ -149,40 +149,13 @@ class wasmer_error : std::exception {
     }
 };
 
-std::shared_ptr<wasmer_memory_t> wasmerMemory(unsigned int size)
-{
-    /* Allocate memory for our string */
-    wasmer_memory_t *pmem;
-    auto memres = wasmer_memory_new(
-        &pmem, wasmer_limits_t{ .min = size, .max = wasmer_limit_option_t{ .has_some = true, .some = size } });
-
-    wasmer_error::check(memres, "Wasmer unable to allocate memory");
-    auto mem = std::shared_ptr<wasmer_memory_t>(pmem, [](void *inptr) {
-        if (inptr) {
-            wasmer_memory_destroy(static_cast<wasmer_memory_t *>(inptr));
-        }
-    });
-
-    return mem;
-}
-
-const std::string moduleName{ "inkscape" };
-const std::string importName{ "document" };
-
-std::shared_ptr<wasmer_instance_t> wasmerInstance(std::string &moduleContent,
-                                                  std::shared_ptr<wasmer_memory_t> &strmemory)
+std::shared_ptr<wasmer_instance_t> wasmerInstance(std::string &moduleContent)
 {
     if (moduleContent.empty()) {
         throw std::runtime_error{ "Module content empty" };
     }
 
-    std::array<wasmer_import_t, 1> imports = { wasmer_import_t{
-        .module_name = wasmer_byte_array{ .bytes = (const unsigned char *)moduleName.c_str(),
-                                          .bytes_len = (unsigned int)moduleName.length() },
-        .import_name = wasmer_byte_array{ .bytes = (const unsigned char *)importName.c_str(),
-                                          .bytes_len = (unsigned int)importName.length() },
-        .tag = wasmer_import_export_kind::WASM_MEMORY,
-        .value = wasmer_import_export_value{ .memory = strmemory.get() } } };
+    std::array<wasmer_import_t, 0> imports;
 
     wasmer_instance_t *instancep;
     auto result = wasmer_instantiate(&instancep, (uint8_t *)(moduleContent.c_str()), moduleContent.size(),
@@ -210,54 +183,66 @@ void Wasmer::effect(Inkscape::Extension::Effect *module, std::shared_ptr<Impleme
     }
 
     try {
-        auto mem = wasmerMemory(dc->doc().length() + 1);
-        auto inst = wasmerInstance(moduleContent, mem);
+        auto inst = wasmerInstance(moduleContent);
 
-        /* Copy data */
-        auto mdata = wasmer_memory_data(mem.get());
-        if (!mdata) {
-            throw std::runtime_error("Memory doesn't have data");
+        wasmer_exports_t *exports;
+        wasmer_instance_exports(inst.get(), &exports);
+        for (auto i = 0; i < wasmer_exports_len(exports); i++) {
+            auto exp = wasmer_exports_get(exports, i);
+            auto namebytes = wasmer_export_name(exp);
+            const std::string name{ (const char *)namebytes.bytes, namebytes.bytes_len };
+            printf("Export: %s\n", name.c_str());
         }
-        memcpy(mdata, dc->doc().c_str(), dc->doc().length() + 1);
-
 
         /* Run script */
         std::array<wasmer_value_t, 3> params{
             wasmer_value_t{ .tag = wasmer_value_tag::WASM_I32, .value = wasmer_value{ .I32 = 8 } }, // no clue what this
                                                                                                     // is
             wasmer_value_t{ .tag = wasmer_value_tag::WASM_I32, .value = wasmer_value{ .I32 = 0 } },
-            wasmer_value_t{ .tag = wasmer_value_tag::WASM_I32, .value = wasmer_value{ .I32 = (int)dc->doc().length() } }
+            // wasmer_value_t{ .tag = wasmer_value_tag::WASM_I32, .value = wasmer_value{ .I32 = (int)dc->doc().length()
+            // } }
+            wasmer_value_t{ .tag = wasmer_value_tag::WASM_I32, .value = wasmer_value{ .I32 = 0 } }
         };
-        std::array<wasmer_value_t, 2> returns{ 0 };
+        std::array<wasmer_value_t, 0> returns;
 
         auto result = wasmer_instance_call(inst.get(), "inkscape_effect", params.data(), params.size(), returns.data(),
                                            returns.size());
         wasmer_error::check(result, "Wasmer instance execution error");
 
-        if (returns[0].tag != wasmer_value_tag::WASM_I32) {
-            throw std::runtime_error{ "Function didn't return i32 for param 0" };
-        }
-        if (returns[1].tag != wasmer_value_tag::WASM_I32) {
-            throw std::runtime_error{ "Function didn't return i32 for param 1" };
-        }
-
-        auto addr = returns[0].value.I32;
-        auto len = returns[1].value.I32;
 
         auto ctx = wasmer_instance_context_get(inst.get());
 
         auto retmem = wasmer_instance_context_memory(ctx, 0);
         auto retdata = wasmer_memory_data(retmem);
-        retdata += addr;
 
-        auto newdoc = std::shared_ptr<SPDocument>(SPDocument::createNewDocFromMem((const char *)retdata, len, true),
+        auto intdata = (unsigned int *)retdata;
+
+        /* TODO: Why not 0, 1? */
+        auto addr = intdata[2];
+        auto len = intdata[3];
+
+        if (len == 0) {
+            throw std::runtime_error{ "Returned zero length string" };
+        }
+        if (addr + len > wasmer_memory_data_length((wasmer_memory_t *)retmem)) {
+            throw std::runtime_error{ "Memory out of range (addr: " + std::to_string(addr) +
+                                      ", len: " + std::to_string(len) };
+        }
+
+        printf("Address: %d\n", addr);
+        printf("Length:  %d\n", len);
+
+        const std::string data{ (const char *)&retdata[addr], len };
+        printf("Data:    %s\n", data.c_str());
+
+        auto newdoc = std::shared_ptr<SPDocument>(SPDocument::createNewDocFromMem(data.c_str(), data.size(), true),
                                                   [](void *doc) {
                                                       if (doc) {
                                                           static_cast<SPDocument *>(doc)->release();
                                                       }
                                                   });
         if (newdoc) {
-            replace_document(dc->view(), newdoc.get());
+            // replace_document(dc->view(), newdoc.get());
         } else {
             throw std::runtime_error{ "Unable to build document" };
         }
