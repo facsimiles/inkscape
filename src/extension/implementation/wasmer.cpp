@@ -9,6 +9,7 @@
 */
 
 #include "wasmer.h"
+#include "wasmer-wrap.h"
 
 #include "extension/effect.h"
 #include "extension/extension.h"
@@ -18,6 +19,7 @@
 #include "xml/repr.h"
 
 #include <glibmm.h>
+#include <numeric>
 
 namespace Inkscape {
 namespace Extension {
@@ -128,49 +130,6 @@ bool Wasmer::check(Inkscape::Extension::Extension *module)
     return moduleDep->check();
 }
 
-class wasmer_error : std::exception {
-    std::string _error;
-
-  public:
-    wasmer_error(const std::string &explainer = "Wasmer error")
-    {
-        int error_len = wasmer_last_error_length();
-        char *error_str = (char *)malloc(error_len);
-        wasmer_last_error_message(error_str, error_len);
-        _error = explainer + ": " + error_str;
-        free(error_str);
-    }
-    virtual const char *what() const noexcept override { return _error.c_str(); }
-    static void check(wasmer_result_t result, const std::string &text)
-    {
-        if (result != wasmer_result_t::WASMER_OK) {
-            throw wasmer_error{ text };
-        }
-    }
-};
-
-std::shared_ptr<wasmer_instance_t> wasmerInstance(std::string &moduleContent)
-{
-    if (moduleContent.empty()) {
-        throw std::runtime_error{ "Module content empty" };
-    }
-
-    std::array<wasmer_import_t, 0> imports;
-
-    wasmer_instance_t *instancep;
-    auto result = wasmer_instantiate(&instancep, (uint8_t *)(moduleContent.c_str()), moduleContent.size(),
-                                     imports.data(), imports.size());
-    wasmer_error::check(result, "Wasmer unable to create instance");
-
-    auto instance = std::shared_ptr<wasmer_instance_t>(instancep, [](void *input) {
-        if (input) {
-            wasmer_instance_destroy(static_cast<wasmer_instance_t *>(input));
-        }
-    });
-
-    return instance;
-}
-
 /**
  * \brief Calls the 'inkscape_effect' function in the module
  */
@@ -183,34 +142,15 @@ void Wasmer::effect(Inkscape::Extension::Effect *module, std::shared_ptr<Impleme
     }
 
     try {
-        auto inst = wasmerInstance(moduleContent);
+        auto inst = std::make_shared<wasmer::instance>(moduleContent);
 
-        wasmer_exports_t *exports;
-        wasmer_instance_exports(inst.get(), &exports);
-        for (auto i = 0; i < wasmer_exports_len(exports); i++) {
-            auto exp = wasmer_exports_get(exports, i);
-            auto namebytes = wasmer_export_name(exp);
-            const std::string name{ (const char *)namebytes.bytes, namebytes.bytes_len };
-            printf("Export: %s\n", name.c_str());
-        }
+	auto [ docaddr, dochandle ] = inst->heapAllocate(dc->doc()->size());
+	auto [ retstringaddr, retstringhandle ] = inst->heapAllocate(sizeof(int32_t) * 2);
 
         /* Run script */
-        std::array<wasmer_value_t, 3> params{
-            wasmer_value_t{ .tag = wasmer_value_tag::WASM_I32, .value = wasmer_value{ .I32 = 8 } }, // no clue what this
-                                                                                                    // is
-            wasmer_value_t{ .tag = wasmer_value_tag::WASM_I32, .value = wasmer_value{ .I32 = 0 } },
-            // wasmer_value_t{ .tag = wasmer_value_tag::WASM_I32, .value = wasmer_value{ .I32 = (int)dc->doc().length()
-            // } }
-            wasmer_value_t{ .tag = wasmer_value_tag::WASM_I32, .value = wasmer_value{ .I32 = 0 } }
-        };
-        std::array<wasmer_value_t, 0> returns;
+	inst->call<std::tuple<>>("inkscape_effect", retstringaddr, docaddr, dc->doc()->size());
 
-        auto result = wasmer_instance_call(inst.get(), "inkscape_effect", params.data(), params.size(), returns.data(),
-                                           returns.size());
-        wasmer_error::check(result, "Wasmer instance execution error");
-
-
-        auto ctx = wasmer_instance_context_get(inst.get());
+        auto ctx = wasmer_instance_context_get(*inst.get());
 
         auto retmem = wasmer_instance_context_memory(ctx, 0);
         auto retdata = wasmer_memory_data(retmem);
@@ -248,7 +188,7 @@ void Wasmer::effect(Inkscape::Extension::Effect *module, std::shared_ptr<Impleme
         }
     } catch (std::exception const &e) {
         g_warning("Wasmer Execution Failure: %s", e.what());
-    } catch (wasmer_error const &e) {
+    } catch (wasmer::error const &e) {
         g_warning("Wasmer Execution Failure: %s", e.what());
     }
 }

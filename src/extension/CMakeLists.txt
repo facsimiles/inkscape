@@ -173,6 +173,7 @@ if(WITH_WASMER)
 	list(APPEND extension_SRC
 		implementation/wasmer.cpp
 		implementation/wasmer.h
+		implementation/wasmer-wrap.h
 	)
 endif()
 
