@@ -78,20 +78,58 @@ class import {
     operator wasmer_import_t() const { return wasmer_import_t{}; }
 };
 
+class memory {
+    const wasmer_memory_t *_mem;
+    wasmer_memory_t *_dmem;
+
+  public:
+    memory(wasmer_memory_t *mem, bool destroy = true)
+        : _mem(mem)
+        , _dmem(mem)
+    {
+    }
+    memory(const wasmer_memory_t *mem, bool destroy = false)
+        : _mem(mem)
+        , _dmem(nullptr)
+    {
+    }
+    ~memory()
+    {
+        if (_dmem) {
+            wasmer_memory_destroy(_dmem);
+        }
+    }
+
+    size_t size() { return wasmer_memory_data_length((wasmer_memory_t *)_mem); }
+
+    uint8_t *ptr(int32_t addr)
+    {
+        if (addr >= size()) {
+            throw std::runtime_error("Accessing memory outside the size of the memory");
+        }
+        auto base = wasmer_memory_data(_mem);
+        base += addr;
+        return base;
+    }
+
+    int32_t data(int32_t addr)
+    {
+        auto p = ptr(addr);
+        auto p32 = reinterpret_cast<int32_t *>(p);
+        return *p32;
+    }
+};
+
 class instance {
     wasmer_instance_t *_instance;
     std::string _malloc_name;
     std::string _free_name;
 
-    std::string find_malloc()
-    {
-        return "__wbindgen_malloc"; // TODO: Other mallocs?
-    }
+    // TODO: I imagine these will require searching exports, but not quite sure
+    // how they'll show up for other types of programs
+    void find_malloc() { _malloc_name = "__wbindgen_malloc"; }
 
-    std::string find_free()
-    {
-        return "__wbindgen_free"; // TODO: Other mallocs?
-    }
+    void find_free() { _free_name = "__wbindgen_free"; }
 
   public:
     instance(std::string &module, std::vector<import> imports = {})
@@ -114,8 +152,8 @@ class instance {
             find_malloc();
         }
 
-        auto retvals = call<std::tuple<int32_t>>(_malloc_name, size);
-        return std::get<0>(retvals);
+        auto [addr] = call<std::tuple<int32_t>>(_malloc_name, size);
+        return addr;
     }
 
     void free(int32_t addr, int32_t size)
@@ -142,19 +180,19 @@ class instance {
         ~heapHandle() { inst->free(addr, size); }
     };
 
-    std::tuple<int32_t, heapHandle>
-    heapAllocate(int32_t size)
+    std::tuple<int32_t, heapHandle> heapAllocate(int32_t size)
     {
         auto addr = malloc(size);
         return std::make_tuple(addr, heapHandle{ this, addr, size });
     }
 
     template <typename rettuple, typename... inputvals>
-    rettuple call(std::string &funcname, inputvals... params)
+    rettuple call(const std::string &funcname, inputvals... params)
     {
         std::array<wasmer_value_t, sizeof...(params)> vparams{ wasmer::value<inputvals>(params)... };
         std::array<wasmer_value_t, std::tuple_size<rettuple>::value> vret;
 
+        printf("Calling '%s'\n", funcname.c_str());
         auto result =
             wasmer_instance_call(_instance, funcname.c_str(), vparams.data(), vparams.size(), vret.data(), vret.size());
         wasmer::error::check(result, "Wasmer instance execution error");
@@ -180,6 +218,14 @@ class instance {
     inline typename std::enable_if<cnt == std::tuple_size<tupletype>::value, void>::type call_return(tupletype tuple,
                                                                                                      arraytype array)
     {
+    }
+
+  public:
+    std::shared_ptr<memory> mem()
+    {
+        auto ctx = wasmer_instance_context_get(_instance);
+
+        return std::make_shared<memory>(wasmer_instance_context_memory(ctx, 0));
     }
 };
 

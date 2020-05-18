@@ -130,6 +130,8 @@ bool Wasmer::check(Inkscape::Extension::Extension *module)
     return moduleDep->check();
 }
 
+const std::string inkscape_effect{ "inkscape_effect" };
+
 /**
  * \brief Calls the 'inkscape_effect' function in the module
  */
@@ -143,28 +145,23 @@ void Wasmer::effect(Inkscape::Extension::Effect *module, std::shared_ptr<Impleme
 
     try {
         auto inst = std::make_shared<wasmer::instance>(moduleContent);
+        auto mem = inst->mem();
 
-	auto [ docaddr, dochandle ] = inst->heapAllocate(dc->doc()->size());
-	auto [ retstringaddr, retstringhandle ] = inst->heapAllocate(sizeof(int32_t) * 2);
+        auto [docaddr, dochandle] = inst->heapAllocate(dc->doc().size());
+        auto [retstringaddr, retstringhandle] = inst->heapAllocate(sizeof(int32_t) * 2);
+
+        memcpy(mem->ptr(docaddr), dc->doc().c_str(), dc->doc().size());
 
         /* Run script */
-	inst->call<std::tuple<>>("inkscape_effect", retstringaddr, docaddr, dc->doc()->size());
+        inst->call<std::tuple<>>(inkscape_effect, retstringaddr, docaddr, int32_t(dc->doc().size()));
 
-        auto ctx = wasmer_instance_context_get(*inst.get());
-
-        auto retmem = wasmer_instance_context_memory(ctx, 0);
-        auto retdata = wasmer_memory_data(retmem);
-
-        auto intdata = (unsigned int *)retdata;
-
-        /* TODO: Why not 0, 1? */
-        auto addr = intdata[2];
-        auto len = intdata[3];
+        auto addr = mem->data(retstringaddr);
+        auto len = mem->data(retstringaddr + sizeof(int32_t));
 
         if (len == 0) {
             throw std::runtime_error{ "Returned zero length string" };
         }
-        if (addr + len > wasmer_memory_data_length((wasmer_memory_t *)retmem)) {
+        if (addr + len > mem->size()) {
             throw std::runtime_error{ "Memory out of range (addr: " + std::to_string(addr) +
                                       ", len: " + std::to_string(len) };
         }
@@ -172,7 +169,7 @@ void Wasmer::effect(Inkscape::Extension::Effect *module, std::shared_ptr<Impleme
         printf("Address: %d\n", addr);
         printf("Length:  %d\n", len);
 
-        const std::string data{ (const char *)&retdata[addr], len };
+        const std::string data{ (const char *)mem->ptr(addr), len };
         printf("Data:    %s\n", data.c_str());
 
         auto newdoc = std::shared_ptr<SPDocument>(SPDocument::createNewDocFromMem(data.c_str(), data.size(), true),
