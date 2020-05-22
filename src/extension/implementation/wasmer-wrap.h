@@ -72,26 +72,48 @@ class value {
     }
 };
 
-class import {
-  public:
-    import() {}
-    operator wasmer_import_t() const { return wasmer_import_t{}; }
-};
-
 class memory {
     const wasmer_memory_t *_mem;
     wasmer_memory_t *_dmem;
 
   public:
-    memory(wasmer_memory_t *mem, bool destroy = true)
+    memory(wasmer_memory_t *mem)
         : _mem(mem)
         , _dmem(mem)
     {
     }
-    memory(const wasmer_memory_t *mem, bool destroy = false)
+    memory(const wasmer_memory_t *mem)
         : _mem(mem)
         , _dmem(nullptr)
     {
+    }
+    memory(uint32_t min_bytes)
+        : memory(wasmer_limits_t{
+              .min = min_bytes % page_size + 1,
+              .max = { .has_some = false, .some = 0 },
+          })
+    {
+    }
+    memory(uint32_t min_bytes, uint32_t max_bytes):
+        memory(wasmer_limits_t{
+            .min = min_bytes % page_size + 1,
+            .max = {
+	    .has_some = true,
+	    .some = max_bytes % page_size + 1,
+	    },
+        })
+    {
+    }
+    memory(wasmer_limits_t limits)
+        : _mem(nullptr)
+        , _dmem(nullptr)
+    {
+        wasmer_memory_t *memp;
+        auto result = wasmer_memory_new(&memp, limits);
+        error::check(result, "Unable to create new memory");
+
+        _mem = memp;
+        _dmem = memp;
     }
     ~memory()
     {
@@ -118,6 +140,41 @@ class memory {
         auto p32 = reinterpret_cast<int32_t *>(p);
         return *p32;
     }
+
+    void grow(uint32_t pages)
+    {
+        auto result = wasmer_memory_grow((wasmer_memory_t *)_mem, pages);
+        error::check(result, "Unable to grow memory");
+    }
+
+    static const uint32_t page_size = 64 * 1024;
+
+  private:
+    const std::string module_name{ "module" }; // TODO: Can't figure out why these matter
+    const std::string import_name{ "import" };
+
+  public:
+    operator wasmer_import_t() const
+    {
+        wasmer_import_t retval{
+            .module_name =
+                wasmer_byte_array{
+                    .bytes = (const uint8_t *)module_name.c_str(),
+                    .bytes_len = (uint32_t)module_name.size(),
+                },
+            .import_name =
+                wasmer_byte_array{
+                    .bytes = (const uint8_t *)import_name.c_str(),
+                    .bytes_len = (uint32_t)import_name.size(),
+                },
+            .tag = wasmer_import_export_kind::WASM_MEMORY,
+            .value =
+                wasmer_import_export_value{
+                    .memory = _mem,
+                },
+        };
+        return retval;
+    }
 };
 
 class instance {
@@ -128,13 +185,13 @@ class instance {
     // TODO: I imagine these will require searching exports, but not quite sure
     // how they'll show up for other types of programs
     void find_malloc() { _malloc_name = "__wbindgen_malloc"; }
-
     void find_free() { _free_name = "__wbindgen_free"; }
 
   public:
-    instance(std::string &module, std::vector<import> imports = {})
+    template <typename... importtypes>
+    instance(std::string &module, importtypes... imports)
     {
-        std::vector<wasmer_import_t> imp{ imports.begin(), imports.end() };
+        std::array<wasmer_import_t, sizeof...(imports)> imp{ *imports... };
         auto result =
             wasmer_instantiate(&_instance, (uint8_t *)(module.c_str()), module.size(), imp.data(), imp.size());
         wasmer::error::check(result, "Wasmer unable to create instance");
@@ -146,6 +203,7 @@ class instance {
         }
     }
     operator wasmer_instance_t *() const { return _instance; }
+
     int32_t malloc(int32_t size)
     {
         if (_malloc_name.empty()) {
@@ -153,6 +211,7 @@ class instance {
         }
 
         auto [addr] = call<std::tuple<int32_t>>(_malloc_name, size);
+
         return addr;
     }
 
@@ -160,6 +219,10 @@ class instance {
     {
         if (_free_name.empty()) {
             find_free();
+        }
+
+        if (addr == 0) {
+            return;
         }
 
         call<std::tuple<>>(_free_name, addr, size);
@@ -178,12 +241,16 @@ class instance {
         {
         }
         ~heapHandle() { inst->free(addr, size); }
+
+        heapHandle(const heapHandle &) = delete;
+        heapHandle &operator=(const heapHandle &) = delete;
     };
 
-    std::tuple<int32_t, heapHandle> heapAllocate(int32_t size)
+    std::tuple<int32_t, std::shared_ptr<heapHandle>> heapAllocate(int32_t size)
     {
-        auto addr = malloc(size);
-        return std::make_tuple(addr, heapHandle{ this, addr, size });
+        int32_t addr;
+        addr = malloc(size);
+        return std::make_tuple(addr, std::make_shared<heapHandle>(this, addr, size));
     }
 
     template <typename rettuple, typename... inputvals>

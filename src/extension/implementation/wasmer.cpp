@@ -144,11 +144,12 @@ void Wasmer::effect(Inkscape::Extension::Effect *module, std::shared_ptr<Impleme
     }
 
     try {
-        auto inst = std::make_shared<wasmer::instance>(moduleContent);
+        auto premem = std::make_shared<wasmer::memory>(dc->doc().size());
+        auto inst = std::make_shared<wasmer::instance>(moduleContent, premem);
         auto mem = inst->mem();
 
-        auto [docaddr, dochandle] = inst->heapAllocate(dc->doc().size());
         auto [retstringaddr, retstringhandle] = inst->heapAllocate(sizeof(int32_t) * 2);
+        auto [docaddr, dochandle] = inst->heapAllocate(dc->doc().size());
 
         memcpy(mem->ptr(docaddr), dc->doc().c_str(), dc->doc().size());
 
@@ -166,11 +167,8 @@ void Wasmer::effect(Inkscape::Extension::Effect *module, std::shared_ptr<Impleme
                                       ", len: " + std::to_string(len) };
         }
 
-        printf("Address: %d\n", addr);
-        printf("Length:  %d\n", len);
 
-        const std::string data{ (const char *)mem->ptr(addr), len };
-        printf("Data:    %s\n", data.c_str());
+        const std::string data{ (const char *)mem->ptr(addr), (size_t)len };
 
         auto newdoc = std::shared_ptr<SPDocument>(SPDocument::createNewDocFromMem(data.c_str(), data.size(), true),
                                                   [](void *doc) {
@@ -179,7 +177,7 @@ void Wasmer::effect(Inkscape::Extension::Effect *module, std::shared_ptr<Impleme
                                                       }
                                                   });
         if (newdoc) {
-            // replace_document(dc->view(), newdoc.get());
+            replace_document(dc->view(), newdoc.get());
         } else {
             throw std::runtime_error{ "Unable to build document" };
         }
