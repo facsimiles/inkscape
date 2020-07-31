@@ -17,10 +17,12 @@
 
 #include <2geom/transforms.h>
 #include <2geom/line.h>
+
 #include "sp-canvas-util.h"
 #include "sodipodi-ctrl.h"
-#include "display/cairo-utils.h"
-#include "display/sp-canvas.h"
+#include "cairo-utils.h"
+
+#include "ui/widget/canvas.h" // Request redraw
 
 enum {
     ARG_0,
@@ -219,6 +221,8 @@ sp_ctrl_init (SPCtrl *ctrl)
     ctrl->pixbuf = nullptr;
 
     ctrl->_point = Geom::Point(0,0);
+
+    ctrl->name = "SPCtrl";
 }
 
 static void sp_ctrl_destroy(SPCanvasItem *object)
@@ -249,7 +253,7 @@ sp_ctrl_update (SPCanvasItem *item, Geom::Affine const &affine, unsigned int fla
     sp_canvas_item_reset_bounds (item);
 
     if (ctrl->shown) {
-        item->canvas->requestRedraw(ctrl->box.left(), ctrl->box.top(), ctrl->box.right() + 1, ctrl->box.bottom() + 1);
+        item->canvas->redraw_area(ctrl->box.left(), ctrl->box.top(), ctrl->box.right() + 1, ctrl->box.bottom() + 1);
     }
 
     if (!ctrl->defined) return;

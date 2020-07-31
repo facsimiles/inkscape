@@ -59,6 +59,7 @@ namespace OfS {
 
 
 static const Util::EnumData<unsigned> JoinTypeData[] = {
+    // clang-format off
     {JOIN_BEVEL,       N_("Beveled"),    "bevel"},
     {JOIN_ROUND,       N_("Rounded"),    "round"},
     {JOIN_MITER,       N_("Miter"),      "miter"},
@@ -67,6 +68,7 @@ static const Util::EnumData<unsigned> JoinTypeData[] = {
     {JOIN_EXTRAPOLATE1, N_("Extrapolated arc Alt1"), "extrp_arc1"},
     {JOIN_EXTRAPOLATE2, N_("Extrapolated arc Alt2"), "extrp_arc2"},
     {JOIN_EXTRAPOLATE3, N_("Extrapolated arc Alt3"), "extrp_arc3"},
+    // clang-format on
 };
 
 static const Util::EnumDataConverter<unsigned> JoinTypeConverter(JoinTypeData, sizeof(JoinTypeData)/sizeof(*JoinTypeData));
@@ -547,7 +549,7 @@ Geom::Point KnotHolderEntityOffsetPoint::knot_get() const
         if (group) {
             nearest = Geom::Point(lpe->boundingbox_X.min(), lpe->boundingbox_Y.min());
         } else {
-            Geom::PathVector out = SP_SHAPE(item)->getCurve(true)->get_pathvector();
+            Geom::PathVector out = SP_SHAPE(item)->curve()->get_pathvector();
             nearest = lpe->get_default_point(out);
             boost::optional<Geom::PathVectorTime> pathvectortime = out.nearestTime(nearest);
             if (pathvectortime) {

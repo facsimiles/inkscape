@@ -122,12 +122,6 @@ protected:
     };
     PageListModelColumns _page_list_columns;
 
-    Gtk::TreeModel::Path _path_tools;
-    Gtk::TreeModel::Path _path_shapes;
-    Gtk::TreeModel::Path _path_ui;
-    Gtk::TreeModel::Path _path_behavior;
-    Gtk::TreeModel::Path _path_io;
-
     UI::Widget::DialogPage _page_tools;
     UI::Widget::DialogPage _page_selector;
     UI::Widget::DialogPage _page_node;
@@ -367,12 +361,14 @@ protected:
     UI::Widget::PrefOpenFolder _sys_user_extension_dir;
     UI::Widget::PrefOpenFolder _sys_user_themes_dir;
     UI::Widget::PrefOpenFolder _sys_user_ui_dir;
+    UI::Widget::PrefOpenFolder _sys_user_fonts_dir;
     UI::Widget::PrefOpenFolder _sys_user_icons_dir;
     UI::Widget::PrefOpenFolder _sys_user_keys_dir;
     UI::Widget::PrefOpenFolder _sys_user_palettes_dir;
     UI::Widget::PrefOpenFolder _sys_user_templates_dir;
     UI::Widget::PrefOpenFolder _sys_user_symbols_dir;
     UI::Widget::PrefOpenFolder _sys_user_paint_servers_dir;
+    UI::Widget::PrefMultiEntry _sys_fontdirs_custom;
     Gtk::Entry                  _sys_user_cache;
     Gtk::Entry                  _sys_data;
     Gtk::TextView               _sys_icon;

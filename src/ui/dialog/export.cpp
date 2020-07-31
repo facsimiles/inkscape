@@ -21,7 +21,9 @@
 #include <gtkmm/buttonbox.h>
 #include <gtkmm/dialog.h>
 #include <gtkmm/entry.h>
+#include <gtkmm/filechooserdialog.h>
 #include <gtkmm/grid.h>
+#include <gtkmm/main.h>
 #include <gtkmm/spinbutton.h>
 
 #include <glibmm/convert.h>
@@ -34,6 +36,7 @@
 #include "document.h"
 #include "file.h"
 #include "inkscape.h"
+#include "inkscape-window.h"
 #include "preferences.h"
 #include "selection-chemistry.h"
 #include "verbs.h"
@@ -106,6 +109,31 @@ private:
 namespace Inkscape {
 namespace UI {
 namespace Dialog {
+
+class ExportProgressDialog : public Gtk::Dialog {
+  private:
+      Gtk::ProgressBar *_progress = nullptr;
+      Export *_export_panel = nullptr;
+      int _current = 0;
+      int _total = 0;
+
+  public:
+      ExportProgressDialog(const Glib::ustring &title, bool modal = false)
+          : Gtk::Dialog(title, modal)
+      {}
+
+      inline void set_export_panel(const decltype(_export_panel) export_panel) { _export_panel = export_panel; }
+      inline decltype(_export_panel) get_export_panel() const { return _export_panel; }
+
+      inline void set_progress(const decltype(_progress) progress) { _progress = progress; }
+      inline decltype(_progress) get_progress() const { return _progress; }
+
+      inline void set_current(const int current) { _current = current; }
+      inline int get_current() const { return _current; }
+
+      inline void set_total(const int total) { _total = total; }
+      inline int get_total() const { return _total; }
+};
 
 static std::string create_filepath_from_id(Glib::ustring, const Glib::ustring &);
 
@@ -297,6 +325,7 @@ Export::Export () :
         browser_im_label->pack_start(browse_label);
         browse_button.add(*browser_im_label);
         filename_box.pack_end (browse_button, false, false);
+        filename_box.pack_end(export_button, false, false);
 
         file_box.add(filename_box);
 
@@ -326,7 +355,6 @@ Export::Export () :
 
     button_box.set_border_width(3);
     button_box.pack_start(closeWhenDone, true, true, 0);
-    button_box.pack_end(export_button, false, false, 0);
 
     /*Advanced*/
     Gtk::Label *label_advanced = Gtk::manage(new Gtk::Label(_("Advanced"),true));
@@ -356,7 +384,6 @@ Export::Export () :
     antialiasing_label.set_halign(Gtk::ALIGN_START);
     auto table = new Gtk::Grid();
     expander.add(*table);
-    // gtk_container_add(GTK_CONTAINER(expander.gobj()), (GtkWidget*)(table->gobj()));
     table->set_border_width(4);
     table->attach(interlacing,0,0,1,1);
     table->attach(bitdepth_label,0,1,1,1);
@@ -846,14 +873,14 @@ void Export::onProgressCancel ()
 /// Called for every progress iteration
 unsigned int Export::onProgressCallback(float value, void *dlg)
 {
-    Gtk::Dialog *dlg2 = reinterpret_cast<Gtk::Dialog*>(dlg);
+    auto dlg2 = reinterpret_cast<ExportProgressDialog*>(dlg);
 
-    Export *self = reinterpret_cast<Export *>(dlg2->get_data("exportPanel"));
+    auto self = dlg2->get_export_panel();
     if (self->interrupted)
         return FALSE;
     
-    gint current = GPOINTER_TO_INT(dlg2->get_data("current"));
-    gint total = GPOINTER_TO_INT(dlg2->get_data("total"));
+    auto current = dlg2->get_current();
+    auto total = dlg2->get_total();
     if (total > 0) {
         double completed = current;
         completed /= static_cast<double>(total);
@@ -861,7 +888,7 @@ unsigned int Export::onProgressCallback(float value, void *dlg)
         value = completed + (value / static_cast<double>(total));
     }
 
-    Gtk::ProgressBar *prg = reinterpret_cast<Gtk::ProgressBar *>(dlg2->get_data("progress"));
+    auto prg = dlg2->get_progress();
     prg->set_fraction(value);
 
     if (self) {
@@ -870,11 +897,11 @@ unsigned int Export::onProgressCallback(float value, void *dlg)
 
     int evtcount = 0;
     while ((evtcount < 16) && gdk_events_pending()) {
-        gtk_main_iteration_do(FALSE);
+        Gtk::Main::iteration(false);
         evtcount += 1;
     }
 
-    gtk_main_iteration_do(FALSE);
+    Gtk::Main::iteration(false);
     return TRUE;
 } // end of sp_export_progress_callback()
 
@@ -895,13 +922,15 @@ void Export::setExporting(bool exporting, Glib::ustring const &text)
     }
 }
 
-Gtk::Dialog * Export::create_progress_dialog (Glib::ustring progress_text) {
-    Gtk::Dialog *dlg = new Gtk::Dialog(_("Export in progress"), TRUE);
+ExportProgressDialog *
+Export::create_progress_dialog(Glib::ustring progress_text)
+{
+    auto dlg = new ExportProgressDialog(_("Export in progress"), true);
     dlg->set_transient_for( *(INKSCAPE.active_desktop()->getToplevel()) );
 
     Gtk::ProgressBar *prg = new Gtk::ProgressBar ();
     prg->set_text(progress_text);
-    dlg->set_data ("progress", prg);
+    dlg->set_progress(prg);
     auto CA = dlg->get_content_area();
     CA->pack_start(*prg, FALSE, FALSE, 4);
 
@@ -988,7 +1017,7 @@ void Export::onExport ()
         }
 
         prog_dlg = create_progress_dialog(Glib::ustring::compose(_("Exporting %1 files"), num));
-        prog_dlg->set_data("exportPanel", this);
+        prog_dlg->set_export_panel(this);
         setExporting(true, Glib::ustring::compose(_("Exporting %1 files"), num));
 
         gint export_count = 0;
@@ -997,8 +1026,8 @@ void Export::onExport ()
         for(auto i = itemlist.begin();i!=itemlist.end() && !interrupted ;++i){
             SPItem *item = *i;
 
-            prog_dlg->set_data("current", GINT_TO_POINTER(n));
-            prog_dlg->set_data("total", GINT_TO_POINTER(num));
+            prog_dlg->set_current(n);
+            prog_dlg->set_total(num);
             onProgressCallback(0.0, prog_dlg);
 
             // retrieve export filename hint
@@ -1120,11 +1149,11 @@ void Export::onExport ()
 
         /* TRANSLATORS: %1 will be the filename, %2 the width, and %3 the height of the image */
         prog_dlg = create_progress_dialog (Glib::ustring::compose(_("Exporting %1 (%2 x %3)"), fn, width, height));
-        prog_dlg->set_data("exportPanel", this);
+        prog_dlg->set_export_panel(this);
         setExporting(true, Glib::ustring::compose(_("Exporting %1 (%2 x %3)"), fn, width, height));
 
-        prog_dlg->set_data("current", GINT_TO_POINTER(0));
-        prog_dlg->set_data("total", GINT_TO_POINTER(0));
+        prog_dlg->set_current(0);
+        prog_dlg->set_total(0);
 
         auto area = Geom::Rect(Geom::Point(x0, y0), Geom::Point(x1, y1)) * desktop->dt2doc();
 
@@ -1267,24 +1296,19 @@ void Export::onExport ()
 } // end of sp_export_export_clicked()
 
 /// Called when Browse button is clicked
-/// @todo refactor this code to use ui/dialogs/filedialog.cpp
+/// @todo refactor this code to use ui/dialog/filedialog.cpp
 void Export::onBrowse ()
 {
-    GtkWidget *fs;
-    SPDesktop *desktop = getDesktop();
+    bool accept = false;
+    Gtk::FileChooserDialog fs(_("Select a filename for exporting"),
+                              Gtk::FILE_CHOOSER_ACTION_SAVE);
+    fs.add_button(_("_Cancel"), Gtk::RESPONSE_CANCEL);
+    fs.add_button(_("_Save"),   Gtk::RESPONSE_ACCEPT);
+    fs.set_local_only(false);
 
-    fs = gtk_file_chooser_dialog_new (_("Select a filename for exporting"),
-                                      (GtkWindow*)desktop->getToplevel(),
-                                      GTK_FILE_CHOOSER_ACTION_SAVE,
-                                      _("_Cancel"), GTK_RESPONSE_CANCEL,
-                                      _("_Save"),   GTK_RESPONSE_ACCEPT,
-                                      NULL );
+    sp_transientize(GTK_WIDGET(fs.gobj()));
 
-    gtk_file_chooser_set_local_only(GTK_FILE_CHOOSER(fs), false);
-
-    sp_transientize (fs);
-
-    gtk_window_set_modal(GTK_WINDOW (fs), true);
+    fs.set_modal(true);
 
     std::string filename = Glib::filename_from_utf8(filename_entry.get_text());
 
@@ -1293,7 +1317,7 @@ void Export::onBrowse ()
         filename = create_filepath_from_id(tmp, tmp);
     }
 
-    gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (fs), filename.c_str());
+    fs.set_filename(filename);
 
 #ifdef _WIN32
     // code in this section is borrowed from ui/dialogs/filedialogimpl-win32.cpp
@@ -1320,6 +1344,7 @@ void Export::onBrowse ()
     wcsncpy(_filename, reinterpret_cast<wchar_t*>(utf16_path_string), _MAX_PATH);
     g_free(utf16_path_string);
 
+    auto desktop = getDesktop();
     Glib::RefPtr<const Gdk::Window> parentWindow = desktop->getToplevel()->get_window();
     g_assert(parentWindow->gobj() != NULL);
 
@@ -1346,32 +1371,28 @@ void Export::onBrowse ()
         // Copy the selected file name, converting from UTF-16 to UTF-8
         gchar *utf8string = g_utf16_to_utf8((const gunichar2*)opf.lpstrFile, _MAX_PATH, NULL, NULL, NULL);
         filename_entry.set_text(utf8string);
-        filename_entry.set_position(strlen(utf8string));
+        filename_entry.set_position(-1);
+        accept = true;
         g_free(utf8string);
-
     }
     g_free(extension_string);
     g_free(title_string);
 
 #else
-    if (gtk_dialog_run (GTK_DIALOG (fs)) == GTK_RESPONSE_ACCEPT)
+    if (fs.run() == Gtk::RESPONSE_ACCEPT)
     {
-        gchar *file;
+        auto file = fs.get_filename();
 
-        file = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (fs));
-
-        gchar * utf8file = g_filename_to_utf8( file, -1, nullptr, nullptr, nullptr );
-        filename_entry.set_text (utf8file);
-        filename_entry.set_position(strlen(utf8file));
-
-        g_free(utf8file);
-        g_free(file);
+        auto utf8file = Glib::filename_to_utf8(file);
+        filename_entry.set_text(utf8file);
+        filename_entry.set_position(-1);
+        accept = true;
     }
 #endif
 
-    gtk_widget_destroy (fs);
-
-    return;
+    if (accept) {
+        onExport();
+    }
 } // end of sp_export_browse_clicked()
 
 // TODO: Move this to nr-rect-fns.h.
@@ -1539,9 +1560,7 @@ void Export::areaYChange(Glib::RefPtr<Gtk::Adjustment>& adj)
     height = floor ((y1 - y0) * ydpi / DPI_BASE + 0.5);
 
     if (height < SP_EXPORT_MIN_SIZE) {
-        //const gchar *key;
         height = SP_EXPORT_MIN_SIZE;
-        //key = (const gchar *)g_object_get_data(G_OBJECT (adj), "key");
         if (adj == y1_adj) {
             //if (!strcmp (key, "y0")) {
             y1 = y0 + height * DPI_BASE / ydpi;

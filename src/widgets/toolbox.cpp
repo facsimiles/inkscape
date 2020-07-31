@@ -59,7 +59,6 @@
 #include "ui/widget/style-swatch.h"
 #include "ui/widget/unit-tracker.h"
 
-#include "widgets/spinbutton-events.h"
 #include "widgets/spw-utilities.h"
 #include "widgets/widget-sizes.h"
 
@@ -143,29 +142,31 @@ static struct {
     sp_verb_t verb;
     sp_verb_t doubleclick_verb;
 } const tools[] = {
-	{ "/tools/select",   "select_tool",    SP_VERB_CONTEXT_SELECT,  SP_VERB_CONTEXT_SELECT_PREFS},
-	{ "/tools/nodes",     "node_tool",      SP_VERB_CONTEXT_NODE, SP_VERB_CONTEXT_NODE_PREFS },
-	{ "/tools/tweak",    "tweak_tool",     SP_VERB_CONTEXT_TWEAK, SP_VERB_CONTEXT_TWEAK_PREFS },
-	{ "/tools/spray",    "spray_tool",     SP_VERB_CONTEXT_SPRAY, SP_VERB_CONTEXT_SPRAY_PREFS },
-	{ "/tools/zoom",     "zoom_tool",      SP_VERB_CONTEXT_ZOOM, SP_VERB_CONTEXT_ZOOM_PREFS },
-	{ "/tools/measure",  "measure_tool",   SP_VERB_CONTEXT_MEASURE, SP_VERB_CONTEXT_MEASURE_PREFS },
-	{ "/tools/shapes/rect",     "rect_tool",      SP_VERB_CONTEXT_RECT, SP_VERB_CONTEXT_RECT_PREFS },
-	{ "/tools/shapes/3dbox",      "3dbox_tool",     SP_VERB_CONTEXT_3DBOX, SP_VERB_CONTEXT_3DBOX_PREFS },
-	{ "/tools/shapes/arc",      "arc_tool",       SP_VERB_CONTEXT_ARC, SP_VERB_CONTEXT_ARC_PREFS },
-	{ "/tools/shapes/star",     "star_tool",      SP_VERB_CONTEXT_STAR, SP_VERB_CONTEXT_STAR_PREFS },
-	{ "/tools/shapes/spiral",   "spiral_tool",    SP_VERB_CONTEXT_SPIRAL, SP_VERB_CONTEXT_SPIRAL_PREFS },
-	{ "/tools/freehand/pencil",   "pencil_tool",    SP_VERB_CONTEXT_PENCIL, SP_VERB_CONTEXT_PENCIL_PREFS },
-	{ "/tools/freehand/pen",      "pen_tool",       SP_VERB_CONTEXT_PEN, SP_VERB_CONTEXT_PEN_PREFS },
-	{ "/tools/calligraphic", "dyna_draw_tool", SP_VERB_CONTEXT_CALLIGRAPHIC, SP_VERB_CONTEXT_CALLIGRAPHIC_PREFS },
-	{ "/tools/lpetool",  "lpetool_tool",   SP_VERB_CONTEXT_LPETOOL, SP_VERB_CONTEXT_LPETOOL_PREFS },
-	{ "/tools/eraser",   "eraser_tool",    SP_VERB_CONTEXT_ERASER, SP_VERB_CONTEXT_ERASER_PREFS },
-	{ "/tools/paintbucket",    "paintbucket_tool",     SP_VERB_CONTEXT_PAINTBUCKET, SP_VERB_CONTEXT_PAINTBUCKET_PREFS },
-	{ "/tools/text",     "text_tool",      SP_VERB_CONTEXT_TEXT, SP_VERB_CONTEXT_TEXT_PREFS },
-	{ "/tools/connector","connector_tool", SP_VERB_CONTEXT_CONNECTOR, SP_VERB_CONTEXT_CONNECTOR_PREFS },
-	{ "/tools/gradient", "gradient_tool",  SP_VERB_CONTEXT_GRADIENT, SP_VERB_CONTEXT_GRADIENT_PREFS },
-	{ "/tools/mesh",     "mesh_tool",      SP_VERB_CONTEXT_MESH, SP_VERB_CONTEXT_MESH_PREFS },
-	{ "/tools/dropper",  "dropper_tool",   SP_VERB_CONTEXT_DROPPER, SP_VERB_CONTEXT_DROPPER_PREFS },
-	{ nullptr, nullptr, 0, 0 }
+    // clang-format off
+    { "/tools/select",           "select_tool",       SP_VERB_CONTEXT_SELECT,        SP_VERB_CONTEXT_SELECT_PREFS        },
+    { "/tools/nodes",            "node_tool",         SP_VERB_CONTEXT_NODE,          SP_VERB_CONTEXT_NODE_PREFS          },
+    { "/tools/tweak",            "tweak_tool",        SP_VERB_CONTEXT_TWEAK,         SP_VERB_CONTEXT_TWEAK_PREFS         },
+    { "/tools/spray",            "spray_tool",        SP_VERB_CONTEXT_SPRAY,         SP_VERB_CONTEXT_SPRAY_PREFS         },
+    { "/tools/zoom",             "zoom_tool",         SP_VERB_CONTEXT_ZOOM,          SP_VERB_CONTEXT_ZOOM_PREFS          },
+    { "/tools/measure",          "measure_tool",      SP_VERB_CONTEXT_MEASURE,       SP_VERB_CONTEXT_MEASURE_PREFS       },
+    { "/tools/shapes/rect",      "rect_tool",         SP_VERB_CONTEXT_RECT,          SP_VERB_CONTEXT_RECT_PREFS          },
+    { "/tools/shapes/3dbox",     "3dbox_tool",        SP_VERB_CONTEXT_3DBOX,         SP_VERB_CONTEXT_3DBOX_PREFS         },
+    { "/tools/shapes/arc",       "arc_tool",          SP_VERB_CONTEXT_ARC,           SP_VERB_CONTEXT_ARC_PREFS           },
+    { "/tools/shapes/star",      "star_tool",         SP_VERB_CONTEXT_STAR,          SP_VERB_CONTEXT_STAR_PREFS          },
+    { "/tools/shapes/spiral",    "spiral_tool",       SP_VERB_CONTEXT_SPIRAL,        SP_VERB_CONTEXT_SPIRAL_PREFS        },
+    { "/tools/freehand/pencil",  "pencil_tool",       SP_VERB_CONTEXT_PENCIL,        SP_VERB_CONTEXT_PENCIL_PREFS        },
+    { "/tools/freehand/pen",     "pen_tool",          SP_VERB_CONTEXT_PEN,           SP_VERB_CONTEXT_PEN_PREFS           },
+    { "/tools/calligraphic",     "dyna_draw_tool",    SP_VERB_CONTEXT_CALLIGRAPHIC,  SP_VERB_CONTEXT_CALLIGRAPHIC_PREFS  },
+    { "/tools/lpetool",          "lpetool_tool",      SP_VERB_CONTEXT_LPETOOL,       SP_VERB_CONTEXT_LPETOOL_PREFS       },
+    { "/tools/eraser",           "eraser_tool",       SP_VERB_CONTEXT_ERASER,        SP_VERB_CONTEXT_ERASER_PREFS        },
+    { "/tools/paintbucket",      "paintbucket_tool",  SP_VERB_CONTEXT_PAINTBUCKET,   SP_VERB_CONTEXT_PAINTBUCKET_PREFS   },
+    { "/tools/text",             "text_tool",         SP_VERB_CONTEXT_TEXT,          SP_VERB_CONTEXT_TEXT_PREFS          },
+    { "/tools/connector",        "connector_tool",    SP_VERB_CONTEXT_CONNECTOR,     SP_VERB_CONTEXT_CONNECTOR_PREFS     },
+    { "/tools/gradient",         "gradient_tool",     SP_VERB_CONTEXT_GRADIENT,      SP_VERB_CONTEXT_GRADIENT_PREFS      },
+    { "/tools/mesh",             "mesh_tool",         SP_VERB_CONTEXT_MESH,          SP_VERB_CONTEXT_MESH_PREFS          },
+    { "/tools/dropper",          "dropper_tool",      SP_VERB_CONTEXT_DROPPER,       SP_VERB_CONTEXT_DROPPER_PREFS       },
+    { nullptr,                   nullptr,             0,                             0,                                  },
+    // clang-format on
 };
 
 static struct {
@@ -177,6 +178,7 @@ static struct {
     gchar const *swatch_tool;
     gchar const *swatch_tip;
 } const aux_toolboxes[] = {
+    // clang-format off
     { "/tools/select",          "select_toolbox",      Inkscape::UI::Toolbar::SelectToolbar::create,        "SelectToolbar",
       SP_VERB_INVALID,                    nullptr,                  nullptr},
     { "/tools/nodes",           "node_toolbox",        Inkscape::UI::Toolbar::NodeToolbar::create,          "NodeToolbar",
@@ -225,6 +227,7 @@ static struct {
       SP_VERB_CONTEXT_PAINTBUCKET_PREFS, "/tools/paintbucket",       N_("Style of Paint Bucket fill objects")},
     { nullptr,                  nullptr,               nullptr,                                             nullptr,
         SP_VERB_INVALID,                 nullptr,                    nullptr }
+    // clang-format on
 };
 
 

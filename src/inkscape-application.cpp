@@ -580,6 +580,7 @@ ConcreteInkscapeApplication<T>::ConcreteInkscapeApplication()
             + "  " + Glib::ustring::compose(_("See %1 and %2 for more details."), "'man inkscape'", "http://wiki.inkscape.org/wiki/index.php/Using_the_Command_Line"));
 #endif
 
+    // clang-format off
     // General
     this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "version",                 'V', N_("Print Inkscape version"),                                                  "");
     this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "system-data-directory",  '\0', N_("Print system data directory"),                                             "");
@@ -605,7 +606,7 @@ ConcreteInkscapeApplication<T>::ConcreteInkscapeApplication()
     this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "export-area-drawing",    'D', N_("Area to export is whole drawing (ignoring page size)"),                     ""); // BSP
     this->add_main_option_entry(T::OPTION_TYPE_STRING,   "export-area",            'a', N_("Area to export in SVG user units"),                          N_("x0:y0:x1:y1")); // BSP
     this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "export-area-snap",      '\0', N_("Snap the bitmap export area outwards to the nearest integer values"),       ""); // Bxx
-    this->add_main_option_entry(T::OPTION_TYPE_INT,      "export-dpi",             'd', N_("Resolution for bitmaps and rasterized filters; default is 96"),      N_("DPI")); // BxP
+    this->add_main_option_entry(T::OPTION_TYPE_DOUBLE,   "export-dpi",             'd', N_("Resolution for bitmaps and rasterized filters; default is 96"),      N_("DPI")); // BxP
     this->add_main_option_entry(T::OPTION_TYPE_INT,      "export-width",           'w', N_("Bitmap width in pixels (overrides --export-dpi)"),                 N_("WIDTH")); // Bxx
     this->add_main_option_entry(T::OPTION_TYPE_INT,      "export-height",          'h', N_("Bitmap height in pixels (overrides --export-dpi)"),               N_("HEIGHT")); // Bxx
     this->add_main_option_entry(T::OPTION_TYPE_INT,      "export-margin",         '\0', N_("Margin around export area: units of page size for SVG, mm for PS/PDF"), N_("MARGIN")); // xSP
@@ -660,6 +661,7 @@ ConcreteInkscapeApplication<T>::ConcreteInkscapeApplication()
     this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "dbus-listen",           '\0', N_("Enter a listening loop for D-Bus messages in console mode"),                "");
     this->add_main_option_entry(T::OPTION_TYPE_STRING,   "dbus-name",             '\0', N_("Specify the D-Bus name; default is 'org.inkscape'"),            N_("BUS-NAME"));
 #endif // WITH_DBUS
+    // clang-format on
 
     Gio::Application::signal_handle_local_options().connect(sigc::mem_fun(*this, &InkscapeApplication::on_handle_local_options));
 
@@ -1056,10 +1058,13 @@ template<class T>
 void
 ConcreteInkscapeApplication<T>::parse_actions(const Glib::ustring& input, action_vector_t& action_vector)
 {
+    const auto re_colon = Glib::Regex::create("\\s*:\\s*");
+
     // Split action list
     std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("\\s*;\\s*", input);
     for (auto token : tokens) {
-        std::vector<Glib::ustring> tokens2 = Glib::Regex::split_simple("\\s*:\\s*", token);
+        // Note: split into 2 tokens max ("param:value"); allows value to contain colon (e.g. abs. paths on Windows)
+        std::vector<Glib::ustring> tokens2 = re_colon->split(token, 0,  static_cast<Glib::RegexMatchFlags>(0), 2);
         std::string action;
         std::string value;
         if (tokens2.size() > 0) {
@@ -1078,9 +1083,9 @@ ConcreteInkscapeApplication<T>::parse_actions(const Glib::ustring& input, action
                 Glib::VariantType type = action_ptr->get_parameter_type();
                 if (type.get_string() == "b") {
                     bool b = false;
-                    if (value == "0" || value == "true" || value.empty()) {
+                    if (value == "1" || value == "true" || value.empty()) {
                         b = true;
-                    } else if (value =="1" || value == "false") {
+                    } else if (value == "0" || value == "false") {
                         b = false;
                     } else {
                         std::cerr << "InkscapeApplication::parse_actions: Invalid boolean value: " << action << ":" << value << std::endl;

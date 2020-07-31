@@ -23,7 +23,7 @@
 #include <fstream>
 
 #include <gio/gio.h>
-#include <gtk/gtksettings.h>
+#include <gtk/gtk.h>
 #include <glibmm/i18n.h>
 #include <gtkmm.h>
 
@@ -106,7 +106,7 @@ InkscapePreferences::InkscapePreferences()
     auto hbox_list_page = Gtk::manage(new Gtk::Box());
     hbox_list_page->set_border_width(12);
     hbox_list_page->set_spacing(12);
-    _getContents()->add(*hbox_list_page);
+    _setContents(hbox_list_page);
 
     //Pagelist
     Gtk::Frame* list_frame = Gtk::manage(new Gtk::Frame());
@@ -153,8 +153,7 @@ InkscapePreferences::InkscapePreferences()
     initPageRendering();
     initPageSpellcheck();
 
-
-    signalPresent().connect(sigc::mem_fun(*this, &InkscapePreferences::_presentPages));
+    signal_map().connect(sigc::mem_fun(*this, &InkscapePreferences::_presentPages));
 
     //calculate the size request for this dialog
     _page_list.expand_all();
@@ -346,8 +345,6 @@ void InkscapePreferences::initPageTools()
     this->AddPage(_page_zoom, _("Zoom"), iter_tools, PREFS_PAGE_TOOLS_ZOOM);
     this->AddPage(_page_measure, C_("ContextVerb", "Measure"), iter_tools, PREFS_PAGE_TOOLS_MEASURE);
     
-    _path_tools = _page_list.get_model()->get_path(iter_tools);
-
     _page_tools.add_group_header( _("Bounding box to use"));
     _t_bbox_visual.init ( _("Visual bounding box"), "/tools/bounding_box", 0, false, nullptr); // 0 means visual
     _page_tools.add_line( true, "", _t_bbox_visual, "",
@@ -433,7 +430,6 @@ void InkscapePreferences::initPageTools()
     _page_measure.add_line( false, "", *cb, "", _("The start and end of the measurement tool's control line will not be considered for calculating lengths. Only lengths between actual curve intersections will be displayed."));
 
     //Shapes
-    _path_shapes = _page_list.get_model()->get_path(iter_shapes);
     this->AddSelcueCheckbox(_page_shapes, "/tools/shapes", true);
     this->AddGradientCheckbox(_page_shapes, "/tools/shapes", true);
 
@@ -778,7 +774,7 @@ void InkscapePreferences::themeChange()
 
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         Glib::ustring current_theme = prefs->getString("/theme/gtkTheme");
-        GtkSettings *settings = gtk_settings_get_default();
+        auto settings = Gtk::Settings::get_default();
         _dark_theme.get_parent()->set_no_show_all(false);
         if (dark_themes[current_theme]) {
             _dark_theme.get_parent()->show_all();
@@ -786,7 +782,7 @@ void InkscapePreferences::themeChange()
             _dark_theme.get_parent()->hide();
         }
 
-        g_object_set(settings, "gtk-theme-name", current_theme.c_str(), NULL);
+        settings->property_gtk_theme_name() = current_theme;
         bool dark = current_theme.find(":dark") != std::string::npos;
         if (!dark) {
             Glib::RefPtr<Gtk::StyleContext> stylecontext = window->get_style_context();
@@ -819,8 +815,8 @@ void InkscapePreferences::preferDarkThemeChange()
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         bool dark_theme = prefs->getBool("/theme/preferDarkTheme", false);
         Glib::ustring current_theme = prefs->getString("/theme/gtkTheme");
-        GtkSettings *settings = gtk_settings_get_default();
-        g_object_set(settings, "gtk-application-prefer-dark-theme", dark_theme, NULL);
+        auto settings = Gtk::Settings::get_default();
+        settings->property_gtk_application_prefer_dark_theme() = dark_theme;
         bool dark = current_theme.find(":dark") != std::string::npos;
         if (!dark) {
             Glib::RefPtr<Gtk::StyleContext> stylecontext = window->get_style_context();
@@ -851,10 +847,10 @@ void InkscapePreferences::symbolicThemeCheck()
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     Glib::ustring themeiconname = prefs->getString("/theme/iconTheme");
     bool symbolic = false;
-    GtkSettings *settings = gtk_settings_get_default();
+    auto settings = Gtk::Settings::get_default();
     if (settings) {
         if (themeiconname != "") {
-            g_object_set(settings, "gtk-icon-theme-name", themeiconname.c_str(), NULL);
+            settings->property_gtk_icon_theme_name() = themeiconname;
         }
     }
     if (prefs->getString("/theme/defaultIconTheme") != prefs->getString("/theme/iconTheme")) {
@@ -965,7 +961,6 @@ void InkscapePreferences::changeIconsColor(guint32 /*color*/)
 void InkscapePreferences::initPageUI()
 {
     Gtk::TreeModel::iterator iter_ui = this->AddPage(_page_ui, _("Interface"), PREFS_PAGE_UI);
-    _path_ui = _page_list.get_model()->get_path(iter_ui);
 
     Glib::ustring languages[] = {_("System default"),
         _("Albanian (sq)"), _("Arabic (ar)"), _("Armenian (hy)"), _("Assamese (as)"), _("Azerbaijani (az)"),
@@ -1504,7 +1499,6 @@ static void gamutColorChanged( Gtk::ColorButton* btn ) {
 void InkscapePreferences::initPageIO()
 {
     Gtk::TreeModel::iterator iter_io = this->AddPage(_page_io, _("Input/Output"), PREFS_PAGE_IO);
-    _path_io = _page_list.get_model()->get_path(iter_io);
 
     _save_use_current_dir.init( _("Use current directory for \"Save As ...\""), "/dialogs/save_as/use_current_dir", true);
     _page_io.add_line( false, "", _save_use_current_dir, "",
@@ -1797,7 +1791,6 @@ void InkscapePreferences::initPageIO()
 void InkscapePreferences::initPageBehavior()
 {
     Gtk::TreeModel::iterator iter_behavior = this->AddPage(_page_behavior, _("Behavior"), PREFS_PAGE_BEHAVIOR);
-    _path_behavior = _page_list.get_model()->get_path(iter_behavior);
 
     _misc_simpl.init("/options/simplifythreshold/value", 0.0001, 1.0, 0.0001, 0.0010, 0.0010, false, false);
     _page_behavior.add_line( false, _("_Simplification threshold:"), _misc_simpl, "",
@@ -2609,13 +2602,15 @@ void InkscapePreferences::initPageSpellcheck()
 #endif
 }
 
-static void appendList( Glib::ustring& tmp, const gchar* const*listing )
+template <typename string_type>
+static void appendList(Glib::ustring& tmp, const std::vector<string_type> &listing)
 {
-    for (const gchar* const* ptr = listing; *ptr; ptr++) {
-        tmp += *ptr;
+    for (auto const & str : listing) {
+        tmp += str;
         tmp += "\n";
     }
 }
+
 
 void InkscapePreferences::initPageSystem()
 {
@@ -2640,10 +2635,15 @@ void InkscapePreferences::initPageSystem()
     _sys_user_config.init((char const *)Inkscape::IO::Resource::profile_path(""), _("Open preferences folder"));
     _page_system.add_line(true, _("User config: "), _sys_user_config, "", _("Location of users configuration"), true);
 
-    _sys_user_extension_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::EXTENSIONS, ""),
+    auto extensions_folder = IO::Resource::get_path_string(IO::Resource::USER, IO::Resource::EXTENSIONS);
+    _sys_user_extension_dir.init(extensions_folder,
                                  _("Open extensions folder"));
     _page_system.add_line(true, _("User extensions: "), _sys_user_extension_dir, "",
                           _("Location of the user’s extensions"), true);
+
+    _sys_user_fonts_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::FONTS, ""),
+                             _("Open fonts folder"));
+    _page_system.add_line(true, _("User fonts: "), _sys_user_fonts_dir, "", _("Location of the user’s fonts"), true);
 
     _sys_user_themes_dir.init(g_build_filename(g_get_user_data_dir(), "themes", NULL), _("Open themes folder"));
     _page_system.add_line(true, _("User themes: "), _sys_user_themes_dir, "", _("Location of the user’s themes"), true);
@@ -2696,16 +2696,18 @@ void InkscapePreferences::initPageSystem()
     _sys_tmp_files.set_editable(false);
     _page_system.add_line(true, _("Temporary files: "), _sys_tmp_files, "", _("Location of the temporary files used for autosave"), true);
 
-    _sys_data.set_text( INKSCAPE_DATADIR_REAL );
+    _sys_data.set_text(get_inkscape_datadir());
     _sys_data.set_editable(false);
     _page_system.add_line(true, _("Inkscape data: "), _sys_data, "", _("Location of Inkscape data"), true);
 
-    _sys_extension_dir.set_text(INKSCAPE_EXTENSIONDIR);
+    extensions_folder = IO::Resource::get_path_string(IO::Resource::SYSTEM, IO::Resource::EXTENSIONS);
+    _sys_extension_dir.set_text(extensions_folder);
     _sys_extension_dir.set_editable(false);
     _page_system.add_line(true, _("Inkscape extensions: "), _sys_extension_dir, "", _("Location of the Inkscape extensions"), true);
 
     Glib::ustring tmp;
-    appendList( tmp, g_get_system_data_dirs() );
+    auto system_data_dirs = Glib::get_system_data_dirs();
+    appendList(tmp, system_data_dirs);
     _sys_systemdata.get_buffer()->insert(_sys_systemdata.get_buffer()->end(), tmp);
     _sys_systemdata.set_editable(false);
     _sys_systemdata_scroll.add(_sys_systemdata);
@@ -2714,12 +2716,13 @@ void InkscapePreferences::initPageSystem()
     _sys_systemdata_scroll.set_shadow_type(Gtk::SHADOW_IN);
     _page_system.add_line(true,  _("System data: "), _sys_systemdata_scroll, "", _("Locations of system data"), true);
 
+    _sys_fontdirs_custom.init("/options/font/custom_fontdirs", 50);
+    _page_system.add_line(true, _("Custom Font directories"), _sys_fontdirs_custom, "", _("Load additional fonts from custom locations (one path per line)"), true);
+
     tmp = "";
-    gchar** paths = nullptr;
-    gint count = 0;
-    gtk_icon_theme_get_search_path(gtk_icon_theme_get_default(), &paths, &count);
+    auto icon_theme = Gtk::IconTheme::get_default();
+    auto paths = icon_theme->get_search_path();
     appendList( tmp, paths );
-    g_strfreev(paths);
     _sys_icon.get_buffer()->insert(_sys_icon.get_buffer()->end(), tmp);
     _sys_icon.set_editable(false);
     _sys_icon_scroll.add(_sys_icon);
@@ -2756,16 +2759,8 @@ bool InkscapePreferences::PresentPage(const Gtk::TreeModel::iterator& iter)
     _init = false;
     if (desired_page == row[_page_list_columns._col_id])
     {
-        if (desired_page >= PREFS_PAGE_TOOLS && desired_page <= PREFS_PAGE_TOOLS_CONNECTOR)
-            _page_list.expand_row(_path_tools, false);
-        if (desired_page >= PREFS_PAGE_TOOLS_SHAPES && desired_page <= PREFS_PAGE_TOOLS_SHAPES_SPIRAL)
-            _page_list.expand_row(_path_shapes, false);
-        if (desired_page >= PREFS_PAGE_UI && desired_page <= PREFS_PAGE_UI_KEYBOARD_SHORTCUTS)
-            _page_list.expand_row(_path_ui, false);
-        if (desired_page >= PREFS_PAGE_BEHAVIOR && desired_page <= PREFS_PAGE_BEHAVIOR_MASKS)
-            _page_list.expand_row(_path_behavior, false);
-        if (desired_page >= PREFS_PAGE_IO && desired_page <= PREFS_PAGE_IO_OPENCLIPART)
-            _page_list.expand_row(_path_io, false);
+        auto const path = _page_list.get_model()->get_path(*iter);
+        _page_list.expand_to_path(path);
         _page_list.get_selection()->select(iter);
         if (desired_page == PREFS_PAGE_UI_THEME)
             symbolicThemeCheck();
@@ -2819,10 +2814,6 @@ void InkscapePreferences::on_pagelist_selection_changed()
         _page_title.set_markup("<span size='large'><b>" + col_name_escaped + "</b></span>");
         _page_frame.add(*_current_page);
         _current_page->show();
-        while (Gtk::Main::events_pending())
-        {
-            Gtk::Main::iteration();
-        }
         this->show_all_children();
         if (prefs->getInt("/dialogs/preferences/page", 0) == PREFS_PAGE_UI_THEME) {
             symbolicThemeCheck();

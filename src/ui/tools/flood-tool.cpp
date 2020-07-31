@@ -44,7 +44,6 @@
 #include "display/drawing-context.h"
 #include "display/drawing-image.h"
 #include "display/drawing.h"
-#include "display/sp-canvas.h"
 
 #include "include/macros.h"
 
@@ -55,14 +54,14 @@
 #include "object/sp-path.h"
 #include "object/sp-root.h"
 
-#include "ui/pixmaps/cursor-paintbucket.xpm"
-
 #include "svg/svg.h"
 
 #include "trace/imagemap.h"
 #include "trace/potrace/inkscape-potrace.h"
 
+#include "ui/pixmaps/cursor-paintbucket.xpm"
 #include "ui/shape-editor.h"
+#include "ui/widget/canvas.h"  // Canvas area
 
 #include "xml/node-event-vector.h"
 
@@ -741,7 +740,7 @@ static bool sort_fill_queue_horizontal(Geom::Point a, Geom::Point b) {
  * @param is_touch_fill If true, use only the initial contact point in the Rubberband "touch selection" as the fill target color.
  */
 static void sp_flood_do_flood_fill(ToolBase *event_context, GdkEvent *event, bool union_with_selection, bool is_point_fill, bool is_touch_fill) {
-    SPDesktop *desktop = event_context->desktop;
+    SPDesktop *desktop = event_context->getDesktop();
     SPDocument *document = desktop->getDocument();
 
     document->ensureUpToDate();
@@ -758,7 +757,7 @@ static void sp_flood_do_flood_fill(ToolBase *event_context, GdkEvent *event, boo
     double padding = 1.6;
 
     // image space is world space with an offset
-    Geom::Rect const screen_world = desktop->canvas->getViewbox();
+    Geom::Rect const screen_world = desktop->getCanvas()->get_area_world();
     Geom::Rect const screen = screen_world * desktop->w2d();
     Geom::IntPoint const img_dims = (screen_world.dimensions() * padding).ceil();
     Geom::Affine const world2img = Geom::Translate((img_dims - screen_world.dimensions()) / 2.0 - screen_world.min());
@@ -1161,31 +1160,23 @@ bool FloodTool::root_handler(GdkEvent* event) {
             Inkscape::Rubberband *r = Inkscape::Rubberband::get(desktop);
 
             if (r->is_started()) {
-                // set "busy" cursor
+                // set "busy" cursor  THIS LEADS TO CRASHES. USER CAN CHANGE TOOLS AS IT CALLS GTK MAIN LOOP
                 desktop->setWaitingCursor();
 
-                if (SP_IS_EVENT_CONTEXT(this)) { 
-                    // Since setWaitingCursor runs main loop iterations, we may have already left this tool!
-                    // So check if the tool is valid before doing anything
-                    dragging = false;
+                dragging = false;
 
-                    bool is_point_fill = this->within_tolerance;
-                    bool is_touch_fill = event->button.state & GDK_MOD1_MASK;
+                bool is_point_fill = this->within_tolerance;
+                bool is_touch_fill = event->button.state & GDK_MOD1_MASK;
                     
-                    sp_flood_do_flood_fill(this, event, event->button.state & GDK_SHIFT_MASK, is_point_fill, is_touch_fill);
+                sp_flood_do_flood_fill(this, event, event->button.state & GDK_SHIFT_MASK, is_point_fill, is_touch_fill);
                     
-                    desktop->clearWaitingCursor();
-                    // restore cursor when done; note that it may already be different if e.g. user 
-                    // switched to another tool during interruptible tracing or drawing, in which case do nothing
+                desktop->clearWaitingCursor();
 
-                    ret = TRUE;
-                }
+                ret = TRUE;
 
                 r->stop();
 
-                //if (SP_IS_EVENT_CONTEXT(this)) {
                 this->defaultMessageContext()->clear();
-                //}
             }
         }
         break;
@@ -1220,8 +1211,6 @@ void FloodTool::finishItem() {
 
     if (this->item != nullptr) {
         this->item->updateRepr();
-
-        desktop->canvas->endForcedFullRedraws();
 
         desktop->getSelection()->set(this->item);
 

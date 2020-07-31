@@ -37,15 +37,14 @@ SPDrawAnchor *sp_draw_anchor_new(Inkscape::UI::Tools::FreehandBase *dc, SPCurve 
         return nullptr;
     }
 
-    SPDrawAnchor *a = g_new(SPDrawAnchor, 1);
+    SPDrawAnchor *a = new SPDrawAnchor;
 
     a->dc = dc;
-    a->curve = curve;
-    curve->ref();
+    a->curve = curve->ref();
     a->start = start;
     a->active = FALSE;
     a->dp = delta;
-    a->ctrl = ControlManager::getManager().createControl(dc->getDesktop().getControls(), Inkscape::CTRL_TYPE_ANCHOR);
+    a->ctrl = ControlManager::getManager().createControl(dc->getDesktop()->getControls(), Inkscape::CTRL_TYPE_ANCHOR);
 
     SP_CTRL(a->ctrl)->moveto(delta);
 
@@ -54,18 +53,19 @@ SPDrawAnchor *sp_draw_anchor_new(Inkscape::UI::Tools::FreehandBase *dc, SPCurve 
     return a;
 }
 
+SPDrawAnchor::~SPDrawAnchor()
+{
+    if (ctrl) {
+        sp_canvas_item_destroy(ctrl);
+    }
+}
+
 /**
  * Destroys the anchor's canvas item and frees the anchor object.
  */
 SPDrawAnchor *sp_draw_anchor_destroy(SPDrawAnchor *anchor)
 {
-    if (anchor->curve) {
-        anchor->curve->unref();
-    }
-    if (anchor->ctrl) {
-        sp_canvas_item_destroy(anchor->ctrl);
-    }
-    g_free(anchor);
+    delete anchor;
     return nullptr;
 }
 
@@ -77,7 +77,7 @@ SPDrawAnchor *sp_draw_anchor_test(SPDrawAnchor *anchor, Geom::Point w, bool acti
 {
     SPCtrl *ctrl = SP_CTRL(anchor->ctrl);
 
-    if ( activate && ( Geom::LInfty( w - anchor->dc->getDesktop().d2w(anchor->dp) ) <= (ctrl->box.width() / 2.0) ) ) {
+    if ( activate && ( Geom::LInfty( w - anchor->dc->getDesktop()->d2w(anchor->dp) ) <= (ctrl->box.width() / 2.0) ) ) {
         if (!anchor->active) {
             ControlManager::getManager().setControlResize(anchor->ctrl, 4);
             g_object_set(anchor->ctrl, "fill_color", FILL_COLOR_MOUSEOVER, NULL);

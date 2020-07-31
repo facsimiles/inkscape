@@ -59,10 +59,12 @@ namespace TpS {
 } // TpS
 
 static const Util::EnumData<unsigned> JoinType[] = {
+    // clang-format off
     {JOIN_BEVEL,          N_("Beveled"),         "bevel"},
     {JOIN_ROUND,          N_("Rounded"),         "round"},
     {JOIN_MITER,          N_("Miter"),           "miter"},
     {JOIN_EXTRAPOLATE,    N_("Extrapolated"),    "extrapolated"},
+    // clang-format on
 };
 
 enum TaperShape {
@@ -482,7 +484,7 @@ void KnotHolderEntityAttachBegin::knot_set(Geom::Point const &p, Geom::Point con
         return;
     }
     
-    if (!SP_SHAPE(lpe->sp_lpe_item)->getCurve(true)) {
+    if (!SP_SHAPE(lpe->sp_lpe_item)->curve()) {
         // oops
         return;
     }
@@ -538,7 +540,7 @@ void KnotHolderEntityAttachEnd::knot_set(Geom::Point const &p, Geom::Point const
         return;
     }
     
-    if (!SP_SHAPE(lpe->sp_lpe_item)->getCurve(true)) {
+    if (!SP_SHAPE(lpe->sp_lpe_item)->curve()) {
         // oops
         return;
     }

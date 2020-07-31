@@ -48,45 +48,14 @@
 #include "ui/tools-switch.h"
 #include "ui/tools/pen-tool.h"
 
+#include "ui/widget/canvas.h"
 #include "ui/widget/label-tool-item.h"
 #include "ui/widget/combo-tool-item.h"
 #include "ui/widget/spin-button-tool-item.h"
 
 #include "ui/uxmanager.h"
 
-#include "widgets/spinbutton-events.h"
-
 using Inkscape::UI::UXManager;
-
-/*
-class PencilToleranceObserver : public Inkscape::Preferences::Observer {
-public:
-    PencilToleranceObserver(Glib::ustring const &path, GObject *x) : Observer(path), _obj(x)
-    {
-        g_object_set_data(_obj, "prefobserver", this);
-    }
-    virtual ~PencilToleranceObserver() {
-        if (g_object_get_data(_obj, "prefobserver") == this) {
-            g_object_set_data(_obj, "prefobserver", NULL);
-        }
-    }
-    virtual void notify(Inkscape::Preferences::Entry const &val) {
-        GObject* tbl = _obj;
-        if (g_object_get_data( tbl, "freeze" )) {
-            return;
-        }
-        g_object_set_data( tbl, "freeze", GINT_TO_POINTER(TRUE) );
-
-        GtkAdjustment * adj = GTK_ADJUSTMENT(g_object_get_data(tbl, "tolerance"));
-
-        double v = val.getDouble(adj->value);
-        gtk_adjustment_set_value(adj, v);
-        g_object_set_data( tbl, "freeze", GINT_TO_POINTER(FALSE) );
-    }
-private:
-    GObject *_obj;
-};
-*/
 
 namespace Inkscape {
 namespace UI {
@@ -121,7 +90,7 @@ PencilToolbar::PencilToolbar(SPDesktop *desktop,
             _minpressure =
                 Gtk::manage(new UI::Widget::SpinButtonToolItem("pencil-minpressure", _("Min:"), _minpressure_adj, 0, 0));
             _minpressure->set_tooltip_text(_("Min percent of pressure"));
-            _minpressure->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
+            _minpressure->set_focus_widget(desktop->canvas);
             _minpressure_adj->signal_value_changed().connect(
                 sigc::mem_fun(*this, &PencilToolbar::minpressure_value_changed));
             add(*_minpressure);
@@ -133,7 +102,7 @@ PencilToolbar::PencilToolbar(SPDesktop *desktop,
             _maxpressure =
                 Gtk::manage(new UI::Widget::SpinButtonToolItem("pencil-maxpressure", _("Max:"), _maxpressure_adj, 0, 0));
             _maxpressure->set_tooltip_text(_("Max percent of pressure"));
-            _maxpressure->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
+            _maxpressure->set_focus_widget(desktop->canvas);
             _maxpressure_adj->signal_value_changed().connect(
                 sigc::mem_fun(*this, &PencilToolbar::maxpressure_value_changed));
             add(*_maxpressure);
@@ -155,7 +124,7 @@ PencilToolbar::PencilToolbar(SPDesktop *desktop,
                 Gtk::manage(new UI::Widget::SpinButtonToolItem("pencil-tolerance", _("Smoothing:"), _tolerance_adj, 1, 2));
             tolerance_item->set_tooltip_text(_("How much smoothing (simplifying) is applied to the line"));
             tolerance_item->set_custom_numeric_menu_data(values, labels);
-            tolerance_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
+            tolerance_item->set_focus_widget(desktop->canvas);
             _tolerance_adj->signal_value_changed().connect(sigc::mem_fun(*this, &PencilToolbar::tolerance_value_changed));
             // ege_adjustment_action_set_appearance( eact, TOOLBAR_SLIDER_HINT );
             add(*tolerance_item);
@@ -228,12 +197,11 @@ PencilToolbar::mode_changed(int mode)
 
     bool visible = (mode != 2);
 
-    if (_flatten_simplify) {
-        _flatten_simplify->set_visible(visible);
-    }
-
     if (_simplify) {
         _simplify->set_visible(visible);
+        if (_flatten_simplify) {
+            _flatten_simplify->set_visible(visible && _simplify->get_active());
+        }
     }
     if (tools_isactive(_desktop, TOOLS_FREEHAND_PEN)) {
         SP_PEN_CONTEXT(_desktop->event_context)->setPolylineMode();
@@ -336,6 +304,7 @@ PencilToolbar::maxpressure_value_changed()
 
 void
 PencilToolbar::use_pencil_pressure() {
+    // assumes called by pencil toolbar (and all these widgets exist)
     bool pressure = _pressure_item->get_active();
     auto prefs = Inkscape::Preferences::get();
     prefs->setBool(freehand_tool_name() + "/pressure", pressure);
@@ -346,6 +315,7 @@ PencilToolbar::use_pencil_pressure() {
         _shape_item->set_visible(false);
         _simplify->set_visible(false);
         _flatten_spiro_bspline->set_visible(false);
+        _flatten_simplify->set_visible(false);
         for (auto button : _mode_buttons) {
             button->set_sensitive(false);
         }
@@ -356,7 +326,9 @@ PencilToolbar::use_pencil_pressure() {
         _maxpressure->set_visible(false);
         _cap_item->set_visible(false);
         _shape_item->set_visible(true);
-        _simplify->set_visible(true);
+        bool simplify_visible = freehandMode != 2;
+        _simplify->set_visible(simplify_visible);
+        _flatten_simplify->set_visible(simplify_visible && _simplify->get_active());
         if (freehandMode == 1 || freehandMode == 2) {
             _flatten_spiro_bspline->set_visible(true);
         }
@@ -469,15 +441,15 @@ PencilToolbar::simplify_flatten()
                     if (dynamic_cast<Inkscape::LivePathEffect::LPESimplify *>(lpe)) {
                         SPShape * shape = dynamic_cast<SPShape *>(lpeitem);
                         if(shape){
-                            SPCurve * c = shape->getCurveForEdit();
-                            lpe->doEffect(c);
+                            auto c = SPCurve::copy(shape->curveForEdit());
+                            lpe->doEffect(c.get());
                             lpeitem->setCurrentPathEffect(*i);
                             if (lpelist.size() > 1){
                                 lpeitem->removeCurrentPathEffect(true);
-                                shape->setCurveBeforeLPE(c);
+                                shape->setCurveBeforeLPE(std::move(c));
                             } else {
                                 lpeitem->removeCurrentPathEffect(false);
-                                shape->setCurve(c, false);
+                                shape->setCurve(std::move(c));
                             }
                             break;
                         }
@@ -513,15 +485,15 @@ PencilToolbar::flatten_spiro_bspline()
                     {
                         SPShape * shape = dynamic_cast<SPShape *>(lpeitem);
                         if(shape){
-                            SPCurve * c = shape->getCurveForEdit();
-                            lpe->doEffect(c);
+                            auto c = SPCurve::copy(shape->curveForEdit());
+                            lpe->doEffect(c.get());
                             lpeitem->setCurrentPathEffect(*i);
                             if (lpelist.size() > 1){
                                 lpeitem->removeCurrentPathEffect(true);
-                                shape->setCurveBeforeLPE(c);
+                                shape->setCurveBeforeLPE(std::move(c));
                             } else {
                                 lpeitem->removeCurrentPathEffect(false);
-                                shape->setCurve(c, false);
+                                shape->setCurve(std::move(c));
                             }
                             break;
                         }
@@ -579,11 +551,11 @@ PencilToolbar::tolerance_value_changed()
                             sp_lpe_item_update_patheffect(lpeitem, false, false);
                             SPShape *sp_shape = dynamic_cast<SPShape *>(lpeitem);
                             if (sp_shape) {
-                                guint previous_curve_length = sp_shape->getCurve(true)->get_segment_count();
+                                guint previous_curve_length = sp_shape->curve()->get_segment_count();
                                 lpe_simplify->getRepr()->setAttribute("threshold", ss.str());
                                 sp_lpe_item_update_patheffect(lpeitem, false, false);
                                 simplified = true;
-                                guint curve_length = sp_shape->getCurve(true)->get_segment_count();
+                                guint curve_length = sp_shape->curve()->get_segment_count();
                                 std::vector<Geom::Point> ts = lpe_powerstroke->offset_points.data();
                                 double factor = (double)curve_length/ (double)previous_curve_length;
                                 for (auto & t : ts) {

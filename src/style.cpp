@@ -35,8 +35,6 @@
 #include "document.h"
 #include "preferences.h"
 
-#include "display/canvas-bpath.h"
-
 #include "3rdparty/libcroco/cr-sel-eng.h"
 
 #include "object/sp-paint-server.h"
@@ -50,6 +48,10 @@
 
 #include "xml/croco-node-iface.h"
 #include "xml/simple-document.h"
+
+#if !GLIB_CHECK_VERSION(2, 64, 0)
+#define g_warning_once g_warning
+#endif
 
 using Inkscape::CSSOStringStream;
 
@@ -677,7 +679,7 @@ SPStyle::readIfUnset(SPAttr id, gchar const *val, SPStyleSrc const &source ) {
              * will fail, since CSS always overwrites SVG attributes.
              * Fixes Bug #324849
              */
-            g_warning("attribute 'clip-path' given as CSS");
+            g_warning_once("attribute 'clip-path' given as CSS");
 
             //XML Tree being directly used here.
             if (object) {
@@ -688,7 +690,7 @@ SPStyle::readIfUnset(SPAttr id, gchar const *val, SPStyleSrc const &source ) {
             /** \todo
              * See comment for SPAttr::CLIP_PATH
              */
-            g_warning("attribute 'mask' given as CSS");
+            g_warning_once("attribute 'mask' given as CSS");
             
             //XML Tree being directly used here.
             if (object) {

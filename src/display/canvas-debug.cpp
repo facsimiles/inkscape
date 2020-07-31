@@ -11,7 +11,6 @@
  */
 
 #include "canvas-debug.h"
-#include "sp-canvas.h"
 #include "cairo-utils.h"
 #include "ui/event-debug.h"
 
@@ -37,6 +36,8 @@ static void sp_canvas_debug_class_init (SPCanvasDebugClass *klass)
 static void sp_canvas_debug_init (SPCanvasDebug *debug)
 {
     debug->pickable = true; // So we can receive events.
+
+    debug->name = "CanvasDebug";
 }
 
 namespace {

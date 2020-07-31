@@ -23,9 +23,10 @@
 #include "sp-canvas-util.h"
 #include "inkscape.h"
 #include "guideline.h"
+
 #include "display/cairo-utils.h"
-#include "display/sp-canvas.h"
 #include "display/sodipodi-ctrl.h"
+
 #include "object/sp-namedview.h"
 
 static void sp_guideline_destroy(SPCanvasItem *object);
@@ -58,6 +59,8 @@ static void sp_guideline_init(SPGuideLine *gl)
 
     gl->origin = nullptr;
     gl->label = nullptr;
+
+    SP_CANVAS_ITEM(gl)->name = "Guideline";
 }
 
 static void sp_guideline_destroy(SPCanvasItem *object)
@@ -237,6 +240,7 @@ SPCanvasItem *sp_guideline_new(SPCanvasGroup *parent, char* label, Geom::Point p
                                                "filled", FALSE,
                                                "stroked", TRUE,
                                                "stroke_color", 0x01000000, NULL);
+    gl->origin->name = "SPCtrl:GuidelineOrigin";
     gl->origin->pickable = false;
 
     return item;

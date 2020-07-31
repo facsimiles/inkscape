@@ -28,7 +28,6 @@
 #include "display/cairo-utils.h"
 #include "display/canvas-grid.h"
 #include "display/sp-canvas-util.h"
-#include "display/sp-canvas.h"
 #include "document.h"
 #include "inkscape.h"
 #include "preferences.h"
@@ -357,6 +356,9 @@ void
 CanvasAxonomGrid::updateWidgets()
 {
     if (_wr.isUpdating()) return;
+
+    //no widgets (grid created with the document, not with the dialog)
+    if (!_rcb_visible) return;
 
     _wr.setUpdating (true);
 

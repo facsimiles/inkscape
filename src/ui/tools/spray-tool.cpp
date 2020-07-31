@@ -46,10 +46,10 @@
 
 #include "display/cairo-utils.h"
 #include "display/canvas-arena.h"
+#include "display/canvas-bpath.h"
 #include "display/curve.h"
 #include "display/drawing-context.h"
 #include "display/drawing.h"
-#include "display/sp-canvas.h"
 
 #include "helper/action.h"
 
@@ -225,10 +225,9 @@ void SprayTool::setup() {
         /* TODO: have a look at sp_dyna_draw_context_setup where the same is done.. generalize? at least make it an arcto! */
         Geom::PathVector path = Geom::Path(Geom::Circle(0,0,1));
 
-        SPCurve *c = new SPCurve(path);
+        auto c = std::make_unique<SPCurve>(path);
 
-        this->dilate_area = sp_canvas_bpath_new(this->desktop->getControls(), c);
-        c->unref();
+        dilate_area = sp_canvas_bpath_new(desktop->getControls(), c.get());
         sp_canvas_bpath_set_fill(SP_CANVAS_BPATH(this->dilate_area), 0x00000000,(SPWindRule)0);
         sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(this->dilate_area), 0xff9900ff, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
         sp_canvas_item_hide(this->dilate_area);
@@ -355,7 +354,7 @@ static double get_width(SprayTool *tc)
 
 static double get_dilate_radius(SprayTool *tc)
 {
-    return 250 * get_width(tc)/SP_EVENT_CONTEXT(tc)->desktop->current_zoom();
+    return 250 * get_width(tc)/tc->getDesktop()->current_zoom();
 }
 
 static double get_path_mean(SprayTool *tc)
@@ -1113,7 +1112,7 @@ static bool sp_spray_recursive(SPDesktop *desktop,
 
 static bool sp_spray_dilate(SprayTool *tc, Geom::Point /*event_p*/, Geom::Point p, Geom::Point vector, bool reverse)
 {
-    SPDesktop *desktop = tc->desktop;
+    SPDesktop *desktop = tc->getDesktop();
     Inkscape::ObjectSet *set = tc->objectSet();
     if (set->isEmpty()) {
         return false;
@@ -1200,14 +1199,14 @@ static void sp_spray_update_area(SprayTool *tc)
 {
     double radius = get_dilate_radius(tc);
     Geom::Affine const sm ( Geom::Scale(radius/(1-tc->ratio), radius/(1+tc->ratio)) );
-    sp_canvas_item_affine_absolute(tc->dilate_area, (sm* Geom::Rotate(tc->tilt))* Geom::Translate(SP_EVENT_CONTEXT(tc)->desktop->point()));
+    sp_canvas_item_affine_absolute(tc->dilate_area, (sm* Geom::Rotate(tc->tilt))* Geom::Translate(tc->getDesktop()->point()));
     sp_canvas_item_show(tc->dilate_area);
 }
 
 static void sp_spray_switch_mode(SprayTool *tc, gint mode, bool with_shift)
 {
     // Select the button mode
-    auto tb = dynamic_cast<UI::Toolbar::SprayToolbar*>(SP_EVENT_CONTEXT(tc)->desktop->get_toolbar_by_name("SprayToolbar"));
+    auto tb = dynamic_cast<UI::Toolbar::SprayToolbar*>(tc->getDesktop()->get_toolbar_by_name("SprayToolbar"));
 
     if(tb) {
         tb->set_mode(mode);
@@ -1242,7 +1241,7 @@ bool SprayTool::root_handler(GdkEvent* event) {
 
                 sp_spray_extinput(this, event);
 
-                desktop->canvas->forceFullRedrawAfterInterruptions(3);
+                forced_redraws_start(3);
                 set_high_motion_precision();
                 this->is_drawing = true;
                 this->is_dilating = true;
@@ -1311,7 +1310,7 @@ bool SprayTool::root_handler(GdkEvent* event) {
                         }
                         this->last_push = desktop->dt2doc(scroll_dt);
                         sp_spray_extinput(this, event);
-                        desktop->canvas->forceFullRedrawAfterInterruptions(3);
+                        forced_redraws_start(3);
                         this->is_drawing = true;
                         this->is_dilating = true;
                         this->has_dilated = false;
@@ -1339,7 +1338,7 @@ bool SprayTool::root_handler(GdkEvent* event) {
             Geom::Point const motion_w(event->button.x, event->button.y);
             Geom::Point const motion_dt(desktop->w2d(motion_w));
 
-            desktop->canvas->endForcedFullRedraws();
+            forced_redraws_stop();
             set_high_motion_precision(false);
             this->is_drawing = false;
 

@@ -320,8 +320,9 @@ SPDocument *VsdInput::open(Inkscape::Extension::Input * /*mod*/, const gchar * u
 
 void VsdInput::init()
 {
+    // clang-format off
     /* VSD */
-     Inkscape::Extension::build_from_mem(
+    Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>" N_("VSD Input") "</name>\n"
             "<id>org.inkscape.input.vsd</id>\n"
@@ -333,8 +334,8 @@ void VsdInput::init()
             "</input>\n"
         "</inkscape-extension>", new VsdInput());
 
-     /* VDX */
-     Inkscape::Extension::build_from_mem(
+    /* VDX */
+    Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>" N_("VDX Input") "</name>\n"
             "<id>org.inkscape.input.vdx</id>\n"
@@ -346,8 +347,8 @@ void VsdInput::init()
             "</input>\n"
         "</inkscape-extension>", new VsdInput());
 
-     /* VSDM */
-     Inkscape::Extension::build_from_mem(
+    /* VSDM */
+    Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>" N_("VSDM Input") "</name>\n"
             "<id>org.inkscape.input.vsdm</id>\n"
@@ -359,8 +360,8 @@ void VsdInput::init()
             "</input>\n"
         "</inkscape-extension>", new VsdInput());
 
-     /* VSDX */
-     Inkscape::Extension::build_from_mem(
+    /* VSDX */
+    Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>" N_("VSDX Input") "</name>\n"
             "<id>org.inkscape.input.vsdx</id>\n"
@@ -371,6 +372,7 @@ void VsdInput::init()
                 "<filetypetooltip>" N_("File format used by Microsoft Visio 2013 and later") "</filetypetooltip>\n"
             "</input>\n"
         "</inkscape-extension>", new VsdInput());
+    // clang-format on
 
      return;
 

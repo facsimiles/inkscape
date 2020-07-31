@@ -29,6 +29,8 @@
 #include "object/sp-path.h"
 #include "object/sp-text.h"
 
+#include "display/curve.h"
+
 // derived from Path_for_item
 Path *
 Path_for_pathvector(Geom::PathVector const &epathv)
@@ -47,13 +49,13 @@ Path_for_pathvector(Geom::PathVector const &epathv)
 Path *
 Path_for_item(SPItem *item, bool doTransformation, bool transformFull)
 {
-    SPCurve *curve = curve_for_item(item);
+    std::unique_ptr<SPCurve> curve = curve_for_item(item);
 
     if (curve == nullptr)
         return nullptr;
 
-    Geom::PathVector *pathv = pathvector_for_curve(item, curve, doTransformation, transformFull, Geom::identity(), Geom::identity());
-    curve->unref();
+    Geom::PathVector *pathv =
+        pathvector_for_curve(item, curve.get(), doTransformation, transformFull, Geom::identity(), Geom::identity());
 
     /*std::cout << "converting to Livarot path" << std::endl;
 
@@ -80,13 +82,13 @@ Path_for_item(SPItem *item, bool doTransformation, bool transformFull)
 Path *
 Path_for_item_before_LPE(SPItem *item, bool doTransformation, bool transformFull)
 {
-    SPCurve *curve = curve_for_item_before_LPE(item);
+    std::unique_ptr<SPCurve> curve = curve_for_item_before_LPE(item);
 
     if (curve == nullptr)
         return nullptr;
     
-    Geom::PathVector *pathv = pathvector_for_curve(item, curve, doTransformation, transformFull, Geom::identity(), Geom::identity());
-    curve->unref();
+    Geom::PathVector *pathv =
+        pathvector_for_curve(item, curve.get(), doTransformation, transformFull, Geom::identity(), Geom::identity());
     
     Path *dest = new Path;
     dest->LoadPathVector(*pathv);
@@ -125,54 +127,45 @@ pathvector_for_curve(SPItem *item, SPCurve *curve, bool doTransformation, bool t
  * Obtains an item's curve. For SPPath, it is the path *before* LPE. For SPShapes other than path, it is the path *after* LPE.
  * So the result is somewhat ill-defined, and probably this method should not be used... See curve_for_item_before_LPE.
  */
-SPCurve* curve_for_item(SPItem *item)
+std::unique_ptr<SPCurve> curve_for_item(SPItem *item)
 {
     if (!item) 
         return nullptr;
     
-    SPCurve *curve = nullptr;
-    if (SP_IS_SHAPE(item)) {
-        if (SP_IS_PATH(item)) {
-            curve = SP_PATH(item)->getCurveForEdit();
-        } else {
-            curve = SP_SHAPE(item)->getCurve();
-        }
-    }
-    else if (SP_IS_TEXT(item) || SP_IS_FLOWTEXT(item))
-    {
+    std::unique_ptr<SPCurve> curve;
+
+    if (auto path = dynamic_cast<SPPath const *>(item)) {
+        curve = SPCurve::copy(path->curveForEdit());
+    } else if (auto shape = dynamic_cast<SPShape const *>(item)) {
+        curve = SPCurve::copy(shape->curve());
+    } else if (SP_IS_TEXT(item) || SP_IS_FLOWTEXT(item)) {
         curve = te_get_layout(item)->convertToCurves();
+    } else if (auto image = dynamic_cast<SPImage const *>(item)) {
+        curve = image->get_curve();
     }
-    else if (SP_IS_IMAGE(item))
-    {
-    curve = SP_IMAGE(item)->get_curve();
-    }
-    
-    return curve; // do not forget to unref the curve at some point!
+
+    return curve;
 }
 
 /**
  * Obtains an item's curve *before* LPE.
- * The returned SPCurve should be unreffed by the caller.
  */
-SPCurve* curve_for_item_before_LPE(SPItem *item)
+std::unique_ptr<SPCurve> curve_for_item_before_LPE(SPItem *item)
 {
     if (!item) 
         return nullptr;
     
-    SPCurve *curve = nullptr;
-    if (SP_IS_SHAPE(item)) {
-        curve = SP_SHAPE(item)->getCurveForEdit();
-    }
-    else if (SP_IS_TEXT(item) || SP_IS_FLOWTEXT(item))
-    {
+    std::unique_ptr<SPCurve> curve;
+
+    if (auto shape = dynamic_cast<SPShape const *>(item)) {
+        curve = SPCurve::copy(shape->curveForEdit());
+    } else if (SP_IS_TEXT(item) || SP_IS_FLOWTEXT(item)) {
         curve = te_get_layout(item)->convertToCurves();
+    } else if (auto image = dynamic_cast<SPImage const *>(item)) {
+        curve = image->get_curve();
     }
-    else if (SP_IS_IMAGE(item))
-    {
-        curve = SP_IMAGE(item)->get_curve();
-    }
-    
-    return curve; // do not forget to unref the curve at some point!
+
+    return curve;
 }
 
 boost::optional<Path::cut_position> get_nearest_position_on_Path(Path *path, Geom::Point p, unsigned seg)

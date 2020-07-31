@@ -13,7 +13,11 @@
 #ifndef SEEN_INKSCAPE_XML_NODE_H
 #define SEEN_INKSCAPE_XML_NODE_H
 
+#include <list>
+#include <glibmm/ustring.h>
 #include "gc-anchored.h"
+#include "inkgc/gc-alloc.h"
+#include "util/list.h"
 #include "util/const_char_ptr.h"
 #include "util/list.h"
 #include <glibmm/ustring.h>
@@ -21,16 +25,18 @@
 namespace Inkscape {
 namespace XML {
 
-struct AttributeRecord;
+class AttributeRecord;
 struct Document;
 class Event;
 class NodeObserver;
 struct NodeEventVector;
 
+typedef std::list<AttributeRecord, Inkscape::GC::Alloc< AttributeRecord, Inkscape::GC::MANUAL > > AttributeVector;
+
 /**
  * @brief Enumeration containing all supported node types.
  */
-enum NodeType {
+enum class NodeType {
     DOCUMENT_NODE, ///< Top-level document node. Do not confuse with the root node.
     ELEMENT_NODE,  ///< Regular element node, e.g. &lt;group /&gt;.
     TEXT_NODE, ///< Text node, e.g. "Some text" in &lt;group&gt;Some text&lt;/group&gt; is represented by a text node.
@@ -150,7 +156,7 @@ class Node : public Inkscape::GC::Anchored {
      * @todo This method should return std::map<Glib::Quark const, gchar const *>
      *       or something similar with a custom allocator
      */
-    virtual Inkscape::Util::List<AttributeRecord const> attributeList() const = 0;
+    virtual const AttributeVector & attributeList() const=0;
 
     /**
      * @brief Check whether this node has any attribute that matches a string

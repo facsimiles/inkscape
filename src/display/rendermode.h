@@ -25,15 +25,32 @@ enum RenderMode {
     RENDERMODE_VISIBLE_HAIRLINES
 };
 
+enum SplitMode {
+    SPLITMODE_NORMAL,
+    SPLITMODE_SPLIT,
+    SPLITMODE_XRAY
+};
+
+enum SplitDirection {
+    SPLITDIRECTION_NONE,
+    SPLITDIRECTION_NORTH,
+    SPLITDIRECTION_EAST,
+    SPLITDIRECTION_SOUTH,
+    SPLITDIRECTION_WEST,
+    SPLITDIRECTION_HORIZONTAL, // Only used when hovering
+    SPLITDIRECTION_VERTICAL    // Only used when hovering
+};
+
 enum ColorMode {
     COLORMODE_NORMAL,
     COLORMODE_GRAYSCALE,
     COLORMODE_PRINT_COLORS_PREVIEW
 };
 
-}
+} // Namespace Inkscape
 
 #endif
+
 /*
   Local Variables:
   mode:c++

@@ -26,9 +26,8 @@
 namespace Inkscape {
 namespace LivePathEffect {
 
-static const Util::EnumData<DivisionMethod> DivisionMethodData[DM_END] = {
-    { DM_SEGMENTS, N_("By number of segments"), "segments" }, { DM_SIZE, N_("By max. segment size"), "size" }
-};
+static const Util::EnumData<DivisionMethod> DivisionMethodData[DM_END] = { { DM_SEGMENTS, N_("By number of segments"), "segments" }, 
+                                                                           { DM_SIZE, N_("By max. segment size"), "size" } };
 static const Util::EnumDataConverter<DivisionMethod> DMConverter(DivisionMethodData, DM_END);
 
 static const Util::EnumData<HandlesMethod> HandlesMethodData[HM_END] = { { HM_ALONG_NODES, N_("Along nodes"), "along" },
@@ -39,9 +38,7 @@ static const Util::EnumDataConverter<HandlesMethod> HMConverter(HandlesMethodDat
 
 LPERoughen::LPERoughen(LivePathEffectObject *lpeobject)
     : Effect(lpeobject)
-    ,
-    // initialise your parameters here:
-    method(_("Method"), _("Division method"), "method", DMConverter, &wr, this, DM_SEGMENTS)
+    , method(_("Method"), _("Division method"), "method", DMConverter, &wr, this, DM_SIZE)
     , max_segment_size(_("Max. segment size"), _("Max. segment size"), "max_segment_size", &wr, this, 10)
     , segments(_("Number of segments"), _("Number of segments"), "segments", &wr, this, 2)
     , displace_x(_("Max. displacement in X"), _("Max. displacement in X"), "displace_x", &wr, this, 10.)
@@ -79,25 +76,6 @@ LPERoughen::LPERoughen(LivePathEffectObject *lpeobject)
 
 LPERoughen::~LPERoughen() = default;
 
-/* double sp_get_perimeter(SPLPEItem const *lpeitem) {
-    double lenght = 0;
-    if (dynamic_cast<SPGroup *>(lpeitem) ) {
-    std::vector<SPItem*> const item_list = sp_item_group_item_list(lpeitem);
-    for (auto sub_item : item_list) {
-        if (sub_item) {
-            SPLPEItem *lpe_item = dynamic_cast<SPLPEItem *>(sub_item);
-            if (lpe_item) {
-                lenght += sp_get_perimeter(lpe_item);
-            }
-        }
-    }
-    if (SP_IS_SHAPE(lpeitem)) {
-        Geom::PathVector shape = SP_SHAPE(lpeitem)->getCurve(true)->get_pathvector();
-        lenght += Geom::length(paths_to_pw(shape));
-    }
-    return lenght;
-} */
-
 void LPERoughen::doOnApply(SPLPEItem const *lpeitem)
 {
     Geom::OptRect bbox = lpeitem->bounds(SPItem::GEOMETRIC_BBOX);
@@ -113,11 +91,9 @@ void LPERoughen::doOnApply(SPLPEItem const *lpeitem)
 
 
             bool valid = prefs->getEntry(pref_path).isValid();
-            // double lenght = sp_get_perimeter(lpeitem);
             Glib::ustring displace_x_str = Glib::ustring::format((*bbox).width() / 100.0);
             Glib::ustring displace_y_str = Glib::ustring::format((*bbox).height() / 100.0);
-            Glib::ustring max_segment_size_str =
-                Glib::ustring::format(std::min((*bbox).height(), (*bbox).width()) / 100.0);
+            Glib::ustring max_segment_size_str = Glib::ustring::format(std::min((*bbox).height(), (*bbox).width()) / 100.0);
             if (!valid) {
                 if (strcmp(key, "method") == 0) {
                     param->param_readSVGValue("size");
@@ -252,7 +228,7 @@ void LPERoughen::doEffect(SPCurve *curve)
         Geom::Path::const_iterator curve_it1 = path_it.begin();
         Geom::Path::const_iterator curve_it2 = ++(path_it.begin());
         Geom::Path::const_iterator curve_endit = path_it.end_default();
-        SPCurve *nCurve = new SPCurve();
+        auto nCurve = std::make_unique<SPCurve>();
         Geom::Point prev(0, 0);
         Geom::Point last_move(0, 0);
         nCurve->moveto(curve_it1->initialPoint());
@@ -284,12 +260,12 @@ void LPERoughen::doEffect(SPCurve *curve)
             } else {
                 splits = ceil(length / max_segment_size);
             }
-            Geom::Curve const *original = nCurve->last_segment()->duplicate();
+            auto const original = std::unique_ptr<Geom::Curve>(nCurve->last_segment()->duplicate());
             for (unsigned int t = 1; t <= splits; t++) {
                 if (t == splits && splits != 1) {
                     continue;
                 }
-                SPCurve const *tmp;
+                std::unique_ptr<SPCurve> tmp;
                 if (splits == 1) {
                     tmp = jitter(nCurve->last_segment(), prev, last_move);
                 } else {
@@ -301,13 +277,13 @@ void LPERoughen::doEffect(SPCurve *curve)
                         Geom::nearest_time(original->pointAt((1. / (double)splits) * t), *nCurve->last_segment());
                     tmp = addNodesAndJitter(nCurve->last_segment(), prev, last_move, time, last);
                 }
+                assert(tmp);
                 if (nCurve->get_segment_count() > 1) {
                     nCurve->backspace();
-                    nCurve->append_continuous(tmp, 0.001);
+                    nCurve->append_continuous(*tmp, 0.001);
                 } else {
-                    nCurve = tmp->copy();
+                    nCurve = std::move(tmp);
                 }
-                delete tmp;
             }
             ++curve_it1;
             ++curve_it2;
@@ -332,7 +308,7 @@ void LPERoughen::doEffect(SPCurve *curve)
                     out->curveto(nCurve->last_segment()->initialPoint(), oposite, nCurve->last_segment()->finalPoint());
                 }
                 nCurve->backspace();
-                nCurve->append_continuous(out, 0.001);
+                nCurve->append_continuous(*out, 0.001);
                 nCurve = nCurve->create_reverse();
             }
             if (handles == HM_ALONG_NODES && curve_it1 == curve_endit) {
@@ -344,23 +320,21 @@ void LPERoughen::doEffect(SPCurve *curve)
                     out->curveto((*cubic)[1], (*cubic)[2] - ((*cubic)[3] - nCurve->first_segment()->initialPoint()),
                                  (*cubic)[3]);
                     nCurve->backspace();
-                    nCurve->append_continuous(out, 0.001);
+                    nCurve->append_continuous(*out, 0.001);
                 }
                 nCurve = nCurve->create_reverse();
             }
             nCurve->move_endpoints(nCurve->last_segment()->finalPoint(), nCurve->last_segment()->finalPoint());
             nCurve->closepath_current();
         }
-        curve->append(nCurve, false);
-        nCurve->reset();
-        delete nCurve;
+        curve->append(*nCurve);
     }
 }
 
-SPCurve const *LPERoughen::addNodesAndJitter(Geom::Curve const *A, Geom::Point &prev, Geom::Point &last_move, double t,
+std::unique_ptr<SPCurve> LPERoughen::addNodesAndJitter(Geom::Curve const *A, Geom::Point &prev, Geom::Point &last_move, double t,
                                              bool last)
 {
-    SPCurve *out = new SPCurve();
+    auto out = std::make_unique<SPCurve>();
     Geom::CubicBezier const *cubic = dynamic_cast<Geom::CubicBezier const *>(&*A);
     double max_length = Geom::distance(A->initialPoint(), A->pointAt(t)) / 3.0;
     Geom::Point point_a1(0, 0);
@@ -502,9 +476,9 @@ SPCurve const *LPERoughen::addNodesAndJitter(Geom::Curve const *A, Geom::Point &
     return out;
 }
 
-SPCurve *LPERoughen::jitter(Geom::Curve const *A, Geom::Point &prev, Geom::Point &last_move)
+std::unique_ptr<SPCurve> LPERoughen::jitter(Geom::Curve const *A, Geom::Point &prev, Geom::Point &last_move)
 {
-    SPCurve *out = new SPCurve();
+    auto out = std::make_unique<SPCurve>();
     Geom::CubicBezier const *cubic = dynamic_cast<Geom::CubicBezier const *>(&*A);
     double max_length = Geom::distance(A->initialPoint(), A->finalPoint()) / 3.0;
     Geom::Point point_a1(0, 0);

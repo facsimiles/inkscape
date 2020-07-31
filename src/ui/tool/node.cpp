@@ -21,7 +21,6 @@
 #include "snap.h"
 
 #include "display/sp-ctrlline.h"
-#include "display/sp-canvas.h"
 #include "display/sp-canvas-util.h"
 
 #include "ui/control-manager.h"
@@ -30,6 +29,7 @@
 #include "ui/tool/path-manipulator.h"
 #include "ui/tools/node-tool.h"
 #include "ui/tools-switch.h"
+#include "ui/widget/canvas.h"
 
 namespace {
 

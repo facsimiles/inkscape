@@ -32,19 +32,19 @@
 #include "verbs.h"
 
 #include "display/sp-canvas-item.h"
-#include "display/sp-canvas.h"
 
 #include "include/macros.h"
-
-#include "ui/pixmaps/cursor-3dbox.xpm"
 
 #include "object/box3d-side.h"
 #include "object/box3d.h"
 #include "object/sp-defs.h"
 #include "object/sp-namedview.h"
 
+#include "ui/pixmaps/cursor-3dbox.xpm"
+
 #include "ui/shape-editor.h"
 #include "ui/tools/box3d-tool.h"
+#include "ui/widget/canvas.h"  // Forced redraw
 
 #include "xml/node-event-vector.h"
 
@@ -540,7 +540,7 @@ void Box3dTool::drag(guint /*state*/) {
         //       at this point (only after finishing the box), we must do this "manually"
         /* this._vpdrag->updateDraggers(); */
 
-        desktop->canvas->forceFullRedrawAfterInterruptions(5);
+        forced_redraws_start(5);
     }
 
     g_assert(this->box3d);
@@ -579,7 +579,7 @@ void Box3dTool::finishItem() {
 
         this->box3d->relabel_corners();
 
-        desktop->canvas->endForcedFullRedraws();
+        forced_redraws_stop();
 
         desktop->getSelection()->set(this->box3d);
         DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_3DBOX,

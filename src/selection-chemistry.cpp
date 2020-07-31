@@ -33,6 +33,7 @@
 #include "selection-chemistry.h"
 
 #include "file.h"
+#include "display/canvas-bpath.h"
 
 // TODO FIXME: This should be moved into preference repr
 SPCycleType SP_CYCLING = SP_CYCLE_FOCUS;
@@ -54,7 +55,7 @@ SPCycleType SP_CYCLING = SP_CYCLE_FOCUS;
 #include "verbs.h"
 
 #include "display/cairo-utils.h"
-#include "display/sp-canvas.h"
+#include "display/curve.h"
 
 #include "helper/png-write.h"
 
@@ -109,6 +110,7 @@ SPCycleType SP_CYCLING = SP_CYCLE_FOCUS;
 #include "ui/tools/gradient-tool.h"
 #include "ui/tools/node-tool.h"
 #include "ui/tools/text-tool.h"
+#include "ui/widget/canvas.h"  // is_dragging()
 
 #include "xml/rebase-hrefs.h"
 #include "xml/simple-document.h"
@@ -1220,7 +1222,7 @@ void
 sp_undo(SPDesktop *desktop, SPDocument *)
 {
     // No re/undo while dragging, too dangerous.
-    if(desktop->getCanvas()->_is_dragging) return;
+    if (desktop->getCanvas()->is_dragging()) return;
 
     if (!DocumentUndo::undo(desktop->getDocument())) {
         desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Nothing to undo."));
@@ -1231,7 +1233,7 @@ void
 sp_redo(SPDesktop *desktop, SPDocument *)
 {
     // No re/undo while dragging, too dangerous.
-    if(desktop->getCanvas()->_is_dragging) return;
+    if (desktop->getCanvas()->is_dragging()) return;
 
     if (!DocumentUndo::redo(desktop->getDocument())) {
         desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Nothing to redo."));
@@ -2884,14 +2886,13 @@ void ObjectSet::cloneOriginal()
             Geom::OptRect b = original->desktopVisualBounds();
             if ( a && b && desktop()) {
                 // draw a flashing line between the objects
-                SPCurve *curve = new SPCurve();
+                auto curve = std::make_unique<SPCurve>();
                 curve->moveto(a->midpoint());
                 curve->lineto(b->midpoint());
 
-                SPCanvasItem * canvasitem = sp_canvas_bpath_new(desktop()->getTempGroup(), curve);
+                SPCanvasItem *canvasitem = sp_canvas_bpath_new(desktop()->getTempGroup(), curve.get());
                 sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(canvasitem), 0x0000ddff, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT, 5, 3);
                 sp_canvas_item_show(canvasitem);
-                curve->unref();
                 desktop()->add_temporary_canvasitem(canvasitem, 1000);
             }
         }

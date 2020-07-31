@@ -444,6 +444,10 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
     // ************* Fix Document **************
     // Move to separate function?
 
+    /** Fix OSB **/
+    sp_file_fix_osb(document->getRoot());
+
+
     /** Fix baseline spacing (pre-92 files) **/
     if ( (!sp_no_convert_text_baseline_spacing)
          && sp_version_inside_range( document->root->version.inkscape, 0, 1, 0, 92 ) ) {
@@ -1780,7 +1784,7 @@ void SPDocument::_importDefsNode(SPDocument *source, Inkscape::XML::Node *defs, 
 
     /* First pass: remove duplicates in clipboard of definitions in document */
     for (Inkscape::XML::Node *def = defs->firstChild() ; def ; def = def->next()) {
-        if(def->type() != Inkscape::XML::ELEMENT_NODE)continue;
+        if(def->type() != Inkscape::XML::NodeType::ELEMENT_NODE)continue;
         /* If this  clipboard has been pasted into one document, and is now being pasted into another,
         or pasted again into the same, it will already have been processed.  If we detect that then
         skip the rest of this pass. */
@@ -1828,7 +1832,7 @@ void SPDocument::_importDefsNode(SPDocument *source, Inkscape::XML::Node *defs, 
 
     /* Second pass: remove duplicates in clipboard of earlier definitions in clipboard */
     for (Inkscape::XML::Node *def = defs->firstChild() ; def ; def = def->next()) {
-        if(def->type() != Inkscape::XML::ELEMENT_NODE)continue;
+        if(def->type() != Inkscape::XML::NodeType::ELEMENT_NODE)continue;
         Glib::ustring defid = def->attribute("id");
         if( defid.find( DuplicateDefString ) != Glib::ustring::npos )continue; // this one already handled
         SPObject *src = source->getObjectByRepr(def);
@@ -1873,7 +1877,7 @@ void SPDocument::_importDefsNode(SPDocument *source, Inkscape::XML::Node *defs, 
 
     /* Final pass: copy over those parts which are not duplicates  */
     for (Inkscape::XML::Node *def = defs->firstChild() ; def ; def = def->next()) {
-        if(def->type() != Inkscape::XML::ELEMENT_NODE)continue;
+        if(def->type() != Inkscape::XML::NodeType::ELEMENT_NODE)continue;
 
         /* Ignore duplicate defs marked in the first pass */
         Glib::ustring defid = def->attribute("id");

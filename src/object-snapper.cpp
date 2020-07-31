@@ -19,11 +19,10 @@
 #include <2geom/path-sink.h>
 
 #include "desktop.h"
+#include "display/curve.h"
 #include "document.h"
 #include "inkscape.h"
-#include "preferences.h"
-#include "text-editing.h"
-
+#include "live_effects/effect-enum.h"
 #include "object/sp-clippath.h"
 #include "object/sp-flowtext.h"
 #include "object/sp-image.h"
@@ -35,10 +34,11 @@
 #include "object/sp-shape.h"
 #include "object/sp-text.h"
 #include "object/sp-use.h"
-
-#include "path/path-util.h"  // curve_for_item
-
+#include "path/path-util.h" // curve_for_item
+#include "preferences.h"
+#include "style.h"
 #include "svg/svg.h"
+#include "text-editing.h"
 
 Inkscape::ObjectSnapper::ObjectSnapper(SnapManager *sm, Geom::Coord const d)
     : Snapper(sm, d)
@@ -96,6 +96,43 @@ void Inkscape::ObjectSnapper::_findCandidates(SPObject* parent,
         g_assert(dt != nullptr);
         SPItem *item = dynamic_cast<SPItem *>(&o);
         if (item && !(dt->itemIsHidden(item) && !clip_or_mask)) {
+            // Fix LPE boolops selfsnaping
+            bool stop = false;
+            if (item->style) {
+                SPFilter *filt = item->style->getFilter();
+                if (filt && filt->getId() && strcmp(filt->getId(), "selectable_hidder_filter") == 0) {
+                    stop = true;
+                }
+                SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(item);
+                if (lpeitem && lpeitem->hasPathEffectOfType(Inkscape::LivePathEffect::EffectType::BOOL_OP)) {
+                    stop = true;
+                }
+            }
+            if (stop) {
+                stop = false;
+                for (auto skipitem : *it) {
+                    if (skipitem && skipitem->style) {
+                        SPItem *toskip = const_cast<SPItem *>(skipitem);
+                        if (toskip) {
+                            SPFilter *filt = toskip->style->getFilter();
+                            if (filt && filt->getId() && strcmp(filt->getId(), "selectable_hidder_filter") == 0) {
+                                stop = true;
+                                break;
+                            }
+
+                            SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(toskip);
+                            if (!stop && lpeitem &&
+                                lpeitem->hasPathEffectOfType(Inkscape::LivePathEffect::EffectType::BOOL_OP)) {
+                                stop = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+                if (stop) {
+                    continue;
+                }
+            }
             // Snapping to items in a locked layer is allowed
             // Don't snap to hidden objects, unless they're a clipped path or a mask
             /* See if this item is on the ignore list */
@@ -424,10 +461,10 @@ void Inkscape::ObjectSnapper::_collectPaths(Geom::Point /*p*/,
                         }
 
                         if (!very_complex_path && root_item && _snapmanager->snapprefs.isTargetSnappable(SNAPTARGET_PATH, SNAPTARGET_PATH_INTERSECTION)) {
-                            SPCurve *curve = nullptr;
+                            std::unique_ptr<SPCurve> curve;
                             SPShape *shape = dynamic_cast<SPShape *>(root_item);
                             if (shape) {
-                               curve = shape->getCurve();
+                                curve = SPCurve::copy(shape->curve());
                             }/* else if (dynamic_cast<SPText *>(root_item) || dynamic_cast<SPFlowtext *>(root_item)) {
                                curve = te_get_layout(root_item)->convertToCurves();
                             }*/
@@ -437,7 +474,6 @@ void Inkscape::ObjectSnapper::_collectPaths(Geom::Point /*p*/,
                                 (*pv) *= root_item->i2dt_affine() * _candidate.additional_affine * _snapmanager->getDesktop()->doc2dt(); // (_edit_transform * _i2d_transform);
 
                                 _paths_to_snap_to->push_back(SnapCandidatePath(pv, SNAPTARGET_PATH, Geom::OptRect())); // Perhaps for speed, get a reference to the Geom::pathvector, and store the transformation besides it.
-                                curve->unref();
                             }
                         }
                     }
@@ -486,12 +522,11 @@ void Inkscape::ObjectSnapper::_snapPaths(IntermSnapResults &isr,
          * */
         if (node_tool_active) {
             // TODO fix the function to be const correct:
-            SPCurve *curve = curve_for_item(const_cast<SPPath*>(selected_path));
+            auto curve = curve_for_item(const_cast<SPPath *>(selected_path));
             if (curve) {
                 Geom::PathVector *pathv = new Geom::PathVector(curve->get_pathvector()); // Must be freed.
                 *pathv *= selected_path->i2doc_affine();
                 _paths_to_snap_to->push_back(SnapCandidatePath(pathv, SNAPTARGET_PATH, Geom::OptRect(), true));
-                curve->unref();
             }
         }
     }
@@ -751,7 +786,7 @@ Geom::PathVector* Inkscape::ObjectSnapper::_getBorderPathv() const
 
 Geom::PathVector* Inkscape::ObjectSnapper::_getPathvFromRect(Geom::Rect const rect) const
 {
-    SPCurve const *border_curve = SPCurve::new_from_rect(rect, true);
+    auto const border_curve = SPCurve::new_from_rect(rect, true);
     if (border_curve) {
         Geom::PathVector *dummy = new Geom::PathVector(border_curve->get_pathvector());
         return dummy;

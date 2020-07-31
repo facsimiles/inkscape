@@ -23,6 +23,8 @@
  *      http://msdn.microsoft.com/library/en-us/gdi/metafile_5hkj.asp
  */
 
+#include "emf-print.h"
+
 #include <cstring>
 #include <glibmm/miscutils.h>
 #include <3rdparty/libuemf/symbol_convert.h>
@@ -31,17 +33,23 @@
 #include <2geom/pathvector.h>
 #include <2geom/rect.h>
 #include <2geom/curves.h>
-
-#include "helper/geom.h"
-#include "helper/geom-curves.h"
-#include "util/units.h"
+#include <2geom/svg-path-parser.h> // to get from SVG text to Geom::Path
 
 #include "inkscape-version.h"
 
-#include "extension/system.h"
-#include "extension/print.h"
 #include "document.h"
 #include "path-prefix.h"
+#include "style.h"
+#include "style-enums.h"          // Fill rules
+
+#include "display/cairo-utils.h"  // for Inkscape::Pixbuf::PF_CAIRO
+#include "display/curve.h"
+
+#include "extension/system.h"
+#include "extension/print.h"
+
+#include "helper/geom.h"
+#include "helper/geom-curves.h"
 
 #include "object/sp-pattern.h"
 #include "object/sp-image.h"
@@ -52,17 +60,10 @@
 #include "object/sp-root.h"
 #include "object/sp-shape.h"
 #include "object/sp-clippath.h"
-#include "style.h"
-#include "display/cairo-utils.h"
 
 #include "path/path-boolop.h"
 
-#include "2geom/svg-path-parser.h" // to get from SVG text to Geom::Path
-#include "display/canvas-bpath.h"  // for SPWindRule
-#include "display/cairo-utils.h"  // for Inkscape::Pixbuf::PF_CAIRO
-
-#include "emf-print.h"
-
+#include "util/units.h"
 
 namespace Inkscape {
 namespace Extension {
@@ -1098,12 +1099,15 @@ Geom::PathVector PrintEmf::merge_PathVector_with_group(Geom::PathVector const &c
 Geom::PathVector PrintEmf::merge_PathVector_with_shape(Geom::PathVector const &combined_pathvector, SPItem const *item, const Geom::Affine &transform)
 {
     Geom::PathVector new_combined_pathvector;
-    if(!SP_IS_SHAPE(item))return(new_combined_pathvector);  // sanity test, only a shape should be passed in, return empty if something else happens
+    auto shape = dynamic_cast<SPShape const *>(item);
+
+    // sanity test, only a shape should be passed in, return empty if something else happens
+    if (!shape)
+        return new_combined_pathvector;
 
     Geom::Affine tfc = item->transform * transform;
-    SPShape *shape = SP_SHAPE(item);
-    if (shape->_curve) {
-        Geom::PathVector const & new_vect = shape->_curve->get_pathvector();
+    if (shape->curve()) {
+        Geom::PathVector const &new_vect = shape->curve()->get_pathvector();
         if(combined_pathvector.empty()){
             new_combined_pathvector = new_vect * tfc;
         }
@@ -2182,21 +2186,23 @@ unsigned int PrintEmf::text(Inkscape::Extension::Print * /*mod*/, char const *te
 void PrintEmf::init()
 {
     /* EMF print */
+    // clang-format off
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
-        "<name>Enhanced Metafile Print</name>\n"
-        "<id>org.inkscape.print.emf</id>\n"
-        "<param gui-hidden=\"true\" name=\"destination\" type=\"string\"></param>\n"
-        "<param gui-hidden=\"true\" name=\"textToPath\" type=\"bool\">true</param>\n"
-        "<param gui-hidden=\"true\" name=\"pageBoundingBox\" type=\"bool\">true</param>\n"
-        "<param gui-hidden=\"true\" name=\"FixPPTCharPos\" type=\"bool\">false</param>\n"
-        "<param gui-hidden=\"true\" name=\"FixPPTDashLine\" type=\"bool\">false</param>\n"
-        "<param gui-hidden=\"true\" name=\"FixPPTGrad2Polys\" type=\"bool\">false</param>\n"
-        "<param gui-hidden=\"true\" name=\"FixPPTLinGrad\" type=\"bool\">false</param>\n"
-        "<param gui-hidden=\"true\" name=\"FixPPTPatternAsHatch\" type=\"bool\">false</param>\n"
-        "<param gui-hidden=\"true\" name=\"FixImageRot\" type=\"bool\">false</param>\n"
-        "<print/>\n"
+            "<name>Enhanced Metafile Print</name>\n"
+            "<id>org.inkscape.print.emf</id>\n"
+            "<param gui-hidden=\"true\" name=\"destination\" type=\"string\"></param>\n"
+            "<param gui-hidden=\"true\" name=\"textToPath\" type=\"bool\">true</param>\n"
+            "<param gui-hidden=\"true\" name=\"pageBoundingBox\" type=\"bool\">true</param>\n"
+            "<param gui-hidden=\"true\" name=\"FixPPTCharPos\" type=\"bool\">false</param>\n"
+            "<param gui-hidden=\"true\" name=\"FixPPTDashLine\" type=\"bool\">false</param>\n"
+            "<param gui-hidden=\"true\" name=\"FixPPTGrad2Polys\" type=\"bool\">false</param>\n"
+            "<param gui-hidden=\"true\" name=\"FixPPTLinGrad\" type=\"bool\">false</param>\n"
+            "<param gui-hidden=\"true\" name=\"FixPPTPatternAsHatch\" type=\"bool\">false</param>\n"
+            "<param gui-hidden=\"true\" name=\"FixImageRot\" type=\"bool\">false</param>\n"
+            "<print/>\n"
         "</inkscape-extension>", new PrintEmf());
+    // clang-format on
 
     return;
 }

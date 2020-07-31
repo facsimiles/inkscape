@@ -153,6 +153,8 @@ set(ui_SRC
 	widget/alignment-selector.cpp
 	widget/anchor-selector.cpp
         widget/button.cpp
+        widget/canvas.cpp
+        widget/canvas-grid.cpp
 	widget/clipmaskicon.cpp
 	widget/color-entry.cpp
 	widget/color-icc-selector.cpp
@@ -393,6 +395,8 @@ set(ui_SRC
 	widget/anchor-selector.h
 	widget/attr-widget.h
         widget/button.h
+        widget/canvas.h
+        widget/canvas-grid.h
 	widget/clipmaskicon.h
 	widget/color-entry.h
 	widget/color-icc-selector.h
@@ -465,7 +469,6 @@ set(ui_SRC
 	widget/unit-menu.h
 	widget/unit-tracker.h
 
-	view/edit-widget-interface.h
 	view/svg-view-widget.h
 	view/view.h
 	view/view-widget.h

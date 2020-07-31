@@ -14,6 +14,7 @@
  */
 
 #include <map>
+#include <memory>
 #include <string>
 
 #include <2geom/point.h>
@@ -70,11 +71,11 @@ public:
 
     // Red curve
     SPCanvasItem *red_bpath;
-    SPCurve *red_curve;
+    std::unique_ptr<SPCurve> red_curve;
     guint32 red_color;
 
     // Green curve
-    SPCurve *green_curve;
+    std::unique_ptr<SPCurve> green_curve;
 
     // The new connector
     SPItem *newconn;
@@ -105,7 +106,9 @@ public:
     SPKnot *endpt_handle[2];
     guint  endpt_handler_id[2];
     gchar *shref;
+    gchar *sub_shref;
     gchar *ehref;
+    gchar *sub_ehref;
     SPCanvasItem *c0, *c1, *cl0, *cl1;
 
     static std::string const prefsPath;
@@ -138,9 +141,9 @@ private:
     void _concatColorsAndFlush();
     void _flushWhite(SPCurve *gc);
 
-    void _activeShapeAddKnot(SPItem* item);
+    void _activeShapeAddKnot(SPItem* item, SPItem* subitem);
     void _setActiveShape(SPItem *item);
-    bool _ptHandleTest(Geom::Point& p, gchar **href);
+    bool _ptHandleTest(Geom::Point& p, gchar **href, gchar **subhref);
 
     void _reroutingFinish(Geom::Point *const p);
 };

@@ -167,6 +167,19 @@ list(APPEND INKSCAPE_INCS_SYS ${WASMER_INCLUDE_DIRS})
 list(APPEND INKSCAPE_LIBS ${WASMER_LIBRARIES})
 add_definitions(${WASMER_DEFINITIONS})
 
+# This package isn’t marked REQUIRED, because we fallback to the
+# src/3rdparty/2geom submodule if it isn’t available system-wide.
+find_package(2Geom 1.0.0 QUIET)
+if(NOT 2Geom_FOUND)
+    pkg_check_modules(2Geom QUIET IMPORTED_TARGET GLOBAL 2geom>=1.0.0)
+    if(2Geom_FOUND)
+        add_library(2Geom::2geom ALIAS PkgConfig::2Geom)
+    endif()
+endif()
+if(NOT 2Geom_FOUND)
+    message(WARNING "lib2geom not found, falling back to the submodule in src/3rdparty/2geom")
+endif()
+
 if(ENABLE_POPPLER)
     find_package(PopplerCairo)
     if(POPPLER_FOUND)
@@ -281,10 +294,10 @@ endif()
 pkg_check_modules(
     GTK3
     REQUIRED
-    gtkmm-3.0>=3.22
-    gdkmm-3.0>=3.22
-    gtk+-3.0>=3.22
-    gdk-3.0>=3.22
+    gtkmm-3.0>=3.24
+    gdkmm-3.0>=3.24
+    gtk+-3.0>=3.24
+    gdk-3.0>=3.24
     gdl-3.0>=3.6
     )
 list(APPEND INKSCAPE_CXX_FLAGS ${GTK3_CFLAGS_OTHER})

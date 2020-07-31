@@ -29,7 +29,6 @@
 #include "display/canvas-bpath.h"
 #include "display/curve.h"
 #include "display/sp-canvas-group.h"
-#include "display/sp-canvas.h"
 
 #include "live_effects/effect.h"
 #include "live_effects/lpeobject.h"
@@ -58,7 +57,6 @@
 #include "ui/tools-switch.h"
 #include "ui/tools/node-tool.h"
 #include "ui/tools/tool-base.h"
-
 
 /** @struct NodeTool
  *
@@ -190,7 +188,8 @@ NodeTool::~NodeTool() {
     destroy_group(data.outline_group);
     destroy_group(data.dragpoint_group);
     destroy_group(this->_transform_handle_group);
-    this->desktop->canvas->endForcedFullRedraws();
+
+    forced_redraws_stop();
 }
 
 void NodeTool::setup() {
@@ -323,30 +322,25 @@ void sp_update_helperpath(SPDesktop *desktop)
                 }
                 lpe->setSelectedNodePoints(selectedNodesPositions);
                 lpe->setCurrentZoom(desktop->current_zoom());
-                SPCurve *c = new SPCurve();
-                SPCurve *cc = new SPCurve();
+                auto c = std::make_unique<SPCurve>();
                 std::vector<Geom::PathVector> cs = lpe->getCanvasIndicators(lpeitem);
                 for (auto &p : cs) {
-                    cc->set_pathvector(p);
-                    c->append(cc, false);
-                    cc->reset();
+                    c->append(p);
                 }
                 if (!c->is_empty()) {
-                    SPCanvasItem *helperpath = sp_canvas_bpath_new(desktop->getTempGroup(), c, true);
+                    SPCanvasItem *helperpath = sp_canvas_bpath_new(desktop->getTempGroup(), c.get(), true);
                     sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(helperpath), 0x0000ff9A, 1.0, SP_STROKE_LINEJOIN_MITER,
                                                SP_STROKE_LINECAP_BUTT);
                     sp_canvas_bpath_set_fill(SP_CANVAS_BPATH(helperpath), 0, SP_WIND_RULE_NONZERO);
                     sp_canvas_item_affine_absolute(helperpath, lpeitem->i2dt_affine());
                     nt->_helperpath_tmpitem.emplace_back(desktop->add_temporary_canvasitem(helperpath, 0));
-                    SPCanvasItem *helperpath_back = sp_canvas_bpath_new(desktop->getTempGroup(), c, true);
+                    SPCanvasItem *helperpath_back = sp_canvas_bpath_new(desktop->getTempGroup(), c.get(), true);
                     sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(helperpath_back), 0xFFFFFF33, 3.0, SP_STROKE_LINEJOIN_MITER,
                                                SP_STROKE_LINECAP_BUTT);
                     sp_canvas_bpath_set_fill(SP_CANVAS_BPATH(helperpath_back), 0, SP_WIND_RULE_NONZERO);
                     sp_canvas_item_affine_absolute(helperpath_back, lpeitem->i2dt_affine());
                     nt->_helperpath_tmpitem.emplace_back(desktop->add_temporary_canvasitem(helperpath_back, 0));
                 }
-                c->unref();
-                cc->unref();
             }
         }
     }
@@ -484,7 +478,7 @@ bool NodeTool::root_handler(GdkEvent* event) {
      */
     using namespace Inkscape::UI; // pull in event helpers
 
-    desktop->getCanvas()->forceFullRedrawAfterInterruptions(5, false);
+    forced_redraws_start(5);
 
     Inkscape::Selection *selection = desktop->selection;
     static Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -505,7 +499,6 @@ bool NodeTool::root_handler(GdkEvent* event) {
     case GDK_MOTION_NOTIFY: {
         sp_update_helperpath(desktop);
         SPItem *over_item = nullptr;
-        combine_motion_events(desktop->canvas, event->motion, 0);
         over_item = sp_event_context_find_item(desktop, event_point(event->button), FALSE, TRUE);
         
         Geom::Point const motion_w(event->motion.x, event->motion.y);
@@ -550,19 +543,20 @@ bool NodeTool::root_handler(GdkEvent* event) {
                 this->flashed_item = nullptr;
             }
 
-            if (!SP_IS_SHAPE(over_item)) {
+            auto shape = dynamic_cast<SPShape const *>(over_item);
+            if (!shape) {
                 break; // for now, handle only shapes
             }
 
             this->flashed_item = over_item;
-            SPCurve *c = SP_SHAPE(over_item)->getCurveForEdit();
+            auto c = SPCurve::copy(shape->curveForEdit());
 
             if (!c) {
                 break; // break out when curve doesn't exist
             }
 
             c->transform(over_item->i2dt_affine());
-            SPCanvasItem *flash = sp_canvas_bpath_new(desktop->getTempGroup(), c, true);
+            SPCanvasItem *flash = sp_canvas_bpath_new(desktop->getTempGroup(), c.get(), true);
 
             sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(flash),
                 //prefs->getInt("/tools/nodes/highlight_color", 0xff0000ff), 1.0,
@@ -571,8 +565,6 @@ bool NodeTool::root_handler(GdkEvent* event) {
             sp_canvas_bpath_set_fill(SP_CANVAS_BPATH(flash), 0, SP_WIND_RULE_NONZERO);
             this->flash_tempitem = desktop->add_temporary_canvasitem(flash,
                 prefs->getInt("/tools/nodes/pathflash_timeout", 500));
-
-            c->unref();
         }
         } break; // do not return true, because we need to pass this event to the parent context
         // otherwise some features cease to work

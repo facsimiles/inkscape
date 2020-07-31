@@ -23,6 +23,7 @@
 
 #include <2geom/coord.h>
 
+#include "io/resource.h"
 #include "util/units.h"
 #include "path-prefix.h"
 #include "streq.h"
@@ -51,11 +52,6 @@ enum UnitCode {
 };
 
 // TODO: convert to constexpr in C++11, so that the above constants can be eliminated
-inline unsigned make_unit_code(char a, char b) {
-    // this should work without the casts, but let's be 100% sure
-    // also ensure that the codes are in lowercase
-    return MAKE_UNIT_CODE(a,b);
-}
 inline unsigned make_unit_code(char const *str) {
     if (!str || str[0] == 0) return 0;
     return MAKE_UNIT_CODE(str[0], str[1]);
@@ -256,9 +252,9 @@ Unit UnitTable::_empty_unit;
 
 UnitTable::UnitTable()
 {
-    gchar *filename = g_build_filename(INKSCAPE_UIDIR, "units.xml", NULL);
+    using namespace Inkscape::IO::Resource;
+    auto filename = get_path_string(SYSTEM, UIS, "units.xml");
     load(filename);
-    g_free(filename);
 }
 
 UnitTable::~UnitTable()

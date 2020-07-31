@@ -17,13 +17,16 @@
 #include "desktop.h"
 
 #include "color.h"
-#include "display/sp-canvas-group.h"
-#include "display/sp-canvas-util.h"
-#include "display/canvas-bpath.h"
-#include "display/curve.h"
-#include "display/cairo-utils.h"
+
+#include "sp-canvas-group.h"
+#include "sp-canvas-util.h"
+#include "canvas-bpath.h"
+#include "curve.h"
+#include "cairo-utils.h"
+
 #include "helper/geom.h"
-#include "display/sp-canvas.h"
+
+#include "ui/widget/canvas.h"
 
 static void sp_canvas_bpath_destroy(SPCanvasItem *object);
 
@@ -55,15 +58,16 @@ sp_canvas_bpath_init (SPCanvasBPath * bpath)
     bpath->stroke_linecap = SP_STROKE_LINECAP_BUTT;
     bpath->stroke_miterlimit = 11.0;
     bpath->phantom_line = false;
+
+    SP_CANVAS_ITEM(bpath)->name = "BPath";
 }
 
 static void sp_canvas_bpath_destroy(SPCanvasItem *object)
 {
     SPCanvasBPath *cbp = SP_CANVAS_BPATH (object);
 
-    if (cbp->curve) {
-        cbp->curve = cbp->curve->unref();
-    }
+    // C++ member in C-allocated struct
+    std::destroy_at(&cbp->curve);
 
     if (SP_CANVAS_ITEM_CLASS(sp_canvas_bpath_parent_class)->destroy)
         (* SP_CANVAS_ITEM_CLASS(sp_canvas_bpath_parent_class)->destroy) (object);
@@ -73,7 +77,7 @@ static void sp_canvas_bpath_update(SPCanvasItem *item, Geom::Affine const &affin
 {
     SPCanvasBPath *cbp = SP_CANVAS_BPATH(item);
 
-    item->canvas->requestRedraw((int)item->x1 - 1, (int)item->y1 - 1, (int)item->x2 + 1 , (int)item->y2 + 1);
+    item->canvas->redraw_area((int)item->x1 - 1, (int)item->y1 - 1, (int)item->x2 + 1 , (int)item->y2 + 1);
 
     if (reinterpret_cast<SPCanvasItemClass *>(sp_canvas_bpath_parent_class)->update) {
         reinterpret_cast<SPCanvasItemClass *>(sp_canvas_bpath_parent_class)->update(item, affine, flags);
@@ -98,7 +102,7 @@ static void sp_canvas_bpath_update(SPCanvasItem *item, Geom::Affine const &affin
         item->x2 = 0;
         item->y2 = 0;
     }
-    item->canvas->requestRedraw((int)item->x1, (int)item->y1, (int)item->x2, (int)item->y2);
+    item->canvas->redraw_area((int)item->x1, (int)item->y1, (int)item->x2, (int)item->y2);
 }
 
 static void
@@ -170,7 +174,7 @@ sp_canvas_bpath_point (SPCanvasItem *item, Geom::Point p, SPCanvasItem **actual_
         return Geom::infinity();
 
     double width = 0.5;
-    Geom::Rect viewbox = item->canvas->getViewbox();
+    Geom::Rect viewbox = item->canvas->get_area_world();
     viewbox.expandBy (width);
     double dist = Geom::infinity();
     pathv_matrix_point_bbox_wind_distance(cbp->curve->get_pathvector(), cbp->affine, p, nullptr, nullptr, &dist, 0.5, &viewbox);
@@ -190,6 +194,11 @@ sp_canvas_bpath_new (SPCanvasGroup *parent, SPCurve *curve, bool phantom_line)
 
     SPCanvasItem *item = sp_canvas_item_new (parent, SP_TYPE_CANVAS_BPATH, nullptr);
 
+    auto cbp = SP_CANVAS_BPATH(item);
+
+    // C++ member in C-allocated struct
+    new (&cbp->curve) decltype(cbp->curve)();
+
     sp_canvas_bpath_set_bpath (SP_CANVAS_BPATH (item), curve, phantom_line);
 
     return item;
@@ -202,13 +211,8 @@ sp_canvas_bpath_set_bpath (SPCanvasBPath *cbp, SPCurve *curve, bool phantom_line
     g_return_if_fail (SP_IS_CANVAS_BPATH (cbp));
 
     cbp->phantom_line = phantom_line;
-    if (cbp->curve) {
-        cbp->curve = cbp->curve->unref();
-    }
 
-    if (curve) {
-        cbp->curve = curve->ref();
-    }
+    cbp->curve = curve ? curve->ref() : nullptr;
 
     sp_canvas_item_request_update (SP_CANVAS_ITEM (cbp));
 }

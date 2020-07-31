@@ -53,6 +53,8 @@ InkscapeWindow::InkscapeWindow(SPDocument* document)
     // =================== Actions ===================
     add_actions_canvas_transform(this);    // Actions to transform canvas view.
 
+    insert_action_group("doc", document->getActionGroup());
+
     // =============== Build interface ===============
 
     // Main box
@@ -164,6 +166,7 @@ bool
 InkscapeWindow::on_focus_in_event(GdkEventFocus* event)
 {
     if (_app) {
+        _app->set_active_window(this);
         _app->set_active_document(_document);
         _app->set_active_view(_desktop);
         _app->set_active_selection(_desktop->selection);

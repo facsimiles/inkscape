@@ -32,9 +32,6 @@
 #include "xml/repr-sorting.h"
 
 
-#define OSB_NS_URI "http://www.openswatchbook.org/uri/2009/osb"
-
-
 struct SPXMLNs {
     SPXMLNs *next;
     unsigned int uri, prefix;
@@ -107,11 +104,11 @@ static void sp_xml_ns_register_defaults()
 
     defaults[6].uri = g_quark_from_static_string(SP_DC_NS_URI);
     defaults[6].prefix = g_quark_from_static_string("dc");
-    defaults[6].next = &defaults[7];
+    defaults[6].next = &defaults[8];
 
-    defaults[7].uri = g_quark_from_static_string(OSB_NS_URI);
-    defaults[7].prefix = g_quark_from_static_string("osb");
-    defaults[7].next = &defaults[8];
+    //defaults[7].uri = g_quark_from_static_string("https://inkscape.org/namespaces/deprecated/osb");
+    //defaults[7].prefix = g_quark_from_static_string("osb");
+    //defaults[7].next = &defaults[8];
 
     // Inkscape versions prior to 0.44 would write this namespace
     // URI instead of the correct sodipodi namespace; by adding this
@@ -457,7 +454,7 @@ sp_repr_lookup_property_many( Inkscape::XML::Node *repr, Glib::ustring const& pr
 bool sp_repr_is_meta_element(const Inkscape::XML::Node *node)
 {
     if (node == nullptr) return false;
-    if (node->type() != Inkscape::XML::ELEMENT_NODE) return false;
+    if (node->type() != Inkscape::XML::NodeType::ELEMENT_NODE) return false;
     gchar const *name = node->name();
     if (name == nullptr) return false;
     if (!std::strcmp(name, "svg:title")) return true;

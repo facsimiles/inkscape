@@ -30,7 +30,6 @@
 #include "selection.h"
 #include "verbs.h"
 
-#include "display/sp-canvas.h"
 #include "display/sp-canvas-item.h"
 
 #include "include/macros.h"
@@ -105,42 +104,42 @@ void StarTool::selection_changed(Inkscape::Selection* selection) {
 }
 
 void StarTool::setup() {
-	ToolBase::setup();
+    ToolBase::setup();
 
-	sp_event_context_read(this, "magnitude");
-	sp_event_context_read(this, "proportion");
-	sp_event_context_read(this, "isflatsided");
-	sp_event_context_read(this, "rounded");
-	sp_event_context_read(this, "randomized");
+    sp_event_context_read(this, "isflatsided");
+    sp_event_context_read(this, "magnitude");
+    sp_event_context_read(this, "proportion");
+    sp_event_context_read(this, "rounded");
+    sp_event_context_read(this, "randomized");
 
-	this->shape_editor = new ShapeEditor(this->desktop);
+    this->shape_editor = new ShapeEditor(this->desktop);
 
-	SPItem *item = this->desktop->getSelection()->singleItem();
-	if (item) {
-		this->shape_editor->set_item(item);
-	}
+    SPItem *item = this->desktop->getSelection()->singleItem();
+    if (item) {
+        this->shape_editor->set_item(item);
+    }
 
-	Inkscape::Selection *selection = this->desktop->getSelection();
-	
-	this->sel_changed_connection.disconnect();
+    Inkscape::Selection *selection = this->desktop->getSelection();
 
-	this->sel_changed_connection = selection->connectChanged(sigc::mem_fun(this, &StarTool::selection_changed));
+    this->sel_changed_connection.disconnect();
 
-	Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-	if (prefs->getBool("/tools/shapes/selcue")) {
-		this->enableSelectionCue();
-	}
+    this->sel_changed_connection = selection->connectChanged(sigc::mem_fun(this, &StarTool::selection_changed));
 
-	if (prefs->getBool("/tools/shapes/gradientdrag")) {
-		this->enableGrDrag();
-	}
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    if (prefs->getBool("/tools/shapes/selcue")) {
+        this->enableSelectionCue();
+    }
+
+    if (prefs->getBool("/tools/shapes/gradientdrag")) {
+        this->enableGrDrag();
+    }
 }
 
 void StarTool::set(const Inkscape::Preferences::Entry& val) {
     Glib::ustring path = val.getEntryName();
 
     if (path == "magnitude") {
-        this->magnitude = CLAMP(val.getInt(5), 3, 1024);
+        this->magnitude = CLAMP(val.getInt(5), this->isflatsided ? 3 : 2, 1024);
     } else if (path == "proportion") {
         this->proportion = CLAMP(val.getDouble(0.5), 0.01, 2.0);
     } else if (path == "isflatsided") {
@@ -361,7 +360,7 @@ void StarTool::drag(Geom::Point p, guint state)
         this->star->transform = SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
         this->star->updateRepr();
 
-        desktop->canvas->forceFullRedrawAfterInterruptions(5);
+        forced_redraws_start(5);
     }
 
     /* Snap corner point with no constraints */
@@ -416,7 +415,7 @@ void StarTool::finishItem() {
         this->star->set_shape();
         this->star->updateRepr(SP_OBJECT_WRITE_EXT);
         this->star->doWriteTransform(this->star->transform, nullptr, true);
-        desktop->canvas->endForcedFullRedraws();
+        forced_redraws_stop();
 
         desktop->getSelection()->set(this->star);
         DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_STAR,
@@ -440,7 +439,7 @@ void StarTool::cancel() {
     this->yp = 0;
     this->item_to_select = nullptr;
 
-    desktop->canvas->endForcedFullRedraws();
+    forced_redraws_stop();
 
     DocumentUndo::cancel(desktop->getDocument());
 }

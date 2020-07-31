@@ -51,7 +51,6 @@
 #include "selection.h"
 #include "verbs.h"
 
-#include "display/sp-canvas.h"
 #include "display/canvas-arena.h"
 #include "display/canvas-bpath.h"
 #include "display/curve.h"
@@ -109,11 +108,11 @@ EraserTool::~EraserTool() = default;
 void EraserTool::setup() {
     DynamicBase::setup();
 
-    this->accumulated = new SPCurve();
-    this->currentcurve = new SPCurve();
+    accumulated.reset(new SPCurve());
+    currentcurve.reset(new SPCurve());
 
-    this->cal1 = new SPCurve();
-    this->cal2 = new SPCurve();
+    cal1.reset(new SPCurve());
+    cal2.reset(new SPCurve());
 
     this->currentshape = sp_canvas_item_new(desktop->getSketch(), SP_TYPE_CANVAS_BPATH, nullptr);
 
@@ -336,7 +335,7 @@ void EraserTool::brush() {
 
     double dezoomify_factor = 0.05 * 1000;
     if (!this->abs_width) {
-        dezoomify_factor /= SP_EVENT_CONTEXT(this)->desktop->current_zoom();
+        dezoomify_factor /= desktop->current_zoom();
     }
 
     Geom::Point del_left = dezoomify_factor * (width + tremble_left) * this->ang;
@@ -360,7 +359,7 @@ sp_erc_update_toolbox (SPDesktop *desktop, const gchar *id, double value)
 }
 
 void EraserTool::cancel() {
-    SPDesktop *desktop = SP_EVENT_CONTEXT(this)->desktop;
+
     this->dragging = FALSE;
     this->is_drawing = false;
     sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate));
@@ -416,7 +415,7 @@ bool EraserTool::root_handler(GdkEvent* event) {
 
                 ret = TRUE;
 
-                desktop->canvas->forceFullRedrawAfterInterruptions(3);
+                forced_redraws_start(3);
                 this->is_drawing = true;
             }
             break;
@@ -459,7 +458,7 @@ bool EraserTool::root_handler(GdkEvent* event) {
         Geom::Point const motion_dt(desktop->w2d(motion_w));
 
         sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate));
-        desktop->canvas->endForcedFullRedraws();
+        forced_redraws_stop();
         this->is_drawing = false;
 
         if (this->dragging && event->button.button == 1 && !this->space_panning) {
@@ -860,7 +859,7 @@ void EraserTool::set_to_accumulated() {
 }
 
 static void
-add_cap(SPCurve *curve,
+add_cap(SPCurve &curve,
         Geom::Point const &pre, Geom::Point const &from,
         Geom::Point const &to, Geom::Point const &post,
         double rounding)
@@ -887,7 +886,7 @@ add_cap(SPCurve *curve,
     }
 
     if ( Geom::L2(v_in) > ERASER_EPSILON || Geom::L2(v_out) > ERASER_EPSILON ) {
-        curve->curveto(from + v_in, to + v_out, to);
+        curve.curveto(from + v_in, to + v_out, to);
     }
 }
 
@@ -896,7 +895,7 @@ void EraserTool::accumulate() {
     // this desperately needs to be rewritten to use the path outliner...
     if ( !this->cal1->is_empty() && !this->cal2->is_empty() ) {
         this->accumulated->reset(); /*  Is this required ?? */
-        SPCurve *rev_cal2 = this->cal2->create_reverse();
+        auto rev_cal2 = this->cal2->create_reverse();
 
         g_assert(this->cal1->get_segment_count() > 0);
         g_assert(rev_cal2->get_segment_count() > 0);
@@ -913,18 +912,18 @@ void EraserTool::accumulate() {
         g_assert( dc_cal1_lastseg );
         g_assert( rev_cal2_lastseg );
 
-        this->accumulated->append(this->cal1, FALSE);
+        accumulated->append(*cal1);
         if(!this->nowidth) {
-            add_cap(this->accumulated,
+            add_cap(*accumulated,
                     dc_cal1_lastseg->finalPoint() - dc_cal1_lastseg->unitTangentAt(1),
                     dc_cal1_lastseg->finalPoint(),
                     rev_cal2_firstseg->initialPoint(),
                     rev_cal2_firstseg->initialPoint() + rev_cal2_firstseg->unitTangentAt(0),
                     this->cap_rounding);
 
-            this->accumulated->append(rev_cal2, TRUE);
+            this->accumulated->append(*rev_cal2, true);
 
-            add_cap(this->accumulated,
+            add_cap(*accumulated,
                     rev_cal2_lastseg->finalPoint() - rev_cal2_lastseg->unitTangentAt(1),
                     rev_cal2_lastseg->finalPoint(),
                     dc_cal1_firstseg->initialPoint(),
@@ -933,8 +932,6 @@ void EraserTool::accumulate() {
 
             this->accumulated->closepath();
         }
-
-        rev_cal2->unref();
 
         this->cal1->reset();
         this->cal2->reset();
@@ -1010,11 +1007,11 @@ void EraserTool::fit_and_split(bool release) {
 
                 // FIXME: this->segments is always NULL at this point??
                 if (this->segments.empty()) { // first segment
-                    add_cap(this->currentcurve, b2[1], b2[0], b1[0], b1[1], this->cap_rounding);
+                    add_cap(*currentcurve, b2[1], b2[0], b1[0], b1[1], cap_rounding);
                 }
 
                 this->currentcurve->closepath();
-                sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->currentshape), this->currentcurve, true);
+                sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(currentshape), currentcurve.get(), true);
             }
 
             /* Current eraser */
@@ -1050,9 +1047,8 @@ void EraserTool::fit_and_split(bool release) {
             g_assert(!this->currentcurve->is_empty());
 
             SPCanvasItem *cbp = sp_canvas_item_new(desktop->getSketch(), SP_TYPE_CANVAS_BPATH, nullptr);
-            SPCurve *curve = this->currentcurve->copy();
-            sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH (cbp), curve, true);
-            curve->unref();
+            auto curve = this->currentcurve->copy();
+            sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(cbp), curve.get(), true);
 
             guint32 fillColor = sp_desktop_get_color_tool (desktop, "/tools/eraser", true);
             //guint32 strokeColor = sp_desktop_get_color_tool (desktop, "/tools/eraser", false);
@@ -1096,11 +1092,13 @@ void EraserTool::draw_temporary_box() {
     }
 
     if (this->npoints >= 2) {
-        add_cap(this->currentcurve, this->point2[this->npoints-2], this->point2[this->npoints-1], this->point1[this->npoints-1], this->point1[this->npoints-2], this->cap_rounding);
+        add_cap(*currentcurve,                            //
+                point2[npoints - 2], point2[npoints - 1], //
+                point1[npoints - 1], point1[npoints - 2], cap_rounding);
     }
 
     this->currentcurve->closepath();
-    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->currentshape), this->currentcurve, true);
+    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(currentshape), currentcurve.get(), true);
 }
 
 }

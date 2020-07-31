@@ -19,7 +19,11 @@
 #include <cstdint>
 #include <glib.h>
 
+#include "style-enums.h"
+
 #include "sp-canvas-item.h"
+
+#include <memory>
 
 struct SPCanvasBPath;
 struct SPCanvasBPathClass;
@@ -36,39 +40,11 @@ class SPCurve;
 
 class Shape;
 
-/* stroke-linejoin */
-
-enum SPStrokeJoinType : std::uint_least8_t {
-    SP_STROKE_LINEJOIN_MITER,
-    SP_STROKE_LINEJOIN_ROUND,
-    SP_STROKE_LINEJOIN_BEVEL
-};
-
-/* stroke-linecap */
-
-enum SPStrokeCapType : std::uint_least8_t {
-    SP_STROKE_LINECAP_BUTT,
-    SP_STROKE_LINECAP_ROUND,
-    SP_STROKE_LINECAP_SQUARE
-};
-
-
-/* fill-rule */
-/* clip-rule */
-
-enum SPWindRule : std::uint_least8_t {
-    SP_WIND_RULE_NONZERO,
-    SP_WIND_RULE_INTERSECT,
-    SP_WIND_RULE_EVENODD,
-    SP_WIND_RULE_POSITIVE
-};
-
-
 struct SPCanvasBPath {
     SPCanvasItem item;
 
     /* Line def */
-    SPCurve *curve;
+    std::unique_ptr<SPCurve> curve;
     Geom::Affine affine;
 
     /* Fill attributes */

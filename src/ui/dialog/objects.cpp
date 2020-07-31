@@ -49,6 +49,8 @@
 #include "ui/selected-color.h"
 #include "ui/tools-switch.h"
 #include "ui/tools/node-tool.h"
+
+#include "ui/widget/canvas.h"
 #include "ui/widget/clipmaskicon.h"
 #include "ui/widget/color-notebook.h"
 #include "ui/widget/highlight-picker.h"
@@ -249,11 +251,11 @@ public:
  */
 void ObjectsPanel::_styleButton(Gtk::Button& btn, char const* iconName, char const* tooltip)
 {
-    GtkWidget *child = sp_get_icon_image(iconName, GTK_ICON_SIZE_SMALL_TOOLBAR);
-    gtk_widget_show( child );
-    btn.add( *Gtk::manage(Glib::wrap(child)) );
+    auto child = Glib::wrap(sp_get_icon_image(iconName, GTK_ICON_SIZE_SMALL_TOOLBAR));
+    child->show();
+    btn.add(*child);
     btn.set_relief(Gtk::RELIEF_NONE);
-    btn.set_tooltip_text (tooltip);
+    btn.set_tooltip_text(tooltip);
 }
 
 /**
@@ -889,7 +891,7 @@ bool ObjectsPanel::_handleKeyEvent(GdkEventKey *event)
         // defocus:
         case GDK_KEY_Escape:
             if (_desktop->canvas) {
-                gtk_widget_grab_focus (GTK_WIDGET(_desktop->canvas));
+                _desktop->canvas->grab_focus();
                 return true;
             }
             break;
@@ -2322,7 +2324,7 @@ void SPItem::setHighlightColor(guint32 const color)
         Inkscape::UI::Tools::ToolBase *ec = SP_ACTIVE_DESKTOP->event_context;
         if (INK_IS_NODE_TOOL(ec)) {
             tool = static_cast<NodeTool*>(ec);
-            tools_switch(tool->desktop, TOOLS_NODES);
+            tools_switch(tool->getDesktop(), TOOLS_NODES);
         }
     }
 }
@@ -2336,7 +2338,7 @@ void SPItem::unsetHighlightColor()
         Inkscape::UI::Tools::ToolBase *ec = SP_ACTIVE_DESKTOP->event_context;
         if (INK_IS_NODE_TOOL(ec)) {
             tool = static_cast<NodeTool*>(ec);
-            tools_switch(tool->desktop, TOOLS_NODES);
+            tools_switch(tool->getDesktop(), TOOLS_NODES);
         }
     }
 }

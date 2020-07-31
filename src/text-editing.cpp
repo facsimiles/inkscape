@@ -290,27 +290,26 @@ unsigned sp_text_get_length_upto(SPObject const *item, SPObject const *upto)
 static Inkscape::XML::Node* duplicate_node_without_children(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node const *old_node)
 {
     switch (old_node->type()) {
-        case Inkscape::XML::ELEMENT_NODE: {
+        case Inkscape::XML::NodeType::ELEMENT_NODE: {
             Inkscape::XML::Node *new_node = xml_doc->createElement(old_node->name());
-            Inkscape::Util::List<Inkscape::XML::AttributeRecord const> attributes = old_node->attributeList();
             GQuark const id_key = g_quark_from_string("id");
-            for ( ; attributes ; attributes++) {
-                if (attributes->key == id_key) continue;
-                new_node->setAttribute(g_quark_to_string(attributes->key), attributes->value);
+            for ( const auto & attr: old_node->attributeList() ) {
+                if (attr.key == id_key) continue;
+                new_node->setAttribute(g_quark_to_string(attr.key), attr.value);
             }
             return new_node;
         }
 
-        case Inkscape::XML::TEXT_NODE:
+        case Inkscape::XML::NodeType::TEXT_NODE:
             return xml_doc->createTextNode(old_node->content());
 
-        case Inkscape::XML::COMMENT_NODE:
+        case Inkscape::XML::NodeType::COMMENT_NODE:
             return xml_doc->createComment(old_node->content());
 
-        case Inkscape::XML::PI_NODE:
+        case Inkscape::XML::NodeType::PI_NODE:
             return xml_doc->createPI(old_node->name(), old_node->content());
 
-        case Inkscape::XML::DOCUMENT_NODE:
+        case Inkscape::XML::NodeType::DOCUMENT_NODE:
             return nullptr;   // this had better never happen
     }
     return nullptr;
@@ -731,11 +730,10 @@ static SPObject* delete_line_break(SPObject *root, SPObject *item, bool *next_is
     SPCSSAttr *dest_node_attrs = sp_repr_css_attr(new_parent_item->getRepr(), "style");
     SPCSSAttr *this_node_attrs = sp_repr_css_attr(this_repr, "style");
     SPCSSAttr *this_node_attrs_inherited = sp_repr_css_attr_inherited(this_repr, "style");
-    Inkscape::Util::List<Inkscape::XML::AttributeRecord const> attrs = dest_node_attrs->attributeList();
-    for ( ; attrs ; attrs++) {
-        gchar const *key = g_quark_to_string(attrs->key);
+    for ( const auto & attr :dest_node_attrs->attributeList()) {
+        gchar const *key = g_quark_to_string(attr.key);
         gchar const *this_attr = this_node_attrs_inherited->attribute(key);
-        if ((this_attr == nullptr || strcmp(attrs->value, this_attr)) && this_node_attrs->attribute(key) == nullptr)
+        if ((this_attr == nullptr || strcmp(attr.value, this_attr)) && this_node_attrs->attribute(key) == nullptr)
             this_node_attrs->setAttribute(key, this_attr);
     }
     sp_repr_css_attr_unref(this_node_attrs_inherited);
@@ -1469,16 +1467,14 @@ forwards and backwards to make sure we don't miss any attributes that are
 in one but not the other. */
 static bool css_attrs_are_equal(SPCSSAttr const *first, SPCSSAttr const *second)
 {
-    Inkscape::Util::List<Inkscape::XML::AttributeRecord const> attrs = first->attributeList();
-    for ( ; attrs ; attrs++) {
-        gchar const *other_attr = second->attribute(g_quark_to_string(attrs->key));
-        if (other_attr == nullptr || strcmp(attrs->value, other_attr))
+    for ( const auto & attr : first->attributeList()) {
+        gchar const *other_attr = second->attribute(g_quark_to_string(attr.key));
+        if (other_attr == nullptr || strcmp(attr.value, other_attr))
             return false;
     }
-    attrs = second->attributeList();
-    for ( ; attrs ; attrs++) {
-        gchar const *other_attr = first->attribute(g_quark_to_string(attrs->key));
-        if (other_attr == nullptr || strcmp(attrs->value, other_attr))
+    for (const auto & attr : second->attributeList()) {
+        gchar const *other_attr = first->attribute(g_quark_to_string(attr.key));
+        if (other_attr == nullptr || strcmp(attr.value, other_attr))
             return false;
     }
     return true;
@@ -1715,7 +1711,7 @@ static bool tidy_operator_repeated_spans(SPObject **item, bool /*has_text_decora
     }
 
     // merge consecutive spans with identical styles into one
-    if (first_repr->type() != Inkscape::XML::ELEMENT_NODE) return false;
+    if (first_repr->type() != Inkscape::XML::NodeType::ELEMENT_NODE) return false;
     if (strcmp(first_repr->name(), second_repr->name()) != 0) return false;
     if (is_line_break_object(second)) return false;
     gchar const *first_style = first_repr->attribute("style");

@@ -23,6 +23,8 @@
 #include "sp-lpe-item.h"
 #include "sp-marker-loc.h"
 
+#include <memory>
+
 #define SP_SHAPE(obj) (dynamic_cast<SPShape*>((SPObject*)obj))
 #define SP_IS_SHAPE(obj) (dynamic_cast<const SPShape*>((SPObject*)obj) != NULL)
 
@@ -40,12 +42,23 @@ public:
 	SPShape();
 	~SPShape() override;
 
-    SPCurve * getCurve (unsigned int owner = FALSE) const;
-    SPCurve * getCurveBeforeLPE (unsigned int owner = FALSE) const;
-    SPCurve * getCurveForEdit (unsigned int owner = FALSE) const;
-    void setCurve (SPCurve *curve, unsigned int owner = FALSE);
-    void setCurveBeforeLPE (SPCurve *new_curve, unsigned int owner = FALSE);
-    void setCurveInsync (SPCurve *curve, unsigned int owner = FALSE);
+    SPCurve *curve();
+    SPCurve const *curve() const;
+    SPCurve const *curveBeforeLPE() const;
+    SPCurve const *curveForEdit() const;
+
+private:
+    void _setCurve(SPCurve const *, bool);
+    void _setCurve(std::unique_ptr<SPCurve> &&, bool);
+
+public:
+    void setCurve(SPCurve const *);
+    void setCurve(std::unique_ptr<SPCurve> &&);
+    void setCurveInsync(SPCurve const *);
+    void setCurveInsync(std::unique_ptr<SPCurve> &&);
+    void setCurveBeforeLPE(SPCurve const *new_curve);
+    void setCurveBeforeLPE(std::unique_ptr<SPCurve> &&);
+
     int hasMarkers () const;
     int numberOfMarkers (int type) const;
 
@@ -57,10 +70,9 @@ public:
     mutable Geom::OptRect bbox_geom_cache;
     mutable Geom::OptRect bbox_vis_cache;
 
-
-public: // temporarily public, until SPPath is properly classed, etc.
-    SPCurve *_curve_before_lpe;
-    SPCurve *_curve;
+protected:
+    std::unique_ptr<SPCurve> _curve_before_lpe;
+    std::unique_ptr<SPCurve> _curve;
 
 public:
     SPMarker *_marker[SP_MARKER_LOC_QTY];

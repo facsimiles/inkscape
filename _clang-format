@@ -65,7 +65,7 @@ IncludeCategories:
   - Regex:           '^"'
     Priority:        2
 IncludeIsMainRegex: '(-test)?$'
-IndentCaseLabels: false
+IndentCaseLabels: true
 IndentPPDirectives: None
 IndentWidth:     4
 IndentWrappedFunctionNames: false
@@ -103,10 +103,11 @@ SpacesInContainerLiterals: false
 SpacesInCStyleCastParentheses: false
 SpacesInParentheses: false
 SpacesInSquareBrackets: false
-Standard:        Cpp11
+Standard:        c++17
 StatementMacros: []
 TypenameMacros: []
 TabWidth: 4
+UseCRLF: false
 UseTab: Never
 ...
 

@@ -903,14 +903,9 @@ sp_file_save_template(Gtk::Window &parentWindow, Glib::ustring name,
                 Inkscape::Extension::FILE_SAVE_METHOD_INKSCAPE_SVG);
         }
     }
-
-    auto nodeToRemove = sp_repr_lookup_name(root, "inkscape:_templateinfo");
-
-    if (nodeToRemove != nullptr){
-
-        sp_repr_unparent(nodeToRemove);
-        delete nodeToRemove;
-    }
+    
+    // remove this node from current document after saving it as template
+    root->removeChild(templateinfo_node);
 
     DocumentUndo::setUndoSensitive(document, true);
 
@@ -1094,7 +1089,8 @@ file_import(SPDocument *in_doc, const Glib::ustring &uri,
 
         // Create a new group if necessary.
         Inkscape::XML::Node *newgroup = nullptr;
-        if ((style && style->attributeList()) || items_count > 1) {
+        const auto & al = style->attributeList();
+        if ((style && !al.empty()) || items_count > 1) {
             newgroup = xml_in_doc->createElement("svg:g");
             sp_repr_css_set(newgroup, style, "style");
         }
@@ -1131,7 +1127,7 @@ file_import(SPDocument *in_doc, const Glib::ustring &uri,
             }
 
             // don't lose top-level defs or style elements
-            else if (child.getRepr()->type() == Inkscape::XML::ELEMENT_NODE) {
+            else if (child.getRepr()->type() == Inkscape::XML::NodeType::ELEMENT_NODE) {
                 const gchar *tag = child.getRepr()->name();
                 if (!strcmp(tag, "svg:style")) {
                     in_doc->getRoot()->appendChildRepr(child.getRepr()->duplicate(xml_in_doc));

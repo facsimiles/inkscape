@@ -42,8 +42,6 @@
 // #define G_LOG_DOMAIN "STYLEDIALOG"
 
 using Inkscape::DocumentUndo;
-using Inkscape::Util::List;
-using Inkscape::XML::AttributeRecord;
 
 /**
  * This macro is used to remove spaces around selectors or any strings when
@@ -93,7 +91,7 @@ XML::Node *get_first_style_text_node(XML::Node *root, bool create_if_missing)
     }
 
     for (auto *node = styleNode->firstChild(); node; node = node->next()) {
-        if (node->type() == XML::TEXT_NODE) {
+        if (node->type() == XML::NodeType::TEXT_NODE) {
             textNode = node;
             break;
         }

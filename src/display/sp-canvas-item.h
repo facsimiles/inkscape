@@ -23,14 +23,17 @@
 #include <2geom/rect.h>
 #include <boost/intrusive/list.hpp>
 #include <glib-object.h>
+#include <cairo/cairo.h>
 
 #include "ui/control-types.h"
 
 G_BEGIN_DECLS
 
-struct SPCanvas;
-struct SPCanvasBuf;
 struct SPCanvasGroup;
+
+namespace Inkscape::UI::Widget {
+class Canvas;
+}
 
 typedef struct _SPCanvasItemClass SPCanvasItemClass;
 typedef union  _GdkEvent          GdkEvent;
@@ -42,6 +45,31 @@ typedef struct _GdkCursor         GdkCursor;
 #define SP_IS_CANVAS_ITEM(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj), SP_TYPE_CANVAS_ITEM))
 #define SP_CANVAS_ITEM_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS((o), SP_TYPE_CANVAS_ITEM, SPCanvasItemClass))
 
+enum {
+    ITEM_EVENT,
+    ITEM_LAST_SIGNAL
+};
+
+extern guint item_signals[ITEM_LAST_SIGNAL];
+
+enum {
+    SP_CANVAS_UPDATE_REQUESTED  = 1 << 0,
+    SP_CANVAS_UPDATE_AFFINE     = 1 << 1
+};
+
+/**
+ * Structure used when rendering canvas items.
+ */
+struct SPCanvasBuf {
+    cairo_t *ct;
+    Geom::IntRect rect;
+    Geom::IntRect canvas_rect; // visible window in world coordinates (i.e. offset by _x0, _y0)
+
+    unsigned char *buf;
+    int buf_rowstride;
+    int device_scale; // For high DPI monitors.
+    bool is_empty;
+};
 
 /**
  * An SPCanvasItem refers to a SPCanvas and to its parent item; it has
@@ -53,7 +81,7 @@ struct SPCanvasItem {
     // boost linked list member hook
     boost::intrusive::list_member_hook<> member_hook_;
 
-    SPCanvas *canvas;
+    Inkscape::UI::Widget::Canvas *canvas;
     SPCanvasItem *parent;
 
     double x1;
@@ -78,6 +106,8 @@ struct SPCanvasItem {
     bool pickable;
 
     bool in_destruction;
+
+    char const *name; // For debugging.
 };
 
 GType sp_canvas_item_get_type();
@@ -134,6 +164,14 @@ void sp_canvas_item_destroy(SPCanvasItem *item);
 int sp_canvas_item_grab(SPCanvasItem *item, unsigned int event_mask, GdkCursor *cursor, guint32 etime);
 void sp_canvas_item_ungrab(SPCanvasItem *item);
 
+bool is_descendant(SPCanvasItem const *item, SPCanvasItem const *parent);
+double sp_canvas_item_invoke_point(SPCanvasItem *item, Geom::Point p, SPCanvasItem **actual_item);
+void sp_canvas_item_invoke_update(SPCanvasItem *item, Geom::Affine const &affine, unsigned int flags);
+void sp_canvas_item_finalize(GObject *gobject);
+void sp_canvas_item_real_destroy(SPCanvasItem *object);
+void sp_canvas_item_dispose(GObject *object);
+void sp_canvas_item_construct(SPCanvasItem *item, SPCanvasGroup *parent, gchar const *first_arg_name, va_list args);
+
 Geom::Affine sp_canvas_item_i2w_affine(SPCanvasItem const *item);
 
 void sp_canvas_item_request_update(SPCanvasItem *item);
@@ -142,7 +180,7 @@ void sp_canvas_item_request_update(SPCanvasItem *item);
 
 gint sp_canvas_item_order(SPCanvasItem * item);
 
-
+void sp_canvas_item_recursive_print_tree(unsigned level, SPCanvasItem* item);
 
 #endif // SEEN_SP_CANVAS_ITEM_H
 

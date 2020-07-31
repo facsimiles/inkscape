@@ -207,10 +207,8 @@ void SPRect::set_shape() {
         if (this->getRepr()->attribute("d")) {
             // unconditionally read the curve from d, if any, to preserve appearance
             Geom::PathVector pv = sp_svg_read_pathv(this->getRepr()->attribute("d"));
-            SPCurve *cold = new SPCurve(pv);
-            this->setCurveInsync(cold);
-            this->setCurveBeforeLPE( cold );
-            cold->unref();
+            setCurveInsync(std::make_unique<SPCurve>(pv));
+            setCurveBeforeLPE(curve());
         }
 
         return;
@@ -221,7 +219,7 @@ void SPRect::set_shape() {
         return;
     }
 
-    SPCurve *c = new SPCurve();
+    auto c = std::make_unique<SPCurve>();
 
     double const x = this->x.computed;
     double const y = this->y.computed;
@@ -287,32 +285,27 @@ void SPRect::set_shape() {
 
     /* Reset the shape's curve to the "original_curve"
     * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
-    SPCurve * before = this->getCurveBeforeLPE();
-    bool haslpe = this->hasPathEffectOnClipOrMaskRecursive(this);
-    if (before || haslpe) {
-        if (c && before && before->get_pathvector() != c->get_pathvector()){
-            this->setCurveBeforeLPE(c);
-            sp_lpe_item_update_patheffect(this, true, false);
-        } else if(haslpe) {
-            this->setCurveBeforeLPE(c);
-        } else {
-            //This happends on undo, fix bug:#1791784
-            this->setCurveInsync(c);
-        }
-    } else {
-        this->setCurveInsync(c);
-    }
-    if (before) {
-        before->unref();
+
+    auto const before = this->curveBeforeLPE();
+    if (before && before->get_pathvector() != c->get_pathvector()) {
+        setCurveBeforeLPE(std::move(c));
+        sp_lpe_item_update_patheffect(this, true, false);
+        return;
     }
     if (this->hasPathEffectOnClipOrMaskRecursive(this)) {
+        setCurveBeforeLPE(std::move(c));
+
         Inkscape::XML::Node *rectrepr = this->getRepr();
         if (strcmp(rectrepr->name(), "svg:rect") == 0) {
             sp_lpe_item_update_patheffect(this, true, false);
             this->write(rectrepr->document(), rectrepr, SP_OBJECT_MODIFIED_FLAG);
         }
+
+        return;
     }
-    c->unref();
+
+    // This happends on undo, fix bug:#1791784
+    setCurveInsync(std::move(c));
 }
 
 bool SPRect::set_rect_path_attribute(Inkscape::XML::Node *repr)

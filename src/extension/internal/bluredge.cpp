@@ -127,6 +127,7 @@ BlurEdge::prefs_effect(Inkscape::Extension::Effect * module, sigc::signal<void> 
 void
 BlurEdge::init ()
 {
+    // clang-format off
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>" N_("Inset/Outset Halo") "</name>\n"
@@ -140,6 +141,7 @@ BlurEdge::init ()
                 "</effects-menu>\n"
             "</effect>\n"
         "</inkscape-extension>\n" , new BlurEdge());
+    // clang-format on
     return;
 }
 

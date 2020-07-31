@@ -150,12 +150,11 @@ void SPPath::build(SPDocument *document, Inkscape::XML::Node *repr) {
                 Glib::ustring  value = matchInfo.fetch(1);
                 Geom::PathVector pv = sp_svg_read_pathv(value.c_str());
 
-                SPCurve *curve = new SPCurve(pv);
+                auto curve = std::make_unique<SPCurve>(pv);
                 if (curve) {
 
                     // Update curve
-                    this->setCurveInsync(curve, TRUE);
-                    curve->unref();
+                    setCurveInsync(std::move(curve));
 
                     // Convert from property to attribute (convert back on write)
                     setAttributeOrRemoveIfEmpty("d", value);
@@ -199,15 +198,7 @@ void SPPath::build(SPDocument *document, Inkscape::XML::Node *repr) {
     {
         // Write the value to _curve_before_lpe, do not recalculate effects
         Geom::PathVector pv = sp_svg_read_pathv(s);
-        SPCurve *curve = new SPCurve(pv);
-        
-        if (_curve_before_lpe) {
-            _curve_before_lpe = _curve_before_lpe->unref();
-        }
-
-        if (curve) {
-            _curve_before_lpe = curve->ref();
-        }
+        _curve_before_lpe.reset(new SPCurve(pv));
     }
     this->readAttr(SPAttr::D);
 
@@ -237,12 +228,7 @@ void SPPath::set(SPAttr key, const gchar* value) {
         case SPAttr::INKSCAPE_ORIGINAL_D:
             if (value) {
                 Geom::PathVector pv = sp_svg_read_pathv(value);
-                SPCurve *curve = new SPCurve(pv);
-
-                if (curve) {
-                    this->setCurveBeforeLPE(curve);
-                    curve->unref();
-                }
+                setCurveBeforeLPE(std::make_unique<SPCurve>(pv));
             } else {
                 bool haslpe = this->hasPathEffectOnClipOrMaskRecursive(this);
                 if (!haslpe) {
@@ -258,12 +244,7 @@ void SPPath::set(SPAttr key, const gchar* value) {
        case SPAttr::D:
             if (value) {
                 Geom::PathVector pv = sp_svg_read_pathv(value);
-                SPCurve *curve = new SPCurve(pv);
-
-                if (curve) {
-                    this->setCurve(curve);
-                    curve->unref();
-                }
+                setCurve(std::make_unique<SPCurve>(pv));
             } else {
                 this->setCurve(nullptr);
             }

@@ -26,7 +26,12 @@ void
 file_open(const Glib::VariantBase& value, InkscapeApplication *app)
 {
     Glib::Variant<Glib::ustring> s = Glib::VariantBase::cast_dynamic<Glib::Variant<Glib::ustring> >(value);
+
     Glib::RefPtr<Gio::File> file = Gio::File::create_for_path(s.get());
+    if (!file->query_exists()) {
+        std::cerr << "file_open: file '" << s.get() << "' does not exist." << std::endl;
+        return;
+    }
 
     SPDocument *document = app->document_open(file);
     INKSCAPE.add_document(document);
@@ -91,9 +96,11 @@ file_close(InkscapeApplication *app)
 
 std::vector<std::vector<Glib::ustring>> raw_data_file =
 {
+    // clang-format off
     {"app.file-open",                 "FileOpen",                "File",       N_("Open file.")                                         },
     {"app.file-new",                  "FileNew",                 "File",       N_("Open new document using template.")                  },
     {"app.file-close",                "FileClose",               "File",       N_("Close active document.")                             }
+    // clang-format on
 };
 
 template <class T>
@@ -109,9 +116,11 @@ add_actions_file(ConcreteInkscapeApplication<T>* app)
     // Debian 9 has 2.50.0
 #if GLIB_CHECK_VERSION(2, 52, 0)
 
+    // clang-format off
     app->add_action_with_parameter( "file-open",                 String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&file_open),           app));
     app->add_action_with_parameter( "file-new",                  String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&file_new),            app));
     app->add_action(                "file-close",                        sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&file_close),          app));
+    // clang-format on
 #else
     std::cerr << "add_actions: Some actions require Glibmm 2.52, compiled with: " << glib_major_version << "." << glib_minor_version << std::endl;
 #endif

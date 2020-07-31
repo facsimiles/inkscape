@@ -98,9 +98,8 @@ const gchar *gr_handle_descr [] = {
 };
 
 void GradientTool::selection_changed(Inkscape::Selection*) {
-    GradientTool *rc = (GradientTool *) this;
 
-    GrDrag *drag = rc->_grdrag;
+    GrDrag *drag = _grdrag;
     Inkscape::Selection *selection = this->desktop->getSelection();
     if (selection == nullptr) {
         return;
@@ -121,8 +120,8 @@ void GradientTool::selection_changed(Inkscape::Selection*) {
                 //TRANSLATORS: Mind the space in front. This is part of a compound message
                 ngettext(" out of %d gradient handle"," out of %d gradient handles",n_tot),
                 ngettext(" on %d selected object"," on %d selected objects",n_obj),NULL);
-            rc->message_context->setF(Inkscape::NORMAL_MESSAGE,
-                                       message,_(gr_handle_descr[drag->singleSelectedDraggerSingleDraggableType()]), n_tot, n_obj);
+            message_context->setF(Inkscape::NORMAL_MESSAGE,
+                                  message,_(gr_handle_descr[drag->singleSelectedDraggerSingleDraggableType()]), n_tot, n_obj);
         } else {
             gchar * message = g_strconcat(
                 //TRANSLATORS: This is a part of a compound message (out of two more indicating: grandint handle count & object count)
@@ -130,19 +129,19 @@ void GradientTool::selection_changed(Inkscape::Selection*) {
                          "One handle merging %d stops (drag with <b>Shift</b> to separate) selected",drag->singleSelectedDraggerNumDraggables()),
                 ngettext(" out of %d gradient handle"," out of %d gradient handles",n_tot),
                 ngettext(" on %d selected object"," on %d selected objects",n_obj),NULL);
-            rc->message_context->setF(Inkscape::NORMAL_MESSAGE,message,drag->singleSelectedDraggerNumDraggables(), n_tot, n_obj);
+            message_context->setF(Inkscape::NORMAL_MESSAGE,message,drag->singleSelectedDraggerNumDraggables(), n_tot, n_obj);
         }
     } else if (n_sel > 1) {
         //TRANSLATORS: The plural refers to number of selected gradient handles. This is part of a compound message (part two indicates selected object count)
         gchar * message = g_strconcat(ngettext("<b>%d</b> gradient handle selected out of %d","<b>%d</b> gradient handles selected out of %d",n_sel),
                                       //TRANSLATORS: Mind the space in front. (Refers to gradient handles selected). This is part of a compound message
                                       ngettext(" on %d selected object"," on %d selected objects",n_obj),NULL);
-        rc->message_context->setF(Inkscape::NORMAL_MESSAGE,message, n_sel, n_tot, n_obj);
+        message_context->setF(Inkscape::NORMAL_MESSAGE,message, n_sel, n_tot, n_obj);
     } else if (n_sel == 0) {
-        rc->message_context->setF(Inkscape::NORMAL_MESSAGE,
-                                   //TRANSLATORS: The plural refers to number of selected objects
-                                   ngettext("<b>No</b> gradient handles selected out of %d on %d selected object",
-                                            "<b>No</b> gradient handles selected out of %d on %d selected objects",n_obj), n_tot, n_obj);
+        message_context->setF(Inkscape::NORMAL_MESSAGE,
+                              //TRANSLATORS: The plural refers to number of selected objects
+                              ngettext("<b>No</b> gradient handles selected out of %d on %d selected object",
+                                       "<b>No</b> gradient handles selected out of %d on %d selected objects",n_obj), n_tot, n_obj);
     }
 }
 
@@ -180,7 +179,7 @@ sp_gradient_context_select_next (ToolBase *event_context)
 
     GrDragger *d = drag->select_next();
 
-    event_context->desktop->scroll_to_point(d->point, 1.0);
+    event_context->getDesktop()->scroll_to_point(d->point, 1.0);
 }
 
 void
@@ -191,13 +190,13 @@ sp_gradient_context_select_prev (ToolBase *event_context)
 
     GrDragger *d = drag->select_prev();
 
-    event_context->desktop->scroll_to_point(d->point, 1.0);
+    event_context->getDesktop()->scroll_to_point(d->point, 1.0);
 }
 
 static bool
 sp_gradient_context_is_over_line (GradientTool *rc, SPItem *item, Geom::Point event_p)
 {
-    SPDesktop *desktop = SP_EVENT_CONTEXT (rc)->desktop;
+    const SPDesktop *desktop = rc->getDesktop();
 
     //Translate mouse point into proper coord system
     rc->mousepoint_doc = desktop->w2d(event_p);
@@ -209,9 +208,7 @@ sp_gradient_context_is_over_line (GradientTool *rc, SPItem *item, Geom::Point ev
         Geom::Point nearest = ls.pointAt(ls.nearestTime(rc->mousepoint_doc));
         double dist_screen = Geom::L2 (rc->mousepoint_doc - nearest) * desktop->current_zoom();
 
-        double tolerance = (double) SP_EVENT_CONTEXT(rc)->tolerance;
-
-        bool close = (dist_screen < tolerance);
+        bool close = (dist_screen < rc->tolerance);
 
         return close;
     }
@@ -369,6 +366,15 @@ sp_gradient_context_add_stops_between_selected_stops (GradientTool *rc)
 
 static double sqr(double x) {return x*x;}
 
+/**
+ * Remove unnecessary stops in the adjacent currently selected stops
+ *
+ * For selected stops that are adjacent to each other, remove
+ * stops that don't change the gradient visually, within a range of tolerance.
+ *
+ * @param rc GradientTool used to extract selected stops
+ * @param tolerance maximum difference between stop and expected color at that position
+ */
 static void
 sp_gradient_simplify(GradientTool *rc, double tolerance)
 {
@@ -383,11 +389,12 @@ sp_gradient_simplify(GradientTool *rc, double tolerance)
     std::set<SPStop *> todel;
 
     auto i = these_stops.begin();
-    auto j = next_stops.end();
+    auto j = next_stops.begin();
     for (; i != these_stops.end() && j != next_stops.end(); ++i, ++j) {
         SPStop *stop0 = *i;
         SPStop *stop1 = *j;
 
+        // find the next adjacent stop if it exists and is in selection
         auto i1 = std::find(these_stops.begin(), these_stops.end(), stop1);
         if (i1 != these_stops.end()) {
             if (next_stops.size()>(i1-these_stops.begin())) {
@@ -396,6 +403,7 @@ sp_gradient_simplify(GradientTool *rc, double tolerance)
                 if (todel.find(stop0)!=todel.end() || todel.find(stop2) != todel.end())
                     continue;
 
+                // compare color of stop1 to the average color of stop0 and stop2
                 guint32 const c0 = stop0->get_rgba32();
                 guint32 const c2 = stop2->get_rgba32();
                 guint32 const c1r = stop1->get_rgba32();
@@ -434,19 +442,18 @@ sp_gradient_context_add_stop_near_point (GradientTool *rc, SPItem *item,  Geom::
 {
     // item is the selected item. mouse_p the location in doc coordinates of where to add the stop
 
-    ToolBase *ec = SP_EVENT_CONTEXT(rc);
-    SPDesktop *desktop = SP_EVENT_CONTEXT (rc)->desktop;
+    const SPDesktop *desktop = rc->getDesktop();
 
-    double tolerance = (double) ec->tolerance;
+    double tolerance = (double) rc->tolerance;
 
-    SPStop *newstop = ec->get_drag()->addStopNearPoint (item, mouse_p, tolerance/desktop->current_zoom());
+    SPStop *newstop = rc->get_drag()->addStopNearPoint (item, mouse_p, tolerance/desktop->current_zoom());
 
     DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_GRADIENT,
                        _("Add gradient stop"));
 
-    ec->get_drag()->updateDraggers();
-    ec->get_drag()->local_change = true;
-    ec->get_drag()->selectByStop(newstop);
+    rc->get_drag()->updateDraggers();
+    rc->get_drag()->local_change = true;
+    rc->get_drag()->selectByStop(newstop);
 }
 
 bool GradientTool::root_handler(GdkEvent* event) {
@@ -781,10 +788,9 @@ bool GradientTool::root_handler(GdkEvent* event) {
 // Creates a new linear or radial gradient.
 static void sp_gradient_drag(GradientTool &rc, Geom::Point const pt, guint /*state*/, guint32 etime)
 {
-    SPDesktop *desktop = SP_EVENT_CONTEXT(&rc)->desktop;
+    SPDesktop *desktop = rc.getDesktop();
     Inkscape::Selection *selection = desktop->getSelection();
     SPDocument *document = desktop->getDocument();
-    ToolBase *ec = SP_EVENT_CONTEXT(&rc);
 
     if (!selection->isEmpty()) {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -792,9 +798,9 @@ static void sp_gradient_drag(GradientTool &rc, Geom::Point const pt, guint /*sta
         Inkscape::PaintTarget fill_or_stroke = (prefs->getInt("/tools/gradient/newfillorstroke", 1) != 0) ? Inkscape::FOR_FILL : Inkscape::FOR_STROKE;
 
         SPGradient *vector;
-        if (ec->item_to_select) {
+        if (rc.item_to_select) {
             // pick color from the object where drag started
-            vector = sp_gradient_vector_for_object(document, desktop, ec->item_to_select, fill_or_stroke);
+            vector = sp_gradient_vector_for_object(document, desktop, rc.item_to_select, fill_or_stroke);
         } else {
             // Starting from empty space:
             // Sort items so that the topmost comes last
@@ -825,14 +831,14 @@ static void sp_gradient_drag(GradientTool &rc, Geom::Point const pt, guint /*sta
             }
             (*i)->requestModified(SP_OBJECT_MODIFIED_FLAG);
         }
-        if (ec->_grdrag) {
-            ec->_grdrag->updateDraggers();
+        if (rc._grdrag) {
+            rc._grdrag->updateDraggers();
             // prevent regenerating draggers by selection modified signal, which sometimes
             // comes too late and thus destroys the knot which we will now grab:
-            ec->_grdrag->local_change = true;
+            rc._grdrag->local_change = true;
             // give the grab out-of-bounds values of xp/yp because we're already dragging
             // and therefore are already out of tolerance
-            ec->_grdrag->grabKnot (selection->items().front(),
+            rc._grdrag->grabKnot (selection->items().front(),
                                    type == SP_GRADIENT_TYPE_LINEAR? POINT_LG_END : POINT_RG_R1,
                                    -1, // ignore number (though it is always 1)
                                    fill_or_stroke, 99999, 99999, etime);

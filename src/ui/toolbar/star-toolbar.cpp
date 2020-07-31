@@ -42,6 +42,7 @@
 #include "ui/icon-names.h"
 #include "ui/tools/star-tool.h"
 #include "ui/uxmanager.h"
+#include "ui/widget/canvas.h"
 #include "ui/widget/label-tool-item.h"
 #include "ui/widget/spin-button-tool-item.h"
 
@@ -103,14 +104,23 @@ StarToolbar::StarToolbar(SPDesktop *desktop) :
 
     /* Magnitude */
     {
-        std::vector<Glib::ustring> labels = {_("triangle/tri-star"), _("square/quad-star"), _("pentagon/five-pointed star"), _("hexagon/six-pointed star"), "", "", "", "", ""};
-        std::vector<double>        values = {                     3,                     4,                               5,                             6, 7,   8, 10, 12, 20};
+        std::vector<Glib::ustring> labels = {"",
+                                             _("triangle/tri-star"),
+                                             _("square/quad-star"),
+                                             _("pentagon/five-pointed star"),
+                                             _("hexagon/six-pointed star"),
+                                             "",
+                                             "",
+                                             "",
+                                             "",
+                                             ""};
+        std::vector<double> values = {2, 3, 4, 5, 6, 7, 8, 10, 12, 20};
         auto magnitude_val = prefs->getDouble("/tools/shapes/star/magnitude", 3);
-        _magnitude_adj = Gtk::Adjustment::create(magnitude_val, 3, 1024, 1, 5);
+        _magnitude_adj = Gtk::Adjustment::create(magnitude_val, isFlatSided ? 3 : 2, 1024, 1, 5);
         _magnitude_item = Gtk::manage(new UI::Widget::SpinButtonToolItem("star-magnitude", _("Corners:"), _magnitude_adj, 1.0, 0));
         _magnitude_item->set_tooltip_text(_("Number of corners of a polygon or star"));
         _magnitude_item->set_custom_numeric_menu_data(values, labels);
-        _magnitude_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
+        _magnitude_item->set_focus_widget(desktop->canvas);
         _magnitude_adj->signal_value_changed().connect(sigc::mem_fun(*this, &StarToolbar::magnitude_value_changed));
         _magnitude_item->set_sensitive(true);
         add(*_magnitude_item);
@@ -127,7 +137,7 @@ StarToolbar::StarToolbar(SPDesktop *desktop) :
         // Base radius is the same for the closest handle.
         _spoke_item->set_tooltip_text(_("Base radius to tip radius ratio"));
         _spoke_item->set_custom_numeric_menu_data(values, labels);
-        _spoke_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
+        _spoke_item->set_focus_widget(desktop->canvas);
         _spoke_adj->signal_value_changed().connect(sigc::mem_fun(*this, &StarToolbar::proportion_value_changed));
 
         add(*_spoke_item);
@@ -143,7 +153,7 @@ StarToolbar::StarToolbar(SPDesktop *desktop) :
         _roundedness_item = Gtk::manage(new UI::Widget::SpinButtonToolItem("star-roundedness", _("Rounded:"), _roundedness_adj));
         _roundedness_item->set_tooltip_text(_("How rounded are the corners (0 for sharp)"));
         _roundedness_item->set_custom_numeric_menu_data(values, labels);
-        _roundedness_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
+        _roundedness_item->set_focus_widget(desktop->canvas);
         _roundedness_adj->signal_value_changed().connect(sigc::mem_fun(*this, &StarToolbar::rounded_value_changed));
         _roundedness_item->set_sensitive(true);
         add(*_roundedness_item);
@@ -158,14 +168,14 @@ StarToolbar::StarToolbar(SPDesktop *desktop) :
         _randomization_item = Gtk::manage(new UI::Widget::SpinButtonToolItem("star-randomized", _("Randomized:"), _randomization_adj, 0.1, 3));
         _randomization_item->set_tooltip_text(_("Scatter randomly the corners and angles"));
         _randomization_item->set_custom_numeric_menu_data(values, labels);
-        _randomization_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
+        _randomization_item->set_focus_widget(desktop->canvas);
         _randomization_adj->signal_value_changed().connect(sigc::mem_fun(*this, &StarToolbar::randomized_value_changed));
         _randomization_item->set_sensitive(true);
         add(*_randomization_item);
     }
 
     add(*Gtk::manage(new Gtk::SeparatorToolItem()));
-    
+
     /* Reset */
     {
         _reset_item = Gtk::manage(new Gtk::ToolButton(_("Defaults")));
@@ -228,10 +238,22 @@ StarToolbar::side_mode_changed(int mode)
         SPItem *item = *i;
         if (SP_IS_STAR(item)) {
             Inkscape::XML::Node *repr = item->getRepr();
+            if (flat) {
+                gint sides = (gint)_magnitude_adj->get_value();
+                if (sides < 3) {
+                    sp_repr_set_int(repr, "sodipodi:sides", 3);
+                }
+            }
             repr->setAttribute("inkscape:flatsided", flat ? "true" : "false" );
+
             item->updateRepr();
             modmade = true;
         }
+    }
+
+    _magnitude_adj->set_lower(flat ? 3 : 2);
+    if (flat && _magnitude_adj->get_value() < 3) {
+        _magnitude_adj->set_value(3);
     }
 
     if (modmade) {
@@ -525,9 +547,11 @@ StarToolbar::event_attr_changed(Inkscape::XML::Node *repr, gchar const *name,
         if ( flatsides && !strcmp(flatsides,"false") ) {
             toolbar->_flat_item_buttons[1]->set_active();
             toolbar->_spoke_item->set_visible(true);
+            toolbar->_magnitude_adj->set_lower(2);
         } else {
             toolbar->_flat_item_buttons[0]->set_active();
             toolbar->_spoke_item->set_visible(false);
+            toolbar->_magnitude_adj->set_lower(3);
         }
     } else if ((!strcmp(name, "sodipodi:r1") || !strcmp(name, "sodipodi:r2")) && (!isFlatSided) ) {
         gdouble r1 = 1.0;

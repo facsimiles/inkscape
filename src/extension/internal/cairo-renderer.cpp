@@ -51,7 +51,6 @@
 #include "rdf.h"
 
 #include "display/cairo-utils.h"
-#include "display/canvas-bpath.h"
 #include "display/curve.h"
 
 #include "extension/system.h"
@@ -173,7 +172,7 @@ static void sp_shape_render_invoke_marker_rendering(SPMarker* marker, Geom::Affi
 
 static void sp_shape_render(SPShape *shape, CairoRenderContext *ctx)
 {
-    if (!shape->_curve) {
+    if (!shape->curve()) {
         return;
     }
 
@@ -181,7 +180,7 @@ static void sp_shape_render(SPShape *shape, CairoRenderContext *ctx)
 
     SPStyle* style = shape->style;
 
-    Geom::PathVector const & pathv = shape->_curve->get_pathvector();
+    Geom::PathVector const &pathv = shape->curve()->get_pathvector();
     if (pathv.empty()) {
         return;
     }
@@ -545,7 +544,12 @@ static void sp_item_invoke_render(SPItem *item, CairoRenderContext *ctx)
         return;
     }
 
-    if(ctx->getFilterToBitmap() && (item->style->filter.set != 0)) {
+    if(ctx->getFilterToBitmap() && (!item->style || item->style->filter.set != 0)) {
+        // This is not necesary but for cleanup, the filter hide the item
+        SPFilter *filt = item->style->getFilter();
+        if (filt && g_strcmp0(filt->getId(), "selectable_hidder_filter") == 0) {
+            return;
+        }
         return sp_asbitmap_render(item, ctx);
     }
 
@@ -664,13 +668,12 @@ void CairoRenderer::renderHatchPath(CairoRenderContext *ctx, SPHatchPath const &
     ctx->setStateForStyle(hatchPath.style);
     ctx->transform(Geom::Translate(hatchPath.offset.computed, 0));
 
-    SPCurve *curve = hatchPath.calculateRenderCurve(key);
+    std::unique_ptr<SPCurve> curve = hatchPath.calculateRenderCurve(key);
     Geom::PathVector const & pathv =curve->get_pathvector();
     if (!pathv.empty()) {
         ctx->renderPathVector(pathv, hatchPath.style, Geom::OptRect());
     }
 
-    curve->unref();
     ctx->popState();
 }
 

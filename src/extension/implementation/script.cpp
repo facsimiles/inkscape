@@ -69,19 +69,21 @@ void Script::pump_events () {
     the given interpreter to a custom one per user.
 */
 const std::map<std::string, Script::interpreter_t> Script::interpreterTab = {
+    // clang-format off
 #ifdef _WIN32
-        { "perl",    {"perl-interpreter",    {"wperl"             }}},
-        { "python",  {"python-interpreter",  {"pythonw"           }}},
+    { "perl",    {"perl-interpreter",    {"wperl"             }}},
+    { "python",  {"python-interpreter",  {"pythonw"           }}},
 #elif defined __APPLE__
-        { "perl",    {"perl-interpreter",    {"perl"              }}},
-        { "python",  {"python-interpreter",  {"python3"           }}},
+    { "perl",    {"perl-interpreter",    {"perl"              }}},
+    { "python",  {"python-interpreter",  {"python3"           }}},
 #else
-        { "perl",    {"perl-interpreter",    {"perl"              }}},
-        { "python",  {"python-interpreter",  {"python3", "python" }}},
+    { "perl",    {"perl-interpreter",    {"perl"              }}},
+    { "python",  {"python-interpreter",  {"python3", "python" }}},
 #endif
-        { "python2", {"python2-interpreter", {"python2", "python" }}},
-        { "ruby",    {"ruby-interpreter",    {"ruby"    }}},
-        { "shell",   {"shell-interpreter",   {"sh"      }}},
+    { "python2", {"python2-interpreter", {"python2", "python" }}},
+    { "ruby",    {"ruby-interpreter",    {"ruby"    }}},
+    { "shell",   {"shell-interpreter",   {"sh"      }}},
+    // clang-format on
 };
 
 
@@ -491,8 +493,6 @@ void Script::save(Inkscape::Extension::Output *module,
     return;
 }
 
-
-
 /**
     \return    none
     \brief     This function uses an extension as an effect on a document.
@@ -604,6 +604,7 @@ void Script::effect(Inkscape::Extension::Effect *module,
 
     return;
 }
+
 
 /**  \brief  This function checks the stderr file, and if it has data,
              shows it in a warning dialog to the user

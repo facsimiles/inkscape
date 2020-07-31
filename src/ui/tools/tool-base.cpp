@@ -22,8 +22,6 @@
 #include "shortcuts.h"
 #include "file.h"
 
-
-
 #include "desktop-events.h"
 #include "desktop-style.h"
 #include "desktop.h"
@@ -36,7 +34,6 @@
 #include "selection.h"
 #include "sp-cursor.h"
 
-#include "display/sp-canvas.h"
 #include "display/sp-canvas-group.h"
 #include "display/canvas-rotate.h"
 
@@ -56,6 +53,7 @@
 #include "ui/tool/event-utils.h"
 #include "ui/tools/node-tool.h"
 #include "ui/tool/shape-record.h"
+#include "ui/widget/canvas.h"
 
 #include "widgets/desktop-widget.h"
 
@@ -86,48 +84,13 @@ namespace Tools {
 static void set_event_location(SPDesktop * desktop, GdkEvent * event);
 
 
-void ToolBase::set(const Inkscape::Preferences::Entry& /*val*/) {
-}
-
-void ToolBase::finish() {
-    this->desktop->canvas->endForcedFullRedraws();
-    this->enableSelectionCue(false);
-}
-
-SPDesktop const& ToolBase::getDesktop() const {
-    return *desktop;
-}
-
 ToolBase::ToolBase(gchar const *const *cursor_shape, bool uses_snap)
-    : pref_observer(nullptr)
-    , cursor(nullptr)
-    , xp(0)
-    , yp(0)
-    , tolerance(0)
-    , within_tolerance(false)
-    , item_to_select(nullptr)
-    , message_context(nullptr)
-    , _selcue(nullptr)
-    , _grdrag(nullptr)
-    , shape_editor(nullptr)
-    , space_panning(false)
-    , _delayed_snap_event(nullptr)
-    , _dse_callback_in_process(false)
-    , desktop(nullptr)
-    , _uses_snap(uses_snap)
+    : _uses_snap(uses_snap)
     , cursor_shape(cursor_shape)
-    , _button1on(false)
-    , _button3on(false)
 {
 }
 
 ToolBase::~ToolBase() {
-    this->message_context = nullptr;
-
-    if (this->desktop) {
-        this->desktop = nullptr;
-    }
-
     if (this->pref_observer) {
         delete this->pref_observer;
     }
@@ -137,13 +100,36 @@ ToolBase::~ToolBase() {
     }
 }
 
+/**
+ * Callback that gets called on initialization of ToolBase object.
+ * Redraws mouse cursor, at the moment.
+ *
+ * When you override it, call this method first.
+ */
+void ToolBase::setup() {
+    this->pref_observer = new ToolPrefObserver(this->getPrefsPath(), this);
+    Inkscape::Preferences::get()->addObserver(*(this->pref_observer));
+    this->sp_event_context_update_cursor();
+}
+
+void ToolBase::finish() {
+    this->desktop->getCanvas()->forced_redraws_stop();
+    this->enableSelectionCue(false);
+}
+
+/**
+ * Called by our pref_observer if a preference has been changed.
+ */
+void ToolBase::set(const Inkscape::Preferences::Entry& /*val*/) {
+}
+
 
 /**
  * Set the cursor to a standard GDK cursor
  */
 void ToolBase::sp_event_context_set_cursor(GdkCursorType cursor_type) {
 
-    GtkWidget *w = GTK_WIDGET(this->desktop->getCanvas());
+    GtkWidget *w = GTK_WIDGET(this->desktop->getCanvas()->gobj());
     GdkDisplay *display = gdk_display_get_default();
     GdkCursor *cursor = gdk_cursor_new_for_display(display, cursor_type);
 
@@ -157,17 +143,18 @@ void ToolBase::sp_event_context_set_cursor(GdkCursorType cursor_type) {
  * Recreates and draws cursor on desktop related to ToolBase.
  */
 void ToolBase::sp_event_context_update_cursor() {
-    Gtk::Widget* w = Glib::wrap(GTK_WIDGET(desktop->getCanvas()));
+    Gtk::Widget *w = desktop->getCanvas();
     if (w->get_window()) {
-        if (this->cursor_shape) {
-	    bool fillHasColor=false, strokeHasColor=false;
-	    guint32 fillColor = sp_desktop_get_color_tool(this->desktop, this->getPrefsPath(), true, &fillHasColor);
-	    guint32 strokeColor = sp_desktop_get_color_tool(this->desktop, this->getPrefsPath(), false, &strokeHasColor);
-	    double fillOpacity = fillHasColor ? sp_desktop_get_opacity_tool(this->desktop, this->getPrefsPath(), true) : 1.0;
-	    double strokeOpacity = strokeHasColor ? sp_desktop_get_opacity_tool(this->desktop, this->getPrefsPath(), false) : 1.0;
+        if (cursor_shape) {
+	    bool fillHasColor   = false;
+            bool strokeHasColor = false;
+	    guint32 fillColor   = sp_desktop_get_color_tool(desktop, getPrefsPath(), true,  &fillHasColor);
+	    guint32 strokeColor = sp_desktop_get_color_tool(desktop, getPrefsPath(), false, &strokeHasColor);
+	    double fillOpacity   = fillHasColor   ? sp_desktop_get_opacity_tool(desktop, getPrefsPath(), true) :1.0;
+	    double strokeOpacity = strokeHasColor ? sp_desktop_get_opacity_tool(desktop, getPrefsPath(), false):1.0;
 
-            this->cursor = Glib::wrap(sp_cursor_from_xpm(
-		this->cursor_shape,
+            cursor = Glib::wrap(sp_cursor_from_xpm(
+		cursor_shape,
                 SP_RGBA32_C_COMPOSE(fillColor, fillOpacity),
                 SP_RGBA32_C_COMPOSE(strokeColor, strokeOpacity)
             ));
@@ -176,18 +163,6 @@ void ToolBase::sp_event_context_update_cursor() {
         w->get_display()->flush();
     }
     this->desktop->waiting_cursor = false;
-}
-
-/**
- * Callback that gets called on initialization of ToolBase object.
- * Redraws mouse cursor, at the moment.
- *
- * When you override it, call this method first.
- */
-void ToolBase::setup() {
-    this->pref_observer = new ToolPrefObserver(this->getPrefsPath(), this);
-    Inkscape::Preferences::get()->addObserver(*(this->pref_observer));
-    this->sp_event_context_update_cursor();
 }
 
 /**
@@ -288,8 +263,8 @@ void sp_toggle_dropper(SPDesktop *dt) {
  * Calculates and keeps track of scroll acceleration.
  * Subroutine of sp_event_context_private_root_handler().
  */
-static gdouble accelerate_scroll(GdkEvent *event, gdouble acceleration,
-        SPCanvas */*canvas*/) {
+static gdouble accelerate_scroll(GdkEvent *event, gdouble acceleration)
+{
     guint32 time_diff = ((GdkEventKey *) event)->time - scroll_event_time;
 
     /* key pressed within 500ms ? (1/2 second) */
@@ -402,7 +377,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
 
                 // Grab background before doing anything else
                 sp_canvas_rotate_start (SP_CANVAS_ROTATE(desktop->canvas_rotate),
-                                        desktop->canvas->_backing_store);
+                                        desktop->canvas->get_backing_store()->cobj());
                 sp_canvas_item_ungrab (desktop->acetate);
                 sp_canvas_item_show (desktop->canvas_rotate);
                 sp_canvas_item_grab (desktop->canvas_rotate,
@@ -541,8 +516,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
 
         if (panning_cursor == 1) {
             panning_cursor = 0;
-            Gtk::Widget* w = Glib::wrap(GTK_WIDGET(desktop->getCanvas()));
-            w->get_window()->set_cursor(cursor);
+            desktop->getCanvas()->get_window()->set_cursor(cursor);
         }
 
         if (within_tolerance && (panning || zoom_rb)) {
@@ -635,8 +609,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
         case GDK_KEY_KP_Left:
         case GDK_KEY_KP_4:
             if (MOD__CTRL_ONLY(event)) {
-                int i = (int) floor(key_scroll * accelerate_scroll(event,
-                        acceleration, desktop->getCanvas()));
+                int i = (int) floor(key_scroll * accelerate_scroll(event, acceleration));
 
                 gobble_key_events(get_latin_keyval(&event->key), GDK_CONTROL_MASK);
                 this->desktop->scroll_relative(Geom::Point(i, 0));
@@ -650,8 +623,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
         case GDK_KEY_KP_Up:
         case GDK_KEY_KP_8:
             if (MOD__CTRL_ONLY(event)) {
-                int i = (int) floor(key_scroll * accelerate_scroll(event,
-                        acceleration, desktop->getCanvas()));
+                int i = (int) floor(key_scroll * accelerate_scroll(event, acceleration));
 
                 gobble_key_events(get_latin_keyval(&event->key), GDK_CONTROL_MASK);
                 this->desktop->scroll_relative(Geom::Point(0, i));
@@ -665,8 +637,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
         case GDK_KEY_KP_Right:
         case GDK_KEY_KP_6:
             if (MOD__CTRL_ONLY(event)) {
-                int i = (int) floor(key_scroll * accelerate_scroll(event,
-                        acceleration, desktop->getCanvas()));
+                int i = (int) floor(key_scroll * accelerate_scroll(event, acceleration));
 
                 gobble_key_events(get_latin_keyval(&event->key), GDK_CONTROL_MASK);
                 this->desktop->scroll_relative(Geom::Point(-i, 0));
@@ -680,8 +651,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
         case GDK_KEY_KP_Down:
         case GDK_KEY_KP_2:
             if (MOD__CTRL_ONLY(event)) {
-                int i = (int) floor(key_scroll * accelerate_scroll(event,
-                        acceleration, desktop->getCanvas()));
+                int i = (int) floor(key_scroll * accelerate_scroll(event, acceleration));
 
                 gobble_key_events(get_latin_keyval(&event->key), GDK_CONTROL_MASK);
                 this->desktop->scroll_relative(Geom::Point(0, -i));
@@ -747,8 +717,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
 
         if (panning_cursor == 1) {
             panning_cursor = 0;
-            Gtk::Widget* w = Glib::wrap(GTK_WIDGET(desktop->getCanvas()));
-            w->get_window()->set_cursor(cursor);
+            desktop->getCanvas()->get_window()->set_cursor(cursor);
         }
 
         switch (get_latin_keyval(&event->key)) {
@@ -1089,11 +1058,32 @@ void ToolBase::set_high_motion_precision(bool high_precision) {
 }
 
 /**
+ * Force canvas to fully update after interruptions.
+ * Convenience function that just passes request to canvas.
+ */
+void
+ToolBase::forced_redraws_start(int count, bool reset)
+{
+    desktop->canvas->forced_redraws_start(count, reset);
+}
+
+
+/**
+ * End force canvas full updates.
+ * Convenience function that just passes request to canvas.
+ */
+void
+ToolBase::forced_redraws_stop()
+{
+    desktop->canvas->forced_redraws_stop();
+}
+
+
+/**
  * Calls virtual set() function of ToolBase.
  */
 void sp_event_context_read(ToolBase *ec, gchar const *key) {
     g_return_if_fail(ec != nullptr);
-    g_return_if_fail(SP_IS_EVENT_CONTEXT(ec));
     g_return_if_fail(key != nullptr);
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -1130,7 +1120,7 @@ gint sp_event_context_root_handler(ToolBase * event_context,
     case GDK_3BUTTON_PRESS:
         // Snapping will be on hold if we're moving the mouse at high speeds. When starting
         // drawing a new shape we really should snap though.
-        event_context->desktop->namedview->snap_manager.snapprefs.setSnapPostponedGlobally(false);
+        event_context->getDesktop()->namedview->snap_manager.snapprefs.setSnapPostponedGlobally(false);
         break;
     default:
         break;
@@ -1147,7 +1137,7 @@ gint sp_event_context_virtual_root_handler(ToolBase * event_context, GdkEvent * 
         if (event_context->block_button(event)) {
             return false;
         }
-        SPDesktop* desktop = event_context->desktop;
+        SPDesktop* desktop = event_context->getDesktop();
         ret = event_context->root_handler(event);
 
         set_event_location(desktop, event);
@@ -1181,7 +1171,7 @@ gint sp_event_context_item_handler(ToolBase * event_context,
     case GDK_3BUTTON_PRESS:
         // Snapping will be on hold if we're moving the mouse at high speeds. When starting
         // drawing a new shape we really should snap though.
-        event_context->desktop->namedview->snap_manager.snapprefs.setSnapPostponedGlobally(false);
+        event_context->getDesktop()->namedview->snap_manager.snapprefs.setSnapPostponedGlobally(false);
         break;
     default:
         break;
@@ -1203,7 +1193,7 @@ gint sp_event_context_virtual_item_handler(ToolBase * event_context, SPItem * it
         if (!ret) {
             ret = sp_event_context_virtual_root_handler(event_context, event);
         } else {
-            set_event_location(event_context->desktop, event);
+            set_event_location(event_context->getDesktop(), event);
         }
     }
 
@@ -1339,26 +1329,12 @@ guint get_latin_keyval(GdkEventKey const *event, guint *consumed_modifiers /*= N
             &keyval, nullptr, nullptr, &modifiers);
 
     if (consumed_modifiers) {
-#if !defined(GDK_WINDOWING_QUARTZ) || GTK_CHECK_VERSION(3, 24, 13)
         *consumed_modifiers = modifiers;
-#else
-        // gdk_quartz_keymap_translate_keyboard_state fills the `consumed_modifiers`
-        // incorrectly, e.g. assigns 0xB instead of 0x0 when no modifiers pressed.
-
-        *consumed_modifiers = 0;
-
-        for (unsigned mod = 1, statemask = (event->state & GDK_MODIFIER_MASK); mod <= statemask; mod <<= 1) {
-            if ((mod & statemask)) {
-                guint keyval_no_mod = 0;
-                gdk_keymap_translate_keyboard_state(Gdk::Display::get_default()->get_keymap(), event->hardware_keycode,
-                                                    (GdkModifierType)(event->state & ~mod), group, &keyval_no_mod,
-                                                    nullptr, nullptr, nullptr);
-                if (keyval_no_mod != keyval) {
-                    *consumed_modifiers |= mod;
-                }
-            }
-        }
-#endif
+    }
+    if (keyval != event->keyval) {
+        std::cerr << "get_latin_keyval: OH OH OH keyval did change! "
+                  << "  keyval: " << keyval << " (" << (char)keyval << ")"
+                  << "  event->keyval: " << event->keyval << "(" << (char)event->keyval << ")" << std::endl;
     }
     return keyval;
 }
@@ -1435,7 +1411,7 @@ void sp_event_context_snap_delay_handler(ToolBase *ec,
     bool const c1 = event->state & GDK_BUTTON2_MASK; // We shouldn't hold back any events when other mouse buttons have been
     bool const c2 = event->state & GDK_BUTTON3_MASK; // pressed, e.g. when scrolling with the middle mouse button; if we do then
     // Inkscape will get stuck in an unresponsive state
-    bool const c3 = tools_isactive(ec->desktop, TOOLS_CALLIGRAPHIC);
+    bool const c3 = tools_isactive(ec->getDesktop(), TOOLS_CALLIGRAPHIC);
     // The snap delay will repeat the last motion event, which will lead to
     // erroneous points in the calligraphy context. And because we don't snap
     // in this context, we might just as well disable the snap delay all together
@@ -1446,12 +1422,12 @@ void sp_event_context_snap_delay_handler(ToolBase *ec,
         // that we're not going to snap any way (e.g. while scrolling with middle mouse button)
         // Any motion event might affect the state of the context, leading to unexpected behavior
         sp_event_context_discard_delayed_snap_event(ec);
-    } else if (ec->desktop
-            && ec->desktop->namedview->snap_manager.snapprefs.getSnapEnabledGlobally()) {
+    } else if (ec->getDesktop() &&
+               ec->getDesktop()->namedview->snap_manager.snapprefs.getSnapEnabledGlobally()) {
         // Snap when speed drops below e.g. 0.02 px/msec, or when no motion events have occurred for some period.
         // i.e. snap when we're at stand still. A speed threshold enforces snapping for tablets, which might never
         // be fully at stand still and might keep spitting out motion events.
-        ec->desktop->namedview->snap_manager.snapprefs.setSnapPostponedGlobally(true); // put snapping on hold
+        ec->getDesktop()->namedview->snap_manager.snapprefs.setSnapPostponedGlobally(true); // put snapping on hold
 
         Geom::Point event_pos(event->x, event->y);
         guint32 event_t = gdk_event_get_time((GdkEvent *) event);
@@ -1512,7 +1488,9 @@ gboolean sp_event_context_snap_watchdog_callback(gpointer data) {
         delete dse;
         return false;
     }
-    if (ec->desktop == nullptr) {
+
+    const SPDesktop *dt = ec->getDesktop();
+    if (dt == nullptr) {
         ec->_delayed_snap_event = nullptr;
         delete dse;
         return false;
@@ -1520,7 +1498,6 @@ gboolean sp_event_context_snap_watchdog_callback(gpointer data) {
 
     ec->_dse_callback_in_process = true;
 
-    SPDesktop *dt = ec->desktop;
     dt->namedview->snap_manager.snapprefs.setSnapPostponedGlobally(false);
 
     // Depending on where the delayed snap event originated from, we will inject it back at it's origin
@@ -1609,7 +1586,7 @@ gboolean sp_event_context_snap_watchdog_callback(gpointer data) {
 void sp_event_context_discard_delayed_snap_event(ToolBase *ec) {
     delete ec->_delayed_snap_event;
     ec->_delayed_snap_event = nullptr;
-    ec->desktop->namedview->snap_manager.snapprefs.setSnapPostponedGlobally(false);
+    ec->getDesktop()->namedview->snap_manager.snapprefs.setSnapPostponedGlobally(false);
 }
 
 }

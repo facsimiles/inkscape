@@ -321,14 +321,16 @@ PrintLatex::textToPath(Inkscape::Extension::Print * ext)
 void PrintLatex::init()
 {
     /* SVG in */
+    // clang-format off
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
-        "<name>" N_("LaTeX Print") "</name>\n"
-        "<id>" SP_MODULE_KEY_PRINT_LATEX "</id>\n"
-        "<param gui-hidden=\"true\" name=\"destination\" type=\"string\"></param>\n"
-        "<param gui-hidden=\"true\" name=\"textToPath\" type=\"bool\">true</param>\n"
-        "<print/>\n"
+            "<name>" N_("LaTeX Print") "</name>\n"
+            "<id>" SP_MODULE_KEY_PRINT_LATEX "</id>\n"
+            "<param gui-hidden=\"true\" name=\"destination\" type=\"string\"></param>\n"
+            "<param gui-hidden=\"true\" name=\"textToPath\" type=\"bool\">true</param>\n"
+            "<print/>\n"
         "</inkscape-extension>", new PrintLatex());
+    // clang-format on
 }
 
 }  /* namespace Internal */

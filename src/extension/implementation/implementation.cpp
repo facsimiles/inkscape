@@ -59,6 +59,8 @@ Gtk::Widget *Implementation::prefs_effect(Inkscape::Extension::Effect *module, s
     return module->autogui(current_document, const_cast<Inkscape::XML::Node *>(first_select), changeSignal);
 } // Implementation::prefs_effect
 
+
+
 /**
     \brief  A function to replace all the elements in an old document
             by those from a new document.
@@ -78,16 +80,15 @@ Gtk::Widget *Implementation::prefs_effect(Inkscape::Extension::Effect *module, s
 
     Finally, it copies the attributes in namedview.
 */
-void copy_doc(Inkscape::XML::Node *oldroot, Inkscape::XML::Node *newroot)
+void copy_doc (Inkscape::XML::Node * oldroot, Inkscape::XML::Node * newroot)
 {
-    if ((oldroot == nullptr) || (newroot == nullptr)) {
+    if ((oldroot == nullptr) ||(newroot == nullptr))
+    {
         g_warning("Error on copy_doc: NULL pointer input.");
         return;
     }
 
     // For copying attributes in root and in namedview
-    using Inkscape::Util::List;
-    using Inkscape::XML::AttributeRecord;
     std::vector<gchar const *> attribs;
 
     // Must explicitly copy root attributes. This must be done first since
@@ -95,8 +96,8 @@ void copy_doc(Inkscape::XML::Node *oldroot, Inkscape::XML::Node *newroot)
     // width, height, and viewBox of the root element.
 
     // Make a list of all attributes of the old root node.
-    for (List<AttributeRecord const> iter = oldroot->attributeList(); iter; ++iter) {
-        attribs.push_back(g_quark_to_string(iter->key));
+    for (const auto & iter : oldroot->attributeList()) {
+        attribs.push_back(g_quark_to_string(iter.key));
     }
 
     // Delete the attributes of the old root node.
@@ -105,8 +106,8 @@ void copy_doc(Inkscape::XML::Node *oldroot, Inkscape::XML::Node *newroot)
     }
 
     // Set the new attributes.
-    for (List<AttributeRecord const> iter = newroot->attributeList(); iter; ++iter) {
-        gchar const *name = g_quark_to_string(iter->key);
+    for (const auto & iter : newroot->attributeList()) {
+        gchar const *name = g_quark_to_string(iter.key);
         oldroot->setAttribute(name, newroot->attribute(name));
     }
 
@@ -118,10 +119,13 @@ void copy_doc(Inkscape::XML::Node *oldroot, Inkscape::XML::Node *newroot)
     std::vector<Inkscape::XML::Node *> delete_list;
 
     // Make list
-    for (Inkscape::XML::Node *child = oldroot->firstChild(); child != nullptr; child = child->next()) {
+    for (Inkscape::XML::Node * child = oldroot->firstChild();
+            child != nullptr;
+            child = child->next()) {
         if (!strcmp("sodipodi:namedview", child->name())) {
-            for (Inkscape::XML::Node *oldroot_namedview_child = child->firstChild(); oldroot_namedview_child != nullptr;
-                 oldroot_namedview_child = oldroot_namedview_child->next()) {
+            for (Inkscape::XML::Node * oldroot_namedview_child = child->firstChild();
+                    oldroot_namedview_child != nullptr;
+                    oldroot_namedview_child = oldroot_namedview_child->next()) {
                 delete_list.push_back(oldroot_namedview_child);
             }
             break;
@@ -129,7 +133,7 @@ void copy_doc(Inkscape::XML::Node *oldroot, Inkscape::XML::Node *newroot)
     }
 
     // Unparent (delete)
-    for (auto &i : delete_list) {
+    for (auto & i : delete_list) {
         sp_repr_unparent(i);
     }
     attribs.clear();

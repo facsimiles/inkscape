@@ -32,7 +32,6 @@
 #include "verbs.h"
 
 #include "display/curve.h"
-#include "display/sp-canvas.h"
 
 #include "object/box3d.h"
 #include "object/object-set.h"
@@ -40,6 +39,8 @@
 #include "object/sp-path.h"
 #include "object/sp-text.h"
 #include "style.h"
+
+#include "ui/widget/canvas.h"  // Disable drawing during ops
 
 #include "svg/svg.h"
 
@@ -98,7 +99,7 @@ ObjectSet::combine(bool skip_undo)
     char const *transform = nullptr;
     char const *path_effect = nullptr;
 
-    SPCurve* curve = nullptr;
+    std::unique_ptr<SPCurve> curve;
     SPItem *first = nullptr;
     Inkscape::XML::Node *parent = nullptr; 
 
@@ -119,7 +120,7 @@ ObjectSet::combine(bool skip_undo)
             did = true;
         }
 
-        SPCurve *c = path->getCurveForEdit();
+        auto c = SPCurve::copy(path->curveForEdit());
         if (first == nullptr) {  // this is the topmost path
             first = item;
             parent = first->getRepr()->parent();
@@ -128,11 +129,10 @@ ObjectSet::combine(bool skip_undo)
             // FIXME: merge styles of combined objects instead of using the first one's style
             path_effect = first->getRepr()->attribute("inkscape:path-effect");
             //c->transform(item->transform);
-            curve = c;
+            curve = std::move(c);
         } else {
             c->transform(item->getRelativeTransform(first));
-            curve->append(c, false);
-            c->unref();
+            curve->append(*c);
 
             // reduce position only if the same parent
             if (item->getRepr()->parent() == parent) {
@@ -162,7 +162,6 @@ ObjectSet::combine(bool skip_undo)
 
         // set path data corresponding to new curve
         gchar *dstring = sp_svg_write_path(curve->get_pathvector());
-        curve->unref();
         if (path_effect) {
             repr->setAttribute("inkscape:original-d", dstring);
         } else {
@@ -204,7 +203,7 @@ ObjectSet::breakApart(bool skip_undo)
         // set "busy" cursor
         desktop()->setWaitingCursor();
         // disable redrawing during the break-apart operation for remarkable speedup for large paths
-        desktop()->getCanvas()->_drawing_disabled = true;
+        desktop()->getCanvas()->set_drawing_disabled(true);
     }
 
     bool did = false;
@@ -217,7 +216,7 @@ ObjectSet::breakApart(bool skip_undo)
             continue;
         }
 
-        SPCurve *curve = path->getCurveForEdit();
+        auto curve = SPCurve::copy(path->curveForEdit());
         if (curve == nullptr) {
             continue;
         }
@@ -236,12 +235,10 @@ ObjectSet::breakApart(bool skip_undo)
         item->deleteObject(false);
 
 
-        std::list<SPCurve *> list = curve->split();
-
-        curve->unref();
+        auto list = curve->split();
 
         std::vector<Inkscape::XML::Node*> reprs;
-        for (auto curve:list) {
+        for (auto const &curve : list) {
 
             Inkscape::XML::Node *repr = parent->document()->createElement("svg:path");
             repr->setAttribute("style", style);
@@ -262,7 +259,7 @@ ObjectSet::breakApart(bool skip_undo)
             parent->addChildAtPos(repr, pos);
 
             // if it's the first one, restore id
-            if (curve == *(list.begin()))
+            if (curve == list.front())
                 repr->setAttribute("id", id);
 
             reprs.push_back(repr);
@@ -276,7 +273,7 @@ ObjectSet::breakApart(bool skip_undo)
     }
 
     if (desktop()) {
-        desktop()->getCanvas()->_drawing_disabled = false;
+        desktop()->getCanvas()->set_drawing_disabled(false);
         desktop()->clearWaitingCursor();
     }
 
@@ -408,7 +405,9 @@ sp_item_list_to_curves(const std::vector<SPItem*> &items, std::vector<SPItem*>& 
             // remove connector attributes
             if (item->getAttribute("inkscape:connector-type") != nullptr) {
                 item->removeAttribute("inkscape:connection-start");
+                item->removeAttribute("inkscape:connection-start-point");
                 item->removeAttribute("inkscape:connection-end");
+                item->removeAttribute("inkscape:connection-end-point");
                 item->removeAttribute("inkscape:connector-type");
                 item->removeAttribute("inkscape:connector-curvature");
                 did = true;
@@ -510,13 +509,12 @@ sp_selected_item_to_curved_repr(SPItem *item, guint32 /*text_grouping_policy*/)
                 pos_obj->style->write( SP_STYLE_FLAG_IFDIFF, SP_STYLE_SRC_UNSET, pos_obj->parent ? pos_obj->parent->style : nullptr); // TODO investigate possibility
 
             // get path from iter to iter_next:
-            SPCurve *curve = te_get_layout(item)->convertToCurves(iter, iter_next);
+            auto curve = te_get_layout(item)->convertToCurves(iter, iter_next);
             iter = iter_next; // shift to next glyph
             if (!curve) { // error converting this glyph
                 continue;
             }
             if (curve->is_empty()) { // whitespace glyph?
-                curve->unref();
                 continue;
             }
 
@@ -525,7 +523,6 @@ sp_selected_item_to_curved_repr(SPItem *item, guint32 /*text_grouping_policy*/)
             gchar *def_str = sp_svg_write_path(curve->get_pathvector());
             p_repr->setAttribute("d", def_str);
             g_free(def_str);
-            curve->unref();
 
             p_repr->setAttributeOrRemoveIfEmpty("style", style_str);
 
@@ -540,11 +537,13 @@ sp_selected_item_to_curved_repr(SPItem *item, guint32 /*text_grouping_policy*/)
 
         return g_repr;
     }
-    SPCurve *curve = nullptr;
+
+    std::unique_ptr<SPCurve> curve;
+
     {
         SPShape *shape = dynamic_cast<SPShape *>(item);
         if (shape) {
-            curve = shape->getCurveForEdit();
+            curve = SPCurve::copy(shape->curveForEdit());
         }
     }
 
@@ -555,7 +554,6 @@ sp_selected_item_to_curved_repr(SPItem *item, guint32 /*text_grouping_policy*/)
     // otherwise we end up with zomby markup in the SVG file
     if(curve->is_empty())
     {
-        curve->unref();
         return nullptr;
     }
 
@@ -575,7 +573,6 @@ sp_selected_item_to_curved_repr(SPItem *item, guint32 /*text_grouping_policy*/)
     gchar *def_str = sp_svg_write_path(curve->get_pathvector());
     repr->setAttribute("d", def_str);
     g_free(def_str);
-    curve->unref();
     return repr;
 }
 
@@ -607,7 +604,7 @@ ObjectSet::pathReverse()
 
         did = true;
 
-        SPCurve *rcurve = path->getCurveForEdit(true)->create_reverse();
+        auto rcurve = path->curveForEdit()->create_reverse();
 
         gchar *str = sp_svg_write_path(rcurve->get_pathvector());
         if ( path->hasPathEffectRecursive() ) {
@@ -616,8 +613,6 @@ ObjectSet::pathReverse()
             path->setAttribute("d", str);
         }
         g_free(str);
-
-        rcurve->unref();
 
         // reverse nodetypes order (Bug #179866)
         gchar *nodetypes = g_strdup(path->getRepr()->attribute("sodipodi:nodetypes"));
@@ -709,7 +704,7 @@ static void ink_copy_generic_children( //
 
     for (const auto *child = src->firstChild(); child != nullptr; child = child->next()) {
         // check if this child should be copied
-        if (!(child->type() == Inkscape::XML::COMMENT_NODE || //
+        if (!(child->type() == Inkscape::XML::NodeType::COMMENT_NODE || //
               (child->name() && names.count(child->name())))) {
             continue;
         }

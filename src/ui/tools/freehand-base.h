@@ -20,6 +20,8 @@
 #include "ui/tools/tool-base.h"
 #include "live_effects/effect-enum.h"
 
+#include <memory>
+
 struct SPCanvasItem;
 class SPCurve;
 struct SPDrawAnchor;
@@ -60,26 +62,26 @@ public:
 
     // Red - Last segement as it's drawn.
     SPCanvasItem *red_bpath;
-    SPCurve *red_curve;
+    std::unique_ptr<SPCurve> red_curve;
     boost::optional<Geom::Point> red_curve_get_last_point();
 
     // Blue - New path after LPE as it's drawn.
     SPCanvasItem *blue_bpath;
-    SPCurve *blue_curve;
+    std::unique_ptr<SPCurve> blue_curve;
 
     // Green - New path as it's drawn.
     std::vector<SPCanvasItem*> green_bpaths;
-    SPCurve *green_curve;
+    std::unique_ptr<SPCurve> green_curve;
     SPDrawAnchor *green_anchor;
     gboolean green_closed; // a flag meaning we hit the green anchor, so close the path on itself
 
     // White
     SPItem *white_item;
-    std::list<SPCurve *> white_curves;
+    std::list<std::unique_ptr<SPCurve>> white_curves;
     std::vector<SPDrawAnchor*> white_anchors;
 
     // Temporary modified curve when start anchor
-    SPCurve *sa_overwrited;
+    std::unique_ptr<SPCurve> sa_overwrited;
 
     // Start anchor
     SPDrawAnchor *sa;
@@ -132,9 +134,9 @@ void spdc_concat_colors_and_flush(FreehandBase *dc, gboolean forceclosed);
  *  @param o origin point.
  *  @param state  keyboard state to check if ctrl or shift was pressed.
  */
-void spdc_endpoint_snap_rotation(ToolBase const *const ec, Geom::Point &p, Geom::Point const &o, guint state);
+void spdc_endpoint_snap_rotation(ToolBase* const ec, Geom::Point &p, Geom::Point const &o, guint state);
 
-void spdc_endpoint_snap_free(ToolBase const *ec, Geom::Point &p, boost::optional<Geom::Point> &start_of_line, guint state);
+void spdc_endpoint_snap_free(ToolBase* const ec, Geom::Point &p, boost::optional<Geom::Point> &start_of_line, guint state);
 
 /**
  * If we have an item and a waiting LPE, apply the effect to the item

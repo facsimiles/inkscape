@@ -12,6 +12,8 @@
 
 #include "selected-style.h"
 
+#include <vector>
+
 #include <gtkmm/separatormenuitem.h>
 
 
@@ -21,8 +23,6 @@
 #include "message-context.h"
 #include "selection.h"
 #include "sp-cursor.h"
-
-#include "display/sp-canvas.h"
 
 #include "include/gtkmm_version.h"
 
@@ -46,11 +46,11 @@
 #include "ui/dialog/fill-and-stroke.h"
 #include "ui/dialog/panel-dialog.h"
 #include "ui/tools/tool-base.h"
+#include "ui/widget/canvas.h"   // Forced redraws.
 #include "ui/widget/color-preview.h"
 #include "ui/widget/gradient-image.h"
 
 #include "widgets/ege-paint-def.h"
-#include "widgets/spinbutton-events.h"
 #include "widgets/spw-utilities.h"
 #include "widgets/widget-sizes.h"
 
@@ -413,9 +413,6 @@ SelectedStyle::SelectedStyle(bool /*layout*/)
     _stroke_width_place.signal_button_release_event().connect(sigc::mem_fun(*this, &SelectedStyle::on_sw_click));
     _opacity_sb.signal_populate_popup().connect(sigc::mem_fun(*this, &SelectedStyle::on_opacity_menu));
     _opacity_sb.signal_value_changed().connect(sigc::mem_fun(*this, &SelectedStyle::on_opacity_changed));
-    // Connect to key-press to ensure focus is consistent with other spin buttons when using the keys vs mouse-click
-    g_signal_connect (G_OBJECT (_opacity_sb.gobj()), "key-press-event", G_CALLBACK (spinbutton_keypress), _opacity_sb.gobj());
-    g_signal_connect (G_OBJECT (_opacity_sb.gobj()), "focus-in-event", G_CALLBACK (spinbutton_focus_in), _opacity_sb.gobj());
 }
 
 SelectedStyle::~SelectedStyle()
@@ -443,7 +440,6 @@ void
 SelectedStyle::setDesktop(SPDesktop *desktop)
 {
     _desktop = desktop;
-    g_object_set_data (G_OBJECT(_opacity_sb.gobj()), "dtw", _desktop->canvas);
 
     Inkscape::Selection *selection = desktop->getSelection();
 
@@ -1103,7 +1099,7 @@ void SelectedStyle::opacity_1() {_opacity_sb.set_value(100);}
 
 void SelectedStyle::on_opacity_menu (Gtk::Menu *menu) {
 
-    Glib::ListHandle<Gtk::Widget *> children = menu->get_children();
+    std::vector<Gtk::Widget *> children = menu->get_children();
     for (auto iter : children) {
         menu->remove(*iter);
     }
@@ -1152,6 +1148,7 @@ void SelectedStyle::on_opacity_changed ()
     Inkscape::CSSOStringStream os;
     os << CLAMP ((_opacity_adjustment->get_value() / 100), 0.0, 1.0);
     sp_repr_css_set_property (css, "opacity", os.str().c_str());
+
     // FIXME: workaround for GTK breakage: display interruptibility sometimes results in GTK
     // sending multiple value-changed events. As if when Inkscape interrupts redraw for main loop
     // iterations, GTK discovers that this callback hasn't finished yet, and for some weird reason
@@ -1159,14 +1156,13 @@ void SelectedStyle::on_opacity_changed ()
     // me. As a result, scrolling the spinbutton once results in runaway change until it hits 1.0
     // or 0.0. (And no, this is not a race with ::update, I checked that.)
     // Sigh. So we disable interruptibility while we're setting the new value.
-    _desktop->getCanvas()->forceFullRedrawAfterInterruptions(0);
+    _desktop->getCanvas()->forced_redraws_start(0);
     sp_desktop_set_style (_desktop, css);
     sp_repr_css_attr_unref (css);
     DocumentUndo::maybeDone(_desktop->getDocument(), "fillstroke:opacity", SP_VERB_DIALOG_FILL_STROKE,
                             _("Change opacity"));
     // resume interruptibility
-    _desktop->getCanvas()->endForcedFullRedraws();
-    // spinbutton_defocus(GTK_WIDGET(_opacity_sb.gobj()));
+    _desktop->getCanvas()->forced_redraws_stop();
     _opacity_blocked = false;
 }
 
