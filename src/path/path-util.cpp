@@ -31,7 +31,6 @@
 
 #include "display/curve.h"
 
-// derived from Path_for_item
 Path *
 Path_for_pathvector(Geom::PathVector const &epathv)
 {
@@ -76,9 +75,6 @@ Path_for_item(SPItem *item, bool doTransformation, bool transformFull)
     return dest;
 }
 
-/**
- * Obtains an item's Path before the LPE stack has been applied.
- */
 Path *
 Path_for_item_before_LPE(SPItem *item, bool doTransformation, bool transformFull)
 {
@@ -86,10 +82,10 @@ Path_for_item_before_LPE(SPItem *item, bool doTransformation, bool transformFull
 
     if (curve == nullptr)
         return nullptr;
-    
+
     Geom::PathVector *pathv =
         pathvector_for_curve(item, curve.get(), doTransformation, transformFull, Geom::identity(), Geom::identity());
-    
+
     Path *dest = new Path;
     dest->LoadPathVector(*pathv);
     delete pathv;
@@ -97,19 +93,15 @@ Path_for_item_before_LPE(SPItem *item, bool doTransformation, bool transformFull
     return dest;
 }
 
-/* 
- * NOTE: Returns empty pathvector if curve == NULL
- * TODO: see if calling this method can be optimized. All the pathvector copying might be slow.
- */
 Geom::PathVector*
 pathvector_for_curve(SPItem *item, SPCurve *curve, bool doTransformation, bool transformFull, Geom::Affine extraPreAffine, Geom::Affine extraPostAffine)
 {
     if (curve == nullptr)
         return nullptr;
 
-    Geom::PathVector *dest = new Geom::PathVector;    
+    Geom::PathVector *dest = new Geom::PathVector;
     *dest = curve->get_pathvector(); // Make a copy; must be freed by the caller!
-    
+
     if (doTransformation) {
         if (transformFull) {
             *dest *= extraPreAffine * item->i2doc_affine() * extraPostAffine;
@@ -123,15 +115,11 @@ pathvector_for_curve(SPItem *item, SPCurve *curve, bool doTransformation, bool t
     return dest;
 }
 
-/**
- * Obtains an item's curve. For SPPath, it is the path *before* LPE. For SPShapes other than path, it is the path *after* LPE.
- * So the result is somewhat ill-defined, and probably this method should not be used... See curve_for_item_before_LPE.
- */
 std::unique_ptr<SPCurve> curve_for_item(SPItem *item)
 {
-    if (!item) 
+    if (!item)
         return nullptr;
-    
+
     std::unique_ptr<SPCurve> curve;
 
     if (auto path = dynamic_cast<SPPath const *>(item)) {
@@ -147,9 +135,6 @@ std::unique_ptr<SPCurve> curve_for_item(SPItem *item)
     return curve;
 }
 
-/**
- * Obtains an item's curve *before* LPE.
- */
 std::unique_ptr<SPCurve> curve_for_item_before_LPE(SPItem *item)
 {
     if (!item) 
