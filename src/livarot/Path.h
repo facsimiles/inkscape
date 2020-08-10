@@ -58,6 +58,26 @@ class Shape;
 // path creation: 2 phases: first the path is given as a succession of commands (MoveTo, LineTo, CurveTo...); then it
 // is converted in a polyline
 // a polylone can be stroked or filled to make a polygon
+
+/**
+ * An object to store path descriptions and line segment approximations.
+ *
+ * This object stores path descriptions similar to the `d' attribute of an SVG path node
+ * and line segment approximations of those path descriptions.
+ *
+ * Create a new instance of the object. Call the instruction functions such as Path::MoveTo,
+ * Path::LineTo, Path::CubicTo, etc to create a path description. Then call one of Path::Convert,
+ * Path::ConvertEvenLines or Path::ConvertWithBackData to do more interesting things.
+ *
+ *     Path *path = new Path;
+ *     path.MoveTo(Geom::Point(10, 10));
+ *     path.LineTo(Geom::Point(100, 10));
+ *     path.LineTo(Geom::Point(100, 100));
+ *     path.Close();
+ *     path.ConvertEvenLines(0.001); // You can use the other variants too
+ *     // insteresting stuff here
+ *
+ */
 class Path
 {
   friend class Shape;
@@ -80,7 +100,7 @@ public:
   int         pending_bezier_data;
   int         pending_moveto_cmd;
   int         pending_moveto_data;
-  // the path description
+
   std::vector<PathDescr*> descr_cmd;
 
   // polyline storage: a series of coordinates (and maybe weights)
