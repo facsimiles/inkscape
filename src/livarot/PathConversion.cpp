@@ -24,25 +24,38 @@
 
 void Path::ConvertWithBackData(double treshhold)
 {
+    // if any of the quadratic bezier spline stuff was going, just close it
     if ( descr_flags & descr_adding_bezier ) {
         CancelBezier();
     }
 
+    // are we doing a sub path? if yes, clear the flags. CloseSubPath just removes
+    // the flags, it won't close the contour don't worry. :P
     if ( descr_flags & descr_doing_subpath ) {
         CloseSubpath();
     }
 
+    // set the backdata flag to true, since, this function will be calculating and storing backdata stuff
     SetBackData(true);
+    // delete any pre-existing line segment approximation stuff
     ResetPoints();
+
+    // nothing to approximate so return
     if ( descr_cmd.empty() ) {
         return;
     }
 
-    Geom::Point curX;
+    Geom::Point curX; // the last point added
+    // the description to process. We start with 1 usually since the first is always a MoveTo that
+    // we handle before the loop (see below). In the case that the first is not a moveTo, We set
+    // curP to 0.
     int curP = 1;
+    // index of the last moveto point. We store this for use when a close path description is encountered.
     int lastMoveTo = -1;
 
     // The initial moveto.
+    // if the first command is a moveTo, set that as the lastPoint (curX) otherwise add a point at
+    // the origin as a moveTo.
     {
         int const firstTyp = descr_cmd[0]->getType();
         if ( firstTyp == descr_moveto ) {
@@ -51,10 +64,13 @@ void Path::ConvertWithBackData(double treshhold)
             curP = 0;
             curX[Geom::X] = curX[Geom::Y] = 0;
         }
+        // tiny detail to see here is that piece (the index of the description this point comes from) is set to 0 which
+        // may or may not be true. If there was not a MoveTo, index 0 can have other description types.
         lastMoveTo = AddPoint(curX, 0, 0.0, true);
     }
 
     // And the rest, one by one.
+    // within this loop, curP holds the current path description, curX holds the last point added
     while ( curP < int(descr_cmd.size()) ) {
 
         int const nType = descr_cmd[curP]->getType();
@@ -62,6 +78,7 @@ void Path::ConvertWithBackData(double treshhold)
 
         switch (nType) {
             case descr_forced: {
+                // just add a forced point (at the last point added). These arguments are useless btw.
                 AddForcedPoint(curX, curP, 1.0);
                 curP++;
                 break;
@@ -70,6 +87,7 @@ void Path::ConvertWithBackData(double treshhold)
             case descr_moveto: {
                 PathDescrMoveTo *nData = dynamic_cast<PathDescrMoveTo*>(descr_cmd[curP]);
                 nextX = nData->p;
+                // add the moveTo point and also store this in lastMoveTo
                 lastMoveTo = AddPoint(nextX, curP, 0.0, true);
                 // et on avance
                 curP++;
@@ -77,8 +95,16 @@ void Path::ConvertWithBackData(double treshhold)
             }
 
             case descr_close: {
+                // add the lastMoveTo point again
                 nextX = pts[lastMoveTo].p;
                 int n = AddPoint(nextX, curP, 1.0, false);
+                // we check if n > 0 because in some cases the last point has already been added so AddPoint would
+                // return -1 .. but then that last point won't get marked with closed = true .. I wonder if that would cause
+                // problems. Just to explain this say:
+                // MoveTo(0, 0); LineTo(10, 0); LineTo(10, 10); LineTo(0, 10); LineTo(0, 0); Close();
+                // LineTo(0, 0) would have already added a point at origin. So AddPoint won't add anything. But my point is that
+                // then the last point (0,0) won't get marked as closed = true which it should be.
+                // But then maybe this doesn't matter for us since Path::Fill automatically checks for this.
                 if (n > 0) pts[n].closed = true;
                 curP++;
                 break;
@@ -96,7 +122,12 @@ void Path::ConvertWithBackData(double treshhold)
             case descr_cubicto: {
                 PathDescrCubicTo *nData = dynamic_cast<PathDescrCubicTo *>(descr_cmd[curP]);
                 nextX = nData->p;
+                // RecCubicTo will see if threshold is fine with approximating this cubic bezier with
+                // a line segment through the start and end points. If no, it'd split the cubic at its
+                // center point and recursively call itself on the left and right side. The center point
+                // gets added in the points list though.
                 RecCubicTo(curX, nData->start, nextX, nData->end, treshhold, 8, 0.0, 1.0, curP);
+                // We let RecCubicTo add any points inside the cubic and add the last one ourselves.
                 AddPoint(nextX, curP, 1.0, false);
                 // et on avance
                 curP++;
@@ -106,6 +137,7 @@ void Path::ConvertWithBackData(double treshhold)
             case descr_arcto: {
                 PathDescrArcTo *nData = dynamic_cast<PathDescrArcTo *>(descr_cmd[curP]);
                 nextX = nData->p;
+                // Similar to RecCubicTo, just for Arcs
                 DoArc(curX, nextX, nData->rx, nData->ry, nData->angle, nData->large, nData->clockwise, treshhold, curP);
                 AddPoint(nextX, curP, 1.0, false);
                 // et on avance
@@ -117,6 +149,8 @@ void Path::ConvertWithBackData(double treshhold)
                 PathDescrBezierTo *nBData = dynamic_cast<PathDescrBezierTo *>(descr_cmd[curP]);
                 int nbInterm = nBData->nb;
                 nextX = nBData->p;
+                // probably something similar but for quadratic bezier splines. I still need to read this whole
+                // stuff to be sure about what it does and how it does that. TODO
 
                 int ip = curP + 1;
                 PathDescrIntermBezierTo *nData = dynamic_cast<PathDescrIntermBezierTo *>(descr_cmd[ip]);

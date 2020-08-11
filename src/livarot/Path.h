@@ -724,6 +724,24 @@ public:
   void   FlushPendingAddition(Path* dest,PathDescr *lastAddition,PathDescrCubicTo &lastCubic,int lastAD);
 
 private:
+  /**
+   * Add a Geom::Curve's equivalent path description.
+   *
+   * Any straight curve (line or otherwise that's straight) is added as line. CubicBezier
+   * and EllipticalArcs are handled manually, while any other Geom::Curve type is handled by
+   * converting to cubic beziers using Geom::cubicbezierpath_from_sbasis and recursively calling
+   * the same function.
+   *
+   * There is one special reason for using is_straight_curve to figure out if a CubicBezier is
+   * actually a line and making sure that it is added as a line not as a CubicBezier (which is
+   * straight). Sometimes when you're drawing straight line segments with the Bezier (pen) tool,
+   * Inkscape would place a straight CubicBezier instead of a line segment. The call to
+   * Path::Convert or Path::ConvertWithBackData would break up this line segment into smaller line
+   * segments which is not what we want (we want it to break only real curves) not curves that are
+   * actually just straight lines.
+   *
+   * @param c The Geom::Curve whose path description to create/add.
+   */
     void  AddCurve(Geom::Curve const &c);
 
 };
