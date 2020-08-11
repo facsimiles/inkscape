@@ -27,7 +27,7 @@ enum
   descr_moveto = 0,         /*!< A MoveTo instruction */
   descr_lineto = 1,         /*!< A LineTo instruction */
   descr_cubicto = 2,        /*!< A CubicTo insruction. Basically a Cubic Bezier */
-  descr_bezierto = 3,       /*!< A BezierTo instruction is a generalized Bezier curve. It can contain as many control points as you want to
+  descr_bezierto = 3,       /*!< A BezierTo instruction is a quadratic Bezier spline. It can contain as many control points as you want to
                               add. The BezierTo instruction only stores the final point and the total number of control points. The actual
                               control points are stored in descr_interm_bezier instructions. One for each control point. */
   descr_arcto = 4,          /*!< An elliptical arc */
@@ -141,7 +141,7 @@ struct PathDescrLineTo : public PathDescr
 // quadratic bezier curves: a set of control points, and an endpoint
 
 /**
- * An nth order bezier curve.
+ * A quadratic bezier spline
  *
  * Stores the final point as well as the total number of control points. The control
  * points will exist in the descriptions following this one which would be of the type
@@ -156,7 +156,7 @@ struct PathDescrBezierTo : public PathDescr
   void transform(Geom::Affine const &t) override;
   void dump(std::ostream &s) const override;
 
-  Geom::Point p; /*!< The final point of the nth order bezier curve. */
+  Geom::Point p; /*!< The final point of the quadratic bezier spline. */
   int nb;        /*!< The total number of control points. The descriptions following this one of the type PathDescrIntermBezierTo
                    will store these control points, one in each one. */
 };
