@@ -441,6 +441,10 @@ public:
    * currently stored while respecting the threshold. The function clears all existing path
    * descriptions and the new cubic bezier patches will be stored in this object.
    *
+   * The algorithm to fit cubic beziers on the line segment approximation.
+   *
+   * http://www.cs.mtu.edu/~shene/COURSES/cs3621/NOTES/INT-APP/CURVE-APP-global.html
+   *
    * @param threshold The threshold for simplification.
    */
   void Simplify (double treshhold);
@@ -702,24 +706,102 @@ public:
             Geom::Point &origine,float width);
 
 
+  /**
+   * Simplify a Path (a series of points).
+   *
+   * @param off The offset to the first point to process.
+   * @param N The total number of points in the sequence.
+   * @param threshhold The threshold to respect during simplification. The higher this number is,
+   * the more relaxed you're making the simplifier. The smaller the number, the more strict you're
+   * making the simplifier.
+   */
   void DoSimplify(int off, int N, double treshhold);
+
+  /**
+   * Fit a cubic bezier patch. (From sratch).
+   *
+   * @param off The index of the first point in pts.
+   * @param N The total number of points you want to fit on starting at index off.
+   * @param res Reference to the Cubic Bezier description where the resulting control points will
+   * be stored.
+   * @param worstP Reference to a point index. This will be changed to whichever point measures at
+   * highest deviation from the fitted curve.
+   *
+   * @return True if the fit respected threshold, false otherwise.
+   */
   bool AttemptSimplify(int off, int N, double treshhold, PathDescrCubicTo &res, int &worstP);
+  /*
+   * The actual fitting algorithm that takes a sequence and fits stuff on it.
+   *
+   * Totally based on the algorithm from:
+   * http://www.cs.mtu.edu/~shene/COURSES/cs3621/NOTES/INT-APP/CURVE-APP-global.html
+   *
+   * @param start The start point of the cubic bezier which is already known.
+   * @param res The Cubic Bezier description that function will populate after doing the maths.
+   * @param Xk The array of X coordinates of the point to fit.
+   * @param Yk The array of Y coordinates of the point to fit.
+   * @param Qk An array to store some intermediate values (math stuff again).
+   * @param tk The time values for the points.
+   * @param nbPt The total points to fit on.
+   *
+   * @return True if the fit was done correctly, false if something bad happened. (Non-invertible
+   * matrix).
+   */
   static bool FitCubic(Geom::Point const &start,
 		       PathDescrCubicTo &res,
 		       double *Xk, double *Yk, double *Qk, double *tk, int nbPt);
-  
+  /**
+   * Structure to keep some data for fitting.
+   */
   struct fitting_tables {
-    int      nbPt,maxPt,inPt;
-    double   *Xk;
-    double   *Yk;
-    double   *Qk;
-    double   *tk;
-    double   *lk;
-    char     *fk;
-    double   totLen;
+    int      nbPt;   /*!< The points to fit on in a particular iteration */
+    int      maxPt;  /*!< Maximum number of points these arrays here can store */
+    int      inPt;   /*!< Total points whose X, Y, lk are all populated here */
+    double   *Xk;    /*!< X coordinate of the point */
+    double   *Yk;    /*!< Y coordinate of the point */
+    double   *Qk;    /*!< A special value needed by the fitting algorithm */
+    double   *tk;    /*!< A number between 0 and 1 that tells the fraction (length b/w first point to this point)/(total length) */
+    double   *lk;    /*!< Length of the line segment from the previous point to this point */
+    char     *fk;    /*!< A flag if 0x01 indicates forced point and if 0x00 indicates a normal point */
+    double   totLen; /*!< Total length of the polyline or you can say the sum of lengths of all line segments. */
   };
+
+  /**
+   * Fit Cubic Bezier patch using the fitting table data.
+   *
+   * @param data The fitting_tables data needed for fitting. ExtendFit sets that up for this
+   * function.
+   * @param threshhold The threshold to respect.
+   * @param res The Cubic Bezier description which this function will populate.
+   * @param worstP The point with the worst error.
+   */
   bool   AttemptSimplify (fitting_tables &data,double treshhold, PathDescrCubicTo & res,int &worstP);
+
+  /**
+   * Fit Cubic Bezier patch on the points.
+   *
+   * This uses data already calculated by probably the same function if it exists.
+   * The data that's reused is apparently the X, Y and lk values. However, I think there is a
+   * problem with this caching mechanism. See the inline comments of ExtendFit.
+   *
+   * This function prepares data in fitting tables and calls the AttemptSimplify version that takes
+   * fitting_tables data.
+   *
+   * @param off The offset to the first point.
+   * @param N The total number of points in that sequence.
+   * @param data The data structure which keeps data saved for later use by the same function.
+   * @param threshhold The threshold to respect.
+   * @param res Cubic Bezier description where this function will store the handles.
+   * @param worstP Function will store the point with the worst error here.
+   *
+   * @return True if the threshold was respected, otherwise false.
+   */
   bool   ExtendFit(int off, int N, fitting_tables &data,double treshhold, PathDescrCubicTo & res,int &worstP);
+  /**
+   * Peform an iteration of Newton-Raphson to improve t values.
+   * I have the mathematical derivation of how this works in my head.
+   * TODO: Place them here with embedded latex maybe.
+   */
   double RaffineTk (Geom::Point pt, Geom::Point p0, Geom::Point p1, Geom::Point p2, Geom::Point p3, double it);
   void   FlushPendingAddition(Path* dest,PathDescr *lastAddition,PathDescrCubicTo &lastCubic,int lastAD);
 
