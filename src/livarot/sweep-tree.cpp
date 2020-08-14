@@ -174,71 +174,97 @@ SweepTree::Find(Geom::Point const &px, SweepTree *newOne, SweepTree *&insertL,
 // only find a point's position
 int
 SweepTree::Find(Geom::Point const &px, SweepTree * &insertL,
-		 SweepTree * &insertR)
+        SweepTree * &insertR)
 {
-  Geom::Point bOrig, bNorm;
-  bOrig = src->pData[src->getEdge(bord).st].rx;
-  bNorm = src->eData[bord].rdx;
-  if (src->getEdge(bord).st > src->getEdge(bord).en)
+    Geom::Point bOrig, bNorm;
+    // The start point of the original edge vector
+    bOrig = src->pData[src->getEdge(bord).st].rx;
+    // The edge vector
+    bNorm = src->eData[bord].rdx;
+    // Flip the edge vector if it's bottom to top or horizontal and right to left
+    if (src->getEdge(bord).st > src->getEdge(bord).en)
     {
-      bNorm = -bNorm;
+        bNorm = -bNorm;
     }
- bNorm=bNorm.ccw();
+    // rotate the edge vector counter clockwise by 90 degrees
+    bNorm=bNorm.ccw();
 
-  Geom::Point diff;
-  diff = px - bOrig;
+    // draw a vector from the start point to the actual point
+    Geom::Point diff;
+    diff = px - bOrig;
 
-  double y = 0;
-  y = dot(bNorm, diff);
-  if (y == 0)
+    double y = 0;
+    y = dot(bNorm, diff); // take the dot product
+    // ANALOGY FROM DIAGRAM (See doc in header file):
+    // this case is the same as if we are at node (15) and want to add (15). Usually, you can't
+    // add same stuff in a binary search tree but here it's fine to do so (I guess)
+    // In that case, we have found an exact match and the point belongs between 15 and the one
+    // on it's right (16).
+    if (y == 0) // point lies on the edge (or at least the line of the edge)
     {
-      insertL = this;
-      insertR = static_cast<SweepTree *>(elem[RIGHT]);
-      return found_exact;
+        insertL = this;
+        insertR = static_cast<SweepTree *>(elem[RIGHT]);
+        return found_exact;
     }
-  if (y < 0)
+
+    // ANALOGY FROM DIAGRAM (See doc in header file):
+    // This is the same as inserting 3 while standing at 10, or inserting 3 while at 5 or inserting
+    // 13 while at 15 or inserting 1 while at 2 or inserting 11 while at 12.
+    if (y < 0) // lies to the left of the edge
     {
-      if (child[LEFT])
-	{
-	  return (static_cast<SweepTree *>(child[LEFT]))->Find(px, insertL,
-							    insertR);
-	}
-      else
-	{
-	  insertR = this;
-	  insertL = static_cast<SweepTree *>(elem[LEFT]);
-	  if (insertL)
-	    {
-	      return found_between;
-	    }
-	  else
-	    {
-	      return found_on_left;
-	    }
-	}
-    }
-  else
+        if (child[LEFT]) // is there child on left? This works at 10, 5, 15 but not at the nodes such as 2, 6, 12, 16
+        {
+            // if there is a child on left, let the child do the searching
+            return (static_cast<SweepTree *>(child[LEFT]))->Find(px, insertL, // if yes, let that child do the finding now
+                    insertR);
+        }
+        else // no child on the left? Means either a lead node or node has no child on left.
+        {
+            // well we are sure that there is no child on the left, which means this new node goes
+            // to the left of this node, but that doesn't really mean there no left element in the
+            // linked list, there sure can be. For example, if you're inserting 11 while standing
+            // at 12, there is no left child, but in the linked list, there is 10 to the left.
+            insertR = this;
+            insertL = static_cast<SweepTree *>(elem[LEFT]);
+            if (insertL)
+            {
+                return found_between;
+            }
+            else // however, if you're at 2 and inserting 1, there is no left child, but there is also nothing on the left in the linked list either
+            {
+                return found_on_left;
+            }
+        }
+    } // lies to the right of the edge
+    // ANALOGY FROM DIAGRAM (See doc in header file):
+    // This is the same as inserting 14 while standing at 10, 7 while standing at 5, 18 while
+    // standing at 15, 7 while standing at 6, you get the point
+    else
     {
-      if (child[RIGHT])
-	{
-	  return (static_cast<SweepTree *>(child[RIGHT]))->Find(px, insertL,
-							    insertR);
-	}
-      else
-	{
-	  insertL = this;
-	  insertR = static_cast<SweepTree *>(elem[RIGHT]);
-	  if (insertR)
-	    {
-	      return found_between;
-	    }
-	  else
-	    {
-	      return found_on_right;
-	    }
-	}
+        if (child[RIGHT]) // is there a child to the right? If you're at 10 or 5 or 15 there is child on right so you let the child decide where
+        {                 // new node goes but not if you're at leaf nodes such as 2, 6, 12, 16 or any other node that doesn't have a right child
+            return (static_cast<SweepTree *>(child[RIGHT]))->Find(px, insertL, // let that child do the finding now
+                    insertR);
+        }
+        else
+        {
+            // okay so no right child, but stil you can have an element to the right in the linked
+            // list. For example you are at 6 and want to insert 7, no child on the right so we are
+            // sure the new node goes to the right of 6 but there is still 10 to the right in the
+            // double-linked list.
+            insertL = this;
+            insertR = static_cast<SweepTree *>(elem[RIGHT]);
+            if (insertR)
+            {
+                return found_between;
+            }
+            else
+            {
+                return found_on_right;
+            }
+        }
     }
-  return not_found;
+    return not_found;
 }
 
 void

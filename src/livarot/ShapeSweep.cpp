@@ -170,408 +170,413 @@ Shape::Reoriente (Shape * a)
 int
 Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 {
-    Reset (0, 0);
+  // reset any existing stuff in this shape
+  Reset (0, 0);
 
-    if (a->numberOfPoints() <= 1 || a->numberOfEdges() <= 1) {
-	return 0;
-    }
-    
-    if ( directed != fill_justDont && directedEulerian(a) == false ) {
-  			g_warning ("Shape error in ConvertToShape: directedEulerian(a) == false\n");
-				return shape_input_err;
-    }
-  
-    a->ResetSweep();
+  // nothing to do with 0/1 points/edges
+  if (a->numberOfPoints() <= 1 || a->numberOfEdges() <= 1) {
+    return 0;
+  }
 
-    if (sTree == nullptr) {
-	sTree = new SweepTreeList(a->numberOfEdges());
-    }
-    if (sEvts == nullptr) {
-	sEvts = new SweepEventQueue(a->numberOfEdges());
-    }
-  
-    MakePointData(true);
-    MakeEdgeData(true);
-    MakeSweepSrcData(true);
-    MakeSweepDestData(true);
-    MakeBackData(a->_has_back_data);
+  // if shape is not eulerian, we can't proceedA, why though you might ask?
+  // I think because if it's not eulerian, winding numbers won't be consistent and thus
+  // nothing else will work
+  if ( directed != fill_justDont && directedEulerian(a) == false ) {
+    g_warning ("Shape error in ConvertToShape: directedEulerian(a) == false\n");
+    return shape_input_err;
+  }
 
-    a->initialisePointData();
-    a->initialiseEdgeData();
+  a->ResetSweep();
 
-    a->SortPointsRounded();
+  if (sTree == nullptr) {
+    sTree = new SweepTreeList(a->numberOfEdges());
+  }
+  if (sEvts == nullptr) {
+    sEvts = new SweepEventQueue(a->numberOfEdges());
+  }
 
-    chgts.clear();
+  MakePointData(true);
+  MakeEdgeData(true);
+  MakeSweepSrcData(true);
+  MakeSweepDestData(true);
+  MakeBackData(a->_has_back_data);
 
-    double lastChange = a->pData[0].rx[1] - 1.0;
-    int lastChgtPt = 0;
-    int edgeHead = -1;
-    Shape *shapeHead = nullptr;
+  a->initialisePointData();
+  a->initialiseEdgeData();
 
-    clearIncidenceData();
-    
-    int curAPt = 0;
+  a->SortPointsRounded();
 
-    while (curAPt < a->numberOfPoints() || sEvts->size() > 0) {
-	Geom::Point ptX;
-      double ptL, ptR;
-      SweepTree *intersL = nullptr;
-      SweepTree *intersR = nullptr;
-      int nPt = -1;
-      Shape *ptSh = nullptr;
-      bool isIntersection = false;
-      if (sEvts->peek(intersL, intersR, ptX, ptL, ptR))
-	{
-	  if (a->pData[curAPt].pending > 0
-	      || (a->pData[curAPt].rx[1] > ptX[1]
-		  || (a->pData[curAPt].rx[1] == ptX[1]
-		      && a->pData[curAPt].rx[0] > ptX[0])))
-	    {
-	      /* FIXME: could just be pop? */
-	      sEvts->extract(intersL, intersR, ptX, ptL, ptR);
-	      isIntersection = true;
-	    }
-	  else
-	    {
-	      nPt = curAPt++;
-	      ptSh = a;
-	      ptX = ptSh->pData[nPt].rx;
-	      isIntersection = false;
-	    }
-	}
+  chgts.clear();
+
+  double lastChange = a->pData[0].rx[1] - 1.0;
+  int lastChgtPt = 0;
+  int edgeHead = -1;
+  Shape *shapeHead = nullptr;
+
+  clearIncidenceData();
+
+  int curAPt = 0;
+
+  while (curAPt < a->numberOfPoints() || sEvts->size() > 0) {
+    Geom::Point ptX;
+    double ptL, ptR;
+    SweepTree *intersL = nullptr;
+    SweepTree *intersR = nullptr;
+    int nPt = -1;
+    Shape *ptSh = nullptr;
+    bool isIntersection = false;
+    if (sEvts->peek(intersL, intersR, ptX, ptL, ptR))
+    {
+      if (a->pData[curAPt].pending > 0
+          || (a->pData[curAPt].rx[1] > ptX[1]
+            || (a->pData[curAPt].rx[1] == ptX[1]
+              && a->pData[curAPt].rx[0] > ptX[0])))
+      {
+        /* FIXME: could just be pop? */
+        sEvts->extract(intersL, intersR, ptX, ptL, ptR);
+        isIntersection = true;
+      }
       else
-	{
-	  nPt = curAPt++;
-	  ptSh = a;
-	  ptX = ptSh->pData[nPt].rx;
-	  isIntersection = false;
-	}
-
-      if (isIntersection == false)
-	{
-	  if (ptSh->getPoint(nPt).dI == 0 && ptSh->getPoint(nPt).dO == 0)
-	    continue;
-	}
-
-      Geom::Point rPtX;
-      rPtX[0]= Round (ptX[0]);
-      rPtX[1]= Round (ptX[1]);
-      int lastPointNo = AddPoint (rPtX);
-      pData[lastPointNo].rx = rPtX;
-
-      if (rPtX[1] > lastChange)
-	{
-	  int lastI = AssemblePoints (lastChgtPt, lastPointNo);
-
-	  Shape *curSh = shapeHead;
-	  int curBo = edgeHead;
-	  while (curSh)
-	    {
-	      curSh->swsData[curBo].leftRnd =
-		pData[curSh->swsData[curBo].leftRnd].newInd;
-	      curSh->swsData[curBo].rightRnd =
-		pData[curSh->swsData[curBo].rightRnd].newInd;
-
-	      Shape *neSh = curSh->swsData[curBo].nextSh;
-	      curBo = curSh->swsData[curBo].nextBo;
-	      curSh = neSh;
-	    }
-
-	  for (auto & chgt : chgts)
-	    {
-	      chgt.ptNo = pData[chgt.ptNo].newInd;
-	      if (chgt.type == 0)
-		{
-		  if (chgt.src->getEdge(chgt.bord).st <
-		      chgt.src->getEdge(chgt.bord).en)
-		    {
-		      chgt.src->swsData[chgt.bord].stPt =
-			chgt.ptNo;
-		    }
-		  else
-		    {
-		      chgt.src->swsData[chgt.bord].enPt =
-			chgt.ptNo;
-		    }
-		}
-	      else if (chgt.type == 1)
-		{
-		  if (chgt.src->getEdge(chgt.bord).st >
-		      chgt.src->getEdge(chgt.bord).en)
-		    {
-		      chgt.src->swsData[chgt.bord].stPt =
-			chgt.ptNo;
-		    }
-		  else
-		    {
-		      chgt.src->swsData[chgt.bord].enPt =
-			chgt.ptNo;
-		    }
-		}
-	    }
-
-	  CheckAdjacencies (lastI, lastChgtPt, shapeHead, edgeHead);
-
-	  CheckEdges (lastI, lastChgtPt, a, nullptr, bool_op_union);
-
-	  for (int i = lastChgtPt; i < lastI; i++) {
-	    if (pData[i].askForWindingS) {
-		    Shape *windS = pData[i].askForWindingS;
-		    int windB = pData[i].askForWindingB;
-		    pData[i].nextLinkedPoint = windS->swsData[windB].firstLinkedPoint;
-		    windS->swsData[windB].firstLinkedPoint = i;
-		  }
-	   }
-
-    if (lastI < lastPointNo) {
-          _pts[lastI] = getPoint(lastPointNo);
-	   pData[lastI] = pData[lastPointNo];
-	  }
-	  lastPointNo = lastI;
-	  _pts.resize(lastI + 1);
-
-	  lastChgtPt = lastPointNo;
-	  lastChange = rPtX[1];
-	  chgts.clear();
-	  edgeHead = -1;
-	  shapeHead = nullptr;
-	}
-
-
-      if (isIntersection)
-	{
-//                      printf("(%i %i [%i %i]) ",intersL->bord,intersR->bord,intersL->startPoint,intersR->startPoint);
-	  intersL->RemoveEvent (*sEvts, LEFT);
-	  intersR->RemoveEvent (*sEvts, RIGHT);
-
-	  AddChgt (lastPointNo, lastChgtPt, shapeHead, edgeHead, INTERSECTION,
-		   intersL->src, intersL->bord, intersR->src, intersR->bord);
-
-	  intersL->SwapWithRight (*sTree, *sEvts);
-
-	  TesteIntersection (intersL, LEFT, false);
-	  TesteIntersection (intersR, RIGHT, false);
-	}
-      else
-	{
-	  int cb;
-
-	  int nbUp = 0, nbDn = 0;
-	  int upNo = -1, dnNo = -1;
-	  cb = ptSh->getPoint(nPt).incidentEdge[FIRST];
-	  while (cb >= 0 && cb < ptSh->numberOfEdges())
-	    {
-	      if ((ptSh->getEdge(cb).st < ptSh->getEdge(cb).en
-		   && nPt == ptSh->getEdge(cb).en)
-		  || (ptSh->getEdge(cb).st > ptSh->getEdge(cb).en
-		      && nPt == ptSh->getEdge(cb).st))
-		{
-		  upNo = cb;
-		  nbUp++;
-		}
-	      if ((ptSh->getEdge(cb).st > ptSh->getEdge(cb).en
-		   && nPt == ptSh->getEdge(cb).en)
-		  || (ptSh->getEdge(cb).st < ptSh->getEdge(cb).en
-		      && nPt == ptSh->getEdge(cb).st))
-		{
-		  dnNo = cb;
-		  nbDn++;
-		}
-	      cb = ptSh->NextAt (nPt, cb);
-	    }
-
-	  if (nbDn <= 0)
-	    {
-	      upNo = -1;
-	    }
-	  if (upNo >= 0 && (SweepTree *) ptSh->swsData[upNo].misc == nullptr)
-	    {
-	      upNo = -1;
-	    }
-
-	  bool doWinding = true;
-
-	  if (nbUp > 0)
-	    {
-	      cb = ptSh->getPoint(nPt).incidentEdge[FIRST];
-	      while (cb >= 0 && cb < ptSh->numberOfEdges())
-		{
-		  if ((ptSh->getEdge(cb).st < ptSh->getEdge(cb).en
-		       && nPt == ptSh->getEdge(cb).en)
-		      || (ptSh->getEdge(cb).st > ptSh->getEdge(cb).en
-			  && nPt == ptSh->getEdge(cb).st))
-		    {
-		      if (cb != upNo)
-			{
-			  SweepTree *node =
-			    (SweepTree *) ptSh->swsData[cb].misc;
-			  if (node == nullptr)
-			    {
-			    }
-			  else
-			    {
-			      AddChgt (lastPointNo, lastChgtPt, shapeHead,
-				       edgeHead, EDGE_REMOVED, node->src, node->bord,
-				       nullptr, -1);
-			      ptSh->swsData[cb].misc = nullptr;
-
-			      int onLeftB = -1, onRightB = -1;
-			      Shape *onLeftS = nullptr;
-			      Shape *onRightS = nullptr;
-			      if (node->elem[LEFT])
-				{
-				  onLeftB =
-				    (static_cast <
-				     SweepTree * >(node->elem[LEFT]))->bord;
-				  onLeftS =
-				    (static_cast <
-				     SweepTree * >(node->elem[LEFT]))->src;
-				}
-			      if (node->elem[RIGHT])
-				{
-				  onRightB =
-				    (static_cast <
-				     SweepTree * >(node->elem[RIGHT]))->bord;
-				  onRightS =
-				    (static_cast <
-				     SweepTree * >(node->elem[RIGHT]))->src;
-				}
-
-			      node->Remove (*sTree, *sEvts, true);
-			      if (onLeftS && onRightS)
-				{
-				  SweepTree *onLeft =
-				    (SweepTree *) onLeftS->swsData[onLeftB].
-				    misc;
-				  if (onLeftS == ptSh
-				      && (onLeftS->getEdge(onLeftB).en == nPt
-					  || onLeftS->getEdge(onLeftB).st ==
-					  nPt))
-				    {
-				    }
-				  else
-				    {
-				      if (onRightS == ptSh
-					  && (onRightS->getEdge(onRightB).en ==
-					      nPt
-					      || onRightS->getEdge(onRightB).
-					      st == nPt))
-					{
-					}
-				      else
-					{
-					  TesteIntersection (onLeft, RIGHT, false);
-					}
-				    }
-				}
-			    }
-			}
-		    }
-		  cb = ptSh->NextAt (nPt, cb);
-		}
-	    }
-
-	  // traitement du "upNo devient dnNo"
-	  SweepTree *insertionNode = nullptr;
-	  if (dnNo >= 0)
-	    {
-	      if (upNo >= 0)
-		{
-		  SweepTree *node = (SweepTree *) ptSh->swsData[upNo].misc;
-
-		  AddChgt (lastPointNo, lastChgtPt, shapeHead, edgeHead, EDGE_REMOVED,
-			   node->src, node->bord, nullptr, -1);
-
-		  ptSh->swsData[upNo].misc = nullptr;
-
-		  node->RemoveEvents (*sEvts);
-		  node->ConvertTo (ptSh, dnNo, 1, lastPointNo);
-		  ptSh->swsData[dnNo].misc = node;
-		  TesteIntersection (node, RIGHT, false);
-		  TesteIntersection (node, LEFT, false);
-		  insertionNode = node;
-
-		  ptSh->swsData[dnNo].curPoint = lastPointNo;
-		  AddChgt (lastPointNo, lastChgtPt, shapeHead, edgeHead, EDGE_INSERTED,
-			   node->src, node->bord, nullptr, -1);
-		}
-	      else
-		{
-		  SweepTree *node = sTree->add(ptSh, dnNo, 1, lastPointNo, this);
-		  ptSh->swsData[dnNo].misc = node;
-		  node->Insert (*sTree, *sEvts, this, lastPointNo, true);
-		  if (doWinding)
-		    {
-		      SweepTree *myLeft =
-			static_cast < SweepTree * >(node->elem[LEFT]);
-		      if (myLeft)
-			{
-			  pData[lastPointNo].askForWindingS = myLeft->src;
-			  pData[lastPointNo].askForWindingB = myLeft->bord;
-			}
-		      else
-			{
-			  pData[lastPointNo].askForWindingB = -1;
-			}
-		      doWinding = false;
-		    }
-		  TesteIntersection (node, RIGHT, false);
-		  TesteIntersection (node, LEFT, false);
-		  insertionNode = node;
-
-		  ptSh->swsData[dnNo].curPoint = lastPointNo;
-		  AddChgt (lastPointNo, lastChgtPt, shapeHead, edgeHead, EDGE_INSERTED,
-			   node->src, node->bord, nullptr, -1);
-		}
-	    }
-
-	  if (nbDn > 1)
-	    {			// si nbDn == 1 , alors dnNo a deja ete traite
-	      cb = ptSh->getPoint(nPt).incidentEdge[FIRST];
-	      while (cb >= 0 && cb < ptSh->numberOfEdges())
-		{
-		  if ((ptSh->getEdge(cb).st > ptSh->getEdge(cb).en
-		       && nPt == ptSh->getEdge(cb).en)
-		      || (ptSh->getEdge(cb).st < ptSh->getEdge(cb).en
-			  && nPt == ptSh->getEdge(cb).st))
-		    {
-		      if (cb != dnNo)
-			{
-			  SweepTree *node = sTree->add(ptSh, cb, 1, lastPointNo, this);
-			  ptSh->swsData[cb].misc = node;
-			  node->InsertAt (*sTree, *sEvts, this, insertionNode,
-					  nPt, true);
-			  if (doWinding)
-			    {
-			      SweepTree *myLeft =
-				static_cast < SweepTree * >(node->elem[LEFT]);
-			      if (myLeft)
-				{
-				  pData[lastPointNo].askForWindingS =
-				    myLeft->src;
-				  pData[lastPointNo].askForWindingB =
-				    myLeft->bord;
-				}
-			      else
-				{
-				  pData[lastPointNo].askForWindingB = -1;
-				}
-			      doWinding = false;
-			    }
-			  TesteIntersection (node, RIGHT, false);
-			  TesteIntersection (node, LEFT, false);
-
-			  ptSh->swsData[cb].curPoint = lastPointNo;
-			  AddChgt (lastPointNo, lastChgtPt, shapeHead,
-				   edgeHead, EDGE_INSERTED, node->src, node->bord, nullptr,
-				   -1);
-			}
-		    }
-		  cb = ptSh->NextAt (nPt, cb);
-		}
-	    }
-	}
+      {
+        nPt = curAPt++;
+        ptSh = a;
+        ptX = ptSh->pData[nPt].rx;
+        isIntersection = false;
+      }
     }
+    else
+    {
+      nPt = curAPt++;
+      ptSh = a;
+      ptX = ptSh->pData[nPt].rx;
+      isIntersection = false;
+    }
+
+    if (isIntersection == false)
+    {
+      if (ptSh->getPoint(nPt).dI == 0 && ptSh->getPoint(nPt).dO == 0)
+        continue;
+    }
+
+    Geom::Point rPtX;
+    rPtX[0]= Round (ptX[0]);
+    rPtX[1]= Round (ptX[1]);
+    int lastPointNo = AddPoint (rPtX);
+    pData[lastPointNo].rx = rPtX;
+
+    if (rPtX[1] > lastChange)
+    {
+      int lastI = AssemblePoints (lastChgtPt, lastPointNo);
+
+      Shape *curSh = shapeHead;
+      int curBo = edgeHead;
+      while (curSh)
+      {
+        curSh->swsData[curBo].leftRnd =
+          pData[curSh->swsData[curBo].leftRnd].newInd;
+        curSh->swsData[curBo].rightRnd =
+          pData[curSh->swsData[curBo].rightRnd].newInd;
+
+        Shape *neSh = curSh->swsData[curBo].nextSh;
+        curBo = curSh->swsData[curBo].nextBo;
+        curSh = neSh;
+      }
+
+      for (auto & chgt : chgts)
+      {
+        chgt.ptNo = pData[chgt.ptNo].newInd;
+        if (chgt.type == 0)
+        {
+          if (chgt.src->getEdge(chgt.bord).st <
+              chgt.src->getEdge(chgt.bord).en)
+          {
+            chgt.src->swsData[chgt.bord].stPt =
+              chgt.ptNo;
+          }
+          else
+          {
+            chgt.src->swsData[chgt.bord].enPt =
+              chgt.ptNo;
+          }
+        }
+        else if (chgt.type == 1)
+        {
+          if (chgt.src->getEdge(chgt.bord).st >
+              chgt.src->getEdge(chgt.bord).en)
+          {
+            chgt.src->swsData[chgt.bord].stPt =
+              chgt.ptNo;
+          }
+          else
+          {
+            chgt.src->swsData[chgt.bord].enPt =
+              chgt.ptNo;
+          }
+        }
+      }
+
+      CheckAdjacencies (lastI, lastChgtPt, shapeHead, edgeHead);
+
+      CheckEdges (lastI, lastChgtPt, a, nullptr, bool_op_union);
+
+      for (int i = lastChgtPt; i < lastI; i++) {
+        if (pData[i].askForWindingS) {
+          Shape *windS = pData[i].askForWindingS;
+          int windB = pData[i].askForWindingB;
+          pData[i].nextLinkedPoint = windS->swsData[windB].firstLinkedPoint;
+          windS->swsData[windB].firstLinkedPoint = i;
+        }
+      }
+
+      if (lastI < lastPointNo) {
+        _pts[lastI] = getPoint(lastPointNo);
+        pData[lastI] = pData[lastPointNo];
+      }
+      lastPointNo = lastI;
+      _pts.resize(lastI + 1);
+
+      lastChgtPt = lastPointNo;
+      lastChange = rPtX[1];
+      chgts.clear();
+      edgeHead = -1;
+      shapeHead = nullptr;
+    }
+
+
+    if (isIntersection)
+    {
+      //                      printf("(%i %i [%i %i]) ",intersL->bord,intersR->bord,intersL->startPoint,intersR->startPoint);
+      intersL->RemoveEvent (*sEvts, LEFT);
+      intersR->RemoveEvent (*sEvts, RIGHT);
+
+      AddChgt (lastPointNo, lastChgtPt, shapeHead, edgeHead, INTERSECTION,
+          intersL->src, intersL->bord, intersR->src, intersR->bord);
+
+      intersL->SwapWithRight (*sTree, *sEvts);
+
+      TesteIntersection (intersL, LEFT, false);
+      TesteIntersection (intersR, RIGHT, false);
+    }
+    else
+    {
+      int cb;
+
+      int nbUp = 0, nbDn = 0;
+      int upNo = -1, dnNo = -1;
+      cb = ptSh->getPoint(nPt).incidentEdge[FIRST];
+      while (cb >= 0 && cb < ptSh->numberOfEdges())
+      {
+        if ((ptSh->getEdge(cb).st < ptSh->getEdge(cb).en
+              && nPt == ptSh->getEdge(cb).en)
+            || (ptSh->getEdge(cb).st > ptSh->getEdge(cb).en
+              && nPt == ptSh->getEdge(cb).st))
+        {
+          upNo = cb;
+          nbUp++;
+        }
+        if ((ptSh->getEdge(cb).st > ptSh->getEdge(cb).en
+              && nPt == ptSh->getEdge(cb).en)
+            || (ptSh->getEdge(cb).st < ptSh->getEdge(cb).en
+              && nPt == ptSh->getEdge(cb).st))
+        {
+          dnNo = cb;
+          nbDn++;
+        }
+        cb = ptSh->NextAt (nPt, cb);
+      }
+
+      if (nbDn <= 0)
+      {
+        upNo = -1;
+      }
+      if (upNo >= 0 && (SweepTree *) ptSh->swsData[upNo].misc == nullptr)
+      {
+        upNo = -1;
+      }
+
+      bool doWinding = true;
+
+      if (nbUp > 0)
+      {
+        cb = ptSh->getPoint(nPt).incidentEdge[FIRST];
+        while (cb >= 0 && cb < ptSh->numberOfEdges())
+        {
+          if ((ptSh->getEdge(cb).st < ptSh->getEdge(cb).en
+                && nPt == ptSh->getEdge(cb).en)
+              || (ptSh->getEdge(cb).st > ptSh->getEdge(cb).en
+                && nPt == ptSh->getEdge(cb).st))
+          {
+            if (cb != upNo)
+            {
+              SweepTree *node =
+                (SweepTree *) ptSh->swsData[cb].misc;
+              if (node == nullptr)
+              {
+              }
+              else
+              {
+                AddChgt (lastPointNo, lastChgtPt, shapeHead,
+                    edgeHead, EDGE_REMOVED, node->src, node->bord,
+                    nullptr, -1);
+                ptSh->swsData[cb].misc = nullptr;
+
+                int onLeftB = -1, onRightB = -1;
+                Shape *onLeftS = nullptr;
+                Shape *onRightS = nullptr;
+                if (node->elem[LEFT])
+                {
+                  onLeftB =
+                    (static_cast <
+                     SweepTree * >(node->elem[LEFT]))->bord;
+                  onLeftS =
+                    (static_cast <
+                     SweepTree * >(node->elem[LEFT]))->src;
+                }
+                if (node->elem[RIGHT])
+                {
+                  onRightB =
+                    (static_cast <
+                     SweepTree * >(node->elem[RIGHT]))->bord;
+                  onRightS =
+                    (static_cast <
+                     SweepTree * >(node->elem[RIGHT]))->src;
+                }
+
+                node->Remove (*sTree, *sEvts, true);
+                if (onLeftS && onRightS)
+                {
+                  SweepTree *onLeft =
+                    (SweepTree *) onLeftS->swsData[onLeftB].
+                    misc;
+                  if (onLeftS == ptSh
+                      && (onLeftS->getEdge(onLeftB).en == nPt
+                        || onLeftS->getEdge(onLeftB).st ==
+                        nPt))
+                  {
+                  }
+                  else
+                  {
+                    if (onRightS == ptSh
+                        && (onRightS->getEdge(onRightB).en ==
+                          nPt
+                          || onRightS->getEdge(onRightB).
+                          st == nPt))
+                    {
+                    }
+                    else
+                    {
+                      TesteIntersection (onLeft, RIGHT, false);
+                    }
+                  }
+                }
+              }
+            }
+          }
+          cb = ptSh->NextAt (nPt, cb);
+        }
+      }
+
+      // traitement du "upNo devient dnNo"
+      SweepTree *insertionNode = nullptr;
+      if (dnNo >= 0)
+      {
+        if (upNo >= 0)
+        {
+          SweepTree *node = (SweepTree *) ptSh->swsData[upNo].misc;
+
+          AddChgt (lastPointNo, lastChgtPt, shapeHead, edgeHead, EDGE_REMOVED,
+              node->src, node->bord, nullptr, -1);
+
+          ptSh->swsData[upNo].misc = nullptr;
+
+          node->RemoveEvents (*sEvts);
+          node->ConvertTo (ptSh, dnNo, 1, lastPointNo);
+          ptSh->swsData[dnNo].misc = node;
+          TesteIntersection (node, RIGHT, false);
+          TesteIntersection (node, LEFT, false);
+          insertionNode = node;
+
+          ptSh->swsData[dnNo].curPoint = lastPointNo;
+          AddChgt (lastPointNo, lastChgtPt, shapeHead, edgeHead, EDGE_INSERTED,
+              node->src, node->bord, nullptr, -1);
+        }
+        else
+        {
+          SweepTree *node = sTree->add(ptSh, dnNo, 1, lastPointNo, this);
+          ptSh->swsData[dnNo].misc = node;
+          node->Insert (*sTree, *sEvts, this, lastPointNo, true);
+          if (doWinding)
+          {
+            SweepTree *myLeft =
+              static_cast < SweepTree * >(node->elem[LEFT]);
+            if (myLeft)
+            {
+              pData[lastPointNo].askForWindingS = myLeft->src;
+              pData[lastPointNo].askForWindingB = myLeft->bord;
+            }
+            else
+            {
+              pData[lastPointNo].askForWindingB = -1;
+            }
+            doWinding = false;
+          }
+          TesteIntersection (node, RIGHT, false);
+          TesteIntersection (node, LEFT, false);
+          insertionNode = node;
+
+          ptSh->swsData[dnNo].curPoint = lastPointNo;
+          AddChgt (lastPointNo, lastChgtPt, shapeHead, edgeHead, EDGE_INSERTED,
+              node->src, node->bord, nullptr, -1);
+        }
+      }
+
+      if (nbDn > 1)
+      {			// si nbDn == 1 , alors dnNo a deja ete traite
+        cb = ptSh->getPoint(nPt).incidentEdge[FIRST];
+        while (cb >= 0 && cb < ptSh->numberOfEdges())
+        {
+          if ((ptSh->getEdge(cb).st > ptSh->getEdge(cb).en
+                && nPt == ptSh->getEdge(cb).en)
+              || (ptSh->getEdge(cb).st < ptSh->getEdge(cb).en
+                && nPt == ptSh->getEdge(cb).st))
+          {
+            if (cb != dnNo)
+            {
+              SweepTree *node = sTree->add(ptSh, cb, 1, lastPointNo, this);
+              ptSh->swsData[cb].misc = node;
+              node->InsertAt (*sTree, *sEvts, this, insertionNode,
+                  nPt, true);
+              if (doWinding)
+              {
+                SweepTree *myLeft =
+                  static_cast < SweepTree * >(node->elem[LEFT]);
+                if (myLeft)
+                {
+                  pData[lastPointNo].askForWindingS =
+                    myLeft->src;
+                  pData[lastPointNo].askForWindingB =
+                    myLeft->bord;
+                }
+                else
+                {
+                  pData[lastPointNo].askForWindingB = -1;
+                }
+                doWinding = false;
+              }
+              TesteIntersection (node, RIGHT, false);
+              TesteIntersection (node, LEFT, false);
+
+              ptSh->swsData[cb].curPoint = lastPointNo;
+              AddChgt (lastPointNo, lastChgtPt, shapeHead,
+                  edgeHead, EDGE_INSERTED, node->src, node->bord, nullptr,
+                  -1);
+            }
+          }
+          cb = ptSh->NextAt (nPt, cb);
+        }
+      }
+    }
+  }
   {
     int lastI = AssemblePoints (lastChgtPt, numberOfPoints());
 
@@ -579,60 +584,60 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
     Shape *curSh = shapeHead;
     int curBo = edgeHead;
     while (curSh)
-      {
-	curSh->swsData[curBo].leftRnd =
-	  pData[curSh->swsData[curBo].leftRnd].newInd;
-	curSh->swsData[curBo].rightRnd =
-	  pData[curSh->swsData[curBo].rightRnd].newInd;
+    {
+      curSh->swsData[curBo].leftRnd =
+        pData[curSh->swsData[curBo].leftRnd].newInd;
+      curSh->swsData[curBo].rightRnd =
+        pData[curSh->swsData[curBo].rightRnd].newInd;
 
-	Shape *neSh = curSh->swsData[curBo].nextSh;
-	curBo = curSh->swsData[curBo].nextBo;
-	curSh = neSh;
-      }
+      Shape *neSh = curSh->swsData[curBo].nextSh;
+      curBo = curSh->swsData[curBo].nextBo;
+      curSh = neSh;
+    }
 
     for (auto & chgt : chgts)
+    {
+      chgt.ptNo = pData[chgt.ptNo].newInd;
+      if (chgt.type == 0)
       {
-	chgt.ptNo = pData[chgt.ptNo].newInd;
-	if (chgt.type == 0)
-	  {
-	    if (chgt.src->getEdge(chgt.bord).st <
-		chgt.src->getEdge(chgt.bord).en)
-	      {
-		chgt.src->swsData[chgt.bord].stPt = chgt.ptNo;
-	      }
-	    else
-	      {
-		chgt.src->swsData[chgt.bord].enPt = chgt.ptNo;
-	      }
-	  }
-	else if (chgt.type == 1)
-	  {
-	    if (chgt.src->getEdge(chgt.bord).st >
-		chgt.src->getEdge(chgt.bord).en)
-	      {
-		chgt.src->swsData[chgt.bord].stPt = chgt.ptNo;
-	      }
-	    else
-	      {
-		chgt.src->swsData[chgt.bord].enPt = chgt.ptNo;
-	      }
-	  }
+        if (chgt.src->getEdge(chgt.bord).st <
+            chgt.src->getEdge(chgt.bord).en)
+        {
+          chgt.src->swsData[chgt.bord].stPt = chgt.ptNo;
+        }
+        else
+        {
+          chgt.src->swsData[chgt.bord].enPt = chgt.ptNo;
+        }
       }
+      else if (chgt.type == 1)
+      {
+        if (chgt.src->getEdge(chgt.bord).st >
+            chgt.src->getEdge(chgt.bord).en)
+        {
+          chgt.src->swsData[chgt.bord].stPt = chgt.ptNo;
+        }
+        else
+        {
+          chgt.src->swsData[chgt.bord].enPt = chgt.ptNo;
+        }
+      }
+    }
 
     CheckAdjacencies (lastI, lastChgtPt, shapeHead, edgeHead);
 
     CheckEdges (lastI, lastChgtPt, a, nullptr, bool_op_union);
 
     for (int i = lastChgtPt; i < lastI; i++)
+    {
+      if (pData[i].askForWindingS)
       {
-	if (pData[i].askForWindingS)
-	  {
-	    Shape *windS = pData[i].askForWindingS;
-	    int windB = pData[i].askForWindingB;
-	    pData[i].nextLinkedPoint = windS->swsData[windB].firstLinkedPoint;
-	    windS->swsData[windB].firstLinkedPoint = i;
-	  }
+        Shape *windS = pData[i].askForWindingS;
+        int windB = pData[i].askForWindingB;
+        pData[i].nextLinkedPoint = windS->swsData[windB].firstLinkedPoint;
+        windS->swsData[windB].firstLinkedPoint = i;
       }
+    }
 
     _pts.resize(lastI);
 
@@ -640,27 +645,27 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
     shapeHead = nullptr;
   }
 
-    chgts.clear();
+  chgts.clear();
 
-//  Plot (98.0, 112.0, 8.0, 400.0, 400.0, true, true, true, true);
-//      Plot(200.0,200.0,2.0,400.0,400.0,true,true,true,true);
+  //  Plot (98.0, 112.0, 8.0, 400.0, 400.0, true, true, true, true);
+  //      Plot(200.0,200.0,2.0,400.0,400.0,true,true,true,true);
 
   //      AssemblePoints(a);
 
-//      GetAdjacencies(a);
+  //      GetAdjacencies(a);
 
-//      MakeAretes(a);
-    clearIncidenceData();
+  //      MakeAretes(a);
+  clearIncidenceData();
 
   AssembleAretes (directed);
 
-//  Plot (98.0, 112.0, 8.0, 400.0, 400.0, true, true, true, true);
+  //  Plot (98.0, 112.0, 8.0, 400.0, 400.0, true, true, true, true);
 
   for (int i = 0; i < numberOfPoints(); i++)
-    {
-      _pts[i].oldDegree = getPoint(i).totalDegree();
-    }
-//      Validate();
+  {
+    _pts[i].oldDegree = getPoint(i).totalDegree();
+  }
+  //      Validate();
 
   _need_edges_sorting = true;
   if ( directed == fill_justDont ) {
@@ -668,55 +673,55 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
   } else {
     GetWindings (a);
   }
-//  Plot (98.0, 112.0, 8.0, 400.0, 400.0, true, true, true, true);
-//   if ( doDebug ) {
-//   a->CalcBBox();
-//     a->Plot(a->leftX,a->topY,32.0,0.0,0.0,true,true,true,true,"orig.svg");
-//     Plot(a->leftX,a->topY,32.0,0.0,0.0,true,true,true,true,"winded.svg");
-//   }
+  //  Plot (98.0, 112.0, 8.0, 400.0, 400.0, true, true, true, true);
+  //   if ( doDebug ) {
+  //   a->CalcBBox();
+  //     a->Plot(a->leftX,a->topY,32.0,0.0,0.0,true,true,true,true,"orig.svg");
+  //     Plot(a->leftX,a->topY,32.0,0.0,0.0,true,true,true,true,"winded.svg");
+  //   }
   if (directed == fill_positive)
   {
     if (invert)
     {
       for (int i = 0; i < numberOfEdges(); i++)
-	    {
-	      if (swdData[i].leW < 0 && swdData[i].riW >= 0)
+      {
+        if (swdData[i].leW < 0 && swdData[i].riW >= 0)
         {
           eData[i].weight = 1;
         }
-	      else if (swdData[i].leW >= 0 && swdData[i].riW < 0)
+        else if (swdData[i].leW >= 0 && swdData[i].riW < 0)
         {
           Inverse (i);
           eData[i].weight = 1;
         }
-	      else
+        else
         {
           eData[i].weight = 0;
           SubEdge (i);
           i--;
         }
-	    }
+      }
     }
     else
     {
       for (int i = 0; i < numberOfEdges(); i++)
-	    {
-	      if (swdData[i].leW > 0 && swdData[i].riW <= 0)
+      {
+        if (swdData[i].leW > 0 && swdData[i].riW <= 0)
         {
           eData[i].weight = 1;
         }
-	      else if (swdData[i].leW <= 0 && swdData[i].riW > 0)
+        else if (swdData[i].leW <= 0 && swdData[i].riW > 0)
         {
           Inverse (i);
           eData[i].weight = 1;
         }
-	      else
+        else
         {
-           eData[i].weight = 0;
+          eData[i].weight = 0;
           SubEdge (i);
           i--;
         }
-	    }
+      }
     }
   }
   else if (directed == fill_nonZero)
@@ -724,62 +729,62 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
     if (invert)
     {
       for (int i = 0; i < numberOfEdges(); i++)
-	    {
-	      if (swdData[i].leW < 0 && swdData[i].riW == 0)
+      {
+        if (swdData[i].leW < 0 && swdData[i].riW == 0)
         {
           eData[i].weight = 1;
         }
-	      else if (swdData[i].leW > 0 && swdData[i].riW == 0)
+        else if (swdData[i].leW > 0 && swdData[i].riW == 0)
         {
           eData[i].weight = 1;
         }
-	      else if (swdData[i].leW == 0 && swdData[i].riW < 0)
-        {
-          Inverse (i);
-          eData[i].weight = 1;
-        }
-	      else if (swdData[i].leW == 0 && swdData[i].riW > 0)
+        else if (swdData[i].leW == 0 && swdData[i].riW < 0)
         {
           Inverse (i);
           eData[i].weight = 1;
         }
-	      else
+        else if (swdData[i].leW == 0 && swdData[i].riW > 0)
+        {
+          Inverse (i);
+          eData[i].weight = 1;
+        }
+        else
         {
           eData[i].weight = 0;
           SubEdge (i);
           i--;
         }
-	    }
+      }
     }
     else
     {
       for (int i = 0; i < numberOfEdges(); i++)
-	    {
-	      if (swdData[i].leW > 0 && swdData[i].riW == 0)
+      {
+        if (swdData[i].leW > 0 && swdData[i].riW == 0)
         {
           eData[i].weight = 1;
         }
-	      else if (swdData[i].leW < 0 && swdData[i].riW == 0)
+        else if (swdData[i].leW < 0 && swdData[i].riW == 0)
         {
           eData[i].weight = 1;
         }
-	      else if (swdData[i].leW == 0 && swdData[i].riW > 0)
-        {
-          Inverse (i);
-          eData[i].weight = 1;
-        }
-	      else if (swdData[i].leW == 0 && swdData[i].riW < 0)
+        else if (swdData[i].leW == 0 && swdData[i].riW > 0)
         {
           Inverse (i);
           eData[i].weight = 1;
         }
-	      else
+        else if (swdData[i].leW == 0 && swdData[i].riW < 0)
+        {
+          Inverse (i);
+          eData[i].weight = 1;
+        }
+        else
         {
           eData[i].weight = 0;
           SubEdge (i);
           i--;
         }
-	    }
+      }
     }
   }
   else if (directed == fill_oddEven)
@@ -793,20 +798,20 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
       if (swdData[i].riW < 0)
         swdData[i].riW = -swdData[i].riW;
       if (swdData[i].leW > 0 && swdData[i].riW <= 0)
-	    {
-	      eData[i].weight = 1;
-	    }
+      {
+        eData[i].weight = 1;
+      }
       else if (swdData[i].leW <= 0 && swdData[i].riW > 0)
-	    {
-	      Inverse (i);
-	      eData[i].weight = 1;
-	    }
+      {
+        Inverse (i);
+        eData[i].weight = 1;
+      }
       else
-	    {
-	      eData[i].weight = 0;
-	      SubEdge (i);
-	      i--;
-	    }
+      {
+        eData[i].weight = 0;
+        SubEdge (i);
+        i--;
+      }
     }
   } else if ( directed == fill_justDont ) {
     for (int i=0;i<numberOfEdges();i++) {
@@ -814,12 +819,12 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
         SubEdge(i);
         i--;
       } else {
-	      eData[i].weight = 0;
+        eData[i].weight = 0;
       }
     }
   }
-  
-//      Plot(200.0,200.0,2.0,400.0,400.0,true,true,true,true);
+
+  //      Plot(200.0,200.0,2.0,400.0,400.0,true,true,true,true);
 
   delete sTree;
   sTree = nullptr;

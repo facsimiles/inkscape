@@ -54,22 +54,36 @@ enum
 class BitLigne;
 class AlphaLigne;
 
+/**
+ * A class to store/manipulate directed graphs.
+ *
+ * This class is at the heart of everything we do in Livarot. When you first populate a Shape by calling
+ * Path::Fill, it makes a directed graph of the type shape_graph. This one is exactly identical to the original
+ * polyline except that it's a graph. Later, you call Shape::ConvertToShape to create another directed graph
+ * from this one that is totally intersection free. All the intersections would have been calculated, edges broken
+ * up at those points, all edges flipped such that inside is to their left. You ofcourse need a fill rule to do this.
+ */
 class Shape
 {
 public:
 
+    /**
+     * A structure to store back data for an edge.
+     */
     struct back_data
     {
-        int pathID, pieceID;
-        double tSt, tEn;
+        int pathID;  /*!< The pathID. This is a unique number given by the user to the Path::Fill function. */
+        int pieceID; /*!< The path description to which this edge belongs to in the original Path object. */
+        double tSt;  /*!< Time value in that path description for this edge's start point. */
+        double tEn;  /*!< Time value in that path description for this edge's end point. */
     };
-    
+
     struct voronoi_point
     {                                // info for points treated as points of a voronoi diagram (obtained by MakeShape())
         double value;                // distance to source
         int winding;                // winding relatively to source
     };
-    
+
     struct voronoi_edge
     {                                // info for edges, treated as approximation of edges of the voronoi diagram
         int leF, riF;                // left and right site
@@ -86,19 +100,25 @@ public:
         int    next,prev; // dbl linkage
     };
 
+    /**
+     * Enum describing all the events that can happen to a sweepline.
+     */
     enum sTreeChangeType
     {
-        EDGE_INSERTED = 0,
-        EDGE_REMOVED = 1,
-        INTERSECTION = 2
+        EDGE_INSERTED = 0,  /*!< A new edge got added. */
+        EDGE_REMOVED = 1,   /*!< An edge got removed. */
+        INTERSECTION = 2    /*!< An intersection got detected. */
     };
-  
+
+    /**
+     * An structure that represents a change that took place in the sweepline.
+     */
     struct sTreeChange
     {
-        sTreeChangeType type;                // type of modification to the sweepline:
-        int ptNo;                        // point at which the modification takes place
+        sTreeChangeType type;       // type of modification to the sweepline:
+        int ptNo;                   // point at which the modification takes place
 
-        Shape *src;                        // left edge (or unique edge if not an intersection) involved in the event
+        Shape *src;                 // left edge (or unique edge if not an intersection) involved in the event
         int bord;
         Shape *osrc;                // right edge (if intersection)
         int obord;
@@ -107,14 +127,14 @@ public:
         Shape *rSrc;                // edge directly on the right
         int rBrd;
     };
-    
+
     struct incidenceData
     {
         int nextInc;                // next incidence in the linked list
         int pt;                        // point incident to the edge (there is one list per edge)
         double theta;                // coordinate of the incidence on the edge
     };
-    
+
     Shape();
     virtual ~Shape();
 
@@ -126,6 +146,16 @@ public:
     // insertion/deletion/movement of elements in the graph
     void Copy(Shape *a);
     // -reset the graph, and ensure there's room for n points and m edges
+
+    /**
+     * Clear all data.
+     *
+     * Set shape type to shape_polygon. Clear all points and edges. Make room for
+     * enough points and edges.
+     *
+     * @param n Number of points to make space for.
+     * @param m Number of edges to make space for.
+     */
     void Reset(int n = 0, int m = 0);
     //  -points:
     int AddPoint(const Geom::Point x);        // as the function name says
@@ -135,17 +165,24 @@ public:
     // so don't trust point indices if you use SubPoint
     void SwapPoints(int a, int b);        // swaps 2 points at indices a and b
     void SwapPoints(int a, int b, int c);        // swaps 3 points: c <- a <- b <- c
+
+
+    /**
+     * Sort the points (all points) only if needed. (checked by flag)
+     *
+     * See the index version of SortPoints since this is exactly the same.
+     */
     void SortPoints();        // sorts the points if needed (checks the need_points_sorting flag)
 
     //  -edges:
-    // add an edge between points of indices st and en    
+    // add an edge between points of indices st and en
     int AddEdge(int st, int en);
     // return the edge index in the array
-    
-    // add an edge between points of indices st and en    
+
+    // add an edge between points of indices st and en
     int AddEdge(int st, int en, int leF, int riF);
     // return the edge index in the array
-    
+
     // version for the voronoi (with faces IDs)
     void SubEdge(int e);                // removes the edge at index e (same remarks as for SubPoint)
     void SwapEdges(int a, int b);        // swaps 2 edges
@@ -153,8 +190,8 @@ public:
     void SortEdges();        // sort the edges if needed (checks the need_edges_sorting falg)
 
     // primitives for topological manipulations
-  
-    // endpoint of edge at index b that is different from the point p      
+
+    // endpoint of edge at index b that is different from the point p
     inline int Other(int p, int b) const
     {
         if (getEdge(b).st == p) {
@@ -163,7 +200,7 @@ public:
         return getEdge(b).st;
     }
 
-    // next edge (after edge b) in the double-linked list at point p  
+    // next edge (after edge b) in the double-linked list at point p
     inline int NextAt(int p, int b) const
     {
         if (p == getEdge(b).st) {
@@ -189,7 +226,7 @@ public:
         return -1;
     }
 
-    // same as NextAt, but the list is considered circular  
+    // same as NextAt, but the list is considered circular
     inline int CycleNextAt(int p, int b) const
     {
         if (p == getEdge(b).st) {
@@ -208,7 +245,7 @@ public:
         return -1;
     }
 
-    // same as PrevAt, but the list is considered circular  
+    // same as PrevAt, but the list is considered circular
     inline int CyclePrevAt(int p, int b) const
     {
         if (p == getEdge(b).st) {
@@ -225,17 +262,17 @@ public:
 
         return -1;
     }
-    
+
     void ConnectStart(int p, int b);        // set the point p as the start of edge b
     void ConnectEnd(int p, int b);        // set the point p as the end of edge b
     void DisconnectStart(int b);        // disconnect edge b from its start point
     void DisconnectEnd(int b);        // disconnect edge b from its end point
 
-    // reverses edge b (start <-> end)    
+    // reverses edge b (start <-> end)
     void Inverse(int b);
     // calc bounding box and sets leftX,rightX,topY and bottomY to their values
     void CalcBBox(bool strict_degree = false);
-    
+
     // debug function: plots the graph (mac only)
     void Plot(double ix, double iy, double ir, double mx, double my, bool doPoint,
               bool edgesNo, bool pointNo, bool doDir, char *fileName);
@@ -243,20 +280,33 @@ public:
     // transforms a polygon in a "forme" structure, ie a set of contours, which can be holes (see ShapeUtils.h)
     // return NULL in case it's not possible
     void ConvertToForme(Path *dest);
-    
-    // version to use when conversion was done with ConvertWithBackData(): will attempt to merge segment belonging to 
+
+    // version to use when conversion was done with ConvertWithBackData(): will attempt to merge segment belonging to
     // the same curve
     // nota: apparently the function doesn't like very small segments of arc
     void ConvertToForme(Path *dest, int nbP, Path **orig, bool splitWhenForced = false);
     // version trying to recover the nesting of subpaths (ie: holes)
     void ConvertToFormeNested(Path *dest, int nbP, Path **orig, int wildPath, int &nbNest,
                               int *&nesting, int *&contStart, bool splitWhenForced = false);
-  
+
     // sweeping a digraph to produce a intersection-free polygon
     // return 0 if everything is ok and a return code otherwise (see LivarotDefs.h)
     // the input is the Shape "a"
-    // directed=true <=> non-zero fill rule    
+    // directed=true <=> non-zero fill rule
+
+    /**
+     * Using a given fill rule, find all intersections in the shape given, create a new
+     * intersection free shape in this.
+     *
+     * @param a The pointer to the shape that we want to process.
+     * @param directed The fill rule.
+     * @param invert TODO: Be sure about what this does
+     *
+     * @return 0 if everything went nice, error code otherwise. (see LivarotDefs.h)
+     */
     int ConvertToShape(Shape *a, FillRule directed = fill_nonZero, bool invert = false);
+
+
     // directed=false <=> even-odd fill rule
     // invert=true: make as if you inverted all edges in the source
     int Reoriente(Shape *a);        // subcase of ConvertToShape: the input a is already intersection-free
@@ -272,13 +322,13 @@ public:
     {
         return ldexp(rint(ldexp(x, 9)), -9);
     }
-    
+
     // 2 miscannellous variations on it, to scale to and back the rounding grid
     inline static double HalfRound(double x)
     {
         return ldexp(x, -9);
     }
-    
+
     inline static double IHalfRound(double x)
     {
         return ldexp(x, 9);
@@ -295,16 +345,16 @@ public:
     int MakeOffset(Shape *of, double dec, JoinType join, double miter, bool do_profile=false, double cx = 0, double cy = 0, double radius = 0, Geom::Affine *i2doc = nullptr);
 
     int MakeTweak (int mode, Shape *a, double dec, JoinType join, double miter, bool do_profile, Geom::Point c, Geom::Point vector, double radius, Geom::Affine *i2doc);
-  
+
     int PtWinding(const Geom::Point px) const; // plus rapide
     int Winding(const Geom::Point px) const;
-  
+
     // rasterization
     void BeginRaster(float &pos, int &curPt);
     void EndRaster();
     void BeginQuickRaster(float &pos, int &curPt);
     void EndQuickRaster();
-  
+
     void Scan(float &pos, int &curP, float to, float step);
     void QuickScan(float &pos, int &curP, float to, bool doSort, float step);
     void DirectScan(float &pos, int &curP, float to, float step);
@@ -321,7 +371,7 @@ public:
     void Transform(Geom::Affine const &tr)
         {for(auto & _pt : _pts) _pt.x*=tr;}
 
-    std::vector<back_data> ebData;
+    std::vector<back_data> ebData;        /*!< Stores the back data for each edge. */
     std::vector<voronoi_point> vorpData;
     std::vector<voronoi_edge> voreData;
 
@@ -330,55 +380,132 @@ public:
     int lastQRas;
     quick_raster_data *qrsData;
 
-    std::vector<sTreeChange> chgts;
+    std::vector<sTreeChange> chgts;    /*!< An array to store all the changes that happen to a sweepline within a y value. Lots of comments on this in function body. */
     int nbInc;
     int maxInc;
 
     incidenceData *iData;
     // these ones are allocated at the beginning of each sweep and freed at the end of the sweep
-    SweepTreeList *sTree;
-    SweepEventQueue *sEvts;
-    
+    SweepTreeList *sTree;     /*!< Pointer to store the sweepline tree. To our use at least, it's a linear list of the edges that intersect with sweepline. */
+    SweepEventQueue *sEvts;   /*!< Intersection events that we have detected that are to come. Sorted so closest one gets popped. */
+
     // bounding box stuff
     double leftX, topY, rightX, bottomY;
 
-    // topological information: who links who?
+    /**
+     * A point or vertex in the directed graph.
+     *
+     * Each point keeps track of the first edge that got connected to it and the last edge
+     * that got connected to it. By connecting we mean both an edge starting at the point or
+     * an edge ending at the point. This is needed for maintaining a linked list at each point.
+     *
+     * At each point, we maintain a linked list of edges that connect to that edge. incidentEdge
+     * keeps the first and last edge of this double-linked list. The rest of the edge pointers
+     * are stored in dg_arete.
+     */
     struct dg_point
     {
-        Geom::Point x;                // position
-        int dI, dO;                // indegree and outdegree
-        int incidentEdge[2];    // first and last incident edge
-        int oldDegree;
+        Geom::Point x;          /*!< The coordinates of the point. */
+        int dI;                 /*!< Number of edges ending on this point. */
+        int dO;                 /*!< Number of edges starting from this point. */
+        int incidentEdge[2];    /*!< First (index 0) and last edge (index 1) that are attached to this point. */
+        int oldDegree;          /*!< TODO: Not exactly sure why this is needed. Probably somewhere the degree changes and we retain the old degree for some reason. */
 
         int totalDegree() const { return dI + dO; }
     };
-    
+
+    /**
+     * An edge in the directed graph.
+     *
+     * nextS tells the next edge in the double-linked list of the start point
+     * prevS tells the prev egde in the double-linked list of the start point
+     * nextE tells the next edge in the double-linked list of the end point
+     * prevE tells the next edge in the double-linked list of the end point
+     */
     struct dg_arete
     {
-        Geom::Point dx;                // edge vector
-        int st, en;                // start and end points of the edge
-        int nextS, prevS;        // next and previous edge in the double-linked list at the start point
-        int nextE, prevE;        // next and previous edge in the double-linked list at the end point
+        Geom::Point dx;          /*!< edge vector (vector from start point to end point). */
+        int st, en;              /*!< start and end points of the edge. */
+        int nextS, prevS;        /*!< next and previous edge in the double-linked list at the start point. */
+        int nextE, prevE;        /*!< next and previous edge in the double-linked list at the end point. */
     };
 
     // lists of the nodes and edges
     int maxPt; // [FIXME: remove this]
     int maxAr; // [FIXME: remove this]
-    
+
     // flags
     int type;
-    
+
+    /**
+     * Returns number of points.
+     *
+     * @return Number of points.
+     */
     inline int numberOfPoints() const { return _pts.size(); }
+
+    /**
+     * Do we have points?
+     *
+     * @return True if we do, false otherwise.
+     */
     inline bool hasPoints() const { return (_pts.empty() == false); }
+
+    /**
+     * Returns number of edges.
+     *
+     * @return Number of edges.
+     */
     inline int numberOfEdges() const { return _aretes.size(); }
+
+    /**
+     * Do we have edges?
+     *
+     * @return True if we do, false otherwise.
+     */
     inline bool hasEdges() const { return (_aretes.empty() == false); }
 
+    /**
+     * Do the points need sorting?
+     *
+     * @return True if we do, false otherwise.
+     */
     inline void needPointsSorting() { _need_points_sorting = true; }
+
+    /**
+     * Do the edges need sorting?
+     *
+     * @return True if we do, false otherwise.
+     */
     inline void needEdgesSorting()  { _need_edges_sorting = true; }
-    
+
+    /**
+     * Do we have back data?
+     *
+     * @return True if we do, false otherwise.
+     */
     inline bool hasBackData() const { return _has_back_data; }
-    
+
+    /**
+     * Get a point.
+     *
+     * Be careful about the index.
+     *
+     * @param n Index of the point.
+     *
+     * @return Reference to the point.
+     */
     inline dg_point const &getPoint(int n) const { return _pts[n]; }
+
+    /**
+     * Get an edge.
+     *
+     * Be careful about the index.
+     *
+     * @param n Index of the edge.
+     *
+     * @return Reference to the edge.
+     */
     inline dg_arete const &getEdge(int n) const { return _aretes[n]; }
 
 private:
@@ -386,18 +513,23 @@ private:
     friend class SweepTree;
     friend class SweepEvent;
     friend class SweepEventQueue;
-  
-    // temporary data for the various algorithms
+
+    /**
+     * Extra data that some algorithms use.
+     */
     struct edge_data
     {
-        int weight;                        // weight of the edge (to handle multiple edges)
-        Geom::Point rdx;                // rounded edge vector
-        double length, sqlength, ilength, isqlength;        // length^2, length, 1/length^2, 1/length
-        double siEd, coEd;                // siEd=abs(rdy/length) and coEd=rdx/length
+        int weight;            /*!< Weight of the edge. If weight is 2, it means there are two identical edges on top of each other. */
+        Geom::Point rdx;       /*!< Rounded edge vector */
+        double length;         /*!< length of edge vector squared. */  // <-- epic naming here folks
+        double sqlength;       /*!< length of edge vector */           // <-- epic naming here too
+        double ilength;        /*!< Inverse of length squared */
+        double isqlength;      /*!< Inverse of length */
+        double siEd, coEd;     /*!< siEd=abs(rdy/length) and coEd=rdx/length */
         edge_data() : weight(0), length(0.0), sqlength(0.0), ilength(0.0), isqlength(0.0), siEd(0.0), coEd(0.0) {}
         // used to determine the "most horizontal" edge between 2 edges
     };
-    
+
     struct sweep_src_data
     {
         void *misc;                        // pointer to the SweepTree* in the sweepline
@@ -413,7 +545,7 @@ private:
         int curPoint, doneTo;
         double curT;
     };
-    
+
     struct sweep_dest_data
     {
         void *misc;                        // used to check if an edge has already been seen during the depth-first search
@@ -421,7 +553,7 @@ private:
         int leW, riW;                // left and right winding numbers for this edge
         int ind;                        // order of the edges during the depth-first search
     };
-    
+
     struct raster_data
     {
         SweepTree *misc;                // pointer to the associated SweepTree* in the sweepline
@@ -433,7 +565,10 @@ private:
         double dxdy, dydx;                // horizontal change per unit vertical move of the intersection with the sweepline
         int guess;
     };
-    
+
+    /**
+     * Extra data for points used at various ocassions.
+     */
     struct point_data
     {
         int oldInd, newInd;                // back and forth indices used when sorting the points, to know where they have
@@ -443,12 +578,15 @@ private:
         int nextLinkedPoint;        // not used
         Shape *askForWindingS;
         int askForWindingB;
-        Geom::Point  rx;                // rounded coordinates of the point
+        Geom::Point  rx;          /*!< rounded coordinates of the point */
     };
-    
-    
+
+
+    /**
+     * A structure to help with sorting edges around a point.
+     */
     struct edge_list
-    {                                // temporary array of edges for easier sorting
+    {
         int no;
         bool starting;
         Geom::Point x;
@@ -461,25 +599,93 @@ private:
     void _countUpDown(int P, int *numberUp, int *numberDown, int *upEdge, int *downEdge) const;
     void _countUpDownTotalDegree2(int P, int *numberUp, int *numberDown, int *upEdge, int *downEdge) const;
     void _updateIntersection(int e, int p);
-  
+
     // activation/deactivation of the temporary data arrays
+
+    /**
+     * Initialize the point data cache.
+     *
+     * @param nVal If set to true, it sets some flags and then resizes pData to maxPt. Does nothing if false.
+     */
     void MakePointData(bool nVal);
+
+    /**
+     * Initialize the edge data cache.
+     *
+     * @param nVal If set to true, it sets some flags and then resizes eData to maxAr. If set to false, it clears all edge data.
+     */
     void MakeEdgeData(bool nVal);
+
+    /**
+     * Initialize the sweep source data cache.
+     *
+     * @param nVal If set to true, it sets some flags and then resizes swsData to maxAr. If set to false, it clears all swsData.
+     */
     void MakeSweepSrcData(bool nVal);
+
+    /**
+     * Initialize the sweep destination data cache.
+     *
+     * @param nVal If set to true, it sets some flags and then resizes swdData to maxAr. If set to false, it clears all swdData.
+     */
     void MakeSweepDestData(bool nVal);
+
     void MakeRasterData(bool nVal);
     void MakeQuickRasterData(bool nVal);
 
+    /**
+     * Sort the points
+     *
+     * Nothing fancy here. Please note, sorting really means just making sure the
+     * points exist in the array in a sorted manner. All we do here is just change
+     * the point's position in the array according to their location in physical space
+     * and make sure all edges still point to the original point they were pointing to. (:-D)
+     *
+     * Sorting condition: Given two points LEFT and RIGHT (where LEFT's index < RIGHT's index)
+     * we swap only if LEFT.y > RIGHT.y || (LEFT.y == RIGHT.y && LEFT.x > RIGHT.x)
+     *
+     * After sorting, not only are the points sorted in _pts, but also in pData. So both arrays
+     * will have same index for the same point.
+     *
+     * Sorting algorithm looks like quick sort.
+     *
+     * @param s The start index.
+     * @param e The end index.
+     */
     void SortPoints(int s, int e);
+
+    /**
+     * Sort the points (take oldInd into account)
+     *
+     * Same as SortPoints except the sorting condition.
+     *
+     * Sorting condition: Given two points LEFT and RIGHT (where LEFT's index < RIGHT's index)
+     * we swap only if LEFT.y > RIGHT.y || (LEFT.y == RIGHT.y && LEFT.x > RIGHT.x) ||
+     * (LEFT.y == RIGHT.y && LEFT.x == RIGHT.x && LEFT.oldInd > RIGHT.oldInd)
+     *
+     * After sorting, not only are the points sorted in _pts, but also in pData. So both arrays
+     * will have same index for the same point.
+     *
+     * @param s The start index.
+     * @param e The end index.
+     */
     void SortPointsByOldInd(int s, int e);
 
     // fonctions annexes pour ConvertToShape et Booleen
+
+    /**
+     * Prepare point data cache, edge data cache and sweep source cache.
+     */
     void ResetSweep();        // allocates sweep structures
+
+    /**
+     * Clear point data cache, edge data cache and sweep source cache.
+     */
     void CleanupSweep();        // deallocates them
 
-    // edge sorting function    
+    // edge sorting function
     void SortEdgesList(edge_list *edges, int s, int e);
-  
+
     void TesteIntersection(SweepTree *t, Side s, bool onlyDiff);        // test if there is an intersection
     bool TesteIntersection(SweepTree *iL, SweepTree *iR, Geom::Point &atx, double &atL, double &atR, bool onlyDiff);
     bool TesteIntersection(Shape *iL, Shape *iR, int ilb, int irb,
@@ -504,9 +710,23 @@ private:
     void Validate();
 
     int Winding(int nPt) const;
+
+    /**
+     * Sort all points by their rounded coordinates.
+     */
     void SortPointsRounded();
+
+    /**
+     * Sort points by their rounded coordinates.
+     *
+     * Exactly the same as SortPoints but instead of using the actual point coordinates
+     * rounded coordinates are used.
+     *
+     * @param s The start index.
+     * @param e The end index.
+     */
     void SortPointsRounded(int s, int e);
-    
+
     void CreateEdge(int no, float to, float step);
     void AvanceEdge(int no, float to, bool exact, float step);
     void DestroyEdge(int no, float to, FloatLigne *line);
@@ -515,7 +735,7 @@ private:
     void AvanceEdge(int no, float to, BitLigne *line, bool exact, float step);
     void DestroyEdge(int no, AlphaLigne *line);
     void AvanceEdge(int no, float to, AlphaLigne *line, bool exact, float step);
-  
+
     void AddContour(Path * dest, int nbP, Path **orig, int startBord,
                    int curBord, bool splitWhenForced);
     int ReFormeLineTo(int bord, int curBord, Path *dest, Path *orig);
@@ -546,17 +766,17 @@ private:
     bool _has_voronoi_data;
     bool _bbox_up_to_date;      ///< the leftX/rightX/topY/bottomY are up to date
 
-    std::vector<dg_point> _pts;
-    std::vector<dg_arete> _aretes;
-  
+    std::vector<dg_point> _pts;    /*!< The array of points */
+    std::vector<dg_arete> _aretes; /*!< The array of edges */
+
     // the arrays of temporary data
     // these ones are dynamically kept at a length of maxPt or maxAr
-    std::vector<edge_data> eData;
+    std::vector<edge_data> eData;           /*!< Extra edge data */
     std::vector<sweep_src_data> swsData;
     std::vector<sweep_dest_data> swdData;
     std::vector<raster_data> swrData;
-    std::vector<point_data> pData;
-    
+    std::vector<point_data> pData;          /*!< Extra point data */
+
     static int CmpQRs(const quick_raster_data &p1, const quick_raster_data &p2) {
         if ( fabs(p1.x - p2.x) < 0.00001 ) {
             return 0;
@@ -565,10 +785,19 @@ private:
         return ( ( p1.x < p2.x ) ? -1 : 1 );
     };
 
-    // edge direction comparison function    
+    // edge direction comparison function
     static int CmpToVert(const Geom::Point ax, const Geom::Point bx, bool as, bool bs);
 };
 
+/**
+ * Is the graph Euleraian?
+ *
+ * A directed graph is Eulerian if every vertex has equal indegree and outdegree.
+ * http://mathworld.wolfram.com/EulerianGraph.html
+ *
+ * @param s Pointer to the shape object.
+ * @return True if shape is Eulerian.
+ */
 bool directedEulerian(Shape const *s);
 double distance(Shape const *s, Geom::Point const &p);
 bool distanceLessThanOrEqual(Shape const *s, Geom::Point const &p, double const max_l2);

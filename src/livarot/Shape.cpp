@@ -74,6 +74,7 @@ void Shape::Affiche()
  * Allocates space for point cache or clears the cache
  \param  nVal   Allocate a cache (true) or clear it (false)
  */
+
 void
 Shape::MakePointData (bool nVal)
 {
@@ -286,12 +287,13 @@ Shape::Copy (Shape * who)
 /**
  *  Clear points and edges and prepare internal data using new size.
  */
+
 void
 Shape::Reset (int pointCount, int edgeCount)
 {
   _pts.clear();
   _aretes.clear();
-  
+
   type = shape_polygon;
   if (pointCount > maxPt)
     {
