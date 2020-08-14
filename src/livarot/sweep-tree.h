@@ -100,6 +100,49 @@ public:
     /**
      * Find where the new edge needs to go.
      *
+     * Please check out the documentation of the other version of Find that takesa
+     * a point as input, this function is exactly identical except one block of code.
+     *
+     * For that special block of code, see this picture.
+     *
+     * @image html livarot-images/find-point-same.svg
+     *
+     * The rest of the function is the same as the other Find function so you're already
+     * familiar with how it works. The difference is how the y == 0 case handled. When we are
+     * within that block, it's established that the upper endpoint of the new edge is on our edge.
+     * Now we see how the rest of the edge is orientated with respect to our edge so we can decide
+     * where to put it. To do this, we get the edge vector of the new edge and make sure it's top
+     * to bottom or if horizontal left to right. Then we rotate this new edge vector
+     * counter-clockwise by 90 degrees and shift it so that it starts at the same point as
+     * bNorm.ccw() does. The picture takes two cases simultaneously, one with edge red and the
+     * other being edge magenta. Their normals are shown with dotted lines and the shifted versions
+     * are lighter in color.
+     *
+     * Now if sweepSens is false, we take a cross product of new edge's normal with this edge's
+     * normal or cross(nNorm, bNorm). To figure out the direction of a cross product in SVG
+     * coordinates use this variation of right hand rule. Let index finger point to vector A. Let
+     * middle finger point to vector B. If thumb points out of page, cross product is negative, if
+     * it points inside the page, cross product is positive. Now you can see how when sweepSens is
+     * false, the cross product checks out with the orientation of the edges. If the cross product
+     * turns out to be zero, then we take dot product and let that decide. TODO: Which orientation
+     * will do what though?
+     *
+     * What about the other condition of sweepSens? When would sweepSens be true and how would that
+     * be useful. I think it has to do with sweeping in the opposite direction as a comment in the
+     * function already says.
+     *
+     * @image html livarot-images/find-point-same-opp-sweepsense.svg
+     *
+     * In this image, you can see the edges go bottom to top and then, you'd need cross(bNorm,
+     * nNorm) to figure out the correct orientation.
+     *
+     * @param iPt The point whose location we need to find in the sweepline.
+     * @param newOne The new edge that we wanna insert. To which point iPt belongs.
+     * @param insertL The edge that should go on the left (looking from the position where the new
+     * edge should go). This is set by the function.
+     * @param insertR The edge that should go on the right (looking form the position where the new
+     * edge should go). This is set by the function.
+     * @param sweepSens
      *
      */
     int Find(Geom::Point const &iPt, SweepTree *newOne, SweepTree *&insertL,
@@ -130,6 +173,10 @@ public:
      * edge. If it lies on 90 or -90, it means the point lies on the same line as the edge and
      * if it's greater than 90 or smaller than -90, the point lies on the left side of the
      * original edge.
+     *
+     * One thing to note, the blue point here is kinda wrong. You can't have another edge starting
+     * above the already existing edge when sweeping done (that's just not possible). So sorry
+     * about that. But the math checks out anyways. TODO: Maybe fix this to avoid confusion?
      *
      * One important point to see here is that the edge vector will be flipped however it's start
      * point remains the same as the original one, this is not a problem as you can see in the
