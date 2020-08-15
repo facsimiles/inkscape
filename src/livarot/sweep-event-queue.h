@@ -27,17 +27,44 @@ public:
     SweepEventQueue(int s);
     virtual ~SweepEventQueue();
 
+    /**
+     * Number of events currently stored.
+     *
+     * @return The number of elements stored.
+     */
     int size() const { return nbEvt; }
 
     /** Look for the topmost intersection in the heap
+     *
+     * @param iLeft Reference that function will set to the left node of intersection.
+     * @param iRight Reference that function will set to the right node of intersection.
+     * @param oPt Reference that function will set to the point of intersection.
+     * @param itl Reference that function will set to time of intersection on the left edge.
+     * @param itr Reference that function will set to time of intersection on the right edge.
+     *
+     * @return True if an intersection event exists false otherwise.
      */
     bool peek(SweepTree * &iLeft, SweepTree * &iRight, Geom::Point &oPt, double &itl, double &itr);
 
     /** Extract the topmost intersection from the heap
+     *
+     * @param iLeft Reference that function will set to the left node of intersection.
+     * @param iRight Reference that function will set to the right node of intersection.
+     * @param oPt Reference that function will set to the point of intersection.
+     * @param itl Reference that function will set to time of intersection on the left edge.
+     * @param itr Reference that function will set to time of intersection on the right edge.
+     *
+     * @return True if an intersection event exists false otherwise.
      */
     bool extract(SweepTree * &iLeft, SweepTree * &iRight, Geom::Point &oPt, double &itl, double &itr);
 
     /** Add one intersection in the binary heap
+     *
+     * @param iLeft Pointer to left node of intersection.
+     * @param iRight Pointer to right node of intersection.
+     * @param iPt Point of intersection.
+     * @param itl Time of intersection on the left edge.
+     * @param itr Time of intersection on the right edge.
      */
     SweepEvent *add(SweepTree *iLeft, SweepTree *iRight, Geom::Point &iPt, double itl, double itr);
 
