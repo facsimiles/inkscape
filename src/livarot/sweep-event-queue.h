@@ -29,14 +29,35 @@ public:
 
     int size() const { return nbEvt; }
 
-    /// Look for the topmost intersection in the heap
+    /** Look for the topmost intersection in the heap
+     */
     bool peek(SweepTree * &iLeft, SweepTree * &iRight, Geom::Point &oPt, double &itl, double &itr);
-    /// Extract the topmost intersection from the heap
+
+    /** Extract the topmost intersection from the heap
+     */
     bool extract(SweepTree * &iLeft, SweepTree * &iRight, Geom::Point &oPt, double &itl, double &itr);
-    /// Add one intersection in the binary heap
+
+    /** Add one intersection in the binary heap
+     */
     SweepEvent *add(SweepTree *iLeft, SweepTree *iRight, Geom::Point &iPt, double itl, double itr);
 
+    /**
+     * Remove event from the event queue. Make sure to clear the evt pointers from the nodes
+     * involved.
+     *
+     * @param e The event to remove.
+     */
     void remove(SweepEvent *e);
+
+    /**
+     * Relocate the event e to the location to.
+     *
+     * This will place all data of e in `to` and also update any
+     * evt pointers held by the intersection nodes.
+     *
+     * @param e The SweepEvent to relocate.
+     * @param to The index of the location where we want to relocate `e` to.
+     */
     void relocate(SweepEvent *e, int to);
 
 private:
