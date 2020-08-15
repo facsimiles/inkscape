@@ -298,6 +298,13 @@ public:
      * Using a given fill rule, find all intersections in the shape given, create a new
      * intersection free shape in this.
      *
+     * Details of the algorithm:
+     * The function does four things more or less:
+     * 1. Find all self-intersections in the shape.
+     * 2. Reconstruct the directed graph with the intersections now converted to vertices.
+     * 3. Do some processing on edges. Calling AssembleAretes.
+     * 4. Compute winding numbers and accordingly manipulate edges. (Deciding whether to keep, invert or destroy them)
+     *
      * @param a The pointer to the shape that we want to process.
      * @param directed The fill rule.
      * @param invert TODO: Be sure about what this does

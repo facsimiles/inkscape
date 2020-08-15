@@ -142,8 +142,8 @@ public:
      * edge should go). This is set by the function.
      * @param insertR The edge that should go on the right (looking form the position where the new
      * edge should go). This is set by the function.
-     * @param sweepSens
-     *
+     * @param sweepSens TODO: Why is this set to true? When it should be false when coming from
+     * ConvertToShape?
      */
     int Find(Geom::Point const &iPt, SweepTree *newOne, SweepTree *&insertL,
              SweepTree *&insertR, bool sweepSens = true);
@@ -212,23 +212,102 @@ public:
     int Find(Geom::Point const &iPt, SweepTree *&insertL, SweepTree *&insertR);
 
     /// Remove sweepevents attached to this node.
+
+    /**
+     * Remove any events attached to this node.
+     *
+     * Since the event the other node referring to this event will also have it's
+     * evt value cleared.
+     *
+     * @param queue Reference to the event queue.
+     */
     void RemoveEvents(SweepEventQueue &queue);
 
+    /**
+     * Remove event on the side s if it exists from event queue.
+     *
+     * Since the event the other node referring to this event will also have it's
+     * evt value cleared.
+     *
+     * @param queue Reference to the event queue.
+     * @param s The side to remove the event from.
+     */
     void RemoveEvent(SweepEventQueue &queue, Side s);
 
     // overrides of the AVLTree functions, to account for the sorting in the tree
     // and some other stuff
     int Remove(SweepTreeList &list, SweepEventQueue &queue, bool rebalance = true);
+
+    /**
+     * Insert this node at it's appropriate position in the sweepline tree.
+     *
+     * The function works by calling the Find function to let it find the appropriate
+     * position where this node should go, which it does by traversing the whole search
+     * tree.
+     *
+     * @param list A reference to the sweepline tree.
+     * @param queue A reference to the event queue.
+     * @param iDst Pointer to the shape to which this edge belongs to.
+     * @param iAtPoint The point at which we are adding this edge.
+     * @param rebalance TODO: Confirm this but most likely has to do with whether AVL should
+     * rebalance or not.
+     * @param sweepSens TODO: The same variable as in Find, has to do with sweepline direction.
+     */
     int Insert(SweepTreeList &list, SweepEventQueue &queue, Shape *iDst,
                int iAtPoint, bool rebalance = true, bool sweepSens = true);
+
+    /**
+     * Insert this node near an existing node.
+     *
+     * This is a simplification to the other Insert function. The normal Insert function would
+     * traverse the whole tree to find an appropriate place to add the current node. There are
+     * situations where we just added an edge and we have more edges connected to the same point
+     * that we wanna add. This function will can be used to directly traverse left and right around
+     * the existing node to see where this edge would fit. Saves us full Find call. This searching
+     * is exactly how you'd insert something in a doubly-linked list. The function uses cross
+     * products to see where this edge should go relative to the existing one and then has loops
+     * to find the right spot for it.
+     *
+     * @image html livarot-images/find-point.svg
+     *
+     * I'll use this image to explain some stuff in the code body.
+     *
+     * @param list A reference to the sweepline tree.
+     * @param queue A reference to the event queue.
+     * @param iDst Pointer to the shape to which this edge belongs to.
+     * @param insNode Pointer to the node near which this is to be added.
+     * @param fromPt The point at which we are adding this edge.
+     * @param rebalance TODO: Confirm this but most likely has to do with whether AVL should
+     * rebalance or not.
+     * @param sweepSens TODO: The same variable as in Find, has to do with sweepline direction.
+     */
     int InsertAt(SweepTreeList &list, SweepEventQueue &queue, Shape *iDst,
                  SweepTree *insNode, int fromPt, bool rebalance = true, bool sweepSens = true);
 
     /// Swap nodes, or more exactly, swap the edges in them.
+
+    /**
+     * Used to swap two notes with each other. Basically the data in the nodes are swapped
+     * not their addresses or locations in memory.
+     *
+     * Hence anyone referencing these nodes will get invalid (or unexpected) references since
+     * the data got swapped out. Therefore you must clear any events that might have references to
+     * these nodes.
+     *
+     * @param list Reference to the sweepline tree. Useless parameter.
+     * @param queue Reference to the event queue. Useless parameter.
+     */
     void SwapWithRight(SweepTreeList &list, SweepEventQueue &queue);
 
+    /**
+     * Useless function. No active code in the function body. I suspected this became
+     * useless after Shape::Avance was implemented.
+     */
     void Avance(Shape *dst, int nPt, Shape *a, Shape *b);
 
+    /**
+     * TODO: Probably has to do with some AVL relocation. Only called once from Node removal code.
+     */
     void Relocate(SweepTree *to);
 };
 
