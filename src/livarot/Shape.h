@@ -302,8 +302,19 @@ public:
      * The function does four things more or less:
      * 1. Find all self-intersections in the shape.
      * 2. Reconstruct the directed graph with the intersections now converted to vertices.
-     * 3. Do some processing on edges. Calling AssembleAretes.
-     * 4. Compute winding numbers and accordingly manipulate edges. (Deciding whether to keep, invert or destroy them)
+     * 3. Compute winding number needs for later use by GetWindings.
+     * 4. Do some processing on edges. Calling AssembleAretes.
+     * 5. Compute winding numbers and accordingly manipulate edges. (Deciding whether to keep, invert or destroy them)
+     *
+     * Finding self-intersections and reconstruction happens simultanously. The function has a huge loop that moves
+     * a sweepline top to bottom, finding intersections and reconstructing the new directed graph. Edges are added/removed
+     * in the sweepline tree sTree and intersections detected go in sEvts. All events (Edge Addition/Removal/Intersection)
+     * that take place at a constant `y` value are recorded in an array named `chgts` and the function call to CheckEdges
+     * does the reconstruction.
+     *
+     * One important thing to note is that usually Bentley-Ottman sweepline algorithm, the heap also contains endpoints
+     * (where edges start or end) but in this implementation that's not the case. The main loop takes care of the endpoints
+     * and the heap takes care of intersections only.
      *
      * @param a The pointer to the shape that we want to process.
      * @param directed The fill rule.

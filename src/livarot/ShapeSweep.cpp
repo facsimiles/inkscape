@@ -188,6 +188,7 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 
   a->ResetSweep();
 
+  // allocating the sweepline data structures
   if (sTree == nullptr) {
     sTree = new SweepTreeList(a->numberOfEdges());
   }
@@ -195,17 +196,21 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
     sEvts = new SweepEventQueue(a->numberOfEdges());
   }
 
+  // make room for stuff and set flags
   MakePointData(true);
   MakeEdgeData(true);
   MakeSweepSrcData(true);
   MakeSweepDestData(true);
   MakeBackData(a->_has_back_data);
 
+  // initialize pData and eData arrays, stores rounded points, rounded edge vectors and their lengths
   a->initialisePointData();
   a->initialiseEdgeData();
 
+  // sort points of a, top to bottom so we can sweepline
   a->SortPointsRounded();
 
+  // clear the chgts array
   chgts.clear();
 
   double lastChange = a->pData[0].rx[1] - 1.0;
@@ -215,8 +220,10 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 
   clearIncidenceData();
 
+  // index of the current point in shape a
   int curAPt = 0;
 
+  // as long as there is a point we haven't seen yet or events that we haven't popped yet
   while (curAPt < a->numberOfPoints() || sEvts->size() > 0) {
     Geom::Point ptX;
     double ptL, ptR;
@@ -225,23 +232,27 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
     int nPt = -1;
     Shape *ptSh = nullptr;
     bool isIntersection = false;
+    // is there an intersection event to pop?
     if (sEvts->peek(intersL, intersR, ptX, ptL, ptR))
     {
+      // is that intersection event before the current point in shape a? If yes, we pop and process the intersection event otherwise
+      // we process the point in shape a, whichever comes first (sweeping top to bottom) the one with smaller y or smaller x (if same y)
       if (a->pData[curAPt].pending > 0
           || (a->pData[curAPt].rx[1] > ptX[1]
             || (a->pData[curAPt].rx[1] == ptX[1]
               && a->pData[curAPt].rx[0] > ptX[0])))
       {
+        // if yes, let's process the intersection point
         /* FIXME: could just be pop? */
         sEvts->extract(intersL, intersR, ptX, ptL, ptR);
         isIntersection = true;
       }
-      else
+      else // otherwise, we process the current point in shape a
       {
-        nPt = curAPt++;
+        nPt = curAPt++;            // nPt stores the index of this point in shape a that we are going to process
         ptSh = a;
-        ptX = ptSh->pData[nPt].rx;
-        isIntersection = false;
+        ptX = ptSh->pData[nPt].rx; // get the rounded version of the current point in ptX
+        isIntersection = false;    // not an intersection
       }
     }
     else
@@ -252,7 +263,7 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
       isIntersection = false;
     }
 
-    if (isIntersection == false)
+    if (isIntersection == false) // if this is not intersection event and the point has total degree of 0, we have nothing to do
     {
       if (ptSh->getPoint(nPt).dI == 0 && ptSh->getPoint(nPt).dO == 0)
         continue;
@@ -264,8 +275,12 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
     int lastPointNo = AddPoint (rPtX);
     pData[lastPointNo].rx = rPtX;
 
+    // this whole block deals with the reconstruction procedure
     if (rPtX[1] > lastChange)
     {
+      // the important thing this function does is that it sorts points and merges any duplicate points
+      // so edges with different points (which were at the same coordinates) would be forced to point
+      // to the same exact point. (useful for cases when multiple edges intersect at the same point)
       int lastI = AssemblePoints (lastChgtPt, lastPointNo);
 
       Shape *curSh = shapeHead;
@@ -284,7 +299,7 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 
       for (auto & chgt : chgts)
       {
-        chgt.ptNo = pData[chgt.ptNo].newInd;
+        chgt.ptNo = pData[chgt.ptNo].newInd; // this updates the ptNo index to the new index, so identical points really merge
         if (chgt.type == 0)
         {
           if (chgt.src->getEdge(chgt.bord).st <
@@ -315,8 +330,14 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
         }
       }
 
+      // this function finds adjacencies which seem to be points that lie
+      // on top of an edge. However, I don't really see how this is useful, you can comment this
+      // function out and everything else works fine. I did a redesign of this code without any such function
+      // and it too worked just fine. Maybe there are some extremely rare cases where this would be useful,
+      // but I don't think so.
       CheckAdjacencies (lastI, lastChgtPt, shapeHead, edgeHead);
 
+      // reconstruct the edges
       CheckEdges (lastI, lastChgtPt, a, nullptr, bool_op_union);
 
       for (int i = lastChgtPt; i < lastI; i++) {
@@ -337,30 +358,43 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 
       lastChgtPt = lastPointNo;
       lastChange = rPtX[1];
-      chgts.clear();
+      chgts.clear(); // this chgts array gets cleared up whenever the y of the sweepline changes
       edgeHead = -1;
       shapeHead = nullptr;
     }
 
 
+    // are we processing an intersection point?
     if (isIntersection)
     {
       //                      printf("(%i %i [%i %i]) ",intersL->bord,intersR->bord,intersL->startPoint,intersR->startPoint);
+      // remove any intersections that have interesL as a RIGHT edge
       intersL->RemoveEvent (*sEvts, LEFT);
+      // remove any intersections that have intersR as a LEFT edge
       intersR->RemoveEvent (*sEvts, RIGHT);
 
+      // add the intersection point to the chgts array
       AddChgt (lastPointNo, lastChgtPt, shapeHead, edgeHead, INTERSECTION,
           intersL->src, intersL->bord, intersR->src, intersR->bord);
 
+      // swap the edges intersL and intersR with each other (because they swap their intersection point with the sweepline as
+      // you pass the intersection point)
       intersL->SwapWithRight (*sTree, *sEvts);
 
+      // test intersection of the now left edge with the one on its left
       TesteIntersection (intersL, LEFT, false);
+      // test intersection of the now right edge with the one on its right
       TesteIntersection (intersR, RIGHT, false);
     }
     else
-    {
+    { // we are doing with a point in shape a (not an intersection point)
       int cb;
 
+      // this whole block:
+      // - Counts how many edges start at the current point (nbDn)
+      // - Counts how many edges end at the current point (nbUp)
+      // - Notes the last edge that starts here (dnNo)
+      // - Notes the last edge that ends here (upNo)
       int nbUp = 0, nbDn = 0;
       int upNo = -1, dnNo = -1;
       cb = ptSh->getPoint(nPt).incidentEdge[FIRST];
@@ -396,26 +430,31 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 
       bool doWinding = true;
 
+      // these blocks of code do the job of adding/removing edges
+      // however, there are some optimizations which leads to their weird if blocks
+
+      // Is there any edge that ends here?
       if (nbUp > 0)
       {
         cb = ptSh->getPoint(nPt).incidentEdge[FIRST];
+        // for all edges that connect to this point
         while (cb >= 0 && cb < ptSh->numberOfEdges())
-        {
+        { // if the edge ends here
           if ((ptSh->getEdge(cb).st < ptSh->getEdge(cb).en
                 && nPt == ptSh->getEdge(cb).en)
               || (ptSh->getEdge(cb).st > ptSh->getEdge(cb).en
                 && nPt == ptSh->getEdge(cb).st))
           {
-            if (cb != upNo)
+            if (cb != upNo) // if this is not the last edge that ended at this point
             {
               SweepTree *node =
-                (SweepTree *) ptSh->swsData[cb].misc;
+                (SweepTree *) ptSh->swsData[cb].misc; // get the sweepline node for this edge
               if (node == nullptr)
               {
               }
               else
               {
-                AddChgt (lastPointNo, lastChgtPt, shapeHead,
+                AddChgt (lastPointNo, lastChgtPt, shapeHead, // add the corresponding remove event in chgts
                     edgeHead, EDGE_REMOVED, node->src, node->bord,
                     nullptr, -1);
                 ptSh->swsData[cb].misc = nullptr;
@@ -442,7 +481,9 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
                      SweepTree * >(node->elem[RIGHT]))->src;
                 }
 
-                node->Remove (*sTree, *sEvts, true);
+                node->Remove (*sTree, *sEvts, true); // remove this edge
+                // if there are edges on the left and right and they do not start or end at the current point
+                // test if they interesect with each other (since now this edge just go removed and they are side to side)
                 if (onLeftS && onRightS)
                 {
                   SweepTree *onLeft =
@@ -478,33 +519,33 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 
       // traitement du "upNo devient dnNo"
       SweepTree *insertionNode = nullptr;
-      if (dnNo >= 0)
+      if (dnNo >= 0) // if there is a last edge that started here
       {
-        if (upNo >= 0)
+        if (upNo >= 0) // and there is a last edge that ended here
         {
           SweepTree *node = (SweepTree *) ptSh->swsData[upNo].misc;
 
-          AddChgt (lastPointNo, lastChgtPt, shapeHead, edgeHead, EDGE_REMOVED,
+          AddChgt (lastPointNo, lastChgtPt, shapeHead, edgeHead, EDGE_REMOVED, // add edge removal event to the list
               node->src, node->bord, nullptr, -1);
 
           ptSh->swsData[upNo].misc = nullptr;
 
-          node->RemoveEvents (*sEvts);
-          node->ConvertTo (ptSh, dnNo, 1, lastPointNo);
-          ptSh->swsData[dnNo].misc = node;
-          TesteIntersection (node, RIGHT, false);
-          TesteIntersection (node, LEFT, false);
-          insertionNode = node;
+          node->RemoveEvents (*sEvts); // remove any events associated with this node
+          node->ConvertTo (ptSh, dnNo, 1, lastPointNo); // convert this node the last edge that got added at this point
+          ptSh->swsData[dnNo].misc = node;     // store the sweepline edge tree node at misc for later use
+          TesteIntersection (node, RIGHT, false); // test the interesction of this node with the one on its right
+          TesteIntersection (node, LEFT, false); // test the interesection of this node with the one on its left
+          insertionNode = node; // a variable to keep the pointer to this node for later use
 
-          ptSh->swsData[dnNo].curPoint = lastPointNo;
+          ptSh->swsData[dnNo].curPoint = lastPointNo; // mark the curPoint in swsData for later use in reconstruction
           AddChgt (lastPointNo, lastChgtPt, shapeHead, edgeHead, EDGE_INSERTED,
-              node->src, node->bord, nullptr, -1);
+              node->src, node->bord, nullptr, -1); // add the edge insertion event to chgts
         }
-        else
+        else // if there is a last edge that started at this point but not any that ended
         {
-          SweepTree *node = sTree->add(ptSh, dnNo, 1, lastPointNo, this);
-          ptSh->swsData[dnNo].misc = node;
-          node->Insert (*sTree, *sEvts, this, lastPointNo, true);
+          SweepTree *node = sTree->add(ptSh, dnNo, 1, lastPointNo, this); // add this edge
+          ptSh->swsData[dnNo].misc = node; // store in misc too
+          node->Insert (*sTree, *sEvts, this, lastPointNo, true); // insert the node at its right location in the sweepline tree
           if (doWinding)
           {
             SweepTree *myLeft =
@@ -520,31 +561,31 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
             }
             doWinding = false;
           }
-          TesteIntersection (node, RIGHT, false);
-          TesteIntersection (node, LEFT, false);
-          insertionNode = node;
+          TesteIntersection (node, RIGHT, false); // test intersection of this newly inserted node with the one on its right
+          TesteIntersection (node, LEFT, false); // test intersection of this newly inserted node with the one on its left
+          insertionNode = node; // store insertionNode for later use
 
-          ptSh->swsData[dnNo].curPoint = lastPointNo;
-          AddChgt (lastPointNo, lastChgtPt, shapeHead, edgeHead, EDGE_INSERTED,
+          ptSh->swsData[dnNo].curPoint = lastPointNo; // mark the curPoint appropriately
+          AddChgt (lastPointNo, lastChgtPt, shapeHead, edgeHead, EDGE_INSERTED, // add the edge inserted event
               node->src, node->bord, nullptr, -1);
         }
       }
 
-      if (nbDn > 1)
+      if (nbDn > 1) // if there are more than 1 edges that start at this point
       {			// si nbDn == 1 , alors dnNo a deja ete traite
         cb = ptSh->getPoint(nPt).incidentEdge[FIRST];
-        while (cb >= 0 && cb < ptSh->numberOfEdges())
+        while (cb >= 0 && cb < ptSh->numberOfEdges()) // for all edges that connect to this point
         {
           if ((ptSh->getEdge(cb).st > ptSh->getEdge(cb).en
                 && nPt == ptSh->getEdge(cb).en)
               || (ptSh->getEdge(cb).st < ptSh->getEdge(cb).en
                 && nPt == ptSh->getEdge(cb).st))
-          {
+          { // if the edge starts here
             if (cb != dnNo)
             {
-              SweepTree *node = sTree->add(ptSh, cb, 1, lastPointNo, this);
+              SweepTree *node = sTree->add(ptSh, cb, 1, lastPointNo, this); // add the node to the tree
               ptSh->swsData[cb].misc = node;
-              node->InsertAt (*sTree, *sEvts, this, insertionNode,
+              node->InsertAt (*sTree, *sEvts, this, insertionNode, // insert it at appropriate position
                   nPt, true);
               if (doWinding)
               {
@@ -563,11 +604,11 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
                 }
                 doWinding = false;
               }
-              TesteIntersection (node, RIGHT, false);
-              TesteIntersection (node, LEFT, false);
+              TesteIntersection (node, RIGHT, false); // test intersection of this edge with one on its left
+              TesteIntersection (node, LEFT, false); // test intersection of this edge with one on its right
 
-              ptSh->swsData[cb].curPoint = lastPointNo;
-              AddChgt (lastPointNo, lastChgtPt, shapeHead,
+              ptSh->swsData[cb].curPoint = lastPointNo; // store curPoint in sws
+              AddChgt (lastPointNo, lastChgtPt, shapeHead, // add appropriate edge insertion event in chgts
                   edgeHead, EDGE_INSERTED, node->src, node->bord, nullptr,
                   -1);
             }
@@ -577,6 +618,8 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
       }
     }
   }
+  // a code block totally identical to the one found above in loop. Has to be run one last time
+  // so written outside..
   {
     int lastI = AssemblePoints (lastChgtPt, numberOfPoints());
 
@@ -657,10 +700,15 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
   //      MakeAretes(a);
   clearIncidenceData();
 
+  // deal with doublon edges (edges on top of each other)
+  // we only keep one edge and set its weight equivalent to the net difference of the edges.
+  // If two edges are exactly identical and in same direction their weights add up, if they
+  // are in the opposite direction, weights are subtracted. The other edges are removed.
   AssembleAretes (directed);
 
   //  Plot (98.0, 112.0, 8.0, 400.0, 400.0, true, true, true, true);
 
+  // store the degrees at this point in time
   for (int i = 0; i < numberOfPoints(); i++)
   {
     _pts[i].oldDegree = getPoint(i).totalDegree();
@@ -669,9 +717,9 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 
   _need_edges_sorting = true;
   if ( directed == fill_justDont ) {
-    SortEdges();
+    SortEdges(); // sorting edges
   } else {
-    GetWindings (a);
+    GetWindings (a); // getting winding numbers of the edges
   }
   //  Plot (98.0, 112.0, 8.0, 400.0, 400.0, true, true, true, true);
   //   if ( doDebug ) {
@@ -679,6 +727,8 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
   //     a->Plot(a->leftX,a->topY,32.0,0.0,0.0,true,true,true,true,"orig.svg");
   //     Plot(a->leftX,a->topY,32.0,0.0,0.0,true,true,true,true,"winded.svg");
   //   }
+
+  // change edges depending on the fill rule. Decide whether to keep it, invert it or get rid of it
   if (directed == fill_positive)
   {
     if (invert)
@@ -2182,23 +2232,26 @@ Shape::AssemblePoints (Shape * a)
       _pts.resize(lastI);
     }
 }
+
 void
 Shape::AssembleAretes (FillRule directed)
 {
   if ( directed == fill_justDont && _has_back_data == false ) {
     directed=fill_nonZero;
   }
-  
+
+  // for each point in points
   for (int i = 0; i < numberOfPoints(); i++) {
-    if (getPoint(i).totalDegree() == 2) {
+    if (getPoint(i).totalDegree() == 2) { // if simple point with one incoming edge another outgoing edge
       int cb, cc;
-      cb = getPoint(i).incidentEdge[FIRST];
-      cc = getPoint(i).incidentEdge[LAST];
+      cb = getPoint(i).incidentEdge[FIRST]; // the first edge connected to the point
+      cc = getPoint(i).incidentEdge[LAST]; // the last edge connected to the point
       bool  doublon=false;
       if ((getEdge(cb).st == getEdge(cc).st && getEdge(cb).en == getEdge(cc).en)
-          || (getEdge(cb).st == getEdge(cc).en && getEdge(cb).en == getEdge(cc).en)) doublon=true;
+          || (getEdge(cb).st == getEdge(cc).en && getEdge(cb).en == getEdge(cc).en)) doublon=true; // if the start and end edges have same endpoints, it's a doublon edge
       if ( directed == fill_justDont ) {
         if ( doublon ) {
+          // depending on pathID, pieceID and tSt reorient cb and cc if needed
           if ( ebData[cb].pathID > ebData[cc].pathID ) {
             cc = getPoint(i).incidentEdge[FIRST]; // on swappe pour enlever cc
             cb = getPoint(i).incidentEdge[LAST];
@@ -2206,7 +2259,7 @@ Shape::AssembleAretes (FillRule directed)
             if ( ebData[cb].pieceID > ebData[cc].pieceID ) {
               cc = getPoint(i).incidentEdge[FIRST]; // on swappe pour enlever cc
               cb = getPoint(i).incidentEdge[LAST];
-            } else if ( ebData[cb].pieceID == ebData[cc].pieceID ) { 
+            } else if ( ebData[cb].pieceID == ebData[cc].pieceID ) {
               if ( ebData[cb].tSt > ebData[cc].tSt ) {
                 cc = getPoint(i).incidentEdge[FIRST]; // on swappe pour enlever cc
                 cb = getPoint(i).incidentEdge[LAST];
@@ -2214,18 +2267,19 @@ Shape::AssembleAretes (FillRule directed)
             }
           }
         }
-        if ( doublon ) eData[cc].weight = 0;
+        if ( doublon ) eData[cc].weight = 0; // make cc's weight zero
       } else {
       }
       if ( doublon ) {
-        if (getEdge(cb).st == getEdge(cc).st) {
-          eData[cb].weight += eData[cc].weight;
+        if (getEdge(cb).st == getEdge(cc).st) { // if both edges share same start point
+          eData[cb].weight += eData[cc].weight; // you get double weight
         } else {
-          eData[cb].weight -= eData[cc].weight;
+          eData[cb].weight -= eData[cc].weight; // if one's start is other's end, you subtract weight
         }
- 	      eData[cc].weight = 0;
-        
-	      if (swsData[cc].firstLinkedPoint >= 0) {
+        eData[cc].weight = 0; // remove cc (set weight to zero)
+
+        // winding number seed stuff
+        if (swsData[cc].firstLinkedPoint >= 0) {
           int cp = swsData[cc].firstLinkedPoint;
           while (cp >= 0) {
             pData[cp].askForWindingB = cb;
@@ -2241,30 +2295,34 @@ Shape::AssembleAretes (FillRule directed)
             pData[ncp].nextLinkedPoint = swsData[cc].firstLinkedPoint;
           }
         }
-        
-	      DisconnectStart (cc);
-	      DisconnectEnd (cc);
-	      if (numberOfEdges() > 1) {
+
+        // disconnect start and end of cc
+        DisconnectStart (cc);
+        DisconnectEnd (cc);
+
+        if (numberOfEdges() > 1) {
           int cp = swsData[numberOfEdges() - 1].firstLinkedPoint;
           while (cp >= 0) {
             pData[cp].askForWindingB = cc;
             cp = pData[cp].nextLinkedPoint;
           }
         }
-	      SwapEdges (cc, numberOfEdges() - 1);
-	      if (cb == numberOfEdges() - 1) {
+        // swap cc with last edge
+        SwapEdges (cc, numberOfEdges() - 1);
+        if (cb == numberOfEdges() - 1) {
           cb = cc;
         }
-	      _aretes.pop_back();
-	    }
+        // pop back the last one (to completely remove it from the array)
+        _aretes.pop_back();
+      }
     } else {
       int cb;
       cb = getPoint(i).incidentEdge[FIRST];
       while (cb >= 0 && cb < numberOfEdges()) {
-	      int other = Other (i, cb);
-	      int cc;
-	      cc = getPoint(i).incidentEdge[FIRST];
-	      while (cc >= 0 && cc < numberOfEdges()) {
+        int other = Other (i, cb);
+        int cc;
+        cc = getPoint(i).incidentEdge[FIRST];
+        while (cc >= 0 && cc < numberOfEdges()) {
           int ncc = NextAt (i, cc);
           bool  doublon=false;
           if (cc != cb && Other (i, cc) == other ) doublon=true;
@@ -2286,7 +2344,7 @@ Shape::AssembleAretes (FillRule directed)
           } else {
           }
           if ( doublon ) {
-//            if (cc != cb && Other (i, cc) == other) {
+            //            if (cc != cb && Other (i, cc) == other) {
             // doublon
             if (getEdge(cb).st == getEdge(cc).st) {
               eData[cb].weight += eData[cc].weight;
@@ -2294,7 +2352,7 @@ Shape::AssembleAretes (FillRule directed)
               eData[cb].weight -= eData[cc].weight;
             }
             eData[cc].weight = 0;
-            
+
             if (swsData[cc].firstLinkedPoint >= 0) {
               int cp = swsData[cc].firstLinkedPoint;
               while (cp >= 0) {
@@ -2311,7 +2369,7 @@ Shape::AssembleAretes (FillRule directed)
                 pData[ncp].nextLinkedPoint = swsData[cc].firstLinkedPoint;
               }
             }
-            
+
             DisconnectStart (cc);
             DisconnectEnd (cc);
             if (numberOfEdges() > 1) {
@@ -2328,35 +2386,35 @@ Shape::AssembleAretes (FillRule directed)
             if (ncc == numberOfEdges() - 1) {
               ncc = cc;
             }
-	    _aretes.pop_back();
+            _aretes.pop_back();
           }
           cc = ncc;
+          }
+          cb = NextAt (i, cb);
         }
-	      cb = NextAt (i, cb);
-	    }
-    }
-  }
-  
-  if ( directed == fill_justDont ) {
-    for (int i = 0; i < numberOfEdges(); i++)  {
-      if (eData[i].weight == 0) {
-//        SubEdge(i);
- //       i--;
-      } else {
-        if (eData[i].weight < 0) Inverse (i);
       }
     }
-  } else {
-    for (int i = 0; i < numberOfEdges(); i++)  {
-      if (eData[i].weight == 0) {
-        //                      SubEdge(i);
-        //                      i--;
-      } else {
-        if (eData[i].weight < 0) Inverse (i);
+
+    if ( directed == fill_justDont ) {
+      for (int i = 0; i < numberOfEdges(); i++)  {
+        if (eData[i].weight == 0) {
+          //        SubEdge(i);
+          //       i--;
+        } else {
+          if (eData[i].weight < 0) Inverse (i);
+        }
+      }
+    } else {
+      for (int i = 0; i < numberOfEdges(); i++)  {
+        if (eData[i].weight == 0) {
+          //                      SubEdge(i);
+          //                      i--;
+        } else {
+          if (eData[i].weight < 0) Inverse (i);
+        }
       }
     }
   }
-}
 void
 Shape::GetWindings (Shape * /*a*/, Shape * /*b*/, BooleanOp /*mod*/, bool brutal)
 {
