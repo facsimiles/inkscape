@@ -187,6 +187,18 @@ public:
     void SubEdge(int e);                // removes the edge at index e (same remarks as for SubPoint)
     void SwapEdges(int a, int b);        // swaps 2 edges
     void SwapEdges(int a, int b, int c);        // swaps 3 edges
+
+    /**
+     * Sort all edges (anti-clockwise) around each point.
+     *
+     * The function operates on each point and ensures that the linked list of the edges
+     * connected to a point is in the counter-clockwise direction spatially. The counter-clockwise
+     * angle that an edge line segment makes with the -y axis should increase (or remain same) as we move
+     * forward in the linked list of edges.
+     *
+     * This sorting is done using edge vectors however note that if an edge ends at a point instead of starting
+     * from there, we invert the edge to make it look like it started from there.
+     */
     void SortEdges();        // sort the edges if needed (checks the need_edges_sorting falg)
 
     // primitives for topological manipulations
@@ -702,6 +714,18 @@ private:
     void CleanupSweep();        // deallocates them
 
     // edge sorting function
+
+    /**
+     * Sort edges given in a list.
+     *
+     * Swapping is done in place so the original list will be modified to a sorted one.
+     *
+     * Edges between (inclusive) edges[s] and edges[e] are all sorted.
+     *
+     * @param edges The list of edges to sort.
+     * @param s The index of the beginning of the list to sort.
+     * @param s The index of the end of the list to sort.
+     */
     void SortEdgesList(edge_list *edges, int s, int e);
 
     void TesteIntersection(SweepTree *t, Side s, bool onlyDiff);        // test if there is an intersection
@@ -804,6 +828,25 @@ private:
     };
 
     // edge direction comparison function
+
+    /**
+     * Edge comparison function.
+     *
+     * The function returns +1 when a swap is needed. The arguments
+     * are arranged in a weird way. Say you have two edges: w x y z and you wanna ask
+     * if w and x should be swapped, you pass parameters such that ax = x & bx = w.
+     *
+     * The explaination of the function in the code body uses this picture to help explain.
+     *
+     * @image html livarot-images/edge-sorting.svg
+     *
+     * @param ax The right edge in the list before sorting.
+     * @param bx The left edge in the list before sorting.
+     * @param as True if the edge of vector ax started from the point. False if it ended there.
+     * @param bs True if the edge of vector bx started from the point. False if it ended there.
+     *
+     * @return A positive number if the arrangement bx ax is wrong and should be swapped.
+     */
     static int CmpToVert(const Geom::Point ax, const Geom::Point bx, bool as, bool bs);
 };
 
