@@ -2066,11 +2066,18 @@ Shape::CreateIncidence (Shape * a, int no, int nPt)
 }
 
 int
-Shape::Winding (int nPt) const 
+Shape::Winding (int nPt) const
 {
+  // the array pData has a variable named askForWindingB
+  // that tells us which edge to go to to find the winding number
+  // of the pint nPt.
   int askTo = pData[nPt].askForWindingB;
-  if (askTo < 0 || askTo >= numberOfEdges())
+  if (askTo < 0 || askTo >= numberOfEdges()) // if there is no info there, just return 0
     return 0;
+  // if the edge is top to bottom, return left winding number otherwise the right winding number
+  // actually, while sweeping, ConvertToShape stores the edge on the immediate left of each point,
+  // hence, we are seeing the winding to the right of this edge and depending on orientation,
+  // right is "left" if edge is top to bottom, right is "right" if edge is bottom to top
   if (getEdge(askTo).st < getEdge(askTo).en)
     {
       return swdData[askTo].leW;
@@ -2083,86 +2090,100 @@ Shape::Winding (int nPt) const
 }
 
 int
-Shape::Winding (const Geom::Point px) const 
+Shape::Winding (const Geom::Point px) const
 {
   int lr = 0, ll = 0, rr = 0;
 
+  // for each edge
   for (int i = 0; i < numberOfEdges(); i++)
+  {
+    Geom::Point adir, diff, ast, aen;
+    adir = eData[i].rdx;
+
+    ast = pData[getEdge(i).st].rx; // start point of this edge
+    aen = pData[getEdge(i).en].rx; // end point of this edge
+
+    int nWeight = eData[i].weight; // weight of this edge
+
+    // this block checks if the vertical lines crossing the start and end points of the edge
+    // covers the point px or not. See the first figure in the header documentation to see
+    // what I mean. The figure shows two contours one inside another. It shows the point px
+    // and the current edge that the loop is processing is drawn in black color. Two dashed
+    // vertical lines create a region. This block of code checks if the point px lies within
+    // that region or not. Because if it doesn't, we really don't care about this edge at all
+    // then.
+    if (ast[0] < aen[0])
     {
-      Geom::Point adir, diff, ast, aen;
-      adir = eData[i].rdx;
-
-      ast = pData[getEdge(i).st].rx;
-      aen = pData[getEdge(i).en].rx;
-
-      int nWeight = eData[i].weight;
-
-      if (ast[0] < aen[0])
-	{
-	  if (ast[0] > px[0])
-	    continue;
-	  if (aen[0] < px[0])
-	    continue;
-	}
-      else
-	{
-	  if (ast[0] < px[0])
-	    continue;
-	  if (aen[0] > px[0])
-	    continue;
-	}
-      if (ast[0] == px[0])
-	{
-	  if (ast[1] >= px[1])
-	    continue;
-	  if (aen[0] == px[0])
-	    continue;
-	  if (aen[0] < px[0])
-	    ll += nWeight;
-	  else
-	    rr -= nWeight;
-	  continue;
-	}
-      if (aen[0] == px[0])
-	{
-	  if (aen[1] >= px[1])
-	    continue;
-	  if (ast[0] == px[0])
-	    continue;
-	  if (ast[0] < px[0])
-	    ll -= nWeight;
-	  else
-	    rr += nWeight;
-	  continue;
-	}
-
-      if (ast[1] < aen[1])
-	{
-	  if (ast[1] >= px[1])
-	    continue;
-	}
-      else
-	{
-	  if (aen[1] >= px[1])
-	    continue;
-	}
-
-      diff = px - ast;
-      double cote = cross(adir, diff);
-      if (cote == 0)
-	continue;
-      if (cote < 0)
-	{
-	  if (ast[0] > px[0])
-	    lr += nWeight;
-	}
-      else
-	{
-	  if (ast[0] < px[0])
-	    lr -= nWeight;
-	}
+      if (ast[0] > px[0])
+        continue;
+      if (aen[0] < px[0])
+        continue;
     }
-  return lr + (ll + rr) / 2;
+    else
+    {
+      if (ast[0] < px[0])
+        continue;
+      if (aen[0] > px[0])
+        continue;
+    }
+
+    // the situations in these blocks are explained by the second and third figure in the header documentation
+    // the fourth figure along with the documentation there describe what ll and rr really do
+    if (ast[0] == px[0])
+    {
+      if (ast[1] >= px[1])
+        continue;
+      if (aen[0] == px[0])
+        continue;
+      if (aen[0] < px[0])
+        ll += nWeight;
+      else
+        rr -= nWeight;
+      continue;
+    }
+    if (aen[0] == px[0])
+    {
+      if (aen[1] >= px[1])
+        continue;
+      if (ast[0] == px[0])
+        continue;
+      if (ast[0] < px[0])
+        ll -= nWeight;
+      else
+        rr += nWeight;
+      continue;
+    }
+
+    // if the edge is below the point, it doesn't cut the ray at all
+    // so we don't care about it
+    if (ast[1] < aen[1])
+    {
+      if (ast[1] >= px[1])
+        continue;
+    }
+    else
+    {
+      if (aen[1] >= px[1])
+        continue;
+    }
+
+    // a vector from the edge start point to our point px whose winding we wanna calculate
+    diff = px - ast;
+    double cote = cross(adir, diff); // cross from edge vector to diff vector to figure out the orientation
+    if (cote == 0)
+      continue;
+    if (cote < 0)
+    {
+      if (ast[0] > px[0])
+        lr += nWeight;
+    }
+    else
+    {
+      if (ast[0] < px[0])
+        lr -= nWeight;
+    }
+  }
+  return lr + (ll + rr) / 2; // lr comes as it is, ll and rr get divided by two due to the reason I mention in the header file docs
 }
 
 // merging duplicate points and edges
@@ -2420,155 +2441,206 @@ Shape::GetWindings (Shape * /*a*/, Shape * /*b*/, BooleanOp /*mod*/, bool brutal
 {
   // preparation du parcours
   for (int i = 0; i < numberOfEdges(); i++)
-    {
-      swdData[i].misc = nullptr;
-      swdData[i].precParc = swdData[i].suivParc = -1;
-    }
+  {
+    swdData[i].misc = nullptr;
+    swdData[i].precParc = swdData[i].suivParc = -1;
+  }
 
+  // we make sure that the edges are sorted. What this means is that for each point, all
+  // the edges that are attached to it are arranged in the linked list according to
+  // clockwise order (of their spatial orientation)
   // chainage
   SortEdges ();
 
   int searchInd = 0;
 
   int lastPtUsed = 0;
+  // okay now let's see what this outer most loop is supposed to do. Look, you can have a directed graph
+  // with multiple paths that don't touch each other. For example a rectangle inside another rectangle.
+  // If you just start at the first point and follow the edges moving around, you'd have explored one
+  // sub-graph but you wouldn't even touch the others. This outer loop ensures that all the points have
+  // been walked over. We start at the first point and start exploring. When we reach the end of that
+  // sub-graph, we update lastPtUsed and this outerloop will check if there are still points remaining
+  // to be explored, if yes, we start with the first point (that we haven't touched yet)
   do
+  {
+    int startBord = -1;
+    int outsideW = 0; // the winding number outside (to the top left) of the first point in a sub-graph
     {
-      int startBord = -1;
-      int outsideW = 0;
+      int fi = 0;
+			// ignore all points that don't have any edges attached
+      for (fi = lastPtUsed; fi < numberOfPoints(); fi++)
       {
-	int fi = 0;
-	for (fi = lastPtUsed; fi < numberOfPoints(); fi++)
-	  {
-	    if (getPoint(fi).incidentEdge[FIRST] >= 0 && swdData[getPoint(fi).incidentEdge[FIRST]].misc == nullptr)
-	      break;
-	  }
-	lastPtUsed = fi + 1;
-	if (fi < numberOfPoints())
-	  {
-	    int bestB = getPoint(fi).incidentEdge[FIRST];
-	    if (bestB >= 0)
-	      {
-		startBord = bestB;
-		if (fi == 0)
-		  {
-		    outsideW = 0;
-		  }
-		else
-		  {
-		    if (brutal)
-		      {
-			outsideW = Winding (getPoint(fi).x);
-		      }
-		    else
-		      {
-			outsideW = Winding (fi);
-		      }
-		  }
-    if ( getPoint(fi).totalDegree() == 1 ) {
-      if ( fi == getEdge(startBord).en ) {
-        if ( eData[startBord].weight == 0 ) {
-          // on se contente d'inverser
-          Inverse(startBord);
-        } else {
-          // on passe le askForWinding (sinon ca va rester startBord)
-          pData[getEdge(startBord).st].askForWindingB=pData[getEdge(startBord).en].askForWindingB;
+        if (getPoint(fi).incidentEdge[FIRST] >= 0 && swdData[getPoint(fi).incidentEdge[FIRST]].misc == nullptr)
+          break;
+      }
+      lastPtUsed = fi + 1;
+      if (fi < numberOfPoints())
+      {
+				// get the first edge attached to the first point
+        int bestB = getPoint(fi).incidentEdge[FIRST];
+        if (bestB >= 0)
+        {
+					// let's start with this edge
+          startBord = bestB;
+					// is the first point the first in the array? if yes, this ensure it's at the top most and left most position.
+          // Hence the winding number must be zero (since that region is literally outside everything)
+          if (fi == 0)
+          {
+            outsideW = 0;
+          }
+          else
+          {
+            // you can either compute the winding number by iterating through all the edges
+            // basically that would work by seeing how many edges a ray from (0, +infty) would cross
+            // and in which order
+            if (brutal)
+            {
+              outsideW = Winding (getPoint(fi).x);
+            }
+						// or we can get the winding number for that point computed by the sweepline.. this is pretty
+            // interesting.
+            else
+            {
+              outsideW = Winding (fi);
+            }
+          }
+					// TODO: Look at this piece
+          if ( getPoint(fi).totalDegree() == 1 ) {
+            if ( fi == getEdge(startBord).en ) {
+              if ( eData[startBord].weight == 0 ) {
+                // on se contente d'inverser
+                Inverse(startBord);
+              } else {
+                // on passe le askForWinding (sinon ca va rester startBord)
+                pData[getEdge(startBord).st].askForWindingB=pData[getEdge(startBord).en].askForWindingB;
+              }
+            }
+          }
+          if (getEdge(startBord).en == fi)
+            outsideW += eData[startBord].weight;
         }
       }
     }
-		if (getEdge(startBord).en == fi)
-		  outsideW += eData[startBord].weight;
-	      }
-	  }
+    if (startBord >= 0)
+    {
+			// now start from this edge
+      // parcours en profondeur pour mettre les leF et riF a leurs valeurs
+      swdData[startBord].misc = (void *) 1;
+			// setting the winding numbers for this edge
+			// one question I had was, would these values for the first edge will always be valid?
+			// The answer is yes. Due to the fact that edges are sorted clockwise, and that
+      // we start with the top most (and leftmost if mutliple top most points exist), and that
+      // there is a piece of code above that adds weight to start edge if the edge ends at the current
+      // point, I think these will always be correct values.
+      swdData[startBord].leW = outsideW;
+      swdData[startBord].riW = outsideW - eData[startBord].weight;
+      //    if ( doDebug ) printf("part de %d\n",startBord);
+      // curBord is the current edge that we are at
+      int curBord = startBord;
+      // curDir is the direction, true means we are going in the direction of the edge vector, false means
+      // we are going in the direction opposite to the edge vector
+      bool curDir = true;
+      swdData[curBord].precParc = -1;
+      swdData[curBord].suivParc = -1;
+      // the depth first search
+      do
+      {
+        int cPt;
+        // if curDir is true, we are going along the edge, so get the end point
+        if (curDir)
+          cPt = getEdge(curBord).en;
+        else // if curDir is false, we are going opposite to the edge, so get the start point
+          cPt = getEdge(curBord).st;
+
+        // start finding the next edge to move to
+        int nb = curBord;
+        //        if ( doDebug ) printf("de curBord= %d avec leF= %d et riF= %d  -> ",curBord,swdData[curBord].leW,swdData[curBord].riW);
+        do
+        {
+          int nnb = -1;
+          // see the diagram attached in the header file documentation of this function to see the
+          // four situations that can come up.
+          // outsideW here does not mean outside winding, in fact it means inside winding.
+          // if we are going along the edge, we save the right winding number for later use
+          if (getEdge(nb).en == cPt)
+          {
+            outsideW = swdData[nb].riW;
+            nnb = CyclePrevAt (cPt, nb); // get the prev edge, since sorting was clockwise, this means get the first counter-clockwise edge
+          }
+          // if we are going against the edge, we save it's left winding number for later use
+          else
+          {
+            outsideW = swdData[nb].leW;
+            nnb = CyclePrevAt (cPt, nb);
+          }
+          if (nnb == nb) // if we didn't get any "new" edge
+          {
+            // cul-de-sac
+            nb = -1;
+            break;
+          }
+          nb = nnb;
+        } // you can break for three reasons from this loop: having no other edge, we got the same one we started on, edge hasn't been visited yet
+        while (nb >= 0 && nb != curBord && swdData[nb].misc != nullptr);
+        // in the beginning, you'd break from the upper loop due to the misc condition and later on, you'll break due to nb != curBord which
+        // means we need to start backtracking
+        if (nb < 0 || nb == curBord) // backtracking block
+        {
+          // retour en arriere
+          // so if we are here, we couldn't get any new edge that we haven't seen yet
+          int oPt;
+          // we wanna find the previous point (since we are going back)
+          // if curDir is True, we were going along the edge, so get the start point (going backwards u see)
+          if (curDir)
+            oPt = getEdge(curBord).st;
+          else // if curDir is false, we were going against edge, so get the end point (going backwards)
+            oPt = getEdge(curBord).en;
+          curBord = swdData[curBord].precParc; // make current edge the previous one in traversal (back tracking)
+          //    if ( doDebug ) printf("retour vers %d\n",curBord);
+          if (curBord < 0) // if no edge to go back to, break
+            break;
+          if (oPt == getEdge(curBord).en) // if this new "current edge" ends at that point, curDir should be true, since we ideally have to go forward
+            curDir = true;
+          else // otherwise set it to false, so ideal direction would be against edge
+            curDir = false;
+          // I say ideal because this this is how backtracking is, if you have nothing new to go forward to, you go back once and see
+          // if there is another new edge to go forward to, if not you go back again, and you keep doing this until the point comes where
+          // you have nothing to go back to and then you break from the loop
+        }
+        else // okay we have new edge to compute windings
+        {
+          swdData[nb].misc = (void *) 1; // we visited this edge, so mark that
+          swdData[nb].ind = searchInd++; // probably for use later on?
+          if (cPt == getEdge(nb).st) // this outsideW is the winding stored before, see the diagram in header file
+          {
+            swdData[nb].riW = outsideW;
+            swdData[nb].leW = outsideW + eData[nb].weight;
+          }
+          else
+          {
+            swdData[nb].leW = outsideW;
+            swdData[nb].riW = outsideW - eData[nb].weight;
+          }
+          // maintaining the stack of traversal
+          swdData[nb].precParc = curBord;
+          swdData[curBord].suivParc = nb;
+          // this edge becomes current edge now
+          curBord = nb;
+          //		  if ( doDebug ) printf("suite %d\n",curBord);
+          // set direction depending on how this edge is oriented
+          if (cPt == getEdge(nb).en)
+            curDir = false;
+          else
+            curDir = true;
+        }
       }
-      if (startBord >= 0)
-	{
-	  // parcours en profondeur pour mettre les leF et riF a leurs valeurs
-	  swdData[startBord].misc = (void *) 1;
-	  swdData[startBord].leW = outsideW;
-	  swdData[startBord].riW = outsideW - eData[startBord].weight;
-//    if ( doDebug ) printf("part de %d\n",startBord);
-	  int curBord = startBord;
-	  bool curDir = true;
-	  swdData[curBord].precParc = -1;
-	  swdData[curBord].suivParc = -1;
-	  do
-	    {
-	      int cPt;
-	      if (curDir)
-		cPt = getEdge(curBord).en;
-	      else
-		cPt = getEdge(curBord).st;
-	      int nb = curBord;
-//        if ( doDebug ) printf("de curBord= %d avec leF= %d et riF= %d  -> ",curBord,swdData[curBord].leW,swdData[curBord].riW);
-	      do
-		{
-		  int nnb = -1;
-		  if (getEdge(nb).en == cPt)
-		    {
-		      outsideW = swdData[nb].riW;
-		      nnb = CyclePrevAt (cPt, nb);
-		    }
-		  else
-		    {
-		      outsideW = swdData[nb].leW;
-		      nnb = CyclePrevAt (cPt, nb);
-		    }
-		  if (nnb == nb)
-		    {
-		      // cul-de-sac
-		      nb = -1;
-		      break;
-		    }
-		  nb = nnb;
-		}
-	      while (nb >= 0 && nb != curBord && swdData[nb].misc != nullptr);
-	      if (nb < 0 || nb == curBord)
-		{
-		  // retour en arriere
-		  int oPt;
-		  if (curDir)
-		    oPt = getEdge(curBord).st;
-		  else
-		    oPt = getEdge(curBord).en;
-		  curBord = swdData[curBord].precParc;
-//    if ( doDebug ) printf("retour vers %d\n",curBord);
-		  if (curBord < 0)
-		    break;
-		  if (oPt == getEdge(curBord).en)
-		    curDir = true;
-		  else
-		    curDir = false;
-		}
-	      else
-		{
-		  swdData[nb].misc = (void *) 1;
-		  swdData[nb].ind = searchInd++;
-		  if (cPt == getEdge(nb).st)
-		    {
-		      swdData[nb].riW = outsideW;
-		      swdData[nb].leW = outsideW + eData[nb].weight;
-		    }
-		  else
-		    {
-		      swdData[nb].leW = outsideW;
-		      swdData[nb].riW = outsideW - eData[nb].weight;
-		    }
-		  swdData[nb].precParc = curBord;
-		  swdData[curBord].suivParc = nb;
-		  curBord = nb;
-//		  if ( doDebug ) printf("suite %d\n",curBord);
-		  if (cPt == getEdge(nb).en)
-		    curDir = false;
-		  else
-		    curDir = true;
-		}
-	    }
-	  while (true /*swdData[curBord].precParc >= 0 */ );
-	  // fin du cas non-oriente
-	}
+      while (true /*swdData[curBord].precParc >= 0 */ );
+      // fin du cas non-oriente
     }
+  }
   while (lastPtUsed < numberOfPoints());
-//      fflush(stdout);
+  //      fflush(stdout);
 }
 
 bool

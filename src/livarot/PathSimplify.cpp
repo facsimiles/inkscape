@@ -559,7 +559,7 @@ bool Path::AttemptSimplify (fitting_tables &data,double treshhold, PathDescrCubi
         return true;
     }
   
-    start[0] = data.Xk
+    start[0] = data.Xk[0];
     start[1] = data.Yk[0];
     cp1[0] = data.Xk[1];
     cp1[1] = data.Yk[1];

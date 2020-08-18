@@ -189,10 +189,10 @@ public:
     void SwapEdges(int a, int b, int c);        // swaps 3 edges
 
     /**
-     * Sort all edges (anti-clockwise) around each point.
+     * Sort all edges (clockwise) around each point.
      *
      * The function operates on each point and ensures that the linked list of the edges
-     * connected to a point is in the counter-clockwise direction spatially. The counter-clockwise
+     * connected to a point is in the clockwise direction spatially. The clockwise
      * angle that an edge line segment makes with the -y axis should increase (or remain same) as we move
      * forward in the linked list of edges.
      *
@@ -377,6 +377,36 @@ public:
     int MakeTweak (int mode, Shape *a, double dec, JoinType join, double miter, bool do_profile, Geom::Point c, Geom::Point vector, double radius, Geom::Affine *i2doc);
 
     int PtWinding(const Geom::Point px) const; // plus rapide
+    /**
+     * Compute the winding number of the point given brutually.
+     *
+     * The function works by bringing in a ray from (px.x, -infinity)
+     * to (px.x, px.y) and seeing how many edges it cuts and the direction
+     * of those edges. It uses this information to compute the winding number.
+     *
+     * The way this function works is that it iterates through all the edges
+     * and for each edge it checks if the ray will intersect the edge and in
+     * which orientation. See the function body to see exactly how this works.
+     *
+     * @image html livarot-images/winding-brutal-bounds.svg
+     * @image html livarot-images/winding-brutal-endpoints-start.svg
+     * @image html livarot-images/winding-brutal-endpoints-end.svg
+     *
+     * The algorithm is quite simple. For edges that simply cut the ray, we check
+     * the direction of the edge and accordingly add/subtract from a variable to keep
+     * track of the winding. However, a different case comes up when an edge has an
+     * endpoint that cuts the ray. You can just see the direction and maybe change the same
+     * variable, but then the problem is, another edge connected to the same point will also
+     * do the same and you'd have two additions when you should only have one. Hence, the solution
+     * is, we create two variables ll and rr and add/subtract to them, then, we sum them and divide
+     * by 2 to get the contribution to the winding number.
+     *
+     * @image html livarot-images/winding-brutal-endpoints.svg
+     *
+     * @param px The point whose winding number to compute
+     *
+     * @return The winding number of the point px.
+     */
     int Winding(const Geom::Point px) const;
 
     // rasterization
@@ -747,10 +777,53 @@ private:
     void CheckEdges(int lastPointNo, int lastChgtPt, Shape *a, Shape *b, BooleanOp mod);
     void Avance(int lastPointNo, int lastChgtPt, Shape *iS, int iB, Shape *a, Shape *b, BooleanOp mod);
     void DoEdgeTo(Shape *iS, int iB, int iTo, bool direct, bool sens);
+
+    /**
+     * Calculates the winding numbers to the left and right of all edges of this shape.
+     *
+     * The winding numbers that are calculated are stored in swdData.
+     *
+     * The winding number computation algorithm is a very interesting one and I'll get into
+     * its details too. The algorithm essentially follows sub-graphs to calculate winding
+     * numbers. A sub-graph is basically a set of edges and points that are connected to each
+     * other in the sense that you can walk on the edges to move around them. The winding number
+     * computation algorithm starts at the top most (and left most if there are multiple points at same y).
+     * There, it is known that the winding number outside the edges is definitely 0 since it's the outer most
+     * point. However, when you are starting on an edge that's inside the shape, a rectangle inside another one,
+     * you need to know what outside winding number really is for that point. See the following image to see
+     * what I mean.
+     *
+     * @image html livarot-images/winding-computation-seed.svg
+     *
+     * For the outer contour, we know it's definitely 0 but for the inside one it needs to be calculated and it's -1.
+     * There are two ways to figure out this "seed" winding number. You can either iterate through all edges and calculate
+     * it manually. This is known as the brutual method. The other method is to use the winding number info left from the
+     * sweepline algorithm.
+     *
+     * I have explained the winding number computation algorithm in detail in the code comments. Once we have a seed, we start
+     * walking on the edges. Once you have the left and right winding number for the first edge, you can move to its endpoint
+     * and depending on the relative directions of the edge vectors, you can definitely calculate the winding number for the
+     * next edge. See the code comments for details on this procedure.
+     *
+     * @image html livarot-images/winding-computation.svg
+     *
+     * Basically, given the winding numbers to the left and right of the current edge, and the orientation of the next edge
+     * with this one, we can calculate the winding number of the next edge and then repeat this process.
+     *
+     * @param a Useless.
+     * @param b Useless.
+     * @param mod Useless.
+     * @param brutal Should the algorithm use winding number seeds left by the sweepline or brutually compute the seeds?
+     */
     void GetWindings(Shape *a, Shape *b = nullptr, BooleanOp mod = bool_op_union, bool brutal = false);
 
     void Validate();
 
+    /**
+     * Get the winding number for a point but from the data left by the sweepline algorithm.
+     *
+     * @param nPt Index of the point whose finding number we wanna calculate.
+     */
     int Winding(int nPt) const;
 
     /**
