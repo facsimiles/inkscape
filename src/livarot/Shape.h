@@ -291,11 +291,33 @@ public:
 
     // transforms a polygon in a "forme" structure, ie a set of contours, which can be holes (see ShapeUtils.h)
     // return NULL in case it's not possible
+
+    /**
+     * Extract contours from a directed graph.
+     *
+     * The function doesn't care about any back data and thus if all contours will be made up
+     * of line segments. Any original curves would be lost.
+     *
+     * The algorithm is totally identical to GetWindings with minor differences.
+     *
+     * @param dest Pointer to the path where the extracted contours will be stored.
+     */
     void ConvertToForme(Path *dest);
 
     // version to use when conversion was done with ConvertWithBackData(): will attempt to merge segment belonging to
     // the same curve
     // nota: apparently the function doesn't like very small segments of arc
+
+    /**
+     * Extract contours from a directed graph while using back data.
+     *
+     * Since back data is used, the original curves are preserved.
+     *
+     * @param dest Point to the shape where extracted contours will be placed in.
+     * @param nbP Number of paths that were originally feeded to the directed graph with Path::Fill.
+     * @param orig An array of pointers to Path, one Path object for each path it in the graph.
+     * @param splitWhenForced TODO: Figure this out.
+     */
     void ConvertToForme(Path *dest, int nbP, Path **orig, bool splitWhenForced = false);
     // version trying to recover the nesting of subpaths (ie: holes)
     void ConvertToFormeNested(Path *dest, int nbP, Path **orig, int wildPath, int &nbNest,
@@ -851,8 +873,19 @@ private:
     void DestroyEdge(int no, AlphaLigne *line);
     void AvanceEdge(int no, float to, AlphaLigne *line, bool exact, float step);
 
+    /**
+     * Add a contour.
+     *
+     * @param dest The pointer to the Path object where we want to add contours.
+     * @param nbP  The total number of path object points in the array orig.
+     * @param orig A pointer of Path object pointers. These are the original Path objects which were used to fill the directed graph.
+     * @param startBord The first edge in the contour.
+     * @param curBord The last edge in the contour.
+     * @param splitWhenForced  TODO: No idea what it does. We never use ForcedPoints in Inkscape so doesn't matter I think.
+     */
     void AddContour(Path * dest, int nbP, Path **orig, int startBord,
                    int curBord, bool splitWhenForced);
+
     int ReFormeLineTo(int bord, int curBord, Path *dest, Path *orig);
     int ReFormeArcTo(int bord, int curBord, Path *dest, Path *orig);
     int ReFormeCubicTo(int bord, int curBord, Path *dest, Path *orig);
