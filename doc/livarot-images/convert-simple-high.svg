@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="1000"
+   height="1000"
+   viewBox="0 0 1000 1000"
+   version="1.1"
+   id="svg6"
+   inkscape:version="1.1-dev (037b845d7b, 2020-08-19, custom)"
+   sodipodi:docname="convert-simple-high.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs2">
+    <marker
+       style="overflow:visible;"
+       id="marker1121"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="Arrow1Lend"
+       inkscape:isstock="true">
+      <path
+         transform="scale(0.8) rotate(180) translate(12.5,0)"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1;fill:#000000;fill-opacity:1"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         id="path1119" />
+    </marker>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.73466529"
+     inkscape:cx="423.32203"
+     inkscape:cy="467.55986"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     units="px"
+     width="1000px"
+     inkscape:window-width="1920"
+     inkscape:window-height="1016"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       style="fill:none;stroke:#000000;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+       d="m 169.80587,903.64156 c 0,0 -12.42953,-718.44653 673.63375,-827.426466 z"
+       id="path829" />
+    <path
+       style="fill:none;stroke:#0000ff;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:10,10;stroke-dashoffset:0"
+       d="M 169.80587,903.64156 182.71269,765.04756 212.23946,636.86938 260.20747,508.1645 322.35796,396.90598 409.87867,291.38652 496.60371,216.66734 609.10662,148.9347 721.1411,106.25846 843.43962,76.215094 Z"
+       id="path1035" />
+    <circle
+       style="fill:#ff0000;fill-rule:evenodd;stroke:none;stroke-width:12.7962;stroke-miterlimit:4;stroke-dasharray:none"
+       id="path831"
+       cx="170.3782"
+       cy="900.13428"
+       r="11.163104" />
+    <circle
+       style="fill:#ff0000;fill-rule:evenodd;stroke:none;stroke-width:12.7962;stroke-miterlimit:4;stroke-dasharray:none"
+       id="circle833"
+       cx="181.96687"
+       cy="764.42114"
+       r="11.163104" />
+    <circle
+       style="fill:#ff0000;fill-rule:evenodd;stroke:none;stroke-width:12.7962;stroke-miterlimit:4;stroke-dasharray:none"
+       id="circle835"
+       cx="408.2381"
+       cy="291.26648"
+       r="11.163104" />
+    <circle
+       style="fill:#ff0000;fill-rule:evenodd;stroke:none;stroke-width:12.7962;stroke-miterlimit:4;stroke-dasharray:none"
+       id="circle837"
+       cx="608.80701"
+       cy="147.69565"
+       r="11.163104" />
+    <circle
+       style="fill:#ff0000;fill-rule:evenodd;stroke:none;stroke-width:12.7962;stroke-miterlimit:4;stroke-dasharray:none"
+       id="circle839"
+       cx="844.16833"
+       cy="74.509865"
+       r="11.163104" />
+    <circle
+       style="fill:#ff0000;fill-rule:evenodd;stroke:none;stroke-width:12.7962;stroke-miterlimit:4;stroke-dasharray:none"
+       id="circle1025"
+       cx="211.71443"
+       cy="634.60669"
+       r="11.163104" />
+    <circle
+       style="fill:#ff0000;fill-rule:evenodd;stroke:none;stroke-width:12.7962;stroke-miterlimit:4;stroke-dasharray:none"
+       id="circle1027"
+       cx="259.12973"
+       cy="508.01376"
+       r="11.163104" />
+    <circle
+       style="fill:#ff0000;fill-rule:evenodd;stroke:none;stroke-width:12.7962;stroke-miterlimit:4;stroke-dasharray:none"
+       id="circle1029"
+       cx="319.61734"
+       cy="397.23761"
+       r="11.163104" />
+    <circle
+       style="fill:#ff0000;fill-rule:evenodd;stroke:none;stroke-width:12.7962;stroke-miterlimit:4;stroke-dasharray:none"
+       id="circle1031"
+       cx="494.88968"
+       cy="215.41803"
+       r="11.163104" />
+    <circle
+       style="fill:#ff0000;fill-rule:evenodd;stroke:none;stroke-width:12.7962;stroke-miterlimit:4;stroke-dasharray:none"
+       id="circle1033"
+       cx="720.59332"
+       cy="104.28481"
+       r="11.163104" />
+    <text
+       xml:space="preserve"
+       style="font-size:26.6667px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px"
+       x="39.448586"
+       y="65.917633"
+       id="text1043"><tspan
+         sodipodi:role="line"
+         id="tspan1041"
+         x="39.448586"
+         y="65.917633">Smaller Threshold</tspan></text>
+  </g>
+</svg>
