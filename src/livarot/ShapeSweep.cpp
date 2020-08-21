@@ -3452,3 +3452,7 @@ Shape::DoEdgeTo (Shape * iS, int iB, int iTo, bool direct, bool sens)
       iS->swsData[iB].firstLinkedPoint = -1;
     }
 }
+          if ((ptSh->getEdge(cb).st < ptSh->getEdge(cb).en
+                && nPt == ptSh->getEdge(cb).en)
+              || (ptSh->getEdge(cb).st > ptSh->getEdge(cb).en
+                && nPt == ptSh->getEdge(cb).st))

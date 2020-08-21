@@ -206,5 +206,67 @@
  *
  * @subsection Reconstruction Reconstruction of directed graph
  *
+ * The way that livarot does the reconstruction looks simple from an overview but the code underneath that does it is just
+ * way too much chaos for me to understand. It's like you can read and understand what's happening but can't really make
+ * sense of the big picture (why it's being done). I did a very simple redesign of these parts and only kept whatever seemed
+ * sensible to me or you can say whatever big picture I could see. It's working great even in really complex figures. There
+ * are two possibilities here. Either Livarot has all that extra code for some edge cases or purpose that I'm unable to see
+ * yet or all of that is useless. It's unlikely that it's entirely useless, maybe it had some purpose earlier or was supposed
+ * to but no longer has that. I'm not really sure. Whatever the case, as I progress with my redesign I'll hopefully learn
+ * more.
+ *
+ * For now, I'll attempt to describe the big picture that I understood and also way Livarot does it.
+ *
+ * The way Shape::ConvertToShape is designed is such that you call it on a new Shape object while passing in the actual
+ * directed graph Shape as argument. It'll pick up everything from there and you'll have the reconstructed directed graph
+ * in the new Shape object. Rounded versions of the end points and intersection points get picked as soon as the sweepline
+ * reaches that point. These list of points are kept sorted and if there are any duplicate points, they are merged together.
+ * The overview of the algorithm is that each edge in the sweepline list should keep track of the last point until which it
+ * was drawn, this would be its upper endpoint when the edge got added to the sweepline. Whenever the edge either encounters
+ * an intersection point or it's lower end point (so it's about to be removed from the list), the algorithm should look at
+ * the last point drawn and create an edge from that last point to the current point. Remember that this is only done for
+ * edges that are about to be removed from the sweepline list or just encountered an intersection point. One more thing, when
+ * you do sorting and merging duplicate points, make sure that you update the "last point drawn" variable from each sweepline
+ * list node. This would ensure that duplicate points appear as a single vertex in the graph. This is literally how I've done
+ * it in my redesign and everything works great as far as I've tested.
+ *
+ * The process is shown in the figure below.
+ *
+ * @image html livarot-images/convert-reconstruction.svg
+ *
+ * Now let me describe how Livarot does it and it's really complicated honestly. Firstly, it records all changes that happen
+ * to the sweepline at each y level. I don't know why it does this, but that's how it is. So all edge additions, edge
+ * intersections and edge removals that happen at a particular y level stay in an array called "chgts". This array is cleared
+ * as soon as the y level of the sweepline changes. Then a function called CheckAdjacencies is called that iterates through
+ * these changes but honestly the function is useless. Comment it out and you'd be fine, unless there is some really out of
+ * the world complicated scenario that it was written for, I don't know. Then there is a call to CheckEdges and it is what
+ * does the reconstruction. Inside swsData, there is a field known as "curPoint" which keeps track of the last point that
+ * was drawn. After a lot of loops and blocks that make no sense to me, DoEdgeTo will be called which will create the edge
+ * and add it. I've no idea what's the use and purpose of that chaos but ultimately what it does is what I've just described,
+ * keep track of last point drawn and add an edge between that point and the current point. That's it, that's all there is
+ * to it. Two linked lists are kept in Shape::ConvertToShape named shapeHead and edgeHead and I've no idea what's their use
+ * if at all. Then there are points such as leftRnd and rightRnd and I have no idea why they were needed either.
+ *
+ * @subsection WindingSeeds Winding number seed calculation
+ *
+ * See the documentation of Shape::GetWindings and you'll see how a seed winding number is needed for the computation of
+ * winding numbers. Whenever we add an edge to the sweepline, the point where that edge starts is noted and we see if there
+ * is any edge to the left of this newly added edge, if there is, we note that edge too and we can save this information. The
+ * next time somebody wants to know the winding number at winding number at that point is, we can take the edge it that was
+ * to its left and find its right winding number (whatever right means depending on the direction of the edge).
+ *
+ * @image html livarot-images/edge-winding-seed.svg
+ *
+ * Take a close look at the picture above, you'll see two points highlighted with dark circles. The moment these points are
+ * touched by the sweepline and the edges start start there are added to the sweepline list, we see which edge is immediately
+ * to the left and note it down in pData[point_index].askForWindingB. The red one is on the left so it gets noted. Later on
+ * when GetWindings is trying to find the seed winding number, it can refer back to the red edge and ask for its left winding
+ * number which is the winding number at the black point. There is one complication here though. When we are sweeping, the edge
+ * on the left hasn't really been added yet, so we don't know its edge index (since it hasn't been added) yet. So we just form
+ * a linked list of points that refer to this edge and later when the edge gets drawn (or a part of it), we change all the
+ * edge indices to the right value (to the new edge index that just got added) and we remove any associate from the old edge
+ * index. This is important, because as we sweep, some other point can again start an association with the same edge and again
+ * when some part of the edge gets drawn, we'd want that point to be indexed to the newly added edge. This is the case in the
+ * picture I show. The second black point also gets associated to the same red edge.
  *
  */
