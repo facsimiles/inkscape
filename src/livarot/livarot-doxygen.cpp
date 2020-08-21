@@ -269,4 +269,27 @@
  * when some part of the edge gets drawn, we'd want that point to be indexed to the newly added edge. This is the case in the
  * picture I show. The second black point also gets associated to the same red edge.
  *
+ * @subsection RemovingDoublon Removing Doublon Edges
+ *
+ * There can be situations where one or more edges are exactly identical (share endpoints) and are in same or the opposite
+ * directions. We deal with these situations by removing all identical edges but keepoing only one. We assign it a weight
+ * equal to the difference. Say you have three edges in one direction and one in the opposite. We keep one edge from those
+ * three and set it weight to 2. This is all done by Shape::AssembleAretes.
+ *
+ * @subsection ComputeWindings Computing Winding numbers.
+ *
+ * There is only one fundamental principle that lets us calculate winding numbers. That is, if you know the left and right
+ * winding numbers of an edge and want to know the winding numbers of an edge that shares an endpoint with that edge, you
+ * can calculate them as long there is no edge between them as I show in the figure below. To see the details of how you
+ * find the winding numbers of one edge given the winding numbers of the other edge (that share an endpoint), go to the
+ * function Shape::GetWindings.
+ *
+ * @image html livarot-images/winding-fundamental-principle.svg
+ *
+ * We combine this idea with a depth first search. It is very simple. You start with an edge and crawling to new edges, it
+ * doesn't matter whether you're going in the direction of the edge or against it, as long as you maintain the direction it's
+ * fine. Just keep exploring until you reach a dead-end (unable to find any new edge that you haven't seen before). You start
+ * back tracking, going back and at each endpoint checking if there are other edges connected that you haven't seen before. If
+ * you do find such an edge, start following it and repeat this until there is no new edge to explore.
+ *
  */
