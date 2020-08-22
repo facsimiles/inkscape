@@ -895,25 +895,36 @@ void Path::RecCubicTo( Geom::Point const &iS, Geom::Point const &isD,
                        Geom::Point const &iE, Geom::Point const &ieD,
                        double tresh, int lev, double maxL)
 {
+    // vector from start to end point
     Geom::Point se = iE - iS;
+    // length of that vector
     const double dC = Geom::L2(se);
+    // if the vector from start to end point is smaller than 0.01
     if ( dC < 0.01 ) {
-
+        // we still need to get an idea of how far away the curve goes from the start to end line segment se
+        // for that, we measure lengths of isD and ieD
         const double sC = dot(isD,isD);
         const double eC = dot(ieD,ieD);
+        // if they are limited by tresh, great
         if ( sC < tresh && eC < tresh ) {
             return;
         }
+        // otherwise proceed
 
     } else {
+        // okay so length is greater than or equal to 0.01, we can still check the perpendicular component
+        // of the control handles and see if they are limited by tresh
         const double sC = fabs(cross(se, isD)) / dC;
         const double eC = fabs(cross(se, ieD)) / dC;
         if ( sC < tresh && eC < tresh ) {
             // presque tt droit -> attention si on nous demande de bien subdiviser les petits segments
+            // if the perpendicular is limited and a maxL is set, check if maxL is being respected, if yes
+            // return otherwise we split
             if ( maxL > 0 && dC > maxL ) {
                 if ( lev <= 0 ) {
                     return;
                 }
+                // maths for splitting one cubic bezier into two
                 Geom::Point m = 0.5 * (iS + iE) + 0.125 * (isD - ieD);
                 Geom::Point md = 0.75 * (iE - iS) - 0.125 * (isD + ieD);
 

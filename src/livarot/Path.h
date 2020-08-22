@@ -581,6 +581,51 @@ public:
   // they append points to the polyline
   void DoArc ( Geom::Point const &iS,  Geom::Point const &iE, double rx, double ry,
 	      double angle, bool large, bool wise, double tresh);
+  /**
+   * Approximate the passed cubic bezier with line segments.
+   *
+   * Basically the function checks if the passed cubic bezier is "small enough" and if
+   * it is, it does nothing, if it however isn't "small enough", it splits the bezier
+   * curve into two bezier curves (split at mid point), recursively calls itself on the
+   * left, add the midpoint to the line segment approximation, call itself on the right
+   * cubic and done. lev is the maximum recursion possible, once it's reached, the function
+   * returns doing nothing immediately. See the code to understand more about maxL.
+   *
+   * The way the algorithm checks if the curve is "small enough" is maths so I'll try to
+   * explain it here so you can see the equations printed and probably refer it in code.
+   *
+   * Let \f$\vec{p_{0}}\f$, \f$\vec{p_{1}}\f$, \f$\vec{p_{2}}\f$ and \f$\vec{p_{3}}\f$ be the four
+   * points that define a cubic bezier. The first is the start point, last is the end point,
+   * the two in between are the control points. Given this let me relate these points to the
+   * arguments that were passed in.
+   *
+   * \f[ \vec{iS} = \vec{p_{0}}\f]
+   * \f[ \vec{iE} = \vec{p_{3}}\f]
+   * \f[ \vec{iSd} = 3 (\vec{p_{1}} - \vec{p_{0}})\f]
+   * \f[ \vec{iEd} = 3 (\vec{p_{3}} - \vec{p_{2}})\f]
+   *
+   * This is just how livarot represents a Cubic Bezier, nothing I can do about that. The code
+   * starts by calculating a vector from start point to end point.
+   *
+   * \f[ \vec{se} = \vec{iE} - \vec{iS} ]\f
+   *
+   * If the length of \f$\vec{se}\f$ is smaller than 0.01, then the cubic bezier's endpoints are
+   * kinda close, but if the control points are too far away, it can still be a huge tall curve,
+   * so let's see the control points and see how far away they are from the \f$\vec{se}\f$ vector.
+   * To do that, we measure the lengths of \f$\vec{iSd}\f$ and \f$\vec{iEd}\f$. If both are below
+   * threshold, we return immediately since it indicates the cubic bezier is "small enough".
+   *
+   * if the length is greater than 0.01, we still check the y projections of the control handles
+   * on the line between start and end points, if these projections are limited by the threshold
+   * and we didn't mess up the maxL restriction, we are good.
+   *
+   * If we ran out of recursion levels, we return anyways. In case this cubic bezier isn't small
+   * enough, we split it in two parts. There are math equations in the code that do this and I
+   * spent hours deriving it and they are totally correct. Basically take the usual maths to split
+   * a cubic bezier into two parts and just account for the factor of 3 in the control handles
+   * that livarot adds and you'll end up with correct equations. TODO: Add derivation here maybe?
+   *
+   */
   void RecCubicTo ( Geom::Point const &iS,  Geom::Point const &iSd,  Geom::Point const &iE,  Geom::Point const &iEd, double tresh, int lev,
 		   double maxL = -1.0);
   void RecBezierTo ( Geom::Point const &iPt,  Geom::Point const &iS,  Geom::Point const &iE, double treshhold, int lev, double maxL = -1.0);
