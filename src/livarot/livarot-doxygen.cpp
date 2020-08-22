@@ -292,4 +292,26 @@
  * back tracking, going back and at each endpoint checking if there are other edges connected that you haven't seen before. If
  * you do find such an edge, start following it and repeat this until there is no new edge to explore.
  *
+ * @subsection ManipulateEdges Manipulate Edges
+ *
+ * Once winding numbers have been computed, there is a block of code at the end of Shape::ConvertToShape that does this. The
+ * code would iterate through all the edges that were reconstructed and decide between doing one of three things: Keep an
+ * edge as it is, invert or flip it or remove it. One key principle that is followed is that inside is kept to the edge's
+ * left. So if that's not the case already, the edge gets inverted. Of course the fill rule is taken into account while
+ * doing this. Take a close look at the code to understand it all in detail, it's a really simple piece of code to look at.
+ *
+ *
+ * @section ContourExtraction Extracting Contours
+ *
+ * Once you're done with all the directed graph stuff that's described above you'd want to extract contours out from the
+ * directed graph. The procedure to do that is very similiar to the winding number computation algorithm. You do a depth
+ * first search but ensure that you're always moving along the edge vector (when moving forward). Whenever you reach a
+ * dead end you complete the contour. To see the details you can see Shape::ConvertToForme.
+ *
+ * There is another version of the same function that takes back data into account. What it does is that it can recognize
+ * where the edges originally come from and recreate those path descriptions. So basically, instead of having straight
+ * line segments, you get those original curves back (although they'd be broken into pieces depending on the intersection).
+ *
  */
+
+
