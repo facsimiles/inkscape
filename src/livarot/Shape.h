@@ -809,10 +809,40 @@ private:
      */
     int AssemblePoints(int st, int en);
     void AssembleAretes(FillRule directed = fill_nonZero);
+
+    /**
+     * Add the event in chgts.
+     *
+     * The function adds stuff to the edgehead and shapeHead linked lists as well as set the
+     * leftRnd and rightRnd in swsData of the edges.
+     *
+     * @param lastPointNo The point that was just added in "this" shape.
+     * @param lastChgtPt Either lastPointNo if it's the left most point at that y level or whichever point is the left most at the
+     * same y level as lastPointNo.
+     * @param shapeHead The linked list from ConvertToShape and Booleen.
+     * @param edgeHead The linked list from ConvertToShape and Booleen.
+     * @param type The type of event this is.
+     * @param lS Pointer to the unique edge's shape if this is edge addition/removal or the left edge's shape if an intersection event.
+     * @param lB The unique edge (or the left edge if an intersection event).
+     * @param rS Pointer to the right edge's shape if this is an intersection event.
+     * @param rB The right edge if this is an intersection event.
+     */
     void AddChgt(int lastPointNo, int lastChgtPt, Shape *&shapeHead,
                  int &edgeHead, sTreeChangeType type, Shape *lS, int lB, Shape *rS,
                  int rB);
     void CheckAdjacencies(int lastPointNo, int lastChgtPt, Shape *shapeHead, int edgeHead);
+
+    /**
+     * Check if there are edges to draw and draw them.
+     *
+     * @image html livarot-images/lastChgtPt-from-avance.svg
+     *
+     * @param lastPointNo The point that was just added. See the figure above.
+     * @param lastChgtPt See the figure above.
+     * @param a The main shape a.
+     * @param b The other shape if called from Shape::Booleen.
+     * @param mod The boolean operation mode if called from Shape::Booleen.
+     */
     void CheckEdges(int lastPointNo, int lastChgtPt, Shape *a, Shape *b, BooleanOp mod);
 
     /**

@@ -295,7 +295,9 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
       // the important thing this function does is that it sorts points and merges any duplicate points
       // so edges with different points (which were at the same coordinates) would be forced to point
       // to the same exact point. (useful for cases when multiple edges intersect at the same point)
-      int lastI = AssemblePoints (lastChgtPt, lastPointNo); // lastI is the index of the last point in
+      // Sort all points before lastPointNo
+      int lastI = AssemblePoints (lastChgtPt, lastPointNo); // lastI is one more than the index of the last point that
+      // was added by AssemblePoints after sorting and merging
 
       // after AssemblePoints is done sorting, the newInd variable holds the new index of that point
 
@@ -305,6 +307,8 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
       // the edge is horizontal, the two will be different since the sweepline will intersect it all
       // and btw (here forget everything about the slanted sweepline :-P) also read the note in header
       // docs where I explain how most of this seems chaos with no purpose
+      // This linked list seems to be used only here at this point, it's being used to update the
+      // indices of all the edges' leftRnd and rightRnd, it doesn't get used anywhere else at all
       Shape *curSh = shapeHead;
       int curBo = edgeHead;
       while (curSh)
@@ -362,6 +366,9 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
       // reconstruct the edges
       CheckEdges (lastI, lastChgtPt, a, nullptr, bool_op_union);
 
+      // for each one of the points in the range lastChgtPt..(lastI-1) and if there are already
+      // points associated to the edge pData[i].askForWindingB, push the current one (i) in the linked
+      // list
       for (int i = lastChgtPt; i < lastI; i++) {
         if (pData[i].askForWindingS) {
           Shape *windS = pData[i].askForWindingS;
@@ -371,15 +378,21 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
         }
       }
 
+      // note that AssemblePoints doesn't even touch lastPointNo, it iterates on all the points before
+      // lastPointNo, so while that range might have shrinked because of duplicate points, lastPointNo
+      // remains where it was, so we check if some points got merged, if yes, lastPointNo is kinda far away
+      // from those points (there are garbage points in between due to merging), so we drag it back
       if (lastI < lastPointNo) {
         _pts[lastI] = getPoint(lastPointNo);
         pData[lastI] = pData[lastPointNo];
       }
+      // set lastPointNo to lastI (the new index for lastPointNo)
       lastPointNo = lastI;
-      _pts.resize(lastI + 1);
+      _pts.resize(lastI + 1); // resize and delete everything beyond lastPointNo, we add 1 cuz lastI is an index so u
+      // add one to convert it to size
 
-      lastChgtPt = lastPointNo;
-      lastChange = rPtX[1];
+      lastChgtPt = lastPointNo; // set lastChgtPt
+      lastChange = rPtX[1]; // set lastChange
       chgts.clear(); // this chgts array gets cleared up whenever the y of the sweepline changes
       edgeHead = -1;
       shapeHead = nullptr;
@@ -3081,6 +3094,7 @@ void Shape::AddChgt(int lastPointNo, int lastChgtPt, Shape * &shapeHead,
 		    int &edgeHead, sTreeChangeType type, Shape * lS, int lB, Shape * rS,
 		    int rB)
 {
+  // fill in the event details and push it
   sTreeChange c;
   c.ptNo = lastPointNo;
   c.type = type;
@@ -3089,11 +3103,13 @@ void Shape::AddChgt(int lastPointNo, int lastChgtPt, Shape * &shapeHead,
   c.osrc = rS;
   c.obord = rB;
   chgts.push_back(c);
+  // index of the newly added event
   const int nCh = chgts.size() - 1;
 
   /* FIXME: this looks like a cut and paste job */
 
   if (lS) {
+    // if there is an edge to the left, mark it in lSrc
     SweepTree *lE = static_cast < SweepTree * >(lS->swsData[lB].misc);
     if (lE && lE->elem[LEFT]) {
       SweepTree *llE = static_cast < SweepTree * >(lE->elem[LEFT]);
@@ -3104,20 +3120,31 @@ void Shape::AddChgt(int lastPointNo, int lastChgtPt, Shape * &shapeHead,
       chgts[nCh].lBrd = -1;
     }
 
+    // lastChgtPt is same as lastPointNo if lastPointNo is the leftmost point in that y level and it's the
+    // left most point on the y level of lastPointNo otherwise
+    // leftRnd will be smaller than lastChgtPt if the last time the edge participated in any event (edge addition/intersection)
+    // was before lastChgtPt.
     if (lS->swsData[lB].leftRnd < lastChgtPt) {
-      lS->swsData[lB].leftRnd = lastPointNo;
-      lS->swsData[lB].nextSh = shapeHead;
+      lS->swsData[lB].leftRnd = lastPointNo; // set leftRnd to the current point
+      lS->swsData[lB].nextSh = shapeHead; // add this edge in the linked list
       lS->swsData[lB].nextBo = edgeHead;
       edgeHead = lB;
       shapeHead = lS;
-    } else {
+    } else { // If an event occured to the edge after lastChgtPt (which is possible, for example, a horizontal edge
+             // that intersects with other edges.
+      // get the leftRnd already
       int old = lS->swsData[lB].leftRnd;
+      // This seems really weird. I suspect this if statement will never be true in a top to bottom sweepline
+      // see if we reached this point, it means old >= lastChgtPt
+      // and lastChgtPt is the leftmost point at the current y level of lastPointNo
+      // so how can old have an x greater than lastPoint? The sweepline hasn't reached that position yet!
       if (getPoint(old).x[0] > getPoint(lastPointNo).x[0]) {
         lS->swsData[lB].leftRnd = lastPointNo;
       }
     }
+    // same logic as in the upper block
     if (lS->swsData[lB].rightRnd < lastChgtPt) {
-      lS->swsData[lB].rightRnd = lastPointNo;
+      lS->stwsData[lB].rightRnd = lastPointNo;
     } else {
       int old = lS->swsData[lB].rightRnd;
       if (getPoint(old).x[0] < getPoint(lastPointNo).x[0])
@@ -3125,7 +3152,10 @@ void Shape::AddChgt(int lastPointNo, int lastChgtPt, Shape * &shapeHead,
     }
   }
 
+  // it's an intersection event and rS is the right edge's shape and rB is the
+  // right edge
   if (rS) {
+    // get the edge on the right and set it in rBrd and rSrc
     SweepTree *rE = static_cast < SweepTree * >(rS->swsData[rB].misc);
     if (rE->elem[RIGHT]) {
       SweepTree *rrE = static_cast < SweepTree * >(rE->elem[RIGHT]);
@@ -3136,6 +3166,7 @@ void Shape::AddChgt(int lastPointNo, int lastChgtPt, Shape * &shapeHead,
       chgts[nCh].rBrd = -1;
     }
 
+    // same code as above, except that it's on rS
     if (rS->swsData[rB].leftRnd < lastChgtPt) {
       rS->swsData[rB].leftRnd = lastPointNo;
       rS->swsData[rB].nextSh = shapeHead;
@@ -3155,7 +3186,8 @@ void Shape::AddChgt(int lastPointNo, int lastChgtPt, Shape * &shapeHead,
       if (getPoint(old).x[0] < getPoint(lastPointNo).x[0])
         rS->swsData[rB].rightRnd = lastPointNo;
     }
-  } else {
+  } else { // if rS wasn't set, this is not an intersection event, so
+    // check if there is an edge to the right and set rBrd
     SweepTree *lE = static_cast < SweepTree * >(lS->swsData[lB].misc);
     if (lE && lE->elem[RIGHT]) {
       SweepTree *rlE = static_cast < SweepTree * >(lE->elem[RIGHT]);
@@ -3202,6 +3234,9 @@ Shape::CheckEdges (int lastPointNo, int lastChgtPt, Shape * a, Shape * b,
 
   for (auto & chgt : chgts)
   {
+    // if an edge addition event, we want to set curPoint to the point at which
+    // the edge was added. chgt.ptNo is automatically updated after any possible sorting and merging
+    // so thats good too :-)
     if (chgt.type == 0)
     {
       Shape *lS = chgt.src;
@@ -3209,27 +3244,36 @@ Shape::CheckEdges (int lastPointNo, int lastChgtPt, Shape * a, Shape * b,
       lS->swsData[lB].curPoint = chgt.ptNo;
     }
   }
+  // for each event in events
   for (auto & chgt : chgts)
   {
     //              int   chLeN=chgts[cCh].ptNo;
     //              int   chRiN=chgts[cCh].ptNo;
+    // do the main edge (by do I mean process it, see if anything needs to be drawn, if yes, draw it)
     if (chgt.src)
     {
       Shape *lS = chgt.src;
       int lB = chgt.bord;
       Avance (lastPointNo, lastChgtPt, lS, lB, a, b, mod);
     }
+    // do the other edge (the right in intersection, wont exist if chgt wasn't an intersection event)
     if (chgt.osrc)
     {
       Shape *rS = chgt.osrc;
       int rB = chgt.obord;
       Avance (lastPointNo, lastChgtPt, rS, rB, a, b, mod);
     }
+    // this block always seemed weird to me. I think it's not really needed. I did a quick test by commenting
+    // it out and things were working just fine. Not a 100% sure about this though!
+    // See all edges that participated in some intersection or which just got removed from the sweepline will
+    // have a chgt entry of their own, which will get processed and the blocks above will take care of them.
+    // So why do we really need to traverse all the edges to the left and process each one? despite knowing that
+    // each one of them will have a chgt entry and will get processed
     if (chgt.lSrc)
     {
       Shape *nSrc = chgt.lSrc;
       int nBrd = chgt.lBrd;
-      while (nSrc->swsData[nBrd].leftRnd >=
+      while (nSrc->swsData[nBrd].leftRnd >= // <-- if yes, means some event occured to this event after lastChgt
           lastChgtPt /*&& nSrc->swsData[nBrd].doneTo < lastChgtPt */ )
       {
         Avance (lastPointNo, lastChgtPt, nSrc, nBrd, a, b, mod);
