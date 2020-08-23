@@ -232,6 +232,14 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
     int nPt = -1;
     Shape *ptSh = nullptr;
     bool isIntersection = false;
+
+    // this block gives us the earliest most point (sweeping top to bottom and left to right)
+    // whether it comes from the intersection event priority queue sEvts or sweepline list sTree.
+    // isIntersection tell us if it's coming from an intersection or from the endpoints list of shape a
+    // ptX contains the actual point itself
+    // ptSh contains the shape from which the point comes (if it does) (shape a always)
+    // nPt is the index of the point if it's coming from a shape
+
     // is there an intersection event to pop?
     if (sEvts->peek(intersL, intersR, ptX, ptL, ptR))
     {
@@ -269,20 +277,34 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
         continue;
     }
 
+    // wherever the point comes from, we add the rounded version to "this" shape's list of points
     Geom::Point rPtX;
     rPtX[0]= Round (ptX[0]);
     rPtX[1]= Round (ptX[1]);
-    int lastPointNo = AddPoint (rPtX);
+    int lastPointNo = AddPoint (rPtX); // lastPointNo is the index of this last rounded point we added
     pData[lastPointNo].rx = rPtX;
 
     // this whole block deals with the reconstruction procedure
+    // only do this if the y level changed, we don't need to do this
+    // as long as the y level has not changed, note that sweepline in this algorithm
+    // moves top to bottom but also left to right when there are multiple points at same y
+    // better to think of it as the sweepline being slightly slanted such that it'll hit the
+    // left points earlier than the right ones
     if (rPtX[1] > lastChange)
     {
       // the important thing this function does is that it sorts points and merges any duplicate points
       // so edges with different points (which were at the same coordinates) would be forced to point
       // to the same exact point. (useful for cases when multiple edges intersect at the same point)
-      int lastI = AssemblePoints (lastChgtPt, lastPointNo);
+      int lastI = AssemblePoints (lastChgtPt, lastPointNo); // lastI is the index of the last point in
 
+      // after AssemblePoints is done sorting, the newInd variable holds the new index of that point
+
+      // update the leftRnd and rightRnd indexes to newInd while traversing the linked list of
+      // edges and shapes. leftRnd and rightRnd are the left most and right most points of an edge
+      // that intersect the sweepline. In all non-horizontal edges, both would be identical, only when
+      // the edge is horizontal, the two will be different since the sweepline will intersect it all
+      // and btw (here forget everything about the slanted sweepline :-P) also read the note in header
+      // docs where I explain how most of this seems chaos with no purpose
       Shape *curSh = shapeHead;
       int curBo = edgeHead;
       while (curSh)
@@ -305,8 +327,8 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
           if (chgt.src->getEdge(chgt.bord).st <
               chgt.src->getEdge(chgt.bord).en)
           {
-            chgt.src->swsData[chgt.bord].stPt =
-              chgt.ptNo;
+            chgt.src->swsData[chgt.bord].stPt = // <-- these stPt and enPt variables kinda seem useless, only used once in CheckAdjacencies and the
+              chgt.ptNo;                        // only other place they are read at is the MakeTweak
           }
           else
           {
@@ -2214,7 +2236,7 @@ Shape::AssemblePoints (int st, int en)
 		        } else {
 		      // meme point, mais pas le meme bord: ouille!
 		      // il faut prendre le bord le plus a gauche
-		      // en pratique, n'arrive que si 2 maxima sont dans la meme case -> le mauvais choix prend une arete incidente 
+		      // en pratique, n'arrive que si 2 maxima sont dans la meme case -> le mauvais choix prend une arete incidente
 		      // au bon choix
 //                                              printf("doh");
 		        }
@@ -3059,91 +3081,91 @@ void Shape::AddChgt(int lastPointNo, int lastChgtPt, Shape * &shapeHead,
 		    int &edgeHead, sTreeChangeType type, Shape * lS, int lB, Shape * rS,
 		    int rB)
 {
-    sTreeChange c;
-    c.ptNo = lastPointNo;
-    c.type = type;
-    c.src = lS;
-    c.bord = lB;
-    c.osrc = rS;
-    c.obord = rB;
-    chgts.push_back(c);
-    const int nCh = chgts.size() - 1;
+  sTreeChange c;
+  c.ptNo = lastPointNo;
+  c.type = type;
+  c.src = lS;
+  c.bord = lB;
+  c.osrc = rS;
+  c.obord = rB;
+  chgts.push_back(c);
+  const int nCh = chgts.size() - 1;
 
-    /* FIXME: this looks like a cut and paste job */
+  /* FIXME: this looks like a cut and paste job */
 
-    if (lS) {
-	SweepTree *lE = static_cast < SweepTree * >(lS->swsData[lB].misc);
-	if (lE && lE->elem[LEFT]) {
-	    SweepTree *llE = static_cast < SweepTree * >(lE->elem[LEFT]);
-	    chgts[nCh].lSrc = llE->src;
-	    chgts[nCh].lBrd = llE->bord;
-	} else {
-	    chgts[nCh].lSrc = nullptr;
-	    chgts[nCh].lBrd = -1;
-	}
-
-	if (lS->swsData[lB].leftRnd < lastChgtPt) {
-	    lS->swsData[lB].leftRnd = lastPointNo;
-	    lS->swsData[lB].nextSh = shapeHead;
-	    lS->swsData[lB].nextBo = edgeHead;
-	    edgeHead = lB;
-	    shapeHead = lS;
-	} else {
-	    int old = lS->swsData[lB].leftRnd;
-	    if (getPoint(old).x[0] > getPoint(lastPointNo).x[0]) {
-		lS->swsData[lB].leftRnd = lastPointNo;
-	    }
-	}
-	if (lS->swsData[lB].rightRnd < lastChgtPt) {
-	    lS->swsData[lB].rightRnd = lastPointNo;
-	} else {
-	    int old = lS->swsData[lB].rightRnd;
-	    if (getPoint(old).x[0] < getPoint(lastPointNo).x[0])
-		lS->swsData[lB].rightRnd = lastPointNo;
-	}
-    }
-
-    if (rS) {
-	SweepTree *rE = static_cast < SweepTree * >(rS->swsData[rB].misc);
-	if (rE->elem[RIGHT]) {
-	    SweepTree *rrE = static_cast < SweepTree * >(rE->elem[RIGHT]);
-	    chgts[nCh].rSrc = rrE->src;
-	    chgts[nCh].rBrd = rrE->bord;
-	} else {
-	    chgts[nCh].rSrc = nullptr;
-	    chgts[nCh].rBrd = -1;
-	}
-	
-	if (rS->swsData[rB].leftRnd < lastChgtPt) {
-	    rS->swsData[rB].leftRnd = lastPointNo;
-	    rS->swsData[rB].nextSh = shapeHead;
-	    rS->swsData[rB].nextBo = edgeHead;
-	    edgeHead = rB;
-	    shapeHead = rS;
-	} else {
-	    int old = rS->swsData[rB].leftRnd;
-	    if (getPoint(old).x[0] > getPoint(lastPointNo).x[0]) {
-		rS->swsData[rB].leftRnd = lastPointNo;
-	    }
-	}
-	if (rS->swsData[rB].rightRnd < lastChgtPt) {
-	    rS->swsData[rB].rightRnd = lastPointNo;
-	} else {
-	    int old = rS->swsData[rB].rightRnd;
-	    if (getPoint(old).x[0] < getPoint(lastPointNo).x[0])
-		rS->swsData[rB].rightRnd = lastPointNo;
-	}
+  if (lS) {
+    SweepTree *lE = static_cast < SweepTree * >(lS->swsData[lB].misc);
+    if (lE && lE->elem[LEFT]) {
+      SweepTree *llE = static_cast < SweepTree * >(lE->elem[LEFT]);
+      chgts[nCh].lSrc = llE->src;
+      chgts[nCh].lBrd = llE->bord;
     } else {
-	SweepTree *lE = static_cast < SweepTree * >(lS->swsData[lB].misc);
-	if (lE && lE->elem[RIGHT]) {
-	    SweepTree *rlE = static_cast < SweepTree * >(lE->elem[RIGHT]);
-	    chgts[nCh].rSrc = rlE->src;
-	    chgts[nCh].rBrd = rlE->bord;
-	} else {
-	    chgts[nCh].rSrc = nullptr;
-	    chgts[nCh].rBrd = -1;
-	}
+      chgts[nCh].lSrc = nullptr;
+      chgts[nCh].lBrd = -1;
     }
+
+    if (lS->swsData[lB].leftRnd < lastChgtPt) {
+      lS->swsData[lB].leftRnd = lastPointNo;
+      lS->swsData[lB].nextSh = shapeHead;
+      lS->swsData[lB].nextBo = edgeHead;
+      edgeHead = lB;
+      shapeHead = lS;
+    } else {
+      int old = lS->swsData[lB].leftRnd;
+      if (getPoint(old).x[0] > getPoint(lastPointNo).x[0]) {
+        lS->swsData[lB].leftRnd = lastPointNo;
+      }
+    }
+    if (lS->swsData[lB].rightRnd < lastChgtPt) {
+      lS->swsData[lB].rightRnd = lastPointNo;
+    } else {
+      int old = lS->swsData[lB].rightRnd;
+      if (getPoint(old).x[0] < getPoint(lastPointNo).x[0])
+        lS->swsData[lB].rightRnd = lastPointNo;
+    }
+  }
+
+  if (rS) {
+    SweepTree *rE = static_cast < SweepTree * >(rS->swsData[rB].misc);
+    if (rE->elem[RIGHT]) {
+      SweepTree *rrE = static_cast < SweepTree * >(rE->elem[RIGHT]);
+      chgts[nCh].rSrc = rrE->src;
+      chgts[nCh].rBrd = rrE->bord;
+    } else {
+      chgts[nCh].rSrc = nullptr;
+      chgts[nCh].rBrd = -1;
+    }
+
+    if (rS->swsData[rB].leftRnd < lastChgtPt) {
+      rS->swsData[rB].leftRnd = lastPointNo;
+      rS->swsData[rB].nextSh = shapeHead;
+      rS->swsData[rB].nextBo = edgeHead;
+      edgeHead = rB;
+      shapeHead = rS;
+    } else {
+      int old = rS->swsData[rB].leftRnd;
+      if (getPoint(old).x[0] > getPoint(lastPointNo).x[0]) {
+        rS->swsData[rB].leftRnd = lastPointNo;
+      }
+    }
+    if (rS->swsData[rB].rightRnd < lastChgtPt) {
+      rS->swsData[rB].rightRnd = lastPointNo;
+    } else {
+      int old = rS->swsData[rB].rightRnd;
+      if (getPoint(old).x[0] < getPoint(lastPointNo).x[0])
+        rS->swsData[rB].rightRnd = lastPointNo;
+    }
+  } else {
+    SweepTree *lE = static_cast < SweepTree * >(lS->swsData[lB].misc);
+    if (lE && lE->elem[RIGHT]) {
+      SweepTree *rlE = static_cast < SweepTree * >(lE->elem[RIGHT]);
+      chgts[nCh].rSrc = rlE->src;
+      chgts[nCh].rBrd = rlE->bord;
+    } else {
+      chgts[nCh].rSrc = nullptr;
+      chgts[nCh].rBrd = -1;
+    }
+  }
 }
 
 // is this a debug function?  It's calling localized "printf" ...
@@ -3179,219 +3201,248 @@ Shape::CheckEdges (int lastPointNo, int lastChgtPt, Shape * a, Shape * b,
 {
 
   for (auto & chgt : chgts)
+  {
+    if (chgt.type == 0)
     {
-      if (chgt.type == 0)
-	{
-	  Shape *lS = chgt.src;
-	  int lB = chgt.bord;
-	  lS->swsData[lB].curPoint = chgt.ptNo;
-	}
+      Shape *lS = chgt.src;
+      int lB = chgt.bord;
+      lS->swsData[lB].curPoint = chgt.ptNo;
     }
+  }
   for (auto & chgt : chgts)
+  {
+    //              int   chLeN=chgts[cCh].ptNo;
+    //              int   chRiN=chgts[cCh].ptNo;
+    if (chgt.src)
     {
-//              int   chLeN=chgts[cCh].ptNo;
-//              int   chRiN=chgts[cCh].ptNo;
-      if (chgt.src)
-	{
-	  Shape *lS = chgt.src;
-	  int lB = chgt.bord;
-	  Avance (lastPointNo, lastChgtPt, lS, lB, a, b, mod);
-	}
-      if (chgt.osrc)
-	{
-	  Shape *rS = chgt.osrc;
-	  int rB = chgt.obord;
-	  Avance (lastPointNo, lastChgtPt, rS, rB, a, b, mod);
-	}
-      if (chgt.lSrc)
-	{
-	  Shape *nSrc = chgt.lSrc;
-	  int nBrd = chgt.lBrd;
-	  while (nSrc->swsData[nBrd].leftRnd >=
-		 lastChgtPt /*&& nSrc->swsData[nBrd].doneTo < lastChgtPt */ )
-	    {
-	      Avance (lastPointNo, lastChgtPt, nSrc, nBrd, a, b, mod);
-
-	      SweepTree *node =
-		static_cast < SweepTree * >(nSrc->swsData[nBrd].misc);
-	      if (node == nullptr)
-		break;
-	      node = static_cast < SweepTree * >(node->elem[LEFT]);
-	      if (node == nullptr)
-		break;
-	      nSrc = node->src;
-	      nBrd = node->bord;
-	    }
-	}
-      if (chgt.rSrc)
-	{
-	  Shape *nSrc = chgt.rSrc;
-	  int nBrd = chgt.rBrd;
-	  while (nSrc->swsData[nBrd].rightRnd >=
-		 lastChgtPt /*&& nSrc->swsData[nBrd].doneTo < lastChgtPt */ )
-	    {
-	      Avance (lastPointNo, lastChgtPt, nSrc, nBrd, a, b, mod);
-
-	      SweepTree *node =
-		static_cast < SweepTree * >(nSrc->swsData[nBrd].misc);
-	      if (node == nullptr)
-		break;
-	      node = static_cast < SweepTree * >(node->elem[RIGHT]);
-	      if (node == nullptr)
-		break;
-	      nSrc = node->src;
-	      nBrd = node->bord;
-	    }
-	}
+      Shape *lS = chgt.src;
+      int lB = chgt.bord;
+      Avance (lastPointNo, lastChgtPt, lS, lB, a, b, mod);
     }
+    if (chgt.osrc)
+    {
+      Shape *rS = chgt.osrc;
+      int rB = chgt.obord;
+      Avance (lastPointNo, lastChgtPt, rS, rB, a, b, mod);
+    }
+    if (chgt.lSrc)
+    {
+      Shape *nSrc = chgt.lSrc;
+      int nBrd = chgt.lBrd;
+      while (nSrc->swsData[nBrd].leftRnd >=
+          lastChgtPt /*&& nSrc->swsData[nBrd].doneTo < lastChgtPt */ )
+      {
+        Avance (lastPointNo, lastChgtPt, nSrc, nBrd, a, b, mod);
+
+        SweepTree *node =
+          static_cast < SweepTree * >(nSrc->swsData[nBrd].misc);
+        if (node == nullptr)
+          break;
+        node = static_cast < SweepTree * >(node->elem[LEFT]);
+        if (node == nullptr)
+          break;
+        nSrc = node->src;
+        nBrd = node->bord;
+      }
+    }
+    if (chgt.rSrc)
+    {
+      Shape *nSrc = chgt.rSrc;
+      int nBrd = chgt.rBrd;
+      while (nSrc->swsData[nBrd].rightRnd >=
+          lastChgtPt /*&& nSrc->swsData[nBrd].doneTo < lastChgtPt */ )
+      {
+        Avance (lastPointNo, lastChgtPt, nSrc, nBrd, a, b, mod);
+
+        SweepTree *node =
+          static_cast < SweepTree * >(nSrc->swsData[nBrd].misc);
+        if (node == nullptr)
+          break;
+        node = static_cast < SweepTree * >(node->elem[RIGHT]);
+        if (node == nullptr)
+          break;
+        nSrc = node->src;
+        nBrd = node->bord;
+      }
+    }
+  }
 }
 
 void
 Shape::Avance (int lastPointNo, int lastChgtPt, Shape * lS, int lB, Shape * /*a*/,
 	       Shape * b, BooleanOp mod)
 {
-  double dd = HalfRound (1);
-  bool avoidDiag = false;
-//      if ( lastChgtPt > 0 && pts[lastChgtPt-1].y+dd == pts[lastChgtPt].y ) avoidDiag=true;
+  double dd = HalfRound (1); // get the smallest step you can take in the rounding grid.
+  bool avoidDiag = false; // triggers some special diagonal avoiding code below
+  //      if ( lastChgtPt > 0 && pts[lastChgtPt-1].y+dd == pts[lastChgtPt].y ) avoidDiag=true;
 
+  // my best guess is that direct acts kinda as an inverter. If set to true, edges are drawn
+  // in the direction they should be drawn in, if set to false, they are inverted. This is needed
+  // if the edge is coming from shape b and the mod is bool_op_diff or bool_op_symdiff. This is how
+  // Livarot does these boolean operations.
   bool direct = true;
   if (lS == b && (mod == bool_op_diff || mod == bool_op_symdiff))
     direct = false;
+  // get the leftRnd and rightRnd points of the edge lB. For most edges, leftRnd and rightRnd are identical
+  // however when you have a horizontal edge, they can be different.
   int lftN = lS->swsData[lB].leftRnd;
   int rgtN = lS->swsData[lB].rightRnd;
+  // doneTo acts as a marker. Once Avance processes an edge at a certain y level, it sets doneTo to the
+  // right most point at that y level. See the end of this function to see how it does this.
   if (lS->swsData[lB].doneTo < lastChgtPt)
+  {
+    // the last point till which this edge has been drawn
+    int lp = lS->swsData[lB].curPoint;
+    // if the last point exists and lastChgtPt.y is just dd (1 rounded step) bigger than lastpoint.y
+    // in simpler words, the last point drawn is just 1 rounded step above lastChgtPt
+    // Look, if there is a potential edge to draw, that edge is going to have its upper endpoint at lp
+    // and could have the lower endpoint lftN...rgtN whatever, but we are sure that it can't go any lower (downwards)
+    // than lastChgtPt. If this "if" block evalues to true, there is a possibility we might an edge that would
+    // be diagonal for example 1 rounded unit dd down and to the right. We would like to avoid this if there is
+    // a point right below, so we can draw two edges, first down and then right. See the figure in the header
+    // docs to see what I mean
+    if (lp >= 0 && getPoint(lp).x[1] + dd == getPoint(lastChgtPt).x[1])
+      avoidDiag = true;
+    // if the edge is horizontal
+    if (lS->eData[lB].rdx[1] == 0)
     {
-      int lp = lS->swsData[lB].curPoint;
-      if (lp >= 0 && getPoint(lp).x[1] + dd == getPoint(lastChgtPt).x[1])
-	avoidDiag = true;
-      if (lS->eData[lB].rdx[1] == 0)
-	{
-	  // tjs de gauche a droite et pas de diagonale
-	  if (lS->eData[lB].rdx[0] >= 0)
-	    {
-	      for (int p = lftN; p <= rgtN; p++)
-		{
-		  DoEdgeTo (lS, lB, p, direct, true);
-		  lp = p;
-		}
-	    }
-	  else
-	    {
-	      for (int p = lftN; p <= rgtN; p++)
-		{
-		  DoEdgeTo (lS, lB, p, direct, false);
-		  lp = p;
-		}
-	    }
-	}
-      else if (lS->eData[lB].rdx[1] > 0)
-	{
-	  if (lS->eData[lB].rdx[0] >= 0)
-	    {
-
-	      for (int p = lftN; p <= rgtN; p++)
-		{
-		  if (avoidDiag && p == lftN && getPoint(lftN).x[0] == getPoint(lp).x[0] + dd)
-		    {
-		      if (lftN > 0 && lftN - 1 >= lastChgtPt
-			  && getPoint(lftN - 1).x[0] == getPoint(lp).x[0])
-			{
-			  DoEdgeTo (lS, lB, lftN - 1, direct, true);
-			  DoEdgeTo (lS, lB, lftN, direct, true);
-			}
-		      else
-			{
-			  DoEdgeTo (lS, lB, lftN, direct, true);
-			}
-		    }
-		  else
-		    {
-		      DoEdgeTo (lS, lB, p, direct, true);
-		    }
-		  lp = p;
-		}
-	    }
-	  else
-	    {
-
-	      for (int p = rgtN; p >= lftN; p--)
-		{
-		  if (avoidDiag && p == rgtN && getPoint(rgtN).x[0] == getPoint(lp).x[0] - dd)
-		    {
-		      if (rgtN < numberOfPoints() && rgtN + 1 < lastPointNo
-			  && getPoint(rgtN + 1).x[0] == getPoint(lp).x[0])
-			{
-			  DoEdgeTo (lS, lB, rgtN + 1, direct, true);
-			  DoEdgeTo (lS, lB, rgtN, direct, true);
-			}
-		      else
-			{
-			  DoEdgeTo (lS, lB, rgtN, direct, true);
-			}
-		    }
-		  else
-		    {
-		      DoEdgeTo (lS, lB, p, direct, true);
-		    }
-		  lp = p;
-		}
-	    }
-	}
-      else
-	{
-	  if (lS->eData[lB].rdx[0] >= 0)
-	    {
-
-	      for (int p = rgtN; p >= lftN; p--)
-		{
-		  if (avoidDiag && p == rgtN && getPoint(rgtN).x[0] == getPoint(lp).x[0] - dd)
-		    {
-		      if (rgtN < numberOfPoints() && rgtN + 1 < lastPointNo
-			  && getPoint(rgtN + 1).x[0] == getPoint(lp).x[0])
-			{
-			  DoEdgeTo (lS, lB, rgtN + 1, direct, false);
-			  DoEdgeTo (lS, lB, rgtN, direct, false);
-			}
-		      else
-			{
-			  DoEdgeTo (lS, lB, rgtN, direct, false);
-			}
-		    }
-		  else
-		    {
-		      DoEdgeTo (lS, lB, p, direct, false);
-		    }
-		  lp = p;
-		}
-	    }
-	  else
-	    {
-
-	      for (int p = lftN; p <= rgtN; p++)
-		{
-		  if (avoidDiag && p == lftN && getPoint(lftN).x[0] == getPoint(lp).x[0] + dd)
-		    {
-		      if (lftN > 0 && lftN - 1 >= lastChgtPt
-			  && getPoint(lftN - 1).x[0] == getPoint(lp).x[0])
-			{
-			  DoEdgeTo (lS, lB, lftN - 1, direct, false);
-			  DoEdgeTo (lS, lB, lftN, direct, false);
-			}
-		      else
-			{
-			  DoEdgeTo (lS, lB, lftN, direct, false);
-			}
-		    }
-		  else
-		    {
-		      DoEdgeTo (lS, lB, p, direct, false);
-		    }
-		  lp = p;
-		}
-	    }
-	}
-      lS->swsData[lB].curPoint = lp;
+      // tjs de gauche a droite et pas de diagonale -- > left to right horizonal edge won't be diagonal (since it's horizontal :P)
+      if (lS->eData[lB].rdx[0] >= 0) // edge is left to right
+      {
+        for (int p = lftN; p <= rgtN; p++)
+        {
+          DoEdgeTo (lS, lB, p, direct, true);
+          lp = p;
+        }
+      }
+      else // edge is right to left
+      {
+        for (int p = lftN; p <= rgtN; p++)
+        {
+          DoEdgeTo (lS, lB, p, direct, false);
+          lp = p;
+        }
+      }
     }
+    else if (lS->eData[lB].rdx[1] > 0) // the edge is top to bottom
+    {
+      if (lS->eData[lB].rdx[0] >= 0) // edge is top to bottom and left to right
+      {
+
+        for (int p = lftN; p <= rgtN; p++) // for the range lftN..rgtN
+        {
+          // if avoidDiag is true, point p is lftN and the point the edge is to be drawn to (lftN) has an x that's
+          // 1 rounded unit (dd) greater than the last point drawn. So basically lftN is one unit down and one unit
+          // to the right of lp
+          if (avoidDiag && p == lftN && getPoint(lftN).x[0] == getPoint(lp).x[0] + dd)
+          {
+            // we would want to avoid the diagonal but only if there is a point (in our directed graph)
+            // just to the left of the original lower endpoint and instead of doing a diagonal, we can create an edge to that point
+            // and then from that point to the original endpoint. see the figure in the header docs to see what I mean
+            if (lftN > 0 && lftN - 1 >= lastChgtPt // if there is a point in the figure just below lp and to the left of lftN
+                && getPoint(lftN - 1).x[0] == getPoint(lp).x[0]) // that point has x equal to that of lp (right below it)
+            {
+              DoEdgeTo (lS, lB, lftN - 1, direct, true); // draw an edge to lftn - 1
+              DoEdgeTo (lS, lB, lftN, direct, true); // then draw an edge to lftN
+            }
+            else
+            {
+              DoEdgeTo (lS, lB, lftN, direct, true);
+            }
+          }
+          else
+          {
+            DoEdgeTo (lS, lB, p, direct, true);
+          }
+          lp = p;
+        }
+      }
+      else
+      {
+
+        for (int p = rgtN; p >= lftN; p--) // top to bottom and right to left
+        {
+          // exactly identical to the code above except that it's a diagonal down and to the left
+          if (avoidDiag && p == rgtN && getPoint(rgtN).x[0] == getPoint(lp).x[0] - dd)
+          {
+            if (rgtN < numberOfPoints() && rgtN + 1 < lastPointNo // refer to first diagram in header docs to see why this condition
+                && getPoint(rgtN + 1).x[0] == getPoint(lp).x[0])
+            {
+              DoEdgeTo (lS, lB, rgtN + 1, direct, true);
+              DoEdgeTo (lS, lB, rgtN, direct, true);
+            }
+            else
+            {
+              DoEdgeTo (lS, lB, rgtN, direct, true);
+            }
+          }
+          else
+          {
+            DoEdgeTo (lS, lB, p, direct, true);
+          }
+          lp = p;
+        }
+      }
+    }
+    else // edge is bottom to top
+    {
+      if (lS->eData[lB].rdx[0] >= 0) // edge is bottom to top and left to right
+      {
+
+        for (int p = rgtN; p >= lftN; p--)
+        {
+          if (avoidDiag && p == rgtN && getPoint(rgtN).x[0] == getPoint(lp).x[0] - dd)
+          {
+            if (rgtN < numberOfPoints() && rgtN + 1 < lastPointNo
+                && getPoint(rgtN + 1).x[0] == getPoint(lp).x[0])
+            {
+              DoEdgeTo (lS, lB, rgtN + 1, direct, false); // draw an edge that goes down
+              DoEdgeTo (lS, lB, rgtN, direct, false); // draw an edge that goes left
+            }
+            else
+            {
+              DoEdgeTo (lS, lB, rgtN, direct, false);
+            }
+          }
+          else
+          {
+            DoEdgeTo (lS, lB, p, direct, false);
+          }
+          lp = p;
+        }
+      }
+      else
+      {
+        // bottom to top and right to left edge
+        for (int p = lftN; p <= rgtN; p++)
+        {
+          // totally identical as the first block that I explain with a figure in the header docs
+          if (avoidDiag && p == lftN && getPoint(lftN).x[0] == getPoint(lp).x[0] + dd)
+          {
+            if (lftN > 0 && lftN - 1 >= lastChgtPt
+                && getPoint(lftN - 1).x[0] == getPoint(lp).x[0])
+            {
+              DoEdgeTo (lS, lB, lftN - 1, direct, false);
+              DoEdgeTo (lS, lB, lftN, direct, false);
+            }
+            else
+            {
+              DoEdgeTo (lS, lB, lftN, direct, false);
+            }
+          }
+          else
+          {
+            DoEdgeTo (lS, lB, p, direct, false);
+          }
+          lp = p;
+        }
+      }
+    }
+    lS->swsData[lB].curPoint = lp;
+  }
+  // see how doneTo is being set to lastPointNo - 1? See the figure in the header docs of this function and you'll see
+  // what lastPointNo is, subtract one and you get the right most point that's just above lastPointNo. This marks that
+  // this edge has been processed til that y level.
   lS->swsData[lB].doneTo = lastPointNo - 1;
 }
 
@@ -3401,58 +3452,54 @@ Shape::DoEdgeTo (Shape * iS, int iB, int iTo, bool direct, bool sens)
   int lp = iS->swsData[iB].curPoint;
   int ne = -1;
   if (sens)
-    {
-      if (direct)
-	ne = AddEdge (lp, iTo);
-      else
-	ne = AddEdge (iTo, lp);
-    }
+  {
+    if (direct)
+      ne = AddEdge (lp, iTo);
+    else
+      ne = AddEdge (iTo, lp);
+  }
   else
-    {
-      if (direct)
-	ne = AddEdge (iTo, lp);
-      else
-	ne = AddEdge (lp, iTo);
-    }
+  {
+    if (direct)
+      ne = AddEdge (iTo, lp);
+    else
+      ne = AddEdge (lp, iTo);
+  }
   if (ne >= 0 && _has_back_data)
+  {
+    ebData[ne].pathID = iS->ebData[iB].pathID;
+    ebData[ne].pieceID = iS->ebData[iB].pieceID;
+    if (iS->eData[iB].length < 0.00001)
     {
-      ebData[ne].pathID = iS->ebData[iB].pathID;
-      ebData[ne].pieceID = iS->ebData[iB].pieceID;
-      if (iS->eData[iB].length < 0.00001)
-	{
-	  ebData[ne].tSt = ebData[ne].tEn = iS->ebData[iB].tSt;
-	}
-      else
-	{
-	  double bdl = iS->eData[iB].ilength;
-    Geom::Point bpx = iS->pData[iS->getEdge(iB).st].rx;
-	  Geom::Point bdx = iS->eData[iB].rdx;
-	  Geom::Point psx = getPoint(getEdge(ne).st).x;
-	  Geom::Point pex = getPoint(getEdge(ne).en).x;
-        Geom::Point psbx=psx-bpx;
-        Geom::Point pebx=pex-bpx;
-	  double pst = dot(psbx,bdx) * bdl;
-	  double pet = dot(pebx,bdx) * bdl;
-	  pst = iS->ebData[iB].tSt * (1 - pst) + iS->ebData[iB].tEn * pst;
-	  pet = iS->ebData[iB].tSt * (1 - pet) + iS->ebData[iB].tEn * pet;
-	  ebData[ne].tEn = pet;
-	  ebData[ne].tSt = pst;
-	}
+      ebData[ne].tSt = ebData[ne].tEn = iS->ebData[iB].tSt;
     }
+    else
+    {
+      double bdl = iS->eData[iB].ilength;
+      Geom::Point bpx = iS->pData[iS->getEdge(iB).st].rx;
+      Geom::Point bdx = iS->eData[iB].rdx;
+      Geom::Point psx = getPoint(getEdge(ne).st).x;
+      Geom::Point pex = getPoint(getEdge(ne).en).x;
+      Geom::Point psbx=psx-bpx;
+      Geom::Point pebx=pex-bpx;
+      double pst = dot(psbx,bdx) * bdl;
+      double pet = dot(pebx,bdx) * bdl;
+      pst = iS->ebData[iB].tSt * (1 - pst) + iS->ebData[iB].tEn * pst;
+      pet = iS->ebData[iB].tSt * (1 - pet) + iS->ebData[iB].tEn * pet;
+      ebData[ne].tEn = pet;
+      ebData[ne].tSt = pst;
+    }
+  }
   iS->swsData[iB].curPoint = iTo;
   if (ne >= 0)
+  {
+    int cp = iS->swsData[iB].firstLinkedPoint;
+    swsData[ne].firstLinkedPoint = iS->swsData[iB].firstLinkedPoint;
+    while (cp >= 0)
     {
-      int cp = iS->swsData[iB].firstLinkedPoint;
-      swsData[ne].firstLinkedPoint = iS->swsData[iB].firstLinkedPoint;
-      while (cp >= 0)
-	{
-	  pData[cp].askForWindingB = ne;
-	  cp = pData[cp].nextLinkedPoint;
-	}
-      iS->swsData[iB].firstLinkedPoint = -1;
+      pData[cp].askForWindingB = ne;
+      cp = pData[cp].nextLinkedPoint;
     }
+    iS->swsData[iB].firstLinkedPoint = -1;
+  }
 }
-          if ((ptSh->getEdge(cb).st < ptSh->getEdge(cb).en
-                && nPt == ptSh->getEdge(cb).en)
-              || (ptSh->getEdge(cb).st > ptSh->getEdge(cb).en
-                && nPt == ptSh->getEdge(cb).st))

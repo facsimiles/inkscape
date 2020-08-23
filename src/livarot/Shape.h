@@ -790,6 +790,23 @@ private:
     int PushIncidence(Shape *a, int cb, int pt, double theta);
     int CreateIncidence(Shape *a, int cb, int pt);
     void AssemblePoints(Shape *a);
+
+    /**
+     * Sort the points and merge duplicate ones.
+     *
+     * Sort the points from st to en - 1. No idea why the parameters were
+     * set up in this weird way.
+     *
+     * The function also sets up newInd to the new indices so everything else
+     * can update the indices instantly.
+     *
+     * @param st The start of the range of points to sort.
+     * @param en One more than the end of the range of points to sort.
+     *
+     * @return If st and en are the same, nothing is done and en is returned. Otherwise, an index one more than the last point
+     * in the sorted and merged list is returned. So say we gave the sequence of points indexed 2,4,5,6,7 and 4 and 5 were duplicates
+     * so final sequence would have indices 2,4,5,6 and the function will return 7.
+     */
     int AssemblePoints(int st, int en);
     void AssembleAretes(FillRule directed = fill_nonZero);
     void AddChgt(int lastPointNo, int lastChgtPt, Shape *&shapeHead,
@@ -797,7 +814,70 @@ private:
                  int rB);
     void CheckAdjacencies(int lastPointNo, int lastChgtPt, Shape *shapeHead, int edgeHead);
     void CheckEdges(int lastPointNo, int lastChgtPt, Shape *a, Shape *b, BooleanOp mod);
+
+    /**
+     * Do the edge.
+     *
+     * That's a very vague thing to say but basically this function checks the leftRnd and rightRnd
+     * of the edge and if anything needs to be drawn, it draws them.
+     *
+     * Most of the code you see in the function body deals with a very rare diagonal case that I suspect would be
+     * extremely rare. I'll add comments in the code body to further highlight this. But if you ignore all of that
+     * the resulting code is quite simple.
+     *
+     * @image html livarot-images/lastChgtPt-from-avance.svg
+     *
+     * This picture shows you how the variables look like when Avance is called by CheckEdges which is called from
+     * a block of code in Shape::ConvertToShape or Shape::Booleen. You can see that lastPointNo is the point that
+     * just got added to the list and it has to be the left most, there can't be another point at the same y and
+     * to the left of lastPointNo. The reason is, the block which calls CheckEdges is called at the leftmost point
+     * at a particular y. You should also note how lastChgtPt is the left most point but just above lastPointNo
+     * (smaller y), can't be the same y.
+     *
+     * @image html livarot-images/rounded-edge-diagonal-avoid.svg
+     *
+     * This image is referred from code comments to help explain a point.
+     *
+     * @param lastPointNo The new point that the sweepline just jumped on. No edge processing (adding/removal) has
+     * been done on the point yet. The point has only been added in "this" shape and this is its index.
+     * @param lastChgtPt This is hard to visualize but image the set of points having a y just smaller than lastPointNo's y
+     * and now within those points (if there are multiple ones), get the left most one. That's what lastChgtPt will be.
+     * @param iS The shape to which edge iB belongs.
+     * @param iB The index of the edge to draw/do.
+     * @param a Index of shape a. Not really used.
+     * @param b Index of shape b if called ultimately from Shape::Booleen.
+     * @param mod The mode of boolean operation.
+     */
     void Avance(int lastPointNo, int lastChgtPt, Shape *iS, int iB, Shape *a, Shape *b, BooleanOp mod);
+
+    /**
+     * Draw edge to a passed point.
+     *
+     * You might ask, don't we need two points to draw an edge. Well iB is the original edge
+     * passed. The edge stores the last point until which it was drawn. We will simply draw
+     * an edge between that last point and the point iTo.
+     *
+     * Say that lp is the last point drawn and iTo is the new point. The edge will be drawn
+     * in the following fashion depending on the values of direct and sens
+     *
+     *  direct &  sens : lp  -> iTo
+     * !direct &  sens : iTo -> lp
+     *  direct & !sens : iTo -> lp
+     * !direct & !sens : lp  -> iTo
+     *
+     * If the edges had back data, the backdata for the new points is carefully calculated by doing
+     * some maths so the correct t values are found. The function also updates "last point drawn" of
+     * that edge to the point iTo. There is one more important thing that this function does. If the
+     * edge iB has a linked list of points associated with it (due to computation of seed winding numbers)
+     * then we make sure to transfer that linked list of points to the new edge that we just drew and
+     * destroy the association with the original edge iB.
+     *
+     * @param iS The shape to which the original edge belongs.
+     * @param iB The original edge in shape iS.
+     * @param iTo The point to draw the edge to.
+     * @param direct Used to control direction of the edge.
+     * @param sens Used to control direction of the edge.
+     */
     void DoEdgeTo(Shape *iS, int iB, int iTo, bool direct, bool sens);
 
     /**
