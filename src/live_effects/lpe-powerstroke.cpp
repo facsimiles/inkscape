@@ -159,7 +159,7 @@ LPEPowerStroke::LPEPowerStroke(LivePathEffectObject *lpeobject) :
     sort_points(_("Sort points"), _("Sort offset points according to their time value along the curve"), "sort_points", &wr, this, true),
     interpolator_type(_("Interpolator type:"), _("Determines which kind of interpolator will be used to interpolate between stroke width along the path"), "interpolator_type", InterpolatorTypeConverter, &wr, this, Geom::Interpolate::INTERP_CENTRIPETAL_CATMULLROM),
     interpolator_beta(_("Smoothness:"), _("Sets the smoothness for the CubicBezierJohan interpolator; 0 = linear interpolation, 1 = smooth"), "interpolator_beta", &wr, this, 0.2),
-    scale_width(_("Width scale:"), _("Width scale all points"), "scale_width", &wr, this, 1.0),
+    scale_width(_("Width factor:"), _("Scale the stroke's width uniformly along the whole path"), "scale_width", &wr, this, 1.0),
     start_linecap_type(_("Start cap:"), _("Determines the shape of the path's start"), "start_linecap_type", LineCapTypeConverter, &wr, this, LINECAP_ZERO_WIDTH),
     linejoin_type(_("Join:"), _("Determines the shape of the path's corners"), "linejoin_type", LineJoinTypeConverter, &wr, this, LINEJOIN_ROUND),
     miter_limit(_("Miter limit:"), _("Maximum length of the miter (in units of stroke width)"), "miter_limit", &wr, this, 4.),
@@ -188,11 +188,18 @@ LPEPowerStroke::LPEPowerStroke(LivePathEffectObject *lpeobject) :
     has_recursion = false;
 }
 
-LPEPowerStroke::~LPEPowerStroke() = default;
+LPEPowerStroke::~LPEPowerStroke()
+{
+    modified_connection.disconnect();
+};
 
 void 
 LPEPowerStroke::doBeforeEffect(SPLPEItem const *lpeItem)
 {
+    SPObject *obj = dynamic_cast<SPObject *>(sp_lpe_item);
+    if (is_load && obj) {
+        modified_connection = obj->connectModified(sigc::mem_fun(*this, &LPEPowerStroke::modified));
+    }
     offset_points.set_scale_width(scale_width);
     if (has_recursion) {
         has_recursion = false;
@@ -200,46 +207,124 @@ LPEPowerStroke::doBeforeEffect(SPLPEItem const *lpeItem)
     }
 }
 
-void LPEPowerStroke::applyStyle(SPLPEItem *lpeitem)
+void
+LPEPowerStroke::createStroke(Geom::PathVector strokepv)
 {
-    SPCSSAttr *css = sp_repr_css_attr_new();
-    if (lpeitem->style) {
-        if (lpeitem->style->stroke.isPaintserver()) {
-            SPPaintServer *server = lpeitem->style->getStrokePaintServer();
-            if (server) {
-                Glib::ustring str;
-                str += "url(#";
-                str += server->getId();
-                str += ")";
-                sp_repr_css_set_property(css, "fill", str.c_str());
-            }
-        } else if (lpeitem->style->stroke.isColor()) {
-            gchar c[64];
-            sp_svg_write_color(
-                c, sizeof(c),
-                lpeitem->style->stroke.value.color.toRGBA32(SP_SCALE24_TO_FLOAT(lpeitem->style->stroke_opacity.value)));
-            sp_repr_css_set_property(css, "fill", c);
-        } else {
-            sp_repr_css_set_property(css, "fill", "none");
-        }
-    } else {
-        sp_repr_css_unset_property(css, "fill");
+    SPDocument *document = getSPDoc();
+    if (!document || !sp_lpe_item|| !sp_lpe_item->getId()) {
+        return;
     }
+    //we use the LPE object (defs defined) id to construct the unique id for the linked item
+    //we dont use sp_lpe_item (Current LPE Item) id because it can conflict
+    Glib::ustring lpobjid = this->lpeobj->getId();
+    Glib::ustring strokeid  = lpobjid + "_stroke";
+    //We dalay to later style
+    Inkscape::XML::Document *xml_doc = document->getReprDoc();
+    SPObject *elemref = nullptr;
+    //here we set the stroke
+    gchar *strokestr = sp_svg_write_path(strokepv);
+    //Here we find if the element of the strokeid exist or not
+    if ((elemref = document->getObjectById(strokeid.c_str()))) {
+        Inkscape::XML::Node *stroke = elemref->getRepr();
+        stroke->setAttribute("d", strokestr);
+        //we also lock the item to not be selectable
+        stroke->setAttribute("sodipodi:insensitive", "true");
+    } else {
+        Inkscape::XML::Node *stroke = xml_doc->createElement("svg:path");
+        stroke->setAttribute("id", strokeid.c_str());
+        stroke->setAttribute("d", strokestr);
+        stroke->setAttribute("sodipodi:insensitive", "true");
+        elemref = SP_OBJECT(sp_lpe_item->parent->appendChildRepr(stroke));
+        Inkscape::GC::release(stroke);
+    }
+    //we use the ID of the new element to add to extra items list
+    items.push_back(strokeid);
+}
 
-    sp_repr_css_set_property(css, "fill-rule", "nonzero");
-    sp_repr_css_set_property(css, "stroke", "none");
+void
+LPEPowerStroke::modified(SPObject *obj, guint flags)
+{
+    // Now we are going to link styles
+    // this function is executed each time the item style is changed
+    if (flags & SP_OBJECT_STYLE_MODIFIED_FLAG) { //style changed
+        //get the fill item
+        SPDocument *document = getSPDoc();
+        if (!document || !sp_lpe_item || !sp_lpe_item->getId()) {
+            return;
+        }
+        Glib::ustring lpobjid = this->lpeobj->getId();
+        Glib::ustring strokeid  = lpobjid + "_stroke";
+        SPObject * elemref = document->getObjectById(strokeid);
 
-    sp_desktop_apply_css_recursive(lpeitem, css, true);
-    sp_repr_css_attr_unref(css);
+        if(elemref) {
+            elemref->style->fill.read(sp_lpe_item->style->stroke.get_value().c_str());
+            elemref->style->fill_opacity.read(sp_lpe_item->style->stroke_opacity.get_value().c_str());
+            elemref->style->stroke.read(nullptr);
+            elemref->style->stroke_opacity.read("1.0");
+            elemref->updateRepr();
+        }
+
+        sp_lpe_item->style->fill.readIfUnset("none");
+        sp_lpe_item->style->stroke_width.read("0.0");
+        sp_lpe_item->updateRepr();
+
+        auto paint_order = sp_lpe_item->style->paint_order.get_value();
+        auto item_a = dynamic_cast<SPItem *>(sp_lpe_item);
+        auto item_b = dynamic_cast<SPItem *>(elemref);
+        if(item_a && item_b) {
+            // We're ignoring markers at the moment, there isn't any markers
+            // Paint order where stroke or fill doesn't appear 'normal' will be Fill, then stroke
+            if(paint_order.find("stroke") < paint_order.find("fill")) {
+                // Stroke, then fill
+                item_a->moveTo(item_b, false);
+            } else {
+                // Fill, then stroke (normal)
+                item_b->moveTo(item_a, false);
+            }
+        }
+
+    } 
+}
+
+//now adding common to handle external items
+void
+LPEPowerStroke::doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/)
+{
+    processObjects(LPE_VISIBILITY);
+}
+
+void 
+LPEPowerStroke::doOnRemove (SPLPEItem const* /*lpeitem*/)
+{
+    //set "keep paths" hook on sp-lpe-item.cpp
+    if (keep_paths) {
+        processObjects(LPE_TO_OBJECTS);
+        items.clear();
+        return;
+    }
+    processObjects(LPE_ERASE);
+    //we see later how to handle remove
+    SPShape *shape = dynamic_cast<SPShape *>(sp_lpe_item);
+    if (shape) {
+        //lpe_shape_revert_stroke_and_fill(shape, offset_points.median_width()*2);
+    }
+}
+
+void LPEPowerStroke::applyStyle(SPLPEItem */*lpeitem*/)
+{
+    SPObject *object = dynamic_cast<SPObject *>(sp_lpe_item);
+    if (object) {
+        modified(object, SP_OBJECT_STYLE_MODIFIED_FLAG);
+    }
 }
 
 void
 LPEPowerStroke::doOnApply(SPLPEItem const* lpeitem)
 {
-    if (SP_IS_SHAPE(lpeitem)) {
+    if (auto shape = dynamic_cast<SPShape const *>(lpeitem)) {
         SPLPEItem* item = const_cast<SPLPEItem*>(lpeitem);
         std::vector<Geom::Point> points;
-        Geom::PathVector const &pathv = pathv_to_linear_and_cubic_beziers(SP_SHAPE(lpeitem)->_curve->get_pathvector());
+        Geom::PathVector const &pathv = pathv_to_linear_and_cubic_beziers(shape->getCurve()->get_pathvector());
         double width = (lpeitem && lpeitem->style) ? lpeitem->style->stroke_width.computed / 2 : 1.;
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         Glib::ustring pref_path_pp = "/live_effects/powerstroke/powerpencil";
@@ -272,41 +357,6 @@ LPEPowerStroke::doOnApply(SPLPEItem const* lpeitem)
         if (!SP_IS_SHAPE(lpeitem)) {
             g_warning("LPE Powerstroke can only be applied to shapes (not groups).");
         }
-    }
-}
-
-void LPEPowerStroke::doOnRemove(SPLPEItem const* lpeitem)
-{
-    if (SP_IS_SHAPE(lpeitem) && !keep_paths) {
-        SPLPEItem *item = const_cast<SPLPEItem*>(lpeitem);
-        SPCSSAttr *css = sp_repr_css_attr_new ();
-        if (lpeitem->style->fill.isPaintserver()) {
-            SPPaintServer * server = lpeitem->style->getFillPaintServer();
-            if (server) {
-                Glib::ustring str;
-                str += "url(#";
-                str += server->getId();
-                str += ")";
-                sp_repr_css_set_property (css, "stroke", str.c_str());
-            }
-        } else if (lpeitem->style->fill.isColor()) {
-            char c[64] = {0};
-            sp_svg_write_color (c, sizeof(c), lpeitem->style->fill.value.color.toRGBA32(SP_SCALE24_TO_FLOAT(lpeitem->style->fill_opacity.value)));
-            sp_repr_css_set_property (css, "stroke", c);
-        } else {
-            sp_repr_css_set_property (css, "stroke", "none");
-        }
-
-        Inkscape::CSSOStringStream os;
-        os << std::abs(offset_points.median_width()) * 2;
-        sp_repr_css_set_property (css, "stroke-width", os.str().c_str());
-
-        sp_repr_css_set_property(css, "fill", "none");
-
-        sp_desktop_apply_css_recursive(item, css, true);
-        sp_repr_css_attr_unref (css);
-
-        item->updateRepr();
     }
 }
 
@@ -476,6 +526,7 @@ static Geom::Path path_from_piecewise_fix_cusps( Geom::Piecewise<Geom::D2<Geom::
                             if (arc0) {
                                 // FIX: Some assertions errors here
                                 build_from_sbasis(pb,arc0->toSBasis(), tol, false);
+                                build = true;
                             } else if (arc1) {
                                 boost::optional<Geom::Point> p = intersection_point( B[prev_i].at1(), tang1,
                                                                                 B[i].at0(), tang2 );
@@ -822,7 +873,8 @@ LPEPowerStroke::doEffect_path (Geom::PathVector const & path_in)
         return path_in;
         // doEffect_path (path_in);
     }
-    return path_out;
+    createStroke(path_out);
+    return path_in;
 }
 
 void LPEPowerStroke::transform_multiply(Geom::Affine const &postmul, bool /*set*/)

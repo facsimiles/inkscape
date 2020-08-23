@@ -43,9 +43,12 @@ public:
     void doBeforeEffect(SPLPEItem const *lpeItem) override;
     void doOnApply(SPLPEItem const* lpeitem) override;
     void doOnRemove(SPLPEItem const* lpeitem) override;
+    void doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/) override;
     void doAfterEffect(SPLPEItem const *lpeitem) override;
     void transform_multiply(Geom::Affine const &postmul, bool set) override;
     void applyStyle(SPLPEItem *lpeitem);
+    void createStroke(Geom::PathVector stroke);
+    void modified(SPObject *obj, guint flags);
     // methods called by path-manipulator upon edits
     void adjustForNewPath(Geom::PathVector const & path_in);
 
@@ -60,6 +63,7 @@ private:
     ScalarParam miter_limit;
     EnumParam<unsigned> end_linecap_type;
     size_t recusion_limit;
+    sigc::connection modified_connection;
     bool has_recursion;
 };
 
