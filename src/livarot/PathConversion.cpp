@@ -1020,8 +1020,15 @@ void Path::DoArc(Geom::Point const &iS, Geom::Point const &iE,
     Geom::Rotate cb(sang);
     Geom::Rotate cbangle(angle*M_PI/180.0);
 
+    // see the image in the header documentation to see how max angle is calculated
+    // I still don't have a solid reason for why a factor of 2 is being multiplied
+    // here
+    // max angle is basically the maximum arc angle you can have that won't create
+    // an arc that exceeds the threshold
     double max_ang = 2 * acos ( 1 - tresh / fmax(rx, ry)  );
     max_ang = fmin (max_ang, M_PI / 2 );
+    // divide the whole arc range into sectors such that each sector
+    // is no bigger than max ang
     int const num_sectors = abs(sang - eang) / max_ang + 1;
 
     if (wise) {
@@ -1491,6 +1498,8 @@ void Path::Fill(Shape* dest, int pathID, bool justAdd, bool closeIfNeeded, bool 
         if ( back ) {
             {
                 // !invert && back && !weighted
+
+                // add all points to the shape
                 for (auto & pt : pts) {
                     dest->AddPoint(pt.p);
                 }

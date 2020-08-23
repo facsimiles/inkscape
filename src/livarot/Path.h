@@ -579,6 +579,17 @@ public:
 
   // Functions used by the conversion.
   // they append points to the polyline
+  /**
+   * The function is quite similar to RecCubicTo. Some of the maths, specially that in
+   * ArcAnglesAndCenter is too cryptic and I have not spent enough time deriving it yet
+   * either, but it's kinda useless. The important thing is how the Arc is split into
+   * line segments and that I can explain.
+   *
+   * @image html livarot-images/arc-threshold.svg
+   *
+   * TODO: Complete this
+   *
+   */
   void DoArc ( Geom::Point const &iS,  Geom::Point const &iE, double rx, double ry,
 	      double angle, bool large, bool wise, double tresh);
   /**
