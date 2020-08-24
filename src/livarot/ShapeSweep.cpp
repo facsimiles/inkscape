@@ -361,7 +361,7 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
       // function out and everything else works fine. I did a redesign of this code without any such function
       // and it too worked just fine. Maybe there are some extremely rare cases where this would be useful,
       // but I don't think so.
-      CheckAdjacencies (lastI, lastChgtPt, shapeHead, edgeHead);
+      //CheckAdjacencies (lastI, lastChgtPt, shapeHead, edgeHead);
 
       // reconstruct the edges
       CheckEdges (lastI, lastChgtPt, a, nullptr, bool_op_union);
@@ -702,7 +702,7 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
       }
     }
 
-    CheckAdjacencies (lastI, lastChgtPt, shapeHead, edgeHead);
+    //CheckAdjacencies (lastI, lastChgtPt, shapeHead, edgeHead);
 
     CheckEdges (lastI, lastChgtPt, a, nullptr, bool_op_union);
 
@@ -1749,113 +1749,139 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
 // frontend to the TesteIntersection() below
 void Shape::TesteIntersection(SweepTree *t, Side s, bool onlyDiff)
 {
-    SweepTree *tt = static_cast<SweepTree*>(t->elem[s]);
-    if (tt == nullptr) {
-	return;
-    }
+  // get the element that is to the side s of node t
+  SweepTree *tt = static_cast<SweepTree*>(t->elem[s]);
+  if (tt == nullptr) {
+    return;
+  }
 
-    SweepTree *a = (s == LEFT) ? tt : t;
-    SweepTree *b = (s == LEFT) ? t : tt;
+  // set left right properly, a is left, b is right
+  SweepTree *a = (s == LEFT) ? tt : t;
+  SweepTree *b = (s == LEFT) ? t : tt;
 
-    Geom::Point atx;
-    double atl;
-    double atr;
-    if (TesteIntersection(a, b, atx, atl, atr, onlyDiff)) {
-	sEvts->add(a, b, atx, atl, atr);
-    }
+  // call the actual intersection checking function and if an intersection
+  // is detected, add it as an event
+  Geom::Point atx;
+  double atl;
+  double atr;
+  if (TesteIntersection(a, b, atx, atl, atr, onlyDiff)) {
+    sEvts->add(a, b, atx, atl, atr);
+  }
 }
 
 // a crucial piece of code: computing intersections between segments
 bool
 Shape::TesteIntersection (SweepTree * iL, SweepTree * iR, Geom::Point &atx, double &atL, double &atR, bool onlyDiff)
 {
+  // get the left edge's start and end point
   int lSt = iL->src->getEdge(iL->bord).st, lEn = iL->src->getEdge(iL->bord).en;
+  // get the right edge's start and end point
   int rSt = iR->src->getEdge(iR->bord).st, rEn = iR->src->getEdge(iR->bord).en;
+  // get both edge vectors
   Geom::Point ldir, rdir;
   ldir = iL->src->eData[iL->bord].rdx;
   rdir = iR->src->eData[iR->bord].rdx;
   // first, a round of checks to quickly dismiss edge which obviously dont intersect,
   // such as having disjoint bounding boxes
+
+  // invert the edge vector and swap the endpoints if an edge is bottom to top
+  // or horizontal and right to left
   if (lSt < lEn)
-    {
-    }
+  {
+  }
   else
-    {
-      int swap = lSt;
-      lSt = lEn;
-      lEn = swap;
-      ldir = -ldir;
-    }
+  {
+    int swap = lSt;
+    lSt = lEn;
+    lEn = swap;
+    ldir = -ldir;
+  }
   if (rSt < rEn)
-    {
-    }
+  {
+  }
   else
-    {
-      int swap = rSt;
-      rSt = rEn;
-      rEn = swap;
-      rdir = -rdir;
-    }
+  {
+    int swap = rSt;
+    rSt = rEn;
+    rEn = swap;
+    rdir = -rdir;
+  }
 
+  // these blocks check if the bounding boxes of the two don't overlap, if they
+  // don't overlap, we can just return false since non-overlapping bounding boxes
+  // indicate they won't intersect
   if (iL->src->pData[lSt].rx[0] < iL->src->pData[lEn].rx[0])
+  {
+    if (iR->src->pData[rSt].rx[0] < iR->src->pData[rEn].rx[0])
     {
-      if (iR->src->pData[rSt].rx[0] < iR->src->pData[rEn].rx[0])
-	{
-	  if (iL->src->pData[lSt].rx[0] > iR->src->pData[rEn].rx[0])
-	    return false;
-	  if (iL->src->pData[lEn].rx[0] < iR->src->pData[rSt].rx[0])
-	    return false;
-	}
-      else
-	{
-	  if (iL->src->pData[lSt].rx[0] > iR->src->pData[rSt].rx[0])
-	    return false;
-	  if (iL->src->pData[lEn].rx[0] < iR->src->pData[rEn].rx[0])
-	    return false;
-	}
+      if (iL->src->pData[lSt].rx[0] > iR->src->pData[rEn].rx[0])
+        return false;
+      if (iL->src->pData[lEn].rx[0] < iR->src->pData[rSt].rx[0])
+        return false;
     }
+    else
+    {
+      if (iL->src->pData[lSt].rx[0] > iR->src->pData[rSt].rx[0])
+        return false;
+      if (iL->src->pData[lEn].rx[0] < iR->src->pData[rEn].rx[0])
+        return false;
+    }
+  }
   else
+  {
+    if (iR->src->pData[rSt].rx[0] < iR->src->pData[rEn].rx[0])
     {
-      if (iR->src->pData[rSt].rx[0] < iR->src->pData[rEn].rx[0])
-	{
-	  if (iL->src->pData[lEn].rx[0] > iR->src->pData[rEn].rx[0])
-	    return false;
-	  if (iL->src->pData[lSt].rx[0] < iR->src->pData[rSt].rx[0])
-	    return false;
-	}
-      else
-	{
-	  if (iL->src->pData[lEn].rx[0] > iR->src->pData[rSt].rx[0])
-	    return false;
-	  if (iL->src->pData[lSt].rx[0] < iR->src->pData[rEn].rx[0])
-	    return false;
-	}
+      if (iL->src->pData[lEn].rx[0] > iR->src->pData[rEn].rx[0])
+        return false;
+      if (iL->src->pData[lSt].rx[0] < iR->src->pData[rSt].rx[0])
+        return false;
     }
+    else
+    {
+      if (iL->src->pData[lEn].rx[0] > iR->src->pData[rSt].rx[0])
+        return false;
+      if (iL->src->pData[lSt].rx[0] < iR->src->pData[rEn].rx[0])
+        return false;
+    }
+  }
 
+  // see the second image in the header docs of this function to visualize
+  // this cross product
   double ang = cross (ldir, rdir);
-//      ang*=iL->src->eData[iL->bord].isqlength;
-//      ang*=iR->src->eData[iR->bord].isqlength;
+  //      ang*=iL->src->eData[iL->bord].isqlength;
+  //      ang*=iR->src->eData[iR->bord].isqlength;
   if (ang <= 0) return false;		// edges in opposite directions:  <-left  ... right ->
-                                // they can't intersect
+  // they can't intersect
 
   // d'abord tester les bords qui partent d'un meme point
+  // if they come from same shape and they share the same start point
   if (iL->src == iR->src && lSt == rSt)
-    {
-      if (iL->src == iR->src && lEn == rEn)
-	return false;		// c'est juste un doublon
-      atx = iL->src->pData[lSt].rx;
-      atR = atL = -1;
-      return true;		// l'ordre est mauvais
-    }
+  {
+    // if they share the end point too, it's a doublon doesn't count as intersection
+    if (iL->src == iR->src && lEn == rEn)
+      return false;		// c'est juste un doublon
+    // if we are here, it means they share the start point only and that counts as an interesection
+    // intersection point is the starting point and times are all set to -1
+    atx = iL->src->pData[lSt].rx;
+    atR = atL = -1;
+    return true;		// l'ordre est mauvais
+  }
+  // if they only share the end points, doesn't count as intersection (no idea why)
+  // in my opinion, both endpoints shouldn't count for intersection
   if (iL->src == iR->src && lEn == rEn)
     return false;		// rien a faire=ils vont terminer au meme endroit
 
   // tester si on est dans une intersection multiple
 
+  // I'm not sure what onlyDiff does but it seems it stands for "only different", which means, the intersections
+  // will only be detected if the two edges are coming from different shapes, if they come from the same shape,
+  // don't do any checks, we are not interested. but this if statement should be somewhere above in the code
+  // not here, shouldn't it? Why bother doing the bounding box checks?
   if (onlyDiff && iL->src == iR->src)
     return false;
 
   // on reprend les vrais points
+  // get the start end points again, since we might have swapped them above
   lSt = iL->src->getEdge(iL->bord).st;
   lEn = iL->src->getEdge(iL->bord).en;
   rSt = iR->src->getEdge(iR->bord).st;
@@ -1864,203 +1890,244 @@ Shape::TesteIntersection (SweepTree * iL, SweepTree * iR, Geom::Point &atx, doub
   // compute intersection (if there is one)
   // Boissonat anr Preparata said in one paper that double precision floats were sufficient for get single precision
   // coordinates for the intersection, if the endpoints are single precision. i hope they're right...
+  // so till here, lSt, lEn, rSt, rEn have been reset, but note that ldir and rdir are the same
   {
     Geom::Point sDiff, eDiff;
     double slDot, elDot;
     double srDot, erDot;
+    // a vector from the start point of right edge to the start point of left edge
     sDiff = iL->src->pData[lSt].rx - iR->src->pData[rSt].rx;
+    // a vector from the start point of right edge to the end point of left edge
     eDiff = iL->src->pData[lEn].rx - iR->src->pData[rSt].rx;
     srDot = cross(rdir, sDiff);
     erDot = cross(rdir, eDiff);
+    // a vector from the start point of left edge to the start point of right edge
     sDiff = iR->src->pData[rSt].rx - iL->src->pData[lSt].rx;
+    // a vector from the start point of left edge to the end point of right edge
     eDiff = iR->src->pData[rEn].rx - iL->src->pData[lSt].rx;
     slDot = cross(ldir, sDiff);
     elDot = cross(ldir, eDiff);
+    // these cross products above are shown in the third picture in the header docs of this function.
+    // The only thing that matters to us at the moment about these cross products is their sign
+    // not their value, the value comes in later. I've labelled the angle arcs with the name of the
+    // cross product so that you can immediately visualize the sign that the cross product will take
+    // take your right hand, index finger to first vector, middle finger to second vector, if thumb
+    // is into the page, cross is positive, else it's negative.
 
+    // basically these cross products give us a sense of where the endpoints of other vector is with
+    // respect to a particular vector. If both are on the opposite sides, it indicates that an intersection
+    // will happen. Of course you can have the edge far away and still have endpoints on opposite side,
+    // they won't intersect but those cases have already been ruled out above
+
+    // if both endpoints of left edge are on one side (the same side doesn't matter which one) of the right edge
     if ((srDot >= 0 && erDot >= 0) || (srDot <= 0 && erDot <= 0))
+    {
+      // you might think okay if both endpoints of left edge are on same side of right edge, then they can't intersect
+      // right? no, they still can. An endpoint of the left edge can fall on the right edge and in that case
+      // there is an intersection
+      // the start point of the left edge is on the right edge
+      if (srDot == 0)
       {
-	if (srDot == 0)
-	  {
-	    if (lSt < lEn)
-	      {
-		atx = iL->src->pData[lSt].rx;
-		atL = 0;
-		atR = slDot / (slDot - elDot);
-		return true;
-	      }
-	    else
-	      {
-		return false;
-	      }
-	  }
-	else if (erDot == 0)
-	  {
-	    if (lSt > lEn)
-	      {
-		atx = iL->src->pData[lEn].rx;
-		atL = 1;
-		atR = slDot / (slDot - elDot);
-		return true;
-	      }
-	    else
-	      {
-		return false;
-	      }
-	  }
-	if (srDot > 0 && erDot > 0)
-	  {
-	    if (rEn < rSt)
-	      {
-		if (srDot < erDot)
-		  {
-		    if (lSt < lEn)
-		      {
-			atx = iL->src->pData[lSt].rx;
-			atL = 0;
-			atR = slDot / (slDot - elDot);
-			return true;
-		      }
-		  }
-		else
-		  {
-		    if (lEn < lSt)
-		      {
-			atx = iL->src->pData[lEn].rx;
-			atL = 1;
-			atR = slDot / (slDot - elDot);
-			return true;
-		      }
-		  }
-	      }
-	  }
-	if (srDot < 0 && erDot < 0)
-	  {
-	    if (rEn > rSt)
-	      {
-		if (srDot > erDot)
-		  {
-		    if (lSt < lEn)
-		      {
-			atx = iL->src->pData[lSt].rx;
-			atL = 0;
-			atR = slDot / (slDot - elDot);
-			return true;
-		      }
-		  }
-		else
-		  {
-		    if (lEn < lSt)
-		      {
-			atx = iL->src->pData[lEn].rx;
-			atL = 1;
-			atR = slDot / (slDot - elDot);
-			return true;
-		      }
-		  }
-	      }
-	  }
-	return false;
+        // this condition here is quite weird, due to it, some intersections won't get detected while others might, I
+        // don't really see why it has been done this way. See the fourth figure in the header docs of this function and
+        // you'll see both cases. One where the condition lSt < lEn is valid and an intersection is detected and another
+        // one where it isn't. In fact as I was testing this out, I realized the purpose of CheckAdjacencies. Apparently
+        // when a point of intersection is missed by this function, the edge still gets split up at the intersection point
+        // thanks to CheckAdjacencies. You can see this for yourself by taking a 1000 px by 1000 px canvas and the following
+        // SVG path: M 500,200 L 500,800 L 200,800 L 500,500 L 200,200 Z
+        // Try Path > Union with and without the CheckAdjacencies call and you'll see the difference in the resultant path.
+        // So I was trying to find out a case where this if statement lSt < lEn would be true and an intersection would be
+        // returned, I couldn't succeed at this. You can get lSt < lEn to be true, but something else above in the code will
+        // cause an early return, most likely the ang <= 0 condition. So in order words, I couldn't get the code below to
+        // run, ever.
+        if (lSt < lEn)
+        {
+          atx = iL->src->pData[lSt].rx;
+          atL = 0;
+          atR = slDot / (slDot - elDot);
+          return true;
+        }
+        else
+        {
+          return false;
+        }
       }
+      else if (erDot == 0)
+      {
+        if (lSt > lEn)
+        {
+          atx = iL->src->pData[lEn].rx;
+          atL = 1;
+          atR = slDot / (slDot - elDot);
+          return true;
+        }
+        else
+        {
+          return false;
+        }
+      }
+      // This code doesn't make sense either, I couldn't get it to trigger
+      // TODO: Try again or just prove that it's impossible to reach here
+      if (srDot > 0 && erDot > 0)
+      {
+        if (rEn < rSt)
+        {
+          if (srDot < erDot)
+          {
+            if (lSt < lEn)
+            {
+              atx = iL->src->pData[lSt].rx;
+              atL = 0;
+              atR = slDot / (slDot - elDot);
+              return true;
+            }
+          }
+          else
+          {
+            if (lEn < lSt)
+            {
+              atx = iL->src->pData[lEn].rx;
+              atL = 1;
+              atR = slDot / (slDot - elDot);
+              return true;
+            }
+          }
+        }
+      }
+      if (srDot < 0 && erDot < 0)
+      {
+        if (rEn > rSt)
+        {
+          if (srDot > erDot)
+          {
+            if (lSt < lEn)
+            {
+              atx = iL->src->pData[lSt].rx;
+              atL = 0;
+              atR = slDot / (slDot - elDot);
+              return true;
+            }
+          }
+          else
+          {
+            if (lEn < lSt)
+            {
+              atx = iL->src->pData[lEn].rx;
+              atL = 1;
+              atR = slDot / (slDot - elDot);
+              return true;
+            }
+          }
+        }
+      }
+      return false;
+    }
+    // if both endpoints of the right edge are on the same side of left edge
     if ((slDot >= 0 && elDot >= 0) || (slDot <= 0 && elDot <= 0))
+    {
+      if (slDot == 0)
       {
-	if (slDot == 0)
-	  {
-	    if (rSt < rEn)
-	      {
-		atx = iR->src->pData[rSt].rx;
-		atR = 0;
-		atL = srDot / (srDot - erDot);
-		return true;
-	      }
-	    else
-	      {
-		return false;
-	      }
-	  }
-	else if (elDot == 0)
-	  {
-	    if (rSt > rEn)
-	      {
-		atx = iR->src->pData[rEn].rx;
-		atR = 1;
-		atL = srDot / (srDot - erDot);
-		return true;
-	      }
-	    else
-	      {
-		return false;
-	      }
-	  }
-	if (slDot > 0 && elDot > 0)
-	  {
-	    if (lEn > lSt)
-	      {
-		if (slDot < elDot)
-		  {
-		    if (rSt < rEn)
-		      {
-			atx = iR->src->pData[rSt].rx;
-			atR = 0;
-			atL = srDot / (srDot - erDot);
-			return true;
-		      }
-		  }
-		else
-		  {
-		    if (rEn < rSt)
-		      {
-			atx = iR->src->pData[rEn].rx;
-			atR = 1;
-			atL = srDot / (srDot - erDot);
-			return true;
-		      }
-		  }
-	      }
-	  }
-	if (slDot < 0 && elDot < 0)
-	  {
-	    if (lEn < lSt)
-	      {
-		if (slDot > elDot)
-		  {
-		    if (rSt < rEn)
-		      {
-			atx = iR->src->pData[rSt].rx;
-			atR = 0;
-			atL = srDot / (srDot - erDot);
-			return true;
-		      }
-		  }
-		else
-		  {
-		    if (rEn < rSt)
-		      {
-			atx = iR->src->pData[rEn].rx;
-			atR = 1;
-			atL = srDot / (srDot - erDot);
-			return true;
-		      }
-		  }
-	      }
-	  }
-	return false;
+        if (rSt < rEn)
+        {
+          atx = iR->src->pData[rSt].rx;
+          atR = 0;
+          atL = srDot / (srDot - erDot);
+          return true;
+        }
+        else
+        {
+          return false;
+        }
       }
+      else if (elDot == 0)
+      {
+        if (rSt > rEn)
+        {
+          atx = iR->src->pData[rEn].rx;
+          atR = 1;
+          atL = srDot / (srDot - erDot);
+          return true;
+        }
+        else
+        {
+          return false;
+        }
+      }
+      if (slDot > 0 && elDot > 0)
+      {
+        if (lEn > lSt)
+        {
+          if (slDot < elDot)
+          {
+            if (rSt < rEn)
+            {
+              atx = iR->src->pData[rSt].rx;
+              atR = 0;
+              atL = srDot / (srDot - erDot);
+              return true;
+            }
+          }
+          else
+          {
+            if (rEn < rSt)
+            {
+              atx = iR->src->pData[rEn].rx;
+              atR = 1;
+              atL = srDot / (srDot - erDot);
+              return true;
+            }
+          }
+        }
+      }
+      if (slDot < 0 && elDot < 0)
+      {
+        if (lEn < lSt)
+        {
+          if (slDot > elDot)
+          {
+            if (rSt < rEn)
+            {
+              atx = iR->src->pData[rSt].rx;
+              atR = 0;
+              atL = srDot / (srDot - erDot);
+              return true;
+            }
+          }
+          else
+          {
+            if (rEn < rSt)
+            {
+              atx = iR->src->pData[rEn].rx;
+              atR = 1;
+              atL = srDot / (srDot - erDot);
+              return true;
+            }
+          }
+        }
+      }
+      return false;
+    }
 
-/*		double  slb=slDot-elDot,srb=srDot-erDot;
-		if ( slb < 0 ) slb=-slb;
-		if ( srb < 0 ) srb=-srb;*/
+    /*		double  slb=slDot-elDot,srb=srDot-erDot;
+          if ( slb < 0 ) slb=-slb;
+          if ( srb < 0 ) srb=-srb;*/
+    // We use different formulas depending on whose sin is greater
+
+    // These formulas would look really weird to you, but let's pick the first one
+    // and I'll do some maths that you can see in the header docs to elaborate what's
+    // happening
     if (iL->src->eData[iL->bord].siEd > iR->src->eData[iR->bord].siEd)
-      {
-	atx =
-	  (slDot * iR->src->pData[rEn].rx -
-	   elDot * iR->src->pData[rSt].rx) / (slDot - elDot);
-      }
+    {
+      atx =
+        (slDot * iR->src->pData[rEn].rx -
+         elDot * iR->src->pData[rSt].rx) / (slDot - elDot);
+    }
     else
-      {
-	atx =
-	  (srDot * iL->src->pData[lEn].rx -
-	   erDot * iL->src->pData[lSt].rx) / (srDot - erDot);
-      }
+    {
+      atx =
+        (srDot * iL->src->pData[lEn].rx -
+         erDot * iL->src->pData[lSt].rx) / (srDot - erDot);
+    }
     atL = srDot / (srDot - erDot);
     atR = slDot / (slDot - elDot);
     return true;
@@ -3144,7 +3211,7 @@ void Shape::AddChgt(int lastPointNo, int lastChgtPt, Shape * &shapeHead,
     }
     // same logic as in the upper block
     if (lS->swsData[lB].rightRnd < lastChgtPt) {
-      lS->stwsData[lB].rightRnd = lastPointNo;
+      lS->swsData[lB].rightRnd = lastPointNo;
     } else {
       int old = lS->swsData[lB].rightRnd;
       if (getPoint(old).x[0] < getPoint(lastPointNo).x[0])

@@ -2181,7 +2181,7 @@ void Shape::initialiseEdgeData()
         eData[i].isqlength = 1 / eData[i].sqlength;
         eData[i].siEd = eData[i].rdx[1] * eData[i].isqlength;
         eData[i].coEd = eData[i].rdx[0] * eData[i].isqlength;
-        
+
         if (eData[i].siEd < 0) {
             eData[i].siEd = -eData[i].siEd;
             eData[i].coEd = -eData[i].coEd;

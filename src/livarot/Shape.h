@@ -780,7 +780,81 @@ private:
      */
     void SortEdgesList(edge_list *edges, int s, int e);
 
+    /**
+     * Test if there is an intersection of an edge on a particular side.
+     *
+     * The actual intersection checking is performed by the other TesteIntersection and this one
+     * calls it, creating an intersection event if an intersection is detected.
+     *
+     * @param t The pointer to the node of the edge whose intersection we wanna test.
+     * @param s The side that we want to test for intersection. If RIGHT, the edge on the right is tested with this one. If LEFT, the edge on the
+     * left is tested with this one.
+     * @param onlyDiff My best guess about onlyDiff is it stands for "only different". Only detect intersections if
+     * both edges come from different shapes, otherwise don't bother.
+     */
     void TesteIntersection(SweepTree *t, Side s, bool onlyDiff);        // test if there is an intersection
+
+    /**
+     * Test intersection between the two edges.
+     *
+     * This is the function that does the actual checking.
+     *
+     * An important point to remember is that left and right aren't just two names for
+     * the edges, that's how the edges should be in the sweepline at the moment, otherwise, the
+     * intersectionn won't be detected.
+     *
+     * @image html livarot-images/teste-intersection.svg
+     *
+     * This is a very special point as it prevents detecting an intersection that has already passed. See
+     * when an intersection has already passed, the order of nodes in the sweepline have switched, thus the
+     * function won't detect the intersection.
+     *
+     * @image html livarot-images/intersection-cross-product.svg
+     *
+     * @image html livarot-images/intersection-cross-products.svg
+     *
+     * @image html livarot-images/problematic-intersection-case.svg
+     *
+     * This picture is related to the intersection point calculation formulas:
+     *
+     * @image html livarot-images/intersection-point-calculation.svg
+     *
+     * \f[ |\vec{slDot}| = |\vec{left}||\vec{sl}|\sin\theta_{sl}\f]
+     * \f[ |\vec{elDot}| = |\vec{left}||\vec{el}|\sin\theta_{el}\f]
+     *
+     * These cross products (weirdly named) do have a direction too but you need to figure that out
+     * with your fingers. These here only give us the magnitude, however the actual variables in code also have
+     * a positive or negative sign depending on the direction. Index of right hand to the first vector, middle finger
+     * to the second vector and if thumb points out of page, cross product is negative, if it points in the page, cross
+     * product is negative. From figure 2 you can already guess that \f$ slDot < 0\f$ and \f$ elDot > 0 \f$. So let's
+     * rewrite the formula in the code while taking into account these signs.
+     *
+     * \f[ \vec{atx} = \frac{-|\vec{slDot}|*\vec{rEn} -|\vec{elDot}|*\vec{rSt}}{-|\vec{slDot}|-|\vec{elDot}|}\f]
+     * You can cancel out all the minus signs:
+     * \f[ \vec{atx} = \frac{|\vec{slDot}|*\vec{rEn} + |\vec{elDot}|*\vec{rSt}}{|\vec{slDot}|+|\vec{elDot}|}\f]
+     * \f[ \vec{atx} = \frac{|\vec{left}||\vec{sl}||\sin\theta_{sl}|*\vec{rEn} + |\vec{left}||\vec{el}||\sin\theta_{el}|*\vec{rSt}}{|\vec{left}||\vec{sl}||\sin\theta_{sl}| + |\vec{left}||\vec{el}||\sin\theta_{el}|} \f]
+     * We can cancel the left and we are left with (no word twisting intended):
+     * \f[ \vec{atx} = \frac{|\vec{sl}||\sin\theta_{sl}|*\vec{rEn} + |\vec{el}||\sin\theta_{el}|*\vec{rSt}}{||\vec{sl}||\sin\theta_{sl}| + |\vec{el}||\sin\theta_{el}|} \f]
+     *
+     * \f[ \vec{atx} =  \frac{|\vec{sl}||\sin\theta_{sl}|}{|\vec{sl}||\sin\theta_{sl}|+|\vec{el}||\sin\theta_{el}|}*\vec{rEn} + \frac{|\vec{el}||\sin\theta_{el}|}{|\vec{sl}||\sin\theta_{sl}|+|\vec{el}||\sin\theta_{el}|}*\vec{rSt} \f]
+     *
+     * What you see here is a simple variant of the midpoint formula that can give us the intersection point. The sin terms when combined with sl or el
+     * are simply the perpendiculars you see in figure 2 and 3. See how the perpendiculars' relative length change as the intersection point changes on
+     * the right edge? This is exactly the mechanism used to find out the intersection point and its time on each edge. Look at figure 3, the point I'm
+     * trying to make is that the red perpendicular's length divided by sum of both red and blue perpendiculars is the same factor as the (length of the
+     * part of the right edge that's to the "right" of intersection) divided by total length of right edge. These ratios are exactly what we use to
+     * find the intersection point as well as the time of these intersection points.
+     *
+     * @param iL Pointer to the left edge's node.
+     * @param iR Pointer to the right edge's node.
+     * @param atx The point of intersection. The function sets this if an intersection was detected.
+     * @param atL The time on the left edge at the intersection point.
+     * @param atR The time on the right edge at the intersection point.
+     * @param onlyDiff My best guess about onlyDiff is it stands for "only different". Only detect intersections if
+     * both edges come from different shapes, otherwise don't bother.
+     *
+     * @return true if intersection detected, otherwise false.
+     */
     bool TesteIntersection(SweepTree *iL, SweepTree *iR, Geom::Point &atx, double &atL, double &atR, bool onlyDiff);
     bool TesteIntersection(Shape *iL, Shape *iR, int ilb, int irb,
                            Geom::Point &atx, double &atL, double &atR,
