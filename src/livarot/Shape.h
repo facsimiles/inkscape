@@ -906,6 +906,45 @@ private:
     void AddChgt(int lastPointNo, int lastChgtPt, Shape *&shapeHead,
                  int &edgeHead, sTreeChangeType type, Shape *lS, int lB, Shape *rS,
                  int rB);
+
+    /**
+     * If there are points that lie on edges, mark this by modifying leftRnd and rightRnd variables.
+     *
+     * Please note that an adjacency means a point lying on an edge somewhere. This is checked by
+     * the function TesteAdjacency.
+     *
+     * Before I go into discussing how it works please review the following figure to have an idea
+     * about how the points look like when this function is called from Shape::ConvertToShape.
+     *
+     * @image html livarot-images/lastChgtPt-from-avance.svg
+     *
+     * This function runs has a main loop that runs on all events in chgts. Each event can either be
+     * an edge addition or edge addition or edge intersection. Each event (chgt) keeps four important
+     * things. A unique edge associated with the event. For addition/removal it's the main edge that got
+     * added/removed. For intersection it's the left one. It stores the right edge too in case of an
+     * intersection. Then there are two pointers to edges to the left and right in the sweepline at the time
+     * the event happened. This function does four things:
+     *
+     * 1. For the unique edge, get the leftRnd and rightRnd. Sets chLeN and chRiN depending on ptNo of the
+     * event and the leftRnd and rightRnd. See the code to see how this is done. We test all points ranging
+     * from lastChgtPt to leftRnd-1 for a possible adjacency with this unique edge. If found, we set leftRnd
+     * of the unique edge accordingly. We also test points in the range rightRnd+1 to lastPointNo (not included)
+     * for an adjacency and if found, we set rightRnd accordingly.
+     * 2. Exactly identical thing is done with the right edge (if this is an intersection event).
+     * 3. Then there is the possibility of having an edge on the left in the sweepline at the time the event happened.
+     * If that's the case, we do something very special. We check if the left edge's leftRnd is smaller than lastChgtPt,
+     * if not, it means the leftRnd got updated in the previous iteration of the main loop, thus, we don't need to take
+     * care of it do anything about it. If it is smaller than lastChgtPt, we run a loop testing all points in the range
+     * chLeN..chRiN of having an adjacency with that edge. We update leftRnd and rightRnd of the left edge after doing some
+     * checks. This process gets repeated for all the edges to the left.
+     * 4. Same as 3 but for edges to the right.
+     *
+     * 3 and 4 are very useful. They deal with cases when you have some other edge's endpoint exactly on some edge and these
+     * modify leftRnd and rightRnd of the edge so that CheckEdges will later split that edge at that endpoint. For example,
+     * a shape like:
+     * SVG path: M 500,200 L 500,800 L 200,800 L 500,500 L 200,200 Z
+     *
+     */
     void CheckAdjacencies(int lastPointNo, int lastChgtPt, Shape *shapeHead, int edgeHead);
 
     /**

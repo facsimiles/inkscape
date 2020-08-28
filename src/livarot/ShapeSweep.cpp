@@ -2961,21 +2961,30 @@ void
 Shape::CheckAdjacencies (int lastPointNo, int lastChgtPt, Shape * /*shapeHead*/,
 			 int /*edgeHead*/)
 {
+  // for each event in chgts
   for (auto & chgt : chgts)
   {
+    // get the chgt.ptoNo, which is the point at which the event happened
     int chLeN = chgt.ptNo;
     int chRiN = chgt.ptNo;
     if (chgt.src)
     {
       Shape *lS = chgt.src;
       int lB = chgt.bord;
+      // get the leftRnd and rightRnd of this edge
       int lftN = lS->swsData[lB].leftRnd;
       int rgtN = lS->swsData[lB].rightRnd;
+      // expand the range chLeN..chRiN
       if (lftN < chLeN)
         chLeN = lftN;
       if (rgtN > chRiN)
         chRiN = rgtN;
       //                      for (int n=lftN;n<=rgtN;n++) CreateIncidence(lS,lB,n);
+      // check each point from lastChgtPt to leftN-1 for a possible adjacency with
+      // the edge, if detected mark it by modifying leftRnd
+      // Note we do this in reverse order by starting at the point closer to the
+      // edge first. If an adjacency is not detected, we immediately break since
+      // if a point is not adjacent, another on its left won't be adjacent either
       for (int n = lftN - 1; n >= lastChgtPt; n--)
       {
         if (TesteAdjacency (lS, lB, getPoint(n).x, n, false) ==
@@ -2983,6 +2992,10 @@ Shape::CheckAdjacencies (int lastPointNo, int lastChgtPt, Shape * /*shapeHead*/,
           break;
         lS->swsData[lB].leftRnd = n;
       }
+      // check each point from rgtN+1 to lastPointNo (not included) for a possible adjacency with
+      // the edge, if detected mark it by modifying rightRnd
+      // If an adjacency is not detected, we immediately break since if a point
+      // is not adjacent, another one to its right won't be either.
       for (int n = rgtN + 1; n < lastPointNo; n++)
       {
         if (TesteAdjacency (lS, lB, getPoint(n).x, n, false) ==
@@ -2991,6 +3004,7 @@ Shape::CheckAdjacencies (int lastPointNo, int lastChgtPt, Shape * /*shapeHead*/,
         lS->swsData[lB].rightRnd = n;
       }
     }
+    // totally identical to the block above
     if (chgt.osrc)
     {
       Shape *rS = chgt.osrc;
@@ -3017,28 +3031,39 @@ Shape::CheckAdjacencies (int lastPointNo, int lastChgtPt, Shape * /*shapeHead*/,
         rS->swsData[rB].rightRnd = n;
       }
     }
+    // very interesting part, deals with edges to the left in the sweepline at the time
+    // the event took place
     if (chgt.lSrc)
     {
+      // is the left edge's leftRnd smaller than lastChgtPt, basically this is a way to check
+      // if leftRnd got updated in the previous iteration of the main loop of Shape::ConvertToShape
+      // or not.
       if (chgt.lSrc->swsData[chgt.lBrd].leftRnd < lastChgtPt)
       {
+        // get the left edge and its shape
         Shape *nSrc = chgt.lSrc;
         int nBrd = chgt.lBrd /*,nNo=chgts[cCh].ptNo */ ;
         bool hit;
 
+        // iterate through the linked list of edges to the left
         do
         {
-          hit = false;
+          hit = false; // adjacency got detected?
+          // check all points from chRiN to chLeN
+          // we go right to left
           for (int n = chRiN; n >= chLeN; n--)
           {
+            // test if the point is adjacent to the edge
             if (TesteAdjacency
                 (nSrc, nBrd, getPoint(n).x, n, false))
             {
+              // has the leftRnd been updated in previous iteration? if no? set it directly
               if (nSrc->swsData[nBrd].leftRnd < lastChgtPt)
               {
                 nSrc->swsData[nBrd].leftRnd = n;
                 nSrc->swsData[nBrd].rightRnd = n;
               }
-              else
+              else // if yes, we do some checking and only update if it expands the span
               {
                 if (n < nSrc->swsData[nBrd].leftRnd)
                   nSrc->swsData[nBrd].leftRnd = n;
@@ -3048,6 +3073,7 @@ Shape::CheckAdjacencies (int lastPointNo, int lastChgtPt, Shape * /*shapeHead*/,
               hit = true;
             }
           }
+          // test all points between lastChgtPt and chLeN - 1
           for (int n = chLeN - 1; n >= lastChgtPt; n--)
           {
             if (TesteAdjacency
@@ -3067,8 +3093,12 @@ Shape::CheckAdjacencies (int lastPointNo, int lastChgtPt, Shape * /*shapeHead*/,
             }
             hit = true;
           }
+          // if no adjacency got detected, no point in going further left so break, if yes
+          // we continue and see if we can repeat the process on the edge to the left
+          // and so on (basically going left detecting adjacencies)
           if (hit)
           {
+            // get the edge on the left, if non exist, break
             SweepTree *node =
               static_cast < SweepTree * >(nSrc->swsData[nBrd].misc);
             if (node == nullptr)
@@ -3078,6 +3108,7 @@ Shape::CheckAdjacencies (int lastPointNo, int lastChgtPt, Shape * /*shapeHead*/,
               break;
             nSrc = node->src;
             nBrd = node->bord;
+            // the edge on the left, did its leftRnd update in the previous iteration of the main loop if ConvertToShape?
             if (nSrc->swsData[nBrd].leftRnd >= lastChgtPt)
               break;
           }
@@ -3086,6 +3117,7 @@ Shape::CheckAdjacencies (int lastPointNo, int lastChgtPt, Shape * /*shapeHead*/,
 
       }
     }
+    // same thing but to the right side?
     if (chgt.rSrc)
     {
       if (chgt.rSrc->swsData[chgt.rBrd].leftRnd < lastChgtPt)
@@ -3096,6 +3128,8 @@ Shape::CheckAdjacencies (int lastPointNo, int lastChgtPt, Shape * /*shapeHead*/,
         do
         {
           hit = false;
+          // test points between chLeN and chRiN for adjacency
+          // but go left to right
           for (int n = chLeN; n <= chRiN; n++)
           {
             if (TesteAdjacency
@@ -3116,6 +3150,7 @@ Shape::CheckAdjacencies (int lastPointNo, int lastChgtPt, Shape * /*shapeHead*/,
               hit = true;
             }
           }
+          // testing points between chRiN and lastPointNo for adjacency
           for (int n = chRiN + 1; n < lastPointNo; n++)
           {
             if (TesteAdjacency
