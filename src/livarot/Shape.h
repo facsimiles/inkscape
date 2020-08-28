@@ -890,6 +890,8 @@ private:
      * The function adds stuff to the edgehead and shapeHead linked lists as well as set the
      * leftRnd and rightRnd in swsData of the edges.
      *
+     * @image html livarot-images/situation-from-add-chgt.svg
+     *
      * @param lastPointNo The point that was just added in "this" shape.
      * @param lastChgtPt Either lastPointNo if it's the left most point at that y level or whichever point is the left most at the
      * same y level as lastPointNo.

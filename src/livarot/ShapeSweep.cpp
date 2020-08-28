@@ -361,7 +361,7 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
       // function out and everything else works fine. I did a redesign of this code without any such function
       // and it too worked just fine. Maybe there are some extremely rare cases where this would be useful,
       // but I don't think so.
-      //CheckAdjacencies (lastI, lastChgtPt, shapeHead, edgeHead);
+      CheckAdjacencies (lastI, lastChgtPt, shapeHead, edgeHead);
 
       // reconstruct the edges
       CheckEdges (lastI, lastChgtPt, a, nullptr, bool_op_union);
@@ -702,7 +702,7 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
       }
     }
 
-    //CheckAdjacencies (lastI, lastChgtPt, shapeHead, edgeHead);
+    CheckAdjacencies (lastI, lastChgtPt, shapeHead, edgeHead);
 
     CheckEdges (lastI, lastChgtPt, a, nullptr, bool_op_union);
 
@@ -2962,198 +2962,198 @@ Shape::CheckAdjacencies (int lastPointNo, int lastChgtPt, Shape * /*shapeHead*/,
 			 int /*edgeHead*/)
 {
   for (auto & chgt : chgts)
+  {
+    int chLeN = chgt.ptNo;
+    int chRiN = chgt.ptNo;
+    if (chgt.src)
     {
-      int chLeN = chgt.ptNo;
-      int chRiN = chgt.ptNo;
-      if (chgt.src)
-	{
-	  Shape *lS = chgt.src;
-	  int lB = chgt.bord;
-	  int lftN = lS->swsData[lB].leftRnd;
-	  int rgtN = lS->swsData[lB].rightRnd;
-	  if (lftN < chLeN)
-	    chLeN = lftN;
-	  if (rgtN > chRiN)
-	    chRiN = rgtN;
-//                      for (int n=lftN;n<=rgtN;n++) CreateIncidence(lS,lB,n);
-	  for (int n = lftN - 1; n >= lastChgtPt; n--)
-	    {
-	      if (TesteAdjacency (lS, lB, getPoint(n).x, n, false) ==
-		  false)
-                break;
-              lS->swsData[lB].leftRnd = n;
-	    }
-	  for (int n = rgtN + 1; n < lastPointNo; n++)
-	    {
-	      if (TesteAdjacency (lS, lB, getPoint(n).x, n, false) ==
-		  false)
-		break;
-	      lS->swsData[lB].rightRnd = n;
-	    }
-	}
-      if (chgt.osrc)
-	{
-	  Shape *rS = chgt.osrc;
-	  int rB = chgt.obord;
-	  int lftN = rS->swsData[rB].leftRnd;
-	  int rgtN = rS->swsData[rB].rightRnd;
-	  if (lftN < chLeN)
-	    chLeN = lftN;
-	  if (rgtN > chRiN)
-	    chRiN = rgtN;
-//                      for (int n=lftN;n<=rgtN;n++) CreateIncidence(rS,rB,n);
-	  for (int n = lftN - 1; n >= lastChgtPt; n--)
-	    {
-	      if (TesteAdjacency (rS, rB, getPoint(n).x, n, false) ==
-		  false)
-		break;
-              rS->swsData[rB].leftRnd = n;
-	    }
-	  for (int n = rgtN + 1; n < lastPointNo; n++)
-	    {
-	      if (TesteAdjacency (rS, rB, getPoint(n).x, n, false) ==
-		  false)
-		break;
-	      rS->swsData[rB].rightRnd = n;
-	    }
-	}
-      if (chgt.lSrc)
-	{
-	  if (chgt.lSrc->swsData[chgt.lBrd].leftRnd < lastChgtPt)
-	    {
-	      Shape *nSrc = chgt.lSrc;
-	      int nBrd = chgt.lBrd /*,nNo=chgts[cCh].ptNo */ ;
-	      bool hit;
-
-	      do
-		{
-		  hit = false;
-		  for (int n = chRiN; n >= chLeN; n--)
-		    {
-		      if (TesteAdjacency
-			  (nSrc, nBrd, getPoint(n).x, n, false))
-			{
-			  if (nSrc->swsData[nBrd].leftRnd < lastChgtPt)
-			    {
-			      nSrc->swsData[nBrd].leftRnd = n;
-			      nSrc->swsData[nBrd].rightRnd = n;
-			    }
-			  else
-			    {
-			      if (n < nSrc->swsData[nBrd].leftRnd)
-				nSrc->swsData[nBrd].leftRnd = n;
-			      if (n > nSrc->swsData[nBrd].rightRnd)
-				nSrc->swsData[nBrd].rightRnd = n;
-			    }
-			  hit = true;
-			}
-		    }
-		  for (int n = chLeN - 1; n >= lastChgtPt; n--)
-		    {
-		      if (TesteAdjacency
-			  (nSrc, nBrd, getPoint(n).x, n, false) == false)
-			break;
-		      if (nSrc->swsData[nBrd].leftRnd < lastChgtPt)
-			{
-			  nSrc->swsData[nBrd].leftRnd = n;
-			  nSrc->swsData[nBrd].rightRnd = n;
-			}
-		      else
-			{
-			  if (n < nSrc->swsData[nBrd].leftRnd)
-			    nSrc->swsData[nBrd].leftRnd = n;
-			  if (n > nSrc->swsData[nBrd].rightRnd)
-			    nSrc->swsData[nBrd].rightRnd = n;
-			}
-		      hit = true;
-		    }
-		  if (hit)
-		    {
-		      SweepTree *node =
-			static_cast < SweepTree * >(nSrc->swsData[nBrd].misc);
-		      if (node == nullptr)
-			break;
-		      node = static_cast < SweepTree * >(node->elem[LEFT]);
-		      if (node == nullptr)
-			break;
-		      nSrc = node->src;
-		      nBrd = node->bord;
-		      if (nSrc->swsData[nBrd].leftRnd >= lastChgtPt)
-			break;
-		    }
-		}
-	      while (hit);
-
-	    }
-	}
-      if (chgt.rSrc)
-	{
-	  if (chgt.rSrc->swsData[chgt.rBrd].leftRnd < lastChgtPt)
-	    {
-	      Shape *nSrc = chgt.rSrc;
-	      int nBrd = chgt.rBrd /*,nNo=chgts[cCh].ptNo */ ;
-	      bool hit;
-	      do
-		{
-		  hit = false;
-		  for (int n = chLeN; n <= chRiN; n++)
-		    {
-		      if (TesteAdjacency
-			  (nSrc, nBrd, getPoint(n).x, n, false))
-			{
-			  if (nSrc->swsData[nBrd].leftRnd < lastChgtPt)
-			    {
-			      nSrc->swsData[nBrd].leftRnd = n;
-			      nSrc->swsData[nBrd].rightRnd = n;
-			    }
-			  else
-			    {
-			      if (n < nSrc->swsData[nBrd].leftRnd)
-				nSrc->swsData[nBrd].leftRnd = n;
-			      if (n > nSrc->swsData[nBrd].rightRnd)
-				nSrc->swsData[nBrd].rightRnd = n;
-			    }
-			  hit = true;
-			}
-		    }
-		  for (int n = chRiN + 1; n < lastPointNo; n++)
-		    {
-		      if (TesteAdjacency
-			  (nSrc, nBrd, getPoint(n).x, n, false) == false)
-			break;
-		      if (nSrc->swsData[nBrd].leftRnd < lastChgtPt)
-			{
-			  nSrc->swsData[nBrd].leftRnd = n;
-			  nSrc->swsData[nBrd].rightRnd = n;
-			}
-		      else
-			{
-			  if (n < nSrc->swsData[nBrd].leftRnd)
-			    nSrc->swsData[nBrd].leftRnd = n;
-			  if (n > nSrc->swsData[nBrd].rightRnd)
-			    nSrc->swsData[nBrd].rightRnd = n;
-			}
-		      hit = true;
-		    }
-		  if (hit)
-		    {
-		      SweepTree *node =
-			static_cast < SweepTree * >(nSrc->swsData[nBrd].misc);
-		      if (node == nullptr)
-			break;
-		      node = static_cast < SweepTree * >(node->elem[RIGHT]);
-		      if (node == nullptr)
-			break;
-		      nSrc = node->src;
-		      nBrd = node->bord;
-		      if (nSrc->swsData[nBrd].leftRnd >= lastChgtPt)
-			break;
-		    }
-		}
-	      while (hit);
-	    }
-	}
+      Shape *lS = chgt.src;
+      int lB = chgt.bord;
+      int lftN = lS->swsData[lB].leftRnd;
+      int rgtN = lS->swsData[lB].rightRnd;
+      if (lftN < chLeN)
+        chLeN = lftN;
+      if (rgtN > chRiN)
+        chRiN = rgtN;
+      //                      for (int n=lftN;n<=rgtN;n++) CreateIncidence(lS,lB,n);
+      for (int n = lftN - 1; n >= lastChgtPt; n--)
+      {
+        if (TesteAdjacency (lS, lB, getPoint(n).x, n, false) ==
+            false)
+          break;
+        lS->swsData[lB].leftRnd = n;
+      }
+      for (int n = rgtN + 1; n < lastPointNo; n++)
+      {
+        if (TesteAdjacency (lS, lB, getPoint(n).x, n, false) ==
+            false)
+          break;
+        lS->swsData[lB].rightRnd = n;
+      }
     }
+    if (chgt.osrc)
+    {
+      Shape *rS = chgt.osrc;
+      int rB = chgt.obord;
+      int lftN = rS->swsData[rB].leftRnd;
+      int rgtN = rS->swsData[rB].rightRnd;
+      if (lftN < chLeN)
+        chLeN = lftN;
+      if (rgtN > chRiN)
+        chRiN = rgtN;
+      //                      for (int n=lftN;n<=rgtN;n++) CreateIncidence(rS,rB,n);
+      for (int n = lftN - 1; n >= lastChgtPt; n--)
+      {
+        if (TesteAdjacency (rS, rB, getPoint(n).x, n, false) ==
+            false)
+          break;
+        rS->swsData[rB].leftRnd = n;
+      }
+      for (int n = rgtN + 1; n < lastPointNo; n++)
+      {
+        if (TesteAdjacency (rS, rB, getPoint(n).x, n, false) ==
+            false)
+          break;
+        rS->swsData[rB].rightRnd = n;
+      }
+    }
+    if (chgt.lSrc)
+    {
+      if (chgt.lSrc->swsData[chgt.lBrd].leftRnd < lastChgtPt)
+      {
+        Shape *nSrc = chgt.lSrc;
+        int nBrd = chgt.lBrd /*,nNo=chgts[cCh].ptNo */ ;
+        bool hit;
+
+        do
+        {
+          hit = false;
+          for (int n = chRiN; n >= chLeN; n--)
+          {
+            if (TesteAdjacency
+                (nSrc, nBrd, getPoint(n).x, n, false))
+            {
+              if (nSrc->swsData[nBrd].leftRnd < lastChgtPt)
+              {
+                nSrc->swsData[nBrd].leftRnd = n;
+                nSrc->swsData[nBrd].rightRnd = n;
+              }
+              else
+              {
+                if (n < nSrc->swsData[nBrd].leftRnd)
+                  nSrc->swsData[nBrd].leftRnd = n;
+                if (n > nSrc->swsData[nBrd].rightRnd)
+                  nSrc->swsData[nBrd].rightRnd = n;
+              }
+              hit = true;
+            }
+          }
+          for (int n = chLeN - 1; n >= lastChgtPt; n--)
+          {
+            if (TesteAdjacency
+                (nSrc, nBrd, getPoint(n).x, n, false) == false)
+              break;
+            if (nSrc->swsData[nBrd].leftRnd < lastChgtPt)
+            {
+              nSrc->swsData[nBrd].leftRnd = n;
+              nSrc->swsData[nBrd].rightRnd = n;
+            }
+            else
+            {
+              if (n < nSrc->swsData[nBrd].leftRnd)
+                nSrc->swsData[nBrd].leftRnd = n;
+              if (n > nSrc->swsData[nBrd].rightRnd)
+                nSrc->swsData[nBrd].rightRnd = n;
+            }
+            hit = true;
+          }
+          if (hit)
+          {
+            SweepTree *node =
+              static_cast < SweepTree * >(nSrc->swsData[nBrd].misc);
+            if (node == nullptr)
+              break;
+            node = static_cast < SweepTree * >(node->elem[LEFT]);
+            if (node == nullptr)
+              break;
+            nSrc = node->src;
+            nBrd = node->bord;
+            if (nSrc->swsData[nBrd].leftRnd >= lastChgtPt)
+              break;
+          }
+        }
+        while (hit);
+
+      }
+    }
+    if (chgt.rSrc)
+    {
+      if (chgt.rSrc->swsData[chgt.rBrd].leftRnd < lastChgtPt)
+      {
+        Shape *nSrc = chgt.rSrc;
+        int nBrd = chgt.rBrd /*,nNo=chgts[cCh].ptNo */ ;
+        bool hit;
+        do
+        {
+          hit = false;
+          for (int n = chLeN; n <= chRiN; n++)
+          {
+            if (TesteAdjacency
+                (nSrc, nBrd, getPoint(n).x, n, false))
+            {
+              if (nSrc->swsData[nBrd].leftRnd < lastChgtPt)
+              {
+                nSrc->swsData[nBrd].leftRnd = n;
+                nSrc->swsData[nBrd].rightRnd = n;
+              }
+              else
+              {
+                if (n < nSrc->swsData[nBrd].leftRnd)
+                  nSrc->swsData[nBrd].leftRnd = n;
+                if (n > nSrc->swsData[nBrd].rightRnd)
+                  nSrc->swsData[nBrd].rightRnd = n;
+              }
+              hit = true;
+            }
+          }
+          for (int n = chRiN + 1; n < lastPointNo; n++)
+          {
+            if (TesteAdjacency
+                (nSrc, nBrd, getPoint(n).x, n, false) == false)
+              break;
+            if (nSrc->swsData[nBrd].leftRnd < lastChgtPt)
+            {
+              nSrc->swsData[nBrd].leftRnd = n;
+              nSrc->swsData[nBrd].rightRnd = n;
+            }
+            else
+            {
+              if (n < nSrc->swsData[nBrd].leftRnd)
+                nSrc->swsData[nBrd].leftRnd = n;
+              if (n > nSrc->swsData[nBrd].rightRnd)
+                nSrc->swsData[nBrd].rightRnd = n;
+            }
+            hit = true;
+          }
+          if (hit)
+          {
+            SweepTree *node =
+              static_cast < SweepTree * >(nSrc->swsData[nBrd].misc);
+            if (node == nullptr)
+              break;
+            node = static_cast < SweepTree * >(node->elem[RIGHT]);
+            if (node == nullptr)
+              break;
+            nSrc = node->src;
+            nBrd = node->bord;
+            if (nSrc->swsData[nBrd].leftRnd >= lastChgtPt)
+              break;
+          }
+        }
+        while (hit);
+      }
+    }
+  }
 }
 
 
