@@ -350,6 +350,8 @@ public:
      * (where edges start or end) but in this implementation that's not the case. The main loop takes care of the endpoints
      * and the heap takes care of intersections only.
      *
+     * If you want a good theoretical overview of how all these things are done, please see the docs in livarot-doxygen.cpp.
+     *
      * @param a The pointer to the shape that we want to process.
      * @param directed The fill rule.
      * @param invert TODO: Be sure about what this does

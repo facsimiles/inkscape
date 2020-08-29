@@ -284,12 +284,13 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
     int lastPointNo = AddPoint (rPtX); // lastPointNo is the index of this last rounded point we added
     pData[lastPointNo].rx = rPtX;
 
-    // this whole block deals with the reconstruction procedure
-    // only do this if the y level changed, we don't need to do this
-    // as long as the y level has not changed, note that sweepline in this algorithm
-    // moves top to bottom but also left to right when there are multiple points at same y
-    // better to think of it as the sweepline being slightly slanted such that it'll hit the
-    // left points earlier than the right ones
+    // this whole block deals with the reconstruction procedure only do this if the y level
+    // changed, we don't need to do this as long as the y level has not changed, note that
+    // sweepline in this algorithm moves top to bottom but also left to right when there are
+    // multiple points at same y better to think of it as the sweepline being slightly slanted such
+    // that it'll hit the left points earlier than the right ones In fact, it's better to visualize
+    // as if we are iterating through set of points top to bottom and left ot right instead of a
+    // sweepline.
     if (rPtX[1] > lastChange)
     {
       // the important thing this function does is that it sorts points and merges any duplicate points
@@ -303,12 +304,11 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 
       // update the leftRnd and rightRnd indexes to newInd while traversing the linked list of
       // edges and shapes. leftRnd and rightRnd are the left most and right most points of an edge
-      // that intersect the sweepline. In all non-horizontal edges, both would be identical, only when
-      // the edge is horizontal, the two will be different since the sweepline will intersect it all
-      // and btw (here forget everything about the slanted sweepline :-P) also read the note in header
-      // docs where I explain how most of this seems chaos with no purpose
-      // This linked list seems to be used only here at this point, it's being used to update the
-      // indices of all the edges' leftRnd and rightRnd, it doesn't get used anywhere else at all
+      // in the resultant polygon that intersect the sweepline. In all non-horizontal edges, both
+      // would be identical, only when the edge is horizontal, the two will be different since the
+      // sweepline will intersect it at multiple endpoints.
+      // To define it more strictly, you can think of leftRnd and rightRnd as being the left most
+      // and right most point in the final resulted shape ("this" shape) at the y level lastChange.
       Shape *curSh = shapeHead;
       int curBo = edgeHead;
       while (curSh)
@@ -331,8 +331,8 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
           if (chgt.src->getEdge(chgt.bord).st <
               chgt.src->getEdge(chgt.bord).en)
           {
-            chgt.src->swsData[chgt.bord].stPt = // <-- these stPt and enPt variables kinda seem useless, only used once in CheckAdjacencies and the
-              chgt.ptNo;                        // only other place they are read at is the MakeTweak
+            chgt.src->swsData[chgt.bord].stPt = // <-- No idea where stPt and enPt are really used
+              chgt.ptNo;
           }
           else
           {
@@ -356,11 +356,8 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
         }
       }
 
-      // this function finds adjacencies which seem to be points that lie
-      // on top of an edge. However, I don't really see how this is useful, you can comment this
-      // function out and everything else works fine. I did a redesign of this code without any such function
-      // and it too worked just fine. Maybe there are some extremely rare cases where this would be useful,
-      // but I don't think so.
+      // finds if points at the y level "lastChange" lie on top of the edge and if yes, modifies
+      // leftRnd and rightRnd of those edges accordingly
       CheckAdjacencies (lastI, lastChgtPt, shapeHead, edgeHead);
 
       // reconstruct the edges
@@ -3365,17 +3362,21 @@ Shape::CheckEdges (int lastPointNo, int lastChgtPt, Shape * a, Shape * b,
       int rB = chgt.obord;
       Avance (lastPointNo, lastChgtPt, rS, rB, a, b, mod);
     }
-    // this block always seemed weird to me. I think it's not really needed. I did a quick test by commenting
-    // it out and things were working just fine. Not a 100% sure about this though!
-    // See all edges that participated in some intersection or which just got removed from the sweepline will
-    // have a chgt entry of their own, which will get processed and the blocks above will take care of them.
-    // So why do we really need to traverse all the edges to the left and process each one? despite knowing that
-    // each one of them will have a chgt entry and will get processed
+
+    // See there are few cases due to which an edge will have a leftRnd >= lastChgtPt. Either the
+    // edge had some event associated with it (addition/removal/intersection) at that y level. Or
+    // there was some point in the previous y level that was on top of the edge, and thus an
+    // adjacency was detected and the leftRnd/rightRnd were set accordingly. If you have neither of
+    // these, leftRnd/rightRnd won't be set at all. If the case is former, that the edge had an
+    // event at the previous y level, the blocks above will automatically call Avance on the edge.
+    // However, for the latter, we have no chgt event associated with the edge.  Thus, the blocks
+    // below calls Shape::Avance on edges to the left and to the right of the unique (or the left)
+    // edge. However, it's called only if leftRnd >= lastChgtPt.
     if (chgt.lSrc)
     {
       Shape *nSrc = chgt.lSrc;
       int nBrd = chgt.lBrd;
-      while (nSrc->swsData[nBrd].leftRnd >= // <-- if yes, means some event occured to this event after lastChgt
+      while (nSrc->swsData[nBrd].leftRnd >= // <-- if yes, means some event occured to this event after lastChgtPt or an adjacency was detected
           lastChgtPt /*&& nSrc->swsData[nBrd].doneTo < lastChgtPt */ )
       {
         Avance (lastPointNo, lastChgtPt, nSrc, nBrd, a, b, mod);
