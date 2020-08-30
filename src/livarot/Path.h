@@ -44,7 +44,7 @@ class SPStyle;
 // polyline description commands
 enum
 {
-  polyline_lineto = 0,  // a lineto 
+  polyline_lineto = 0,  // a lineto
   polyline_moveto = 1,  // a moveto
   polyline_forced = 2   // a forced point, ie a point that was an angle or an intersection in a previous life
                         // or more realistically a control point in the path description that created the polyline
@@ -87,7 +87,7 @@ public:
   // flags for the path construction
   enum
   {
-    descr_ready = 0,        
+    descr_ready = 0,
     descr_adding_bezier = 1, // we're making a bezier spline, so you can expect  pending_bezier_* to have a value
     descr_doing_subpath = 2, // we're doing a path, so there is a moveto somewhere
     descr_delayed_bezier = 4,// the bezier spline we're doing was initiated by a TempBezierTo(), so we'll need an endpoint
@@ -110,14 +110,14 @@ public:
   {
     path_lineto(bool m, Geom::Point pp) : isMoveTo(m), p(pp), piece(-1), t(0), closed(false) {}
     path_lineto(bool m, Geom::Point pp, int pie, double tt) : isMoveTo(m), p(pp), piece(pie), t(tt), closed(false) {}
-    
+
     int isMoveTo;    /*!< A flag that stores one of polyline_lineto, polyline_moveto, polyline_forced */
     Geom::Point  p;  /*!< The point itself. */
     int piece;       /*!< The path description index which this point comes from. */
     double t;        /*!< The time in that description that it comes from. 0 is beginning and 1 is the end. */
     bool closed;     /*!< True indicates that subpath is closed (this point is the last point of a closed subpath) */
   };
-  
+
   std::vector<path_lineto> pts; /*!< A vector storing the line segment approximation points. */
 
   bool back; /*!< A flag that when true, indicates that the line segment approximation is going to have backdata.
@@ -201,7 +201,7 @@ public:
   int ArcTo ( Geom::Point const &ip, double iRx, double iRy, double angle, bool iLargeArc, bool iClockwise);
 
   /**
-   * Adds a control point to the Nth degree bezier curve that was last inserted with a call to
+   * Adds a control point to the quadratic bezier spline that was last inserted with a call to
    * Path::BezierTo.
    *
    * @param ip The control point.
@@ -211,7 +211,7 @@ public:
   int IntermBezierTo ( Geom::Point const &ip);	// add a quadratic bezier spline control point
 
   /**
-   * An Nth degree bezier curve.
+   * A quadratic bezier spline.
    *
    * No need to specify the degree. That'll be done automatically as you call Path::IntermBezierTo
    * to add the control points. The sequence of instructions are like:
@@ -226,7 +226,7 @@ public:
   int BezierTo ( Geom::Point const &ip);	// quadratic bezier spline to this point (control points can be added after this)
 
   /**
-   * Called to mark the end of the Nth order bezier stuff.
+   * Called to mark the end of the quadratic bezier spline stuff.
    *
    * @return -1 All the time.
    */
@@ -581,9 +581,8 @@ public:
   // they append points to the polyline
   /**
    * The function is quite similar to RecCubicTo. Some of the maths, specially that in
-   * ArcAnglesAndCenter is too cryptic and I have not spent enough time deriving it yet
-   * either, but it's kinda useless. The important thing is how the Arc is split into
-   * line segments and that I can explain.
+   * ArcAnglesAndCenter is too cryptic and I have not spent enough time deriving it yet either. The
+   * important thing is how the Arc is split into line segments and that I can explain.
    *
    * @image html livarot-images/arc-threshold.svg
    *

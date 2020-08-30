@@ -295,7 +295,7 @@ public:
     /**
      * Extract contours from a directed graph.
      *
-     * The function doesn't care about any back data and thus if all contours will be made up
+     * The function doesn't care about any back data and thus all contours will be made up
      * of line segments. Any original curves would be lost.
      *
      * The algorithm is totally identical to GetWindings with minor differences.
@@ -315,7 +315,7 @@ public:
      *
      * @param dest Point to the shape where extracted contours will be placed in.
      * @param nbP Number of paths that were originally feeded to the directed graph with Path::Fill.
-     * @param orig An array of pointers to Path, one Path object for each path it in the graph.
+     * @param orig An array of pointers to Path, one Path object for each path id in the graph.
      * @param splitWhenForced TODO: Figure this out.
      */
     void ConvertToForme(Path *dest, int nbP, Path **orig, bool splitWhenForced = false);
@@ -336,11 +336,11 @@ public:
      * The function does four things more or less:
      * 1. Find all self-intersections in the shape.
      * 2. Reconstruct the directed graph with the intersections now converted to vertices.
-     * 3. Compute winding number needs for later use by GetWindings.
+     * 3. Compute winding number seeds for later use by GetWindings.
      * 4. Do some processing on edges. Calling AssembleAretes.
      * 5. Compute winding numbers and accordingly manipulate edges. (Deciding whether to keep, invert or destroy them)
      *
-     * Finding self-intersections and reconstruction happens simultanously. The function has a huge loop that moves
+     * Finding self-intersections and reconstruction happens simultaneously. The function has a huge loop that moves
      * a sweepline top to bottom, finding intersections and reconstructing the new directed graph. Edges are added/removed
      * in the sweepline tree sTree and intersections detected go in sEvts. All events (Edge Addition/Removal/Intersection)
      * that take place at a constant `y` value are recorded in an array named `chgts` and the function call to CheckEdges
@@ -502,7 +502,7 @@ public:
      * An edge in the directed graph.
      *
      * nextS tells the next edge in the double-linked list of the start point
-     * prevS tells the prev egde in the double-linked list of the start point
+     * prevS tells the prev edge in the double-linked list of the start point
      * nextE tells the next edge in the double-linked list of the end point
      * prevE tells the next edge in the double-linked list of the end point
      */
@@ -785,7 +785,7 @@ private:
     /**
      * Test if there is an intersection of an edge on a particular side.
      *
-     * The actual intersection checking is performed by the other TesteIntersection and this one
+     * The actual intersection checking is performed by the other TesteIntersection and this function
      * calls it, creating an intersection event if an intersection is detected.
      *
      * @param t The pointer to the node of the edge whose intersection we wanna test.
@@ -843,9 +843,9 @@ private:
      * What you see here is a simple variant of the midpoint formula that can give us the intersection point. The sin terms when combined with sl or el
      * are simply the perpendiculars you see in figure 2 and 3. See how the perpendiculars' relative length change as the intersection point changes on
      * the right edge? This is exactly the mechanism used to find out the intersection point and its time on each edge. Look at figure 3, the point I'm
-     * trying to make is that the red perpendicular's length divided by sum of both red and blue perpendiculars is the same factor as the (length of the
-     * part of the right edge that's to the "right" of intersection) divided by total length of right edge. These ratios are exactly what we use to
-     * find the intersection point as well as the time of these intersection points.
+     * trying to make is that the red perpendicular's length divided by sum of length of both red and blue perpendiculars is the same factor as the
+     * (length of the part of the right edge that's to the "right" of intersection) divided by total length of right edge. These ratios are exactly
+     * what we use to find the intersection point as well as the time of these intersection points.
      *
      * @param iL Pointer to the left edge's node.
      * @param iR Pointer to the right edge's node.

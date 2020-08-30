@@ -143,9 +143,11 @@
  *
  * We keep two data structures for our needs. The first one has to be linear structure that can preserve the
  * order in which items are stored. A double linked list should suffice for this purpose however we use a double
- * linked list + an AVL tree for faster searching. Secondly, we keep a priority queue (a min heap), to keep track
- * of all the intersections that we detect. The priority queue stores these in such a way that the top most and
- * left most intersection (if there are multiple ones at same y) get popped.
+ * linked list + an AVL tree for faster searching. This structure should hold the linear order in which the edges
+ * intersect with the sweepline. I refer to each entry in this structure as a node. In the code these have the type
+ * `SweepTree`. I refeer to this whole tree structure as sweepline list. Secondly, we keep a priority queue
+ * (a min heap), to keep track of all the intersections that we detect. The priority queue stores these in such
+ * a way that the top most and left most intersection (if there are multiple ones at same y) get popped.
  *
  * We start by sorting all the points of the graph top to bottom (and left to right if there are points at the same
  * y level). After that we place the sweepline at the top most point. To determine which point to go next, we check
@@ -158,7 +160,7 @@
  * you must find the right position where it should go in the sweepline list. Once you find that right position, insert
  * it there and test if this edge intersects with the one on its right and its left in that list. If any intersections
  * are detected, record them. This testing is done by doing maths that can tell if two line segments intersect.
- * 2. See if there are edges that need to be removed the sweepline list (they ended here). For each edge that you remove,
+ * 2. See if there are edges that need to be removed from the sweepline list (they ended here). For each edge that you remove,
  * unless that edge was either the head or tail of the sweepline list, it'd leave its two neighbors who'd now be side
  * to side. So you must test if these two neighbors intersect with each other and if they do, record that intersection
  * event.
@@ -226,6 +228,20 @@
  * B -> C, C -> D and D -> E. The function also interpolates back data to create valid back data for the new edges and there is
  * some winding number seed stuff that it takes care of. You can visit the function to see the details.
  *
+ * The diagram below shows the whole process for specific shape. The sweepline starts at point 0
+ * where edge 0 and edge 1 are added to the sweepline. Their "last point drawn" is of course 0. Then
+ * the sweepline reaches point 1, edge 0 is about to end so we draw it till the point 1, change its
+ * "last point drawn" and remove the edge. Edge 2 is added and its "last point drawn" is set to point
+ * 1. Then the sweepline reaches point 2 and here edge 1 and 2 intersect. We draw both of these
+ * edges till the point 2 and update their "last point drawn" to 2. Then the sweepline reaches
+ * point 3 and edge 1 is about to end here, so we draw it till point 3, update its "last point
+ * drawn" and remove it from the list. Edge 3 is added and its "last point drawn" is set to point
+ * 3. Lastly, the sweepline reaches point 4 where both edges are to be removed. They get drawn till
+ * point 4, their "last point drawn" is updated and both are removed from the list. The summary of
+ * the process is, whenver an event occurs to an edge (addition/removal/intersection), draw till
+ * that point and update "last point drawn". Of course there is more detail to this and you'll
+ * see that next.
+ *
  * @image html livarot-images/convert-reconstruction.svg
  *
  * Now let's get to the meaty stuff. This whole region of code gets called from the main loop of Shape::ConvertToShape. The body
@@ -237,35 +253,41 @@
  * sweepline stuff that I've already talked about in the previous section. After this loop has ended, the reconstruction block is run for
  * the last time (it has been seperately written after the loop). So, understand this cearly, the loop starts by adding a point, runs the
  * reconstruction block if this point's y is different (higher) than the previous one and then runs the sweepline intersection code. You
- * can imagine a grid of points in your head arranged in row and columns and you'll realize that the reconstruction block only runs when
+ * can imagine a grid of points in your head arranged in rows and columns and you'll realize that the reconstruction block only runs when
  * the left most point of each y level just got added. The following picture shows you this grid and also showns what the variables indicate
- * the situation at the point when the reconstruction block ran right after the current point (lastPointNo) got added. As you can see,
- * lastChgtPt will hold the left most point of the previous y level and lastPointNo holds the point that just got added.
+ * at the point when the reconstruction block ran right after the current point (lastPointNo) got added. As you can see, lastChgtPt will
+ * hold the left most point of the previous y level and lastPointNo holds the point that just got added.
  *
  * @image html livarot-images/lastChgtPt-from-avance.svg
  *
+ * The following picture illustrates how these different pieces are called.
+ *
+ * @image html livarot-images/sequence-convert-shape-loop.svg
+ *
  * I discussed the sweepline intersection finding algorithm in the previous section. That section also operates an array called "chgts".
- * Maybe this stands for changes? I don't know. Anyways, this array stores for changes that happen to the sweepline. These can be of
+ * Maybe this stands for changes? I don't know. Anyways, this array stores changes that happen to the sweepline at a y level. These can be of
  * three types, an edge addition, an edge removal or an edge intersection. Whenever the sweepline stuff (the last part of the main loop
  * of Shape::ConvertToShape) does any of these three, it adds an entry in chgts for that change. These entries in chgts get processed
  * as soon as the reconstruction block runs, and the reconstruction block runs whenever the y level of the current point changes. So it
  * could run immediately after the current iteration if the y of the next point is different (higher), or you could iterate a few more
- * times until the y changes. It depends on how many points exist at the y level on which the event was detected and pushed in chgts.
+ * times until the y changes. It depends on how many more points exist at the y level on which the event was detected and pushed in chgts.
  * If this is the last point, reconstruction block will run after the loop has ended (it has been rewritten after it as I mentioned
- * above). Once the reconstruction block runs, it processes these chgts array and uses it to do the reconstruction and at the end of the
+ * above). Once the reconstruction block runs, it processes this chgts array and uses it to do the reconstruction and at the end of the
  * reconstruction block, this array is emptied. So you can imagine the process is that we add all events that take place at a y level
  * and as soon as the y level changes, we process all those chgts (doing the reconstruction) and empty the array immediately.
  *
- * The next thing I want to describe are the two variables called leftRnd and rightRnd that are stored in the array. I don't know how
- * to easily describe what these points do. The best way to put it is how the author puts it, they store the left and right most points
- * in the resultant graph at the current sweepline position (y level). These values are not set if the edge has no event associated with
- * a y level (it has no edge addition/removal/intersection at that y level). However, this explaination makes no sense unless you already
- * understand what these variables do. Recall that the edges get created by the function DoEdgeTo and this function needs an edge and a
- * point to draw to. The edge stores the last drawn point and will automatically draw a new edge from that point to the passed in point.
- * For now, think of leftRnd and rightRnd as storing the range of points which we will supply in the DoEdgeTo calls for that edge, one
- * by one. In all non-horizontal edges, leftRnd and rightRnd are the same point (as far as I know), since, at a particular y level,
- * all non-horizontal edges can have only one point. It'll only be horizontal edges that can have a range of points defined by leftRnd
- * and rightRnd, since its endpoints will all be at the same y level.
+ * The next thing I want to describe are the two variables called leftRnd and rightRnd that are stored for each edge in the array swsData.
+ * I don't know how to easily describe what these points do. The best way to put it is how the author puts it, they store the left and
+ * right most points in the resultant graph at the current sweepline position (y level). These values are not set if the edge has no
+ * event associated with a y level (it has no edge addition/removal/intersection at that y level) (there is an exception to this you'll
+ * later discover). However, this explaination makes no sense unless you already understand what these variables do. Recall that the
+ * edges get created by the function DoEdgeTo and this function needs an edge and a point to draw to. The edge stores the last drawn
+ * point and will automatically draw a new edge from that point to the passed in point. For now, think of leftRnd and rightRnd as
+ * storing the range of points which we will supply in the DoEdgeTo calls for that edge, one by one. In all non-horizontal edges,
+ * leftRnd and rightRnd are the same point (as far as I know), since, at a particular y level, all non-horizontal edges can have only
+ * one point. It'll only be horizontal edges that can have a range of points defined by leftRnd and rightRnd, since its endpoints
+ * will all be at the same y level. The function Shape::Avance is what actually does these DoEdgeTo calls with leftRnd and righRnd
+ * points.
  *
  * Coming back to chgts, whenever the sweepline intersection stuff (the last bit in the main loop of ConvertToShape) detects an event,
  * which can be an edge addition/removal/intersection, it adds an entry in chgts by calling Shape::AddChgt. This entry stores a few
@@ -275,20 +297,19 @@
  * very useful thing this function Shape::AddChgt does, it populates the leftRnd and rightRnd variables associated with the edge that's
  * associated with that event. In the trivial case of non-horizonal edge, you just set them to lastPointNo (the point that just got
  * added) and lead to this event (addition/intersection/removal). You can see the function to see in detail how this is done to handle
- * horizonal cases too. (See the condition ...leftRnd < lastChgtPt). To conclude, AddChgt also sets leftRnd and rightRnd properly to
- * the leftmost and rightmost rounded points that the edge has at this y level. Again, they'll be just the same point for a vertical
- * edge and only be different when your edge is horizontal. If you see details of AddChgt, you'll realize that for a horizonal edge,
- * leftRnd and rightRnd get set to correct values after AddChgt has been called for both for the edge insertion as well as
- * removal/intersection. Now this populated chgt array and the leftRnd and rightRnd stuff gets used together for edge reconstruction
- * in the reconstruction block.
+ * horizonal cases too. (See the condition ...leftRnd < lastChgtPt). AddChgt also sets leftRnd and rightRnd properly to the leftmost
+ * and rightmost rounded points that the edge has at this y level. Again, they'll be just the same point for a vertical edge and only
+ * be different when your edge is horizontal. If you see details of AddChgt, you'll realize that for a horizonal edge, leftRnd and
+ * rightRnd get set to correct values after AddChgt has been called for both for the edge insertion as well as removal/intersection.
+ * Now this populated chgt array and the leftRnd and rightRnd stuff will be used together for edge reconstruction in the reconstruction block.
  *
  * The reconstruction block starts with a call to AssemblePoints. This function is used to sort all points at the previous y level
- * and merge all duplicate points. We do store the new mapping between old and new indices of points so we can update the references
- * in leftRnd, rightRnd and chgt.ptNo. After this sorting and index updating has been done, there is a call to a function named
+ * and merge all duplicate points. We do store the new mapping between old and new indices of points so we can update the indices
+ * stored in leftRnd, rightRnd and chgt.ptNo. After this sorting and index updating has been done, there is a call to a function named
  * CheckAdjacencies but I'll get to that later. After it there is a call to Shape::CheckEdges. The first thing that CheckEdges does is
  * for all chgt in chgts it checks if its an edge insertion and if yes, it sets "last point drawn" of that edge. This is the same
  * idea that I've talked about previously. It sets that to the current point to mark that the point has only been drawn to its
- * start point or in other words, hasn't been drawn at all. After this, for each cht in chts, Shape::Avance is called on the main
+ * start point or in other words, hasn't been drawn at all. After this, for each chgt in chgts, Shape::Avance is called on the main
  * edge that's associated with the event. The same is done with the right edge if it was intersection event. Shape::Avance does
  * a lot of fancy checks, but it simply calls DoEdgeTo on the edge multiple times for each point in the range leftRnd and rightRnd
  * of that edge. That's how it all works.
