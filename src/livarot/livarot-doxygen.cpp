@@ -357,6 +357,14 @@
  * on the edge. However, for the latter, we have no chgt event associated with the edge. Thus, there is a special block in Shape::CheckEdges that calls
  * Shape::Avance on edges to the left and to the right of the unique (or the left) edge. However, it's called only if leftRnd >= lastChgtPt.
  *
+ * There is one more point that I'd like to highlight. The chaos looking code in CheckAdjacencies and CheckEdges has another special
+ * purpose that's not that apparent. It does something called "Snap Rounding". As far as I can see, it's based on an algorithm by
+ * John D. Hobby described in the paper "Practical segment intersection with finite precision output". This rounding is exactly all
+ * that it does. The reason why we are not able to catch this easily is because it becomes useful when your points gets too close to
+ * the edges and that rarely happens in mouse drawn paths. By default, you can't even zoom that level in Inkscape.
+ *
+ * https://www.sciencedirect.com/science/article/pii/S0925772199000218
+ *
  * @subsection WindingSeeds Winding number seed calculation
  *
  * See the documentation of Shape::GetWindings and you'll see how a seed winding number is needed for the computation of
