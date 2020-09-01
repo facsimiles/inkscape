@@ -18,19 +18,51 @@ class Shape;
 class SweepTree;
 
 /**
- * The sweepline: a set of edges intersecting the current sweepline
- * stored as an AVL tree.
+ * The sweepline tree itself.
+ *
+ * This could just be a double-linked list but it also an AVL search tree
+ * to quickly find nodes.
+ *
+ * This is the parent class for the sweepline. Most interesting stuff happens in the class
+ * SweepTree or its parent class AVLTree.h This just keeps the list of nodes and the address
+ * to the root node.
  */
 class SweepTreeList {
 public:
-    int nbTree;   ///< Number of nodes in the tree.
-    int const maxTree;   ///< Max number of nodes in the tree.
-    SweepTree *trees;    ///< The array of nodes.
-    SweepTree *racine;   ///< Root of the tree.
+    int nbTree;          /*!< Number of nodes in the tree. */
+    int const maxTree;   /*!< Max number of nodes in the tree. */
+    SweepTree *trees;    /*!< The array of nodes. */
+    SweepTree *racine;   /*!< Root of the tree. */
 
+    /**
+     * Constructor to start a new SweepTreeList.
+     *
+     * @param s The number of maximum items it should be able to hold.
+     */
     SweepTreeList(int s);
+
+    /**
+     * The destructor. But didn't have to be virtual I guess.
+     */
     virtual ~SweepTreeList();
 
+    /**
+     * Create a new node and add it. This doesn't do any insertion in tree though. It just
+     * creates the node and puts it in the list of nodes. The actual insertion would need
+     * to be done by calling SweepTree::Insert or in the speical case SweepTree::InsertAt.
+     *
+     * @param iSrc A pointer to the shape.
+     * @param iBord The edge index.
+     * @param iWeight Weight of the of the edge. Weight of 2 is equivalent of two identical edges
+     * on top of each other.
+     * @param iStartPoint The point at which this node got added. (the upper endpoint if sweeping
+     * top to bottom).
+     * @param iDst Supposed to be the destination shape. The Shape on which Shape::ConvertToShape
+     * was called. `iSrc` is the parameter that was passed in Shape::ConvertToShape. Useless
+     * parameter though, not used.
+     * @param The address of the newly added node. Can be used later for Inserting it or anything
+     * else.
+     */
     SweepTree *add(Shape *iSrc, int iBord, int iWeight, int iStartPoint, Shape *iDst);
 };
 

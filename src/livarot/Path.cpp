@@ -54,7 +54,7 @@ void Path::Reset()
     for (auto & i : descr_cmd) {
         delete i;
     }
-    
+
     descr_cmd.clear();
     pending_bezier_cmd = -1;
     pending_moveto_cmd = -1;
@@ -64,13 +64,13 @@ void Path::Reset()
 void Path::Copy(Path * who)
 {
     ResetPoints();
-    
+
     for (auto & i : descr_cmd) {
         delete i;
     }
-        
+
     descr_cmd.clear();
-        
+
     for (auto i : who->descr_cmd)
     {
         descr_cmd.push_back(i->clone());

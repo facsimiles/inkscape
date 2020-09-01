@@ -31,13 +31,18 @@ enum
 };
 
 // return codes for the find function in the AVL tree (private)
+
+/**
+ * Indicates how the position (that was found for the point or edge)
+ * looks like.
+ */
 enum
 {
-  not_found = 0,
-  found_exact = 1,
-  found_on_left = 2,
-  found_on_right = 3,
-  found_between = 4
+  not_found = 0,      /*!< We didn't find anything. */
+  found_exact = 1,    /*!< We such an edge where our point/edge lies directly on top */ // <-- TODO: confirm this?
+  found_on_left = 2,  /*!< This point/edge should go to the left of some edge. (There is nothing on the left of that edge) */
+  found_on_right = 3, /*!< This point/edge should go to the right of some edge. (There is nothing on the right of that edge) */
+  found_between = 4   /*!< This point/edge should go in between two particular edges. */
 };
 
 // types of cap for stroking polylines

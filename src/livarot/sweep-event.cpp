@@ -102,7 +102,7 @@ bool SweepEventQueue::extract(SweepTree * &iLeft, SweepTree * &iRight, Geom::Poi
     itl = e.tl;
     itr = e.tr;
     remove(&e);
-    
+
     return true;
 }
 
@@ -114,7 +114,7 @@ void SweepEventQueue::remove(SweepEvent *e)
 	nbEvt = 0;
 	return;
     }
-    
+
     int const n = e->ind;
     int to = inds[n];
     e->MakeDelete();
@@ -124,7 +124,7 @@ void SweepEventQueue::remove(SweepEvent *e)
     if (moveInd == n) {
 	return;
     }
-    
+
     to = inds[moveInd];
 
     events[to].ind = n;

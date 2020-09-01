@@ -950,6 +950,7 @@ hence the Path-esque coding style"
 
 */
 template<typename T> inline static T square(T x) {return x*x;}
+
 Path::cut_position Path::PointToCurvilignPosition(Geom::Point const &pos, unsigned seg) const
 {
     // if the parameter "seg" == 0, then all segments will be considered
