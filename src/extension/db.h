@@ -16,14 +16,12 @@
 #ifndef SEEN_MODULES_DB_H
 #define SEEN_MODULES_DB_H
 
-#include <map>
-#include <list>
-#include <cstring>
 #include <algorithm>
+#include <cstring>
 #include <functional>
-
 #include <glib.h>
-
+#include <list>
+#include <map>
 
 namespace Inkscape {
 namespace Extension {
@@ -57,10 +55,11 @@ public:
     Extension * get (const gchar *key);
     void register_ext (Extension *module);
     void unregister_ext (Extension *module);
-    void foreach (std::function<void(Extension*)> func) {
-	    for (auto& entry : moduledict) {
-		    func(entry.second);
-	    }
+    void foreach (std::function<void(Extension *)> func)
+    {
+        for (auto &entry : moduledict) {
+            func(entry.second);
+        }
     }
 
     typedef std::list<Output *> OutputList;

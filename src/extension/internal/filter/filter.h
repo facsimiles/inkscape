@@ -42,9 +42,10 @@ public:
 	~Filter() override;
 
 	bool load(Inkscape::Extension::Extension *module) override;
-	void effect(Inkscape::Extension::Effect *module, std::shared_ptr<Inkscape::Extension::Implementation::ImplementationDocumentCache> docCache) override;
+    void effect(Inkscape::Extension::Effect *module,
+                std::shared_ptr<Inkscape::Extension::Implementation::ImplementationDocumentCache> docCache) override;
 
-	static void filter_init(gchar const * id, gchar const * name, gchar const * submenu, gchar const * tip, gchar const * filter);
+    static void filter_init(gchar const * id, gchar const * name, gchar const * submenu, gchar const * tip, gchar const * filter);
 	static void filters_all();
 
 	/* File loader related */

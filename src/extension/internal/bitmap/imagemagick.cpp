@@ -50,15 +50,15 @@ public:
     ~ImageMagickDocCache ( ) override;
 };
 
-ImageMagickDocCache::ImageMagickDocCache(Inkscape::UI::View::View * view) :
-    Inkscape::Extension::Implementation::ImplementationDocumentCache(view),
-    _nodes(nullptr),
-    _images(nullptr),
-    _imageCount(0),
-    _caches(nullptr),
-    _cacheLengths(nullptr),
-    _originals(nullptr),
-    _imageItems(nullptr)
+ImageMagickDocCache::ImageMagickDocCache(Inkscape::UI::View::View *view)
+    : Inkscape::Extension::Implementation::ImplementationDocumentCache(view)
+    , _nodes(nullptr)
+    , _images(nullptr)
+    , _imageCount(0)
+    , _caches(nullptr)
+    , _cacheLengths(nullptr)
+    , _originals(nullptr)
+    , _imageItems(nullptr)
 {
     SPDesktop *desktop = (SPDesktop*)view;
     auto selectedItemList = desktop->selection->items();
@@ -148,24 +148,25 @@ ImageMagick::load(Inkscape::Extension::Extension */*module*/)
 }
 
 std::shared_ptr<Inkscape::Extension::Implementation::ImplementationDocumentCache>
-ImageMagick::newDocCache (Inkscape::UI::View::View * view) {
+ImageMagick::newDocCache(Inkscape::UI::View::View *view)
+{
     return std::make_shared<ImageMagickDocCache>(view);
 }
 
-void
-ImageMagick::effect (Inkscape::Extension::Effect *module, std::shared_ptr<Inkscape::Extension::Implementation::ImplementationDocumentCache> docCache)
+void ImageMagick::effect(Inkscape::Extension::Effect *module,
+                         std::shared_ptr<Inkscape::Extension::Implementation::ImplementationDocumentCache> docCache)
 {
     refreshParameters(module);
 
     if (docCache == nullptr) { // should never happen
-	    g_warning("ImageMagick: Invalid Document Cache!");
-	    return;
+        g_warning("ImageMagick: Invalid Document Cache!");
+        return;
     }
 
     auto dc = std::dynamic_pointer_cast<ImageMagickDocCache>(docCache);
     if (dc == nullptr) {
-	    g_warning("ImageMagick: Incorrect document cache");
-	    return;
+        g_warning("ImageMagick: Incorrect document cache");
+        return;
     }
 
     for (int i = 0; i < dc->_imageCount; i++)
@@ -238,7 +239,8 @@ ImageMagick::effect (Inkscape::Extension::Effect *module, std::shared_ptr<Inksca
     Uses AutoGUI for creating the GUI.
 */
 Gtk::Widget *
-ImageMagick::prefs_effect(Inkscape::Extension::Effect *module, sigc::signal<void> * changeSignal, std::shared_ptr<Inkscape::Extension::Implementation::ImplementationDocumentCache> docCache)
+ImageMagick::prefs_effect(Inkscape::Extension::Effect *module, sigc::signal<void> *changeSignal,
+                          std::shared_ptr<Inkscape::Extension::Implementation::ImplementationDocumentCache> docCache)
 {
     auto view = docCache->view();
     auto current_document = view->doc();

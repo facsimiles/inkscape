@@ -41,7 +41,7 @@ public:
     void unload(Inkscape::Extension::Extension *module) override;
     bool check(Inkscape::Extension::Extension *module) override;
 
-    std::shared_ptr<ImplementationDocumentCache> newDocCache(Inkscape::UI::View::View * view) override;
+    std::shared_ptr<ImplementationDocumentCache> newDocCache(Inkscape::UI::View::View *view) override;
 
     Gtk::Widget *prefs_input(Inkscape::Extension::Input *module, gchar const *filename) override;
     SPDocument *open(Inkscape::Extension::Input *module, gchar const *filename) override;

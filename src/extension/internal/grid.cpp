@@ -80,10 +80,10 @@ Glib::ustring build_lines(Geom::Rect bounding_area,
     \param  module   The effect that was called (unused)
     \param  document What should be edited.
 */
-void
-Grid::effect (Inkscape::Extension::Effect *module, std::shared_ptr<Inkscape::Extension::Implementation::ImplementationDocumentCache> docCache)
+void Grid::effect(Inkscape::Extension::Effect *module,
+                  std::shared_ptr<Inkscape::Extension::Implementation::ImplementationDocumentCache> docCache)
 {
-	auto document = docCache->view();
+    auto document = docCache->view();
     Inkscape::Selection * selection     = ((SPDesktop *)document)->selection;
 
     Geom::Rect bounding_area = Geom::Rect(Geom::Point(0,0), Geom::Point(100,100));
@@ -171,9 +171,10 @@ PrefAdjustment::val_changed ()
     Uses AutoGUI for creating the GUI.
 */
 Gtk::Widget *
-Grid::prefs_effect(Inkscape::Extension::Effect *module, sigc::signal<void> * changeSignal, std::shared_ptr<Inkscape::Extension::Implementation::ImplementationDocumentCache> docCache)
+Grid::prefs_effect(Inkscape::Extension::Effect *module, sigc::signal<void> *changeSignal,
+                   std::shared_ptr<Inkscape::Extension::Implementation::ImplementationDocumentCache> docCache)
 {
-	auto view = docCache->view();
+    auto view = docCache->view();
     SPDocument * current_document = view->doc();
 
     auto selected = ((SPDesktop *) view)->getSelection()->items();

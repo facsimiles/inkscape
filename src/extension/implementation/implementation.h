@@ -52,13 +52,12 @@ namespace Implementation {
  * A cache for the document and this implementation.
  */
 class ImplementationDocumentCache {
-
     /**
      * The document that this instance is working on.
      */
     Inkscape::UI::View::View *_view;
 
-  public:
+public:
     ImplementationDocumentCache(Inkscape::UI::View::View *view)
         : _view(view)
     {
@@ -75,7 +74,7 @@ class ImplementationDocumentCache {
  * from this class.
  */
 class Implementation {
-  public:
+public:
     // ----- Constructor / destructor -----
     Implementation() = default;
 
@@ -128,8 +127,7 @@ class Implementation {
     }
     virtual void effect(Inkscape::Extension::Effect * /*module*/,
                         std::shared_ptr<ImplementationDocumentCache> /*docCache*/)
-    {
-    }
+    {}
     virtual void effect(Inkscape::Extension::Effect *module, Inkscape::UI::View::View *doc)
     {
         this->effect(module, this->newDocCache(doc));
@@ -201,7 +199,6 @@ class Implementation {
      */
     virtual void setDetachBase(bool detach) {}
 };
-
 
 } // namespace Implementation
 } // namespace Extension

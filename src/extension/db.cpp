@@ -156,11 +156,12 @@ DB::get (const gchar *key)
  * \brief Small filter function to only choose extensions of a particular type
  */
 template <typename T>
-static void extension_type_filter(Extension * ext, std::list<T> &list) {
-	auto typed_ext = dynamic_cast<T>(ext);
-	if (typed_ext != nullptr) {
-		list.push_back(typed_ext);
-	}
+static void extension_type_filter(Extension *ext, std::list<T> &list)
+{
+    auto typed_ext = dynamic_cast<T>(ext);
+    if (typed_ext != nullptr) {
+        list.push_back(typed_ext);
+    }
 }
 
 /**
@@ -172,8 +173,9 @@ static void extension_type_filter(Extension * ext, std::list<T> &list) {
 DB::InputList &
 DB::get_input_list (DB::InputList &ou_list)
 {
-	foreach([&ou_list](Extension * ext) { extension_type_filter(ext, ou_list); });
-	ou_list.sort( ModuleInputCmp() );
+    foreach ([&ou_list](Extension *ext) { extension_type_filter(ext, ou_list); })
+        ;
+    ou_list.sort( ModuleInputCmp() );
 	return ou_list;
 }
 
@@ -186,8 +188,9 @@ DB::get_input_list (DB::InputList &ou_list)
 DB::OutputList &
 DB::get_output_list (DB::OutputList &ou_list)
 {
-	foreach([&ou_list](Extension * ext) { extension_type_filter(ext, ou_list); });
-	ou_list.sort( ModuleOutputCmp() );
+    foreach ([&ou_list](Extension *ext) { extension_type_filter(ext, ou_list); })
+        ;
+    ou_list.sort( ModuleOutputCmp() );
 	return ou_list;
 }
 
@@ -200,8 +203,9 @@ DB::get_output_list (DB::OutputList &ou_list)
 DB::EffectList &
 DB::get_effect_list (DB::EffectList &ou_list)
 {
-	foreach([&ou_list](Extension * ext) { extension_type_filter(ext, ou_list); });
-	return ou_list;
+    foreach ([&ou_list](Extension *ext) { extension_type_filter(ext, ou_list); })
+        ;
+    return ou_list;
 }
 
 } } /* namespace Extension, Inkscape */

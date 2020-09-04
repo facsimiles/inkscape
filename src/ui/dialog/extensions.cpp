@@ -57,7 +57,7 @@ void ExtensionsPanel::set_full(bool full)
     }
 }
 
-void ExtensionsPanel::listCB( Inkscape::Extension::Extension * in_plug )
+void ExtensionsPanel::listCB(Inkscape::Extension::Extension *in_plug)
 {
     const char* stateStr;
     Extension::state_t state = in_plug->get_state();
@@ -81,11 +81,11 @@ void ExtensionsPanel::listCB( Inkscape::Extension::Extension * in_plug )
             stateStr = "unknown";
     }
 
-    if ( _showAll || in_plug->deactivated() ) {
+    if (_showAll || in_plug->deactivated()) {
         gchar* line = g_strdup_printf( "%s   %s\n        \"%s\"", stateStr, in_plug->get_name(), in_plug->get_id() );
 
-        _view.get_buffer()->insert( _view.get_buffer()->end(), line );
-        _view.get_buffer()->insert( _view.get_buffer()->end(), "\n" );
+        _view.get_buffer()->insert(_view.get_buffer()->end(), line);
+        _view.get_buffer()->insert(_view.get_buffer()->end(), "\n");
         g_free(line);
     }
 
@@ -97,9 +97,9 @@ void ExtensionsPanel::rescan()
     _view.get_buffer()->set_text("Extensions:\n");
 //     g_message("/------------------");
 
-    Inkscape::Extension::db.foreach([this](Extension * ext){ listCB(ext); });
+    Inkscape::Extension::db.foreach ([this](Extension *ext) { listCB(ext); });
 
-//     g_message("\\------------------");
+    //     g_message("\\------------------");
 }
 
 } //namespace Dialogs

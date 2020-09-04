@@ -69,7 +69,7 @@ SPDocument *open(Extension *key, gchar const *filename)
     Input *imod = nullptr;
 
     if (key == nullptr) {
-        db.foreach([&filename, &imod](Extension *ext) { open_internal(ext, filename, &imod); });
+        db.foreach ([&filename, &imod](Extension *ext) { open_internal(ext, filename, &imod); });
     } else {
         imod = dynamic_cast<Input *>(key);
     }
@@ -160,8 +160,7 @@ SPDocument *open(Extension *key, gchar const *filename)
  * of the filename (for the length of the extension), and the extension itself.  If this passes
  * then the pointer passed in is set to the current module.
  */
-static void
-open_internal(Extension *in_plug, gchar const *filename, Input **pimod)
+static void open_internal(Extension *in_plug, gchar const *filename, Input **pimod)
 {
     if (!in_plug->deactivated() && dynamic_cast<Input *>(in_plug)) {
         // skip all the rest if we already found a function to open it
@@ -213,7 +212,7 @@ save(Extension *key, SPDocument *doc, gchar const *filename, bool setextension, 
 {
     Output *omod;
     if (key == nullptr) {
-        db.foreach([&filename, &omod](Extension *ext) { save_internal(ext, filename, &omod); });
+        db.foreach ([&filename, &omod](Extension *ext) { save_internal(ext, filename, &omod); });
 
         /* This is a nasty hack, but it is required to ensure that
            autodetect will always save with the Inkscape extensions
@@ -362,8 +361,7 @@ save(Extension *key, SPDocument *doc, gchar const *filename, bool setextension, 
  * of the filename (for the length of the extension), and the extension itself.  If this passes
  * then the pointer passed in is set to the current module.
  */
-static void
-save_internal(Extension *in_plug, gchar const *filename, Output **pomod)
+static void save_internal(Extension *in_plug, gchar const *filename, Output **pomod)
 {
     if (!in_plug->deactivated() && dynamic_cast<Output *>(in_plug)) {
         // skip all the rest if we already found someone to save it
@@ -457,7 +455,7 @@ build_from_reprdoc(Inkscape::XML::Document *doc, Implementation::Implementation 
         } else if (!strcmp(element_name,  INKSCAPE_EXTENSION_NS "plugin")) {
             module_implementation_type = MODULE_PLUGIN;
         } else if (!strcmp(element_name, INKSCAPE_EXTENSION_NS "wasm")) {
-	    g_warning("WASM not supported\n");
+            g_warning("WASM not supported\n");
         }
 
         //Inkscape::XML::Node *old_repr = child_repr;
@@ -496,7 +494,7 @@ build_from_reprdoc(Inkscape::XML::Document *doc, Implementation::Implementation 
     }
 
     if (imp == nullptr) {
-	    return false;
+        return false;
     }
 
     Extension *module = nullptr;

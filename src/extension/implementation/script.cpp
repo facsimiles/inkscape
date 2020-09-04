@@ -312,9 +312,9 @@ ScriptDocCache::~ScriptDocCache ( )
     unlink(_filename.c_str());
 }
 
-std::shared_ptr<ImplementationDocumentCache>
-Script::newDocCache(Inkscape::UI::View::View * doc) {
-	return std::make_shared<ScriptDocCache>(doc);
+std::shared_ptr<ImplementationDocumentCache> Script::newDocCache(Inkscape::UI::View::View *doc)
+{
+    return std::make_shared<ScriptDocCache>(doc);
 }
 
 /**
@@ -521,13 +521,12 @@ void Script::save(Inkscape::Extension::Output *module,
     exists at the time, the other is created by that script).  At that
     point both should be full, and the second one is loaded.
 */
-void Script::effect(Inkscape::Extension::Effect *module,
-               std::shared_ptr<ImplementationDocumentCache> docCache)
+void Script::effect(Inkscape::Extension::Effect *module, std::shared_ptr<ImplementationDocumentCache> docCache)
 {
     auto dc = std::dynamic_pointer_cast<ScriptDocCache>(docCache);
     if (dc == nullptr) {
-	    g_warning("Script::effect: Invalid document cache");
-	    return;
+        g_warning("Script::effect: Invalid document cache");
+        return;
     }
 
     auto desktop = reinterpret_cast<SPDesktop *>(dc->view());
@@ -598,7 +597,7 @@ void Script::effect(Inkscape::Extension::Effect *module,
     g_unlink(tempfilename_out.c_str());
 
     if (mydoc) {
-	replace_document(dc->view(), mydoc);
+        replace_document(dc->view(), mydoc);
         mydoc->release();
     }
 

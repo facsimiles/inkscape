@@ -118,13 +118,13 @@ void Filter::effect(Inkscape::Extension::Effect *module,
     auto desktop = static_cast<SPDesktop *>(view);
 
     //printf("Calling filter effect\n");
-    Inkscape::Selection * selection = desktop->selection;
+    Inkscape::Selection *selection = desktop->selection;
 
     // TODO need to properly refcount the items, at least
     std::vector<SPItem*> items(selection->items().begin(), selection->items().end());
 
-    Inkscape::XML::Document * xmldoc = view->doc()->getReprDoc();
-    Inkscape::XML::Node * defsrepr = view->doc()->getDefs()->getRepr();
+    Inkscape::XML::Document *xmldoc = view->doc()->getReprDoc();
+    Inkscape::XML::Node *defsrepr = view->doc()->getDefs()->getRepr();
 
     for(auto spitem : items) {
         Inkscape::XML::Node *node = spitem->getRepr();

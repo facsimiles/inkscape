@@ -26,10 +26,10 @@ class Grid : public Inkscape::Extension::Implementation::Implementation {
 public:
     bool load(Inkscape::Extension::Extension *module) override;
     void effect(Inkscape::Extension::Effect *module,
-		    std::shared_ptr<Inkscape::Extension::Implementation::ImplementationDocumentCache> docCache) override;
-    Gtk::Widget * prefs_effect(Inkscape::Extension::Effect *module, 
-		    sigc::signal<void> * changeSignal,
-		    std::shared_ptr<Inkscape::Extension::Implementation::ImplementationDocumentCache> docCache) override;
+                std::shared_ptr<Inkscape::Extension::Implementation::ImplementationDocumentCache> docCache) override;
+    Gtk::Widget *
+    prefs_effect(Inkscape::Extension::Effect *module, sigc::signal<void> *changeSignal,
+                 std::shared_ptr<Inkscape::Extension::Implementation::ImplementationDocumentCache> docCache) override;
 
     static void init ();
 };
