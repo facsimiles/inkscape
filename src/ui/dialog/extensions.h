@@ -42,7 +42,7 @@ private:
     ExtensionsPanel(ExtensionsPanel const &) = delete; // no copy
     ExtensionsPanel &operator=(ExtensionsPanel const &) = delete; // no assign
 
-    static void listCB(Inkscape::Extension::Extension *in_plug, gpointer in_data);
+    void listCB(Inkscape::Extension::Extension *in_plug);
 
     void rescan();
 

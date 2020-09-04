@@ -41,13 +41,13 @@ public:
     void unload(Inkscape::Extension::Extension *module) override;
     bool check(Inkscape::Extension::Extension *module) override;
 
-    ImplementationDocumentCache * newDocCache(Inkscape::Extension::Extension * ext, Inkscape::UI::View::View * view) override;
+    std::shared_ptr<ImplementationDocumentCache> newDocCache(Inkscape::UI::View::View * view) override;
 
     Gtk::Widget *prefs_input(Inkscape::Extension::Input *module, gchar const *filename) override;
     SPDocument *open(Inkscape::Extension::Input *module, gchar const *filename) override;
     Gtk::Widget *prefs_output(Inkscape::Extension::Output *module) override;
     void save(Inkscape::Extension::Output *module, SPDocument *doc, gchar const *filename) override;
-    void effect(Inkscape::Extension::Effect *module, Inkscape::UI::View::View *doc, ImplementationDocumentCache * docCache) override;
+    void effect(Inkscape::Extension::Effect *module, std::shared_ptr<ImplementationDocumentCache> docCache) override;
     bool cancelProcessing () override;
 
 private:

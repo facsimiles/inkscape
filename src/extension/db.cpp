@@ -112,16 +112,8 @@ DB::register_ext (Extension *module)
 	g_return_if_fail(module != nullptr);
 	g_return_if_fail(module->get_id() != nullptr);
 
-	// only add to list if it's a never-before-seen module
-        bool add_to_list = 
-               ( moduledict.find(module->get_id()) == moduledict.end());
-        
 	//printf("Registering: '%s' '%s' add:%d\n", module->get_id(), module->get_name(), add_to_list);
 	moduledict[module->get_id()] = module;
-
-	if (add_to_list) {
-	  modulelist.push_back( module );
-	}
 }
 
 /**
@@ -136,9 +128,6 @@ DB::unregister_ext (Extension * module)
 
 	// printf("Extension DB: removing %s\n", module->get_id());
 	moduledict.erase(moduledict.find(module->get_id()));
-	// only remove if it's not there any more
-	if ( moduledict.find(module->get_id()) != moduledict.end())
-		modulelist.remove(module);
 }
 
 /**
@@ -164,106 +153,14 @@ DB::get (const gchar *key)
 }
 
 /**
-	\return    none
-	\brief     A function to execute another function with every entry
-	           in the database as a parameter.
-	\param     in_func  The function to execute for every module
-	\param     in_data  A data pointer that is also passed to in_func
-
- 	Enumerates the modules currently in the database, calling a given
-	callback for each one.
-*/
-void
-DB::foreach (void (*in_func)(Extension * in_plug, gpointer in_data), gpointer in_data)
-{
-	std::list <Extension *>::iterator cur;
-
-	for (cur = modulelist.begin(); cur != modulelist.end(); ++cur) {
-		// printf("foreach: %s\n", (*cur)->get_id());
-		in_func((*cur), in_data);
+ * \brief Small filter function to only choose extensions of a particular type
+ */
+template <typename T>
+static void extension_type_filter(Extension * ext, std::list<T> &list) {
+	auto typed_ext = dynamic_cast<T>(ext);
+	if (typed_ext != nullptr) {
+		list.push_back(typed_ext);
 	}
-}
-
-/**
-	\return    none
-	\brief     The function to look at each module and see if it is
-	           an input module, then add it to the list.
-	\param     in_plug  Module to be examined
-	\param     data     The list to be attached to
-
-	The first thing that is checked is if this module is an input
-	module.  If it is, then it is added to the list which is passed
-	in through \c data.
-*/
-void
-DB::input_internal (Extension * in_plug, gpointer data)
-{
-	if (dynamic_cast<Input *>(in_plug)) {
-		InputList * ilist;
-		Input * imod;
-
-		imod = dynamic_cast<Input *>(in_plug);
-		ilist = reinterpret_cast<InputList *>(data);
-
-		ilist->push_back(imod);
-		// printf("Added to input list: %s\n", imod->get_id());
-	}
-}
-
-/**
-	\return    none
-	\brief     The function to look at each module and see if it is
-	           an output module, then add it to the list.
-	\param     in_plug  Module to be examined
-	\param     data     The list to be attached to
-
-	The first thing that is checked is if this module is an output
-	module.  If it is, then it is added to the list which is passed
-	in through \c data.
-*/
-void
-DB::output_internal (Extension * in_plug, gpointer data)
-{
-	if (dynamic_cast<Output *>(in_plug)) {
-		OutputList * olist;
-		Output * omod;
-
-		omod = dynamic_cast<Output *>(in_plug);
-		olist = reinterpret_cast<OutputList *>(data);
-
-		olist->push_back(omod);
-		// printf("Added to output list: %s\n", omod->get_id());
-	}
-
-	return;
-}
-
-/**
-	\return    none
-	\brief     The function to look at each module and see if it is
-	           an effect module, then add it to the list.
-	\param     in_plug  Module to be examined
-	\param     data     The list to be attached to
-
-	The first thing that is checked is if this module is an effect
-	module.  If it is, then it is added to the list which is passed
-	in through \c data.
-*/
-void
-DB::effect_internal (Extension * in_plug, gpointer data)
-{
-	if (dynamic_cast<Effect *>(in_plug)) {
-		EffectList * elist;
-		Effect * emod;
-
-		emod = dynamic_cast<Effect *>(in_plug);
-		elist = reinterpret_cast<EffectList *>(data);
-
-		elist->push_back(emod);
-		// printf("Added to effect list: %s\n", emod->get_id());
-	}
-
-	return;
 }
 
 /**
@@ -275,7 +172,7 @@ DB::effect_internal (Extension * in_plug, gpointer data)
 DB::InputList &
 DB::get_input_list (DB::InputList &ou_list)
 {
-	foreach(input_internal, (gpointer)&ou_list);
+	foreach([&ou_list](Extension * ext) { extension_type_filter(ext, ou_list); });
 	ou_list.sort( ModuleInputCmp() );
 	return ou_list;
 }
@@ -289,7 +186,7 @@ DB::get_input_list (DB::InputList &ou_list)
 DB::OutputList &
 DB::get_output_list (DB::OutputList &ou_list)
 {
-	foreach(output_internal, (gpointer)&ou_list);
+	foreach([&ou_list](Extension * ext) { extension_type_filter(ext, ou_list); });
 	ou_list.sort( ModuleOutputCmp() );
 	return ou_list;
 }
@@ -303,7 +200,7 @@ DB::get_output_list (DB::OutputList &ou_list)
 DB::EffectList &
 DB::get_effect_list (DB::EffectList &ou_list)
 {
-	foreach(effect_internal, (gpointer)&ou_list);
+	foreach([&ou_list](Extension * ext) { extension_type_filter(ext, ou_list); });
 	return ou_list;
 }
 

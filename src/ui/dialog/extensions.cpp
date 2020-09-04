@@ -57,10 +57,8 @@ void ExtensionsPanel::set_full(bool full)
     }
 }
 
-void ExtensionsPanel::listCB( Inkscape::Extension::Extension * in_plug, gpointer in_data )
+void ExtensionsPanel::listCB( Inkscape::Extension::Extension * in_plug )
 {
-    ExtensionsPanel * self = static_cast<ExtensionsPanel*>(in_data);
-
     const char* stateStr;
     Extension::state_t state = in_plug->get_state();
     switch ( state ) {
@@ -83,11 +81,11 @@ void ExtensionsPanel::listCB( Inkscape::Extension::Extension * in_plug, gpointer
             stateStr = "unknown";
     }
 
-    if ( self->_showAll || in_plug->deactivated() ) {
+    if ( _showAll || in_plug->deactivated() ) {
         gchar* line = g_strdup_printf( "%s   %s\n        \"%s\"", stateStr, in_plug->get_name(), in_plug->get_id() );
 
-        self->_view.get_buffer()->insert( self->_view.get_buffer()->end(), line );
-        self->_view.get_buffer()->insert( self->_view.get_buffer()->end(), "\n" );
+        _view.get_buffer()->insert( _view.get_buffer()->end(), line );
+        _view.get_buffer()->insert( _view.get_buffer()->end(), "\n" );
         g_free(line);
     }
 
@@ -99,7 +97,7 @@ void ExtensionsPanel::rescan()
     _view.get_buffer()->set_text("Extensions:\n");
 //     g_message("/------------------");
 
-    Inkscape::Extension::db.foreach(listCB, (gpointer)this);
+    Inkscape::Extension::db.foreach([this](Extension * ext){ listCB(ext); });
 
 //     g_message("\\------------------");
 }

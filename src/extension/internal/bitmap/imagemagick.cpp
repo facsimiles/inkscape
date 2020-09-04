@@ -52,13 +52,13 @@ public:
 
 ImageMagickDocCache::ImageMagickDocCache(Inkscape::UI::View::View * view) :
     Inkscape::Extension::Implementation::ImplementationDocumentCache(view),
-    _nodes(NULL),
-    _images(NULL),
+    _nodes(nullptr),
+    _images(nullptr),
     _imageCount(0),
-    _caches(NULL),
-    _cacheLengths(NULL),
-    _originals(NULL),
-    _imageItems(NULL)
+    _caches(nullptr),
+    _cacheLengths(nullptr),
+    _originals(nullptr),
+    _imageItems(nullptr)
 {
     SPDesktop *desktop = (SPDesktop*)view;
     auto selectedItemList = desktop->selection->items();
@@ -147,23 +147,25 @@ ImageMagick::load(Inkscape::Extension::Extension */*module*/)
     return true;
 }
 
-Inkscape::Extension::Implementation::ImplementationDocumentCache *
-ImageMagick::newDocCache (Inkscape::Extension::Extension * /*ext*/, Inkscape::UI::View::View * view) {
-    return new ImageMagickDocCache(view);
+std::shared_ptr<Inkscape::Extension::Implementation::ImplementationDocumentCache>
+ImageMagick::newDocCache (Inkscape::UI::View::View * view) {
+    return std::make_shared<ImageMagickDocCache>(view);
 }
 
 void
-ImageMagick::effect (Inkscape::Extension::Effect *module, Inkscape::UI::View::View *document, Inkscape::Extension::Implementation::ImplementationDocumentCache * docCache)
+ImageMagick::effect (Inkscape::Extension::Effect *module, std::shared_ptr<Inkscape::Extension::Implementation::ImplementationDocumentCache> docCache)
 {
     refreshParameters(module);
 
-    if (docCache == NULL) { // should never happen
-        docCache = newDocCache(module, document);
+    if (docCache == nullptr) { // should never happen
+	    g_warning("ImageMagick: Invalid Document Cache!");
+	    return;
     }
-    ImageMagickDocCache * dc = dynamic_cast<ImageMagickDocCache *>(docCache);
-    if (dc == NULL) { // should really never happen
-        printf("AHHHHHHHHH!!!!!");
-        exit(1);
+
+    auto dc = std::dynamic_pointer_cast<ImageMagickDocCache>(docCache);
+    if (dc == nullptr) {
+	    g_warning("ImageMagick: Incorrect document cache");
+	    return;
     }
 
     for (int i = 0; i < dc->_imageCount; i++)
@@ -236,9 +238,10 @@ ImageMagick::effect (Inkscape::Extension::Effect *module, Inkscape::UI::View::Vi
     Uses AutoGUI for creating the GUI.
 */
 Gtk::Widget *
-ImageMagick::prefs_effect(Inkscape::Extension::Effect *module, Inkscape::UI::View::View * view, sigc::signal<void> * changeSignal, Inkscape::Extension::Implementation::ImplementationDocumentCache * /*docCache*/)
+ImageMagick::prefs_effect(Inkscape::Extension::Effect *module, sigc::signal<void> * changeSignal, std::shared_ptr<Inkscape::Extension::Implementation::ImplementationDocumentCache> docCache)
 {
-    SPDocument * current_document = view->doc();
+    auto view = docCache->view();
+    auto current_document = view->doc();
 
     auto selected = ((SPDesktop *) view)->getSelection()->items();
     Inkscape::XML::Node * first_select = NULL;

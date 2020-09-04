@@ -79,7 +79,7 @@ void
 ExecutionEnv::genDocCache () {
     if (_docCache == nullptr) {
         // printf("Gen Doc Cache\n");
-        _docCache = _effect->get_imp()->newDocCache(_effect, _doc);
+        _docCache = _effect->get_imp()->newDocCache(_doc);
     }
     return;
 }
@@ -90,11 +90,7 @@ ExecutionEnv::genDocCache () {
 */
 void
 ExecutionEnv::killDocCache () {
-    if (_docCache != nullptr) {
-        // printf("Killed Doc Cache\n");
-        delete _docCache;
-        _docCache = nullptr;
-    }
+    _docCache = nullptr;
     return;
 }
 
@@ -193,7 +189,7 @@ ExecutionEnv::run () {
     Inkscape::Selection *selection = desktop->getSelection();
     selection->setBackup();
     desktop->setWaitingCursor();
-    _effect->get_imp()->effect(_effect, _doc, _docCache);
+    _effect->get_imp()->effect(_effect, _docCache);
     desktop->clearWaitingCursor();
     _state = ExecutionEnv::COMPLETE;
     selection->restoreBackup();

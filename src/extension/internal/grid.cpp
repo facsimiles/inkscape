@@ -81,8 +81,9 @@ Glib::ustring build_lines(Geom::Rect bounding_area,
     \param  document What should be edited.
 */
 void
-Grid::effect (Inkscape::Extension::Effect *module, Inkscape::UI::View::View *document, Inkscape::Extension::Implementation::ImplementationDocumentCache * /*docCache*/)
+Grid::effect (Inkscape::Extension::Effect *module, std::shared_ptr<Inkscape::Extension::Implementation::ImplementationDocumentCache> docCache)
 {
+	auto document = docCache->view();
     Inkscape::Selection * selection     = ((SPDesktop *)document)->selection;
 
     Geom::Rect bounding_area = Geom::Rect(Geom::Point(0,0), Geom::Point(100,100));
@@ -170,8 +171,9 @@ PrefAdjustment::val_changed ()
     Uses AutoGUI for creating the GUI.
 */
 Gtk::Widget *
-Grid::prefs_effect(Inkscape::Extension::Effect *module, Inkscape::UI::View::View * view, sigc::signal<void> * changeSignal, Inkscape::Extension::Implementation::ImplementationDocumentCache * /*docCache*/)
+Grid::prefs_effect(Inkscape::Extension::Effect *module, sigc::signal<void> * changeSignal, std::shared_ptr<Inkscape::Extension::Implementation::ImplementationDocumentCache> docCache)
 {
+	auto view = docCache->view();
     SPDocument * current_document = view->doc();
 
     auto selected = ((SPDesktop *) view)->getSelection()->items();

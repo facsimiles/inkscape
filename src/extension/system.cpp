@@ -41,8 +41,8 @@
 namespace Inkscape {
 namespace Extension {
 
-static void open_internal(Inkscape::Extension::Extension *in_plug, gpointer in_data);
-static void save_internal(Inkscape::Extension::Extension *in_plug, gpointer in_data);
+static void open_internal(Extension *in_plug, gchar const *filename, Input **pimod);
+static void save_internal(Extension *in_plug, gchar const *filename, Output **pomod);
 
 /**
  * \return   A new document created from the filename passed in
@@ -69,10 +69,7 @@ SPDocument *open(Extension *key, gchar const *filename)
     Input *imod = nullptr;
 
     if (key == nullptr) {
-        gpointer parray[2];
-        parray[0] = (gpointer)filename;
-        parray[1] = (gpointer)&imod;
-        db.foreach(open_internal, (gpointer)&parray);
+        db.foreach([&filename, &imod](Extension *ext) { open_internal(ext, filename, &imod); });
     } else {
         imod = dynamic_cast<Input *>(key);
     }
@@ -164,13 +161,9 @@ SPDocument *open(Extension *key, gchar const *filename)
  * then the pointer passed in is set to the current module.
  */
 static void
-open_internal(Extension *in_plug, gpointer in_data)
+open_internal(Extension *in_plug, gchar const *filename, Input **pimod)
 {
     if (!in_plug->deactivated() && dynamic_cast<Input *>(in_plug)) {
-        gpointer *parray = (gpointer *)in_data;
-        gchar const *filename = (gchar const *)parray[0];
-        Input **pimod = (Input **)parray[1];
-
         // skip all the rest if we already found a function to open it
         // since they're ordered by preference now.
         if (!*pimod) {
@@ -220,11 +213,7 @@ save(Extension *key, SPDocument *doc, gchar const *filename, bool setextension, 
 {
     Output *omod;
     if (key == nullptr) {
-        gpointer parray[2];
-        parray[0] = (gpointer)filename;
-        parray[1] = (gpointer)&omod;
-        omod = nullptr;
-        db.foreach(save_internal, (gpointer)&parray);
+        db.foreach([&filename, &omod](Extension *ext) { save_internal(ext, filename, &omod); });
 
         /* This is a nasty hack, but it is required to ensure that
            autodetect will always save with the Inkscape extensions
@@ -374,13 +363,9 @@ save(Extension *key, SPDocument *doc, gchar const *filename, bool setextension, 
  * then the pointer passed in is set to the current module.
  */
 static void
-save_internal(Extension *in_plug, gpointer in_data)
+save_internal(Extension *in_plug, gchar const *filename, Output **pomod)
 {
     if (!in_plug->deactivated() && dynamic_cast<Output *>(in_plug)) {
-        gpointer *parray = (gpointer *)in_data;
-        gchar const *filename = (gchar const *)parray[0];
-        Output **pomod = (Output **)parray[1];
-
         // skip all the rest if we already found someone to save it
         // since they're ordered by preference now.
         if (!*pomod) {
@@ -471,6 +456,8 @@ build_from_reprdoc(Inkscape::XML::Document *doc, Implementation::Implementation 
             module_implementation_type = MODULE_XSLT;
         } else if (!strcmp(element_name,  INKSCAPE_EXTENSION_NS "plugin")) {
             module_implementation_type = MODULE_PLUGIN;
+        } else if (!strcmp(element_name, INKSCAPE_EXTENSION_NS "wasm")) {
+	    g_warning("WASM not supported\n");
         }
 
         //Inkscape::XML::Node *old_repr = child_repr;
@@ -508,6 +495,10 @@ build_from_reprdoc(Inkscape::XML::Document *doc, Implementation::Implementation 
         imp = in_imp;
     }
 
+    if (imp == nullptr) {
+	    return false;
+    }
+
     Extension *module = nullptr;
     try {
         switch (module_functional_type) {
@@ -532,8 +523,7 @@ build_from_reprdoc(Inkscape::XML::Document *doc, Implementation::Implementation 
                 break;
             }
             default: {
-                g_warning("Extension of unknown type!"); // TODO: Should not happen! Is this even useful?
-                module = new Extension(repr, imp, baseDir);
+                g_warning("Extension of unknown type!");
                 break;
             }
         }

@@ -256,18 +256,6 @@ init()
         );
 }
 
-static void
-check_extensions_internal(Extension *in_plug, gpointer in_data)
-{
-    int *count = (int *)in_data;
-
-    if (in_plug == nullptr) return;
-    if (!in_plug->deactivated() && !in_plug->check()) {
-         in_plug->deactivate();
-        (*count)++;
-    }
-}
-
 static void check_extensions()
 {
     int count = 1;
@@ -275,7 +263,13 @@ static void check_extensions()
     Inkscape::Extension::Extension::error_file_open();
     while (count != 0) {
         count = 0;
-        db.foreach(check_extensions_internal, (gpointer)&count);
+        db.foreach([&count](Extension* ext) {
+			    if (ext == nullptr) return;
+			    if (!ext->deactivated() && !ext->check()) {
+				 ext->deactivate();
+				count++;
+			    }
+			});
     }
     Inkscape::Extension::Extension::error_file_close();
 }
