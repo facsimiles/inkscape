@@ -175,8 +175,8 @@ DB::get_input_list (DB::InputList &ou_list)
 {
     foreach ([&ou_list](Extension *ext) { extension_type_filter(ext, ou_list); })
         ;
-    ou_list.sort( ModuleInputCmp() );
-	return ou_list;
+    ou_list.sort(ModuleInputCmp());
+    return ou_list;
 }
 
 /**
@@ -190,8 +190,8 @@ DB::get_output_list (DB::OutputList &ou_list)
 {
     foreach ([&ou_list](Extension *ext) { extension_type_filter(ext, ou_list); })
         ;
-    ou_list.sort( ModuleOutputCmp() );
-	return ou_list;
+    ou_list.sort(ModuleOutputCmp());
+    return ou_list;
 }
 
 /**
