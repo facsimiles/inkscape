@@ -107,7 +107,7 @@ ColorWheel::ColorWheel()
     , _saturation(1.0)
     , _value(1.0)
     , _ring_width(0.2)
-    , _mode(DRAG_NONE)
+    , _mode(DragMode::NONE)
     , _focus_on_ring(true)
 {
     set_name("ColorWheel");
@@ -572,6 +572,32 @@ ColorWheel::on_focus(Gtk::DirectionType direction)
     return keep_focus;
 }
 
+void
+ColorWheel::update_triangle_color(const double x, const double y)
+{
+    set_from_xy(x, y);
+    _signal_color_changed.emit();
+    queue_draw();
+}
+
+void
+ColorWheel::update_ring_color(const double x, const double y)
+{
+    Gtk::Allocation allocation = get_allocation();
+    const int width = allocation.get_width();
+    const int height = allocation.get_height();
+    double cx = width / 2.0;
+    double cy = height / 2.0;
+    double angle = -atan2(y - cy, x - cx);
+
+    if (angle < 0)
+        angle += 2.0 * M_PI;
+    _hue = angle / (2.0 * M_PI);
+
+    queue_draw();
+    _signal_color_changed.emit();
+}
+
 bool
 ColorWheel::on_button_press_event(GdkEventButton* event)
 {
@@ -580,16 +606,18 @@ ColorWheel::on_button_press_event(GdkEventButton* event)
     double y = event->y;
 
     if (is_in_ring(x, y) ) {
-        _mode = DRAG_H;
+        _mode = DragMode::HUE;
         grab_focus();
         _focus_on_ring = true;
+        update_ring_color(x, y);
         return true;
     }
 
     if (is_in_triangle(x, y)) {
-        _mode = DRAG_SV;
+        _mode = DragMode::SATURATION_VALUE;
         grab_focus();
         _focus_on_ring = false;
+        update_triangle_color(x, y);
         return true;
     }
 
@@ -599,9 +627,10 @@ ColorWheel::on_button_press_event(GdkEventButton* event)
 bool
 ColorWheel::on_button_release_event(GdkEventButton* event)
 {
-    _mode = DRAG_NONE;
+    _mode = DragMode::NONE;
     return true;
 }
+
 
 bool
 ColorWheel::on_motion_notify_event(GdkEventMotion* event)
@@ -609,28 +638,13 @@ ColorWheel::on_motion_notify_event(GdkEventMotion* event)
     double x = event->x;
     double y = event->y;
 
-    Gtk::Allocation allocation = get_allocation();
-    const int width  = allocation.get_width();
-    const int height = allocation.get_height();
-    double cx = width/2.0;
-    double cy = height/2.0;
-
-    if (_mode == DRAG_H) {
-
-        double angle = -atan2(y-cy, x-cx);
-        if (angle < 0) angle += 2.0 * M_PI;
-        _hue = angle / (2.0 * M_PI);
-
-        queue_draw();
-        _signal_color_changed.emit();
+    if (_mode == DragMode::HUE) {
+        update_ring_color(x, y);
         return true;
     }
 
-    if (_mode == DRAG_SV) {
-
-        set_from_xy(x, y);
-        _signal_color_changed.emit();
-        queue_draw();
+    if (_mode == DragMode::SATURATION_VALUE) {
+        update_triangle_color(x, y);
         return true;
     }
 
