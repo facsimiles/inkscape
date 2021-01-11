@@ -392,8 +392,7 @@ private:
     SPRoot *root;             ///< Our SPRoot
 
     // A list of svg documents being used or shown within this document
-    boost::ptr_list<SPDocument> _child_documents;
-    // Conversely this is a parent document because this is a child.
+    std::list<std::unique_ptr<SPDocument> > _child_documents;
     SPDocument *_parent_document;
     // When copying documents, this can refer to its original
     SPDocument const *_original_document;

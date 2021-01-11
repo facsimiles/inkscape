@@ -143,8 +143,8 @@ load_svg_cursor(Glib::RefPtr<Gdk::Display> const &display,
     }
 
     bool cancelled = false;
-    std::unique_ptr<SPDocument> document;
-    document.reset(ink_file_open(file, &cancelled));
+    std::unique_ptr<SPDocument> document(ink_file_open(file, &cancelled));
+    document->doRef();
 
     if (!document) {
         std::cerr << "load_svg_cursor: Could not open document: " << full_file_path << std::endl;
