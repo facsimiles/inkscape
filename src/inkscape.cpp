@@ -642,7 +642,7 @@ Application::crash_handler (int /*signum*/)
             // Find a location
             const char* locations[] = {
                 // Don't use getDocumentBase as that also can be unsaved template locations.
-                document_uri,
+                document_base,
                 g_get_home_dir(),
                 g_get_tmp_dir(),
                 curdir,
