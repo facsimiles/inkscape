@@ -658,7 +658,6 @@ Application::crash_handler (int /*signum*/)
                     break;
                 }
             }
-            g_free(document_base);
 
             // Save
             if (file) {
