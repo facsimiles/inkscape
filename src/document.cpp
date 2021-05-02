@@ -1051,6 +1051,8 @@ SPObject *SPDocument::getObjectById(Glib::ustring const &id) const
     std::map<std::string, SPObject *>::const_iterator rv = iddef.find(id);
     if (rv != iddef.end()) {
         return (rv->second);
+    } else if (_parent_document) {
+        return _parent_document->getObjectById(id);
     } else {
         return nullptr;
     }
@@ -1208,6 +1210,23 @@ std::vector<Glib::ustring> SPDocument::getLanguages() const
             document_languages.emplace_back(rdf_language_stripped);
         }
         g_free(rdf_language_stripped);
+    }
+
+    // add languages from parent document
+    if (_parent_document) {
+        auto parent_languages = _parent_document->getLanguages();
+
+        // return parent languages directly if we aren't contributing any
+        if (document_languages.empty()) {
+            return parent_languages;
+        }
+
+        // otherwise append parent's languages to what we already have
+        std::move(parent_languages.begin(), parent_languages.end(),
+                  std::back_insert_iterator(document_languages));
+
+        // don't add languages from locale; parent already did that
+        return document_languages;
     }
 
     // get language from system locale (will also match the interface language preference as we set LANG accordingly)
