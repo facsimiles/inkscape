@@ -650,6 +650,7 @@ protected:
     static void AddDotSizeSpinbutton(UI::Widget::DialogPage& p, Glib::ustring const &prefs_path, double def_value);
     static void AddBaseSimplifySpinbutton(UI::Widget::DialogPage& p, Glib::ustring const &prefs_path, double def_value);
     static void AddNewObjectsStyle(UI::Widget::DialogPage& p, Glib::ustring const &prefs_path, const gchar* banner = nullptr);
+    static void AddRouterPenaltySpinbutton(UI::Widget::DialogPage &p, Glib::ustring const &pref, Glib::ustring const &name, Glib::ustring const &tip, double def_value);
 
     void on_pagelist_selection_changed();
     void show_not_found();

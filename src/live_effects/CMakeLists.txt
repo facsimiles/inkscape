@@ -11,6 +11,8 @@ set(live_effects_SRC
 	lpe-circle_3pts.cpp
 	lpe-circle_with_radius.cpp
 	lpe-clone-original.cpp
+	lpe-connector-avoid.cpp
+	lpe-connector-line.cpp
 	lpe-constructgrid.cpp
 	lpe-copy_rotate.cpp
 	lpe-curvestitch.cpp
@@ -71,6 +73,8 @@ set(live_effects_SRC
 	parameter/bool.cpp
 	parameter/colorpicker.cpp
 	parameter/hidden.cpp
+	parameter/item.cpp
+	parameter/item-reference.cpp
 	parameter/satellite.cpp
 	parameter/satellitearray.cpp
 	parameter/satellite-reference.cpp
@@ -108,6 +112,8 @@ set(live_effects_SRC
 	lpe-circle_3pts.h
 	lpe-circle_with_radius.h
 	lpe-clone-original.h
+	lpe-connector-avoid.h
+	lpe-connector-line.h
 	lpe-constructgrid.h
 	lpe-copy_rotate.h
 	lpe-curvestitch.h
@@ -169,6 +175,8 @@ set(live_effects_SRC
 	parameter/bool.h
 	parameter/colorpicker.h
 	parameter/hidden.h
+	parameter/item.h
+	parameter/item-reference.h
 	parameter/enum.h
 	parameter/enumarray.h
 	parameter/satellite.h

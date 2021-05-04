@@ -24,6 +24,7 @@
 #include "document.h"
 #include "enums.h"
 #include "preferences.h"
+#include "path/path-outline.h"
 #include "style.h"
 
 #include "box3d.h"
@@ -258,6 +259,13 @@ Inkscape::XML::Node* SPGroup::write(Inkscape::XML::Document *xml_doc, Inkscape::
     SPLPEItem::write(xml_doc, repr, flags);
 
     return repr;
+}
+
+Geom::PathVector SPGroup::outline() const
+{
+    Geom::PathVector pathv;
+    item_to_outline_recursive(this, Geom::identity(), pathv);
+    return pathv;
 }
 
 Geom::OptRect SPGroup::bbox(Geom::Affine const &transform, SPItem::BBoxType bboxtype) const

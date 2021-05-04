@@ -10,8 +10,6 @@ set(object_SRC
   persp3d.cpp
   sp-anchor.cpp
   sp-clippath.cpp
-  sp-conn-end-pair.cpp
-  sp-conn-end.cpp
   sp-defs.cpp
   sp-desc.cpp
   sp-dimensions.cpp
@@ -55,6 +53,7 @@ set(object_SRC
   sp-page.cpp
   sp-path.cpp
   sp-pattern.cpp
+  sp-point.cpp
   sp-polygon.cpp
   sp-polyline.cpp
   sp-radial-gradient.cpp
@@ -96,8 +95,6 @@ set(object_SRC
   persp3d.h
   sp-anchor.h
   sp-clippath.h
-  sp-conn-end-pair.h
-  sp-conn-end.h
   sp-defs.h
   sp-desc.h
   sp-dimensions.h
@@ -147,6 +144,7 @@ set(object_SRC
   sp-page.h
   sp-path.h
   sp-pattern.h
+  sp-point.h
   sp-polygon.h
   sp-polyline.h
   sp-radial-gradient.h

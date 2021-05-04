@@ -394,15 +394,6 @@ std::vector<AttributeInfo> getKnownAttrs()
         AttributeInfo("inkscape:box3dsidetype", true),
         AttributeInfo("inkscape:collect", true),
         AttributeInfo("inkscape:color", true),
-        AttributeInfo("inkscape:connection-end", true),
-        AttributeInfo("inkscape:connection-end-point", true),
-        AttributeInfo("inkscape:connection-points", true),
-        AttributeInfo("inkscape:connection-start", true),
-        AttributeInfo("inkscape:connection-start-point", true),
-        AttributeInfo("inkscape:connector-avoid", true),
-        AttributeInfo("inkscape:connector-curvature", true),
-        AttributeInfo("inkscape:connector-spacing", true),
-        AttributeInfo("inkscape:connector-type", true),
         AttributeInfo("inkscape:corner0", true),
         AttributeInfo("inkscape:corner7", true),
         AttributeInfo("inkscape:current-layer", true),
@@ -567,8 +558,10 @@ std::vector<AttributeInfo> getKnownAttrs()
         // SPGuide
         AttributeInfo("position", true),
 
-        // don't know what that is
-        AttributeInfo("effect", true)
+        AttributeInfo("effect", true),
+
+        // Connectors
+        AttributeInfo("inkscape:original-point", true)
     };
 
     size_t count = sizeof(all_attrs) / sizeof(all_attrs[0]);

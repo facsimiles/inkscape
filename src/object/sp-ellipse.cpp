@@ -614,6 +614,15 @@ void SPGenericEllipse::modified(guint flags)
     SPShape::modified(flags);
 }
 
+/**
+ * Generate a list of virtual points around this ellipse.
+ */
+PointHints SPGenericEllipse::getConnectionHints() const
+{
+    // generate a few basic hints here
+    return {};
+}
+
 void SPGenericEllipse::update_patheffect(bool write) {
     SPShape::update_patheffect(write);
 }

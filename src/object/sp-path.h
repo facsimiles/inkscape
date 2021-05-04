@@ -18,7 +18,6 @@
  */
 
 #include "sp-shape.h"
-#include "sp-conn-end-pair.h"
 #include "style-internal.h" // For SPStyleSrc
 
 class SPCurve;
@@ -33,8 +32,6 @@ public:
     int tag() const override { return tag_of<decltype(*this)>; }
 
     int nodesInPath() const;
-    friend class SPConnEndPair;
-    SPConnEndPair connEndPair;
 
     void build(SPDocument *document, Inkscape::XML::Node *repr) override;
     void release() override;

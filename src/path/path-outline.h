@@ -16,6 +16,8 @@
 #ifndef SEEN_PATH_OUTLINE_H
 #define SEEN_PATH_OUTLINE_H
 
+#include <2geom/affine.h>
+
 class SPDesktop;
 class SPItem;
 
@@ -32,12 +34,17 @@ namespace XML {
 /**
  * Find the fill and stroke of the given item.
  */
-bool item_find_paths(const SPItem *item, Geom::PathVector& fill, Geom::PathVector& stroke, bool bbox_only = false);
+bool item_find_paths(SPItem const *item, Geom::PathVector &fill, Geom::PathVector &stroke, bool bbox_only = false);
 
 /**
  * Find an outline that represents an item.
  */
-Geom::PathVector* item_to_outline (SPItem const *item, bool exclude_markers = false);
+Geom::PathVector item_to_outline(SPItem const *item, bool exclude_markers = false);
+
+/**
+ * Find an outline recursivly, for groups for example.
+ */
+void item_to_outline_recursive(SPItem const *item, Geom::Affine const &transform, Geom::PathVector &pathv_in);
 
 /**
  * Replace item by path objects (a.k.a. stroke to path).
