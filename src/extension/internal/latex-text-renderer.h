@@ -31,7 +31,7 @@ namespace Internal {
 
 bool latex_render_document_text_to_file(SPDocument *doc, gchar const *filename,
                                         const gchar * const exportId, bool exportDrawing, bool exportCanvas, float bleedmargin_px,
-                                        bool pdflatex, std::string const &escapeChars);
+                                        bool pdflatex, bool escapeChars);
 
 class LaTeXTextRenderer {
 public:

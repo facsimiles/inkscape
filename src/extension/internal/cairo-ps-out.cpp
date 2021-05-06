@@ -202,9 +202,9 @@ CairoPsOutput::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar con
 
     // Create LaTeX file (if requested)
     if (new_textToLaTeX) {
-        std::string escapeChars = "";
+        bool escapeChars = true;
         try {
-            escapeChars = std::string(mod->get_param_string("latexEscapeChars"));
+            escapeChars = mod->get_param_bool("latexEscapeChars");
         }
         catch(...) {
             g_warning("Parameter <latexEscapeChars> might not exist");
@@ -299,14 +299,13 @@ CairoEpsOutput::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar co
 
     // Create LaTeX file (if requested)
     if (new_textToLaTeX) {
-        std::string escapeChars = "";
+        bool escapeChars = true;
         try {
-            escapeChars = (mod->get_param_string("latexEscapeChars"));
+            escapeChars = mod->get_param_bool("latexEscapeChars");
         }
         catch(...) {
             g_warning("Parameter <latexEscapeChars> might not exist");
         }
-
         ret = latex_render_document_text_to_file(doc, filename, new_exportId, new_areaDrawing, new_areaPage, 0., false, escapeChars);
 
         if (!ret)
@@ -353,8 +352,8 @@ CairoPsOutput::init ()
                 "<option value=\"paths\">" N_("Convert text to paths") "</option>\n"
                 "<option value=\"LaTeX\">" N_("Omit text in PDF and create LaTeX file") "</option>\n"
             "</param>\n"
-            "<param name=\"latexEscapeChars\" gui-text=\"" N_("Escape the following characters for LaTeX export:") "\" type=\"string\" gui-description=\"" 
-            N_("The following characters have a special meaning in LaTeX: &amp; % $ # _ { } ~ ^ \\. Any of those characters that are listed in this field will be escaped (protected) during export.") "\">&amp;%</param>\n"
+            "<param name=\"latexEscapeChars\" gui-text=\"" N_("Escape LaTeX control characters") "\" type=\"bool\" gui-description=\"" 
+            N_("The following characters have a special meaning in LaTeX: &amp; % $ # _ { } ~ ^ \\. If this field is checked, these characters will be escaped (protected) during export.") "\">true</param>\n"
             "<param name=\"blurToBitmap\" gui-text=\"" N_("Rasterize filter effects") "\" type=\"bool\">true</param>\n"
             "<param name=\"resolution\" gui-text=\"" N_("Resolution for rasterization (dpi):") "\" type=\"int\" min=\"1\" max=\"10000\">96</param>\n"
             "<param name=\"area\" gui-text=\"" N_("Output page size") "\" type=\"optiongroup\" appearance=\"radio\" >\n"
@@ -399,8 +398,8 @@ CairoEpsOutput::init ()
                 "<option value=\"paths\">" N_("Convert text to paths") "</option>\n"
                 "<option value=\"LaTeX\">" N_("Omit text in PDF and create LaTeX file") "</option>\n"
             "</param>\n"
-            "<param name=\"latexEscapeChars\" gui-text=\"" N_("Escape the following characters for LaTeX export:") "\" type=\"string\" gui-description=\"" 
-            N_("The following characters have a special meaning in LaTeX: &amp; % $ # _ { } ~ ^ \\. Any of those characters that are listed in this field will be escaped (protected) during export.") "\">&amp;%</param>\n"
+            "<param name=\"latexEscapeChars\" gui-text=\"" N_("Escape LaTeX control characters") "\" type=\"bool\" gui-description=\"" 
+            N_("The following characters have a special meaning in LaTeX: &amp; % $ # _ { } ~ ^ \\. If this field is checked, these characters will be escaped (protected) during export.") "\">true</param>\n"
             "<param name=\"blurToBitmap\" gui-text=\"" N_("Rasterize filter effects") "\" type=\"bool\">true</param>\n"
             "<param name=\"resolution\" gui-text=\"" N_("Resolution for rasterization (dpi):") "\" type=\"int\" min=\"1\" max=\"10000\">96</param>\n"
             "<param name=\"area\" gui-text=\"" N_("Output page size") "\" type=\"optiongroup\" appearance=\"radio\" >\n"

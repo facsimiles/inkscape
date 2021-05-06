@@ -59,7 +59,7 @@ namespace Internal {
 bool
 latex_render_document_text_to_file( SPDocument *doc, gchar const *filename,
                                     const gchar * const exportId, bool exportDrawing, bool exportCanvas, float bleedmargin_px,
-                                    bool pdflatex, std::string const &escapeChars)
+                                    bool pdflatex, bool escapeChars)
 {
     doc->ensureUpToDate();
 
@@ -86,7 +86,10 @@ latex_render_document_text_to_file( SPDocument *doc, gchar const *filename,
         return false;
 
     /* Create renderer */
-    LaTeXTextRenderer *renderer = new LaTeXTextRenderer(pdflatex, escapeChars);
+    std::string escapeCharList = "";
+    if (escapeChars)
+        escapeCharList = "&%$#_{}~^\\";
+    LaTeXTextRenderer *renderer = new LaTeXTextRenderer(pdflatex, escapeCharList);
 
     bool ret = renderer->setTargetFile(filename);
     if (ret) {
