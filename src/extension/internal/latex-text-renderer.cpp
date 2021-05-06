@@ -563,7 +563,9 @@ Flowing in rectangle is possible, not in arb shape.
 
             Inkscape::Text::Layout::iterator ln = li; 
             ln.nextStartOfSpan();
-            Glib::ustring uspanstr = sp_te_get_string_multiline(flowtext, li, ln);
+            std::string uspanstr = sp_te_get_string_multiline(flowtext, li, ln);
+            this->escape_text(uspanstr);
+
             const gchar *spanstr = uspanstr.c_str();
             if (!spanstr) {
                 continue;
