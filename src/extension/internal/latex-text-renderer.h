@@ -31,11 +31,11 @@ namespace Internal {
 
 bool latex_render_document_text_to_file(SPDocument *doc, gchar const *filename,
                                         const gchar * const exportId, bool exportDrawing, bool exportCanvas, float bleedmargin_px,
-                                        bool pdflatex);
+                                        bool pdflatex, std::string const &escapeChars);
 
 class LaTeXTextRenderer {
 public:
-    LaTeXTextRenderer(bool pdflatex);
+    LaTeXTextRenderer(bool pdflatex, std::string const &escapeChars);
     virtual ~LaTeXTextRenderer();
 
     bool setTargetFile(gchar const *filename);
@@ -56,6 +56,7 @@ protected:
 
     FILE * _stream;
     gchar * _filename;
+    std::string const _escape_chars;
 
     bool _pdflatex; /** true if outputting for pdfLaTeX*/
 
@@ -71,13 +72,20 @@ protected:
     void writePostamble();
 
     void writeGraphicPage();
-
+    
     void sp_item_invoke_render(SPItem *item);
     void sp_root_render(SPRoot *item);
     void sp_group_render(SPGroup *group);
     void sp_use_render(SPUse *use);
     void sp_text_render(SPText *text);
     void sp_flowtext_render(SPFlowtext *flowtext);
+    /**
+     * @brief Escapes (in-place) all of the special LaTeX characters in a
+     * string if they are in _escape_chars.
+     * 
+     * @param text The text to be processed
+     */
+    void escape_text(std::string &text);
 };
 
 }  /* namespace Internal */

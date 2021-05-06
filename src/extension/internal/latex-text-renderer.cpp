@@ -59,7 +59,7 @@ namespace Internal {
 bool
 latex_render_document_text_to_file( SPDocument *doc, gchar const *filename,
                                     const gchar * const exportId, bool exportDrawing, bool exportCanvas, float bleedmargin_px,
-                                    bool pdflatex)
+                                    bool pdflatex, std::string const &escapeChars)
 {
     doc->ensureUpToDate();
 
@@ -86,7 +86,7 @@ latex_render_document_text_to_file( SPDocument *doc, gchar const *filename,
         return false;
 
     /* Create renderer */
-    LaTeXTextRenderer *renderer = new LaTeXTextRenderer(pdflatex);
+    LaTeXTextRenderer *renderer = new LaTeXTextRenderer(pdflatex, escapeChars);
 
     bool ret = renderer->setTargetFile(filename);
     if (ret) {
@@ -102,10 +102,11 @@ latex_render_document_text_to_file( SPDocument *doc, gchar const *filename,
     return ret;
 }
 
-LaTeXTextRenderer::LaTeXTextRenderer(bool pdflatex)
+LaTeXTextRenderer::LaTeXTextRenderer(bool pdflatex, std::string const &escapeChars)
   : _stream(nullptr),
     _filename(nullptr),
     _pdflatex(pdflatex),
+    _escape_chars(escapeChars),
     _omittext_state(EMPTY),
     _omittext_page(1)
 {
@@ -373,12 +374,9 @@ void LaTeXTextRenderer::sp_text_render(SPText *textobj)
         {
             Inkscape::Text::Layout::iterator ln = li; 
             ln.nextStartOfSpan();
-            Glib::ustring uspanstr = sp_te_get_string_multiline (textobj, li, ln);
+            std::string uspanstr = sp_te_get_string_multiline (textobj, li, ln);
 
-            // escape ampersands
-            uspanstr = Glib::Regex::create("&")->replace_literal(uspanstr, 0, "\\&", (Glib::RegexMatchFlags)0);
-            // escape percent
-            uspanstr = Glib::Regex::create("%")->replace_literal(uspanstr, 0, "\\%", (Glib::RegexMatchFlags)0);
+            this->escape_text(uspanstr);
 
             const gchar *spanstr = uspanstr.c_str();
             if (!spanstr) {
@@ -737,6 +735,36 @@ void
 LaTeXTextRenderer::pop_transform()
 {
     _transform_stack.pop();
+}
+
+void
+LaTeXTextRenderer::escape_text(std::string &text)
+{
+    // LaTeX has 10 special characters: & % $ # _ { } ; ~ ^ and backslash. 
+    // this method escapes those listed in _escape_chars.
+    std::string result = "";
+    for (char const &c: text) {
+        std::string all_escapes = "&%$#_{}";
+        std::string replacement = "";
+        std::string strchar(1, c);
+        if (all_escapes.find(strchar) != std::string::npos)
+            replacement = "\\" + strchar;
+        else if (c == '~')
+            replacement = "\\textasciitilde{}";
+        else if (c == '^')
+            replacement = "\\textasciicircum{}";
+        else if (c == '\\')
+            replacement = "\\textbackslash{}";
+         // only replace a character if a) the user requested it and b) we know how to replace it
+         // i.e. it is one of the 10 special LaTeX characters
+        if (replacement != "" && this->_escape_chars.find(c) != std::string::npos)
+        {
+            result += replacement;
+        }
+        else
+            result += strchar;
+    }
+    text = result;
 }
 
 }  /* namespace Internal */

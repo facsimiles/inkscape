@@ -219,7 +219,15 @@ CairoRendererPdfOutput::save(Inkscape::Extension::Output *mod, SPDocument *doc, 
 
     // Create LaTeX file (if requested)
     if (new_textToLaTeX) {
-        ret = latex_render_document_text_to_file(doc, filename, new_exportId, new_exportDrawing, new_exportCanvas, new_bleedmargin_px, true);
+        std::string escapeChars = "";
+        try {
+            escapeChars = std::string(mod->get_param_string("latexEscapeChars"));
+        }
+        catch(...) {
+            g_warning("Parameter <latexEscapeChars> might not exist");
+        }
+
+        ret = latex_render_document_text_to_file(doc, filename, new_exportId, new_exportDrawing, new_exportCanvas, new_bleedmargin_px, true, escapeChars);
 
         if (!ret)
             throw Inkscape::Extension::Output::save_failed();
@@ -252,6 +260,8 @@ CairoRendererPdfOutput::init ()
                 "<option value=\"paths\">" N_("Convert text to paths") "</option>\n"
                 "<option value=\"LaTeX\">" N_("Omit text in PDF and create LaTeX file") "</option>\n"
             "</param>\n"
+            "<param name=\"latexEscapeChars\" gui-text=\"" N_("Escape the following characters for LaTeX export:") "\" type=\"string\" gui-description=\"" 
+            N_("The following characters have a special meaning in LaTeX: &amp; % $ # _ { } ~ ^ \\. Any of those characters that are listed in this field will be escaped (protected) during export.") "\">&amp;%</param>\n"
             "<param name=\"blurToBitmap\" gui-text=\"" N_("Rasterize filter effects") "\" type=\"bool\">true</param>\n"
             "<param name=\"resolution\" gui-text=\"" N_("Resolution for rasterization (dpi):") "\" type=\"int\" min=\"1\" max=\"10000\">96</param>\n"
             "<param name=\"area\" gui-text=\"" N_("Output page size:") "\" type=\"optiongroup\" appearance=\"radio\" >\n"
