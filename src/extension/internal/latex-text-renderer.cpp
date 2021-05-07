@@ -18,35 +18,30 @@
 
 #include "latex-text-renderer.h"
 
-#include <csignal>
+#include <2geom/rect.h>
+#include <2geom/transforms.h>
 #include <cerrno>
-
+#include <csignal>
 #include <glibmm/i18n.h>
 #include <glibmm/regex.h>
+#include <utility>
 
-#include "libnrtype/Layout-TNG.h"
-#include <2geom/transforms.h>
-#include <2geom/rect.h>
-
-#include "object/sp-item.h"
-#include "object/sp-item-group.h"
-#include "object/sp-root.h"
-#include "object/sp-use.h"
-#include "object/sp-text.h"
-#include "object/sp-flowtext.h"
-#include "object/sp-rect.h"
-#include "style.h"
-
-#include "text-editing.h"
-
-#include "util/units.h"
-
+#include "document.h"
 #include "extension/output.h"
 #include "extension/system.h"
-
 #include "inkscape-version.h"
 #include "io/sys.h"
-#include "document.h"
+#include "libnrtype/Layout-TNG.h"
+#include "object/sp-flowtext.h"
+#include "object/sp-item-group.h"
+#include "object/sp-item.h"
+#include "object/sp-rect.h"
+#include "object/sp-root.h"
+#include "object/sp-text.h"
+#include "object/sp-use.h"
+#include "style.h"
+#include "text-editing.h"
+#include "util/units.h"
 
 namespace Inkscape {
 namespace Extension {
@@ -56,10 +51,9 @@ namespace Internal {
  * This method is called by the PDF, EPS and PS output extensions.
  * @param filename This should be the filename without '_tex' extension to which the tex code should be written. Output goes to <filename>_tex, note the underscore instead of period.
  */
-bool
-latex_render_document_text_to_file( SPDocument *doc, gchar const *filename,
-                                    const gchar * const exportId, bool exportDrawing, bool exportCanvas, float bleedmargin_px,
-                                    bool pdflatex, bool escapeChars)
+bool latex_render_document_text_to_file(SPDocument *doc, gchar const *filename, const gchar *const exportId,
+                                        bool exportDrawing, bool exportCanvas, float bleedmargin_px, bool pdflatex,
+                                        bool escapeChars)
 {
     doc->ensureUpToDate();
 
@@ -86,7 +80,7 @@ latex_render_document_text_to_file( SPDocument *doc, gchar const *filename,
         return false;
 
     /* Create renderer */
-    std::string escapeCharList = "";
+    Glib::ustring escapeCharList = "";
     if (escapeChars)
         escapeCharList = "&%$#_{}~^\\";
     LaTeXTextRenderer *renderer = new LaTeXTextRenderer(pdflatex, escapeCharList);
@@ -105,13 +99,13 @@ latex_render_document_text_to_file( SPDocument *doc, gchar const *filename,
     return ret;
 }
 
-LaTeXTextRenderer::LaTeXTextRenderer(bool pdflatex, std::string const &escapeChars)
-  : _stream(nullptr),
-    _filename(nullptr),
-    _pdflatex(pdflatex),
-    _escape_chars(escapeChars),
-    _omittext_state(EMPTY),
-    _omittext_page(1)
+LaTeXTextRenderer::LaTeXTextRenderer(bool pdflatex, Glib::ustring escapeChars)
+    : _stream(nullptr)
+    , _filename(nullptr)
+    , _pdflatex(pdflatex)
+    , _escape_chars(std::move(escapeChars))
+    , _omittext_state(EMPTY)
+    , _omittext_page(1)
 {
     push_transform(Geom::identity());
 }
@@ -377,7 +371,7 @@ void LaTeXTextRenderer::sp_text_render(SPText *textobj)
         {
             Inkscape::Text::Layout::iterator ln = li; 
             ln.nextStartOfSpan();
-            std::string uspanstr = sp_te_get_string_multiline (textobj, li, ln);
+            Glib::ustring uspanstr = sp_te_get_string_multiline(textobj, li, ln);
 
             this->escape_text(uspanstr);
 
@@ -563,7 +557,7 @@ Flowing in rectangle is possible, not in arb shape.
 
             Inkscape::Text::Layout::iterator ln = li; 
             ln.nextStartOfSpan();
-            std::string uspanstr = sp_te_get_string_multiline(flowtext, li, ln);
+            Glib::ustring uspanstr = sp_te_get_string_multiline(flowtext, li, ln);
             this->escape_text(uspanstr);
 
             const gchar *spanstr = uspanstr.c_str();
@@ -742,17 +736,16 @@ LaTeXTextRenderer::pop_transform()
     _transform_stack.pop();
 }
 
-void
-LaTeXTextRenderer::escape_text(std::string &text)
+void LaTeXTextRenderer::escape_text(Glib::ustring &text)
 {
-    // LaTeX has 10 special characters: & % $ # _ { } ; ~ ^ and backslash. 
+    // LaTeX has 10 special characters: & % $ # _ { } ; ~ ^ and backslash.
     // this method escapes those listed in _escape_chars.
-    std::string result = "";
-    for (char const &c: text) {
-        std::string all_escapes = "&%$#_{}";
-        std::string replacement = "";
-        std::string strchar(1, c);
-        if (all_escapes.find(strchar) != std::string::npos)
+    Glib::ustring result = "";
+    for (char const &c : text) {
+        Glib::ustring all_escapes = "&%$#_{}";
+        Glib::ustring replacement = "";
+        Glib::ustring strchar(1, c);
+        if (all_escapes.find(strchar) != Glib::ustring::npos)
             replacement = "\\" + strchar;
         else if (c == '~')
             replacement = "\\textasciitilde{}";
@@ -760,13 +753,11 @@ LaTeXTextRenderer::escape_text(std::string &text)
             replacement = "\\textasciicircum{}";
         else if (c == '\\')
             replacement = "\\textbackslash{}";
-         // only replace a character if a) the user requested it and b) we know how to replace it
-         // i.e. it is one of the 10 special LaTeX characters
-        if (replacement != "" && this->_escape_chars.find(c) != std::string::npos)
-        {
+        // only replace a character if a) the user requested it and b) we know how to replace it
+        // i.e. it is one of the 10 special LaTeX characters
+        if (replacement != "" && this->_escape_chars.find(c) != Glib::ustring::npos) {
             result += replacement;
-        }
-        else
+        } else
             result += strchar;
     }
     text = result;

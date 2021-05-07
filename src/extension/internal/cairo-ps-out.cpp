@@ -205,12 +205,12 @@ CairoPsOutput::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar con
         bool escapeChars = true;
         try {
             escapeChars = mod->get_param_bool("latexEscapeChars");
-        }
-        catch(...) {
+        } catch (...) {
             g_warning("Parameter <latexEscapeChars> might not exist");
         }
 
-        ret = latex_render_document_text_to_file(doc, filename, new_exportId, new_areaDrawing, new_areaPage, 0., false, escapeChars);
+        ret = latex_render_document_text_to_file(doc, filename, new_exportId, new_areaDrawing, new_areaPage, 0., false,
+                                                 escapeChars);
 
         if (!ret)
             throw Inkscape::Extension::Output::save_failed();
@@ -302,11 +302,11 @@ CairoEpsOutput::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar co
         bool escapeChars = true;
         try {
             escapeChars = mod->get_param_bool("latexEscapeChars");
-        }
-        catch(...) {
+        } catch (...) {
             g_warning("Parameter <latexEscapeChars> might not exist");
         }
-        ret = latex_render_document_text_to_file(doc, filename, new_exportId, new_areaDrawing, new_areaPage, 0., false, escapeChars);
+        ret = latex_render_document_text_to_file(doc, filename, new_exportId, new_areaDrawing, new_areaPage, 0., false,
+                                                 escapeChars);
 
         if (!ret)
             throw Inkscape::Extension::Output::save_failed();

@@ -222,12 +222,12 @@ CairoRendererPdfOutput::save(Inkscape::Extension::Output *mod, SPDocument *doc, 
         bool escapeChars = true;
         try {
             escapeChars = mod->get_param_bool("latexEscapeChars");
-        }
-        catch(...) {
+        } catch (...) {
             g_warning("Parameter <latexEscapeChars> might not exist");
         }
 
-        ret = latex_render_document_text_to_file(doc, filename, new_exportId, new_exportDrawing, new_exportCanvas, new_bleedmargin_px, true, escapeChars);
+        ret = latex_render_document_text_to_file(doc, filename, new_exportId, new_exportDrawing, new_exportCanvas,
+                                                 new_bleedmargin_px, true, escapeChars);
 
         if (!ret)
             throw Inkscape::Extension::Output::save_failed();

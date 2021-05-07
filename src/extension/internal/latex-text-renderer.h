@@ -14,9 +14,11 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include "extension/extension.h"
 #include <2geom/affine.h>
+#include <glibmm/ustring.h>
 #include <stack>
+
+#include "extension/extension.h"
 
 class SPItem;
 class SPRoot;
@@ -29,13 +31,13 @@ namespace Inkscape {
 namespace Extension {
 namespace Internal {
 
-bool latex_render_document_text_to_file(SPDocument *doc, gchar const *filename,
-                                        const gchar * const exportId, bool exportDrawing, bool exportCanvas, float bleedmargin_px,
-                                        bool pdflatex, bool escapeChars);
+bool latex_render_document_text_to_file(SPDocument *doc, gchar const *filename, const gchar *const exportId,
+                                        bool exportDrawing, bool exportCanvas, float bleedmargin_px, bool pdflatex,
+                                        bool escapeChars);
 
 class LaTeXTextRenderer {
 public:
-    LaTeXTextRenderer(bool pdflatex, std::string const &escapeChars);
+    LaTeXTextRenderer(bool pdflatex, Glib::ustring escapeChars);
     virtual ~LaTeXTextRenderer();
 
     bool setTargetFile(gchar const *filename);
@@ -56,7 +58,7 @@ protected:
 
     FILE * _stream;
     gchar * _filename;
-    std::string const _escape_chars;
+    Glib::ustring const _escape_chars;
 
     bool _pdflatex; /** true if outputting for pdfLaTeX*/
 
@@ -72,7 +74,7 @@ protected:
     void writePostamble();
 
     void writeGraphicPage();
-    
+
     void sp_item_invoke_render(SPItem *item);
     void sp_root_render(SPRoot *item);
     void sp_group_render(SPGroup *group);
@@ -82,10 +84,10 @@ protected:
     /**
      * @brief Escapes (in-place) all of the special LaTeX characters in a
      * string if they are in _escape_chars.
-     * 
+     *
      * @param text The text to be processed
      */
-    void escape_text(std::string &text);
+    void escape_text(Glib::ustring &text);
 };
 
 }  /* namespace Internal */
