@@ -37,7 +37,7 @@ bool latex_render_document_text_to_file(SPDocument *doc, gchar const *filename, 
 
 class LaTeXTextRenderer {
 public:
-    LaTeXTextRenderer(bool pdflatex, Glib::ustring escapeChars);
+    LaTeXTextRenderer(bool pdflatex, bool escapeChars);
     virtual ~LaTeXTextRenderer();
 
     bool setTargetFile(gchar const *filename);
@@ -58,7 +58,7 @@ protected:
 
     FILE * _stream;
     gchar * _filename;
-    Glib::ustring const _escape_chars;
+    bool _escape_chars;
 
     bool _pdflatex; /** true if outputting for pdfLaTeX*/
 

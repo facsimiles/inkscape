@@ -80,10 +80,7 @@ bool latex_render_document_text_to_file(SPDocument *doc, gchar const *filename, 
         return false;
 
     /* Create renderer */
-    Glib::ustring escapeCharList = "";
-    if (escapeChars)
-        escapeCharList = "&%$#_{}~^\\";
-    LaTeXTextRenderer *renderer = new LaTeXTextRenderer(pdflatex, escapeCharList);
+    LaTeXTextRenderer *renderer = new LaTeXTextRenderer(pdflatex, escapeChars);
 
     bool ret = renderer->setTargetFile(filename);
     if (ret) {
@@ -99,11 +96,11 @@ bool latex_render_document_text_to_file(SPDocument *doc, gchar const *filename, 
     return ret;
 }
 
-LaTeXTextRenderer::LaTeXTextRenderer(bool pdflatex, Glib::ustring escapeChars)
+LaTeXTextRenderer::LaTeXTextRenderer(bool pdflatex, bool escapeChars)
     : _stream(nullptr)
     , _filename(nullptr)
     , _pdflatex(pdflatex)
-    , _escape_chars(std::move(escapeChars))
+    , _escape_chars(escapeChars)
     , _omittext_state(EMPTY)
     , _omittext_page(1)
 {
@@ -738,27 +735,26 @@ LaTeXTextRenderer::pop_transform()
 
 void LaTeXTextRenderer::escape_text(Glib::ustring &text)
 {
+    if (!_escape_chars)
+        return;
+    Glib::ustring all_escapes = "&%$#_{}^~\\";
     // LaTeX has 10 special characters: & % $ # _ { } ; ~ ^ and backslash.
     // this method escapes those listed in _escape_chars.
     Glib::ustring result = "";
-    for (char const &c : text) {
-        Glib::ustring all_escapes = "&%$#_{}";
+    for (gunichar const &c : text) {
         Glib::ustring replacement = "";
         Glib::ustring strchar(1, c);
-        if (all_escapes.find(strchar) != Glib::ustring::npos)
-            replacement = "\\" + strchar;
-        else if (c == '~')
+        if (c == '~')
             replacement = "\\textasciitilde{}";
         else if (c == '^')
             replacement = "\\textasciicircum{}";
         else if (c == '\\')
             replacement = "\\textbackslash{}";
-        // only replace a character if a) the user requested it and b) we know how to replace it
-        // i.e. it is one of the 10 special LaTeX characters
-        if (replacement != "" && this->_escape_chars.find(c) != Glib::ustring::npos) {
-            result += replacement;
-        } else
-            result += strchar;
+        else if (all_escapes.find(strchar) != Glib::ustring::npos)
+            replacement = "\\" + strchar;
+        else
+            replacement = strchar;
+        result += replacement;
     }
     text = result;
 }
