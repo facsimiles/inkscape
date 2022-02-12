@@ -1006,6 +1006,9 @@ void SPGroup::update_patheffect(bool write) {
             if (lpeobj) {
                 Inkscape::LivePathEffect::Effect *lpe = lpeobj->get_lpe();
                 if (lpe && lpe->isVisible()) {
+                    if (document->stylesheetchg) {
+                        break;
+                    }
                     lpeobj->get_lpe()->doBeforeEffect_impl(this);
                     sp_group_perform_patheffect(this, this, lpe, write);
                     lpeobj->get_lpe()->doAfterEffect_impl(this, nullptr);
