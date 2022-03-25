@@ -4,6 +4,7 @@
 
 #include <gdkmm/monitor.h>
 #include <limits>
+#include <set>
 #ifdef G_OS_WIN32
 #include <filesystem>
 namespace filesystem = std::filesystem;
@@ -24,6 +25,11 @@ namespace filesystem = boost::filesystem;
 namespace Inkscape {
 namespace UI {
 namespace Dialog {
+
+// we define here which dialogs should open floating by default
+static std::set<std::string> const DEFAULT_FLOATING_DIALOGS = { "CloneTiler", "DocumentProperties",
+    "FilterEffects", "Input", "Preferences", "XMLEditor"};
+
 
 std::optional<window_position_t> dm_get_window_position(Gtk::Window &window)
 {
@@ -282,16 +288,12 @@ void DialogManager::remove_dialog_floating_state(const Glib::ustring& dialog_typ
 }
 
 // apply defaults when dialog state cannot be loaded / doesn't exist:
-// here we can define which dialogs should by default be open floating rather then docked
-void DialogManager::dialog_defaults() {
-    std::shared_ptr<Glib::KeyFile> floating;
+void DialogManager::dialog_defaults()
+{
     // strings are dialog types
-    _floating_dialogs["CloneTiler"] = floating;
-    _floating_dialogs["DocumentProperties"] = floating;
-    _floating_dialogs["FilterEffects"] = floating;
-    _floating_dialogs["Input"] = floating;
-    _floating_dialogs["Preferences"] = floating;
-    _floating_dialogs["XMLEditor"] = floating;
+    for (auto const &d : DEFAULT_FLOATING_DIALOGS) {
+        _floating_dialogs[d] = std::make_shared<Glib::KeyFile>();
+    }
 }
 
 } // namespace Dialog
