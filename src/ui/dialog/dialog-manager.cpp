@@ -196,21 +196,38 @@ void DialogManager::save_dialogs_state(DialogContainer *docking_container)
     auto keyfile = docking_container->save_container_state();
 
     // save transient state of floating dialogs that user might have opened interacting with the app
-    int idx = 1;
-    for (auto dlg : _floating_dialogs) {
+
+    // Sentinel item to be assigned to when state is saved
+    auto const SAVED_STATE = std::make_shared<Glib::KeyFile>();
+    int idx = 0;
+    for (auto const &dlg : _floating_dialogs) {
         auto state = dlg.second.get();
         auto&& type = dlg.first;
-        auto index = std::to_string(idx++);
+        auto index = std::to_string(idx + 1);
+
+        // was already saved, we move on
+        if (state == SAVED_STATE.get()) {
+            continue;
+        }
+
         // state may be empty; all that means it that dialog hasn't been opened yet,
         // but when it is, then it should be open in a floating state
-        keyfile->set_string(transient_group, "state" + index, state ? state->to_data() : "");
-        auto dialogs = count_dialogs(state);
+        keyfile->set_string(transient_group, "state" + index, state->to_data());
+
         if (!state) {
-            dialogs.emplace_back(type);
+            keyfile->set_string(transient_group, "dialogs" + index, type);
+            _floating_dialogs[type] = SAVED_STATE;
+        } else {
+            auto dialogs = shared_dialogs(state);
+            keyfile->set_string_list(transient_group, "dialogs" + index, dialogs);
+            // mark all the saved dialogs as saved
+            for (auto &d : dialogs) {
+                _floating_dialogs[d] = SAVED_STATE;
+            }
         }
-        keyfile->set_string_list(transient_group, "dialogs" + index, dialogs);
+        idx++;
     }
-    keyfile->set_integer(transient_group, "count", _floating_dialogs.size());
+    keyfile->set_integer(transient_group, "count", idx);
 
     std::string filename = Glib::build_filename(Inkscape::IO::Resource::profile_path(), dialogs_state);
     try {
