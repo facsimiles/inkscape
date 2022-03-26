@@ -170,12 +170,12 @@ const char save_dialog_position[] = "/options/savedialogposition/value";
 const char transient_group[] = "transient";
 
 // list of dialogs sharing the same state
-std::vector<Glib::ustring> DialogManager::count_dialogs(const Glib::KeyFile *state) const
+std::vector<Glib::ustring> DialogManager::shared_dialogs(const Glib::KeyFile *state) const
 {
     std::vector<Glib::ustring> dialogs;
     if (!state) return dialogs;
 
-    for (auto dlg : _floating_dialogs) {
+    for (auto const &dlg : _floating_dialogs) {
         if (dlg.second.get() == state) {
             dialogs.emplace_back(dlg.first);
         }

@@ -69,7 +69,7 @@ private:
     DialogManager() = default;
     ~DialogManager() = default;
 
-    std::vector<Glib::ustring> count_dialogs(const Glib::KeyFile *state) const;
+    std::vector<Glib::ustring> shared_dialogs(const Glib::KeyFile *state) const;
     void load_transient_state(Glib::KeyFile *keyfile);
     void dialog_defaults();
 
