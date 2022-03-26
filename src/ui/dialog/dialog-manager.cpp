@@ -233,8 +233,12 @@ void DialogManager::load_transient_state(Glib::KeyFile *file)
         if (!state.empty()) {
             keyfile->load_from_data(state);
         }
-        for (auto type : dialogs) {
-            _floating_dialogs[type] = keyfile;
+
+        // Since the elements of dialogs are likely to be sorted with high likelyhood,
+        // we could use hints to make the insertion faster
+        for (auto const &type : dialogs) {
+            auto hint_it = _floating_dialogs.cend();
+            _floating_dialogs.emplace_hint(hint_it, type, keyfile);
         }
     }
 }
