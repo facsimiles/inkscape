@@ -29,6 +29,7 @@
 #include "actions/actions-extra-data.h"
 #include "actions/actions-hint-data.h"
 #include "io/file-export-cmd.h"   // File export (non-verb)
+#include "util/string-map.h"
 
 typedef std::vector<std::pair<std::string, Glib::VariantBase> > action_vector_t;
 
@@ -117,7 +118,7 @@ public:
     InkActionExtraData&     get_action_extra_data()     { return _action_extra_data;  }
     InkActionEffectData&    get_action_effect_data()    { return _action_effect_data; }
     InkActionHintData&      get_action_hint_data()      { return _action_hint_data;   }
-    std::map<Glib::ustring, Glib::ustring>& get_menu_label_to_tooltip_map() { return _menu_label_to_tooltip_map; };
+    Inkscape::Util::StringMap<Glib::ustring>& get_menu_label_to_tooltip_map() { return _menu_label_to_tooltip_map; };
 
     /******* Debug ********/
     void                  dump();
@@ -163,7 +164,7 @@ protected:
     InkActionExtraData  _action_extra_data;
     InkActionEffectData  _action_effect_data;
     InkActionHintData   _action_hint_data;
-    std::map<Glib::ustring, Glib::ustring> _menu_label_to_tooltip_map; // Needed due to the
+    Inkscape::Util::StringMap<Glib::ustring> _menu_label_to_tooltip_map; // Needed due to the
                                                                        // inabilitiy to get the
                                                                        // corresponding Gio::Action
                                                                        // from a Gtk::MenuItem.
