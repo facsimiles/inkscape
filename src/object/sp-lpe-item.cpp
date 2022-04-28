@@ -319,60 +319,7 @@ bool SPLPEItem::performOnePathEffect(SPCurve *curve, SPShape *current, Inkscape:
 /**
  * returns false when LPE write unoptimiced
  */
-bool SPLPEItem::optimizeTransforms()
-{
-    if (dynamic_cast<SPGroup *>(this)) {
-        return false;
-    }
 
-    if (dynamic_cast<SPSpiral *>(this) && !this->transform.isUniformScale()) {
-        return false;
-    }
-    if (dynamic_cast<SPStar *>(this) && !this->transform.isUniformScale()) {
-        return false;
-    }
-    auto* mask_path = this->getMaskObject();
-    if(mask_path) {
-        return false;
-    }
-    auto* clip_path = this->getClipObject();
-    if(clip_path) {
-        return false;
-    }
-    PathEffectList path_effect_list(*this->path_effect_list);
-    for (auto &lperef : path_effect_list) {
-        if (!lperef) {
-            continue;
-        }
-        LivePathEffectObject *lpeobj = lperef->lpeobject;
-        if (lpeobj) {
-            Inkscape::LivePathEffect::Effect *lpe = lpeobj->get_lpe();
-            if (lpe) {
-                if (dynamic_cast<Inkscape::LivePathEffect::LPEMeasureSegments *>(lpe) ||
-                    dynamic_cast<Inkscape::LivePathEffect::LPELattice2 *>(lpe))
-                {
-                    return false;
-                }
-            }
-        }
-    }
-    // LPEs with satellites (and his satellites) has this class auto
-    gchar *classes = g_strdup(getRepr()->attribute("class"));
-    if (classes) {
-        Glib::ustring classdata = classes;
-        size_t pos = classdata.find("UnoptimicedTransforms");
-        if ( pos != std::string::npos ) {
-            return false;
-        }
-    }
-    g_free(classes);
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    return !prefs->getBool("/options/preservetransform/value", false);
-}
-
-/**
- * notify tranbsform applied to a LPE
- */
 void SPLPEItem::notifyTransform(Geom::Affine const &postmul)
 {
     if (!pathEffectsEnabled())
