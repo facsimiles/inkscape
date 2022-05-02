@@ -359,7 +359,10 @@ bool DialogContainer::recreate_dialogs_from_state(InkscapeWindow* inkscape_windo
     try {
         windows_count = keyfile->get_integer("Windows", "Count");
     } catch (Glib::Error &error) {
-        std::cerr << G_STRFUNC << ": " << error.what() << std::endl;
+        // error.what().c_str() is needed because error.what() can raise an exception
+        // while trying to print the error with some locales
+        // See https://gitlab.com/inkscape/inkscape/-/issues/3027
+        std::cerr << G_STRFUNC << ": " << error.what().c_str() << std::endl;
     }
 
     // Step 3: for each window, load its state.

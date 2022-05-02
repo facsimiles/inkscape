@@ -4,6 +4,7 @@
 
 #include <gdkmm/monitor.h>
 #include <limits>
+#include <set>
 #ifdef G_OS_WIN32
 #include <filesystem>
 namespace filesystem = std::filesystem;
@@ -13,17 +14,22 @@ namespace filesystem = std::filesystem;
 namespace filesystem = boost::filesystem;
 #endif
 
-#include "io/resource.h"
-#include "inkscape-application.h"
 #include "dialog-base.h"
 #include "dialog-container.h"
 #include "dialog-window.h"
 #include "enums.h"
+#include "inkscape-application.h"
+#include "io/resource.h"
 #include "preferences.h"
 
 namespace Inkscape {
 namespace UI {
 namespace Dialog {
+
+// we define here which dialogs should open floating by default
+static std::set<std::string> const DEFAULT_FLOATING_DIALOGS = {
+    "CloneTiler", "DocumentProperties", "FilterEffects",
+    "Input",      "Preferences",        "XMLEditor"};
 
 std::optional<window_position_t> dm_get_window_position(Gtk::Window &window)
 {
@@ -73,7 +79,7 @@ void DialogManager::store_state(DialogWindow &wnd)
             auto state = container->get_container_state(&*pos);
 
             // find dialogs hosted in this window
-            for (auto dlg : *container->get_dialogs()) {
+            for (auto const &dlg : *container->get_dialogs()) {
                 _floating_dialogs[dlg.first] = state;
             }
         }
@@ -81,17 +87,16 @@ void DialogManager::store_state(DialogWindow &wnd)
 }
 
 //
-bool DialogManager::should_open_floating(const Glib::ustring& dialog_type)
+bool DialogManager::should_open_floating(const Glib::ustring &dialog_type)
 {
     return _floating_dialogs.count(dialog_type) > 0;
 }
 
-void DialogManager::set_floating_dialog_visibility(DialogWindow* wnd, bool show) {
+void DialogManager::set_floating_dialog_visibility(DialogWindow *wnd, bool show)
+{
     if (!wnd) return;
 
-    if (show) {
-        if (wnd->is_visible()) return;
-
+    if (show && !wnd->is_visible()) {
         // wnd->present(); - not sure which one is better, show or present...
         wnd->show();
         _hidden_dlg_windows.erase(wnd);
@@ -99,21 +104,19 @@ void DialogManager::set_floating_dialog_visibility(DialogWindow* wnd, bool show)
         if (auto app = InkscapeApplication::instance()) {
             app->gtk_app()->add_window(*wnd);
         }
-    }
-    else {
-        if (!wnd->is_visible()) return;
-
+    } else if (!show && wnd->is_visible()) {
         _hidden_dlg_windows.insert(wnd);
         wnd->hide();
     }
 }
 
-std::vector<DialogWindow*> DialogManager::get_all_floating_dialog_windows() {
-    std::vector<Gtk::Window*> windows = InkscapeApplication::instance()->gtk_app()->get_windows();
+std::vector<DialogWindow *> DialogManager::get_all_floating_dialog_windows()
+{
+    std::vector<Gtk::Window *> windows = InkscapeApplication::instance()->gtk_app()->get_windows();
 
-    std::vector<DialogWindow*> result(_hidden_dlg_windows.begin(), _hidden_dlg_windows.end());
+    std::vector<DialogWindow *> result(_hidden_dlg_windows.begin(), _hidden_dlg_windows.end());
     for (auto wnd : windows) {
-        if (auto dlg_wnd = dynamic_cast<DialogWindow*>(wnd)) {
+        if (auto dlg_wnd = dynamic_cast<DialogWindow *>(wnd)) {
             result.push_back(dlg_wnd);
         }
     }
@@ -121,7 +124,8 @@ std::vector<DialogWindow*> DialogManager::get_all_floating_dialog_windows() {
     return result;
 }
 
-DialogWindow* DialogManager::find_floating_dialog_window(const Glib::ustring& dialog_type) {
+DialogWindow *DialogManager::find_floating_dialog_window(const Glib::ustring &dialog_type)
+{
     auto windows = get_all_floating_dialog_windows();
 
     for (auto dlg_wnd : windows) {
@@ -135,7 +139,7 @@ DialogWindow* DialogManager::find_floating_dialog_window(const Glib::ustring& di
     return nullptr;
 }
 
-DialogBase *DialogManager::find_floating_dialog(const Glib::ustring& dialog_type)
+DialogBase *DialogManager::find_floating_dialog(const Glib::ustring &dialog_type)
 {
     auto windows = get_all_floating_dialog_windows();
 
@@ -150,7 +154,7 @@ DialogBase *DialogManager::find_floating_dialog(const Glib::ustring& dialog_type
     return nullptr;
 }
 
-std::shared_ptr<Glib::KeyFile> DialogManager::find_dialog_state(const Glib::ustring& dialog_type)
+std::shared_ptr<Glib::KeyFile> DialogManager::find_dialog_state(const Glib::ustring &dialog_type)
 {
     auto it = _floating_dialogs.find(dialog_type);
     if (it != _floating_dialogs.end()) {
@@ -164,12 +168,12 @@ const char save_dialog_position[] = "/options/savedialogposition/value";
 const char transient_group[] = "transient";
 
 // list of dialogs sharing the same state
-std::vector<Glib::ustring> DialogManager::count_dialogs(const Glib::KeyFile *state) const
+std::vector<Glib::ustring> DialogManager::shared_dialogs(const Glib::KeyFile *state) const
 {
     std::vector<Glib::ustring> dialogs;
     if (!state) return dialogs;
 
-    for (auto dlg : _floating_dialogs) {
+    for (auto const &dlg : _floating_dialogs) {
         if (dlg.second.get() == state) {
             dialogs.emplace_back(dlg.first);
         }
@@ -190,21 +194,38 @@ void DialogManager::save_dialogs_state(DialogContainer *docking_container)
     auto keyfile = docking_container->save_container_state();
 
     // save transient state of floating dialogs that user might have opened interacting with the app
-    int idx = 1;
-    for (auto dlg : _floating_dialogs) {
+
+    // Sentinel item to be assigned to when state is saved
+    auto const SAVED_STATE = std::make_shared<Glib::KeyFile>();
+    int idx = 0;
+    for (auto const &dlg : _floating_dialogs) {
         auto state = dlg.second.get();
-        auto&& type = dlg.first;
-        auto index = std::to_string(idx++);
+        auto &&type = dlg.first;
+        auto index = std::to_string(idx + 1);
+
+        // was already saved, we move on
+        if (state == SAVED_STATE.get()) {
+            continue;
+        }
+
         // state may be empty; all that means it that dialog hasn't been opened yet,
         // but when it is, then it should be open in a floating state
-        keyfile->set_string(transient_group, "state" + index, state ? state->to_data() : "");
-        auto dialogs = count_dialogs(state);
+        keyfile->set_string(transient_group, "state" + index, state->to_data());
+
         if (!state) {
-            dialogs.emplace_back(type);
+            keyfile->set_string(transient_group, "dialogs" + index, type);
+            _floating_dialogs[type] = SAVED_STATE;
+        } else {
+            auto dialogs = shared_dialogs(state);
+            keyfile->set_string_list(transient_group, "dialogs" + index, dialogs);
+            // mark all the saved dialogs as saved
+            for (auto &d : dialogs) {
+                _floating_dialogs[d] = SAVED_STATE;
+            }
         }
-        keyfile->set_string_list(transient_group, "dialogs" + index, dialogs);
+        idx++;
     }
-    keyfile->set_integer(transient_group, "count", _floating_dialogs.size());
+    keyfile->set_integer(transient_group, "count", idx);
 
     std::string filename = Glib::build_filename(Inkscape::IO::Resource::profile_path(), dialogs_state);
     try {
@@ -227,8 +248,12 @@ void DialogManager::load_transient_state(Glib::KeyFile *file)
         if (!state.empty()) {
             keyfile->load_from_data(state);
         }
-        for (auto type : dialogs) {
-            _floating_dialogs[type] = keyfile;
+
+        // Since the elements of dialogs are likely to be sorted with high likelyhood,
+        // we could use hints to make the insertion faster
+        for (auto const &type : dialogs) {
+            auto hint_it = _floating_dialogs.cend();
+            _floating_dialogs.emplace_hint(hint_it, type, keyfile);
         }
     }
 }
@@ -264,8 +289,7 @@ void DialogManager::restore_dialogs_state(DialogContainer *docking_container, bo
                     std::cerr << G_STRFUNC << ": transient state not loaded - " << error.what() << std::endl;
                 }
             }
-        }
-        else {
+        } else {
             // state not available or not valid; prepare defaults
             dialog_defaults();
         }
@@ -274,7 +298,8 @@ void DialogManager::restore_dialogs_state(DialogContainer *docking_container, bo
     }
 }
 
-void DialogManager::remove_dialog_floating_state(const Glib::ustring& dialog_type) {
+void DialogManager::remove_dialog_floating_state(const Glib::ustring &dialog_type)
+{
     auto it = _floating_dialogs.find(dialog_type);
     if (it != _floating_dialogs.end()) {
         _floating_dialogs.erase(it);
@@ -282,16 +307,12 @@ void DialogManager::remove_dialog_floating_state(const Glib::ustring& dialog_typ
 }
 
 // apply defaults when dialog state cannot be loaded / doesn't exist:
-// here we can define which dialogs should by default be open floating rather then docked
-void DialogManager::dialog_defaults() {
-    std::shared_ptr<Glib::KeyFile> floating;
+void DialogManager::dialog_defaults()
+{
     // strings are dialog types
-    _floating_dialogs["CloneTiler"] = floating;
-    _floating_dialogs["DocumentProperties"] = floating;
-    _floating_dialogs["FilterEffects"] = floating;
-    _floating_dialogs["Input"] = floating;
-    _floating_dialogs["Preferences"] = floating;
-    _floating_dialogs["XMLEditor"] = floating;
+    for (auto const &d : DEFAULT_FLOATING_DIALOGS) {
+        _floating_dialogs[d] = std::make_shared<Glib::KeyFile>();
+    }
 }
 
 } // namespace Dialog

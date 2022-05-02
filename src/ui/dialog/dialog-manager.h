@@ -6,9 +6,9 @@
 #include <glibmm/keyfile.h>
 #include <gtkmm/window.h>
 #include <map>
-#include <set>
 #include <memory>
 #include <optional>
+#include <set>
 #include <vector>
 
 namespace Inkscape {
@@ -39,19 +39,19 @@ public:
     void store_state(DialogWindow &wnd);
 
     // return true if dialog 'type' should be opened as floating
-    bool should_open_floating(const Glib::ustring& dialog_type);
+    bool should_open_floating(const Glib::ustring &dialog_type);
 
     // find instance of dialog 'type' in one of currently open floating dialog windows
-    DialogBase *find_floating_dialog(const Glib::ustring& dialog_type);
+    DialogBase *find_floating_dialog(const Glib::ustring &dialog_type);
 
     // find window hosting floating dialog
-    DialogWindow* find_floating_dialog_window(const Glib::ustring& dialog_type);
+    DialogWindow *find_floating_dialog_window(const Glib::ustring &dialog_type);
 
     // find floating window state hosting dialog 'code', if there was one
-    std::shared_ptr<Glib::KeyFile> find_dialog_state(const Glib::ustring& dialog_type);
+    std::shared_ptr<Glib::KeyFile> find_dialog_state(const Glib::ustring &dialog_type);
 
     // remove dialog floating state
-    void remove_dialog_floating_state(const Glib::ustring& dialog_type);
+    void remove_dialog_floating_state(const Glib::ustring &dialog_type);
 
     // save configuration of docked and floating dialogs
     void save_dialogs_state(DialogContainer *docking_container);
@@ -60,23 +60,23 @@ public:
     void restore_dialogs_state(DialogContainer *docking_container, bool include_floating);
 
     // find all floating dialog windows
-    std::vector<DialogWindow*> get_all_floating_dialog_windows();
+    std::vector<DialogWindow *> get_all_floating_dialog_windows();
 
     // show/hide dialog window and keep track of it
-    void set_floating_dialog_visibility(DialogWindow* wnd, bool show);
+    void set_floating_dialog_visibility(DialogWindow *wnd, bool show);
 
 private:
     DialogManager() = default;
     ~DialogManager() = default;
 
-    std::vector<Glib::ustring> count_dialogs(const Glib::KeyFile *state) const;
+    std::vector<Glib::ustring> shared_dialogs(const Glib::KeyFile *state) const;
     void load_transient_state(Glib::KeyFile *keyfile);
     void dialog_defaults();
 
     // transient dialog state for floating windows user closes
     std::map<std::string, std::shared_ptr<Glib::KeyFile>> _floating_dialogs;
     // temp set used when dialogs are hidden (F12 toggle)
-    std::set<DialogWindow*> _hidden_dlg_windows;
+    std::set<DialogWindow *> _hidden_dlg_windows;
 };
 
 } // namespace Dialog
