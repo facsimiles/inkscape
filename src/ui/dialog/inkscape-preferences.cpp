@@ -1731,7 +1731,7 @@ void InkscapePreferences::initPageUI()
 
     _page_ui.add_group_header(_("Pages"));
     auto sb_pagelabels = Gtk::make_managed<UI::Widget::PrefCheckButton>();
-    sb_pagelabels->init(_("Show default page labels"), "/pages/visibility/labels", true);
+    sb_pagelabels->init(_("Show default page labels"), "/pages/visibility/defaultlabels", true);
     _page_ui.add_line(false, "", *sb_pagelabels, "", _("If no page label set, show the default label instead"), true);
 
     // Theme
