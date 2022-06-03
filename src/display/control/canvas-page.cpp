@@ -11,6 +11,7 @@
  */
 
 #include "canvas-page.h"
+
 #include "canvas-item-rect.h"
 #include "canvas-item-text.h"
 
@@ -47,7 +48,7 @@ void CanvasPage::add(Geom::Rect size, CanvasItemGroup *background_group, CanvasI
     if (auto label = new CanvasItemText(border_group, Geom::Point(0, 0), "{Page Label}")) {
         label->set_fontsize(10.0);
         label->set_fill(0xffffffff);
-        label->set_background(0x00000099);
+        label->set_background(0x00000030);
         label->set_bg_radius(0.2);
         label->set_anchor(Geom::Point(0.0, 1.0));
         label->set_fixed_line(true);
@@ -124,22 +125,21 @@ void CanvasPage::update(Geom::Rect size, const char *txt, bool outline)
             // This undoes the hide for the background rect, and additionally gives it a fill and shadow.
             if (!is_foreground) {
                 rect->show();
-/*
-                if (_checkerboard) {
-                    // draw checkerboard pattern, ignore alpha (background color doesn't support it)
-                    rect->set_background_checkerboard(_background_color, false);
-                }
-                else {
-                    // Background color does not support transparency; draw opaque pages
-                    rect->set_background(_background_color | 0xff);
-                }
-*/
+                /*
+                                if (_checkerboard) {
+                                    // draw checkerboard pattern, ignore alpha (background color doesn't support it)
+                                    rect->set_background_checkerboard(_background_color, false);
+                                }
+                                else {
+                                    // Background color does not support transparency; draw opaque pages
+                                    rect->set_background(_background_color | 0xff);
+                                }
+                */
                 rect->set_fill(_background_color);
                 rect->set_shadow(shadow_color, _shadow_size);
             } else {
                 rect->set_fill(0x0);
                 rect->set_shadow(0x0, 0);
-
             }
         }
         if (auto label = dynamic_cast<CanvasItemText *>(item)) {
@@ -168,7 +168,7 @@ bool CanvasPage::setAttributes(bool on_top, uint32_t border, uint32_t bg, int sh
     return false;
 }
 
-};
+}; // namespace Inkscape
 
 /*
   Local Variables:
