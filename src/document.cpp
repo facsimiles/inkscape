@@ -333,14 +333,11 @@ void SPDocument::queueForOrphanCollection(SPObject *object) {
 }
 
 void SPDocument::collectOrphans() {
-    while (!_collection_queue.empty()) {
-        std::vector<SPObject *> objects(_collection_queue);
-        _collection_queue.clear();
-        for (auto object : objects) {
-            object->collectOrphan();
-            sp_object_unref(object, nullptr);
-        }
+    for (auto object : _collection_queue) {
+        object->collectOrphan();
+        sp_object_unref(object, nullptr);
     }
+    _collection_queue.clear();
 }
 
 SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
@@ -562,14 +559,13 @@ SPDocument *SPDocument::createChildDoc(std::string const &filename)
             break;
         }
         // Then check children of those.
-        boost::ptr_list<SPDocument>::iterator iter;
-        for (iter = parent->_child_documents.begin();
-          iter != parent->_child_documents.end(); ++iter) {
-            if(filename == iter->getDocumentFilename()) {
-                document = &*iter;
+        for (auto& child : _child_documents) {
+            if(filename == child->getDocumentFilename()) {
+                document = child;
                 break;
             }
         }
+
         parent = parent->_parent_document;
     }
 
@@ -1047,7 +1043,7 @@ void SPDocument::bindObjectToId(char const *id, SPObject *object)
         if(object->getId()) {
             iddef.erase(object->getId());
         }
-        auto ret = iddef.emplace(id, object);
+        auto ret = iddef.try_emplace(id, object);
         g_assert(ret.second);
     } else {
         auto it = iddef.find(id);
@@ -1234,9 +1230,7 @@ void SPDocument::bindObjectToRepr(Inkscape::XML::Node *repr, SPObject *object)
         auto ret = reprdef.emplace(repr, object);
         g_assert(ret.second);
     } else {
-        auto it = reprdef.find(repr);
-        g_assert(it != reprdef.end());
-        reprdef.erase(it);
+        g_assert(reprdef.erase(repr) != 0);
     }
 }
 
@@ -1732,9 +1726,9 @@ bool SPDocument::addResource(gchar const *key, SPObject *object)
     bool result = false;
 
     if ( !object->cloned ) {
-        std::vector<SPObject *> rlist = resources[key];
+        auto &rlist = resources[key];
         g_return_val_if_fail(std::find(rlist.begin(),rlist.end(),object) == rlist.end(), false);
-        resources[key].insert(resources[key].begin(),object);
+        rlist.insert(rlist.begin(), object);
 
         GQuark q = g_quark_from_string(key);
 
@@ -1766,11 +1760,11 @@ bool SPDocument::removeResource(gchar const *key, SPObject *object)
     bool result = false;
 
     if ( !object->cloned ) {
-        std::vector<SPObject *> rlist = resources[key];
+        auto &rlist = resources[key];
         g_return_val_if_fail(!rlist.empty(), false);
-        std::vector<SPObject*>::iterator it = std::find(resources[key].begin(),resources[key].end(),object);
+        std::vector<SPObject*>::iterator it = std::find(rlist.begin(), rlist.end(),object);
         g_return_val_if_fail(it != rlist.end(), false);
-        resources[key].erase(it);
+        rlist.erase(it);
 
         GQuark q = g_quark_from_string(key);
         resources_changed_signals[q].emit();
