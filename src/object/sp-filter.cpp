@@ -41,7 +41,7 @@ SPFilter::SPFilter()
     : SPObject(), filterUnits(SP_FILTER_UNITS_OBJECTBOUNDINGBOX), filterUnits_set(FALSE),
       primitiveUnits(SP_FILTER_UNITS_USERSPACEONUSE), primitiveUnits_set(FALSE),
       filterRes(NumberOptNumber()),
-      _renderer(nullptr), _image_name(new std::map<gchar *, int, ltstr>), _image_number_next(0)
+      _renderer(nullptr), _image_number_next(0)
 {
     this->href = new SPFilterReference(this);
     this->href->changedSignal().connect(sigc::bind(sigc::ptr_fun(filter_ref_changed), this));
@@ -51,8 +51,6 @@ SPFilter::SPFilter()
     this->width = 0;
     this->height = 0;
     this->auto_region = true;
-
-    this->_image_name->clear();
 }
 
 SPFilter::~SPFilter() = default;
@@ -102,11 +100,7 @@ void SPFilter::release() {
         this->href = nullptr;
     }
 
-    for (std::map<gchar *, int, ltstr>::const_iterator i = this->_image_name->begin() ; i != this->_image_name->end() ; ++i) {
-        g_free(i->first);
-    }
-
-    delete this->_image_name;
+    _image_name.clear();
 
     SPObject::release();
 }
@@ -535,24 +529,13 @@ int SPFilter::primitive_count() const {
 }
 
 int SPFilter::get_image_name(gchar const *name) const {
-    std::map<gchar *, int, ltstr>::iterator result = this->_image_name->find(const_cast<gchar*>(name));
-    if (result == this->_image_name->end()) return -1;
-    else return (*result).second;
+    auto const result = _image_name.find(name);
+    return (result == _image_name.end()) ? -1 : result->second;
 }
 
 int SPFilter::set_image_name(gchar const *name) {
-    int value = this->_image_number_next;
-    this->_image_number_next++;
-    gchar *name_copy = strdup(name);
-    std::pair<gchar*,int> new_pair(name_copy, value);
-    const std::pair<std::map<gchar*,int,ltstr>::iterator,bool> ret = this->_image_name->insert(new_pair);
-    if (ret.second == false) {
-        // The element is not inserted (because an element with the same key was already in the map) 
-        // Therefore, free the memory allocated for the new entry:
-        free(name_copy);
-
-        return (*ret.first).second;
-    }
+    int value = _image_number_next++;
+    _image_name.try_emplace(name, value);
     return value;
 }
 
@@ -581,11 +564,9 @@ gchar const *SPFilter::name_for_image(int const image) const {
             return nullptr;
             break;
         default:
-            for (std::map<gchar *, int, ltstr>::const_iterator i
-                     = this->_image_name->begin() ;
-                 i != this->_image_name->end() ; ++i) {
-                if (i->second == image) {
-                    return i->first;
+            for (auto const &i : _image_name) {
+                if (i.second == image) {
+                    return i.first.c_str();
                 }
             }
     }
@@ -615,12 +596,6 @@ Glib::ustring SPFilter::get_new_result_name() const {
 
     return "result" + Glib::Ascii::dtostr(largest + 1);
 }
-
-bool ltstr::operator()(const char* s1, const char* s2) const
-{
-    return strcmp(s1, s2) < 0;
-}
-
 
 /*
   Local Variables:

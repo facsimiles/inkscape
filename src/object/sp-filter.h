@@ -14,7 +14,6 @@
 #define SP_FILTER_H_SEEN
 
 #include <glibmm/ustring.h>
-#include <map>
 
 #include "number-opt-number.h"
 #include "sp-dimensions.h"
@@ -22,6 +21,7 @@
 #include "sp-item.h"
 #include "sp-filter-units.h"
 #include "svg/svg-length.h"
+#include "util/string-map.h"
 
 #define SP_FILTER_FILTER_UNITS(f) (SP_FILTER(f)->filterUnits)
 #define SP_FILTER_PRIMITIVE_UNITS(f) (SP_FILTER(f)->primitiveUnits)
@@ -33,10 +33,6 @@ class Filter;
 
 class SPFilterReference;
 class SPFilterPrimitive;
-
-struct ltstr {
-    bool operator()(const char* s1, const char* s2) const;
-};
 
 class SPFilter : public SPObject, public SPDimensions {
 public:
@@ -86,7 +82,7 @@ public:
 
     Inkscape::Filters::Filter *_renderer;
 
-    std::map<gchar *, int, ltstr>* _image_name;
+    Inkscape::Util::StringMap<int> _image_name;
     int _image_number_next;
 
 protected:
