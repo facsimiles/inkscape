@@ -204,9 +204,13 @@ public:
     RefCountEvent(SPObject *object, int bias, char const *name)
     : BaseRefCountEvent(name)
     {
-        _addProperty("object", Util::format("%p", object).pointer());
+        constexpr size_t N = 2048;
+        gchar buf[N];
+        Util::snformat(buf, N, "%p", object);
+        _addProperty("object", buf);
         _addProperty("class", Debug::demangle(typeid(*object).name()));
-        _addProperty("new-refcount", Util::format("%d", object->refCount + bias).pointer());
+        Util::snformat(buf, N, "%d", object->refCount + bias);
+        _addProperty("new-refcount", buf);
     }
 };
 

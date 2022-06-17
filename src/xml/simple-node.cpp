@@ -41,31 +41,30 @@ namespace XML {
 namespace {
 
 std::shared_ptr<std::string> stringify_node(Node const &node) {
-    gchar *string;
+    constexpr size_t N = 2048;
+    char string[N];
     switch (node.type()) {
     case NodeType::ELEMENT_NODE: {
         char const *id=node.attribute("id");
         if (id) {
-            string = g_strdup_printf("element(%p)=%s(#%s)", &node, node.name(), id);
+            Util::snformat(string, N, "element(%p)=%s(#%s)", &node, node.name(), id);
         } else {
-            string = g_strdup_printf("element(%p)=%s", &node, node.name());
+            Util::snformat(string, N, "element(%p)=%s", &node, node.name());
         }
     } break;
     case NodeType::TEXT_NODE:
-        string = g_strdup_printf("text(%p)=%s", &node, node.content());
+        Util::snformat(string, N, "text(%p)=%s", &node, node.content());
         break;
     case NodeType::COMMENT_NODE:
-        string = g_strdup_printf("comment(%p)=<!--%s-->", &node, node.content());
+        Util::snformat(string, N, "comment(%p)=<!--%s-->", &node, node.content());
         break;
     case NodeType::DOCUMENT_NODE:
-        string = g_strdup_printf("document(%p)", &node);
+        Util::snformat(string, N, "document(%p)", &node);
         break;
     default:
-        string = g_strdup_printf("unknown(%p)", &node);
+        Util::snformat(string, N, "unknown(%p)", &node);
     }
-    std::shared_ptr<std::string> result = std::make_shared<std::string>(string);
-    g_free(string);
-    return result;
+    return std::make_shared<std::string>(string);
 }
 
 typedef Debug::SimpleEvent<Debug::Event::XML> DebugXML;

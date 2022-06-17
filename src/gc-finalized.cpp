@@ -42,8 +42,12 @@ public:
     FinalizerEvent(Finalized *object)
     : BaseEvent("gc-finalizer")
     {
-        _addProperty("base", Util::format("%p", Core::base(object)).pointer());
-        _addProperty("pointer", Util::format("%p", object).pointer());
+        constexpr size_t N = 2048;
+        gchar buf[N];
+        Util::snformat(buf, N, "%p", Core::base(object));
+        _addProperty("base", buf);
+        Util::snformat(buf, N, "%p", object);
+        _addProperty("pointer", buf);
         _addProperty("class", typeid(*object).name());
     }
 };
