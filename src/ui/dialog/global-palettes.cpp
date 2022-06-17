@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 #include "global-palettes.h"
 
+#include <cstring>
 #include <iomanip>
 
 // Using Glib::regex because

@@ -278,12 +278,12 @@ Application::Application(bool use_gui) :
     /* Initialize font factory */
     auto &factory = FontFactory::get();
     if (prefs->getBool("/options/font/use_fontsdir_system", true)) {
-        char const *fontsdir = get_path(SYSTEM, FONTS);
-        factory.AddFontsDir(fontsdir);
+        auto const fontsdir = get_path_string(SYSTEM, FONTS);
+        factory.AddFontsDir(fontsdir.c_str());
     }
     if (prefs->getBool("/options/font/use_fontsdir_user", true)) {
-        char const *fontsdir = get_path(USER, FONTS);
-        factory.AddFontsDir(fontsdir);
+        auto const fontsdir = get_path_string(USER, FONTS);
+        factory.AddFontsDir(fontsdir.c_str());
     }
     Glib::ustring fontdirs_pref = prefs->getString("/options/font/custom_fontdirs");
     std::vector<Glib::ustring> fontdirs = Glib::Regex::split_simple("\\|", fontdirs_pref);

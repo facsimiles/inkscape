@@ -89,8 +89,7 @@ Glib::ustring get_file(Glib::ustring uri, unsigned int timeout, callback func) {
         filepart = path.substr(path.rfind("/") + 1);
     }
 
-    const char *ret = get_path(Resource::CACHE, Resource::NONE, filepart.c_str());
-    Glib::ustring filename = Glib::ustring(ret);
+    auto const filename = get_path_ustring(Resource::CACHE, Resource::NONE, filepart.c_str());
 
     // We test first if the cache already exists
     if(file_test(filename.c_str(), G_FILE_TEST_EXISTS) && timeout > 0) {

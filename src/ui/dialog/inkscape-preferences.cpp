@@ -1768,7 +1768,7 @@ void InkscapePreferences::initPageUI()
         _icon_theme.init("/theme/iconTheme", labels, values, "");
         _page_theme.add_line(false, _("Change icon theme:"), _icon_theme, "", "", false);
         _icon_theme.signal_changed().connect(sigc::mem_fun(*this, &InkscapePreferences::symbolicThemeCheck));
-        _sys_user_icons_dir_copy.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::ICONS, ""),
+        _sys_user_icons_dir_copy.init(IO::Resource::get_path_ustring(IO::Resource::USER, IO::Resource::ICONS, ""),
                              _("Open icons folder"));
         _page_theme.add_line(true, _("User icons: "), _sys_user_icons_dir_copy, "", _("Location of the user’s icons"), true, Gtk::manage(new Gtk::Box()));
     }
@@ -3524,45 +3524,45 @@ void InkscapePreferences::initPageSystem()
     _page_system.add_line(true, _("User extensions:"), _sys_user_extension_dir, "",
                           _("Location of the user’s extensions"), true);
 
-    _sys_user_fonts_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::FONTS, ""),
+    _sys_user_fonts_dir.init(IO::Resource::get_path_ustring(IO::Resource::USER, IO::Resource::FONTS, ""),
                              _("Open fonts folder"));
     _page_system.add_line(true, _("User fonts:"), _sys_user_fonts_dir, "", _("Location of the user’s fonts"), true);
 
     _sys_user_themes_dir.init(g_build_filename(g_get_user_data_dir(), "themes", nullptr), _("Open themes folder"));
     _page_system.add_line(true, _("User themes:"), _sys_user_themes_dir, "", _("Location of the user’s themes"), true);
 
-    _sys_user_icons_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::ICONS, ""),
+    _sys_user_icons_dir.init(IO::Resource::get_path_ustring(IO::Resource::USER, IO::Resource::ICONS, ""),
                              _("Open icons folder"));
     _page_system.add_line(true, _("User icons:"), _sys_user_icons_dir, "", _("Location of the user’s icons"), true);
 
-    _sys_user_templates_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::TEMPLATES, ""),
+    _sys_user_templates_dir.init(IO::Resource::get_path_ustring(IO::Resource::USER, IO::Resource::TEMPLATES, ""),
                                  _("Open templates folder"));
     _page_system.add_line(true, _("User templates:"), _sys_user_templates_dir, "",
                           _("Location of the user’s templates"), true);
 
-    _sys_user_symbols_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::SYMBOLS, ""),
+    _sys_user_symbols_dir.init(IO::Resource::get_path_ustring(IO::Resource::USER, IO::Resource::SYMBOLS, ""),
                                _("Open symbols folder"));
 
     _page_system.add_line(true, _("User symbols:"), _sys_user_symbols_dir, "", _("Location of the user’s symbols"),
                           true);
 
-    _sys_user_paint_servers_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::PAINT, ""),
+    _sys_user_paint_servers_dir.init(IO::Resource::get_path_ustring(IO::Resource::USER, IO::Resource::PAINT, ""),
                                 _("Open paint servers folder"));
 
     _page_system.add_line(true, _("User paint servers:"), _sys_user_paint_servers_dir, "",
                         _("Location of the user’s paint servers"), true);
 
-    _sys_user_palettes_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::PALETTES, ""),
+    _sys_user_palettes_dir.init(IO::Resource::get_path_ustring(IO::Resource::USER, IO::Resource::PALETTES, ""),
                                 _("Open palettes folder"));
     _page_system.add_line(true, _("User palettes:"), _sys_user_palettes_dir, "", _("Location of the user’s palettes"),
                           true);
 
-    _sys_user_keys_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::KEYS, ""),
+    _sys_user_keys_dir.init(IO::Resource::get_path_ustring(IO::Resource::USER, IO::Resource::KEYS, ""),
                             _("Open keyboard shortcuts folder"));
     _page_system.add_line(true, _("User keys:"), _sys_user_keys_dir, "",
                           _("Location of the user’s keyboard mapping files"), true);
 
-    _sys_user_ui_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::UIS, ""),
+    _sys_user_ui_dir.init(IO::Resource::get_path_ustring(IO::Resource::USER, IO::Resource::UIS, ""),
                           _("Open user interface folder"));
     _page_system.add_line(true, _("User UI:"), _sys_user_ui_dir, "",
                           _("Location of the user’s user interface description files"), true);
