@@ -90,23 +90,19 @@ UnitCodeLookup const unit_code_lookup = make_unit_code_lookup();
 
 
 
-typedef std::unordered_map<Glib::ustring, Inkscape::Util::UnitType> TypeMap;
+typedef Inkscape::Util::StringMap<Inkscape::Util::UnitType> TypeMap;
 
-/** A std::map that gives the data type value for the string version.
- * @todo consider hiding map behind hasFoo() and getFoo() type functions. */
-TypeMap make_type_map()
+/** A string map that gives the data type value for the string version.
+ * @todo consider hiding map behind hasFoo() and getFoo() type functions.
+ */
+static TypeMap const type_map =
 {
-    TypeMap tmap;
-    tmap["DIMENSIONLESS"] = UNIT_TYPE_DIMENSIONLESS;
-    tmap["LINEAR"] = UNIT_TYPE_LINEAR;
-    tmap["RADIAL"] = UNIT_TYPE_RADIAL;
-    tmap["FONT_HEIGHT"] = UNIT_TYPE_FONT_HEIGHT;
+    { "DIMENSIONLESS", UNIT_TYPE_DIMENSIONLESS },
+    { "LINEAR", UNIT_TYPE_LINEAR },
+    { "RADIAL", UNIT_TYPE_RADIAL },
+    { "FONT_HEIGHT", UNIT_TYPE_FONT_HEIGHT },
     // Note that code was not yet handling LINEAR_SCALED, TIME, QTY and NONE
-
-    return tmap;
-}
-
-TypeMap const type_map = make_type_map();
+};
 
 } // namespace
 
@@ -377,7 +373,7 @@ UnitTable::UnitMap UnitTable::units(UnitType type) const
     UnitMap submap;
     for (auto iter : _unit_map) {
         if (iter.second->type == type) {
-            submap.insert(UnitMap::value_type(iter.second->abbr, *iter.second));
+            submap.emplace(iter.second->abbr, *iter.second);
         }
     }
 
@@ -427,8 +423,8 @@ void UnitParser::on_start_element(Ctx &/*ctx*/, Glib::ustring const &name, AttrM
 
         AttrMap::const_iterator f;
         if ((f = attrs.find("type")) != attrs.end()) {
-            Glib::ustring type = f->second;
-            TypeMap::const_iterator tf = type_map.find(type);
+            const auto& type = f->second;
+            auto const tf = type_map.find(type);
             if (tf != type_map.end()) {
                 unit.type = tf->second;
             } else {

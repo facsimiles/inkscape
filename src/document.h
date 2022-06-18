@@ -23,10 +23,9 @@
 #include <deque>
 #include <map>
 #include <memory>
+#include <unordered_map>
 #include <vector>
 #include <queue>
-
-#include <boost/ptr_container/ptr_list.hpp>
 
 #include <glibmm/ustring.h>
 #include <giomm/simpleactiongroup.h>
@@ -43,6 +42,7 @@
 #include "gc-finalized.h"
 
 #include "inkgc/gc-managed.h"
+#include "util/string-map.h"
 
 #include "composite-undo-stack-observer.h"
 // XXX only for testing!
@@ -386,7 +386,7 @@ private:
     SPRoot *root;             ///< Our SPRoot
 
     // A list of svg documents being used or shown within this document
-    boost::ptr_list<SPDocument> _child_documents;
+    std::vector<SPDocument *> _child_documents;
     // Conversely this is a parent document because this is a child.
     SPDocument *_parent_document;
     // When copying documents, this can refer to its original
@@ -406,8 +406,8 @@ private:
     char *document_name;  ///< basename or other human-readable label for the document.
 
     // Find items ----------------------------
-    std::map<std::string, SPObject *> iddef;
-    std::map<Inkscape::XML::Node *, SPObject *> reprdef;
+    Inkscape::Util::StringMap<SPObject *> iddef;
+    std::unordered_map<Inkscape::XML::Node *, SPObject *> reprdef;
 
     // Find items by geometry --------------------
     mutable std::deque<SPItem*> _node_cache; // Used to speed up search.
@@ -500,7 +500,7 @@ public:
     sigc::connection connectReconstructionFinish(ReconstructionFinish::slot_type slot);
 
     /* Resources */
-    std::map<std::string, std::vector<SPObject *> > resources;
+    Inkscape::Util::StringMap<std::vector<SPObject *> > resources;
     ResourcesChangedSignalMap resources_changed_signals; // Used by Extension::Internal::Filter
 
     void _emitModified();  // Used by SPItem

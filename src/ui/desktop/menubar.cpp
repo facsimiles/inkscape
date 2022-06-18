@@ -31,6 +31,7 @@
 #include "inkscape-application.h" // Open recent
 #include "preferences.h"          // Use icons or not
 #include "io/resource.h"          // UI File location
+#include "util/string-map.h"
 
 // =================== Main Menu ================
 void
@@ -62,7 +63,7 @@ build_menu()
     } else {
 
         static auto app = InkscapeApplication::instance();
-        std::map<Glib::ustring, Glib::ustring>& label_to_tooltip_map = app->get_menu_label_to_tooltip_map();
+        auto& label_to_tooltip_map = app->get_menu_label_to_tooltip_map();
         label_to_tooltip_map.clear();
 
         { // Filters and Extensions
@@ -79,7 +80,7 @@ build_menu()
                 std::cerr << "build_menu(): Couldn't find Extensions menu entry!" << std::endl;
             }
 
-            std::map<Glib::ustring, Glib::RefPtr<Gio::Menu>> submenus;
+            Inkscape::Util::StringMap<Glib::RefPtr<Gio::Menu>> submenus;
 
             for (auto &[ entry_id, submenu_name_list, entry_name ] : app->get_action_effect_data().give_all_data())
             {
@@ -236,7 +237,7 @@ void rebuild_menu (Glib::RefPtr<Gio::MenuModel>    menu, Glib::RefPtr<Gio::Menu>
         Glib::ustring target;
         Glib::VariantBase icon;
         Glib::ustring use_icon;
-        std::map<Glib::ustring, Glib::VariantBase> attributes;
+        Inkscape::Util::StringMap<Glib::VariantBase> attributes;
 
         auto attribute_iter = menu->iterate_item_attributes(i);
         while (attribute_iter->next()) {

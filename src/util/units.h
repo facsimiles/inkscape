@@ -20,20 +20,11 @@
 #include <2geom/coord.h>
 #include "svg/svg-length.h"
 
+#include "util/string-map.h"
+
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 
 #define DEFAULT_UNIT_NAME "mm";
-
-namespace std {
-template <>
-struct hash<Glib::ustring>
-{
-    std::size_t operator()(Glib::ustring const &s) const
-    {
-        return hash<std::string>()(s.raw());
-    }
-};
-} // namespace std
 
 #endif
 
@@ -154,7 +145,7 @@ public:
     UnitTable();
     virtual ~UnitTable();
 
-    typedef std::unordered_map<Glib::ustring, Unit> UnitMap;
+    typedef Util::StringMap<Unit> UnitMap;
     typedef std::unordered_map<unsigned, Unit*> UnitCodeMap;
 
     /** Add a new unit to the table */
