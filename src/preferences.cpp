@@ -60,7 +60,7 @@ public:
         _filter(std::move(filter))
     {}
     ~PrefNodeObserver() override = default;
-    void notifyAttributeChanged(XML::Node &node, GQuark name, Util::ptr_shared, Util::ptr_shared) override;
+    void notifyAttributeChanged(XML::Node &node, GQuark name, const char *, const char *) override;
 private:
     Observer &_observer;
     Glib::ustring const _filter;
@@ -319,10 +319,9 @@ bool Preferences::getLastError( Glib::ustring& primary, Glib::ustring& secondary
 std::vector<Preferences::Entry> Preferences::getAllEntries(Glib::ustring const &path)
 {
     std::vector<Entry> temp;
-    Inkscape::XML::Node *node = _getNode(path, false);
-    if (node) {
-        for (const auto & iter : node->attributeList()) {
-            temp.push_back( Entry(path + '/' + g_quark_to_string(iter.key), static_cast<void const*>(iter.value.pointer())) );
+    if (auto node = _getNode(path, false)) {
+        for (auto const &iter : node->attributeList()) {
+            temp.push_back(Entry(path + '/' + g_quark_to_string(iter.key), iter.value.pointer()));
         }
     }
     return temp;
@@ -337,8 +336,7 @@ std::vector<Preferences::Entry> Preferences::getAllEntries(Glib::ustring const &
 std::vector<Glib::ustring> Preferences::getAllDirs(Glib::ustring const &path)
 {
     std::vector<Glib::ustring> temp;
-    Inkscape::XML::Node *node = _getNode(path, false);
-    if (node) {
+    if (auto node = _getNode(path, false)) {
         for (Inkscape::XML::NodeSiblingIterator i = node->firstChild(); i; ++i) {
             if (i->attribute("id") == nullptr) {
                 continue;
@@ -354,6 +352,7 @@ std::vector<Glib::ustring> Preferences::getAllDirs(Glib::ustring const &path)
 Preferences::Entry const Preferences::getEntry(Glib::ustring const &pref_path)
 {
     gchar const *v;
+    //FIXME: not the best way
     _getRawValue(pref_path, v);
     return Entry(pref_path, v);
 }
@@ -476,8 +475,7 @@ void Preferences::mergeStyle(Glib::ustring const &pref_path, SPCSSAttr *style)
  */
 void Preferences::remove(Glib::ustring const &pref_path)
 {
-    auto it = cachedRawValue.find(pref_path.c_str());
-    if (it != cachedRawValue.end()) cachedRawValue.erase(it);
+    cachedRawValue.erase(pref_path.raw());
 
     Inkscape::XML::Node *node = _getNode(pref_path, false);
     if (node && node->parent()) {
@@ -538,7 +536,7 @@ Preferences::Observer::~Observer()
     prefs->removeObserver(*this);
 }
 
-void Preferences::PrefNodeObserver::notifyAttributeChanged(XML::Node &node, GQuark name, Util::ptr_shared, Util::ptr_shared new_value)
+void Preferences::PrefNodeObserver::notifyAttributeChanged(XML::Node &node, GQuark name, const char *, char const *new_value)
 {
     // filter out attributes we don't watch
     gchar const *attr_name = g_quark_to_string(name);
@@ -567,8 +565,7 @@ void Preferences::PrefNodeObserver::notifyAttributeChanged(XML::Node &node, GQua
             notify_path.append(attr_name);
         }
 
-        Entry const val = Preferences::_create_pref_value(notify_path, static_cast<void const*>(new_value.pointer()));
-        _observer.notify(val);
+        _observer.notify(Entry(notify_path, new_value));
     }
 }
 
@@ -714,13 +711,15 @@ Inkscape::XML::Node *Preferences::_getNode(Glib::ustring const &pref_key, bool c
 void Preferences::_getRawValue(Glib::ustring const &path, gchar const *&result)
 {
     // will return empty string if `path` was not in the cache yet
-    auto& cacheref = cachedRawValue[path.c_str()];
+    auto& cacheref = cachedRawValue[path.raw()];
 
     // check in cache first
     if (_initialized && !cacheref.empty()) {
         if (cacheref == RAWCACHE_CODE_NULL) {
             result = nullptr;
         } else {
+            //setting value memory into cachedRawValue which may be invalidated
+            //in the future?
             result = cacheref.c_str() + RAWCACHE_CODE_VALUE.length();
         }
         return;
@@ -760,7 +759,7 @@ void Preferences::_setRawValue(Glib::ustring const &path, Glib::ustring const &v
     // update cache first, so by the time notification change fires and observers are called,
     // they have access to current settings even if they watch a group
     if (_initialized) {
-        cachedRawValue[path.c_str()] = RAWCACHE_CODE_VALUE + value;
+        cachedRawValue[path.raw()] = RAWCACHE_CODE_VALUE + value;
     }
 
     // set the attribute
@@ -775,8 +774,9 @@ bool Preferences::_extractBool(Entry const &v)
 {
     if (v.cached_bool) return v.value_bool;
     v.cached_bool = true;
-    gchar const *s = static_cast<gchar const *>(v._value);
-    if ( !s[0] || !strcmp(s, "0") || !strcmp(s, "false") ) {
+    auto const &s = *v._value;
+    if (s.size() == 0 || s == "0" || s == "false") {
+        v.value_bool = false;
         return false;
     } else {
         v.value_bool = true;
@@ -788,11 +788,11 @@ int Preferences::_extractInt(Entry const &v)
 {
     if (v.cached_int) return v.value_int;
     v.cached_int = true;
-    gchar const *s = static_cast<gchar const *>(v._value);
-    if ( !strcmp(s, "true") ) {
+    auto const &s = *v._value;
+    if (s == "true") {
         v.value_int = 1;
         return true;
-    } else if ( !strcmp(s, "false") ) {
+    } else if ( s == "false") {
         v.value_int = 0;
         return false;
     } else {
@@ -802,12 +802,12 @@ int Preferences::_extractInt(Entry const &v)
         //       We should consider adding an unsigned integer type to preferences or use HTML colors where appropriate
         //       (the latter would breaks backwards compatibility, though)
         errno = 0;
-        val = (int)strtol(s, nullptr, 0);
+        val = static_cast<int>(strtol(s.c_str(), nullptr, 0));
         if (errno == ERANGE) {
             errno = 0;
-            val = (int)strtoul(s, nullptr, 0);
+            val = static_cast<int>(strtoul(s.c_str(), nullptr, 0));
             if (errno == ERANGE) {
-                g_warning("Integer preference out of range: '%s' (raw value: %s)", v._pref_path.c_str(), s);
+                g_warning("Integer preference out of range: '%s' (raw value: %s)", v._pref_path.c_str(), s.c_str());
                 val = 0;
             }
         }
@@ -821,15 +821,15 @@ unsigned int Preferences::_extractUInt(Entry const &v)
 {
     if (v.cached_uint) return v.value_uint;
     v.cached_uint = true;
-    gchar const *s = static_cast<gchar const *>(v._value);
+    auto const &s = *v._value;
 
     // Note: 'strtoul' can also read overflowed (i.e. negative) signed int values that we used to save before we
     //       had the unsigned type, so this is fully backwards compatible and can be replaced seamlessly
     unsigned int val = 0;
     errno = 0;
-    val = (unsigned int)strtoul(s, nullptr, 0);
+    val = static_cast<unsigned int>(strtoul(s.c_str(), nullptr, 0));
     if (errno == ERANGE) {
-        g_warning("Unsigned integer preference out of range: '%s' (raw value: %s)", v._pref_path.c_str(), s);
+        g_warning("Unsigned integer preference out of range: '%s' (raw value: %s)", v._pref_path.c_str(), s.c_str());
         val = 0;
     }
 
@@ -841,8 +841,8 @@ double Preferences::_extractDouble(Entry const &v)
 {
     if (v.cached_double) return v.value_double;
     v.cached_double = true;
-    gchar const *s = static_cast<gchar const *>(v._value);
-    v.value_double = g_ascii_strtod(s, nullptr);
+    auto const &s = *v._value;
+    v.value_double = g_ascii_strtod(s.c_str(), nullptr);
     return v.value_double;
 }
 
@@ -860,7 +860,7 @@ double Preferences::_extractDouble(Entry const &v, Glib::ustring const &requeste
 
 Glib::ustring Preferences::_extractString(Entry const &v)
 {
-    return Glib::ustring(static_cast<gchar const *>(v._value));
+    return Glib::ustring(*v._value);
 }
 
 Glib::ustring Preferences::_extractUnit(Entry const &v)
@@ -868,10 +868,10 @@ Glib::ustring Preferences::_extractUnit(Entry const &v)
     if (v.cached_unit) return v.value_unit;
     v.cached_unit = true;
     v.value_unit = "";
-    gchar const *str = static_cast<gchar const *>(v._value);
+    auto const &str = *v._value;
     gchar const *e;
-    g_ascii_strtod(str, (char **) &e);
-    if (e == str) {
+    g_ascii_strtod(str.c_str(), (char **) &e);
+    if (e == str.c_str()) {
         return "";
     }
 
@@ -888,7 +888,7 @@ guint32 Preferences::_extractColor(Entry const &v)
 {
     if (v.cached_color) return v.value_color;
     v.cached_color = true;
-    gchar const *s = static_cast<gchar const *>(v._value);
+    auto const &s = *v._value;
     std::istringstream hr(s);
     guint32 color;
     if (s[0] == '#') {
@@ -906,7 +906,7 @@ SPCSSAttr *Preferences::_extractStyle(Entry const &v)
     if (v.cached_style) return v.value_style;
     v.cached_style = true;
     SPCSSAttr *style = sp_repr_css_attr_new();
-    sp_repr_css_attr_add_from_string(style, static_cast<gchar const*>(v._value));
+    sp_repr_css_attr_add_from_string(style, v._value->c_str());
     v.value_style = style;
     return style;
 }
@@ -940,11 +940,6 @@ void Preferences::_reportError(Glib::ustring const &msg, Glib::ustring const &se
     if (_errorHandler) {
         _errorHandler->handleError(msg, secondary);
     }
-}
-
-Preferences::Entry const Preferences::_create_pref_value(Glib::ustring const &path, void const *ptr)
-{
-    return Entry(path, ptr);
 }
 
 void Preferences::setErrorHandler(ErrorReporter* handler)

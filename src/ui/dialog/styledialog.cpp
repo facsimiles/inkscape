@@ -112,29 +112,25 @@ namespace Dialog {
 
 // Keeps a watch on style element
 class StyleDialog::NodeObserver : public Inkscape::XML::NodeObserver {
-  public:
+    StyleDialog *_styledialog;
+public:
     NodeObserver(StyleDialog *styledialog)
         : _styledialog(styledialog)
     {
         g_debug("StyleDialog::NodeObserver: Constructor");
     };
 
-    void notifyContentChanged(Inkscape::XML::Node &node, Inkscape::Util::ptr_shared old_content,
-                              Inkscape::Util::ptr_shared new_content) override;
+    void notifyContentChanged(Inkscape::XML::Node & /*node*/,
+                              char const */*old_content*/,
+                              char const */*new_content*/) override
+    {
 
-    StyleDialog *_styledialog;
+        g_debug("StyleDialog::NodeObserver::notifyContentChanged");
+        _styledialog->_updating = false;
+        _styledialog->readStyleElement();
+    }
 };
 
-
-void StyleDialog::NodeObserver::notifyContentChanged(Inkscape::XML::Node & /*node*/,
-                                                     Inkscape::Util::ptr_shared /*old_content*/,
-                                                     Inkscape::Util::ptr_shared /*new_content*/)
-{
-
-    g_debug("StyleDialog::NodeObserver::notifyContentChanged");
-    _styledialog->_updating = false;
-    _styledialog->readStyleElement();
-}
 
 
 // Keeps a watch for new/removed/changed nodes
@@ -158,8 +154,8 @@ class StyleDialog::NodeWatcher : public Inkscape::XML::NodeObserver {
     {
             _styledialog->_nodeRemoved(child);
     }
-    void notifyAttributeChanged(Inkscape::XML::Node &node, GQuark qname, Util::ptr_shared /*old_value*/,
-                                Util::ptr_shared /*new_value*/) override
+    void notifyAttributeChanged(Inkscape::XML::Node &node, GQuark qname, char const */*old_value*/,
+                                char const */*new_value*/) override
     {
         static GQuark const CODE_id = g_quark_from_static_string("id");
         static GQuark const CODE_class = g_quark_from_static_string("class");

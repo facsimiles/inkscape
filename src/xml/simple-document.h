@@ -54,12 +54,12 @@ public:
                                  Node *old_prev, Node *new_prev) override;
 
     void notifyContentChanged(Node &node,
-                              Util::ptr_shared old_content,
-                              Util::ptr_shared new_content) override;
+                              char const *old_content,
+                              char const *new_content) override;
 
     void notifyAttributeChanged(Node &node, GQuark name,
-                                Util::ptr_shared old_value,
-                                Util::ptr_shared new_value) override;
+                                char const *old_value,
+                                char const *new_value) override;
 
     void notifyElementNameChanged(Node& node, GQuark old_name, GQuark new_name) override;
 

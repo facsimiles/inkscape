@@ -107,7 +107,7 @@ public:
     void notifyChildAdded(Node &, Node &, Node *) override;
     void notifyChildRemoved(Node &, Node &, Node *) override;
     void notifyChildOrderChanged(Node &, Node &child, Node *, Node *) override;
-    void notifyAttributeChanged(Node &, GQuark, Util::ptr_shared, Util::ptr_shared) override;
+    void notifyAttributeChanged(Node &, GQuark, const char *, const char *) override;
 
     /// Associate this watcher with a tree row
     void setRow(const Gtk::TreeModel::Path &path)
@@ -552,7 +552,7 @@ void ObjectWatcher::notifyChildOrderChanged( Node &parent, Node &child, Node */*
 
     moveChild(child, new_prev);
 }
-void ObjectWatcher::notifyAttributeChanged( Node &node, GQuark name, Util::ptr_shared /*old_value*/, Util::ptr_shared /*new_value*/ )
+void ObjectWatcher::notifyAttributeChanged( Node &node, GQuark name, char const */*old_value*/, char const */*new_value*/ )
 {
     assert(this->node == &node);
 
@@ -566,7 +566,8 @@ void ObjectWatcher::notifyAttributeChanged( Node &node, GQuark name, Util::ptr_s
     // examples of not-so-obvious cases:
     // - width/height: Can change type "circle" to an "ellipse"
 
-    static std::set<GQuark> const excluded{
+    // NOTE: convert to an std::set or std::unordered_set if it holds more than a few values
+    static std::vector<GQuark> const excluded {
         g_quark_from_static_string("transform"),
         g_quark_from_static_string("x"),
         g_quark_from_static_string("y"),
@@ -574,7 +575,8 @@ void ObjectWatcher::notifyAttributeChanged( Node &node, GQuark name, Util::ptr_s
         g_quark_from_static_string("sodipodi:nodetypes"),
     };
 
-    if (excluded.count(name)) {
+    if (auto const it = std::find(excluded.begin(), excluded.end(), name);
+        it != excluded.end()) {
         return;
     }
 

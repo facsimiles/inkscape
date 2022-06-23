@@ -14,12 +14,13 @@
 #define SEEN_INKSCAPE_XML_SP_REPR_ACTION_H
 
 typedef unsigned int GQuark;
-#include <glibmm/ustring.h>
 
 #include <iterator>
-#include "util/share.h"
-#include "util/forward-pointer-iterator.h"
+
+#include "gc-finalized.h"
 #include "inkgc/gc-managed.h"
+#include "util/forward-pointer-iterator.h"
+#include "util/optstr.h"
 #include "xml/node.h"
 
 namespace Inkscape {
@@ -159,21 +160,29 @@ private:
 /**
  * @brief Object representing attribute change
  */
-class EventChgAttr : public Event {
+class EventChgAttr
+    : public Event
+    , GC::Finalized
+{
 public:
     EventChgAttr(Node *repr, GQuark k,
-                 Inkscape::Util::ptr_shared ov,
-                 Inkscape::Util::ptr_shared nv,
+                 char const *ov,
+                 char const *nv,
                  Event *next)
-    : Event(repr, next), key(k),
-      oldval(ov), newval(nv) {}
+        : Event(repr, next)
+        , key(k)
+        , oldval(Inkscape::Util::to_opt(ov))
+        , newval(Inkscape::Util::to_opt(nv))
+    {
+    }
 
+private:
     /// GQuark corresponding to the changed attribute's name
     GQuark key;
     /// Value of the attribute before the change
-    Inkscape::Util::ptr_shared oldval;
+    std::optional<std::string> oldval;
     /// Value of the attribute after the change
-    Inkscape::Util::ptr_shared newval;
+    std::optional<std::string> newval;
 
 private:
     Event *_optimizeOne() override;
@@ -184,18 +193,26 @@ private:
 /**
  * @brief Object representing content change
  */
-class EventChgContent : public Event {
+class EventChgContent
+    : public Event
+    , GC::Finalized
+{
 public:
     EventChgContent(Node *repr,
-                    Inkscape::Util::ptr_shared ov,
-                    Inkscape::Util::ptr_shared nv,
+                    char const *ov,
+                    char const *nv,
                     Event *next)
-    : Event(repr, next), oldval(ov), newval(nv) {}
+        : Event(repr, next)
+        , oldval(Inkscape::Util::to_opt(ov))
+        , newval(Inkscape::Util::to_opt(nv))
+    {
+    }
 
+private:
     /// Content of the node before the change
-    Inkscape::Util::ptr_shared oldval;
+    std::optional<std::string> oldval;
     /// Content of the node after the change
-    Inkscape::Util::ptr_shared newval;
+    std::optional<std::string> newval;
 
 private:
     Event *_optimizeOne() override;

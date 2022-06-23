@@ -78,7 +78,7 @@ public:
     }
 
     void notifyAttributeChanged(Inkscape::XML::Node &/*node*/, GQuark attr,
-        Util::ptr_shared, Util::ptr_shared) override
+        const char *, const char *) override
     {
         // do nothing if blocked
         if (_blocked) return;

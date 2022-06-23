@@ -43,7 +43,6 @@ using Inkscape::IO::Writer;
 using Inkscape::XML::Document;
 using Inkscape::XML::SimpleDocument;
 using Inkscape::XML::Node;
-using Inkscape::XML::AttributeRecord;
 using Inkscape::XML::AttributeVector;
 using Inkscape::XML::rebase_href_attrs;
 

@@ -20,6 +20,7 @@
 #include <glibmm/ustring.h>
 #include <map>
 #include <memory>
+#include <optional>
 #include <unordered_map>
 #include <utility>
 #include <vector>
@@ -148,7 +149,7 @@ public:
          *
          * @return If false, the default value will be returned by the getters.
          */
-        bool isValid() const { return _value != nullptr; }
+        bool isValid() const { return _value.has_value(); }
 
         /**
          * Interpret the preference as a Boolean value.
@@ -252,12 +253,15 @@ public:
          */
         Glib::ustring getEntryName() const;
     private:
-        Entry(Glib::ustring path, void const *v)
+        Entry(Glib::ustring path, char const *v)
             : _pref_path(std::move(path))
-            , _value(v) {}
+        {
+            if (v)
+                _value = std::make_optional<std::string>(v);
+        }
 
         Glib::ustring _pref_path;
-        void const *_value = nullptr;
+        std::optional<std::string> _value;
 
         mutable bool value_bool = false;
         mutable int value_int = 0;
@@ -617,7 +621,7 @@ protected:
     /* helper methods used by Entry
      * This will enable using the same Entry class with different backends.
      * For now, however, those methods are not virtual. These methods assume
-     * that v._value is not NULL
+     * that v._value has a value
      */
     bool _extractBool(Entry const &v);
     int _extractInt(Entry const &v);
@@ -660,13 +664,12 @@ private:
     _ObsMap _observer_map;
 
     // privilege escalation methods for PrefNodeObserver
-    static Entry const _create_pref_value(Glib::ustring const &, void const *ptr);
     static _ObserverData *_get_pref_observer_data(Observer &o) { return o._data.get(); }
 
     static Preferences *_instance;
 
-friend class PrefNodeObserver;
-friend class Entry;
+    friend class PrefNodeObserver;
+    friend class Entry;
 };
 
 typedef std::unique_ptr<Preferences::PreferencesObserver> PrefObserver;

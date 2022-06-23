@@ -21,7 +21,9 @@ namespace XML {
 /**
  * @brief Processing instruction node, e.g. &lt;?xml version="1.0" encoding="utf-8" standalone="no"?&gt;
  */
-struct PINode : public SimpleNode {
+struct PINode
+    : public SimpleNode
+{
     PINode(GQuark target, Util::ptr_shared content, Document *doc)
     : SimpleNode(target, doc)
     {
