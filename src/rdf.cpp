@@ -84,11 +84,11 @@ Bag example:
 */
 
 // clang-format off
-struct rdf_double_t rdf_license_empty [] = {
+static struct rdf_double_t rdf_license_empty [] = {
     { nullptr, nullptr }
 };
 
-struct rdf_double_t rdf_license_cc_a [] = {
+static struct rdf_double_t rdf_license_cc_a [] = {
     { "cc:permits", "http://creativecommons.org/ns#Reproduction", },
     { "cc:permits", "http://creativecommons.org/ns#Distribution", },
     { "cc:requires", "http://creativecommons.org/ns#Notice", },
@@ -97,7 +97,7 @@ struct rdf_double_t rdf_license_cc_a [] = {
     { nullptr, nullptr }
 };
 
-struct rdf_double_t rdf_license_cc_a_sa [] = {
+static struct rdf_double_t rdf_license_cc_a_sa [] = {
     { "cc:permits", "http://creativecommons.org/ns#Reproduction", },
     { "cc:permits", "http://creativecommons.org/ns#Distribution", },
     { "cc:requires", "http://creativecommons.org/ns#Notice", },
@@ -107,7 +107,7 @@ struct rdf_double_t rdf_license_cc_a_sa [] = {
     { nullptr, nullptr }
 };
 
-struct rdf_double_t rdf_license_cc_a_nd [] = {
+static struct rdf_double_t rdf_license_cc_a_nd [] = {
     { "cc:permits", "http://creativecommons.org/ns#Reproduction", },
     { "cc:permits", "http://creativecommons.org/ns#Distribution", },
     { "cc:requires", "http://creativecommons.org/ns#Notice", },
@@ -115,7 +115,7 @@ struct rdf_double_t rdf_license_cc_a_nd [] = {
     { nullptr, nullptr }
 };
 
-struct rdf_double_t rdf_license_cc_a_nc [] = {
+static struct rdf_double_t rdf_license_cc_a_nc [] = {
     { "cc:permits", "http://creativecommons.org/ns#Reproduction", },
     { "cc:permits", "http://creativecommons.org/ns#Distribution", },
     { "cc:requires", "http://creativecommons.org/ns#Notice", },
@@ -125,7 +125,7 @@ struct rdf_double_t rdf_license_cc_a_nc [] = {
     { nullptr, nullptr }
 };
 
-struct rdf_double_t rdf_license_cc_a_nc_sa [] = {
+static struct rdf_double_t rdf_license_cc_a_nc_sa [] = {
     { "cc:permits", "http://creativecommons.org/ns#Reproduction", },
     { "cc:permits", "http://creativecommons.org/ns#Distribution", },
     { "cc:requires", "http://creativecommons.org/ns#Notice", },
@@ -136,7 +136,7 @@ struct rdf_double_t rdf_license_cc_a_nc_sa [] = {
     { nullptr, nullptr }
 };
 
-struct rdf_double_t rdf_license_cc_a_nc_nd [] = {
+static struct rdf_double_t rdf_license_cc_a_nc_nd [] = {
     { "cc:permits", "http://creativecommons.org/ns#Reproduction", },
     { "cc:permits", "http://creativecommons.org/ns#Distribution", },
     { "cc:requires", "http://creativecommons.org/ns#Notice", },
@@ -145,14 +145,14 @@ struct rdf_double_t rdf_license_cc_a_nc_nd [] = {
     { nullptr, nullptr }
 };
 
-struct rdf_double_t rdf_license_pd [] = {
+static struct rdf_double_t rdf_license_pd [] = {
     { "cc:permits", "http://creativecommons.org/ns#Reproduction", },
     { "cc:permits", "http://creativecommons.org/ns#Distribution", },
     { "cc:permits", "http://creativecommons.org/ns#DerivativeWorks", },
     { nullptr, nullptr }
 };
 
-struct rdf_double_t rdf_license_freeart [] = {
+static struct rdf_double_t rdf_license_freeart [] = {
     { "cc:permits", "http://creativecommons.org/ns#Reproduction", },
     { "cc:permits", "http://creativecommons.org/ns#Distribution", },
     { "cc:permits", "http://creativecommons.org/ns#DerivativeWorks", },
@@ -162,7 +162,7 @@ struct rdf_double_t rdf_license_freeart [] = {
     { nullptr, nullptr }
 };
 
-struct rdf_double_t rdf_license_ofl [] = {
+static struct rdf_double_t rdf_license_ofl [] = {
     { "cc:permits", "http://scripts.sil.org/pub/OFL/Reproduction", },
     { "cc:permits", "http://scripts.sil.org/pub/OFL/Distribution", },
     { "cc:permits", "http://scripts.sil.org/pub/OFL/Embedding", },

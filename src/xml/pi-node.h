@@ -24,13 +24,13 @@ namespace XML {
 struct PINode
     : public SimpleNode
 {
-    PINode(GQuark target, Util::ptr_shared content, Document *doc)
-    : SimpleNode(target, doc)
+    PINode(GQuark target, char const *content, Document *doc)
+        : SimpleNode(target, doc)
     {
         setContent(content);
     }
     PINode(PINode const &other, Document *doc)
-    : SimpleNode(other, doc) {}
+        : SimpleNode(other, doc) {}
 
     Inkscape::XML::NodeType type() const override { return Inkscape::XML::NodeType::PI_NODE; }
 

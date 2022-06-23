@@ -53,19 +53,19 @@ Node *SimpleDocument::createElement(char const *name) {
 }
 
 Node *SimpleDocument::createTextNode(char const *content) {
-    return new TextNode(Util::share_string(content), this);
+    return createTextNode(content, false);
 }
 
 Node *SimpleDocument::createTextNode(char const *content, bool const is_CData) {
-    return new TextNode(Util::share_string(content), this, is_CData);
+    return new TextNode(content, this, is_CData);
 }
 
 Node *SimpleDocument::createComment(char const *content) {
-    return new CommentNode(Util::share_string(content), this);
+    return new CommentNode(content, this);
 }
 
 Node *SimpleDocument::createPI(char const *target, char const *content) {
-    return new PINode(g_quark_from_string(target), Util::share_string(content), this);
+    return new PINode(g_quark_from_string(target), content, this);
 }
 
 void SimpleDocument::notifyChildAdded(Node &parent,

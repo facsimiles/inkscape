@@ -21,19 +21,15 @@ namespace XML {
 /**
  * @brief Text node, e.g. "Some text" in &lt;group&gt;Some text&lt;/group&gt;
  */
-struct TextNode : public SimpleNode {
-    TextNode(Util::ptr_shared content, Document *doc)
-    : SimpleNode(g_quark_from_static_string("string"), doc)
-    {
-        setContent(content);
-        _is_CData = false;
-    }
-    TextNode(Util::ptr_shared content, Document *doc, bool is_CData)
-    : SimpleNode(g_quark_from_static_string("string"), doc)
+struct TextNode : public SimpleNode
+{
+    TextNode(const char *content, Document *doc, bool is_CData = false)
+        : SimpleNode(g_quark_from_static_string("string"), doc)
     {
         setContent(content);
         _is_CData = is_CData;
     }
+
     TextNode(TextNode const &other, Document *doc)
     : SimpleNode(other, doc) {
       _is_CData = other._is_CData;
