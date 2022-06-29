@@ -41,10 +41,6 @@ static void migrateDetails( Inkscape::XML::Document *from, Inkscape::XML::Docume
 
 static Inkscape::XML::Document *migrateFromDoc = nullptr;
 
-// cachedRawValue prefixes for encoding nullptr
-static Glib::ustring const RAWCACHE_CODE_NULL {"N"};
-static Glib::ustring const RAWCACHE_CODE_VALUE {"V"};
-
 // private inner class definition
 
 /**
@@ -55,9 +51,9 @@ static Glib::ustring const RAWCACHE_CODE_VALUE {"V"};
  */
 class Preferences::PrefNodeObserver : public XML::NodeObserver {
 public:
-    PrefNodeObserver(Observer &o, Glib::ustring filter) :
-        _observer(o),
-        _filter(std::move(filter))
+    PrefNodeObserver(Observer &o, Glib::ustring filter)
+        : _observer(o)
+        , _filter(std::move(filter))
     {}
     ~PrefNodeObserver() override = default;
     void notifyAttributeChanged(XML::Node &node, GQuark name, const char *, const char *) override;
@@ -351,10 +347,8 @@ std::vector<Glib::ustring> Preferences::getAllDirs(Glib::ustring const &path)
 
 Preferences::Entry const Preferences::getEntry(Glib::ustring const &pref_path)
 {
-    gchar const *v;
-    //FIXME: not the best way
-    _getRawValue(pref_path, v);
-    return Entry(pref_path, v);
+    char const *val = _getRawValue(pref_path);
+    return Entry(pref_path, val);
 }
 
 // setter methods
@@ -598,22 +592,21 @@ XML::Node *Preferences::_findObserverNode(Glib::ustring const &pref_path, Glib::
 void Preferences::addObserver(Observer &o)
 {
     // prevent adding the same observer twice
-    if ( _observer_map.find(&o) == _observer_map.end() ) {
-        Glib::ustring node_key, attr_key;
-        Inkscape::XML::Node *node;
-        node = _findObserverNode(o.observed_path, node_key, attr_key, true);
-        if (node) {
-            // set additional data
-            o._data.reset(new _ObserverData(node, !attr_key.empty()));
+    if ( _observer_map.find(&o) == _observer_map.end() )
+        return;
 
-            _observer_map[&o].reset(new PrefNodeObserver(o, attr_key));
+    Glib::ustring node_key, attr_key;
+    if (auto node = _findObserverNode(o.observed_path, node_key, attr_key, true)) {
+        // set additional data
+        o._data.reset(new _ObserverData(node, !attr_key.empty()));
 
-            // if we watch a single pref, we want to receive notifications only for a single node
-            if (o._data->_is_attr) {
-                node->addObserver( *(_observer_map[&o]) );
-            } else {
-                node->addSubtreeObserver( *(_observer_map[&o]) );
-            }
+        _observer_map[&o].reset(new PrefNodeObserver(o, attr_key));
+
+        // if we watch a single pref, we want to receive notifications only for a single node
+        if (o._data->_is_attr) {
+            node->addObserver( *(_observer_map[&o]) );
+        } else {
+            node->addSubtreeObserver( *(_observer_map[&o]) );
         }
     }
 }
@@ -708,21 +701,19 @@ Inkscape::XML::Node *Preferences::_getNode(Glib::ustring const &pref_key, bool c
     return node;
 }
 
-void Preferences::_getRawValue(Glib::ustring const &path, gchar const *&result)
+char const *Preferences::_getRawValue(Glib::ustring const &path)
 {
-    // will return empty string if `path` was not in the cache yet
-    auto& cacheref = cachedRawValue[path.raw()];
 
-    // check in cache first
-    if (_initialized && !cacheref.empty()) {
-        if (cacheref == RAWCACHE_CODE_NULL) {
-            result = nullptr;
-        } else {
-            //setting value memory into cachedRawValue which may be invalidated
-            //in the future?
-            result = cacheref.c_str() + RAWCACHE_CODE_VALUE.length();
+    if (_initialized){
+        // check in cache first
+        auto it = cachedRawValue.find(path.raw());
+        if (it != cachedRawValue.end()) {
+            if (it->second) {
+                return it->second->c_str();
+            } else {
+                return nullptr;
+            }
         }
-        return;
     }
 
     // create node and attribute keys
@@ -730,24 +721,23 @@ void Preferences::_getRawValue(Glib::ustring const &path, gchar const *&result)
     _keySplit(path, node_key, attr_key);
 
     // retrieve the attribute
-    Inkscape::XML::Node *node = _getNode(node_key, false);
-    if ( node == nullptr ) {
-        result = nullptr;
-    } else {
+    char const *result = nullptr;
+    if (auto node = _getNode(node_key, false)) {
         gchar const *attr = node->attribute(attr_key.c_str());
-        if ( attr == nullptr ) {
-            result = nullptr;
-        } else {
+        if (attr) {
             result = attr;
         }
     }
 
-    if (_initialized && result) {
-        cacheref = RAWCACHE_CODE_VALUE;
-        cacheref += result;
-    } else {
-        cacheref = RAWCACHE_CODE_NULL;
+    if (_initialized) {
+        if (result) {
+            cachedRawValue[path.raw()] = std::make_optional<Glib::ustring>(result);
+        } else {
+            cachedRawValue[path.raw()] = {};
+        }
     }
+
+    return result;
 }
 
 void Preferences::_setRawValue(Glib::ustring const &path, Glib::ustring const &value)
@@ -759,7 +749,7 @@ void Preferences::_setRawValue(Glib::ustring const &path, Glib::ustring const &v
     // update cache first, so by the time notification change fires and observers are called,
     // they have access to current settings even if they watch a group
     if (_initialized) {
-        cachedRawValue[path.raw()] = RAWCACHE_CODE_VALUE + value;
+        cachedRawValue[path.raw()] = value;
     }
 
     // set the attribute
@@ -772,29 +762,24 @@ void Preferences::_setRawValue(Glib::ustring const &path, Glib::ustring const &v
 
 bool Preferences::_extractBool(Entry const &v)
 {
-    if (v.cached_bool) return v.value_bool;
-    v.cached_bool = true;
+    if (v.bool_cache) return *v.bool_cache;
     auto const &s = *v._value;
     if (s.size() == 0 || s == "0" || s == "false") {
-        v.value_bool = false;
-        return false;
+        v.bool_cache = false;
     } else {
-        v.value_bool = true;
-        return true;
+        v.bool_cache = true;
     }
+    return *v.bool_cache;
 }
 
 int Preferences::_extractInt(Entry const &v)
 {
-    if (v.cached_int) return v.value_int;
-    v.cached_int = true;
+    if (v.int_cache) return *v.int_cache;
     auto const &s = *v._value;
     if (s == "true") {
-        v.value_int = 1;
-        return true;
+        v.int_cache = 1;
     } else if ( s == "false") {
-        v.value_int = 0;
-        return false;
+        v.int_cache = 0;
     } else {
         int val = 0;
 
@@ -812,15 +797,14 @@ int Preferences::_extractInt(Entry const &v)
             }
         }
 
-        v.value_int = val;
-        return v.value_int;
+        v.int_cache = val;
     }
+    return *v.int_cache;
 }
 
 unsigned int Preferences::_extractUInt(Entry const &v)
 {
-    if (v.cached_uint) return v.value_uint;
-    v.cached_uint = true;
+    if (v.uint_cache) return *v.uint_cache;
     auto const &s = *v._value;
 
     // Note: 'strtoul' can also read overflowed (i.e. negative) signed int values that we used to save before we
@@ -833,17 +817,16 @@ unsigned int Preferences::_extractUInt(Entry const &v)
         val = 0;
     }
 
-    v.value_uint = val;
-    return v.value_uint;
+    v.uint_cache = val;
+    return *v.uint_cache;
 }
 
 double Preferences::_extractDouble(Entry const &v)
 {
-    if (v.cached_double) return v.value_double;
-    v.cached_double = true;
+    if (v.double_cache) return *v.double_cache;
     auto const &s = *v._value;
-    v.value_double = g_ascii_strtod(s.c_str(), nullptr);
-    return v.value_double;
+    v.double_cache = g_ascii_strtod(s.c_str(), nullptr);
+    return *v.double_cache;
 }
 
 double Preferences::_extractDouble(Entry const &v, Glib::ustring const &requested_unit)
@@ -860,36 +843,34 @@ double Preferences::_extractDouble(Entry const &v, Glib::ustring const &requeste
 
 Glib::ustring Preferences::_extractString(Entry const &v)
 {
-    return Glib::ustring(*v._value);
+    return *v._value;
 }
 
 Glib::ustring Preferences::_extractUnit(Entry const &v)
 {
-    if (v.cached_unit) return v.value_unit;
-    v.cached_unit = true;
-    v.value_unit = "";
+    if (v.unit_cache) return *v.unit_cache;
     auto const &str = *v._value;
     gchar const *e;
     g_ascii_strtod(str.c_str(), (char **) &e);
     if (e == str.c_str()) {
-        return "";
+        v.unit_cache = "";
+        return *v.unit_cache;
     }
 
     if (e[0] == 0) {
         /* Unitless */
-        return "";
+        v.unit_cache = "";
     } else {
-        v.value_unit = Glib::ustring(e);
-        return v.value_unit;
+        v.unit_cache = e;
     }
+    return *v.unit_cache;
 }
 
 guint32 Preferences::_extractColor(Entry const &v)
 {
-    if (v.cached_color) return v.value_color;
-    v.cached_color = true;
+    if (v.color_cache) return *v.color_cache;
     auto const &s = *v._value;
-    std::istringstream hr(s);
+    std::istringstream hr(s.raw());
     guint32 color;
     if (s[0] == '#') {
         hr.ignore(1);
@@ -897,18 +878,17 @@ guint32 Preferences::_extractColor(Entry const &v)
     } else {
         hr >> color;
     }
-    v.value_color = color;
-    return color;
+    v.color_cache = color;
+    return *v.color_cache;
 }
 
 SPCSSAttr *Preferences::_extractStyle(Entry const &v)
 {
-    if (v.cached_style) return v.value_style;
-    v.cached_style = true;
+    if (v.style_cache) return *v.style_cache;
     SPCSSAttr *style = sp_repr_css_attr_new();
     sp_repr_css_attr_add_from_string(style, v._value->c_str());
-    v.value_style = style;
-    return style;
+    v.style_cache = style;
+    return *v.style_cache;
 }
 
 SPCSSAttr *Preferences::_extractInheritedStyle(Entry const &v)

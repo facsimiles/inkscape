@@ -257,28 +257,19 @@ public:
             : _pref_path(std::move(path))
         {
             if (v)
-                _value = std::make_optional<std::string>(v);
+                _value = std::make_optional<Glib::ustring>(v);
         }
 
         Glib::ustring _pref_path;
-        std::optional<std::string> _value;
+        std::optional<Glib::ustring> _value;
 
-        mutable bool value_bool = false;
-        mutable int value_int = 0;
-        mutable unsigned int value_uint = 0;
-        mutable double value_double = 0.;
-        mutable Glib::ustring value_unit;
-        mutable guint32 value_color = 0;
-        mutable SPCSSAttr* value_style = nullptr;
-
-        mutable bool cached_bool = false;
-        mutable bool cached_point = false;
-        mutable bool cached_int = false;
-        mutable bool cached_uint = false;
-        mutable bool cached_double = false;
-        mutable bool cached_unit = false;
-        mutable bool cached_color = false;
-        mutable bool cached_style = false;
+        mutable std::optional<bool> bool_cache;
+        mutable std::optional<int> int_cache;
+        mutable std::optional<unsigned int> uint_cache;
+        mutable std::optional<double> double_cache;
+        mutable std::optional<Glib::ustring> unit_cache;
+        mutable std::optional<guint32> color_cache;
+        mutable std::optional<SPCSSAttr *> style_cache;
     };
 
     // disable copying
@@ -639,7 +630,7 @@ private:
     ~Preferences();
     void _loadDefaults();
     void _load();
-    void _getRawValue(Glib::ustring const &path, gchar const *&result);
+    char const *_getRawValue(Glib::ustring const &path);
     void _setRawValue(Glib::ustring const &path, Glib::ustring const &value);
     void _reportError(Glib::ustring const &, Glib::ustring const &);
     void _keySplit(Glib::ustring const &pref_path, Glib::ustring &node_key, Glib::ustring &attr_key);
@@ -654,7 +645,7 @@ private:
     bool _writable = false; ///< Will the preferences be saved at exit?
     bool _hasError = false; ///< Indication that some error has occurred;
     bool _initialized = false; ///< Is this instance fully initialized? Caching should be avoided before.
-    std::unordered_map<std::string, Glib::ustring> cachedRawValue;
+    std::unordered_map<std::string, std::optional<Glib::ustring>> cachedRawValue;
 
     /// Wrapper class for XML node observers
     class PrefNodeObserver;
