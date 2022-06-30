@@ -10,9 +10,9 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <glibmm/i18n.h>
-
 #include "sp-page.h"
+
+#include <glibmm/i18n.h>
 
 #include "attributes.h"
 #include "desktop.h"
@@ -367,8 +367,7 @@ void SPPage::swapPage(SPPage *other, bool with_objects)
     // Swapping with the viewport page must be handled gracefully.
     if (this->isViewportPage()) {
         auto other_rect = other->getDesktopRect();
-        auto new_rect = Geom::Rect(Geom::Point(0, 0),
-            Geom::Point(other_rect.width(), other_rect.height()));
+        auto new_rect = Geom::Rect(Geom::Point(0, 0), Geom::Point(other_rect.width(), other_rect.height()));
         this->document->fitToRect(new_rect, false);
     } else if (other->isViewportPage()) {
         other->swapPage(this, with_objects);
@@ -384,7 +383,7 @@ void SPPage::swapPage(SPPage *other, bool with_objects)
 void SPPage::update(SPCtx * /*ctx*/, unsigned int /*flags*/)
 {
     // This is manual because this is not an SPItem, but it's own visual identity.
-    _canvas_item->update(getDesktopRect(), this->label());
+    _canvas_item->update(getDesktopRect(), this->getLabel().c_str());
 }
 
 /**
