@@ -89,6 +89,10 @@
 /* Build in libwpg */
 #cmakedefine WITH_LIBWPG 1
 
+/* Build in libtesseract-dev */
+/* Build in tesseract-ocr */
+#cmakedefine WITH_TESSERACT 1
+
 /* Build in libreadline */
 #cmakedefine WITH_GNU_READLINE 1
 

@@ -21,7 +21,7 @@ set(extension_SRC
 	implementation/xslt.cpp
 	implementation/script.cpp
 
-	internal/bluredge.cpp
+	internal/bluredge.cpp	
 	internal/cairo-ps-out.cpp
 	internal/cairo-render-context.cpp
 	internal/cairo-renderer.cpp
@@ -204,6 +204,13 @@ if(WITH_LIBWPG)
 	list(APPEND extension_SRC
 		internal/wpg-input.cpp
 		internal/wpg-input.h
+	)
+endif()
+
+if(WITH_TESSERACT)
+	list(APPEND extension_SRC
+		internal/text-recognition.cpp
+		internal/text-recognition.h
 	)
 endif()
 

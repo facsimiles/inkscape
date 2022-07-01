@@ -79,7 +79,10 @@ $ARCH-libwpg \
 $ARCH-gtksourceview5 \
 $ARCH-graphicsmagick \
 $ARCH-libjxl \
-$ARCH-enchant
+$ARCH-enchant \
+$ARCH-leptonica \
+$ARCH-libarchive \
+$ARCH-tesseract-ocr
 
 # install Python and modules used by Inkscape
 eval pacman -S $PACMAN_OPTIONS \
