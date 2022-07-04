@@ -131,6 +131,7 @@ ${_build_dir}/share/templates/templates.h
 ../src/extension/internal/template-screen.cpp
 ../src/extension/internal/template-social.cpp
 ../src/extension/internal/template-video.cpp
+../src/extension/internal/text-recognition.cpp
 ../src/extension/internal/vsd-input.cpp
 ../src/extension/internal/wmf-inout.cpp
 ../src/extension/internal/wpg-input.cpp
