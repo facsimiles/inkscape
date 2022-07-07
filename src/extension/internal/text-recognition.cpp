@@ -37,15 +37,41 @@ bool DetectText::load(Inkscape::Extension::Extension * /*module*/)
     return TRUE;
 }
 
-Gtk::Widget *DetectText::updateGUI(std::string detectedtext)
+Gtk::Widget *DetectText::textWidget()
 {
-    static Gtk::Label *detectedtextlabel = Gtk::manage(new Gtk::Label("", Gtk::ALIGN_START));
-    detectedtextlabel->set_label(detectedtext);
+    static Gtk::Label *detectedtextlabel =
+        Gtk::manage(new Gtk::Label("The Detected Text will appear here", Gtk::ALIGN_START));
     return detectedtextlabel;
 }
 
+Gtk::Widget *DetectText::languageWidget()
+{
+    static Gtk::ComboBoxText *detectedtextlabel = Gtk::manage(new Gtk::ComboBoxText());
+    return detectedtextlabel;
+}
+
+void DetectText::loadLanguages()
+{
+    tesseract::TessBaseAPI *tess = new tesseract::TessBaseAPI();
+    if (tess->Init(NULL, "eng")) {
+        std::cerr << "Could not initialize tesseract!" << std::endl;
+        return;
+    }
+    GenericVector<STRING> languages;
+    tess->GetAvailableLanguagesAsVector(&languages);
+    Gtk::ComboBoxText *languageMenu = dynamic_cast<Gtk::ComboBoxText *>(languageWidget());
+    int languageCount = languages.size();
+    for (int i = 0; i < languageCount; i++) {
+        languageMenu->append(languages[i].string());
+    }
+    languageMenu->set_active(0);
+    tess->End();
+    delete tess;
+    return;
+}
+
 void DetectText::effect(Inkscape::Extension::Effect *module, Inkscape::UI::View::View *view,
-                        Inkscape::Extension::Implementation::ImplementationDocumentCache *docCache)
+                        Inkscape::Extension::Implementation::ImplementationDocumentCache * /*docCache*/)
 {
     auto desktop = dynamic_cast<SPDesktop *>(view);
     if (!desktop) {
@@ -53,9 +79,10 @@ void DetectText::effect(Inkscape::Extension::Effect *module, Inkscape::UI::View:
         return;
     }
     Inkscape::Selection *selection = desktop->getSelection();
-
     std::vector<SPItem *> items(selection->items().begin(), selection->items().end());
     selection->clear();
+
+    Gtk::ComboBoxText *languageMenu = dynamic_cast<Gtk::ComboBoxText *>(languageWidget());
     std::string detectedtext = "";
 
     for (auto spitem : items) {
@@ -65,7 +92,7 @@ void DetectText::effect(Inkscape::Extension::Effect *module, Inkscape::UI::View:
 
             tesseract::TessBaseAPI *tess = new tesseract::TessBaseAPI();
             char *text;
-            if (tess->Init(NULL, "eng")) {
+            if (tess->Init(NULL, languageMenu->get_active_text().c_str())) {
                 std::cerr << "Could not initialize tesseract!" << std::endl;
                 return;
             }
@@ -82,7 +109,8 @@ void DetectText::effect(Inkscape::Extension::Effect *module, Inkscape::UI::View:
         }
     }
     // std::cout << detectedtext << std::endl;
-    updateGUI(detectedtext);
+    Gtk::Label *detectedTextLabel = dynamic_cast<Gtk::Label *>(textWidget());
+    detectedTextLabel->set_label(detectedtext);
     return;
 }
 
@@ -90,26 +118,24 @@ Gtk::Widget *DetectText::prefs_effect(Inkscape::Extension::Effect *module, Inksc
                                       sigc::signal<void> *changeSignal,
                                       Inkscape::Extension::Implementation::ImplementationDocumentCache * /*docCache*/)
 {
-    Gtk::Widget *detectedtext = updateGUI("The Detected Text will appear here");
-
-    Gtk::Widget *guitext = Gtk::manage(new Gtk::Label("Detected Text: ", Gtk::ALIGN_START));
-    Gtk::Widget *separatortop = Gtk::manage(new Gtk::Separator(Gtk::ORIENTATION_HORIZONTAL));
-    Gtk::Widget *separatorbottom = Gtk::manage(new Gtk::Separator(Gtk::ORIENTATION_HORIZONTAL));
-    guitext->show();
-    detectedtext->show();
-    separatortop->show();
-    separatorbottom->show();
-
     Gtk::Box *gui = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
+    gui->show();
     gui->set_border_width(InxParameter::GUI_BOX_MARGIN);
     gui->set_spacing(InxParameter::GUI_BOX_SPACING);
 
-    gui->pack_start(*guitext, false, true, 0);
-    gui->pack_start(*separatortop, false, true, 0);
-    gui->pack_start(*detectedtext, false, true, 0);
-    gui->pack_start(*separatorbottom, false, true, 0);
+    Gtk::Widget *selectLang = Gtk::manage(new Gtk::Label("Select Language:", Gtk::ALIGN_START));
+    selectLang->show();
+    gui->pack_start(*selectLang, false, true, 0);
 
-    gui->show();
+    Gtk::Widget *language = languageWidget();
+    language->show();
+    loadLanguages();
+    gui->pack_start(*language, false, true, 0);
+
+    Gtk::Widget *detectedText = textWidget();
+    detectedText->show();
+    gui->pack_start(*detectedText, false, true, 0);
+
     return gui;
 }
 

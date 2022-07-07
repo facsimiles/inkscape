@@ -10,6 +10,7 @@
  */
 
 #include <tesseract/baseapi.h>
+#include <tesseract/genericvector.h>
 
 #include "extension/implementation/implementation.h"
 
@@ -31,7 +32,9 @@ public:
                               sigc::signal<void> *changeSignal,
                               Inkscape::Extension::Implementation::ImplementationDocumentCache *docCache) override;
 
-    Gtk::Widget *updateGUI(std::string detectedtext);
+    Gtk::Widget *textWidget();
+    Gtk::Widget *languageWidget();
+    void loadLanguages();
 
     static void init();
 };
