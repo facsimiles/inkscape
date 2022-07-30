@@ -22,10 +22,10 @@
 #include "object/sp-object.h"
 #include "object/uri.h"
 
+#include "xml/attribute-record.h"
 #include "xml/node.h"
 #include "xml/rebase-hrefs.h"
 
-using Inkscape::XML::AttributeRecord;
 using Inkscape::XML::AttributeVector;
 
 /**

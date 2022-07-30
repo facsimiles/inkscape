@@ -22,6 +22,7 @@
  */
 
 #include <numeric>
+#include <optional>
 #include <vector>
 #include <tuple>
 
@@ -981,11 +982,12 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                 if (_fid <= population) { // Rules the population of objects sprayed
                     // Duplicates the parent item
                     Inkscape::XML::Node *copy = old_repr->duplicate(xml_doc);
-                    gchar const * spray_origin;
+                    std::optional<Glib::ustring> spray_origin;
                     if(!copy->attribute("inkscape:spray-origin")){
-                        spray_origin = g_strdup_printf("#%s", old_repr->attribute("id"));
+                        spray_origin = Glib::ustring("#") +  old_repr->attribute("id");
                     } else {
-                        spray_origin = copy->attribute("inkscape:spray-origin");
+                        char const *spray_origin_cstr = copy->attribute("inkscape:spray-origin");
+                        if (spray_origin_cstr) spray_origin = spray_origin_cstr;
                     }
                     parent->appendChild(copy);
                     SPObject *new_obj = doc->getObjectByRepr(copy);
@@ -1016,7 +1018,8 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                     single_path_output = object_set_tmp.items().front();
                     for (auto item : object_set_tmp.items()) {
                         auto repr = item->getRepr();
-                        repr->setAttribute("inkscape:spray-origin", spray_origin);
+                        const auto *spray_origin_cstr = spray_origin.has_value() ? spray_origin->c_str() : nullptr;
+                        repr->setAttribute("inkscape:spray-origin", spray_origin_cstr);
                     }
                     object_set_tmp.clear();
                     Inkscape::GC::release(copy);

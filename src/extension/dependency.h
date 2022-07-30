@@ -54,7 +54,7 @@ private:
     /** \brief  The string that is in the XML tags pulled out. */
     std::optional<Glib::ustring> _string;
     /** \brief  The description of the dependency for the users. */
-    const gchar * _description = nullptr;
+    Glib::ustring _description;
     /** \brief  The absolute path to the dependency file determined while checking this dependency. */
     std::string  _absolute_location = UNCHECKED;
 

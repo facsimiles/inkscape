@@ -44,7 +44,6 @@
 #include "extension/system.h"
 
 #include "xml/repr.h"
-#include "xml/attribute-record.h"
 #include "object/sp-image.h"
 #include "object/sp-gradient.h"
 #include "object/sp-stop.h"

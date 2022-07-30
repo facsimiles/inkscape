@@ -81,9 +81,11 @@ Dependency::Dependency (Inkscape::XML::Node * in_repr, const Extension *extensio
 
     _string = _repr->firstChild()->content();
 
-    _description = _repr->attribute("description");
-    if (_description == nullptr)
-        _description = _repr->attribute("_description");
+    if (char const *desc_attr = _repr->attribute("description")) {
+        _description = desc_attr;
+    } else if (desc_attr = _repr->attribute("_description")) {
+        _description = desc_attr;
+    }
 
     return;
 }
@@ -341,8 +343,8 @@ Glib::ustring Dependency::info_string()
                                                _("location"), _(_location_str[_location]),
                                                _("string"),     _string->c_str());
 
-    if (_description) {
-        str += Glib::ustring::compose("\n\t%1: %2\n", _("  description: "), _(_description));
+    if (!_description.empty()) {
+        str += Glib::ustring::compose("\n\t%1: %2\n", _("  description: "), _(_description.c_str()));
     }
 
     return str;

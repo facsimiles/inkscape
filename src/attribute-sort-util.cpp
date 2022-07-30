@@ -36,7 +36,6 @@
 #include "attributes.h"
 
 using Inkscape::XML::Node;
-using Inkscape::XML::AttributeRecord;
 
 static void sp_attribute_sort_recursive(Node& repr);
 static void sp_attribute_sort_element(Node& repr);
@@ -96,6 +95,7 @@ static void sp_attribute_sort_element(Node& repr) {
   // It doesn't seem possible to sort a List directly so we dump the list into
   // a std::list and sort that. Not very efficient. Sad.
 
+  // TODO: Make this better
   std::vector<std::pair< Glib::ustring, Glib::ustring > > my_list;
   for ( const auto & iter : repr.attributeList()) {
 
@@ -148,6 +148,7 @@ static void sp_attribute_sort_style(Node& repr) {
  */
 static void sp_attribute_sort_style(Node& repr, SPCSSAttr& css) {
 
+  // TODO: Make this better
   // Loop over all properties in "style" node.
   std::vector<std::pair< Glib::ustring, Glib::ustring > > my_list;
   for ( const auto & iter : css.attributeList()) {

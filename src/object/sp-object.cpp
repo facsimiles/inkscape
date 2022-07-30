@@ -1724,10 +1724,11 @@ Glib::ustring SPObject::textualContent() const
 
 Glib::ustring SPObject::getExportFilename() const
 {
+    Glib::ustring result;
     if (auto filename = repr->attribute("inkscape:export-filename")) {
-        return Glib::ustring(filename);
+        result = filename;
     }
-    return "";
+    return result;
 }
 
 void SPObject::setExportFilename(Glib::ustring filename)

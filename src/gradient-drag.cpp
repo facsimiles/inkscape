@@ -52,7 +52,6 @@
 #include "ui/widget/canvas.h" // Forced redraws
 
 #include "xml/sp-css-attr.h"
-#include "xml/attribute-record.h"
 
 using Inkscape::DocumentUndo;
 using Inkscape::allPaintTargets;
