@@ -240,7 +240,7 @@ void sp_repr_css_write_string(SPCSSAttr *css, Glib::ustring &str)
     str.clear();
     for (const auto & iter : css->attributeList())
     {
-        if (iter.value && !strcmp(iter.value, "inkscape:unset")) {
+        if (Inkscape::Util::equal(iter.value, "inkscape:unset")) {
             continue;
         }
 
@@ -250,7 +250,7 @@ void sp_repr_css_write_string(SPCSSAttr *css, Glib::ustring &str)
 
         str.append(g_quark_to_string(iter.key));
         str.push_back(':');
-        str.append(iter.value); // Any necessary quoting to be done by calling routine.
+        str.append(Inkscape::Util::to_cstr(iter.value)); // Any necessary quoting to be done by calling routine.
     }
 }
 
@@ -283,7 +283,7 @@ void sp_repr_css_print(SPCSSAttr *css)
     for ( const auto & attr: css->attributeList() )
     {
         gchar const * key = g_quark_to_string(attr.key);
-        gchar const * val = attr.value;
+        gchar const * val = Inkscape::Util::to_cstr(attr.value);
         g_print("%s:\t%s\n",key,val);
     }
 }

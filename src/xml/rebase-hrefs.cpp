@@ -14,7 +14,6 @@
 #include <glibmm/utility.h>
 
 #include "../document.h"  /* Unfortunately there's a separate xml/document.h. */
-#include "streq.h"
 
 #include "io/dir-util.h"
 #include "io/sys.h"
@@ -59,8 +58,6 @@ Inkscape::XML::rebase_href_attrs(gchar const *const old_abs_base,
                                  gchar const *const new_abs_base,
                                  const AttributeVector &attributes)
 {
-    using Inkscape::Util::share_string;
-
     auto ret = attributes; // copy
 
     if (old_abs_base == new_abs_base) {
@@ -75,21 +72,21 @@ Inkscape::XML::rebase_href_attrs(gchar const *const old_abs_base,
     };
 
     auto href_it = find_record(href_key);
-    if (href_it == ret.end() || !href_needs_rebasing(href_it->value.pointer())) {
+    if (href_it == ret.end() || !href_needs_rebasing(Inkscape::Util::to_cstr(href_it->value))) {
         return ret;
     }
 
-    auto uri = URI::from_href_and_basedir(href_it->value.pointer(), old_abs_base);
+    auto uri = URI::from_href_and_basedir(Inkscape::Util::to_cstr(href_it->value), old_abs_base);
     auto abs_href = uri.toNativeFilename();
 
     auto absref_it = find_record(absref_key);
     if (absref_it != ret.end()) {
         if (g_file_test(abs_href.c_str(), G_FILE_TEST_EXISTS)) {
-            if (!streq(abs_href.c_str(), absref_it->value.pointer())) {
-                absref_it->value = share_string(abs_href.c_str());
+            if (!Inkscape::Util::equal(absref_it->value, abs_href.c_str())) {
+                absref_it->value = abs_href;
             }
-        } else if (g_file_test(absref_it->value.pointer(), G_FILE_TEST_EXISTS)) {
-            uri = URI::from_native_filename(absref_it->value.pointer());
+        } else if (g_file_test(Inkscape::Util::to_cstr(absref_it->value), G_FILE_TEST_EXISTS)) {
+            uri = URI::from_native_filename(Inkscape::Util::to_cstr(absref_it->value));
         }
     }
 
@@ -98,8 +95,7 @@ Inkscape::XML::rebase_href_attrs(gchar const *const old_abs_base,
         baseuri = URI::from_dirname(new_abs_base).str();
     }
 
-    auto new_href = uri.str(baseuri.c_str());
-    href_it->value = share_string(new_href.c_str());
+    href_it->value = uri.str(baseuri.c_str());
 
     return ret;
 }

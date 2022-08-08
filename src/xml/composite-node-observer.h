@@ -32,7 +32,10 @@ struct NodeEventVector;
  * allows an observer to remove itself from this object during a method call.
  * For the documentation of callback methods, see NodeObserver.
  */
-class CompositeNodeObserver : public NodeObserver, public GC::Managed<> {
+class CompositeNodeObserver
+    : public NodeObserver
+    , GC::Managed<GC::SCANNED, GC::MANUAL>
+{
 public:
     struct ObserverRecord : public GC::Managed<> {
         explicit ObserverRecord(NodeObserver &o) : observer(o), marked(false) {}

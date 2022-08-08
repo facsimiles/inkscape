@@ -23,6 +23,8 @@
 #include "xml/attribute-record.h"
 #include "xml/composite-node-observer.h"
 
+// #include "gc-finalized.h"
+
 namespace Inkscape {
 
 namespace XML {
@@ -33,7 +35,10 @@ namespace XML {
  * @see Inkscape::XML::Node
  */
 class SimpleNode
-: virtual public Node, public Inkscape::GC::Managed<>
+    : virtual public Node
+    , public Inkscape::GC::Managed<>
+    // NOTE: Finalization cycle
+    // , public Inkscape::GC::Finalized 
 {
 public:
     char const *name() const override;
@@ -121,6 +126,8 @@ public:
 
     void recursivePrintTree(unsigned level = 0) override;
 
+    ~SimpleNode() override = default; // for finalization
+
 protected:
     SimpleNode(int code, Document *document);
     SimpleNode(SimpleNode const &repr, Document *document);
@@ -144,7 +151,7 @@ private:
 
     AttributeVector _attributes;
 
-    Inkscape::Util::ptr_shared _content;
+    std::optional<std::string> _content;
 
     unsigned _child_count;
     mutable bool _cached_positions_valid;

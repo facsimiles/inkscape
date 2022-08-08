@@ -30,11 +30,11 @@ public:
         d = new SPItem();
         e = new SPItem();
         auto sd = new SimpleDocument();
-        auto et = new TextNode(Util::share_string("e"), sd);
-        auto dt = new TextNode(Util::share_string("d"), sd);
-        auto ct = new TextNode(Util::share_string("c"), sd);
-        auto bt = new TextNode(Util::share_string("b"), sd);
-        auto at = new TextNode(Util::share_string("a"), sd);
+        auto et = new TextNode("e", sd);
+        auto dt = new TextNode("d", sd);
+        auto ct = new TextNode("c", sd);
+        auto bt = new TextNode("b", sd);
+        auto at = new TextNode("a", sd);
         e->invoke_build(_doc, et, 0);
         d->invoke_build(_doc, dt, 0);
         c->invoke_build(_doc, ct, 0);

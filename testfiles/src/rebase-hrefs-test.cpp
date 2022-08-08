@@ -12,12 +12,13 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include "xml/rebase-hrefs.h"
-
 #include <doc-per-case-test.h>
 #include <gtest/gtest.h>
 
 #include "object/sp-object.h"
+
+#include "xml/attribute-record.h"
+#include "xml/rebase-hrefs.h"
 
 using namespace Inkscape::XML;
 
@@ -105,7 +106,7 @@ static std::map<std::string, std::string> rebase_attrs_test_helper(SPDocument *d
     std::map<std::string, std::string> attributemap;
     auto attributes = rebase_href_attrs(old_base, new_base, doc->getObjectById(id)->getRepr()->attributeList());
     for (const auto &item : attributes) {
-        attributemap[g_quark_to_string(item.key)] = item.value.pointer();
+        attributemap[g_quark_to_string(item.key)] = *item.value;
     }
     return attributemap;
 }

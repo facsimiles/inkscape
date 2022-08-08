@@ -317,7 +317,7 @@ std::vector<Preferences::Entry> Preferences::getAllEntries(Glib::ustring const &
     std::vector<Entry> temp;
     if (auto node = _getNode(path, false)) {
         for (auto const &iter : node->attributeList()) {
-            temp.push_back(Entry(path + '/' + g_quark_to_string(iter.key), iter.value.pointer()));
+            temp.push_back(Entry(path + '/' + g_quark_to_string(iter.key), Inkscape::Util::to_cstr(iter.value)));
         }
     }
     return temp;

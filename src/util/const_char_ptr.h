@@ -14,7 +14,6 @@
 #define SEEN_INKSCAPE_UTIL_CONST_CHAR_PTR_H
 #include <glibmm/ustring.h>
 #include <string>
-#include "share.h"
 
 namespace Inkscape {
 namespace Util {
@@ -30,7 +29,6 @@ public:
     const_char_ptr(const char* const data) noexcept: m_data(data) {};
     const_char_ptr(const Glib::ustring& str) noexcept: const_char_ptr(str.c_str()) {};
     const_char_ptr(const std::string& str) noexcept: const_char_ptr(str.c_str()) {};
-    const_char_ptr(const ptr_shared& shared) : const_char_ptr(static_cast<const char*>(shared)) {};
 
     const char * data() const noexcept { return m_data; }
 private:

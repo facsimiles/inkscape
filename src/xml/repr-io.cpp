@@ -848,19 +848,17 @@ static void sp_repr_write_stream_root_element(Node *repr, Writer &out,
     for (auto iter : ns_map)
     {
         Glib::QueryQuark const prefix = iter.first;
-        auto ns_uri = Inkscape::Util::share_unsafe(iter.second);
+        auto const ns_uri = iter.second;
 
         if (prefix.id()) {
             if ( prefix != xml_prefix ) {
                 if ( elide_prefix == prefix ) {
-                    //repr->setAttribute(share_string("xmlns"), share_string(ns_uri));
                     attributes.emplace_back(g_quark_from_static_string("xmlns"), ns_uri);
                 }
 
                 Glib::ustring attr_name="xmlns:";
                 attr_name.append(g_quark_to_string(prefix));
                 GQuark key = g_quark_from_string(attr_name.c_str());
-                //repr->setAttribute(share_string(attr_name.c_str()), share_string(ns_uri));
                 attributes.emplace_back(key, ns_uri);
             }
         } else {
@@ -982,7 +980,7 @@ void sp_repr_write_stream_element( Node * repr, Writer & out,
             }
         }
         out.printf(" %s=\"", g_quark_to_string(iter.key));
-        repr_quote_write(out, iter.value);
+        repr_quote_write(out, Inkscape::Util::to_cstr(iter.value));
         out.writeChar('"');
     }
 

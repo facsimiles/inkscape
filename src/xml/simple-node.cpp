@@ -30,6 +30,7 @@
 #include "xml/node-fns.h"
 #include "debug/event-tracker.h"
 #include "debug/simple-event.h"
+#include "util/optstr.h"
 #include "util/format.h"
 
 #include "attribute-rel-util.h"
@@ -164,9 +165,6 @@ public:
 
 }
 
-using Util::share_string;
-using Util::share_unsafe;
-
 SimpleNode::SimpleNode(int code, Document *document)
 : Node(), _name(code), _attributes(), _child_count(0),
   _cached_positions_valid(false)
@@ -220,7 +218,7 @@ gchar const *SimpleNode::name() const {
 }
 
 gchar const *SimpleNode::content() const {
-    return this->_content;
+    return Inkscape::Util::to_cstr(_content);
 }
 
 gchar const *SimpleNode::attribute(gchar const *name) const {
@@ -228,10 +226,9 @@ gchar const *SimpleNode::attribute(gchar const *name) const {
 
     GQuark const key = g_quark_from_string(name);
 
-    for (const auto & iter : _attributes)
-    {
-        if ( iter.key == key ) {
-            return iter.value;
+    for (auto const &iter : _attributes) {
+        if (iter.key == key) {
+            return Inkscape::Util::to_cstr(iter.value);
         }
     }
 
@@ -291,28 +288,33 @@ void SimpleNode::_setParent(SimpleNode *parent) {
 
 void SimpleNode::setContent(char const *content)
 {
-    char const *old_content = _content.pointer();
-    char const *new_content = content;
+    using Inkscape::Util::to_cstr;
+    using Inkscape::Util::to_opt;
+
+    bool changed = !Inkscape::Util::equal(_content, content);
+
+    auto const old_content = _content;
 
     Debug::EventTracker<> tracker;
-    if (new_content) {
-        tracker.set<DebugSetContent>(*this, new_content);
+    if (content) {
+        tracker.set<DebugSetContent>(*this, content);
     } else {
         tracker.set<DebugClearContent>(*this);
     }
 
-    if (new_content)
-        _content = share_string(new_content);
+    _content = to_opt(content);
 
-    if (_content.pointer() != old_content) {
-        _document->logger()->notifyContentChanged(*this, old_content, new_content);
-        _observers.notifyContentChanged(*this, old_content, new_content);
+    if (changed) {
+        _document->logger()->notifyContentChanged(*this, to_cstr(old_content), to_cstr(_content));
+        _observers.notifyContentChanged(*this, to_cstr(old_content), to_cstr(_content));
     }
 }
 
-void
-SimpleNode::setAttributeImpl(char const *name, char const *value)
+void SimpleNode::setAttributeImpl(char const *name, char const *value)
 {
+    using Inkscape::Util::to_cstr;
+    using Inkscape::Util::to_opt;
+
     g_return_if_fail(name && *name);
 
     // sanity check: `name` must not contain whitespace
@@ -360,35 +362,35 @@ SimpleNode::setAttributeImpl(char const *name, char const *value)
 
     GQuark const key = g_quark_from_string(name);
 
-    auto const ref = std::find_if(_attributes.begin(), _attributes.end(), [&](auto const &attr) {
+    auto const attr = std::find_if(_attributes.begin(), _attributes.end(), [&](auto const &attr) {
         return attr.key == key;
     });
 
     Debug::EventTracker<> tracker;
 
-    std::string_view old_value;
-    if (ref != _attributes.end() && ref->value)
-        old_value = ref->value.pointer();
+    std::optional<std::string> const old_value = (attr != _attributes.end()) ?
+        attr->value : std::nullopt;
 
-    std::string_view new_value;
+    char const *new_value = nullptr;
     if (cleaned_value) { // set value of attribute
         new_value = cleaned_value;
-        tracker.set<DebugSetAttribute>(*this, key, new_value.data());
-        if (ref == _attributes.end()) {
-            _attributes.emplace_back(key, share_string(new_value.data()));
+        tracker.set<DebugSetAttribute>(*this, key, new_value);
+        if (attr == _attributes.end()) {
+            _attributes.emplace_back(key, new_value);
         } else {
-            ref->value = share_string(new_value.data());
+            attr->value = to_opt(new_value);
         }
     } else { //clearing attribute
         tracker.set<DebugClearAttribute>(*this, key);
-        if (ref != _attributes.end()) {
-            _attributes.erase(ref);
+        if (attr != _attributes.end()) {
+            _attributes.erase(attr);
         }
     }
 
-    if (!new_value.data() || !old_value.data() || new_value != old_value) {
-        _document->logger()->notifyAttributeChanged(*this, key, old_value.data(), new_value.data());
-        _observers.notifyAttributeChanged(*this, key, old_value.data(), new_value.data());
+    // NOTE: check again maybe?
+    if (new_value != to_cstr(old_value) && (!old_value || !new_value || old_value != new_value)) {
+        _document->logger()->notifyAttributeChanged(*this, key, to_cstr(old_value), new_value);
+        _observers.notifyAttributeChanged(*this, key, to_cstr(old_value), new_value);
         //g_warning( "setAttribute notified: %s: %s: %s: %s", name, element.c_str(), old_value, new_value ); 
     }
     g_free(cleaned_value);
@@ -604,7 +606,7 @@ void SimpleNode::synthesizeEvents(NodeEventVector const *vector, void *data) {
     if (vector->attr_changed) {
         for ( const auto & iter : _attributes )
         {
-            vector->attr_changed(this, g_quark_to_string(iter.key), nullptr, iter.value, false, data);
+            vector->attr_changed(this, g_quark_to_string(iter.key), nullptr, Inkscape::Util::to_cstr(iter.value), false, data);
         }
     }
     if (vector->child_added) {
@@ -617,7 +619,7 @@ void SimpleNode::synthesizeEvents(NodeEventVector const *vector, void *data) {
         }
     }
     if (vector->content_changed) {
-        vector->content_changed(this, nullptr, this->_content, data);
+        vector->content_changed(this, nullptr, content(), data);
     }
 }
 
@@ -706,8 +708,7 @@ bool SimpleNode::equal(Node const *other, bool recursive) {
             const gchar * key_orig = g_quark_to_string(orig_attr.key);
             const gchar * key_other = g_quark_to_string(other_attr.key);
             if (!strcmp(key_orig, key_other) && 
-                !strcmp(orig_attr.value, other_attr.value)) 
-            {
+                (orig_attr.value == other_attr.value)) {
                 other_length++;
                 break;
             }
@@ -775,7 +776,7 @@ void SimpleNode::mergeFrom(Node const *src, gchar const *key, bool extension, bo
 
     for ( const auto & iter : src->attributeList() )
     {
-        setAttribute(g_quark_to_string(iter.key), iter.value);
+        setAttribute(g_quark_to_string(iter.key), Inkscape::Util::to_cstr(iter.value));
     }
 }
 
