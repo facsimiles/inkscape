@@ -167,6 +167,7 @@ set(ui_SRC
 	widget/iconrenderer.cpp
 	widget/alignment-selector.cpp
 	widget/anchor-selector.cpp
+	widget/completion-popup.cpp
 	widget/canvas.cpp
 	widget/canvas/stores.cpp
 	widget/canvas/util.cpp
@@ -450,6 +451,7 @@ set(ui_SRC
 	widget/canvas/glgraphics.h
 	widget/canvas/cairographics.h
 	widget/canvas-grid.h
+	widget/completion-popup.h
 	widget/color-entry.h
 	widget/color-icc-selector.h
 	widget/color-notebook.h
