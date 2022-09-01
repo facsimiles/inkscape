@@ -46,8 +46,8 @@ Gtk::Widget *DetectText::textWidget()
 
 Gtk::Widget *DetectText::languageWidget()
 {
-    static Gtk::ComboBoxText *detectedtextlabel = Gtk::manage(new Gtk::ComboBoxText());
-    return detectedtextlabel;
+    static Gtk::ComboBoxText *languageComboBox = Gtk::manage(new Gtk::ComboBoxText());
+    return languageComboBox;
 }
 
 void DetectText::loadLanguages()
@@ -59,12 +59,13 @@ void DetectText::loadLanguages()
     }
     GenericVector<STRING> languages;
     tess->GetAvailableLanguagesAsVector(&languages);
-    Gtk::ComboBoxText *languageMenu = dynamic_cast<Gtk::ComboBoxText *>(languageWidget());
+    Gtk::ComboBoxText *languageComboBox = dynamic_cast<Gtk::ComboBoxText *>(languageWidget());
     int languageCount = languages.size();
     for (int i = 0; i < languageCount; i++) {
-        languageMenu->append(languages[i].string());
+        auto language=languages[i].string();
+        languageComboBox->append(language,language);
     }
-    languageMenu->set_active(0);
+    languageComboBox->set_active_id("eng");
     tess->End();
     delete tess;
     return;
@@ -82,7 +83,7 @@ void DetectText::effect(Inkscape::Extension::Effect *module, Inkscape::UI::View:
     std::vector<SPItem *> items(selection->items().begin(), selection->items().end());
     selection->clear();
 
-    Gtk::ComboBoxText *languageMenu = dynamic_cast<Gtk::ComboBoxText *>(languageWidget());
+    Gtk::ComboBoxText *languageComboBox = dynamic_cast<Gtk::ComboBoxText *>(languageWidget());
     std::string detectedtext = "";
 
     for (auto spitem : items) {
@@ -92,7 +93,7 @@ void DetectText::effect(Inkscape::Extension::Effect *module, Inkscape::UI::View:
 
             tesseract::TessBaseAPI *tess = new tesseract::TessBaseAPI();
             char *text;
-            if (tess->Init(NULL, languageMenu->get_active_text().c_str())) {
+            if (tess->Init(NULL, languageComboBox->get_active_text().c_str())) {
                 std::cerr << "Could not initialize tesseract!" << std::endl;
                 return;
             }
