@@ -1998,7 +1998,6 @@ bool FilterEffectsDialog::PrimitiveList::on_draw_signal(const Cairo::RefPtr<Cair
     SPFilterPrimitive* prim = get_selected();
     int row_count = get_model()->children().size();
 
-    int fheight = CellRendererConnection::size_h;
     int fwidth = CellRendererConnection::size_w;
     Gdk::Rectangle rct, vis;
     Gtk::TreeIter row = get_model()->children().begin();
@@ -2746,6 +2745,11 @@ FilterEffectsDialog::FilterEffectsDialog()
     : DialogBase("/dialogs/filtereffects", "FilterEffects"),
     _builder(create_builder("dialog-filter-editor.glade")),
     _paned(get_widget<Gtk::Paned>(_builder, "paned")),
+    _main_grid(get_widget<Gtk::Grid>(_builder, "main")),
+    _params_box(get_widget<Gtk::Box>(_builder, "params")),
+    _search_box(get_widget<Gtk::Box>(_builder, "search")),
+    _search_wide_box(get_widget<Gtk::Box>(_builder, "search-wide")),
+    _filter_wnd(get_widget<Gtk::ScrolledWindow>(_builder, "filter")),
     _cur_filter_btn(get_widget<Gtk::CheckButton>(_builder, "label"))
     , _add_primitive_type(FPConverter)
     , _add_primitive(_("Add Effect:"))
@@ -2774,13 +2778,13 @@ FilterEffectsDialog::FilterEffectsDialog()
     add_effects(_effects_popup, symbolic);
     _effects_popup.get_entry().set_placeholder_text(_("Add effect"));
     _effects_popup.on_match_selected().connect([=](int id){ add_filter_primitive(static_cast<FilterPrimitiveType>(id)); });
-    get_widget<Gtk::Box>(_builder, "search").pack_start(_effects_popup);
+    _search_box.pack_start(_effects_popup);
 
     _filter_modifier.show_all();
     get_widget<Gtk::Popover>(_builder, "filters-popover").add(_filter_modifier);
 
     _settings_effect.show_all();
-    get_widget<Gtk::Box>(_builder, "params").pack_end(_settings_effect);
+    _params_box.pack_end(_settings_effect);
 
     _settings_filter.show_all();
     get_widget<Gtk::Popover>(_builder, "gen-settings").add(_settings_filter);
@@ -2811,14 +2815,29 @@ FilterEffectsDialog::FilterEffectsDialog()
         _cur_filter_toggle.unblock();
     };
 
-    _filter_modifier.signal_filter_changed().connect([=](){
+    auto update_widgets = [=](){
+        auto& opt = get_widget<Gtk::MenuButton>(_builder, "filter-opt");
         _primitive_list.update();
         Glib::ustring name = "-";
         if (auto filter = _filter_modifier.get_selected_filter()) {
             name = get_filter_name(filter);
+            _effects_popup.set_sensitive();
+            _cur_filter_btn.set_sensitive(); // ideally this should also be selection-dependent
+            opt.set_sensitive();
+        }
+        else {
+            _effects_popup.set_sensitive(false);
+            _cur_filter_btn.set_sensitive(false);
+            opt.set_sensitive(false);
         }
         get_widget<Gtk::Label>(_builder, "filter-name").set_label(name);
         update_checkbox();
+    };
+
+    update_widgets();
+
+    _filter_modifier.signal_filter_changed().connect([=](){
+        update_widgets();
     });
 
     _filter_modifier.signal_filters_updated().connect([=](){
@@ -2830,13 +2849,13 @@ FilterEffectsDialog::FilterEffectsDialog()
                                     sigc::mem_fun(_primitive_list, &PrimitiveList::remove_selected));
 
     get_widget<Gtk::Button>(_builder, "new-filter").signal_clicked().connect([=](){ _filter_modifier.add_filter(); });
-    pack_start(get_widget<Gtk::Grid>(_builder, "main"));
+    pack_start(_main_grid);
 
     get_widget<Gtk::Button>(_builder, "dup-btn").signal_clicked().connect([=](){ duplicate_primitive(); });
     get_widget<Gtk::Button>(_builder, "del-btn").signal_clicked().connect([=](){ _primitive_list.remove_selected(); });
     get_widget<Gtk::Button>(_builder, "info-btn").signal_clicked().connect([=](){ /* todo */ });
 
-    _paned.set_position(Inkscape::Preferences::get()->getIntLimited(_prefs + "/handlePos", 50, 10, 9999));
+    _paned.set_position(Inkscape::Preferences::get()->getIntLimited(_prefs + "/handlePos", 200, 10, 9999));
     _paned.property_position().signal_changed().connect([=](){
         Inkscape::Preferences::get()->setInt(_prefs + "/handlePos", _paned.get_position());
     });
@@ -2845,6 +2864,43 @@ FilterEffectsDialog::FilterEffectsDialog()
     _primitive_list.update();
 
     show();
+
+    int min_width = 0, dummy = 0;
+    this->get_preferred_width(min_width, dummy);
+
+    // two alternative layout arrangements depending on the dialog size;
+    // one is tall and narrow with widgets in one column, while the other
+    // is for wide dialogs with filter parameters and effects side by side
+    signal_size_allocate().connect([=] (const Gtk::Allocation& alloc) {
+        if (alloc.get_width() < 10 || alloc.get_height() < 10) return;
+
+        double const ratio = alloc.get_width() / static_cast<double>(alloc.get_height());
+
+        double constexpr hysteresis = 0.01;
+        if (ratio < 1 - hysteresis) {
+            // narrow/tall
+            if (!_narrow_dialog) {
+                _main_grid.remove(_filter_wnd);
+                _search_wide_box.remove(_effects_popup);
+                _paned.add1(_filter_wnd);
+                _search_box.pack_start(_effects_popup);
+                _paned.set_size_request();
+            }
+            _narrow_dialog = true;
+        }
+        else if (ratio > 1 + hysteresis && alloc.get_width() > min_width) {
+            // wide/short
+            if (_narrow_dialog) {
+                _paned.remove(_filter_wnd);
+                _search_box.remove(_effects_popup);
+                _main_grid.attach(_filter_wnd, 2, 1, 1, 2);
+                _search_wide_box.pack_start(_effects_popup);
+                _paned.set_size_request(min_width);
+            }
+            _narrow_dialog = false;
+        }
+    });
+
     show_all_children();
     update();
     update_settings_view();

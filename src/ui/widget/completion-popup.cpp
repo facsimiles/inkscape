@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 #include "completion-popup.h"
+#include <cassert>
 #include <glibmm/ustring.h>
 #include <gtkmm/entrycompletion.h>
 #include <gtkmm/searchentry.h>

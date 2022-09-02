@@ -19,6 +19,7 @@
 #include <glibmm/propertyproxy.h>
 #include <glibmm/refptr.h>
 #include <glibmm/ustring.h>
+#include <gtkmm/box.h>
 #include <gtkmm/builder.h>
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/notebook.h>
@@ -160,7 +161,7 @@ private:
         CellRendererConnection();
         Glib::PropertyProxy<void*> property_primitive();
 
-        static const int size_w = 12;
+        static const int size_w = 16;
         static const int size_h = 21;
 
     protected:
@@ -275,6 +276,12 @@ private:
     Glib::RefPtr<Gtk::Builder> _builder;
     Glib::ustring _prefs = "/dialogs/filters";
     Gtk::Paned& _paned;
+    Gtk::Grid& _main_grid;
+    Gtk::Box& _params_box;
+    Gtk::Box& _search_box;
+    Gtk::Box& _search_wide_box;
+    Gtk::ScrolledWindow& _filter_wnd;
+    bool _narrow_dialog = true;
     Gtk::CheckButton& _cur_filter_btn;
     sigc::connection _cur_filter_toggle;
     // View/add primitives
