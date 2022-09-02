@@ -10,11 +10,12 @@
  */
 
 #include <gtest/gtest.h>
+#include <gtkmm.h>
 #include <src/extension/effect.h>
-#include "desktop.h"
 #include <src/extension/internal/text-recognition.h>
 #include <src/inkscape.h>
-#include <gtkmm.h>
+
+#include "desktop.h"
 
 using namespace Inkscape;
 class DetectTextTest : public ::testing::Test
@@ -38,23 +39,23 @@ TEST_F(DetectTextTest, loadFunctionReturnsTrue)
     ASSERT_TRUE(instance->load(nullptr));
 }
 
-TEST_F(DetectTextTest, defaultLanguageIsEnglish) 
-{   
+TEST_F(DetectTextTest, defaultLanguageIsEnglish)
+{
     instance->loadLanguages();
     Gtk::ComboBoxText *languageComboBox = dynamic_cast<Gtk::ComboBoxText *>(instance->languageWidget());
-    ASSERT_EQ(languageComboBox->get_active_id(),"eng");
+    ASSERT_EQ(languageComboBox->get_active_id(), "eng");
 }
 
-TEST_F(DetectTextTest, defaultTextIsCorrect) 
+TEST_F(DetectTextTest, defaultTextIsCorrect)
 {
     Gtk::Label *detectedTextLabel = dynamic_cast<Gtk::Label *>(instance->textWidget());
-    ASSERT_EQ(detectedTextLabel->get_label(),"The Detected Text will appear here");
+    ASSERT_EQ(detectedTextLabel->get_label(), "The Detected Text will appear here");
 }
 
-TEST_F(DetectTextTest, testEmptyDocument) 
+TEST_F(DetectTextTest, testEmptyDocument)
 {
-    SPDesktop* view=new SPDesktop();
-    instance->effect(nullptr,view,nullptr);
+    SPDesktop *view = new SPDesktop();
+    instance->effect(nullptr, view, nullptr);
     Gtk::Label *detectedTextLabel = dynamic_cast<Gtk::Label *>(instance->textWidget());
-    ASSERT_EQ(detectedTextLabel->get_label(),"");
+    ASSERT_EQ(detectedTextLabel->get_label(), "");
 }

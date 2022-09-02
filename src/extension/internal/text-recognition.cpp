@@ -62,8 +62,8 @@ void DetectText::loadLanguages()
     Gtk::ComboBoxText *languageComboBox = dynamic_cast<Gtk::ComboBoxText *>(languageWidget());
     int languageCount = languages.size();
     for (int i = 0; i < languageCount; i++) {
-        auto language=languages[i].string();
-        languageComboBox->append(language,language);
+        auto language = languages[i].string();
+        languageComboBox->append(language, language);
     }
     languageComboBox->set_active_id("eng");
     tess->End();
