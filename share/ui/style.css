@@ -795,3 +795,7 @@ combobox.flat-combobox button {
     background-color: transparent;
     background-image: image(transparent);
 }
+
+.filter-effects, .effects-params {
+    min-height: 50px;
+}

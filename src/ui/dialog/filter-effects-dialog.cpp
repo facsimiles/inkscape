@@ -36,6 +36,7 @@
 #include <gtkmm/eventbox.h>
 #include <gtkmm/label.h>
 #include <gtkmm/menuitem.h>
+#include <gtkmm/paned.h>
 #include <gtkmm/popover.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/sizegroup.h>
@@ -2744,6 +2745,7 @@ void FilterEffectsDialog::add_effects(Inkscape::UI::Widget::CompletionPopup& pop
 FilterEffectsDialog::FilterEffectsDialog()
     : DialogBase("/dialogs/filtereffects", "FilterEffects"),
     _builder(create_builder("dialog-filter-editor.glade")),
+    _paned(get_widget<Gtk::Paned>(_builder, "paned")),
     _cur_filter_btn(get_widget<Gtk::CheckButton>(_builder, "label"))
     , _add_primitive_type(FPConverter)
     , _add_primitive(_("Add Effect:"))
@@ -2833,6 +2835,11 @@ FilterEffectsDialog::FilterEffectsDialog()
     get_widget<Gtk::Button>(_builder, "dup-btn").signal_clicked().connect([=](){ duplicate_primitive(); });
     get_widget<Gtk::Button>(_builder, "del-btn").signal_clicked().connect([=](){ _primitive_list.remove_selected(); });
     get_widget<Gtk::Button>(_builder, "info-btn").signal_clicked().connect([=](){ /* todo */ });
+
+    _paned.set_position(Inkscape::Preferences::get()->getIntLimited(_prefs + "/handlePos", 50, 10, 9999));
+    _paned.property_position().signal_changed().connect([=](){
+        Inkscape::Preferences::get()->setInt(_prefs + "/handlePos", _paned.get_position());
+    });
 
     init_settings_widgets();
     _primitive_list.update();

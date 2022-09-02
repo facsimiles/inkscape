@@ -18,6 +18,7 @@
 #include <glibmm/property.h>
 #include <glibmm/propertyproxy.h>
 #include <glibmm/refptr.h>
+#include <glibmm/ustring.h>
 #include <gtkmm/builder.h>
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/notebook.h>
@@ -272,7 +273,8 @@ private:
     void add_effects(Inkscape::UI::Widget::CompletionPopup& popup, bool symbolic);
 
     Glib::RefPtr<Gtk::Builder> _builder;
-
+    Glib::ustring _prefs = "/dialogs/filters";
+    Gtk::Paned& _paned;
     Gtk::CheckButton& _cur_filter_btn;
     sigc::connection _cur_filter_toggle;
     // View/add primitives
