@@ -124,8 +124,6 @@ DualSpinScale::DualSpinScale(const Glib::ustring label1, const Glib::ustring lab
     : AttrWidget(a),
       _s1(label1, value, lower, upper, step_increment, page_increment, digits, SPAttr::INVALID, tip_text1),
       _s2(label2, value, lower, upper, step_increment, page_increment, digits, SPAttr::INVALID, tip_text2)
-      //TRANSLATORS: "Link" means to _link_ two sliders together
-    //   _link(C_("Sliders", "Link"))
 {
     set_name("DualSpinScale");
     signal_value_changed().connect(signal_attr_changed().make_slot());

@@ -37,20 +37,30 @@ CompletionPopup::CompletionPopup() :
         }
         return str.lowercase().find(text.lowercase()) != Glib::ustring::npos;
     });
+
+    // clear search box without triggering completion popup menu
+    auto clear = [=]() { _search.get_buffer()->set_text(Glib::ustring()); };
+
     _completion->signal_match_selected().connect([=](const Gtk::TreeModel::iterator& it){
         int id;
         it->get_value(ColID, id);
         _match_selected.emit(id);
+        clear();
         return true;
     }, false);
 
     _search.signal_focus_in_event().connect([=](GdkEventFocus*){
-        _search.set_text(Glib::ustring());
+        clear();
         return false;
     });
+
     _search.signal_focus_out_event().connect([=](GdkEventFocus*){
-        _search.set_text(Glib::ustring());
+        clear();
         return false;
+    });
+
+    _search.signal_stop_search().connect([=](){
+        clear();
     });
 
     show();

@@ -82,6 +82,7 @@ private:
         void add_filter();
         bool is_selected_filter_active();
         void toggle_current_filter();
+        bool filters_present() const;
 
         sigc::signal<void ()>& signal_filter_changed()
         {
@@ -113,7 +114,7 @@ private:
         void on_name_edited(const Glib::ustring&, const Glib::ustring&);
         bool on_filter_move(const Glib::RefPtr<Gdk::DragContext>& /*context*/, int x, int y, guint /*time*/);
         void on_selection_toggled(const Glib::ustring&);
-        void selection_toggled(Gtk::TreeIter iter);
+        void selection_toggled(Gtk::TreeIter iter, bool toggle);
 
         void update_counts();
         void filter_list_button_release(GdkEventButton*);
@@ -125,7 +126,7 @@ private:
         Glib::RefPtr<Gtk::Builder> _builder;
         FilterEffectsDialog& _dialog;
         Gtk::TreeView& _list;
-        Glib::RefPtr<Gtk::ListStore> _model;
+        Glib::RefPtr<Gtk::ListStore> _filters_model;
         Columns _columns;
         Gtk::CellRendererToggle _cell_toggle;
         Gtk::Button& _add;
@@ -202,9 +203,10 @@ private:
         SPFilterPrimitive* get_selected();
         void select(SPFilterPrimitive *prim);
         void remove_selected();
-
         int primitive_count() const;
         int get_input_type_width() const;
+        void set_inputs_count(int count);
+        int get_inputs_count() const;
 
     protected:
         bool on_draw_signal(const Cairo::RefPtr<Cairo::Context> &cr);
@@ -217,11 +219,7 @@ private:
     private:
         void init_text();
 
-	// void draw_connection_node(const Cairo::RefPtr<Cairo::Context>& cr,
-                                //   const std::vector<Gdk::Point>& points,
-				//   const bool fill);
-
-	bool do_connection_node(const Gtk::TreeIter& row, const int input, std::vector<Gdk::Point>& points,
+        bool do_connection_node(const Gtk::TreeIter& row, const int input, std::vector<Gdk::Point>& points,
                                 const int ix, const int iy);
 
         const Gtk::TreeIter find_result(const Gtk::TreeIter& start, const SPAttr attr, int& src_id, const int pos);
@@ -249,6 +247,7 @@ private:
         std::unique_ptr<Inkscape::XML::SignalObserver> _observer;
         int _input_type_width;
         int _input_type_height;
+        int _inputs_count;
     };
 
     void init_settings_widgets();

@@ -47,6 +47,11 @@
       <placeholder/>
     </child>
   </object>
+  <object class="GtkImage" id="image-connect">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">show-sources</property>
+  </object>
   <object class="GtkImage" id="image-del">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
@@ -186,7 +191,7 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
-                <property name="tooltip-text" translatable="yes">Select filter elements</property>
+                <property name="tooltip-text" translatable="yes">Select objects that use this filter</property>
                 <property name="image">image-select</property>
                 <property name="relief">none</property>
               </object>
@@ -232,7 +237,7 @@
     <property name="can-focus">False</property>
     <property name="border-width">5</property>
     <child>
-      <!-- n-columns=2 n-rows=2 -->
+      <!-- n-columns=2 n-rows=4 -->
       <object class="GtkGrid">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
@@ -278,9 +283,26 @@
           </object>
           <packing>
             <property name="left-attach">0</property>
+            <property name="top-attach">2</property>
+            <property name="width">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkImage" id="effect-image">
+            <property name="can-focus">False</property>
+            <property name="stock">gtk-missing-image</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
             <property name="top-attach">1</property>
             <property name="width">2</property>
           </packing>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
         </child>
       </object>
     </child>
@@ -333,6 +355,8 @@
                     <property name="can-focus">False</property>
                     <property name="halign">start</property>
                     <property name="label" translatable="yes">-</property>
+                    <property name="ellipsize">end</property>
+                    <property name="single-line-mode">True</property>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -592,9 +616,10 @@
           <placeholder/>
         </child>
         <child>
-          <object class="GtkBox">
+          <object class="GtkBox" id="connect-box-wide">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
+            <property name="halign">end</property>
             <child>
               <placeholder/>
             </child>
@@ -613,7 +638,31 @@
       </packing>
     </child>
     <child>
-      <placeholder/>
+      <object class="GtkBox" id="connect-box">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="halign">end</property>
+        <child>
+          <object class="GtkToggleButton" id="btn-connect">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
+            <property name="tooltip-text" translatable="yes">Show all filter input sources</property>
+            <property name="halign">end</property>
+            <property name="image">image-connect</property>
+            <property name="relief">none</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="left-attach">1</property>
+        <property name="top-attach">1</property>
+      </packing>
     </child>
     <child>
       <placeholder/>
