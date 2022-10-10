@@ -22,12 +22,13 @@ namespace XML {
 /**
  * @brief Element node, e.g. &lt;group /&gt;
  */
-class ElementNode : public SimpleNode {
+class ElementNode : public SimpleNode
+{
 public:
     ElementNode(int code, Document *doc)
-    : SimpleNode(code, doc) {}
+        : SimpleNode(code, doc) {}
     ElementNode(ElementNode const &other, Document *doc)
-    : SimpleNode(other, doc) {}
+        : SimpleNode(other, doc) {}
 
     Inkscape::XML::NodeType type() const override { return Inkscape::XML::NodeType::ELEMENT_NODE; }
 

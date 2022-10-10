@@ -43,7 +43,6 @@ using Inkscape::IO::Writer;
 using Inkscape::XML::Document;
 using Inkscape::XML::SimpleDocument;
 using Inkscape::XML::Node;
-using Inkscape::XML::AttributeRecord;
 using Inkscape::XML::AttributeVector;
 using Inkscape::XML::rebase_href_attrs;
 
@@ -761,7 +760,7 @@ static void repr_write_comment( Writer &out, const gchar * val, bool addWhitespa
 namespace {
 
 typedef std::map<Glib::QueryQuark, gchar const *, Inkscape::compare_quark_ids> LocalNameMap;
-typedef std::map<Glib::QueryQuark, Inkscape::Util::ptr_shared, Inkscape::compare_quark_ids> NSMap;
+typedef std::map<Glib::QueryQuark, char const *, Inkscape::compare_quark_ids> NSMap;
 
 gchar const *qname_local_name(Glib::QueryQuark qname) {
     static LocalNameMap local_name_map;
@@ -780,22 +779,19 @@ gchar const *qname_local_name(Glib::QueryQuark qname) {
 }
 
 void add_ns_map_entry(NSMap &ns_map, Glib::QueryQuark prefix) {
-    using Inkscape::Util::ptr_shared;
-    using Inkscape::Util::share_unsafe;
-
     static const Glib::QueryQuark xml_prefix("xml");
 
-    NSMap::iterator iter=ns_map.find(prefix);
-    if ( iter == ns_map.end() ) {
+    auto const iter = ns_map.find(prefix);
+    if (iter == ns_map.end()) {
         if (prefix.id()) {
-            gchar const *uri=sp_xml_ns_prefix_uri(g_quark_to_string(prefix));
+            gchar const *uri = sp_xml_ns_prefix_uri(g_quark_to_string(prefix));
             if (uri) {
-                ns_map.insert(NSMap::value_type(prefix, share_unsafe(uri)));
+                ns_map.emplace(prefix, uri);
             } else if ( prefix != xml_prefix ) {
                 g_warning("No namespace known for normalized prefix %s", g_quark_to_string(prefix));
             }
         } else {
-            ns_map.insert(NSMap::value_type(prefix, ptr_shared()));
+            ns_map.emplace(prefix, nullptr);
         }
     }
 }
@@ -826,8 +822,6 @@ static void sp_repr_write_stream_root_element(Node *repr, Writer &out,
                                   gchar const *const old_href_base,
                                   gchar const *const new_href_base)
 {
-    using Inkscape::Util::ptr_shared;
-
     g_assert(repr != nullptr);
 
     // Clean unnecessary attributes and stype properties. (Controlled by preferences.)
@@ -851,23 +845,20 @@ static void sp_repr_write_stream_root_element(Node *repr, Writer &out,
 
     auto attributes = repr->attributeList(); // copy
 
-    using Inkscape::Util::share_string;
-    for (auto iter : ns_map) 
+    for (auto iter : ns_map)
     {
-        Glib::QueryQuark prefix=iter.first;
-        ptr_shared ns_uri=iter.second;
+        Glib::QueryQuark const prefix = iter.first;
+        auto const ns_uri = iter.second;
 
         if (prefix.id()) {
             if ( prefix != xml_prefix ) {
                 if ( elide_prefix == prefix ) {
-                    //repr->setAttribute(share_string("xmlns"), share_string(ns_uri));
                     attributes.emplace_back(g_quark_from_static_string("xmlns"), ns_uri);
                 }
 
                 Glib::ustring attr_name="xmlns:";
                 attr_name.append(g_quark_to_string(prefix));
                 GQuark key = g_quark_from_string(attr_name.c_str());
-                //repr->setAttribute(share_string(attr_name.c_str()), share_string(ns_uri));
                 attributes.emplace_back(key, ns_uri);
             }
         } else {
@@ -989,7 +980,7 @@ void sp_repr_write_stream_element( Node * repr, Writer & out,
             }
         }
         out.printf(" %s=\"", g_quark_to_string(iter.key));
-        repr_quote_write(out, iter.value);
+        repr_quote_write(out, Inkscape::Util::to_cstr(iter.value));
         out.writeChar('"');
     }
 

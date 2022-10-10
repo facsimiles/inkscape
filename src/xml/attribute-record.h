@@ -14,9 +14,15 @@
 #ifndef SEEN_XML_SP_REPR_ATTR_H
 #define SEEN_XML_SP_REPR_ATTR_H
 
+#include <optional>
+#include <string>
+
 #include <glib.h>
+
+#include "gc-finalized.h"
 #include "inkgc/gc-managed.h"
-#include "util/share.h"
+
+#include "util/optstr.h"
 
 #define SP_REPR_ATTRIBUTE_KEY(a) g_quark_to_string((a)->key)
 #define SP_REPR_ATTRIBUTE_VALUE(a) ((a)->value)
@@ -30,19 +36,21 @@ namespace XML {
  * Internally, the attributes of each node in the XML tree are
  * represented by this structure.
  */
-class AttributeRecord : public Inkscape::GC::Managed<> {
+class AttributeRecord
+    : public Inkscape::GC::Managed<>
+    , public Inkscape::GC::Finalized
+{
     public:
 
-    AttributeRecord(GQuark k, Inkscape::Util::ptr_shared v)
-    : key(k), value(v) {}
+    AttributeRecord(GQuark k, char const *v)
+        : key(k), value(Inkscape::Util::to_opt(v)) {}
+    ~AttributeRecord() override = default;
 
     /** @brief GQuark corresponding to the name of the attribute */
     GQuark key;
-    /** @brief Shared pointer to the value of the attribute */
-    Inkscape::Util::ptr_shared value;
+    /** @brief optional string containing the value of the attribute */
+    std::optional<std::string> value;
     bool operator== (const AttributeRecord &o) const {return key==o.key && value==o.value;}
-
-    // accept default copy constructor and assignment operator
 };
 
 }

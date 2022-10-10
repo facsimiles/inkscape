@@ -25,8 +25,6 @@
 #include "xml/comment-node.h"
 #include "xml/simple-document.h"
 
-using Inkscape::Util::share_string;
-
 /// Returns new document having as first child a node named rootname.
 Inkscape::XML::Document *
 sp_repr_document_new(char const *rootname)

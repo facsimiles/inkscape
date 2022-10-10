@@ -41,6 +41,8 @@
 #include "object/sp-text.h"
 #include "object/sp-flowtext.h"
 
+#include "util/optstr.h"
+
 #include "svg/svg.h"
 
 /**
@@ -374,6 +376,8 @@ void item_to_paths_add_marker( SPItem *context,
     }
 }
 
+using Inkscape::Util::to_cstr;
+using Inkscape::Util::to_opt;
 
 /*
  * Find an outline that represents an item.
@@ -384,6 +388,7 @@ void item_to_paths_add_marker( SPItem *context,
  *
  * The return value is used externally to update a selection. It is nullptr if no change is made.
  */
+// NOTE: this is the offending function
 Inkscape::XML::Node*
 item_to_paths(SPItem *item, bool legacy, SPItem *context)
 {
@@ -492,11 +497,11 @@ item_to_paths(SPItem *item, bool legacy, SPItem *context)
     }
     // Stroke
     
-    gchar const *s_val   = sp_repr_css_property(ncss, "stroke", nullptr);
-    gchar const *s_opac  = sp_repr_css_property(ncss, "stroke-opacity", nullptr);
-    gchar const *f_val   = sp_repr_css_property(ncss, "fill", nullptr);
-    gchar const *opacity = sp_repr_css_property(ncss, "opacity", nullptr);  // Also for markers
-    gchar const *filter  = sp_repr_css_property(ncss, "filter", nullptr);   // Also for markers
+    auto const s_val   = to_opt(sp_repr_css_property(ncss, "stroke", nullptr));
+    auto const s_opac  = to_opt(sp_repr_css_property(ncss, "stroke-opacity", nullptr));
+    auto const f_val   = to_opt(sp_repr_css_property(ncss, "fill", nullptr));
+    auto const opacity = to_opt(sp_repr_css_property(ncss, "opacity", nullptr));  // Also for markers
+    auto const filter  = to_opt(sp_repr_css_property(ncss, "filter", nullptr));   // Also for markers
 
     sp_repr_css_set_property(ncss, "stroke", "none");
     sp_repr_css_set_property(ncss, "stroke-width", nullptr);
@@ -508,14 +513,13 @@ item_to_paths(SPItem *item, bool legacy, SPItem *context)
     sp_repr_css_unset_property(ncss, "marker-end");
 
     // we change the stroke to fill on ncss to create the filled stroke
-    sp_repr_css_set_property(ncss, "fill", s_val);
-    if ( s_opac ) {
-        sp_repr_css_set_property(ncss, "fill-opacity", s_opac);
+    sp_repr_css_set_property(ncss, "fill", to_cstr(s_val));
+    if (s_opac) {
+        sp_repr_css_set_property(ncss, "fill-opacity", to_cstr(s_opac));
     } else {
         sp_repr_css_set_property(ncss, "fill-opacity", "1.0");
     }
 
-    
     sp_repr_css_set_property(ncsf, "stroke", "none");
     sp_repr_css_set_property(ncsf, "stroke-opacity", "1.0");
     sp_repr_css_set_property(ncss, "stroke-width", nullptr);
@@ -547,7 +551,7 @@ item_to_paths(SPItem *item, bool legacy, SPItem *context)
 
     // The stroke ------------------------
     Inkscape::XML::Node *stroke = nullptr;
-    if (s_val && g_strcmp0(s_val,"none") != 0 && stroke_path.size() > 0) {
+    if (!Inkscape::Util::equal(s_val, "none") && stroke_path.size() > 0) {
         stroke = xml_doc->createElement("svg:path");
         sp_repr_css_change(stroke, ncss, "style");
 
@@ -557,7 +561,7 @@ item_to_paths(SPItem *item, bool legacy, SPItem *context)
 
     // The fill --------------------------
     Inkscape::XML::Node *fill = nullptr;
-    if (f_val && g_strcmp0(f_val,"none") != 0 && !legacy) {
+    if (!Inkscape::Util::equal(f_val, "none") && !legacy) {
         fill = xml_doc->createElement("svg:path");
         sp_repr_css_change(fill, ncsf, "style");
 
@@ -761,8 +765,8 @@ item_to_paths(SPItem *item, bool legacy, SPItem *context)
     }
 
     SPCSSAttr *r_style = sp_repr_css_attr_new();
-    sp_repr_css_set_property(r_style, "opacity", opacity);
-    sp_repr_css_set_property(r_style, "filter", filter);
+    sp_repr_css_set_property(r_style, "opacity", to_cstr(opacity));
+    sp_repr_css_set_property(r_style, "filter", to_cstr(filter));
     sp_repr_css_change(out, r_style, "style");
 
     sp_repr_css_attr_unref(r_style);

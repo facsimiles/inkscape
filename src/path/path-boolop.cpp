@@ -846,7 +846,7 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, 
     }
 
     auto const source2doc_inverse = i2doc.inverse();
-    char const *const old_transform_attibute = repr_source->attribute("transform");
+    char const *const old_transform_attribute = repr_source->attribute("transform");
 
     // now that we have the result, add it on the canvas
     if ( bop == bool_op_cut || bop == bool_op_slice ) {
@@ -902,7 +902,7 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, 
                 sp_repr_css_attr_unref(css);
             }
 
-            repr->setAttributeOrRemoveIfEmpty("transform", old_transform_attibute);
+            repr->setAttributeOrRemoveIfEmpty("transform", old_transform_attribute);
 
             // add the new repr to the parent
             // move to the saved position
@@ -931,7 +931,7 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, 
         repr->setAttribute("d", d);
         g_free(d);
 
-        repr->setAttributeOrRemoveIfEmpty("transform", old_transform_attibute);
+        repr->setAttributeOrRemoveIfEmpty("transform", old_transform_attribute);
 
         parent->addChildAtPos(repr, pos);
 

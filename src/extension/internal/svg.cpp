@@ -159,7 +159,7 @@ static void remove_marker_auto_start_reverse(Inkscape::XML::Node *repr,
 
                         // Copy attributes
                         for (const auto & iter : marker->attributeList()) {
-                            marker_reversed->setAttribute(g_quark_to_string(iter.key), iter.value);
+                            marker_reversed->setAttribute(g_quark_to_string(iter.key), Inkscape::Util::to_cstr(iter.value));
                         }
 
                         // Override attributes

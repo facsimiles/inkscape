@@ -75,8 +75,8 @@ void SPTRefReference::notifyChildOrderChanged(Inkscape::XML::Node &/*node*/, Ink
 
 
 void SPTRefReference::notifyContentChanged(Inkscape::XML::Node &/*node*/,
-                                           Inkscape::Util::ptr_shared /*old_content*/,
-                                           Inkscape::Util::ptr_shared /*new_content*/)
+                                           char const */*old_content*/,
+                                           char const */*new_content*/)
 {
     SPObject *owner = getOwner();
 
@@ -87,8 +87,8 @@ void SPTRefReference::notifyContentChanged(Inkscape::XML::Node &/*node*/,
 
 
 void SPTRefReference::notifyAttributeChanged(Inkscape::XML::Node &/*node*/, GQuark /*name*/,
-                                             Inkscape::Util::ptr_shared /*old_value*/,
-                                             Inkscape::Util::ptr_shared /*new_value*/)
+                                             char const */*old_value*/,
+                                             char const */*new_value*/)
 {
     // Do nothing - tref only cares about textual content
 }

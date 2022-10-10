@@ -11,7 +11,6 @@
 #define REBASE_HREFS_H_SEEN
 
 #include <vector>
-#include "xml/attribute-record.h"
 #include "xml/node.h"
 
 class SPDocument;

@@ -90,7 +90,7 @@ Shortcuts::init() {
         // Save relative path to "share/keys" if possible to handle parallel installations of
         // Inskcape gracefully.
         if (success && absolute) {
-            std::string relative_path = sp_relative_path_from_path(path, std::string(get_path(SYSTEM, KEYS)));
+            auto const relative_path = sp_relative_path_from_path(path, get_path_string(SYSTEM, KEYS));
             prefs->setString("/options/kbshortcuts/shortcutfile", relative_path.c_str());
         }
     }
@@ -718,7 +718,7 @@ Shortcuts::get_file_names()
     std::vector<std::pair<Glib::ustring, Glib::ustring>> names_and_paths;
     for (auto &filename : filenames) {
         std::string label = Glib::path_get_basename(filename);
-        Glib::ustring filename_relative = sp_relative_path_from_path(filename, std::string(get_path(SYSTEM, KEYS)));
+        Glib::ustring filename_relative = sp_relative_path_from_path(filename, get_path_string(SYSTEM, KEYS));
 
         XML::Document *document = sp_repr_read_file(filename.c_str(), nullptr);
         if (!document) {
@@ -733,8 +733,7 @@ Shortcuts::get_file_names()
                 if (name) {
                     label = Glib::ustring(name) + " (" + label + ")";
                 }
-                std::pair<Glib::ustring, Glib::ustring> name_and_path = std::make_pair(label, filename_relative);
-                names_and_paths.emplace_back(name_and_path);
+                names_and_paths.emplace_back(std::move(label), std::move(filename_relative));
                 break;
             }
         }

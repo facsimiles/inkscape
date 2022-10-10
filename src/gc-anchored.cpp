@@ -31,8 +31,12 @@ public:
                     char const *name)
     : RefCountEvent(name)
     {
-        _addProperty("base", Util::format("%p", Core::base(const_cast<Anchored *>(object))).pointer());
-        _addProperty("pointer", Util::format("%p", object).pointer());
+        constexpr size_t N = 2048;
+        gchar buf[N];
+        Util::snformat(buf, N, "%p", Core::base(const_cast<Anchored *>(object)));
+        _addProperty("base", buf);
+        Util::snformat(buf, N, "%p", object);
+        _addProperty("pointer", buf);
         _addProperty("class", Debug::demangle(typeid(*object).name()));
         _addProperty("new-refcount", object->_anchored_refcount() + bias);
     }

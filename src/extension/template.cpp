@@ -42,7 +42,8 @@ TemplatePreset::TemplatePreset(Template *mod, const Inkscape::XML::Node *repr, T
     if (repr) {
         for (const auto &iter : repr->attributeList()) {
             std::string name = g_quark_to_string(iter.key);
-            std::string value = std::string(iter.value);
+            //TODO: make this better
+            const auto &value = *iter.value;
             if (name == "name")
                 _name = value;
             else if (name == "label")
@@ -184,7 +185,8 @@ Template::Template(Inkscape::XML::Node *in_repr, Implementation::Implementation 
             TemplatePrefs prefs;
             for (const auto &iter : t_node->attributeList()) {
                 std::string name = g_quark_to_string(iter.key);
-                std::string value = std::string(iter.value);
+                //TODO: Make this better
+                const auto &value = *iter.value;
                 if (name == "icon") {
                     _icon = value;
                 } else if (name == "visibility") {

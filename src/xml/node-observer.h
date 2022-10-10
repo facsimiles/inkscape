@@ -15,12 +15,7 @@
 #ifndef SEEN_INKSCAPE_XML_NODE_OBSERVER_H
 #define SEEN_INKSCAPE_XML_NODE_OBSERVER_H
 
-#include "util/share.h"
 typedef unsigned int GQuark;
-
-#ifndef INK_UNUSED
-#define INK_UNUSED(x) ((void)(x))
-#endif // INK_UNUSED
 
 namespace Inkscape {
 namespace XML {
@@ -66,11 +61,8 @@ public:
      * @param child The newly added child node
      * @param prev The node after which the new child was inserted into the sibling order, or NULL
      */
-    virtual void notifyChildAdded(Node &node, Node &child, Node *prev) {
-        INK_UNUSED(node);
-        INK_UNUSED(child);
-        INK_UNUSED(prev);
-    }
+    virtual void notifyChildAdded(Node &/*node*/, Node &/*child*/, Node */*prev*/)
+    {}
 
     /**
      * @brief Child removal callback
@@ -82,11 +74,8 @@ public:
      * @param child The removed child node
      * @param prev The node that was before the removed node in sibling order, or NULL
      */
-    virtual void notifyChildRemoved(Node &node, Node &child, Node *prev) {
-        INK_UNUSED(node);
-        INK_UNUSED(child);
-        INK_UNUSED(prev);
-    }
+    virtual void notifyChildRemoved(Node &/*node*/, Node &/*child*/, Node */*prev*/)
+    {}
 
     /**
      * @brief Child order change callback
@@ -101,13 +90,9 @@ public:
      * @param old_prev The node that was before @c child prior to the order change
      * @param new_prev The node that is before @c child after the order change
      */
-    virtual void notifyChildOrderChanged(Node &node, Node &child,
-                                         Node *old_prev, Node *new_prev) {
-        INK_UNUSED(node);
-        INK_UNUSED(child);
-        INK_UNUSED(old_prev);
-        INK_UNUSED(new_prev);
-    }
+    virtual void notifyChildOrderChanged(Node &/*node*/, Node &/*child*/,
+                                         Node */*old_prev*/, Node */*new_prev*/)
+    {}
 
     /**
      * @brief Content change callback
@@ -119,13 +104,10 @@ public:
      * @param old_content Old content of @c node
      * @param new_content New content of @c node
      */
-    virtual void notifyContentChanged(Node &node,
-                                      Util::ptr_shared old_content,
-                                      Util::ptr_shared new_content) {
-        INK_UNUSED(node);
-        INK_UNUSED(old_content);
-        INK_UNUSED(new_content);
-    }
+    virtual void notifyContentChanged(Node &/*node*/,
+                                      char const */*old_content*/,
+                                      char const */*new_content*/)
+    {}
 
     /**
      * @brief Attribute change callback
@@ -137,14 +119,10 @@ public:
      * @param old_value Old value of the modified attribute
      * @param new_value New value of the modified attribute
      */
-    virtual void notifyAttributeChanged(Node &node, GQuark name,
-                                        Util::ptr_shared old_value,
-                                        Util::ptr_shared new_value) {
-        INK_UNUSED(node);
-        INK_UNUSED(name);
-        INK_UNUSED(old_value);
-        INK_UNUSED(new_value);
-    }
+    virtual void notifyAttributeChanged(Node &/*node*/, GQuark /*name*/,
+                                        char const */*old_value*/,
+                                        char const */*new_value*/)
+    {}
 
     /**
      * @brief Element name change callback.
@@ -155,11 +133,8 @@ public:
      * @param old_name GQuark corresponding to the old element name.
      * @param new_name GQuark corresponding to the new element name.
      */
-    virtual void notifyElementNameChanged(Node& node, GQuark old_name, GQuark new_name) {
-        INK_UNUSED(node);
-        INK_UNUSED(old_name);
-        INK_UNUSED(new_name);
-    }
+    virtual void notifyElementNameChanged(Node& /*node*/, GQuark /*old_name*/, GQuark /*new_name*/)
+    {}
 
 };
 

@@ -56,9 +56,9 @@ Input::Input (Inkscape::XML::Node *in_repr, Implementation::Implementation *in_i
             if (!strcmp(child_repr->name(), INKSCAPE_EXTENSION_NS "input")) {
                 // Input tag attributes
                 for (const auto &iter : child_repr->attributeList()) {
-                    std::string name = g_quark_to_string(iter.key);
-                    std::string value = std::string(iter.value);
-                    if (name == "priority")
+                    auto const name = g_quark_to_string(iter.key);
+                    auto const &value = *iter.value;
+                    if (std::strcmp(name, "priority") == 0)
                         set_sort_priority(strtol(value.c_str(), nullptr, 0));
                 }
 

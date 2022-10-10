@@ -43,7 +43,6 @@ protected:
     int _imageCount;
     char** _caches;
     unsigned* _cacheLengths;
-    const char** _originals;
     SPItem** _imageItems;
 public:
     ImageMagickDocCache(Inkscape::UI::View::View * view);
@@ -57,7 +56,6 @@ ImageMagickDocCache::ImageMagickDocCache(Inkscape::UI::View::View * view) :
     _imageCount(0),
     _caches(NULL),
     _cacheLengths(NULL),
-    _originals(NULL),
     _imageItems(NULL)
 {
     SPDesktop *desktop = (SPDesktop*)view;
@@ -66,7 +64,6 @@ ImageMagickDocCache::ImageMagickDocCache(Inkscape::UI::View::View * view) :
     
     // Init the data-holders
     _nodes = new Inkscape::XML::Node*[selectCount];
-    _originals = new const char*[selectCount];
     _caches = new char*[selectCount];
     _cacheLengths = new unsigned int[selectCount];
     _images = new Magick::Image*[selectCount];
@@ -82,7 +79,6 @@ ImageMagickDocCache::ImageMagickDocCache(Inkscape::UI::View::View * view) :
             _nodes[_imageCount] = node;    
             char const *xlink = node->attribute("xlink:href");
             char const *id = node->attribute("id");
-            _originals[_imageCount] = xlink;
             _caches[_imageCount] = (char*)"";
             _cacheLengths[_imageCount] = 0;
             _images[_imageCount] = new Magick::Image();
@@ -96,8 +92,6 @@ ImageMagickDocCache::ImageMagickDocCache(Inkscape::UI::View::View * view) :
 ImageMagickDocCache::~ImageMagickDocCache ( ) {
     if (_nodes)
         delete _nodes;
-    if (_originals)
-        delete _originals;
     if (_caches)
         delete _caches;
     if (_cacheLengths)

@@ -24,15 +24,16 @@ namespace XML {
 /**
  * @brief Comment node, e.g. &lt;!-- Some comment --&gt;
  */
-struct CommentNode : public SimpleNode {
-    CommentNode(Util::ptr_shared content, Document *doc)
-    : SimpleNode(g_quark_from_static_string("comment"), doc)
+struct CommentNode : public SimpleNode
+{
+    CommentNode(char const *content, Document *doc)
+        : SimpleNode(g_quark_from_static_string("comment"), doc)
     {
         setContent(content);
     }
 
     CommentNode(CommentNode const &other, Document *doc)
-    : SimpleNode(other, doc) {}
+        : SimpleNode(other, doc) {}
 
     Inkscape::XML::NodeType type() const override { return Inkscape::XML::NodeType::COMMENT_NODE; }
 

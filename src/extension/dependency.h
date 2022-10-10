@@ -11,6 +11,8 @@
 #ifndef INKSCAPE_EXTENSION_DEPENDENCY_H__
 #define INKSCAPE_EXTENSION_DEPENDENCY_H__
 
+#include <optional>
+
 #include <glibmm/ustring.h>
 #include "xml/repr.h"
 
@@ -50,9 +52,9 @@ private:
     /** \brief  The XML representation of the dependency. */
     Inkscape::XML::Node * _repr;
     /** \brief  The string that is in the XML tags pulled out. */
-    const gchar * _string = nullptr;
+    std::optional<Glib::ustring> _string;
     /** \brief  The description of the dependency for the users. */
-    const gchar * _description = nullptr;
+    Glib::ustring _description;
     /** \brief  The absolute path to the dependency file determined while checking this dependency. */
     std::string  _absolute_location = UNCHECKED;
 

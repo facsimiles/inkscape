@@ -50,64 +50,63 @@ namespace UI {
 namespace Dialog {
 
 // Keeps a watch on style element
-class SelectorsDialog::NodeObserver : public Inkscape::XML::NodeObserver {
-  public:
+class SelectorsDialog::NodeObserver : public Inkscape::XML::NodeObserver
+{
+    SelectorsDialog *_selectorsdialog;
+public:
     NodeObserver(SelectorsDialog *selectorsdialog)
         : _selectorsdialog(selectorsdialog)
     {
         g_debug("SelectorsDialog::NodeObserver: Constructor");
     };
 
-    void notifyContentChanged(Inkscape::XML::Node &node,
-                                      Inkscape::Util::ptr_shared old_content,
-                                      Inkscape::Util::ptr_shared new_content) override;
+    void notifyContentChanged(Inkscape::XML::Node & /*node*/,
+                              char const */*old_content*/,
+                              char const */*new_content*/) override
+    {
 
-    SelectorsDialog *_selectorsdialog;
+        g_debug("SelectorsDialog::NodeObserver::notifyContentChanged");
+        _selectorsdialog->_scrollock = true;
+        _selectorsdialog->_updating = false;
+        _selectorsdialog->_readStyleElement();
+        _selectorsdialog->_selectRow();
+    }
 };
 
 
-void SelectorsDialog::NodeObserver::notifyContentChanged(Inkscape::XML::Node & /*node*/,
-                                                         Inkscape::Util::ptr_shared /*old_content*/,
-                                                         Inkscape::Util::ptr_shared /*new_content*/)
-{
-
-    g_debug("SelectorsDialog::NodeObserver::notifyContentChanged");
-    _selectorsdialog->_scrollock = true;
-    _selectorsdialog->_updating = false;
-    _selectorsdialog->_readStyleElement();
-    _selectorsdialog->_selectRow();
-}
 
 
 // Keeps a watch for new/removed/changed nodes
 // (Must update objects that selectors match.)
-class SelectorsDialog::NodeWatcher : public Inkscape::XML::NodeObserver {
-  public:
+class SelectorsDialog::NodeWatcher : public Inkscape::XML::NodeObserver
+{
+    SelectorsDialog *_selectorsdialog;
+public:
     NodeWatcher(SelectorsDialog *selectorsdialog)
         : _selectorsdialog(selectorsdialog)
     {
         g_debug("SelectorsDialog::NodeWatcher: Constructor");
     };
 
-    void notifyChildAdded( Inkscape::XML::Node &/*node*/,
-                                   Inkscape::XML::Node &child,
-                                   Inkscape::XML::Node */*prev*/ ) override
+    void notifyChildAdded(Inkscape::XML::Node &/*node*/,
+                          Inkscape::XML::Node &child,
+                          Inkscape::XML::Node */*prev*/ ) override
     {
-            _selectorsdialog->_nodeAdded(child);
+        _selectorsdialog->_nodeAdded(child);
     }
 
-    void notifyChildRemoved( Inkscape::XML::Node &/*node*/,
-                                     Inkscape::XML::Node &child,
-                                     Inkscape::XML::Node */*prev*/ ) override
+    void notifyChildRemoved(Inkscape::XML::Node &/*node*/,
+                            Inkscape::XML::Node &child,
+                            Inkscape::XML::Node */*prev*/ ) override
     {
-            _selectorsdialog->_nodeRemoved(child);
+        _selectorsdialog->_nodeRemoved(child);
     }
 
-    void notifyAttributeChanged( Inkscape::XML::Node &node,
-                                         GQuark qname,
-                                         Util::ptr_shared /*old_value*/,
-                                         Util::ptr_shared /*new_value*/ ) override {
-
+    void notifyAttributeChanged(Inkscape::XML::Node &node,
+                                GQuark qname,
+                                char const */*old_value*/,
+                                char const */*new_value*/ ) override
+    {
         static GQuark const CODE_id = g_quark_from_static_string("id");
         static GQuark const CODE_class = g_quark_from_static_string("class");
 
@@ -115,8 +114,6 @@ class SelectorsDialog::NodeWatcher : public Inkscape::XML::NodeObserver {
             _selectorsdialog->_nodeChanged(node);
         }
     }
-
-    SelectorsDialog *_selectorsdialog;
 };
 
 void SelectorsDialog::_nodeAdded(Inkscape::XML::Node &node)

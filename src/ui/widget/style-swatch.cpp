@@ -32,7 +32,6 @@
 #include "widgets/spw-utilities.h"
 
 #include "xml/sp-css-attr.h"
-#include "xml/attribute-record.h"
 
 enum {
     SS_FILL,

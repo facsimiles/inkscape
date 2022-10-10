@@ -5,7 +5,6 @@ set(util_SRC
 	expression-evaluator.cpp
 	funclog.cpp
 	pool.cpp
-	share.cpp
 	paper.cpp
 	preview.cpp
 	statics.cpp
@@ -33,7 +32,6 @@ set(util_SRC
 	pool.h
 	preview.h
 	reference.h
-	share.h
 	signal-blocker.h
 	statics.h
 	trim.h

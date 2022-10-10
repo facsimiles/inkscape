@@ -61,7 +61,7 @@ protected:
         Geom::PathVector bpv = sp_svg_read_pathv(b);
         size_t totala = apv.curveCount();
         size_t totalb = bpv.curveCount();
-        ASSERT_TRUE(totala == totalb);
+        ASSERT_EQ(totala, totalb);
         std::vector<Geom::Coord> pos;
         // find initial
         size_t initial = 0;

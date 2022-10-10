@@ -60,7 +60,7 @@ Output::Output (Inkscape::XML::Node *in_repr, Implementation::Implementation *in
 
                 for (const auto &iter : child_repr->attributeList()) {
                     std::string name = g_quark_to_string(iter.key);
-                    std::string value = std::string(iter.value);
+                    std::string value = *iter.value;
                     if (name == "raster")
                         raster = value == "true";
                     else if (name == "is_exported")

@@ -81,9 +81,11 @@ Dependency::Dependency (Inkscape::XML::Node * in_repr, const Extension *extensio
 
     _string = _repr->firstChild()->content();
 
-    _description = _repr->attribute("description");
-    if (_description == nullptr)
-        _description = _repr->attribute("_description");
+    if (char const *desc_attr = _repr->attribute("description")) {
+        _description = desc_attr;
+    } else if (desc_attr = _repr->attribute("_description")) {
+        _description = desc_attr;
+    }
 
     return;
 }
@@ -130,7 +132,7 @@ Dependency::~Dependency ()
 */
 bool Dependency::check ()
 {
-    if (_string == nullptr) {
+    if (!_string.has_value()) {
         return false;
     }
 
@@ -138,7 +140,7 @@ bool Dependency::check ()
 
     switch (_type) {
         case TYPE_EXTENSION: {
-            Extension * myext = db.get(_string);
+            Extension * myext = db.get(_string->c_str());
             if (myext == nullptr) return false;
             if (myext->deactivated()) return false;
             break;
@@ -147,7 +149,7 @@ bool Dependency::check ()
         case TYPE_FILE: {
             Glib::FileTest filetest = Glib::FILE_TEST_EXISTS;
 
-            std::string location(_string);
+            std::string location(*_string);
 
             // get potential file extension for later usage
             std::string extension;
@@ -203,7 +205,7 @@ bool Dependency::check ()
                     std::string base_directory = _extension->get_base_directory();
                     if (base_directory.empty()) {
                         g_warning("Dependency '%s' requests location relative to .inx file, "
-                                  "which is unknown for extension '%s'", _string, _extension->get_id());
+                                  "which is unknown for extension '%s'", _string->c_str(), _extension->get_id());
                     }
                     std::string absolute_location = Glib::build_filename(base_directory, location);
                     if (!Glib::file_test(absolute_location, filetest)) {
@@ -250,9 +252,9 @@ bool Dependency::check ()
                         }
 
                         if (*local_path == '\0') {
-                            final_name = _string;
+                            final_name = *_string;
                         } else {
-                            final_name = Glib::build_filename(local_path, _string);
+                            final_name = Glib::build_filename(local_path, _string->raw());
                         }
 
                         if (Glib::file_test(final_name, filetest)) {
@@ -305,7 +307,7 @@ bool Dependency::check ()
 */
 const gchar* Dependency::get_name()
 {
-    return _string;
+    return _string->c_str();
 }
 
 /**
@@ -319,11 +321,11 @@ const gchar* Dependency::get_name()
 std::string Dependency::get_path()
 {
     if (_type == TYPE_EXTENSION) {
-        g_warning("Requested absolute path of dependency '%s' which is of 'extension' type.", _string);
+        g_warning("Requested absolute path of dependency '%s' which is of 'extension' type.", _string->c_str());
         return "";
     }
     if (_absolute_location == UNCHECKED) {
-        g_warning("Requested absolute path of dependency '%s' which is unchecked.", _string);
+        g_warning("Requested absolute path of dependency '%s' which is unchecked.", _string->c_str());
         return "";
     }
 
@@ -339,10 +341,10 @@ Glib::ustring Dependency::info_string()
                                                _("Dependency"),
                                                _("type"),     _(_type_str[_type]),
                                                _("location"), _(_location_str[_location]),
-                                               _("string"),     _string);
+                                               _("string"),     _string->c_str());
 
-    if (_description) {
-        str += Glib::ustring::compose("\n\t%1: %2\n", _("  description: "), _(_description));
+    if (!_description.empty()) {
+        str += Glib::ustring::compose("\n\t%1: %2\n", _("  description: "), _(_description.c_str()));
     }
 
     return str;

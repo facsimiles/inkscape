@@ -13,7 +13,6 @@
 #ifndef SEEN_INKSCAPE_XML_LOG_BUILDER_H
 #define SEEN_INKSCAPE_XML_LOG_BUILDER_H
 
-#include "inkgc/gc-managed.h"
 #include "xml/node-observer.h"
 
 namespace Inkscape {
@@ -57,12 +56,12 @@ public:
                        Node *old_prev, Node *new_prev);
 
     void setContent(Node &node,
-                    Util::ptr_shared old_content,
-                    Util::ptr_shared new_content);
+                    char const *old_content,
+                    char const *new_content);
 
     void setAttribute(Node &node, GQuark name,
-                      Util::ptr_shared old_value,
-                      Util::ptr_shared new_value);
+                      char const *old_value,
+                      char const *new_value);
 
     void setElementName(Node& node, GQuark old_name, GQuark new_name);
     /*@}*/

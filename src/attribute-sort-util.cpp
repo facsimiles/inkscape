@@ -18,16 +18,18 @@
  * Utility functions for sorting attributes by name.
  */
 
-#include <fstream>
-#include <sstream>
-#include <iostream>
-#include <vector>
-#include <utility>      // std::pair
 #include <algorithm>    // std::sort
+#include <fstream>
+#include <iostream>
+#include <sstream>
+#include <utility>      // std::pair
+#include <vector>
 
 #include <glibmm/ustring.h>
 
 #include "attribute-sort-util.h"
+
+#include "util/optstr.h"
 
 #include "xml/repr.h"
 #include "xml/attribute-record.h"
@@ -36,7 +38,6 @@
 #include "attributes.h"
 
 using Inkscape::XML::Node;
-using Inkscape::XML::AttributeRecord;
 
 static void sp_attribute_sort_recursive(Node& repr);
 static void sp_attribute_sort_element(Node& repr);
@@ -73,10 +74,11 @@ static void sp_attribute_sort_recursive(Node& repr) {
 /**
  * Compare function
  */
-static bool cmp(std::pair< Glib::ustring, Glib::ustring > const &a,
-                std::pair< Glib::ustring, Glib::ustring > const &b) {
-    auto val_a = sp_attribute_lookup(a.first.c_str());
-    auto val_b = sp_attribute_lookup(b.first.c_str());
+static bool cmp(std::pair<char const*, Glib::ustring> const &a,
+                std::pair<char const*, Glib::ustring> const &b)
+{
+    auto val_a = sp_attribute_lookup(a.first);
+    auto val_b = sp_attribute_lookup(b.first);
     if (val_a == SPAttr::INVALID) return false; // Unknown attributes at end.
     if (val_b == SPAttr::INVALID) return true;  // Unknown attributes at end.
     return val_a < val_b;
@@ -86,38 +88,29 @@ static bool cmp(std::pair< Glib::ustring, Glib::ustring > const &a,
  * Sort attributes on an element
  */
 static void sp_attribute_sort_element(Node& repr) {
-
   g_return_if_fail (repr.type() == Inkscape::XML::NodeType::ELEMENT_NODE);
 
   sp_attribute_sort_style(repr);
 
   // Sort attributes:
+  std::vector<std::pair<char const*, Glib::ustring>> my_list;
+  for (auto const &iter : repr.attributeList()) {
+      auto const attribute = g_quark_to_string(iter.key);
+      auto &&value = Glib::ustring(*iter.value);
 
-  // It doesn't seem possible to sort a List directly so we dump the list into
-  // a std::list and sort that. Not very efficient. Sad.
-
-  std::vector<std::pair< Glib::ustring, Glib::ustring > > my_list;
-  for ( const auto & iter : repr.attributeList()) {
-
-      Glib::ustring attribute = g_quark_to_string(iter.key);
-      Glib::ustring value = (const char*)iter.value;
-
-      // C++11 my_list.emlace_back(attribute, value);
-      my_list.emplace_back(attribute,value);
+      // Removing "inkscape:label" results in crash when Layers dialog is open.
+      if (std::strcmp(attribute, "inkscape:label") != 0) {
+          my_list.emplace_back(attribute, value);
+      }
   }
   std::sort(my_list.begin(), my_list.end(), cmp);
   // Delete all attributes.
   for (const auto& it : my_list) {
-      // Removing "inkscape:label" results in crash when Layers dialog is open.
-      if (it.first != "inkscape:label") {
-          repr.removeAttribute(it.first);
-      }
+      repr.removeAttribute(it.first);
   }
   // Insert all attributes in proper order
   for (const auto& it : my_list) {
-      if (it.first != "inkscape:label") {
-          repr.setAttribute( it.first, it.second);
-      }
+      repr.setAttribute(it.first, it.second.c_str());
   } 
 }
 
@@ -149,23 +142,21 @@ static void sp_attribute_sort_style(Node& repr) {
 static void sp_attribute_sort_style(Node& repr, SPCSSAttr& css) {
 
   // Loop over all properties in "style" node.
-  std::vector<std::pair< Glib::ustring, Glib::ustring > > my_list;
-  for ( const auto & iter : css.attributeList()) {
+  std::vector<std::pair<char const*, Glib::ustring>> my_list;
+  for (auto const &iter : css.attributeList()) {
+      auto const property = g_quark_to_string(iter.key);
+      auto &&value = Glib::ustring(*iter.value);
 
-    Glib::ustring property = g_quark_to_string(iter.key);
-    Glib::ustring value = (const char*)iter.value;
-
-    // C++11 my_list.emlace_back(property, value);
-    my_list.emplace_back(property,value);
+      my_list.emplace_back(property, value);
   }
   std::sort(my_list.begin(), my_list.end(), cmp);
   // Delete all attributes.
   for (const auto& it : my_list) {
-      sp_repr_css_set_property( &css, it.first.c_str(), nullptr );
+      sp_repr_css_set_property(&css, it.first, nullptr);
   }
   // Insert all attributes in proper order
   for (const auto& it : my_list) {
-      sp_repr_css_set_property( &css, it.first.c_str(), it.second.c_str() );
+      sp_repr_css_set_property(&css, it.first, it.second.c_str());
   } 
 }
 

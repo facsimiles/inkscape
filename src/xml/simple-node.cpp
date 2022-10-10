@@ -30,6 +30,7 @@
 #include "xml/node-fns.h"
 #include "debug/event-tracker.h"
 #include "debug/simple-event.h"
+#include "util/optstr.h"
 #include "util/format.h"
 
 #include "attribute-rel-util.h"
@@ -41,31 +42,30 @@ namespace XML {
 namespace {
 
 std::shared_ptr<std::string> stringify_node(Node const &node) {
-    gchar *string;
+    constexpr size_t N = 2048;
+    char string[N];
     switch (node.type()) {
     case NodeType::ELEMENT_NODE: {
         char const *id=node.attribute("id");
         if (id) {
-            string = g_strdup_printf("element(%p)=%s(#%s)", &node, node.name(), id);
+            Util::snformat(string, N, "element(%p)=%s(#%s)", &node, node.name(), id);
         } else {
-            string = g_strdup_printf("element(%p)=%s", &node, node.name());
+            Util::snformat(string, N, "element(%p)=%s", &node, node.name());
         }
     } break;
     case NodeType::TEXT_NODE:
-        string = g_strdup_printf("text(%p)=%s", &node, node.content());
+        Util::snformat(string, N, "text(%p)=%s", &node, node.content());
         break;
     case NodeType::COMMENT_NODE:
-        string = g_strdup_printf("comment(%p)=<!--%s-->", &node, node.content());
+        Util::snformat(string, N, "comment(%p)=<!--%s-->", &node, node.content());
         break;
     case NodeType::DOCUMENT_NODE:
-        string = g_strdup_printf("document(%p)", &node);
+        Util::snformat(string, N, "document(%p)", &node);
         break;
     default:
-        string = g_strdup_printf("unknown(%p)", &node);
+        Util::snformat(string, N, "unknown(%p)", &node);
     }
-    std::shared_ptr<std::string> result = std::make_shared<std::string>(string);
-    g_free(string);
-    return result;
+    return std::make_shared<std::string>(string);
 }
 
 typedef Debug::SimpleEvent<Debug::Event::XML> DebugXML;
@@ -119,10 +119,10 @@ public:
 class DebugSetContent : public DebugXMLNode {
 public:
     DebugSetContent(Node const &node,
-                    Util::ptr_shared content)
+                    char const *content)
     : DebugXMLNode(node, "set-content")
     {
-        _addProperty("content", content.pointer());
+        _addProperty("content", content);
     }
 };
 
@@ -137,11 +137,11 @@ class DebugSetAttribute : public DebugXMLNode {
 public:
     DebugSetAttribute(Node const &node,
                       GQuark name,
-                      Util::ptr_shared value)
+                      char const *value)
     : DebugXMLNode(node, "set-attribute")
     {
         _addProperty("name", g_quark_to_string(name));
-        _addProperty("value", value.pointer());
+        _addProperty("value", value);
     }
 };
 
@@ -164,10 +164,6 @@ public:
 };
 
 }
-
-using Util::ptr_shared;
-using Util::share_string;
-using Util::share_unsafe;
 
 SimpleNode::SimpleNode(int code, Document *document)
 : Node(), _name(code), _attributes(), _child_count(0),
@@ -222,7 +218,7 @@ gchar const *SimpleNode::name() const {
 }
 
 gchar const *SimpleNode::content() const {
-    return this->_content;
+    return Inkscape::Util::to_cstr(_content);
 }
 
 gchar const *SimpleNode::attribute(gchar const *name) const {
@@ -230,10 +226,9 @@ gchar const *SimpleNode::attribute(gchar const *name) const {
 
     GQuark const key = g_quark_from_string(name);
 
-    for (const auto & iter : _attributes)
-    {
-        if ( iter.key == key ) {
-            return iter.value;
+    for (auto const &iter : _attributes) {
+        if (iter.key == key) {
+            return Inkscape::Util::to_cstr(iter.value);
         }
     }
 
@@ -291,28 +286,35 @@ void SimpleNode::_setParent(SimpleNode *parent) {
     }
 }
 
-void SimpleNode::setContent(gchar const *content) {
-    ptr_shared old_content=_content;
-    ptr_shared new_content = ( content ? share_string(content) : ptr_shared() );
+void SimpleNode::setContent(char const *content)
+{
+    using Inkscape::Util::to_cstr;
+    using Inkscape::Util::to_opt;
+
+    bool changed = !Inkscape::Util::equal(_content, content);
+
+    auto const old_content = _content;
 
     Debug::EventTracker<> tracker;
-    if (new_content) {
-        tracker.set<DebugSetContent>(*this, new_content);
+    if (content) {
+        tracker.set<DebugSetContent>(*this, content);
     } else {
         tracker.set<DebugClearContent>(*this);
     }
 
-    _content = new_content;
+    _content = to_opt(content);
 
-    if ( _content != old_content ) {
-        _document->logger()->notifyContentChanged(*this, old_content, _content);
-        _observers.notifyContentChanged(*this, old_content, _content);
+    if (changed) {
+        _document->logger()->notifyContentChanged(*this, to_cstr(old_content), to_cstr(_content));
+        _observers.notifyContentChanged(*this, to_cstr(old_content), to_cstr(_content));
     }
 }
 
-void
-SimpleNode::setAttributeImpl(gchar const *name, gchar const *value)
+void SimpleNode::setAttributeImpl(char const *name, char const *value)
 {
+    using Inkscape::Util::to_cstr;
+    using Inkscape::Util::to_opt;
+
     g_return_if_fail(name && *name);
 
     // sanity check: `name` must not contain whitespace
@@ -321,13 +323,13 @@ SimpleNode::setAttributeImpl(gchar const *name, gchar const *value)
     // Check usefulness of attributes on elements in the svg namespace, optionally don't add them to tree.
     Glib::ustring element = g_quark_to_string(_name);
     //g_message("setAttribute:  %s: %s: %s", element.c_str(), name, value);
-    gchar* cleaned_value = g_strdup( value );
+    gchar* cleaned_value = g_strdup(value);
 
     // Only check elements in SVG name space and don't block setting attribute to NULL.
-    if( element.substr(0,4) == "svg:" && value != nullptr) {
+    if(std::string_view(element.raw()).substr(0,4) == "svg:" && value != nullptr) {
 
-        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        if( prefs->getBool("/options/svgoutput/check_on_editing") ) {
+        auto prefs = Inkscape::Preferences::get();
+        if (prefs->getBool("/options/svgoutput/check_on_editing")) {
 
             gchar const *id_char = attribute("id");
             Glib::ustring id = (id_char == nullptr ? "" : id_char );
@@ -339,7 +341,7 @@ SimpleNode::setAttributeImpl(gchar const *name, gchar const *value)
             if( (attr_warn || attr_remove) && value != nullptr ) {
                 bool is_useful = sp_attribute_check_attribute( element, id, name, attr_warn );
                 if( !is_useful && attr_remove ) {
-                    g_free( cleaned_value );
+                    g_free(cleaned_value);
                     return; // Don't add to tree.
                 }
             }
@@ -348,7 +350,7 @@ SimpleNode::setAttributeImpl(gchar const *name, gchar const *value)
             // tree (and thus has no parent), default values will not be tested.
             if( !strcmp( name, "style" ) && (flags >= SP_ATTRCLEAN_STYLE_WARN) ) {
                 g_free( cleaned_value );
-                cleaned_value = g_strdup( sp_attribute_clean_style( this, value, flags ).c_str() );
+                cleaned_value = g_strdup(sp_attribute_clean_style(this, value, flags).c_str());
                 // if( g_strcmp0( value, cleaned_value ) ) {
                 //     g_warning( "SimpleNode::setAttribute: %s", id.c_str() );
                 //     g_warning( "     original: %s", value);
@@ -360,39 +362,38 @@ SimpleNode::setAttributeImpl(gchar const *name, gchar const *value)
 
     GQuark const key = g_quark_from_string(name);
 
-    AttributeRecord *ref = nullptr;
-    for ( auto & existing : _attributes ) {
-        if ( existing.key == key ) {
-            ref = &existing;
-            break;
-        }
-    }
+    auto const attr = std::find_if(_attributes.begin(), _attributes.end(), [&](auto const &attr) {
+        return attr.key == key;
+    });
+
     Debug::EventTracker<> tracker;
 
-    ptr_shared old_value=( ref ? ref->value : ptr_shared() );
+    std::optional<std::string> const old_value = (attr != _attributes.end()) ?
+        attr->value : std::nullopt;
 
-    ptr_shared new_value=ptr_shared();
+    char const *new_value = nullptr;
     if (cleaned_value) { // set value of attribute
-        new_value = share_string(cleaned_value);
+        new_value = cleaned_value;
         tracker.set<DebugSetAttribute>(*this, key, new_value);
-        if (!ref) {
-	    _attributes.emplace_back(key, new_value);
+        if (attr == _attributes.end()) {
+            _attributes.emplace_back(key, new_value);
         } else {
-            ref->value = new_value;
+            attr->value = to_opt(new_value);
         }
     } else { //clearing attribute
         tracker.set<DebugClearAttribute>(*this, key);
-        if (ref) {
-	    _attributes.erase(std::find(_attributes.begin(),_attributes.end(),(*ref)));
+        if (attr != _attributes.end()) {
+            _attributes.erase(attr);
         }
     }
 
-    if ( new_value != old_value && (!old_value || !new_value || strcmp(old_value, new_value))) {
-        _document->logger()->notifyAttributeChanged(*this, key, old_value, new_value);
-        _observers.notifyAttributeChanged(*this, key, old_value, new_value);
+    // NOTE: check again maybe?
+    if (new_value != to_cstr(old_value) && (!old_value || !new_value || old_value != new_value)) {
+        _document->logger()->notifyAttributeChanged(*this, key, to_cstr(old_value), new_value);
+        _observers.notifyAttributeChanged(*this, key, to_cstr(old_value), new_value);
         //g_warning( "setAttribute notified: %s: %s: %s: %s", name, element.c_str(), old_value, new_value ); 
     }
-    g_free( cleaned_value );
+    g_free(cleaned_value);
 }
 
 void SimpleNode::setCodeUnsafe(int code) {
@@ -580,11 +581,11 @@ void child_removed(Node *node, Node *child, Node *ref, void *data) {
 }
 
 void content_changed(Node *node, gchar const *old_content, gchar const *new_content, void *data) {
-    reinterpret_cast<NodeObserver *>(data)->notifyContentChanged(*node, Util::share_unsafe((const char *)old_content), Util::share_unsafe((const char *)new_content));
+    reinterpret_cast<NodeObserver *>(data)->notifyContentChanged(*node, old_content, new_content);
 }
 
 void attr_changed(Node *node, gchar const *name, gchar const *old_value, gchar const *new_value, bool /*is_interactive*/, void *data) {
-    reinterpret_cast<NodeObserver *>(data)->notifyAttributeChanged(*node, g_quark_from_string(name), Util::share_unsafe((const char *)old_value), Util::share_unsafe((const char *)new_value));
+    reinterpret_cast<NodeObserver *>(data)->notifyAttributeChanged(*node, g_quark_from_string(name), old_value, new_value);
 }
 
 void order_changed(Node *node, Node *child, Node *old_ref, Node *new_ref, void *data) {
@@ -605,7 +606,7 @@ void SimpleNode::synthesizeEvents(NodeEventVector const *vector, void *data) {
     if (vector->attr_changed) {
         for ( const auto & iter : _attributes )
         {
-            vector->attr_changed(this, g_quark_to_string(iter.key), nullptr, iter.value, false, data);
+            vector->attr_changed(this, g_quark_to_string(iter.key), nullptr, Inkscape::Util::to_cstr(iter.value), false, data);
         }
     }
     if (vector->child_added) {
@@ -618,7 +619,7 @@ void SimpleNode::synthesizeEvents(NodeEventVector const *vector, void *data) {
         }
     }
     if (vector->content_changed) {
-        vector->content_changed(this, nullptr, this->_content, data);
+        vector->content_changed(this, nullptr, content(), data);
     }
 }
 
@@ -707,8 +708,7 @@ bool SimpleNode::equal(Node const *other, bool recursive) {
             const gchar * key_orig = g_quark_to_string(orig_attr.key);
             const gchar * key_other = g_quark_to_string(other_attr.key);
             if (!strcmp(key_orig, key_other) && 
-                !strcmp(orig_attr.value, other_attr.value)) 
-            {
+                (orig_attr.value == other_attr.value)) {
                 other_length++;
                 break;
             }
@@ -776,7 +776,7 @@ void SimpleNode::mergeFrom(Node const *src, gchar const *key, bool extension, bo
 
     for ( const auto & iter : src->attributeList() )
     {
-        setAttribute(g_quark_to_string(iter.key), iter.value);
+        setAttribute(g_quark_to_string(iter.key), Inkscape::Util::to_cstr(iter.value));
     }
 }
 

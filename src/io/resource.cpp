@@ -122,14 +122,6 @@ gchar *_get_path(Domain domain, Type type, char const *filename)
 }
 
 
-
-Util::ptr_shared get_path(Domain domain, Type type, char const *filename)
-{
-    char *path = _get_path(domain, type, filename);
-    Util::ptr_shared result=Util::share_string(path);
-    g_free(path);
-    return result;
-}
 Glib::ustring get_path_ustring(Domain domain, Type type, char const *filename)
 {
     Glib::ustring result;

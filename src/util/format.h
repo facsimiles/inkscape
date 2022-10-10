@@ -15,26 +15,22 @@
 
 #include <cstdarg>
 #include <glib.h>
-#include "util/share.h"
 
 namespace Inkscape {
 
 namespace Util {
 
-inline ptr_shared vformat(char const *format, va_list args) {
-    char *temp=g_strdup_vprintf(format, args);
-    ptr_shared result=share_string(temp);
-    g_free(temp);
-    return result;
+inline int vsnformat(char *str, size_t n, char const *format, va_list args) {
+    return g_vsnprintf(str, n, format, args);
 }
 
-       // needed since G_GNUC_PRINTF can only be used on a declaration
-       ptr_shared format(char const *format, ...) G_GNUC_PRINTF(1,2);
-inline ptr_shared format(char const *format, ...) {
+// needed since G_GNUC_PRINTF can only be used on a declaration
+int snformat(char *str, size_t n, char const *format, ...) G_GNUC_PRINTF(3,4);
+inline int snformat(char *str, size_t n, char const *format, ...) {
     va_list args;
 
     va_start(args, format);
-    ptr_shared result=vformat(format, args);
+    auto result = vsnformat(str, n, format, args);
     va_end(args);
 
     return result;

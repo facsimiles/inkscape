@@ -27,6 +27,7 @@
 #include "attribute-rel-css.h"
 #include "attribute-rel-svg.h"
 #include "preferences.h"
+#include "util/optstr.h"
 #include "xml/attribute-record.h"
 
 using Inkscape::XML::Node;
@@ -199,7 +200,7 @@ void sp_attribute_clean_style(Node *repr, SPCSSAttr *css, unsigned int flags)
     std::set<Glib::ustring> toDelete;
     for (const auto &iter : css->attributeList()) {
         Glib::ustring property = g_quark_to_string(iter.key);
-        gchar const *value = iter.value;
+        auto const value = Inkscape::Util::to_cstr(iter.value);
 
         // Check if a property is applicable to an element (i.e. is font-family useful for a <rect>?).
         if (!SPAttributeRelCSS::findIfValid(property, element)) {
@@ -220,7 +221,7 @@ void sp_attribute_clean_style(Node *repr, SPCSSAttr *css, unsigned int flags)
                 gchar const *property_p = g_quark_to_string(iter_p.key);
 
                 if (!g_strcmp0(property.c_str(), property_p)) {
-                    value_p = iter_p.value;
+                    value_p = Inkscape::Util::to_cstr(iter_p.value);
                     break;
                 }
             }
@@ -271,13 +272,13 @@ void sp_attribute_purge_default_style(SPCSSAttr *css, unsigned int flags)
     std::set<Glib::ustring> toDelete;
     for (const auto &iter : css->attributeList()) {
         Glib::ustring property = g_quark_to_string(iter.key);
-        gchar const *value = iter.value;
+        auto const &value = *iter.value;
 
         // If property value is same as default mark for deletion.
         if (SPAttributeRelCSS::findIfDefault(property, value)) {
             if (flags & SP_ATTRCLEAN_DEFAULT_WARN) {
                 g_warning("Preferences CSS Style property: \"%s\" with default value (%s) not needed.",
-                          property.c_str(), value);
+                          property.c_str(), value.c_str());
             }
             if (flags & SP_ATTRCLEAN_DEFAULT_REMOVE) {
                 toDelete.insert(property);

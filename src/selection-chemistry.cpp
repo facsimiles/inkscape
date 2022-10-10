@@ -3140,8 +3140,7 @@ void ObjectSet::toMarker(bool apply)
     int saved_compensation = prefs->getInt("/options/clonecompensation/value", SP_CLONE_COMPENSATION_UNMOVED);
     prefs->setInt("/options/clonecompensation/value", SP_CLONE_COMPENSATION_UNMOVED);
 
-    gchar const *mark_id = generate_marker(repr_copies, bbox, doc, center, parent_transform * move);
-    (void)mark_id;
+    generate_marker(repr_copies, bbox, doc, center, parent_transform * move);
 
     // restore compensation setting
     prefs->setInt("/options/clonecompensation/value", saved_compensation);

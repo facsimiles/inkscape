@@ -60,7 +60,6 @@
 #include "ui/widget/canvas.h"
 #include "ui/event-debug.h"
 
-#include "xml/attribute-record.h"
 #include "xml/node-event-vector.h"
 #include "xml/sp-css-attr.h"
 

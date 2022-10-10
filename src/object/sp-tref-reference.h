@@ -20,7 +20,6 @@
 #include "sp-item.h"
 #include "uri-references.h"
 
-#include "util/share.h"
 #include "xml/node-observer.h"
 #include "xml/subtree.h"
 
@@ -51,11 +50,11 @@ public:
     void notifyChildOrderChanged(Inkscape::XML::Node &node, Inkscape::XML::Node &child,
                                  Inkscape::XML::Node *old_prev, Inkscape::XML::Node *new_prev) override;
     void notifyContentChanged(Inkscape::XML::Node &node,
-                              Inkscape::Util::ptr_shared old_content,
-                              Inkscape::Util::ptr_shared new_content) override;
+                              char const *old_content,
+                              char const *new_content) override;
     void notifyAttributeChanged(Inkscape::XML::Node &node, GQuark name,
-                                Inkscape::Util::ptr_shared old_value,
-                                Inkscape::Util::ptr_shared new_value) override;
+                                char const *old_value,
+                                char const *new_value) override;
 
 protected:
     bool _acceptObject(SPObject * obj) const override; 

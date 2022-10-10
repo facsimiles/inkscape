@@ -50,7 +50,6 @@
 #include "ui/tools/tool-base.h"
 
 #include "xml/sp-css-attr.h"
-#include "xml/attribute-record.h"
 
 namespace {
 

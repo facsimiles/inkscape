@@ -16,6 +16,7 @@
 
 #include <glib.h> // g_assert()
 #include <cstdio>
+#include <memory>
 
 #include "event.h"
 #include "event-fns.h"
@@ -25,6 +26,8 @@
 #include "debug/simple-event.h"
 
 int Inkscape::XML::Event::_next_serial=0;
+
+using Inkscape::Util::to_cstr;
 
 void
 sp_repr_begin_transaction (Inkscape::XML::Document *doc)
@@ -104,15 +107,15 @@ public:
     }
 
     void notifyAttributeChanged(Node &node, GQuark name,
-                        Inkscape::Util::ptr_shared /*old_value*/,
-                    Inkscape::Util::ptr_shared new_value) override
+                                char const */*old_value*/,
+                                char const *new_value) override
     {
         node.setAttribute(g_quark_to_string(name), new_value);
     }
 
     void notifyContentChanged(Node &node,
-                      Inkscape::Util::ptr_shared /*old_value*/,
-                  Inkscape::Util::ptr_shared new_value) override
+                              char const */*old_value*/,
+                              char const *new_value) override
     {
         node.setContent(new_value);
     }
@@ -166,13 +169,13 @@ void Inkscape::XML::EventDel::_undoOne(
 void Inkscape::XML::EventChgAttr::_undoOne(
     Inkscape::XML::NodeObserver &observer
 ) const {
-    observer.notifyAttributeChanged(*this->repr, this->key, this->newval, this->oldval);
+    observer.notifyAttributeChanged(*this->repr, this->key, to_cstr(this->newval), to_cstr(this->oldval));
 }
 
 void Inkscape::XML::EventChgContent::_undoOne(
     Inkscape::XML::NodeObserver &observer
 ) const {
-    observer.notifyContentChanged(*this->repr, this->newval, this->oldval);
+    observer.notifyContentChanged(*this->repr, to_cstr(this->newval), to_cstr(this->oldval));
 }
 
 void Inkscape::XML::EventChgOrder::_undoOne(
@@ -234,13 +237,13 @@ void Inkscape::XML::EventDel::_replayOne(
 void Inkscape::XML::EventChgAttr::_replayOne(
     Inkscape::XML::NodeObserver &observer
 ) const {
-    observer.notifyAttributeChanged(*this->repr, this->key, this->oldval, this->newval);
+    observer.notifyAttributeChanged(*this->repr, this->key, to_cstr(this->oldval), to_cstr(this->newval));
 }
 
 void Inkscape::XML::EventChgContent::_replayOne(
     Inkscape::XML::NodeObserver &observer
 ) const {
-    observer.notifyContentChanged(*this->repr, this->oldval, this->newval);
+    observer.notifyContentChanged(*this->repr, to_cstr(this->oldval), to_cstr(this->newval));
 }
 
 void Inkscape::XML::EventChgOrder::_replayOne(
@@ -341,15 +344,12 @@ Inkscape::XML::Event *Inkscape::XML::EventDel::_optimizeOne() {
 }
 
 Inkscape::XML::Event *Inkscape::XML::EventChgAttr::_optimizeOne() {
-    Inkscape::XML::EventChgAttr *chg_attr=dynamic_cast<Inkscape::XML::EventChgAttr *>(this->next);
-
     /* consecutive chgattrs on the same key can be combined */
-    if ( chg_attr) {
-        if ( chg_attr->repr == this->repr &&
-             chg_attr->key == this->key )
-        {
+    if (auto chg_attr = dynamic_cast<Inkscape::XML::EventChgAttr *>(this->next)) {
+        if (chg_attr->repr == this->repr &&
+            chg_attr->key == this->key) {
             /* replace our oldval with the prior action's */
-            this->oldval = chg_attr->oldval;
+            this->oldval = std::move(chg_attr->oldval);
 
             /* discard the prior action */
             this->next = chg_attr->next;
@@ -361,13 +361,11 @@ Inkscape::XML::Event *Inkscape::XML::EventChgAttr::_optimizeOne() {
 }
 
 Inkscape::XML::Event *Inkscape::XML::EventChgContent::_optimizeOne() {
-    Inkscape::XML::EventChgContent *chg_content=dynamic_cast<Inkscape::XML::EventChgContent *>(this->next);
-
     /* consecutive content changes can be combined */
-    if (chg_content) {
+    if (auto chg_content = dynamic_cast<Inkscape::XML::EventChgContent *>(this->next)) {
         if (chg_content->repr == this->repr ) {
             /* replace our oldval with the prior action's */
-            this->oldval = chg_content->oldval;
+            this->oldval = std::move(chg_content->oldval);
 
             /* get rid of the prior action*/
             this->next = chg_content->next;
@@ -493,22 +491,22 @@ public:
     }
 
     void notifyAttributeChanged(Node &node, GQuark name,
-                                Inkscape::Util::ptr_shared /*old_value*/,
-                    Inkscape::Util::ptr_shared new_value) override
+                                char const */*old_value*/,
+                                char const *new_value) override
     {
         if (new_value) {
-            g_warning("Event: Set attribute %s to \"%s\" on %s", g_quark_to_string(name), new_value.pointer(), node_to_string(node).c_str());
+            g_warning("Event: Set attribute %s to \"%s\" on %s", g_quark_to_string(name), new_value, node_to_string(node).c_str());
         } else {
             g_warning("Event: Unset attribute %s on %s", g_quark_to_string(name), node_to_string(node).c_str());
         }
     }
 
     void notifyContentChanged(Node &node,
-                      Inkscape::Util::ptr_shared /*old_value*/,
-                  Inkscape::Util::ptr_shared new_value) override
+                              char const */*old_value*/,
+                              char const *new_value) override
     {
         if (new_value) {
-            g_warning("Event: Set content of %s to \"%s\"", node_to_string(node).c_str(), new_value.pointer());
+            g_warning("Event: Set content of %s to \"%s\"", node_to_string(node).c_str(), new_value);
         } else {
             g_warning("Event: Unset content of %s", node_to_string(node).c_str());
         }
