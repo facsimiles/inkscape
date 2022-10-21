@@ -800,7 +800,7 @@ CanvasXYGrid::Update (Geom::Affine const &affine, unsigned int /*flags*/)
             scaling_factor = 5;
 
         scaled[dim] = false;
-        while (fabs(sw[dim].length()) < 8.0) {
+        while (fabs(sw[dim].length()) < 12.0) {
             scaled[dim] = true;
             sw[dim] *= scaling_factor;
             /* First pass, go up to the major line spacing, then
