@@ -1543,6 +1543,10 @@ gchar const *SPObject::getTagName() const
     g_assert(repr != nullptr);
 
     /// \todo fixme: Exception if object is NULL? */
+    if (getRepr() == nullptr) {
+        throw NullptrException();
+    }
+
     //XML Tree being used here.
     return getRepr()->name();
 }
@@ -1552,6 +1556,10 @@ gchar const *SPObject::getAttribute(gchar const *key) const
     g_assert(this->repr != nullptr);
 
     /// \todo fixme: Exception if object is NULL? */
+    if (getRepr() == nullptr) {
+        throw NullptrException();
+    }
+
     //XML Tree being used here.
     return (gchar const *) getRepr()->attribute(key);
 }
@@ -1562,6 +1570,10 @@ void SPObject::setAttribute(Inkscape::Util::const_char_ptr key,
     g_assert(this->repr != nullptr);
 
     /// \todo fixme: Exception if object is NULL? */
+    if (getRepr() == nullptr) {
+        throw NullptrException();
+    }
+
     //XML Tree being used here.
     getRepr()->setAttribute(key, value);
 }
@@ -1575,6 +1587,9 @@ void SPObject::setAttributeDouble(Inkscape::Util::const_char_ptr key, double val
 void SPObject::removeAttribute(gchar const *key)
 {
     /// \todo fixme: Exception if object is NULL? */
+    if (getRepr() == nullptr) {
+        throw NullptrException();
+    }
     //XML Tree being used here.
     getRepr()->removeAttribute(key);
 }

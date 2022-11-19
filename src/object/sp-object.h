@@ -180,7 +180,7 @@ private:
 public:
     int refCount;
     std::list<SPObject*> hrefList;
-
+    class NullptrException : public std::exception {};
     /**
      * Returns the objects current ID string.
      */
