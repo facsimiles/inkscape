@@ -17,7 +17,7 @@
 #endif
 
 #include <cstdlib>
-#include <cstdio> // sprintf
+#include <cstdio> // snprintf
 #include <cstring>
 #include <string>
 #include <cmath>
@@ -457,12 +457,12 @@ static void rgb24_to_css(char *const buf, unsigned const rgb24)
         default: {
             if ((rgb24 & 0xf0f0f) * 0x11 == rgb24) {
                 /* Can use the shorter three-digit form #rgb instead of #rrggbb. */
-                std::sprintf(buf, "#%x%x%x",
+                std::snprintf(buf, "#%x%x%x",
                         (rgb24 >> 16) & 0xf,
                         (rgb24 >> 8) & 0xf,
                         rgb24 & 0xf);
             } else {
-                std::sprintf(buf, "#%06x", rgb24);
+                std::snprintf(buf, "#%06x", rgb24);
             }
             break;
         }

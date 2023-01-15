@@ -242,7 +242,7 @@ LPEPowerMask::setMask(){
         Glib::ustring style;
         gchar c[32];
         unsigned const rgb24 = background_color.get_value() >> 8;
-        sprintf(c, "#%06x", rgb24);
+        snprintf(c, "#%06x", rgb24);
         style = Glib::ustring("fill:") + Glib::ustring(c);
         Inkscape::SVGOStringStream os;
         os << SP_RGBA32_A_F(background_color.get_value());

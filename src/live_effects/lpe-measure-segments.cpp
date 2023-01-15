@@ -454,7 +454,7 @@ LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double leng
     font_size <<  fontsize << "px";
     setlocale (LC_NUMERIC, locale_base);           
     gchar c[32];
-    sprintf(c, "#%06x", rgb32 >> 8);
+    snprintf(c, "#%06x", rgb32 >> 8);
     sp_repr_css_set_property (css, "fill",c);
     Inkscape::SVGOStringStream os;
     os << SP_RGBA32_A_F(coloropacity.get_value());
@@ -631,7 +631,7 @@ LPEMeasureSegments::createLine(Geom::Point start,Geom::Point end, Glib::ustring 
     style  += "stroke-width:";
     style  += stroke_w.str();
     gchar c[32];
-    sprintf(c, "#%06x", rgb32 >> 8);
+    snprintf(c, "#%06x", rgb32 >> 8);
     style += ";stroke:";
     style += Glib::ustring(c);
     Inkscape::SVGOStringStream os;

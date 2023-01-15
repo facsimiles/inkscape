@@ -58,17 +58,17 @@ char *smuggle_adxkyrtl_in(const char *string, int ndx, float *adx, float ky, flo
     char *smuggle=(char *)malloc(newsize);
     strcpy(smuggle,string);                   // text to pass, includes the first fake terminator
     char *cptr = smuggle + slen + 1;          // immediately after the first fake terminator
-    sprintf(cptr,"%07d",ndx);                 // number of widths to pass
+    snprintf(cptr,"%07d",ndx);                 // number of widths to pass
     cptr+=7;                                  // advance over ndx
     for(int i=0; i<ndx ; i++){                // all the widths
-       sprintf(cptr," %6f",adx[i]);
+       snprintf(cptr," %6f",adx[i]);
        cptr+=7;                               // advance over space + width
     }
     *cptr='\0';
     cptr++;                                   // second fake terminator
-    sprintf(cptr," %6f",ky);                  // y kern for span
+    snprintf(cptr," %6f",ky);                  // y kern for span
     cptr+=7;                                  // advance over space + ky
-    sprintf(cptr," %6d",(int) rtl);           // rtl multiplier for span
+    snprintf(cptr," %6d",(int) rtl);           // rtl multiplier for span
     cptr+=7;                                  // advance over rtl
     *cptr++ = '\0';                           // Set the real terminators
     *cptr   = '\0';
