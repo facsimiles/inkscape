@@ -20,6 +20,7 @@
 #include <gtkmm/cssprovider.h>
 #include <gtkmm/infobar.h>
 #include <gtkmm/liststore.h>
+#include <gtkmm/main.h>
 #include <gtkmm/notebook.h>
 #include <gtkmm/overlay.h>
 #include <gtkmm/recentmanager.h>
@@ -168,6 +169,45 @@ StartScreen::StartScreen()
     set_urgency_hint(true);  // Draw user's attention to this window!
     set_modal(true);
     set_position(Gtk::WIN_POS_CENTER_ALWAYS);
+}
+
+std::unique_ptr<StartScreen> StartScreen::show_splash()
+{
+    auto start_screen = std::make_unique<StartScreen>();
+    start_screen->setup_splash();
+    return start_screen;
+}
+
+void StartScreen::setup_splash()
+{
+    set_decorated(false);
+    set_resizable(false);
+    set_transparent(true);
+
+    auto splash = Inkscape::IO::Resource::get_filename(Inkscape::IO::Resource::SCREENS, "start-splash.png");
+    Gtk::Image image(splash);
+    get_content_area()->add(image);
+
+    show_all_children();
+    show();
+
+    // The main loop won't get called until the main window is initialized,
+    // so we need to iterate the loop a few times here to show the splash screen.
+    while (Gtk::Main::events_pending())
+        Gtk::Main::iteration(false);
+}
+
+std::unique_ptr<StartScreen> StartScreen::show_welcome()
+{
+    auto start_screen = std::make_unique<StartScreen>();
+    start_screen->setup_welcome();
+    return start_screen;
+}
+
+void StartScreen::setup_welcome()
+{
+    set_decorated(true);
+    set_resizable(true);
     set_default_size(700, 360);
 
     // Populate with template extensions
@@ -734,6 +774,37 @@ void StartScreen::refresh_dark_switch()
     auto &dark_toggle = get_widget<Gtk::Switch>(builder, "dark_toggle");
     dark_toggle.set_sensitive(themes[current_theme]);
     dark_toggle.set_active(dark);
+}
+
+// Transparency support
+void StartScreen::set_transparent(bool transparent)
+{
+    set_app_paintable(transparent);
+    _use_alpha = false;
+
+    if (transparent) {
+        auto screen = get_screen();
+        auto visual = screen->get_rgba_visual();
+
+        // Screen supports alpha
+        if (visual)
+            _use_alpha = true;
+
+        gtk_widget_set_visual(GTK_WIDGET(gobj()), visual->gobj());
+    }
+}
+
+bool StartScreen::on_draw(const Cairo::RefPtr<Cairo::Context> &cr)
+{
+    if (_use_alpha) {
+        cr->save();
+        cr->set_source_rgba(1.0, 1.0, 1.0, 0.0);
+        cr->set_operator(Cairo::OPERATOR_SOURCE);
+        cr->paint();
+        cr->restore();
+    }
+
+    return Gtk::Window::on_draw(cr);
 }
 
 } // namespace Inkscape::UI::Dialog

@@ -45,12 +45,18 @@ public:
     StartScreen();
     ~StartScreen() override;
 
+    static std::unique_ptr<StartScreen> show_splash();
+    static std::unique_ptr<StartScreen> show_welcome();
+
     SPDocument* get_document() { return _document; }
 
 protected:
     void on_response(int response_id) override;
 
 private:
+    void setup_splash();
+    void setup_welcome();
+
     void notebook_next(Gtk::Widget *button);
     gboolean on_key_pressed(GtkEventControllerKey const *controller,
                         unsigned keyval, unsigned keycode, GdkModifierType state);
@@ -73,6 +79,10 @@ private:
     void on_recent_changed();
     void on_kind_changed(Gtk::Widget *tab, unsigned page_num);
 
+protected:
+    // Support for transparent background
+    void set_transparent(bool transparent);
+    bool on_draw(const ::Cairo::RefPtr<::Cairo::Context> &cr) override;
 
 private:
     Glib::RefPtr<Gtk::Builder> builder;
@@ -85,6 +95,7 @@ private:
     Inkscape::UI::Widget::TemplateList &templates;
 
     SPDocument* _document = nullptr;
+    bool _use_alpha = false;
 };
 
 } // namespace Dialog

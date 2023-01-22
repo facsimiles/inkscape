@@ -1956,6 +1956,7 @@ void InkscapePreferences::initPageUI()
     _win_gtk.init ( _("GTK open/save dialogs"), "/options/desktopintegration/value", 0, false, &_win_native);
 
     _win_show_boot.init ( _("Show Welcome dialog"), "/options/boot/enabled", true);
+    _win_show_splash.init(_("Show splash screen"), "/options/splash/enabled", true);
     _win_hide_task.init ( _("Dialogs are hidden in taskbar"), "/options/dialogsskiptaskbar/value", true);
     _win_save_viewport.init ( _("Save and restore documents viewport"), "/options/savedocviewport/value", true);
     _win_zoom_resize.init ( _("Zoom when window is resized"), "/options/stickyzoom/value", false);
@@ -2043,6 +2044,8 @@ void InkscapePreferences::initPageUI()
 
     _page_windows.add_line( true, "", _win_show_boot, "",
                             _("Whether the Welcome dialog will be shown when Inkscape starts."));
+    _page_windows.add_line(true, "", _win_show_splash, "",
+                           _("Whether the splash screen will be shown while Inkscape loads."));
     _page_windows.add_line( true, "", _win_zoom_resize, "",
                             _("Zoom drawing when document window is resized, to keep the same area visible (this is the default which can be changed in any window using the button above the right scrollbar)"));
     _page_windows.add_line( true, "", _win_save_viewport, "",

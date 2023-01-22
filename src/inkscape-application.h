@@ -36,6 +36,12 @@ class SPDesktop;
 
 namespace Inkscape {
 class Selection;
+
+namespace UI {
+namespace Dialog {
+class StartScreen;
+}
+} // namespace UI
 } // namespace Inkscape
 
 class InkscapeApplication final
@@ -187,6 +193,7 @@ protected:
 private:
     void init_extension_action_data();
     std::vector<Glib::RefPtr<Gio::SimpleAction>> _effect_actions;
+    std::unique_ptr<Inkscape::UI::Dialog::StartScreen> _start_screen;
 };
 
 #endif // INKSCAPE_APPLICATION_H
