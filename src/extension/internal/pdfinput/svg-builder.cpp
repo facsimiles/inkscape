@@ -1687,10 +1687,10 @@ Inkscape::XML::Node *SvgBuilder::_createImage(Stream *str, int width, int height
 
                 unsigned int *dest = buffer;
                 for ( int x = 0 ; x < width ; x++ ) {
-                    // Check each color component against the mask
+                    // Check each color component against the mask, set to full opacity
                     for ( int i = 0; i < color_map->getNumPixelComps() ; i++) {
-                        if ( row[i] < mask_colors[2*i] * 255 ||
-                             row[i] > mask_colors[2*i + 1] * 255 ) {
+                        if ( row[i] < mask_colors[2*i]  ||
+                             row[i] > mask_colors[2*i + 1] ) {
                             *dest = *dest | 0xff000000;
                             break;
                         }
@@ -1800,7 +1800,7 @@ void SvgBuilder::addImage(GfxState *state, Stream *str, int width, int height, G
                           bool interpolate, int *mask_colors)
 {
 
-    Inkscape::XML::Node *image_node = _createImage(str, width, height, color_map, interpolate, mask_colors);
+    Inkscape::XML::Node *image_node = _createImage(str, width, height, color_map, interpolate, mask_colors, false, true);
     if (image_node) {
         _setBlendMode(image_node, state);
         _container->appendChild(image_node);
