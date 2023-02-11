@@ -21,6 +21,7 @@
 #include <map>
 #include <string>
 #include <utility>
+#include <glibmm/regex.h>
 
 #include "extract-uri.h"
 #include "live_effects/effect.h"
@@ -107,6 +108,8 @@ const char* clipboard_properties[] = {
     "marker-start"
 };
 #define NUM_CLIPBOARD_PROPERTIES (sizeof(clipboard_properties) / sizeof(*clipboard_properties))
+// https://www.w3.org/TR/REC-xml/#id we not folow because couldent work with sugns specials from oter langs so I keeep reuced
+static Glib::RefPtr<Glib::Regex> invalid_id_chars = Glib::Regex::create("([^A-Za-z0-9\\-\\._\\:])");// This is the rest allowed chars, regex crash |[Ä-Üä-üÂ-Ẑâ-ẑÁ-Üá-ź\\xC0-\\xD6]|[\\x37F-\\x1FFF]|[\\x200C-\\x200D]|[\\x2070-\\x218F]|[\\x2C00-\\x2FEF]|[\\x3001-\\xD7FF]|[\\xF900-\\xFDCF]|[\\xFDF0-\\xFFFD]|[\\x10000-\\xEFFFF]|\\xB7|[\\x0300-\\x036F]|[\\x203F-\\x2040])]*";//)*";
 
 /**
  * Given an reference (idref), make it point to to_obj instead
@@ -493,7 +496,6 @@ change_def_references(SPObject *from_obj, SPObject *to_obj)
     }
 }
 
-const char valid_id_chars[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_.:";
 
 /**
  * Modify 'base_name' to create a new ID that is not used in the 'document'
@@ -505,11 +507,7 @@ Glib::ustring generate_similar_unique_id(SPDocument* document, const Glib::ustri
         id = "id-0";
     }
     else {
-        for (auto pos = id.find_first_not_of(valid_id_chars);
-                  pos != Glib::ustring::npos;
-                  pos = id.find_first_not_of(valid_id_chars, pos)) {
-            id.replace(pos, 1, "_");
-        }
+        id = fix_id(id);
         if (!isalnum(id[0])) {
             id.insert(0, "x");
         }
@@ -543,6 +541,18 @@ Glib::ustring generate_similar_unique_id(SPDocument* document, const Glib::ustri
 }
 
 /*
+ * strip broken ID from symbols
+ */
+Glib::ustring fix_id(Glib::ustring id) {
+    if (id.empty()){
+        g_message("Invalid Id, will not change.");
+        return id;
+    }
+    return invalid_id_chars->replace_literal(id, 0, "_", (Glib::RegexMatchFlags)0);
+}
+
+
+/*
  * Change the id of a SPObject to new_name
  * If there is an id clash then rename to something similar
  */
@@ -552,12 +562,10 @@ void rename_id(SPObject *elem, Glib::ustring const &new_name)
         g_message("Invalid Id, will not change.");
         return;
     }
-    gchar *id = g_strdup(new_name.c_str()); //id is not empty here as new_name is check to be not empty
-    g_strcanon (id, valid_id_chars, '_');
+    auto id = fix_id(new_name);
     Glib::ustring new_name2 = id; //will not fail as id can not be NULL, see length check on new_name
     if (!isalnum (new_name2[0])) {
         g_message("Invalid Id, will not change.");
-        g_free (id);
         return;
     }
 
@@ -578,7 +586,6 @@ void rename_id(SPObject *elem, Glib::ustring const &new_name)
                 break;
         }
     }
-    g_free (id);
     // Change to the new ID
     elem->setAttribute("id", new_name2);
     // Make a note of this change, if we need to fix up refs to it

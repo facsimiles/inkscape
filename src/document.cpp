@@ -2140,9 +2140,7 @@ void SPDocument::_importDefsNode(SPDocument *source, Inkscape::XML::Node *defs, 
                         }
                     }
                 }
-                if ( !duplicate ) {
-                    src->setAttribute("id", id);
-                }
+                rename_id(src, id);
             }
         }
 
