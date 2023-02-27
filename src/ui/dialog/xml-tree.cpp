@@ -31,6 +31,7 @@
 #include <gtkmm/radiomenuitem.h>
 #include <gtkmm/scrolledwindow.h>
 #include <memory>
+#include <utility>
 
 #include "desktop.h"
 #include "document-undo.h"
@@ -43,6 +44,7 @@
 #include "object/sp-root.h"
 #include "object/sp-string.h"
 
+#include "object/uri-references.h"
 #include "preferences.h"
 #include "ui/builder-utils.h"
 #include "ui/dialog-events.h"
@@ -53,6 +55,8 @@
 
 #include "util/trim.h"
 #include "widgets/sp-xmlview-tree.h"
+#include "xml/node.h"
+#include "xml/href-attribute-helper.h"
 
 namespace {
 /**
@@ -95,6 +99,13 @@ XmlTree::XmlTree()
     /* tree view */
     tree = SP_XMLVIEW_TREE(sp_xmlview_tree_new(nullptr, nullptr, nullptr));
     gtk_widget_set_tooltip_text( GTK_WIDGET(tree), _("Drag to reorder nodes") );
+    tree->user_data = this;
+    tree->get_node_status = [](void* self, Inkscape::XML::Node* node){
+        return static_cast<XmlTree*>(self)->get_node_status(node).first;
+    };
+    tree->get_node_tooltip = [](void* self, Inkscape::XML::Node* node){
+        return static_cast<XmlTree*>(self)->get_node_status(node).second;
+    };
 
     Gtk::ScrolledWindow& tree_scroller = get_widget<Gtk::ScrolledWindow>(_builder, "tree-wnd");
     _treemm = Gtk::manage(Glib::wrap(GTK_TREE_VIEW(tree)));
@@ -912,6 +923,26 @@ void XmlTree::desktopReplaced() {
 void XmlTree::setSyntaxStyle(Inkscape::UI::Syntax::XMLStyles const &new_style)
 {
     tree->formatter->setStyle(new_style);
+}
+
+std::pair<NodeStatus, Glib::ustring> XmlTree::get_node_status(Inkscape::XML::Node* repr) {
+    auto* document = getDocument();
+    if (repr && document) {
+        // does current element contain a reference to another element?
+        auto [href, link] = Inkscape::getHrefAttribute(*repr);
+        if (link && link[0] == '#' && link[1] != '\0') {
+            // verify that node pointed to exists
+            auto ref = sp_uri_reference_resolve(document, link);
+            if (!ref) {
+                // missing referenced node - broken link
+                Glib::ustring tooltip = _("Broken link. Missing ");
+                return std::make_pair(NodeStatus::Warning, tooltip + link);
+            }
+        }
+        // TODO: we can check for other problems in XML and signal them here
+        // ...
+    }
+    return std::make_pair(NodeStatus::Normal, "");
 }
 
 } // namespace Inkscape::UI::Dialog

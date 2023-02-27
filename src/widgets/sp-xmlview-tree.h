@@ -32,7 +32,9 @@ struct SPXMLViewTree;
 struct SPXMLViewTreeClass;
 namespace Inkscape::UI::Syntax { class XMLFormatter; }
 
-class SPXMLViewTree
+enum class NodeStatus { Normal, Warning };
+
+struct SPXMLViewTree
 {
 public:
     GtkTreeView tree;
@@ -41,6 +43,10 @@ public:
     gint blocked;
     Gtk::CellRendererText* renderer;
     Inkscape::UI::Syntax::XMLFormatter* formatter;
+    void* user_data;
+
+    NodeStatus (*get_node_status)(void* user_data, Inkscape::XML::Node* node);
+    Glib::ustring (*get_node_tooltip)(void* user_data, Inkscape::XML::Node* node);
 
     sigc::connection connectTreeMove(const sigc::slot<void ()> &slot)
     {

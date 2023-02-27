@@ -13,6 +13,7 @@
 #include "sp-xmlview-tree.h"
 
 #include <cstring>
+#include <glib/gi18n.h>
 #include <glibmm/markup.h>
 #include <glibmm/property.h>
 #include <glibmm/ustring.h>
@@ -25,6 +26,8 @@
 #include "ui/syntax.h"
 #include "xml/node-observer.h"
 #include "xml/node.h"
+// #include "xml/href-attribute-helper.h"
+#include "xml/repr.h"
 
 namespace {
 
@@ -200,6 +203,16 @@ public:
         display_text += ">";
         auto markup = formatter.finishTag();
 
+        auto get_status = *_nodedata->tree->get_node_status;
+        if (get_status) {
+            auto status = get_status(_nodedata->tree->user_data, repr);
+            if (status != NodeStatus::Normal) {
+                auto warning = "\u26a0"; // warning sign
+                markup += "<i> " + formatter.warning(warning) + "</i>"; // <i> makes warning sign larger
+                display_text += " ";
+                display_text += warning;
+            }
+        }
         GtkTreeIter iter;
         if (tree_ref_to_iter(_nodedata->tree, &iter, _nodedata->rowref)) {
             gtk_tree_store_set(GTK_TREE_STORE(_nodedata->tree->store), &iter, STORE_TEXT_COL, display_text.c_str(), -1);
@@ -350,6 +363,31 @@ static gboolean on_test_expand_row( //
     return false;
 }
 
+static gboolean on_query_tooltip(
+    GtkWidget*  widget,
+    gint        x,
+    gint        y,
+    gboolean    keyboard_tooltip,
+    GtkTooltip* tooltip) {
+
+    auto tree = SP_XMLVIEW_TREE(widget);
+    if (!tree->get_node_tooltip) return false;
+
+    auto model = GTK_TREE_MODEL(tree->store);
+    GtkTreeIter iter;
+    if (gtk_tree_view_get_tooltip_context(GTK_TREE_VIEW(tree), &x, &y, keyboard_tooltip, &model, nullptr, &iter)) {
+        if (NodeData* data = sp_xmlview_tree_node_get_data(model, &iter)) {
+            auto text = tree->get_node_tooltip(tree->user_data, data->repr);
+            if (!text.empty()) {
+                gtk_tooltip_set_text(tooltip, text.c_str());
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
 /** Node name renderer for XML tree.
  *  It knows to use markup, but falls back to plain text for selected nodes.
  */
@@ -408,6 +446,9 @@ GtkWidget *sp_xmlview_tree_new(Inkscape::XML::Node * repr, void * /*factory*/, v
 
     tree->formatter = new Inkscape::UI::Syntax::XMLFormatter();
 
+// gtk_widget_trigger_tooltip_query(0);
+    g_signal_connect(GTK_TREE_VIEW(tree), "query-tooltip", G_CALLBACK(on_query_tooltip), nullptr);
+
     return GTK_WIDGET(tree);
 }
 
@@ -424,6 +465,7 @@ sp_xmlview_tree_init (SPXMLViewTree * tree)
 {
 	tree->repr = nullptr;
 	tree->blocked = 0;
+    tree->get_node_status = nullptr;
 }
 
 void sp_xmlview_tree_destroy(GtkWidget * object)
