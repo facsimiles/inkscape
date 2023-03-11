@@ -97,7 +97,6 @@ LPESketch::LPESketch(LivePathEffectObject *lpeobject) :
     nbiter_approxstrokes.param_set_increments(1, 1);
     nbiter_approxstrokes.param_set_digits(0);
 
-    strokelength.addSlider(true);
     strokelength.param_set_range(5, 1000);
     strokelength.param_set_increments(0.5, 0.5);
     

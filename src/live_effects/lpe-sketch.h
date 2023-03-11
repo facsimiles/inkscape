@@ -16,6 +16,7 @@
 
 #include "live_effects/effect.h"
 #include "live_effects/parameter/parameter.h"
+#include "live_effects/parameter/scalar2.h"
 #include "live_effects/parameter/random.h"
 #include "live_effects/parameter/point.h"
 
@@ -40,7 +41,7 @@ private:
     // add the parameters for your effect here:
     //PointParam testpointA;
     ScalarParam nbiter_approxstrokes;
-    ScalarParam strokelength;
+    Scalar2Param strokelength;
     RandomParam strokelength_rdm;
     ScalarParam strokeoverlap;
     RandomParam strokeoverlap_rdm;
