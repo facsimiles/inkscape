@@ -89,6 +89,179 @@ object_set_property(const Glib::VariantBase& value, InkscapeApplication *app)
     Inkscape::DocumentUndo::done(app->get_active_document(), "ActionObjectSetProperty", "");
 }
 
+// No sanity checking is done... should probably add.
+void
+object_get_attribute(const Glib::VariantBase& value, InkscapeApplication *app)
+{
+    Glib::Variant<Glib::ustring> s = Glib::VariantBase::cast_dynamic<Glib::Variant<Glib::ustring> >(value);
+
+    auto selection = app->get_active_selection();
+    if (selection->isEmpty()) {
+        show_output("action:object_set_attribute: selection empty!");
+        return;
+    }
+
+    // Should this be a selection member function?
+    auto items = selection->items();
+    for (auto i = items.begin(); i != items.end(); ++i) {
+        Inkscape::XML::Node *repr = (*i)->getRepr();
+        gchar const *attr = repr->attribute(s.get().c_str());
+        if (attr) {
+            show_output(Glib::ustring(repr->attribute("id")) + ":" + attr);
+        } else {
+            show_output(Glib::ustring(repr->attribute("id")) + ":Not defined");
+        }
+    }
+
+    // Needed to update repr (is this the best way?).
+    Inkscape::DocumentUndo::done(app->get_active_document(), "ActionObjectSetAttribute", "");
+}
+
+// No sanity checking is done... should probably add.
+void
+object_get_property(const Glib::VariantBase& value, InkscapeApplication *app)
+{
+    Glib::Variant<Glib::ustring> s = Glib::VariantBase::cast_dynamic<Glib::Variant<Glib::ustring> >(value);
+
+
+    auto selection = app->get_active_selection();
+    if (selection->isEmpty()) {
+        show_output("action:object_set_property: selection empty!");
+        return;
+    }
+
+    // Should this be a selection member function?
+    auto items = selection->items();
+    for (auto i = items.begin(); i != items.end(); ++i) {
+        Inkscape::XML::Node *repr = (*i)->getRepr();
+
+        SPCSSAttr *css = sp_repr_css_attr(repr, "style");
+        SPCSSAttr *css_new = sp_repr_css_attr_new();
+       
+        sp_repr_css_set_property(css_new, s.get().c_str(), sp_repr_css_property(css, s.get().c_str(), ""));
+        Glib::ustring value;
+        sp_repr_css_write_string(css_new, value);
+        if (value.empty()) {
+            show_output(Glib::ustring(repr->attribute("id")) +":Not defined");
+        } else {
+            show_output(Glib::ustring(repr->attribute("id")) +":" + value);
+        }
+        sp_repr_css_attr_unref(css);
+        sp_repr_css_attr_unref(css_new);
+    }
+
+    // Needed to update repr (is this the best way?).
+    Inkscape::DocumentUndo::done(app->get_active_document(), "ActionObjectSetProperty", "");
+}
+
+// No sanity checking is done... should probably add.
+void
+object_set_attribute_by_id(const Glib::VariantBase& value, InkscapeApplication *app)
+{
+    Glib::Variant<Glib::ustring> s = Glib::VariantBase::cast_dynamic<Glib::Variant<Glib::ustring> >(value);
+
+    std::vector<Glib::ustring> tokens = Glib::Regex::split_simple(",", s.get());
+    if (tokens.size() != 3) {
+        show_output("action:object_set_attribute_by_id: requires 'object id, attribute name, attribute value'");
+        return;
+    }
+    // Should this be a selection member function?
+    SPObject *obj = app->get_active_document()->getObjectById(tokens[0]);
+    if (obj) {
+        obj->setAttribute(tokens[1], tokens[2]);
+    }
+    // Needed to update repr (is this the best way?).
+    Inkscape::DocumentUndo::done(app->get_active_document(), "ActionObjectSetAttributeById", "");
+}
+
+
+// No sanity checking is done... should probably add.
+void
+object_set_property_by_id(const Glib::VariantBase& value, InkscapeApplication *app)
+{
+    Glib::Variant<Glib::ustring> s = Glib::VariantBase::cast_dynamic<Glib::Variant<Glib::ustring> >(value);
+
+    std::vector<Glib::ustring> tokens = Glib::Regex::split_simple(",", s.get());
+    if (tokens.size() != 3) {
+        show_output("action:object_get_property_by_id: requires 'object id, property name, property value'");
+        return;
+    }
+
+    // Should this be a selection member function?
+    SPObject *obj = app->get_active_document()->getObjectById(tokens[0]);
+    if (obj) {
+        Inkscape::XML::Node *repr = obj->getRepr();
+        SPCSSAttr *css = sp_repr_css_attr(repr, "style");
+        sp_repr_css_set_property(css, tokens[1].c_str(), tokens[2].c_str());
+        sp_repr_css_set(repr, css, "style");
+        sp_repr_css_attr_unref(css);
+    }
+
+    // Needed to update repr (is this the best way?).
+    Inkscape::DocumentUndo::done(app->get_active_document(), "ActionObjectSetPropertyById", "");
+}
+
+// No sanity checking is done... should probably add.
+void
+object_get_attribute_by_id(const Glib::VariantBase& value, InkscapeApplication *app)
+{
+    Glib::Variant<Glib::ustring> s = Glib::VariantBase::cast_dynamic<Glib::Variant<Glib::ustring> >(value);
+
+    std::vector<Glib::ustring> tokens = Glib::Regex::split_simple(",", s.get());
+    if (tokens.size() != 2) {
+        show_output("action:object_get_attribute_by_id: requires 'object id, attribute name, attribute value'");
+        return;
+    }
+
+    SPObject *obj = app->get_active_document()->getObjectById(tokens[0]);
+    if (obj) {
+        Inkscape::XML::Node *repr = obj->getRepr();
+        gchar const *attr = repr->attribute(tokens[1].c_str());
+        if (attr) {
+            show_output(tokens[0] + ":" + attr);
+        } else {
+            show_output(tokens[0] + ":Not defined");
+        }
+    }
+
+    // Needed to update repr (is this the best way?).
+    Inkscape::DocumentUndo::done(app->get_active_document(), "ActionObjectGetAttributeById", "");
+}
+
+// No sanity checking is done... should probably add.
+void
+object_get_property_by_id(const Glib::VariantBase& value, InkscapeApplication *app)
+{
+    Glib::Variant<Glib::ustring> s = Glib::VariantBase::cast_dynamic<Glib::Variant<Glib::ustring> >(value);
+
+    std::vector<Glib::ustring> tokens = Glib::Regex::split_simple(",", s.get());
+    if (tokens.size() != 2) {
+        show_output("action:object_get_property_by_id: requires 'object id, property name, property value'");
+        return;
+    }
+
+    SPObject *obj = app->get_active_document()->getObjectById(tokens[0]);
+    if (obj) {
+        Inkscape::XML::Node *repr = obj->getRepr();
+
+        SPCSSAttr *css = sp_repr_css_attr(repr, "style");
+        SPCSSAttr *css_new = sp_repr_css_attr_new();
+       
+        sp_repr_css_set_property(css_new, tokens[1].c_str(), sp_repr_css_property(css, tokens[1].c_str(), ""));
+        Glib::ustring value;
+        sp_repr_css_write_string(css_new, value);
+        if (value.empty()) {
+            show_output(Glib::ustring(repr->attribute("id")) +":Not defined");
+        } else {
+            show_output(Glib::ustring(repr->attribute("id")) +":" + value);
+        }
+        sp_repr_css_attr_unref(css);
+        sp_repr_css_attr_unref(css_new);
+    }
+
+    // Needed to update repr (is this the best way?).
+    Inkscape::DocumentUndo::done(app->get_active_document(), "ActionObjectSetPropertyById", "");
+}
 
 void
 object_unlink_clones(InkscapeApplication *app)
@@ -277,6 +450,14 @@ std::vector<std::vector<Glib::ustring>> raw_data_object =
     // clang-format off
     {"app.object-set-attribute",        N_("Set Attribute"),                    "Object",     N_("Set or update an attribute of selected objects; usage: object-set-attribute:attribute name, attribute value;")},
     {"app.object-set-property",         N_("Set Property"),                     "Object",     N_("Set or update a property on selected objects; usage: object-set-property:property name, property value;")},
+    {"app.object-get-attributes",       N_("Get Attributes"),                   "Object",     N_("Get an attribute of selected objects; usage: object-set-attribute:attribute name;")},
+    {"app.object-get-property",         N_("Get Property"),                     "Object",     N_("Get a property of selected objects; usage: object-get-propertye:property name;")},
+
+    {"app.object-set-attribute-by-id",  N_("Set Attribute By Id"),              "Object",     N_("Set or update an attribute an object by id; usage: object-set-attribute-by-id:object id, attribute name, attribute value;")},
+    {"app.object-set-property-by-id",   N_("Set Property By Id"),               "Object",     N_("Set or update a property an object by id; usage: object-set-property-by-id:object id, property name, property value;")},
+    {"app.object-get-attributes-by-id", N_("Get Attributes By Id"),             "Object",     N_("Get an attribute an object by id: object-set-attribute-by-id:object id, attribute name;")},
+    {"app.object-get-property-by-id",   N_("Get Property By Id"),               "Object",     N_("Get a property an object by id; usage: object-get-propertye-by-id:object id, property name;")},
+
 
     {"app.object-unlink-clones",        N_("Unlink Clones"),                    "Object",     N_("Unlink clones and symbols")},
     {"app.object-to-path",              N_("Object To Path"),                   "Object",     N_("Convert shapes to paths")},
@@ -301,7 +482,12 @@ std::vector<std::vector<Glib::ustring>> hint_data_object =
 {
     // clang-format off
     {"app.object-set-attribute",        N_("Enter comma-separated string for attribute name, attribute value") },
-    {"app.object-set-property",         N_("Enter comma-separated string for property name, property value")  }
+    {"app.object-set-property",         N_("Enter comma-separated string for property name, property value")  },
+    {"app.object-set-attribute-by-id",  N_("Enter comma-separated string for object id, attribute name, attribute value")  },
+    {"app.object-set-property-by-id",   N_("Enter comma-separated string for object id, property name, property value")  },
+    {"app.object-get-attribute-by-id",  N_("Enter comma-separated string for object id, attribute name")  },
+    {"app.object-get-property-by-id",   N_("Enter comma-separated string for object id, property name")  }
+
     // clang-format on
 };
 
@@ -316,25 +502,32 @@ add_actions_object(InkscapeApplication* app)
     auto *gapp = app->gio_app();
 
     // clang-format off
-    gapp->add_action_with_parameter( "object-set-attribute",            String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_set_attribute),  app));
-    gapp->add_action_with_parameter( "object-set-property",             String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_set_property),   app));
+    gapp->add_action_with_parameter( "object-set-attribute",            String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_set_attribute),        app));
+    gapp->add_action_with_parameter( "object-set-property",             String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_set_property),         app));
+    gapp->add_action_with_parameter( "object-get-attribute",            String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_get_attribute),        app));
+    gapp->add_action_with_parameter( "object-get-property",             String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_get_property),         app));
 
-    gapp->add_action(                "object-unlink-clones",            sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_unlink_clones),          app));
-    gapp->add_action(                "object-to-path",                  sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_to_path),                app));
-    gapp->add_action(                "object-stroke-to-path",           sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_stroke_to_path),         app));
+    gapp->add_action_with_parameter( "object-set-attribute-by-id",      String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_set_attribute_by_id),  app));
+    gapp->add_action_with_parameter( "object-set-property-by-id",       String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_set_property_by_id),   app));
+    gapp->add_action_with_parameter( "object-get-attribute-by-id",      String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_get_attribute_by_id),  app));
+    gapp->add_action_with_parameter( "object-get-property-by-id",       String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_get_property_by_id),   app));
 
-    gapp->add_action(                "object-set-clip",                 sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_clip_set),               app));
-    gapp->add_action(                "object-set-inverse-clip",         sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_clip_set_inverse),       app));
-    gapp->add_action(                "object-release-clip",             sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_clip_release),           app));
-    gapp->add_action(                "object-set-clip-group",           sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_clip_set_group),         app));
-    gapp->add_action(                "object-set-mask",                 sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_mask_set),               app));
-    gapp->add_action(                "object-set-inverse-mask",         sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_mask_set_inverse),       app));
-    gapp->add_action(                "object-release-mask",             sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_mask_release),           app));
+    gapp->add_action(                "object-unlink-clones",            sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_unlink_clones),                app));
+    gapp->add_action(                "object-to-path",                  sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_to_path),                      app));
+    gapp->add_action(                "object-stroke-to-path",           sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_stroke_to_path),               app));
 
-    gapp->add_action(                "object-rotate-90-cw",             sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_rotate_90_cw),           app));
-    gapp->add_action(                "object-rotate-90-ccw",            sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_rotate_90_ccw),          app));
-    gapp->add_action(                "object-flip-horizontal",          sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_flip_horizontal),        app));
-    gapp->add_action(                "object-flip-vertical",            sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_flip_vertical),          app));
+    gapp->add_action(                "object-set-clip",                 sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_clip_set),                     app));
+    gapp->add_action(                "object-set-inverse-clip",         sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_clip_set_inverse),             app));
+    gapp->add_action(                "object-release-clip",             sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_clip_release),                 app));
+    gapp->add_action(                "object-set-clip-group",           sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_clip_set_group),               app));
+    gapp->add_action(                "object-set-mask",                 sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_mask_set),                     app));
+    gapp->add_action(                "object-set-inverse-mask",         sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_mask_set_inverse),             app));
+    gapp->add_action(                "object-release-mask",             sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_mask_release),                 app));
+
+    gapp->add_action(                "object-rotate-90-cw",             sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_rotate_90_cw),                 app));
+    gapp->add_action(                "object-rotate-90-ccw",            sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_rotate_90_ccw),                app));
+    gapp->add_action(                "object-flip-horizontal",          sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_flip_horizontal),              app));
+    gapp->add_action(                "object-flip-vertical",            sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_flip_vertical),                app));
     // clang-format on
 
     app->get_action_extra_data().add_data(raw_data_object);
