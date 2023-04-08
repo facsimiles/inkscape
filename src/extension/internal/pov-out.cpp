@@ -459,7 +459,7 @@ bool PovOutput::doTreeRecursive(SPDocument *doc, SPObject *obj)
     if (!obj->getId())
         {
         char buf[16];
-        snprintf(buf, "id%d", idIndex++);
+        sprintf(buf, "id%d", idIndex++);
         id = buf;
         }
     else

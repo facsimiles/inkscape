@@ -91,7 +91,7 @@ Glib::ustring
 ColorPickerParam::param_getSVGValue() const
 {
     gchar c[32];
-    snprintf(c, "#%08x", value);
+    sprintf(c, "#%08x", value);
     return c;
 }
 
@@ -99,7 +99,7 @@ Glib::ustring
 ColorPickerParam::param_getDefaultSVGValue() const
 {
     gchar c[32];
-    snprintf(c, "#%08x", defvalue);
+    sprintf(c, "#%08x", defvalue);
     return c;
 }
 

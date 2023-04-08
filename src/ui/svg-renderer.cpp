@@ -22,7 +22,7 @@ namespace Inkscape {
 
 Glib::ustring rgba_to_css_color(double r, double g, double b) {
     char buffer[16];
-    snprintf(buffer, "#%02x%02x%02x",
+    sprintf(buffer, "#%02x%02x%02x",
         static_cast<int>(r * 0xff + 0.5),
         static_cast<int>(g * 0xff + 0.5),
         static_cast<int>(b * 0xff + 0.5)
@@ -43,7 +43,7 @@ Glib::ustring rgba_to_css_color(const SPColor& color) {
 Glib::ustring double_to_css_value(double value) {
     char buffer[32];
     // arbitrarily chosen precision
-    snprintf(buffer, "%.4f", value);
+    sprintf(buffer, "%.4f", value);
     return Glib::ustring(buffer);
 }
 

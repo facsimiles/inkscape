@@ -408,7 +408,7 @@ RegisteredColorPicker::on_changed (guint32 rgba)
     }
     gchar c[32];
     if (_akey == _ckey + "_opacity_LPE") { //For LPE parameter we want stored with alpha
-        snprintf(c, "#%08x", rgba);
+        sprintf(c, "#%08x", rgba);
     } else {
         sp_svg_write_color(c, sizeof(c), rgba);
     }

@@ -145,7 +145,7 @@ std::vector<TracingEngineResult> AutotraceTracingEngine::trace(Glib::RefPtr<Gdk:
                 thePath.clear();
                 nNodes = 0;
             }
-            std::snprintf(color, "#%02x%02x%02x;", list.color.r, list.color.g, list.color.b);
+            std::sprintf(color, "#%02x%02x%02x;", list.color.r, list.color.g, list.color.b);
 
             theStyle << ((spline.centerline || list.open) ? "stroke:" : "fill:") << color
                      << ((spline.centerline || list.open) ? "fill:" : "stroke:") << "none";
