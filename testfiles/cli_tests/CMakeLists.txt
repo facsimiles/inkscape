@@ -808,10 +808,15 @@ add_cli_test(actions-object-distribute     INPUT_FILENAME rects.svg
                                            REFERENCE_FILENAME actions-object-distribute_expected.png)
 
 # object-set-attribute
-add_cli_test(actions-object-set-attribute  INPUT_FILENAME rects.svg
-                                           PARAMETERS --actions=select-by-id:rect1$<SEMICOLON>object-set-attribute:rx,15
-                                           OUTPUT_FILENAME actions-object-set-attribute.png
-                                           REFERENCE_FILENAME actions-object-set-attribute_expected.png)
+add_cli_test(actions-object-set-attribute           INPUT_FILENAME rects.svg
+                                                    PARAMETERS --actions=select-by-id:rect1$<SEMICOLON>object-set-attribute:rx,15
+                                                    OUTPUT_FILENAME actions-object-set-attribute.png
+                                                    REFERENCE_FILENAME actions-object-set-attribute_expected.png)
+
+add_cli_test(actions-object-set-attribute_filter    INPUT_FILENAME gradient.svg
+                                                    PARAMETERS --actions=select-by-id:stop1$<SEMICOLON>object-set-attribute:offset,25%
+                                                    OUTPUT_FILENAME actions-object-set-attribute.svg
+                                                    TEST_SCRIPT match_regex.sh actions-object-set-attribute.svg "offset=\"25%\"")
 
 # object-get-attribute
 add_cli_test(actions-object-get-attribute              INPUT_FILENAME rects.svg
@@ -823,10 +828,15 @@ add_cli_test(actions-object-get-attribute_nonexistant  INPUT_FILENAME rects.svg
                                                        PASS_FOR_OUTPUT "\n$")
 
 # object-set-property
-add_cli_test(actions-object-set-property   INPUT_FILENAME areas.svg
-                                           PARAMETERS --actions=select-by-id:MyRect$<SEMICOLON>object-set-property:fill,gold
-                                           OUTPUT_FILENAME actions-object-set-property.svg
-                                           TEST_SCRIPT match_regex.sh actions-object-set-property.svg "style=\"fill:gold\"")
+add_cli_test(actions-object-set-property        INPUT_FILENAME areas.svg
+                                                PARAMETERS --actions=select-by-id:MyRect$<SEMICOLON>object-set-property:fill,gold
+                                                OUTPUT_FILENAME actions-object-set-property.svg
+                                                TEST_SCRIPT match_regex.sh actions-object-set-property.svg "style=\"fill:gold\"")
+
+add_cli_test(actions-object-set-property_filter INPUT_FILENAME gradient.svg
+                                                PARAMETERS --actions=select-by-id:stop1$<SEMICOLON>object-set-property:stop-color,gold
+                                                OUTPUT_FILENAME actions-object-set-property.svg
+                                                TEST_SCRIPT match_regex.sh actions-object-set-property.svg "style=\"stop-color:gold\"")
 
 # object-get-property
 add_cli_test(actions-object-get-property               INPUT_FILENAME areas.svg

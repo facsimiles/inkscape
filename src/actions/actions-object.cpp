@@ -159,9 +159,8 @@ object_set_attribute(const Glib::VariantBase& value, InkscapeApplication *app)
     }
 
     // Should this be a selection member function?
-    auto items = selection->items();
-    for (auto i = items.begin(); i != items.end(); ++i) {
-        Inkscape::XML::Node *repr = (*i)->getRepr();
+    for (auto obj : selection->objects()) {
+        Inkscape::XML::Node *repr = obj->getRepr();
         repr->setAttribute(attribute, new_value);
     }
 
@@ -189,9 +188,8 @@ object_set_property(const Glib::VariantBase& value, InkscapeApplication *app)
     }
 
     // Should this be a selection member function?
-    auto items = selection->items();
-    for (auto i = items.begin(); i != items.end(); ++i) {
-        Inkscape::XML::Node *repr = (*i)->getRepr();
+    for (auto obj : selection->objects()) {
+        Inkscape::XML::Node *repr = obj->getRepr();
         SPCSSAttr *css = sp_repr_css_attr(repr, "style");
         sp_repr_css_set_property(css, tokens[0].c_str(), tokens[1].c_str());
         sp_repr_css_set(repr, css, "style");

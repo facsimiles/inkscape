@@ -224,10 +224,9 @@ select_list(InkscapeApplication* app)
         return;
     }
 
-    auto items = selection->items();
-    for (auto i = items.begin(); i != items.end(); ++i) {
+    for (auto obj : selection->objects()) {
         std::stringstream buffer;
-        buffer << **i;
+        buffer << *obj;
         show_output(buffer.str(), false);
     }
 }
