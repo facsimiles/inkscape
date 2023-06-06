@@ -253,14 +253,14 @@ uint32_t Emf::add_hatch(PEMF_CALLBACK_DATA d, uint32_t hatchType, U_COLORREF hat
     switch(hatchType){
         case U_HS_SOLIDTEXTCLR:
         case U_HS_DITHEREDTEXTCLR:
-            sprintf(tmpcolor,"%6.6X",sethexcolor(d->dc[d->level].textColor));
+            snprintf(tmpcolor,"%6.6X",sethexcolor(d->dc[d->level].textColor));
             break;
         case U_HS_SOLIDBKCLR:
         case U_HS_DITHEREDBKCLR:
-            sprintf(tmpcolor,"%6.6X",sethexcolor(d->dc[d->level].bkColor));
+            snprintf(tmpcolor,"%6.6X",sethexcolor(d->dc[d->level].bkColor));
             break;
         default:
-            sprintf(tmpcolor,"%6.6X",sethexcolor(hatchColor));
+            snprintf(tmpcolor,"%6.6X",sethexcolor(hatchColor));
             break;
     }
 
@@ -268,7 +268,7 @@ uint32_t Emf::add_hatch(PEMF_CALLBACK_DATA d, uint32_t hatchType, U_COLORREF hat
         This will be used late to compose, or recompose  the transparent or opaque final hatch.*/
 
     std::string refpath; // used to reference later the path pieces which are about to be created
-    sprintf(hpathname,"EMFhpath%d_%s",hatchType,tmpcolor);
+    snprintf(hpathname,"EMFhpath%d_%s",hatchType,tmpcolor);
     idx = in_hatches(d,hpathname);
     auto & defs = d->defs;
     if(!idx){  // add path/color if not already present
@@ -392,8 +392,8 @@ uint32_t Emf::add_hatch(PEMF_CALLBACK_DATA d, uint32_t hatchType, U_COLORREF hat
     }
 
     if(d->dc[d->level].bkMode == U_TRANSPARENT || hatchType >= U_HS_SOLIDCLR){
-        sprintf(hatchname,"EMFhatch%d_%s",hatchType,tmpcolor);
-        sprintf(hpathname,"EMFhpath%d_%s",hatchType,tmpcolor);
+        snprintf(hatchname,"EMFhatch%d_%s",hatchType,tmpcolor);
+        snprintf(hpathname,"EMFhpath%d_%s",hatchType,tmpcolor);
         idx = in_hatches(d,hatchname);
         if(!idx){  // add it if not already present
             if(d->hatches.count == d->hatches.size){  enlarge_hatches(d); }
@@ -409,8 +409,8 @@ uint32_t Emf::add_hatch(PEMF_CALLBACK_DATA d, uint32_t hatchType, U_COLORREF hat
     }
     else { //  bkMode==U_OPAQUE
         /* Set up an object in the defs for this background, if there is not one already there */
-        sprintf(bkcolor,"%6.6X",sethexcolor(d->dc[d->level].bkColor));
-        sprintf(hbkname,"EMFhbkclr_%s",bkcolor);
+        snprintf(bkcolor,"%6.6X",sethexcolor(d->dc[d->level].bkColor));
+        snprintf(hbkname,"EMFhbkclr_%s",bkcolor);
         idx = in_hatches(d,hbkname);
         if(!idx){  // add path/color if not already present.  Hatchtype is not needed in the name.
             if(d->hatches.count == d->hatches.size){  enlarge_hatches(d); }
@@ -425,7 +425,7 @@ uint32_t Emf::add_hatch(PEMF_CALLBACK_DATA d, uint32_t hatchType, U_COLORREF hat
         }
 
         // this is the pattern, its name will show up in Inkscape's pattern selector
-        sprintf(hatchname,"EMFhatch%d_%s_%s",hatchType,tmpcolor,bkcolor);
+        snprintf(hatchname,"EMFhatch%d_%s_%s",hatchType,tmpcolor,bkcolor);
         idx = in_hatches(d,hatchname);
         if(!idx){  // add it if not already present
             if(d->hatches.count == d->hatches.size){  enlarge_hatches(d); }
@@ -544,8 +544,8 @@ uint32_t Emf::add_image(PEMF_CALLBACK_DATA d,  void *pEmr, uint32_t cbBits, uint
         idx = d->images.count;
         d->images.strings[d->images.count++]=strdup(base64String);
 
-        sprintf(imagename,"EMFimage%d",idx++);
-        sprintf(xywh," x=\"0\" y=\"0\" width=\"%d\" height=\"%d\" ",width,height); // reuse this buffer
+        snprintf(imagename,"EMFimage%d",idx++);
+        snprintf(xywh," x=\"0\" y=\"0\" width=\"%d\" height=\"%d\" ",width,height); // reuse this buffer
 
         defs += "\n";
         defs += "   <image id=\"";
@@ -590,14 +590,14 @@ uint32_t Emf::add_image(PEMF_CALLBACK_DATA d,  void *pEmr, uint32_t cbBits, uint
     */
     if(current_rotation(d) >= 0.00001 || current_rotation(d) <= -0.00001){ /* some rotation, allow a little rounding error around 0 degrees */
         int tangle = round(current_rotation(d)*1000000.0);
-        sprintf(imrotname,"EMFrotimage%d_%d",idx-1,tangle);
+        snprintf(imrotname,"EMFrotimage%d_%d",idx-1,tangle);
         base64String = g_base64_encode((guchar*) imrotname, strlen(imrotname) );
         idx = in_images(d, (char *) base64String); // scan for this "image"
         if(!idx){
             if(d->images.count == d->images.size){  enlarge_images(d); }
             idx = d->images.count;
             d->images.strings[d->images.count++]=strdup(base64String);
-            sprintf(imrotname,"EMFimage%d",idx++);
+            snprintf(imrotname,"EMFimage%d",idx++);
 
             defs += "\n";
             defs += "   <pattern\n";
@@ -659,8 +659,8 @@ uint32_t Emf::add_gradient(PEMF_CALLBACK_DATA d, uint32_t gradientType, U_TRIVER
     U_COLORREF gradientColor2 = trivertex_to_colorref(tv2);
 
 
-    sprintf(tmpcolor1,"%6.6X",sethexcolor(gradientColor1));
-    sprintf(tmpcolor2,"%6.6X",sethexcolor(gradientColor2));
+    snprintf(tmpcolor1,"%6.6X",sethexcolor(gradientColor1));
+    snprintf(tmpcolor2,"%6.6X",sethexcolor(gradientColor2));
     switch(gradientType){
         case U_GRADIENT_FILL_RECT_H:
             gradc='H';
@@ -684,7 +684,7 @@ uint32_t Emf::add_gradient(PEMF_CALLBACK_DATA d, uint32_t gradientType, U_TRIVER
         as for add_image.
     */
     int tangle = round(current_rotation(d)*1000000.0);
-    sprintf(hgradname,"LinGrd%c_%s_%s_%d",gradc,tmpcolor1,tmpcolor2,tangle);
+    snprintf(hgradname,"LinGrd%c_%s_%s_%d",gradc,tmpcolor1,tmpcolor2,tangle);
     
     idx = in_gradients(d,hgradname);
     if(!idx){ // gradient does not yet exist
@@ -3492,7 +3492,7 @@ std::cout << "BEFORE DRAW"
                  U_GRADIENT3 *tris = (U_GRADIENT3 *)(((char *)lpEMFR) + sizeof(U_EMRGRADIENTFILL) + sizeof(U_TRIVERTEX)*nV);
                  for(i=0;i<nG;i++){
                      tmp_triangle << "\n<path d=\"";
-                     sprintf(tmpcolor,"%6.6X",sethexcolor(trivertex_to_colorref(tv[tris[i].Vertex1])));
+                     snprintf(tmpcolor,"%6.6X",sethexcolor(trivertex_to_colorref(tv[tris[i].Vertex1])));
                      tmp_triangle << "\n\tM " << pix_to_xy( d, tv[tris[i].Vertex1].x , tv[tris[i].Vertex1].y )  << " ";
                      tmp_triangle << "\n\tL " << pix_to_xy( d, tv[tris[i].Vertex2].x , tv[tris[i].Vertex2].y )  << " ";
                      tmp_triangle << "\n\tL " << pix_to_xy( d, tv[tris[i].Vertex3].x , tv[tris[i].Vertex3].y )  << " ";
