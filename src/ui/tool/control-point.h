@@ -306,22 +306,6 @@ protected:
 
     void _setAnchor(SPAnchorType anchor);
 
-    /**
-     * Determines if the control point is not visible yet still reacting to events.
-     *
-     * @return true if non-visible, false otherwise.
-     */
-    bool _isLurking();
-
-    /**
-     * Sets the control point to be non-visible yet still reacting to events.
-     *
-     * @param lurking true to make non-visible, false otherwise.
-     */
-    void _setLurking(bool lurking);
-
-    /// @}
-
     virtual Glib::ustring _getTip(unsigned /*state*/) const { return ""; }
 
     virtual Glib::ustring _getDragTip(MotionEvent const &event) const { return ""; }
@@ -363,8 +347,6 @@ private:
     Geom::Point _position; ///< Current position in desktop coordinates
 
     sigc::connection _event_handler_connection;
-
-    bool _lurking = false;
 
     static ColorSet _default_color_set;
 

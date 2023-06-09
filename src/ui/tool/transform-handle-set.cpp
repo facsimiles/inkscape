@@ -131,7 +131,7 @@ bool TransformHandle::grabbed(MotionEvent const &)
     startTransform();
 
     _th._setActiveHandle(this);
-    _setLurking(true);
+    setVisible(false);
     _setState(_state);
 
     // Collect the snap-candidates, one for each selected node. These will be stored in the _snap_points vector.
@@ -181,7 +181,7 @@ void TransformHandle::ungrabbed(ButtonReleaseEvent const *)
 {
     _snap_points.clear();
     _th._clearActiveHandle();
-    _setLurking(false);
+    setVisible(true);
     _setState(_state);
     endTransform();
     _th.signal_commit.emit(getCommitEvent());

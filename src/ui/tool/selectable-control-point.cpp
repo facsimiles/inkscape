@@ -119,16 +119,15 @@ void SelectableControlPoint::_setState(State state)
         ControlPoint::_setState(state);
     } else {
         ColorEntry current = {0, 0};
-        ColorSet const &activeCset = (_isLurking()) ? invisible_cset : _cset;
         switch (state) {
             case STATE_NORMAL:
-                current = activeCset.selected_normal;
+                current = _cset.selected_normal;
                 break;
             case STATE_MOUSEOVER:
-                current = activeCset.selected_mouseover;
+                current = _cset.selected_mouseover;
                 break;
             case STATE_CLICKED:
-                current = activeCset.selected_clicked;
+                current = _cset.selected_clicked;
                 break;
         }
         _setColors(current);
