@@ -505,7 +505,7 @@ void ControlPoint::_setColors(ColorEntry colors)
     _canvas_item_ctrl->set_stroke(colors.stroke);
 }
 
-bool ControlPoint::_isLurking()
+bool ControlPoint::_is_drag_cancelled(MotionEvent const &event)
 {
     return _lurking;
 }
@@ -518,7 +518,8 @@ void ControlPoint::_setLurking(bool lurking)
     }
 }
 
-bool ControlPoint::_is_drag_cancelled(MotionEvent const &event)
+
+bool ControlPoint::_is_drag_cancelled(GdkEventMotion *event)
 {
     return event.original()->x_root == -1;
 }
