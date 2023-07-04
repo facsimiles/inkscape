@@ -29,8 +29,107 @@
 
 namespace Inkscape {
 
-class CanvasItemCtrl : public CanvasItem
-{
+struct Handle {
+    // something to identify type and
+    CanvasItemCtrlType _type;
+
+    // something to identify state
+    uint32_t _state;
+    // 0b00....0<click-bit><hover-bit><selected-bit>
+
+    Handle() : _type(CANVAS_ITEM_CTRL_TYPE_DEFAULT), _state(0) {}
+
+    Handle(CanvasItemCtrlType type) : _type(type), _state(0) {}
+
+    Handle(CanvasItemCtrlType type, uint32_t state) : _type(type), _state(state) {}
+
+    // this function already exists in the code
+    void setType(CanvasItemCtrlType set_type)
+    {
+        _type = set_type;
+    }
+    void setState(uint32_t state)
+    {
+        _state |= state;
+    }
+    void setSelected(bool selected)
+    {
+        _state &= ~(1);
+        _state |= (selected);
+    }
+    bool isSelected()
+    {
+        return _state & 1;
+    }
+    void setClick(bool clicked)
+    {
+        _state &= ~(1 << 1);
+        _state |= (clicked << 1);
+    }
+    bool isClick()
+    {
+        return _state & 1 << 1;
+    }
+    void setHover(bool hover)
+    {
+        _state &= ~(1 << 2);
+        _state |= (hover << 2);
+    }
+    bool isHover()
+    {
+        return _state & 1 << 1;
+    }
+    bool operator==(const Handle &other) const
+    {
+        return _type == other._type && _state == other._state;
+    }
+    bool operator!=(const Handle &other) const
+    {
+        return !(*this == other);
+    }
+    static bool fits(const Handle &selector, const Handle &handle)
+    {
+      std::cout<<selector._type<<" "<<handle._type<<std::endl;
+      std::cout<<selector._state<<" "<<handle._state<<std::endl;
+        if (selector._type == CANVAS_ITEM_CTRL_TYPE_DEFAULT) {
+            return ((selector._state & handle._state) == selector._state);
+        }
+        return (selector._type == handle._type) && ((selector._state & handle._state) == selector._state);
+    }
+};
+
+template <typename T>
+struct Property {
+    T value;
+    uint32_t specificity = 0;
+
+    void setProperty(T newValue, uint32_t newSpecificity)
+    {
+      std::cout<<"TRIED"<<newSpecificity<<std::endl;
+        if (newSpecificity >= specificity) {
+      std::cout<<"TRIED  YES"<<newSpecificity<<std::endl;
+            value = newValue;
+            specificity = newSpecificity;
+        }
+    }
+
+    // this is in alternate needing to call ->value everytime, now () can be called directly on the object.
+    T operator()() const
+    {
+        return value;
+    }
+};
+
+struct HandleStyle {
+    Property<CanvasItemCtrlShape> shape;
+
+    HandleStyle()
+    {
+        shape.value = CANVAS_ITEM_CTRL_SHAPE_SQUARE;
+    }
+};
+
+class CanvasItemCtrl : public CanvasItem {
 public:
     CanvasItemCtrl(CanvasItemGroup *group);
     CanvasItemCtrl(CanvasItemGroup *group, CanvasItemCtrlType type);
@@ -61,7 +160,8 @@ public:
     void set_angle(double angle);
     void set_type(CanvasItemCtrlType type);
     void set_pixbuf(Glib::RefPtr<Gdk::Pixbuf> pixbuf);
- 
+    static std::unordered_map<Handle, HandleStyle *> handle_styles;
+
 protected:
     ~CanvasItemCtrl() override = default;
 
@@ -69,6 +169,7 @@ protected:
     void _render(Inkscape::CanvasItemBuffer &buf) const override;
 
     void build_cache(int device_scale) const;
+    void parse_and_build_cache() const;
 
     // Geometry
     Geom::Point _position;
@@ -76,8 +177,14 @@ protected:
     // Display
     InitLock _built;
     mutable std::unique_ptr<uint32_t[]> _cache;
+    //Pair of Type and State mapped to the Cache
+    static InitLock _parsed;
+    // mutable static std::unordered_map<pair<CanvasItermCtrlType,uint32_t>,std::unique_ptr<uint32_t[]>> cache;
+
+    // static mutable int does_it;
 
     // Properties
+    // Handle _handle = Handle();
     CanvasItemCtrlType  _type  = CANVAS_ITEM_CTRL_TYPE_DEFAULT;
     CanvasItemCtrlShape _shape = CANVAS_ITEM_CTRL_SHAPE_SQUARE;
     CanvasItemCtrlMode  _mode  = CANVAS_ITEM_CTRL_MODE_XOR;
@@ -90,6 +197,17 @@ protected:
 };
 
 } // namespace Inkscape
+
+namespace std {
+template <>
+struct hash<Inkscape::Handle> {
+    size_t operator()(Inkscape::Handle const &handle) const
+    {
+        uint64_t typeandstate = uint64_t(handle._type) << 32 | handle._state;
+        return hash<uint64_t>()(typeandstate);
+    }
+};
+} // namespace std
 
 #endif // SEEN_CANVAS_ITEM_CTRL_H
 
