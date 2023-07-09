@@ -30,10 +30,7 @@
 namespace Inkscape {
 
 struct Handle {
-    // something to identify type and
     CanvasItemCtrlType _type;
-
-    // something to identify state
     uint32_t _state;
     // 0b00....0<click-bit><hover-bit><selected-bit>
 
@@ -43,7 +40,7 @@ struct Handle {
 
     Handle(CanvasItemCtrlType type, uint32_t state) : _type(type), _state(state) {}
 
-    // this function already exists in the code
+    //TODO: this function already exists in the code so adjust to use that one.
     void setType(CanvasItemCtrlType set_type)
     {
         _type = set_type;
@@ -89,8 +86,8 @@ struct Handle {
     }
     static bool fits(const Handle &selector, const Handle &handle)
     {
-      std::cout<<selector._type<<" "<<handle._type<<std::endl;
-      std::cout<<selector._state<<" "<<handle._state<<std::endl;
+        std::cout << selector._type << " " << handle._type << std::endl;
+        std::cout << selector._state << " " << handle._state << std::endl;
         if (selector._type == CANVAS_ITEM_CTRL_TYPE_DEFAULT) {
             return ((selector._state & handle._state) == selector._state);
         }
@@ -105,9 +102,7 @@ struct Property {
 
     void setProperty(T newValue, uint32_t newSpecificity)
     {
-      std::cout<<"TRIED"<<newSpecificity<<std::endl;
         if (newSpecificity >= specificity) {
-      std::cout<<"TRIED  YES"<<newSpecificity<<std::endl;
             value = newValue;
             specificity = newSpecificity;
         }
@@ -177,14 +172,14 @@ protected:
     // Display
     InitLock _built;
     mutable std::unique_ptr<uint32_t[]> _cache;
-    //Pair of Type and State mapped to the Cache
     static InitLock _parsed;
-    // mutable static std::unordered_map<pair<CanvasItermCtrlType,uint32_t>,std::unique_ptr<uint32_t[]>> cache;
+    //Handle mapped to the Cache
+    //mutable(might not need to make it mutable) static std::unordered_map<Handle,std::unique_ptr<uint32_t[]>> cache;
 
     // static mutable int does_it;
 
     // Properties
-    // Handle _handle = Handle();
+    //Handle _handle = Handle();
     CanvasItemCtrlType  _type  = CANVAS_ITEM_CTRL_TYPE_DEFAULT;
     CanvasItemCtrlShape _shape = CANVAS_ITEM_CTRL_SHAPE_SQUARE;
     CanvasItemCtrlMode  _mode  = CANVAS_ITEM_CTRL_MODE_XOR;

@@ -33,7 +33,7 @@
 
 namespace Inkscape {
 
-// int CanvasItemCtrl::status;
+//Declaration of static members
 InitLock CanvasItemCtrl::_parsed;
 std::unordered_map<Handle, HandleStyle *> CanvasItemCtrl::handle_styles = {
     {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_SMOOTH), new HandleStyle()},
@@ -826,12 +826,10 @@ static inline uint32_t compose_xor(uint32_t bg, uint32_t fg, uint32_t a)
 void CanvasItemCtrl::_render(CanvasItemBuffer &buf) const
 {
     // auto base_css_path = Inkscape::IO::Resource::get_path_string(Inkscape::IO::Resource::USER, Inkscape::IO::Resource::UIS, "xyz.css");
-    // std::cout << "worked" << base_css_path << std::endl;
     _parsed.init([ &, this] {
         parse_and_build_cache();
     });
 
-    std::cout<<"THIS IS WHAT IT CAME "<<handle_styles[Handle(CANVAS_ITEM_CTRL_TYPE_NODE_AUTO)]->shape()<<std::endl;
 
     _built.init([ &, this] {
         build_cache(buf.device_scale);
@@ -957,11 +955,12 @@ std::unordered_map<std::string, CanvasItemCtrlShape> shape_map = {
 
 std::vector<std::pair<HandleStyle *, int>> selected_handles;
 
-void configure_selector(CRSelector *a_selector, Handle* &selector, int &specificity)
+void configure_selector(CRSelector *a_selector, Handle *&selector, int &specificity)
 {
     cr_simple_sel_compute_specificity(a_selector->simple_sel);
     specificity =  a_selector->simple_sel->specificity;
-    char **tokens = g_strsplit(reinterpret_cast<const char *>(cr_simple_sel_one_to_string(a_selector->simple_sel)), ":", 0);
+    const char *selector_str = reinterpret_cast<const char *>(cr_simple_sel_one_to_string(a_selector->simple_sel));
+    char **tokens = g_strsplit(selector_str, ":", 0);
     CanvasItemCtrlType type;
     if (type_map.find(*tokens) != type_map.end()) {
         type = type_map[*tokens];
@@ -969,7 +968,7 @@ void configure_selector(CRSelector *a_selector, Handle* &selector, int &specific
     }
     else {
         //throw a warning that it is not a valid selector
-        std::cerr << "Invalid selector" << std::endl;
+        std::cerr << "Unrecognized selector:" << selector_str << std::endl;
         selector = NULL;
         return;
     }
@@ -981,15 +980,15 @@ void configure_selector(CRSelector *a_selector, Handle* &selector, int &specific
         else if (*tokens == "selected") {
             selector->setSelected(1);
         }
+        //TODO: both these would be more specific than selected so handle that later
         else if (*tokens == "hover") {
-            //this would be more specific than selected so handle that later
             selector->setHover(1);
         }
         else if (*tokens == "click") {
-            //this would be more specific than selected so handle that later
             selector->setClick(1);
         }
         else {
+            std::cerr << "Unrecognized selector:" << selector_str << std::endl;
             selector = NULL;
             return;
         }
@@ -1003,16 +1002,14 @@ void set_selectors(CRDocHandler *a_handler, CRSelector *a_selector)
         int specificity;
         configure_selector(a_selector, selector, specificity);
         if (selector) {
-            std::cout << "LOOPED";
             for (const auto& [handle, style] : CanvasItemCtrl::handle_styles) {
-                std::cout << "LOOPED";
-                if (Handle::fits(*selector,handle)) {
-                    std::cout << "FITTED";
+                if (Handle::fits(*selector, handle)) {
                     selected_handles.push_back({style, specificity});
                 }
             }
         }
         a_selector = a_selector->next;
+        delete selector;
     }
 }
 
@@ -1021,6 +1018,7 @@ void set_properties(CRDocHandler *a_handler, CRString *a_name, CRTerm *a_value, 
     //const is the issue just remove it and you can do direct comparisons
     const char *value = (char *)cr_term_to_string(a_value);
     const char *property = cr_string_peek_raw_str(a_name);
+    //TODO: write the parser for rest of the properties
     if (std::string(property) == "shape") {
         if (shape_map.find(std::string(value)) != shape_map.end()) {
             for (auto& [handle, specificity] : selected_handles) {
@@ -1028,17 +1026,13 @@ void set_properties(CRDocHandler *a_handler, CRString *a_name, CRTerm *a_value, 
             }
         }
         else {
-            // invalid shape skip property
-            std::cerr << "Unrecognized value for " << property << " :" << value;
+            std::cerr << "Unrecognized value for " << property << ": " << value << std::endl;
             return;
         }
     }
     else {
-        std::cerr << "Unrecognized property :" << property;
+        std::cerr << "Unrecognized property:" << property << std::endl;
     }
-    // for (auto [handle, specificity] : selected_handles) {
-    //     handle->"property"->setProperty("value", specificity + 10000 * a_important);
-    // }
 }
 
 void clear_selectors(CRDocHandler *a_handler, CRSelector *a_selector)
@@ -1063,77 +1057,18 @@ void CanvasItemCtrl::parse_and_build_cache() const
 
     cr_parser_parse(base_parser);
 }
-// unordered_set<pair<HandleStyle *, int>> selected_handles;
-// std::unordered_map<std::string, CanvasItemCtrlType> type_map = {
-//     {".inkscape-node-smooth", CANVAS_ITEM_CTRL_TYPE_NODE_SMOOTH},
-//     {".inkscape-node-auto", CANVAS_ITEM_CTRL_TYPE_NODE_AUTO},
-//     {".inkscape-node-cusp", CANVAS_ITEM_CTRL_TYPE_NODE_CUSP},
-//     {".inkscape-node-symmetrical", CANVAS_ITEM_CTRL_TYPE_NODE_SYMETRICAL}
-// };
-
-// std::unordered_map<std::string, CanvasItemCtrlShape> shape_map = {
-//     {"square", CANVAS_ITEM_CTRL_SHAPE_SQUARE},
-//     {"diamond", CANVAS_ITEM_CTRL_SHAPE_DIAMOND},
-//     {"circle", CANVAS_ITEM_CTRL_SHAPE_CIRCLE}
-// };
-
-// void set_selectors(CRDocHandler * a_handler, CRSelector * a_selector) {
-//     while (a_selector) {
-//         cr_simple_sel_compute_specificity(a_selector->simple_sel);
-//         current_specificity =  a_selector->simple_sel->specificity;
-//         gchar **tokens = g_strsplit(reinterpret_cast<const gchar *>(cr_simple_sel_one_to_string(a_selector->simple_sel)), ":", 0);
-//         a_selector = a_selector->next;
-//     }
-// }
-
-// void set_properties(CRDocHandler * a_handler, CRString * a_name, CRTerm * a_value, gboolean a_important) {
-
-//     for (auto [handle, specificity] : selected_handles) {
-//         handle->"property"->setProperty("value", specificity + 10000 * a_important);
-//     }
-// }
-
-// void clear_selectors(CRDocHandler * a_handler, CRSelector * a_selector) {
-//     selected_handles.clear();
-// }
 
 void CanvasItemCtrl::build_cache(int device_scale) const
 {
-    // const gchar *string = "Hello,World,How,Are,You";
-    // gchar **splitArray = g_strsplit(string, ",", -1);
-
-    // // Iterate over the split array and print each substring
-    // for (gchar **iter = splitArray; *iter != NULL; ++iter) {
-    //     printf("%s\n", *iter);
-    // }
-
-    // auto base_css_path = Inkscape::IO::Resource::get_path_ustring(Inkscape::IO::Resource::SYSTEM, Inkscape::IO::Resource::UIS, "findthis.css");
-
-    // //there shall be a check of some kind for existence of both the css
-    // CRParser *base_parser = cr_parser_new_from_file(reinterpret_cast<const guchar *>(base_css_path.c_str()), CR_ASCII);
-
-    // CRDocHandler *sac = cr_doc_handler_new();
-
-    // sac->start_selector = set_selectors;
-    // sac->property = set_properties;
-
-    // cr_parser_set_sac_handler(base_parser, sac);
-
-    // cr_parser_parse(base_parser);
-
     auto shape = _shape;
 
     if (handle_styles.find(Handle(_type)) != handle_styles.end()) {
         shape = handle_styles[Handle(_type)]->shape();
     }
 
-    // CanvasItemCtrl::status = 5;
     if (_type == CANVAS_ITEM_CTRL_TYPE_NODE_SMOOTH) {
-        // CanvasItemCtrl::status = 10;
         shape = CANVAS_ITEM_CTRL_SHAPE_CIRCLE;
     }
-    // std::cout<<CanvasItemCtrl::status<<std::endl;
-    // std::cout<<"BUILD_CACHE called!\n";
     if (_width < 2 || _height < 2) {
         return; // Nothing to render
     }
@@ -1156,7 +1091,6 @@ void CanvasItemCtrl::build_cache(int device_scale) const
     switch (shape) {
     case CANVAS_ITEM_CTRL_SHAPE_SQUARE:
         // Actually any rectanglular shape.
-        // std::cout<<"SQARE MADE";
         for (int i = 0; i < width; ++i) {
             for (int j = 0; j < width; ++j) {
                 if (i + 1 > device_scale && device_scale < width  - i &&
@@ -1174,7 +1108,6 @@ void CanvasItemCtrl::build_cache(int device_scale) const
         // Assume width == height.
         int m = (width + 1) / 2;
 
-        // std::cout<<"RHOMBUS MADE";
         for (int i = 0; i < width; ++i) {
             for (int j = 0; j < height; ++j) {
                 if (i  +           j  > m - 1 + device_scale &&

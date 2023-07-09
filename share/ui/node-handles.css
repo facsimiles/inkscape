@@ -1,7 +1,7 @@
 * {
-    shape: "circle";
+    shape: "circle" !important;
 }
 
-.inkscape-node-auto {
+.inkscape-node-auto, .inkscape-node-symmetrical {
     shape: "diamond";
 }
