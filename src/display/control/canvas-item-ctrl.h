@@ -40,7 +40,7 @@ struct Handle {
 
     Handle(CanvasItemCtrlType type, uint32_t state) : _type(type), _state(state) {}
 
-    //TODO: this function already exists in the code so adjust to use that one.
+    //TODO: this function already exists in the code so will need to adjust to use that one
     void setType(CanvasItemCtrlType set_type)
     {
         _type = set_type;
@@ -86,8 +86,6 @@ struct Handle {
     }
     static bool fits(const Handle &selector, const Handle &handle)
     {
-        std::cout << selector._type << " " << handle._type << std::endl;
-        std::cout << selector._state << " " << handle._state << std::endl;
         if (selector._type == CANVAS_ITEM_CTRL_TYPE_DEFAULT) {
             return ((selector._state & handle._state) == selector._state);
         }
@@ -174,9 +172,7 @@ protected:
     mutable std::unique_ptr<uint32_t[]> _cache;
     static InitLock _parsed;
     //Handle mapped to the Cache
-    //mutable(might not need to make it mutable) static std::unordered_map<Handle,std::unique_ptr<uint32_t[]>> cache;
-
-    // static mutable int does_it;
+    //mutable(might not need to make it mutable explicitly) static std::unordered_map<Handle,std::unique_ptr<uint32_t[]>> cache;
 
     // Properties
     //Handle _handle = Handle();

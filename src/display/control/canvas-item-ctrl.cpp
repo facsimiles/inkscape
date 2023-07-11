@@ -25,8 +25,10 @@
 #include "canvas-item-ctrl.h"
 #include "helper/geom.h"
 
-#include "preferences.h"
-#include "io/resource.h"         // Default size. 
+#include "io/resource.h"
+#include "io/sys.h"
+
+#include "preferences.h" // Default size. 
 #include "display/cairo-utils.h" // argb32_from_rgba()
 
 #include "ui/widget/canvas.h"
@@ -355,7 +357,6 @@ void CanvasItemCtrl::set_type(CanvasItemCtrlType type)
 {
     defer([ = ] {
         if (_type == type) return;
-        std::cout << "set_type" << type << "from" << _type << std::endl;
         _type = type;
         // Use _type to set default values.
         set_shape_default();
@@ -967,7 +968,6 @@ void configure_selector(CRSelector *a_selector, Handle *&selector, int &specific
         tokens++;
     }
     else {
-        //throw a warning that it is not a valid selector
         std::cerr << "Unrecognized selector:" << selector_str << std::endl;
         selector = NULL;
         return;
@@ -981,10 +981,13 @@ void configure_selector(CRSelector *a_selector, Handle *&selector, int &specific
             selector->setSelected(1);
         }
         //TODO: both these would be more specific than selected so handle that later
+        //Need to verify whether the "+1" works
         else if (*tokens == "hover") {
+            specificity++;
             selector->setHover(1);
         }
         else if (*tokens == "click") {
+            specificity++;
             selector->setClick(1);
         }
         else {
@@ -995,7 +998,7 @@ void configure_selector(CRSelector *a_selector, Handle *&selector, int &specific
     }
 }
 
-void set_selectors(CRDocHandler *a_handler, CRSelector *a_selector)
+void set_selectors(CRDocHandler *a_handler, CRSelector *a_selector, bool is_users)
 {
     while (a_selector) {
         Handle *selector;
@@ -1004,13 +1007,23 @@ void set_selectors(CRDocHandler *a_handler, CRSelector *a_selector)
         if (selector) {
             for (const auto& [handle, style] : CanvasItemCtrl::handle_styles) {
                 if (Handle::fits(*selector, handle)) {
-                    selected_handles.push_back({style, specificity});
+                    selected_handles.push_back({style, specificity + 10000 * is_users});
                 }
             }
         }
         a_selector = a_selector->next;
         delete selector;
     }
+}
+
+void set_selectors_user(CRDocHandler *a_handler, CRSelector *a_selector)
+{
+    set_selectors(a_handler, a_selector, true);
+}
+
+void set_selectors_base(CRDocHandler *a_handler, CRSelector *a_selector)
+{
+    set_selectors(a_handler, a_selector, false);
 }
 
 void set_properties(CRDocHandler *a_handler, CRString *a_name, CRTerm *a_value, gboolean a_important)
@@ -1022,7 +1035,7 @@ void set_properties(CRDocHandler *a_handler, CRString *a_name, CRTerm *a_value, 
     if (std::string(property) == "shape") {
         if (shape_map.find(std::string(value)) != shape_map.end()) {
             for (auto& [handle, specificity] : selected_handles) {
-                handle->shape.setProperty(shape_map[value], specificity + 10000 * a_important);
+                handle->shape.setProperty(shape_map[value], specificity + 100000 * a_important);
             }
         }
         else {
@@ -1042,20 +1055,25 @@ void clear_selectors(CRDocHandler *a_handler, CRSelector *a_selector)
 
 void CanvasItemCtrl::parse_and_build_cache() const
 {
-    auto base_css_path = Inkscape::IO::Resource::get_path_ustring(Inkscape::IO::Resource::SYSTEM, Inkscape::IO::Resource::UIS, "node-handles.css");
-
-    //there shall be a check of some kind for existence of both the css
-    CRParser *base_parser = cr_parser_new_from_file(reinterpret_cast<const guchar *>(base_css_path.c_str()), CR_ASCII);
-
     CRDocHandler *sac = cr_doc_handler_new();
-
-    sac->start_selector = set_selectors;
+    sac->start_selector = set_selectors_base;
     sac->property = set_properties;
     sac->end_selector = clear_selectors;
 
-    cr_parser_set_sac_handler(base_parser, sac);
+    auto base_css_path = Inkscape::IO::Resource::get_path_ustring(Inkscape::IO::Resource::SYSTEM, Inkscape::IO::Resource::UIS, "node-handles.css");
+    if (Inkscape::IO::file_test(base_css_path.c_str(), G_FILE_TEST_EXISTS)) {
+        CRParser *base_parser = cr_parser_new_from_file(reinterpret_cast<const guchar *>(base_css_path.c_str()), CR_ASCII);
+        cr_parser_set_sac_handler(base_parser, sac);
+        cr_parser_parse(base_parser);
+    }
 
-    cr_parser_parse(base_parser);
+    auto user_css_path = Inkscape::IO::Resource::get_path_ustring(Inkscape::IO::Resource::USER, Inkscape::IO::Resource::UIS, "node-handles.css");
+    if (Inkscape::IO::file_test(user_css_path.c_str(), G_FILE_TEST_EXISTS)) {
+        CRParser *user_parser = cr_parser_new_from_file(reinterpret_cast<const guchar *>(user_css_path.c_str()), CR_ASCII);
+        sac->start_selector = set_selectors_user;
+        cr_parser_set_sac_handler(user_parser, sac);
+        cr_parser_parse(user_parser);
+    }
 }
 
 void CanvasItemCtrl::build_cache(int device_scale) const
@@ -1066,9 +1084,6 @@ void CanvasItemCtrl::build_cache(int device_scale) const
         shape = handle_styles[Handle(_type)]->shape();
     }
 
-    if (_type == CANVAS_ITEM_CTRL_TYPE_NODE_SMOOTH) {
-        shape = CANVAS_ITEM_CTRL_SHAPE_CIRCLE;
-    }
     if (_width < 2 || _height < 2) {
         return; // Nothing to render
     }
