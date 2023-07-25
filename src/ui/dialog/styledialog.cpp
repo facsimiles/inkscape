@@ -391,35 +391,35 @@ void StyleDialog::readStyleElement()
 
     // Remove comments (/* xxx */)
 
-    bool breakme = false;
-    size_t start = content.find("/*");
-    size_t open = content.find("{", start + 1);
-    size_t close = content.find("}", start + 1);
-    size_t end = content.find("*/", close + 1);
-    while (!breakme) {
-        if (open == std::string::npos || close == std::string::npos || end == std::string::npos) {
-            breakme = true;
-            break;
-        }
-        while (open < close) {
-            open = content.find("{", close + 1);
-            close = content.find("}", close + 1);
-            end = content.find("*/", close + 1);
-            size_t reopen = content.find("{", close + 1);
-            if (open == std::string::npos || end == std::string::npos || end < reopen) {
-                if (end < reopen) {
-                    content = content.erase(start, end - start + 2);
-                } else {
-                    breakme = true;
-                }
-                break;
-            }
-        }
-        start = content.find("/*", start + 1);
-        open = content.find("{", start + 1);
-        close = content.find("}", start + 1);
-        end = content.find("*/", close + 1);
-    }
+    // bool breakme = false;
+    // size_t start = content.find("/*");
+    // size_t open = content.find("{", start + 1);
+    // size_t close = content.find("}", start + 1);
+    // size_t end = content.find("*/", close + 1);
+    // while (!breakme) {
+    //     if (open == std::string::npos || close == std::string::npos || end == std::string::npos) {
+    //         breakme = true;
+    //         break;
+    //     }
+    //     while (open < close) {
+    //         open = content.find("{", close + 1);
+    //         close = content.find("}", close + 1);
+    //         end = content.find("*/", close + 1);
+    //         size_t reopen = content.find("{", close + 1);
+    //         if (open == std::string::npos || end == std::string::npos || end < reopen) {
+    //             if (end < reopen) {
+    //                 content = content.erase(start, end - start + 2);
+    //             } else {
+    //                 breakme = true;
+    //             }
+    //             break;
+    //         }
+    //     }
+    //     start = content.find("/*", start + 1);
+    //     open = content.find("{", start + 1);
+    //     close = content.find("}", start + 1);
+    //     end = content.find("*/", close + 1);
+    // }
 
     // First split into selector/value chunks.
     // An attempt to use Glib::Regex failed. A C++11 version worked but
@@ -486,6 +486,16 @@ void StyleDialog::readStyleElement()
         addRenderer->signal_activated().connect(
             sigc::bind(sigc::mem_fun(*this, &StyleDialog::_onPropDelete), store));
     }
+    Gtk::CellRendererToggle* toggleRenderer = Gtk::manage(new Gtk::CellRendererToggle());
+    toggleRenderer->property_radio() = false;
+    toggleRenderer->set_activatable(true);
+    addCol = css_tree->append_column(" ", *toggleRenderer) - 1;
+    col = css_tree->get_column(addCol);
+    if (col) {
+        toggleRenderer->signal_toggled().connect(
+        sigc::bind<Glib::RefPtr<Gtk::TreeStore>>(sigc::mem_fun(*this, &StyleDialog::_onPropToggle), store));
+        col->add_attribute(toggleRenderer->property_active(), _mColumns._colAttribute);
+    }
     Gtk::CellRendererText *label = Gtk::manage(new Gtk::CellRendererText());
     label->property_placeholder_text() = _("property");
     label->property_editable() = true;
@@ -523,15 +533,16 @@ void StyleDialog::readStyleElement()
         urlRenderer->signal_activated().connect(sigc::bind(sigc::mem_fun(*this, &StyleDialog::_onLinkObj), store));
         urlcol->add_attribute(urlRenderer->property_icon(), _mColumns._colLinked);
     }
-    std::map<Glib::ustring, Glib::ustring> attr_prop;
+    std::map<Glib::ustring, std::pair<Glib::ustring, bool>> result_props;
     Gtk::TreeModel::Path path;
     bool empty = true;
     if (obj && obj->getRepr()->attribute("style")) {
         Glib::ustring style = obj->getRepr()->attribute("style");
-        attr_prop = parseStyle(style);
+        result_props = parseStyle(style);
         for (auto iter : obj->style->properties()) {
-            if (attr_prop.count(iter->name())) {
-                auto value = attr_prop[iter->name()];
+            if (result_props.count(iter->name())) {
+                auto value = result_props[iter->name()].first;
+                auto active = result_props[iter->name()].second;
                 empty = false;
                 Gtk::TreeModel::Row row = *(store->prepend());
                 row[_mColumns._colSelector] = "style_properties";
@@ -539,6 +550,7 @@ void StyleDialog::readStyleElement()
                 row[_mColumns._colActive] = true;
                 row[_mColumns._colName] = iter->name();
                 row[_mColumns._colValue] = value;
+                row[_mColumns._colAttribute] = active;
                 row[_mColumns._colStrike] = false;
                 row[_mColumns._colOwner] = Glib::ustring("Current value");
                 row[_mColumns._colHref] = nullptr;
@@ -699,24 +711,6 @@ void StyleDialog::readStyleElement()
             col->add_attribute(value->property_strikethrough(), _mColumns._colStrike);
         }
         Glib::ustring style = properties;
-        Glib::ustring comments = "";
-        while (style.find("/*") != std::string::npos) {
-            size_t beg = style.find("/*");
-            size_t end = style.find("*/");
-            if (end != std::string::npos && beg != std::string::npos) {
-                comments = comments.append(style, beg + 2, end - beg - 2);
-                style = style.erase(beg, end - beg + 2);
-            }
-        }
-        std::map<Glib::ustring, Glib::ustring> attr_prop_styleshet = parseStyle(style);
-        std::map<Glib::ustring, Glib::ustring> attr_prop_styleshet_comments = parseStyle(comments);
-        std::map<Glib::ustring, std::pair<Glib::ustring, bool>> result_props;
-        for (auto styled : attr_prop_styleshet) {
-            result_props[styled.first] = std::make_pair(styled.second, true);
-        }
-        for (auto styled : attr_prop_styleshet_comments) {
-            result_props[styled.first] = std::make_pair(styled.second, false);
-        }
         empty = true;
         css_selector_event_add->signal_button_release_event().connect(
             sigc::bind(
@@ -745,7 +739,7 @@ void StyleDialog::readStyleElement()
                     r1 = sp_svg_read_color(value.c_str(), r1);
                     guint32 r2 = 0; // if there's no color, return black
                     r2 = sp_svg_read_color(val.c_str(), r2);
-                    if (attr_prop.count(iter.first) || (value != val && (r1 == 0 || r1 != r2))) {
+                    if (result_props.count(iter.first) || (value != val && (r1 == 0 || r1 != r2))) {
                         row[_mColumns._colStrike] = true;
                         row[_mColumns._colOwner] = Glib::ustring("");
                     } else {
@@ -768,6 +762,7 @@ void StyleDialog::readStyleElement()
                 row[_mColumns._colActive] = iter.second.second;
                 row[_mColumns._colName] = iter.first;
                 row[_mColumns._colValue] = iter.second.first;
+                row[_mColumns._colAttribute] = true;
                 row[_mColumns._colStrike] = false;
                 row[_mColumns._colOwner] = Glib::ustring("Stylesheet value");
             }
@@ -1008,24 +1003,31 @@ void StyleDialog::_addOwnerStyle(Glib::ustring name, Glib::ustring selector)
  * Convert a style string into a vector map. This should be moved to style.cpp
  *
  */
-std::map<Glib::ustring, Glib::ustring> StyleDialog::parseStyle(Glib::ustring style_string)
+std::map<Glib::ustring, std::pair<Glib::ustring, bool>> StyleDialog::parseStyle(Glib::ustring style_string)
 {
     g_debug("StyleDialog::parseStyle");
 
-    std::map<Glib::ustring, Glib::ustring> ret;
+    std::map<Glib::ustring, std::pair<Glib::ustring, bool>> ret;
 
     Util::trim(style_string); // We'd use const, but we need to trip spaces
     std::vector<Glib::ustring> props = r_props->split(style_string);
-
     for (auto token : props) {
+        // remove /* and */ from the ends of token
+        size_t beg = token.find("/*");
+        size_t end = token.find("*/");
+        bool active = true;
+        if(beg != std::string::npos && end != std::string::npos) {
+            token = token.substr(beg+2, end-beg-2);
+            active = false;
+        }
         Util::trim(token);
 
         if (token.empty())
             break;
         std::vector<Glib::ustring> pair = r_pair->split(token);
-
         if (pair.size() > 1) {
-            ret[pair[0]] = pair[1];
+            std::pair value(pair[1],active);
+            ret[pair[0]] = value;
         }
     }
     return ret;
@@ -1167,6 +1169,8 @@ bool StyleDialog::_addRow(GdkEventButton *evt, Glib::RefPtr<Gtk::TreeStore> stor
         row[_mColumns._colName] = "";
         row[_mColumns._colValue] = "";
         row[_mColumns._colStrike] = false;
+        row[_mColumns._colStrike] = false;
+        row[_mColumns._colAttribute] = true;
         gint col = 2;
         if (pos < 1) {
             col = 1;
@@ -1287,6 +1291,44 @@ StyleDialog::_startValueEdit(Gtk::CellEditable* cell, const Glib::ustring& path,
             sigc::bind(sigc::mem_fun(*this, &StyleDialog::_onValueKeyPressed), entry));
     }
 }
+
+
+void StyleDialog::_onPropToggle(const Glib::ustring& path, Glib::RefPtr<Gtk::TreeStore> store)
+{
+    Gtk::TreeModel::iterator iter = store->get_iter(path);
+    Gtk::TreeModel::Row row = *iter;
+    bool is_active = row[_mColumns._colAttribute];
+    Glib::ustring name = row[_mColumns._colName];
+    auto *selection = getSelection();
+    if(!selection) 
+        return;
+    for (auto obj : selection->objects()) {
+        Glib::ustring style = obj->getRepr()->attribute("style");
+        if (iter)
+        {
+            if(is_active){
+                if (style.find(name) != std::string::npos) {
+                    Glib::ustring::size_type pos = style.find(name+":");
+                    Glib::ustring::size_type end = style.find(";", pos);
+                    style.insert(pos, "/* ");
+                    end = end + 3;
+                    if(end<pos) end = style.size();
+                    style.insert(end, " */");
+                    obj->getRepr()->setAttribute("style", style);
+                }
+            }
+            else{
+                if (style.find(name) != std::string::npos) {
+                    Glib::ustring::size_type pos = style.find(name+":");
+                    Glib::ustring::size_type end = style.find(" */", pos);
+                    style.erase(pos-3, 3);
+                    style.erase(end-3, 3);
+                    obj->getRepr()->setAttribute("style", style);
+                }
+            }
+        }
+    }
+};
 
 void StyleDialog::_startNameEdit(Gtk::CellEditable *cell, const Glib::ustring &path)
 {

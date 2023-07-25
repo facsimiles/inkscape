@@ -96,6 +96,7 @@ public:
             add(_colActive);
             add(_colName);
             add(_colValue);
+            add(_colAttribute);
             add(_colStrike);
             add(_colSelector);
             add(_colSelectorPos);
@@ -105,7 +106,8 @@ public:
         }
         Gtk::TreeModelColumn<bool> _colActive;            // Active or inactive property
         Gtk::TreeModelColumn<Glib::ustring> _colName;     // Name of the property.
-        Gtk::TreeModelColumn<Glib::ustring> _colValue;    // Value of the property.
+        Gtk::TreeModelColumn<Glib::ustring> _colValue;  
+        Gtk::TreeModelColumn<bool> _colAttribute;         // Value of the property.
         Gtk::TreeModelColumn<bool> _colStrike;            // Property not used, overloaded
         Gtk::TreeModelColumn<Glib::ustring> _colSelector; // Style or matching object id.
         Gtk::TreeModelColumn<gint> _colSelectorPos;       // Position of the selector to handle dup selectors
@@ -155,6 +157,7 @@ public:
     void _setAutocompletion(Gtk::Entry *entry, Glib::ustring name);
     bool _on_foreach_iter(const Gtk::TreeModel::iterator &iter);
     void _reload();
+    void _onPropToggle(const Glib::ustring &path, Glib::RefPtr<Gtk::TreeStore> store);
     void _vscroll();
     bool _scrollock;
     double _scrollpos{0};
@@ -166,7 +169,7 @@ public:
 
     // Manipulate Tree
     std::vector<SPObject *> _getObjVec(Glib::ustring selector);
-    std::map<Glib::ustring, Glib::ustring> parseStyle(Glib::ustring style_string);
+    std::map<Glib::ustring, std::pair<Glib::ustring, bool>> parseStyle(Glib::ustring style_string);
     std::map<Glib::ustring, Glib::ustring> _owner_style;
     void _addOwnerStyle(Glib::ustring name, Glib::ustring selector);
     // Variables
