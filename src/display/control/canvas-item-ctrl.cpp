@@ -62,9 +62,9 @@ CanvasItemCtrl::CanvasItemCtrl(CanvasItemGroup *group)
  */
 CanvasItemCtrl::CanvasItemCtrl(CanvasItemGroup *group, CanvasItemCtrlType type)
     : CanvasItem(group)
-    , _type(type)
 {
-    _name = "CanvasItemCtrl:Type_" + std::to_string(_type);
+    _handle._type = type;
+    _name = "CanvasItemCtrl:Type_" + std::to_string(_handle._type);
     _pickable = true; // Everybody gets events from this class!
 
     // Use _type to set default values:
@@ -88,7 +88,6 @@ CanvasItemCtrl::CanvasItemCtrl(CanvasItemGroup *group, CanvasItemCtrlType type, 
 CanvasItemCtrl::CanvasItemCtrl(CanvasItemGroup *group, CanvasItemCtrlShape shape)
     : CanvasItem(group)
     , _shape(shape)
-    , _type(CANVAS_ITEM_CTRL_TYPE_DEFAULT)
 {
     _name = "CanvasItemCtrl:Shape_" + std::to_string(_shape);
     _pickable = true; // Everybody gets events from this class!
@@ -181,7 +180,7 @@ void CanvasItemCtrl::set_shape(CanvasItemCtrlShape shape)
 
 void CanvasItemCtrl::set_shape_default()
 {
-    switch (_type) {
+    switch (_handle._type) {
     case CANVAS_ITEM_CTRL_TYPE_ADJ_HANDLE:
         _shape = CANVAS_ITEM_CTRL_SHAPE_DARROW;
         break;
@@ -284,7 +283,7 @@ void CanvasItemCtrl::set_size_via_index(int size_index)
     }
 
     int size = 0;
-    switch (_type) {
+    switch (_handle._type) {
     case CANVAS_ITEM_CTRL_TYPE_ADJ_HANDLE:
     case CANVAS_ITEM_CTRL_TYPE_ADJ_SKEW:
         size = size_index * 2 + 7;
@@ -331,7 +330,7 @@ void CanvasItemCtrl::set_size_via_index(int size_index)
         break;
 
     default:
-        g_warning("set_size_via_index: missing case for handle type: %d", static_cast<int>(_type));
+        g_warning("set_size_via_index: missing case for handle type: %d", static_cast<int>(_handle._type));
         size = size_index * 2 + 1;
         break;
     }
@@ -361,8 +360,8 @@ void CanvasItemCtrl::set_size_extra(int extra)
 void CanvasItemCtrl::set_type(CanvasItemCtrlType type)
 {
     defer([ = ] {
-        if (_type == type) return;
-        _type = type;
+        if (_handle._type == type) return;
+        _handle._type = type;
         // Use _type to set default values.
         set_shape_default();
         set_size_default();
@@ -1112,9 +1111,9 @@ void CanvasItemCtrl::build_cache(int device_scale) const
     auto shape = _shape;
     auto fill = _fill;
 
-    if (handle_styles.find(Handle(_type)) != handle_styles.end()) {
-        shape = handle_styles[Handle(_type)]->shape();
-        fill = handle_styles[Handle(_type)]->getFill();
+    if (handle_styles.find(Handle(_handle._type)) != handle_styles.end()) {
+        shape = handle_styles[Handle(_handle._type)]->shape();
+        fill = handle_styles[Handle(_handle._type)]->getFill();
     }
 
     std::cout<<"Size "<<_height<<" "<<_width<<" Shape : "<<_shape<<std::endl;
@@ -1145,7 +1144,7 @@ void CanvasItemCtrl::build_cache(int device_scale) const
             for (int j = 0; j < width; ++j) {
                 if (i + 1 > device_scale && device_scale < width  - i &&
                         j + 1 > device_scale && device_scale < height - j) {
-                    *p++ = fill;
+                    *p++ = _fill;
                 }
                 else {
                     *p++ = _stroke;

@@ -113,15 +113,6 @@ struct Property {
     }
 };
 
-// struct HandleStyle {
-//     Property<CanvasItemCtrlShape> shape;
-
-//     HandleStyle()
-//     {
-//         shape.value = CANVAS_ITEM_CTRL_SHAPE_SQUARE;
-//     }
-// };
-
 struct Color {
     unsigned char red, green, blue;
     float alpha = 1;
@@ -296,8 +287,8 @@ protected:
     //mutable(might not need to make it mutable explicitly) static std::unordered_map<Handle,std::unique_ptr<uint32_t[]>> cache;
 
     // Properties
-    // Handle _handle = Handle();
-    CanvasItemCtrlType  _type  = CANVAS_ITEM_CTRL_TYPE_DEFAULT;
+    Handle _handle = Handle();
+    // CanvasItemCtrlType  _type  = CANVAS_ITEM_CTRL_TYPE_DEFAULT;
     CanvasItemCtrlShape _shape = CANVAS_ITEM_CTRL_SHAPE_SQUARE;
     CanvasItemCtrlMode  _mode  = CANVAS_ITEM_CTRL_MODE_XOR;
     int _width  = 5; // Nominally width == height == size... unless we use a pixmap.
