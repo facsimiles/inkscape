@@ -131,7 +131,7 @@ void BatchItem::init(std::shared_ptr<PreviewDrawing> drawing) {
     set_valign(Gtk::Align::ALIGN_START);
     set_halign(Gtk::Align::ALIGN_START);
     add(_grid);
-    show();
+    set_visible(true);
     this->set_can_focus(false);
 
     _selector.signal_toggled().connect([=]() {
@@ -344,7 +344,7 @@ void BatchExport::setup()
     // set them before connecting to signals
     setDefaultSelectionMode();
     setExporting(false);
-    queueRefresh();
+    queueRefresh(true);
 
     // Connect Signals
     for (auto [key, button] : selection_buttons) {
@@ -499,7 +499,7 @@ void BatchExport::refreshPreview()
     }
 }
 
-void BatchExport::loadExportHints()
+void BatchExport::loadExportHints(bool rename_file)
 {
     if (!_desktop) return;
 
@@ -507,7 +507,7 @@ void BatchExport::loadExportHints()
     auto old_filename = filename_entry->get_text();
     if (old_filename.empty()) {
         Glib::ustring filename = doc->getRoot()->getExportFilename();
-        if (filename.empty()) {
+        if (rename_file && filename.empty()) {
             Glib::ustring filename_entry_text = filename_entry->get_text();
             Glib::ustring extension = ".png";
             filename = Export::defaultFilename(doc, original_name, extension);
@@ -734,14 +734,14 @@ void BatchExport::setExporting(bool exporting, Glib::ustring const &text, Glib::
     if (exporting) {
         set_sensitive(false);
         set_opacity(0.2);
-        progress_box->show();
+        progress_box->set_visible(true);
         _prog->set_text(text);
         _prog->set_fraction(0.0);
         _prog_batch->set_text(text_batch);
     } else {
         set_sensitive(true);
         set_opacity(1.0);
-        progress_box->hide();
+        progress_box->set_visible(false);
         _prog->set_text("");
         _prog->set_fraction(0.0);
         _prog_batch->set_text("");
@@ -752,7 +752,8 @@ unsigned int BatchExport::onProgressCallback(float value, void *data)
 {
     if (auto bi = static_cast<BatchExport *>(data)) {
         bi->_prog->set_fraction(value);
-        Gtk::Main::iteration(false);
+        auto main_context = Glib::MainContext::get_default();
+        main_context->iteration(false);
         return !bi->interrupted;
     }
     return false;
@@ -802,14 +803,14 @@ void BatchExport::queueRefreshItems()
     }, Glib::PRIORITY_HIGH);
 }
 
-void BatchExport::queueRefresh()
+void BatchExport::queueRefresh(bool rename_file)
 {
     if (refresh_conn) {
         return;
     }
-    refresh_conn = Glib::signal_idle().connect([this] {
+    refresh_conn = Glib::signal_idle().connect([this, rename_file] {
         refreshItems();
-        loadExportHints();
+        loadExportHints(rename_file);
         return false;
     }, Glib::PRIORITY_HIGH);
 }

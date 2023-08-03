@@ -113,6 +113,7 @@ void sp_selected_path_create_offset_object(SPDesktop *desktop, int expand, bool 
     if (auto shape = cast<SPShape>(item)) {
         if (!shape->curve())
             return;
+    } else if (is<SPText>(item)) {
     } else {
         desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("Selected object is <b>not a path</b>, cannot inset/outset."));
         return;
@@ -139,9 +140,8 @@ void sp_selected_path_create_offset_object(SPDesktop *desktop, int expand, bool 
         }
     }
 
-    Path *orig = Path_for_item(item, true, false);
-    if (orig == nullptr)
-    {
+    auto orig = Path_for_item(item, true, false);
+    if (!orig) {
         return;
     }
 
@@ -170,9 +170,8 @@ void sp_selected_path_create_offset_object(SPDesktop *desktop, int expand, bool 
             theRes->ConvertToShape(theShape, fill_nonZero);
         }
 
-        Path *originaux[1];
-        originaux[0] = orig;
-        theRes->ConvertToForme(res, 1, originaux);
+        Path *paths[] = { orig.get() };
+        theRes->ConvertToForme(res, 1, paths);
 
         delete theShape;
         delete theRes;
@@ -190,7 +189,6 @@ void sp_selected_path_create_offset_object(SPDesktop *desktop, int expand, bool 
         selection->clear();
 
         delete res;
-        delete orig;
         return;
     }
 
@@ -212,10 +210,7 @@ void sp_selected_path_create_offset_object(SPDesktop *desktop, int expand, bool 
                                                           ? -o_width
                                                           : 0 ));
 
-        gchar *str = res->svg_dump_path();
-        repr->setAttribute("inkscape:original", str);
-        g_free(str);
-        str = nullptr;
+        repr->setAttribute("inkscape:original", res->svg_dump_path().c_str());
 
         if ( updating ) {
 
@@ -258,7 +253,6 @@ void sp_selected_path_create_offset_object(SPDesktop *desktop, int expand, bool 
                         : INKSCAPE_ICON("path-offset-dynamic")));
 
     delete res;
-    delete orig;
 }
 
 /**
@@ -283,6 +277,7 @@ sp_selected_path_do_offset(SPDesktop *desktop, bool expand, double prefOffset)
         if (auto shape = cast<SPShape>(item)) {
             if (!shape->curve())
                 continue;
+        } else if (is<SPText>(item) || is<SPFlowtext>(item)) {
         } else {
             continue;
         }
@@ -322,8 +317,8 @@ sp_selected_path_do_offset(SPDesktop *desktop, bool expand, double prefOffset)
             o_miter = i_style->stroke_miterlimit.value * o_width;
         }
 
-        Path *orig = Path_for_item(item, false);
-        if (orig == nullptr) {
+        auto orig = Path_for_item(item, false);
+        if (!orig) {
             continue;
         }
 
@@ -422,15 +417,13 @@ sp_selected_path_do_offset(SPDesktop *desktop, bool expand, double prefOffset)
         item->deleteObject(false);
 
         if (repr) {
-            gchar *str = res->svg_dump_path();
-            repr->setAttribute("d", str);
-            g_free(str);
+            repr->setAttribute("d", res->svg_dump_path().c_str());
 
             // add the new repr to the parent
             // move to the saved position
             parent->addChildAtPos(repr, pos);
 
-            SPItem *newitem = (SPItem *) desktop->getDocument()->getObjectByRepr(repr);
+            auto newitem = cast_unsafe<SPItem>(desktop->getDocument()->getObjectByRepr(repr));
 
             // reapply the transform
             newitem->doWriteTransform(transform);
@@ -440,7 +433,6 @@ sp_selected_path_do_offset(SPDesktop *desktop, bool expand, double prefOffset)
             Inkscape::GC::release(repr);
         }
 
-        delete orig;
         delete res;
     }
 

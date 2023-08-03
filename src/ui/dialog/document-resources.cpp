@@ -68,12 +68,12 @@
 #include "pattern-manipulation.h"
 #include "rdf.h"
 #include "selection.h"
-#include "ui/builder-utils.h"
 #include "object/sp-defs.h"
 #include "object/sp-root.h"
 #include "object/sp-symbol.h"
 #include "object/sp-use.h"
 #include "style.h"
+#include "ui/builder-utils.h"
 #include "ui/dialog/filedialog.h"
 #include "ui/icon-names.h"
 #include "ui/themes.h"
@@ -347,7 +347,7 @@ DocumentResources::DocumentResources()
     _selector.insert_column("", *icon_renderer, 0);
     auto column = _selector.get_column(0);
     column->add_attribute(*icon_renderer, icon_renderer->property_shape_type().get_name(), COL_ICON);
-    auto count_renderer = Gtk::make_managed<Gtk::CellRendererText>();
+    auto const count_renderer = Gtk::make_managed<Gtk::CellRendererText>();
     auto count_column = _selector.get_column(_selector.append_column("", *count_renderer) - 1);
     count_column->add_attribute(*count_renderer, "text", COL_COUNT);
     count_column->set_cell_data_func(*count_renderer, [=](Gtk::CellRenderer* r, const Gtk::TreeModel::iterator& it){
@@ -1012,8 +1012,7 @@ void DocumentResources::refresh_page(const Glib::ustring& id) {
     auto tab = "iconview";
     auto has_count = false;
     auto item_width = 90;
-    auto context = get_style_context();
-    Gdk::RGBA color = context->get_color(get_state_flags());
+    auto const color = get_foreground_color(get_style_context());
     auto label_editable = false;
     auto items_selectable = true;
     auto can_delete = false; // enable where supported
@@ -1030,7 +1029,9 @@ void DocumentResources::refresh_page(const Glib::ustring& id) {
     case Symbols:
         {
             auto opt = object_renderer::options();
-            if (INKSCAPE.themecontext->isCurrentThemeDark(dynamic_cast<Gtk::Container*>(this))) {
+            if (auto const window = dynamic_cast<Gtk::Window *>(get_toplevel());
+	        INKSCAPE.themecontext->isCurrentThemeDark(window))
+	    {
                 // white background for typically black symbols, so they don't disappear in a dark theme
                 opt.solid_background(0xf0f0f0ff, 3, 3);
             }
@@ -1120,10 +1121,10 @@ void DocumentResources::refresh_page(const Glib::ustring& id) {
 
     _treeview.get_column(1)->set_visible(has_count);
     _label_renderer->property_editable() = label_editable;
-    widget_show(_edit, label_editable);
-    widget_show(_select, items_selectable);
-    widget_show(_delete, can_delete);
-    widget_show(_extract, can_extract);
+    _edit   .set_visible(label_editable);
+    _select .set_visible(items_selectable);
+    _delete .set_visible(can_delete);
+    _extract.set_visible(can_extract);
 
     _iconview.set_item_width(item_width);
     get_widget<Gtk::Stack>(_builder, "stack").set_visible_child(tab);

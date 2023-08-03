@@ -10,7 +10,7 @@
   <object class="GtkPopover" id="object-menu">
     <property name="width-request">222</property>
     <property name="can-focus">False</property>
-    <property name="border-width">5</property>
+    <property name="margin">5</property>
     <child>
       <object class="GtkBox">
         <property name="visible">True</property>
@@ -191,7 +191,7 @@
         <property name="visible">True</property>
         <property name="can-focus">True</property>
         <property name="receives-default">True</property>
-        <property name="action-name">app.selection-stack-up</property>
+        <property name="tooltip-text" translatable="yes">Raise selection one step</property>
         <property name="image">image-up</property>
         <property name="relief">none</property>
       </object>
@@ -206,7 +206,7 @@
         <property name="visible">True</property>
         <property name="can-focus">True</property>
         <property name="receives-default">True</property>
-        <property name="action-name">app.selection-stack-down</property>
+        <property name="tooltip-text" translatable="yes">Lower selection one step</property>
         <property name="image">image-down</property>
         <property name="relief">none</property>
       </object>
@@ -221,7 +221,7 @@
         <property name="visible">True</property>
         <property name="can-focus">True</property>
         <property name="receives-default">True</property>
-        <property name="action-name">app.delete-selection</property>
+        <property name="tooltip-text" translatable="yes">Delete selected items</property>
         <property name="image">image-remove</property>
         <property name="relief">none</property>
       </object>

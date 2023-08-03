@@ -79,9 +79,9 @@ Gtk::Widget *WidgetBox::get_widget(sigc::signal<void ()> *changeSignal)
         orientation = Gtk::ORIENTATION_VERTICAL;
     }
 
-    Gtk::Box *box = Gtk::manage(new Gtk::Box(orientation));
-    // box->set_border_width(GUI_BOX_MARGIN); // leave at zero for now, so box is purely for layouting (not grouping)
-                                              // revisit this later, possibly implementing GtkFrame or similar
+    auto const box = Gtk::make_managed<Gtk::Box>(orientation);
+    // box->property_margin().set_value(GUI_BOX_MARGIN); // leave at zero for now, so box is purely for layouting (not grouping)
+                                                         // revisit this later, possibly implementing GtkFrame or similar
     box->set_spacing(GUI_BOX_SPACING);
 
     if (_orientation == HORIZONTAL) {
@@ -106,9 +106,8 @@ Gtk::Widget *WidgetBox::get_widget(sigc::signal<void ()> *changeSignal)
         }
     }
 
-    box->show();
-
-    return dynamic_cast<Gtk::Widget *>(box);
+    box->set_visible(true);
+    return box;
 }
 
 }  /* namespace Extension */

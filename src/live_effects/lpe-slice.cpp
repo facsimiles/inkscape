@@ -99,19 +99,20 @@ LPESlice::newWidget()
 {
     // use manage here, because after deletion of Effect object, others might
     // still be pointing to this widget.
-    Gtk::Box *vbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
+    auto const vbox = Gtk::make_managed<Gtk::Box>(Gtk::ORIENTATION_VERTICAL, 2);
+    vbox->property_margin().set_value(5);
 
-    vbox->set_border_width(5);
-    vbox->set_homogeneous(false);
-    vbox->set_spacing(2);
-    Gtk::Box *hbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, 0));
-    Gtk::Button *center_vert_button = Gtk::manage(new Gtk::Button(Glib::ustring(_("Vertical"))));
+    auto const hbox = Gtk::make_managed<Gtk::Box>(Gtk::ORIENTATION_HORIZONTAL, 0);
+
+    auto const center_vert_button = Gtk::make_managed<Gtk::Button>(Glib::ustring(_("Vertical")));
     center_vert_button->signal_clicked().connect(sigc::mem_fun(*this, &LPESlice::centerVert));
     center_vert_button->set_size_request(110, 20);
-    Gtk::Button *center_horiz_button = Gtk::manage(new Gtk::Button(Glib::ustring(_("Horizontal"))));
+
+    auto const center_horiz_button = Gtk::make_managed<Gtk::Button>(Glib::ustring(_("Horizontal")));
     center_horiz_button->signal_clicked().connect(sigc::mem_fun(*this, &LPESlice::centerHoriz));
     center_horiz_button->set_size_request(110, 20);
-    Gtk::Button *reset_button = Gtk::manage(new Gtk::Button(Glib::ustring(_("Reset styles"))));
+
+    auto const reset_button = Gtk::make_managed<Gtk::Button>(Glib::ustring(_("Reset styles")));
     reset_button->signal_clicked().connect(sigc::mem_fun(*this, &LPESlice::resetStyles));
     reset_button->set_size_request(110, 20);
 
@@ -119,11 +120,12 @@ LPESlice::newWidget()
     hbox->pack_start(*reset_button, false, false, 2);
     hbox->pack_start(*center_vert_button, false, false, 2);
     hbox->pack_start(*center_horiz_button, false, false, 2);
+
     std::vector<Parameter *>::iterator it = param_vector.begin();
     while (it != param_vector.end()) {
         if ((*it)->widget_is_visible) {
             Parameter *param = *it;
-            Gtk::Widget *widg = dynamic_cast<Gtk::Widget *>(param->param_newWidget());
+            auto const widg = param->param_newWidget();
             Glib::ustring *tip = param->param_getTooltip();
             if (widg) {
                 vbox->pack_start(*widg, true, true, 2);
@@ -138,7 +140,8 @@ LPESlice::newWidget()
 
         ++it;
     }
-    return dynamic_cast<Gtk::Widget *>(vbox);
+
+    return vbox;
 }
 
 
@@ -574,7 +577,7 @@ LPESlice::cloneD(SPObject *orig, SPObject *dest, bool is_original)
     }
 }
 
-static fill_typ GetFillTyp(SPItem *item)
+static FillRule GetFillTyp(SPItem *item)
 {
     SPCSSAttr *css = sp_repr_css_attr(item->getRepr(), "style");
     gchar const *val = sp_repr_css_property(css, "fill-rule", nullptr);

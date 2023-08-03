@@ -32,8 +32,6 @@
 #include "message-stack.h"
 #include "mod360.h"
 #include "pure-transform.h"
-#include "selection-chemistry.h"
-#include "filter-chemistry.h"
 #include "selection.h"
 #include "seltrans-handles.h"
 
@@ -44,7 +42,6 @@
 #include "display/control/canvas-item-group.h"
 #include "live_effects/effect-enum.h"
 #include "live_effects/effect.h"
-#include "live_effects/lpe-bool.h"
 
 #include "object/sp-item-transform.h"
 #include "object/sp-namedview.h"
@@ -54,6 +51,7 @@
 #include "ui/modifiers.h"
 #include "ui/knot/knot.h"
 #include "ui/tools/select-tool.h"
+#include "ui/widget/events/canvas-event.h"
 
 using Inkscape::DocumentUndo;
 
@@ -63,30 +61,29 @@ static void sp_sel_trans_handle_click(SPKnot *knot, guint state, SPSelTransHandl
 static void sp_sel_trans_handle_new_event(SPKnot *knot, Geom::Point const &position, guint32 state, SPSelTransHandle const* data);
 static gboolean sp_sel_trans_handle_request(SPKnot *knot, Geom::Point *p, guint state, SPSelTransHandle const *data);
 
-static gboolean sp_sel_trans_handle_event(SPKnot *knot, GdkEvent *event, SPSelTransHandle const*)
+static bool sp_sel_trans_handle_event(SPKnot *knot, Inkscape::CanvasEvent const &event, SPSelTransHandle const*)
 {
-    switch (event->type) {
-        case GDK_MOTION_NOTIFY:
-            break;
-        case GDK_KEY_PRESS:
-            if (Inkscape::UI::Tools::get_latin_keyval (&event->key) == GDK_KEY_space) {
-                /* stamping mode: both mode(show content and outline) operation with knot */
+    bool ret = false;
+
+    inspect_event(event,
+        [&] (Inkscape::KeyPressEvent const &event) {
+            if (Inkscape::UI::Tools::get_latin_keyval(event) == GDK_KEY_space) {
+                // Stamping mode: both mode (show content and outline) operation with knot.
                 if (!knot->is_grabbed()) {
-                    return FALSE;
+                    return;
                 }
-                SPDesktop *desktop = knot->desktop;
-                Inkscape::SelTrans *seltrans = SP_SELECT_CONTEXT(desktop->event_context)->_seltrans;
+                auto desktop = knot->desktop;
+                auto seltrans = SP_SELECT_CONTEXT(desktop->event_context)->_seltrans;
                 // This stamp can't produce clones without requiring extra support of "undoing"
                 // the cascaded transform from this knot's changes.
                 seltrans->stamp();
-                return TRUE;
+                ret = true;
             }
-            break;
-        default:
-            break;
-    }
+        },
+        [&] (Inkscape::CanvasEvent const &event) {}
+    );
 
-    return FALSE;
+    return ret;
 }
 
 Inkscape::SelTrans::BoundingBoxPrefsObserver::BoundingBoxPrefsObserver(SelTrans &sel_trans) :
@@ -130,16 +127,16 @@ Inkscape::SelTrans::SelTrans(SPDesktop *desktop) :
     _norm = make_canvasitem<CanvasItemCtrl>(desktop->getCanvasControls(), Inkscape::CANVAS_ITEM_CTRL_TYPE_CENTER);
     _norm->set_fill(0x0);
     _norm->set_stroke(0xff0000b0);
-    _norm->hide();
+    _norm->set_visible(false);
 
     _grip = make_canvasitem<CanvasItemCtrl>(desktop->getCanvasControls(), Inkscape::CANVAS_ITEM_CTRL_TYPE_POINT);
     _grip->set_fill(0xffffff7f);
     _grip->set_stroke(0xff0000b0);
-    _grip->hide();
+    _grip->set_visible(false);
 
     for (auto &i : _l) {
         i = make_canvasitem<CanvasItemCurve>(desktop->getCanvasControls());
-        i->hide();
+        i->set_visible(false);
     }
 
     _sel_changed_connection = _selection->connectChanged(
@@ -160,8 +157,8 @@ Inkscape::SelTrans::~SelTrans()
     _sel_changed_connection.disconnect();
     _sel_modified_connection.disconnect();
 
-    for (auto & knot : knots) {
-        knot_unref(knot);
+    for (auto &knot : knots) {
+        SPKnot::unref(knot);
         knot = nullptr;
     }
 
@@ -352,13 +349,13 @@ void Inkscape::SelTrans::grab(Geom::Point const &p, gdouble x, gdouble y, bool s
     }
 
     if ((x != -1) && (y != -1)) {
-        _norm->show();
-        _grip->show();
+        _norm->set_visible(true);
+        _grip->set_visible(true);
     }
 
     if (_show == SHOW_OUTLINE) {
         for (auto & i : _l)
-            i->show();
+            i->set_visible(true);
     }
 
     _updateHandles();
@@ -435,12 +432,12 @@ void Inkscape::SelTrans::ungrab()
         sp_object_unref(_item, nullptr);
     }
 
-    _norm->hide();
-    _grip->hide();
+    _norm->set_visible(false);
+    _grip->set_visible(false);
 
     if (_show == SHOW_OUTLINE) {
         for (auto & i : _l)
-            i->hide();
+            i->set_visible(false);
     }
     if (_stamped) {
         _clear_stamp();
@@ -922,14 +919,14 @@ void Inkscape::SelTrans::handleGrab(SPKnot *knot, guint /*state*/, SPSelTransHan
         case HANDLE_CENTER:
             _grip->set_shape(Inkscape::CANVAS_ITEM_CTRL_SHAPE_PLUS);
 
-            _norm->hide();
-            _grip->show();
+            _norm->set_visible(false);
+            _grip->set_visible(true);
             break;
         default:
             _grip->set_shape(Inkscape::CANVAS_ITEM_CTRL_SHAPE_CROSS);
 
-            _norm->show();
-            _grip->show();
+            _norm->set_visible(true);
+            _grip->set_visible(true);
             break;
     }
 }

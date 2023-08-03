@@ -3,7 +3,6 @@
 #include <gtkmm/adjustment.h>
 #include <gtkmm/box.h>
 #include <gtkmm/button.h>
-#include <gtkmm/cssprovider.h>
 #include <gtkmm/menu.h>
 #include <gtkmm/menubutton.h>
 #include <gtkmm/popover.h>
@@ -30,8 +29,7 @@ ColorPalette::ColorPalette():
     _scroll_up(get_widget<Gtk::Button>(_builder, "btn-up")),
     _scroll_down(get_widget<Gtk::Button>(_builder, "btn-down")),
     _scroll(get_widget<Gtk::ScrolledWindow>(_builder, "scroll-wnd"))
-    {
-
+{
     auto& box = get_widget<Gtk::Box>(_builder, "palette-box");
     this->add(box);
 
@@ -103,56 +101,10 @@ ColorPalette::ColorPalette():
 
     _scroll.set_min_content_height(1);
 
-    // set style for small buttons; we need them reasonably small, since they impact min height of color palette strip
-    {
-        auto css_provider = Gtk::CssProvider::create();
-        css_provider->load_from_data(
-        ".small {"
-        " padding: 1px;"
-        " margin: 0;"
-        "}"
-        );
-
-        auto& btn_menu = get_widget<Gtk::MenuButton>(_builder, "btn-menu");
-        Gtk::Widget* small_buttons[5] = {&_scroll_up, &_scroll_down, &_scroll_left, &_scroll_right, &btn_menu};
-        for (auto button : small_buttons) {
-            button->get_style_context()->add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-        }
-    }
-
     _scroll_down.signal_clicked().connect([=](){ scroll(0, get_palette_height(), get_tile_height() + _border, true); });
     _scroll_up.signal_clicked().connect([=](){ scroll(0, -get_palette_height(), get_tile_height() + _border, true); });
     _scroll_left.signal_clicked().connect([=](){ scroll(-10 * (get_tile_width() + _border), 0, 0.0, false); });
     _scroll_right.signal_clicked().connect([=](){ scroll(10 * (get_tile_width() + _border), 0, 0.0, false); });
-
-    {
-        auto css_provider = Gtk::CssProvider::create();
-        css_provider->load_from_data(
-        "flowbox, scrolledwindow {"
-        " padding: 0;"
-        " border: 0;"
-        " margin: 0;"
-        " min-width: 1px;"
-        " min-height: 1px;"
-        "}");
-        _scroll.get_style_context()->add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-        _normal_box.get_style_context()->add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-        _pinned_box.get_style_context()->add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-    }
-
-    // remove padding/margins from FlowBoxChild widgets, so previews can be adjacent to each other
-    {
-        auto css_provider = Gtk::CssProvider::create();
-        css_provider->load_from_data(
-        ".color-palette-main-box flowboxchild {"
-        " padding: 0;"
-        " border: 0;"
-        " margin: 0;"
-        " min-width: 1px;"
-        " min-height: 1px;"
-        "}");
-        get_style_context()->add_provider_for_screen(this->get_screen(), css_provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-    }
 
     set_vexpand_set(true);
     set_up_scrolling();
@@ -421,15 +373,15 @@ void ColorPalette::set_up_scrolling() {
             // horizontal scrolling with single row
             _normal_box.set_min_children_per_line(normal_count);
 
-            _scroll_btn.hide();
+            _scroll_btn.set_visible(false);
 
             if (_force_scrollbar) {
-                _scroll_left.hide();
-                _scroll_right.hide();
+                _scroll_left.set_visible(false);
+                _scroll_right.set_visible(false);
             }
             else {
-                _scroll_left.show();
-                _scroll_right.show();
+                _scroll_left.set_visible(true);
+                _scroll_right.set_visible(true);
             }
 
             // ideally we should be able to use POLICY_AUTOMATIC, but on some themes this leads to a scrollbar
@@ -440,9 +392,9 @@ void ColorPalette::set_up_scrolling() {
             // vertical scrolling with multiple rows
             // 'external' allows scrollbar to shrink vertically
             _scroll.set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_EXTERNAL);
-            _scroll_left.hide();
-            _scroll_right.hide();
-            _scroll_btn.show();
+            _scroll_left.set_visible(false);
+            _scroll_right.set_visible(false);
+            _scroll_btn.set_visible(true);
         }
 
         int div = _large_pinned_panel ? (_rows > 2 ? 2 : 1) : _rows;
@@ -457,9 +409,9 @@ void ColorPalette::set_up_scrolling() {
         set_valign(Gtk::ALIGN_FILL);
         set_vexpand(true);
 
-        _scroll_left.hide();
-        _scroll_right.hide();
-        _scroll_btn.hide();
+        _scroll_left.set_visible(false);
+        _scroll_right.set_visible(false);
+        _scroll_btn.set_visible(false);
 
         _normal_box.set_valign(Gtk::ALIGN_START);
         _scroll.set_valign(Gtk::ALIGN_FILL);
@@ -590,8 +542,8 @@ Gtk::Widget *ColorPalette::_get_widget(Dialog::ColorItem *item) {
     }
     if (_show_labels) {
         item->set_valign(Gtk::ALIGN_CENTER);
-        auto box = Gtk::make_managed<Gtk::Box>();
-        auto label = Gtk::make_managed<Gtk::Label>(item->get_description());
+        auto const box = Gtk::make_managed<Gtk::Box>();
+        auto const label = Gtk::make_managed<Gtk::Label>(item->get_description());
         box->add(*item);
         box->add(*label);
         return box;
@@ -689,7 +641,7 @@ void ColorPalette::set_palettes(const std::vector<ColorPalette::palette_t>& pale
     Gtk::RadioMenuItem::Group group;
     for (auto it = palettes.rbegin(); it != palettes.rend(); ++it) {
         auto& name = it->name;
-        auto item = Gtk::manage(new CustomMenuItem(group, name, it->colors));
+        auto const item = Gtk::make_managed<CustomMenuItem>(group, name, it->colors);
         item->signal_activate().connect([=](){
             if (!_in_update) {
                 _in_update = true;
@@ -697,7 +649,7 @@ void ColorPalette::set_palettes(const std::vector<ColorPalette::palette_t>& pale
                 _in_update = false;
             }
         });
-        item->show();
+        item->set_visible(true);
         _menu.prepend(*item);
     }
 }

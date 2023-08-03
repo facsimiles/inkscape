@@ -142,25 +142,23 @@ LPESketch::~LPESketch() = default;
 
 Gtk::Widget *LPESketch::newWidget()
 {
-    Gtk::Box *vbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
-    vbox->set_border_width(0);
-    vbox->set_homogeneous(false);
-    vbox->set_spacing(0);
+    auto const vbox = Gtk::make_managed<Gtk::Box>(Gtk::ORIENTATION_VERTICAL);
+
     std::vector<Parameter *>::iterator it = param_vector.begin();
     while (it != param_vector.end()) {
         if ((*it)->widget_is_visible) {
             Parameter *param = *it;
-            Gtk::Widget *widg = dynamic_cast<Gtk::Widget *>(param->param_newWidget());
+            auto const widg = param->param_newWidget();
             if (param->param_key == "strokelength") {
-                vbox->pack_start(*Gtk::manage(new Gtk::Separator(Gtk::ORIENTATION_HORIZONTAL)),
+                vbox->pack_start(*Gtk::make_managed<Gtk::Separator>(Gtk::ORIENTATION_HORIZONTAL),
                                  Gtk::PACK_EXPAND_WIDGET);
             }
             if (param->param_key == "tremble_size") {
-                vbox->pack_start(*Gtk::manage(new Gtk::Separator(Gtk::ORIENTATION_HORIZONTAL)),
+                vbox->pack_start(*Gtk::make_managed<Gtk::Separator>(Gtk::ORIENTATION_HORIZONTAL),
                                  Gtk::PACK_EXPAND_WIDGET);
             }
             if (param->param_key == "nbtangents") {
-                vbox->pack_start(*Gtk::manage(new Gtk::Separator(Gtk::ORIENTATION_HORIZONTAL)),
+                vbox->pack_start(*Gtk::make_managed<Gtk::Separator>(Gtk::ORIENTATION_HORIZONTAL),
                                  Gtk::PACK_EXPAND_WIDGET);
             }
             Glib::ustring *tip = param->param_getTooltip();
@@ -176,7 +174,7 @@ Gtk::Widget *LPESketch::newWidget()
         }
         ++it;
     }
-    return dynamic_cast<Gtk::Widget *>(vbox);
+    return vbox;
 }
 /*
 Geom::Piecewise<Geom::D2<Geom::SBasis> >

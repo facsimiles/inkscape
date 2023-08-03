@@ -2108,13 +2108,18 @@ std::vector<SPItem*> sp_get_same_fill_or_stroke_color(SPItem *sel, std::vector<S
                 SPPaintServer *iter_server =
                     (type == SP_FILL_COLOR) ? iter->style->getFillPaintServer() : iter->style->getStrokePaintServer();
 
+                auto check_gradient = [] (SPGradient const *g) {
+                    return is<SPLinearGradient>(g) || is<SPRadialGradient>(g) || g->getVector()->isSwatch();
+                };
+
                 SPGradient *sel_gradient, *iter_gradient;
                 SPPattern *sel_pattern, *iter_pattern;
 
                 if ((sel_gradient = cast<SPGradient>(sel_server)) &&
                     (iter_gradient = cast<SPGradient>(iter_server)) &&
-                    sel_gradient->getVector()->isSwatch() && //
-                    iter_gradient->getVector()->isSwatch()) {
+                    check_gradient(sel_gradient) &&
+                    check_gradient(iter_gradient))
+                {
                     SPGradient *sel_vector = sel_gradient->getVector();
                     SPGradient *iter_vector = iter_gradient->getVector();
                     if (sel_vector == iter_vector) {
@@ -2395,13 +2400,35 @@ void ObjectSet::move(double dx, double dy)
     }
 }
 
+void ObjectSet::move(double dx, double dy, bool rotated)
+{
+    if (rotated) {
+        double const rotation = desktop()->current_rotation();
+        double const rdx = std::cos(rotation) * dx + std::sin(rotation) * dy;
+        double const rdy = -std::sin(rotation) * dx + std::cos(rotation) * dy;
+
+        move(rdx, rdy);
+    } else {
+        move(dx, dy);
+    }
+}
+
+void ObjectSet::move(double dx, double dy, bool rotated, bool screen)
+{
+    if (screen) {
+        moveScreen(dx, dy, rotated);
+    } else {
+        move(dx, dy, rotated);
+    }
+}
+
 void ObjectSet::moveScreen(double dx, double dy)
 {
     if (isEmpty() || !desktop()) {
         return;
     }
 
-    // same as sp_selection_move but divide deltas by zoom factor
+    // same as ObjectSet::move but divide deltas by zoom factor
     gdouble const zoom = desktop()->current_zoom();
     gdouble const zdx = dx / zoom;
     gdouble const zdy = dy / zoom;
@@ -2417,7 +2444,18 @@ void ObjectSet::moveScreen(double dx, double dy)
     }
 }
 
+void ObjectSet::moveScreen(double dx, double dy, bool rotated)
+{
+    if (rotated) {
+        double const rotation = desktop()->current_rotation();
+        double const rdx = std::cos(rotation) * dx + std::sin(rotation) * dy;
+        double const rdy = -std::sin(rotation) * dx + std::cos(rotation) * dy;
 
+        moveScreen(rdx, rdy);
+    } else {
+        moveScreen(dx, dy);
+    }
+}
 
 struct Forward {
     typedef SPObject *Iterator;
@@ -3018,7 +3056,7 @@ void ObjectSet::cloneOriginal()
                 auto canvas_item_bpath = new Inkscape::CanvasItemBpath(desktop()->getCanvasTemp(), curve.get_pathvector());
                 canvas_item_bpath->set_stroke(0x0000ddff);
                 canvas_item_bpath->set_dashes({5.0, 3.0});
-                canvas_item_bpath->show();
+                canvas_item_bpath->set_visible(true);
                 desktop()->add_temporary_canvasitem(canvas_item_bpath, 1000);
             }
         }

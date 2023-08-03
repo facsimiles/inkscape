@@ -23,9 +23,6 @@
 
 class SPShape;
 
-#define DDC_MIN_PRESSURE      0.0
-#define DDC_MAX_PRESSURE      1.0
-#define DDC_DEFAULT_PRESSURE  1.0
 #define SP_PENCIL_CONTEXT(obj) (dynamic_cast<Inkscape::UI::Tools::PencilTool*>((Inkscape::UI::Tools::ToolBase*)obj))
 #define SP_IS_PENCIL_CONTEXT(obj) (dynamic_cast<const Inkscape::UI::Tools::PencilTool*>((const Inkscape::UI::Tools::ToolBase*)obj) != NULL)
 
@@ -43,7 +40,8 @@ enum PencilState {
 /**
  * PencilTool: a context for pencil tool events
  */
-class PencilTool : public FreehandBase {
+class PencilTool : public FreehandBase
+{
 public:
     PencilTool(SPDesktop *desktop);
     ~PencilTool() override;
@@ -57,7 +55,8 @@ public:
     unsigned sketch_n; // number of sketches done
 
 protected:
-    bool root_handler(GdkEvent* event) override;
+    bool root_handler(CanvasEvent const &event) override;
+
 private:
     bool _handleButtonPress(GdkEventButton const &bevent);
     bool _handleMotionNotify(GdkEventMotion const &mevent);
@@ -79,8 +78,7 @@ private:
     Geom::Point _req_tangent;
     bool _is_drawing;
     PencilState _state;
-    gint _npoints;
-    // std::future<bool> future;
+    int _npoints;
 };
 
 }

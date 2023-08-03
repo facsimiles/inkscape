@@ -60,6 +60,7 @@
 
 #include "ui/icon-names.h"
 #include "ui/toolbar/tweak-toolbar.h"
+#include "ui/widget/events/canvas-event.h"
 
 
 using Inkscape::DocumentUndo;
@@ -93,7 +94,7 @@ TweakTool::TweakTool(SPDesktop *desktop)
     dilate_area = make_canvasitem<CanvasItemBpath>(desktop->getCanvasSketch());
     dilate_area->set_stroke(0xff9900ff);
     dilate_area->set_fill(0x0, SP_WIND_RULE_EVENODD);
-    dilate_area->hide();
+    dilate_area->set_visible(false);
 
     this->is_drawing = false;
 
@@ -136,9 +137,9 @@ static bool is_transform_mode (gint mode)
             mode == TWEAK_MODE_MORELESS);
 }
 
-static bool is_color_mode (gint mode)
+static bool is_color_mode(gint mode)
 {
-    return (mode == TWEAK_MODE_COLORPAINT || mode == TWEAK_MODE_COLORJITTER || mode == TWEAK_MODE_BLUR);
+    return mode == TWEAK_MODE_COLORPAINT || mode == TWEAK_MODE_COLORJITTER || mode == TWEAK_MODE_BLUR;
 }
 
 void TweakTool::update_cursor (bool with_shift) {
@@ -477,8 +478,8 @@ sp_tweak_dilate_recursive (Inkscape::Selection *selection, SPItem *item, Geom::P
                 }
             }
 
-            Path *orig = Path_for_item(item, false);
-            if (orig == nullptr) {
+            auto orig = Path_for_item(item, false);
+            if (!orig) {
                 return false;
             }
 
@@ -565,18 +566,17 @@ sp_tweak_dilate_recursive (Inkscape::Selection *selection, SPItem *item, Geom::P
                 }
 
                 if (res->descr_cmd.size() > 1) {
-                    gchar *str = res->svg_dump_path();
+                    auto str = res->svg_dump_path();
                     if (newrepr) {
-                        newrepr->setAttribute("d", str);
+                        newrepr->setAttribute("d", str.c_str());
                     } else {
                         auto lpeitem = cast<SPLPEItem>(item);
                         if (lpeitem && lpeitem->hasPathEffectRecursive()) {
-                            item->setAttribute("inkscape:original-d", str);
+                            item->setAttribute("inkscape:original-d", str.c_str());
                         } else {
-                            item->setAttribute("d", str);
+                            item->setAttribute("d", str.c_str());
                         }
                     }
-                    g_free(str);
                 } else {
                     // TODO: if there's 0 or 1 node left, delete this path altogether
                 }
@@ -589,7 +589,6 @@ sp_tweak_dilate_recursive (Inkscape::Selection *selection, SPItem *item, Geom::P
 
             delete theShape;
             delete theRes;
-            delete orig;
             delete res;
 
             if (did_this) {
@@ -1075,7 +1074,7 @@ sp_tweak_update_area (TweakTool *tc)
     Geom::PathVector path = Geom::Path(Geom::Circle(0,0,1)); // Unit circle centered at origin.
     path *= sm;
     tc->dilate_area->set_bpath(path);
-    tc->dilate_area->show();
+    tc->dilate_area->set_visible(true);
 }
 
     static void
@@ -1116,15 +1115,17 @@ sp_tweak_switch_mode_temporarily (TweakTool *tc, gint mode, bool with_shift)
     tc->update_cursor(with_shift);
 }
 
-bool TweakTool::root_handler(GdkEvent* event) {
+bool TweakTool::root_handler(CanvasEvent const &canvas_event)
+{
+    auto event = canvas_event.original();
     gint ret = FALSE;
 
     switch (event->type) {
         case GDK_ENTER_NOTIFY:
-            dilate_area->show();
+            dilate_area->set_visible(true);
             break;
         case GDK_LEAVE_NOTIFY:
-            dilate_area->hide();
+            dilate_area->set_visible(false);
             break;
         case GDK_BUTTON_PRESS:
             if (event->button.button == 1) {
@@ -1160,7 +1161,7 @@ bool TweakTool::root_handler(GdkEvent* event) {
             Geom::PathVector path = Geom::Path(Geom::Circle(0,0,1)); // Unit circle centered at origin.
             path *= sm;
             dilate_area->set_bpath(path);
-            dilate_area->show();
+            dilate_area->set_visible(true);
 
             guint num = 0;
             if (!_desktop->getSelection()->isEmpty()) {
@@ -1460,7 +1461,7 @@ bool TweakTool::root_handler(GdkEvent* event) {
     }
 
     if (!ret) {
-        ret = ToolBase::root_handler(event);
+        ret = ToolBase::root_handler(canvas_event);
     }
 
     return ret;

@@ -22,12 +22,10 @@ set(inkscape_SRC
   desktop-events.cpp
   desktop-style.cpp
   desktop.cpp
-  device-manager.cpp
   distribution-snapper.cpp
   document-subset.cpp
   document-undo.cpp
   document.cpp
-  ege-color-prof-tracker.cpp
   event-log.cpp
   extract-uri.cpp
   file.cpp
@@ -96,9 +94,6 @@ set(inkscape_SRC
   auto-save.h
   axis-manip.h
   bad-uri-exception.h
-  cms-color-types.h
-  cms-system.h
-  color-profile-cms-fns.h
   color-rgba.h
   hsluv.h
   color.h
@@ -111,12 +106,10 @@ set(inkscape_SRC
   desktop-events.h
   desktop-style.h
   desktop.h
-  device-manager.h
   distribution-snapper.h
   document-subset.h
   document-undo.h
   document.h
-  ege-color-prof-tracker.h
   enums.h
   event-log.h
   event.h
@@ -381,14 +374,14 @@ if(WIN32)
   set_target_properties(inkscape_com
                         PROPERTIES
                           LINK_FLAGS "-mconsole"
-                          OUTPUT_NAME "inkscapecom"
-                          SUFFIX ".com")
+                          OUTPUT_NAME "inkscape.com"
+                          SUFFIX "")
   add_executable(inkview_com ${view_SRC})
   set_target_properties(inkview_com
                         PROPERTIES
                           LINK_FLAGS "-mconsole"
-                          OUTPUT_NAME "inkviewcom"
-                          SUFFIX ".com")
+                          OUTPUT_NAME "inkview.com"
+                          SUFFIX "")
 endif()
 
 
@@ -449,8 +442,8 @@ endif()
 #Define the installation
 install(TARGETS inkscape inkview RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 if(WIN32)
-    install(TARGETS inkscape_com RENAME "inkscape.com")
-    install(TARGETS inkview_com RENAME "inkview.com")
+    install(TARGETS inkscape_com)
+    install(TARGETS inkview_com)
 endif()
 if(BUILD_SHARED_LIBS)
     install(TARGETS inkscape_base LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}/inkscape")

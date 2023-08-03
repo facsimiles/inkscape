@@ -31,6 +31,7 @@
 #include "page-manager.h"
 
 #include "ui/dialog-events.h"
+#include "ui/dialog-run.h"
 #include "ui/tools/tool-base.h"
 #include "ui/widget/spinbutton.h"
 
@@ -68,7 +69,7 @@ GuidelinePropertiesDialog::~GuidelinePropertiesDialog() {
 void GuidelinePropertiesDialog::showDialog(SPGuide *guide, SPDesktop *desktop) {
     GuidelinePropertiesDialog dialog(guide, desktop);
     dialog._setup();
-    dialog.run();
+    Inkscape::UI::dialog_run(dialog);
 }
 
 void GuidelinePropertiesDialog::_modeChanged()
@@ -202,7 +203,7 @@ void GuidelinePropertiesDialog::_setup() {
     auto mainVBox = get_content_area();
     _layout_table.set_row_spacing(4);
     _layout_table.set_column_spacing(4);
-    _layout_table.set_border_width(4);
+    _layout_table.property_margin().set_value(4);
 
     mainVBox->pack_start(_layout_table, false, false, 0);
 

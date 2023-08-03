@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
-#ifndef SEEN_ARC_CONTEXT_H
-#define SEEN_ARC_CONTEXT_H
+#ifndef INKSCAPE_UI_TOOLS_ARC_TOOl_H
+#define INKSCAPE_UI_TOOLS_ARC_TOOl_H
 
 /*
  * Ellipse drawing context
@@ -22,47 +22,41 @@
 #include <sigc++/connection.h>
 
 #include "ui/tools/tool-base.h"
+#include "object/weakptr.h"
 
 class SPItem;
 class SPGenericEllipse;
+namespace Inkscape { class Selection; }
 
-namespace Inkscape {
-    class Selection;
-}
+namespace Inkscape::UI::Tools {
 
-#define SP_ARC_CONTEXT(obj) (dynamic_cast<Inkscape::UI::Tools::ArcTool*>((Inkscape::UI::Tools::ToolBase*)obj))
-#define SP_IS_ARC_CONTEXT(obj) (dynamic_cast<const Inkscape::UI::Tools::ArcTool*>(obj) != NULL)
-
-namespace Inkscape {
-namespace UI {
-namespace Tools {
-
-class ArcTool : public ToolBase {
+class ArcTool : public ToolBase
+{
 public:
     ArcTool(SPDesktop *desktop);
     ~ArcTool() override;
 
-	bool root_handler(GdkEvent* event) override;
-	bool item_handler(SPItem* item, GdkEvent* event) override;
+    bool root_handler(CanvasEvent const &event) override;
+    bool item_handler(SPItem *item, CanvasEvent const &event) override;
+
 private:
-	SPGenericEllipse *arc;
+    SPWeakPtr<SPGenericEllipse> arc;
 
     Geom::Point center;
+    bool dragging = false;
 
     sigc::connection sel_changed_connection;
 
-	void selection_changed(Inkscape::Selection* selection);
+    void selection_changed(Selection *selection);
 
-	void drag(Geom::Point pt, guint state);
+    void drag(Geom::Point const &pt, unsigned state);
 	void finishItem();
 	void cancel();
 };
 
-}
-}
-}
+} // namespace Inkscape::UI::Tools
 
-#endif /* !SEEN_ARC_CONTEXT_H */
+#endif // INKSCAPE_UI_TOOLS_ARC_TOOl_H
 
 /*
   Local Variables:

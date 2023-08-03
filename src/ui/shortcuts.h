@@ -5,7 +5,6 @@
  * Copyright (C) 2020 Tavmjong Bah
  *
  * The contents of this file may be used under the GNU General Public License Version 2 or later.
- *
  */
 
 #ifndef INK_SHORTCUTS_H
@@ -20,11 +19,8 @@
 
 namespace Inkscape {
 
-namespace UI {
-namespace View {
-class View;
-}
-}
+class KeyEvent;
+namespace UI::View { class View; }
 
 namespace XML {
 class Document;
@@ -42,9 +38,7 @@ struct accel_key_less
 };
 
 class Shortcuts {
-
 public:
-
     enum What {
         All,
         System,
@@ -90,12 +84,20 @@ public:
     bool clear_user_shortcuts();
 
     // Invoke action corresponding to key
+    bool invoke_action(Gtk::AccelKey const &shortcut);
     bool invoke_action(GdkEventKey const *event);
+    bool invoke_action(GtkEventControllerKey const *controller,
+                       unsigned keyval, unsigned keycode, GdkModifierType state);
+    bool invoke_action(KeyEvent const &event);
 
     // Utility
     sigc::connection connect_changed(sigc::slot<void ()> const &slot);
     static Glib::ustring get_label(const Gtk::AccelKey& shortcut);
     static Gtk::AccelKey get_from_event(GdkEventKey const *event, bool fix = false);
+    static Gtk::AccelKey get_from(GtkEventControllerKey const *controller,
+                                  unsigned keyval, unsigned keycode, GdkModifierType state,
+                                  bool fix = false);
+    static Gtk::AccelKey get_from_event(KeyEvent const &event, bool fix = false);
     std::vector<Glib::ustring> list_all_detailed_action_names();
     std::vector<Glib::ustring> list_all_actions();
 

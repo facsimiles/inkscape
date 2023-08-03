@@ -129,9 +129,10 @@ static std::vector<SPItem *> grid_item_sort(Inkscape::ObjectSet *items)
         SPDesktop *desktop = Parent->getDesktop();
         desktop->getDocument()->ensureUpToDate();
         Inkscape::Selection *selection = desktop->getSelection();
-        if (!selection) return;
+        if (!selection || selection->isEmpty()) return;
 
         auto sel_box = selection->documentBounds(SPItem::VISUAL_BBOX);
+        if (sel_box.empty()) return;
         double grid_left = sel_box->min()[Geom::X];
         double grid_top = sel_box->min()[Geom::Y];
 
@@ -472,7 +473,7 @@ GridArrangeTab::GridArrangeTab(ArrangeDialog *parent)
     : Parent(parent),
       XPadding(_("X:"), _("Horizontal spacing between columns."), UNIT_TYPE_LINEAR, "", "object-columns", &PaddingUnitMenu),
       YPadding(_("Y:"), _("Vertical spacing between rows."), XPadding, "", "object-rows"),
-      PaddingTable(Gtk::manage(new Gtk::Grid()))
+      PaddingTable(Gtk::make_managed<Gtk::Grid>())
 {
      // bool used by spin button callbacks to stop loops where they change each other.
     updating = false;
@@ -612,7 +613,7 @@ GridArrangeTab::GridArrangeTab(ArrangeDialog *parent)
         XPadding.signal_value_changed().connect(sigc::mem_fun(*this, &GridArrangeTab::on_xpad_spinbutton_changed));
     }
 
-    PaddingTable->set_border_width(MARGIN);
+    PaddingTable->property_margin().set_value(MARGIN);
     PaddingTable->set_row_spacing(MARGIN);
     PaddingTable->set_column_spacing(MARGIN);
     PaddingTable->attach(XPadding,        0, 0, 1, 1);
@@ -621,7 +622,7 @@ GridArrangeTab::GridArrangeTab(ArrangeDialog *parent)
 
     TileBox.pack_start(*PaddingTable, false, false, MARGIN);
 
-    contents->set_border_width(4);
+    contents->property_margin().set_value(4);
     contents->pack_start(TileBox);
 
     double SpacingType = prefs->getDouble("/dialogs/gridtiler/SpacingType", 15);

@@ -59,6 +59,7 @@
 #include "style.h"
 #include "text-editing.h"
 #include "ui/shape-editor.h"
+#include "ui/dialog-run.h"
 
 using Inkscape::DocumentUndo;
 
@@ -306,7 +307,7 @@ int gui_request_dpi_fix_method(SPDocument *doc)
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     Gtk::Dialog scale_dialog(_("Convert legacy Inkscape file"));
     scale_dialog.set_transient_for(*(INKSCAPE.active_desktop()->getToplevel()));
-    scale_dialog.set_border_width(10);
+    scale_dialog.property_margin().set_value(10);
     scale_dialog.set_resizable(false);
     Gtk::Label explanation;
     explanation.set_markup(Glib::ustring("<b>") + doc->getDocumentName() + "</b>\n" +
@@ -355,12 +356,10 @@ int gui_request_dpi_fix_method(SPDocument *doc)
     moreinfo_text.set_margin_end(15);
 
     Gtk::Box b;
-    b.set_border_width(0);
-
     b.pack_start(choice2_1, false, false, 4);
     b.pack_start(choice2_2, false, false, 4);
-    choice2_1.show();
-    choice2_2.show();
+    choice2_1.set_visible(true);
+    choice2_2.set_visible(true);
 
     b.set_halign(Gtk::ALIGN_START);
     b.set_valign(Gtk::ALIGN_START);
@@ -382,21 +381,21 @@ int gui_request_dpi_fix_method(SPDocument *doc)
     // clang-format on
     moreinfo.add(moreinfo_text);
     scale_dialog.show_all_children();
-    b.hide();
+    b.set_visible(false);
     choice1.signal_clicked().connect(sigc::mem_fun(b, &Gtk::Box::hide));
     choice2.signal_clicked().connect(sigc::mem_fun(b, &Gtk::Box::show));
 
     int response = prefs->getInt("/options/dpiupdatemethod", FILE_DPI_UNCHANGED);
     if (response != FILE_DPI_UNCHANGED) {
         choice2.set_active();
-        b.show();
+        b.set_visible(true);
         if (response == FILE_DPI_DOCUMENT_SCALED) {
             choice2_2.set_active();
         }
     }
     ok_button->grab_focus();
 
-    int status = scale_dialog.run();
+    int status = Inkscape::UI::dialog_run(scale_dialog);
     if (status == GTK_RESPONSE_ACCEPT) {
         backup = backup_button.get_active();
         prefs->setBool("/options/dpifixbackup", backup);

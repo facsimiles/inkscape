@@ -51,7 +51,7 @@ RenderingOptions::RenderingOptions () :
                         "arbitrarily scaled without quality loss, but all "
                         "objects will be rendered exactly as displayed."));
 
-    set_border_width(2);
+    property_margin().set_value(2);
 
     Gtk::RadioButtonGroup group = _radio_vector.get_group ();
     _radio_bitmap.set_group (group);
@@ -73,13 +73,13 @@ RenderingOptions::RenderingOptions () :
     _dpi.update();
 
     // fill frames
-    Gtk::Box *box_vector = Gtk::manage( new Gtk::Box (Gtk::ORIENTATION_VERTICAL) );
+    auto const box_vector = Gtk::make_managed<Gtk::Box>(Gtk::ORIENTATION_VERTICAL);
     box_vector->set_border_width (2);
     box_vector->add (_radio_vector);
     box_vector->add (_radio_bitmap);
     _frame_backends.add (*box_vector);
 
-    Gtk::Box *box_bitmap = Gtk::manage( new Gtk::Box (Gtk::ORIENTATION_HORIZONTAL) );
+    auto const box_bitmap = Gtk::make_managed<Gtk::Box>(Gtk::ORIENTATION_HORIZONTAL);
     box_bitmap->set_border_width (2);
     box_bitmap->add (_dpi);
     _frame_bitmap.add (*box_bitmap);

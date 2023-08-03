@@ -1669,8 +1669,8 @@ GrDragger::~GrDragger()
     this->_mousedown_connection.disconnect();
     this->_ungrabbed_connection.disconnect();
 
-    /* unref should call destroy */
-    knot_unref(this->knot);
+    // unref should call destroy
+    SPKnot::unref(knot);
 
     // delete all draggables
     for (auto draggable : this->draggables) {
@@ -2323,7 +2323,7 @@ void GrDrag::refreshDraggersMesh(SPMeshGradient *mg, SPItem *item, Inkscape::Pai
 void GrDrag::grabKnot(GrDragger *dragger, gint x, gint y, guint32 etime)
 {
     if (dragger) {
-        dragger->knot->startDragging(dragger->point, x, y, etime);
+        dragger->knot->startDragging(dragger->point, {x, y}, etime);
     }
 }
 
@@ -2335,7 +2335,7 @@ void GrDrag::grabKnot(SPItem *item, GrPointType point_type, gint point_i, Inksca
 {
     GrDragger *dragger = getDraggerFor(item, point_type, point_i, fill_or_stroke);
     if (dragger) {
-        dragger->knot->startDragging(dragger->point, x, y, etime);
+        dragger->knot->startDragging(dragger->point, {x, y}, etime);
     }
 }
 
@@ -2676,6 +2676,14 @@ void GrDrag::selected_move(double x, double y, bool write_repr, bool scale_radia
 
     bool did = false;
 
+    auto delta = Geom::Point(x, y);
+
+    auto prefs = Inkscape::Preferences::get();
+    bool const rotated = prefs->getBool("/options/moverotated/value", true);
+    if (rotated) {
+        delta *= Geom::Rotate(-desktop->current_rotation());
+    }
+
     for(auto d : selected) {
         if (!d->isA(POINT_LG_MID) && !d->isA(POINT_RG_MID1) && !d->isA(POINT_RG_MID2)) {
             // if this is an endpoint,
@@ -2701,7 +2709,7 @@ void GrDrag::selected_move(double x, double y, bool write_repr, bool scale_radia
 
             did = true;
             Geom::Point p_old = d->point;
-            d->point += Geom::Point (x, y);
+            d->point += delta;
             d->point_original = d->point;
             d->knot->moveto(d->point);
 

@@ -12,6 +12,7 @@
 
 #include "util.h"
 #include "inkscape.h"
+#include "ui/dialog-run.h"
 
 #include <cairomm/pattern.h>
 #include <cstdint>
@@ -37,22 +38,6 @@
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>
 #include "widgets/spw-utilities.h" // sp_traverse_widget_tree()
-
-/**
- * Recursively look through pre-constructed widget parents for a specific named widget.
- */
-Gtk::Widget *get_widget_by_name(Gtk::Container *parent, const std::string &name)
-{
-    for (auto child : parent->get_children()) {
-        if (name == child->get_name())
-            return child;
-        if (auto recurse = dynamic_cast<Gtk::Container *>(child)) {
-            if (auto decendant = get_widget_by_name(recurse, name))
-                return decendant;
-        }
-    }
-    return nullptr;
-}
 
 /*
  * Ellipse text if longer than maxlen, "50% start text + ... + ~50% end text"
@@ -80,9 +65,9 @@ void reveal_widget(Gtk::Widget *widget, bool show)
         revealer->set_reveal_child(show);
     }
     if (show) {
-        widget->show();
+        widget->set_visible(true);
     } else if (!revealer) {
-        widget->hide();
+        widget->set_visible(false);
     }
 }
 
@@ -121,7 +106,7 @@ void gui_warning(const std::string &msg, Gtk::Window *parent_window) {
     if (INKSCAPE.active_desktop()) {
         Gtk::MessageDialog warning(_(msg.c_str()), false, Gtk::MESSAGE_WARNING, Gtk::BUTTONS_OK, true);
         warning.set_transient_for( parent_window ? *parent_window : *(INKSCAPE.active_desktop()->getToplevel()) );
-        warning.run();
+        dialog_run(warning);
     }
 }
 
@@ -167,19 +152,43 @@ Gdk::RGBA mix_colors(const Gdk::RGBA& a, const Gdk::RGBA& b, float ratio) {
     return result;
 }
 
-Gdk::RGBA get_background_color(const Glib::RefPtr<Gtk::StyleContext> &context,
-                               Gtk::StateFlags state) {
-    return get_context_color(context, GTK_STYLE_PROPERTY_BACKGROUND_COLOR, state);
+double get_luminance(Gdk::RGBA const &rgba)
+{
+    return 0.299 * rgba.get_red  ()
+         + 0.587 * rgba.get_green()
+         + 0.114 * rgba.get_blue ();
 }
 
-Gdk::RGBA get_context_color(const Glib::RefPtr<Gtk::StyleContext> &context,
-                            const gchar *property,
-                            Gtk::StateFlags state) {
-    GdkRGBA *c;
-    gtk_style_context_get(context->gobj(),
-                          static_cast<GtkStateFlags>(state),
-                          property, &c, nullptr);
-    return Glib::wrap(c);
+Gdk::RGBA get_foreground_color(Glib::RefPtr<Gtk::StyleContext const> const &context)
+{
+    return context->get_color(context->get_state());
+}
+
+Gdk::RGBA get_color_with_class(Glib::RefPtr<Gtk::StyleContext> const &context,
+                               Glib::ustring const &css_class)
+{
+    if (!css_class.empty()) context->add_class(css_class);
+    auto result = get_foreground_color(context);
+    if (!css_class.empty()) context->remove_class(css_class);
+    return result;
+}
+
+guint32 to_guint32(Gdk::RGBA const &rgba)
+{
+        return guint32(0xff * rgba.get_red  ()) << 24 |
+               guint32(0xff * rgba.get_green()) << 16 |
+               guint32(0xff * rgba.get_blue ()) <<  8 |
+               guint32(0xff * rgba.get_alpha());
+}
+
+Gdk::RGBA to_rgba(guint32 const u32)
+{
+    auto rgba = Gdk::RGBA{};
+    rgba.set_red  ((u32 & 0xFF000000 >> 24) / 255.0);
+    rgba.set_green((u32 & 0x00FF0000 >> 16) / 255.0);
+    rgba.set_blue ((u32 & 0x0000FF00 >>  8) / 255.0);
+    rgba.set_alpha((u32 & 0x000000FF      ) / 255.0);
+    return rgba;
 }
 
 // 2Geom <-> Cairo

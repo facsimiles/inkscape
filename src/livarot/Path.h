@@ -26,8 +26,6 @@ struct PathDescr;
 struct PathDescrLineTo;
 struct PathDescrArcTo;
 struct PathDescrCubicTo;
-struct PathDescrBezierTo;
-struct PathDescrIntermBezierTo;
 
 class SPStyle;
 
@@ -94,25 +92,18 @@ class Path
 {
   friend class Shape;
 
-public:
-
   // flags for the path construction
   enum
   {
     descr_ready = 0,        
-    descr_adding_bezier = 1, // we're making a bezier spline, so you can expect  pending_bezier_* to have a value
     descr_doing_subpath = 2, // we're doing a path, so there is a moveto somewhere
-    descr_delayed_bezier = 4,// the bezier spline we're doing was initiated by a TempBezierTo(), so we'll need an endpoint
     descr_dirty = 16         // the path description was modified
   };
 
   // some data for the construction: what's pending, and some flags
-  int         descr_flags;
-  int         pending_bezier_cmd;
-  int         pending_bezier_data;
-  int         pending_moveto_cmd;
-  int         pending_moveto_data;
+  int         descr_flags = descr_ready;
 
+public:
   std::vector<PathDescr*> descr_cmd; /*!< A vector of owned pointers to path commands. */
 
   /**
@@ -123,23 +114,24 @@ public:
    */
   struct path_lineto
   {
-    path_lineto(bool m, Geom::Point pp) : isMoveTo(m), p(pp), piece(-1), t(0), closed(false) {}
-    path_lineto(bool m, Geom::Point pp, int pie, double tt) : isMoveTo(m), p(pp), piece(pie), t(tt), closed(false) {}
+    path_lineto(bool m, Geom::Point const &pp) : isMoveTo(m), p(pp) {}
+    path_lineto(bool m, Geom::Point const &pp, int pie, double tt) : isMoveTo(m), p(pp), piece(pie), t(tt) {}
     
-    int isMoveTo;    /*!< A flag that stores one of polyline_lineto, polyline_moveto, polyline_forced */
-    Geom::Point  p;  /*!< The point itself. */
-    int piece;       /*!< Index of the path command that created the path segment that this point comes from.*/
-    double t;        /*!< The time at which this point exists in the path segment. A value between 0 and 1. */
-    bool closed;     /*!< True indicates that subpath is closed (this point is the last point of a closed subpath) */
+    int isMoveTo;        /*!< A flag that stores one of polyline_lineto, polyline_moveto, polyline_forced */
+    Geom::Point p;       /*!< The point itself. */
+    int piece = -1;      /*!< Index of the path command that created the path segment that this point comes from.*/
+    double t = 0.0;      /*!< The time at which this point exists in the path segment. A value between 0 and 1. */
+    bool closed = false; /*!< True indicates that subpath is closed (this point is the last point of a closed subpath) */
   };
   
   std::vector<path_lineto> pts; /*!< A vector storing the polyline approximation points. */
 
-  bool back; /*!< If true, indicates that the polyline approximation is going to have backdata.
-                  No need to set this manually though. When Path::Convert or any of its variants is called, it's set automatically. */
+private:
+  bool back = false; /*!< If true, indicates that the polyline approximation is going to have backdata.
+                          No need to set this manually though. When Path::Convert or any of its variants is called, it's set automatically. */
 
-  Path();
-  virtual ~Path();
+public:
+  ~Path();
 
   // creation of the path description
 
@@ -233,93 +225,6 @@ public:
    */
   int ArcTo ( Geom::Point const &ip, double iRx, double iRy, double angle, bool iLargeArc, bool iClockwise);
 
-  /**
-   * Adds a control point for the last quadratic bezier spline command.
-   *
-   * Adds a control point to the quadratic bezier spline that was last inserted with a call to
-   * Path::BezierTo.
-   *
-   * @param ip The control point.
-   *
-   * @return The index of the path description added.
-   */
-  int IntermBezierTo ( Geom::Point const &ip);	// add a quadratic bezier spline control point
-
-  /**
-   * Appends a quadratic bezier spline path command.
-   *
-   * A quadratic bezier spline is basically a set of quadratic bezier curves. To simply illustrate
-   * how this spline is made up, let's define some terms first. Let midpoint(a, b) represent the
-   * midpoint of the points a and b. Let quad(a, b, c) represent a quadratic Bezier curve with a
-   * as the start point, b as the control point and c as the end point.
-   *
-   * Given a set of points: st, p1, p2, p3, p4, en where st and en are the endpoints and the rest
-   * are control points, we will have the following quadratic Bezier curves connected end to end.
-   *
-   * quad(st, p1, midpoint(p1, p2))
-   * quad(midpoint(p1, p2), p2, midpoint(p2, p3))
-   * quad(midpoint(p2, p3), p3, midpoint(p3, p4))
-   * quad(midpoint(p3, p4), p4, en)
-   *
-   * No need to specify the number of control points. That'll be done automatically as you call
-   * Path::IntermBezierTo to add the control points. The sequence of instructions are like:
-   * 1. Call Path::BezierTo with the final point.
-   * 2. Call Path::IntermBezierTo with control points. One call for each control point.
-   * 3. Call Path::EndBezierTo to mark the end of the quadratic bezier spline command.
-   *
-   * Basically, the interface has been designed in such a way that you specify the final point and
-   * then add control points one by one as many as you like. Once you're done, you call
-   * Path::EndBezierTo to inform that you're done adding points for the spline.
-   *
-   * @param ip The final point of the quadratic bezier spline.
-   *
-   * @return The index of the path description added.
-   */
-  int BezierTo ( Geom::Point const &ip);	// quadratic bezier spline to this point (control points can be added after this)
-
-  /**
-   * Finish any ongoing BezierTo instruction.
-   *
-   * Once Path::BezierTo has been called, the object expects you to specify control points by
-   * calling Path::IntermBezierTo for each control point. Once you're done specifying the control
-   * points you call Path::EndBezierTo to finish the quadratic bezier spline.
-   *
-   * @return -1 all the time.
-   */
-  int EndBezierTo();
-
-  /**
-   * Appends a quadratic bezier spline path command (without specifying a final point).
-   *
-   * If you use Path::BezierTo, you have to specify the final point of the spline first and then
-   * follow it with all the control points. However, this is kinda counter-intuitive. Visually, we
-   * would look at the control points first and then the final end point. This function allows a
-   * similar mechanism. You can start a quadratic bezier spline without mentioning any final point,
-   * specify as many control points as you like and then while finishing it, you can specify the
-   * final point of the spline.
-   *
-   * The sequence of instructions would be:
-   * 1. Path::TempBezierTo to start.
-   * 2. Path::IntermBezierTo to specify control points. One call for each control point.
-   * 3. Path::EndBezierTo(Geom::Point const&) passing the final point of the quadratic bezier spline and finish the
-   * quadratic bezier spline command.
-   *
-   * @return Index of the description added.
-   */
-  int TempBezierTo();	// start a quadratic bezier spline (control points can be added after this)
-
-  /**
-   * Finish any ongoing TempBezierTo instruction.
-   *
-   * Used to specify the final point of a quadratic bezier spline which was started by calling
-   * Path::TempBezierTo.
-   *
-   * @param ip The final point.
-   *
-   * @return -1 all the time.
-   */
-  int EndBezierTo ( Geom::Point const &ip);	// ends a quadratic bezier spline (for curves started with TempBezierTo)
-
   // transforms a description in a polyline (for stroking and filling)
   // treshhold is the max length^2 (sort of)
 
@@ -373,6 +278,7 @@ public:
    */
   void ResetPoints(); // resets to the empty polyline
 
+private:
   /**
    * Adds a point to the polyline approximation's list of points.
    *
@@ -411,47 +317,17 @@ public:
   int AddPoint ( Geom::Point const &iPt, int ip, double it, bool mvto = false);
 
   /**
-   * Adds a forced point to the polyline approximation's list of points without specifying any back data.
+   * Adds a forced point to the polyline approximation's list of points.
    *
-   * The argument of this function is useless. The point that gets added as a forced point has the
-   * same coordinates as the last point that was added. If no points exist or the last one isn't a
-   * lineto, nothing gets added.
-   *
-   * Dummy back data will be used if the back variable of the instance is true.
-   *
-   * @param iPt Unused argument.
+   * The point that gets added as a forced point has the same coordinates as the last point that
+   * was added (and the same backdata too, if backdata is enabled). If no points exist or the last
+   * one isn't a lineto, nothing gets added.
    *
    * @return Index of the point added if it was added, -1 otherwise.
    */
-  int AddForcedPoint ( Geom::Point const &iPt);	// add point
+  int AddForcedPoint();
 
-  /**
-   * Add a forced point to the polyline approximation's list of points while specifying backdata.
-   *
-   * The argument of this function is useless. The point that gets added as a forced point has the
-   * same coordinates as the last point that was added. If no points exist or the last one isn't a
-   * lineto, nothing gets added. The back data is also picked up from the last point that was
-   * added.
-   *
-   * @param iPt Unused argument.
-   * @param ip Unused argument.
-   * @param it Unused argument.
-   *
-   * @return Index of the point added if it was added, -1 otherwise.
-   */
-  int AddForcedPoint ( Geom::Point const &iPt, int ip, double it);
-
-  /**
-   * Replace the last point in the polyline approximation's list of points with the passed one.
-   *
-   * Nothing gets added if no points exist already.
-   *
-   * @param iPt The point to replace the last one with.
-   *
-   * @return Index of the last point added if it was added, -1 otherwise.
-   */
-  int ReplacePoint(Geom::Point const &iPt);  // replace point
-
+public:
   // transform in a polygon (in a graph, in fact; a subsequent call to ConvertToShape is needed)
   //  - fills the polyline; justAdd=true doesn't reset the Shape dest, but simply adds the polyline into it
   // closeIfNeeded=false prevent the function from closing the path (resulting in a non-eulerian graph
@@ -601,7 +477,7 @@ public:
    *
    * @return The Geom::PathVector created.
    */
-  Geom::PathVector MakePathVector();
+  Geom::PathVector MakePathVector() const;
 
   /**
    * Apply a transformation on all path commands.
@@ -643,21 +519,18 @@ public:
   void             ConvertPositionsToForced(int nbPos,cut_position* poss);
 
   void  Affiche();
-  char *svg_dump_path() const;
+  std::string svg_dump_path() const;
   
   bool IsLineSegment(int piece);
 
     private:
   // utilitary functions for the path construction
-  void CancelBezier ();
   void CloseSubpath();
   void InsertMoveTo (Geom::Point const &iPt,int at);
   void InsertForcePoint (int at);
   void InsertLineTo (Geom::Point const &iPt,int at);
   void InsertArcTo (Geom::Point const &ip, double iRx, double iRy, double angle, bool iLargeArc, bool iClockwise,int at);
   void InsertCubicTo (Geom::Point const &ip,  Geom::Point const &iStD,  Geom::Point const &iEnD,int at);
-  void InsertBezierTo (Geom::Point const &iPt,int iNb,int at);
-  void InsertIntermBezierTo (Geom::Point const &iPt,int at);
   
   // creation of dashes: take the polyline given by spP (length spL) and dash it according to head, body, etc. put the result in
   // the polyline of this instance
@@ -735,30 +608,11 @@ public:
    */
   void RecCubicTo ( Geom::Point const &iS,  Geom::Point const &iSd,  Geom::Point const &iE,  Geom::Point const &iEd, double tresh, int lev,
 		   double maxL = -1.0);
-  void RecBezierTo ( Geom::Point const &iPt,  Geom::Point const &iS,  Geom::Point const &iE, double treshhold, int lev, double maxL = -1.0);
 
   void DoArc ( Geom::Point const &iS,  Geom::Point const &iE, double rx, double ry,
 	      double angle, bool large, bool wise, double tresh, int piece);
   void RecCubicTo ( Geom::Point const &iS,  Geom::Point const &iSd,  Geom::Point const &iE,  Geom::Point const &iEd, double tresh, int lev,
 		   double st, double et, int piece);
-  void RecBezierTo ( Geom::Point const &iPt,  Geom::Point const &iS, const  Geom::Point &iE, double treshhold, int lev, double st, double et,
-		    int piece);
-
-  // don't pay attention
-  struct offset_orig
-  {
-    Path *orig;
-    int piece;
-    double tSt, tEn;
-    double off_dec;
-  };
-  void DoArc ( Geom::Point const &iS,  Geom::Point const &iE, double rx, double ry,
-	      double angle, bool large, bool wise, double tresh, int piece,
-	      offset_orig & orig);
-  void RecCubicTo ( Geom::Point const &iS,  Geom::Point const &iSd,  Geom::Point const &iE,  Geom::Point const &iEd, double tresh, int lev,
-		   double st, double et, int piece, offset_orig & orig);
-  void RecBezierTo ( Geom::Point const &iPt,  Geom::Point const &iS,  Geom::Point const &iE, double treshhold, int lev, double st, double et,
-		    int piece, offset_orig & orig);
 
   static void ArcAngles ( Geom::Point const &iS,  Geom::Point const &iE, double rx,
                          double ry, double angle, bool large, bool wise,
@@ -802,7 +656,6 @@ public:
   struct outline_callbacks
   {
     outlineCallback *cubicto;
-    outlineCallback *bezierto;
     outlineCallback *arcto;
   };
 
@@ -820,10 +673,6 @@ public:
 			     Geom::Point &pos, Geom::Point &tgt, double &len, double &rad);
   static void TangentOnCubAt (double at, Geom::Point const &iS, PathDescrCubicTo const &fin, bool before,
 			      Geom::Point &pos, Geom::Point &tgt, double &len, double &rad);
-  static void TangentOnBezAt (double at, Geom::Point const &iS,
-			      PathDescrIntermBezierTo & mid,
-			      PathDescrBezierTo & fin, bool before,
-			      Geom::Point & pos, Geom::Point & tgt, double &len, double &rad);
   static void OutlineJoin (Path * dest, Geom::Point pos, Geom::Point stNor, Geom::Point enNor,
 			   double width, JoinType join, double miter, int nType);
 
@@ -833,12 +682,9 @@ public:
 			     double width, int lev);
   static void StdCubicTo (outline_callback_data * data, double tol,
 			  double width);
-  static void StdBezierTo (outline_callback_data * data, double tol,
-			   double width);
   static void RecStdArcTo (outline_callback_data * data, double tol,
 			   double width, int lev);
   static void StdArcTo (outline_callback_data * data, double tol, double width);
-
 
   // fonctions annexes pour le stroke
   static void DoButt (Shape * dest, double width, ButtType butt, Geom::Point pos,

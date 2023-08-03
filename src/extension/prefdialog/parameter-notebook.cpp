@@ -74,8 +74,8 @@ Gtk::Widget *ParamNotebook::ParamNotebookPage::get_widget(sigc::signal<void ()> 
         return nullptr;
     }
 
-    Gtk::Box * vbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
-    vbox->set_border_width(GUI_BOX_MARGIN);
+    auto const vbox = Gtk::make_managed<Gtk::Box>(Gtk::ORIENTATION_VERTICAL);
+    vbox->property_margin().set_value(GUI_BOX_MARGIN);
     vbox->set_spacing(GUI_BOX_SPACING);
 
     // add parameters onto page (if any)
@@ -94,9 +94,8 @@ Gtk::Widget *ParamNotebook::ParamNotebookPage::get_widget(sigc::signal<void ()> 
         }
     }
 
-    vbox->show();
-
-    return dynamic_cast<Gtk::Widget *>(vbox);
+    vbox->set_visible(true);
+    return vbox;
 }
 
 /** End ParamNotebookPage **/
@@ -240,7 +239,7 @@ Gtk::Widget *ParamNotebook::get_widget(sigc::signal<void ()> *changeSignal)
         return nullptr;
     }
 
-    NotebookWidget *notebook = Gtk::manage(new NotebookWidget(this));
+    auto const notebook = Gtk::make_managed<NotebookWidget>(this);
 
     // add pages (if any) and switch to previously selected page
     int current_page = -1;
@@ -268,7 +267,7 @@ Gtk::Widget *ParamNotebook::get_widget(sigc::signal<void ()> *changeSignal)
         notebook->set_current_page(selected_page);
     }
 
-    notebook->show();
+    notebook->set_visible(true);
 
     return static_cast<Gtk::Widget *>(notebook);
 }

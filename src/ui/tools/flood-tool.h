@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
-#ifndef __SP_FLOOD_CONTEXT_H__
-#define __SP_FLOOD_CONTEXT_H__
+#ifndef INKSCAPE_UI_TOOLS_FLOOD_TOOL_H
+#define INKSCAPE_UI_TOOLS_FLOOD_TOOL_H
 
 /*
  * Flood fill drawing context
@@ -18,38 +18,37 @@
 
 #include "ui/tools/tool-base.h"
 
-#define SP_FLOOD_CONTEXT(obj) (dynamic_cast<Inkscape::UI::Tools::FloodTool*>((Inkscape::UI::Tools::ToolBase*)obj))
-#define SP_IS_FLOOD_CONTEXT(obj) (dynamic_cast<const Inkscape::UI::Tools::FloodTool*>((const Inkscape::UI::Tools::ToolBase*)obj) != NULL)
+namespace Inkscape { class Selection; }
 
-namespace Inkscape {
+namespace Inkscape::UI::Tools {
 
-class Selection;
-
-namespace UI {
-namespace Tools {
-
-class FloodTool : public ToolBase {
+class FloodTool : public ToolBase
+{
 public:
     FloodTool(SPDesktop *desktop);
     ~FloodTool() override;
 
-	SPItem *item;
+    SPItem *item = nullptr;
 
 	sigc::connection sel_changed_connection;
 
-	bool root_handler(GdkEvent* event) override;
-	bool item_handler(SPItem* item, GdkEvent* event) override;
+    bool root_handler(CanvasEvent const &event) override;
+    bool item_handler(SPItem *item, CanvasEvent const &event) override;
 
-	static void set_channels(gint channels);
-	static const std::vector<Glib::ustring> channel_list;
-	static const std::vector<Glib::ustring> gap_list;
+    static void set_channels(int channels);
+
+    static std::vector<char const *> const channel_list;
+    static std::vector<char const *> const gap_list;
 
 private:
-	void selection_changed(Inkscape::Selection* selection);
+    bool dragging = false;
+
+    void selection_changed(Selection *selection);
 	void finishItem();
 };
 
-enum PaintBucketChannels {
+enum PaintBucketChannels
+{
     FLOOD_CHANNELS_RGB,
     FLOOD_CHANNELS_R,
     FLOOD_CHANNELS_G,
@@ -60,8 +59,6 @@ enum PaintBucketChannels {
     FLOOD_CHANNELS_ALPHA
 };
 
-}
-}
-}
+} // namespace Inkscape::UI::Tools
 
-#endif
+#endif // INKSCAPE_UI_TOOLS_FLOOD_TOOL_H

@@ -23,8 +23,8 @@
 #include "preferences.h"
 #include "display/cairo-utils.h"
 #include "style.h"
-
 #include "ui/dialog-events.h"
+#include "ui/util.h"
 
 namespace Inkscape {
 namespace UI {
@@ -48,7 +48,7 @@ DashSelector::DashSelector()
     _dash_combo.pack_start(_image_renderer);
     _dash_combo.set_cell_data_func(_image_renderer, sigc::mem_fun(*this, &DashSelector::prepareImageRenderer));
     _dash_combo.set_tooltip_text(_("Dash pattern"));
-    _dash_combo.show();
+    _dash_combo.set_visible(true);
     _dash_combo.signal_changed().connect( sigc::mem_fun(*this, &DashSelector::on_selection) );
     // show dashes in two columns to eliminate or minimize scrolling
     _dash_combo.set_wrap_width(2);
@@ -61,7 +61,7 @@ DashSelector::DashSelector()
     _sb->set_tooltip_text(_("Pattern offset"));
     sp_dialog_defocus_on_enter_cpp(_sb);
     _sb->set_width_chars(4);
-    _sb->show();
+    _sb->set_visible(true);
 
     this->pack_start(*_sb, false, false, 0);
 
@@ -186,8 +186,7 @@ Cairo::RefPtr<Cairo::Surface> DashSelector::sp_dash_to_pixbuf(const std::vector<
     cairo_surface_t *s = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
     cairo_t *ct = cairo_create(s);
 
-    auto context = get_style_context();
-    Gdk::RGBA fg = context->get_color(get_state_flags());
+    auto const fg = get_foreground_color(get_style_context());
 
     cairo_set_line_width (ct, _preview_lineheight * device_scale);
     cairo_scale (ct, _preview_lineheight * device_scale, 1);
@@ -215,8 +214,7 @@ Cairo::RefPtr<Cairo::Surface> DashSelector::sp_text_to_pixbuf(const char* text) 
     cairo_select_font_face (ct, "Sans", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL);
     // todo: how to find default font face and size?
     cairo_set_font_size (ct, 12 * device_scale);
-    auto context = get_style_context();
-    Gdk::RGBA fg = context->get_color(get_state_flags());
+    auto const fg = get_foreground_color(get_style_context());
     cairo_set_source_rgb(ct, fg.get_red(), fg.get_green(), fg.get_blue());
     cairo_move_to (ct, 16.0 * device_scale, 13.0 * device_scale);
     cairo_show_text (ct, text);

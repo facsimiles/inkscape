@@ -18,8 +18,6 @@
 #include "display/control/canvas-item-ptr.h"
 #include "helper/auto-connection.h"
 
-#define SAMPLING_SIZE 8        /* fixme: ?? */
-
 #define TC_MIN_PRESSURE      0.0
 #define TC_MAX_PRESSURE      1.0
 #define TC_DEFAULT_PRESSURE  0.35
@@ -81,12 +79,12 @@ public:
 
     auto_connection style_set_connection;
 
-    void set(const Inkscape::Preferences::Entry &val) override;
-    bool root_handler(GdkEvent *event) override;
+    void set(Preferences::Entry const &val) override;
+    bool root_handler(CanvasEvent const &event) override;
     void update_cursor(bool with_shift);
 
 private:
-    bool set_style(const SPCSSAttr *css);
+    bool set_style(SPCSSAttr const *css);
 };
 
 }

@@ -45,7 +45,6 @@ void recursive_bezier4(const double x1, const double y1, const double x2, const 
                        std::vector<Geom::Point> &pointlist,
                        int level);
 bool approx_dihedral(Geom::Affine const &affine, double eps = 0.0001);
-std::pair<Geom::Affine, Geom::Rect> min_bounding_box(std::vector<Geom::Point> const &pts);
 
 /// Returns signed area of triangle given by points; may be negative.
 inline Geom::Coord triangle_area(Geom::Point const &p1, Geom::Point const &p2, Geom::Point const &p3)
@@ -133,6 +132,16 @@ inline auto floor(Geom::Rect const &rect)
 inline auto roundedOutwards(Geom::OptRect const &rect)
 {
     return rect ? rect->roundOutwards() : Geom::OptIntRect();
+}
+
+/**
+ * Compute the maximum factor by which @a affine can increase a vector's length.
+ */
+inline double max_expansion(Geom::Affine const &affine)
+{
+    auto const t = (Geom::sqr(affine[0]) + Geom::sqr(affine[1]) + Geom::sqr(affine[2]) + Geom::sqr(affine[3])) / 2;
+    auto const d = std::abs(affine.det());
+    return std::sqrt(t + std::sqrt(std::max(t - d, 0.0) * (t + d)));
 }
 
 #endif // INKSCAPE_HELPER_GEOM_H

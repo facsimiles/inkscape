@@ -79,7 +79,7 @@
           <object class="GtkBox" id="font_box">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="border-width">4</property>
+            <property name="margin">4</property>
             <property name="orientation">vertical</property>
             <child>
               <object class="GtkBox" id="settings_and_filters_box">
@@ -191,7 +191,7 @@
           <object class="GtkBox" id="feat_box">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="border-width">4</property>
+            <property name="margin">4</property>
             <property name="orientation">vertical</property>
             <child>
               <placeholder/>
@@ -267,11 +267,10 @@
       </packing>
     </child>
     <child>
-      <object class="GtkButtonBox">
+      <object class="GtkBox">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="spacing">4</property>
-        <property name="layout-style">start</property>
         <child>
           <object class="GtkButton" id="setasdefault_button">
             <property name="label" translatable="yes">Set as _default</property>
@@ -298,7 +297,7 @@
             <property name="expand">False</property>
             <property name="fill">True</property>
             <property name="position">1</property>
-            <property name="secondary">True</property>
+            <property name="pack-type">end</property>
           </packing>
         </child>
       </object>
@@ -310,4 +309,13 @@
       </packing>
     </child>
   </object>
+
+  <object class="GtkSizeGroup">
+   <property name="mode">horizontal</property>
+    <widgets>
+      <widget name="setasdefault_button"/>
+      <widget name="apply_button"/>
+    </widgets>
+  </object>
+
 </interface>

@@ -87,7 +87,7 @@ DrawingItem::DrawingItem(Drawing &drawing)
     , _has_cache_iterator(0)
     , _propagate_state(0)
     , _pick_children(0)
-    , _antialias(2)
+    , _antialias(Antialiasing::Good)
     , _isolation(SP_CSS_ISOLATION_AUTO)
     , _blend_mode(SP_CSS_BLEND_NORMAL)
 {
@@ -206,7 +206,7 @@ void DrawingItem::setOpacity(float opacity)
     });
 }
 
-void DrawingItem::setAntialiasing(unsigned antialias)
+void DrawingItem::setAntialiasing(Antialiasing antialias)
 {
     defer([=] {
         if (_antialias == antialias) return;
@@ -786,16 +786,19 @@ unsigned DrawingItem::render(DrawingContext &dc, RenderContext &rc, Geom::IntRec
     }
 
     // determine whether this shape needs intermediate rendering.
-    bool needs_intermediate_rendering =
+    bool const greyscale = _drawing.colorMode() == ColorMode::GRAYSCALE && !(flags & RENDER_OUTLINE);
+    bool const isolate_root = _contains_unisolated_blend || greyscale;
+    bool const needs_intermediate_rendering =
            _clip                                  // 1. it has a clipping path
         || _mask                                  // 2. it has a mask
         || (_filter && render_filters)            // 3. it has a filter
         || _opacity < 0.995                       // 4. it is non-opaque
         || _blend_mode != SP_CSS_BLEND_NORMAL     // 5. it has blend mode
         || _isolation == SP_CSS_ISOLATION_ISOLATE // 6. it is isolated
-        || (   _child_type == ChildType::ROOT
-            && _contains_unisolated_blend    )    // 7. it is the root and needs isolation
+        || (_child_type == ChildType::ROOT && isolate_root) // 7. it is the root and needs isolation
         || (bool)_cache;                          // 8. it is to be cached
+
+    auto antialias = rc.antialiasing_override.value_or(_antialias);
 
     /* How the rendering is done.
      *
@@ -816,6 +819,7 @@ unsigned DrawingItem::render(DrawingContext &dc, RenderContext &rc, Geom::IntRec
 
     if ((flags & RENDER_FILTER_BACKGROUND) || !needs_intermediate_rendering) {
         dc.setOperator(ink_css_blend_to_cairo_operator(SP_CSS_BLEND_NORMAL));
+        apply_antialias(dc, antialias);
         return _renderItem(dc, rc, *carea, flags & ~RENDER_FILTER_BACKGROUND, stop_at);
     }
 
@@ -867,6 +871,7 @@ unsigned DrawingItem::render(DrawingContext &dc, RenderContext &rc, Geom::IntRec
 
     // 3. Render object itself
     ict.pushGroup();
+    apply_antialias(ict, antialias);
     render_result = _renderItem(ict, rc, *carea, flags, stop_at);
 
     // 4. Apply filter.
@@ -894,7 +899,6 @@ unsigned DrawingItem::render(DrawingContext &dc, RenderContext &rc, Geom::IntRec
     }
 
     // 4b. Apply greyscale rendering mode, if root node.
-    bool const greyscale = _drawing.colorMode() == ColorMode::GRAYSCALE && !(flags & RENDER_OUTLINE);
     if (greyscale && _child_type == ChildType::ROOT) {
         ink_cairo_surface_filter(ict.rawTarget(), ict.rawTarget(), _drawing.grayscaleMatrix());
     }
@@ -1248,20 +1252,40 @@ Geom::OptIntRect DrawingItem::_cacheRect() const
     return r;
 }
 
-void apply_antialias(DrawingContext &dc, int antialias)
+void apply_antialias(DrawingContext &dc, Antialiasing antialias)
 {
     switch (antialias) {
-        case 0:
+        case Antialiasing::None:
             cairo_set_antialias(dc.raw(), CAIRO_ANTIALIAS_NONE);
             break;
-        case 1:
+        case Antialiasing::Fast:
             cairo_set_antialias(dc.raw(), CAIRO_ANTIALIAS_FAST);
             break;
-        case 2:
+        case Antialiasing::Good:
             cairo_set_antialias(dc.raw(), CAIRO_ANTIALIAS_GOOD);
             break;
-        case 3:
+        case Antialiasing::Best:
             cairo_set_antialias(dc.raw(), CAIRO_ANTIALIAS_BEST);
+            break;
+        default:
+            g_assert_not_reached();
+    }
+}
+
+void propagate_antialias(SPShapeRendering shape_rendering, DrawingItem &item)
+{
+    switch (shape_rendering) {
+        case SP_CSS_SHAPE_RENDERING_AUTO:
+            item.setAntialiasing(Antialiasing::Good);
+            break;
+        case SP_CSS_SHAPE_RENDERING_OPTIMIZESPEED:
+            item.setAntialiasing(Antialiasing::Fast);
+            break;
+        case SP_CSS_SHAPE_RENDERING_CRISPEDGES:
+            item.setAntialiasing(Antialiasing::None);
+            break;
+        case SP_CSS_SHAPE_RENDERING_GEOMETRICPRECISION:
+            item.setAntialiasing(Antialiasing::Best);
             break;
         default:
             g_assert_not_reached();

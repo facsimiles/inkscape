@@ -16,7 +16,6 @@
  */
 #include <iomanip>
 #include <glibmm/i18n.h>
-#include <gtkmm/main.h>
 #include <potracelib.h>
 
 #include "inkscape-potrace.h"
@@ -94,7 +93,7 @@ void PotraceTracingEngine::setTurdSize(int turdsize)
  * Recursively descend the potrace_path_t node tree \a paths, writing paths to \a builder.
  * The \a points set is used to prevent redundant paths.
  */
-void PotraceTracingEngine::writePaths(potrace_path_t *paths, Geom::PathBuilder &builder, std::unordered_set<Geom::Point, geom_point_hash> &points, Async::Progress<double> &progress) const
+void PotraceTracingEngine::writePaths(potrace_path_t *paths, Geom::PathBuilder &builder, std::unordered_set<Geom::Point> &points, Async::Progress<double> &progress) const
 {
     auto to_geom = [] (potrace_dpoint_t const &c) {
         return Geom::Point(c.x, c.y);
@@ -281,7 +280,7 @@ Geom::PathVector PotraceTracingEngine::grayMapToPath(GrayMap const &grayMap, Asy
 
     // Extract the paths into a pathvector and return it.
     Geom::PathBuilder builder;
-    std::unordered_set<Geom::Point, geom_point_hash> points;
+    std::unordered_set<Geom::Point> points;
     writePaths(potraceState->plist, builder, points, progress);
     return builder.peek();
 }
@@ -380,17 +379,28 @@ TraceResult PotraceTracingEngine::traceQuant(Glib::RefPtr<Gdk::Pixbuf> const &pi
 {
     auto imap = filterIndexed(pixbuf);
 
+    // Create and clear a gray map
+    auto gm = GrayMap(imap.width, imap.height);
+    for (int row = 0; row < gm.height; row++) {
+        for (int col = 0; col < gm.width; col++) {
+            gm.setPixel(col, row, GrayMap::WHITE);
+        }
+    }
+
     TraceResult results;
 
     for (int colorIndex = 0; colorIndex < imap.nrColors; colorIndex++) {
         auto subprogress = Async::SubProgress(progress, (double)colorIndex / imap.nrColors, 1.0 / imap.nrColors);
 
-        // Make a graymap for each color index
-        auto gm = GrayMap(imap.width, imap.height);
+        // Update the graymap for the current color index
         for (int row = 0; row < imap.height; row++) {
             for (int col = 0; col < imap.width; col++) {
                 int index = imap.getPixel(col, row);
-                gm.setPixel(col, row, index == colorIndex ? GrayMap::BLACK : GrayMap::WHITE);
+                if (index == colorIndex) {
+                    gm.setPixel(col, row, GrayMap::BLACK);
+                } else if (!multiScanStack) {
+                    gm.setPixel(col, row, GrayMap::WHITE);
+                }
             }
         }
 
