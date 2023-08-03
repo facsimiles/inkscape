@@ -1,7 +1,12 @@
 * {
-    shape: "circle";
+    shape: "square";
+    fill: #034560;
 }
 
 .inkscape-node-auto, .inkscape-node-symmetrical {
+    shape: "diamond";
+}
+
+.inkscape-anchor {
     shape: "diamond";
 }

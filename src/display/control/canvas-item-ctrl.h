@@ -113,12 +113,133 @@ struct Property {
     }
 };
 
+// struct HandleStyle {
+//     Property<CanvasItemCtrlShape> shape;
+
+//     HandleStyle()
+//     {
+//         shape.value = CANVAS_ITEM_CTRL_SHAPE_SQUARE;
+//     }
+// };
+
+struct Color {
+    unsigned char red, green, blue;
+    float alpha = 1;
+    Color(unsigned char r, unsigned char g, unsigned char b) : red(r), green(g), blue(b) {}
+    void setRGB(unsigned char r, unsigned char g, unsigned char b)
+    {
+        red = r;
+        green = g;
+        blue = b;
+    }
+    Color(unsigned char r, unsigned char g, unsigned char b, float a) : red(r), green(g), blue(b), alpha(a) {}
+    void setRGBA(unsigned char r, unsigned char g, unsigned char b, float a)
+    {
+        red = r;
+        green = g;
+        blue = b;
+        alpha = a;
+    }
+    // 0xXXRRGGBB or 0xRRGGBBAA
+    Color(uint32_t rgb, bool is_alpha = 1)
+    {
+        setColor(rgb, is_alpha);
+    }
+    void setColor(uint32_t rgb, bool is_alpha = 1)
+    {
+        if (is_alpha) {
+            alpha = (rgb & 0xff) / 255.0;
+            rgb = rgb >> 8;
+        }
+        red = (rgb >> 16) & 0xff;
+        green = (rgb >> 8) & 0xff;
+        blue = rgb & 0xff;
+    }
+
+    Color() : red(0xff), green(0xff), blue(0xff) {}
+
+    void setAlpha(float a)
+    {
+        alpha = a;
+    }
+
+    void overlapAlpha(float a)
+    {
+        alpha *= a;
+    }
+
+    uint32_t getRGB() const
+    {
+        return (red << 16) | (green << 8) | blue;
+    }
+    static uint32_t getRGB(unsigned char red, unsigned char green, unsigned char blue)
+    {
+        return (red << 16) | (green << 8) | blue;
+    }
+
+    uint32_t getRGBA() const
+    {
+        return (red << 24) | (green << 16) | (blue << 8) | int((alpha * 255));
+    }
+    static uint32_t getRGBA(unsigned char red, unsigned char green, unsigned char blue, float alpha)
+    {
+        return (red << 24) | (green << 16) | (blue << 8) | int((alpha * 255));
+    }
+
+    static Color computeBlend(Color const &top, Color const &bottom)
+    {
+        float result_alpha = top.alpha + bottom.alpha * (1 - top.alpha);
+        if (result_alpha == 0) {
+            return Color(0, 0, 0, 0);
+        }
+        unsigned char result_red = int((top.red * top.alpha + bottom.red * bottom.alpha * (1 - top.alpha)) / result_alpha);
+        unsigned char result_green = int((top.green * top.alpha + bottom.green * bottom.alpha * (1 - top.alpha)) / result_alpha);
+        unsigned char result_blue = int((top.blue * top.alpha + bottom.blue * bottom.alpha * (1 - top.alpha)) / result_alpha);
+        return Color(result_red, result_green, result_blue, result_alpha);
+    }
+};
+
 struct HandleStyle {
     Property<CanvasItemCtrlShape> shape;
+    Property<Color> fill;
+    Property<Color> stroke;
+    Property<float> fill_opacity;
+    Property<float> stroke_opacity;
+    Property<float> opacity;
+    // Property<uint32_t> stroke_width;
+    // Property<uint32_t> outline_width;
+    // Property<Color> outline;
 
     HandleStyle()
     {
         shape.value = CANVAS_ITEM_CTRL_SHAPE_SQUARE;
+        fill.value = Color();
+        stroke.value = Color();
+        fill_opacity.value = 1.0;
+        stroke_opacity.value = 1.0;
+        opacity.value = 1.0;
+        // outline.value = Color();
+    }
+
+    uint32_t getFill()
+    {
+        //lazy update of opacity
+        fill().setAlpha(fill_opacity());
+        
+        Color fill_color = fill();
+        fill_color.overlapAlpha(opacity());
+        return fill_color.getRGBA();
+    }
+
+    uint32_t getStroke()
+    {
+        //lazy update of opacity
+        fill().setAlpha(fill_opacity());
+        stroke().setAlpha(stroke_opacity());
+
+        Color blend = Color::computeBlend(stroke(), fill());
+        blend.overlapAlpha(opacity());
+        return blend.getRGBA();
     }
 };
 
@@ -175,7 +296,7 @@ protected:
     //mutable(might not need to make it mutable explicitly) static std::unordered_map<Handle,std::unique_ptr<uint32_t[]>> cache;
 
     // Properties
-    //Handle _handle = Handle();
+    // Handle _handle = Handle();
     CanvasItemCtrlType  _type  = CANVAS_ITEM_CTRL_TYPE_DEFAULT;
     CanvasItemCtrlShape _shape = CANVAS_ITEM_CTRL_SHAPE_SQUARE;
     CanvasItemCtrlMode  _mode  = CANVAS_ITEM_CTRL_MODE_XOR;

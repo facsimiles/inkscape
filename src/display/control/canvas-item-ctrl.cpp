@@ -21,6 +21,8 @@
 #include "3rdparty/libcroco/src/cr-string.h"
 #include "3rdparty/libcroco/src/cr-term.h"
 #include "3rdparty/libcroco/src/cr-parser.h"
+#include "3rdparty/libcroco/src/cr-rgb.h"
+#include "3rdparty/libcroco/src/cr-utils.h"
 
 #include "canvas-item-ctrl.h"
 #include "helper/geom.h"
@@ -38,10 +40,12 @@ namespace Inkscape {
 //Declaration of static members
 InitLock CanvasItemCtrl::_parsed;
 std::unordered_map<Handle, HandleStyle *> CanvasItemCtrl::handle_styles = {
+    {Handle(CANVAS_ITEM_CTRL_TYPE_ANCHOR), new HandleStyle()},
     {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_SMOOTH), new HandleStyle()},
     {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_AUTO), new HandleStyle()},
     {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_CUSP), new HandleStyle()},
     {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_SYMETRICAL), new HandleStyle()}
+    // {Handle(CANVAS_ITEM_CTRL_TYPE_ROTATE), new HandleStyle()}//this are the rotation handles (circular in general)
 };
 /**
  * Create a null control node.
@@ -332,6 +336,7 @@ void CanvasItemCtrl::set_size_via_index(int size_index)
         break;
     }
 
+    std::cout<<_shape<<" - "<<size<<std::endl;
     set_size(size);
 }
 
@@ -945,6 +950,7 @@ std::unordered_map<std::string, CanvasItemCtrlType> type_map = {
     {".inkscape-node-smooth", CANVAS_ITEM_CTRL_TYPE_NODE_SMOOTH},
     {".inkscape-node-cusp", CANVAS_ITEM_CTRL_TYPE_NODE_CUSP},
     {".inkscape-node-symmetrical", CANVAS_ITEM_CTRL_TYPE_NODE_SYMETRICAL},
+    {".inkscape-anchor", CANVAS_ITEM_CTRL_TYPE_ANCHOR},
     {"*", CANVAS_ITEM_CTRL_TYPE_DEFAULT}
 };
 
@@ -1032,6 +1038,8 @@ void set_properties(CRDocHandler *a_handler, CRString *a_name, CRTerm *a_value, 
     const char *value = (char *)cr_term_to_string(a_value);
     const char *property = cr_string_peek_raw_str(a_name);
     //TODO: write the parser for rest of the properties
+    // switch (std::string(property)) {
+    //     case "shape":
     if (std::string(property) == "shape") {
         if (shape_map.find(std::string(value)) != shape_map.end()) {
             for (auto& [handle, specificity] : selected_handles) {
@@ -1043,9 +1051,32 @@ void set_properties(CRDocHandler *a_handler, CRString *a_name, CRTerm *a_value, 
             return;
         }
     }
+    // break;
+
+    // case "fill":
+    else if (std::string(property) == "fill") {
+        CRRgb *rgb = cr_rgb_new();
+        CRStatus status = cr_rgb_set_from_term(rgb, a_value);
+
+        if (status == CR_OK) {
+            for (auto& [handle, specificity] : selected_handles) {
+                handle->fill.setProperty(Color((unsigned char)rgb->red, (unsigned char)rgb->green, (unsigned char)rgb->blue),
+                                          specificity + 100000 * a_important);
+            }
+        }
+        else {
+            std::cerr << "Unrecognized value for " << property << ": " << value << std::endl;
+            return;
+        }
+    }
     else {
         std::cerr << "Unrecognized property:" << property << std::endl;
     }
+    //     break;
+    //     // case "fill-opacity":
+
+
+    // default:
 }
 
 void clear_selectors(CRDocHandler *a_handler, CRSelector *a_selector)
@@ -1079,10 +1110,14 @@ void CanvasItemCtrl::parse_and_build_cache() const
 void CanvasItemCtrl::build_cache(int device_scale) const
 {
     auto shape = _shape;
+    auto fill = _fill;
 
     if (handle_styles.find(Handle(_type)) != handle_styles.end()) {
         shape = handle_styles[Handle(_type)]->shape();
+        fill = handle_styles[Handle(_type)]->getFill();
     }
+
+    std::cout<<"Size "<<_height<<" "<<_width<<" Shape : "<<_shape<<std::endl;
 
     if (_width < 2 || _height < 2) {
         return; // Nothing to render
@@ -1110,7 +1145,7 @@ void CanvasItemCtrl::build_cache(int device_scale) const
             for (int j = 0; j < width; ++j) {
                 if (i + 1 > device_scale && device_scale < width  - i &&
                         j + 1 > device_scale && device_scale < height - j) {
-                    *p++ = _fill;
+                    *p++ = fill;
                 }
                 else {
                     *p++ = _stroke;
