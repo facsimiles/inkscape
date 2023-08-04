@@ -42,6 +42,10 @@ InitLock CanvasItemCtrl::_parsed;
 std::unordered_map<Handle, HandleStyle *> CanvasItemCtrl::handle_styles = {
     {Handle(CANVAS_ITEM_CTRL_TYPE_ANCHOR), new HandleStyle()},
     {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_SMOOTH), new HandleStyle()},
+    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_SMOOTH,1,0,0), new HandleStyle()},//selected
+    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_SMOOTH,0,1,0), new HandleStyle()},//hover
+    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_SMOOTH,1,1,0), new HandleStyle()},//hover
+    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_SMOOTH), new HandleStyle()},
     {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_AUTO), new HandleStyle()},
     {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_CUSP), new HandleStyle()},
     {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_SYMETRICAL), new HandleStyle()}
@@ -335,7 +339,7 @@ void CanvasItemCtrl::set_size_via_index(int size_index)
         break;
     }
 
-    std::cout<<_shape<<" - "<<size<<std::endl;
+    // std::cout<<_shape<<" - "<<size<<std::endl;
     set_size(size);
 }
 
@@ -368,6 +372,19 @@ void CanvasItemCtrl::set_type(CanvasItemCtrlType type)
         _built.reset();
         request_update(); // Possible geometry change
     });
+}
+
+void CanvasItemCtrl::set_selected(bool selected)
+{
+    _handle.setSelected(selected);
+}
+void CanvasItemCtrl::set_clicked(bool clicked)
+{
+    _handle.setClick(clicked);
+}
+void CanvasItemCtrl::set_hover(bool hover)
+{
+    _handle.setHover(hover);
 }
 
 void CanvasItemCtrl::set_angle(double angle)
@@ -1111,12 +1128,12 @@ void CanvasItemCtrl::build_cache(int device_scale) const
     auto shape = _shape;
     auto fill = _fill;
 
-    if (handle_styles.find(Handle(_handle._type)) != handle_styles.end()) {
-        shape = handle_styles[Handle(_handle._type)]->shape();
-        fill = handle_styles[Handle(_handle._type)]->getFill();
+    if (handle_styles.find(_handle) != handle_styles.end()) {
+        shape = handle_styles[_handle]->shape();
+        fill = handle_styles[_handle]->getFill();
     }
 
-    std::cout<<"Size "<<_height<<" "<<_width<<" Shape : "<<_shape<<std::endl;
+    // std::cout<<"Size "<<_height<<" "<<_width<<" Shape : "<<_shape<<std::endl;
 
     if (_width < 2 || _height < 2) {
         return; // Nothing to render

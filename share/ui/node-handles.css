@@ -7,6 +7,10 @@
     shape: "diamond";
 }
 
+.inkscape-node-smooth:selected:hover {
+    shape: "circle";
+}
+
 .inkscape-anchor {
     shape: "diamond";
 }

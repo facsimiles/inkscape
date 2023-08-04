@@ -477,16 +477,21 @@ void ControlPoint::transferGrab(ControlPoint *prev_point, MotionEvent const &eve
 
 void ControlPoint::_setState(State state)
 {
+    _canvas_item_ctrl->set_selected(0);
     ColorEntry current = {0, 0};
     switch(state) {
         case STATE_NORMAL:
+            _canvas_item_ctrl->set_hover(0);
+            _canvas_item_ctrl->set_clicked(0);
             current = _cset.normal;
             break;
         case STATE_MOUSEOVER:
             current = _cset.mouseover;
+            _canvas_item_ctrl->set_hover(1);
             break;
         case STATE_CLICKED:
             current = _cset.clicked;
+            _canvas_item_ctrl->set_clicked(1);
             break;
     };
     _setColors(current);
@@ -506,20 +511,6 @@ void ControlPoint::_setColors(ColorEntry colors)
 }
 
 bool ControlPoint::_is_drag_cancelled(MotionEvent const &event)
-{
-    return _lurking;
-}
-
-void ControlPoint::_setLurking(bool lurking)
-{
-    if (lurking != _lurking) {
-        _lurking = lurking;
-        _setState(_state); // TODO refactor out common part
-    }
-}
-
-
-bool ControlPoint::_is_drag_cancelled(GdkEventMotion *event)
 {
     return event.original()->x_root == -1;
 }

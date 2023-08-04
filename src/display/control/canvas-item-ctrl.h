@@ -40,16 +40,26 @@ struct Handle {
 
     Handle(CanvasItemCtrlType type, uint32_t state) : _type(type), _state(state) {}
 
-    //TODO: this function already exists in the code so will need to adjust to use that one
+    Handle(CanvasItemCtrlType type, bool selected, bool hover, bool click) : _type(type)
+    {
+        setState(selected, hover, click);
+    }
+
     void setType(CanvasItemCtrlType set_type)
     {
         _type = set_type;
+    }
+    void setState(bool selected, bool hover, bool click)
+    {
+        setSelected(selected);
+        setHover(hover);
+        setClick(click);
     }
     void setState(uint32_t state)
     {
         _state |= state;
     }
-    void setSelected(bool selected)
+    void setSelected(bool selected = 1)
     {
         _state &= ~(1);
         _state |= (selected);
@@ -58,7 +68,7 @@ struct Handle {
     {
         return _state & 1;
     }
-    void setClick(bool clicked)
+    void setClick(bool clicked = 1)
     {
         _state &= ~(1 << 1);
         _state |= (clicked << 1);
@@ -67,7 +77,7 @@ struct Handle {
     {
         return _state & 1 << 1;
     }
-    void setHover(bool hover)
+    void setHover(bool hover = 1)
     {
         _state &= ~(1 << 2);
         _state |= (hover << 2);
@@ -216,7 +226,7 @@ struct HandleStyle {
     {
         //lazy update of opacity
         fill().setAlpha(fill_opacity());
-        
+
         Color fill_color = fill();
         fill_color.overlapAlpha(opacity());
         return fill_color.getRGBA();
@@ -265,6 +275,9 @@ public:
     void set_angle(double angle);
     void set_type(CanvasItemCtrlType type);
     void set_pixbuf(Glib::RefPtr<Gdk::Pixbuf> pixbuf);
+    void set_selected(bool selected);
+    void set_clicked(bool clicked);
+    void set_hover(bool hover);
     static std::unordered_map<Handle, HandleStyle *> handle_styles;
 
 protected:
