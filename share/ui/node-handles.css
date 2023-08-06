@@ -1,16 +1,43 @@
-* {
+/* * {
     shape: "square";
     fill: #034560;
 }
 
-.inkscape-node-auto, .inkscape-node-symmetrical {
+.inkscape-node-auto,
+.inkscape-node-symmetrical {
     shape: "diamond";
 }
 
-.inkscape-node-smooth:selected:hover {
+*:click {
     shape: "circle";
+    fill: pink;
 }
 
 .inkscape-anchor {
     shape: "diamond";
+} */
+
+* {
+    shape: "square";
+    fill: red;
+}
+
+*:hover {
+    fill: pink;
+    /* shape: "diamond"; */
+}
+
+*:selected {
+    fill: blue;
+    /* shape: "circle"; */
+}
+
+*:selected:hover {
+    fill: turquoise;
+    /* shape: "circle"; */
+}
+
+*:click {
+    fill: black;
+    /* shape: "circle"; */
 }

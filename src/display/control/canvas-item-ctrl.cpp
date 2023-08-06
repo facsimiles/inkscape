@@ -40,15 +40,23 @@ namespace Inkscape {
 //Declaration of static members
 InitLock CanvasItemCtrl::_parsed;
 std::unordered_map<Handle, HandleStyle *> CanvasItemCtrl::handle_styles = {
-    {Handle(CANVAS_ITEM_CTRL_TYPE_ANCHOR), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_SMOOTH), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_SMOOTH,1,0,0), new HandleStyle()},//selected
-    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_SMOOTH,0,1,0), new HandleStyle()},//hover
-    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_SMOOTH,1,1,0), new HandleStyle()},//hover
-    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_SMOOTH), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_AUTO), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_CUSP), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_SYMETRICAL), new HandleStyle()}
+    // {Handle(CANVAS_ITEM_CTRL_TYPE_ANCHOR), new HandleStyle()},
+    // {Handle(CANVAS_ITEM_CTRL_TYPE_ANCHOR,1,1,1), new HandleStyle()},
+    // {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_SMOOTH,1,1,1), new HandleStyle()},
+    // {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_SMOOTH), new HandleStyle()},
+    // {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_AUTO), new HandleStyle()},
+    // {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_AUTO,1,1,1), new HandleStyle()},
+    // {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_CUSP,1,1,1), new HandleStyle()},
+    // {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_CUSP), new HandleStyle()},
+    // {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_SYMETRICAL), new HandleStyle()},
+    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_SYMETRICAL,0,0,0), new HandleStyle()},
+    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_SYMETRICAL,0,0,1), new HandleStyle()},
+    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_SYMETRICAL,0,1,0), new HandleStyle()},
+    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_SYMETRICAL,0,1,1), new HandleStyle()},
+    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_SYMETRICAL,1,0,0), new HandleStyle()},
+    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_SYMETRICAL,1,0,1), new HandleStyle()},
+    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_SYMETRICAL,1,1,0), new HandleStyle()},
+    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_SYMETRICAL,1,1,1), new HandleStyle()}
     // {Handle(CANVAS_ITEM_CTRL_TYPE_ROTATE), new HandleStyle()}//this are the rotation handles (circular in general)
 };
 /**
@@ -377,14 +385,20 @@ void CanvasItemCtrl::set_type(CanvasItemCtrlType type)
 void CanvasItemCtrl::set_selected(bool selected)
 {
     _handle.setSelected(selected);
+    _built.reset();//won't be needed possibly later since we will just use the rendering from a different element and not re-render entirely
+    request_update();
 }
 void CanvasItemCtrl::set_clicked(bool clicked)
 {
     _handle.setClick(clicked);
+    _built.reset();
+    request_update();
 }
 void CanvasItemCtrl::set_hover(bool hover)
 {
     _handle.setHover(hover);
+    _built.reset();
+    request_update();
 }
 
 void CanvasItemCtrl::set_angle(double angle)
@@ -999,16 +1013,16 @@ void configure_selector(CRSelector *a_selector, Handle *&selector, int &specific
         if (*tokens == "*") {
             continue;
         }
-        else if (*tokens == "selected") {
+        else if (!strcmp(*tokens,"selected")) {
             selector->setSelected(1);
         }
         //TODO: both these would be more specific than selected so handle that later
         //Need to verify whether the "+1" works
-        else if (*tokens == "hover") {
+        else if (!strcmp(*tokens,"hover")) {
             specificity++;
             selector->setHover(1);
         }
-        else if (*tokens == "click") {
+        else if (!strcmp(*tokens,"click")) {
             specificity++;
             selector->setClick(1);
         }
@@ -1054,8 +1068,6 @@ void set_properties(CRDocHandler *a_handler, CRString *a_name, CRTerm *a_value, 
     const char *value = (char *)cr_term_to_string(a_value);
     const char *property = cr_string_peek_raw_str(a_name);
     //TODO: write the parser for rest of the properties
-    // switch (std::string(property)) {
-    //     case "shape":
     if (std::string(property) == "shape") {
         if (shape_map.find(std::string(value)) != shape_map.end()) {
             for (auto& [handle, specificity] : selected_handles) {
@@ -1067,9 +1079,6 @@ void set_properties(CRDocHandler *a_handler, CRString *a_name, CRTerm *a_value, 
             return;
         }
     }
-    // break;
-
-    // case "fill":
     else if (std::string(property) == "fill") {
         CRRgb *rgb = cr_rgb_new();
         CRStatus status = cr_rgb_set_from_term(rgb, a_value);
@@ -1133,8 +1142,6 @@ void CanvasItemCtrl::build_cache(int device_scale) const
         fill = handle_styles[_handle]->getFill();
     }
 
-    // std::cout<<"Size "<<_height<<" "<<_width<<" Shape : "<<_shape<<std::endl;
-
     if (_width < 2 || _height < 2) {
         return; // Nothing to render
     }
@@ -1161,7 +1168,7 @@ void CanvasItemCtrl::build_cache(int device_scale) const
             for (int j = 0; j < width; ++j) {
                 if (i + 1 > device_scale && device_scale < width  - i &&
                         j + 1 > device_scale && device_scale < height - j) {
-                    *p++ = _fill;
+                    *p++ = fill;
                 }
                 else {
                     *p++ = _stroke;

@@ -31,7 +31,7 @@ namespace Inkscape {
 
 struct Handle {
     CanvasItemCtrlType _type;
-    uint32_t _state;
+    uint32_t _state = 0;
     // 0b00....0<click-bit><hover-bit><selected-bit>
 
     Handle() : _type(CANVAS_ITEM_CTRL_TYPE_DEFAULT), _state(0) {}
@@ -45,9 +45,9 @@ struct Handle {
         setState(selected, hover, click);
     }
 
-    void setType(CanvasItemCtrlType set_type)
+    void setType(CanvasItemCtrlType type)
     {
-        _type = set_type;
+        _type = type;
     }
     void setState(bool selected, bool hover, bool click)
     {
@@ -63,32 +63,35 @@ struct Handle {
     {
         _state &= ~(1);
         _state |= (selected);
+        // std::cout<<"selected set: "<<selected<<" "<<_state<<std::endl;
     }
     bool isSelected()
     {
         return _state & 1;
     }
-    void setClick(bool clicked = 1)
-    {
-        _state &= ~(1 << 1);
-        _state |= (clicked << 1);
-    }
-    bool isClick()
-    {
-        return _state & 1 << 1;
-    }
     void setHover(bool hover = 1)
     {
-        _state &= ~(1 << 2);
-        _state |= (hover << 2);
+        _state &= ~(1 << 1);
+        _state |= (hover << 1);
+        // std::cout<<"hover set: "<<hover<<" "<<_state<<std::endl;
     }
     bool isHover()
     {
-        return _state & 1 << 1;
+        return _state & (1 << 1);
+    }
+    void setClick(bool clicked = 1)
+    {
+        _state &= ~(1 << 2);
+        _state |= (clicked << 2);
+        // std::cout<<"click set: "<<clicked<<" "<<_state<<std::endl;
+    }
+    bool isClick()
+    {
+        return _state & (1 << 2);
     }
     bool operator==(const Handle &other) const
     {
-        return _type == other._type && _state == other._state;
+        return (_type == other._type && _state == other._state);
     }
     bool operator!=(const Handle &other) const
     {
@@ -279,6 +282,7 @@ public:
     void set_clicked(bool clicked);
     void set_hover(bool hover);
     static std::unordered_map<Handle, HandleStyle *> handle_styles;
+    // static std::unordered_map<Handle, std::shared_ptr<uint32_t[]>> handle_cache;
 
 protected:
     ~CanvasItemCtrl() override = default;

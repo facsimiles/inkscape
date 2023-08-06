@@ -491,6 +491,7 @@ void ControlPoint::_setState(State state)
             break;
         case STATE_CLICKED:
             current = _cset.clicked;
+            _canvas_item_ctrl->set_hover(0);
             _canvas_item_ctrl->set_clicked(1);
             break;
     };
