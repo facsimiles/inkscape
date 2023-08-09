@@ -477,12 +477,10 @@ void ControlPoint::transferGrab(ControlPoint *prev_point, MotionEvent const &eve
 
 void ControlPoint::_setState(State state)
 {
-    _canvas_item_ctrl->set_selected(0);
+    _canvas_item_ctrl->set_normal();
     ColorEntry current = {0, 0};
     switch(state) {
         case STATE_NORMAL:
-            _canvas_item_ctrl->set_hover(0);
-            _canvas_item_ctrl->set_clicked(0);
             current = _cset.normal;
             break;
         case STATE_MOUSEOVER:
@@ -491,8 +489,7 @@ void ControlPoint::_setState(State state)
             break;
         case STATE_CLICKED:
             current = _cset.clicked;
-            _canvas_item_ctrl->set_hover(0);
-            _canvas_item_ctrl->set_clicked(1);
+            _canvas_item_ctrl->set_click(1);
             break;
     };
     _setColors(current);

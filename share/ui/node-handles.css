@@ -1,35 +1,17 @@
-/* * {
-    shape: "square";
-    fill: #034560;
-}
-
-.inkscape-node-auto,
-.inkscape-node-symmetrical {
-    shape: "diamond";
-}
-
-*:click {
-    shape: "circle";
-    fill: pink;
-}
-
-.inkscape-anchor {
-    shape: "diamond";
-} */
-
 * {
     shape: "square";
+    stroke: orange;
     fill: red;
+    stroke-opacity: 0.8;
+    opacity: 0.6;
 }
 
 *:hover {
     fill: pink;
-    /* shape: "diamond"; */
 }
 
 *:selected {
     fill: blue;
-    /* shape: "circle"; */
 }
 
 *:selected:hover {
@@ -37,7 +19,19 @@
     /* shape: "circle"; */
 }
 
+.inkscape-anchor {
+    fill: white;
+    stroke: black;
+}
+
+.inkscape-anchor:hover {
+    fill: red;
+}
+
 *:click {
     fill: black;
-    /* shape: "circle"; */
+}
+
+*:selected:click {
+    fill: purple;
 }

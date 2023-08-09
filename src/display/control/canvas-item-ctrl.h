@@ -65,7 +65,7 @@ struct Handle {
         _state |= (selected);
         // std::cout<<"selected set: "<<selected<<" "<<_state<<std::endl;
     }
-    bool isSelected()
+    bool isSelected() const
     {
         return _state & 1;
     }
@@ -75,17 +75,17 @@ struct Handle {
         _state |= (hover << 1);
         // std::cout<<"hover set: "<<hover<<" "<<_state<<std::endl;
     }
-    bool isHover()
+    bool isHover() const
     {
         return _state & (1 << 1);
     }
-    void setClick(bool clicked = 1)
+    void setClick(bool click = 1)
     {
         _state &= ~(1 << 2);
-        _state |= (clicked << 2);
+        _state |= (click << 2);
         // std::cout<<"click set: "<<clicked<<" "<<_state<<std::endl;
     }
-    bool isClick()
+    bool isClick() const
     {
         return _state & (1 << 2);
     }
@@ -120,7 +120,7 @@ struct Property {
     }
 
     // this is in alternate needing to call ->value everytime, now () can be called directly on the object.
-    T operator()() const
+    T &operator()()
     {
         return value;
     }
@@ -210,10 +210,13 @@ struct HandleStyle {
     Property<float> fill_opacity;
     Property<float> stroke_opacity;
     Property<float> opacity;
+    // int height, width;
     // Property<uint32_t> stroke_width;
     // Property<uint32_t> outline_width;
     // Property<Color> outline;
 
+    //replace it such that it takes on the handle type and sets the size accordingly, the size should always be a part of this as the width when set in percentage will be based on it
+    //else we might save it in two ways but that would be needlessly complicated.
     HandleStyle()
     {
         shape.value = CANVAS_ITEM_CTRL_SHAPE_SQUARE;
@@ -279,10 +282,16 @@ public:
     void set_type(CanvasItemCtrlType type);
     void set_pixbuf(Glib::RefPtr<Gdk::Pixbuf> pixbuf);
     void set_selected(bool selected);
-    void set_clicked(bool clicked);
+    void set_click(bool click);
     void set_hover(bool hover);
+    void set_normal(bool selected = 0);
+    static void build_shape(std::shared_ptr<uint32_t[]> cache, 
+                            CanvasItemCtrlShape shape, uint32_t fill, uint32_t stroke,
+                            int height, int width, double angle, Glib::RefPtr<Gdk::Pixbuf> pixbuf,
+                            int device_scale);//TODO: add more style properties
+
     static std::unordered_map<Handle, HandleStyle *> handle_styles;
-    // static std::unordered_map<Handle, std::shared_ptr<uint32_t[]>> handle_cache;
+    static std::unordered_map<Handle, std::shared_ptr<uint32_t[]>> handle_cache;
 
 protected:
     ~CanvasItemCtrl() override = default;
@@ -298,7 +307,7 @@ protected:
 
     // Display
     InitLock _built;
-    mutable std::unique_ptr<uint32_t[]> _cache;
+    mutable std::shared_ptr<uint32_t[]> _cache;
     static InitLock _parsed;
     //Handle mapped to the Cache
     //mutable(might not need to make it mutable explicitly) static std::unordered_map<Handle,std::unique_ptr<uint32_t[]>> cache;

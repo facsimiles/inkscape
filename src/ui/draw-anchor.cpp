@@ -53,6 +53,7 @@ SPDrawAnchor *SPDrawAnchor::anchorTest(Geom::Point w, bool activate)
     if ( activate && this->ctrl->contains(w)) {
         
         if (!this->active) {
+            this->ctrl->set_hover(1);
             this->ctrl->set_size_extra(4);
             this->ctrl->set_fill(FILL_COLOR_MOUSEOVER);
             this->active = TRUE;
@@ -61,6 +62,7 @@ SPDrawAnchor *SPDrawAnchor::anchorTest(Geom::Point w, bool activate)
     }
 
     if (this->active) {
+        this->ctrl->set_normal();
         this->ctrl->set_size_extra(0);
         this->ctrl->set_fill(FILL_COLOR_NORMAL);
         this->active = FALSE;

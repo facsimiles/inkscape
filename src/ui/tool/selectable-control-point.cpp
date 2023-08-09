@@ -116,16 +116,13 @@ bool SelectableControlPoint::selected() const
 void SelectableControlPoint::_setState(State state)
 {
     if (!selected()) {
-        // _canvas_item_ctrl->set_selected(0);
         ControlPoint::_setState(state);
     } else {
-        _canvas_item_ctrl->set_selected(1);
+        _canvas_item_ctrl->set_normal(1);
         ColorEntry current = {0, 0};
         switch (state) {
             case STATE_NORMAL:
                 current = _cset.selected_normal;
-                _canvas_item_ctrl->set_hover(0);
-                _canvas_item_ctrl->set_clicked(0);
                 break;
             case STATE_MOUSEOVER:
                 current = _cset.selected_mouseover;
@@ -133,8 +130,7 @@ void SelectableControlPoint::_setState(State state)
                 break;
             case STATE_CLICKED:
                 current = _cset.selected_clicked;
-                _canvas_item_ctrl->set_hover(0);
-                _canvas_item_ctrl->set_clicked(1);
+                _canvas_item_ctrl->set_click(1);
                 break;
         }
         _setColors(current);
