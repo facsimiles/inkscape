@@ -26,6 +26,7 @@
 
 #include "enums.h" // SP_ANCHOR_X
 #include "display/initlock.h"
+#include "display/cairo-utils.h" // argb32_from_rgba()
 
 namespace Inkscape {
 
@@ -126,127 +127,55 @@ struct Property {
     }
 };
 
-struct Color {
-    unsigned char red, green, blue;
-    float alpha = 1;
-    Color(unsigned char r, unsigned char g, unsigned char b) : red(r), green(g), blue(b) {}
-    void setRGB(unsigned char r, unsigned char g, unsigned char b)
-    {
-        red = r;
-        green = g;
-        blue = b;
-    }
-    Color(unsigned char r, unsigned char g, unsigned char b, float a) : red(r), green(g), blue(b), alpha(a) {}
-    void setRGBA(unsigned char r, unsigned char g, unsigned char b, float a)
-    {
-        red = r;
-        green = g;
-        blue = b;
-        alpha = a;
-    }
-    // 0xXXRRGGBB or 0xRRGGBBAA
-    Color(uint32_t rgb, bool is_alpha = 1)
-    {
-        setColor(rgb, is_alpha);
-    }
-    void setColor(uint32_t rgb, bool is_alpha = 1)
-    {
-        if (is_alpha) {
-            alpha = (rgb & 0xff) / 255.0;
-            rgb = rgb >> 8;
-        }
-        red = (rgb >> 16) & 0xff;
-        green = (rgb >> 8) & 0xff;
-        blue = rgb & 0xff;
-    }
-
-    Color() : red(0xff), green(0xff), blue(0xff) {}
-
-    void setAlpha(float a)
-    {
-        alpha = a;
-    }
-
-    void overlapAlpha(float a)
-    {
-        alpha *= a;
-    }
-
-    uint32_t getRGB() const
-    {
-        return (red << 16) | (green << 8) | blue;
-    }
-    static uint32_t getRGB(unsigned char red, unsigned char green, unsigned char blue)
-    {
-        return (red << 16) | (green << 8) | blue;
-    }
-
-    uint32_t getRGBA() const
-    {
-        return (red << 24) | (green << 16) | (blue << 8) | int((alpha * 255));
-    }
-    static uint32_t getRGBA(unsigned char red, unsigned char green, unsigned char blue, float alpha)
-    {
-        return (red << 24) | (green << 16) | (blue << 8) | int((alpha * 255));
-    }
-
-    static Color computeBlend(Color const &top, Color const &bottom)
-    {
-        float result_alpha = top.alpha + bottom.alpha * (1 - top.alpha);
-        if (result_alpha == 0) {
-            return Color(0, 0, 0, 0);
-        }
-        unsigned char result_red = int((top.red * top.alpha + bottom.red * bottom.alpha * (1 - top.alpha)) / result_alpha);
-        unsigned char result_green = int((top.green * top.alpha + bottom.green * bottom.alpha * (1 - top.alpha)) / result_alpha);
-        unsigned char result_blue = int((top.blue * top.alpha + bottom.blue * bottom.alpha * (1 - top.alpha)) / result_alpha);
-        return Color(result_red, result_green, result_blue, result_alpha);
-    }
-};
-
 struct HandleStyle {
     Property<CanvasItemCtrlShape> shape;
-    Property<Color> fill;
-    Property<Color> stroke;
+    //they store the value in argb but return in rgba
+    Property<uint32_t> fill;
+    Property<uint32_t> stroke;
     Property<float> fill_opacity;
     Property<float> stroke_opacity;
     Property<float> opacity;
     // int height, width;
-    // Property<uint32_t> stroke_width;
-    // Property<uint32_t> outline_width;
-    // Property<Color> outline;
-
     //replace it such that it takes on the handle type and sets the size accordingly, the size should always be a part of this as the width when set in percentage will be based on it
     //else we might save it in two ways but that would be needlessly complicated.
+    // Property<uint32_t> stroke_width;
+    // Property<uint32_t> outline_width;
+    // Property<uint32_t> outline;
+
     HandleStyle()
     {
         shape.value = CANVAS_ITEM_CTRL_SHAPE_SQUARE;
-        fill.value = Color();
-        stroke.value = Color();
+        fill.value = 0xffffffff;
+        stroke.value = 0xffffffff;
         fill_opacity.value = 1.0;
         stroke_opacity.value = 1.0;
         opacity.value = 1.0;
-        // outline.value = Color();
     }
 
     uint32_t getFill()
     {
-        //lazy update of opacity
-        fill().setAlpha(fill_opacity());
-
-        Color fill_color = fill();
-        fill_color.overlapAlpha(opacity());
-        return fill_color.getRGBA();
+        EXTRACT_ARGB32((fill()), a, r, g, b)
+        a = int(fill_opacity() * opacity() * 255);
+        ASSEMBLE_ARGB32(fill_color, a, r, g, b)
+        return rgba_from_argb32(fill_color);
     }
 
     uint32_t getStroke()
     {
-        //lazy update of opacity
-        fill().setAlpha(fill_opacity());
-        stroke().setAlpha(stroke_opacity());
+        EXTRACT_ARGB32(stroke(), stroke_a, stroke_r, stroke_g, stroke_b)
+        EXTRACT_ARGB32(fill(), fill_a, fill_r, fill_g, fill_b)
+        float f_fill_a = fill_opacity();
+        float f_stroke_a = stroke_opacity();
+        float result_a = f_stroke_a + f_fill_a * (1 - f_stroke_a);
+        if (result_a == 0) {
+            return 0;
+        }
 
-        Color blend = Color::computeBlend(stroke(), fill());
-        blend.overlapAlpha(opacity());
-        return blend.getRGBA();
+        unsigned char result_r = int((stroke_r * f_stroke_a + fill_r * f_fill_a * (1 - f_stroke_a)) / result_a);
+        unsigned char result_g = int((stroke_g * f_stroke_a + fill_g * f_fill_a * (1 - f_stroke_a)) / result_a);
+        unsigned char result_b = int((stroke_b * f_stroke_a + fill_b * f_fill_a * (1 - f_stroke_a)) / result_a);
+        ASSEMBLE_ARGB32(blend, (int(opacity()*result_a * 255)), result_r, result_g, result_b)
+        return rgba_from_argb32(blend);
     }
 };
 
@@ -285,7 +214,7 @@ public:
     void set_click(bool click);
     void set_hover(bool hover);
     void set_normal(bool selected = 0);
-    static void build_shape(std::shared_ptr<uint32_t[]> cache, 
+    static void build_shape(std::shared_ptr<uint32_t[]> cache,
                             CanvasItemCtrlShape shape, uint32_t fill, uint32_t stroke,
                             int height, int width, double angle, Glib::RefPtr<Gdk::Pixbuf> pixbuf,
                             int device_scale);//TODO: add more style properties

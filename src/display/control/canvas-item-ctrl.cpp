@@ -44,6 +44,14 @@ std::unordered_map<Handle, HandleStyle *> CanvasItemCtrl::handle_styles = {
     //type, selected, hover, click
     {Handle(CANVAS_ITEM_CTRL_TYPE_ANCHOR, 0, 0, 0), new HandleStyle()},
     {Handle(CANVAS_ITEM_CTRL_TYPE_ANCHOR, 0, 1, 0), new HandleStyle()},
+    {Handle(CANVAS_ITEM_CTRL_TYPE_ROTATE, 0, 0, 0), new HandleStyle()},
+    {Handle(CANVAS_ITEM_CTRL_TYPE_ROTATE, 0, 0, 1), new HandleStyle()},
+    {Handle(CANVAS_ITEM_CTRL_TYPE_ROTATE, 0, 1, 0), new HandleStyle()},
+    {Handle(CANVAS_ITEM_CTRL_TYPE_ROTATE, 0, 1, 1), new HandleStyle()},
+    {Handle(CANVAS_ITEM_CTRL_TYPE_ROTATE, 1, 0, 0), new HandleStyle()},
+    {Handle(CANVAS_ITEM_CTRL_TYPE_ROTATE, 1, 0, 1), new HandleStyle()},
+    {Handle(CANVAS_ITEM_CTRL_TYPE_ROTATE, 1, 1, 0), new HandleStyle()},
+    {Handle(CANVAS_ITEM_CTRL_TYPE_ROTATE, 1, 1, 1), new HandleStyle()},
     {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_SYMETRICAL, 0, 0, 0), new HandleStyle()},
     {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_SYMETRICAL, 0, 0, 1), new HandleStyle()},
     {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_SYMETRICAL, 0, 1, 0), new HandleStyle()},
@@ -51,7 +59,31 @@ std::unordered_map<Handle, HandleStyle *> CanvasItemCtrl::handle_styles = {
     {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_SYMETRICAL, 1, 0, 0), new HandleStyle()},
     {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_SYMETRICAL, 1, 0, 1), new HandleStyle()},
     {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_SYMETRICAL, 1, 1, 0), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_SYMETRICAL, 1, 1, 1), new HandleStyle()}
+    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_SYMETRICAL, 1, 1, 1), new HandleStyle()},
+    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_CUSP, 0, 0, 0), new HandleStyle()},
+    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_CUSP, 0, 0, 1), new HandleStyle()},
+    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_CUSP, 0, 1, 0), new HandleStyle()},
+    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_CUSP, 0, 1, 1), new HandleStyle()},
+    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_CUSP, 1, 0, 0), new HandleStyle()},
+    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_CUSP, 1, 0, 1), new HandleStyle()},
+    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_CUSP, 1, 1, 0), new HandleStyle()},
+    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_CUSP, 1, 1, 1), new HandleStyle()},
+    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_AUTO, 0, 0, 0), new HandleStyle()},
+    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_AUTO, 0, 0, 1), new HandleStyle()},
+    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_AUTO, 0, 1, 0), new HandleStyle()},
+    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_AUTO, 0, 1, 1), new HandleStyle()},
+    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_AUTO, 1, 0, 0), new HandleStyle()},
+    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_AUTO, 1, 0, 1), new HandleStyle()},
+    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_AUTO, 1, 1, 0), new HandleStyle()},
+    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_AUTO, 1, 1, 1), new HandleStyle()},
+    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_SMOOTH, 0, 0, 0), new HandleStyle()},
+    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_SMOOTH, 0, 0, 1), new HandleStyle()},
+    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_SMOOTH, 0, 1, 0), new HandleStyle()},
+    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_SMOOTH, 0, 1, 1), new HandleStyle()},
+    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_SMOOTH, 1, 0, 0), new HandleStyle()},
+    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_SMOOTH, 1, 0, 1), new HandleStyle()},
+    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_SMOOTH, 1, 1, 0), new HandleStyle()},
+    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_SMOOTH, 1, 1, 1), new HandleStyle()}
 };
 
 /**
@@ -380,19 +412,19 @@ void CanvasItemCtrl::set_type(CanvasItemCtrlType type)
 void CanvasItemCtrl::set_selected(bool selected)
 {
     _handle.setSelected(selected);
-    // _built.reset();//won't be needed possibly later since we will just use the rendering from a different element and not re-render entirely
+    _built.reset();
     request_update();
 }
 void CanvasItemCtrl::set_click(bool click)
 {
     _handle.setClick(click);
-    // _built.reset();
+    _built.reset();
     request_update();
 }
 void CanvasItemCtrl::set_hover(bool hover)
 {
     _handle.setHover(hover);
-    // _built.reset();
+    _built.reset();
     request_update();
 }
 void CanvasItemCtrl::set_normal(bool selected)
@@ -400,7 +432,7 @@ void CanvasItemCtrl::set_normal(bool selected)
     _handle.setSelected(selected);
     _handle.setHover(0);
     _handle.setClick(0);
-    // _built.reset();
+    _built.reset();
     request_update();
 }
 
@@ -868,15 +900,18 @@ void CanvasItemCtrl::_render(CanvasItemBuffer &buf) const
         parse_and_build_cache();
     });
 
-    if (handle_cache.find(_handle) != handle_cache.end()) {
-        _cache = handle_cache[_handle];
-    }
-    else {
-        _built.init([ &, this] {
-            build_cache(buf.device_scale);
-        });
-    }
+    // if (handle_cache.find(_handle) != handle_cache.end()) {
+    //     _cache = handle_cache[_handle];
+    // }
+    // else {
+    //     _built.init([ &, this] {
+    //         build_cache(buf.device_scale);
+    //     });
+    // }
 
+    _built.init([ &, this] {
+        build_cache(buf.device_scale);
+    });
 
     Geom::Point c = _bounds->min() - buf.rect.min();
     int x = c.x(); // Must be pixel aligned.
@@ -989,6 +1024,7 @@ std::unordered_map<std::string, CanvasItemCtrlType> type_map = {
     {".inkscape-node-cusp", CANVAS_ITEM_CTRL_TYPE_NODE_CUSP},
     {".inkscape-node-symmetrical", CANVAS_ITEM_CTRL_TYPE_NODE_SYMETRICAL},
     {".inkscape-anchor", CANVAS_ITEM_CTRL_TYPE_ANCHOR},
+    {".inkscape-rotate", CANVAS_ITEM_CTRL_TYPE_ROTATE},
     {"*", CANVAS_ITEM_CTRL_TYPE_DEFAULT}
 };
 
@@ -1092,7 +1128,7 @@ void set_properties(CRDocHandler *a_handler, CRString *a_name, CRTerm *a_value, 
         CRStatus status = cr_rgb_set_from_term(rgb, a_value);
 
         if (status == CR_OK) {
-            auto color = Color((unsigned char)rgb->red, (unsigned char)rgb->green, (unsigned char)rgb->blue);
+            ASSEMBLE_ARGB32(color, 255, (uint8_t)rgb->red, (uint8_t)rgb->green, (uint8_t)rgb->blue)
             for (auto& [handle, specificity] : selected_handles) {
                 if (property == "fill") {
                     handle->fill.setProperty(color, specificity + 100000 * a_important);
@@ -1170,8 +1206,8 @@ void CanvasItemCtrl::parse_and_build_cache() const
         cr_parser_parse(user_parser);
     }
 
-    //we would have the styles defined now in handle_styles, now we would just create the handles for the same
-    for (auto [handle, handle_style] : handle_styles) {
+    // we would have the styles defined now in handle_styles, now we would just create the handles for the same
+    for (auto& [handle, handle_style] : handle_styles) {
         int height = 35;
         int width = 35;
         int size = height * width;
@@ -1205,13 +1241,21 @@ void CanvasItemCtrl::build_cache(int device_scale) const
     int size = width * height;
 
     _cache = std::make_unique<uint32_t[]>(size);
-    build_shape(_cache, _shape, _fill, _stroke, height, width, _angle, _pixbuf, device_scale);
+    if (handle_styles.find(_handle) != handle_styles.end()) {
+        auto shape = handle_styles[_handle]->shape();
+        auto fill = handle_styles[_handle]->getFill();
+        auto stroke = handle_styles[_handle]->getStroke();
+        build_shape(_cache, shape, fill, stroke, height, width, _angle, _pixbuf, device_scale);
+    }
+    else {
+        build_shape(_cache, _shape, _fill, _stroke, height, width, _angle, _pixbuf, device_scale);
+    }
 }
 
 void CanvasItemCtrl::build_shape(std::shared_ptr<uint32_t[]> cache,
-                        CanvasItemCtrlShape shape, uint32_t fill, uint32_t stroke,
-                        int height, int width, double angle, Glib::RefPtr<Gdk::Pixbuf> pixbuf,
-                        int device_scale)
+                                 CanvasItemCtrlShape shape, uint32_t fill, uint32_t stroke,
+                                 int height, int width, double angle, Glib::RefPtr<Gdk::Pixbuf> pixbuf,
+                                 int device_scale)
 {
     auto p = cache.get();
     switch (shape) {

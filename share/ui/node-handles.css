@@ -2,8 +2,33 @@
     shape: "square";
     stroke: orange;
     fill: red;
-    stroke-opacity: 0.8;
-    opacity: 0.6;
+    fill-opacity: 0.9;
+    stroke-opacity: 0.9;
+    opacity: 0.9;
+}
+
+.inkscape-node-auto {
+    shape: "circle";
+}
+
+.inkscape-node-smooth {
+    shape: "square";
+}
+
+.inkscape-node-cusp {
+    shape: "diamond";
+}
+
+.inkscape-node-symmetrical {
+    shape: "square";
+}
+
+.inkscape-anchor {
+    shape: "square";
+}
+
+.inkscape-rotate {
+    shape: "circle";
 }
 
 *:hover {
