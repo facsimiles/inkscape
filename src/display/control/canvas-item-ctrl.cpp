@@ -41,7 +41,7 @@ namespace Inkscape {
 InitLock CanvasItemCtrl::_parsed;
 std::unordered_map<Handle, std::shared_ptr<uint32_t[]>> CanvasItemCtrl::handle_cache;
 std::unordered_map<Handle, HandleStyle *> CanvasItemCtrl::handle_styles = {
-    //TODO: [Must] Replace with an automated initialization 
+    //TODO: [Must] Replace with an automated initialization
     //type, selected, hover, click
     {Handle(CANVAS_ITEM_CTRL_TYPE_ANCHOR, 0, 0, 0), new HandleStyle()},
     {Handle(CANVAS_ITEM_CTRL_TYPE_ANCHOR, 0, 1, 0), new HandleStyle()},
@@ -1382,12 +1382,13 @@ void CanvasItemCtrl::build_shape(std::shared_ptr<uint32_t[]> cache,
         break;
     }
 
-    case CANVAS_ITEM_CTRL_SHAPE_CROSS:
+    case CANVAS_ITEM_CTRL_SHAPE_CROSS: {
         // Actually an 'X'.
+        double sw2 = device_scale * stroke_width * sqrt(2);
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                if (abs(x - y) < device_scale * stroke_width ||
-                        abs(width - 1 - x - y) < device_scale * stroke_width) {
+                if ((abs(x - y) < sw2 && abs(x + y - width) < width - sw2) ||
+                        (abs(x + y - width) < sw2 && abs(x - y) < width - sw2)) {
                     *p++ = stroke;
                 }
                 else {
@@ -1396,6 +1397,7 @@ void CanvasItemCtrl::build_shape(std::shared_ptr<uint32_t[]> cache,
             }
         }
         break;
+    }
 
     case CANVAS_ITEM_CTRL_SHAPE_PLUS:
         // Actually an '+'.
@@ -1411,6 +1413,7 @@ void CanvasItemCtrl::build_shape(std::shared_ptr<uint32_t[]> cache,
             }
         }
         break;
+
     case CANVAS_ITEM_CTRL_SHAPE_TRIANGLE:        //triangle optionaly rotated
     case CANVAS_ITEM_CTRL_SHAPE_TRIANGLE_ANGLED: // triangle with pointing to center of  knot and rotated this way
     case CANVAS_ITEM_CTRL_SHAPE_DARROW:          // Double arrow
