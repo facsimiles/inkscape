@@ -120,7 +120,7 @@ struct Property {
         }
     }
 
-    // this is in alternate needing to call ->value everytime, now () can be called directly on the object.
+    // this is in alternate needing to call .value everytime.
     T &operator()()
     {
         return value;
@@ -128,29 +128,15 @@ struct Property {
 };
 
 struct HandleStyle {
-    Property<CanvasItemCtrlShape> shape;
-    //they store the value in argb but return in rgba
-    Property<uint32_t> fill;
-    Property<uint32_t> stroke;
-    Property<float> fill_opacity;
-    Property<float> stroke_opacity;
-    Property<float> opacity;
-    // int height, width;
-    //replace it such that it takes on the handle type and sets the size accordingly, the size should always be a part of this as the width when set in percentage will be based on it
-    //else we might save it in two ways but that would be needlessly complicated.
-    // Property<uint32_t> stroke_width;
-    // Property<uint32_t> outline_width;
-    // Property<uint32_t> outline;
-
-    HandleStyle()
-    {
-        shape.value = CANVAS_ITEM_CTRL_SHAPE_SQUARE;
-        fill.value = 0xffffffff;
-        stroke.value = 0xffffffff;
-        fill_opacity.value = 1.0;
-        stroke_opacity.value = 1.0;
-        opacity.value = 1.0;
-    }
+    Property<CanvasItemCtrlShape> shape{CANVAS_ITEM_CTRL_SHAPE_SQUARE};
+    Property<uint32_t> fill{0xffffffff};
+    Property<uint32_t> stroke{0xffffffff};
+    Property<float> fill_opacity{1.0};
+    Property<float> stroke_opacity{1.0};
+    Property<float> opacity{1.0};
+    Property<int> stroke_width{1};
+    // Property<int> outline_width{initial_value};
+    // Property<int> outline{initial_value};
 
     uint32_t getFill()
     {
@@ -171,9 +157,9 @@ struct HandleStyle {
             return 0;
         }
 
-        unsigned char result_r = int((stroke_r * f_stroke_a + fill_r * f_fill_a * (1 - f_stroke_a)) / result_a);
-        unsigned char result_g = int((stroke_g * f_stroke_a + fill_g * f_fill_a * (1 - f_stroke_a)) / result_a);
-        unsigned char result_b = int((stroke_b * f_stroke_a + fill_b * f_fill_a * (1 - f_stroke_a)) / result_a);
+        uint8_t result_r = int((stroke_r * f_stroke_a + fill_r * f_fill_a * (1 - f_stroke_a)) / result_a);
+        uint8_t result_g = int((stroke_g * f_stroke_a + fill_g * f_fill_a * (1 - f_stroke_a)) / result_a);
+        uint8_t result_b = int((stroke_b * f_stroke_a + fill_b * f_fill_a * (1 - f_stroke_a)) / result_a);
         ASSEMBLE_ARGB32(blend, (int(opacity()*result_a * 255)), result_r, result_g, result_b)
         return rgba_from_argb32(blend);
     }
@@ -215,7 +201,7 @@ public:
     void set_hover(bool hover);
     void set_normal(bool selected = 0);
     static void build_shape(std::shared_ptr<uint32_t[]> cache,
-                            CanvasItemCtrlShape shape, uint32_t fill, uint32_t stroke,
+                            CanvasItemCtrlShape shape, uint32_t fill, uint32_t stroke, int stroke_width,
                             int height, int width, double angle, Glib::RefPtr<Gdk::Pixbuf> pixbuf,
                             int device_scale);//TODO: add more style properties
 

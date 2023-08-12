@@ -41,6 +41,7 @@ namespace Inkscape {
 InitLock CanvasItemCtrl::_parsed;
 std::unordered_map<Handle, std::shared_ptr<uint32_t[]>> CanvasItemCtrl::handle_cache;
 std::unordered_map<Handle, HandleStyle *> CanvasItemCtrl::handle_styles = {
+    //TODO: [Must] Replace with an automated initialization 
     //type, selected, hover, click
     {Handle(CANVAS_ITEM_CTRL_TYPE_ANCHOR, 0, 0, 0), new HandleStyle()},
     {Handle(CANVAS_ITEM_CTRL_TYPE_ANCHOR, 0, 1, 0), new HandleStyle()},
@@ -76,6 +77,30 @@ std::unordered_map<Handle, HandleStyle *> CanvasItemCtrl::handle_styles = {
     {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_AUTO, 1, 0, 1), new HandleStyle()},
     {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_AUTO, 1, 1, 0), new HandleStyle()},
     {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_AUTO, 1, 1, 1), new HandleStyle()},
+    {Handle(CANVAS_ITEM_CTRL_TYPE_SHAPER, 0, 0, 0), new HandleStyle()},
+    {Handle(CANVAS_ITEM_CTRL_TYPE_SHAPER, 0, 0, 1), new HandleStyle()},
+    {Handle(CANVAS_ITEM_CTRL_TYPE_SHAPER, 0, 1, 0), new HandleStyle()},
+    {Handle(CANVAS_ITEM_CTRL_TYPE_SHAPER, 0, 1, 1), new HandleStyle()},
+    {Handle(CANVAS_ITEM_CTRL_TYPE_SHAPER, 1, 0, 0), new HandleStyle()},
+    {Handle(CANVAS_ITEM_CTRL_TYPE_SHAPER, 1, 0, 1), new HandleStyle()},
+    {Handle(CANVAS_ITEM_CTRL_TYPE_SHAPER, 1, 1, 0), new HandleStyle()},
+    {Handle(CANVAS_ITEM_CTRL_TYPE_SHAPER, 1, 1, 1), new HandleStyle()},
+    {Handle(CANVAS_ITEM_CTRL_TYPE_SIZER, 0, 0, 0), new HandleStyle()},
+    {Handle(CANVAS_ITEM_CTRL_TYPE_SIZER, 0, 0, 1), new HandleStyle()},
+    {Handle(CANVAS_ITEM_CTRL_TYPE_SIZER, 0, 1, 0), new HandleStyle()},
+    {Handle(CANVAS_ITEM_CTRL_TYPE_SIZER, 0, 1, 1), new HandleStyle()},
+    {Handle(CANVAS_ITEM_CTRL_TYPE_SIZER, 1, 0, 0), new HandleStyle()},
+    {Handle(CANVAS_ITEM_CTRL_TYPE_SIZER, 1, 0, 1), new HandleStyle()},
+    {Handle(CANVAS_ITEM_CTRL_TYPE_SIZER, 1, 1, 0), new HandleStyle()},
+    {Handle(CANVAS_ITEM_CTRL_TYPE_SIZER, 1, 1, 1), new HandleStyle()},
+    {Handle(CANVAS_ITEM_CTRL_TYPE_MARGIN, 0, 0, 0), new HandleStyle()},
+    {Handle(CANVAS_ITEM_CTRL_TYPE_MARGIN, 0, 0, 1), new HandleStyle()},
+    {Handle(CANVAS_ITEM_CTRL_TYPE_MARGIN, 0, 1, 0), new HandleStyle()},
+    {Handle(CANVAS_ITEM_CTRL_TYPE_MARGIN, 0, 1, 1), new HandleStyle()},
+    {Handle(CANVAS_ITEM_CTRL_TYPE_MARGIN, 1, 0, 0), new HandleStyle()},
+    {Handle(CANVAS_ITEM_CTRL_TYPE_MARGIN, 1, 0, 1), new HandleStyle()},
+    {Handle(CANVAS_ITEM_CTRL_TYPE_MARGIN, 1, 1, 0), new HandleStyle()},
+    {Handle(CANVAS_ITEM_CTRL_TYPE_MARGIN, 1, 1, 1), new HandleStyle()},
     {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_SMOOTH, 0, 0, 0), new HandleStyle()},
     {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_SMOOTH, 0, 0, 1), new HandleStyle()},
     {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_SMOOTH, 0, 1, 0), new HandleStyle()},
@@ -1108,6 +1133,8 @@ void set_selectors_base(CRDocHandler *a_handler, CRSelector *a_selector)
 
 void set_properties(CRDocHandler *a_handler, CRString *a_name, CRTerm *a_value, gboolean a_important)
 {
+    //Refactor to use enum and a common function interface.
+
     //const is the issue just remove it and you can do direct comparisons
     const std::string value = (char *)cr_term_to_string(a_value);
     const std::string property = cr_string_peek_raw_str(a_name);
@@ -1156,6 +1183,10 @@ void set_properties(CRDocHandler *a_handler, CRString *a_name, CRTerm *a_value, 
         else if (a_value->content.num->type == NUM_GENERIC) {
             val = a_value->content.num->val;
         }
+        else {
+            std::cerr << "Invalid type for " << property << ": " << value << std::endl;
+            return;
+        }
 
         if (val > 1 || val < 0) {
             std::cerr << "Invalid value for " << property << ": " << value << std::endl;
@@ -1172,6 +1203,25 @@ void set_properties(CRDocHandler *a_handler, CRString *a_name, CRTerm *a_value, 
             else if (property == "stroke-opacity") {
                 handle->stroke_opacity.setProperty(val, specificity + 100000 * a_important);
             }
+        }
+    }
+    else if (property == "stroke-width") {
+        //Assuming px value only, which stays the same regardless of the size of the handles.
+        int val;
+        if (!a_value->content.num) {
+            std::cerr << "Invalid value for " << property << ": " << value << std::endl;
+            return;
+        }
+        if (a_value->content.num->type == NUM_LENGTH_PX) {
+            val = int(a_value->content.num->val);
+        }
+        else {
+            std::cerr << "Invalid type for " << property << ": " << value << std::endl;
+            return;
+        }
+
+        for (auto& [handle, specificity] : selected_handles) {
+            handle->stroke_width.setProperty(val, specificity + 100000 * a_important);
         }
     }
     else {
@@ -1214,11 +1264,12 @@ void CanvasItemCtrl::parse_and_build_cache() const
         //TODO: (C++20) Replace with make_shared
         handle_cache[handle] = std::make_unique<uint32_t[]>(size);
 
-        uint32_t fill = handle_style->getFill();
-        uint32_t stroke = handle_style->getStroke();
-        CanvasItemCtrlShape shape = handle_style->shape();
+        auto fill = handle_style->getFill();
+        auto stroke = handle_style->getStroke();
+        auto shape = handle_style->shape();
+        auto stroke_width = handle_style->stroke_width();
         Glib::RefPtr<Gdk::Pixbuf> pixbuf;
-        build_shape(handle_cache[handle], shape, fill, stroke, height, width, 0, pixbuf, 1);
+        build_shape(handle_cache[handle], shape, fill, stroke, stroke_width, height, width, 0, pixbuf, 1);
     }
 }
 
@@ -1242,20 +1293,23 @@ void CanvasItemCtrl::build_cache(int device_scale) const
 
     _cache = std::make_unique<uint32_t[]>(size);
     if (handle_styles.find(_handle) != handle_styles.end()) {
-        auto shape = handle_styles[_handle]->shape();
-        auto fill = handle_styles[_handle]->getFill();
-        auto stroke = handle_styles[_handle]->getStroke();
-        build_shape(_cache, shape, fill, stroke, height, width, _angle, _pixbuf, device_scale);
+        auto handle = handle_styles[_handle];
+        auto shape = handle->shape();
+        auto fill = handle->getFill();
+        auto stroke = handle->getStroke();
+        auto stroke_width = handle->stroke_width();
+        build_shape(_cache, shape, fill, stroke, stroke_width, height, width, _angle, _pixbuf, device_scale);
     }
     else {
-        build_shape(_cache, _shape, _fill, _stroke, height, width, _angle, _pixbuf, device_scale);
+        std::cout << _handle._type << std::endl;
+        build_shape(_cache, _shape, _fill, _stroke, 1, height, width, _angle, _pixbuf, device_scale);
     }
 }
 
 void CanvasItemCtrl::build_shape(std::shared_ptr<uint32_t[]> cache,
                                  CanvasItemCtrlShape shape, uint32_t fill, uint32_t stroke,
-                                 int height, int width, double angle, Glib::RefPtr<Gdk::Pixbuf> pixbuf,
-                                 int device_scale)
+                                 int stroke_width, int height, int width, double angle,
+                                 Glib::RefPtr<Gdk::Pixbuf> pixbuf, int device_scale)
 {
     auto p = cache.get();
     switch (shape) {
@@ -1263,8 +1317,8 @@ void CanvasItemCtrl::build_shape(std::shared_ptr<uint32_t[]> cache,
         // Actually any rectanglular shape.
         for (int i = 0; i < width; ++i) {
             for (int j = 0; j < width; ++j) {
-                if (i + 1 > device_scale && device_scale < width  - i &&
-                        j + 1 > device_scale && device_scale < height - j) {
+                if (i + 1 > device_scale * stroke_width && device_scale * stroke_width < width  - i &&
+                        j + 1 > device_scale * stroke_width && device_scale * stroke_width < height - j) {
                     *p++ = fill;
                 }
                 else {
@@ -1280,10 +1334,10 @@ void CanvasItemCtrl::build_shape(std::shared_ptr<uint32_t[]> cache,
 
         for (int i = 0; i < width; ++i) {
             for (int j = 0; j < height; ++j) {
-                if (i  +           j  > m - 1 + device_scale &&
-                        (width - 1 - i) +           j  > m - 1 + device_scale &&
-                        (width - 1 - i) + (height - 1 - j) > m - 1 + device_scale &&
-                        i    + (height - 1 - j) > m - 1 + device_scale) {
+                if (i  +           j  > m - 1 + device_scale * stroke_width &&
+                        (width - 1 - i) +           j  > m - 1 + device_scale * stroke_width &&
+                        (width - 1 - i) + (height - 1 - j) > m - 1 + device_scale * stroke_width &&
+                        i    + (height - 1 - j) > m - 1 + device_scale * stroke_width) {
                     *p++ = fill;
                 }
                 else if (i  +           j  > m - 2 &&
@@ -1304,7 +1358,7 @@ void CanvasItemCtrl::build_shape(std::shared_ptr<uint32_t[]> cache,
         // Assume width == height.
         double rs  = width / 2.0;
         double rs2 = rs * rs;
-        double rf  = rs - device_scale;
+        double rf  = rs - device_scale * stroke_width;
         double rf2 = rf * rf;
 
         for (int i = 0; i < width; ++i) {
@@ -1332,8 +1386,8 @@ void CanvasItemCtrl::build_shape(std::shared_ptr<uint32_t[]> cache,
         // Actually an 'X'.
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                if (abs(x - y)             < device_scale ||
-                        abs(width - 1 - x - y) < device_scale) {
+                if (abs(x - y) < device_scale * stroke_width ||
+                        abs(width - 1 - x - y) < device_scale * stroke_width) {
                     *p++ = stroke;
                 }
                 else {
@@ -1347,8 +1401,8 @@ void CanvasItemCtrl::build_shape(std::shared_ptr<uint32_t[]> cache,
         // Actually an '+'.
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                if (std::abs(x - width / 2)   < device_scale ||
-                        std::abs(y - height / 2)  < device_scale) {
+                if (std::abs(x - width / 2)   < device_scale * stroke_width ||
+                        std::abs(y - height / 2)  < device_scale * stroke_width) {
                     *p++ = stroke;
                 }
                 else {
@@ -1428,7 +1482,7 @@ void CanvasItemCtrl::build_shape(std::shared_ptr<uint32_t[]> cache,
                             SP_RGBA32_G_F(stroke),
                             SP_RGBA32_B_F(stroke),
                             SP_RGBA32_A_F(stroke));
-        cr->set_line_width(1);
+        cr->set_line_width(stroke_width);
         cr->stroke();
 
         // Copy to buffer.

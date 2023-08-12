@@ -426,11 +426,15 @@ void SPKnot::updateCtrl() {
 void SPKnot::_setCtrlState() {
     int state = SP_KNOT_STATE_NORMAL;
 
+    ctrl->set_normal();
     if (this->flags & SP_KNOT_DRAGGING) {
+        ctrl->set_click(1);
         state = SP_KNOT_STATE_DRAGGING;
     } else if (this->flags & SP_KNOT_MOUSEOVER) {
+        ctrl->set_hover(1);
         state = SP_KNOT_STATE_MOUSEOVER;
     } else if (this->flags & SP_KNOT_SELECTED) {
+        ctrl->set_selected(1);
         state = SP_KNOT_STATE_SELECTED;
     }
     if (ctrl) {

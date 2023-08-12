@@ -5,6 +5,7 @@
     fill-opacity: 0.9;
     stroke-opacity: 0.9;
     opacity: 0.9;
+    stroke-width: 2px;
 }
 
 .inkscape-node-auto {
@@ -45,7 +46,7 @@
 }
 
 .inkscape-anchor {
-    fill: white;
+    fill: gold;
     stroke: black;
 }
 

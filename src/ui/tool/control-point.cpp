@@ -83,7 +83,7 @@ ControlPoint::ControlPoint(SPDesktop *d, Geom::Point const &initial_pos, SPAncho
                                                 Inkscape::CANVAS_ITEM_CTRL_SHAPE_BITMAP);
     _canvas_item_ctrl->set_name("CanvasItemCtrl:ControlPoint");
     _canvas_item_ctrl->set_pixbuf(std::move(pixbuf));
-    _canvas_item_ctrl->set_fill(  _cset.normal.fill);
+    _canvas_item_ctrl->set_fill(_cset.normal.fill);
     _canvas_item_ctrl->set_stroke(_cset.normal.stroke);
     _canvas_item_ctrl->set_anchor(anchor);
 
