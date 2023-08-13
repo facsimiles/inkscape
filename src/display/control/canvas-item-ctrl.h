@@ -206,7 +206,7 @@ public:
                             int device_scale);//TODO: add more style properties
 
     static std::unordered_map<Handle, HandleStyle *> handle_styles;
-    static std::unordered_map<Handle, std::shared_ptr<uint32_t[]>> handle_cache;
+    static std::unordered_map<Handle, std::unordered_map<int,std::shared_ptr<uint32_t[]>>> handle_cache;
 
 protected:
     ~CanvasItemCtrl() override = default;
@@ -215,7 +215,7 @@ protected:
     void _render(Inkscape::CanvasItemBuffer &buf) const override;
 
     void build_cache(int device_scale) const;
-    void parse_and_build_cache() const;
+    void parse_handle_styles() const;
 
     // Geometry
     Geom::Point _position;

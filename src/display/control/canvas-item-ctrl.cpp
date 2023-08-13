@@ -39,7 +39,7 @@ namespace Inkscape {
 
 //Declaration of static members
 InitLock CanvasItemCtrl::_parsed;
-std::unordered_map<Handle, std::shared_ptr<uint32_t[]>> CanvasItemCtrl::handle_cache;
+std::unordered_map<Handle, std::unordered_map<int, std::shared_ptr<uint32_t[]>>> CanvasItemCtrl::handle_cache;
 std::unordered_map<Handle, HandleStyle *> CanvasItemCtrl::handle_styles = {
     //TODO: [Must] Replace with an automated initialization
     //type, selected, hover, click
@@ -922,17 +922,8 @@ static inline uint32_t compose_xor(uint32_t bg, uint32_t fg, uint32_t a)
 void CanvasItemCtrl::_render(CanvasItemBuffer &buf) const
 {
     _parsed.init([ &, this] {
-        parse_and_build_cache();
+        parse_handle_styles();
     });
-
-    // if (handle_cache.find(_handle) != handle_cache.end()) {
-    //     _cache = handle_cache[_handle];
-    // }
-    // else {
-    //     _built.init([ &, this] {
-    //         build_cache(buf.device_scale);
-    //     });
-    // }
 
     _built.init([ &, this] {
         build_cache(buf.device_scale);
@@ -1050,13 +1041,35 @@ std::unordered_map<std::string, CanvasItemCtrlType> type_map = {
     {".inkscape-node-symmetrical", CANVAS_ITEM_CTRL_TYPE_NODE_SYMETRICAL},
     {".inkscape-anchor", CANVAS_ITEM_CTRL_TYPE_ANCHOR},
     {".inkscape-rotate", CANVAS_ITEM_CTRL_TYPE_ROTATE},
+    {".inkscape-margin", CANVAS_ITEM_CTRL_TYPE_MARGIN},
+    {".inkscape-center", CANVAS_ITEM_CTRL_TYPE_CENTER},
+    {".inkscape-sizer", CANVAS_ITEM_CTRL_TYPE_SIZER},
+    {".inkscape-shaper", CANVAS_ITEM_CTRL_TYPE_SHAPER},
+    {".inkscape-lpe", CANVAS_ITEM_CTRL_TYPE_LPE},
+    {".inkscape-point", CANVAS_ITEM_CTRL_TYPE_POINT},
+    {".inkscape-adj-handle", CANVAS_ITEM_CTRL_TYPE_ADJ_HANDLE},
+    {".inkscape-adj-skew", CANVAS_ITEM_CTRL_TYPE_ADJ_SKEW},
+    {".inkscape-adj-rotate", CANVAS_ITEM_CTRL_TYPE_ADJ_ROTATE},
+    {".inkscape-adj-center", CANVAS_ITEM_CTRL_TYPE_ADJ_CENTER},
+    {".inkscape-adj-salign", CANVAS_ITEM_CTRL_TYPE_ADJ_SALIGN},
+    {".inkscape-adj-calign", CANVAS_ITEM_CTRL_TYPE_ADJ_CALIGN},
+    {".inkscape-adj-malign", CANVAS_ITEM_CTRL_TYPE_ADJ_MALIGN},
     {"*", CANVAS_ITEM_CTRL_TYPE_DEFAULT}
 };
 
 std::unordered_map<std::string, CanvasItemCtrlShape> shape_map = {
     {"\'square\'", CANVAS_ITEM_CTRL_SHAPE_SQUARE},
     {"\'diamond\'", CANVAS_ITEM_CTRL_SHAPE_DIAMOND},
-    {"\'circle\'", CANVAS_ITEM_CTRL_SHAPE_CIRCLE}
+    {"\'circle\'", CANVAS_ITEM_CTRL_SHAPE_CIRCLE},
+    {"\'cross\'", CANVAS_ITEM_CTRL_SHAPE_CROSS},
+    {"\'plus\'", CANVAS_ITEM_CTRL_SHAPE_PLUS},
+    {"\'pivot\'", CANVAS_ITEM_CTRL_SHAPE_PIVOT},
+    {"\'arrow\'", CANVAS_ITEM_CTRL_SHAPE_DARROW},
+    {"\'skew-arrow\'", CANVAS_ITEM_CTRL_SHAPE_SARROW},
+    {"\'curved-arrow\'", CANVAS_ITEM_CTRL_SHAPE_CARROW},
+    {"\'side-align\'", CANVAS_ITEM_CTRL_SHAPE_SALIGN},
+    {"\'corner-align\'", CANVAS_ITEM_CTRL_SHAPE_CALIGN},
+    {"\'middle-align\'", CANVAS_ITEM_CTRL_SHAPE_MALIGN}
 };
 
 std::vector<std::pair<HandleStyle *, int>> selected_handles;
@@ -1085,8 +1098,6 @@ void configure_selector(CRSelector *a_selector, Handle *&selector, int &specific
         else if (!strcmp(*tokens, "selected")) {
             selector->setSelected(1);
         }
-        //TODO: both these would be more specific than selected so handle that later
-        //Need to verify whether the "+1" works
         else if (!strcmp(*tokens, "hover")) {
             specificity++;
             selector->setHover(1);
@@ -1135,10 +1146,8 @@ void set_properties(CRDocHandler *a_handler, CRString *a_name, CRTerm *a_value, 
 {
     //Refactor to use enum and a common function interface.
 
-    //const is the issue just remove it and you can do direct comparisons
     const std::string value = (char *)cr_term_to_string(a_value);
     const std::string property = cr_string_peek_raw_str(a_name);
-    //TODO: write the parser for rest of the properties
     if (property == "shape") {
         if (shape_map.find(value) != shape_map.end()) {
             for (auto& [handle, specificity] : selected_handles) {
@@ -1234,7 +1243,7 @@ void clear_selectors(CRDocHandler *a_handler, CRSelector *a_selector)
     selected_handles.clear();
 }
 
-void CanvasItemCtrl::parse_and_build_cache() const
+void CanvasItemCtrl::parse_handle_styles() const
 {
     CRDocHandler *sac = cr_doc_handler_new();
     sac->start_selector = set_selectors_base;
@@ -1254,22 +1263,6 @@ void CanvasItemCtrl::parse_and_build_cache() const
         sac->start_selector = set_selectors_user;
         cr_parser_set_sac_handler(user_parser, sac);
         cr_parser_parse(user_parser);
-    }
-
-    // we would have the styles defined now in handle_styles, now we would just create the handles for the same
-    for (auto& [handle, handle_style] : handle_styles) {
-        int height = 35;
-        int width = 35;
-        int size = height * width;
-        //TODO: (C++20) Replace with make_shared
-        handle_cache[handle] = std::make_unique<uint32_t[]>(size);
-
-        auto fill = handle_style->getFill();
-        auto stroke = handle_style->getStroke();
-        auto shape = handle_style->shape();
-        auto stroke_width = handle_style->stroke_width();
-        Glib::RefPtr<Gdk::Pixbuf> pixbuf;
-        build_shape(handle_cache[handle], shape, fill, stroke, stroke_width, height, width, 0, pixbuf, 1);
     }
 }
 
@@ -1292,17 +1285,23 @@ void CanvasItemCtrl::build_cache(int device_scale) const
     int size = width * height;
 
     _cache = std::make_unique<uint32_t[]>(size);
-    if (handle_styles.find(_handle) != handle_styles.end()) {
+    if (handle_cache.find(_handle) != handle_cache.end() && 
+        handle_cache[_handle].find(size) != handle_cache[_handle].end()) {
+        _cache = handle_cache[_handle][size];
+    }
+    else if (handle_styles.find(_handle) != handle_styles.end()) {
         auto handle = handle_styles[_handle];
         auto shape = handle->shape();
         auto fill = handle->getFill();
         auto stroke = handle->getStroke();
         auto stroke_width = handle->stroke_width();
         build_shape(_cache, shape, fill, stroke, stroke_width, height, width, _angle, _pixbuf, device_scale);
+        handle_cache[_handle][size] = _cache;
     }
     else {
-        std::cout << _handle._type << std::endl;
+        // std::cout << _handle._type << std::endl;
         build_shape(_cache, _shape, _fill, _stroke, 1, height, width, _angle, _pixbuf, device_scale);
+        handle_cache[_handle][size] = _cache;
     }
 }
 
