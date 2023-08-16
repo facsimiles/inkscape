@@ -85,6 +85,7 @@ set(live_effects_SRC
 	parameter/powerstrokepointarray.cpp
 	parameter/random.cpp
 	parameter/scalararray.cpp
+	parameter/scalar2.cpp
 	parameter/nodesatellitesarray.cpp
 	parameter/text.cpp
 	parameter/fontbutton.cpp
@@ -185,6 +186,7 @@ set(live_effects_SRC
 	parameter/powerstrokepointarray.h
 	parameter/random.h
 	parameter/scalararray.h
+	parameter/scalar2.h
 	parameter/nodesatellitesarray.h
 	parameter/text.h
 	parameter/fontbutton.h

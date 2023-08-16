@@ -22,6 +22,7 @@
 #include "registry.h"
 
 #include "ui/widget/scalar.h"
+#include "ui/widget/scalar2.h"
 #include "ui/widget/scalar-unit.h"
 #include "ui/widget/point.h"
 #include "ui/widget/text.h"
@@ -238,6 +239,20 @@ class RegisteredScalar : public RegisteredWidget<Scalar> {
 public:
     ~RegisteredScalar() override;
     RegisteredScalar (const Glib::ustring& label,
+            const Glib::ustring& tip,
+            const Glib::ustring& key,
+            Registry& wr,
+            Inkscape::XML::Node* repr_in = nullptr,
+            SPDocument *doc_in = nullptr );
+protected:
+    sigc::connection _value_changed_connection;
+    void on_value_changed();
+};
+
+class RegisteredScalar2 : public RegisteredWidget<Ink2::Scalar> {
+public:
+    ~RegisteredScalar2() override;
+    RegisteredScalar2 (const Glib::ustring& label,
             const Glib::ustring& tip,
             const Glib::ustring& key,
             Registry& wr,

@@ -13,6 +13,12 @@
 #ifndef UI_UTIL_SEEN
 #define UI_UTIL_SEEN
 
+//#ifdef _WIN32
+//#define cursor(x, y) SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), (COORD){x, y})
+//#else
+//#define cursor(x,y) printf("\033[%d;%dH", x, y)
+//#endif
+
 #include <cstddef> // size_t
 #include <exception>
 #include <type_traits>

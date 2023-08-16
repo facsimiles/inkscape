@@ -297,6 +297,54 @@ RegisteredScalar::on_value_changed()
 
 
 /*#########################################
+ * Registered SpinScalar2
+ */
+
+RegisteredScalar2::~RegisteredScalar2()
+{
+    _value_changed_connection.disconnect();
+}
+
+RegisteredScalar2::RegisteredScalar2 ( const Glib::ustring& label, const Glib::ustring& tip,
+                         const Glib::ustring& key, Registry& wr, Inkscape::XML::Node* repr_in,
+                         SPDocument * doc_in )
+    : RegisteredWidget<Ink2::Scalar>(label, tip)
+{
+    init_parent(key, wr, repr_in, doc_in);
+
+    setProgrammatically = false;
+    setRange (-1e6, 1e6);
+    setDigits (2);
+    setIncrements(0.1, 1.0);
+    _value_changed_connection = signal_value_changed().connect (sigc::mem_fun (*this, &RegisteredScalar2::on_value_changed));
+}
+
+void
+RegisteredScalar2::on_value_changed()
+{
+    if (setProgrammatically) {
+        setProgrammatically = false;
+        return;
+    }
+    if (_wr->isUpdating()) {
+        return;
+    }
+    _wr->setUpdating (true);
+
+    Inkscape::SVGOStringStream os;
+    //Force exact 0 if decimals over to 6
+    double val = getValue() < 1e-6 && getValue() > -1e-6?0.0:getValue();
+    os << val;
+    //TODO: Test is ok remove this sensitives
+    //also removed in registered text and in registered random
+    //set_sensitive(false);
+    write_to_xml(os.str().c_str());
+    //set_sensitive(true);
+    _wr->setUpdating (false);
+}
+
+
+/*#########################################
  * Registered TEXT
  */
 

@@ -231,6 +231,7 @@ set(ui_SRC
 	widget/ink-spinscale.cpp
 	widget/label-tool-item.cpp
 	widget/labelled.cpp
+	widget/labelled2.cpp
 	widget/layer-selector.cpp
 	widget/licensor.cpp
 	widget/marker-combo-box.cpp
@@ -255,12 +256,14 @@ set(ui_SRC
 	widget/rotateable.cpp
 	widget/scalar-unit.cpp
 	widget/scalar.cpp
+	widget/scalar2.cpp
 	widget/scroll-utils.cpp
 	widget/selected-style.cpp
 	widget/shapeicon.cpp
 	widget/spin-button-tool-item.cpp
 	widget/spin-scale.cpp
 	widget/spinbutton.cpp
+	widget/spinbutton2.cpp
 	widget/stroke-style.cpp
 	widget/style-subject.cpp
 	widget/style-swatch.cpp
@@ -522,6 +525,7 @@ set(ui_SRC
 	widget/ink-spinscale.h
 	widget/label-tool-item.h
 	widget/labelled.h
+	widget/labelled2.h
 	widget/layer-selector.h
 	widget/licensor.h
 	widget/marker-combo-box.h
@@ -545,6 +549,7 @@ set(ui_SRC
 	widget/rotateable.h
 	widget/scalar-unit.h
 	widget/scalar.h
+	widget/scalar2.h
 	widget/scroll-utils.h
 	widget/scrollprotected.h
 	widget/selected-style.h
@@ -552,6 +557,7 @@ set(ui_SRC
 	widget/spin-button-tool-item.h
 	widget/spin-scale.h
 	widget/spinbutton.h
+	widget/spinbutton2.h
 	widget/stroke-style.h
 	widget/style-subject.h
 	widget/style-swatch.h
