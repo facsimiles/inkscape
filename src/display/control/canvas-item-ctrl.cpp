@@ -40,76 +40,7 @@ namespace Inkscape {
 //Declaration of static members
 InitLock CanvasItemCtrl::_parsed;
 std::unordered_map<Handle, std::unordered_map<int, std::shared_ptr<uint32_t[]>>> CanvasItemCtrl::handle_cache;
-std::unordered_map<Handle, HandleStyle *> CanvasItemCtrl::handle_styles = {
-    //TODO: [Must] Replace with an automated initialization
-    //type, selected, hover, click
-    {Handle(CANVAS_ITEM_CTRL_TYPE_ANCHOR, 0, 0, 0), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_ANCHOR, 0, 1, 0), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_ROTATE, 0, 0, 0), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_ROTATE, 0, 0, 1), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_ROTATE, 0, 1, 0), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_ROTATE, 0, 1, 1), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_ROTATE, 1, 0, 0), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_ROTATE, 1, 0, 1), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_ROTATE, 1, 1, 0), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_ROTATE, 1, 1, 1), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_SYMETRICAL, 0, 0, 0), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_SYMETRICAL, 0, 0, 1), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_SYMETRICAL, 0, 1, 0), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_SYMETRICAL, 0, 1, 1), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_SYMETRICAL, 1, 0, 0), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_SYMETRICAL, 1, 0, 1), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_SYMETRICAL, 1, 1, 0), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_SYMETRICAL, 1, 1, 1), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_CUSP, 0, 0, 0), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_CUSP, 0, 0, 1), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_CUSP, 0, 1, 0), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_CUSP, 0, 1, 1), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_CUSP, 1, 0, 0), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_CUSP, 1, 0, 1), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_CUSP, 1, 1, 0), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_CUSP, 1, 1, 1), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_AUTO, 0, 0, 0), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_AUTO, 0, 0, 1), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_AUTO, 0, 1, 0), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_AUTO, 0, 1, 1), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_AUTO, 1, 0, 0), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_AUTO, 1, 0, 1), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_AUTO, 1, 1, 0), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_AUTO, 1, 1, 1), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_SHAPER, 0, 0, 0), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_SHAPER, 0, 0, 1), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_SHAPER, 0, 1, 0), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_SHAPER, 0, 1, 1), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_SHAPER, 1, 0, 0), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_SHAPER, 1, 0, 1), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_SHAPER, 1, 1, 0), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_SHAPER, 1, 1, 1), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_SIZER, 0, 0, 0), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_SIZER, 0, 0, 1), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_SIZER, 0, 1, 0), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_SIZER, 0, 1, 1), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_SIZER, 1, 0, 0), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_SIZER, 1, 0, 1), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_SIZER, 1, 1, 0), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_SIZER, 1, 1, 1), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_MARGIN, 0, 0, 0), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_MARGIN, 0, 0, 1), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_MARGIN, 0, 1, 0), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_MARGIN, 0, 1, 1), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_MARGIN, 1, 0, 0), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_MARGIN, 1, 0, 1), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_MARGIN, 1, 1, 0), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_MARGIN, 1, 1, 1), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_SMOOTH, 0, 0, 0), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_SMOOTH, 0, 0, 1), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_SMOOTH, 0, 1, 0), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_SMOOTH, 0, 1, 1), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_SMOOTH, 1, 0, 0), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_SMOOTH, 1, 0, 1), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_SMOOTH, 1, 1, 0), new HandleStyle()},
-    {Handle(CANVAS_ITEM_CTRL_TYPE_NODE_SMOOTH, 1, 1, 1), new HandleStyle()}
-};
+std::unordered_map<Handle, HandleStyle *> CanvasItemCtrl::handle_styles;
 
 /**
  * Create a null control node.
@@ -1245,6 +1176,14 @@ void clear_selectors(CRDocHandler *a_handler, CRSelector *a_selector)
 
 void CanvasItemCtrl::parse_handle_styles() const
 {
+    for (int type_i = CANVAS_ITEM_CTRL_TYPE_DEFAULT; type_i <= CANVAS_ITEM_CTRL_TYPE_NODE_SYMETRICAL; type_i++) {
+        auto type = static_cast<CanvasItemCtrlType>(type_i);
+        for (auto state = 0; state <= 8; state++) {
+            delete handle_styles[Handle(type,state)];
+            handle_styles[Handle(type,state)] = new HandleStyle();
+        }
+    }
+
     CRDocHandler *sac = cr_doc_handler_new();
     sac->start_selector = set_selectors_base;
     sac->property = set_properties;
@@ -1285,8 +1224,8 @@ void CanvasItemCtrl::build_cache(int device_scale) const
     int size = width * height;
 
     _cache = std::make_unique<uint32_t[]>(size);
-    if (handle_cache.find(_handle) != handle_cache.end() && 
-        handle_cache[_handle].find(size) != handle_cache[_handle].end()) {
+    if (handle_cache.find(_handle) != handle_cache.end() &&
+            handle_cache[_handle].find(size) != handle_cache[_handle].end()) {
         _cache = handle_cache[_handle][size];
     }
     else if (handle_styles.find(_handle) != handle_styles.end()) {
@@ -1310,14 +1249,15 @@ void CanvasItemCtrl::build_shape(std::shared_ptr<uint32_t[]> cache,
                                  int stroke_width, int height, int width, double angle,
                                  Glib::RefPtr<Gdk::Pixbuf> pixbuf, int device_scale)
 {
+    int scaled_width = device_scale * stroke_width;
     auto p = cache.get();
     switch (shape) {
     case CANVAS_ITEM_CTRL_SHAPE_SQUARE:
         // Actually any rectanglular shape.
         for (int i = 0; i < width; ++i) {
             for (int j = 0; j < width; ++j) {
-                if (i + 1 > device_scale * stroke_width && device_scale * stroke_width < width  - i &&
-                        j + 1 > device_scale * stroke_width && device_scale * stroke_width < height - j) {
+                if (i + 1 > scaled_width && scaled_width < width  - i &&
+                        j + 1 > scaled_width && scaled_width < height - j) {
                     *p++ = fill;
                 }
                 else {
@@ -1333,10 +1273,10 @@ void CanvasItemCtrl::build_shape(std::shared_ptr<uint32_t[]> cache,
 
         for (int i = 0; i < width; ++i) {
             for (int j = 0; j < height; ++j) {
-                if (i  +           j  > m - 1 + device_scale * stroke_width &&
-                        (width - 1 - i) +           j  > m - 1 + device_scale * stroke_width &&
-                        (width - 1 - i) + (height - 1 - j) > m - 1 + device_scale * stroke_width &&
-                        i    + (height - 1 - j) > m - 1 + device_scale * stroke_width) {
+                if (i  +           j  > m - 1 + scaled_width &&
+                        (width - 1 - i) +           j  > m - 1 + scaled_width &&
+                        (width - 1 - i) + (height - 1 - j) > m - 1 + scaled_width &&
+                        i    + (height - 1 - j) > m - 1 + scaled_width) {
                     *p++ = fill;
                 }
                 else if (i  +           j  > m - 2 &&
@@ -1357,7 +1297,7 @@ void CanvasItemCtrl::build_shape(std::shared_ptr<uint32_t[]> cache,
         // Assume width == height.
         double rs  = width / 2.0;
         double rs2 = rs * rs;
-        double rf  = rs - device_scale * stroke_width;
+        double rf  = rs - scaled_width;
         double rf2 = rf * rf;
 
         for (int i = 0; i < width; ++i) {
@@ -1383,7 +1323,7 @@ void CanvasItemCtrl::build_shape(std::shared_ptr<uint32_t[]> cache,
 
     case CANVAS_ITEM_CTRL_SHAPE_CROSS: {
         // Actually an 'X'.
-        double sw2 = device_scale * stroke_width * sqrt(2);
+        double sw2 = scaled_width * sqrt(2);
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 if ((abs(x - y) < sw2 && abs(x + y - width) < width - sw2) ||
@@ -1402,8 +1342,8 @@ void CanvasItemCtrl::build_shape(std::shared_ptr<uint32_t[]> cache,
         // Actually an '+'.
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                if (std::abs(x - width / 2)   < device_scale * stroke_width ||
-                        std::abs(y - height / 2)  < device_scale * stroke_width) {
+                if (std::abs(x - width / 2)   < scaled_width ||
+                        std::abs(y - height / 2)  < scaled_width) {
                     *p++ = stroke;
                 }
                 else {

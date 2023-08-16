@@ -64,7 +64,6 @@ struct Handle {
     {
         _state &= ~(1);
         _state |= (selected);
-        // std::cout<<"selected set: "<<selected<<" "<<_state<<std::endl;
     }
     bool isSelected() const
     {
@@ -74,7 +73,6 @@ struct Handle {
     {
         _state &= ~(1 << 1);
         _state |= (hover << 1);
-        // std::cout<<"hover set: "<<hover<<" "<<_state<<std::endl;
     }
     bool isHover() const
     {
@@ -84,7 +82,6 @@ struct Handle {
     {
         _state &= ~(1 << 2);
         _state |= (click << 2);
-        // std::cout<<"click set: "<<clicked<<" "<<_state<<std::endl;
     }
     bool isClick() const
     {
@@ -120,7 +117,7 @@ struct Property {
         }
     }
 
-    // this is in alternate needing to call .value everytime.
+    // this is in alternate needing to call .value.
     T &operator()()
     {
         return value;
@@ -224,12 +221,9 @@ protected:
     InitLock _built;
     mutable std::shared_ptr<uint32_t[]> _cache;
     static InitLock _parsed;
-    //Handle mapped to the Cache
-    //mutable(might not need to make it mutable explicitly) static std::unordered_map<Handle,std::unique_ptr<uint32_t[]>> cache;
 
     // Properties
     Handle _handle = Handle();
-    // CanvasItemCtrlType  _type  = CANVAS_ITEM_CTRL_TYPE_DEFAULT;
     CanvasItemCtrlShape _shape = CANVAS_ITEM_CTRL_SHAPE_SQUARE;
     CanvasItemCtrlMode  _mode  = CANVAS_ITEM_CTRL_MODE_XOR;
     int _width  = 5; // Nominally width == height == size... unless we use a pixmap.
