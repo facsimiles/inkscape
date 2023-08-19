@@ -170,12 +170,7 @@ private:
     void on_action_fullname_clicked(const Glib::ustring &action_fullname);
 
     /// Implements text matching logic
-    static bool fuzzy_search(const Glib::ustring &subject, const Glib::ustring &search);
-    static bool normal_search(const Glib::ustring &subject, const Glib::ustring &search);
-    static bool fuzzy_tolerance_search(const Glib::ustring &subject, const Glib::ustring &search);
-    static int fuzzy_points(const Glib::ustring &subject, const Glib::ustring &search);
-    static int fuzzy_tolerance_points(const Glib::ustring &subject, const Glib::ustring &search);
-    static int fuzzy_points_compare(int fuzzy_points_count_1, int fuzzy_points_count_2, int text_len_1, int text_len_2);
+    static size_t search_score(Gtk::ListBoxRow *row, Glib::ustring const &search);
 
     static void test_sort();
     int on_sort(Gtk::ListBoxRow *row1, Gtk::ListBoxRow *row2);
