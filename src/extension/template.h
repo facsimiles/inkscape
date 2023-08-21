@@ -54,6 +54,7 @@ public:
     std::string get_key() const { return _key; }
     std::string get_icon() const { return _icon; }
     std::string get_name() const;
+    bool get_on_selection() const;
     std::string get_label() const;
     int get_sort_priority() const { return _priority; }
     int get_visibility() const { return _visibility; }
@@ -78,6 +79,7 @@ protected:
     std::string _icon;
     std::string _name;
     std::string _label;
+    bool _on_selection;
     int _priority;
     int _visibility;
 

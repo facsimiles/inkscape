@@ -35,6 +35,7 @@
 #include "object/sp-namedview.h"
 #include "object/sp-page.h"
 #include "object/sp-path.h"
+#include "object/sp-defs.h"
 #include "object/sp-root.h"
 #include "path-prefix.h"
 #include "preferences.h"
@@ -605,6 +606,25 @@ void Script::effect(Inkscape::Extension::Effect *module,
     g_free(old_document_filename);
 } */
 
+// pattern preview for UI list, with light gray background and border
+std::shared_ptr<SPDocument> _get_empty_document() {
+char const* buffer = R"A(<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg1"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+</svg>
+)A";
+    return std::shared_ptr<SPDocument>(SPDocument::createNewDocFromMem(buffer, strlen(buffer), false));
+}
+
+
 /**
  * Internally, any modification of an existing document, used by effect and resize_page extensions.
  */
@@ -620,12 +640,29 @@ void Script::_change_extension(Inkscape::Extension::Extension *module, SPDocumen
     auto tempfile_out = Inkscape::IO::TempFilename("ink_ext_XXXXXX.svg");
     auto tempfile_in = Inkscape::IO::TempFilename("ink_ext_XXXXXX.svg");
 
+    auto document = _get_empty_document();
+    if (module->get_on_selection()) {
+        Inkscape::XML::Document *xmldoc = document->getReprDoc();
+        Inkscape::XML::Node *root = xmldoc->root();
+        Inkscape::XML::Node *copy = doc->getDefs()->getRepr()->duplicate(xmldoc);
+        //remove new defa and named view autofenerarted
+        root->removeChild(root->nthChild(0));
+        root->removeChild(root->nthChild(0));
+        root->appendChild(copy);
+        for (auto id : params) {
+            if (id.find("--id=") != std::string::npos) {
+                SPObject *obj = doc->getObjectById(id.replace(0,5,""));
+                Inkscape::XML::Node *copy = obj->getRepr()->duplicate(xmldoc);
+                root->appendChild(copy);
+            }
+        }
+    }
     // Save current document to a temporary file we can send to the extension
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     prefs->setBool("/options/svgoutput/disable_optimizations", true);
     Inkscape::Extension::save(
               Inkscape::Extension::db.get(SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE),
-              doc, tempfile_in.get_filename().c_str(), false, false,
+              module->get_on_selection()? document.get() : doc, tempfile_in.get_filename().c_str(), false, false,
               Inkscape::Extension::FILE_SAVE_METHOD_TEMPORARY);
     prefs->setBool("/options/svgoutput/disable_optimizations", false);
 
@@ -647,7 +684,24 @@ void Script::_change_extension(Inkscape::Extension::Extension *module, SPDocumen
     if (new_xmldoc) {
         //uncomment if issues on ref extensions links (with previous function)
         //sp_change_hrefs(new_xmldoc, tempfile_out.get_filename().c_str(), doc->getDocumentFilename());
-        doc->rebase(new_xmldoc);
+        if (module->get_on_selection()) {
+            Inkscape::XML::Node *nextnode = new_xmldoc->root()->firstChild();
+            while (nextnode) {
+                if (!strcmp(nextnode->name(),"sodipodi:namedview")) {
+                    nextnode = nextnode->next();
+                    continue;
+                }
+                std::cout << nextnode->name() << std::endl;
+                SPObject *obj = doc->getObjectById(nextnode->attribute("id"));
+                if (obj) {
+                    obj->getRepr()->mergeFrom(nextnode,"id");
+                }
+                nextnode = nextnode->next();
+            }
+        } else {
+            doc->rebase(new_xmldoc);
+        }
+        
     } else {
         Inkscape::UI::gui_warning(_("The output from the extension could not be parsed."), parent_window);
     }

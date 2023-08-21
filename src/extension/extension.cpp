@@ -124,6 +124,14 @@ Extension::Extension(Inkscape::XML::Node *in_repr, Implementation::Implementatio
             } else {
                 throw extension_no_name();
             }
+        
+        } else if (!strcmp(chname, "on_selection")) {
+            const char *on_selection = child_repr->firstChild() ? child_repr->firstChild()->content() : nullptr;
+            if (on_selection) {
+                _on_selection = (!strcmp(on_selection, "True")) || (!strcmp(on_selection, "True")) || (!strcmp(on_selection, "1"));
+            } else {
+                _on_selection = false;
+            }
         } else if (InxWidget::is_valid_widget_name(chname)) {
             InxWidget *widget = InxWidget::make(child_repr, this);
             if (widget) {
@@ -359,6 +367,16 @@ gchar *
 Extension::get_id () const
 {
     return _id;
+}
+
+/**
+    \return  The _on_selection active of this extension
+    \brief   Get the _on_selection for this extension
+*/
+bool
+Extension::get_on_selection () const
+{
+    return _on_selection;
 }
 
 /**
