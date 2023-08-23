@@ -18,6 +18,7 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include <mutex>
 #include <memory>
 #include <2geom/point.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
@@ -204,6 +205,9 @@ public:
                             int height, int width, double angle, Glib::RefPtr<Gdk::Pixbuf> pixbuf,
                             int device_scale);//TODO: add more style properties
 
+    //Handle style and its caching, declaration of static members
+    static InitLock _parsed;
+    static std::mutex cache_mutex;
     static std::unordered_map<Handle, HandleStyle *> handle_styles;
     static std::unordered_map<Handle, boost::unordered_map<std::pair<int,double>,std::shared_ptr<uint32_t[]>>> handle_cache;
 
@@ -222,7 +226,6 @@ protected:
     // Display
     InitLock _built;
     mutable std::shared_ptr<uint32_t[]> _cache;
-    static InitLock _parsed;
 
     // Properties
     Handle _handle = Handle();

@@ -40,6 +40,7 @@ namespace Inkscape {
 
 //Declaration of static members
 InitLock CanvasItemCtrl::_parsed;
+std::mutex CanvasItemCtrl::cache_mutex;
 std::unordered_map<Handle, HandleStyle *> CanvasItemCtrl::handle_styles;
 std::unordered_map<Handle, boost::unordered_map<std::pair<int,double>, std::shared_ptr<uint32_t[]>>> CanvasItemCtrl::handle_cache;
 
@@ -928,7 +929,7 @@ void CanvasItemCtrl::_render(CanvasItemBuffer &buf) const
                 float base_af = base_a/255.0f;
                 float result_af = handle_af + base_af * (1-handle_af);
                 if(result_af == 0) {
-                    row_ptr[i] = 0;
+                    row_ptr[j] = 0;
                     continue;
                 }
                 uint32_t result_r = (handle_r * handle_af + base_r* base_af * (1-handle_af)) / result_af;
@@ -1234,12 +1235,24 @@ void CanvasItemCtrl::build_cache(int device_scale) const
     int height = _height * device_scale;
     int size = width * height;
 
+    //TODO: 
+    //- (C++20) make_shared 
+    //- handle using pixbuf isn't possible using this method
     _cache = std::make_unique<uint32_t[]>(size);
     std::pair<int,double> size_and_angle(size,_angle);
     if (handle_cache.find(_handle) != handle_cache.end() &&
         handle_cache[_handle].find(size_and_angle) != handle_cache[_handle].end()) {
         _cache = handle_cache[_handle][size_and_angle];
-    } else if (handle_styles.find(_handle) != handle_styles.end()) {
+        return;
+    }
+    std::lock_guard<std::mutex> lock(cache_mutex);
+    //if while it was waiting its cache was created and now it doesn't need to build it itself
+    if (handle_cache.find(_handle) != handle_cache.end() &&
+        handle_cache[_handle].find(size_and_angle) != handle_cache[_handle].end()) {
+        _cache = handle_cache[_handle][size_and_angle];
+        return;
+    }
+    if (handle_styles.find(_handle) != handle_styles.end()) {
         auto handle = handle_styles[_handle];
         auto shape = handle->shape();
         auto fill = handle->getFill();
@@ -1379,7 +1392,6 @@ void CanvasItemCtrl::build_shape(std::shared_ptr<uint32_t[]> cache,
         cr->translate(-size / 2.0, -size / 2.0);
 
         // Construct path
-        bool triangles = (shape == CANVAS_ITEM_CTRL_SHAPE_TRIANGLE_ANGLED || shape == CANVAS_ITEM_CTRL_SHAPE_TRIANGLE);
         switch (shape) {
         case CANVAS_ITEM_CTRL_SHAPE_DARROW:
         case CANVAS_ITEM_CTRL_SHAPE_SARROW:
