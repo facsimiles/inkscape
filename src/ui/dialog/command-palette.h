@@ -17,6 +17,7 @@
 #include <utility>
 #include <vector>
 #include <sigc++/connection.h>
+#include <glibmm/quark.h>
 #include <glibmm/refptr.h>
 #include <glibmm/ustring.h>
 #include <gtk/gtk.h> // GtkEventControllerKey
@@ -228,6 +229,11 @@ private:
 
     /// Stores the most recent ask_action_name for when Entry::activate fires & we are in INPUT mode
     std::optional<ActionPtrName> _ask_action_ptr_name;
+
+    static Glib::Quark& quark_score() {
+        static Glib::Quark q{"Score"};
+        return q;
+    }
 };
 
 } // namespace Inkscape::UI::Dialog

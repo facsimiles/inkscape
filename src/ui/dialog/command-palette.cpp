@@ -364,7 +364,7 @@ void CommandPalette::on_search()
         auto list_box_child = dynamic_cast<Gtk::ListBoxRow*>(child); 
         auto [CPName, CPDescription] = get_name_desc(list_box_child);
         auto score = search_score(list_box_child, _CPFilter->get_text());
-        child->set_data(Glib::Quark("Score"), (void*)score);
+        child->set_data(quark_score(), (void*)score);
         // if (dump++ < 10) {
         //     std::cout << " Score: " << std::setw(10) << score << ": " << CPName->get_text() << std::endl;
         // }
@@ -794,8 +794,8 @@ size_t CommandPalette::search_score(Gtk::ListBoxRow *row, Glib::ustring const &s
 
 int CommandPalette::on_sort(Gtk::ListBoxRow *row1, Gtk::ListBoxRow *row2)
 {
-    auto score1 = (uintptr_t)row1->get_data(Glib::Quark("Score"));
-    auto score2 = (uintptr_t)row2->get_data(Glib::Quark("Score"));
+    auto score1 = (uintptr_t)row1->get_data(quark_score());
+    auto score2 = (uintptr_t)row2->get_data(quark_score());
     if (score1 < score2) {
         return -1;
     } else if (score1 > score2) {
