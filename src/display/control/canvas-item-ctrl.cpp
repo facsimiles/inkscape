@@ -4,8 +4,9 @@
  */
 
 /*
- * Author:
+ * Authors:
  *   Tavmjong Bah
+ *   Sanidhya Singh
  *
  * Copyright (C) 2020 Tavmjong Bah
  *
@@ -15,7 +16,7 @@
  */
 
 #include <2geom/transforms.h>
-// #include "3rdparty/libcroco/src/libcroco.h"
+
 #include "3rdparty/libcroco/src/cr-selector.h"
 #include "3rdparty/libcroco/src/cr-doc-handler.h"
 #include "3rdparty/libcroco/src/cr-string.h"
@@ -31,7 +32,7 @@
 #include "io/sys.h"
 
 #include "preferences.h" // Default size. 
-#include "display/cairo-utils.h" // argb32_from_rgba()
+#include "display/cairo-utils.h" // 32bit color handling.
 
 #include "ui/widget/canvas.h"
 
@@ -39,8 +40,8 @@ namespace Inkscape {
 
 //Declaration of static members
 InitLock CanvasItemCtrl::_parsed;
-std::unordered_map<Handle, std::unordered_map<int, std::shared_ptr<uint32_t[]>>> CanvasItemCtrl::handle_cache;
 std::unordered_map<Handle, HandleStyle *> CanvasItemCtrl::handle_styles;
+std::unordered_map<Handle, boost::unordered_map<std::pair<int,double>, std::shared_ptr<uint32_t[]>>> CanvasItemCtrl::handle_cache;
 
 /**
  * Create a null control node.
@@ -63,7 +64,7 @@ CanvasItemCtrl::CanvasItemCtrl(CanvasItemGroup *group, CanvasItemCtrlType type)
     _pickable = true; // Everybody gets events from this class!
 
     // Use _type to set default values:
-    set_shape_default();
+    // set_shape_default();
     set_size_default();
 }
 
@@ -132,8 +133,7 @@ bool CanvasItemCtrl::contains(Geom::Point const &p, double tolerance)
     }
     if (tolerance == 0) {
         return _bounds->interiorContains(p);
-    }
-    else {
+    } else {
         return closest_distance_to(p) <= tolerance;
     }
 }
@@ -173,61 +173,61 @@ void CanvasItemCtrl::set_shape(CanvasItemCtrlShape shape)
     });
 }
 
-void CanvasItemCtrl::set_shape_default()
-{
-    switch (_handle._type) {
-    case CANVAS_ITEM_CTRL_TYPE_ADJ_HANDLE:
-        _shape = CANVAS_ITEM_CTRL_SHAPE_DARROW;
-        break;
+// void CanvasItemCtrl::set_shape_default()
+// {
+//     switch (_handle._type) {
+//     case CANVAS_ITEM_CTRL_TYPE_ADJ_HANDLE:
+//         _shape = CANVAS_ITEM_CTRL_SHAPE_DARROW;
+//         break;
 
-    case CANVAS_ITEM_CTRL_TYPE_ADJ_SKEW:
-        _shape = CANVAS_ITEM_CTRL_SHAPE_SARROW;
-        break;
+//     case CANVAS_ITEM_CTRL_TYPE_ADJ_SKEW:
+//         _shape = CANVAS_ITEM_CTRL_SHAPE_SARROW;
+//         break;
 
-    case CANVAS_ITEM_CTRL_TYPE_ADJ_ROTATE:
-        _shape = CANVAS_ITEM_CTRL_SHAPE_CARROW;
-        break;
+//     case CANVAS_ITEM_CTRL_TYPE_ADJ_ROTATE:
+//         _shape = CANVAS_ITEM_CTRL_SHAPE_CARROW;
+//         break;
 
-    case CANVAS_ITEM_CTRL_TYPE_ADJ_CENTER:
-        _shape = CANVAS_ITEM_CTRL_SHAPE_PIVOT;
-        break;
+//     case CANVAS_ITEM_CTRL_TYPE_ADJ_CENTER:
+//         _shape = CANVAS_ITEM_CTRL_SHAPE_PIVOT;
+//         break;
 
-    case CANVAS_ITEM_CTRL_TYPE_ADJ_SALIGN:
-        _shape = CANVAS_ITEM_CTRL_SHAPE_SALIGN;
-        break;
+//     case CANVAS_ITEM_CTRL_TYPE_ADJ_SALIGN:
+//         _shape = CANVAS_ITEM_CTRL_SHAPE_SALIGN;
+//         break;
 
-    case CANVAS_ITEM_CTRL_TYPE_ADJ_CALIGN:
-        _shape = CANVAS_ITEM_CTRL_SHAPE_CALIGN;
-        break;
+//     case CANVAS_ITEM_CTRL_TYPE_ADJ_CALIGN:
+//         _shape = CANVAS_ITEM_CTRL_SHAPE_CALIGN;
+//         break;
 
-    case CANVAS_ITEM_CTRL_TYPE_ADJ_MALIGN:
-        _shape = CANVAS_ITEM_CTRL_SHAPE_MALIGN;
-        break;
+//     case CANVAS_ITEM_CTRL_TYPE_ADJ_MALIGN:
+//         _shape = CANVAS_ITEM_CTRL_SHAPE_MALIGN;
+//         break;
 
-    case CANVAS_ITEM_CTRL_TYPE_NODE_AUTO:
-    case CANVAS_ITEM_CTRL_TYPE_ROTATE:
-    case CANVAS_ITEM_CTRL_TYPE_MARGIN:
-        _shape = CANVAS_ITEM_CTRL_SHAPE_CIRCLE;
-        break;
+//     case CANVAS_ITEM_CTRL_TYPE_NODE_AUTO:
+//     case CANVAS_ITEM_CTRL_TYPE_ROTATE:
+//     case CANVAS_ITEM_CTRL_TYPE_MARGIN:
+//         _shape = CANVAS_ITEM_CTRL_SHAPE_CIRCLE;
+//         break;
 
-    case CANVAS_ITEM_CTRL_TYPE_CENTER:
-        _shape = CANVAS_ITEM_CTRL_SHAPE_PLUS;
-        break;
+//     case CANVAS_ITEM_CTRL_TYPE_CENTER:
+//         _shape = CANVAS_ITEM_CTRL_SHAPE_PLUS;
+//         break;
 
-    case CANVAS_ITEM_CTRL_TYPE_SHAPER:
-    case CANVAS_ITEM_CTRL_TYPE_LPE:
-    case CANVAS_ITEM_CTRL_TYPE_NODE_CUSP:
-        _shape = CANVAS_ITEM_CTRL_SHAPE_DIAMOND;
-        break;
+//     case CANVAS_ITEM_CTRL_TYPE_SHAPER:
+//     case CANVAS_ITEM_CTRL_TYPE_LPE:
+//     case CANVAS_ITEM_CTRL_TYPE_NODE_CUSP:
+//         _shape = CANVAS_ITEM_CTRL_SHAPE_DIAMOND;
+//         break;
 
-    case CANVAS_ITEM_CTRL_TYPE_POINT:
-        _shape = CANVAS_ITEM_CTRL_SHAPE_CROSS;
-        break;
+//     case CANVAS_ITEM_CTRL_TYPE_POINT:
+//         _shape = CANVAS_ITEM_CTRL_SHAPE_CROSS;
+//         break;
 
-    default:
-        _shape = CANVAS_ITEM_CTRL_SHAPE_SQUARE;
-    }
-}
+//     default:
+//         _shape = CANVAS_ITEM_CTRL_SHAPE_SQUARE;
+//     }
+// }
 
 void CanvasItemCtrl::set_mode(CanvasItemCtrlMode mode)
 {
@@ -358,13 +358,14 @@ void CanvasItemCtrl::set_type(CanvasItemCtrlType type)
         if (_handle._type == type) return;
         _handle._type = type;
         // Use _type to set default values.
-        set_shape_default();
+        // set_shape_default();
         set_size_default();
         _built.reset();
         request_update(); // Possible geometry change
     });
 }
 
+// set "selected", "click", "hover" states for the handle
 void CanvasItemCtrl::set_selected(bool selected)
 {
     _handle.setSelected(selected);
@@ -383,6 +384,8 @@ void CanvasItemCtrl::set_hover(bool hover)
     _built.reset();
     request_update();
 }
+
+// reset the state to normal or normal selected
 void CanvasItemCtrl::set_normal(bool selected)
 {
     _handle.setSelected(selected);
@@ -738,7 +741,15 @@ void CanvasItemCtrl::_update(bool)
     int dx = 0;
     int dy = 0;
 
-    switch (_shape) {
+
+    CanvasItemCtrlShape shape;
+    if(handle_styles.find(_handle) != handle_styles.end()) {
+        shape = handle_styles[_handle]->shape();
+    } else {
+        shape = _shape;
+    }
+
+    switch (shape) {
     case CANVAS_ITEM_CTRL_SHAPE_DARROW:
     case CANVAS_ITEM_CTRL_SHAPE_SARROW:
     case CANVAS_ITEM_CTRL_SHAPE_CARROW:
@@ -750,7 +761,7 @@ void CanvasItemCtrl::_update(bool)
         dx = -(half + 2) * cos(angle); // Add a bit to prevent tip from overlapping due to rounding errors.
         dy = -(half + 2) * sin(angle);
 
-        switch (_shape) {
+        switch (shape) {
         case CANVAS_ITEM_CTRL_SHAPE_CARROW:
             angle += 5 * M_PI_4;
             break;
@@ -860,12 +871,11 @@ void CanvasItemCtrl::_render(CanvasItemBuffer &buf) const
         build_cache(buf.device_scale);
     });
 
-    Geom::Point c = _bounds->min() - buf.rect.min();
-    int x = c.x(); // Must be pixel aligned.
-    int y = c.y();
+    Geom::Point point = (_bounds->min() - buf.rect.min());
+    int x = point.x(); // Must be pixel aligned.
+    int y = point.y();
 
     buf.cr->save();
-
     // This code works regardless of source type.
 
     // 1. Copy the affected part of output to a temporary surface
@@ -874,9 +884,7 @@ void CanvasItemCtrl::_render(CanvasItemBuffer &buf) const
     int width  = _width  * buf.device_scale;
     int height = _height * buf.device_scale;
     auto work = Cairo::ImageSurface::create(Cairo::FORMAT_ARGB32, width, height);
-    cairo_surface_set_device_scale(work->cobj(), buf.device_scale, buf.device_scale); // No C++ API!
-
-    // std::cout<<width<<" "<<height<<std::endl;
+    cairo_surface_set_device_scale(work->cobj(), buf.device_scale, buf.device_scale); // No C++ API!       
 
     auto cr = Cairo::Context::create(work);
     cr->translate(-_bounds->left(), -_bounds->top());
@@ -888,72 +896,93 @@ void CanvasItemCtrl::_render(CanvasItemBuffer &buf) const
 
     // 2. Composite the control on a temporary surface
     work->flush();
-    int strideb = work->get_stride();
-    unsigned char *pxb = work->get_data();
+    int stride = work->get_stride()/4; // divided by 4 to covert from bytes to 1 pixel (32 bits)
+    auto row_ptr = reinterpret_cast<uint32_t *>(work->get_data());
 
     // this code allow background become isolated from rendering so we can do things like outline overlay
-    uint32_t backcolor = get_canvas()->get_effective_background();
-    uint32_t *p = _cache.get();
+    uint32_t canvas_color = get_canvas()->get_effective_background();
+    uint32_t *handle_ptr = _cache.get();
     for (int i = 0; i < height; ++i) {
-        auto pb = reinterpret_cast<uint32_t *>(pxb + i * strideb);
         for (int j = 0; j < width; ++j) {
-            uint32_t base = *pb;
-            uint32_t cc = *p++;
-            uint32_t ac = cc & 0xff;
-            if (*pb == 0 && cc != 0) {
-                base = backcolor;
-            }
-            if (ac == 0 && cc != 0) {
-                *pb++ = argb32_from_rgba(cc | 0x000000ff);
-            }
-            else if (ac == 0) {
-                *pb++ = base;
-            }
-            else if (
-                _mode == CANVAS_ITEM_CTRL_MODE_XOR ||
-                _mode == CANVAS_ITEM_CTRL_MODE_GRAYSCALED_XOR ||
-                _mode == CANVAS_ITEM_CTRL_MODE_DESATURATED_XOR) {
-                EXTRACT_ARGB32(base, ab, rb, gb, bb)
-                // here we get canvas color and if color to draw
-                // has opacity, we override base colors
-                // flattenig canvas color
-                EXTRACT_ARGB32(backcolor, abb, rbb, gbb, bbb)
-                if (abb != ab) {
-                    rb = (ab / 255.0) * rb + (1 - (ab / 255.0)) * rbb;
-                    gb = (ab / 255.0) * gb + (1 - (ab / 255.0)) * gbb;
-                    bb = (ab / 255.0) * bb + (1 - (ab / 255.0)) * bbb;
-                    ab = 255;
+            uint32_t base = row_ptr[j];
+            uint32_t handle_px = *handle_ptr++;
+            uint32_t handle_op = handle_px & 0xff;
+            auto mode = CANVAS_ITEM_CTRL_MODE_NORMAL;//for testing purpose only.
+            if(mode != CANVAS_ITEM_CTRL_MODE_NORMAL) {
+                if (base == 0 && handle_px != 0) {
+                    base = canvas_color;
                 }
-                uint32_t ro = compose_xor(rb, (cc & 0xff000000) >> 24, ac);
-                uint32_t go = compose_xor(gb, (cc & 0x00ff0000) >> 16, ac);
-                uint32_t bo = compose_xor(bb, (cc & 0x0000ff00) >>  8, ac);
-                if (_mode == CANVAS_ITEM_CTRL_MODE_GRAYSCALED_XOR ||
-                        _mode == CANVAS_ITEM_CTRL_MODE_DESATURATED_XOR) {
-                    uint32_t gray = ro * 0.299 + go * 0.587 + bo * 0.114;
-                    if (_mode == CANVAS_ITEM_CTRL_MODE_DESATURATED_XOR) {
-                        double f = 0.85; // desaturate by 15%
-                        double p = sqrt(ro * ro * 0.299 + go * go *  0.587 + bo * bo * 0.114);
-                        ro = p + (ro - p) * f;
-                        go = p + (go - p) * f;
-                        bo = p + (bo - p) * f;
-                    }
-                    else {
-                        ro = gray;
-                        go = gray;
-                        bo = gray;
-                    }
+                if (handle_op == 0 && handle_px != 0) {
+                    row_ptr[j] = argb32_from_rgba(handle_px | 0x000000ff);
+                    continue;
+                } else if (handle_op == 0) {
+                    row_ptr[j] = base;
+                    continue;
                 }
-                ASSEMBLE_ARGB32(px, ab, ro, go, bo)
-                *pb++ = px;
             }
-            else {
-                *pb++ = argb32_from_rgba(cc | 0x000000ff);
+            switch(mode) {
+            case CANVAS_ITEM_CTRL_MODE_NORMAL: {
+                EXTRACT_ARGB32(base, base_a, base_r, base_g, base_b)
+                EXTRACT_ARGB32(argb32_from_rgba(handle_px), handle_a, handle_r, handle_g, handle_b)
+                float handle_af = handle_a/255.0f;
+                float base_af = base_a/255.0f;
+                float result_af = handle_af + base_af * (1-handle_af);
+                if(result_af == 0) {
+                    row_ptr[i] = 0;
+                    continue;
+                }
+                uint32_t result_r = (handle_r * handle_af + base_r* base_af * (1-handle_af)) / result_af;
+                uint32_t result_g = (handle_g * handle_af + base_g* base_af * (1-handle_af)) / result_af;
+                uint32_t result_b = (handle_b * handle_af + base_b* base_af * (1-handle_af)) / result_af;
+                ASSEMBLE_ARGB32(result,int(result_af*255),result_r,result_g,result_b)
+                row_ptr[j] = result;
+                break;
+            }
+            case CANVAS_ITEM_CTRL_MODE_COLOR:
+                row_ptr[j] = argb32_from_rgba(handle_px | 0x000000ff);
+                break;
+            case CANVAS_ITEM_CTRL_MODE_XOR:
+            case CANVAS_ITEM_CTRL_MODE_GRAYSCALED_XOR:
+            case CANVAS_ITEM_CTRL_MODE_DESATURATED_XOR: {
+                // if color to draw has opacity, we overide base colors flattening base colors
+                EXTRACT_ARGB32(base, base_a, base_r, base_g, base_b)
+                EXTRACT_ARGB32(canvas_color, canvas_a, canvas_r, canvas_g, canvas_b)
+                if (canvas_a != base_a) {
+                base_r = (base_a / 255.0) * base_r + (1 - (base_a / 255.0)) * canvas_r;
+                base_g = (base_a / 255.0) * base_g + (1 - (base_a / 255.0)) * canvas_g;
+                base_b = (base_a / 255.0) * base_b + (1 - (base_a / 255.0)) * canvas_b;
+                base_a = 255;
+                }
+                uint32_t result_r = compose_xor(base_r, (handle_px & 0xff000000) >> 24, handle_op);
+                uint32_t result_g = compose_xor(base_g, (handle_px & 0x00ff0000) >> 16, handle_op);
+                uint32_t result_b = compose_xor(base_b, (handle_px & 0x0000ff00) >>  8, handle_op);
+                switch(_mode) {
+                case CANVAS_ITEM_CTRL_MODE_GRAYSCALED_XOR: {
+                    uint32_t gray = result_r * 0.299 + result_g * 0.587 + result_b * 0.114;
+                    result_r = gray;
+                    result_g = gray;
+                    result_b = gray;
+                    break;
+                }
+                case CANVAS_ITEM_CTRL_MODE_DESATURATED_XOR: {
+                    double f = 0.85; // desaturate by 15%
+                    double p = sqrt(result_r * result_r * 0.299 + result_g * result_g *  0.587 + result_b * result_b * 0.114);
+                    result_r = p + (result_r - p) * f;
+                    result_g = p + (result_g - p) * f;
+                    result_b = p + (result_b - p) * f;
+                    break;
+                }
+                }
+                ASSEMBLE_ARGB32(result, base_a, result_r, result_g, result_b)
+                row_ptr[j] = result;
+                break;
+            }
             }
         }
+        // move the row pointer to the next row
+        row_ptr += stride;
     }
     work->mark_dirty();
-    // std::string name1 = "ctrl1_" + _name + "_" + std::to_string(a) + ".png";
-    // work->write_to_png(name1);
 
     // 3. Replace the affected part of output with contents of temporary surface
     buf.cr->set_source(work, x, y);
@@ -965,6 +994,7 @@ void CanvasItemCtrl::_render(CanvasItemBuffer &buf) const
     buf.cr->restore();
 }
 
+// conversion maps for ctrl types and shapes
 std::unordered_map<std::string, CanvasItemCtrlType> type_map = {
     {".inkscape-node-auto", CANVAS_ITEM_CTRL_TYPE_NODE_AUTO},
     {".inkscape-node-smooth", CANVAS_ITEM_CTRL_TYPE_NODE_SMOOTH},
@@ -987,7 +1017,6 @@ std::unordered_map<std::string, CanvasItemCtrlType> type_map = {
     {".inkscape-adj-malign", CANVAS_ITEM_CTRL_TYPE_ADJ_MALIGN},
     {"*", CANVAS_ITEM_CTRL_TYPE_DEFAULT}
 };
-
 std::unordered_map<std::string, CanvasItemCtrlShape> shape_map = {
     {"\'square\'", CANVAS_ITEM_CTRL_SHAPE_SQUARE},
     {"\'diamond\'", CANVAS_ITEM_CTRL_SHAPE_DIAMOND},
@@ -1004,7 +1033,6 @@ std::unordered_map<std::string, CanvasItemCtrlShape> shape_map = {
 };
 
 std::vector<std::pair<HandleStyle *, int>> selected_handles;
-
 void configure_selector(CRSelector *a_selector, Handle *&selector, int &specificity)
 {
     cr_simple_sel_compute_specificity(a_selector->simple_sel);
@@ -1015,8 +1043,7 @@ void configure_selector(CRSelector *a_selector, Handle *&selector, int &specific
     if (type_map.find(*tokens) != type_map.end()) {
         type = type_map[*tokens];
         tokens++;
-    }
-    else {
+    } else {
         std::cerr << "Unrecognized selector:" << selector_str << std::endl;
         selector = NULL;
         return;
@@ -1025,19 +1052,15 @@ void configure_selector(CRSelector *a_selector, Handle *&selector, int &specific
     for (; *tokens; tokens++) {
         if (*tokens == "*") {
             continue;
-        }
-        else if (!strcmp(*tokens, "selected")) {
+        } else if (!strcmp(*tokens, "selected")) {
             selector->setSelected(1);
-        }
-        else if (!strcmp(*tokens, "hover")) {
+        } else if (!strcmp(*tokens, "hover")) {
             specificity++;
             selector->setHover(1);
-        }
-        else if (!strcmp(*tokens, "click")) {
+        } else if (!strcmp(*tokens, "click")) {
             specificity++;
             selector->setClick(1);
-        }
-        else {
+        } else {
             std::cerr << "Unrecognized selector:" << selector_str << std::endl;
             selector = NULL;
             return;
@@ -1063,11 +1086,13 @@ void set_selectors(CRDocHandler *a_handler, CRSelector *a_selector, bool is_user
     }
 }
 
+// to parse user's style definition css
 void set_selectors_user(CRDocHandler *a_handler, CRSelector *a_selector)
 {
     set_selectors(a_handler, a_selector, true);
 }
 
+// to parse the default style definition css
 void set_selectors_base(CRDocHandler *a_handler, CRSelector *a_selector)
 {
     set_selectors(a_handler, a_selector, false);
@@ -1075,8 +1100,6 @@ void set_selectors_base(CRDocHandler *a_handler, CRSelector *a_selector)
 
 void set_properties(CRDocHandler *a_handler, CRString *a_name, CRTerm *a_value, gboolean a_important)
 {
-    //Refactor to use enum and a common function interface.
-
     const std::string value = (char *)cr_term_to_string(a_value);
     const std::string property = cr_string_peek_raw_str(a_name);
     if (property == "shape") {
@@ -1084,13 +1107,11 @@ void set_properties(CRDocHandler *a_handler, CRString *a_name, CRTerm *a_value, 
             for (auto& [handle, specificity] : selected_handles) {
                 handle->shape.setProperty(shape_map[value], specificity + 100000 * a_important);
             }
-        }
-        else {
+        } else {
             std::cerr << "Unrecognized value for " << property << ": " << value << std::endl;
             return;
         }
-    }
-    else if (property == "fill" || property == "stroke") {
+    } else if (property == "fill" || property == "stroke") {
         CRRgb *rgb = cr_rgb_new();
         CRStatus status = cr_rgb_set_from_term(rgb, a_value);
 
@@ -1099,18 +1120,15 @@ void set_properties(CRDocHandler *a_handler, CRString *a_name, CRTerm *a_value, 
             for (auto& [handle, specificity] : selected_handles) {
                 if (property == "fill") {
                     handle->fill.setProperty(color, specificity + 100000 * a_important);
-                }
-                else {
+                } else {
                     handle->stroke.setProperty(color, specificity + 100000 * a_important);
                 }
             }
-        }
-        else {
+        } else {
             std::cerr << "Unrecognized value for " << property << ": " << value << std::endl;
             return;
         }
-    }
-    else if (property == "opacity" || property == "fill-opacity" || property == "stroke-opacity") {
+    } else if (property == "opacity" || property == "fill-opacity" || property == "stroke-opacity") {
         if (!a_value->content.num) {
             std::cerr << "Invalid value for " << property << ": " << value << std::endl;
             return;
@@ -1119,11 +1137,9 @@ void set_properties(CRDocHandler *a_handler, CRString *a_name, CRTerm *a_value, 
         double val;
         if (a_value->content.num->type == NUM_PERCENTAGE) {
             val = (a_value->content.num->val) / 100.0f;
-        }
-        else if (a_value->content.num->type == NUM_GENERIC) {
+        } else if (a_value->content.num->type == NUM_GENERIC) {
             val = a_value->content.num->val;
-        }
-        else {
+        } else {
             std::cerr << "Invalid type for " << property << ": " << value << std::endl;
             return;
         }
@@ -1132,21 +1148,17 @@ void set_properties(CRDocHandler *a_handler, CRString *a_name, CRTerm *a_value, 
             std::cerr << "Invalid value for " << property << ": " << value << std::endl;
             return;
         }
-
         for (auto& [handle, specificity] : selected_handles) {
             if (property == "opacity") {
                 handle->opacity.setProperty(val, specificity + 100000 * a_important);
-            }
-            else if (property == "fill-opacity") {
+            } else if (property == "fill-opacity") {
                 handle->fill_opacity.setProperty(val, specificity + 100000 * a_important);
-            }
-            else if (property == "stroke-opacity") {
+            } else if (property == "stroke-opacity") {
                 handle->stroke_opacity.setProperty(val, specificity + 100000 * a_important);
             }
         }
-    }
-    else if (property == "stroke-width") {
-        //Assuming px value only, which stays the same regardless of the size of the handles.
+    } else if (property == "stroke-width") {
+        // Assuming px value only, which stays the same regardless of the size of the handles.
         int val;
         if (!a_value->content.num) {
             std::cerr << "Invalid value for " << property << ": " << value << std::endl;
@@ -1154,8 +1166,7 @@ void set_properties(CRDocHandler *a_handler, CRString *a_name, CRTerm *a_value, 
         }
         if (a_value->content.num->type == NUM_LENGTH_PX) {
             val = int(a_value->content.num->val);
-        }
-        else {
+        } else {
             std::cerr << "Invalid type for " << property << ": " << value << std::endl;
             return;
         }
@@ -1163,8 +1174,7 @@ void set_properties(CRDocHandler *a_handler, CRString *a_name, CRTerm *a_value, 
         for (auto& [handle, specificity] : selected_handles) {
             handle->stroke_width.setProperty(val, specificity + 100000 * a_important);
         }
-    }
-    else {
+    } else {
         std::cerr << "Unrecognized property:" << property << std::endl;
     }
 }
@@ -1174,6 +1184,7 @@ void clear_selectors(CRDocHandler *a_handler, CRSelector *a_selector)
     selected_handles.clear();
 }
 
+// parse and set handle styles from css
 void CanvasItemCtrl::parse_handle_styles() const
 {
     for (int type_i = CANVAS_ITEM_CTRL_TYPE_DEFAULT; type_i <= CANVAS_ITEM_CTRL_TYPE_NODE_SYMETRICAL; type_i++) {
@@ -1224,32 +1235,33 @@ void CanvasItemCtrl::build_cache(int device_scale) const
     int size = width * height;
 
     _cache = std::make_unique<uint32_t[]>(size);
+    std::pair<int,double> size_and_angle(size,_angle);
     if (handle_cache.find(_handle) != handle_cache.end() &&
-            handle_cache[_handle].find(size) != handle_cache[_handle].end()) {
-        _cache = handle_cache[_handle][size];
-    }
-    else if (handle_styles.find(_handle) != handle_styles.end()) {
+        handle_cache[_handle].find(size_and_angle) != handle_cache[_handle].end()) {
+        _cache = handle_cache[_handle][size_and_angle];
+    } else if (handle_styles.find(_handle) != handle_styles.end()) {
         auto handle = handle_styles[_handle];
         auto shape = handle->shape();
         auto fill = handle->getFill();
         auto stroke = handle->getStroke();
         auto stroke_width = handle->stroke_width();
-        build_shape(_cache, shape, fill, stroke, stroke_width, height, width, _angle, _pixbuf, device_scale);
-        handle_cache[_handle][size] = _cache;
-    }
-    else {
-        // std::cout << _handle._type << std::endl;
-        build_shape(_cache, _shape, _fill, _stroke, 1, height, width, _angle, _pixbuf, device_scale);
-        handle_cache[_handle][size] = _cache;
+        build_shape(_cache, shape, fill, stroke, stroke_width,
+                        height, width, _angle, _pixbuf, device_scale);
+        handle_cache[_handle][size_and_angle] = _cache;
+    } else {//this will never occur
+        build_shape(_cache, CANVAS_ITEM_CTRL_SHAPE_SQUARE, _fill, _stroke, 1,
+                        height, width, _angle, _pixbuf, device_scale);
+        handle_cache[_handle][size_and_angle] = _cache;
     }
 }
 
+// draw the handles as described by the arguments
 void CanvasItemCtrl::build_shape(std::shared_ptr<uint32_t[]> cache,
                                  CanvasItemCtrlShape shape, uint32_t fill, uint32_t stroke,
                                  int stroke_width, int height, int width, double angle,
                                  Glib::RefPtr<Gdk::Pixbuf> pixbuf, int device_scale)
 {
-    int scaled_width = device_scale * stroke_width;
+    int scaled_width = device_scale * stroke_width; 
     auto p = cache.get();
     switch (shape) {
     case CANVAS_ITEM_CTRL_SHAPE_SQUARE:
@@ -1259,8 +1271,7 @@ void CanvasItemCtrl::build_shape(std::shared_ptr<uint32_t[]> cache,
                 if (i + 1 > scaled_width && scaled_width < width  - i &&
                         j + 1 > scaled_width && scaled_width < height - j) {
                     *p++ = fill;
-                }
-                else {
+                } else {
                     *p++ = stroke;
                 }
             }
@@ -1278,14 +1289,12 @@ void CanvasItemCtrl::build_shape(std::shared_ptr<uint32_t[]> cache,
                         (width - 1 - i) + (height - 1 - j) > m - 1 + scaled_width &&
                         i    + (height - 1 - j) > m - 1 + scaled_width) {
                     *p++ = fill;
-                }
-                else if (i  +           j  > m - 2 &&
+                } else if (i  +           j  > m - 2 &&
                          (width - 1 - i) +           j  > m - 2 &&
                          (width - 1 - i) + (height - 1 - j) > m - 2 &&
                          i    + (height - 1 - j) > m - 2) {
                     *p++ = stroke;
-                }
-                else {
+                } else {
                     *p++ = 0;
                 }
             }
@@ -1309,11 +1318,9 @@ void CanvasItemCtrl::build_shape(std::shared_ptr<uint32_t[]> cache,
 
                 if (r2 < rf2) {
                     *p++ = fill;
-                }
-                else if (r2 < rs2) {
+                } else if (r2 < rs2) {
                     *p++ = stroke;
-                }
-                else {
+                } else {
                     *p++ = 0;
                 }
             }
@@ -1323,14 +1330,13 @@ void CanvasItemCtrl::build_shape(std::shared_ptr<uint32_t[]> cache,
 
     case CANVAS_ITEM_CTRL_SHAPE_CROSS: {
         // Actually an 'X'.
-        double sw2 = scaled_width * sqrt(2);
+        double sw2 = scaled_width / sqrt(2);
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 if ((abs(x - y) < sw2 && abs(x + y - width) < width - sw2) ||
                         (abs(x + y - width) < sw2 && abs(x - y) < width - sw2)) {
                     *p++ = stroke;
-                }
-                else {
+                } else {
                     *p++ = 0;
                 }
             }
@@ -1345,8 +1351,7 @@ void CanvasItemCtrl::build_shape(std::shared_ptr<uint32_t[]> cache,
                 if (std::abs(x - width / 2)   < scaled_width ||
                         std::abs(y - height / 2)  < scaled_width) {
                     *p++ = stroke;
-                }
-                else {
+                } else {
                     *p++ = 0;
                 }
             }
@@ -1374,7 +1379,7 @@ void CanvasItemCtrl::build_shape(std::shared_ptr<uint32_t[]> cache,
         cr->translate(-size / 2.0, -size / 2.0);
 
         // Construct path
-        bool triangles = shape == CANVAS_ITEM_CTRL_SHAPE_TRIANGLE_ANGLED || shape == CANVAS_ITEM_CTRL_SHAPE_TRIANGLE;
+        bool triangles = (shape == CANVAS_ITEM_CTRL_SHAPE_TRIANGLE_ANGLED || shape == CANVAS_ITEM_CTRL_SHAPE_TRIANGLE);
         switch (shape) {
         case CANVAS_ITEM_CTRL_SHAPE_DARROW:
         case CANVAS_ITEM_CTRL_SHAPE_SARROW:
@@ -1429,31 +1434,13 @@ void CanvasItemCtrl::build_shape(std::shared_ptr<uint32_t[]> cache,
 
         // Copy to buffer.
         work->flush();
-        int strideb = work->get_stride();
-        unsigned char *pxb = work->get_data();
+        int stride = work->get_stride();
+        unsigned char *work_ptr = work->get_data();
         auto p = cache.get();
         for (int i = 0; i < device_scale * size; ++i) {
-            auto pb = reinterpret_cast<uint32_t *>(pxb + i * strideb);
+            auto pb = reinterpret_cast<uint32_t *>(work_ptr + i * stride);
             for (int j = 0; j < width; ++j) {
-
-                if (triangles) {
-                    *p++ = rgba_from_argb32(*pb);
-                }
-                else {
-                    uint32_t color = 0x0;
-
-                    // Need to un-premultiply alpha and change order argb -> rgba.
-                    uint32_t alpha = (*pb & 0xff000000) >> 24;
-                    if (alpha == 0x0) {
-                        color = 0x0;
-                    }
-                    else {
-                        uint32_t rgb = unpremul_alpha(*pb & 0xffffff, alpha);
-                        color = (rgb << 8) + alpha;
-                    }
-                    *p++ = color;
-                }
-                pb++;
+                *p++ = rgba_from_argb32(*pb++);
             }
         }
         break;
@@ -1469,11 +1456,9 @@ void CanvasItemCtrl::build_shape(std::shared_ptr<uint32_t[]> cache,
                     uint32_t color;
                     if (s[3] < 0x80) {
                         color = 0;
-                    }
-                    else if (s[0] < 0x80) {
+                    } else if (s[0] < 0x80) {
                         color = stroke;
-                    }
-                    else {
+                    } else {
                         color = fill;
                     }
 
@@ -1488,16 +1473,14 @@ void CanvasItemCtrl::build_shape(std::shared_ptr<uint32_t[]> cache,
                     }
                 }
             }
-        }
-        else {
+        } else {
             std::cerr << "CanvasItemCtrl::build_cache: No bitmap!" << std::endl;
             auto p = cache.get();
             for (int y = 0; y < height / device_scale; y++) {
                 for (int x = 0; x < width / device_scale; x++) {
                     if (x == y) {
                         *p++ = 0xffff0000;
-                    }
-                    else {
+                    } else {
                         *p++ = 0;
                     }
                 }

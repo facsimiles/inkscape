@@ -7,8 +7,9 @@
  */
 
 /*
- * Author:
+ * Authors:
  *   Tavmjong Bah
+ *   Sanidhya Singh
  *
  * Copyright (C) 2020 Tavmjong Bah
  *
@@ -20,6 +21,7 @@
 #include <memory>
 #include <2geom/point.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
+#include <boost/unordered_map.hpp>
 
 #include "canvas-item.h"
 #include "canvas-item-enums.h"
@@ -147,17 +149,17 @@ struct HandleStyle {
     {
         EXTRACT_ARGB32(stroke(), stroke_a, stroke_r, stroke_g, stroke_b)
         EXTRACT_ARGB32(fill(), fill_a, fill_r, fill_g, fill_b)
-        float f_fill_a = fill_opacity();
-        float f_stroke_a = stroke_opacity();
-        float result_a = f_stroke_a + f_fill_a * (1 - f_stroke_a);
-        if (result_a == 0) {
+        float fill_af = fill_opacity();
+        float stroke_af = stroke_opacity();
+        float result_af = stroke_af + fill_af * (1 - stroke_af);
+        if (result_af == 0) {
             return 0;
         }
 
-        uint8_t result_r = int((stroke_r * f_stroke_a + fill_r * f_fill_a * (1 - f_stroke_a)) / result_a);
-        uint8_t result_g = int((stroke_g * f_stroke_a + fill_g * f_fill_a * (1 - f_stroke_a)) / result_a);
-        uint8_t result_b = int((stroke_b * f_stroke_a + fill_b * f_fill_a * (1 - f_stroke_a)) / result_a);
-        ASSEMBLE_ARGB32(blend, (int(opacity()*result_a * 255)), result_r, result_g, result_b)
+        uint8_t result_r = int((stroke_r * stroke_af + fill_r * fill_af * (1 - stroke_af)) / result_af);
+        uint8_t result_g = int((stroke_g * stroke_af + fill_g * fill_af * (1 - stroke_af)) / result_af);
+        uint8_t result_b = int((stroke_b * stroke_af + fill_b * fill_af * (1 - stroke_af)) / result_af);
+        ASSEMBLE_ARGB32(blend, (int(opacity()*result_af * 255)), result_r, result_g, result_b)
         return rgba_from_argb32(blend);
     }
 };
@@ -182,7 +184,7 @@ public:
     void set_fill(uint32_t rgba) override;
     void set_stroke(uint32_t rgba) override;
     void set_shape(CanvasItemCtrlShape shape);
-    void set_shape_default(); // Use type to determine shape.
+    // void set_shape_default(); // Use type to determine shape.
     void set_mode(CanvasItemCtrlMode mode);
     void set_mode_default();
     void set_size(int size);
@@ -193,9 +195,9 @@ public:
     void set_angle(double angle);
     void set_type(CanvasItemCtrlType type);
     void set_pixbuf(Glib::RefPtr<Gdk::Pixbuf> pixbuf);
-    void set_selected(bool selected);
-    void set_click(bool click);
-    void set_hover(bool hover);
+    void set_selected(bool selected = 1);
+    void set_click(bool click = 1);
+    void set_hover(bool hover = 1);
     void set_normal(bool selected = 0);
     static void build_shape(std::shared_ptr<uint32_t[]> cache,
                             CanvasItemCtrlShape shape, uint32_t fill, uint32_t stroke, int stroke_width,
@@ -203,7 +205,7 @@ public:
                             int device_scale);//TODO: add more style properties
 
     static std::unordered_map<Handle, HandleStyle *> handle_styles;
-    static std::unordered_map<Handle, std::unordered_map<int,std::shared_ptr<uint32_t[]>>> handle_cache;
+    static std::unordered_map<Handle, boost::unordered_map<std::pair<int,double>,std::shared_ptr<uint32_t[]>>> handle_cache;
 
 protected:
     ~CanvasItemCtrl() override = default;

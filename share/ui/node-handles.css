@@ -1,22 +1,40 @@
 * {
-    shape: "square";
-    stroke: orange;
     fill: red;
-    fill-opacity: 0.9;
-    stroke-opacity: 0.9;
-    opacity: 0.9;
-    stroke-width: 2px;
+    stroke: blue;
+    opacity: 40%;
+    stroke-width: 3px;
 }
 
-.inkscape-node-auto {
-    shape: "circle";
+/*
+*:hover {
+    fill: blue;
 }
+*/
+
+*:selected {
+    fill: blue;
+    stroke: white;
+}
+
+/*
+*:click {
+    fill: green;
+}
+
+*:selected:hover {
+    fill: yellow;
+}
+
+*:selected:click {
+    fill: black;
+} */
 
 .inkscape-node-smooth {
     shape: "square";
 }
 
-.inkscape-node-cusp {
+.inkscape-node-cusp,
+.inkscape-lpe {
     shape: "diamond";
 }
 
@@ -32,32 +50,56 @@
     shape: "circle";
 }
 
-*:hover {
-    fill: pink;
+.inkscape-adj-handle,
+.inkscape-adj-skew,
+.inkscape-adj-rotate,
+.inkscape-adj-center {
+    stroke-width: 2px;
 }
 
-*:selected {
-    fill: blue;
+.inkscape-adj-handle {
+    shape: "arrow";
 }
 
-*:selected:hover {
-    fill: turquoise;
-    /* shape: "circle"; */
+.inkscape-adj-skew {
+    shape: "skew-arrow";
 }
 
-.inkscape-anchor {
-    fill: gold;
-    stroke: black;
+.inkscape-adj-rotate {
+    shape: "curved-arrow";
 }
 
-.inkscape-anchor:hover {
-    fill: red;
+.inkscape-adj-center {
+    shape: "pivot";
 }
 
-*:click {
-    fill: black;
+.inkscape-adj-salign {
+    shape: "side-align";
 }
 
-*:selected:click {
-    fill: purple;
+.inkscape-adj-calign {
+    shape: "corner-align";
+}
+
+.inkscape-adj-malign {
+    shape: "middle-align";
+}
+
+/*( margin -  this is only used by the page tool edge-center handles )*/
+.inkscape-node-auto,
+.inkscape-shaper,
+.inkscape-margin {
+    shape: "circle";
+}
+
+.inkscape-sizer {
+    shape: "square";
+}
+
+.inkscape-center {
+    shape: "plus";
+}
+
+.inkscape-point {
+    shape: "cross";
 }
