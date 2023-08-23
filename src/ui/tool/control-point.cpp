@@ -83,8 +83,8 @@ ControlPoint::ControlPoint(SPDesktop *d, Geom::Point const &initial_pos, SPAncho
                                                 Inkscape::CANVAS_ITEM_CTRL_SHAPE_BITMAP);
     _canvas_item_ctrl->set_name("CanvasItemCtrl:ControlPoint");
     _canvas_item_ctrl->set_pixbuf(std::move(pixbuf));
-    _canvas_item_ctrl->set_fill(_cset.normal.fill);
-    _canvas_item_ctrl->set_stroke(_cset.normal.stroke);
+    // _canvas_item_ctrl->set_fill(_cset.normal.fill);
+    // _canvas_item_ctrl->set_stroke(_cset.normal.stroke);
     _canvas_item_ctrl->set_anchor(anchor);
 
     _commonInit();
@@ -100,8 +100,8 @@ ControlPoint::ControlPoint(SPDesktop *d, Geom::Point const &initial_pos, SPAncho
 {
     _canvas_item_ctrl = make_canvasitem<Inkscape::CanvasItemCtrl>(group ? group : _desktop->getCanvasControls(), type);
     _canvas_item_ctrl->set_name("CanvasItemCtrl:ControlPoint");
-    _canvas_item_ctrl->set_fill(  _cset.normal.fill);
-    _canvas_item_ctrl->set_stroke(_cset.normal.stroke);
+    // _canvas_item_ctrl->set_fill(  _cset.normal.fill);
+    // _canvas_item_ctrl->set_stroke(_cset.normal.stroke);
     _canvas_item_ctrl->set_anchor(anchor);
 
     _commonInit();
@@ -481,18 +481,18 @@ void ControlPoint::_setState(State state)
     ColorEntry current = {0, 0};
     switch(state) {
         case STATE_NORMAL:
-            current = _cset.normal;
+            // current = _cset.normal;
             break;
         case STATE_MOUSEOVER:
-            current = _cset.mouseover;
-            _canvas_item_ctrl->set_hover(1);
+            // current = _cset.mouseover;
+            _canvas_item_ctrl->set_hover();
             break;
         case STATE_CLICKED:
-            current = _cset.clicked;
-            _canvas_item_ctrl->set_click(1);
+            // current = _cset.clicked;
+            _canvas_item_ctrl->set_click();
             break;
     };
-    _setColors(current);
+    // _setColors(current);
     _state = state;
 }
 
@@ -504,8 +504,8 @@ void ControlPoint::_handleControlStyling()
 
 void ControlPoint::_setColors(ColorEntry colors)
 {
-    _canvas_item_ctrl->set_fill(colors.fill);
-    _canvas_item_ctrl->set_stroke(colors.stroke);
+    // _canvas_item_ctrl->set_fill(colors.fill);
+    // _canvas_item_ctrl->set_stroke(colors.stroke);
 }
 
 bool ControlPoint::_is_drag_cancelled(MotionEvent const &event)

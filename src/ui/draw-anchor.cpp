@@ -37,7 +37,7 @@ SPDrawAnchor::SPDrawAnchor(Inkscape::UI::Tools::FreehandBase *dc, std::shared_pt
       )
 {
     ctrl->set_name("CanvasItemCtrl:DrawAnchor");
-    ctrl->set_fill(FILL_COLOR_NORMAL);
+    // ctrl->set_fill(FILL_COLOR_NORMAL);
     ctrl->set_position(delta);
     ctrl->set_pickable(false); // We do our own checking. (TODO: Should be fixed!)
 }
@@ -53,9 +53,8 @@ SPDrawAnchor *SPDrawAnchor::anchorTest(Geom::Point w, bool activate)
     if ( activate && this->ctrl->contains(w)) {
         
         if (!this->active) {
-            this->ctrl->set_hover(1);
+            this->ctrl->set_hover();
             this->ctrl->set_size_extra(4);
-            this->ctrl->set_fill(FILL_COLOR_MOUSEOVER);
             this->active = TRUE;
         }
         return this;
@@ -64,7 +63,6 @@ SPDrawAnchor *SPDrawAnchor::anchorTest(Geom::Point w, bool activate)
     if (this->active) {
         this->ctrl->set_normal();
         this->ctrl->set_size_extra(0);
-        this->ctrl->set_fill(FILL_COLOR_NORMAL);
         this->active = FALSE;
     }
 

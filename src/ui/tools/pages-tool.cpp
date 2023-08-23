@@ -52,10 +52,7 @@ PagesTool::PagesTool(SPDesktop *desktop)
 
     if (resize_knots.empty()) {
         for (int i = 0; i < 4; i++) {
-            auto knot = new SPKnot(desktop, _("Resize page"), Inkscape::CANVAS_ITEM_CTRL_TYPE_SHAPER, "PageTool:Resize");
-            knot->setShape(Inkscape::CANVAS_ITEM_CTRL_SHAPE_SQUARE);
-            knot->setFill(0xffffff00, 0x0000ff00, 0x000000ff, 0x000000ff);
-            knot->setSize(9);
+            auto knot = new SPKnot(desktop, _("Resize page"), Inkscape::CANVAS_ITEM_CTRL_TYPE_SIZER, "PageTool:Resize");
             knot->setAnchor(SP_ANCHOR_CENTER);
             knot->updateCtrl();
             knot->hide();
@@ -64,9 +61,6 @@ PagesTool::PagesTool(SPDesktop *desktop)
             resize_knots.push_back(knot);
 
             auto m_knot = new SPKnot(desktop, _("Set page margin"), Inkscape::CANVAS_ITEM_CTRL_TYPE_MARGIN, "PageTool:Margin");
-            m_knot->setFill(0xffffff00, 0x0000ff00, 0x000000ff, 0x000000ff);
-            m_knot->setStroke(0x1699d791, 0xff99d791, 0x000000ff, 0x000000ff);
-            m_knot->setSize(11);
             m_knot->setAnchor(SP_ANCHOR_CENTER);
             m_knot->updateCtrl();
             m_knot->hide();

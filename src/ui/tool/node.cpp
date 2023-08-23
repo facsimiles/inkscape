@@ -1323,7 +1323,6 @@ void Node::_setState(State state)
                 this->front()->setPosition(_pm()._bsplineHandleReposition(this->front()));
                 this->back()->setPosition(_pm()._bsplineHandleReposition(this->back()));
             }
-            break;
     }
     SelectableControlPoint::_setState(state);
 }

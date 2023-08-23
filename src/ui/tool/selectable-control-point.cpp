@@ -122,18 +122,18 @@ void SelectableControlPoint::_setState(State state)
         ColorEntry current = {0, 0};
         switch (state) {
             case STATE_NORMAL:
-                current = _cset.selected_normal;
+                // current = _cset.selected_normal;
                 break;
             case STATE_MOUSEOVER:
-                current = _cset.selected_mouseover;
-                _canvas_item_ctrl->set_hover(1);
+                // current = _cset.selected_mouseover;
+                _canvas_item_ctrl->set_hover();
                 break;
             case STATE_CLICKED:
-                current = _cset.selected_clicked;
-                _canvas_item_ctrl->set_click(1);
+                // current = _cset.selected_clicked;
+                _canvas_item_ctrl->set_click();
                 break;
         }
-        _setColors(current);
+        // _setColors(current);
         _state = state;
     }
 }

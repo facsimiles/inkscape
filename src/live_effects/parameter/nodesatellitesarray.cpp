@@ -226,8 +226,8 @@ void NodeSatelliteArrayParam::addKnotHolderEntities(KnotHolder *knotholder, SPIt
                           _(tip), _knot_color);
                 knotholder->add(e);
                 e->knot->setMode(CANVAS_ITEM_CTRL_MODE_COLOR);
-                e->knot->setFill(0xffffffff, 0x44ff44ff, 0x44ff44ff, 0xffffffff);
-                e->knot->setStroke(0x555555ff, 0x555555ff, 0x555555ff, 0x555555ff);
+                // e->knot->setFill(0xffffffff, 0x44ff44ff, 0x44ff44ff, 0xffffffff);
+                // e->knot->setStroke(0x555555ff, 0x555555ff, 0x555555ff, 0x555555ff);
             }
             index++;
         }
@@ -465,13 +465,13 @@ Geom::Point FilletChamferKnotHolderEntity::knot_get() const
     
     knot->setAngle(angle + Geom::rad_from_deg(90));
     knot->setSize(33);
-    knot->setShape(CANVAS_ITEM_CTRL_SHAPE_TRIANGLE_ANGLED);
+    // knot->setShape(CANVAS_ITEM_CTRL_SHAPE_TRIANGLE_ANGLED);
     if (nodesatellite.amount == 0) {
         if (is_mirror) {
             knot->hide();
         } else {
             tmp_point = contracted;
-            knot->setShape(CANVAS_ITEM_CTRL_SHAPE_CIRCLE);
+            // knot->setShape(CANVAS_ITEM_CTRL_SHAPE_CIRCLE);
             knot->setSize(11);
         }
     }

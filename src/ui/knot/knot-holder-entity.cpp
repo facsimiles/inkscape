@@ -51,8 +51,8 @@ void KnotHolderEntity::create(SPDesktop *desktop, SPItem *item, KnotHolder *pare
     this->desktop = desktop;
 
     knot = new SPKnot(desktop, tip, type, name);
-    knot->fill[SP_KNOT_STATE_NORMAL] = color;
-    knot->ctrl->set_fill(color);
+    // knot->fill[SP_KNOT_STATE_NORMAL] = color;
+    // knot->ctrl->set_fill(color);
     on_created();
     update_knot();
     knot->show();

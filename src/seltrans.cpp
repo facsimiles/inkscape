@@ -125,13 +125,13 @@ Inkscape::SelTrans::SelTrans(SPDesktop *desktop) :
     _selection = desktop->getSelection();
 
     _norm = make_canvasitem<CanvasItemCtrl>(desktop->getCanvasControls(), Inkscape::CANVAS_ITEM_CTRL_TYPE_CENTER);
-    _norm->set_fill(0x0);
-    _norm->set_stroke(0xff0000b0);
+    // _norm->set_fill(0x0);
+    // _norm->set_stroke(0xff0000b0);
     _norm->set_visible(false);
 
     _grip = make_canvasitem<CanvasItemCtrl>(desktop->getCanvasControls(), Inkscape::CANVAS_ITEM_CTRL_TYPE_POINT);
-    _grip->set_fill(0xffffff7f);
-    _grip->set_stroke(0xff0000b0);
+    // _grip->set_fill(0xffffff7f);
+    // _grip->set_stroke(0xff0000b0);
     _grip->set_visible(false);
 
     for (auto &i : _l) {
@@ -823,8 +823,8 @@ void Inkscape::SelTrans::_makeHandles()
 
         knots[i]->setAnchor(hands[i].anchor);
         knots[i]->setMode(CANVAS_ITEM_CTRL_MODE_DESATURATED_XOR);
-        knots[i]->setFill(DEF_COLOR[0], DEF_COLOR[1], DEF_COLOR[1], DEF_COLOR[2]);
-        knots[i]->setStroke(DEF_COLOR[3], DEF_COLOR[4], DEF_COLOR[4], DEF_COLOR[4]);
+        // knots[i]->setFill(DEF_COLOR[0], DEF_COLOR[1], DEF_COLOR[1], DEF_COLOR[2]);
+        // knots[i]->setStroke(DEF_COLOR[3], DEF_COLOR[4], DEF_COLOR[4], DEF_COLOR[4]);
 
         knots[i]->updateCtrl();
 
@@ -917,14 +917,12 @@ void Inkscape::SelTrans::handleGrab(SPKnot *knot, guint /*state*/, SPSelTransHan
     // Forcing handles visibility must be done after grab() to be effective
     switch (handle.type) {
         case HANDLE_CENTER:
-            _grip->set_shape(Inkscape::CANVAS_ITEM_CTRL_SHAPE_PLUS);
-
+            // _grip->set_shape(Inkscape::CANVAS_ITEM_CTRL_SHAPE_PLUS);
             _norm->set_visible(false);
             _grip->set_visible(true);
             break;
         default:
-            _grip->set_shape(Inkscape::CANVAS_ITEM_CTRL_SHAPE_CROSS);
-
+            // _grip->set_shape(Inkscape::CANVAS_ITEM_CTRL_SHAPE_CROSS);
             _norm->set_visible(true);
             _grip->set_visible(true);
             break;

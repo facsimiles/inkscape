@@ -272,8 +272,8 @@ VPDragger::VPDragger(VPDrag *parent, Geom::Point p, VanishingPoint &vp)
     if (vp.is_finite()) {
         // create the knot
         this->knot = new SPKnot(SP_ACTIVE_DESKTOP, "", Inkscape::CANVAS_ITEM_CTRL_TYPE_ANCHOR, "CanvasItemCtrl:VPDragger");
-        this->knot->setFill(VP_KNOT_COLOR_NORMAL, VP_KNOT_COLOR_NORMAL, VP_KNOT_COLOR_NORMAL, VP_KNOT_COLOR_NORMAL);
-        this->knot->setStroke(0x000000ff, 0x000000ff, 0x000000ff, 0x000000ff);
+        // this->knot->setFill(VP_KNOT_COLOR_NORMAL, VP_KNOT_COLOR_NORMAL, VP_KNOT_COLOR_NORMAL, VP_KNOT_COLOR_NORMAL);
+        // this->knot->setStroke(0x000000ff, 0x000000ff, 0x000000ff, 0x000000ff);
         this->knot->updateCtrl();
 
         // move knot to the given point

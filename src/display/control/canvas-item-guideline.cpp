@@ -223,7 +223,7 @@ void CanvasItemGuideLine::set_stroke(uint32_t color)
 {
     // Make sure the fill of the control is the same as the stroke
     // of the guide-line:
-    _origin_ctrl->set_fill(color);
+    // _origin_ctrl->set_fill(color);
     CanvasItem::set_stroke(color);
 }
 
@@ -242,13 +242,13 @@ void CanvasItemGuideLine::set_locked(bool locked)
         if (_locked == locked) return;
         _locked = locked;
         if (_locked) {
-            _origin_ctrl->set_shape(CANVAS_ITEM_CTRL_SHAPE_CROSS);
-            _origin_ctrl->set_stroke(CONTROL_LOCKED_COLOR);
-            _origin_ctrl->set_fill(0x00000000);   // no fill
+            // _origin_ctrl->set_shape(CANVAS_ITEM_CTRL_SHAPE_CROSS);
+            // _origin_ctrl->set_stroke(CONTROL_LOCKED_COLOR);
+            // _origin_ctrl->set_fill(0x00000000);   // no fill
         } else {
-            _origin_ctrl->set_shape(CANVAS_ITEM_CTRL_SHAPE_CIRCLE);
-            _origin_ctrl->set_stroke(0x00000000); // no stroke
-            _origin_ctrl->set_fill(_stroke);      // fill the control with this guide's color
+            // _origin_ctrl->set_shape(CANVAS_ITEM_CTRL_SHAPE_CIRCLE);
+            // _origin_ctrl->set_stroke(0x00000000); // no stroke
+            // _origin_ctrl->set_fill(_stroke);      // fill the control with this guide's color
         }
     });
 }
