@@ -22,7 +22,7 @@
 #include <memory>
 #include <2geom/point.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
-#include <boost/unordered_map.hpp>
+#include <boost/functional/hash.hpp>
 
 #include "canvas-item.h"
 #include "canvas-item-enums.h"
@@ -33,17 +33,17 @@
 
 namespace Inkscape {
 
+/**
+ * Struct to manage state and type.
+ */
 struct Handle {
     CanvasItemCtrlType _type;
-    uint32_t _state = 0;
     // 0b00....0<click-bit><hover-bit><selected-bit>
+    uint32_t _state = 0;
 
     Handle() : _type(CANVAS_ITEM_CTRL_TYPE_DEFAULT), _state(0) {}
-
     Handle(CanvasItemCtrlType type) : _type(type), _state(0) {}
-
     Handle(CanvasItemCtrlType type, uint32_t state) : _type(type), _state(state) {}
-
     Handle(CanvasItemCtrlType type, bool selected, bool hover, bool click) : _type(type)
     {
         setState(selected, hover, click);
@@ -107,11 +107,17 @@ struct Handle {
     }
 };
 
+/**
+ * Template struct for properties with specificities.
+ */
 template <typename T>
 struct Property {
     T value;
     uint32_t specificity = 0;
 
+    /*
+     * Set value of property based on specificity.
+     */
     void setProperty(T newValue, uint32_t newSpecificity)
     {
         if (newSpecificity >= specificity) {
@@ -120,13 +126,18 @@ struct Property {
         }
     }
 
-    // this is in alternate needing to call .value.
+    /*
+     * Equivalent to calling .value
+     */
     T &operator()()
     {
         return value;
     }
 };
 
+/**
+ * Struct containing all required styling for handles.
+ */
 struct HandleStyle {
     Property<CanvasItemCtrlShape> shape{CANVAS_ITEM_CTRL_SHAPE_SQUARE};
     Property<uint32_t> fill{0xffffffff};
@@ -135,8 +146,6 @@ struct HandleStyle {
     Property<float> stroke_opacity{1.0};
     Property<float> opacity{1.0};
     Property<int> stroke_width{1};
-    // Property<int> outline_width{initial_value};
-    // Property<int> outline{initial_value};
 
     uint32_t getFill()
     {
@@ -205,12 +214,6 @@ public:
                             int height, int width, double angle, Glib::RefPtr<Gdk::Pixbuf> pixbuf,
                             int device_scale);//TODO: add more style properties
 
-    //Handle style and its caching, declaration of static members
-    static InitLock _parsed;
-    static std::mutex cache_mutex;
-    static std::unordered_map<Handle, HandleStyle *> handle_styles;
-    static std::unordered_map<Handle, boost::unordered_map<std::pair<int,double>,std::shared_ptr<uint32_t[]>>> handle_cache;
-
 protected:
     ~CanvasItemCtrl() override = default;
 
@@ -219,7 +222,6 @@ protected:
 
     void build_cache(int device_scale) const;
     void parse_handle_styles() const;
-
     // Geometry
     Geom::Point _position;
 
@@ -240,17 +242,6 @@ protected:
 };
 
 } // namespace Inkscape
-
-namespace std {
-template <>
-struct hash<Inkscape::Handle> {
-    size_t operator()(Inkscape::Handle const &handle) const
-    {
-        uint64_t typeandstate = uint64_t(handle._type) << 32 | handle._state;
-        return hash<uint64_t>()(typeandstate);
-    }
-};
-} // namespace std
 
 #endif // SEEN_CANVAS_ITEM_CTRL_H
 

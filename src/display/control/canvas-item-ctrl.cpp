@@ -36,13 +36,35 @@
 
 #include "ui/widget/canvas.h"
 
+namespace std {
+template <>
+struct hash<Inkscape::Handle> {
+    size_t operator()(Inkscape::Handle const &handle) const
+    {
+        uint64_t typeandstate = uint64_t(handle._type) << 32 | handle._state;
+        return hash<uint64_t>()(typeandstate);
+    }
+};
+template <>
+struct hash<std::tuple<Inkscape::Handle, int, double>> {
+    size_t operator()(const std::tuple<Inkscape::Handle, int, double>& key) const {
+        size_t hashValue = hash<Inkscape::Handle>{}(std::get<0>(key));
+        boost::hash_combine(hashValue, std::get<1>(key));
+        boost::hash_combine(hashValue, std::get<2>(key));
+        return hashValue;
+    }
+};
+} // namespace std
+
 namespace Inkscape {
 
-//Declaration of static members
-InitLock CanvasItemCtrl::_parsed;
-std::mutex CanvasItemCtrl::cache_mutex;
-std::unordered_map<Handle, HandleStyle *> CanvasItemCtrl::handle_styles;
-std::unordered_map<Handle, boost::unordered_map<std::pair<int,double>, std::shared_ptr<uint32_t[]>>> CanvasItemCtrl::handle_cache;
+/** 
+ * For Handle Styling (shared between all handles)
+ */
+std::unordered_map<Handle, HandleStyle *> handle_styles;
+std::unordered_map<std::tuple<Handle, int, double>, std::shared_ptr<uint32_t[]>> handle_cache;
+std::mutex cache_mutex;
+InitLock _parsed;
 
 /**
  * Create a null control node.
@@ -55,12 +77,12 @@ CanvasItemCtrl::CanvasItemCtrl(CanvasItemGroup *group)
 }
 
 /**
- * Create a control ctrl. Shape auto-set by type.
+ * Create a control ctrl with type.
  */
 CanvasItemCtrl::CanvasItemCtrl(CanvasItemGroup *group, CanvasItemCtrlType type)
     : CanvasItem(group)
 {
-    _handle._type = type;
+    _handle.setType(type);
     _name = "CanvasItemCtrl:Type_" + std::to_string(_handle._type);
     _pickable = true; // Everybody gets events from this class!
 
@@ -104,7 +126,6 @@ CanvasItemCtrl::CanvasItemCtrl(CanvasItemGroup *group, CanvasItemCtrlShape shape
  */
 void CanvasItemCtrl::set_position(Geom::Point const &position)
 {
-    // std::cout << "CanvasItemCtrl::set_ctrl: " << _name << ": " << position << std::endl;
     defer([ = ] {
         if (_position == position) return;
         _position = position;
@@ -252,9 +273,9 @@ void CanvasItemCtrl::set_pixbuf(Glib::RefPtr<Gdk::Pixbuf> pixbuf)
     });
 }
 
-// Nominally width == height == size except possibly for pixmaps.
 void CanvasItemCtrl::set_size(int size)
 {
+    //nominally width == height == size except possibly for pixmaps.
     defer([ = ] {
         if (_pixbuf)
         {
@@ -272,7 +293,6 @@ void CanvasItemCtrl::set_size(int size)
 void CanvasItemCtrl::set_size_via_index(int size_index)
 {
     // Size must always be an odd number to center on pixel.
-
     if (size_index < 1 || size_index > 15) {
         std::cerr << "CanvasItemCtrl::set_size_via_index: size_index out of range!" << std::endl;
         size_index = 3;
@@ -331,7 +351,6 @@ void CanvasItemCtrl::set_size_via_index(int size_index)
         break;
     }
 
-    // std::cout<<_shape<<" - "<<size<<std::endl;
     set_size(size);
 }
 
@@ -357,8 +376,7 @@ void CanvasItemCtrl::set_type(CanvasItemCtrlType type)
 {
     defer([ = ] {
         if (_handle._type == type) return;
-        _handle._type = type;
-        // Use _type to set default values.
+        _handle.setType(type);
         // set_shape_default();
         set_size_default();
         _built.reset();
@@ -366,7 +384,6 @@ void CanvasItemCtrl::set_type(CanvasItemCtrlType type)
     });
 }
 
-// set "selected", "click", "hover" states for the handle
 void CanvasItemCtrl::set_selected(bool selected)
 {
     _handle.setSelected(selected);
@@ -386,7 +403,9 @@ void CanvasItemCtrl::set_hover(bool hover)
     request_update();
 }
 
-// reset the state to normal or normal selected
+/**
+ * Reset the state to normal or normal selected
+ */
 void CanvasItemCtrl::set_normal(bool selected)
 {
     _handle.setSelected(selected);
@@ -414,8 +433,6 @@ void CanvasItemCtrl::set_anchor(SPAnchorType anchor)
         request_update(); // Geometry change
     });
 }
-
-// ---------- Protected ----------
 
 static void draw_darrow(Cairo::RefPtr<Cairo::Context> const &cr, double size)
 {
@@ -995,7 +1012,9 @@ void CanvasItemCtrl::_render(CanvasItemBuffer &buf) const
     buf.cr->restore();
 }
 
-// conversion maps for ctrl types and shapes
+/**
+ * Conversion maps for ctrl types.
+ */
 std::unordered_map<std::string, CanvasItemCtrlType> type_map = {
     {".inkscape-node-auto", CANVAS_ITEM_CTRL_TYPE_NODE_AUTO},
     {".inkscape-node-smooth", CANVAS_ITEM_CTRL_TYPE_NODE_SMOOTH},
@@ -1018,6 +1037,10 @@ std::unordered_map<std::string, CanvasItemCtrlType> type_map = {
     {".inkscape-adj-malign", CANVAS_ITEM_CTRL_TYPE_ADJ_MALIGN},
     {"*", CANVAS_ITEM_CTRL_TYPE_DEFAULT}
 };
+
+/**
+ * Conversion maps for ctrl shapes.
+ */
 std::unordered_map<std::string, CanvasItemCtrlShape> shape_map = {
     {"\'square\'", CANVAS_ITEM_CTRL_SHAPE_SQUARE},
     {"\'diamond\'", CANVAS_ITEM_CTRL_SHAPE_DIAMOND},
@@ -1033,7 +1056,14 @@ std::unordered_map<std::string, CanvasItemCtrlShape> shape_map = {
     {"\'middle-align\'", CANVAS_ITEM_CTRL_SHAPE_MALIGN}
 };
 
+/**
+ * A global vector needed for parsing (between functions).
+ */
 std::vector<std::pair<HandleStyle *, int>> selected_handles;
+
+/**
+ * Parses the CSS selector for handles.
+ */
 void configure_selector(CRSelector *a_selector, Handle *&selector, int &specificity)
 {
     cr_simple_sel_compute_specificity(a_selector->simple_sel);
@@ -1069,6 +1099,9 @@ void configure_selector(CRSelector *a_selector, Handle *&selector, int &specific
     }
 }
 
+/**
+ * Selects fitting handles from all handles based on selector.
+ */
 void set_selectors(CRDocHandler *a_handler, CRSelector *a_selector, bool is_users)
 {
     while (a_selector) {
@@ -1076,7 +1109,7 @@ void set_selectors(CRDocHandler *a_handler, CRSelector *a_selector, bool is_user
         int specificity;
         configure_selector(a_selector, selector, specificity);
         if (selector) {
-            for (const auto& [handle, style] : CanvasItemCtrl::handle_styles) {
+            for (const auto& [handle, style] : handle_styles) {
                 if (Handle::fits(*selector, handle)) {
                     selected_handles.push_back({style, specificity + 10000 * is_users});
                 }
@@ -1087,18 +1120,25 @@ void set_selectors(CRDocHandler *a_handler, CRSelector *a_selector, bool is_user
     }
 }
 
-// to parse user's style definition css
+/**
+ * Parse user's style definition css.
+ */
 void set_selectors_user(CRDocHandler *a_handler, CRSelector *a_selector)
 {
     set_selectors(a_handler, a_selector, true);
 }
 
-// to parse the default style definition css
+/**
+ * Parse the default style definition css.
+ */
 void set_selectors_base(CRDocHandler *a_handler, CRSelector *a_selector)
 {
     set_selectors(a_handler, a_selector, false);
 }
 
+/**
+ * Parse and set the properties for selected handles.
+ */
 void set_properties(CRDocHandler *a_handler, CRString *a_name, CRTerm *a_value, gboolean a_important)
 {
     const std::string value = (char *)cr_term_to_string(a_value);
@@ -1180,12 +1220,17 @@ void set_properties(CRDocHandler *a_handler, CRString *a_name, CRTerm *a_value, 
     }
 }
 
+/**
+ * Clean-up for selected handles vector.
+ */
 void clear_selectors(CRDocHandler *a_handler, CRSelector *a_selector)
 {
     selected_handles.clear();
 }
 
-// parse and set handle styles from css
+/**
+ * Parse and set handle styles from css.
+ */
 void CanvasItemCtrl::parse_handle_styles() const
 {
     for (int type_i = CANVAS_ITEM_CTRL_TYPE_DEFAULT; type_i <= CANVAS_ITEM_CTRL_TYPE_NODE_SYMETRICAL; type_i++) {
@@ -1217,6 +1262,9 @@ void CanvasItemCtrl::parse_handle_styles() const
     }
 }
 
+/**
+ * Build object-specific cache. 
+ */
 void CanvasItemCtrl::build_cache(int device_scale) const
 {
     if (_width < 2 || _height < 2) {
@@ -1239,36 +1287,33 @@ void CanvasItemCtrl::build_cache(int device_scale) const
     //- (C++20) make_shared 
     //- handle using pixbuf isn't possible using this method
     _cache = std::make_unique<uint32_t[]>(size);
-    std::pair<int,double> size_and_angle(size,_angle);
-    if (handle_cache.find(_handle) != handle_cache.end() &&
-        handle_cache[_handle].find(size_and_angle) != handle_cache[_handle].end()) {
-        _cache = handle_cache[_handle][size_and_angle];
-        return;
-    }
-    std::lock_guard<std::mutex> lock(cache_mutex);
-    //if while it was waiting its cache was created and now it doesn't need to build it itself
-    if (handle_cache.find(_handle) != handle_cache.end() &&
-        handle_cache[_handle].find(size_and_angle) != handle_cache[_handle].end()) {
-        _cache = handle_cache[_handle][size_and_angle];
-        return;
-    }
-    if (handle_styles.find(_handle) != handle_styles.end()) {
-        auto handle = handle_styles[_handle];
-        auto shape = handle->shape();
-        auto fill = handle->getFill();
-        auto stroke = handle->getStroke();
-        auto stroke_width = handle->stroke_width();
-        build_shape(_cache, shape, fill, stroke, stroke_width,
-                        height, width, _angle, _pixbuf, device_scale);
-        handle_cache[_handle][size_and_angle] = _cache;
-    } else {//this will never occur
-        build_shape(_cache, CANVAS_ITEM_CTRL_SHAPE_SQUARE, _fill, _stroke, 1,
-                        height, width, _angle, _pixbuf, device_scale);
-        handle_cache[_handle][size_and_angle] = _cache;
+    std::tuple<Handle,int,double> handle = std::make_tuple(_handle,size,_angle);
+    {
+        std::lock_guard<std::mutex> lock(cache_mutex);
+        if(handle_cache.find(handle) != handle_cache.end()) {
+            _cache = handle_cache[handle];
+        }
+        if (handle_styles.find(_handle) != handle_styles.end()) {
+            auto handle_style = handle_styles[_handle];
+            auto shape = handle_style->shape();
+            auto fill = handle_style->getFill();
+            auto stroke = handle_style->getStroke();
+            auto stroke_width = handle_style->stroke_width();
+            build_shape(_cache, shape, fill, stroke, stroke_width,
+                            height, width, _angle, _pixbuf, device_scale);
+            handle_cache[handle] = _cache;
+        } else {//this will never occur
+            build_shape(_cache, CANVAS_ITEM_CTRL_SHAPE_SQUARE, _fill, _stroke, 1,
+                            height, width, _angle, _pixbuf, device_scale);
+            handle_cache[handle] = _cache;
+        }
     }
 }
 
-// draw the handles as described by the arguments
+
+/**
+ * Draw the handles as described by the arguments.
+ */
 void CanvasItemCtrl::build_shape(std::shared_ptr<uint32_t[]> cache,
                                  CanvasItemCtrlShape shape, uint32_t fill, uint32_t stroke,
                                  int stroke_width, int height, int width, double angle,
