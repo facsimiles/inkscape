@@ -755,9 +755,9 @@ int CommandPalette::on_filter_general(Gtk::ListBoxRow *child)
         // Rewrite (removed fuzzy matching)
     }
 
-    if (CPDescription && CPDescription->get_text().find(_search_text) != Glib::ustring::npos) {
-        add_color_description(CPDescription, _search_text);
-    }
+    // if (CPDescription && CPDescription->get_text().find(_search_text) != Glib::ustring::npos) {
+    //     add_color_description(CPDescription, _search_text);
+    // }
 
     return 0;
 }
@@ -789,7 +789,7 @@ size_t CommandPalette::search_score(Gtk::ListBoxRow *row, Glib::ustring const &s
         return position + 2000; // Demote compared to name match and tooltip match.
     }
 
-    return INT_MAX;
+    return std::numeric_limits<size_t>::max();
 }
 
 int CommandPalette::on_sort(Gtk::ListBoxRow *row1, Gtk::ListBoxRow *row2)

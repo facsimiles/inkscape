@@ -230,8 +230,8 @@ private:
     /// Stores the most recent ask_action_name for when Entry::activate fires & we are in INPUT mode
     std::optional<ActionPtrName> _ask_action_ptr_name;
 
-    static Glib::Quark& quark_score() {
-        static Glib::Quark q{"Score"};
+    static Glib::Quark const &quark_score() {
+        static Glib::Quark const q{"Score"};
         return q;
     }
 };
