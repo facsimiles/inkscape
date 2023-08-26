@@ -44,7 +44,7 @@ enum SPGradientState {
 };
 
 enum GrPointType {
-    POINT_LG_BEGIN = 0, //start enum at 0 (for indexing into gr_knot_shapes array for example)
+    POINT_LG_BEGIN = 0,
     POINT_LG_END,
     POINT_LG_MID,
     POINT_RG_CENTER,

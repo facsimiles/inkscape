@@ -322,6 +322,7 @@ void CanvasItemCtrl::set_size_via_index(int size_index)
     case CANVAS_ITEM_CTRL_TYPE_CENTER:
     case CANVAS_ITEM_CTRL_TYPE_SIZER:
     case CANVAS_ITEM_CTRL_TYPE_SHAPER:
+    case CANVAS_ITEM_CTRL_TYPE_MESH:
     case CANVAS_ITEM_CTRL_TYPE_LPE:
     case CANVAS_ITEM_CTRL_TYPE_NODE_AUTO:
     case CANVAS_ITEM_CTRL_TYPE_NODE_CUSP:
@@ -1013,21 +1014,10 @@ void CanvasItemCtrl::_render(CanvasItemBuffer &buf) const
 }
 
 /**
- * Conversion maps for ctrl types.
+ * Conversion maps for ctrl types (CSS parsing).
  */
-std::unordered_map<std::string, CanvasItemCtrlType> type_map = {
-    {".inkscape-node-auto", CANVAS_ITEM_CTRL_TYPE_NODE_AUTO},
-    {".inkscape-node-smooth", CANVAS_ITEM_CTRL_TYPE_NODE_SMOOTH},
-    {".inkscape-node-cusp", CANVAS_ITEM_CTRL_TYPE_NODE_CUSP},
-    {".inkscape-node-symmetrical", CANVAS_ITEM_CTRL_TYPE_NODE_SYMETRICAL},
-    {".inkscape-anchor", CANVAS_ITEM_CTRL_TYPE_ANCHOR},
-    {".inkscape-rotate", CANVAS_ITEM_CTRL_TYPE_ROTATE},
-    {".inkscape-margin", CANVAS_ITEM_CTRL_TYPE_MARGIN},
-    {".inkscape-center", CANVAS_ITEM_CTRL_TYPE_CENTER},
-    {".inkscape-sizer", CANVAS_ITEM_CTRL_TYPE_SIZER},
-    {".inkscape-shaper", CANVAS_ITEM_CTRL_TYPE_SHAPER},
-    {".inkscape-lpe", CANVAS_ITEM_CTRL_TYPE_LPE},
-    {".inkscape-point", CANVAS_ITEM_CTRL_TYPE_POINT},
+const std::unordered_map<std::string, CanvasItemCtrlType> ctrl_type_map = {
+    {"*", CANVAS_ITEM_CTRL_TYPE_DEFAULT},
     {".inkscape-adj-handle", CANVAS_ITEM_CTRL_TYPE_ADJ_HANDLE},
     {".inkscape-adj-skew", CANVAS_ITEM_CTRL_TYPE_ADJ_SKEW},
     {".inkscape-adj-rotate", CANVAS_ITEM_CTRL_TYPE_ADJ_ROTATE},
@@ -1035,16 +1025,29 @@ std::unordered_map<std::string, CanvasItemCtrlType> type_map = {
     {".inkscape-adj-salign", CANVAS_ITEM_CTRL_TYPE_ADJ_SALIGN},
     {".inkscape-adj-calign", CANVAS_ITEM_CTRL_TYPE_ADJ_CALIGN},
     {".inkscape-adj-malign", CANVAS_ITEM_CTRL_TYPE_ADJ_MALIGN},
-    {"*", CANVAS_ITEM_CTRL_TYPE_DEFAULT}
+    {".inkscape-anchor", CANVAS_ITEM_CTRL_TYPE_ANCHOR},
+    {".inkscape-point", CANVAS_ITEM_CTRL_TYPE_POINT},
+    {".inkscape-rotate", CANVAS_ITEM_CTRL_TYPE_ROTATE},
+    {".inkscape-margin", CANVAS_ITEM_CTRL_TYPE_MARGIN},
+    {".inkscape-center", CANVAS_ITEM_CTRL_TYPE_CENTER},
+    {".inkscape-sizer", CANVAS_ITEM_CTRL_TYPE_SIZER},
+    {".inkscape-shaper", CANVAS_ITEM_CTRL_TYPE_SHAPER},
+    {".inkscape-lpe", CANVAS_ITEM_CTRL_TYPE_LPE},
+    {".inkscape-node-auto", CANVAS_ITEM_CTRL_TYPE_NODE_AUTO},
+    {".inkscape-node-cusp", CANVAS_ITEM_CTRL_TYPE_NODE_CUSP},
+    {".inkscape-node-smooth", CANVAS_ITEM_CTRL_TYPE_NODE_SMOOTH},
+    {".inkscape-node-symmetrical", CANVAS_ITEM_CTRL_TYPE_NODE_SYMETRICAL},
+    {".inkscape-mesh", CANVAS_ITEM_CTRL_TYPE_MESH},
 };
 
 /**
- * Conversion maps for ctrl shapes.
+ * Conversion maps for ctrl shapes (CSS parsing).
  */
-std::unordered_map<std::string, CanvasItemCtrlShape> shape_map = {
+const std::unordered_map<std::string, CanvasItemCtrlShape> ctrl_shape_map = {
     {"\'square\'", CANVAS_ITEM_CTRL_SHAPE_SQUARE},
     {"\'diamond\'", CANVAS_ITEM_CTRL_SHAPE_DIAMOND},
     {"\'circle\'", CANVAS_ITEM_CTRL_SHAPE_CIRCLE},
+    {"\'triangle\'", CANVAS_ITEM_CTRL_SHAPE_TRIANGLE},
     {"\'cross\'", CANVAS_ITEM_CTRL_SHAPE_CROSS},
     {"\'plus\'", CANVAS_ITEM_CTRL_SHAPE_PLUS},
     {"\'pivot\'", CANVAS_ITEM_CTRL_SHAPE_PIVOT},
@@ -1071,8 +1074,8 @@ void configure_selector(CRSelector *a_selector, Handle *&selector, int &specific
     const char *selector_str = reinterpret_cast<const char *>(cr_simple_sel_one_to_string(a_selector->simple_sel));
     char **tokens = g_strsplit(selector_str, ":", 0);
     CanvasItemCtrlType type;
-    if (type_map.find(*tokens) != type_map.end()) {
-        type = type_map[*tokens];
+    if (ctrl_type_map.find(*tokens) != ctrl_type_map.end()) {
+        type = ctrl_type_map.at(*tokens);
         tokens++;
     } else {
         std::cerr << "Unrecognized selector:" << selector_str << std::endl;
@@ -1144,9 +1147,9 @@ void set_properties(CRDocHandler *a_handler, CRString *a_name, CRTerm *a_value, 
     const std::string value = (char *)cr_term_to_string(a_value);
     const std::string property = cr_string_peek_raw_str(a_name);
     if (property == "shape") {
-        if (shape_map.find(value) != shape_map.end()) {
+        if (ctrl_shape_map.find(value) != ctrl_shape_map.end()) {
             for (auto& [handle, specificity] : selected_handles) {
-                handle->shape.setProperty(shape_map[value], specificity + 100000 * a_important);
+                handle->shape.setProperty(ctrl_shape_map.at(value), specificity + 100000 * a_important);
             }
         } else {
             std::cerr << "Unrecognized value for " << property << ": " << value << std::endl;
@@ -1233,7 +1236,7 @@ void clear_selectors(CRDocHandler *a_handler, CRSelector *a_selector)
  */
 void CanvasItemCtrl::parse_handle_styles() const
 {
-    for (int type_i = CANVAS_ITEM_CTRL_TYPE_DEFAULT; type_i <= CANVAS_ITEM_CTRL_TYPE_NODE_SYMETRICAL; type_i++) {
+    for (int type_i = CANVAS_ITEM_CTRL_TYPE_DEFAULT; type_i <= CANVAS_ITEM_CTRL_TYPE_MESH; type_i++) {
         auto type = static_cast<CanvasItemCtrlType>(type_i);
         for (auto state = 0; state <= 8; state++) {
             delete handle_styles[Handle(type,state)];
@@ -1292,6 +1295,7 @@ void CanvasItemCtrl::build_cache(int device_scale) const
         std::lock_guard<std::mutex> lock(cache_mutex);
         if(handle_cache.find(handle) != handle_cache.end()) {
             _cache = handle_cache[handle];
+            return;
         }
         if (handle_styles.find(_handle) != handle_styles.end()) {
             auto handle_style = handle_styles[_handle];

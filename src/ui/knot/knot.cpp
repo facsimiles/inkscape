@@ -425,31 +425,14 @@ void SPKnot::updateCtrl() {
 }
 
 void SPKnot::_setCtrlState() {
-    int state = SP_KNOT_STATE_NORMAL;
-
     if(ctrl) {
-        ctrl->set_normal();
-    }
-    if (this->flags & SP_KNOT_DRAGGING) {
-        if(ctrl) {
+        ctrl->set_normal(this->flags & SP_KNOT_SELECTED);
+        if (this->flags & SP_KNOT_DRAGGING) {
             ctrl->set_click();
-        }
-        state = SP_KNOT_STATE_DRAGGING;
-    } else if (this->flags & SP_KNOT_MOUSEOVER) {
-        if(ctrl) {
+        } else if (this->flags & SP_KNOT_MOUSEOVER) {
             ctrl->set_hover();
         }
-        state = SP_KNOT_STATE_MOUSEOVER;
-    } else if (this->flags & SP_KNOT_SELECTED) {
-        if(ctrl) {
-            ctrl->set_selected();
-        }
-        state = SP_KNOT_STATE_SELECTED;
     }
-    // if (ctrl) {
-    //     ctrl->set_fill(fill[state]);
-    //     ctrl->set_stroke(stroke[state]);
-    // }
 }
 
 void SPKnot::setSize(guint i) {

@@ -1,39 +1,41 @@
 * {
-    fill: red;
+    fill: yellow;
     stroke: blue;
-    opacity: 40%;
+    opacity: 80%;
     stroke-width: 3px;
 }
-
-/*
-*:hover {
-    fill: blue;
-}
-*/
 
 *:selected {
     fill: blue;
     stroke: white;
 }
 
-/*
-*:click {
-    fill: green;
-}
-
 *:selected:hover {
-    fill: yellow;
+    fill: darkblue;
 }
 
-*:selected:click {
-    fill: black;
-} */
+*:hover {
+    fill: orange;
+}
+
+*:click {
+    fill: red;
+}
+
+.inkscape-mesh {
+    shape: "circle";
+}
+
+.inkscape-mesh:selected {
+    shape: "triangle";
+}
 
 .inkscape-node-smooth {
     shape: "square";
 }
 
 .inkscape-node-cusp,
+.inkscape-shaper,
 .inkscape-lpe {
     shape: "diamond";
 }
@@ -87,7 +89,6 @@
 
 /*( margin -  this is only used by the page tool edge-center handles )*/
 .inkscape-node-auto,
-.inkscape-shaper,
 .inkscape-margin {
     shape: "circle";
 }
