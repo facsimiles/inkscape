@@ -126,8 +126,6 @@ private:
     bool grabbed(MotionEvent const &event) override;
     void dragged(Geom::Point &new_pos, MotionEvent const &event) override;
     void ungrabbed(ButtonReleaseEvent const *event) override;
-
-    static ColorSet thandle_cset;
 };
 
 } // namespace UI

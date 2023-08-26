@@ -76,18 +76,8 @@ double snap_increment_degrees() {
 
 } // anonymous namespace
 
-ControlPoint::ColorSet TransformHandle::thandle_cset = {
-    {0x000000ff, 0x000000ff},  // normal fill, stroke
-    {0x00ff66ff, 0x000000ff},  // mouseover fill, stroke
-    {0x00ff66ff, 0x000000ff},  // clicked fill, stroke
-    //
-    {0x000000ff, 0x000000ff},  // normal fill, stroke when selected
-    {0x00ff66ff, 0x000000ff},  // mouseover fill, stroke when selected
-    {0x00ff66ff, 0x000000ff}   // clicked fill, stroke when selected
-};
-
 TransformHandle::TransformHandle(TransformHandleSet &th, SPAnchorType anchor, Inkscape::CanvasItemCtrlType type)
-    : ControlPoint(th._desktop, Geom::Point(), anchor, type, thandle_cset, th._transform_handle_group)
+    : ControlPoint(th._desktop, Geom::Point(), anchor, type, th._transform_handle_group)
     , _th(th)
 {
     _canvas_item_ctrl->set_name("CanvasItemCtrl:TransformHandle");
@@ -621,7 +611,7 @@ public:
     RotationCenter(TransformHandleSet &th)
         : ControlPoint(th._desktop, Geom::Point(), SP_ANCHOR_CENTER,
                      Inkscape::CANVAS_ITEM_CTRL_TYPE_ADJ_CENTER,
-                     _center_cset, th._transform_handle_group)
+                     th._transform_handle_group)
         , _th(th)
     {
         setVisible(false);
@@ -653,18 +643,7 @@ protected:
     }
 
 private:
-    static ColorSet _center_cset;
     TransformHandleSet &_th;
-};
-
-ControlPoint::ColorSet RotationCenter::_center_cset = {
-    {0x000000ff, 0x000000ff},  // normal fill, stroke
-    {0x00ff66ff, 0x000000ff},  // mouseover fill, stroke
-    {0x00ff66ff, 0x000000ff},  // clicked fill, stroke
-    //
-    {0x000000ff, 0x000000ff},  // normal fill, stroke when selected
-    {0x00ff66ff, 0x000000ff},  // mouseover fill, stroke when selected
-    {0x00ff66ff, 0x000000ff}   // clicked fill, stroke when selected
 };
 
 TransformHandleSet::TransformHandleSet(SPDesktop *d, Inkscape::CanvasItemGroup *th_group)

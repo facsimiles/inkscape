@@ -101,8 +101,9 @@ CanvasItemCtrl::CanvasItemCtrl(CanvasItemGroup *group, CanvasItemCtrlType type, 
     request_update();
 }
 
+//get rid of all usages of below, so that styling is completely moved to based on type.
 /**
- * Create a control ctrl.
+ * Create a control ctrl. 
  */
 CanvasItemCtrl::CanvasItemCtrl(CanvasItemGroup *group, CanvasItemCtrlShape shape)
     : CanvasItem(group)
@@ -273,10 +274,11 @@ void CanvasItemCtrl::set_pixbuf(Glib::RefPtr<Gdk::Pixbuf> pixbuf)
     });
 }
 
-void CanvasItemCtrl::set_size(int size)
+void CanvasItemCtrl::set_size(int size, bool manual)
 {
     //nominally width == height == size except possibly for pixmaps.
     defer([ = ] {
+        _size_set = manual;
         if (_pixbuf)
         {
             // std::cerr << "CanvasItemCtrl::set_size: Attempting to set size on pixbuf control!" << std::endl;
@@ -292,6 +294,10 @@ void CanvasItemCtrl::set_size(int size)
 
 void CanvasItemCtrl::set_size_via_index(int size_index)
 {
+    //If size has been set manually in the code, the handles shouldn't be affected.
+    if(_size_set) {
+        return;
+    }
     // Size must always be an odd number to center on pixel.
     if (size_index < 1 || size_index > 15) {
         std::cerr << "CanvasItemCtrl::set_size_via_index: size_index out of range!" << std::endl;
@@ -352,7 +358,7 @@ void CanvasItemCtrl::set_size_via_index(int size_index)
         break;
     }
 
-    set_size(size);
+    set_size(size, false);
 }
 
 void CanvasItemCtrl::set_size_default()
@@ -926,8 +932,7 @@ void CanvasItemCtrl::_render(CanvasItemBuffer &buf) const
             uint32_t base = row_ptr[j];
             uint32_t handle_px = *handle_ptr++;
             uint32_t handle_op = handle_px & 0xff;
-            auto mode = CANVAS_ITEM_CTRL_MODE_NORMAL;//for testing purpose only.
-            if(mode != CANVAS_ITEM_CTRL_MODE_NORMAL) {
+            if(_mode != CANVAS_ITEM_CTRL_MODE_NORMAL) {
                 if (base == 0 && handle_px != 0) {
                     base = canvas_color;
                 }
@@ -939,7 +944,7 @@ void CanvasItemCtrl::_render(CanvasItemBuffer &buf) const
                     continue;
                 }
             }
-            switch(mode) {
+            switch(_mode) {
             case CANVAS_ITEM_CTRL_MODE_NORMAL: {
                 EXTRACT_ARGB32(base, base_a, base_r, base_g, base_b)
                 EXTRACT_ARGB32(argb32_from_rgba(handle_px), handle_a, handle_r, handle_g, handle_b)
@@ -1290,30 +1295,35 @@ void CanvasItemCtrl::build_cache(int device_scale) const
     //- (C++20) make_shared 
     //- handle using pixbuf isn't possible using this method
     _cache = std::make_unique<uint32_t[]>(size);
-    std::tuple<Handle,int,double> handle = std::make_tuple(_handle,size,_angle);
+    std::tuple<Handle,int,double> handle_prop = std::make_tuple(_handle,size,_angle);
     {
         std::lock_guard<std::mutex> lock(cache_mutex);
-        if(handle_cache.find(handle) != handle_cache.end()) {
-            _cache = handle_cache[handle];
+        if(auto cached_handle = handle_cache.find(handle_prop); cached_handle != handle_cache.end()) {
+            _cache = cached_handle->second;
             return;
         }
-        if (handle_styles.find(_handle) != handle_styles.end()) {
-            auto handle_style = handle_styles[_handle];
-            auto shape = handle_style->shape();
-            auto fill = handle_style->getFill();
-            auto stroke = handle_style->getStroke();
-            auto stroke_width = handle_style->stroke_width();
-            build_shape(_cache, shape, fill, stroke, stroke_width,
-                            height, width, _angle, _pixbuf, device_scale);
-            handle_cache[handle] = _cache;
-        } else {//this will never occur
-            build_shape(_cache, CANVAS_ITEM_CTRL_SHAPE_SQUARE, _fill, _stroke, 1,
-                            height, width, _angle, _pixbuf, device_scale);
-            handle_cache[handle] = _cache;
+    }
+    if (auto handle_style_find = handle_styles.find(_handle); handle_style_find != handle_styles.end()) {
+        auto handle_style = handle_style_find->second;
+        auto shape = handle_style->shape();
+        auto fill = handle_style->getFill();
+        auto stroke = handle_style->getStroke();
+        auto stroke_width = handle_style->stroke_width();
+        build_shape(_cache, shape, fill, stroke, stroke_width,
+                        height, width, _angle, _pixbuf, device_scale);
+        {
+            std::lock_guard<std::mutex> lock(cache_mutex);
+            handle_cache[handle_prop] = _cache;
+        }
+    } else {//this will never occur
+        build_shape(_cache, CANVAS_ITEM_CTRL_SHAPE_SQUARE, _fill, _stroke, 1,
+                        height, width, _angle, _pixbuf, device_scale);
+        {
+            std::lock_guard<std::mutex> lock(cache_mutex);
+            handle_cache[handle_prop] = _cache;
         }
     }
 }
-
 
 /**
  * Draw the handles as described by the arguments.

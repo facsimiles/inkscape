@@ -225,7 +225,7 @@ void NodeSatelliteArrayParam::addKnotHolderEntities(KnotHolder *knotholder, SPIt
                 e->create(nullptr, item, knotholder, Inkscape::CANVAS_ITEM_CTRL_TYPE_LPE, "LPE:Chamfer",
                           _(tip), _knot_color);
                 knotholder->add(e);
-                e->knot->setMode(CANVAS_ITEM_CTRL_MODE_COLOR);
+                // e->knot->setMode(CANVAS_ITEM_CTRL_MODE_COLOR);
                 // e->knot->setFill(0xffffffff, 0x44ff44ff, 0x44ff44ff, 0xffffffff);
                 // e->knot->setStroke(0x555555ff, 0x555555ff, 0x555555ff, 0x555555ff);
             }

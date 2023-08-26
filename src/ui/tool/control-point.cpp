@@ -31,18 +31,6 @@
 namespace Inkscape {
 namespace UI {
 
-
-// Default colors for control points
-ControlPoint::ColorSet ControlPoint::_default_color_set = {
-    {0xffffff00, 0x01000000}, // normal fill, stroke
-    {0xff0000ff, 0x01000000}, // mouseover fill, stroke
-    {0x0000ffff, 0x01000000}, // clicked fill, stroke
-    //
-    {0x0000ffff, 0x000000ff}, // normal fill, stroke when selected
-    {0xff000000, 0x000000ff}, // mouseover fill, stroke when selected
-    {0xff000000, 0x000000ff}  // clicked fill, stroke when selected
-};
-
 ControlPoint *ControlPoint::mouseovered_point = nullptr;
 
 sigc::signal<void (ControlPoint*)> ControlPoint::signal_mouseover_change;
@@ -62,29 +50,16 @@ static constexpr auto grab_event_mask = EventType::BUTTON_PRESS   |
 bool ControlPoint::_drag_initiated = false;
 bool ControlPoint::_event_grab = false;
 
-ControlPoint::ColorSet ControlPoint::invisible_cset = {
-    {0x00000000, 0x00000000},
-    {0x00000000, 0x00000000},
-    {0x00000000, 0x00000000},
-    {0x00000000, 0x00000000},
-    {0x00000000, 0x00000000},
-    {0x00000000, 0x00000000}
-};
-
 ControlPoint::ControlPoint(SPDesktop *d, Geom::Point const &initial_pos, SPAnchorType anchor,
                            Glib::RefPtr<Gdk::Pixbuf> pixbuf,
-                           ColorSet const &cset,
                            Inkscape::CanvasItemGroup *group)
     : _desktop(d)
-    , _cset(cset)
     , _position(initial_pos)
 {
     _canvas_item_ctrl = make_canvasitem<Inkscape::CanvasItemCtrl>(group ? group : _desktop->getCanvasControls(),
                                                 Inkscape::CANVAS_ITEM_CTRL_SHAPE_BITMAP);
     _canvas_item_ctrl->set_name("CanvasItemCtrl:ControlPoint");
     _canvas_item_ctrl->set_pixbuf(std::move(pixbuf));
-    // _canvas_item_ctrl->set_fill(_cset.normal.fill);
-    // _canvas_item_ctrl->set_stroke(_cset.normal.stroke);
     _canvas_item_ctrl->set_anchor(anchor);
 
     _commonInit();
@@ -92,16 +67,12 @@ ControlPoint::ControlPoint(SPDesktop *d, Geom::Point const &initial_pos, SPAncho
 
 ControlPoint::ControlPoint(SPDesktop *d, Geom::Point const &initial_pos, SPAnchorType anchor,
                            Inkscape::CanvasItemCtrlType type,
-                           ColorSet const &cset,
                            Inkscape::CanvasItemGroup *group)
     : _desktop(d)
-    , _cset(cset)
     , _position(initial_pos)
 {
     _canvas_item_ctrl = make_canvasitem<Inkscape::CanvasItemCtrl>(group ? group : _desktop->getCanvasControls(), type);
     _canvas_item_ctrl->set_name("CanvasItemCtrl:ControlPoint");
-    // _canvas_item_ctrl->set_fill(  _cset.normal.fill);
-    // _canvas_item_ctrl->set_stroke(_cset.normal.stroke);
     _canvas_item_ctrl->set_anchor(anchor);
 
     _commonInit();
@@ -478,21 +449,16 @@ void ControlPoint::transferGrab(ControlPoint *prev_point, MotionEvent const &eve
 void ControlPoint::_setState(State state)
 {
     _canvas_item_ctrl->set_normal();
-    ColorEntry current = {0, 0};
     switch(state) {
         case STATE_NORMAL:
-            // current = _cset.normal;
             break;
         case STATE_MOUSEOVER:
-            // current = _cset.mouseover;
             _canvas_item_ctrl->set_hover();
             break;
         case STATE_CLICKED:
-            // current = _cset.clicked;
             _canvas_item_ctrl->set_click();
             break;
     };
-    // _setColors(current);
     _state = state;
 }
 

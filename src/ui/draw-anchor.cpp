@@ -21,9 +21,6 @@
 #include "display/control/canvas-item-ctrl.h"
 #include "display/curve.h"
 
-const guint32 FILL_COLOR_NORMAL    = 0xffffff7f;
-const guint32 FILL_COLOR_MOUSEOVER = 0xff0000ff;
-
 /**
  * Creates an anchor object and initializes it.
  */
@@ -37,7 +34,6 @@ SPDrawAnchor::SPDrawAnchor(Inkscape::UI::Tools::FreehandBase *dc, std::shared_pt
       )
 {
     ctrl->set_name("CanvasItemCtrl:DrawAnchor");
-    // ctrl->set_fill(FILL_COLOR_NORMAL);
     ctrl->set_position(delta);
     ctrl->set_pickable(false); // We do our own checking. (TODO: Should be fixed!)
 }

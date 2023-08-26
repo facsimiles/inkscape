@@ -74,7 +74,7 @@ private:
     
     /// The looks of the vector and origin knots oncanvas
     Inkscape::CanvasItemCtrlShape vec_knot_shape = Inkscape::CANVAS_ITEM_CTRL_SHAPE_DIAMOND;
-    Inkscape::CanvasItemCtrlMode  vec_knot_mode = Inkscape::CANVAS_ITEM_CTRL_MODE_XOR;
+    Inkscape::CanvasItemCtrlMode  vec_knot_mode = Inkscape::CANVAS_ITEM_CTRL_MODE_NORMAL;
     guint32                       vec_knot_color = 0xffffb500;
 
     friend class TransformedPointParamKnotHolderEntity_Vector;

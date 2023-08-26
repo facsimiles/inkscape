@@ -182,7 +182,7 @@ bool Handle::_drag_out = false;
 Handle::Handle(NodeSharedData const &data, Geom::Point const &initial_pos, Node *parent)
     : ControlPoint(data.desktop, initial_pos, SP_ANCHOR_CENTER,
                    Inkscape::CANVAS_ITEM_CTRL_TYPE_ROTATE,
-                   _handle_colors, data.handle_group)
+                   data.handle_group)
     , _handle_line(make_canvasitem<CanvasItemCurve>(data.handle_line_group))
     , _parent(parent)
     , _degenerate(true)
@@ -757,7 +757,7 @@ Node::Node(NodeSharedData const &data, Geom::Point const &initial_pos) :
     SelectableControlPoint(data.desktop, initial_pos, SP_ANCHOR_CENTER,
                            Inkscape::CANVAS_ITEM_CTRL_TYPE_NODE_CUSP,
                            *data.selection,
-                           node_colors, data.node_group),
+                           data.node_group),
     _front(data, initial_pos, this),
     _back(data, initial_pos, this),
     _type(NODE_CUSP),

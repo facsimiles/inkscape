@@ -136,8 +136,7 @@ public:
 
     /**
      * Set the visibility of the control point. An invisible point is not drawn on the canvas
-     * and cannot receive any events. If you want to have an invisible point that can respond
-     * to events, use <tt>invisible_cset</tt> as its color set.
+     * and cannot receive any events.
      */
     virtual void setVisible(bool v);
     /// @}
@@ -205,11 +204,6 @@ protected:
     };
 
     /**
-     * A color set which you can use to create an invisible control that can still receive events.
-     */
-    static ColorSet invisible_cset;
-
-    /**
      * Create a regular control point.
      * Derive to have constructors with a reasonable number of parameters.
      *
@@ -217,12 +211,10 @@ protected:
      * @param initial_pos Initial position of the control point in desktop coordinates
      * @param anchor Where is the control point rendered relative to its desktop coordinates
      * @param type Logical type of the control point.
-     * @param cset Colors of the point
      * @param group The canvas group the point's canvas item should be created in
      */
     ControlPoint(SPDesktop *d, Geom::Point const &initial_pos, SPAnchorType anchor,
                  Inkscape::CanvasItemCtrlType type,
-                 ColorSet const &cset = _default_color_set,
                  Inkscape::CanvasItemGroup *group = nullptr);
 
     /**
@@ -232,12 +224,10 @@ protected:
      * @param initial_pos Initial position of the control point in desktop coordinates
      * @param anchor Where is the control point rendered relative to its desktop coordinates
      * @param pixbuf Pixbuf to be used as the visual representation
-     * @param cset Colors of the point
      * @param group The canvas group the point's canvas item should be created in
      */
     ControlPoint(SPDesktop *d, Geom::Point const &initial_pos, SPAnchorType anchor,
                  Glib::RefPtr<Gdk::Pixbuf> pixbuf,
-                 ColorSet const &cset = _default_color_set,
                  Inkscape::CanvasItemGroup *group = nullptr);
 
     /// @name Handle control point events in subclasses
@@ -315,8 +305,6 @@ protected:
 
     CanvasItemPtr<Inkscape::CanvasItemCtrl> _canvas_item_ctrl; ///< Visual representation of the control point.
 
-    ColorSet const &_cset; ///< Colors used to represent the point
-
     State _state = STATE_NORMAL;
 
     static Geom::Point const &_last_click_event_point() { return _drag_event_origin; }
@@ -347,8 +335,6 @@ private:
     Geom::Point _position; ///< Current position in desktop coordinates
 
     sigc::connection _event_handler_connection;
-
-    static ColorSet _default_color_set;
 
     /** Stores the window point over which the cursor was during the last mouse button press. */
     static Geom::Point _drag_event_origin;

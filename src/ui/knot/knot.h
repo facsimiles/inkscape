@@ -78,7 +78,7 @@ public:
 
     Inkscape::CanvasItemCtrlShape shape = Inkscape::CANVAS_ITEM_CTRL_SHAPE_SQUARE;   /**< Shape type. */
     bool shape_set      = false;                    /**< Use default shape unless explicitly set. */
-    Inkscape::CanvasItemCtrlMode mode = Inkscape::CANVAS_ITEM_CTRL_MODE_XOR;
+    Inkscape::CanvasItemCtrlMode mode = Inkscape::CANVAS_ITEM_CTRL_MODE_NORMAL;
 
     // uint32_t fill[SP_KNOT_VISIBLE_STATES];
     // uint32_t stroke[SP_KNOT_VISIBLE_STATES];

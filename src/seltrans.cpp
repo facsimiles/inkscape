@@ -822,10 +822,6 @@ void Inkscape::SelTrans::_makeHandles()
         }
 
         knots[i]->setAnchor(hands[i].anchor);
-        knots[i]->setMode(CANVAS_ITEM_CTRL_MODE_DESATURATED_XOR);
-        // knots[i]->setFill(DEF_COLOR[0], DEF_COLOR[1], DEF_COLOR[1], DEF_COLOR[2]);
-        // knots[i]->setStroke(DEF_COLOR[3], DEF_COLOR[4], DEF_COLOR[4], DEF_COLOR[4]);
-
         knots[i]->updateCtrl();
 
         knots[i]->request_signal.connect(sigc::bind(sigc::ptr_fun(sp_sel_trans_handle_request), &hands[i]));

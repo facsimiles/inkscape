@@ -196,8 +196,7 @@ public:
     void set_shape(CanvasItemCtrlShape shape);
     // void set_shape_default(); // Use type to determine shape.
     void set_mode(CanvasItemCtrlMode mode);
-    void set_mode_default();
-    void set_size(int size);
+    void set_size(int size, bool manual = 1);
     virtual void set_size_via_index(int size_index);
     void set_size_default(); // Use preference and type to set size.
     void set_size_extra(int extra); // Used to temporary increase size of ctrl.
@@ -232,7 +231,8 @@ protected:
     // Properties
     Handle _handle = Handle();
     CanvasItemCtrlShape _shape = CANVAS_ITEM_CTRL_SHAPE_SQUARE;
-    CanvasItemCtrlMode  _mode  = CANVAS_ITEM_CTRL_MODE_XOR;
+    CanvasItemCtrlMode  _mode  = CANVAS_ITEM_CTRL_MODE_NORMAL;
+    bool _size_set = false;
     int _width  = 5; // Nominally width == height == size... unless we use a pixmap.
     int _height = 5;
     int _extra  = 0; // Used to temporarily increase size.

@@ -19,7 +19,7 @@ namespace Inkscape::UI {
 class PathManipulator;
 struct PathSharedData;
 
-// This point should be invisible to the user - use the invisible_cset from control-point.h
+// This point should be invisible to the user
 // TODO make some methods from path-manipulator.cpp public so that this point doesn't have
 // to be declared as a friend
 /**

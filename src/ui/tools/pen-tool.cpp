@@ -94,7 +94,6 @@ PenTool::PenTool(SPDesktop *desktop, std::string &&prefs_path, std::string &&cur
     auto canvas = desktop->getCanvasControls();
     for (int i = 0; i < 4; i++) {
         ctrl[i] = make_canvasitem<CanvasItemCtrl>(canvas, ctrl_types[i]);
-        // ctrl[i]->set_fill(0x0);
         ctrl[i]->set_visible(false);
     }
 

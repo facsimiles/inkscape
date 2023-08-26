@@ -27,9 +27,8 @@ ControlPoint::ColorSet SelectableControlPoint::_default_scp_color_set = {
 SelectableControlPoint::SelectableControlPoint(SPDesktop *d, Geom::Point const &initial_pos, SPAnchorType anchor,
                                                Inkscape::CanvasItemCtrlType type,
                                                ControlPointSelection &sel,
-                                               ColorSet const &cset,
                                                Inkscape::CanvasItemGroup *group)
-    : ControlPoint(d, initial_pos, anchor, type, cset, group)
+    : ControlPoint(d, initial_pos, anchor, type, group)
     , _selection(sel)
 {
     _canvas_item_ctrl->set_name("CanvasItemCtrl:SelectableControlPoint");
@@ -39,9 +38,8 @@ SelectableControlPoint::SelectableControlPoint(SPDesktop *d, Geom::Point const &
 SelectableControlPoint::SelectableControlPoint(SPDesktop *d, Geom::Point const &initial_pos, SPAnchorType anchor,
                                                Glib::RefPtr<Gdk::Pixbuf> pixbuf,
                                                ControlPointSelection &sel,
-                                               ColorSet const &cset,
                                                Inkscape::CanvasItemGroup *group)
-    : ControlPoint(d, initial_pos, anchor, pixbuf, cset, group)
+    : ControlPoint(d, initial_pos, anchor, pixbuf, group)
     , _selection (sel)
 {
     _selection.allPoints().insert(this);
@@ -122,14 +120,11 @@ void SelectableControlPoint::_setState(State state)
         ColorEntry current = {0, 0};
         switch (state) {
             case STATE_NORMAL:
-                // current = _cset.selected_normal;
                 break;
             case STATE_MOUSEOVER:
-                // current = _cset.selected_mouseover;
                 _canvas_item_ctrl->set_hover();
                 break;
             case STATE_CLICKED:
-                // current = _cset.selected_clicked;
                 _canvas_item_ctrl->set_click();
                 break;
         }
