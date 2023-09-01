@@ -906,11 +906,7 @@ ObjectsPanel::ObjectsPanel()
 
     // Before expanding a row, replace the dummy child with the actual children
     _tree.signal_test_expand_row().connect([this](const Gtk::TreeModel::iterator &iter, const Gtk::TreeModel::Path &) {
-        if (cleanDummyChildren(*iter)) {
-            if (getSelection()) {
-                _selectionChanged();
-            }
-        }
+        cleanDummyChildren(*iter);
         return false;
     });
     _tree.signal_row_expanded().connect([=](const Gtk::TreeModel::iterator &iter, const Gtk::TreeModel::Path &) {
