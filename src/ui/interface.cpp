@@ -52,7 +52,7 @@ sp_ui_new_view()
     document = SP_ACTIVE_DOCUMENT;
     if (!document) return;
 
-    auto *app = InkscapeApplication::instance();
+    auto app = InkscapeApplication::instance();
 
     app->window_open(document);
 }
@@ -60,7 +60,7 @@ sp_ui_new_view()
 void
 sp_ui_close_view(GtkWidget */*widget*/)
 {
-    auto *app = InkscapeApplication::instance();
+    auto app = InkscapeApplication::instance();
 
     auto window = app->get_active_window();
     assert(window);

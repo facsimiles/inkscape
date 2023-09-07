@@ -27,6 +27,7 @@
 #include <gtkmm/window.h>
 
 #include "desktop.h"
+#include "inkscape-application.h"
 #include "extension/db.h"
 #include "extension/effect.h"
 #include "extension/execution-env.h"
@@ -39,6 +40,7 @@
 #include "inkscape.h"
 #include "io/resource.h"
 #include "io/file.h"
+#include "actions/actions-helper.h"
 #include "layer-manager.h"
 #include "object/sp-namedview.h"
 #include "object/sp-page.h"
@@ -532,23 +534,30 @@ void Script::export_raster(Inkscape::Extension::Output *module,
 */
 void Script::effect(Inkscape::Extension::Effect *module,
                SPDesktop *desktop,
-               ImplementationDocumentCache * docCache)
+               ImplementationDocumentCache * docCache,
+               std::list<std::string> &params)
 {
-    if (desktop == nullptr)
-    {
-        g_warning("Script::effect: Desktop not defined");
+    auto app = InkscapeApplication::instance();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        std::cerr << "Need selection and document" << std::endl;
         return;
     }
-
-    sp_namedview_document_from_window(desktop);
+    if (params.empty()) {
+        params = selection->params;
+    }
+    selection->clear();
+    //this store things related to desktop in cuurent document
+    if (desktop) {
+        sp_namedview_document_from_window(desktop);
+    }
 
     if (module->no_doc) {
         // this is a no-doc extension, e.g. a Help menu command;
         // just run the command without any files, ignoring errors
 
-        std::list<std::string> params;
-        module->paramListString(params);
-        module->set_environment(desktop->getDocument());
+        module->set_environment(document);
 
         Glib::ustring empty;
         file_listener outfile;
@@ -557,23 +566,14 @@ void Script::effect(Inkscape::Extension::Effect *module,
         // Hack to allow for extension manager to reload extensions
         // TODO: Find a better way to do this, e.g. implement an action and have extensions (or users)
         //       call that instead when there's a change that requires extensions to reload
-        if (!g_strcmp0(module->get_id(), "org.inkscape.extension.manager")) {
+        if (desktop && !g_strcmp0(module->get_id(), "org.inkscape.extension.manager")) {
             Inkscape::Extension::refresh_user_extensions();
             build_menu(); // Rebuild main menubar.
         }
 
         return;
     }
-
-    std::list<std::string> params;
-    if (desktop) {
-        Inkscape::Selection * selection = desktop->getSelection();
-        if (selection) {
-            params = selection->params;
-            selection->clear();
-        }
-    }
-    _change_extension(module, desktop->getDocument(), params, module->ignore_stderr);
+    _change_extension(module, document, params, module->ignore_stderr);
 }
 
 //uncomment if issues on ref extensions links
@@ -614,9 +614,9 @@ void Script::effect(Inkscape::Extension::Effect *module,
  */
 void Script::_change_extension(Inkscape::Extension::Extension *module, SPDocument *doc, std::list<std::string> &params, bool ignore_stderr)
 {
+
     module->paramListString(params);
     module->set_environment(doc);
-
     if (auto env = module->get_execution_env()) {
         parent_window = env->get_working_dialog();
     }
@@ -637,6 +637,13 @@ void Script::_change_extension(Inkscape::Extension::Extension *module, SPDocumen
     int data_read = execute(command, params, tempfile_in.get_filename(), fileout, ignore_stderr);
     if (data_read == 0) {
         return;
+    }
+    if (!SP_ACTIVE_DESKTOP && doc->getDocumentFilename()) {
+        Glib::ustring fn = g_strdup(doc->getDocumentFilename());
+        fileout.toFile(fn);
+        return;
+    } else if (!SP_ACTIVE_DESKTOP) {
+        Inkscape::UI::gui_warning(_("Couldent save documen woithout file."), parent_window);
     }
     fileout.toFile(tempfile_out.get_filename());
 

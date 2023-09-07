@@ -132,7 +132,7 @@ void create_and_apply_filter(SPItem* item, Inkscape::XML::Document* filterdoc) {
 #define FILTER_SRC_GRAPHIC_ALPHA "fbSourceGraphicAlpha"
 
 void Filter::effect(Inkscape::Extension::Effect *module, SPDesktop *desktop,
-                    Inkscape::Extension::Implementation::ImplementationDocumentCache * /*docCache*/)
+                    Inkscape::Extension::Implementation::ImplementationDocumentCache * /*docCache*/, std::list<std::string> &/*params*/)
 {
     Inkscape::XML::Document *filterdoc = get_filter(module);
     if (filterdoc == nullptr) {

@@ -105,7 +105,7 @@ void dump_ustr(Glib::ustring const &ustr);
  */
 SPDesktop *sp_file_new(const std::string &templ)
 {
-    auto *app = InkscapeApplication::instance();
+    auto app = InkscapeApplication::instance();
 
     SPDocument* doc = app->document_new (templ);
     if (!doc) {
@@ -187,7 +187,7 @@ void sp_file_revert_dialog()
 
     bool reverted = false;
     if (do_revert) {
-        auto *app = InkscapeApplication::instance();
+        auto app = InkscapeApplication::instance();
         reverted = app->document_revert (doc);
     }
 
@@ -373,7 +373,7 @@ sp_file_open_dialog(Gtk::Window &parentWindow, gpointer /*object*/, gpointer /*d
     delete openDialogInstance;
     openDialogInstance = nullptr;
 
-    auto *app = InkscapeApplication::instance();
+    auto app = InkscapeApplication::instance();
 
     //# Iterate through filenames if more than 1
     if (flist.size() > 1)

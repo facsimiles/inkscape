@@ -52,7 +52,7 @@ BlurEdge::load (Inkscape::Extension::Extension */*module*/)
     \param  desktop What should be edited.
 */
 void
-BlurEdge::effect (Inkscape::Extension::Effect *module, SPDesktop *desktop, Inkscape::Extension::Implementation::ImplementationDocumentCache * /*docCache*/)
+BlurEdge::effect (Inkscape::Extension::Effect *module, SPDesktop *desktop, Inkscape::Extension::Implementation::ImplementationDocumentCache * /*docCache*/, std::list<std::string> &/*params*/)
 {
     Inkscape::Selection * selection     = desktop->getSelection();
 

@@ -135,7 +135,7 @@ PrefDialog::preview_toggle () {
 
             _exEnv = std::make_unique<ExecutionEnv>(_effect, SP_ACTIVE_DESKTOP, nullptr, false, false);
             _effect->set_execution_env(_exEnv.get());
-            _exEnv->run();
+            _exEnv->run(_params);
         }
     } else {
         set_modal(false);
@@ -175,7 +175,7 @@ PrefDialog::param_timer_expire () {
         _exEnv->cancel();
         _exEnv->undo();
         _exEnv->reselect();
-        _exEnv->run();
+        _exEnv->run(_params);
     }
 
     return false;
@@ -186,7 +186,7 @@ PrefDialog::on_response (int signal) {
     if (signal == Gtk::RESPONSE_OK) {
         if (_exEnv == nullptr) {
             if (_effect != nullptr) {
-                _effect->effect(SP_ACTIVE_DESKTOP);
+                _effect->effect(SP_ACTIVE_DESKTOP,_params);
             } else {
                 // Shutdown run()
                 return;

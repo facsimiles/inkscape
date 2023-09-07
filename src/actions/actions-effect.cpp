@@ -37,9 +37,9 @@ last_effect(InkscapeApplication *app)
     if (effect == nullptr) {
         return;
     }
-
+    std::list<std::string> params = Inkscape::Extension::Effect::get_last_params();
     // Last Effect
-    effect->effect(InkscapeApplication::instance()->get_active_desktop());
+    effect->effect(InkscapeApplication::instance()->get_active_desktop(), params);
 }
 
 void
@@ -50,9 +50,9 @@ last_effect_pref(InkscapeApplication *app)
     if (effect == nullptr) {
         return;
     }
-
+    std::list<std::string> params;
     // Last Effect Pref
-    effect->prefs(InkscapeApplication::instance()->get_active_desktop());
+    effect->prefs(InkscapeApplication::instance()->get_active_desktop(), params);
 }
 
 void

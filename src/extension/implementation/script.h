@@ -63,7 +63,7 @@ public:
     void save(Inkscape::Extension::Output *module, SPDocument *doc, gchar const *filename) override;
     void export_raster(Inkscape::Extension::Output *module,
             const SPDocument *doc, std::string const &png_file, gchar const *filename) override;
-    void effect(Inkscape::Extension::Effect *module, SPDesktop *desktop, ImplementationDocumentCache * docCache) override;
+    void effect(Inkscape::Extension::Effect *module, SPDesktop *desktop, ImplementationDocumentCache * docCache, std::list<std::string> &params) override;
     bool cancelProcessing () override;
 
 private:

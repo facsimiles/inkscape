@@ -116,7 +116,7 @@ std::vector<std::vector<Glib::ustring>> hint_data_file =
     {"app.file-open",               N_("Enter file name")},
     {"app.file-new",                N_("Enter file name")},
     {"app.file-open-window",        N_("Enter file name")},
-    {"app.file-rebase-from-saved",  N_("Namedview; Update=1, Replace=0")}
+    {"app.file-rebase",             N_("Namedview; Update=1, Replace=0")}
     // clang-format on
 };
 

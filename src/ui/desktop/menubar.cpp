@@ -122,7 +122,13 @@ build_menu()
 
                 current_menu = it->second;
             }
-            current_menu->append(entry.effect_name, "app." + entry.effect_id);
+            auto item { Gio::MenuItem::create(std::move(entry.effect_name), Glib::ustring()) };
+            // we need empty target on filters and extensions to run from menu (no params)
+            auto target { Glib::Variant<Glib::ustring>::create("") };
+            // note: setting action and target separately rather than using convenience menu method append
+            // since some filename characters can result in invalid "direct action" string
+            item->set_action_and_target(Glib::ustring("app." + entry.effect_id), target);
+            current_menu->append_item(item);
         }
     }
 

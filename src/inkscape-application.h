@@ -87,7 +87,7 @@ public:
     // This will replace _active_desktop.
     InkscapeWindow*       get_active_window() { return _active_window; }
     void                  set_active_window(InkscapeWindow* window) { _active_window = window; }
-
+    bool                  get_with_gui() const { return _with_gui; }
     /****** Document ******/
     /* These should not require a GUI! */
     void                  document_add(SPDocument* document);
@@ -131,7 +131,7 @@ public:
     // void unreference() { /*printf("unreference()\n");*/ }
 
     int get_number_of_windows() const;
-
+    
 protected:
     bool _with_gui    = true;
     bool _batch_process = false; // Temp

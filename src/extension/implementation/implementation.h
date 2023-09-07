@@ -126,7 +126,8 @@ public:
                                        ImplementationDocumentCache *docCache);
     virtual void effect(Inkscape::Extension::Effect * /*module*/,
                         SPDesktop * /*desktop*/,
-                        ImplementationDocumentCache * /*docCache*/) {}
+                        ImplementationDocumentCache * /*docCache*/,
+                        std::list<std::string> &/*params*/) {}
     virtual bool apply_filter(Inkscape::Extension::Effect* module, SPItem* item) { return false; }
 
     // ----- Print functions -----

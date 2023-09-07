@@ -77,7 +77,7 @@ public:
 
     /** \brief Starts the execution of the effect
         \return Returns whether the effect was executed to completion */
-    void run ();
+    void run (std::list<std::string> &params);
     /** \brief Cancel the execution of the effect */
     void cancel ();
     /** \brief Commit the changes to the document */

@@ -40,7 +40,7 @@ class Effect : public Extension {
     /** \brief  This is the last effect that was used.  This is used in
                 a menu item to rapidly recall the same effect. */
     static Effect * _last_effect;
-
+    static std::list<std::string> _last_params;
     Inkscape::XML::Node *find_menu (Inkscape::XML::Node * menustruct, const gchar *name);
     void get_menu(Inkscape::XML::Node * pattern, std::list<Glib::ustring>& sub_menu_list) const;
 
@@ -54,8 +54,8 @@ public:
     Effect(Inkscape::XML::Node *in_repr, Implementation::Implementation *in_imp, std::string *base_directory, std::string* file_name);
     ~Effect  () override;
 
-    bool         prefs   (SPDesktop * desktop);
-    void         effect  (SPDesktop * desktop);
+    bool         prefs   (SPDesktop * desktop, std::list<std::string> &params);
+    void         effect  (SPDesktop * desktop, std::list<std::string> &params);
 
     /** \brief  Whether a working dialog should be shown */
     bool _workingDialog = true;
@@ -65,7 +65,10 @@ public:
 
     /** \brief  Static function to get the last effect used */
     static Effect *  get_last_effect () { return _last_effect; };
+    static std::list<std::string>  get_last_params () { return _last_params; };
+
     static void      set_last_effect (Effect * in_effect);
+    static void      set_last_params (std::list<std::string> in_params);
 
     static void      place_menus ();
     void             place_menu (Inkscape::XML::Node * menus);
@@ -105,7 +108,8 @@ public:
 
     // apply filter effect to 'item'
     bool apply_filter(SPItem* item);
-
+    
+    static void sanitizeId(std::string &id);
 private:
     std::string _file_name; // extension file name, if provided
     bool _hidden_from_menu = false;
@@ -115,7 +119,6 @@ private:
     std::string _icon_path;
 
     static gchar *   remove_ (gchar * instr);
-    static void _sanitizeId(std::string &id);
 };
 
 } }  /* namespace Inkscape, Extension */

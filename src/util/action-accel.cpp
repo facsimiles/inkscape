@@ -41,7 +41,7 @@ void ActionAccel::_onShortcutsModified()
 
 bool ActionAccel::_query()
 {
-    auto *app = InkscapeApplication::instance();
+    auto app = InkscapeApplication::instance();
     if (!app) {
         g_warn_message("Inkscape", __FILE__, __LINE__, __func__,
                        "Attempt to read keyboard shortcuts while running without an InkscapeApplication!");
