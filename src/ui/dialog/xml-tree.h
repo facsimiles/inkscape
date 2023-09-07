@@ -34,6 +34,7 @@
 #include "dialog-base.h"
 #include "preferences.h"
 #include "ui/syntax.h"
+#include "widgets/sp-xmlview-tree.h"
 
 class SPObject;
 struct SPXMLViewAttrList;
@@ -139,6 +140,7 @@ private:
     void rebuildTree();
     void stopNodeEditing(bool ok, Glib::ustring const &path, Glib::ustring name);
     void startNodeEditing(Gtk::CellEditable *cell, Glib::ustring const &path);
+    std::pair<NodeStatus, Glib::ustring> get_node_status(Inkscape::XML::Node* repr);
 
     /**
      * Flag to ensure only one operation is performed at once

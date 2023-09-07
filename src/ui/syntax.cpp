@@ -187,6 +187,7 @@ XMLStyles build_xml_styles(const Glib::ustring& syntax_theme)
         styles.comment          = to_style("def:comment");
         styles.prolog           = to_style("def:warning");
         styles.angular_brackets = to_style("draw-spaces");
+        styles.warning          = to_style("def:warning");
         styles.error            = to_style("def:error");
     }
 #endif

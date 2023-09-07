@@ -53,6 +53,7 @@ struct XMLStyles
     Style attribute_name;
     Style attribute_value;
     Style content;
+    Style warning;
     Style error;
 };
 
@@ -80,6 +81,8 @@ public:
     Glib::ustring formatContent(char const* content, bool wrap_in_quotes = true) const;
     Glib::ustring formatComment(char const* comment, bool wrap_in_comment_marks = true) const;
     Glib::ustring formatProlog(char const* prolog) const { return _format(_style.prolog, prolog); }
+
+    Glib::ustring warning(const char* warn) const { return _format(_style.warning, warn); }
 
 private:
     Glib::ustring _format(Style const &style, Glib::ustring const &content) const;
