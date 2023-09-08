@@ -15,6 +15,8 @@
 #include "execution-env.h"
 #include "prefdialog/prefdialog.h"
 #include "implementation/implementation.h"
+#include "actions/actions-helper.h"
+#include "inkscape-application.h"
 
 #include "selection.h"
 #include "effect.h"
@@ -50,17 +52,15 @@ ExecutionEnv::ExecutionEnv (Effect * effect, SPDesktop * desktop, Implementation
     _effect(effect),
     _show_working(show_working)
 {
-    SPDocument *document = desktop->doc();
-    if (document && desktop) {
-        // Temporarily prevent undo in this scope
-        Inkscape::DocumentUndo::ScopedInsensitive pauseUndo(document);
-        Inkscape::Selection *selection = desktop->getSelection();
-        if (selection) {
-            // Make sure all selected objects have an ID attribute
-            selection->enforceIds();
-        }
+    auto app = InkscapeApplication::instance();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        std::cerr << "No selection or document" << std::endl;
     }
-
+    // Temporarily prevent undo in this scope
+    Inkscape::DocumentUndo::ScopedInsensitive pauseUndo(document);
+    selection->enforceIds();
     genDocCache();
 
     return;
@@ -115,6 +115,9 @@ ExecutionEnv::killDocCache () {
 */
 void
 ExecutionEnv::createWorkingDialog () {
+    if (!_desktop) {
+        return;
+    }
     if (_visibleDialog != nullptr) {
         _visibleDialog->set_visible(false);
         delete _visibleDialog;
@@ -159,20 +162,34 @@ ExecutionEnv::workingCanceled( const int /*resp*/) {
 
 void
 ExecutionEnv::cancel () {
-    _desktop->clearWaitingCursor();
+    if (_desktop) {
+        _desktop->clearWaitingCursor();
+    }
     _effect->get_imp()->cancelProcessing();
     return;
 }
 
 void
 ExecutionEnv::undo () {
-    DocumentUndo::cancel(_desktop->doc());
+    auto app = InkscapeApplication::instance();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        std::cerr << "No selection or document" << std::endl;
+    }
+    DocumentUndo::cancel(document);
     return;
 }
 
 void
 ExecutionEnv::commit () {
-    DocumentUndo::done(_desktop->doc(), _effect->get_name(), "");
+    auto app = InkscapeApplication::instance();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        std::cerr << "No selection or document" << std::endl;
+    }
+    DocumentUndo::done(document, _effect->get_name(), "");
     Effect::set_last_effect(_effect);
     _effect->get_imp()->commitDocument();
     killDocCache();
@@ -181,27 +198,36 @@ ExecutionEnv::commit () {
 
 void
 ExecutionEnv::reselect () {
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP; // Why not use _desktop?
-    if (desktop) {
-        Inkscape::Selection *selection = desktop->getSelection();
-        if (selection) {
-            selection->restoreBackup();
-        }
+    auto app = InkscapeApplication::instance();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
     }
-    return;
+    selection->restoreBackup();
 }
 
 void
-ExecutionEnv::run () {
+ExecutionEnv::run (std::list<std::string> &params) {
     _state = ExecutionEnv::RUNNING;
-    if (_show_working) {
+    auto app = InkscapeApplication::instance();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        std::cerr << "No selection or document" << std::endl;
+    }
+    if (_desktop && _show_working) {
         createWorkingDialog();
     }
-    Inkscape::Selection *selection = _desktop->getSelection();
     selection->setBackup();
-    _desktop->setWaitingCursor();
-    _effect->get_imp()->effect(_effect, _desktop, _docCache);
-    _desktop->clearWaitingCursor();
+    if (_desktop) {
+        _desktop->setWaitingCursor();
+    }
+    _effect->get_imp()->effect(_effect, _desktop, _docCache, params);
+    Effect::set_last_params(params);
+    if (_desktop) {
+        _desktop->clearWaitingCursor();
+    }
     _state = ExecutionEnv::COMPLETE;
     selection->restoreBackup();
     // _runComplete.signal();

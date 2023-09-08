@@ -18,9 +18,10 @@
 #include <glib/gstdio.h>
 
 #include "desktop.h"
-
+#include "inkscape-application.h"
 #include "selection.h"
 
+#include "actions/actions-helper.h"
 #include "extension/effect.h"
 #include "extension/system.h"
 
@@ -62,7 +63,13 @@ ImageMagickDocCache::ImageMagickDocCache(SPDesktop *desktop) :
     _originals(NULL),
     _imageItems(NULL)
 {
-    auto selectedItemList = desktop->getSelection()->items();
+    auto app = InkscapeApplication::instance();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        std::cerr << "No selection or document" << std::endl;
+    }
+    auto selectedItemList = selection->items();
     int selectCount = (int) boost::distance(selectedItemList);
     
     // Init the data-holders
@@ -154,7 +161,7 @@ ImageMagick::newDocCache (Inkscape::Extension::Extension * /*ext*/, SPDesktop *d
 }
 
 void
-ImageMagick::effect (Inkscape::Extension::Effect *module, SPDesktop *desktop, Inkscape::Extension::Implementation::ImplementationDocumentCache * docCache)
+ImageMagick::effect (Inkscape::Extension::Effect *module, SPDesktop *desktop, Inkscape::Extension::Implementation::ImplementationDocumentCache * docCache, std::list<std::string> &params)
 {
     refreshParameters(module);
 
@@ -235,14 +242,18 @@ ImageMagick::effect (Inkscape::Extension::Effect *module, SPDesktop *desktop, In
 Gtk::Widget *
 ImageMagick::prefs_effect(Inkscape::Extension::Effect *module, SPDesktop *desktop, sigc::signal<void ()> * changeSignal, Inkscape::Extension::Implementation::ImplementationDocumentCache * /*docCache*/)
 {
-  SPDocument * current_document = desktop->doc();
-
-  auto selected = desktop->getSelection()->items();
-  Inkscape::XML::Node * first_select = NULL;
-  if (!selected.empty()) {
+    auto app = InkscapeApplication::instance();
+    SPDocument* current_document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &current_document, &selection)) {
+        std::cerr << "No selection or document" << std::endl;
+    }
+    auto selected = selection->items();
+    Inkscape::XML::Node * first_select = NULL;
+    if (!selected.empty()) {
     first_select = (selected.front())->getRepr();
-  }
-  return module->autogui(current_document, first_select, changeSignal);
+    }
+    return module->autogui(current_document, first_select, changeSignal);
 }
 
 }; /* namespace Bitmap */

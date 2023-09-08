@@ -632,12 +632,21 @@ Extension::paramListString (std::list <std::string> &retlist)
         if (parameter) {
             const char *name = parameter->name();
             std::string value = parameter->value_to_string();
-
+            std::string parameter_string;
+            parameter_string += "--";
+            parameter_string += name;
+            parameter_string += "=";
+            bool continueit = false;
+            for(auto parm : retlist) {
+                if (!parm.find(parameter_string)) {
+                    continueit = true;
+                    break;
+                }
+            }
+            if (continueit) {
+                continue;
+            }
             if (name && !value.empty()) { // TODO: Shouldn't empty string values be allowed?
-                std::string parameter_string;
-                parameter_string += "--";
-                parameter_string += name;
-                parameter_string += "=";
                 parameter_string += value;
                 retlist.push_back(parameter_string);
             }

@@ -41,7 +41,7 @@ class PrefDialog : public Gtk::Dialog {
     Gtk::Widget *_button_preview;
     /** \brief  Checkbox for the preview */
     Gtk::CheckButton *_checkbox_preview;
-
+  
     /** \brief  Parameter to control live preview */
     std::unique_ptr<InxParameter> _param_preview;
 
@@ -64,7 +64,8 @@ class PrefDialog : public Gtk::Dialog {
     /** \brief  The timer used to make it so that parameters don't respond
                 directly and allows for changes. */
     sigc::connection _timersig;
-
+    /* Empty param needed to RUN */
+    std::list<std::string> _params;
     void preview_toggle();
     void param_change();
     bool param_timer_expire();

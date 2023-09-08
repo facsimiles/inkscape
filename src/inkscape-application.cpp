@@ -75,6 +75,8 @@
 #include "extension/init.h"
 #include "extension/db.h"
 #include "extension/effect.h"
+#include "extension/implementation/script.h"
+
 #include "io/file.h"                // File open (command line).
 #include "io/resource.h"            // TEMPLATE
 #include "io/fix-broken-links.h"    // Fix up references.
@@ -1103,7 +1105,7 @@ InkscapeApplication::on_activate()
     process_document (document, output);
 
     if (_batch_process) {
-        // If with_gui, we've reused a window for each file. We must quit to destroy it.
+        // If _with_gui, we've reused a window for each file. We must quit to destroy it.
         gio_app()->quit();
     }
 }
@@ -1157,7 +1159,7 @@ InkscapeApplication::on_open(const Gio::Application::type_vec_files& files, cons
     }
 
     if (_batch_process) {
-        // If with_gui, we've reused a window for each file. We must quit to destroy it.
+        // If _with_gui, we've reused a window for each file. We must quit to destroy it.
         gio_app()->quit();
     }
 }
@@ -1185,6 +1187,10 @@ InkscapeApplication::parse_actions(const Glib::ustring& input, action_vector_t& 
         }
 
         Glib::RefPtr<Gio::Action> action_ptr = _gio_application->lookup_action(action);
+        if (!action_ptr) {
+            Inkscape::Extension::Effect::sanitizeId(action);
+            action_ptr = _gio_application->lookup_action(action);
+        }
         if (action_ptr) {
             // Doesn't seem to be a way to test this using the C++ binding without Glib-CRITICAL errors.
             const  GVariantType* gtype = g_action_get_parameter_type(action_ptr->gobj());
@@ -1253,7 +1259,7 @@ char* readline_generator (const char* text, int state)
 
     // Fill the vector of action names.
     if (actions.size() == 0) {
-        auto *app = InkscapeApplication::instance();
+        auto app = InkscapeApplication::instance();
         actions = app->gio_app()->list_actions();
         std::sort(actions.begin(), actions.end());
     }
@@ -1565,7 +1571,9 @@ InkscapeApplication::on_handle_local_options(const Glib::RefPtr<Glib::VariantDic
         ) {
         _with_gui = false;
     }
-
+    if (options->contains("with-gui")) {
+        std::cout << "Now can run any extension without need --with-gui parameter" << std::endl;
+    }
     if (options->contains("with-gui")        ||
         options->contains("batch-process")
         ) {
@@ -1797,8 +1805,11 @@ InkscapeApplication::on_handle_local_options(const Glib::RefPtr<Glib::VariantDic
         else if (val == "false") _file_export.export_png_use_dithering = false;
         else std::cerr << "invalid value for export-png-use-dithering. Ignoring." << std::endl;
     } else _file_export.export_png_use_dithering = prefs->getBool("/options/dithering/value", true);
-    
     if (use_active_window) {
+        // Extensions
+        Inkscape::Extension::init();
+        // After extensions are loaded query effects to construct action data
+        init_extension_action_data(); 
         _gio_application->register_application();
         if (!_gio_application->get_default()->is_remote()) {
 #ifdef __APPLE__
@@ -1894,12 +1905,40 @@ int InkscapeApplication::get_number_of_windows() const {
  *  \c effect is Filter or Extension
  *  \c show_prefs is used to show preferences dialog
 */
-void action_effect(Inkscape::Extension::Effect* effect, bool show_prefs) {
-    auto desktop = InkscapeApplication::instance()->get_active_desktop();
-    if (effect->_workingDialog && show_prefs) {
-        effect->prefs(desktop);
+void action_effect(const Glib::VariantBase& value, Inkscape::Extension::Effect* effect, bool show_prefs, InkscapeApplication *app) {
+    Glib::Variant<Glib::ustring> s = Glib::VariantBase::cast_dynamic<Glib::Variant<Glib::ustring> >(value);
+    Glib::ustring paramstr = s.get();
+    SPDesktop *desktop = InkscapeApplication::instance()->get_active_desktop();
+    std::list<std::string> params;
+    /* 
+    /  This mimic previous behabiour when gui
+    /  if we want run from command line with --with-gui and no show dialog
+    /  on extensions, one way is create a bool member variable that store "with-gui" 
+    /  command and use as a extra parameter to this function.
+    /  other approach is use a param in the extension
+    */
+    size_t pos = paramstr.find("--no-ext-dialog");
+    bool no_ext_dialog = false;
+    if (pos != std::string::npos) {
+        no_ext_dialog = true;
+        paramstr.erase(pos,15);
+    }
+    if (!app->get_with_gui() || no_ext_dialog) { 
+        desktop = nullptr;
+        std::stringstream ss(paramstr);
+        std::string p;
+        while (getline (ss, p, ' ')) {
+            p.erase(p.find_last_not_of(' ')+1);
+            p.erase(0, p.find_first_not_of(' '));
+            if (!p.empty()) {
+                params.push_back(p);
+            }
+        }
+    }
+    if (effect->_workingDialog && show_prefs && desktop) {
+        effect->prefs(desktop, params);
     } else {
-        effect->effect(desktop);
+        effect->effect(desktop, params);
     }
 }
 
@@ -1919,11 +1958,10 @@ void InkscapeApplication::init_extension_action_data() {
 
         std::string aid = effect->get_sanitized_id();
         std::string action_id = "app." + aid;
-
-        auto app = this;
+        Glib::VariantType String(Glib::VARIANT_TYPE_STRING);
         if (auto gapp = gtk_app()) {
-            auto action = gapp->add_action(aid, [effect](){ action_effect(effect, true); });
-            auto action_noprefs = gapp->add_action(aid + ".noprefs", [effect](){ action_effect(effect, false); });
+            auto action = gapp->add_action_with_parameter(aid, String,sigc::bind(sigc::ptr_fun(&action_effect), effect, true, this));
+            auto action_noprefs = gapp->add_action_with_parameter(aid + ".noprefs", String,sigc::bind(sigc::ptr_fun(&action_effect), effect, false, this));
             _effect_actions.emplace_back(action);
             _effect_actions.emplace_back(action_noprefs);
         }
@@ -1941,12 +1979,12 @@ void InkscapeApplication::init_extension_action_data() {
             std::vector<std::vector<Glib::ustring>>raw_data_filter =
                 {{ action_id, effect->get_name(), "Filters", description },
                 { action_id + ".noprefs", Glib::ustring(effect->get_name()) + " " + _("(No preferences)"), "Filters (no prefs)", description }};
-            app->get_action_extra_data().add_data(raw_data_filter);
+            get_action_extra_data().add_data(raw_data_filter);
         } else {
             std::vector<std::vector<Glib::ustring>>raw_data_effect =
                 {{ action_id, effect->get_name(), "Extensions", description },
                 { action_id + ".noprefs", Glib::ustring(effect->get_name()) + " " + _("(No preferences)"), "Extensions (no prefs)", description }};
-            app->get_action_extra_data().add_data(raw_data_effect);
+            get_action_extra_data().add_data(raw_data_effect);
         }
 
 #if false // enable to see all the loaded effects
@@ -1964,7 +2002,7 @@ void InkscapeApplication::init_extension_action_data() {
         gchar *ellipsized_name = effect->takes_input() ? g_strdup_printf(_("%s..."), effect->get_name()) : nullptr;
         Glib::ustring menu_name = ellipsized_name ? ellipsized_name : effect->get_name();
         bool is_filter = effect->is_filter_effect();
-        app->get_action_effect_data().add_data(aid, is_filter, sub_menu_list, menu_name);
+        get_action_effect_data().add_data(aid, is_filter, sub_menu_list, menu_name);
         g_free(ellipsized_name);
     }
 }

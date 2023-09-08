@@ -36,6 +36,7 @@ namespace Inkscape {
 namespace Extension {
 
 Effect * Effect::_last_effect = nullptr;
+std::list<std::string> Effect::_last_params;
 
 Effect::Effect (Inkscape::XML::Node *in_repr, Implementation::Implementation *in_imp, std::string *base_directory, std::string* file_name)
     : Extension(in_repr, in_imp, base_directory)
@@ -105,7 +106,7 @@ Effect::Effect (Inkscape::XML::Node *in_repr, Implementation::Implementation *in
 /** Sanitizes the passed id in place. If an invalid character is found in the ID, a warning
  *  is printed to stderr. All invalid characters are replaced with an 'X'.
  */
-void Effect::_sanitizeId(std::string &id)
+void Effect::sanitizeId(std::string &id)
 {
     auto allowed = [] (char ch) {
         // Note: std::isalnum() is locale-dependent
@@ -125,7 +126,7 @@ void Effect::_sanitizeId(std::string &id)
         if (!allowed(ch)) {
             if (!errored) {
                 auto message = std::string{"Invalid extension action ID found: \""} + id + "\".";
-                g_warn_message("Inkscape", __FILE__, __LINE__, "Effect::_sanitizeId()", message.c_str());
+                g_warn_message("Inkscape", __FILE__, __LINE__, "Effect::sanitizeId()", message.c_str());
                 errored = true;
             }
             ch = 'X';
@@ -177,8 +178,11 @@ Effect::deactivate()
 
 Effect::~Effect ()
 {
-    if (get_last_effect() == this)
+    if (get_last_effect() == this) {
         set_last_effect(nullptr);
+        std::list<std::string> params;
+        set_last_params(params);
+    }
     if (_menu_node) {
         if (_menu_node->parent()) {
             _menu_node->parent()->removeChild(_menu_node);
@@ -189,7 +193,7 @@ Effect::~Effect ()
 }
 
 bool
-Effect::prefs (SPDesktop * desktop)
+Effect::prefs (SPDesktop * desktop, std::list<std::string> &params)
 {
     if (_prefDialog != nullptr) {
         _prefDialog->raise();
@@ -197,7 +201,7 @@ Effect::prefs (SPDesktop * desktop)
     }
 
     if (!widget_visible_count()) {
-        effect(desktop);
+        effect(desktop, params);
         return true;
     }
 
@@ -223,7 +227,7 @@ Effect::prefs (SPDesktop * desktop)
     stack.
 */
 void
-Effect::effect (SPDesktop * desktop)
+Effect::effect (SPDesktop * desktop, std::list<std::string> &params)
 {
     //printf("Execute effect\n");
     if (!loaded())
@@ -232,7 +236,7 @@ Effect::effect (SPDesktop * desktop)
     ExecutionEnv executionEnv(this, desktop, nullptr, _workingDialog, true);
     execution_env = &executionEnv;
     timer->lock();
-    executionEnv.run();
+    executionEnv.run(params);
     if (executionEnv.wait()) {
         executionEnv.commit();
     } else {
@@ -256,6 +260,19 @@ Effect::set_last_effect (Effect * in_effect)
 {
     _last_effect = in_effect;
     enable_effect_actions(InkscapeApplication::instance(), !!in_effect);
+    return;
+}
+
+/** \brief  Sets which params was called last
+    \param in_effect 
+
+    This function sets the static variable \c _last_params
+
+*/
+void
+Effect::set_last_params (std::list<std::string> in_params)
+{
+    _last_params = in_params;
     return;
 }
 
@@ -355,7 +372,7 @@ const Glib::ustring& Effect::get_menu_tip() const {
 
 std::string Effect::get_sanitized_id() const {
     std::string id = get_id();
-    _sanitizeId(id);
+    sanitizeId(id);
     return id;
 }
 

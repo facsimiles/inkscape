@@ -25,7 +25,7 @@ class BlurEdge : public Inkscape::Extension::Implementation::Implementation {
 
 public:
     bool load(Inkscape::Extension::Extension *module) override;
-    void effect(Inkscape::Extension::Effect *module, SPDesktop *desktop, Inkscape::Extension::Implementation::ImplementationDocumentCache * docCache) override;
+    void effect(Inkscape::Extension::Effect *module, SPDesktop *desktop, Inkscape::Extension::Implementation::ImplementationDocumentCache * docCache, std::list<std::string> &params) override;
     Gtk::Widget * prefs_effect(Inkscape::Extension::Effect * module, SPDesktop *desktop, sigc::signal<void ()> * changeSignal, Inkscape::Extension::Implementation::ImplementationDocumentCache * docCache) override;
 
     static void init ();
