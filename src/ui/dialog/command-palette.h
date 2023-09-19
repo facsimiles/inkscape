@@ -17,6 +17,7 @@
 #include <utility>
 #include <vector>
 #include <sigc++/connection.h>
+#include <glibmm/quark.h>
 #include <glibmm/refptr.h>
 #include <glibmm/ustring.h>
 #include <gtk/gtk.h> // GtkEventControllerKey
@@ -170,12 +171,7 @@ private:
     void on_action_fullname_clicked(const Glib::ustring &action_fullname);
 
     /// Implements text matching logic
-    static bool fuzzy_search(const Glib::ustring &subject, const Glib::ustring &search);
-    static bool normal_search(const Glib::ustring &subject, const Glib::ustring &search);
-    static bool fuzzy_tolerance_search(const Glib::ustring &subject, const Glib::ustring &search);
-    static int fuzzy_points(const Glib::ustring &subject, const Glib::ustring &search);
-    static int fuzzy_tolerance_points(const Glib::ustring &subject, const Glib::ustring &search);
-    static int fuzzy_points_compare(int fuzzy_points_count_1, int fuzzy_points_count_2, int text_len_1, int text_len_2);
+    static size_t search_score(Gtk::ListBoxRow *row, Glib::ustring const &search);
 
     static void test_sort();
     int on_sort(Gtk::ListBoxRow *row1, Gtk::ListBoxRow *row2);
@@ -233,6 +229,11 @@ private:
 
     /// Stores the most recent ask_action_name for when Entry::activate fires & we are in INPUT mode
     std::optional<ActionPtrName> _ask_action_ptr_name;
+
+    static Glib::Quark const &quark_score() {
+        static Glib::Quark const q{"Score"};
+        return q;
+    }
 };
 
 } // namespace Inkscape::UI::Dialog
