@@ -73,7 +73,11 @@ hide_lock_lock(SPItem* item, bool lock)
 void
 hide_lock_unhide_all(InkscapeApplication* app)
 {
-    auto document = app->get_active_document();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
     auto root = document->getRoot();
 
     bool changed = hide_lock_recurse(&hide_lock_hide, root, false); // Unhide
@@ -87,7 +91,11 @@ hide_lock_unhide_all(InkscapeApplication* app)
 void
 hide_lock_unlock_all(InkscapeApplication* app)
 {
-    auto document = app->get_active_document();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
     auto root = document->getRoot();
 
     bool changed = hide_lock_recurse(&hide_lock_lock, root, false); // Unlock
@@ -101,9 +109,9 @@ hide_lock_unlock_all(InkscapeApplication* app)
 void
 hide_lock_unhide_below(InkscapeApplication *app)
 {
-    auto selection = app->get_active_selection();
-    if (!selection) {
-        show_output("hide_lock_unhide_below: no selection!");
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
         return;
     }
 
@@ -115,7 +123,6 @@ hide_lock_unhide_below(InkscapeApplication *app)
     }
 
     if (changed) {
-        auto document = app->get_active_document();
         Inkscape::DocumentUndo::done(document, _("Unhid selected items and their descendents."), "");
     }
 }
@@ -124,9 +131,9 @@ hide_lock_unhide_below(InkscapeApplication *app)
 void
 hide_lock_unlock_below(InkscapeApplication *app)
 {
-    auto selection = app->get_active_selection();
-    if (!selection) {
-        show_output("hide_lock_unhide_below: no selection!");
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
         return;
     }
 
@@ -138,7 +145,6 @@ hide_lock_unlock_below(InkscapeApplication *app)
     }
 
     if (changed) {
-        auto document = app->get_active_document();
         Inkscape::DocumentUndo::done(document, _("Unlocked selected items and their descendents."), "");
     }
 }
@@ -147,9 +153,9 @@ hide_lock_unlock_below(InkscapeApplication *app)
 void
 hide_lock_hide_selected(InkscapeApplication* app, bool hide)
 {
-    auto selection = app->get_active_selection();
-    if (!selection) {
-        show_output("hide_lock_hide_selected: no selection!");
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
         return;
     }
 
@@ -161,7 +167,6 @@ hide_lock_hide_selected(InkscapeApplication* app, bool hide)
     }
 
     if (changed) {
-        auto document = app->get_active_document();
         Inkscape::DocumentUndo::done(document, (hide ? _("Hid selected items.") : _("Unhid selected items.")), "");
         selection->clear();
     }
@@ -171,9 +176,9 @@ hide_lock_hide_selected(InkscapeApplication* app, bool hide)
 void
 hide_lock_lock_selected(InkscapeApplication* app, bool lock)
 {
-    auto selection = app->get_active_selection();
-    if (!selection) {
-        show_output("hide_lock_lock_selected: no selection!");
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
         return;
     }
 
@@ -185,7 +190,6 @@ hide_lock_lock_selected(InkscapeApplication* app, bool lock)
     }
 
     if (changed) {
-        auto document = app->get_active_document();
         Inkscape::DocumentUndo::done(document, (lock ? _("Locked selected items.") : _("Unlocked selected items.")), "");
         selection->clear();
     }

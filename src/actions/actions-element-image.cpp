@@ -50,13 +50,15 @@ Glib::ustring image_get_editor_name(bool is_svg)
 // Note that edits are external to Inkscape and thus we cannot undo them!
 void image_edit(InkscapeApplication *app)
 {
-    auto selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
     if (selection->isEmpty()) {
         // Nothing to do.
         return;
     }
-
-    auto document = selection->document();
 
     for (auto item : selection->items()) {
         auto image = cast<SPImage>(item);
@@ -139,13 +141,16 @@ void image_edit(InkscapeApplication *app)
 void image_crop(InkscapeApplication *app)
 {
     auto win = app->get_active_window();
-    auto doc = app->get_active_document();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
     auto msg = win->get_desktop()->messageStack();
     auto const tool = win->get_desktop()->getTool();
     int done = 0;
     int bytes = 0;
 
-    auto selection = app->get_active_selection();
     if (selection->isEmpty()) {
         msg->flash(Inkscape::ERROR_MESSAGE, _("Nothing selected."));
         return;
@@ -198,7 +203,7 @@ void image_crop(InkscapeApplication *app)
         }
         // Do flashing after select tool update.
         msg->flashF(Inkscape::INFORMATION_MESSAGE, ss.str().c_str(), done, Inkscape::Util::format_size(abs(bytes)).c_str());
-        Inkscape::DocumentUndo::done(doc, "ActionImageCrop", "Crop Images");
+        Inkscape::DocumentUndo::done(document, "ActionImageCrop", "Crop Images");
     } else {
         msg->flash(Inkscape::WARNING_MESSAGE, _("No images cropped!"));
     }

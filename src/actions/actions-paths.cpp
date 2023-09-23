@@ -29,7 +29,11 @@
 void
 object_path_union(InkscapeApplication *app)
 {
-    auto selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
     selection->removeLPESRecursive(true);
     selection->unlinkRecursive(true);
     selection->pathUnion();
@@ -38,7 +42,11 @@ object_path_union(InkscapeApplication *app)
 void
 select_path_difference(InkscapeApplication *app)
 {
-    auto selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
     selection->removeLPESRecursive(true);
     selection->unlinkRecursive(true);
     selection->pathDiff();
@@ -47,7 +55,11 @@ select_path_difference(InkscapeApplication *app)
 void
 select_path_intersection(InkscapeApplication *app)
 {
-    auto selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
     selection->removeLPESRecursive(true);
     selection->unlinkRecursive(true);
     selection->pathIntersect();
@@ -56,7 +68,11 @@ select_path_intersection(InkscapeApplication *app)
 void
 select_path_exclusion(InkscapeApplication *app)
 {
-    auto selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
     selection->removeLPESRecursive(true);
     selection->unlinkRecursive(true);
     selection->pathSymDiff();
@@ -65,7 +81,11 @@ select_path_exclusion(InkscapeApplication *app)
 void
 select_path_division(InkscapeApplication *app)
 {
-    auto selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
     selection->removeLPESRecursive(true);
     selection->unlinkRecursive(true);
     selection->pathCut();
@@ -74,7 +94,11 @@ select_path_division(InkscapeApplication *app)
 void
 select_path_cut(InkscapeApplication *app)
 {
-    auto selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
     selection->removeLPESRecursive(true);
     selection->unlinkRecursive(true);
     selection->pathSlice();
@@ -83,7 +107,11 @@ select_path_cut(InkscapeApplication *app)
 void
 select_path_combine(InkscapeApplication *app)
 {
-    auto selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
     selection->unlinkRecursive(true);
     selection->combine();
 }
@@ -91,45 +119,69 @@ select_path_combine(InkscapeApplication *app)
 void
 select_path_break_apart(InkscapeApplication *app)
 {
-    auto selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
     selection->breakApart();
 }
 
 void
 select_path_split(InkscapeApplication *app)
 {
-    auto selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
     selection->breakApart(false, false);
 }
 
 void
 select_path_fracture(InkscapeApplication *app)
 {
-    auto selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
     auto boolean_builder = Inkscape::BooleanBuilder(selection);
     selection->setList(boolean_builder.shape_commit(true));
-    Inkscape::DocumentUndo::done(selection->document(), "Fracture", INKSCAPE_ICON("path-fracture"));
+    Inkscape::DocumentUndo::done(document, "Fracture", INKSCAPE_ICON("path-fracture"));
 }
 
 void select_path_flatten(InkscapeApplication *app)
 {
-    auto selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
     auto boolean_builder = Inkscape::BooleanBuilder(selection, true);
     selection->setList(boolean_builder.shape_commit(true));
-    Inkscape::DocumentUndo::done(selection->document(), "Flatten", INKSCAPE_ICON("path-flatten"));
+    Inkscape::DocumentUndo::done(document, "Flatten", INKSCAPE_ICON("path-flatten"));
 }
 
 void
 fill_between_paths(InkscapeApplication *app)
 {
-    auto selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
     selection->fillBetweenMany();
 }
 
 void
 select_path_simplify(InkscapeApplication *app)
 {
-    auto selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
     selection->simplifyPaths();
 }
 

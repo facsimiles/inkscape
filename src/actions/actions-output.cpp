@@ -232,9 +232,9 @@ export_png_antialias(const Glib::VariantBase&  value, InkscapeApplication *app)
 void
 export_do(InkscapeApplication *app)
 {
-    SPDocument* document = app->get_active_document();
-    if (!document) {
-        show_output("export_do: no documents open!");
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
         return;
     }
     std::string filename;

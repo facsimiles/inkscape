@@ -151,13 +151,13 @@ query_all_recurse (SPObject *o)
 void
 query_all(InkscapeApplication* app)
 {
-    SPDocument* doc = app->get_active_document();
-    if (!doc) {
-        show_output("query_all: no document!");
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
         return;
     }
 
-    SPObject *o = doc->getRoot();
+    SPObject *o = document->getRoot();
     if (o) {
         query_all_recurse(o);
     }

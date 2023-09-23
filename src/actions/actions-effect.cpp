@@ -24,7 +24,11 @@
 void
 edit_remove_filter(InkscapeApplication *app)
 {
-    auto selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
 
     // Remove Filter
     selection->removeFilter();

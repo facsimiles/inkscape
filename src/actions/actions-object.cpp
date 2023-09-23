@@ -37,8 +37,12 @@ object_set_attribute(const Glib::VariantBase& value, InkscapeApplication *app)
     }
     auto const attribute = argument.substr(0, comma_position);
     auto const new_value = argument.substr(comma_position + 1);
-
-    auto selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
+    
     if (selection->isEmpty()) {
         show_output("action:object_set_attribute: selection empty!");
         return;
@@ -52,7 +56,7 @@ object_set_attribute(const Glib::VariantBase& value, InkscapeApplication *app)
     }
 
     // Needed to update repr (is this the best way?).
-    Inkscape::DocumentUndo::done(app->get_active_document(), "ActionObjectSetAttribute", "");
+    Inkscape::DocumentUndo::done(document, "ActionObjectSetAttribute", "");
 }
 
 
@@ -68,7 +72,11 @@ object_set_property(const Glib::VariantBase& value, InkscapeApplication *app)
         return;
     }
 
-    auto selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
     if (selection->isEmpty()) {
         show_output("action:object_set_property: selection empty!");
         return;
@@ -85,17 +93,18 @@ object_set_property(const Glib::VariantBase& value, InkscapeApplication *app)
     }
 
     // Needed to update repr (is this the best way?).
-    Inkscape::DocumentUndo::done(app->get_active_document(), "ActionObjectSetProperty", "");
+    Inkscape::DocumentUndo::done(document, "ActionObjectSetProperty", "");
 }
 
 
 void
 object_unlink_clones(InkscapeApplication *app)
 {
-    auto selection = app->get_active_selection();
-
-    // We should not have to do this!
-    auto document  = app->get_active_document();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
     selection->setDocument(document);
 
     selection->unlink();
@@ -110,7 +119,11 @@ should_remove_original()
 void
 object_clip_set(InkscapeApplication *app)
 {
-    Inkscape::Selection *selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
 
     // Object Clip Set
     selection->setMask(true, false, should_remove_original());
@@ -120,29 +133,41 @@ object_clip_set(InkscapeApplication *app)
 void
 object_clip_set_inverse(InkscapeApplication *app)
 {
-    Inkscape::Selection *selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
 
     // Object Clip Set Inverse
     selection->setMask(true, false, should_remove_original());
-    Inkscape::LivePathEffect::sp_inverse_powerclip(app->get_active_selection());
-    Inkscape::DocumentUndo::done(app->get_active_document(), _("Set Inverse Clip(LPE)"), "");
+    Inkscape::LivePathEffect::sp_inverse_powerclip(selection);
+    Inkscape::DocumentUndo::done(document, _("Set Inverse Clip(LPE)"), "");
 }
 
 void
 object_clip_release(InkscapeApplication *app)
 {
-    Inkscape::Selection *selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
 
     // Object Clip Release
-    Inkscape::LivePathEffect::sp_remove_powerclip(app->get_active_selection());
+    Inkscape::LivePathEffect::sp_remove_powerclip(selection);
     selection->unsetMask(true, true, should_remove_original());
-    Inkscape::DocumentUndo::done(app->get_active_document(), _("Release clipping path"), "");
+    Inkscape::DocumentUndo::done(document, _("Release clipping path"), "");
 }
 
 void
 object_clip_set_group(InkscapeApplication *app)
 {
-    Inkscape::Selection *selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
     selection->setClipGroup();
     // Undo added in setClipGroup().
 }
@@ -150,39 +175,55 @@ object_clip_set_group(InkscapeApplication *app)
 void
 object_mask_set(InkscapeApplication *app)
 {
-    Inkscape::Selection *selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
 
     // Object Mask Set
     selection->setMask(false, false, should_remove_original());
-    Inkscape::DocumentUndo::done(selection->document(), _("Set mask"), "");
+    Inkscape::DocumentUndo::done(document, _("Set mask"), "");
 }
 
 void
 object_mask_set_inverse(InkscapeApplication *app)
 {
-    Inkscape::Selection *selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
 
     // Object Mask Set Inverse
     selection->setMask(false, false, should_remove_original());
-    Inkscape::LivePathEffect::sp_inverse_powermask(app->get_active_selection());
-    Inkscape::DocumentUndo::done(app->get_active_document(), _("Set Inverse Mask (LPE)"), "");
+    Inkscape::LivePathEffect::sp_inverse_powermask(selection);
+    Inkscape::DocumentUndo::done(document, _("Set Inverse Mask (LPE)"), "");
 }
 
 void
 object_mask_release(InkscapeApplication *app)
 {
-    Inkscape::Selection *selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
 
     // Object Mask Release
-    Inkscape::LivePathEffect::sp_remove_powermask(app->get_active_selection());
+    Inkscape::LivePathEffect::sp_remove_powermask(selection);
     selection->unsetMask(false, true, should_remove_original());
-    Inkscape::DocumentUndo::done(app->get_active_document(), _("Release mask"), "");
+    Inkscape::DocumentUndo::done(document, _("Release mask"), "");
 }
 
 void
 object_rotate_90_cw(InkscapeApplication *app)
 {
-    Inkscape::Selection *selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
 
     // Object Rotate 90
     auto desktop = selection->desktop();
@@ -192,7 +233,11 @@ object_rotate_90_cw(InkscapeApplication *app)
 void
 object_rotate_90_ccw(InkscapeApplication *app)
 {
-    Inkscape::Selection *selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
 
     // Object Rotate 90 CCW
     auto desktop = selection->desktop();
@@ -202,7 +247,11 @@ object_rotate_90_ccw(InkscapeApplication *app)
 void
 object_flip_horizontal(InkscapeApplication *app)
 {
-    Inkscape::Selection *selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
 
     Geom::OptRect bbox = selection->visualBounds();
     if (!bbox) {
@@ -219,13 +268,17 @@ object_flip_horizontal(InkscapeApplication *app)
 
     // Object Flip Horizontal
     selection->setScaleRelative(center, Geom::Scale(-1.0, 1.0));
-    Inkscape::DocumentUndo::done(app->get_active_document(), _("Flip horizontally"), INKSCAPE_ICON("object-flip-horizontal"));
+    Inkscape::DocumentUndo::done(document, _("Flip horizontally"), INKSCAPE_ICON("object-flip-horizontal"));
 }
 
 void
 object_flip_vertical(InkscapeApplication *app)
 {
-    Inkscape::Selection *selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
 
     Geom::OptRect bbox = selection->visualBounds();
     if (!bbox) {
@@ -242,27 +295,29 @@ object_flip_vertical(InkscapeApplication *app)
 
     // Object Flip Vertical
     selection->setScaleRelative(center, Geom::Scale(1.0, -1.0));
-    Inkscape::DocumentUndo::done(app->get_active_document(), _("Flip vertically"), INKSCAPE_ICON("object-flip-vertical"));
+    Inkscape::DocumentUndo::done(document, _("Flip vertically"), INKSCAPE_ICON("object-flip-vertical"));
 }
 
 
 void
 object_to_path(InkscapeApplication *app)
 {
-    auto selection = app->get_active_selection();
-
-    // We should not have to do this!
-    auto document  = app->get_active_document();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
     selection->setDocument(document);
     selection->toCurves(false, Inkscape::Preferences::get()->getBool("/options/clonestocurvesjustunlink/value", true));
 }
 
 void
 object_add_corners_lpe(InkscapeApplication *app) {
-    auto selection = app->get_active_selection();
-
-    // We should not have to do this!
-    auto document  = app->get_active_document();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
     selection->setDocument(document);
     std::vector<SPItem *> items(selection->items().begin(), selection->items().end());
     selection->clear();
@@ -286,10 +341,11 @@ object_add_corners_lpe(InkscapeApplication *app) {
 void
 object_stroke_to_path(InkscapeApplication *app)
 {
-    auto selection = app->get_active_selection();
-
-    // We should not have to do this!
-    auto document  = app->get_active_document();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
     selection->setDocument(document);
 
     selection->strokesToPaths();
