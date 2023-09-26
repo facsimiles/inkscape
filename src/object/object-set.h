@@ -406,7 +406,7 @@ public:
     //item groups operations
     //in selection-chemistry.cpp
     void deleteItems(bool skip_undo = false);
-    void duplicate(bool suppressDone = false, bool duplicateLayer = false);
+    void duplicate(bool suppressDone = false, bool duplicateLayer = false, SPGroup * layer = nullptr);
     void clone();
 
     /**
@@ -438,8 +438,8 @@ public:
     void stackDown(bool skip_undo = false);
     void lower(bool skip_undo = false);
     void lowerToBottom(bool skip_undo = false);
-    void toNextLayer(bool skip_undo = false);
-    void toPrevLayer(bool skip_undo = false);
+    void toNextLayer(bool skip_undo = false, SPDocument *document = nullptr, SPGroup *layer = nullptr);
+    void toPrevLayer(bool skip_undo = false, SPDocument *document = nullptr, SPGroup *layer = nullptr);
     void toLayer(SPObject *layer);
     void toLayer(SPObject *layer, Inkscape::XML::Node *after);
 
@@ -483,7 +483,7 @@ public:
     void tile(bool apply = true); //"Object to Pattern"
     void untile();
     void createBitmapCopy();
-    void setMask(bool apply_clip_path, bool apply_to_layer, bool remove_original);
+    void setMask(bool apply_clip_path, bool apply_to_layer, bool remove_original, SPGroup *layer = nullptr);
     void editMask(bool clip);
     void unsetMask(const bool apply_clip_path, const bool delete_helper_group, bool remove_original);
     void setClipGroup();
