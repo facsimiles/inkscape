@@ -564,7 +564,7 @@ bool EraserTool::_handleKeypress(KeyPressEvent const &key)
  */
 SPItem *EraserTool::_insertAcidIntoDocument(SPDocument *document)
 {
-    auto *top_layer = _desktop->layerManager().currentRoot();
+    auto *top_layer = _desktop->doc()->layerManager().currentRoot();
     auto *eraser_item = cast<SPItem>(top_layer->appendChildRepr(repr));
     Inkscape::GC::release(repr);
     eraser_item->updateRepr();

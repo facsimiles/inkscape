@@ -132,7 +132,7 @@ void Selection::_emitChanged(bool persist_selection_context/* = false */) {
     ObjectSet::_emitChanged();
     if (persist_selection_context) {
         if (nullptr == _selection_context) {
-            _selection_context = _desktop->layerManager().currentLayer();
+            _selection_context = _desktop->getDocument()->layerManager().currentLayer();
             sp_object_ref(_selection_context, nullptr);
             _context_release_connection = _selection_context->connectRelease(sigc::mem_fun(*this, &Selection::_releaseContext));
         }
@@ -146,9 +146,9 @@ void Selection::_emitChanged(bool persist_selection_context/* = false */) {
     if (_document && _desktop) {
         if (auto item = singleItem()) {
             if (_change_layer) {
-                auto layer = _desktop->layerManager().layerForObject(item);
+                auto layer = _document->layerManager().layerForObject(item);
                 if (layer && layer != _selection_context) {
-                    _desktop->layerManager().setCurrentLayer(layer);
+                    _document->layerManager().setCurrentLayer(layer);
                 }
             }
             if (_change_page) {
@@ -183,7 +183,7 @@ void Selection::_releaseContext(SPObject *obj)
 SPObject *Selection::activeContext() {
     if (nullptr != _selection_context)
         return _selection_context;
-    return _desktop->layerManager().currentLayer();
+    return _desktop->getDocument()->layerManager().currentLayer();
 }
 
 std::vector<Inkscape::SnapCandidatePoint> Selection::getSnapPoints(SnapPreferences const *snapprefs) const {
@@ -252,7 +252,7 @@ size_t Selection::numberOfLayers() {
     auto items = this->items();
     std::set<SPObject*> layers;
     for (auto iter = items.begin(); iter != items.end(); ++iter) {
-        SPObject *layer = _desktop->layerManager().layerForObject(*iter);
+        SPObject *layer = _desktop->getDocument()->layerManager().layerForObject(*iter);
         layers.insert(layer);
     }
 

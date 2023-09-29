@@ -136,7 +136,7 @@ void ToolBase::set(Inkscape::Preferences::Entry const &value)
 
 SPGroup *ToolBase::currentLayer() const
 {
-    return _desktop->layerManager().currentLayer();
+    return _desktop->doc()->layerManager().currentLayer();
 }
 
 /**

@@ -265,7 +265,7 @@ void MeasureTool::createAngleDisplayCurve(Geom::Point const &center, Geom::Point
             path.start(_desktop->doc2dt(p1));
             path.appendNew<Geom::CubicBezier>(_desktop->doc2dt(p2), _desktop->doc2dt(p3), _desktop->doc2dt(p4));
             pathv.push_back(path);
-            auto layer = _desktop->layerManager().currentLayer();
+            auto layer = _desktop->doc()->layerManager().currentLayer();
             pathv *= layer->i2doc_affine().inverse();
             if (!pathv.empty()) {
                 setMeasureItem(pathv, true, false, 0xff00007f, measure_repr);
@@ -624,7 +624,7 @@ void MeasureTool::toGuides()
     }
     setGuide(start,ray.angle(), _("Measure"));
     if(explicit_base) {
-        auto layer = _desktop->layerManager().currentLayer();
+        auto layer = _desktop->doc()->layerManager().currentLayer();
         explicit_base = *explicit_base * layer->i2doc_affine().inverse();
         ray.setPoints(start, *explicit_base);
         if(ray.angle() != 0) {
@@ -667,7 +667,7 @@ void MeasureTool::toItem()
     Inkscape::XML::Node *rgroup = xml_doc->createElement("svg:g");
     showCanvasItems(false, true, false, rgroup);
     setLine(start_p,end_p, false, line_color_primary, rgroup);
-    auto measure_item = cast<SPItem>(_desktop->layerManager().currentLayer()->appendChildRepr(rgroup));
+    auto measure_item = cast<SPItem>(_desktop->doc()->layerManager().currentLayer()->appendChildRepr(rgroup));
     Inkscape::GC::release(rgroup);
     measure_item->updateRepr();
     doc->ensureUpToDate();
@@ -766,7 +766,7 @@ void MeasureTool::setLine(Geom::Point start_point,Geom::Point end_point, bool ma
     path.start(_desktop->doc2dt(start_point));
     path.appendNew<Geom::LineSegment>(_desktop->doc2dt(end_point));
     pathv.push_back(path);
-    pathv *= _desktop->layerManager().currentLayer()->i2doc_affine().inverse();
+    pathv *= _desktop->getDocument()->layerManager().currentLayer()->i2doc_affine().inverse();
     if(!pathv.empty()) {
         setMeasureItem(pathv, false, markers, color, measure_repr);
     }
@@ -785,7 +785,7 @@ void MeasureTool::setPoint(Geom::Point origin, Inkscape::XML::Node *measure_repr
     pathv *= scale;
     pathv *= Geom::Translate(Geom::Point() - (scale.vector() * 0.5));
     pathv *= Geom::Translate(_desktop->doc2dt(origin));
-    pathv *= _desktop->layerManager().currentLayer()->i2doc_affine().inverse();
+    pathv *= _desktop->getDocument()->layerManager().currentLayer()->i2doc_affine().inverse();
     if (!pathv.empty()) {
         guint32 line_color_secondary = 0xff0000ff;
         setMeasureItem(pathv, false, false, line_color_secondary, measure_repr);
@@ -795,7 +795,7 @@ void MeasureTool::setPoint(Geom::Point origin, Inkscape::XML::Node *measure_repr
 void MeasureTool::setLabelText(Glib::ustring const &value, Geom::Point pos, double fontsize, Geom::Coord angle,
                                guint32 background, Inkscape::XML::Node *measure_repr)
 {
-    Inkscape::XML::Document *xml_doc = _desktop->doc()->getReprDoc();
+    Inkscape::XML::Document *xml_doc = _desktop->getDocument()->getReprDoc();
     /* Create <text> */
     pos = _desktop->doc2dt(pos);
     Inkscape::XML::Node *rtext = xml_doc->createElement("svg:text");
@@ -848,7 +848,7 @@ void MeasureTool::setLabelText(Glib::ustring const &value, Geom::Point pos, doub
     Inkscape::XML::Node *rstring = xml_doc->createTextNode(value.c_str());
     rtspan->addChild(rstring, nullptr);
     Inkscape::GC::release(rstring);
-    auto layer = _desktop->layerManager().currentLayer();
+    auto layer = _desktop->getDocument()->layerManager().currentLayer();
     auto text_item = cast<SPText>(layer->appendChildRepr(rtext));
     Inkscape::GC::release(rtext);
     text_item->rebuildLayout();
@@ -1152,7 +1152,7 @@ void MeasureTool::showCanvasItems(bool to_guides, bool to_item, bool to_phantom,
     SPDocument *doc = _desktop->getDocument();
     Geom::Rect rect(start_p_doc, end_p_doc);
     items = doc->getItemsPartiallyInBox(_desktop->dkey, rect, false, true, false, true);
-    SPGroup *current_layer = _desktop->layerManager().currentLayer();
+    SPGroup *current_layer = _desktop->getDocument()->layerManager().currentLayer();
 
     std::vector<double> intersection_times;
     bool only_selected = prefs->getBool("/tools/measure/only_selected", false);
@@ -1161,7 +1161,7 @@ void MeasureTool::showCanvasItems(bool to_guides, bool to_item, bool to_phantom,
         if (!_desktop->getSelection()->includes(i) && only_selected) {
             continue;
         }
-        if (all_layers || _desktop->layerManager().layerForObject(item) == current_layer) {
+        if (all_layers || _desktop->getDocument()->layerManager().layerForObject(item) == current_layer) {
             if (auto shape = cast<SPShape>(item)) {
                 calculate_intersections(_desktop, item, lineseg, *shape->curve(), intersection_times);
             } else {
@@ -1332,7 +1332,7 @@ void MeasureTool::setMeasureItem(Geom::PathVector pathv, bool is_curve, bool mar
     repr = xml_doc->createElement("svg:path");
     auto str = sp_svg_write_path(pathv);
     SPCSSAttr *css = sp_repr_css_attr_new();
-    auto layer = _desktop->layerManager().currentLayer();
+    auto layer = _desktop->getDocument()->layerManager().currentLayer();
     Geom::Coord strokewidth = layer->i2doc_affine().inverse().expansionX();
     std::stringstream stroke_width;
     stroke_width.imbue(std::locale::classic());

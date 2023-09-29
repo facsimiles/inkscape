@@ -127,7 +127,7 @@ Grid::effect (Inkscape::Extension::Effect *module, SPDesktop *desktop, Inkscape:
     Inkscape::XML::Document * xml_doc = desktop->doc()->getReprDoc();
 
     //XML Tree being used directly here while it shouldn't be.
-    Inkscape::XML::Node * current_layer = desktop->layerManager().currentLayer()->getRepr();
+    Inkscape::XML::Node * current_layer = desktop->doc()->layerManager().currentLayer()->getRepr();
     Inkscape::XML::Node * path = xml_doc->createElement("svg:path");
 
     path->setAttribute("d", path_data);

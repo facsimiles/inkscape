@@ -402,7 +402,7 @@ void BatchExport::refreshItems()
             break;
         }
         case SELECTION_LAYER: {
-            for (auto layer : _desktop->layerManager().getAllLayers()) {
+            for (auto layer : _desktop->getDocument()->layerManager().getAllLayers()) {
                 // Ignore empty layers, they have no size.
                 if (layer->geometricBounds()) {
                     itemsList.insert(layer);

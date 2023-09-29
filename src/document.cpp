@@ -96,6 +96,33 @@ using Inkscape::Util::unit_table;
 // since we want it to happen when there are no more updates.
 #define SP_DOCUMENT_REROUTING_PRIORITY (G_PRIORITY_HIGH_IDLE - 1)
 
+
+/// Called when document is starting to be rebuilt.
+static void _reconstruction_start(SPDocument * document)
+{
+    auto layer = document->layerManager().currentLayer();
+    document->_reconstruction_old_layer_id = layer->getId() ? layer->getId() : "";
+    document->layerManager().reset();
+    if (auto desktop = SP_ACTIVE_DESKTOP) {
+        desktop->getSelection()->clear();
+    }
+}
+
+/// Called when document rebuild is finished.
+static void _reconstruction_finish(SPDocument * document)
+{
+    g_debug("document, finishing reconstruction\n");
+    if (!document->_reconstruction_old_layer_id.empty()) {
+        if (auto const newLayer = document->getObjectById(document->_reconstruction_old_layer_id))
+        {
+            document->layerManager().setCurrentLayer(newLayer);
+        }
+
+        document->_reconstruction_old_layer_id.clear();
+    }
+    g_debug("document, finishing reconstruction end\n");
+}
+
 bool sp_no_convert_text_baseline_spacing = false;
 
 //gboolean sp_document_resource_list_free(gpointer key, gpointer value, gpointer data);
@@ -122,7 +149,8 @@ SPDocument::SPDocument() :
     current_persp3d_impl(nullptr),
     _parent_document(nullptr),
     _node_cache_valid(false),
-    _activexmltree(nullptr)
+    _activexmltree(nullptr),
+    _reconstruction_old_layer_id()
 {
     // This is kept here so that members are not accessed before they are initialized
 
@@ -168,6 +196,10 @@ SPDocument::SPDocument() :
     add_actions_undo_document(this);
 
     _page_manager = std::make_unique<Inkscape::PageManager>(this);
+    /* Set up notification of rebuilding the document, this allows
+       for saving object related settings in the document. */
+    _reconstruction_old_layer_id.clear();
+    _layer_manager = nullptr;
 }
 
 SPDocument::~SPDocument() {
@@ -228,6 +260,13 @@ SPDocument::~SPDocument() {
     // This is at the end of the destructor, because preceding code adds new orphans to the queue
     collectOrphans();
 }
+
+void SPDocument::setLayerManager() {
+    _layer_manager = std::make_unique<Inkscape::LayerManager>(this);
+}
+void SPDocument::setDkey(unsigned int *dkey) {
+    _dkey = dkey;
+};
 
 gint SPDocument::get_new_doc_number() {
     return ++doc_count;
@@ -1747,14 +1786,14 @@ std::vector<SPItem*> SPDocument::getItemsAtPoints(unsigned const key, std::vecto
     SPObject *current_layer = nullptr;
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     if(desktop){
-        current_layer = desktop->layerManager().currentLayer();
+        current_layer = desktop->getDocument()->layerManager().currentLayer();
     }
     size_t item_counter = 0;
     for(auto point : points) {
         std::vector<SPItem*> items = find_items_at_point(_node_cache, key, point, topmost_only);
         for (SPItem *item : items) {
             if (item && result.end()==find(result.begin(), result.end(), item))
-                if(all_layers || (desktop && desktop->layerManager().layerForObject(item) == current_layer)){
+                if(all_layers || (desktop && desktop->getDocument()->layerManager().layerForObject(item) == current_layer)){
                     result.push_back(item);
                     item_counter++;
                     //limit 0 = no limit
@@ -2222,13 +2261,17 @@ sigc::connection SPDocument::connectResourcesChanged(gchar const *key,
 sigc::connection
 SPDocument::connectReconstructionStart(SPDocument::ReconstructionStart::slot_type slot)
 {
-    return _reconstruction_start_signal.connect(slot);
+    auto ret = _reconstruction_start_signal.connect(slot);
+    _reconstruction_start(this);
+    return ret;
 }
 
 sigc::connection
 SPDocument::connectReconstructionFinish(SPDocument::ReconstructionFinish::slot_type  slot)
 {
-    return _reconstruction_finish_signal.connect(slot);
+    auto ret = _reconstruction_finish_signal.connect(slot);
+    _reconstruction_finish(this);
+    return ret;
 }
 
 void SPDocument::_emitModified() {

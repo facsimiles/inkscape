@@ -18,17 +18,17 @@
 #include "document-subset.h"
 #include "object/sp-item-group.h"
 
-class SPDesktop;
 class SPDocument;
 
 namespace Inkscape {
+class Selection;
 
 class ObjectHierarchy;
 
 class LayerManager : public DocumentSubset
 {
 public:
-    LayerManager(SPDesktop *desktop);
+    LayerManager(SPDocument *document);
     ~LayerManager();
 
     void renameLayer( SPObject* obj, char const *label, bool uniquify );
@@ -57,10 +57,9 @@ public:
     bool isRoot() const { return currentLayer() == currentRoot(); }
 
 private:
-
     void _objectModified( SPObject* obj, unsigned int flags );
-    void _setDocument(SPDesktop *, SPDocument *document);
     void _rebuild();
+    bool _oninit = true;
 
     void _selectedLayerChanged(SPObject *top, SPObject *bottom);
     void _layer_activated(SPObject *layer);
@@ -72,9 +71,7 @@ private:
     sigc::connection _document_connection;
     sigc::connection _resource_connection;
 
-    SPDesktop *_desktop;
     SPDocument *_document;
-
     std::unique_ptr<Inkscape::ObjectHierarchy> _layer_hierarchy;
     sigc::signal<void (SPGroup *)> _layer_changed_signal;
 };

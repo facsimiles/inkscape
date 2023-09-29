@@ -651,7 +651,7 @@ bool SPFlowtext::has_internal_frame() const
 SPItem *create_flowtext_with_internal_frame (SPDesktop *desktop, Geom::Point p0, Geom::Point p1)
 {
     SPDocument *doc = desktop->getDocument();
-    auto const parent = desktop->layerManager().currentLayer();
+    auto const parent = doc->layerManager().currentLayer();
     assert(parent);
 
     Inkscape::XML::Document *xml_doc = doc->getReprDoc();

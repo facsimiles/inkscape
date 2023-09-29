@@ -22,6 +22,7 @@
 #include <sigc++/functors/mem_fun.h>
 
 #include "desktop.h"
+#include "document.h"
 #include "document-undo.h"
 #include "layer-manager.h"
 #include "object/sp-item-group.h"
@@ -131,8 +132,8 @@ void LayerSelector::setDesktop(SPDesktop *desktop) {
     _desktop = desktop;
 
     if (_desktop) {
-        _layer_changed = _desktop->layerManager().connectCurrentLayerChanged(sigc::mem_fun(*this, &LayerSelector::_layerChanged));
-        _layerChanged(_desktop->layerManager().currentLayer());
+        _layer_changed = _desktop->doc()->layerManager().connectCurrentLayerChanged(sigc::mem_fun(*this, &LayerSelector::_layerChanged));
+        _layerChanged(_desktop->doc()->layerManager().currentLayer());
     }
 }
 
@@ -151,7 +152,7 @@ void LayerSelector::_layerChanged(SPGroup *layer)
  */
 void LayerSelector::_layerModified()
 {
-    auto root = _desktop->layerManager().currentRoot();
+    auto root = _desktop->doc()->layerManager().currentRoot();
     bool active = _layer && _layer != root;
 
     auto color_str = std::string("white");
@@ -182,7 +183,7 @@ void LayerSelector::_layerModified()
 void LayerSelector::_lockLayer()
 {
     bool lock = _lock_toggle.get_active();
-    if (auto layer = _desktop->layerManager().currentLayer()) {
+    if (auto layer = _desktop->doc()->layerManager().currentLayer()) {
         layer->setLocked(lock);
         DocumentUndo::done(_desktop->getDocument(), lock ? _("Lock layer") : _("Unlock layer"), "");
     }
@@ -191,7 +192,7 @@ void LayerSelector::_lockLayer()
 void LayerSelector::_hideLayer()
 {
     bool hide = _eye_toggle.get_active();
-    if (auto layer = _desktop->layerManager().currentLayer()) {
+    if (auto layer = _desktop->doc()->layerManager().currentLayer()) {
         layer->setHidden(hide);
         DocumentUndo::done(_desktop->getDocument(), hide ? _("Hide layer") : _("Unhide layer"), "");
     }

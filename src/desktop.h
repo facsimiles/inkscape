@@ -98,7 +98,6 @@ struct InkscapeApplication;
 
 namespace Inkscape {
 
-class LayerManager;
 class PageManager;
 class MessageContext;
 class MessageStack;
@@ -236,8 +235,6 @@ public:
     guint  gr_point_i;
     Inkscape::PaintTarget gr_fill_or_stroke;
 
-    Glib::ustring _reconstruction_old_layer_id;
-
     sigc::signal<bool (const SPCSSAttr *, bool)>::accumulated<StopOnTrue> _set_style_signal;
     sigc::signal<int (SPStyle *, int)>::accumulated<StopOnNonZero> _query_style_signal;
 
@@ -293,9 +290,6 @@ public:
     void emit_gradient_stop_selected(void* sender, SPStop* stop);
     void emit_control_point_selected(void* sender, Inkscape::UI::ControlPointSelection* selection);
     void emit_text_cursor_moved(void* sender, Inkscape::UI::Tools::TextTool* tool);
-
-    Inkscape::LayerManager& layerManager() { return *_layer_manager; }
-    const Inkscape::LayerManager& layerManager() const { return *_layer_manager; }
 
     Inkscape::MessageContext *guidesMessageContext() const {
         return _guides_message_context.get();
@@ -555,7 +549,6 @@ private:
     bool _overlays_visible = true; ///< Whether the overlays are temporarily hidden
     bool _saved_guides_visible = false; ///< Remembers guides' visibility when hiding overlays
 
-    std::unique_ptr<Inkscape::LayerManager> _layer_manager;
 
     sigc::signal<void (SPDesktop *)> _destroy_signal;
     sigc::signal<void (SPDesktop *, SPDocument *)>     _document_replaced_signal;
@@ -565,8 +558,6 @@ private:
     sigc::signal<void (void *, Inkscape::UI::ControlPointSelection *)> _control_point_selected;
     sigc::signal<void (void *, Inkscape::UI::Tools::TextTool *)> _text_cursor_moved;
 
-    Inkscape::auto_connection _reconstruction_start_connection;
-    Inkscape::auto_connection _reconstruction_finish_connection;
     Inkscape::auto_connection _schedule_zoom_from_document_connection;
 
     // pinch zoom

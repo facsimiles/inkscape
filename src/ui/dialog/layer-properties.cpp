@@ -153,10 +153,10 @@ void LayerPropertiesDialog::_doCreate()
     SPObject *new_layer = Inkscape::create_layer(root, _layer, position);
 
     if (!name.empty()) {
-        _desktop->layerManager().renameLayer(new_layer, name.c_str(), true);
+        _desktop->getDocument()->layerManager().renameLayer(new_layer, name.c_str(), true);
     }
     _desktop->getSelection()->clear();
-    _desktop->layerManager().setCurrentLayer(new_layer);
+    _desktop->getDocument()->layerManager().setCurrentLayer(new_layer);
     DocumentUndo::done(_desktop->getDocument(), _("Add layer"), INKSCAPE_ICON("layer-new"));
     _desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("New layer created."));
 }
@@ -177,7 +177,7 @@ void LayerPropertiesDialog::_doRename()
     if (name.empty()) {
         return;
     }
-    LayerManager &layman = _desktop->layerManager();
+    LayerManager &layman = _desktop->getDocument()->layerManager();
     layman.renameLayer(layman.currentLayer(), name.c_str(), false);
 
     DocumentUndo::done(_desktop->getDocument(), _("Rename layer"), INKSCAPE_ICON("layer-rename"));
@@ -189,7 +189,7 @@ void LayerPropertiesDialog::_doRename()
 void LayerPropertiesDialog::_setup()
 {
     g_assert(_desktop != nullptr);
-    LayerManager &layman = _desktop->layerManager();
+    LayerManager &layman = _desktop->getDocument()->layerManager();
 
     switch (_type) {
         case LayerPropertiesDialogType::CREATE: {
@@ -311,10 +311,10 @@ void LayerPropertiesDialog::_setup_layers_controls()
     _scroller.set_shadow_type(Gtk::SHADOW_IN);
     _scroller.set_size_request(220, 180);
 
-    SPDocument* document = _desktop->doc();
+    SPDocument* document = _desktop->getDocument();
     SPRoot* root = document->getRoot();
     if (root) {
-        SPObject* target = _desktop->layerManager().currentLayer();
+        SPObject* target = _desktop->getDocument()->layerManager().currentLayer();
         _store->clear();
         _addLayer(root, nullptr, target, 0);
     }
@@ -342,10 +342,10 @@ void LayerPropertiesDialog::_addLayer(SPObject* layer, Gtk::TreeModel::Row* pare
         g_warn_message("Inkscape", __FILE__, __LINE__, __func__, "Maximum layer nesting reached.");
         return;
     }
-    LayerManager &layman = _desktop->layerManager();
+    LayerManager &layman = _desktop->getDocument()->layerManager();
     unsigned int counter = layman.childCount(layer);
     for (unsigned int i = 0; i < counter; i++) {
-        SPObject *child = _desktop->layerManager().nthChildOf(layer, i);
+        SPObject *child = _desktop->getDocument()->layerManager().nthChildOf(layer, i);
         if (!child) {
             continue;
         }

@@ -303,7 +303,7 @@ static void ink_drag_data_received(GtkWidget *widget,
 
             // Greg's edits to add intelligent positioning of svg drops
             SPObject *new_obj = nullptr;
-            new_obj = desktop->layerManager().currentLayer()->appendChildRepr(newgroup);
+            new_obj = desktop->doc()->layerManager().currentLayer()->appendChildRepr(newgroup);
 
             Inkscape::Selection *selection = desktop->getSelection();
             selection->set(cast<SPItem>(new_obj));

@@ -82,6 +82,7 @@ namespace Inkscape {
     class EventLog;
     class ProfileManager;
     class PageManager;
+    class LayerManager;
     namespace XML {
         struct Document;
         class Node;
@@ -172,26 +173,30 @@ public:
     void changeFilenameAndHrefs(char const *filename);
     void setXMLDialogSelectedObject(SPObject *activexmltree) { _activexmltree = activexmltree; }
     SPObject *getXMLDialogSelectedObject() { return _activexmltree; }
-
     Inkscape::EventLog *get_event_log() { return _event_log.get(); }
 
     Inkscape::PageManager& getPageManager() { return *_page_manager; }
     const Inkscape::PageManager& getPageManager() const { return *_page_manager; }
-
-
+    void setDkey(unsigned int *dkey);
+    void setLayerManager();
+    unsigned int *getDkey() const { return _dkey; };
 private:
+    unsigned int *_dkey = nullptr;
     void _importDefsNode(SPDocument *source, Inkscape::XML::Node *defs, Inkscape::XML::Node *target_defs);
     SPObject *_activexmltree;
-
     std::unique_ptr<Inkscape::PageManager> _page_manager;
 
     std::queue<GQuark> pending_resource_changes;
+    std::unique_ptr<Inkscape::LayerManager> _layer_manager;
 
 public:
     void importDefs(SPDocument *source);
 
     unsigned int vacuumDocument();
 
+    Inkscape::LayerManager& layerManager() { return *_layer_manager; }
+    const Inkscape::LayerManager& layerManager() const { return *_layer_manager; }
+    Glib::ustring _reconstruction_old_layer_id;
     /******** Getters and Setters **********/
 
     // Document structure -----------------
@@ -499,7 +504,6 @@ public:
     sigc::connection connectResourcesChanged(char const *key, SPDocument::ResourcesChangedSignal::slot_type slot);
     sigc::connection connectReconstructionStart(ReconstructionStart::slot_type slot);
     sigc::connection connectReconstructionFinish(ReconstructionFinish::slot_type slot);
-
     /* Resources */
     std::map<std::string, std::vector<SPObject *> > resources;
     ResourcesChangedSignalMap resources_changed_signals; // Used by Extension::Internal::Filter

@@ -878,7 +878,7 @@ void spdc_create_single_dot(ToolBase *tool, Geom::Point const &pt, char const *p
     Glib::ustring tool_path = path;
 
     SPDesktop *desktop = tool->getDesktop();
-    Inkscape::XML::Document *xml_doc = desktop->doc()->getReprDoc();
+    Inkscape::XML::Document *xml_doc = desktop->getDocument()->getReprDoc();
     Inkscape::XML::Node *repr = xml_doc->createElement("svg:path");
     repr->setAttribute("sodipodi:type", "arc");
     auto layer = tool->currentLayer();

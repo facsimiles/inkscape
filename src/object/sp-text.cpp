@@ -1238,7 +1238,7 @@ SPItem *create_text_with_inline_size (SPDesktop *desktop, Geom::Point p0, Geom::
     Inkscape::XML::Node *text_repr = xml_doc->createElement("svg:text");
     text_repr->setAttribute("xml:space", "preserve"); // we preserve spaces in the text objects we create
 
-    auto layer = desktop->layerManager().currentLayer();
+    auto layer = doc->layerManager().currentLayer();
     g_assert(layer != nullptr);
 
     auto text_object = cast<SPText>(layer->appendChildRepr(text_repr));
@@ -1275,7 +1275,7 @@ SPItem *create_text_with_inline_size (SPDesktop *desktop, Geom::Point p0, Geom::
 SPItem *create_text_with_rectangle (SPDesktop *desktop, Geom::Point p0, Geom::Point p1)
 {
     SPDocument *doc = desktop->getDocument();
-    auto const parent = desktop->layerManager().currentLayer();
+    auto const parent = doc->layerManager().currentLayer();
     assert(parent);
 
     Inkscape::XML::Document *xml_doc = doc->getReprDoc();

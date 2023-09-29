@@ -443,10 +443,10 @@ void XmlTree::set_dt_select(Inkscape::XML::Node *repr)
     if (!object || !in_dt_coordsys(*object)) {
         // object not on canvas
     } else if (isRealLayer(object)) {
-        getDesktop()->layerManager().setCurrentLayer(object);
+        getDesktop()->doc()->layerManager().setCurrentLayer(object);
     } else {
         if (is<SPGroup>(object->parent)) {
-            getDesktop()->layerManager().setCurrentLayer(object->parent);
+            getDesktop()->doc()->layerManager().setCurrentLayer(object->parent);
         }
 
         getSelection()->set(cast<SPItem>(object));
