@@ -133,6 +133,7 @@ public:
 private:
     gchar     *_id = nullptr;                  /**< The unique identifier for the Extension */
     gchar     *_name = nullptr;                /**< A user friendly name for the Extension */
+    bool      _on_selection = false;         /**< Special check to allow extension parse run fater on special situations */
     state_t    _state = STATE_UNLOADED;        /**< Which state the Extension is currently in */
     int _priority = 0;                         /**< when sorted, should this come before any others */
     std::vector<Dependency *>  _deps;          /**< Dependencies for this extension */
@@ -171,6 +172,7 @@ public:
     Inkscape::XML::Node *      get_repr     ();
     gchar *       get_id       () const;
     const gchar * get_name     () const;
+    bool get_on_selection     () const;
     virtual void  deactivate   ();
     bool          deactivated  ();
     void          printFailure (Glib::ustring reason);

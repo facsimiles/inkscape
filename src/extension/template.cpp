@@ -36,6 +36,7 @@ TemplatePreset::TemplatePreset(Template *mod, const Inkscape::XML::Node *repr, T
     , _prefs(prefs)
     , _name("Unnamed")
     , _label("")
+    , _on_selection(false)
     , _visibility(mod->get_visibility())
     , _priority(priority)
 {
@@ -50,6 +51,8 @@ TemplatePreset::TemplatePreset(Template *mod, const Inkscape::XML::Node *repr, T
                 _name = value.empty() ? "?" : value;
             else if (name == "label")
                 _label = value;
+            else if (name == "on_selection")
+                _on_selection = value == "True" || value == "true" || value == "1";
             else if (name == "icon")
                 _icon = value;
             else if (name == "priority")
@@ -410,6 +413,10 @@ SPDocument *Template::get_template_document() const
 
 std::string TemplatePreset::get_name() const {
     return _name;
+}
+
+bool TemplatePreset::get_on_selection() const {
+    return _on_selection;
 }
 
 std::string TemplatePreset::get_label() const {
