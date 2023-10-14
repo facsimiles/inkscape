@@ -117,7 +117,7 @@ ContextMenu::ContextMenu(SPDesktop *desktop, SPObject *object, bool hide_layers_
     auto gmenu_section = Gio::Menu::create(); // Section (used multiple times)
 
     auto layer = Inkscape::LayerManager::asLayer(item);  // Layers have their own context menu in the Object and Layers dialog.
-    auto root = desktop->layerManager().currentRoot();
+    auto root = desktop->getDocument()->layerManager().currentRoot();
 
     // Get a list of items under the cursor, used for unhiding and unlocking.
     auto point_win = desktop->point() * desktop->d2w();

@@ -20,6 +20,7 @@
 
 #include "actions-helper.h"
 #include "desktop.h"
+#include "document.h"
 #include "document-undo.h"
 #include "inkscape-application.h"
 #include "inkscape-window.h"
@@ -44,7 +45,7 @@ layer_new(InkscapeWindow* win)
     SPDesktop* dt = win->get_desktop();
 
     // New Layer
-    Inkscape::UI::Dialog::LayerPropertiesDialog::showCreate(dt, dt->layerManager().currentLayer());
+    Inkscape::UI::Dialog::LayerPropertiesDialog::showCreate(dt, dt->getDocument()->layerManager().currentLayer());
 }
 
 void
@@ -52,7 +53,7 @@ layer_duplicate (InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
 
-    if (!dt->layerManager().isRoot()) {
+    if (!dt->getDocument()->layerManager().isRoot()) {
 
         dt->getSelection()->duplicate(true, true); // This requires the selection to be a layer!
         Inkscape::DocumentUndo::done(dt->getDocument(), _("Duplicate layer"), INKSCAPE_ICON("layer-duplicate"));
@@ -67,12 +68,12 @@ void
 layer_delete (InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
-    auto root = dt->layerManager().currentRoot();
+    auto root = dt->getDocument()->layerManager().currentRoot();
 
-    if (!dt->layerManager().isRoot()) {
+    if (!dt->getDocument()->layerManager().isRoot()) {
 
         dt->getSelection()->clear();
-        SPObject *old_layer = dt->layerManager().currentLayer();
+        SPObject *old_layer = dt->getDocument()->layerManager().currentLayer();
         SPObject *old_parent = old_layer->parent;
         SPObject *old_parent_parent = (old_parent != nullptr) ? old_parent->parent : nullptr;
 
@@ -104,7 +105,7 @@ layer_delete (InkscapeWindow* win)
         old_layer->deleteObject();
 
         if (survivor) {
-            dt->layerManager().setCurrentLayer(survivor);
+            dt->getDocument()->layerManager().setCurrentLayer(survivor);
         }
 
         Inkscape::DocumentUndo::done(dt->getDocument(), _("Delete layer"), INKSCAPE_ICON("layer-delete"));
@@ -121,14 +122,14 @@ layer_rename (InkscapeWindow* win)
     SPDesktop* dt = win->get_desktop();
 
     // Rename Layer
-    Inkscape::UI::Dialog::LayerPropertiesDialog::showRename(dt, dt->layerManager().currentLayer());
+    Inkscape::UI::Dialog::LayerPropertiesDialog::showRename(dt, dt->getDocument()->layerManager().currentLayer());
 }
 
 void
 layer_hide_all (InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
-    dt->layerManager().toggleHideAllLayers(true);
+    dt->getDocument()->layerManager().toggleHideAllLayers(true);
     Inkscape::DocumentUndo::maybeDone(dt->getDocument(), "layer:hideall", _("Hide all layers"), "");
 }
 
@@ -136,7 +137,7 @@ void
 layer_unhide_all (InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
-    dt->layerManager().toggleHideAllLayers(false);
+    dt->getDocument()->layerManager().toggleHideAllLayers(false);
     Inkscape::DocumentUndo::maybeDone(dt->getDocument(), "layer:showall", _("Show all layers"), "");
 }
 
@@ -144,9 +145,9 @@ void
 layer_hide_toggle (InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
-    auto layer = dt->layerManager().currentLayer();
+    auto layer = dt->getDocument()->layerManager().currentLayer();
 
-    if (!layer || dt->layerManager().isRoot()) {
+    if (!layer || dt->getDocument()->layerManager().isRoot()) {
         dt->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("No current layer."));
     } else {
         layer->setHidden(!layer->isHidden());
@@ -157,12 +158,12 @@ void
 layer_hide_toggle_others (InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
-    auto layer = dt->layerManager().currentLayer();
+    auto layer = dt->getDocument()->layerManager().currentLayer();
 
-    if (!layer || dt->layerManager().isRoot()) {
+    if (!layer || dt->getDocument()->layerManager().isRoot()) {
         dt->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("No current layer."));
     } else {
-        dt->layerManager().toggleLayerSolo( layer ); // Weird name!
+        dt->getDocument()->layerManager().toggleLayerSolo( layer ); // Weird name!
         Inkscape::DocumentUndo::done(dt->getDocument(), _("Hide other layers"), "");
     }
 }
@@ -171,7 +172,7 @@ void
 layer_lock_all (InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
-    dt->layerManager().toggleLockAllLayers(true);
+    dt->getDocument()->layerManager().toggleLockAllLayers(true);
     Inkscape::DocumentUndo::maybeDone(dt->getDocument(), "layer:lockall", _("Lock all layers"), "");
 }
 
@@ -179,7 +180,7 @@ void
 layer_unlock_all (InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
-    dt->layerManager().toggleLockAllLayers(false);
+    dt->getDocument()->layerManager().toggleLockAllLayers(false);
     Inkscape::DocumentUndo::maybeDone(dt->getDocument(), "layer:unlockall", _("Unlock all layers"), "");
 }
 
@@ -187,9 +188,9 @@ void
 layer_lock_toggle (InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
-    auto layer = dt->layerManager().currentLayer();
+    auto layer = dt->getDocument()->layerManager().currentLayer();
 
-    if (!layer || dt->layerManager().isRoot()) {
+    if (!layer || dt->getDocument()->layerManager().isRoot()) {
         dt->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("No current layer."));
     } else {
         layer->setLocked(!layer->isLocked());
@@ -200,12 +201,12 @@ void
 layer_lock_toggle_others (InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
-    auto layer = dt->layerManager().currentLayer();
+    auto layer = dt->getDocument()->layerManager().currentLayer();
 
-    if (!layer || dt->layerManager().isRoot()) {
+    if (!layer || dt->getDocument()->layerManager().isRoot()) {
         dt->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("No current layer."));
     } else {
-        dt->layerManager().toggleLockOtherLayers( layer );
+        dt->getDocument()->layerManager().toggleLockOtherLayers( layer );
         Inkscape::DocumentUndo::done(dt->getDocument(), _("Lock other layers"), "");
     }
 }
@@ -215,9 +216,9 @@ layer_previous (InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
 
-    SPObject *next = Inkscape::next_layer(dt->layerManager().currentRoot(), dt->layerManager().currentLayer());
+    SPObject *next = Inkscape::next_layer(dt->getDocument()->layerManager().currentRoot(), dt->getDocument()->layerManager().currentLayer());
     if (next) {
-        dt->layerManager().setCurrentLayer(next);
+        dt->getDocument()->layerManager().setCurrentLayer(next);
         Inkscape::DocumentUndo::done(dt->getDocument(), _("Switch to next layer"), INKSCAPE_ICON("layer-previous"));
         dt->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Switched to next layer."));
     } else {
@@ -230,9 +231,9 @@ layer_next (InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
 
-    SPObject *prev=Inkscape::previous_layer(dt->layerManager().currentRoot(), dt->layerManager().currentLayer());
+    SPObject *prev=Inkscape::previous_layer(dt->getDocument()->layerManager().currentRoot(), dt->getDocument()->layerManager().currentLayer());
     if (prev) {
-        dt->layerManager().setCurrentLayer(prev);
+        dt->getDocument()->layerManager().setCurrentLayer(prev);
         Inkscape::DocumentUndo::done(dt->getDocument(), _("Switch to previous layer") ,INKSCAPE_ICON("layer-next"));
         dt->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Switched to previous layer."));
     } else {
@@ -264,7 +265,7 @@ selection_move_to_layer (InkscapeWindow* win)
     SPDesktop* dt = win->get_desktop();
 
     // Selection move to layer
-    Inkscape::UI::Dialog::LayerPropertiesDialog::showMove(dt, dt->layerManager().currentLayer());
+    Inkscape::UI::Dialog::LayerPropertiesDialog::showMove(dt, dt->getDocument()->layerManager().currentLayer());
 }
 
 void
@@ -272,12 +273,12 @@ layer_top (InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
 
-        if (dt->layerManager().isRoot()) {
+        if (dt->getDocument()->layerManager().isRoot()) {
             dt->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("No current layer."));
             return;
         }
 
-        SPItem *layer = dt->layerManager().currentLayer();
+        SPItem *layer = dt->getDocument()->layerManager().currentLayer();
         g_return_if_fail(layer != nullptr);
         SPObject *old_pos = layer->getNext();
         layer->raiseToTop();
@@ -299,12 +300,12 @@ layer_raise (InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
 
-    if (dt->layerManager().isRoot()) {
+    if (dt->getDocument()->layerManager().isRoot()) {
         dt->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("No current layer."));
         return;
     }
 
-    SPItem *layer = dt->layerManager().currentLayer();
+    SPItem *layer = dt->getDocument()->layerManager().currentLayer();
     g_return_if_fail(layer != nullptr);
 
     SPObject *old_pos = layer->getNext();
@@ -330,12 +331,12 @@ layer_lower (InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
 
-    if (dt->layerManager().isRoot()) {
+    if (dt->getDocument()->layerManager().isRoot()) {
         dt->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("No current layer."));
         return;
     }
 
-    SPItem *layer = dt->layerManager().currentLayer();
+    SPItem *layer = dt->getDocument()->layerManager().currentLayer();
     g_return_if_fail(layer != nullptr);
     SPObject *old_pos = layer->getNext();
     layer->lowerOne();
@@ -357,12 +358,12 @@ layer_bottom (InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
 
-    if (dt->layerManager().isRoot()) {
+    if (dt->getDocument()->layerManager().isRoot()) {
         dt->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("No current layer."));
         return;
     }
 
-    SPItem *layer = dt->layerManager().currentLayer();
+    SPItem *layer = dt->getDocument()->layerManager().currentLayer();
     g_return_if_fail(layer != nullptr);
     SPObject *old_pos = layer->getNext();
     layer->lowerToBottom();
@@ -383,9 +384,9 @@ void
 layer_to_group (InkscapeWindow* win)
 {
     SPDesktop* dt = win->get_desktop();
-    auto layer = dt->layerManager().currentLayer();
+    auto layer = dt->getDocument()->layerManager().currentLayer();
 
-    if (!layer || dt->layerManager().isRoot()) {
+    if (!layer || dt->getDocument()->layerManager().isRoot()) {
         dt->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("No current layer."));
         return;
     }
@@ -432,7 +433,7 @@ group_enter (InkscapeWindow* win)
     std::vector<SPItem*> items(selection->items().begin(), selection->items().end());
     if (items.size() == 1 && cast<SPGroup>(items[0])) {
         // Only one item and it is a group!
-        dt->layerManager().setCurrentLayer(items[0]);
+        dt->getDocument()->layerManager().setCurrentLayer(items[0]);
         selection->clear();
     }
 }
@@ -444,8 +445,8 @@ group_exit (InkscapeWindow* win)
     SPDesktop* dt = win->get_desktop();
     auto selection = dt->getSelection();
 
-    auto parent = dt->layerManager().currentLayer()->parent;
-    dt->layerManager().setCurrentLayer(parent);
+    auto parent = dt->getDocument()->layerManager().currentLayer()->parent;
+    dt->getDocument()->layerManager().setCurrentLayer(parent);
 
     std::vector<SPItem*> items(selection->items().begin(), selection->items().end());
     if (items.size() == 1 && cast<SPGroup>(items[0]->parent) ) {

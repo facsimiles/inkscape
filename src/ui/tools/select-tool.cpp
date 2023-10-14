@@ -187,7 +187,7 @@ sp_select_context_up_one_layer(SPDesktop *desktop)
      * document), we might consider further restricting the below to disallow
      * leaving a layer to go to a non-layer.
      */
-    if (SPObject *const current_layer = desktop->layerManager().currentLayer()) {
+    if (SPObject *const current_layer = desktop->doc()->layerManager().currentLayer()) {
         SPObject *const parent = current_layer->parent;
         auto current_group = cast<SPGroup>(current_layer);
         if ( parent
@@ -195,7 +195,7 @@ sp_select_context_up_one_layer(SPDesktop *desktop)
                   || !( current_group
                         && ( SPGroup::LAYER == current_group->layerMode() ) ) ) )
         {
-            desktop->layerManager().setCurrentLayer(parent);
+            desktop->doc()->layerManager().setCurrentLayer(parent);
             if (current_group && (SPGroup::LAYER != current_group->layerMode())) {
                 desktop->getSelection()->set(current_layer);
             }
@@ -421,7 +421,7 @@ bool SelectTool::root_handler(CanvasEvent const &event)
                     SPItem *clicked_item = selection->items().front();
 
                     if (is<SPGroup>(clicked_item) && !is<SPBox3D>(clicked_item)) { // enter group if it's not a 3D box
-                        _desktop->layerManager().setCurrentLayer(clicked_item);
+                        _desktop->doc()->layerManager().setCurrentLayer(clicked_item);
                         _desktop->getSelection()->clear();
                         dragging = false;
                         discard_delayed_snap_event();
@@ -939,7 +939,7 @@ bool SelectTool::root_handler(CanvasEvent const &event)
                             SPItem *clicked_item = selection->singleItem();
                             auto clickedGroup = cast<SPGroup>(clicked_item);
                             if ( (clickedGroup && (clickedGroup->layerMode() != SPGroup::LAYER)) || is<SPBox3D>(clicked_item)) { // enter group or a 3D box
-                                _desktop->layerManager().setCurrentLayer(clicked_item);
+                                _desktop->doc()->layerManager().setCurrentLayer(clicked_item);
                                 _desktop->getSelection()->clear();
                             } else {
                                 _desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Selected object is not a group. Cannot enter."));

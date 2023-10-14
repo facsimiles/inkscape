@@ -851,7 +851,7 @@ bool Find::item_type_match (SPItem *item)
         return (all || check_texts.get_active());
 
     } else if (is<SPGroup>(item) &&
-               !getDesktop()->layerManager().isLayer(item)) { // never select layers!
+               !getDesktop()->getDocument()->layerManager().isLayer(item)) { // never select layers!
         return (all || check_groups.get_active());
 
     } else if (is<SPUse>(item)) {
@@ -902,7 +902,7 @@ std::vector<SPItem*> &Find::all_items (SPObject *r, std::vector<SPItem*> &l, boo
     auto desktop = getDesktop();
     for (auto& child: r->children) {
         auto item = cast<SPItem>(&child);
-        if (item && !child.cloned && !desktop->layerManager().isLayer(item)) {
+        if (item && !child.cloned && !desktop->getDocument()->layerManager().isLayer(item)) {
             if ((hidden || !desktop->itemIsHidden(item)) && (locked || !item->isLocked())) {
                 l.insert(l.begin(),(SPItem*)&child);
             }
@@ -920,7 +920,7 @@ std::vector<SPItem*> &Find::all_selection_items (Inkscape::Selection *s, std::ve
         SPObject *obj = *i;
         auto item = cast<SPItem>(obj);
         g_assert(item != nullptr);
-        if (item && !item->cloned && !desktop->layerManager().isLayer(item)) {
+        if (item && !item->cloned && !desktop->getDocument()->layerManager().isLayer(item)) {
             if (!ancestor || ancestor->isAncestorOf(item)) {
                 if ((hidden || !desktop->itemIsHidden(item)) && (locked || !item->isLocked())) {
                     l.push_back(*i);
@@ -974,13 +974,13 @@ void Find::onAction()
     std::vector<SPItem*> l;
     if (check_scope_selection.get_active()) {
         if (check_scope_layer.get_active()) {
-            l = all_selection_items (desktop->getSelection(), l, desktop->layerManager().currentLayer(), hidden, locked);
+            l = all_selection_items (desktop->getSelection(), l, desktop->getDocument()->layerManager().currentLayer(), hidden, locked);
         } else {
             l = all_selection_items (desktop->getSelection(), l, nullptr, hidden, locked);
         }
     } else {
         if (check_scope_layer.get_active()) {
-            l = all_items (desktop->layerManager().currentLayer(), l, hidden, locked);
+            l = all_items (desktop->getDocument()->layerManager().currentLayer(), l, hidden, locked);
         } else {
             l = all_items(desktop->getDocument()->getRoot(), l, hidden, locked);
         }

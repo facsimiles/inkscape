@@ -989,7 +989,7 @@ void ObjectsPanel::desktopReplaced()
     layer_changed.disconnect();
 
     if (auto desktop = getDesktop()) {
-        layer_changed = desktop->layerManager().connectCurrentLayerChanged(sigc::mem_fun(*this, &ObjectsPanel::layerChanged));
+        layer_changed = desktop->doc()->layerManager().connectCurrentLayerChanged(sigc::mem_fun(*this, &ObjectsPanel::layerChanged));
     }
 }
 
@@ -1012,7 +1012,7 @@ void ObjectsPanel::setRootWatcher()
     // Filtering disables creating dummy children and instead processes entire trees.
     root_watcher = std::make_unique<ObjectWatcher>(this, document->getRoot(), nullptr, filtered);
     root_watcher->rememberExtendedItems();
-    layerChanged(getDesktop()->layerManager().currentLayer());
+    layerChanged(getDesktop()->doc()->layerManager().currentLayer());
     _selectionChanged();
 }
 
@@ -1195,8 +1195,8 @@ bool ObjectsPanel::toggleVisible(unsigned int state, Gtk::TreeModel::Row row)
     if (SPItem* item = getItem(row)) { 
         if (state & GDK_SHIFT_MASK) {
             // Toggle Visible for layers (hide all other layers)
-            if (desktop->layerManager().isLayer(item)) {
-                desktop->layerManager().toggleLayerSolo(item);
+            if (desktop->doc()->layerManager().isLayer(item)) {
+                desktop->doc()->layerManager().toggleLayerSolo(item);
                 DocumentUndo::done(getDocument(), _("Hide other layers"), "");
             }
             return true;
@@ -1262,8 +1262,8 @@ bool ObjectsPanel::toggleLocked(unsigned int state, Gtk::TreeModel::Row row)
     if (SPItem* item = getItem(row)) { 
         if (state & GDK_SHIFT_MASK) {
             // Toggle lock for layers (lock all other layers)
-            if (desktop->layerManager().isLayer(item)) {
-                desktop->layerManager().toggleLockOtherLayers(item);
+            if (desktop->doc()->layerManager().isLayer(item)) {
+                desktop->doc()->layerManager().toggleLockOtherLayers(item);
                 DocumentUndo::done(getDocument(), _("Lock other layers"), "");
             }
             return true;
@@ -1633,7 +1633,7 @@ Gtk::EventSequenceState ObjectsPanel::on_click(Gtk::GestureMultiPress const &ges
         if (context_menu) {
             // if right-clicking on a layer, make it current for context menu actions to work correctly
             if (layer && !selection->includes(layer)) {
-                getDesktop()->layerManager().setCurrentLayer(item, true);
+                getDesktop()->doc()->layerManager().setCurrentLayer(item, true);
             }
 
             // true == hide menu item for opening this dialog!
@@ -1641,7 +1641,7 @@ Gtk::EventSequenceState ObjectsPanel::on_click(Gtk::GestureMultiPress const &ges
             UI::popup_at(*menu, *this, ex, ey);
             UI::on_hide_reset(std::move(menu));
         } else if (should_set_current_layer()) {
-            getDesktop()->layerManager().setCurrentLayer(item, true);
+            getDesktop()->doc()->layerManager().setCurrentLayer(item, true);
         } else {
             selectCursorItem(state);
         }
@@ -1881,7 +1881,7 @@ void ObjectsPanel::on_drag_end(const Glib::RefPtr<Gdk::DragContext> &context)
  */
 bool ObjectsPanel::selectCursorItem(unsigned int state)
 {
-    auto &layers = getDesktop()->layerManager();
+    auto &layers = getDesktop()->doc()->layerManager();
     auto selection = getSelection();
     if (!selection)
         return false;

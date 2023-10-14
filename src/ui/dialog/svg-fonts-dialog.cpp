@@ -355,7 +355,7 @@ Glib::ustring get_glyph_full_name(const SPGlyph& glyph) {
 SPItem* find_layer(SPDesktop* desktop, SPObject* root_layer, const Glib::ustring& name) {
     if (!desktop) return nullptr;
 
-    const auto& layers = desktop->layerManager();
+    const auto& layers = desktop->doc()->layerManager();
     auto root = root_layer == nullptr ? layers.currentRoot() : root_layer;
     if (!root) return nullptr;
 
@@ -386,7 +386,7 @@ std::vector<SPGroup*> get_direct_sublayers(SPObject* layer) {
 void rename_glyph_layer(SPDesktop* desktop, SPItem* layer, const Glib::ustring& font, const Glib::ustring& name) {
     if (!desktop || !layer || font.empty() || name.empty()) return;
 
-    auto parent_layer = find_layer(desktop, desktop->layerManager().currentRoot(), font);
+    auto parent_layer = find_layer(desktop, desktop->doc()->layerManager().currentRoot(), font);
     if (!parent_layer) return;
 
     // before renaming the layer find new place to move it into to keep sorted order intact
@@ -409,13 +409,13 @@ void rename_glyph_layer(SPDesktop* desktop, SPItem* layer, const Glib::ustring& 
         parent_layer->getRepr()->changeOrder(layer->getRepr(), after ? after->getRepr() : nullptr);
     }
 
-    desktop->layerManager().renameLayer(layer, name.c_str(), false);
+    desktop->doc()->layerManager().renameLayer(layer, name.c_str(), false);
 }
 
 SPItem* get_layer_for_glyph(SPDesktop* desktop, const Glib::ustring& font, const Glib::ustring& name) {
     if (!desktop || name.empty() || font.empty()) return nullptr;
 
-    auto parent_layer = find_layer(desktop, desktop->layerManager().currentRoot(), font);
+    auto parent_layer = find_layer(desktop, desktop->doc()->layerManager().currentRoot(), font);
     if (!parent_layer) return nullptr;
 
     return find_layer(desktop, parent_layer, name);
@@ -424,7 +424,7 @@ SPItem* get_layer_for_glyph(SPDesktop* desktop, const Glib::ustring& font, const
 SPItem* get_or_create_layer_for_glyph(SPDesktop* desktop, const Glib::ustring& font, const Glib::ustring& name) {
     if (!desktop || name.empty() || font.empty()) return nullptr;
 
-    auto& layers = desktop->layerManager();
+    auto& layers = desktop->doc()->layerManager();
     auto parent_layer = find_layer(desktop, layers.currentRoot(), font);
     if (!parent_layer) {
         // create a new layer for a font
@@ -1264,7 +1264,7 @@ void SvgFontsDialog::edit_glyph(SPGlyph* glyph) {
         }
     }
 
-    auto& layers = desktop->layerManager();
+    auto& layers = desktop->doc()->layerManager();
     // set layer as "solo" - only one visible and unlocked
     if (layers.isLayer(layer) && layer != layers.currentRoot()) {
         layers.setCurrentLayer(layer, true);

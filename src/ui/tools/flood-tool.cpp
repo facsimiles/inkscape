@@ -397,7 +397,7 @@ static void do_trace(BitmapCoordsInfo const &bci, unsigned char *trace_px, SPDes
             pathRepr->setAttribute("d", path.svg_dump_path().c_str());
         }
 
-        auto layer = desktop->layerManager().currentLayer();
+        auto layer = desktop->doc()->layerManager().currentLayer();
         layer->addChild(pathRepr, nullptr);
 
         SPObject *reprobj = document->getObjectByRepr(pathRepr);

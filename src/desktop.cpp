@@ -68,8 +68,6 @@ namespace Inkscape { namespace XML { class Node; }}
 
 // Callback declarations
 static bool _drawing_handler(Inkscape::CanvasEvent const &event, Inkscape::DrawingItem *item, SPDesktop *desktop);
-static void _reconstruction_start(SPDesktop * desktop);
-static void _reconstruction_finish(SPDesktop * desktop);
 
 template <typename T>
 static void delete_then_null(std::unique_ptr<T> &uptr)
@@ -94,15 +92,11 @@ SPDesktop::SPDesktop()
     , gr_point_type(POINT_LG_BEGIN)
     , gr_point_i(0)
     , gr_fill_or_stroke(Inkscape::FOR_FILL)
-    , _reconstruction_old_layer_id()
     // an id attribute is not allowed to be the empty string
     , _widget(nullptr) // DesktopWidget
     , _guides_message_context(nullptr)
     , _active(false)
 {
-    // Moving this into the list initializer breaks the application because this->_document_replaced_signal
-    // is accessed before it is initialized
-    _layer_manager = std::make_unique<Inkscape::LayerManager>(this);
     _selection = std::make_unique<Inkscape::Selection>(this);
 
     // Formerly in View::View VVVVVVVVVVVVVVVVVVV
@@ -157,7 +151,7 @@ SPDesktop::init (SPNamedView *nv, Inkscape::UI::Widget::Canvas *acanvas, SPDeskt
         document->ensureUpToDate();
     }
     dkey = SPItem::display_key_new(1);
-
+    
     /* Connect document */
     setDocument (document);
 
@@ -235,7 +229,6 @@ SPDesktop::init (SPNamedView *nv, Inkscape::UI::Widget::Canvas *acanvas, SPDeskt
 
     // Set the select tool as the active tool.
     setTool("/tools/select");
-
     // display rect and zoom are now handled in sp_desktop_widget_realize()
 
     // pinch zoom
@@ -243,14 +236,6 @@ SPDesktop::init (SPNamedView *nv, Inkscape::UI::Widget::Canvas *acanvas, SPDeskt
                                         (*canvas, *this);
     Inkscape::UI::Controller::add_zoom<&SPDesktop::on_zoom_begin, &SPDesktop::on_zoom_scale, &SPDesktop::on_zoom_end>
                                       (*canvas, *this, Gtk::PHASE_CAPTURE);
-
-    /* Set up notification of rebuilding the document, this allows
-       for saving object related settings in the document. */
-    _reconstruction_start_connection =
-        document->connectReconstructionStart(sigc::bind(&_reconstruction_start, this));
-    _reconstruction_finish_connection =
-        document->connectReconstructionFinish(sigc::bind(&_reconstruction_finish, this));
-    _reconstruction_old_layer_id.clear();
 }
 
 void SPDesktop::destroy()
@@ -267,8 +252,6 @@ void SPDesktop::destroy()
 
     namedview->hide(this);
 
-    _reconstruction_start_connection.disconnect();
-    _reconstruction_finish_connection.disconnect();
     _schedule_zoom_from_document_connection.disconnect();
 
     if (_canvas_drawing) {
@@ -373,7 +356,6 @@ SPDesktop::change_document (SPDocument *theDocument)
     } else {
         std::cerr << "SPDesktop::change_document: failed to get desktop widget!" << std::endl;
     }
-
 }
 
 /**
@@ -1338,7 +1320,9 @@ SPDesktop::setDocument (SPDocument *doc)
     }
 
     _selection->setDocument(doc);
-
+    unsigned int * dk = &dkey;
+    doc->setDkey(dk);
+    doc->setLayerManager();
     /// \todo fixme: This condition exists to make sure the code
     /// inside is NOT called on initialization, only on replacement. But there
     /// are surely more safe methods to accomplish this.
@@ -1425,32 +1409,6 @@ static bool _drawing_handler(Inkscape::CanvasEvent const &event, Inkscape::Drawi
     }
 
     return tool->start_root_handler(event);
-}
-
-/// Called when document is starting to be rebuilt.
-static void _reconstruction_start(SPDesktop * desktop)
-{
-    auto layer = desktop->layerManager().currentLayer();
-    desktop->_reconstruction_old_layer_id = layer->getId() ? layer->getId() : "";
-    desktop->layerManager().reset();
-
-    desktop->getSelection()->clear();
-}
-
-/// Called when document rebuild is finished.
-static void _reconstruction_finish(SPDesktop * desktop)
-{
-    g_debug("Desktop, finishing reconstruction\n");
-    if (!desktop->_reconstruction_old_layer_id.empty()) {
-        if (auto const newLayer = desktop->getNamedView()->document
-                                  ->getObjectById(desktop->_reconstruction_old_layer_id))
-        {
-            desktop->layerManager().setCurrentLayer(newLayer);
-        }
-
-        desktop->_reconstruction_old_layer_id.clear();
-    }
-    g_debug("Desktop, finishing reconstruction end\n");
 }
 
 Geom::Affine SPDesktop::w2d() const

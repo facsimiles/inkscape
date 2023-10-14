@@ -260,7 +260,7 @@ void ConnectorToolbar::spacing_changed()
     _desktop->getNamedView()->updateRepr();
     bool modmade = false;
 
-    auto items = get_avoided_items(_desktop->layerManager().currentRoot(), _desktop);
+    auto items = get_avoided_items(_desktop->doc()->layerManager().currentRoot(), _desktop);
     for (auto item : items) {
         Geom::Affine m = Geom::identity();
         avoid_item_move(&m, item);

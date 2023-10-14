@@ -997,6 +997,7 @@ InkscapeApplication::process_document(SPDocument* document, std::string output_p
         _active_window = nullptr;
         _active_desktop = nullptr;
         _active_selection = document->getSelection();
+        document->setLayerManager();
     }
 
     document->ensureUpToDate(); // Or queries don't work!

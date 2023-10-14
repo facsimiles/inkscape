@@ -680,13 +680,13 @@ void sp_namedview_update_layers_from_document (SPDesktop *desktop)
     // if that didn't work out, look for the topmost layer
     if (!layer) {
         for (auto& iter: document->getRoot()->children) {
-            if (desktop->layerManager().isLayer(&iter)) {
+            if (document->layerManager().isLayer(&iter)) {
                 layer = &iter;
             }
         }
     }
     if (layer) {
-        desktop->layerManager().setCurrentLayer(layer);
+        document->layerManager().setCurrentLayer(layer);
     }
 
     // FIXME: find a better place to do this
@@ -723,7 +723,7 @@ void sp_namedview_document_from_window(SPDesktop *desktop)
         view->setAttributeInt("inkscape:window-maximized", desktop->is_maximized());
     }
 
-    view->setAttribute("inkscape:current-layer", desktop->layerManager().currentLayer()->getId());
+    view->setAttribute("inkscape:current-layer", desktop->getDocument()->layerManager().currentLayer()->getId());
 }
 
 void SPNamedView::hide(SPDesktop const *desktop)

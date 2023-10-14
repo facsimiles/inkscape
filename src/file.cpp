@@ -875,7 +875,7 @@ void sp_import_document(SPDesktop *desktop, SPDocument *clipdoc, bool in_place, 
 
     SPDocument *target_document = desktop->getDocument();
     Inkscape::XML::Node *root = clipdoc->getReprRoot();
-    Inkscape::XML::Node *target_parent = desktop->layerManager().currentLayer()->getRepr();
+    Inkscape::XML::Node *target_parent = target_document->layerManager().currentLayer()->getRepr();
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
@@ -933,7 +933,7 @@ void sp_import_document(SPDesktop *desktop, SPDocument *clipdoc, bool in_place, 
     }
 
     std::vector<Inkscape::XML::Node*> pasted_objects_not;
-    auto layer = desktop->layerManager().currentLayer();
+    auto layer = target_document->layerManager().currentLayer();
     Geom::Affine doc2parent = layer->i2doc_affine().inverse();
 
     Geom::OptRect from_page;
@@ -1103,7 +1103,7 @@ file_import(SPDocument *in_doc, const Glib::ustring &uri,
         //        For now, we just use the root in this case.
         SPObject *place_to_insert;
         if (desktop) {
-            place_to_insert = desktop->layerManager().currentLayer();
+            place_to_insert = desktop->getDocument()->layerManager().currentLayer();
         } else {
             place_to_insert = in_doc->getRoot();
         }

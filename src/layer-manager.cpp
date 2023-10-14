@@ -2,7 +2,7 @@
 /*
  * Inkscape::LayerManager
  *
- * Owned by the Desktop, this manager tracks layer objects as
+ * Owned by the Document, this manager tracks layer objects as
  * distinct entities from groups, providing a comprehensive set
  * of utilities, signals and other Layer based organisation.
  *
@@ -26,11 +26,10 @@
 #include <sigc++/adaptors/hide.h>
 
 
-#include "desktop.h"
 #include "document.h"
 #include "layer-manager.h"
 #include "selection.h"
-
+#include "preferences.h"
 
 #include "object-hierarchy.h"
 #include "object/sp-defs.h"
@@ -41,17 +40,17 @@
 
 namespace Inkscape {
 
-LayerManager::LayerManager(SPDesktop *desktop)
-    : _desktop(desktop)
-    , _document(nullptr)
+LayerManager::LayerManager(SPDocument *document)
+    : _document(document)
 {
     _layer_hierarchy = std::make_unique<Inkscape::ObjectHierarchy>(nullptr);
     _layer_hierarchy->connectAdded(sigc::mem_fun(*this, &LayerManager::_layer_activated));
     _layer_hierarchy->connectRemoved(sigc::mem_fun(*this, &LayerManager::_layer_deactivated));
     _layer_hierarchy->connectChanged(sigc::mem_fun(*this, &LayerManager::_selectedLayerChanged));
-    _document_connection = desktop->connectDocumentReplaced(sigc::mem_fun(*this, &LayerManager::_setDocument));
-    _setDocument(desktop, desktop->doc());
-}
+    _resource_connection = _document->connectResourcesChanged("layer", sigc::mem_fun(*this, &LayerManager::_rebuild));
+    _layer_hierarchy->setTop(_document->getRoot());
+    _rebuild();
+};
 
 LayerManager::~LayerManager()
 {
@@ -63,28 +62,21 @@ LayerManager::~LayerManager()
     _document = nullptr;
 }
 
-void LayerManager::_setDocument(SPDesktop *, SPDocument *document) {
-    _layer_hierarchy->clear();
-    _resource_connection.disconnect();
-    _document = document;
-    if (document) {
-        _resource_connection = document->connectResourcesChanged("layer", sigc::mem_fun(*this, &LayerManager::_rebuild));
-        _layer_hierarchy->setTop(document->getRoot());
-    }
-    _rebuild();
-}
-
 void LayerManager::_layer_activated(SPObject *layer)
 {
-    if (auto group = cast<SPGroup>(layer)) {
-        group->setLayerDisplayMode(_desktop->dkey, SPGroup::LAYER);
+    if (auto dkey = _document->getDkey()) {
+        if (auto group = cast<SPGroup>(layer)) {
+            group->setLayerDisplayMode(*dkey, SPGroup::LAYER);
+        }
     }
 }
 
 void LayerManager::_layer_deactivated(SPObject *layer)
 {
-    if (auto group = cast<SPGroup>(layer)) {
-        group->setLayerDisplayMode(_desktop->dkey, SPGroup::GROUP);
+    if (auto dkey = _document->getDkey()) {
+        if (auto group = cast<SPGroup>(layer)) {
+            group->setLayerDisplayMode(*dkey, SPGroup::GROUP);
+        }
     }
 }
 
@@ -175,7 +167,7 @@ void LayerManager::renameLayer( SPObject* obj, gchar const *label, bool uniquify
 }
 
 /**
- * Sets the current layer of the desktop.
+ * Sets the current layer of the document.
  *
  * Make \a object the top layer.
  */
@@ -188,7 +180,7 @@ void LayerManager::setCurrentLayer(SPObject *object, bool clear) {
 
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         if (clear && prefs->getBool("/options/selection/layerdeselect", true)) {
-            _desktop->getSelection()->clear();
+            _document->getSelection()->clear();
         }
     }
 }
@@ -221,12 +213,13 @@ void LayerManager::_rebuild() {
 
     _clear();
 
-    if (!_document || !_desktop)
+    if (!_document)
         return;
 
     std::vector<SPObject *> layers = _document->getResourceList("layer");
 
-    if (auto root = _desktop->layerManager().currentRoot()) {
+    if (auto root = _oninit ? _document->getRoot() : _document->layerManager().currentRoot()) {
+        _oninit = false;
         _addOne(root);
         std::set<SPGroup *> layersToAdd;
 
@@ -545,7 +538,11 @@ SPObject *LayerManager::layerForObject(SPObject *object) {
 bool LayerManager::isLayer(SPObject *object) const
 {
     if (auto group = cast<SPGroup>(object)) {
-        return group->effectiveLayerMode(_desktop->dkey) == SPGroup::LAYER;
+        if (auto dkey = _document->getDkey()) {
+            return group->effectiveLayerMode(*dkey) == SPGroup::LAYER;
+        } else {
+            return group->layerMode() == SPGroup::LAYER;
+        }
     }
     return false;
 }

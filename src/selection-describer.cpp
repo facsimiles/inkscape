@@ -24,6 +24,7 @@
 #include "layer-manager.h"
 #include "selection.h"
 #include "desktop.h"
+#include "document.h"
 
 #include "object/sp-flowtext.h"
 #include "object/sp-image.h"
@@ -110,8 +111,8 @@ void SelectionDescriber::updateMessage(Inkscape::Selection *selection) {
     } else {
         SPItem *item = items[0];
         g_assert(item != nullptr);
-        SPObject *layer = selection->desktop()->layerManager().layerForObject(item);
-        SPObject *root = selection->desktop()->layerManager().currentRoot();
+        SPObject *layer = selection->desktop()->getDocument()->layerManager().layerForObject(item);
+        SPObject *root = selection->desktop()->getDocument()->layerManager().currentRoot();
 
         // Layer name
         gchar *layer_name;

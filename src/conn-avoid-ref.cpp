@@ -24,7 +24,6 @@
 #include "document-undo.h"
 #include "document.h"
 #include "inkscape.h"
-#include "layer-manager.h"
 
 #include "display/curve.h"
 
@@ -33,6 +32,8 @@
 
 #include "object/sp-namedview.h"
 #include "object/sp-shape.h"
+#include "object/sp-item-group.h"
+#include "object/sp-root.h"
 
 #include "svg/stringstream.h"
 
@@ -337,8 +338,12 @@ std::vector<SPItem *> get_avoided_items(SPObject *from, SPDesktop *desktop, bool
 static inline void get_avoided_items_rec(std::vector<SPItem *> &list, SPObject *from, SPDesktop *desktop, bool initialised)
 {
     for (auto &child: from->children) {
+        SPGroup *group = nullptr;
+        if (is<SPItem>(&child)) {
+            group = cast<SPGroup>(&child);
+        }
         if (is<SPItem>(&child) &&
-            !desktop->layerManager().isLayer(cast<SPItem>(&child)) &&
+            (!group || group->layerMode() != SPGroup::LAYER) &&
             !cast_unsafe<SPItem>(&child)->isLocked() &&
             !desktop->itemIsHidden(cast<SPItem>(&child)) &&
             (!initialised || cast<SPItem>(&child)->getAvoidRef().shapeRef)
@@ -347,7 +352,7 @@ static inline void get_avoided_items_rec(std::vector<SPItem *> &list, SPObject *
             list.push_back(cast<SPItem>(&child));
         }
 
-        if (is<SPItem>(&child) && desktop->layerManager().isLayer(cast<SPItem>(&child))) {
+        if (group && group->layerMode() == SPGroup::LAYER) {
             get_avoided_items_rec(list, &child, desktop, initialised);
         }
     }
@@ -375,7 +380,7 @@ void init_avoided_shape_geometry(SPDesktop *desktop)
     DocumentUndo::ScopedInsensitive _no_undo(document);
 
     bool initialised = false;
-    auto items = get_avoided_items(desktop->layerManager().currentRoot(), desktop, initialised);
+    auto items = get_avoided_items(document->getRoot(), desktop, initialised);
 
     for (auto item : items) {
         item->getAvoidRef().handleSettingChange();
