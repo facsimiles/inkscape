@@ -268,6 +268,105 @@ selection_empty_backup(InkscapeApplication* app)
     selection->emptyBackup();
 }
 
+void
+select_all_layers(Glib::ustring layer, InkscapeApplication* app)
+{
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
+    SPObject* object = document->getObjectById(layer.c_str());
+    if (object) {
+        Inkscape::SelectionHelper::selectAllInAll(document, selection);
+    } else {
+        std::cerr << "No hay una capa con el id:" << layer.c_str() << std::endl;
+    }
+}
+
+void
+select_same_fill_and_stroke(InkscapeApplication* app)
+{
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
+
+    // Fill and Stroke
+    Inkscape::SelectionHelper::selectSameFillStroke(document, selection);
+}
+
+void
+select_same_fill(InkscapeApplication* app)
+{
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
+
+    // Fill Color
+    Inkscape::SelectionHelper::selectSameFillColor(document, selection);
+}
+
+void
+select_same_stroke_color(InkscapeApplication* app)
+{
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
+
+    // Stroke Color
+    Inkscape::SelectionHelper::selectSameStrokeColor(document, selection);
+}
+
+void
+select_same_stroke_style(InkscapeApplication* app)
+{
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
+
+    // Stroke Style
+    Inkscape::SelectionHelper::selectSameStrokeStyle(document, selection);
+}
+
+void
+select_same_object_type(InkscapeApplication* app)
+{
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
+
+    // Object Type
+    Inkscape::SelectionHelper::selectSameObjectType(document, selection);
+}
+
+void
+select_invert_all(Glib::ustring layer, InkscapeApplication* app)
+{
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
+
+    // Invert Selection
+    SPObject* object = document->getObjectById(layer.c_str());
+    if (object) {
+        Inkscape::SelectionHelper::invertAllInAll(document, selection);
+    } else {
+        std::cerr << "No hay una capa con el id:" << layer.c_str() << std::endl;
+    }
+}
+
 std::vector<std::vector<Glib::ustring>> raw_data_selection =
 {
     // clang-format offs
@@ -280,6 +379,14 @@ std::vector<std::vector<Glib::ustring>> raw_data_selection =
     {"app.select-by-element",               N_("Select by Element"),        "Select",   N_("Select by SVG element (e.g. 'rect')")},
     {"app.select-by-selector",              N_("Select by Selector"),       "Select",   N_("Select by CSS selector")},
     {"app.select-all",                      N_("Select All Objects"),       "Select",   N_("Select all; options: 'all' (every object including groups), 'layers', 'no-layers' (top level objects in layers), 'groups' (all groups including layers), 'no-groups' (all objects other than groups and layers, default)")},
+    {"app.select-all-layers",               N_("Select All in All Layers"), "Select",   N_("Select all objects in all visible and unlocked layers")},
+    {"app.select-same-fill-and-stroke",     N_("Fill and Stroke"),          "Select",   N_("Select all objects with the same fill and stroke as the selected objects")},
+    {"app.select-same-fill",                N_("Fill Color"),               "Select",   N_("Select all objects with the same fill as the selected objects")},
+    {"app.select-same-stroke-color",        N_("Stroke Color"),             "Select",   N_("Select all objects with the same stroke as the selected objects")},
+    {"app.select-same-stroke-style",        N_("Stroke Style"),             "Select",   N_("Select all objects with the same stroke style (width, dash, markers) as the selected objects")},
+    {"app.select-same-object-type",         N_("Object Type"),              "Select",   N_("Select all objects with the same object type (rect, arc, text, path, bitmap etc) as the selected objects")},
+    {"app.select-invert",                   N_("Invert Selection"),         "Select",   N_("Invert selection (unselect what is selected and select everything else)")},
+    {"app.select-invert-all",               N_("Invert in All Layers"),     "Select",   N_("Invert selection in all visible and unlocked layers")},
     {"app.select-list",                     N_("List Selection"),           "Select",   N_("Print a list of objects in current selection")},
     {"app.selection-set-backup",            N_("Set selection backup"),     "Select",   N_("Set backup of current selection of objects or nodes")},
     {"app.selection-restore-backup",        N_("Restore selection backup"), "Select",   N_("Restore backup of stored selection of objects or nodes")},
@@ -293,20 +400,27 @@ add_actions_selection(InkscapeApplication* app)
     auto *gapp = app->gio_app();
 
     // clang-format off
-    gapp->add_action(               "select-clear",                 sigc::bind(sigc::ptr_fun(&select_clear),             app)        );
-    gapp->add_action_radio_string(  "select",                       sigc::bind(sigc::ptr_fun(&select_by_id),             app), "null"); // Backwards compatible.
-    gapp->add_action_radio_string(  "unselect",                     sigc::bind(sigc::ptr_fun(&unselect_by_id),           app), "null"); // Match select.
-    gapp->add_action_radio_string(  "select-by-id",                 sigc::bind(sigc::ptr_fun(&select_by_id),             app), "null");
-    gapp->add_action_radio_string(  "unselect-by-id",               sigc::bind(sigc::ptr_fun(&unselect_by_id),           app), "null");
-    gapp->add_action_radio_string(  "select-by-class",              sigc::bind(sigc::ptr_fun(&select_by_class),          app), "null");
-    gapp->add_action_radio_string(  "select-by-element",            sigc::bind(sigc::ptr_fun(&select_by_element),        app), "null");
-    gapp->add_action_radio_string(  "select-by-selector",           sigc::bind(sigc::ptr_fun(&select_by_selector),       app), "null");
-    gapp->add_action_radio_string(  "select-all",                   sigc::bind(sigc::ptr_fun(&select_all),               app), "null");
-    gapp->add_action_radio_string(  "select-invert",                sigc::bind(sigc::ptr_fun(&select_invert),            app), "null");
-    gapp->add_action(               "select-list",                  sigc::bind(sigc::ptr_fun(&select_list),              app)        );
-    gapp->add_action(               "selection-set-backup",         sigc::bind(sigc::ptr_fun(&selection_set_backup),     app)        );
-    gapp->add_action(               "selection-restore-backup",     sigc::bind(sigc::ptr_fun(&selection_restore_backup), app)        );
-    gapp->add_action(               "selection-empty-backup",       sigc::bind(sigc::ptr_fun(&selection_empty_backup),   app)        );
+    gapp->add_action(               "select-clear",                 sigc::bind(sigc::ptr_fun(&select_clear),                app)        );
+    gapp->add_action_radio_string(  "select",                       sigc::bind(sigc::ptr_fun(&select_by_id),                app), "null"); // Backwards compatible.
+    gapp->add_action_radio_string(  "unselect",                     sigc::bind(sigc::ptr_fun(&unselect_by_id),              app), "null"); // Match select.
+    gapp->add_action_radio_string(  "select-by-id",                 sigc::bind(sigc::ptr_fun(&select_by_id),                app), "null");
+    gapp->add_action_radio_string(  "unselect-by-id",               sigc::bind(sigc::ptr_fun(&unselect_by_id),              app), "null");
+    gapp->add_action_radio_string(  "select-by-class",              sigc::bind(sigc::ptr_fun(&select_by_class),             app), "null");
+    gapp->add_action_radio_string(  "select-by-element",            sigc::bind(sigc::ptr_fun(&select_by_element),           app), "null");
+    gapp->add_action_radio_string(  "select-by-selector",           sigc::bind(sigc::ptr_fun(&select_by_selector),          app), "null");
+    gapp->add_action_radio_string(  "select-all",                   sigc::bind(sigc::ptr_fun(&select_all),                  app), "null");
+    gapp->add_action(               "select-list",                  sigc::bind(sigc::ptr_fun(&select_list),                 app)        );
+    gapp->add_action(               "selection-set-backup",         sigc::bind(sigc::ptr_fun(&selection_set_backup),        app)        );
+    gapp->add_action(               "selection-restore-backup",     sigc::bind(sigc::ptr_fun(&selection_restore_backup),    app)        );
+    gapp->add_action(               "selection-empty-backup",       sigc::bind(sigc::ptr_fun(&selection_empty_backup),      app)        );
+    gapp->add_action_radio_string(  "select-all-layers",            sigc::bind(sigc::ptr_fun(&select_all_layers),           app), "null");
+    gapp->add_action(               "select-same-fill-and-stroke",  sigc::bind(sigc::ptr_fun(&select_same_fill_and_stroke), app)        );
+    gapp->add_action(               "select-same-fill",             sigc::bind(sigc::ptr_fun(&select_same_fill),            app)        );
+    gapp->add_action(               "select-same-stroke-color",     sigc::bind(sigc::ptr_fun(&select_same_stroke_color),    app)        );
+    gapp->add_action(               "select-same-stroke-style",     sigc::bind(sigc::ptr_fun(&select_same_stroke_style),    app)        );
+    gapp->add_action(               "select-same-object-type",      sigc::bind(sigc::ptr_fun(&select_same_object_type),     app)        );
+    gapp->add_action_radio_string(  "select-invert",                sigc::bind(sigc::ptr_fun(&select_invert),               app), "null");
+    gapp->add_action_radio_string(  "select-invert-all",            sigc::bind(sigc::ptr_fun(&select_invert_all),           app), "null");
     // clang-format on
 
     app->get_action_extra_data().add_data(raw_data_selection);
