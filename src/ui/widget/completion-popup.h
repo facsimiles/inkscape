@@ -37,6 +37,8 @@ public:
     sigc::signal<bool ()>& on_focus();
 
 private:
+    bool onPopoverKeyPressed(GtkEventControllerKey const *controller,
+                             unsigned keyval, unsigned keycode, GdkModifierType state);
     Glib::RefPtr<Gtk::Builder> _builder;
     Glib::RefPtr<Gtk::ListStore> _list;
     Gtk::SearchEntry& _search;

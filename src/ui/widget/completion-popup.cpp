@@ -8,6 +8,7 @@
 
 #include "completion-popup.h"
 #include "ui/builder-utils.h"
+#include "ui/controller.h"
 
 namespace Inkscape::UI::Widget {
 
@@ -26,6 +27,7 @@ CompletionPopup::CompletionPopup() :
     _completion(get_object<Gtk::EntryCompletion>(_builder, "completion"))
 {
     _popover_menu.show_all_children();
+    Controller::add_key<&CompletionPopup::onPopoverKeyPressed>(_popover_menu, *this, Gtk::PHASE_CAPTURE);
     _button.set_popover(_popover_menu);
 
     _list = Glib::RefPtr<Gtk::ListStore>::cast_dynamic(_builder->get_object("list"));
@@ -73,6 +75,34 @@ CompletionPopup::CompletionPopup() :
 }
 
 CompletionPopup::~CompletionPopup() = default;
+
+bool CompletionPopup::onPopoverKeyPressed(GtkEventControllerKey const * /*controller*/,
+                                     unsigned keyval, unsigned /*keycode*/,
+                                     GdkModifierType state) {
+    if (!_button.get_active()) {
+        return false;
+    }
+    switch (keyval) {
+        // do nothing on direction keys and enter
+        case GDK_KEY_Left:
+        case GDK_KEY_KP_Left:
+        case GDK_KEY_Up:
+        case GDK_KEY_KP_Up:
+        case GDK_KEY_Right:
+        case GDK_KEY_KP_Right:
+        case GDK_KEY_Down:
+        case GDK_KEY_KP_Down:
+        case GDK_KEY_Return:
+        case GDK_KEY_KP_Enter:
+            break;
+        default:
+            _button_press.emit();
+            clear();
+            _search.grab_focus();
+            break;
+    }
+    return false;
+}
 
 void CompletionPopup::clear_completion_list() {
     _list->clear();
