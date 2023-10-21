@@ -60,6 +60,7 @@
 #include "object/sp-flowtext.h"
 #include "object/sp-gradient-reference.h"
 #include "object/sp-image.h"
+#include "object/sp-item-group.h"
 #include "object/sp-item-transform.h"
 #include "object/sp-item.h"
 #include "object/sp-line.h"
@@ -148,6 +149,11 @@ void SelectionHelper::selectAll(SPDesktop *dt)
     sp_edit_select_all(dt);
 }
 
+void SelectionHelper::selectAll(SPDocument *doc, SPGroup *layer)
+{
+    sp_edit_select_all(doc, layer);
+}
+
 void SelectionHelper::selectAllInAll(SPDesktop *dt)
 {
     NodeTool *nt = dynamic_cast<NodeTool*>(dt->getTool());
@@ -156,6 +162,11 @@ void SelectionHelper::selectAllInAll(SPDesktop *dt)
     } else {
         sp_edit_select_all_in_all_layers(dt);
     }
+}
+
+void SelectionHelper::selectAllInAll(SPDocument *doc, SPGroup *layer)
+{
+    sp_edit_select_all_in_all_layers(doc, layer);  
 }
 
 void SelectionHelper::selectNone(SPDesktop *dt)
@@ -171,9 +182,21 @@ void SelectionHelper::selectNone(SPDesktop *dt)
     }
 }
 
+void SelectionHelper::selectNone(SPDocument *doc)
+{
+    auto selection = doc->getSelection();
+    if (selection) {
+        selection->clear();
+    }
+}
+
 void SelectionHelper::selectSameFillStroke(SPDesktop *dt)
 {
     sp_select_same_fill_stroke_style(dt, true, true, true);
+}
+void SelectionHelper::selectSameFillStroke(SPDocument *doc)
+{
+    sp_select_same_fill_stroke_style(doc, true, true, true);
 }
 
 void SelectionHelper::selectSameFillColor(SPDesktop *dt)
@@ -181,9 +204,19 @@ void SelectionHelper::selectSameFillColor(SPDesktop *dt)
     sp_select_same_fill_stroke_style(dt, true, false, false);
 }
 
+void SelectionHelper::selectSameFillColor(SPDocument *doc)
+{
+    sp_select_same_fill_stroke_style(doc, true, false, false);
+}
+
 void SelectionHelper::selectSameStrokeColor(SPDesktop *dt)
 {
     sp_select_same_fill_stroke_style(dt, false, true, false);
+}
+
+void SelectionHelper::selectSameStrokeColor(SPDocument *doc)
+{
+    sp_select_same_fill_stroke_style(doc, false, true, false);
 }
 
 void SelectionHelper::selectSameStrokeStyle(SPDesktop *dt)
@@ -191,9 +224,19 @@ void SelectionHelper::selectSameStrokeStyle(SPDesktop *dt)
     sp_select_same_fill_stroke_style(dt, false, false, true);
 }
 
+void SelectionHelper::selectSameStrokeStyle(SPDocument *doc)
+{
+    sp_select_same_fill_stroke_style(doc, false, false, true);
+}
+
 void SelectionHelper::selectSameObjectType(SPDesktop *dt)
 {
     sp_select_same_object_type(dt);
+}
+
+void SelectionHelper::selectSameObjectType(SPDocument *doc)
+{
+    sp_select_same_object_type(doc);
 }
 
 void SelectionHelper::invert(SPDesktop *dt)
@@ -206,6 +249,11 @@ void SelectionHelper::invert(SPDesktop *dt)
     }
 }
 
+void SelectionHelper::invert(SPDocument *doc, SPGroup *layer)
+{
+    sp_edit_invert(doc, layer);
+}
+
 void SelectionHelper::invertAllInAll(SPDesktop *dt)
 {
     NodeTool *nt = dynamic_cast<NodeTool*>(dt->getTool());
@@ -216,6 +264,11 @@ void SelectionHelper::invertAllInAll(SPDesktop *dt)
     }
 }
 
+void SelectionHelper::invertAllInAll(SPDocument *doc, SPGroup *layer)
+{
+    sp_edit_invert_in_all_layers(doc, layer);
+}
+
 void SelectionHelper::reverse(SPDesktop *dt)
 {
     // TODO make this a virtual method of event context!
@@ -224,6 +277,14 @@ void SelectionHelper::reverse(SPDesktop *dt)
         nt->_multipath->reverseSubpaths();
     } else {
         dt->getSelection()->pathReverse();
+    }
+}
+
+void SelectionHelper::reverse(SPDocument *doc)
+{
+    auto selection = doc->getSelection();
+    if (selection) {
+        selection->pathReverse();
     }
 }
 
@@ -252,6 +313,29 @@ void SelectionHelper::fixSelection(SPDesktop *dt)
         }
     }
 
+    selection->setList(items);
+}
+void SelectionHelper::fixSelection(SPDocument *doc)
+{
+    if (!doc) {
+        return;
+    }
+    Inkscape::Selection *selection = doc->getSelection();
+    std::vector<SPItem*> items;
+
+    auto selList = selection->items();
+
+    for(auto i = boost::rbegin(selList); i != boost::rend(selList); ++i) {
+        SPItem *item = *i;
+        SPGroup *group = cast<SPGroup>(*i);
+        bool islayer = (!group && group->layerMode() == SPGroup::LAYER);
+        if( item && 
+            !islayer &&
+            (!item->isLocked()))
+        {
+            items.push_back(item);
+        }
+    }
     selection->setList(items);
 }
 
@@ -395,10 +479,9 @@ static void add_ids_recursive(std::vector<const gchar *> &ids, SPObject *obj)
     }
 }
 
-void ObjectSet::duplicate(bool suppressDone, bool duplicateLayer)
+void ObjectSet::duplicate(bool suppressDone, bool duplicateLayer, SPGroup *layer)
 {
-    if(duplicateLayer && !desktop() ){
-        //TODO: understand why layer management is tied to desktop and not to document.
+    if (duplicateLayer && ((!desktop() && !layer) || (!desktop() && layer->layerMode() != SPGroup::LAYER))) {
         return;
     }
 
@@ -418,7 +501,10 @@ void ObjectSet::duplicate(bool suppressDone, bool duplicateLayer)
 
     if(duplicateLayer){
         reprs.clear();
-        reprs.push_back(desktop()->layerManager().currentLayer()->getRepr());
+        Inkscape::XML::Node *repr = desktop() ? desktop()->layerManager().currentLayer()->getRepr() : layer->getRepr();
+        if (repr) {
+            reprs.push_back(repr);
+        }
     }
 
     clear();
@@ -602,9 +688,10 @@ void ObjectSet::duplicate(bool suppressDone, bool duplicateLayer)
         SPObject* new_layer = doc->getObjectByRepr(copies[0]);
 
         if (auto label = new_layer->label()) {
-            if (std::string(label).find("copy") == std::string::npos) {
+            if (desktop() && std::string(label).find("copy") == std::string::npos) {
                 gchar* name = g_strdup_printf(_("%s copy"), label);
-                desktop()->layerManager().renameLayer( new_layer, name, TRUE );
+                /// todo fix with LM2DOC
+                desktop()->layerManager().renameLayer(new_layer, name, TRUE);
                 g_free(name);
             }
         }
@@ -612,16 +699,17 @@ void ObjectSet::duplicate(bool suppressDone, bool duplicateLayer)
     
 }
 
-void sp_edit_clear_all(Inkscape::Selection *selection)
+void sp_edit_clear_all(Inkscape::Selection *selection, SPGroup *layer)
 {
     if (!selection)
         return;
-
+    // todo fix with LM2DOC
     auto desktop = selection->desktop();
-    SPDocument *doc = desktop->getDocument();
+    auto doc = selection->document() ? selection->document() : desktop->getDocument();
     selection->clear();
-
-    auto group = desktop->layerManager().currentLayer();
+    if (!desktop || !layer)
+        return;
+    auto group = desktop ? desktop->layerManager().currentLayer() : layer;
     g_return_if_fail(group != nullptr);
     std::vector<SPItem*> items = group->item_list();
 
@@ -642,42 +730,56 @@ void sp_edit_clear_all(Inkscape::Selection *selection)
  * onlysensitive - TRUE includes only non-locked items
  * ingroups - TRUE to recursively get grouped items children
  */
-static void get_all_items_recursive(std::vector<SPItem*> &list, SPObject *from, SPDesktop *desktop, bool onlyvisible, bool onlysensitive, bool ingroups, std::vector<SPItem*> const &exclude)
+static void get_all_items_recursive(std::vector<SPItem*> &list, SPObject *from, SPDesktop *desktop, bool onlyvisible, bool onlysensitive, bool ingroups, SPDocument *document, std::vector<SPItem*> const &exclude = {})
 {
     for (auto &child : from->children) {
         auto item = cast<SPItem>(&child);
+        auto group = cast<SPGroup>(&child);
+        bool islayer = ( desktop && item  && desktop->layerManager().isLayer(item)) || 
+                       (!desktop && group && group->layerMode() == SPGroup::LAYER);
+        bool ishidden = ( desktop && item && desktop->itemIsHidden(item)) || 
+                        (!desktop && item && item->isHidden());
         if (item &&
-            !desktop->layerManager().isLayer(item) &&
+             !islayer &&
             (!onlysensitive || !item->isLocked()) &&
-            (!onlyvisible || !desktop->itemIsHidden(item)) &&
+            (!onlyvisible || !ishidden) &&
             (exclude.empty() || std::find(exclude.begin(), exclude.end(), &child) == exclude.end()))
         {
             list.emplace_back(item);
         }
 
-        if (ingroups || (item && desktop->layerManager().isLayer(item))) {
-            get_all_items_recursive(list, &child, desktop, onlyvisible, onlysensitive, ingroups, exclude);
+        if (ingroups || !islayer) {
+            get_all_items_recursive(list, &child, desktop, onlyvisible, onlysensitive, ingroups, document, exclude);
         }
     }
 }
 
-std::vector<SPItem*> get_all_items(SPObject *from, SPDesktop *desktop, bool onlyvisible, bool onlysensitive, bool ingroups, std::vector<SPItem*> const &exclude)
+std::vector<SPItem*> _get_all_items(SPObject *from, SPDesktop *desktop, bool onlyvisible, bool onlysensitive, bool ingroups, SPDocument *document, std::vector<SPItem*> const &exclude = {})
 {
     std::vector<SPItem*> list;
-    get_all_items_recursive(list, from, desktop, onlyvisible, onlysensitive, ingroups, exclude);
+    get_all_items_recursive(list, from, desktop, onlyvisible, onlysensitive, ingroups, nullptr, exclude);
     std::reverse(list.begin(), list.end()); // Todo: For compatibility; is it necessary?
     return list;
 }
 
-static void sp_edit_select_all_full(SPDesktop *dt, bool force_all_layers, bool invert)
+std::vector<SPItem*> get_all_items(SPObject *from, SPDesktop *desktop, bool onlyvisible, bool onlysensitive, bool ingroups, std::vector<SPItem*> const &exclude)
 {
-    if (!dt)
+    return _get_all_items(from, desktop, onlyvisible, onlysensitive, ingroups, nullptr, exclude);
+}
+
+std::vector<SPItem*> get_all_items(SPObject *from, SPDocument *document, bool onlyvisible, bool onlysensitive, bool ingroups, std::vector<SPItem*> const &exclude)
+{
+    return _get_all_items(from,  nullptr, onlyvisible, onlysensitive, ingroups, document, exclude);
+}
+
+static void sp_edit_select_all_full(SPDesktop *desktop, SPDocument *document, bool force_all_layers, bool invert, SPGroup *layer)
+{
+    if (!desktop && (!document || !layer ))
         return;
 
-    Inkscape::Selection *selection = dt->getSelection();
-
-    auto layer = dt->layerManager().currentLayer();
+    layer = desktop ? desktop->layerManager().currentLayer() : layer;
     g_return_if_fail(layer);
+    Inkscape::Selection *selection = desktop ? desktop->getSelection() : document->getSelection();
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     PrefsSelectionContext inlayer = (PrefsSelectionContext) prefs->getInt("/options/kbselection/inlayer", PREFS_SELECTION_LAYER);
@@ -685,7 +787,6 @@ static void sp_edit_select_all_full(SPDesktop *dt, bool force_all_layers, bool i
     bool onlysensitive = prefs->getBool("/options/kbselection/onlysensitive", true);
 
     std::vector<SPItem*> items ;
-
     std::vector<SPItem*> exclude;
     if (invert) {
         exclude.insert(exclude.end(), selection->items().begin(), selection->items().end());
@@ -694,9 +795,13 @@ static void sp_edit_select_all_full(SPDesktop *dt, bool force_all_layers, bool i
     if (force_all_layers)
         inlayer = PREFS_SELECTION_ALL;
 
+    bool ishidden = ( desktop && layer && desktop->itemIsHidden(layer)) || 
+                    (!desktop && layer && layer->isHidden());
+        
+
     switch (inlayer) {
         case PREFS_SELECTION_LAYER: {
-        if ((onlysensitive && layer->isLocked()) || (onlyvisible && dt->itemIsHidden(layer)))
+        if ((onlysensitive && layer->isLocked()) || (onlyvisible && ishidden))
         return;
 
         std::vector<SPItem*> all_items = layer->item_list();
@@ -705,8 +810,13 @@ static void sp_edit_select_all_full(SPDesktop *dt, bool force_all_layers, bool i
             SPItem *item = *i;
 
             if (item && (!onlysensitive || !item->isLocked())) {
-                if (!onlyvisible || !dt->itemIsHidden(item)) {
-                    if (!dt->layerManager().isLayer(item)) {
+                auto group = cast<SPGroup>(item);
+                bool islayer = ( desktop && item  && desktop->layerManager().isLayer(item)) || 
+                               (!desktop && group && group->layerMode() == SPGroup::LAYER);
+                bool ishidden = ( desktop && item && desktop->itemIsHidden(item)) || 
+                                (!desktop && item && item->isHidden());
+                if (!onlyvisible || !ishidden) {
+                    if (!islayer) {
                         if (!invert || exclude.end() == std::find(exclude.begin(),exclude.end(),item)) {
                             items.push_back(item); // leave it in the list
                         }
@@ -718,13 +828,13 @@ static void sp_edit_select_all_full(SPDesktop *dt, bool force_all_layers, bool i
             break;
         }
         case PREFS_SELECTION_LAYER_RECURSIVE: {
-            items = get_all_items(dt->layerManager().currentLayer(), dt, onlyvisible, onlysensitive, FALSE, exclude);
+            items = _get_all_items(layer, desktop, onlyvisible, onlysensitive, FALSE, document, exclude);
             break;
         }
         default: {
-            items = get_all_items(dt->layerManager().currentRoot(), dt, onlyvisible, onlysensitive, FALSE, exclude);
+            items = _get_all_items(document->getRoot(), desktop, onlyvisible, onlysensitive, FALSE, document, exclude);
             break;
-    }
+        }
     }
 
     selection->setList(items);
@@ -733,22 +843,44 @@ static void sp_edit_select_all_full(SPDesktop *dt, bool force_all_layers, bool i
 
 void sp_edit_select_all(SPDesktop *desktop)
 {
-    sp_edit_select_all_full(desktop, false, false);
+    sp_edit_select_all_full(desktop, nullptr, false, false, nullptr);
+}
+
+void sp_edit_select_all(SPDocument *document, SPGroup *layer)
+{
+    sp_edit_select_all_full(nullptr, document, false, false, layer);
 }
 
 void sp_edit_select_all_in_all_layers(SPDesktop *desktop)
 {
-    sp_edit_select_all_full(desktop, true, false);
+    sp_edit_select_all_full(desktop, nullptr, true, false, nullptr);
 }
+
+void sp_edit_select_all_in_all_layers(SPDocument *document, SPGroup *layer)
+{
+    sp_edit_select_all_full(nullptr, document, true, false, layer);
+}
+
 
 void sp_edit_invert(SPDesktop *desktop)
 {
-    sp_edit_select_all_full(desktop, false, true);
+    sp_edit_select_all_full(desktop, nullptr, false, true, nullptr);
 }
+
+void sp_edit_invert(SPDocument *document, SPGroup *layer)
+{
+    sp_edit_select_all_full(nullptr, document, false, true, layer);
+}
+
 
 void sp_edit_invert_in_all_layers(SPDesktop *desktop)
 {
-    sp_edit_select_all_full(desktop, true, true);
+    sp_edit_select_all_full(desktop, nullptr, true, true, nullptr);
+}
+
+void sp_edit_invert_in_all_layers(SPDocument *document, SPGroup *layer)
+{
+    sp_edit_select_all_full(nullptr, document, true, true, layer);
 }
 
 Inkscape::XML::Node* ObjectSet::group(bool is_anchor) {
@@ -1225,25 +1357,49 @@ void ObjectSet::stackDown(bool skip_undo) {
 }
 
 void
-sp_undo(SPDesktop *desktop, SPDocument *)
+_sp_undo(SPDesktop *desktop, SPDocument *document)
 {
     // No re/undo while dragging, too dangerous.
-    if (desktop->getCanvas()->is_dragging()) return;
+    if (desktop && desktop->getCanvas()->is_dragging()) return;
 
-    if (!DocumentUndo::undo(desktop->getDocument())) {
+    if (!DocumentUndo::undo(document ? document : desktop->getDocument()) && desktop) {
         desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Nothing to undo."));
     }
 }
 
 void
-sp_redo(SPDesktop *desktop, SPDocument *)
+sp_undo(SPDesktop *desktop)
+{
+    _sp_undo(desktop, nullptr);
+}
+
+void
+sp_undo(SPDocument *document)
+{
+    _sp_undo(nullptr, document);
+}
+
+void
+_sp_redo(SPDesktop *desktop, SPDocument *document)
 {
     // No re/undo while dragging, too dangerous.
-    if (desktop->getCanvas()->is_dragging()) return;
+    if (desktop && desktop->getCanvas()->is_dragging()) return;
 
-    if (!DocumentUndo::redo(desktop->getDocument())) {
+    if (!DocumentUndo::redo(desktop ? desktop->getDocument() : document) && desktop) {
         desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Nothing to redo."));
     }
+}
+
+void
+sp_redo(SPDesktop *desktop)
+{
+    _sp_redo(desktop, nullptr);
+}
+
+void
+sp_redo(SPDocument *document)
+{
+    _sp_redo(nullptr, document);
 }
 
 void ObjectSet::cut()
@@ -1446,93 +1602,95 @@ void sp_selection_change_layer_maintain_clones(std::vector<SPItem*> const &items
     }
 }
 
-void ObjectSet::toNextLayer(bool skip_undo)
+void ObjectSet::toNextLayer(bool skip_undo, SPDocument *document, SPGroup *layer)
 {
-    if (!desktop()) {
+    if (!desktop() && (!document || !layer)) {
         return;
     }
-    SPDesktop *dt=desktop(); //TODO make it desktop-independent
+    SPDesktop *dt=desktop();
 
     // check if something is selected
-    if (isEmpty()) {
+    if (isEmpty() && dt) {
         dt->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to move to the layer above."));
         return;
     }
 
     std::vector<SPItem*> items_copy(items().begin(), items().end());
-
+    document = dt ? dt->doc() : document;
+    layer = dt ? dt->layerManager().currentLayer() : layer;
     bool no_more = false; // Set to true, if no more layers above
-    SPObject *next=Inkscape::next_layer(dt->layerManager().currentRoot(), dt->layerManager().currentLayer());
+    SPObject *next=Inkscape::next_layer(document->getRoot(), layer);
     if (next) {
         clear();
         sp_selection_change_layer_maintain_clones(items_copy,next);
         std::vector<Inkscape::XML::Node*> temp_clip;
-        sp_selection_copy_impl(items_copy, temp_clip, dt->doc()->getReprDoc());
+        sp_selection_copy_impl(items_copy, temp_clip, document->getReprDoc());
         sp_selection_delete_impl(items_copy, false, false);
-        next=Inkscape::next_layer(dt->layerManager().currentRoot(), dt->layerManager().currentLayer()); // Fixes bug 1482973: crash while moving layers
+        next=Inkscape::next_layer(document->getRoot(), layer); // Fixes bug 1482973: crash while moving layers
         std::vector<Inkscape::XML::Node*> copied;
         if (next) {
-            copied = sp_selection_paste_impl(dt->getDocument(), next, temp_clip);
+            copied = sp_selection_paste_impl(document, next, temp_clip);
         } else {
-            copied = sp_selection_paste_impl(dt->getDocument(), dt->layerManager().currentLayer(), temp_clip);
+            copied = sp_selection_paste_impl(document, layer, temp_clip);
             no_more = true;
         }
         setReprList(copied);
-        if (next) dt->layerManager().setCurrentLayer(next);
+        if (next && dt) dt->layerManager().setCurrentLayer(next);
         if ( !skip_undo ) {
-            DocumentUndo::done(dt->getDocument(), _("Raise to next layer"), INKSCAPE_ICON("selection-move-to-layer-above"));
+            DocumentUndo::done(document, _("Raise to next layer"), INKSCAPE_ICON("selection-move-to-layer-above"));
         }
     } else {
         no_more = true;
     }
 
-    if (no_more) {
+    if (no_more && dt) {
         dt->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("No more layers above."));
     }
 
 }
 
-void ObjectSet::toPrevLayer(bool skip_undo)
+void ObjectSet::toPrevLayer(bool skip_undo, SPDocument *document, SPGroup *layer)
 {
-    if (!desktop()) {
+    if (!desktop() && (!document || !layer)) {
         return;
     }
-    SPDesktop *dt=desktop(); //TODO make it desktop-independent
+    SPDesktop *dt=desktop();
 
     // check if something is selected
-    if (isEmpty()) {
+    if (isEmpty() && dt) {
         dt->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to move to the layer below."));
         return;
     }
-
     std::vector<SPItem*> items_copy(items().begin(), items().end());
+    document = dt ? dt->doc() : document;
+    layer = dt ? dt->layerManager().currentLayer() : layer;
 
     bool no_more = false; // Set to true, if no more layers below
-    SPObject *next=Inkscape::previous_layer(dt->layerManager().currentRoot(), dt->layerManager().currentLayer());
+    SPObject *next=Inkscape::previous_layer(document->getRoot(), layer);
     if (next) {
         clear();
         sp_selection_change_layer_maintain_clones(items_copy,next);
         std::vector<Inkscape::XML::Node*> temp_clip;
-        sp_selection_copy_impl(items_copy, temp_clip, dt->doc()->getReprDoc()); // we're in the same doc, so no need to copy defs
+        sp_selection_copy_impl(items_copy, temp_clip, document->getReprDoc()); // we're in the same doc, so no need to copy defs
         sp_selection_delete_impl(items_copy, false, false);
-        next=Inkscape::previous_layer(dt->layerManager().currentRoot(), dt->layerManager().currentLayer()); // Fixes bug 1482973: crash while moving layers
+        next=Inkscape::previous_layer(document->getRoot(), layer); // Fixes bug 1482973: crash while moving layers
         std::vector<Inkscape::XML::Node*> copied;
         if (next) {
-            copied = sp_selection_paste_impl(dt->getDocument(), next, temp_clip);
+            copied = sp_selection_paste_impl(document, next, temp_clip);
         } else {
-            copied = sp_selection_paste_impl(dt->getDocument(), dt->layerManager().currentLayer(), temp_clip);
+            copied = sp_selection_paste_impl(document, layer, temp_clip);
             no_more = true;
         }
         setReprList( copied);
-        if (next) dt->layerManager().setCurrentLayer(next);
+        if (next && dt) dt->layerManager().setCurrentLayer(next);
         if ( !skip_undo ) {
-            DocumentUndo::done(dt->getDocument(), _("Lower to previous layer"), INKSCAPE_ICON("selection-move-to-layer-below"));
+            DocumentUndo::done(document, _("Lower to previous layer"), INKSCAPE_ICON("selection-move-to-layer-below"));
         }
     } else {
         no_more = true;
     }
 
-    if (no_more) {
+    if (no_more && dt) {
         dt->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("No more layers below."));
     }
 }
@@ -1978,9 +2136,9 @@ void ObjectSet::rotate(gdouble const angle_degrees)
  * fill - select objects matching fill
  * stroke - select objects matching stroke
  */
-void sp_select_same_fill_stroke_style(SPDesktop *desktop, gboolean fill, gboolean stroke, gboolean style)
+void _sp_select_same_fill_stroke_style(SPDesktop *desktop, gboolean fill, gboolean stroke, gboolean style, SPDocument *document)
 {
-    if (!desktop) {
+    if (!desktop && !document) {
         return;
     }
 
@@ -1988,14 +2146,14 @@ void sp_select_same_fill_stroke_style(SPDesktop *desktop, gboolean fill, gboolea
         return;
     }
 
-    Inkscape::Selection *selection = desktop->getSelection();
+    Inkscape::Selection *selection = desktop ? desktop->getSelection() : document->getSelection();
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     bool inlayersame = prefs->getBool("/options/selection/samelikeall", false);
     bool onlyvisible = prefs->getBool("/options/kbselection/onlyvisible", true);
     bool onlysensitive = prefs->getBool("/options/kbselection/onlysensitive", true);
 
-    SPObject *root = desktop->layerManager().currentRoot();
+    SPObject *root = desktop ? desktop->layerManager().currentRoot() : document->getRoot() ;
     bool ingroup = true;
 
     // Apply the same layer logic to select same as used for select all.
@@ -2007,7 +2165,7 @@ void sp_select_same_fill_stroke_style(SPDesktop *desktop, gboolean fill, gboolea
         }
     }
 
-    std::vector<SPItem*> all_list = get_all_items(root, desktop, onlyvisible, onlysensitive, ingroup);
+    std::vector<SPItem*> all_list = _get_all_items(root, desktop, onlyvisible, onlysensitive, ingroup, document);
     std::vector<SPItem*> all_matches;
 
     auto items = selection->items();
@@ -2042,17 +2200,23 @@ void sp_select_same_fill_stroke_style(SPDesktop *desktop, gboolean fill, gboolea
     selection->setList(all_matches);
 
 }
-
-
+void sp_select_same_fill_stroke_style(SPDesktop *desktop, gboolean fill, gboolean stroke, gboolean style)
+{
+    _sp_select_same_fill_stroke_style(desktop, fill, stroke, style, nullptr);
+}
+void sp_select_same_fill_stroke_style(SPDocument *document, gboolean fill, gboolean stroke, gboolean style)
+{
+    _sp_select_same_fill_stroke_style(nullptr, fill, stroke, style, document);
+}
 /*
  * Selects all the visible items with the same object type as the items in the current selection
  *
  * Params:
  * desktop - set the selection on this desktop
  */
-void sp_select_same_object_type(SPDesktop *desktop)
+void _sp_select_same_object_type(SPDesktop *desktop, SPDocument *document)
 {
-    if (!desktop) {
+    if (!desktop && !document) {
         return;
     }
 
@@ -2061,10 +2225,8 @@ void sp_select_same_object_type(SPDesktop *desktop)
     bool onlyvisible = prefs->getBool("/options/kbselection/onlyvisible", true);
     bool onlysensitive = prefs->getBool("/options/kbselection/onlysensitive", true);
     bool ingroups = TRUE;
-    auto matches = get_all_items(desktop->layerManager().currentRoot(), desktop, onlyvisible, onlysensitive, ingroups);
-
-    Inkscape::Selection *selection = desktop->getSelection();
-
+    auto matches = _get_all_items(desktop ? desktop->layerManager().currentRoot() : document->getRoot() , desktop, onlyvisible, onlysensitive, ingroups, document);
+    Inkscape::Selection *selection = desktop ? desktop->getSelection() : document->getSelection();
     auto items= selection->items();
     for (auto sel_iter=items.begin();sel_iter!=items.end();++sel_iter) {
         SPItem *sel = *sel_iter;
@@ -2079,7 +2241,15 @@ void sp_select_same_object_type(SPDesktop *desktop)
     selection->setList(matches);
 
 }
+void sp_select_same_object_type(SPDesktop *desktop)
+{
+    _sp_select_same_object_type(desktop, nullptr);
+}
 
+void sp_select_same_object_type(SPDocument *document)
+{
+    _sp_select_same_object_type(nullptr, document);
+}
 
 
 /*
@@ -2551,6 +2721,57 @@ SPItem *next_item(SPDesktop *desktop, std::vector<SPObject *> &path, SPObject *r
     return found;
 }
 
+template <typename D>
+SPItem *next_item(SPDocument *document, std::vector<SPObject *> &path, SPObject *root,
+                  bool only_in_viewport, PrefsSelectionContext inlayer, bool onlyvisible, bool onlysensitive)
+{
+    typename D::Iterator children;
+    typename D::Iterator iter;
+
+    SPItem *found=nullptr;
+
+    if (!path.empty()) {
+        SPObject *object=path.back();
+        path.pop_back();
+        g_assert(object->parent == root);
+        SPGroup *group = cast<SPGroup>(object);
+        bool islayer = group && group->layerMode() == SPGroup::LAYER;
+        if (islayer ) {
+            found = next_item<D>(document, path, object, only_in_viewport, inlayer, onlyvisible, onlysensitive);
+        }
+        iter = children = D::siblings_after(object);
+    } else {
+        iter = children = D::children(root);
+    }
+
+    while ( !D::isNull(iter) && !found ) {
+        SPObject *object=D::object(iter);
+        SPItem *item = cast<SPItem>(object);
+        SPGroup *group = cast<SPGroup>(object);
+        bool islayer = group && group->layerMode() == SPGroup::LAYER;
+        bool ishidden = item && item->isHidden();
+        if (islayer ) {
+            if (PREFS_SELECTION_LAYER != inlayer) { // recurse into sublayers
+                std::vector<SPObject *> empt;
+                item = nullptr;
+                found = next_item<D>(document, empt, object, only_in_viewport, inlayer, onlyvisible, onlysensitive);
+            }
+        } else {
+            if ( item &&
+                 ( !onlyvisible || !ishidden) &&
+                 ( !onlysensitive || !item->isLocked()))
+            {
+                found = item;
+            }
+        }
+        iter = D::next(iter);
+    }
+
+    D::dispose(children);
+
+    return found;
+}
+
 
 template <typename D>
 SPItem *next_item_from_list(SPDesktop *desktop, std::vector<SPItem*> const &items,
@@ -2584,11 +2805,42 @@ SPItem *next_item_from_list(SPDesktop *desktop, std::vector<SPItem*> const &item
     return next;
 }
 
-void
-sp_selection_item_next(SPDesktop *desktop)
+template <typename D>
+SPItem *next_item_from_list(SPDocument *document, std::vector<SPItem*> const &items,
+                            SPObject *root, bool only_in_viewport, PrefsSelectionContext inlayer, bool onlyvisible, bool onlysensitive)
 {
-    g_return_if_fail(desktop != nullptr);
-    Inkscape::Selection *selection = desktop->getSelection();
+    SPObject *current=root;
+    for(auto item : items) {
+        if ( root->isAncestorOf(item))
+        {
+            current = item;
+            break;
+        }
+    }
+
+    std::vector<SPObject *> path;
+    while ( current != root ) {
+        path.push_back(current);
+        current = current->parent;
+    }
+
+    SPItem *next;
+    // first, try from the current object
+    next = next_item<D>(document, path, root, only_in_viewport, inlayer, onlyvisible, onlysensitive);
+
+    if (!next) { // if we ran out of objects, start over at the root
+        std::vector<SPObject *> empt;
+        next = next_item<D>(document, empt, root, only_in_viewport, inlayer, onlyvisible, onlysensitive);
+    }
+
+    return next;
+}
+
+void
+_sp_selection_item_next(SPDesktop *desktop, SPDocument *document)
+{
+    g_return_if_fail(desktop != nullptr && document != nullptr);
+    Inkscape::Selection *selection = desktop ? desktop->getSelection() : document->getSelection();
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     PrefsSelectionContext inlayer = (PrefsSelectionContext)prefs->getInt("/options/kbselection/inlayer", PREFS_SELECTION_LAYER);
@@ -2599,27 +2851,43 @@ sp_selection_item_next(SPDesktop *desktop)
     if (PREFS_SELECTION_ALL != inlayer) {
         root = selection->activeContext();
     } else {
-        root = desktop->layerManager().currentRoot();
+        root = desktop ? desktop->layerManager().currentRoot() : document->getRoot() ;
     }
 
     std::vector<SPItem *> vec(selection->items().begin(), selection->items().end());
-    SPItem *item=next_item_from_list<Forward>(desktop, vec, root, SP_CYCLING == SP_CYCLE_VISIBLE, inlayer, onlyvisible, onlysensitive);
+    SPItem *item = nullptr;
+    if (desktop) {
+        item=next_item_from_list<Forward>(desktop, vec, root, SP_CYCLING == SP_CYCLE_VISIBLE, inlayer, onlyvisible, onlysensitive);
+    } else {
+        item=next_item_from_list<Forward>(document, vec, root, SP_CYCLING == SP_CYCLE_VISIBLE, inlayer, onlyvisible, onlysensitive);
+    }
 
     if (item) {
         selection->set(item, PREFS_SELECTION_LAYER_RECURSIVE == inlayer);
-        if ( SP_CYCLING == SP_CYCLE_FOCUS ) {
+        if ( SP_CYCLING == SP_CYCLE_FOCUS && desktop) {
             scroll_to_show_item(desktop, item);
         }
     }
 }
 
 void
-sp_selection_item_prev(SPDesktop *desktop)
+sp_selection_item_next(SPDesktop *desktop)
 {
-    SPDocument *document = desktop->getDocument();
+    _sp_selection_item_next(desktop, nullptr);
+}
+
+void
+sp_selection_item_next(SPDocument *document)
+{
+    _sp_selection_item_next(nullptr, document);
+}
+
+void
+_sp_selection_item_prev(SPDesktop *desktop, SPDocument *document)
+{
+    document = desktop ? desktop->getDocument() : document;
     g_return_if_fail(document != nullptr);
-    g_return_if_fail(desktop != nullptr);
-    Inkscape::Selection *selection = desktop->getSelection();
+    Inkscape::Selection *selection = desktop ? desktop->getSelection() : document->getSelection();
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     PrefsSelectionContext inlayer = (PrefsSelectionContext) prefs->getInt("/options/kbselection/inlayer", PREFS_SELECTION_LAYER);
@@ -2630,32 +2898,47 @@ sp_selection_item_prev(SPDesktop *desktop)
     if (PREFS_SELECTION_ALL != inlayer) {
         root = selection->activeContext();
     } else {
-        root = desktop->layerManager().currentRoot();
+        root = desktop ? desktop->layerManager().currentRoot() : document->getRoot();
     }
 
     std::vector<SPItem *> vec(selection->items().begin(), selection->items().end());
-    SPItem *item=next_item_from_list<ListReverse>(desktop, vec, root, SP_CYCLING == SP_CYCLE_VISIBLE, inlayer, onlyvisible, onlysensitive);
-
+    SPItem *item = nullptr;
+    if (desktop) {
+        item=next_item_from_list<ListReverse>(desktop, vec, root, SP_CYCLING == SP_CYCLE_VISIBLE, inlayer, onlyvisible, onlysensitive);
+    } else {
+        item=next_item_from_list<ListReverse>(document, vec, root, SP_CYCLING == SP_CYCLE_VISIBLE, inlayer, onlyvisible, onlysensitive);
+    }
     if (item) {
         selection->set(item, PREFS_SELECTION_LAYER_RECURSIVE == inlayer);
-        if ( SP_CYCLING == SP_CYCLE_FOCUS ) {
+        if ( SP_CYCLING == SP_CYCLE_FOCUS && desktop) {
             scroll_to_show_item(desktop, item);
         }
     }
 }
 
-void sp_selection_next_patheffect_param(SPDesktop * dt)
+void
+sp_selection_item_prev(SPDesktop *desktop)
 {
-    if (!dt) return;
+    _sp_selection_item_prev(desktop, nullptr);
+}
+void
+sp_selection_item_prev(SPDocument *document)
+{
+    _sp_selection_item_prev(nullptr, document);
+}
 
-    Inkscape::Selection *selection = dt->getSelection();
+void sp_selection_next_patheffect_param(SPDesktop * desktop)
+{
+    if (!desktop) return;
+
+    Inkscape::Selection *selection = desktop->getSelection();
     if ( selection && !selection->isEmpty() ) {
         SPItem *item = selection->singleItem();
         if ( auto lpeitem = cast<SPLPEItem>(item) ) {
             if (lpeitem->hasPathEffect()) {
-                lpeitem->editNextParamOncanvas(dt);
-            } else {
-                dt->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("The selection has no applied path effect."));
+                lpeitem->editNextParamOncanvas(desktop);
+            } else  {
+                desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("The selection has no applied path effect."));
             }
         }
     }
@@ -3846,9 +4129,9 @@ void ObjectSet::setClipGroup()
  * If \a apply_clip_path parameter is true, clipPath is created, otherwise mask
  *
  */
- void ObjectSet::setMask(bool apply_clip_path, bool apply_to_layer, bool remove_original)
+void ObjectSet::setMask(bool apply_clip_path, bool apply_to_layer, bool remove_original, SPGroup *layer)
 {
-    if(!desktop() && apply_to_layer)
+    if(!desktop() && apply_to_layer && (!layer || layer->layerMode() != SPGroup::LAYER))
         return;
 
     SPDocument *doc = document();
@@ -3896,7 +4179,8 @@ void ObjectSet::setClipGroup()
 
     if (apply_to_layer) {
         // all selected items are used for mask, which is applied to a layer
-        apply_to_items.push_back(desktop()->layerManager().currentLayer());
+        layer = layer ? layer : desktop()->layerManager().currentLayer();
+        apply_to_items.push_back(layer);
     }
 
     for (std::vector<SPItem*>::const_iterator i=items_.begin();i!=items_.end();++i) {
@@ -4382,27 +4666,25 @@ fit_canvas_to_drawing(SPDocument *doc, bool with_margins)
     }
 }
 
-void
-fit_canvas_to_drawing(SPDesktop *desktop)
-{
-    if (fit_canvas_to_drawing(desktop->getDocument())) {
-        DocumentUndo::done(desktop->getDocument(), _("Fit Page to Drawing"), "");
-    }
-}
-
-static void itemtree_map(void (*f)(SPItem *, SPDesktop *), SPObject *root, SPDesktop *desktop) {
+static void itemtree_map(void (*f)(SPItem *, SPDesktop *), SPObject *root, SPDesktop *desktop, SPDocument *document) {
     // don't operate on layers
     {
         auto item = cast<SPItem>(root);
-        if (item && !desktop->layerManager().isLayer(item)) {
+        auto group = cast<SPGroup>(root);
+        bool islayer = ( desktop && item  && desktop->layerManager().isLayer(item)) || 
+                       (!desktop && group && group->layerMode() == SPGroup::LAYER);
+        if (item && !islayer) {
             f(item, desktop);
         }
     }
     for (auto& child: root->children) {
         //don't recurse into locked layers
         auto item = cast<SPItem>(&child);
-        if (!(item && desktop->layerManager().isLayer(item) && item->isLocked())) {
-            itemtree_map(f, &child, desktop);
+        auto group = cast<SPGroup>(&child);
+        bool islayer = ( desktop && item  && desktop->layerManager().isLayer(item)) || 
+                       (!desktop && group && group->layerMode() == SPGroup::LAYER);
+        if (!(item && islayer && item->isLocked())) {
+            itemtree_map(f, &child, desktop, document);
         }
     }
 }
@@ -4414,40 +4696,55 @@ static void unlock(SPItem *item, SPDesktop */*desktop*/) {
 }
 
 static void unhide(SPItem *item, SPDesktop *desktop) {
-    if (desktop->itemIsHidden(item)) {
+    bool ishidden = ( desktop && item && desktop->itemIsHidden(item)) || 
+                    (!desktop && item && item->isHidden());
+    if (ishidden) {
         item->setExplicitlyHidden(FALSE);
     }
 }
 
-static void process_all(void (*f)(SPItem *, SPDesktop *), SPDesktop *dt, bool layer_only) {
-    if (!dt) return;
+static void _process_all(void (*f)(SPItem *, SPDesktop *), SPDesktop *desktop, SPDocument *document, SPGroup *layer, bool layer_only) {
+    if (!desktop || (layer_only && (!layer || layer->layerMode() != SPGroup::LAYER))) return;
 
     SPObject *root;
     if (layer_only) {
-        root = dt->layerManager().currentLayer();
+        root = desktop ? desktop->layerManager().currentLayer() : layer;
     } else {
-        root = dt->layerManager().currentRoot();
+        root = desktop ? desktop->layerManager().currentRoot() : document->getRoot() ;
     }
 
-    itemtree_map(f, root, dt);
+    itemtree_map(f, root, desktop, document);
 }
 
-void unlock_all(SPDesktop *dt) {
-    process_all(&unlock, dt, true);
+void unlock_all(SPDesktop *desktop) {
+    _process_all(&unlock, desktop, nullptr, desktop->layerManager().currentLayer(), true);
 }
 
-void unlock_all_in_all_layers(SPDesktop *dt) {
-    process_all(&unlock, dt, false);
+void unlock_all( SPDocument *document, SPGroup *layer) {
+    _process_all(&unlock, nullptr, document, layer, true);
 }
 
-void unhide_all(SPDesktop *dt) {
-    process_all(&unhide, dt, true);
+void unlock_all_in_all_layers(SPDesktop *desktop) {
+    _process_all(&unlock, desktop, nullptr, desktop->layerManager().currentLayer(), false);
 }
 
-void unhide_all_in_all_layers(SPDesktop *dt) {
-    process_all(&unhide, dt, false);
+void unlock_all_in_all_layers(SPDocument *document, SPGroup *layer) {
+    _process_all(&unlock, nullptr, document, layer, false);
 }
 
+void unhide_all(SPDesktop *desktop) {
+    _process_all(&unhide, desktop, nullptr, desktop->layerManager().currentLayer(), true);
+}
+
+void unhide_all(SPDocument *document, SPGroup *layer) {
+    _process_all(&unhide, nullptr, document, layer, true);
+}
+void unhide_all_in_all_layers(SPDesktop *desktop) {
+    _process_all(&unhide,  desktop, nullptr, desktop->layerManager().currentLayer(), true);
+}
+void unhide_all_in_all_layers(SPDocument *document, SPGroup *layer) {
+    _process_all(&unhide,  nullptr, document, layer, true);
+}
 
 /*
   Local Variables:
