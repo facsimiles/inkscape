@@ -35,9 +35,9 @@ namespace Inkscape::UI::Dialog {
 
 FillAndStroke::FillAndStroke()
     : DialogBase("/dialogs/fillstroke", "FillStroke")
-    , _page_fill(Gtk::make_managed<UI::Widget::NotebookPage>(1, 1, true, true))
-    , _page_stroke_paint(Gtk::make_managed<UI::Widget::NotebookPage>(1, 1, true, true))
-    , _page_stroke_style(Gtk::make_managed<UI::Widget::NotebookPage>(1, 1, true, true))
+    , _page_fill(Gtk::make_managed<UI::Widget::NotebookPage>(1, 1, true, true, 0, 0))
+    , _page_stroke_paint(Gtk::make_managed<UI::Widget::NotebookPage>(1, 1, true, true, 0, 0))
+    , _page_stroke_style(Gtk::make_managed<UI::Widget::NotebookPage>(1, 1, true, true, 0, 0))
     , _composite_settings(INKSCAPE_ICON("dialog-fill-and-stroke"),
                           "fillstroke",
                           UI::Widget::SimpleFilterModifier::ISOLATION |
@@ -47,19 +47,19 @@ FillAndStroke::FillAndStroke()
     , fillWdgt(nullptr)
     , strokeWdgt(nullptr)
 {
-    set_spacing(2);
-    UI::pack_start(*this, _notebook, true, true);
+    set_spacing(0);
+    UI::pack_start(*this, _notebook, false, false );
 
     _notebook.append_page(*_page_fill, _createPageTabLabel(_("_Fill"), INKSCAPE_ICON("object-fill")));
     _notebook.append_page(*_page_stroke_paint, _createPageTabLabel(_("Stroke _paint"), INKSCAPE_ICON("object-stroke")));
     _notebook.append_page(*_page_stroke_style, _createPageTabLabel(_("Stroke st_yle"), INKSCAPE_ICON("object-stroke-style")));
-    _notebook.set_vexpand(true);
+    _notebook.set_vexpand(false);
 
     _notebook.signal_switch_page().connect(sigc::mem_fun(*this, &FillAndStroke::_onSwitchPage));
-
+    _notebook.get_style_context()->add_class("notebook_nomenu");
     _layoutPageFill();
     _layoutPageStrokePaint();
-    _layoutPageStrokeStyle();
+    //_layoutPageStrokeStyle();
 
     UI::pack_end(*this, _composite_settings, UI::PackOptions::shrink);
 
@@ -149,8 +149,6 @@ void
 FillAndStroke::_layoutPageStrokeStyle()
 {
     strokeStyleWdgt = Gtk::make_managed<UI::Widget::StrokeStyle>();
-    strokeStyleWdgt->set_hexpand();
-    strokeStyleWdgt->set_halign(Gtk::ALIGN_START);
     _page_stroke_style->table().attach(*strokeStyleWdgt, 0, 0, 1, 1);
 }
 

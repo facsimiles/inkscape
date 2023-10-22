@@ -117,6 +117,8 @@ Transformation::Transformation()
     _notebook.append_page(_page_transform, _("Matri_x"), true);
     layoutPageTransform();
 
+    _notebook.get_style_context()->add_class("notebook_nomenu");
+
     _tabSwitchConn = _notebook.signal_switch_page().connect(sigc::mem_fun(*this, &Transformation::onSwitchPage));
 
     // Apply separately

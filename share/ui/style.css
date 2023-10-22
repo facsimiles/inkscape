@@ -1199,9 +1199,23 @@ popover.menu.menuize > stack > box > modelbutton:first-child > * /* Affect child
     color: @theme_selected_bg_color;
 }
 
+/*Give extra 10 px to noebooks without menus*/
+
+.notebook_nomenu tab{
+    margin:0px;
+}
+
+.notebook_nomenu tab:last-child{
+    min-width:10px;
+    margin-right:-10px;
+}
+
+#DialogMultipaned tabs{
+    padding:0;
+}
 /* ColorSlider */
 #ColorSlider {
-    min-width : 96px;
+    min-width : 36px;
     min-height:  8px;
 }
 

@@ -20,16 +20,16 @@ namespace Inkscape {
 namespace UI {
 namespace Widget {
 
-NotebookPage::NotebookPage(int n_rows, int n_columns, bool expand, bool fill, guint padding)
+NotebookPage::NotebookPage(int n_rows, int n_columns, bool expand, bool fill, guint padding, guint spacing)
     : Gtk::Box(Gtk::ORIENTATION_VERTICAL)
     , _table(Gtk::make_managed<Gtk::Grid>())
 {
     set_name("NotebookPage");
-    property_margin().set_value(4);
-    set_spacing(4);
+    property_margin().set_value(spacing);
+    set_spacing(spacing);
 
-    _table->set_row_spacing(4);
-    _table->set_column_spacing(4);
+    _table->set_row_spacing(spacing);
+    _table->set_column_spacing(spacing);
 
     UI::pack_start(*this, *_table, expand, fill, padding);
 }

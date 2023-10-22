@@ -31,7 +31,7 @@ public:
     /**
      * Construct a NotebookPage.
      */
-    NotebookPage(int n_rows, int n_columns, bool expand=false, bool fill=false, guint padding=0);
+    NotebookPage(int n_rows, int n_columns, bool expand=false, bool fill=false, guint padding=0, guint spacing = 4);
 
     Gtk::Grid& table() { return *_table; }
 
