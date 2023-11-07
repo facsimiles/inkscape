@@ -405,23 +405,23 @@ bool TextTool::root_handler(CanvasEvent const &event)
             ret = true;
         },
         [&] (MotionEvent const &event) {
+            pMouseDesktop = _desktop->w2d(event.pos);
+
             if (creating && event.modifiers & GDK_BUTTON1_MASK) {
                 if (!checkDragMoved(event.pos)) {
                     return;
                 }
 
-                auto p = _desktop->w2d(event.pos);
-
                 auto &m = _desktop->getNamedView()->snap_manager;
                 m.setup(_desktop);
-                m.freeSnapReturnByRef(p, SNAPSOURCE_NODE_HANDLE);
+                m.freeSnapReturnByRef(pMouseDesktop, SNAPSOURCE_NODE_HANDLE);
                 m.unSetup();
 
-                Rubberband::get(_desktop)->move(p);
+                Rubberband::get(_desktop)->move(pMouseDesktop);
                 gobble_motion_events(GDK_BUTTON1_MASK);
 
                 // status text
-                auto const diff = p - p0;
+                auto const diff = pMouseDesktop - p0;
                 auto const x_q = Util::Quantity(std::abs(diff.x()), "px");
                 auto const y_q = Util::Quantity(std::abs(diff.y()), "px");
                 auto const xs = x_q.string(_desktop->getNamedView()->display_units);
@@ -431,8 +431,7 @@ bool TextTool::root_handler(CanvasEvent const &event)
                 auto &m = _desktop->getNamedView()->snap_manager;
                 m.setup(_desktop);
 
-                auto const motion_dt = _desktop->w2d(event.pos);
-                m.preSnap(SnapCandidatePoint(motion_dt, SNAPSOURCE_OTHER_HANDLE));
+                m.preSnap(SnapCandidatePoint(pMouseDesktop, SNAPSOURCE_OTHER_HANDLE));
                 m.unSetup();
             }
 
@@ -441,10 +440,8 @@ bool TextTool::root_handler(CanvasEvent const &event)
                 if (!layout) {
                     return;
                 }
-                // find out click point in document coordinates
-                auto const p = _desktop->w2d(event.pos);
                 // set the cursor closest to that point
-                auto new_end = sp_te_get_position_by_coords(text, p);
+                auto new_end = sp_te_get_position_by_coords(text, pMouseDesktop);
                 if (dragging_state == 2) {
                     // double-click dragging_state: go by word
                     if (new_end < text_sel_start) {
@@ -1208,87 +1205,96 @@ bool TextTool::root_handler(CanvasEvent const &event)
  */
 bool TextTool::pasteInline()
 {
-    if (text || nascent_object) {
-        // There is an active text object, or a new object was just created.
+    auto const clip_text = Gtk::Clipboard::get()->wait_for_text();
+    if(clip_text.empty())
+        return false;
+    
+    if(!text && !nascent_object) {
+        // Button 1, set X & Y & new item.
+        _desktop->getSelection()->clear();
+        pdoc = _desktop->dt2doc(pMouseDesktop);
+        nascent_object = true; // new object was just created
 
-        auto const clip_text = Gtk::Clipboard::get()->wait_for_text();
+        // Cursor height is defined by the new text object's font size; it needs to be set
+        // artificially here, for the text object does not exist yet:
+        double cursor_height = sp_desktop_get_font_size_tool(_desktop);
+        auto const y_dir = _desktop->yaxisdir();
+        auto const cursor_size = Geom::Point(0, y_dir * cursor_height);
+        cursor->set_coords(pMouseDesktop, pMouseDesktop - cursor_size);
+        _showCursor();
+    }
 
-        if (!clip_text.empty()) {
+    // There is an active text object, or a new object was just created.
 
-            bool is_svg2 = false;
-            auto const textitem = cast<SPText>(text);
-            if (textitem) {
-                is_svg2 = textitem->has_shape_inside() /*|| textitem->has_inline_size()*/; // Do now since hiding messes this up.
-                textitem->hide_shape_inside();
-            }
+    bool is_svg2 = false;
+    auto const textitem = cast<SPText>(text);
+    if (textitem) {
+        is_svg2 = textitem->has_shape_inside() /*|| textitem->has_inline_size()*/; // Do now since hiding messes this up.
+        textitem->hide_shape_inside();
+    }
 
-            auto const flowtext = cast<SPFlowtext>(text);
-            if (flowtext) {
-                flowtext->fix_overflow_flowregion(false);
-            }
+    auto const flowtext = cast<SPFlowtext>(text);
+    if (flowtext) {
+        flowtext->fix_overflow_flowregion(false);
+    }
 
-            // Fix for 244940
-            // The XML standard defines the following as valid characters
-            // (Extensible Markup Language (XML) 1.0 (Fourth Edition) paragraph 2.2)
-            // char ::=     #x9 | #xA | #xD | [#x20-#xD7FF] | [#xE000-#xFFFD] | [#x10000-#x10FFFF]
-            // Since what comes in off the paste buffer will go right into XML, clean
-            // the text here.
-            auto txt = clip_text;
+    // Fix for 244940
+    // The XML standard defines the following as valid characters
+    // (Extensible Markup Language (XML) 1.0 (Fourth Edition) paragraph 2.2)
+    // char ::=     #x9 | #xA | #xD | [#x20-#xD7FF] | [#xE000-#xFFFD] | [#x10000-#x10FFFF]
+    // Since what comes in off the paste buffer will go right into XML, clean
+    // the text here.
+    auto txt = clip_text;
 
-            for (auto itr = txt.begin(); itr != txt.end(); ) {
-                auto const paste_string_uchar = *itr;
+    for (auto itr = txt.begin(); itr != txt.end(); ) {
+        auto const paste_string_uchar = *itr;
 
-                // Make sure we don't have a control character. We should really check
-                // for the whole range above... Add the rest of the invalid cases from
-                // above if we find additional issues
-                if (paste_string_uchar >= 0x00000020 ||
-                    paste_string_uchar == 0x00000009 ||
-                    paste_string_uchar == 0x0000000A ||
-                    paste_string_uchar == 0x0000000D)
-                {
-                    ++itr;
-                } else {
-                    itr = txt.erase(itr);
-                }
-            }
-
-            if (!text) { // create text if none (i.e. if nascent_object)
-                _setupText();
-                nascent_object = false; // we don't need it anymore, having created a real <text>
-            }
-
-            // using indices is slow in ustrings. Whatever.
-            Glib::ustring::size_type begin = 0;
-            while (true) {
-                auto const end = txt.find('\n', begin);
-
-                if (end == Glib::ustring::npos || is_svg2) {
-                    // Paste everything
-                    if (begin != txt.length()) {
-                        text_sel_start = text_sel_end = sp_te_replace(text, text_sel_start, text_sel_end, txt.substr(begin).c_str());
-                    }
-                    break;
-                }
-
-                // Paste up to new line, add line, repeat.
-                text_sel_start = text_sel_end = sp_te_replace(text, text_sel_start, text_sel_end, txt.substr(begin, end - begin).c_str());
-                text_sel_start = text_sel_end = sp_te_insert_line(text, text_sel_start);
-                begin = end + 1;
-            }
-            if (textitem) {
-                textitem->show_shape_inside();
-            }
-            if (flowtext) {
-                flowtext->fix_overflow_flowregion(true);
-            }
-            DocumentUndo::done(_desktop->getDocument(), _("Paste text"), INKSCAPE_ICON("draw-text"));
-
-            return true;
+        // Make sure we don't have a control character. We should really check
+        // for the whole range above... Add the rest of the invalid cases from
+        // above if we find additional issues
+        if (paste_string_uchar >= 0x00000020 ||
+            paste_string_uchar == 0x00000009 ||
+            paste_string_uchar == 0x0000000A ||
+            paste_string_uchar == 0x0000000D)
+        {
+            ++itr;
+        } else {
+            itr = txt.erase(itr);
         }
-        
-    } // FIXME: else create and select a new object under cursor!
+    }
 
-    return false;
+    if (!text) { // create text if none (i.e. if nascent_object)
+        _setupText();
+        nascent_object = false; // we don't need it anymore, having created a real <text>
+    }
+
+    // using indices is slow in ustrings. Whatever.
+    Glib::ustring::size_type begin = 0;
+    while (true) {
+        auto const end = txt.find('\n', begin);
+
+        if (end == Glib::ustring::npos || is_svg2) {
+            // Paste everything
+            if (begin != txt.length()) {
+                text_sel_start = text_sel_end = sp_te_replace(text, text_sel_start, text_sel_end, txt.substr(begin).c_str());
+            }
+            break;
+        }
+
+        // Paste up to new line, add line, repeat.
+        text_sel_start = text_sel_end = sp_te_replace(text, text_sel_start, text_sel_end, txt.substr(begin, end - begin).c_str());
+        text_sel_start = text_sel_end = sp_te_insert_line(text, text_sel_start);
+        begin = end + 1;
+    }
+    if (textitem) {
+        textitem->show_shape_inside();
+    }
+    if (flowtext) {
+        flowtext->fix_overflow_flowregion(true);
+    }
+    DocumentUndo::done(_desktop->getDocument(), _("Paste text"), INKSCAPE_ICON("draw-text"));
+
+    return true;
 }
 
 /**
