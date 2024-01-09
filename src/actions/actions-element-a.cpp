@@ -40,7 +40,11 @@ void anchor_open_link(InkscapeApplication* app)
 {
     auto window = app->get_active_window();
     if (window) {
-        auto selection = app->get_active_selection();
+        SPDocument* document = nullptr;
+        Inkscape::Selection* selection = nullptr;
+        if (!get_document_and_selection(app, &document, &selection)) {
+            return;
+        }
         for (auto item : selection->items()) {
             auto anchor = cast<SPAnchor>(item);
             if (anchor) {

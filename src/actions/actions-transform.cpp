@@ -42,41 +42,57 @@ transform_translate(const Glib::VariantBase& value, InkscapeApplication *app)
         return;
     }
 
-    auto selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
     selection->move(dx, dy);
 
     // Needed to update repr (is this the best way?).
-    Inkscape::DocumentUndo::done(app->get_active_document(), "ActionTransformTranslate", "");
+    Inkscape::DocumentUndo::done(document, "ActionTransformTranslate", "");
 }
 
 void
 transform_rotate(const Glib::VariantBase& value, InkscapeApplication *app)
 {
     Glib::Variant<double> d = Glib::VariantBase::cast_dynamic<Glib::Variant<double> >(value);
-    auto selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
 
     selection->rotate(d.get());
 
     // Needed to update repr (is this the best way?).
-    Inkscape::DocumentUndo::done(app->get_active_document(), "ActionTransformRotate", "");
+    Inkscape::DocumentUndo::done(document, "ActionTransformRotate", "");
 }
 
 void
 transform_scale(const Glib::VariantBase& value, InkscapeApplication *app)
 {
     Glib::Variant<double> d = Glib::VariantBase::cast_dynamic<Glib::Variant<double> >(value);
-    auto selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
     selection->scale(d.get());
 
     // Needed to update repr (is this the best way?).
-    Inkscape::DocumentUndo::done(app->get_active_document(), "ActionTransformScale", "");
+    Inkscape::DocumentUndo::done(document, "ActionTransformScale", "");
 }
 
 void
 transform_grow(const Glib::VariantBase& value, InkscapeApplication *app)
 {
     Glib::Variant<double> d = Glib::VariantBase::cast_dynamic<Glib::Variant<double> >(value);
-    auto selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
     selection->scaleGrow(d.get());
 }
 
@@ -85,7 +101,11 @@ transform_grow_step(const Glib::VariantBase& value, InkscapeApplication *app)
 {
     Glib::Variant<double> d = Glib::VariantBase::cast_dynamic<Glib::Variant<double> >(value);
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    auto selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
     selection->scaleGrow(d.get() * prefs->getDoubleLimited("/options/defaultscale/value", 2, 0, 1000));
 }
 
@@ -93,31 +113,47 @@ void
 transform_grow_screen(const Glib::VariantBase& value, InkscapeApplication *app)
 {
     Glib::Variant<double> d = Glib::VariantBase::cast_dynamic<Glib::Variant<double> >(value);
-    auto selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
     selection->scaleScreen(d.get());
 }
 
 void
 transform_remove(InkscapeApplication *app)
 {
-    auto selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
     selection->removeTransform();
 
     // Needed to update repr (is this the best way?).
-    Inkscape::DocumentUndo::done(app->get_active_document(), "ActionTransformRemoveTransform", "");
+    Inkscape::DocumentUndo::done(document, "ActionTransformRemoveTransform", "");
 }
 
 void transform_reapply(InkscapeApplication *app)
 {
-    auto selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
     selection->reapplyAffine();
-    Inkscape::DocumentUndo::maybeDone(app->get_active_document(), "reapply-transform", _("Reapply Transforms"),
+    Inkscape::DocumentUndo::maybeDone(document, "reapply-transform", _("Reapply Transforms"),
                                       INKSCAPE_ICON("tool-pointer"));
 }
 
 void page_rotate(const Glib::VariantBase& value, InkscapeApplication *app)
 {
-    auto document = app->get_active_document();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
     Glib::Variant<int> i = Glib::VariantBase::cast_dynamic<Glib::Variant<int> >(value);
     document->getPageManager().rotatePage(i.get());
     Inkscape::DocumentUndo::done(document, "Rotate Page", INKSCAPE_ICON("tool-pages"));

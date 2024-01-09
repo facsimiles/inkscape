@@ -82,7 +82,11 @@ void
 file_rebase(const Glib::VariantBase& value, InkscapeApplication *app)
 {
     Glib::Variant<bool> s = Glib::VariantBase::cast_dynamic<Glib::Variant<bool> >(value);
-    SPDocument *document = app->get_active_document();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
     document->rebase(s.get());
 
     document->ensureUpToDate();
@@ -100,7 +104,11 @@ file_rebase(const Glib::VariantBase& value, InkscapeApplication *app)
 void
 file_close(InkscapeApplication *app)
 {
-    SPDocument *document = app->get_active_document();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
     app->document_close(document);
 
     app->set_active_document(nullptr);

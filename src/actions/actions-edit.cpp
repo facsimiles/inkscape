@@ -33,7 +33,11 @@ namespace ActionsEdit {
 void
 object_to_pattern(InkscapeApplication *app)
 {
-    auto selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
 
     //  Objects to Pattern
     selection->tile();
@@ -42,7 +46,11 @@ object_to_pattern(InkscapeApplication *app)
 void
 pattern_to_object(InkscapeApplication *app)
 {
-    auto selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
 
     //  Pattern to Objects
     selection->untile();
@@ -51,7 +59,11 @@ pattern_to_object(InkscapeApplication *app)
 void
 object_to_marker(InkscapeApplication *app)
 {
-    auto selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
 
     //  Objects to Marker
     selection->toMarker();
@@ -60,7 +72,11 @@ object_to_marker(InkscapeApplication *app)
 void
 object_to_guides(InkscapeApplication *app)
 {
-    auto selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
 
     //  Objects to Guides
     selection->toGuides();
@@ -69,7 +85,11 @@ object_to_guides(InkscapeApplication *app)
 void
 cut(InkscapeApplication *app)
 {
-    auto selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
 
     // Cut
     selection->cut();
@@ -78,7 +98,11 @@ cut(InkscapeApplication *app)
 void
 copy(InkscapeApplication *app)
 {
-    auto selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
 
     //  Copy
     selection->copy();
@@ -87,7 +111,11 @@ copy(InkscapeApplication *app)
 void
 paste_style(InkscapeApplication *app)
 {
-    auto selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
 
     //  Paste Style
     selection->pasteStyle();
@@ -96,7 +124,11 @@ paste_style(InkscapeApplication *app)
 void
 paste_size(InkscapeApplication *app)
 {
-    auto selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
 
     //  Paste Size
     selection->pasteSize(true,true);
@@ -105,7 +137,11 @@ paste_size(InkscapeApplication *app)
 void
 paste_width(InkscapeApplication *app)
 {
-    auto selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
 
     //  Paste Width
     selection->pasteSize(true, false);
@@ -114,7 +150,11 @@ paste_width(InkscapeApplication *app)
 void
 paste_height(InkscapeApplication *app)
 {
-    auto selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
 
     //  Paste Height
     selection->pasteSize(false, true);
@@ -123,7 +163,11 @@ paste_height(InkscapeApplication *app)
 void
 paste_size_separately(InkscapeApplication *app)
 {
-    auto selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
 
     //  Paste Size Separately
     selection->pasteSizeSeparately(true, true);
@@ -132,7 +176,11 @@ paste_size_separately(InkscapeApplication *app)
 void
 paste_width_separately(InkscapeApplication *app)
 {
-    auto selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
 
     //  Paste Width Separately
     selection->pasteSizeSeparately(true, false);
@@ -141,7 +189,11 @@ paste_width_separately(InkscapeApplication *app)
 void
 paste_height_separately(InkscapeApplication *app)
 {
-    auto selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
 
     //  Paste Height Separately
     selection->pasteSizeSeparately(false, true);
@@ -150,7 +202,11 @@ paste_height_separately(InkscapeApplication *app)
 void
 duplicate(InkscapeApplication *app)
 {
-    auto selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
 
     //  Duplicate
     selection->duplicate();
@@ -158,17 +214,26 @@ duplicate(InkscapeApplication *app)
 
 void duplicate_transform(InkscapeApplication *app)
 {
-    auto selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
+
     selection->duplicate(true);
     selection->reapplyAffine();
-    Inkscape::DocumentUndo::done(app->get_active_document(), _("Duplicate and Transform"),
+    Inkscape::DocumentUndo::done(document, _("Duplicate and Transform"),
                                  INKSCAPE_ICON("edit-duplicate"));
 }
 
 void
 clone(InkscapeApplication *app)
 {
-    auto selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
 
     //  Create Clone
     selection->clone();
@@ -177,7 +242,11 @@ clone(InkscapeApplication *app)
 void
 clone_unlink(InkscapeApplication *app)
 {
-    auto selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
 
     //  Unlink Clone
     selection->unlink();
@@ -186,7 +255,11 @@ clone_unlink(InkscapeApplication *app)
 void
 clone_unlink_recursively(InkscapeApplication *app)
 {
-    auto selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
 
     //  Unlink Clones recursively
     selection->unlinkRecursive(false, true);
@@ -195,7 +268,11 @@ clone_unlink_recursively(InkscapeApplication *app)
 void
 clone_link(InkscapeApplication *app)
 {
-    auto selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
 
     //  Relink to Copied
     selection->relink();
@@ -204,7 +281,11 @@ clone_link(InkscapeApplication *app)
 void
 select_original(InkscapeApplication *app)
 {
-    auto selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
 
     //  Select Original
     selection->cloneOriginal();
@@ -213,7 +294,11 @@ select_original(InkscapeApplication *app)
 void
 clone_link_lpe(InkscapeApplication *app)
 {
-    auto selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
 
     //  Clone original path (LPE)
     selection->cloneOriginalPathLPE();
@@ -222,7 +307,11 @@ clone_link_lpe(InkscapeApplication *app)
 void
 edit_delete(InkscapeApplication *app)
 {
-    auto selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
 
     // For text and node too special handling.
     if (auto desktop = selection->desktop()) {
@@ -246,14 +335,22 @@ edit_delete(InkscapeApplication *app)
 void
 edit_delete_selection(InkscapeApplication *app)
 {
-    auto selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
     selection->deleteItems();
 }
 
 void
 paste_path_effect(InkscapeApplication *app)
 {
-    auto selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
 
     //  Paste Path Effect
     selection->pastePathEffect();
@@ -262,7 +359,11 @@ paste_path_effect(InkscapeApplication *app)
 void
 remove_path_effect(InkscapeApplication *app)
 {
-    auto selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
 
     //  Remove Path Effect
     selection->removeLPE();
@@ -271,7 +372,11 @@ remove_path_effect(InkscapeApplication *app)
 void
 swap_fill_and_stroke(InkscapeApplication *app)
 {
-    auto selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
 
     // Swap fill and Stroke
     selection->swapFillStroke();
@@ -280,7 +385,11 @@ swap_fill_and_stroke(InkscapeApplication *app)
 void
 fit_canvas_to_selection(InkscapeApplication *app)
 {
-    auto selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
 
     // Fit Page to Selection
     selection->fitCanvas(true);

@@ -25,17 +25,17 @@
 void
 window_open(InkscapeApplication *app)
 {
-    SPDocument *document = app->get_active_document();
-    if (document) {
-        InkscapeWindow* window = app->get_active_window();
-        if (window && window->get_document() && window->get_document()->getVirgin()) {
-            // We have a window with an untouched template document, use this window.
-            app->document_swap (window, document);
-        } else {
-            app->window_open(document);
-        }
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
+    InkscapeWindow* window = app->get_active_window();
+    if (window && window->get_document() && window->get_document()->getVirgin()) {
+        // We have a window with an untouched template document, use this window.
+        app->document_swap (window, document);
     } else {
-        show_output("window_open(): failed to find document!");
+        app->window_open(document);
     }
 }
 

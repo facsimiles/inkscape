@@ -87,6 +87,11 @@ object_align_on_canvas(InkscapeApplication *app)
 void
 object_align(const Glib::VariantBase& value, InkscapeApplication *app)
 {
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     Glib::Variant<Glib::ustring> s = Glib::VariantBase::cast_dynamic<Glib::Variant<Glib::ustring> >(value);
     std::vector<Glib::ustring> tokens = Glib::Regex::split_simple(" ", s.get());
@@ -149,10 +154,6 @@ object_align(const Glib::VariantBase& value, InkscapeApplication *app)
     }
     // clang-format on
 
-    auto selection = app->get_active_selection();
-
-    // We should not have to do this!
-    auto document  = app->get_active_document();
     selection->setDocument(document);
 
     // We force unselect operand in bool LPE. TODO: See if we can use "selected" from below.
@@ -274,10 +275,11 @@ object_distribute(const Glib::VariantBase& value, InkscapeApplication *app)
     Glib::Variant<Glib::ustring> s = Glib::VariantBase::cast_dynamic<Glib::Variant<Glib::ustring> >(value);
     auto token = s.get();
 
-    auto selection = app->get_active_selection();
-
-    // We should not have to do this!
-    auto document  = app->get_active_document();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
     selection->setDocument(document);
 
     std::vector<SPItem*> selected(selection->items().begin(), selection->items().end());
@@ -384,7 +386,7 @@ object_distribute(const Glib::VariantBase& value, InkscapeApplication *app)
     prefs->setInt("/options/clonecompensation/value", saved_compensation);
 
     if (changed) {
-        Inkscape::DocumentUndo::done( document, _("Distribute"), INKSCAPE_ICON("dialog-align-and-distribute"));
+        Inkscape::DocumentUndo::done(document, _("Distribute"), INKSCAPE_ICON("dialog-align-and-distribute"));
     }
 }
 
@@ -411,19 +413,21 @@ object_distribute_text(const Glib::VariantBase& value, InkscapeApplication *app)
 {
     Glib::Variant<Glib::ustring> s = Glib::VariantBase::cast_dynamic<Glib::Variant<Glib::ustring> >(value);
     auto token = s.get();
-
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
     Geom::Dim2 orientation = Geom::Dim2::X;
     if (token.find("vertical") != Glib::ustring::npos) {
         orientation = Geom::Dim2::Y;
     }
 
-    auto selection = app->get_active_selection();
     if (selection->size() < 2) {
         return;
     }
 
     // We should not have to do this!
-    auto document  = app->get_active_document();
     selection->setDocument(document);
 
     std::vector<Baseline> baselines;
@@ -460,7 +464,7 @@ object_distribute_text(const Glib::VariantBase& value, InkscapeApplication *app)
         ++i;
     }
 
-    Inkscape::DocumentUndo::done( document, _("Distribute"), INKSCAPE_ICON("dialog-align-and-distribute"));
+    Inkscape::DocumentUndo::done(document, _("Distribute"), INKSCAPE_ICON("dialog-align-and-distribute"));
 }
 
 void
@@ -469,7 +473,11 @@ object_align_text(const Glib::VariantBase& value, InkscapeApplication *app)
 
     Glib::Variant<Glib::ustring> s = Glib::VariantBase::cast_dynamic<Glib::Variant<Glib::ustring> >(value);
     std::vector<Glib::ustring> tokens = Glib::Regex::split_simple(" ", s.get());
-
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
     // Defaults
     auto target = ObjectAlignTarget::SELECTION;
     auto orientation = Geom::Dim2::X;
@@ -499,10 +507,6 @@ object_align_text(const Glib::VariantBase& value, InkscapeApplication *app)
         }
     }
 
-    auto selection = app->get_active_selection();
-
-    // We should not have to do this!
-    auto document  = app->get_active_document();
     selection->setDocument(document);
 
     // Find alignment rectangle. This can come from:
@@ -694,10 +698,11 @@ object_rearrange(const Glib::VariantBase& value, InkscapeApplication *app)
     Glib::Variant<Glib::ustring> s = Glib::VariantBase::cast_dynamic<Glib::Variant<Glib::ustring> >(value);
     auto token = s.get();
 
-    auto selection = app->get_active_selection();
-
-    // We should not have to do this!
-    auto document  = app->get_active_document();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
     selection->setDocument(document);
 
     std::vector<SPItem*> items(selection->items().begin(), selection->items().end());
@@ -724,17 +729,18 @@ object_rearrange(const Glib::VariantBase& value, InkscapeApplication *app)
     // Restore compensation setting.
     prefs->setInt("/options/clonecompensation/value", saved_compensation);
 
-    Inkscape::DocumentUndo::done( document, _("Rearrange"), INKSCAPE_ICON("dialog-align-and-distribute"));
+    Inkscape::DocumentUndo::done(document, _("Rearrange"), INKSCAPE_ICON("dialog-align-and-distribute"));
 }
 
 
 void
 object_remove_overlaps(const Glib::VariantBase& value, InkscapeApplication *app)
 {
-    auto selection = app->get_active_selection();
-
-    // We should not have to do this!
-    auto document  = app->get_active_document();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
     selection->setDocument(document);
 
     std::vector<SPItem*> items(selection->items().begin(), selection->items().end());
@@ -759,7 +765,7 @@ object_remove_overlaps(const Glib::VariantBase& value, InkscapeApplication *app)
     // Restore compensation setting.
     prefs->setInt("/options/clonecompensation/value", saved_compensation);
 
-    Inkscape::DocumentUndo::done( document, _("Remove overlaps"), INKSCAPE_ICON("dialog-align-and-distribute"));
+    Inkscape::DocumentUndo::done(document, _("Remove overlaps"), INKSCAPE_ICON("dialog-align-and-distribute"));
 }
 
 

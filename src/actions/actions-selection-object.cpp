@@ -32,24 +32,36 @@
 void
 select_object_group(InkscapeApplication* app)
 {
-    Inkscape::Selection *selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
     selection->group();
-    Inkscape::DocumentUndo::done(selection->document(), C_("Verb", "Group"), INKSCAPE_ICON("object-group"));
+    Inkscape::DocumentUndo::done(document, C_("Verb", "Group"), INKSCAPE_ICON("object-group"));
 }
 
 void
 select_object_ungroup(InkscapeApplication* app)
 {
-    Inkscape::Selection *selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
 
     selection->ungroup();
-    Inkscape::DocumentUndo::done(selection->document(), _("Ungroup"), INKSCAPE_ICON("object-ungroup"));
+    Inkscape::DocumentUndo::done(document, _("Ungroup"), INKSCAPE_ICON("object-ungroup"));
 }
 
 void
 select_object_ungroup_pop(InkscapeApplication* app)
 {
-    Inkscape::Selection *selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
 
     // Pop Selected Objects out of Group
     selection->popFromGroup();
@@ -58,7 +70,11 @@ select_object_ungroup_pop(InkscapeApplication* app)
 void
 select_object_link(InkscapeApplication* app)
 {
-    Inkscape::Selection *selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
 
     // Group with <a>
     auto anchor = selection->group(true);
@@ -66,13 +82,17 @@ select_object_link(InkscapeApplication* app)
 
     // Open dialog to set link.
     selection->desktop()->getContainer()->new_dialog("ObjectAttributes");
-    Inkscape::DocumentUndo::done(selection->document(), _("Anchor"), INKSCAPE_ICON("object-group"));
+    Inkscape::DocumentUndo::done(document, _("Anchor"), INKSCAPE_ICON("object-group"));
 }
 
 void
 selection_top(InkscapeApplication* app)
 {
-    Inkscape::Selection *selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
 
     // Raise to Top
     selection->raiseToTop();
@@ -81,7 +101,11 @@ selection_top(InkscapeApplication* app)
 void
 selection_raise(InkscapeApplication* app)
 {
-    Inkscape::Selection *selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
 
     // Raise
     selection->raise();
@@ -90,7 +114,11 @@ selection_raise(InkscapeApplication* app)
 void
 selection_lower(InkscapeApplication* app)
 {
-    Inkscape::Selection *selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
 
     // Lower
     selection->lower();
@@ -99,7 +127,11 @@ selection_lower(InkscapeApplication* app)
 void
 selection_bottom(InkscapeApplication* app)
 {
-    Inkscape::Selection *selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
 
     // Lower to Bottom
     selection->lowerToBottom();
@@ -108,21 +140,33 @@ selection_bottom(InkscapeApplication* app)
 void
 selection_stack_up(InkscapeApplication *app)
 {
-    auto selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
     selection->stackUp();
 }
 
 void
 selection_stack_down(InkscapeApplication *app)
 {
-    auto selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
     selection->stackDown();
 }
 
 void
 selection_make_bitmap_copy(InkscapeApplication *app)
 {
-    auto selection = app->get_active_selection();
+    SPDocument* document = nullptr;
+    Inkscape::Selection* selection = nullptr;
+    if (!get_document_and_selection(app, &document, &selection)) {
+        return;
+    }
 
     // Make a Bitmap Copy
     selection->createBitmapCopy();
