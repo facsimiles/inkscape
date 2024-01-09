@@ -182,6 +182,11 @@ void SPDesktop::_setupCanvasItems()
     _canvas_drawing->connect_drawing_event(sigc::mem_fun(*this, &SPDesktop::drawing_handler));
 
     canvas->set_drawing(_canvas_drawing->get_drawing());
+
+    _layer_changed_connection = _layer_manager->connectCurrentLayerChanged([this](SPGroup *group) {
+        updateTranslucenyGroups();
+    });
+
 }
 
 SPDesktop::~SPDesktop()
@@ -1393,6 +1398,17 @@ void SPDesktop::on_zoom_scale(double const scale)
 void SPDesktop::on_zoom_end(Gdk::EventSequence * /*sequence*/)
 {
     _begin_zoom.reset();
+}
+
+/**
+ * Set or unset the translucency group if needed.
+ */
+void SPDesktop::updateTranslucenyGroups()
+{
+    auto group = _layer_manager->currentLayer();
+    bool enabled = !group->isLayer();
+    // TODO: Add preference to control this here?
+    _translucency_group->setSolidItem(enabled ? group : nullptr);
 }
 
 /*

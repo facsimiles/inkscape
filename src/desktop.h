@@ -550,6 +550,7 @@ private:
     sigc::scoped_connection _reconstruction_finish_connection;
     sigc::scoped_connection _schedule_zoom_from_document_connection;
     sigc::scoped_connection _y_axis_flipped;
+    sigc::scoped_connection _layer_changed_connection;
 
     bool drawing_handler(Inkscape::CanvasEvent const &event, Inkscape::DrawingItem *item);
     void reconstruction_start();
@@ -563,6 +564,8 @@ private:
     void on_zoom_end(Gdk::EventSequence *sequence);
 
     void onStatusMessage(Inkscape::MessageType type, char const *message);
+
+    void updateTranslucenyGroups();
 };
 
 #endif // INKSCAPE_DESKTOP_H
