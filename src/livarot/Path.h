@@ -617,7 +617,6 @@ public:
   static void ArcAngles ( Geom::Point const &iS,  Geom::Point const &iE, double rx,
                          double ry, double angle, bool large, bool wise,
                          double &sang, double &eang);
-  static void QuadraticPoint (double t,  Geom::Point &oPt,   Geom::Point const &iS,   Geom::Point const &iM,   Geom::Point const &iE);
   static void CubicTangent (double t,  Geom::Point &oPt,  Geom::Point const &iS,
 			     Geom::Point const &iSd,  Geom::Point const &iE,
 			     Geom::Point const &iEd);

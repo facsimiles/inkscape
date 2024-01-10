@@ -324,11 +324,6 @@ void  Path::AddCurve(Geom::Curve const &c)
     {
         LineTo( c.finalPoint() );
     }
-    /*
-    else if(Geom::QuadraticBezier const *quadratic_bezier = dynamic_cast<Geom::QuadraticBezier const  *>(c)) {
-        ...
-    }
-    */
     else if(Geom::CubicBezier const *cubic_bezier = dynamic_cast<Geom::CubicBezier const *>(&c)) {
         Geom::Point tmp = (*cubic_bezier)[3];
         Geom::Point tms = 3 * ((*cubic_bezier)[1] - (*cubic_bezier)[0]);

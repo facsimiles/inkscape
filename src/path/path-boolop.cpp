@@ -28,7 +28,6 @@
 #include "path-util.h"
 
 #include "display/curve.h"
-#include "helper/geom.h"        // pathv_to_linear_and_cubic_beziers()
 #include "livarot/Path.h"
 #include "livarot/Shape.h"
 #include "object/object-set.h"  // This file defines some member functions of ObjectSet.
@@ -44,34 +43,35 @@ using Inkscape::DocumentUndo;
 /*
  * ObjectSet functions
  */
-bool Inkscape::ObjectSet::pathUnion(bool skip_undo, bool silent)
+
+void Inkscape::ObjectSet::pathUnion(bool skip_undo, bool silent)
 {
-    return pathBoolOp(bool_op_union, skip_undo, false, INKSCAPE_ICON("path-union"), _("Union"), silent) == DONE;
+    _pathBoolOp(bool_op_union, INKSCAPE_ICON("path-union"), _("Union"), skip_undo, silent);
 }
 
-bool Inkscape::ObjectSet::pathIntersect(bool skip_undo, bool silent)
+void Inkscape::ObjectSet::pathIntersect(bool skip_undo, bool silent)
 {
-    return pathBoolOp(bool_op_inters, skip_undo, false, INKSCAPE_ICON("path-intersection"), _("Intersection"), silent) == DONE;
+    _pathBoolOp(bool_op_inters, INKSCAPE_ICON("path-intersection"), _("Intersection"), skip_undo, silent);
 }
 
-bool Inkscape::ObjectSet::pathDiff(bool skip_undo, bool silent)
+void Inkscape::ObjectSet::pathDiff(bool skip_undo, bool silent)
 {
-    return pathBoolOp(bool_op_diff, skip_undo, false, INKSCAPE_ICON("path-difference"), _("Difference"), silent) == DONE;
+    _pathBoolOp(bool_op_diff, INKSCAPE_ICON("path-difference"), _("Difference"), skip_undo, silent);
 }
 
-bool Inkscape::ObjectSet::pathSymDiff(bool skip_undo, bool silent)
+void Inkscape::ObjectSet::pathSymDiff(bool skip_undo, bool silent)
 {
-    return pathBoolOp(bool_op_symdiff, skip_undo, false, INKSCAPE_ICON("path-exclusion"), _("Exclusion"), silent) == DONE;
+    _pathBoolOp(bool_op_symdiff, INKSCAPE_ICON("path-exclusion"), _("Exclusion"), skip_undo, silent);
 }
 
-bool Inkscape::ObjectSet::pathCut(bool skip_undo, bool silent)
+void Inkscape::ObjectSet::pathCut(bool skip_undo, bool silent)
 {
-    return pathBoolOp(bool_op_cut, skip_undo, false, INKSCAPE_ICON("path-division"), _("Division"), silent) == DONE;
+    _pathBoolOp(bool_op_cut, INKSCAPE_ICON("path-division"), _("Division"), skip_undo, silent);
 }
 
-bool Inkscape::ObjectSet::pathSlice(bool skip_undo, bool silent)
+void Inkscape::ObjectSet::pathSlice(bool skip_undo, bool silent)
 {
-    return pathBoolOp(bool_op_slice, skip_undo, false, INKSCAPE_ICON("path-cut"), _("Cut path"), silent) == DONE;
+    _pathBoolOp(bool_op_slice, INKSCAPE_ICON("path-cut"), _("Cut path"), skip_undo, silent);
 }
 
 /*
@@ -154,7 +154,7 @@ Geom::PathVector flattened(Geom::PathVector const &pathv, FillRule fill_rule)
     return res.MakePathVector();
 }
 
-void sp_flatten(Geom::PathVector &pathv, FillRule fill_rule)
+void flatten(Geom::PathVector &pathv, FillRule fill_rule)
 {
     pathv = flattened(pathv, fill_rule);
 }
@@ -187,6 +187,7 @@ std::vector<Geom::PathVector> pathvector_cut(Geom::PathVector const &pathv, Geom
 
     for (int i = 0; i < num_paths; i++) {
         result.emplace_back(paths[i]->MakePathVector());
+        delete paths[i];
     }
 
     g_free(paths);
@@ -196,58 +197,10 @@ std::vector<Geom::PathVector> pathvector_cut(Geom::PathVector const &pathv, Geom
     return result;
 }
 
-Geom::PathVector sp_pathvector_boolop(Geom::PathVector const &pathva, Geom::PathVector const &pathvb, BooleanOp bop,
-                                      FillRule fra, FillRule frb, bool livarotonly, bool flattenbefore)
-{
-    bool error = false;
-    return sp_pathvector_boolop(pathva, pathvb, bop, fra, frb, livarotonly, flattenbefore, error);
-}
-
-Geom::PathVector sp_pathvector_boolop(Geom::PathVector const &pathva, Geom::PathVector const &pathvb, BooleanOp bop,
-                                      FillRule fra, FillRule frb, bool livarotonly, bool flattenbefore, bool &error)
-{
-    // Livarot's outline of arcs is broken. So convert the path to linear and cubics only, for which the outline is created correctly.
-    auto a = pathv_to_linear_and_cubic_beziers(pathva);
-    auto b = pathv_to_linear_and_cubic_beziers(pathvb);
-
-    if (!livarotonly) {
-        try {
-            if (flattenbefore) {
-                sp_flatten(a, fra);
-                sp_flatten(b, frb);
-            }
-
-            // Don't change tolerance - gives errors on boolops.
-            auto pig = Geom::PathIntersectionGraph(a, b);
-
-            switch (bop) {
-                case bool_op_inters:
-                    return pig.getIntersection();
-                case bool_op_union:
-                    return pig.getUnion();
-                case bool_op_symdiff:
-                    return pig.getXOR();
-                case bool_op_diff:
-                    return pig.getBminusA(); // livarot order...
-                case bool_op_cut: {
-                    auto out = pig.getBminusA();
-                    auto tmp = pig.getIntersection();
-                    out.insert(out.end(), tmp.begin(), tmp.end());
-                    return out;
-                }
-                default:
-                    g_debug("Path Intersection Graph unsupported operation, fallback to livarot");
-                    break;
-            }
-        } catch (...) {
-            g_debug("Path Intersection Graph failed boolops, fallback to livarot");
-        }
-
-        error = true;
-    }
-
-    auto patha = make_path(a);
-    auto pathb = make_path(b);
+Geom::PathVector sp_pathvector_boolop(Geom::PathVector const &pathva, Geom::PathVector const &pathvb, BooleanOp bop, FillRule fra, FillRule frb)
+{    
+    auto patha = make_path(pathva);
+    auto pathb = make_path(pathvb);
 
     Path result;
 
@@ -351,84 +304,56 @@ Geom::PathVector sp_pathvector_boolop(Geom::PathVector const &pathva, Geom::Path
     return result.MakePathVector();
 }
 
-// helper for printing error messages, regardless of whether we have a GUI or not
-// If desktop == NULL, errors will be shown on stderr
-static void boolop_display_error_message(SPDesktop *desktop, Glib::ustring const &msg)
+void Inkscape::ObjectSet::_pathBoolOp(BooleanOp bop, char const *icon_name, char const *description, bool skip_undo, bool silent)
 {
-    if (desktop) {
-        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, msg);
-    } else {
-        g_printerr("%s\n", msg.c_str());
+    try {
+        ObjectSet::_pathBoolOp(bop);
+        if (!skip_undo) {
+            DocumentUndo::done(document(), description, icon_name);
+        }
+    } catch (char const *msg) {
+        if (!silent) {
+            if (desktop()) {
+                desktop()->messageStack()->flash(ERROR_MESSAGE, msg);
+            } else {
+                g_printerr("%s\n", msg);
+            }
+        }
     }
 }
 
-// boolean operations on the desktop
-// take the source paths from the file, do the operation, delete the originals and add the results
-BoolOpErrors Inkscape::ObjectSet::pathBoolOp(BooleanOp bop, const bool skip_undo, const bool checked,
-                                             const Glib::ustring icon_name, const Glib::ustring description,
-                                             bool const silent)
+void Inkscape::ObjectSet::_pathBoolOp(BooleanOp bop)
 {
-    if (nullptr != desktop() && !checked) {
-        SPDocument *doc = desktop()->getDocument();
-        BoolOpErrors returnCode = ObjectSet::pathBoolOp(bop, true, true,icon_name);
+    auto const doc = document();
 
-        switch(returnCode) {
-        case ERR_TOO_LESS_PATHS_1:
-            if (!silent) {
-                boolop_display_error_message(desktop(),
-                                             _("Select <b>at least 1 path</b> to perform a boolean union."));
+    // Grab the items list.
+    auto const il = std::vector<SPItem*>(items().begin(), items().end());
+
+    // Validate number of items.
+    switch (bop) {
+        case bool_op_union:
+            if (il.size() < 1) { // Allow union of single item --> flatten.
+                throw _("Select <b>at least 1 path</b> to perform a boolean union.");
             }
             break;
-        case ERR_TOO_LESS_PATHS_2:
-            if (!silent) {
-                boolop_display_error_message(desktop(),
-                                             _("Select <b>at least 2 paths</b> to perform a boolean operation."));
+        case bool_op_inters:
+        case bool_op_symdiff:
+            if (il.size() < 2) {
+                throw _("Select <b>at least 2 paths</b> to perform an intersection or symmetric difference.");
             }
             break;
-        case ERR_NO_PATHS:
-            if (!silent) {
-                boolop_display_error_message(desktop(),
-                                             _("One of the objects is <b>not a path</b>, cannot perform boolean operation."));
+        case bool_op_diff:
+        case bool_op_cut:
+        case bool_op_slice:
+            if (il.size() != 2) {
+                throw _("Select <b>exactly 2 paths</b> to perform difference, division, or path cut.");
             }
             break;
-        case ERR_Z_ORDER:
-            if (!silent) {
-                boolop_display_error_message(desktop(),
-                                             _("Unable to determine the <b>z-order</b> of the objects selected for difference, XOR, division, or path cut."));
-            }
-            break;
-        case DONE_NO_PATH:
-            if (!skip_undo) { 
-                DocumentUndo::done(doc, description, "");
-            }
-            break;
-        case DONE:
-            if (!skip_undo) { 
-                DocumentUndo::done(doc, description, icon_name);
-            }
-            break;
-        case DONE_NO_ACTION:
-            // Do nothing (?)
-            break;
-        }
-        return returnCode;
     }
-
-    SPDocument *doc = document();
-    std::vector<SPItem*> il(items().begin(), items().end());
-
-    // allow union on a single object for the purpose of removing self overlapse (svn log, revision 13334)
-    if (il.size() < 2 && bop != bool_op_union) {
-        return ERR_TOO_LESS_PATHS_2;
-    }
-    else if (il.size() < 1) {
-        return ERR_TOO_LESS_PATHS_1;
-    }
-
-    g_assert(!il.empty());
+    assert(!il.empty());
 
     // reverseOrderForOp marks whether the order of the list is the top->down order
-    // it's only used when there are 2 objects, and for operations who need to know the
+    // it's only used when there are 2 objects, and for operations which need to know the
     // topmost object (differences, cuts)
     bool reverseOrderForOp = false;
 
@@ -437,8 +362,8 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(BooleanOp bop, const bool skip_undo
         Inkscape::XML::Node *a = il.front()->getRepr();
         Inkscape::XML::Node *b = il.back()->getRepr();
 
-        if (a == nullptr || b == nullptr) {
-            return ERR_Z_ORDER;
+        if (!a || !b) {
+            return;
         }
 
         if (is_descendant_of(a, b)) {
@@ -451,8 +376,8 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(BooleanOp bop, const bool skip_undo
             // objects are not in parent/child relationship;
             // find their lowest common ancestor
             Inkscape::XML::Node *parent = lowest_common_ancestor(a, b);
-            if (parent == nullptr) {
-                return ERR_Z_ORDER;
+            if (!parent) {
+                return;
             }
 
             // find the children of the LCA that lead from it to the a and b
@@ -472,67 +397,65 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(BooleanOp bop, const bool skip_undo
         }
     }
 
-    g_assert(!il.empty());
-
     // first check if all the input objects have shapes
     // otherwise bail out
-    for (auto item : il)
-    {
-        if (!is<SPShape>(item) && !is<SPText>(item) && !is<SPFlowtext>(item))
-        {
-            return ERR_NO_PATHS;
+    for (auto item : il) {
+        if (!is<SPShape>(item) && !is<SPText>(item) && !is<SPFlowtext>(item)) {
+            return;
         }
     }
 
     // extract the livarot Paths from the source objects
     // also get the winding rule specified in the style
-    int nbOriginaux = il.size();
+    int const nbOriginaux = il.size();
     std::vector<Path *> originaux(nbOriginaux);
     std::vector<FillRule> origWind(nbOriginaux);
     std::vector<double> origThresh(nbOriginaux);
-    int curOrig;
-    {
-        curOrig = 0;
-        for (auto item : il)
-        {
-            // apply live path effects prior to performing boolean operation
-            char const *id = item->getAttribute("id");
-            if (auto lpeitem = cast<SPLPEItem>(item)) {
-                SPDocument * document = item->document;
-                lpeitem->removeAllPathEffects(true);
-                SPObject *elemref = document->getObjectById(id);
-                if (elemref && elemref != item) {
-                    // If the LPE item is a shape, it is converted to a path 
-                    // so we need to reupdate the item
-                    item = cast<SPItem>(elemref);
-                }
+    int curOrig = 0;
+    for (auto item : il) {
+        // apply live path effects prior to performing boolean operation
+        char const *id = item->getAttribute("id");
+        if (auto lpeitem = cast<SPLPEItem>(item)) {
+            SPDocument * document = item->document;
+            lpeitem->removeAllPathEffects(true);
+            SPObject *elemref = document->getObjectById(id);
+            if (elemref && elemref != item) {
+                // If the LPE item is a shape, it is converted to a path
+                // so we need to reupdate the item
+                item = cast<SPItem>(elemref);
             }
-
-            if (item->style->fill_rule.computed == SP_WIND_RULE_EVENODD) {
-                origWind[curOrig]= fill_oddEven;
-            } else {
-                origWind[curOrig]= fill_nonZero;
-            }
-
-            if (auto curve = curve_for_item(item)) {
-                auto pathv = curve->get_pathvector() * item->i2doc_affine();
-                originaux[curOrig] = Path_for_pathvector(pathv).release();
-                origThresh[curOrig] = get_threshold(pathv);
-            } else {
-                originaux[curOrig] = nullptr;
-            }
-
-            if (!originaux[curOrig] || originaux[curOrig]->descr_cmd.size() <= 1) {
-                for (int i = curOrig; i >= 0; i--) delete originaux[i];
-                return DONE_NO_ACTION;
-            }
-
-            curOrig++;
         }
+
+        auto css = sp_repr_css_attr(il[0]->getRepr(), "style");
+        auto val = sp_repr_css_property(css, "fill-rule", nullptr);
+        if (val && strcmp(val, "nonzero") == 0) {
+            origWind[curOrig]= fill_nonZero;
+        } else if (val && strcmp(val, "evenodd") == 0) {
+            origWind[curOrig]= fill_oddEven;
+        } else {
+            origWind[curOrig]= fill_nonZero;
+        }
+        sp_repr_css_attr_unref(css);
+
+        if (auto curve = curve_for_item(item)) {
+            auto pathv = curve->get_pathvector() * item->i2doc_affine();
+            originaux[curOrig] = Path_for_pathvector(pathv).release();
+            origThresh[curOrig] = get_threshold(pathv);
+        } else {
+            originaux[curOrig] = nullptr;
+        }
+
+        if (!originaux[curOrig] || originaux[curOrig]->descr_cmd.size() <= 1) {
+            for (int i = curOrig; i >= 0; i--) delete originaux[i];
+            return;
+        }
+
+        curOrig++;
     }
+
     // reverse if needed
     // note that the selection list keeps its order
-    if ( reverseOrderForOp ) {
+    if (reverseOrderForOp) {
         std::swap(originaux[0], originaux[1]);
         std::swap(origWind[0], origWind[1]);
         std::swap(origThresh[0], origThresh[1]);
@@ -607,11 +530,7 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(BooleanOp bop, const bool skip_undo
             curOrig++;
         }
 
-        {
-            Shape *swap = theShape;
-            theShape = theShapeA;
-            theShapeA = swap;
-        }
+        std::swap(theShape, theShapeA);
 
     } else if ( bop == bool_op_cut ) {
         // cuts= sort of a bastard boolean operation, thus not the axact same modus operandi
@@ -754,7 +673,7 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(BooleanOp bop, const bool skip_undo
         clear();
 
         delete res;
-        return DONE_NO_PATH;
+        return;
     }
 
     // get the source path object
@@ -884,8 +803,6 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(BooleanOp bop, const bool skip_undo
     }
 
     delete res;
-
-    return DONE;
 }
 
 /*

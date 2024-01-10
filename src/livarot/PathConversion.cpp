@@ -450,18 +450,6 @@ const Geom::Point Path::PrevPoint(int i) const
     }
 }
 
-// utilitaries: given a quadratic bezier curve (start point, control point, end point, ie that's a clamped curve),
-// and an abcissis on it, get the point with that abcissis.
-// warning: it's NOT a curvilign abcissis (or whatever you call that in english), so "t" is NOT the length of "start point"->"result point"
-void Path::QuadraticPoint(double t, Geom::Point &oPt,
-                          const Geom::Point &iS, const Geom::Point &iM, const Geom::Point &iE)
-{
-    Geom::Point const ax = iE - 2 * iM + iS;
-    Geom::Point const bx = 2 * iM - 2 * iS;
-    Geom::Point const cx = iS;
-
-    oPt = t * t * ax + t * bx + cx;
-}
 // idem for cubic bezier patch
 void Path::CubicTangent(double t, Geom::Point &oPt, const Geom::Point &iS, const Geom::Point &isD,
                         const Geom::Point &iE, const Geom::Point &ieD)
