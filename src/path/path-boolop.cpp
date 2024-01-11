@@ -79,26 +79,6 @@ void Inkscape::ObjectSet::pathSlice(bool skip_undo, bool silent)
  */
 
 /**
- * Return a rough estimate of a pathvector's size, based on its bounding box.
- */
-static double diameter(Geom::PathVector const &pathv)
-{
-    if (auto rect = pathv.boundsExact()) {
-        return rect->dimensions().length();
-    }
-
-    return 0;
-}
-
-/**
- * Estimate a suitable approximation threshold for a pathvector.
- */
-static double get_threshold(Geom::PathVector const &pathv)
-{
-    return diameter(pathv) * 1e-3;
-}
-
-/**
  * Create a flattened shape from a path.
  *
  * @param path The path to convert.
@@ -117,6 +97,8 @@ static Shape make_shape(Path &path, int path_id = -1, FillRule fill_rule = fill_
     return result;
 }
 
+constexpr auto RELATIVE_THRESHOLD = 0.1;
+
 /**
  * Create a path with backdata from a pathvector,
  * automatically estimating a suitable conversion threshold.
@@ -126,7 +108,7 @@ static Path make_path(Geom::PathVector const &pathv)
     Path result;
 
     result.LoadPathVector(pathv);
-    result.ConvertWithBackData(get_threshold(pathv));
+    result.ConvertWithBackData(RELATIVE_THRESHOLD, true);
 
     return result;
 }
@@ -410,7 +392,6 @@ void Inkscape::ObjectSet::_pathBoolOp(BooleanOp bop)
     int const nbOriginaux = il.size();
     std::vector<Path *> originaux(nbOriginaux);
     std::vector<FillRule> origWind(nbOriginaux);
-    std::vector<double> origThresh(nbOriginaux);
     int curOrig = 0;
     for (auto item : il) {
         // apply live path effects prior to performing boolean operation
@@ -440,7 +421,6 @@ void Inkscape::ObjectSet::_pathBoolOp(BooleanOp bop)
         if (auto curve = curve_for_item(item)) {
             auto pathv = curve->get_pathvector() * item->i2doc_affine();
             originaux[curOrig] = Path_for_pathvector(pathv).release();
-            origThresh[curOrig] = get_threshold(pathv);
         } else {
             originaux[curOrig] = nullptr;
         }
@@ -458,7 +438,6 @@ void Inkscape::ObjectSet::_pathBoolOp(BooleanOp bop)
     if (reverseOrderForOp) {
         std::swap(originaux[0], originaux[1]);
         std::swap(origWind[0], origWind[1]);
-        std::swap(origThresh[0], origThresh[1]);
     }
 
     // and work
@@ -474,7 +453,7 @@ void Inkscape::ObjectSet::_pathBoolOp(BooleanOp bop)
     if ( bop == bool_op_inters || bop == bool_op_union || bop == bool_op_diff || bop == bool_op_symdiff ) {
         // true boolean op
         // get the polygons of each path, with the winding rule specified, and apply the operation iteratively
-        originaux[0]->ConvertWithBackData(origThresh[0]);
+        originaux[0]->ConvertWithBackData(RELATIVE_THRESHOLD, true);
 
         originaux[0]->Fill(theShape, 0);
 
@@ -483,7 +462,7 @@ void Inkscape::ObjectSet::_pathBoolOp(BooleanOp bop)
         curOrig = 1;
         for (auto item : il){
             if(item==il[0])continue;
-            originaux[curOrig]->ConvertWithBackData(origThresh[curOrig]);
+            originaux[curOrig]->ConvertWithBackData(RELATIVE_THRESHOLD, true);
 
             originaux[curOrig]->Fill(theShape, curOrig);
 
@@ -546,15 +525,14 @@ void Inkscape::ObjectSet::_pathBoolOp(BooleanOp bop)
         // that's how the Booleen() function knows it's an edge of the cut
         std::swap(originaux[0], originaux[1]);
         std::swap(origWind[0], origWind[1]);
-        std::swap(origThresh[0], origThresh[1]);
 
-        originaux[0]->ConvertWithBackData(origThresh[0]);
+        originaux[0]->ConvertWithBackData(RELATIVE_THRESHOLD, true);
 
         originaux[0]->Fill(theShape, 0);
 
         theShapeA->ConvertToShape(theShape, origWind[0]);
 
-        originaux[1]->ConvertWithBackData(origThresh[1]);
+        originaux[1]->ConvertWithBackData(RELATIVE_THRESHOLD, true);
 
         if ((originaux[1]->pts.size() == 2) && originaux[1]->pts[0].isMoveTo && !originaux[1]->pts[1].isMoveTo)
             originaux[1]->Fill(theShape, 1,false,true,false); // see LP Bug 177956
@@ -576,13 +554,12 @@ void Inkscape::ObjectSet::_pathBoolOp(BooleanOp bop)
         // inversion pour l'opération
         std::swap(originaux[0], originaux[1]);
         std::swap(origWind[0], origWind[1]);
-        std::swap(origThresh[0], origThresh[1]);
 
-        originaux[0]->ConvertWithBackData(origThresh[0]);
+        originaux[0]->ConvertWithBackData(RELATIVE_THRESHOLD, true);
 
         originaux[0]->Fill(theShapeA, 0,false,false,false); // don't closeIfNeeded
 
-        originaux[1]->ConvertWithBackData(origThresh[1]);
+        originaux[1]->ConvertWithBackData(RELATIVE_THRESHOLD, true);
 
         originaux[1]->Fill(theShapeA, 1,true,false,false);// don't closeIfNeeded and just dump in the shape, don't reset it
 

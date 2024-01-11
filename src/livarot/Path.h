@@ -261,8 +261,10 @@ public:
    *
    * @param threshhold The error threshold used to approximate the path. The smaller this is, the
    * more line segments there will be and the better the polyline approximation would be.
+   *
+   * @param relative Whether to interpret threshold relatively, rather than absolutely.
    */
-  void ConvertWithBackData (double treshhold);
+  void ConvertWithBackData(double threshhold, bool relative = false);
 
   // creation of the polyline (you can tinker with these function if you want)
 
@@ -605,14 +607,16 @@ public:
    *
    * TODO: Add derivation here maybe?
    *
+   * If relative is true, then instead of "small enough", the criterion is "linear enough".
+   * That is, the threshold parameter is interpreted relatively rather than absolutely.
    */
   void RecCubicTo ( Geom::Point const &iS,  Geom::Point const &iSd,  Geom::Point const &iE,  Geom::Point const &iEd, double tresh, int lev,
 		   double maxL = -1.0);
 
   void DoArc ( Geom::Point const &iS,  Geom::Point const &iE, double rx, double ry,
-	      double angle, bool large, bool wise, double tresh, int piece);
+          double angle, bool large, bool wise, double tresh, int piece, bool relative);
   void RecCubicTo ( Geom::Point const &iS,  Geom::Point const &iSd,  Geom::Point const &iE,  Geom::Point const &iEd, double tresh, int lev,
-		   double st, double et, int piece);
+           double st, double et, int piece, bool relative);
 
   static void ArcAngles ( Geom::Point const &iS,  Geom::Point const &iE, double rx,
                          double ry, double angle, bool large, bool wise,

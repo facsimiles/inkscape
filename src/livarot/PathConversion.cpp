@@ -22,7 +22,7 @@
  * nathing fancy here: take each command and append an approximation of it to the polyline
  */
 
-void Path::ConvertWithBackData(double treshhold)
+void Path::ConvertWithBackData(double treshhold, bool relative)
 {
     // are we doing a sub path? if yes, clear the flags. CloseSubPath just clears the flags
     // it doesn't close a sub path
@@ -120,7 +120,7 @@ void Path::ConvertWithBackData(double treshhold)
                 // a line segment through the start and end points. If no, it'd split the cubic at its
                 // center point and recursively call itself on the left and right side. The center point
                 // gets added in the points list too.
-                RecCubicTo(curX, nData->start, nextX, nData->end, treshhold, 8, 0.0, 1.0, curP);
+                RecCubicTo(curX, nData->start, nextX, nData->end, treshhold, 8, 0.0, 1.0, curP, relative);
                 // RecCubicTo adds any points inside the cubic and last one is added here
                 AddPoint(nextX, curP, 1.0, false);
                 // et on avance
@@ -132,7 +132,7 @@ void Path::ConvertWithBackData(double treshhold)
                 PathDescrArcTo *nData = dynamic_cast<PathDescrArcTo *>(descr_cmd[curP]);
                 nextX = nData->p;
                 // Similar to RecCubicTo, just for Arcs
-                DoArc(curX, nextX, nData->rx, nData->ry, nData->angle, nData->large, nData->clockwise, treshhold, curP);
+                DoArc(curX, nextX, nData->rx, nData->ry, nData->angle, nData->large, nData->clockwise, treshhold, curP, relative);
                 AddPoint(nextX, curP, 1.0, false);
                 // et on avance
                 curP++;
@@ -686,7 +686,7 @@ void Path::RecCubicTo( Geom::Point const &iS, Geom::Point const &isD,
 
 void Path::DoArc(Geom::Point const &iS, Geom::Point const &iE,
                  double const rx, double const ry, double const angle,
-                 bool const large, bool const wise, double const tresh, int const piece)
+                 bool const large, bool const wise, double const tresh, int const piece, bool relative)
 {
     /* TODO: Check that our behaviour is standards-conformant if iS and iE are (much) further
        apart than the diameter.  Also check that we do the right thing for negative radius.
@@ -711,17 +711,17 @@ void Path::DoArc(Geom::Point const &iS, Geom::Point const &iE,
 
     // max angle is basically the maximum arc angle you can have that won't create
     // an arc that exceeds the threshold
-    double max_ang = 2 * acos ( 1 - tresh / fmax(rx, ry)  );
-    max_ang = fmin (max_ang, M_PI / 2 );
+    double max_ang = relative ? std::sqrt(tresh) : 2 * std::acos(1 - tresh / std::max(rx, ry));
+    max_ang = std::min(max_ang, M_PI / 2);
     // divide the whole arc range into sectors such that each sector
     // is no bigger than max ang
-    int const num_sectors = abs(sang - eang) / max_ang + 1;
+    auto const num_sectors = [&] { return std::ceil(std::abs(sang - eang) / max_ang); };
 
     if (wise) {
         if ( sang < eang ) {
             sang += 2*M_PI;
         }
-        double const incr = (eang - sang) / num_sectors;
+        double const incr = (eang - sang) / num_sectors();
         Geom::Rotate const omega(incr);
         for (double b = sang + incr; b > eang; b += incr) {
             cb = omega * cb;
@@ -733,7 +733,7 @@ void Path::DoArc(Geom::Point const &iS, Geom::Point const &iE,
         if ( sang > eang ) {
             sang -= 2 * M_PI;
         }
-        double const incr = (eang - sang) / num_sectors;
+        double const incr = (eang - sang) / num_sectors();
         Geom::Rotate const omega(incr);
         for (double b = sang + incr ; b < eang ; b += incr) {
             cb = omega * cb;
@@ -744,25 +744,28 @@ void Path::DoArc(Geom::Point const &iS, Geom::Point const &iE,
 
 void Path::RecCubicTo(Geom::Point const &iS, Geom::Point const &isD,
                       Geom::Point const &iE, Geom::Point const &ieD,
-                      double tresh, int lev, double st, double et, int piece)
+                      double tresh, int lev, double st, double et, int piece, bool relative)
 {
-    const Geom::Point se = iE - iS;
-    const double dC = Geom::L2(se);
-    if ( dC < 0.01 ) {
-        const double sC = dot(isD, isD);
-        const double eC = dot(ieD, ieD);
-        if ( sC < tresh && eC < tresh ) {
+    auto const se = iE - iS;
+    auto const y1 = std::abs(Geom::cross(isD, se));
+    auto const y2 = std::abs(Geom::cross(ieD, se));
+    if (relative) {
+        auto const bound = se.lengthSq() * tresh;
+        if (y1 < bound && y2 < bound) {
+            return;
+        }
+    } else if (se.lengthSq() < Geom::sqr(0.01)) {
+        if (isD.lengthSq() < tresh && ieD.lengthSq() < tresh) {
             return;
         }
     } else {
-        const double sC = fabs(cross(se, isD)) / dC;
-        const double eC = fabs(cross(se, ieD)) / dC;
-        if ( sC < tresh && eC < tresh ) {
+        auto const bound = se.length() * tresh;
+        if (y1 < bound && y2 < bound) {
             return;
         }
     }
 
-    if ( lev <= 0 ) {
+    if (lev <= 0) {
         return;
     }
 
@@ -773,9 +776,9 @@ void Path::RecCubicTo(Geom::Point const &iS, Geom::Point const &isD,
     Geom::Point hisD = 0.5 * isD;
     Geom::Point hieD = 0.5 * ieD;
 
-    RecCubicTo(iS, hisD, m, md, tresh, lev - 1, st, mt, piece);
+    RecCubicTo(iS, hisD, m, md, tresh, lev - 1, st, mt, piece, relative);
     AddPoint(m, piece, mt);
-    RecCubicTo(m, md, iE, hieD, tresh, lev - 1, mt, et, piece);
+    RecCubicTo(m, md, iE, hieD, tresh, lev - 1, mt, et, piece, relative);
 }
 
 /*
