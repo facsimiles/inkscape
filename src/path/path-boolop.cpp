@@ -103,11 +103,11 @@ constexpr auto RELATIVE_THRESHOLD = 0.1;
  * Create a path with backdata from a pathvector,
  * automatically estimating a suitable conversion threshold.
  */
-static Path make_path(Geom::PathVector const &pathv)
+static Path make_path(Geom::PathVector const &pathv, std::vector<Geom::PathVectorTime> const &cuts)
 {
     Path result;
 
-    result.LoadPathVector(pathv);
+    result.LoadPathVector(pathv, cuts);
     result.ConvertWithBackData(RELATIVE_THRESHOLD, true);
 
     return result;
@@ -121,13 +121,46 @@ static bool is_line(Path const &path)
     return path.pts.size() == 2 && path.pts[0].isMoveTo && !path.pts[1].isMoveTo;
 }
 
+static inline void distribute_intersection_times(std::vector<Geom::PathVectorTime> &dst1, std::vector<Geom::PathVectorTime> &dst2, std::vector<Geom::PathVectorIntersection> const &intersections)
+{
+    auto filter_and_add = [] (auto const &x, auto &dst) {
+        if (x.t > Geom::EPSILON && x.t < 1.0 - Geom::EPSILON) {
+            dst.emplace_back(x);
+        }
+    };
+
+    for (auto const &x : intersections) {
+        filter_and_add(x.first, dst1);
+        filter_and_add(x.second, dst2);
+    }
+}
+
+static void sort_and_clean_intersection_times(std::vector<Geom::PathVectorTime> &vec)
+{
+    std::sort(begin(vec), end(vec));
+
+    auto prev = Geom::PathVectorTime{0, 0, 0.0};
+    for (auto it = vec.begin(); it != vec.end(); ) {
+        if (it->path_index == prev.path_index && it->curve_index == prev.curve_index && it->t < prev.t + Geom::EPSILON) {
+            it = vec.erase(it);
+        } else {
+            prev = *it;
+            ++it;
+        }
+    }
+}
+
 /*
  * Flattening
  */
 
 Geom::PathVector flattened(Geom::PathVector const &pathv, FillRule fill_rule)
 {
-    auto path = make_path(pathv);
+    std::vector<Geom::PathVectorTime> times;
+    distribute_intersection_times(times, times, pathv.intersectSelf());
+    sort_and_clean_intersection_times(times);
+
+    auto path = make_path(pathv, times);
     auto shape = make_shape(path, 0, fill_rule);
 
     Path res;
@@ -147,8 +180,15 @@ void flatten(Geom::PathVector &pathv, FillRule fill_rule)
 
 std::vector<Geom::PathVector> pathvector_cut(Geom::PathVector const &pathv, Geom::PathVector const &lines)
 {
-    auto patha = make_path(pathv);
-    auto pathb = make_path(lines);
+    std::vector<Geom::PathVectorTime> timesa, timesb;
+    distribute_intersection_times(timesa, timesa, pathv.intersectSelf());
+    distribute_intersection_times(timesb, timesb, lines.intersectSelf());
+    distribute_intersection_times(timesa, timesb, pathv.intersect(lines));
+    sort_and_clean_intersection_times(timesa);
+    sort_and_clean_intersection_times(timesb);
+
+    auto patha = make_path(pathv, timesa);
+    auto pathb = make_path(lines, timesb);
     auto shapea = make_shape(patha, 0);
     auto shapeb = make_shape(pathb, 1, fill_justDont, is_line(pathb));
 
@@ -180,9 +220,16 @@ std::vector<Geom::PathVector> pathvector_cut(Geom::PathVector const &pathv, Geom
 }
 
 Geom::PathVector sp_pathvector_boolop(Geom::PathVector const &pathva, Geom::PathVector const &pathvb, BooleanOp bop, FillRule fra, FillRule frb)
-{    
-    auto patha = make_path(pathva);
-    auto pathb = make_path(pathvb);
+{
+    std::vector<Geom::PathVectorTime> timesa, timesb;
+    distribute_intersection_times(timesa, timesa, pathva.intersectSelf());
+    distribute_intersection_times(timesb, timesb, pathvb.intersectSelf());
+    distribute_intersection_times(timesa, timesb, pathva.intersect(pathvb));
+    sort_and_clean_intersection_times(timesa);
+    sort_and_clean_intersection_times(timesb);
+
+    auto patha = make_path(pathva, timesa);
+    auto pathb = make_path(pathvb, timesb);
 
     Path result;
 
@@ -387,13 +434,25 @@ void Inkscape::ObjectSet::_pathBoolOp(BooleanOp bop)
         }
     }
 
-    // extract the livarot Paths from the source objects
-    // also get the winding rule specified in the style
-    int const nbOriginaux = il.size();
-    std::vector<Path *> originaux(nbOriginaux);
-    std::vector<FillRule> origWind(nbOriginaux);
-    int curOrig = 0;
-    for (auto item : il) {
+    struct Operand
+    {
+        // From source objects
+        FillRule fill_rule{};
+        Geom::PathVector pathv;
+
+        // Computed
+        std::vector<Geom::PathVectorTime> cuts;
+        std::unique_ptr<Path> path;
+    };
+
+    std::vector<Operand> operands;
+    operands.resize(il.size());
+
+    // Extract the fill rules and pathvectors from the source objects.
+    for (int i = 0; i < il.size(); i++) {
+        auto item = il[i];
+        auto &operand = operands[i];
+
         // apply live path effects prior to performing boolean operation
         char const *id = item->getAttribute("id");
         if (auto lpeitem = cast<SPLPEItem>(item)) {
@@ -407,37 +466,46 @@ void Inkscape::ObjectSet::_pathBoolOp(BooleanOp bop)
             }
         }
 
-        auto css = sp_repr_css_attr(il[0]->getRepr(), "style");
-        auto val = sp_repr_css_property(css, "fill-rule", nullptr);
-        if (val && strcmp(val, "nonzero") == 0) {
-            origWind[curOrig]= fill_nonZero;
-        } else if (val && strcmp(val, "evenodd") == 0) {
-            origWind[curOrig]= fill_oddEven;
+        // Get the fill rule.
+        if (item->style->fill_rule.computed == SP_WIND_RULE_EVENODD) {
+            operand.fill_rule = fill_oddEven;
         } else {
-            origWind[curOrig]= fill_nonZero;
-        }
-        sp_repr_css_attr_unref(css);
-
-        if (auto curve = curve_for_item(item)) {
-            auto pathv = curve->get_pathvector() * item->i2doc_affine();
-            originaux[curOrig] = Path_for_pathvector(pathv).release();
-        } else {
-            originaux[curOrig] = nullptr;
+            operand.fill_rule = fill_nonZero;
         }
 
-        if (!originaux[curOrig] || originaux[curOrig]->descr_cmd.size() <= 1) {
-            for (int i = curOrig; i >= 0; i--) delete originaux[i];
+        // Get the pathvector.
+        auto curve = curve_for_item(item);
+        if (!curve) {
             return;
         }
 
-        curOrig++;
+        operand.pathv = curve->get_pathvector() * item->i2doc_affine();
+    }
+
+    // Compute the intersections and self-intersections, and use this information when converting to livarot paths.
+    for (int i = 0; i < operands.size(); i++) {
+        for (int j = 0; j < i; j++) {
+            distribute_intersection_times(operands[i].cuts, operands[j].cuts, operands[i].pathv.intersect(operands[j].pathv));
+        }
+    }
+
+    for (auto &operand : operands) {
+        distribute_intersection_times(operand.cuts, operand.cuts, operand.pathv.intersectSelf());
+        sort_and_clean_intersection_times(operand.cuts);
+
+        operand.path = std::make_unique<Path>();
+        operand.path->LoadPathVector(operand.pathv, operand.cuts);
+        operand.path->ConvertWithBackData(RELATIVE_THRESHOLD, true);
+
+        if (operand.path->descr_cmd.size() <= 1) {
+            return;
+        }
     }
 
     // reverse if needed
     // note that the selection list keeps its order
     if (reverseOrderForOp) {
-        std::swap(originaux[0], originaux[1]);
-        std::swap(origWind[0], origWind[1]);
+        std::swap(operands[0], operands[1]);
     }
 
     // and work
@@ -446,27 +514,21 @@ void Inkscape::ObjectSet::_pathBoolOp(BooleanOp bop)
     Shape *theShapeB = new Shape;
     Shape *theShape = new Shape;
     Path *res = new Path;
-    res->SetBackData(false);
     Path::cut_position  *toCut=nullptr;
     int                  nbToCut=0;
 
-    if ( bop == bool_op_inters || bop == bool_op_union || bop == bool_op_diff || bop == bool_op_symdiff ) {
+    if (bop == bool_op_inters || bop == bool_op_union || bop == bool_op_diff || bop == bool_op_symdiff) {
         // true boolean op
         // get the polygons of each path, with the winding rule specified, and apply the operation iteratively
-        originaux[0]->ConvertWithBackData(RELATIVE_THRESHOLD, true);
 
-        originaux[0]->Fill(theShape, 0);
+        operands[0].path->Fill(theShape, 0);
 
-        theShapeA->ConvertToShape(theShape, origWind[0]);
+        theShapeA->ConvertToShape(theShape, operands[0].fill_rule);
 
-        curOrig = 1;
-        for (auto item : il){
-            if(item==il[0])continue;
-            originaux[curOrig]->ConvertWithBackData(RELATIVE_THRESHOLD, true);
+        for (int i = 1; i < operands.size(); i++) {
+            operands[i].path->Fill(theShape, i);
 
-            originaux[curOrig]->Fill(theShape, curOrig);
-
-            theShapeB->ConvertToShape(theShape, origWind[curOrig]);
+            theShapeB->ConvertToShape(theShape, operands[i].fill_rule);
 
             /* Due to quantization of the input shape coordinates, we may end up with A or B being empty.
              * If this is a union or symdiff operation, we just use the non-empty shape as the result:
@@ -494,24 +556,19 @@ void Inkscape::ObjectSet::_pathBoolOp(BooleanOp bop)
                                    ||  (bop == bool_op_diff);
                 if (resultIsB) {
                     // Swap A and B to use B as the result
-                    Shape *swap = theShapeB;
-                    theShapeB = theShapeA;
-                    theShapeA = swap;
+                    std::swap(theShapeA, theShapeB);
                 }
             } else {
                 // Just do the Boolean operation as usual
                 // les elements arrivent en ordre inverse dans la liste
                 theShape->Booleen(theShapeB, theShapeA, bop);
-                Shape *swap = theShape;
-                theShape = theShapeA;
-                theShapeA = swap;
+                std::swap(theShape, theShapeA);
             }
-            curOrig++;
         }
 
         std::swap(theShape, theShapeA);
 
-    } else if ( bop == bool_op_cut ) {
+    } else if (bop == bool_op_cut) {
         // cuts= sort of a bastard boolean operation, thus not the axact same modus operandi
         // technically, the cut path is not necessarily a polygon (thus has no winding rule)
         // it is just uncrossed, and cleaned from duplicate edges and points
@@ -523,28 +580,20 @@ void Inkscape::ObjectSet::_pathBoolOp(BooleanOp bop)
 
         // the cut path needs to have the highest pathID in the back data
         // that's how the Booleen() function knows it's an edge of the cut
-        std::swap(originaux[0], originaux[1]);
-        std::swap(origWind[0], origWind[1]);
+        std::swap(operands[0], operands[1]);
 
-        originaux[0]->ConvertWithBackData(RELATIVE_THRESHOLD, true);
+        operands[0].path->Fill(theShape, 0);
 
-        originaux[0]->Fill(theShape, 0);
+        theShapeA->ConvertToShape(theShape, operands[0].fill_rule);
 
-        theShapeA->ConvertToShape(theShape, origWind[0]);
+        operands[1].path->Fill(theShape, 1, false, is_line(*operands[1].path), false);
 
-        originaux[1]->ConvertWithBackData(RELATIVE_THRESHOLD, true);
-
-        if ((originaux[1]->pts.size() == 2) && originaux[1]->pts[0].isMoveTo && !originaux[1]->pts[1].isMoveTo)
-            originaux[1]->Fill(theShape, 1,false,true,false); // see LP Bug 177956
-        else
-            originaux[1]->Fill(theShape, 1,false,false,false); //do not closeIfNeeded
-
-        theShapeB->ConvertToShape(theShape, fill_justDont); // fill_justDont doesn't computes winding numbers
+        theShapeB->ConvertToShape(theShape, fill_justDont);
 
         // les elements arrivent en ordre inverse dans la liste
         theShape->Booleen(theShapeB, theShapeA, bool_op_cut, 1);
 
-    } else if ( bop == bool_op_slice ) {
+    } else if (bop == bool_op_slice) {
         // slice is not really a boolean operation
         // you just put the 2 shapes in a single polygon, uncross it
         // the points where the degree is > 2 are intersections
@@ -552,20 +601,15 @@ void Inkscape::ObjectSet::_pathBoolOp(BooleanOp bop)
         // the intersections you have found are then fed to ConvertPositionsToMoveTo() which will
         // make new subpath at each one of these positions
         // inversion pour l'opération
-        std::swap(originaux[0], originaux[1]);
-        std::swap(origWind[0], origWind[1]);
+        std::swap(operands[0], operands[1]);
 
-        originaux[0]->ConvertWithBackData(RELATIVE_THRESHOLD, true);
+        operands[0].path->Fill(theShapeA, 0, false, false, false); // don't closeIfNeeded
 
-        originaux[0]->Fill(theShapeA, 0,false,false,false); // don't closeIfNeeded
-
-        originaux[1]->ConvertWithBackData(RELATIVE_THRESHOLD, true);
-
-        originaux[1]->Fill(theShapeA, 1,true,false,false);// don't closeIfNeeded and just dump in the shape, don't reset it
+        operands[1].path->Fill(theShapeA, 1, true, false, false); // don't closeIfNeeded and just dump in the shape, don't reset it
 
         theShape->ConvertToShape(theShapeA, fill_justDont);
 
-        if ( theShape->hasBackData() ) {
+        if (theShape->hasBackData()) {
             // should always be the case, but ya never know
             {
                 for (int i = 0; i < theShape->numberOfPoints(); i++) {
@@ -617,32 +661,39 @@ void Inkscape::ObjectSet::_pathBoolOp(BooleanOp bop)
         }
     }
 
+    auto get_path_arr = [&] {
+        std::vector<Path *> result;
+        result.reserve(operands.size());
+        for (auto &operand : operands) {
+            result.emplace_back(operand.path.get());
+        }
+        return result;
+    };
+
     int*    nesting=nullptr;
     int*    conts=nullptr;
     int     nbNest=0;
     // pour compenser le swap juste avant
-    if ( bop == bool_op_slice ) {
-        res->Copy(originaux[0]);
+    if (bop == bool_op_slice) {
+        res->Copy(operands[0].path.get());
         res->ConvertPositionsToMoveTo(nbToCut, toCut); // cut where you found intersections
         free(toCut);
-    } else if ( bop == bool_op_cut ) {
+    } else if (bop == bool_op_cut) {
         // il faut appeler pour desallouer PointData (pas vital, mais bon)
         // the Booleen() function did not deallocate the point_data array in theShape, because this
         // function needs it.
         // this function uses the point_data to get the winding number of each path (ie: is a hole or not)
         // for later reconstruction in objects, you also need to extract which path is parent of holes (nesting info)
-        theShape->ConvertToFormeNested(res, nbOriginaux, &originaux[0], nbNest, nesting, conts, true);
+        theShape->ConvertToFormeNested(res, operands.size(), get_path_arr().data(), nbNest, nesting, conts, true);
     } else {
-        theShape->ConvertToForme(res, nbOriginaux, &originaux[0]);
+        theShape->ConvertToForme(res, operands.size(), get_path_arr().data());
     }
 
     delete theShape;
     delete theShapeA;
     delete theShapeB;
-    for (int i = 0; i < nbOriginaux; i++)  delete originaux[i];
 
-    if (res->descr_cmd.size() <= 1)
-    {
+    if (res->descr_cmd.size() <= 1) {
         // only one command, presumably a moveto: it isn't a path
         for (auto l : il){
             l->deleteObject();
