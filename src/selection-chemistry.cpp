@@ -3988,6 +3988,15 @@ void ObjectSet::setClipGroup()
 
     for (auto i : items_to_delete) {
         SPObject *item = reinterpret_cast<SPObject*>(i);
+        auto lpeitem = cast<SPLPEItem>(item);
+        if (lpeitem) {
+            // we need to do because deleting item and resurrect on clipboard
+            // cause delete all refs and this are not regenerated because on cliboard
+            // stude increase SPObject delete function to not remove LPE
+            // if we notice more similar pattern
+            // See to improve: https://gitlab.com/inkscape/inkscape/-/merge_requests/4843#note_1425238668
+            lpeitem->setAttribute("inkscape:path-effect", nullptr);
+        }
         item->deleteObject(false);
         items_to_select.erase(std::remove(items_to_select.begin(), items_to_select.end(), item), items_to_select.end());
     }

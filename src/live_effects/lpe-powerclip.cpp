@@ -110,6 +110,9 @@ Geom::PathVector LPEPowerClip::getClipPathvector()
             for (auto clip : clip_path_list) {
                 auto childitem = cast<SPLPEItem>(clip);
                 if (childitem) {
+                    if (!_updating) {
+                        sp_lpe_item_update_patheffect(childitem, false, true);
+                    }
                     res_hlp = sp_get_recursive_pathvector(childitem, res_hlp, false, inverse);
                     if (is_load && _legacy) {
                         childitem->doWriteTransform(Geom::Translate(0, -999999));
@@ -150,6 +153,9 @@ void LPEPowerClip::add()
     SPObject *clip_path = sp_lpe_item->getClipObject();
     SPObject *elemref = NULL;
     if (clip_path) {
+        modified_connection = clip_path->connectModified([this] (auto a, unsigned flags) {
+            modified(a, flags);
+        });
         Inkscape::XML::Document *xml_doc = document->getReprDoc();
         Inkscape::XML::Node *parent = clip_path->getRepr();
         auto childitems = clip_path->childList(true);
@@ -211,15 +217,32 @@ void LPEPowerClip::upd()
 }
 
 
+void 
+LPEPowerClip::modified(auto, unsigned flags) {
+    if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG) && !_updating) {
+        _updating = true;
+        upd();
+        _updating = false;
+    }
+}
+
 void LPEPowerClip::doBeforeEffect(SPLPEItem const *lpeitem)
 {
     if (!_updating) {
         upd();
     }
+    if (is_load) {
+        SPObject *clip_path = sp_lpe_item->getClipObject();
+        if (clip_path) {
+            modified_connection = clip_path->connectModified([this] (auto a, unsigned flags) {
+                modified(a, flags);
+            });
+        }
+    }
 }
 
 void 
-LPEPowerClip::doOnRemove (SPLPEItem const* /*lpeitem*/)
+LPEPowerClip::doOnRemove (SPLPEItem const* lpeitem)
 {
     SPDocument *document = getSPDoc();
     if (!document) {
@@ -234,12 +257,17 @@ LPEPowerClip::doOnRemove (SPLPEItem const* /*lpeitem*/)
         }
         return;
     }
+    SPObject *clip_path = lpeitem->getClipObject();
+    if (clip_path) {
+        inverse.param_setValue(false);
+        upd();
+    }
+    
     _updating = true;
     SPObject *elemref = document->getObjectById(getId().c_str());
     if (elemref) {
         elemref->deleteObject();
     }
-    SPObject *clip_path = sp_lpe_item->getClipObject();
     if (clip_path) {
         std::vector<SPObject *> clip_path_list = clip_path->childList(true);
         for (auto clip : clip_path_list) {

@@ -10,6 +10,7 @@
 
 #include "live_effects/effect.h"
 #include "live_effects/parameter/message.h"
+#include "helper/auto-connection.h"
 
 namespace Inkscape {
 namespace LivePathEffect {
@@ -22,6 +23,7 @@ public:
     Geom::PathVector doEffect_path (Geom::PathVector const & path_in) override;
     void doOnRemove(SPLPEItem const* /*lpeitem*/) override;
     void doOnVisibilityToggled(SPLPEItem const* lpeitem) override;
+    void modified(auto, unsigned flags);
     Glib::ustring getId();
     void add();
     void upd();
@@ -33,6 +35,7 @@ public:
     BoolParam flatten;
     BoolParam hide_clip;
     MessageParam message;
+    auto_connection modified_connection;
     bool _updating;
     bool _legacy;
 };

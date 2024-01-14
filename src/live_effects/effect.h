@@ -77,7 +77,6 @@ public:
     void transform_multiply_impl(Geom::Affine const &postmul, SPLPEItem *);
     void doOnBeforeCommit();
     void read_from_SVG();
-    void setCurrentZoom(double cZ);
     void setSelectedNodePoints(std::vector<Geom::Point> sNP);
     bool isNodePointSelected(Geom::Point const &nodePoint) const;
     bool isOnClipboard();
@@ -152,6 +151,7 @@ public:
     void setLPEAction(LPEAction lpe_action) { _lpe_action = lpe_action; }
     BoolParam is_visible;
     HiddenParam lpeversion;
+    double current_zoom = 1;
     Geom::PathVector pathvector_before_effect;
     Geom::PathVector pathvector_after_effect;
     SPLPEItem *sp_lpe_item = nullptr; // these get stored in doBeforeEffect_impl, and derived classes may do as they please with
@@ -191,7 +191,6 @@ protected:
     // this boolean defaults to false, it concatenates the input path to one pwd2,
     // instead of normally 'splitting' the path into continuous pwd2 paths and calling doEffect_pwd2 for each.
     bool concatenate_before_pwd2;
-    double current_zoom;
     std::vector<Geom::Point> selectedNodesPoints;
     Inkscape::UI::Widget::Registry wr;
 private:

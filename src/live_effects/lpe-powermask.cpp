@@ -207,7 +207,7 @@ LPEPowerMask::setMask(){
     for (auto iter : mask_list) {
         auto mask_data = cast<SPItem>(iter);
         Inkscape::XML::Node *mask_node = mask_data->getRepr();
-        if (! strcmp(mask_data->getId(), box_id.c_str())){
+        if (!strcmp(mask_data->getId(), box_id.c_str())) {
             continue;
         }
         Glib::ustring mask_data_id = (Glib::ustring)mask_data->getId();
@@ -225,6 +225,10 @@ LPEPowerMask::setMask(){
             Glib::ustring css_str;
             sp_repr_css_write_string(css, css_str);
             mask_node->setAttribute("style", css_str);
+        }
+        auto *maskitem = cast<SPLPEItem>(iter);
+        if (maskitem && maskitem->hasPathEffect()) {
+            sp_lpe_item_update_patheffect(maskitem, false, false);
         }
     }
     if ((elemref = document->getObjectById(box_id))) {

@@ -1204,12 +1204,6 @@ Effect::doOnApply (SPLPEItem const*/*lpeitem*/)
 {
 }
 
-void
-Effect::setCurrentZoom(double cZ)
-{
-    current_zoom = cZ;
-}
-
 /**
  * Overridden function to apply transforms for example to powerstroke, jointtype or tapperstroke
  */
@@ -1542,6 +1536,11 @@ void Effect::doOnApply_impl(SPLPEItem const* lpeitem)
 void Effect::doBeforeEffect_impl(SPLPEItem const* lpeitem)
 {
     sp_lpe_item = const_cast<SPLPEItem *>(lpeitem);
+    if (SP_ACTIVE_DESKTOP) {
+        //we need to set here instead in helper patths because clips/mask itens with LPE are not is selection
+        current_zoom = SP_ACTIVE_DESKTOP->current_zoom();
+    }
+    
     doBeforeEffect(lpeitem);
     if (is_load) {
         update_satellites();

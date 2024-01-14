@@ -54,7 +54,6 @@ public:
     }
     void param_transform_multiply(Geom::Affine const &postmul, bool /*set*/) override;
     void setUseDistance(bool use_knot_distance);
-    void setCurrentZoom(double current_zoom);
     void setGlobalKnotHide(bool global_knot_hide);
     void setEffectType(EffectType et);
     void reloadKnots();
@@ -76,7 +75,6 @@ private:
     Geom::PathVector _hp;
     bool _use_distance = false;
     bool _global_knot_hide = false;
-    double _current_zoom = 0;
     EffectType _effectType = FILLET_CHAMFER;
     PathVectorNodeSatellites *_last_pathvector_nodesatellites = nullptr;
 };
