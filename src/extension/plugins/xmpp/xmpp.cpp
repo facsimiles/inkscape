@@ -18,9 +18,8 @@
 #include <gloox/message.h>
 #include <gloox/jinglesessionmanager.h>
 #include <gloox/jinglecontent.h>
-#include <gloox/sxe.h>
-#include <gloox/sxesession.h>
-#include <gloox/jinglesxe.h>
+#undef lookup
+#include "sxe.h"
 
 #include <gtkmm/adjustment.h>
 #include <gtkmm/box.h>
@@ -28,7 +27,8 @@
 
 #include "desktop.h"
 
-#include "2geom/geom.h"
+#include <2geom/geom.h>
+#include "event.h"
 #include "document.h"
 #include "object/sp-object.h"
 #include "selection.h"
@@ -105,8 +105,7 @@ public:
 
 InkscapeClient::InkscapeClient(JID jid, const std::string& password)
 {
-    // TODO: use std::make_unique() once we’re C++14.
-    client = std::unique_ptr<Client>(new Client(jid, password));
+    client = std::make_unique<Client>(jid, password);
     // TODO: figure out why SCRAM-SHA-1 isn’t working.
     client->setSASLMechanisms(SaslMechPlain);
     // TODO: fetch the OS properly, instead of hardcoding it to Linux.
@@ -114,8 +113,6 @@ InkscapeClient::InkscapeClient(JID jid, const std::string& password)
     client->disco()->setIdentity("collaboration", "whiteboard", "Inkscape");
     session_manager = std::unique_ptr<Jingle::SessionManager>(new Jingle::SessionManager(client.get(), this));
     session_manager->registerPlugin(new Jingle::Content());
-    session_manager->registerPlugin(new Jingle::SxePlugin());
-    sxe_manager = std::unique_ptr<SxeSessionManager>(new SxeSessionManager(client.get(), this));
     client->registerConnectionListener(this);
     //client->logInstance().registerLogHandler(LogLevelDebug, LogAreaXmlOutgoing | LogAreaXmlIncoming, this);
     client->logInstance().registerLogHandler(LogLevelDebug, ~0, this);
@@ -150,7 +147,9 @@ void InkscapeClient::send(Tag *tag)
 
 void InkscapeClient::sendChanges(JID recipient, std::string& sid, std::vector<Sxe::StateChange> state_changes)
 {
-    sxe_manager->sendChanges(recipient, sid, state_changes);
+    //TODO
+    // client->send(something)
+    //TODO sxe_manager->sendChanges(recipient, sid, state_changes);
 }
 
 int InkscapeClient::runLoop(void *data)
@@ -221,8 +220,6 @@ void InkscapeClient::handleSessionAction(Jingle::Action action, Jingle::Session*
         if (true/*accept*/) {
             std::list<const Jingle::Plugin*> plugins_list;
             SvgApplication* description = new SvgApplication();
-            Jingle::SxePlugin* transport = new Jingle::SxePlugin(client->jid());
-            plugins_list.push_front(transport);
             plugins_list.push_front(description);
             bool ret = session->sessionAccept(new Jingle::Content(name, plugins_list));
             printf("accepted? %d\n", ret);
@@ -248,27 +245,27 @@ void InkscapeClient::handleIncomingSession(Jingle::Session* session)
 {
     printf("handleIncomingSession(session=%p)\n", session);
 }
-
-std::vector<Sxe::StateChange> InkscapeClient::getCurrentState(const std::string& session, const std::string& id)
+/*
+std::vector<StateChangeType> InkscapeClient::getCurrentState(const std::string& session, const std::string& id)
 {
     printf("getCurrentState(session=%s, id=%s)\n", session.c_str(), id.c_str());
-    std::vector<Sxe::StateChange> state;
+    std::vector<StateChangeType> state;
     Sxe::DocumentBegin document_begin = {
         .prolog = "data:image/svg+xml,<?xml version=\"1.0\" encoding=\"UTF-8\"?>",
     };
-    Sxe::StateChange begin = {
-        .type = Sxe::StateChangeDocumentBegin,
+    StateChangeType begin = {
+        .type = StateChangeTypeDocumentBegin,
         .document_begin = document_begin,
     };
     state.push_back(begin);
     m_rid = get_uuid();
-    Sxe::New new_ = Sxe::New::Element(
-        /*rid*/  m_rid.c_str(),
-        /*ns*/   "http://www.w3.org/2000/svg",
-        /*name*/ "svg"
+    gloox::New new_ = gloox::New::Element(
+        /*rid* /  m_rid.c_str(),
+        /*ns* /   "http://www.w3.org/2000/svg",
+        /*name* / "svg"
     );
-    Sxe::StateChange change = {
-        .type = Sxe::StateChangeNew,
+    StateChangeType change = {
+        .type = StateChangeTypeNew,
         .new_ = new_,
     };
     state.push_back(change);
@@ -276,13 +273,13 @@ std::vector<Sxe::StateChange> InkscapeClient::getCurrentState(const std::string&
         .last_sender = "foo@bar/baz",
         .last_id = "unknown",
     };
-    Sxe::StateChange end = {
-        .type = Sxe::StateChangeDocumentEnd,
+    StateChangeType end = {
+        .type = StateChangeTypeDocumentEnd,
         .document_end = document_end,
     };
     state.push_back(end);
     return state;
-}
+}*/
 
 void XMPPObserver::notifyUndoCommitEvent(Event *ee)
 {
@@ -314,37 +311,41 @@ void XMPPObserver::notifyUndoCommitEvent(Event *ee)
             }
             name = name.substr(4);
 
-            Sxe::New new_ = Sxe::New::Element(
+            Sxe::New new_ = {
                 /*rid*/  rid.c_str(),
                 /*parent*/  client->m_rid.c_str(),
                 /*ns*/   "http://www.w3.org/2000/svg",
-                /*name*/ name.c_str()
-            );
+                /*name*/ name.c_str(),
+                "",
+                ""
+            };
             Sxe::StateChange change = {
                 .type = Sxe::StateChangeNew,
-                .new_ = new_,
+                .new_ = new_
             };
             std::vector<Sxe::StateChange> state_changes = {};
             state_changes.push_back(change);
 
             // XXX: huge hack to keep all rids on the stack…
             size_t num_attrs = 0;
-            for (Util::List<XML::AttributeRecord const> it = node->attributeList(); it; ++it) {
+            for (auto it : node->attributeList()) {
                 ++num_attrs;
             }
             std::vector<std::string> rids;
             rids.reserve(num_attrs);
 
             size_t cur_attr = 0;
-            for (Util::List<XML::AttributeRecord const> it = node->attributeList(); it; ++it) {
+            for (auto it : node->attributeList()) {
                 rids.push_back(get_uuid());
 
-                Sxe::New new_ = Sxe::New::Attr(
+                Sxe::New new_ = {
                     /*rid*/    rids[cur_attr].c_str(),
                     /*parent*/ rid.c_str(),
-                    /*name*/   g_quark_to_string(it->key),
-                    /*chdata*/ it->value
-                );
+                    /*name*/   g_quark_to_string(it.key),
+                    /*chdata*/ it.value,
+                    "",
+                    ""
+                };
                 Sxe::StateChange change = {
                     .type = Sxe::StateChangeNew,
                     .new_ = new_,
@@ -354,13 +355,13 @@ void XMPPObserver::notifyUndoCommitEvent(Event *ee)
             }
 
             std::vector<Sxe::StateChange> copy(state_changes);
-            Sxe* coucou = new Sxe("session", "id", copy);
+            Sxe* coucou = new Sxe("session", "id", Sxe::SxeStateOffer, {XMLNS_SXE}, copy);
             fprintf(stderr, "coucou: %s\n", coucou->tag()->xml().c_str());
 
             //Message msg(Message::Normal, JID("linkmauve@linkmauve.fr"));
             //msg.addExtension(new Sxe("session", "id", Sxe::TypeState, {}, state_changes));
             std::string sid = "foo";
-            client->sendChanges(JID("test@linkmauve.fr/coucou"), sid, state_changes);
+            client->sendChanges(JID("test@xmpp.r2.enst.fr/test2"), sid, state_changes);
             printf("coucou\n");
         } else if ((edel = dynamic_cast<XML::EventDel *>(e))) {
             std::cout << "EventDel" << std::endl;
@@ -376,8 +377,8 @@ void XMPPObserver::notifyUndoCommitEvent(Event *ee)
             std::vector<Sxe::StateChange> state_changes = {};
             state_changes.push_back(change);
 
-            Message msg(Message::Normal, JID("linkmauve@linkmauve.fr"));
-            msg.addExtension(new Sxe("session", "id", Sxe::TypeState, {}, state_changes));
+            Message msg(Message::Normal, JID("test@xmpp.r2.enst.fr"));
+            msg.addExtension(new Sxe("session", "id", Sxe::SxeState, {}, state_changes));
             client->send(msg.tag());
         } else if ((echga = dynamic_cast<XML::EventChgAttr *>(e))) {
             std::cout << "EventChgAttr" << std::endl;
@@ -423,7 +424,7 @@ bool XMPP::load(Inkscape::Extension::Extension * /*module*/)
     enabled = false;
 
     // TODO: fetch these from the preferences.
-    JID jid("test@linkmauve.fr");
+    JID jid("test@xmpp.r2.enst.fr");
     const char *password = "test";
 
     client = std::make_shared<InkscapeClient>(jid, password);
@@ -442,14 +443,14 @@ bool XMPP::load(Inkscape::Extension::Extension * /*module*/)
     \param  module   The effect that was called (unused)
     \param  document What should be edited.
 */
-void XMPP::effect(Inkscape::Extension::Effect *module, Inkscape::UI::View::View *document,
+void XMPP::effect(Inkscape::Extension::Effect *module, SPDesktop *desktop,
                   Inkscape::Extension::Implementation::ImplementationDocumentCache * /*docCache*/)
 {
     std::cout << (enabled ? "disabling" : "enabling") << std::endl;
     if (!enabled)
-        document->doc()->addUndoObserver(*obs);
+        desktop->doc()->addUndoObserver(*obs);
     else
-        document->doc()->removeUndoObserver(*obs);
+        desktop->doc()->removeUndoObserver(*obs);
     enabled = !enabled;
 }
 
