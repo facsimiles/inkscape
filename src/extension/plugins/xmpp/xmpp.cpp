@@ -99,7 +99,7 @@ public:
     // reimplemented from Plugin
     Jingle::Plugin* clone() const override
     {
-	return new SvgApplication(*this);
+        return new SvgApplication(*this);
     }
 };
 
@@ -361,7 +361,7 @@ void XMPPObserver::notifyUndoCommitEvent(Event *ee)
             //Message msg(Message::Normal, JID("linkmauve@linkmauve.fr"));
             //msg.addExtension(new Sxe("session", "id", Sxe::TypeState, {}, state_changes));
             std::string sid = "foo";
-            client->sendChanges(JID("test@xmpp.r2.enst.fr/test2"), sid, state_changes);
+            client->sendChanges(JID(client->document_jid), sid, state_changes);
             printf("coucou\n");
         } else if ((edel = dynamic_cast<XML::EventDel *>(e))) {
             std::cout << "EventDel" << std::endl;
@@ -377,7 +377,7 @@ void XMPPObserver::notifyUndoCommitEvent(Event *ee)
             std::vector<Sxe::StateChange> state_changes = {};
             state_changes.push_back(change);
 
-            Message msg(Message::Normal, JID("test@xmpp.r2.enst.fr"));
+            Message msg(Message::Normal, client->jid());
             msg.addExtension(new Sxe("session", "id", Sxe::SxeState, {}, state_changes));
             client->send(msg.tag());
         } else if ((echga = dynamic_cast<XML::EventChgAttr *>(e))) {
@@ -416,25 +416,13 @@ XMPPObserver::XMPPObserver(std::shared_ptr<InkscapeClient> client)
 
 /**
     \brief  A function to allocated anything -- just an example here
-    \param  module  Unused
     \return Whether the load was successful
 */
-bool XMPP::load(Inkscape::Extension::Extension * /*module*/)
+bool XMPP::load(Inkscape::Extension::Extension * module)
 {
     enabled = false;
+    _event_source = 0;
 
-    // TODO: fetch these from the preferences.
-    JID jid("test@xmpp.r2.enst.fr");
-    const char *password = "test";
-
-    client = std::make_shared<InkscapeClient>(jid, password);
-    client->connect();
-
-    // TODO: find a better way to integrate gloox’s fd into the main loop.
-    g_timeout_add(16, &InkscapeClient::runLoop, client.get());
-
-    obs = std::unique_ptr<XMPPObserver>(new XMPPObserver(client));
-    obs->writer = std::unique_ptr<IO::StdWriter>(new IO::StdWriter());
     return TRUE;
 }
 
@@ -447,10 +435,27 @@ void XMPP::effect(Inkscape::Extension::Effect *module, SPDesktop *desktop,
                   Inkscape::Extension::Implementation::ImplementationDocumentCache * /*docCache*/)
 {
     std::cout << (enabled ? "disabling" : "enabling") << std::endl;
-    if (!enabled)
+    if (!enabled) {
+        JID jid(module->get_param_string("JID"));
+        const char *password = module->get_param_string("pw");
+
+        client = std::make_shared<InkscapeClient>(jid, password);
+        client->document_jid = module->get_param_string("docJID");
+        client->connect();
+
+        // TODO: find a better way to integrate gloox’s fd into the main loop.
+        _event_source = g_timeout_add(16, &InkscapeClient::runLoop, client.get());
+
+        obs = std::unique_ptr<XMPPObserver>(new XMPPObserver(client));
+        obs->writer = std::unique_ptr<IO::StdWriter>(new IO::StdWriter());
         desktop->doc()->addUndoObserver(*obs);
-    else
+    } else {
+        g_source_remove(_event_source);
+        client->disconnect();
         desktop->doc()->removeUndoObserver(*obs);
+        obs.reset();
+        client.reset();
+    }
     enabled = !enabled;
 }
 

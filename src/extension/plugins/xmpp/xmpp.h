@@ -47,6 +47,7 @@ public:
     void send(gloox::Tag *tag);
     void sendChanges(gloox::JID recipient, std::string& sid, std::vector<gloox::Sxe::StateChange> state_changes);
     static int runLoop(void *data);
+    gloox::JID jid() {return client->jid();}
 
 private:
     // From ConnectionListener
@@ -72,6 +73,7 @@ private:
 // XXX: hack
 public:
     std::string m_rid;
+    std::string document_jid;
 };
 
 
@@ -100,6 +102,7 @@ public:
 private:
     std::unique_ptr<XMPPObserver> obs;
     std::shared_ptr<InkscapeClient> client;
+    unsigned int _event_source;
     bool enabled;
 };
 

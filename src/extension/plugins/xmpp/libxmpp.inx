@@ -3,6 +3,13 @@
 <inkscape-extension xmlns="http://www.inkscape.org/namespace/inkscape/extension">
 	<_name>XMPP</_name>
 	<id>org.inkscape.collaboration.xmpp</id>
+	<param name="JID" type="string" gui-text="JID">test@xmpp.r2.enst.fr</param>
+	<param name="pw" type="string" gui-text="password">test</param>
+	<param name="docJID" type="string" gui-text="doc JID">isape@conf.xmpp.r2.enst.fr</param>
+	<param name="action" type="optiongroup" appearance="combo" gui-text="What to do? (not implemented)">
+		<option value="start">Replace remote with current</option>
+		<option value="connect">Replace current with remote</option>
+	</param>
 	<effect>
 		<object-type>all</object-type>
 		<effects-menu>
