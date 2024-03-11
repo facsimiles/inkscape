@@ -21,6 +21,7 @@
 #include <gtkmm/stylecontext.h>
 #include <gtkmm/window.h>
 
+#include "preferences.h"
 #include "ui/menuize.h"
 #include "ui/popup-menu.h"
 #include "ui/util.h"
@@ -175,6 +176,53 @@ void PopoverMenu::set_scrolled_window_size()
     auto &window = dynamic_cast<Gtk::Window const &>(*get_toplevel());
     _scrolled_window.set_max_content_width (window.get_width () - 2 * padding);
     _scrolled_window.set_max_content_height(window.get_height() - 2 * padding);
+}
+
+bool PopoverMenu::activate(Glib::ustring const &search) {
+    bool match = false;
+    if (_active_search && search.empty()) {
+        _active_search->set_markup(_top_separator);
+        return false;
+    }
+    for (auto const item : _items) {
+        for (auto const widg : UI::get_children(*item)) {
+            item->unset_state_flags(Gtk::STATE_FLAG_FOCUSED | Gtk::STATE_FLAG_PRELIGHT);
+            if (!_active_search) {
+                _active_search = dynamic_cast<Gtk::Label *>(widg);
+                if (_active_search) {
+                    _top_separator = _active_search->get_text();
+                }
+            }
+            if (!search.empty()) {
+                for (auto const mi : UI::get_children(*widg)) {
+                    if (auto label = dynamic_cast<Gtk::Label *>(mi)) {
+                        auto text_data = label->get_text();
+                        // if not matched and search == begining of label
+                        if (!match && text_data.size() >= search.size() && 
+                            text_data.substr(0, search.size()).lowercase() == search) 
+                        {
+                            match = true;
+                            item->grab_focus();
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    if (_active_search) {
+        auto markup = _top_separator;
+        if (match) {
+            auto prefs = Inkscape::Preferences::get();
+            Glib::ustring color = "#ddddddff";
+            if (prefs->getBool("/theme/darkTheme", true)) {
+                color = "#444444ff";
+            }
+            markup = Glib::ustring::compose("%1     <span bgcolor='%2'> %3 </span>", markup, color, search);
+        }
+        _active_search->set_markup(markup);
+    }
+    return match;
 }
 
 void PopoverMenu::unset_items_focus_hover(Gtk::Widget * const except_active)

@@ -63,6 +63,9 @@ public:
     /// Append a horizontal separator.
     void append_separator();
 
+    /// Find and active from string
+    bool activate(Glib::ustring const &search);
+
     /// Replace Gtk::Menu::popup_at_pointer. If x or y
     /// offsets != 0, :pointing-to is set to {x,y,1,1}
     /// @a widget must be the parent passed to self constructor or a descendant.
@@ -84,12 +87,14 @@ private:
     Gtk::ScrolledWindow &_scrolled_window;
     PopoverMenuGrid &_grid;
     std::vector<Gtk::Widget *> _items;
-
+    Gtk::Label *_active_search = nullptr;
+    Glib::ustring _top_separator;
     void check_child_invariants();
     void set_scrolled_window_size();
 
     // Let PopoverMenuItem call this without making it public API
     friend class PopoverMenuItem;
+    friend class CompletionPopup;
     void unset_items_focus_hover(Gtk::Widget *except_active);
 
     void remove_all(bool and_delete);

@@ -8,6 +8,9 @@
 
 #include "completion-popup.h"
 #include "ui/builder-utils.h"
+#include "ui/controller.h"
+#include <locale>
+#include <codecvt>
 
 namespace Inkscape::UI::Widget {
 
@@ -26,6 +29,7 @@ CompletionPopup::CompletionPopup() :
     _completion(get_object<Gtk::EntryCompletion>(_builder, "completion"))
 {
     _popover_menu.show_all_children();
+    Controller::add_key<&CompletionPopup::onPopoverKeyPressed>(_popover_menu, *this, Gtk::PHASE_CAPTURE);
     _button.set_popover(_popover_menu);
 
     _list = Glib::RefPtr<Gtk::ListStore>::cast_dynamic(_builder->get_object("list"));
@@ -63,6 +67,8 @@ CompletionPopup::CompletionPopup() :
         }
         _button_press.emit();
         clear();
+        _menu_search.clear();
+        _popover_menu.activate({});
     }, false);
 
     _search.signal_stop_search().connect([this](){
@@ -73,6 +79,47 @@ CompletionPopup::CompletionPopup() :
 }
 
 CompletionPopup::~CompletionPopup() = default;
+
+bool CompletionPopup::onPopoverKeyPressed(GtkEventControllerKey const * /*controller*/,
+                                     unsigned keyval, unsigned /*keycode*/,
+                                     GdkModifierType state) {
+    if (!_button.get_active()) {
+        return false;
+    }
+    switch (keyval) {
+        case GDK_KEY_Left:
+        case GDK_KEY_KP_Left:
+        case GDK_KEY_Up:
+        case GDK_KEY_KP_Up:
+        case GDK_KEY_Right:
+        case GDK_KEY_KP_Right:
+        case GDK_KEY_Down:
+        case GDK_KEY_KP_Down:
+            _menu_search.clear();
+            _popover_menu.activate({});
+            return false;
+            break;
+        case GDK_KEY_BackSpace:
+            _popover_menu.unset_items_focus_hover(nullptr);
+            _popover_menu.activate({});
+            _menu_search.clear();
+            return true;
+            break;
+        default:
+            break;
+    }
+    int const ucode = gdk_keyval_to_unicode(gdk_keyval_to_lower(keyval));
+    if (!std::isalpha(ucode)) {
+        return false;
+    }
+    std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> conv1;
+    std::string charutf = conv1.to_bytes(ucode);
+    _menu_search += charutf;
+    if (!_popover_menu.activate(_menu_search)) {
+        _menu_search.clear();
+    }
+    return true;
+}
 
 void CompletionPopup::clear_completion_list() {
     _list->clear();
