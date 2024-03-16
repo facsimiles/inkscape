@@ -1681,7 +1681,20 @@ void FilterEffectsDialog::FilterModifier::duplicate_filter()
     if (filter) {
         Inkscape::XML::Node *repr = filter->getRepr();
         Inkscape::XML::Node *parent = repr->parent();
+        Glib::ustring old_label = repr->attribute("inkscape:label");
         repr = repr->duplicate(repr->document());
+        Glib::ustring new_label = old_label + "_copy";
+        std::set<Glib::ustring> children_names;
+        for (auto child = parent->firstChild(); child; child = child->next()) {
+            if (child->attribute("inkscape:label"))
+                children_names.insert(child->attribute("inkscape:label"));
+        }
+        int copy_count = 1;
+        while (children_names.find(new_label) != children_names.end()) {
+            new_label = old_label + "_copy_" + g_strdup_printf("%i", copy_count);
+            copy_count++;
+        }
+        repr->setAttribute("inkscape:label", new_label);
         parent->appendChild(repr);
 
         DocumentUndo::done(filter->document, _("Duplicate filter"), INKSCAPE_ICON("dialog-filters"));
