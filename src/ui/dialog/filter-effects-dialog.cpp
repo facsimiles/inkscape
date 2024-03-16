@@ -1374,6 +1374,7 @@ FilterEffectsDialog::FilterModifier::FilterModifier(FilterEffectsDialog& d, Glib
 
     _list.get_selection()->signal_changed().connect(sigc::mem_fun(*this, &FilterModifier::on_filter_selection_changed));
     _observer->signal_changed().connect(signal_filter_changed().make_slot());
+    _observer->signal_changed().connect(sigc::mem_fun(*this, &FilterModifier::update_filters));
 }
 
 // Update each filter's sel property based on the current object selection;
