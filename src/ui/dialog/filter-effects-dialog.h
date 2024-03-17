@@ -299,10 +299,12 @@ private:
     Glib::ustring _prefs = "/dialogs/filters";
     Gtk::Paned& _paned;
     Gtk::Grid& _main_grid;
+    Gtk::Box& _modifier_box;
     Gtk::Box& _params_box;
     Gtk::Box& _search_box;
     Gtk::Box& _search_wide_box;
     Gtk::ScrolledWindow& _filter_wnd;
+    Gtk::ScrolledWindow& _params_wnd;
     bool _narrow_dialog = true;
     Gtk::CheckButton& _cur_filter_btn;
     sigc::connection _cur_filter_toggle;
@@ -318,6 +320,8 @@ private:
     Gtk::Label _empty_settings;
     Gtk::Label _no_filter_selected;
     Gtk::Label* _cur_effect_name;
+    Gtk::Box _vbox_filter;
+    Gtk::Box _vbox_params;
     bool _settings_initialized;
 
     class Settings;
