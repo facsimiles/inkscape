@@ -1374,6 +1374,7 @@ FilterEffectsDialog::FilterModifier::FilterModifier(FilterEffectsDialog& d, Glib
 
     _list.get_selection()->signal_changed().connect(sigc::mem_fun(*this, &FilterModifier::on_filter_selection_changed));
     _observer->signal_changed().connect(signal_filter_changed().make_slot());
+    _observer->signal_changed().connect(sigc::mem_fun(*this, &FilterModifier::update_filters));
 }
 
 // Update each filter's sel property based on the current object selection;
@@ -1681,7 +1682,20 @@ void FilterEffectsDialog::FilterModifier::duplicate_filter()
     if (filter) {
         Inkscape::XML::Node *repr = filter->getRepr();
         Inkscape::XML::Node *parent = repr->parent();
+        Glib::ustring old_label = repr->attribute("inkscape:label");
         repr = repr->duplicate(repr->document());
+        Glib::ustring new_label = old_label + "_copy";
+        std::set<Glib::ustring> children_names;
+        for (auto child = parent->firstChild(); child; child = child->next()) {
+            if (child->attribute("inkscape:label"))
+                children_names.insert(child->attribute("inkscape:label"));
+        }
+        int copy_count = 1;
+        while (children_names.find(new_label) != children_names.end()) {
+            new_label = old_label + "_copy_" + g_strdup_printf("%i", copy_count);
+            copy_count++;
+        }
+        repr->setAttribute("inkscape:label", new_label);
         parent->appendChild(repr);
 
         DocumentUndo::done(filter->document, _("Duplicate filter"), INKSCAPE_ICON("dialog-filters"));
@@ -2734,10 +2748,12 @@ FilterEffectsDialog::FilterEffectsDialog()
     _builder(create_builder("dialog-filter-editor.glade")),
     _paned(get_widget<Gtk::Paned>(_builder, "paned")),
     _main_grid(get_widget<Gtk::Grid>(_builder, "main")),
+    _modifier_box(get_widget<Gtk::Box>(_builder, "modifier-box")),
     _params_box(get_widget<Gtk::Box>(_builder, "params")),
     _search_box(get_widget<Gtk::Box>(_builder, "search")),
     _search_wide_box(get_widget<Gtk::Box>(_builder, "search-wide")),
     _filter_wnd(get_widget<Gtk::ScrolledWindow>(_builder, "filter")),
+    _params_wnd(get_widget<Gtk::ScrolledWindow>(_builder, "params-wnd")),
     _cur_filter_btn(get_widget<Gtk::CheckButton>(_builder, "label"))
     , _add_primitive_type(FPConverter)
     , _add_primitive(_("Add Effect:"))
@@ -2750,6 +2766,8 @@ FilterEffectsDialog::FilterEffectsDialog()
     , _primitive_list(*this)
     , _settings_effect(Gtk::ORIENTATION_VERTICAL)
     , _settings_filter(Gtk::ORIENTATION_VERTICAL)
+    , _vbox_filter(Gtk::ORIENTATION_VERTICAL, 5)
+    , _vbox_params(Gtk::ORIENTATION_VERTICAL, 5)
 {
     _settings = std::make_unique<Settings>(*this, _settings_effect,
                                            [this](auto const a){ set_attr_direct(a); },
@@ -2892,8 +2910,9 @@ FilterEffectsDialog::FilterEffectsDialog()
     // two alternative layout arrangements depending on the dialog size;
     // one is tall and narrow with widgets in one column, while the other
     // is for wide dialogs with filter parameters and effects side by side
-    signal_size_allocate().connect([=, this](Gtk::Allocation const &alloc){
-        if (alloc.get_width() < 10 || alloc.get_height() < 10) return;
+    signal_size_allocate().connect([=, this](Gtk::Allocation const &alloc) {
+        if (alloc.get_width() < 10 || alloc.get_height() < 10)
+            return;
 
         double const ratio = alloc.get_width() / static_cast<double>(alloc.get_height());
 
@@ -2901,9 +2920,22 @@ FilterEffectsDialog::FilterEffectsDialog()
         if (ratio < 1 - hysteresis || alloc.get_width() <= thresold_width) {
             // make narrow/tall
             if (!_narrow_dialog) {
-                _main_grid.remove(_filter_wnd);
+                _main_grid.remove(_paned);
                 _search_wide_box.remove(_effects_popup);
+                _main_grid.remove(_paned);
+                _paned.remove(_vbox_params);
+                _paned.remove(_vbox_filter);
+                _vbox_params.remove(_params_wnd);
+                _vbox_params.remove(_modifier_box);
+                _vbox_filter.remove(_filter_wnd);
+                _vbox_filter.remove(_search_wide_box);
+                _paned.set_orientation(Gtk::ORIENTATION_VERTICAL);
+                _paned.add2(_params_wnd);
                 _paned.add1(_filter_wnd);
+
+                _main_grid.attach(_paned, 0, 2, _main_grid.get_children().size(), 2);
+                _main_grid.attach(_modifier_box, 0, 0, _main_grid.get_children().size(), 1);
+                _main_grid.attach(_search_wide_box, 2, 0, 1, 1);
                 UI::pack_start(_search_box, _effects_popup);
                 _paned.set_size_request();
                 get_widget<Gtk::Box>(_builder, "connect-box-wide").remove(*show_sources);
@@ -2911,13 +2943,28 @@ FilterEffectsDialog::FilterEffectsDialog()
                 _narrow_dialog = true;
                 ensure_size();
             }
-        }
-        else if (ratio > 1 + hysteresis && alloc.get_width() > thresold_width) {
+        } else if (ratio > 1 + hysteresis && alloc.get_width() > thresold_width) {
             // make wide/short
             if (_narrow_dialog) {
-                _paned.remove(_filter_wnd);
+                //_paned.remove(_filter_wnd);
                 _search_box.remove(_effects_popup);
-                _main_grid.attach(_filter_wnd, 2, 1, 1, 2);
+                // Gtk::Widget& _params_wnd =_paned.get_child1();
+                _main_grid.remove(_paned);
+                _main_grid.remove(_modifier_box);
+                _main_grid.remove(_search_wide_box);
+                _paned.remove(_params_wnd);
+                _paned.remove(_filter_wnd);
+                _vbox_filter.add(_search_wide_box);
+                _vbox_filter.add(_filter_wnd);
+                _vbox_filter.set_visible(true);
+                _vbox_params.add(_modifier_box);
+                _vbox_params.add(_params_wnd);
+                _vbox_params.set_visible(true);
+                _modifier_box.set_visible(true);
+                _paned.set_orientation(Gtk::ORIENTATION_HORIZONTAL);
+                _paned.add1(_vbox_params);
+                _paned.add2(_vbox_filter);
+                _main_grid.attach(_paned, 0, 1, _main_grid.get_children().size(), 2);
                 UI::pack_start(_search_wide_box, _effects_popup);
                 _paned.set_size_request(min_width);
                 get_widget<Gtk::Box>(_builder, "connect-box").remove(*show_sources);
