@@ -2153,6 +2153,7 @@ void InkscapePreferences::initPageUI()
     _grids_notebook.append_page(_grids_xy,     _("Rectangular Grid"));
     _grids_notebook.append_page(_grids_axonom, _("Axonometric Grid"));
     _grids_notebook.append_page(grid_modular, _("Modular Grid"));
+    _grids_notebook.get_style_context()->add_class("notebook_nomenu");
     {
     // Rectangular SPGrid properties
         _grids_xy_units.init("/options/grids/xy/units");
@@ -3214,6 +3215,7 @@ void InkscapePreferences::initKeyboardShortcuts(Gtk::TreeModel::iterator iter_ui
     _kb_shortcut_renderer.signal_accel_cleared().connect( sigc::mem_fun(*this, &InkscapePreferences::onKBTreeCleared) );
 
     _kb_notebook.append_page(_kb_page_shortcuts, _("Shortcuts"));
+    _kb_notebook.get_style_context()->add_class("notebook_nomenu");
     auto const shortcut_scroller = Gtk::make_managed<Gtk::ScrolledWindow>();
     shortcut_scroller->add(_kb_tree);
     shortcut_scroller->set_hexpand();

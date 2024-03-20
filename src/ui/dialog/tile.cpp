@@ -65,6 +65,7 @@ ArrangeDialog::ArrangeDialog()
     _notebook->signal_switch_page().connect([=](Widget*, guint page){
         update_arrange_btn();
     });
+    _notebook->get_style_context()->add_class("notebook_nomenu");
     UI::pack_start(*this, *_arrangeBox);
 
     // Add button

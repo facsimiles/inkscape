@@ -223,7 +223,7 @@ DocumentProperties::DocumentProperties()
             populate_available_profiles();
         }
     });
-
+    _notebook.get_style_context()->add_class("notebook_nomenu");
     _wr.setUpdating (true);
     build_page();
     build_guides();
