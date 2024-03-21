@@ -83,11 +83,6 @@ void NodeSatelliteArrayParam::setUseDistance(bool use_knot_distance)
     _use_distance = use_knot_distance;
 }
 
-void NodeSatelliteArrayParam::setCurrentZoom(double current_zoom)
-{
-    _current_zoom = current_zoom;
-}
-
 void NodeSatelliteArrayParam::setGlobalKnotHide(bool global_knot_hide)
 {
     _global_knot_hide = global_knot_hide;
@@ -310,10 +305,7 @@ void FilletChamferKnotHolderEntity::knot_set(Geom::Point const &p,
     Geom::Point normal = pathv[satelite_index][subsatelite_index].pointAt(normal_time);
     double distance_mirror = Geom::distance(mirror,s);
     double distance_normal = Geom::distance(normal,s);
-    if ((normal_time == 0 && !is_mirror) ||
-        (mirror_time == 1 && is_mirror) || 
-        Geom::are_near(s, pathv[satelite_index][subsatelite_index].initialPoint(), 1.5 / _pparam->_current_zoom)) 
-    {
+    if (Geom::are_near(s, pathv[satelite_index][subsatelite_index].initialPoint(), 1.5 / _pparam->param_effect->current_zoom)) {
         nodesatellite.amount = 0;
     } else if (distance_mirror < distance_normal) {
         double time_start = 0;
@@ -481,9 +473,9 @@ Geom::Point FilletChamferKnotHolderEntity::knot_get() const
         }
     }
     
-    if (_pparam->_current_zoom && 
-        (Geom::are_near(ssat_path.pointAt(0), ssat_path.pointAt(0.1), 0.5 / _pparam->_current_zoom) ||
-         Geom::are_near(prev_path.pointAt(0), prev_path.pointAt(0.1), 0.5 / _pparam->_current_zoom)))
+    if (_pparam->param_effect->current_zoom && 
+        (Geom::are_near(ssat_path.pointAt(0), ssat_path.pointAt(0.1), 0.5 / _pparam->param_effect->current_zoom) ||
+         Geom::are_near(prev_path.pointAt(0), prev_path.pointAt(0.1), 0.5 / _pparam->param_effect->current_zoom)))
     {
         knot->hide();
     }

@@ -23,6 +23,7 @@
 #include "document.h"                                // for SPDocument
 #include "enums.h"                                   // for SP_CONTENT_UNITS...
 #include "sp-defs.h"                                 // for SPDefs
+#include "sp-lpe-item.h"                              // for LPEItems
 #include "sp-item.h"                                 // for SPItem, SP_ITEM_...
 #include "xml/document.h"                            // for Document
 
@@ -204,6 +205,10 @@ char const *SPMask::create(std::vector<Inkscape::XML::Node*> &reprs, SPDocument 
     
     for (auto node : reprs) {
         mask_object->appendChildRepr(node);
+        SPLPEItem *maskitem = cast<SPLPEItem>(document->getObjectByRepr(node));
+        if (maskitem && maskitem->hasPathEffect()) {
+            sp_lpe_item_update_patheffect(maskitem, false, false);
+        }
     }
 
     if (repr != defsrepr->lastChild()) {

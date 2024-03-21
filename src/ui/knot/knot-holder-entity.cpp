@@ -74,7 +74,7 @@ KnotHolderEntity::~KnotHolderEntity()
 
 void KnotHolderEntity::update_knot()
 {
-    if (auto const knot_pos = knot_get(); knot_pos.isFinite()) {
+    if (auto const knot_pos = knot_get(); knot_pos.isFinite() && item->document) {
         auto const dp = knot_pos * parent_holder->getEditTransform() * item->i2dt_affine();
         _moved_connection.block();
         knot->setPosition(dp, SP_KNOT_STATE_NORMAL);

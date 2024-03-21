@@ -258,7 +258,6 @@ void sp_update_helperpath(SPDesktop *desktop)
                     }
                 }
                 lpe->setSelectedNodePoints(selectedNodesPositions);
-                lpe->setCurrentZoom(desktop->current_zoom());
                 SPCurve c;
                 std::vector<Geom::PathVector> cs = lpe->getCanvasIndicators(lpeitem);
                 for (auto &p : cs) {
