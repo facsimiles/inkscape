@@ -93,6 +93,7 @@ private:
     unsigned dragging_state = 0;  // dragging selection over text
     bool creating = false;  // dragging rubberband to create flowtext
     Geom::Point p0;         // initial point if the flowtext rect
+    Geom::Point pMouseDesktop; 
 
     auto_connection sel_changed_connection;
     auto_connection sel_modified_connection;
