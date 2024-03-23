@@ -430,6 +430,10 @@ LPEFilletChamfer::doEffect_path(Geom::PathVector const &path_in)
             }
         }
         size_t tcurves = count_path_curves(pathv[path]);
+        if (tcurves < 2) {
+            path_out.push_back(pathv[path]);
+            continue;
+        }
         while (curve_it1 != curve_endit) {
             ++curve;
             size_t next_index = curve + 1;
