@@ -270,7 +270,7 @@ void LPEPowerStroke::doOnRemove(SPLPEItem const* lpeitem)
 }
 
 void
-LPEPowerStroke::adjustForNewPath()
+LPEPowerStroke::adjustForNewPath(bool removed)
 {
     _adjust_path = true;
 }

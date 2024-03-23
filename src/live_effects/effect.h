@@ -103,7 +103,7 @@ public:
     void update_satellites();
     virtual void doOnException(SPLPEItem const *lpeitem);
     virtual void doOnVisibilityToggled(SPLPEItem const* lpeitem);
-    virtual void adjustForNewPath();
+    virtual void adjustForNewPath(bool removed = false);
     void writeParamsToSVG();
     std::vector<SPObject *> effect_get_satellites(bool force = true);
     virtual void acceptParamPath (SPPath const* param_path);
@@ -162,6 +162,7 @@ public:
     bool keep_paths; // set this to false allow retain extra generated objects, see measure line LPE
     bool is_load;
     bool is_applied;
+    bool is_current = false;
     bool on_remove_all;
     bool refresh_widgets;
     bool finishiddle = false;
