@@ -191,6 +191,7 @@ LPEPowerStroke::LPEPowerStroke(LivePathEffectObject *lpeobject) :
     scale_width.param_set_digits(1);   
     recusion_limit = 0;
     has_recursion = false;
+    _provides_path_adjustment = true;
     
 }
 
@@ -271,7 +272,7 @@ void LPEPowerStroke::doOnRemove(SPLPEItem const* lpeitem)
 void
 LPEPowerStroke::adjustForNewPath()
 {
-    adjust_path = true;
+    _adjust_path = true;
 }
     
 
@@ -596,9 +597,9 @@ LPEPowerStroke::doEffect_path (Geom::PathVector const & path_in)
     }
     Geom::PathVector pathv = pathv_to_linear_and_cubic_beziers(path_in);
     size_t path_init = 0;
-    if (adjust_path) {
+    if (_adjust_path) {
         path_out_prev.clear();
-        adjust_path = false;
+        _adjust_path = false; // not wait till effect finish
         Glib::ustring version = lpeversion.param_getSVGValue();
         if (version < "1.3") {
             offset_points.recalculate_controlpoints(pathv[0]);

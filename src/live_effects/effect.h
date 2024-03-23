@@ -15,6 +15,7 @@
 #include "ui/widget/registry.h"
 #include <2geom/forward.h>
 #include <glibmm/ustring.h>
+#include <iostream>
 
 #define  LPE_CONVERSION_TOLERANCE 0.01    // FIXME: find good solution for this.
 
@@ -55,6 +56,23 @@ enum LPEAction
     LPE_UPDATE
 };
 
+// maybe can grow in the future with more SPItemData
+struct LPEItemShapesNumbers {
+    size_t nchildshapes = 0;
+    size_t nsubpaths = 0;
+    size_t ncurves = 0;
+    inline bool operator==(LPEItemShapesNumbers const &other) const = default;
+    inline bool operator!=(LPEItemShapesNumbers other) const
+    {
+        return !(*this == other);
+    }
+};
+inline std::ostream &operator<<(std::ostream &os, LPEItemShapesNumbers const &lpeitemnumbers) {
+    os << "Number of child shapes:" << lpeitemnumbers.nchildshapes << std::endl;
+    os << "Number of subpaths:" << lpeitemnumbers.nsubpaths << std::endl;
+    os << "Number of curves:" << lpeitemnumbers.ncurves; 
+    return os;
+}
 class Effect {
 public:
     static Effect* New(EffectType lpenr, LivePathEffectObject *lpeobj);
@@ -85,6 +103,7 @@ public:
     void update_satellites();
     virtual void doOnException(SPLPEItem const *lpeitem);
     virtual void doOnVisibilityToggled(SPLPEItem const* lpeitem);
+    virtual void adjustForNewPath();
     void writeParamsToSVG();
     std::vector<SPObject *> effect_get_satellites(bool force = true);
     virtual void acceptParamPath (SPPath const* param_path);
@@ -166,6 +185,8 @@ protected:
     Effect(LivePathEffectObject *lpeobject);
     friend class SatelliteArrayParam;
     friend class LPEMeasureSegments;
+    // adjust path study make public if grow
+    bool _adjust_path = false;
     // provide a set of doEffect functions so the developer has a choice
     // of what kind of input/output parameters he desires.
     // the order in which they appear is the order in which they are
@@ -184,6 +205,7 @@ protected:
     virtual void addCanvasIndicators(SPLPEItem const* lpeitem, std::vector<Geom::PathVector> &hp_vec);
 
     bool _provides_knotholder_entities;
+    bool _provides_path_adjustment = false;
     LPEAction _lpe_action = LPE_NONE;
     int oncanvasedit_it;
     bool show_orig_path; // set this to true in derived effects to automatically have the original
@@ -208,6 +230,7 @@ private:
     void unsetDefaultParam(Glib::ustring pref_path, Parameter *param);
     bool provides_own_flash_paths; // if true, the standard flash path is suppressed
     sigc::connection _before_commit_connection;
+    LPEItemShapesNumbers _lpenumbers;
     bool is_ready;
     bool defaultsopen;
 };

@@ -48,7 +48,7 @@ public:
     void transform_multiply(Geom::Affine const &postmul, bool set) override;
     void applyStyle(SPLPEItem *lpeitem);
     // methods called by path-manipulator upon edits
-    void adjustForNewPath();
+    void adjustForNewPath() override;
 
     PowerStrokePointArrayParam offset_points;
     BoolParam not_jump;
@@ -64,7 +64,6 @@ private:
     EnumParam<unsigned> end_linecap_type;
     size_t recusion_limit;
     bool has_recursion;
-    bool adjust_path = false;
     Geom::PathVector path_out_prev;
     MessageParam message;
 };

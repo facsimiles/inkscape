@@ -88,6 +88,7 @@ LPEFilletChamfer::LPEFilletChamfer(LivePathEffectObject *lpeobject)
     chamfer_steps.param_set_increments(1, 1);
     chamfer_steps.param_make_integer();
     _provides_knotholder_entities = true;
+    _provides_path_adjustment = true;
     helperpath = false;
     previous_unit = Glib::ustring("");
 }
@@ -330,7 +331,7 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
                     } else {
                         double size = arcLengthAt(amount, curve_in);
                         nodesatellites[i][j].amount = size;
-                    }
+                     }
                 }
                 nodesatellites[i][j].hidden = hide_knots;
                 if (only_selected && isNodePointSelected(curve_in.initialPoint()) ){
@@ -346,13 +347,12 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
         if (!_pathvector_nodesatellites) {
             _pathvector_nodesatellites = new PathVectorNodeSatellites();
         }
-        size_t number_nodes = count_pathvector_nodes(pathv);
-        size_t previous_number_nodes = _pathvector_nodesatellites->getTotalNodeSatellites();
-        if (is_load || number_nodes != previous_number_nodes) {
+        if (is_load || _adjust_path) {
             double power = radius;
             if (!flexible) {
                 power = Inkscape::Util::Quantity::convert(power, unit.get_abbreviation(), "px") / getSPDoc()->getDocumentScale()[Geom::X];
             }
+            _adjust_path = false; // not wait till effect finish
             NodeSatelliteType nodesatellite_type = FILLET;
             std::map<std::string, NodeSatelliteType> gchar_map_to_nodesatellite_type = boost::assign::map_list_of(
                 "F", FILLET)("IF", INVERSE_FILLET)("C", CHAMFER)("IC", INVERSE_CHAMFER)("KO", INVALID_SATELLITE);
@@ -379,6 +379,11 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
     } else {
         g_warning("LPE Fillet can only be applied to shapes (not groups).");
     }
+}
+
+void
+LPEFilletChamfer::adjustForNewPath() {
+    _adjust_path = true;
 }
 
 void
