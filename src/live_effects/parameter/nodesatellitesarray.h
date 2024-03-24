@@ -57,7 +57,6 @@ public:
     void setCurrentZoom(double current_zoom);
     void setGlobalKnotHide(bool global_knot_hide);
     void setEffectType(EffectType et);
-    void reloadKnots();
     void updateAmmount(double amount);
     void setPathVectorNodeSatellites(PathVectorNodeSatellites *pathVectorNodeSatellites, bool write = true);
 

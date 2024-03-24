@@ -162,6 +162,7 @@ public:
     bool keep_paths; // set this to false allow retain extra generated objects, see measure line LPE
     bool is_load;
     bool is_applied;
+    bool is_current = false;
     bool on_remove_all;
     bool refresh_widgets;
     bool finishiddle = false;
@@ -177,6 +178,7 @@ public:
                             // them.
     SPShape *current_shape; // these get stored in performPathEffects.
     std::vector<Parameter *> param_vector;
+    void reloadKnots(SPLPEItem const *lpeitem);
     void setDefaultParameters();
     void resetDefaultParameters();
     bool hasDefaultParameters();

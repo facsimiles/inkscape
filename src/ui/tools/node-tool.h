@@ -14,9 +14,10 @@
 
 #include <map>
 #include <memory>
-#include <vector>
 #include <sigc++/connection.h>
+#include <vector>
 
+#include "helper/auto-connection.h"
 #include "ui/tools/tool-base.h"
 
 namespace Inkscape {
@@ -62,7 +63,7 @@ public:
 
 private:
     Inkscape::Rubberband *get_rubberband() const;
-
+    std::unordered_map<SPItem *, Inkscape::auto_connection> _releaseConnections;
     sigc::connection _selection_changed_connection;
     sigc::connection _mouseover_changed_connection;
 

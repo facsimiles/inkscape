@@ -9,24 +9,18 @@
 
 #include "nodesatellitesarray.h"
 
+#include <2geom/path-intersection.h>
 #include <glibmm/i18n.h>
 
-#include <2geom/path-intersection.h>
-
-#include "display/control/canvas-item-enums.h"
-#include "inkscape.h"
-#include "preferences.h"
-
 #include "display/control/canvas-item-ctrl.h"
+#include "display/control/canvas-item-enums.h"
 #include "helper/geom.h"
+#include "inkscape.h"
 #include "live_effects/effect.h"
 #include "live_effects/lpe-fillet-chamfer.h"
 #include "object/sp-lpe-item.h"
+#include "preferences.h"
 #include "ui/dialog/lpe-fillet-chamfer-properties.h"
-#include "ui/knot/knot-holder.h"
-#include "ui/shape-editor.h"
-#include "ui/tools/node-tool.h"
-
 
 // TODO due to internal breakage in glibmm headers,
 // this has to be included last.
@@ -60,24 +54,6 @@ void NodeSatelliteArrayParam::setPathVectorNodeSatellites(PathVectorNodeSatellit
     }
 }
 
-void NodeSatelliteArrayParam::reloadKnots()
-{
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    if (desktop && !_global_knot_hide) {
-        Inkscape::UI::Tools::NodeTool *nt = dynamic_cast<Inkscape::UI::Tools::NodeTool *>(desktop->getTool());
-        if (nt) {
-            for (auto &_shape_editor : nt->_shape_editors) {
-                Inkscape::UI::ShapeEditor *shape_editor = _shape_editor.second.get();
-                if (shape_editor && shape_editor->lpeknotholder) {
-                    SPItem *item = shape_editor->lpeknotholder->item;
-                    delete shape_editor->lpeknotholder;
-                    shape_editor->lpeknotholder = nullptr;
-                    shape_editor->set_item(item);
-                }
-            }
-        }
-    }
-}
 void NodeSatelliteArrayParam::setUseDistance(bool use_knot_distance)
 {
     _use_distance = use_knot_distance;

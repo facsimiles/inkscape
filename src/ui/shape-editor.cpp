@@ -16,6 +16,7 @@
 
 #include "desktop.h"
 #include "document.h"
+#include "inkscape.h"
 #include "live_effects/effect.h"
 #include "object/sp-lpe-item.h"
 #include "ui/knot/knot-holder.h"
@@ -124,18 +125,10 @@ void ShapeEditor::set_item(SPItem *item) {
 
     if (item) {
         Inkscape::XML::Node *repr;
+        _externChangedConn = INKSCAPE.signal_external_change.connect([this]() { this->reset_item(); });
         if (!this->knotholder) {
             // only recreate knotholder if none is present
             this->knotholder = createKnotHolder(item, desktop, _edit_rotation, _edit_marker_mode);
-        }
-        auto lpe = cast<SPLPEItem>(item);
-        if (!(lpe &&
-            lpe->getCurrentLPE() &&
-            lpe->getCurrentLPE()->isVisible() &&
-            lpe->getCurrentLPE()->providesKnotholder()))
-        {
-            delete this->lpeknotholder;
-            this->lpeknotholder = nullptr;
         }
         if (!this->lpeknotholder) {
             // only recreate knotholder if none is present
@@ -172,11 +165,11 @@ void ShapeEditor::set_item(SPItem *item) {
    Why not make a reload function in KnotHolder? */
 void ShapeEditor::reset_item()
 {
-    if (knotholder) {
-        SPObject *obj = desktop->getDocument()->getObjectByRepr(knotholder_listener_attached_for); /// note that it is not certain that this is an SPItem; it could be a LivePathEffectObject.
-        set_item(cast<SPItem>(obj));
-    } else if (lpeknotholder) {
-        SPObject *obj = desktop->getDocument()->getObjectByRepr(lpeknotholder_listener_attached_for); /// note that it is not certain that this is an SPItem; it could be a LivePathEffectObject.
+    if (knotholder || lpeknotholder) {
+        SPObject *obj = desktop->getDocument()->getObjectByRepr(knotholder_listener_attached_for);
+        if (!obj) {
+            obj = desktop->getDocument()->getObjectByRepr(lpeknotholder_listener_attached_for);
+        }
         set_item(cast<SPItem>(obj));
     }
 }

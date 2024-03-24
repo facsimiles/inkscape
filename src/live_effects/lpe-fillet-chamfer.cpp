@@ -364,7 +364,7 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
             _pathvector_nodesatellites->setNodeSatellites(nodesatellites);
             _pathvector_nodesatellites->recalculateForNewPathVector(pathv, nodesatellite);
             nodesatellites_param.setPathVectorNodeSatellites(_pathvector_nodesatellites, true);
-            nodesatellites_param.reloadKnots();
+            reloadKnots(lpeItem);
         } else {
             _pathvector_nodesatellites->setPathVector(pathv);
             _pathvector_nodesatellites->setNodeSatellites(nodesatellites);

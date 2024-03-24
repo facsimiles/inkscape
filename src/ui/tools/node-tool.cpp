@@ -385,6 +385,17 @@ void NodeTool::selection_changed(Inkscape::Selection *sel) {
             auto item = cast<SPItem>(r.object);
             si->set_item(item);
             this->_shape_editors.insert({item, std::move(si)});
+            // delete all knotholders on remove item become recreated later
+            _releaseConnections[item] = item->connectRelease([this](auto item) {
+                for (auto i = this->_shape_editors.begin(); i != this->_shape_editors.end();) {
+                    if (item == (*i).first) {
+                        (*i).second->unset_item();
+                        this->_shape_editors.erase(i++);
+                    } else {
+                        ++i;
+                    }
+                }
+            });
         }
     }
 
