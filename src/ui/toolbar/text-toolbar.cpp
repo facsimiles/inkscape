@@ -58,11 +58,13 @@
 #include "ui/builder-utils.h"
 #include "ui/dialog/dialog-container.h"
 #include "ui/icon-names.h"
+#include "ui/item-factories.h"
 #include "ui/tools/select-tool.h"
 #include "ui/tools/text-tool.h"
 #include "ui/util.h"
 #include "ui/widget/combo-box-entry-tool-item.h"
 #include "ui/widget/combo-tool-item.h"
+#include "ui/widget/entry-dropdown.h"
 #include "ui/widget/spinbutton.h"
 #include "ui/widget/unit-tracker.h"
 #include "util-string/ustring-format.h"
@@ -102,7 +104,7 @@ void recursively_set_properties(SPObject *object, SPCSSAttr *css, bool unset_des
     sp_repr_css_attr_unref(css_unset);
 }
 
-Glib::RefPtr<Gtk::ListStore> create_sizes_store_uncached(int unit)
+Glib::RefPtr<Gio::ListModel> create_sizes_store_uncached(int unit)
 {
     // List of font sizes for dropdown menu
     constexpr int sizes[] = {
@@ -111,19 +113,12 @@ Glib::RefPtr<Gtk::ListStore> create_sizes_store_uncached(int unit)
     };
 
     // Array must be same length as SPCSSUnit in style.h
-    constexpr float ratios[] = {1, 1, 1, 10, 4, 40, 100, 16, 8, 0.16};
+    constexpr double ratios[] = {1, 1, 1, 10, 4, 40, 100, 16, 8, 0.16};
 
-    struct Columns : Gtk::TreeModelColumnRecord
-    {
-        Gtk::TreeModelColumn<Glib::ustring> str;
-        Columns() { add(str); }
-    };
-    static Columns const columns;
+    auto store = Gio::ListStore<WrapAsGObject<double>>::create();
 
-    auto store = Gtk::ListStore::create(columns);
-
-    for (int i : sizes) {
-        store->append()->set_value(columns.str, ustring::format_classic(i / ratios[unit]));
+    for (int size : sizes) {
+        store->append(WrapAsGObject<double>::create(size / ratios[unit]));
     }
 
     return store;
@@ -132,9 +127,9 @@ Glib::RefPtr<Gtk::ListStore> create_sizes_store_uncached(int unit)
 /**
  * Create a ListStore containing the default list of font sizes scaled for the given unit.
  */
-Glib::RefPtr<Gtk::ListStore> create_sizes_store(int unit)
+Glib::RefPtr<Gio::ListModel> create_sizes_store(int unit)
 {
-    static std::unordered_map<int, Glib::RefPtr<Gtk::ListStore>> cache;
+    static std::unordered_map<int, Glib::RefPtr<Gio::ListModel>> cache;
 
     auto &result = cache[unit];
 
@@ -314,20 +309,14 @@ TextToolbar::TextToolbar(Glib::RefPtr<Gtk::Builder> const &builder)
     auto unit_str = sp_style_get_css_unit_string(unit);
     auto tooltip = Glib::ustring::format(_("Font size"), " (", unit_str, ")");
 
-    _font_size_item = Gtk::manage(new UI::Widget::ComboBoxEntryToolItem(
-        "TextFontSizeAction",
-        _("Font Size"),
-        tooltip,
-        create_sizes_store(unit),
-        8, // Width in characters
-        0, // Extra list width
-        {}, // Cell layout
-        {} // Separator
-    ));
-
+    _font_size_item = Gtk::make_managed<UI::Widget::EntryDropDown>();
+    _font_size_item->set_name("TextFontSizeAction");
+    _font_size_item->set_tooltip_text(tooltip);
+    _font_size_item->setWidthChars(8);
+    _font_size_item->setDefocusTarget(this);
+    _font_size_item->setModel(create_sizes_store(unit));
+    _font_size_item->setStringFuncAndFactory(unwrap_arg_adaptor<double>(Inkscape::ustring::format_classic<double>));
     _font_size_item->connectChanged([this] { fontsize_value_changed(); });
-    _font_size_item->focus_on_click(false);
-    _font_size_item->setDefocusWidget(this);
 
     get_widget<Gtk::Box>(builder, "font_size_box").append(*_font_size_item);
 
@@ -545,8 +534,8 @@ void TextToolbar::fontsize_value_changed()
     }
     _freeze = true;
 
-    auto active_text = _font_size_item->get_active_text();
-    char const *text = active_text.c_str();
+    auto const &active_text = _font_size_item->getText();
+    auto const text = active_text.c_str();
     char *endptr;
     double size = g_strtod(text, &endptr);
     if (endptr == text) { // Conversion failed, non-numeric input.
@@ -1554,8 +1543,7 @@ void TextToolbar::_selectionChanged(Selection *selection) // don't bother to upd
 
         auto unit_str = sp_style_get_css_unit_string(unit);
         Glib::ustring tooltip = Glib::ustring::format(_("Font size"), " (", unit_str, ")");
-
-        _font_size_item->set_tooltip(tooltip.c_str());
+        _font_size_item->set_tooltip_text(tooltip.c_str());
 
         CSSOStringStream os;
         // We don't want to parse values just show
@@ -1571,12 +1559,8 @@ void TextToolbar::_selectionChanged(Selection *selection) // don't bother to upd
             selection_fontsize = size;
         }
 
-        // Freeze to ignore callbacks.
-        //g_object_freeze_notify( G_OBJECT( fontSizeAction->combobox ) );
-        _font_size_item->set_model(create_sizes_store(unit));
-        //g_object_thaw_notify( G_OBJECT( fontSizeAction->combobox ) );
-
-        _font_size_item->set_active_text( os.str().c_str() );
+        _font_size_item->setModel(create_sizes_store(unit));
+        _font_size_item->setText(os.str());
 
         // Superscript
         bool superscriptSet =
