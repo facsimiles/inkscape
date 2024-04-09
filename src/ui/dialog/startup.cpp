@@ -400,7 +400,9 @@ StartScreen::load_document()
 
                 if (browser->show()) {
                     auto prefs = Inkscape::Preferences::get();
-                    prefs->setString("/dialogs/open/path", Glib::filename_to_utf8(browser->getCurrentDirectory()->get_path()));
+                    if (auto dir = browser->getCurrentDirectory()) {
+                        prefs->setString("/dialogs/open/path", Glib::filename_to_utf8(dir->get_path()));
+                    }
                     file = browser->getFile();
                 } else {
                     return; // Cancel

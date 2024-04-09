@@ -19,7 +19,6 @@
 
 #include <map>
 #include <vector>
-#include <set>
 
 #include "extension/system.h"
 
@@ -70,24 +69,15 @@ enum FileDialogSelectionType
 };
 
 /**
- * Return true if the string ends with the given suffix
- */
-bool hasSuffix(const Glib::ustring &str, const Glib::ustring &ext);
-
-/**
  * Set initial directory for dialog given a preference path.
  */
 void get_start_directory(std::string &start_path, Glib::ustring const &prefs_path, bool try_document_dir = false);
 
-/**
- * Return true if the image is loadable by Gdk, else false.
- * Only user is svg-preview.cpp which is disappearing, don't worry about string type.
- */
-bool isValidImageFile(const Glib::ustring &fileName);
-
 class FileDialog
 {
 public:
+    virtual ~FileDialog() = default;
+
     /**
      * Return the 'key' (filetype) of the selection, if any
      * @return a pointer to a string if successful (which must
@@ -120,14 +110,12 @@ protected:
 
 /**
  * This class provides an implementation-independent API for
- * file "Open" dialogs.  Using a standard interface obviates the need
+ * file "Open" dialogs. Using a standard interface obviates the need
  * for ugly #ifdefs in file open code
  */
 class FileOpenDialog : public FileDialog
 {
 public:
-    virtual ~FileOpenDialog() = default;
-
     /**
      * Factory.
      * @param path the directory where to start searching
@@ -140,7 +128,7 @@ public:
                                                   char const *title);
 
     virtual void setSelectMultiple(bool value) = 0;
-    virtual Glib::RefPtr<Gio::ListModel> getFiles() = 0;
+    virtual std::vector<Glib::RefPtr<Gio::File>> const &getFiles() = 0;
     virtual Glib::RefPtr<Gio::File> getFile() = 0;
 
 protected:
@@ -153,10 +141,6 @@ protected:
 class FileSaveDialog : public FileDialog
 {
 public:
-    // Constructor. Do not call directly. Use the factory.
-    FileSaveDialog() = default;
-    virtual ~FileSaveDialog() = default;
-
     /**
      * Factory.
      * @param path the directory where to start searching
@@ -172,7 +156,7 @@ public:
                                                   char const *docTitle,
                                                   Inkscape::Extension::FileSaveMethod save_method);
 
-    virtual const Glib::RefPtr<Gio::File> getFile() = 0;
+    virtual Glib::RefPtr<Gio::File> getFile() = 0;
     virtual void setCurrentName(Glib::ustring) = 0;
 
     /**
@@ -182,6 +166,8 @@ public:
     Glib::ustring getDocTitle () { return myDocTitle; } // Only used by rdf_set_work_entity()
 
 protected:
+    FileSaveDialog() = default;
+
     // Doc Title that was given
     Glib::ustring myDocTitle;
 
@@ -189,8 +175,7 @@ protected:
     std::map<Glib::ustring, Inkscape::Extension::Output *> knownExtensions;
 
     void appendExtension(Glib::ustring& filename_utf8, Inkscape::Extension::Output* outputExtension);
-
-}; //FileSaveDialog
+};
 
 } // namespace Inkscape::UI::Dialog
 
