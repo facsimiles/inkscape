@@ -358,7 +358,8 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
                                   bool keepalive,
                                   SPDocument *parent)
 {
-    SPDocument *document = new SPDocument();
+    auto document = new SPDocument();
+    auto docptr = std::unique_ptr<SPDocument>(document);
 
     Inkscape::XML::Node *rroot = rdoc->root();
 
@@ -368,7 +369,7 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
     document->rroot = rroot;
     if (parent) {
         document->_parent_document = parent;
-        parent->_child_documents.push_back(document);
+        parent->_child_documents.push_back(docptr->doRef());
     }
 
     if (document->document_filename){
@@ -642,11 +643,9 @@ SPDocument *SPDocument::createChildDoc(std::string const &filename)
             break;
         }
         // Then check children of those.
-        boost::ptr_list<SPDocument>::iterator iter;
-        for (iter = parent->_child_documents.begin();
-          iter != parent->_child_documents.end(); ++iter) {
-            if(filename == iter->getDocumentFilename()) {
-                document = &*iter;
+        for (auto const &child:_child_documents) {
+            if(filename == child->getDocumentFilename()) {
+                document = child.get();
                 break;
             }
         }
