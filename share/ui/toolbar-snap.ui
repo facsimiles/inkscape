@@ -958,7 +958,7 @@
     <property name="halign">start</property>
     <property name="spacing">4</property>
     <style>
-        <class name="toolbar"/>
+      <class name="inkscape-toolbar"/>
     </style>
     <child>
       <object class="GtkToggleButton">

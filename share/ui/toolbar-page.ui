@@ -237,7 +237,7 @@
       </packing>
     </child>
     <style>
-      <class name="toolbar"/>
+      <class name="inkscape-toolbar"/>
     </style>
   </object>
   <object class="GtkPopover" id="margin_popover">
