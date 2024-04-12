@@ -11,6 +11,8 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include <cairomm/pattern.h>
+#include <cairomm/refptr.h>
 #include <cstdint>
 #include <2geom/point.h>
 #include <2geom/path.h>
@@ -56,8 +58,7 @@ public:
     void setMode(int mode);
     void defaultMode();
 
-    void setColor(uint32_t color);
-    void resetColor() { _color.reset(); }
+    void resetColor() { _stroke.reset(); }
 
     static Rubberband* get(SPDesktop *desktop);
 
@@ -81,7 +82,9 @@ private:
     int _mode = RUBBERBAND_MODE_RECT;
     double _tolerance = 0.0;
 
-    std::optional<uint32_t> _color;
+    std::optional<uint32_t> _fill;
+    Cairo::RefPtr<Cairo::Pattern> _fill_pattern = nullptr;
+    std::optional<uint32_t> _stroke;
 };
 
 } // namespace Inkscape

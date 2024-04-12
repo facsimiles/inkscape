@@ -17,8 +17,10 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include <cstdint>
 #include <memory>
 #include <2geom/path.h>
+#include <optional>
 
 #include "canvas-item.h"
 
@@ -40,6 +42,7 @@ public:
     // Properties
     void set_is_page(bool is_page);
     void set_fill(uint32_t color) override;
+    void set_fill_pattern(Cairo::RefPtr<Cairo::Pattern> pattern) override;
     void set_dashed(bool dash = true);
     void set_inverted(bool inverted = false);
     void set_shadow(uint32_t color, int width);
@@ -61,6 +64,7 @@ protected:
     int _stroke_width = 1;
     int _shadow_width = 0;
     uint32_t _shadow_color = 0x0;
+    std::optional<uint32_t> _fill;
 };
 
 } // namespace Inkscape

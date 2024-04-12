@@ -87,6 +87,7 @@ public:
     // Properties
     virtual void set_fill(uint32_t rgba);
     void set_fill(CanvasItemColor color) { set_fill(CANVAS_ITEM_COLORS[color]); }
+    virtual void set_fill_pattern(Cairo::RefPtr<Cairo::Pattern> pattern) {_fill_pattern = pattern;};
     virtual void set_stroke(uint32_t rgba);
     void set_stroke(CanvasItemColor color) { set_stroke(CANVAS_ITEM_COLORS[color]); }
     void set_name(std::string &&name) { _name = std::move(name); }
@@ -138,6 +139,7 @@ protected:
     // Properties
     uint32_t _fill    = CANVAS_ITEM_COLORS[CANVAS_ITEM_SECONDARY];
     uint32_t _stroke  = CANVAS_ITEM_COLORS[CANVAS_ITEM_PRIMARY];
+    Cairo::RefPtr<Cairo::Pattern> _fill_pattern = nullptr;
     std::string _name; // For debugging
 
     // Events

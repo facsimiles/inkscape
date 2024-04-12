@@ -17,6 +17,7 @@
 
 #include "2geom/path.h"
 
+#include "display/cairo-utils.h"
 #include "display/curve.h"
 #include "display/control/canvas-item-bpath.h"
 #include "display/control/canvas-item-rect.h"
@@ -120,10 +121,11 @@ void Inkscape::Rubberband::move(Geom::Point const &p)
         case RUBBERBAND_MODE_RECT:
             if (!_rect) {
                 _rect = make_canvasitem<CanvasItemRect>(_desktop->getCanvasControls());
-                _rect->set_stroke(_color.value_or(0x808080ff));
+                _rect->set_stroke(_stroke.value_or(0x277fffff));
+                _rect->set_fill(_fill.value_or(0x277fff1a));
                 _rect->set_shadow(0xffffffff, 0); // Not a shadow
                 _rect->set_dashed(false);
-                _rect->set_inverted(true);
+                _rect->set_inverted(false);
             }
             _rect->set_rect(Geom::Rect(_start, _end));
             _rect->set_visible(true);
@@ -131,9 +133,12 @@ void Inkscape::Rubberband::move(Geom::Point const &p)
         case RUBBERBAND_MODE_TOUCHRECT:
             if (!_rect) {
                 _rect = make_canvasitem<CanvasItemRect>(_desktop->getCanvasControls());
-                _rect->set_stroke(_color.value_or(0xff0000ff));
+                _rect->set_stroke(_stroke.value_or(0x277fffff));
+                _rect->set_fill(_fill.value_or(0x277fff1a));
+                auto pattern = Cairo::RefPtr<Cairo::Pattern>(new Cairo::Pattern(ink_cairo_pattern_create_slanting_stripes(0x277fff1a)));
+                _rect->set_fill_pattern(pattern);
                 _rect->set_shadow(0xffffffff, 0); // Not a shadow
-                _rect->set_dashed(false);
+                _rect->set_dashed(true);
                 _rect->set_inverted(false);
             }
             _rect->set_rect(Geom::Rect(_start, _end));
@@ -142,7 +147,7 @@ void Inkscape::Rubberband::move(Geom::Point const &p)
         case RUBBERBAND_MODE_TOUCHPATH:
             if (!_touchpath) {
                 _touchpath = make_canvasitem<CanvasItemBpath>(_desktop->getCanvasControls()); // Should be sketch?
-                _touchpath->set_stroke(_color.value_or(0xff0000ff));
+                _touchpath->set_stroke(_stroke.value_or(0xff0000ff));
                 _touchpath->set_fill(0x0, SP_WIND_RULE_NONZERO);
             }
             _touchpath->set_bpath(_touchpath_curve);
@@ -150,21 +155,6 @@ void Inkscape::Rubberband::move(Geom::Point const &p)
             break;
         default:
             break;
-    }
-}
-
-void Inkscape::Rubberband::setColor(uint32_t color)
-{
-    _color = color;
-
-    if (_mode == RUBBERBAND_MODE_TOUCHPATH) {
-        if (_touchpath) {
-            _touchpath->set_stroke(color);
-        }
-    } else {
-        if (_rect) {
-            _rect->set_stroke(color);
-        }
     }
 }
 
