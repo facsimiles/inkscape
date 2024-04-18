@@ -147,8 +147,11 @@ void Inkscape::Rubberband::move(Geom::Point const &p)
         case RUBBERBAND_MODE_TOUCHPATH:
             if (!_touchpath) {
                 _touchpath = make_canvasitem<CanvasItemBpath>(_desktop->getCanvasControls()); // Should be sketch?
-                _touchpath->set_stroke(_stroke.value_or(0xff0000ff));
-                _touchpath->set_fill(0x0, SP_WIND_RULE_NONZERO);
+                _touchpath->set_stroke(_stroke.value_or(0x277fffff));
+                _touchpath->set_fill(_fill.value_or(0x277fff1a), SP_WIND_RULE_EVENODD);
+                _touchpath->set_dashes(std::vector{4.0});
+                auto pattern = ink_cairo_pattern_create_slanting_stripes(0x277fff1a);
+                _touchpath->set_fill_pattern(pattern);
             }
             _touchpath->set_bpath(_touchpath_curve);
             _touchpath->set_visible(true);

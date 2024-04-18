@@ -15,6 +15,8 @@
  */
 
 #include "canvas-item-bpath.h"
+#include <cairo.h>
+#include <cairomm/matrix.h>
 
 #include "color.h" // SP_RGBA_x_F
 #include "display/curve.h"
@@ -75,6 +77,14 @@ void CanvasItemBpath::set_fill(uint32_t fill, SPWindRule fill_rule)
         if (_fill == fill && _fill_rule == fill_rule) return;
         _fill = fill;
         _fill_rule = fill_rule;
+        request_redraw();
+    });
+}
+
+void CanvasItemBpath::set_fill_pattern(Cairo::RefPtr<Cairo::Pattern> fill_pattern) {
+    defer([fill_pattern = std::move(fill_pattern), this] () mutable {
+        if (_fill_pattern == fill_pattern) return;
+        _fill_pattern = std::move(fill_pattern);
         request_redraw();
     });
 }
@@ -181,6 +191,17 @@ void CanvasItemBpath::_render(Inkscape::CanvasItemBuffer &buf) const
                                 SP_RGBA32_B_F(_fill), SP_RGBA32_A_F(_fill));
         buf.cr->set_fill_rule(_fill_rule == SP_WIND_RULE_EVENODD ?
                                Cairo::Context::FillRule::EVEN_ODD : Cairo::Context::FillRule::WINDING);
+        buf.cr->fill_preserve();
+    }
+
+    //Do fill pattern
+    if (_fill_pattern) {
+        buf.cr->set_source(_fill_pattern);
+        auto mat = _fill_pattern->get_matrix();
+        // TODO: Move the rotation matrix to cairo utils
+        auto matrix = Cairo::rotation_matrix((3 * M_PI)/ 4);
+        matrix.translate(buf.rect.min().x(), buf.rect.min().y());
+        _fill_pattern->set_matrix(matrix);
         buf.cr->fill_preserve();
     }
 
