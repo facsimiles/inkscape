@@ -138,7 +138,7 @@ void Inkscape::Rubberband::move(Geom::Point const &p)
                 auto pattern = ink_cairo_pattern_create_slanting_stripes(0x277fff1a);
                 _rect->set_fill_pattern(pattern);
                 _rect->set_shadow(0xffffffff, 0); // Not a shadow
-                _rect->set_dashed(true);
+                _rect->set_dashed(false);
                 _rect->set_inverted(false);
             }
             _rect->set_rect(Geom::Rect(_start, _end));
