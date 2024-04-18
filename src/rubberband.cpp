@@ -135,7 +135,7 @@ void Inkscape::Rubberband::move(Geom::Point const &p)
                 _rect = make_canvasitem<CanvasItemRect>(_desktop->getCanvasControls());
                 _rect->set_stroke(_stroke.value_or(0x277fffff));
                 _rect->set_fill(_fill.value_or(0x277fff1a));
-                auto pattern = Cairo::RefPtr<Cairo::Pattern>(new Cairo::Pattern(ink_cairo_pattern_create_slanting_stripes(0x277fff1a)));
+                auto pattern = ink_cairo_pattern_create_slanting_stripes(0x277fff1a);
                 _rect->set_fill_pattern(pattern);
                 _rect->set_shadow(0xffffffff, 0); // Not a shadow
                 _rect->set_dashed(true);

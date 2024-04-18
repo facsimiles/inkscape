@@ -23,6 +23,11 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/operators.hpp>
 #include <boost/optional/optional.hpp>
+#include <cairomm/context.h>
+#include <cairomm/matrix.h>
+#include <cairomm/pattern.h>
+#include <cairomm/refptr.h>
+#include <cairomm/surface.h>
 #include <cmath>
 #include <cairo.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
@@ -1509,27 +1514,27 @@ int ink_cairo_surface_linear_to_srgb(cairo_surface_t *surface)
     return width * height;
 }
 
-cairo_pattern_t *
+Cairo::RefPtr<Cairo::Pattern>
 ink_cairo_pattern_create_slanting_stripes(uint32_t color){
-    int const w = 10;
-    int const h = 10;
+    int const width = 10;
+    int const height = 10;
     int const line_width = 10;
-    cairo_surface_t *s = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, w, h);
-    cairo_t *ct = cairo_create(s);
-    cairo_move_to(ct, 0, 0);
-    cairo_line_to(ct, 0, h);
-    cairo_set_line_width(ct, line_width);
-    cairo_set_source_rgba(ct,SP_RGBA32_R_F(color), SP_RGBA32_G_F(color),
-                            SP_RGBA32_B_F(color), SP_RGBA32_A_F(color));
-    cairo_stroke(ct);
-    cairo_matrix_t mat; cairo_matrix_init (&mat, std::cos(3*3.14/4), std::sin(3*3.14/4), -std::sin(3*3.14/4),std:: cos(3*3.14/4), 0, 0); cairo_transform (ct, &mat);
-    cairo_pattern_t *p = cairo_pattern_create_for_surface(s);
-    cairo_pattern_set_extend(p, CAIRO_EXTEND_REPEAT);
-    cairo_pattern_set_filter(p, CAIRO_FILTER_NEAREST);
-    cairo_pattern_set_matrix(p, &mat);
 
-    cairo_surface_destroy(s);
-    return p;
+    auto surface = Cairo::ImageSurface::create(Cairo::ImageSurface::Format::ARGB32, width, height);
+    auto context = Cairo::Context::create(surface);
+    context->set_line_width(line_width);
+    context->move_to(0, 0);
+    context->line_to(0, height);
+    context->set_source_rgba(SP_RGBA32_R_F(color), SP_RGBA32_G_F(color),
+                             SP_RGBA32_B_F(color), SP_RGBA32_A_F(color));
+    context->stroke();
+
+    auto pattern = Cairo::SurfacePattern::create(surface);
+    pattern->set_extend(Cairo::SurfacePattern::Extend::REPEAT);
+    pattern->set_filter(Cairo::SurfacePattern::Filter::NEAREST);
+    // TODO: Is this the correct place for the matrix?
+    pattern->set_matrix(Cairo::rotation_matrix((3 * M_PI) / 4));
+    return pattern;
 }
 
 cairo_pattern_t *
