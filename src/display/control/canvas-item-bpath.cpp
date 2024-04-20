@@ -194,15 +194,13 @@ void CanvasItemBpath::_render(Inkscape::CanvasItemBuffer &buf) const
         buf.cr->fill_preserve();
     }
 
-    //Do fill pattern
+    // Do fill pattern
     if (_fill_pattern) {
+        buf.cr->save();
+        buf.cr->translate(-buf.rect.min().x(), -buf.rect.min().y());
         buf.cr->set_source(_fill_pattern);
-        auto mat = _fill_pattern->get_matrix();
-        // TODO: Move the rotation matrix to cairo utils
-        auto matrix = Cairo::rotation_matrix((3 * M_PI)/ 4);
-        matrix.translate(buf.rect.min().x(), buf.rect.min().y());
-        _fill_pattern->set_matrix(matrix);
         buf.cr->fill_preserve();
+        buf.cr->restore();
     }
 
     // Do stroke
