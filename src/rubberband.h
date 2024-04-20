@@ -83,7 +83,7 @@ private:
     double _tolerance = 0.0;
 
     std::optional<uint32_t> _fill;
-    Cairo::RefPtr<Cairo::Pattern> _fill_pattern = nullptr;
+    Cairo::RefPtr<Cairo::Pattern> _fill_pattern;
     std::optional<uint32_t> _stroke;
 };
 

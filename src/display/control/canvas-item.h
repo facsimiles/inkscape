@@ -139,7 +139,7 @@ protected:
     // Properties
     uint32_t _fill    = CANVAS_ITEM_COLORS[CANVAS_ITEM_SECONDARY];
     uint32_t _stroke  = CANVAS_ITEM_COLORS[CANVAS_ITEM_PRIMARY];
-    Cairo::RefPtr<Cairo::Pattern> _fill_pattern = nullptr;
+    Cairo::RefPtr<Cairo::Pattern> _fill_pattern;
     std::string _name; // For debugging
 
     // Events
