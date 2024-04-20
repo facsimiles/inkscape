@@ -36,6 +36,7 @@ CanvasItemRect::CanvasItemRect(CanvasItemGroup *group)
     : CanvasItem(group)
 {
     _name = "CanvasItemRect:Null";
+    _fill = 0;
 }
 
 /**
@@ -46,6 +47,7 @@ CanvasItemRect::CanvasItemRect(CanvasItemGroup *group, Geom::Rect const &rect)
     , _rect(rect)
 {
     _name = "CanvasItemRect";
+    _fill = 0;
 }
 
 /**
@@ -164,15 +166,16 @@ void CanvasItemRect::_render(Inkscape::CanvasItemBuffer &buf) const
                             SP_RGBA32_B_F(_stroke), SP_RGBA32_A_F(_stroke));
     buf.cr->stroke_preserve();
 
+    // Draw fill pattern
     if(_fill_pattern) {
         buf.cr->set_source(_fill_pattern);
         buf.cr->fill_preserve();
     }
 
-    if(_fill.has_value()) {
-        auto fill = _fill.value();
-        buf.cr->set_source_rgba(SP_RGBA32_R_F(fill), SP_RGBA32_G_F(fill),
-                                SP_RGBA32_B_F(fill), SP_RGBA32_A_F(fill));
+    // Draw fill
+    if(SP_RGBA32_A_U(_fill) > 0) {
+        buf.cr->set_source_rgba(SP_RGBA32_R_F(_fill), SP_RGBA32_G_F(_fill),
+                                SP_RGBA32_B_F(_fill), SP_RGBA32_A_F(_fill));
         buf.cr->fill_preserve();
     }
 
@@ -208,16 +211,13 @@ void CanvasItemRect::set_is_page(bool is_page)
 
 void CanvasItemRect::set_fill(uint32_t fill)
 {
-    if (_fill.has_value() && fill != _fill.value() && _is_page) {
-        get_canvas()->set_page(fill);
-        CanvasItem::set_fill(fill);
-    } else {
-        defer([=, this] {
-            if (_fill.has_value() && _fill.value() == fill) return;
-            _fill = fill;
-            request_redraw();
-        });
-    }
+    defer([=, this] {
+        if (fill != _fill && _is_page) {
+            get_canvas()->set_page(fill);
+        }
+        _fill = fill;
+        request_redraw();
+    });
 }
 
 void CanvasItemRect::set_fill_pattern(Cairo::RefPtr<Cairo::Pattern> fill_pattern) {
