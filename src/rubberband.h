@@ -26,13 +26,6 @@
 class SPCurve;
 class SPDesktop;
 
-enum
-{
-    RUBBERBAND_MODE_RECT,
-    RUBBERBAND_MODE_TOUCHPATH,
-    RUBBERBAND_MODE_TOUCHRECT
-};
-
 namespace Inkscape {
 
 class CanvasItemBpath;
@@ -44,6 +37,12 @@ class CanvasItemRect;
 class Rubberband
 {
 public:
+    enum class Mode {
+        RECT,
+        TOUCHPATH,
+        TOUCHRECT
+    };
+
     void start(SPDesktop *desktop, Geom::Point const &p, bool tolerance = false);
     void move(Geom::Point const &p);
     Geom::OptRect getRectangle() const;
@@ -51,12 +50,13 @@ public:
     bool is_started() { return _started; }
     bool is_moved() { return _moved; }
 
-    inline int getMode() {return _mode;}
+    Rubberband::Mode getMode() { return _mode; }
     std::vector<Geom::Point> getPoints() const;
     Geom::Path getPath() const;
 
-    void setMode(int mode);
-    void defaultMode();
+    consteval static Rubberband::Mode get_default_mode() { return Rubberband::Mode::RECT; };
+    void set_mode(Rubberband::Mode mode) { _mode = mode; };
+    void set_default_mode() { _mode = get_default_mode(); };
 
     void resetColor() { _stroke.reset(); }
 
@@ -79,7 +79,7 @@ private:
 
     bool _started = false;
     bool _moved = false;
-    int _mode = RUBBERBAND_MODE_RECT;
+    Rubberband::Mode _mode = get_default_mode();
     double _tolerance = 0.0;
 
     std::optional<uint32_t> _fill;

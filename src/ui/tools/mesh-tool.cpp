@@ -667,7 +667,7 @@ bool MeshTool::root_handler(CanvasEvent const &event)
 
                                 if (r->is_started() && !this->within_tolerance) {
                                     // this was a rubberband drag
-                                    if (r->getMode() == RUBBERBAND_MODE_RECT) {
+                                    if (r->getMode() == Rubberband::Mode::RECT) {
                                         Geom::OptRect const b = r->getRectangle();
                                         if (!(event.modifiers & GDK_SHIFT_MASK)) {
                                             _grdrag->deselectAll();

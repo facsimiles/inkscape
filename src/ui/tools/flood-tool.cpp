@@ -1052,7 +1052,7 @@ bool FloodTool::root_handler(CanvasEvent const &event)
                 dragging = true;
 
                 auto const p = _desktop->w2d(event.pos);
-                Rubberband::get(_desktop)->setMode(RUBBERBAND_MODE_TOUCHPATH);
+                Rubberband::get(_desktop)->set_mode(Rubberband::Mode::TOUCHPATH);
                 Rubberband::get(_desktop)->start(_desktop, p);
             }
         }

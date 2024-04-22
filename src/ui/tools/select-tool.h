@@ -14,6 +14,7 @@
  */
 
 #include "display/control/canvas-item.h"
+#include "rubberband.h"
 #include "ui/tools/tool-base.h"
 
 namespace Inkscape {
@@ -55,6 +56,7 @@ private:
     bool sp_select_context_abort();
     void sp_select_context_cycle_through_items(Selection *selection, ScrollEvent const &scroll_event);
     void sp_select_context_reset_opacities();
+    static Rubberband::Mode get_default_rubberband_mode();
 
     bool _alt_on = false;
     bool _force_dragging = false;

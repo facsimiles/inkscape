@@ -41,7 +41,7 @@ void Inkscape::Rubberband::delete_canvas_items()
 Geom::Path Inkscape::Rubberband::getPath() const
 {
     g_assert(_started);
-    if (_mode == RUBBERBAND_MODE_TOUCHPATH) {
+    if (_mode == Rubberband::Mode::TOUCHPATH) {
         return _path * _desktop->w2d();
     }
     return Geom::Path(*getRectangle());
@@ -75,7 +75,8 @@ void Inkscape::Rubberband::stop()
 {
     _started = false;
     _moved = false;
-    defaultMode(); // restore the default
+
+    set_default_mode();
 
     _touchpath_curve->reset();
     _path.clear();
@@ -118,7 +119,7 @@ void Inkscape::Rubberband::move(Geom::Point const &p)
     if (_rect) _rect->set_visible(false);
 
     switch (_mode) {
-        case RUBBERBAND_MODE_RECT:
+        case Inkscape::Rubberband::Mode::RECT:
             if (!_rect) {
                 _rect = make_canvasitem<CanvasItemRect>(_desktop->getCanvasControls());
                 _rect->set_stroke(_stroke.value_or(0x277fffff));
@@ -130,7 +131,7 @@ void Inkscape::Rubberband::move(Geom::Point const &p)
             _rect->set_rect(Geom::Rect(_start, _end));
             _rect->set_visible(true);
             break;
-        case RUBBERBAND_MODE_TOUCHRECT:
+        case Inkscape::Rubberband::Mode::TOUCHRECT:
             if (!_rect) {
                 _rect = make_canvasitem<CanvasItemRect>(_desktop->getCanvasControls());
                 _rect->set_stroke(_stroke.value_or(0x277fffff));
@@ -144,7 +145,7 @@ void Inkscape::Rubberband::move(Geom::Point const &p)
             _rect->set_rect(Geom::Rect(_start, _end));
             _rect->set_visible(true);
             break;
-        case RUBBERBAND_MODE_TOUCHPATH:
+        case Inkscape::Rubberband::Mode::TOUCHPATH:
             if (!_touchpath) {
                 _touchpath = make_canvasitem<CanvasItemBpath>(_desktop->getCanvasControls()); // Should be sketch?
                 _touchpath->set_stroke(_stroke.value_or(0x277fffff));
@@ -158,24 +159,6 @@ void Inkscape::Rubberband::move(Geom::Point const &p)
             break;
         default:
             break;
-    }
-}
-
-void Inkscape::Rubberband::setMode(int mode) 
-{
-    _mode = mode;
-}
-
-/**
- * Set the default mode (usually rect or touchrect)
- */
-void Inkscape::Rubberband::defaultMode()
-{
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    if (prefs->getBool("/tools/select/touch_box", false)) {
-        _mode = RUBBERBAND_MODE_TOUCHRECT;
-    } else {
-        _mode = RUBBERBAND_MODE_RECT;
     }
 }
 

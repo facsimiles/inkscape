@@ -525,7 +525,7 @@ bool GradientTool::root_handler(CanvasEvent const &event)
 
                     if (r->is_started() && !within_tolerance) {
                         // this was a rubberband drag
-                        if (r->getMode() == RUBBERBAND_MODE_RECT) {
+                        if (r->getMode() == Rubberband::Mode::RECT) {
                             _grdrag->selectRect(*r->getRectangle());
                         }
                     }

@@ -430,7 +430,7 @@ bool NodeTool::root_handler(CanvasEvent const &event)
             }
   
             auto touch_path = Modifier::get(Modifiers::Type::SELECT_TOUCH_PATH)->get_label();
-            if (rband->getMode() == RUBBERBAND_MODE_TOUCHPATH) {
+            if (rband->getMode() == Rubberband::Mode::TOUCHPATH) {
                 defaultMessageContext()->setF(Inkscape::NORMAL_MESSAGE,
                     _("<b>Draw over</b> lines to select their nodes; release <b>%s</b> to switch to rubberband selection"), touch_path.c_str());
             } else {
@@ -562,9 +562,9 @@ bool NodeTool::root_handler(CanvasEvent const &event)
         if (event.num_press == 1) {
 
             if (Modifier::get(Modifiers::Type::SELECT_TOUCH_PATH)->active(event.modifiers)) {
-                rband->setMode(RUBBERBAND_MODE_TOUCHPATH);
+                rband->set_mode(Rubberband::Mode::TOUCHPATH);
             } else {
-                rband->defaultMode();
+                rband->set_default_mode();
             }
 
             rband->start(_desktop, desktop_pt, true);
