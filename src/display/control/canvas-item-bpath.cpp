@@ -183,7 +183,7 @@ void CanvasItemBpath::_render(Inkscape::CanvasItemBuffer &buf) const
     buf.cr->begin_new_path();
 
     feed_pathvector_to_cairo(buf.cr->cobj(), _path, affine(), buf.rect,
-                             /* optimize_stroke */ !do_fill, 1);
+                             /* optimize_stroke */ !(do_fill || _fill_pattern), 1);
 
     // Do fill
     if (do_fill) {
