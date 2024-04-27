@@ -536,7 +536,9 @@ bool MeshTool::root_handler(CanvasEvent const &event)
                     }
 
                     if (has_mesh && !(event.modifiers & GDK_CONTROL_MASK)) {
-                        Inkscape::Rubberband::get(_desktop)->start(_desktop, button_dt);
+                        auto rubberband = Inkscape::Rubberband::get(_desktop);
+                        rubberband->set_mode_with_default_style(Rubberband::get_default_mode());
+                        rubberband->start(_desktop, button_dt);
                     }
 
                     // remember clicked item, disregarding groups, honoring Alt; do nothing with Crtl to

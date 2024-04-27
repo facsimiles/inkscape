@@ -62,7 +62,9 @@ bool ZoomTool::root_handler(CanvasEvent const &event)
 
             if (event.button == 1) {
                 saveDragOrigin(event.pos);
-                Rubberband::get(_desktop)->start(_desktop, button_dt);
+                auto rubberband = Rubberband::get(_desktop);
+                rubberband->set_mode_with_default_style(Rubberband::get_default_mode());
+                rubberband->start(_desktop, button_dt);
                 escaped = false;
                 ret = true;
             } else if (event.button == 3) {

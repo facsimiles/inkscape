@@ -76,14 +76,12 @@ void Inkscape::Rubberband::stop()
     _started = false;
     _moved = false;
 
-    set_default_mode();
+    set_default_mode(); // Can't set default style as well, that causes a race condition
 
     _touchpath_curve->reset();
     _path.clear();
 
     delete_canvas_items();
-
-    resetColor();
 }
 
 void Inkscape::Rubberband::move(Geom::Point const &p)
@@ -122,11 +120,10 @@ void Inkscape::Rubberband::move(Geom::Point const &p)
         case Inkscape::Rubberband::Mode::RECT:
             if (!_rect) {
                 _rect = make_canvasitem<CanvasItemRect>(_desktop->getCanvasControls());
-                _rect->set_stroke(_stroke.value_or(0x277fffff));
-                _rect->set_fill(_fill.value_or(0x277fff1a));
+                _rect->set_stroke(_style.stroke);
+                _rect->set_fill(_style.fill);
                 _rect->set_shadow(0xffffffff, 0); // Not a shadow
-                _rect->set_dashed(false);
-                _rect->set_inverted(false);
+                _rect->set_dashed(_style.is_dashed);
             }
             _rect->set_rect(Geom::Rect(_start, _end));
             _rect->set_visible(true);
@@ -134,13 +131,11 @@ void Inkscape::Rubberband::move(Geom::Point const &p)
         case Inkscape::Rubberband::Mode::TOUCHRECT:
             if (!_rect) {
                 _rect = make_canvasitem<CanvasItemRect>(_desktop->getCanvasControls());
-                _rect->set_stroke(_stroke.value_or(0x277fffff));
-                _rect->set_fill(_fill.value_or(0x277fff1a));
-                auto pattern = ink_cairo_pattern_create_slanting_stripes(0x277fff1a);
-                _rect->set_fill_pattern(pattern);
+                _rect->set_stroke(_style.stroke);
+                _rect->set_fill(_style.fill);
+                _rect->set_fill_pattern(_style.fill_pattern);
                 _rect->set_shadow(0xffffffff, 0); // Not a shadow
-                _rect->set_dashed(false);
-                _rect->set_inverted(false);
+                _rect->set_dashed(_style.is_dashed);
             }
             _rect->set_rect(Geom::Rect(_start, _end));
             _rect->set_visible(true);
@@ -148,11 +143,14 @@ void Inkscape::Rubberband::move(Geom::Point const &p)
         case Inkscape::Rubberband::Mode::TOUCHPATH:
             if (!_touchpath) {
                 _touchpath = make_canvasitem<CanvasItemBpath>(_desktop->getCanvasControls()); // Should be sketch?
-                _touchpath->set_stroke(_stroke.value_or(0x277fffff));
-                _touchpath->set_fill(_fill.value_or(0x277fff1a), SP_WIND_RULE_EVENODD);
-                _touchpath->set_dashes(std::vector{4.0});
-                auto pattern = ink_cairo_pattern_create_slanting_stripes(0x277fff1a);
-                _touchpath->set_fill_pattern(pattern);
+                _touchpath->set_stroke(_style.stroke);
+                _touchpath->set_stroke_outset(_style.stroke_outset);
+                _touchpath->set_stroke_width(_style.stroke_width);
+                _touchpath->set_fill(_style.fill, SP_WIND_RULE_EVENODD);
+                _touchpath->set_fill_pattern(_style.fill_pattern);
+                if (_style.is_dashed) {
+                    _touchpath->set_dashes(std::vector{4.0});
+                }
             }
             _touchpath->set_bpath(_touchpath_curve);
             _touchpath->set_visible(true);
@@ -160,6 +158,45 @@ void Inkscape::Rubberband::move(Geom::Point const &p)
         default:
             break;
     }
+}
+
+void Inkscape::Rubberband::set_mode_with_style(Inkscape::Rubberband::Mode mode, Inkscape::Rubberband::Style &style) {
+    set_mode(mode);
+    set_style(std::move(style));
+}
+
+void Inkscape::Rubberband::set_mode_with_default_style(Inkscape::Rubberband::Mode mode) {
+    set_mode(mode);
+    set_style(get_default_style(mode));
+}
+
+/**
+ * @return The default style for each of the rubberband modes. The caller should consider the
+ * returned style as a base and then modify the members as required.
+ */
+Inkscape::Rubberband::Style Inkscape::Rubberband::get_default_style(Inkscape::Rubberband::Mode mode) {
+    Rubberband::Style style{};
+
+    switch (mode) {
+        case Rubberband::Mode::TOUCHRECT:
+            // TODO: Collect all places where this pattern is used, and cache it somehow
+            static auto _pattern = ink_cairo_pattern_create_slanting_stripes(0x277fff1a);
+            style = Rubberband::Style{
+                .fill = 0x277fff1a,
+                .fill_pattern = _pattern,
+            };
+            break;
+        case Rubberband::Mode::TOUCHPATH:
+            style = Rubberband::Style{
+                .fill = 0x0,
+            };
+            break;
+        case Rubberband::Mode::RECT: // RECT is default
+            break;
+        default:
+            break;
+    }
+    return style;
 }
 
 /**

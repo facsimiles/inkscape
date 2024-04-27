@@ -19,6 +19,7 @@
 #include <gdk/gdkkeysyms.h>
 
 #include "desktop.h"
+#include "display/cairo-utils.h"
 #include "document.h"
 #include "message-context.h"
 #include "rubberband.h"
@@ -562,9 +563,16 @@ bool NodeTool::root_handler(CanvasEvent const &event)
         if (event.num_press == 1) {
 
             if (Modifier::get(Modifiers::Type::SELECT_TOUCH_PATH)->active(event.modifiers)) {
-                rband->set_mode(Rubberband::Mode::TOUCHPATH);
+                auto active_mode = Rubberband::Mode::TOUCHPATH;
+                auto style = Rubberband::get_default_style(active_mode);
+                style.fill = 0x277fff1a;
+                if (!_multipath->empty()) { // nodes rather than rubberband items
+                  static auto pattern = ink_cairo_pattern_create_slanting_stripes(0x277fff1a);
+                  style.fill_pattern = pattern;
+                }
+                rband->set_mode_with_style(active_mode, style);
             } else {
-                rband->set_default_mode();
+                rband->set_mode_with_default_style(Rubberband::get_default_mode());
             }
 
             rband->start(_desktop, desktop_pt, true);

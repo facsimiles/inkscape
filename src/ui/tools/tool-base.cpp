@@ -481,18 +481,19 @@ bool ToolBase::root_handler(CanvasEvent const &event)
                 return;
             }
 
-            if (Inkscape::Rubberband::get(_desktop)->is_started()) {
+            if (auto rubberband = Inkscape::Rubberband::get(_desktop); rubberband->is_started()) {
                 auto const motion_w = event.pos;
                 auto const motion_dt = _desktop->w2d(motion_w);
 
-                Inkscape::Rubberband::get(_desktop)->move(motion_dt);
+                rubberband->move(motion_dt);
             } else {
                 // Start the box where the mouse was clicked, not where it is now
                 // because otherwise our box would be offset by the amount of tolerance.
                 auto const motion_w = xyp;
                 auto const motion_dt = _desktop->w2d(motion_w);
 
-                Inkscape::Rubberband::get(_desktop)->start(_desktop, motion_dt);
+                rubberband->set_mode_with_default_style(Rubberband::get_default_mode());
+                rubberband->start(_desktop, motion_dt);
             }
 
             if (zoom_rb == 2) {

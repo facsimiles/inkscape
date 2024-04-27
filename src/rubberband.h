@@ -17,7 +17,6 @@
 #include <2geom/point.h>
 #include <2geom/path.h>
 #include <2geom/rect.h>
-#include <optional>
 #include <vector>
 #include "display/control/canvas-item-ptr.h"
 
@@ -43,22 +42,34 @@ public:
         TOUCHRECT
     };
 
+    /**
+     * Styling information for the rubberband
+     */
+    struct Style
+    {
+        bool is_dashed{false};
+        uint32_t fill{0x277fff1a};
+        uint32_t stroke{0x277fffff};
+        uint32_t stroke_outset{0x0};
+        double stroke_width{1.0}; // Only used by Touchpath
+        Cairo::RefPtr<Cairo::Pattern> fill_pattern;
+    };
+
     void start(SPDesktop *desktop, Geom::Point const &p, bool tolerance = false);
     void move(Geom::Point const &p);
     Geom::OptRect getRectangle() const;
     void stop();
-    bool is_started() { return _started; }
-    bool is_moved() { return _moved; }
+    bool is_started() const { return _started; }
+    bool is_moved() const { return _moved; }
 
-    Rubberband::Mode getMode() { return _mode; }
+    Rubberband::Mode getMode() const { return _mode; }
     std::vector<Geom::Point> getPoints() const;
     Geom::Path getPath() const;
 
-    consteval static Rubberband::Mode get_default_mode() { return Rubberband::Mode::RECT; };
-    void set_mode(Rubberband::Mode mode) { _mode = mode; };
-    void set_default_mode() { _mode = get_default_mode(); };
-
-    void resetColor() { _stroke.reset(); }
+    constexpr static Rubberband::Mode get_default_mode() { return Rubberband::Mode::RECT; };
+    static Inkscape::Rubberband::Style get_default_style(Rubberband::Mode mode);
+    void set_mode_with_style(Rubberband::Mode mode, Rubberband::Style &style);
+    void set_mode_with_default_style(Rubberband::Mode mode);
 
     static Rubberband* get(SPDesktop *desktop);
 
@@ -82,9 +93,11 @@ private:
     Rubberband::Mode _mode = get_default_mode();
     double _tolerance = 0.0;
 
-    std::optional<uint32_t> _fill;
-    Cairo::RefPtr<Cairo::Pattern> _fill_pattern;
-    std::optional<uint32_t> _stroke;
+    Style _style{};
+
+    void set_mode(Rubberband::Mode mode) { _mode = mode; };
+    void set_default_mode() { set_mode(get_default_mode()); };
+    void set_style(Rubberband::Style style) { _style = style; };
 };
 
 } // namespace Inkscape

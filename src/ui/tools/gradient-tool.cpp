@@ -432,7 +432,9 @@ bool GradientTool::root_handler(CanvasEvent const &event)
 
             auto button_dt = _desktop->w2d(event.pos);
             if (event.modifiers & GDK_SHIFT_MASK && !(event.modifiers & GDK_CONTROL_MASK)) {
-                Rubberband::get(_desktop)->start(_desktop, button_dt);
+                auto rubberband = Rubberband::get(_desktop);
+                rubberband->set_mode_with_default_style(Rubberband::get_default_mode());
+                rubberband->start(_desktop, button_dt);
             } else {
                 // remember clicked item, disregarding groups, honoring Alt; do nothing with Crtl to
                 // enable Ctrl+doubleclick of exactly the selected item(s)

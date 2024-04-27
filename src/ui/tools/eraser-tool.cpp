@@ -363,8 +363,11 @@ bool EraserTool::root_handler(CanvasEvent const &event)
 
                 if (mode == EraserToolMode::DELETE) {
                     auto rubberband = Inkscape::Rubberband::get(_desktop);
+                    auto active_mode = Rubberband::Mode::TOUCHPATH;
+                    auto style = Rubberband::get_default_style(active_mode);
+                    style.stroke = 0xf00000ff;
+                    rubberband->set_mode_with_style(active_mode, style);
                     rubberband->start(_desktop, button_dt);
-                    rubberband->set_mode(Rubberband::Mode::TOUCHPATH);
                 }
                 /* initialize first point */
                 npoints = 0;

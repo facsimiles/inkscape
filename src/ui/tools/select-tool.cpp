@@ -441,9 +441,9 @@ bool SelectTool::root_handler(CanvasEvent const &event)
 
                 auto rubberband = Inkscape::Rubberband::get(_desktop);
                 if (Modifier::get(Modifiers::Type::SELECT_TOUCH_PATH)->active(event.modifiers)) {
-                    rubberband->set_mode(Rubberband::Mode::TOUCHPATH);
+                    rubberband->set_mode_with_default_style(Rubberband::Mode::TOUCHPATH);
                 } else {
-                    rubberband->set_mode(get_default_rubberband_mode());
+                    rubberband->set_mode_with_default_style(get_default_rubberband_mode());
                 }
 
                 Geom::Point const p(_desktop->w2d(event.pos));
@@ -797,10 +797,10 @@ bool SelectTool::root_handler(CanvasEvent const &event)
             if (!key_is_a_modifier (keyval)) {
                 defaultMessageContext()->clear();
             } else if (grabbed || _seltrans->isGrabbed()) {
-                if (Inkscape::Rubberband::get(_desktop)->is_started()) {
+                if (auto rubberband = Inkscape::Rubberband::get(_desktop); rubberband->is_started()) {
                     // if Alt then change cursor to moving cursor:
                     if (Modifier::get(Modifiers::Type::SELECT_TOUCH_PATH)->active(event.modifiers | keyval)) {
-                        Inkscape::Rubberband::get(_desktop)->set_mode(Rubberband::Mode::TOUCHPATH);
+                        rubberband->set_mode_with_default_style(Rubberband::Mode::TOUCHPATH);
                     }
                 } else {
                     // do not change the statusbar text when mousekey is down to move or transform the object,
@@ -997,10 +997,10 @@ bool SelectTool::root_handler(CanvasEvent const &event)
                 _alt_on = false; // Turned on in KeyPressEvent
             }
 
-            if (Inkscape::Rubberband::get(_desktop)->is_started()) {
+            if (auto rubberband = Inkscape::Rubberband::get(_desktop); rubberband->is_started()) {
                 // if Alt then change cursor to moving cursor:
                 if (alt) {
-                    Inkscape::Rubberband::get(_desktop)->set_mode(get_default_rubberband_mode());
+                    rubberband->set_mode_with_default_style(get_default_rubberband_mode());
                 }
             } else {
                 if (alt) {
