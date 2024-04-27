@@ -19,6 +19,7 @@
 
 #include <2geom/transforms.h>
 #include <2geom/pathvector.h>
+#include <cstdint>
 
 #include "canvas-item.h"
 
@@ -48,6 +49,7 @@ public:
     void set_fill_pattern(Cairo::RefPtr<Cairo::Pattern> pattern) override;
     void set_dashes(std::vector<double> &&dashes);
     void set_stroke_width(double width);
+    void set_stroke_outset(uint32_t color);
 
 protected:
     ~CanvasItemBpath() override = default;
@@ -63,6 +65,7 @@ protected:
     std::vector<double> _dashes;
     bool _phantom_line = false;
     double _stroke_width = 1.0;
+    uint32_t _stroke_outset = 0x0;
 };
 
 } // namespace Inkscape

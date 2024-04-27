@@ -17,6 +17,7 @@
 #include "canvas-item-bpath.h"
 #include <cairo.h>
 #include <cairomm/matrix.h>
+#include <cstdint>
 
 #include "color.h" // SP_RGBA_x_F
 #include "display/curve.h"
@@ -93,6 +94,18 @@ void CanvasItemBpath::set_dashes(std::vector<double> &&dashes)
 {
     defer([this, dashes = std::move(dashes)] () mutable {
         _dashes = std::move(dashes);
+    });
+}
+
+/**
+ * Set the stroke outset
+ */
+void CanvasItemBpath::set_stroke_outset(uint32_t color)
+{
+    defer([=, this] {
+        if (_stroke_outset == color) return;
+        _stroke_outset = color;
+        request_redraw();
     });
 }
 
@@ -201,6 +214,16 @@ void CanvasItemBpath::_render(Inkscape::CanvasItemBuffer &buf) const
         buf.cr->set_source(_fill_pattern);
         buf.cr->fill_preserve();
         buf.cr->restore();
+    }
+
+    // Do stroke outset, but only if we have a stroke
+    // Doing an outset without a stroke doesn't make much sense,
+    // that could very well be just a stroke with a larger width
+    if (do_stroke && (SP_RGBA32_A_U(_stroke_outset) > 0)) {
+        buf.cr->set_source_rgba(SP_RGBA32_R_F(_stroke_outset), SP_RGBA32_G_F(_stroke_outset),
+                                SP_RGBA32_B_F(_stroke_outset), SP_RGBA32_A_F(_stroke_outset));
+        buf.cr->set_line_width(_stroke_width * 4);
+        buf.cr->stroke_preserve();
     }
 
     // Do stroke
