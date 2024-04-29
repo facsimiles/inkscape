@@ -566,10 +566,6 @@ bool NodeTool::root_handler(CanvasEvent const &event)
                 auto active_mode = Rubberband::Mode::TOUCHPATH;
                 auto style = Rubberband::get_default_style(active_mode);
                 style.fill = 0x277fff1a;
-                if (!_multipath->empty()) { // nodes rather than rubberband items
-                  static auto pattern = ink_cairo_pattern_create_slanting_stripes(0x277fff1a);
-                  style.fill_pattern = pattern;
-                }
                 rband->set_mode_with_style(active_mode, style);
             } else {
                 rband->set_mode_with_default_style(Rubberband::get_default_mode());
