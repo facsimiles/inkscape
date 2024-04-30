@@ -366,7 +366,7 @@ bool EraserTool::root_handler(CanvasEvent const &event)
                     auto active_mode = Rubberband::Mode::TOUCHPATH;
                     auto style = Rubberband::get_default_style(active_mode);
                     style.stroke = 0xf00000ff;
-                    rubberband->set_mode_with_style(active_mode, style);
+                    rubberband->set_mode_with_style(active_mode, std::move(style));
                     rubberband->start(_desktop, button_dt);
                 }
                 /* initialize first point */

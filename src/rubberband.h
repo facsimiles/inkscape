@@ -68,7 +68,7 @@ public:
 
     constexpr static Rubberband::Mode get_default_mode() { return Rubberband::Mode::RECT; };
     static Inkscape::Rubberband::Style get_default_style(Rubberband::Mode mode);
-    void set_mode_with_style(Rubberband::Mode mode, Rubberband::Style &style);
+    void set_mode_with_style(Rubberband::Mode mode, Rubberband::Style&& style);
     void set_mode_with_default_style(Rubberband::Mode mode);
 
     static Rubberband* get(SPDesktop *desktop);
@@ -94,10 +94,6 @@ private:
     double _tolerance = 0.0;
 
     Style _style{};
-
-    void set_mode(Rubberband::Mode mode) { _mode = mode; };
-    void set_default_mode() { set_mode(get_default_mode()); };
-    void set_style(Rubberband::Style style) { _style = style; };
 };
 
 } // namespace Inkscape

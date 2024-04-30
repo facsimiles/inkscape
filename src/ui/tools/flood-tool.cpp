@@ -1057,7 +1057,7 @@ bool FloodTool::root_handler(CanvasEvent const &event)
                 auto style = Rubberband::get_default_style(active_mode);
                 style.stroke_outset = 0xffffffff;
                 style.stroke_width = 1.25;
-                rubberband->set_mode_with_style(active_mode, style);
+                rubberband->set_mode_with_style(active_mode, std::move(style));
                 rubberband->start(_desktop, p);
             }
         }

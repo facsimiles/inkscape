@@ -492,7 +492,6 @@ bool ToolBase::root_handler(CanvasEvent const &event)
                 auto const motion_w = xyp;
                 auto const motion_dt = _desktop->w2d(motion_w);
 
-                rubberband->set_mode_with_default_style(Rubberband::get_default_mode());
                 rubberband->start(_desktop, motion_dt);
             }
 

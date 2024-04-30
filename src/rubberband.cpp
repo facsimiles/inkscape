@@ -76,7 +76,8 @@ void Inkscape::Rubberband::stop()
     _started = false;
     _moved = false;
 
-    set_default_mode(); // Can't set default style as well, that causes a race condition
+    _mode = get_default_mode();
+    _style = get_default_style(_mode);
 
     _touchpath_curve->reset();
     _path.clear();
@@ -160,14 +161,13 @@ void Inkscape::Rubberband::move(Geom::Point const &p)
     }
 }
 
-void Inkscape::Rubberband::set_mode_with_style(Inkscape::Rubberband::Mode mode, Inkscape::Rubberband::Style &style) {
-    set_mode(mode);
-    set_style(std::move(style));
+void Inkscape::Rubberband::set_mode_with_style(Inkscape::Rubberband::Mode mode, Inkscape::Rubberband::Style&& style) {
+    _mode = mode;
+    _style = std::move(style);
 }
 
 void Inkscape::Rubberband::set_mode_with_default_style(Inkscape::Rubberband::Mode mode) {
-    set_mode(mode);
-    set_style(get_default_style(mode));
+    set_mode_with_style(mode, get_default_style(mode));
 }
 
 /**

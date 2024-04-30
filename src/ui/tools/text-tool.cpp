@@ -398,7 +398,6 @@ bool TextTool::root_handler(CanvasEvent const &event)
 
             p0 = button_dt;
             auto rubberband = Rubberband::get(_desktop);
-            rubberband->set_mode_with_default_style(Rubberband::get_default_mode());
             rubberband->start(_desktop, p0);
 
             grabCanvasEvents();
