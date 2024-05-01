@@ -179,11 +179,10 @@ Inkscape::Rubberband::Style Inkscape::Rubberband::get_default_style(Inkscape::Ru
 
     switch (mode) {
         case Rubberband::Mode::TOUCHRECT:
-            // TODO: Collect all places where this pattern is used, and cache it somehow
-            static auto _pattern = ink_cairo_pattern_create_slanting_stripes(0x277fff1a);
+            static const auto pattern = ink_cairo_pattern_create_slanting_stripes(0x277fff1a);
             style = Rubberband::Style{
                 .fill = 0x277fff1a,
-                .fill_pattern = _pattern,
+                .fill_pattern = pattern,
             };
             break;
         case Rubberband::Mode::TOUCHPATH:
