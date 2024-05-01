@@ -46,7 +46,6 @@ public:
 
     // Properties
     void set_fill(uint32_t rgba, SPWindRule fill_rule);
-    void set_fill_pattern(Cairo::RefPtr<Cairo::Pattern> pattern) override;
     void set_dashes(std::vector<double> &&dashes);
     void set_stroke_width(double width);
     void set_stroke_outset(uint32_t color);

@@ -273,6 +273,14 @@ void CanvasItem::set_fill(uint32_t fill)
     });
 }
 
+void CanvasItem::set_fill_pattern(Cairo::RefPtr<Cairo::Pattern> fill_pattern) {
+    defer([fill_pattern = std::move(fill_pattern), this] () mutable {
+        if (_fill_pattern == fill_pattern) return;
+        _fill_pattern = std::move(fill_pattern);
+        request_redraw();
+    });
+}
+
 void CanvasItem::set_stroke(uint32_t stroke)
 {
     defer([=, this] {

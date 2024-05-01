@@ -42,7 +42,6 @@ public:
     // Properties
     void set_is_page(bool is_page);
     void set_fill(uint32_t color) override;
-    void set_fill_pattern(Cairo::RefPtr<Cairo::Pattern> pattern) override;
     void set_dashed(bool dash = true);
     void set_inverted(bool inverted = false);
     void set_shadow(uint32_t color, int width);

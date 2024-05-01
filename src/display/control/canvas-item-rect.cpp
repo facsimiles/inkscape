@@ -220,14 +220,6 @@ void CanvasItemRect::set_fill(uint32_t fill)
     });
 }
 
-void CanvasItemRect::set_fill_pattern(Cairo::RefPtr<Cairo::Pattern> fill_pattern) {
-    defer([fill_pattern = std::move(fill_pattern), this] () mutable {
-        if (_fill_pattern == fill_pattern) return;
-        _fill_pattern = std::move(fill_pattern);
-        request_redraw();
-    });
-}
-
 void CanvasItemRect::set_dashed(bool dashed)
 {
     defer([=, this] {
