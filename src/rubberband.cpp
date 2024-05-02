@@ -133,6 +133,7 @@ void Inkscape::Rubberband::move(Geom::Point const &p)
             if (!_rect) {
                 _rect = make_canvasitem<CanvasItemRect>(_desktop->getCanvasControls());
                 _rect->set_stroke(_style.stroke);
+                _rect->set_stroke_width(_style.stroke_width);
                 _rect->set_fill(_style.fill);
                 _rect->set_fill_pattern(_style.fill_pattern);
                 _rect->set_shadow(0xffffffff, 0); // Not a shadow

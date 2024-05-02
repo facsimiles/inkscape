@@ -148,6 +148,7 @@ void CanvasItemRect::_render(Inkscape::CanvasItemBuffer &buf) const
     }
 
     // Get the points we need transformed into window coordinates.
+    buf.cr->set_line_width(_stroke_width);
     buf.cr->begin_new_path();
     for (int i = 0; i < 4; ++i) {
         auto pt = rect.corner(i) * aff;
@@ -160,7 +161,6 @@ void CanvasItemRect::_render(Inkscape::CanvasItemBuffer &buf) const
     if (_dashed) {
         buf.cr->set_dash(dashes, -0.5);
     }
-    buf.cr->set_line_width(_stroke_width);
     // we maybe have painted the background, back to "normal" compositing
     buf.cr->set_source_rgba(SP_RGBA32_R_F(_stroke), SP_RGBA32_G_F(_stroke),
                             SP_RGBA32_B_F(_stroke), SP_RGBA32_A_F(_stroke));
