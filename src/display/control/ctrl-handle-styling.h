@@ -88,28 +88,51 @@ private:
     int specificity = 0;
 };
 
-/**
- * Struct containing all required styling for handles.
- */
-struct Style
+struct FillStyle
 {
-    Property<CanvasItemCtrlShape> shape{CANVAS_ITEM_CTRL_SHAPE_SQUARE};
     Property<uint32_t> fill{0xffffff};
-    Property<uint32_t> stroke{0xffffff};
-    Property<uint32_t> outline{0xffffff};
     Property<float> fill_opacity{1.0};
+};
+
+struct StrokeStyle
+{
+    Property<uint32_t> stroke{0xffffff};
     Property<float> stroke_opacity{1.0};
-    Property<float> outline_opacity{1.0};
-    Property<float> opacity{1.0};
     Property<float> stroke_width{1.0};
+};
+
+struct OutlineStyle // Outset
+{
+    Property<uint32_t> outline{0xffffff};
+    Property<float> outline_opacity{1.0};
     Property<float> outline_width{0.0};
+};
+
+struct ScaleStyle
+{
     Property<float> scale{2.0};
-    Property<float> size_extra{1.0};
     Property<float> stroke_scale{0.125};
+};
+
+/**
+ * Struct containing common styling for CanvasItems.
+ */
+struct BaseStyle: FillStyle, StrokeStyle, OutlineStyle
+{
+    Property<float> opacity{1.0};
 
     uint32_t getFill() const;
     uint32_t getStroke() const;
     uint32_t getOutline() const;
+};
+
+/**
+ * Struct containing all required styling for handles.
+ */
+struct Style : BaseStyle, ScaleStyle
+{
+    Property<float> size_extra{1.0};
+    Property<CanvasItemCtrlShape> shape{CANVAS_ITEM_CTRL_SHAPE_SQUARE};
 };
 
 /**
