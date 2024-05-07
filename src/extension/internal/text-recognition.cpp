@@ -27,6 +27,7 @@
 #include "object/sp-image.h"
 #include "object/sp-item.h"
 #include "selection.h"
+#include <gtkmm.h>
 
 namespace Inkscape {
 namespace Extension {
@@ -40,7 +41,7 @@ bool DetectText::load(Inkscape::Extension::Extension * /*module*/)
 Gtk::Widget *DetectText::textWidget()
 {
     static Gtk::Label *detectedtextlabel =
-        Gtk::manage(new Gtk::Label("The Detected Text will appear here", Gtk::ALIGN_START));
+        Gtk::manage(new Gtk::Label("The Detected Text will appear here", Gtk::Align::START));
     return detectedtextlabel;
 }
 
@@ -57,12 +58,12 @@ void DetectText::loadLanguages()
         std::cerr << "Could not initialize tesseract!" << std::endl;
         return;
     }
-    GenericVector<STRING> languages;
+    std::vector<std::string> languages;
     tess->GetAvailableLanguagesAsVector(&languages);
     Gtk::ComboBoxText *languageComboBox = dynamic_cast<Gtk::ComboBoxText *>(languageWidget());
     int languageCount = languages.size();
     for (int i = 0; i < languageCount; i++) {
-        auto language = languages[i].string();
+        auto language = languages[i];
         languageComboBox->append(language, language);
     }
     languageComboBox->set_active_id("eng");
@@ -71,14 +72,9 @@ void DetectText::loadLanguages()
     return;
 }
 
-void DetectText::effect(Inkscape::Extension::Effect *module, Inkscape::UI::View::View *view,
+void DetectText::effect(Inkscape::Extension::Effect *module, SPDesktop *desktop,
                         Inkscape::Extension::Implementation::ImplementationDocumentCache * /*docCache*/)
 {
-    auto desktop = dynamic_cast<SPDesktop *>(view);
-    if (!desktop) {
-        std::cerr << "DetectText::effect: view is not desktop!" << std::endl;
-        return;
-    }
     Inkscape::Selection *selection = desktop->getSelection();
     std::vector<SPItem *> items(selection->items().begin(), selection->items().end());
     selection->clear();
@@ -115,27 +111,30 @@ void DetectText::effect(Inkscape::Extension::Effect *module, Inkscape::UI::View:
     return;
 }
 
-Gtk::Widget *DetectText::prefs_effect(Inkscape::Extension::Effect *module, Inkscape::UI::View::View * /*view*/,
+Gtk::Widget *DetectText::prefs_effect(Inkscape::Extension::Effect *module, SPDesktop *desktop,
                                       sigc::signal<void> *changeSignal,
                                       Inkscape::Extension::Implementation::ImplementationDocumentCache * /*docCache*/)
 {
-    Gtk::Box *gui = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
+    Gtk::Box *gui = Gtk::manage(new Gtk::Box(Gtk::Orientation::VERTICAL));
     gui->show();
-    gui->set_border_width(InxParameter::GUI_BOX_MARGIN);
+    //gui->set_border_width(InxParameter::GUI_BOX_MARGIN);
     gui->set_spacing(InxParameter::GUI_BOX_SPACING);
 
-    Gtk::Widget *selectLang = Gtk::manage(new Gtk::Label("Select Language:", Gtk::ALIGN_START));
+    Gtk::Widget *selectLang = Gtk::manage(new Gtk::Label("Select Language:", Gtk::Align::START));
     selectLang->show();
-    gui->pack_start(*selectLang, false, true, 0);
+    //gui->pack_start(*selectLang, false, true, 0);
+    gui->append(*selectLang);
 
     Gtk::Widget *language = languageWidget();
     language->show();
     loadLanguages();
-    gui->pack_start(*language, false, true, 0);
+    //gui->pack_start(*language, false, true, 0);
+    gui->append(*language);
 
     Gtk::Widget *detectedText = textWidget();
     detectedText->show();
-    gui->pack_start(*detectedText, false, true, 0);
+    //gui->pack_start(*detectedText, false, true, 0);
+    gui->append(*detectedText);
 
     return gui;
 }
@@ -156,7 +155,7 @@ void DetectText::init()
                     "<submenu name=\"" N_("Text") "\" />\n"
                 "</effects-menu>\n"
             "</effect>\n"
-        "</inkscape-extension>\n" , new DetectText());
+        "</inkscape-extension>\n" , std::make_unique<DetectText>());
     // clang-format on
     return;
 }
