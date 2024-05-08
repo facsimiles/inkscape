@@ -66,6 +66,9 @@
 #ifdef WITH_LIBCDR
 #include "internal/cdr-input.h"
 #endif
+#ifdef WITH_TESSERACT
+#include "internal/text-recognition.h"
+#endif
 #include "preferences.h"
 #include "io/resource.h"
 
@@ -193,6 +196,9 @@ init()
 #endif
 #ifdef WITH_LIBCDR
     Internal::CdrInput::init();
+#endif
+#ifdef WITH_TESSERACT
+    Internal::DetectText::init();
 #endif
 
     /* Effects */

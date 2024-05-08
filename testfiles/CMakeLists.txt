@@ -57,6 +57,12 @@ if(${CMAKE_SIZEOF_VOID_P} EQUAL 8)
     )
 endif()
 
+if(WITH_TESSERACT)
+    set(TESSERACT_TESTS
+        text-recognition-test
+    )
+endif()
+
 set(TEST_SOURCES
     actions-svg-processing
     async_channel-test
@@ -106,6 +112,7 @@ set(TEST_SOURCES
     store-test
     lpe-test
     ${LPE_TESTS_64bit}
+    ${TESSERACT_TESTS}
     )
 
 add_library(cpp_test_static_library SHARED unittest.cpp doc-per-case-test.cpp compare-paths-test.h lpespaths-test.h store-integrity-test.h test-with-svg-object-pairs.cpp)
