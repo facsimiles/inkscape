@@ -31,6 +31,8 @@
 #include <gtkmm/searchentry2.h>
 #include <gtkmm/separator.h>
 #include <gtkmm/textview.h>
+
+#include "ui/tools/text-tool.h"
 #ifdef WITH_LIBSPELLING
 #include "ui/libspelling-wrapper.h"
 #endif
@@ -176,6 +178,13 @@ TextEdit::TextEdit()
     notebook->signal_switch_page().connect(sigc::mem_fun(*this, &TextEdit::on_page_changed));
     _font_changed = font_list->signal_changed().connect([this](){ apply_changes(true); });
     _apply_font = font_list->signal_apply().connect([this](){ onChange(); onSetDefault(); });
+    _insert_text = font_list->signal_insert_text().connect([this](const auto& text) {
+        if (auto desktop = getDesktop()) {
+            if (auto text_tool = dynamic_cast<Tools::TextTool*>(desktop->getTool())) {
+                text_tool->insertText(text);
+            }
+        }
+    });
 
     on_page_changed(nullptr, 0);
 }

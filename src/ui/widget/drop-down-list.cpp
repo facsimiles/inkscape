@@ -2,6 +2,7 @@
 
 #include "drop-down-list.h"
 #include <gtkmm/label.h>
+#include <gtkmm/listheader.h>
 #include <gtkmm/stringobject.h>
 
 namespace Inkscape::UI::Widget {
@@ -20,15 +21,44 @@ DropDownList::DropDownList(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Buil
 void DropDownList::_init() {
     set_name("DropDownList");
 
+    // enable expression to support search early on, as it resets the item factory;
+    // search can be enabled/disabled separately as needed
+    auto expression = Gtk::ClosureExpression<Glib::ustring>::create([this](auto& item){
+        return std::dynamic_pointer_cast<Gtk::StringObject>(item)->get_string();
+    });
+    set_expression(expression);
+
+    /* Example of setting up and binding labels in header factory:
+     *
+    _header->signal_setup_obj().connect([this](const Glib::RefPtr<Glib::Object>& obj) {
+        auto list_header = std::dynamic_pointer_cast<Gtk::ListHeader>(obj);
+        // list_header->set_child(*set_up_item(true));
+    });
+    _header->signal_bind_obj().connect([this](const Glib::RefPtr<Glib::Object>& obj) {
+        return;
+        auto list_header = std::dynamic_pointer_cast<Gtk::ListHeader>(obj);
+        auto& label = dynamic_cast<Gtk::Label&>(*list_header->get_child());
+        auto item = std::dynamic_pointer_cast<Gtk::StringObject>(list_header->get_item());
+        label.set_label(item->get_string());
+    });
+    set_header_factory(_header);
+    */
+
+    auto dropdown_button = Gtk::SignalListItemFactory::create();
+    dropdown_button->signal_setup().connect([this](auto& list_item) {
+        list_item->set_child(*set_up_item(true));
+    });
+    dropdown_button->signal_bind().connect([this](const Glib::RefPtr<Gtk::ListItem>& list_item) {
+        auto& label = dynamic_cast<Gtk::Label&>(*list_item->get_child());
+        auto item = std::dynamic_pointer_cast<Gtk::StringObject>(list_item->get_item());
+        label.set_label(item->get_string());
+    });
+
     _factory->signal_setup().connect([this](const Glib::RefPtr<Gtk::ListItem>& list_item) {
-        auto label = Gtk::make_managed<Gtk::Label>();
-        label->set_xalign(0);
-        label->set_valign(Gtk::Align::CENTER);
-        list_item->set_child(*label);
+        list_item->set_child(*set_up_item(false));
     });
 
     _factory->signal_bind().connect([this](const Glib::RefPtr<Gtk::ListItem>& list_item) {
-        auto obj = list_item->get_item();
         auto& label = dynamic_cast<Gtk::Label&>(*list_item->get_child());
         if (_separator_callback) {
             auto pos = list_item->get_position();
@@ -36,12 +66,26 @@ void DropDownList::_init() {
                 label.get_parent()->add_css_class("top-separator");
             }
         }
-        auto item = std::dynamic_pointer_cast<Gtk::StringObject>(obj);
+        auto item = std::dynamic_pointer_cast<Gtk::StringObject>(list_item->get_item());
         label.set_label(item->get_string());
     });
 
+    // separate factory to allow dropdown button to shrink (ellipsis)
+    set_factory(dropdown_button);
+    // normal list items without ellipsis
     set_list_factory(_factory);
     set_model(_model);
+}
+
+Gtk::Label* DropDownList::set_up_item(bool ellipsize) {
+    auto label = Gtk::make_managed<Gtk::Label>();
+    label->set_xalign(0);
+    label->set_valign(Gtk::Align::CENTER);
+    if (ellipsize) {
+        label->set_ellipsize(Pango::EllipsizeMode::END);
+        label->set_max_width_chars(_button_max_chars);
+    }
+    return label;
 }
 
 unsigned int DropDownList::append(const Glib::ustring& item) {
@@ -50,16 +94,12 @@ unsigned int DropDownList::append(const Glib::ustring& item) {
     return n;
 }
 
+void DropDownList::set_button_max_chars(int max_chars) {
+    _button_max_chars = max_chars;
+}
+
 void DropDownList::enable_search(bool enable) {
-    if (enable) {
-        auto expression = Gtk::ClosureExpression<Glib::ustring>::create([this](auto& item){
-            return std::dynamic_pointer_cast<Gtk::StringObject>(item)->get_string();
-        });
-        set_expression(expression);
-    }
     set_enable_search(enable);
-    // search or expression reset item factory; restore it
-    set_list_factory(_factory);
 }
 
 void DropDownList::set_row_separator_func(std::function<bool (unsigned int)> callback) {

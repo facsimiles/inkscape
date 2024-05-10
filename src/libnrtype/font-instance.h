@@ -118,6 +118,14 @@ public:
     bool is_oblique() const { return _oblique; }
     unsigned short family_class() const { return _family_class; }
 
+    struct CharInfo {
+        uint32_t unicode;
+        uint32_t glyph_index;
+    };
+    // traverse the font to find all defined characters returning (unicode, glyph index) pairs;
+    // return only characters in (from, to) range
+    std::vector<CharInfo> find_all_characters(uint32_t from = 0, uint32_t to = 0xffff'ffff) const;
+
 private:
     void acquire(PangoFont *p_font, PangoFontDescription *descr);
     void release();

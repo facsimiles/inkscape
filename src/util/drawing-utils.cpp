@@ -101,20 +101,32 @@ void draw_point_indicator(const Cairo::RefPtr<Cairo::Context>& ctx, const Geom::
     ctx->restore();
 }
 
-std::optional<Gdk::RGBA> lookup_background_color(Glib::RefPtr<Gtk::StyleContext>& style) {
+static std::optional<Gdk::RGBA> lookup_theme_color(Glib::RefPtr<Gtk::StyleContext>& style, const Glib::ustring& name) {
     Gdk::RGBA color;
-    if (style && style->lookup_color("theme_bg_color", color)) {
+    if (style && style->lookup_color(name, color)) {
         return color;
     }
     return {};
 }
 
+std::optional<Gdk::RGBA> lookup_background_color(Glib::RefPtr<Gtk::StyleContext>& style) {
+    return lookup_theme_color(style, "theme_bg_color");
+}
+
 std::optional<Gdk::RGBA> lookup_foreground_color(Glib::RefPtr<Gtk::StyleContext>& style) {
-    Gdk::RGBA color;
-    if (style && style->lookup_color("theme_fg_color", color)) {
-        return color;
-    }
-    return {};
+    return lookup_theme_color(style, "theme_fg_color");
+}
+
+std::optional<Gdk::RGBA> lookup_selected_foreground_color(Glib::RefPtr<Gtk::StyleContext>& style) {
+    return lookup_theme_color(style, "theme_selected_fg_color");
+}
+
+std::optional<Gdk::RGBA> lookup_selected_background_color(Glib::RefPtr<Gtk::StyleContext>& style) {
+    return lookup_theme_color(style, "theme_selected_bg_color");
+}
+
+std::optional<Gdk::RGBA> lookup_border_color(Glib::RefPtr<Gtk::StyleContext>& style) {
+    return lookup_theme_color(style, "borders");
 }
 
 }

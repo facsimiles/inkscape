@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
+  <placeholder width="172" height="332"></placeholder>
   <requires lib="gtk" version="4.0"></requires>
   <object class="GtkAdjustment" id="adjustment-font-size">
     <property name="upper">20</property>
@@ -36,10 +37,10 @@
   <object class="GtkPopover" id="filter-popover">
     <property name="child">
       <object class="GtkGrid">
-        <property name="margin-start">10</property>
-        <property name="margin-end">10</property>
-        <property name="margin-top">8</property>
-        <property name="margin-bottom">8</property>
+        <property name="margin-start">1</property>
+        <property name="margin-end">1</property>
+        <property name="margin-top">1</property>
+        <property name="margin-bottom">1</property>
         <property name="row-spacing">3</property>
         <property name="column-spacing">3</property>
         <child>
@@ -161,6 +162,9 @@
           <property name="row">4</property>
           <property name="row-span">2</property>
         </layout>
+        <style>
+          <class name="active-background"></class>
+        </style>
       </object>
     </child>
     <child>
@@ -176,56 +180,57 @@
         <property name="margin-start">5</property>
         <property name="margin-end">5</property>
         <property name="hexpand">True</property>
-        <property name="spacing">4</property>
+        <property name="spacing">0</property>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">0</property>
+        </layout>
         <child>
           <object class="GtkMenuButton" id="btn-sort">
+            <property name="tooltip-text" translatable="yes">Font list sorting</property>
+            <property name="icon-name">sort-icon</property>
+            <property name="always-show-arrow">false</property>
             <property name="focusable">True</property>
             <property name="focus-on-click">False</property>
             <property name="receives-default">True</property>
             <property name="halign">center</property>
             <property name="has-frame">False</property>
-            <child>
-              <object class="GtkBox">
-                <child>
-                  <object class="GtkImage" id="sort-icon">
-                    <property name="icon-name">sort</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkImage">
-                    <property name="icon-name">pan-down-symbolic</property>
-                  </object>
-                </child>
-              </object>
-            </child>
           </object>
         </child>
         <child>
           <object class="GtkMenuButton" id="btn-filter">
+            <property name="tooltip-text" translatable="yes">Font filtering</property>
+            <property name="always-show-arrow">false</property>
+            <property name="icon-name">font_collections</property>
             <property name="focusable">True</property>
             <property name="focus-on-click">False</property>
             <property name="receives-default">True</property>
             <property name="halign">center</property>
             <property name="has-frame">False</property>
             <property name="popover">filter-popover</property>
-            <child>
-              <object class="GtkBox">
-                <child>
-                  <object class="GtkImage">
-                    <property name="icon-name">font_collections</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkImage">
-                    <property name="icon-name">pan-down-symbolic</property>
-                  </object>
-                </child>
-              </object>
-            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkMenuButton" id="btn-charmap">
+            <property name="margin-end">0</property>
+            <property name="margin-start">12</property>
+            <property name="tooltip-text" translatable="yes">Character viewer</property>
+            <property name="has-frame">false</property>
+            <property name="icon-name">charmap</property>
+            <property name="focusable">True</property>
+            <property name="focus-on-click">False</property>
+            <property name="receives-default">True</property>
+            <property name="halign">center</property>
           </object>
         </child>
         <child>
           <object class="GtkToggleButton" id="btn-options">
+            <property name="margin-end">4</property>
+            <property name="margin-start">0</property>
+            <property name="hexpand">true</property>
+            <property name="hexpand-set">true</property>
+            <property name="halign">end</property>
+            <property name="tooltip-text" translatable="yes">Dialog options</property>
             <property name="focusable">True</property>
             <property name="receives-default">True</property>
             <property name="icon-name">gear</property>
@@ -233,21 +238,15 @@
           </object>
         </child>
         <child>
-          <object class="GtkDrawingArea">
-            <property name="width-request">15</property>
-          </object>
-        </child>
-        <child>
           <object class="GtkSearchEntry" id="font-search">
+            <property name="halign">fill</property>
+            <property name="hexpand-set">true</property>
+            <property name="max-width-chars">3</property>
             <property name="focusable">True</property>
-            <property name="hexpand">True</property>
-            <property name="width-chars">10</property>
+            <property name="hexpand">true</property>
+            <property name="width-chars">-1</property>
           </object>
         </child>
-        <layout>
-          <property name="column">0</property>
-          <property name="row">0</property>
-        </layout>
       </object>
     </child>
     <child>
@@ -500,13 +499,13 @@
                     <property name="child">
                       <object class="GtkBox" id="tag-box">
                         <child>
-                          <placeholder/>
+                          <placeholder></placeholder>
                         </child>
                         <child>
-                          <placeholder/>
+                          <placeholder></placeholder>
                         </child>
                         <child>
-                          <placeholder/>
+                          <placeholder></placeholder>
                         </child>
                       </object>
                     </property>
@@ -548,8 +547,8 @@
             <property name="focusable">True</property>
             <property name="margin-start">4</property>
             <property name="margin-end">4</property>
-            <property name="margin-top">4</property>
-            <property name="margin-bottom">4</property>
+            <property name="margin-top">0</property>
+            <property name="margin-bottom">0</property>
             <property name="row-spacing">0</property>
             <property name="column-spacing">0</property>
             <property name="item-padding">0</property>
@@ -559,6 +558,9 @@
           <property name="column">0</property>
           <property name="row">6</property>
         </layout>
+        <style>
+          <class name="active-background"></class>
+        </style>
       </object>
     </child>
     <child>
@@ -576,5 +578,6 @@
         </layout>
       </object>
     </child>
+    <!--dim: 1, 10-->
   </object>
 </interface>

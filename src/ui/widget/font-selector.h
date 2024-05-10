@@ -143,7 +143,9 @@ private:
     void set_current_size(double size) override { update_size(size); };
     sigc::signal<void ()>& signal_changed() override { return dummy; }
     sigc::signal<void ()>& signal_apply() override { return _signal_apply; }
+    sigc::signal<void (const Glib::ustring&)>& signal_insert_text() override { return dummy2; }
     sigc::signal<void ()> dummy;
+    sigc::signal<void (const Glib::ustring&)> dummy2;
 
 public:
     /**

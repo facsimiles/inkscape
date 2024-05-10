@@ -177,6 +177,7 @@ set(ui_SRC
 	dialog/save-template-dialog.cpp
 
 	widget/block-scale.cpp
+	widget/character-viewer.cpp
 	widget/iconrenderer.cpp
 	widget/ink-spin-button.cpp
 	widget/ink-property-grid.cpp
@@ -279,6 +280,7 @@ set(ui_SRC
 	widget/selected-style.cpp
 	widget/shapeicon.cpp
 	widget/snapshot-widget.cpp
+	widget/simple-grid.cpp
 	widget/spin-scale.cpp
 	widget/spinbutton.cpp
 	widget/stack.cpp
@@ -518,6 +520,7 @@ set(ui_SRC
 	widget/canvas/cairographics.h
 	widget/canvas-grid.h
 	widget/canvas-notice.h
+	widget/character-viewer.h
 	widget/completion-popup.h
 	widget/color-entry.h
 	widget/color-notebook.h
@@ -606,6 +609,7 @@ set(ui_SRC
 	widget/selected-style.h
 	widget/shapeicon.h
 	widget/snapshot-widget.h
+	widget/simple-grid.h
 	widget/size-reporter.h
 	widget/spin-scale.h
 	widget/spinbutton.h

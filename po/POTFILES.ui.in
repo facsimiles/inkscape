@@ -32,6 +32,7 @@
 ../share/ui/page-properties.glade
 ../share/ui/pattern-edit.glade
 ../share/ui/align-and-distribute.ui
+../share/ui/character-viewer.ui
 ../share/ui/dash-selector.ui
 ../share/ui/dialog-measure-tool-settings.ui
 ../share/ui/dialog-spellcheck.ui

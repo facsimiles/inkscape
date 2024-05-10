@@ -230,6 +230,7 @@ FontList::FontList(Glib::ustring preferences_path) :
     _tag_box(get_widget<Gtk::Box>(_builder, "tag-box")),
     _info_box(get_widget<Gtk::Box>(_builder, "info-box")),
     _progress_box(get_widget<Gtk::Box>(_builder, "progress-box")),
+    _search(get_widget<Gtk::SearchEntry2>(_builder, "font-search")),
     _font_tags(Inkscape::FontTags::get())
 {
     _cell_renderer = std::make_unique<CellFontRenderer>();
@@ -249,7 +250,7 @@ FontList::FontList(Glib::ustring preferences_path) :
     get_widget<Gtk::Box>(_builder, "variants").append(_font_variations);
     _font_variations.get_size_group(0)->add_widget(get_widget<Gtk::Label>(_builder, "font-size-label"));
     _font_variations.get_size_group(1)->add_widget(_font_size);
-    _font_variations.connectChanged([this](){
+    _font_variations.connectChanged([this]{
         if (_update.pending()) return;
         _signal_changed.emit();
     });
@@ -301,8 +302,38 @@ FontList::FontList(Glib::ustring preferences_path) :
         }
     });
 
-    auto search = &get_widget<Gtk::SearchEntry2>(_builder, "font-search");
-    search->signal_changed().connect([this](){ filter(); });
+    _charmap_popover.set_child(_charmap);
+    get_widget<Gtk::MenuButton>(_builder, "btn-charmap").set_popover(_charmap_popover);
+    _charmap_popover.signal_show().connect([this] {
+        try {
+            auto spec = get_fontspec();
+            _current_font_instance = FontFactory::get().FaceFromPangoString(spec.c_str());
+
+            Glib::ustring name;
+            if (auto iter = get_selected_font()) {
+                const auto& font = iter->get_value(g_column_model.font);
+                name = get_full_name(font);
+            }
+            _charmap.set_font(_current_font_instance.get(), name);
+            return;
+        }
+        catch (std::exception& ex) {
+            // TODO: show notification
+            std::cerr << ex.what() << std::endl;
+        }
+        _current_font_instance = {};
+        _charmap.set_font(nullptr, {});
+    });
+    _charmap_popover.signal_closed().connect([this] {
+        // clear old content
+        _charmap.set_font(nullptr, {});
+    });
+    _charmap.signal_insert_text().connect([this](auto& text) {
+        // insert glyph selected in a char viewer
+        _signal_insert_text.emit(text);
+    });
+
+    _search.signal_changed().connect([this]{ filter(); });
 
     auto set_row_height = [font_renderer, this](int font_size_percent) {
         font_renderer->_font_size = font_size_percent;
@@ -326,7 +357,7 @@ FontList::FontList(Glib::ustring preferences_path) :
         return Glib::ustring::format(std::fixed, std::setprecision(0), val) + "%";
     });
     size->set_value(font_renderer->_font_size);
-    size->signal_value_changed().connect([=, this](){
+    size->signal_value_changed().connect([=, this]{
         auto font_size = size->get_value();
         set_row_height(font_size);
         set_grid_size(font_size);
@@ -464,7 +495,7 @@ FontList::FontList(Glib::ustring preferences_path) :
         _signal_changed.emit();
     };
 
-    _selection_changed = _font_grid.signal_selection_changed().connect([font_selected, this](){
+    _selection_changed = _font_grid.signal_selection_changed().connect([font_selected, this]{
         auto sel = _font_grid.get_selected_items();
         if (sel.size() == 1) {
             auto it = _font_list_store->get_iter(sel.front());
@@ -635,8 +666,8 @@ void FontList::sort_fonts(Inkscape::FontOrder order) {
     Inkscape::sort_fonts(_fonts, order, true);
 
     if (const char* icon = get_sort_icon(order)) {
-        auto& sort = get_widget<Gtk::Image>(_builder, "sort-icon");
-        sort.set_from_icon_name(icon);
+        auto& button = get_widget<Gtk::MenuButton>(_builder, "btn-sort");
+        button.set_icon_name(icon);
     }
 
     filter();
@@ -684,7 +715,6 @@ void FontList::filter() {
         selected = it->get_value(g_column_model.font);
     }
 
-    auto& search = get_widget<Gtk::SearchEntry2>(_builder, "font-search");
     // Not used: extra search terms; use collections instead
     // auto& oblique = get_widget<Gtk::CheckButton>(_builder, "id-oblique");
     // auto& monospaced = get_widget<Gtk::CheckButton>(_builder, "id-monospaced");
@@ -694,7 +724,7 @@ void FontList::filter() {
     // params.monospaced = monospaced.get_active();
     // params.oblique = oblique.get_active();
     // params.others = others.get_active();
-    populate_font_store(search.get_text(), params);
+    populate_font_store(_search.get_text(), params);
 
     if (!_current_fspec.empty()) {
         add_font(_current_fspec, false);

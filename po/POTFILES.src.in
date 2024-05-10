@@ -450,5 +450,6 @@ ${_build_dir}/share/templates/templates.h
 ../src/util/font-collections.h
 ../src/util/font-tags.cpp
 ../src/util/paper.cpp
+../src/util/unicode.cpp
 ../src/vanishing-point.cpp
 ../src/widgets/sp-attribute-widget.cpp

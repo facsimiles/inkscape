@@ -14,6 +14,9 @@
 #include <gtkmm/iconview.h>
 #include <gtkmm/listbox.h>
 #include <gtkmm/liststore.h>
+#include <gtkmm/popover.h>
+
+#include "character-viewer.h"
 #include "ui/widget/font-variations.h"
 #include "util/font-discovery.h"
 #include "util/font-tags.h"
@@ -38,6 +41,7 @@ public:
 
     sigc::signal<void ()>& signal_changed() override { return _signal_changed; }
     sigc::signal<void ()>& signal_apply() override { return _signal_apply; }
+    sigc::signal<void (const Glib::ustring&)>& signal_insert_text() override { return _signal_insert_text; }
 
     Gtk::Widget* box() override { return this; }
 
@@ -70,11 +74,13 @@ private:
 
     sigc::signal<void ()> _signal_changed;
     sigc::signal<void ()> _signal_apply;
+    sigc::signal<void (const Glib::ustring&)> _signal_insert_text;
     Glib::RefPtr<Gtk::Builder> _builder;
     Gtk::Grid& _main_grid;
     Gtk::TreeView& _font_list;
     Gtk::TreeViewColumn _text_column;
     Gtk::IconView& _font_grid;
+    Gtk::SearchEntry2& _search;
     sigc::scoped_connection _selection_changed;
     Glib::RefPtr<Gtk::ListStore> _font_list_store;
     Gtk::Box& _tag_box;
@@ -102,6 +108,9 @@ private:
     std::size_t _initializing = 0;
     sigc::scoped_connection _font_collections_update;
     sigc::scoped_connection _font_collections_selection;
+    Gtk::Popover _charmap_popover;
+    CharacterViewer _charmap;
+    std::shared_ptr<FontInstance> _current_font_instance; // for charmap only
 };
 
 } // namespaces

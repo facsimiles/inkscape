@@ -152,6 +152,11 @@ if(WITH_JEMALLOC)
     endif()
 endif()
 
+pkg_search_module(ICU_UC icu-uc)
+list(APPEND INKSCAPE_INCS_SYS ${ICU_UC_INCLUDE_DIRS})
+list(APPEND INKSCAPE_LIBS ${ICU_UC_LIBRARIES})
+link_directories(${ICU_UC_LIBRARY_DIRS})
+
 find_package(Iconv REQUIRED)
 list(APPEND INKSCAPE_INCS_SYS ${Iconv_INCLUDE_DIRS})
 list(APPEND INKSCAPE_LIBS ${Iconv_LIBRARIES})

@@ -46,6 +46,8 @@ public:
     void placeCursor(SPObject *text, Text::Layout::iterator where);
     bool deleteSelection();
     void deleteSelected();
+    // Insert the text to replace the current selection
+    void insertText(const Glib::ustring& text);
 
     SPItem *textItem() const { return text; }
 
@@ -112,6 +114,7 @@ private:
     void _forgetText();
     void _insertUnichar();
     void _showCurrUnichar();
+    void _insertText(const Glib::ustring& text);
 
     void _selectionChanged(Selection *selection);
     void _selectionModified(Selection *selection, unsigned flags);

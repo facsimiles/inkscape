@@ -182,7 +182,7 @@ inkscape:macos:
   needs: ["deps:macos"]
   variables:
     CCACHE_MAXSIZE: "200Mi"
-    MACOSX_DEPLOYMENT_TARGET: 11.3
+    MACOSX_DEPLOYMENT_TARGET: 13.3
     SDKROOT: /opt/sdks/MacOSX15.5.sdk
   script:
     - |

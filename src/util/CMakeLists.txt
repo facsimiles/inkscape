@@ -10,6 +10,7 @@ set(util_SRC
     font-discovery.cpp
     font-tags.cpp
     funclog.cpp
+	glyph-draw.cpp
     share.cpp
     object-renderer.cpp
     object-modified-tags.cpp
@@ -22,6 +23,7 @@ set(util_SRC
     recently-used-fonts.cpp
     pool.cpp
     treeify.cpp
+	unicode.cpp
     units.cpp
     uri.cpp
     ziptool.cpp
@@ -45,6 +47,7 @@ set(util_SRC
     format_size.h
     forward-pointer-iterator.h
     funclog.h
+	glyph-draw.h
     hybrid-pointer.h
     longest-common-suffix.h
     object-renderer.h
@@ -67,6 +70,7 @@ set(util_SRC
     treeify.h
     trim.h
     smart_ptr_keys.h
+	unicode.h
     units.h
     uri.h
     variant-visitor.h

@@ -165,6 +165,10 @@ void TextTool::deleteSelected()
     DocumentUndo::done(_desktop->getDocument(), _("Delete text"), INKSCAPE_ICON("draw-text"));
 }
 
+void TextTool::insertText(const Glib::ustring& text) {
+    _insertText(text);
+}
+
 bool TextTool::item_handler(SPItem *item, CanvasEvent const &event)
 {
     _validateCursorIterators();
@@ -279,8 +283,7 @@ void TextTool::_setupText()
  *
  * \pre uni non-empty.
  */
-void TextTool::_insertUnichar()
-{
+void TextTool::_insertUnichar() {
     assert(!uni.empty());
 
     unsigned uv;
@@ -295,20 +298,23 @@ void TextTool::_insertUnichar()
         // This may be due to bad input, so it goes to statusbar.
         _desktop->messageStack()->flash(ERROR_MESSAGE, _("Non-printable character"));
     } else {
-        if (!text) { // printable key; create text if none (i.e. if nascent_object)
-            _setupText();
-            nascent_object = false; // we don't need it anymore, having created a real <text>
-        }
-
         char u[10];
         auto const len = g_unichar_to_utf8(uv, u);
         u[len] = '\0';
-
-        text_sel_start = text_sel_end = sp_te_replace(text, text_sel_start, text_sel_end, u);
-        _updateCursor();
-        _updateTextSelection();
-        DocumentUndo::done(_desktop->getDocument(), _("Insert Unicode character"), INKSCAPE_ICON("draw-text"));
+        _insertText(u);
     }
+}
+
+void TextTool::_insertText(const Glib::ustring& str) {
+    if (!text) { // printable key; create text if none (i.e. if nascent_object)
+        _setupText();
+        nascent_object = false; // we don't need it anymore, having created a real <text>
+    }
+
+    text_sel_start = text_sel_end = sp_te_replace(text, text_sel_start, text_sel_end, str.c_str());
+    _updateCursor();
+    _updateTextSelection();
+    DocumentUndo::done(_desktop->getDocument(), _("Insert Unicode character"), INKSCAPE_ICON("draw-text"));
 }
 
 static void hex_to_printable_utf8_buf(char const *const ehex, char *utf8)

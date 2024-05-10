@@ -20,6 +20,10 @@
 #ifndef INCLUDE_DROP_DOWN_LIST_H
 #define INCLUDE_DROP_DOWN_LIST_H
 
+namespace Gtk {
+class Label;
+}
+
 namespace Inkscape::UI::Widget {
 
 class DropDownList : public Gtk::DropDown {
@@ -37,6 +41,8 @@ public:
     unsigned int get_item_count() const { return _model->get_n_items(); }
     // delete all items
     void remove_all() { _model->splice(0, _model->get_n_items(), {}); }
+    // set to limit the width of the dropdown itself (-1 to impose no limit)
+    void set_button_max_chars(int max_chars);
 
     // selected item changed signal
     Glib::SignalProxyProperty signal_changed() { return property_selected().signal_changed(); }
@@ -50,9 +56,11 @@ public:
 
 private:
     void _init();
+    Gtk::Label* set_up_item(bool ellipsize);
     Glib::RefPtr<Gtk::StringList> _model = Gtk::StringList::create({});
     Glib::RefPtr<Gtk::SignalListItemFactory> _factory = Gtk::SignalListItemFactory::create();
     std::function<bool (unsigned int)> _separator_callback;
+    int _button_max_chars = -1;
 };
 
 } // namespace

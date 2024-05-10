@@ -383,6 +383,22 @@ void FontInstance::find_font_metrics()
     // std::cout << "  text_after:  " << _baselines[ SP_CSS_BASELINE_TEXT_AFTER_EDGE  ] << std::endl;
 }
 
+std::vector<FontInstance::CharInfo> FontInstance::find_all_characters(uint32_t from, uint32_t to) const {
+    std::vector<CharInfo> characters;
+
+    FT_UInt glyph_index;
+    auto unicode = FT_Get_First_Char(face, &glyph_index);
+    while (glyph_index) {
+        if (unicode >= from && unicode <= to) {
+            characters.push_back(CharInfo(unicode, glyph_index));
+        }
+
+        unicode = FT_Get_Next_Char(face, unicode, &glyph_index);
+    }
+
+    return characters;
+}
+
 unsigned int FontInstance::MapUnicodeChar(gunichar c) const
 {
     unsigned int res = 0;

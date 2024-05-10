@@ -198,6 +198,7 @@ private:
     sigc::scoped_connection fontCollectionsUpdate;
     sigc::scoped_connection _apply_font;
     sigc::scoped_connection _font_changed;
+    sigc::scoped_connection _insert_text;
 
     // Other
     double selected_fontsize = 12;

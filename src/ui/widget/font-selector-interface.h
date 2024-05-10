@@ -17,6 +17,7 @@ public:
 
     virtual sigc::signal<void ()>& signal_changed() = 0;
     virtual sigc::signal<void ()>& signal_apply() = 0;
+    virtual sigc::signal<void (const Glib::ustring&)>& signal_insert_text() = 0;
 
     // get UI element
     virtual Gtk::Widget* box() = 0;
