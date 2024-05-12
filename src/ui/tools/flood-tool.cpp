@@ -34,6 +34,9 @@
 #include "context-fns.h"
 #include "desktop-style.h"
 #include "desktop.h"
+#include "display/control/canvas-item-enums.h"
+#include "display/control/ctrl-handle-manager.h"
+#include "display/control/ctrl-handle-styling.h"
 #include "document-undo.h"
 #include "document.h"
 #include "layer-manager.h"
@@ -1053,11 +1056,8 @@ bool FloodTool::root_handler(CanvasEvent const &event)
 
                 auto const p = _desktop->w2d(event.pos);
                 auto rubberband = Rubberband::get(_desktop);
-                auto active_mode = Rubberband::Mode::TOUCHPATH;
-                auto style = Rubberband::get_default_style(active_mode);
-                style.stroke_outset = 0xffffffff;
-                style.stroke_width = 1.25;
-                rubberband->set_mode_with_style(active_mode, std::move(style));
+                rubberband->set_mode(Rubberband::Mode::TOUCHPATH);
+                rubberband->set_handle(RUBBERBAND_TOUCHPATH_FLOOD);
                 rubberband->start(_desktop, p);
             }
         }

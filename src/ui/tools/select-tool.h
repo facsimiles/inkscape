@@ -13,6 +13,7 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "display/control/canvas-item-enums.h"
 #include "display/control/canvas-item.h"
 #include "rubberband.h"
 #include "ui/tools/tool-base.h"
@@ -56,7 +57,7 @@ private:
     bool sp_select_context_abort();
     void sp_select_context_cycle_through_items(Selection *selection, ScrollEvent const &scroll_event);
     void sp_select_context_reset_opacities();
-    static Rubberband::Mode get_default_rubberband_mode();
+    static std::pair<Rubberband::Mode const, CanvasItemCtrlType const> const get_default_rubberband_state();
 
     bool _alt_on = false;
     bool _force_dragging = false;

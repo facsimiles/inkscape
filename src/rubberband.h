@@ -18,7 +18,9 @@
 #include <2geom/path.h>
 #include <2geom/rect.h>
 #include <vector>
+#include "display/control/canvas-item-enums.h"
 #include "display/control/canvas-item-ptr.h"
+#include "display/control/ctrl-handle-styling.h"
 
 /* fixme: do multidocument safe */
 
@@ -67,9 +69,10 @@ public:
     Geom::Path getPath() const;
 
     constexpr static Rubberband::Mode get_default_mode() { return Rubberband::Mode::RECT; };
+    constexpr static CanvasItemCtrlType get_default_handle() { return CanvasItemCtrlType::RUBBERBAND_RECT; };
     static Inkscape::Rubberband::Style get_default_style(Rubberband::Mode mode);
-    void set_mode_with_style(Rubberband::Mode mode, Rubberband::Style&& style);
-    void set_mode_with_default_style(Rubberband::Mode mode);
+    void set_mode(Rubberband::Mode mode) { _mode = mode; };
+    void set_handle(CanvasItemCtrlType handle) { _handle = handle; };
 
     static Rubberband* get(SPDesktop *desktop);
 
@@ -84,6 +87,7 @@ private:
 
     CanvasItemPtr<CanvasItemRect> _rect;
     CanvasItemPtr<CanvasItemBpath> _touchpath;
+    CanvasItemCtrlType _handle = CanvasItemCtrlType::RUBBERBAND_RECT; // Used for styling through css
     SPCurve *_touchpath_curve = nullptr;
 
     void delete_canvas_items();
@@ -92,8 +96,6 @@ private:
     bool _moved = false;
     Rubberband::Mode _mode = get_default_mode();
     double _tolerance = 0.0;
-
-    Style _style{};
 };
 
 } // namespace Inkscape

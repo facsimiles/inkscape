@@ -15,6 +15,7 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "display/control/canvas-item-enums.h"
 #ifdef HAVE_CONFIG_H
 # include "config.h"  // only include where actually required!
 #endif
@@ -441,9 +442,12 @@ bool SelectTool::root_handler(CanvasEvent const &event)
 
                 auto rubberband = Inkscape::Rubberband::get(_desktop);
                 if (Modifier::get(Modifiers::Type::SELECT_TOUCH_PATH)->active(event.modifiers)) {
-                    rubberband->set_mode_with_default_style(Rubberband::Mode::TOUCHPATH);
+                    rubberband->set_mode(Rubberband::Mode::TOUCHPATH);
+                    rubberband->set_handle(CanvasItemCtrlType::RUBBERBAND_TOUCHPATH);
                 } else {
-                    rubberband->set_mode_with_default_style(get_default_rubberband_mode());
+                    auto const [mode, handle] = get_default_rubberband_state();
+                    rubberband->set_mode(mode);
+                    rubberband->set_handle(handle);
                 }
 
                 Geom::Point const p(_desktop->w2d(event.pos));
@@ -800,7 +804,8 @@ bool SelectTool::root_handler(CanvasEvent const &event)
                 if (auto rubberband = Inkscape::Rubberband::get(_desktop); rubberband->is_started()) {
                     // if Alt then change cursor to moving cursor:
                     if (Modifier::get(Modifiers::Type::SELECT_TOUCH_PATH)->active(event.modifiers | keyval)) {
-                        rubberband->set_mode_with_default_style(Rubberband::Mode::TOUCHPATH);
+                        rubberband->set_mode(Rubberband::Mode::TOUCHPATH);
+                        rubberband->set_handle(CanvasItemCtrlType::RUBBERBAND_TOUCHPATH);
                     }
                 } else {
                     // do not change the statusbar text when mousekey is down to move or transform the object,
@@ -1000,7 +1005,9 @@ bool SelectTool::root_handler(CanvasEvent const &event)
             if (auto rubberband = Inkscape::Rubberband::get(_desktop); rubberband->is_started()) {
                 // if Alt then change cursor to moving cursor:
                 if (alt) {
-                    rubberband->set_mode_with_default_style(get_default_rubberband_mode());
+                    auto const [mode, handle] = get_default_rubberband_state();
+                    rubberband->set_mode(mode);
+                    rubberband->set_handle(handle);
                 }
             } else {
                 if (alt) {
@@ -1033,14 +1040,16 @@ void SelectTool::updateDescriber(Inkscape::Selection *selection)
 }
 
 /**
- * Get the default rubberband mode for select tool.
+ * Get the default rubberband state for select tool.
  */
-Rubberband::Mode SelectTool::get_default_rubberband_mode() {
+std::pair<Rubberband::Mode const, CanvasItemCtrlType const> const SelectTool::get_default_rubberband_state() {
     auto mode = Rubberband::get_default_mode();
+    auto handle = Rubberband::get_default_handle();
     if (Inkscape::Preferences::get()->getBool("/tools/select/touch_box", false)) {
         mode = Rubberband::Mode::TOUCHRECT;
+        handle = CanvasItemCtrlType::RUBBERBAND_TOUCHRECT;
     }
-    return mode;
+    return {mode, handle};
 }
 } // namespace Inkscape::UI::Tools
 

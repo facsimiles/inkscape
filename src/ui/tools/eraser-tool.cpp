@@ -24,6 +24,9 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "display/control/canvas-item-enums.h"
+#include "display/control/ctrl-handle-manager.h"
+#include "display/control/ctrl-handle-styling.h"
 #define noERASER_VERBOSE
 
 #include "eraser-tool.h"
@@ -363,10 +366,8 @@ bool EraserTool::root_handler(CanvasEvent const &event)
 
                 if (mode == EraserToolMode::DELETE) {
                     auto rubberband = Inkscape::Rubberband::get(_desktop);
-                    auto active_mode = Rubberband::Mode::TOUCHPATH;
-                    auto style = Rubberband::get_default_style(active_mode);
-                    style.stroke = 0xf00000ff;
-                    rubberband->set_mode_with_style(active_mode, std::move(style));
+                    rubberband->set_mode(Rubberband::Mode::TOUCHPATH);
+                    rubberband->set_handle(RUBBERBAND_TOUCHPATH_ERASER);
                     rubberband->start(_desktop, button_dt);
                 }
                 /* initialize first point */

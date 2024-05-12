@@ -563,10 +563,8 @@ bool NodeTool::root_handler(CanvasEvent const &event)
         if (event.num_press == 1) {
 
             if (Modifier::get(Modifiers::Type::SELECT_TOUCH_PATH)->active(event.modifiers)) {
-                auto active_mode = Rubberband::Mode::TOUCHPATH;
-                auto style = Rubberband::get_default_style(active_mode);
-                style.fill = 0x277fff1a;
-                rband->set_mode_with_style(active_mode, std::move(style));
+                rband->set_mode(Rubberband::Mode::TOUCHPATH);
+                rband->set_handle(RUBBERBAND_TOUCHPATH);
             }
             rband->start(_desktop, desktop_pt, true);
             ret = true;

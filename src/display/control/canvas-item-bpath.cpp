@@ -92,11 +92,23 @@ void CanvasItemBpath::set_dashes(std::vector<double> &&dashes)
 /**
  * Set the stroke outset
  */
-void CanvasItemBpath::set_stroke_outset(uint32_t color)
+void CanvasItemBpath::set_outline(uint32_t color)
 {
     defer([=, this] {
-        if (_stroke_outset == color) return;
-        _stroke_outset = color;
+        if (_outline == color) return;
+        _outline = color;
+        request_redraw();
+    });
+}
+
+/**
+ * Set the outline width
+ */
+void CanvasItemBpath::set_outline_width(double width)
+{
+    defer([=, this] {
+        if (_outline_width == width) return;
+        _outline_width = width;
         request_redraw();
     });
 }
@@ -208,13 +220,13 @@ void CanvasItemBpath::_render(Inkscape::CanvasItemBuffer &buf) const
         buf.cr->restore();
     }
 
-    // Do stroke outset, but only if we have a stroke
-    // Doing an outset without a stroke doesn't make much sense,
+    // Do stroke outline, but only if we have a stroke
+    // Doing an outline without a stroke doesn't make much sense,
     // that could very well be just a stroke with a larger width
-    if (do_stroke && (SP_RGBA32_A_U(_stroke_outset) > 0)) {
-        buf.cr->set_source_rgba(SP_RGBA32_R_F(_stroke_outset), SP_RGBA32_G_F(_stroke_outset),
-                                SP_RGBA32_B_F(_stroke_outset), SP_RGBA32_A_F(_stroke_outset));
-        buf.cr->set_line_width(_stroke_width * 4);
+    if (do_stroke && _outline_width > 0 && (SP_RGBA32_A_U(_outline) > 0)) {
+        buf.cr->set_source_rgba(SP_RGBA32_R_F(_outline), SP_RGBA32_G_F(_outline),
+                                SP_RGBA32_B_F(_outline), SP_RGBA32_A_F(_outline));
+        buf.cr->set_line_width(_outline_width);
         buf.cr->stroke_preserve();
     }
 

@@ -48,7 +48,8 @@ public:
     void set_fill(uint32_t rgba, SPWindRule fill_rule);
     void set_dashes(std::vector<double> &&dashes);
     void set_stroke_width(double width);
-    void set_stroke_outset(uint32_t color);
+    void set_outline(uint32_t color);
+    void set_outline_width(double width);
 
 protected:
     ~CanvasItemBpath() override = default;
@@ -64,7 +65,8 @@ protected:
     std::vector<double> _dashes;
     bool _phantom_line = false;
     double _stroke_width = 1.0;
-    uint32_t _stroke_outset = 0x0;
+    uint32_t _outline = 0x0;
+    double _outline_width = 0;
 };
 
 } // namespace Inkscape
