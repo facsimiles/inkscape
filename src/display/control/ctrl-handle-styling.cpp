@@ -352,17 +352,17 @@ uint32_t combine_rgb_a(uint32_t rgb, float a)
 
 } // namespace
 
-uint32_t Handles::BaseStyle::getFill() const
+uint32_t Style::getFill() const
 {
     return combine_rgb_a(fill(), fill_opacity() * opacity());
 }
 
-uint32_t Handles::BaseStyle::getStroke() const
+uint32_t Style::getStroke() const
 {
     return combine_rgb_a(stroke(), stroke_opacity() * opacity());
 }
 
-uint32_t Handles::BaseStyle::getOutline() const
+uint32_t Style::getOutline() const
 {
     return combine_rgb_a(outline(), outline_opacity() * opacity());
 }
