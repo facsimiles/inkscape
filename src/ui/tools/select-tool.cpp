@@ -443,7 +443,7 @@ bool SelectTool::root_handler(CanvasEvent const &event)
                 auto rubberband = Inkscape::Rubberband::get(_desktop);
                 if (Modifier::get(Modifiers::Type::SELECT_TOUCH_PATH)->active(event.modifiers)) {
                     rubberband->set_mode(Rubberband::Mode::TOUCHPATH);
-                    rubberband->set_handle(CanvasItemCtrlType::RUBBERBAND_TOUCHPATH);
+                    rubberband->set_handle(CanvasItemCtrlType::RUBBERBAND_TOUCHPATH_SELECT);
                 } else {
                     auto const [mode, handle] = get_default_rubberband_state();
                     rubberband->set_mode(mode);
@@ -805,7 +805,7 @@ bool SelectTool::root_handler(CanvasEvent const &event)
                     // if Alt then change cursor to moving cursor:
                     if (Modifier::get(Modifiers::Type::SELECT_TOUCH_PATH)->active(event.modifiers | keyval)) {
                         rubberband->set_mode(Rubberband::Mode::TOUCHPATH);
-                        rubberband->set_handle(CanvasItemCtrlType::RUBBERBAND_TOUCHPATH);
+                        rubberband->set_handle(CanvasItemCtrlType::RUBBERBAND_TOUCHPATH_SELECT);
                     }
                 } else {
                     // do not change the statusbar text when mousekey is down to move or transform the object,
