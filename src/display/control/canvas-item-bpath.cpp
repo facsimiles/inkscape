@@ -200,7 +200,7 @@ void CanvasItemBpath::_render(Inkscape::CanvasItemBuffer &buf) const
     buf.cr->begin_new_path();
 
     feed_pathvector_to_cairo(buf.cr->cobj(), _path, affine(), buf.rect,
-                             /* optimize_stroke */ !(do_fill || _fill_pattern), 1);
+                             /* optimize_stroke */ !(do_fill || _fill_pattern), _stroke_width); // Is this the right thing to do?
 
     // Do fill
     if (do_fill) {
