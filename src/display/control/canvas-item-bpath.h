@@ -56,6 +56,7 @@ protected:
 
     void _update(bool propagate) override;
     void _render(Inkscape::CanvasItemBuffer &buf) const override;
+    double get_effective_outline() const;
 
     // Geometry
     Geom::PathVector _path;

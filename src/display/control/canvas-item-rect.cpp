@@ -100,7 +100,7 @@ void CanvasItemRect::_update(bool)
         _bounds->expandBy(2 * get_shadow_size());
     }
     *_bounds *= affine();
-    _bounds->expandBy(2); // Room for stroke.
+    _bounds->expandBy(_stroke_width); // Room for stroke.
 
     // Queue redraw of new area
     request_redraw();

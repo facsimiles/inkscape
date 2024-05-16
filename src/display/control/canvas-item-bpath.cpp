@@ -49,6 +49,10 @@ CanvasItemBpath::CanvasItemBpath(CanvasItemGroup *group, Geom::PathVector path, 
     request_update(); // Render immediately or temporary bpaths won't show.
 }
 
+double CanvasItemBpath::get_effective_outline() const {
+    return _stroke_width + 2 * _outline_width;
+}
+
 /**
  * Set a control bpath. Curve is in document coordinates.
  */
@@ -174,7 +178,7 @@ void CanvasItemBpath::_update(bool)
         return;
     }
 
-    _bounds = expandedBy(bounds_exact_transformed(_path, affine()), 2);
+    _bounds = expandedBy(bounds_exact_transformed(_path, affine()), get_effective_outline() / 2);
 
     // Queue redraw of new area
     request_redraw();
@@ -200,7 +204,7 @@ void CanvasItemBpath::_render(Inkscape::CanvasItemBuffer &buf) const
     buf.cr->begin_new_path();
 
     feed_pathvector_to_cairo(buf.cr->cobj(), _path, affine(), buf.rect,
-                             /* optimize_stroke */ !(do_fill || _fill_pattern), _stroke_width); // Is this the right thing to do?
+                             /* optimize_stroke */ !(do_fill || _fill_pattern), get_effective_outline());
 
     // Do fill
     if (do_fill) {
@@ -226,7 +230,7 @@ void CanvasItemBpath::_render(Inkscape::CanvasItemBuffer &buf) const
     if (do_stroke && _outline_width > 0 && (SP_RGBA32_A_U(_outline) > 0)) {
         buf.cr->set_source_rgba(SP_RGBA32_R_F(_outline), SP_RGBA32_G_F(_outline),
                                 SP_RGBA32_B_F(_outline), SP_RGBA32_A_F(_outline));
-        buf.cr->set_line_width(_outline_width);
+        buf.cr->set_line_width(get_effective_outline());
         buf.cr->stroke_preserve();
     }
 
