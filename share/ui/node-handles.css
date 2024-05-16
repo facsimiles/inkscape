@@ -262,6 +262,7 @@ Notes:
    stroke-width: 2px;
    outline: white;
    outline-width: 6px;
+   outline-opacity: 100%;
 }
 
 /* eraser tool with "touch to delete" mode */
