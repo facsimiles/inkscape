@@ -247,6 +247,7 @@ Notes:
    fill-opacity: 10%;
    stroke: #277fff;
    stroke-width: 2px;
+   outline-width: 0px;
 }
 
 /* select tool while holding "Alt" key */
@@ -254,6 +255,7 @@ Notes:
    fill-opacity: 0%;
    stroke: #277fff;
    stroke-width: 2px;
+   outline-width: 0px;
 }
 
 .inkscape-selection-path.paint-bucket {
@@ -261,7 +263,7 @@ Notes:
    stroke: #277fff;
    stroke-width: 2px;
    outline: white;
-   outline-width: 6px;
+   outline-width: 3px;
    outline-opacity: 100%;
 }
 
@@ -270,4 +272,5 @@ Notes:
    fill-opacity: 0%;
    stroke: red;
    stroke-width: 2px;
+   outline-width: 0px;
 }
