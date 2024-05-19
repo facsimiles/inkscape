@@ -144,6 +144,8 @@ void Inkscape::Rubberband::move(Geom::Point const &p)
                 _rect->set_stroke(style.getStroke());
                 _rect->set_stroke_width(style.stroke_width());
                 _rect->set_fill(style.getFill());
+                _rect->set_outline(style.getOutline());
+                _rect->set_outline_width(style.outline_width());
                 _rect->set_shadow(0xffffffff, 0); // Not a shadow
             }
             _rect->set_rect(Geom::Rect(_start, _end));
@@ -156,6 +158,8 @@ void Inkscape::Rubberband::move(Geom::Point const &p)
                 _rect->set_stroke_width(style.stroke_width());
                 _rect->set_fill(style.getFill());
                 _rect->set_fill_pattern(get_cached_pattern(style.getFill()));
+                _rect->set_outline(style.getOutline());
+                _rect->set_outline_width(style.outline_width());
                 _rect->set_shadow(0xffffffff, 0); // Not a shadow
             }
             _rect->set_rect(Geom::Rect(_start, _end));

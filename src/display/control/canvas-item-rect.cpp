@@ -100,7 +100,7 @@ void CanvasItemRect::_update(bool)
         _bounds->expandBy(2 * get_shadow_size());
     }
     *_bounds *= affine();
-    _bounds->expandBy(_stroke_width); // Room for stroke.
+    _bounds->expandBy(get_effective_outline()); // Room for stroke.
 
     // Queue redraw of new area
     request_redraw();
@@ -148,7 +148,6 @@ void CanvasItemRect::_render(Inkscape::CanvasItemBuffer &buf) const
     }
 
     // Get the points we need transformed into window coordinates.
-    buf.cr->set_line_width(_stroke_width);
     buf.cr->begin_new_path();
     for (int i = 0; i < 4; ++i) {
         auto pt = rect.corner(i) * aff;
@@ -161,9 +160,19 @@ void CanvasItemRect::_render(Inkscape::CanvasItemBuffer &buf) const
     if (_dashed) {
         buf.cr->set_dash(dashes, -0.5);
     }
-    // we maybe have painted the background, back to "normal" compositing
+
+    // We maybe have painted the background, back to "normal" compositing
+
+    // Do outline
+    buf.cr->set_source_rgba(SP_RGBA32_R_F(_outline), SP_RGBA32_G_F(_outline),
+                            SP_RGBA32_B_F(_outline), SP_RGBA32_A_F(_outline));
+    buf.cr->set_line_width(get_effective_outline());
+    buf.cr->stroke_preserve();
+
+    // Do stroke
     buf.cr->set_source_rgba(SP_RGBA32_R_F(_stroke), SP_RGBA32_G_F(_stroke),
                             SP_RGBA32_B_F(_stroke), SP_RGBA32_A_F(_stroke));
+    buf.cr->set_line_width(_stroke_width);
     buf.cr->stroke_preserve();
 
     // Draw fill pattern
@@ -269,16 +278,6 @@ double CanvasItemRect::get_shadow_size() const
     // more slowly at small zoom levels (so it's still perceptible) and grow more slowly at high mag (where it doesn't matter, b/c it's typically off-screen)
     return size / (scale > 0 ? sqrt(scale) : 1);
 }
-
-void CanvasItemRect::set_stroke_width(int width)
-{
-    defer([=, this] {
-        if (_stroke_width == width) return;
-        _stroke_width = width;
-        request_redraw();
-    });
-}
-
 } // namespace Inkscape
 
 /*

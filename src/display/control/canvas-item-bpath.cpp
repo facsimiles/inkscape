@@ -94,42 +94,6 @@ void CanvasItemBpath::set_dashes(std::vector<double> &&dashes)
 }
 
 /**
- * Set the stroke outset
- */
-void CanvasItemBpath::set_outline(uint32_t color)
-{
-    defer([=, this] {
-        if (_outline == color) return;
-        _outline = color;
-        request_redraw();
-    });
-}
-
-/**
- * Set the outline width
- */
-void CanvasItemBpath::set_outline_width(double width)
-{
-    defer([=, this] {
-        if (_outline_width == width) return;
-        _outline_width = width;
-        request_redraw();
-    });
-}
-
-/**
- * Set the stroke width
- */
-void CanvasItemBpath::set_stroke_width(double width)
-{
-    defer([=, this] {
-        if (_stroke_width == width) return;
-        _stroke_width = width;
-        request_redraw();
-    });
-}
-
-/**
  * Returns distance between point in canvas units and nearest point on bpath.
  */
 double CanvasItemBpath::closest_distance_to(Geom::Point const &p) const

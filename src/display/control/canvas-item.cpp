@@ -290,6 +290,54 @@ void CanvasItem::set_stroke(uint32_t stroke)
     });
 }
 
+/**
+ * Set the stroke width
+ */
+void CanvasItem::set_stroke_width(double width)
+{
+    defer([=, this] {
+        if (_stroke_width == width) return;
+        _stroke_width = width;
+        request_redraw();
+    });
+}
+
+
+/**
+ * Set the outline color
+ */
+void CanvasItem::set_outline(uint32_t color)
+{
+    defer([=, this] {
+        if (_outline == color) return;
+        _outline = color;
+        request_redraw();
+    });
+}
+
+/**
+ * Set the outline width. Outline is the "area" beyond the stroke
+ */
+void CanvasItem::set_outline_width(double width)
+{
+    defer([=, this] {
+        if (_outline_width == width) return;
+        _outline_width = width;
+        request_redraw();
+    });
+}
+
+/**
+ * Get the effective outline
+ */
+double CanvasItem::get_effective_outline() const {
+    /* Outline extends in two directions, but it's only generally visible in the outer direction.
+     * The inner direction is usually drawn over by a fill.
+     * TODO: Worry about device scale and pixel fitting if relevant
+     */
+    return _stroke_width + 2 * _outline_width;
+}
+
 void CanvasItem::update_canvas_item_ctrl_sizes(int size_index)
 {
     if (auto ctrl = dynamic_cast<CanvasItemCtrl*>(this)) {
