@@ -431,7 +431,11 @@ static void copy_cairo_surface_to_pixbuf (cairo_surface_t *surface,
 
 bool PdfImportDialog::_onDraw(const Cairo::RefPtr<Cairo::Context>& cr) {
     // Check if we have a thumbnail at all
-    if (!_thumb_data && !_cairo_surfaces[_preview_page]) {
+    if (!_thumb_data
+#ifdef HAVE_POPPLER_CAIRO
+        && !_cairo_surfaces[_preview_page]
+#endif
+    ) {
         return true;
     }
 
