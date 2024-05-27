@@ -2,6 +2,8 @@
 
 set(util_SRC
 	action-accel.cpp
+	drawing-utils.cpp
+	theme-utils.cpp
     document-fonts.cpp
 	drawing-utils.cpp
 	expression-evaluator.cpp
@@ -26,6 +28,8 @@ set(util_SRC
 	# -------
 	# Headers
 	action-accel.h
+	drawing-utils.h
+    theme-utils.h
 	cached_map.h
 	cast.h
 	const_char_ptr.h
@@ -44,6 +48,7 @@ set(util_SRC
 	funclog.h
 	hybrid-pointer.h
 	longest-common-suffix.h
+	ok-color.h
     object-renderer.h
 	optstr.h
 	pages-skeleton.h

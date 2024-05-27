@@ -19,11 +19,10 @@
 #include <sigc++/functors/mem_fun.h>
 #include <utility>
 
+#include "ink-spin-button.h"
 #include "colors/color.h"
 #include "colors/color-set.h"
-#include "colors/spaces/base.h"
 #include "colors/spaces/components.h"
-#include "preferences.h"
 #include "ui/controller.h"
 #include "ui/util.h"
 #include "util/drawing-utils.h"
@@ -57,6 +56,14 @@ ColorSlider::ColorSlider(
     auto const motion = Gtk::EventControllerMotion::create();
     motion->signal_motion().connect([this, &motion = *motion](auto &&...args) { on_motion(motion, args...); });
     add_controller(motion);
+
+    _drag = Gtk::GestureDrag::create();
+    _drag->set_button(1); // left
+    _drag->signal_begin().connect([this](auto){ _dragging = true; });
+    _drag->signal_update().connect([this](auto seq){ on_drag(seq); });
+    _drag->signal_end().connect([this](auto){ _dragging = false; });
+    _drag->set_propagation_phase(Gtk::PropagationPhase::CAPTURE);
+    add_controller(_drag);
 
     _changed_connection = _colors->signal_changed.connect([this]() {
         queue_draw();
@@ -93,6 +100,7 @@ void ColorSlider::on_motion(Gtk::EventControllerMotion const &motion, double x, 
         // don't rely on any click/release events, as release event might be lost leading to unintended updates
         update_component(x, y, state);
     }
+    _dragging = false;
 }
 
 void ColorSlider::update_component(double x, double y, Gdk::ModifierType const state)
@@ -102,6 +110,25 @@ void ColorSlider::update_component(double x, double y, Gdk::ModifierType const s
     // XXX We don't know how to deal with constraints yet.
     if (_colors->isValid(_component) && _colors->setAll(_component, get_value_at(*this, x, y))) {
         signal_value_changed.emit();
+    }
+}
+
+void ColorSlider::on_drag(Gdk::EventSequence* sequence) {
+    if (!_drag->get_current_button() || !_drag->is_active()) {
+        _dragging = false;
+        return;
+    }
+
+    // only update color if user is dragging the slider
+    if (_dragging) {
+        double x = 0.0;
+        double y = 0.0;
+        _drag->get_start_point(x, y);
+        double dx = 0.0;
+        double dy = 0.0;
+        _drag->get_offset(dx, dy);
+        auto state = _drag->get_current_event_state();
+        update_component(x + dx, y + dy, state);
     }
 }
 
@@ -169,7 +196,6 @@ void ColorSlider::draw_func(Cairo::RefPtr<Cairo::Context> const &cr,
 
     auto const scale = get_scale_factor();
     auto width = border.width() * scale;
-    // auto height = area->height() * scale;
     auto left = border.left() * scale;
     auto top = border.top() * scale;
     bool const is_alpha = _component.id == "a";
@@ -195,7 +221,7 @@ void ColorSlider::draw_func(Cairo::RefPtr<Cairo::Context> const &cr,
     // The alpha background is a checkerboard pattern of light and dark pixels
     if (is_alpha) {
         std::vector<uint32_t> bg_buffer;
-        auto [col1, col2] = Util::get_checkerboard_colors(*this);
+        auto [col1, col2] = Util::get_checkerboard_colors(*this, true);
         Glib::RefPtr<Gdk::Pixbuf> background = _make_checkerboard(col1, col2, scale, bg_buffer);
 
         // Paint the alpha background

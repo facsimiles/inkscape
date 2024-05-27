@@ -173,6 +173,7 @@ set(ui_SRC
 	dialog/save-template-dialog.cpp
 
 	widget/iconrenderer.cpp
+	widget/ink-spin-button.cpp
 	widget/alignment-selector.cpp
 	widget/anchor-selector.cpp
 	widget/bin.cpp
@@ -196,6 +197,7 @@ set(ui_SRC
 	widget/color-page.cpp
 	widget/color-palette.cpp
 	widget/color-palette-preview.cpp
+	widget/color-picker-panel.cpp
 	widget/color-picker.cpp
 	widget/color-plate.cpp
 	widget/color-preview.cpp
@@ -245,7 +247,9 @@ set(ui_SRC
 	widget/page-properties.cpp
 	widget/page-size-preview.cpp
 	widget/page-selector.cpp
+	widget/paint-attribute.cpp
 	widget/paint-selector.cpp
+	widget/paint-switch.cpp
 	widget/pattern-editor.cpp
 	widget/point.cpp
 	widget/popover-bin.cpp
@@ -466,6 +470,7 @@ set(ui_SRC
 	tools/zoom-tool.h
 
 	widget/iconrenderer.h
+	widget/ink-spin-button.h
 	widget/alignment-selector.h
 	widget/anchor-selector.h
 	widget/attr-widget.h
@@ -493,6 +498,7 @@ set(ui_SRC
 	widget/color-palette.h
 	widget/color-palette-preview.h
 	widget/color-picker.h
+	widget/color-picker-panel.h
 	widget/color-plate.h
 	widget/color-preview.h
 	widget/color-slider.h
@@ -544,7 +550,9 @@ set(ui_SRC
 	widget/oklab-color-wheel.h
 	widget/optglarea.h
 	widget/page-selector.h
+	widget/paint-attribute.h
 	widget/paint-selector.h
+	widget/paint-switch.h
 	widget/palette_t.h
 	widget/pattern-editor.h
 	widget/point.h

@@ -53,12 +53,21 @@ public:
     // add indicator on top of the preview: swatch or spot color
     enum Indicator { None, Swatch, SpotColor };
     void setIndicator(Indicator indicator);
+    // add frame for a 'Simple' preview
+    void set_frame(bool frame);
+    // set border radius; -1 to auto
+    void set_border_radius(int radius);
+    // adjust size of checkerboard tiles
+    void set_checkerboard_tile_size(unsigned size);
 private:
     std::uint32_t _rgba; // requested RGBA color, used if there is no pattern given
     Cairo::RefPtr<Cairo::Pattern> _pattern; // pattern to show, if provided
     Style _style = Simple;
     Indicator _indicator = None;
+    int _radius = -1;
+    bool _frame = false;
     void draw_func(Cairo::RefPtr<Cairo::Context> const &cr, int width, int height);
+    int _checkerboard_tile_size = 6;
 };
 
 } // namespace Inkscape::UI::Widget

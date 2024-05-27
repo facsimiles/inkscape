@@ -27,6 +27,8 @@
 #include "colors/spaces/enum.h"
 #include <2geom/rect.h>
 #include "ui/util.h"
+#include "util/drawing-utils.h"
+#include "util/theme-utils.h"
 
 namespace Inkscape::UI::Widget {
 
@@ -67,8 +69,10 @@ Geom::Rect round_rect(const Cairo::RefPtr<Cairo::Context>& ctx, Geom::Rect rect,
     return rect.shrunkBy(1);
 }
 
-Cairo::RefPtr<Cairo::Pattern> create_checkerboard_pattern(double tx, double ty) {
-    auto pattern = Cairo::RefPtr<Cairo::Pattern>(new Cairo::Pattern(ink_cairo_pattern_create_checkerboard(), true));
+static Cairo::RefPtr<Cairo::Pattern> _create_checkerboard_pattern(Gtk::Widget& w, double tx, double ty, int size) {
+    auto [col1, col2] = Util::get_checkerboard_colors(w, false);
+    auto pattern = ::create_checkerboard_pattern(col1, col2, size);
+    // auto pattern = Cairo::RefPtr<Cairo::Pattern>(new Cairo::Pattern(ink_cairo_pattern_create_checkerboard(), true));
     pattern->set_matrix(Cairo::translation_matrix(tx, ty));
     return pattern;
 }
@@ -81,17 +85,14 @@ void ColorPreview::draw_func(Cairo::RefPtr<Cairo::Context> const &cr,
     auto x = 0.0;
     auto y = 0.0;
     double radius = _style == Simple ? 0.0 : 2.0;
+    if (_radius >= 0) radius = _radius;
     double degrees = M_PI / 180.0;
     auto rect = Geom::Rect(x, y, x + width, y + height);
 
     std::uint32_t outline_color = 0x00000000;
     std::uint32_t border_color = 0xffffff00;
 
-    auto style = get_style_context();
-    Gdk::RGBA bgnd;
-    bool found = style->lookup_color("theme_bg_color", bgnd);
-    // use theme background color as a proxy for dark theme; this method is fast, which is important here
-    auto dark_theme = found && get_luminance(bgnd) <= 0.5;
+    bool dark_theme = Util::is_current_theme_dark(*this);
     auto state = get_state_flags();
     auto disabled = (state & Gtk::StateFlags::INSENSITIVE) == Gtk::StateFlags::INSENSITIVE;
     auto backdrop = (state & Gtk::StateFlags::BACKDROP) == Gtk::StateFlags::BACKDROP;
@@ -118,7 +119,7 @@ void ColorPreview::draw_func(Cairo::RefPtr<Cairo::Context> const &cr,
         round_rect(cr, rect, radius);
 
         // checkers first
-        auto checkers = create_checkerboard_pattern(-x, -y);
+        auto checkers = _create_checkerboard_pattern(*this, -x, -y, _checkerboard_tile_size);
         cr->set_source(checkers);
         cr->fill_preserve();
 
@@ -172,7 +173,7 @@ void ColorPreview::draw_func(Cairo::RefPtr<Cairo::Context> const &cr,
         cairo_line_to(cr->cobj(), x, y);
         cairo_close_path(cr->cobj());
         if (alpha < 0xff) {
-            auto checkers = create_checkerboard_pattern(-x, -y);
+            auto checkers = _create_checkerboard_pattern(*this, -x, -y, _checkerboard_tile_size);
             cr->set_source(checkers);
             cr->fill_preserve();
         }
@@ -215,6 +216,12 @@ void ColorPreview::draw_func(Cairo::RefPtr<Cairo::Context> const &cr,
             assert(false);
         }
     }
+
+    if (_style == Simple && _frame) {
+        Util::draw_standard_border(cr, rect, dark_theme, radius, get_scale_factor(), false);
+        // Gdk::RGBA color(SP_RGBA32_R_F(_shadow), SP_RGBA32_G_F(_shadow), SP_RGBA32_B_F(_shadow), SP_RGBA32_A_F(_shadow));
+        // Util::draw_border(cr, rect, radius, color, get_scale_factor(), false);
+    }
 }
 
 void ColorPreview::setStyle(Style style) {
@@ -231,6 +238,27 @@ void ColorPreview::setStyle(Style style) {
 void ColorPreview::setIndicator(Indicator indicator) {
     if (_indicator != indicator) {
         _indicator = indicator;
+        queue_draw();
+    }
+}
+
+void ColorPreview::set_frame(bool frame) {
+    if (_frame != frame) {
+        _frame = frame;
+        queue_draw();
+    }
+}
+
+void ColorPreview::set_border_radius(int radius) {
+    if (_radius != radius) {
+        _radius = radius;
+        queue_draw();
+    }
+}
+
+void ColorPreview::set_checkerboard_tile_size(unsigned size) {
+    if (_checkerboard_tile_size != size) {
+        _checkerboard_tile_size = size;
         queue_draw();
     }
 }

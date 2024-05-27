@@ -12,7 +12,7 @@ namespace Inkscape::Util {
 bool is_current_theme_dark(Gtk::Widget& widget);
 
 // checkerboard ARGB colors (background for semi-transparent drawing); dark-theme aware
-std::tuple<std::uint32_t, std::uint32_t> get_checkerboard_colors(Gtk::Widget& widget);
+std::tuple<std::uint32_t, std::uint32_t> get_checkerboard_colors(Gtk::Widget& widget, bool argb);
 
 }
 

@@ -1112,6 +1112,13 @@
       </object>
     </child>
     <child>
+      <object class="GtkBox" id="paint-box">
+        <property name="orientation">vertical</property>
+        <property name="hexpand">True</property>
+        <property name="spacing">4</property>
+      </object>
+    </child>
+    <child>
       <object class="GtkBox" id="main-panel">
         <property name="hexpand">True</property>
       </object>

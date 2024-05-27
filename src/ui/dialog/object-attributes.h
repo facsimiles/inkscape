@@ -28,6 +28,7 @@
 #include "ui/dialog/dialog-base.h"
 #include "ui/dialog/object-properties.h"
 #include "ui/operation-blocker.h"
+#include "ui/widget/paint-attribute.h"
 #include "ui/widget/spinbutton.h"
 #include "ui/widget/style-swatch.h"
 #include "ui/widget/unit-tracker.h"
@@ -102,6 +103,7 @@ private:
     // Contains a pointer to the currently selected item (NULL in case nothing is or multiple objects are selected).
     SPItem* _current_item = nullptr;
     Inkscape::UI::Widget::StyleSwatch _style_swatch;
+    // Inkscape::UI::Widget::PaintAttribute _paint;
     ObjectProperties& _obj_properties;
 };
 

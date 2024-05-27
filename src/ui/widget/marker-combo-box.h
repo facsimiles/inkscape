@@ -77,7 +77,8 @@ public:
 
     sigc::connection connect_changed(sigc::slot<void ()> slot);
     sigc::connection connect_edit   (sigc::slot<void ()> slot);
-
+    // set flat look
+    void set_flat(bool flat);
 private:
     class MarkerItem : public Glib::Object
     {

@@ -36,7 +36,7 @@ namespace Inkscape::UI::Widget {
 class DashSelector final : public Gtk::Box {
 
 public:
-    DashSelector();
+    DashSelector(bool compact = false);
     ~DashSelector() final;
 
     void set_dash_pattern(const std::vector<double>& dash, double offset);

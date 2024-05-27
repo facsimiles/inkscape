@@ -491,7 +491,7 @@
                 <property name="margin-end">4</property>
                 <property name="margin-bottom">3</property>
                 <property name="has-frame">False</property>
-                <property name="width-chars">10</property>
+                <property name="max-width-chars">10</property>
                 <property name="xalign">0.5</property>
                 <property name="placeholder-text" translatable="yes" comments="This is a hint that shows up when pattern name is blank">name</property>
                 <style>
