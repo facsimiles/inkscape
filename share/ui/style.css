@@ -770,6 +770,12 @@ button.square-button image {
     font-size: smaller;
 }
 
+entry.small-entry {
+    font-size: smaller;
+    min-height: 18px;
+    padding: 0;
+}
+
 .inkscape-toolbar {
     margin: 4px;
 }
@@ -1421,10 +1427,21 @@ listview.list-view-small > row > box.item-box.separator {
     margin: 4px 6px;
 }
 
-InkSpinButton {
+/* Establish minimal size for custom spin buttons */
+#InkSpinButton {
+    min-height: 20px;
+}
+#InkSpinButton.frame {
     min-height: 22px;
 }
+/*#InkSpinButton entry {*/
+/*    !* we need to set entry size too, so it doesn't enlarge spin button *!*/
+/*    min-height: 18px;*/
+/*}*/
 
+separator.thin {
+    margin: 0;
+}
 separator.faint {
     opacity: 0.5;
 }
@@ -1436,7 +1453,7 @@ separator.faint {
 }
 
 #ColorWheel {
-    min-height: 300px;
+    min-height: 220px;
 }
 
 #ColorPlate.rectangular {

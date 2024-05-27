@@ -21,6 +21,7 @@
 #include "colors/spaces/components.h"
 
 namespace Gtk {
+class GestureDrag;
 class Builder;
 class EventControllerMotion;
 class GestureClick;
@@ -57,12 +58,12 @@ private:
     void on_click_pressed(Gtk::GestureClick const &click, int n_press, double x, double y);
     void on_motion(Gtk::EventControllerMotion const &motion, double x, double y);
     void update_component(double x, double y, Gdk::ModifierType const state);
+    void on_drag(Gdk::EventSequence* sequence);
 
     sigc::scoped_connection _changed_connection;
     sigc::signal<void ()> signal_value_changed;
-
-    int _arrow_x, _arrow_y = 0;
-
+    bool _dragging = false;
+    Glib::RefPtr<Gtk::GestureDrag> _drag;
     // Memory buffers for the painted gradient
     std::vector<unsigned int> _gr_buffer;
     Glib::RefPtr<Gdk::Pixbuf> _gradient;

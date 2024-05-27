@@ -58,6 +58,8 @@
 #include "ui/builder-utils.h"
 #include "ui/controller.h"
 #include "ui/dialog/object-attributes.h"
+
+#include "style.h"
 #include "ui/icon-names.h"
 #include "ui/pack.h"
 #include "ui/tools/object-picker-tool.h"
@@ -102,6 +104,8 @@ ObjectAttributes::ObjectAttributes()
     _main_panel(get_widget<Gtk::Box>(_builder, "main-panel")),
     _obj_title(get_widget<Gtk::Label>(_builder, "main-obj-name")),
     _style_swatch(nullptr, _("Item's fill, stroke and opacity"), Gtk::Orientation::HORIZONTAL),
+    // _fill_paint(_("Fill")),
+    // _stroke_paint(_("Stroke")),
     _obj_properties(*Gtk::make_managed<ObjectProperties>())
 {
     auto& main = get_widget<Gtk::Box>(_builder, "main-widget");
@@ -111,6 +115,9 @@ ObjectAttributes::ObjectAttributes()
     _style_swatch.set_hexpand(false);
     _style_swatch.set_valign(Gtk::Align::CENTER);
     get_widget<Gtk::Box>(_builder, "main-header").append(_style_swatch);
+    // auto& paint = get_widget<Gtk::Box>(_builder, "paint-box");
+    // paint.append(_fill_paint);
+    // paint.append(_stroke_paint);
     append(main);
     create_panels();
     _style_swatch.set_visible(false);
@@ -476,6 +483,8 @@ public:
         _title = _("Rectangle");
         _widget = &_main;
 
+        _paint.insert_widgets(_main, 0);
+
         _width.get_adjustment()->signal_value_changed().connect([this](){
             change_value_px(_rect, _width.get_adjustment(), "width", [this](double w){ _rect->setVisibleWidth(w); });
         });
@@ -533,17 +542,20 @@ public:
         auto lpe = find_lpeffect(_rect, LivePathEffect::FILLET_CHAMFER);
         _sharp.set_sensitive(_rect->rx.value > 0 || _rect->ry.value > 0 || lpe);
         _round.set_sensitive(!lpe);
+        //todo
+        _paint.update_from_object(_rect);
     }
 
 private:
     SPRect* _rect = nullptr;
-    Gtk::Widget& _main;
+    Gtk::Grid& _main;
     Inkscape::UI::Widget::SpinButton& _width;
     Inkscape::UI::Widget::SpinButton& _height;
     Inkscape::UI::Widget::SpinButton& _rx;
     Inkscape::UI::Widget::SpinButton& _ry;
     Gtk::Button& _sharp;
     Gtk::Button& _round;
+    Inkscape::UI::Widget::PaintAttribute _paint;
 };
 
 ///////////////////////////////////////////////////////////////////////////////

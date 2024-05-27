@@ -103,13 +103,8 @@ ColorPage::ColorPage(std::shared_ptr<Space::AnySpace> space, std::shared_ptr<Col
             auto on = _expander.property_expanded().get_value();
             if (on && !_color_wheel) {
                 // create color wheel now
-                _color_wheel = create_managed_color_wheel(wheel_type);
+                create_color_wheel(wheel_type, true);
                 _expander.set_child(_color_wheel->get_widget());
-                _color_wheel->set_color(_specific_colors->getAverage());
-                _color_wheel_changed = _color_wheel->connect_color_changed([this](const Color& color) {
-                    auto scoped = SignalBlocker{_color_wheel_changed};
-                    _specific_colors->setAll(color);
-                });
             }
             if (_color_wheel) {
                 if (on) {
@@ -122,6 +117,27 @@ ColorPage::ColorPage(std::shared_ptr<Space::AnySpace> space, std::shared_ptr<Col
     else {
         _expander.set_visible(false);
     }
+}
+
+void ColorPage::show_expander(bool show) {
+    _expander.set_visible(show);
+}
+
+ColorWheel* ColorPage::create_color_wheel(Space::Type type, bool disc) {
+    if (_color_wheel) {
+        g_message("Color wheel has already been created.");
+        return _color_wheel;
+    }
+
+    _color_wheel = create_managed_color_wheel(type, disc);
+    if (!_specific_colors->isEmpty()) {
+        _color_wheel->set_color(_specific_colors->getAverage());
+    }
+    _color_wheel_changed = _color_wheel->connect_color_changed([this](const Color& color) {
+        auto scoped(_color_wheel_changed.block_here());
+        _specific_colors->setAll(color);
+    });
+    return _color_wheel;
 }
 
 ColorPageChannel::ColorPageChannel(

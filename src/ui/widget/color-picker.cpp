@@ -46,7 +46,15 @@ ColorPicker::ColorPicker(Glib::ustring title,
     }
 
     _colors->set(initial);
-    _construct();
+    _construct(nullptr);
+}
+
+ColorPicker::ColorPicker(Gtk::Widget& popup_content, const Glib::ustring& tip):
+    _preview(Gtk::make_managed<ColorPreview>(0x0)),
+    _colors(std::make_shared<Colors::ColorSet>(nullptr, true)) {
+
+    set_tooltip_text(tip);
+    _construct(&popup_content);
 }
 
 ColorPicker::ColorPicker(BaseObjectType *cobject, Glib::RefPtr<Gtk::Builder> const &,
@@ -56,29 +64,37 @@ ColorPicker::ColorPicker(BaseObjectType *cobject, Glib::RefPtr<Gtk::Builder> con
     , _title(std::move(title))
     , _colors(std::make_shared<Colors::ColorSet>(nullptr, use_transparency))
 {
-    _construct();
+    _construct(nullptr);
 }
 
-void ColorPicker::_construct() {
+void ColorPicker::_construct(Gtk::Widget* content) {
     // match min height with that of the current theme button and enforce square shape for our color picker
     Gtk::Button button;
     auto height = button.measure(Gtk::Orientation::VERTICAL).sizes.minimum;
     set_name("ColorPicker");
     restrict_minsize_to_square(*this, height);
 
+    if (content) {
+        _popup.set_child(*content);
+    }
+
     _preview->setStyle(ColorPreview::Outlined);
     set_child(*_preview);
 
-    // postpone color selector creation until popup is open
-    _popup.signal_show().connect([this](){
-        if (!_color_selector) {
-            _color_selector = Gtk::make_managed<ColorNotebook>(_colors);
-            _color_selector->set_label(_title);
-            _color_selector->set_margin(4);
-            _popup.set_child(*_color_selector);
-        }
-    });
+    if (!content) {
+        // postpone color selector creation until popup is open
+        _popup.signal_show().connect([this](){
+            if (!_color_selector) {
+                _color_selector = Gtk::make_managed<ColorNotebook>(_colors);
+                _color_selector->set_label(_title);
+                _color_selector->set_margin(4);
+                _popup.set_child(*_color_selector);
+            }
+        });
+    }
     set_popover(_popup);
+
+    set_create_popup_func([this](){ _signal_open.emit(); });
 
     _colors->signal_changed.connect(sigc::mem_fun(*this, &ColorPicker::_onSelectedColorChanged));
     _colors->signal_released.connect(sigc::mem_fun(*this, &ColorPicker::_onSelectedColorChanged));

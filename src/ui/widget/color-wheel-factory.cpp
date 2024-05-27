@@ -49,42 +49,88 @@ private:
     int _var_channel2;
 };
 
-static std::pair<ColorWheel*, bool> create_color_wheel_helper(Type type, bool create_widget) {
+static ColorWheel* create_plate(Type source, Type plate, bool disc) {
+    if (disc) {
+        auto value = 2; // if value changes, color wheel needs to be rebuilt
+        auto hue = 0;   // vary hue with angle (while painting the disc)
+        auto sat = 1;   // vary saturation with distance from the center of the disc (while painting the disc)
+        return new FastColorWheel(source, plate, value, hue, sat, disc);
+    }
+    else {
+        auto hue = 0;   // hue is fixed; it's a single hue rectangular plate
+        auto sat = 1;
+        auto value = 2;
+        return new FastColorWheel(source, plate, hue, sat, value, disc);
+    }
+}
+
+static std::pair<ColorWheel*, bool> create_color_wheel_helper(Type type, bool create_widget, bool disc) {
     bool can_create = true;
     ColorWheel* wheel = nullptr;
 
     switch (type) {
     case Type::HSL:
-        if (create_widget) wheel = new ColorWheelHSL();
+        if (create_widget) wheel = disc ? new ColorWheelHSL() : create_plate(type, Type::HSV, disc);
         break;
 
     case Type::HSLUV:
-        if (create_widget) wheel = new ColorWheelHSLuv();
+        if (create_widget) wheel = disc ? new ColorWheelHSLuv() : create_plate(type, Type::HSV, disc);
         break;
 
     case Type::OKHSL:
         if (create_widget) {
-            auto luminocity = 2; // if luma changes, color wheel needs to be rebuilt
-            auto hue = 0;   // vary hue with angle (while painting the disc)
-            auto sat = 1;   // vary saturation with distance from the center of the disc (while painting the disc)
-            wheel = new FastColorWheel(Type::OKHSL, Type::OKHSL, luminocity, hue, sat, true);
+            wheel = create_plate(type, Type::OKHSL, disc);
+            // if (!disc) {
+            //     //TODO: we need OKHSV
+            //     auto hue = 0;   // hue is fixed
+            //     auto sat = 1;
+            //     auto luminocity = 2;
+            //     wheel = new FastColorWheel(Type::OKHSL, Type::OKHSL, hue, sat, luminocity, disc);
+            // }
+            // else {
+            //     auto luminocity = 2; // if luma changes, color wheel needs to be rebuilt
+            //     auto hue = 0;   // vary hue with angle (while painting the disc)
+            //     auto sat = 1;   // vary saturation with distance from the center of the disc (while painting the disc)
+            //     wheel = new FastColorWheel(Type::OKHSL, Type::OKHSL, luminocity, hue, sat, disc);
+            // }
+        }
+        break;
+
+    case Type::OKLCH:
+        if (create_widget) {
+                //TODO: we need OKHSV
+            wheel = create_plate(type, Type::OKHSL, disc);
+            // if (!disc) {
+            //     //TODO: we need OKHSV
+            //     auto hue = 0;   // hue is fixed
+            //     auto sat = 1;
+            //     auto luminocity = 2;
+            //     wheel = new FastColorWheel(Type::OKLCH, Type::OKLCH, hue, sat, luminocity, disc);
+            // }
+            // else {
+            //     auto luminocity = 2; // if luma changes, color wheel needs to be rebuilt
+            //     auto hue = 0;   // vary hue with angle (while painting the disc)
+            //     auto sat = 1;   // vary saturation with distance from the center of the disc (while painting the disc)
+            //     wheel = new FastColorWheel(Type::OKLCH, Type::OKLCH, luminocity, hue, sat, disc);
+            // }
         }
         break;
 
     case Type::HSV:
-        if (create_widget) wheel = new ColorWheelHSL();
-        // if (create_widget) {
-            // wheel = new FastColorWheel(Type::HSV, Type::HSV);
-        // }
+        if (create_widget) {
+            wheel = disc ? new ColorWheelHSL() : create_plate(type, Type::HSV, disc);
+        }
         break;
 
     case Type::RGB:
         if (create_widget) {
-            // create rectangular HSV plate for RGB picker
-            auto hue = 0;   // hue is fixed in a rectangular plate
-            auto sat = 1;   // vary saturation
-            auto val = 2;   // vary value
-            wheel = new FastColorWheel(Type::RGB, Type::HSV, hue, sat, val, false);
+            wheel = create_plate(type, Type::HSV, disc);
+        }
+        break;
+
+    case Type::CMYK:
+        if (create_widget) {
+            wheel = create_plate(type, Type::HSV, disc);
         }
         break;
 
@@ -123,8 +169,8 @@ static std::pair<ColorWheel*, bool> create_color_wheel_helper(Type type, bool cr
     return std::make_pair(wheel, can_create);
 }
 
-ColorWheel* create_managed_color_wheel(Type type) {
-    auto [wheel, _] = create_color_wheel_helper(type, true);
+ColorWheel* create_managed_color_wheel(Type type, bool disc) {
+    auto [wheel, _] = create_color_wheel_helper(type, true, disc);
     if (wheel) {
         wheel->get_widget().set_manage();
     }
@@ -132,7 +178,7 @@ ColorWheel* create_managed_color_wheel(Type type) {
 }
 
 bool can_create_color_wheel(Type type) {
-    auto [_, ok] = create_color_wheel_helper(type, false);
+    auto [_, ok] = create_color_wheel_helper(type, false, true);
     return ok;
 }
 

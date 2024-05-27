@@ -35,6 +35,7 @@
 #include <sigc++/adaptors/bind.h>
 #include <sigc++/functors/mem_fun.h>
 
+#include "color-picker-panel.h"
 #include "document-undo.h"
 #include "gradient-chemistry.h"
 #include "gradient-selector.h"
@@ -214,10 +215,12 @@ GradientEditor::GradientEditor(const char* prefs):
     gradBox.append(_gradient_image);
 
     // add color selector
-    auto const color_selector = Gtk::make_managed<ColorNotebook>(_colors);
-    color_selector->set_label(_("Stop color"));
-    color_selector->set_visible(true);
-    _colors_box.append(*color_selector);
+    auto selector = ColorPickerPanel::create(_("Stop color"), _colors);
+    // auto const color_selector = Gtk::make_managed<ColorNotebook>(_colors);
+    // color_selector->set_label(_("Stop color"));
+    // color_selector->set_visible(true);
+    selector->set_manage();
+    _colors_box.append(*selector.release());
 
     // gradient library in a popup
     get_widget<Gtk::Popover>(_builder, "libraryPopover").set_child(*_selector);

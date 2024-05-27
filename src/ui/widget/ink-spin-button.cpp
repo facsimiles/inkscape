@@ -27,7 +27,7 @@ auto ink_spinbutton_css = R"=====(
 #InkSpinButton button { border: 0 solid alpha(@border-color, 0.30); border-radius: 2px; padding: 1px; min-width: 6px; min-height: 8px; -gtk-icon-size: 10px; background-image: none; }
 #InkSpinButton button.left  { border-top-right-radius: 0; border-bottom-right-radius: 0; border-right-width: 1px; }
 #InkSpinButton button.right { border-top-left-radius: 0; border-bottom-left-radius: 0; border-left-width: 1px; }
-#InkSpinButton entry { border: none; border-radius: 3px; padding: 0; min-height: 13px; background-color: @bgnd-color; outline-width: 0; }
+#InkSpinButton entry#InkSpinButton-Entry { border: none; border-radius: 3px; padding: 0; min-height: 13px; background-color: @bgnd-color; outline-width: 0; }
 )=====";
 constexpr int timeout_click = 500;
 constexpr int timeout_repeat = 50;
@@ -73,7 +73,7 @@ void InkSpinButton::construct() {
         provider = Gtk::CssProvider::create();
         provider->load_from_data(ink_spinbutton_css);
         auto const display = Gdk::Display::get_default();
-        Gtk::StyleContext::add_provider_for_display(display, provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+        Gtk::StyleContext::add_provider_for_display(display, provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION + 10);
     }
 
     // ------------- CONTROLLERS -------------
@@ -171,7 +171,6 @@ void InkSpinButton::construct() {
 
 InkSpinButton::InkSpinButton():
     Glib::ObjectBase("InkSpinButton") {
-    // prop_digits(*this, "digits", 0) {
 
     construct();
 }
@@ -179,7 +178,6 @@ InkSpinButton::InkSpinButton():
 InkSpinButton::InkSpinButton(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& builder):
     Glib::ObjectBase("InkSpinButton"),
     Gtk::Widget(cobject) {
-    // prop_digits(*this, "digits", 0) {
 
     construct();
 }
@@ -218,9 +216,11 @@ void InkSpinButton::measure_vfunc(Gtk::Orientation orientation, int for_size, in
     }
     else {
         minimum_baseline = natural_baseline = _baseline;
+        // auto m = _entry.measure(orientation);
         auto height = std::max(text_height, _entry_height);
         minimum = height;
-        natural = int(1.5 * height);
+        natural = std::max(static_cast<int>(1.5 * text_height), _entry_height); // std::max(int(1.5 * text_height), _entry_height);
+// printf("btn h: %d %d, text: '%s', %d  %d, now: %d\n", natural, 0, text.c_str(), text_height, _entry_height, 0);// m.sizes.minimum);
     }
 }
 
@@ -270,13 +270,11 @@ void InkSpinButton::set_adjustment(const Glib::RefPtr<Gtk::Adjustment>& adjustme
 
 void InkSpinButton::set_digits(int digits) {
     prop_digits = digits;
-    // prop_digits.set_value(digits);
     update();
 }
 
 int InkSpinButton::get_digits() const {
     return prop_digits;
-    // return prop_digits.get_value();
 }
 
 void InkSpinButton::set_prefix(const std::string& prefix, bool add_space) {

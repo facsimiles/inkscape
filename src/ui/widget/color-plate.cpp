@@ -385,4 +385,4 @@ sigc::signal<void(const Color&)>& ColorPlate::signal_color_changed() {
     return _signal_color_changed;
 }
 
-}
+} // namespace

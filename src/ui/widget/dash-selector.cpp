@@ -18,11 +18,14 @@
  */
 
 #include "dash-selector.h"
-
+#include <gtkmm/box.h>
+#include <gtkmm/entry.h>
+#include <gtkmm/enums.h>
+#include <gtkmm/label.h>
+#include <gtkmm/object.h>
 #include <iostream>
 #include <numeric>  // std::accumulate
 #include <vector>
-
 #include <giomm.h>
 #include <glibmm/i18n.h>
 #include <glibmm/regex.h>
@@ -34,9 +37,7 @@
 #include <gtkmm/popover.h>
 #include <gtkmm/signallistitemfactory.h>
 #include <gtkmm/singleselection.h>
-
 #include <2geom/coord.h> // Geom::are_near
-
 #include "preferences.h"
 #include "style.h"  // Read dash patterns from preferences.
 #include "ui/dialog-events.h"
@@ -87,7 +88,9 @@ private:
 
 } // namespace
 
-DashSelector::DashSelector()
+constexpr int CUSTOM_POS = 2;
+
+DashSelector::DashSelector(bool compact)
     : Gtk::Box(Gtk::Orientation::HORIZONTAL, 4)
 {
     set_name("DashSelector");
@@ -105,7 +108,7 @@ DashSelector::DashSelector()
     // Add custom pattern slot (upper right corner).
     auto custom_pattern = DashPattern::create({1, 2, 1, 4});
     custom_pattern->custom = true;
-    liststore->insert(1, custom_pattern);
+    liststore->insert(CUSTOM_POS, custom_pattern);
 
     selection = Gtk::SingleSelection::create(liststore);
     auto factory = Gtk::SignalListItemFactory::create();
@@ -113,15 +116,18 @@ DashSelector::DashSelector()
     factory->signal_bind() .connect(sigc::mem_fun(*this, &DashSelector::bind_listitem_cb));
 
     auto gridview = Gtk::make_managed<Gtk::GridView>(selection, factory);
-    gridview->set_min_columns(2);
-    gridview->set_max_columns(2);
+    int columns = 3; // three columns to strike a balance between width to height ratio of popup menu
+    gridview->set_min_columns(columns);
+    gridview->set_max_columns(columns);
     gridview->set_single_click_activate(true);
-    gridview->signal_activate().connect(sigc::bind<0>(sigc::mem_fun(*this, &DashSelector::activate), gridview));
+    gridview->signal_activate().connect([=,this](unsigned i){ activate(gridview, i); });
 
     popover = Gtk::make_managed<Gtk::Popover>();
     popover->set_has_arrow(false);
     popover->add_css_class("menu");
-    popover->set_child(*gridview);
+    if (!compact) {
+        popover->set_child(*gridview);
+    }
 
     // Menubutton
     drawing_area = Gtk::make_managed<Gtk::DrawingArea>();
@@ -147,7 +153,30 @@ DashSelector::DashSelector()
     spinbutton->set_width_chars(5);
     sp_dialog_defocus_on_enter(*spinbutton);
 
-    append(*spinbutton);
+    if (compact) {
+        auto box = Gtk::make_managed<Gtk::Box>(Gtk::Orientation::HORIZONTAL, 4);
+        box->append(*Gtk::make_managed<Gtk::Label>(_("Offset")));
+        box->append(*spinbutton);
+        spinbutton->set_margin_end(5);
+
+        box->append(*Gtk::make_managed<Gtk::Label>(_("Pattern")));
+        auto pattern_entry = Gtk::make_managed<Gtk::Entry>();
+        pattern_entry->set_width_chars(10);
+        pattern_entry->signal_changed().connect([this](){
+            //todo
+        });
+        box->append(*pattern_entry);
+        box->set_margin(5);
+        box->set_halign(Gtk::Align::CENTER);
+
+        auto vbox = Gtk::make_managed<Gtk::Box>(Gtk::Orientation::VERTICAL, 10);
+        vbox->append(*gridview);
+        vbox->append(*box);
+        popover->set_child(*vbox);
+    }
+    else {
+        append(*spinbutton);
+    }
 }
 
 DashSelector::~DashSelector() = default;
@@ -161,7 +190,7 @@ void DashSelector::set_dash_pattern(std::vector<double> const &new_dash_pattern,
     double const delta = std::accumulate(new_dash_pattern.begin(), new_dash_pattern.end(), 0.0)
                        / (10000.0 * (new_dash_pattern.empty() ? 1.0 : new_dash_pattern.size()));
 
-    int position = 1; // Position for custom dash patterns.
+    int position = CUSTOM_POS; // Position for custom dash patterns.
     auto const item_count = selection->get_n_items();
     for (int index = 0; index < item_count; ++index) {
         auto const &item = dynamic_cast<DashPattern &>(*selection->get_object(index));
@@ -176,7 +205,7 @@ void DashSelector::set_dash_pattern(std::vector<double> const &new_dash_pattern,
     // Set selected pattern in GridView.
     selection->set_selected(position);
 
-    if (position == 1) {
+    if (position == CUSTOM_POS) {
         // Custom pattern!
 
         // Update custom dash patterns.
@@ -194,7 +223,7 @@ void DashSelector::set_dash_pattern(std::vector<double> const &new_dash_pattern,
 void DashSelector::update(int position)
 {
     // Update MenuButton DrawingArea.
-    if (position == 1) {
+    if (position == CUSTOM_POS) {
         drawing_area->set_draw_func(sigc::mem_fun(*this, &DashSelector::draw_text));
     } else {
         drawing_area->set_draw_func(sigc::bind(sigc::mem_fun(*this, &DashSelector::draw_pattern), dash_pattern));
@@ -224,6 +253,8 @@ void DashSelector::setup_listitem_cb(Glib::RefPtr<Gtk::ListItem> const &list_ite
     auto drawing_area = Gtk::make_managed<Gtk::DrawingArea>();
     drawing_area->set_content_width(DRAWING_AREA_WIDTH);
     drawing_area->set_content_height(DRAWING_AREA_HEIGHT);
+    drawing_area->set_margin_start(5);
+    drawing_area->set_margin_end(5);
     list_item->set_child(*drawing_area);
 }
 
@@ -258,7 +289,7 @@ void DashSelector::draw_text(Cairo::RefPtr<Cairo::Context> const &cr, int width,
     cr->select_font_face("Sans", Cairo::ToyFontFace::Slant::NORMAL, Cairo::ToyFontFace::Weight::NORMAL);
     cr->set_font_size(12);
     Gdk::Cairo::set_source_rgba(cr, get_color());
-    cr->move_to(16.0, (height + 12) / 2.0);
+    cr->move_to(16.0, (height + 10) / 2.0);
     cr->show_text(_("Custom"));
 }
 

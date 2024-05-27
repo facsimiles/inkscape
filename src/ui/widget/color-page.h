@@ -41,6 +41,8 @@ class ColorPage : public Gtk::Box
 {
 public:
     ColorPage(std::shared_ptr<Space::AnySpace> space, std::shared_ptr<ColorSet> colors);
+    void show_expander(bool show);
+    ColorWheel* create_color_wheel(Space::Type type, bool disc);
 protected:
     Glib::RefPtr<Gtk::Builder> _builder;
 

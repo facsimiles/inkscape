@@ -20,7 +20,7 @@ namespace Inkscape::UI::Widget {
 class IconComboBox : public Gtk::DropDown
 {
 public:
-    IconComboBox(bool use_icons = true);
+    IconComboBox(bool use_icons = true, bool compact_header = false);
     ~IconComboBox() override;
 
     void add_row(Glib::ustring const &icon_name, Glib::ustring const &label, int id);
@@ -32,8 +32,9 @@ public:
     sigc::signal<void (int)>& signal_changed();
 
     static int get_image_size() { return 16; }
-
+    void set_has_frame(bool frame);
     void refilter();
+
 private:
     struct ListItem;
     bool is_item_visible(const Glib::RefPtr<Glib::ObjectBase>& item) const;
@@ -41,6 +42,7 @@ private:
     std::shared_ptr<IconComboBox::ListItem> current_item();
 
     Glib::RefPtr<Gtk::SignalListItemFactory> _factory;
+    Glib::RefPtr<Gtk::SignalListItemFactory> _compact_factory;
     Glib::RefPtr<Gtk::FilterListModel> _filtered_model;
     Glib::RefPtr<Gtk::SingleSelection> _selection_model;
     Glib::RefPtr<Gtk::BoolFilter> _filter;
