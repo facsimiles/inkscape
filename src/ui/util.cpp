@@ -12,6 +12,8 @@
 
 #include "util.h"
 
+#include <cstdint>
+#include <stdexcept>
 #include <glibmm/i18n.h>
 #include <glibmm/regex.h>
 #include <glibmm/spawn.h>
@@ -27,8 +29,16 @@
 #include "inkscape-window.h"
 #include "object/sp-text.h"
 #include "ui/dialog-run.h"
+// #include "desktop.h"
+// #include "inkscape-window.h"
+// #include "inkscape.h"
+// #include "colors/color.h"
+#include "colors/utils.h" // color to hex string
+#include "ui/dialog-run.h"
 #include "util/numeric/converters.h"
+#include "widget/ink-spin-button.h"
 
+// NOTE: Include windows stuff last, as it #defines ERROR leading to compilation errors
 #if (defined (_WIN32) || defined (_WIN64))
 #undef NOGDI
 #include <gdk/win32/gdkwin32.h>
@@ -529,9 +539,52 @@ void restrict_minsize_to_square(Gtk::Widget& widget, int min_size_px) {
     style_context->add_provider(css, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION + 2);
 }
 
+void set_degree_suffix(Inkscape::UI::Widget::InkSpinButton& button) {
+    button.set_suffix("\u00b0", false); // degree symbol
+}
+
+void set_percent_suffix(Inkscape::UI::Widget::InkSpinButton& button) {
+    button.set_suffix(_("%"), false);
+}
+
 char const *get_text(Gtk::Editable const &editable)
 {
     return gtk_editable_get_text(const_cast<GtkEditable *>(editable.gobj())); // C API is const-incorrect
+}
+
+Gtk::Button* create_button(const char* label_text, const char* icon_name) {
+    if (!label_text || !icon_name) return nullptr;
+
+    auto button = Gtk::make_managed<Gtk::Button>();
+    auto box = Gtk::make_managed<Gtk::Box>();
+    box->set_spacing(4);
+    auto icon = Gtk::make_managed<Gtk::Image>();
+    icon->set_from_icon_name(icon_name);
+    auto label = Gtk::make_managed<Gtk::Label>(label_text);
+    box->append(*icon);
+    box->append(*label);
+    button->set_child(*box);
+    box->set_halign(Gtk::Align::CENTER);
+    return button;
+}
+
+Glib::ustring get_synthetic_object_name(SPObject const* object) {
+    if (!object) return {};
+
+    auto id = object->getId();
+    if (auto item = cast<SPItem>(object)) {
+        if (id) {
+            return Glib::ustring::compose("%1 %2", item->displayName(), id);
+        }
+        return Glib::ustring::compose("%1", item->displayName());
+    }
+    else if (id) {
+        return Glib::ustring::compose("#%1", id);
+    }
+    else if (auto repr = object->getRepr()) {
+        return Glib::ustring::compose("<%1>", repr->name());
+    }
+    return "object";
 }
 
 /*

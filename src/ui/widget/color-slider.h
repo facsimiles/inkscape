@@ -17,6 +17,7 @@
 #include "colors/spaces/components.h"
 
 namespace Gtk {
+class GestureDrag;
 class Builder;
 class EventControllerMotion;
 class GestureClick;
@@ -33,6 +34,7 @@ namespace Inkscape::UI::Widget {
  */
 class ColorSlider : public Gtk::DrawingArea {
 public:
+    ColorSlider(std::shared_ptr<Colors::ColorSet> color, Colors::Space::Component component);
     ColorSlider(
         BaseObjectType *cobject,
         Glib::RefPtr<Gtk::Builder> const &builder,
@@ -42,23 +44,25 @@ public:
 
     double getScaled() const;
     void setScaled(double value);
+    static int get_checkerboard_tile_size();
 protected:
     friend class ColorPageChannel;
 
     std::shared_ptr<Colors::ColorSet> _colors;
     Colors::Space::Component _component;
 private:
+    void construct();
     void draw_func(Cairo::RefPtr<Cairo::Context> const &cr, int width, int height);
 
     void on_click_pressed(Gtk::GestureClick const &click, int n_press, double x, double y);
     void on_motion(Gtk::EventControllerMotion const &motion, double x, double y);
     void update_component(double x, double y, Gdk::ModifierType const state);
+    void on_drag(Gdk::EventSequence* sequence);
 
     sigc::scoped_connection _changed_connection;
     sigc::signal<void ()> signal_value_changed;
-
-    int _arrow_x, _arrow_y = 0;
-
+    bool _dragging = false;
+    Glib::RefPtr<Gtk::GestureDrag> _drag;
     // Memory buffers for the painted gradient
     std::vector<unsigned int> _gr_buffer;
     Glib::RefPtr<Gdk::Pixbuf> _gradient;

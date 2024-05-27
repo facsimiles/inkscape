@@ -50,18 +50,20 @@ public:
     // get pattern image on a solid background for use in UI lists
     Cairo::RefPtr<Cairo::Surface> get_image(SPPattern* pattern, int width, int height, double device_scale);
 
-    // get pattern image on checkerboard background for use as a larger preview
+    // get pattern image on a checkerboard background for use as a larger preview
     Cairo::RefPtr<Cairo::Surface> get_preview(SPPattern* pattern, int width, int height, unsigned int rgba_background, double device_scale);
 
 protected:
     PatternManager();
 
 private:
+    void init();
     Glib::RefPtr<Gtk::TreeModel> _model;
     std::vector<std::shared_ptr<Category>> _categories;
     std::unordered_map<SPPattern*, Glib::RefPtr<Inkscape::UI::Widget::PatternItem>> _cache;
     std::unique_ptr<SPDocument> _preview_doc;
     std::unique_ptr<SPDocument> _big_preview_doc;
+    bool _initialized = false;
 };
 
 } // namespace

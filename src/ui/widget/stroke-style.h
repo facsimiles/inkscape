@@ -36,6 +36,7 @@ class Label;
 class SPDocument;
 class SPObject;
 SPObject *getMarkerObj(gchar const *n, SPDocument *doc);
+std::pair<std::vector<double>, double> getDashFromStyle(SPStyle *style);
 
 namespace Inkscape {
 
@@ -44,6 +45,10 @@ class Unit;
 } // namespace Util
 
 namespace UI::Widget {
+
+void set_scaled_dash(SPCSSAttr* css, int ndash, const double *dash, double offset, double scale);
+std::vector<double> parse_dash_pattern(const Glib::ustring& input);
+double calc_scale_line_width(double width_typed, const SPItem* item, const Util::Unit* unit);
 
 class DashSelector;
 class MarkerComboBox;
@@ -90,8 +95,6 @@ private:
             gchar const *stroke_style;         ///< The stroke style associated with the button
     };
 
-    std::vector<double> getDashFromStyle(SPStyle *style, double &offset);
-
     void updateAllMarkers(std::vector<SPItem*> const &objects, bool skip_undo = false);
     void setDashSelectorFromStyle(DashSelector *dsel, SPStyle *style);
     void setJoinType (unsigned const jointype);
@@ -103,7 +106,6 @@ private:
     void setStrokeWidth();
     void setStrokeDash();
     void setStrokeMiter();
-    void setScaledDash(SPCSSAttr *css, int ndash, const double *dash, double offset, double scale);
     bool isHairlineSelected() const;
 
     StrokeStyleButton * makeRadioButton(Gtk::ToggleButton    *&grp,

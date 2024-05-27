@@ -14,6 +14,8 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include <gtkmm/object.h>
+#include "ui/widget/color-picker-panel.h"
 #define noSP_PS_VERBOSE
 
 #include "paint-selector.h"
@@ -405,12 +407,21 @@ void PaintSelector::clear_frame()
     }
 }
 
+// ColorPickerPanel* pp = 0;
+
 void PaintSelector::set_mode_empty()
 {
     set_style_buttons(nullptr);
     _style->set_sensitive(false);
     clear_frame();
     _label->set_markup(_("<b>No objects</b>"));
+
+// if (!pp) {
+//     pp = ColorPickerPanel::create(); // Gtk::make_managed<ColorPlate>();
+//     pp->set_expand();
+//     // pp->set_size_request(520,460);
+//     _frame->append(*pp);
+// }
 }
 
 void PaintSelector::set_mode_multiple()
@@ -537,7 +548,7 @@ void PaintSelector::set_mode_gradient(PaintSelector::Mode mode)
         if (!_selector_gradient) {
             /* Create new gradient selector */
             try {
-                _selector_gradient = Gtk::make_managed<GradientEditor>("/gradient-edit");
+                _selector_gradient = Gtk::make_managed<GradientEditor>("/gradient-edit", /*TODO*/Space::Type::HSL, false, true);
                 _selector_gradient->set_visible(true);
                 _selector_gradient->signal_grabbed().connect(sigc::mem_fun(*this, &PaintSelector::gradient_grabbed));
                 _selector_gradient->signal_dragged().connect(sigc::mem_fun(*this, &PaintSelector::gradient_dragged));
@@ -561,13 +572,12 @@ void PaintSelector::set_mode_gradient(PaintSelector::Mode mode)
     /* Actually we have to set option menu history here */
     if (mode == PaintSelector::MODE_GRADIENT_LINEAR) {
         _selector_gradient->setMode(GradientSelector::MODE_LINEAR);
-        // sp_gradient_selector_set_mode(SP_GRADIENT_SELECTOR(gsel), SP_GRADIENT_SELECTOR_MODE_LINEAR);
-      //   _label->set_markup(_("<b>Linear gradient</b>"));
-        _label->set_visible(false);
+        _label->set_markup(_("<b>Linear gradient</b>"));
+        _label->set_visible();
     } else if (mode == PaintSelector::MODE_GRADIENT_RADIAL) {
         _selector_gradient->setMode(GradientSelector::MODE_RADIAL);
-        // _label->set_markup(_("<b>Radial gradient</b>"));
-        _label->set_visible(false);
+        _label->set_markup(_("<b>Radial gradient</b>"));
+        _label->set_visible();
     }
 
 #ifdef SP_PS_VERBOSE

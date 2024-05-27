@@ -992,7 +992,7 @@ void DocumentProperties::build_scripting()
         if (! current.empty()) {
             _scripts_observer.set((*(current.begin()))->parent);
         }
-        _scripts_observer.signal_changed().connect(sigc::mem_fun(*this, &DocumentProperties::populate_script_lists));
+        _scripts_observer.signal_changed().connect([this](auto, auto){populate_script_lists();});
         onEmbeddedScriptSelectRow();
         onExternalScriptSelectRow();
     }

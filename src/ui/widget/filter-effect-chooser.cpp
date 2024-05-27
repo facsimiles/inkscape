@@ -48,6 +48,10 @@ const EnumData<SPBlendMode> SPBlendModeData[SP_CSS_BLEND_COUNT] = {
 const EnumDataConverter<SPBlendMode> SPBlendModeConverter(SPBlendModeData, SP_CSS_BLEND_COUNT);
 
 
+const EnumDataConverter<SPBlendMode>& get_blendmode_combo_converter() {
+    return SPBlendModeConverter;//(SPBlendModeData, SP_CSS_BLEND_COUNT);
+}
+
 namespace UI {
 namespace Widget {
 

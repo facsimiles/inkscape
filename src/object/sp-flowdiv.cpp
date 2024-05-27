@@ -74,7 +74,7 @@ void SPFlowdiv::modified(unsigned int flags) {
     }
 
     for(auto child:l) {
-        if (flags || (child->mflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
+        if ((flags & SP_OBJECT_FLAGS_ALL) || (child->mflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
             child->emitModified(flags);
         }
         sp_object_unref(child);
@@ -199,7 +199,7 @@ void SPFlowtspan::modified(unsigned int flags) {
     }
 
     for(auto child:l) {
-        if (flags || (child->mflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
+        if ((flags & SP_OBJECT_FLAGS_ALL) || (child->mflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
             child->emitModified(flags);
         }
         sp_object_unref(child);
@@ -291,7 +291,7 @@ void SPFlowpara::update(SPCtx *ctx, unsigned int flags) {
     }
 
     for(auto child:l) {
-        if (flags || (child->uflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
+        if ((flags & SP_OBJECT_FLAGS_ALL) || (child->uflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
             if (is<SPItem>(child)) {
                 SPItem const &chi = *cast<SPItem>(child);
                 cctx.i2doc = chi.transform * ictx->i2doc;

@@ -73,10 +73,9 @@ void
 sp_gradient_draw(SPGradient * const gr, int const width, int const height,
                  cairo_t * const ct)
 {
-    cairo_pattern_t *check = ink_cairo_pattern_create_checkerboard();
-    cairo_set_source(ct, check);
+    auto check = ink_cairo_pattern_create_checkerboard();
+    cairo_set_source(ct, check->cobj());
     cairo_paint(ct);
-    cairo_pattern_destroy(check);
 
     if (gr) {
         cairo_pattern_t *p = gr->create_preview_pattern(width);
@@ -116,11 +115,10 @@ sp_gradstop_to_pixbuf_ref (SPStop *stop, int width, int height)
     cairo_t *ct = cairo_create(s);
 
     /* Checkerboard background */
-    cairo_pattern_t *check = ink_cairo_pattern_create_checkerboard();
+    auto check = ink_cairo_pattern_create_checkerboard();
     cairo_rectangle(ct, 0, 0, width, height);
-    cairo_set_source(ct, check);
+    cairo_set_source(ct, check->cobj());
     cairo_fill_preserve(ct);
-    cairo_pattern_destroy(check);
 
     if (stop) {
         /* Alpha area */

@@ -47,7 +47,7 @@ void PageSizePreview::draw_func(Cairo::RefPtr<Cairo::Context> const &ctx, int wi
 
     if (_draw_checkerboard) {
         // auto device_scale = get_scale_factor();
-        Cairo::RefPtr<Cairo::Pattern> pattern(new Cairo::Pattern(ink_cairo_pattern_create_checkerboard(_desk_color)));
+        auto pattern = ink_cairo_pattern_create_checkerboard(_desk_color);
         ctx->save();
         ctx->set_operator(Cairo::Context::Operator::SOURCE);
         ctx->set_source(pattern);
@@ -84,7 +84,7 @@ void PageSizePreview::draw_func(Cairo::RefPtr<Cairo::Context> const &ctx, int wi
     ctx->rectangle(rect.left(), rect.top(), rect.width(), rect.height());
 
     if (_draw_checkerboard) {
-        Cairo::RefPtr<Cairo::Pattern> pattern(new Cairo::Pattern(ink_cairo_pattern_create_checkerboard(_page_color)));
+        auto pattern = ink_cairo_pattern_create_checkerboard(_page_color);
         ctx->save();
         ctx->set_operator(Cairo::Context::Operator::SOURCE);
         ctx->set_source(pattern);

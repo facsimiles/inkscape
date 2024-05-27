@@ -20,6 +20,7 @@ void rename_id(SPObject *elem, Glib::ustring const &newname);
 void change_def_references(SPObject *replace_obj, SPObject *with_obj);
 Glib::ustring generate_similar_unique_id(SPDocument *document, Glib::ustring const &base_name);
 Glib::ustring sanitize_id(const Glib::ustring& id);
+std::pair<bool, Glib::ustring> is_object_id_valid(const std::string& id);
 
 #endif /* !SEEN_ID_CLASH_H */
 

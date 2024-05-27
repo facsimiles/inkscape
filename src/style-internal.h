@@ -239,7 +239,7 @@ class SPIFloat : public SPIBase
 {
 
 public:
-    SPIFloat(float value_default = 0.0 )
+    SPIFloat(double value_default = 0.0 )
         : value(value_default),
           value_default(value_default)
     {}
@@ -261,10 +261,10 @@ public:
 
   // To do: make private
 public:
-    float value = 0.0;
+    double value = 0.0;
 
 private:
-    float value_default = 0.0;
+    double value_default = 0.0;
 };
 
 /*
@@ -359,7 +359,7 @@ class SPILength : public SPIBase
 {
 
 public:
-    SPILength(float value = 0)
+    SPILength(double value = 0)
         : unit(SP_CSS_UNIT_NONE),
           value(value),
           computed(value),
@@ -389,11 +389,11 @@ public:
     // To do: make private
   public:
     unsigned unit : 4;
-    float value = 0.f;
-    float computed = 0.f;
+    double value = 0.0;
+    double computed = 0.0;
 
 private:
-    float value_default = 0.f;
+    double value_default = 0.0;
 };
 
 
@@ -403,7 +403,7 @@ class SPILengthOrNormal : public SPILength
 {
 
 public:
-    SPILengthOrNormal(float value = 0)
+    SPILengthOrNormal(double value = 0)
         : SPILength(value),
           normal(true)
     {}
@@ -973,19 +973,19 @@ public:
     bool equals(const SPIBase& rhs) const override;
 
 public:
-    static float const font_size_default;
+    static double const font_size_default;
 
   // To do: make private
 public:
     unsigned type : 2;
     unsigned unit : 4;
     unsigned literal : 4;
-    float value;
-    float computed;
+    double value;
+    double computed;
 
 private:
     double relative_fraction() const;
-    static float const font_size_table[];
+    static double const font_size_table[];
 };
 
 
@@ -1059,8 +1059,8 @@ public:
     unsigned type : 2;
     unsigned unit : 4;
     unsigned literal: 2;
-    float value; // Can be negative
-    float computed;
+    double value; // Can be negative
+    double computed;
 };
 
 // CSS 2.  Changes in CSS 3, where description is for TextDecorationLine, NOT TextDecoration
@@ -1183,16 +1183,16 @@ public:
 
 // These are used to implement text_decoration. The values are not saved to or read from SVG file
 struct SPITextDecorationData {
-    float   phase_length;          // length along text line,used for phase for dot/dash/wavy
+    double   phase_length;         // length along text line,used for phase for dot/dash/wavy
     bool    tspan_line_start;      // is first  span on a line
     bool    tspan_line_end;        // is last span on a line
-    float   tspan_width;           // from libnrtype, when it calculates spans
-    float   ascender;              // the rest from tspan's font
-    float   descender;
-    float   underline_thickness;
-    float   underline_position; 
-    float   line_through_thickness;
-    float   line_through_position;
+    double   tspan_width;           // from libnrtype, when it calculates spans
+    double   ascender;              // the rest from tspan's font
+    double   descender;
+    double   underline_thickness;
+    double   underline_position;
+    double   line_through_thickness;
+    double   line_through_position;
 };
 
 /// Vector Effects.  THIS SHOULD BE A GENERIC CLASS

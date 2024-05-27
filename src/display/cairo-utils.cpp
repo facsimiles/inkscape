@@ -1485,37 +1485,29 @@ Cairo::RefPtr<Cairo::Pattern> ink_cairo_pattern_create_slanting_stripes(uint32_t
     return pattern;
 }
 
-cairo_pattern_t *
-ink_cairo_pattern_create_checkerboard(guint32 rgba, bool use_alpha)
-{
-    int const w = 6;
-    int const h = 6;
+Cairo::RefPtr<Cairo::Pattern> create_checkerboard_pattern(uint32_t dark, uint32_t light, int size) {
+    auto img = Cairo::ImageSurface::create(Cairo::Surface::Format::ARGB32, 2 * size, 2 * size);
+    auto ctx = Cairo::Context::create(img);
+    ctx->set_source_rgb(SP_RGBA32_R_F(dark), SP_RGBA32_G_F(dark), SP_RGBA32_B_F(dark));
+    ctx->paint();
+    ctx->set_source_rgb(SP_RGBA32_R_F(light), SP_RGBA32_G_F(light), SP_RGBA32_B_F(light));
+    ctx->rectangle(0, 0, size, size);
+    ctx->fill();
+    ctx->rectangle(size, size, size, size);
+    ctx->fill();
+    auto pattern = Cairo::SurfacePattern::create(img);
+    pattern->set_extend(Cairo::Pattern::Extend::REPEAT);
+    pattern->set_filter(Cairo::SurfacePattern::Filter::NEAREST);
+    return pattern;
+}
 
+Cairo::RefPtr<Cairo::Pattern> ink_cairo_pattern_create_checkerboard(guint32 rgba, bool use_alpha, int size) {
     auto color_a = Colors::Color(rgba, use_alpha);
     auto color_b = Inkscape::Colors::make_contrasted_color(color_a, 1.0);
     // Once the second color is generated, the original doesn't need alpha
     color_a.enableOpacity(false);
-
-    cairo_surface_t *s = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 2*w, 2*h);
-
-    cairo_t *ct = cairo_create(s);
-    cairo_set_operator(ct, CAIRO_OPERATOR_SOURCE);
-    ink_cairo_set_source_color(ct, color_a);
-    cairo_paint(ct);
-    ink_cairo_set_source_color(ct, color_b);
-    cairo_rectangle(ct, 0, 0, w, h);
-    cairo_rectangle(ct, w, h, w, h);
-    cairo_fill(ct);
-    cairo_destroy(ct);
-
-    cairo_pattern_t *p = cairo_pattern_create_for_surface(s);
-    cairo_pattern_set_extend(p, CAIRO_EXTEND_REPEAT);
-    cairo_pattern_set_filter(p, CAIRO_FILTER_NEAREST);
-
-    cairo_surface_destroy(s);
-    return p;
+    return create_checkerboard_pattern(color_a.toRGBA(), color_b.toRGBA(), size);
 }
-
 
 /** 
  * Draw drop shadow around the 'rect' with given 'size' and 'color'; shadow extends to the right and bottom of rect.

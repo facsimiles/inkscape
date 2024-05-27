@@ -202,7 +202,7 @@ void SPNamedView::modified(unsigned int flags)
     }
 
     for (auto child : childList(false)) {
-        if (flags || (child->mflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
+        if ((flags & SP_OBJECT_FLAGS_ALL) || (child->mflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
             child->emitModified(flags & SP_OBJECT_MODIFIED_CASCADE);
         }
     }
@@ -220,7 +220,7 @@ void SPNamedView::update(SPCtx *ctx, guint flags)
     flags &= SP_OBJECT_MODIFIED_CASCADE;
 
     for (auto child : childList(false)) {
-        if (flags || (child->uflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
+        if ((flags & SP_OBJECT_FLAGS_ALL) || (child->uflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
             child->updateDisplay(ctx, flags);
         }
     }

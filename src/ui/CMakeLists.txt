@@ -8,6 +8,7 @@ set(ui_SRC
 	dialog-run.cpp
 	draw-anchor.cpp
 	drag-and-drop.cpp
+	gridview-utils.cpp
 	icon-loader.cpp
 	interface.cpp
 	monitor.cpp
@@ -175,7 +176,10 @@ set(ui_SRC
 	dialog/xml-tree.cpp
 	dialog/save-template-dialog.cpp
 
+	widget/block-scale.cpp
 	widget/iconrenderer.cpp
+	widget/ink-spin-button.cpp
+	widget/ink-property-grid.cpp
 	widget/alignment-selector.cpp
 	widget/anchor-selector.cpp
 	widget/bin.cpp
@@ -199,6 +203,7 @@ set(ui_SRC
 	widget/color-page.cpp
 	widget/color-palette.cpp
 	widget/color-palette-preview.cpp
+	widget/color-picker-panel.cpp
 	widget/color-picker.cpp
 	widget/color-plate.cpp
 	widget/color-preview.cpp
@@ -244,6 +249,7 @@ set(ui_SRC
 	widget/marker-combo-box.cpp
 	widget/memory.cpp
 	widget/messages.cpp
+	widget/mesh-editor.cpp
 	widget/notebook-page.cpp
 	widget/object-composite-settings.cpp
 	widget/objects-dialog-cells.cpp
@@ -252,7 +258,9 @@ set(ui_SRC
 	widget/page-properties.cpp
 	widget/page-size-preview.cpp
 	widget/page-selector.cpp
+	widget/paint-attribute.cpp
 	widget/paint-selector.cpp
+	widget/paint-switch.cpp
 	widget/pattern-editor.cpp
 	widget/point.cpp
 	widget/popover-bin.cpp
@@ -263,6 +271,7 @@ set(ui_SRC
 	widget/registered-widget.cpp
 	widget/registry.cpp
 	widget/rendering-options.cpp
+	widget/resizing-separator.cpp
 	widget/rotateable.cpp
 	widget/scalar-unit.cpp
 	widget/scalar.cpp
@@ -274,8 +283,10 @@ set(ui_SRC
 	widget/stack.cpp
 	widget/status-bar.cpp
 	widget/stroke-style.cpp
+	widget/stroke-options.cpp
 	widget/style-subject.cpp
 	widget/style-swatch.cpp
+	widget/swatch-editor.cpp
 	widget/swatch-selector.cpp
 	widget/tab-strip.cpp
 	widget/tabs-widget.cpp
@@ -286,6 +297,7 @@ set(ui_SRC
 	widget/unit-tracker.cpp
 	widget/widget-vfuncs-class-init.cpp
 	widget/xml-treeview.cpp
+	widget/property-utils.cpp
 
 	view/svg-view-widget.cpp
 
@@ -306,6 +318,7 @@ set(ui_SRC
 	draw-anchor.h
 	error-reporter.h
 	filtered-store.h
+	gridview-utils.h
 	icon-names.h
 	icon-loader.h
 	interface.h
@@ -313,7 +326,7 @@ set(ui_SRC
 	pack.h
 	popup-menu.h
 	shape-editor.h
-        shape-editor-knotholders.h
+	shape-editor-knotholders.h
 	simple-pref-pusher.h
 	shortcuts.h
 	svg-renderer.h
@@ -480,7 +493,10 @@ set(ui_SRC
 	tools/tweak-tool.h
 	tools/zoom-tool.h
 
+	widget/block-scale.h
 	widget/iconrenderer.h
+	widget/ink-spin-button.h
+	widget/ink-property-grid.h
 	widget/alignment-selector.h
 	widget/anchor-selector.h
 	widget/attr-widget.h
@@ -508,6 +524,7 @@ set(ui_SRC
 	widget/color-palette.h
 	widget/color-palette-preview.h
 	widget/color-picker.h
+	widget/color-picker-panel.h
 	widget/color-plate.h
 	widget/color-preview.h
 	widget/color-slider.h
@@ -522,6 +539,7 @@ set(ui_SRC
 	widget/desktop-widget.h
 	widget/drop-down-list.h
 	widget/document-templates.h
+	widget/edit-operation.h
 	widget/entity-entry.h
 	widget/entry.h
 	widget/events/canvas-event.h
@@ -557,13 +575,16 @@ set(ui_SRC
 	widget/marker-combo-box.h
 	widget/memory.h
 	widget/messages.h
+	widget/mesh-editor.h
 	widget/notebook-page.h
 	widget/object-composite-settings.h
 	widget/objects-dialog-cells.h
 	widget/oklab-color-wheel.h
 	widget/optglarea.h
 	widget/page-selector.h
+	widget/paint-attribute.h
 	widget/paint-selector.h
+	widget/paint-switch.h
 	widget/palette_t.h
 	widget/pattern-editor.h
 	widget/point.h
@@ -576,6 +597,7 @@ set(ui_SRC
 	widget/registered-widget.h
 	widget/registry.h
 	widget/rendering-options.h
+	widget/resizing-separator.h
 	widget/rotateable.h
 	widget/scalar-unit.h
 	widget/scalar.h
@@ -588,8 +610,10 @@ set(ui_SRC
 	widget/stack.h
 	widget/status-bar.h
 	widget/stroke-style.h
+	widget/stroke-options.h
 	widget/style-subject.h
 	widget/style-swatch.h
+	widget/swatch-editor.h
 	widget/swatch-selector.h
 	widget/tab-strip.h
 	widget/tabs-widget.h
@@ -600,6 +624,7 @@ set(ui_SRC
 	widget/unit-tracker.h
 	widget/widget-vfuncs-class-init.h
 	widget/xml-treeview.h
+	widget/property-utils.h
 
 	view/svg-view-widget.h
 )

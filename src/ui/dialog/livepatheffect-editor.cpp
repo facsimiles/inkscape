@@ -41,7 +41,6 @@
 #include "util/optstr.h"
 
 namespace Inkscape::UI::Dialog {
-
 /*
 * * favourites
  */
@@ -155,9 +154,22 @@ LivePathEffectEditor::~LivePathEffectEditor()
     sp_clear_custom_tooltip();
 }
 
-bool
-LivePathEffectEditor::can_apply(LivePathEffect::EffectType etype, Glib::ustring const &item_type,
-                                bool const has_clip, bool const has_mask)
+namespace {
+
+Glib::ustring get_tooltip(LivePathEffect::EffectType const type, Glib::ustring const &untranslated_label) {
+    const auto& converter = Inkscape::LivePathEffect::LPETypeConverter;
+    Glib::ustring tooltip = _(converter.get_description(type).c_str());
+    if (tooltip != untranslated_label) {
+        // TRANSLATORS: %1 is the untranslated label. %2 is the effect type description.
+        tooltip = Glib::ustring::compose("[%1] %2", untranslated_label, tooltip);
+    }
+    return tooltip;
+}
+
+bool can_apply(
+    const LivePathEffect::EnumEffectDataConverter<LivePathEffect::EffectType>& converter,
+    LivePathEffect::EffectType etype, Glib::ustring const &item_type,
+    bool const has_clip, bool const has_mask)
 {
     if (!has_clip && etype == LivePathEffect::POWERCLIP) {
         return false;
@@ -177,6 +189,8 @@ LivePathEffectEditor::can_apply(LivePathEffect::EffectType etype, Glib::ustring 
 
     return true;
 }
+
+} // namespace
 
 void align(Gtk::Widget *top, int const spinbutton_width_chars)
 {
@@ -286,16 +300,10 @@ const Glib::ustring& get_category_name(Inkscape::LivePathEffect::LPECategory cat
     return category_names.at(category);
 }
 
-struct LivePathEffectEditor::LPEMetadata final {
-    LivePathEffect::EffectType type{};
-    LivePathEffect::LPECategory category{};
-    Glib::ustring label, icon_name, tooltip;
-    bool sensitive{};
-};
 
 // populate popup with lpes and completion list for a search box
 void LivePathEffectEditor::add_lpes(Inkscape::UI::Widget::CompletionPopup &popup, bool const symbolic,
-                                    std::vector<LPEMetadata> &&lpes)
+                                    std::vector<Glib::RefPtr<LPEMetadata>> &&lpes)
 {
     popup.clear_completion_list();
 
@@ -307,17 +315,18 @@ void LivePathEffectEditor::add_lpes(Inkscape::UI::Widget::CompletionPopup &popup
     auto &menu = popup.get_menu();
     menu.remove_all();
 
-    ColumnMenuBuilder<LivePathEffect::LPECategory> builder{menu, 3, Gtk::IconSize::LARGE};
-    auto const tie = [](LPEMetadata const &lpe){ return std::tie(lpe.category, lpe.label); };
+    ColumnMenuBuilder<LivePathEffect::LPECategory> builder{menu, 3, Gtk::IconSize::NORMAL};
+    auto const tie = [](const Glib::RefPtr<LPEMetadata>& lpe){ return std::tie(lpe->category, lpe->label); };
     std::sort(lpes.begin(), lpes.end(), [=](auto &l, auto &r){ return tie(l) < tie(r); });
-    for (auto const &lpe : lpes) {
+    for (auto const &plpe : lpes) {
         // build popup menu
+        auto& lpe = *plpe;
         auto const type = lpe.type;
         int const id = static_cast<int>(type);
         auto const menuitem = builder.add_item(lpe.label, lpe.category, lpe.tooltip, lpe.icon_name,
                                                lpe.sensitive, true, [=, this]{ onAdd(type); });
-        menuitem->signal_query_tooltip().connect([lpe, id, this](int x, int y, bool kbd, const Glib::RefPtr<Gtk::Tooltip>& tooltipw){
-            return sp_query_custom_tooltip(this, x, y, kbd, tooltipw, id, lpe.tooltip, lpe.icon_name);
+        menuitem->signal_query_tooltip().connect([plpe, id, this](int x, int y, bool kbd, const Glib::RefPtr<Gtk::Tooltip>& tooltipw){
+            return sp_query_custom_tooltip(this, x, y, kbd, tooltipw, id, plpe->tooltip, plpe->icon_name);
         }, false); // before
         if (builder.new_section()) {
             builder.set_section(get_category_name(lpe.category));
@@ -325,8 +334,9 @@ void LivePathEffectEditor::add_lpes(Inkscape::UI::Widget::CompletionPopup &popup
     }
 
     // build completion list
-    std::sort(lpes.begin(), lpes.end(), [=](auto &l, auto &r){ return l.label < r.label; });
-    for (auto const &lpe: lpes) {
+    std::sort(lpes.begin(), lpes.end(), [=](auto &l, auto &r){ return l->label < r->label; });
+    for (auto const &plpe: lpes) {
+        auto& lpe = *plpe;
         if (lpe.sensitive) {
             int const id = static_cast<int>(lpe.type);
             Glib::ustring untranslated_label = converter.get_label(lpe.type);
@@ -344,15 +354,49 @@ void LivePathEffectEditor::add_lpes(Inkscape::UI::Widget::CompletionPopup &popup
     }
 }
 
-Glib::ustring LivePathEffectEditor::get_tooltip(LivePathEffect::EffectType const type,
-                                                Glib::ustring const &untranslated_label)
-{
-    Glib::ustring tooltip = _(converter.get_description(type).c_str());
-    if (tooltip != untranslated_label) {
-        // TRANSLATORS: %1 is the untranslated label. %2 is the effect type description.
-        tooltip = Glib::ustring::compose("[%1] %2", untranslated_label, tooltip);
+std::vector<Glib::RefPtr<LPEMetadata>> get_list_of_applicable_lpes(SPLPEItem* item, bool use, bool include_experimental) {
+    auto shape = cast<SPShape>(item);
+    auto path = cast<SPPath>(item);
+    auto group = cast<SPGroup>(item);
+    bool has_clip = item && item->getClipObject() != nullptr;
+    bool has_mask = item && item->getMaskObject() != nullptr;
+
+    Glib::ustring item_type;
+    if (group) {
+        item_type = "group";
+    } else if (path) {
+        item_type = "path";
+    } else if (shape) {
+        item_type = "shape";
+    } else if (use) {
+        item_type = "use";
     }
-    return tooltip;
+
+    const auto& converter = Inkscape::LivePathEffect::LPETypeConverter;
+    auto lpes = std::vector<Glib::RefPtr<LPEMetadata>>{};
+    lpes.reserve(converter._length);
+    for (int i = 0; i < static_cast<int>(converter._length); ++i) {
+        auto const * const data = &converter.data(i);
+        auto const &type = data->id;
+        auto const &untranslated_label = converter.get_label(type);
+
+        auto category = converter.get_category(type);
+        if (sp_has_fav(untranslated_label)) {
+            category = Inkscape::LivePathEffect::LPECategory::Favorites;
+        }
+
+        if (!include_experimental && category == Inkscape::LivePathEffect::LPECategory::Experimental) {
+            continue;
+        }
+
+        Glib::ustring label = g_dpgettext2(0, "path effect", untranslated_label.c_str());
+        auto const &icon = converter.get_icon(type);
+        auto tooltip = get_tooltip(type, untranslated_label);
+        auto const sensitive = can_apply(converter, type, item_type, has_clip, has_mask);
+        lpes.push_back(LPEMetadata::create(type, category, std::move(label), icon, std::move(tooltip), sensitive));
+    }
+
+    return lpes;
 }
 
 void
@@ -389,30 +433,7 @@ LivePathEffectEditor::setMenu()
     _has_mask = has_mask;
 
     bool symbolic = Inkscape::Preferences::get()->getBool("/theme/symbolicIcons", true);
-
-    auto lpes = std::vector<LPEMetadata>{};
-    lpes.reserve(converter._length);
-    for (int i = 0; i < static_cast<int>(converter._length); ++i) {
-        auto const * const data = &converter.data(i);
-        auto const &type = data->id;
-        auto const &untranslated_label = converter.get_label(type);
-
-        auto category = converter.get_category(type);
-        if (sp_has_fav(untranslated_label)) {
-            category = Inkscape::LivePathEffect::LPECategory::Favorites;
-        }
-
-        if (!_experimental && category == Inkscape::LivePathEffect::LPECategory::Experimental) {
-            continue;
-        }
-
-        Glib::ustring label = g_dpgettext2(0, "path effect", untranslated_label.c_str());
-        auto const &icon = converter.get_icon(type);
-        auto tooltip = get_tooltip(type, untranslated_label);
-        auto const sensitive = can_apply(type, item_type, has_clip, has_mask);
-        lpes.push_back({type, category, std::move(label), icon, std::move(tooltip), sensitive});
-    }
-
+    auto lpes = get_list_of_applicable_lpes(current_lpeitem, _current_use != nullptr, _experimental);
     add_lpes(_lpes_popup, symbolic, std::move(lpes));
 }
 

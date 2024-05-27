@@ -2300,8 +2300,8 @@ bool SPIDashArray::is_valid() const {
 // SPIFontSize ----------------------------------------------------------
 
 /** Indexed by SP_CSS_FONT_SIZE_blah.   These seem a bit small */
-float const SPIFontSize::font_size_table[] = {6.0, 8.0, 10.0, 12.0, 14.0, 18.0, 24.0};
-float const SPIFontSize::font_size_default = 12.0;
+double const SPIFontSize::font_size_table[] = {6.0, 8.0, 10.0, 12.0, 14.0, 18.0, 24.0};
+double const SPIFontSize::font_size_default = 12.0;
 
 void
 SPIFontSize::read( gchar const *str ) {

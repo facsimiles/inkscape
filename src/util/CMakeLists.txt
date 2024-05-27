@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 
 set(util_SRC
-    action-accel.cpp
+	action-accel.cpp
     document-fonts.cpp
     drawing-utils.cpp
     expression-evaluator.cpp
@@ -26,13 +26,13 @@ set(util_SRC
     uri.cpp
     ziptool.cpp
 
-    # -------
-    # Headers
-    action-accel.h
-    cached_map.h
-    cast.h
-    const_char_ptr.h
-    delete-with.h
+	# -------
+	# Headers
+	action-accel.h
+	cached_map.h
+	cast.h
+	const_char_ptr.h
+	delete-with.h
     document-fonts.h
     drawing-utils.h
     enums.h

@@ -16,15 +16,15 @@
 
 #include "colors/color-set.h"
 
-namespace Inkscape {
-namespace UI {
-namespace Widget {
+namespace Inkscape::UI::Widget {
 
 class ColorEntry : public Gtk::Entry
 {
 public:
     ColorEntry(std::shared_ptr<Colors::ColorSet> color);
     ~ColorEntry() override;
+
+    sigc::signal<void (Glib::ustring)>& get_out_of_gamut_signal() { return _signal_out_of_gamut; }
 
 protected:
     void on_changed() override;
@@ -37,14 +37,12 @@ private:
     bool _updating;
     bool _updatingrgba;
     int _prevpos;
-    std::optional<Colors::Color> _lastcolor;
-
+    sigc::signal<void (Glib::ustring)> _signal_out_of_gamut;
+    bool _warning = false;
     sigc::connection _color_changed_connection;
 };
 
-}
-}
-}
+} // namespace
 
 #endif
 /*

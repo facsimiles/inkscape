@@ -20,8 +20,9 @@ using namespace std::literals;
 
 namespace Inkscape {
 
-// pattern preview for UI list, with light gray background and border
+// pattern preview for the UI list, with a light-gray background and border
 std::unique_ptr<SPDocument> get_preview_document() {
+    // language=XML
     constexpr auto buffer = R"A(
 <svg width="40" height="40" viewBox="0 0 40 40"
    xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -30,7 +31,7 @@ std::unique_ptr<SPDocument> get_preview_document() {
   </defs>
   <g id="layer1">
     <rect
-       style="fill:#f0f0f0;fill-opacity:1;stroke:none"
+       style="fill:#f6f6f6;fill-opacity:1;stroke:none"
        id="rect2620"
        width="100%" height="100%" x="0" y="0" />
     <rect
@@ -43,8 +44,9 @@ std::unique_ptr<SPDocument> get_preview_document() {
     return SPDocument::createNewDocFromMem(buffer, false);
 }
 
-// pattern preview document without background
+// pattern preview document without a background
 std::unique_ptr<SPDocument> get_big_preview_document() {
+    // language=XML
     constexpr auto buffer = R"A(
 <svg width="100" height="100"
    xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -71,6 +73,11 @@ PatternManager::PatternManager() {
     if (!_big_preview_doc.get() || !_big_preview_doc->getReprDoc()) {
         throw std::runtime_error("Pattern embedded big preview document cannot be loaded");
     }
+}
+
+// delayed initialization, until stock patterns are needed
+void PatternManager::init() {
+    if (_initialized) return;
 
     auto model = Gtk::ListStore::create(columns);
 
@@ -109,6 +116,7 @@ PatternManager::PatternManager() {
     }
 
     _model = model;
+    _initialized = true;
 }
 
 static Cairo::RefPtr<Cairo::Surface> create_pattern_image(SPDocument &sandbox,
@@ -156,7 +164,7 @@ static Cairo::RefPtr<Cairo::Surface> create_pattern_image(SPDocument &sandbox,
 
 // given a pattern, create a PatternItem instance that describes it;
 // input pattern can be a link or a root pattern
-Glib::RefPtr<PatternItem> create_pattern_item(SPDocument *sandbox, SPPattern* pattern, bool stock_pattern, double scale) {
+static Glib::RefPtr<PatternItem> create_pattern_item(SPDocument *sandbox, SPPattern* pattern, bool stock_pattern, double scale) {
     if (!pattern) return {};
 
     auto item = PatternItem::create();
@@ -222,6 +230,7 @@ Glib::RefPtr<Inkscape::UI::Widget::PatternItem> PatternManager::get_item(SPPatte
     Glib::RefPtr<Inkscape::UI::Widget::PatternItem> item;
     if (!pattern) return item;
 
+    init();
     auto it = _cache.find(pattern);
     // if pattern entry was present in the cache, then it is a stock pattern
     bool stock = it != _cache.end();
@@ -241,6 +250,7 @@ Glib::RefPtr<Inkscape::UI::Widget::PatternItem> PatternManager::get_item(SPPatte
 }
 
 Glib::RefPtr<Gtk::TreeModel> PatternManager::get_categories() {
+    init();
     return _model;
 }
 

@@ -42,7 +42,7 @@ struct PaletteFileData
     /// Certain color palettes are organized into blocks, typically 7 or 8 colors long.
     /// This value tells us how big the block are, if any.
     /// We can use this info to organize colors in columns in multiples of this value.
-    int columns;
+    int columns = 0;
 
     // dummy item used for aligning color tiles in a palette
     enum SpacerItem {};
@@ -86,12 +86,24 @@ struct PaletteResult { // todo: replace with std::expected when it becomes avail
     std::optional<PaletteFileData> palette;
     Glib::ustring error_message;
 };
+
 PaletteResult load_palette(std::string const &path);
 
 // Show file chooser and select color palette file
 Glib::RefPtr<Gio::File> choose_palette_file(Gtk::Window* window);
 
 } // namespace Inkscape::UI::Dialog
+
+
+namespace Inkscape {
+
+// Save list of RGB values with optional names to the GIMP color palette file
+// - fname: path with file name
+// - colors: list of (RGB, name)
+// - palette_name: name recorded inside palette file
+void save_gimp_palette(std::string fname, const std::vector<std::pair<int, std::string>>& colors, const char* palette_name);
+
+}
 
 #endif // INKSCAPE_UI_DIALOG_GLOBAL_PALETTES_H
 

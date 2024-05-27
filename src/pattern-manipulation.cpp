@@ -3,8 +3,11 @@
 #include <glibmm/fileutils.h>
 #include <glibmm/i18n.h>
 #include "pattern-manipulation.h"
+
+#include "desktop-style.h"
 #include "colors/color.h"
 #include "document.h"
+#include "fill-or-stroke.h"
 #include "helper/stock-items.h"
 #include "object/sp-pattern.h"
 #include "xml/repr.h"
@@ -122,7 +125,6 @@ Geom::Scale sp_pattern_get_gap(SPPattern* link_pattern) {
     );
 }
 
-
 std::string sp_get_pattern_label(SPPattern* pattern) {
     if (!pattern) return std::string();
 
@@ -137,3 +139,62 @@ std::string sp_get_pattern_label(SPPattern* pattern) {
     return std::string(pat_id ? pat_id : "");
 }
 
+void sp_item_set_pattern_style(SPItem* item, SPPattern* root_pattern, SPCSSAttr* css, FillOrStroke kind) {
+    if (!item || !item->style || !item->getRepr()) {
+        g_warning("No valid item provided to sp_item_set_pattern");
+        return;
+    }
+
+    SPStyle* style = item->style;
+    auto server = kind == FILL ? style->getFillPaintServer() : style->getStrokePaintServer();
+
+    if (auto pattern = cast<SPPattern>(server); pattern && pattern->rootPattern() == root_pattern) {
+        // only if this object's pattern is not rooted in our selected pattern, apply
+        return;
+    }
+
+    if (kind == FILL) {
+        sp_desktop_apply_css_recursive(item, css, true);
+    }
+    else {
+        sp_repr_css_change_recursive(item->getRepr(), css, "style");
+    }
+
+    // create a link to the pattern right away, without waiting for an object to be moved;
+    // otherwise the pattern editor may end up modifying a pattern shared by different objects
+    item->adjust_pattern(Geom::Affine());
+}
+
+// set a pattern as item's fill or stroke; modify the pattern's attributes
+void sp_item_apply_pattern(SPItem* item, SPPattern* pattern, FillOrStroke kind, std::optional<Color> color, const Glib::ustring& label,
+    const Geom::Affine& transform, const Geom::Point& offset, bool uniform_scale, const Geom::Scale& gap) {
+
+    if (!pattern || !item) return;
+
+    auto link_pattern = pattern;
+    auto root_pattern = pattern->rootPattern();
+    if (color) {
+        sp_pattern_set_color(root_pattern, color.value());
+    }
+    // pattern name is applied to the root
+    root_pattern->setAttribute("inkscape:label", label.c_str());
+    // the remaining settings apply to a link pattern
+    if (link_pattern != root_pattern) {
+        sp_pattern_set_transform(link_pattern, transform);
+        sp_pattern_set_offset(link_pattern, offset);
+        sp_pattern_set_uniform_scale(link_pattern, uniform_scale);
+        // a gap requires both patterns, but they are only created later by calling "adjust_pattern" below
+        // it is OK to ignore it for now, during the initial creation the gap is 0,0
+        sp_pattern_set_gap(link_pattern, gap);
+    }
+
+    auto url = Glib::ustring::compose("url(#%1)", root_pattern->getRepr()->attribute("id"));
+
+    SPCSSAttr* css = sp_repr_css_attr_new();
+    sp_repr_css_set_property(css, kind == FILL ? "fill" : "stroke", url.c_str());
+    sp_item_set_pattern_style(item, root_pattern, css, kind);
+
+    // create a link to the pattern right away, without waiting for this item to be moved;
+    // otherwise the pattern editor may end up modifying a pattern shared by different objects
+    item->adjust_pattern(Geom::Affine());
+}

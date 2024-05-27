@@ -19,8 +19,8 @@ Geom::Rect rounded_rectangle(const Cairo::RefPtr<Cairo::Context>& ctx, const Geo
     else {
         ctx->move_to(x, y);
         ctx->line_to(x + width, y);
-        ctx->line_to(x + width, y + width);
-        ctx->line_to(x, y + width);
+        ctx->line_to(x + width, y + height);
+        ctx->line_to(x, y + height);
         ctx->close_path();
     }
     return rect.shrunkBy(1);
@@ -30,12 +30,12 @@ void circle(const Cairo::RefPtr<Cairo::Context>& ctx, const Geom::Point& center,
     ctx->arc(center.x(), center.y(), radius, 0, 2 * M_PI);
 }
 
-// draw relief around the given rect to stop colors inside blend with background outside
-void draw_border(const Cairo::RefPtr<Cairo::Context>& ctx, Geom::Rect rect, double radius, const Gdk::RGBA& color, int device_scale, bool circular) {
+void draw_border_shape(const Cairo::RefPtr<Cairo::Context>& ctx, Geom::Rect rect, const Gdk::RGBA& color, int device_scale, std::function<void (const Cairo::RefPtr<Cairo::Context>&, Geom::Rect&, int)> draw_path) {
+
     if (rect.width() < 1 || rect.height() < 1) return;
 
     if (device_scale > 1) {
-        // there's one physical pixel overhang on high-dpi display, so eliminate that:
+        // there's one physical pixel overhang on a high-dpi display, so eliminate that:
         auto pix = 1.0 / device_scale;
         rect = Geom::Rect::from_xywh(rect.min().x(), rect.min().y(), rect.width() - pix, rect.height() - pix);
     }
@@ -45,7 +45,7 @@ void draw_border(const Cairo::RefPtr<Cairo::Context>& ctx, Geom::Rect rect, doub
     // align 1.0 wide stroke to pixel grid
     ctx->translate(0.5, 0.5);
     ctx->set_line_width(1.0);
-    radius *= device_scale;
+    // radius *= device_scale;
     // shadow depth
     const int steps = 3 * device_scale;
     auto alpha = color.get_alpha();
@@ -53,13 +53,7 @@ void draw_border(const Cairo::RefPtr<Cairo::Context>& ctx, Geom::Rect rect, doub
     // rect in physical pixels
     rect = Geom::Rect(rect.min() * device_scale, rect.max() * device_scale);
     for (int i = 0; i < steps; ++i) {
-        if (circular) {
-            circle(ctx, rect.midpoint(), rect.minExtent() / 2);
-            rect.shrinkBy(1);
-        }
-        else {
-            rect = rounded_rectangle(ctx, rect, radius--);
-        }
+        draw_path(ctx, rect, i);
         ctx->set_source_rgba(color.get_red(), color.get_green(), color.get_blue(), alpha);
         ctx->stroke();
         alpha *= 0.5;
@@ -67,9 +61,45 @@ void draw_border(const Cairo::RefPtr<Cairo::Context>& ctx, Geom::Rect rect, doub
     ctx->restore();
 }
 
-void draw_standard_border(const Cairo::RefPtr<Cairo::Context>& ctx, Geom::Rect rect, bool dark_theme, double radius, int device_scale, bool circular) {
-    auto color = dark_theme ? Gdk::RGBA(1, 1, 1, 0.25) : Gdk::RGBA(0, 0, 0, 0.25);
-    draw_border(ctx, rect, radius, color, device_scale, circular);
+// draw relief around the given rect to stop colors inside blend with a background outside
+void draw_border(const Cairo::RefPtr<Cairo::Context>& ctx, Geom::Rect start_rect, double radius, const Gdk::RGBA& color, int device_scale, bool circular, bool inwards) {
+
+    radius *= device_scale;
+
+    draw_border_shape(ctx, start_rect, color, device_scale, [&](const Cairo::RefPtr<Cairo::Context>&, Geom::Rect& rect, int) {
+        if (circular) {
+            circle(ctx, rect.midpoint(), rect.minExtent() / 2);
+        }
+        else {
+            rounded_rectangle(ctx, rect, inwards ? radius-- : radius++);
+        }
+        rect.expandBy(inwards ? -1 : 1);
+    });
+}
+
+Gdk::RGBA get_standard_border_color(bool dark_theme) {
+    return dark_theme ? Gdk::RGBA(1, 1, 1, 0.25) : Gdk::RGBA(0, 0, 0, 0.25);
+}
+
+void draw_standard_border(const Cairo::RefPtr<Cairo::Context>& ctx, Geom::Rect rect, bool dark_theme, double radius, int device_scale, bool circular, bool inwards) {
+    auto color = get_standard_border_color(dark_theme);
+    draw_border(ctx, rect, radius, color, device_scale, circular, inwards);
+}
+
+// draw a circle around given point to show currently selected color
+void draw_point_indicator(const Cairo::RefPtr<Cairo::Context>& ctx, const Geom::Point& point, double size) {
+    ctx->save();
+
+    auto pt = point;
+    ctx->set_line_width(1.0);
+    circle(ctx, pt, (size - 2) / 2);
+    ctx->set_source_rgb(1, 1, 1);
+    ctx->stroke();
+    circle(ctx, pt, size / 2);
+    ctx->set_source_rgb(0, 0, 0);
+    ctx->stroke();
+
+    ctx->restore();
 }
 
 std::optional<Gdk::RGBA> lookup_background_color(Glib::RefPtr<Gtk::StyleContext>& style) {

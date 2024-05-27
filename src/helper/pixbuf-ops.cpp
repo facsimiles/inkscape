@@ -101,10 +101,9 @@ Inkscape::Pixbuf *sp_generate_internal_bitmap(SPDocument *document,
         dc.save();
         dc.transform(Geom::Scale(device_scale));
         dc.setOperator(CAIRO_OPERATOR_SOURCE);
-        dc.setSource(pattern);
+        dc.setSource(pattern->cobj());
         dc.paint();
         dc.restore();
-        cairo_pattern_destroy(pattern);
     }
 
     // render items

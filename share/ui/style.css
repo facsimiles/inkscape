@@ -556,15 +556,14 @@ button.link:hover image {
 }
 
 .marker-item-box {
-    padding: 1px;
+    padding: 0px;
 }
 .marker-separator {
     padding: 0;
 }
 
 .tight-button {
-    padding-left: 3px;
-    padding-right: 3px;
+    padding: 4px;
 }
 
 .small-button {
@@ -572,9 +571,14 @@ button.link:hover image {
     padding: 1px 3px;
 }
 
-.link-edit-button {
-    padding: 5px 3px;
-    min-width: 0.5em;
+/* This is a button placed next to spinbuttons with a link/unlink icon.
+ * It is supposed to be narrow and tall, so let it be narrow: */
+button.link-edit-button {
+    padding: 5px 0;
+    min-width: 16px; /* icon size */
+}
+button.link-edit-button image {
+    padding: 0;
 }
 
 /* In some themes stack switcher buttons are extra wide forcing dialogs too wide */
@@ -655,6 +659,12 @@ stackswitcher button {
     margin: 0;
     padding: 4px;
 }
+.compact-flowbox flowboxchild {
+    margin: 0;
+    padding: 2px; /* moderate gap of 2*2=4 pixels */
+    min-width: 8px;
+    min-height: 8px;
+}
 
 /* slider with tighter margins */
 scale.tight-slider {
@@ -709,7 +719,7 @@ button.square-button image {
     /* Color is set in src/ui/widget/layer-selector.cpp */
 }
 
-#DialogNotebook #Swatches box label {
+#DialogNotebook #Swatches box label.padded-label {
     padding-left: 5px;
     padding-right: 3px;
 }
@@ -762,6 +772,20 @@ button.square-button image {
     margin-top: 0.5em;
 }
 
+.grid-section-title {
+    font-weight: bold;
+    margin: 2px 0;
+}
+.grid-section-button {
+    /* make it tight */
+    padding: 2px 2px 2px 0;
+    margin: 2px 0;
+}
+.grid-section-divider {
+    margin: 2px 0;
+    opacity: 0.6;
+}
+
 /* single-level indentation for labels in a dialog */
 .indent {
     margin-left: 1em;
@@ -769,6 +793,11 @@ button.square-button image {
 
 .small-font {
     font-size: smaller;
+}
+
+entry.small-entry {
+    min-height: 18px;
+    padding: 0;
 }
 
 .inkscape-toolbar {
@@ -1034,9 +1063,9 @@ padding:3px 3px 10px 3px;
     min-height:26px;
 }
 
-#LPEEffectItem expander, 
+#LPEEffectItem expander,
 #LPEEffectItem expander *,
-#LPEEffectItem expander:focus, 
+#LPEEffectItem expander:focus,
 #LPEEffectItem expander *:focus {
     outline:0;
 }
@@ -1224,11 +1253,6 @@ popover.menu > stack > box > modelbutton:first-child > * /* Affect children not 
     opacity: 0.55;
 }
 
-/* regular popover that has no arrow and pretends to be a dropdown menu */
-popover.popup-menu contents {
-    margin-top: 1px; /* distance from the bottom of the button above this menu */
-}
-
 /* darker background for extensions gallery due to fixed-color thumbnails (white background + drop shadow) */
 .darker-background {
     background-image: image(alpha(#000, 0.05));
@@ -1283,11 +1307,11 @@ popover.popup-menu contents {
     min-width: 24px;
     min-height: 24px;
 }
-#ColorPicker > button {
+#ColorPicker:not(.icon) > button {
     border-width: 0;
     padding: 0;
 }
-#ColorPicker > .toggle {
+#ColorPicker:not(.icon) > .toggle {
     border-width: 0;
     padding: 0;
 }
@@ -1298,12 +1322,12 @@ popover.popup-menu contents {
     min-height: 16px;
 }
 #ColorPreview.simple {
-    min-width : 32px;
     min-height: 12px;
 }
 #ColorPreview:hover:not(.simple) {
-    border-radius: 3px;
-    border: solid @theme_selected_bg_color 1px;
+    border-radius: 2px;
+    /* using outline, to keep dimensions intact - no growth */
+    outline: solid @theme_selected_bg_color 1px;
 }
 
 /* GradientImage */
@@ -1314,21 +1338,11 @@ popover.popup-menu contents {
 
 /* GradientWithStops */
 #GradientEdit {
-    min-width : 60px;
-
+    min-width: 60px;
     /* widget's height; it should take stop template's height into account
      * current value is fine-tuned to make stop handles overlap gradient image
      * just the right amount */
-    min-height: 33px;
-}
-/* focus outline, emulates style of GTKʼs Adwaita/Default CSS themeʼs outline */
-#GradientEdit {
-    border: 1px dashed transparent; /* reserve space but donʼt draw til focus */
-    border-radius: 3px;
-    padding: 3px;
-}
-#GradientEdit:focus-within {
-    border-color: alpha(@theme_fg_color, 0.3);
+    min-height: 35px;
 }
 
 /* Canvas */
@@ -1358,7 +1372,7 @@ frame.flat {
 }
 
 /*we dont want higlight with tab order only want checked ones */
-#ToolToolbar flowboxchild:selected { 
+#ToolToolbar flowboxchild:selected {
     background-color:transparent;
     background-image:image(@theme_bg_color);
 }
@@ -1420,6 +1434,22 @@ gridview.grid-view-small > child box.item-box {
     border-spacing: 8px;
 }
 
+/* gridview items with much tighter margins for compact view */
+gridview.grid-view-compact > child box.item-box {
+    padding: 0;
+    margin: 3px;
+    border-spacing: 3px;
+}
+gridview.grid-view-no-margins > child {
+    padding: 2px;
+    border-radius: 2px;
+}
+gridview.grid-view-no-margins > child box.item-box {
+    padding: 0;
+    margin: 0;
+    border-spacing: 0;
+}
+
 /* list view with items based on labels need some extra vertical space */
 listview.list-view-small > row > box.item-box {
     margin-top: 3px;
@@ -1456,9 +1486,22 @@ listview.list-view-small > row > box.item-box.separator {
     margin: 4px 6px;
 }
 
-InkSpinButton {
+/* Establish minimal size for custom spin buttons */
+ink-spinbutton {
     min-height: 22px;
 }
+ink-spinbutton.frame {
+    min-height: 24px;
+}
+
+.std-widget-height {
+    min-height: 24px;
+}
+
+/*ink-spinbutton entry {*/
+/*    !* we need to set entry size too, so it doesn't enlarge spin button *!*/
+/*    min-height: 18px;*/
+/*}*/
 
 /* Helper class to make icons in GtkEntry disappear */
 .no-icon image {
@@ -1467,6 +1510,9 @@ InkSpinButton {
     -gtk-icon-size: 0;
 }
 
+separator.thin {
+    margin: 0;
+}
 separator.faint {
     opacity: 0.5;
 }
@@ -1478,14 +1524,14 @@ separator.faint {
 }
 
 #ColorWheel {
-    min-height: 300px;
+    min-height: 220px;
 }
 
 #ColorPlate.rectangular {
     min-height: 160px;
 }
 #ColorPlate.circular {
-    min-height: 300px;
+    min-height: 220px;
 }
 
 /* Shrink area of separator's influence or else it will interfere with ruler and multipaned handle. */
@@ -1508,6 +1554,11 @@ separator.faint {
         @theme_bg_color 10%,
         @theme_bg_color 90%,
         alpha(@theme_fg_color, 0.25) 100%);
+}
+
+/* Establish min width of the paint popup in object properties dialog */
+#PaintSwitch {
+    min-width: 24rem;
 }
 
 /* Adds an exception to StartScreen recent files tab
@@ -1537,6 +1588,56 @@ listview row.top-separator {
 /* Limit max size of rows in a stack sidebar to something more compact */
 .compact-stack-sidebar list row {
     min-height: 2.25em;
+}
+
+.border-box {
+    border-radius: 2px;
+    border: 1px solid @borders;
+}
+.linked .border-box:not(:first-child) {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+.linked .border-box:not(:last-child) {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.entry-box {
+    /* Entry background color */
+    background-color: @theme_base_color;
+}
+
+/* MenuButton with sharp corners */
+menubutton.rectangle > button {
+    border-radius: 0;
+    padding: 0px;
+}
+
+/* limit slider size to let scrolledwindow shrink */
+scrolledwindow.small-window slider {
+    min-height: 16px;
+}
+
+.large-icon {
+    -gtk-icon-size: 20px;
+}
+
+button.reduced-padding {
+    padding: 1px;
+}
+
+.standard-frame {
+    border: 1px solid @borders;
+}
+
+.active-background {
+    background-color: @theme_base_color;
+}
+
+/* Pattern editor in a popup - give it some vertical size to reveal a list of patterns */
+#PatternEditorPopup {
+    min-height: 400px;
 }
 
 /* TabStrip widget is used for switching docked dialogs */

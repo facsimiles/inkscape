@@ -17,6 +17,7 @@
 
 #include "sp-marker.h"
 
+#include <cassert>
 #include <cstring>
 
 #include <glib/gi18n.h>
@@ -559,7 +560,7 @@ SPObject *sp_marker_fork_if_necessary(SPObject *marker)
     // Turn off garbage-collectable or it might be collected before we can use it
     marker->removeAttribute("inkscape:collect");
     Inkscape::XML::Node *mark_repr = marker->getRepr()->duplicate(xml_doc);
-    doc->getDefs()->getRepr()->addChild(mark_repr, nullptr);
+    doc->getDefs()->getRepr()->appendChild(mark_repr);
     if (!mark_repr->attribute("inkscape:stockid")) {
         mark_repr->setAttribute("inkscape:stockid", mark_repr->attribute("id"));
     }
@@ -633,6 +634,21 @@ void sp_marker_flip_horizontally(SPMarker* marker) {
         if (marker->document) {
             DocumentUndo::maybeDone(marker->document, "marker", _("Flip marker horizontally"), INKSCAPE_ICON("dialog-fill-and-stroke"));
         }
+    }
+}
+
+void sp_marker_set_opacity(SPMarker* marker, double alpha) {
+    assert(marker);
+    assert(marker->document);
+
+    if (!marker) return;
+
+    // "opacity" alone doesn't have any impact; using fill and stroke opacity instead
+    marker->setAttributeDouble("fill-opacity", alpha);
+    marker->setAttributeDouble("stroke-opacity", alpha);
+
+    if (marker->document) {
+        DocumentUndo::maybeDone(marker->document, "marker", _("Set marker opacity"), INKSCAPE_ICON("dialog-fill-and-stroke"));
     }
 }
 

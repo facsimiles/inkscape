@@ -53,7 +53,7 @@ namespace Inkscape {
 namespace UI {
 namespace Widget {
 
-FillNStroke::FillNStroke(FillOrStroke k)
+FillNStroke::FillNStroke(FillOrStroke k, bool no_paint_selector)
     : Gtk::Box(Gtk::Orientation::VERTICAL)
     , kind(k)
     , _solid_colors(std::make_shared<Colors::ColorSet>())
@@ -62,6 +62,9 @@ FillNStroke::FillNStroke(FillOrStroke k)
 {
     // Single fallback color
     _solid_colors->set(Color(0x000000ff));
+
+    // no paint selector needed - only logic for applying style changes?
+    if (no_paint_selector) return;
 
     // Add and connect up the paint selector widget:
     _psel = Gtk::make_managed<UI::Widget::PaintSelector>(kind, _solid_colors);
@@ -161,7 +164,7 @@ void FillNStroke::eventContextCB(SPDesktop * /*desktop*/, Inkscape::UI::Tools::T
  */
 void FillNStroke::performUpdate()
 {
-    if (_update || !_desktop) {
+    if (_update || !_desktop || !_psel) {
         return;
     }
     auto *widg = get_parent()->get_parent()->get_parent()->get_parent(); 

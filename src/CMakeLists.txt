@@ -16,6 +16,7 @@ set(inkscape_SRC
   conditions.cpp
   conn-avoid-ref.cpp
   context-fns.cpp
+  css-chemistry.cpp
   desktop-events.cpp
   desktop-style.cpp
   desktop.cpp
@@ -91,6 +92,7 @@ set(inkscape_SRC
   conditions.h
   conn-avoid-ref.h
   context-fns.h
+  css-chemistry.h
   desktop-events.h
   desktop-style.h
   desktop.h

@@ -25,6 +25,8 @@
 #include "ui/controller.h"
 #include "ui/util.h"
 #include "ui/widget/bin.h"
+#include "util/drawing-utils.h"
+#include "util/theme-utils.h"
 
 using namespace Inkscape::Colors;
 using Inkscape::Colors::Space::Luv;
@@ -47,6 +49,7 @@ constexpr static double marker_radius = 4.0;
 constexpr static double focus_line_width = 1.0;
 constexpr static double focus_padding = 3.0;
 static auto const focus_dash = std::vector{1.5};
+constexpr double ring_width = 0.15;
 
 /** Represents a vertex of the Luv color polygon (intersection of bounding lines). */
 struct Intersection final
@@ -344,38 +347,56 @@ void ColorWheelHSL::on_drawing_area_size(int width, int height, int baseline)
     _source_ring.reset();
 }
 
+std::array<Geom::Point, 3> find_triangle_points(double width, double height, double radius, double angle) {
+    double cx = width  / 2.0;
+    double cy = height / 2.0;
+    auto add2 = 2.0 * M_PI / 3.0;
+    auto angle2 = angle  + add2;
+    auto angle4 = angle2 + add2;
+    auto x0 = cx + std::cos(angle ) * radius;
+    auto y0 = cy - std::sin(angle ) * radius;
+    auto x1 = cx + std::cos(angle2) * radius;
+    auto y1 = cy - std::sin(angle2) * radius;
+    auto x2 = cx + std::cos(angle4) * radius;
+    auto y2 = cy - std::sin(angle4) * radius;
+    return { Geom::Point{x0, y0}, {x1, y1}, {x2, y2} };
+}
+
 void ColorWheelHSL::on_drawing_area_draw(Cairo::RefPtr<Cairo::Context> const &cr, int, int)
 {
-    auto const [width, height] = *_cache_size;
+    auto const width = _cache_size->x();
+    auto const height = _cache_size->y();
     auto const cx = width  / 2.0;
     auto const cy = height / 2.0;
+    const auto angle = _values[0] * M_PI * 2;
 
     cr->set_antialias(Cairo::ANTIALIAS_SUBPIXEL);
 
     // Update caches
     update_ring_source();
     auto const &[p0, p1, p2] = update_triangle_source();
-    auto const &[r_min, r_max] = get_radii();
+    auto const r_min = get_radii()[0];
+    auto const r_max = get_radii()[1];
 
     // Paint with ring surface, clipping to ring.
     cr->save();
     cr->set_source(_source_ring, 0, 0);
     cr->set_line_width (r_max - r_min);
     cr->begin_new_path();
-    cr->arc(cx, cy, (r_max + r_min)/2.0, 0, 2.0 * M_PI);
+    cr->arc(cx, cy, (r_max + r_min) / 2.0, 0, 2.0 * M_PI);
     cr->stroke();
+    bool dark = Util::is_current_theme_dark(*this);
+    auto radius = r_max;
+    auto area = Geom::Rect(cx, cy, cx, cy).expandedBy(radius);
+    Util::draw_standard_border(cr, area, dark, radius, get_scale_factor(), true);
+    radius = r_min + 0.5;
+    auto small_area = Geom::Rect(cx, cy, cx, cy).expandedBy(radius);
+    Util::draw_standard_border(cr, small_area, dark, radius, get_scale_factor(), true, false);
     cr->restore();
-    // Paint line on ring
-    auto color_on_ring = Color(Type::HSV, {_values[0], 1.0, 1.0});
-    double l = luminance(color_on_ring) < 0.5 ? 1.0 : 0.0;
-    cr->save();
-    cr->set_source_rgb(l, l, l);
-    cr->move_to(cx + cos(_values[0] * M_PI * 2.0) * (r_min + 1),
-                cy - sin(_values[0] * M_PI * 2.0) * (r_min + 1));
-    cr->line_to(cx + cos(_values[0] * M_PI * 2.0) * (r_max - 1),
-                cy - sin(_values[0] * M_PI * 2.0) * (r_max - 1));
-    cr->stroke();
-    cr->restore();
+    // Paint marker on ring
+    auto r = (r_min + r_max) / 2;
+    auto ring_pos = Geom::Point(cx + cos(angle) * r, cy - sin(angle) * r);
+    Util::draw_point_indicator(cr, ring_pos, marker_radius * 2);
 
     // Paint with triangle surface, clipping to triangle.
     cr->save();
@@ -385,33 +406,37 @@ void ColorWheelHSL::on_drawing_area_draw(Cairo::RefPtr<Cairo::Context> const &cr
     cr->line_to(p2.x, p2.y);
     cr->close_path();
     cr->fill();
+    auto border_color = Util::get_standard_border_color(dark);
+    auto scale = get_scale_factor();
+    Util::draw_border_shape(cr, Geom::Rect(0, 0, width, height), border_color, scale, [=](auto& ctx, auto&, int step) {
+        auto [p1, p2, p3] = find_triangle_points(width * scale, height * scale, r_min * scale - step, angle);
+        ctx->move_to(p1.x(), p1.y());
+        ctx->line_to(p2.x(), p2.y());
+        ctx->line_to(p3.x(), p3.y());
+        ctx->close_path();
+    });
     cr->restore();
 
     // Draw marker
-    auto const &[mx, my] = get_marker_point();
+    auto mp = get_marker_point();
+    Util::draw_point_indicator(cr, mp, marker_radius * 2);
     double a = luminance(getColor()) < 0.5 ? 1.0 : 0.0;
-    cr->set_source_rgb(a, a, a);
-    cr->begin_new_path();
-    cr->arc(mx, my, marker_radius, 0, 2 * M_PI);
-    cr->stroke();
 
-    // Draw focus
+    // Draw focus ring around one of color indicators
     if (drawing_area_has_focus()) {
         // The focus_dash width & alpha(foreground_color) are from GTK3 Adwaita.
         cr->set_dash(focus_dash, 0);
         cr->set_line_width(1.0);
-
+        cr->begin_new_path();
         if (_focus_on_ring) {
-            auto const rgba = change_alpha(Widget::get_color(), 0.7);
-            Gdk::Cairo::set_source_rgba(cr, rgba);
-            cr->begin_new_path();
-            cr->rectangle(0, 0, width, height);
-        } else {
-            cr->set_source_rgb(1 - a, 1 - a, 1 - a);
-            cr->begin_new_path();
-            cr->arc(mx, my, marker_radius + focus_padding, 0, 2 * M_PI);
+            auto c = getColor();
+            c.set(1, 1.0);
+            c.set(2, 1.0);
+            a = luminance(c) < 0.5 ? 1.0 : 0.0;
+            mp = ring_pos;
         }
-
+        cr->set_source_rgb(a, a, a);
+        cr->arc(mp.x(), mp.y(), marker_radius + focus_padding, 0, 2 * M_PI);
         cr->stroke();
     }
 }
@@ -458,7 +483,7 @@ bool ColorWheelHSL::_set_from_xy(double const x, double const y)
     double const cx = width/2.0;
     double const cy = height/2.0;
 
-    double const r = std::min(cx, cy) * (1 - _ring_width);
+    double const r = std::min(cx, cy) * (1 - ring_width);
 
     // We calculate RGB value under the cursor by rotating the cursor
     // and triangle by the hue value and looking at position in the
@@ -626,6 +651,7 @@ bool ColorWheelHSL::on_key_pressed(unsigned keyval, unsigned /*keycode*/, Gdk::M
     _values.normalize();
 
     if (changed) {
+        _triangle_corners.reset();
         color_changed();
     }
 
@@ -642,8 +668,8 @@ ColorWheelHSL::MinMax const &ColorWheelHSL::get_radii()
     _radii.emplace();
     auto &[r_min, r_max] = *_radii;
     auto const [width, height] = *_cache_size;
-    r_max = std::min(width, height) / 2.0 - 2 * (focus_line_width + focus_padding);
-    r_min = r_max * (1.0 - _ring_width);
+    r_max = std::round(std::min(width, height) / 2.0 - focus_line_width);
+    r_min = std::round(r_max * (1.0 - ring_width));
     return *_radii;
 }
 

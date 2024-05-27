@@ -11,6 +11,8 @@
 #define SEEN_PATTERN_EDITOR_H
 
 #include "pattern-manager.h"
+#include "ink-property-grid.h"
+#include "ink-spin-button.h"
 #include "ui/operation-blocker.h"
 #include "ui/widget/color-picker.h"
 
@@ -24,12 +26,10 @@ class FlowBox;
 class Grid;
 class Label;
 class Paned;
-class Picture;
 class Scale;
 class SearchEntry2;
 class SpinButton;
 class TreeModel;
-class Viewport;
 } // namespace Gtk
 
 class SPDocument;
@@ -47,10 +47,14 @@ public:
 
     // pass current document to extract patterns
     void set_document(SPDocument* document);
-    // set selected pattern
+    // set the selected pattern
     void set_selected(SPPattern* pattern);
     // selected pattern ID if any plus stock pattern collection document (or null)
     std::pair<std::string, SPDocument*> get_selected();
+    // get the selected pattern ID from a list of current document patterns
+    std::string get_selected_doc_pattern();
+    // get the selected pattern ID and its stock document from a list of stock patterns
+    std::pair<std::string, SPDocument*> get_selected_stock_pattern();
     // and its color
     std::optional<Colors::Color> get_selected_color();
     // return combined scale and rotation
@@ -88,27 +92,23 @@ private:
     void select_pattern_set(int index);
     void apply_filter(bool stock);
     void update_pattern_tiles();
+    void draw_preview(const Cairo::RefPtr<Cairo::Context>& ctx, int width, int height);
+    void on_map() override;
+    void initial_select();
 
     Glib::RefPtr<Gtk::Builder> _builder;
     Gtk::Paned& _paned;
-    Gtk::Box& _main_grid;
     Gtk::Grid& _input_grid;
-    Gtk::SpinButton& _offset_x;
-    Gtk::SpinButton& _offset_y;
-    Gtk::SpinButton& _scale_x;
-    Gtk::SpinButton& _scale_y;
-    Gtk::SpinButton& _angle_btn;
-    Gtk::Scale& _orient_slider;
-    Gtk::Scale& _gap_x_slider;
-    Gtk::Scale& _gap_y_slider;
-    Gtk::SpinButton& _gap_x_spin;
-    Gtk::SpinButton& _gap_y_spin;
-    bool _precise_gap_control = false;
+    InkSpinButton& _offset_x;
+    InkSpinButton& _offset_y;
+    InkSpinButton& _scale_x;
+    InkSpinButton& _scale_y;
+    InkSpinButton& _angle_btn;
+    InkSpinButton& _gap_x_spin;
+    InkSpinButton& _gap_y_spin;
     Gtk::Button& _edit_btn;
-    Gtk::Label& _color_label;
     Gtk::Button& _link_scale;
-    Gtk::Picture& _preview_img;
-    Gtk::Viewport& _preview;
+    Gtk::DrawingArea& _preview;
     Gtk::FlowBox& _doc_gallery;
     Gtk::FlowBox& _stock_gallery;
     Gtk::Entry& _name_box;
@@ -128,9 +128,11 @@ private:
     Glib::ustring _filter_text;
     int _tile_size = 0;
     SPDocument* _current_document = nullptr;
+    InkPropertyGrid _main;
     // pattern being currently edited: id for a root pattern, and link id of a pattern with href set
     // plus current translation offset, so we can preserve it
     struct { Glib::ustring id; Glib::ustring link_id; Geom::Point offset; } _current_pattern;
+    bool _initial_selection_done = false;
 };
 
 } // namespace Inkscape::UI::Widget

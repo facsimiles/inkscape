@@ -4,6 +4,7 @@
 #define SEEN_IMAGE_PROPERTIES_H
 
 #include <gtkmm/box.h>
+#include <gtkmm/sizegroup.h>
 
 #include "object/sp-image.h"
 #include "ui/operation-blocker.h"
@@ -14,6 +15,8 @@ class Surface;
 } // namespace Cairo
 
 namespace Gtk {
+class Grid;
+class DropDown;
 class Builder;
 class Button;
 class CheckButton;
@@ -22,6 +25,7 @@ class DrawingArea;
 } // namespace Gtk
 
 namespace Inkscape::UI::Widget {
+class InkSpinButton;
 
 class ImageProperties final
     : public WidgetVfuncsClassInit
@@ -33,16 +37,20 @@ public:
 
     void update(SPImage* image);
 
+    Gtk::Grid& get_main() { return _main; }
+
 private:
     void css_changed(GtkCssStyleChange *change) final;
     void update_bg_color();
 
     Glib::RefPtr<Gtk::Builder> _builder;
 
+    Gtk::Grid& _main;
     Gtk::DrawingArea& _preview;
     Gtk::CheckButton &_aspect;
     Gtk::CheckButton &_stretch;
-    Gtk::ComboBoxText& _rendering;
+    Gtk::DropDown& _rendering;
+    InkSpinButton& _resolution;
     Gtk::Button& _embed;
     int _preview_max_height;
     int _preview_max_width;

@@ -272,6 +272,8 @@ sp_desktop_get_style(SPDesktop *desktop, bool with_text)
 std::optional<Color>
 sp_desktop_get_color(SPDesktop *desktop, bool is_fill)
 {
+    if (!desktop) return std::nullopt;
+
     gchar const *property = sp_repr_css_property(desktop->current,
                                                  is_fill ? "fill" : "stroke",
                                                  "#000");

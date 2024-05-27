@@ -42,12 +42,12 @@ using namespace std::literals;
 
 namespace Inkscape {
 
-// traverse nodes starting from given 'object' until visitor returns object that evaluates to true
+// traverse nodes starting from a given 'object' until a visitor returns an object that evaluates to true
 template<typename V>
 bool visit_until(SPObject& object, V&& visitor) {
     if (visitor(object)) return true;
 
-    // SPUse inserts referenced object as a child; skip it
+    // SPUse inserts a referenced object as a child; skip it
     if (is<SPUse>(&object)) return false;
 
     for (auto&& child : object.children) {
@@ -101,18 +101,18 @@ Cairo::RefPtr<Cairo::Surface> draw_symbol(SPObject& symbol, double box_w, double
     Inkscape::XML::Node* repr = symbol.getRepr()->duplicate(preview_document->getReprDoc());
     repr->setAttribute("id", "the_symbol");
 
-    // First look for default style stored in <symbol>
+    // First look for the default style stored in <symbol>
     auto style = repr->attribute("inkscape:symbol-style");
     if (!style) {
         // If no default style in <symbol>, look in documents.
 
-        // Read style from <use> element pointing to this symbol?
+        // Read style from a <use> element pointing to this symbol?
         if (style_from_use) {
             // When symbols are inserted from a set into a new document, styles they may rely on
-            // are copied from original document and applied to the <use> symbol.
+            // are copied from an original document and applied to the <use> symbol.
             // We need to use those styles to render symbols correctly, because some symbols only
             // define geometry and no presentation attributes and defaults (black fill, no stroke)
-            // may be completely incorrect (for instance originals may have no fill and stroke).
+            // may be completely incorrect (for instance, originals may have no fill and stroke).
             auto id = symbol.getId();
             style = style_from_use_element(id, symbol.document);
         }
@@ -121,10 +121,10 @@ Cairo::RefPtr<Cairo::Surface> draw_symbol(SPObject& symbol, double box_w, double
         }
     }
 
-    // This is for display in Symbols dialog only
+    // This is for display in the Symbols dialog only
     if (style) repr->setAttribute("style", style);
 
-    // reach out to the document for CSS styles, in case symbol uses some class selectors
+    // reach out to the document for CSS styles, in case the symbol uses some class selectors
     SPDocument::install_reference_document scoped(preview_document, symbol.document);
 
     preview_document->getDefs()->getRepr()->appendChild(repr);
@@ -135,7 +135,7 @@ Cairo::RefPtr<Cairo::Surface> draw_symbol(SPObject& symbol, double box_w, double
     // sp_repr_save_stream(preview_document->getReprDoc(), fp);
     // fclose (fp);
 
-    // Make sure preview_document is up-to-date.
+    // Make sure preview_document is up to date.
     preview_document->ensureUpToDate();
 
     unsigned dkey = SPItem::display_key_new(1);
@@ -145,17 +145,17 @@ Cairo::RefPtr<Cairo::Surface> draw_symbol(SPObject& symbol, double box_w, double
     // drawing.root()->setTransform(affine);
     drawing.setExact(); // Maximum quality for blurs.
 
-    // Make sure we have symbol in preview_document
+    // Make sure we have a symbol in preview_document
     SPObject* object_temp = preview_document->getObjectById("the_use");
 
     auto item = cast<SPItem>(object_temp);
     g_assert(item != nullptr);
 
     // We could use cache here, but it doesn't really work with the structure
-    // of this user interface and we've already cached the pixbuf in the gtklist
+    // of this user interface, and we've already cached the pixbuf in the gtklist
     cairo_surface_t* s = nullptr;
-    // Find object's bbox in document.
-    // Note symbols can have own viewport... ignore for now.
+    // Find the object's bbox in a document.
+    // Note symbols can have their own viewport... ignore for now.
     Geom::OptRect dbox = item->documentVisualBounds();
 
     if (dbox) {
@@ -182,12 +182,11 @@ Cairo::RefPtr<Cairo::Surface> draw_symbol(SPObject& symbol, double box_w, double
     return Cairo::RefPtr<Cairo::Surface>(new Cairo::Surface(s, true));
 }
 
-void draw_gradient(const Cairo::RefPtr<Cairo::Context>& cr, SPGradient* gradient, int x, int width) {
-    cairo_pattern_t* check = ink_cairo_pattern_create_checkerboard();
+void draw_gradient(const Cairo::RefPtr<Cairo::Context>& cr, SPGradient* gradient, int x, int width, int checkerboard_tile_size) {
+    auto check = ink_cairo_pattern_create_checkerboard(0xC4C4C4FF, true, checkerboard_tile_size);
 
-    cairo_set_source(cr->cobj(), check);
+    cr->set_source(check);
     cr->fill_preserve();
-    cairo_pattern_destroy(check);
 
     if (gradient) {
         auto p = gradient->create_preview_pattern(width);
@@ -242,6 +241,7 @@ Cairo::RefPtr<Cairo::Surface> draw_gradient(SPGradient* gradient, double width, 
 
 std::unique_ptr<SPDocument> ink_markers_preview_doc(const Glib::ustring& group_id)
 {
+    // language=XML
     constexpr auto buffer = R"A(
     <svg xmlns="http://www.w3.org/2000/svg"
          xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -266,7 +266,7 @@ std::unique_ptr<SPDocument> ink_markers_preview_doc(const Glib::ustring& group_i
 
     <!-- cross at the end of the line to help position marker -->
     <symbol id="cross" width="25" height="25" viewBox="0 0 25 25">
-      <path class="cross" style="mix-blend-mode:difference;stroke:#7ff;stroke-opacity:1;fill:none;display:block" d="M 0,0 M 25,25 M 10,10 15,15 M 10,15 15,10" />
+      <path class="cross" style="mix-blend-mode:difference;stroke:#7ff;stroke-opacity:1;fill:none;display:block" d="M 0,0 M 25,25 M 11,11 14,14 M 11,14 14,11" />
       <!-- <path class="cross" style="mix-blend-mode:difference;stroke:#7ff;stroke-width:1;stroke-opacity:1;fill:none;display:block;-inkscape-stroke:hairline" d="M 0,0 M 25,25 M 10,10 15,15 M 10,15 15,10" /> -->
     </symbol>
 
@@ -302,7 +302,7 @@ std::unique_ptr<SPDocument> ink_markers_preview_doc(const Glib::ustring& group_i
 )A"sv;
 
     auto document = SPDocument::createNewDocFromMem(buffer, false);
-    // only leave requested group, so nothing else gets rendered
+    // only leave a requested group, so nothing else gets rendered
     for (auto&& group : document->getObjectsByClass("group")) {
         assert(group->getId());
         if (group->getId() != group_id) {
@@ -331,7 +331,8 @@ Cairo::RefPtr<Cairo::Surface> create_marker_image(
     std::optional<guint32> checkerboard,
     bool no_clip,
     double scale,
-    int device_scale)
+    int device_scale,
+    bool add_cross)
 {
     Cairo::RefPtr<Cairo::Surface> g_bad_marker;
 
@@ -360,7 +361,7 @@ Cairo::RefPtr<Cairo::Surface> create_marker_image(
 
     Inkscape::GC::release(mrepr);
 
-    // If the marker color is a url link to a pattern or gradient copy that too
+    // If the marker color is a url link to a pattern or gradient, copy that too
     SPObject *mk = source->getObjectById(mname);
     SPCSSAttr *css_marker = sp_css_attr_from_object(mk->firstChild(), SP_STYLE_FLAG_ALWAYS);
     //const char *mfill = sp_repr_css_property(css_marker, "fill", "none");
@@ -425,7 +426,7 @@ Cairo::RefPtr<Cairo::Surface> create_marker_image(
     double stroke = 0.5;
     for (auto el : cross) {
         if (SPCSSAttr* css = sp_repr_css_attr(el->getRepr(), "style")) {
-            sp_repr_css_set_property(css, "display", checkerboard ? "block" : "none");
+            sp_repr_css_set_property(css, "display", add_cross ? "block" : "none");
             sp_repr_css_set_property_double(css, "stroke-width", stroke);
             el->changeCSS(css, "style");
             sp_repr_css_attr_unref(css);
@@ -567,7 +568,7 @@ Cairo::RefPtr<Cairo::Surface> draw_frame(Cairo::RefPtr<Cairo::Surface> image, do
     auto ctx = Cairo::Context::create(surface);
 
     if (checkerboard_color) {
-        Cairo::RefPtr<Cairo::Pattern> pattern(new Cairo::Pattern(ink_cairo_pattern_create_checkerboard(*checkerboard_color)));
+        auto pattern = ink_cairo_pattern_create_checkerboard(*checkerboard_color);
         ctx->save();
         ctx->set_operator(Cairo::Context::Operator::SOURCE);
         ctx->set_source(pattern);
@@ -615,6 +616,7 @@ Cairo::RefPtr<Cairo::Surface> object_renderer::render(SPObject& object, double w
             _sandbox = ink_markers_preview_doc(group);
         }
         std::optional<guint32> checkerboard; // rgb background color
+        bool add_cross = false;
         bool no_clip = true;
         double scale = 1.0;
 
@@ -625,7 +627,7 @@ Cairo::RefPtr<Cairo::Surface> object_renderer::render(SPObject& object, double w
         drawing.setExact(); // Maximum quality for blurs.
 
         surface = create_marker_image(group, _sandbox.get(), opt._foreground, Geom::IntPoint(width, height), object.getId(),
-            object.document, drawing, checkerboard, no_clip, scale, device_scale);
+            object.document, drawing, checkerboard, no_clip, scale, device_scale, add_cross);
     }
     else if (is<SPGradient>(&object)) {
         surface = draw_gradient(cast<SPGradient>(&object), width, height, device_scale, false);

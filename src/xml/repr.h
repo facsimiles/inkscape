@@ -84,6 +84,8 @@ void sp_repr_css_attr_unref(SPCSSAttr *css);
 SPCSSAttr *sp_repr_css_attr(Inkscape::XML::Node const *repr, char const *attr);
 SPCSSAttr *sp_repr_css_attr_inherited(Inkscape::XML::Node const *repr, char const *attr);
 SPCSSAttr *sp_repr_css_attr_unset_all(SPCSSAttr *css);
+void intrusive_ptr_add_ref(SPCSSAttr* css);
+void intrusive_ptr_release(SPCSSAttr* css);
 
 char const *sp_repr_css_property(SPCSSAttr *css, char const *name, char const *defval);
 Glib::ustring sp_repr_css_property(SPCSSAttr *css, Glib::ustring const &name, Glib::ustring const &defval);

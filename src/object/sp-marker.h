@@ -111,5 +111,6 @@ void sp_marker_scale_with_stroke(SPMarker* marker, bool scale_with_stroke);
 void sp_marker_set_offset(SPMarker* marker, double dx, double dy);
 void sp_marker_set_uniform_scale(SPMarker* marker, bool uniform);
 void sp_marker_flip_horizontally(SPMarker* marker);
+void sp_marker_set_opacity(SPMarker* marker, double alpha);
 
 #endif

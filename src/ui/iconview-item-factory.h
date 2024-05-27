@@ -6,6 +6,8 @@
 #ifndef _ICONVIEWITEMFACTORY_H_
 #define _ICONVIEWITEMFACTORY_H_
 
+#include <unordered_map>
+#include <vector>
 #include <gtkmm/binlayout.h>
 #include <gtkmm/centerbox.h>
 #include <gtkmm/label.h>

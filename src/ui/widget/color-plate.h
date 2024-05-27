@@ -20,12 +20,12 @@ public:
 
     // set color to use for creating plates and tell which channel is fixed and which channels to vary doing so
     void set_base_color(Colors::Color color, int fixed_channel, int var_channel1, int var_channel2);
-    // should we show disc color selector (true) or rectangular one (false)
+    // should we show a disc color selector (true) or a rectangular one (false)?
     void set_disc(bool disc);
     bool is_disc() const;
-    // extra space around the widget reserved for current color indicator
+    // extra space around the widget reserved for the current color indicator
     void set_padding(int pad);
-    // move on-plate indicator point to matching color
+    // move the on-plate indicator point to matching color
     void move_indicator_to(const Colors::Color& color);
 
     sigc::signal<void (const Colors::Color&)>& signal_color_changed();

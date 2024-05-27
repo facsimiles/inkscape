@@ -58,7 +58,7 @@ class FillNStroke : public Gtk::Box {
     void updateFromPaint(bool switch_style = false);
 
   public:
-    FillNStroke(FillOrStroke k);
+    FillNStroke(FillOrStroke k, bool no_paint_selector = false);
     ~FillNStroke() override;
     
     void selectionModifiedCB(guint flags);
@@ -66,6 +66,8 @@ class FillNStroke : public Gtk::Box {
 
     void setFillrule(PaintSelector::FillRule mode);
     void setDesktop(SPDesktop *desktop);
+
+    void update_selected_objects(PaintSelector::Mode mode);
 };
 
 } // namespace Widget

@@ -22,6 +22,8 @@
 #include <2geom/forward.h>
 #include <glibmm/ustring.h>
 
+#include "selection.h"
+
 class SPCSSAttr;
 class SPDesktop;
 class SPDocument;
@@ -29,6 +31,9 @@ class SPItem;
 class SPObject;
 
 namespace Inkscape {
+namespace Util {
+class Unit;
+}
 
 class Selection;
 class ObjectSet;
@@ -112,5 +117,21 @@ enum SPCycleType
 
 // TODO FIXME: This should be moved into preference repr
 extern SPCycleType SP_CYCLING;
+
+//
+void sp_transform_selected_items(
+    SPDesktop* desktop,
+    const Geom::Rect& rect,
+    const Inkscape::Util::Unit* unit,
+    const std::string& action_prefix,
+    bool transform_stroke,
+    bool preserve_transform,
+    bool use_visual_box);
+
+//
+Geom::Rect sp_selection_get_xywh(
+    SPDesktop* desktop,
+    const Inkscape::Util::Unit* unit,
+    bool use_visual_box);
 
 #endif // SEEN_SELECTION_CHEMISTRY_H

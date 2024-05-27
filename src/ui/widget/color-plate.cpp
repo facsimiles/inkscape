@@ -16,22 +16,6 @@ void circle(const Cairo::RefPtr<Cairo::Context>& ctx, const Geom::Point& center,
     ctx->arc(center.x(), center.y(), radius, 0, 2 * M_PI);
 }
 
-// draw a circle around given point to show currently selected color
-static void draw_point_indicator(const Cairo::RefPtr<Cairo::Context>& ctx, const Geom::Point& point, double size) {
-    ctx->save();
-
-    auto pt = point.round();
-    ctx->set_line_width(1.0);
-    circle(ctx, pt, (size - 2) / 2);
-    ctx->set_source_rgb(1, 1, 1);
-    ctx->stroke();
-    circle(ctx, pt, size / 2);
-    ctx->set_source_rgb(0, 0, 0);
-    ctx->stroke();
-
-    ctx->restore();
-}
-
 static void draw_color_plate(const Cairo::RefPtr<Cairo::Context>& ctx, const Geom::Rect& area, double radius, const Cairo::RefPtr<Cairo::ImageSurface>& preview, bool circular) {
     if (area.width() <= 0 || area.height() <= 0) return;
 
@@ -48,9 +32,9 @@ static void draw_color_plate(const Cairo::RefPtr<Cairo::Context>& ctx, const Geo
     Geom::Point scale;
     auto offset = area.min();
     if (circular) {
-        // Note: circular color preview needs to be larger than requested area to make sure
-        // that there are no miscolored pixels visible after clip path is applied.
-        // Note 2: comment out clip() path above to verify that circle is centered with respect to border
+        // Note: circular color preview needs to be larger than the requested area to make sure
+        // that there are no miscolored pixels visible after a clip path is applied.
+        // Note 2: comment out clip() path above to verify that the circle is centered with respect to the border
 
         auto size = std::min(area.width(), area.height());
         // uniform scaling of the circular preview; it is square, so just use width;
@@ -86,6 +70,9 @@ static void draw_color_plate(const Cairo::RefPtr<Cairo::Context>& ctx, const Geo
 }
 
 static Geom::Point get_color_coordinates(double val1, double val2, bool circular) {
+    val1 = std::clamp(val1, 0.0, 1.0);
+    val2 = std::clamp(val2, 0.0, 1.0);
+
     if (circular) {
         // point in a circle
         // val1 is an angle (0..1 -> -2pi..2pi), while val2 is a distance
@@ -220,6 +207,7 @@ static Geom::Point local_to_screen(const Geom::Rect& active, Geom::Point point, 
     return active.min() + point * active.dimensions();
 }
 
+
 ColorPlate::ColorPlate() {
     set_name("ColorPlate");
     set_disc(_disc); // add right CSS class
@@ -276,8 +264,7 @@ void ColorPlate::draw_plate(const Cairo::RefPtr<Cairo::Context>& ctx) {
 
     if (auto maybe = get_active_area(); _down && maybe) {
         auto pt = local_to_screen(*maybe, *_down, _disc);
-        double size = 8;
-        draw_point_indicator(ctx, pt, size);
+        Util::draw_point_indicator(ctx, pt);
     }
 }
 
@@ -328,6 +315,13 @@ void ColorPlate::fire_color_changed() {
 void ColorPlate::on_motion(Gtk::EventControllerMotion const &motion, double x, double y) {
     if (!_drag) return;
 
+    if (x == 0 && y == 0) {
+        // this value is legit, but the motion controller also reports it when
+        // the mouse button leaves the popover, leading to an unexpected jump;
+        // skip it (as of gtk 4.15.7)
+        return;
+    }
+
     auto state = motion.get_current_event_state();
     auto drag = Controller::has_flag(state, Gdk::ModifierType::BUTTON1_MASK);
     if (!drag) return;
@@ -365,7 +359,7 @@ void ColorPlate::set_padding(int pad) {
 }
 
 void ColorPlate::move_indicator_to(const Colors::Color& color) {
-    // find 'color' on the plate and move indicator to it
+    // find 'color' on the plate and move the indicator to it
     auto point = get_color_coordinates(color[_channel1], color[_channel2], _disc);
     if (_down && _down == point) return;
 
@@ -377,4 +371,4 @@ sigc::signal<void(const Color&)>& ColorPlate::signal_color_changed() {
     return _signal_color_changed;
 }
 
-}
+} // namespace

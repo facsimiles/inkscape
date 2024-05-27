@@ -39,6 +39,9 @@ public:
     ColorPicker(BaseObjectType *cobject, Glib::RefPtr<Gtk::Builder> const &,
                 Glib::ustring title, bool use_transparency = true);
 
+    // custom popup content
+    ColorPicker(Gtk::Widget& popup_content, const Glib::ustring& tip);
+
     ~ColorPicker() override;
 
     void setColor(Colors::Color const &);
@@ -57,13 +60,17 @@ public:
         return _colors->getAverage();
     }
 
+    sigc::signal<void (void)> signal_open_popup() { return _signal_open; }
+
+    void set_icon(const Glib::ustring& icon_name);
+
 private:
     void _onSelectedColorChanged();
     virtual void on_changed(Colors::Color const &);
-    void _construct();
+    void _construct(Gtk::Widget* content);
     void set_preview(std::uint32_t rgba);
 
-    ColorPreview* _preview = nullptr;
+    std::unique_ptr<ColorPreview> _preview;
     Glib::ustring _title;
     sigc::signal<void (Colors::Color const &)> _changed_signal;
     bool          _undo     = false;
@@ -71,6 +78,7 @@ private:
     std::shared_ptr<Colors::ColorSet> _colors;
     Gtk::Popover _popup;
     ColorNotebook* _color_selector = nullptr;
+    sigc::signal<void (void)> _signal_open;
 };
 
 

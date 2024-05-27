@@ -100,7 +100,7 @@ DialogNotebook::DialogNotebook(DialogContainer* container) : _container(containe
     build_dialog_menu(_menu_dialogs);
 
     auto const menubtn = Gtk::make_managed<Gtk::MenuButton>();
-    menubtn->set_icon_name("go-down-symbolic");
+    menubtn->set_icon_name("pan-down-symbolic");
     menubtn->set_has_frame(false);
     menubtn->set_popover(_menu_dock);
     menubtn->set_visible(true);

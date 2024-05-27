@@ -22,6 +22,7 @@
 #include <vector>
 #include <glibmm/ustring.h>
 #include <gtkmm/box.h>
+#include <gtkmm/grid.h>
 
 #include <sigc++/scoped_connection.h>
 #include "ui/syntax.h"
@@ -88,6 +89,11 @@ public:
      */
     void reread_properties();
 
+    // Set one of the modification flags (SP_OBJECT_USER_MODIFIED_TAG_N) to destinguish sources of mofification requests
+    void set_modified_tag(unsigned int tag);
+
+    Gtk::Grid& get_grid() { return _table; }
+
 private:
     /**
      * Stores pointer to the selected object.
@@ -115,7 +121,7 @@ private:
     /**
      * Container widget for the dynamically created child widgets (labels and entry boxes).
      */
-    std::unique_ptr<Gtk::Grid> table;
+    Gtk::Grid _table;
 
     /**
      * List of attributes.
@@ -149,6 +155,8 @@ private:
     void attribute_table_entry_changed(size_t index);
     void attribute_table_object_modified(SPObject* object, unsigned flags);
     void attribute_table_object_release(SPObject* object);
+
+    unsigned int _modified_tag = 0;
 };
 
 #endif // SEEN_DIALOGS_SP_ATTRIBUTE_WIDGET_H

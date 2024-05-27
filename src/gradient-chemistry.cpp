@@ -31,6 +31,10 @@
 #include "document.h"
 #include "document-undo.h"
 #include "gradient-chemistry.h"
+
+#include <numeric>
+
+#include "fill-or-stroke.h"
 #include "gradient-drag.h"
 #include "selection.h"
 
@@ -43,6 +47,7 @@
 #include "object/sp-text.h"
 #include "object/sp-tspan.h"
 #include "object/sp-root.h"
+#include "object/sp-object-iterator.h"
 #include "style.h"
 
 #include "svg/svg.h"
@@ -323,7 +328,7 @@ SPGradient *sp_gradient_fork_vector_if_necessary(SPGradient *gr)
         Inkscape::XML::Document *xml_doc = doc->getReprDoc();
 
         Inkscape::XML::Node *repr = gr->getRepr()->duplicate(xml_doc);
-        doc->getDefs()->getRepr()->addChild(repr, nullptr);
+        doc->getDefs()->getRepr()->appendChild(repr);
         SPGradient *gr_new = static_cast<SPGradient *>(doc->getObjectByRepr(repr));
         gr_new = sp_gradient_ensure_vector_normalized (gr_new);
         Inkscape::GC::release(repr);
@@ -1626,7 +1631,6 @@ SPGradient *sp_item_set_gradient(SPItem *item, SPGradient *gr, SPGradientType ty
 
         /* Current fill style is the gradient of the required type */
         auto current = cast<SPGradient>(ps);
-
         //g_message("hrefcount %d   count %d\n", current->hrefcount, count_gradient_hrefs(item, current));
 
         if (!current->isSwatch()
@@ -1711,12 +1715,12 @@ static void addStop(Inkscape::XML::Node *parent, Color const &color, double opac
 /*
  * Get default normalized gradient vector of document, create if there is none
  */
-SPGradient *sp_document_default_gradient_vector( SPDocument *document, Color const &color, double opacity, bool singleStop )
+SPGradient *sp_document_default_gradient_vector(SPDocument *document, Color const &color, double opacity, bool singleStop)
 {
     SPDefs *defs = document->getDefs();
 
     Inkscape::XML::Node *repr = document->getReprDoc()->createElement("svg:linearGradient");
-    defs->getRepr()->addChild(repr, nullptr);
+    defs->getRepr()->appendChild(repr);
 
     if ( !singleStop ) {
         // make auto collection optional
@@ -1731,14 +1735,20 @@ SPGradient *sp_document_default_gradient_vector( SPDocument *document, Color con
         // to further reduce clutter, we could
         // (1) here, search gradients by color and return what is found without duplication
         // (2) in fill & stroke, show only one copy of each gradient in list
+
+        // Use a gradient prefix for the ID - it's a vector with stop definitions for either linear or radial gradient
+        repr->setAttribute("id", document->generate_unique_id("gradient"));
     } else {
         // Use a swatch prefix for the id, for better UX
         repr->setAttribute("id", document->generate_unique_id("swatch"));
     }
 
-    addStop( repr, color, opacity, "0" );
-    if ( !singleStop ) {
-        addStop( repr, color, 0, "1" );
+    addStop(repr, color, opacity, "0");
+    if (!singleStop) {
+        auto lightness = Colors::get_perceptual_lightness(color);
+        auto contrast = (lightness > 0.95 ? Color(0x00'00'00'ff) : Color(0xff'ff'ff'ff)).converted(color.getSpace());
+        // second stop without transparency - no more forcing users to fix alpha channel on new gradients
+        addStop(repr, /*contrast.value_or*/(color), 1.0, "1");
     }
 
     Inkscape::GC::release(repr);
@@ -1857,43 +1867,291 @@ SPGradient* sp_item_get_gradient(SPItem *item, bool fillorstroke)
     return nullptr;
 }
 
-static void get_all_doc_items(std::vector<SPItem*> &list, SPObject *from)
-{
-    for (auto& child: from->children) {
-        if (is<SPItem>(&child)) {
-            list.push_back(cast<SPItem>(&child));
-        }
-        get_all_doc_items(list, &child);
-    }
-}
-
-std::vector<SPItem*> sp_get_all_document_items(SPDocument* document) {
-    std::vector<SPItem*> items;
-    if (document) {
-        get_all_doc_items(items, document->getRoot());
-    }
-    return items;
-}
-
 int sp_get_gradient_refcount(SPDocument* document, SPGradient* gradient) {
     if (!document || !gradient) return 0;
 
-    int count = 0;
-    for (auto item : sp_get_all_document_items(document)) {
-        if (!item->getId()) {
-            continue;
+    int count = std::accumulate(object_subtree_iterator(document->getRoot()), object_subtree_iterator(nullptr), 0, [=](auto acc, auto obj) {
+        auto item = cast<SPItem>(obj);
+        if (!item || !item->getId()) {
+            return acc;
         }
         SPGradient* fill = sp_item_get_gradient(item, true); // fill
         if (fill == gradient) {
-            ++count;
+            ++acc;
         }
         SPGradient* stroke = sp_item_get_gradient(item, false); // stroke
         if (stroke == gradient) {
+            ++acc;
+        }
+        return acc;
+    });
+
+    return count;
+}
+
+void sp_item_apply_gradient(SPItem* item, SPGradient* vector, SPDesktop* desktop, SPGradientType gradient_type, bool create_swatch, FillOrStroke kind) {
+    if (!item || !item->document || !item->style || gradient_type == SP_GRADIENT_TYPE_MESH) return;
+
+    PaintTarget paint_target = kind == FILL ? FOR_FILL : FOR_STROKE;
+
+    if (!vector) {
+        // no vector means that we want to create a new one; find initial color
+        if (auto paint = item->style->getFillOrStroke(kind == FILL)) {
+            Colors::Color common(0xff'ff'ff'ff); // fallback: opaque white
+            if (paint->isColor()) {
+                common = paint->getColor();
+            }
+            else if (auto server = cast<SPGradient>(kind == FILL ? item->style->getFillPaintServer() : item->style->getStrokePaintServer())) {
+                if (auto vect = server->getVector(); vect && vect->hasStops()) {
+                    common = vect->getFirstStop()->getColor();
+                }
+            }
+            else if (desktop) {
+                if (auto color = sp_desktop_get_color(desktop, kind == FILL)) {
+                    common = *color;
+                }
+            }
+            vector = sp_document_default_gradient_vector(item->document, common, 1.0, create_swatch);
+        }
+        if (vector) {
+            vector->setSwatch(create_swatch);
+        }
+        // apply
+        if (!vector) {
+            auto gr = sp_gradient_vector_for_object(item->document, desktop, item, paint_target, create_swatch);
+            if (gr) {
+                gr->setSwatch(create_swatch);
+            }
+            sp_item_set_gradient(item, gr, gradient_type, paint_target);
+        }
+        else {
+            sp_item_set_gradient(item, vector, gradient_type, paint_target);
+        }
+    }
+    else {
+        // We have changed from another gradient type, or modified spread/units within
+        // this gradient type.
+        vector = sp_gradient_ensure_vector_normalized(vector);
+        sp_item_set_gradient(item, vector, gradient_type, paint_target);
+    }
+}
+
+void sp_item_apply_mesh(SPItem* item, SPGradient* mesh, SPDocument* document, FillOrStroke kind) {
+    if (!item || !item->document || !item->style) return;
+
+    auto style = item->style;
+    SPPaintServer* server = kind == FILL ? style->getFillPaintServer() : style->getStrokePaintServer();
+    bool has_mesh = false;
+    if (server && is<SPMeshGradient>(server)) {
+        has_mesh = true;
+    }
+
+    auto xml_doc = document->getReprDoc();
+    SPDefs* defs = document->getDefs();
+    SPMeshGradient* mesh_gradient = nullptr;
+
+    if (!mesh || !has_mesh) {
+        // No mesh in document or object does not already have mesh -> create new mesh.
+
+        // Create mesh element
+        auto repr = xml_doc->createElement("svg:meshgradient");
+
+        // privates are garbage-collectable
+        repr->setAttribute("inkscape:collect", "always");
+
+        // Attach to document
+        defs->getRepr()->appendChild(repr);
+        Inkscape::GC::release(repr);
+
+        // Get corresponding object
+        mesh_gradient = static_cast<SPMeshGradient*>(document->getObjectByRepr(repr));
+        mesh_gradient->array.create(mesh_gradient, item, kind == FILL ? item->geometricBounds() : item->visualBounds());
+    }
+    else {
+        // Using found mesh
+
+        // Duplicate
+        auto mesh_repr = mesh->getRepr();
+        auto copy_repr = mesh_repr->duplicate(xml_doc);
+
+        // privates are garbage-collectable
+        copy_repr->setAttribute("inkscape:collect", "always");
+
+        // Attach to document
+        defs->getRepr()->appendChild(copy_repr);
+        Inkscape::GC::release(copy_repr);
+
+        // Get corresponding object
+        mesh_gradient = static_cast<SPMeshGradient*>(document->getObjectByRepr(copy_repr));
+        mesh_gradient->array.read(mesh_gradient);
+
+        Geom::OptRect item_bbox = kind == FILL ? item->geometricBounds() : item->visualBounds();
+        mesh_gradient->array.fill_box(item_bbox);
+    }
+
+    sp_style_set_property_url(item, kind == FILL ? "fill" : "stroke", mesh_gradient, is<SPText>(item));
+}
+
+void sp_delete_item_swatch(SPItem* item, FillOrStroke kind, SPGradient* to_delete, SPGradient* replacement) {
+    if (!item || !item->style || !replacement) return;
+
+    auto swatch = cast<SPGradient>(kind == FILL ? item->style->getFillPaintServer() : item->style->getStrokePaintServer());
+    if (!swatch) return;
+
+    swatch = swatch->getVector();
+
+    // apply replacement swatch
+    sp_item_apply_gradient(item, replacement, nullptr, SP_GRADIENT_TYPE_LINEAR, true, kind);
+
+    // now we can remove it
+    swatch->collectOrphan();
+}
+
+bool sp_can_delete_swatch(SPGradient* swatch) {
+    if (!swatch || !swatch->document) return false;
+
+    int count = 0;
+    auto&& list = swatch->document->getResourceList("gradient");
+    for (auto obj : list) {
+        auto grad = cast_unsafe<SPGradient>(obj);
+        if (grad->isSwatch()) {
             ++count;
+            if (count == 2) break;
         }
     }
 
-    return count;
+    // too few swatches
+    if (count < 2) return false;
+
+    count = 0;
+    for (auto obj : swatch->document->getRoot()) {
+        auto item = cast<SPItem>(obj);
+        if (!item || !item->getId()) continue;
+
+        auto fill = sp_item_get_gradient(item, true); // fill
+        if (fill == swatch) {
+            ++count;
+        }
+        auto stroke = sp_item_get_gradient(item, false); // stroke
+        if (stroke == swatch) {
+            ++count;
+        }
+
+        if (count > 1) break;
+    }
+
+    // swatch can be deleted if there's only one reference to it
+    return count < 2;
+}
+
+SPGradient* sp_find_replacement_swatch(SPDocument* document, SPGradient* swatch) {
+    if (!document || !swatch) return nullptr;
+
+    auto&& list = document->getResourceList("gradient");
+    for (auto obj : list) {
+        auto grad = cast_unsafe<SPGradient>(obj);
+        if (grad->isSwatch() && grad != swatch) {
+            return grad;
+        }
+    }
+
+    return nullptr;
+}
+
+void sp_change_swatch_color(SPGradient* swatch, const Color& color) {
+    if (!swatch) return;
+
+    if (swatch->hasStops()) {
+        swatch->getFirstStop()->setColor(color);
+    }
+}
+
+void sp_create_document_swatches(SPDocument* document, const std::vector<Color>& colors) {
+    if (!document || colors.empty()) return;
+
+    for (auto& color : colors) {
+        auto swatch = sp_document_default_gradient_vector(document, color, 1, true);
+        swatch->setSwatch();
+        auto name = color.getName();
+        if (!name.empty()) {
+            swatch->setLabel(name.c_str());
+        }
+    }
+}
+
+std::vector<SPGradient*> sp_collect_all_swatches(SPDocument* document) {
+    std::vector<SPGradient*> swatches;
+    if (!document) return swatches;
+
+    auto gradients = document->getResourceList("gradient");
+    swatches.reserve(gradients.size() / 2);
+
+    for (auto grad : gradients) {
+        auto g = static_cast<SPGradient*>(grad);
+        if (g->isSwatch()) swatches.push_back(g);
+    }
+
+    return swatches;
+}
+
+int sp_cleanup_document_swatches(SPDocument* document) {
+    if (!document) return false;
+
+    std::unordered_map<SPGradient*, int> swatches;
+    auto gradients = document->getResourceList("gradient");
+
+    for (auto grad : gradients) {
+        auto g = static_cast<SPGradient*>(grad);
+        if (g->isSwatch()) swatches[g] = 0;
+    }
+
+    for (auto obj : document->getRoot()) {
+        auto item = cast<SPItem>(obj);
+        if (!item || !item->getId()) {
+            continue;
+        }
+        if (auto fill = sp_item_get_gradient(item, true)) {
+            swatches[fill]++;
+        }
+        if (auto stroke = sp_item_get_gradient(item, false)) {
+            swatches[stroke]++;
+        }
+    }
+
+    int removed = 0;
+    for (auto kv : swatches) {
+        if (kv.first && kv.second == 0) {
+            // unused swatch, mark for collection
+            // kv.first->setSwatch(false);
+            // kv.first->removeAttribute("inkscape:swatch");
+            // kv.first->setCollectionPolicy(SPObject::ALWAYS_COLLECT);
+            kv.first->collectOrphan();
+            removed++;
+        }
+    }
+
+    return removed;
+}
+
+SPGradient* sp_find_matching_swatch(SPDocument* document, const Color& color) {
+    if (!document) return nullptr;
+
+    auto rgb = color.converted(Colors::Space::Type::RGB);
+    if (!rgb) return nullptr;
+    rgb->enableOpacity(false);
+
+    auto gradients = document->getResourceList("gradient");
+    for (auto grad : gradients) {
+        auto g = static_cast<SPGradient*>(grad);
+        if (g->isSwatch()) {
+            if (auto c = g->getFirstStop()->getColor().converted(Colors::Space::Type::RGB)) {
+                c->enableOpacity(false);
+                if (*c == *rgb) return g;
+            }
+        }
+    }
+
+    return nullptr;
 }
 
 /*

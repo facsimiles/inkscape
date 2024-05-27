@@ -24,6 +24,7 @@
 #include "enums.h"
 #include "inkscape.h"
 #include "preferences.h"
+#include "widget/ink-spin-button.h"
 
 /**
  * Remove focus from window to whoever it is transient for.
@@ -51,6 +52,10 @@ void sp_dialog_defocus_on_enter(Gtk::SpinButton &s)
         sp_dialog_defocus(dynamic_cast<Gtk::Window*>(s.get_root()));
     });
 #endif
+}
+
+void sp_dialog_defocus_on_enter(Inkscape::UI::Widget::InkSpinButton &s) {
+    //todo
 }
 
 /**

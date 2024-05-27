@@ -149,7 +149,7 @@ public:
 
     bool addResource(char const *key, SPObject *object);
     bool removeResource(char const *key, SPObject *object);
-    std::vector<SPObject *> const getResourceList(char const *key);
+    const std::vector<SPObject*>& getResourceList(char const *key);
     void process_pending_resource_changes();
 
     void do_change_filename(char const *const filename, bool const rebase);

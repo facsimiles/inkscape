@@ -185,8 +185,8 @@ void ColorItem::draw_color(Cairo::RefPtr<Cairo::Context> const &cr, int w, int h
     [&] (Colors::Color const &color) {
         ink_cairo_set_source_color(cr->cobj(), color);
         cr->paint();
-        // there's no way to query background color to check if color item stands out,
-        // so we apply faint outline to let users make out color shapes blending with background
+        // there's no way to query background color to check if a color item stands out,
+        // so we apply faint outline to let users make out color shapes blending with a background
         auto const fg = get_color();
         cr->rectangle(0.5, 0.5, w - 1, h - 1);
         cr->set_source_rgba(fg.get_red(), fg.get_green(), fg.get_blue(), 0.07);
@@ -198,8 +198,8 @@ void ColorItem::draw_color(Cairo::RefPtr<Cairo::Context> const &cr, int w, int h
         auto grad = graddata.gradient;
         if (!grad) return;
 
-        auto pat_checkerboard = Cairo::RefPtr<Cairo::Pattern>(new Cairo::Pattern(ink_cairo_pattern_create_checkerboard(), true));
-        auto pat_gradient     = Cairo::RefPtr<Cairo::Pattern>(new Cairo::Pattern(grad->create_preview_pattern(w),         true));
+        auto pat_checkerboard = ink_cairo_pattern_create_checkerboard();
+        auto pat_gradient     = Cairo::RefPtr<Cairo::Pattern>(new Cairo::Pattern(grad->create_preview_pattern(w), true));
 
         cr->set_source(pat_checkerboard);
         cr->paint();

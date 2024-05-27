@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 /**
- * Pattern editor widget for "Fill and Stroke" dialog
+ * Pattern editor widget for the "Fill and Stroke" and "Object Properties" dialogs.
  *
- * Copyright (C) 2022 Michael Kowalski
+ * Copyright (C) 2022-2025 Michael Kowalski
  *
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
@@ -16,43 +16,31 @@
 #include <gtkmm/flowbox.h>
 #include <gtkmm/grid.h>
 #include <gtkmm/paned.h>
-#include <gtkmm/picture.h>
 #include <gtkmm/scale.h>
 #include <gtkmm/searchentry2.h>
-#include <gtkmm/spinbutton.h>
-#include <gtkmm/viewport.h>
+#include <gtkmm/treemodel.h>
 
 #include "document.h"
 #include "object/sp-pattern.h"
-#include "pattern-manipulation.h"
 #include "preferences.h"
+#include "pattern-manager.h"
+#include "pattern-manipulation.h"
 #include "ui/builder-utils.h"
-#include "ui/pack.h"
 #include "ui/util.h"
-#include "util-string/ustring-format.h"
 
 namespace Inkscape::UI::Widget {
 
 using namespace Inkscape::IO;
 
+namespace {
 // default size of pattern image in a list
-static constexpr int ITEM_WIDTH = 45;
-
-// get slider position 'index' (linear) and transform that into gap percentage (non-linear)
-static double slider_to_gap(double index, double upper) {
-    auto v = std::tan(index / (upper + 1) * M_PI / 2.0) * 500;
-    return std::round(v / 20) * 20;
-}
-// transform gap percentage value into slider position
-static double gap_to_slider(double gap, double upper) {
-    return std::atan(gap / 500) * (upper + 1) / M_PI * 2;
-}
+constexpr int ITEM_WIDTH = 45;
 
 // tile size slider functions
-static int slider_to_tile(double index) {
+int slider_to_tile(double index) {
     return 30 + static_cast<int>(index) * 5;
 }
-static double tile_to_slider(int tile) {
+double tile_to_slider(int tile) {
     return (tile - 30) / 5.0;
 }
 
@@ -66,27 +54,21 @@ double get_attrib_num(SPPattern* pattern, const char* attrib) {
     return strtod(val.c_str(), nullptr);
 }
 
-const double ANGLE_STEP = 15.0;
+} // namespace
 
-PatternEditor::PatternEditor(const char* prefs, Inkscape::PatternManager& manager) :
+PatternEditor::PatternEditor(const char* prefs, PatternManager& manager) :
     _manager(manager),
     _builder(create_builder("pattern-edit.glade")),
-    _offset_x(get_widget<Gtk::SpinButton>(_builder, "offset-x")),
-    _offset_y(get_widget<Gtk::SpinButton>(_builder, "offset-y")),
-    _scale_x(get_widget<Gtk::SpinButton>(_builder, "scale-x")),
-    _scale_y(get_widget<Gtk::SpinButton>(_builder, "scale-y")),
-    _angle_btn(get_widget<Gtk::SpinButton>(_builder, "angle")),
-    _orient_slider(get_widget<Gtk::Scale>(_builder, "orient")),
-    _gap_x_slider(get_widget<Gtk::Scale>(_builder, "gap-x")),
-    _gap_y_slider(get_widget<Gtk::Scale>(_builder, "gap-y")),
-    _gap_x_spin(get_widget<Gtk::SpinButton>(_builder, "gap-x-spin")),
-    _gap_y_spin(get_widget<Gtk::SpinButton>(_builder, "gap-y-spin")),
+    _offset_x(get_widget<InkSpinButton>(_builder, "offset-x")),
+    _offset_y(get_widget<InkSpinButton>(_builder, "offset-y")),
+    _scale_x(get_widget<InkSpinButton>(_builder, "scale-x")),
+    _scale_y(get_widget<InkSpinButton>(_builder, "scale-y")),
+    _angle_btn(get_widget<InkSpinButton>(_builder, "angle")),
+    _gap_x_spin(get_widget<InkSpinButton>(_builder, "gap-x-spin")),
+    _gap_y_spin(get_widget<InkSpinButton>(_builder, "gap-y-spin")),
     _edit_btn(get_widget<Gtk::Button>(_builder, "edit-pattern")),
-    _preview_img(get_widget<Gtk::Picture>(_builder, "preview")),
-    _preview(get_widget<Gtk::Viewport>(_builder, "preview-box")),
-    _color_label(get_widget<Gtk::Label>(_builder, "color-label")),
+    _preview(get_widget<Gtk::DrawingArea>(_builder, "preview")),
     _paned(get_widget<Gtk::Paned>(_builder, "paned")),
-    _main_grid(get_widget<Gtk::Box>(_builder, "main-box")),
     _input_grid(get_widget<Gtk::Grid>(_builder, "input-grid")),
     _stock_gallery(get_widget<Gtk::FlowBox>(_builder, "flowbox")),
     _doc_gallery(get_widget<Gtk::FlowBox>(_builder, "doc-flowbox")),
@@ -99,28 +81,16 @@ PatternEditor::PatternEditor(const char* prefs, Inkscape::PatternManager& manage
     _color_picker(get_derived_widget<ColorPicker>(_builder, "color-btn", _("Pattern color"), false)),
     _prefs(prefs)
 {
+    reparent_properties(_input_grid, _main);
+
     _color_picker.connectChanged([this](Colors::Color const &color){
         if (_update.pending()) return;
         _signal_color_changed.emit(color);
     });
 
-    // there's enough space for one set of controls only:
-    auto set_gap_control = [this](){
-        if (_precise_gap_control) {
-            _gap_x_slider.set_visible(false);
-            _gap_y_slider.set_visible(false);
-            _gap_x_spin.set_visible();
-            _gap_y_spin.set_visible();
-        }
-        else {
-            _gap_x_spin.set_visible(false);
-            _gap_y_spin.set_visible(false);
-            _gap_x_slider.set_visible();
-            _gap_y_slider.set_visible();
-        }
-    };
+    _preview.set_draw_func([this](auto&& ...args){ draw_preview(args...); });
 
-    _tile_size = Inkscape::Preferences::get()->getIntLimited(_prefs + "/tileSize", ITEM_WIDTH, 30, 1000);
+    _tile_size = Preferences::get()->getIntLimited(_prefs + "/tileSize", ITEM_WIDTH, 30, 1000);
     _tile_slider.set_value(tile_to_slider(_tile_size));
     _tile_slider.signal_change_value().connect([this](Gtk::ScrollType st, double value){
         if (_update.pending()) return true;
@@ -131,80 +101,34 @@ PatternEditor::PatternEditor(const char* prefs, Inkscape::PatternManager& manage
             // change pattern tile size
             _tile_size = size;
             update_pattern_tiles();
-            Inkscape::Preferences::get()->setInt(_prefs + "/tileSize", size);
+            Preferences::get()->setInt(_prefs + "/tileSize", size);
         }
         return true;
     }, true);
-    _precise_gap_control = Inkscape::Preferences::get()->getBool(_prefs + "/preciseGapControl", false);
-    auto precise_gap = &get_widget<Gtk::CheckButton>(_builder, "gap-spin");
-    auto& mouse_friendly = get_widget<Gtk::CheckButton>(_builder, "gap-slider");
-    precise_gap->set_active(_precise_gap_control);
-    mouse_friendly.set_active(!_precise_gap_control);
-    precise_gap->signal_toggled().connect([=, this] {
-        auto precise = precise_gap->get_active();
-        if (_precise_gap_control != precise) {
-            _precise_gap_control = precise;
-            set_gap_control();
-            Inkscape::Preferences::get()->setBool(_prefs + "/preciseGapControl", precise);
-        }
-    });
 
-    auto show_labels = Inkscape::Preferences::get()->getBool(_prefs + "/showLabels", false);
+    auto show_labels = Preferences::get()->getBool(_prefs + "/showLabels", false);
     _show_names.set_active(show_labels);
-    _show_names.signal_toggled().connect([this](){
+    _show_names.signal_toggled().connect([this]{
         // toggle pattern labels
         _stock_pattern_store.store.refresh();
         _doc_pattern_store.store.refresh();
-        Inkscape::Preferences::get()->setBool(_prefs + "/showLabels", _show_names.get_active());
+        Preferences::get()->setBool(_prefs + "/showLabels", _show_names.get_active());
     });
 
-    const auto max = 180.0 / ANGLE_STEP;
-    _orient_slider.set_range(-max, max);
-    _orient_slider.set_increments(1, 1);
-    _orient_slider.set_digits(0);
-    _orient_slider.set_value(0);
-    _orient_slider.signal_change_value().connect([=, this](Gtk::ScrollType st, double value){
-        if (_update.pending()) return false;
-        auto scoped(_update.block());
-        // slider works with 15deg discrete steps
-        _angle_btn.set_value(round(CLAMP(value, -max, max)) * ANGLE_STEP);
-        _signal_changed.emit();
-        return true;
-    }, true);
-
     for (auto spin : {&_gap_x_spin, &_gap_y_spin}) {
-        spin->signal_value_changed().connect([spin, this](){
+        spin->signal_value_changed().connect([spin, this](double value){
             if (_update.pending() || !spin->is_sensitive()) return;
             _signal_changed.emit();
         });
     }
 
-    for (auto slider : {&_gap_x_slider, &_gap_y_slider}) {
-        slider->set_increments(1, 1);
-        slider->set_digits(0);
-        slider->set_value(0);
-        slider->set_format_value_func([=](double val){
-            auto upper = slider->get_adjustment()->get_upper();
-            return Inkscape::ustring::format_classic(std::fixed, std::setprecision(0), slider_to_gap(val, upper)) + "%";
-        });
-        slider->signal_change_value().connect([this](Gtk::ScrollType st, double value){
-            if (_update.pending()) return false;
-            _signal_changed.emit();
-            return true;
-        }, true);
-    }
-
-    set_gap_control();
-
-    _angle_btn.signal_value_changed().connect([this]() {
+    _angle_btn.signal_value_changed().connect([this](double angle) {
         if (_update.pending() || !_angle_btn.is_sensitive()) return;
         auto scoped(_update.block());
-        auto angle = _angle_btn.get_value();
-        _orient_slider.set_value(round(angle / ANGLE_STEP));
         _signal_changed.emit();
     });
 
-    _link_scale.signal_clicked().connect([this](){
+    _link_scale.signal_clicked().connect([this]{
         if (_update.pending()) return;
         auto scoped(_update.block());
         _scale_linked = !_scale_linked;
@@ -217,53 +141,30 @@ PatternEditor::PatternEditor(const char* prefs, Inkscape::PatternManager& manage
     });
 
     for (auto el : {&_scale_x, &_scale_y, &_offset_x, &_offset_y}) {
-        el->signal_value_changed().connect([el, this]() {
+        el->signal_value_changed().connect([el, this](double value) {
             if (_update.pending()) return;
             if (_scale_linked && (el == &_scale_x || el == &_scale_y)) {
                 auto scoped(_update.block());
                 // enforce uniform scaling
-                (el == &_scale_x) ? _scale_y.set_value(el->get_value()) : _scale_x.set_value(el->get_value());
+                (el == &_scale_x) ? _scale_y.set_value(value) : _scale_x.set_value(value);
             }
             _signal_changed.emit();
         });
     }
 
-    _name_box.signal_changed().connect([this](){
+    _name_box.signal_changed().connect([this]{
         if (_update.pending()) return;
 
         _signal_changed.emit();
     });
 
-    _search_box.signal_search_changed().connect([this](){
+    _search_box.signal_search_changed().connect([this]{
         if (_update.pending()) return;
 
         // filter patterns
         _filter_text = _search_box.get_text();
         apply_filter(false);
         apply_filter(true);
-    });
-
-    // populate combo box with all patern categories
-    auto pattern_categories = _manager.get_categories()->children();
-    int cat_count = pattern_categories.size();
-    for (auto row : pattern_categories) {
-        auto name = row.get_value(_manager.columns.name);
-        _combo_set.append(name);
-    }
-
-    get_widget<Gtk::Button>(_builder, "previous").signal_clicked().connect([this](){
-        int previous = _combo_set.get_active_row_number() - 1;
-        if (previous >= 0) _combo_set.set_active(previous);
-    });
-    get_widget<Gtk::Button>(_builder, "next").signal_clicked().connect([cat_count, this](){
-        auto next = _combo_set.get_active_row_number() + 1;
-        if (next < cat_count) _combo_set.set_active(next);
-    });
-    _combo_set.signal_changed().connect([this](){
-        // select pattern category to show
-        auto index = _combo_set.get_active_row_number();
-        select_pattern_set(index);
-        Inkscape::Preferences::get()->setInt(_prefs + "/currentSet", index);
     });
 
     bind_store(_doc_gallery, _doc_pattern_store);
@@ -287,20 +188,18 @@ PatternEditor::PatternEditor(const char* prefs, Inkscape::PatternManager& manage
         _signal_changed.emit();
     });
 
-    _edit_btn.signal_clicked().connect([this](){
+    _edit_btn.signal_clicked().connect([this]{
         _signal_edit.emit();
     });
 
-    _paned.set_position(Inkscape::Preferences::get()->getIntLimited(_prefs + "/handlePos", 50, 10, 9999));
+    _paned.set_position(Preferences::get()->getIntLimited(_prefs + "/handlePos", 50, 10, 9999));
     _paned.property_position().signal_changed().connect([this](){
-        Inkscape::Preferences::get()->setInt(_prefs + "/handlePos", _paned.get_position());
+        Preferences::get()->setInt(_prefs + "/handlePos", _paned.get_position());
     });
 
-    // current pattern category
-    _combo_set.set_active(Inkscape::Preferences::get()->getIntLimited(_prefs + "/currentSet", 0, 0, std::max(cat_count - 1, 0)));
-
     update_scale_link();
-    UI::pack_start(*this, _main_grid);
+    set_vexpand();
+    append(_main);
 }
 
 void PatternEditor::bind_store(Gtk::FlowBox& list, PatternStore& pat) {
@@ -315,10 +214,10 @@ void PatternEditor::bind_store(Gtk::FlowBox& list, PatternStore& pat) {
     });
 
     list.bind_list_store(pat.store.get_store(), [&pat, this](const Glib::RefPtr<PatternItem>& item){
-        auto const box = Gtk::make_managed<Gtk::Box>(Gtk::Orientation::VERTICAL);
+        auto const box = Gtk::make_managed<Box>(Gtk::Orientation::VERTICAL);
         auto const image = Gtk::make_managed<Gtk::Image>(to_texture(item->pix));
         image->set_size_request(_tile_size, _tile_size);
-        UI::pack_start(*box, *image);
+        box->append(*image);
         auto name = Glib::ustring(item->label.c_str());
         if (_show_names.get_active()) {
             auto const label = Gtk::make_managed<Gtk::Label>(name);
@@ -327,7 +226,7 @@ void PatternEditor::bind_store(Gtk::FlowBox& list, PatternStore& pat) {
             label->set_ellipsize(Pango::EllipsizeMode::END);
             label->set_max_width_chars(0);
             label->set_size_request(_tile_size);
-            UI::pack_end(*box, *label);
+            box->append(*label);
         }
         image->set_tooltip_text(name);
 
@@ -350,7 +249,7 @@ void PatternEditor::select_pattern_set(int index) {
 }
 
 void PatternEditor::update_scale_link() {
-    _link_scale.set_child(get_widget<Gtk::Image>(_builder, _scale_linked ? "image-linked" : "image-unlinked"));
+    _link_scale.set_icon_name(_scale_linked ? "entries-linked-symbolic" : "entries-unlinked-symbolic");
 }
 
 void PatternEditor::update_widgets_from_pattern(Glib::RefPtr<PatternItem>& pattern) {
@@ -374,25 +273,20 @@ void PatternEditor::update_widgets_from_pattern(Glib::RefPtr<PatternItem>& patte
     _offset_y.set_value(item.offset.y());
 
     auto degrees = 180.0 / M_PI * Geom::atan2(item.transform.xAxis());
-    _orient_slider.set_value(round(degrees / ANGLE_STEP));
     _angle_btn.set_value(degrees);
 
-    double x_index = gap_to_slider(item.gap[Geom::X], _gap_x_slider.get_adjustment()->get_upper());
-    _gap_x_slider.set_value(x_index);
     _gap_x_spin.set_value(item.gap[Geom::X]);
-    double y_index = gap_to_slider(item.gap[Geom::Y], _gap_y_slider.get_adjustment()->get_upper());
-    _gap_y_slider.set_value(y_index);
     _gap_y_spin.set_value(item.gap[Geom::Y]);
 
     if (item.color.has_value()) {
         _color_picker.setColor(*item.color);
         _color_picker.set_sensitive();
-        _color_label.set_opacity(1.0); // hack: sensitivity doesn't change appearance, so using opacity directly
+        // _color_label.set_opacity(1.0); // hack: sensitivity doesn't change appearance, so using opacity directly
     }
     else {
         _color_picker.setColor(Colors::Color(0x0));
         _color_picker.set_sensitive(false);
-        _color_label.set_opacity(0.6);
+        // _color_label.set_opacity(0.6);
         _color_picker.close();
     }
 }
@@ -413,7 +307,7 @@ void sort_patterns(std::vector<Glib::RefPtr<PatternItem>>& list) {
 }
 
 // given a pattern, create a PatternItem instance that describes it;
-// input pattern can be a link or a root pattern
+// the input pattern can be a link or a root pattern
 Glib::RefPtr<PatternItem> create_pattern_item(PatternManager& manager, SPPattern* pattern, int tile_size, double scale) {
     auto item = manager.get_item(pattern);
     if (item && scale > 0) {
@@ -449,9 +343,9 @@ void PatternEditor::set_selected(SPPattern* pattern) {
 
     auto list = update_doc_pattern_list(pattern ? pattern->document : nullptr);
     if (pattern) {
-        // patch up tile image on a list of document root patterns, it might have changed;
-        // color attribute for instance is being set directly on the root pattern;
-        // other attributes are per-object, so should not be taken into account when rendering tile
+        // patch up a tile image on a list of document root patterns, it might have changed;
+        // color attribute, for instance, is being set directly on the root pattern;
+        // other attributes are per-object, so should not be taken into account when rendering a tile
         for (auto& pattern_item : list) {
             if (pattern_item->id == item->id && pattern_item->collection == nullptr) {
                 // update preview
@@ -464,24 +358,8 @@ void PatternEditor::set_selected(SPPattern* pattern) {
     }
 
     set_active(_doc_gallery, _doc_pattern_store, item);
-
-    // generate large preview of selected pattern
-    if (link_pattern) {
-        const double device_scale = get_scale_factor();
-        auto size = _preview.get_allocation();
-        const int m = 1;
-        if (size.get_width() <= m || size.get_height() <= m) {
-            // widgets not resized yet, choose arbitrary size, so preview is not missing when widget is shown
-            size.set_width(200);
-            size.set_height(200);
-        }
-        // use white for checkerboard since most stock patterns are black
-        unsigned int background = 0xffffffff;
-        auto surface = _manager.get_preview(link_pattern, size.get_width(), size.get_height(), background, device_scale);
-        _preview_img.set_paintable(to_texture(surface));
-    } else {
-        _preview_img.set_paintable(nullptr);
-    }
+    // draw a large preview of the selected pattern
+    _preview.queue_draw();
 }
 
 // generate preview images for patterns
@@ -498,11 +376,11 @@ std::vector<Glib::RefPtr<PatternItem>> create_pattern_items(PatternManager& mana
     return output;
 }
 
-// populate store with document patterns if list has changed, minimize amount of work by using cached previews
+// populate the store with document patterns if a list has changed, minimize the amount of work by using cached previews
 std::vector<Glib::RefPtr<PatternItem>> PatternEditor::update_doc_pattern_list(SPDocument* document) {
     auto list = sp_get_pattern_list(document);
     const double device_scale = get_scale_factor();
-    // create pattern items (cheap), but skip preview generation (expansive)
+    // create pattern items (cheap), but skip preview generation (expensive)
     auto patterns = create_pattern_items(_manager, list, 0, 0);
     bool modified = false;
     for (auto&& item : patterns) {
@@ -513,7 +391,7 @@ std::vector<Glib::RefPtr<PatternItem>> PatternEditor::update_doc_pattern_list(SP
         }
         else {
             if (!item->pix) {
-                // generate preview for newly added pattern
+                // generate a preview for a newly added pattern
                 item->pix = _manager.get_image(cast<SPPattern>(document->getObjectById(item->id)), _tile_size, _tile_size, device_scale);
             }
             modified = true;
@@ -583,14 +461,14 @@ std::pair<Glib::RefPtr<PatternItem>, SPDocument*> PatternEditor::get_active() {
 void PatternEditor::set_active(Gtk::FlowBox& gallery, PatternStore& pat, Glib::RefPtr<PatternItem> item) {
     bool selected = false;
     if (item) {
-        UI::for_each_child(gallery, [=,&selected,&pat,&gallery](Gtk::Widget& widget){
+        for_each_child(gallery, [=,&selected,&pat,&gallery](Widget& widget){
             if (auto box = dynamic_cast<Gtk::FlowBoxChild*>(&widget)) {
                 if (auto pattern = pat.widgets_to_pattern[box]) {
                     if (pattern->id == item->id && pattern->collection == item->collection) {
                         gallery.select_child(*box);
                         if (item->pix) {
                             // update preview, it might be stale
-                            for_each_descendant(*box, [&](Gtk::Widget &widget){
+                            for_each_descendant(*box, [&](Widget &widget){
                                 if (auto const image = dynamic_cast<Gtk::Image *>(&widget)) {
                                     image->set(to_texture(item->pix));
                                     return ForEachResult::_break;
@@ -602,7 +480,7 @@ void PatternEditor::set_active(Gtk::FlowBox& gallery, PatternStore& pat, Glib::R
                     }
                 }
             }
-            return UI::ForEachResult::_continue;
+            return ForEachResult::_continue;
         });
     }
 
@@ -613,34 +491,44 @@ void PatternEditor::set_active(Gtk::FlowBox& gallery, PatternStore& pat, Glib::R
 
 std::pair<std::string, SPDocument*> PatternEditor::get_selected() {
     // document patterns first
-    auto active = get_active();
-    auto sel = active.first;
-    auto stock_doc = active.second;
-    std::string id;
+    auto id = get_selected_doc_pattern();
+    if (!id.empty()) {
+        return std::make_pair(id, nullptr);
+    }
+    // stock patterns next
+    return get_selected_stock_pattern();
+}
+
+std::string PatternEditor::get_selected_doc_pattern() {
+    initial_select();
+    if (auto sel = get_active(_doc_gallery, _doc_pattern_store)) {
+        // for the current document, if selection hasn't changed return linked pattern ID
+        // so that we can modify its properties (transform, offset, gap)
+        if (sel->id == _current_pattern.id.raw()) {
+            return _current_pattern.link_id;
+        }
+        // different pattern from the current document selected; use its root pattern
+        // as a starting point; a link pattern will be injected by adjust_pattern()
+        return sel->id;
+    }
+    return std::string{};
+}
+
+std::pair<std::string, SPDocument*> PatternEditor::get_selected_stock_pattern() {
+    initial_select();
+    auto sel = get_active(_stock_gallery, _stock_pattern_store);
     if (sel) {
-        if (stock_doc) {
-            // for stock pattern, report its root pattern ID
-            return std::make_pair(sel->id, stock_doc);
-        }
-        else {
-            // for current document, if selection hasn't changed return linked pattern ID
-            // so that we can modify its properties (transform, offset, gap)
-            if (sel->id == _current_pattern.id.raw()) {
-                return std::make_pair(_current_pattern.link_id, nullptr);
-            }
-            // different pattern from current document selected; use its root pattern
-            // as a starting point; link pattern will be injected by adjust_pattern()
-            return std::make_pair(sel->id, nullptr);
-        }
+        // return pattern ID and stock document it comes from
+        return std::make_pair(sel->id, sel->collection);
     }
     else {
-        // if nothing is selected, pick first stock pattern, so we have something to assign
+        // if nothing is selected, pick the first stock pattern, so we have something to assign
         // to selected object(s); without it, pattern editing will not be activated
         if (auto first = _stock_pattern_store.store.get_store()->get_item(0)) {
             return std::make_pair(first->id, first->collection);
         }
 
-        // no stock patterns available
+        // no stock patterns available; that's not good, transition to pattern fill won't work
         return std::make_pair("", nullptr);
     }
 }
@@ -650,7 +538,7 @@ std::optional<Colors::Color> PatternEditor::get_selected_color() {
     if (pat.first && pat.first->color.has_value()) {
         return _color_picker.get_current_color();
     }
-    return {}; // color not supported
+    return {}; // color is not supported
 }
 
 Geom::Point PatternEditor::get_selected_offset() {
@@ -671,13 +559,7 @@ bool PatternEditor::is_selected_scale_uniform() {
 }
 
 Geom::Scale PatternEditor::get_selected_gap() {
-    auto vx = _gap_x_slider.get_value();
-    auto gap_x = _precise_gap_control ? _gap_x_spin.get_value() : slider_to_gap(vx, _gap_x_slider.get_adjustment()->get_upper());
-
-    auto vy = _gap_y_slider.get_value();
-    auto gap_y = _precise_gap_control ? _gap_y_spin.get_value() : slider_to_gap(vy, _gap_y_slider.get_adjustment()->get_upper());
-
-    return Geom::Scale(gap_x, gap_y);
+    return Geom::Scale(_gap_x_spin.get_value(), _gap_y_spin.get_value());
 }
 
 Glib::ustring PatternEditor::get_label() {
@@ -705,6 +587,58 @@ void PatternEditor::update_pattern_tiles() {
     const double device_scale = get_scale_factor();
     regenerate_tile_images(_manager, _doc_pattern_store, _tile_size, device_scale, _current_document);
     regenerate_tile_images(_manager, _stock_pattern_store, _tile_size, device_scale, nullptr);
+}
+
+void PatternEditor::draw_preview(const Cairo::RefPtr<Cairo::Context>& ctx, int width, int height) {
+    if (!width || !height || _current_pattern.link_id.empty() || !_current_document) return;
+
+    auto link_pattern = cast<SPPattern>(_current_document->getObjectById(_current_pattern.link_id.raw()));
+    if (!link_pattern) return;
+
+    const double device_scale = get_scale_factor();
+    // use white for checkerboard since most stock patterns are black
+    unsigned int background = 0xffffffff;
+    auto surface = _manager.get_preview(link_pattern, width, height, background, device_scale);
+    ctx->set_source(surface, 0, 0);
+    ctx->paint();
+}
+
+void PatternEditor::on_map() {
+    Box::on_map();
+
+    initial_select();
+}
+
+// delay populating patterns until they are being used; it's expensive to read stock patterns
+void PatternEditor::initial_select() {
+    if (_initial_selection_done) return;
+
+    // populate our combo box with all pattern categories
+    auto pattern_categories = _manager.get_categories()->children();
+    int cat_count = pattern_categories.size();
+    for (auto row : pattern_categories) {
+        auto name = row.get_value(_manager.columns.name);
+        _combo_set.append(name);
+    }
+
+    get_widget<Gtk::Button>(_builder, "previous").signal_clicked().connect([this](){
+        int previous = _combo_set.get_active_row_number() - 1;
+        if (previous >= 0) _combo_set.set_active(previous);
+    });
+    get_widget<Gtk::Button>(_builder, "next").signal_clicked().connect([cat_count, this](){
+        auto next = _combo_set.get_active_row_number() + 1;
+        if (next < cat_count) _combo_set.set_active(next);
+    });
+    _combo_set.signal_changed().connect([this](){
+        // select a pattern category to show
+        auto index = _combo_set.get_active_row_number();
+        select_pattern_set(index);
+        Preferences::get()->setInt(_prefs + "/currentSet", index);
+    });
+
+    // current pattern category
+    _combo_set.set_active(Preferences::get()->getIntLimited(_prefs + "/currentSet", 0, 0, std::max(cat_count - 1, 0)));
+    _initial_selection_done = true;
 }
 
 } // namespace Inkscape::UI::Widget

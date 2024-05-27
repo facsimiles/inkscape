@@ -38,24 +38,24 @@ public:
             _radius = corner_radius;
             return *this;
         }
-        // use checkerboard pattern for drawing background
+        // use a checkerboard pattern to draw background
         options& checkerboard(uint32_t color) {
             _checkerboard = color;
             return *this;
         }
-        // option to add an outline to rendered image
+        // option to add an outline to the rendered image
         options& frame(uint32_t rgba, double thickness = 1) {
             _stroke = thickness;
             _draw_frame = true;
             _frame_rgba = rgba;
             return *this;
         }
-        // option to reduce opacity of rendered image
+        // option to reduce the opacity of a rendered image
         options& image_opacity(double alpha) {
             _image_opacity = alpha;
             return *this;
         }
-        // for symbols only: take style from <use> element
+        // for symbols only: take style from the <use> element
         options& symbol_style_from_use(bool from_use_element = true) {
             _symbol_style_from_use = from_use_element;
             return *this;
@@ -83,13 +83,13 @@ private:
     std::unique_ptr<SPDocument> _sandbox;
 };
 
-// Place 'image' on a solid background with given color optionally adding border.
-// If no image is provided, only background surface will be created.
+// Place 'image' on a solid background with a given color optionally adding border.
+// If no image is provided, only a background surface will be created.
 Cairo::RefPtr<Cairo::Surface> add_background_to_image(Cairo::RefPtr<Cairo::Surface> image, uint32_t rgb, double margin, double radius, int device_scale, std::optional<uint32_t> border = std::optional<uint32_t>());
 
 /**
  * Returns a new document containing default start, mid, and end markers.
- * Note 1: group IDs are matched against "group_id" to render correct preview object.
+ * Note 1: group IDs are matched against "group_id" to render a correct preview object.
  * Note 2: paths/lines are kept outside of groups, so they don't inflate visible bounds
  * Note 3: invisible rects inside groups keep visual bounds from getting too small, so we can see relative marker sizes
  */
@@ -111,12 +111,13 @@ Cairo::RefPtr<Cairo::Surface> create_marker_image(
     std::optional<guint32> checkerboard,
     bool no_clip,
     double scale,
-    int device_scale);
+    int device_scale,
+    bool add_cross);
 
 /**
  * Renders a preview of a gradient into the passed context.
  */
-void draw_gradient(const Cairo::RefPtr<Cairo::Context>& cr, SPGradient* gradient, int x, int width);
+void draw_gradient(const Cairo::RefPtr<Cairo::Context>& cr, SPGradient* gradient, int x, int width, int checkerboard_tile_size = 6);
 
 
 } // namespace

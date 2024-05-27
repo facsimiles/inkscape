@@ -201,6 +201,24 @@ void ColorPalette::set_settings_visibility(bool show) {
     btn_menu.set_visible(show);
 }
 
+void ColorPalette::show_pinned_colors(bool show) {
+    _pinned_box.set_visible(show);
+}
+
+void ColorPalette::enable_color_selection(bool enable) {
+    _normal_box.set_selection_mode(enable ? Gtk::SelectionMode::SINGLE : Gtk::SelectionMode::NONE);
+}
+
+void ColorPalette::show_stretch_checkbox(bool show) {
+    auto& stretch = get_widget<Gtk::CheckButton>(_builder, "stretch");
+    stretch.set_visible(show);
+}
+
+void ColorPalette::show_scrollbar_checkbox(bool show) {
+    auto& sb = get_widget<Gtk::CheckButton>(_builder, "use-sb");
+    sb.set_visible(show);
+}
+
 void ColorPalette::do_scroll(int dx, int dy) {
     if (auto vert = _scroll.get_vscrollbar()) {
         vert->get_adjustment()->set_value(vert->get_adjustment()->get_value() + dy);
@@ -555,7 +573,7 @@ int ColorPalette::get_tile_size(bool horz) const {
     if (_stretch_tiles) return _size;
 
     double aspect = horz ? _aspect : -_aspect;
-    int scale = _show_labels ? 2.0 : 1.0;
+    int extra = _show_labels ? 8 : 0;
     int size = 0;
 
     if (aspect > 0) {
@@ -567,7 +585,7 @@ int ColorPalette::get_tile_size(bool horz) const {
     else {
         size = _size;
     }
-    return size * scale;
+    return size + extra;
 }
 
 int ColorPalette::get_tile_width() const {
@@ -640,8 +658,8 @@ void ColorPalette::set_colors(std::vector<std::unique_ptr<Dialog::ColorItem>> co
 {
     _normal_items.clear();
     _pinned_items.clear();
-    
-    for (auto &item : coloritems) {
+
+    for (auto& item : coloritems) {
         item->signal_modified().connect([item = item.get()] {
             UI::for_each_child(*item->get_parent(), [=](Gtk::Widget& w) {
                 if (auto label = dynamic_cast<Gtk::Label *>(&w)) {
@@ -650,6 +668,7 @@ void ColorPalette::set_colors(std::vector<std::unique_ptr<Dialog::ColorItem>> co
                 return UI::ForEachResult::_continue;
             });
         });
+        //
         if (item->is_pinned()) {
             _pinned_items.push_back(std::move(item));
         } else {
@@ -678,8 +697,8 @@ void ColorPalette::rebuild_widgets()
     _normal_box.freeze_notify();
     _pinned_box.freeze_notify();
 
-    UI::remove_all_children(_normal_box);
-    UI::remove_all_children(_pinned_box);
+    _normal_box.remove_all();
+    _pinned_box.remove_all();
 
     for (auto const &item : _normal_items) {
         // in a tile mode (no labels) group headers are hidden:

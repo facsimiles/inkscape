@@ -13,20 +13,23 @@
 #include <glib/gi18n.h>
 #include <glibmm/markup.h>
 #include <gtkmm/checkbutton.h>
-#include <gtkmm/comboboxtext.h>
 #include <gtkmm/drawingarea.h>
 #include <gtkmm/grid.h>
 #include <gtkmm/label.h>
 
+#include "ink-spin-button.h"
 #include "display/cairo-utils.h"
 #include "document-undo.h"
 #include "enums.h"
+#include "inkscape.h"
+#include "object/sp-image.h"
 #include "ui/builder-utils.h"
 #include "ui/dialog/choose-file.h"
 #include "ui/dialog/save-image.h"
 #include "ui/icon-names.h"
-#include "ui/pack.h"
+#include "ui/themes.h"
 #include "ui/util.h"
+#include "util-string/ustring-format.h"
 #include "util/format_size.h"
 #include "util/object-renderer.h"
 #include "xml/href-attribute-helper.h"
@@ -54,7 +57,8 @@ void link_image(Gtk::Window* window, SPImage* image) {
 
     static std::string current_folder;
     std::vector<Glib::ustring> mime_types = {
-        "image/png", "image/jpeg", "image/gif", "image/bmp", "image/tiff"
+        "image/png", "image/jpeg", "image/gif", "image/bmp", "image/tiff",
+        "image/svg+xml"
     };
     auto file = choose_file_open(_("Change Image"), window, mime_types, current_folder);
     if (!file) return;
@@ -95,15 +99,16 @@ void set_aspect_ratio(SPImage* image, bool preserve_aspect_ratio) {
 ImageProperties::ImageProperties() :
     Glib::ObjectBase{"ImageProperties"}, WidgetVfuncsClassInit{}, // They are both needed w ClassInit
     Gtk::Box(Gtk::Orientation::HORIZONTAL),
+    _main(get_widget<Gtk::Grid>(_builder, "main")),
     _builder(create_builder("image-properties.glade")),
     _preview(get_widget<Gtk::DrawingArea>(_builder, "preview")),
     _aspect(get_widget<Gtk::CheckButton>(_builder, "preserve")),
     _stretch(get_widget<Gtk::CheckButton>(_builder, "stretch")),
-    _rendering(get_widget<Gtk::ComboBoxText>(_builder, "rendering")),
+    _rendering(get_widget<Gtk::DropDown>(_builder, "rendering")),
+    _resolution(get_widget<InkSpinButton>(_builder, "dpi")),
     _embed(get_widget<Gtk::Button>(_builder, "embed"))
 {
-    auto& main = get_widget<Gtk::Grid>(_builder, "main");
-    UI::pack_start(*this, main, true, true);
+    append(_main);
 
     // arbitrarily selected max preview size for image content:
     _preview_max_width = 120;
@@ -117,20 +122,20 @@ ImageProperties::ImageProperties() :
     });
 
     auto& change = get_widget<Gtk::Button>(_builder, "change-img");
-    change.signal_clicked().connect([this](){
+    change.signal_clicked().connect([this]{
         if (_update.pending()) return;
-        auto window = dynamic_cast<Gtk::Window*>(get_root());
+        auto window = dynamic_cast<Gtk::Window*>(_preview.get_root());
         link_image(window, _image);
     });
 
     auto& extract = get_widget<Gtk::Button>(_builder, "export");
-    extract.signal_clicked().connect([this](){
+    extract.signal_clicked().connect([this]{
         if (_update.pending()) return;
-        auto window = dynamic_cast<Gtk::Window*>(get_root());
+        auto window = dynamic_cast<Gtk::Window*>(_preview.get_root());
         extract_image(window, _image);
     });
 
-    _embed.signal_clicked().connect([this](){
+    _embed.signal_clicked().connect([this]{
         if (_update.pending() || !_image) return;
         // embed image in the current document
         Inkscape::Pixbuf copy(*_image->pixbuf);
@@ -138,20 +143,30 @@ ImageProperties::ImageProperties() :
         DocumentUndo::done(_image->document, _("Embed image"), INKSCAPE_ICON("selection-make-bitmap-copy"));
     });
 
-    _rendering.signal_changed().connect([this](){
+    _rendering.property_selected().signal_changed().connect([this]{
         if (_update.pending()) return;
-        auto index = _rendering.get_active_row_number();
+        auto index = _rendering.get_selected();
         set_rendering_mode(_image, index);
     });
 
-    _aspect.signal_toggled().connect([this](){
+    _resolution.signal_value_changed().connect([this](auto dpi) {
+        if (_update.pending()) return;
+
+        Glib::ustring dpi_value = Inkscape::ustring::format_classic(dpi);
+        _image->setAttribute("inkscape:svg-dpi", dpi_value);
+        DocumentUndo::maybeDone(_image->document, "set-image-dpi", _("Set image DPI"), INKSCAPE_ICON("dialog-object-properties"));
+    });
+
+    _aspect.signal_toggled().connect([this]{
         if (_update.pending()) return;
         set_aspect_ratio(_image, _aspect.get_active());
     });
-    _stretch.signal_toggled().connect([this](){
+    _stretch.signal_toggled().connect([this]{
         if (_update.pending()) return;
         set_aspect_ratio(_image, !_stretch.get_active());
     });
+
+    INKSCAPE.themecontext->getChangeThemeSignal().connect(sigc::track_object([this] { css_changed(nullptr); }, *this));
 }
 
 ImageProperties::~ImageProperties() = default;
@@ -232,7 +247,11 @@ void ImageProperties::update(SPImage* image) {
         }
 
         // rendering
-        _rendering.set_active(image->style ? image->style->image_rendering.value : -1);
+        _rendering.set_selected(image->style ? image->style->image_rendering.value : -1);
+        // DPI
+        auto dpi = image->getRepr()->getAttributeDouble("inkscape:svg-dpi", 96);
+        _resolution.set_value(dpi);
+
     }
 
     int width = _preview_max_width;
@@ -254,15 +273,15 @@ void ImageProperties::update(SPImage* image) {
     _preview.queue_draw();
 
     // prepare preview
-    auto device_scale = get_scale_factor();
-    auto const fg = get_color();
+    auto device_scale = _preview.get_scale_factor();
+    auto const fg = _preview.get_color();
     auto foreground = conv_gdk_color_to_rgba(fg, 0.30);
     update_bg_color();
     _preview_image = draw_preview(_image, width, height, device_scale, foreground, _background_color);
 }
 
 void ImageProperties::update_bg_color() {
-    if (auto wnd = dynamic_cast<Gtk::Window*>(get_root())) {
+    if (auto wnd = dynamic_cast<Gtk::Window*>(_preview.get_root())) {
         auto const color = get_color_with_class(*wnd, "theme_bg_color");
         _background_color = conv_gdk_color_to_rgba(color);
     }

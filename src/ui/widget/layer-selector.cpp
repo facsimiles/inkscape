@@ -107,7 +107,7 @@ LayerSelector::LayerSelector(SPDesktop *desktop)
     Gtk::StyleProvider::add_provider_for_display(_layer_label.get_display(), _label_style,
                                                  GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
-    _observer->signal_changed().connect(sigc::mem_fun(*this, &LayerSelector::_layerModified));
+    _observer->signal_changed().connect([this](auto, auto){_layerModified();});
     setDesktop(desktop);
 }
 

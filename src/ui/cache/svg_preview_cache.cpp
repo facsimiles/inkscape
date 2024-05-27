@@ -65,10 +65,9 @@ cairo_surface_t* render_surface(Inkscape::Drawing &drawing, double scale_factor,
         dc.save();
         dc.transform(Geom::Scale(device_scale));
         dc.setOperator(CAIRO_OPERATOR_SOURCE);
-        dc.setSource(pattern);
+        dc.setSource(pattern->cobj());
         dc.paint();
         dc.restore();
-        cairo_pattern_destroy(pattern);
     }
 
     drawing.render(dc, area, Inkscape::DrawingItem::RENDER_BYPASS_CACHE);

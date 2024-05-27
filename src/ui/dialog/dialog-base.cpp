@@ -64,7 +64,8 @@ DialogBase::DialogBase(char const * const prefs_path, Glib::ustring dialog_type)
     set_margin(1); // Essential for dialog UI
 
     auto const key = Gtk::EventControllerKey::create();
-    key->set_propagation_phase(Gtk::PropagationPhase::CAPTURE);
+    // handle Esc key in a bubble phase to give widgets a chance to see it first and react if desired
+    key->set_propagation_phase(Gtk::PropagationPhase::BUBBLE);
     key->signal_key_pressed().connect([this, &key = *key](auto &&...args) { return on_key_pressed(key, args...); }, true);
     add_controller(key);
 }

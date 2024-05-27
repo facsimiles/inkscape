@@ -20,7 +20,7 @@
 #include <map>
 #include <string>
 #include <utility>
-
+#include <glibmm/i18n.h>
 #include <glibmm/regex.h>
 
 #include "attributes.h"                              // for SPAttr
@@ -496,6 +496,27 @@ change_def_references(SPObject *from_obj, SPObject *to_obj)
 
 // This is a subset of the valid XML 1.0 ID characters.
 const char valid_id_chars[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_.:";
+
+std::pair<bool, Glib::ustring> is_object_id_valid(const std::string& id) {
+    if (id.empty()) {
+        return std::make_pair(false, _("Invalid empty ID"));
+    }
+    auto c = id[0];
+    if (isdigit(c)) {
+        return std::make_pair(false, _("ID cannot start with a digit"));
+    }
+    if (c == '.') {
+        return std::make_pair(false, _("ID cannot start with a period"));
+    }
+    if (c == '-') {
+        return std::make_pair(false, _("ID cannot start with a dash"));
+    }
+    if (auto pos = id.find_first_not_of(valid_id_chars); pos != std::string::npos) {
+        return std::make_pair(false, pos == 0 ? _("ID starts with an invalid character") : _("ID contains invalid characters"));
+    }
+
+    return std::make_pair(true, Glib::ustring());
+}
 
 /**
  * Convert string to valid XML id.

@@ -140,7 +140,7 @@ void SPTSpan::modified(unsigned int flags) {
     flags &= SP_OBJECT_MODIFIED_CASCADE;
 
     for (auto& ochild: children) {
-        if (flags || (ochild.mflags & SP_OBJECT_MODIFIED_FLAG)) {
+        if ((flags & SP_OBJECT_FLAGS_ALL) || (ochild.mflags & SP_OBJECT_MODIFIED_FLAG)) {
             ochild.emitModified(flags);
         }
     }
@@ -387,7 +387,7 @@ void SPTextPath::modified(unsigned int flags) {
     flags &= SP_OBJECT_MODIFIED_CASCADE;
 
     for (auto& ochild: children) {
-        if (flags || (ochild.mflags & SP_OBJECT_MODIFIED_FLAG)) {
+        if ((flags & SP_OBJECT_FLAGS_ALL) || (ochild.mflags & SP_OBJECT_MODIFIED_FLAG)) {
             ochild.emitModified(flags);
         }
     }

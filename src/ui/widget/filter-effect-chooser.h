@@ -26,7 +26,11 @@ using Inkscape::Util::EnumData;
 using Inkscape::Util::EnumDataConverter;
 
 namespace Inkscape {
+
 extern const Util::EnumDataConverter<SPBlendMode> SPBlendModeConverter;
+
+const EnumDataConverter<SPBlendMode>& get_blendmode_combo_converter();
+
 namespace UI {
 namespace Widget {
 

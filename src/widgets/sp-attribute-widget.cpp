@@ -67,8 +67,7 @@ void SPAttributeTable::create(const std::vector<Glib::ustring>& labels, const st
     _textviews.clear();
     _entries.reserve(attributes.size());
 
-    table = std::make_unique<Gtk::Grid>();
-    append(*table);
+    append(_table);
 
     auto theme = Inkscape::Preferences::get()->getString("/theme/syntax-color-theme", "-none-");
 
@@ -80,7 +79,7 @@ void SPAttributeTable::create(const std::vector<Glib::ustring>& labels, const st
         ll->set_margin_end(XPAD);
         ll->set_margin_top(YPAD);
         ll->set_margin_bottom(YPAD);
-        table->attach(*ll, 0, i, 1, 1);
+        _table.attach(*ll, 0, i, 1, 1);
 
         EntryWidget entry;
         if (_syntax != SyntaxMode::PlainText) {
@@ -98,7 +97,7 @@ void SPAttributeTable::create(const std::vector<Glib::ustring>& labels, const st
             wnd->set_child(tv);
             wnd->set_has_frame(true);
             wnd->set_policy(Gtk::PolicyType::NEVER, Gtk::PolicyType::AUTOMATIC);
-            table->attach(*wnd, 1, i, 1, 1);
+            _table.attach(*wnd, 1, i, 1, 1);
 
             tv.get_buffer()->signal_end_user_action().connect([i, this](){
                 attribute_table_entry_changed(i);
@@ -113,7 +112,7 @@ void SPAttributeTable::create(const std::vector<Glib::ustring>& labels, const st
             ee->set_margin_start(XPAD);
             ee->set_margin_top(YPAD);
             ee->set_margin_bottom(YPAD);
-            table->attach(*ee, 1, i, 1, 1);
+            _table.attach(*ee, 1, i, 1, 1);
 
             ee->signal_changed().connect([i, this](){
                 attribute_table_entry_changed(i);
@@ -158,12 +157,18 @@ void SPAttributeTable::change_object(SPObject *object)
 
 void SPAttributeTable::reread_properties()
 {
+    if (blocked) return;
+
     blocked = true;
     for (std::size_t i = 0; i < _attributes.size(); ++i) {
         auto const val = _object->getRepr()->attribute(_attributes[i].c_str());
         _entries.at(i).set_text(val ? val : "");
     }
     blocked = false;
+}
+
+void SPAttributeTable::set_modified_tag(unsigned int tag) {
+    _modified_tag = tag;
 }
 
 /**
@@ -208,8 +213,14 @@ void SPAttributeTable::attribute_table_entry_changed(size_t index) {
     blocked = true;
     if (_object) {
         auto text = e.get_text();
-        _object->getRepr()->setAttribute(_attributes[index], text);
-        DocumentUndo::done(_object->document, _("Set attribute"), "");
+        auto attr = _object->getRepr()->attribute(_attributes[index].c_str());
+        if (!attr || text != attr) {
+            _object->getRepr()->setAttribute(_attributes[index], text);
+            if (_modified_tag) {
+                _object->requestModified(SP_OBJECT_MODIFIED_FLAG | _modified_tag);
+            }
+            DocumentUndo::done(_object->document, _("Set attribute"), "");
+        }
     }
     blocked = false;
 }

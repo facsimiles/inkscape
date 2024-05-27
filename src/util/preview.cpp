@@ -65,8 +65,7 @@ render_preview(SPDocument *doc, std::shared_ptr<Inkscape::Drawing> drawing, uint
 
             // We always use checkerboard to indicate transparency.
             if (SP_RGBA32_A_F(bg) < 1.0) {
-                auto pattern = ink_cairo_pattern_create_checkerboard(bg, false);
-                auto background = Cairo::RefPtr<Cairo::Pattern>(new Cairo::Pattern(pattern, true));
+                auto background = ink_cairo_pattern_create_checkerboard(bg, false);
                 cr->set_source(background);
                 cr->fill();
             }

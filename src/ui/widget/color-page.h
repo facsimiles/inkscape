@@ -11,6 +11,16 @@
 
 #include <gtkmm/box.h>
 
+#include <gtkmm/button.h>
+#include <gtkmm/entry.h>
+#include <gtkmm/expander.h>
+#include <gtkmm/grid.h>
+#include <gtkmm/sizegroup.h>
+#include <sigc++/scoped_connection.h>
+
+#include "color-notebook.h"
+#include "color-slider.h"
+#include "color-preview.h"
 #include "ui/widget/color-slider.h"
 
 using namespace Inkscape::Colors;
@@ -27,15 +37,9 @@ class AnySpace;
 }
 }
 
-namespace Gtk {
-class Expander;
-class Builder;
-}
-
 namespace Inkscape::UI::Widget {
 class ColorWheel;
 class InkSpinButton;
-class ColorSlider;
 class ColorWheelBase;
 class ColorPageChannel;
 
@@ -43,20 +47,33 @@ class ColorPage : public Gtk::Box
 {
 public:
     ColorPage(std::shared_ptr<Space::AnySpace> space, std::shared_ptr<ColorSet> colors);
-protected:
-    Glib::RefPtr<Gtk::Builder> _builder;
+    ~ColorPage() override;
 
+    void show_expander(bool show);
+    ColorWheel* create_color_wheel(Space::Type type, bool disc);
+    // Gtk::Grid& get_grid();
+    void set_spinner_size_pattern(const std::string& pattern);
+
+    void attach_page(Glib::RefPtr<Gtk::SizeGroup> first_column, Glib::RefPtr<Gtk::SizeGroup> last_column);
+    void detach_page(Glib::RefPtr<Gtk::SizeGroup> first_column, Glib::RefPtr<Gtk::SizeGroup> last_column);
+protected:
     std::shared_ptr<Space::AnySpace> _space;
     std::shared_ptr<ColorSet> _selected_colors;
     std::shared_ptr<ColorSet> _specific_colors;
 
     std::vector<std::unique_ptr<ColorPageChannel>> _channels;
 private:
+    Gtk::Grid _grid;
+    Gtk::Expander _expander;
+    Gtk::Box _frame;
+    ColorPreview _preview;
+    Gtk::Entry _rgb_edit;
+    // eye dropper color picker
+    Gtk::Button _dropper;
     sigc::scoped_connection _specific_changed_connection;
     sigc::scoped_connection _selected_changed_connection;
     ColorWheel* _color_wheel = nullptr;
     sigc::scoped_connection _color_wheel_changed;
-    Gtk::Expander& _expander;
 };
 
 class ColorPageChannel
@@ -68,6 +85,8 @@ public:
         ColorSlider &slider,
         InkSpinButton &spin);
     ColorPageChannel(const ColorPageChannel&) = delete;
+    Gtk::Label& get_label() { return _label; }
+    InkSpinButton& get_spin() { return _spin; }
 private:
     Gtk::Label &_label;
     ColorSlider &_slider;

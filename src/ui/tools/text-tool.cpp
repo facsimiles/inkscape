@@ -1412,8 +1412,7 @@ bool TextTool::_styleSet(SPCSSAttr const *css)
     return true;
 }
 
-int TextTool::_styleQueried(SPStyle *style, int property)
-{
+int TextTool::_styleQueried(SPStyle *style, int property) {
     if (!text) {
         return QUERY_STYLE_NOTHING;
     }
@@ -1423,8 +1422,27 @@ int TextTool::_styleQueried(SPStyle *style, int property)
         return QUERY_STYLE_NOTHING;
     }
 
+    auto styles_list = get_subselection(true);
+    return sp_desktop_query_style_from_list(styles_list, style, property);
+}
+
+std::vector<SPItem*> TextTool::get_subselection(bool include_empty_selection_item) {
+    if (!text) {
+        return {};
+    }
+
+    auto layout = te_get_layout(this->text);
+    if (!layout) {
+        return {};
+    }
+
     _validateCursorIterators();
 
+    if (text_sel_start == text_sel_end && !include_empty_selection_item) {
+        return {};
+    }
+
+    std::vector<SPItem*> styles_list;
     Inkscape::Text::Layout::iterator begin_it, end_it;
     if (text_sel_start < text_sel_end) {
         begin_it = text_sel_start;
@@ -1439,7 +1457,6 @@ int TextTool::_styleQueried(SPStyle *style, int property)
         }
     }
 
-    std::vector<SPItem*> styles_list;
     for (auto it = begin_it; it < end_it; it.nextStartOfSpan()) {
         SPObject *pos_obj = nullptr;
         layout->getSourceOfCharacter(it, &pos_obj);
@@ -1447,7 +1464,7 @@ int TextTool::_styleQueried(SPStyle *style, int property)
             continue;
         }
         if (!pos_obj->parent) { // the string is not in the document anymore (deleted)
-            return 0;
+            return {};
         }
 
         if (is<SPString>(pos_obj)) {
@@ -1457,7 +1474,7 @@ int TextTool::_styleQueried(SPStyle *style, int property)
     }
     std::reverse(styles_list.begin(), styles_list.end());
 
-    return sp_desktop_query_style_from_list(styles_list, style, property);
+    return styles_list;
 }
 
 void TextTool::_validateCursorIterators()

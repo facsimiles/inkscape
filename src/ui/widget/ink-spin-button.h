@@ -9,6 +9,8 @@
 #include <gtkmm/entry.h>
 #include <gtkmm/label.h>
 #include <gtkmm/widget.h>
+#include <sigc++/scoped_connection.h>
+#include "ui/class-init.h"
 
 namespace Gtk {
 class EventControllerKey;
@@ -22,7 +24,7 @@ class Builder;
 
 namespace Inkscape::UI::Widget {
 
-class InkSpinButton : public Gtk::Widget {
+class InkSpinButton : public Util::ClassExtraInit, public Gtk::Widget {
 public:
     InkSpinButton();
     InkSpinButton(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& builder);
@@ -36,46 +38,46 @@ public:
     // Number of decimal digits to use for formatting values
     void set_digits(int digits);
     int get_digits() const;
-    // Set range of allowed input values (as an alternative to specifying 'adjustment')
+    // Set a range of allowed input values (as an alternative to specifying 'adjustment')
     void set_range(double min, double max);
     // Set the step increment of the spin button
     void set_step(double step_increment);
-    // Set new value; it will be rescaled if scaling is set
+    // Set a new value; it will be rescaled if scaling is set
     void set_value(double new_value);
-    // Get current value; it will be rescaled if scaling is set
+    // Get the current value; it will be rescaled if scaling is set
     double get_value() const;
     // Specify optional suffix to show after the value
     void set_suffix(const std::string& suffix, bool add_half_space = true);
-    // Specify optional prefix to show in front of the value
+    // Specify an optional prefix to show in front of the value
     void set_prefix(const std::string& prefix, bool add_space = true);
     // Set to true to draw a border, false to hide it
     void set_has_frame(bool frame = true);
-    // Set to true to hide insignificant zeros after decimal point
+    // Set to true to hide insignificant zeros after the decimal point
     void set_trim_zeros(bool trim);
     // Set scaling factor to multiply all values before presenting them; by default it is 1.0
-    // Example: with a factor of 100 user can edit and see percentages, while read and set values are 0..1 fractions
+    // Example: with a factor of 100, the user can edit and see percentages, while read and set values are 0..1 fractions
     void set_scaling_factor(double factor);
     // Which widget to focus if defocusing this spin button;
-    // if not set explicitly, next available focusable widget will be used
+    // if not set explicitly, the next available focusable widget will be used
     void set_defocus_widget(Gtk::Widget* widget) { _defocus_widget = widget; }
     // Suppress expression evaluator
     void set_dont_evaluate(bool flag) { _dont_evaluate = flag; }
-    // Set distance in pixels of drag travel to adjust full button range; the lower the value the more sensitive the dragging gets
+    // Set the distance in pixels of drag travel to adjust full button range; the lower the value, the more sensitive the dragging gets
     void set_drag_sensitivity(double distance);
-    // Specify label to show inside spin button
+    // Specify the label to show inside spin button
     void set_label(const std::string& label);
     // Signal fired when numerical value changes
     sigc::signal<void (double)> signal_value_changed() const;
     // Base spin button's min size on the pattern provided; ex: "99.99"
     void set_min_size(const std::string& pattern);
-    // Set callback function that parses text and returns "double" value; it may throw std::exception on failure
+    // Set a callback function that parses text and returns "double" value; it may throw std::exception on failure
     void set_evaluator_function(std::function<double (const Glib::ustring&)> cb);
     // Pass true to enable decrement/increment arrow buttons (on by default)
     void set_has_arrows(bool enable = true);
     // Pass true to make Enter key exit editing mode
     void set_enter_exit_edit(bool enable = true);
-    // ----------- PROPERTIES ------------
-    // Glib::PropertyProxy<int> property_digits() { return prop_digits.get_proxy(); }
+    // Set icon to be shown inside the spin button (it replaces short label, if any)
+    void set_icon(const Glib::ustring& icon_name);
 
 private:
     void construct();
@@ -91,6 +93,13 @@ private:
     Gtk::Button _plus;
     Gtk::Entry _entry;
     Gtk::Label _label;
+    Gtk::Image _icon;
+    class FadeOut : public Gtk::Widget {
+    public:
+        FadeOut() {}
+        void snapshot_vfunc(const Glib::RefPtr<Gtk::Snapshot>& snapshot) override;
+    };
+    FadeOut _mask; // value fade-out mask
 
     // ------------- CONTROLLERS -------------
 
@@ -103,9 +112,9 @@ private:
     void on_motion_leave_value();
 
     Glib::RefPtr<Gtk::GestureDrag> _drag_value;
-    void on_drag_begin_value(Gdk::EventSequence* sequence);
-    void on_drag_update_value(Gdk::EventSequence* sequence);
-    void on_drag_end_value(Gdk::EventSequence* sequence);
+    Gtk::EventSequenceState on_drag_begin_value(Gdk::EventSequence* sequence);
+    Gtk::EventSequenceState on_drag_update_value(Gdk::EventSequence* sequence);
+    Gtk::EventSequenceState on_drag_end_value(Gdk::EventSequence* sequence);
 
     Glib::RefPtr<Gtk::EventControllerScroll> _scroll;
     void on_scroll_begin(); // Not used with mouse wheel.
@@ -134,15 +143,16 @@ private:
     void cancel_editing();
     bool defocus();
     void show_arrows(bool on = true);
-    void show_label(bool on = true);
+    void show_label_icon(bool on = true);
     bool commit_entry();
     void change_value(double inc, Gdk::ModifierType state);
     std::string format(double value, bool with_prefix_suffix, bool with_markup, bool trim_zeros, bool limit_size) const;
     void start_spinning(double steps, Gdk::ModifierType state, Glib::RefPtr<Gtk::GestureClick>& gesture);
     void stop_spinning();
+    int get_left_padding() const;
 
     // ---------------- DATA ------------------
-    double _initial_value = 0.0; // Value of adjustment at start of drag.
+    double _initial_value = 0.0; // Value of adjustment at the start of drag.
     double _drag_full_travel = 300.0; // dragging sensitivity in pixels
     bool _dragged = false;      // Hack to avoid enabling entry after drag. TODO Probably not needed now.
     double _scroll_counter = 0; // Counter to control incrementing/decrementing rate
@@ -153,6 +163,7 @@ private:
     int _entry_height = 0;      // natural height of Gtk::Entry
     int _baseline = 0;
     int _label_width = 0;
+    int _icon_width = 0;
     bool _enable_arrows = true;
     sigc::scoped_connection _spinning;
     Gtk::Widget* _defocus_widget = nullptr;
@@ -164,6 +175,7 @@ private:
     sigc::signal<void (double)> _signal_value_changed;
     std::string _min_size_pattern;
     std::function<double (const Glib::ustring&)> _evaluator; // evaluator callback
+    bool _mouse_entered = false; // flag to keep track of motion_enter/leave
 
     // ----------- PROPERTIES ------------
     Glib::Property<Glib::RefPtr<Gtk::Adjustment>> _adjust;
@@ -176,11 +188,13 @@ private:
     Glib::Property<bool> _has_frame;
     Glib::Property<bool> _show_arrows;
     Glib::Property<bool> _enter_exit;
+    Glib::Property<Glib::ustring> _icon_name;
     Glib::Property<Glib::ustring> _label_text;
     Glib::Property<Glib::ustring> _prefix;
     Glib::Property<Glib::ustring> _suffix;
 
 public:
+    Glib::PropertyProxy<Glib::RefPtr<Gtk::Adjustment>> property_adjustment() { return _adjust.get_proxy(); }
     Glib::PropertyProxy<int> property_digits() { return _digits.get_proxy(); }
     Glib::PropertyProxy<double> property_scaling_factor() { return _scaling_factor.get_proxy(); }
     Glib::PropertyProxy<double> property_min_value() { return _min_value.get_proxy(); }
@@ -188,6 +202,7 @@ public:
     Glib::PropertyProxy<double> property_step_value() { return _step_value.get_proxy(); }
     Glib::PropertyProxy<double> property_value() { return _num_value.get_proxy(); }
     Glib::PropertyProxy<Glib::ustring> property_label() { return _label_text.get_proxy(); }
+    Glib::PropertyProxy<Glib::ustring> property_icon() { return _icon_name.get_proxy(); }
     Glib::PropertyProxy<Glib::ustring> property_prefix() { return _prefix.get_proxy(); }
     Glib::PropertyProxy<Glib::ustring> property_suffix() { return _suffix.get_proxy(); }
     Glib::PropertyProxy<bool> property_has_frame() { return _has_frame.get_proxy(); }

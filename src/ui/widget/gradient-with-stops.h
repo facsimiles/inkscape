@@ -69,7 +69,7 @@ private:
     void css_changed(GtkCssStyleChange *change) final;
     void on_click_pressed(int n_press, double x, double y);
     void on_click_released(int n_press, double x, double y);
-    void on_motion(double x, double y);
+    void on_motion(double x, double y, Gdk::ModifierType state);
     bool on_key_pressed(unsigned keyval, unsigned keycode, Gdk::ModifierType state);
     std::optional<bool> focus(Gtk::DirectionType direction) final;
 

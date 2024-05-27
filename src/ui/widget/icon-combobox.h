@@ -15,10 +15,12 @@ namespace Inkscape::UI::Widget {
 class IconComboBox : public Gtk::DropDown
 {
 public:
-    IconComboBox(bool use_icons = true);
+    enum HeaderType { ImageLabel, ImageOnly, LabelOnly };
+    IconComboBox(bool use_icons = true, HeaderType header = ImageLabel);
     ~IconComboBox() override;
 
     void add_row(Glib::ustring const &icon_name, Glib::ustring const &label, int id);
+    void add_row(const Glib::ustring& icon_name, const Glib::ustring& full_name, const Glib::ustring& short_name, int id);
     void add_row(Cairo::RefPtr<Cairo::Surface> image, const Glib::ustring& label, int id);
     void set_active_by_id(int id);
     void set_row_visible(int id, bool visible = true, bool refilter_items = true);
@@ -27,8 +29,9 @@ public:
     sigc::signal<void (int)>& signal_changed();
 
     static int get_image_size() { return 16; }
-
+    void set_has_frame(bool frame);
     void refilter();
+
 private:
     struct ListItem;
     bool is_item_visible(const Glib::RefPtr<Glib::ObjectBase>& item) const;
@@ -36,6 +39,7 @@ private:
     std::shared_ptr<IconComboBox::ListItem> current_item();
 
     Glib::RefPtr<Gtk::SignalListItemFactory> _factory;
+    Glib::RefPtr<Gtk::SignalListItemFactory> _compact_factory;
     Glib::RefPtr<Gtk::FilterListModel> _filtered_model;
     Glib::RefPtr<Gtk::SingleSelection> _selection_model;
     Glib::RefPtr<Gtk::BoolFilter> _filter;

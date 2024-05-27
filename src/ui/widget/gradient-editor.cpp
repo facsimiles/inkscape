@@ -17,11 +17,11 @@
 #include <gtkmm/image.h>
 #include <gtkmm/liststore.h>
 #include <gtkmm/menubutton.h>
-#include <gtkmm/spinbutton.h>
 #include <gtkmm/togglebutton.h>
 #include <gtkmm/treeview.h>
 
 #include "display/cairo-utils.h"
+#include "color-picker-panel.h"
 #include "document-undo.h"
 #include "gradient-chemistry.h"
 #include "gradient-selector.h"
@@ -29,7 +29,11 @@
 #include "object/sp-stop.h"
 #include "ui/builder-utils.h"
 #include "ui/icon-names.h"
+#include "ui/util.h"
 #include "ui/widget/color-notebook.h"
+#include "ui/widget/color-preview.h"
+#include "ui/widget/ink-spin-button.h"
+#include "ui/widget/popover-menu.h"
 #include "ui/widget/popover-menu-item.h"
 #include "ui/widget/popover-menu.h"
 
@@ -38,26 +42,12 @@ namespace Inkscape::UI::Widget {
 using namespace Inkscape::IO;
 using Inkscape::UI::Widget::ColorNotebook;
 
-class scope {
-public:
-    scope(bool& flag): _flag(flag) {
-        flag = true;
-    }
-
-    ~scope() {
-        _flag = false;
-    }
-
-private:
-    bool& _flag;
-};
-
 void set_icon(Gtk::Button &btn, char const *pixmap)
 {
     btn.set_image_from_icon_name(pixmap, Gtk::IconSize::NORMAL);
 }
 
-// draw solid color circle with black outline; right side is to show checkerboard if color's alpha is > 0
+// draw a solid color circle with black outline; the right side is to show checkerboard if color's alpha is > 0
 Glib::RefPtr<Gdk::Pixbuf> draw_circle(int size, Colors::Color color) {
     int width = size;
     int height = size;
@@ -98,10 +88,9 @@ Glib::RefPtr<Gdk::Pixbuf> draw_circle(int size, Colors::Color color) {
 
     // (semi)transparent part
     if (opacity < 1.0) {
-        cairo_pattern_t* checkers = ink_cairo_pattern_create_checkerboard();
-        cairo_set_source(cr, checkers);
+        auto checkers = ink_cairo_pattern_create_checkerboard();
+        cairo_set_source(cr, checkers->cobj());
         cairo_fill_preserve(cr);
-        cairo_pattern_destroy(checkers);
     }
     color.addOpacity(opacity);
     ink_cairo_set_source_color(cr, color);
@@ -139,45 +128,46 @@ Glib::ustring get_repeat_icon(SPGradientSpread mode) {
     return ico;
 }
 
-GradientEditor::GradientEditor(const char* prefs):
+GradientEditor::GradientEditor(const char* prefs, Space::Type space, bool show_type_selector, bool show_colorwheel_expander):
+    _prefs(prefs),
     _builder(Inkscape::UI::create_builder("gradient-edit.glade")),
     _selector(Gtk::make_managed<GradientSelector>()),
     _colors(new Colors::ColorSet()),
     _repeat_popover{std::make_unique<UI::Widget::PopoverMenu>(Gtk::PositionType::BOTTOM)},
     _repeat_icon(get_widget<Gtk::Image>(_builder, "repeatIco")),
     _stop_tree(get_widget<Gtk::TreeView>(_builder, "stopList")),
-    _offset_btn(get_widget<Gtk::SpinButton>(_builder, "offsetSpin")),
-    _show_stops_list(get_widget<Gtk::Expander>(_builder, "stopsBtn")),
+    _offset_btn(get_widget<InkSpinButton>(_builder, "offsetSpin")),
+    _turn_gradient(get_widget<Gtk::Button>(_builder, "turnBtn")),
+    _angle_adj(get_object<Gtk::Adjustment>(_builder, "adjustmentAngle")),
+    _angle_btn(get_widget<InkSpinButton>(_builder, "angle")),
     _add_stop(get_widget<Gtk::Button>(_builder, "stopAdd")),
     _delete_stop(get_widget<Gtk::Button>(_builder, "stopDelete")),
     _stops_gallery(get_widget<Gtk::Box>(_builder, "stopsGallery")),
     _colors_box(get_widget<Gtk::Box>(_builder, "colorsBox")),
-    _linear_btn(get_widget<Gtk::ToggleButton>(_builder, "linearBtn")),
-    _radial_btn(get_widget<Gtk::ToggleButton>(_builder, "radialBtn")),
-    _turn_gradient(get_widget<Gtk::Button>(_builder, "turnBtn")),
-    _angle_adj(get_object<Gtk::Adjustment>(_builder, "adjustmentAngle")),
     _main_grid(get_widget<Gtk::Grid>(_builder, "mainGrid")),
-    _prefs(prefs)
+    _color_picker(ColorPickerPanel::create(space, get_plate_type_preference(prefs, ColorPickerPanel::None), _colors)),
+    _linear_btn(get_widget<Gtk::ToggleButton>(_builder, "type-linear")),
+    _radial_btn(get_widget<Gtk::ToggleButton>(_builder, "type-radial"))
 {
-    // gradient type buttons; not currently used, hidden, WIP
-    set_icon(_linear_btn, INKSCAPE_ICON("paint-gradient-linear"));
-    set_icon(_radial_btn, INKSCAPE_ICON("paint-gradient-radial"));
+    // gradient type buttons
+    _linear_btn.set_active();
+    _linear_btn.signal_clicked().connect([this](){ fire_change_type(true); });
+    _radial_btn.signal_clicked().connect([this](){ fire_change_type(false); });
+    if (!show_type_selector) {
+        _linear_btn.set_visible(false);
+        _radial_btn.set_visible(false);
+    }
 
     auto& reverse = get_widget<Gtk::Button>(_builder, "reverseBtn");
-    set_icon(reverse, INKSCAPE_ICON("object-flip-horizontal"));
     reverse.signal_clicked().connect([this](){ reverse_gradient(); });
 
-    set_icon(_turn_gradient, INKSCAPE_ICON("object-rotate-right"));
     _turn_gradient.signal_clicked().connect([this](){ turn_gradient(90, true); });
     _angle_adj->signal_value_changed().connect([this](){
         turn_gradient(_angle_adj->get_value(), false);
     });
 
     auto& gradBox = get_widget<Gtk::Box>(_builder, "gradientBox");
-    const int dot_size = 8;
     _gradient_image.set_visible(true);
-    _gradient_image.set_margin_start(dot_size / 2);
-    _gradient_image.set_margin_end(dot_size / 2);
     // gradient stop selected in a gradient widget; sync list selection
     _gradient_image.signal_stop_selected().connect([this](size_t index) {
         select_stop(index);
@@ -194,11 +184,18 @@ GradientEditor::GradientEditor(const char* prefs):
     });
     gradBox.append(_gradient_image);
 
+    if (show_colorwheel_expander) {
+        auto expander = Gtk::make_managed<Gtk::Expander>();
+        expander->set_label(_("Color wheel"));
+        expander->set_margin_top(8);
+        expander->property_expanded().signal_changed().connect([this, expander]{
+            _color_picker->set_plate_type(expander->get_expanded() ? ColorPickerPanel::Circle : ColorPickerPanel::None);
+        });
+        _colors_box.append(*expander);
+    }
+
     // add color selector
-    auto const color_selector = Gtk::make_managed<ColorNotebook>(_colors);
-    color_selector->set_label(_("Stop color"));
-    color_selector->set_visible(true);
-    _colors_box.append(*color_selector);
+    _colors_box.append(*_color_picker);
 
     // gradient library in a popup
     get_widget<Gtk::Popover>(_builder, "libraryPopover").set_child(*_selector);
@@ -218,6 +215,7 @@ GradientEditor::GradientEditor(const char* prefs):
         _signal_changed.emit(gradient);
     });
 
+    //todo: retire this store
     // construct store for a list of stops
     _stop_columns.add(_stopObj);
     _stop_columns.add(_stopIdx);
@@ -237,9 +235,9 @@ GradientEditor::GradientEditor(const char* prefs):
         }
     });
 
-    _show_stops_list.property_expanded().signal_changed().connect(
-        [&](){ show_stops(_show_stops_list.get_expanded()); }
-    );
+    // _show_stops_list.property_expanded().signal_changed().connect(
+    //     [&](){ show_stops(_show_stops_list.get_expanded()); }
+    // );
 
     set_icon(_add_stop, "list-add");
     _add_stop.signal_clicked().connect([this](){
@@ -277,23 +275,29 @@ GradientEditor::GradientEditor(const char* prefs):
         set_stop_color(_colors->getAverage());
     });
 
-    _offset_btn.signal_changed().connect([this]() {
+    _offset_btn.signal_value_changed().connect([this](double offset) {
         if (auto row = current_stop()) {
             auto index = row->get_value(_stopIdx);
-            double offset = _offset_btn.get_value();
-            set_stop_offset(index, offset);
+            set_stop_offset(index, offset / 100.0);
         }
     });
 
+    auto pattern = "-180.0";
+    _angle_btn.set_min_size(pattern);
+    _offset_btn.set_min_size(pattern);
+    _color_picker->get_last_column_size()->add_widget(_angle_btn);
+    _color_picker->get_last_column_size()->add_widget(_offset_btn);
+
     append(_main_grid);
 
+    _stops_list_visible = false;
+    /* == retired list of stops -> todo: remove completely
     // restore visibility of the stop list view
     _stops_list_visible = Inkscape::Preferences::get()->getBool(_prefs + "/stoplist", true);
     _show_stops_list.set_expanded(_stops_list_visible);
+    */
+    _stops_gallery.set_visible(false);
     update_stops_layout();
-}
-
-GradientEditor::~GradientEditor() noexcept {
 }
 
 void GradientEditor::set_stop_color(Inkscape::Colors::Color const &color)
@@ -347,13 +351,13 @@ void GradientEditor::stop_selected() {
 
             auto stops = sp_get_before_after_stops(stop);
             if (stops.first && stops.second) {
-                _offset_btn.set_range(stops.first->offset, stops.second->offset);
+                _offset_btn.set_range(stops.first->offset * 100, stops.second->offset * 100);
             }
             else {
-                _offset_btn.set_range(stops.first ? stops.first->offset : 0, stops.second ? stops.second->offset : 1);
+                _offset_btn.set_range(stops.first ? stops.first->offset * 100 : 0, stops.second ? stops.second->offset * 100 : 100);
             }
             _offset_btn.set_sensitive();
-            _offset_btn.set_value(stop->offset);
+            _offset_btn.set_value(stop->offset * 100);
 
             int index = row->get_value(_stopIdx);
             _gradient_image.set_focused_stop(index);
@@ -370,7 +374,7 @@ void GradientEditor::stop_selected() {
 
 void GradientEditor::insert_stop_at(double offset) {
     if (SPGradient* vector = get_gradient_vector()) {
-        // only insert new stop if there are some stops present
+        // only insert a new stop if there are some stops present
         if (vector->hasStops()) {
             SPStop* stop = sp_gradient_add_stop_at(vector, offset);
             // just select next stop; newly added stop will be in a list view after selection refresh (on idle)
@@ -542,9 +546,22 @@ void GradientEditor::selectStop(SPStop* selected) {
     }
 }
 
+void GradientEditor::set_color_picker_plate(ColorPickerPanel::PlateType type) {
+    _color_picker->set_plate_type(type);
+    set_plate_type_preference(_prefs.c_str(), type);
+}
+
+ColorPickerPanel::PlateType GradientEditor::get_color_picker_plate() const {
+    return _color_picker->get_plate_type();
+}
+
 SPGradient* GradientEditor::get_gradient_vector() {
     if (!_gradient) return nullptr;
     return sp_gradient_get_forked_vector_if_necessary(_gradient, false);
+}
+
+SPGradientType GradientEditor::get_type() const {
+    return _linear_btn.get_active() ? SP_GRADIENT_TYPE_LINEAR : SP_GRADIENT_TYPE_RADIAL;
 }
 
 void GradientEditor::set_gradient(SPGradient* gradient) {
@@ -595,10 +612,15 @@ void GradientEditor::set_gradient(SPGradient* gradient) {
         );
         auto angle = line_angle(line) * 180 / M_PI;
         _angle_adj->set_value(angle);
+
+        _linear_btn.set_active();
+    }
+    else {
+        _radial_btn.set_active();
     }
     _turn_gradient.set_sensitive(can_rotate);
-    get_widget<Gtk::SpinButton>(_builder, "angle").set_sensitive(can_rotate);
-    get_widget<Gtk::Scale>(_builder, "angleSlider").set_sensitive(can_rotate);
+    _angle_btn.set_sensitive(can_rotate);
+    // get_widget<Gtk::Scale>(_builder, "angleSlider").set_sensitive(can_rotate);
 
     // list not empty?
     if (index > 0) {
@@ -627,7 +649,7 @@ void GradientEditor::set_stop_offset(size_t index, double offset) {
     }
 }
 
-// select requested stop in a list view
+// select the requested stop in a list view
 bool GradientEditor::select_stop(size_t index) {
     if (!_gradient) return false;
 
@@ -658,6 +680,13 @@ void GradientEditor::fire_stop_selected(SPStop* stop) {
         auto scoped(_notification.block());
         emit_stop_selected(stop);
     }
+}
+
+void GradientEditor::fire_change_type(bool linear) {
+    if (_notification.pending()) return;
+
+    auto scoped(_notification.block());
+    _signal_changed.emit(_gradient);
 }
 
 } // namespace Inkscape::UI::Widget

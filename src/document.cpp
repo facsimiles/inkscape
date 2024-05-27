@@ -1861,9 +1861,11 @@ bool SPDocument::addResource(gchar const *key, SPObject *object)
     bool result = false;
 
     if ( !object->cloned ) {
-        std::vector<SPObject *> rlist = resources[key];
-        g_return_val_if_fail(std::find(rlist.begin(),rlist.end(),object) == rlist.end(), false);
-        resources[key].insert(resources[key].begin(),object);
+        auto& rlist = resources[key];
+        // return if 'object' is already on a list of resources
+        g_return_val_if_fail(std::find(rlist.begin(), rlist.end(), object) == rlist.end(), false);
+        // append, so new items appear at the end of the list
+        rlist.push_back(object);
 
         GQuark q = g_quark_from_string(key);
 
@@ -1894,11 +1896,11 @@ bool SPDocument::removeResource(gchar const *key, SPObject *object)
     bool result = false;
 
     if ( !object->cloned ) {
-        std::vector<SPObject *> rlist = resources[key];
+        auto& rlist = resources[key];
         g_return_val_if_fail(!rlist.empty(), false);
-        std::vector<SPObject*>::iterator it = std::find(resources[key].begin(),resources[key].end(),object);
+        std::vector<SPObject*>::iterator it = std::find(rlist.begin(), rlist.end(), object);
         g_return_val_if_fail(it != rlist.end(), false);
-        resources[key].erase(it);
+        rlist.erase(it);
 
         GQuark q = g_quark_from_string(key);
         resources_changed_signals[q].emit();
@@ -1909,11 +1911,11 @@ bool SPDocument::removeResource(gchar const *key, SPObject *object)
     return result;
 }
 
-std::vector<SPObject *> const SPDocument::getResourceList(gchar const *key)
+const std::vector<SPObject*>& SPDocument::getResourceList(const char* key)
 {
-    std::vector<SPObject *> emptyset;
-    g_return_val_if_fail(key != nullptr, emptyset);
-    g_return_val_if_fail(*key != '\0', emptyset);
+    if (!key || !*key) {
+        throw std::runtime_error("Missing key in getResourceList.");
+    }
 
     return resources[key];
 }

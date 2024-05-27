@@ -15,10 +15,14 @@
 
 #include <gtkmm/treemodelcolumn.h>
 
+#include "color-page.h"
+#include "color-picker-panel.h"
 #include "colors/color-set.h"
 #include "spin-scale.h"
 #include "gradient-with-stops.h"
 #include "gradient-selector-interface.h"
+#include "ink-spin-button.h"
+#include "popover-menu.h"
 #include "ui/operation-blocker.h"
 
 namespace Gtk {
@@ -36,14 +40,13 @@ class TreeView;
 } // namespace Gtk
 
 namespace Inkscape::UI::Widget {
-
+class ColorPage;
 class GradientSelector;
-class PopoverMenu;
 
 class GradientEditor final : public Gtk::Box, public GradientSelectorInterface {
 public:
-    GradientEditor(const char* prefs);
-    ~GradientEditor() noexcept final;
+    GradientEditor(const char* prefs, Space::Type space, bool show_type_selector, bool show_colorwheel_expander);
+    ~GradientEditor() noexcept override = default;
 
 private:
     sigc::signal<void ()> _signal_grabbed;
@@ -66,13 +69,17 @@ public:
     void setSpread(SPGradientSpread spread) final;
     SPGradientSpread getSpread() final;
     void selectStop(SPStop *selected) final;
+    void set_color_picker_plate(ColorPickerPanel::PlateType type);
+    ColorPickerPanel::PlateType get_color_picker_plate() const;
+    SPGradientType get_type() const;
+    ColorPickerPanel& get_picker() { return *_color_picker; }
 
 private:
     void set_gradient(SPGradient* gradient);
     void stop_selected();
     void insert_stop_at(double offset);
     void add_stop(int index);
-    void duplicate_stop();
+    // void duplicate_stop();
     void delete_stop(int index);
     void show_stops(bool visible);
     void update_stops_layout();
@@ -88,6 +95,7 @@ private:
     void set_stop_offset(size_t index, double offset);
     SPGradient* get_gradient_vector();
     void fire_stop_selected(SPStop* stop);
+    void fire_change_type(bool linear);
 
     Glib::RefPtr<Gtk::Builder> _builder;
     GradientSelector* _selector;
@@ -104,21 +112,22 @@ private:
     Gtk::TreeView& _stop_tree;
     Gtk::Button& _turn_gradient;
     Glib::RefPtr<Gtk::Adjustment> _angle_adj;
-    Gtk::SpinButton& _offset_btn;
+    InkSpinButton& _offset_btn;
+    InkSpinButton& _angle_btn;
     Gtk::Button& _add_stop;
     Gtk::Button& _delete_stop;
-    Gtk::Expander& _show_stops_list;
     bool _stops_list_visible = true;
     Gtk::Box& _stops_gallery;
     Gtk::Box& _colors_box;
-    Gtk::ToggleButton& _linear_btn;
-    Gtk::ToggleButton& _radial_btn;
     Gtk::Grid& _main_grid;
     SPGradient* _gradient = nullptr;
     SPDocument* _document = nullptr;
     OperationBlocker _update;
     OperationBlocker _notification;
     Glib::ustring _prefs;
+    std::unique_ptr<ColorPickerPanel> _color_picker;
+    Gtk::ToggleButton& _linear_btn;
+    Gtk::ToggleButton& _radial_btn;
 };
 
 } // namespace Inkscape::UI::Widget

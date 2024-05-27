@@ -315,7 +315,7 @@ void ObjectWatcher::updateRowInfo()
 
         // show ids without "#"
         char const *id = item->getId();
-        row[_model->_colLabel] = (id && !item->label()) ? id : item->defaultLabel();
+        row[_model->_colLabel] = id && !item->label() ? get_synthetic_object_name(item) : item->defaultLabel();
 
         row[_model->_colType] = item->typeName();
         row[_model->_colClipMask] =

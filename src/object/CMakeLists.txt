@@ -140,6 +140,7 @@ set(object_SRC
   sp-missing-glyph.h
   sp-namedview.h
   sp-object-group.h
+  sp-object-iterator.h
   sp-object.h
   sp-offset.h
   sp-paint-server-reference.h

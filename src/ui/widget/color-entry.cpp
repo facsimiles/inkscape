@@ -13,16 +13,17 @@
 
 #include "color-entry.h"
 
-namespace Inkscape {
-namespace UI {
-namespace Widget {
+#include "colors/spaces/gamut.h"
+#include "colors/spaces/base.h"
+#include "svg/css-ostringstream.h"
+
+namespace Inkscape::UI::Widget {
 
 ColorEntry::ColorEntry(std::shared_ptr<Colors::ColorSet> colors)
     : _colors(std::move(colors))
     , _updating(false)
     , _updatingrgba(false)
     , _prevpos(0)
-    , _lastcolor()
 {
     set_name("ColorEntry");
 
@@ -33,8 +34,9 @@ ColorEntry::ColorEntry(std::shared_ptr<Colors::ColorSet> colors)
 
     // add extra character for pasting a hash, '#11223344'
     set_max_length(9);
+    set_max_width_chars(9);
     set_width_chars(8);
-    set_tooltip_text(_("Hexadecimal RGBA value of the color"));
+    set_tooltip_text(_("Hexadecimal RGB value of the color"));
 }
 
 ColorEntry::~ColorEntry()
@@ -59,6 +61,9 @@ void ColorEntry::on_changed()
 
     _updatingrgba = true;
     if (new_color) {
+        if (auto color = _colors->get()) {
+            new_color->setOpacity(color->getOpacity());
+        }
         _colors->setAll(*new_color);
     }
     _updatingrgba = false;
@@ -76,19 +81,36 @@ void ColorEntry::_onColorChanged()
         return;
     }
 
-    _lastcolor = _colors->getAverage();;
-    auto text = _lastcolor->toString();
+    auto color = *_colors->getAverage().converted(Colors::Space::Type::RGB);
+    if (Colors::out_of_gamut(color, color.getSpace())) {
+        // out of sRGB gamut warning
+        auto r = color[0];
+        auto g = color[1];
+        auto b = color[2];
+        CSSOStringStream rgb;
+        // high precision, so we show values just barely above/below limits
+        rgb.precision(2);
+        rgb << "rgb(" << 100 * r << "% " << 100 * g << "% " << 100 * b << "%)";
+        _signal_out_of_gamut.emit(Glib::ustring::compose(_("Color %1 is out of sRGB gamut.\nIt has been mapped to sRGB gamut."), rgb.str().c_str()));
+        _warning = true;
+        color = Colors::to_gamut_css(color, color.getSpace());
+    }
+    else if (_warning) {
+        // clear warning
+        _warning = false;
+        _signal_out_of_gamut.emit({});
+    }
+    auto text = color.toString(false);
 
-    std::string old_text = get_text();
-    if (old_text != text) {
+    if (get_text().raw() != text) {
         _updating = true;
         set_text(text);
         _updating = false;
     }
 }
-}
-}
-}
+
+} // namespace
+
 /*
   Local Variables:
   mode:c++

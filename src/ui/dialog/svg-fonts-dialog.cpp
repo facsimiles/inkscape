@@ -1485,7 +1485,7 @@ Gtk::Box* SvgFontsDialog::glyphs_tab() {
     static_cast<Gtk::CellRendererText*>(_GlyphsList.get_column_cell_renderer(ColAdvance))->signal_edited().connect(
         sigc::mem_fun(*this, &SvgFontsDialog::glyph_advance_edit));
 
-    _glyphs_observer.signal_changed().connect([this]{ update_glyphs(); });
+    _glyphs_observer.signal_changed().connect([this](auto, auto){ update_glyphs(); });
 
     return &glyphs_vbox;
 }
@@ -1731,7 +1731,7 @@ void SvgFontsDialog::documentReplaced()
     _defs_observer_connection.disconnect();
     if (auto document = getDocument()) {
         _defs_observer.set(document->getDefs());
-        _defs_observer_connection = _defs_observer.signal_changed().connect([this]{ update_fonts(false); });
+        _defs_observer_connection = _defs_observer.signal_changed().connect([this](auto, auto){ update_fonts(false); });
     }
     update_fonts(true);
 }

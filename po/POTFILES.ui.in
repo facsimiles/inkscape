@@ -32,11 +32,17 @@
 ../share/ui/page-properties.glade
 ../share/ui/pattern-edit.glade
 ../share/ui/align-and-distribute.ui
+../share/ui/dash-selector.ui
 ../share/ui/dialog-measure-tool-settings.ui
 ../share/ui/dialog-spellcheck.ui
 ../share/ui/document-tab.ui
 ../share/ui/menus.ui
+../share/ui/object-properties.ui
+../share/ui/paint-attribute.ui
+../share/ui/paint-strip.ui
+../share/ui/paint-switch.ui
 ../share/ui/statusbar.ui
+../share/ui/swatch-editor.ui
 ../share/ui/textpath-popover-box.ui
 ../share/ui/toolbar-arc.ui
 ../share/ui/toolbar-booleans.ui

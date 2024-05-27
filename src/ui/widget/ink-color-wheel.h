@@ -153,7 +153,6 @@ private:
         SATURATION_VALUE
     };
 
-    static constexpr double _ring_width = 0.2;
     DragMode _mode = DragMode::NONE;
     bool _focus_on_ring = true;
 

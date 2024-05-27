@@ -18,6 +18,7 @@
 #include <glibmm/i18n.h>
 #include <glibmm/miscutils.h>
 #include <glibmm/regex.h>
+#include <glibmm/fileutils.h>
 
 #include "colors/manager.h"
 
@@ -329,6 +330,44 @@ void load_gimp_palette(PaletteFileData& palette, std::string const &path)
 }
 
 } // namespace
+
+
+namespace Inkscape {
+
+void save_gimp_palette(std::string fname, const std::vector<std::pair<int, std::string>>& colors, const char* name) {
+    try {
+        std::ostringstream ost;
+        ost << "GIMP Palette\n";
+        if (name && *name) {
+            ost << "Name: " << name << "\n";
+        }
+        ost << "Columns: 0\n";
+        ost << "#\n";
+        for (auto color : colors) {
+            auto c = color.first;
+            auto r = (c >> 16) & 0xff;
+            auto g = (c >> 8) & 0xff;
+            auto b = c & 0xff;
+            ost << r << ' ' << g << ' ' << b;
+            if (!color.second.empty()) {
+                ost << ' ';
+                // todo: escape chars?
+                ost << color.second;
+            }
+            ost << '\n';
+        }
+        Glib::file_set_contents(fname, ost.str());
+    }
+    catch (Glib::Error const &ex) {
+        g_warning("Error saving color palette: %s", ex.what());
+    }
+    catch (...) {
+        g_warning("Error saving color palette.");
+    }
+}
+
+} // Inkscape
+
 
 namespace Inkscape::UI::Dialog {
 

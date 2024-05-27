@@ -145,6 +145,7 @@ static char const preferences_skeleton[] =
   <group id="palette">
     <group id="dashes">
       <dash id="solid" style="stroke-dasharray:none"/>
+      <dash id="dash-3-2" style="stroke-dasharray:3,2"/>
       <dash id="dash-1-1" style="stroke-dasharray:1,1"/>
       <dash id="dash-1-2" style="stroke-dasharray:1,2"/>
       <dash id="dash-1-3" style="stroke-dasharray:1,3"/>

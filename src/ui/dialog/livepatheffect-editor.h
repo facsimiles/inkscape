@@ -45,6 +45,32 @@ class SPLPEItem;
 
 namespace Inkscape::UI::Dialog {
 
+class LPEMetadata : public Glib::Object {
+public:
+    LivePathEffect::EffectType type{};
+    LivePathEffect::LPECategory category{};
+    Glib::ustring label, icon_name, tooltip;
+    bool sensitive{};
+
+    static Glib::RefPtr<LPEMetadata> create(LivePathEffect::EffectType type, LivePathEffect::LPECategory category,
+        Glib::ustring label, Glib::ustring icon, Glib::ustring tooltip, bool sensitive) {
+
+        auto item = Glib::make_refptr_for_instance(new LPEMetadata());
+        item->type = type;
+        item->category = category;
+        item->label = std::move(label);
+        item->icon_name = std::move(icon);
+        item->tooltip = std::move(tooltip);
+        item->sensitive = sensitive;
+        return item;
+    }
+private:
+    LPEMetadata() {}
+};
+
+// List of live path effects that are applicable to the given 'item'
+std::vector<Glib::RefPtr<LPEMetadata>> get_list_of_applicable_lpes(SPLPEItem* item, bool use, bool include_experimental);
+
 /*
  * @brief The LivePathEffectEditor class
  */
@@ -72,9 +98,7 @@ private:
     int dndx = 0;
     int dndy = 0;
 
-    struct LPEMetadata;
-    void add_lpes(UI::Widget::CompletionPopup &, bool symbolic, std::vector<LPEMetadata> &&lpes);
-    Glib::ustring get_tooltip(LivePathEffect::EffectType, Glib::ustring const &untranslated_label);
+    void add_lpes(UI::Widget::CompletionPopup &, bool symbolic, std::vector<Glib::RefPtr<LPEMetadata>> &&lpes);
 
     void clear_lpe_list();
     void selectionChanged (Inkscape::Selection *selection                ) final;
@@ -84,7 +108,6 @@ private:
     void onAdd(Inkscape::LivePathEffect::EffectType etype);
     bool showWarning(std::string const &msg);
     void toggleVisible(Inkscape::LivePathEffect::Effect *lpe, Gtk::Button *visbutton);
-    bool can_apply(LivePathEffect::EffectType, Glib::ustring const &item_type, bool has_clip, bool has_mask);
     void removeEffect(Gtk::Expander * expander);
     [[nodiscard]] bool on_drop(Gtk::Widget &widget,
                                Glib::ValueBase const &value, int pos_target);

@@ -24,8 +24,6 @@
 #include "ui/pack.h"
 #include "ui/widget/style-subject.h"
 
-constexpr double BLUR_MULTIPLIER = 4.0;
-
 namespace Inkscape {
 namespace UI {
 namespace Widget {

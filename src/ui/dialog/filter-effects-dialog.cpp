@@ -1264,7 +1264,7 @@ FilterEffectsDialog::FilterModifier::FilterModifier(FilterEffectsDialog& d, Glib
     _list.add_controller(click);
 
     _list.get_selection()->signal_changed().connect(sigc::mem_fun(*this, &FilterModifier::on_filter_selection_changed));
-    _observer->signal_changed().connect(signal_filter_changed().make_slot());
+    _observer->signal_changed().connect([this](auto, auto) {signal_filter_changed().empty();});
 }
 
 // Update each filter's sel property based on the current object selection;
@@ -1694,7 +1694,7 @@ FilterEffectsDialog::PrimitiveList::PrimitiveList(FilterEffectsDialog& d)
     get_column(0)->set_resizable(true);
     set_headers_visible(false);
 
-    _observer->signal_changed().connect(signal_primitive_changed().make_slot());
+    _observer->signal_changed().connect([this](auto, auto){signal_primitive_changed().emit();});
     get_selection()->signal_changed().connect(sigc::mem_fun(*this, &PrimitiveList::on_primitive_selection_changed));
     signal_primitive_changed().connect(sigc::mem_fun(*this, &PrimitiveList::queue_draw));
 

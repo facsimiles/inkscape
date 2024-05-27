@@ -81,6 +81,7 @@ XmlTree::XmlTree()
     /* tree view */
     _xml_treeview = Gtk::make_managed<Inkscape::UI::Widget::XmlTreeView>();
     _xml_treeview->set_tooltip_text( _("Drag to reorder nodes") );
+    _xml_treeview->set_search_column(-1);
 
     Gtk::ScrolledWindow& tree_scroller = get_widget<Gtk::ScrolledWindow>(_builder, "tree-wnd");
     tree_scroller.set_child(*_xml_treeview);

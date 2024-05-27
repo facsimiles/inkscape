@@ -21,8 +21,10 @@
 #define SEEN_DASH_SELECTOR_H
 
 #include <gtkmm/box.h>
+#include <gtkmm/entry.h>
 
 namespace Gtk {
+class Builder;
 class DrawingArea;
 class GridView;
 class ListItem;
@@ -35,16 +37,21 @@ namespace Inkscape::UI::Widget {
 class DashSelector final : public Gtk::Box {
 
 public:
-    DashSelector();
+    DashSelector(bool compact = false);
+    DashSelector(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& /*builder*/, bool compact = false);
     ~DashSelector() final;
 
     void set_dash_pattern(const std::vector<double>& dash, double offset);
     const std::vector<double>& get_dash_pattern() { return dash_pattern; }
     double get_offset() { return offset; }
+    std::vector<double> get_custom_dash_pattern() const;
 
-    sigc::signal<void ()> changed_signal;
+    enum Change { Dash, Offset, Pattern };
+    sigc::signal<void (Change)> changed_signal;
 
 private:
+    void construct(bool compact);
+
     // Functions
     void update(int position);
 
@@ -61,11 +68,12 @@ private:
     std::vector<double> dash_pattern; // The current pattern.
     double offset = 0;                // The current offset.
 
-    // Gtk
+    Glib::RefPtr<Gtk::Builder> _builder;
     Glib::RefPtr<Gtk::SingleSelection> selection;
     Gtk::DrawingArea* drawing_area = nullptr; // MenuButton
     Gtk::Popover* popover = nullptr;
     Glib::RefPtr<Gtk::Adjustment> adjustment; // Dash offset
+    Gtk::Entry* _pattern_entry = nullptr;
 };
 
 } // namespace Inkscape::UI::Widget

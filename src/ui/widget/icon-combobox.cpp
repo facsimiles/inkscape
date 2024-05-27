@@ -7,6 +7,7 @@
 #include <gtkmm/image.h>
 #include <gtkmm/label.h>
 #include <gtkmm/picture.h>
+#include <gtkmm/togglebutton.h>
 #include "ui/util.h"
 
 namespace Inkscape::UI::Widget {
@@ -14,6 +15,7 @@ namespace Inkscape::UI::Widget {
 struct IconComboBox::ListItem : public Glib::Object {
     int id;
     Glib::ustring label;
+    Glib::ustring short_name;
     Glib::ustring icon;  // icon's name to load if icons have been enabled
     Glib::RefPtr<Gdk::Texture> image;  // image to present instead of icon if icons are disabled
     bool is_visible = true;
@@ -21,12 +23,14 @@ struct IconComboBox::ListItem : public Glib::Object {
     static Glib::RefPtr<ListItem> create(
         int id,
         Glib::ustring label,
+        Glib::ustring short_name,
         Glib::ustring icon,
         Glib::RefPtr<Gdk::Texture> image
     ) {
         auto item = Glib::make_refptr_for_instance<ListItem>(new ListItem());
         item->id = id;
         item->label = label;
+        item->short_name = short_name;
         item->icon = icon;
         item->image = image;
         return item;
@@ -35,9 +39,37 @@ private:
     ListItem() {}
 };
 
-IconComboBox::IconComboBox(bool use_icons)
+IconComboBox::IconComboBox(bool use_icons, HeaderType header)
 {
     _factory = Gtk::SignalListItemFactory::create();
+
+    auto set_up_image = [=](Gtk::Box& box, int size, bool center) {
+        if (use_icons) {
+            auto icon = Gtk::make_managed<Gtk::Image>();
+            icon->set_icon_size(Gtk::IconSize::NORMAL);
+            if (center) {
+                icon->set_halign(Gtk::Align::CENTER);
+                icon->set_hexpand();
+            }
+
+            box.append(*icon);
+        }
+        else {
+            auto image = Gtk::make_managed<Gtk::Picture>();
+            image->set_layout_manager(Gtk::BinLayout::create());
+            // int size = get_image_size();
+            image->set_size_request(size, size);
+            image->set_can_shrink(true);
+            image->set_content_fit(Gtk::ContentFit::CONTAIN);
+            image->set_valign(Gtk::Align::CENTER);
+            if (center) {
+                image->set_halign(Gtk::Align::CENTER);
+                image->set_hexpand();
+            }
+
+            box.append(*image);
+        }
+    };
 
     _factory->signal_setup().connect([=](const Glib::RefPtr<Gtk::ListItem>& list_item) {
         auto box = Gtk::make_managed<Gtk::Box>();
@@ -50,23 +82,24 @@ IconComboBox::IconComboBox(bool use_icons)
         label->set_xalign(0);
         label->set_valign(Gtk::Align::CENTER);
 
-        if (use_icons) {
-            auto icon = Gtk::make_managed<Gtk::Image>();
-            icon->set_icon_size(Gtk::IconSize::NORMAL);
+        set_up_image(*box, get_image_size(), false);
+        // if (use_icons) {
+        //     auto icon = Gtk::make_managed<Gtk::Image>();
+        //     icon->set_icon_size(Gtk::IconSize::NORMAL);
 
-            box->append(*icon);
-        }
-        else {
-            auto image = Gtk::make_managed<Gtk::Picture>();
-            image->set_layout_manager(Gtk::BinLayout::create());
-            int size = get_image_size();
-            image->set_size_request(size, size);
-            image->set_can_shrink(true);
-            image->set_content_fit(Gtk::ContentFit::CONTAIN);
-            image->set_valign(Gtk::Align::CENTER);
+        //     box->append(*icon);
+        // }
+        // else {
+        //     auto image = Gtk::make_managed<Gtk::Picture>();
+        //     image->set_layout_manager(Gtk::BinLayout::create());
+        //     int size = get_image_size();
+        //     image->set_size_request(size, size);
+        //     image->set_can_shrink(true);
+        //     image->set_content_fit(Gtk::ContentFit::CONTAIN);
+        //     image->set_valign(Gtk::Align::CENTER);
 
-            box->append(*image);
-        }
+        //     box->append(*image);
+        // }
 
         box->append(*label);
 
@@ -93,7 +126,60 @@ IconComboBox::IconComboBox(bool use_icons)
     });
 
     set_list_factory(_factory);
-    set_factory(_factory);
+
+    if (header == ImageOnly) {
+        // show only icon in closed combobox
+        _compact_factory = Gtk::SignalListItemFactory::create();
+
+        _compact_factory->signal_setup().connect([=](const Glib::RefPtr<Gtk::ListItem>& list_item) {
+            auto box = Gtk::make_managed<Gtk::Box>();
+            box->add_css_class("item-box");
+            box->set_orientation(Gtk::Orientation::HORIZONTAL);
+            set_up_image(*box, get_image_size(), true);
+            list_item->set_child(*box);
+        });
+
+        _compact_factory->signal_bind().connect([=](const Glib::RefPtr<Gtk::ListItem>& list_item) {
+            auto obj = list_item->get_item();
+            auto item = std::dynamic_pointer_cast<ListItem>(obj);
+
+            auto& box = dynamic_cast<Gtk::Box&>(*list_item->get_child());
+            auto first = box.get_first_child();
+
+            if (use_icons) {
+                dynamic_cast<Gtk::Image&>(*first).set_from_icon_name(item->icon);
+            }
+            else {
+                dynamic_cast<Gtk::Picture&>(*first).set_paintable(item->image);
+            }
+        });
+
+        set_factory(_compact_factory);
+    }
+    else if (header == LabelOnly) {
+        // show only label in closed combobox
+        _compact_factory = Gtk::SignalListItemFactory::create();
+
+        _compact_factory->signal_setup().connect([=](const Glib::RefPtr<Gtk::ListItem>& list_item) {
+            auto label = Gtk::make_managed<Gtk::Label>();
+            label->set_hexpand();
+            label->set_xalign(0.5);
+            label->set_valign(Gtk::Align::FILL);
+            list_item->set_child(*label);
+        });
+
+        _compact_factory->signal_bind().connect([=](const Glib::RefPtr<Gtk::ListItem>& list_item) {
+            auto obj = list_item->get_item();
+            auto item = std::dynamic_pointer_cast<ListItem>(obj);
+            auto& label = dynamic_cast<Gtk::Label&>(*list_item->get_child());
+            label.set_label(item->short_name.empty() ? item->label : item->short_name);
+        });
+
+        set_factory(_compact_factory);
+    }
+    else {
+        set_factory(_factory);
+    }
 
     _store = Gio::ListStore<ListItem>::create();
     _filter = Gtk::BoolFilter::create({});
@@ -127,12 +213,16 @@ void IconComboBox::refilter() {
 
 void IconComboBox::add_row(Glib::ustring const &icon_name, Glib::ustring const &label, int const id)
 {
-    _store->append(ListItem::create(id, label, icon_name, Glib::RefPtr<Gdk::Texture>() ));
+    _store->append(ListItem::create(id, label, {}, icon_name, Glib::RefPtr<Gdk::Texture>() ));
+}
+
+void IconComboBox::add_row(const Glib::ustring& icon_name, const Glib::ustring& full_name, const Glib::ustring& short_name, int id) {
+    _store->append(ListItem::create(id, full_name, short_name, icon_name, Glib::RefPtr<Gdk::Texture>() ));
 }
 
 void IconComboBox::add_row(Cairo::RefPtr<Cairo::Surface> image, const Glib::ustring& label, int id) {
     auto tex = to_texture(image);
-    _store->append(ListItem::create(id, label, Glib::ustring(), tex));
+    _store->append(ListItem::create(id, label, {}, {}, tex));
 }
 
 void IconComboBox::set_active_by_id(int const id)
@@ -184,6 +274,12 @@ int IconComboBox::get_active_row_id() const
         return item->id;
     }
     return -1;
+}
+
+void IconComboBox::set_has_frame(bool frame) {
+    if (auto btn = dynamic_cast<Gtk::ToggleButton*>(get_first_child())) {
+        btn->set_has_frame(frame);
+    }
 }
 
 } // namespace Inkscape::UI::Widget

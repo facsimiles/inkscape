@@ -18,6 +18,7 @@
 #include "preferences.h"  // PrefObserver
 #include "ui/dialog/dialog-base.h"
 #include "ui/dialog/global-palettes.h"
+#include "ui/widget/edit-operation.h"
 #include "ui/widget/palette_t.h"
 
 namespace Gtk {
@@ -57,8 +58,21 @@ class ColorItem;
 class SwatchesPanel final : public DialogBase
 {
 public:
-    SwatchesPanel(bool compact, char const *prefsPath = "/dialogs/swatches");
+    // SwatchesPanel is used in different places and exposes different capabilities:
+    enum PanelType {
+        // regular "Swatches" dialog with selection of color palettes
+        Dialog,
+        // compact color palette used to show frequently used colors (at the bottom of the app)
+        Compact,
+        // swatch fill popup with a list of document swatches only
+        Popup
+    };
+    SwatchesPanel(PanelType panel_type, char const *prefsPath = "/dialogs/swatches");
     ~SwatchesPanel() final;
+
+    void select_vector(SPGradient* vector);
+    SPGradient* get_selected_vector() const;
+    sigc::signal<void (EditOperation)>& get_signal_operation() { return _signal_action; }
 
 private:
     void documentReplaced() final;
@@ -70,7 +84,7 @@ private:
     void _scheduleUpdate();
     void _update();
 
-    void update_palettes(bool compact);
+    void update_palettes(PanelType panel_type);
     void rebuild();
     bool load_swatches();
     bool load_swatches(std::string const &path);
@@ -127,8 +141,10 @@ private:
 
     Glib::ustring _color_filter_text;
     Gtk::Button& _new_btn;
-    Gtk::Button& _edit_btn;
     Gtk::Button& _delete_btn;
+    Gtk::Button& _import_btn;
+    Gtk::Button& _open_btn;
+    sigc::signal<void (EditOperation)> _signal_action;
 };
 
 } // namespace Dialog

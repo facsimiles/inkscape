@@ -16,6 +16,16 @@
 #include <gtkmm/notebook.h>
 #include <2geom/rect.h>
 
+class SPObject;
+
+namespace Gtk {
+class Button;
+}
+
+namespace Inkscape::UI::Widget {
+class InkSpinButton;
+}
+
 /*
  * Use these errors when building from glade files for graceful
  * fallbacks and prevent crashes from corrupt ui files.
@@ -241,8 +251,20 @@ Glib::RefPtr<Gdk::Texture> to_texture(Cairo::RefPtr<Cairo::Surface> const &surfa
 // Widget has to have a name given with set_name.
 void restrict_minsize_to_square(Gtk::Widget& widget, int min_size_px);
 
+// Add degree symbol suffix to the spin button
+void set_degree_suffix(Inkscape::UI::Widget::InkSpinButton& button);
+// Add percent symbol suffix to the spin button
+void set_percent_suffix(Inkscape::UI::Widget::InkSpinButton& button);
+
 /// Get the text from a GtkEditable without the temporary copy imposed by gtkmm.
 char const *get_text(Gtk::Editable const &editable);
+
+// Create managed button with label and icon
+Gtk::Button* create_button(const char* label, const char* icon);
+
+// Get a display name for the given object using its type and ID.
+// This name can be used if the object's label is not set.
+Glib::ustring get_synthetic_object_name(SPObject const* object);
 
 #endif // UI_UTIL_SEEN
 

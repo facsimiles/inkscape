@@ -28,56 +28,88 @@ ColorPicker::ColorPicker(Glib::ustring title,
                          Colors::Color const &initial,
                          bool const undo,
                          bool use_transparency)
-    : _preview(Gtk::make_managed<ColorPreview>(initial.toRGBA()))
+    : _preview(new ColorPreview(initial.toRGBA()))
     , _title(std::move(title))
     , _undo(undo)
     , _colors(std::make_shared<Colors::ColorSet>(nullptr, use_transparency))
 {
-    // set tooltip if given, otherwise leave original tooltip in place (from external button)
+    // set tooltip if given, otherwise leave the original tooltip in place (from the external button)
     if (!tip.empty()) {
         set_tooltip_text(tip);
     }
 
     _colors->set(initial);
-    _construct();
+    _construct(nullptr);
+}
+
+ColorPicker::ColorPicker(Gtk::Widget& popup_content, const Glib::ustring& tip):
+    _preview(new ColorPreview(0x0)),
+    _colors(std::make_shared<Colors::ColorSet>(nullptr, true)) {
+
+    set_tooltip_text(tip);
+    _construct(&popup_content);
 }
 
 ColorPicker::ColorPicker(BaseObjectType *cobject, Glib::RefPtr<Gtk::Builder> const &,
                          Glib::ustring title, bool use_transparency)
     : Gtk::MenuButton(cobject)
-    , _preview(Gtk::make_managed<ColorPreview>(0x0))
+    , _preview(new ColorPreview(0x0))
     , _title(std::move(title))
     , _colors(std::make_shared<Colors::ColorSet>(nullptr, use_transparency))
 {
-    _construct();
+    _construct(nullptr);
 }
 
-void ColorPicker::_construct() {
-    // match min height with that of the current theme button and enforce square shape for our color picker
-    Gtk::Button button;
-    auto height = button.measure(Gtk::Orientation::VERTICAL).sizes.minimum;
-    set_name("ColorPicker");
-    restrict_minsize_to_square(*this, height);
+void ColorPicker::_construct(Gtk::Widget* content) {
+    if (!has_css_class("small")) {
+        // match min height with that of the current theme button and enforce a square shape for our color picker
+        Gtk::Button button;
+        auto height = button.measure(Gtk::Orientation::VERTICAL).sizes.minimum;
+        set_name("ColorPicker");
+        restrict_minsize_to_square(*this, height);
+    }
+
+    if (content) {
+        _popup.set_child(*content);
+    }
 
     _preview->setStyle(ColorPreview::Outlined);
     set_child(*_preview);
 
-    // postpone color selector creation until popup is open
-    _popup.signal_show().connect([this](){
-        if (!_color_selector) {
-            _color_selector = Gtk::make_managed<ColorNotebook>(_colors);
-            _color_selector->set_label(_title);
-            _color_selector->set_margin(4);
-            _popup.set_child(*_color_selector);
-        }
-    });
+    if (!content) {
+        // postpone color selector creation until the popup is open
+        _popup.signal_show().connect([this](){
+            if (!_color_selector) {
+                _color_selector = Gtk::make_managed<ColorNotebook>(_colors);
+                _color_selector->set_label(_title);
+                _color_selector->set_margin(4);
+                _popup.set_child(*_color_selector);
+            }
+        });
+    }
     set_popover(_popup);
+
+    set_create_popup_func([this](){ _signal_open.emit(); });
 
     _colors->signal_changed.connect(sigc::mem_fun(*this, &ColorPicker::_onSelectedColorChanged));
     _colors->signal_released.connect(sigc::mem_fun(*this, &ColorPicker::_onSelectedColorChanged));
 }
 
 ColorPicker::~ColorPicker() = default;
+
+void ColorPicker::set_icon(const Glib::ustring& icon_name) {
+    if (icon_name.empty()) {
+        set_icon_name(icon_name);
+        unset_child();
+        set_child(*_preview);
+        remove_css_class("icon");
+    }
+    else {
+        set_icon_name(icon_name);
+        unset_child();
+        add_css_class("icon");
+    }
+}
 
 void ColorPicker::setTitle(Glib::ustring title) {
     _title = std::move(title);

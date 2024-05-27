@@ -48,6 +48,7 @@
 #include "live_effects/effect.h"
 #include "live_effects/lpeobject.h"
 #include "message-stack.h"
+#include "page-manager.h"
 #include "object/box3d.h"
 #include "object/object-set.h"
 #include "object/persp3d.h"
@@ -85,6 +86,7 @@
 #include "svg/svg.h"
 #include "text-chemistry.h"
 #include "text-editing.h"
+#include "numeric/symmetric-matrix-fs-operation.h"
 #include "ui/clipboard.h"
 #include "ui/icon-names.h"
 #include "ui/tool/control-point-selection.h"
@@ -4300,6 +4302,188 @@ void unhide_all(SPDesktop *dt) {
 
 void unhide_all_in_all_layers(SPDesktop *dt) {
     process_all(&unhide, dt, false);
+}
+
+namespace {
+
+const char* get_action_key(double mh, double sh, double mv, double sv) {
+    // do the action only if one of the scales/moves is greater than half the last significant
+    // digit in the spinbox (currently spinboxes have 3 fractional digits, so that makes 0.0005). If
+    // the value was changed by the user, the difference will be at least that much; otherwise it's
+    // just rounding difference between the spinbox value and actual value, so no action is
+    // performed
+    double const threshold = 5e-4;
+    const char* const action = mh > threshold ? "move:horizontal:" :
+                               sh > threshold ? "scale:horizontal:" :
+                               mv > threshold ? "move:vertical:" :
+                               sv > threshold ? "scale:vertical:" : nullptr;
+    // if (!action) {
+        // return nullptr;
+    // }
+    // _action_key = _action_prefix + action;
+    return action; //_action_key.c_str();
+}
+
+}
+
+void sp_transform_selected_items(SPDesktop* desktop, const Geom::Rect& rect, const Inkscape::Util::Unit* unit,
+        const std::string& action_prefix,
+        bool transform_stroke, bool preserve_transform, bool use_visual_box) {
+
+    if (!desktop || !unit) return;
+
+    auto selection = desktop->getSelection();
+    auto document = desktop->getDocument();
+    auto& pm = document->getPageManager();
+    auto page = pm.getSelectedPageRect();
+    auto page_correction = document->get_origin_follows_page();
+
+    document->ensureUpToDate();
+
+    Geom::OptRect bbox_vis = selection->visualBounds();
+    Geom::OptRect bbox_geom = selection->geometricBounds();
+    Geom::OptRect bbox_user = selection->preferredBounds();
+
+    if (!bbox_user) {
+        return;
+    }
+
+    double old_w = bbox_user->width();
+    double old_h = bbox_user->height();
+    double new_w, new_h, new_x, new_y = 0;
+
+    auto x = rect.min().x(); // _x_item.get_adjustment();
+    auto y = rect.min().y(); //_y_item.get_adjustment();
+    auto w = rect.width(); // _w_item.get_adjustment();
+    auto h = rect.height(); // _h_item.get_adjustment();
+
+    if (unit->type == Util::UNIT_TYPE_LINEAR) {
+        new_w = Quantity::convert(w, unit, "px");
+        new_h = Quantity::convert(h, unit, "px");
+        new_x = Quantity::convert(x, unit, "px");
+        new_y = Quantity::convert(y, unit, "px");
+
+    } else {
+        double old_x = bbox_user->min()[Geom::X] + old_w * selection->anchor.x();
+        double old_y = bbox_user->min()[Geom::Y] + old_h * selection->anchor.y();
+
+        // Adjust against selected page, so later correction isn't broken.
+        if (page_correction) {
+            old_x -= page.left();
+            old_y -= page.top();
+        }
+
+        new_x = old_x * (x / 100 / unit->factor);
+        new_y = old_y * (y / 100 / unit->factor);
+        new_w = old_w * (w / 100 / unit->factor);
+        new_h = old_h * (h / 100 / unit->factor);
+    }
+
+    // Adjust depending on the selected anchor.
+    double x0 = new_x - old_w * selection->anchor.x() - (new_w - old_w) * selection->anchor.x();
+    double y0 = new_y - old_h * selection->anchor.y() - (new_h - old_h) * selection->anchor.y();
+
+    // Adjust according to the selected page, if needed
+    if (page_correction) {
+        x0 += page.left();
+        y0 += page.top();
+    }
+
+    double x1 = x0 + new_w;
+    // double xrel = new_w / old_w;
+    double y1 = y0 + new_h;
+    // double yrel = new_h / old_h;
+
+    // Keep proportions if lock is on
+    // if (_lock_btn.get_active()) {
+    //     if (adj == _adj_h) {
+    //         x1 = x0 + yrel * bbox_user->dimensions()[Geom::X];
+    //     } else if (adj == _adj_w) {
+    //         y1 = y0 + xrel * bbox_user->dimensions()[Geom::Y];
+    //     }
+    // }
+
+    // scales and moves, in px
+    double mh = fabs(x0 - bbox_user->min().x());
+    double sh = fabs(x1 - bbox_user->max().x());
+    double mv = fabs(y0 - bbox_user->min().y());
+    double sv = fabs(y1 - bbox_user->max().y());
+
+    // unless the unit is %, convert the scales and moves to the unit
+    if (unit->type == Util::UNIT_TYPE_LINEAR) {
+        mh = Quantity::convert(mh, "px", unit);
+        sh = Quantity::convert(sh, "px", unit);
+        mv = Quantity::convert(mv, "px", unit);
+        sv = Quantity::convert(sv, "px", unit);
+    }
+
+    if (auto actionkey = get_action_key(mh, sh, mv, sv)) {
+        Geom::Affine scaler;
+        if (use_visual_box) { // SPItem::VISUAL_BBOX
+            scaler = get_scale_transform_for_variable_stroke(*bbox_vis, *bbox_geom, transform_stroke, preserve_transform, x0, y0, x1, y1);
+        } else {
+            // 1) We could have used the newer get_scale_transform_for_variable_stroke() here, but to avoid regressions
+            // we'll just use the old get_scale_transform_for_uniform_stroke() for now.
+            // 2) get_scale_transform_for_uniform_stroke() is intended for visual bounding boxes, not geometrical ones!
+            // we'll trick it into using a geometric bounding box though, by setting the stroke width to zero
+            scaler = get_scale_transform_for_uniform_stroke(*bbox_geom, 0, 0, false, false, x0, y0, x1, y1);
+        }
+
+        selection->applyAffine(scaler);
+        static std::string key = action_prefix + actionkey; // simple logger doesn't own strings
+        DocumentUndo::maybeDone(document, key.c_str(), _("Transform selected items"), INKSCAPE_ICON("tool-pointer"));
+    }
+}
+
+Geom::Rect sp_selection_get_xywh(SPDesktop* desktop, const Inkscape::Util::Unit* unit, bool use_visual_box) {
+    if (!desktop || !unit) return Geom::Rect();
+
+    auto sel = desktop->getSelection();
+    auto bbox = sel->bounds(use_visual_box ? SPItem::VISUAL_BBOX : SPItem::GEOMETRIC_BBOX);
+    if (sel->isEmpty() || !bbox) return {};
+
+    // auto const unit = _tracker->getActiveUnit();
+
+    auto width = bbox->width();
+    auto height = bbox->height();
+    auto x = bbox->left() + width * sel->anchor.x();
+    auto y = bbox->top() + height * sel->anchor.y();
+
+    if (desktop->getDocument()->get_origin_follows_page()) {
+        auto &pm = desktop->getDocument()->getPageManager();
+        auto page = pm.getSelectedPageRect();
+        x -= page.left();
+        y -= page.top();
+    }
+
+    // auto _adj_x = _x_item.get_adjustment();
+    // auto _adj_y = _y_item.get_adjustment();
+    // auto _adj_w = _w_item.get_adjustment();
+    // auto _adj_h = _h_item.get_adjustment();
+
+    if (unit->type == Util::UNIT_TYPE_DIMENSIONLESS) {
+        // todo if/when needed
+        // double const val = unit->factor * 100;
+        // _adj_x->set_value(val);
+        // _adj_y->set_value(val);
+        // _adj_w->set_value(val);
+        // _adj_h->set_value(val);
+        // _tracker->setFullVal(_adj_x->gobj(), x);
+        // _tracker->setFullVal(_adj_y->gobj(), y);
+        // _tracker->setFullVal(_adj_w->gobj(), width);
+        // _tracker->setFullVal(_adj_h->gobj(), height);
+        return {};
+    }
+    else {
+        return Geom::Rect::from_xywh(
+            Quantity::convert(x, "px", unit),
+            Quantity::convert(y, "px", unit),
+            Quantity::convert(width, "px", unit),
+            Quantity::convert(height, "px", unit)
+        );
+    }
+
+    return {};
 }
 
 /*

@@ -6,7 +6,7 @@
  * Author:
  *   Michael Kowalski
  *
- * Copyright (C) 2020-2021 Michael Kowalski
+ * Copyright (C) 2020-2024 Michael Kowalski
  *
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
@@ -23,12 +23,15 @@
 #include "object/sp-stop.h"
 #include "ui/controller.h"
 #include "ui/util.h"
+#include "util/drawing-utils.h"
 #include "util/numeric/converters.h"
 #include "util/object-renderer.h"
+#include "util/theme-utils.h"
 
 // c.f. share/ui/style.css
-// gradient's image height (multiple of checkerboard tiles, they are 6x6)
-constexpr static int GRADIENT_IMAGE_HEIGHT = 3 * 6;
+// gradient's image height (multiple of checkerboard tiles)
+constexpr int GRADIENT_CHECKERBOARD_TILE = 7;
+constexpr int GRADIENT_IMAGE_HEIGHT = 3 * GRADIENT_CHECKERBOARD_TILE;
 
 namespace Inkscape::UI::Widget {
 
@@ -62,7 +65,7 @@ GradientWithStops::GradientWithStops() :
     add_controller(click);
 
     auto const motion = Gtk::EventControllerMotion::create();
-    motion->signal_motion().connect(sigc::mem_fun(*this, &GradientWithStops::on_motion));
+    motion->signal_motion().connect([this, motion=motion.get()](auto x, auto y) { on_motion(x, y, motion->get_current_event_state()); });
     add_controller(motion);
 
     auto const key = Gtk::EventControllerKey::create();
@@ -98,7 +101,7 @@ void GradientWithStops::modified() {
         SPStop* stop = _gradient->getFirstStop();
         while (stop) {
             _stops.push_back(stop_t {
-                .offset = stop->offset, .color = stop->getColor()
+                .offset = stop->offset, .color = stop->getColor(), .opacity = stop->getColor().getOpacity()
             });
             stop = stop->getNextStop();
         }
@@ -112,8 +115,7 @@ void GradientWithStops::update() {
 }
 
 // capture background color when styles change
-void GradientWithStops::css_changed(GtkCssStyleChange * /*change*/)
-{
+void GradientWithStops::css_changed(GtkCssStyleChange * /*change*/) {
     if (auto wnd = dynamic_cast<Gtk::Window*>(this->get_root())) {
         _background_color = get_color_with_class(*wnd, "theme_bg_color");
     }
@@ -134,7 +136,7 @@ GradientWithStops::stop_pos_t GradientWithStops::get_stop_position(size_t index,
     }
 
     // half of the stop template width; round it to avoid half-pixel coordinates
-    const auto dx = round((_template.get_width_px() + 1) / 2);
+    const auto dx = round(_template.get_width_px() / 2);
 
     auto pos = [&](double offset) { return round(layout.x + layout.width * CLAMP(offset, 0, 1)); };
     const auto& v = _stops;
@@ -171,9 +173,9 @@ GradientWithStops::stop_pos_t GradientWithStops::get_stop_position(size_t index,
 
 // widget's layout; mainly location of the gradient's image and stop handles
 GradientWithStops::layout_t GradientWithStops::get_layout() const {
-    const auto stop_width = _template.get_width_px();
-    const auto half_stop = round((stop_width + 1) / 2);
-    const auto x = half_stop;
+    const double stop_width = _template.get_width_px();
+    const double half_stop = round(stop_width / 2);
+    const double x = half_stop;
     const double width = get_width() - stop_width;
     const double height = get_height();
 
@@ -244,8 +246,7 @@ GradientWithStops::limits_t GradientWithStops::get_stop_limits(int maybe_index) 
     }
 }
 
-std::optional<bool> GradientWithStops::focus(Gtk::DirectionType const direction)
-{
+std::optional<bool> GradientWithStops::focus(Gtk::DirectionType const direction) {
     // On arrow key, let ::key-pressed move focused stop (horz) / nothing (vert)
     if (!(direction == Gtk::DirectionType::TAB_FORWARD || direction == Gtk::DirectionType::TAB_BACKWARD)) {
         return true;
@@ -352,8 +353,7 @@ void GradientWithStops::on_click_pressed(int n_press, double x, double y)
     }
 }
 
-void GradientWithStops::on_click_released(int /*n_press*/, double x, double y)
-{
+void GradientWithStops::on_click_released(int /*n_press*/, double x, double y) {
     set_stop_cursor(get_cursor(x, y));
     _dragging = false;
 }
@@ -372,9 +372,11 @@ void GradientWithStops::move_stop(int stop_index, double offset_shift) {
     }
 }
 
-void GradientWithStops::on_motion(double x, double y)
-{
+void GradientWithStops::on_motion(double x, double y, Gdk::ModifierType state) {
     if (!_gradient) return;
+
+    auto drag = Controller::has_flag(state, Gdk::ModifierType::BUTTON1_MASK);
+    if (!drag) _dragging = false;
 
     if (_dragging) {
         // move stop to a new position (adjust offset)
@@ -394,8 +396,7 @@ void GradientWithStops::on_motion(double x, double y)
 }
 
 Glib::RefPtr<Gdk::Cursor> const *
-GradientWithStops::get_cursor(double const x, double const y) const
-{
+GradientWithStops::get_cursor(double const x, double const y) const {
     if (!_gradient) return nullptr;
 
     // check if mouse if over stop handle that we can adjust
@@ -412,8 +413,7 @@ GradientWithStops::get_cursor(double const x, double const y) const
     return nullptr;
 }
 
-void GradientWithStops::set_stop_cursor(Glib::RefPtr<Gdk::Cursor> const * const cursor)
-{
+void GradientWithStops::set_stop_cursor(Glib::RefPtr<Gdk::Cursor> const * const cursor) {
     if (_cursor_current == cursor) return;
 
     if (cursor != nullptr) {
@@ -425,23 +425,30 @@ void GradientWithStops::set_stop_cursor(Glib::RefPtr<Gdk::Cursor> const * const 
     _cursor_current = cursor;
 }
 
-void GradientWithStops::draw_func(Cairo::RefPtr<Cairo::Context> const &cr,
-                                  int /*width*/, int /*height*/)
-{
+void GradientWithStops::draw_func(Cairo::RefPtr<Cairo::Context> const &ctx, int /*width*/, int /*height*/) {
     const double scale = get_scale_factor();
     const auto layout = get_layout();
 
     if (layout.width <= 0) return;
 
+    auto grad = layout;
+    grad.x -= 1;
+    grad.width += 2;
+    int radius = 2;
+    auto rect = Geom::Rect::from_xywh(grad.x, grad.y, grad.width, GRADIENT_IMAGE_HEIGHT);
+    Util::rounded_rectangle(ctx, rect, radius);
+    ctx->clip();
     // empty gradient checkboard or gradient itself
-    cr->rectangle(layout.x, layout.y, layout.width, GRADIENT_IMAGE_HEIGHT);
-    draw_gradient(cr, _gradient, layout.x, layout.width);
+    ctx->rectangle(grad.x, grad.y, grad.width, GRADIENT_IMAGE_HEIGHT);
+    draw_gradient(ctx, _gradient, grad.x, grad.width, GRADIENT_CHECKERBOARD_TILE);
+    Util::draw_standard_border(ctx, rect, Util::is_current_theme_dark(*this), radius, get_scale_factor());
+    ctx->reset_clip();
 
     if (!_gradient) return;
 
     // draw stop handles
 
-    cr->begin_new_path();
+    ctx->begin_new_path();
 
     auto const fg = get_color();
     auto const &bg = _background_color;
@@ -476,28 +483,28 @@ void GradientWithStops::draw_func(Cairo::RefPtr<Cairo::Context> const &cr,
 
         // selected handle sports a 'tip' to make it easily noticeable
         if (is_selected && tip) {
-            cr->save();
+            ctx->save();
             // scale back to physical pixels
-            cr->scale(1 / scale, 1 / scale);
+            ctx->scale(1 / scale, 1 / scale);
             // paint tip bitmap
-            Gdk::Cairo::set_source_pixbuf(cr, tip, round(pos.tip * scale - tip->get_width() / 2),
+            Gdk::Cairo::set_source_pixbuf(ctx, tip, round(pos.tip * scale - tip->get_width() / 2),
                                                    layout.y * scale);
-            cr->paint();
-            cr->restore();
+            ctx->paint();
+            ctx->restore();
         }
 
         // calc space available for stop marker
-        cr->save();
-        cr->rectangle(pos.left, layout.y, pos.right - pos.left, layout.height);
-        cr->clip();
+        ctx->save();
+        ctx->rectangle(pos.left, layout.y, pos.right - pos.left, layout.height);
+        ctx->clip();
         // scale back to physical pixels
-        cr->scale(1 / scale, 1 / scale);
+        ctx->scale(1 / scale, 1 / scale);
         // paint bitmap
-        Gdk::Cairo::set_source_pixbuf(cr, pix, round(pos.tip * scale - pix->get_width() / 2),
+        Gdk::Cairo::set_source_pixbuf(ctx, pix, round(pos.tip * scale - pix->get_width() / 2),
                                                pos.top * scale);
-        cr->paint();
-        cr->restore();
-        cr->reset_clip();
+        ctx->paint();
+        ctx->restore();
+        ctx->reset_clip();
     }
 }
 
