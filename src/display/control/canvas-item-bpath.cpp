@@ -15,7 +15,6 @@
  */
 
 #include "canvas-item-bpath.h"
-#include <cairo.h>
 #include <cairomm/matrix.h>
 #include <cstdint>
 

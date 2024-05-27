@@ -23,7 +23,6 @@
 #include "desktop.h"
 #include "display/cairo-utils.h"
 #include "display/control/canvas-item-bpath.h"
-#include "display/control/canvas-item-enums.h"
 #include "display/control/canvas-item-rect.h"
 #include "display/control/ctrl-handle-manager.h"
 #include "display/control/ctrl-handle-styling.h"

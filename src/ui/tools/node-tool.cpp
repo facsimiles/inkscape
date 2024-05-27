@@ -19,7 +19,6 @@
 #include <gdk/gdkkeysyms.h>
 
 #include "desktop.h"
-#include "display/cairo-utils.h"
 #include "document.h"
 #include "message-context.h"
 #include "rubberband.h"

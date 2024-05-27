@@ -13,14 +13,12 @@
 
 #include <cairomm/pattern.h>
 #include <cairomm/refptr.h>
-#include <cstdint>
 #include <2geom/point.h>
 #include <2geom/path.h>
 #include <2geom/rect.h>
 #include <vector>
 #include "display/control/canvas-item-enums.h"
 #include "display/control/canvas-item-ptr.h"
-#include "display/control/ctrl-handle-styling.h"
 
 /* fixme: do multidocument safe */
 
@@ -44,19 +42,6 @@ public:
         TOUCHRECT
     };
 
-    /**
-     * Styling information for the rubberband
-     */
-    struct Style
-    {
-        bool is_dashed{false};
-        uint32_t fill{0x277fff1a};
-        uint32_t stroke{0x277fffff};
-        uint32_t stroke_outset{0x0};
-        double stroke_width{1.0}; // Only used by Touchpath
-        Cairo::RefPtr<Cairo::Pattern> fill_pattern;
-    };
-
     void start(SPDesktop *desktop, Geom::Point const &p, bool tolerance = false);
     void move(Geom::Point const &p);
     Geom::OptRect getRectangle() const;
@@ -70,7 +55,6 @@ public:
 
     constexpr static Rubberband::Mode get_default_mode() { return Rubberband::Mode::RECT; };
     constexpr static CanvasItemCtrlType get_default_handle() { return CanvasItemCtrlType::RUBBERBAND_RECT; };
-    static Inkscape::Rubberband::Style get_default_style(Rubberband::Mode mode);
     void set_mode(Rubberband::Mode mode) { _mode = mode; };
     void set_handle(CanvasItemCtrlType handle) { _handle = handle; };
 

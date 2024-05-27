@@ -35,8 +35,6 @@
 #include "desktop-style.h"
 #include "desktop.h"
 #include "display/control/canvas-item-enums.h"
-#include "display/control/ctrl-handle-manager.h"
-#include "display/control/ctrl-handle-styling.h"
 #include "document-undo.h"
 #include "document.h"
 #include "layer-manager.h"

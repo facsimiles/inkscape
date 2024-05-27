@@ -29,7 +29,6 @@
 #include <cairomm/refptr.h>
 #include <cairomm/surface.h>
 #include <cmath>
-#include <cairo.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <glib/gstdio.h>
 #include <glibmm/fileutils.h>
@@ -1532,8 +1531,7 @@ ink_cairo_pattern_create_slanting_stripes(uint32_t color){
     auto pattern = Cairo::SurfacePattern::create(surface);
     pattern->set_extend(Cairo::SurfacePattern::Extend::REPEAT);
     pattern->set_filter(Cairo::SurfacePattern::Filter::NEAREST);
-    // TODO: Is this the correct place for the matrix?
-    pattern->set_matrix(Cairo::rotation_matrix((3 * M_PI) / 4));
+    pattern->set_matrix(Cairo::rotation_matrix(3 * M_PI / 4));
     return pattern;
 }
 

@@ -25,8 +25,6 @@
  */
 
 #include "display/control/canvas-item-enums.h"
-#include "display/control/ctrl-handle-manager.h"
-#include "display/control/ctrl-handle-styling.h"
 #define noERASER_VERBOSE
 
 #include "eraser-tool.h"

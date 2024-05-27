@@ -20,7 +20,6 @@
 #include <cstdint>
 #include <memory>
 #include <2geom/path.h>
-#include <optional>
 
 #include "canvas-item.h"
 
