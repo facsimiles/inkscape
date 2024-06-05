@@ -331,10 +331,7 @@ void CanvasItem::set_outline_width(double width)
  * Get the effective outline
  */
 double CanvasItem::get_effective_outline() const {
-    /* Outline extends in two directions, but it's only generally visible in the outer direction.
-     * The inner direction is usually drawn over by a fill.
-     * TODO: Worry about device scale and pixel fitting if relevant
-     */
+    // Outline extends in two directions, so we scale by 2
     return _stroke_width + 2 * _outline_width;
 }
 

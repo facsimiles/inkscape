@@ -116,10 +116,12 @@ void CanvasItemRect::_render(Inkscape::CanvasItemBuffer &buf) const
     bool const axis_aligned = (Geom::are_near(aff[1], 0) && Geom::are_near(aff[2], 0))
                            || (Geom::are_near(aff[0], 0) && Geom::are_near(aff[3], 0));
 
-    // If so, then snap the rectangle to the pixel grid.
+    // If we are and the effective outline is of odd width then snap the rectangle to the pixel grid.
     auto rect = _rect;
     if (axis_aligned) {
-        rect = (floor(_rect * aff) + Geom::Point(0.5, 0.5)) * aff.inverse();
+        auto is_odd = static_cast<int>(std::round(get_effective_outline())) & 1;
+        auto shift = is_odd ? Geom::Point(0.5, 0.5) : Geom::Point();
+        rect = (floor(_rect * aff) + shift) * aff.inverse();
     }
 
     buf.cr->save();
