@@ -187,10 +187,8 @@ void CanvasItemBpath::_render(Inkscape::CanvasItemBuffer &buf) const
         buf.cr->restore();
     }
 
-    // Do stroke outline, but only if we have a stroke
-    // Doing an outline without a stroke doesn't make much sense,
-    // that could very well be just a stroke with a larger width
-    if (do_stroke && _outline_width > 0 && (SP_RGBA32_A_U(_outline) > 0)) {
+    // Do outline
+    if ((SP_RGBA32_A_U(_outline) > 0) && _outline_width > 0) {
         buf.cr->set_source_rgba(SP_RGBA32_R_F(_outline), SP_RGBA32_G_F(_outline),
                                 SP_RGBA32_B_F(_outline), SP_RGBA32_A_F(_outline));
         buf.cr->set_line_width(get_effective_outline());
@@ -198,7 +196,7 @@ void CanvasItemBpath::_render(Inkscape::CanvasItemBuffer &buf) const
     }
 
     // Do stroke
-    if (do_stroke) {
+    if (do_stroke && _stroke_width > 0) {
 
         if (!_dashes.empty()) {
             buf.cr->set_dash(_dashes, 0.0); // 0.0 is offset

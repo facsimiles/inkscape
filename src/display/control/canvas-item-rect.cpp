@@ -166,16 +166,20 @@ void CanvasItemRect::_render(Inkscape::CanvasItemBuffer &buf) const
     // We maybe have painted the background, back to "normal" compositing
 
     // Do outline
-    buf.cr->set_source_rgba(SP_RGBA32_R_F(_outline), SP_RGBA32_G_F(_outline),
-                            SP_RGBA32_B_F(_outline), SP_RGBA32_A_F(_outline));
-    buf.cr->set_line_width(get_effective_outline());
-    buf.cr->stroke_preserve();
+    if ((SP_RGBA32_A_U(_outline) > 0) && _outline_width > 0) {
+        buf.cr->set_source_rgba(SP_RGBA32_R_F(_outline), SP_RGBA32_G_F(_outline),
+                                SP_RGBA32_B_F(_outline), SP_RGBA32_A_F(_outline));
+        buf.cr->set_line_width(get_effective_outline());
+        buf.cr->stroke_preserve();
+    }
 
     // Do stroke
-    buf.cr->set_source_rgba(SP_RGBA32_R_F(_stroke), SP_RGBA32_G_F(_stroke),
-                            SP_RGBA32_B_F(_stroke), SP_RGBA32_A_F(_stroke));
-    buf.cr->set_line_width(_stroke_width);
-    buf.cr->stroke_preserve();
+    if (SP_RGBA32_A_U(_stroke) > 0 && _stroke_width > 0) {
+        buf.cr->set_source_rgba(SP_RGBA32_R_F(_stroke), SP_RGBA32_G_F(_stroke),
+                                SP_RGBA32_B_F(_stroke), SP_RGBA32_A_F(_stroke));
+        buf.cr->set_line_width(_stroke_width);
+        buf.cr->stroke_preserve();
+    }
 
     // Draw fill pattern
     if(_fill_pattern) {
