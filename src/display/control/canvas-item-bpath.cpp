@@ -48,10 +48,6 @@ CanvasItemBpath::CanvasItemBpath(CanvasItemGroup *group, Geom::PathVector path, 
     request_update(); // Render immediately or temporary bpaths won't show.
 }
 
-double CanvasItemBpath::get_effective_outline() const {
-    return _stroke_width + 2 * _outline_width;
-}
-
 /**
  * Set a control bpath. Curve is in document coordinates.
  */
