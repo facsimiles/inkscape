@@ -154,6 +154,7 @@ static Geom::Point direction(Geom::Point const &first, Geom::Point const &second
 }
 
 Geom::Point Handle::_saved_other_pos(0, 0);
+Geom::Point Handle::_saved_dir(0,0);
 
 double Handle::_saved_length = 0.0;
 
@@ -426,6 +427,7 @@ bool Handle::grabbed(MotionEvent const &)
 {
     _saved_other_pos = other()->position();
     _saved_length = _drag_out ? 0 : length();
+    _saved_dir = Geom::unit_vector(_last_drag_origin() - _parent->position());
     _pm()._handleGrabbed();
     return false;
 }
@@ -437,19 +439,24 @@ void Handle::dragged(Geom::Point &new_pos, MotionEvent const &event)
     SnapManager &sm = _desktop->getNamedView()->snap_manager;
     bool snap = held_shift(event) ? false : sm.someSnapperMightSnap();
     std::optional<Inkscape::Snapper::SnapConstraint> ctrl_constraint;
+    bool _moved_handles = false;
 
     if (held_alt(event)) {
         // with Alt + Shift, preserve the length of the handles
         if (held_shift(event)) {
             new_pos = parent_pos + Geom::unit_vector(new_pos - parent_pos) * _saved_length;
-        } else { // with Alt only we link the two handles (and keep their original lengths)
+        } else if (!held_ctrl(event)) { // with Alt only we link the two handles (and keep their original lengths)
             other()->setRelativePos(-relativePos());
-        }   
+        } else { // with Alt + Ctrl, we fix the handles length and directions and move the node accordingly
+            _moved_handles = true;
+            Geom::Point _parent_pos = new_pos - _saved_dir * _saved_length;
+            _parent->move(_parent_pos);
+        }  
         snap = false;
     }
     // with Ctrl, constrain to M_PI/rotationsnapsperpi increments from vertical
     // and the original position.
-    if (held_ctrl(event)) {
+    if (held_ctrl(event) && !_moved_handles) {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         int snaps = 2 * prefs->getIntLimited("/options/rotationsnapsperpi/value", 12, 1, 1000);
 
