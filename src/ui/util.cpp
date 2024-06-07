@@ -12,31 +12,19 @@
 
 #include "util.h"
 
-#include <cstdint>
-#include <stdexcept>
-
-#include <cairomm/pattern.h>
 #include <glibmm/i18n.h>
 #include <glibmm/regex.h>
 #include <glibmm/spawn.h>
-#include <gtkmm/adjustment.h>
 #include <gtkmm/cssprovider.h>
 #include <gtkmm/image.h>
-#include <gtkmm/label.h>
 #include <gtkmm/messagedialog.h>
 #include <gtkmm/revealer.h>
 #include <gtkmm/spinbutton.h>
 #include <gtkmm/textview.h>
 #include <gtkmm/tooltip.h>
-#include <gtkmm/widget.h>
-#include <pangomm/context.h>
-#include <pangomm/fontdescription.h>
-#include <pangomm/layout.h>
-#include <2geom/bezier.h>
 
-#include "colors/color.h"
-#include "colors/utils.h" // color to hex string
 #include "inkscape-window.h"
+#include "object/sp-text.h"
 #include "util/numeric/converters.h"
 
 #if (defined (_WIN32) || defined (_WIN64))
@@ -55,10 +43,7 @@
 
 #include "desktop.h"
 #include "inkscape.h"
-
 #include "ui/dialog-run.h"
-#include "ui/util.h" // for_each_child()
-
 
 /*
  * Ellipse text if longer than maxlen, "50% start text + ... + ~50% end text"

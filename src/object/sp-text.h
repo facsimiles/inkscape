@@ -14,18 +14,10 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <cstddef>
-#include <sigc++/sigc++.h>
-
 #include "desktop.h"
-#include "sp-item.h"
-#include "sp-string.h" // Provides many other headers with is<SPString>
+#include "sp-string.h"
 #include "text-tag-attributes.h"
-
-#include "libnrtype/Layout-TNG.h"
 #include "libnrtype/style-attachments.h"
-
-#include <memory>
 
 /* Text specific flags */
 #define SP_TEXT_CONTENT_MODIFIED_FLAG SP_OBJECT_USER_MODIFIED_FLAG_A
@@ -140,6 +132,10 @@ private:
     SPItem *get_first_shape_dependency();
     const std::vector<SPItem *> get_all_shape_dependencies() const;
     void remove_newlines();                           // Removes newlines in text.
+
+    double length() const;
+    int resolve_flip_offset_multiplier() const;
+    double resolve_alignment_offset_multiplier() const;
 };
 
 SPItem *create_text_with_inline_size (SPDesktop *desktop, Geom::Point p0, Geom::Point p1);

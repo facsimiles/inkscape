@@ -10,8 +10,6 @@
 #ifndef INKSCAPE_SP_TEXTPATH_H
 #define INKSCAPE_SP_TEXTPATH_H
 
-#include "svg/svg-length.h"
-#include "sp-item.h"
 #include "sp-text.h"
 
 class SPUsePath;
@@ -39,6 +37,8 @@ public:
     void build(SPDocument* doc, Inkscape::XML::Node* repr) override;
     void release() override;
     void set(SPAttr key, const char* value) override;
+    void setStartOffset(const char *offset);
+    void setSide(TextPathSide side);
     void update(SPCtx* ctx, unsigned int flags) override;
     void modified(unsigned int flags) override;
     Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags) override;

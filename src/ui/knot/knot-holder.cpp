@@ -16,13 +16,10 @@
 
 #include "knot-holder.h"
 
-#include <glibmm/i18n.h>
-
 #include "desktop.h"
 #include "display/control/snap-indicator.h"
 #include "document-undo.h"
 #include "knot-holder-entity.h"
-#include "knot.h"
 #include "object/box3d.h"
 #include "object/sp-ellipse.h"
 #include "object/sp-hatch.h"
@@ -30,16 +27,12 @@
 #include "object/sp-offset.h"
 #include "object/sp-pattern.h"
 #include "object/sp-rect.h"
-#include "object/sp-shape.h"
 #include "object/sp-spiral.h"
 #include "object/sp-star.h"
 #include "style.h"
 #include "ui/icon-names.h"
 #include "ui/shape-editor.h"
-#include "ui/tools/arc-tool.h"
 #include "ui/tools/node-tool.h"
-#include "ui/tools/rect-tool.h"
-#include "ui/tools/spiral-tool.h"
 
 using Inkscape::DocumentUndo;
 

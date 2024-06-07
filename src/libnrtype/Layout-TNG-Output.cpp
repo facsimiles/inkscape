@@ -10,25 +10,21 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <glib.h>
 #include "Layout-TNG.h"
 #include "style-attachments.h"
 #include "display/drawing-text.h"
-#include "style.h"
 #include "print.h"
 #include "extension/print.h"
 #include "livarot/Path.h"
 #include "font-instance.h"
-#include "svg/svg-length.h"
 #include "extension/internal/cairo-render-context.h"
 #include "display/curve.h"
-#include <2geom/pathvector.h>
 #include <3rdparty/libuemf/symbol_convert.h>
 #include "libnrtype/font-factory.h"
 
 
-using Inkscape::Extension::Internal::CairoRenderContext;
-using Inkscape::Extension::Internal::CairoGlyphInfo;
+using Extension::Internal::CairoRenderContext;
+using Extension::Internal::CairoGlyphInfo;
 
 namespace Inkscape {
 namespace Text {
@@ -729,6 +725,12 @@ void Layout::fitToPathAlign(SVGLength const &startOffset, Path const &path)
         }
 
         double start_offset = offset + span.x_start + _characters[char_index].x;
+
+        Geom::PathVector pathv = path.MakePathVector();
+        if (pathv[0].closed()) {
+            start_offset = const_cast<Path&>(path).Length() + start_offset;
+        }
+
         double cluster_width = 0.0;
         size_t const current_cluster_glyph_index = _characters[char_index].in_glyph;
         for (size_t glyph_index = current_cluster_glyph_index ; glyph_index < next_cluster_glyph_index ; glyph_index++)
@@ -744,6 +746,11 @@ void Layout::fitToPathAlign(SVGLength const &startOffset, Path const &path)
 
         int unused = 0;
         double midpoint_offset = (start_offset + end_offset) * 0.5;
+
+        if (auto const path_len = const_cast<Path &>(path).Length(); pathv[0].closed() && path_len > Geom::EPSILON) {
+            midpoint_offset = std::fmod((start_offset + end_offset) * 0.5, path_len);
+        }
+
         // as far as I know these functions are const, they're just not marked as such
         Path::cut_position *midpoint_otp = const_cast<Path&>(path).CurvilignToPosition(1, &midpoint_offset, unused);
         if (midpoint_offset >= 0.0 && midpoint_otp != nullptr && midpoint_otp[0].piece >= 0) {

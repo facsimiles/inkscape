@@ -458,6 +458,8 @@ bool TextTool::root_handler(CanvasEvent const &event)
                 return;
             }
 
+            bool textpath_item = [selection = _desktop->getSelection()] { return selection && SP_IS_TEXT_TEXTPATH(selection->singleItem()); }();
+
             // find out item under mouse, disregarding groups
             auto const item_ungrouped = _desktop->getItemAtPoint(event.pos, true, nullptr);
             if (is<SPText>(item_ungrouped) || is<SPFlowtext>(item_ungrouped)) {
@@ -475,14 +477,17 @@ bool TextTool::root_handler(CanvasEvent const &event)
 
                 set_cursor("text-insert.svg");
                 _updateTextSelection();
-                if (is<SPText>(item_ungrouped)) {
-                    _desktop->getTool()->defaultMessageContext()->set(
+
+                if (SP_IS_TEXT_TEXTPATH(item_ungrouped)) {
+                    textpath_item = true;
+                }
+
+                if (!textpath_item) {
+                    _desktop->getTool()->defaultMessageContext()->setF(
                         NORMAL_MESSAGE,
-                        _("<b>Click</b> to edit the text, <b>drag</b> to select part of the text."));
-                } else {
-                    _desktop->getTool()->defaultMessageContext()->set(
-                        NORMAL_MESSAGE,
-                        _("<b>Click</b> to edit the flowed text, <b>drag</b> to select part of the text."));
+                        _("<b>Click</b> to edit the %s text, <b>drag</b> to select part of the text."),
+                        is<SPText>(item_ungrouped) ? "" : "flowed"
+                    );
                 }
                 over_text = true;
             } else {
@@ -1367,8 +1372,13 @@ void TextTool::_selectionChanged(Selection *selection)
     _updateTextSelection();
 }
 
-void TextTool::_selectionModified(Selection */*selection*/, unsigned /*flags*/)
+void TextTool::_selectionModified(Selection *selection, unsigned /*flags*/)
 {
+    auto item = selection->singleItem();
+    if (SP_IS_TEXT_TEXTPATH(item) && shape_editor->has_knotholder() && shape_editor->knotholder->is_dragging()) {
+        return;
+    }
+
     bool scroll = !shape_editor->has_knotholder() ||
                   !shape_editor->knotholder->is_dragging();
     _updateCursor(scroll);

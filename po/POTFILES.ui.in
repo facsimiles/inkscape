@@ -37,6 +37,7 @@
 ../share/ui/document-tab.ui
 ../share/ui/menus.ui
 ../share/ui/statusbar.ui
+../share/ui/textpath-popover-box.ui
 ../share/ui/toolbar-arc.ui
 ../share/ui/toolbar-booleans.ui
 ../share/ui/toolbar-box3d.ui

@@ -26,24 +26,15 @@
 
 #include "sp-tspan.h"
 
-#include <cstring>
-
 #include <glibmm/i18n.h>
 #include <glibmm/regex.h>
 
-#include "attributes.h"
-#include "text-editing.h"
-
+#include "livarot/Path.h"
 #include "sp-textpath.h"
 #include "sp-tref.h"
 #include "sp-use-reference.h"
 #include "style.h"
-
-#include "display/curve.h"
-
-#include "livarot/Path.h"
-
-#include "svg/stringstream.h"
+#include "text-editing.h"
 #include "xml/href-attribute-helper.h"
 
 
@@ -300,6 +291,8 @@ void SPTextPath::set(SPAttr key, const gchar* value) {
                     std::cerr << "SPTextPath: Bad side value: " << (value?value:"null") << std::endl;
                     side = SP_TEXT_PATH_SIDE_LEFT;
                 }
+                sourcePath->sourceDirty = true;
+                this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
                 break;
             case SPAttr::STARTOFFSET:
                 this->startOffset.readOrUnset(value);
@@ -310,6 +303,14 @@ void SPTextPath::set(SPAttr key, const gchar* value) {
                 break;
         }
     }
+}
+
+void SPTextPath::setStartOffset(const char *offset) {
+    setAttribute("startOffset", offset);
+}
+
+void SPTextPath::setSide(TextPathSide new_side) {
+    setAttribute("side", new_side ? "right" : "left");
 }
 
 void SPTextPath::update(SPCtx *ctx, guint flags) {

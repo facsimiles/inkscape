@@ -27,29 +27,21 @@
 #include "sp-text.h"
 
 #include <glibmm/i18n.h>
-#include <glibmm/regex.h>
-
-#include <2geom/affine.h>
 
 #include "libnrtype/font-factory.h"
 #include "libnrtype/font-instance.h"
 
-#include "attributes.h"
 #include "desktop-style.h"
-#include "desktop.h"
 #include "document.h"
 #include "layer-manager.h"
 #include "mod360.h"
 #include "preferences.h"                             // for Preferences
 #include "snap-candidate.h"                          // for SnapCandidatePoint
-#include "snap-enums.h"                              // for SnapTargetType
 #include "snap-preferences.h"                        // for SnapPreferences
 #include "text-editing.h"
 
 #include "sp-desc.h"
-#include "sp-flowregion.h"
 #include "sp-rect.h"
-#include "sp-shape.h"
 #include "sp-textpath.h"
 #include "sp-title.h"
 #include "sp-tref.h"
@@ -64,8 +56,6 @@
 
 // For SVG 2 text flow
 #include "livarot/Path.h"
-#include "livarot/Shape.h"
-#include "display/curve.h"
 
 
 /*#####################################################
@@ -1799,6 +1789,76 @@ void TextTagAttributes::setRotate(unsigned index, double angle)
     attributes.rotate[index] = mod360(angle);
 }
 
+/*
+ * Returns the effective physical length of the text along
+ * the baseline.
+ */
+double SPText::length() const
+{
+    auto iter = layout.begin();
+    auto const start_pt = layout.characterAnchorPoint(iter);
+    iter = layout.end();
+    auto const end_pt = layout.characterAnchorPoint(iter);
+    return Geom::distance(start_pt, end_pt);
+}
+
+/*
+ * This method determines a multiplier to adjust the startOffset when the
+ * side of text on a path is changed. When the text's side is flipped, the
+ * effective direction of the path relative to the text also flips. This
+ * can cause an unexpected shift in text position.
+ *
+ * The `(100 - oldOffset)` adjustment (for percentage-based offsets) is
+ * often insufficient because it doesn't account for the intrinsic offset
+ * produced by the text itself, which depends on its `text-anchor` and
+ * `direction` properties.
+ *
+ * This function resolves an additional multiplier (either -1, 1, or 0)
+ * that, when applied to the text's "length-based" offset (i.e., the space
+ * occupied by the text based on its content, direction, and alignment),
+ * helps correctly reposition the text-path knots. This ensures that the
+ * text appears in the expected location after the flip.
+ */
+int SPText::resolve_flip_offset_multiplier() const
+{
+    auto const anchor = style->text_anchor.computed;
+    auto const direction = style->direction.computed;
+
+    if ((anchor == SP_CSS_TEXT_ANCHOR_START && direction == SP_CSS_DIRECTION_RTL) ||
+        (anchor == SP_CSS_TEXT_ANCHOR_END && direction == SP_CSS_DIRECTION_LTR)) {
+        return -1;
+    }
+
+    if ((anchor == SP_CSS_TEXT_ANCHOR_END && direction == SP_CSS_DIRECTION_RTL) ||
+        (anchor == SP_CSS_TEXT_ANCHOR_START && direction == SP_CSS_DIRECTION_LTR)) {
+        return 1;
+    }
+
+    return 0;
+}
+
+/*
+ * This method determines a multiplier used to calculate an offset for positioning
+ * text path knots. This offset helps align the text correctly along the path
+ * based on its 'text-anchor' (start, middle, end) and 'direction' (left-to-right,
+ * right-to-left) properties.
+ */
+double SPText::resolve_alignment_offset_multiplier() const
+{
+    auto const anchor = style->text_anchor.computed;
+    auto const direction = style->direction.computed;
+
+    if (anchor == SP_CSS_TEXT_ANCHOR_MIDDLE) {
+        return -0.5;
+    }
+
+    if ((anchor == SP_CSS_TEXT_ANCHOR_START && direction == SP_CSS_DIRECTION_RTL) ||
+        (anchor == SP_CSS_TEXT_ANCHOR_END && direction == SP_CSS_DIRECTION_LTR)) {
+        return -1.0;
+    }
+
+    return 0;
+}
 
 /*
   Local Variables:

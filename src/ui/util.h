@@ -13,20 +13,7 @@
 #ifndef UI_UTIL_SEEN
 #define UI_UTIL_SEEN
 
-#include <cstddef> // size_t
-#include <exception>
-#include <type_traits>
-#include <vector>
-
-#include <pangomm/layout.h> // Pango::EllipsizeMode
-#include <gdkmm/rgba.h>
-#include <gtkmm/cellrenderer.h>
-#include <gtkmm/enums.h>
 #include <gtkmm/notebook.h>
-#include <gtkmm/widget.h>
-
-#include <2geom/affine.h>
-#include <2geom/point.h>
 #include <2geom/rect.h>
 
 /*
