@@ -159,6 +159,7 @@ Geom::Point Handle::_saved_dir(0,0);
 double Handle::_saved_length = 0.0;
 
 bool Handle::_drag_out = false;
+bool _space_pressed = false;
 
 Handle::Handle(NodeSharedData const &data, Geom::Point const &initial_pos, Node *parent)
     : ControlPoint(data.desktop, initial_pos, SP_ANCHOR_CENTER,
@@ -337,7 +338,6 @@ char const *Handle::handle_type_to_localized_string(NodeType type)
 bool Handle::_eventHandler(Tools::ToolBase *event_context, CanvasEvent const &event)
 {
     bool ret = false;
-
     inspect_event(event,
     [&] (KeyPressEvent const &event) {
         switch (event.keyval) {
@@ -391,9 +391,18 @@ bool Handle::_eventHandler(Tools::ToolBase *event_context, CanvasEvent const &ev
                 ret = true;
             }
             break;
-
+        case GDK_KEY_space:
+            _space_pressed = true;
+            ret = true;
+            break;
         default:
             break;
+        }
+    },
+
+    [&] (KeyReleaseEvent const &event) {
+        if (event.keyval == GDK_KEY_space){
+            _space_pressed = false;
         }
     },
 
@@ -439,24 +448,26 @@ void Handle::dragged(Geom::Point &new_pos, MotionEvent const &event)
     SnapManager &sm = _desktop->getNamedView()->snap_manager;
     bool snap = held_shift(event) ? false : sm.someSnapperMightSnap();
     std::optional<Inkscape::Snapper::SnapConstraint> ctrl_constraint;
-    bool _moved_handles = false;
 
+    // with Alt, preserve length of the handle
     if (held_alt(event)) {
-        // with Alt + Shift, preserve the length of the handles
-        if (held_shift(event)) {
-            new_pos = parent_pos + Geom::unit_vector(new_pos - parent_pos) * _saved_length;
-        } else if (!held_ctrl(event)) { // with Alt only we link the two handles (and keep their original lengths)
-            other()->setRelativePos(-relativePos());
-        } else { // with Alt + Ctrl, we fix the handles length and directions and move the node accordingly
-            _moved_handles = true;
-            Geom::Point _parent_pos = new_pos - _saved_dir * _saved_length;
-            _parent->move(_parent_pos);
-        }  
+        new_pos = parent_pos + Geom::unit_vector(new_pos - parent_pos) * _saved_length;
         snap = false;
     }
+
+    // with Shift + space, preserve length and direction of handles and move parent
+    if (held_shift(event) && _space_pressed) {
+        Geom::Point _parent_pos = new_pos - _saved_dir * _saved_length;
+        _parent->move(_parent_pos);
+        snap = false;
+    } else {
+        _saved_dir = Geom::unit_vector(relativePos());
+        _saved_length = _drag_out ? 0 : length(); 
+    }
+
     // with Ctrl, constrain to M_PI/rotationsnapsperpi increments from vertical
     // and the original position.
-    if (held_ctrl(event) && !_moved_handles) {
+    if (held_ctrl(event)) {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         int snaps = 2 * prefs->getIntLimited("/options/rotationsnapsperpi/value", 12, 1, 1000);
 
@@ -568,6 +579,41 @@ void Handle::ungrabbed(ButtonReleaseEvent const *event)
 
 bool Handle::clicked(ButtonReleaseEvent const &event)
 {
+    if (held_alt(event)) { // with Alt, toggle between symmetric and smooth node type
+
+        if(_parent->type() == NODE_SMOOTH) {
+            // make the node symmetric
+            other()->setRelativePos(-relativePos());
+            _parent->setType(NODE_SYMMETRIC, false);
+
+        } else {
+            // no matter the node type make it smooth
+            // make opposite handle collinear,
+            // but preserve length, unless degenerate
+            if (other()->isDegenerate())
+                other()->setRelativePos(-relativePos());
+            else
+                other()->setDirection(-relativePos());
+            _parent->setType(NODE_SMOOTH, false);
+        }
+
+        // update display
+        _parent->_pm().update();
+
+        // update undo history
+        _parent->_pm()._commit(_("Change node type"));
+    }
+
+    if (held_only_shift(event) && _parent->type() != NODE_CUSP) { // with Shift, make CUSP node
+        _parent->setType(NODE_CUSP, false);
+
+        // update display
+        _parent->_pm().update();
+
+        // update undo history
+        _parent->_pm()._commit(_("Change node type"));
+    }
+
     _pm()._handleClicked(this, event);
     return true;
 }
