@@ -20,6 +20,7 @@
 #include "display/control/canvas-item-ctrl.h"
 #include "display/control/canvas-item-guideline.h"
 #include "display/control/canvas-item-rect.h"
+#include "display/control/ctrl-handle-manager.h"
 #include "libnrtype/Layout-TNG.h"
 #include "object/sp-flowtext.h"
 #include "object/sp-text.h"
@@ -45,6 +46,7 @@ SelCue::SelCue(SPDesktop *desktop)
     _selection = _desktop->getSelection();
 
     _sel_changed_connection = _selection->connectChanged(sigc::hide(sigc::mem_fun(*this, &SelCue::_newItemBboxes)));
+    _css_changed_connection = Handles::Manager::get().connectCssUpdated(sigc::mem_fun(*this, &SelCue::_newItemBboxes));
 
     {
         void (SelCue::*modifiedSignal)() = &SelCue::_updateItemBboxes;
@@ -61,6 +63,7 @@ SelCue::~SelCue()
 {
     _sel_changed_connection.disconnect();
     _sel_modified_connection.disconnect();
+    _css_changed_connection.disconnect();
 }
 
 void SelCue::_updateItemBboxes()
@@ -140,10 +143,13 @@ void SelCue::_newItemBboxes()
                                                             Geom::Point(bbox->min().x(), bbox->max().y()));
                 canvas_item = std::move(ctrl);
             } else if (mode == BBOX) {
+                const auto &css = (*(Handles::Manager::get().getCss())).style_map;
+                const auto &style = css.at(Handles::TypeState{.type = CanvasItemCtrlType::SELECTION_CUE});
                 auto rect = make_canvasitem<CanvasItemRect>(_desktop->getCanvasControls(), *bbox);
-                rect->set_stroke(0xffffffa0);
-                rect->set_shadow(0x0000c0a0, 1);
-                rect->set_dashed(true);
+                rect->set_stroke(style.getStroke());
+                rect->set_stroke_width(style.stroke_width());
+                rect->set_outline(style.getOutline());
+                rect->set_outline_width(style.outline_width());
                 rect->set_inverted(false);
                 canvas_item = std::move(rect);
             }

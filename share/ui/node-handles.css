@@ -274,3 +274,15 @@ Notes:
    stroke-width: 2px;
    outline-width: 1px;
 }
+
+/*
+* Selection cues
+*/
+
+.inkscape-selection-cue {
+   stroke: #277fff;
+   stroke-opacity: 100%;
+   stroke-width: 1px;
+   outline-width: 1px;
+   outline-opacity: 30%;
+}
