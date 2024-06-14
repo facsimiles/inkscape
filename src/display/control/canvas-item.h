@@ -87,8 +87,13 @@ public:
     // Properties
     virtual void set_fill(uint32_t rgba);
     void set_fill(CanvasItemColor color) { set_fill(CANVAS_ITEM_COLORS[color]); }
+    void set_fill_pattern(Cairo::RefPtr<Cairo::Pattern> pattern);
     virtual void set_stroke(uint32_t rgba);
     void set_stroke(CanvasItemColor color) { set_stroke(CANVAS_ITEM_COLORS[color]); }
+    void set_stroke_width(double width);
+    void set_outline(uint32_t color);
+    void set_outline_width(double width);
+    double get_effective_outline() const;
     void set_name(std::string &&name) { _name = std::move(name); }
     std::string const &get_name() const { return _name; }
     void update_canvas_item_ctrl_sizes(int size_index);
@@ -137,7 +142,11 @@ protected:
 
     // Properties
     uint32_t _fill    = CANVAS_ITEM_COLORS[CANVAS_ITEM_SECONDARY];
+    Cairo::RefPtr<Cairo::Pattern> _fill_pattern;
     uint32_t _stroke  = CANVAS_ITEM_COLORS[CANVAS_ITEM_PRIMARY];
+    double _stroke_width = 1.0;
+    uint32_t _outline = 0x0;
+    double _outline_width = 0;
     std::string _name; // For debugging
 
     // Events

@@ -23,6 +23,12 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/operators.hpp>
 #include <boost/optional/optional.hpp>
+#include <cairomm/context.h>
+#include <cairomm/matrix.h>
+#include <cairomm/pattern.h>
+#include <cairomm/refptr.h>
+#include <cairomm/surface.h>
+#include <cmath>
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <glib/gstdio.h>
 #include <glibmm/fileutils.h>
@@ -1509,6 +1515,28 @@ int ink_cairo_surface_linear_to_srgb(cairo_surface_t *surface)
     ink_cairo_surface_filter(surface, surface, linear_to_srgb_argb32);
 
     return width * height;
+}
+
+Cairo::RefPtr<Cairo::Pattern>
+ink_cairo_pattern_create_slanting_stripes(uint32_t color){
+    int const width = 10;
+    int const height = 10;
+    int const line_width = 10;
+
+    auto surface = Cairo::ImageSurface::create(Cairo::ImageSurface::Format::ARGB32, width, height);
+    auto context = Cairo::Context::create(surface);
+    context->set_line_width(line_width);
+    context->move_to(0, 0);
+    context->line_to(0, height);
+    context->set_source_rgba(SP_RGBA32_R_F(color), SP_RGBA32_G_F(color),
+                             SP_RGBA32_B_F(color), SP_RGBA32_A_F(color));
+    context->stroke();
+
+    auto pattern = Cairo::SurfacePattern::create(surface);
+    pattern->set_extend(Cairo::SurfacePattern::Extend::REPEAT);
+    pattern->set_filter(Cairo::SurfacePattern::Filter::NEAREST);
+    pattern->set_matrix(Cairo::rotation_matrix(3 * M_PI / 4));
+    return pattern;
 }
 
 cairo_pattern_t *

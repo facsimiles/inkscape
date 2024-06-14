@@ -15,6 +15,7 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "display/control/canvas-item-enums.h"
 #ifdef HAVE_CONFIG_H
 # include "config.h"  // only include where actually required!
 #endif
@@ -439,14 +440,18 @@ bool SelectTool::root_handler(CanvasEvent const &event)
 
                 saveDragOrigin(event.pos);
 
+                auto rubberband = Inkscape::Rubberband::get(_desktop);
                 if (Modifier::get(Modifiers::Type::SELECT_TOUCH_PATH)->active(event.modifiers)) {
-                    Inkscape::Rubberband::get(_desktop)->setMode(RUBBERBAND_MODE_TOUCHPATH);
+                    rubberband->set_mode(Rubberband::Mode::TOUCHPATH);
+                    rubberband->set_handle(CanvasItemCtrlType::RUBBERBAND_TOUCHPATH_SELECT);
                 } else {
-                    Inkscape::Rubberband::get(_desktop)->defaultMode();
+                    auto const [mode, handle] = get_default_rubberband_state();
+                    rubberband->set_mode(mode);
+                    rubberband->set_handle(handle);
                 }
 
                 Geom::Point const p(_desktop->w2d(event.pos));
-                Inkscape::Rubberband::get(_desktop)->start(_desktop, p);
+                rubberband->start(_desktop, p);
 
                 if (grabbed) {
                     grabbed->ungrab();
@@ -568,10 +573,10 @@ bool SelectTool::root_handler(CanvasEvent const &event)
 
                         auto touch_path = Modifier::get(Modifiers::Type::SELECT_TOUCH_PATH)->get_label();
                         auto mode = Inkscape::Rubberband::get(_desktop)->getMode();
-                        if (mode == RUBBERBAND_MODE_TOUCHPATH) {
+                        if (mode == Rubberband::Mode::TOUCHPATH) {
                             defaultMessageContext()->setF(Inkscape::NORMAL_MESSAGE,
                                 _("<b>Draw over</b> objects to select them; release <b>%s</b> to switch to rubberband selection"), touch_path.c_str());
-                        } else if (mode == RUBBERBAND_MODE_TOUCHRECT) {
+                        } else if (mode == Rubberband::Mode::TOUCHRECT) {
                             defaultMessageContext()->setF(Inkscape::NORMAL_MESSAGE,
                                 _("<b>Drag near</b> objects to select them; press <b>%s</b> to switch to touch selection"), touch_path.c_str());
                         } else {
@@ -644,13 +649,13 @@ bool SelectTool::root_handler(CanvasEvent const &event)
                         // this was a rubberband drag
                         std::vector<SPItem*> items;
 
-                        if (r->getMode() == RUBBERBAND_MODE_RECT) {
+                        if (r->getMode() == Rubberband::Mode::RECT) {
                             Geom::OptRect const b = r->getRectangle();
                             items = _desktop->getDocument()->getItemsInBox(_desktop->dkey, (*b) * _desktop->dt2doc());
-                        } else if (r->getMode() == RUBBERBAND_MODE_TOUCHRECT) {
+                        } else if (r->getMode() == Rubberband::Mode::TOUCHRECT) {
                             Geom::OptRect const b = r->getRectangle();
                             items = _desktop->getDocument()->getItemsPartiallyInBox(_desktop->dkey, (*b) * _desktop->dt2doc());
-                        } else if (r->getMode() == RUBBERBAND_MODE_TOUCHPATH) {
+                        } else if (r->getMode() == Rubberband::Mode::TOUCHPATH) {
                             bool topmost_items_only = prefs->getBool("/options/selection/touchsel_topmost_only");
                             items = _desktop->getDocument()->getItemsAtPoints(_desktop->dkey, r->getPoints(), true, topmost_items_only);
                         }
@@ -796,10 +801,11 @@ bool SelectTool::root_handler(CanvasEvent const &event)
             if (!key_is_a_modifier (keyval)) {
                 defaultMessageContext()->clear();
             } else if (grabbed || _seltrans->isGrabbed()) {
-                if (Inkscape::Rubberband::get(_desktop)->is_started()) {
+                if (auto rubberband = Inkscape::Rubberband::get(_desktop); rubberband->is_started()) {
                     // if Alt then change cursor to moving cursor:
                     if (Modifier::get(Modifiers::Type::SELECT_TOUCH_PATH)->active(event.modifiers | keyval)) {
-                        Inkscape::Rubberband::get(_desktop)->setMode(RUBBERBAND_MODE_TOUCHPATH);
+                        rubberband->set_mode(Rubberband::Mode::TOUCHPATH);
+                        rubberband->set_handle(CanvasItemCtrlType::RUBBERBAND_TOUCHPATH_SELECT);
                     }
                 } else {
                     // do not change the statusbar text when mousekey is down to move or transform the object,
@@ -996,10 +1002,12 @@ bool SelectTool::root_handler(CanvasEvent const &event)
                 _alt_on = false; // Turned on in KeyPressEvent
             }
 
-            if (Inkscape::Rubberband::get(_desktop)->is_started()) {
+            if (auto rubberband = Inkscape::Rubberband::get(_desktop); rubberband->is_started()) {
                 // if Alt then change cursor to moving cursor:
                 if (alt) {
-                    Inkscape::Rubberband::get(_desktop)->defaultMode();
+                    auto const [mode, handle] = get_default_rubberband_state();
+                    rubberband->set_mode(mode);
+                    rubberband->set_handle(handle);
                 }
             } else {
                 if (alt) {
@@ -1031,6 +1039,18 @@ void SelectTool::updateDescriber(Inkscape::Selection *selection)
     _describer->updateMessage(selection);
 }
 
+/**
+ * Get the default rubberband state for select tool.
+ */
+std::pair<Rubberband::Mode const, CanvasItemCtrlType const> const SelectTool::get_default_rubberband_state() {
+    auto mode = Rubberband::get_default_mode();
+    auto handle = Rubberband::get_default_handle();
+    if (Inkscape::Preferences::get()->getBool("/tools/select/touch_box", false)) {
+        mode = Rubberband::Mode::TOUCHRECT;
+        handle = CanvasItemCtrlType::RUBBERBAND_TOUCHRECT;
+    }
+    return {mode, handle};
+}
 } // namespace Inkscape::UI::Tools
 
 /*

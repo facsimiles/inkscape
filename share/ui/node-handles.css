@@ -235,3 +235,54 @@ Notes:
     scale: 5.0; /* angled triangle occupies half of the image, so it needs larger scale */
     size-extra: 10px;
 }
+
+/*
+* Selection boxes/paths
+*/
+
+.inkscape-selection-rect, /* default selection box */
+.inkscape-selection-lasso, /* node tool while holding "Alt" key */
+.inkscape-selection-touchrect { /* select tool with "touch to select" mode */
+   fill: #277fff;
+   fill-opacity: 10%;
+   stroke: #277fff;
+   stroke-width: 2px;
+   outline-width: 1px;
+}
+
+/* select tool while holding "Alt" key */
+.inkscape-selection-path.selector {
+   fill-opacity: 0%;
+   stroke: #277fff;
+   stroke-width: 2px;
+   outline-width: 1px;
+}
+
+.inkscape-selection-path.paint-bucket {
+   fill-opacity: 0%;
+   stroke: #277fff;
+   stroke-width: 2px;
+   outline: white;
+   outline-width: 3px;
+   outline-opacity: 100%;
+}
+
+/* eraser tool with "touch to delete" mode */
+.inkscape-selection-path.eraser {
+   fill-opacity: 0%;
+   stroke: red;
+   stroke-width: 2px;
+   outline-width: 1px;
+}
+
+/*
+* Selection cues
+*/
+
+.inkscape-selection-cue {
+   stroke: #277fff;
+   stroke-opacity: 100%;
+   stroke-width: 1px;
+   outline-width: 1px;
+   outline-opacity: 30%;
+}

@@ -33,6 +33,7 @@
 #include "context-fns.h"
 #include "desktop-style.h"
 #include "desktop.h"
+#include "display/control/canvas-item-enums.h"
 #include "document-undo.h"
 #include "document.h"
 #include "layer-manager.h"
@@ -1053,8 +1054,10 @@ bool FloodTool::root_handler(CanvasEvent const &event)
                 dragging = true;
 
                 auto const p = _desktop->w2d(event.pos);
-                Rubberband::get(_desktop)->setMode(RUBBERBAND_MODE_TOUCHPATH);
-                Rubberband::get(_desktop)->start(_desktop, p);
+                auto rubberband = Rubberband::get(_desktop);
+                rubberband->set_mode(Rubberband::Mode::TOUCHPATH);
+                rubberband->set_handle(RUBBERBAND_TOUCHPATH_FLOOD);
+                rubberband->start(_desktop, p);
             }
         }
     },

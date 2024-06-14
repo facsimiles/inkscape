@@ -11,16 +11,22 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include "desktop.h"
-
 #include "rubberband.h"
 
-#include "2geom/path.h"
+#include <cairomm/pattern.h>
+#include <cairomm/refptr.h>
+#include <cstdint>
+#include <unordered_map>
+#include <utility>
 
-#include "display/curve.h"
+#include "2geom/path.h"
+#include "desktop.h"
+#include "display/cairo-utils.h"
 #include "display/control/canvas-item-bpath.h"
 #include "display/control/canvas-item-rect.h"
-
+#include "display/control/ctrl-handle-manager.h"
+#include "display/control/ctrl-handle-styling.h"
+#include "display/curve.h"
 #include "ui/widget/canvas.h" // autoscroll
 
 Inkscape::Rubberband *Inkscape::Rubberband::_instance = nullptr;
@@ -40,7 +46,7 @@ void Inkscape::Rubberband::delete_canvas_items()
 Geom::Path Inkscape::Rubberband::getPath() const
 {
     g_assert(_started);
-    if (_mode == RUBBERBAND_MODE_TOUCHPATH) {
+    if (_mode == Rubberband::Mode::TOUCHPATH) {
         return _path * _desktop->w2d();
     }
     return Geom::Path(*getRectangle());
@@ -74,14 +80,25 @@ void Inkscape::Rubberband::stop()
 {
     _started = false;
     _moved = false;
-    defaultMode(); // restore the default
+
+    _mode = get_default_mode();
+    _handle = get_default_handle();
 
     _touchpath_curve->reset();
     _path.clear();
 
     delete_canvas_items();
+}
 
-    resetColor();
+static std::unordered_map<uint32_t, Cairo::RefPtr<Cairo::Pattern>> _pattern_cache;
+
+Cairo::RefPtr<Cairo::Pattern> get_cached_pattern(uint32_t color)
+{
+    if (_pattern_cache.contains(color)) {
+        return _pattern_cache.at(color);
+    }
+    return (_pattern_cache.insert(std::make_pair(color, ink_cairo_pattern_create_slanting_stripes(color))))
+        .first->second;
 }
 
 void Inkscape::Rubberband::move(Geom::Point const &p)
@@ -116,73 +133,51 @@ void Inkscape::Rubberband::move(Geom::Point const &p)
     if (_touchpath) _touchpath->set_visible(false);
     if (_rect) _rect->set_visible(false);
 
+    const auto &css = (*(Handles::Manager::get().getCss())).style_map;
+    const auto &style = css.at(Handles::TypeState{.type = _handle});
+
     switch (_mode) {
-        case RUBBERBAND_MODE_RECT:
+        case Inkscape::Rubberband::Mode::RECT:
             if (!_rect) {
                 _rect = make_canvasitem<CanvasItemRect>(_desktop->getCanvasControls());
-                _rect->set_stroke(_color.value_or(0x808080ff));
+                _rect->set_stroke(style.getStroke());
+                _rect->set_stroke_width(style.stroke_width());
+                _rect->set_fill(style.getFill());
+                _rect->set_outline(style.getOutline());
+                _rect->set_outline_width(style.outline_width());
                 _rect->set_shadow(0xffffffff, 0); // Not a shadow
-                _rect->set_dashed(false);
-                _rect->set_inverted(true);
             }
             _rect->set_rect(Geom::Rect(_start, _end));
             _rect->set_visible(true);
             break;
-        case RUBBERBAND_MODE_TOUCHRECT:
+        case Inkscape::Rubberband::Mode::TOUCHRECT:
             if (!_rect) {
                 _rect = make_canvasitem<CanvasItemRect>(_desktop->getCanvasControls());
-                _rect->set_stroke(_color.value_or(0xff0000ff));
+                _rect->set_stroke(style.getStroke());
+                _rect->set_stroke_width(style.stroke_width());
+                _rect->set_fill(style.getFill());
+                _rect->set_fill_pattern(get_cached_pattern(style.getFill()));
+                _rect->set_outline(style.getOutline());
+                _rect->set_outline_width(style.outline_width());
                 _rect->set_shadow(0xffffffff, 0); // Not a shadow
-                _rect->set_dashed(false);
-                _rect->set_inverted(false);
             }
             _rect->set_rect(Geom::Rect(_start, _end));
             _rect->set_visible(true);
             break;
-        case RUBBERBAND_MODE_TOUCHPATH:
+        case Inkscape::Rubberband::Mode::TOUCHPATH:
             if (!_touchpath) {
                 _touchpath = make_canvasitem<CanvasItemBpath>(_desktop->getCanvasControls()); // Should be sketch?
-                _touchpath->set_stroke(_color.value_or(0xff0000ff));
-                _touchpath->set_fill(0x0, SP_WIND_RULE_NONZERO);
+                _touchpath->set_stroke(style.getStroke());
+                _touchpath->set_stroke_width(style.stroke_width());
+                _touchpath->set_fill(style.getFill(), SP_WIND_RULE_EVENODD);
+                _touchpath->set_outline(style.getOutline());
+                _touchpath->set_outline_width(style.outline_width());
             }
             _touchpath->set_bpath(_touchpath_curve);
             _touchpath->set_visible(true);
             break;
         default:
             break;
-    }
-}
-
-void Inkscape::Rubberband::setColor(uint32_t color)
-{
-    _color = color;
-
-    if (_mode == RUBBERBAND_MODE_TOUCHPATH) {
-        if (_touchpath) {
-            _touchpath->set_stroke(color);
-        }
-    } else {
-        if (_rect) {
-            _rect->set_stroke(color);
-        }
-    }
-}
-
-void Inkscape::Rubberband::setMode(int mode) 
-{
-    _mode = mode;
-}
-
-/**
- * Set the default mode (usually rect or touchrect)
- */
-void Inkscape::Rubberband::defaultMode()
-{
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    if (prefs->getBool("/tools/select/touch_box", false)) {
-        _mode = RUBBERBAND_MODE_TOUCHRECT;
-    } else {
-        _mode = RUBBERBAND_MODE_RECT;
     }
 }
 

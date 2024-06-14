@@ -69,6 +69,7 @@ private:
     Selection *_selection;
     sigc::connection _sel_changed_connection;
     sigc::connection _sel_modified_connection;
+    sigc::connection _css_changed_connection;
     std::vector<CanvasItemPtr<CanvasItem>> _item_bboxes;
     std::vector<CanvasItemPtr<CanvasItem>> _text_baselines;
     std::vector<CanvasItemPtr<CanvasItem>> _item_lines;

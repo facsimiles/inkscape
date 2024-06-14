@@ -15,6 +15,7 @@
 
 #include <2geom/forward.h>
 #include <cairomm/cairomm.h>
+#include <cairomm/refptr.h>
 #include "style.h"
 
 typedef struct _GdkPixbuf GdkPixbuf;
@@ -134,6 +135,7 @@ double srgb_to_linear( const double c );
 int ink_cairo_surface_srgb_to_linear(cairo_surface_t *surface);
 int ink_cairo_surface_linear_to_srgb(cairo_surface_t *surface);
 
+Cairo::RefPtr<Cairo::Pattern> ink_cairo_pattern_create_slanting_stripes(uint32_t color);
 cairo_pattern_t *ink_cairo_pattern_create_checkerboard(guint32 rgba = 0xC4C4C4FF, bool use_alpha = false);
 // draw drop shadow around the 'rect' with given 'size' and 'color'; shadow extends to the right and bottom of rect
 void ink_cairo_draw_drop_shadow(const Cairo::RefPtr<Cairo::Context> &ctx, const Geom::Rect& rect, double size, guint32 color, double color_alpha);

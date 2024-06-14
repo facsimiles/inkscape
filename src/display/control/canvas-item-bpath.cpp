@@ -15,6 +15,8 @@
  */
 
 #include "canvas-item-bpath.h"
+#include <cairomm/matrix.h>
+#include <cstdint>
 
 #include "display/curve.h"
 #include "display/cairo-utils.h"
@@ -86,18 +88,6 @@ void CanvasItemBpath::set_dashes(std::vector<double> &&dashes)
 }
 
 /**
- * Set the stroke width
- */
-void CanvasItemBpath::set_stroke_width(double width)
-{
-    defer([=, this] {
-        if (_stroke_width == width) return;
-        _stroke_width = width;
-        request_redraw();
-    });
-}
-
-/**
  * Returns distance between point in canvas units and nearest point on bpath.
  */
 double CanvasItemBpath::closest_distance_to(Geom::Point const &p) const
@@ -146,7 +136,7 @@ void CanvasItemBpath::_update(bool)
         return;
     }
 
-    _bounds = expandedBy(bounds_exact_transformed(_path, affine()), 2);
+    _bounds = expandedBy(bounds_exact_transformed(_path, affine()), get_effective_outline() / 2);
 
     // Queue redraw of new area
     request_redraw();
@@ -172,7 +162,7 @@ void CanvasItemBpath::_render(Inkscape::CanvasItemBuffer &buf) const
     buf.cr->begin_new_path();
 
     feed_pathvector_to_cairo(buf.cr->cobj(), _path, affine(), buf.rect,
-                             /* optimize_stroke */ !do_fill, 1);
+                             /* optimize_stroke */ !(do_fill || _fill_pattern), get_effective_outline());
 
     // Do fill
     if (do_fill) {
@@ -183,8 +173,25 @@ void CanvasItemBpath::_render(Inkscape::CanvasItemBuffer &buf) const
         buf.cr->fill_preserve();
     }
 
+    // Do fill pattern
+    if (_fill_pattern) {
+        buf.cr->save();
+        buf.cr->translate(-buf.rect.min().x(), -buf.rect.min().y());
+        buf.cr->set_source(_fill_pattern);
+        buf.cr->fill_preserve();
+        buf.cr->restore();
+    }
+
+    // Do outline
+    if ((SP_RGBA32_A_U(_outline) > 0) && _outline_width > 0) {
+        buf.cr->set_source_rgba(SP_RGBA32_R_F(_outline), SP_RGBA32_G_F(_outline),
+                                SP_RGBA32_B_F(_outline), SP_RGBA32_A_F(_outline));
+        buf.cr->set_line_width(get_effective_outline());
+        buf.cr->stroke_preserve();
+    }
+
     // Do stroke
-    if (do_stroke) {
+    if (do_stroke && _stroke_width > 0) {
 
         if (!_dashes.empty()) {
             buf.cr->set_dash(_dashes, 0.0); // 0.0 is offset

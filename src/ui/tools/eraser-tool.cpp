@@ -24,6 +24,7 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "display/control/canvas-item-enums.h"
 #define noERASER_VERBOSE
 
 #include "eraser-tool.h"
@@ -363,8 +364,9 @@ bool EraserTool::root_handler(CanvasEvent const &event)
 
                 if (mode == EraserToolMode::DELETE) {
                     auto rubberband = Inkscape::Rubberband::get(_desktop);
+                    rubberband->set_mode(Rubberband::Mode::TOUCHPATH);
+                    rubberband->set_handle(RUBBERBAND_TOUCHPATH_ERASER);
                     rubberband->start(_desktop, button_dt);
-                    rubberband->setMode(RUBBERBAND_MODE_TOUCHPATH);
                 }
                 /* initialize first point */
                 npoints = 0;

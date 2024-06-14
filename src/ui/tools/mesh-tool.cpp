@@ -536,7 +536,8 @@ bool MeshTool::root_handler(CanvasEvent const &event)
                     }
 
                     if (has_mesh && !(event.modifiers & GDK_CONTROL_MASK)) {
-                        Inkscape::Rubberband::get(_desktop)->start(_desktop, button_dt);
+                        auto rubberband = Inkscape::Rubberband::get(_desktop);
+                        rubberband->start(_desktop, button_dt);
                     }
 
                     // remember clicked item, disregarding groups, honoring Alt; do nothing with Crtl to
@@ -667,7 +668,7 @@ bool MeshTool::root_handler(CanvasEvent const &event)
 
                                 if (r->is_started() && !this->within_tolerance) {
                                     // this was a rubberband drag
-                                    if (r->getMode() == RUBBERBAND_MODE_RECT) {
+                                    if (r->getMode() == Rubberband::Mode::RECT) {
                                         Geom::OptRect const b = r->getRectangle();
                                         if (!(event.modifiers & GDK_SHIFT_MASK)) {
                                             _grdrag->deselectAll();

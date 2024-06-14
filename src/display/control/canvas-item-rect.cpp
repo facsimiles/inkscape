@@ -17,6 +17,8 @@
 #include "canvas-item-rect.h"
 
 #include <cairo/cairo.h>
+#include <cairomm/pattern.h>
+#include <cairomm/refptr.h>
 
 #include "desktop.h"
 #include "display/cairo-utils.h"
@@ -33,6 +35,7 @@ CanvasItemRect::CanvasItemRect(CanvasItemGroup *group)
     : CanvasItem(group)
 {
     _name = "CanvasItemRect:Null";
+    _fill = 0;
 }
 
 /**
@@ -43,6 +46,7 @@ CanvasItemRect::CanvasItemRect(CanvasItemGroup *group, Geom::Rect const &rect)
     , _rect(rect)
 {
     _name = "CanvasItemRect";
+    _fill = 0;
 }
 
 /**
@@ -95,7 +99,7 @@ void CanvasItemRect::_update(bool)
         _bounds->expandBy(2 * get_shadow_size());
     }
     *_bounds *= affine();
-    _bounds->expandBy(2); // Room for stroke.
+    _bounds->expandBy(get_effective_outline() / 2); // Room for stroke and outline.
 
     // Queue redraw of new area
     request_redraw();
@@ -111,10 +115,12 @@ void CanvasItemRect::_render(Inkscape::CanvasItemBuffer &buf) const
     bool const axis_aligned = (Geom::are_near(aff[1], 0) && Geom::are_near(aff[2], 0))
                            || (Geom::are_near(aff[0], 0) && Geom::are_near(aff[3], 0));
 
-    // If so, then snap the rectangle to the pixel grid.
+    // If we are and the effective outline is of odd width then snap the rectangle to the pixel grid.
     auto rect = _rect;
     if (axis_aligned) {
-        rect = (floor(_rect * aff) + Geom::Point(0.5, 0.5)) * aff.inverse();
+        auto is_odd = static_cast<int>(std::round(get_effective_outline())) & 1;
+        auto shift = is_odd ? Geom::Point(0.5, 0.5) : Geom::Point();
+        rect = (floor(_rect * aff) + shift) * aff.inverse();
     }
 
     buf.cr->save();
@@ -155,11 +161,37 @@ void CanvasItemRect::_render(Inkscape::CanvasItemBuffer &buf) const
     if (_dashed) {
         buf.cr->set_dash(dashes, -0.5);
     }
-    buf.cr->set_line_width(_stroke_width);
-    // we maybe have painted the background, back to "normal" compositing
-    buf.cr->set_source_rgba(SP_RGBA32_R_F(_stroke), SP_RGBA32_G_F(_stroke),
-                            SP_RGBA32_B_F(_stroke), SP_RGBA32_A_F(_stroke));
-    buf.cr->stroke_preserve();
+
+    // We maybe have painted the background, back to "normal" compositing
+
+    // Do outline
+    if ((SP_RGBA32_A_U(_outline) > 0) && _outline_width > 0) {
+        buf.cr->set_source_rgba(SP_RGBA32_R_F(_outline), SP_RGBA32_G_F(_outline),
+                                SP_RGBA32_B_F(_outline), SP_RGBA32_A_F(_outline));
+        buf.cr->set_line_width(get_effective_outline());
+        buf.cr->stroke_preserve();
+    }
+
+    // Do stroke
+    if (SP_RGBA32_A_U(_stroke) > 0 && _stroke_width > 0) {
+        buf.cr->set_source_rgba(SP_RGBA32_R_F(_stroke), SP_RGBA32_G_F(_stroke),
+                                SP_RGBA32_B_F(_stroke), SP_RGBA32_A_F(_stroke));
+        buf.cr->set_line_width(_stroke_width);
+        buf.cr->stroke_preserve();
+    }
+
+    // Draw fill pattern
+    if(_fill_pattern) {
+        buf.cr->set_source(_fill_pattern);
+        buf.cr->fill_preserve();
+    }
+
+    // Draw fill
+    if(SP_RGBA32_A_U(_fill) > 0) {
+        buf.cr->set_source_rgba(SP_RGBA32_R_F(_fill), SP_RGBA32_G_F(_fill),
+                                SP_RGBA32_B_F(_fill), SP_RGBA32_A_F(_fill));
+        buf.cr->fill_preserve();
+    }
 
     // Highlight the border by drawing it in _shadow_color.
     if (_shadow_width == 1 && _dashed) {
@@ -193,8 +225,13 @@ void CanvasItemRect::set_is_page(bool is_page)
 
 void CanvasItemRect::set_fill(uint32_t fill)
 {
-    if (fill != _fill && _is_page) get_canvas()->set_page(fill);
-    CanvasItem::set_fill(fill);
+    defer([=, this] {
+        if (fill != _fill && _is_page) {
+            get_canvas()->set_page(fill);
+        }
+        _fill = fill;
+        request_redraw();
+    });
 }
 
 void CanvasItemRect::set_dashed(bool dashed)
@@ -246,16 +283,6 @@ double CanvasItemRect::get_shadow_size() const
     // more slowly at small zoom levels (so it's still perceptible) and grow more slowly at high mag (where it doesn't matter, b/c it's typically off-screen)
     return size / (scale > 0 ? sqrt(scale) : 1);
 }
-
-void CanvasItemRect::set_stroke_width(int width)
-{
-    defer([=, this] {
-        if (_stroke_width == width) return;
-        _stroke_width = width;
-        request_redraw();
-    });
-}
-
 } // namespace Inkscape
 
 /*

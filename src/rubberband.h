@@ -11,25 +11,19 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <cstdint>
+#include <cairomm/pattern.h>
+#include <cairomm/refptr.h>
 #include <2geom/point.h>
 #include <2geom/path.h>
 #include <2geom/rect.h>
-#include <optional>
 #include <vector>
+#include "display/control/canvas-item-enums.h"
 #include "display/control/canvas-item-ptr.h"
 
 /* fixme: do multidocument safe */
 
 class SPCurve;
 class SPDesktop;
-
-enum
-{
-    RUBBERBAND_MODE_RECT,
-    RUBBERBAND_MODE_TOUCHPATH,
-    RUBBERBAND_MODE_TOUCHRECT
-};
 
 namespace Inkscape {
 
@@ -42,22 +36,27 @@ class CanvasItemRect;
 class Rubberband
 {
 public:
+    enum class Mode {
+        RECT,
+        TOUCHPATH,
+        TOUCHRECT
+    };
+
     void start(SPDesktop *desktop, Geom::Point const &p, bool tolerance = false);
     void move(Geom::Point const &p);
     Geom::OptRect getRectangle() const;
     void stop();
-    bool is_started() { return _started; }
-    bool is_moved() { return _moved; }
+    bool is_started() const { return _started; }
+    bool is_moved() const { return _moved; }
 
-    inline int getMode() {return _mode;}
+    Rubberband::Mode getMode() const { return _mode; }
     std::vector<Geom::Point> getPoints() const;
     Geom::Path getPath() const;
 
-    void setMode(int mode);
-    void defaultMode();
-
-    void setColor(uint32_t color);
-    void resetColor() { _color.reset(); }
+    constexpr static Rubberband::Mode get_default_mode() { return Rubberband::Mode::RECT; };
+    constexpr static CanvasItemCtrlType get_default_handle() { return CanvasItemCtrlType::RUBBERBAND_RECT; };
+    void set_mode(Rubberband::Mode mode) { _mode = mode; };
+    void set_handle(CanvasItemCtrlType handle) { _handle = handle; };
 
     static Rubberband* get(SPDesktop *desktop);
 
@@ -72,16 +71,15 @@ private:
 
     CanvasItemPtr<CanvasItemRect> _rect;
     CanvasItemPtr<CanvasItemBpath> _touchpath;
+    CanvasItemCtrlType _handle = CanvasItemCtrlType::RUBBERBAND_RECT; // Used for styling through css
     SPCurve *_touchpath_curve = nullptr;
 
     void delete_canvas_items();
 
     bool _started = false;
     bool _moved = false;
-    int _mode = RUBBERBAND_MODE_RECT;
+    Rubberband::Mode _mode = get_default_mode();
     double _tolerance = 0.0;
-
-    std::optional<uint32_t> _color;
 };
 
 } // namespace Inkscape

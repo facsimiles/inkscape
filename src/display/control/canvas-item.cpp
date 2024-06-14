@@ -273,6 +273,14 @@ void CanvasItem::set_fill(uint32_t fill)
     });
 }
 
+void CanvasItem::set_fill_pattern(Cairo::RefPtr<Cairo::Pattern> fill_pattern) {
+    defer([fill_pattern = std::move(fill_pattern), this] () mutable {
+        if (_fill_pattern == fill_pattern) return;
+        _fill_pattern = std::move(fill_pattern);
+        request_redraw();
+    });
+}
+
 void CanvasItem::set_stroke(uint32_t stroke)
 {
     defer([=, this] {
@@ -280,6 +288,51 @@ void CanvasItem::set_stroke(uint32_t stroke)
         _stroke = stroke;
         request_redraw();
     });
+}
+
+/**
+ * Set the stroke width
+ */
+void CanvasItem::set_stroke_width(double width)
+{
+    defer([=, this] {
+        if (_stroke_width == width) return;
+        _stroke_width = width;
+        request_redraw();
+    });
+}
+
+
+/**
+ * Set the outline color
+ */
+void CanvasItem::set_outline(uint32_t color)
+{
+    defer([=, this] {
+        if (_outline == color) return;
+        _outline = color;
+        request_redraw();
+    });
+}
+
+/**
+ * Set the outline width. Outline is the "area" beyond the stroke
+ */
+void CanvasItem::set_outline_width(double width)
+{
+    defer([=, this] {
+        if (_outline_width == width) return;
+        _outline_width = width;
+        request_redraw();
+    });
+}
+
+/**
+ * Get the effective outline
+ */
+double CanvasItem::get_effective_outline() const {
+    // Outline extends in two directions, so we scale by 2
+    return _stroke_width + 2 * _outline_width;
 }
 
 void CanvasItem::update_canvas_item_ctrl_sizes(int size_index)
