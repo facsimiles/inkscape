@@ -315,6 +315,17 @@ void draw_malign(Cairo::Context &cr, double size)
     cr.close_path();
 }
 
+void draw_hexagon(Cairo::Context &cr, double size)
+{
+    cr.move_to(0, size / 2.0);
+    cr.line_to(size / 4.0, size * 0.933012);
+    cr.line_to((3.0 * size) / 4.0, size * 0.933012);
+    cr.line_to(size, size / 2.0);
+    cr.line_to((3.0 * size) / 4.0, 0.066987);
+    cr.line_to(size / 4.0, 0.066987);
+    cr.close_path();
+}
+
 void draw_circle(Cairo::Context &cr, double size)
 {
     cr.arc(size / 2.0, size / 2.0, size / 2.0, 0, 2 * M_PI);
@@ -392,6 +403,10 @@ void draw_cairo_path(CanvasItemCtrlShape shape, Cairo::Context &cr, double size,
 
         case CANVAS_ITEM_CTRL_SHAPE_MALIGN:
             draw_malign(cr, size);
+            break;
+
+        case CANVAS_ITEM_CTRL_SHAPE_HEXAGON:
+            draw_hexagon(cr, size);
             break;
 
         case CANVAS_ITEM_CTRL_SHAPE_CIRCLE:

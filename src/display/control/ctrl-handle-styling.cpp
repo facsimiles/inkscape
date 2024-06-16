@@ -80,6 +80,7 @@ std::unordered_map<std::string, CanvasItemCtrlShape> const ctrl_shape_map = {
     {"'square'", CANVAS_ITEM_CTRL_SHAPE_SQUARE},
     {"'diamond'", CANVAS_ITEM_CTRL_SHAPE_DIAMOND},
     {"'circle'", CANVAS_ITEM_CTRL_SHAPE_CIRCLE},
+    {"'hexagon'", CANVAS_ITEM_CTRL_SHAPE_HEXAGON},
     {"'triangle'", CANVAS_ITEM_CTRL_SHAPE_TRIANGLE},
     {"'triangle-angled'", CANVAS_ITEM_CTRL_SHAPE_TRIANGLE_ANGLED},
     {"'cross'", CANVAS_ITEM_CTRL_SHAPE_CROSS},
