@@ -454,16 +454,15 @@ void Handle::dragged(Geom::Point &new_pos, MotionEvent const &event)
         new_pos = parent_pos + Geom::unit_vector(new_pos - parent_pos) * _saved_length;
         snap = false;
     }
-
-    // with Shift + space, preserve length and direction of handles and move parent
-    if (held_shift(event) && _space_pressed) {
+    else if (_space_pressed) { // with space, preserve length and direction of handles and move parent
         Geom::Point _parent_pos = new_pos - _saved_dir * _saved_length;
         _parent->move(_parent_pos);
         snap = false;
     } else {
+        _saved_length = _drag_out ? 0 : length();
         _saved_dir = Geom::unit_vector(relativePos());
-        _saved_length = _drag_out ? 0 : length(); 
     }
+        
 
     // with Ctrl, constrain to M_PI/rotationsnapsperpi increments from vertical
     // and the original position.
@@ -579,41 +578,10 @@ void Handle::ungrabbed(ButtonReleaseEvent const *event)
 
 bool Handle::clicked(ButtonReleaseEvent const &event)
 {
-    if (held_alt(event)) { // with Alt, toggle between symmetric and smooth node type
-
-        if(_parent->type() == NODE_SMOOTH) {
-            // make the node symmetric
-            other()->setRelativePos(-relativePos());
-            _parent->setType(NODE_SYMMETRIC, false);
-
-        } else {
-            // no matter the node type make it smooth
-            // make opposite handle collinear,
-            // but preserve length, unless degenerate
-            if (other()->isDegenerate())
-                other()->setRelativePos(-relativePos());
-            else
-                other()->setDirection(-relativePos());
-            _parent->setType(NODE_SMOOTH, false);
-        }
-
-        // update display
-        _parent->_pm().update();
-
-        // update undo history
-        _parent->_pm()._commit(_("Change node type"));
+    
+    if (_pm()._nodeClicked(this->parent(), event)) {
+        return true;
     }
-
-    if (held_only_shift(event) && _parent->type() != NODE_CUSP) { // with Shift, make CUSP node
-        _parent->setType(NODE_CUSP, false);
-
-        // update display
-        _parent->_pm().update();
-
-        // update undo history
-        _parent->_pm()._commit(_("Change node type"));
-    }
-
     _pm()._handleClicked(this, event);
     return true;
 }
