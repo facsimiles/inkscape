@@ -54,6 +54,7 @@ public:
         POINT,
         CONTROL,
         CLOSE,
+        BREAK,
         STOP,
         DEAD
     };
@@ -73,6 +74,9 @@ public:
     bool spiro = false;  // Spiro mode active?
     bool bspline = false; // BSpline mode active?
 
+    bool prev_anchor_statusbar = false;
+    bool hid_handles = false; // hid handles due to PenTool::BREAK ?
+
     unsigned int expecting_clicks_for_LPE = 0; // if positive, finish the path after this many clicks
     Inkscape::LivePathEffect::Effect *waiting_LPE = nullptr; // if NULL, waiting_LPE_type in SPDrawContext is taken into account
     SPLPEItem *waiting_item = nullptr;
@@ -84,6 +88,8 @@ public:
 
     CanvasItemPtr<CanvasItemCurve> cl0;
     CanvasItemPtr<CanvasItemCurve> cl1;
+
+    std::vector<SPDrawAnchor*> _anchors;
     
     bool events_disabled = false;
 

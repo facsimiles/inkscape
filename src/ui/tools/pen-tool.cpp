@@ -69,6 +69,7 @@ namespace Tools {
 
 static Geom::Point pen_drag_origin_w(0, 0);
 static bool pen_within_tolerance = false;
+static CanvasItemGroup* canvas;
 
 PenTool::PenTool(SPDesktop *desktop, std::string &&prefs_path, std::string &&cursor_filename)
     : FreehandBase(desktop, std::move(prefs_path), std::move(cursor_filename))
@@ -79,7 +80,7 @@ PenTool::PenTool(SPDesktop *desktop, std::string &&prefs_path, std::string &&cur
     tablet_enabled = false;
 
     // Pen indicators (temporary handles shown when adding a new node).
-    auto canvas = desktop->getCanvasControls();
+    canvas = desktop->getCanvasControls();
     
     cl0 = make_canvasitem<CanvasItemCurve>(canvas);
     cl1 = make_canvasitem<CanvasItemCurve>(canvas);
@@ -123,6 +124,12 @@ PenTool::~PenTool() {
     cl0.reset();
     cl1.reset();
 
+    // remove all anchors
+    for (auto& _anchor: _anchors) {
+        delete _anchor;
+    }
+    _anchors.clear();
+
     if (this->waiting_item && this->expecting_clicks_for_LPE > 0) {
         // we received too few clicks to sanely set the parameter path so we remove the LPE from the item
         this->waiting_item->removeCurrentPathEffect(false);
@@ -152,6 +159,13 @@ void PenTool::_cancel() {
     }
     cl0->set_visible(false);
     cl1->set_visible(false);
+
+    // remove all anchors
+    for (auto& _anchor: _anchors) {
+        delete _anchor;
+    }
+    _anchors.clear();
+
     this->message_context->clear();
     this->message_context->flash(Inkscape::NORMAL_MESSAGE, _("Drawing cancelled"));
     _redo_stack.clear();
@@ -306,6 +320,11 @@ bool PenTool::_handleButtonPress(ButtonPressEvent const &event) {
             return true;
         }
 
+        SPDrawAnchor *prev = nullptr;
+        if ( !_anchors.empty() && !polylines_only && !polylines_paraxial ) {
+            prev = _anchors.back()->anchorTest(event_w, true);
+        }
+
         grabCanvasEvents();
 
         pen_drag_origin_w = event_w;
@@ -319,6 +338,7 @@ bool PenTool::_handleButtonPress(ButtonPressEvent const &event) {
                     case PenTool::POINT:
                     case PenTool::CONTROL:
                     case PenTool::CLOSE:
+                    case PenTool::BREAK:
                         break;
                     case PenTool::STOP:
                         // This is allowed, if we just canceled curve
@@ -406,6 +426,15 @@ bool PenTool::_handleButtonPress(ButtonPressEvent const &event) {
                                 }
                                 ret = true;
                                 break;
+                            
+                            } else if (prev) {
+                                // we hit the previous node anchor, we will break the front handle
+                                // of the previous node
+                                p = prev->dp;
+                                state = PenTool::BREAK;
+
+                                ret = true;
+                                break;
 
                             } else {
                                 p = event_dt;
@@ -422,6 +451,9 @@ bool PenTool::_handleButtonPress(ButtonPressEvent const &event) {
                         break;
                     case PenTool::CLOSE:
                         g_warning("Button down in CLOSE state");
+                        break;
+                    case PenTool::BREAK:
+                        g_warning("Button down in BREAK state");
                         break;
                     default:
                         break;
@@ -507,6 +539,11 @@ bool PenTool::_handleMotionNotify(MotionEvent const &event) {
     // Test, whether we hit any anchor
     SPDrawAnchor *anchor = spdc_test_inside(this, event_w);
 
+    SPDrawAnchor *prev = nullptr;
+    if ( !_anchors.empty() && !polylines_only && !polylines_paraxial ) {
+        prev = _anchors.back()->anchorTest(event_w, true);
+    }
+
     switch (mode) {
         case PenTool::MODE_CLICK:
             switch (state) {
@@ -530,6 +567,8 @@ bool PenTool::_handleMotionNotify(MotionEvent const &event) {
                     _setCtrl(p, event.modifiers);
                     ret = true;
                     break;
+                case PenTool::BREAK:
+                    break;
                 case PenTool::STOP:
                     if (!sp_event_context_knot_mouseover()) {
                         SnapManager &m = _desktop->getNamedView()->snap_manager;
@@ -548,14 +587,29 @@ bool PenTool::_handleMotionNotify(MotionEvent const &event) {
                     if ( npoints > 0 ) {
                         // Only set point, if we are already appending
 
-                        if (!anchor) {   // Snap node only if not hitting anchor
+                        if (!anchor && !prev) {   // Snap node only if not hitting anchor
+                        
+                            if (hid_handles) {
+                                cl1->set_visible(true);
+                                ctrl[1]->set_visible(true);
+                                hid_handles = false;
+                            }
                             _endpointSnap(p, event.modifiers);
                             _setSubsequentPoint(p, true, event.modifiers);
                         } else if (green_anchor && green_anchor->active && green_curve && !green_curve->is_unset()) {
                             // The green anchor is the end point, use the initial point explicitly.
                             _setSubsequentPoint(green_curve->first_path()->initialPoint(), false, event.modifiers);
-                        } else {
+                        } else if (anchor) {
                             _setSubsequentPoint(anchor->dp, false, event.modifiers);
+                        } else {
+                            // if hovering over previous node, delete its front handles and the red curve
+                            this->red_curve.reset();
+                            this->red_bpath->set_bpath(&red_curve, true);
+                            if (cl1->is_visible()) {
+                                cl1->set_visible(false);
+                                ctrl[1]->set_visible(false);
+                                hid_handles = true;
+                            }
                         }
 
                         if (anchor && !anchor_statusbar) {
@@ -568,6 +622,18 @@ bool PenTool::_handleMotionNotify(MotionEvent const &event) {
                         } else if (!anchor && anchor_statusbar) {
                             message_context->clear();
                             anchor_statusbar = false;
+                        }
+
+                        if (prev && !prev_anchor_statusbar) {
+                            if(!spiro && !bspline){
+                                message_context->set(Inkscape::NORMAL_MESSAGE, _("<b>Click</b> or <b>click and drag</b> to delete front handle of previous node."));
+                            }else{
+                                message_context->set(Inkscape::NORMAL_MESSAGE, _("<b>Click</b> or <b>click and drag</b> to make last node a cusp node."));
+                            }
+                            prev_anchor_statusbar = true;
+                        } else if (!prev && prev_anchor_statusbar) {
+                            message_context->clear();
+                            prev_anchor_statusbar = false;
                         }
 
                         ret = true;
@@ -608,6 +674,8 @@ bool PenTool::_handleMotionNotify(MotionEvent const &event) {
 
                     gobble_motion_events(GDK_BUTTON1_MASK);
                     ret = true;
+                    break;
+                case PenTool::BREAK:
                     break;
                 case PenTool::STOP:
                     // Don't break; fall through to default to do preSnapping
@@ -663,6 +731,11 @@ bool PenTool::_handleButtonRelease(ButtonReleaseEvent const &event) {
             return true;
         }
 
+        SPDrawAnchor *prev = nullptr;
+        if ( !_anchors.empty() && !polylines_only && !polylines_paraxial ) {
+            prev = _anchors.back()->anchorTest(event_w, true);
+        }
+
         switch (mode) {
             case PenTool::MODE_CLICK:
                 switch (state) {
@@ -685,12 +758,15 @@ bool PenTool::_handleButtonRelease(ButtonReleaseEvent const &event) {
                             _endpointSnap(p, event.modifiers);
                         }
                         _finishSegment(p, event.modifiers);
-                        // hude the guide of the penultimate node when closing the curve
+                        // hide the guide of the penultimate node when closing the curve
                         if(spiro){
                             ctrl[1]->set_visible(false);
                         }
                         _finish(true);
                         state = PenTool::POINT;
+                        break;
+                    case PenTool::BREAK:
+                        g_warning("release_click");
                         break;
                     case PenTool::STOP:
                         // This is allowed, if we just canceled curve
@@ -722,6 +798,20 @@ bool PenTool::_handleButtonRelease(ButtonReleaseEvent const &event) {
                             _finish(false);
                         }
                         break;
+
+                    case PenTool::BREAK:
+                        g_warning("release_drag");
+                        // we clicked on previous node, make it a line
+                        _lastpointToLine();
+
+                        // hide front handles
+                        cl1->set_visible(false);
+                        ctrl[1]->set_visible(false);
+                        hid_handles = false;
+
+                        state = PenTool::POINT;
+                        break;
+
                     case PenTool::STOP:
                         // This is allowed, if we just cancelled curve
                         break;
@@ -852,6 +942,11 @@ void PenTool::_lastpointMove(gdouble x, gdouble y) {
     // red
     p_array[0] += delta;
     p_array[1] += delta;
+
+    if (!_anchors.empty()) {
+        _anchors.back()->dp = p_array[0];
+        _anchors.back()->ctrl->set_position(p_array[0]);
+    }
     _redrawAll();
 }
 
@@ -958,6 +1053,8 @@ void PenTool::_lastpointToLine() {
     }
 
     p_array[1] = p_array[0];
+    // since we have a straign line now we need to change npoints
+    npoints = 2;
     this->_redrawAll();
 }
 
@@ -1473,6 +1570,12 @@ void PenTool::_bsplineSpiroMotion(guint const state){
         }
     }
 
+    // update position of old spiro anchor
+    if (!_anchors.empty()) {
+        _anchors.back()->dp = p_array[0];
+        _anchors.back()->ctrl->set_position(p_array[0]);
+    }
+
     // remove old piecewise green canvasitems
     green_bpaths.clear();
 
@@ -1754,8 +1857,8 @@ void PenTool::_setCtrl(Geom::Point const q, guint const state)
         cl1->set_coords(p_array[3], p_array[4]);
 
         gchar *message = is_symm ?
-            _("<b>Curve handle, symmetric</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</b> to snap angle, with <b>Shift</b> to move this handle only") :
-            _("<b>Curve handle</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</b> to snap angle, with <b>Shift</b> to move this handle only");
+            _("<b>Curve handle, symmetric</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</b> to snap angle, with <b>Shift</b> to break this handle, with <b>Alt</b> to move this handle only") :
+            _("<b>Curve handle</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</b> to snap angle, with <b>Shift</b> to break this handle, with <b>Alt</b> to move this handle only");
         this->_setAngleDistanceStatusMessage(q, 3, message);
     } else {
         g_warning("Something bad happened - npoints is %d", this->npoints);
@@ -1790,6 +1893,10 @@ void PenTool::_finishSegment(Geom::Point const q, guint const state) { // use 'q
         canvas_shape->set_fill(0x0, SP_WIND_RULE_NONZERO);
         green_bpaths.emplace_back(canvas_shape);
 
+        // display the new point
+        _anchors.push_back(new SPDrawAnchor(this, green_curve, true, p_array[3]));
+        if ( bspline || spiro ) _anchors.back()->ctrl->set_type(CANVAS_ITEM_CTRL_TYPE_ROTATE);
+
         p_array[0] = p_array[3];
         p_array[1] = p_array[4];
         this->npoints = 2;
@@ -1801,6 +1908,12 @@ void PenTool::_finishSegment(Geom::Point const q, guint const state) { // use 'q
 
 bool PenTool::_undoLastPoint(bool user_undo) {
     bool ret = false;
+
+    // remove last point from _anchors
+    if (!_anchors.empty()) {
+        delete *_anchors.rbegin();
+        _anchors.pop_back();
+    }
 
     if ( this->green_curve->is_unset() || (this->green_curve->last_segment() == nullptr) ) {
         if (red_curve.is_unset()) {
@@ -1946,6 +2059,11 @@ void PenTool::_finish(gboolean const closed) {
 
     cl0->set_visible(false);
     cl1->set_visible(false);
+
+    for (auto& _anchor: _anchors) {
+        delete _anchor;
+    }
+    _anchors.clear();
 
     this->green_anchor.reset();
     _redo_stack.clear();
