@@ -18,6 +18,7 @@
  */
 
 #include <cstring>
+#include <memory>
 #include <string>
 
 #include <gdk/gdkkeysyms.h>
@@ -27,6 +28,7 @@
 #include "desktop.h"
 #include "message-context.h"
 #include "message-stack.h"
+#include "pen-tool.h"
 #include "selection-chemistry.h"
 #include "selection.h"
 
@@ -125,9 +127,6 @@ PenTool::~PenTool() {
     cl1.reset();
 
     // remove all anchors
-    for (auto& _anchor: _anchors) {
-        delete _anchor;
-    }
     _anchors.clear();
 
     if (this->waiting_item && this->expecting_clicks_for_LPE > 0) {
@@ -161,9 +160,6 @@ void PenTool::_cancel() {
     cl1->set_visible(false);
 
     // remove all anchors
-    for (auto& _anchor: _anchors) {
-        delete _anchor;
-    }
     _anchors.clear();
 
     this->message_context->clear();
@@ -1834,8 +1830,13 @@ void PenTool::_setCtrl(Geom::Point const q, guint const state)
         if ( ( ( this->mode == PenTool::MODE_CLICK ) && ( state & GDK_CONTROL_MASK ) ) ||
              ( ( this->mode == PenTool::MODE_DRAG ) &&  !( state & GDK_SHIFT_MASK  ) ) ) {
             Geom::Point delta = q - p_array[3];
-            p_array[2] = p_array[3] - delta;
-            is_symm = true;
+            if ( this->mode == PenTool::MODE_DRAG && ( state & GDK_ALT_MASK ) ) {
+                // with Alt, we unlink handle length keeping directions opposite to each other
+                p_array[2] = p_array[3] - (p_array[3] - p_array[2]).length() * Geom::unit_vector(delta);
+            } else {
+                p_array[2] = p_array[3] - delta;
+                is_symm = true; 
+            }
             this->red_curve.reset();
             this->red_curve.moveto(p_array[0]);
             this->red_curve.curveto(p_array[1], p_array[2], p_array[3]);
@@ -1894,7 +1895,7 @@ void PenTool::_finishSegment(Geom::Point const q, guint const state) { // use 'q
         green_bpaths.emplace_back(canvas_shape);
 
         // display the new point
-        _anchors.push_back(new SPDrawAnchor(this, green_curve, true, p_array[3]));
+        _anchors.push_back(std::make_unique<SPDrawAnchor>(this, green_curve, true, p_array[3]));
         if ( bspline || spiro ) _anchors.back()->ctrl->set_type(CANVAS_ITEM_CTRL_TYPE_ROTATE);
 
         p_array[0] = p_array[3];
@@ -1911,7 +1912,6 @@ bool PenTool::_undoLastPoint(bool user_undo) {
 
     // remove last point from _anchors
     if (!_anchors.empty()) {
-        delete *_anchors.rbegin();
         _anchors.pop_back();
     }
 
@@ -2060,9 +2060,6 @@ void PenTool::_finish(gboolean const closed) {
     cl0->set_visible(false);
     cl1->set_visible(false);
 
-    for (auto& _anchor: _anchors) {
-        delete _anchor;
-    }
     _anchors.clear();
 
     this->green_anchor.reset();

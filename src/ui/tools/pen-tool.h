@@ -89,7 +89,7 @@ public:
     CanvasItemPtr<CanvasItemCurve> cl0;
     CanvasItemPtr<CanvasItemCurve> cl1;
 
-    std::vector<SPDrawAnchor*> _anchors;
+    std::vector<std::unique_ptr<SPDrawAnchor>> _anchors;
     
     bool events_disabled = false;
 
