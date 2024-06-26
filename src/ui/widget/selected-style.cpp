@@ -65,27 +65,28 @@ static constexpr std::array<double, 15> _sw_presets{
     32, 16, 10, 8, 6, 4, 3, 2, 1.5, 1, 0.75, 0.5, 0.25, 0.1};
 
 // In order of PaintType enum: fill, stroke; label, tooltip.
+// not use bold to avoid whole ink resize
 static const Glib::ustring type_strings[][2][2] = {
     {{ _("N/A"),                    _("Nothing selected")},
      { _("N/A"),                    _("Nothing selected")}},
-    {{C_("Fill", "<i>None</i>"),    _("No fill, middle-click for black fill")},
+    {{C_("Fill",   "<i>None</i>"),  _("No fill, middle-click for black fill")},
      {C_("Stroke", "<i>None</i>"),  _("No stroke, middle-click for black stroke")}},
-    {{ _("<b>Unset</b>"),           _("Unset fill")},
-     { _("<b>Unset</b>"),           _("Unset stroke")}},
+    {{ _("<i>Unset</i>"),           _("Unset fill")},
+     { _("<i>Unset</i>"),           _("Unset stroke")}},
     {{ _("≠"),                      _("Different fills")},
      { _("≠"),                      _("Different strokes")}},
     {{ _("Pattern"),                _("Pattern (fill)")},
      { _("Pattern"),                _("Pattern (stroke)")}},
     {{ _("Hatch"),                  _("Pattern (fill)")},
      { _("Hatch"),                  _("Pattern (stroke)")}},
-    {{ _("<b>L</b>"),               _("Linear gradient (fill)")},
-     { _("<b>L</b>"),               _("Linear gradient (stroke)")}},
-    {{ _("<b>R</b>"),               _("Radial gradient (fill)")},
-     { _("<b>R</b>"),               _("Radial gradient (stroke)")}},
-    {{ _("<b>M</b>"),               _("Mesh gradient (fill)")},
-     { _("<b>M</b>"),               _("Mesh gradient (stroke)")}},
-    {{ _("<b>C</b>"),               _("Flat color (fill)")},
-     { _("<b>C</b>"),               _("Flat color (stroke)")}}
+    {{ _("<i>L</i>"),               _("Linear gradient (fill)")},
+     { _("<i>L</i>"),               _("Linear gradient (stroke)")}},
+    {{ _("<i>R</i>"),               _("Radial gradient (fill)")},
+     { _("<i>R</i>"),               _("Radial gradient (stroke)")}},
+    {{ _("<i>M</i>"),               _("Mesh gradient (fill)")},
+     { _("<i>M</i>"),               _("Mesh gradient (stroke)")}},
+    {{ _("<i>C</i>"),               _("Flat color (fill)")},
+     { _("<i>C</i>"),               _("Flat color (stroke)")}}
 };
 
 static void
@@ -203,12 +204,21 @@ SelectedStyle::SelectedStyle(bool /*layout*/)
     }
 
     // Stroke width
+    // ad a NBSP char hover to not move when application text size scale
+    auto empty_label = Gtk::make_managed<Gtk::Label>("");
+    empty_label->set_markup(" ");
+    // We need to add into a empty_eventbox container because application font scale 
+    // not sale a label need a -?parent- widget with css node tipe "widget". box or label arent
+    auto empty_eventbox = Gtk::make_managed<Gtk::EventBox>();
+    empty_eventbox->add(*empty_label);
     stroke_width = Gtk::make_managed<Gtk::Label>("1");
     stroke_width_rotateable = Gtk::make_managed<RotateableStrokeWidth>(this);
     stroke_width_rotateable->add(*stroke_width);
     stroke_width_rotateable->set_size_request(SELECTED_STYLE_STROKE_WIDTH, -1);
     Controller::add_click(*stroke_width_rotateable, {},
                           sigc::mem_fun(*this, &SelectedStyle::on_sw_click));
+    
+    grid->attach(*empty_eventbox, 3, 0, 1, 1);
     grid->attach(*stroke_width_rotateable, 3, 1, 1, 1);
 
     // Opacity
@@ -234,7 +244,7 @@ SelectedStyle::SelectedStyle(bool /*layout*/)
     opacity_sb->signal_value_changed().connect(sigc::mem_fun(*this, &SelectedStyle::on_opacity_changed));
 
     grid->attach(*opacity_label, 4, 0, 1, 2);
-    grid->attach(*opacity_sb,       5, 0, 1, 2);
+    grid->attach(*opacity_sb,    5, 0, 1, 2);
 
     grid->set_column_spacing(4);
     grid->show_all();
@@ -840,6 +850,8 @@ SelectedStyle::update()
                         auto vector = cast<SPGradient>(server)->getVector();
 
                         type_label[i]->set_markup(  type_strings[SS_LGRADIENT][i][0]);
+                        type_label[i]->set_size_request(20,-1);
+                        type_label[i]->set_xalign(0);
                         swatch[i]->set_tooltip_text(type_strings[SS_LGRADIENT][i][1]);
                         gradient_preview[i]->set_gradient(vector);
                         gradient_preview[i]->show();
@@ -849,6 +861,8 @@ SelectedStyle::update()
                         auto vector = cast<SPGradient>(server)->getVector();
 
                         type_label[i]->set_markup(  type_strings[SS_RGRADIENT][i][0]);
+                        type_label[i]->set_size_request(20,-1);
+                        type_label[i]->set_xalign(0);
                         swatch[i]->set_tooltip_text(type_strings[SS_RGRADIENT][i][1]);
                         gradient_preview[i]->set_gradient(vector);
                         gradient_preview[i]->show();
@@ -858,6 +872,8 @@ SelectedStyle::update()
                         auto array = cast<SPGradient>(server)->getArray();
 
                         type_label[i]->set_markup(  type_strings[SS_MGRADIENT][i][0]);
+                        type_label[i]->set_size_request(20,-1);
+                        type_label[i]->set_xalign(0);
                         swatch[i]->set_tooltip_text(type_strings[SS_MGRADIENT][i][1]);
                         gradient_preview[i]->set_gradient(array);
                         gradient_preview[i]->show();
@@ -911,14 +927,14 @@ SelectedStyle::update()
 
             if (result == QUERY_STYLE_MULTIPLE_AVERAGED) {
                 // TRANSLATORS: A means "Averaged"
-                tag[i]->set_markup("<b>a</b>");
+                tag[i]->set_markup("<span font_weight='bold' font_size='small'>a</span>");
                 tag[i]->set_tooltip_text(i == 0 ?
                                          _("Fill is averaged over selected objects") :
                                          _("Stroke is averaged over selected objects"));
 
             } else if (result == QUERY_STYLE_MULTIPLE_SAME) {
                 // TRANSLATORS: M means "Multiple"
-                tag[i]->set_markup("<b>m</b>");
+                tag[i]->set_markup("<span font_weight='bold' font_size='small'>m</span>");
                 tag[i]->set_tooltip_text(i == 0 ?
                                          _("Multiple selected objects have same fill") :
                                          _("Multiple selected objects have same stroke"));
