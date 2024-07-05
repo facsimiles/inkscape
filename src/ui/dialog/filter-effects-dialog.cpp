@@ -71,6 +71,821 @@
 using namespace Inkscape::Filters;
 
 namespace Inkscape::UI::Dialog {
+FilterEditorNode::FilterEditorNode(int node_id, int x, int y, SPFilterPrimitive *primitive,
+                                   std::string label_text)
+    : Gtk::Box(Gtk::Orientation::VERTICAL, -10)
+    , primitive(primitive)
+    , node_id(node_id)
+    , x(x)
+    , y(y)
+    , node(Gtk::Orientation::VERTICAL, 10)
+    , source_dock(Gtk::Orientation::HORIZONTAL, 10)
+    , source(this)
+    , sink_dock(Gtk::Orientation::HORIZONTAL, 10)
+    , sink(this)
+{
+    this->set_size_request(-1, -1);
+    this->node.set_name("filter-node");
+    this->node.set_size_request(200, -1);
+
+    Glib::RefPtr<Gtk::StyleContext> context = this->node.get_style_context();
+    Glib::RefPtr<Gtk::CssProvider> provider = Gtk::CssProvider::create();
+    Glib::ustring style = Inkscape::IO::Resource::get_filename(Inkscape::IO::Resource::UIS, "node-editor.css");
+    provider->load_from_path(style);
+    // provider->load_from_path("/home/phantomzback/Documents/GSOC_Projs/inkscape_final/testing.css");
+    context->add_provider(provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    this->node.add_css_class("nodebox-alt");
+    Gtk::Label *label = new Gtk::Label(label_text.c_str());
+    label->set_sensitive(false);
+    this->append(sink_dock);
+    this->sink_dock.append(sink);
+    this->sink_dock.set_halign(Gtk::Align::CENTER);
+    this->sink_dock.set_name("filter-node-sink-dock");
+    this->node.append(*label);
+
+    this->append(node);
+    this->append(source_dock);
+    this->source_dock.append(source);
+    this->source_dock.set_halign(Gtk::Align::CENTER);
+    this->source_dock.set_name("filter-node-source-dock");
+    this->is_selected = false;
+    this->add_css_class("node");
+    // this->source_dock.insert_child_at_start(source);
+}
+
+bool FilterEditorNode::get_selected()
+{
+    return is_selected;
+}
+bool FilterEditorNode::toggle_selection(bool selected)
+{
+    is_selected = selected;
+    if (selected) {
+        this->add_css_class("node-selected");
+        this->remove_css_class("node");
+    } else {
+        this->add_css_class("node");
+        this->remove_css_class("node-selected");
+    }
+    return selected;
+}
+
+void FilterEditorNode::get_position(double &x, double &y)
+{
+    x = this->x;
+    y = this->y;
+}
+
+void FilterEditorNode::update_position(double x, double y)
+{
+    this->x = x;
+    this->y = y;
+}
+
+SPFilterPrimitive* FilterEditorNode::get_primitive(){
+    return primitive;
+}
+
+FilterEditorSource::FilterEditorSource(FilterEditorNode* _node, std::string _label_string)
+    : Gtk::Box(Gtk::Orientation::VERTICAL, 0)
+    , label_string(_label_string)
+    , node(_node)
+{
+    this->set_name("filter-node-source");
+    Glib::RefPtr<Gtk::StyleContext> context = this->get_style_context();
+    Glib::RefPtr<Gtk::CssProvider> provider = Gtk::CssProvider::create();
+    this->set_size_request(15, 15);
+    Glib::ustring style = Inkscape::IO::Resource::get_filename(Inkscape::IO::Resource::UIS, "node-editor.css");
+    provider->load_from_path(style);
+    // provider->load_from_path("/home/phantomzback/Documents/GSOC_Projs/inkscape_final/testing.css");
+    context->add_provider(provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    this->add_css_class("nodesource");
+};
+FilterEditorNode *FilterEditorSource::get_parent_node()
+{
+    return node;
+};
+
+std::vector<FilterEditorConnection *> FilterEditorSource::get_connections()
+{
+    return connections;
+};
+
+bool FilterEditorSource::add_connection(FilterEditorConnection *connection)
+{
+    connections.push_back(connection);
+    return true;
+};
+bool FilterEditorSource::get_selected(){
+    return node->get_selected();
+}
+
+bool FilterEditorSink::get_selected(){
+    return node->get_selected();
+}
+
+
+CanvasFixed::CanvasFixed(std::vector<FilterEditorConnection *> &_connections, FilterEditorCanvas* _canvas, double _x_offset, double _y_offset)
+    : canvas(_canvas)
+    , x_offset(_x_offset)
+    , y_offset(_y_offset)
+    , connections(_connections) {};
+void CanvasFixed::update_positions(double x_offset_new, double y_offset_new)
+{
+    this->x_offset = x_offset_new;
+    this->y_offset = y_offset_new;
+    for (auto child : this->get_children()) {
+        double x, y;
+        dynamic_cast<NODE_TYPE *>(child)->get_position(x, y);
+    }
+}
+
+double CanvasFixed::get_x_offset()
+{
+    return this->x_offset;
+}
+double CanvasFixed::get_y_offset()
+{
+    return this->y_offset;
+}
+
+void CanvasFixed::update_offset(double x, double y)
+{
+    this->x_offset = x;
+    this->y_offset = y;
+}
+
+void CanvasFixed::snapshot_vfunc(const std::shared_ptr<Gtk::Snapshot> &snapshot)
+{
+    auto const cr = snapshot->append_cairo(get_allocation());
+    const double t = 100;
+    if(this->canvas->current_event_type == FilterEditorCanvas::FilterEditorEvent::CONNECTION_UPDATE){
+        cr->set_source_rgba(1.0, 1.0, 1.0, 1.0);
+        cr->set_line_width(5.0);
+        double x1, y1, x2, y2;
+        x1 = this->canvas->drag_global_coordinates.first.first;
+        y2 = this->canvas->drag_global_coordinates.second.first;
+        x2 = this->canvas->drag_global_coordinates.second.first;
+        y2 = this->canvas->drag_global_coordinates.second.second;
+        auto alloc = this->canvas->starting_source->get_allocation();
+        this->canvas->starting_source->translate_coordinates(*this, alloc.get_width()/2, alloc.get_height()/2, x1, y1);
+        double x2_l, y2_l;
+        this->canvas->global_to_local(x2, y2, x2_l, y2_l);
+        // x1/=this->canvas->get_zoom_factor();
+        // y1/=this->canvas->get_zoom_factor();
+        cr->move_to(x1, y1);
+        cr->curve_to(x1, y1 + t, x2, y2 - t, x2, y2);
+        cr->stroke();
+        cr->close_path();
+    }
+    for (auto conn : connections) {
+        double x1, y1, x2, y2;
+        conn->get_position(x1, y1, x2, y2);
+        double zoom_fac = this->canvas->get_zoom_factor();
+        x1 /= zoom_fac;
+        x2 /= zoom_fac;
+        y1 /= zoom_fac;
+        y2 /= zoom_fac;
+        
+        auto gradient = Cairo::LinearGradient::create(x1, y1, x2, y2);
+        gradient->add_color_stop_rgba(0.0, 0.3607843137254902, 0.0, 0.47843137254901963, 1.0);  // Red at 0%
+        gradient->add_color_stop_rgba(1.0, 0.0, 0.28627450980392155, 0.47843137254901963, 1.0); // Blue at 100%
+        
+
+        cr->set_line_cap(Cairo::Context::LineCap::ROUND);
+
+        if (1) {
+            auto gradient = Cairo::LinearGradient::create(x1, y1, x2, y2);
+            gradient->add_color_stop_rgba(0.0, 1.0, 1.0, 1.0,
+                                          1.0 * conn->get_source_node()->get_selected()); // Red at 0%
+            gradient->add_color_stop_rgba(1.0, 1.0, 1.0, 1.0,
+                                          1.0 * conn->get_sink_node()->get_selected()); // Blue at 100%
+            cr->set_source(gradient);
+
+            cr->move_to(x1, y1);
+            cr->set_line_width(7.0);
+
+            cr->curve_to(x1, y1 + t, x2, y2 - t, x2, y2);
+            cr->stroke();
+
+            cr->close_path();
+        }
+        cr->set_source(gradient);
+        cr->set_line_width(5.0);
+        cr->move_to(x1, y1);
+
+        cr->curve_to(x1, y1 + t, x2, y2 - t, x2, y2);
+        cr->stroke();
+
+        cr->close_path();
+    } 
+
+    Gtk::Fixed::snapshot_vfunc(snapshot);
+};
+void FilterEditorConnection::get_position(double &x1, double &y1, double &x2, double &y2)
+{
+    double x, y;
+    auto alloc = source->get_allocation();
+    source->translate_coordinates(*(canvas->get_child()), alloc.get_width() / 2, alloc.get_height() / 2, x, y);
+    x1 = x;
+    y1 = y;
+    alloc = sink->get_allocation();
+    sink->translate_coordinates(*(canvas->get_child()), alloc.get_width() / 2, alloc.get_height() / 2, x, y);
+    x2 = x;
+    y2 = y;
+}
+FilterEditorNode* FilterEditorConnection::get_source_node(){
+    return source_node;
+}
+FilterEditorNode* FilterEditorConnection::get_sink_node(){
+    return sink_node;
+}
+FilterEditorSource* FilterEditorConnection::get_source()
+{
+    return source;
+}
+FilterEditorSink* FilterEditorConnection::get_sink()
+{
+    return sink;
+}
+
+
+FilterEditorCanvas::FilterEditorCanvas(int w, int h)
+    : Gtk::ScrolledWindow()
+    , canvas(this->connections, this)
+{
+    auto ptr = new Gtk::Box(Gtk::Orientation::VERTICAL, 40);
+    auto label = new Gtk::Label("Hello");
+    ptr->insert_child_at_start(*label);
+    this->set_name("filter-canvas");
+    this->set_focusable();
+    this->canvas.set_focusable();
+    this->canvas.grab_focus();
+
+    this->zoom_fac = 1.0;
+
+    this->set_child(canvas);
+    this->canvas.set_expand(true);
+    this->canvas.set_size_request(100, 100);
+    Glib::RefPtr<Gtk::CssProvider> provider = Gtk::CssProvider::create();
+    this->add_css_class("canvas");
+    this->canvas.set_name("filter-canvas-fixed");
+
+    /*TODO: move the testing CSS file to the right place*/
+    Glib::ustring style = Inkscape::IO::Resource::get_filename(Inkscape::IO::Resource::UIS, "node-editor.css");
+    provider->load_from_path(style);
+    // provider->load_from_path("/home/phantomzback/Documents/GSOC_Projs/inkscape_final/testing.css");
+    this->canvas.get_style_context()->add_provider(provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    this->get_style_context()->add_provider(provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    this->canvas.add_css_class("canvas-fixed");
+
+    rubberband_rectangle = std::make_shared<Gtk::Box>(Gtk::Orientation::VERTICAL, 0);
+    rubberband_rectangle->set_name("rubberband-rectangle");
+    rubberband_rectangle->get_style_context()->add_provider(provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    rubberband_rectangle->add_css_class("rubberband");
+
+    this->initialize_gestures();
+};
+        // ~FilterEditorCanvas() override;
+
+NODE_TYPE *FilterEditorCanvas::add_node(SPFilterPrimitive *primitive, double x_click, double y_click, std::string label_text)
+{
+    std::shared_ptr<FilterEditorNode> node = std::make_shared<FilterEditorNode>(100, 0, 0, primitive, label_text);
+    place_node(node.get(), x_click, y_click);
+    nodes.push_back(node);
+    return node.get();
+};
+
+FilterEditorConnection *FilterEditorCanvas::create_connection(FilterEditorSource *source, FilterEditorSink *sink)
+{
+    FilterEditorConnection *connection = new FilterEditorConnection(source, sink, this);
+    connections.push_back(connection);
+    source->add_connection(connection);
+    sink->add_connection(connection);
+    return connection;
+};
+
+bool FilterEditorCanvas::destroy_connection(FilterEditorConnection *connection)
+{
+    connections.erase(std::remove(connections.begin(), connections.end(), connection), connections.end());
+    connection->get_source()->get_connections().erase(
+        std::remove(connection->get_source()->get_connections().begin(), connection->get_source()->get_connections().end(),
+                    connection),
+        connection->get_source()->get_connections().end());
+    connection->get_sink()->get_connections().erase(
+        std::remove(connection->get_sink()->get_connections().begin(), connection->get_sink()->get_connections().end(),
+                    connection),
+        connection->get_sink()->get_connections().end());
+    delete connection;
+    return true;
+};
+
+double FilterEditorCanvas::get_zoom_factor()
+{
+    return this->zoom_fac;
+};
+void FilterEditorCanvas::update_offsets(double x, double y)
+{
+    this->canvas.update_offset(x, y);
+    this->update_positions();
+}
+void FilterEditorCanvas::update_positions()
+{
+    for (auto child : this->canvas.get_children()) {
+        double x, y;
+        dynamic_cast<NODE_TYPE *>(child)->get_position(x, y);
+        place_node(dynamic_cast<NODE_TYPE *>(child), x, y);
+    }
+}
+// void auto_arrange_nodes(bool selection_only = false);
+//     void delete_nodes();
+//     void select_nodes(std::vector<NODE_TYPE> nodes);
+//     void select_node(NODE_TYPE node);
+//     enum class FilterEditorEvent{
+//         SELECT,
+//         PAN_START,
+//         PAN_UPDATE,
+//         PAN_END,
+//         MOVE_START,
+//         MOVE_UPDATE,
+//         MOVE_END,
+//         CONNECTION_START,
+//         CONNECTION_UPDATE,
+//         CONNECTION_END,
+//         RUBBERBAND_START,
+//         RUBBERBAND_UPDATE,
+//         RUBBERBAND_END,
+//         NONE
+//     };
+
+// protected:
+//     std::vector<FilterEditorConnection*> connections;
+
+// private:
+//     FilterEditorEvent current_event_type;
+//     double zoom_fac;
+//     FilterEditorSource* starting_source;
+//     std::pair<std::pair<double, double>, std::pair<double, double>> drag_global_coordinates;
+
+//     /*Rubberband Selection*/
+//     Glib::RefPtr<Gtk::Box> rubberband_rectangle;
+
+//     Gtk::Widget* active_widget = nullptr;
+Gtk::Widget *FilterEditorCanvas::get_widget_under(double xl, double yl)
+{
+    auto widget = this->canvas.pick(xl, yl);
+    active_widget = widget;
+    return widget;
+}
+template <typename T>
+T *FilterEditorCanvas::resolve_to_type(Gtk::Widget *widget)
+{
+    while (dynamic_cast<T *>(widget) == nullptr) {
+        if (dynamic_cast<FilterEditorCanvas *>(widget) != nullptr) {
+            return nullptr;
+        }
+        widget = widget->get_parent();
+    }
+    return dynamic_cast<T *>(widget);
+}
+// FilterEditorSource *FilterEditorCanvas::resolve_to_source(Gtk::Widget *widget)
+// {
+//     while (dynamic_cast<FilterEditorSource *>(widget) == nullptr) {
+//         if (dynamic_cast<FilterEditorCanvas *>(widget) != nullptr) {
+//             return nullptr;
+//         }
+//         widget = widget->get_parent();
+//     }
+//     return dynamic_cast<FilterEditorSource *>(widget);
+// }
+// FilterEditorSink *FilterEditorCanvas::resolve_to_sink(Gtk::Widget *widget)
+// {
+//     while (dynamic_cast<FilterEditorSink *>(widget) == nullptr) {
+//         if (dynamic_cast<FilterEditorCanvas *>(widget) != nullptr) {
+//             return nullptr;
+//         }
+//         widget = widget->get_parent();
+//     }
+//     return dynamic_cast<FilterEditorSink *>(widget);
+// }
+// NODE_TYPE *FilterEditorCanvas::resolve_to_node(Gtk::Widget *widget)
+// {
+//     while (dynamic_cast<NODE_TYPE *>(widget) == nullptr) {
+//         if (dynamic_cast<FilterEditorCanvas *>(widget) != nullptr) {
+//             return nullptr;
+//         }
+//         widget = widget->get_parent();
+//     }
+//     return dynamic_cast<NODE_TYPE *>(widget);
+// }
+
+SPFilterPrimitive* FilterEditorCanvas::get_selected_primitive(){
+    return this->selected_nodes.size() > 0 ? this->selected_nodes[0]->get_primitive() : nullptr;
+}
+
+
+sigc::signal<void ()>& FilterEditorCanvas::signal_primitive_changed()
+{
+    return _signal_primitive_changed;
+}
+/*Selection Based*/
+bool FilterEditorCanvas::toggle_node_selection(NODE_TYPE *widget)
+{
+    widget->toggle_selection(!widget->get_selected());
+    if (widget->get_selected()) {
+        selected_nodes.push_back(widget);
+    } else {
+        selected_nodes.erase(std::remove(selected_nodes.begin(), selected_nodes.end(), widget), selected_nodes.end());
+    }
+    return widget->get_selected();
+    _signal_primitive_changed.emit();
+}
+
+void FilterEditorCanvas::set_node_selection(NODE_TYPE *widget, bool selected)
+{
+    widget->toggle_selection(selected);
+    selected_nodes.erase(std::remove(selected_nodes.begin(), selected_nodes.end(), widget), selected_nodes.end());
+    if (selected) {
+        selected_nodes.push_back(widget);
+    } else {
+    }
+    _signal_primitive_changed.emit();
+}
+
+void FilterEditorCanvas::clear_selection()
+{
+    for (auto node : selected_nodes) {
+        node->toggle_selection(false);
+    }
+    selected_nodes.clear();
+    _signal_primitive_changed.emit();
+}
+
+void FilterEditorCanvas::rubberband_select()
+{
+    /*Construct node list in the given region*/
+    std::vector<NODE_TYPE *> nodes_in_region;
+    for (auto node : nodes) {
+        double x, y;
+        // node->get_position(x, y);
+        this->canvas.get_child_position(*node, x, y);
+        if (x >= rubberband_x && x <= rubberband_x + rubberband_size_x && y >= rubberband_y &&
+            y <= rubberband_y + rubberband_size_y) {
+            nodes_in_region.push_back(node.get());
+        }
+    }
+    if (SHIFT_DOWN) {
+        for (auto node : nodes_in_region) {
+            set_node_selection(node);
+        }
+    } else {
+        clear_selection();
+        for (auto node : nodes_in_region) {
+            set_node_selection(node);
+        }
+    }
+    _signal_primitive_changed.emit();
+}
+// double rubberband_x, rubberband_y, rubberband_size_x, rubberband_size_y;
+// double drag_start_x, drag_start_y;
+void FilterEditorCanvas::event_handler(double x, double y)
+{
+    static std::vector<std::pair<NODE_TYPE *, std::pair<double, double>>> start_positions;
+    // static FilterEditorSource* starting_source;
+    if (current_event_type == FilterEditorEvent::NONE) {
+        return;
+    } else if (current_event_type == FilterEditorEvent::SELECT) {
+        if (SHIFT_DOWN) {
+            if (active_widget != nullptr) {
+                auto active_node = resolve_to_type<FilterEditorNode>(active_widget);
+                if (active_node != nullptr) {
+                    toggle_node_selection(active_node);
+                }
+            }
+
+        } else {
+            clear_selection();
+            if (active_widget != nullptr) {
+                auto active_node = resolve_to_type<FilterEditorNode>(active_widget);
+                if (active_node != nullptr) {
+                    set_node_selection(active_node);
+                }
+            }
+        }
+    } else if (current_event_type == FilterEditorEvent::PAN_START) {
+        drag_start_x = this->canvas.get_x_offset();
+        drag_start_y = this->canvas.get_y_offset();
+        current_event_type = FilterEditorEvent::PAN_UPDATE;
+    } else if (current_event_type == FilterEditorEvent::PAN_UPDATE) {
+        double offset_x, offset_y;
+        this->gesture_drag->get_offset(offset_x, offset_y);
+        this->update_offsets(drag_start_x - offset_x, drag_start_y - offset_y);
+    } else if (current_event_type == FilterEditorEvent::PAN_END) {
+        current_event_type = FilterEditorEvent::NONE;
+    } else if (current_event_type == FilterEditorEvent::MOVE_START) {
+        active_widget = resolve_to_type<FilterEditorNode>(active_widget);
+        if (std::find(selected_nodes.begin(), selected_nodes.end(), (NODE_TYPE *)active_widget) ==
+            selected_nodes.end()) {
+            clear_selection();
+            set_node_selection((NODE_TYPE *)active_widget);
+        }
+        start_positions.clear();
+        for (auto node : selected_nodes) {
+            double x, y;
+            this->canvas.get_child_position(*node, x, y);
+            start_positions.push_back({node, {x, y}});
+        }
+        current_event_type = FilterEditorEvent::MOVE_UPDATE;
+    } else if (current_event_type == FilterEditorEvent::MOVE_UPDATE) {
+        double offset_x, offset_y;
+        this->gesture_drag->get_offset(offset_x, offset_y);
+        for (auto pr : start_positions) {
+            double x, y;
+            x = pr.second.first;
+            y = pr.second.second;
+            this->place_node(pr.first, x + offset_x, y + offset_y, true);
+        }
+    } else if (current_event_type == FilterEditorEvent::MOVE_END) {
+        start_positions.clear(); // Clearing the start positions for safety
+    } else if (current_event_type == FilterEditorEvent::CONNECTION_START) {
+        if (active_widget != nullptr) {
+            if (dynamic_cast<FilterEditorSource *>(active_widget) != nullptr) {
+                double x, y;
+                this->gesture_drag->get_start_point(x, y);
+                double x_g, y_g;
+                this->local_to_global(x, y, x_g, y_g);
+                this->drag_global_coordinates = {{x_g, y_g}, {x_g, y_g}};
+                starting_source = resolve_to_type<FilterEditorSource>(active_widget);
+                this->current_event_type = FilterEditorEvent::CONNECTION_UPDATE;
+            }
+        }
+    } else if (current_event_type == FilterEditorEvent::CONNECTION_UPDATE) {
+        double x, y;
+        this->gesture_drag->get_start_point(x, y);
+        double x_offset, y_offset;
+        this->gesture_drag->get_offset(x_offset, y_offset);
+        double x_end_g, y_end_g;
+        this->local_to_global(x + x_offset, y + y_offset, x_end_g, y_end_g);
+        this->drag_global_coordinates.second = {x_end_g, y_end_g};
+        this->canvas.queue_draw();
+    } else if (current_event_type == FilterEditorEvent::CONNECTION_END) {
+        double x_start, y_start, x_offset, y_offset, x_end, y_end;
+        this->gesture_drag->get_start_point(x_start, y_start);
+        this->gesture_drag->get_offset(x_offset, y_offset);
+        x_end = x_start + x_offset;
+        y_end = y_start + y_offset;
+        auto widget = get_widget_under(x_end, y_end);
+        if (widget != nullptr) {
+            auto sink = resolve_to_type<FilterEditorSink>(widget);
+            if (sink != nullptr) {
+                this->create_connection(starting_source, sink);
+            }
+        }
+        this->canvas.queue_draw();
+        this->current_event_type = FilterEditorEvent::NONE;
+
+    } else if (current_event_type == FilterEditorEvent::RUBBERBAND_START) {
+        double x_start, y_start;
+        this->gesture_drag->get_start_point(x_start, y_start);
+        this->canvas.put(*rubberband_rectangle, x_start, y_start);
+        this->rubberband_rectangle->set_size_request(0, 0);
+        current_event_type = FilterEditorEvent::RUBBERBAND_UPDATE;
+    } else if (current_event_type == FilterEditorEvent::RUBBERBAND_UPDATE) {
+        if (rubberband_rectangle->get_parent() == nullptr) {
+            this->canvas.put(*rubberband_rectangle, x, y);
+            current_event_type = FilterEditorEvent::RUBBERBAND_UPDATE;
+        }
+        double x_start, y_start;
+        this->gesture_drag->get_start_point(x_start, y_start);
+        double offset_x, offset_y;
+        this->gesture_drag->get_offset(offset_x, offset_y);
+        double x_end = x_start + offset_x, y_end = y_start + offset_y;
+        if (offset_x < 0) {
+            x_start = x_end;
+            offset_x = -offset_x;
+        }
+        if (offset_y < 0) {
+            y_start = y_end;
+            offset_y = -offset_y;
+        }
+        this->canvas.move(*rubberband_rectangle, x_start, y_start);
+        rubberband_rectangle->set_size_request(offset_x, offset_y);
+        this->rubberband_x = x_start;
+        this->rubberband_y = y_start;
+        this->rubberband_size_x = offset_x;
+        this->rubberband_size_y = offset_y;
+
+    } else if (current_event_type == FilterEditorEvent::RUBBERBAND_END) {
+        this->canvas.remove(*rubberband_rectangle);
+        this->rubberband_select();
+    }
+}
+
+/*Modifier related*/
+// Gdk::ModifierType modifier_state = Gdk::ModifierType::NO_MODIFIER_MASK;
+// bool in_click = false;
+// bool in_drag = false;
+
+// double click_start_x, click_start_y;
+
+// /*Controllers and methods for gestures*/
+
+// Glib::RefPtr<Gtk::GestureClick> gesture_click;
+// Glib::RefPtr<Gtk::GestureDrag> gesture_drag;
+// Glib::RefPtr<Gtk::GestureClick> gesture_right_click;
+// Glib::RefPtr<Gtk::EventControllerKey> key_controller;
+// Glib::RefPtr<Gtk::EventControllerScroll> scroll_controller;
+
+void FilterEditorCanvas::on_scroll(const Gtk::EventControllerScroll &scroll) {};
+
+void FilterEditorCanvas::initialize_gestures()
+{
+    gesture_click = Gtk::GestureClick::create();
+    gesture_click->set_button(GDK_BUTTON_PRIMARY);
+
+    gesture_click->signal_pressed().connect([this](int n_press, double x, double y) {
+        this->canvas.grab_focus();
+        this->active_widget = this->get_widget_under(x, y);
+        this->current_event_type = FilterEditorEvent::NONE;
+        in_click = true;
+        in_drag = false;
+    });
+    gesture_click->signal_stopped().connect([this]() {
+        if (current_event_type != FilterEditorEvent::SELECT) {
+            in_click = false;
+            in_drag = true;
+            if (active_widget != nullptr) {
+                if (resolve_to_type<FilterEditorSource>(active_widget) != nullptr) {
+                    this->current_event_type = FilterEditorEvent::CONNECTION_START;
+                } else if (resolve_to_type<FilterEditorNode>(active_widget) != nullptr) {
+                    this->current_event_type = FilterEditorEvent::MOVE_START;
+                } else {
+                    this->current_event_type = FilterEditorEvent::RUBBERBAND_START;
+                }
+            }
+            this->event_handler(0, 0);
+        }
+    });
+    gesture_click->signal_released().connect([this](int n_press, double x, double y) {
+        if (!in_drag) {
+            this->current_event_type = FilterEditorEvent::SELECT;
+            event_handler(x, y);
+        }
+        in_click = false;
+    });
+    this->canvas.add_controller(gesture_click);
+
+    gesture_drag = Gtk::GestureDrag::create();
+    gesture_drag->set_button(0);
+    gesture_drag->signal_drag_begin().connect([this](double start_x, double start_y) {
+        in_drag = false;
+        get_widget_under(start_x, start_y);
+        if (gesture_drag->get_current_button() == GDK_BUTTON_MIDDLE) {
+            this->current_event_type = FilterEditorEvent::PAN_START;
+            this->event_handler(0, 0);
+            in_drag = true;
+
+        } else {
+        }
+    });
+    gesture_drag->signal_drag_update().connect([this](double x, double y) {
+        if (in_drag) {
+            if (gesture_drag->get_current_button() == GDK_BUTTON_PRIMARY) {
+                // Left click
+                // Add your code here
+                if (this->active_widget != nullptr) {
+                    if (resolve_to_type<FilterEditorSource>(active_widget) != nullptr) {
+                        this->current_event_type = FilterEditorEvent::CONNECTION_UPDATE;
+                    } else if (resolve_to_type<FilterEditorNode>(active_widget) != nullptr) {
+                        this->current_event_type = FilterEditorEvent::MOVE_UPDATE;
+                    }
+                } else {
+                    this->current_event_type = FilterEditorEvent::RUBBERBAND_UPDATE;
+                }
+                this->event_handler(x, y);
+            } else if (gesture_drag->get_current_button() == GDK_BUTTON_MIDDLE) {
+                this->current_event_type = FilterEditorEvent::PAN_UPDATE;
+                this->event_handler(x, y);
+            }
+        }
+    });
+    gesture_drag->signal_drag_end().connect([this](double x, double y) {
+        if (in_drag) {
+            if (this->current_event_type == FilterEditorEvent::CONNECTION_UPDATE) {
+                this->current_event_type = FilterEditorEvent::CONNECTION_END;
+            } else if (this->current_event_type == FilterEditorEvent::MOVE_UPDATE) {
+                this->current_event_type = FilterEditorEvent::MOVE_END;
+            } else if (this->current_event_type == FilterEditorEvent::RUBBERBAND_UPDATE) {
+                this->current_event_type = FilterEditorEvent::RUBBERBAND_END;
+            }
+            this->event_handler(x, y);
+        }
+    });
+
+    this->canvas.add_controller(gesture_drag);
+
+    /*Setting up temporary controllers related to clicks.*/
+    gesture_right_click = Gtk::GestureClick::create();
+    gesture_right_click->set_button(GDK_BUTTON_SECONDARY);
+    gesture_right_click->signal_pressed().connect(
+        [this](int n_press, double x, double y) { this->add_node(nullptr, x, y, "Temporary Node"); });
+    this->canvas.add_controller(gesture_right_click);
+
+    key_controller = Gtk::EventControllerKey::create();
+    key_controller->set_propagation_phase(Gtk::PropagationPhase::CAPTURE);
+    key_controller->signal_modifiers().connect(
+        [this](Gdk::ModifierType state) -> bool {
+            modifier_state = state;
+            if ((modifier_state & Gdk::ModifierType::SHIFT_MASK) == Gdk::ModifierType::SHIFT_MASK) {
+                // g_message("Shift pressed now");
+            } else {
+                // g_message("Shift not pressed anymore");
+            }
+            return true;
+        },
+        true);
+
+    key_controller->signal_modifiers().connect(
+        [this](Gdk::ModifierType state) -> bool {
+            modifier_state = state;
+            return true;
+        },
+        true);
+    this->canvas.add_controller(key_controller);
+
+    /*Setting up scroll controller.*/
+    scroll_controller = Gtk::EventControllerScroll::create();
+    scroll_controller->set_flags(Gtk::EventControllerScroll::Flags::VERTICAL |
+                                 Gtk::EventControllerScroll::Flags::HORIZONTAL);
+    scroll_controller->signal_scroll().connect(
+        [this](double dx, double dy) {
+            this->canvas.grab_focus();
+            if (SHIFT_DOWN) {
+                zoom_fac = zoom_fac + dy * 0.1;
+                zoom_fac = std::max(0.5, std::min(2.0, zoom_fac));
+
+                Glib::RefPtr<Gtk::CssProvider> provider = Gtk::CssProvider::create();
+                this->canvas.get_style_context()->add_provider(provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+                provider->load_from_data(".canvas-fixed { transform: scale(" + std::to_string(zoom_fac) + "); }");
+                // this->update_offsets(this->canvas.get_x_offset() + dx * SCROLL_SENS, this->canvas.get_y_offset()
+                // + dy * SCROLL_SENS);
+                return true;
+            } else {
+                this->update_offsets(this->canvas.get_x_offset() + dx * SCROLL_SENS,
+                                     this->canvas.get_y_offset() + dy * SCROLL_SENS);
+                return true;
+            }
+        },
+        true);
+    this->add_controller(scroll_controller);
+}
+
+// std::vector<std::pair<NODE_TYPE*, NODE_TYPE*>> connections;
+
+NODE_TYPE *FilterEditorCanvas::create_node(SPFilterPrimitive *primitive)
+{
+    std::shared_ptr<FilterEditorNode> node = std::make_shared<FilterEditorNode>(100, 0, 0, primitive);
+    nodes.push_back(node);
+    return node.get();
+};
+// void remove_node(int node_id);
+// void connect_nodes(int node1, int node2);
+// void disconnect_nodes(int node1, int node2);
+// void set_node_position(int node_id, int x, int y);
+
+/*Geometry related*/
+void FilterEditorCanvas::global_to_local(double xg, double yg, double &xl, double &yl)
+{
+    xl = xg - this->canvas.get_x_offset();
+    yl = yg - this->canvas.get_y_offset();
+};
+void FilterEditorCanvas::local_to_global(double xl, double yl, double &xg, double &yg)
+{
+    xg = xl + this->canvas.get_x_offset();
+    yg = yl + this->canvas.get_y_offset();
+};
+void FilterEditorCanvas::place_node(NODE_TYPE *node, double x, double y, bool local)
+{
+    if (!local) {
+        node->update_position(x, y);
+        double xl, yl;
+        global_to_local(x, y, xl, yl);
+        if (node->get_parent() != &canvas) {
+            canvas.put(*node, xl, yl);
+        } else {
+            canvas.move(*node, xl, yl);
+        }
+    } else {
+        double xg, yg;
+        local_to_global(x, y, xg, yg);
+        node->update_position(xg, yg);
+        if (node->get_parent() != &canvas) {
+            canvas.put(*node, x, y);
+        } else {
+            canvas.move(*node, x, y);
+        }
+    }
+};
 
 using Inkscape::UI::Widget::AttrWidget;
 using Inkscape::UI::Widget::ComboBoxEnum;
@@ -2653,7 +3468,8 @@ FilterEffectsDialog::FilterEffectsDialog()
     _params_box(get_widget<Gtk::Box>(_builder, "params")),
     _search_box(get_widget<Gtk::Box>(_builder, "search")),
     _search_wide_box(get_widget<Gtk::Box>(_builder, "search-wide")),
-    _filter_wnd(get_widget<Gtk::ScrolledWindow>(_builder, "filter")),
+    _filter_wnd(100, 100),
+    // _filter_wnd(100, 100/*get_widget<Gtk::ScrolledWindow>(_builder, "filter")*/),
     _cur_filter_btn(get_widget<Gtk::CheckButton>(_builder, "label"))
     , _add_primitive_type(FPConverter)
     , _add_primitive(_("Add Effect:"))
@@ -2708,6 +3524,7 @@ FilterEffectsDialog::FilterEffectsDialog()
     });
 
     _primitive_list.signal_primitive_changed().connect([this]{ update_settings_view(); });
+    _filter_wnd.signal_primitive_changed().connect([this]{ update_settings_view(); });
 
     _cur_filter_toggle = _cur_filter_btn.signal_toggled().connect([this]{
         _filter_modifier.toggle_current_filter();
@@ -3002,6 +3819,7 @@ void FilterEffectsDialog::init_settings_widgets()
 void FilterEffectsDialog::add_filter_primitive(Filters::FilterPrimitiveType type) {
     if (auto filter = _filter_modifier.get_selected_filter()) {
         SPFilterPrimitive* prim = filter_add_primitive(filter, type);
+        auto added_node = _filter_wnd.add_node(prim,0,0, FPConverter.get_label(type));
         _primitive_list.select(prim);
         DocumentUndo::done(filter->document, _("Add filter primitive"), INKSCAPE_ICON("dialog-filters"));
     }
@@ -3146,7 +3964,8 @@ void FilterEffectsDialog::update_settings_view()
         i->set_visible(false);
     }
 
-    SPFilterPrimitive* prim = _primitive_list.get_selected();
+    // SPFilterPrimitive* prim = _primitive_list.get_selected();
+    SPFilterPrimitive* prim = _filter_wnd.get_selected_primitive();
     auto& header = get_widget<Gtk::Box>(_builder, "effect-header");
     SPFilter* filter = _filter_modifier.get_selected_filter();
     bool present = _filter_modifier.filters_present();
