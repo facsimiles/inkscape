@@ -56,6 +56,7 @@ public:
         CLOSE,
         BREAK,
         STOP,
+        NODE,
         DEAD
     };
 
@@ -67,15 +68,16 @@ public:
 
     Mode mode = MODE_CLICK;
     State state = POINT;
-    bool polylines_only = false;
-    bool polylines_paraxial = false;
+    bool is_polylines_only = false;
+    bool is_polylines_paraxial = false;
     Geom::Point paraxial_angle;
 
-    bool spiro = false;  // Spiro mode active?
-    bool bspline = false; // BSpline mode active?
+    bool is_spiro = false;  // Spiro mode active?
+    bool is_bspline = false; // BSpline mode active?
 
     bool prev_anchor_statusbar = false;
-    bool hid_handles = false; // hid handles due to PenTool::BREAK ?
+    bool hid_handles = false; // hid handles due to PenTool::BREAK
+    bool node_mode_statusbar = false;
 
     unsigned int expecting_clicks_for_LPE = 0; // if positive, finish the path after this many clicks
     Inkscape::LivePathEffect::Effect *waiting_LPE = nullptr; // if NULL, waiting_LPE_type in SPDrawContext is taken into account
@@ -89,8 +91,9 @@ public:
     CanvasItemPtr<CanvasItemCurve> cl0;
     CanvasItemPtr<CanvasItemCurve> cl1;
 
-    std::vector<std::unique_ptr<SPDrawAnchor>> _anchors;
-    
+    std::vector<std::shared_ptr<SPDrawAnchor>> _anchors;
+    int node_index = -1;
+
     bool events_disabled = false;
 
     void nextParaxialDirection(Geom::Point const &pt, Geom::Point const &origin, guint state);
@@ -140,6 +143,8 @@ private:
     bool _undoLastPoint(bool user_undo = false);
     bool _redoLastPoint();
 
+    void _moveNode(Geom::Point const p);
+
     void _finish(gboolean closed);
 
     void _resetColors();
@@ -155,7 +160,7 @@ private:
     void _lastpointToCurve();
     void _lastpointMoveScreen(gdouble x, gdouble y);
     void _lastpointMove(gdouble x, gdouble y);
-    void _redrawAll();
+    void _redrawAll(bool const draw_red);
 
     void _endpointSnapHandle(Geom::Point &p, guint const state);
     void _endpointSnap(Geom::Point &p, guint const state);

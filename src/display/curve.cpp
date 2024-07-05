@@ -612,6 +612,25 @@ void SPCurve::last_point_additive_move(Geom::Point const &p)
     }
 }
 
+/**
+ * Adds p to the first point (and the first handle if present) of the first path
+ */
+void SPCurve::first_point_additive_move(Geom::Point const &p)
+{
+    if(is_empty()) {
+        return;
+    }
+
+    _pathv.front().setInitial(_pathv.front().initialPoint() + p);
+
+    // Move handle as well when the last segment is a cubic bezier segment:
+    if (auto const firstcube = dynamic_cast<Geom::CubicBezier const *>(&_pathv.front().front())) {
+        Geom::CubicBezier newcube(*firstcube);
+        newcube.setPoint(1, newcube[1] + p);
+        _pathv.front().replace(_pathv.front().begin(), newcube);
+    }
+}
+
 /*
   Local Variables:
   mode:c++
