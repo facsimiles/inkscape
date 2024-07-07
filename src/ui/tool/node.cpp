@@ -159,7 +159,6 @@ Geom::Point Handle::_saved_dir(0,0);
 double Handle::_saved_length = 0.0;
 
 bool Handle::_drag_out = false;
-bool _space_pressed = false;
 
 Handle::Handle(NodeSharedData const &data, Geom::Point const &initial_pos, Node *parent)
     : ControlPoint(data.desktop, initial_pos, SP_ANCHOR_CENTER,
@@ -391,18 +390,8 @@ bool Handle::_eventHandler(Tools::ToolBase *event_context, CanvasEvent const &ev
                 ret = true;
             }
             break;
-        case GDK_KEY_space:
-            _space_pressed = true;
-            ret = true;
-            break;
         default:
             break;
-        }
-    },
-
-    [&] (KeyReleaseEvent const &event) {
-        if (event.keyval == GDK_KEY_space){
-            _space_pressed = false;
         }
     },
 
@@ -449,20 +438,28 @@ void Handle::dragged(Geom::Point &new_pos, MotionEvent const &event)
     bool snap = held_shift(event) ? false : sm.someSnapperMightSnap();
     std::optional<Inkscape::Snapper::SnapConstraint> ctrl_constraint;
 
-    // with Alt, preserve length of the handle
-    if (held_alt(event)) {
-        new_pos = parent_pos + Geom::unit_vector(new_pos - parent_pos) * _saved_length;
-        snap = false;
-    }
-    else if (_space_pressed) { // with space, preserve length and direction of handles and move parent
+    // with Alt + Shift, preserve length and direction of handles and move parent
+    if (held_alt(event) & held_shift(event)) {
         Geom::Point _parent_pos = new_pos - _saved_dir * _saved_length;
         _parent->move(_parent_pos);
         snap = false;
+
+    } else if (held_alt(event)) {
+        // with Alt, preserve length of the handle
+        new_pos = parent_pos + Geom::unit_vector(new_pos - parent_pos) * _saved_length;
+        snap = false;
+        _saved_dir = Geom::unit_vector(relativePos());
+
     } else {
+        // with nothing pressed we update the lengths
         _saved_length = _drag_out ? 0 : length();
         _saved_dir = Geom::unit_vector(relativePos());
     }
-        
+
+    if (_parent->type() != NODE_CUSP && held_shift(event) && !held_alt(event)) {
+        // if we hold Shift, and node is not cusp, link the two handles
+        other()->setRelativePos(-relativePos());
+    }
 
     // with Ctrl, constrain to M_PI/rotationsnapsperpi increments from vertical
     // and the original position.
@@ -578,7 +575,13 @@ void Handle::ungrabbed(ButtonReleaseEvent const *event)
 
 bool Handle::clicked(ButtonReleaseEvent const &event)
 {
-    
+    if (held_ctrl(event) && !held_alt(event)) {
+        // we want to skip the Node Auto when we cycle between nodes
+        if(_parent->type() == NODE_SMOOTH) {
+            _parent->setType(NODE_AUTO, false);
+        }
+    }
+
     if (_pm()._nodeClicked(this->parent(), event)) {
         return true;
     }
