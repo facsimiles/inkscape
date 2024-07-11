@@ -10,10 +10,16 @@
 #include <gtkmm/separator.h>
 #include <gtkmm/togglebutton.h>
 #include <gtkmm/widget.h>
-// #include <memory>
+#include <memory>
+#include <sigc++/connection.h>
 
 #include "color-picker-panel.h"
+#include "colors/color-set.h"
+#include "helper/auto-connection.h"
+#include "style-internal.h"
+#include "ui/operation-blocker.h"
 #include "ui/widget/gradient-editor.h"
+#include "ui/widget/gradient-selector.h"
 #include "ui/widget/pattern-editor.h"
 #include "object/sp-hatch.h"
 #include "object/sp-linear-gradient.h"
@@ -71,6 +77,13 @@ const static struct Paint { PaintMode mode; const char* icon; const char* tip; }
     {PaintMode::NotSet, "paint-unknown", _("Inherited")},
 };
 
+Glib::ustring get_mode_icon(PaintMode mode) {
+    for (auto&& p : paint_modes) {
+        if (p.mode == mode) return p.icon;
+    }
+    return {};
+}
+
 PaintSwitch::PaintSwitch():
     Gtk::Box(Gtk::Orientation::VERTICAL) {
 
@@ -84,24 +97,27 @@ public:
     void set_mode(PaintMode mode) override;
     void set_color(const Colors::Color& color) override;
     sigc::signal<void (const Colors::Color&)> signal_color_changed() override;
-
+    sigc::signal<void (PaintMode)> signal_mode_changed() override;
+    void update_from_paint(const SPIPaint& paint) override;
     void _set_mode(PaintMode mode);
+
     Gtk::Stack _stack;
     std::map<PaintMode, Gtk::Widget*> _pages;
+    std::map<PaintMode, Gtk::ToggleButton*> _mode_buttons;
     PaintMode _mode = PaintMode::None;
-    // sigc::signal<void, PaintMode> _signal_changed;
     sigc::signal<void (const Colors::Color&)> _signal_color_changed;
-    // SelectedColor _color = std::make_shared<Colors::ColorSet>();
-    // std::unique_ptr<ColorSelector> _flat_color = ColorSelector::create();
-    std::unique_ptr<ColorPickerPanel> _flat_color = ColorPickerPanel::create();
-    // ColorNotebook _flat_color = {_color};
+    sigc::signal<void (PaintMode)> _signal_mode_changed;
+    std::unique_ptr<ColorPickerPanel> _flat_color;
     GradientEditor _gradient = {"/gradient-edit"}; 
     PatternEditor _pattern = {"/pattern-edit", PatternManager::get()};
     SwatchSelector _swatch;
     Gtk::Box _unset = Gtk::Box{Gtk::Orientation::VERTICAL};
+    std::shared_ptr<Colors::ColorSet> _color = std::make_shared<Colors::ColorSet>();
+    auto_connection _mode_change;
 };
 
 PaintSwitchImpl::PaintSwitchImpl() {
+    _flat_color = ColorPickerPanel::create("", _color);
     auto header = Gtk::make_managed<Gtk::Box>(Gtk::Orientation::HORIZONTAL);
     header->set_margin(5);
     header->set_spacing(2);
@@ -112,19 +128,25 @@ PaintSwitchImpl::PaintSwitchImpl() {
         btn->set_has_frame(false);
         btn->set_tooltip_text(i.tip);
         auto mode = i.mode;
-        btn->signal_toggled().connect([=,this](){
+        _mode_change = btn->signal_toggled().connect([=,this](){
             // turn off other buttons
             if (btn->get_active()) {
                 for (auto child : header->get_children()) {
+                    auto scoped = _mode_change.block_here();
                     if (auto b = dynamic_cast<Gtk::ToggleButton*>(child)) {
                         if (b != btn) b->set_active(false);
                     }
                 }
+                // fire mode change
+                _signal_mode_changed.emit(mode);
             }
-//test:
-if (btn->get_active()) set_mode(mode);
+            else {
+                // turn it back on - there's no "undoing" paint mode
+                //todo
+            }
         });
         header->append(*btn);
+        _mode_buttons[i.mode] = btn;
     }
 
     append(*header);
@@ -170,9 +192,9 @@ sigc::signal<void(const Colors::Color&)> PaintSwitchImpl::signal_color_changed()
     return _signal_color_changed;
 }
 
-// void PaintSwitchImpl::update_from_object(SPObject* object) {
-    //
-// }
+sigc::signal<void (PaintMode)> PaintSwitchImpl::signal_mode_changed() {
+    return _signal_mode_changed;
+}
 
 void PaintSwitchImpl::set_mode(PaintMode mode) {
     if (mode == _mode) return;
@@ -183,8 +205,50 @@ void PaintSwitchImpl::set_mode(PaintMode mode) {
 void PaintSwitchImpl::_set_mode(PaintMode mode) {
     _mode = mode;
 
-    if (auto page = _pages[mode]) {
-        _stack.set_visible_child(*page);
+    if (auto it = _pages.find(mode); it != end(_pages)) {
+        _stack.set_visible_child(*it->second);
+    }
+    if (auto btn = _mode_buttons.find(mode); btn != end(_mode_buttons)) {
+        auto scoped = _mode_change.block_here();
+        btn->second->set_active();
+    }
+}
+
+void PaintSwitchImpl::update_from_paint(const SPIPaint& paint) {
+    auto* server = paint.isPaintserver() ? paint.href->getObject() : nullptr;
+    if (server) {
+        if (is<SPGradient>(server) && cast<SPGradient>(server)->getVector()->isSwatch()) {
+            auto vector = cast<SPGradient>(server)->getVector();
+            // _psel->setSwatch(vector);
+        }
+        else if (is<SPLinearGradient>(server) || is<SPRadialGradient>(server)) {
+            auto vector = cast<SPGradient>(server)->getVector();
+            _gradient.setMode(is<SPLinearGradient>(server) ? GradientSelector::MODE_LINEAR : GradientSelector::MODE_RADIAL);
+            _gradient.setGradient(vector);
+            _gradient.setVector(vector ? vector->document : nullptr, vector);
+            auto stop = cast<SPStop>(const_cast<SPIPaint&>(paint).getTag());
+            _gradient.selectStop(stop);
+            vector->getUnits();
+            _gradient.setUnits(vector->getUnits());
+            _gradient.setSpread(vector->getSpread());
+        }
+#ifdef WITH_MESH
+        else if (is<SPMeshGradient>(server)) {
+            //todo
+            // auto array = cast<SPGradient>(server)->getArray();
+            // _psel->setGradientMesh(cast<SPMeshGradient>(array));
+            // _psel->updateMeshList(cast<SPMeshGradient>(array));
+        }
+#endif
+        else if (is<SPPattern>(server)) {
+            _pattern.set_selected(cast<SPPattern>(server));
+        }
+    }
+    else if (paint.isColor()) {
+        //
+    }
+    else {
+        //todo
     }
 }
 

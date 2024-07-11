@@ -50,7 +50,7 @@ ColorPicker::ColorPicker(Glib::ustring title,
 }
 
 ColorPicker::ColorPicker(Gtk::Widget& popup_content, const Glib::ustring& tip):
-    _preview(Gtk::make_managed<ColorPreview>(0x0)),
+    _preview(new ColorPreview(0x0)),
     _colors(std::make_shared<Colors::ColorSet>(nullptr, true)) {
 
     set_tooltip_text(tip);
@@ -60,7 +60,7 @@ ColorPicker::ColorPicker(Gtk::Widget& popup_content, const Glib::ustring& tip):
 ColorPicker::ColorPicker(BaseObjectType *cobject, Glib::RefPtr<Gtk::Builder> const &,
                          Glib::ustring title, bool use_transparency)
     : Gtk::MenuButton(cobject)
-    , _preview(Gtk::make_managed<ColorPreview>(0x0))
+    , _preview(new ColorPreview(0x0))
     , _title(std::move(title))
     , _colors(std::make_shared<Colors::ColorSet>(nullptr, use_transparency))
 {
@@ -101,6 +101,20 @@ void ColorPicker::_construct(Gtk::Widget* content) {
 }
 
 ColorPicker::~ColorPicker() = default;
+
+void ColorPicker::set_icon(const Glib::ustring& icon_name) {
+    if (icon_name.empty()) {
+        set_icon_name(icon_name);
+        unset_child();
+        set_child(*_preview);
+        remove_css_class("icon");
+    }
+    else {
+        set_icon_name(icon_name);
+        unset_child();
+        add_css_class("icon");
+    }
+}
 
 void ColorPicker::setTitle(Glib::ustring title) {
     _title = std::move(title);

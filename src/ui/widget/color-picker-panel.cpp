@@ -103,7 +103,7 @@ struct Panel: Gtk::Grid {
         box->set_valign(Gtk::Align::CENTER);
         constexpr int size = 48;
         _preview.set_size_request(size, size);
-        _preview.set_checkerboard_tile_size(size / 3);
+        _preview.set_checkerboard_tile_size(size / 2 / 3);
         _preview.set_margin_top(10); // to optically center it vertically, push it down
         box->append(_preview);
         box->append(_rgb_edit);

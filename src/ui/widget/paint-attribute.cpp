@@ -3,7 +3,13 @@
 #include "paint-attribute.h"
 #include <glibmm/ustring.h>
 #include <gtkmm/enums.h>
+#include "object/sp-gradient.h"
+#include "object/sp-linear-gradient.h"
+#include "object/sp-paint-server.h"
+#include "object/sp-pattern.h"
+#include "object/sp-radial-gradient.h"
 #include "style.h"
+#include "ui/widget/paint-switch.h"
 
 namespace Inkscape::UI::Widget {
 
@@ -25,6 +31,22 @@ PaintAttribute::PaintAttribute() {
     _stroke._picker.signal_open_popup().connect([this]() {
         set_paint(_current_object, false);
     });
+}
+
+void PaintAttribute::PaintStrip::hide() {
+    // _switch = PaintSwitch::create();
+    _picker.set_visible(false);
+    _alpha.set_visible(false);
+    _define.set_visible();
+    _clear.set_visible(false);
+}
+
+void PaintAttribute::PaintStrip::show() {
+    // _switch = PaintSwitch::create();
+    _picker.set_visible();
+    _alpha.set_visible();
+    _define.set_visible(false);
+    _clear.set_visible();
 }
 
 PaintAttribute::PaintStrip::PaintStrip(const Glib::ustring& title) :
@@ -114,19 +136,32 @@ void PaintAttribute::set_paint(const SPIPaint& paint, double opacity, bool fill)
         stripe._picker.setColor(color);
         stripe._switch->set_color(color);
     }
+    init_popup(paint, opacity, mode, fill);
 }
 
+// set correct icon for current fill/stroke type
 void PaintAttribute::set_preview(const SPIPaint& paint, double paint_opacity, PaintMode mode, bool fill) {
     auto& stripe = fill ? _fill : _stroke;
-    if (mode == PaintMode::Solid) {
+    if (mode == PaintMode::None) {
+        stripe.hide();
+    }
+    else if (mode == PaintMode::Solid) {
         auto color = paint.getColor();
         color.addOpacity(paint_opacity);
+        stripe._picker.set_icon("");
         stripe._picker.setColor(color);
+        stripe.show();
     }
     else {
-    //todo: icons?
-        //
+        auto icon = get_mode_icon(mode);
+        stripe._picker.set_icon(icon);
+        stripe.show();
     }
+}
+
+void PaintAttribute::init_popup(const SPIPaint& paint, double paint_opacity, PaintMode mode, bool fill) {
+    auto& stripe = fill ? _fill : _stroke;
+    stripe._switch->update_from_paint(paint);
 }
 
 void PaintAttribute::update_from_object(SPObject* object) {
@@ -142,7 +177,7 @@ void PaintAttribute::update_from_object(SPObject* object) {
         auto fill_mode = get_mode_from_paint(fill_paint);
         set_preview(fill_paint, object->style->fill_opacity, fill_mode, true);
 
-        auto& stroke_paint = *object->style->getFillOrStroke(true);
+        auto& stroke_paint = *object->style->getFillOrStroke(false);
         auto stroke_mode = get_mode_from_paint(stroke_paint);
         set_preview(stroke_paint, object->style->stroke_opacity, stroke_mode, false);
     }

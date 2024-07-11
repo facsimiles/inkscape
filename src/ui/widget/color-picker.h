@@ -20,6 +20,7 @@
 #include <gtkmm/builder.h>
 #include <gtkmm/popover.h>
 #include <gtkmm/widget.h>
+#include <memory>
 #include <utility>
 
 #include "colors/color.h"
@@ -71,13 +72,15 @@ public:
 
     sigc::signal<void (void)> signal_open_popup() { return _signal_open; }
 
+    void set_icon(const Glib::ustring& icon_name);
+
 private:
     void _onSelectedColorChanged();
     virtual void on_changed(Colors::Color const &);
     void _construct(Gtk::Widget* content);
     void set_preview(std::uint32_t rgba);
 
-    ColorPreview* _preview = nullptr;
+    std::unique_ptr<ColorPreview> _preview;
     Glib::ustring _title;
     sigc::signal<void (Colors::Color const &)> _changed_signal;
     bool          _undo     = false;
