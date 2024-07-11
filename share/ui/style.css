@@ -1288,11 +1288,11 @@ popover.popup-menu contents {
     min-width: 24px;
     min-height: 24px;
 }
-#ColorPicker > button {
+#ColorPicker:not(.icon) > button {
     border-width: 0;
     padding: 0;
 }
-#ColorPicker > .toggle {
+#ColorPicker:not(.icon) > .toggle {
     border-width: 0;
     padding: 0;
 }

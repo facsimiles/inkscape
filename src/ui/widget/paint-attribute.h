@@ -16,6 +16,7 @@
 #include <gtkmm/widget.h>
 #include <memory>
 #include "object/sp-marker-loc.h"
+#include "object/sp-paint-server.h"
 #include "style-internal.h"
 #include "ui/widget/color-picker.h"
 #include "ui/widget/dash-selector.h"
@@ -36,13 +37,16 @@ public:
 private:
     void set_paint(const SPIPaint& paint, double opacity, bool fill);
     void set_paint(const SPObject* object, bool fill);
+    // set icon representing current fill/stroke type
     void set_preview(const SPIPaint& paint, double paint_opacity, PaintMode mode, bool fill);
+    // init fill/stroke popup (before it gets opened)
+    void init_popup(const SPIPaint& paint, double paint_opacity, PaintMode mode, bool fill);
 
     struct PaintStrip {
         PaintStrip(const Glib::ustring& title);
 
-        void show(){}
-        void hide(){}
+        void show();
+        void hide();
         std::unique_ptr<PaintSwitch> _switch = PaintSwitch::create();
         ColorPicker _picker = ColorPicker(*_switch, _("Select paint"));
         Gtk::Label _label;

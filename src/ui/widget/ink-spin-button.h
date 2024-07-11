@@ -118,6 +118,7 @@ private:
     bool _dont_evaluate = false; // turn off expression evaluator?
     Glib::RefPtr<Gdk::Cursor> _old_cursor;
     Glib::RefPtr<Gdk::Cursor> _current_cursor;
+    struct Point { double x = 0; double y = 0; } _drag_start;
 
     // ----------- PROPERTIES ------------
     int prop_digits = 0;

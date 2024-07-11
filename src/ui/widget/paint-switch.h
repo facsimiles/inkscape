@@ -5,6 +5,7 @@
 #ifndef PAINT_SWITCH_H
 #define PAINT_SWITCH_H
 
+#include <glibmm/ustring.h>
 #include <gtkmm/box.h>
 #include <gtkmm/stack.h>
 #include <memory>
@@ -27,6 +28,7 @@ enum class PaintMode {
 };
 
 PaintMode get_mode_from_paint(const SPIPaint& paint);
+Glib::ustring get_mode_icon(PaintMode mode);
 
 class PaintSwitch : public Gtk::Box {
 public:
@@ -36,11 +38,12 @@ public:
 
     virtual void set_mode(PaintMode mode) = 0;
 
-    // virtual void update_from_object(SPObject* object) = 0;
+    virtual void update_from_paint(const SPIPaint& paint) = 0;
 
     // flat colors
     virtual void set_color(const Colors::Color& color) = 0;
     virtual sigc::signal<void (const Colors::Color&)> signal_color_changed() = 0;
+    virtual sigc::signal<void (PaintMode)> signal_mode_changed() = 0;
 };
 
 } // namespace

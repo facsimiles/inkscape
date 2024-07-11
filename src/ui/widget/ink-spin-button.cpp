@@ -83,6 +83,7 @@ void InkSpinButton::construct() {
     _motion = Gtk::EventControllerMotion::create();
     _motion->signal_enter().connect(sigc::mem_fun(*this, &InkSpinButton::on_motion_enter));
     _motion->signal_leave().connect(sigc::mem_fun(*this, &InkSpinButton::on_motion_leave));
+    _motion->signal_motion().connect([=](double x, double y){printf("just motion: %f %f\n",x,y);});
     add_controller(_motion);
 
     // This is mouse movement. Sets cursor.
@@ -97,6 +98,7 @@ void InkSpinButton::construct() {
     _drag_value->signal_update().connect(sigc::mem_fun(*this, &InkSpinButton::on_drag_update_value));
     _drag_value->signal_end().connect(sigc::mem_fun(*this, &InkSpinButton::on_drag_end_value));
     _drag_value->set_propagation_phase(Gtk::PropagationPhase::CAPTURE);
+    // _drag_value->set_exclusive();
     _value.add_controller(_drag_value);
 
     // Changes value.
@@ -372,12 +374,14 @@ void InkSpinButton::update() {
 // ------------------  MOTION  ------------------
 
 void InkSpinButton::on_motion_enter(double x, double y) {
+printf("motion enter\n");
     if (_focus->contains_focus()) return;
 
     show_arrows(true);
 }
 
 void InkSpinButton::on_motion_leave() {
+printf("motion leave\n");
     if (_focus->contains_focus()) return;
 
     show_arrows(false);
@@ -392,6 +396,7 @@ void InkSpinButton::on_motion_leave() {
 // ---------------  MOTION VALUE  ---------------
 
 void InkSpinButton::on_motion_enter_value(double x, double y) {
+printf("val motion enter\n");
     _old_cursor = get_cursor();
     if (!g_resizing_cursor) {
         g_resizing_cursor = Gdk::Cursor::create(Glib::ustring("ew-resize"));
@@ -401,6 +406,7 @@ void InkSpinButton::on_motion_enter_value(double x, double y) {
 }
 
 void InkSpinButton::on_motion_leave_value() {
+printf("val motion leave\n");
     _current_cursor = _old_cursor;
     set_cursor(_current_cursor);
 }
@@ -420,6 +426,7 @@ static double get_accel_factor(Gdk::ModifierType state) {
 
 void InkSpinButton::on_drag_begin_value(Gdk::EventSequence* sequence) {
     _initial_value = _adjustment->get_value();
+    _drag_value->get_point(sequence, _drag_start.x,_drag_start.y);
 }
 
 void InkSpinButton::on_drag_update_value(Gdk::EventSequence* sequence) {
@@ -427,6 +434,9 @@ void InkSpinButton::on_drag_update_value(Gdk::EventSequence* sequence) {
     double dy = 0.0;
     _drag_value->get_offset(dx, dy);
 
+// double x,y;
+// _drag_value->get_point(sequence, x, y);
+// printf("drag: %f %f, %f %f\n",dx,dy,x,y);
     // If we don't move, then it probably was a button click.
     auto delta = 1; // tweak this value to reject real clicks, or else we'll change value inadvertently
     if (std::abs(dx) > delta || std::abs(dy) > delta) {
