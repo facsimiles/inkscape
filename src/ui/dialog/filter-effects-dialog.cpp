@@ -72,7 +72,7 @@ using namespace Inkscape::Filters;
 
 namespace Inkscape::UI::Dialog {
 FilterEditorNode::FilterEditorNode(int node_id, int x, int y, SPFilterPrimitive *primitive,
-                                   std::string label_text)
+                                   std::string label_text, int num_sources, int num_sinks)
     : Gtk::Box(Gtk::Orientation::VERTICAL, -10)
     , primitive(primitive)
     , node_id(node_id)
@@ -82,11 +82,11 @@ FilterEditorNode::FilterEditorNode(int node_id, int x, int y, SPFilterPrimitive 
     , source_dock(Gtk::Orientation::HORIZONTAL, 10)
     , source(this)
     , sink_dock(Gtk::Orientation::HORIZONTAL, 10)
-    , sink(this)
+    , sinks(0)
 {
-    this->set_size_request(-1, -1);
-    this->node.set_name("filter-node");
-    this->node.set_size_request(200, -1);
+    set_size_request(-1, -1);
+    node.set_name("filter-node");
+    node.set_size_request(200, -1);
 
     Glib::RefPtr<Gtk::StyleContext> context = this->node.get_style_context();
     Glib::RefPtr<Gtk::CssProvider> provider = Gtk::CssProvider::create();
@@ -98,7 +98,12 @@ FilterEditorNode::FilterEditorNode(int node_id, int x, int y, SPFilterPrimitive 
     Gtk::Label *label = new Gtk::Label(label_text.c_str());
     label->set_sensitive(false);
     this->append(sink_dock);
-    this->sink_dock.append(sink);
+    for(int i = 0; i != num_sinks; i++){
+        auto sink = new FilterEditorSink(this, 1);
+        this->sinks.push_back(sink);
+        this->sink_dock.append(*sink);
+    }
+    // this->sink_dock.append(sink);
     this->sink_dock.set_halign(Gtk::Align::CENTER);
     this->sink_dock.set_name("filter-node-sink-dock");
     this->node.append(*label);
@@ -140,6 +145,19 @@ void FilterEditorNode::update_position(double x, double y)
 {
     this->x = x;
     this->y = y;
+}
+
+FilterEditorSink* FilterEditorNode::get_next_available_sink(){
+    for(auto sink : sinks){
+        if(sink->can_add_connection()){
+            return sink;
+        }
+    }
+    return nullptr;
+}
+
+FilterEditorSource* FilterEditorNode::get_source(){
+    return &source;
 }
 
 SPFilterPrimitive* FilterEditorNode::get_primitive(){
@@ -348,15 +366,28 @@ FilterEditorCanvas::FilterEditorCanvas(int w, int h)
 };
         // ~FilterEditorCanvas() override;
 
-NODE_TYPE *FilterEditorCanvas::add_node(SPFilterPrimitive *primitive, double x_click, double y_click, std::string label_text)
+FilterEditorNode* FilterEditorCanvas::get_node(SPFilterPrimitive* prim){
+    
+    if(primitive_to_node.find(prim) != primitive_to_node.end()){
+        return primitive_to_node[prim];
+    }
+    else{
+        return nullptr;
+    }
+}
+
+NODE_TYPE *FilterEditorCanvas::add_node(SPFilterPrimitive *primitive, double x_click, double y_click, std::string label_text, int num_sources, int num_sinks)
 {
-    std::shared_ptr<FilterEditorNode> node = std::make_shared<FilterEditorNode>(100, 0, 0, primitive, label_text);
+    std::shared_ptr<FilterEditorNode> node = std::make_shared<FilterEditorNode>(100, 0, 0, primitive, label_text, num_sources, num_sinks);
+    primitive_to_node[primitive] = node.get();
     place_node(node.get(), x_click, y_click);
     nodes.push_back(node);
     return node.get();
 };
 
-FilterEditorConnection *FilterEditorCanvas::create_connection(FilterEditorSource *source, FilterEditorSink *sink)
+
+
+FilterEditorConnection* FilterEditorCanvas::create_connection(FilterEditorSource *source, FilterEditorSink *sink)
 {
     FilterEditorConnection *connection = new FilterEditorConnection(source, sink, this);
     connections.push_back(connection);
@@ -364,6 +395,19 @@ FilterEditorConnection *FilterEditorCanvas::create_connection(FilterEditorSource
     sink->add_connection(connection);
     return connection;
 };
+
+FilterEditorConnection *FilterEditorCanvas::create_connection(FilterEditorNode *source_node, FilterEditorNode *sink_node){
+    auto sink = sink_node->get_next_available_sink();
+    if(sink == nullptr){
+        return nullptr;
+    }
+    auto source = source_node->get_source();
+    FilterEditorConnection *connection = new FilterEditorConnection(source, sink, this);
+    connections.push_back(connection);
+    source->add_connection(connection);
+    sink->add_connection(connection);
+    return connection;
+}
 
 bool FilterEditorCanvas::destroy_connection(FilterEditorConnection *connection)
 {
@@ -681,20 +725,6 @@ void FilterEditorCanvas::event_handler(double x, double y)
     }
 }
 
-/*Modifier related*/
-// Gdk::ModifierType modifier_state = Gdk::ModifierType::NO_MODIFIER_MASK;
-// bool in_click = false;
-// bool in_drag = false;
-
-// double click_start_x, click_start_y;
-
-// /*Controllers and methods for gestures*/
-
-// Glib::RefPtr<Gtk::GestureClick> gesture_click;
-// Glib::RefPtr<Gtk::GestureDrag> gesture_drag;
-// Glib::RefPtr<Gtk::GestureClick> gesture_right_click;
-// Glib::RefPtr<Gtk::EventControllerKey> key_controller;
-// Glib::RefPtr<Gtk::EventControllerScroll> scroll_controller;
 
 void FilterEditorCanvas::on_scroll(const Gtk::EventControllerScroll &scroll) {};
 
@@ -787,9 +817,9 @@ void FilterEditorCanvas::initialize_gestures()
     /*Setting up temporary controllers related to clicks.*/
     gesture_right_click = Gtk::GestureClick::create();
     gesture_right_click->set_button(GDK_BUTTON_SECONDARY);
-    gesture_right_click->signal_pressed().connect(
-        [this](int n_press, double x, double y) { this->add_node(nullptr, x, y, "Temporary Node"); });
-    this->canvas.add_controller(gesture_right_click);
+    // gesture_right_click->signal_pressed().connect(
+    //     [this](int n_press, double x, double y) { this->add_node(nullptr, x, y, "Temporary Node"); });
+    // this->canvas.add_controller(gesture_right_click);
 
     key_controller = Gtk::EventControllerKey::create();
     key_controller->set_propagation_phase(Gtk::PropagationPhase::CAPTURE);
@@ -842,12 +872,12 @@ void FilterEditorCanvas::initialize_gestures()
 
 // std::vector<std::pair<NODE_TYPE*, NODE_TYPE*>> connections;
 
-NODE_TYPE *FilterEditorCanvas::create_node(SPFilterPrimitive *primitive)
-{
-    std::shared_ptr<FilterEditorNode> node = std::make_shared<FilterEditorNode>(100, 0, 0, primitive);
-    nodes.push_back(node);
-    return node.get();
-};
+// NODE_TYPE *FilterEditorCanvas::create_node(SPFilterPrimitive *primitive)
+// {
+//     std::shared_ptr<FilterEditorNode> node = std::make_shared<FilterEditorNode>(100, 0, 0, primitive);
+//     nodes.push_back(node);
+//     return node.get();
+// };
 // void remove_node(int node_id);
 // void connect_nodes(int node1, int node2);
 // void disconnect_nodes(int node1, int node2);
@@ -2777,8 +2807,8 @@ void FilterEffectsDialog::PrimitiveList::snapshot_vfunc(Glib::RefPtr<Gtk::Snapsh
                 }
 
                 if(_in_drag != (i + 1) || row_prim != prim) {
-                    draw_connection(cr, row, SPAttr::INVALID, text_start_x, outline_x,
-                                    con_poly[2].y(), row_count, i, fg_color, mid_color);
+                    // draw_connection(cr, row, SPAttr::INVALID, text_start_x, outline_x,
+                                    // con_poly[2].y(), row_count, i, fg_color, mid_color);
                 }
             }
         }
@@ -3202,6 +3232,9 @@ FilterEffectsDialog::PrimitiveList::on_click_released(Gtk::GestureClick const &c
                 }
             }
             else {
+                auto node_below = _dialog._filter_canvas.get_node(prim);
+                auto node_above = _dialog._filter_canvas.get_node(target); 
+                _dialog._filter_canvas.create_connection(node_above, node_below);
                 if(_in_drag == 1)
                     _dialog.set_attr(prim, SPAttr::IN_, in_val);
                 else if(_in_drag == 2)
@@ -3468,8 +3501,8 @@ FilterEffectsDialog::FilterEffectsDialog()
     _params_box(get_widget<Gtk::Box>(_builder, "params")),
     _search_box(get_widget<Gtk::Box>(_builder, "search")),
     _search_wide_box(get_widget<Gtk::Box>(_builder, "search-wide")),
-    _filter_wnd(100, 100),
-    // _filter_wnd(100, 100/*get_widget<Gtk::ScrolledWindow>(_builder, "filter")*/),
+    _filter_canvas(100, 100),
+    _filter_wnd(get_widget<Gtk::ScrolledWindow>(_builder, "filter")),
     _cur_filter_btn(get_widget<Gtk::CheckButton>(_builder, "label"))
     , _add_primitive_type(FPConverter)
     , _add_primitive(_("Add Effect:"))
@@ -3524,7 +3557,7 @@ FilterEffectsDialog::FilterEffectsDialog()
     });
 
     _primitive_list.signal_primitive_changed().connect([this]{ update_settings_view(); });
-    _filter_wnd.signal_primitive_changed().connect([this]{ update_settings_view(); });
+    _filter_canvas.signal_primitive_changed().connect([this]{ update_settings_view(); });
 
     _cur_filter_toggle = _cur_filter_btn.signal_toggled().connect([this]{
         _filter_modifier.toggle_current_filter();
@@ -3632,9 +3665,11 @@ FilterEffectsDialog::FilterEffectsDialog()
         if (ratio < 1 - hysteresis || width <= threshold_width) {
             // make narrow/tall
             if (!_narrow_dialog) {
-                _main_grid.remove(_filter_wnd);
+                // _main_grid.remove(_filter_wnd);
+                _main_grid.remove(_filter_canvas);
                 _search_wide_box.remove(_effects_popup);
                 _paned.set_start_child(_filter_wnd);
+                // _paned.set_start_child(_filter_canvas);
                 UI::pack_start(_search_box, _effects_popup);
                 _paned.set_size_request();
                 get_widget<Gtk::Box>(_builder, "connect-box-wide").remove(*_show_sources);
@@ -3646,7 +3681,8 @@ FilterEffectsDialog::FilterEffectsDialog()
             if (_narrow_dialog) {
                 _paned.property_start_child().set_value(nullptr);
                 _search_box.remove(_effects_popup);
-                _main_grid.attach(_filter_wnd, 2, 1, 1, 2);
+                // _main_grid.attach(_filter_wnd, 2, 1, 1, 2);
+                _main_grid.attach(_filter_canvas, 2, 1, 1, 2);
                 UI::pack_start(_search_wide_box, _effects_popup);
                 _paned.set_size_request(min_width);
                 get_widget<Gtk::Box>(_builder, "connect-box").remove(*_show_sources);
@@ -3819,7 +3855,8 @@ void FilterEffectsDialog::init_settings_widgets()
 void FilterEffectsDialog::add_filter_primitive(Filters::FilterPrimitiveType type) {
     if (auto filter = _filter_modifier.get_selected_filter()) {
         SPFilterPrimitive* prim = filter_add_primitive(filter, type);
-        auto added_node = _filter_wnd.add_node(prim,0,0, FPConverter.get_label(type));
+        int num_sinks = input_count(prim);
+        auto added_node = _filter_canvas.add_node(prim,0,0,FPConverter.get_label(type), 1, num_sinks);
         _primitive_list.select(prim);
         DocumentUndo::done(filter->document, _("Add filter primitive"), INKSCAPE_ICON("dialog-filters"));
     }
@@ -3965,7 +4002,7 @@ void FilterEffectsDialog::update_settings_view()
     }
 
     // SPFilterPrimitive* prim = _primitive_list.get_selected();
-    SPFilterPrimitive* prim = _filter_wnd.get_selected_primitive();
+    SPFilterPrimitive* prim = _filter_canvas.get_selected_primitive();
     auto& header = get_widget<Gtk::Box>(_builder, "effect-header");
     SPFilter* filter = _filter_modifier.get_selected_filter();
     bool present = _filter_modifier.filters_present();

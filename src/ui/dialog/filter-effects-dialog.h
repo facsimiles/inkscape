@@ -74,7 +74,7 @@ class SPFilterPrimitive;
 
 #define NODE_TYPE FilterEditorNode
 #define SCROLL_SENS (10.0)
-#define SHIFT_DOWN ((modifier_state & Gdk::ModifierType::SHIFT_MASK)==Gdk::ModifierType::SHIFT_MASK)
+#define SHIFT_DOWN ((modifier_state & Gdk::ModifierType::SHIFT_MASK)!=Gdk::ModifierType::SHIFT_MASK)
 namespace Inkscape::UI {
 
 namespace Widget {
@@ -127,7 +127,7 @@ class FilterEditorSource : public Gtk::Box{
 
 class FilterEditorSink : public Gtk::Box{
     public:
-        FilterEditorSink(FilterEditorNode* _node, std::string _label_string = "") : Gtk::Box(Gtk::Orientation::VERTICAL, 0), label_string(_label_string), node(_node){
+        FilterEditorSink(FilterEditorNode* _node, int _max_connections, std::string _label_string = "") : Gtk::Box(Gtk::Orientation::VERTICAL, 0), label_string(_label_string), node(_node), max_connections(_max_connections){
             this->set_name("filter-node-sink");
             Glib::RefPtr<Gtk::StyleContext> context = this->get_style_context();
             Glib::RefPtr<Gtk::CssProvider> provider = Gtk::CssProvider::create();
@@ -147,6 +147,10 @@ class FilterEditorSink : public Gtk::Box{
             return connections;
         };
 
+        bool can_add_connection(){
+            return connections.size() < max_connections;
+        };
+
         bool add_connection(FilterEditorConnection* connection){
             if(connections.size() < max_connections){
                 connections.push_back(connection);
@@ -163,7 +167,7 @@ class FilterEditorSink : public Gtk::Box{
         // int source_id;
         // int node_id;
         FilterEditorNode* node;       
-        int max_connections = 0;
+        int max_connections = 1;
         std::vector<FilterEditorConnection*> connections;
         std::string label_string; // The label corresponding to the string.
 
@@ -212,25 +216,38 @@ class FilterEditorNode : public Gtk::Box{
     public:
         Gtk::Box node;
         Gtk::Box source_dock, sink_dock;
+        std::vector<FilterEditorSink*> sinks;
         FilterEditorSource source;
-        FilterEditorSink sink;
 
-        FilterEditorNode(int node_id, int x, int y, SPFilterPrimitive* primitive, std::string label_text = "Hello");
+        FilterEditorNode(int node_id, int x, int y, SPFilterPrimitive* primitive, std::string label_text, int num_outputs = 1, int num_inputs = 1);
 
         bool get_selected();
         bool toggle_selection(bool selected = true);
         void get_position(double& x, double& y);
         void update_position(double x, double y);
+
+        FilterEditorSink* get_next_available_sink();
+        FilterEditorSource* get_source();
+        
         SPFilterPrimitive* get_primitive();
-
-
         bool is_selected = false;
-    private:
+
+
+    protected:
         SPFilterPrimitive* primitive;
         int node_id;
         double x, y;
-        std::vector<int> connected_nodes; 
+        std::vector<FilterEditorNode*> connected_nodes;
 };
+
+// class FilterEditorPrimitiveNode : public FilterEditorNode{
+//     public:
+//         FilterEditorPrimitiveNode(int node_id, int x, int y, std::string label_text, SPFilterPrimitive* primitive, int num_outputs = 1, int num_inputs):
+
+
+
+// }
+
 
 class FilterEditorCanvas : public Gtk::ScrolledWindow{
     public:
@@ -238,9 +255,10 @@ class FilterEditorCanvas : public Gtk::ScrolledWindow{
         FilterEditorCanvas(int w, int h);
         // ~FilterEditorCanvas() override;
 
-        NODE_TYPE* add_node(SPFilterPrimitive* primitive, double x_click, double y_click, std::string label_text);
+        NODE_TYPE *add_node(SPFilterPrimitive *primitive, double x_click, double y_click, std::string label_text, int num_sources = 1, int num_sinks = 1);
+        FilterEditorConnection *create_connection(FilterEditorSource *source, FilterEditorSink *sink);
+        FilterEditorConnection *create_connection(FilterEditorNode *source_node, FilterEditorNode *sink_node);
 
-        FilterEditorConnection* create_connection(FilterEditorSource* source, FilterEditorSink* sink);
         bool destroy_connection(FilterEditorConnection *connection);
 
         double get_zoom_factor();
@@ -268,11 +286,14 @@ class FilterEditorCanvas : public Gtk::ScrolledWindow{
         };
         SPFilterPrimitive* get_selected_primitive();
         sigc::signal<void ()>& signal_primitive_changed();
+        FilterEditorNode* get_node(SPFilterPrimitive* prim);
 
     protected:
         std::vector<FilterEditorConnection*> connections;
          
     private:
+        std::map<SPFilterPrimitive*, FilterEditorNode*> primitive_to_node;
+
         FilterEditorEvent current_event_type;
         double zoom_fac;
         FilterEditorSource* starting_source;
@@ -290,34 +311,8 @@ class FilterEditorCanvas : public Gtk::ScrolledWindow{
 
         template <typename T>
         T* resolve_to_type(Gtk::Widget* widget);
-        // FilterEditorSource* resolve_to_source(Gtk::Widget* widget){
-        //     while(dynamic_cast<FilterEditorSource*>(widget) == nullptr){
-        //         if(dynamic_cast<FilterEditorCanvas*>(widget) != nullptr){
-        //             return nullptr;
-        //         }
-        //         widget = widget->get_parent();
-        //     }
-        //     return dynamic_cast<FilterEditorSource*>(widget);
-        // }
-        // FilterEditorSink* resolve_to_sink(Gtk::Widget* widget){
-        //     while(dynamic_cast<FilterEditorSink*>(widget) == nullptr){
-        //         if(dynamic_cast<FilterEditorCanvas*>(widget) != nullptr){
-        //             return nullptr;
-        //         }
-        //         widget = widget->get_parent();
-        //     }
-        //     return dynamic_cast<FilterEditorSink*>(widget);
-        // }
-        // NODE_TYPE* resolve_to_node(Gtk::Widget* widget){
-        //     while(dynamic_cast<NODE_TYPE*>(widget) == nullptr){
-        //         if(dynamic_cast<FilterEditorCanvas*>(widget) != nullptr){
-        //             return nullptr;
-        //         }
-        //         widget = widget->get_parent();
-        //     }
-        //     return dynamic_cast<NODE_TYPE*>(widget);
-        // }
 
+        
         /*Selection Based*/
         bool toggle_node_selection(NODE_TYPE* widget);
 
@@ -331,7 +326,7 @@ class FilterEditorCanvas : public Gtk::ScrolledWindow{
         
 
         /*Modifier related*/
-        Gdk::ModifierType modifier_state = Gdk::ModifierType::NO_MODIFIER_MASK;
+        Gdk::ModifierType modifier_state = ~Gdk::ModifierType::NO_MODIFIER_MASK;
         bool in_click = false;
         bool in_drag = false;
         double click_start_x, click_start_y;
@@ -619,8 +614,8 @@ private:
     Gtk::Box& _params_box;
     Gtk::Box& _search_box;
     Gtk::Box& _search_wide_box;
-    // Gtk::ScrolledWindow& _filter_wnd;
-    FilterEditorCanvas _filter_wnd;
+    Gtk::ScrolledWindow& _filter_wnd;
+    FilterEditorCanvas _filter_canvas;
     bool _narrow_dialog = true;
     Gtk::ToggleButton *_show_sources = nullptr;
     Gtk::CheckButton& _cur_filter_btn;
