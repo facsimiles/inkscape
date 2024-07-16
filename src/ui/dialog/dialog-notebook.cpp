@@ -156,6 +156,11 @@ DialogNotebook::DialogNotebook(DialogContainer *container)
 
     auto builder = ColumnMenuBuilder<DialogData::Category>{_menu, 2, Gtk::IconSize::NORMAL, row};
     for (auto const &data : all_dialogs) {
+#ifdef DEBUG
+        if (data.category == DialogData::Diagnostics) {
+            continue; // only show dev dialogs in dev builds
+        }
+#endif
         auto callback = [key = data.key]{
             // get desktop's container, it may be different than current '_container'!
             if (auto desktop = SP_ACTIVE_DESKTOP) {
