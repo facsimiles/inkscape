@@ -24,22 +24,6 @@ void circle(const Cairo::RefPtr<Cairo::Context>& ctx, const Geom::Point& center,
     ctx->arc(center.x(), center.y(), radius, 0, 2 * M_PI);
 }
 
-// draw a circle around given point to show currently selected color
-static void draw_point_indicator(const Cairo::RefPtr<Cairo::Context>& ctx, const Geom::Point& point, double size) {
-    ctx->save();
-
-    auto pt = point.round();
-    ctx->set_line_width(1.0);
-    circle(ctx, pt, (size - 2) / 2);
-    ctx->set_source_rgb(1, 1, 1);
-    ctx->stroke();
-    circle(ctx, pt, size / 2);
-    ctx->set_source_rgb(0, 0, 0);
-    ctx->stroke();
-
-    ctx->restore();
-}
-
 static void draw_color_plate(const Cairo::RefPtr<Cairo::Context>& ctx, const Geom::Rect& area, double radius, const Cairo::RefPtr<Cairo::ImageSurface>& preview, bool circular) {
     if (area.width() <= 0 || area.height() <= 0) return;
 
@@ -284,8 +268,7 @@ void ColorPlate::draw_plate(const Cairo::RefPtr<Cairo::Context>& ctx) {
 
     if (auto maybe = get_active_area(); _down && maybe) {
         auto pt = local_to_screen(*maybe, *_down, _disc);
-        double size = 8;
-        draw_point_indicator(ctx, pt, size);
+        Util::draw_point_indicator(ctx, pt);
     }
 }
 

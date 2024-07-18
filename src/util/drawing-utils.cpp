@@ -121,22 +121,6 @@ void draw_standard_border(const Cairo::RefPtr<Cairo::Context>& ctx, Geom::Rect r
     draw_border(ctx, rect, radius, color, device_scale, circular, inwards);
 }
 
-// draw a circle around given point to show currently selected color
-static void draw_point_indicator(const Cairo::RefPtr<Cairo::Context>& ctx, const Geom::Point& point, double size) {
-    ctx->save();
-
-    auto pt = point.round();
-    ctx->set_line_width(1.0);
-    circle(ctx, pt, (size - 2) / 2);
-    ctx->set_source_rgb(1, 1, 1);
-    ctx->stroke();
-    circle(ctx, pt, size / 2);
-    ctx->set_source_rgb(0, 0, 0);
-    ctx->stroke();
-
-    ctx->restore();
-}
-
 std::optional<Gdk::RGBA> lookup_background_color(Glib::RefPtr<Gtk::StyleContext>& style) {
     Gdk::RGBA color;
     if (style && style->lookup_color("theme_bg_color", color)) {
@@ -152,5 +136,22 @@ std::optional<Gdk::RGBA> lookup_foreground_color(Glib::RefPtr<Gtk::StyleContext>
     }
     return {};
 }
+
+// draw a circle around given point to show currently selected color
+void draw_point_indicator(const Cairo::RefPtr<Cairo::Context>& ctx, const Geom::Point& point, double size) {
+    ctx->save();
+
+    auto pt = point;
+    ctx->set_line_width(1.0);
+    circle(ctx, pt, (size - 2) / 2);
+    ctx->set_source_rgb(1, 1, 1);
+    ctx->stroke();
+    circle(ctx, pt, size / 2);
+    ctx->set_source_rgb(0, 0, 0);
+    ctx->stroke();
+
+    ctx->restore();
+}
+
 
 }

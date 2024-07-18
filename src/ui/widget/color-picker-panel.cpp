@@ -12,6 +12,7 @@
 #include <gtkmm/stack.h>
 #include <gtkmm/togglebutton.h>
 
+#include <string>
 #include <utility>
 #include "color-plate.h"
 #include "color-preview.h"
@@ -87,16 +88,23 @@ struct Panel: Gtk::Grid {
         _type = type;
     }
 
-    int add_widgets() {
+    int add_widgets(const std::string& name) {
         int row = 0;
         if (_plate) {
             _plate->get_widget().set_expand();
             attach(_plate->get_widget(), 0, row++, 2);
+            if (name == "circle") {
+                auto space = Gtk::make_managed<Gtk::Box>();
+                space->set_size_request(1, 5);
+                attach(*space, 0, row++);
+            }
         }
         else {
+            //
             set_margin_top(4);
         }
 
+        // color preview with #rrggbb value
         auto box = Gtk::make_managed<Gtk::Box>(Gtk::Orientation::VERTICAL);
         box->set_spacing(1);
         box->set_vexpand(false);
@@ -119,6 +127,9 @@ struct Panel: Gtk::Grid {
         });
         attach(*box, 0, row);
 
+        // if (name == "circle") {
+        //     _page->set_margin_bottom(5);
+        // }
         _page_row = row;
         attach(*_page, 1, row++);
         return row;
@@ -236,22 +247,22 @@ void ColorPickerPanelImpl::create_page(Space::Type type, const std::string& name
     if (name == "rect") {
         if (!_rect_picker) {
             _rect_picker = std::make_unique<Panel>(type, _color_set, name);
-            _rect_picker->add_widgets();
+            _rect_picker->add_widgets(name);
             _stack.add(*_rect_picker, name);
         }
     }
     else if (name == "circle") {
         if (!_circle_picker) {
             _circle_picker = std::make_unique<Panel>(type, _color_set, name);
-            _circle_picker->add_widgets();
+            _circle_picker->add_widgets(name);
             _stack.add(*_circle_picker, name);
         }
     }
     else if (name == "input") {
         if (!_slider_picker) {
             _slider_picker = std::make_unique<Panel>(type, _color_set, name);
-            _slider_picker->add_widgets();
-            _stack.add(*_slider_picker, "input");
+            _slider_picker->add_widgets(name);
+            _stack.add(*_slider_picker, name);
         }
     }
     else {

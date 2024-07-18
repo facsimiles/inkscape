@@ -27,4 +27,7 @@ std::optional<Gdk::RGBA> lookup_background_color(Glib::RefPtr<Gtk::StyleContext>
 // find theme foreground color; it may not be defined on some themes
 std::optional<Gdk::RGBA> lookup_foreground_color(Glib::RefPtr<Gtk::StyleContext>& style);
 
+// draw a circular marker indicating selected point in a color wheel or similar location
+void draw_point_indicator(const Cairo::RefPtr<Cairo::Context>& ctx, const Geom::Point& point, double size = 8.0);
+
 } // namespace Inkscape::Util
