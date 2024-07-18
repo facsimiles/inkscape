@@ -35,7 +35,7 @@ ColorPicker::ColorPicker(Glib::ustring title,
                          Colors::Color const &initial,
                          bool const undo,
                          bool use_transparency)
-    : _preview(Gtk::make_managed<ColorPreview>(initial.toRGBA()))
+    : _preview(new ColorPreview(initial.toRGBA()))
     , _title(std::move(title))
     , _undo(undo)
     , _colors(std::make_shared<Colors::ColorSet>(nullptr, use_transparency))

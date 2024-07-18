@@ -1460,7 +1460,7 @@ separator.faint {
     min-height: 160px;
 }
 #ColorPlate.circular {
-    min-height: 300px;
+    min-height: 220px;
 }
 
 /* Shrink area of separator's influence or else it will interfere with ruler and multipaned handle. */
