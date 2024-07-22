@@ -8,28 +8,19 @@
     background-color: #242424;
     border-radius: 20px;
     border: 1px solid #000000; 
-    padding: 20px;
-    
+    padding: 20px 10px;    
 
-    /* filter: drop-shadow(0 0 2px black); */
-    font-family: "Manjari", sans-serif;
-    font-weight: 1000;
-    font-style: normal;
-    
+    /* filter: drop-shadow(0 0 2px black); */ 
     /* filter: drop-shadow(0 0 0.75rem crimson); */
   }
   .node-selected > .nodebox-alt{
     background-color: #242424;
     border-radius: 20px;
-    padding: 20px;
+    padding: 20px 10px;
     border: 1px solid #FFFFFF;
-    transform-origin: 0 0;
     /* transform: scale(2); */
     /* filter: drop-shadow(0 0 2px #ffffff); */
     /* filter: drop-shadow(0 0 0.25rem #b9b9b99a); */
-    font-family: "Manjari", sans-serif;
-    font-weight: 1000;
-    font-style: normal;
     /* filter: drop-shadow(0 0 0.75rem crimson); */
   }
 
@@ -42,9 +33,6 @@
     
 
     filter: drop-shadow(0 0 5px black);
-    font-family: "Manjari", sans-serif;
-    font-weight: 1000;
-    font-style: normal;
     
     /* filter: drop-shadow(0 0 0.75rem crimson); */
   }
@@ -103,8 +91,8 @@
     /* background-color: #000000; */
     color: #ffffff;
     /* background-image: url("/home/phantomzback/Documents/GSOC_Projs/protoptype_infinite_canvas/qL9wz.png"); */
-    background-image: url("/home/phantomzback/Documents/GSOC_Projs/protoptype_infinite_canvas/tile_canvas_bg_dotted.svg");
-    border: 4px dotted #999999;
+    /* background-image: url("/home/phantomzback/Documents/GSOC_Projs/protoptype_infinite_canvas/tile_canvas_bg_dotted.svg"); */
+    border: 4px double #909090;
     
     
     /* background: repeat; */
@@ -125,7 +113,7 @@
 .canvas_zoomed_out{
     /* background-color: #000000; */
     /* background-image: url("/home/phantomzback/Documents/GSOC_Projs/protoptype_infinite_canvas/qL9wz.png"); */
-    background-image: url("/home/phantomzback/Documents/GSOC_Projs/protoptype_infinite_canvas/tile_canvas_bg_dotted.svg");
+    /* background-image: url("/home/phantomzback/Documents/GSOC_Projs/protoptype_infinite_canvas/tile_canvas_bg_dotted.svg"); */
     transform: scale(1);
     /* background: repeat; */
     
