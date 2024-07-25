@@ -646,31 +646,31 @@ void FilterEditorCanvas::delete_nodes(){
 
 }
 
-void FilterEditorCanvas::duplicate_nodes(){
-    for(auto node : selected_nodes){
-        if(dynamic_cast<FilterEditorPrimitiveNode*>(node) != nullptr){
-            auto prim_node = dynamic_cast<FilterEditorPrimitiveNode*>(node);
-            auto prim = prim_node->get_primitive();
-            auto new_prim = prim->getRepr()->duplicate(prim->getRepr()->document());
-            auto filter = _dialog._filter_modifier.get_selected_filter();
-            filter->appendChild(new_prim);
-            auto new_node = add_primitive_node(new_prim, prim_node->x + 100, prim_node->y + 100, Filters::FilterPrimitiveType::NR_FILTER_UNKNOWN, prim->getRepr()->name(), prim->get_num_sinks());
-            for(auto sink:prim_node->sinks){
-                if(sink->get_connections().size() != 0){
-                    auto connection = sink->get_connections()[0];
-                    auto source_node = connection->get_source_node();
-                    auto source = source_node->get_source();
-                    auto new_sink = new_node->get_next_available_sink();
-                    if(new_sink != nullptr){
-                        create_connection(source, new_sink, false);
-                    }
-                }
-            }
-        }
-    }
-    update_document();
-    canvas.queue_draw();
-}
+// void FilterEditorCanvas::duplicate_nodes(){
+//     for(auto node : selected_nodes){
+//         if(dynamic_cast<FilterEditorPrimitiveNode*>(node) != nullptr){
+//             auto prim_node = dynamic_cast<FilterEditorPrimitiveNode*>(node);
+//             auto prim = prim_node->get_primitive();
+//             auto new_prim = prim->getRepr()->duplicate(prim->getRepr()->document());
+//             auto filter = _dialog._filter_modifier.get_selected_filter();
+//             filter->appendChild(new_prim);
+//             auto new_node = add_primitive_node(new_prim, prim_node->x + 100, prim_node->y + 100, Filters::FilterPrimitiveType::NR_FILTER_UNKNOWN, prim->getRepr()->name(), prim->get_num_sinks());
+//             for(auto sink:prim_node->sinks){
+//                 if(sink->get_connections().size() != 0){
+//                     auto connection = sink->get_connections()[0];
+//                     auto source_node = connection->get_source_node();
+//                     auto source = source_node->get_source();
+//                     auto new_sink = new_node->get_next_available_sink();
+//                     if(new_sink != nullptr){
+//                         create_connection(source, new_sink, false);
+//                     }
+//                 }
+//             }
+//         }
+//     }
+//     update_document();
+//     canvas.queue_draw();
+// }
 void FilterEditorCanvas::update_document(){
     // SPFilter* filter = _dialog._filter_modifier.get_selected_filter();
     // g_assert(filter);
