@@ -370,9 +370,6 @@ class FilterEditorCanvas : public Gtk::ScrolledWindow{
         std::vector<FilterEditorConnection *> connections;
         std::unique_ptr<UI::Widget::PopoverMenu> _primitive_menu;
 
-        virtual void create_menu();
-
-
     private:
 
         FilterEffectsDialog &_dialog; 
