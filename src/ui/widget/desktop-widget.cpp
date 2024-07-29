@@ -198,7 +198,7 @@ SPDesktopWidget::SPDesktopWidget(InkscapeWindow *inkscape_window, SPDocument *do
     INKSCAPE.add_desktop(_desktop.get());
 
     // Initialize the command toolbar only after contructing the desktop. Else, it'll crash.
-    command_toolbar = std::make_unique<Inkscape::UI::Toolbar::CommandToolbar>(_desktop.get());
+    command_toolbar = std::make_unique<Inkscape::UI::Toolbar::CommandToolbar>();
     _top_toolbars->attach(*command_toolbar, 0, 0);
 
     // Add the shape geometry to libavoid for autorouting connectors.
@@ -213,8 +213,8 @@ SPDesktopWidget::SPDesktopWidget(InkscapeWindow *inkscape_window, SPDocument *do
     /* Listen on namedview modification */
     modified_connection = namedview->connectModified(sigc::mem_fun(*this, &SPDesktopWidget::namedviewModified));
 
-    // tool_toolbars is an empty Gtk::Box at this point, fill it.
-    tool_toolbars->create_toolbars(_desktop.get());
+    _desktop->connectEventContextChanged([this] (auto, auto tool) { tool_toolbars->setTool(tool); });
+    tool_toolbars->setTool(_desktop->getTool());
 
     layoutWidgets();
 
@@ -565,22 +565,13 @@ void SPDesktopWidget::layoutWidgets()
 
 Gtk::Widget *SPDesktopWidget::get_toolbar_by_name(const Glib::ustring &name)
 {
-    // The name is actually attached to the GtkGrid that contains
-    // the toolbar, so we need to get the grid first
-    auto widget = Inkscape::UI::find_widget_by_name(*tool_toolbars, name, false);
-    auto grid = dynamic_cast<Gtk::Grid*>(widget);
+    auto const widget = Inkscape::UI::find_widget_by_name(*tool_toolbars, name, false);
 
-    if (!grid) {
+    if (!widget) {
         std::cerr << "SPDesktopWidget::get_toolbar_by_name: failed to find: " << name << std::endl;
-        return nullptr;
     }
 
-    auto tb = grid->get_child_at(0,0);
-    if (!tb) {
-        std::cerr << "SPDesktopWidget::get_toolbar_by_name: toolbar not at grid origin: " << name << std::endl;
-    }
-
-    return tb;
+    return widget;
 }
 
 void
@@ -686,31 +677,8 @@ void SPDesktopWidget::namedviewModified(SPObject *obj, guint flags)
     _canvas_grid->GetHRuler()->set_tooltip_text(gettext(nv->display_units->name_plural.c_str()));
     _canvas_grid->updateRulers();
 
-    /* This loops through all the grandchildren of tool toolbars,
-     * and for each that it finds, it performs an Inkscape::UI::find_widget_by_name(*),
-     * looking for widgets named "unit-tracker" (this is used by
-     * all toolboxes to refer to the unit selector). The default document units
-     * is then selected within these unit selectors.
-     *
-     * This should solve: https://bugs.launchpad.net/inkscape/+bug/362995
-     */
-    for (auto const i : Inkscape::UI::get_children(*tool_toolbars)) {
-        for (auto const j : Inkscape::UI::get_children(*i)) {
-            // Don't apply to text toolbar. We want to be able to
-            // use different units for text. (Bug 1562217)
-            const Glib::ustring name = j->get_name();
-            if ( name == "TextToolbar" || name == "MeasureToolbar" || name == "CalligraphicToolbar" )
-                continue;
-
-            auto const tracker = dynamic_cast<Inkscape::UI::Widget::ComboToolItem*>
-                                             (Inkscape::UI::find_widget_by_name(*j, "unit-tracker", false));
-            if (tracker) { // it's null when inkscape is first opened
-                if (auto ptr = static_cast<UnitTracker*>(tracker->get_data(Glib::Quark("unit-tracker")))) {
-                    ptr->setActiveUnit(nv->display_units);
-                }
-            }
-        } // grandchildren
-    } // children
+    // Update unit trackers in certain toolbars, to address https://bugs.launchpad.net/inkscape/+bug/362995.
+    tool_toolbars->setActiveUnit(nv->getDisplayUnit());
 }
 
 // We make the desktop window with focus active. Signal is connected in inkscape-window.cpp
