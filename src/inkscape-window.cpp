@@ -43,13 +43,12 @@
 #include "actions/actions-tools.h"
 #include "actions/actions-view-mode.h"
 #include "actions/actions-view-window.h"
+#include "inkscape.h"
 #include "object/sp-namedview.h"  // TODO Remove need for this!
 #include "ui/desktop/menubar.h"
 #include "ui/desktop/menu-set-tooltips-shift-icons.h"
 #include "ui/dialog/dialog-manager.h"
 #include "ui/dialog/dialog-window.h"
-#include "ui/drag-and-drop.h"
-#include "ui/pack.h"
 #include "ui/shortcuts.h"
 #include "ui/util.h"
 #include "ui/widget/desktop-widget.h"
@@ -65,18 +64,18 @@ static gboolean _resize_children(Gtk::Window *win)
     return false;
 }
 
-InkscapeWindow::InkscapeWindow(SPDocument *document)
-    : _document(document)
+InkscapeWindow::InkscapeWindow(SPDesktop *desktop)
+    : _app{InkscapeApplication::instance()}
+    , _document{desktop->getDocument()}
+    , _desktop{desktop}
 {
     assert(_document);
 
     set_name("InkscapeWindow");
     set_show_menubar(true);
-
-    _app = InkscapeApplication::instance();
-    _app->gtk_app()->add_window(*this);
-
     set_resizable(true);
+
+    _app->gtk_app()->add_window(*this);
 
     // =================== Actions ===================
 
@@ -103,7 +102,7 @@ InkscapeWindow::InkscapeWindow(SPDocument *document)
     auto connection = _app->gio_app()->get_dbus_connection();
     if (connection) {
         std::string document_action_group_name = _app->gio_app()->get_dbus_object_path() + "/document/" + std::to_string(get_id());
-        connection->export_action_group(document_action_group_name, document->getActionGroup());
+        connection->export_action_group(document_action_group_name, _document->getActionGroup());
     }
 
     // This is called here (rather than in InkscapeApplication) solely to add win level action
@@ -113,14 +112,10 @@ InkscapeWindow::InkscapeWindow(SPDocument *document)
     // =============== Build interface ===============
 
     // Desktop widget (=> MultiPaned) (After actions added as this initializes shortcuts via CommandDialog.)
-    _desktop_widget = Gtk::make_managed<SPDesktopWidget>(this, _document);
-    _desktop_widget->set_window(this);
-    _desktop_widget->set_visible(true);
-    _desktop = _desktop_widget->get_desktop();
+    _desktop_widget = Gtk::make_managed<SPDesktopWidget>(this);
     set_child(*_desktop_widget);
 
-    // ========== Drag and Drop of Documents =========
-    ink_drag_setup(_desktop_widget);
+    _desktop_widget->addDesktop(desktop);
 
     // ================== Callbacks ==================
     property_is_active().signal_changed().connect(sigc::mem_fun(*this, &InkscapeWindow::on_is_active_changed));
@@ -128,13 +123,10 @@ InkscapeWindow::InkscapeWindow(SPDocument *document)
     property_default_width ().signal_changed().connect(sigc::mem_fun(*this, &InkscapeWindow::on_size_changed));
     property_default_height().signal_changed().connect(sigc::mem_fun(*this, &InkscapeWindow::on_size_changed));
 
-    // ================ Window Options ===============
-    setup_view();
-
     // Show dialogs after the main window, otherwise dialogs may be associated as the main window of the program.
     // Restore short-lived floating dialogs state if this is the first window being opened
     bool include_short_lived = _app->get_number_of_windows() == 0;
-    DialogManager::singleton().restore_dialogs_state(_desktop->getContainer(), include_short_lived);
+    DialogManager::singleton().restore_dialogs_state(_desktop_widget->getDialogContainer(), include_short_lived);
 
     // This pokes the window to request the right size for the dialogs once loaded.
     g_idle_add(GSourceFunc(&_resize_children), this);
@@ -168,13 +160,6 @@ InkscapeWindow::InkscapeWindow(SPDocument *document)
 
     // Add shortcuts to tooltips, etc. (but not menus).
     shortcuts_instance.update_gui_text_recursive(this);
-
-    // ==== Other ====
-    set_visible(true);  // Gtk4: This 'hack' is required for windows created via 'File->New' to be shown. If called before 'build_menu()', menu will not be visible.
-
-    // Apply preferences that are deferred on initialization of the desktop
-    apply_preferences_canvas_mode(this);
-    apply_preferences_canvas_transform(this);
 }
 
 void InkscapeWindow::on_realize()
@@ -204,35 +189,7 @@ void InkscapeWindow::change_document(SPDocument *document)
     _app->set_active_document(_document);
     add_document_actions();
 
-    setup_view();
     update_dialogs();
-}
-
-// Sets up the window and view according to user preferences and <namedview> of the just loaded document
-void
-InkscapeWindow::setup_view()
-{
-    // Make sure the GdkWindow is fully initialized before resizing/moving
-    // (ensures the monitor it'll be shown on is known)
-    Gtk::Widget::realize();
-
-    // Resize the window to match the document properties
-    sp_namedview_window_from_document(_desktop); // This should probably be a member function here.
-
-    // Must show before setting zoom and view! (crashes otherwise)
-    //
-    // Showing after resizing/moving allows the window manager to correct an invalid size/position of the window
-    // TODO: This does *not* work when called from 'change_document()', i.e. when the window is already visible.
-    //       This can result in off-screen windows! We previously worked around this by hiding and re-showing
-    //       the window, but a call to set_visible(false) causes Inkscape to just exit since the migration to Gtk::Application
-    
-    _desktop->schedule_zoom_from_document();
-    sp_namedview_update_layers_from_document(_desktop);
-
-    SPNamedView *nv = _desktop->getNamedView();
-    if (nv && nv->lockguides) {
-        nv->setLockGuides(true);
-    }
 }
 
 /**
@@ -295,8 +252,7 @@ void InkscapeWindow::toggleFullscreen()
     }
 }
 
-void
-InkscapeWindow::on_toplevel_state_changed()
+void InkscapeWindow::on_toplevel_state_changed()
 {
     // The initial old state is empty {}, as is the new state if we do not have a toplevel anymore.
     auto const new_toplevel_state = get_toplevel_state();
@@ -326,14 +282,29 @@ void InkscapeWindow::on_is_active_changed()
     retransientize_dialogs(*this);
 }
 
-// Called when a window is closed via the 'X' in the window bar.
-bool
-InkscapeWindow::on_close_request()
+void InkscapeWindow::setActiveTab(SPDesktop *desktop)
 {
-    if (_app) {
-        _app->destroy_window(this);
+    _document = desktop->getDocument();
+    _desktop = desktop;
+    _app->set_active_document(_document);
+    _app->set_active_desktop(_desktop);
+    _app->set_active_selection(_desktop->getSelection());
+    update_dialogs();
+    add_document_actions();
+}
+
+// Called when a window is closed via the 'X' in the window bar.
+bool InkscapeWindow::on_close_request()
+{
+    auto desktops = get_desktop_widget()->get_desktops();
+    for (auto desktop : desktops) {
+        if (!_app->destroyDesktop(desktop)) {
+            return true; // abort closing
+        }
     }
-    return true;
+
+    // We are deleted by InkscapeApplication at this point, so return value doesn't matter.
+    return false;
 };
 
 /**

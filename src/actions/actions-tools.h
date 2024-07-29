@@ -68,6 +68,8 @@ void tool_preferences(Glib::ustring const &tool, InkscapeWindow *win);
 // Standard function to add actions.
 void add_actions_tools(InkscapeWindow* win);
 
+Glib::ustring const &pref_path_to_tool_name(std::string const &pref_path);
+
 
 #endif // INK_ACTIONS_TOOLS_H
 

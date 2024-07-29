@@ -312,6 +312,8 @@ public:
     Geom::Point displacement, velocity;
     void autoscroll_begin(Geom::Point const &to);
     void autoscroll_end();
+
+    bool just_realized = false;
 };
 
 /*
@@ -470,8 +472,10 @@ void CanvasPrivate::activate()
 
     active = true;
 
-    // Run the first redraw at high priority so it happens before the first call to paint_widget().
-    schedule_redraw(Glib::PRIORITY_HIGH);
+    if (!just_realized) { // otherwise deferred to first resize after realisation
+        // Run the first redraw at high priority so it happens before the first call to paint_widget().
+        schedule_redraw(Glib::PRIORITY_HIGH);
+    }
 }
 
 void CanvasPrivate::deactivate()
@@ -538,6 +542,7 @@ CanvasItemGroup *Canvas::get_canvas_item_root() const
 void Canvas::on_realize()
 {
     parent_type::on_realize();
+    d->just_realized = true;
     d->activate_graphics();
     if (_drawing) d->activate();
 }
@@ -561,10 +566,11 @@ void CanvasPrivate::schedule_redraw(int priority)
         return;
     }
 
-    // Ensure another iteration is performed if one is in progress.
-    redraw_requested = true;
-
     if (redraw_active) {
+        if (!schedule_redraw_conn) {
+            // Ensure another iteration is performed if one is in progress.
+            redraw_requested = true;
+        }
         return;
     }
 
@@ -663,6 +669,8 @@ void CanvasPrivate::launch_redraw()
         redraw_active = false;
         return;
     }
+
+    redraw_requested = false;
 
     // Snapshot the CanvasItems and DrawingItems.
     canvasitem_ctx->snapshot();
@@ -1875,16 +1883,10 @@ void Canvas::size_allocate_vfunc(int const width, int const height, int const ba
     parent_type::size_allocate_vfunc(width, height, baseline);
     auto const new_dimensions = Geom::IntPoint{width, height};
 
-    // Necessary as GTK seems to somehow invalidate the current pipeline state upon resize.
-    if (d->active) {
-        d->graphics->invalidated_glstate();
-    }
-
-    // Trigger the size update to be applied to the stores before the next redraw of the window.
-    d->schedule_redraw();
+    _signal_pre_draw.emit();
 
     // Keep canvas centered and optionally zoomed in.
-    if (_desktop && new_dimensions != d->old_dimensions) {
+    if (_desktop && new_dimensions != d->old_dimensions && d->old_dimensions != Geom::IntPoint{0, 0}) {
         auto const midpoint = _desktop->w2d(_pos + Geom::Point(d->old_dimensions) * 0.5);
         double zoom = _desktop->current_zoom();
 
@@ -1902,6 +1904,27 @@ void Canvas::size_allocate_vfunc(int const width, int const height, int const ba
     }
 
     d->old_dimensions = new_dimensions;
+
+    if (d->active) {
+        // Necessary as GTK seems to somehow invalidate the current pipeline state upon resize.
+        d->graphics->invalidated_glstate();
+
+        if (d->just_realized) {
+            d->just_realized = false;
+            if (!(d->redraw_active && !d->schedule_redraw_conn)) {
+                d->schedule_redraw_conn.disconnect();
+                // Launch redraw without waiting for idle callbacks.
+                if (get_opengl_enabled()) {
+                    make_current();
+                }
+                d->redraw_active = true;
+                d->launch_redraw();
+            }
+        } else {
+            // Trigger the size update to be applied to the stores before the next redraw of the window.
+            d->schedule_redraw();
+        }
+    }
 }
 
 Glib::RefPtr<Gdk::GLContext> Canvas::create_context()
@@ -1936,8 +1959,6 @@ void Canvas::paint_widget(Cairo::RefPtr<Cairo::Context> const &cr)
         return;
     }
 
-    _signal_pre_draw.emit();
-
     if constexpr (false) d->canvasitem_ctx->root()->canvas_item_print_tree();
 
     // On activation, launch_redraw() is scheduled at a priority much higher than draw, so it
@@ -1957,9 +1978,7 @@ void Canvas::paint_widget(Cairo::RefPtr<Cairo::Context> const &cr)
     }
 
     // Commit pending tiles in case GTK called on_draw even though after_redraw() is scheduled at higher priority.
-    if (!d->redraw_active) {
-        d->commit_tiles();
-    }
+    d->commit_tiles();
 
     if (get_opengl_enabled()) {
         bind_framebuffer();
