@@ -1367,6 +1367,15 @@ frame.flat {
     margin: 0.75em;
 }
 
+/* Tabs widget */
+.tab_active {
+    border-width:1px 1px 0 1px;
+    border-style:solid;
+    border-color:@borders;
+    border-radius:4px 4px 0 0;
+    background-color:@theme_bg_color;
+}
+
 /*heper info in popover menu*/
 .menu_search{
     background-color:alpha(@theme_fg_color,0.1);

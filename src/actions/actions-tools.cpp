@@ -410,6 +410,20 @@ add_actions_tools(InkscapeWindow* win)
     app->get_action_extra_data().add_data(raw_data_tools);
 }
 
+Glib::ustring const &pref_path_to_tool_name(std::string const &pref_path)
+{
+    auto &data = get_tool_data();
+
+    // Fixme: Would prefer a map lookup.
+    for (auto &[a, b] : data) {
+        if (b.pref_path.raw() == pref_path) {
+            return a;
+        }
+    }
+
+    static Glib::ustring const empty;
+    return empty;
+}
 
 /*
   Local Variables:

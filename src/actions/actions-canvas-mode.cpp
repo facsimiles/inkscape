@@ -43,12 +43,10 @@ canvas_set_display_mode(Inkscape::RenderMode value, InkscapeWindow *win, Glib::R
     saction->change_state((int)value);
 
     // Save value as a preference
-    Inkscape::Preferences *pref = Inkscape::Preferences::get();
+    auto pref = Inkscape::Preferences::get();
     pref->setInt("/options/displaymode", (int)value);
 
-    SPDesktop* dt = win->get_desktop();
-    auto canvas = dt->getCanvas();
-    canvas->set_render_mode(Inkscape::RenderMode(value));
+    win->get_desktop()->setRenderMode(Inkscape::RenderMode(value));
 }
 
 /**
@@ -223,11 +221,8 @@ canvas_color_mode_toggle(InkscapeWindow *win)
         canvas_color_mode_gray(win);
     }
 
-    SPDesktop* dt = win->get_desktop();
-    auto canvas = dt->getCanvas();
-    canvas->set_color_mode(state ? Inkscape::ColorMode::GRAYSCALE : Inkscape::ColorMode::NORMAL);
+    win->get_desktop()->setColorMode(state ? Inkscape::ColorMode::GRAYSCALE : Inkscape::ColorMode::NORMAL);
 }
-
 
 /**
  * Toggle Color management on/off.
