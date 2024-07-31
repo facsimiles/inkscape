@@ -252,12 +252,17 @@ class FilterEditorNode : public Gtk::Box{
         bool is_selected = false;
 
         void prepare_for_delete();
+        virtual void set_result_string(std::string _result_string);
+        virtual std::string get_result_string();
 
 
     protected:
         int node_id;
         double x, y;
         bool part_of_chain = false;
+
+
+        std::string result_string;
 
 
         std::vector<FilterEditorConnection*> connections;
@@ -275,6 +280,8 @@ class FilterEditorPrimitiveNode : public FilterEditorNode{
         SPFilterPrimitive *get_primitive();
 
     protected:
+        std::string get_result_string();
+        void set_result_string(std::string _result_string);
         SPFilterPrimitive* primitive;
 };
 
@@ -334,6 +341,8 @@ class FilterEditorCanvas : public Gtk::ScrolledWindow{
         void duplicate_nodes();
         void select_nodes(std::vector<NODE_TYPE> nodes);
         void select_node(NODE_TYPE node);
+        void update_canvas();
+        bool primitive_node_exists(SPFilterPrimitive *primitive);
         enum class FilterEditorEvent
         {
             SELECT,
@@ -438,6 +447,7 @@ class FilterEditorCanvas : public Gtk::ScrolledWindow{
 
         // std::vector<std::shared_ptr<FilterEditorNode>> nodes;
         std::vector<FilterEditorNode*> nodes;
+        // std::map<int, FilterEditorNode*> nodes;
         std::vector<NODE_TYPE*> selected_nodes;
         // std::vector<std::pair<NODE_TYPE*, NODE_TYPE*>> connections;
         
