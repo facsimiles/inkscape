@@ -71,6 +71,9 @@
 using namespace Inkscape::Filters;
 
 namespace Inkscape::UI::Dialog {
+
+static int input_count(const SPFilterPrimitive* prim);
+
 FilterEditorNode::FilterEditorNode(int node_id, int x, int y, 
                                    Glib::ustring label_text, int num_sources, int num_sinks)
     : Gtk::Box(Gtk::Orientation::VERTICAL, -10)
@@ -181,19 +184,18 @@ void FilterEditorNode::add_connected_node(FilterEditorSink* sink, FilterEditorNo
     connections.push_back(conn);
 }
 
-std::vector<std::pair<FilterEditorSink*, FilterEditorNode*>> FilterEditorNode::get_connected_up_nodes(){
-    // std::vector<FilterEditorNode*> connected_nodes;
-    // for(auto sink_node_pair: connected_up_nodes){
-    //     connected_nodes.push_back(sink_node_pair.second);
-    // }
+std::vector<std::pair<FilterEditorSink*, FilterEditorNode*>> FilterEditorNode::get_connected_up_nodes(){ 
     return connected_up_nodes;
 }
 std::vector<std::pair<FilterEditorSource*, FilterEditorNode*>> FilterEditorNode::get_connected_down_nodes(){
-    // std::vector<FilterEditorNode*> connected_nodes;
-    // for(auto source_node_pair: connected_down_nodes){
-    //     connected_nodes.push_back(source_node_pair.second);
-    // }
     return connected_down_nodes;
+}
+
+void FilterEditorNode::set_result_string(std::string _result_string) {
+    result_string = _result_string;
+}
+std::string FilterEditorNode::get_result_string(){
+    return result_string;
 }
 
 SPFilterPrimitive* FilterEditorPrimitiveNode::get_primitive(){
@@ -203,6 +205,15 @@ SPFilterPrimitive* FilterEditorPrimitiveNode::get_primitive(){
 FilterEditorSource* FilterEditorPrimitiveNode::get_source(){
 
     return sources[0];
+}
+
+void FilterEditorPrimitiveNode::set_result_string(std::string _result_string){
+    result_string = _result_string;
+    get_primitive()->getRepr()->setAttribute("result", result_string.c_str());
+}
+
+std::string FilterEditorPrimitiveNode::get_result_string(){
+    return result_string;
 }
 
 void FilterEditorPrimitiveMergeNode::create_sink_merge_node(FilterEditorSink* sink, FilterEditorPrimitiveNode* prev_node){
@@ -501,18 +512,21 @@ void FilterEditorCanvas::create_nodes_order(FilterEditorPrimitiveNode* node, std
                 if (dynamic_cast<FilterEditorPrimitiveNode *>(above_node) != nullptr) {
                     auto above_primitive = dynamic_cast<FilterEditorPrimitiveNode *>(above_node)->get_primitive();
                     auto repr = above_primitive->getRepr();
-                    const gchar *gres = repr->attribute("result");
+                    // const gchar *gres = repr->attribute("result");
+                    auto result_str = above_node->get_result_string();
+
                     Glib::ustring in_val;
-                    if (!gres) {
+                    if (result_str == "") {
                         auto result = cast<SPFilter>(above_primitive->parent)->get_new_result_name();
+                        above_node->set_result_string(result);
                         repr->setAttributeOrRemoveIfEmpty("result", result);
                         in_val = result;
                     } else {
-                        in_val = gres;
+                        in_val = result_str;
                     }
-                    g_message("Connection from %d th sink to above node is: %s and in val is %s", i,
-                              dynamic_cast<FilterEditorPrimitiveNode *>(above_node)->get_primitive()->getRepr()->name(),
-                              in_val.c_str());
+                    // g_message("Connection from %d th sink to above node is: %s and in val is %s", i,
+                    //           dynamic_cast<FilterEditorPrimitiveNode *>(above_node)->get_primitive()->getRepr()->name(),
+                    //           in_val.c_str());
                     if (i == 0) {
                         _dialog.set_attr(node->get_primitive(), SPAttr::IN_, in_val.c_str());
                     } else {
@@ -530,14 +544,15 @@ void FilterEditorCanvas::create_nodes_order(FilterEditorPrimitiveNode* node, std
                 auto above_node = sink.first->get_connections()[0]->get_source_node();
                 auto above_primitive = dynamic_cast<FilterEditorPrimitiveNode*>(above_node)->get_primitive();
                 auto repr = above_primitive->getRepr();
-                const gchar *gres = repr->attribute("result");
+                // const gchar *gres = repr->attribute("result");
+                auto result_string = above_node->get_result_string();
                 Glib::ustring in_val;
-                if (!gres) {
+                if (result_string == "") {
                     auto result = cast<SPFilter>(above_primitive->parent)->get_new_result_name();
                     repr->setAttributeOrRemoveIfEmpty("result", result);
                     in_val = result;
                 } else {
-                    in_val = gres;
+                    in_val = result_string;
                 }
                 g_message("Connection from %d th sink to above node is: %s and in val is %s", i,
                           dynamic_cast<FilterEditorPrimitiveNode *>(above_node)->get_primitive()->getRepr()->name(),
@@ -644,6 +659,56 @@ void FilterEditorCanvas::delete_nodes(){
     update_document();
     canvas.queue_draw();
 
+}
+
+
+bool FilterEditorCanvas::primitive_node_exists(SPFilterPrimitive* primitive){
+    if(primitive_to_node.find(primitive) != primitive_to_node.end()){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+
+
+void FilterEditorCanvas::update_canvas(){
+    SPFilter* filter = _dialog._filter_modifier.get_selected_filter();
+    if(filter){
+        auto filter_repr = filter->getRepr();
+        for(auto &child : filter->children){
+            auto prim = cast<SPFilterPrimitive>(&child);
+            if(primitive_node_exists(prim)){
+                // Skip
+            }
+            else{
+                auto type_id = FPConverter.get_id_from_key(prim->getRepr()->name());
+                auto type = static_cast<Filters::FilterPrimitiveType>(type_id);
+                int num_sinks = input_count(prim);
+                double x_position = prim->getRepr()->getAttributeDouble("inkscape:filter-x", 100.0);
+                double y_position = prim->getRepr()->getAttributeDouble("inkscape:filter-y", 100.0);
+                add_primitive_node(prim, x_position+10.0, y_position+10.0, type, FPConverter.get_label(type), num_sinks);
+            }
+        }
+    }    
+};
+
+void FilterEditorCanvas::duplicate_nodes(){
+    for(auto node : selected_nodes){
+        if(dynamic_cast<FilterEditorPrimitiveNode*>(node) != nullptr){
+            auto prim_node = dynamic_cast<FilterEditorPrimitiveNode *>(node);
+            auto prim = prim_node->get_primitive();
+            auto new_prim = prim->getRepr()->duplicate(prim->getRepr()->document());
+            auto filter = _dialog._filter_modifier.get_selected_filter();
+            filter->getRepr()->appendChild(new_prim);
+            if(dynamic_cast<FilterEditorPrimitiveMergeNode*>(node) != nullptr){
+                while(new_prim->firstChild() != nullptr){
+                    new_prim->removeChild(new_prim->firstChild());
+                }
+            }
+            update_canvas();
+        }
+    }
 }
 
 // void FilterEditorCanvas::duplicate_nodes(){
@@ -1346,7 +1411,9 @@ void FilterEditorCanvas::initialize_gestures()
     gesture_right_click->set_button(GDK_BUTTON_SECONDARY);
     gesture_right_click->signal_pressed().connect([this](int n_press, double x, double y) {
         canvas.grab_focus();
-        delete_nodes();
+        // delete_nodes();
+        g_message("Duplicating nodes");
+        duplicate_nodes();
     });
     canvas.add_controller(gesture_right_click);
 
@@ -4084,7 +4151,7 @@ FilterEffectsDialog::FilterEffectsDialog()
     get_widget<Gtk::Popover>(_builder, "info-popover").signal_show().connect([this]{
         if (auto prim = _filter_canvas.get_selected_primitive()) {
             if (prim->getRepr()) {
-                auto id = FPConverter.get_id_from_key(prim->getRepr()->name());
+                auto id = FPConverter.get_id_from_label(prim->getRepr()->name());
                 const auto& effect = get_effects().at(id);
                 get_widget<Gtk::Image>(_builder, "effect-icon").set_from_icon_name(effect.icon_name);
                 auto buffer = get_widget<Gtk::TextView>(_builder, "effect-info").get_buffer();
