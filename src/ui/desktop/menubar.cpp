@@ -41,6 +41,7 @@
 #include "actions/actions-effect.h"
 #include "inkscape-application.h" // Open recent
 #include "preferences.h"          // Use icons or not
+#include "io/fix-broken-links.h"
 #include "io/resource.h"          // UI File location
 
 // =================== Main Menu ================
@@ -130,9 +131,15 @@ build_menu()
     auto recent_object = refBuilder->get_object("recent-files");
     auto recent_gmenu = std::dynamic_pointer_cast<Gio::Menu>(recent_object);
     auto recent_menu_quark = Glib::Quark("recent-manager");
-    recent_gmenu->set_data(recent_menu_quark, recent_manager.get()); // mark submenu, so we can find it
+    if (recent_gmenu) {
+        recent_gmenu->set_data(recent_menu_quark, recent_manager.get()); // mark submenu, so we can find it
+    }
 
     auto rebuild_recent = [](Glib::RefPtr<Gio::Menu> const &submenu) {
+        if (!submenu) {
+            g_warning("No recent submenu in menus.ui found.");
+            return;
+        }
 
         submenu->remove_all();
 
@@ -187,9 +194,9 @@ build_menu()
                 display_uris.emplace_back(( * it   )->get_uri_display());
                 display_uris.emplace_back(( *(it+1))->get_uri_display());
 
-                std::vector<std::vector<Glib::ustring>> path_parts;
-                path_parts.emplace_back(Glib::Regex::split_simple(G_DIR_SEPARATOR_S, (* it   )->get_uri_display()));
-                path_parts.emplace_back(Glib::Regex::split_simple(G_DIR_SEPARATOR_S, (*(it+1))->get_uri_display()));
+                std::vector<std::vector<std::string>> path_parts;
+                path_parts.emplace_back(Inkscape::splitPath((* it   )->get_uri_display()));
+                path_parts.emplace_back(Inkscape::splitPath((*(it+1))->get_uri_display()));
 
                 // Find first directory difference from root down.
                 auto max_size = std::min(path_parts[0].size(), path_parts[1].size());
@@ -204,17 +211,15 @@ build_menu()
                 for (int j = 0; j < 2; j++) {
 
                     auto display_uri = display_uris[j]; // We always use display_uri as map index.
+                    // Size is always one first element such as '/' or 'C:\\' and the last element is the filename
                     auto size = path_parts[j].size();
 
-                    if (size == 1 || size == 2) {
+                    if (size <= 3) {
                         // If file is in root directory or child of root directory, just use display uri.
                         shortened_path_map[display_uri] = display_uri;
                     } else if (i == size - 1) {
                         // If difference is at last path part (file name), use that.
-                        shortened_path_map[display_uri] =
-                            Glib::ustring::compose("..%1%2",
-                                                   G_DIR_SEPARATOR_S,
-                                                   path_parts[j].back());
+                        shortened_path_map[display_uri] = path_parts[j].back();
                     } else if (i == size - 2) {
 
                         // If difference is last directory level (file name), use that + file name.
@@ -222,6 +227,15 @@ build_menu()
                             Glib::ustring::compose ("..%1%2%3%4",
                                                     G_DIR_SEPARATOR_S,
                                                     path_parts[j][size-2],
+                                                    G_DIR_SEPARATOR_S,
+                                                    path_parts[j][size-1]);
+                    } else if (i == 1) {
+                        // parts[j][i] is actually a root folder
+                        shortened_path_map[display_uri] =
+                            Glib::ustring::compose ("%1%2%3..%4%5",
+                                                    path_parts[j][0],
+                                                    path_parts[j][i],
+                                                    G_DIR_SEPARATOR_S,
                                                     G_DIR_SEPARATOR_S,
                                                     path_parts[j][size-1]);
                     } else {
