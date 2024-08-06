@@ -91,6 +91,8 @@
     color: #ffffff;
     /* background-image: url("/home/phantomzback/Documents/GSOC_Projs/protoptype_infinite_canvas/qL9wz.png"); */
     /* background-image: url("/home/phantomzback/Documents/GSOC_Projs/protoptype_infinite_canvas/tile_canvas_bg_dotted.svg"); */
+    /* margin: 10px; */
+    /* padding: 20px; */
     border: 4px double #909090;
     
     
@@ -137,12 +139,15 @@
     /* background-color: #290037; */
     background-color: #5c007a;
     border: 1px solid #ffffff;
-    border-radius: 100%;
+    border-radius: 50px;
+    /* border-radius: 100%; */
 }
 .node-selected .nodesink{
     background-color: rgb(0, 69, 116);
     border: 1px solid #ffffff;
-    border-radius: 100%;
+    /* padding: 3px; */
+    border-radius: 50px;
+    /* border-radius: 100%; */
 }
 
 
@@ -151,10 +156,13 @@
     background-color: #5c007a;
     border: 1px solid #242424;
     /* border: 1px solid #ffffff; */
-    border-radius: 100%;
+    border-radius: 50px;
+    /* border-radius: 100%; */
 }
 .node .nodesink{
     background-color: rgb(0, 69, 116);
     border: 1px solid #242424;
-    border-radius: 100%;
+    /* padding: 3px; */
+    /* border-radius: 100%; */
+    border-radius: 50px;
 }
