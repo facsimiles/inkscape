@@ -129,7 +129,11 @@ class FilterEditorSource : public Gtk::Box{
 
 class FilterEditorSink : public Gtk::Box{
     public:
-        FilterEditorSink(FilterEditorNode* _node, int _max_connections, Glib::ustring _label_string = "") : Gtk::Box(Gtk::Orientation::VERTICAL, 0), label_string(_label_string), node(_node), max_connections(_max_connections){
+        static std::pair<Glib::ustring, Glib::ustring> get_result_inputs(int index){
+            std::pair<Glib::ustring, Glib::ustring> inps[] = {{"SourceGraphic", "SG"}, {"SourceAlpha","SA"}};
+            return inps[index%2];
+        }
+        FilterEditorSink(FilterEditorNode* _node, int _max_connections, Glib::ustring _label_string = "") : Gtk::Box(Gtk::Orientation::VERTICAL, 0), label_string(_label_string), node(_node), max_connections(_max_connections), label(){
             this->set_name("filter-node-sink");
             Glib::RefPtr<Gtk::StyleContext> context = this->get_style_context();
             Glib::RefPtr<Gtk::CssProvider> provider = Gtk::CssProvider::create();
@@ -138,6 +142,9 @@ class FilterEditorSink : public Gtk::Box{
             provider->load_from_path(style);
             context->add_provider(provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
             this->add_css_class("nodesink");
+            this->append(label);
+            label.set_text("");
+            // label.set_text(label_string);
         };
         
         FilterEditorNode* get_parent_node(){
@@ -160,6 +167,32 @@ class FilterEditorSink : public Gtk::Box{
             return false;
         };
 
+        void set_label_text(Glib::ustring new_text){
+            label.set_text(new_text);
+        }
+
+        void set_result_inp(int _inp_index = 0, std::string new_result = ""){
+            if(_inp_index == -1){
+                inp_index = -1;
+                result_string = new_result;
+                label_string = "";
+                return;
+            }
+            else if(_inp_index == -2){
+                inp_index++;
+                // inp_index = _inp_index%2;
+                // auto strs = get_result_inputs(inp_index);
+                // result_string = strs.first;
+                // label_string = strs.second;
+            }
+            // else{
+            inp_index = _inp_index % 2;
+            auto strs = get_result_inputs(inp_index);
+            result_string = strs.first;
+            label_string = strs.second;
+            
+        }
+
         bool get_selected();
 
         
@@ -171,6 +204,9 @@ class FilterEditorSink : public Gtk::Box{
         int max_connections = 1;
         std::vector<FilterEditorConnection*> connections;
         Glib::ustring label_string; // The label corresponding to the string.
+        Glib::ustring result_string;
+        int inp_index = 0;
+        Gtk::Label label;
 
 };
 class FilterEditorFixed : public Gtk::Fixed {
@@ -243,6 +279,8 @@ class FilterEditorNode : public Gtk::Box{
 
         void prepare_for_delete();
         virtual void set_result_string(std::string _result_string);
+        virtual void set_sink_result(FilterEditorSink* sink, std::string result_string);
+        virtual void set_sink_result(FilterEditorSink* sink, int inp_index);
         virtual std::string get_result_string();
 
 
@@ -253,6 +291,7 @@ class FilterEditorNode : public Gtk::Box{
 
 
         std::string result_string;
+
 
 
         std::vector<FilterEditorConnection*> connections;
@@ -269,8 +308,10 @@ class FilterEditorPrimitiveNode : public FilterEditorNode{
         FilterEditorSource* get_source();
         SPFilterPrimitive *get_primitive();
 
-    protected:
         std::string get_result_string();
+
+
+    protected:
         void set_result_string(std::string _result_string);
         SPFilterPrimitive* primitive;
 };
@@ -307,7 +348,9 @@ class FilterEditorOutputNode : public FilterEditorNode{
 
 
 
+
 class FilterEditorCanvas : public Gtk::ScrolledWindow{
+// class FilterEditorCanvas : public Gtk::Window{
     public:
         friend class FilterEditorFixed;
         FilterEditorCanvas(FilterEffectsDialog& dialog);
@@ -362,6 +405,7 @@ class FilterEditorCanvas : public Gtk::ScrolledWindow{
         // std::map<SPFilter*, FilterEditorOutputNode*> filter_to_output_node;*
         FilterEditorOutputNode* create_output_node(SPFilter* filter, double x, double y, Glib::ustring label_text);
         void clear_nodes();
+        void update_editor();
         void update_filter(SPFilter* filter);
         void update_document();
 
@@ -371,8 +415,9 @@ class FilterEditorCanvas : public Gtk::ScrolledWindow{
 
     protected:
         // std::vector<FilterEditorConnection *> connections;
+        std::unique_ptr<UI::Widget::PopoverMenu> create_menu();
         std::map<int, std::vector<FilterEditorConnection*>> connections;
-        std::unique_ptr<UI::Widget::PopoverMenu> _primitive_menu;
+        std::unique_ptr<UI::Widget::PopoverMenu> _popover_menu;
 
     private:
 
@@ -443,7 +488,7 @@ class FilterEditorCanvas : public Gtk::ScrolledWindow{
         // std::vector<std::shared_ptr<FilterEditorNode>> nodes;
         // std::vector<FilterEditorNode*> nodes;
         // std::map<int, std::vector<FilterEditorNode*>> nodes;
-        std::map<int, std::unique_ptr<FilterEditorNode>> nodes;
+        std::map<int, std::vector<std::unique_ptr<FilterEditorNode>>> nodes;
         // std::vector<NODE_TYPE*> selected_nodes;
         std::map<int, std::vector<FilterEditorNode*>> selected_nodes;
         // std::vector<std::pair<NODE_TYPE*, NODE_TYPE*>> connections;
@@ -493,6 +538,9 @@ private:
     class FilterModifier : public Gtk::Box
     {
     public:
+        friend class FilterEffectsDialog;
+        friend class FilterEditorCanvas;
+
         FilterModifier(FilterEffectsDialog& d, Glib::RefPtr<Gtk::Builder> builder);
 
         void update_filters();
@@ -711,6 +759,8 @@ private:
     Gtk::Box& _search_wide_box;
     Gtk::ScrolledWindow& _filter_wnd;
     FilterEditorCanvas _filter_canvas;
+    Gtk::Box testing_box;
+    Gtk::Window new_win;
     bool _narrow_dialog = true;
     Gtk::ToggleButton *_show_sources = nullptr;
     Gtk::CheckButton& _cur_filter_btn;
