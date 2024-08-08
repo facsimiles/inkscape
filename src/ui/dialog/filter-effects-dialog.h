@@ -28,6 +28,7 @@
 #include <gtkmm/label.h>
 #include <gtkmm/treeview.h>
 #include <gtkmm/scrolledwindow.h>
+#include <gtkmm/grid.h>
 #include <gtkmm/fixed.h>
 #include <gtkmm/stylecontext.h>
 #include <gtkmm/cssprovider.h>
@@ -117,9 +118,27 @@ class FilterEditorSource : public Gtk::Box{
 
         bool get_selected();
 
+        void update_width(){
+            width = std::max(static_cast<std::size_t>(15), 11*connections.size()+4);
+            // width = 15*std::max(static_cast<std::size_t>(1), connections.size());
+            this->set_size_request(width, 15);
+        };
+
+        void get_connection_starting_coordinates(double& x, double& y, FilterEditorConnection* conn){
+            auto alloc = this->get_allocation();
+            int index = std::find(connections.begin(), connections.end(), conn) - connections.begin();
+            x = alloc.get_x() + width_conn/2.0 + spacing +index*(width_conn+spacing);
+            y = alloc.get_y()+alloc.get_height()/2.0;
+        }
+
+        
+
     protected:
         // int source_id;
         // int node_id;
+        const double spacing = 4;
+        const double width_conn = 7;
+        int width = 15;
         FilterEditorNode* node;        
         std::vector<FilterEditorConnection*> connections;
         Glib::ustring label_string; // The label corresponding to the string.
@@ -176,6 +195,7 @@ class FilterEditorSink : public Gtk::Box{
                 inp_index = -1;
                 result_string = new_result;
                 label_string = "";
+                set_label_text(label_string);
                 return;
             }
             else if(_inp_index == -2){
@@ -190,6 +210,7 @@ class FilterEditorSink : public Gtk::Box{
             auto strs = get_result_inputs(inp_index);
             result_string = strs.first;
             label_string = strs.second;
+            set_label_text(label_string);
             
         }
 
@@ -303,16 +324,22 @@ class FilterEditorNode : public Gtk::Box{
 class FilterEditorPrimitiveNode : public FilterEditorNode{
     public:
         FilterEditorPrimitiveNode(int node_id, int x, int y, Glib::ustring label_text, SPFilterPrimitive* _primitive, int num_inputs = 1):
-        FilterEditorNode(node_id, x, y, label_text, 1, num_inputs), primitive(_primitive){};
+        FilterEditorNode(node_id, x, y, label_text, 1, num_inputs), primitive(_primitive){
+            // update_sink_results();
+        };
+
         
         FilterEditorSource* get_source();
         SPFilterPrimitive *get_primitive();
 
         std::string get_result_string();
-
+        void update_sink_results();
+        virtual void set_sink_result(FilterEditorSink* sink, std::string result_string);
+        virtual void set_sink_result(FilterEditorSink* sink, int inp_index);
 
     protected:
         void set_result_string(std::string _result_string);
+        
         SPFilterPrimitive* primitive;
 };
 
@@ -350,6 +377,7 @@ class FilterEditorOutputNode : public FilterEditorNode{
 
 
 class FilterEditorCanvas : public Gtk::ScrolledWindow{
+// class FilterEditorCanvas : public Gtk::Grid{
 // class FilterEditorCanvas : public Gtk::Window{
     public:
         friend class FilterEditorFixed;
@@ -364,6 +392,8 @@ class FilterEditorCanvas : public Gtk::ScrolledWindow{
         FilterEditorConnection *create_connection(FilterEditorPrimitiveNode *source_node, FilterEditorNode *sink_node);
 
         bool destroy_connection(FilterEditorConnection *connection);
+        
+        FilterEditorFixed* get_canvas();
 
         double get_zoom_factor();
         void update_offsets(double x, double y);
@@ -376,6 +406,8 @@ class FilterEditorCanvas : public Gtk::ScrolledWindow{
         void select_node(NODE_TYPE node);
         void update_canvas();
         bool primitive_node_exists(SPFilterPrimitive *primitive);
+
+        void modify_observer(bool disable);
         enum class FilterEditorEvent
         {
             SELECT,
@@ -412,6 +444,7 @@ class FilterEditorCanvas : public Gtk::ScrolledWindow{
         std::vector<SPFilter*> filter_list;
         int current_filter_id = -1;
 
+        const std::vector<Glib::ustring> result_inputs = {"SourceGraphic", "SourceAlpha"}; 
 
     protected:
         // std::vector<FilterEditorConnection *> connections;
@@ -422,7 +455,8 @@ class FilterEditorCanvas : public Gtk::ScrolledWindow{
     private:
 
         FilterEffectsDialog &_dialog; 
-        void create_nodes_order(FilterEditorPrimitiveNode* node, std::vector<FilterEditorPrimitiveNode*>& nodes_order, std::set<FilterEditorPrimitiveNode*>& visited);
+        // void create_nodes_order(FilterEditorPrimitiveNode* node, std::vector<FilterEditorPrimitiveNode*>& nodes_order, std::set<FilterEditorPrimitiveNode*>& visited);
+        void create_nodes_order(FilterEditorPrimitiveNode* prev_node, FilterEditorPrimitiveNode* node, std::vector<FilterEditorPrimitiveNode*>& nodes_order, std::map<FilterEditorPrimitiveNode*, std::pair<int, int>>& visited,bool dir, bool reset = false);
         std::map<SPFilterPrimitive *, FilterEditorPrimitiveNode *> primitive_to_node;
 
         FilterEditorEvent current_event_type;
