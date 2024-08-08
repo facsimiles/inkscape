@@ -53,7 +53,7 @@
 
 
 .nodebutton{
-    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    /* font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; */
     color: #242424;
     background-image: none;
     background-color: #B9B9B9;
@@ -162,7 +162,8 @@
 .node .nodesink{
     background-color: rgb(0, 69, 116);
     border: 1px solid #242424;
-    padding: 0px 15px;
+    /* padding: 0px 15px; */
+    padding: 0px 3px;
     /* border-radius: 100%; */
     border-radius: 50px;
 }
