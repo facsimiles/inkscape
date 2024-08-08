@@ -186,8 +186,9 @@ class FilterEditorSink : public Gtk::Box{
             return false;
         };
 
-        void set_label_text(Glib::ustring new_text){
+        void set_label_text(Glib::ustring new_text, Glib::ustring tooltip_text = ""){
             label.set_text(new_text);
+            label.set_tooltip_text(tooltip_text);
         }
 
         void set_result_inp(int _inp_index = 0, std::string new_result = ""){
@@ -195,7 +196,7 @@ class FilterEditorSink : public Gtk::Box{
                 inp_index = -1;
                 result_string = new_result;
                 label_string = "";
-                set_label_text(label_string);
+                set_label_text(label_string, result_string);
                 return;
             }
             else if(_inp_index == -2){
@@ -210,7 +211,7 @@ class FilterEditorSink : public Gtk::Box{
             auto strs = get_result_inputs(inp_index);
             result_string = strs.first;
             label_string = strs.second;
-            set_label_text(label_string);
+            set_label_text(label_string, result_string);
             
         }
 
@@ -393,6 +394,7 @@ class FilterEditorCanvas : public Gtk::ScrolledWindow{
 
         bool destroy_connection(FilterEditorConnection *connection);
         
+        
         FilterEditorFixed* get_canvas();
 
         double get_zoom_factor();
@@ -446,6 +448,90 @@ class FilterEditorCanvas : public Gtk::ScrolledWindow{
 
         const std::vector<Glib::ustring> result_inputs = {"SourceGraphic", "SourceAlpha"}; 
 
+        std::map<int, std::map<Glib::ustring, FilterEditorPrimitiveNode*>> result_manager;
+        // Glib::ustring get_result();
+        FilterEditorPrimitiveNode* get_primitive_from_result(Glib::ustring result){
+            if(current_filter_id == -1){
+                return nullptr;
+            }
+            if(result_manager[current_filter_id].find(result) != result_manager[current_filter_id].end()){
+                return result_manager[current_filter_id][result];
+            }
+            else{
+                return nullptr;
+            }
+        }
+
+        Glib::ustring get_new_result(){
+            if(current_filter_id == -1){
+                return "SourceGraphic";
+            }
+            int largest = 0;
+            for(auto& [key, value] : result_manager[current_filter_id]){
+                int index;
+                if (std::sscanf(key.c_str(), "result%5d", &index) == 1) {
+                    if (index > largest) {
+                        largest = index;
+                    }
+                }
+            }
+            return "result" + std::to_string(largest+1);
+        }
+
+        Glib::ustring update_result_for_primitive(FilterEditorPrimitiveNode* node){
+            if(current_filter_id == -1){
+                return "";
+            }
+            g_assert(node != nullptr);
+
+            auto current_result = node->get_primitive()->getAttribute("result");
+            if (current_result == nullptr){
+
+            }
+            else{
+                if(result_manager[current_filter_id].find(current_result) != result_manager[current_filter_id].end()){
+                    if(result_manager[current_filter_id].find(current_result)->second != node){
+
+
+                    }
+                    result_manager[current_filter_id].erase(current_result);
+                    result_manager[current_filter_id].insert({current_result, node});
+                }
+
+
+            }
+
+
+                int largest = 0;
+
+            // for (auto it: Glib::) {
+            //     if (is<SPFilterPrimitive>(&primitive_obj)) {
+            //         auto repr = primitive_obj.getRepr();
+            //         auto result = repr->attribute("result");
+            //         if (result) {
+            //             int index;
+            //             if (std::sscanf(result, "result%5d", &index) == 1) {
+            //                 if (index > largest) {
+            //                     largest = index;
+            //                 }
+            //             }
+            //         }
+            //     }
+        }
+        Glib::ustring get_result_from_primitive(FilterEditorPrimitiveNode* node){
+            if(current_filter_id == -1){
+                return "";
+            }
+            if(node == nullptr){
+                return "SourceGraphic";
+            }
+            for(auto& [key, value] : result_manager[current_filter_id]){
+                if(value == node){
+                    return key;
+                }
+            }
+            return "SourceGraphic";
+        }
     protected:
         // std::vector<FilterEditorConnection *> connections;
         std::unique_ptr<UI::Widget::PopoverMenu> create_menu();
