@@ -778,6 +778,16 @@ unsigned PathManipulator::_deleteStretch(NodeList::iterator start, NodeList::ite
             double bspline_weight = _bsplineHandlePosition(end->front(), false);
             end->back()->setPosition(_bsplineHandleReposition(end->back(),bspline_weight));
         }
+    } else if (mode == NodeDeleteMode::line_segment) {
+        // Handle line straigtening
+        if (start.prev()) {
+            start.prev()->setType(NodeType::NODE_CUSP);
+            start.prev()->front()->move(start.prev()->position());
+        }
+        if (end) {
+            end->setType(NodeType::NODE_CUSP);
+            end->back()->move(end->position());
+        }
     }
 
     return del_len;
