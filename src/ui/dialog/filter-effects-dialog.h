@@ -418,6 +418,7 @@ class FilterEditorCanvas : public Gtk::ScrolledWindow{
         void select_node(NODE_TYPE node);
         void update_canvas();
         bool primitive_node_exists(SPFilterPrimitive *primitive);
+        void remove_filter(SPFilter* filter);
 
         void modify_observer(bool disable);
         enum class FilterEditorEvent
