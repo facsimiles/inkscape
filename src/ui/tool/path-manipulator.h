@@ -53,7 +53,8 @@ enum class NodeDeleteMode
     automatic,    // try to preserve shape if deleted nodes do not form sharp corners
     inverse_auto, // opposite of what automatic mode would do
     curve_fit,    // preserve shape
-    line_segment  // do not preserve shape; delete nodes and connect subpaths with a line segment
+    line_segment, // do not preserve shape; delete nodes and connect subpaths with a line segment
+    gap_segment   // Remove the connection between the selected nodes leaving a gap
 };
 
 /**
@@ -90,7 +91,7 @@ public:
     void copySelectedPath(Geom::PathBuilder *builder);
     void weldNodes(NodeList::iterator preserve_pos = NodeList::iterator());
     void weldSegments();
-    void breakNodes();
+    void breakNodes(bool new_nodes = true);
     void deleteNodes(NodeDeleteMode mode);
     void deleteSegments();
     void reverseSubpaths(bool selected_only);

@@ -220,7 +220,8 @@ void NodeTool::deleteSelected()
 {
     auto prefs = Preferences::get();
     // This takes care of undo internally
-    _multipath->deleteNodes(prefs->getBool("/tools/nodes/delete_preserves_shape", true));
+    // TODO: Decide which mode is correct for the menu bar edit > Delete
+    _multipath->deleteNodes(NodeDeleteMode::automatic);
 }
 
 // show helper paths of the applied LPE, if any
