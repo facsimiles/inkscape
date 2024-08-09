@@ -162,7 +162,7 @@ if(WIN32)
       PATTERN "*.la"
       PATTERN "filters" EXCLUDE)
     file(GLOB MAGICK_LIBS
-      ${MINGW_BIN}/libGraphicsMagick[+-]*.dll
+      ${MINGW_BIN}/libGraphicsMagick*.dll
       ${MINGW_BIN}/libjxl.dll
       ${MINGW_BIN}/libjxl_cms.dll
       ${MINGW_BIN}/libjxl_threads.dll

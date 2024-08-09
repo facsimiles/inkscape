@@ -77,7 +77,6 @@ $ARCH-libcdr \
 $ARCH-libvisio \
 $ARCH-libwpg \
 $ARCH-gtksourceview5 \
-$ARCH-graphicsmagick \
 $ARCH-libjxl \
 $ARCH-enchant
 
@@ -136,5 +135,14 @@ for arch in $(eval echo $ARCH); do
       ;;
   esac
 done
+
+# compile graphicsmagick for current arch as MSYS2 packaged one is buggy
+(
+  cd /tmp
+  wget https://downloads.sourceforge.net/project/graphicsmagick/graphicsmagick/1.3.43/GraphicsMagick-1.3.43.tar.xz
+  tar xJf GraphicsMagick-1.3.43.tar.xz
+  cd GraphicsMagick-1.3.43
+  ./configure --enable-shared && make && make install
+)
 
 echo "Done :-)"
