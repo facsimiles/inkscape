@@ -148,9 +148,13 @@ class FilterEditorSource : public Gtk::Box{
 
 class FilterEditorSink : public Gtk::Box{
     public:
-        static std::pair<Glib::ustring, Glib::ustring> get_result_inputs(int index){
-            std::pair<Glib::ustring, Glib::ustring> inps[] = {{"SourceGraphic", "SG"}, {"SourceAlpha","SA"}};
-            return inps[index%2];
+        friend class FilterEditorCanvas;
+        std::pair<Glib::ustring, Glib::ustring> get_result_inputs(int index = -1){
+            if(index == -1){
+                return {result_string, label_string};
+            }
+            std::pair<Glib::ustring, Glib::ustring> inps[] = {{"SourceGraphic", "SG"}, {"SourceAlpha","SA"}, {"BackgroundImage", "BI"}, {"BackgroundAlpha", "BA"}, {"FillPaint", "FP"}, {"StrokePaint", "SP"}};
+            return inps[index%6];
         }
         FilterEditorSink(FilterEditorNode* _node, int _max_connections, Glib::ustring _label_string = "") : Gtk::Box(Gtk::Orientation::VERTICAL, 0), label_string(_label_string), node(_node), max_connections(_max_connections), label(){
             this->set_name("filter-node-sink");
@@ -200,18 +204,24 @@ class FilterEditorSink : public Gtk::Box{
                 return;
             }
             else if(_inp_index == -2){
+                g_message(".h %d", __LINE__);
                 inp_index++;
-                // inp_index = _inp_index%2;
-                // auto strs = get_result_inputs(inp_index);
-                // result_string = strs.first;
-                // label_string = strs.second;
+                inp_index = inp_index%6;
+                auto strs = get_result_inputs(inp_index);
+                result_string = strs.first;
+                label_string = strs.second;
+                set_label_text(label_string, result_string); 
             }
-            // else{
-            inp_index = _inp_index % 2;
-            auto strs = get_result_inputs(inp_index);
-            result_string = strs.first;
-            label_string = strs.second;
-            set_label_text(label_string, result_string);
+            else{
+                inp_index = _inp_index % 6;
+                auto strs = get_result_inputs(inp_index);
+                result_string = strs.first;
+                label_string = strs.second;
+                set_label_text(label_string, result_string);
+            }
+
+            
+            
             
         }
 
@@ -446,7 +456,7 @@ class FilterEditorCanvas : public Gtk::ScrolledWindow{
         std::vector<SPFilter*> filter_list;
         int current_filter_id = -1;
 
-        const std::vector<Glib::ustring> result_inputs = {"SourceGraphic", "SourceAlpha"}; 
+        const std::vector<Glib::ustring> result_inputs = {"SourceGraphic", "SourceAlpha", "BackgroundImage", "BackgroundAlpha", "FillPaint", "StrokePaint"}; 
 
         std::map<int, std::map<Glib::ustring, FilterEditorPrimitiveNode*>> result_manager;
         // Glib::ustring get_result();
