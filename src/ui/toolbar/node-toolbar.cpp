@@ -378,7 +378,9 @@ void NodeToolbar::edit_add_bottommost()
 void NodeToolbar::edit_delete()
 {
     if (auto nt = get_node_tool()) {
-        nt->_multipath->deleteNodes(Preferences::get()->getBool("/tools/nodes/delete_preserves_shape", true));
+        // TODO: Decide how this toolbar button acts or if we need more
+        nt->_multipath->deleteNodes(NodeDeleteMode::automatic);
+    }
     }
 }
 
