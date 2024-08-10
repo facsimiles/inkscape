@@ -87,6 +87,8 @@ $ARCH-python-pip \
 $ARCH-python-lxml \
 $ARCH-python-numpy \
 $ARCH-python-cssselect \
+$ARCH-python-webencodings \
+$ARCH-python-tinycss2 \
 $ARCH-python-pillow \
 $ARCH-python-six \
 $ARCH-python-gobject \

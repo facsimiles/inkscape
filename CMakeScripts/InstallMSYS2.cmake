@@ -338,7 +338,7 @@ if(WIN32)
   if (NOT WITH_CROSSINK)
     # Python packages installed via pacman
     set(packages
-        "python-lxml" "python-numpy" "python-pillow" "python-six" "python-cairo" "python-cssselect"
+        "python-lxml" "python-numpy" "python-pillow" "python-six" "python-cairo" "python-cssselect" "python-webencodings" "python-tinycss2"
         "python-gobject" "python-coverage" "python-pyserial" "python-packaging" "python-zstandard" "scour")
     foreach(package ${packages})
       list_files_pacman(${package} paths)
