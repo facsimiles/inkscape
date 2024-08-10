@@ -611,6 +611,9 @@ void PathManipulator::breakNodes(bool new_nodes)
                 n->back()->setRelativePos(cur->back()->relativePos());
                 cur->back()->retract();
                 n->sink();
+            } else {
+                cur->setType(NODE_CUSP, false);
+                cur->back()->retract();
             }
 
             if (becomes_open) {
@@ -628,9 +631,13 @@ void PathManipulator::deleteNodes(NodeDeleteMode delete_mode)
     if (_selection.empty()) return;
     hideDragPoint();
 
-    if (delete_mode == NodeDeleteMode::gap_segment) {
+    if (delete_mode == NodeDeleteMode::gap_nodes) {
         // Break nodes first to create gaps
         breakNodes(false);
+    } else if (delete_mode == NodeDeleteMode::gap_lines) {
+        // Delete nodes but preserve end points
+        _deleteSegments(true);
+        return;
     }
 
     for (SubpathList::iterator i = _subpaths.begin(); i != _subpaths.end();) {
@@ -692,8 +699,8 @@ double get_angle(const Geom::Point& p0, const Geom::Point& p1, const Geom::Point
  * The given range can cross the beginning of the subpath in closed subpaths.
  * @param start      Beginning of the range to delete
  * @param end        End of the range
- * @param delete_mode Whether to fit the handles at surrounding nodes to approximate
- *                   the shape before deletion
+ * @param mode       Various delete methods, see NodeDeleteMode enum
+ *
  * @return Number of deleted nodes
  */
 unsigned PathManipulator::_deleteStretch(NodeList::iterator start, NodeList::iterator end, NodeDeleteMode mode)
@@ -801,8 +808,13 @@ unsigned PathManipulator::_deleteStretch(NodeList::iterator start, NodeList::ite
     return del_len;
 }
 
-/** Removes selected segments */
 void PathManipulator::deleteSegments()
+{
+    _deleteSegments(false);
+}
+
+/** Removes selected segments */
+void PathManipulator::_deleteSegments(bool delete_singles)
 {
     if (_selection.empty()) return;
     hideDragPoint();
@@ -838,7 +850,7 @@ void PathManipulator::deleteSegments()
                 sel_end = sel_end.next();
                 ++num_points;
             }
-            if (num_points >= 2) {
+            if (num_points >= (2 - delete_singles)) {
                 // Retract end handles
                 sel_end.prev()->setType(NODE_CUSP, false);
                 sel_end.prev()->back()->retract();

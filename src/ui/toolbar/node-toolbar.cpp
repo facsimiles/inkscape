@@ -378,9 +378,8 @@ void NodeToolbar::edit_add_bottommost()
 void NodeToolbar::edit_delete()
 {
     if (auto nt = get_node_tool()) {
-        // TODO: Decide how this toolbar button acts or if we need more
-        nt->_multipath->deleteNodes(NodeDeleteMode::automatic);
-    }
+        auto prefs = Preferences::get();
+        nt->_multipath->deleteNodes((NodeDeleteMode)prefs->getInt("/tools/node/delete-mode-default", (int)NodeDeleteMode::automatic));
     }
 }
 

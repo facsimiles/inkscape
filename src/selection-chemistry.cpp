@@ -1218,7 +1218,7 @@ void ObjectSet::cut()
     if (node_tool && node_tool->_selected_nodes) {
         auto prefs = Preferences::get();
         // This takes care of undo internally
-        node_tool->_multipath->deleteNodes(Inkscape::UI::NodeDeleteMode::gap_segment);
+        node_tool->_multipath->deleteNodes((Inkscape::UI::NodeDeleteMode)prefs->getInt("/tools/node/delete-mode-cut", (int)Inkscape::UI::NodeDeleteMode::gap_lines));
         return;
     }
 
