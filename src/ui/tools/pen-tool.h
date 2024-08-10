@@ -79,6 +79,9 @@ public:
     bool hid_handles = false; // hid handles due to PenTool::BREAK
     bool node_mode_statusbar = false;
 
+    Geom::Point front_handle;
+    Geom::Point back_handle;
+
     unsigned int expecting_clicks_for_LPE = 0; // if positive, finish the path after this many clicks
     Inkscape::LivePathEffect::Effect *waiting_LPE = nullptr; // if NULL, waiting_LPE_type in SPDrawContext is taken into account
     SPLPEItem *waiting_item = nullptr;

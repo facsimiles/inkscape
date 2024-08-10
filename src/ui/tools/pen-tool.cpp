@@ -1961,6 +1961,22 @@ void PenTool::_setCtrl(Geom::Point const q, guint const state)
             this->red_curve.curveto(p_array[1], p_array[2], p_array[3]);
             red_bpath->set_bpath(&red_curve, true);
         }
+
+        if ( ( ( this->mode == PenTool::MODE_DRAG ) && ( state & GDK_SHIFT_MASK ) && ( state & GDK_ALT_MASK ) ) ) {
+            // Alt + Shift is held we need to move the path
+            p_array[3] = q - front_handle;
+            p_array[2] = p_array[3] + back_handle;
+
+            // Changing the red curve to match
+            this->red_curve.reset();
+            this->red_curve.moveto(p_array[0]);
+            this->red_curve.curveto(p_array[1], p_array[2], p_array[3]);
+            red_bpath->set_bpath(&red_curve, true);
+        } else {
+            front_handle = p_array[4] - p_array[3];
+            back_handle = p_array[2] - p_array[3];
+        }
+
         // Avoid conflicting with initial point ctrl
         ctrl[3]->set_position(p_array[3]);
         ctrl[3]->set_visible(true);
