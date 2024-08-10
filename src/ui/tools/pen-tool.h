@@ -57,6 +57,7 @@ public:
         BREAK,
         STOP,
         NODE,
+        HANDLE,
         DEAD
     };
 
@@ -74,6 +75,7 @@ public:
 
     bool is_spiro = false;  // Spiro mode active?
     bool is_bspline = false; // BSpline mode active?
+    bool is_bezier = true; // All other modes inactive? 
 
     bool prev_anchor_statusbar = false;
     bool hid_handles = false; // hid handles due to PenTool::BREAK
@@ -81,6 +83,11 @@ public:
 
     Geom::Point front_handle;
     Geom::Point back_handle;
+
+    SPDrawAnchor* fh_anchor; // front-handle anchor
+    SPDrawAnchor* bh_anchor; // back-handle anchor
+    SPDrawAnchor* selected_anchor;
+    bool drag_handle = false;
 
     unsigned int expecting_clicks_for_LPE = 0; // if positive, finish the path after this many clicks
     Inkscape::LivePathEffect::Effect *waiting_LPE = nullptr; // if NULL, waiting_LPE_type in SPDrawContext is taken into account
@@ -147,6 +154,7 @@ private:
     bool _redoLastPoint();
 
     void _moveNode(Geom::Point const p);
+    void _moveHandle(Geom::Point const p);
 
     void _finish(gboolean closed);
 
