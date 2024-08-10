@@ -269,6 +269,12 @@ protected:
     UI::Widget::PrefColorPicker _t_node_pathoutline_color;
     UI::Widget::PrefSpinButton  _t_node_delete_flat_corner;
 
+    UI::Widget::PrefCombo       _t_node_delete_mode;
+    UI::Widget::PrefCombo       _t_node_delete_mode1;
+    UI::Widget::PrefCombo       _t_node_delete_mode2;
+    UI::Widget::PrefCombo       _t_node_delete_mode3;
+    UI::Widget::PrefCombo       _t_node_cut_mode;
+
     // Command Palette
     UI::Widget::PrefCheckButton _cp_show_full_action_name;
     UI::Widget::PrefCheckButton _cp_show_untranslated_name;

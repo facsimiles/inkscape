@@ -220,8 +220,7 @@ void NodeTool::deleteSelected()
 {
     auto prefs = Preferences::get();
     // This takes care of undo internally
-    // TODO: Decide which mode is correct for the menu bar edit > Delete
-    _multipath->deleteNodes(NodeDeleteMode::automatic);
+    _multipath->deleteNodes((NodeDeleteMode)prefs->getInt("/tools/node/delete-mode-default", (int)NodeDeleteMode::automatic));
 }
 
 // show helper paths of the applied LPE, if any
@@ -495,6 +494,7 @@ bool NodeTool::root_handler(CanvasEvent const &event)
     },
 
     [&] (KeyPressEvent const &event) {
+        // Unconfigurable shortcuts
         switch (get_latin_keyval(event)) {
         case GDK_KEY_Escape: // deselect everything
             if (_selected_nodes->empty()) {

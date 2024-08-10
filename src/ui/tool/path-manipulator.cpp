@@ -628,9 +628,13 @@ void PathManipulator::deleteNodes(NodeDeleteMode delete_mode)
     if (_selection.empty()) return;
     hideDragPoint();
 
-    if (delete_mode == NodeDeleteMode::gap_segment) {
+    if (delete_mode == NodeDeleteMode::gap_nodes) {
         // Break nodes first to create gaps
         breakNodes(false);
+    } else if (delete_mode == NodeDeleteMode::gap_lines) {
+        // Delete nodes but preserve end points
+        deleteSegments();
+        return;
     }
 
     for (SubpathList::iterator i = _subpaths.begin(); i != _subpaths.end();) {
