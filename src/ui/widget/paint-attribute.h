@@ -15,6 +15,9 @@
 #include <gtkmm/spinbutton.h>
 #include <gtkmm/widget.h>
 #include <memory>
+
+#include "ink-property-grid.h"
+#include "ink-spin-button.h"
 #include "object/sp-marker-loc.h"
 #include "object/sp-paint-server.h"
 #include "style-internal.h"
@@ -30,7 +33,7 @@ class PaintAttribute {
 public:
     PaintAttribute();
 
-    void insert_widgets(Gtk::Grid& grid, int row);
+    void insert_widgets(InkPropertyGrid& grid, int row);
 
     void update_from_object(SPObject* object);
 
@@ -47,10 +50,14 @@ private:
 
         void show();
         void hide();
+        Gtk::MenuButton _paint_btn;
         std::unique_ptr<PaintSwitch> _switch = PaintSwitch::create();
+        ColorPreview _solid_color = ColorPreview(0);
+        Gtk::Label _paint_type;
+        Gtk::Box _paint_box;
         ColorPicker _picker = ColorPicker(*_switch, _("Select paint"));
         Gtk::Label _label;
-        Gtk::SpinButton _alpha;
+        InkSpinButton _alpha;
         Gtk::Box _box;
         Gtk::Button _define;
         Gtk::Button _clear;
@@ -65,7 +72,7 @@ private:
     DashSelector _dash_selector = DashSelector(true);
     Gtk::MenuButton _stroke_style;
     Gtk::MenuButton _stroke_presets;
-    SpinButton _stroke_width;
+    InkSpinButton _stroke_width;
     SPObject* _current_object = nullptr;
 };
 

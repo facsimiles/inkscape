@@ -67,6 +67,7 @@
 #include "ui/util.h"
 #include "ui/widget/image-properties.h"
 #include "ui/widget/spinbutton.h"
+#include "ui/widget/ink-property-grid.h"
 #include "ui/widget/style-swatch.h"
 #include "widgets/sp-attribute-widget.h"
 #include "xml/href-attribute-helper.h"
@@ -482,8 +483,9 @@ public:
     {
         _title = _("Rectangle");
         _widget = &_main;
+        _main.attach(_grid, 0, 0, 5);
 
-        _paint.insert_widgets(_main, 0);
+        _paint.insert_widgets(_grid, 0);
 
         _width.get_adjustment()->signal_value_changed().connect([this](){
             change_value_px(_rect, _width.get_adjustment(), "width", [this](double w){ _rect->setVisibleWidth(w); });
@@ -549,6 +551,7 @@ public:
 private:
     SPRect* _rect = nullptr;
     Gtk::Grid& _main;
+    Widget::InkPropertyGrid _grid;
     Inkscape::UI::Widget::SpinButton& _width;
     Inkscape::UI::Widget::SpinButton& _height;
     Inkscape::UI::Widget::SpinButton& _rx;

@@ -76,7 +76,7 @@ static cairo_surface_t* create_separator(double alpha, int width, int height, in
     auto mid = height / 2;
     cairo_move_to(ctx, x, mid);
     cairo_line_to(ctx, x + width, mid);
-    auto stroke = 1.0 * device_scale;
+    auto stroke = 2.0 * device_scale;
     cairo_set_line_width(ctx, stroke);
     cairo_stroke(ctx);
     auto h = 3 * device_scale;
@@ -837,6 +837,20 @@ sigc::connection MarkerComboBox::connect_edit(sigc::slot<void ()> slot)
 void MarkerComboBox::set_flat(bool flat) {
     _menu_btn.set_has_frame(!flat);
     get_widget<Gtk::Image>(_builder, "down-arrow").set_visible(!flat);
+    get_widget<Gtk::Box>(_builder, "btn-box").set_halign(flat ? Gtk::Align::CENTER : Gtk::Align::FILL);
+    if (flat) {
+        _menu_btn.add_css_class("rectangle");
+    }
+    else {
+        _menu_btn.remove_css_class("rectangle");
+    }
+}
+
+void MarkerComboBox::preview_scale(double scale) {
+    if (_preview_scale != scale) {
+        _preview_scale = scale;
+        _current_img.set_size_request(static_cast<int>(std::round(scale * ITEM_WIDTH)), static_cast<int>(std::round(scale * ITEM_HEIGHT)));
+    }
 }
 
 } // namespace Inkscape::UI::Widget

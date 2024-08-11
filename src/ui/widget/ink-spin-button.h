@@ -21,6 +21,8 @@ public:
     // Number of decimal digits to use for formatting values
     void set_digits(int digits);
     int get_digits() const;
+    // Set range of allowed input values (as an alternative to specifying 'adjustment')
+    void set_range(double min, double max);
     void update();
     // Specify optional suffix to show after the value
     void set_suffix(const std::string& suffix, bool add_half_space = true);
@@ -37,6 +39,8 @@ public:
     void set_dont_evaluate(bool flag) { _dont_evaluate = flag; }
     // Set distance in pixels of drag travel to adjust full button range; the lower the value the more sensitive the dragging gets
     void set_drag_sensitivity(double distance);
+    // Specify label to show inside spin button
+    void set_label(const std::string& label);
 
     // ----------- PROPERTIES ------------
     // Glib::PropertyProxy<int> property_digits() { return prop_digits.get_proxy(); }
@@ -52,6 +56,7 @@ private:
     Gtk::Label _value;
     Gtk::Button _plus;
     Gtk::Entry _entry;
+    Gtk::Label _label;
 
     // ------------- CONTROLLERS -------------
 
@@ -96,6 +101,7 @@ private:
     void exit_edit();
     bool defocus();
     void show_arrows(bool on = true);
+    void show_label(bool on = true);
     bool commit_entry();
     void change_value(double inc, Gdk::ModifierType state);
     void set_value(double new_value);
@@ -112,9 +118,10 @@ private:
     std::string _prefix; // prefix to show before the number, if any
     bool _trim_zeros = true;    // hide insignificant zeros in decimal fraction
     sigc::connection _connection;
-    int _buttons_width = 0;     // width of increment/decrement button
+    int _button_width = 0;     // width of increment/decrement button
     int _entry_height = 0;      // natural height of Gtk::Entry
     int _baseline = 0;
+    int _label_width = 0;
     sigc::scoped_connection _spinning;
     Gtk::Widget* _defocus_widget = nullptr;
     bool _dont_evaluate = false; // turn off expression evaluator?

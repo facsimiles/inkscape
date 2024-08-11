@@ -62,8 +62,6 @@ class MarkerComboBox final
     : public WidgetVfuncsClassInit
     , public Gtk::Box
 {
-    using parent_type = Gtk::Box;
-
 public:
     MarkerComboBox(Glib::ustring id, int loc);
 
@@ -79,10 +77,11 @@ public:
     sigc::connection connect_edit   (sigc::slot<void ()> slot);
     // set flat look
     void set_flat(bool flat);
+    // scale default marker preview size; 1.0 by default (=40x32)
+    void preview_scale(double scale);
+
 private:
-    class MarkerItem : public Glib::Object
-    {
-    public:
+    struct MarkerItem : Glib::Object {
         Cairo::RefPtr<Cairo::Surface> pix;
         SPDocument* source = nullptr;
         std::string id;
@@ -108,7 +107,7 @@ private:
 
     sigc::signal<void ()> _signal_changed;
     sigc::signal<void ()> _signal_edit;
-
+    double _preview_scale = 1.0;
     Glib::RefPtr<Gtk::Builder> _builder;
     Gtk::FlowBox& _marker_list;
     Gtk::Label& _marker_name;
