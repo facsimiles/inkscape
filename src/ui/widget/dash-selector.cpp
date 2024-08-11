@@ -131,7 +131,7 @@ DashSelector::DashSelector(bool compact)
 
     // Menubutton
     drawing_area = Gtk::make_managed<Gtk::DrawingArea>();
-    drawing_area->set_content_width(DRAWING_AREA_WIDTH);
+    drawing_area->set_content_width(compact ? DRAWING_AREA_WIDTH/2 : DRAWING_AREA_WIDTH);
     drawing_area->set_content_height(DRAWING_AREA_HEIGHT);
     drawing_area->set_draw_func(sigc::bind(sigc::mem_fun(*this, &DashSelector::draw_pattern), std::vector<double>{}));
 
@@ -139,6 +139,7 @@ DashSelector::DashSelector(bool compact)
     menubutton->set_child(*drawing_area);
     gtk_menu_button_set_always_show_arrow(menubutton->gobj(), true); // No C++ API!
     menubutton->set_popover(*popover);
+    menubutton->set_hexpand();
 
     append(*menubutton);
 

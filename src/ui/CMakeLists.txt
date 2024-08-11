@@ -173,6 +173,7 @@ set(ui_SRC
 
 	widget/iconrenderer.cpp
 	widget/ink-spin-button.cpp
+	widget/ink-property-grid.cpp
 	widget/alignment-selector.cpp
 	widget/anchor-selector.cpp
 	widget/bin.cpp
@@ -472,6 +473,7 @@ set(ui_SRC
 
 	widget/iconrenderer.h
 	widget/ink-spin-button.h
+	widget/ink-property-grid.h
 	widget/alignment-selector.h
 	widget/anchor-selector.h
 	widget/attr-widget.h

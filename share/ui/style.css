@@ -1303,7 +1303,6 @@ popover.popup-menu contents {
     min-height: 16px;
 }
 #ColorPreview.simple {
-    min-width : 32px;
     min-height: 12px;
 }
 #ColorPreview:hover:not(.simple) {
@@ -1490,4 +1489,14 @@ separator.faint {
    See share/ui/inkscape-start.glade:637 */
 scrolledwindow.inkscape-start-exception.frame {
     border-bottom: 0;
+}
+
+.border-box {
+    border-radius: 2px;
+    border: 1px solid @unfocused_borders;
+}
+
+/* MenuButton with sharp corners */
+menubutton.rectangle button {
+    border-radius: 0;
 }

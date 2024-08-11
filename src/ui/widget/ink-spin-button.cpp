@@ -24,6 +24,7 @@ auto ink_spinbutton_css = R"=====(
 #InkSpinButton.frame { border: 1px solid @border-color; }
 #InkSpinButton:hover button { opacity: 1; }
 #InkSpinButton:focus-within { outline: 2px solid @focus-color; outline-offset: -2px; }
+#InkSpinButton label#InkSpinButton-Label { opacity: 0.5; margin-left: 3px; margin-right: 3px; }
 #InkSpinButton button { border: 0 solid alpha(@border-color, 0.30); border-radius: 2px; padding: 1px; min-width: 6px; min-height: 8px; -gtk-icon-size: 10px; background-image: none; }
 #InkSpinButton button.left  { border-top-right-radius: 0; border-bottom-right-radius: 0; border-right-width: 1px; }
 #InkSpinButton button.right { border-top-left-radius: 0; border-bottom-left-radius: 0; border-left-width: 1px; }
@@ -37,14 +38,17 @@ static Glib::RefPtr<Gdk::Cursor> g_resizing_cursor;
 void InkSpinButton::construct() {
     set_name("InkSpinButton");
 
+    set_overflow(Gtk::Overflow::HIDDEN);
+
     _minus.set_name("InkSpinButton-Minus");
     _minus.add_css_class("left");
     _value.set_name("InkSpinButton-Value");
     _plus.set_name("InkSpinButton-Plus");
     _plus.add_css_class("right");
     _entry.set_name("InkSpinButton-Entry");
-    _entry.set_alignment(0.5);
+    _entry.set_alignment(0.5f);
     _entry.set_max_width_chars(3); // let it shrink, we can always stretch it
+    _label.set_name("InkSpinButton-Label");
 
     _value.set_expand();
     _entry.set_expand();
@@ -52,15 +56,19 @@ void InkSpinButton::construct() {
     _minus.set_margin(0);
     _minus.set_size_request(8, -1);
     _value.set_margin(0);
+    _value.set_single_line_mode();
     _plus.set_margin(0);
     _plus.set_size_request(8, -1);
     _minus.set_can_focus(false);
     _plus.set_can_focus(false);
+    _label.set_can_focus(false);
+    _label.set_xalign(0.0f);
 
     _minus.set_icon_name("go-previous-symbolic");
     _plus.set_icon_name("go-next-symbolic");
 
     containerize(*this);
+    _label.insert_at_end(*this);
     _minus.insert_at_end(*this);
     _value.insert_at_end(*this);
     _entry.insert_at_end(*this);
@@ -158,7 +166,7 @@ void InkSpinButton::construct() {
     // m_value->signal_clicked().connect(sigc::mem_fun(*this, &SpinButton::on_value_clicked));
 
     auto m = _minus.measure(Gtk::Orientation::HORIZONTAL);
-    _buttons_width = m.sizes.natural;
+    _button_width = m.sizes.natural;
     m = _entry.measure(Gtk::Orientation::VERTICAL);
     _entry_height = m.sizes.natural;
     _baseline = m.baselines.natural;
@@ -212,30 +220,40 @@ void InkSpinButton::measure_vfunc(Gtk::Orientation orientation, int for_size, in
         auto p = _plus.measure(orientation);
         auto _ = _entry.measure(orientation);
         _ = _value.measure(orientation);
+        _ = _label.measure(orientation);
 
-        // always reserve space for inc/dec buttons:
-        minimum = natural = text_width + 2 * _buttons_width;
+        // always reserve space for inc/dec buttons and label, whichever is greater
+        minimum = natural = std::max(_label_width + text_width, _button_width + text_width + _button_width);
     }
     else {
         minimum_baseline = natural_baseline = _baseline;
-        // auto m = _entry.measure(orientation);
         auto height = std::max(text_height, _entry_height);
         minimum = height;
-        natural = std::max(static_cast<int>(1.5 * text_height), _entry_height); // std::max(int(1.5 * text_height), _entry_height);
-// printf("btn h: %d %d, text: '%s', %d  %d, now: %d\n", natural, 0, text.c_str(), text_height, _entry_height, 0);// m.sizes.minimum);
+        natural = std::max(static_cast<int>(1.5 * text_height), _entry_height);
     }
 }
 
 void InkSpinButton::size_allocate_vfunc(int width, int height, int baseline) {
     Gtk::Allocation allocation;
     allocation.set_height(height);
-    allocation.set_width(_buttons_width);
+    allocation.set_width(_button_width);
     allocation.set_x(0);
     allocation.set_y(0);
 
     int left = 0;
     int right = width;
 
+    // either label or buttons may be visible, but not both
+    if (_label.get_visible()) {
+        Gtk::Allocation alloc;
+        alloc.set_height(height);
+        alloc.set_width(_label_width);
+        alloc.set_x(0);
+        alloc.set_y(0);
+        _label.size_allocate(alloc, baseline);
+        left += _label_width;
+        right -= _label_width;
+    }
     if (_minus.get_visible()) {
         _minus.size_allocate(allocation, baseline);
         left += allocation.get_width();
@@ -247,7 +265,7 @@ void InkSpinButton::size_allocate_vfunc(int width, int height, int baseline) {
     }
 
     allocation.set_x(left);
-    allocation.set_width(right - left);
+    allocation.set_width(std::max(0, right - left));
     if (_value.get_visible()) {
         _value.size_allocate(allocation, baseline);
     }
@@ -277,6 +295,11 @@ void InkSpinButton::set_digits(int digits) {
 
 int InkSpinButton::get_digits() const {
     return prop_digits;
+}
+
+void InkSpinButton::set_range(double min, double max) {
+    _adjustment->set_lower(min);
+    _adjustment->set_upper(max);
 }
 
 void InkSpinButton::set_prefix(const std::string& prefix, bool add_space) {
@@ -374,17 +397,19 @@ void InkSpinButton::update() {
 // ------------------  MOTION  ------------------
 
 void InkSpinButton::on_motion_enter(double x, double y) {
-printf("motion enter\n");
+// printf("motion enter\n");
     if (_focus->contains_focus()) return;
 
-    show_arrows(true);
+    show_label(false);
+    show_arrows();
 }
 
 void InkSpinButton::on_motion_leave() {
-printf("motion leave\n");
+// printf("motion leave\n");
     if (_focus->contains_focus()) return;
 
     show_arrows(false);
+    show_label();
 
     if (_entry.is_visible()) {
         // We left spinbutton, save value and update.
@@ -396,7 +421,7 @@ printf("motion leave\n");
 // ---------------  MOTION VALUE  ---------------
 
 void InkSpinButton::on_motion_enter_value(double x, double y) {
-printf("val motion enter\n");
+// printf("val motion enter\n");
     _old_cursor = get_cursor();
     if (!g_resizing_cursor) {
         g_resizing_cursor = Gdk::Cursor::create(Glib::ustring("ew-resize"));
@@ -406,7 +431,7 @@ printf("val motion enter\n");
 }
 
 void InkSpinButton::on_motion_leave_value() {
-printf("val motion leave\n");
+// printf("val motion leave\n");
     _current_cursor = _old_cursor;
     set_cursor(_current_cursor);
 }
@@ -471,6 +496,10 @@ void InkSpinButton::show_arrows(bool on) {
     _plus.set_visible(on);
 }
 
+void InkSpinButton::show_label(bool on) {
+    _label.set_visible(on && _label_width > 0);
+}
+
 bool InkSpinButton::commit_entry() {
     try {
         double value = 0.0;
@@ -490,14 +519,15 @@ bool InkSpinButton::commit_entry() {
 }
 
 void InkSpinButton::exit_edit() {
+    show_arrows(false);
     _entry.hide();
-    _minus.hide();
+    show_label();
     _value.show();
-    _plus.hide();
 }
 
 inline void InkSpinButton::enter_edit() {
     show_arrows(false);
+    show_label(false);
     _value.hide();
     _entry.select_region(0, _entry.get_text_length());
     _entry.show();
@@ -649,6 +679,18 @@ void InkSpinButton::stop_spinning() {
 
 void InkSpinButton::set_drag_sensitivity(double distance) {
     _drag_full_travel = distance;
+}
+
+void InkSpinButton::set_label(const std::string& label) {
+    _label.set_text(label);
+    if (label.empty()) {
+        _label_width = 0;
+    }
+    else {
+        _label.set_visible(true);
+        auto l = _label.measure(Gtk::Orientation::HORIZONTAL);
+        _label_width = l.sizes.minimum;
+    }
 }
 
 } // namespace Inkscape::UI::Widget
