@@ -593,6 +593,105 @@ size_t SPCurve::nodes_in_path() const
 }
 
 /**
+ * Adds p to the last point of the nth path and first point of the (n+1)th path and changes their handles accordingly
+ */
+void SPCurve::nth_point_additive_move(const Geom::Point &p, const int n) {
+    if (is_empty()) {
+        return;
+    }
+
+    // Finding the indices of the path
+    int _index = -1;
+    int count = n;
+    for (int i = 0; i < _pathv.size(); i++) {
+        if (count_path_nodes(_pathv[i]) >= count) {
+            _index = i;
+            break;
+        }
+        count -= count_path_nodes(_pathv[i]);
+    }
+
+    if (_index == -1) {
+        // The index is larger then total number of nodes
+        return;
+    }
+
+    Geom::Path newpath;
+
+    if (count == 0) {
+        if (_index == 0) {
+            // This is the first path of the curve
+            first_point_additive_move(p);
+            return;
+        }
+
+        // This is the first path of the given path-vector
+        if (auto const prevcube = dynamic_cast<Geom::CubicBezier const *>(&_pathv[_index-1].back())) {
+            Geom::CubicBezier newcube(*prevcube);
+            newcube.setPoint(2, newcube[2] + p);
+            newcube.setFinal(newcube.finalPoint() + p);
+            newpath.append(newcube);
+        }
+
+        if (auto const nextcube = dynamic_cast<Geom::CubicBezier const *>(&_pathv[_index].front())) {
+            Geom::CubicBezier newcube(*nextcube);
+            newcube.setPoint(1, newcube[1] + p);
+            newcube.setInitial(newcube.initialPoint() + p);
+            newpath.append(newcube);
+        }
+
+        _pathv[_index-1].replace(--_pathv[_index-1].end(), newpath.front());
+        _pathv[_index].replace(_pathv[_index].begin(), newpath[1]);
+
+    } else if (count == count_path_nodes(_pathv[_index])) {
+        if (_index == _pathv.size()-1) {
+            // This is the last part of the curve
+            last_point_additive_move(p);
+            return;
+        }
+
+        // This is the last path of the given path-vector
+        if (auto const prevcube = dynamic_cast<Geom::CubicBezier const *>(&_pathv[_index][count-1])) {
+            Geom::CubicBezier newcube(*prevcube);
+            newcube.setPoint(2, newcube[2] + p);
+            newcube.setFinal(newcube.finalPoint() + p);
+            newpath.append(newcube);
+        }
+
+        if (auto const nextcube = dynamic_cast<Geom::CubicBezier const *>(&_pathv[_index+1].front())) {
+            Geom::CubicBezier newcube(*nextcube);
+            newcube.setPoint(1, newcube[1] + p);
+            newcube.setInitial(newcube.initialPoint() + p);
+            newpath.append(newcube);
+        }
+
+        _pathv[_index].replace(--_pathv[_index].end(), newpath.front());
+        _pathv[_index+1].replace(_pathv[_index+1].begin(), newpath[1]);
+
+
+    } else {
+
+        if (auto const prevcube = dynamic_cast<Geom::CubicBezier const *>(&_pathv[_index][count-1])) {
+            Geom::CubicBezier newcube(*prevcube);
+            newcube.setPoint(2, newcube[2] + p);
+            newcube.setFinal(newcube.finalPoint() + p);
+            newpath.append(newcube);
+        }
+
+        if (auto const nextcube = dynamic_cast<Geom::CubicBezier const *>(&_pathv[_index][count])) {
+            Geom::CubicBezier newcube(*nextcube);
+            newcube.setPoint(1, newcube[1] + p);
+            newcube.setInitial(newcube.initialPoint() + p);
+            newpath.append(newcube);
+        }
+
+        _pathv[_index].replace(_pathv[_index].begin() + count - 1, _pathv[_index].begin() + count + 1, newpath);
+
+    }
+}
+
+
+/**
  *  Adds p to the last point (and last handle if present) of the last path
  */
 void SPCurve::last_point_additive_move(Geom::Point const &p)

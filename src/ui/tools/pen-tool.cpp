@@ -490,14 +490,17 @@ bool PenTool::_handleButtonPress(ButtonPressEvent const &event) {
                             break;
                         }
 
-                        node_index = NONE_SELECTED;
-
-                        for (int i = 0; i < _anchors.size(); i++) {
-                            if (_anchors[i]->anchorTest(event_w, true)) {
-                                node_index = i;
-                                break;
+                        if (node_index == NONE_SELECTED) {
+                            for (int i = 0; i < _anchors.size(); i++) {
+                                if (_anchors[i]->anchorTest(event_w, true)) {
+                                    node_index = i;
+                                    break;
+                                }
                             }
                         }
+
+                        drag_node = node_index != -1 ? true : false;
+                        
 
                     case PenTool::HANDLE:
 
@@ -643,6 +646,19 @@ bool PenTool::_handleMotionNotify(MotionEvent const &event) {
             switch (state) {
                 case PenTool::POINT:
                     if ( npoints > 0 ) {
+                        // Make sure the handle anchors are inactive
+                        if (fh_anchor->active) {
+                            fh_anchor->ctrl->set_normal();
+                            fh_anchor->ctrl->set_size(Inkscape::HandleSize::NORMAL);
+                            fh_anchor->active = false;
+                        }
+                        
+                        if (bh_anchor->active) {
+                            bh_anchor->ctrl->set_normal();
+                            bh_anchor->ctrl->set_size(Inkscape::HandleSize::NORMAL);
+                            bh_anchor->active = false;
+                        }
+
                         // Only set point, if we are already appending
 
                         // if ALT key held switch to NODE tool
@@ -733,7 +749,6 @@ bool PenTool::_handleMotionNotify(MotionEvent const &event) {
                     // Placing controls is last operation in CLOSE state
 
                     // snap the handle
-
                     _endpointSnapHandle(p, event.modifiers);
 
                     if (!is_polylines_only) {
@@ -750,31 +765,29 @@ bool PenTool::_handleMotionNotify(MotionEvent const &event) {
                 case PenTool::NODE: {
                     
                     //if we release ALT while dragging node, continue to drag
-                    if ( !(event.modifiers & GDK_ALT_MASK) && node_index == NONE_SELECTED) {
+                    if ( !(event.modifiers & GDK_ALT_MASK) && !drag_node) {
                         state = PenTool::POINT;
                         break;
                     }
 
-                    if (node_index == NONE_SELECTED) {
-                        for (auto& _anchor: _anchors) {
-                            if (_anchor->anchorTest(event_w, true)) {
-                                // Highlight the node we hover over
-                                break;
-                            }
+                    for (int i = 0; i < _anchors.size(); i++) {
+                        if (_anchors[i]->anchorTest(event_w, true)) {
+                            node_index = i;
+                            break;
                         }
                     }
-                    else {
-                        // User has clicked on a node
+
+                    if (node_index != NONE_SELECTED && drag_node) {
                         _moveNode(p);
                     }
 
                     break;
                 }
                 case PenTool::HANDLE: {
-
                     // if we release SHIFT while dragging handle, continue to drag
-                    if ( !(event.modifiers & GDK_SHIFT_MASK) && !drag_handle ) {
+                    if ( !(event.modifiers & GDK_SHIFT_MASK)) {
                         state = PenTool::POINT;
+                        selected_anchor = nullptr;
                         break;
                     }
 
@@ -912,7 +925,6 @@ bool PenTool::_handleButtonRelease(ButtonReleaseEvent const &event) {
                         break;
 
                     case PenTool::BREAK:
-                        g_warning("release_drag");
                         // we clicked on previous node, make it a line
                         _lastpointToLine();
 
@@ -925,6 +937,7 @@ bool PenTool::_handleButtonRelease(ButtonReleaseEvent const &event) {
                         break;
                     case PenTool::NODE:
                         node_index = NONE_SELECTED;
+                        drag_node = false;
                         break;
                     case PenTool::HANDLE:
                         drag_handle = false;
@@ -1180,7 +1193,30 @@ void PenTool::_moveHandle(Geom::Point const p) {
     }
 
     if (selected_anchor == bh_anchor) {
-        // This needs to be implemented
+        
+        Geom::Curve const * last_seg = green_curve->last_segment();
+        if (last_seg) {
+            SPCurve lsegment;
+            Geom::CubicBezier const * cubic = dynamic_cast<Geom::CubicBezier const *>( last_seg );
+            if (cubic) {
+                lsegment.moveto((*cubic)[0]);
+                lsegment.curveto((*cubic)[1], p_array[0] + (p - (*cubic)[3]), p_array[0]);
+                green_curve->backspace();
+                green_curve->append_continuous(std::move(lsegment));
+            }
+        }
+
+        bh_anchor->dp = p;
+        bh_anchor->ctrl->set_position(p);
+        cl0->set_coords(p_array[0], p);
+        
+        green_bpaths.clear();
+
+        // one canvas bpath for all of green_curve
+        auto canvas_shape = new Inkscape::CanvasItemBpath(_desktop->getCanvasSketch(), copy_pathvector_optional(green_curve), true);
+        canvas_shape->set_stroke(green_color);
+        canvas_shape->set_fill(0x0, SP_WIND_RULE_NONZERO);
+        green_bpaths.emplace_back(canvas_shape);
     }
 
     return;
@@ -1193,15 +1229,9 @@ void PenTool::_moveNode(Geom::Point const p) {
         return;
     }
 
-    std::shared_ptr<SPDrawAnchor> _before, _after;
+    bool _after_exists = true;
 
-    if (node_index != 0){
-        _before = _anchors[node_index - 1];
-    }
-
-    if (node_index != (_anchors.size() - 1)) {
-        _after = _anchors[node_index + 1];
-    }
+    if ( node_index == (_anchors.size() -1)) _after_exists = false;
 
     Geom::Point delta( (p - _anchors[node_index]->dp).x(), (p - _anchors[node_index]->dp).y() );
 
@@ -1211,42 +1241,25 @@ void PenTool::_moveNode(Geom::Point const p) {
         delta *= Geom::Rotate(-_desktop->current_rotation());
     }
 
-    if (!_after) {
-        // Dragging the last point on the curve
+    // Move green curve
+    if (!green_curve->is_unset()) {
+        green_curve->nth_point_additive_move(delta, node_index);
+    } else {
+        g_warning(" Green curve is unset ");
+    }
 
-        // move green curve
-        if (!green_curve->is_unset()) {
-            green_curve->last_point_additive_move(delta);
-        } else {
-            g_warning("Green curve is unset while dragging Node");
-        }
-
+    if (!_after_exists) {
+        // Reset the anchors if last point on curve
         p_array[0] += delta;
         p_array[1] += delta;
-
-    } else if (!_before) {
-        // Dragging the first point on the curve
-
-        // move green curve
-        if (!green_curve->is_unset()) {
-            green_curve->first_point_additive_move(delta);
-        } else {
-            g_warning("Green curve is unset while dragging Node");
-        }
-    } else {
-        // Dragging middle point of the curve
-
-        // move green curve
-        if (!green_curve->is_unset()) {
-            g_warning("Moving middle node");
-        } else {
-            g_warning("Green curve is unset while dragging Node");
-        }
     }
 
     _redrawAll(false);
 
-    if (!_after) {
+    ctrl[1]->set_visible(false);
+    ctrl[2]->set_visible(false);
+
+    if (!_after_exists) {
         fh_anchor->dp = ctrl[1]->get_position();
         fh_anchor->ctrl->set_position(fh_anchor->dp);
         bh_anchor->dp = ctrl[1]->get_position();
@@ -1256,10 +1269,6 @@ void PenTool::_moveNode(Geom::Point const p) {
     // move the anchor
     _anchors[node_index]->dp = p;
     _anchors[node_index]->ctrl->set_position(p);
-
-    // Delete pointers after their use is done
-    _before.reset();
-    _after.reset();
 
     return;
 }

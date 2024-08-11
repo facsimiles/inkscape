@@ -69,6 +69,7 @@ public:
     void move_endpoints(Geom::Point const &, Geom::Point const &);
     void last_point_additive_move(Geom::Point const &p);
     void first_point_additive_move(Geom::Point const &p);
+    void nth_point_additive_move(Geom::Point const &p, int const n);
 
     void append(Geom::PathVector const &, bool use_lineto = false);
     void append(SPCurve const &curve2, bool use_lineto = false);
