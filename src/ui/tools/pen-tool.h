@@ -89,6 +89,7 @@ public:
     SPDrawAnchor* bh_anchor; // back-handle anchor
     SPDrawAnchor* selected_anchor;
     bool drag_handle = false;
+    bool drag_handle_statusbar = false;
 
     unsigned int expecting_clicks_for_LPE = 0; // if positive, finish the path after this many clicks
     Inkscape::LivePathEffect::Effect *waiting_LPE = nullptr; // if NULL, waiting_LPE_type in SPDrawContext is taken into account

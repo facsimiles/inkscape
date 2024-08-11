@@ -190,6 +190,8 @@ void PenTool::_cancel() {
     bh_anchor->active = false;
 
     selected_anchor = nullptr;
+    drag_handle_statusbar = false;
+    node_mode_statusbar = false;
 
     this->message_context->clear();
     this->message_context->flash(Inkscape::NORMAL_MESSAGE, _("Drawing cancelled"));
@@ -702,11 +704,8 @@ bool PenTool::_handleMotionNotify(MotionEvent const &event) {
                         }
 
                         if (anchor && !anchor_statusbar) {
-                            if(!is_spiro && !is_bspline){
-                                message_context->set(Inkscape::NORMAL_MESSAGE, _("<b>Click</b> or <b>click and drag</b> to close and finish the path."));
-                            }else{
-                                message_context->set(Inkscape::NORMAL_MESSAGE, _("<b>Click</b> or <b>click and drag</b> to close and finish the path. Shift+Click make a cusp node"));
-                            }
+                            Glib::ustring message = (!is_spiro && !is_bspline) ? "" : "<b>Shift</b> + <b>Click</b> make a cusp node";
+                            message_context->setF(Inkscape::NORMAL_MESSAGE, _("<b>Click</b> or <b>click and drag</b> to close and finish the path. %s"), message.c_str());
                             anchor_statusbar = true;
                         } else if (!anchor && anchor_statusbar) {
                             message_context->clear();
@@ -714,8 +713,8 @@ bool PenTool::_handleMotionNotify(MotionEvent const &event) {
                         }
 
                         if (prev && !prev_anchor_statusbar) {
-                            // Glib::ustring message = (!is_spiro && !is_bspline) ? "delete front handle of the previous" : "make last node a cusp";
-                            // message_context->set(Inkscape::NORMAL_MESSAGE, (("<b>Click</b> or <b>click and drag</b> to %s node"), message));
+                            Glib::ustring message = (!is_spiro && !is_bspline) ? "delete front handle of the previous" : "make last node a cusp";
+                            message_context->setF(Inkscape::NORMAL_MESSAGE, _("<b>Click</b> or <b>click and drag</b> to %s node."), message.c_str());
                             prev_anchor_statusbar = true;
                         } else if (!prev && prev_anchor_statusbar) {
                             message_context->clear();
@@ -725,17 +724,14 @@ bool PenTool::_handleMotionNotify(MotionEvent const &event) {
                         ret = true;
                     } else {
                         if (anchor && !anchor_statusbar) {
-                            if(!is_spiro && !is_bspline){
-                                message_context->set(Inkscape::NORMAL_MESSAGE, _("<b>Click</b> or <b>click and drag</b> to continue the path from this point."));
-                            }else{
-                                message_context->set(Inkscape::NORMAL_MESSAGE, _("<b>Click</b> or <b>click and drag</b> to continue the path from this point. Shift+Click make a cusp node"));
-                            }
+                            Glib::ustring message = (!is_spiro && !is_bspline) ? "" : "<b>Shift</b> + <b>Click</b> make a cusp node";
+                            message_context->setF(Inkscape::NORMAL_MESSAGE, _("<b>Click</b> or <b>click and drag</b> to continue the path from this point. %s"), message.c_str());
                             anchor_statusbar = true;
                         } else if (!anchor && anchor_statusbar) {
                             message_context->clear();
                             anchor_statusbar = false;
-
                         }
+
                         if (!sp_event_context_knot_mouseover()) {
                             SnapManager &m = _desktop->getNamedView()->snap_manager;
                             m.setup(_desktop);
@@ -767,7 +763,19 @@ bool PenTool::_handleMotionNotify(MotionEvent const &event) {
                     //if we release ALT while dragging node, continue to drag
                     if ( !(event.modifiers & GDK_ALT_MASK) && !drag_node) {
                         state = PenTool::POINT;
+
+                        if (node_mode_statusbar) {
+                            node_mode_statusbar = false;
+                            message_context->clear();
+                        }
+
                         break;
+                    }
+
+                    // setting the statusbar
+                    if (!node_mode_statusbar) {
+                        node_mode_statusbar = true;
+                        message_context->set(Inkscape::NORMAL_MESSAGE, _("<b>Click</b> or <b>Click and drag</b> any node to move it."));
                     }
 
                     for (int i = 0; i < _anchors.size(); i++) {
@@ -788,7 +796,19 @@ bool PenTool::_handleMotionNotify(MotionEvent const &event) {
                     if ( !(event.modifiers & GDK_SHIFT_MASK)) {
                         state = PenTool::POINT;
                         selected_anchor = nullptr;
+
+                        if (drag_handle_statusbar) {
+                            drag_handle_statusbar = false;
+                            message_context->clear();
+                        }
+
                         break;
+                    }
+
+                    // setting the statusbar
+                    if (!drag_handle_statusbar) {
+                        drag_handle_statusbar = true;
+                        message_context->set(Inkscape::NORMAL_MESSAGE, _("<b>Click</b> or <b>Click and drag</b> any handle of last node to move it."));
                     }
 
                     if (!drag_handle) selected_anchor = bh_anchor->anchorTest(event_w, true);
@@ -2016,7 +2036,7 @@ void PenTool::_setSubsequentPoint(Geom::Point const p, bool statusbar, guint sta
             this->_setAngleDistanceStatusMessage(p, 0, message);
         } else {
             message = is_curve ?
-            _("<b>Curve segment</b>: angle %3.2f&#176;, distance %s; with <b>Ctrl</b> to snap angle, <b>Enter</b> or <b>Shift+Enter</b> to finish the path" ):
+            _("<b>Curve segment</b>: angle %3.2f&#176;, distance %s; with <b>Ctrl</b> to snap angle, <b>Enter</b> or <b>Shift+Enter</b> to finish the path, <b>Shift</b> to change last handles, <b>Alt</b> to move previous nodes"):
             _("<b>Line segment</b>: angle %3.2f&#176;, distance %s; with <b>Ctrl</b> to snap angle, <b>Enter</b> or <b>Shift+Enter</b> to finish the path");
             this->_setAngleDistanceStatusMessage(p, 0, message);
         }
@@ -2092,8 +2112,8 @@ void PenTool::_setCtrl(Geom::Point const q, guint const state)
         cl1->set_coords(p_array[3], p_array[4]);
 
         gchar *message = is_symm ?
-            _("<b>Curve handle, symmetric</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</b> to snap angle, with <b>Shift</b> to break this handle, with <b>Alt</b> to move this handle only") :
-            _("<b>Curve handle</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</b> to snap angle, with <b>Shift</b> to break this handle, with <b>Alt</b> to move this handle only");
+            _("<b>Curve handle, symmetric</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</b> to snap angle, with <b>Shift</b> to break this handle, with <b>Alt</b> to unlink handle, with <b>Alt + Shift</b> to move node") :
+            _("<b>Curve handle</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</b> to snap angle, with <b>Shift</b> to break this handle, with <b>Alt</b> to unlink handle, with <b>Alt + Shift</b> to move node");
         this->_setAngleDistanceStatusMessage(q, 3, message);
     } else {
         g_warning("Something bad happened - npoints is %d", this->npoints);
@@ -2318,6 +2338,10 @@ void PenTool::_finish(gboolean const closed) {
     // hide the anchors
     fh_anchor->ctrl->set_visible(false);
     bh_anchor->ctrl->set_visible(false);
+
+
+    drag_handle_statusbar = false;
+    node_mode_statusbar = false;
 
     this->green_anchor.reset();
     _redo_stack.clear();
