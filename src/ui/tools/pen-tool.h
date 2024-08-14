@@ -80,7 +80,6 @@ public:
     bool prev_anchor_statusbar = false;
     bool hid_handles = false; // hid handles due to PenTool::BREAK
     bool node_mode_statusbar = false;
-    bool drag_node = false;
 
     Geom::Point front_handle;
     Geom::Point back_handle;

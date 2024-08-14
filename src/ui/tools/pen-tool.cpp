@@ -402,7 +402,6 @@ bool PenTool::_handleButtonPress(ButtonPressEvent const &event) {
                             // distinction so that the case of a waiting LPE is treated separately
 
                             // Set start anchor
-
                             sa = anchor;
                             if (anchor) {
                                 //Put the start overwrite curve always on the same direction
@@ -487,6 +486,7 @@ bool PenTool::_handleButtonPress(ButtonPressEvent const &event) {
                         g_warning("Button down in BREAK state");
                         break;
                     case PenTool::NODE:
+
                         if (!(event.modifiers & GDK_ALT_MASK)) {
                             state = PenTool::POINT;
                             break;
@@ -500,9 +500,8 @@ bool PenTool::_handleButtonPress(ButtonPressEvent const &event) {
                                 }
                             }
                         }
-
-                        drag_node = node_index != -1 ? true : false;
-                        
+  
+                        break;
 
                     case PenTool::HANDLE:
 
@@ -671,6 +670,7 @@ bool PenTool::_handleMotionNotify(MotionEvent const &event) {
                             break;
                         }
 
+                        // if SHIFT key held switch to HANDLE tool
                         if ( (event.modifiers & GDK_SHIFT_MASK) && is_bezier ) {
                             state = PenTool::HANDLE;
                             red_curve.reset();
@@ -761,9 +761,22 @@ bool PenTool::_handleMotionNotify(MotionEvent const &event) {
                 case PenTool::NODE: {
                     
                     //if we release ALT while dragging node, continue to drag
-                    if ( !(event.modifiers & GDK_ALT_MASK) && !drag_node) {
+                    if ( !(event.modifiers & GDK_ALT_MASK) ) {
                         state = PenTool::POINT;
 
+                        // make all anchors inactive
+                        for (auto& _anchor: _anchors) {
+                            if (_anchor->active) {
+                                _anchor->ctrl->set_normal();
+                                _anchor->ctrl->set_size(Inkscape::HandleSize::NORMAL);
+                                _anchor->active = false;
+
+                                // There could be only one active anchor
+                                break;
+                            }
+                        }
+
+                        // Reset statusbar
                         if (node_mode_statusbar) {
                             node_mode_statusbar = false;
                             message_context->clear();
@@ -772,24 +785,27 @@ bool PenTool::_handleMotionNotify(MotionEvent const &event) {
                         break;
                     }
 
-                    // setting the statusbar
+                    // Setting the statusbar
                     if (!node_mode_statusbar) {
                         node_mode_statusbar = true;
                         message_context->set(Inkscape::NORMAL_MESSAGE, _("<b>Click</b> or <b>Click and drag</b> any node to move it."));
                     }
 
-                    for (int i = 0; i < _anchors.size(); i++) {
-                        if (_anchors[i]->anchorTest(event_w, true)) {
-                            node_index = i;
-                            break;
+                    if (node_index == NONE_SELECTED) {
+                        for (auto& _anchor: _anchors) {
+                            if (_anchor->anchorTest(event_w, true)) {
+                                // Highlight the node we hover over
+                                break;
+                            }
                         }
                     }
-
-                    if (node_index != NONE_SELECTED && drag_node) {
+                    else {
+                        // User has clicked on a node
                         _moveNode(p);
                     }
 
                     break;
+
                 }
                 case PenTool::HANDLE: {
                     // if we release SHIFT while dragging handle, continue to drag
@@ -957,7 +973,6 @@ bool PenTool::_handleButtonRelease(ButtonReleaseEvent const &event) {
                         break;
                     case PenTool::NODE:
                         node_index = NONE_SELECTED;
-                        drag_node = false;
                         break;
                     case PenTool::HANDLE:
                         drag_handle = false;
@@ -1282,7 +1297,7 @@ void PenTool::_moveNode(Geom::Point const p) {
     if (!_after_exists) {
         fh_anchor->dp = ctrl[1]->get_position();
         fh_anchor->ctrl->set_position(fh_anchor->dp);
-        bh_anchor->dp = ctrl[1]->get_position();
+        bh_anchor->dp = ctrl[2]->get_position();
         bh_anchor->ctrl->set_position(bh_anchor->dp);
     }
 
