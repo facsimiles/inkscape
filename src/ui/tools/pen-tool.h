@@ -61,6 +61,12 @@ public:
         DEAD
     };
 
+    enum Ctrl{
+        FRONT_HANDLE=0,
+        BACK_HANDLE,
+        TEMPORARY_ANCHOR,
+    };
+
     Geom::Point p_array[5];
     Geom::Point previous;
     /** \invar npoints in {0, 2, 5}. */
@@ -94,9 +100,8 @@ public:
     Inkscape::LivePathEffect::Effect *waiting_LPE = nullptr; // if NULL, waiting_LPE_type in SPDrawContext is taken into account
     SPLPEItem *waiting_item = nullptr;
 
-    CanvasItemPtr<CanvasItemCtrl> ctrl[4]; // Origin, Start, Center, End point of path.
-    static constexpr std::array<CanvasItemCtrlType, 4> ctrl_types = {
-        CANVAS_ITEM_CTRL_TYPE_NODE_SMOOTH, CANVAS_ITEM_CTRL_TYPE_ROTATE,
+    CanvasItemPtr<CanvasItemCtrl> ctrl[3]; // Origin, Start, Center, End point of path.
+    static constexpr std::array<CanvasItemCtrlType, 3> ctrl_types = { CANVAS_ITEM_CTRL_TYPE_ROTATE,
         CANVAS_ITEM_CTRL_TYPE_ROTATE, CANVAS_ITEM_CTRL_TYPE_NODE_SMOOTH};
 
     CanvasItemPtr<CanvasItemCurve> cl0;

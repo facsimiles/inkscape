@@ -99,7 +99,7 @@ PenTool::PenTool(SPDesktop *desktop, std::string &&prefs_path, std::string &&cur
     fh_anchor->ctrl->set_type(CANVAS_ITEM_CTRL_TYPE_ROTATE);
     bh_anchor->ctrl->set_type(CANVAS_ITEM_CTRL_TYPE_ROTATE);
 
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 3; i++) {
         ctrl[i] = make_canvasitem<CanvasItemCtrl>(canvas, ctrl_types[i]);
         ctrl[i]->set_visible(false);
     }
@@ -920,7 +920,7 @@ bool PenTool::_handleButtonRelease(ButtonReleaseEvent const &event) {
                         _finishSegment(p, event.modifiers);
                         // hide the guide of the penultimate node when closing the curve
                         if(is_spiro){
-                            ctrl[1]->set_visible(false);
+                            ctrl[FRONT_HANDLE]->set_visible(false);
                         }
                         _finish(true);
                         state = PenTool::POINT;
@@ -949,7 +949,7 @@ bool PenTool::_handleButtonRelease(ButtonReleaseEvent const &event) {
                         _finishSegment(p, event.modifiers);
                         // hide the penultimate node guide when closing the curve
                         if(is_spiro){
-                            ctrl[1]->set_visible(false);
+                            ctrl[FRONT_HANDLE]->set_visible(false);
                         }
                         if (green_closed) {
                             // finishing at the start anchor, close curve
@@ -966,7 +966,7 @@ bool PenTool::_handleButtonRelease(ButtonReleaseEvent const &event) {
 
                         // hide front handles
                         cl1->set_visible(false);
-                        ctrl[1]->set_visible(false);
+                        ctrl[FRONT_HANDLE]->set_visible(false);
                         hid_handles = false;
 
                         state = PenTool::POINT;
@@ -1046,8 +1046,8 @@ void PenTool::_redrawAll(bool const draw_red) {
     // handles
     // hide the handlers in bspline and spiro modes
     if (p_array[0] != p_array[1] && !is_spiro && !is_bspline) {
-        ctrl[1]->set_position(p_array[1]);
-        ctrl[1]->set_visible(true);
+        ctrl[FRONT_HANDLE]->set_position(p_array[1]);
+        ctrl[FRONT_HANDLE]->set_visible(true);
         cl1->set_coords(p_array[0], p_array[1]);
         cl1->set_visible(true);
     } else {
@@ -1062,8 +1062,8 @@ void PenTool::_redrawAll(bool const draw_red) {
              (*cubic)[2] != p_array[0] && !is_spiro && !is_bspline )
         {
             Geom::Point p2 = (*cubic)[2];
-            ctrl[2]->set_position(p2);
-            ctrl[2]->set_visible(true);
+            ctrl[BACK_HANDLE]->set_position(p2);
+            ctrl[BACK_HANDLE]->set_visible(true);
             cl0->set_coords(p2, p_array[0]);
             cl0->set_visible(true);
         } else {
@@ -1291,13 +1291,13 @@ void PenTool::_moveNode(Geom::Point const p) {
 
     _redrawAll(false);
 
-    ctrl[1]->set_visible(false);
-    ctrl[2]->set_visible(false);
+    ctrl[FRONT_HANDLE]->set_visible(false);
+    ctrl[BACK_HANDLE]->set_visible(false);
 
     if (!_after_exists) {
-        fh_anchor->dp = ctrl[1]->get_position();
+        fh_anchor->dp = ctrl[FRONT_HANDLE]->get_position();
         fh_anchor->ctrl->set_position(fh_anchor->dp);
-        bh_anchor->dp = ctrl[2]->get_position();
+        bh_anchor->dp = ctrl[BACK_HANDLE]->get_position();
         bh_anchor->ctrl->set_position(bh_anchor->dp);
     }
 
@@ -1994,8 +1994,8 @@ void PenTool::_bsplineSpiroBuild()
             c->set_visible(false);
         }
         if (is_spiro){
-            ctrl[1]->set_position(p_array[0]);
-            ctrl[1]->set_visible(true);
+            ctrl[FRONT_HANDLE]->set_position(p_array[0]);
+            ctrl[FRONT_HANDLE]->set_visible(true);
         }
         cl0->set_visible(false);
         cl1->set_visible(false);
@@ -2070,14 +2070,14 @@ void PenTool::_setCtrl(Geom::Point const q, guint const state)
     // hide previous handle anchors
     fh_anchor->ctrl->set_visible(false);
     bh_anchor->ctrl->set_visible(false);
-    ctrl[1]->set_visible(true);
+    ctrl[FRONT_HANDLE]->set_visible(true);
     cl1->set_visible(true);
 
     if ( this->npoints == 2 ) {
         p_array[1] = q;
         cl0->set_visible(false);
-        ctrl[1]->set_position(p_array[1]);
-        ctrl[1]->set_visible(true);
+        ctrl[FRONT_HANDLE]->set_position(p_array[1]);
+        ctrl[FRONT_HANDLE]->set_visible(true);
         cl1->set_coords(p_array[0], p_array[1]);
         this->_setAngleDistanceStatusMessage(q, 0, _("<b>Curve handle</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</b> to snap angle"));
     } else if ( this->npoints == 5 ) {
@@ -2116,12 +2116,12 @@ void PenTool::_setCtrl(Geom::Point const q, guint const state)
         }
 
         // Avoid conflicting with initial point ctrl
-        ctrl[3]->set_position(p_array[3]);
-        ctrl[3]->set_visible(true);
-        ctrl[2]->set_position(p_array[2]);
-        ctrl[2]->set_visible(true);
-        ctrl[1]->set_position(p_array[4]);
-        ctrl[1]->set_visible(true);
+        ctrl[TEMPORARY_ANCHOR]->set_position(p_array[3]);
+        ctrl[TEMPORARY_ANCHOR]->set_visible(true);
+        ctrl[BACK_HANDLE]->set_position(p_array[2]);
+        ctrl[BACK_HANDLE]->set_visible(true);
+        ctrl[FRONT_HANDLE]->set_position(p_array[4]);
+        ctrl[FRONT_HANDLE]->set_visible(true);
 
         cl0->set_coords(p_array[3], p_array[2]);
         cl1->set_coords(p_array[3], p_array[4]);
@@ -2166,11 +2166,11 @@ void PenTool::_finishSegment(Geom::Point const q, guint const state) { // use 'q
         // display the new point
         _anchors.push_back(std::make_unique<SPDrawAnchor>(this, green_curve, true, p_array[3]));
         if ( is_bspline || is_spiro ) _anchors.back()->ctrl->set_type(CANVAS_ITEM_CTRL_TYPE_ROTATE);
-        ctrl[3]->set_visible(false);
+        ctrl[TEMPORARY_ANCHOR]->set_visible(false);
 
         // hide control handles
-        ctrl[1]->set_visible(false);
-        ctrl[2]->set_visible(false);
+        ctrl[FRONT_HANDLE]->set_visible(false);
+        ctrl[BACK_HANDLE]->set_visible(false);
 
         // show new anchors
         fh_anchor->ctrl->set_position(p_array[4]);
@@ -2257,7 +2257,7 @@ bool PenTool::_undoLastPoint(bool user_undo) {
             Geom::CubicBezier const *cubic = dynamic_cast<Geom::CubicBezier const *>(this->green_curve->last_segment());
             if ( cubic ) {
                 p_array[1] = (*cubic)[3] + (*cubic)[3] - (*cubic)[2];
-                ctrl[1]->set_position(p_array[0]);
+                ctrl[FRONT_HANDLE]->set_position(p_array[0]);
             } else {
                 p_array[1] = p_array[0];
             }
