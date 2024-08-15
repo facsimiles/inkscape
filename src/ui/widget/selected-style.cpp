@@ -905,7 +905,9 @@ SelectedStyle::update()
                 _mode[i] = SS_COLOR;
                 _popup_copy[i]->set_sensitive(true);
             } else if (paint->set && paint->isNone()) {
-                type_label[i]->set_markup(_(type_strings[  SS_NONE][i][0]));
+                type_label[i]->set_markup(i == 0 ?
+                                          C_("Fill", "<i>None</i>") :
+                                          C_("Stroke", "<i>None</i>"));
                 swatch[i]->set_tooltip_text(_(type_strings[SS_NONE][i][1]));
 
                 _mode[i] = SS_NONE;
