@@ -68,18 +68,26 @@ PaintMode get_mode_from_paint(const SPIPaint& paint) {
     return PaintMode::NotSet;
 }
 
-const static struct Paint { PaintMode mode; const char* icon; const char* tip; } paint_modes[] = {
+const static struct Paint { PaintMode mode; const char* icon; const char* name; const char* tip; } paint_modes[] = {
     // {PaintMode::None, "paint-none", _("No paint")},
-    {PaintMode::Solid, "paint-solid", _("Flat color")},
-    {PaintMode::Gradient, "paint-gradient-linear", _("Gradient fill")},
-    {PaintMode::Pattern, "paint-pattern", _("Patter fill")},
-    {PaintMode::Swatch, "paint-swatch", _("Swatch color")},
-    {PaintMode::NotSet, "paint-unknown", _("Inherited")},
+    {PaintMode::Solid,    "paint-solid",           C_("Paint type", "Flat"),     _("Flat color")},
+    {PaintMode::Gradient, "paint-gradient-linear", C_("Paint type", "Gradient"), _("Gradient fill")},
+    {PaintMode::Pattern,  "paint-pattern",         C_("Paint type", "Pattern"),  _("Pattern fill")},
+    {PaintMode::Swatch,   "paint-swatch",          C_("Paint type", "Swatch"),   _("Swatch color")},
+    {PaintMode::NotSet,   "paint-unknown",         C_("Paint type", "Unset"),    _("Inherited")},
+    {PaintMode::Mesh,     "paint-gradient-mesh",   C_("Paint type", "Mesh"),     _("Mesh fill")},
 };
 
-Glib::ustring get_mode_icon(PaintMode mode) {
+Glib::ustring get_paint_mode_icon(PaintMode mode) {
     for (auto&& p : paint_modes) {
         if (p.mode == mode) return p.icon;
+    }
+    return {};
+}
+
+Glib::ustring get_paint_mode_name(PaintMode mode) {
+    for (auto&& p : paint_modes) {
+        if (p.mode == mode) return p.name;
     }
     return {};
 }
@@ -114,14 +122,19 @@ public:
     Gtk::Box _unset = Gtk::Box{Gtk::Orientation::VERTICAL};
     std::shared_ptr<Colors::ColorSet> _color = std::make_shared<Colors::ColorSet>();
     auto_connection _mode_change;
+    Gtk::ToggleButton _group;
 };
 
 PaintSwitchImpl::PaintSwitchImpl() {
     _flat_color = ColorPickerPanel::create("", _color);
     auto header = Gtk::make_managed<Gtk::Box>(Gtk::Orientation::HORIZONTAL);
-    header->set_margin(5);
-    header->set_spacing(2);
-    header->set_halign(Gtk::Align::CENTER);
+    header->set_margin_top(5);
+    header->set_margin_bottom(5);
+    header->set_halign(Gtk::Align::FILL);
+    auto types = Gtk::make_managed<Gtk::Box>(Gtk::Orientation::HORIZONTAL);
+    types->set_spacing(2);
+    types->set_hexpand();
+
     for (auto i : paint_modes) {
         auto btn = Gtk::make_managed<Gtk::ToggleButton>();
         btn->set_image_from_icon_name(i.icon);
@@ -145,13 +158,45 @@ PaintSwitchImpl::PaintSwitchImpl() {
                 //todo
             }
         });
-        header->append(*btn);
+        types->append(*btn);
         _mode_buttons[i.mode] = btn;
     }
+
+    auto pickers = Gtk::make_managed<Gtk::Box>(Gtk::Orientation::HORIZONTAL);
+    pickers->set_spacing(2);
+    pickers->set_halign(Gtk::Align::END);
+    for (auto [id, icon, type] :
+        {std::tuple{"rect", "color-picker-rect", ColorPickerPanel::Type::Rect},
+        {"circle", "color-picker-circle", ColorPickerPanel::Type::Circle},
+        {"input", "color-picker-input", ColorPickerPanel::Type::Sliders}}) {
+
+        auto btn = Gtk::make_managed<Gtk::ToggleButton>();
+        btn->set_has_frame(false);
+        btn->set_icon_name(icon);
+        // if (id != "rect")
+        btn->set_group(_group);
+        auto name = type;
+        btn->signal_toggled().connect([this, name]() {
+            _flat_color->set_picker_type(name);
+            // gradients:
+            _gradient.get_color_picker()->set_picker_type(name);
+            //todo: others if needed
+            //
+            // auto type = static_cast<Space::Type>(_spaces.get_active_row_id());
+            // create_page(type, name);
+            // switch UI
+            // _stack.set_visible_child(name);
+        });
+        pickers->append(*btn);
+    }
+    header->append(*types);
+    header->append(*pickers);
 
     append(*header);
     auto separator = Gtk::make_managed<Gtk::Separator>();
     separator->set_margin_bottom(4);
+    separator->set_margin_start(-10);
+    separator->set_margin_end(-10);
     append(*separator);
     append(_stack);
 
@@ -208,14 +253,18 @@ void PaintSwitchImpl::_set_mode(PaintMode mode) {
     if (auto it = _pages.find(mode); it != end(_pages)) {
         _stack.set_visible_child(*it->second);
     }
-    if (auto btn = _mode_buttons.find(mode); btn != end(_mode_buttons)) {
-        auto scoped = _mode_change.block_here();
-        btn->second->set_active();
+    auto scoped = _mode_change.block_here();
+    for (auto& kv : _mode_buttons) {
+        kv.second->set_active(mode == kv.first);
     }
+    // if (auto btn = _mode_buttons.find(mode); btn != end(_mode_buttons)) {
+    //     auto scoped = _mode_change.block_here();
+    //     btn->second->set_active();
+    // }
 }
 
 void PaintSwitchImpl::update_from_paint(const SPIPaint& paint) {
-    auto* server = paint.isPaintserver() ? paint.href->getObject() : nullptr;
+    auto server = paint.isPaintserver() ? paint.href->getObject() : nullptr;
     if (server) {
         if (is<SPGradient>(server) && cast<SPGradient>(server)->getVector()->isSwatch()) {
             auto vector = cast<SPGradient>(server)->getVector();

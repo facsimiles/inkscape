@@ -3,12 +3,15 @@
 #include "paint-attribute.h"
 #include <glibmm/ustring.h>
 #include <gtkmm/enums.h>
+
+#include "stroke-style.h"
 #include "object/sp-gradient.h"
 #include "object/sp-linear-gradient.h"
 #include "object/sp-paint-server.h"
 #include "object/sp-pattern.h"
 #include "object/sp-radial-gradient.h"
 #include "style.h"
+#include "object/sp-stop.h"
 #include "ui/widget/paint-switch.h"
 
 namespace Inkscape::UI::Widget {
@@ -25,25 +28,24 @@ PaintAttribute::PaintAttribute() {
         }
     });
 
-    _fill._picker.signal_open_popup().connect([this]() {
+    // refresh paint popup before opening it; it is not kept up-to-date
+    _fill._popover.signal_show().connect([this]() {
         set_paint(_current_object, true);
-    });
-    _stroke._picker.signal_open_popup().connect([this]() {
+    }, false);
+    _stroke._popover.signal_show().connect([this]() {
         set_paint(_current_object, false);
-    });
+    }, false);
 }
 
 void PaintAttribute::PaintStrip::hide() {
-    // _switch = PaintSwitch::create();
-    _picker.set_visible(false);
+    _paint_btn.set_visible(false);
     _alpha.set_visible(false);
     _define.set_visible();
     _clear.set_visible(false);
 }
 
 void PaintAttribute::PaintStrip::show() {
-    // _switch = PaintSwitch::create();
-    _picker.set_visible();
+    _paint_btn.set_visible();
     _alpha.set_visible();
     _define.set_visible(false);
     _clear.set_visible();
@@ -56,6 +58,8 @@ PaintAttribute::PaintStrip::PaintStrip(const Glib::ustring& title) :
     _paint_btn.set_always_show_arrow();
     // _paint_btn.set_label(_("Fill"));
     // _paint_btn.set_icon_name("gear");
+    _paint_btn.set_popover(_popover);
+    _popover.set_child(*_switch);
 
     _solid_color.setStyle(ColorPreview::Simple);
     _solid_color.set_size_request(16, 16);
@@ -67,14 +71,12 @@ PaintAttribute::PaintStrip::PaintStrip(const Glib::ustring& title) :
     _paint_type.set_hexpand();
     _paint_type.set_xalign(0.5f);
     _paint_box.append(_solid_color);
+    _paint_box.append(_paint_icon);
     _paint_box.append(_paint_type);
     _paint_type.set_text("Gradient");
     _paint_btn.set_child(_paint_box);
 
-    _picker.set_valign(Gtk::Align::CENTER);
-
     // set_spacing(4);
-    // append(_picker);
     // _label.set_hexpand();
     // _label.set_xalign(0);
     // _label.set_max_width_chars(10);
@@ -84,9 +86,9 @@ PaintAttribute::PaintStrip::PaintStrip(const Glib::ustring& title) :
     auto alpha_adj = Gtk::Adjustment::create(0.0, 0, 100, 1.0, 5.0, 0.0);
     _alpha.set_adjustment(alpha_adj);
     _alpha.set_digits(0);
-    // _alpha.set_range(0, 100);
     _alpha.set_label(C_("Alpha transparency", "A"));
-    _alpha.set_prefix(C_("Alpha percent sign", "%"), false);
+    _alpha.set_suffix(C_("Alpha percent sign", "%"), false);
+    _alpha.set_halign(Gtk::Align::START);
 
     _define.set_image_from_icon_name("plus");
     _define.set_has_frame(false);
@@ -106,14 +108,14 @@ PaintAttribute::PaintStrip::PaintStrip(const Glib::ustring& title) :
 }
 
 void PaintAttribute::insert_widgets(InkPropertyGrid& grid, int row) {
-    // grid.insert_row(row);
     _markers.add_css_class("border-box");
     _markers.set_overflow(Gtk::Overflow::HIDDEN);
     _markers.set_spacing(0);
     _markers.set_halign(Gtk::Align::FILL);
-    _marker_start.preview_scale(0.5);
-    _marker_mid.preview_scale(0.5);
-    _marker_end.preview_scale(0.5);
+    auto scale = 0.6;
+    _marker_start.preview_scale(scale);
+    _marker_mid.preview_scale(scale);
+    _marker_end.preview_scale(scale);
     _markers.append(_marker_start);
     _markers.append(*Gtk::make_managed<Gtk::Separator>(Gtk::Orientation::VERTICAL));
     _markers.append(_marker_mid);
@@ -127,29 +129,56 @@ void PaintAttribute::insert_widgets(InkPropertyGrid& grid, int row) {
     // grid.attach(_stroke_presets, 0, row);
     // grid.attach(_stroke_width, 1, row);
     // grid.attach(_dash_selector, 3, row);
+    _size_group->add_widget(_fill._alpha);
+    _size_group->add_widget(_stroke._alpha);
+    _size_group->add_widget(_unit_selector);
 
+    //TODO: unit-specific adj
+    auto adj = Gtk::Adjustment::create(0.0, 0, 1e6, 0.1, 1.0, 0.0);
+    _stroke_width.set_adjustment(adj);
+    _stroke_width.set_digits(3);
     _stroke_width.set_label(C_("Stroke width", "W"));
+    _unit_selector.set_halign(Gtk::Align::START);
+    _unit_selector.setUnitType(UNIT_TYPE_LINEAR);
+    _unit_selector.addUnit(*UnitTable::get().getUnit("%"));
+    _unit_selector.append("hairline", _("Hairline"));
+    _stroke_box.set_spacing(1);
+    _stroke_box.append(_unit_selector);
+    _stroke_box.append(_stroke_presets);
+    _stroke_presets.set_halign(Gtk::Align::START);
+    _stroke_box.set_halign(Gtk::Align::START);
+    //TODO:
+    // _stroke_width.set_unit_menu();
+    // _old_unit = unitSelector->getUnit();
+    // if (desktop) {
+    //     unitSelector->setUnit(desktop->getNamedView()->display_units->abbr);
+    //     _old_unit = desktop->getNamedView()->display_units;
+    // }
+    // widthSpin->setUnitMenu(unitSelector);
+    // unitSelector->signal_changed().connect(sigc::mem_fun(*this, &StrokeStyle::unitChangedCB));
+    // unitSelector->set_visible(true);
+    _stroke_presets.set_has_frame(false);
+    _stroke_presets.set_icon_name("gear");
+    _stroke_presets.set_always_show_arrow(false);
+    _stroke_presets.set_popover(_stroke_options);
 
     grid.add_property(&_fill._label, nullptr, &_fill._paint_btn, &_fill._alpha, &_fill._box);
-    grid.add_gap();
+    _stroke_widgets.add(grid.add_gap());
     grid.add_property(&_stroke._label, nullptr, &_stroke._paint_btn, &_stroke._alpha, &_stroke._box);
-    grid.add_property(nullptr, nullptr, &_stroke_width, /* units */nullptr, &_stroke_presets);
-    grid.add_property(nullptr, nullptr, &_dash_selector, &_markers, nullptr);
-    grid.add_gap();
+    _stroke_widgets.add(grid.add_property(nullptr, nullptr, &_stroke_width, &_stroke_box, nullptr));
+    _stroke_widgets.add(grid.add_property(nullptr, nullptr, &_dash_selector, &_markers, nullptr));
+    _stroke_widgets.add(grid.add_gap());
 
-    // for (auto paint : {&_fill, &_stroke}) {
-        // grid.add_property(&paint->_label, nullptr, &paint->_paint_btn, &paint->_alpha, nullptr);
+    _fill._define.set_tooltip_text(_("Add fill"));
+    _fill._clear.set_tooltip_text(_("No fill"));
+    _stroke._define.set_tooltip_text(_("Add stroke"));
+    _stroke._clear.set_tooltip_text(_("No stroke"));
+}
 
-        /*
-        grid.insert_row(row);
-
-        grid.attach(paint->_paint_btn, 0, row, 2);
-        // grid.attach(paint->_picker, 0, row);
-        // grid.attach(paint->_label, 1, row);
-        grid.attach(paint->_alpha, 3, row);
-        grid.attach(paint->_box, 4, row);
-        */
-    // }
+void PaintAttribute::set_document(SPDocument* document) {
+    for (auto combo : {&_marker_start, &_marker_mid, &_marker_end}) {
+        combo->setDocument(document);
+    }
 }
 
 void PaintAttribute::set_paint(const SPObject* object, bool set_fill) {
@@ -175,7 +204,6 @@ void PaintAttribute::set_paint(const SPIPaint& paint, double opacity, bool fill)
     if (paint.isColor()) {
         auto color = paint.getColor();
         color.addOpacity(opacity);
-        stripe._picker.setColor(color);
         stripe._switch->set_color(color);
     }
     init_popup(paint, opacity, mode, fill);
@@ -186,24 +214,102 @@ void PaintAttribute::set_preview(const SPIPaint& paint, double paint_opacity, Pa
     auto& stripe = fill ? _fill : _stroke;
     if (mode == PaintMode::None) {
         stripe.hide();
+        if (!fill) {
+            show_stroke(false);
+        }
+        return;
     }
-    else if (mode == PaintMode::Solid) {
-        auto color = paint.getColor();
-        color.addOpacity(paint_opacity);
-        stripe._picker.set_icon("");
-        stripe._picker.setColor(color);
+
+    stripe._paint_type.set_text(get_paint_mode_name(mode));
+
+    if (mode == PaintMode::Solid || mode == PaintMode::Swatch) {
+        stripe._alpha.set_value(paint_opacity * 100);
+        if (mode == PaintMode::Solid) {
+            auto color = paint.getColor();
+            color.addOpacity(paint_opacity);
+            stripe._solid_color.setRgba32(color.toRGBA());
+            stripe._solid_color.setIndicator(ColorPreview::None);
+        }
+        else {
+            // swatch
+            stripe._solid_color.setIndicator(ColorPreview::Swatch);
+            auto server = paint.href->getObject();
+            auto swatch = cast<SPGradient>(server);
+            assert(swatch);
+            auto vect = swatch->getVector();
+            auto color = paint.getColor();
+            if (auto stop = vect->getFirstStop()) {
+                // swatch color is in a first (and only) stop
+                color = stop->getColor();
+            }
+            color.addOpacity(paint_opacity);
+            stripe._solid_color.setRgba32(color.toRGBA());
+        }
+        stripe._solid_color.set_visible();
+        stripe._paint_icon.set_visible(false);
         stripe.show();
     }
     else {
-        auto icon = get_mode_icon(mode);
-        stripe._picker.set_icon(icon);
+        auto icon = get_paint_mode_icon(mode);
+        stripe._solid_color.set_visible(false);
+        stripe._paint_icon.set_from_icon_name(icon);
+        stripe._paint_icon.set_visible();
         stripe.show();
+        stripe._alpha.set_visible(false);
     }
+
+    show_stroke(!fill);
 }
 
 void PaintAttribute::init_popup(const SPIPaint& paint, double paint_opacity, PaintMode mode, bool fill) {
     auto& stripe = fill ? _fill : _stroke;
     stripe._switch->update_from_paint(paint);
+}
+
+void PaintAttribute::update_markers(SPIString* markers[], SPObject* object) {
+    for (auto combo : {&_marker_start, &_marker_mid, &_marker_end}) {
+        if (combo->in_update()) continue;
+
+        SPObject* marker = nullptr;
+        if (auto value = markers[combo->get_loc()]->value()) {
+            marker = getMarkerObj(value, object->document);
+        }
+        combo->setDocument(object->document);
+        combo->set_current(marker);
+    }
+}
+
+void PaintAttribute::show_stroke(bool show) {
+    _stroke_widgets.set_visible(show);
+    // _dash_selector.set_visible(show);
+    // _stroke_box.set_visible(show);
+    // _stroke_width.set_visible(show);
+    // _stroke_presets.set_visible(show);
+    // _unit_selector.set_visible(show);
+    // _stroke_style.set_visible(show);
+    // _markers.set_visible(show);
+}
+
+void PaintAttribute::update_stroke(SPStyle* style) {
+    auto unit = _unit_selector.getUnit();
+
+    if (style->stroke_extensions.hairline) {
+        _stroke_width.set_sensitive(false);
+        _stroke_width.set_value(1);
+    }
+    else if (unit->type == UNIT_TYPE_LINEAR) {
+        double width = Quantity::convert(style->stroke_width.computed, "px", unit);
+        _stroke_width.set_value(width);
+        _stroke_width.set_sensitive();
+    }
+    else {
+        _stroke_width.set_value(100);
+        _stroke_width.set_sensitive();
+    }
+
+    double offset = 0;
+    auto vec = getDashFromStyle(style, offset);
+    _dash_selector.set_dash_pattern(vec, offset);
 }
 
 void PaintAttribute::update_from_object(SPObject* object) {
@@ -213,6 +319,7 @@ void PaintAttribute::update_from_object(SPObject* object) {
         // hide
         _fill.hide();
         _stroke.hide();
+        //todo: reset document in marker combo?
     }
     else {
         auto& fill_paint = *object->style->getFillOrStroke(true);
@@ -222,6 +329,8 @@ void PaintAttribute::update_from_object(SPObject* object) {
         auto& stroke_paint = *object->style->getFillOrStroke(false);
         auto stroke_mode = get_mode_from_paint(stroke_paint);
         set_preview(stroke_paint, object->style->stroke_opacity, stroke_mode, false);
+        update_stroke(object->style);
+        update_markers(object->style->marker_ptrs, object);
     }
     // else if (object && object->style) {
     //     if (auto fill = object->style->getFillOrStroke(true)) {

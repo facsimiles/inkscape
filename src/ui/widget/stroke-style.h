@@ -34,6 +34,7 @@ class Label;
 class SPDocument;
 class SPObject;
 SPObject *getMarkerObj(gchar const *n, SPDocument *doc);
+std::vector<double> getDashFromStyle(SPStyle *style, double &offset);
 
 namespace Inkscape {
 
@@ -88,7 +89,7 @@ private:
             gchar const *stroke_style;         ///< The stroke style associated with the button
     };
 
-    std::vector<double> getDashFromStyle(SPStyle *style, double &offset);
+    // std::vector<double> getDashFromStyle(SPStyle *style, double &offset);
 
     void updateAllMarkers(std::vector<SPItem*> const &objects, bool skip_undo = false);
     void setDashSelectorFromStyle(DashSelector *dsel, SPStyle *style);

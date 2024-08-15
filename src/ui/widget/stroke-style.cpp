@@ -91,6 +91,29 @@ SPObject* getMarkerObj(gchar const *n, SPDocument *doc)
     return marker;
 }
 
+/**
+ * Get a dash array and offset from the style.
+ *
+ * Both values are de-scaled by the style's width if needed.
+ */
+std::vector<double> getDashFromStyle(SPStyle *style, double &offset) {
+    auto prefs = Inkscape::Preferences::get();
+
+    std::vector<double> ret;
+    size_t len = style->stroke_dasharray.values.size();
+
+    double scaledash = 1.0;
+    if (prefs->getBool("/options/dash/scale", true) && style->stroke_width.computed) {
+        scaledash = style->stroke_width.computed;
+    }
+
+    offset = style->stroke_dashoffset.value / scaledash;
+    for (unsigned i = 0; i < len; i++) {
+        ret.push_back(style->stroke_dasharray.values[i].value / scaledash);
+    }
+    return ret;
+}
+
 namespace Inkscape::UI::Widget {
 
 /**
@@ -659,31 +682,6 @@ void
 StrokeStyle::selectionChangedCB()
 {
     updateLine();
-}
-
-/**
- * Get a dash array and offset from the style.
- *
- * Both values are de-scaled by the style's width if needed.
- */
-std::vector<double>
-StrokeStyle::getDashFromStyle(SPStyle *style, double &offset)
-{
-    auto prefs = Inkscape::Preferences::get();
-
-    std::vector<double> ret;
-    size_t len = style->stroke_dasharray.values.size();
-
-    double scaledash = 1.0;
-    if (prefs->getBool("/options/dash/scale", true) && style->stroke_width.computed) {
-        scaledash = style->stroke_width.computed;
-    }
-
-    offset = style->stroke_dashoffset.value / scaledash;
-    for (unsigned i = 0; i < len; i++) {
-        ret.push_back(style->stroke_dasharray.values[i].value / scaledash);
-    }
-    return ret;
 }
 
 /**

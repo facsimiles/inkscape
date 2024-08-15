@@ -45,6 +45,7 @@ public:
     AttributesPanel();
     virtual ~AttributesPanel() = default;
 
+    void set_document(SPDocument* document);
     void update_panel(SPObject* object, SPDesktop* desktop);
     Gtk::Widget& widget() { if(!_widget) throw "crap"; return *_widget; }
     Glib::ustring get_title() const { return _title; }
@@ -52,6 +53,7 @@ public:
 
 protected:
     virtual void update(SPObject* object) = 0;
+    virtual void document_replaced(SPDocument* document) {}
     // value with units changed by the user; modify current object
     void change_value_px(SPObject* object, const Glib::RefPtr<Gtk::Adjustment>& adj, const char* attr, std::function<void (double)>&& setter);
     // angle in degrees changed by the user; modify current object
@@ -102,7 +104,7 @@ private:
     Gtk::Label& _obj_title;
     // Contains a pointer to the currently selected item (NULL in case nothing is or multiple objects are selected).
     SPItem* _current_item = nullptr;
-    Inkscape::UI::Widget::StyleSwatch _style_swatch;
+    // Inkscape::UI::Widget::StyleSwatch _style_swatch;
     // Inkscape::UI::Widget::PaintAttribute _paint;
     ObjectProperties& _obj_properties;
 };

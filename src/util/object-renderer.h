@@ -116,7 +116,7 @@ Cairo::RefPtr<Cairo::Surface> create_marker_image(
 /**
  * Renders a preview of a gradient into the passed context.
  */
-void draw_gradient(const Cairo::RefPtr<Cairo::Context>& cr, SPGradient* gradient, int x, int width);
+void draw_gradient(const Cairo::RefPtr<Cairo::Context>& cr, SPGradient* gradient, int x, int width, int checkerboard_tile_size = 6);
 
 
 } // namespace

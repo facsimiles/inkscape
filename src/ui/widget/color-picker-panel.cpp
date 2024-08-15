@@ -153,6 +153,7 @@ class ColorPickerPanelImpl : public ColorPickerPanel {
 public:
     ColorPickerPanelImpl(const Glib::ustring& title, std::shared_ptr<ColorSet> color);
     void set_color(const Color& color) override;
+    void set_picker_type(Type type) override;
 
     void select_color_type(Space::Type type);
     void _select_color_type(Space::Type type);
@@ -162,7 +163,6 @@ public:
     }
 
     Gtk::Box _header;
-    enum Type {Rect, Circle, Sliders};
     Gtk::ToggleButton _rect_btn;
     Gtk::ToggleButton _circle_btn;
     Gtk::ToggleButton _sliders_btn;
@@ -231,7 +231,7 @@ ColorPickerPanelImpl::ColorPickerPanelImpl(const Glib::ustring& title, std::shar
     _header.append(_title);
     _spaces.set_halign(Gtk::Align::END);
     _header.append(_spaces);
-    attach(_header, 0, row++);
+    // attach(_header, 0, row++);
 
     _stack.set_hhomogeneous();
     _stack.set_vhomogeneous(false);
@@ -276,6 +276,15 @@ void ColorPickerPanelImpl::set_color(const Color& color) {
         page->set_type(_color_space);
         // page->set_current_color(color);
     }
+}
+
+void ColorPickerPanelImpl::set_picker_type(Type type) {
+    std::string name = type == Rect ? "rect" : (type == Circle ? "circle" : "input");
+
+    auto color_type = static_cast<Space::Type>(_spaces.get_active_row_id());
+    create_page(color_type, name);
+    // switch UI
+    _stack.set_visible_child(name);
 }
 
 void ColorPickerPanelImpl::select_color_type(Space::Type type) {
