@@ -20,6 +20,9 @@ public:
 
     virtual void set_color(const Colors::Color& color) = 0;
 
+    enum Type {Rect, Circle, Sliders};
+    virtual void set_picker_type(Type type) = 0;
+
     // virtual sigc::signal<void (const Colors::Color&)>& signal_color_changed() = 0;
 };
 

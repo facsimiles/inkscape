@@ -1542,10 +1542,10 @@ Cairo::RefPtr<Cairo::Pattern> ink_cairo_pattern_create_slanting_stripes(uint32_t
 }
 
 cairo_pattern_t *
-ink_cairo_pattern_create_checkerboard(guint32 rgba, bool use_alpha)
+ink_cairo_pattern_create_checkerboard(guint32 rgba, bool use_alpha, int size)
 {
-    int const w = 6;
-    int const h = 6;
+    int const w = size;
+    int const h = size;
 
     auto color_a = Colors::Color(rgba, use_alpha);
     auto color_b = Inkscape::Colors::make_contrasted_color(color_a, 1.0);

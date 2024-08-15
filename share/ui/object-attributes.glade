@@ -330,17 +330,17 @@
   <object class="GtkGrid" id="rect-main">
     <property name="row-spacing">4</property>
     <property name="column-spacing">4</property>
-    <child>
-      <object class="GtkLabel">
-        <property name="halign">start</property>
-        <property name="label" translatable="yes">Dimensions</property>
-        <layout>
-          <property name="column">0</property>
-          <property name="row">0</property>
-          <property name="column-span">4</property>
-        </layout>
-      </object>
-    </child>
+<!--    <child>-->
+<!--      <object class="GtkLabel">-->
+<!--        <property name="halign">start</property>-->
+<!--        <property name="label" translatable="yes">Dimensions</property>-->
+<!--        <layout>-->
+<!--          <property name="column">0</property>-->
+<!--          <property name="row">0</property>-->
+<!--          <property name="column-span">4</property>-->
+<!--        </layout>-->
+<!--      </object>-->
+<!--    </child>-->
     <child>
       <object class="GtkLabel">
         <property name="halign">start</property>

@@ -23,7 +23,8 @@ public:
     int get_digits() const;
     // Set range of allowed input values (as an alternative to specifying 'adjustment')
     void set_range(double min, double max);
-    void update();
+    // Set new value
+    void set_value(double new_value);
     // Specify optional suffix to show after the value
     void set_suffix(const std::string& suffix, bool add_half_space = true);
     // Specify optional prefix to show in front of the value
@@ -41,12 +42,16 @@ public:
     void set_drag_sensitivity(double distance);
     // Specify label to show inside spin button
     void set_label(const std::string& label);
-
+    // Signal fired when numerical value changes
+    sigc::signal<void (double)> signal_value_changed() const;
+    // Base spin button's max size on the pattern provided; ex: "99.99"
+    void set_max_size(const std::string& pattern);
     // ----------- PROPERTIES ------------
     // Glib::PropertyProxy<int> property_digits() { return prop_digits.get_proxy(); }
 
 private:
     void construct();
+    void update();
     Gtk::SizeRequestMode get_request_mode_vfunc() const override;
     void measure_vfunc(Gtk::Orientation orientation, int for_size, int& minimum, int& natural, int& minimum_baseline, int& natural_baseline) const override;
     void size_allocate_vfunc(int width, int height, int baseline) override;
@@ -104,7 +109,6 @@ private:
     void show_label(bool on = true);
     bool commit_entry();
     void change_value(double inc, Gdk::ModifierType state);
-    void set_value(double new_value);
     std::string format(double value, bool with_prefix_suffix, bool with_markup, bool trim_zeros) const;
     void start_spinning(double steps, Gdk::ModifierType state, Glib::RefPtr<Gtk::GestureClick>& gesture);
     void stop_spinning();
@@ -128,6 +132,8 @@ private:
     Glib::RefPtr<Gdk::Cursor> _old_cursor;
     Glib::RefPtr<Gdk::Cursor> _current_cursor;
     struct Point { double x = 0; double y = 0; } _drag_start;
+    sigc::signal<void (double)> _signal_value_changed;
+    std::string _max_size_pattern;
 
     // ----------- PROPERTIES ------------
     int prop_digits = 0;

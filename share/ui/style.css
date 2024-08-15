@@ -1318,21 +1318,11 @@ popover.popup-menu contents {
 
 /* GradientWithStops */
 #GradientEdit {
-    min-width : 60px;
-
+    min-width: 60px;
     /* widget's height; it should take stop template's height into account
      * current value is fine-tuned to make stop handles overlap gradient image
      * just the right amount */
-    min-height: 33px;
-}
-/* focus outline, emulates style of GTKʼs Adwaita/Default CSS themeʼs outline */
-#GradientEdit {
-    border: 1px dashed transparent; /* reserve space but donʼt draw til focus */
-    border-radius: 3px;
-    padding: 3px;
-}
-#GradientEdit:focus-within {
-    border-color: alpha(@theme_fg_color, 0.3);
+    min-height: 35px;
 }
 
 /* Canvas */
@@ -1499,4 +1489,12 @@ scrolledwindow.inkscape-start-exception.frame {
 /* MenuButton with sharp corners */
 menubutton.rectangle button {
     border-radius: 0;
+    padding: 0px;
 }
+
+/*#InkPropertyGrid > button,*/
+/*#InkPropertyGrid > menubutton button {*/
+/*    min-height: 22px;*/
+/*}*/
+
+/*#MarkerComboBox*/

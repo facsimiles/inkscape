@@ -20,7 +20,7 @@ auto ink_spinbutton_css = R"=====(
 @define-color bgnd-color alpha(@theme_base_color, 1.0);
 @define-color focus-color alpha(@theme_selected_bg_color, 0.5);
 /* :root { --border-color: lightgray; } - this is not working yet, so using nonstandard @define-color */
-#InkSpinButton { border: 0 solid @border-color; border-radius: 3px; background-color: @bgnd-color; }
+#InkSpinButton { border: 0 solid @border-color; border-radius: 2px; background-color: @bgnd-color; }
 #InkSpinButton.frame { border: 1px solid @border-color; }
 #InkSpinButton:hover button { opacity: 1; }
 #InkSpinButton:focus-within { outline: 2px solid @focus-color; outline-offset: -2px; }
@@ -57,6 +57,7 @@ void InkSpinButton::construct() {
     _minus.set_size_request(8, -1);
     _value.set_margin(0);
     _value.set_single_line_mode();
+    _value.set_overflow(Gtk::Overflow::HIDDEN);
     _plus.set_margin(0);
     _plus.set_size_request(8, -1);
     _minus.set_can_focus(false);
@@ -91,7 +92,7 @@ void InkSpinButton::construct() {
     _motion = Gtk::EventControllerMotion::create();
     _motion->signal_enter().connect(sigc::mem_fun(*this, &InkSpinButton::on_motion_enter));
     _motion->signal_leave().connect(sigc::mem_fun(*this, &InkSpinButton::on_motion_leave));
-    _motion->signal_motion().connect([=](double x, double y){printf("just motion: %f %f\n",x,y);});
+    // _motion->signal_motion().connect([=](double x, double y){printf("just motion: %f %f\n",x,y);});
     add_controller(_motion);
 
     // This is mouse movement. Sets cursor.
@@ -201,10 +202,16 @@ Gtk::SizeRequestMode InkSpinButton::get_request_mode_vfunc() const {
 
 void InkSpinButton::measure_vfunc(Gtk::Orientation orientation, int for_size, int& minimum, int& natural, int& minimum_baseline, int& natural_baseline) const {
 
-    auto delta = prop_digits > 0 ? pow(10.0, -prop_digits) : 0;
-    auto low = format(_adjustment->get_lower() + delta, true, false, true);
-    auto high = format(_adjustment->get_upper() - delta, true, false, true);
-    auto text = low.size() > high.size() ? low : high;
+    std::string text;
+    if (_max_size_pattern.empty()) {
+        auto delta = prop_digits > 0 ? pow(10.0, -prop_digits) : 0;
+        auto low = format(_adjustment->get_lower() + delta, true, false, true);
+        auto high = format(_adjustment->get_upper() - delta, true, false, true);
+        text = low.size() > high.size() ? low : high;
+    }
+    else {
+        text = _max_size_pattern;
+    }
 
     // http://developer.gnome.org/pangomm/unstable/classPango_1_1Layout.html
     auto layout = const_cast<InkSpinButton*>(this)->create_pango_layout("\u2009" + text + "\u2009");
@@ -391,6 +398,8 @@ void InkSpinButton::update() {
 
     _minus.set_sensitive(_adjustment->get_value() > _adjustment->get_lower());
     _plus.set_sensitive(_adjustment->get_value() < _adjustment->get_upper());
+
+    _signal_value_changed.emit(value);
 }
 
 // ---------------- CONTROLLERS -----------------
@@ -691,6 +700,7 @@ void InkSpinButton::set_drag_sensitivity(double distance) {
 void InkSpinButton::set_label(const std::string& label) {
     _label.set_text(label);
     if (label.empty()) {
+        _label.set_visible(false);
         _label_width = 0;
     }
     else {
@@ -698,6 +708,15 @@ void InkSpinButton::set_label(const std::string& label) {
         auto l = _label.measure(Gtk::Orientation::HORIZONTAL);
         _label_width = l.sizes.minimum;
     }
+}
+
+sigc::signal<void(double)> InkSpinButton::signal_value_changed() const {
+    return _signal_value_changed;
+}
+
+void InkSpinButton::set_max_size(const std::string& pattern) {
+    _max_size_pattern = pattern;
+    queue_resize();
 }
 
 } // namespace Inkscape::UI::Widget

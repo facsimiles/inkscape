@@ -21,11 +21,13 @@
 #include "object/sp-marker-loc.h"
 #include "object/sp-paint-server.h"
 #include "style-internal.h"
-#include "ui/widget/color-picker.h"
+#include "unit-menu.h"
+#include "color-preview.h"
 #include "ui/widget/dash-selector.h"
 #include "ui/widget/marker-combo-box.h"
 #include "ui/widget/paint-switch.h"
 #include "ui/widget/spinbutton.h"
+#include "ui/widget/widget-group.h"
 
 namespace Inkscape::UI::Widget {
 
@@ -34,7 +36,7 @@ public:
     PaintAttribute();
 
     void insert_widgets(InkPropertyGrid& grid, int row);
-
+    void set_document(SPDocument* document);
     void update_from_object(SPObject* object);
 
 private:
@@ -44,6 +46,11 @@ private:
     void set_preview(const SPIPaint& paint, double paint_opacity, PaintMode mode, bool fill);
     // init fill/stroke popup (before it gets opened)
     void init_popup(const SPIPaint& paint, double paint_opacity, PaintMode mode, bool fill);
+    //
+    void update_markers(SPIString* markers[], SPObject* object);
+    // show/hide stroke widgets
+    void show_stroke(bool show);
+    void update_stroke(SPStyle* style);
 
     struct PaintStrip {
         PaintStrip(const Glib::ustring& title);
@@ -51,11 +58,12 @@ private:
         void show();
         void hide();
         Gtk::MenuButton _paint_btn;
+        Gtk::Popover _popover;
         std::unique_ptr<PaintSwitch> _switch = PaintSwitch::create();
         ColorPreview _solid_color = ColorPreview(0);
+        Gtk::Image _paint_icon;
         Gtk::Label _paint_type;
         Gtk::Box _paint_box;
-        ColorPicker _picker = ColorPicker(*_switch, _("Select paint"));
         Gtk::Label _label;
         InkSpinButton _alpha;
         Gtk::Box _box;
@@ -68,12 +76,16 @@ private:
     MarkerComboBox _marker_start = MarkerComboBox("marker-start", SP_MARKER_LOC_START);
     MarkerComboBox _marker_mid =   MarkerComboBox("marker-mid", SP_MARKER_LOC_MID);
     MarkerComboBox _marker_end =   MarkerComboBox("marker-end", SP_MARKER_LOC_END);
-    // Gtk::MenuButton _dash_btn;
+    Gtk::Box _stroke_box;
     DashSelector _dash_selector = DashSelector(true);
     Gtk::MenuButton _stroke_style;
     Gtk::MenuButton _stroke_presets;
     InkSpinButton _stroke_width;
+    UnitMenu _unit_selector;
+    Gtk::Popover _stroke_options;
     SPObject* _current_object = nullptr;
+    Glib::RefPtr<Gtk::SizeGroup> _size_group = Gtk::SizeGroup::create(Gtk::SizeGroup::Mode::HORIZONTAL);
+    WidgetGroup _stroke_widgets;
 };
 
 } // namespace

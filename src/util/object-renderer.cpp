@@ -182,8 +182,8 @@ Cairo::RefPtr<Cairo::Surface> draw_symbol(SPObject& symbol, double box_w, double
     return Cairo::RefPtr<Cairo::Surface>(new Cairo::Surface(s, true));
 }
 
-void draw_gradient(const Cairo::RefPtr<Cairo::Context>& cr, SPGradient* gradient, int x, int width) {
-    cairo_pattern_t* check = ink_cairo_pattern_create_checkerboard();
+void draw_gradient(const Cairo::RefPtr<Cairo::Context>& cr, SPGradient* gradient, int x, int width, int checkerboard_tile_size) {
+    cairo_pattern_t* check = ink_cairo_pattern_create_checkerboard(0xC4C4C4FF, true, checkerboard_tile_size);
 
     cairo_set_source(cr->cobj(), check);
     cr->fill_preserve();

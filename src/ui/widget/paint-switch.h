@@ -28,7 +28,8 @@ enum class PaintMode {
 };
 
 PaintMode get_mode_from_paint(const SPIPaint& paint);
-Glib::ustring get_mode_icon(PaintMode mode);
+Glib::ustring get_paint_mode_icon(PaintMode mode);
+Glib::ustring get_paint_mode_name(PaintMode mode);
 
 class PaintSwitch : public Gtk::Box {
 public:

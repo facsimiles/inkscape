@@ -50,6 +50,7 @@
 #include "ui/icon-names.h"
 #include "ui/widget/color-notebook.h"
 #include "ui/widget/color-preview.h"
+#include "ui/widget/ink-spin-button.h"
 #include "ui/widget/popover-menu.h"
 #include "ui/widget/popover-menu-item.h"
 
@@ -166,22 +167,20 @@ GradientEditor::GradientEditor(const char* prefs):
     _repeat_popover{std::make_unique<UI::Widget::PopoverMenu>(Gtk::PositionType::BOTTOM)},
     _repeat_icon(get_widget<Gtk::Image>(_builder, "repeatIco")),
     _stop_tree(get_widget<Gtk::TreeView>(_builder, "stopList")),
-    _offset_btn(get_widget<Gtk::SpinButton>(_builder, "offsetSpin")),
-    _show_stops_list(get_widget<Gtk::Expander>(_builder, "stopsBtn")),
     _add_stop(get_widget<Gtk::Button>(_builder, "stopAdd")),
     _delete_stop(get_widget<Gtk::Button>(_builder, "stopDelete")),
     _stops_gallery(get_widget<Gtk::Box>(_builder, "stopsGallery")),
     _colors_box(get_widget<Gtk::Box>(_builder, "colorsBox")),
-    _linear_btn(get_widget<Gtk::ToggleButton>(_builder, "linearBtn")),
-    _radial_btn(get_widget<Gtk::ToggleButton>(_builder, "radialBtn")),
+    // _linear_btn(get_widget<Gtk::ToggleButton>(_builder, "linearBtn")),
+    // _radial_btn(get_widget<Gtk::ToggleButton>(_builder, "radialBtn")),
     _turn_gradient(get_widget<Gtk::Button>(_builder, "turnBtn")),
     _angle_adj(get_object<Gtk::Adjustment>(_builder, "adjustmentAngle")),
     _main_grid(get_widget<Gtk::Grid>(_builder, "mainGrid")),
     _prefs(prefs)
 {
     // gradient type buttons; not currently used, hidden, WIP
-    set_icon(_linear_btn, INKSCAPE_ICON("paint-gradient-linear"));
-    set_icon(_radial_btn, INKSCAPE_ICON("paint-gradient-radial"));
+    // set_icon(_linear_btn, INKSCAPE_ICON("paint-gradient-linear"));
+    // set_icon(_radial_btn, INKSCAPE_ICON("paint-gradient-radial"));
 
     auto& reverse = get_widget<Gtk::Button>(_builder, "reverseBtn");
     set_icon(reverse, INKSCAPE_ICON("object-flip-horizontal"));
@@ -196,8 +195,8 @@ GradientEditor::GradientEditor(const char* prefs):
     auto& gradBox = get_widget<Gtk::Box>(_builder, "gradientBox");
     const int dot_size = 8;
     _gradient_image.set_visible(true);
-    _gradient_image.set_margin_start(dot_size / 2);
-    _gradient_image.set_margin_end(dot_size / 2);
+    // _gradient_image.set_margin_start(dot_size / 2);
+    // _gradient_image.set_margin_end(dot_size / 2);
     // gradient stop selected in a gradient widget; sync list selection
     _gradient_image.signal_stop_selected().connect([this](size_t index) {
         select_stop(index);
@@ -215,12 +214,8 @@ GradientEditor::GradientEditor(const char* prefs):
     gradBox.append(_gradient_image);
 
     // add color selector
-    auto selector = ColorPickerPanel::create(_("Stop color"), _colors);
-    // auto const color_selector = Gtk::make_managed<ColorNotebook>(_colors);
-    // color_selector->set_label(_("Stop color"));
-    // color_selector->set_visible(true);
-    selector->set_manage();
-    _colors_box.append(*selector.release());
+    _color_picker = ColorPickerPanel::create(_("Stop color"), _colors);
+    _colors_box.append(*_color_picker.get());
 
     // gradient library in a popup
     get_widget<Gtk::Popover>(_builder, "libraryPopover").set_child(*_selector);
@@ -259,9 +254,9 @@ GradientEditor::GradientEditor(const char* prefs):
         }
     });
 
-    _show_stops_list.property_expanded().signal_changed().connect(
-        [&](){ show_stops(_show_stops_list.get_expanded()); }
-    );
+    // _show_stops_list.property_expanded().signal_changed().connect(
+    //     [&](){ show_stops(_show_stops_list.get_expanded()); }
+    // );
 
     set_icon(_add_stop, "list-add");
     _add_stop.signal_clicked().connect([this](){
@@ -299,11 +294,65 @@ GradientEditor::GradientEditor(const char* prefs):
         set_stop_color(_colors->getAverage());
     });
 
-    _offset_btn.signal_changed().connect([this]() {
+    auto reparent = [this](const char* id, InkSpinButton& subst) {
+        auto& orig = get_widget<Gtk::SpinButton>(_builder, id);
+        subst.set_adjustment(orig.get_adjustment());
+        subst.set_tooltip_text(orig.get_tooltip_text());
+        subst.set_digits(orig.get_digits());
+        subst.set_margin_start(orig.get_margin_start());
+        subst.set_margin_end(orig.get_margin_end());
+        subst.set_margin_top(orig.get_margin_top());
+        subst.set_margin_bottom(orig.get_margin_bottom());
+        subst.set_valign(orig.get_valign());
+        subst.set_halign(orig.get_halign());
+        subst.set_vexpand(orig.get_vexpand());
+        subst.set_hexpand(orig.get_hexpand());
+
+        if (auto grid = dynamic_cast<Gtk::Grid*>(orig.get_parent())) {
+            int col, row, w, h;
+            grid->query_child(orig, col, row, w, h);
+            grid->remove(orig);
+            grid->attach(subst, col, row, w, h);
+        }
+        else if (auto box = dynamic_cast<Gtk::Box*>(orig.get_parent())) {
+            box->insert_child_after(subst, orig);
+            box->remove(orig);
+        }
+    };
+    {
+        reparent("angle", _angle_btn);
+        // auto& ab = get_widget<Gtk::SpinButton>(_builder, "angle");
+        _angle_btn.set_adjustment(_angle_adj);
+        // _angle_btn.set_tooltip_text(ab.get_tooltip_text());
+        // _angle_btn.set_digits(ab.get_digits());
+        _angle_btn.set_suffix("\u00b0", false); // degree symbol
+        // auto grid = dynamic_cast<Gtk::Grid*>(ab.get_parent());
+        // int col, row, w, h;
+        // grid->query_child(ab, col, row, w, h);
+        // grid->remove(ab);
+        // grid->attach(_angle_btn, col, row, w, h);
+        _angle_btn.set_max_size("99.9");
+    }
+    {
+        reparent("offsetSpin", _offset_btn);
+        // auto& ob = get_widget<Gtk::SpinButton>(_builder, "offsetSpin");
+        // _offset_btn.set_adjustment(ob.get_adjustment());
+        // _offset_btn.set_tooltip_text(ob.get_tooltip_text());
+        _offset_btn.set_max_size("99.9");
+        // _offset_btn.set_digits(ob.get_digits());
+        // auto grid = dynamic_cast<Gtk::Grid*>(ob.get_parent());
+        // int col, row, w, h;
+        // grid->query_child(ob, col, row, w, h);
+        // grid->remove(ob);
+        // grid->attach(_offset_btn, col, row, w, h);
+        // auto box = dynamic_cast<Gtk::Box*>(ob.get_parent());
+        // box->remove(ob);
+        // box->append(_offset_btn);
+    }
+    _offset_btn.signal_value_changed().connect([this](double offset) {
         if (auto row = current_stop()) {
             auto index = row->get_value(_stopIdx);
-            double offset = _offset_btn.get_value();
-            set_stop_offset(index, offset);
+            set_stop_offset(index, offset / 100.0);
         }
     });
 
@@ -311,7 +360,7 @@ GradientEditor::GradientEditor(const char* prefs):
 
     // restore visibility of the stop list view
     _stops_list_visible = Inkscape::Preferences::get()->getBool(_prefs + "/stoplist", true);
-    _show_stops_list.set_expanded(_stops_list_visible);
+    // _show_stops_list.set_expanded(_stops_list_visible);
     update_stops_layout();
 }
 
@@ -369,13 +418,13 @@ void GradientEditor::stop_selected() {
 
             auto stops = sp_get_before_after_stops(stop);
             if (stops.first && stops.second) {
-                _offset_btn.set_range(stops.first->offset, stops.second->offset);
+                _offset_btn.set_range(stops.first->offset * 100, stops.second->offset * 100);
             }
             else {
-                _offset_btn.set_range(stops.first ? stops.first->offset : 0, stops.second ? stops.second->offset : 1);
+                _offset_btn.set_range(stops.first ? stops.first->offset * 100 : 0, stops.second ? stops.second->offset * 100 : 100);
             }
             _offset_btn.set_sensitive();
-            _offset_btn.set_value(stop->offset);
+            _offset_btn.set_value(stop->offset * 100);
 
             int index = row->get_value(_stopIdx);
             _gradient_image.set_focused_stop(index);
@@ -619,8 +668,8 @@ void GradientEditor::set_gradient(SPGradient* gradient) {
         _angle_adj->set_value(angle);
     }
     _turn_gradient.set_sensitive(can_rotate);
-    get_widget<Gtk::SpinButton>(_builder, "angle").set_sensitive(can_rotate);
-    get_widget<Gtk::Scale>(_builder, "angleSlider").set_sensitive(can_rotate);
+    _angle_btn.set_sensitive(can_rotate);
+    // get_widget<Gtk::Scale>(_builder, "angleSlider").set_sensitive(can_rotate);
 
     // list not empty?
     if (index > 0) {
