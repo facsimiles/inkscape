@@ -66,26 +66,26 @@ static constexpr std::array<double, 15> _sw_presets{
 
 // In order of PaintType enum: fill, stroke; label, tooltip.
 static const char* type_strings[][2][2] = {
-    {{ _("N/A"),                    _("Nothing selected")},
-     { _("N/A"),                    _("Nothing selected")}},
-    {{C_("Fill", "<i>None</i>"),    _("No fill, middle-click for black fill")},
-     {C_("Stroke", "<i>None</i>"),  _("No stroke, middle-click for black stroke")}},
-    {{ _("<b>Unset</b>"),           _("Unset fill")},
-     { _("<b>Unset</b>"),           _("Unset stroke")}},
-    {{ _("≠"),                      _("Different fills")},
-     { _("≠"),                      _("Different strokes")}},
-    {{ _("Pattern"),                _("Pattern (fill)")},
-     { _("Pattern"),                _("Pattern (stroke)")}},
-    {{ _("Hatch"),                  _("Pattern (fill)")},
-     { _("Hatch"),                  _("Pattern (stroke)")}},
-    {{ _("<b>L</b>"),               _("Linear gradient (fill)")},
-     { _("<b>L</b>"),               _("Linear gradient (stroke)")}},
-    {{ _("<b>R</b>"),               _("Radial gradient (fill)")},
-     { _("<b>R</b>"),               _("Radial gradient (stroke)")}},
-    {{ _("<b>M</b>"),               _("Mesh gradient (fill)")},
-     { _("<b>M</b>"),               _("Mesh gradient (stroke)")}},
-    {{ _("<b>C</b>"),               _("Flat color (fill)")},
-     { _("<b>C</b>"),               _("Flat color (stroke)")}}
+    {{ N_("N/A"),                    N_("Nothing selected")},
+     { N_("N/A"),                    N_("Nothing selected")}},
+    {{NC_("Fill", "<i>None</i>"),    N_("No fill, middle-click for black fill")},
+     {NC_("Stroke", "<i>None</i>"),  N_("No stroke, middle-click for black stroke")}},
+    {{ N_("<b>Unset</b>"),           N_("Unset fill")},
+     { N_("<b>Unset</b>"),           N_("Unset stroke")}},
+    {{ N_("≠"),                      N_("Different fills")},
+     { N_("≠"),                      N_("Different strokes")}},
+    {{ N_("Pattern"),                N_("Pattern (fill)")},
+     { N_("Pattern"),                N_("Pattern (stroke)")}},
+    {{ N_("Hatch"),                  N_("Pattern (fill)")},
+     { N_("Hatch"),                  N_("Pattern (stroke)")}},
+    {{ N_("<b>L</b>"),               N_("Linear gradient (fill)")},
+     { N_("<b>L</b>"),               N_("Linear gradient (stroke)")}},
+    {{ N_("<b>R</b>"),               N_("Radial gradient (fill)")},
+     { N_("<b>R</b>"),               N_("Radial gradient (stroke)")}},
+    {{ N_("<b>M</b>"),               N_("Mesh gradient (fill)")},
+     { N_("<b>M</b>"),               N_("Mesh gradient (stroke)")}},
+    {{ N_("<b>C</b>"),               N_("Flat color (fill)")},
+     { N_("<b>C</b>"),               N_("Flat color (stroke)")}}
 };
 
 static void
