@@ -65,7 +65,8 @@ static constexpr std::array<double, 15> _sw_presets{
     32, 16, 10, 8, 6, 4, 3, 2, 1.5, 1, 0.75, 0.5, 0.25, 0.1};
 
 // In order of PaintType enum: fill, stroke; label, tooltip.
-static const char* type_strings[][2][2] = {
+static const char *type_strings[][2][2] = {
+    // clang-format off
     {{ N_("N/A"),                    N_("Nothing selected")},
      { N_("N/A"),                    N_("Nothing selected")}},
     {{NC_("Fill", "<i>None</i>"),    N_("No fill, middle-click for black fill")},
@@ -86,6 +87,7 @@ static const char* type_strings[][2][2] = {
      { N_("<b>M</b>"),               N_("Mesh gradient (stroke)")}},
     {{ N_("<b>C</b>"),               N_("Flat color (fill)")},
      { N_("<b>C</b>"),               N_("Flat color (stroke)")}}
+    // clang-format on
 };
 
 static void
