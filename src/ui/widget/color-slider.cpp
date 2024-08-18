@@ -28,12 +28,20 @@
 #include "util/drawing-utils.h"
 #include "util/theme-utils.h"
 
-static constexpr int THUMB_SPACE = 16;
-static constexpr int THUMB_SIZE = 10;
+constexpr int THUMB_SPACE = 16;
+constexpr int THUMB_SIZE = 10;
+constexpr int CHECKERBOARD_TILE = 7;
 constexpr uint32_t ERR_DARK = 0xff00ff00;    // Green
 constexpr uint32_t ERR_LIGHT = 0xffff00ff;   // Magenta
 
 namespace Inkscape::UI::Widget {
+
+ColorSlider::ColorSlider(std::shared_ptr<Colors::ColorSet> colors, Colors::Space::Component component) :
+    _colors(std::move(colors)),
+    _component(std::move(component)) {
+
+    construct();
+}
 
 ColorSlider::ColorSlider(
     BaseObjectType *cobject,
@@ -42,8 +50,12 @@ ColorSlider::ColorSlider(
     Colors::Space::Component component)
     : Gtk::DrawingArea(cobject)
     , _colors(std::move(colors))
-    , _component(std::move(component))
-{
+    , _component(std::move(component)) {
+
+    construct();
+}
+
+void ColorSlider::construct() {
     set_name("ColorSlider");
 
     set_draw_func(sigc::mem_fun(*this, &ColorSlider::draw_func));
@@ -145,7 +157,7 @@ void ColorSlider::on_drag(Gdk::EventSequence* sequence) {
 Glib::RefPtr<Gdk::Pixbuf> _make_checkerboard(uint32_t dark, uint32_t light, unsigned scale, std::vector<uint32_t> &buffer)
 {
     // A pattern of 2x2 blocks is enough for REPEAT mode to do the rest, this way we never need to recalculate the checkerboard
-    static auto block = 0x09 * scale;
+    static auto block = CHECKERBOARD_TILE * scale;
     static auto pattern = block * 2;
 
     buffer = std::vector<uint32_t>(pattern * pattern);
@@ -191,7 +203,7 @@ void ColorSlider::draw_func(Cairo::RefPtr<Cairo::Context> const &cr,
     // expand border past active area on both sides, so slider's thumb doesn't hang at any extreme, but looks confined
     auto border = area;
     border.expandBy(1, 0);
-    double radius = 3;
+    double radius = 2;
     Util::rounded_rectangle(cr, border, radius);
 
     auto const scale = get_scale_factor();
@@ -290,6 +302,10 @@ void ColorSlider::setScaled(double value)
     }
     // setAll replaces every color with the same value, setAverage moves them all by the same amount.
     _colors->setAll(_component, value / _component.scale);
+}
+
+int ColorSlider::get_checkerboard_tile_size() {
+    return CHECKERBOARD_TILE;
 }
 
 } // namespace Inkscape::UI::Widget

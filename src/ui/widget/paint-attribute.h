@@ -60,7 +60,7 @@ private:
         Gtk::MenuButton _paint_btn;
         Gtk::Popover _popover;
         std::unique_ptr<PaintSwitch> _switch = PaintSwitch::create();
-        ColorPreview _solid_color = ColorPreview(0);
+        ColorPreview _color_preview = ColorPreview(0);
         Gtk::Image _paint_icon;
         Gtk::Label _paint_type;
         Gtk::Box _paint_box;

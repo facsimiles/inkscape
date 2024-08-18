@@ -20,17 +20,18 @@
     <property name="name">mainGrid</property>
     <property name="hexpand">True</property>
     <property name="column-spacing">4</property>
-    <property name="row-spacing">4</property>
+    <property name="row-spacing">0</property>
     <child>
       <object class="GtkBox">
         <property name="hexpand">True</property>
         <property name="spacing">4</property>
-        <child>
-          <object class="GtkLabel">
-            <property name="halign">start</property>
-            <property name="label" translatable="yes">Gradient</property>
-          </object>
-        </child>
+        <property name="margin-bottom">4</property>
+<!--        <child>-->
+<!--          <object class="GtkLabel">-->
+<!--            <property name="halign">start</property>-->
+<!--            <property name="label" translatable="yes">Gradient</property>-->
+<!--          </object>-->
+<!--        </child>-->
         <child>
           <object class="GtkMenuButton" id="libraryBtn">
             <property name="focusable">True</property>
@@ -45,6 +46,12 @@
                   <object class="GtkImage">
                     <property name="margin-end">8</property>
                     <property name="icon-name">gradient-library</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes">Gradients</property>
                   </object>
                 </child>
                 <child>
@@ -64,12 +71,19 @@
           </object>
         </child>
         <child>
+          <object class="GtkBox">
+            <property name="hexpand">True</property>
+            <property name="orientation">vertical</property>
+          </object>
+        </child>
+        <child>
           <object class="GtkMenuButton" id="repeatMode">
             <property name="focusable">True</property>
             <property name="focus-on-click">False</property>
             <property name="receives-default">True</property>
             <property name="halign">start</property>
             <property name="valign">center</property>
+            <property name="has-frame">False</property>
             <property name="tooltip-text" translatable="yes">Repeat mode</property>
             <child>
               <object class="GtkBox">
@@ -79,12 +93,12 @@
                     <property name="margin-end">0</property>
                   </object>
                 </child>
-                <child>
-                  <object class="GtkLabel" id="repeatId">
-                    <property name="halign">start</property>
-                    <property name="label" translatable="no">None</property>
-                  </object>
-                </child>
+<!--                <child>-->
+<!--                  <object class="GtkLabel" id="repeatId">-->
+<!--                    <property name="halign">start</property>-->
+<!--                    <property name="label" translatable="no">None</property>-->
+<!--                  </object>-->
+<!--                </child>-->
                 <child>
                   <object class="GtkImage">
                     <property name="icon-name">pan-down-symbolic</property>
@@ -98,9 +112,15 @@
           </object>
         </child>
         <child>
-          <object class="GtkBox">
-            <property name="hexpand">True</property>
-            <property name="orientation">vertical</property>
+          <object class="GtkButton" id="turnBtn">
+            <property name="valign">center</property>
+            <property name="halign">end</property>
+            <property name="focusable">True</property>
+            <property name="focus-on-click">False</property>
+            <property name="receives-default">True</property>
+            <property name="tooltip-text" translatable="yes">Rotate gradient 90 degrees</property>
+            <property name="has-frame">False</property>
+            <property name="margin-end">6</property>
           </object>
         </child>
         <child>
@@ -114,17 +134,6 @@
             <property name="numeric">True</property>
           </object>
         </child>
-        <child>
-          <object class="GtkButton" id="turnBtn">
-            <property name="valign">center</property>
-            <property name="halign">end</property>
-            <property name="focusable">True</property>
-            <property name="focus-on-click">False</property>
-            <property name="receives-default">True</property>
-            <property name="tooltip-text" translatable="yes">Rotate gradient 90 degrees</property>
-            <property name="has-frame">False</property>
-          </object>
-        </child>
         <layout>
           <property name="column">0</property>
           <property name="row">1</property>
@@ -136,9 +145,20 @@
     <child>
     <object class="GtkBox">
       <property name="hexpand">True</property>
-      <property name="spacing">4</property>
+      <property name="spacing">0</property>
+        <child>
+          <object class="GtkButton" id="reverseBtn">
+            <property name="valign">start</property>
+            <property name="focus-on-click">False</property>
+            <property name="receives-default">True</property>
+            <property name="tooltip-text" translatable="yes">Reverse the direction of the gradient</property>
+            <property name="has-frame">True</property>
+          </object>
+        </child>
         <child>
           <object class="GtkBox" id="gradientBox">
+            <property name="margin-start">2</property>
+            <property name="margin-end">2</property>
             <property name="margin-top">1</property>
             <property name="hexpand">True</property>
             <property name="orientation">vertical</property>
@@ -153,15 +173,6 @@
             <property name="digits">1</property>
             <property name="numeric">True</property>
             <property name="valign">start</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkButton" id="reverseBtn">
-            <property name="valign">start</property>
-            <property name="focus-on-click">False</property>
-            <property name="receives-default">True</property>
-            <property name="tooltip-text" translatable="yes">Reverse the direction of the gradient</property>
-            <property name="has-frame">False</property>
           </object>
         </child>
       <layout>

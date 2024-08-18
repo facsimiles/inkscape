@@ -25,6 +25,8 @@ public:
     void set_range(double min, double max);
     // Set new value
     void set_value(double new_value);
+    // Get current value
+    double get_value() const;
     // Specify optional suffix to show after the value
     void set_suffix(const std::string& suffix, bool add_half_space = true);
     // Specify optional prefix to show in front of the value
@@ -45,7 +47,7 @@ public:
     // Signal fired when numerical value changes
     sigc::signal<void (double)> signal_value_changed() const;
     // Base spin button's max size on the pattern provided; ex: "99.99"
-    void set_max_size(const std::string& pattern);
+    void set_min_size(const std::string& pattern);
     // ----------- PROPERTIES ------------
     // Glib::PropertyProxy<int> property_digits() { return prop_digits.get_proxy(); }
 
@@ -133,7 +135,7 @@ private:
     Glib::RefPtr<Gdk::Cursor> _current_cursor;
     struct Point { double x = 0; double y = 0; } _drag_start;
     sigc::signal<void (double)> _signal_value_changed;
-    std::string _max_size_pattern;
+    std::string _min_size_pattern;
 
     // ----------- PROPERTIES ------------
     int prop_digits = 0;

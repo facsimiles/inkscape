@@ -439,13 +439,16 @@ void GradientWithStops::draw_func(Cairo::RefPtr<Cairo::Context> const &ctx, int 
 
     if (layout.width <= 0) return;
 
+    auto grad = layout;
+    grad.x -= 1;
+    grad.width += 2;
     int radius = 2;
-    auto rect = Geom::Rect::from_xywh(layout.x, layout.y, layout.width, GRADIENT_IMAGE_HEIGHT);
+    auto rect = Geom::Rect::from_xywh(grad.x, grad.y, grad.width, GRADIENT_IMAGE_HEIGHT);
     Util::rounded_rectangle(ctx, rect, radius);
     ctx->clip();
     // empty gradient checkboard or gradient itself
-    ctx->rectangle(layout.x, layout.y, layout.width, GRADIENT_IMAGE_HEIGHT);
-    draw_gradient(ctx, _gradient, layout.x, layout.width, GRADIENT_CHECKERBOARD_TILE);
+    ctx->rectangle(grad.x, grad.y, grad.width, GRADIENT_IMAGE_HEIGHT);
+    draw_gradient(ctx, _gradient, grad.x, grad.width, GRADIENT_CHECKERBOARD_TILE);
     Util::draw_standard_border(ctx, rect, Util::is_current_theme_dark(*this), radius, get_scale_factor());
     ctx->reset_clip();
 

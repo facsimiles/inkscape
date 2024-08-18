@@ -23,6 +23,7 @@ set(ui_SRC
 	tool-factory.cpp
 	util.cpp
 	modifiers.cpp
+	reparent-spinbutton.cpp
 
 	cache/svg_preview_cache.cpp
 
@@ -589,6 +590,7 @@ set(ui_SRC
 	widget/xml-treeview.h
 
 	view/svg-view-widget.h
+	reparent-spinbutton.h
 )
 
 add_inkscape_source("${ui_SRC}")

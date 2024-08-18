@@ -38,6 +38,7 @@ namespace Inkscape::UI::Widget {
  */
 class ColorSlider : public Gtk::DrawingArea {
 public:
+    ColorSlider(std::shared_ptr<Colors::ColorSet> color, Colors::Space::Component component);
     ColorSlider(
         BaseObjectType *cobject,
         Glib::RefPtr<Gtk::Builder> const &builder,
@@ -47,12 +48,14 @@ public:
 
     double getScaled() const;
     void setScaled(double value);
+    static int get_checkerboard_tile_size();
 protected:
     friend class ColorPageChannel;
 
     std::shared_ptr<Colors::ColorSet> _colors;
     Colors::Space::Component _component;
 private:
+    void construct();
     void draw_func(Cairo::RefPtr<Cairo::Context> const &cr, int width, int height);
 
     void on_click_pressed(Gtk::GestureClick const &click, int n_press, double x, double y);

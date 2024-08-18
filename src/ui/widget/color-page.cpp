@@ -20,6 +20,7 @@
 #include "ink-spin-button.h"
 #include "colors/color.h"
 #include "colors/color-set.h"
+#include "colors/manager.h"
 #include "colors/spaces/base.h"
 #include "colors/spaces/components.h"
 #include "ui/builder-utils.h"
@@ -27,18 +28,17 @@
 
 namespace Inkscape::UI::Widget {
 
-static unsigned int MAX_COMPONENTS = 6;
-
 ColorPage::ColorPage(std::shared_ptr<Space::AnySpace> space, std::shared_ptr<ColorSet> colors)
     : Gtk::Box()
-    , _builder(create_builder("color-page.glade"))
     , _space(std::move(space))
     , _selected_colors(std::move(colors))
     , _specific_colors(std::make_shared<Colors::ColorSet>(_space, true))
-    , _expander(get_widget<Gtk::Expander>(_builder, "wheel-expander"))
+    // , _expander(get_widget<Gtk::Expander>(_builder, "wheel-expander"))
 {
     set_name("ColorPage");
-    append(get_widget<Gtk::Grid>(_builder, "color-page"));
+    append(_grid);
+    _grid.set_column_spacing(2);
+    _grid.set_row_spacing(4);
 
     // Keep the selected colorset in-sync with the space specific colorset.
     _specific_changed_connection = _specific_colors->signal_changed.connect([this]() {
@@ -72,27 +72,16 @@ ColorPage::ColorPage(std::shared_ptr<Space::AnySpace> space, std::shared_ptr<Col
         _selected_changed_connection.block();
     });
 
-    // init ink spin button once before builder-derived instance is created to register its custom type first
-    //todo: not working after all...
-    // InkSpinButton dummy;
-
+    int row = 0;
     for (auto &component : _specific_colors->getComponents()) {
         std::string index = std::to_string(component.index + 1);
-        _channels.emplace_back(std::make_unique<ColorPageChannel>(
-            _specific_colors,
-            get_widget<Gtk::Label>(_builder, ("label" + index).c_str()),
-            get_derived_widget<ColorSlider>(_builder, ("slider" + index).c_str(), _specific_colors, component),
-            get_derived_widget<InkSpinButton>(_builder, ("spin" + index).c_str())
-        ));
-    }
-
-    // Hide unncessary channel widgets
-    for (auto j = _specific_colors->getComponents().size(); j < MAX_COMPONENTS; j++) {
-        std::string index = std::to_string(j+1);
-        hide_widget(_builder, "label" + index);
-        hide_widget(_builder, "slider" + index);
-        hide_widget(_builder, "spin" + index);
-        hide_widget(_builder, "separator" + index);
+        auto label = Gtk::make_managed<Gtk::Label>();
+        auto slider = Gtk::make_managed<ColorSlider>(_specific_colors, component);
+        auto spin = Gtk::make_managed<InkSpinButton>();
+        _grid.attach(*label, 0, row);
+        _grid.attach(*slider, 1, row);
+        _grid.attach(*spin, 2, row++);
+        _channels.emplace_back(std::make_unique<ColorPageChannel>(_specific_colors, *label, *slider, *spin));
     }
 
     // Color wheel
@@ -120,7 +109,7 @@ ColorPage::ColorPage(std::shared_ptr<Space::AnySpace> space, std::shared_ptr<Col
 }
 
 void ColorPage::show_expander(bool show) {
-    _expander.set_visible(show);
+     _expander.set_visible(show);
 }
 
 ColorWheel* ColorPage::create_color_wheel(Space::Type type, bool disc) {
@@ -140,6 +129,32 @@ ColorWheel* ColorPage::create_color_wheel(Space::Type type, bool disc) {
     return _color_wheel;
 }
 
+void ColorPage::set_spinner_size_pattern(const std::string& pattern) {
+    for (auto& c : _channels) {
+        c->get_spin().set_min_size(pattern);
+    }
+}
+
+void ColorPage::attach_page(Glib::RefPtr<Gtk::SizeGroup> first_column, Glib::RefPtr<Gtk::SizeGroup> last_column) {
+    if (_channels.empty()) {
+        g_warning("No channels in color page");
+        return;
+    }
+    auto& c = *_channels.front();
+    first_column->add_widget(c.get_label());
+    last_column->add_widget(c.get_spin());
+}
+
+void ColorPage::detach_page(Glib::RefPtr<Gtk::SizeGroup> first_column, Glib::RefPtr<Gtk::SizeGroup> last_column) {
+    if (_channels.empty()) {
+        g_warning("No channels in color page");
+        return;
+    }
+    auto& c = *_channels.front();
+    first_column->remove_widget(c.get_label());
+    last_column->remove_widget(c.get_spin());
+}
+
 ColorPageChannel::ColorPageChannel(
     std::shared_ptr<Colors::ColorSet> color,
     Gtk::Label &label,
@@ -153,15 +168,21 @@ ColorPageChannel::ColorPageChannel(
     auto &component = _slider._component;
     _label.set_markup_with_mnemonic(component.name);
     _label.set_tooltip_text(component.tip);
+    _label.set_halign(Gtk::Align::CENTER);
+    _label.set_xalign(0.5);
 
     _slider.set_hexpand(true);
+    _slider.set_valign(Gtk::Align::CENTER);
+    _slider.set_size_request(-1, ColorSlider::get_checkerboard_tile_size() * 2);
 
     _adj->set_lower(0.0);
     _adj->set_upper(component.scale);
     _adj->set_page_increment(0.0);
     _adj->set_page_size(0.0);
 
-    _spin.set_has_frame(false);
+    if (component.scale == 360) {
+        _spin.set_suffix("\u00b0", false); // append degree sign
+    }
 
     _color_changed = _color->signal_changed.connect([this]() {
         if (_color->isValid(_slider._component)) {

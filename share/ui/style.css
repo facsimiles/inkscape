@@ -771,7 +771,6 @@ button.square-button image {
 }
 
 entry.small-entry {
-    font-size: smaller;
     min-height: 18px;
     padding: 0;
 }

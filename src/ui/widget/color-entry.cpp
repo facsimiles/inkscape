@@ -80,7 +80,7 @@ void ColorEntry::_onColorChanged()
     }
 
     _lastcolor = _colors->getAverage();;
-    auto text = _lastcolor->toString();
+    auto text = _lastcolor->toString(false);
 
     std::string old_text = get_text();
     if (old_text != text) {
