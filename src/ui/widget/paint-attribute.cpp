@@ -61,16 +61,19 @@ PaintAttribute::PaintStrip::PaintStrip(const Glib::ustring& title) :
     _paint_btn.set_popover(_popover);
     _popover.set_child(*_switch);
 
-    _solid_color.setStyle(ColorPreview::Simple);
-    _solid_color.set_size_request(16, 16);
-    _solid_color.set_checkerboard_tile_size(4);
-    _solid_color.set_margin_end(4);
-    _solid_color.set_halign(Gtk::Align::START);
-    _solid_color.set_valign(Gtk::Align::CENTER);
+    _color_preview.setStyle(ColorPreview::Simple);
+    _color_preview.set_frame(true);
+    _color_preview.set_border_radius(0);
+    _color_preview.set_size_request(16, 16);
+    _color_preview.set_checkerboard_tile_size(4);
+    _color_preview.set_margin_end(4);
+    _color_preview.set_margin_start(1);
+    _color_preview.set_halign(Gtk::Align::START);
+    _color_preview.set_valign(Gtk::Align::CENTER);
     // _paint_type.set_halign(Gtk::Align::FILL);
     _paint_type.set_hexpand();
     _paint_type.set_xalign(0.5f);
-    _paint_box.append(_solid_color);
+    _paint_box.append(_color_preview);
     _paint_box.append(_paint_icon);
     _paint_box.append(_paint_type);
     _paint_type.set_text("Gradient");
@@ -227,12 +230,12 @@ void PaintAttribute::set_preview(const SPIPaint& paint, double paint_opacity, Pa
         if (mode == PaintMode::Solid) {
             auto color = paint.getColor();
             color.addOpacity(paint_opacity);
-            stripe._solid_color.setRgba32(color.toRGBA());
-            stripe._solid_color.setIndicator(ColorPreview::None);
+            stripe._color_preview.setRgba32(color.toRGBA());
+            stripe._color_preview.setIndicator(ColorPreview::None);
         }
         else {
             // swatch
-            stripe._solid_color.setIndicator(ColorPreview::Swatch);
+            stripe._color_preview.setIndicator(ColorPreview::Swatch);
             auto server = paint.href->getObject();
             auto swatch = cast<SPGradient>(server);
             assert(swatch);
@@ -243,15 +246,15 @@ void PaintAttribute::set_preview(const SPIPaint& paint, double paint_opacity, Pa
                 color = stop->getColor();
             }
             color.addOpacity(paint_opacity);
-            stripe._solid_color.setRgba32(color.toRGBA());
+            stripe._color_preview.setRgba32(color.toRGBA());
         }
-        stripe._solid_color.set_visible();
+        stripe._color_preview.set_visible();
         stripe._paint_icon.set_visible(false);
         stripe.show();
     }
     else {
         auto icon = get_paint_mode_icon(mode);
-        stripe._solid_color.set_visible(false);
+        stripe._color_preview.set_visible(false);
         stripe._paint_icon.set_from_icon_name(icon);
         stripe._paint_icon.set_visible();
         stripe.show();

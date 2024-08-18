@@ -97,8 +97,10 @@ void ColorNotebook::_initUI()
 
     // combo mode selection is compact and only shows one entry (active)
     _combo = Gtk::make_managed<IconComboBox>();
+    // Important: add "regular" class to render non-symbolic color icons;
+    // otherwise they will be rendered black&white
+    _combo->add_css_class("regular");
     _combo->set_focusable(false);
-    _combo->set_visible();
     _combo->set_tooltip_text(_("Choose style of color selection"));
 
     // Add all universal (non-document icc profile) color spaces

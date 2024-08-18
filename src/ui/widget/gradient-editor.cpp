@@ -48,6 +48,7 @@
 #include "ui/builder-utils.h"
 #include "ui/icon-loader.h"
 #include "ui/icon-names.h"
+#include "ui/reparent-spinbutton.h"
 #include "ui/widget/color-notebook.h"
 #include "ui/widget/color-preview.h"
 #include "ui/widget/ink-spin-button.h"
@@ -160,23 +161,22 @@ Glib::ustring get_repeat_icon(SPGradientSpread mode) {
     return ico;
 }
 
-GradientEditor::GradientEditor(const char* prefs):
+GradientEditor::GradientEditor(const char* prefs, Space::Type space):
+    _prefs(prefs),
     _builder(Inkscape::UI::create_builder("gradient-edit.glade")),
     _selector(Gtk::make_managed<GradientSelector>()),
     _colors(new Colors::ColorSet()),
     _repeat_popover{std::make_unique<UI::Widget::PopoverMenu>(Gtk::PositionType::BOTTOM)},
     _repeat_icon(get_widget<Gtk::Image>(_builder, "repeatIco")),
     _stop_tree(get_widget<Gtk::TreeView>(_builder, "stopList")),
+    _turn_gradient(get_widget<Gtk::Button>(_builder, "turnBtn")),
+    _angle_adj(get_object<Gtk::Adjustment>(_builder, "adjustmentAngle")),
     _add_stop(get_widget<Gtk::Button>(_builder, "stopAdd")),
     _delete_stop(get_widget<Gtk::Button>(_builder, "stopDelete")),
     _stops_gallery(get_widget<Gtk::Box>(_builder, "stopsGallery")),
     _colors_box(get_widget<Gtk::Box>(_builder, "colorsBox")),
-    // _linear_btn(get_widget<Gtk::ToggleButton>(_builder, "linearBtn")),
-    // _radial_btn(get_widget<Gtk::ToggleButton>(_builder, "radialBtn")),
-    _turn_gradient(get_widget<Gtk::Button>(_builder, "turnBtn")),
-    _angle_adj(get_object<Gtk::Adjustment>(_builder, "adjustmentAngle")),
     _main_grid(get_widget<Gtk::Grid>(_builder, "mainGrid")),
-    _prefs(prefs)
+    _color_picker(ColorPickerPanel::create(space, /*TODO*/ ColorPickerPanel::Rect, _colors))
 {
     // gradient type buttons; not currently used, hidden, WIP
     // set_icon(_linear_btn, INKSCAPE_ICON("paint-gradient-linear"));
@@ -214,8 +214,7 @@ GradientEditor::GradientEditor(const char* prefs):
     gradBox.append(_gradient_image);
 
     // add color selector
-    _color_picker = ColorPickerPanel::create(_("Stop color"), _colors);
-    _colors_box.append(*_color_picker.get());
+    _colors_box.append(*_color_picker);
 
     // gradient library in a popup
     get_widget<Gtk::Popover>(_builder, "libraryPopover").set_child(*_selector);
@@ -296,58 +295,17 @@ GradientEditor::GradientEditor(const char* prefs):
 
     auto reparent = [this](const char* id, InkSpinButton& subst) {
         auto& orig = get_widget<Gtk::SpinButton>(_builder, id);
-        subst.set_adjustment(orig.get_adjustment());
-        subst.set_tooltip_text(orig.get_tooltip_text());
-        subst.set_digits(orig.get_digits());
-        subst.set_margin_start(orig.get_margin_start());
-        subst.set_margin_end(orig.get_margin_end());
-        subst.set_margin_top(orig.get_margin_top());
-        subst.set_margin_bottom(orig.get_margin_bottom());
-        subst.set_valign(orig.get_valign());
-        subst.set_halign(orig.get_halign());
-        subst.set_vexpand(orig.get_vexpand());
-        subst.set_hexpand(orig.get_hexpand());
-
-        if (auto grid = dynamic_cast<Gtk::Grid*>(orig.get_parent())) {
-            int col, row, w, h;
-            grid->query_child(orig, col, row, w, h);
-            grid->remove(orig);
-            grid->attach(subst, col, row, w, h);
-        }
-        else if (auto box = dynamic_cast<Gtk::Box*>(orig.get_parent())) {
-            box->insert_child_after(subst, orig);
-            box->remove(orig);
-        }
+        replace_spinbutton_widget(orig, subst);
     };
     {
         reparent("angle", _angle_btn);
-        // auto& ab = get_widget<Gtk::SpinButton>(_builder, "angle");
         _angle_btn.set_adjustment(_angle_adj);
-        // _angle_btn.set_tooltip_text(ab.get_tooltip_text());
-        // _angle_btn.set_digits(ab.get_digits());
         _angle_btn.set_suffix("\u00b0", false); // degree symbol
-        // auto grid = dynamic_cast<Gtk::Grid*>(ab.get_parent());
-        // int col, row, w, h;
-        // grid->query_child(ab, col, row, w, h);
-        // grid->remove(ab);
-        // grid->attach(_angle_btn, col, row, w, h);
-        _angle_btn.set_max_size("99.9");
+        _angle_btn.set_min_size("99.9");
     }
     {
         reparent("offsetSpin", _offset_btn);
-        // auto& ob = get_widget<Gtk::SpinButton>(_builder, "offsetSpin");
-        // _offset_btn.set_adjustment(ob.get_adjustment());
-        // _offset_btn.set_tooltip_text(ob.get_tooltip_text());
-        _offset_btn.set_max_size("99.9");
-        // _offset_btn.set_digits(ob.get_digits());
-        // auto grid = dynamic_cast<Gtk::Grid*>(ob.get_parent());
-        // int col, row, w, h;
-        // grid->query_child(ob, col, row, w, h);
-        // grid->remove(ob);
-        // grid->attach(_offset_btn, col, row, w, h);
-        // auto box = dynamic_cast<Gtk::Box*>(ob.get_parent());
-        // box->remove(ob);
-        // box->append(_offset_btn);
+        _offset_btn.set_min_size("99.9");
     }
     _offset_btn.signal_value_changed().connect([this](double offset) {
         if (auto row = current_stop()) {
@@ -362,9 +320,6 @@ GradientEditor::GradientEditor(const char* prefs):
     _stops_list_visible = Inkscape::Preferences::get()->getBool(_prefs + "/stoplist", true);
     // _show_stops_list.set_expanded(_stops_list_visible);
     update_stops_layout();
-}
-
-GradientEditor::~GradientEditor() noexcept {
 }
 
 void GradientEditor::set_stop_color(Inkscape::Colors::Color const &color)
@@ -616,6 +571,11 @@ void GradientEditor::selectStop(SPStop* selected) {
 SPGradient* GradientEditor::get_gradient_vector() {
     if (!_gradient) return nullptr;
     return sp_gradient_get_forked_vector_if_necessary(_gradient, false);
+}
+
+void GradientEditor::set_spinner_size_pattern(const std::string& pattern) {
+    _angle_btn.set_min_size(pattern);
+    _offset_btn.set_min_size(pattern);
 }
 
 void GradientEditor::set_gradient(SPGradient* gradient) {

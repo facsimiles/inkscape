@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 // Simple paint selector widget
+// https://gitlab.com/inkscape/ux/-/issues/246
 
 #ifndef PAINT_SWITCH_H
 #define PAINT_SWITCH_H

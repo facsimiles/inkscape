@@ -42,7 +42,7 @@ namespace Inkscape::UI::Widget {
  */
 class ColorPreview final : public Gtk::DrawingArea {
 public:
-    ColorPreview(std::uint32_t rgba);
+    ColorPreview(std::uint32_t rgba = 0);
     // set preview color RGBA with opacity (alpha)
     void setRgba32(std::uint32_t rgba);
     // set arbitrary pattern-based preview

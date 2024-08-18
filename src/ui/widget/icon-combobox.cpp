@@ -52,21 +52,29 @@ IconComboBox::IconComboBox(bool use_icons, bool compact_header)
 {
     _factory = Gtk::SignalListItemFactory::create();
 
-    auto set_up_image = [=](Gtk::Box& box, int size) {
+    auto set_up_image = [=](Gtk::Box& box, int size, bool center) {
         if (use_icons) {
             auto icon = Gtk::make_managed<Gtk::Image>();
             icon->set_icon_size(Gtk::IconSize::NORMAL);
+            if (center) {
+                icon->set_halign(Gtk::Align::CENTER);
+                icon->set_hexpand();
+            }
 
             box.append(*icon);
         }
         else {
             auto image = Gtk::make_managed<Gtk::Picture>();
             image->set_layout_manager(Gtk::BinLayout::create());
-            int size = get_image_size();
+            // int size = get_image_size();
             image->set_size_request(size, size);
             image->set_can_shrink(true);
             image->set_content_fit(Gtk::ContentFit::CONTAIN);
             image->set_valign(Gtk::Align::CENTER);
+            if (center) {
+                image->set_halign(Gtk::Align::CENTER);
+                image->set_hexpand();
+            }
 
             box.append(*image);
         }
@@ -83,7 +91,7 @@ IconComboBox::IconComboBox(bool use_icons, bool compact_header)
         label->set_xalign(0);
         label->set_valign(Gtk::Align::CENTER);
 
-        set_up_image(*box, get_image_size());
+        set_up_image(*box, get_image_size(), false);
         // if (use_icons) {
         //     auto icon = Gtk::make_managed<Gtk::Image>();
         //     icon->set_icon_size(Gtk::IconSize::NORMAL);
@@ -135,7 +143,7 @@ IconComboBox::IconComboBox(bool use_icons, bool compact_header)
             auto box = Gtk::make_managed<Gtk::Box>();
             box->add_css_class("item-box");
             box->set_orientation(Gtk::Orientation::HORIZONTAL);
-            set_up_image(*box, get_image_size());
+            set_up_image(*box, get_image_size(), true);
             list_item->set_child(*box);
         });
 

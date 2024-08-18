@@ -18,6 +18,8 @@
 
 #include <2geom/point.h>
 #include <2geom/transforms.h>
+
+#include "ink-spin-button.h"
 #include "object/sp-pattern.h"
 #include "pattern-manager.h"
 #include "spin-scale.h"
@@ -104,16 +106,16 @@ private:
     Gtk::Paned& _paned;
     Gtk::Box& _main_grid;
     Gtk::Grid& _input_grid;
-    Gtk::SpinButton& _offset_x;
-    Gtk::SpinButton& _offset_y;
-    Gtk::SpinButton& _scale_x;
-    Gtk::SpinButton& _scale_y;
-    Gtk::SpinButton& _angle_btn;
-    Gtk::Scale& _orient_slider;
+    InkSpinButton _offset_x;
+    InkSpinButton _offset_y;
+    InkSpinButton _scale_x;
+    InkSpinButton _scale_y;
+    InkSpinButton _angle_btn;
+    // Gtk::Scale& _orient_slider;
     Gtk::Scale& _gap_x_slider;
     Gtk::Scale& _gap_y_slider;
-    Gtk::SpinButton& _gap_x_spin;
-    Gtk::SpinButton& _gap_y_spin;
+    InkSpinButton _gap_x_spin;
+    InkSpinButton _gap_y_spin;
     bool _precise_gap_control = false;
     Gtk::Button& _edit_btn;
     Gtk::Label& _color_label;

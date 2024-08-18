@@ -28,6 +28,7 @@
 #include "object/sp-radial-gradient.h"
 #include "document.h"
 #include "pattern-manager.h"
+#include "widget-group.h"
 #include "ui/widget/swatch-selector.h"
 
 namespace Inkscape::UI::Widget {
@@ -72,10 +73,13 @@ const static struct Paint { PaintMode mode; const char* icon; const char* name; 
     // {PaintMode::None, "paint-none", _("No paint")},
     {PaintMode::Solid,    "paint-solid",           C_("Paint type", "Flat"),     _("Flat color")},
     {PaintMode::Gradient, "paint-gradient-linear", C_("Paint type", "Gradient"), _("Gradient fill")},
+    // {PaintMode::Gradient, "paint-gradient-radial", C_("Paint type", "Gradient"), _("Gradient fill")},
     {PaintMode::Pattern,  "paint-pattern",         C_("Paint type", "Pattern"),  _("Pattern fill")},
     {PaintMode::Swatch,   "paint-swatch",          C_("Paint type", "Swatch"),   _("Swatch color")},
     {PaintMode::NotSet,   "paint-unknown",         C_("Paint type", "Unset"),    _("Inherited")},
+#ifdef WITH_MESH
     {PaintMode::Mesh,     "paint-gradient-mesh",   C_("Paint type", "Mesh"),     _("Mesh fill")},
+#endif
 };
 
 Glib::ustring get_paint_mode_icon(PaintMode mode) {
@@ -98,6 +102,10 @@ PaintSwitch::PaintSwitch():
     set_name("PaintSwitch");
 }
 
+//TODO: persist
+Colors::Space::Type tt = Space::Type::HSL;
+ColorPickerPanel::PlateType pt = ColorPickerPanel::Rect;
+
 class PaintSwitchImpl : public PaintSwitch {
 public:
     PaintSwitchImpl();
@@ -109,6 +117,7 @@ public:
     void update_from_paint(const SPIPaint& paint) override;
     void _set_mode(PaintMode mode);
 
+    std::shared_ptr<Colors::ColorSet> _color = std::make_shared<Colors::ColorSet>();
     Gtk::Stack _stack;
     std::map<PaintMode, Gtk::Widget*> _pages;
     std::map<PaintMode, Gtk::ToggleButton*> _mode_buttons;
@@ -116,17 +125,18 @@ public:
     sigc::signal<void (const Colors::Color&)> _signal_color_changed;
     sigc::signal<void (PaintMode)> _signal_mode_changed;
     std::unique_ptr<ColorPickerPanel> _flat_color;
-    GradientEditor _gradient = {"/gradient-edit"}; 
+    GradientEditor _gradient = {"/gradient-edit", tt};
     PatternEditor _pattern = {"/pattern-edit", PatternManager::get()};
     SwatchSelector _swatch;
     Gtk::Box _unset = Gtk::Box{Gtk::Orientation::VERTICAL};
-    std::shared_ptr<Colors::ColorSet> _color = std::make_shared<Colors::ColorSet>();
     auto_connection _mode_change;
     Gtk::ToggleButton _group;
+    Gtk::ToggleButton _mode_group;
+    WidgetGroup _plate_type;
 };
 
 PaintSwitchImpl::PaintSwitchImpl() {
-    _flat_color = ColorPickerPanel::create("", _color);
+    _flat_color = ColorPickerPanel::create(tt, pt, _color);
     auto header = Gtk::make_managed<Gtk::Box>(Gtk::Orientation::HORIZONTAL);
     header->set_margin_top(5);
     header->set_margin_bottom(5);
@@ -140,16 +150,17 @@ PaintSwitchImpl::PaintSwitchImpl() {
         btn->set_image_from_icon_name(i.icon);
         btn->set_has_frame(false);
         btn->set_tooltip_text(i.tip);
+        btn->set_group(_mode_group);
         auto mode = i.mode;
         _mode_change = btn->signal_toggled().connect([=,this](){
             // turn off other buttons
             if (btn->get_active()) {
-                for (auto child : header->get_children()) {
-                    auto scoped = _mode_change.block_here();
-                    if (auto b = dynamic_cast<Gtk::ToggleButton*>(child)) {
-                        if (b != btn) b->set_active(false);
-                    }
-                }
+                // for (auto child : header->get_children()) {
+                //     auto scoped = _mode_change.block_here();
+                //     if (auto b = dynamic_cast<Gtk::ToggleButton*>(child)) {
+                //         if (b != btn) b->set_active(false);
+                //     }
+                // }
                 // fire mode change
                 _signal_mode_changed.emit(mode);
             }
@@ -165,10 +176,10 @@ PaintSwitchImpl::PaintSwitchImpl() {
     auto pickers = Gtk::make_managed<Gtk::Box>(Gtk::Orientation::HORIZONTAL);
     pickers->set_spacing(2);
     pickers->set_halign(Gtk::Align::END);
-    for (auto [id, icon, type] :
-        {std::tuple{"rect", "color-picker-rect", ColorPickerPanel::Type::Rect},
-        {"circle", "color-picker-circle", ColorPickerPanel::Type::Circle},
-        {"input", "color-picker-input", ColorPickerPanel::Type::Sliders}}) {
+    for (auto [id, icon, type] : { std::tuple
+        {"rect", "color-picker-rect", ColorPickerPanel::PlateType::Rect},
+        {"circle", "color-picker-circle", ColorPickerPanel::PlateType::Circle},
+        {"input", "color-picker-input", ColorPickerPanel::PlateType::None}}) {
 
         auto btn = Gtk::make_managed<Gtk::ToggleButton>();
         btn->set_has_frame(false);
@@ -177,9 +188,8 @@ PaintSwitchImpl::PaintSwitchImpl() {
         btn->set_group(_group);
         auto name = type;
         btn->signal_toggled().connect([this, name]() {
-            _flat_color->set_picker_type(name);
-            // gradients:
-            _gradient.get_color_picker()->set_picker_type(name);
+            _flat_color->set_plate_type(name);
+            _gradient.get_color_picker().set_plate_type(name);
             //todo: others if needed
             //
             // auto type = static_cast<Space::Type>(_spaces.get_active_row_id());
@@ -188,9 +198,13 @@ PaintSwitchImpl::PaintSwitchImpl() {
             // _stack.set_visible_child(name);
         });
         pickers->append(*btn);
+        _plate_type.add(btn);
     }
     header->append(*types);
     header->append(*pickers);
+
+    //TODO: improve
+    _gradient.set_spinner_size_pattern("999.");
 
     append(*header);
     auto separator = Gtk::make_managed<Gtk::Separator>();
@@ -202,7 +216,7 @@ PaintSwitchImpl::PaintSwitchImpl() {
 
     _stack.set_hhomogeneous();
     _stack.set_vhomogeneous(false);
-    _stack.set_size_request(-1, 180); // min height
+    _stack.set_size_request(-1, 120); // min height
 
     auto undef = Gtk::make_managed<Gtk::Label>(_("Paint is undefined."));
     undef->set_halign(Gtk::Align::START);
@@ -214,6 +228,9 @@ PaintSwitchImpl::PaintSwitchImpl() {
     info->set_margin_top(20);
     info->set_margin_bottom(20);
     _unset.append(*info);
+
+    // force hight to reveal list of patterns
+    _pattern.set_size_request(-1, 440);
 
     _set_mode(PaintMode::None);
 
@@ -231,6 +248,7 @@ PaintSwitchImpl::PaintSwitchImpl() {
 
 void PaintSwitchImpl::set_color(const Colors::Color& color) {
     _flat_color->set_color(color);
+    // _flat_color->set_color(color);
 }
 
 sigc::signal<void(const Colors::Color&)> PaintSwitchImpl::signal_color_changed() {
@@ -261,6 +279,10 @@ void PaintSwitchImpl::_set_mode(PaintMode mode) {
     //     auto scoped = _mode_change.block_here();
     //     btn->second->set_active();
     // }
+    // color picker available?
+    bool has_picker = mode == PaintMode::Solid || mode == PaintMode::Gradient || mode == PaintMode::Swatch;
+    _plate_type.set_sensitive(has_picker);
+    _plate_type.set_visible(has_picker);
 }
 
 void PaintSwitchImpl::update_from_paint(const SPIPaint& paint) {

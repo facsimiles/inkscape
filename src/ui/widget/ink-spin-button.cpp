@@ -64,6 +64,7 @@ void InkSpinButton::construct() {
     _plus.set_can_focus(false);
     _label.set_can_focus(false);
     _label.set_xalign(0.0f);
+    _label.set_visible(false);
 
     _minus.set_icon_name("go-previous-symbolic");
     _plus.set_icon_name("go-next-symbolic");
@@ -202,14 +203,14 @@ Gtk::SizeRequestMode InkSpinButton::get_request_mode_vfunc() const {
 void InkSpinButton::measure_vfunc(Gtk::Orientation orientation, int for_size, int& minimum, int& natural, int& minimum_baseline, int& natural_baseline) const {
 
     std::string text;
-    if (_max_size_pattern.empty()) {
+    if (_min_size_pattern.empty()) {
         auto delta = prop_digits > 0 ? pow(10.0, -prop_digits) : 0;
         auto low = format(_adjustment->get_lower() + delta, true, false, true);
         auto high = format(_adjustment->get_upper() - delta, true, false, true);
         text = low.size() > high.size() ? low : high;
     }
     else {
-        text = _max_size_pattern;
+        text = _min_size_pattern;
     }
 
     // http://developer.gnome.org/pangomm/unstable/classPango_1_1Layout.html
@@ -605,6 +606,10 @@ void InkSpinButton::set_value(double new_value) {
     _adjustment->set_value(new_value);
 }
 
+double InkSpinButton::get_value() const {
+    return _adjustment->get_value();
+}
+
 void InkSpinButton::change_value(double inc, Gdk::ModifierType state) {
     double scale = get_accel_factor(state);
     set_value(_adjustment->get_value() + _adjustment->get_step_increment() * scale * inc);
@@ -707,8 +712,8 @@ sigc::signal<void(double)> InkSpinButton::signal_value_changed() const {
     return _signal_value_changed;
 }
 
-void InkSpinButton::set_max_size(const std::string& pattern) {
-    _max_size_pattern = pattern;
+void InkSpinButton::set_min_size(const std::string& pattern) {
+    _min_size_pattern = pattern;
     queue_resize();
 }
 

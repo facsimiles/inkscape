@@ -19,6 +19,7 @@
 #include <gtkmm/box.h>
 #include <gtkmm/treemodelcolumn.h>
 
+#include "color-page.h"
 #include "color-picker-panel.h"
 #include "colors/color-set.h"
 #include "object/sp-gradient.h"
@@ -27,6 +28,7 @@
 #include "gradient-with-stops.h"
 #include "gradient-selector-interface.h"
 #include "ink-spin-button.h"
+#include "popover-menu.h"
 #include "ui/operation-blocker.h"
 
 namespace Gtk {
@@ -44,13 +46,13 @@ class TreeView;
 } // namespace Gtk
 
 namespace Inkscape::UI::Widget {
+class ColorPage;
 class GradientSelector;
-class PopoverMenu;
 
 class GradientEditor final : public Gtk::Box, public GradientSelectorInterface {
 public:
-    GradientEditor(const char* prefs);
-    ~GradientEditor() noexcept final;
+    GradientEditor(const char* prefs, Space::Type space);
+    ~GradientEditor() noexcept override = default;
 
 private:
     sigc::signal<void ()> _signal_grabbed;
@@ -73,7 +75,8 @@ public:
     void setSpread(SPGradientSpread spread) final;
     SPGradientSpread getSpread() final;
     void selectStop(SPStop *selected) final;
-    ColorPickerPanel* get_color_picker() { return _color_picker.get(); };
+    ColorPickerPanel& get_color_picker() { return *_color_picker; };
+    void set_spinner_size_pattern(const std::string& pattern);
 
 private:
     void set_gradient(SPGradient* gradient);
