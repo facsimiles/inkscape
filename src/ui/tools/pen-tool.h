@@ -90,8 +90,8 @@ public:
     Geom::Point front_handle;
     Geom::Point back_handle;
 
-    SPDrawAnchor* fh_anchor; // front-handle anchor
-    SPDrawAnchor* bh_anchor; // back-handle anchor
+    std::unique_ptr<SPDrawAnchor> fh_anchor; // front-handle anchor
+    std::unique_ptr<SPDrawAnchor> bh_anchor; // back-handle anchor
     SPDrawAnchor* selected_anchor;
     bool drag_handle = false;
     bool drag_handle_statusbar = false;
@@ -107,7 +107,7 @@ public:
     CanvasItemPtr<CanvasItemCurve> cl0;
     CanvasItemPtr<CanvasItemCurve> cl1;
 
-    std::vector<std::shared_ptr<SPDrawAnchor>> _anchors;
+    std::vector<std::shared_ptr<SPDrawAnchor>> anchors;
     int node_index = -1;
 
     bool events_disabled = false;
