@@ -53,7 +53,7 @@ private:
     void update_stroke(SPStyle* style);
 
     struct PaintStrip {
-        PaintStrip(const Glib::ustring& title);
+        PaintStrip(const Glib::ustring& title, bool fill);
 
         void show();
         void hide();
@@ -70,8 +70,8 @@ private:
         Gtk::Button _define;
         Gtk::Button _clear;
     };
-    PaintStrip _fill = PaintStrip(_("Fill"));
-    PaintStrip _stroke= PaintStrip(_("Stroke"));
+    PaintStrip _fill = PaintStrip(_("Fill"), true);
+    PaintStrip _stroke= PaintStrip(_("Stroke"), false);
     Gtk::Box _markers;
     MarkerComboBox _marker_start = MarkerComboBox("marker-start", SP_MARKER_LOC_START);
     MarkerComboBox _marker_mid =   MarkerComboBox("marker-mid", SP_MARKER_LOC_MID);

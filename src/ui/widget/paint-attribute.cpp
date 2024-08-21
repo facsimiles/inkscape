@@ -51,13 +51,12 @@ void PaintAttribute::PaintStrip::show() {
     _clear.set_visible();
 }
 
-PaintAttribute::PaintStrip::PaintStrip(const Glib::ustring& title) :
+PaintAttribute::PaintStrip::PaintStrip(const Glib::ustring& title, bool fill) :
   _label(title)
+  // _paint(fill ? FILL : STROKE, true)
 {
     _paint_btn.set_direction(Gtk::ArrowType::DOWN);
     _paint_btn.set_always_show_arrow();
-    // _paint_btn.set_label(_("Fill"));
-    // _paint_btn.set_icon_name("gear");
     _paint_btn.set_popover(_popover);
     _popover.set_child(*_switch);
 
@@ -70,7 +69,6 @@ PaintAttribute::PaintStrip::PaintStrip(const Glib::ustring& title) :
     _color_preview.set_margin_start(1);
     _color_preview.set_halign(Gtk::Align::START);
     _color_preview.set_valign(Gtk::Align::CENTER);
-    // _paint_type.set_halign(Gtk::Align::FILL);
     _paint_type.set_hexpand();
     _paint_type.set_xalign(0.5f);
     _paint_box.append(_color_preview);
@@ -79,11 +77,6 @@ PaintAttribute::PaintStrip::PaintStrip(const Glib::ustring& title) :
     _paint_type.set_text("Gradient");
     _paint_btn.set_child(_paint_box);
 
-    // set_spacing(4);
-    // _label.set_hexpand();
-    // _label.set_xalign(0);
-    // _label.set_max_width_chars(10);
-    // append(_label);
     _label.set_halign(Gtk::Align::START);
 
     auto alpha_adj = Gtk::Adjustment::create(0.0, 0, 100, 1.0, 5.0, 0.0);
@@ -95,19 +88,17 @@ PaintAttribute::PaintStrip::PaintStrip(const Glib::ustring& title) :
 
     _define.set_image_from_icon_name("plus");
     _define.set_has_frame(false);
-    // _define.set_hexpand();
-    // _define.set_halign(Gtk::Align::END);
-    // append(_define);
 
     _clear.set_image_from_icon_name("minus");
     _clear.set_has_frame(false);
     _clear.set_visible(false);
-    // _clear.set_hexpand();
-    // _clear.set_halign(Gtk::Align::END);
-    // append(_clear);
 
     _box.append(_clear);
     _box.append(_define);
+
+    // TEMP code =============================
+    // _switch->signal_color_changed().connect([this](auto& color) {
+    // });
 }
 
 void PaintAttribute::insert_widgets(InkPropertyGrid& grid, int row) {
@@ -124,14 +115,7 @@ void PaintAttribute::insert_widgets(InkPropertyGrid& grid, int row) {
     _markers.append(_marker_mid);
     _markers.append(*Gtk::make_managed<Gtk::Separator>(Gtk::Orientation::VERTICAL));
     _markers.append(_marker_end);
-    // grid.attach(_markers, 0, row, 2);
-    // _stroke_style.set_valign(Gtk::Align::START);
-    // grid.attach(_stroke_style, 3, row);
 
-    // grid.insert_row(row);
-    // grid.attach(_stroke_presets, 0, row);
-    // grid.attach(_stroke_width, 1, row);
-    // grid.attach(_dash_selector, 3, row);
     _size_group->add_widget(_fill._alpha);
     _size_group->add_widget(_stroke._alpha);
     _size_group->add_widget(_unit_selector);
@@ -200,13 +184,12 @@ void PaintAttribute::set_paint(const SPObject* object, bool set_fill) {
 }
 
 void PaintAttribute::set_paint(const SPIPaint& paint, double opacity, bool fill) {
-    //todo
     auto mode = get_mode_from_paint(paint);
     auto& stripe = fill ? _fill : _stroke;
     stripe._switch->set_mode(mode);
     if (paint.isColor()) {
         auto color = paint.getColor();
-        color.addOpacity(opacity);
+        color.setOpacity(opacity);
         stripe._switch->set_color(color);
     }
     init_popup(paint, opacity, mode, fill);
@@ -284,13 +267,6 @@ void PaintAttribute::update_markers(SPIString* markers[], SPObject* object) {
 
 void PaintAttribute::show_stroke(bool show) {
     _stroke_widgets.set_visible(show);
-    // _dash_selector.set_visible(show);
-    // _stroke_box.set_visible(show);
-    // _stroke_width.set_visible(show);
-    // _stroke_presets.set_visible(show);
-    // _unit_selector.set_visible(show);
-    // _stroke_style.set_visible(show);
-    // _markers.set_visible(show);
 }
 
 void PaintAttribute::update_stroke(SPStyle* style) {

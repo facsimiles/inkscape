@@ -41,7 +41,6 @@ public:
         if (!_color_set->isEmpty()) {
             auto color = _color_set->getAverage();
             _preview.setRgba32(color.toRGBA());
-            _rgb_edit.set_text(rgba_to_hex(color.toRGBA(), false));
             if (_plate) { _plate->set_color(color); }
         }
     }
@@ -190,13 +189,12 @@ ColorPickerPanelImpl::ColorPickerPanelImpl(Space::Type space, PlateType type, st
     _rgb_edit(color),
     _with_expander(with_expander),
     _space_type(space),
-    _color_set(std::move(color)),
+    _color_set(color),
     _plate_type(type)
 {
 
-    if (!_color_set) _color_set = std::make_shared<ColorSet>();
-    _color_set->signal_changed.connect([this]() {
-        update_color(); });
+    // if (!_color_set) _color_set = std::make_shared<ColorSet>();
+    _color_set->signal_changed.connect([this]() { update_color(); });
 
     set_row_spacing(0);
     set_column_spacing(0);
