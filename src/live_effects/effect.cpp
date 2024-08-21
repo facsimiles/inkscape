@@ -47,12 +47,11 @@
 #include "live_effects/lpe-interpolate_points.h"
 #include "live_effects/lpe-jointype.h"
 #include "live_effects/lpe-knot.h"
-#include "live_effects/lpe-lattice2.h"
 #include "live_effects/lpe-lattice.h"
+#include "live_effects/lpe-lattice2.h"
 #include "live_effects/lpe-line_segment.h"
 #include "live_effects/lpe-measure-segments.h"
 #include "live_effects/lpe-mirror_symmetry.h"
-#include "live_effects/lpeobject.h"
 #include "live_effects/lpe-offset.h"
 #include "live_effects/lpe-parallel.h"
 #include "live_effects/lpe-path_length.h"
@@ -64,8 +63,8 @@
 #include "live_effects/lpe-powerstroke.h"
 #include "live_effects/lpe-pts2ellipse.h"
 #include "live_effects/lpe-recursiveskeleton.h"
-#include "live_effects/lpe-roughen.h"
 #include "live_effects/lpe-rough-hatches.h"
+#include "live_effects/lpe-roughen.h"
 #include "live_effects/lpe-ruler.h"
 #include "live_effects/lpe-show_handles.h"
 #include "live_effects/lpe-simplify.h"
@@ -79,6 +78,7 @@
 #include "live_effects/lpe-tiling.h"
 #include "live_effects/lpe-transform_2pts.h"
 #include "live_effects/lpe-vonkoch.h"
+#include "live_effects/lpeobject.h"
 #include "message-stack.h"
 #include "object/sp-defs.h"
 #include "object/sp-root.h"
@@ -86,6 +86,7 @@
 #include "path-chemistry.h"
 #include "ui/icon-loader.h"
 #include "ui/pack.h"
+#include "ui/shape-editor.h"
 #include "ui/tools/node-tool.h"
 #include "ui/tools/pen-tool.h"
 #include "xml/sp-css-attr.h"
@@ -1488,6 +1489,31 @@ void Effect::doAfterEffect_impl(SPLPEItem const *lpeitem, SPCurve *curve)
     _adjust_path = false;
 }
 
+void Effect::reloadKnots(SPLPEItem const *lpeitem)
+{
+    if (!is_current) {
+        return;
+    }
+    if (SPDesktop *desktop = SP_ACTIVE_DESKTOP) {
+        if (auto nt = dynamic_cast<Inkscape::UI::Tools::NodeTool *>(desktop->getTool())) {
+            auto lpeitem_mutable = const_cast<SPLPEItem *>(lpeitem);
+            SPItem *item = cast<SPItem>(lpeitem_mutable);
+            auto lpeitems = getCurrrentLPEItems();
+            if (!lpeitems.empty()) {
+                item = cast<SPItem>(lpeitems.front());
+            }
+            for (auto &_shape_editor : nt->_shape_editors) {
+                if (item && item == _shape_editor.first) {
+                    auto shape_editor = _shape_editor.second.get();
+                    shape_editor->unset_item();
+                    shape_editor->set_item(item);
+                    return;
+                }
+            }
+        }
+    }
+}
+
 void Effect::doOnRemove_impl(SPLPEItem const* lpeitem)
 {
     SPDocument *document = getSPDoc();
@@ -1502,6 +1528,7 @@ void Effect::doOnRemove_impl(SPLPEItem const* lpeitem)
     }
     doOnRemove(sp_lpe_item);
     getLPEObj()->deleted = true;
+    reloadKnots(sp_lpe_item);
 }
 
 /**
@@ -1550,6 +1577,9 @@ void Effect::doOnApply_impl(SPLPEItem const* lpeitem)
 void Effect::doBeforeEffect_impl(SPLPEItem const* lpeitem)
 {
     sp_lpe_item = const_cast<SPLPEItem *>(lpeitem);
+    is_current = sp_lpe_item->getCurrentLPE() == this;
+    // enure is not deleted if we we resurrect the item with the LPE
+    getLPEObj()->deleted = false;
     if (_provides_path_adjustment) {
         LPEItemShapesNumbers lpenumbers;
         // By the moment we not handle LPEItem groups. see here how to add to
@@ -1563,6 +1593,7 @@ void Effect::doBeforeEffect_impl(SPLPEItem const* lpeitem)
         //std::cout << _lpenumbers << std::endl;
         _lpenumbers = lpenumbers;
     }
+
     doBeforeEffect(lpeitem);
     if (is_load) {
         update_satellites();
@@ -1719,19 +1750,20 @@ Effect::registerParameter(Parameter * param)
 void
 Effect::addHandles(KnotHolder *knotholder, SPItem *item) {
     using namespace Inkscape::LivePathEffect;
-
+    if (getLPEObj()->deleted) {
+        return;
+    }
+    if (is_load) {
+        if (auto lpeitem = cast<SPLPEItem>(item)) {
+            sp_lpe_item_update_patheffect(lpeitem, false, false);
+        }
+    }
     // add handles provided by the effect itself
     addKnotHolderEntities(knotholder, item);
 
     // add handles provided by the effect's parameters (if any)
     for (auto & p : param_vector) {
         p->addKnotHolderEntities(knotholder, item);
-    }
-    if (is_load) {
-        auto lpeitem = cast<SPLPEItem>(item);
-        if (lpeitem) {
-            sp_lpe_item_update_patheffect(lpeitem, false, false);
-        }
     }
 }
 
@@ -1774,10 +1806,8 @@ Effect::addCanvasIndicators(SPLPEItem const*/*lpeitem*/, std::vector<Geom::PathV
  */
 void
 Effect::update_helperpath() {
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    if (desktop) {
-        auto const nt = dynamic_cast<Inkscape::UI::Tools::NodeTool *>(desktop->getTool());
-        if (nt) {
+    if (SPDesktop *desktop = SP_ACTIVE_DESKTOP) {
+        if (auto const nt = dynamic_cast<Inkscape::UI::Tools::NodeTool *>(desktop->getTool())) {
             Inkscape::UI::Tools::sp_update_helperpath(desktop);
         }
     }

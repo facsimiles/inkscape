@@ -217,22 +217,12 @@ KnotHolder::transform_selected(Geom::Affine transform){
     }
 }
 
-void
-KnotHolder::unselect_knots(){
-    Inkscape::UI::Tools::NodeTool *nt = dynamic_cast<Inkscape::UI::Tools::NodeTool*>(desktop->getTool());
-    if (nt) {
-        for (auto &_shape_editor : nt->_shape_editors) {
-            Inkscape::UI::ShapeEditor *shape_editor = _shape_editor.second.get();
-            if (shape_editor && shape_editor->has_knotholder()) {
-                KnotHolder * knotholder = shape_editor->knotholder;
-                if (knotholder) {
-                    for (auto e : knotholder->entity) {
-                        if (e->knot->is_selected()) {
-                            e->knot->selectKnot(false);
-                        }
-                    }
-                }
-            }
+void KnotHolder::unselect_knots()
+{
+    for (auto i : entity) {
+        SPKnot *knot = i->knot;
+        if (knot->is_selected()) {
+            knot->selectKnot(false);
         }
     }
 }
@@ -295,7 +285,7 @@ KnotHolder::knot_ungrabbed_handler(SPKnot *knot, guint state)
             for(auto e : this->entity) {
                 if (e->knot == knot) {
                     e->knot_ungrabbed(e->knot->position(), e->knot->drag_origin * item->i2dt_affine().inverse() * _edit_transform.inverse(), state);
-                    if (e->knot->is_lpe) {
+                    if (knot->is_lpe) { // ungrab can delete the knot
                         return;
                     }
                     break;

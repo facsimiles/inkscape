@@ -15,6 +15,7 @@
 
 #include <2geom/affine.h>
 
+#include "helper/auto-connection.h"
 #include "xml/node-observer.h"
 
 class KnotHolder;
@@ -48,7 +49,7 @@ public:
 private:
     void reset_item();
     static bool _blockSetItem;
-
+    Inkscape::auto_connection _externChangedConn;
     SPDesktop *desktop;
     Inkscape::XML::Node *knotholder_listener_attached_for{nullptr};
     Inkscape::XML::Node *lpeknotholder_listener_attached_for{nullptr};
