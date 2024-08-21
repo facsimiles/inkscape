@@ -136,6 +136,7 @@ public:
 };
 
 PaintSwitchImpl::PaintSwitchImpl() {
+    _color->set(Color(0x000000ff));
     _flat_color = ColorPickerPanel::create(tt, pt, _color);
     auto header = Gtk::make_managed<Gtk::Box>(Gtk::Orientation::HORIZONTAL);
     header->set_margin_top(5);
@@ -247,7 +248,7 @@ PaintSwitchImpl::PaintSwitchImpl() {
 }
 
 void PaintSwitchImpl::set_color(const Colors::Color& color) {
-    _flat_color->set_color(color);
+    _color->set(color);
     // _flat_color->set_color(color);
 }
 
