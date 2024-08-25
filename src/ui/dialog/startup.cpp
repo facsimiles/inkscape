@@ -264,7 +264,7 @@ void StartScreen::setup_welcome()
     load_btn.signal_clicked().connect(sigc::mem_fun(*this, &StartScreen::load_document));
     templates.connectItemSelected(sigc::mem_fun(*this, &StartScreen::new_document));
     new_btn->signal_clicked().connect(sigc::mem_fun(*this, &StartScreen::new_document));
-    close_btn->signal_clicked().connect([this] { response(GTK_RESPONSE_CANCEL); });
+    close_btn->signal_clicked().connect([this] { response(GTK_RESPONSE_CLOSE); });
 
     // Reparent to our dialog window
     set_titlebar(banners);
@@ -516,7 +516,7 @@ gboolean StartScreen::on_key_pressed(GtkEventControllerKey const * /*controller*
 void
 StartScreen::on_response(int response_id)
 {
-    if (response_id == GTK_RESPONSE_DELETE_EVENT) {
+    if (response_id == GTK_RESPONSE_DELETE_EVENT || response_id == GTK_RESPONSE_CLOSE) {
         // Don't open a window for force closing.
         return;
     }
