@@ -49,6 +49,7 @@
 #include "ui/icon-loader.h"
 #include "ui/icon-names.h"
 #include "ui/reparent-spinbutton.h"
+#include "ui/util.h"
 #include "ui/widget/color-notebook.h"
 #include "ui/widget/color-preview.h"
 #include "ui/widget/ink-spin-button.h"
@@ -60,19 +61,19 @@ namespace Inkscape::UI::Widget {
 using namespace Inkscape::IO;
 using Inkscape::UI::Widget::ColorNotebook;
 
-class scope {
-public:
-    scope(bool& flag): _flag(flag) {
-        flag = true;
-    }
-
-    ~scope() {
-        _flag = false;
-    }
-
-private:
-    bool& _flag;
-};
+// class scope {
+// public:
+//     scope(bool& flag): _flag(flag) {
+//         flag = true;
+//     }
+//
+//     ~scope() {
+//         _flag = false;
+//     }
+//
+// private:
+//     bool& _flag;
+// };
 
 void set_icon(Gtk::Button &btn, char const *pixmap)
 {
@@ -176,11 +177,14 @@ GradientEditor::GradientEditor(const char* prefs, Space::Type space):
     _stops_gallery(get_widget<Gtk::Box>(_builder, "stopsGallery")),
     _colors_box(get_widget<Gtk::Box>(_builder, "colorsBox")),
     _main_grid(get_widget<Gtk::Grid>(_builder, "mainGrid")),
-    _color_picker(ColorPickerPanel::create(space, /*TODO*/ ColorPickerPanel::Rect, _colors))
+    _color_picker(ColorPickerPanel::create(space, /*TODO*/ ColorPickerPanel::Rect, _colors)),
+    _linear_btn(get_widget<Gtk::ToggleButton>(_builder, "type-linear")),
+    _radial_btn(get_widget<Gtk::ToggleButton>(_builder, "type-radial"))
 {
     // gradient type buttons; not currently used, hidden, WIP
-    // set_icon(_linear_btn, INKSCAPE_ICON("paint-gradient-linear"));
-    // set_icon(_radial_btn, INKSCAPE_ICON("paint-gradient-radial"));
+    _linear_btn.set_active();
+    _linear_btn.signal_clicked().connect([this](){ fire_change_type(true); });
+    _radial_btn.signal_clicked().connect([this](){ fire_change_type(false); });
 
     auto& reverse = get_widget<Gtk::Button>(_builder, "reverseBtn");
     set_icon(reverse, INKSCAPE_ICON("object-flip-horizontal"));
@@ -300,7 +304,7 @@ GradientEditor::GradientEditor(const char* prefs, Space::Type space):
     {
         reparent("angle", _angle_btn);
         _angle_btn.set_adjustment(_angle_adj);
-        _angle_btn.set_suffix("\u00b0", false); // degree symbol
+        set_degree_suffix(_angle_btn);
         _angle_btn.set_min_size("99.9");
     }
     {
@@ -578,6 +582,10 @@ void GradientEditor::set_spinner_size_pattern(const std::string& pattern) {
     _offset_btn.set_min_size(pattern);
 }
 
+SPGradientType GradientEditor::get_type() const {
+    return _linear_btn.get_active() ? SP_GRADIENT_TYPE_LINEAR : SP_GRADIENT_TYPE_RADIAL;
+}
+
 void GradientEditor::set_gradient(SPGradient* gradient) {
     auto scoped(_update.block());
 
@@ -626,6 +634,11 @@ void GradientEditor::set_gradient(SPGradient* gradient) {
         );
         auto angle = line_angle(line) * 180 / M_PI;
         _angle_adj->set_value(angle);
+
+        _linear_btn.set_active();
+    }
+    else {
+        _radial_btn.set_active();
     }
     _turn_gradient.set_sensitive(can_rotate);
     _angle_btn.set_sensitive(can_rotate);
@@ -689,6 +702,13 @@ void GradientEditor::fire_stop_selected(SPStop* stop) {
         auto scoped(_notification.block());
         emit_stop_selected(stop);
     }
+}
+
+void GradientEditor::fire_change_type(bool linear) {
+    if (_notification.pending()) return;
+
+    auto scoped(_notification.block());
+    _signal_changed.emit(_gradient);
 }
 
 } // namespace Inkscape::UI::Widget

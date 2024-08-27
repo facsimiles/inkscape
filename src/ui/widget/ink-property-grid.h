@@ -30,10 +30,13 @@ public:
 
     // add a property row to the grid; label and values are optional; widget1 is expected whereas widget2
     // can be specified if this is (potentially) 2-column property (like dimensions width and height)
-    Gtk::Widget* add_property(Gtk::Label* label, Gtk::Widget* button1, Gtk::Widget* widget1, Gtk::Widget* widget2, Gtk::Widget* button2, int margin = 2);
-    Gtk::Widget* add_property(const std::string& label, Gtk::Widget* button1, Gtk::Widget* widget1, Gtk::Widget* widget2, Gtk::Widget* button2, int margin = 2);
+    Gtk::Widget* add_property(Gtk::Label* label, Gtk::Widget* button1, Gtk::Widget* widget1, Gtk::Widget* widget2, Gtk::Widget* button2 = nullptr, int margin = 2);
+    Gtk::Widget* add_property(const std::string& label, Gtk::Widget* button1, Gtk::Widget* widget1, Gtk::Widget* widget2, Gtk::Widget* button2 = nullptr, int margin = 2);
     // leave a gap before adding new row; used to indicate new group of properties
     Gtk::Widget* add_gap(int size = 8);
+    // add a widget to the grid that will occupy both columns
+    void add_row(Gtk::Widget* widget, Gtk::Widget* button = nullptr, bool whole_row = true, int margin = 2);
+    void add_row(const std::string& label, Gtk::Widget* widget, Gtk::Widget* button = nullptr, int margin = 2);
 
 private:
     void construct();

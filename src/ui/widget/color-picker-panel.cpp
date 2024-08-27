@@ -68,10 +68,12 @@ public:
         attach(*_page, 0, ROW_PAGE, 3);
         if (plate_type == Circle) {
             _plate = _page->create_color_wheel(type, true);
+            _plate->get_widget().set_margin_top(4);
             _plate->get_widget().set_margin_bottom(4);
         }
         else if (plate_type == Rect) {
             _plate = _page->create_color_wheel(type, false);
+            _plate->get_widget().set_margin_bottom(0);
         }
         if (_plate) {
             _plate->get_widget().set_expand();

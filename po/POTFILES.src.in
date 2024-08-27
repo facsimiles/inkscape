@@ -273,6 +273,7 @@ ${_build_dir}/share/templates/templates.h
 ../src/text-editing.cpp
 ../src/trace/trace.cpp
 ../src/ui/clipboard.cpp
+../src/ui/color-picker-metadata.cpp
 ../src/ui/contextmenu.cpp
 ../src/ui/desktop/document-check.cpp
 ../src/ui/desktop/menubar.cpp
@@ -394,6 +395,7 @@ ${_build_dir}/share/templates/templates.h
 ../src/ui/widget/color-entry.cpp
 ../src/ui/widget/color-notebook.cpp
 ../src/ui/widget/color-palette.cpp
+../src/ui/widget/color-picker-panel.cpp
 ../src/ui/widget/combo-enums.h
 ../src/ui/widget/dash-selector.cpp
 ../src/ui/widget/desktop-widget.cpp
@@ -418,7 +420,10 @@ ${_build_dir}/share/templates/templates.h
 ../src/ui/widget/object-composite-settings.cpp
 ../src/ui/widget/page-properties.cpp
 ../src/ui/widget/page-selector.cpp
+../src/ui/widget/paint-attribute.cpp
+../src/ui/widget/paint-attribute.h
 ../src/ui/widget/paint-selector.cpp
+../src/ui/widget/paint-switch.cpp
 ../src/ui/widget/pattern-editor.cpp
 ../src/ui/widget/preferences-widget.cpp
 ../src/ui/widget/random.cpp

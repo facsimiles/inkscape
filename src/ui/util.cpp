@@ -57,6 +57,8 @@
 #include "ui/dialog-run.h"
 #include "ui/util.h" // for_each_child()
 
+#include "widget/ink-spin-button.h"
+
 
 /*
  * Ellipse text if longer than maxlen, "50% start text + ... + ~50% end text"
@@ -540,6 +542,14 @@ void restrict_minsize_to_square(Gtk::Widget& widget, int min_size_px) {
     auto style_context = widget.get_style_context();
     // load with a priority higher than that of the "style.css"
     style_context->add_provider(css, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION + 2);
+}
+
+void set_degree_suffix(Inkscape::UI::Widget::InkSpinButton& button) {
+    button.set_suffix("\u00b0", false); // degree symbol
+}
+
+void set_percent_suffix(Inkscape::UI::Widget::InkSpinButton& button) {
+    button.set_suffix(_("%"), false);
 }
 
 char const *get_text(Gtk::Editable const &editable)

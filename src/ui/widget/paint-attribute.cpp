@@ -18,6 +18,7 @@
 #include "object/sp-radial-gradient.h"
 #include "style.h"
 #include "object/sp-stop.h"
+#include "ui/util.h"
 #include "ui/widget/paint-switch.h"
 #include "xml/sp-css-attr.h"
 
@@ -112,7 +113,7 @@ PaintAttribute::PaintStrip::PaintStrip(const Glib::ustring& title, bool fill) :
     _alpha.set_adjustment(alpha_adj);
     _alpha.set_digits(0);
     _alpha.set_label(C_("Alpha transparency", "A"));
-    _alpha.set_suffix(C_("Alpha percent sign", "%"), false);
+    set_percent_suffix(_alpha);
     _alpha.set_halign(Gtk::Align::START);
 
     _define.set_image_from_icon_name("plus");
@@ -176,12 +177,18 @@ PaintAttribute::PaintStrip::PaintStrip(const Glib::ustring& title, bool fill) :
         DocumentUndo::done(_current_item->document, fill ? _("Set pattern on fill") : _("Set pattern on stroke"), "dialog-fill-and-stroke");
     });
 
-    _switch->get_gradient_changed().connect([this,fill](auto gradient, auto gradient_type) {
+    _switch->get_gradient_changed().connect([this,fill](auto vector, auto gradient_type) {
         if (!can_update()) return;
 
         auto kind = fill ? FILL : STROKE;
-        sp_item_apply_gradient(_current_item, gradient, _desktop, gradient_type, kind);
+        sp_item_apply_gradient(_current_item, vector, _desktop, gradient_type, false, kind);
         DocumentUndo::done(_current_item->document, fill ? _("Set gradient on fill") : _("Set gradient on stroke"), "dialog-fill-and-stroke");
+    });
+
+    _switch->get_swatch_changed().connect([this,fill](auto& vector) {
+        auto kind = fill ? FILL : STROKE;
+        sp_item_apply_gradient(_current_item, vector, _desktop, SP_GRADIENT_TYPE_LINEAR, true, kind);
+        DocumentUndo::done(_current_item->document, fill ? _("Set swatch on fill") : _("Set swatch on stroke"), "dialog-fill-and-stroke");
     });
 
     _switch->get_flat_color_changed().connect([=,this](auto& color) {
@@ -289,6 +296,10 @@ void PaintAttribute::set_document(SPDocument* document) {
     for (auto combo : {&_marker_start, &_marker_mid, &_marker_end}) {
         combo->setDocument(document);
     }
+}
+
+void PaintAttribute::set_desktop(SPDesktop* desktop) {
+    _desktop = desktop;
 }
 
 void PaintAttribute::set_paint(const SPObject* object, bool set_fill) {

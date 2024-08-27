@@ -46,7 +46,7 @@ public:
     void set_label(const std::string& label);
     // Signal fired when numerical value changes
     sigc::signal<void (double)> signal_value_changed() const;
-    // Base spin button's max size on the pattern provided; ex: "99.99"
+    // Base spin button's min size on the pattern provided; ex: "99.99"
     void set_min_size(const std::string& pattern);
     // ----------- PROPERTIES ------------
     // Glib::PropertyProxy<int> property_digits() { return prop_digits.get_proxy(); }
@@ -112,6 +112,7 @@ private:
     std::string format(double value, bool with_prefix_suffix, bool with_markup, bool trim_zeros) const;
     void start_spinning(double steps, Gdk::ModifierType state, Glib::RefPtr<Gtk::GestureClick>& gesture);
     void stop_spinning();
+    double get_accel_factor(Gdk::ModifierType state) const;
 
     // ---------------- DATA ------------------
     double _initial_value = 0.0; // Value of adjustment at start of drag.

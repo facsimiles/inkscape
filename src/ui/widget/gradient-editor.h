@@ -77,6 +77,7 @@ public:
     void selectStop(SPStop *selected) final;
     ColorPickerPanel& get_color_picker() { return *_color_picker; };
     void set_spinner_size_pattern(const std::string& pattern);
+    SPGradientType get_type() const;
 
 private:
     void set_gradient(SPGradient* gradient);
@@ -99,6 +100,7 @@ private:
     void set_stop_offset(size_t index, double offset);
     SPGradient* get_gradient_vector();
     void fire_stop_selected(SPStop* stop);
+    void fire_change_type(bool linear);
 
     Glib::RefPtr<Gtk::Builder> _builder;
     GradientSelector* _selector;
@@ -129,6 +131,8 @@ private:
     OperationBlocker _notification;
     Glib::ustring _prefs;
     std::unique_ptr<ColorPickerPanel> _color_picker;
+    Gtk::ToggleButton& _linear_btn;
+    Gtk::ToggleButton& _radial_btn;
 };
 
 } // namespace Inkscape::UI::Widget

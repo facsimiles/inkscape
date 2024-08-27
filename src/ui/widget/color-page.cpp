@@ -24,6 +24,7 @@
 #include "colors/spaces/base.h"
 #include "colors/spaces/components.h"
 #include "ui/builder-utils.h"
+#include "ui/util.h"
 #include "util/signal-blocker.h"
 
 namespace Inkscape::UI::Widget {
@@ -181,7 +182,7 @@ ColorPageChannel::ColorPageChannel(
     _adj->set_page_size(0.0);
 
     if (component.scale == 360) {
-        _spin.set_suffix("\u00b0", false); // append degree sign
+        set_degree_suffix(_spin);
     }
 
     _color_changed = _color->signal_changed.connect([this]() {

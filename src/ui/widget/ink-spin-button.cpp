@@ -448,7 +448,7 @@ void InkSpinButton::on_motion_leave_value() {
 
 // ---------------   DRAG VALUE  ----------------
 
-static double get_accel_factor(Gdk::ModifierType state) {
+double InkSpinButton::get_accel_factor(Gdk::ModifierType state) const {
     double scale = 1.0;
     // Ctrl modifier slows down, Shift speeds up
     if ((state & Gdk::ModifierType::CONTROL_MASK) == Gdk::ModifierType::CONTROL_MASK) {
@@ -610,9 +610,9 @@ double InkSpinButton::get_value() const {
     return _adjustment->get_value();
 }
 
-void InkSpinButton::change_value(double inc, Gdk::ModifierType state) {
+void InkSpinButton::change_value(double delta, Gdk::ModifierType state) {
     double scale = get_accel_factor(state);
-    set_value(_adjustment->get_value() + _adjustment->get_step_increment() * scale * inc);
+    set_value(_adjustment->get_value() + _adjustment->get_step_increment() * scale * delta);
 }
 
 // ------------------   KEY    ------------------
