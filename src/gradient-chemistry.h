@@ -19,6 +19,7 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "fill-or-stroke.h"
 #include "object/sp-gradient.h"
 
 class SPCSSAttr;
@@ -125,6 +126,8 @@ void sp_item_gradient_stop_set_style(SPItem *item, GrPointType point_type, unsig
 Color sp_item_gradient_stop_query_style(SPItem *item, GrPointType point_type, unsigned int point_i, Inkscape::PaintTarget fill_or_stroke);
 void sp_item_gradient_reverse_vector(SPItem *item, Inkscape::PaintTarget fill_or_stroke);
 void sp_item_gradient_invert_vector_color(SPItem *item, Inkscape::PaintTarget fill_or_stroke);
+
+void sp_item_apply_gradient(SPItem* item, SPGradient* vector, SPDesktop* desktop, SPGradientType gradient_type, FillOrStroke kind);
 
 #endif // SEEN_SP_GRADIENT_CHEMISTRY_H
 

@@ -31,6 +31,8 @@
 #include "document.h"
 #include "document-undo.h"
 #include "gradient-chemistry.h"
+
+#include "fill-or-stroke.h"
 #include "gradient-drag.h"
 #include "selection.h"
 
@@ -1736,9 +1738,12 @@ SPGradient *sp_document_default_gradient_vector( SPDocument *document, Color con
         repr->setAttribute("id", document->generate_unique_id("swatch"));
     }
 
-    addStop( repr, color, opacity, "0" );
-    if ( !singleStop ) {
-        addStop( repr, color, 0, "1" );
+    addStop(repr, color, opacity, "0");
+    if (!singleStop) {
+        auto lightness = Colors::get_perceptual_lightness(color);
+        auto contrast = (lightness > 0.85 ? Color(0x0000'00ff) : Color(0xffff'ffff)).converted(color.getSpace());
+        // second stop without transparency - no more forcing users to fix alpha channel on new gradients
+        addStop(repr, contrast.value_or(color), 1.0, "1");
     }
 
     Inkscape::GC::release(repr);
@@ -1894,6 +1899,58 @@ int sp_get_gradient_refcount(SPDocument* document, SPGradient* gradient) {
     }
 
     return count;
+}
+
+void sp_item_apply_gradient(SPItem* item, SPGradient* vector, SPDesktop* desktop, SPGradientType gradient_type, FillOrStroke kind) {
+    if (!item || !item->document || !item->style || gradient_type == SP_GRADIENT_TYPE_MESH) return;
+
+    bool createSwatch = gradient_type == SP_GRADIENT_TYPE_UNKNOWN;// (_psel->get_mode() == UI::Widget::PaintSelector::MODE_SWATCH);
+    PaintTarget paint_target = kind == FILL ? FOR_FILL : FOR_STROKE;
+
+    // auto vector = _psel->getGradientVector();
+    if (!vector) {
+        /* No vector in paint selector should mean that we just changed mode */
+        // SPStyle query(_desktop->doc());
+        // int result = objects_query_fillstroke(items, &query, kind == FILL);
+        // if (result == QUERY_STYLE_MULTIPLE_SAME) {
+        if (auto paint = item->style->getFillOrStroke(kind == FILL)) {
+            // SPIPaint &targPaint = *query.getFillOrStroke(kind == FILL);
+            Colors::Color common(0x000000ff);
+            if (!paint->isColor()) {
+                if (auto color = sp_desktop_get_color(desktop, kind == FILL)) {
+                    common = *color;
+                }
+            } else {
+                common = paint->getColor();
+            }
+            vector = sp_document_default_gradient_vector(item->document, common, 1.0, createSwatch);
+        }
+        if (vector) {
+            vector->setSwatch(createSwatch);
+        }
+
+        // for (auto item : items) {
+        if (!vector) {
+            auto gr = sp_gradient_vector_for_object(item->document, desktop, item, paint_target, createSwatch);
+            if (gr) {
+                gr->setSwatch(createSwatch);
+            }
+            sp_item_set_gradient(item, gr, gradient_type, paint_target);
+        }
+        else {
+            sp_item_set_gradient(item, vector, gradient_type, paint_target);
+        }
+        // }
+    }
+    else {
+        // We have changed from another gradient type, or modified spread/units within
+        // this gradient type.
+        vector = sp_gradient_ensure_vector_normalized(vector);
+        // for (auto item : items) {
+        sp_item_set_gradient(item, vector, gradient_type, paint_target);
+            // _psel->pushAttrsToGradient(gr);
+        // }
+    }
 }
 
 /*

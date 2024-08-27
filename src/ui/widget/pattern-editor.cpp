@@ -636,6 +636,13 @@ void PatternEditor::set_active(Gtk::FlowBox& gallery, PatternStore& pat, Glib::R
 
 std::pair<std::string, SPDocument*> PatternEditor::get_selected() {
     // document patterns first
+    auto id = get_selected_doc_pattern();
+    if (!id.empty()) {
+        return std::make_pair(id, nullptr);
+    }
+    // stock patterns next
+    return get_selected_stock_pattern();
+    /*
     auto active = get_active();
     auto sel = active.first;
     auto stock_doc = active.second;
@@ -664,6 +671,30 @@ std::pair<std::string, SPDocument*> PatternEditor::get_selected() {
         }
 
         // no stock patterns available
+        return std::make_pair("", nullptr);
+    }
+    */
+}
+
+std::string PatternEditor::get_selected_doc_pattern() {
+    auto sel = get_active(_doc_gallery, _doc_pattern_store);
+    return sel ? sel->id : std::string{};
+}
+
+std::pair<std::string, SPDocument*> PatternEditor::get_selected_stock_pattern() {
+    auto sel = get_active(_stock_gallery, _stock_pattern_store);
+    if (sel) {
+        // return pattern ID and stock document it comes from
+        return std::make_pair(sel->id, sel->collection);
+    }
+    else {
+        // if nothing is selected, pick first stock pattern, so we have something to assign
+        // to selected object(s); without it, pattern editing will not be activated
+        if (auto first = _stock_pattern_store.store.get_store()->get_item(0)) {
+            return std::make_pair(first->id, first->collection);
+        }
+
+        // no stock patterns available; that's not good, transition to pattern fill won't work
         return std::make_pair("", nullptr);
     }
 }
