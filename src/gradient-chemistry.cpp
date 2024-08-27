@@ -1901,10 +1901,9 @@ int sp_get_gradient_refcount(SPDocument* document, SPGradient* gradient) {
     return count;
 }
 
-void sp_item_apply_gradient(SPItem* item, SPGradient* vector, SPDesktop* desktop, SPGradientType gradient_type, FillOrStroke kind) {
+void sp_item_apply_gradient(SPItem* item, SPGradient* vector, SPDesktop* desktop, SPGradientType gradient_type, bool create_swatch, FillOrStroke kind) {
     if (!item || !item->document || !item->style || gradient_type == SP_GRADIENT_TYPE_MESH) return;
 
-    bool createSwatch = gradient_type == SP_GRADIENT_TYPE_UNKNOWN;// (_psel->get_mode() == UI::Widget::PaintSelector::MODE_SWATCH);
     PaintTarget paint_target = kind == FILL ? FOR_FILL : FOR_STROKE;
 
     // auto vector = _psel->getGradientVector();
@@ -1923,17 +1922,17 @@ void sp_item_apply_gradient(SPItem* item, SPGradient* vector, SPDesktop* desktop
             } else {
                 common = paint->getColor();
             }
-            vector = sp_document_default_gradient_vector(item->document, common, 1.0, createSwatch);
+            vector = sp_document_default_gradient_vector(item->document, common, 1.0, create_swatch);
         }
         if (vector) {
-            vector->setSwatch(createSwatch);
+            vector->setSwatch(create_swatch);
         }
 
         // for (auto item : items) {
         if (!vector) {
-            auto gr = sp_gradient_vector_for_object(item->document, desktop, item, paint_target, createSwatch);
+            auto gr = sp_gradient_vector_for_object(item->document, desktop, item, paint_target, create_swatch);
             if (gr) {
-                gr->setSwatch(createSwatch);
+                gr->setSwatch(create_swatch);
             }
             sp_item_set_gradient(item, gr, gradient_type, paint_target);
         }

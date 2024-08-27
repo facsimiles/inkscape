@@ -15,7 +15,6 @@
 
 #include "color-picker-panel.h"
 #include "colors/color-set.h"
-// #include "helper/auto-connection.h"
 #include "style-internal.h"
 #include "ui/operation-blocker.h"
 #include "ui/widget/gradient-editor.h"
@@ -72,7 +71,7 @@ PaintMode get_mode_from_paint(const SPIPaint& paint) {
 const static struct Paint { PaintMode mode; const char* icon; const char* name; const char* tip; } paint_modes[] = {
     {PaintMode::Solid,       "paint-solid",           C_("Paint type", "Flat"),     _("Flat color")},
     {PaintMode::Gradient,    "paint-gradient-linear", C_("Paint type", "Gradient"), _("Linear gradient fill")},
-    {PaintMode::RadGradient, "paint-gradient-radial", C_("Paint type", "Gradient"), _("Radial gradient fill")},
+    // {PaintMode::RadGradient, "paint-gradient-radial", C_("Paint type", "Gradient"), _("Radial gradient fill")},
 #ifdef WITH_MESH
     {PaintMode::Mesh,        "paint-gradient-mesh",   C_("Paint type", "Mesh"),     _("Mesh fill")},
 #endif
@@ -112,7 +111,10 @@ public:
     void set_document(SPDocument* document) override {
         _document = document;
     }
+    // called from the outside to update UI
     void set_mode(PaintMode mode) override;
+    // internal handler for buttons switching paint mode
+    void switch_paint_mode(PaintMode mode);
     void set_color(const Colors::Color& color) override;
     sigc::signal<void (const Colors::Color&)> get_flat_color_changed() override;
     sigc::signal<void (PaintMode)> get_signal_mode_changed() override;
@@ -120,6 +122,9 @@ public:
     void _set_mode(PaintMode mode);
     sigc::signal<void (SPGradient* gradient, SPGradientType type)> get_gradient_changed() override {
         return _signal_gradient_changed;
+    }
+    sigc::signal<void (SPGradient* swatch)> get_swatch_changed() override {
+        return _signal_swatch_changed;
     }
     sigc::signal<void (SPPattern* pattern, std::optional<Colors::Color> color, const Glib::ustring& label,
         const Geom::Affine& transform, const Geom::Point& offset, bool uniform_scale, const Geom::Scale& gap)> get_pattern_changed() override {
@@ -133,6 +138,7 @@ public:
     void fire_pattern_changed() {
         if (_update.pending()) return;
 
+        auto scoped(_update.block());
         SPPattern* pattern = nullptr;
         auto id = _pattern.get_selected_doc_pattern();
         if (!id.empty() && _document) {
@@ -152,20 +158,16 @@ public:
     void fire_gradient_changed(SPGradient* gradient, PaintMode mode) {
         if (_update.pending()) return;
 
-        SPGradientType type = SP_GRADIENT_TYPE_LINEAR;
-        if (mode == PaintMode::RadGradient) {
-            //todo: types
-            type = SP_GRADIENT_TYPE_RADIAL;
-        }
-        else if (mode == PaintMode::Mesh) {
-            type = SP_GRADIENT_TYPE_MESH;
-        }
-        _signal_gradient_changed.emit(gradient, type);
+        auto scoped(_update.block());
+        auto vector = gradient ? gradient->getVector() : nullptr;
+        _signal_gradient_changed.emit(vector, _gradient.get_type());
     }
     void fire_swatch_changed() {
         if (_update.pending()) return;
 
-        //todo
+        auto scoped(_update.block());
+        auto vector = _swatch.getGradientSelector()->getVector();
+        _signal_swatch_changed.emit(vector);
     }
 
     SPDocument* _document = nullptr;
@@ -177,6 +179,7 @@ public:
     sigc::signal<void (const Colors::Color&)> _signal_color_changed;
     sigc::signal<void (PaintMode)> _signal_mode_changed;
     sigc::signal<void (SPGradient* gradient, SPGradientType type)> _signal_gradient_changed;
+    sigc::signal<void (SPGradient* swatch)> _signal_swatch_changed;
     sigc::signal<void (SPPattern*, std::optional<Color>, const Glib::ustring&, const Geom::Affine&, const Geom::Point&, bool, const Geom::Scale&)> _signal_pattern_changed;
     std::unique_ptr<ColorPickerPanel> _flat_color;
     GradientEditor _gradient = {"/gradient-edit", tt};
@@ -193,13 +196,14 @@ PaintSwitchImpl::PaintSwitchImpl() {
     _color->set(Color(0x000000ff));
     _flat_color = ColorPickerPanel::create(tt, pt, _color);
     auto header = Gtk::make_managed<Gtk::Box>(Gtk::Orientation::HORIZONTAL);
-    header->set_margin_top(5);
+    header->set_margin_top(1);
     header->set_margin_bottom(5);
     header->set_halign(Gtk::Align::FILL);
     auto types = Gtk::make_managed<Gtk::Box>(Gtk::Orientation::HORIZONTAL);
     types->set_spacing(0);
     types->set_hexpand();
 
+    // add buttons switching paint mode
     for (auto i : paint_modes) {
         auto btn = Gtk::make_managed<Gtk::ToggleButton>();
         btn->set_icon_name(i.icon);
@@ -208,39 +212,15 @@ PaintSwitchImpl::PaintSwitchImpl() {
         btn->set_group(_mode_group);
         auto mode = i.mode;
         btn->signal_toggled().connect([=,this](){
-            if (!btn->get_active() || _update.pending()) return;
-
-            // fire mode change
-            _signal_mode_changed.emit(mode);
-
-            switch (mode) {
-                case PaintMode::None:
-                    break;
-                case PaintMode::Solid:
-                    fire_flat_color_changed();
-                    break;
-                case PaintMode::Pattern:
-                    fire_pattern_changed();
-                    break;
-                case PaintMode::Gradient:
-                case PaintMode::RadGradient:
-                case PaintMode::Mesh:
-                    fire_gradient_changed(nullptr, mode);
-                    break;
-                case PaintMode::Swatch:
-                    fire_swatch_changed();
-                    break;
-                case PaintMode::NotSet:
-                    break;
-                default:
-                    assert(false);
-                    break;
+            if (btn->get_active() && !_update.pending()) {
+                switch_paint_mode(mode);
             }
         });
         types->append(*btn);
         _mode_buttons[i.mode] = btn;
     }
 
+    // add button altering color picker: rect preview, color wheel, sliders only
     auto pickers = Gtk::make_managed<Gtk::Box>(Gtk::Orientation::HORIZONTAL);
     pickers->set_spacing(0);
     pickers->set_halign(Gtk::Align::END);
@@ -265,27 +245,27 @@ PaintSwitchImpl::PaintSwitchImpl() {
     header->append(*types);
     header->append(*pickers);
 
-    //TODO: improve
+    //TODO: improve:
     _gradient.set_spinner_size_pattern("999.");
     _gradient.signal_changed().connect([this](auto gradient) { fire_gradient_changed(gradient, _mode); });
+    _gradient.set_margin_top(4);
 
     append(*header);
     auto separator = Gtk::make_managed<Gtk::Separator>();
-    separator->set_margin_bottom(4);
     separator->set_margin_start(-10);
     separator->set_margin_end(-10);
     append(*separator);
     append(_stack);
 
-    _stack.set_hhomogeneous();
-    _stack.set_vhomogeneous(false);
+    _stack.set_hhomogeneous(); // maintain same width
+    _stack.set_vhomogeneous(false); // but let height vary
     _stack.set_size_request(-1, 120); // min height
 
     auto undef = Gtk::make_managed<Gtk::Label>(_("Paint is undefined."));
     undef->set_halign(Gtk::Align::START);
     _unset.append(*undef);
+    _unset.set_margin_top(4);
     auto info = Gtk::make_managed<Gtk::Label>();
-    //todo - correct message, if any
     info->set_markup("<i>" + Glib::Markup::escape_text("Paint is not set and can be inherited.") + "</i>");
     info->set_opacity(0.6);
     info->set_margin_top(20);
@@ -295,6 +275,7 @@ PaintSwitchImpl::PaintSwitchImpl() {
     // force hight to reveal list of patterns
     _pattern.set_size_request(-1, 440);
     _pattern.signal_changed().connect([this]() { fire_pattern_changed(); });
+    _pattern.set_margin_top(4);
 
     _set_mode(PaintMode::None);
 
@@ -310,6 +291,34 @@ PaintSwitchImpl::PaintSwitchImpl() {
     _color->signal_changed.connect([this]() {
         fire_flat_color_changed();
     });
+}
+
+void PaintSwitchImpl::switch_paint_mode(PaintMode mode) {
+    // fire mode change
+    _signal_mode_changed.emit(mode);
+
+    switch (mode) {
+        case PaintMode::None:
+            break;
+        case PaintMode::Solid:
+            fire_flat_color_changed();
+            break;
+        case PaintMode::Pattern:
+            fire_pattern_changed();
+            break;
+        case PaintMode::Gradient:
+        case PaintMode::Mesh:
+            fire_gradient_changed(nullptr, mode);
+            break;
+        case PaintMode::Swatch:
+            fire_swatch_changed();
+            break;
+        case PaintMode::NotSet:
+            break;
+        default:
+            assert(false);
+            break;
+    }
 }
 
 void PaintSwitchImpl::set_color(const Colors::Color& color) {
@@ -348,22 +357,25 @@ void PaintSwitchImpl::_set_mode(PaintMode mode) {
 
 void PaintSwitchImpl::update_from_paint(const SPIPaint& paint) {
     auto scoped(_update.block());
+
     auto server = paint.isPaintserver() ? paint.href->getObject() : nullptr;
     if (server) {
         if (is<SPGradient>(server) && cast<SPGradient>(server)->getVector()->isSwatch()) {
             auto vector = cast<SPGradient>(server)->getVector();
-            // _psel->setSwatch(vector);
+            _swatch.setVector(vector ? vector->document : nullptr, vector);
         }
         else if (is<SPLinearGradient>(server) || is<SPRadialGradient>(server)) {
-            auto vector = cast<SPGradient>(server)->getVector();
-            _gradient.setMode(is<SPLinearGradient>(server) ? GradientSelector::MODE_LINEAR : GradientSelector::MODE_RADIAL);
-            _gradient.setGradient(vector);
+            auto gradient = cast<SPGradient>(server);
+            auto vector = gradient->getVector();
+            _gradient.setMode(is<SPLinearGradient>(gradient) ? GradientSelector::MODE_LINEAR : GradientSelector::MODE_RADIAL);
+            _gradient.setGradient(gradient);
             _gradient.setVector(vector ? vector->document : nullptr, vector);
             auto stop = cast<SPStop>(const_cast<SPIPaint&>(paint).getTag());
             _gradient.selectStop(stop);
-            vector->getUnits();
-            _gradient.setUnits(vector->getUnits());
-            _gradient.setSpread(vector->getSpread());
+            if (vector) {
+                _gradient.setUnits(vector->getUnits());
+                _gradient.setSpread(vector->getSpread());
+            }
         }
 #ifdef WITH_MESH
         else if (is<SPMeshGradient>(server)) {

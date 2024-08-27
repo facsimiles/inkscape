@@ -10,6 +10,10 @@
 #include <gtkmm/eventcontrollermotion.h>
 #include <gtkmm/gestureclick.h>
 
+#include <gtkmm/droptarget.h>
+#include <gtkmm/gestureclick.h>
+#include <gtkmm/gesturedrag.h>
+
 #include "colors/color.h"
 #include "colors/utils.h"
 #include "ui/controller.h"
@@ -212,6 +216,7 @@ static Geom::Point local_to_screen(const Geom::Rect& active, Geom::Point point, 
     return active.min() + point * active.dimensions();
 }
 
+
 ColorPlate::ColorPlate() {
     set_name("ColorPlate");
     set_disc(_disc); // add right CSS class
@@ -318,6 +323,13 @@ void ColorPlate::fire_color_changed() {
 
 void ColorPlate::on_motion(Gtk::EventControllerMotion const &motion, double x, double y) {
     if (!_drag) return;
+
+    if (x == 0 && y == 0) {
+        // this value is legit, but motion controller also reports it when
+        // mouse button leaves the popover, leading to unexpected jump;
+        // skip it (as of gtk 4.15.7)
+        return;
+    }
 
     auto state = motion.get_current_event_state();
     auto drag = Controller::has_flag(state, Gdk::ModifierType::BUTTON1_MASK);

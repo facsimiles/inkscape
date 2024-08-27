@@ -33,7 +33,6 @@
 #include <gtkmm/label.h>
 #include <gtkmm/spinbutton.h>
 #include <gtkmm/togglebutton.h>
-#include <gtkmm/treemodel.h>
 #include <2geom/rect.h>
 
 #include "desktop.h"
@@ -55,10 +54,10 @@
 #include "object/sp-path.h"
 #include "object/sp-rect.h"
 #include "object/sp-star.h"
+#include "object/sp-text.h"
 #include "ui/builder-utils.h"
 #include "ui/controller.h"
 #include "ui/dialog/object-attributes.h"
-
 #include "style.h"
 #include "ui/icon-names.h"
 #include "ui/pack.h"
@@ -66,9 +65,7 @@
 #include "ui/syntax.h"
 #include "ui/util.h"
 #include "ui/widget/image-properties.h"
-#include "ui/widget/spinbutton.h"
 #include "ui/widget/ink-property-grid.h"
-#include "ui/widget/style-swatch.h"
 #include "widgets/sp-attribute-widget.h"
 #include "xml/href-attribute-helper.h"
 
@@ -104,24 +101,16 @@ ObjectAttributes::ObjectAttributes()
     _builder(create_builder("object-attributes.glade")),
     _main_panel(get_widget<Gtk::Box>(_builder, "main-panel")),
     _obj_title(get_widget<Gtk::Label>(_builder, "main-obj-name")),
-    // _style_swatch(nullptr, _("Item's fill, stroke and opacity"), Gtk::Orientation::HORIZONTAL),
-    // _fill_paint(_("Fill")),
-    // _stroke_paint(_("Stroke")),
+    _obj_locked(get_widget<Gtk::Button>(_builder, "main-obj-locked")),
+    _obj_visible(get_widget<Gtk::Button>(_builder, "main-obj-visible")),
     _obj_properties(*Gtk::make_managed<ObjectProperties>())
 {
     auto& main = get_widget<Gtk::Box>(_builder, "main-widget");
     main.append(_obj_properties);
 
     _obj_title.set_text("");
-    // _style_swatch.set_hexpand(false);
-    // _style_swatch.set_valign(Gtk::Align::CENTER);
-    // get_widget<Gtk::Box>(_builder, "main-header").append(_style_swatch);
-    // auto& paint = get_widget<Gtk::Box>(_builder, "paint-box");
-    // paint.append(_fill_paint);
-    // paint.append(_stroke_paint);
     append(main);
     create_panels();
-    // _style_swatch.set_visible(false);
 }
 
 void ObjectAttributes::widget_setup() {
@@ -162,22 +151,12 @@ void ObjectAttributes::widget_setup() {
         }
     }
     _obj_title.set_markup("<b>" + Glib::Markup::escape_text(title) + "</b>");
+    update_vis_lock(item);
 
-    if (!panel) {
-        // _style_swatch.set_visible(false);
-    }
-    else {
+    if (panel) {
         if (_main_panel.get_children().empty()) {
             UI::pack_start(_main_panel, panel->widget(), true, true);
         }
-        bool show_style = false;
-        if (panel->supports_fill_stroke()) {
-            if (auto style = item ? item->style : nullptr) {
-                // _style_swatch.setStyle(style);
-                show_style = true;
-            }
-        }
-        // _style_swatch.set_visible(show_style);
         panel->update_panel(item, getDesktop());
         panel->widget().set_visible(true);
     }
@@ -186,18 +165,28 @@ void ObjectAttributes::widget_setup() {
 
     // TODO
     // show no of LPEs?
-    // show locked status?
 }
 
 void ObjectAttributes::update_panel(SPObject* item) {
-    if (!_current_panel) return;
+    update_vis_lock(item);
 
-    if (_current_panel->supports_fill_stroke()) {
-        if (auto style = item ? item->style : nullptr) {
-            // _style_swatch.setStyle(style);
-        }
+    if (_current_panel) {
+        _current_panel->update_panel(item, getDesktop());
     }
-    _current_panel->update_panel(item, getDesktop());
+}
+
+void ObjectAttributes::update_vis_lock(SPObject* object) {
+    bool show = false;
+    if (auto item = cast<SPItem>(object)) {
+        show = true;
+        _obj_visible.set_icon_name(item->isExplicitlyHidden() ? "object-hidden" : "object-visible");
+        _obj_locked.set_icon_name(item->isLocked() ? "object-locked" : "object-unlocked");
+    }
+    // don't actually hide buttons, it shifts everything
+    _obj_visible.set_opacity(show ? 1 : 0);
+    _obj_locked.set_opacity(show ? 1 : 0);
+    _obj_visible.set_sensitive(show);
+    _obj_locked.set_sensitive(show);
 }
 
 void ObjectAttributes::desktopReplaced() {
@@ -232,6 +221,8 @@ void ObjectAttributes::selectionModified(Selection* _selection, guint flags) {
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+
+namespace {
 
 std::tuple<bool, double, double> round_values(double x, double y) {
     auto a = std::round(x);
@@ -294,10 +285,59 @@ void align_star_shape(SPStar* path) {
     path->updateRepr();
 }
 
+void set_dimension_adj(Widget::InkSpinButton& btn) {
+    btn.set_adjustment(Gtk::Adjustment::create(0, 0, 1'000'000, 1, 5));
+}
+
+void set_location_adj(Widget::InkSpinButton& btn) {
+    btn.set_adjustment(Gtk::Adjustment::create(0, -1'000'000, 1'000'000, 1, 5));
+}
+
+struct AdjustmentDef {
+    double min = 0, max = 1;
+    double inc = 1, page_inc = 1;
+    int digits = 0;
+};
+enum Suffix {None = 0, Degree, Percent};
+struct SpinPropertyDef {
+    Widget::InkSpinButton* button = nullptr;
+    AdjustmentDef adjustment;
+    const char* label = nullptr;
+    const char* tooltip = nullptr;
+    Suffix unit = None;
+};
+
+void init_spin_button(const SpinPropertyDef& def) {
+    auto& button = *def.button;
+    auto& adj = def.adjustment;
+    button.set_adjustment(Gtk::Adjustment::create(0, adj.min, adj.max, adj.inc, adj.page_inc));
+    button.set_digits(adj.digits);
+    if (def.label) button.set_label(def.label);
+    if (def.tooltip) button.set_tooltip_text(def.tooltip);
+    switch (def.unit) {
+        case Degree:
+            set_degree_suffix(button);
+            break;
+        case Percent:
+            set_percent_suffix(button);
+            break;
+        default:
+            break;
+    }
+}
+
+} // namespace
+
 ///////////////////////////////////////////////////////////////////////////////
 
-details::AttributesPanel::AttributesPanel() {
+details::AttributesPanel::AttributesPanel(bool show_fill_stroke) {
+    _widget = &_grid;
     _tracker = std::make_unique<UI::Widget::UnitTracker>(Inkscape::Util::UNIT_TYPE_LINEAR);
+    _show_fill_stroke = show_fill_stroke;
+    if (show_fill_stroke) {
+        _paint.reset(new Widget::PaintAttribute());
+        _paint->insert_widgets(_grid, 0);
+    }
     //todo:
     // auto init_units = desktop->getNamedView()->display_units;
     // _tracker->setActiveUnit(init_units);
@@ -305,7 +345,14 @@ details::AttributesPanel::AttributesPanel() {
 
 void details::AttributesPanel::set_document(SPDocument* document) {
     if (supports_fill_stroke()) {
-        //
+        _paint->set_document(document);
+    }
+}
+
+void details::AttributesPanel::set_desktop(SPDesktop* desktop) {
+    _desktop = desktop;
+    if (supports_fill_stroke()) {
+        _paint->set_desktop(desktop);
     }
 }
 
@@ -320,7 +367,14 @@ void details::AttributesPanel::update_panel(SPObject* object, SPDesktop* desktop
     _desktop = desktop;
 
     if (!_update.pending()) {
+        update_paint(object);
         update(object);
+    }
+}
+
+void details::AttributesPanel::update_paint(SPObject* object) {
+    if (supports_fill_stroke()) {
+        _paint->update_from_object(object);
     }
 }
 
@@ -367,9 +421,8 @@ void details::AttributesPanel::change_value(SPObject* object, const Glib::RefPtr
 
 class ImagePanel : public details::AttributesPanel {
 public:
-    ImagePanel() {
+    ImagePanel(): AttributesPanel(false) {
         _title = _("Image");
-        _show_fill_stroke = false;
         _panel = std::make_unique<Inkscape::UI::Widget::ImageProperties>();
         _widget = _panel.get();
     }
@@ -385,9 +438,8 @@ private:
 
 class AnchorPanel : public details::AttributesPanel {
 public:
-    AnchorPanel() {
+    AnchorPanel(): AttributesPanel(false) {
         _title = _("Anchor");
-        _show_fill_stroke = false;
         _table = std::make_unique<SPAttributeTable>();
         _table->set_visible(true);
         _table->set_hexpand();
@@ -486,37 +538,25 @@ private:
 
 class RectPanel : public details::AttributesPanel {
 public:
-    RectPanel(Glib::RefPtr<Gtk::Builder> builder)
-        // _main(get_widget<Gtk::Grid>(builder, "rect-main")),
-        // _width(get_derived_widget<Inkscape::UI::Widget::SpinButton>(builder, "rect-width")),
-        // _height(get_derived_widget<Inkscape::UI::Widget::SpinButton>(builder, "rect-height")),
-        // _rx(get_derived_widget<Inkscape::UI::Widget::SpinButton>(builder, "rect-rx")),
-        // _ry(get_derived_widget<Inkscape::UI::Widget::SpinButton>(builder, "rect-ry")),
-        // _sharp(get_widget<Gtk::Button>(builder, "rect-sharp")),
-        // _round(get_widget<Gtk::Button>(builder, "rect-corners"))
+    RectPanel(Glib::RefPtr<Gtk::Builder> builder):
+        _main(get_widget<Gtk::Box>(builder, "rect-main")),
+        _sharp(get_widget<Gtk::Button>(builder, "rect-sharp")),
+        _corners(get_widget<Gtk::Button>(builder, "rect-corners"))
     {
         _title = _("Rectangle");
-        _widget = &_grid;
-        // _main.attach(_grid, 0, 0, 5);
 
-        _paint.insert_widgets(_grid, 0);
-        // _grid.add_gap();
-        _width.set_label(C_("Object's width", "W"));
-        _height.set_label(C_("Object's height", "H"));
-        _grid.add_property(_("Dimensions"), nullptr, &_width, &_height, 0);
-        _rx.set_label(C_("Corner radius in X", "Rx"));
-        _ry.set_label(C_("Corner radius in Y", "Ry"));
-        _grid.add_property(_("Corners"), nullptr, &_rx, &_ry, 0);
-        auto box = Gtk::make_managed<Gtk::Box>();
-        _sharp.set_icon_name("rectangle-make-corners-sharp");
-        _sharp.set_tooltip_text(_("Make corners sharp"));
-        _round.set_icon_name("rectangle-make-corners-round");
-        _round.set_tooltip_text(_("Make corners independent (path effect)"));
-        box->set_spacing(4);
-        box->append(_sharp);
-        box->append(*Gtk::make_managed<Gtk::Separator>(Gtk::Orientation::VERTICAL));
-        box->append(_round);
-        _grid.add_property(nullptr, nullptr, box, nullptr, nullptr);
+        SpinPropertyDef properties[] = {
+            {&_width,  { 0, 1'000'000, 0.1, 1, 3}, C_("Abbreviation of Width", "W"),  _("Width of rectangle (without stroke)")},
+            {&_height, { 0, 1'000'000, 0.1, 1, 3}, C_("Abbreviation of Height", "H"), _("Height of rectangle (without stroke)")},
+            {&_rx, { 0, 1'000'000, 0.5, 1, 3}, C_("Corner radius in X", "Rx"), _("Horizontal radius of rounded corners")},
+            {&_ry, { 0, 1'000'000, 0.5, 1, 3}, C_("Corner radius in Y", "Ry"), _("Vertical radius of rounded corners")},
+        };
+        for (auto& def : properties) {
+            init_spin_button(def);
+        }
+        _grid.add_property(_("Size"), nullptr, &_width, &_height, &_round);
+        _grid.add_property(_("Corners"), nullptr, &_rx, &_ry, nullptr);
+        _grid.add_property(nullptr, nullptr, &_main, nullptr, nullptr);
 
         _width.get_adjustment()->signal_value_changed().connect([this](){
             change_value_px(_rect, _width.get_adjustment(), "width", [this](double w){ _rect->setVisibleWidth(w); });
@@ -530,14 +570,18 @@ public:
         _ry.get_adjustment()->signal_value_changed().connect([this](){
             change_value_px(_rect, _ry.get_adjustment(), "ry", [this](double ry){ _rect->setVisibleRy(ry); });
         });
-        //TODO:
-        get_widget<Gtk::Button>(builder, "rect-round").signal_clicked().connect([this](){
+
+        _round.set_tooltip_text(_("Round numbers to nearest integer"));
+        _round.set_has_frame(false);
+        _round.set_icon_name("rounding");
+        _round.signal_clicked().connect([this](){
             auto [changed, x, y] = round_values(_width, _height);
             if (changed) {
                 _width.get_adjustment()->set_value(x);
                 _height.get_adjustment()->set_value(y);
             }
         });
+
         _sharp.signal_clicked().connect([this](){
             if (!_rect) return;
 
@@ -546,7 +590,7 @@ public:
             _rx.get_adjustment()->set_value(0);
             _ry.get_adjustment()->set_value(0);
         });
-        _round.signal_clicked().connect([this](){
+        _corners.signal_clicked().connect([this](){
             if (!_rect || !_desktop) return;
 
             // switch to node tool to show handles
@@ -565,7 +609,7 @@ public:
     ~RectPanel() override = default;
 
     void document_replaced(SPDocument* document) override {
-        _paint.set_document(document);
+        _paint->set_document(document);
     }
 
     void update(SPObject* object) override {
@@ -579,24 +623,19 @@ public:
         _ry.set_value(_rect->ry.value);
         auto lpe = find_lpeffect(_rect, LivePathEffect::FILLET_CHAMFER);
         _sharp.set_sensitive(_rect->rx.value > 0 || _rect->ry.value > 0 || lpe);
-        _round.set_sensitive(!lpe);
-        //todo
-        _paint.update_from_object(_rect);
+        _corners.set_sensitive(!lpe);
     }
 
 private:
     SPRect* _rect = nullptr;
-    // Gtk::Grid& _main;
-    Widget::InkPropertyGrid _grid;
     Widget::InkSpinButton _width;
     Widget::InkSpinButton _height;
-    // Inkscape::UI::Widget::SpinButton& _width;
-    // Inkscape::UI::Widget::SpinButton& _height;
     Widget::InkSpinButton _rx;
     Widget::InkSpinButton _ry;
-    Gtk::Button _sharp;
+    Gtk::Button& _sharp;
+    Gtk::Button& _corners;
     Gtk::Button _round;
-    Inkscape::UI::Widget::PaintAttribute _paint;
+    Gtk::Box& _main;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -604,18 +643,13 @@ private:
 class EllipsePanel : public details::AttributesPanel {
 public:
     EllipsePanel(Glib::RefPtr<Gtk::Builder> builder) :
-        _main(get_widget<Gtk::Grid>(builder, "ellipse-main")),
-        _rx(get_derived_widget<Inkscape::UI::Widget::SpinButton>(builder, "el-rx")),
-        _ry(get_derived_widget<Inkscape::UI::Widget::SpinButton>(builder, "el-ry")),
-        _start(get_derived_widget<Inkscape::UI::Widget::SpinButton>(builder, "el-start")),
-        _end(get_derived_widget<Inkscape::UI::Widget::SpinButton>(builder, "el-end")),
+        _main(get_widget<Gtk::Box>(builder, "ellipse-main")),
         _slice(get_widget<Gtk::ToggleButton>(builder, "el-slice")),
         _arc(get_widget<Gtk::ToggleButton>(builder, "el-arc")),
         _chord(get_widget<Gtk::ToggleButton>(builder, "el-chord")),
         _whole(get_widget<Gtk::Button>(builder, "el-whole"))
     {
         _title = _("Ellipse");
-        _widget = &_main;
 
         _type[0] = &_slice;
         _type[1] = &_arc;
@@ -638,6 +672,16 @@ public:
             _ellipse->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         };
 
+        SpinPropertyDef properties[] = {
+            {&_rx, { 0, 1'000'000, 0.1, 1, 3}, C_("Horizontal radius - X", "Rx"), _("Horizontal radius of the circle, ellipse, or arc")},
+            {&_ry, { 0, 1'000'000, 0.1, 1, 3}, C_("Vertical radius - Y", "Ry"),   _("Vertical radius of the circle, ellipse, or arc")},
+            {&_start, { -360, 360, 1, 10, 3 }, C_("Start angle", "S"), _("The angle (in degrees) from the horizontal to the arc's start point"), Degree},
+            {&_end,   { -360, 360, 1, 10, 3 }, C_("End angle", "E"),   _("The angle (in degrees) from the horizontal to the arc's end point"), Degree},
+        };
+        for (auto& def : properties) {
+            init_spin_button(def);
+        }
+
         _rx.get_adjustment()->signal_value_changed().connect([=,this](){
             change_value_px(_ellipse, _rx.get_adjustment(), nullptr, [=,this](double rx){ _ellipse->setVisibleRx(rx); normalize(); });
         });
@@ -651,7 +695,14 @@ public:
             change_angle(_ellipse, _end.get_adjustment(), [=,this](double e){ _ellipse->end = e; normalize(); });
         });
 
-        get_widget<Gtk::Button>(builder, "el-round").signal_clicked().connect([this](){
+        _grid.add_property(_("Radii"), nullptr, &_rx, &_ry, &_round);
+        _grid.add_property(_("Angles"), nullptr, &_start, &_end, nullptr);
+        _grid.add_row(&_main, nullptr, false);
+
+        _round.set_tooltip_text(_("Round numbers to nearest integer"));
+        _round.set_has_frame(false);
+        _round.set_icon_name("rounding");
+        _round.signal_clicked().connect([this](){
             auto [changed, x, y] = round_values(_rx, _ry);
             if (changed && x > 0 && y > 0) {
                 _rx.get_adjustment()->set_value(x);
@@ -716,15 +767,16 @@ public:
 private:
     SPGenericEllipse* _ellipse = nullptr;
     Gtk::Widget& _main;
-    Inkscape::UI::Widget::SpinButton& _rx;
-    Inkscape::UI::Widget::SpinButton& _ry;
-    Inkscape::UI::Widget::SpinButton& _start;
-    Inkscape::UI::Widget::SpinButton& _end;
+    Widget::InkSpinButton _rx;
+    Widget::InkSpinButton _ry;
+    Widget::InkSpinButton _start;
+    Widget::InkSpinButton _end;
     Gtk::ToggleButton &_slice;
     Gtk::ToggleButton &_arc;
     Gtk::ToggleButton &_chord;
     Gtk::Button& _whole;
     Gtk::ToggleButton *_type[3];
+    Gtk::Button _round;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -733,20 +785,21 @@ class StarPanel : public details::AttributesPanel {
 public:
     StarPanel(Glib::RefPtr<Gtk::Builder> builder) :
         _main(get_widget<Gtk::Grid>(builder, "star-main")),
-        _corners(get_derived_widget<Inkscape::UI::Widget::SpinButton>(builder, "star-corners")),
-        _ratio(get_derived_widget<Inkscape::UI::Widget::SpinButton>(builder, "star-ratio")),
-        _rounded(get_derived_widget<Inkscape::UI::Widget::SpinButton>(builder, "star-rounded")),
-        _rand(get_derived_widget<Inkscape::UI::Widget::SpinButton>(builder, "star-rand")),
         _poly(get_widget<Gtk::ToggleButton>(builder, "star-poly")),
         _star(get_widget<Gtk::ToggleButton>(builder, "star-star")),
-        _align(get_widget<Gtk::Button>(builder, "star-align")),
-        _clear_rnd(get_widget<Gtk::Button>(builder, "star-rnd-clear")),
-        _clear_round(get_widget<Gtk::Button>(builder, "star-round-clear")),
-        _clear_ratio(get_widget<Gtk::Button>(builder, "star-ratio-clear"))
+        _align(get_widget<Gtk::Button>(builder, "star-align"))
     {
         _title = _("Star");
-        _widget = &_main;
 
+        SpinPropertyDef properties[] = {
+            {&_corners, {   3, 1024, 1,    5,    0 }, nullptr, _("Number of corners of a polygon or star")},
+            {&_ratio,   {   0,    1, 0.01, 0.10, 4 }, nullptr, _("Base radius to tip radius ratio")},
+            {&_rounded, { -10,   10, 0.1,  1,    3 }, nullptr, _("How rounded are the corners (0 for sharp)")},
+            {&_rand,    { -10,   10, 0.1,  1,    3 }, nullptr, _("Scatter randomly the corners and angles")},
+        };
+        for (auto& def : properties) {
+            init_spin_button(def);
+        }
         _corners.get_adjustment()->signal_value_changed().connect([this](){
             change_value(_path, _corners.get_adjustment(), [this](double sides) {
                 _path->setAttributeDouble("sodipodi:sides", (int)sides);
@@ -782,6 +835,12 @@ public:
         _clear_rnd.signal_clicked().connect([this](){ _rand.get_adjustment()->set_value(0); });
         _clear_round.signal_clicked().connect([this](){ _rounded.get_adjustment()->set_value(0); });
         _clear_ratio.signal_clicked().connect([this](){ _ratio.get_adjustment()->set_value(0.5); });
+
+        _grid.add_property(_("Corner"), nullptr, &_corners, nullptr);
+        _grid.add_property(_("Spoke ratio"), nullptr, &_ratio, nullptr);
+        _grid.add_property(_("Rounded"), nullptr, &_rounded, nullptr);
+        _grid.add_property(_("Randomized"), nullptr, &_rand, nullptr);
+        _grid.add_row(_("Shape"), &_main);
 
         _poly.signal_toggled().connect([this](){ set_flat(true); });
         _star.signal_toggled().connect([this](){ set_flat(false); });
@@ -831,13 +890,13 @@ public:
 private:
     SPStar* _path = nullptr;
     Gtk::Widget& _main;
-    Inkscape::UI::Widget::SpinButton& _corners;
-    Inkscape::UI::Widget::SpinButton& _ratio;
-    Inkscape::UI::Widget::SpinButton& _rounded;
-    Inkscape::UI::Widget::SpinButton& _rand;
-    Gtk::Button& _clear_rnd;
-    Gtk::Button& _clear_round;
-    Gtk::Button& _clear_ratio;
+    Widget::InkSpinButton _corners;
+    Widget::InkSpinButton _ratio;
+    Widget::InkSpinButton _rounded;
+    Widget::InkSpinButton _rand;
+    Gtk::Button _clear_rnd;
+    Gtk::Button _clear_round;
+    Gtk::Button _clear_ratio;
     Gtk::Button& _align;
     Gtk::ToggleButton &_poly;
     Gtk::ToggleButton &_star;
@@ -847,15 +906,18 @@ private:
 
 class TextPanel : public details::AttributesPanel {
 public:
-    TextPanel(Glib::RefPtr<Gtk::Builder> builder) :
-        _main(get_widget<Gtk::Grid>(builder, "text-main"))
+    TextPanel(Glib::RefPtr<Gtk::Builder> builder)
+        // _main(get_widget<Gtk::Grid>(builder, "text-main"))
     {
         // TODO - text panel
+        _title = _("Text");
     }
 
 private:
-    Gtk::Widget& _main;
+    // Gtk::Widget& _main;
 
+    void update(SPObject* object) override {
+    }
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -864,17 +926,26 @@ class PathPanel : public details::AttributesPanel {
 public:
     PathPanel(Glib::RefPtr<Gtk::Builder> builder) :
         _main(get_widget<Gtk::Grid>(builder, "path-main")),
-        _width(get_derived_widget<Inkscape::UI::Widget::SpinButton>(builder, "path-width")),
-        _height(get_derived_widget<Inkscape::UI::Widget::SpinButton>(builder, "path-height")),
-        _x(get_derived_widget<Inkscape::UI::Widget::SpinButton>(builder, "path-x")),
-        _y(get_derived_widget<Inkscape::UI::Widget::SpinButton>(builder, "path-y")),
         _info(get_widget<Gtk::Label>(builder, "path-info")),
         _data(_svgd_edit->getTextView())
     {
         _title = _("Path");
-        _widget = &_main;
 
         //TODO: do we need to duplicate x/y/w/h toolbar widgets here?
+        _x.set_label(C_("Object's location X", "X"));
+        set_location_adj(_x);
+        _y.set_label(C_("Object's location Y", "Y"));
+        set_location_adj(_y);
+        _round_loc.set_tooltip_text(_("Round numbers to nearest integer"));
+        _round_loc.set_icon_name("rounding");
+        _round_loc.set_has_frame(false);
+        _grid.add_property(_("Location"), nullptr, &_x, &_y, &_round_loc);
+        _width.set_label(C_("Object's width", "W"));
+        set_dimension_adj(_width);
+        _height.set_label(C_("Object's height", "H"));
+        set_dimension_adj(_height);
+        _grid.add_property(_("Size"), nullptr, &_width, &_height, 0);
+        _grid.add_row(&_main);
         /*
         _width.get_adjustment()->signal_value_changed().connect([=](){
         });
@@ -951,7 +1022,7 @@ public:
         if (curve) {
             node_count = curve->get_segment_count();
         }
-        _info.set_text(_("Nodes: ") + std::to_string(node_count));
+        _info.set_text(C_("Number of path nodes follows", "Nodes: ") + std::to_string(node_count));
 
         //TODO: we can consider adding more stats, like perimeter, area, etc.
     }
@@ -978,11 +1049,12 @@ private:
 
     SPPath* _path = nullptr;
     bool _original = false;
-    Gtk::Widget& _main;
-    Inkscape::UI::Widget::SpinButton& _width;
-    Inkscape::UI::Widget::SpinButton& _height;
-    Inkscape::UI::Widget::SpinButton& _x;
-    Inkscape::UI::Widget::SpinButton& _y;
+    Gtk::Grid& _main;
+    Gtk::Button _round_loc;
+    Widget::InkSpinButton _x;
+    Widget::InkSpinButton _y;
+    Widget::InkSpinButton _width;
+    Widget::InkSpinButton _height;
     Gtk::Label& _info;
     std::unique_ptr<Syntax::TextEditView> _svgd_edit = Syntax::TextEditView::create(Syntax::SyntaxMode::SvgPathData);
     Gtk::TextView& _data;
@@ -1012,6 +1084,7 @@ void ObjectAttributes::create_panels() {
     _panels[typeid(SPStar).name()] = std::make_unique<StarPanel>(_builder);
     _panels[typeid(SPAnchor).name()] = std::make_unique<AnchorPanel>();
     _panels[typeid(SPPath).name()] = std::make_unique<PathPanel>(_builder);
+    _panels[typeid(SPText).name()] = std::make_unique<TextPanel>(_builder);
 }
 
 } // namespace Inkscape::UI::Dialog

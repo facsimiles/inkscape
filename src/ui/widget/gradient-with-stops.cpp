@@ -383,8 +383,8 @@ void GradientWithStops::move_stop(int stop_index, double offset_shift) {
 void GradientWithStops::on_motion(double x, double y, Gdk::ModifierType state) {
     if (!_gradient) return;
 
-    auto drag = state & Gdk::ModifierType::BUTTON1_MASK;
-    if (drag == Gdk::ModifierType::NO_MODIFIER_MASK) _dragging = false;
+    auto drag = Controller::has_flag(state, Gdk::ModifierType::BUTTON1_MASK);
+    if (!drag) _dragging = false;
 
     if (_dragging) {
         // move stop to a new position (adjust offset)

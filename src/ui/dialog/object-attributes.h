@@ -14,10 +14,7 @@
 #define SEEN_DIALOGS_OBJECT_ATTRIBUTES_H
 
 #include <glibmm/ustring.h>
-#include <gtkmm/expander.h>
-#include <gtkmm/grid.h>
 #include <gtkmm/label.h>
-#include <gtkmm/separator.h>
 #include <gtkmm/widget.h>
 #include <memory>
 #include <string>
@@ -29,8 +26,6 @@
 #include "ui/dialog/object-properties.h"
 #include "ui/operation-blocker.h"
 #include "ui/widget/paint-attribute.h"
-#include "ui/widget/spinbutton.h"
-#include "ui/widget/style-swatch.h"
 #include "ui/widget/unit-tracker.h"
 
 class SPAttributeTable;
@@ -42,10 +37,11 @@ namespace details {
 
 class AttributesPanel {
 public:
-    AttributesPanel();
+    AttributesPanel(bool show_fill_stroke = true);
     virtual ~AttributesPanel() = default;
 
     void set_document(SPDocument* document);
+    void set_desktop(SPDesktop* desktop);
     void update_panel(SPObject* object, SPDesktop* desktop);
     Gtk::Widget& widget() { if(!_widget) throw "crap"; return *_widget; }
     Glib::ustring get_title() const { return _title; }
@@ -53,6 +49,7 @@ public:
 
 protected:
     virtual void update(SPObject* object) = 0;
+    virtual void update_paint(SPObject* object);
     virtual void document_replaced(SPDocument* document) {}
     // value with units changed by the user; modify current object
     void change_value_px(SPObject* object, const Glib::RefPtr<Gtk::Adjustment>& adj, const char* attr, std::function<void (double)>&& setter);
@@ -63,10 +60,13 @@ protected:
 
     SPDesktop* _desktop = nullptr;
     OperationBlocker _update;
-    bool _show_fill_stroke = true;
     Glib::ustring _title;
     Gtk::Widget* _widget = nullptr;
     std::unique_ptr<UI::Widget::UnitTracker> _tracker;
+    std::unique_ptr<Widget::PaintAttribute> _paint;
+    Widget::InkPropertyGrid _grid;
+private:
+    bool _show_fill_stroke = true;
 };
 
 } // namespace details
@@ -97,15 +97,16 @@ private:
     std::map<std::string, std::unique_ptr<details::AttributesPanel>> _panels;
     details::AttributesPanel* get_panel(SPObject* object);
     void update_panel(SPObject* object);
+    void update_vis_lock(SPObject* object);
 
     details::AttributesPanel* _current_panel = nullptr;
     OperationBlocker _update;
     Gtk::Box& _main_panel;
     Gtk::Label& _obj_title;
+    Gtk::Button& _obj_locked;
+    Gtk::Button& _obj_visible;
     // Contains a pointer to the currently selected item (NULL in case nothing is or multiple objects are selected).
     SPItem* _current_item = nullptr;
-    // Inkscape::UI::Widget::StyleSwatch _style_swatch;
-    // Inkscape::UI::Widget::PaintAttribute _paint;
     ObjectProperties& _obj_properties;
 };
 

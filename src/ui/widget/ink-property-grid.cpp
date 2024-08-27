@@ -16,12 +16,16 @@ void InkPropertyGrid::construct() {
     set_child(_grid);
 
     connectBeforeResize([this](int width, int height, int baseline) {
+        auto m = measure(Gtk::Orientation::HORIZONTAL);
+        if (!_single_column && m.sizes.minimum < _min_width - 1) {
+            _min_width = m.sizes.minimum + 1;
+        }
         auto single = width <= _min_width;
         if (single != _single_column) {
             // introduce hysteresis to avoid flickering
-            if (abs(width - _min_width) < 2) return;
+            if (!single && abs(width - _min_width) < 2) return;
         }
-        set_single_column(width <= _min_width);
+        set_single_column(single);
     });
 }
 
@@ -48,6 +52,8 @@ Gtk::Widget* InkPropertyGrid::add_property(Gtk::Label* label, Gtk::Widget* butto
         _grid.attach(*button1, COL_BUTTON_1, _row);
     }
     if (w1) {
+        if (w1->get_halign() == Gtk::Align::START) {
+        }
         w1->set_margin(margin);
         w1->set_hexpand();
         _field_width->add_widget(*w1);
@@ -63,6 +69,13 @@ Gtk::Widget* InkPropertyGrid::add_property(Gtk::Label* label, Gtk::Widget* butto
         w2->set_hexpand();
         _field_width->add_widget(*w2);
         _field_height->add_widget(*w2);
+    }
+    else {
+        w2 = Gtk::make_managed<Gtk::Box>();
+        w2->set_hexpand();
+        w2->set_margin_start(margin);
+        w2->set_margin_end(margin);
+        _field_width->add_widget(*w2);
     }
 
     if (w1 && w2) {
@@ -101,6 +114,43 @@ Gtk::Widget* InkPropertyGrid::add_gap(int size) {
     gap->set_size_request(1, size);
    _grid.attach(*gap, COL_LABEL, _row++);
     return gap;
+}
+
+void InkPropertyGrid::add_row(Gtk::Widget* widget, Gtk::Widget* button, bool whole_row, int margin) {
+    if (!widget) return;
+
+    widget->set_margin(margin);
+    _grid.attach(*widget, whole_row ? COL_LABEL : COL_FILED_1, _row, whole_row ? 3 : 2);
+
+    if (button) {
+        button->set_margin(margin);
+        button->set_margin_start(0);
+        button->set_margin_end(0);
+        _grid.attach(*button, COL_BUTTON_2, _row);
+    }
+
+    ++_row;
+}
+
+void InkPropertyGrid::add_row(const std::string& label, Gtk::Widget* widget, Gtk::Widget* button, int margin) {
+    auto l = Gtk::make_managed<Gtk::Label>(label);
+    l->set_halign(Gtk::Align::START);
+    l->set_margin(margin);
+    _grid.attach(*l, COL_LABEL, _row);
+
+    if (widget) {
+        widget->set_margin(margin);
+        _grid.attach(*widget, COL_FILED_1, _row);
+    }
+
+    if (button) {
+        button->set_margin(margin);
+        button->set_margin_start(0);
+        button->set_margin_end(0);
+        _grid.attach(*button, COL_BUTTON_2, _row);
+    }
+
+    ++_row;
 }
 
 void InkPropertyGrid::set_single_column(bool single) {

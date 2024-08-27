@@ -48,6 +48,8 @@ IGNORE_ICONS = [
     'edit-clear-symbolic.svg',
     'view-refresh-symbolic.svg',
     'view-refresh.svg',
+    'pan-down.svg',
+    'pan-down-symbolic.svg',
     # Those are illustrations rather than icons
     'feBlend-icon-symbolic.svg',
     'feColorMatrix-icon-symbolic.svg',

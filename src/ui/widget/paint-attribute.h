@@ -37,6 +37,7 @@ public:
 
     void insert_widgets(InkPropertyGrid& grid, int row);
     void set_document(SPDocument* document);
+    void set_desktop(SPDesktop* desktop);
     // update UI from passed object style
     void update_from_object(SPObject* object);
 
@@ -92,6 +93,7 @@ private:
     Glib::RefPtr<Gtk::SizeGroup> _size_group = Gtk::SizeGroup::create(Gtk::SizeGroup::Mode::HORIZONTAL);
     WidgetGroup _stroke_widgets;
     OperationBlocker _update;
+    SPDesktop* _desktop = nullptr;
 };
 
 } // namespace
