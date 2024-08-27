@@ -64,6 +64,10 @@ public:
     void set_selected(SPPattern* pattern);
     // selected pattern ID if any plus stock pattern collection document (or null)
     std::pair<std::string, SPDocument*> get_selected();
+    // get selected pattern ID from a list of current document patterns
+    std::string get_selected_doc_pattern();
+    // get selected pattern ID and its stock document from a list of stock patterns
+    std::pair<std::string, SPDocument*> get_selected_stock_pattern();
     // and its color
     std::optional<Colors::Color> get_selected_color();
     // return combined scale and rotation

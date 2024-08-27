@@ -1,9 +1,15 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 #include "paint-attribute.h"
+
+#include <boost/smart_ptr/intrusive_ptr.hpp>
 #include <glibmm/ustring.h>
 #include <gtkmm/enums.h>
 
+#include "document-undo.h"
+#include "gradient-chemistry.h"
+#include "inkscape.h"
+#include "pattern-manipulation.h"
 #include "stroke-style.h"
 #include "object/sp-gradient.h"
 #include "object/sp-linear-gradient.h"
@@ -13,20 +19,28 @@
 #include "style.h"
 #include "object/sp-stop.h"
 #include "ui/widget/paint-switch.h"
+#include "xml/sp-css-attr.h"
 
 namespace Inkscape::UI::Widget {
+
+boost::intrusive_ptr<SPCSSAttr> new_css_attr() {
+    return boost::intrusive_ptr<SPCSSAttr>(sp_repr_css_attr_new(), false);
+}
 
 PaintAttribute::PaintAttribute() {
     _marker_start.set_flat(true);
     _marker_mid.set_flat(true);
     _marker_end.set_flat(true);
 
-    _fill._switch->signal_color_changed().connect([this](auto& color) {
-        // change fill solid color
-        if (_current_object) {
-            //todo
-        }
-    });
+    _fill._update = &_update;
+    _stroke._update = &_update;
+
+    // _fill._switch->signal_color_changed().connect([this](auto& color) {
+    //     // change fill solid color
+    //     if (_current_object) {
+    //         //todo
+    //     }
+    // });
 
     // refresh paint popup before opening it; it is not kept up-to-date
     _fill._popover.signal_show().connect([this]() {
@@ -44,6 +58,10 @@ void PaintAttribute::PaintStrip::hide() {
     _clear.set_visible(false);
 }
 
+bool PaintAttribute::PaintStrip::can_update() {
+    return _current_item && _update && !_update->pending();
+}
+
 void PaintAttribute::PaintStrip::show() {
     _paint_btn.set_visible();
     _alpha.set_visible();
@@ -51,9 +69,20 @@ void PaintAttribute::PaintStrip::show() {
     _clear.set_visible();
 }
 
+static void set_item_style(SPItem* item, SPCSSAttr* css) {
+    // SPCSSAttr* css = sp_repr_css_attr_new();
+    // sp_repr_css_set_property(css, fill ? "fill" : "stroke", "none");
+    // sp_desktop_set_style(_desktop, css, true, true, switch_style);
+    // boost::intrusive_ptr<SPCSSAttr> css_set(sp_repr_css_attr_new(), false);
+    // SPCSSAttr* css_set = sp_repr_css_attr_new();
+    // sp_repr_css_merge(css_set.get(), css);
+    item->changeCSS(css, "style");
+    // sp_repr_css_attr_unref(css_set);
+    // sp_repr_css_attr_unref(css);
+}
+
 PaintAttribute::PaintStrip::PaintStrip(const Glib::ustring& title, bool fill) :
   _label(title)
-  // _paint(fill ? FILL : STROKE, true)
 {
     _paint_btn.set_direction(Gtk::ArrowType::DOWN);
     _paint_btn.set_always_show_arrow();
@@ -99,6 +128,100 @@ PaintAttribute::PaintStrip::PaintStrip(const Glib::ustring& title, bool fill) :
     // TEMP code =============================
     // _switch->signal_color_changed().connect([this](auto& color) {
     // });
+
+    _clear.signal_clicked().connect([this,fill]() {
+        if (!can_update()) return;
+
+        //TODO: skip locked items?
+        //TODO: skip <use> items?
+
+        // remove fill/stroke
+        auto css = new_css_attr();
+        sp_repr_css_set_property(css.get(), fill ? "fill" : "stroke", "none");
+        set_item_style(_current_item, css.get());
+
+        DocumentUndo::done(_current_item->document, fill ? _("Remove fill") : _("Remove stroke"), "dialog-fill-and-stroke");
+    });
+
+    auto set_flat_color = [this,fill](const Color& color) {
+        if (!can_update()) return;
+
+        // sp_desktop_set_color(_desktop, _solid_colors->getAverage(), false, kind == FILL);
+        auto css = new_css_attr();
+        // SPCSSAttr* css = sp_repr_css_attr_new();
+        sp_repr_css_set_property_string(css.get(), fill ? "fill" : "stroke", color.toString(false));
+        sp_repr_css_set_property_double(css.get(), fill ? "fill-opacity" : "stroke-opacity", color.getOpacity());
+        // css = sp_css_attr_unset_text(css);
+        // sp_desktop_set_style(desktop, css);
+        //TODO: skip locked item?
+        set_item_style(_current_item, css.get());
+        // sp_repr_css_attr_unref(css);
+
+        DocumentUndo::maybeDone(_current_item->document, fill ? "undo_fill" : "undo_stroke",
+            fill ? _("Set fill color") : _("Set stroke color"), "dialog-fill-and-stroke");
+    };
+
+    _define.signal_clicked().connect([=,this]() {
+        if (!can_update()) return;
+
+        // add fill or stroke
+        set_flat_color(Color(0x909090ff));
+    });
+
+    _switch->get_pattern_changed().connect([this,fill](auto pattern, auto color, auto label, auto transform, auto offset, auto uniform, auto gap) {
+        if (!can_update()) return;
+
+        auto kind = fill ? FILL : STROKE;
+        sp_item_apply_pattern(_current_item, pattern, kind, color, label, transform, offset, uniform, gap);
+        DocumentUndo::done(_current_item->document, fill ? _("Set pattern on fill") : _("Set pattern on stroke"), "dialog-fill-and-stroke");
+    });
+
+    _switch->get_gradient_changed().connect([this,fill](auto gradient, auto gradient_type) {
+        if (!can_update()) return;
+
+        auto kind = fill ? FILL : STROKE;
+        sp_item_apply_gradient(_current_item, gradient, _desktop, gradient_type, kind);
+        DocumentUndo::done(_current_item->document, fill ? _("Set gradient on fill") : _("Set gradient on stroke"), "dialog-fill-and-stroke");
+    });
+
+    _switch->get_flat_color_changed().connect([=,this](auto& color) {
+        set_flat_color(color);
+    });
+
+    _switch->get_signal_mode_changed().connect([=,this](auto mode) {
+        if (!can_update()) return;
+
+        if (mode == PaintMode::NotSet) {
+            // unset
+            _current_item->removeAttribute(fill ? "fill" : "stroke");
+            auto css = new_css_attr();
+            if (fill) {
+                sp_repr_css_unset_property(css.get(), "fill");
+            }
+            else {
+                for (auto attr : {
+                    "stroke", "stroke-opacity", "stroke-width", "stroke-miterlimit", "stroke-linejoin",
+                    "stroke-linecap", "stroke-dashoffset", "stroke-dasharray"}) {
+                    sp_repr_css_unset_property(css.get(), attr);
+                }
+            }
+            set_item_style(_current_item, css.get());
+            DocumentUndo::done(_current_item->document,  fill ? _("Unset fill") : _("Unset stroke"), "dialog-fill-and-stroke");
+        }
+    });
+
+    _alpha.signal_value_changed().connect([this,fill](auto alpha) {
+        if (!can_update()) return;
+
+        auto css = new_css_attr();
+        sp_repr_css_set_property_double(css.get(), fill ? "fill-opacity" : "stroke-opacity", alpha / 100.0);
+        //TODO: skip locked item?
+        set_item_style(_current_item, css.get());
+        // sp_repr_css_attr_unref(css);
+
+        DocumentUndo::maybeDone(_current_item->document, fill ? "undo_fill_alpha" : "undo_stroke_alpha",
+            fill ? _("Set fill opacity") : _("Set stroke opacity"), "dialog-fill-and-stroke");
+    });
 }
 
 void PaintAttribute::insert_widgets(InkPropertyGrid& grid, int row) {
@@ -184,6 +307,7 @@ void PaintAttribute::set_paint(const SPObject* object, bool set_fill) {
 }
 
 void PaintAttribute::set_paint(const SPIPaint& paint, double opacity, bool fill) {
+    auto scoped(_update.block());
     auto mode = get_mode_from_paint(paint);
     auto& stripe = fill ? _fill : _stroke;
     stripe._switch->set_mode(mode);
@@ -241,7 +365,8 @@ void PaintAttribute::set_preview(const SPIPaint& paint, double paint_opacity, Pa
         stripe._paint_icon.set_from_icon_name(icon);
         stripe._paint_icon.set_visible();
         stripe.show();
-        stripe._alpha.set_visible(false);
+        //TODO: when to hide alpha
+        // stripe._alpha.set_visible(false);
     }
 
     show_stroke(!fill);
@@ -292,7 +417,15 @@ void PaintAttribute::update_stroke(SPStyle* style) {
 }
 
 void PaintAttribute::update_from_object(SPObject* object) {
+    auto scoped(_update.block());
+
     _current_object = object;
+    _fill._current_item = cast<SPItem>(object);
+    _stroke._current_item = cast<SPItem>(object);
+    //todo: revise
+    auto desktop = SP_ACTIVE_DESKTOP;
+    _fill._desktop = desktop;
+    _stroke._desktop = desktop;
 
     if (!object || !object->style) {
         // hide
@@ -304,10 +437,16 @@ void PaintAttribute::update_from_object(SPObject* object) {
         auto& fill_paint = *object->style->getFillOrStroke(true);
         auto fill_mode = get_mode_from_paint(fill_paint);
         set_preview(fill_paint, object->style->fill_opacity, fill_mode, true);
+        if (_fill._popover.is_visible()) {
+            set_paint(_current_object, true);
+        }
 
         auto& stroke_paint = *object->style->getFillOrStroke(false);
         auto stroke_mode = get_mode_from_paint(stroke_paint);
         set_preview(stroke_paint, object->style->stroke_opacity, stroke_mode, false);
+        if (_stroke._popover.is_visible()) {
+            set_paint(_current_object, false);
+        }
         update_stroke(object->style);
         update_markers(object->style->marker_ptrs, object);
     }

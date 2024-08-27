@@ -37,6 +37,7 @@ public:
 
     void insert_widgets(InkPropertyGrid& grid, int row);
     void set_document(SPDocument* document);
+    // update UI from passed object style
     void update_from_object(SPObject* object);
 
 private:
@@ -57,6 +58,7 @@ private:
 
         void show();
         void hide();
+        bool can_update();
         Gtk::MenuButton _paint_btn;
         Gtk::Popover _popover;
         std::unique_ptr<PaintSwitch> _switch = PaintSwitch::create();
@@ -69,6 +71,9 @@ private:
         Gtk::Box _box;
         Gtk::Button _define;
         Gtk::Button _clear;
+        SPItem* _current_item = nullptr;
+        SPDesktop* _desktop = nullptr;
+        OperationBlocker* _update = nullptr;
     };
     PaintStrip _fill = PaintStrip(_("Fill"), true);
     PaintStrip _stroke= PaintStrip(_("Stroke"), false);
@@ -86,6 +91,7 @@ private:
     SPObject* _current_object = nullptr;
     Glib::RefPtr<Gtk::SizeGroup> _size_group = Gtk::SizeGroup::create(Gtk::SizeGroup::Mode::HORIZONTAL);
     WidgetGroup _stroke_widgets;
+    OperationBlocker _update;
 };
 
 } // namespace
