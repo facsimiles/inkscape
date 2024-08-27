@@ -69,7 +69,7 @@ ComboBoxEntryToolItem::ComboBoxEntryToolItem(Glib::ustring name,
     append(_combobox);
     _combobox.set_active(false); // ink_comboboxentry_action->active
     _combobox.signal_changed().connect([this] { combo_box_changed_cb(); });
-    _combobox.signal_realize().connect([this] { _combobox.set_model(_model); });
+    _combobox.signal_realize().connect([this] { _combo_box_changed_cb_blocked = true; _combobox.set_model(_model); _combo_box_changed_cb_blocked = false; });
 
     // Optionally add separator function...
     if (separator_func) {
@@ -400,6 +400,10 @@ Glib::ustring ComboBoxEntryToolItem::check_comma_separated_text() const
 
 void ComboBoxEntryToolItem::combo_box_changed_cb()
 {
+    if (_combo_box_changed_cb_blocked) {
+        return;
+    }
+
     // Two things can happen to get here:
     //   An item is selected in the drop-down menu.
     //   Text is typed.

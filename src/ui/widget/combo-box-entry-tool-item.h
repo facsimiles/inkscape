@@ -108,6 +108,8 @@ private:
     sigc::scoped_connection     _warning_cb_id;
     bool                _warning_cb_blocked = false;
 
+    bool _combo_box_changed_cb_blocked = false;
+
     sigc::scoped_connection idle_conn;
 
     sigc::signal<void ()> _signal_changed;
