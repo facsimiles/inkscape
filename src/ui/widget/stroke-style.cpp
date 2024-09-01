@@ -189,7 +189,7 @@ StrokeStyle::StrokeStyleButton::StrokeStyleButton(Gtk::ToggleButton    *&grp,
     set_child(*px);
 }
 
-std::vector<double> parse_pattern(const Glib::ustring& input) {
+std::vector<double> parse_dash_pattern(const Glib::ustring& input) {
     std::vector<double> output;
     if (input.empty()) return output;
 
@@ -280,7 +280,7 @@ StrokeStyle::StrokeStyle() :
                                             //   DashSelector class, so that we do not have to
                                             //   expose any of the underlying widgets?
     dashSelector = Gtk::make_managed<DashSelector>();
-    dashSelector->changed_signal.connect([this](){
+    dashSelector->changed_signal.connect([this](auto){
         if (update || _editing_dash_pattern) {
             return;
         }
@@ -301,7 +301,7 @@ StrokeStyle::StrokeStyle() :
         }
         _editing_dash_pattern = true;
         update = true;
-        auto pattern = parse_pattern(_pattern_entry->get_text());
+        auto pattern = parse_dash_pattern(_pattern_entry->get_text());
         dashSelector->set_dash_pattern(pattern, dashSelector->get_offset());
         update = false;
         setStrokeDash();
@@ -942,11 +942,7 @@ StrokeStyle::updateLine()
 /**
  * Sets a line's dash properties in a CSS style object.
  */
-void
-StrokeStyle::setScaledDash(SPCSSAttr *css,
-                                int ndash, const double *dash, double offset,
-                                double scale)
-{
+void set_scaled_dash(SPCSSAttr* css, int ndash, const double *dash, double offset, double scale) {
     if (ndash > 0) {
         Inkscape::CSSOStringStream osarray;
         for (int i = 0; i < ndash; i++) {
@@ -966,11 +962,10 @@ StrokeStyle::setScaledDash(SPCSSAttr *css,
     }
 }
 
-static inline double calcScaleLineWidth(const double width_typed, SPItem *const item, Inkscape::Util::Unit const *const unit)
-{
+double calc_scale_line_width(double width_typed, const SPItem* item, const Unit* unit) {
     if (unit->abbr == "%") {
         auto scale = item->i2doc_affine().descrim();;
-        const gdouble old_w = item->style->stroke_width.computed;
+        double old_w = item->style->stroke_width.computed;
         return (old_w * width_typed / 100) * scale;
     } else if (unit->type == Inkscape::Util::UNIT_TYPE_LINEAR) {
         return Inkscape::Util::Quantity::convert(width_typed, unit, "px");
@@ -1008,14 +1003,14 @@ void StrokeStyle::setStrokeWidth()
     }
 
     for (auto item : desktop->getSelection()->items()) {
-        const double width = calcScaleLineWidth(width_typed, item, unit);
+        const double width = calc_scale_line_width(width_typed, item, unit);
         sp_repr_css_set_property_double(css, "stroke-width", width);
 
         if (prefs->getBool("/options/dash/scale", true)) {
             // This will read the old stroke-width to un-scale the pattern.
             double offset = 0;
             auto dash = getDashFromStyle(item->style, offset);
-            setScaledDash(css, dash.size(), dash.data(), offset, width);
+            set_scaled_dash(css, dash.size(), dash.data(), offset, width);
         }
         sp_desktop_apply_css_recursive (item, css, true);
     }
@@ -1058,7 +1053,7 @@ void StrokeStyle::setStrokeDash()
             scale = item->style->stroke_width.computed * scale;
         }
 
-        setScaledDash(css, dash.size(), dash.data(), offset, scale);
+        set_scaled_dash(css, dash.size(), dash.data(), offset, scale);
         sp_desktop_apply_css_recursive (item, css, true);
     }
     sp_desktop_set_style (desktop, css, false);

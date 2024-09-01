@@ -23,6 +23,7 @@
 #include "style-internal.h"
 #include "unit-menu.h"
 #include "color-preview.h"
+#include "combo-enums.h"
 #include "ui/widget/dash-selector.h"
 #include "ui/widget/marker-combo-box.h"
 #include "ui/widget/paint-switch.h"
@@ -53,13 +54,15 @@ private:
     // show/hide stroke widgets
     void show_stroke(bool show);
     void update_stroke(SPStyle* style);
+    // true if attributes can be modified now, or false while update is pending
+    bool can_update() const;
 
     struct PaintStrip {
         PaintStrip(const Glib::ustring& title, bool fill);
 
         void show();
         void hide();
-        bool can_update();
+        bool can_update() const;
         Gtk::MenuButton _paint_btn;
         Gtk::Popover _popover;
         std::unique_ptr<PaintSwitch> _switch = PaintSwitch::create();
@@ -89,11 +92,23 @@ private:
     InkSpinButton _stroke_width;
     UnitMenu _unit_selector;
     Gtk::Popover _stroke_options;
-    SPObject* _current_object = nullptr;
+    InkSpinButton _opacity;
+    Gtk::Button _reset_opacity;
+    Gtk::Entry _filter_primitive;
+    InkSpinButton _blur;
+    Gtk::Button _clear_blur;
+    Gtk::Button _edit_filter;
+    Gtk::Box _filter_buttons;
+    WidgetGroup _filter_widgets;
+    ComboBoxEnum<SPBlendMode> _blend;
+    Gtk::Button _reset_blend;
+    SPItem* _current_item = nullptr;
     Glib::RefPtr<Gtk::SizeGroup> _size_group = Gtk::SizeGroup::create(Gtk::SizeGroup::Mode::HORIZONTAL);
     WidgetGroup _stroke_widgets;
     OperationBlocker _update;
     SPDesktop* _desktop = nullptr;
+    const Unit* _current_unit = nullptr;
+    // const Unit* _old_unit = nullptr;
 };
 
 } // namespace

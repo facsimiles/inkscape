@@ -5,6 +5,7 @@
 //
 
 #include "ink-spin-button.h"
+#include <assert.h>
 #include <iomanip>
 
 #include "ui/containerize.h"
@@ -348,6 +349,13 @@ void InkSpinButton::set_trim_zeros(bool trim) {
     }
 }
 
+void InkSpinButton::set_scaling_factor(double factor) {
+    assert(factor > 0 && factor < 1e9);
+    _scaling_factor = factor;
+    queue_resize();
+    update();
+}
+
 static void trim_zeros(std::string& ret) {
     while (ret.find('.') != std::string::npos &&
         (ret.substr(ret.length() - 1, 1) == "0" || ret.substr(ret.length() - 1, 1) == ".")) {
@@ -400,7 +408,11 @@ void InkSpinButton::update() {
     _minus.set_sensitive(_adjustment->get_value() > _adjustment->get_lower());
     _plus.set_sensitive(_adjustment->get_value() < _adjustment->get_upper());
 
-    _signal_value_changed.emit(value);
+    _signal_value_changed.emit(value / _scaling_factor);
+}
+
+void InkSpinButton::set_new_value(double new_value) {
+    _adjustment->set_value(new_value);
 }
 
 // ---------------- CONTROLLERS -----------------
@@ -449,7 +461,7 @@ void InkSpinButton::on_motion_leave_value() {
 
 // ---------------   DRAG VALUE  ----------------
 
-double InkSpinButton::get_accel_factor(Gdk::ModifierType state) const {
+static double get_accel_factor(Gdk::ModifierType state) {
     double scale = 1.0;
     // Ctrl modifier slows down, Shift speeds up
     if ((state & Gdk::ModifierType::CONTROL_MASK) == Gdk::ModifierType::CONTROL_MASK) {
@@ -485,7 +497,7 @@ void InkSpinButton::on_drag_update_value(Gdk::EventSequence* sequence) {
         if (!grow) distance = -distance;
 // printf("drag: %f, %f, angle: %f,  sin: %f,  cos: %f, mul: %f\n", dx, dy, angle, sin(angle), 0.0);
         auto value = _initial_value + get_accel_factor(state) * distance / max_dist * range + _adjustment->get_lower();
-        set_value(value);
+        set_new_value(value);
         _dragged = true;
     }
 }
@@ -517,7 +529,11 @@ bool InkSpinButton::commit_entry() {
         auto text = get_text(_entry);
         if (_dont_evaluate) {
             value = std::stod(text);
-        } else {
+        }
+        else if (_evaluator) {
+            value = _evaluator(text);
+        }
+        else {
             value = Util::ExpressionEvaluator{text}.evaluate().value;
         }
         _adjustment->set_value(value);
@@ -604,16 +620,16 @@ void InkSpinButton::on_scroll_end() {
 }
 
 void InkSpinButton::set_value(double new_value) {
-    _adjustment->set_value(new_value);
+    set_new_value(new_value * _scaling_factor);
 }
 
 double InkSpinButton::get_value() const {
-    return _adjustment->get_value();
+    return _adjustment->get_value() / _scaling_factor;
 }
 
-void InkSpinButton::change_value(double delta, Gdk::ModifierType state) {
+void InkSpinButton::change_value(double inc, Gdk::ModifierType state) {
     double scale = get_accel_factor(state);
-    set_value(_adjustment->get_value() + _adjustment->get_step_increment() * scale * delta);
+    set_new_value(_adjustment->get_value() + _adjustment->get_step_increment() * scale * inc);
 }
 
 // ------------------   KEY    ------------------
@@ -722,6 +738,10 @@ sigc::signal<void(double)> InkSpinButton::signal_value_changed() const {
 void InkSpinButton::set_min_size(const std::string& pattern) {
     _min_size_pattern = pattern;
     queue_resize();
+}
+
+void InkSpinButton::set_evaluator_function(std::function<double(const Glib::ustring&)> cb) {
+    _evaluator = cb;
 }
 
 } // namespace Inkscape::UI::Widget

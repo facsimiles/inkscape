@@ -35,6 +35,8 @@ public:
     void set_has_frame(bool frame = true);
     // Set to true to hide insignificant zeros after decimal point
     void set_trim_zeros(bool trim);
+    // Set scaling factor to multiply all values before presenting them; by default it is 1.0
+    void set_scaling_factor(double factor);
     // Which widget to focus if defocusing this spin button;
     // if not set explicitly, next available focusable widget will be used
     void set_defocus_widget(Gtk::Widget* widget) { _defocus_widget = widget; }
@@ -48,12 +50,15 @@ public:
     sigc::signal<void (double)> signal_value_changed() const;
     // Base spin button's min size on the pattern provided; ex: "99.99"
     void set_min_size(const std::string& pattern);
+    // Set callback function that parses text and returns "double" value; it may throw std::exception on failure
+    void set_evaluator_function(std::function<double (const Glib::ustring&)> cb);
     // ----------- PROPERTIES ------------
     // Glib::PropertyProxy<int> property_digits() { return prop_digits.get_proxy(); }
 
 private:
     void construct();
     void update();
+    void set_new_value(double new_value);
     Gtk::SizeRequestMode get_request_mode_vfunc() const override;
     void measure_vfunc(Gtk::Orientation orientation, int for_size, int& minimum, int& natural, int& minimum_baseline, int& natural_baseline) const override;
     void size_allocate_vfunc(int width, int height, int baseline) override;
@@ -114,7 +119,6 @@ private:
     std::string format(double value, bool with_prefix_suffix, bool with_markup, bool trim_zeros) const;
     void start_spinning(double steps, Gdk::ModifierType state, Glib::RefPtr<Gtk::GestureClick>& gesture);
     void stop_spinning();
-    double get_accel_factor(Gdk::ModifierType state) const;
 
     // ---------------- DATA ------------------
     double _initial_value = 0.0; // Value of adjustment at start of drag.
@@ -124,6 +128,7 @@ private:
     std::string _suffix; // suffix to show after the number, if any
     std::string _prefix; // prefix to show before the number, if any
     bool _trim_zeros = true;    // hide insignificant zeros in decimal fraction
+    double _scaling_factor = 1.0; // multiplier for value formatting
     sigc::connection _connection;
     int _button_width = 0;     // width of increment/decrement button
     int _entry_height = 0;      // natural height of Gtk::Entry
@@ -137,6 +142,7 @@ private:
     struct Point { double x = 0; double y = 0; } _drag_start;
     sigc::signal<void (double)> _signal_value_changed;
     std::string _min_size_pattern;
+    std::function<double (const Glib::ustring&)> _evaluator; // evaluator callback
 
     // ----------- PROPERTIES ------------
     int prop_digits = 0;

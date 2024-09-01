@@ -2,33 +2,42 @@
 
 #include "paint-attribute.h"
 
+#include <numeric>
 #include <boost/smart_ptr/intrusive_ptr.hpp>
 #include <glibmm/ustring.h>
 #include <gtkmm/enums.h>
 
+#include "desktop-style.h"
 #include "document-undo.h"
+#include "filter-chemistry.h"
+#include "filter-effect-chooser.h"
+#include "filter-enums.h"
 #include "gradient-chemistry.h"
 #include "inkscape.h"
+#include "object-composite-settings.h"
 #include "pattern-manipulation.h"
+#include "property-utils.h"
 #include "stroke-style.h"
 #include "object/sp-gradient.h"
-#include "object/sp-linear-gradient.h"
 #include "object/sp-paint-server.h"
 #include "object/sp-pattern.h"
-#include "object/sp-radial-gradient.h"
 #include "style.h"
+#include "object/sp-namedview.h"
 #include "object/sp-stop.h"
+#include "svg/css-ostringstream.h"
 #include "ui/util.h"
+#include "ui/dialog/dialog-container.h"
 #include "ui/widget/paint-switch.h"
+#include "util/expression-evaluator.h"
 #include "xml/sp-css-attr.h"
 
 namespace Inkscape::UI::Widget {
 
-boost::intrusive_ptr<SPCSSAttr> new_css_attr() {
-    return boost::intrusive_ptr<SPCSSAttr>(sp_repr_css_attr_new(), false);
-}
+using namespace Inkscape::UI::Utils;
 
-PaintAttribute::PaintAttribute() {
+PaintAttribute::PaintAttribute():
+    _blend(get_blendmode_combo_converter(), SPAttr::INVALID, false, "BlendMode")
+{
     _marker_start.set_flat(true);
     _marker_mid.set_flat(true);
     _marker_end.set_flat(true);
@@ -36,19 +45,12 @@ PaintAttribute::PaintAttribute() {
     _fill._update = &_update;
     _stroke._update = &_update;
 
-    // _fill._switch->signal_color_changed().connect([this](auto& color) {
-    //     // change fill solid color
-    //     if (_current_object) {
-    //         //todo
-    //     }
-    // });
-
     // refresh paint popup before opening it; it is not kept up-to-date
     _fill._popover.signal_show().connect([this]() {
-        set_paint(_current_object, true);
+        set_paint(_current_item, true);
     }, false);
     _stroke._popover.signal_show().connect([this]() {
-        set_paint(_current_object, false);
+        set_paint(_current_item, false);
     }, false);
 }
 
@@ -59,10 +61,6 @@ void PaintAttribute::PaintStrip::hide() {
     _clear.set_visible(false);
 }
 
-bool PaintAttribute::PaintStrip::can_update() {
-    return _current_item && _update && !_update->pending();
-}
-
 void PaintAttribute::PaintStrip::show() {
     _paint_btn.set_visible();
     _alpha.set_visible();
@@ -70,17 +68,58 @@ void PaintAttribute::PaintStrip::show() {
     _clear.set_visible();
 }
 
-static void set_item_style(SPItem* item, SPCSSAttr* css) {
-    // SPCSSAttr* css = sp_repr_css_attr_new();
-    // sp_repr_css_set_property(css, fill ? "fill" : "stroke", "none");
-    // sp_desktop_set_style(_desktop, css, true, true, switch_style);
-    // boost::intrusive_ptr<SPCSSAttr> css_set(sp_repr_css_attr_new(), false);
-    // SPCSSAttr* css_set = sp_repr_css_attr_new();
-    // sp_repr_css_merge(css_set.get(), css);
-    item->changeCSS(css, "style");
-    // sp_repr_css_attr_unref(css_set);
-    // sp_repr_css_attr_unref(css);
+bool PaintAttribute::PaintStrip::can_update() const {
+    return _current_item && _update && !_update->pending();
 }
+
+namespace {
+
+boost::intrusive_ptr<SPCSSAttr> new_css_attr() {
+    return boost::intrusive_ptr(sp_repr_css_attr_new(), false);
+}
+
+void set_item_style(SPItem* item, SPCSSAttr* css) {
+    item->changeCSS(css, "style");
+}
+
+void set_item_style_str(SPItem* item, const char* attr, const char* value) {
+    auto css = new_css_attr();
+    sp_repr_css_set_property(css.get(), attr, value);
+    set_item_style(item, css.get());
+}
+
+void set_item_style_dbl(SPItem* item, const char* attr, double value) {
+    CSSOStringStream os;
+    os << value;
+    set_item_style_str(item, attr, os.str().c_str());
+}
+
+void set_stroke_width(SPItem* item, double width_typed, bool hairline, const Unit* unit) {
+    auto css = new_css_attr();
+    if (hairline) {
+        // For renderers that don't understand -inkscape-stroke:hairline, fall back to 1px non-scaling
+        width_typed = 1;
+        sp_repr_css_set_property(css.get(), "vector-effect", "non-scaling-stroke");
+        sp_repr_css_set_property(css.get(), "-inkscape-stroke", "hairline");
+    }
+    else {
+        sp_repr_css_unset_property(css.get(), "vector-effect");
+        sp_repr_css_unset_property(css.get(), "-inkscape-stroke");
+    }
+
+    double width = calc_scale_line_width(width_typed, item, unit);
+    sp_repr_css_set_property_double(css.get(), "stroke-width", width);
+
+    if (Preferences::get()->getBool("/options/dash/scale", true)) {
+        // This will read the old stroke-width to un-scale the pattern.
+        double offset = 0;
+        auto dash = getDashFromStyle(item->style, offset);
+        set_scaled_dash(css.get(), dash.size(), dash.data(), offset, width);
+    }
+    set_item_style(item, css.get());
+}
+
+} // namespace
 
 PaintAttribute::PaintStrip::PaintStrip(const Glib::ustring& title, bool fill) :
   _label(title)
@@ -109,26 +148,20 @@ PaintAttribute::PaintStrip::PaintStrip(const Glib::ustring& title, bool fill) :
 
     _label.set_halign(Gtk::Align::START);
 
-    auto alpha_adj = Gtk::Adjustment::create(0.0, 0, 100, 1.0, 5.0, 0.0);
-    _alpha.set_adjustment(alpha_adj);
-    _alpha.set_digits(0);
-    _alpha.set_label(C_("Alpha transparency", "A"));
-    set_percent_suffix(_alpha);
+    SpinPropertyDef properties[] = {
+        {&_alpha, { 0, 100, 1, 5, 0, 100 }, C_("Alpha transparency", "A"), fill ? _("Fill opacity") : _("Stroke opacity"), Percent},
+    };
+    for (auto& def : properties) {
+        init_spin_button(def);
+    }
     _alpha.set_halign(Gtk::Align::START);
 
-    _define.set_image_from_icon_name("plus");
-    _define.set_has_frame(false);
-
-    _clear.set_image_from_icon_name("minus");
-    _clear.set_has_frame(false);
+    init_property_button(_define, Add, fill ? _("Add fill") : _("Add stroke"));
+    init_property_button(_clear, Remove, fill ? _("No fill") : _("No stroke"));
     _clear.set_visible(false);
 
     _box.append(_clear);
     _box.append(_define);
-
-    // TEMP code =============================
-    // _switch->signal_color_changed().connect([this](auto& color) {
-    // });
 
     _clear.signal_clicked().connect([this,fill]() {
         if (!can_update()) return;
@@ -136,10 +169,7 @@ PaintAttribute::PaintStrip::PaintStrip(const Glib::ustring& title, bool fill) :
         //TODO: skip locked items?
         //TODO: skip <use> items?
 
-        // remove fill/stroke
-        auto css = new_css_attr();
-        sp_repr_css_set_property(css.get(), fill ? "fill" : "stroke", "none");
-        set_item_style(_current_item, css.get());
+        set_item_style_str(_current_item, fill ? "fill" : "stroke", "none");
 
         DocumentUndo::done(_current_item->document, fill ? _("Remove fill") : _("Remove stroke"), "dialog-fill-and-stroke");
     });
@@ -149,14 +179,10 @@ PaintAttribute::PaintStrip::PaintStrip(const Glib::ustring& title, bool fill) :
 
         // sp_desktop_set_color(_desktop, _solid_colors->getAverage(), false, kind == FILL);
         auto css = new_css_attr();
-        // SPCSSAttr* css = sp_repr_css_attr_new();
         sp_repr_css_set_property_string(css.get(), fill ? "fill" : "stroke", color.toString(false));
         sp_repr_css_set_property_double(css.get(), fill ? "fill-opacity" : "stroke-opacity", color.getOpacity());
-        // css = sp_css_attr_unset_text(css);
-        // sp_desktop_set_style(desktop, css);
         //TODO: skip locked item?
         set_item_style(_current_item, css.get());
-        // sp_repr_css_attr_unref(css);
 
         DocumentUndo::maybeDone(_current_item->document, fill ? "undo_fill" : "undo_stroke",
             fill ? _("Set fill color") : _("Set stroke color"), "dialog-fill-and-stroke");
@@ -221,10 +247,9 @@ PaintAttribute::PaintStrip::PaintStrip(const Glib::ustring& title, bool fill) :
         if (!can_update()) return;
 
         auto css = new_css_attr();
-        sp_repr_css_set_property_double(css.get(), fill ? "fill-opacity" : "stroke-opacity", alpha / 100.0);
+        sp_repr_css_set_property_double(css.get(), fill ? "fill-opacity" : "stroke-opacity", alpha);
         //TODO: skip locked item?
         set_item_style(_current_item, css.get());
-        // sp_repr_css_attr_unref(css);
 
         DocumentUndo::maybeDone(_current_item->document, fill ? "undo_fill_alpha" : "undo_stroke_alpha",
             fill ? _("Set fill opacity") : _("Set stroke opacity"), "dialog-fill-and-stroke");
@@ -250,30 +275,65 @@ void PaintAttribute::insert_widgets(InkPropertyGrid& grid, int row) {
     _size_group->add_widget(_stroke._alpha);
     _size_group->add_widget(_unit_selector);
 
-    //TODO: unit-specific adj
-    auto adj = Gtk::Adjustment::create(0.0, 0, 1e6, 0.1, 1.0, 0.0);
-    _stroke_width.set_adjustment(adj);
-    _stroke_width.set_digits(3);
-    _stroke_width.set_label(C_("Stroke width", "W"));
+    //TODO: unit-specific adj?
+    SpinPropertyDef width_prop = {&_stroke_width, { 0, 1e6, 0.1, 1.0, 3 }, C_("Stroke width", "W"), _("Stroke width") };
+    init_spin_button(width_prop);
+    _stroke_width.set_evaluator_function([this](auto& text) {
+        auto unit = _unit_selector.getUnit();
+        auto result = ExpressionEvaluator(text.c_str(), unit).evaluate();
+        // check if output dimension corresponds to input unit
+        if (result.dimension != (unit->isAbsolute() ? 1 : 0) ) {
+            throw EvaluatorException("Input dimensions do not match with parameter dimensions.", "");
+        }
+        return result.value;
+    });
+    auto set_stroke = [this](double width) {
+        if (!can_update()) return;
+
+        auto scoped(_update.block());
+        auto hairline = _unit_selector.get_active_id() == "hairline";
+        auto unit = _unit_selector.getUnit();
+        set_stroke_width(_current_item, width, hairline, unit);
+        DocumentUndo::done(_current_item->document, _("Set stroke width"), "dialog-fill-and-stroke");
+    };
+    auto set_stroke_unit = [this]() {
+        if (!can_update()) return;
+
+        auto new_unit = _unit_selector.getUnit();
+        if (new_unit == _current_unit) return;
+
+        auto scoped(_update.block());
+        auto hairline = _unit_selector.get_active_id() == "hairline";
+        auto width = _stroke_width.get_value();
+        if (hairline) {
+            _current_unit = new_unit;
+            set_stroke_width(_current_item, 1, hairline, new_unit);
+            DocumentUndo::done(_current_item->document, _("Set stroke width"), "dialog-fill-and-stroke");
+        }
+        else {
+            width = Quantity::convert(width, _current_unit, new_unit);
+            _current_unit = new_unit;
+            _stroke_width.set_value(width);
+        }
+    };
+    _stroke_width.signal_value_changed().connect([=,this](auto value) {
+        set_stroke(value);
+    });
     _unit_selector.set_halign(Gtk::Align::START);
     _unit_selector.setUnitType(UNIT_TYPE_LINEAR);
-    _unit_selector.addUnit(*UnitTable::get().getUnit("%"));
     _unit_selector.append("hairline", _("Hairline"));
+    _unit_selector.signal_changed().connect([=,this]() {
+        set_stroke_unit();
+    });
     _stroke_box.set_spacing(1);
     _stroke_box.append(_unit_selector);
     _stroke_box.append(_stroke_presets);
     _stroke_presets.set_halign(Gtk::Align::START);
     _stroke_box.set_halign(Gtk::Align::START);
-    //TODO:
-    // _stroke_width.set_unit_menu();
-    // _old_unit = unitSelector->getUnit();
     // if (desktop) {
     //     unitSelector->setUnit(desktop->getNamedView()->display_units->abbr);
     //     _old_unit = desktop->getNamedView()->display_units;
     // }
-    // widthSpin->setUnitMenu(unitSelector);
-    // unitSelector->signal_changed().connect(sigc::mem_fun(*this, &StrokeStyle::unitChangedCB));
-    // unitSelector->set_visible(true);
     _stroke_presets.set_has_frame(false);
     _stroke_presets.set_icon_name("gear");
     _stroke_presets.set_always_show_arrow(false);
@@ -286,10 +346,91 @@ void PaintAttribute::insert_widgets(InkPropertyGrid& grid, int row) {
     _stroke_widgets.add(grid.add_property(nullptr, nullptr, &_dash_selector, &_markers, nullptr));
     _stroke_widgets.add(grid.add_gap());
 
-    _fill._define.set_tooltip_text(_("Add fill"));
-    _fill._clear.set_tooltip_text(_("No fill"));
-    _stroke._define.set_tooltip_text(_("Add stroke"));
-    _stroke._clear.set_tooltip_text(_("No stroke"));
+    auto set_dash = [this](bool pattern_edit) {
+        if (!can_update()) return;
+
+        auto scoped(_update.block());
+        auto item = _current_item;
+        auto& dash = pattern_edit ? _dash_selector.get_custom_dash_pattern() : _dash_selector.get_dash_pattern();
+        auto offset = _dash_selector.get_offset();
+        double scale = item->i2doc_affine().descrim();
+        if (Preferences::get()->getBool("/options/dash/scale", true)) {
+            scale = item->style->stroke_width.computed * scale;
+        }
+        auto css = new_css_attr();
+        set_scaled_dash(css.get(), dash.size(), dash.data(), offset, scale);
+        set_item_style(item, css.get());
+    };
+    _dash_selector.changed_signal.connect([=](auto change) {
+        set_dash(change == DashSelector::Pattern);
+    });
+
+    SpinPropertyDef properties[] = {
+        {&_opacity, { 0, 100, 1, 5, 1, 100 }, nullptr, _("Object's opacity"), Percent, &_reset_opacity},
+        {&_blur,    { 0, 100, 1, 5, 1, 100 }, nullptr, _("Blur filter"), Percent},
+    };
+    for (auto& def : properties) {
+        init_spin_button(def);
+    }
+    init_property_button(_clear_blur, Reset);
+    init_property_button(_edit_filter, Edit, _("Edit filter"));
+    _edit_filter.set_visible(false);
+    _filter_buttons.append(_clear_blur);
+    _filter_buttons.append(_edit_filter);
+    _filter_primitive.set_editable(false);
+    _filter_primitive.set_max_width_chars(8);
+    init_property_button(_reset_blend, Reset, _("Normal blend mode"));
+    grid.add_property(_("Opacity"), nullptr, &_opacity, nullptr, &_reset_opacity);
+    grid.add_property(_("Blend mode"), nullptr, &_blend, nullptr, &_reset_blend);
+    _filter_widgets = grid.add_property(_("Filter"), nullptr, &_filter_primitive, &_blur, &_filter_buttons);
+    grid.add_gap();
+
+    _clear_blur.signal_clicked().connect([this]() {
+        if (!can_update()) return;
+
+        auto scoped(_update.block());
+        if (remove_filter_gaussian_blur(_current_item)) {
+            DocumentUndo::done(_current_item->document, _("Remove filter"), "dialog-fill-and-stroke");
+        }
+    });
+    _edit_filter.signal_clicked().connect([this]() {
+        if (!_desktop) return;
+        // open filter editor
+        if (auto container = _desktop->getContainer()) {
+            container->new_dialog("FilterEffects");
+        }
+    });
+
+    auto set_object_opacity = [this](double opacity) {
+        if (!can_update()) return;
+
+        auto item = _current_item;
+        auto scoped(_update.block());
+        auto css = new_css_attr();
+        sp_repr_css_set_property_double(css.get(), "opacity", opacity);
+        set_item_style(item, css.get());
+
+        DocumentUndo::done(item->document, _("Set opacity"), "dialog-fill-and-stroke");
+    };
+    _opacity.signal_value_changed().connect([=,this](auto value){ set_object_opacity(value); });
+    _reset_opacity.signal_clicked().connect([=,this](){ set_object_opacity(1.0); });
+
+    auto set_blend_mode = [=,this](SPBlendMode mode) {
+        if (!can_update()) return;
+
+        auto scoped(_update.block());
+        if (::set_blend_mode(_current_item, mode)) {
+            DocumentUndo::done(_current_item->document, _("Set blending mode"), "dialog-fill-and-stroke");
+        }
+    };
+    _blend.signal_changed().connect([=,this]() {
+        if (auto data = _blend.get_active_data()) {
+            set_blend_mode(data->id);
+        }
+    });
+    _reset_blend.signal_clicked().connect([=,this]() {
+        set_blend_mode(SP_CSS_BLEND_NORMAL);
+    });
 }
 
 void PaintAttribute::set_document(SPDocument* document) {
@@ -299,26 +440,35 @@ void PaintAttribute::set_document(SPDocument* document) {
 }
 
 void PaintAttribute::set_desktop(SPDesktop* desktop) {
+    if (_desktop != desktop && desktop) {
+        auto unit = desktop->getNamedView()->display_units;
+        if (unit != _unit_selector.getUnit()) {
+            auto scoped(_update.block());
+            _unit_selector.setUnit(unit->abbr);
+        }
+        _current_unit = unit;
+    }
     _desktop = desktop;
 }
 
 void PaintAttribute::set_paint(const SPObject* object, bool set_fill) {
-    if (object && object->style) {
-        if (set_fill) {
-            if (auto fill = object->style->getFillOrStroke(true)) {
-                set_paint(*fill, object->style->fill_opacity, true);
-            }
+    if (!object || !object->style) return;
+
+    if (set_fill) {
+        if (auto fill = object->style->getFillOrStroke(true)) {
+            set_paint(*fill, object->style->fill_opacity, true);
         }
-        else {
-            if (auto stroke = object->style->getFillOrStroke(false)) {
-                set_paint(*stroke, object->style->stroke_opacity, false);
-            }
+    }
+    else {
+        if (auto stroke = object->style->getFillOrStroke(false)) {
+            set_paint(*stroke, object->style->stroke_opacity, false);
         }
     }
 }
 
 void PaintAttribute::set_paint(const SPIPaint& paint, double opacity, bool fill) {
     auto scoped(_update.block());
+
     auto mode = get_mode_from_paint(paint);
     auto& stripe = fill ? _fill : _stroke;
     stripe._switch->set_mode(mode);
@@ -335,16 +485,13 @@ void PaintAttribute::set_preview(const SPIPaint& paint, double paint_opacity, Pa
     auto& stripe = fill ? _fill : _stroke;
     if (mode == PaintMode::None) {
         stripe.hide();
-        if (!fill) {
-            show_stroke(false);
-        }
         return;
     }
 
     stripe._paint_type.set_text(get_paint_mode_name(mode));
 
     if (mode == PaintMode::Solid || mode == PaintMode::Swatch) {
-        stripe._alpha.set_value(paint_opacity * 100);
+        stripe._alpha.set_value(paint_opacity);
         if (mode == PaintMode::Solid) {
             auto color = paint.getColor();
             color.addOpacity(paint_opacity);
@@ -376,11 +523,7 @@ void PaintAttribute::set_preview(const SPIPaint& paint, double paint_opacity, Pa
         stripe._paint_icon.set_from_icon_name(icon);
         stripe._paint_icon.set_visible();
         stripe.show();
-        //TODO: when to hide alpha
-        // stripe._alpha.set_visible(false);
     }
-
-    show_stroke(!fill);
 }
 
 void PaintAttribute::init_popup(const SPIPaint& paint, double paint_opacity, PaintMode mode, bool fill) {
@@ -406,19 +549,14 @@ void PaintAttribute::show_stroke(bool show) {
 }
 
 void PaintAttribute::update_stroke(SPStyle* style) {
-    auto unit = _unit_selector.getUnit();
-
     if (style->stroke_extensions.hairline) {
         _stroke_width.set_sensitive(false);
         _stroke_width.set_value(1);
     }
-    else if (unit->type == UNIT_TYPE_LINEAR) {
+    else {
+        auto unit = _unit_selector.getUnit();
         double width = Quantity::convert(style->stroke_width.computed, "px", unit);
         _stroke_width.set_value(width);
-        _stroke_width.set_sensitive();
-    }
-    else {
-        _stroke_width.set_value(100);
         _stroke_width.set_sensitive();
     }
 
@@ -427,40 +565,87 @@ void PaintAttribute::update_stroke(SPStyle* style) {
     _dash_selector.set_dash_pattern(vec, offset);
 }
 
+bool PaintAttribute::can_update() const {
+    return _current_item && _current_item->style && !_update.pending();
+}
+
 void PaintAttribute::update_from_object(SPObject* object) {
+    if (_update.pending()) return;
+
     auto scoped(_update.block());
 
-    _current_object = object;
-    _fill._current_item = cast<SPItem>(object);
-    _stroke._current_item = cast<SPItem>(object);
-    //todo: revise
-    auto desktop = SP_ACTIVE_DESKTOP;
-    _fill._desktop = desktop;
-    _stroke._desktop = desktop;
+    _current_item = cast<SPItem>(object);
+    _fill._current_item = _current_item;
+    _stroke._current_item = _current_item;
+    _fill._desktop = _desktop;
+    _stroke._desktop = _desktop;
 
-    if (!object || !object->style) {
+    if (!_current_item || !_current_item->style) {
         // hide
         _fill.hide();
         _stroke.hide();
         //todo: reset document in marker combo?
     }
     else {
-        auto& fill_paint = *object->style->getFillOrStroke(true);
+        auto& style = object->style;
+        auto& fill_paint = *style->getFillOrStroke(true);
         auto fill_mode = get_mode_from_paint(fill_paint);
-        set_preview(fill_paint, object->style->fill_opacity, fill_mode, true);
+        set_preview(fill_paint, style->fill_opacity, fill_mode, true);
         if (_fill._popover.is_visible()) {
-            set_paint(_current_object, true);
+            set_paint(_current_item, true);
         }
 
-        auto& stroke_paint = *object->style->getFillOrStroke(false);
+        auto& stroke_paint = *style->getFillOrStroke(false);
         auto stroke_mode = get_mode_from_paint(stroke_paint);
-        set_preview(stroke_paint, object->style->stroke_opacity, stroke_mode, false);
+        set_preview(stroke_paint, style->stroke_opacity, stroke_mode, false);
         if (_stroke._popover.is_visible()) {
-            set_paint(_current_object, false);
+            set_paint(_current_item, false);
         }
-        update_stroke(object->style);
-        update_markers(object->style->marker_ptrs, object);
+        update_stroke(style);
+        update_markers(style->marker_ptrs, object);
+        show_stroke(stroke_mode != PaintMode::None);
+
+        double opacity = style->opacity;
+        _opacity.set_value(opacity);
+        _reset_opacity.set_visible(opacity != 1.0);
+
+        auto blend_mode = style->mix_blend_mode.set ? style->mix_blend_mode.value : SP_CSS_BLEND_NORMAL;
+        _blend.set_active_by_id(blend_mode);
+        _reset_blend.set_visible(blend_mode != SP_CSS_BLEND_NORMAL);
+
+        auto filters = get_filter_primitive_count(object);
+        double blur = 0;
+        if (filters == 1) {
+            auto primitive = get_first_filter_component(object);
+            auto id = FPConverter.get_id_from_key(primitive->getRepr()->name());
+            _filter_primitive.set_text(_(FPConverter.get_label(id).c_str()));
+            if (id == Filters::NR_FILTER_GAUSSIANBLUR) {
+                auto item = cast<SPItem>(object);
+                if (auto radius = object_query_blur_filter(item)) {
+                    if (auto bbox = item->desktopGeometricBounds()) {
+                        double perimeter = bbox->dimensions()[Geom::X] + bbox->dimensions()[Geom::Y];
+                        blur = std::sqrt(*radius * BLUR_MULTIPLIER / perimeter);
+                    }
+                }
+            }
+            _blur.set_value(blur);
+            _blur.set_sensitive(blur > 0);
+        }
+        else if (filters > 1) {
+            _filter_primitive.set_text(_("Compound filter"));
+            _blur.set_value(0);
+            _blur.set_sensitive(false);
+        }
+        else {
+            _filter_primitive.set_text({});
+            _blur.set_value(0);
+            _blur.set_sensitive(false);
+        }
+        _filter_widgets.set_visible(filters > 0);
+        _clear_blur.set_visible(blur != 0);
+        _edit_filter.set_visible(blur == 0 && filters > 0);
     }
+
     // else if (object && object->style) {
     //     if (auto fill = object->style->getFillOrStroke(true)) {
     //         set_preview(*fill, true);

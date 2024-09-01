@@ -50,6 +50,8 @@ IGNORE_ICONS = [
     'view-refresh.svg',
     'pan-down.svg',
     'pan-down-symbolic.svg',
+    'pan-end.svg',
+    'pan-end-symbolic.svg',
     # Those are illustrations rather than icons
     'feBlend-icon-symbolic.svg',
     'feColorMatrix-icon-symbolic.svg',

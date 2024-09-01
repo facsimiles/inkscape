@@ -206,7 +206,7 @@ PatternEditor::PatternEditor(const char* prefs, Inkscape::PatternManager& manage
         slider->set_increments(1, 1);
         slider->set_digits(0);
         slider->set_value(0);
-        slider->set_format_value_func([=](double val){
+        slider->set_format_value_func([this,slider](double val){
             auto upper = slider->get_adjustment()->get_upper();
             return Inkscape::ustring::format_classic(std::fixed, std::setprecision(0), slider_to_gap(val, upper)) + "%";
         });

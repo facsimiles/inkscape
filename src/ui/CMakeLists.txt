@@ -281,6 +281,7 @@ set(ui_SRC
 	widget/unit-tracker.cpp
 	widget/widget-vfuncs-class-init.cpp
 	widget/xml-treeview.cpp
+	widget/property-utils.cpp
 
 	view/svg-view-widget.cpp
 
@@ -588,6 +589,7 @@ set(ui_SRC
 	widget/unit-tracker.h
 	widget/widget-vfuncs-class-init.h
 	widget/xml-treeview.h
+	widget/property-utils.h
 
 	view/svg-view-widget.h
 	reparent-spinbutton.h

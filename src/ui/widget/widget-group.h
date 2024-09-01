@@ -2,6 +2,7 @@
 
 #ifndef WIDGETGROUP_H
 #define WIDGETGROUP_H
+#include <cassert>
 
 namespace Inkscape::UI::Widget {
 
@@ -12,12 +13,21 @@ public:
         _widgets.push_back(widget);
     }
 
+    void add(const WidgetGroup& group) {
+        _widgets.reserve(_widgets.size() + group._widgets.size());
+        _widgets.insert(_widgets.end(), group._widgets.begin(), group._widgets.end());
+    }
+
     void set_visible(bool show) {
-        for_each([=](auto w){ w->set_visible(show); });
+        for_each([=](auto w) {
+            if (w->get_visible() != show) w->set_visible(show);
+        });
     }
 
     void set_sensitive(bool enabled) {
-        for_each([=](auto w){ w->set_sensitive(enabled); });
+        for_each([=](auto w) {
+            if (w->get_sensitive() != enabled) w->set_sensitive(enabled);
+        });
     }
 
     template <typename F>

@@ -84,6 +84,7 @@ public:
     void selectionModified(Selection *selection, guint flags) override;
 
     void desktopReplaced() override;
+    void documentReplaced() override;
 
     /**
      * Updates entries and other child widgets on selection change, object modification, etc.

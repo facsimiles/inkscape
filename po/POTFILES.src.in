@@ -426,6 +426,7 @@ ${_build_dir}/share/templates/templates.h
 ../src/ui/widget/paint-switch.cpp
 ../src/ui/widget/pattern-editor.cpp
 ../src/ui/widget/preferences-widget.cpp
+../src/ui/widget/property-utils.cpp
 ../src/ui/widget/random.cpp
 ../src/ui/widget/registered-widget.cpp
 ../src/ui/widget/rendering-options.cpp
