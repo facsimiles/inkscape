@@ -20,6 +20,7 @@
 #include <gtkmm/sizegroup.h>
 
 #include "bin.h"
+#include "widget-group.h"
 
 namespace Inkscape::UI::Widget {
 
@@ -30,8 +31,8 @@ public:
 
     // add a property row to the grid; label and values are optional; widget1 is expected whereas widget2
     // can be specified if this is (potentially) 2-column property (like dimensions width and height)
-    Gtk::Widget* add_property(Gtk::Label* label, Gtk::Widget* button1, Gtk::Widget* widget1, Gtk::Widget* widget2, Gtk::Widget* button2 = nullptr, int margin = 2);
-    Gtk::Widget* add_property(const std::string& label, Gtk::Widget* button1, Gtk::Widget* widget1, Gtk::Widget* widget2, Gtk::Widget* button2 = nullptr, int margin = 2);
+    WidgetGroup add_property(Gtk::Label* label, Gtk::Widget* button1, Gtk::Widget* widget1, Gtk::Widget* widget2, Gtk::Widget* button2 = nullptr, int margin = 2);
+    WidgetGroup add_property(const std::string& label, Gtk::Widget* button1, Gtk::Widget* widget1, Gtk::Widget* widget2, Gtk::Widget* button2 = nullptr, int margin = 2);
     // leave a gap before adding new row; used to indicate new group of properties
     Gtk::Widget* add_gap(int size = 8);
     // add a widget to the grid that will occupy both columns

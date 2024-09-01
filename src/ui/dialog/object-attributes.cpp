@@ -66,10 +66,13 @@
 #include "ui/util.h"
 #include "ui/widget/image-properties.h"
 #include "ui/widget/ink-property-grid.h"
+#include "ui/widget/property-utils.h"
 #include "widgets/sp-attribute-widget.h"
 #include "xml/href-attribute-helper.h"
 
 namespace Inkscape::UI::Dialog {
+
+using namespace Inkscape::UI::Utils;
 
 struct SPAttrDesc {
     char const *label;
@@ -190,11 +193,15 @@ void ObjectAttributes::update_vis_lock(SPObject* object) {
 }
 
 void ObjectAttributes::desktopReplaced() {
+}
+
+void ObjectAttributes::documentReplaced() {
     auto doc = getDocument();
     for (auto& kv : _panels) {
         kv.second->set_document(doc);
     }
     _obj_properties.update_entries();
+    //todo: watch doc modified to update locked state of current obj
 }
 
 void ObjectAttributes::selectionChanged(Selection* selection) {
@@ -293,39 +300,6 @@ void set_location_adj(Widget::InkSpinButton& btn) {
     btn.set_adjustment(Gtk::Adjustment::create(0, -1'000'000, 1'000'000, 1, 5));
 }
 
-struct AdjustmentDef {
-    double min = 0, max = 1;
-    double inc = 1, page_inc = 1;
-    int digits = 0;
-};
-enum Suffix {None = 0, Degree, Percent};
-struct SpinPropertyDef {
-    Widget::InkSpinButton* button = nullptr;
-    AdjustmentDef adjustment;
-    const char* label = nullptr;
-    const char* tooltip = nullptr;
-    Suffix unit = None;
-};
-
-void init_spin_button(const SpinPropertyDef& def) {
-    auto& button = *def.button;
-    auto& adj = def.adjustment;
-    button.set_adjustment(Gtk::Adjustment::create(0, adj.min, adj.max, adj.inc, adj.page_inc));
-    button.set_digits(adj.digits);
-    if (def.label) button.set_label(def.label);
-    if (def.tooltip) button.set_tooltip_text(def.tooltip);
-    switch (def.unit) {
-        case Degree:
-            set_degree_suffix(button);
-            break;
-        case Percent:
-            set_percent_suffix(button);
-            break;
-        default:
-            break;
-    }
-}
-
 } // namespace
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -364,7 +338,7 @@ void details::AttributesPanel::update_panel(SPObject* object, SPDesktop* desktop
         if (units) _tracker->setActiveUnit(units);
     }
 
-    _desktop = desktop;
+    set_desktop(desktop);
 
     if (!_update.pending()) {
         update_paint(object);

@@ -31,14 +31,16 @@ void InkPropertyGrid::construct() {
 
 // grid columns:
 constexpr int COL_LABEL    = 0; // property name
-constexpr int COL_BUTTON_1 = 1; // button in front of property (like a padlock)
+constexpr int COL_BUTTON_1 = 1; // button in front of property (like a padlock, scale lock, etc)
 constexpr int COL_FILED_1  = 2; // property widget
 constexpr int COL_BUTTON_2 = 3; // button at the end of property (like a reset/clear)
 
-Gtk::Widget* InkPropertyGrid::add_property(Gtk::Label* label, Gtk::Widget* button1, Gtk::Widget* w1, Gtk::Widget* w2, Gtk::Widget* btn, int margin) {
-    Gtk::Widget* group = w1;
+WidgetGroup InkPropertyGrid::add_property(Gtk::Label* label, Gtk::Widget* button1, Gtk::Widget* w1, Gtk::Widget* w2, Gtk::Widget* btn, int margin) {
+    // Gtk::Widget* group = w1;
+    WidgetGroup group;
 
     if (label) {
+        group.add(label);
         label->set_margin(margin);
         _field_height->add_widget(*label);
         label->set_halign(Gtk::Align::START);
@@ -46,14 +48,14 @@ Gtk::Widget* InkPropertyGrid::add_property(Gtk::Label* label, Gtk::Widget* butto
         _grid.attach(*label, COL_LABEL, _row, button1 ? 1 : 2);
     }
     if (button1) {
+        group.add(button1);
         button1->set_margin(margin);
         button1->set_margin_end(0);
         button1->set_valign(Gtk::Align::CENTER);
         _grid.attach(*button1, COL_BUTTON_1, _row);
     }
     if (w1) {
-        if (w1->get_halign() == Gtk::Align::START) {
-        }
+        group.add(w1);
         w1->set_margin(margin);
         w1->set_hexpand();
         _field_width->add_widget(*w1);
@@ -65,6 +67,7 @@ Gtk::Widget* InkPropertyGrid::add_property(Gtk::Label* label, Gtk::Widget* butto
             box->append(*w2);
             w2 = box;
         }
+        group.add(w2);
         w2->set_margin(margin);
         w2->set_hexpand();
         _field_width->add_widget(*w2);
@@ -72,6 +75,7 @@ Gtk::Widget* InkPropertyGrid::add_property(Gtk::Label* label, Gtk::Widget* butto
     }
     else {
         w2 = Gtk::make_managed<Gtk::Box>();
+        group.add(w2);
         w2->set_hexpand();
         w2->set_margin_start(margin);
         w2->set_margin_end(margin);
@@ -80,7 +84,7 @@ Gtk::Widget* InkPropertyGrid::add_property(Gtk::Label* label, Gtk::Widget* butto
 
     if (w1 && w2) {
         auto box = Gtk::make_managed<Gtk::Box>();
-        group = box;
+        // group = box;
         box->add_css_class("fields");
         box->append(*w1);
         box->append(*w2);
@@ -90,6 +94,7 @@ Gtk::Widget* InkPropertyGrid::add_property(Gtk::Label* label, Gtk::Widget* butto
         _grid.attach(*w1, COL_FILED_1, _row);
     }
     if (btn) {
+        group.add(btn);
         btn->set_margin(margin);
         btn->set_margin_start(0);
         btn->set_margin_end(0);
@@ -103,7 +108,7 @@ Gtk::Widget* InkPropertyGrid::add_property(Gtk::Label* label, Gtk::Widget* butto
     return group;
 }
 
-Gtk::Widget* InkPropertyGrid::add_property(const std::string& label, Gtk::Widget* button1, Gtk::Widget* widget1, Gtk::Widget* widget2, Gtk::Widget* button2, int margin) {
+WidgetGroup InkPropertyGrid::add_property(const std::string& label, Gtk::Widget* button1, Gtk::Widget* widget1, Gtk::Widget* widget2, Gtk::Widget* button2, int margin) {
     auto l = Gtk::make_managed<Gtk::Label>(label);
     l->set_halign(Gtk::Align::START);
     return add_property(l, button1, widget1, widget2, button2, margin);

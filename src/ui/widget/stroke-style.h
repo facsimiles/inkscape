@@ -44,6 +44,10 @@ class Unit;
 
 namespace UI::Widget {
 
+void set_scaled_dash(SPCSSAttr* css, int ndash, const double *dash, double offset, double scale);
+std::vector<double> parse_dash_pattern(const Glib::ustring& input);
+double calc_scale_line_width(double width_typed, const SPItem* item, const Util::Unit* unit);
+
 class DashSelector;
 class MarkerComboBox;
 class UnitMenu;
@@ -102,7 +106,6 @@ private:
     void setStrokeWidth();
     void setStrokeDash();
     void setStrokeMiter();
-    void setScaledDash(SPCSSAttr *css, int ndash, const double *dash, double offset, double scale);
     bool isHairlineSelected() const;
 
     StrokeStyleButton * makeRadioButton(Gtk::ToggleButton    *&grp,

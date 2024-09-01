@@ -24,6 +24,8 @@ namespace Inkscape {
 namespace UI {
 namespace Widget {
 
+constexpr double BLUR_MULTIPLIER = 4.0;
+
 class StyleSubject;
 
 /*
