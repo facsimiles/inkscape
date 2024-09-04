@@ -114,6 +114,22 @@ ObjectAttributes::ObjectAttributes()
     _obj_title.set_text("");
     append(main);
     create_panels();
+
+    _obj_locked.signal_clicked().connect([this]() {
+        if (_update.pending() || !_current_item) return;
+
+        bool lock = _current_item->sensitive;
+        _current_item->setLocked(lock);
+        DocumentUndo::done(getDocument(), lock ? _("Lock object") : _("Unlock object"), "dialog-object-properties");
+    });
+
+    _obj_visible.signal_clicked().connect([this]() {
+        if (_update.pending() || !_current_item) return;
+
+        bool hide = !_current_item->isExplicitlyHidden();
+        _current_item->setExplicitlyHidden(hide);
+        DocumentUndo::done(getDocument(), hide ? _("Hide object") : _("Unhide object"), "dialog-object-properties");
+    });
 }
 
 void ObjectAttributes::widget_setup() {
@@ -193,6 +209,9 @@ void ObjectAttributes::update_vis_lock(SPObject* object) {
 }
 
 void ObjectAttributes::desktopReplaced() {
+    if (_current_panel) {
+        _current_panel->set_desktop(getDesktop());
+    }
 }
 
 void ObjectAttributes::documentReplaced() {
