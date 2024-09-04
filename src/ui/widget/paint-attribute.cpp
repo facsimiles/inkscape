@@ -22,11 +22,13 @@
 #include "object/sp-paint-server.h"
 #include "object/sp-pattern.h"
 #include "style.h"
+#include "actions/actions-tools.h"
 #include "object/sp-namedview.h"
 #include "object/sp-stop.h"
 #include "svg/css-ostringstream.h"
 #include "ui/util.h"
 #include "ui/dialog/dialog-container.h"
+#include "ui/tools/marker-tool.h"
 #include "ui/widget/paint-switch.h"
 #include "util/expression-evaluator.h"
 #include "xml/sp-css-attr.h"
@@ -117,6 +119,25 @@ void set_stroke_width(SPItem* item, double width_typed, bool hairline, const Uni
         set_scaled_dash(css.get(), dash.size(), dash.data(), offset, width);
     }
     set_item_style(item, css.get());
+}
+
+void set_item_marker(SPItem* item, int location, const char* attr, const std::string& uri) {
+    set_item_style_str(item, attr, uri.c_str());
+    //??????
+    // item->requestModified(SP_OBJECT_MODIFIED_FLAG);
+    // item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
+    // needed?
+    item->document->ensureUpToDate();
+}
+
+void edit_marker(int location, SPDesktop* desktop) {
+    if (!desktop) return;
+
+    set_active_tool(desktop, "Marker");
+    if (auto marker_tool = dynamic_cast<Tools::MarkerTool*>(desktop->getTool())) {
+        marker_tool->editMarkerMode = location;
+        marker_tool->selection_changed(desktop->getSelection());
+    }
 }
 
 } // namespace
@@ -274,6 +295,24 @@ void PaintAttribute::insert_widgets(InkPropertyGrid& grid, int row) {
     _size_group->add_widget(_fill._alpha);
     _size_group->add_widget(_stroke._alpha);
     _size_group->add_widget(_unit_selector);
+
+    auto set_marker = [this](int location, const char* id, const std::string& uri) {
+        if (!can_update()) return;
+
+        set_item_marker(_current_item, location, id, uri);
+        DocumentUndo::done(_current_item->document, _("Set marker"), "dialog-fill-and-stroke");
+    };
+
+    for (auto combo : {&_marker_start, &_marker_mid, &_marker_end}) {
+        combo->connect_changed([=]() {
+            if (!combo->in_update()) {
+                set_marker(combo->get_loc(), combo->get_id(), combo->get_active_marker_uri());
+            }
+        });
+
+        // request to edit current marker on the canvas
+        combo->connect_edit([this,combo](){ edit_marker(combo->get_loc(), _desktop); });
+    }
 
     //TODO: unit-specific adj?
     SpinPropertyDef width_prop = {&_stroke_width, { 0, 1e6, 0.1, 1.0, 3 }, C_("Stroke width", "W"), _("Stroke width") };

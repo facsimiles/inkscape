@@ -118,6 +118,7 @@ ObjectAttributes::ObjectAttributes()
     _obj_locked.signal_clicked().connect([this]() {
         if (_update.pending() || !_current_item) return;
 
+        auto scoped(_update.block());
         bool lock = _current_item->sensitive;
         _current_item->setLocked(lock);
         DocumentUndo::done(getDocument(), lock ? _("Lock object") : _("Unlock object"), "dialog-object-properties");
@@ -126,6 +127,7 @@ ObjectAttributes::ObjectAttributes()
     _obj_visible.signal_clicked().connect([this]() {
         if (_update.pending() || !_current_item) return;
 
+        auto scoped(_update.block());
         bool hide = !_current_item->isExplicitlyHidden();
         _current_item->setExplicitlyHidden(hide);
         DocumentUndo::done(getDocument(), hide ? _("Hide object") : _("Unhide object"), "dialog-object-properties");
