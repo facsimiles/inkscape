@@ -316,6 +316,20 @@ void PaintAttribute::insert_widgets(InkPropertyGrid& grid, int row) {
             _stroke_width.set_value(width);
         }
     };
+    auto set_stroke_style = [this](const char* attr, const char* value) {
+        if (!can_update()) return;
+
+        auto scoped(_update.block());
+        set_item_style_str(_current_item, attr, value);
+        DocumentUndo::done(_current_item->document, _("Set stroke style"), "dialog-fill-and-stroke");
+    };
+    auto set_stroke_miter_limit = [this](double limit) {
+        if (!can_update()) return;
+
+        auto scoped(_update.block());
+        set_item_style_dbl(_current_item, "stroke-miterlimit", limit);
+        DocumentUndo::done(_current_item->document, _("Set stroke miter"), "dialog-fill-and-stroke");
+    };
     _stroke_width.signal_value_changed().connect([=,this](auto value) {
         set_stroke(value);
     });
@@ -337,7 +351,20 @@ void PaintAttribute::insert_widgets(InkPropertyGrid& grid, int row) {
     _stroke_presets.set_has_frame(false);
     _stroke_presets.set_icon_name("gear");
     _stroke_presets.set_always_show_arrow(false);
-    _stroke_presets.set_popover(_stroke_options);
+    _stroke_presets.set_popover(_stroke_popup);
+    _stroke_popup.set_child(_stroke_options);
+    _stroke_options._join_changed.connect([=](auto style) {
+        set_stroke_style("stroke-linejoin", style);
+    });
+    _stroke_options._cap_changed.connect([=](auto style) {
+        set_stroke_style("stroke-linecap", style);
+    });
+    _stroke_options._order_changed.connect([=](auto style) {
+        set_stroke_style("pant-order", style);
+    });
+    _stroke_options._miter_changed.connect([=](auto value) {
+        set_stroke_miter_limit(value);
+    });
 
     grid.add_property(&_fill._label, nullptr, &_fill._paint_btn, &_fill._alpha, &_fill._box);
     _stroke_widgets.add(grid.add_gap());
@@ -378,6 +405,9 @@ void PaintAttribute::insert_widgets(InkPropertyGrid& grid, int row) {
     _filter_buttons.append(_clear_blur);
     _filter_buttons.append(_edit_filter);
     _filter_primitive.set_editable(false);
+    _filter_primitive.set_can_focus(false);
+    _filter_primitive.set_focusable(false);
+    _filter_primitive.set_focus_on_click(false);
     _filter_primitive.set_max_width_chars(8);
     init_property_button(_reset_blend, Reset, _("Normal blend mode"));
     grid.add_property(_("Opacity"), nullptr, &_opacity, nullptr, &_reset_opacity);
@@ -603,7 +633,13 @@ void PaintAttribute::update_from_object(SPObject* object) {
         }
         update_stroke(style);
         update_markers(style->marker_ptrs, object);
-        show_stroke(stroke_mode != PaintMode::None);
+        if (stroke_mode != PaintMode::None) {
+            _stroke_options.update_widgets(*style);
+            show_stroke(true);
+        }
+        else {
+            show_stroke(false);
+        }
 
         double opacity = style->opacity;
         _opacity.set_value(opacity);

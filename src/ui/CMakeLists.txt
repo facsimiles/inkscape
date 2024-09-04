@@ -273,6 +273,7 @@ set(ui_SRC
 	widget/spinbutton.cpp
 	widget/status-bar.cpp
 	widget/stroke-style.cpp
+	widget/stroke-options.cpp
 	widget/style-subject.cpp
 	widget/style-swatch.cpp
 	widget/swatch-selector.cpp
@@ -583,6 +584,7 @@ set(ui_SRC
 	widget/spinbutton.h
 	widget/status-bar.h
 	widget/stroke-style.h
+	widget/stroke-options.h
 	widget/style-subject.h
 	widget/style-swatch.h
 	widget/swatch-selector.h

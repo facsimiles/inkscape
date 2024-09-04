@@ -9,26 +9,20 @@
 #include <glibmm/ustring.h>
 #include <gtkmm/box.h>
 #include <gtkmm/button.h>
-#include <gtkmm/grid.h>
 #include <gtkmm/label.h>
 #include <gtkmm/menubutton.h>
-#include <gtkmm/spinbutton.h>
-#include <gtkmm/widget.h>
-#include <memory>
 
-#include "ink-property-grid.h"
-#include "ink-spin-button.h"
-#include "object/sp-marker-loc.h"
-#include "object/sp-paint-server.h"
-#include "style-internal.h"
-#include "unit-menu.h"
 #include "color-preview.h"
 #include "combo-enums.h"
-#include "ui/widget/dash-selector.h"
-#include "ui/widget/marker-combo-box.h"
-#include "ui/widget/paint-switch.h"
-#include "ui/widget/spinbutton.h"
-#include "ui/widget/widget-group.h"
+#include "dash-selector.h"
+#include "ink-property-grid.h"
+#include "ink-spin-button.h"
+#include "marker-combo-box.h"
+#include "paint-switch.h"
+#include "stroke-options.h"
+#include "style-internal.h"
+#include "unit-menu.h"
+#include "widget-group.h"
 
 namespace Inkscape::UI::Widget {
 
@@ -91,7 +85,8 @@ private:
     Gtk::MenuButton _stroke_presets;
     InkSpinButton _stroke_width;
     UnitMenu _unit_selector;
-    Gtk::Popover _stroke_options;
+    Gtk::Popover _stroke_popup;
+    StrokeOptions _stroke_options;
     InkSpinButton _opacity;
     Gtk::Button _reset_opacity;
     Gtk::Entry _filter_primitive;
@@ -108,7 +103,6 @@ private:
     OperationBlocker _update;
     SPDesktop* _desktop = nullptr;
     const Unit* _current_unit = nullptr;
-    // const Unit* _old_unit = nullptr;
 };
 
 } // namespace
