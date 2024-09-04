@@ -173,6 +173,7 @@ inkscape:macos:
   before_script:
     - wget.exe --quiet --no-check-certificate $IDW_RELEASE_URL
     - 7z x -oC:/ "$Env:IDW_NAME.7z"
+    - del "$Env:IDW_NAME.7z"
 
 
 inkscape:windows:build:
