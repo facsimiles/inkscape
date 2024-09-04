@@ -39,7 +39,8 @@ MathSpinButton::MathSpinButton(BaseObjectType *cobject, const Glib::RefPtr<Gtk::
 int MathSpinButton::on_input(double *newvalue)
 {
     try {
-        auto eval = Inkscape::Util::ExpressionEvaluator(get_text().c_str(), nullptr);
+        auto text = get_text();
+        auto eval = Inkscape::Util::ExpressionEvaluator(text.c_str(), nullptr);
         auto result = eval.evaluate();
         *newvalue = result.value;
     } catch (Inkscape::Util::EvaluatorException const &e) {
@@ -74,14 +75,16 @@ int SpinButton::on_input(double* newvalue)
             } else {
                 unit = _unit_tracker->getActiveUnit();
             }
-            Inkscape::Util::ExpressionEvaluator eval = Inkscape::Util::ExpressionEvaluator(get_text().c_str(), unit);
+            auto text = get_text();
+            Inkscape::Util::ExpressionEvaluator eval = Inkscape::Util::ExpressionEvaluator(text.c_str(), unit);
             result = eval.evaluate();
             // check if output dimension corresponds to input unit
             if (result.dimension != (unit->isAbsolute() ? 1 : 0) ) {
                 throw Inkscape::Util::EvaluatorException("Input dimensions do not match with parameter dimensions.","");
             }
         } else {
-            Inkscape::Util::ExpressionEvaluator eval = Inkscape::Util::ExpressionEvaluator(get_text().c_str(), nullptr);
+            auto text = get_text();
+            Inkscape::Util::ExpressionEvaluator eval = Inkscape::Util::ExpressionEvaluator(text.c_str(), nullptr);
             result = eval.evaluate();
         }
         *newvalue = result.value;
