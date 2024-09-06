@@ -48,28 +48,25 @@ void SignalObserver::set(SPObject* o)
 }
 
 void SignalObserver::notifyChildAdded(XML::Node&, XML::Node&, XML::Node*)
-{ signal_changed()(); }
+{ signal_changed()(ChildAdded, {}); }
 
 void SignalObserver::notifyChildRemoved(XML::Node&, XML::Node&, XML::Node*)
-{ signal_changed()(); }
+{ signal_changed()(ChildRemoved, {}); }
 
 void SignalObserver::notifyChildOrderChanged(XML::Node&, XML::Node&, XML::Node*, XML::Node*)
-{ signal_changed()(); }
+{ signal_changed()(Order, {}); }
 
 void SignalObserver::notifyContentChanged(XML::Node&, Util::ptr_shared, Util::ptr_shared)
 {}
 
-void SignalObserver::notifyAttributeChanged(XML::Node&, GQuark, Util::ptr_shared, Util::ptr_shared)
-{ signal_changed()(); }
+void SignalObserver::notifyAttributeChanged(XML::Node&, GQuark key, Util::ptr_shared, Util::ptr_shared) {
+    auto attr = g_quark_to_string(key);
+    signal_changed()(Attribute, attr);
+}
 
 void SignalObserver::notifyElementNameChanged(Node&, GQuark, GQuark)
 {
-    signal_changed()();
-}
-
-sigc::signal<void ()>& SignalObserver::signal_changed()
-{
-    return _signal_changed;
+    signal_changed()(ElementName, {});
 }
 
 } //namespace XML
