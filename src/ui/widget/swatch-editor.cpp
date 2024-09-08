@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 //
 // Created by Michael Kowalski on 9/7/24.
 //
@@ -22,13 +23,17 @@ SwatchEditor::SwatchEditor(Colors::Space::Type space):
 
 void SwatchEditor::set_desktop(SPDesktop* desktop) {
     _panel.setDesktop(desktop);
+    _vector = nullptr;
 }
 
 void SwatchEditor::select_vector(SPGradient* vector) {
+    //todo
+    _vector = vector;
 }
 
 SPGradient* SwatchEditor::get_selected_vector() const {
-    return 0;
+    //todo
+    return _vector;
 }
 
 void SwatchEditor::set_color_picker_plate(ColorPickerPanel::PlateType type) {

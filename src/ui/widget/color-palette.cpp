@@ -187,6 +187,16 @@ void ColorPalette::enable_color_selection(bool enable) {
     _normal_box.set_selection_mode(enable ? Gtk::SelectionMode::SINGLE : Gtk::SelectionMode::NONE);
 }
 
+void ColorPalette::show_stretch_checkbox(bool show) {
+    auto& stretch = get_widget<Gtk::CheckButton>(_builder, "stretch");
+    stretch.set_visible(show);
+}
+
+void ColorPalette::show_scrollbar_checkbox(bool show) {
+    auto& sb = get_widget<Gtk::CheckButton>(_builder, "use-sb");
+    sb.set_visible(show);
+}
+
 void ColorPalette::do_scroll(int dx, int dy) {
     if (auto vert = _scroll.get_vscrollbar()) {
         vert->get_adjustment()->set_value(vert->get_adjustment()->get_value() + dy);
@@ -633,6 +643,9 @@ void ColorPalette::set_colors(std::vector<std::unique_ptr<Dialog::ColorItem>> co
         } else {
             _normal_items.emplace_back(item);
         }
+        // commented out: there's no lifetime control for items; this callback crashes
+        // TODO: move to swatches.cpp
+        //
         item->signal_modified().connect([item = item.get()] {
             UI::for_each_child(*item->get_parent(), [=](Gtk::Widget& w) {
                 if (auto label = dynamic_cast<Gtk::Label *>(&w)) {
@@ -641,6 +654,7 @@ void ColorPalette::set_colors(std::vector<std::unique_ptr<Dialog::ColorItem>> co
                 return UI::ForEachResult::_continue;
             });
         });
+        //
         if (item->is_pinned()) {
             _pinned_items.push_back(std::move(item));
         } else {

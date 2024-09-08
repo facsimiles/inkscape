@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 //
 // Created by Michael Kowalski on 9/7/24.
 //
@@ -19,11 +20,14 @@ public:
     SPGradient* get_selected_vector() const;
     void set_color_picker_plate(ColorPickerPanel::PlateType type);
     ColorPickerPanel::PlateType get_color_picker_plate() const;
+    sigc::signal<void (SPGradient*)> signal_changed() const { return _signal_changed; }
 
 private:
     Dialog::SwatchesPanel _panel;
     std::shared_ptr<Colors::ColorSet> _colors;
     std::unique_ptr<ColorPickerPanel> _color_picker;
+    SPGradient* _vector = nullptr;
+    sigc::signal<void (SPGradient*)> _signal_changed;
 };
 
 } // namespace

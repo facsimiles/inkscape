@@ -195,10 +195,11 @@
               <object class="GtkGrid" id="main-grid">
                 <property name="halign">start</property>
                 <property name="valign">start</property>
-                <property name="margin-start">12</property>
-                <property name="margin-end">12</property>
-                <property name="margin-top">12</property>
-                <property name="margin-bottom">12</property>
+                <property name="margin-start">4</property>
+<!--                <property name="margin-start">12</property>-->
+<!--                <property name="margin-end">12</property>-->
+<!--                <property name="margin-top">12</property>-->
+<!--                <property name="margin-bottom">12</property>-->
                 <property name="row-spacing">7</property>
                 <property name="column-spacing">8</property>
                 <child>

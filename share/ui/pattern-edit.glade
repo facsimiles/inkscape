@@ -299,6 +299,9 @@
     </child>
     <child>
       <object class="GtkSeparator">
+        <style>
+          <class name="thin"/>
+        </style>
         <property name="valign">center</property>
         <property name="margin-top">3</property>
         <property name="margin-bottom">3</property>

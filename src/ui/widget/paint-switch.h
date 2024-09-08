@@ -52,6 +52,7 @@ public:
     virtual sigc::signal<void (SPGradient* swatch)> get_swatch_changed() = 0;
     virtual sigc::signal<void (SPPattern* pattern, std::optional<Colors::Color> color, const Glib::ustring& label,
         const Geom::Affine& transform, const Geom::Point& offset, bool uniform_scale, const Geom::Scale& gap)> get_pattern_changed() = 0;
+    virtual sigc::signal<void (SPGradient* mesh)> get_mesh_changed() = 0;
 };
 
 } // namespace

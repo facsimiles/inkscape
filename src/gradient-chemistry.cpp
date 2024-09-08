@@ -1952,6 +1952,63 @@ void sp_item_apply_gradient(SPItem* item, SPGradient* vector, SPDesktop* desktop
     }
 }
 
+void sp_item_apply_mesh(SPItem* item, SPGradient* mesh, SPDocument* document, FillOrStroke kind) {
+    if (!item || !item->document || !item->style) return;
+
+    // PaintTarget paint_target = kind == FILL ? FOR_FILL : FOR_STROKE;
+    auto style = item->style;
+    SPPaintServer* server = kind == FILL ? style->getFillPaintServer() : style->getStrokePaintServer();
+    bool has_mesh = false;
+    if (server && is<SPMeshGradient>(server)) {
+        has_mesh = true;
+    }
+
+    auto xml_doc = document->getReprDoc();
+    SPDefs* defs = document->getDefs();
+    SPMeshGradient* mesh_gradient = nullptr;
+
+    if (!mesh || !has_mesh) {
+        // No mesh in document or object does not already have mesh -> create new mesh.
+
+        // Create mesh element
+        auto repr = xml_doc->createElement("svg:meshgradient");
+
+        // privates are garbage-collectable
+        repr->setAttribute("inkscape:collect", "always");
+
+        // Attach to document
+        defs->getRepr()->appendChild(repr);
+        Inkscape::GC::release(repr);
+
+        // Get corresponding object
+        mesh_gradient = static_cast<SPMeshGradient*>(document->getObjectByRepr(repr));
+        mesh_gradient->array.create(mesh_gradient, item, kind == FILL ? item->geometricBounds() : item->visualBounds());
+    }
+    else {
+        // Using found mesh
+
+        // Duplicate
+        auto mesh_repr = mesh->getRepr();
+        auto copy_repr = mesh_repr->duplicate(xml_doc);
+
+        // privates are garbage-collectable
+        copy_repr->setAttribute("inkscape:collect", "always");
+
+        // Attach to document
+        defs->getRepr()->appendChild(copy_repr);
+        Inkscape::GC::release(copy_repr);
+
+        // Get corresponding object
+        mesh_gradient = static_cast<SPMeshGradient*>(document->getObjectByRepr(copy_repr));
+        mesh_gradient->array.read(mesh_gradient);
+
+        Geom::OptRect item_bbox = kind == FILL ? item->geometricBounds() : item->visualBounds();
+        mesh_gradient->array.fill_box(item_bbox);
+    }
+
+    sp_style_set_property_url(item, kind == FILL ? "fill" : "stroke", mesh_gradient, is<SPText>(item));
+}
+
 /*
   Local Variables:
   mode:c++

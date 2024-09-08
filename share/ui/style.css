@@ -1383,6 +1383,13 @@ gridview.grid-view-small > child box.item-box {
     border-spacing: 8px;
 }
 
+/* gridview items with much tighter margins for compact view */
+gridview.grid-view-compact > child box.item-box {
+    padding: 0;
+    margin: 3px;
+    border-spacing: 3px;
+}
+
 /* list view with items based on labels need some extra vertical space */
 listview.list-view-small > row > box.item-box {
     margin-top: 3px;
