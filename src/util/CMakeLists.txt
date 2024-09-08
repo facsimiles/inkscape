@@ -13,6 +13,7 @@ set(util_SRC
 	font-tags.cpp
 	funclog.cpp
 	share.cpp
+	ok-color.cpp
 	object-renderer.cpp
 	paper.cpp
 	parse-int-range.cpp
