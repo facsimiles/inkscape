@@ -177,11 +177,11 @@ GradientEditor::GradientEditor(const char* prefs, Space::Type space):
     _stops_gallery(get_widget<Gtk::Box>(_builder, "stopsGallery")),
     _colors_box(get_widget<Gtk::Box>(_builder, "colorsBox")),
     _main_grid(get_widget<Gtk::Grid>(_builder, "mainGrid")),
-    _color_picker(ColorPickerPanel::create(space, /*TODO*/ ColorPickerPanel::Rect, _colors)),
+    _color_picker(ColorPickerPanel::create(space, get_plate_type_preference(prefs, ColorPickerPanel::Rect), _colors)),
     _linear_btn(get_widget<Gtk::ToggleButton>(_builder, "type-linear")),
     _radial_btn(get_widget<Gtk::ToggleButton>(_builder, "type-radial"))
 {
-    // gradient type buttons; not currently used, hidden, WIP
+    // gradient type buttons
     _linear_btn.set_active();
     _linear_btn.signal_clicked().connect([this](){ fire_change_type(true); });
     _radial_btn.signal_clicked().connect([this](){ fire_change_type(false); });
@@ -570,6 +570,15 @@ void GradientEditor::selectStop(SPStop* selected) {
     if (it != items.end()) {
         select_stop(std::distance(items.begin(), it));
     }
+}
+
+void GradientEditor::set_color_picker_plate(ColorPickerPanel::PlateType type) {
+    _color_picker->set_plate_type(type);
+    set_plate_type_preference(_prefs.c_str(), type);
+}
+
+ColorPickerPanel::PlateType GradientEditor::get_color_picker_plate() const {
+    return _color_picker->get_plate_type();
 }
 
 SPGradient* GradientEditor::get_gradient_vector() {

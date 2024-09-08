@@ -207,4 +207,8 @@ void sp_item_apply_pattern(SPItem* item, SPPattern* pattern, FillOrStroke kind, 
     sp_repr_css_set_property(css, kind == FILL ? "fill" : "stroke", url.c_str());
 
     sp_item_set_pattern_style(item, root_pattern, css, kind);
+
+    // create link to the pattern right away, without waiting for this item to be moved;
+    // otherwise pattern editor may end up modifying pattern shared by different objects
+    item->adjust_pattern(Geom::Affine());
 }

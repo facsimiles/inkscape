@@ -32,8 +32,8 @@ namespace Inkscape::UI::Widget {
 ColorPage::ColorPage(std::shared_ptr<Space::AnySpace> space, std::shared_ptr<ColorSet> colors)
     : Gtk::Box()
     , _space(std::move(space))
-    , _selected_colors(std::move(colors))
-    , _specific_colors(std::make_shared<Colors::ColorSet>(_space, true))
+    , _selected_colors(colors)
+    , _specific_colors(std::make_shared<Colors::ColorSet>(_space, colors->getAlphaConstraint().value_or(true)))
     // , _expander(get_widget<Gtk::Expander>(_builder, "wheel-expander"))
 {
     set_name("ColorPage");

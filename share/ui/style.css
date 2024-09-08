@@ -714,7 +714,7 @@ button.square-button image {
     /* Color is set in src/ui/widget/layer-selector.cpp */
 }
 
-#DialogNotebook #Swatches box label {
+#DialogNotebook #Swatches box label.padded-label {
     padding-left: 5px;
     padding-right: 3px;
 }
@@ -735,6 +735,10 @@ button.square-button image {
     /* Extra height for text descenders (?) makes style swatch bounding box too tall enlarging toolbars;
     counter combined height of two lines of text that not even line-height can defeat with negative margin. */
     margin-bottom: -3px;
+}
+
+.SwatchEditor .SwatchList {
+    min-height: 15em;
 }
 
 #DocumentProperties #NotebookPage {

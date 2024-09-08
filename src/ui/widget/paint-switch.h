@@ -38,6 +38,7 @@ class PaintSwitch : public Gtk::Box {
 public:
     PaintSwitch();
 
+    virtual void set_desktop(SPDesktop* desktop) = 0;
     virtual void set_document(SPDocument* document) = 0;
     static std::unique_ptr<PaintSwitch> create();
     virtual void set_mode(PaintMode mode) = 0;

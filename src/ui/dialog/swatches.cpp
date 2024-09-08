@@ -76,14 +76,14 @@ static constexpr auto auto_id = "Auto";
  * Lifecycle
  */
 
-SwatchesPanel::SwatchesPanel(bool compact, char const *prefsPath)
+SwatchesPanel::SwatchesPanel(PanelType panel_type, char const *prefsPath)
     : DialogBase(prefsPath, "Swatches"),
     _builder(create_builder("dialog-swatches.glade")),
     _list_btn(get_widget<Gtk::ToggleButton>(_builder, "list")),
     _grid_btn(get_widget<Gtk::ToggleButton>(_builder, "grid")),
     _selector(get_widget<Gtk::MenuButton>(_builder, "selector")),
     _selector_label(get_widget<Gtk::Label>(_builder, "selector-label")),
-    _selector_menu{compact ? nullptr : std::make_unique<UI::Widget::PopoverMenu>(Gtk::PositionType::BOTTOM)},
+    _selector_menu{panel_type == Compact ? nullptr : std::make_unique<UI::Widget::PopoverMenu>(Gtk::PositionType::BOTTOM)},
     _new_btn(get_widget<Gtk::Button>(_builder, "new")),
     _edit_btn(get_widget<Gtk::Button>(_builder, "edit")),
     _delete_btn(get_widget<Gtk::Button>(_builder, "delete"))
@@ -95,7 +95,7 @@ SwatchesPanel::SwatchesPanel(bool compact, char const *prefsPath)
 
     _palette = Gtk::make_managed<Inkscape::UI::Widget::ColorPalette>();
     _palette->set_visible();
-    if (compact) {
+    if (panel_type == Compact) {
         append(*_palette);
     } else {
         get_widget<Gtk::Box>(_builder, "content").append(*_palette);
@@ -131,9 +131,9 @@ SwatchesPanel::SwatchesPanel(bool compact, char const *prefsPath)
     auto path = prefs->getString(_prefs_path + "/palette-path");
     auto loaded = load_swatches(Glib::filename_from_utf8(path));
 
-    update_palettes(compact);
+    update_palettes(panel_type);
 
-    if (!compact) {
+    if (panel_type == Dialog) {
         if (loaded) {
             update_loaded_palette_entry();
         }
@@ -144,7 +144,7 @@ SwatchesPanel::SwatchesPanel(bool compact, char const *prefsPath)
         update_selector_label(_current_palette_id);
     }
 
-    bool embedded = compact;
+    bool embedded = panel_type == Compact;
     _palette->set_compact(embedded);
 
     // restore palette settings
@@ -182,12 +182,33 @@ SwatchesPanel::SwatchesPanel(bool compact, char const *prefsPath)
 
     rebuild();
 
-    if (compact) {
+    if (panel_type == Compact) {
         // Respond to requests from the palette widget to change palettes.
         _palette->get_palette_selected_signal().connect([this] (Glib::ustring name) {
             set_palette(name);
         });
-    } else {
+    }
+    else if (panel_type == Popup) {
+        // swatch fill
+        _selector.set_visible(false);
+        _current_palette_id = auto_id;
+        get_widget<Gtk::Label>(_builder, "swatch-fill").set_visible();
+        _palette->show_pinned_colors(false);
+        // _palette->enable_color_selection(true);
+        auto& header = get_widget<Gtk::Box>(_builder, "header");
+        header.set_margin_start(0);
+        header.set_margin_end(0);
+        header.set_margin_top(3);
+        auto& content = get_widget<Gtk::Box>(_builder, "content");
+        content.set_margin_start(0);
+        content.set_margin_end(0);
+        auto& footer = get_widget<Gtk::Box>(_builder, "footer");
+        footer.set_margin_start(0);
+        footer.set_margin_end(0);
+
+        append(get_widget<Gtk::Box>(_builder, "main"));
+    }
+    else {
         append(get_widget<Gtk::Box>(_builder, "main"));
 
         get_widget<Gtk::Button>(_builder, "open").signal_clicked().connect([this]{
@@ -197,13 +218,21 @@ SwatchesPanel::SwatchesPanel(bool compact, char const *prefsPath)
                 update_selector_menu();
                 update_selector_label(_loaded_palette.id);
             }
-        });;
+        });
     }
 }
 
 SwatchesPanel::~SwatchesPanel()
 {
     untrack_gradients();
+}
+
+void SwatchesPanel::select_vector(SPGradient* vector) {
+    //
+}
+
+SPGradient* SwatchesPanel::get_selected_vector() const {
+    return 0;
 }
 
 /*
@@ -483,19 +512,21 @@ void SwatchesPanel::update_fillstroke_indicators()
 /**
  * Process the list of available palettes and update the list in the _palette widget.
  */
-void SwatchesPanel::update_palettes(bool compact) {
+void SwatchesPanel::update_palettes(PanelType panel_type) {
     std::vector<UI::Widget::palette_t> palettes;
-    palettes.reserve(1 + GlobalPalettes::get().palettes().size());
 
     // The first palette in the list is always the "Auto" palette. Although this
     // will contain colors when selected, the preview we show for it is empty.
     // TRANSLATORS: A list of swatches in the document
     palettes.push_back({_("Document swatches"), auto_id, {}});
 
-    // The remaining palettes in the list are the global palettes.
-    for (auto &p : GlobalPalettes::get().palettes()) {
-        auto palette = to_palette_t(p);
-        palettes.emplace_back(std::move(palette));
+    if (panel_type != Popup) {
+        palettes.reserve(1 + GlobalPalettes::get().palettes().size());
+        // The remaining palettes in the list are the global palettes.
+        for (auto &p : GlobalPalettes::get().palettes()) {
+            auto palette = to_palette_t(p);
+            palettes.emplace_back(std::move(palette));
+        }
     }
 
     _palette->set_palettes(palettes);
@@ -566,6 +597,8 @@ void SwatchesPanel::rebuild()
     if (getDocument()) {
         update_fillstroke_indicators();
     }
+
+    for (auto& p : palette) p->reference();
 
     _palette->set_colors(std::move(palette));
     _palette->set_selected(_current_palette_id);

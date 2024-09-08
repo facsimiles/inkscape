@@ -66,8 +66,20 @@ class ColorItem;
 class SwatchesPanel final : public DialogBase
 {
 public:
-    SwatchesPanel(bool compact, char const *prefsPath = "/dialogs/swatches");
+    // SwatchesPanel is used in different places and exposes different capabilities:
+    enum PanelType {
+        // regular "Swatches" dialog with selection of color palettes
+        Dialog,
+        // compact color palette used to show frequently used colors (at the bottom of the app)
+        Compact,
+        // swatch fill popup with a list of document swatches only
+        Popup
+    };
+    SwatchesPanel(PanelType panel_type, char const *prefsPath = "/dialogs/swatches");
     ~SwatchesPanel() final;
+
+    void select_vector(SPGradient* vector);
+    SPGradient* get_selected_vector() const;
 
 private:
     void documentReplaced() final;
@@ -79,7 +91,7 @@ private:
     void _scheduleUpdate();
     void _update();
 
-    void update_palettes(bool compact);
+    void update_palettes(PanelType panel_type);
     void rebuild();
     bool load_swatches();
     bool load_swatches(std::string const &path);
