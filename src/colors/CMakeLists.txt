@@ -24,6 +24,7 @@ set(colors_SRC
 	spaces/linear-rgb.cpp
 	spaces/luv.cpp
 	spaces/okhsl.cpp
+	spaces/okhsv.cpp
 	spaces/oklab.cpp
 	spaces/oklch.cpp
 	spaces/named.cpp
@@ -58,6 +59,7 @@ set(colors_SRC
 	spaces/linear-rgb.h
 	spaces/luv.h
 	spaces/okhsl.h
+	spaces/okhsv.h
 	spaces/oklab.h
 	spaces/oklch.h
 	spaces/named.h

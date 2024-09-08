@@ -91,6 +91,14 @@ static const std::vector<Components> color_spaces = {
         }
     },
     {
+        Type::OKHSV, Type::OKHSV, Traits::Internal,
+        {
+            { "h", _("_H<sub>ok</sub>"), _("Hue"), 360 },
+            { "s", _("_S<sub>ok</sub>"), _("Saturation"), 100 },
+            { "v", _("_V<sub>ok</sub>"), _("Value"), 100 }
+        }
+    },
+    {
         Type::LCH, Type::NONE, Traits::Internal,
         {
             { "l", _("_L"), _("Luminance"), 255 },
@@ -118,7 +126,7 @@ static const std::vector<Components> color_spaces = {
         Type::OKLCH, Type::OKHSL, Traits::Picker,
         {
             { "l", _("_L<sub>ok</sub>"), _("Lightness"), 100 },
-            { "c", _("_C<sub>ok</sub>"), _("Chroma"), 100 },
+            { "c", _("_C<sub>ok</sub>"), _("Chroma"), 40 },
             { "h", _("_H<sub>ok</sub>"), _("Hue"), 360 }
         }
     },
