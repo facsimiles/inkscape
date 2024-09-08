@@ -28,7 +28,7 @@
 #include "document.h"
 #include "pattern-manager.h"
 #include "widget-group.h"
-#include "ui/widget/swatch-selector.h"
+#include "ui/widget/swatch-editor.h"
 
 namespace Inkscape::UI::Widget {
 
@@ -68,10 +68,11 @@ PaintMode get_mode_from_paint(const SPIPaint& paint) {
     return PaintMode::NotSet;
 }
 
-const static struct Paint { PaintMode mode; const char* icon; const char* name; const char* tip; } paint_modes[] = {
+namespace {
+
+const struct Paint { PaintMode mode; const char* icon; const char* name; const char* tip; } paint_modes[] = {
     {PaintMode::Solid,       "paint-solid",           C_("Paint type", "Flat"),     _("Flat color")},
     {PaintMode::Gradient,    "paint-gradient-linear", C_("Paint type", "Gradient"), _("Linear gradient fill")},
-    // {PaintMode::RadGradient, "paint-gradient-radial", C_("Paint type", "Gradient"), _("Radial gradient fill")},
 #ifdef WITH_MESH
     {PaintMode::Mesh,        "paint-gradient-mesh",   C_("Paint type", "Mesh"),     _("Mesh fill")},
 #endif
@@ -79,6 +80,25 @@ const static struct Paint { PaintMode mode; const char* icon; const char* name; 
     {PaintMode::Swatch,      "paint-swatch",          C_("Paint type", "Swatch"),   _("Swatch color")},
     {PaintMode::NotSet,      "paint-unknown",         C_("Paint type", "Unset"),    _("Inherited")},
 };
+
+class FlatColorEditor : public Gtk::Box {
+    const char* _prefs = "/color-editor";
+    std::unique_ptr<ColorPickerPanel> _picker;
+public:
+    FlatColorEditor(Space::Type space, std::shared_ptr<Colors::ColorSet> colors) :
+        _picker(ColorPickerPanel::create(space, get_plate_type_preference(_prefs, ColorPickerPanel::Rect), colors)) {
+        append(*_picker);
+    }
+
+    void set_color_picker_plate(ColorPickerPanel::PlateType type) {
+        _picker->set_plate_type(type);
+    }
+    ColorPickerPanel::PlateType get_color_picker_plate() const {
+        return _picker->get_plate_type();
+    }
+};
+
+} // namespace
 
 Glib::ustring get_paint_mode_icon(PaintMode mode) {
     for (auto&& p : paint_modes) {
@@ -108,6 +128,9 @@ class PaintSwitchImpl : public PaintSwitch {
 public:
     PaintSwitchImpl();
 
+    void set_desktop(SPDesktop* desktop) override {
+        _swatch.set_desktop(desktop);
+    }
     void set_document(SPDocument* document) override {
         _document = document;
     }
@@ -166,25 +189,30 @@ public:
         if (_update.pending()) return;
 
         auto scoped(_update.block());
-        auto vector = _swatch.getGradientSelector()->getVector();
+        auto vector = _swatch.get_selected_vector(); //.getGradientSelector()->getVector();
         _signal_swatch_changed.emit(vector);
     }
 
+    // set current page color plate type - circle, rect or none
+    void set_plate_type(ColorPickerPanel::PlateType type);
+    std::optional<ColorPickerPanel::PlateType> get_plate_type(Gtk::Widget* page) const;
     SPDocument* _document = nullptr;
     std::shared_ptr<Colors::ColorSet> _color = std::make_shared<Colors::ColorSet>();
     Gtk::Stack _stack;
     std::map<PaintMode, Gtk::Widget*> _pages;
     std::map<PaintMode, Gtk::ToggleButton*> _mode_buttons;
+    std::map<ColorPickerPanel::PlateType, Gtk::ToggleButton*> _plate_buttons;
     PaintMode _mode = PaintMode::None;
     sigc::signal<void (const Colors::Color&)> _signal_color_changed;
     sigc::signal<void (PaintMode)> _signal_mode_changed;
     sigc::signal<void (SPGradient* gradient, SPGradientType type)> _signal_gradient_changed;
     sigc::signal<void (SPGradient* swatch)> _signal_swatch_changed;
-    sigc::signal<void (SPPattern*, std::optional<Color>, const Glib::ustring&, const Geom::Affine&, const Geom::Point&, bool, const Geom::Scale&)> _signal_pattern_changed;
-    std::unique_ptr<ColorPickerPanel> _flat_color;
-    GradientEditor _gradient = {"/gradient-edit", tt};
-    PatternEditor _pattern = {"/pattern-edit", PatternManager::get()};
-    SwatchSelector _swatch;
+    sigc::signal<void (SPPattern*, std::optional<Color>, const Glib::ustring&, const Geom::Affine&, const Geom::Point&,
+                       bool, const Geom::Scale&)> _signal_pattern_changed;
+    FlatColorEditor _flat_color{tt, _color};
+    GradientEditor _gradient{"/gradient-edit", tt};
+    PatternEditor _pattern{"/pattern-edit", PatternManager::get()};
+    SwatchEditor _swatch{tt};
     Gtk::Box _unset = Gtk::Box{Gtk::Orientation::VERTICAL};
     OperationBlocker _update;
     Gtk::ToggleButton _group;
@@ -194,7 +222,7 @@ public:
 
 PaintSwitchImpl::PaintSwitchImpl() {
     _color->set(Color(0x000000ff));
-    _flat_color = ColorPickerPanel::create(tt, pt, _color);
+    // _flat_color = ColorPickerPanel::create(tt, pt, _color);
     auto header = Gtk::make_managed<Gtk::Box>(Gtk::Orientation::HORIZONTAL);
     header->set_margin_top(1);
     header->set_margin_bottom(5);
@@ -224,23 +252,20 @@ PaintSwitchImpl::PaintSwitchImpl() {
     auto pickers = Gtk::make_managed<Gtk::Box>(Gtk::Orientation::HORIZONTAL);
     pickers->set_spacing(0);
     pickers->set_halign(Gtk::Align::END);
-    for (auto [id, icon, type] : { std::tuple
-        {"rect", "color-picker-rect", ColorPickerPanel::PlateType::Rect},
-        {"circle", "color-picker-circle", ColorPickerPanel::PlateType::Circle},
-        {"input", "color-picker-input", ColorPickerPanel::PlateType::None}}) {
+    for (auto [icon, type] : { std::tuple
+        {"color-picker-rect", ColorPickerPanel::PlateType::Rect},
+        {"color-picker-circle", ColorPickerPanel::PlateType::Circle},
+        {"color-picker-input", ColorPickerPanel::PlateType::None}}) {
 
         auto btn = Gtk::make_managed<Gtk::ToggleButton>();
         btn->set_has_frame(false);
         btn->set_icon_name(icon);
         btn->set_group(_group);
         auto name = type;
-        btn->signal_toggled().connect([this, name]() {
-            _flat_color->set_plate_type(name);
-            _gradient.get_color_picker().set_plate_type(name);
-            // todo: others if needed
-        });
+        btn->signal_toggled().connect([this, name]() { set_plate_type(name); });
         pickers->append(*btn);
         _plate_type.add(btn);
+        _plate_buttons[type] = btn;
     }
     header->append(*types);
     header->append(*pickers);
@@ -275,11 +300,12 @@ PaintSwitchImpl::PaintSwitchImpl() {
     // force hight to reveal list of patterns
     _pattern.set_size_request(-1, 440);
     _pattern.signal_changed().connect([this]() { fire_pattern_changed(); });
+    _pattern.signal_color_changed().connect([this](auto) { fire_pattern_changed(); });
     _pattern.set_margin_top(4);
 
     _set_mode(PaintMode::None);
 
-    _pages[PaintMode::Solid] = _flat_color.get();
+    _pages[PaintMode::Solid] = &_flat_color;
     _pages[PaintMode::Swatch] = &_swatch;
     _pages[PaintMode::Gradient] = &_gradient;
     _pages[PaintMode::Pattern] = &_pattern;
@@ -340,19 +366,62 @@ void PaintSwitchImpl::set_mode(PaintMode mode) {
 }
 
 void PaintSwitchImpl::_set_mode(PaintMode mode) {
-    auto scoped(_update.block());
+    // auto scoped(_update.block());
     _mode = mode;
+    bool has_color_picker = false;
 
+    // show corresponding editor page
     if (auto it = _pages.find(mode); it != end(_pages)) {
         _stack.set_visible_child(*it->second);
+        // sync plate type buttons with current page
+        auto type = get_plate_type(it->second);
+        if (type.has_value()) {
+            has_color_picker = true;
+            if (auto btn = _plate_buttons[*type]) {
+                btn->set_active();
+            }
+        }
     }
-    for (auto& kv : _mode_buttons) {
-        kv.second->set_active(mode == kv.first);
+    if (auto mode_btn = _mode_buttons[mode]) {
+        mode_btn->set_active();
     }
+    // for (auto& kv : _mode_buttons) {
+        // kv.second->set_active(mode == kv.first);
+    // }
     // color picker available?
-    bool has_picker = mode == PaintMode::Solid || mode == PaintMode::Gradient || mode == PaintMode::Swatch;
-    _plate_type.set_sensitive(has_picker);
-    _plate_type.set_visible(has_picker);
+    // bool has_picker = mode == PaintMode::Solid || mode == PaintMode::Gradient || mode == PaintMode::Swatch;
+    _plate_type.set_sensitive(has_color_picker);
+    _plate_type.set_visible(has_color_picker);
+}
+
+void PaintSwitchImpl::set_plate_type(ColorPickerPanel::PlateType type) {
+    if (auto it = _pages.find(_mode); it != end(_pages)) {
+        auto page = it->second;
+
+        if (page == &_flat_color) {
+            _flat_color.set_color_picker_plate(type);
+        }
+        else if (page == &_gradient) {
+            _gradient.set_color_picker_plate(type);
+        }
+        else if (page == &_swatch) {
+            _swatch.set_color_picker_plate(type);
+        }
+    }
+}
+
+std::optional<ColorPickerPanel::PlateType> PaintSwitchImpl::get_plate_type(Gtk::Widget* page) const {
+    if (page == &_flat_color) {
+        return _flat_color.get_color_picker_plate();
+    }
+    else if (page == &_gradient) {
+        return _gradient.get_color_picker_plate();
+    }
+    else if (page == &_swatch) {
+        return _swatch.get_color_picker_plate();
+    }
+
+    return {};
 }
 
 void PaintSwitchImpl::update_from_paint(const SPIPaint& paint) {
@@ -362,7 +431,7 @@ void PaintSwitchImpl::update_from_paint(const SPIPaint& paint) {
     if (server) {
         if (is<SPGradient>(server) && cast<SPGradient>(server)->getVector()->isSwatch()) {
             auto vector = cast<SPGradient>(server)->getVector();
-            _swatch.setVector(vector ? vector->document : nullptr, vector);
+            _swatch.select_vector(vector);// .setVector(vector ? vector->document : nullptr, vector);
         }
         else if (is<SPLinearGradient>(server) || is<SPRadialGradient>(server)) {
             auto gradient = cast<SPGradient>(server);

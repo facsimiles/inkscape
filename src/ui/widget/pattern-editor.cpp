@@ -677,8 +677,17 @@ std::pair<std::string, SPDocument*> PatternEditor::get_selected() {
 }
 
 std::string PatternEditor::get_selected_doc_pattern() {
-    auto sel = get_active(_doc_gallery, _doc_pattern_store);
-    return sel ? sel->id : std::string{};
+    if (auto sel = get_active(_doc_gallery, _doc_pattern_store)) {
+        // for current document, if selection hasn't changed return linked pattern ID
+        // so that we can modify its properties (transform, offset, gap)
+        if (sel->id == _current_pattern.id.raw()) {
+            return _current_pattern.link_id;
+        }
+        // different pattern from current document selected; use its root pattern
+        // as a starting point; link pattern will be injected by adjust_pattern()
+        return sel->id;
+    }
+    return std::string{};
 }
 
 std::pair<std::string, SPDocument*> PatternEditor::get_selected_stock_pattern() {

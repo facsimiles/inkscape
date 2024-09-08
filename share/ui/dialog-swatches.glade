@@ -13,6 +13,15 @@
         <property name="margin-bottom">4</property>
         <property name="spacing">4</property>
         <child>
+          <object class="GtkLabel" id="swatch-fill">
+            <property name="visible">False</property>
+            <property name="hexpand">True</property>
+            <property name="halign">start</property>
+            <property name="valign">center</property>
+            <property name="label" translatable="yes">Swatch fill</property>
+          </object>
+        </child>
+        <child>
           <object class="GtkMenuButton" id="selector">
             <property name="hexpand">True</property>
             <property name="focusable">True</property>
@@ -21,6 +30,9 @@
                 <property name="spacing">2</property>
                 <child>
                   <object class="GtkLabel" id="selector-label">
+                    <style>
+                      <class name="padded-label"/>
+                    </style>
                     <property name="hexpand">True</property>
                     <property name="xalign">0.0</property>
                     <property name="ellipsize">middle</property>

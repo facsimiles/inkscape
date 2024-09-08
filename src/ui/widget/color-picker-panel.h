@@ -25,9 +25,16 @@ public:
     virtual void set_color(const Colors::Color& color) = 0;
     virtual void set_picker_type(Colors::Space::Type type) = 0;
     virtual void set_plate_type(PlateType plate) = 0;
+    virtual PlateType get_plate_type() const = 0;
     // current color page
     // virtual ColorPage& get_color_page() = 0;
 };
+
+// get plate type from preferences
+ColorPickerPanel::PlateType get_plate_type_preference(const char* pref_path_base, ColorPickerPanel::PlateType def_type = ColorPickerPanel::Rect);
+
+// persist plate type in preferences
+void set_plate_type_preference(const char* pref_path_base, ColorPickerPanel::PlateType type);
 
 } // namespace
 

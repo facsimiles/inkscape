@@ -205,7 +205,7 @@ PaintAttribute::PaintStrip::PaintStrip(const Glib::ustring& title, bool fill) :
         //TODO: skip locked item?
         set_item_style(_current_item, css.get());
 
-        DocumentUndo::maybeDone(_current_item->document, fill ? "undo_fill" : "undo_stroke",
+        DocumentUndo::maybeDone(_current_item->document, fill ? "change-fill" : "change-stroke",
             fill ? _("Set fill color") : _("Set stroke color"), "dialog-fill-and-stroke");
     };
 
@@ -219,9 +219,10 @@ PaintAttribute::PaintStrip::PaintStrip(const Glib::ustring& title, bool fill) :
     _switch->get_pattern_changed().connect([this,fill](auto pattern, auto color, auto label, auto transform, auto offset, auto uniform, auto gap) {
         if (!can_update()) return;
 
+        // auto scoped(_update->block());
         auto kind = fill ? FILL : STROKE;
         sp_item_apply_pattern(_current_item, pattern, kind, color, label, transform, offset, uniform, gap);
-        DocumentUndo::done(_current_item->document, fill ? _("Set pattern on fill") : _("Set pattern on stroke"), "dialog-fill-and-stroke");
+        DocumentUndo::maybeDone(_current_item->document, fill ? "fill-pattern-change" : "stroke-pattern-change", fill ? _("Set pattern on fill") : _("Set pattern on stroke"), "dialog-fill-and-stroke");
     });
 
     _switch->get_gradient_changed().connect([this,fill](auto vector, auto gradient_type) {
@@ -229,13 +230,13 @@ PaintAttribute::PaintStrip::PaintStrip(const Glib::ustring& title, bool fill) :
 
         auto kind = fill ? FILL : STROKE;
         sp_item_apply_gradient(_current_item, vector, _desktop, gradient_type, false, kind);
-        DocumentUndo::done(_current_item->document, fill ? _("Set gradient on fill") : _("Set gradient on stroke"), "dialog-fill-and-stroke");
+        DocumentUndo::maybeDone(_current_item->document, fill ? "fill-gradient-change" : "stroke-gradient-change", fill ? _("Set gradient on fill") : _("Set gradient on stroke"), "dialog-fill-and-stroke");
     });
 
     _switch->get_swatch_changed().connect([this,fill](auto& vector) {
         auto kind = fill ? FILL : STROKE;
         sp_item_apply_gradient(_current_item, vector, _desktop, SP_GRADIENT_TYPE_LINEAR, true, kind);
-        DocumentUndo::done(_current_item->document, fill ? _("Set swatch on fill") : _("Set swatch on stroke"), "dialog-fill-and-stroke");
+        DocumentUndo::maybeDone(_current_item->document, fill ? "fill-swatch-change" : "stroke-swatch-change", fill ? _("Set swatch on fill") : _("Set swatch on stroke"), "dialog-fill-and-stroke");
     });
 
     _switch->get_flat_color_changed().connect([=,this](auto& color) {
@@ -300,7 +301,7 @@ void PaintAttribute::insert_widgets(InkPropertyGrid& grid, int row) {
         if (!can_update()) return;
 
         set_item_marker(_current_item, location, id, uri);
-        DocumentUndo::done(_current_item->document, _("Set marker"), "dialog-fill-and-stroke");
+        DocumentUndo::maybeDone(_current_item->document, "marker-change", _("Set marker"), "dialog-fill-and-stroke");
     };
 
     for (auto combo : {&_marker_start, &_marker_mid, &_marker_end}) {
@@ -506,6 +507,8 @@ void PaintAttribute::set_document(SPDocument* document) {
     for (auto combo : {&_marker_start, &_marker_mid, &_marker_end}) {
         combo->setDocument(document);
     }
+    _fill._switch->set_document(document);
+    _stroke._switch->set_document(document);
 }
 
 void PaintAttribute::set_desktop(SPDesktop* desktop) {
@@ -518,6 +521,8 @@ void PaintAttribute::set_desktop(SPDesktop* desktop) {
         _current_unit = unit;
     }
     _desktop = desktop;
+    _fill._switch->set_desktop(desktop);
+    _stroke._switch->set_desktop(desktop);
 }
 
 void PaintAttribute::set_paint(const SPObject* object, bool set_fill) {
@@ -546,7 +551,7 @@ void PaintAttribute::set_paint(const SPIPaint& paint, double opacity, bool fill)
         color.setOpacity(opacity);
         stripe._switch->set_color(color);
     }
-    init_popup(paint, opacity, mode, fill);
+    stripe._switch->update_from_paint(paint);
 }
 
 // set correct icon for current fill/stroke type
@@ -595,11 +600,6 @@ void PaintAttribute::set_preview(const SPIPaint& paint, double paint_opacity, Pa
     }
 }
 
-void PaintAttribute::init_popup(const SPIPaint& paint, double paint_opacity, PaintMode mode, bool fill) {
-    auto& stripe = fill ? _fill : _stroke;
-    stripe._switch->update_from_paint(paint);
-}
-
 void PaintAttribute::update_markers(SPIString* markers[], SPObject* object) {
     for (auto combo : {&_marker_start, &_marker_mid, &_marker_end}) {
         if (combo->in_update()) continue;
@@ -639,7 +639,7 @@ bool PaintAttribute::can_update() const {
 }
 
 void PaintAttribute::update_from_object(SPObject* object) {
-    if (_update.pending()) return;
+    // if (_update.pending()) return;
 
     auto scoped(_update.block());
 
@@ -730,5 +730,9 @@ void PaintAttribute::update_from_object(SPObject* object) {
     //     }
     // }
 }
+
+// bool PaintAttribute::in_update() const {
+    // return _update.pending();
+// }
 
 } // namespace

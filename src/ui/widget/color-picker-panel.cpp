@@ -144,6 +144,7 @@ public:
     void set_color(const Color& color) override;
     void set_picker_type(Space::Type type) override;
     void set_plate_type(PlateType plate) override;
+    PlateType get_plate_type() const override;
 
     void switch_page(Space::Type space, PlateType plate_type);
     // void _select_color_type(Space::Type type);
@@ -279,6 +280,20 @@ void ColorPickerPanelImpl::switch_page(Space::Type space, PlateType plate_type) 
     create_color_page(space, plate_type);
     _space_type = space;
     _plate_type = plate_type;
+}
+
+ColorPickerPanel::PlateType ColorPickerPanelImpl::get_plate_type() const {
+    return _plate_type;
+}
+
+ColorPickerPanel::PlateType get_plate_type_preference(const char* pref_path_base, ColorPickerPanel::PlateType def_type) {
+    Glib::ustring path(pref_path_base);
+    return static_cast<ColorPickerPanel::PlateType>(Preferences::get()->getIntLimited(path + "/color-plate", def_type, 0, 2));
+}
+
+void set_plate_type_preference(const char* pref_path_base, ColorPickerPanel::PlateType type) {
+    Glib::ustring path(pref_path_base);
+    Preferences::get()->setInt(path + "/color-plate", type);
 }
 
 } // namespace

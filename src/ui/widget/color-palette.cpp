@@ -179,6 +179,14 @@ void ColorPalette::set_settings_visibility(bool show) {
     btn_menu.set_visible(show);
 }
 
+void ColorPalette::show_pinned_colors(bool show) {
+    _pinned_box.set_visible(show);
+}
+
+void ColorPalette::enable_color_selection(bool enable) {
+    _normal_box.set_selection_mode(enable ? Gtk::SelectionMode::SINGLE : Gtk::SelectionMode::NONE);
+}
+
 void ColorPalette::do_scroll(int dx, int dy) {
     if (auto vert = _scroll.get_vscrollbar()) {
         vert->get_adjustment()->set_value(vert->get_adjustment()->get_value() + dy);
@@ -618,8 +626,13 @@ void ColorPalette::set_colors(std::vector<std::unique_ptr<Dialog::ColorItem>> co
 {
     _normal_items.clear();
     _pinned_items.clear();
-    
-    for (auto &item : coloritems) {
+
+    for (auto& item : coloritems) {
+        if (item->is_pinned()) {
+            _pinned_items.emplace_back(item);
+        } else {
+            _normal_items.emplace_back(item);
+        }
         item->signal_modified().connect([item = item.get()] {
             UI::for_each_child(*item->get_parent(), [=](Gtk::Widget& w) {
                 if (auto label = dynamic_cast<Gtk::Label *>(&w)) {
@@ -656,8 +669,8 @@ void ColorPalette::rebuild_widgets()
     _normal_box.freeze_notify();
     _pinned_box.freeze_notify();
 
-    UI::remove_all_children(_normal_box);
-    UI::remove_all_children(_pinned_box);
+    _normal_box.remove_all();
+    _pinned_box.remove_all();
 
     for (auto const &item : _normal_items) {
         // in a tile mode (no labels) group headers are hidden:

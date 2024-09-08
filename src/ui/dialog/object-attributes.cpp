@@ -118,7 +118,6 @@ ObjectAttributes::ObjectAttributes()
     _obj_locked.signal_clicked().connect([this]() {
         if (_update.pending() || !_current_item) return;
 
-        auto scoped(_update.block());
         bool lock = _current_item->sensitive;
         _current_item->setLocked(lock);
         DocumentUndo::done(getDocument(), lock ? _("Lock object") : _("Unlock object"), "dialog-object-properties");
@@ -127,10 +126,17 @@ ObjectAttributes::ObjectAttributes()
     _obj_visible.signal_clicked().connect([this]() {
         if (_update.pending() || !_current_item) return;
 
-        auto scoped(_update.block());
         bool hide = !_current_item->isExplicitlyHidden();
         _current_item->setExplicitlyHidden(hide);
         DocumentUndo::done(getDocument(), hide ? _("Hide object") : _("Unhide object"), "dialog-object-properties");
+    });
+
+    _observer.signal_changed().connect([this](auto change, auto str) {
+        if (change == XML::SignalObserver::Attribute) {
+            if (_update.pending() || !getDesktop() || !_current_panel || !_current_item) return;
+
+            update_vis_lock(_current_item);
+        }
     });
 }
 
@@ -139,6 +145,10 @@ void ObjectAttributes::widget_setup() {
 
     auto selection = getDesktop()->getSelection();
     auto item = selection->singleItem();
+
+    if (item != _current_item) {
+        _observer.set(item);
+    }
 
     auto scoped(_update.block());
 

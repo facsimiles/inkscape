@@ -27,6 +27,7 @@
 #include "ui/operation-blocker.h"
 #include "ui/widget/paint-attribute.h"
 #include "ui/widget/unit-tracker.h"
+#include "xml/helper-observer.h"
 
 class SPAttributeTable;
 class SPItem;
@@ -109,6 +110,7 @@ private:
     // Contains a pointer to the currently selected item (NULL in case nothing is or multiple objects are selected).
     SPItem* _current_item = nullptr;
     ObjectProperties& _obj_properties;
+    XML::SignalObserver _observer;
 };
 
 } // namespace Inkscape::UI::Dialog

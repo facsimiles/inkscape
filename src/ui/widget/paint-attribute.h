@@ -35,6 +35,8 @@ public:
     void set_desktop(SPDesktop* desktop);
     // update UI from passed object style
     void update_from_object(SPObject* object);
+    // is update pending?
+    // bool in_update() const;
 
 private:
     void set_paint(const SPIPaint& paint, double opacity, bool fill);
@@ -42,7 +44,7 @@ private:
     // set icon representing current fill/stroke type
     void set_preview(const SPIPaint& paint, double paint_opacity, PaintMode mode, bool fill);
     // init fill/stroke popup (before it gets opened)
-    void init_popup(const SPIPaint& paint, double paint_opacity, PaintMode mode, bool fill);
+    // void init_popup(const SPIPaint& paint, double paint_opacity, PaintMode mode, bool fill);
     //
     void update_markers(SPIString* markers[], SPObject* object);
     // show/hide stroke widgets

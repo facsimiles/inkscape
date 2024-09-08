@@ -276,6 +276,7 @@ set(ui_SRC
 	widget/stroke-options.cpp
 	widget/style-subject.cpp
 	widget/style-swatch.cpp
+	widget/swatch-editor.cpp
 	widget/swatch-selector.cpp
 	widget/template-list.cpp
 	widget/text.cpp
@@ -587,6 +588,7 @@ set(ui_SRC
 	widget/stroke-options.h
 	widget/style-subject.h
 	widget/style-swatch.h
+	widget/swatch-editor.h
 	widget/swatch-selector.h
 	widget/template-list.h
 	widget/text.h
