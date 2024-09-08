@@ -241,6 +241,7 @@ set(ui_SRC
 	widget/layer-selector.cpp
 	widget/licensor.cpp
 	widget/marker-combo-box.cpp
+	widget/mesh-editor.cpp
 	widget/notebook-page.cpp
 	widget/object-composite-settings.cpp
 	widget/objects-dialog-cells.cpp
@@ -309,7 +310,7 @@ set(ui_SRC
 	pack.h
 	popup-menu.h
 	shape-editor.h
-        shape-editor-knotholders.h
+	shape-editor-knotholders.h
 	simple-pref-pusher.h
 	shortcuts.h
 	svg-renderer.h
@@ -550,6 +551,7 @@ set(ui_SRC
 	widget/layer-selector.h
 	widget/licensor.h
 	widget/marker-combo-box.h
+	widget/mesh-editor.h
 	widget/notebook-page.h
 	widget/object-composite-settings.h
 	widget/objects-dialog-cells.h

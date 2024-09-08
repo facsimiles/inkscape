@@ -44,7 +44,7 @@ public:
     void set_document(SPDocument* document);
     void set_desktop(SPDesktop* desktop);
     void update_panel(SPObject* object, SPDesktop* desktop);
-    Gtk::Widget& widget() { if(!_widget) throw "crap"; return *_widget; }
+    Gtk::Widget& widget() { if(!_widget) throw "missing widget in attributes panel"; return *_widget; }
     Glib::ustring get_title() const { return _title; }
     bool supports_fill_stroke() const {return _show_fill_stroke; }
 

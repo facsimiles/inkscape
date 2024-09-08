@@ -123,7 +123,7 @@ void set_stroke_width(SPItem* item, double width_typed, bool hairline, const Uni
 
 void set_item_marker(SPItem* item, int location, const char* attr, const std::string& uri) {
     set_item_style_str(item, attr, uri.c_str());
-    //??????
+    //TODO: verify if any of the below lines are needed
     // item->requestModified(SP_OBJECT_MODIFIED_FLAG);
     // item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
     // needed?
@@ -233,6 +233,14 @@ PaintAttribute::PaintStrip::PaintStrip(const Glib::ustring& title, bool fill) :
         DocumentUndo::maybeDone(_current_item->document, fill ? "fill-gradient-change" : "stroke-gradient-change", fill ? _("Set gradient on fill") : _("Set gradient on stroke"), "dialog-fill-and-stroke");
     });
 
+    _switch->get_mesh_changed().connect([this,fill](auto mesh) {
+        if (!can_update()) return;
+
+        auto kind = fill ? FILL : STROKE;
+        sp_item_apply_mesh(_current_item, mesh, _current_item->document, kind);
+        DocumentUndo::maybeDone(_current_item->document, fill ? "fill-mesh-change" : "stroke-mesh-change", fill ? _("Set mesh on fill") : _("Set mesh on stroke"), "dialog-fill-and-stroke");
+    });
+
     _switch->get_swatch_changed().connect([this,fill](auto& vector) {
         auto kind = fill ? FILL : STROKE;
         sp_item_apply_gradient(_current_item, vector, _desktop, SP_GRADIENT_TYPE_LINEAR, true, kind);
@@ -316,7 +324,8 @@ void PaintAttribute::insert_widgets(InkPropertyGrid& grid, int row) {
     }
 
     //TODO: unit-specific adj?
-    SpinPropertyDef width_prop = {&_stroke_width, { 0, 1e6, 0.1, 1.0, 3 }, C_("Stroke width", "W"), _("Stroke width") };
+    // 4 digits of precision to allow meters to show some values when switching from single pixels
+    SpinPropertyDef width_prop = {&_stroke_width, { 0, 1e6, 0.1, 1.0, 4 }, C_("Stroke width", "W"), _("Stroke width") };
     init_spin_button(width_prop);
     _stroke_width.set_evaluator_function([this](auto& text) {
         auto unit = _unit_selector.getUnit();
@@ -336,24 +345,32 @@ void PaintAttribute::insert_widgets(InkPropertyGrid& grid, int row) {
         set_stroke_width(_current_item, width, hairline, unit);
         DocumentUndo::done(_current_item->document, _("Set stroke width"), "dialog-fill-and-stroke");
     };
-    auto set_stroke_unit = [this]() {
+    auto set_stroke_unit = [=,this]() {
         if (!can_update()) return;
 
         auto new_unit = _unit_selector.getUnit();
         if (new_unit == _current_unit) return;
 
-        auto scoped(_update.block());
         auto hairline = _unit_selector.get_active_id() == "hairline";
         auto width = _stroke_width.get_value();
         if (hairline) {
+            auto scoped(_update.block());
             _current_unit = new_unit;
             set_stroke_width(_current_item, 1, hairline, new_unit);
             DocumentUndo::done(_current_item->document, _("Set stroke width"), "dialog-fill-and-stroke");
         }
         else {
+            // if current unit is empty, then it's a hairline, b/c it's not in a unit table
+            if (_current_unit->abbr.empty()) {
+                _current_unit = UnitTable::get().getUnit("px");
+            }
             width = Quantity::convert(width, _current_unit, new_unit);
             _current_unit = new_unit;
-            _stroke_width.set_value(width);
+            {
+                auto scoped(_update.block());
+                _stroke_width.set_value(width);
+            }
+            set_stroke(width);
         }
     };
     auto set_stroke_style = [this](const char* attr, const char* value) {
@@ -381,13 +398,9 @@ void PaintAttribute::insert_widgets(InkPropertyGrid& grid, int row) {
     });
     _stroke_box.set_spacing(1);
     _stroke_box.append(_unit_selector);
-    _stroke_box.append(_stroke_presets);
     _stroke_presets.set_halign(Gtk::Align::START);
+    _stroke_presets.set_tooltip_text(_("Stroke options"));
     _stroke_box.set_halign(Gtk::Align::START);
-    // if (desktop) {
-    //     unitSelector->setUnit(desktop->getNamedView()->display_units->abbr);
-    //     _old_unit = desktop->getNamedView()->display_units;
-    // }
     _stroke_presets.set_has_frame(false);
     _stroke_presets.set_icon_name("gear");
     _stroke_presets.set_always_show_arrow(false);
@@ -409,7 +422,7 @@ void PaintAttribute::insert_widgets(InkPropertyGrid& grid, int row) {
     grid.add_property(&_fill._label, nullptr, &_fill._paint_btn, &_fill._alpha, &_fill._box);
     _stroke_widgets.add(grid.add_gap());
     grid.add_property(&_stroke._label, nullptr, &_stroke._paint_btn, &_stroke._alpha, &_stroke._box);
-    _stroke_widgets.add(grid.add_property(nullptr, nullptr, &_stroke_width, &_stroke_box, nullptr));
+    _stroke_widgets.add(grid.add_property(nullptr, nullptr, &_stroke_width, &_stroke_box, &_stroke_presets));
     _stroke_widgets.add(grid.add_property(nullptr, nullptr, &_dash_selector, &_markers, nullptr));
     _stroke_widgets.add(grid.add_gap());
 
@@ -730,9 +743,5 @@ void PaintAttribute::update_from_object(SPObject* object) {
     //     }
     // }
 }
-
-// bool PaintAttribute::in_update() const {
-    // return _update.pending();
-// }
 
 } // namespace

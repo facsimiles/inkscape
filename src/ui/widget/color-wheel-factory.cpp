@@ -79,7 +79,7 @@ static std::pair<ColorWheel*, bool> create_color_wheel_helper(Type type, bool cr
 
     case Type::OKHSL:
         if (create_widget) {
-            wheel = create_plate(type, Type::OKHSL, disc);
+            wheel = create_plate(type, Type::OKHSV, disc);
             // if (!disc) {
             //     //TODO: we need OKHSV
             //     auto hue = 0;   // hue is fixed
@@ -99,7 +99,7 @@ static std::pair<ColorWheel*, bool> create_color_wheel_helper(Type type, bool cr
     case Type::OKLCH:
         if (create_widget) {
                 //TODO: we need OKHSV
-            wheel = create_plate(type, Type::OKHSL, disc);
+            wheel = create_plate(type, Type::OKHSV, disc);
             // if (!disc) {
             //     //TODO: we need OKHSV
             //     auto hue = 0;   // hue is fixed

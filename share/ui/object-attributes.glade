@@ -324,48 +324,37 @@
     <section>
       <item>
         <attribute name="label" translatable="yes" context="Precision"
-                   comments="This symbolizes precision of 0 digits after the decimal separator.">N
-        </attribute>
+                   comments="This symbolizes precision of 0 digits after the decimal separator.">N</attribute>
         <attribute name="action">attrdialog.precision</attribute>
         <attribute name="target" type="i">0</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes" context="Precision"
-                   comments="This symbolizes precision of 1 digit after the decimal separator. Please adjust to your language's number format (e.g. N,N).">
-          N.N
-        </attribute>
+                   comments="This symbolizes precision of 1 digit after the decimal separator. Please adjust to your language's number format (e.g. N,N).">N.N</attribute>
         <attribute name="action">attrdialog.precision</attribute>
         <attribute name="target" type="i">1</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes" context="Precision"
-                   comments="This symbolizes precision of 2 digits after the decimal separator. Please adjust to your language's number format (e.g. N,NN).">
-          N.NN
-        </attribute>
+                   comments="This symbolizes precision of 2 digits after the decimal separator. Please adjust to your language's number format (e.g. N,NN).">N.NN</attribute>
         <attribute name="action">attrdialog.precision</attribute>
         <attribute name="target" type="i">2</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes" context="Precision"
-                   comments="This symbolizes precision of 3 digits after the decimal separator. Please adjust to your language's number format (e.g. N,NNN).">
-          N.NNN
-        </attribute>
+                   comments="This symbolizes precision of 3 digits after the decimal separator. Please adjust to your language's number format (e.g. N,NNN).">N.NNN</attribute>
         <attribute name="action">attrdialog.precision</attribute>
         <attribute name="target" type="i">3</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes" context="Precision"
-                   comments="This symbolizes precision of 4 digits after the decimal separator. Please adjust to your language's number format (e.g. N,NNNN).">
-          N.NNNN
-        </attribute>
+                   comments="This symbolizes precision of 4 digits after the decimal separator. Please adjust to your language's number format (e.g. N,NNNN).">N.NNNN</attribute>
         <attribute name="action">attrdialog.precision</attribute>
         <attribute name="target" type="i">4</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes" context="Precision"
-                   comments="This symbolizes precision of 5 digits after the decimal separator. Please adjust to your language's number format (e.g. N,NNNNN).">
-          N.NNNNN
-        </attribute>
+                   comments="This symbolizes precision of 5 digits after the decimal separator. Please adjust to your language's number format (e.g. N,NNNNN).">N.NNNNN</attribute>
         <attribute name="action">attrdialog.precision</attribute>
         <attribute name="target" type="i">5</attribute>
       </item>

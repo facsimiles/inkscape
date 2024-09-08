@@ -14,6 +14,8 @@
 #include "colors/color-set.h"
 #include "colors/color.h"
 
+class SPDesktop;
+
 namespace Inkscape::UI::Widget {
 
 class ColorPickerPanel : public Gtk::Grid {
@@ -22,12 +24,11 @@ public:
     enum PlateType {Rect, Circle, None};
     static std::unique_ptr<ColorPickerPanel> create(Colors::Space::Type space, PlateType type, std::shared_ptr<Colors::ColorSet> color);
 
+    virtual void set_desktop(SPDesktop* dekstop) = 0;
     virtual void set_color(const Colors::Color& color) = 0;
     virtual void set_picker_type(Colors::Space::Type type) = 0;
     virtual void set_plate_type(PlateType plate) = 0;
     virtual PlateType get_plate_type() const = 0;
-    // current color page
-    // virtual ColorPage& get_color_page() = 0;
 };
 
 // get plate type from preferences
@@ -35,6 +36,11 @@ ColorPickerPanel::PlateType get_plate_type_preference(const char* pref_path_base
 
 // persist plate type in preferences
 void set_plate_type_preference(const char* pref_path_base, ColorPickerPanel::PlateType type);
+
+// get spin button pattern used by color picker to set min size for its spin buttons;
+// helps other UI elements sync their button sizes
+// todo: check if SizeGroup can by used instead
+const std::string& get_color_picker_spinner_pattern();
 
 } // namespace
 

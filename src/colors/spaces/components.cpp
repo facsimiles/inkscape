@@ -126,7 +126,7 @@ static const std::vector<Components> color_spaces = {
         Type::OKLCH, Type::OKHSL, Traits::Picker,
         {
             { "l", _("_L<sub>ok</sub>"), _("Lightness"), 100 },
-            { "c", _("_C<sub>ok</sub>"), _("Chroma"), 40 },
+            { "c", _("_C<sub>ok</sub>"), _("Chroma"), 40 }, //TODO: 100% is 0.4
             { "h", _("_H<sub>ok</sub>"), _("Hue"), 360 }
         }
     },

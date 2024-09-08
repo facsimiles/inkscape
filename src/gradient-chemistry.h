@@ -129,6 +129,9 @@ void sp_item_gradient_invert_vector_color(SPItem *item, Inkscape::PaintTarget fi
 
 void sp_item_apply_gradient(SPItem* item, SPGradient* vector, SPDesktop* desktop, SPGradientType gradient_type, bool create_swatch, FillOrStroke kind);
 
+// Apply mesh to given item; create a new mesh is none is passed
+void sp_item_apply_mesh(SPItem* item, SPGradient* mesh, SPDocument* document, FillOrStroke kind);
+
 #endif // SEEN_SP_GRADIENT_CHEMISTRY_H
 
 /*

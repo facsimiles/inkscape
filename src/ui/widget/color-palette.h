@@ -75,6 +75,9 @@ public:
     void show_pinned_colors(bool show);
     // Enable/disable selecting individual color items
     void enable_color_selection(bool enable);
+    // Show/hide strettch checkbox in settings
+    void show_stretch_checkbox(bool show);
+    void show_scrollbar_checkbox(bool show);
 
     int get_tile_size() const;
     int get_tile_border() const;

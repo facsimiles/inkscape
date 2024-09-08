@@ -417,6 +417,7 @@ ${_build_dir}/share/templates/templates.h
 ../src/ui/widget/layer-selector.cpp
 ../src/ui/widget/licensor.cpp
 ../src/ui/widget/marker-combo-box.cpp
+../src/ui/widget/mesh-editor.cpp
 ../src/ui/widget/object-composite-settings.cpp
 ../src/ui/widget/page-properties.cpp
 ../src/ui/widget/page-selector.cpp
