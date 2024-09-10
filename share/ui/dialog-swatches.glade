@@ -105,23 +105,23 @@
           </object>
         </child>
         <child>
-          <object class="GtkButton" id="edit">
-            <property name="focusable">True</property>
-            <property name="receives-default">True</property>
-            <property name="tooltip-text" translatable="yes">Edit swatch</property>
-            <property name="has-frame">False</property>
-            <property name="icon-name">edit</property>
-          </object>
-        </child>
-        <child>
           <object class="GtkButton" id="delete">
             <property name="focusable">True</property>
             <property name="receives-default">True</property>
             <property name="tooltip-text" translatable="yes">Delete swatch</property>
-            <property name="margin-start">12</property>
-            <property name="margin-end">12</property>
             <property name="has-frame">False</property>
-            <property name="icon-name">edit-delete</property>
+            <property name="icon-name">list-remove</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="import">
+            <property name="focusable">True</property>
+            <property name="receives-default">True</property>
+            <property name="tooltip-text" translatable="yes">Import swatches</property>
+            <property name="has-frame">False</property>
+            <property name="icon-name">import</property>
+            <property name="margin-start">10</property>
+            <property name="margin-end">10</property>
           </object>
         </child>
         <child>

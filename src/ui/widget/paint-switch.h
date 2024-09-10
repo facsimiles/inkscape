@@ -13,6 +13,7 @@
 #include <sigc++/connection.h>
 #include <sigc++/signal.h>
 
+#include "edit-operation.h"
 #include "style-internal.h"
 #include "colors/color.h"
 #include "object/sp-gradient.h"
@@ -49,7 +50,7 @@ public:
     virtual sigc::signal<void (const Colors::Color&)> get_flat_color_changed() = 0;
     virtual sigc::signal<void (PaintMode)> get_signal_mode_changed() = 0;
     virtual sigc::signal<void (SPGradient* gradient, SPGradientType type)> get_gradient_changed() = 0;
-    virtual sigc::signal<void (SPGradient* swatch)> get_swatch_changed() = 0;
+    virtual sigc::signal<void (SPGradient* swatch, EditOperation, SPGradient*, std::optional<Colors::Color>)> get_swatch_changed() = 0;
     virtual sigc::signal<void (SPPattern* pattern, std::optional<Colors::Color> color, const Glib::ustring& label,
         const Geom::Affine& transform, const Geom::Point& offset, bool uniform_scale, const Geom::Scale& gap)> get_pattern_changed() = 0;
     virtual sigc::signal<void (SPGradient* mesh)> get_mesh_changed() = 0;

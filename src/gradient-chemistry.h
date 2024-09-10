@@ -127,10 +127,54 @@ Color sp_item_gradient_stop_query_style(SPItem *item, GrPointType point_type, un
 void sp_item_gradient_reverse_vector(SPItem *item, Inkscape::PaintTarget fill_or_stroke);
 void sp_item_gradient_invert_vector_color(SPItem *item, Inkscape::PaintTarget fill_or_stroke);
 
+// Apply gradiant (or swatch) to given item; pass nullptr to create a new gradient and apply it
 void sp_item_apply_gradient(SPItem* item, SPGradient* vector, SPDesktop* desktop, SPGradientType gradient_type, bool create_swatch, FillOrStroke kind);
 
 // Apply mesh to given item; create a new mesh is none is passed
 void sp_item_apply_mesh(SPItem* item, SPGradient* mesh, SPDocument* document, FillOrStroke kind);
+
+// Mark swatch in given "item" for auto collection, then replace it with "replacement", so it can be deleted
+void sp_delete_item_swatch(SPItem* item, FillOrStroke kind, SPGradient* to_delete, SPGradient* replacement);
+
+// Check if 'swatch' can be deleted:
+// - it is referenced at most ones (so we can unlink it easily)
+// - there are two or more swatchs total in a document (so we can use another swatch as a replacement)
+bool sp_can_delete_swatch(SPDocument* document, SPGradient* swatch);
+
+// Find a replacement for 'swatch' that we want to delete.
+// We want object using swatch to keep using some other swatch to prevent mode switch.
+SPGradient* sp_find_replacement_swatch(SPDocument* document, SPGradient* swatch);
+
+// Change swatch's color. Possibly impacting many objects fill/stroke.
+void sp_change_swatch_color(SPGradient* swatch, const Color& color);
+
+namespace Inkscape::Object {
+
+// Call 'f' for each child item of 'from', recursively
+template<typename F>
+void for_each_item(SPObject* from, F f) {
+    for (auto& child: from->children) {
+        if (auto item = cast<SPItem>(&child)) {
+            f(item);
+        }
+        for_each_item(&child, f);
+    }
+}
+
+// Call 'f' for each child item of 'from', recursively, until 'f' returns Stop
+enum class ForEach { Continue, Stop };
+template<typename F>
+ForEach for_each_item_until(SPObject* from, F f) {
+    for (auto& child: from->children) {
+        if (auto item = cast<SPItem>(&child)) {
+            if (f(item) == ForEach::Stop) return ForEach::Stop;
+        }
+        if (for_each_item_until(&child, f) == ForEach::Stop) return ForEach::Stop;
+    }
+    return ForEach::Continue;
+}
+
+} // namspace
 
 #endif // SEEN_SP_GRADIENT_CHEMISTRY_H
 

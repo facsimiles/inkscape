@@ -634,6 +634,12 @@ void ColorPalette::resize() {
 
 void ColorPalette::set_colors(std::vector<std::unique_ptr<Dialog::ColorItem>> coloritems)
 {
+    for (auto item : _normal_items) {
+        item->unreference();
+    }
+    for (auto item : _pinned_items) {
+        item->unreference();
+    }
     _normal_items.clear();
     _pinned_items.clear();
 

@@ -140,6 +140,34 @@ void edit_marker(int location, SPDesktop* desktop) {
     }
 }
 
+void swatch_operation(SPItem* item, SPGradient* vector, SPDesktop* desktop, bool fill, EditOperation operation, SPGradient* replacement, std::optional<Color> color) {
+    auto kind = fill ? FILL : STROKE;
+
+    switch (operation) {
+    case EditOperation::New:
+        sp_item_apply_gradient(item, nullptr, desktop, SP_GRADIENT_TYPE_LINEAR, true, kind);
+        DocumentUndo::done(item->document, fill ? _("Set swatch on fill") : _("Set swatch on stroke"), "dialog-fill-and-stroke");
+        break;
+    case EditOperation::Change:
+        if (color.has_value()) {
+            sp_change_swatch_color(vector, *color);
+            DocumentUndo::maybeDone(item->document, "swatch-color", _("Change swatch color"), "dialog-fill-and-stroke");
+        }
+        else {
+            sp_item_apply_gradient(item, vector, desktop, SP_GRADIENT_TYPE_LINEAR, true, kind);
+            DocumentUndo::maybeDone(item->document, fill ? "fill-swatch-change" : "stroke-swatch-change", fill ? _("Set swatch on fill") : _("Set swatch on stroke"), "dialog-fill-and-stroke");
+        }
+        break;
+    case EditOperation::Delete:
+        sp_delete_item_swatch(item, kind, vector, replacement);
+        DocumentUndo::done(item->document, _("Delete swatch"), "dialog-fill-and-stroke");
+        break;
+    case EditOperation::Import:
+        //todo
+        break;
+    }
+}
+
 } // namespace
 
 PaintAttribute::PaintStrip::PaintStrip(const Glib::ustring& title, bool fill) :
@@ -241,10 +269,10 @@ PaintAttribute::PaintStrip::PaintStrip(const Glib::ustring& title, bool fill) :
         DocumentUndo::maybeDone(_current_item->document, fill ? "fill-mesh-change" : "stroke-mesh-change", fill ? _("Set mesh on fill") : _("Set mesh on stroke"), "dialog-fill-and-stroke");
     });
 
-    _switch->get_swatch_changed().connect([this,fill](auto& vector) {
-        auto kind = fill ? FILL : STROKE;
-        sp_item_apply_gradient(_current_item, vector, _desktop, SP_GRADIENT_TYPE_LINEAR, true, kind);
-        DocumentUndo::maybeDone(_current_item->document, fill ? "fill-swatch-change" : "stroke-swatch-change", fill ? _("Set swatch on fill") : _("Set swatch on stroke"), "dialog-fill-and-stroke");
+    _switch->get_swatch_changed().connect([this,fill](auto vector, auto operation, auto replacement, std::optional<Color> color) {
+        if (!can_update()) return;
+
+        swatch_operation(_current_item, vector, _desktop, fill, operation, replacement, color);
     });
 
     _switch->get_flat_color_changed().connect([=,this](auto& color) {

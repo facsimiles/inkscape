@@ -151,7 +151,7 @@ public:
     sigc::signal<void (SPGradient* mesh)> get_mesh_changed() override {
         return _signal_mesh_changed;
     }
-    sigc::signal<void (SPGradient* swatch)> get_swatch_changed() override {
+    sigc::signal<void (SPGradient* swatch, EditOperation, SPGradient*, std::optional<Color>)> get_swatch_changed() override {
         return _signal_swatch_changed;
     }
     sigc::signal<void (SPPattern* pattern, std::optional<Colors::Color> color, const Glib::ustring& label,
@@ -190,12 +190,11 @@ public:
         auto vector = gradient ? gradient->getVector() : nullptr;
         _signal_gradient_changed.emit(vector, _gradient.get_type());
     }
-    void fire_swatch_changed() {
+    void fire_swatch_changed(SPGradient* swatch, EditOperation action, SPGradient* replacement, std::optional<Color> color) {
         if (_update.pending()) return;
 
         auto scoped(_update.block());
-        auto vector = _swatch.get_selected_vector(); //todo: verify: .getGradientSelector()->getVector();
-        _signal_swatch_changed.emit(vector);
+        _signal_swatch_changed.emit(swatch, action, replacement, color);
     }
     void fire_mesh_changed(SPGradient* mesh) {
         if (_update.pending()) return;
@@ -218,7 +217,7 @@ public:
     sigc::signal<void (PaintMode)> _signal_mode_changed;
     sigc::signal<void (SPGradient* gradient, SPGradientType type)> _signal_gradient_changed;
     sigc::signal<void (SPGradient* mesh)> _signal_mesh_changed;
-    sigc::signal<void (SPGradient* swatch)> _signal_swatch_changed;
+    sigc::signal<void (SPGradient* swatch, EditOperation, SPGradient*, std::optional<Color>)> _signal_swatch_changed;
     sigc::signal<void (SPPattern*, std::optional<Color>, const Glib::ustring&, const Geom::Affine&, const Geom::Point&,
                        bool, const Geom::Scale&)> _signal_pattern_changed;
     FlatColorEditor _flat_color{tt, _color};
@@ -284,6 +283,13 @@ PaintSwitchImpl::PaintSwitchImpl() {
     header->append(*pickers);
 
     _mesh.signal_changed().connect([this](auto mesh) { fire_mesh_changed(mesh); });
+
+    _swatch.signal_changed().connect([this](auto swatch, auto operation, auto replacement) {
+        fire_swatch_changed(swatch, operation, replacement, {});
+    });
+    _swatch.signal_color_changed().connect([this](auto swatch, auto& color) {
+        fire_swatch_changed(swatch, EditOperation::Change, nullptr, color);
+    });
 
     //TODO: improve: Gtk::SizeGroup?
     _gradient.set_spinner_size_pattern(get_color_picker_spinner_pattern());
@@ -357,7 +363,8 @@ void PaintSwitchImpl::switch_paint_mode(PaintMode mode) {
             fire_mesh_changed(nullptr);
             break;
         case PaintMode::Swatch:
-            fire_swatch_changed();
+        //todo: verify: .getGradientSelector()->getVector();
+            fire_swatch_changed(_swatch.get_selected_vector(), EditOperation::New, nullptr, {});
             break;
         case PaintMode::NotSet:
             break;
