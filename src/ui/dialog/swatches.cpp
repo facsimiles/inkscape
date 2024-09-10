@@ -85,13 +85,23 @@ SwatchesPanel::SwatchesPanel(PanelType panel_type, char const *prefsPath)
     _selector_label(get_widget<Gtk::Label>(_builder, "selector-label")),
     _selector_menu{panel_type == Compact ? nullptr : std::make_unique<UI::Widget::PopoverMenu>(Gtk::PositionType::BOTTOM)},
     _new_btn(get_widget<Gtk::Button>(_builder, "new")),
-    _edit_btn(get_widget<Gtk::Button>(_builder, "edit")),
-    _delete_btn(get_widget<Gtk::Button>(_builder, "delete"))
+    _delete_btn(get_widget<Gtk::Button>(_builder, "delete")),
+    _import_btn(get_widget<Gtk::Button>(_builder, "import")),
+    _open_btn(get_widget<Gtk::Button>(_builder, "open"))
 {
-    // hide edit buttons - this functionality is not implemented
-    _new_btn.set_visible(false);
-    _edit_btn.set_visible(false);
-    _delete_btn.set_visible(false);
+    // hide edit buttons
+    if (panel_type != Popup) {
+        _new_btn.set_visible(false);
+        _import_btn.set_visible(false);
+        _delete_btn.set_visible(false);
+    }
+    else {
+        _open_btn.set_visible(false);
+
+        _new_btn.signal_clicked().connect([this]{_signal_action.emit(EditOperation::New);});
+        _delete_btn.signal_clicked().connect([this]{_signal_action.emit(EditOperation::Delete);});
+        _import_btn.signal_clicked().connect([this]{_signal_action.emit(EditOperation::Import);});
+    }
 
     _palette = Gtk::make_managed<Inkscape::UI::Widget::ColorPalette>();
     _palette->set_visible();
@@ -215,7 +225,7 @@ SwatchesPanel::SwatchesPanel(PanelType panel_type, char const *prefsPath)
     else {
         append(get_widget<Gtk::Box>(_builder, "main"));
 
-        get_widget<Gtk::Button>(_builder, "open").signal_clicked().connect([this]{
+        _open_btn.signal_clicked().connect([this]{
             // load a color palette file selected by the user
             if (load_swatches()) {
                 update_loaded_palette_entry();
@@ -299,7 +309,7 @@ void SwatchesPanel::select_palette(const Glib::ustring& id) {
     update_selector_label(_current_palette_id);
 
     _new_btn.set_visible(edit);
-    _edit_btn.set_visible(edit);
+    _import_btn.set_visible(edit);
     _delete_btn.set_visible(edit);
 
     rebuild();
@@ -601,8 +611,6 @@ void SwatchesPanel::rebuild()
     if (getDocument()) {
         update_fillstroke_indicators();
     }
-
-    for (auto& p : palette) p->reference();
 
     _palette->set_colors(std::move(palette));
     _palette->set_selected(_current_palette_id);

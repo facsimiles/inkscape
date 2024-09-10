@@ -27,6 +27,7 @@
 #include "preferences.h"  // PrefObserver
 #include "ui/dialog/dialog-base.h"
 #include "ui/dialog/global-palettes.h"
+#include "ui/widget/edit-operation.h"
 #include "ui/widget/palette_t.h"
 
 namespace Gtk {
@@ -80,6 +81,7 @@ public:
 
     void select_vector(SPGradient* vector);
     SPGradient* get_selected_vector() const;
+    sigc::signal<void (EditOperation)>& get_signal_operation() { return _signal_action; }
 
 private:
     void documentReplaced() final;
@@ -148,8 +150,10 @@ private:
 
     Glib::ustring _color_filter_text;
     Gtk::Button& _new_btn;
-    Gtk::Button& _edit_btn;
     Gtk::Button& _delete_btn;
+    Gtk::Button& _import_btn;
+    Gtk::Button& _open_btn;
+    sigc::signal<void (EditOperation)> _signal_action;
 };
 
 } // namespace Dialog

@@ -517,6 +517,7 @@ set(ui_SRC
 	widget/custom-tooltip.h
 	widget/dash-selector.h
 	widget/desktop-widget.h
+	widget/edit-operation.h
 	widget/entity-entry.h
 	widget/entry.h
 	widget/events/canvas-event.h

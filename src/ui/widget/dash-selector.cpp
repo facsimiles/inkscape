@@ -41,7 +41,9 @@
 #include "preferences.h"
 #include "stroke-style.h"
 #include "style.h"  // Read dash patterns from preferences.
+#include "svg/css-ostringstream.h"
 #include "ui/dialog-events.h"
+#include "ui/util.h"
 #include "ui/widget/spinbutton.h"
 
 namespace Inkscape::UI::Widget {
@@ -220,8 +222,8 @@ void DashSelector::set_dash_pattern(std::vector<double> const &new_dash_pattern,
     offset = new_offset;
     update(position);
 
-    if (_pattern_entry) {
-        std::ostringstream ost;
+    if (_pattern_entry && !contains_focus(*_pattern_entry)) {
+        CSSOStringStream ost;
         for (auto d : dash_pattern) {
             ost << d << ' ';
         }
