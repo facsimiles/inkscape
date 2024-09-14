@@ -435,6 +435,7 @@ ${_build_dir}/share/templates/templates.h
 ../src/ui/widget/stroke-options.cpp
 ../src/ui/widget/stroke-style.cpp
 ../src/ui/widget/style-swatch.cpp
+../src/ui/widget/swatch-editor.cpp
 ../src/ui/widget/swatch-selector.cpp
 ../src/ui/widget/template-list.cpp
 ../src/util/enums.h

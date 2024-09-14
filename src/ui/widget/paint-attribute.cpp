@@ -56,21 +56,21 @@ PaintAttribute::PaintAttribute():
     }, false);
 }
 
-void PaintAttribute::PaintStrip::hide() {
+void PaintAttribute::PaintStripe::hide() {
     _paint_btn.set_visible(false);
     _alpha.set_visible(false);
     _define.set_visible();
     _clear.set_visible(false);
 }
 
-void PaintAttribute::PaintStrip::show() {
+void PaintAttribute::PaintStripe::show() {
     _paint_btn.set_visible();
     _alpha.set_visible();
     _define.set_visible(false);
     _clear.set_visible();
 }
 
-bool PaintAttribute::PaintStrip::can_update() const {
+bool PaintAttribute::PaintStripe::can_update() const {
     return _current_item && _update && !_update->pending();
 }
 
@@ -140,7 +140,7 @@ void edit_marker(int location, SPDesktop* desktop) {
     }
 }
 
-void swatch_operation(SPItem* item, SPGradient* vector, SPDesktop* desktop, bool fill, EditOperation operation, SPGradient* replacement, std::optional<Color> color) {
+void swatch_operation(SPItem* item, SPGradient* vector, SPDesktop* desktop, bool fill, EditOperation operation, SPGradient* replacement, std::optional<Color> color, Glib::ustring label) {
     auto kind = fill ? FILL : STROKE;
 
     switch (operation) {
@@ -162,15 +162,18 @@ void swatch_operation(SPItem* item, SPGradient* vector, SPDesktop* desktop, bool
         sp_delete_item_swatch(item, kind, vector, replacement);
         DocumentUndo::done(item->document, _("Delete swatch"), "dialog-fill-and-stroke");
         break;
-    case EditOperation::Import:
-        //todo
+    case EditOperation::Rename:
+        vector->setLabel(label.c_str());
+        DocumentUndo::maybeDone(item->document, _("Rename swatch"), "swatch-rename", "dialog-fill-and-stroke");
+        break;
+    default:
         break;
     }
 }
 
 } // namespace
 
-PaintAttribute::PaintStrip::PaintStrip(const Glib::ustring& title, bool fill) :
+PaintAttribute::PaintStripe::PaintStripe(const Glib::ustring& title, bool fill) :
   _label(title)
 {
     _paint_btn.set_direction(Gtk::ArrowType::DOWN);
@@ -269,10 +272,10 @@ PaintAttribute::PaintStrip::PaintStrip(const Glib::ustring& title, bool fill) :
         DocumentUndo::maybeDone(_current_item->document, fill ? "fill-mesh-change" : "stroke-mesh-change", fill ? _("Set mesh on fill") : _("Set mesh on stroke"), "dialog-fill-and-stroke");
     });
 
-    _switch->get_swatch_changed().connect([this,fill](auto vector, auto operation, auto replacement, std::optional<Color> color) {
+    _switch->get_swatch_changed().connect([this,fill](auto vector, auto operation, auto replacement, std::optional<Color> color, auto label) {
         if (!can_update()) return;
 
-        swatch_operation(_current_item, vector, _desktop, fill, operation, replacement, color);
+        swatch_operation(_current_item, vector, _desktop, fill, operation, replacement, color, label);
     });
 
     _switch->get_flat_color_changed().connect([=,this](auto& color) {

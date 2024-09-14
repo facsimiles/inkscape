@@ -51,6 +51,18 @@
           </object>
         </child>
         <child>
+          <object class="GtkMenuButton" id="settings2">
+            <property name="visible">False</property>
+            <property name="focusable">True</property>
+            <property name="focus-on-click">False</property>
+            <property name="receives-default">True</property>
+            <property name="tooltip-text" translatable="yes">Settings</property>
+            <property name="has-frame">False</property>
+            <property name="direction">down</property>
+            <property name="icon-name">gear</property>
+          </object>
+        </child>
+        <child>
           <object class="GtkSearchEntry" id="search">
             <property name="focusable">True</property>
             <property name="hexpand">True</property>
@@ -62,6 +74,9 @@
     </child>
     <child>
       <object class="GtkSeparator">
+        <style>
+          <class name="thin"/>
+        </style>
       </object>
     </child>
     <child>
@@ -77,6 +92,9 @@
     </child>
     <child>
       <object class="GtkSeparator">
+        <style>
+          <class name="thin"/>
+        </style>
       </object>
     </child>
     <child>

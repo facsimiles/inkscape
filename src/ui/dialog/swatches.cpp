@@ -90,18 +90,9 @@ SwatchesPanel::SwatchesPanel(PanelType panel_type, char const *prefsPath)
     _open_btn(get_widget<Gtk::Button>(_builder, "open"))
 {
     // hide edit buttons
-    if (panel_type != Popup) {
-        _new_btn.set_visible(false);
-        _import_btn.set_visible(false);
-        _delete_btn.set_visible(false);
-    }
-    else {
-        _open_btn.set_visible(false);
-
-        _new_btn.signal_clicked().connect([this]{_signal_action.emit(EditOperation::New);});
-        _delete_btn.signal_clicked().connect([this]{_signal_action.emit(EditOperation::Delete);});
-        _import_btn.signal_clicked().connect([this]{_signal_action.emit(EditOperation::Import);});
-    }
+    _new_btn.set_visible(false);
+    _import_btn.set_visible(false);
+    _delete_btn.set_visible(false);
 
     _palette = Gtk::make_managed<Inkscape::UI::Widget::ColorPalette>();
     _palette->set_visible();
@@ -217,8 +208,8 @@ SwatchesPanel::SwatchesPanel(PanelType panel_type, char const *prefsPath)
         content.set_margin_start(0);
         content.set_margin_end(0);
         auto& footer = get_widget<Gtk::Box>(_builder, "footer");
-        footer.set_margin_start(0);
-        footer.set_margin_end(0);
+        footer.set_visible(false);
+        get_widget<Gtk::MenuButton>(_builder, "settings2").set_visible();
 
         append(get_widget<Gtk::Box>(_builder, "main"));
     }

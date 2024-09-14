@@ -181,6 +181,34 @@ void ColorPreview::draw_func(Cairo::RefPtr<Cairo::Context> const &cr,
         cr->fill();
     }
 
+    // Draw fill/stroke indicators.
+    if (_is_fill || _is_stroke) {
+        auto color = Colors::Color(_rgba);
+        double const lightness = Colors::get_perceptual_lightness(color);
+        auto [gray, alpha] = Colors::get_contrasting_color(lightness);
+        cr->set_source_rgba(gray, gray, gray, alpha);
+
+        // Scale so that the square -1...1 is the biggest possible square centred in the widget.
+        auto w = rect.width();
+        auto h = rect.height();
+        auto minwh = std::min(w, h);
+        cr->translate((w - minwh) / 2.0, (h - minwh) / 2.0);
+        cr->scale(minwh / 2.0, minwh / 2.0);
+        cr->translate(1.0, 1.0);
+
+        if (_is_fill) {
+            cr->arc(0.0, 0.0, 0.35, 0.0, 2 * M_PI);
+            cr->fill();
+        }
+
+        if (_is_stroke) {
+            cr->set_fill_rule(Cairo::Context::FillRule::EVEN_ODD);
+            cr->arc(0.0, 0.0, 0.65, 0.0, 2 * M_PI);
+            cr->arc(0.0, 0.0, 0.5, 0.0, 2 * M_PI);
+            cr->fill();
+        }
+    }
+
     if (_indicator != None) {
         constexpr double side = 7.5;
         constexpr double line = 1.5; // 1.5 pixles b/c it's a diagonal line, so 1px is too thin
@@ -219,8 +247,6 @@ void ColorPreview::draw_func(Cairo::RefPtr<Cairo::Context> const &cr,
 
     if (_style == Simple && _frame) {
         Util::draw_standard_border(cr, rect, dark_theme, radius, get_scale_factor(), false);
-        // Gdk::RGBA color(SP_RGBA32_R_F(_shadow), SP_RGBA32_G_F(_shadow), SP_RGBA32_B_F(_shadow), SP_RGBA32_A_F(_shadow));
-        // Util::draw_border(cr, rect, radius, color, get_scale_factor(), false);
     }
 }
 
@@ -261,6 +287,16 @@ void ColorPreview::set_checkerboard_tile_size(unsigned size) {
         _checkerboard_tile_size = size;
         queue_draw();
     }
+}
+
+void ColorPreview::set_fill(bool on) {
+    _is_fill = on;
+    queue_draw();
+}
+
+void ColorPreview::set_stroke(bool on) {
+    _is_stroke = on;
+    queue_draw();
 }
 
 } // namespace Inkscape::UI::Widget

@@ -25,7 +25,6 @@ ColorEntry::ColorEntry(std::shared_ptr<Colors::ColorSet> colors)
     , _updating(false)
     , _updatingrgba(false)
     , _prevpos(0)
-    , _lastcolor()
 {
     set_name("ColorEntry");
 
@@ -82,11 +81,10 @@ void ColorEntry::_onColorChanged()
         return;
     }
 
-    _lastcolor = _colors->getAverage();;
-    auto text = _lastcolor->toString(false);
+    auto color = _colors->getAverage().converted(Colors::Space::Type::RGB);
+    auto text = color.has_value() ? color->toString(false) : "?";
 
-    std::string old_text = get_text();
-    if (old_text != text) {
+    if (get_text().raw() != text) {
         _updating = true;
         set_text(text);
         _updating = false;

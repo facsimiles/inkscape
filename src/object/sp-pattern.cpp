@@ -462,7 +462,7 @@ SPPattern *SPPattern::_chain() const
     // this attribute is used to express uniform pattern scaling in pattern editor, so keep it
     repr->setAttribute("preserveAspectRatio", getRepr()->attribute("preserveAspectRatio"));
 
-    defsrepr->addChild(repr, nullptr);
+    defsrepr->appendChild(repr);
     SPObject *child = document->getObjectByRepr(repr);
     assert(child == document->getObjectById(repr->attribute("id")));
     g_assert(is<SPPattern>(child));
