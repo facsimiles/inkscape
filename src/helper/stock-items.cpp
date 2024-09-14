@@ -107,7 +107,7 @@ static SPObject *sp_marker_load_from_svg(char const *name, SPDocument *current_d
     auto defs = current_doc->getDefs();
     auto xml_doc = current_doc->getReprDoc();
     auto repr = obj->getRepr()->duplicate(xml_doc);
-    defs->getRepr()->addChild(repr, nullptr);
+    defs->getRepr()->appendChild(repr);
     auto copied = current_doc->getObjectByRepr(repr);
     Inkscape::GC::release(repr);
 
@@ -147,7 +147,7 @@ static SPObject *sp_gradient_load_from_svg(char const *name, SPDocument *current
     auto defs = current_doc->getDefs();
     auto xml_doc = current_doc->getReprDoc();
     auto repr = obj->getRepr()->duplicate(xml_doc);
-    defs->getRepr()->addChild(repr, nullptr);
+    defs->getRepr()->appendChild(repr);
     auto copied = current_doc->getObjectByRepr(repr);
     Inkscape::GC::release(repr);
 

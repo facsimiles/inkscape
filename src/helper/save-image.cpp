@@ -30,7 +30,7 @@ bool extract_image(Gtk::Window* parent, SPImage* image) {
     if (!image || !image->pixbuf || !parent) return false;
 
     std::string current_dir;
-    auto fname = choose_file_save(_("Extract Image"), parent, "image/png", "image.png", current_dir);
+    auto fname = choose_file_save(_("Extract Image"), parent, "image/png", _("PNG image"), "image.png", current_dir);
     if (fname.empty()) return false;
 
     // save image

@@ -557,6 +557,22 @@ char const *get_text(Gtk::Editable const &editable)
     return gtk_editable_get_text(const_cast<GtkEditable *>(editable.gobj())); // C API is const-incorrect
 }
 
+Gtk::Button* create_button(const char* label_text, const char* icon_name) {
+    if (!label_text || !icon_name) return nullptr;
+
+    auto button = Gtk::make_managed<Gtk::Button>();
+    auto box = Gtk::make_managed<Gtk::Box>();
+    box->set_spacing(4);
+    auto icon = Gtk::make_managed<Gtk::Image>();
+    icon->set_from_icon_name(icon_name);
+    auto label = Gtk::make_managed<Gtk::Label>(label_text);
+    box->append(*icon);
+    box->append(*label);
+    button->set_child(*box);
+    box->set_halign(Gtk::Align::CENTER);
+    return button;
+}
+
 /*
   Local Variables:
   mode:c++

@@ -10,6 +10,7 @@
 #define COLOR_PICKER_PANEL_H
 
 #include <gtkmm/grid.h>
+#include <gtkmm/sizegroup.h>
 
 #include "colors/color-set.h"
 #include "colors/color.h"
@@ -29,6 +30,8 @@ public:
     virtual void set_picker_type(Colors::Space::Type type) = 0;
     virtual void set_plate_type(PlateType plate) = 0;
     virtual PlateType get_plate_type() const = 0;
+    virtual Glib::RefPtr<Gtk::SizeGroup> get_first_column_size() = 0;
+    virtual Glib::RefPtr<Gtk::SizeGroup> get_last_column_size() = 0;
 };
 
 // get plate type from preferences

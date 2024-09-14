@@ -565,7 +565,7 @@ SPObject *sp_marker_fork_if_necessary(SPObject *marker)
     // Turn off garbage-collectable or it might be collected before we can use it
     marker->removeAttribute("inkscape:collect");
     Inkscape::XML::Node *mark_repr = marker->getRepr()->duplicate(xml_doc);
-    doc->getDefs()->getRepr()->addChild(mark_repr, nullptr);
+    doc->getDefs()->getRepr()->appendChild(mark_repr);
     if (!mark_repr->attribute("inkscape:stockid")) {
         mark_repr->setAttribute("inkscape:stockid", mark_repr->attribute("id"));
     }

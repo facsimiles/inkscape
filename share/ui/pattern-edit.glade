@@ -160,7 +160,7 @@
     <child>
       <object class="GtkBox">
         <property name="margin-bottom">2</property>
-        <property name="spacing">5</property>
+        <property name="spacing">4</property>
         <child>
           <object class="GtkLabel">
             <property name="valign">center</property>

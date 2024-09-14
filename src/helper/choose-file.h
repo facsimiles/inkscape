@@ -40,7 +40,8 @@ void set_filter(Gtk::FileDialog &file_dialog, Glib::RefPtr<Gtk::FileFilter> cons
 /// @returns name of selected file as local path, or empty if no file selected or not representable
 [[nodiscard]]
 std::string choose_file_save(Glib::ustring const &title, Gtk::Window *parent,
-                             Glib::ustring const &mime_type, Glib::ustring const &file_name,
+                             Glib::ustring const &mime_type, const Glib::ustring& type_name,
+                             Glib::ustring const &file_name,
                              std::string& current_folder);
 
 /// Synchronously run a Gtk::FileDialog to open a single file for reading data.

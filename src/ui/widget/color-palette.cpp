@@ -551,7 +551,7 @@ int ColorPalette::get_tile_size(bool horz) const {
     if (_stretch_tiles) return _size;
 
     double aspect = horz ? _aspect : -_aspect;
-    int scale = _show_labels ? 2.0 : 1.0;
+    int extra = _show_labels ? 8 : 0;
     int size = 0;
 
     if (aspect > 0) {
@@ -563,7 +563,7 @@ int ColorPalette::get_tile_size(bool horz) const {
     else {
         size = _size;
     }
-    return size * scale;
+    return size + extra;
 }
 
 int ColorPalette::get_tile_width() const {

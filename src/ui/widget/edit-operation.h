@@ -18,7 +18,11 @@ enum class EditOperation {
     // request to change selected item
     Change,
     // request to import items
-    Import
+    Import,
+    // request to export items
+    Export,
+    // change label
+    Rename
 };
 
 } // namespace

@@ -20,7 +20,7 @@ constexpr double SP_COLOR_U_TO_F(uint32_t v)
 }
 constexpr uint32_t SP_COLOR_F_TO_U(double v)
 {
-    return (unsigned int)(v * 255. + .5);
+    return (unsigned int)(std::clamp(v, 0.0, 1.0) * 255. + .5);
 }
 constexpr uint32_t SP_RGBA32_R_U(uint32_t v)
 {

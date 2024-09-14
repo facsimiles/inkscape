@@ -94,8 +94,6 @@ void sp_gradient_unset_swatch(SPDesktop *desktop, std::string const &id);
 
 SPGradient* sp_item_get_gradient(SPItem *item, bool fillorstroke);
 
-std::vector<SPItem*> sp_get_all_document_items(SPDocument* document);
-
 int sp_get_gradient_refcount(SPDocument* document, SPGradient* gradient);
 
 void sp_gradient_reverse_vector(SPGradient* gradient);
@@ -139,7 +137,7 @@ void sp_delete_item_swatch(SPItem* item, FillOrStroke kind, SPGradient* to_delet
 // Check if 'swatch' can be deleted:
 // - it is referenced at most ones (so we can unlink it easily)
 // - there are two or more swatchs total in a document (so we can use another swatch as a replacement)
-bool sp_can_delete_swatch(SPDocument* document, SPGradient* swatch);
+bool sp_can_delete_swatch(SPGradient* swatch);
 
 // Find a replacement for 'swatch' that we want to delete.
 // We want object using swatch to keep using some other swatch to prevent mode switch.
@@ -148,33 +146,14 @@ SPGradient* sp_find_replacement_swatch(SPDocument* document, SPGradient* swatch)
 // Change swatch's color. Possibly impacting many objects fill/stroke.
 void sp_change_swatch_color(SPGradient* swatch, const Color& color);
 
-namespace Inkscape::Object {
+// Create swatches in the document for each given color
+void sp_create_document_swatches(SPDocument* document, const std::vector<Color>& colors);
 
-// Call 'f' for each child item of 'from', recursively
-template<typename F>
-void for_each_item(SPObject* from, F f) {
-    for (auto& child: from->children) {
-        if (auto item = cast<SPItem>(&child)) {
-            f(item);
-        }
-        for_each_item(&child, f);
-    }
-}
+// Remove unused (unreferenced) swatches from the document; returns number of removed swatches
+int sp_cleanup_document_swatches(SPDocument* document);
 
-// Call 'f' for each child item of 'from', recursively, until 'f' returns Stop
-enum class ForEach { Continue, Stop };
-template<typename F>
-ForEach for_each_item_until(SPObject* from, F f) {
-    for (auto& child: from->children) {
-        if (auto item = cast<SPItem>(&child)) {
-            if (f(item) == ForEach::Stop) return ForEach::Stop;
-        }
-        if (for_each_item_until(&child, f) == ForEach::Stop) return ForEach::Stop;
-    }
-    return ForEach::Continue;
-}
-
-} // namspace
+// Scan document gradient resources and return all swatches
+std::vector<SPGradient*> sp_collect_all_swatches(SPDocument* document);
 
 #endif // SEEN_SP_GRADIENT_CHEMISTRY_H
 

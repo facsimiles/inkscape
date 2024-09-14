@@ -262,6 +262,7 @@ set(ui_SRC
 	widget/registered-widget.cpp
 	widget/registry.cpp
 	widget/rendering-options.cpp
+	widget/resizing-separator.cpp
 	widget/rotateable.cpp
 	widget/scalar-unit.cpp
 	widget/scalar.cpp
@@ -573,6 +574,7 @@ set(ui_SRC
 	widget/registered-widget.h
 	widget/registry.h
 	widget/rendering-options.h
+	widget/resizing-separator.h
 	widget/rotateable.h
 	widget/scalar-unit.h
 	widget/scalar.h

@@ -59,6 +59,10 @@ public:
     void set_border_radius(int radius);
     // adjust size of checkerboard tiles
     void set_checkerboard_tile_size(unsigned size);
+    /// Update the fill indicator, showing this widget is the fill of the current item.
+    void set_fill(bool on);
+    /// Update the stroke indicator, showing this widget is the stroke of the current item.
+    void set_stroke(bool on);
 private:
     std::uint32_t _rgba; // requested RGBA color, used if there is no pattern given
     Cairo::RefPtr<Cairo::Pattern> _pattern; // pattern to show, if provided
@@ -66,6 +70,8 @@ private:
     Indicator _indicator = None;
     int _radius = -1;
     bool _frame = false;
+    bool _is_fill = false;
+    bool _is_stroke = false;
     void draw_func(Cairo::RefPtr<Cairo::Context> const &cr, int width, int height);
     int _checkerboard_tile_size = 6;
 };

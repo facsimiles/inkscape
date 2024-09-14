@@ -87,6 +87,7 @@ using FinishMethod = Glib::RefPtr<Gio::File> (Gtk::FileDialog::*)
 
 std::string choose_file_save(Glib::ustring const &title, Gtk::Window *parent,
                              Glib::ustring const &mime_type,
+                             const Glib::ustring& type_name,
                              Glib::ustring const &file_name,
                              std::string &current_folder)
 {
@@ -99,6 +100,7 @@ std::string choose_file_save(Glib::ustring const &title, Gtk::Window *parent,
     auto const file_dialog = create_file_dialog(title, _("Save"));
 
     auto filter = Gtk::FileFilter::create();
+    filter->set_name(type_name);
     filter->add_mime_type(mime_type);
     set_filter(*file_dialog, filter);
 

@@ -737,10 +737,6 @@ button.square-button image {
     margin-bottom: -3px;
 }
 
-.SwatchEditor .SwatchList {
-    min-height: 15em;
-}
-
 #DocumentProperties #NotebookPage {
     margin-left: 4px;
     margin-right: 4px;
@@ -1388,6 +1384,11 @@ gridview.grid-view-compact > child box.item-box {
     padding: 0;
     margin: 3px;
     border-spacing: 3px;
+}
+gridview.grid-view-no-margins > child box.item-box {
+    padding: 0;
+    margin: 0px;
+    border-spacing: 0px;
 }
 
 /* list view with items based on labels need some extra vertical space */

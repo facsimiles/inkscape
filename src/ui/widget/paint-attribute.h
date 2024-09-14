@@ -49,8 +49,8 @@ private:
     // true if attributes can be modified now, or false while update is pending
     bool can_update() const;
 
-    struct PaintStrip {
-        PaintStrip(const Glib::ustring& title, bool fill);
+    struct PaintStripe {
+        PaintStripe(const Glib::ustring& title, bool fill);
 
         void show();
         void hide();
@@ -71,8 +71,8 @@ private:
         SPDesktop* _desktop = nullptr;
         OperationBlocker* _update = nullptr;
     };
-    PaintStrip _fill = PaintStrip(_("Fill"), true);
-    PaintStrip _stroke= PaintStrip(_("Stroke"), false);
+    PaintStripe _fill = PaintStripe(_("Fill"), true);
+    PaintStripe _stroke= PaintStripe(_("Stroke"), false);
     Gtk::Box _markers;
     MarkerComboBox _marker_start = MarkerComboBox("marker-start", SP_MARKER_LOC_START);
     MarkerComboBox _marker_mid =   MarkerComboBox("marker-mid", SP_MARKER_LOC_MID);

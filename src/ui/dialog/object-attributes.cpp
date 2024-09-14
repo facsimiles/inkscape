@@ -58,7 +58,10 @@
 #include "ui/builder-utils.h"
 #include "ui/controller.h"
 #include "ui/dialog/object-attributes.h"
+
+#include "layer-manager.h"
 #include "style.h"
+#include "object/sp-use.h"
 #include "ui/icon-names.h"
 #include "ui/pack.h"
 #include "ui/tools/object-picker-tool.h"
@@ -73,6 +76,43 @@
 namespace Inkscape::UI::Dialog {
 
 using namespace Inkscape::UI::Utils;
+
+namespace {
+
+// Take "style" attribute from source object and apply it to destination.
+// Leave source object without "style" attribute.
+bool transfer_item_style(SPObject* src, SPObject* dest) {
+    if (!src || !dest) return false;
+
+    auto style = src->getAttribute("style");
+    if (style && *style) {
+        dest->setAttribute("style", style);
+        src->removeAttribute("style");
+        return true;
+    }
+    return false;
+}
+
+bool remove_item_style(SPObject* obj) {
+    if (!obj) return false;
+
+    auto style = obj->getAttribute("style");
+    if (style && *style) {
+        obj->removeAttribute("style");
+        return true;
+    }
+    return false;
+}
+
+void enter_group(SPDesktop* desktop, SPGroup* group) {
+    if (!desktop || !group) return;
+
+    auto selection = desktop->getSelection();
+    desktop->layerManager().setCurrentLayer(group);
+    // selection->clear();
+}
+
+} // namespace
 
 struct SPAttrDesc {
     char const *label;
@@ -1068,6 +1108,138 @@ private:
 
 ///////////////////////////////////////////////////////////////////////////////
 
+class GroupPanel : public details::AttributesPanel {
+public:
+    GroupPanel(Glib::RefPtr<Gtk::Builder> builder) {
+        _title = _("Group");
+
+        auto remove = Gtk::make_managed<Gtk::Button>(_("Remove style"));
+        remove->set_tooltip_text(_("Remove style from group elements\nto override it with group style"));
+        remove->signal_clicked().connect([this]() {
+            // remove style from group's children
+            remove_styles(_group);
+        });
+        auto enter = Gtk::make_managed<Gtk::Button>(_("Enter group"));
+        enter->set_tooltip_text(_("Enter into this group to select objects"));
+        enter->signal_clicked().connect([this]() {
+            enter_group(_desktop, _group);
+        });
+        _grid.add_property(_("Elements"), nullptr, remove, enter);
+    }
+
+private:
+    void update(SPObject* object) override {
+        _group = cast<SPGroup>(object);
+    }
+
+    void remove_styles(SPObject* parent) {
+        if (!parent) return;
+
+        if (remove_children_styles(parent, true)) {
+            DocumentUndo::done(parent->document, _("Removed style"), "");
+        }
+    }
+
+    bool remove_children_styles(SPObject* parent, bool recursive) {
+        auto changed = false;
+        for (auto obj = parent->firstChild(); obj; obj = obj->getNext()) {
+            if (remove_item_style(obj)) {
+                changed = true;
+            }
+            if (recursive && remove_children_styles(obj, true)) {
+                changed = true;
+            }
+        }
+        return changed;
+    }
+
+    SPGroup* _group = nullptr;
+};
+
+///////////////////////////////////////////////////////////////////////////////
+
+class ClonePanel : public details::AttributesPanel {
+public:
+    ClonePanel(Glib::RefPtr<Gtk::Builder> builder) {
+        _title = _("Clone");
+
+        auto remove = Gtk::make_managed<Gtk::Button>(_("Steal style"));
+        remove->set_tooltip_text(_("Remove style from original element\nand place it on this clone"));
+        remove->signal_clicked().connect([this]() {
+            // remove style from original element
+            remove_styles(_clone);
+        });
+
+        auto link = Gtk::make_managed<Gtk::Button>(_("Original"));
+        link->set_tooltip_text(_("Link this clone to original element"));
+        link->signal_clicked().connect([this]() {
+            // link clone to original object if it points to another <use> element
+            link_to_original(_clone);
+        });
+        _link = link;
+
+        auto go_to = create_button(_("Go to"), "object-pick");
+        go_to->set_tooltip_text(_("Select original object"));
+        go_to->signal_clicked().connect([this]() {
+            if (_desktop) {
+                // go to original; this method should take clone as input
+                //todo: go to true original
+                _desktop->getSelection()->cloneOriginal();
+            }
+        });
+        _grid.add_property(_("Original"), nullptr, remove, go_to);
+        _grid.add_property(_("Link to"), nullptr, link, nullptr);
+    }
+
+private:
+    void update(SPObject* object) override {
+        _clone = cast<SPUse>(object);
+        _link->set_sensitive(_clone && _clone->trueOriginal() != _clone->get_original());
+    }
+
+    void link_to_original(SPUse* clone) {
+        if (!clone) return;
+
+        if (auto original = clone->trueOriginal()) {
+            if (auto id = original->getId()) {
+                std::string url = "#";
+                url += id;
+                // re-link
+                clone->setAttribute("xlink:href", url.c_str());
+            }
+        }
+    }
+
+    void remove_styles(SPUse* clone) {
+        if (!clone) return;
+
+        auto original = clone->get_original();
+        if (transfer_item_style(original, clone)) {
+            DocumentUndo::done(clone->document, _("Transferred style"), "");
+        }
+    }
+
+    bool remove_children_styles(SPObject* parent, bool recursive) {
+        auto changed = false;
+        for (auto obj = parent->firstChild(); obj; obj = obj->getNext()) {
+            auto style = obj->getAttribute("style");
+            if (style && *style) {
+                obj->removeAttribute("style");
+                changed = true;
+            }
+            if (recursive && remove_children_styles(obj, true)) {
+                changed = true;
+            }
+        }
+        return changed;
+    }
+
+    SPUse* _clone = nullptr;
+    Gtk::Button* _link = nullptr;
+};
+
+///////////////////////////////////////////////////////////////////////////////
+
 std::string get_key(SPObject* object) {
     if (!object) return {};
 
@@ -1090,6 +1262,8 @@ void ObjectAttributes::create_panels() {
     _panels[typeid(SPAnchor).name()] = std::make_unique<AnchorPanel>();
     _panels[typeid(SPPath).name()] = std::make_unique<PathPanel>(_builder);
     _panels[typeid(SPText).name()] = std::make_unique<TextPanel>(_builder);
+    _panels[typeid(SPGroup).name()] = std::make_unique<GroupPanel>(_builder);
+    _panels[typeid(SPUse).name()] = std::make_unique<ClonePanel>(_builder);
 }
 
 } // namespace Inkscape::UI::Dialog

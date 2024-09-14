@@ -104,6 +104,14 @@ public:
     void switch_page(Space::Type space, PlateType plate_type);
     void pick_color();
 
+    Glib::RefPtr<Gtk::SizeGroup> get_first_column_size() override {
+        return _first_column;
+    }
+
+    Glib::RefPtr<Gtk::SizeGroup> get_last_column_size() override {
+        return _last_column;
+    }
+
     Glib::RefPtr<Gtk::SizeGroup> _first_column = Gtk::SizeGroup::create(Gtk::SizeGroup::Mode::HORIZONTAL);
     Glib::RefPtr<Gtk::SizeGroup> _last_column = Gtk::SizeGroup::create(Gtk::SizeGroup::Mode::HORIZONTAL);
     // eye dropper - color picker
@@ -153,7 +161,7 @@ ColorPickerPanelImpl::ColorPickerPanelImpl(Space::Type space, PlateType type, st
     // Important: add "regular" class to render non-symbolic color icons;
     // otherwise they will be rendered black&white
     _spaces.add_css_class("regular");
-
+    _spaces.set_active_by_id(int(space));
     _spaces.signal_changed().connect([this](int id) {
         auto type = static_cast<Space::Type>(id);
         if (type != Space::Type::NONE) {
