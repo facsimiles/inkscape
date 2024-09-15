@@ -982,6 +982,9 @@ LivePathEffectEditor::clear_lpe_list()
     UI::remove_all_children( LPEListBox    );
     UI::remove_all_children(_LPEParentBox  );
     UI::remove_all_children(_LPECurrentItem);
+
+    _LPEExpanders.clear();
+    current_lperef = std::make_pair(nullptr, nullptr);
 }
 
 SPLPEItem * LivePathEffectEditor::clonetolpeitem()
