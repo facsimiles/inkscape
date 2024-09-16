@@ -146,7 +146,7 @@ NodeTool::NodeTool(SPDesktop *desktop)
     }
     data.node_data.selection = this->_selected_nodes;
 
-    this->_multipath = new Inkscape::UI::MultiPathManipulator(data, this->_selection_changed_connection);
+    this->_multipath = new Inkscape::UI::MultiPathManipulator(data);
 
     this->_multipath->signal_coords_changed.connect([=](){
         desktop->emit_control_point_selected(this, _selected_nodes);
