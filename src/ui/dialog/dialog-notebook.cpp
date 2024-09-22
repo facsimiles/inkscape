@@ -981,15 +981,16 @@ void DialogNotebook::add_tab_connections(Gtk::Widget * const page)
             sigc::bind(sigc::mem_fun(*this, &DialogNotebook::on_close_button_click_event), page), true);
     _tab_connections.emplace(page, std::move(close_connection));
 
-    auto click = Gtk::GestureClick::create();
+    auto const click = Gtk::GestureClick::create();
     tab->add_controller(click);
     click->set_button(0); // all
-    click->signal_pressed().connect([this, page, &click = *click.get()](int const n_press, double const x, double const y)
-    {
-        auto const state = on_tab_click_event(click, n_press, x, y, page);
-        if (state != Gtk::EventSequenceState::NONE) click.set_state(state);
-    });
-    _tab_connections.emplace(page, std::move(click));
+    sigc::connection click_connection = click->signal_pressed().connect(
+        [this, page, &click = *click](int const n_press, double const x, double const y) {
+            auto const state = on_tab_click_event(click, n_press, x, y, page);
+            if (state != Gtk::EventSequenceState::NONE)
+                click.set_state(state);
+        });
+    _tab_connections.emplace(page, std::move(click_connection));
 }
 
 /**
