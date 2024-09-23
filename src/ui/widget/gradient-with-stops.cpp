@@ -21,6 +21,7 @@
 #include <gtkmm/eventcontrollerkey.h>
 #include <gtkmm/eventcontrollermotion.h>
 #include <gtkmm/gestureclick.h>
+#include <gtkmm/window.h>
 #include <sigc++/functors/mem_fun.h>
 
 #include "display/cairo-utils.h"
