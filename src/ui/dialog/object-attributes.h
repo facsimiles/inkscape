@@ -38,15 +38,16 @@ namespace details {
 
 class AttributesPanel {
 public:
-    AttributesPanel(bool show_fill_stroke = true);
+    AttributesPanel(bool show_fill_stroke = true, bool show_properties = true);
     virtual ~AttributesPanel() = default;
 
     void set_document(SPDocument* document);
     void set_desktop(SPDesktop* desktop);
     void update_panel(SPObject* object, SPDesktop* desktop);
     Gtk::Widget& widget() { if(!_widget) throw "missing widget in attributes panel"; return *_widget; }
-    Glib::ustring get_title() const { return _title; }
+    virtual Glib::ustring get_title(Selection* selection) const { return _title; }
     bool supports_fill_stroke() const {return _show_fill_stroke; }
+    bool supports_props_section() const {return _show_properties; }
 
 protected:
     virtual void update(SPObject* object) = 0;
@@ -68,6 +69,7 @@ protected:
     Widget::InkPropertyGrid _grid;
 private:
     bool _show_fill_stroke = true;
+    bool _show_properties = true;
 };
 
 } // namespace details
@@ -97,9 +99,11 @@ private:
 
     void create_panels();
     std::map<std::string, std::unique_ptr<details::AttributesPanel>> _panels;
+    std::unique_ptr<details::AttributesPanel> _multi_obj_panel;
     details::AttributesPanel* get_panel(SPObject* object);
     void update_panel(SPObject* object);
     void update_vis_lock(SPObject* object);
+    void show_properties_section(bool show);
 
     details::AttributesPanel* _current_panel = nullptr;
     OperationBlocker _update;

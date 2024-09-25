@@ -35,6 +35,7 @@ constexpr int timeout_click = 500;
 constexpr int timeout_repeat = 50;
 
 static Glib::RefPtr<Gdk::Cursor> g_resizing_cursor;
+static Glib::RefPtr<Gdk::Cursor> g_text_cursor;
 
 void InkSpinButton::construct() {
     set_name("InkSpinButton");
@@ -419,7 +420,6 @@ void InkSpinButton::set_new_value(double new_value) {
 // ------------------  MOTION  ------------------
 
 void InkSpinButton::on_motion_enter(double x, double y) {
-// printf("motion enter\n");
     if (_focus->contains_focus()) return;
 
     show_label(false);
@@ -427,7 +427,6 @@ void InkSpinButton::on_motion_enter(double x, double y) {
 }
 
 void InkSpinButton::on_motion_leave() {
-// printf("motion leave\n");
     if (_focus->contains_focus()) return;
 
     show_arrows(false);
@@ -443,17 +442,23 @@ void InkSpinButton::on_motion_leave() {
 // ---------------  MOTION VALUE  ---------------
 
 void InkSpinButton::on_motion_enter_value(double x, double y) {
-// printf("val motion enter\n");
     _old_cursor = get_cursor();
     if (!g_resizing_cursor) {
         g_resizing_cursor = Gdk::Cursor::create(Glib::ustring("ew-resize"));
+        g_text_cursor = Gdk::Cursor::create(Glib::ustring("text"));
     }
-    _current_cursor = g_resizing_cursor;
-    set_cursor(_current_cursor);
+    // if draging/scrolling adjustment is enabled, show appropriate cursor
+    if (_drag_full_travel > 0) {
+        _current_cursor = g_resizing_cursor;
+        set_cursor(_current_cursor);
+    }
+    else {
+        _current_cursor = g_text_cursor;
+        set_cursor(_current_cursor);
+    }
 }
 
 void InkSpinButton::on_motion_leave_value() {
-// printf("val motion leave\n");
     _current_cursor = _old_cursor;
     set_cursor(_current_cursor);
 }
@@ -477,24 +482,23 @@ void InkSpinButton::on_drag_begin_value(Gdk::EventSequence* sequence) {
 }
 
 void InkSpinButton::on_drag_update_value(Gdk::EventSequence* sequence) {
+    if (_drag_full_travel <= 0) return;
+
     double dx = 0.0;
     double dy = 0.0;
     _drag_value->get_offset(dx, dy);
 
-// double x,y;
-// _drag_value->get_point(sequence, x, y);
-// printf("drag: %f %f, %f %f\n",dx,dy,x,y);
     // If we don't move, then it probably was a button click.
     auto delta = 1; // tweak this value to reject real clicks, or else we'll change value inadvertently
     if (std::abs(dx) > delta || std::abs(dy) > delta) {
-        auto max_dist = 300.0; // distance to travel to adjust full range
+        auto max_dist = _drag_full_travel; // distance to travel to adjust full range
         auto range = _adjustment->get_upper() - _adjustment->get_lower();
         auto state = _drag_value->get_current_event_state();
         auto distance = std::hypot(dx, dy);
         auto angle = std::atan2(dx, dy);
         auto grow = angle > M_PI_4 || angle < -M_PI+M_PI_4;
         if (!grow) distance = -distance;
-// printf("drag: %f, %f, angle: %f,  sin: %f,  cos: %f, mul: %f\n", dx, dy, angle, sin(angle), 0.0);
+
         auto value = _initial_value + get_accel_factor(state) * distance / max_dist * range + _adjustment->get_lower();
         set_new_value(value);
         _dragged = true;
@@ -514,8 +518,8 @@ void InkSpinButton::on_drag_end_value(Gdk::EventSequence* sequence) {
 }
 
 void InkSpinButton::show_arrows(bool on) {
-    _minus.set_visible(on);
-    _plus.set_visible(on);
+    _minus.set_visible(on && _enable_arrows);
+    _plus.set_visible(on && _enable_arrows);
 }
 
 void InkSpinButton::show_label(bool on) {
@@ -554,6 +558,7 @@ void InkSpinButton::exit_edit() {
 inline void InkSpinButton::enter_edit() {
     show_arrows(false);
     show_label(false);
+    stop_spinning();
     _value.hide();
     _entry.select_region(0, _entry.get_text_length());
     _entry.show();
@@ -584,11 +589,15 @@ bool InkSpinButton::defocus() {
 // ------------------  SCROLL  ------------------
 
 void InkSpinButton::on_scroll_begin() {
+    if (_drag_full_travel <= 0) return;
+
     _scroll_counter = 0;
     set_cursor("none");
 }
 
 bool InkSpinButton::on_scroll(double dx, double dy) {
+    if (_drag_full_travel <= 0) return false;
+
     // grow direction: up or right
     auto delta = std::abs(dx) > std::abs(dy) ? -dx : dy;
     _scroll_counter += delta;
@@ -614,6 +623,8 @@ bool InkSpinButton::on_scroll(double dx, double dy) {
 }
 
 void InkSpinButton::on_scroll_end() {
+    if (_drag_full_travel <= 0) return;
+
     _scroll_counter = 0;
     set_cursor(_current_cursor);
 }
@@ -687,7 +698,6 @@ void InkSpinButton::on_editing_done() {
 }
 
 void InkSpinButton::start_spinning(double steps, Gdk::ModifierType state, Glib::RefPtr<Gtk::GestureClick>& gesture) {
-
     _spinning = Glib::signal_timeout().connect([=,this]() {
         change_value(steps, state);
         // speed up
@@ -735,6 +745,13 @@ void InkSpinButton::set_min_size(const std::string& pattern) {
 
 void InkSpinButton::set_evaluator_function(std::function<double(const Glib::ustring&)> cb) {
     _evaluator = cb;
+}
+
+void InkSpinButton::set_has_arrows(bool enable) {
+    if (_enable_arrows == enable) return;
+
+    _enable_arrows = enable;
+    show_arrows(enable);
 }
 
 } // namespace Inkscape::UI::Widget

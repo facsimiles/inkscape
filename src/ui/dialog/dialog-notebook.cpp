@@ -648,7 +648,10 @@ void DialogNotebook::on_size_allocate_scroll(int const width)
  */
 void DialogNotebook::on_size_allocate_notebook(int const alloc_width)
 {
-    // we unset scrollable when FULL mode on to prevent overflow with 
+    // the whole "setShowing()" refresh-avoiding mechanism rides on this var being set:
+    _prev_alloc_width = alloc_width;
+
+    // we unset scrollable when FULL mode on to prevent overflow with
     // container at full size that makes an unmaximized desktop freeze 
     _notebook.set_scrollable(false);
     if (!_labels_set_off && !_labels_auto) {
@@ -877,7 +880,7 @@ void DialogNotebook::toggle_tab_labels_callback(bool show)
     }
 }
 
-void DialogNotebook::on_page_switch(Gtk::Widget *curr_page, guint)
+void DialogNotebook::on_page_switch(Gtk::Widget *curr_page, guint nn)
 {
     for_each_page(_notebook, [=, this](Gtk::Widget &page){
         if (auto const dialogbase = dynamic_cast<DialogBase *>(&page)) {

@@ -20,7 +20,7 @@ void init_property_button(Gtk::Button& button, PropertyButton type, const Glib::
         tip = _("Reset property");
         break;
     case Edit:
-        icon = _("edit-clear-value");
+        icon = _("edit");
         tip = _("Edit property");
         break;
     case Add:
@@ -37,6 +37,7 @@ void init_property_button(Gtk::Button& button, PropertyButton type, const Glib::
     button.set_tooltip_text(tooltip.empty() ? tip : tooltip);
     button.set_has_frame(false);
     button.set_halign(Gtk::Align::START);
+    button.set_valign(Gtk::Align::CENTER);
 }
 
 void init_spin_button(const SpinPropertyDef& def) {

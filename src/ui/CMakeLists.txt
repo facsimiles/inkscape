@@ -8,6 +8,7 @@ set(ui_SRC
 	dialog-run.cpp
 	draw-anchor.cpp
 	drag-and-drop.cpp
+	gridview-utils.cpp
 	icon-loader.cpp
 	interface.cpp
 	monitor.cpp
@@ -303,6 +304,7 @@ set(ui_SRC
 	dialog-run.h
 	drag-and-drop.h
 	draw-anchor.h
+	gridview-utils.h
 	filtered-store.h
 	icon-names.h
 	icon-loader.h

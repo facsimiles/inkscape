@@ -21,14 +21,13 @@
 namespace Inkscape::UI::Widget {
 
 enum class PaintMode {
-    None,   // set to no paint
     Solid,
+    Swatch,
     Gradient,
-    // RadGradient,
     Mesh,
     Pattern,
-    Swatch,
-    NotSet
+    NotSet,
+    None,   // set to no paint
 };
 
 PaintMode get_mode_from_paint(const SPIPaint& paint);

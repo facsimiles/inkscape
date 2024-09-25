@@ -181,31 +181,25 @@ void sp_item_apply_pattern(SPItem* item, SPPattern* pattern, FillOrStroke kind, 
 
     auto link_pattern = pattern;
     auto root_pattern = pattern->rootPattern();
-    if (color) { //auto color = _psel->get_pattern_color()) {
+    if (color) {
         sp_pattern_set_color(root_pattern, color.value());
     }
     // pattern name is applied to the root
-    root_pattern->setAttribute("inkscape:label", label.c_str()); // _psel->get_pattern_label().c_str());
+    root_pattern->setAttribute("inkscape:label", label.c_str());
     // remaining settings apply to link pattern
     if (link_pattern != root_pattern) {
-        // auto transform = _psel->get_pattern_transform();
         sp_pattern_set_transform(link_pattern, transform);
-        // auto offset = _psel->get_pattern_offset();
         sp_pattern_set_offset(link_pattern, offset);
-        // auto uniform = _psel->is_pattern_scale_uniform();
         sp_pattern_set_uniform_scale(link_pattern, uniform_scale);
         // gap requires both patterns, but they are only created later by calling "adjust_pattern" below
         // it is OK to ignore it for now, during initial creation gap is 0,0
-        // auto gap = _psel->get_pattern_gap();
         sp_pattern_set_gap(link_pattern, gap);
     }
 
     auto url = Glib::ustring::compose("url(#%1)", root_pattern->getRepr()->attribute("id"));
-    // XML::Node* patrepr = root_pattern->getRepr();
-    SPCSSAttr* css = sp_repr_css_attr_new();
-    // gchar *urltext = g_strdup_printf("url(#%s)", patrepr->attribute("id"));
-    sp_repr_css_set_property(css, kind == FILL ? "fill" : "stroke", url.c_str());
 
+    SPCSSAttr* css = sp_repr_css_attr_new();
+    sp_repr_css_set_property(css, kind == FILL ? "fill" : "stroke", url.c_str());
     sp_item_set_pattern_style(item, root_pattern, css, kind);
 
     // create link to the pattern right away, without waiting for this item to be moved;

@@ -52,6 +52,8 @@ public:
     void set_min_size(const std::string& pattern);
     // Set callback function that parses text and returns "double" value; it may throw std::exception on failure
     void set_evaluator_function(std::function<double (const Glib::ustring&)> cb);
+    // Pass true to enable decrement/increment arrow buttons (on by default)
+    void set_has_arrows(bool enable = true);
     // ----------- PROPERTIES ------------
     // Glib::PropertyProxy<int> property_digits() { return prop_digits.get_proxy(); }
 
@@ -132,6 +134,7 @@ private:
     int _entry_height = 0;      // natural height of Gtk::Entry
     int _baseline = 0;
     int _label_width = 0;
+    bool _enable_arrows = true;
     sigc::scoped_connection _spinning;
     Gtk::Widget* _defocus_widget = nullptr;
     bool _dont_evaluate = false; // turn off expression evaluator?
