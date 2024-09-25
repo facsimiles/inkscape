@@ -214,7 +214,7 @@ void ColorPreview::draw_func(Cairo::RefPtr<Cairo::Context> const &cr,
         constexpr double line = 1.5; // 1.5 pixles b/c it's a diagonal line, so 1px is too thin
         const auto right = rect.right();
         const auto bottom = rect.bottom();
-        if (_indicator == Swatch) {
+        if (_indicator & Swatch) {
             // draw swatch color indicator - a black corner
             cr->move_to(right, bottom - side);
             cr->line_to(right, bottom - side + line);
@@ -228,7 +228,7 @@ void ColorPreview::draw_func(Cairo::RefPtr<Cairo::Context> const &cr,
             cr->set_source_rgb(0, 0, 0); // black
             cr->fill();
         }
-        else if (_indicator == SpotColor) {
+        else if (_indicator & SpotColor) {
             // draw spot color indicator - a black dot
             cr->move_to(right, bottom);
             cr->line_to(right, bottom - side);
@@ -240,8 +240,49 @@ void ColorPreview::draw_func(Cairo::RefPtr<Cairo::Context> const &cr,
             cr->set_source_rgb(0, 0, 0);
             cr->fill();
         }
-        else {
-            assert(false);
+
+        if (_indicator & (LinearGradient | RadialGradient)) {
+            auto s = 3.0; // arrow size
+            auto h = s / 2; // half size
+            auto w = width - 2*s - 2;
+            auto cx = std::round(x + width / 2);
+            auto cy = std::round(y + height / 2);
+
+            if (_indicator & LinearGradient) {
+                auto start = Geom::Point(x + 1 + s, cy);
+                const Geom::Point path_linear[] = {
+                    {0, h}, {-s, -h}, {s, -h}, {0, h}, {w, 0}, {0, h}, {s, -h}, {-s, -h}, {0, h}
+                };
+                auto p = start;
+                cr->move_to(p.x(), p.y());
+                for (auto& d: path_linear) {
+                    p += d;
+                    cr->line_to(p.x(), p.y());
+                }
+            }
+            else {
+                auto start = Geom::Point(cx, y + 1 + s);
+                const Geom::Point path_radial[] = {
+                    {h, 0}, {-h, -s}, {-h, s}, {h, 0}, {0, cy - s - 1},
+                    {cx - s - 1, 0}, {0, h}, {s, -h}, {-s, -h}, {0, h}, {-(cx - s - 1), 0}
+                };
+                auto p = start;
+                cr->move_to(p.x(), p.y());
+                for (auto& d : path_radial) {
+                    p += d;
+                    cr->line_to(p.x(), p.y());
+                }
+            }
+            cr->close_path();
+            cr->set_line_width(2.0);
+            cr->set_miter_limit(10);
+            cr->set_source_rgba(1, 1, 1, 1.0);
+            cr->stroke_preserve();
+            cr->set_line_width(1.0);
+            cr->set_source_rgba(0, 0, 0, 1);
+            cr->stroke_preserve();
+            // cr->set_source_rgba(1, 1, 1, 1);
+            cr->fill();
         }
     }
 

@@ -51,7 +51,7 @@ public:
     enum Style { Simple, Outlined };
     void setStyle(Style style);
     // add indicator on top of the preview: swatch or spot color
-    enum Indicator { None, Swatch, SpotColor };
+    enum Indicator { None = 0, Swatch = 1, SpotColor = 2, LinearGradient = 4, RadialGradient = 8 };
     void setIndicator(Indicator indicator);
     // add frame for a 'Simple' preview
     void set_frame(bool frame);
@@ -59,9 +59,9 @@ public:
     void set_border_radius(int radius);
     // adjust size of checkerboard tiles
     void set_checkerboard_tile_size(unsigned size);
-    /// Update the fill indicator, showing this widget is the fill of the current item.
+    // Update the fill indicator, showing this widget is the fill of the current item.
     void set_fill(bool on);
-    /// Update the stroke indicator, showing this widget is the stroke of the current item.
+    // Update the stroke indicator, showing this widget is the stroke of the current item.
     void set_stroke(bool on);
 private:
     std::uint32_t _rgba; // requested RGBA color, used if there is no pattern given

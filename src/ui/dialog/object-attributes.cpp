@@ -46,12 +46,15 @@
 #include "live_effects/lpeobject.h"
 #include "object/sp-anchor.h"
 #include "object/sp-ellipse.h"
+#include "object/sp-gradient.h"
+#include "object/sp-radial-gradient.h"
 #include "object/sp-image.h"
 #include "object/sp-item.h"
 #include "object/sp-lpe-item.h"
 #include "object/sp-namedview.h"
 #include "object/sp-object.h"
 #include "object/sp-path.h"
+#include "object/sp-pattern.h"
 #include "object/sp-rect.h"
 #include "object/sp-star.h"
 #include "object/sp-text.h"
@@ -61,7 +64,10 @@
 
 #include "layer-manager.h"
 #include "style.h"
+#include "object/sp-object-iterator.h"
+#include "object/sp-stop.h"
 #include "object/sp-use.h"
+#include "ui/gridview-utils.h"
 #include "ui/icon-names.h"
 #include "ui/pack.h"
 #include "ui/tools/object-picker-tool.h"
@@ -178,6 +184,8 @@ ObjectAttributes::ObjectAttributes()
             update_vis_lock(_current_item);
         }
     });
+
+    show_properties_section(false);
 }
 
 void ObjectAttributes::widget_setup() {
@@ -193,17 +201,24 @@ void ObjectAttributes::widget_setup() {
     auto scoped(_update.block());
 
     auto panel = get_panel(item);
+    if (!panel && selection->size() > 1) {
+        panel = _multi_obj_panel.get();
+    }
+
     if (panel != _current_panel && _current_panel) {
         _current_panel->update_panel(nullptr, nullptr);
         _main_panel.remove(_current_panel->widget());
         _obj_title.set_text("");
     }
 
+    if (panel != _current_panel) {
+        show_properties_section(panel && panel->supports_props_section());
+    }
     _current_panel = panel;
     _current_item = nullptr;
     bool enable_props = panel != nullptr;
 
-    Glib::ustring title = panel ? panel->get_title() : "";
+    Glib::ustring title = panel ? panel->get_title(selection) : "";
     if (!panel) {
         if (item) {
             if (auto name = item->displayName()) {
@@ -258,6 +273,12 @@ void ObjectAttributes::update_vis_lock(SPObject* object) {
     _obj_locked.set_opacity(show ? 1 : 0);
     _obj_visible.set_sensitive(show);
     _obj_locked.set_sensitive(show);
+}
+
+void ObjectAttributes::show_properties_section(bool show) {
+    auto& separator = get_widget<Gtk::Separator>(_builder, "main-separator");
+    separator.set_visible(show);
+    _obj_properties.set_visible(show);
 }
 
 void ObjectAttributes::desktopReplaced() {
@@ -375,10 +396,11 @@ void set_location_adj(Widget::InkSpinButton& btn) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-details::AttributesPanel::AttributesPanel(bool show_fill_stroke) {
+details::AttributesPanel::AttributesPanel(bool show_fill_stroke, bool show_properties) {
     _widget = &_grid;
     _tracker = std::make_unique<UI::Widget::UnitTracker>(Inkscape::Util::UNIT_TYPE_LINEAR);
     _show_fill_stroke = show_fill_stroke;
+    _show_properties = show_properties;
     if (show_fill_stroke) {
         _paint.reset(new Widget::PaintAttribute());
         _paint->insert_widgets(_grid, 0);
@@ -1240,6 +1262,222 @@ private:
 
 ///////////////////////////////////////////////////////////////////////////////
 
+namespace {
+
+struct PaintKey {
+    // paint mode
+    Widget::PaintMode mode = Widget::PaintMode::None;
+    // for flat colors and swatches
+    std::optional<Colors::Color> color;
+    std::string id;
+    // display only label
+    std::string label;
+    // gradient or pattern, if any
+    SPObject* server = nullptr;
+    SPObject* vector = nullptr;
+
+    bool operator < (const PaintKey& p) const {
+        if (mode != p.mode) return mode < p.mode;
+
+        // ignore color, server and vector, it's a payload
+        // ignore label too for now
+
+        return id < p.id;
+    }
+};
+
+} // namespace
+
+
+class MultiObjPanel : public details::AttributesPanel {
+public:
+    MultiObjPanel() : AttributesPanel(false, false) {
+        _title = _("Multiple objects");
+
+        //todo: should those options be exposed? =======================
+        // auto box = Gtk::make_managed<Gtk::Box>();
+        // box->set_spacing(4);
+        // auto enter = Gtk::make_managed<Gtk::CheckButton>(_("Enter groups"));
+        // enter->set_tooltip_text(_("Scan objects inside groups"));
+        // auto original = Gtk::make_managed<Gtk::CheckButton>(_("Scan originals"));
+        // original->set_tooltip_text(_("Scan originals pointed to be clones"));
+        // box->append(*enter);
+        // box->append(*original);
+        // _grid.add_row(box);
+        // _grid.add_property(_("Fill"), nullptr, )
+        //todo: end ====================================================
+
+        _types.set_hexpand();
+        _grid.add_row(_("Types"), &_types);
+        _grid.add_row(Gtk::make_managed<Gtk::Separator>(), nullptr, true);
+
+        _fill_paint.set_hexpand();
+        _grid.add_row(_("Fills"), &_fill_paint);
+        _grid.add_row(Gtk::make_managed<Gtk::Separator>(), nullptr, true);
+
+        _stroke_paint.set_hexpand();
+        _grid.add_row(_("Strokes"), &_stroke_paint);
+        _grid.add_row(Gtk::make_managed<Gtk::Separator>(), nullptr, true);
+
+        _stroke_width.set_hexpand();
+        _grid.add_row(_("Stroke widths"), &_stroke_width);
+    }
+
+private:
+    Glib::ustring get_title(Selection* selection) const override {
+        auto n = selection->size();
+        return Glib::ustring::compose(ngettext("%1 Object", "%1 Objects", n), n);
+    }
+
+    void update(SPObject* object) override {
+        if (!_desktop) return;
+
+        auto selection = _desktop->getSelection();
+        auto objects = selection->objects();
+
+        std::set<std::string> types;
+        std::set<PaintKey> fills; // fill paints
+        std::set<PaintKey> strokes;
+        std::set<float> stroke_widths;
+
+        auto get_paint = [](SPIPaint* paint) {
+            auto mode = paint ? Widget::get_mode_from_paint(*paint) : Widget::PaintMode::NotSet;
+            PaintKey key;
+            key.mode = mode;
+            if (mode == Widget::PaintMode::Solid) {
+                key.id = paint->getColor().toString(false);
+                key.color = paint->getColor();
+            }
+            else if (auto server = paint->href ? paint->href->getObject() : nullptr) {
+                if (auto gradient = cast<SPGradient>(server)) {
+                    // gradients, meshes
+                    key.vector = gradient->getVector(false);
+                }
+                else if (auto pattern = cast<SPPattern>(server)) {
+                    key.vector = pattern->rootPattern();
+                }
+                auto s = key.vector ? key.vector : server;
+                key.id = s->getId() ? s->getId() : "";
+                key.label = s->defaultLabel();
+                key.server = server;
+            }
+            return key;
+        };
+
+        auto collect_attr = [&](SPObject* obj) {
+            if (auto repr = obj->getRepr()) {
+                types.insert(repr->name());
+            }
+            if (auto item = cast<SPItem>(obj)) {
+                auto fill = item->style->getFillOrStroke(true);
+                fills.insert(get_paint(fill));
+
+                auto stroke = item->style->getFillOrStroke(false);
+                strokes.insert(get_paint(stroke));
+
+                if (!item->style->stroke.isNone()) {
+                    stroke_widths.insert(item->style->stroke_width.computed);
+                }
+            }
+            //todo: groups and text
+        };
+
+        auto visitor = [&](SPObject* object) {
+            auto visit_objects = [&](SPObject* object, auto& self) -> void {
+                if (auto group = cast<SPGroup>(object)) {
+                    collect_attr(group);
+                    for (auto child : get_object_children(group)) {
+                        self(child, self);
+                    }
+                }
+                else if (auto clone = cast<SPUse>(object)) {
+                    collect_attr(clone);
+                    if (auto original = clone->trueOriginal()) {
+                        collect_attr(original);
+                    }
+                }
+                else if (object) {
+                    collect_attr(object);
+                }
+            };
+            visit_objects(object, visit_objects);
+        };
+
+        for (auto obj: objects) {
+            visitor(obj);
+        }
+
+        {
+            auto it = types.begin();
+            _types.update_store(types.size(), [&](auto i) {
+                auto&& name = *it;
+                ++it;
+                return GridViewList::create_item(name, 0, name, {}, {}, {}, {}, false);
+            });
+        }
+        {
+            auto it = stroke_widths.begin();
+            _stroke_width.update_store(stroke_widths.size(), [&](auto i) {
+                auto width = *it++;
+                auto id = std::to_string(i);
+                return GridViewList::create_item(id, width, {}, {}, {}, {}, {}, false);
+            });
+        }
+
+        {
+            // paint servers, colors, or no paint
+            auto paint_to_item = [](const PaintKey& paint) {
+                auto mode_name = get_paint_mode_name(paint.mode);
+                auto tooltip = paint.vector || !paint.color ? mode_name : Glib::ustring(paint.color->toString(false));
+                if (paint.vector) tooltip = tooltip + " " + paint.vector->defaultLabel();
+                auto label = paint.label.empty() ? paint.id : paint.label;
+                if (label.empty()) label = mode_name;
+                if (paint.mode == Widget::PaintMode::Swatch) {
+                    Colors::Color color{0};
+                    auto swatch = cast<SPGradient>(paint.vector);
+                    if (swatch && swatch->hasStops()) {
+                        color = swatch->getFirstStop()->getColor();
+                    }
+                    return GridViewList::create_item(paint.id, 0, label, {}, tooltip, color, {}, true);
+                }
+                else if (paint.mode == Widget::PaintMode::Solid) {
+                    return GridViewList::create_item(paint.id, 0, label, {}, tooltip, paint.color, {}, false);
+                }
+                else if (paint.mode == Widget::PaintMode::Gradient) {
+                    // todo: pattern size needs to match tile size
+                    auto pat_t = cast<SPGradient>(paint.vector)->create_preview_pattern(16);
+                    auto pat = Cairo::RefPtr<Cairo::Pattern>(new Cairo::Pattern(pat_t, true));
+                    return GridViewList::create_item(paint.id, 0, label, {}, tooltip, {}, pat, false, is<SPRadialGradient>(paint.server));
+                }
+                else {
+                    auto icon = get_paint_mode_icon(paint.mode);
+                    return GridViewList::create_item(paint.id, 0, label, icon, tooltip, {}, {}, false);
+                }
+            };
+            {
+                auto it = fills.begin();
+                _fill_paint.update_store(fills.size(), [&](auto index) {
+                    return paint_to_item(*it++);
+                });
+            }
+            {
+                auto it = strokes.begin();
+                _stroke_paint.update_store(strokes.size(), [&](auto index) {
+                    return paint_to_item(*it++);
+                });
+            }
+        }
+    }
+
+    // bool _enter_groups = true;
+    GridViewList _types{GridViewList::Label};
+    GridViewList _fill_paint{GridViewList::Color};
+    GridViewList _stroke_paint{GridViewList::Color};
+    GridViewList _stroke_width{Gtk::Adjustment::create(0, 0, 1e5, 0.1, 1), 7};
+};
+
+///////////////////////////////////////////////////////////////////////////////
+
 std::string get_key(SPObject* object) {
     if (!object) return {};
 
@@ -1264,6 +1502,8 @@ void ObjectAttributes::create_panels() {
     _panels[typeid(SPText).name()] = std::make_unique<TextPanel>(_builder);
     _panels[typeid(SPGroup).name()] = std::make_unique<GroupPanel>(_builder);
     _panels[typeid(SPUse).name()] = std::make_unique<ClonePanel>(_builder);
+
+    _multi_obj_panel = std::make_unique<MultiObjPanel>();
 }
 
 } // namespace Inkscape::UI::Dialog

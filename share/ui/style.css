@@ -660,6 +660,12 @@ stackswitcher button {
     margin: 0;
     padding: 4px;
 }
+.compact-flowbox flowboxchild {
+    margin: 0;
+    padding: 2px; /* moderate gap of 2*2=4 pixels */
+    min-width: 8px;
+    min-height: 8px;
+}
 
 /* slider with tighter margins */
 scale.tight-slider {
@@ -1385,10 +1391,13 @@ gridview.grid-view-compact > child box.item-box {
     margin: 3px;
     border-spacing: 3px;
 }
+gridview.grid-view-no-margins > child {
+    padding: 2px;
+}
 gridview.grid-view-no-margins > child box.item-box {
     padding: 0;
-    margin: 0px;
-    border-spacing: 0px;
+    margin: 0;
+    border-spacing: 0;
 }
 
 /* list view with items based on labels need some extra vertical space */
@@ -1501,6 +1510,11 @@ scrolledwindow.inkscape-start-exception.frame {
 menubutton.rectangle button {
     border-radius: 0;
     padding: 0px;
+}
+
+/* limit slider size to let scrolledwindow shrink */
+scrolledwindow.small-window slider {
+    min-height: 16px;
 }
 
 /*#InkPropertyGrid > button,*/

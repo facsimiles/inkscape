@@ -2,6 +2,7 @@
 #ifndef SEEN_SP_OBJECT_ITERATOR_H
 #define SEEN_SP_OBJECT_ITERATOR_H
 
+#include <ranges>
 #include "sp-object.h"
 
 // This is depth-first SPObject tree traversal iterator.
@@ -73,7 +74,8 @@ private:
     SPObject* _p;
 };
 
-// Expose begin and end functions for range for loop
+// Expose begin and end functions for range for loop; such loop would visit all
+// subnodes and leaves of input object including starting object itself.
 
 inline object_iterator begin(SPObject* ob) {
     return object_iterator(ob);
@@ -81,6 +83,15 @@ inline object_iterator begin(SPObject* ob) {
 
 inline  object_iterator end(SPObject* ob) {
     return object_iterator::get_end(ob);
+}
+
+// Object child elements as a range of iterators
+
+inline std::ranges::subrange<object_iterator> get_object_children(SPObject* ob) {
+    auto f = ob ? ob->firstChild() : nullptr;
+    if (!f) return std::ranges::subrange{object_iterator(nullptr), object_iterator(nullptr)};
+
+    return std::ranges::subrange{object_iterator(f), ++object_iterator(ob->lastChild())};
 }
 
 #endif // SEEN_SP_OBJECT_ITERATOR_H

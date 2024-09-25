@@ -1735,6 +1735,9 @@ SPGradient *sp_document_default_gradient_vector(SPDocument *document, Color cons
         // to further reduce clutter, we could
         // (1) here, search gradients by color and return what is found without duplication
         // (2) in fill & stroke, show only one copy of each gradient in list
+
+        // Use a gradient prefix for the ID - it's a vector with stop definitions for either linear or radial gradient
+        repr->setAttribute("id", document->generate_unique_id("gradient"));
     } else {
         // Use a swatch prefix for the id, for better UX
         repr->setAttribute("id", document->generate_unique_id("swatch"));
@@ -1743,7 +1746,7 @@ SPGradient *sp_document_default_gradient_vector(SPDocument *document, Color cons
     addStop(repr, color, opacity, "0");
     if (!singleStop) {
         auto lightness = Colors::get_perceptual_lightness(color);
-        auto contrast = (lightness > 0.85 ? Color(0x0000'00ff) : Color(0xffff'ffff)).converted(color.getSpace());
+        auto contrast = (lightness > 0.95 ? Color(0x00'00'00'ff) : Color(0xff'ff'ff'ff)).converted(color.getSpace());
         // second stop without transparency - no more forcing users to fix alpha channel on new gradients
         addStop(repr, contrast.value_or(color), 1.0, "1");
     }

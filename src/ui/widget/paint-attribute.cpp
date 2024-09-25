@@ -19,6 +19,7 @@
 #include "property-utils.h"
 #include "stroke-style.h"
 #include "object/sp-gradient.h"
+#include "object/sp-radial-gradient.h"
 #include "object/sp-paint-server.h"
 #include "object/sp-pattern.h"
 #include "style.h"
@@ -173,6 +174,9 @@ void swatch_operation(SPItem* item, SPGradient* vector, SPDesktop* desktop, bool
 
 } // namespace
 
+// size of color preview tiles
+constexpr int COLOR_TILE = 16;
+
 PaintAttribute::PaintStripe::PaintStripe(const Glib::ustring& title, bool fill) :
   _label(title)
 {
@@ -184,7 +188,7 @@ PaintAttribute::PaintStripe::PaintStripe(const Glib::ustring& title, bool fill) 
     _color_preview.setStyle(ColorPreview::Simple);
     _color_preview.set_frame(true);
     _color_preview.set_border_radius(0);
-    _color_preview.set_size_request(16, 16);
+    _color_preview.set_size_request(COLOR_TILE, COLOR_TILE);
     _color_preview.set_checkerboard_tile_size(4);
     _color_preview.set_margin_end(4);
     _color_preview.set_margin_start(1);
@@ -608,7 +612,7 @@ void PaintAttribute::set_preview(const SPIPaint& paint, double paint_opacity, Pa
 
     stripe._paint_type.set_text(get_paint_mode_name(mode));
 
-    if (mode == PaintMode::Solid || mode == PaintMode::Swatch) {
+    if (mode == PaintMode::Solid || mode == PaintMode::Swatch || mode == PaintMode::Gradient) {
         stripe._alpha.set_value(paint_opacity);
         if (mode == PaintMode::Solid) {
             auto color = paint.getColor();
@@ -616,7 +620,7 @@ void PaintAttribute::set_preview(const SPIPaint& paint, double paint_opacity, Pa
             stripe._color_preview.setRgba32(color.toRGBA());
             stripe._color_preview.setIndicator(ColorPreview::None);
         }
-        else {
+        else if (mode == PaintMode::Swatch) {
             // swatch
             stripe._color_preview.setIndicator(ColorPreview::Swatch);
             auto server = paint.href->getObject();
@@ -630,6 +634,14 @@ void PaintAttribute::set_preview(const SPIPaint& paint, double paint_opacity, Pa
             }
             color.addOpacity(paint_opacity);
             stripe._color_preview.setRgba32(color.toRGBA());
+        }
+        else {
+            // gradients
+            auto server = paint.href->getObject();
+            auto pat_t = cast<SPGradient>(server)->create_preview_pattern(COLOR_TILE);
+            auto pat = Cairo::RefPtr<Cairo::Pattern>(new Cairo::Pattern(pat_t, true));
+            stripe._color_preview.setPattern(pat);
+            stripe._color_preview.setIndicator(is<SPRadialGradient>(server) ? ColorPreview::RadialGradient : ColorPreview::LinearGradient);
         }
         stripe._color_preview.set_visible();
         stripe._paint_icon.set_visible(false);

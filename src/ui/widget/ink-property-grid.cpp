@@ -138,10 +138,12 @@ void InkPropertyGrid::add_row(Gtk::Widget* widget, Gtk::Widget* button, bool who
 }
 
 void InkPropertyGrid::add_row(const std::string& label, Gtk::Widget* widget, Gtk::Widget* button, int margin) {
-    auto l = Gtk::make_managed<Gtk::Label>(label);
-    l->set_halign(Gtk::Align::START);
-    l->set_margin(margin);
-    _grid.attach(*l, COL_LABEL, _row);
+    if (!label.empty()) {
+        auto l = Gtk::make_managed<Gtk::Label>(label);
+        l->set_halign(Gtk::Align::START);
+        l->set_margin(margin);
+        _grid.attach(*l, COL_LABEL, _row);
+    }
 
     if (widget) {
         widget->set_margin(margin);

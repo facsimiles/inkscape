@@ -80,6 +80,7 @@ const struct Paint { PaintMode mode; const char* icon; const char* name; const c
     {PaintMode::Pattern,     "paint-pattern",         C_("Paint type", "Pattern"),  _("Pattern fill")},
     {PaintMode::Swatch,      "paint-swatch",          C_("Paint type", "Swatch"),   _("Swatch color")},
     {PaintMode::NotSet,      "paint-unknown",         C_("Paint type", "Unset"),    _("Inherited")},
+    {PaintMode::None,        "paint-none",            C_("Paint type", "None"),     _("No paint")},
 };
 
 class FlatColorEditor : public Gtk::Box {
@@ -121,7 +122,7 @@ PaintSwitch::PaintSwitch():
     set_name("PaintSwitch");
 }
 
-//TODO: persist
+//TODO: persist those settings
 Colors::Space::Type tt = Space::Type::HSL;
 ColorPickerPanel::PlateType pt = ColorPickerPanel::Rect;
 
@@ -235,7 +236,6 @@ public:
 
 PaintSwitchImpl::PaintSwitchImpl() {
     _color->set(Color(0x000000ff));
-    // _flat_color = ColorPickerPanel::create(tt, pt, _color);
     auto header = Gtk::make_managed<Gtk::Box>(Gtk::Orientation::HORIZONTAL);
     header->set_margin_top(1);
     header->set_margin_bottom(5);
@@ -416,11 +416,7 @@ void PaintSwitchImpl::_set_mode(PaintMode mode) {
     if (auto mode_btn = _mode_buttons[mode]) {
         mode_btn->set_active();
     }
-    // for (auto& kv : _mode_buttons) {
-        // kv.second->set_active(mode == kv.first);
-    // }
     // color picker available?
-    // bool has_picker = mode == PaintMode::Solid || mode == PaintMode::Gradient || mode == PaintMode::Swatch;
     _plate_type.set_sensitive(has_color_picker);
     _plate_type.set_visible(has_color_picker);
 }
@@ -462,7 +458,7 @@ void PaintSwitchImpl::update_from_paint(const SPIPaint& paint) {
     if (server) {
         if (is<SPGradient>(server) && cast<SPGradient>(server)->getVector()->isSwatch()) {
             auto vector = cast<SPGradient>(server)->getVector();
-            _swatch.select_vector(vector);// .setVector(vector ? vector->document : nullptr, vector);
+            _swatch.select_vector(vector);
         }
         else if (is<SPLinearGradient>(server) || is<SPRadialGradient>(server)) {
             auto gradient = cast<SPGradient>(server);
@@ -482,8 +478,6 @@ void PaintSwitchImpl::update_from_paint(const SPIPaint& paint) {
             //todo
             auto array = cast<SPGradient>(server)->getArray();
             _mesh.select_mesh(array);
-            // _psel->setGradientMesh(cast<SPMeshGradient>(array));
-            // _psel->updateMeshList(cast<SPMeshGradient>(array));
         }
 #endif
         else if (is<SPPattern>(server)) {

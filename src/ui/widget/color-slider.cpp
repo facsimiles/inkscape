@@ -169,9 +169,18 @@ Glib::RefPtr<Gdk::Pixbuf> _make_checkerboard(uint32_t dark, uint32_t light, unsi
     return Gdk::Pixbuf::create_from_data((guint8*)buffer.data(), Gdk::Colorspace::RGB, true, 8, pattern, pattern, pattern * 4);
 }
 
-static void draw_slider_thumb(const Cairo::RefPtr<Cairo::Context>& ctx, const Geom::Point& location, double size, const Gdk::RGBA& fill, const Gdk::RGBA& stroke, int device_scale) {
+static void draw_slider_thumb(const Cairo::RefPtr<Cairo::Context>& ctx, const Geom::Point& location, double size, const Gdk::RGBA& fill, const Gdk::RGBA& stroke, int device_scale, bool ring) {
     auto center = location.round(); //todo - verify pix grid fit + Geom::Point(0.5, 0.5);
     auto radius = size / 2;
+    if (ring) {
+        // donut-shaped handle?
+        ctx->save();
+        ctx->begin_new_path();
+        ctx->rectangle(location.x() - size, location.y() - size, size * 2, size * 2);
+        ctx->arc(center.x(), center.y(), radius / 2, 0, 2 * M_PI);
+        ctx->set_fill_rule(Cairo::Context::FillRule::EVEN_ODD);
+        ctx->clip();
+    }
     auto alpha = 0.06 / device_scale;
     double step = 1.0 / device_scale;
     for (int i = 2 * device_scale; i > 0; --i) {
@@ -183,12 +192,21 @@ static void draw_slider_thumb(const Cairo::RefPtr<Cairo::Context>& ctx, const Ge
     }
     // border/outline
     ctx->arc(center.x(), center.y(), radius+1, 0, 2 * M_PI);
-    ctx->set_source_rgb(stroke.get_red(), stroke.get_green(), stroke.get_blue());
+    ctx->set_source_rgba(stroke.get_red(), stroke.get_green(), stroke.get_blue(), 0.6);
     ctx->fill();
     // fill
     ctx->arc(center.x(), center.y(), radius, 0, 2 * M_PI);
     ctx->set_source_rgb(fill.get_red(), fill.get_green(), fill.get_blue());
     ctx->fill();
+
+    if (ring) {
+        ctx->restore();
+        // inner outline of the ring
+        ctx->arc(center.x(), center.y(), radius / 2 - 0.5, 0, 2 * M_PI);
+        ctx->set_source_rgba(stroke.get_red(), stroke.get_green(), stroke.get_blue(), 0.3);
+        ctx->set_line_width(1);
+        ctx->stroke();
+    }
 }
 
 void ColorSlider::draw_func(Cairo::RefPtr<Cairo::Context> const &cr,
@@ -283,7 +301,7 @@ void ColorSlider::draw_func(Cairo::RefPtr<Cairo::Context> const &cr,
     }
     if (_colors->isValid(_component)) {
         double value = _colors->getAverage(_component);
-        draw_slider_thumb(cr, Geom::Point(area.left() + value * area.width(), area.midpoint().y()), THUMB_SIZE, *fill, *stroke, get_scale_factor());
+        draw_slider_thumb(cr, Geom::Point(area.left() + value * area.width(), area.midpoint().y()), THUMB_SIZE, *fill, *stroke, get_scale_factor(), false);
     }
 }
 
