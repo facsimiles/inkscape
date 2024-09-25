@@ -21,6 +21,7 @@
 #include <gdkmm/general.h>
 #include <gtkmm/binlayout.h>
 #include <gtkmm/drawingarea.h>
+#include <gtkmm/eventcontrollermotion.h>
 #include <gtkmm/popovermenu.h>
 
 #include "ink-ruler.h"
@@ -78,7 +79,10 @@ Ruler::Ruler(Gtk::Orientation orientation)
 
     set_draw_func(sigc::mem_fun(*this, &Ruler::draw_func));
 
-    Controller::add_motion<nullptr, &Ruler::on_motion, nullptr>(*this, *this);
+    auto motion = Gtk::EventControllerMotion::create();
+    motion->signal_motion().connect(sigc::bind<0>(sigc::mem_fun(*this, &Ruler::on_motion), motion));
+    add_controller(motion);
+
     Controller::add_click(*this, sigc::mem_fun(*this, &Ruler::on_click_pressed), {}, Controller::Button::right);
 
     auto prefs = Inkscape::Preferences::get();
@@ -157,25 +161,31 @@ void Ruler::set_selection(double lower, double upper)
     }
 }
 
-// Add a widget (i.e. canvas) to monitor. Note, we don't worry about removing this signal as
-// our ruler is tied tightly to the canvas, if one is destroyed, so is the other.
-void
-Ruler::add_track_widget(Gtk::Widget& widget)
+// Add a widget (i.e. canvas) to monitor.
+void Ruler::set_track_widget(Gtk::Widget &widget)
 {
-    Controller::add_motion<nullptr, &Ruler::on_motion, nullptr>(widget, *this,
-        Gtk::PropagationPhase::TARGET, Controller::When::before); // We connected 1st to event, so continue
+    assert(!_track_widget_controller);
+    _track_widget_controller = Gtk::EventControllerMotion::create();
+    _track_widget_controller->signal_motion().connect(sigc::bind<0>(sigc::mem_fun(*this, &Ruler::on_motion), _track_widget_controller));
+    _track_widget_controller->set_propagation_phase(Gtk::PropagationPhase::TARGET);
+    widget.add_controller(_track_widget_controller);
+}
+
+void Ruler::clear_track_widget()
+{
+    assert(_track_widget_controller);
+    _track_widget_controller->get_widget()->remove_controller(_track_widget_controller);
+    _track_widget_controller = {};
 }
 
 // Draws marker in response to motion events from canvas.  Position is defined in ruler pixel
 // coordinates. The routine assumes that the ruler is the same width (height) as the canvas. If
 // not, one could use Gtk::Widget::translate_coordinates() to convert the coordinates.
-void
-Ruler::on_motion(GtkEventControllerMotion const * motion, double const x, double const y)
+void Ruler::on_motion(Glib::RefPtr<Gtk::EventControllerMotion> const &controller, double x, double y)
 {
     // This may come from a widget other than `this`, so translate to accommodate border, etc.
-    auto const widget = Glib::wrap(gtk_event_controller_get_widget(GTK_EVENT_CONTROLLER(motion)));
     double drawing_x{}, drawing_y{};
-    widget->translate_coordinates(*this, std::lround(x), std::lround(y), drawing_x, drawing_y);
+    controller->get_widget()->translate_coordinates(*this, std::lround(x), std::lround(y), drawing_x, drawing_y);
 
     double const position = _orientation == Gtk::Orientation::HORIZONTAL ? drawing_x : drawing_y;
     if (position == _position) return;

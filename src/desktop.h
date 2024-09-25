@@ -42,6 +42,7 @@
 #include <2geom/transforms.h>
 #include <2geom/parallelogram.h>
 
+#include "display/rendermode.h"
 #include "helper/auto-connection.h"
 #include "message-stack.h"
 #include "object/sp-gradient.h" // TODO refactor enums out to their own .h file
@@ -147,7 +148,7 @@ inline constexpr double SP_DESKTOP_ZOOM_MIN =   0.01;
 class SPDesktop
 {
 public:
-    SPDesktop(SPNamedView *nv, Inkscape::UI::Widget::Canvas *canvas, SPDesktopWidget *dtw);
+    SPDesktop(SPNamedView *nv);
     ~SPDesktop();
 
     SPDesktop(SPDesktop const &) = delete;
@@ -159,6 +160,8 @@ public:
     Inkscape::MessageStack *messageStack() const { return _message_stack.get(); }
     Inkscape::MessageContext *tipsMessageContext() const { return _tips_message_context.get(); }
 
+    void setDesktopWidget(SPDesktopWidget *dtw);
+
 private:
     SPDocument *document = nullptr;
     std::unique_ptr<Inkscape::MessageStack> _message_stack;
@@ -167,7 +170,8 @@ private:
 
     Inkscape::auto_connection _message_changed_connection;
     Inkscape::auto_connection _message_idle_connection;
-    Inkscape::auto_connection _document_uri_set_connection;
+    sigc::connection _document_uri_set_connection;
+    sigc::connection _saved_or_modified_conn;
 
     std::unique_ptr<Inkscape::UI::Tools::ToolBase> _tool;
     std::unique_ptr<Inkscape::Display::TemporaryItemList> _temporary_item_list;
@@ -175,18 +179,17 @@ private:
     std::unique_ptr<Inkscape::Display::SnapIndicator> _snapindicator;
 
     SPNamedView *namedview = nullptr;
-    Inkscape::UI::Widget::Canvas *canvas = nullptr;
+    std::unique_ptr<Inkscape::UI::Widget::Canvas> canvas;
 
 public:
     Inkscape::UI::Tools::ToolBase    *getTool         () const { return _tool.get(); }
     Inkscape::Selection              *getSelection    () const { return _selection.get(); }
     SPDocument                       *getDocument     () const { return document; }
-    Inkscape::UI::Widget::Canvas     *getCanvas       () const { return canvas; }
+    Inkscape::UI::Widget::Canvas     *getCanvas       () const { return canvas.get(); }
     SPNamedView                      *getNamedView    () const { return namedview; }
     SPDesktopWidget                  *getDesktopWidget() const { return _widget; }
     Inkscape::Display::SnapIndicator *getSnapIndicator() const { return _snapindicator.get(); }
 
-    // Move these into UI::Widget::Canvas:
     Inkscape::CanvasItemGroup    *getCanvasControls() const { return _canvas_group_controls; }
     Inkscape::CanvasItemGroup    *getCanvasPagesBg()  const { return _canvas_group_pages_bg; }
     Inkscape::CanvasItemGroup    *getCanvasPagesFg()  const { return _canvas_group_pages_fg; }
@@ -214,12 +217,13 @@ private:
     Inkscape::CanvasItemCatchall *_canvas_catchall       = nullptr; ///< The bottom item for unclaimed events.
     Inkscape::CanvasItemDrawing  *_canvas_drawing        = nullptr; ///< The actual SVG drawing (a.k.a. arena).
 
+    void _setupCanvasItems();
+
 public:
     SPCSSAttr *current = nullptr;  ///< Current style
     bool _focusMode = false; ///< Whether we're focused working or general working
 
     unsigned dkey = 0;
-    Gdk::Toplevel::State toplevel_state{};
     unsigned interaction_disabled_counter = 0;
     bool waiting_cursor = false;
     bool showing_dialogs = false;
@@ -363,7 +367,6 @@ public:
     void scroll_relative_in_svg_coords(double dx, double dy);
     bool scroll_to_point(Geom::Point const &s_dt, double autoscrollspeed = 0);
 
-    void setWindowTitle();
     Geom::IntPoint getWindowSize() const;
     void setWindowSize(Geom::IntPoint const &size);
     void setWindowTransient(Gtk::Window &window, int transient_policy = 1);
@@ -374,6 +377,9 @@ public:
     void showInfoDialog(Glib::ustring const &message);
     bool warnDialog (Glib::ustring const &text);
 
+    void setRenderMode(Inkscape::RenderMode mode);
+    void setColorMode(Inkscape::ColorMode  mode);
+
     void toggleCommandPalette();
     void toggleRulers();
     void toggleScrollbars();
@@ -382,7 +388,6 @@ public:
     void layoutWidget();
     void setToolboxFocusTo(char const *label);
     Gtk::Widget *get_toolbar_by_name(Glib::ustring const &name);
-    Gtk::Widget *get_toolbox() const;
 
     void setToolboxAdjustmentValue(char const *id, double val);
     bool isToolboxButtonActive(char const *id) const;
@@ -402,7 +407,6 @@ public:
     bool is_fullscreen() const;
     bool is_focusMode () const;
 
-    void fullscreen();
     void focusMode(bool mode = true);
 
     /// Transformation from window to desktop coordinates (zoom/rotate).
@@ -427,7 +431,9 @@ public:
 
 private:
     SPDesktopWidget *_widget = nullptr;
-    bool _active = false;
+
+    void _attachDocument();
+    void _detachDocument();
 
     // This simple class ensures that _w2d is always in sync with _rotation and _scale
     // We keep rotation and scale separate to avoid having to extract them from the affine.
@@ -522,8 +528,6 @@ private:
     DesktopAffine _current_affine;
     std::list<DesktopAffine> transforms_past;
     std::list<DesktopAffine> transforms_future;
-    bool _split_canvas = false;
-    bool _xray = false;
     bool _quick_zoom_enabled = false; ///< Signifies that currently we're in quick zoom mode
     DesktopAffine _quick_zoom_affine; ///< The transform of the screen before quick zoom
 
@@ -539,9 +543,9 @@ private:
     sigc::signal<void (Inkscape::UI::ControlPointSelection *)> _control_point_selected;
     sigc::signal<void (Inkscape::UI::Tools::TextTool *)> _text_cursor_moved;
 
-    Inkscape::auto_connection _reconstruction_start_connection;
-    Inkscape::auto_connection _reconstruction_finish_connection;
-    Inkscape::auto_connection _schedule_zoom_from_document_connection;
+    sigc::connection _reconstruction_start_connection;
+    sigc::connection _reconstruction_finish_connection;
+    sigc::connection _schedule_zoom_from_document_connection;
 
     bool drawing_handler(Inkscape::CanvasEvent const &event, Inkscape::DrawingItem *item);
     void reconstruction_start();
@@ -554,7 +558,6 @@ private:
     void on_zoom_end  (GtkGesture     const *zoom, GdkEventSequence const *sequence);
 
     void onStatusMessage(Inkscape::MessageType type, char const *message);
-    void onDocumentFilenameSet(char const *filename);
 };
 
 #endif // INKSCAPE_DESKTOP_H

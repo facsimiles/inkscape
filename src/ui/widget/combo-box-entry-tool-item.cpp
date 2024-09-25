@@ -43,10 +43,14 @@
 
 namespace Inkscape::UI::Widget {
 
-ComboBoxEntryToolItem::ComboBoxEntryToolItem(Glib::ustring name, Glib::ustring label, Glib::ustring tooltip,
-                                             Glib::RefPtr<Gtk::TreeModel> model, int entry_width, int extra_width,
-                                             CellDataFunc cell_data_func, SeparatorFunc separator_func,
-                                             Gtk::Widget *focusWidget)
+ComboBoxEntryToolItem::ComboBoxEntryToolItem(Glib::ustring name,
+                                             Glib::ustring label,
+                                             Glib::ustring tooltip,
+                                             Glib::RefPtr<Gtk::TreeModel> model,
+                                             int           entry_width,
+                                             int           extra_width,
+                                             CellDataFunc  cell_data_func,
+                                             SeparatorFunc separator_func)
     : _label(std::move(label))
     , _tooltip(std::move(tooltip))
     , _model(std::move(model))
@@ -54,7 +58,6 @@ ComboBoxEntryToolItem::ComboBoxEntryToolItem(Glib::ustring name, Glib::ustring l
     , _entry_width(entry_width)
     , _extra_width(extra_width)
     , _cell_data_func(std::move(cell_data_func))
-    , _focusWidget(focusWidget)
 {
     set_name(name);
 

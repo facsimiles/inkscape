@@ -249,6 +249,7 @@ SelectedStyle::setDesktop(SPDesktop *desktop)
     selection_modified_connection = selection->connectModified(
         sigc::bind(&ss_selection_modified, this)
     );
+    update();
 
     _sw_unit = desktop->getNamedView()->display_units;
 }

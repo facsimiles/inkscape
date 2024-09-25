@@ -74,10 +74,8 @@ static void delete_then_null(std::unique_ptr<T> &uptr)
     uptr.release();
 }
 
-SPDesktop::SPDesktop(SPNamedView *namedview_, Inkscape::UI::Widget::Canvas *canvas_, SPDesktopWidget *widget_)
+SPDesktop::SPDesktop(SPNamedView *namedview_)
     : namedview(namedview_)
-    , canvas(canvas_)
-    , _widget(widget_)
 {
     // Moving this into the list initializer breaks the application because this->_document_replaced_signal
     // is accessed before it is initialized
@@ -100,40 +98,37 @@ SPDesktop::SPDesktop(SPNamedView *namedview_, Inkscape::UI::Widget::Canvas *canv
     current = prefs->getStyle("/desktop/style");
 
     auto const document = namedview->document;
-    /* XXX:
-     * ensureUpToDate() sends a 'modified' signal to the root element.
-     * This is reportedly required to prevent flickering after the document
-     * loads. However, many SPObjects write to their repr in response
-     * to this signal. This is apparently done to support live path effects,
-     * which rewrite their result paths after each modification of the base object.
-     * This causes the generation of an incomplete undo transaction,
-     * which causes problems down the line, including crashes in the
-     * Undo History dialog.
-     *
-     * For now, this is handled by disabling undo tracking during this call.
-     * A proper fix would involve modifying the way ensureUpToDate() works,
-     * so that the LPE results are not rewritten.
-     */
-    {
-        Inkscape::DocumentUndo::ScopedInsensitive _no_undo(document);
-        document->ensureUpToDate();
-    }
     dkey = SPItem::display_key_new(1);
+
+    canvas = std::make_unique<Inkscape::UI::Widget::Canvas>();
+    canvas->set_desktop(this);
+
+    _setupCanvasItems();
+
+    _temporary_item_list = std::make_unique<Inkscape::Display::TemporaryItemList>();
+    _translucency_group = std::make_unique<Inkscape::Display::TranslucencyGroup>(dkey);
+    _snapindicator = std::make_unique<Inkscape::Display::SnapIndicator>(this);
+
+    // display rect and zoom are now handled in sp_desktop_widget_realize()
+
+    // pinch zoom
+    Inkscape::UI::Controller::add_zoom<&SPDesktop::on_zoom_begin, &SPDesktop::on_zoom_scale, &SPDesktop::on_zoom_end>
+        (*canvas, *this, Gtk::PropagationPhase::CAPTURE);
 
     /* Connect document */
     setDocument(document);
 
-    namedview->viewcount++;
+    // Set the select tool as the active tool.
+    setTool("/tools/select");
 
-    /* Setup Canvas */
-    namedview->set_desk_color(this); // Background page sits on.
+    schedule_zoom_from_document();
+}
 
-    /* ----------- Canvas Items ------------ */
-
-    /* CanvasItem's: Controls/Grids/etc. Canvas items are owned by the canvas through
+void SPDesktop::_setupCanvasItems()
+{
+    /* CanvasItems: Controls/Grids/etc. Canvas items are owned by the canvas through
      * canvas_item_root. Canvas items are automatically added and removed from the tree when
      * created and deleted (as long as a canvas item group is passed in the constructor).
-     * It would probably make sense to move most of this code to the Canvas.
      */
 
     auto const canvas_item_root = canvas->get_canvas_item_root();
@@ -155,6 +150,7 @@ SPDesktop::SPDesktop(SPNamedView *namedview_, Inkscape::UI::Widget::Canvas *canv
     _canvas_group_sketch   = new Inkscape::CanvasItemGroup   {canvas_item_root};
     _canvas_group_temp     = new Inkscape::CanvasItemGroup   {canvas_item_root};
     _canvas_group_controls = new Inkscape::CanvasItemGroup   {canvas_item_root};
+    _canvas_drawing        = new Inkscape::CanvasItemDrawing {_canvas_group_drawing};
 
     _canvas_group_pages_bg->set_name("CanvasItemGroup:PagesBg" ); // Page backgrounds
     _canvas_group_drawing ->set_name("CanvasItemGroup:Drawing" ); // The actual SVG drawing.
@@ -173,43 +169,9 @@ SPDesktop::SPDesktop(SPNamedView *namedview_, Inkscape::UI::Widget::Canvas *canv
     canvas_item_root->connect_event(sigc::bind(&sp_desktop_root_handler, this));
     _canvas_catchall->connect_event(sigc::bind(&sp_desktop_root_handler, this));
 
-    _canvas_drawing = new Inkscape::CanvasItemDrawing{_canvas_group_drawing};
     _canvas_drawing->connect_drawing_event(sigc::mem_fun(*this, &SPDesktop::drawing_handler));
 
-    auto const drawing = _canvas_drawing->get_drawing();
-    g_assert(drawing);
-    canvas->set_drawing(drawing); // Canvas needs access.
-
-    auto const root = document->getRoot();
-    g_assert(root);
-    if (auto const drawing_item = root->invoke_show(*drawing, dkey, SP_ITEM_SHOW_DISPLAY)) {
-        drawing->root()->prependChild(drawing_item);
-    }
-
-    _temporary_item_list = std::make_unique<Inkscape::Display::TemporaryItemList>();
-    _translucency_group = std::make_unique<Inkscape::Display::TranslucencyGroup>(dkey);
-    _snapindicator = std::make_unique<Inkscape::Display::SnapIndicator>(this);
-
-    /* --------- End Canvas Items ----------- */
-
-    namedview->show(this);
-    /* Ugly hack */
-    activate_guides(true);
-
-    // Set the select tool as the active tool.
-    setTool("/tools/select");
-
-    // display rect and zoom are now handled in sp_desktop_widget_realize()
-
-    // pinch zoom
-    Inkscape::UI::Controller::add_zoom<&SPDesktop::on_zoom_begin, &SPDesktop::on_zoom_scale, &SPDesktop::on_zoom_end>
-                                      (*canvas, *this, Gtk::PropagationPhase::CAPTURE);
-
-    /* Set up notification of rebuilding the document, this allows
-       for saving object related settings in the document. */
-    _reconstruction_start_connection = document->connectReconstructionStart(sigc::mem_fun(*this, &SPDesktop::reconstruction_start));
-    _reconstruction_finish_connection = document->connectReconstructionFinish(sigc::mem_fun(*this, &SPDesktop::reconstruction_finish));
-    _reconstruction_old_layer_id.clear();
+    canvas->set_drawing(_canvas_drawing->get_drawing());
 }
 
 SPDesktop::~SPDesktop()
@@ -217,25 +179,25 @@ SPDesktop::~SPDesktop()
     _destroy_signal.emit(this);
 
     delete_then_null(_tool);
+
+    // Canvas
+    canvas->set_drawing(nullptr); // Ensures deactivation
+    canvas->set_desktop(nullptr); // Todo: Remove desktop dependency.
+
+    if (document) {
+        _detachDocument();
+    }
+
     _snapindicator.reset();
     _temporary_item_list.reset();
     _selection.reset();
 
-    namedview->hide(this);
-
-    _reconstruction_start_connection.disconnect();
-    _reconstruction_finish_connection.disconnect();
-    _schedule_zoom_from_document_connection.disconnect();
-
-    if (_canvas_drawing) {
-        doc()->getRoot()->invoke_hide(dkey);
-    }
-
     _guides_message_context = nullptr;
+}
 
-    if (document) {
-        INKSCAPE.remove_document(document);
-    }
+void SPDesktop::setDesktopWidget(SPDesktopWidget *dtw)
+{
+    _widget = dtw;
 }
 
 //--------------------------------------------------------------------
@@ -306,10 +268,9 @@ SPDesktop::activate_guides(bool activate)
 /**
  * Make desktop switch documents.
  */
-void
-SPDesktop::change_document (SPDocument *theDocument)
+void SPDesktop::change_document(SPDocument *theDocument)
 {
-    g_return_if_fail (theDocument != nullptr);
+    g_return_if_fail(theDocument);
 
     /* unselect everything before switching documents */
     _selection->clear();
@@ -317,20 +278,14 @@ SPDesktop::change_document (SPDocument *theDocument)
     // Reset any tool actions currently in progress.
     setTool(std::string{_tool->getPrefsPath()}); // Copy so not passing ref to member of reset tool
 
-    setDocument (theDocument);
+    setDocument(theDocument);
 
     /* update the rulers, connect the desktop widget's signal to the new namedview etc.
        (this can probably be done in a better way) */
-    InkscapeWindow *parent = this->getInkscapeWindow();
-    g_assert(parent != nullptr);
-    parent->change_document(theDocument);
-    SPDesktopWidget *dtw = parent->get_desktop_widget();
-    if (dtw) {
-        dtw->updateNamedview();
-    } else {
-        std::cerr << "SPDesktop::change_document: failed to get desktop widget!" << std::endl;
-    }
+    getInkscapeWindow()->change_document(theDocument);
+    _widget->desktopChangedDocument(this);
 
+    sp_namedview_zoom_and_view_from_document(this);
 }
 
 /**
@@ -941,14 +896,9 @@ bool SPDesktop::scroll_to_point(Geom::Point const &p, double)
     return false;
 }
 
-static bool has_flag(Gdk::Toplevel::State state, Gdk::Toplevel::State flags)
-{
-    return (state & flags) != Gdk::Toplevel::State{};
-}
-
 bool SPDesktop::is_iconified() const
 {
-    return has_flag(toplevel_state, Gdk::Toplevel::State::MINIMIZED);
+    return getInkscapeWindow()->isIconified();
 }
 
 bool SPDesktop::is_darktheme() const
@@ -958,17 +908,12 @@ bool SPDesktop::is_darktheme() const
 
 bool SPDesktop::is_maximized() const
 {
-    return has_flag(toplevel_state, Gdk::Toplevel::State::MAXIMIZED);
+    return getInkscapeWindow()->isMaximised();
 }
 
 bool SPDesktop::is_fullscreen() const
 {
-    return has_flag(toplevel_state, Gdk::Toplevel::State::FULLSCREEN);
-}
-
-void SPDesktop::fullscreen()
-{
-    _widget->fullscreen();
+    return getInkscapeWindow()->isFullscreen();
 }
 
 /**
@@ -995,11 +940,6 @@ void SPDesktop::focusMode(bool mode)
     _focusMode = mode;
 
     layoutWidget();
-}
-
-void SPDesktop::setWindowTitle()
-{
-    _widget->updateTitle(doc()->getDocumentName());
 }
 
 Geom::IntPoint SPDesktop::getWindowSize() const
@@ -1042,6 +982,18 @@ bool
 SPDesktop::warnDialog (Glib::ustring const &text)
 {
     return _widget->warnDialog (text);
+}
+
+void SPDesktop::setRenderMode(Inkscape::RenderMode mode)
+{
+    canvas->set_render_mode(mode);
+    _widget->desktopChangedTitle(this);
+}
+
+void SPDesktop::setColorMode(Inkscape::ColorMode mode)
+{
+    canvas->set_color_mode(mode);
+    _widget->desktopChangedTitle(this);
 }
 
 void
@@ -1121,18 +1073,13 @@ SPDesktop::layoutWidget()
  *  onWindowStateChanged
  *
  *  Called when the window changes its maximize/fullscreen/iconify/pinned state.
- *  Since GTK doesn't have a way to query this state information directly, we
- *  record it for the desktop here, and also possibly trigger a layout.
  */
 void
 SPDesktop::onWindowStateChanged(Gdk::Toplevel::State const changed,
                                 Gdk::Toplevel::State const new_state)
 {
-    // Record the desktop window's state
-    toplevel_state = new_state;
-
     // Layout may differ depending on full-screen mode or not
-    if (has_flag(changed, Gdk::Toplevel::State::FULLSCREEN | Gdk::Toplevel::State::MAXIMIZED)) {
+    if ((bool)(changed & (Gdk::Toplevel::State::FULLSCREEN | Gdk::Toplevel::State::MAXIMIZED))) {
         layoutWidget();
         view_set_gui(getInkscapeWindow()); // Updates View menu
     }
@@ -1175,11 +1122,6 @@ Gtk::Widget *SPDesktop::get_toolbar_by_name(const Glib::ustring &name)
     return _widget->get_toolbar_by_name(name);
 }
 
-Gtk::Widget *SPDesktop::get_toolbox() const
-{
-    return _widget->get_tool_toolbox();
-}
-
 bool
 SPDesktop::isToolboxButtonActive(char const * const id) const
 {
@@ -1219,61 +1161,85 @@ void SPDesktop::toggleLockGuides()
 /**
  * Associate document with desktop.
  */
-void
-SPDesktop::setDocument (SPDocument *doc)
+void SPDesktop::setDocument(SPDocument *doc)
 {
-    if (!doc) return;
-
-    if (this->doc()) {
-        namedview->hide(this);
-        this->doc()->getRoot()->invoke_hide(dkey);
+    if (document) {
+        _detachDocument();
     }
 
     _selection->setDocument(doc);
-
-    /// \todo fixme: This condition exists to make sure the code
-    /// inside is NOT called on initialization, only on replacement. But there
-    /// are surely more safe methods to accomplish this.
-    // TODO since the comment had reversed logic, check the intent of this block of code:
-    if (_canvas_drawing) {
-        g_assert(doc);
-        namedview = doc->getNamedView();
-        namedview->viewcount++;
-
-        auto const drawing = _canvas_drawing->get_drawing();
-        g_assert(drawing);
-
-        auto const root = doc->getRoot();
-        g_assert(root);
-        if (auto const drawing_item = root->invoke_show(*drawing, dkey, SP_ITEM_SHOW_DISPLAY)) {
-            drawing->root()->prependChild(drawing_item);
-        }
-
-        namedview->show(this);
-        namedview->setShowGrids(namedview->getShowGrids());
-
-        /* Ugly hack */
-        activate_guides (true);
-    }
-
-    // set new document before firing signal, so handlers can see new value if they query desktop
-    // View::setDocument(doc);
-    // Formerly in View::View VVVVVVVVVVVVVVVVVVV
-    if (document) {
-        _document_uri_set_connection.disconnect();
-        INKSCAPE.remove_document(document);
-    }
-    INKSCAPE.add_document(doc);
     document = doc;
 
-    _document_uri_set_connection = document->connectFilenameSet([this](auto const filename) {
-        onDocumentFilenameSet(filename);
+    if (document) {
+        _attachDocument();
+    }
+}
+
+void SPDesktop::_attachDocument()
+{
+    /* XXX:
+     * ensureUpToDate() sends a 'modified' signal to the root element.
+     * This is required to prevent flickering after the document
+     * loads. However, many SPObjects write to their repr in response
+     * to this signal. This is apparently done to support live path effects,
+     * which rewrite their result paths after each modification of the base object.
+     * This causes the generation of an incomplete undo transaction,
+     * which causes problems down the line, including crashes in the
+     * Undo History dialog.
+     *
+     * For now, this is handled by disabling undo tracking during this call.
+     * A proper fix would involve modifying the way ensureUpToDate() works,
+     * so that the LPE results are not rewritten.
+     */
+    {
+        Inkscape::DocumentUndo::ScopedInsensitive _no_undo(document);
+        document->ensureUpToDate();
+    }
+
+    /* Set up notification of rebuilding the document, this allows
+       for saving object related settings in the document. */
+    _reconstruction_start_connection = document->connectReconstructionStart(sigc::mem_fun(*this, &SPDesktop::reconstruction_start));
+    _reconstruction_finish_connection = document->connectReconstructionFinish(sigc::mem_fun(*this, &SPDesktop::reconstruction_finish));
+    _reconstruction_old_layer_id.clear();
+
+    auto const drawing = _canvas_drawing->get_drawing();
+
+    if (auto const drawing_item = document->getRoot()->invoke_show(*drawing, dkey, SP_ITEM_SHOW_DISPLAY)) {
+        drawing->root()->prependChild(drawing_item);
+    }
+
+    namedview = document->getNamedView();
+    namedview->viewcount++;
+    namedview->show(this);
+    namedview->setShowGrids(namedview->getShowGrids());
+    namedview->set_desk_color(this); // Background page sits on.
+
+    /* Ugly hack */
+    activate_guides(true);
+
+    _document_uri_set_connection = document->connectFilenameSet([this] (auto) {
+        _widget->desktopChangedTitle(this);
     });
-    // End Fomerly in View::View ^^^^^^^^^^^^^^^
+    _saved_or_modified_conn = document->connectSavedOrModified([this] {
+        _widget->desktopChangedTitle(this);
+    });
+
+    // set new document before firing signal, so handlers can see new value if they query desktop
+    _document_replaced_signal.emit(this, document);
 
     sp_namedview_update_layers_from_document(this);
+}
 
-    _document_replaced_signal.emit(this, doc);
+void SPDesktop::_detachDocument()
+{
+    namedview->hide(this);
+    document->getRoot()->invoke_hide(dkey);
+
+    _document_uri_set_connection.disconnect();
+    _saved_or_modified_conn.disconnect();
+    _reconstruction_start_connection.disconnect();
+    _reconstruction_finish_connection.disconnect();
+    _schedule_zoom_from_document_connection.disconnect();
 }
 
 void SPDesktop::showNotice(Glib::ustring const &msg, int timeout)
@@ -1283,14 +1249,9 @@ void SPDesktop::showNotice(Glib::ustring const &msg, int timeout)
 
 void SPDesktop::onStatusMessage(Inkscape::MessageType type, char const *message)
 {
-    if (_widget) {
+    if (_widget && _widget->get_desktop() == this) {
         _widget->setMessage(type, message);
     }
-}
-
-void SPDesktop::onDocumentFilenameSet(char const *filename)
-{
-    _widget->updateTitle(filename);
 }
 
 /**

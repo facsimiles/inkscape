@@ -87,6 +87,7 @@ using namespace std::literals;
 #include "ui/icon-loader.h"
 #include "ui/pack.h"
 #include "util/statics.h"
+#include "util/value-utils.h"
 #include "xml/href-attribute-helper.h"
 
 #ifdef WITH_LIBVISIO
@@ -364,12 +365,9 @@ SymbolsDialog::SymbolsDialog(const char* prefsPath)
             auto const dims = getSymbolDimensions(dragged);
             sendToClipboard(*dragged, Geom::Rect(-0.5 * dims, 0.5 * dims), false);
 
-            Glib::Value<DnDSymbol> value;
-            value.init(value.value_type());
-            value.set(DnDSymbol{dragged->symbol_id, dragged->unique_key, dragged->symbol_document});
-            auto content = Gdk::ContentProvider::create(value);
-            source.set_content(content);
-            return content;
+            return Gdk::ContentProvider::create(Util::GlibValue::create<DnDSymbol>(
+                DnDSymbol{dragged->symbol_id, dragged->unique_key, dragged->symbol_document}
+            ));
         },
         .begin = [this](Gtk::DragSource& source, const Glib::RefPtr<Gdk::Drag>& drag) {
             auto c = source.get_content();

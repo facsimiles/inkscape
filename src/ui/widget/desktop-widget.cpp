@@ -36,7 +36,11 @@
 #include <gtkmm/paned.h>
 #include <gtkmm/widget.h>
 
+#include "actions/actions-tools.h"
 #include "conn-avoid-ref.h"
+#include "helper/mathfns.h"
+#include "message-context.h"
+#include "ui/tools/tool-base.h"
 #include "desktop.h"
 #include "document.h"
 #include "document-undo.h"
@@ -51,7 +55,6 @@
 #include "ui/dialog-run.h"
 #include "ui/dialog/swatches.h"
 #include "ui/monitor.h"   // Monitor aspect ratio
-#include "ui/pack.h"
 #include "ui/shortcuts.h"
 #include "ui/themes.h"
 #include "ui/toolbar/command-toolbar.h"
@@ -66,6 +69,7 @@
 #include "ui/widget/ink-ruler.h"
 #include "ui/widget/spinbutton.h"
 #include "ui/widget/status-bar.h"
+#include "ui/widget/tabs-widget.h"
 #include "ui/widget/unit-tracker.h"
 #include "util/units.h"
 #include "widgets/widget-sizes.h"
@@ -79,22 +83,22 @@ using Inkscape::UI::Widget::UnitTracker;
 //---------------------------------------------------------------------
 /* SPDesktopWidget */
 
-SPDesktopWidget::SPDesktopWidget(InkscapeWindow *inkscape_window, SPDocument *document)
+SPDesktopWidget::SPDesktopWidget(InkscapeWindow *inkscape_window)
     : Gtk::Box(Gtk::Orientation::VERTICAL)
     , _window{inkscape_window}
 {
     set_name("SPDesktopWidget");
 
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    auto prefs = Inkscape::Preferences::get();
 
     /* Status bar */
     _statusbar = Gtk::make_managed<Inkscape::UI::Widget::StatusBar>();
-    Inkscape::UI::pack_end(*this, *_statusbar, false, true);
+    prepend(*_statusbar);
 
     /* Swatch Bar */
     _panels = Gtk::make_managed<Inkscape::UI::Dialog::SwatchesPanel>(true, "/embedded/swatches");
     _panels->set_vexpand(false);
-    Inkscape::UI::pack_end(*this, *_panels, false, true);
+    prepend(*_panels);
 
     /* DesktopHBox (Vertical toolboxes, canvas) */
     _hbox = Gtk::make_managed<Gtk::Box>();
@@ -102,13 +106,13 @@ SPDesktopWidget::SPDesktopWidget(InkscapeWindow *inkscape_window, SPDocument *do
 
     _tbbox = Gtk::make_managed<Gtk::Paned>(Gtk::Orientation::HORIZONTAL);
     _tbbox->set_name("ToolboxCanvasPaned");
-    Inkscape::UI::pack_start(*_hbox, *_tbbox, true, true);
+    _hbox->append(*_tbbox);
 
-    Inkscape::UI::pack_end(*this, *_hbox, true, true);
+    prepend(*_hbox);
 
     _top_toolbars = Gtk::make_managed<Gtk::Grid>();
     _top_toolbars->set_name("TopToolbars");
-    Inkscape::UI::pack_end(*this, *_top_toolbars, false, true);
+    prepend(*_top_toolbars);
 
     /* Toolboxes */
     tool_toolbars = std::make_unique<Inkscape::UI::Toolbar::Toolbars>();
@@ -132,8 +136,8 @@ SPDesktopWidget::SPDesktopWidget(InkscapeWindow *inkscape_window, SPDocument *do
     };
     _tbbox->property_position().signal_changed().connect([=](){ adjust_pos(); });
 
-    snap_toolbar = std::make_unique<Inkscape::UI::Toolbar::SnapToolbar>();
-    Inkscape::UI::pack_end(*_hbox, *snap_toolbar, false, true); // May moved later.
+    snap_toolbar = std::make_unique<Inkscape::UI::Toolbar::SnapToolbar>(_window);
+    _hbox->append(*snap_toolbar); // May be moved later.
 
     _tb_snap_pos = prefs->createObserver("/toolbox/simplesnap", sigc::mem_fun(*this, &SPDesktopWidget::repack_snaptoolbar));
     repack_snaptoolbar();
@@ -147,7 +151,7 @@ SPDesktopWidget::SPDesktopWidget(InkscapeWindow *inkscape_window, SPDocument *do
         int min = Inkscape::UI::Toolbar::min_pixel_size;
         int max = Inkscape::UI::Toolbar::max_pixel_size;
         int s = prefs->getIntLimited(Inkscape::UI::Toolbar::tools_icon_size, min, min, max);
-        Inkscape::UI::set_icon_sizes(tool_toolbox->gobj(), s);
+        Inkscape::UI::set_icon_sizes(tool_toolbox, s);
         adjust_pos();
     };
 
@@ -164,8 +168,6 @@ SPDesktopWidget::SPDesktopWidget(InkscapeWindow *inkscape_window, SPDocument *do
     _canvas_grid = cg.get();
 
     /* Canvas */
-    _canvas = _canvas_grid->GetCanvas();
-
     _ds_sticky_zoom = prefs->createObserver("/options/stickyzoom/value", [this]() { sticky_zoom_updated(); });
     sticky_zoom_updated();
 
@@ -184,45 +186,106 @@ SPDesktopWidget::SPDesktopWidget(InkscapeWindow *inkscape_window, SPDocument *do
     // ------------------ Finish Up -------------------- //
     _canvas_grid->ShowCommandPalette(false);
 
-    _canvas->grab_focus();
-
     snap_toolbar->mode_update(); // Hide/show parts.
 
-    SPNamedView *namedview = document->getNamedView();
-    _dt2r = 1. / namedview->display_units->factor;
-
-    // ---------- Desktop Dependent Setup -------------- //
-    // This section seems backwards!
-    _desktop = std::make_unique<SPDesktop>(namedview, _canvas, this);
-    _canvas->set_desktop(_desktop.get());
-    INKSCAPE.add_desktop(_desktop.get());
-
-    // Initialize the command toolbar only after contructing the desktop. Else, it'll crash.
-    command_toolbar = std::make_unique<Inkscape::UI::Toolbar::CommandToolbar>(_desktop.get());
+    command_toolbar = std::make_unique<Inkscape::UI::Toolbar::CommandToolbar>();
     _top_toolbars->attach(*command_toolbar, 0, 0);
+}
+
+void SPDesktopWidget::addDesktop(SPDesktop *desktop, int pos)
+{
+    desktop->setDesktopWidget(this);
+    _desktops.push_back(desktop);
+    _canvas_grid->addTab(desktop->getCanvas());
+    _canvas_grid->getTabsWidget()->addTab(desktop, pos);
+
+    switchDesktop(desktop);
+}
+
+void SPDesktopWidget::removeDesktop(SPDesktop *desktop)
+{
+    auto const it = std::find(_desktops.begin(), _desktops.end(), desktop);
+    assert(it != _desktops.end());
+
+    auto tabs = _canvas_grid->getTabsWidget();
+
+    if (desktop == _desktop && _desktops.size() > 1) {
+        auto oldpos = tabs->positionOfTab(_desktop);
+        auto newpos = oldpos == _desktops.size() - 1 ? oldpos - 1 : oldpos + 1;
+        switchDesktop(tabs->tabAtPosition(newpos));
+    }
+
+    tabs->removeTab(desktop);
+    _canvas_grid->removeTab(desktop->getCanvas());
+    _desktops.erase(it);
+    desktop->setDesktopWidget(nullptr);
+}
+
+void SPDesktopWidget::switchDesktop(SPDesktop *desktop)
+{
+    if (desktop == _desktop) {
+        return;
+    }
+
+    _desktop = desktop;
+    _canvas = _desktop->getCanvas();
+
+    _canvas_grid->switchTab(_canvas);
+    _canvas->grab_focus();
 
     // Add the shape geometry to libavoid for autorouting connectors.
     // This needs desktop set for its spacing preferences.
-    init_avoided_shape_geometry(_desktop.get());
+    init_avoided_shape_geometry(_desktop);
 
-    _statusbar->set_desktop(_desktop.get());
+    _statusbar->set_desktop(_desktop);
 
-    /* Once desktop is set, we can update rulers */
-    _canvas_grid->updateRulers();
+    _tool_changed_conn = _desktop->connectEventContextChanged([this] (auto, auto tool) { tool_toolbars->setTool(tool); });
+    tool_toolbars->setTool(_desktop->getTool());
 
-    /* Listen on namedview modification */
-    modified_connection = namedview->connectModified(sigc::mem_fun(*this, &SPDesktopWidget::namedviewModified));
-
-    // tool_toolbars is an empty Gtk::Box at this point, fill it.
-    tool_toolbars->create_toolbars(_desktop.get());
+    _panels->setDesktop(_desktop);
 
     layoutWidgets();
 
-    _panels->setDesktop(_desktop.get());
+    // Once desktop is set, we can update rulers
+    _canvas_grid->updateRulers();
+
+    auto msgstack = _desktop->messageStack();
+    setMessage(msgstack->currentMessageType(), msgstack->currentMessage());
+
+    auto tabs = _canvas_grid->getTabsWidget();
+    tabs->switchTab(_desktop);
+
+    // Update window's current active tool, display mode, colour mode, cms mode
+    // Todo: These should really be tab-level actions.
+    if (auto action = dynamic_cast<Gio::SimpleAction *>(_window->lookup_action("tool-switch").get())) {
+        action->set_state(Glib::Variant<Glib::ustring>::create(pref_path_to_tool_name(_desktop->getTool()->getPrefsPath())));
+    }
+    if (auto action = dynamic_cast<Gio::SimpleAction *>(_window->lookup_action("canvas-display-mode").get())) {
+        action->set_state(Glib::Variant<int>::create((int)_desktop->getCanvas()->get_render_mode()));
+    }
+    if (auto action = dynamic_cast<Gio::SimpleAction *>(_window->lookup_action("canvas-color-mode").get())) {
+        action->set_state(Glib::Variant<bool>::create(_desktop->getCanvas()->get_color_mode() == Inkscape::ColorMode::GRAYSCALE));
+    }
+    if (auto action = dynamic_cast<Gio::SimpleAction *>(_window->lookup_action("canvas-color-manage").get())) {
+        action->set_state(Glib::Variant<bool>::create(_desktop->getCanvas()->get_cms_active()));
+    }
+
+    _updateNamedview();
+
+    _window->setActiveTab(_desktop);
 }
 
-void SPDesktopWidget::apply_ctrlbar_settings() {
-    Inkscape::Preferences* prefs = Inkscape::Preferences::get();
+void SPDesktopWidget::advanceTab(int by)
+{
+    auto tabs = _canvas_grid->getTabsWidget();
+    auto oldpos = tabs->positionOfTab(_desktop);
+    auto newpos = Util::safemod<int>(oldpos + by, _desktops.size());
+    switchDesktop(tabs->tabAtPosition(newpos));
+}
+
+void SPDesktopWidget::apply_ctrlbar_settings()
+{
+    auto prefs = Preferences::get();
     int min = Inkscape::UI::Toolbar::min_pixel_size;
     int max = Inkscape::UI::Toolbar::max_pixel_size;
     int size = prefs->getIntLimited(Inkscape::UI::Toolbar::ctrlbars_icon_size, min, min, max);
@@ -231,10 +294,9 @@ void SPDesktopWidget::apply_ctrlbar_settings() {
     Inkscape::UI::set_icon_sizes(tool_toolbars.get(), size);
 }
 
-void
-SPDesktopWidget::setMessage (Inkscape::MessageType type, const gchar *message)
+void SPDesktopWidget::setMessage(Inkscape::MessageType type, const gchar *message)
 {
-    _statusbar->set_message (type, message);
+    _statusbar->set_message(type, message);
 }
 
 /**
@@ -247,19 +309,12 @@ void SPDesktopWidget::on_unrealize()
         Inkscape::Preferences::get()->setInt("/toolbox/tools/width", _tbbox->get_position());
     }
 
-    if (_desktop) {
-        // Canvas
-        _canvas->set_drawing(nullptr); // Ensures deactivation
-        _canvas->set_desktop(nullptr); // Todo: Remove desktop dependency.
+    _panels->setDesktop(nullptr);
 
-        _panels->setDesktop(nullptr);
+    modified_connection.disconnect();
+    _desktops.clear();
 
-        INKSCAPE.remove_desktop(_desktop.get()); // clears selection and event_context
-        modified_connection.disconnect();
-        _desktop.reset();
-
-        _container.reset(); // will delete _canvas
-    }
+    _container.reset();
 
     parent_type::on_unrealize();
 }
@@ -272,7 +327,7 @@ SPDesktopWidget::~SPDesktopWidget() = default;
  * The title has form file name: desktop number - Inkscape.
  * The desktop number is only shown if it's 2 or higher,
  */
-void SPDesktopWidget::updateTitle(char const *uri)
+void SPDesktopWidget::_updateTitle()
 {
     if (_window) {
         auto const doc = _desktop->doc();
@@ -283,7 +338,7 @@ void SPDesktopWidget::updateTitle(char const *uri)
             Name += "*";
         }
 
-        Name += uri;
+        Name += doc->getDocumentName();
 
         if (namedview->viewcount > 1) {
             Name += ": ";
@@ -316,7 +371,7 @@ void SPDesktopWidget::updateTitle(char const *uri)
             Name += N_("print colors preview");
         }
 
-        if (*Name.rbegin() == '(') {  // Can not use C++11 .back() or .pop_back() with ustring!
+        if (Name.back() == '(') {
             Name.erase(Name.size() - 2);
         } else {
             Name += ")";
@@ -347,52 +402,44 @@ void SPDesktopWidget::showNotice(Glib::ustring const &msg, int timeout)
  */
 void SPDesktopWidget::on_realize()
 {
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-
     parent_type::on_realize();
 
-    auto const d = Geom::Rect::from_xywh(Geom::Point{0, 0}, _desktop->doc()->getDimensions());
-    if (d.width() < 1.0 || d.height() < 1.0) return;
+    auto const dark = INKSCAPE.themecontext->isCurrentThemeDark(_window);
+    Preferences::get()->setBool("/theme/darkTheme", dark);
+    INKSCAPE.themecontext->getChangeThemeSignal().emit();
+    INKSCAPE.themecontext->add_gtk_css(true);
+}
 
-    _desktop->set_display_area(d, 10);
-
-    updateNamedview();
-
-    auto const window = dynamic_cast<Gtk::Window *>(get_root());
-    if (window) {
-        auto const dark = INKSCAPE.themecontext->isCurrentThemeDark(window);
-        prefs->setBool("/theme/darkTheme", dark);
-        INKSCAPE.themecontext->getChangeThemeSignal().emit();
-        INKSCAPE.themecontext->add_gtk_css(true);
+void SPDesktopWidget::desktopChangedDocument(SPDesktop *desktop)
+{
+    _canvas_grid->getTabsWidget()->refreshTitle(desktop);
+    if (desktop == _desktop) {
+        _updateNamedview();
     }
 }
 
-/* This is just to provide access to common functionality from sp_desktop_widget_realize() above
-   as well as from SPDesktop::change_document() */
-void SPDesktopWidget::updateNamedview()
+void SPDesktopWidget::desktopChangedTitle(SPDesktop *desktop)
+{
+    _canvas_grid->getTabsWidget()->refreshTitle(desktop);
+    if (desktop == _desktop) {
+        _updateTitle();
+    }
+}
+
+void SPDesktopWidget::_updateNamedview()
 {
     // Listen on namedview modification
-    // originally (prior to the sigc++ conversion) the signal was simply
-    // connected twice rather than disconnecting the first connection
+    modified_connection = _desktop->getNamedView()->connectModified([this] (auto, unsigned flags) {
+        if (flags & SP_OBJECT_MODIFIED_FLAG) {
+            _updateUnit();
 
-    modified_connection = _desktop->getNamedView()->connectModified(sigc::mem_fun(*this, &SPDesktopWidget::namedviewModified));
+            // Update unit trackers in certain toolbars, to address https://bugs.launchpad.net/inkscape/+bug/362995.
+            tool_toolbars->setActiveUnit(_desktop->getNamedView()->getDisplayUnit());
+        }
+    });
 
-    namedviewModified(_desktop->getNamedView(), SP_OBJECT_MODIFIED_FLAG);
-
-    updateTitle(_desktop->doc()->getDocumentName());
-}
-
-void
-SPDesktopWidget::update_guides_lock()
-{
-    bool down = _canvas_grid->GetGuideLock()->get_active();
-    auto const nv = _desktop->getNamedView();
-    bool lock = nv->getLockGuides();
-
-    if (down != lock) {
-        nv->toggleLockGuides();
-        setMessage(Inkscape::NORMAL_MESSAGE, down ? _("Locked all guides") : _("Unlocked all guides"));
-    }
+    _updateUnit();
+    _updateTitle();
 }
 
 void
@@ -477,21 +524,6 @@ bool SPDesktopWidget::warnDialog (Glib::ustring const &text)
     Gtk::MessageDialog dialog{*_window, text, false, Gtk::MessageType::WARNING, Gtk::ButtonsType::OK_CANCEL};
     auto const response = Inkscape::UI::dialog_run(dialog);
     return response == Gtk::ResponseType::OK;
-}
-
-void
-SPDesktopWidget::fullscreen()
-{
-    GtkWindow *topw = GTK_WINDOW(gtk_widget_get_root(_canvas->Gtk::Widget::gobj()));
-    if (GTK_IS_WINDOW(topw)) {
-        if (_desktop->is_fullscreen()) {
-            gtk_window_unfullscreen(topw);
-            // widget layout is triggered by the resulting window_state_event
-        } else {
-            gtk_window_fullscreen(topw);
-            // widget layout is triggered by the resulting window_state_event
-        }
-    }
 }
 
 /**
@@ -647,7 +679,7 @@ void SPDesktopWidget::repack_snaptoolbar()
     // Only repack if there's no parent widget now.
     if (!snap.get_parent()) {
         if (is_perm) {
-            Inkscape::UI::pack_end(*_hbox, snap, false, true);
+            _hbox->append(snap);
         } else {
             _top_toolbars->attach(snap, 1, 0, 1, 2);
         }
@@ -673,44 +705,17 @@ void SPDesktopWidget::repack_snaptoolbar()
     }
 }
 
-void SPDesktopWidget::namedviewModified(SPObject *obj, guint flags)
+void SPDesktopWidget::_updateUnit()
 {
-    if (!(flags & SP_OBJECT_MODIFIED_FLAG)) return;
+    auto const unit = _desktop->getNamedView()->getDisplayUnit();
 
-    auto nv = cast<SPNamedView>(obj);
-    _dt2r = 1. / nv->display_units->factor;
+    _dt2r = 1.0 / unit->factor;
 
-    _canvas_grid->GetVRuler()->set_unit(nv->getDisplayUnit());
-    _canvas_grid->GetHRuler()->set_unit(nv->getDisplayUnit());
-    _canvas_grid->GetVRuler()->set_tooltip_text(gettext(nv->display_units->name_plural.c_str()));
-    _canvas_grid->GetHRuler()->set_tooltip_text(gettext(nv->display_units->name_plural.c_str()));
+    _canvas_grid->GetVRuler()->set_unit(unit);
+    _canvas_grid->GetHRuler()->set_unit(unit);
+    _canvas_grid->GetVRuler()->set_tooltip_text(gettext(unit->name_plural.c_str()));
+    _canvas_grid->GetHRuler()->set_tooltip_text(gettext(unit->name_plural.c_str()));
     _canvas_grid->updateRulers();
-
-    /* This loops through all the grandchildren of tool toolbars,
-     * and for each that it finds, it performs an Inkscape::UI::find_widget_by_name(*),
-     * looking for widgets named "unit-tracker" (this is used by
-     * all toolboxes to refer to the unit selector). The default document units
-     * is then selected within these unit selectors.
-     *
-     * This should solve: https://bugs.launchpad.net/inkscape/+bug/362995
-     */
-    for (auto const i : Inkscape::UI::get_children(*tool_toolbars)) {
-        for (auto const j : Inkscape::UI::get_children(*i)) {
-            // Don't apply to text toolbar. We want to be able to
-            // use different units for text. (Bug 1562217)
-            const Glib::ustring name = j->get_name();
-            if ( name == "TextToolbar" || name == "MeasureToolbar" || name == "CalligraphicToolbar" )
-                continue;
-
-            auto const tracker = dynamic_cast<Inkscape::UI::Widget::ComboToolItem*>
-                                             (Inkscape::UI::find_widget_by_name(*j, "unit-tracker", false));
-            if (tracker) { // it's null when inkscape is first opened
-                if (auto ptr = static_cast<UnitTracker*>(tracker->get_data(Glib::Quark("unit-tracker")))) {
-                    ptr->setActiveUnit(nv->display_units);
-                }
-            }
-        } // grandchildren
-    } // children
 }
 
 // We make the desktop window with focus active. Signal is connected in inkscape-window.cpp
@@ -726,8 +731,6 @@ void SPDesktopWidget::onFocus(bool const has_focus)
             image->refresh_if_outdated();
         }
     }
-
-    INKSCAPE.activate_desktop(_desktop.get());
 }
 
 // ------------------------ Zoom ------------------------

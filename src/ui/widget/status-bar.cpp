@@ -25,7 +25,6 @@
 
 #include "desktop.h"
 #include "ui/builder-utils.h"
-#include "ui/pack.h"
 #include "ui/util.h"
 #include "ui/widget/canvas.h"
 #include "ui/widget/desktop-widget.h"
@@ -124,26 +123,30 @@ StatusBar::StatusBar()
 
     // Selected Style
     selected_style = Gtk::make_managed<Inkscape::UI::Widget::SelectedStyle>();
-    UI::pack_start(statusbar, *selected_style, false, false);
-    statusbar.reorder_child_at_start(*selected_style);
+    statusbar.prepend(*selected_style);
 
     // Layer Selector
-    layer_selector = Gtk::make_managed<Inkscape::UI::Widget::LayerSelector>(nullptr);
-    UI::pack_start(statusbar, *layer_selector, false, false, 1);  // Expand Fill Padding
+    layer_selector = Gtk::make_managed<Inkscape::UI::Widget::LayerSelector>();
+    layer_selector->set_hexpand(false);
+    statusbar.prepend(*layer_selector);
     statusbar.reorder_child_after(*layer_selector, *selected_style);
 
-    // Selector status
-    UI::pack_start(*this, statusbar);
+    // Page selector
+    _page_selector = Gtk::make_managed<PageSelector>();
+    _page_selector->set_hexpand(false);
+    statusbar.prepend(*_page_selector);
+    statusbar.reorder_child_after(*_page_selector, *layer_selector);
 
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    preference_observer = prefs->createObserver("/statusbar/visibility", [this]{
+    // Selector status
+    append(statusbar);
+
+    preference_observer = Preferences::get()->createObserver("/statusbar/visibility", [this] {
         update_visibility();
     });
     update_visibility();
 }
 
-void
-StatusBar::set_desktop(SPDesktop* desktop_in)
+void StatusBar::set_desktop(SPDesktop *desktop_in)
 {
     if (!desktop_in) {
         std::cerr << "StatusBar::set_desktop: desktop is nullptr!" << std::endl;
@@ -154,17 +157,14 @@ StatusBar::set_desktop(SPDesktop* desktop_in)
 
     selected_style->setDesktop(desktop);
     layer_selector->setDesktop(desktop);
+    _page_selector->setDesktop(desktop);
 
     // A desktop is always "owned" by a desktop widget.
     desktop_widget = desktop->getDesktopWidget();
     zoom_value->set_defocus_widget(desktop_widget->get_canvas());
     rotate_value->set_defocus_widget(desktop_widget->get_canvas());
-
-    // We add page widget here as it requires desktop for constructor.
-    auto &box = dynamic_cast<Gtk::Box &>(*UI::get_children(*this).at(0));
-    auto const page_selector = Gtk::make_managed<PageSelector>(desktop);
-    UI::pack_start(box, *page_selector, false, false);
-    box.reorder_child_after(*page_selector, *UI::get_children(box).at(4));
+    update_zoom();
+    update_rotate();
 }
 
 void
@@ -235,10 +235,14 @@ StatusBar::zoom_output()
     return true;
 }
 
-void
-StatusBar::zoom_value_changed()
+void StatusBar::zoom_value_changed()
 {
-    double const zoom_factor = pow (2, zoom_value->get_value());
+    if (_blocker.pending()) {
+        return;
+    }
+    auto guard = _blocker.block();
+
+    double const zoom_factor = std::pow(2, zoom_value->get_value());
 
     if (auto const window = dynamic_cast<Gtk::ApplicationWindow *>(get_root())) {
         auto variant = Glib::Variant<double>::create(zoom_factor);
@@ -248,17 +252,20 @@ StatusBar::zoom_value_changed()
     }
 }
 
-bool
-StatusBar::zoom_popup(PopupMenuOptionalClick)
+bool StatusBar::zoom_popup(PopupMenuOptionalClick)
 {
     popup_at_center(*zoom_popover, *zoom);
     return true;
 }
 
-void
-StatusBar::update_zoom()
+void StatusBar::update_zoom()
 {
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    if (_blocker.pending()) {
+        return;
+    }
+    auto guard = _blocker.block();
+
+    auto prefs = Preferences::get();
 
     double correction = 1.0;
     if (prefs->getDouble("/options/zoomcorrection/shown", true)) {
@@ -266,8 +273,6 @@ StatusBar::update_zoom()
     }
 
     zoom_value->set_value(log(desktop->current_zoom() / correction) / log(2));
-    zoom_value->queue_draw();
-
 }
 
 // ******* Rotate *******
@@ -286,9 +291,13 @@ StatusBar::rotate_output()
     return true;
 }
 
-void
-StatusBar::rotate_value_changed()
+void StatusBar::rotate_value_changed()
 {
+    if (_blocker.pending()) {
+        return;
+    }
+    auto guard = _blocker.block();
+
     if (auto const window = dynamic_cast<Gtk::ApplicationWindow *>(get_root())) {
         auto variant = Glib::Variant<double>::create(rotate_value->get_value());
         window->activate_action("win.canvas-rotate-absolute-degrees", variant);
@@ -297,18 +306,20 @@ StatusBar::rotate_value_changed()
     }
 }
 
-bool
-StatusBar::rotate_popup(PopupMenuOptionalClick)
+bool StatusBar::rotate_popup(PopupMenuOptionalClick)
 {
     popup_at_center(*rotate_popover, *rotate);
     return true;
 }
 
-void
-StatusBar::update_rotate()
+void StatusBar::update_rotate()
 {
+    if (_blocker.pending()) {
+        return;
+    }
+    auto guard = _blocker.block();
+
     rotate_value->set_value(Geom::deg_from_rad(desktop->current_rotation().angle()));
-    rotate_value->queue_draw();
 }
 
 void

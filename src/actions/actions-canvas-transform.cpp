@@ -306,12 +306,13 @@ add_actions_canvas_transform(InkscapeWindow* win)
 
     bool rotate_lock = prefs->getBool("/options/rotationlock");
 
-    SPDesktop* dt = win->get_desktop();
+    // Fixme: Should not be here.
+    /*SPDesktop* dt = win->get_desktop();
     if (dt) {
         dt->set_rotation_lock(rotate_lock);
     } else {
         show_output("add_actions_canvas_transform: no desktop!");
-    }
+    }*/
 
     Glib::VariantType Double(Glib::VARIANT_TYPE_DOUBLE);
 

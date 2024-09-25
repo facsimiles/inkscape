@@ -90,15 +90,12 @@ SPDesktop *sp_file_new(const std::string &templ)
 {
     auto *app = InkscapeApplication::instance();
 
-    SPDocument* doc = app->document_new (templ);
+    auto doc = app->document_new(templ);
     if (!doc) {
         std::cerr << "sp_file_new: failed to open document: " << templ << std::endl;
     }
-    InkscapeWindow* win = app->window_open (doc);
 
-    SPDesktop* desktop = win->get_desktop();
-
-    return desktop;
+    return app->window_open(doc);
 }
 
 std::string sp_file_default_template_uri()

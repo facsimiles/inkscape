@@ -33,6 +33,7 @@ class Context;
 } // namespace Cairo
 
 namespace Gtk {
+class EventControllerMotion;
 class GestureClick;
 class Popover;
 } // namespace Gtk
@@ -56,7 +57,8 @@ public:
     void set_page(double lower, double upper);
     void set_selection(double lower, double upper);
 
-    void add_track_widget(Gtk::Widget& widget);
+    void set_track_widget(Gtk::Widget &widget);
+    void clear_track_widget();
 
 private:
     std::pair<int, int> get_drawing_size();
@@ -67,7 +69,7 @@ private:
     void css_changed(GtkCssStyleChange *) override;
     void on_prefs_changed();
 
-    void on_motion(GtkEventControllerMotion const *motion, double x, double y);
+    void on_motion(Glib::RefPtr<Gtk::EventControllerMotion> const &controller, double x, double y);
     Gtk::EventSequenceState on_click_pressed(Gtk::GestureClick const &click,
                                              int n_press, double x, double y);
 
@@ -97,6 +99,8 @@ private:
     Cairo::RectangleInt _rect;
 
     std::unordered_map<int, Cairo::RefPtr<::Cairo::Surface>> _label_cache;
+
+    Glib::RefPtr<Gtk::EventControllerMotion> _track_widget_controller;
 
     // Cached style properties
     Gdk::RGBA _shadow;
