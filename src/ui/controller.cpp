@@ -73,28 +73,6 @@ void connect(Object &object, Getter const getter, sigc::slot<SlotResult (SlotArg
     if (slot) _connect(object, getter, std::move(slot), when);
 }
 
-// We add the requirement that slots return an EventSequenceState, which if itʼs
-// not NONE we set on the controller. This makes it easier & less error-prone to
-// migrate code that returned a bool whether GdkEvent is handled, to Controllers
-// & their way of claiming the sequence if handled – as then we only require end
-// users to change their returned type/value – rather than need them to manually
-// call controller.set_state(), which is easy to forget & unlike a return cannot
-// be enforced by the compiler. So… this wraps a callerʼs slot that returns that
-// state & uses it, with a void-returning wrapper as thatʼs what GTK/mm expects.
-template <typename Slot>
-[[nodiscard]] auto use_state(Slot &&slot)
-{
-    return [slot = std::move(slot)](auto &controller, auto &&...args)
-    {
-        if (!slot) return;
-        Gtk::EventSequenceState const state = slot(
-            controller, std::forward<decltype(args)>(args)...);
-        if (state != Gtk::EventSequenceState::NONE) {
-            controller.set_state(state);
-        }
-    };
-}
-
 void set_button(Gtk::GestureSingle &single, Button const button)
 {
     single.set_button(static_cast<int>(button));

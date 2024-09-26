@@ -15,18 +15,19 @@
 
 #include <cstddef>
 #include <functional>
-#include <type_traits>
-#include <unordered_map>
-#include <utility>
-#include <vector>
-#include <sigc++/slot.h>
-#include <glibmm/refptr.h>
 #include <gdkmm/drag.h> // Gdk::DragCancelReason
 #include <gdkmm/enums.h>
+#include <glibmm/refptr.h>
 #include <gtk/gtk.h>
 #include <gtkmm/gesture.h> // Gtk::EventSequenceState
 #include <gtkmm/widget.h>
 #include <gtkmm/window.h>
+#include <optional>
+#include <sigc++/slot.h>
+#include <type_traits>
+#include <unordered_map>
+#include <utility>
+#include <vector>
 
 #include "util/callback-converter.h"
 
@@ -172,6 +173,37 @@ Gtk::DropTarget &add_drop_target(Gtk::Widget &widget,
                                  Gtk::PropagationPhase phase = Gtk::PropagationPhase::BUBBLE,
                                  When when = When::after);
 
+// We add the requirement that slots return an EventSequenceState, which if itʼs
+// not NONE we set on the controller. This makes it easier & less error-prone to
+// migrate code that returned a bool whether GdkEvent is handled, to Controllers
+// & their way of claiming the sequence if handled – as then we only require end
+// users to change their returned type/value – rather than need them to manually
+// call controller.set_state(), which is easy to forget & unlike a return cannot
+// be enforced by the compiler. So… this wraps a callerʼs slot that returns that
+// state & uses it, with a void-returning wrapper as thatʼs what GTK/mm expects.
+template <typename Slot>
+[[nodiscard]] auto use_state(Slot &&slot)
+{
+    return [slot = std::forward<Slot>(slot)](auto &controller, auto &&...args) {
+        if constexpr (std::is_convertible_v<Slot, bool>) {
+            if (!slot)
+                return;
+        }
+        Gtk::EventSequenceState const state = slot(controller, std::forward<decltype(args)>(args)...);
+        if (state != Gtk::EventSequenceState::NONE) {
+            controller.set_state(state);
+        }
+    };
+}
+
+template <typename Slot, typename Controller>
+[[nodiscard]] auto use_state(Slot &&slot, Controller &controller)
+{
+    return [&controller, new_slot = use_state(std::forward<Slot>(slot))](auto &&...args) {
+        return new_slot(controller, std::forward<decltype(args)>(args)...);
+    };
+}
+
 /// internal stuff
 namespace Detail {
 
@@ -209,64 +241,79 @@ void connect(Emitter * const emitter, char const * const detailed_signal,
     }
 }
 
-/// Whether Function can be invoked with Args... to return Result; OR it's a nullptr.
-// FIXME: shouldnʼt allow functions that return non-void for signals declaring a void
-//        result, as thatʼs misleading, but I didnʼt yet manage that with type_traits
-// TODO: C++20: Use <concepts> instead…but not quite yet since Ubuntu 20.04 GCC lacks
-template <typename Function, typename Result, typename ...Args>
-auto constexpr callable_or_null = std::is_same_v       <Function, std::nullptr_t > ||
-                                  std::is_invocable_r_v<Result, Function, Args...>;
+template <typename Function, typename Result, typename... Args>
+struct callable_or_null;
+
+template <typename Result, typename... Args>
+struct callable_or_null<std::nullptr_t, Result, Args...>
+{
+    static auto constexpr value = true;
+};
+
+template <typename Function, typename Result, typename... Args>
+struct callable_or_null
+{
+    static auto constexpr value =
+        std::is_invocable_v<Function, Args...> && std::is_same_v<Result, std::invoke_result_t<Function, Args...>>;
+};
+
+/// Whether Function can be invoked with Args... to return Result, or is std::nullptr_t.
+template <typename Function, typename Result, typename... Args>
+auto constexpr callable_or_null_v = callable_or_null<Function, Result, Args...>::value;
 
 } // namespace Detail
 
 /// Whether Function is suitable to handle Gesture::begin|end.
 /// The arguments are the gesture & triggering event sequence.
 template <typename Function, typename Listener>
-auto constexpr is_gesture_handler = Detail::callable_or_null<Function, void,
-    Listener *, GtkGesture *, GdkEventSequence *>;
+auto constexpr is_gesture_handler =
+    Detail::callable_or_null_v<Function, void, Listener *, GtkGesture *, GdkEventSequence *>;
 
 /// Whether Function is suitable to handle EventControllerKey::pressed|released.
 /// The arguments are the controller, keyval, hardware keycode & modifier state.
 template <typename Function, typename Listener>
-auto constexpr is_key_handler = Detail::callable_or_null<Function, bool,
-    Listener *, GtkEventControllerKey *, unsigned, unsigned, GdkModifierType>;
+auto constexpr is_key_handler = Detail::callable_or_null_v<Function, gboolean, Listener *, GtkEventControllerKey *,
+                                                           unsigned, unsigned, GdkModifierType>;
 
 /// Whether Function is suitable to handle EventControllerKey::modifiers.
 /// The arguments are the controller & modifier state.
 /// Note that this signal seems buggy, i.e. gives wrong state, in GTK3. Beware!!
 template <typename Function, typename Listener>
-auto constexpr is_key_mod_handler = Detail::callable_or_null<Function, bool,
-    Listener *, GtkEventControllerKey *, GdkModifierType>;
+auto constexpr is_key_mod_handler =
+    Detail::callable_or_null_v<Function, gboolean, Listener *, GtkEventControllerKey *, GdkModifierType>;
 
 /// Whether Function is suitable to handle EventControllerMotion::enter|motion.
 /// The arguments are the controller, x coordinate & y coord (in widget space).
 template <typename Function, typename Listener>
-auto constexpr is_motion_handler = Detail::callable_or_null<Function, void,
-    Listener *, GtkEventControllerMotion *, double, double>;
+auto constexpr is_motion_handler =
+    Detail::callable_or_null_v<Function, void, Listener *, GtkEventControllerMotion *, double, double>;
 
 /// Whether Function is suitable to handle EventControllerMotion::leave.
 /// The argument is the controller. Coordinates arenʼt given on leaving.
 template <typename Function, typename Listener>
-auto constexpr is_leave_handler = Detail::callable_or_null<Function, void,
-    Listener *, GtkEventControllerMotion *>;
+auto constexpr is_leave_handler = Detail::callable_or_null_v<Function, void, Listener *, GtkEventControllerMotion *>;
 
 /// Whether Function is suitable for EventControllerScroll::scroll-(begin|end).
 /// The argument is the controller.
 template <typename Function, typename Listener>
-auto constexpr is_scroll_handler = Detail::callable_or_null<Function, void,
-    Listener *, GtkEventControllerScroll *>;
+auto constexpr is_scroll_handler = Detail::callable_or_null_v<Function, void, Listener *, GtkEventControllerScroll *>;
 
-/// Whether Function is suitable for EventControllerScroll::scroll|decelerate.
-/// The arguments are controller & for scroll dx,dy; or decelerate: vel_x, vel_y
+/// Whether Function is suitable for EventControllerScroll::scroll.
+/// The arguments are controller & for scroll dx,dy
 template <typename Function, typename Listener>
-auto constexpr is_scroll_xy_handler = Detail::callable_or_null<Function, void,
-    Listener *, GtkEventControllerScroll *, double, double>;
+auto constexpr is_scroll_xy_handler =
+    Detail::callable_or_null_v<Function, gboolean, Listener *, GtkEventControllerScroll *, double, double>;
+
+/// Whether Function is suitable for EventControllerScroll::decelerate.
+/// The arguments are controller & decelerate vel_x, vel_y
+template <typename Function, typename Listener>
+auto constexpr is_scroll_decelerate_handler =
+    Detail::callable_or_null_v<Function, void, Listener *, GtkEventControllerScroll *, double, double>;
 
 /// Whether Function is suitable for GestureZoom::scale-changed.
 /// The arguments are gesture & scale delta (initial state as 1)
 template <typename Function, typename Listener>
-auto constexpr is_zoom_scale_handler = Detail::callable_or_null<Function, void,
-    Listener *, GtkGestureZoom *, double>;
+auto constexpr is_zoom_scale_handler = Detail::callable_or_null_v<Function, void, Listener *, GtkGestureZoom *, double>;
 
 // TODO: GTK4: The below should be gtkmm-ified, but for now, I am only making min changes to build.
 
@@ -333,10 +380,10 @@ Gtk::EventController &add_scroll(Gtk::Widget &widget  ,
                                  When const when = When::after)
 {
     // NB make_g_callback<> must type-erase methods, so we must check arg compat
-    static_assert(is_scroll_handler   <decltype(on_scroll_begin), Listener>);
-    static_assert(is_scroll_xy_handler<decltype(on_scroll      ), Listener>);
-    static_assert(is_scroll_handler   <decltype(on_scroll_end  ), Listener>);
-    static_assert(is_scroll_xy_handler<decltype(on_decelerate  ), Listener>);
+    static_assert(is_scroll_handler<decltype(on_scroll_begin), Listener>);
+    static_assert(is_scroll_xy_handler<decltype(on_scroll), Listener>);
+    static_assert(is_scroll_handler<decltype(on_scroll_end), Listener>);
+    static_assert(is_scroll_decelerate_handler<decltype(on_decelerate), Listener>);
 
     auto const gcontroller = gtk_event_controller_scroll_new(flags);
     Detail::connect<on_scroll_begin>(gcontroller, "scroll-begin", listener, when);
