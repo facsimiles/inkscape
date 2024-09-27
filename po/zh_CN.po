@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: Inkscape 0.92.x\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2024-09-19 18:42+0000\n"
-"PO-Revision-Date: 2024-09-23 07:43+0800\n"
+"PO-Revision-Date: 2024-09-27 08:47+0800\n"
 "Last-Translator: 驿窗 <classenu@163.com>\n"
 "Language-Team: <https://chat.inkscape.org>\n"
 "Language: zh_CN\n"
@@ -13053,7 +13053,7 @@ msgstr "侵蚀 2"
 #: ../src/live_effects/lpe-roughen.cpp:44 ../share/ui/dialog-trace.glade:624
 #: ../share/extensions/render_barcode_qrcode.inx:69
 msgid "Smooth"
-msgstr "光滑"
+msgstr "平滑"
 
 #: ../src/extension/internal/filter/morphology.h:201
 msgid "Fill opacity:"
@@ -37007,7 +37007,7 @@ msgstr ""
 
 #: ../share/ui/dialog-trace.glade:164 ../share/ui/dialog-trace.glade:709
 msgid "Speckles"
-msgstr "斑点"
+msgstr "斑点消除"
 
 #: ../share/ui/dialog-trace.glade:167 ../share/ui/dialog-trace.glade:712
 msgid "Ignore small spots (speckles) in the bitmap"
@@ -37095,7 +37095,7 @@ msgstr "增加此值按照加强的优化方法减少白描路径中的节点数
 
 #: ../share/ui/dialog-trace.glade:534 ../share/ui/dialog-trace.glade:810
 msgid "User-assisted trace"
-msgstr "用户辅助白描"
+msgstr "划定白描区域"
 
 #: ../share/ui/dialog-trace.glade:537 ../share/ui/dialog-trace.glade:813
 msgid "Cover the area you want to select as the foreground then select both objects"
@@ -37107,7 +37107,7 @@ msgstr "单次扫描"
 
 #: ../share/ui/dialog-trace.glade:584
 msgid "Brightness steps"
-msgstr "亮度步进"
+msgstr "亮度分级"
 
 #: ../share/ui/dialog-trace.glade:586
 msgid "Grays"
@@ -37201,7 +37201,7 @@ msgstr "保留阶梯状失真"
 
 #: ../share/ui/dialog-trace.glade:1072
 msgid "Voronoi"
-msgstr "泰森多边形(Voronoi)"
+msgstr "泰森多边形"
 
 #: ../share/ui/dialog-trace.glade:1075
 msgid "Output composed of straight lines"
