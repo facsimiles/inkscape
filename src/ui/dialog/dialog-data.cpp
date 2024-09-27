@@ -30,7 +30,7 @@ std::map<std::string, DialogData> const &get_dialog_data()
         // clang-format off
     {"AlignDistribute",    {_("_Align and Distribute"), INKSCAPE_ICON("dialog-align-and-distribute"), DialogData::Basic,          ScrollProvider::NOPROVIDE }},
     {"CloneTiler",         {_("Create Tiled Clones"),   INKSCAPE_ICON("dialog-tile-clones"),          DialogData::Basic,          ScrollProvider::NOPROVIDE }},
-    {"DebugWindow",           {_("_DebugWindow"),             INKSCAPE_ICON("dialog-debug"),             DialogData::Diagnostics,    ScrollProvider::NOPROVIDE }},
+    {"DebugWindow",           {_("_Debugger"),             INKSCAPE_ICON("dialog-debug"),             DialogData::Diagnostics,    ScrollProvider::NOPROVIDE }},
     {"DocumentProperties", {_("_Document Properties"),  INKSCAPE_ICON("document-properties"),         DialogData::Settings,       ScrollProvider::PROVIDE }},
     {"DocumentResources",  {_("_Document Resources"),   INKSCAPE_ICON("document-resources"),          DialogData::Advanced,       ScrollProvider::NOPROVIDE }},
     {"Export",             {_("_Export"),               INKSCAPE_ICON("document-export"),             DialogData::Basic,          ScrollProvider::PROVIDE   }},
