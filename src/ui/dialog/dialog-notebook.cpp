@@ -186,9 +186,10 @@ DialogNotebook::DialogNotebook(DialogContainer *container)
     menubtn->set_name("DialogMenuButton");
 
     // =============== Signals ==================
-    auto &source = Controller::add_drag_source(*this);
-    _conn.emplace_back(source.signal_drag_begin().connect(sigc::mem_fun(*this, &DialogNotebook::on_drag_begin)));
-    _conn.emplace_back(source.signal_drag_end().connect(sigc::mem_fun(*this, &DialogNotebook::on_drag_end)));
+    auto const source = Gtk::DragSource::create();
+    add_controller(source);
+    _conn.emplace_back(source->signal_drag_begin().connect(sigc::mem_fun(*this, &DialogNotebook::on_drag_begin)));
+    _conn.emplace_back(source->signal_drag_end().connect(sigc::mem_fun(*this, &DialogNotebook::on_drag_end)));
     _conn.emplace_back(_notebook.signal_page_added().connect(sigc::mem_fun(*this, &DialogNotebook::on_page_added)));
     _conn.emplace_back(_notebook.signal_page_removed().connect(sigc::mem_fun(*this, &DialogNotebook::on_page_removed)));
     _conn.emplace_back(_notebook.signal_switch_page().connect(sigc::mem_fun(*this, &DialogNotebook::on_page_switch)));
