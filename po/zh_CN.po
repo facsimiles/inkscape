@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: Inkscape 0.92.x\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2024-09-19 18:42+0000\n"
-"PO-Revision-Date: 2024-09-27 08:47+0800\n"
+"PO-Revision-Date: 2024-10-02 18:13+0800\n"
 "Last-Translator: 驿窗 <classenu@163.com>\n"
 "Language-Team: <https://chat.inkscape.org>\n"
 "Language: zh_CN\n"
@@ -5952,27 +5952,27 @@ msgstr "无层级的空白页"
 
 #: ../build/share/templates/templates.h:1
 msgid "Zine Booklet (A4)"
-msgstr ""
+msgstr "杂志小册子(A4)"
 
 #: ../build/share/templates/templates.h:1
 msgid "A foldable one page booklet (A4)"
-msgstr ""
+msgstr "单折页(A4)"
 
 #: ../build/share/templates/templates.h:1
 msgid "297 × 210 mm"
-msgstr ""
+msgstr "297 × 210 mm"
 
 #: ../build/share/templates/templates.h:1
 msgid "Zine Booklet (US)"
-msgstr ""
+msgstr "杂志小册子(US)"
 
 #: ../build/share/templates/templates.h:1
 msgid "A foldable one page booklet (US Letter)"
-msgstr ""
+msgstr "单折页(US Letter)"
 
 #: ../build/share/templates/templates.h:1
 msgid "11 × 8.5 in"
-msgstr ""
+msgstr "11 × 8.5 英寸"
 
 #: ../src/actions/actions-base.cpp:195
 msgid "Inkscape Version"
@@ -6897,7 +6897,9 @@ msgstr "打开白描"
 
 #: ../src/actions/actions-dialogs.cpp:61
 msgid "Create one or more paths from a bitmap by tracing it"
-msgstr "用线描/十八描方式提取位图线条为路径"
+msgstr ""
+"有限地把位图转为矢量图 \n"
+"白描是传统中国画技法，另参考: 线描、十八描"
 
 #: ../src/actions/actions-dialogs.cpp:62
 msgid "Open Transform"
@@ -7065,7 +7067,7 @@ msgstr "对象转化为标记"
 
 #: ../src/actions/actions-edit.cpp:293
 msgid "Convert selection to a line marker"
-msgstr "把选中对象转为直线的标记样式"
+msgstr "把选中对象转为直线箭头"
 
 #: ../src/actions/actions-edit.cpp:294
 msgid "Objects to Guides"
@@ -9016,7 +9018,7 @@ msgstr "反向"
 
 #: ../src/actions/actions-paths.cpp:265
 msgid "Reverse the direction of selected paths (useful for flipping markers)"
-msgstr "将所选路径反向(可以翻转标记的方向)"
+msgstr "将所选路径反向(可以反转箭头的方向)"
 
 #: ../src/actions/actions-paths.cpp:266
 msgid "Inset Screen"
@@ -9223,7 +9225,7 @@ msgstr "描边样式"
 msgid ""
 "Select all objects with the same stroke style (width, dash, markers) as the "
 "selected objects"
-msgstr "选择所有带有相同描边样式(宽度、画线、标记)的对象为选择的对象"
+msgstr "选择所有带有相同描边样式(宽度、画线、箭头)的对象为选择的对象"
 
 #: ../src/actions/actions-selection-window.cpp:130
 msgid "Object Type"
@@ -9400,7 +9402,7 @@ msgstr "反转第二条路径顺序"
 
 #: ../src/actions/actions-svg-processing.cpp:703
 msgid "Remove auto start positions from markers"
-msgstr "移除标记的自动起始位置"
+msgstr "移除箭头的自动起始位置"
 
 #: ../src/actions/actions-svg-processing.cpp:704
 msgid "Try to Remove All Transforms"
@@ -9618,7 +9620,7 @@ msgstr "<b>点击+拖动</b>创建螺旋形. <b>拖动手柄</b>调整螺旋形�
 msgid ""
 "<b>Click</b> a shape to start editing its markers. <b>Drag controls</b> to change "
 "orientation, scale, and position."
-msgstr "<b>单击</b>图形开始编辑其标记. <b>拖动手柄</b>修改方向、缩放和位置."
+msgstr "<b>单击</b>图形开始编辑其箭头. <b>拖动手柄</b>修改方向、缩放和位置."
 
 #: ../src/actions/actions-tools.cpp:96
 msgid ""
@@ -9793,7 +9795,7 @@ msgstr "记号工具"
 
 #: ../src/actions/actions-tools.cpp:368
 msgid "Edit markers"
-msgstr "编辑标记"
+msgstr "编辑箭头"
 
 #: ../src/actions/actions-tools.cpp:370
 msgid "Pen Tool"
@@ -10091,7 +10093,9 @@ msgstr "Inkscape：白描位图"
 
 #: ../src/actions/actions-tutorial.cpp:59
 msgid "Using bitmap tracing"
-msgstr "用线描/十八描方式提取位图线条为路径"
+msgstr ""
+"有限地把位图转为矢量图 \n"
+"白描是传统中国画技法，另参考: 线描、十八描"
 
 #: ../src/actions/actions-tutorial.cpp:60 ../share/ui/menus.ui:1256
 msgid "Inkscape: Tracing Pixel Art"
@@ -10099,7 +10103,9 @@ msgstr "Inkscape：白描像素画"
 
 #: ../src/actions/actions-tutorial.cpp:60
 msgid "Using Trace Pixel Art dialog"
-msgstr "用线描/十八描方式提取像素画线条为路径"
+msgstr ""
+"把像素画转为矢量图 \n"
+"白描是传统中国画技法，另参考: 线描、十八描"
 
 #: ../src/actions/actions-tutorial.cpp:61
 msgid "Inkscape: Calligraphy"
@@ -20441,27 +20447,27 @@ msgstr "执行路径效果时出错。"
 
 #: ../src/object/sp-marker.cpp:585
 msgid "Set marker orientation"
-msgstr "设置标记方向"
+msgstr "设置箭头方向"
 
 #: ../src/object/sp-marker.cpp:596
 msgid "Set marker size"
-msgstr "设置标记大小"
+msgstr "设置箭头尺寸"
 
 #: ../src/object/sp-marker.cpp:606
 msgid "Set marker scale with stroke"
-msgstr "使用描边设置标记缩放"
+msgstr "使用描边设置箭头缩放"
 
 #: ../src/object/sp-marker.cpp:617
 msgid "Set marker offset"
-msgstr "设置标记偏移"
+msgstr "设置箭头偏移"
 
 #: ../src/object/sp-marker.cpp:627
 msgid "Set marker uniform scaling"
-msgstr "设置标记均匀缩放"
+msgstr "设置箭头均匀缩放"
 
 #: ../src/object/sp-marker.cpp:640 ../share/ui/marker-popup.glade:248
 msgid "Flip marker horizontally"
-msgstr "水平翻转标记"
+msgstr "水平翻转箭头"
 
 #. TRANSLATORS COMMENT: %s is either "outset" or "inset" depending on sign
 #: ../src/object/sp-offset.cpp:333
@@ -21320,11 +21326,11 @@ msgstr "选取要填充的路径。"
 
 #: ../src/selection-chemistry.cpp:3170
 msgid "Select <b>object(s)</b> to convert to marker."
-msgstr "选择要转化成标记的<b>对象</b>。"
+msgstr "选择要转化成箭头的<b>对象</b>。"
 
 #: ../src/selection-chemistry.cpp:3233
 msgid "Objects to marker"
-msgstr "对象转化成标记"
+msgstr "对象转化成箭头"
 
 #: ../src/selection-chemistry.cpp:3256
 msgid "Select <b>object(s)</b> to convert to guides."
@@ -21640,7 +21646,7 @@ msgstr "选择<b>一个文本</b>和一个或多个<b>路径或图形</b>来浮�
 
 #: ../src/text-chemistry.cpp:358 ../src/text-chemistry.cpp:426
 msgid "Flow text into shape"
-msgstr "浮动文本转为图形"
+msgstr "浮动文本填充图形"
 
 #: ../src/text-chemistry.cpp:448
 msgid "Select <b>a flowed text</b> to unflow it."
@@ -23629,7 +23635,7 @@ msgstr "符号"
 #: ../src/ui/dialog/inkscape-preferences.cpp:2812
 #: ../share/ui/dialog-document-resources.glade:66
 msgid "Markers"
-msgstr "标记"
+msgstr "箭头"
 
 #: ../src/ui/dialog/document-resources.cpp:910 ../src/ui/dialog/find.cpp:99
 #: ../share/ui/dialog-document-resources.glade:60
@@ -24980,9 +24986,8 @@ msgid "Error loading palette %1: %2"
 msgstr "载入调色板错误%1: %2"
 
 #: ../src/ui/dialog/global-palettes.cpp:453
-#, fuzzy
 msgid "Unknown error loading palette %1"
-msgstr "载入调色板未知错误%"
+msgstr "载入调色板未知错误 %1"
 
 #: ../src/ui/dialog/global-palettes.cpp:495
 msgid "Gimp Color Palette"
@@ -25886,7 +25891,7 @@ msgstr "垂直表单"
 
 #: ../src/ui/dialog/glyphs.cpp:362
 msgid "Combining Half Marks"
-msgstr "组合式半标记"
+msgstr "组合式半箭头"
 
 #: ../src/ui/dialog/glyphs.cpp:363
 msgid "CJK Compatibility Forms"
@@ -26237,7 +26242,7 @@ msgstr "视觉边界框"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:931
 msgid "This bounding box includes stroke width, markers, filter margins, etc."
-msgstr "边界范围包括轮廓宽度、标记、滤镜边缘等。"
+msgstr "边界范围包括轮廓宽度、箭头、滤镜边缘等。"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:932
 msgid "Geometric bounding box"
@@ -26318,7 +26323,7 @@ msgstr "无单个对象选择指示"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:967
 msgid "Mark"
-msgstr "标记"
+msgstr "箭头"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:969
 msgid "Each selected object has a diamond mark in the top left corner"
@@ -28077,18 +28082,18 @@ msgstr "SVG 2转换为SVG 1.1"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2374
 msgid "Use correct marker direction in SVG 1.1 renderers"
-msgstr "在SVG 1.1渲染器中使用正确的标记方向"
+msgstr "在SVG 1.1渲染器中使用正确的箭头方向"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2375
 msgid "Use correct marker colors in SVG 1.1 renderers"
-msgstr "在SVG 1.1渲染器中使用正确的标记颜色"
+msgstr "在SVG 1.1渲染器中使用正确的箭头颜色"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2377
 msgid ""
 "SVG 2 allows markers to automatically be reversed at the start of a path with "
 "'auto_start_reverse'. This adds a rotated duplicate of the marker's definition."
 msgstr ""
-"SVG2允许标记用 \"auto_start_reverse \"在路径的起点自动反转。这将添加标记定义的旋转"
+"SVG2允许箭头用 \"auto_start_reverse \"在路径的起点自动反转。这将添加箭头定义的旋转"
 "副本。"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2378
@@ -28096,7 +28101,7 @@ msgid ""
 "SVG 2 allows markers to automatically match the stroke color by using "
 "'context_paint' or 'context_fill'. This adjusts the markers own colors."
 msgstr ""
-"SVG2允许标记用 'context_paint' 或 'context_fill' 自动匹配描边颜色。这样可以调整标"
+"SVG2允许箭头用 'context_paint' 或 'context_fill' 自动匹配描边颜色。这样可以调整标"
 "记本身的颜色。"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2380
@@ -28282,16 +28287,16 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2513
 msgid "Color stock markers the same color as object"
-msgstr "颜色槽标记，和对象一样的颜色"
+msgstr "颜色槽箭头，和对象一样的颜色"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2514
 msgid "Color custom markers the same color as object"
-msgstr "颜色自定义标记，和对象一样的颜色"
+msgstr "颜色自定义箭头，和对象一样的颜色"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2515
 #: ../src/ui/dialog/inkscape-preferences.cpp:2810
 msgid "Update marker color when object color changes"
-msgstr "当对象颜色变化时更新标记颜色"
+msgstr "当对象颜色变化时更新箭头颜色"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2518
 msgid "Select in all layers"
@@ -28970,14 +28975,14 @@ msgstr "剪裁路径和蒙版"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2804
 msgid "Stroke Style Markers"
-msgstr "描边样式标记"
+msgstr "描边样式箭头"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2806
 #: ../src/ui/dialog/inkscape-preferences.cpp:2808
 msgid ""
 "Stroke color same as object, fill color either object fill color or marker fill "
 "color"
-msgstr "描边颜色和对象一样，填充颜色和对象填充色或者标记填充色系统"
+msgstr "描边颜色和对象一样，填充颜色和对象填充色或者箭头填充色系统"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2815
 msgid "Copy computed style"
@@ -31637,17 +31642,17 @@ msgstr "以透视方式移动透视图"
 
 #: ../src/ui/shape-editor-knotholders.cpp:1347
 msgid "Drag to adjust the refX/refY position of the marker"
-msgstr "拖动以调整标记的refX/refY位置"
+msgstr "拖动以调整箭头的refX/refY位置"
 
 #: ../src/ui/shape-editor-knotholders.cpp:1350
 msgid "Adjust marker orientation through rotation"
-msgstr "通过旋转调整标记方向"
+msgstr "通过旋转调整箭头方向"
 
 #: ../src/ui/shape-editor-knotholders.cpp:1353
 #: ../src/ui/shape-editor-knotholders.cpp:1356
 #: ../src/ui/shape-editor-knotholders.cpp:1359
 msgid "Adjust the <b>size</b> of the marker"
-msgstr "调整标记的 <b>尺寸</b>"
+msgstr "调整箭头的 <b>尺寸</b>"
 
 #: ../src/ui/shape-editor-knotholders.cpp:1649
 msgid "Adjust ellipse <b>width</b>, with <b>Ctrl</b> to make circle"
@@ -32329,9 +32334,8 @@ msgid "(broad stroke)"
 msgstr "(宽笔画)"
 
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:111
-#, fuzzy
 msgid "(speed blows up stroke"
-msgstr "(加速炸开笔画)"
+msgstr "(加速炸开"
 
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:114
 #: ../src/ui/toolbar/eraser-toolbar.cpp:89
@@ -33016,14 +33020,12 @@ msgid "Star: Reset to defaults"
 msgstr "设为默认"
 
 #: ../src/ui/toolbar/text-toolbar.cpp:274
-#, fuzzy
 msgid "Single spaced"
-msgstr "单次扫描"
+msgstr "单倍行距"
 
 #: ../src/ui/toolbar/text-toolbar.cpp:274
-#, fuzzy
 msgid "Double spaced"
-msgstr "非间断空格"
+msgstr "双倍间隔"
 
 #: ../src/ui/toolbar/text-toolbar.cpp:275 ../src/ui/toolbar/text-toolbar.cpp:276
 msgctxt "Text tool"
@@ -36146,21 +36148,21 @@ msgstr "重复\"虚线间隙 ...\"的图案"
 #. (arrowheads, bullets, faces, whatever) to the start, end, or middle nodes of a path.
 #: ../src/ui/widget/stroke-style.cpp:289
 msgid "Markers:"
-msgstr "标记:"
+msgstr "箭头:"
 
 #: ../src/ui/widget/stroke-style.cpp:295
 msgid "Start Markers are drawn on the first node of a path or shape"
-msgstr "起点标记画在路径或图形中的第一个节点上"
+msgstr "起点箭头画在路径或图形中的第一个节点上"
 
 #: ../src/ui/widget/stroke-style.cpp:303
 msgid ""
 "Mid Markers are drawn on every node of a path or shape except the first and last "
 "nodes"
-msgstr "中间标记位于路径或图形除去首位外所有的节点上"
+msgstr "中间箭头位于路径或图形除去首位外所有的节点上"
 
 #: ../src/ui/widget/stroke-style.cpp:311
 msgid "End Markers are drawn on the last node of a path or shape"
-msgstr "终点标记位于路径或图形的最后一个节点上"
+msgstr "终点箭头位于路径或图形的最后一个节点上"
 
 #. TRANSLATORS: Bevel join: joining lines with a blunted (flattened) corner.
 #. For an example, draw a triangle with a large stroke width and modify the
@@ -36203,31 +36205,31 @@ msgstr "方头端点"
 
 #: ../src/ui/widget/stroke-style.cpp:414
 msgid "Fill, Stroke, Markers"
-msgstr "填充、描边、标记"
+msgstr "填充、描边、箭头"
 
 #: ../src/ui/widget/stroke-style.cpp:418
 msgid "Stroke, Fill, Markers"
-msgstr "描边、填充、标记"
+msgstr "描边、填充、箭头"
 
 #: ../src/ui/widget/stroke-style.cpp:422
 msgid "Fill, Markers, Stroke"
-msgstr "填充、标记、描边"
+msgstr "填充、箭头、描边"
 
 #: ../src/ui/widget/stroke-style.cpp:430
 msgid "Markers, Fill, Stroke"
-msgstr "标记、填充、描边"
+msgstr "箭头、填充、描边"
 
 #: ../src/ui/widget/stroke-style.cpp:434
 msgid "Stroke, Markers, Fill"
-msgstr "描边、标记、填充"
+msgstr "描边、箭头、填充"
 
 #: ../src/ui/widget/stroke-style.cpp:438
 msgid "Markers, Stroke, Fill"
-msgstr "标记、描边、填充"
+msgstr "箭头、描边、填充"
 
 #: ../src/ui/widget/stroke-style.cpp:567
 msgid "Set markers"
-msgstr "设置标记"
+msgstr "设置箭头"
 
 #: ../src/ui/widget/stroke-style.cpp:615
 msgid "Remove hairline stroke"
@@ -37095,7 +37097,7 @@ msgstr "增加此值按照加强的优化方法减少白描路径中的节点数
 
 #: ../share/ui/dialog-trace.glade:534 ../share/ui/dialog-trace.glade:810
 msgid "User-assisted trace"
-msgstr "划定白描区域"
+msgstr "划定白描范围"
 
 #: ../share/ui/dialog-trace.glade:537 ../share/ui/dialog-trace.glade:813
 msgid "Cover the area you want to select as the foreground then select both objects"
@@ -38892,7 +38894,7 @@ msgstr "图案转化成对象(_O)"
 
 #: ../share/ui/menus.ui:861
 msgid "Objects to _Marker"
-msgstr "对象转化成标记(_M)"
+msgstr "对象转化成箭头(_M)"
 
 #: ../share/ui/menus.ui:865
 msgid "Objects to Gu_ides"
@@ -39399,7 +39401,7 @@ msgstr "长度:"
 
 #: ../share/ui/toolbar-connector.ui:194
 msgid "Make connectors with end-markers (arrows) point downwards"
-msgstr "使带有末尾标记(箭头)的连接器指向下方"
+msgstr "使带有末尾箭头的连接器指向下方"
 
 #: ../share/ui/toolbar-connector.ui:212
 msgid "Do not allow overlapping shapes"
@@ -40521,11 +40523,11 @@ msgstr "这是一个单页文档。"
 msgid ""
 "Encountered key of unknown format, id={0} while parsing DXF. This is probably a "
 "bug."
-msgstr ""
+msgstr "解析DXF时遇到未知格式的键, id={0}. 这可能是个bug。"
 
 #: ../share/extensions/dxf_input.py:1400
 msgid "Binary DXF file has unexpected header."
-msgstr ""
+msgstr "二进制DXF文件有意外header。"
 
 #: ../share/extensions/dxf_input.py:1697
 msgid ""
@@ -41288,7 +41290,7 @@ msgstr ""
 
 #: ../share/extensions/raster_output_png.py:51
 msgid "The optipng command failed with the following message:"
-msgstr "optipng命令失败，显示如下信息:"
+msgstr "optipng命令失败，显示如下信息："
 
 #: ../share/extensions/render_barcode_datamatrix.py:528
 msgid "Invalid symbol size."
@@ -41523,19 +41525,16 @@ msgid "Cleans the cruft out of Adobe Illustrator SVGs before opening"
 msgstr "在打开之前清除Adobe Illustrator SVG中的垃圾代码"
 
 #: ../share/extensions/cgm_input.inx:3
-#, fuzzy
 msgid "CGM Input"
-msgstr "EMF 输入"
+msgstr "CGM 输入"
 
 #: ../share/extensions/cgm_input.inx:11
-#, fuzzy
 msgid "Computer Graphics Metafile (*.cgm)"
-msgstr "计算机图像图元文件(*.cgm)"
+msgstr "计算机图像元文件(*.cgm)"
 
 #: ../share/extensions/cgm_input.inx:12
-#, fuzzy
 msgid "Import a Computer Graphics Metafile (CGM)"
-msgstr "打开计算机图像图元文件输入"
+msgstr "导入计算机图像元文件(CGM)"
 
 #: ../share/extensions/color_blackandwhite.inx:3
 msgid "Black and White"
@@ -41872,7 +41871,7 @@ msgstr "指向："
 
 #: ../share/extensions/construct_from_triangle.inx:35
 msgid "Draw Marker At This Point"
-msgstr "在该点处画标记"
+msgstr "在该点处画箭头"
 
 #: ../share/extensions/construct_from_triangle.inx:36
 msgid "Draw Circle Around This Point"
@@ -42688,7 +42687,7 @@ msgstr "常数 pi、e 和 tau 也可使用。"
 msgid ""
 "Functions from the random library may also be used, eg. random(); randint(a, b); "
 "uniform(a, b)."
-msgstr "random函数库中的函数也可用，例如: random(); randint(a, b); uniform(a, b)."
+msgstr "random函数库中的函数也可用，例如: random(); randint(a, b); uniform(a, b)。"
 
 #: ../share/extensions/funcplot.inx:48
 msgid "This extension creates a plot of a function (in variable x)."
@@ -44726,7 +44725,7 @@ msgstr ""
 
 #: ../share/extensions/markers_strokepaint.inx:3
 msgid "Color Markers"
-msgstr "彩色标记"
+msgstr "彩色箭头"
 
 #: ../share/extensions/markers_strokepaint.inx:7
 msgid "From object"
@@ -44734,7 +44733,7 @@ msgstr "从对象"
 
 #: ../share/extensions/markers_strokepaint.inx:8
 msgid "Marker type:"
-msgstr "标记类型:"
+msgstr "箭头类型:"
 
 #: ../share/extensions/markers_strokepaint.inx:9
 msgid "solid"
@@ -45129,17 +45128,16 @@ msgid "Import Web Image..."
 msgstr "导入网络图像…"
 
 #: ../share/extensions/other/extension-afdesign/inkaf.inx:10
-#, fuzzy
 msgid "Afdesign Input"
-msgstr "打开输入"
+msgstr "Afdesign输入"
 
 #: ../share/extensions/other/extension-afdesign/inkaf.inx:15
 msgid "Affinity Designer file (*.afdesign)"
-msgstr ""
+msgstr "Affinity Designer文件 (*.afdesign)"
 
 #: ../share/extensions/other/extension-afdesign/inkaf.inx:16
 msgid "Import an Affinity Designer file"
-msgstr ""
+msgstr "导入Affinity Designer文件"
 
 #: ../share/extensions/other/extension-xaml/inkxaml/svg2xaml.inx:3
 msgid "XAML Output"
@@ -48726,14 +48724,12 @@ msgid "Depth to Keep (from bottom)"
 msgstr "要保留的深度 (从底部)"
 
 #: ../share/extensions/ungroup_deep.inx:9
-#, fuzzy
 msgid "Preserve Layers"
-msgstr "保持"
+msgstr "保留图层"
 
 #: ../share/extensions/ungroup_deep.inx:9
-#, fuzzy
 msgid "Do not ungroup layers"
-msgstr "锁定其他图层"
+msgstr "不要解散图层群组"
 
 #: ../share/extensions/voronoi_diagram.inx:3
 #: ../share/extensions/voronoi_diagram.inx:9
@@ -49344,7 +49340,7 @@ msgid ""
 "We also aim to maintain a thriving user and developer community by using open, "
 "community-oriented development."
 msgstr ""
-"Inkscape支持许多先进的SVG功能(标记、克隆、alpha混合等)，在设计高效用户界面时非常谨"
+"Inkscape支持许多先进的SVG功能(箭头、克隆、alpha混合等)，在设计高效用户界面时非常谨"
 "慎。编辑节点、执行复杂的路径操作、白描位图等等都非常容易。我们还旨在通过使用开放"
 "的、面向社区的开发方式来维持一个繁荣的用户和开发者社区。"
 
@@ -49595,7 +49591,7 @@ msgstr "Bug修改版本"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:142
 msgid "More python3 compatibility for extensions"
-msgstr "python3对扩展的支持"
+msgstr "扩展对python3更加兼容"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:149
 #: ../org.inkscape.Inkscape.appdata.xml.in:162
