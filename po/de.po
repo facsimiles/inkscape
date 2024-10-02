@@ -20,6 +20,7 @@
 # Michael Rack <miohna@freenet.de>, 2018.
 # Frank Beckmann, 2019.
 # ModProg <dev@modprog.de>, 2021.
+# Roland Illig <roland.illig@gmx.de>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
@@ -390,7 +391,7 @@ msgstr "Altern"
 
 #: ../build/share/filters/filters.svg.h:92
 msgid "Imitate aged photograph"
-msgstr "Imitiere gealterte Fotografie"
+msgstr "Gealterte Fotografie imitieren"
 
 #: ../build/share/filters/filters.svg.h:94
 msgid "Organic"
@@ -603,7 +604,7 @@ msgstr "Dünne Membrane"
 
 #: ../build/share/filters/filters.svg.h:160
 msgid "Thin like a soap membrane"
-msgstr "Dünn, wie eine Seifenblase"
+msgstr "Dünn wie eine Seifenblase"
 
 #: ../build/share/filters/filters.svg.h:162
 msgid "Matte Ridge"
@@ -865,7 +866,7 @@ msgstr "In kleine verstreute Partikel mit etwas Dicke umwandeln"
 
 #: ../build/share/filters/filters.svg.h:278
 msgid "Warm Inside"
-msgstr "Warm innen"
+msgstr "Warme Innenseite"
 
 #: ../build/share/filters/filters.svg.h:280
 msgid "Blurred colorized contour, filled inside"
@@ -877,7 +878,7 @@ msgstr "Kalte Außenseite"
 
 #: ../build/share/filters/filters.svg.h:284
 msgid "Blurred colorized contour, empty inside"
-msgstr "Verschwommene farbige Kontur, leer"
+msgstr "Verschwommene farbige Kontur, innen leer"
 
 #: ../build/share/filters/filters.svg.h:286
 msgid "Electronic Microscopy"
@@ -29041,7 +29042,7 @@ msgid ""
 "Uncheck this to be able to keep the current objects selected when the "
 "current layer changes"
 msgstr ""
-"Dieses abwählen um Objekte ausgewählt zu lassen, wenn die aktuelle Ebene "
+"Dieses abwählen, um Objekte ausgewählt zu lassen, wenn die aktuelle Ebene "
 "geändert wird"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2518
@@ -31725,7 +31726,7 @@ msgstr ""
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:879
 #: ../share/extensions/setup_typography_canvas.inx:6
 msgid "Ascender:"
-msgstr "Aufsteigend:"
+msgstr "Oberlänge:"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:879
 msgid ""
@@ -31756,7 +31757,7 @@ msgstr ""
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:882
 #: ../share/extensions/setup_typography_canvas.inx:9
 msgid "Descender:"
-msgstr "Absteigend:"
+msgstr "Unterlänge:"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:882
 msgid "Amount of space taken up by descenders like the tail on the letter 'g'"
@@ -32630,7 +32631,7 @@ msgid ""
 "lock ratio or stretch in one dimension only"
 msgstr ""
 "<b>Höhe/Breite</b> des Rechtecks anpassen; <b>Strg</b> um Seitenverhältnis "
-"bei zu behalten oder nur in eine Richtung zu strecken"
+"beizubehalten oder nur in eine Richtung zu strecken"
 
 #: ../src/ui/shape-editor-knotholders.cpp:592
 msgid "Drag to move the rectangle"
@@ -33141,7 +33142,7 @@ msgstr "<b>Alt</b>: Knoten formen"
 #, c-format
 msgctxt "Path node tip"
 msgid "<b>%s</b>: drag to shape the path. (more: Shift, Ctrl, Alt)"
-msgstr "<b>%s</b>: Ziehen um den Pfad zu formen (mehr: Umschalt, Strg, Alt)"
+msgstr "<b>%s</b>: Ziehen, um den Pfad zu formen (mehr: Umschalt, Strg, Alt)"
 
 #: ../src/ui/tool/node.cpp:1634
 #, c-format
@@ -33259,7 +33260,7 @@ msgstr "<b>Alt</b>: Skalieren mit Ganzzahl-Faktor"
 #: ../src/ui/tool/transform-handle-set.cpp:222
 msgctxt "Transform handle tip"
 msgid "<b>Scale handle</b>: drag to scale the selection"
-msgstr "<b>Skaliere Anfasser</b>: Ziehen um die Auswahl zu skalieren"
+msgstr "<b>Skaliere Anfasser</b>: Ziehen, um die Auswahl zu skalieren"
 
 #: ../src/ui/tool/transform-handle-set.cpp:227
 #, c-format
@@ -33293,7 +33294,7 @@ msgctxt "Transform handle tip"
 msgid ""
 "<b>Rotation handle</b>: drag to rotate the selection around the rotation "
 "center"
-msgstr "<b>Drehanfaser</b>: Ziehen, um die Auswahl um den Drehpunkt zu drehen"
+msgstr "<b>Drehanfasser</b>: Ziehen, um die Auswahl um den Drehpunkt zu drehen"
 
 #: ../src/ui/tool/transform-handle-set.cpp:449
 #, c-format
@@ -34380,7 +34381,7 @@ msgstr ""
 #: ../src/ui/toolbar/mesh-toolbar.cpp:310
 #: ../src/ui/toolbar/mesh-toolbar.cpp:311
 msgid "WARNING: Mesh SVG Syntax Subject to Change"
-msgstr "WARNUNG: SVG Syntax zu Verlaufsgittern noch im Entwurfsstadium"
+msgstr "WARNUNG: SVG-Syntax zu Verlaufsgittern noch im Entwurfsstadium"
 
 #: ../src/ui/toolbar/mesh-toolbar.cpp:325
 msgctxt "Type"
@@ -34692,7 +34693,7 @@ msgid ""
 "to change defaults)"
 msgstr ""
 "Die Parameter des Farbeimers auf Vorgabewerte zurücksetzen (Menü Datei "
-"„ Inkscape-Einstellungen „ Werkzeuge, um die Vorgabeeinstellungen zu ändern)"
+"> Inkscape-Einstellungen > Werkzeuge, um die Vorgabeeinstellungen zu ändern)"
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:71
 msgid "Use pressure input"
@@ -35138,7 +35139,7 @@ msgid ""
 "change defaults)"
 msgstr ""
 "Die Parameter der Formen auf Vorgabewerte zurücksetzen (Menü Datei "
-"„ Inkscape-Einstellungen „ Werkzeuge, um die Vorgabeeinstellungen zu ändern)"
+"> Inkscape-Einstellungen > Werkzeuge, um die Vorgabeeinstellungen zu ändern)"
 
 #: ../src/ui/toolbar/spiral-toolbar.cpp:181
 msgid "Change spiral"
@@ -51179,17 +51180,17 @@ msgstr "Gon, Neugrad (360/400 deg/gon)"
 # File: ../share/ui/units.xml, line: 74
 #: ../share/ui/units.xml:74
 msgid "turn"
-msgstr "Turn"
+msgstr "Vollwinkel"
 
 #: ../share/ui/units.xml:75
 msgid "turns"
-msgstr "Turns"
+msgstr "Vollwinkel"
 
 #
 # File: ../share/ui/units.xml, line: 78
 #: ../share/ui/units.xml:78
 msgid "Turns (360 deg/turn)"
-msgstr "Drehungen (360 deg/turn)"
+msgstr "Vollwinkel (360 Grad/Vollwinkel)"
 
 #: ../share/ui/units.xml:81
 msgid "font-height"
