@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="40mm"
+   height="50mm"
+   viewBox="0 0 40 50"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.5-dev (aa7e786381, 2024-11-13)"
+   sodipodi:docname="01-test-pages.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <title
+     id="title1">Red Orange</title>
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="1.8798016"
+     inkscape:cx="206.67075"
+     inkscape:cy="4.7877393"
+     inkscape:window-width="1268"
+     inkscape:window-height="896"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="layer1">
+    <inkscape:page
+       x="0"
+       y="0"
+       width="40"
+       height="50"
+       id="page1"
+       margin="0"
+       bleed="0"
+       inkscape:label="First Page" />
+    <inkscape:page
+       x="50"
+       y="0"
+       width="50"
+       height="40"
+       id="page2"
+       margin="5 10"
+       bleed="5 0"
+       inkscape:label="Margin &amp; Bleed" />
+    <inkscape:page
+       x="77.668129"
+       y="22.587292"
+       width="10"
+       height="10"
+       id="page3"
+       margin="0"
+       bleed="0"
+       inkscape:label="Overlap Offset" />
+  </sodipodi:namedview>
+  <defs
+     id="defs1" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       id="path1"
+       style="fill:#00ff00;stroke-width:1;stroke-linejoin:round;paint-order:stroke markers fill"
+       inkscape:transform-center-x="1.1434431"
+       inkscape:transform-center-y="-0.80426756"
+       d="M 11.296811 12.037762 L 8.7073348 23.662492 L 11.536693 22.773551 L 12.831508 16.961433 L 17.217456 20.988255 L 20.069015 20.092394 L 11.296811 12.037762 z "
+       transform="rotate(17.312138,44.789269,36.107034)" />
+    <path
+       id="path1-5"
+       style="fill:#0000ff;stroke-width:0.266451;stroke-linejoin:round;paint-order:stroke markers fill"
+       inkscape:transform-center-x="0.3046716"
+       inkscape:transform-center-y="-0.21429746"
+       d="m 61.580433,5 -1.580431,2.7517784 0.790216,-0.0018 0.790215,-1.37582 0.796412,1.372103 0.796411,-0.0018 z" />
+    <path
+       id="path1-5-6"
+       style="fill:#803300;stroke-width:0.252256;stroke-linejoin:round;paint-order:stroke markers fill"
+       inkscape:transform-center-x="0.2884401"
+       inkscape:transform-center-y="-0.20288078"
+       d="m 79.164364,22.587292 -1.496233,2.605175 0.748117,-0.0017 0.748116,0.668166 0.753982,-0.671685 0.753982,-0.0017 z"
+       sodipodi:nodetypes="ccccccc" />
+    <path
+       id="path1-5-2"
+       style="fill:#b3b3b3;stroke-width:0.266451;stroke-linejoin:round;paint-order:stroke markers fill"
+       inkscape:transform-center-x="0.3046716"
+       inkscape:transform-center-y="-0.21429746"
+       d="m 51.580432,0 -1.580431,2.7517784 0.790216,-0.0018 0.790215,-1.37582 0.796412,1.372103 0.796411,-0.0018 z" />
+    <path
+       id="path1-5-2-7"
+       style="fill:#ff0000;stroke-width:0.266451;stroke-linejoin:round;paint-order:stroke markers fill"
+       inkscape:transform-center-x="0.3046716"
+       inkscape:transform-center-y="-0.21429746"
+       d="m 51.580432,-5 -1.580431,2.7517784 0.790216,-0.0018 0.790215,-1.37582 0.796412,1.372103 0.796411,-0.0018 z" />
+    <path
+       id="path2"
+       style="fill:#803300;stroke-width:0.252256;stroke-linejoin:round;paint-order:stroke markers fill"
+       inkscape:transform-center-x="-0.2884399"
+       inkscape:transform-center-y="0.20288122"
+       d="m 86.171898,32.587292 1.496233,-2.605175 -0.748117,0.0017 -0.748116,0.697592 -0.753982,-0.694073 -0.753982,0.0017 z"
+       sodipodi:nodetypes="ccccccc" />
+  </g>
+  <metadata
+     id="metadata1">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:title>Red Orange</dc:title>
+        <dc:date>2024-11-05T13:45:23</dc:date>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Martin Owens</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:publisher>
+          <cc:Agent>
+            <dc:title>Inkscape PLC</dc:title>
+          </cc:Agent>
+        </dc:publisher>
+        <dc:language>en</dc:language>
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>test</rdf:li>
+            <rdf:li>file</rdf:li>
+            <rdf:li>svg</rdf:li>
+            <rdf:li>pdf</rdf:li>
+            <rdf:li>pdfoutput</rdf:li>
+            <rdf:li>capypdf</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+        <dc:description>This is a test file for the inkscape project, it should test how this metadata gets added to the pdf file.</dc:description>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+</svg>

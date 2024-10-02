@@ -176,6 +176,26 @@ if(WITH_INTERNAL_2GEOM)
   set(2Geom_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/src/3rdparty/2geom/include)
 endif()
 
+if(WITH_CAPYPDF)
+    include(ExternalProject)
+    ExternalProject_Add(capypdf
+        URL https://github.com/jpakkane/capypdf/archive/refs/heads/master.zip
+        DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+        CONFIGURE_COMMAND meson setup --libdir lib . ../capypdf --prefix=${CMAKE_CURRENT_BINARY_DIR}/deps
+        BUILD_COMMAND meson compile
+        INSTALL_COMMAND meson install
+    )
+
+    include_directories(${CMAKE_CURRENT_BINARY_DIR}/deps/include/capypdf-0)
+    link_directories(${CMAKE_CURRENT_BINARY_DIR}/deps/lib)
+    list(APPEND INKSCAPE_LIBS -lcapypdf)
+    set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_RPATH}:${CMAKE_BINARY_DIR}/deps/lib")
+    add_definitions(-DWITH_CAPYPDF)
+
+else()
+    set(WITH_CAPYPDF OFF)
+endif()
+
 if(WITH_POPPLER)
     find_package(PopplerCairo)
     if(POPPLER_FOUND)
@@ -315,6 +335,7 @@ if(NOT GTKMM4_FOUND)
 
     # check we can actually build it
     message("To build gtkmm4, you need the packages glslc, mm-common, and libgstreamer-plugins-bad1.0-dev")
+
     find_program(glslc glslc REQUIRED)
     find_program(mmcp mm-common-prepare REQUIRED)
     pkg_check_modules(TMP-gtkmm-gstreamer gstreamer-player-1.0 REQUIRED)

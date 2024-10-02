@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="100mm"
+   height="100mm"
+   viewBox="0 0 100 100"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.5-dev (aa7e786381, 2024-11-13)"
+   sodipodi:docname="11-flow-text.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <style
+     type="text/css"
+     id="style1">
+    @font-face {
+      font-family: &quot;Noto Sans&quot;;
+      src: url(&quot;../../rendering_tests/fonts/NotoSans-Regular.ttf&quot;);
+    }   
+
+    text, flowRoot {
+      font-family: Noto Sans;
+      fill: black;
+      stroke: none;
+    }   
+  </style>
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="1.4142136"
+     inkscape:cx="604.92984"
+     inkscape:cy="188.79751"
+     inkscape:window-width="1706"
+     inkscape:window-height="896"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="layer1">
+    <inkscape:page
+       x="0"
+       y="0"
+       width="100"
+       height="100"
+       id="page1"
+       margin="10"
+       bleed="0" />
+    <inkscape:page
+       x="110"
+       y="0"
+       width="100"
+       height="100"
+       id="page2"
+       margin="10"
+       bleed="0" />
+  </sodipodi:namedview>
+  <defs
+     id="defs1">
+    <rect
+       x="37.5"
+       y="38.976547"
+       width="319.23444"
+       height="403.8181"
+       id="rect1" />
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="23.181006 : 76.472811 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="50 : 16.666667 : 0"
+       inkscape:persp3d-origin="73.181007 : 59.806144 : 1"
+       id="perspective19" />
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     style="fill:#800080">
+    <path
+       style="fill:none;stroke-width:7.55906;stroke-linecap:round;stroke-linejoin:round;paint-order:stroke markers fill;stroke:#000000"
+       d="M 486.19943,317.8859 C 550.51426,289.34482 606.1526,288.74632 603.07365,192.00435 599.99471,95.262376 671.48172,64.98544 729.2149,58.56003"
+       id="path6"
+       transform="scale(0.26458333)"
+       sodipodi:nodetypes="czc" />
+    <text
+       xml:space="preserve"
+       transform="matrix(0.26458333,0,0,0.26458333,-2.1652425,-5.9778097)"
+       id="text1"
+       style="font-size:9px;line-height:1.15;text-align:justify;text-decoration-color:#000000;letter-spacing:0px;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect1);shape-subtract:url(#path1);shape-padding:9.47266;fill:#000000;stroke-width:7.55906;stroke-linecap:round;stroke-linejoin:round;paint-order:stroke markers fill"
+       x="0"
+       y="0"><tspan
+         x="46.972656"
+         y="56.188095"
+         id="tspan1">
+</tspan><tspan
+         x="46.972656"
+         y="71.697345"
+         id="tspan62"><tspan
+   style="font-size:15px"
+   id="tspan6">What is Lorem Ipsum?</tspan>
+</tspan><tspan
+         x="46.972656"
+         y="83.788094"
+         id="tspan63">
+</tspan><tspan
+         x="46.972656"
+         y="94.138092"
+         id="tspan66"><tspan
+           dx="0 0 0 0 0 0 1.3726788 0 0 0 0 0 1.3726788 0 0 1.3726826 0 0 0 0 0 0 1.3726749 0 0 0 0 0 1.3726749 0 0 0 0 1.3726749 0 0 1.3726749"
+           id="tspan64">Lorem Ipsum is simply dummy text of the </tspan><tspan
+           dx="0 0 0 0 0 0 0 0 0 41.261185"
+           id="tspan65">printing and </tspan></tspan><tspan
+         x="46.972656"
+         y="104.48809"
+         id="tspan69"><tspan
+           dx="0 0 0 0 0 0 0 0 0 0 0 0 5.0973072 0 0 0 0 0 0 0 0 0 5.0973072 0 0 0 0 0 5.0972996"
+           id="tspan67">typesetting industry. Lorem Ipsum </tspan><tspan
+           dx="0 0 0 0 7.2811832 0 0 0 0 7.2811832"
+           id="tspan68">has been the </tspan></tspan><tspan
+         x="46.972656"
+         y="114.83809"
+         id="tspan72"><tspan
+           dx="0 0 0 0 0 0 0 0 0 0 0 4.9636021 0 0 0 0 0 0 0 0 4.9635944 0 0 0 0 0 4.9636021"
+           id="tspan70">industry's standard dummy text </tspan><tspan
+           dx="0 0 0 0 0 15.762413"
+           id="tspan71">ever since </tspan></tspan><tspan
+         x="46.972656"
+         y="125.18809"
+         id="tspan75"><tspan
+           dx="0 0 0 0 4.8126621 0 0 0 0 0 0 4.8126621 0 0 0 0 4.8126621 0 0 4.8126621"
+           id="tspan73">the 1500s, when an unknown </tspan><tspan
+           dx="0 0 0 0 0 0 0 0 0.89919662"
+           id="tspan74">printer took </tspan></tspan><tspan
+         x="46.972656"
+         y="135.53809"
+         id="tspan78"><tspan
+           dx="0 0 0.37520933 0 0 0 0 0 0 0.37521172 0 0 0.37521172 0 0 0 0 0.3752079 0 0 0 0.3752079 0 0 0 0 0 0 0 0 0 0.3752079"
+           id="tspan76">a galley of type and scrambled it </tspan><tspan
+           dx="0 0 0 2.6820707 0 0 0 0 2.6820698"
+           id="tspan77">to make a </tspan></tspan><tspan
+         x="46.972656"
+         y="145.88809"
+         id="tspan80"><tspan
+   dx="0 0 0 0 0 5.8820152 0 0 0 0 0 0 0 0 5.882021 0 0 0 0 0 5.8820133 0 0 5.8820133"
+   id="tspan79">type specimen book. It has </tspan>survived </tspan><tspan
+         x="46.972656"
+         y="156.2381"
+         id="tspan83"><tspan
+           dx="0 0 0 0 0.94317627 0 0 0 0 0.94317436 0 0 0 0 0.94317436 0 0 0 0 0 0 0 0 0 0 0.94317818 0 0 0 0.94317818"
+           id="tspan81">not only five centuries, but also </tspan><tspan
+           dx="0 0 0 0 10.799313"
+           id="tspan82">the leap </tspan></tspan><tspan
+         x="46.972656"
+         y="166.5881"
+         id="tspan85"><tspan
+   dx="0 0 0 0 0 12.031534 0 0 0 0 0 0 0 0 0 0 12.031534"
+   id="tspan84">into electronic typesetting, </tspan>remaining </tspan><tspan
+         x="46.972656"
+         y="176.93811"
+         id="tspan87"><tspan
+   dx="0 0 0 0 0 0 0 0 0 0 0 0 4.8999157 0 0 0 0 0 0 0 0 0 0 4.8999119 0 0 4.8999119"
+   id="tspan86">essentially unchanged. It was </tspan>popularise</tspan><tspan
+         x="46.972656"
+         y="187.28812"
+         id="tspan89"><tspan
+   dx="0 0 0.46328545 0 0 0.46328545 0 0 0 0.46328545 0 0 0 0 0 0.46328545 0 0 0 0 0.46328926 0 0 0 0.46328163 0 0 0 0 0 0 0 0.46328163"
+   id="tspan88">d in the 1960s with the release of </tspan>Letraset </tspan><tspan
+         x="46.972656"
+         y="197.63812"
+         id="tspan91"><tspan
+   dx="0 0 0 0 0 0 0 5.2866497 0 0 0 0 0 0 0 0 0 0 5.2866535 0 0 0 0 0 5.2866535"
+   id="tspan90">sheets containing Lorem Ipsum </tspan>passages, </tspan><tspan
+         x="46.972656"
+         y="207.98813"
+         id="tspan93"><tspan
+   dx="0 0 0 0 6.6047306 0 0 0 0 6.6047306 0 0 0 0 0 0 0 0 6.6047306 0 0 0 0 6.6047306"
+   id="tspan92">and more recently with desktop </tspan>publishing </tspan><tspan
+         x="46.972656"
+         y="218.33813"
+         id="tspan96"><tspan
+           dx="0 0 0 0 0 0 0 0 0 2.9197598 0 0 0 0 2.9197636 0 0 0 0 0 2.9197559 0 0 0 0 0 0 0 0 0 2.9197636"
+           id="tspan94">software like Aldus PageMaker including </tspan><tspan
+           dx="0 0 0 0 0 0 0 0 0 7.6932507 0 0 7.6932507"
+           id="tspan95">versions of Lorem </tspan></tspan><tspan
+         x="46.972656"
+         y="228.68814"
+         id="tspan97">Ipsum.
+</tspan><tspan
+         x="46.972656"
+         y="239.03815"
+         id="tspan98">
+</tspan><tspan
+         x="46.972656"
+         y="254.5474"
+         id="tspan100"><tspan
+   style="font-size:15px"
+   id="tspan99">Why do we use it?</tspan>
+</tspan><tspan
+         x="46.972656"
+         y="266.63817"
+         id="tspan101">
+</tspan><tspan
+         x="46.972656"
+         y="276.98817"
+         id="tspan103"><tspan
+           dx="0 0 0 2.1651621 0 0 2.165163 0 2.1651611 0 0 0 0 2.1651592 0 0 0 0 0 0 0 0 0 0 0 2.165163 0 0 0 0 2.165163 0 0 0 0 2.1651707 0 2.1651707 0 0 0 0 0 0 2.1651554 0 0 0 0 2.1651554 0 0 2.1651707 0 0 0 0 0 0 0 0 0 0 2.1651554 0 0 2.1651554"
+           id="tspan102">It is a long established fact that a reader will be distracted by the </tspan></tspan><tspan
+         x="46.972656"
+         y="287.33818"
+         id="tspan105"><tspan
+           dx="0 0 0 0 0 0 0 0 0 1.663847 0 0 0 0 0 0 0 1.6638432 0 0 1.6638432 0 1.6638432 0 0 0 0 1.6638432 0 0 0 0 1.6638432 0 0 0 0 0 0 0 1.6638432 0 0 1.6638432 0 0 0 1.6638432 0 0 0 0 0 0 0 1.6638432 0 0 0 1.6638432 0 0 0 0 0 1.6638432"
+           id="tspan104">readable content of a page when looking at its layout. The point of </tspan></tspan><tspan
+         x="46.972656"
+         y="297.68819"
+         id="tspan107"><tspan
+           dx="0 0 0 0 0 0 0.57064629 0 0 0 0 0 0.57064629 0 0 0 0 0 0.5706501 0 0 0.57064247 0 0 0 0 0.5706501 0 0 0.5706501 0 0 0 0.57064247 0 0.57064247 0 0 0 0 0 0 0 0 0 0 0 0 0.57064247 0 0 0 0 0 0 0.57064247 0 0 0 0 0 0 0 0 0 0 0 0 0.57064247"
+           id="tspan106">using Lorem Ipsum is that it has a more-or-less normal distribution of </tspan></tspan><tspan
+         x="46.972656"
+         y="308.03819"
+         id="tspan109"><tspan
+           dx="0 0 0 0 0 0 0 0 0 1.8409138 0 0 1.8409176 0 0 0 0 0 0 0 1.8409138 0 0 1.8409138 0 0 0 0 0 1.8409138 0 0 0 0 0 0 0 0 1.8409061 0 0 0 0 0 1.8409214 0 0 0 0 0 0 0 1.8409214 0 0 0 0 0 0 1.8409061 0 0 0 0 0 0 1.8409367"
+           id="tspan108">letters, as opposed to using 'Content here, content here', making it </tspan></tspan><tspan
+         x="46.972656"
+         y="318.3882"
+         id="tspan111"><tspan
+           dx="0 0 0 0 0 0.11945915 0 0 0 0 0.11945915 0 0 0 0 0 0 0 0 0.11946297 0 0 0 0 0 0 0 0 0.11945534 0 0 0 0 0.11945534 0 0 0 0 0 0 0 0.11945534 0 0 0 0 0 0 0 0 0 0 0.1194706 0 0 0 0 0 0 0 0 0.1194706 0 0 0 0.11944008"
+           id="tspan110">look like readable English. Many desktop publishing packages and web </tspan></tspan><tspan
+         x="46.972656"
+         y="328.73821"
+         id="tspan113"><tspan
+           dx="0 0 0 0 0 0.72634506 0 0 0 0 0 0 0 0.72634697 0 0 0 0.72634315 0 0 0 0.72634315 0 0 0 0 0 0.72634315 0 0 0 0 0 0.72634315 0 0 0.72634315 0 0 0 0 0 0.72634315 0 0 0 0 0 0 0 0.72634315 0 0 0 0 0 0.72634315 0 0 0 0 0 0.72634315 0 0 0 0.72634315"
+           id="tspan112">page editors now use Lorem Ipsum as their default model text, and a </tspan></tspan><tspan
+         x="46.972656"
+         y="339.08821"
+         id="tspan115"><tspan
+           dx="0 0 0 0 0 0 0 2.5923805 0 0 0 2.5923786 0 0 0 0 0 0 2.5923786 0 0 0 0 0 0 2.5923786 0 0 0 0 2.592371 0 0 0 0 0 0 0 2.5923862 0 0 0 0 2.5923862 0 0 0 2.5923862 0 0 0 0 0 2.5923862 0 0 0 0 0 2.592371 0 0 2.592371"
+           id="tspan114">search for 'lorem ipsum' will uncover many web sites still in their </tspan></tspan><tspan
+         x="46.972656"
+         y="349.43822"
+         id="tspan117"><tspan
+           dx="0 0 0 0 0 0 0 0 0 1.4244671 0 0 0 0 0 0 0 1.4244709 0 0 0 0 0 0 0 0 1.4244633 0 0 0 0 1.4244633 0 0 0 0 0 0 0 1.4244633 0 0 0 0 1.4244633 0 0 0 1.4244633 0 0 0 0 0 0 1.4244633 0 0 0 0 0 0 0 0 0 1.4244633"
+           id="tspan116">infancy. Various versions have evolved over the years, sometimes by </tspan></tspan><tspan
+         x="46.972656"
+         y="359.78822"
+         id="tspan118">accident, sometimes on purpose (injected humour and the like).
+</tspan></text>
+    <circle
+       style="shape-margin:12.4022;fill:#000000;stroke-width:7.55906;stroke-linecap:round;stroke-linejoin:round;paint-order:stroke markers fill"
+       id="path1"
+       cx="186.35579"
+       cy="106.55214"
+       r="46.740875"
+       transform="matrix(0.26458333,0,0,0.26458333,12.817035,6.5510295)" />
+    <text
+       xml:space="preserve"
+       style="font-size:11.9062px;line-height:1.15;text-align:justify;text-decoration-color:#000000;letter-spacing:0px;fill:#000000;stroke-width:7.55906;stroke-linecap:round;stroke-linejoin:round;paint-order:stroke markers fill"
+       id="text6"
+       transform="translate(-3.3763657,-1.0063324)"><textPath
+         xlink:href="#path6"
+         startOffset="50%"
+         id="textPath6"
+         style="font-size:11.9062px;text-align:center;text-anchor:middle">Text on Path</textPath></text>
+  </g>
+</svg>

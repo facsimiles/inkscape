@@ -123,7 +123,8 @@ public:
     /** Linear and Radial Gradients */
 
     /** Composed vector */
-    SPGradientVector vector;
+    mutable SPGradientVector vector;
+    SPGradientVector const &getGradientVector() const;
 
     sigc::connection modified_connection;
 
@@ -185,7 +186,7 @@ public:
      */
     void setSpread(SPGradientSpread spread);
 
-    SPGradientSpread fetchSpread();
+    SPGradientSpread fetchSpread() const;
     SPGradientUnits fetchUnits();
 
     void setSwatch(bool swatch = true);
@@ -214,7 +215,7 @@ public:
 private:
     bool invalidateVector();
     bool invalidateArray();
-    void rebuildVector();
+    void rebuildVector() const;
     void rebuildArray();
 
 protected:
