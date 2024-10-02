@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hu\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
-"POT-Creation-Date: 2024-07-20 14:57+0000\n"
-"PO-Revision-Date: 2024-07-20 23:08+0000\n"
+"POT-Creation-Date: 2024-09-28 10:42+0000\n"
+"PO-Revision-Date: 2017-09-29 09:20+0000\n"
 "Last-Translator: Gyuris Gellért <jobel@ujevangelizacio.hu>, 2024\n"
 "Language-Team: Hungarian (https://app.transifex.com/fsf-hu/teams/77907/hu/)\n"
 "Language: hu\n"
@@ -2182,7 +2182,7 @@ msgstr "Pont"
 #: ../build/share/markers/markers.svg.h:16
 #: ../src/live_effects/lpe-jointype.cpp:44
 #: ../src/live_effects/lpe-powerstroke.h:29
-#: ../src/ui/toolbar/pencil-toolbar.cpp:154
+#: ../src/ui/toolbar/pencil-toolbar.cpp:175
 #: ../share/extensions/render_barcode_qrcode.inx:80
 msgid "Square"
 msgstr "Négyzet"
@@ -7629,7 +7629,7 @@ msgstr ""
 
 #: ../src/actions/actions-file-window.cpp:119 ../src/helper/choose-file.cpp:28
 #: ../src/ui/dialog/save-template-dialog.cpp:39
-#: ../share/ui/toolbar-commands.ui:72
+#: ../share/ui/inkscape-start.glade:661 ../share/ui/toolbar-commands.ui:72
 msgid "Save"
 msgstr "Mentés"
 
@@ -9285,7 +9285,7 @@ msgstr "A kijelölt útvonalak zsugorítása"
 #: ../src/live_effects/lpe-parallel.cpp:51
 #: ../src/live_effects/lpe-sketch.cpp:35
 #: ../src/live_effects/lpe-transform_2pts.cpp:42
-#: ../src/ui/dialog/filter-effects-dialog.cpp:1033
+#: ../src/ui/dialog/filter-effects-dialog.cpp:981
 msgid "Offset"
 msgstr "Eltolás"
 
@@ -9586,7 +9586,7 @@ msgstr "Kijelölés törlése"
 #: ../src/actions/actions-selection.cpp:275
 #: ../src/extension/prefdialog/parameter-path.cpp:216
 #: ../src/inkview-application.cpp:116 ../src/ui/dialog/export-batch.cpp:813
-#: ../src/ui/toolbar/gradient-toolbar.cpp:383
+#: ../src/ui/toolbar/gradient-toolbar.cpp:386
 msgid "Select"
 msgstr "Kijelölés"
 
@@ -11194,8 +11194,8 @@ msgstr "Igazodó küszöb"
 #: ../src/extension/internal/bitmap/raise.cpp:44
 #: ../src/extension/internal/bitmap/sample.cpp:43
 #: ../src/extension/internal/bluredge.cpp:135
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3073
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3095
+#: ../src/ui/dialog/filter-effects-dialog.cpp:3020
+#: ../src/ui/dialog/filter-effects-dialog.cpp:3042
 #: ../src/ui/dialog/lpe-powerstroke-properties.cpp:60
 #: ../share/ui/page-properties.glade:85 ../share/ui/page-properties.glade:312
 #: ../share/ui/toolbar-calligraphy.ui:119 ../share/ui/toolbar-eraser.ui:142
@@ -11207,8 +11207,8 @@ msgstr "Szélesség:"
 #: ../src/extension/internal/bitmap/adaptiveThreshold.cpp:44
 #: ../src/extension/internal/bitmap/raise.cpp:45
 #: ../src/extension/internal/bitmap/sample.cpp:44
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3074
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3096
+#: ../src/ui/dialog/filter-effects-dialog.cpp:3021
+#: ../src/ui/dialog/filter-effects-dialog.cpp:3043
 #: ../share/ui/page-properties.glade:97 ../share/ui/page-properties.glade:327
 #: ../share/extensions/foldablebox.inx:6
 msgid "Height:"
@@ -11273,8 +11273,8 @@ msgstr "Zaj hozzáadása"
 #: ../src/extension/internal/filter/color.h:1819
 #: ../src/extension/internal/filter/distort.h:71
 #: ../src/extension/internal/filter/morphology.h:62 ../src/rdf.cpp:251
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3006
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3100
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2953
+#: ../src/ui/dialog/filter-effects-dialog.cpp:3047
 #: ../src/ui/dialog/object-attributes.cpp:83
 #: ../share/extensions/jessyink_effects.inx:10
 #: ../share/extensions/jessyink_effects.inx:19
@@ -11329,7 +11329,7 @@ msgstr "Elmosás"
 #: ../src/extension/internal/bitmap/sharpen.cpp:42
 #: ../src/extension/internal/bitmap/unsharpmask.cpp:45
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:48
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3063
+#: ../src/ui/dialog/filter-effects-dialog.cpp:3010
 msgid "Radius:"
 msgstr "Sugár:"
 
@@ -11659,7 +11659,7 @@ msgid "Opacity"
 msgstr "Átlátszatlanság"
 
 #: ../src/extension/internal/bitmap/opacity.cpp:42
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3053
+#: ../src/ui/dialog/filter-effects-dialog.cpp:3000
 #: ../src/ui/dialog/objects.cpp:765
 msgid "Opacity:"
 msgstr "Átlátszatlanság:"
@@ -11717,12 +11717,12 @@ msgid "Shade"
 msgstr "Árnyalás"
 
 #: ../src/extension/internal/bitmap/shade.cpp:44
-#: ../src/ui/dialog/filter-effects-dialog.cpp:1185
+#: ../src/ui/dialog/filter-effects-dialog.cpp:1133
 msgid "Azimuth:"
 msgstr "Azimut:"
 
 #: ../src/extension/internal/bitmap/shade.cpp:45
-#: ../src/ui/dialog/filter-effects-dialog.cpp:1186
+#: ../src/ui/dialog/filter-effects-dialog.cpp:1134
 msgid "Elevation:"
 msgstr "Magasság:"
 
@@ -12535,8 +12535,8 @@ msgstr "Szórt"
 #: ../src/extension/internal/template-screen.cpp:34
 #: ../src/extension/internal/template-social.cpp:34
 #: ../src/extension/internal/template-video.cpp:34
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3074
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3096
+#: ../src/ui/dialog/filter-effects-dialog.cpp:3021
+#: ../src/ui/dialog/filter-effects-dialog.cpp:3043
 #: ../src/ui/tools/measure-tool.cpp:1083 ../share/ui/dialog-export.glade:277
 #: ../share/extensions/interp_att_g.inx:9
 msgid "Height"
@@ -13413,8 +13413,8 @@ msgstr "Nyitott (kizáró vagy)"
 #: ../src/extension/internal/template-screen.cpp:33
 #: ../src/extension/internal/template-social.cpp:33
 #: ../src/extension/internal/template-video.cpp:33
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3073
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3095
+#: ../src/ui/dialog/filter-effects-dialog.cpp:3020
+#: ../src/ui/dialog/filter-effects-dialog.cpp:3042
 #: ../src/ui/tools/measure-tool.cpp:1089
 #: ../src/ui/widget/selected-style.cpp:751 ../share/ui/dialog-export.glade:290
 #: ../share/extensions/interp_att_g.inx:8
@@ -13949,7 +13949,7 @@ msgstr "Háttér"
 
 #: ../src/extension/internal/filter/transparency.h:61
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:46
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3003
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2950
 #: ../share/ui/toolbar-eraser.ui:58 ../share/ui/toolbar-spray.ui:109
 #: ../share/ui/toolbar-spray.ui:126 ../share/ui/toolbar-tweak.ui:69
 #: ../share/ui/toolbar-tweak.ui:85 ../share/extensions/extrude.inx:7
@@ -14151,7 +14151,7 @@ msgstr "Leképezés"
 #: ../src/extension/internal/grid.cpp:204
 #: ../src/ui/dialog/document-properties.cpp:213
 #: ../src/ui/dialog/inkscape-preferences.cpp:2199
-#: ../share/ui/toolbar-snap.ui:243 ../share/extensions/grid_cartesian.inx:66
+#: ../share/ui/toolbar-snap.ui:244 ../share/extensions/grid_cartesian.inx:66
 #: ../share/extensions/grid_isometric.inx:18
 #: ../share/extensions/grid_polar.inx:36
 msgid "Grids"
@@ -15474,7 +15474,8 @@ msgstr "Árnyalatforgatás"
 msgid "Luminance to Alpha"
 msgstr "Fényességet alfává"
 
-#: ../src/filter-enums.cpp:68 ../share/ui/inkscape-start.glade:50
+#: ../src/filter-enums.cpp:68 ../src/ui/toolbar/text-toolbar.cpp:274
+#: ../share/ui/inkscape-start.glade:50
 #: ../share/extensions/jessyink_mouse_handler.inx:8
 #: ../share/extensions/jessyink_transitions.inx:11
 #: ../share/extensions/jessyink_transitions.inx:19
@@ -15697,7 +15698,7 @@ msgstr "Mégsem"
 
 #: ../src/helper/choose-file.cpp:63 ../src/ui/dialog/command-palette.cpp:224
 #: ../src/ui/widget/preferences-widget.cpp:829
-#: ../share/ui/inkscape-start.glade:1012
+#: ../share/ui/inkscape-start.glade:991
 msgid "Open"
 msgstr "Megnyitás"
 
@@ -17250,7 +17251,7 @@ msgid "Item from which to take the original data"
 msgstr "Az elem, ahonnan az eredeti adatok származnak"
 
 #: ../src/live_effects/lpe-clone-original.cpp:53
-#: ../src/ui/toolbar/pencil-toolbar.cpp:197
+#: ../src/ui/toolbar/pencil-toolbar.cpp:218
 #: ../share/ui/object-attributes.glade:725
 msgid "Shape"
 msgstr "Alakzat"
@@ -18042,7 +18043,7 @@ msgstr "Tompa"
 
 #: ../src/live_effects/lpe-jointype.cpp:45
 #: ../src/live_effects/lpe-powerstroke.h:31
-#: ../src/ui/toolbar/pencil-toolbar.cpp:155
+#: ../src/ui/toolbar/pencil-toolbar.cpp:176
 msgid "Peak"
 msgstr "Csúcs"
 
@@ -19368,13 +19369,13 @@ msgid "<b>Ctrl + click</b> on existing node and move it"
 msgstr "<b>Ctrl + kattintás</b> egy meglévő csomóponton és a mozgatása"
 
 #: ../src/live_effects/lpe-powerstroke.h:30
-#: ../src/ui/toolbar/pencil-toolbar.cpp:154
+#: ../src/ui/toolbar/pencil-toolbar.cpp:175
 #: ../share/extensions/other/gcodetools/gcodetools_prepare_path_for_plasma.inx:13
 msgid "Round"
 msgstr "Lekerekített"
 
 #: ../src/live_effects/lpe-powerstroke.h:32
-#: ../src/ui/toolbar/pencil-toolbar.cpp:155
+#: ../src/ui/toolbar/pencil-toolbar.cpp:176
 msgid "Zero width"
 msgstr "Nulla szélesség"
 
@@ -19978,7 +19979,7 @@ msgid "Scale nodes and handles"
 msgstr "Csomópontok és fogantyúk méretezése"
 
 #: ../src/live_effects/lpe-simplify.cpp:27
-#: ../src/ui/toolbar/gradient-toolbar.cpp:424
+#: ../src/ui/toolbar/gradient-toolbar.cpp:427
 msgid "Repeat"
 msgstr "Ismétlődés"
 
@@ -21121,7 +21122,7 @@ msgid "Arc"
 msgstr "Ív"
 
 #: ../src/object/sp-ellipse.cpp:425 ../src/ui/dialog/object-attributes.cpp:545
-#: ../src/ui/toolbar/pencil-toolbar.cpp:185 ../share/extensions/frame.inx:7
+#: ../src/ui/toolbar/pencil-toolbar.cpp:206 ../share/extensions/frame.inx:7
 msgid "Ellipse"
 msgstr "Ellipszis"
 
@@ -21269,27 +21270,27 @@ msgstr "Vonal"
 msgid "An exception occurred during execution of the Path Effect."
 msgstr "Kivétel (hiba) történt az útvonaleffektus végrehajtása közben."
 
-#: ../src/object/sp-marker.cpp:584
+#: ../src/object/sp-marker.cpp:585
 msgid "Set marker orientation"
 msgstr "Jelölő tájolásának beállítása"
 
-#: ../src/object/sp-marker.cpp:595
+#: ../src/object/sp-marker.cpp:596
 msgid "Set marker size"
 msgstr "Jelölő méretének beállítása"
 
-#: ../src/object/sp-marker.cpp:605
+#: ../src/object/sp-marker.cpp:606
 msgid "Set marker scale with stroke"
 msgstr "Jelölő körvonallal együtt történő méretezésének beállítása"
 
-#: ../src/object/sp-marker.cpp:616
+#: ../src/object/sp-marker.cpp:617
 msgid "Set marker offset"
 msgstr "Jelölő eltolásának beállítása"
 
-#: ../src/object/sp-marker.cpp:626
+#: ../src/object/sp-marker.cpp:627
 msgid "Set marker uniform scaling"
 msgstr "Jelölő egyenletes méretezésének beállítása"
 
-#: ../src/object/sp-marker.cpp:639 ../share/ui/marker-popup.glade:248
+#: ../src/object/sp-marker.cpp:640 ../share/ui/marker-popup.glade:248
 msgid "Flip marker horizontally"
 msgstr "Jelölő vízszintes tükrözése"
 
@@ -21712,7 +21713,8 @@ msgid "Open Font License"
 msgstr "Open Font License"
 
 #. TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/linking.html#AElementXLinkTitleAttribute
-#: ../src/rdf.cpp:242 ../src/ui/dialog/object-attributes.cpp:91
+#: ../src/rdf.cpp:242 ../src/ui/dialog/filedialogimpl-win32.cpp:1863
+#: ../src/ui/dialog/object-attributes.cpp:91
 msgid "Title:"
 msgstr "Cím:"
 
@@ -21998,7 +22000,7 @@ msgid "Select <b>object(s)</b> to remove filters from."
 msgstr "Jelölje ki az <b>objektumokat</b>, amelyekről a szűrők eltávolítandók."
 
 #: ../src/selection-chemistry.cpp:1399
-#: ../src/ui/dialog/filter-effects-dialog.cpp:1665
+#: ../src/ui/dialog/filter-effects-dialog.cpp:1613
 msgid "Remove filter"
 msgstr "Szűrő eltávolítása"
 
@@ -24018,8 +24020,8 @@ msgid "Dialog Window"
 msgstr "Párbeszédablak"
 
 #: ../src/ui/dialog/document-properties.cpp:154
-#: ../src/ui/dialog/filter-effects-dialog.cpp:1317
-#: ../src/ui/dialog/filter-effects-dialog.cpp:1431
+#: ../src/ui/dialog/filter-effects-dialog.cpp:1265
+#: ../src/ui/dialog/filter-effects-dialog.cpp:1379
 msgid "_Remove"
 msgstr "_Eltávolítás"
 
@@ -24618,7 +24620,7 @@ msgid "Groups"
 msgstr "Csoportok"
 
 #: ../src/ui/dialog/document-resources.cpp:915 ../src/ui/dialog/find.cpp:92
-#: ../share/ui/toolbar-snap.ui:116
+#: ../share/ui/toolbar-snap.ui:117
 msgid "Paths"
 msgstr "Útvonalak"
 
@@ -24817,22 +24819,28 @@ msgid "Enable preview"
 msgstr "Előnézet bekapcsolása"
 
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:210
+#: ../src/ui/dialog/filedialogimpl-win32.cpp:256
+#: ../src/ui/dialog/filedialogimpl-win32.cpp:384
 msgid "All Files"
 msgstr "Az összes fájl"
 
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:213
+#: ../src/ui/dialog/filedialogimpl-win32.cpp:257
 msgid "All Inkscape Files"
 msgstr "Az összes Inkscape-fájl"
 
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:214
+#: ../src/ui/dialog/filedialogimpl-win32.cpp:258
 msgid "All Images"
 msgstr "Az összes kép"
 
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:215
+#: ../src/ui/dialog/filedialogimpl-win32.cpp:259
 msgid "All Vectors"
 msgstr "Az összes vektoros dokumentum"
 
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:216
+#: ../src/ui/dialog/filedialogimpl-win32.cpp:260
 msgid "All Bitmaps"
 msgstr "Az összes bitkép"
 
@@ -24848,6 +24856,19 @@ msgstr ""
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:471
 msgid "Guess from extension"
 msgstr "A fájlkiterjesztés határozza meg"
+
+#: ../src/ui/dialog/filedialogimpl-win32.cpp:385
+msgid "All Executable Files"
+msgstr "Minden futtatható fájl"
+
+#: ../src/ui/dialog/filedialogimpl-win32.cpp:576
+#: ../share/ui/dialog-export.glade:506
+msgid "Show Preview"
+msgstr "Előnézet megjelenítése"
+
+#: ../src/ui/dialog/filedialogimpl-win32.cpp:714
+msgid "No file selected"
+msgstr "Nincs kijelölve fájl"
 
 #: ../src/ui/dialog/fill-and-stroke.cpp:54
 msgid "_Fill"
@@ -24885,112 +24906,112 @@ msgctxt "Label"
 msgid "None"
 msgstr "Nincs"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:657
+#: ../src/ui/dialog/filter-effects-dialog.cpp:605
 msgid "Choose image file"
 msgstr "Képfájl kijelölése"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:660
+#: ../src/ui/dialog/filter-effects-dialog.cpp:608
 msgid "SVG Element"
 msgstr "SVG-elem"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:661
+#: ../src/ui/dialog/filter-effects-dialog.cpp:609
 msgid "Use selected SVG element"
 msgstr "Kijelölt SVG-elem alkalmazása"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:712
+#: ../src/ui/dialog/filter-effects-dialog.cpp:660
 msgid "Select an image to be used as input."
 msgstr "Válassza ki a bemeneteként használandó képet."
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:810
+#: ../src/ui/dialog/filter-effects-dialog.cpp:758
 msgid "This SVG filter effect does not require any parameters."
 msgstr "Ez az SVG-szűrőeffektus nem igényel paramétert."
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:1027
+#: ../src/ui/dialog/filter-effects-dialog.cpp:975
 msgid "Slope"
 msgstr "Dőlésszög"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:1028
+#: ../src/ui/dialog/filter-effects-dialog.cpp:976
 msgid "Intercept"
 msgstr "Feltartóztatás"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:1031
+#: ../src/ui/dialog/filter-effects-dialog.cpp:979
 msgid "Amplitude"
 msgstr "Amplitúdó"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:1032
+#: ../src/ui/dialog/filter-effects-dialog.cpp:980
 msgid "Exponent"
 msgstr "Exponens"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:1036
-#: ../src/ui/dialog/filter-effects-dialog.cpp:1039
+#: ../src/ui/dialog/filter-effects-dialog.cpp:984
+#: ../src/ui/dialog/filter-effects-dialog.cpp:987
 #: ../share/extensions/interp_att_g.inx:31 ../share/extensions/nicechart.inx:79
 msgid "Values"
 msgstr "Értékek"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:1036
+#: ../src/ui/dialog/filter-effects-dialog.cpp:984
 msgid "List of stops with interpolated output"
 msgstr "Interpolált kimenettel rendelkező fázisok listája"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:1039
+#: ../src/ui/dialog/filter-effects-dialog.cpp:987
 msgid "List of discrete values for a step function"
 msgstr "Lépésfüggvény diszkrét értékeinek listája"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:1128
+#: ../src/ui/dialog/filter-effects-dialog.cpp:1076
 msgid "New transfer function type"
 msgstr "Új átviteli funkciótípus"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:1166
+#: ../src/ui/dialog/filter-effects-dialog.cpp:1114
 msgid "Light Source:"
 msgstr "Fényforrás:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:1185
+#: ../src/ui/dialog/filter-effects-dialog.cpp:1133
 msgid "Direction angle for the light source on the XY plane, in degrees"
 msgstr "A fényforrás irányszöge az XY síkon (fokban)"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:1186
+#: ../src/ui/dialog/filter-effects-dialog.cpp:1134
 msgid "Direction angle for the light source on the YZ plane, in degrees"
 msgstr "A fényforrás irányszöge az YZ síkon (fokban)"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:1189
-#: ../src/ui/dialog/filter-effects-dialog.cpp:1192
+#: ../src/ui/dialog/filter-effects-dialog.cpp:1137
+#: ../src/ui/dialog/filter-effects-dialog.cpp:1140
 msgid "Location:"
 msgstr "Hely:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:1189
-#: ../src/ui/dialog/filter-effects-dialog.cpp:1192
-#: ../src/ui/dialog/filter-effects-dialog.cpp:1195
+#: ../src/ui/dialog/filter-effects-dialog.cpp:1137
+#: ../src/ui/dialog/filter-effects-dialog.cpp:1140
+#: ../src/ui/dialog/filter-effects-dialog.cpp:1143
 msgid "X coordinate"
 msgstr "X koordináta"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:1189
-#: ../src/ui/dialog/filter-effects-dialog.cpp:1192
-#: ../src/ui/dialog/filter-effects-dialog.cpp:1195
+#: ../src/ui/dialog/filter-effects-dialog.cpp:1137
+#: ../src/ui/dialog/filter-effects-dialog.cpp:1140
+#: ../src/ui/dialog/filter-effects-dialog.cpp:1143
 msgid "Y coordinate"
 msgstr "Y koordináta"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:1189
-#: ../src/ui/dialog/filter-effects-dialog.cpp:1192
-#: ../src/ui/dialog/filter-effects-dialog.cpp:1195
+#: ../src/ui/dialog/filter-effects-dialog.cpp:1137
+#: ../src/ui/dialog/filter-effects-dialog.cpp:1140
+#: ../src/ui/dialog/filter-effects-dialog.cpp:1143
 msgid "Z coordinate"
 msgstr "Z koordináta"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:1195
+#: ../src/ui/dialog/filter-effects-dialog.cpp:1143
 msgid "Points at:"
 msgstr "Erre mutassanak:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:1196
+#: ../src/ui/dialog/filter-effects-dialog.cpp:1144
 msgid "Specular Exponent:"
 msgstr "Tükröződési kitevő:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:1196
+#: ../src/ui/dialog/filter-effects-dialog.cpp:1144
 msgid "Exponent value controlling the focus for the light source"
 msgstr "A fényforrás fókuszát meghatározó kitevőérték"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:1198
+#: ../src/ui/dialog/filter-effects-dialog.cpp:1146
 msgid "Cone Angle:"
 msgstr "Kúpszög:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:1198
+#: ../src/ui/dialog/filter-effects-dialog.cpp:1146
 msgid ""
 "This is the angle between the spot light axis (i.e. the axis between the "
 "light source and the point to which it is pointing at) and the spot light "
@@ -25000,90 +25021,90 @@ msgstr ""
 "által alkotott tengely) és a reflektorszerű fény kúpja által bezárt szög. "
 "Ezen kúpon kívüli helyre nem vetül fény."
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:1260
+#: ../src/ui/dialog/filter-effects-dialog.cpp:1208
 msgid "New light source"
 msgstr "Új fényforrás"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:1313
-#: ../src/ui/dialog/filter-effects-dialog.cpp:1430
+#: ../src/ui/dialog/filter-effects-dialog.cpp:1261
+#: ../src/ui/dialog/filter-effects-dialog.cpp:1378
 #: ../src/ui/dialog/guides.cpp:192
 msgid "_Duplicate"
 msgstr "_Kettőzés"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:1345
+#: ../src/ui/dialog/filter-effects-dialog.cpp:1293
 msgid "_Filter"
 msgstr "_Szűrő"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:1349
+#: ../src/ui/dialog/filter-effects-dialog.cpp:1297
 msgid "Used"
 msgstr "Alkalmazott"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:1432
+#: ../src/ui/dialog/filter-effects-dialog.cpp:1380
 msgid "R_ename"
 msgstr "Átne_vezés"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:1433
+#: ../src/ui/dialog/filter-effects-dialog.cpp:1381
 msgid "Select Filter Elements"
 msgstr "Szűrőelemek kijelölése"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:1448
+#: ../src/ui/dialog/filter-effects-dialog.cpp:1396
 msgid "Rename filter"
 msgstr "Szűrő átnevezése"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:1506
+#: ../src/ui/dialog/filter-effects-dialog.cpp:1454
 msgid "Apply filter"
 msgstr "Szűrő alkalmazása"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:1527
-#: ../src/ui/dialog/filter-effects-dialog.cpp:1625
+#: ../src/ui/dialog/filter-effects-dialog.cpp:1475
+#: ../src/ui/dialog/filter-effects-dialog.cpp:1573
 msgid "filter"
 msgstr "szűrő"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:1632
+#: ../src/ui/dialog/filter-effects-dialog.cpp:1580
 msgid "Add filter"
 msgstr "Szűrő felvétele"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:1687
+#: ../src/ui/dialog/filter-effects-dialog.cpp:1635
 msgid "Duplicate filter"
 msgstr "Szűrő kettőzése"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:1795
+#: ../src/ui/dialog/filter-effects-dialog.cpp:1743
 msgid "_Effect"
 msgstr "E_ffektus"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:1805
+#: ../src/ui/dialog/filter-effects-dialog.cpp:1753
 msgid "Connections"
 msgstr "Kapcsolatok"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:1942
+#: ../src/ui/dialog/filter-effects-dialog.cpp:1889
 msgid "Remove filter primitive"
 msgstr "Szűrőprimitív eltávolítása"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2458
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2405
 msgid "Remove merge node"
 msgstr "Összekötési csomópont eltávolítása"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2575
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2522
 msgid "Reorder filter primitive"
 msgstr "Szűrőprimitív átrendezése"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2630
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2577
 msgid "Effect"
 msgstr "Effektus"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2631
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2578
 msgid "Compositing"
 msgstr "Kompozitálás"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2632
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2579
 msgid "Color editing"
 msgstr "Színszerkesztés"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2633
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2580
 msgid "Generating"
 msgstr "Generálás"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2647
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2594
 msgid ""
 "Uniformly blurs its input. Commonly used together with Offset to create a "
 "drop shadow effect."
@@ -25091,7 +25112,7 @@ msgstr ""
 "Egyenletesen elmossa a bemenetet. Általában az Elmozdítással  kombinálva "
 "„vetett árnyék” effektus előállítására használatos."
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2649
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2596
 msgid ""
 "Provides erode and dilate effects. For single-color objects erode makes the "
 "object thinner and dilate makes it thicker."
@@ -25099,7 +25120,7 @@ msgstr ""
 "Zsugorítási és nyújtási effektusokat kínál. Egyszínű objektumok esetén a "
 "zsugorítás vékonyabbá teszi az objektumot, a nyújtás pedig vastagabbá."
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2651
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2598
 msgid ""
 "Offsets the input by an user-defined amount. Commonly used for drop shadow "
 "effects."
@@ -25107,7 +25128,7 @@ msgstr ""
 "Eltolja a bemenetet egy felhasználó által meghatározott mértékkel. Általában "
 "vetett árnyék effektushoz használatos."
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2653
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2600
 msgid ""
 "Performs a convolution on the input image enabling effects like blur, "
 "sharpening, embossing and edge detection."
@@ -25115,7 +25136,7 @@ msgstr ""
 "Konvolúciót hajt végre a bemeneti képen, amely olyan effektusokat tesz "
 "lehetővé, mint az elmosódás, élesítés, domborítás és élérzékelés."
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2655
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2602
 msgid ""
 "Displaces pixels from the first input using the second as a map of "
 "displacement intensity. Classical examples are whirl and pinch effects."
@@ -25124,7 +25145,7 @@ msgstr ""
 "használja elmozdítási intenzitásként. Klasszikus példák erre az örvénylés és "
 "az összehúzási effektusok."
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2657
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2604
 msgid ""
 "Tiles a region with an input graphic. The source tile is defined by the "
 "filter primitive subregion of the input."
@@ -25132,7 +25153,7 @@ msgstr ""
 "Kicsempéz egy területet egy bementi képpel. A forráscsempét a bemeneti szűrő-"
 "primitív részterülete definiálja."
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2659
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2606
 msgid ""
 "Composites two images using one of the Porter-Duff blending modes or the "
 "arithmetic mode described in SVG standard."
@@ -25140,14 +25161,14 @@ msgstr ""
 "Vegyít két képet a Porter-Duff keverési módszerek egyikével vagy az SVG "
 "szabványban leírt aritmetikai módszerekkel."
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2661
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2608
 msgid ""
 "Provides image blending modes, such as screen, multiply, darken and lighten."
 msgstr ""
 "Képkeverési módokat – mint pl. kivetítés, szorzás, sötétítés, világosítás – "
 "állít elő."
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2663
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2610
 msgid ""
 "Merges multiple inputs using normal alpha compositing. Equivalent to using "
 "several Blend primitives in 'normal' mode or several Composite primitives in "
@@ -25157,7 +25178,7 @@ msgstr ""
 "primitív használatával „normál” módban vagy több Vegyítés primitív "
 "használatával „over” módban."
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2665
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2612
 msgid ""
 "Modifies pixel colors based on a transformation matrix. Useful for adjusting "
 "color hue and saturation."
@@ -25165,7 +25186,7 @@ msgstr ""
 "Módosítja a képpontok színét egy transzformációs mátrix alapján. Hasznos a "
 "színárnyalat és a telítettség beállításához."
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2667
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2614
 msgid ""
 "Manipulates color components according to particular transfer functions. "
 "Useful for brightness and contrast adjustment, color balance, and "
@@ -25175,8 +25196,8 @@ msgstr ""
 "a fényerő és a kontraszt beállításához, a színegyensúlyhoz és a "
 "küszöbértékek meghatározásához."
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2669
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2671
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2616
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2618
 msgid ""
 "Creates \"embossed\" shadings.  The input's alpha channel is used to provide "
 "depth information: higher opacity areas are raised toward the viewer and "
@@ -25186,7 +25207,7 @@ msgstr ""
 "mélységi információt: a nagyobb átlátszatlanságú területek kiemelkednek a "
 "szemlélő felé, a kisebb átlátszatlanságúak pedig hátrébb helyezkednek el."
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2673
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2620
 msgid ""
 "Fills the region with a given color and opacity. Often used as input to "
 "other filters to apply color to a graphic."
@@ -25194,7 +25215,7 @@ msgstr ""
 "Kitölti az adott területet a megadott színnel és átlátszatlansággal. Gyakran "
 "más szűrők bemeneteként használatos egy grafika színezésére."
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2675
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2622
 msgid ""
 "Fills the region with graphics from an external file or from another portion "
 "of the document."
@@ -25202,7 +25223,7 @@ msgstr ""
 "A területet külső fájlból vagy a dokumentum egy másik részéből származó "
 "grafikával tölti ki."
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2677
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2624
 msgid ""
 "Renders Perlin noise, which is useful to generate textures such as clouds, "
 "fire, smoke, marble or granite."
@@ -25210,52 +25231,52 @@ msgstr ""
 "Perlin-zajt jelenít meg, mely hasznos olyan textúrák készítésére, mint "
 "például felhők, tűz, füst, márvány vagy gránit."
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2750
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2697
 msgid "Add Effect:"
 msgstr "Effektus felvétele:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2752
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2699
 msgid "No filter selected"
 msgstr "Nincs kijelölve szűrő"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2777
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2724
 msgid "Add effect"
 msgstr "Effektus hozzáadása"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2997
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2944
 msgid "Automatic Region"
 msgstr "Automatikus terület"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2997
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2944
 msgid ""
 "If unset, the coordinates and dimensions won't be updated automatically."
 msgstr "Kikapcsolva a koordináták és a méretek nem frissülnek automatikusan."
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2998
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2945
 msgid "Coordinates:"
 msgstr "Koordináták:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2998
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2945
 msgid "X coordinate of the left corners of filter effects region"
 msgstr "A szűrőeffektus-terület bal oldali sarkainak X koordinátája"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2998
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2945
 msgid "Y coordinate of the upper corners of filter effects region"
 msgstr "A szűrőeffektus-terület felső sarkainak Y koordinátája"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2999
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2946
 msgid "Dimensions:"
 msgstr "Méretek:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2999
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2946
 msgid "Width of filter effects region"
 msgstr "A szűrőeffektus-terület szélessége"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2999
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2946
 msgid "Height of filter effects region"
 msgstr "A szűrőeffektus-terület magassága"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3006
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2953
 msgid ""
 "Indicates the type of matrix operation. The keyword 'matrix' indicates that "
 "a full 5x4 matrix of values will be provided. The other keywords represent "
@@ -25267,47 +25288,47 @@ msgstr ""
 "egyszerűsített módon (egy teljes mátrix megadása nélkül) lehessen "
 "végrehajtani bizonyos gyakran használt színműveleteket."
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3007
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2954
 msgid "Value(s):"
 msgstr "Értékek:"
 
 #. TRANSLATORS: Abbreviation for red color channel in RGBA
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3012
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2959
 msgctxt "color"
 msgid "R:"
 msgstr "R:"
 
 #. TRANSLATORS: Abbreviation for green color channel in RGBA
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3014
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2961
 msgctxt "color"
 msgid "G:"
 msgstr "G:"
 
 #. TRANSLATORS: Abbreviation for blue color channel in RGBA
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3016
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2963
 msgctxt "color"
 msgid "B:"
 msgstr "B:"
 
 #. TRANSLATORS: Abbreviation for alpha channel in RGBA
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3018
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2965
 msgctxt "color"
 msgid "A:"
 msgstr "A:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3021
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3062
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2968
+#: ../src/ui/dialog/filter-effects-dialog.cpp:3009
 msgid "Operator:"
 msgstr "Operátor:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3022
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2969
 msgid "K1:"
 msgstr "K1:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3022
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3023
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3024
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3025
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2969
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2970
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2971
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2972
 msgid ""
 "If the arithmetic operation is chosen, each result pixel is computed using "
 "the formula k1*i1*i2 + k2*i1 + k3*i2 + k4 where i1 and i2 are the pixel "
@@ -25317,38 +25338,38 @@ msgstr ""
 "a „k1*i1*i2 + k2*i1 + k3*i2 + k4” képlettel lesz kiszámítva, ahol i1 és i2 "
 "az első, illetve a második bemenet képpont-értéke."
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3023
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2970
 msgid "K2:"
 msgstr "K2:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3024
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2971
 msgid "K3:"
 msgstr "K3:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3025
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2972
 msgid "K4:"
 msgstr "K4:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3028
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3056
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3101
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2975
+#: ../src/ui/dialog/filter-effects-dialog.cpp:3003
+#: ../src/ui/dialog/filter-effects-dialog.cpp:3048
 msgid "Size:"
 msgstr "Méret:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3028
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2975
 msgid "width of the convolve matrix"
 msgstr "a konvolúciós mátrix szélessége"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3028
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2975
 msgid "height of the convolve matrix"
 msgstr "a konvolúciós mátrix magassága"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3029
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2976
 #: ../src/ui/dialog/object-attributes.cpp:82
 msgid "Target:"
 msgstr "Cél (target):"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3029
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2976
 msgid ""
 "X coordinate of the target point in the convolve matrix. The convolution is "
 "applied to pixels around this point."
@@ -25356,7 +25377,7 @@ msgstr ""
 "A célpont X koordinátája a konvolúciós mátrixban. A konvolúció ezen pont "
 "körül lesz alkalmazva a képpontokra."
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3029
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2976
 msgid ""
 "Y coordinate of the target point in the convolve matrix. The convolution is "
 "applied to pixels around this point."
@@ -25365,11 +25386,11 @@ msgstr ""
 "körül lesz alkalmazva a képpontokra."
 
 #. TRANSLATORS: for info on "Kernel", see http://en.wikipedia.org/wiki/Kernel_(matrix)
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3031
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2978
 msgid "Kernel:"
 msgstr "Kernel:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3031
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2978
 msgid ""
 "This matrix describes the convolve operation that is applied to the input "
 "image in order to calculate the pixel colors at the output. Different "
@@ -25385,11 +25406,11 @@ msgstr ""
 "párhuzamosan), egy nullától eltérő konstanssal feltöltött mátrix pedig "
 "normál elmosást."
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3033
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2980
 msgid "Divisor:"
 msgstr "Osztó:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3033
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2980
 msgid ""
 "After applying the kernelMatrix to the input image to yield a number, that "
 "number is divided by divisor to yield the final destination color value. A "
@@ -25401,11 +25422,11 @@ msgstr ""
 "a mátrix összes elemének összegével, azzal „este” hatás érhető el az "
 "eredmény színintenzitására."
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3034
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2981
 msgid "Bias:"
 msgstr "Eltolódás:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3034
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2981
 msgid ""
 "This value is added to each component. This is useful to define a constant "
 "value as the zero response of the filter."
@@ -25413,11 +25434,11 @@ msgstr ""
 "Ez az érték hozzá lesz adva minden komponenshez. Ezzel megadható egy érték "
 "(konstans) a szűrő alaphatásaként."
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3035
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2982
 msgid "Edge Mode:"
 msgstr "Él-üzemmód:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3035
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2982
 msgid ""
 "Determines how to extend the input image as necessary with color values so "
 "that the matrix operations can be applied when the kernel is positioned at "
@@ -25427,34 +25448,34 @@ msgstr ""
 "bemeneti kép annak érdekében, hogy a mátrixműveletek alkalmazhatók legyenek, "
 "amikor a kernel a bemeneti kép élénél vagy annak közelében van."
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3036
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3077
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2983
+#: ../src/ui/dialog/filter-effects-dialog.cpp:3024
 msgid "Preserve Alpha"
 msgstr "Alfa megőrzése"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3036
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3077
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2983
+#: ../src/ui/dialog/filter-effects-dialog.cpp:3024
 msgid "If set, the alpha channel won't be altered by this filter primitive."
 msgstr ""
 "Ha az opció be van jelölve, akkor ez a szűrőprimitív nem módosítja az alfa-"
 "csatornát."
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3039
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2986
 msgid "Diffuse Color:"
 msgstr "Szórt szín:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3039
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3082
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2986
+#: ../src/ui/dialog/filter-effects-dialog.cpp:3029
 msgid "Defines the color of the light source"
 msgstr "A fényforrás színét adja meg"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3040
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3083
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2987
+#: ../src/ui/dialog/filter-effects-dialog.cpp:3030
 msgid "Surface Scale:"
 msgstr "Felületméretezés:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3040
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3083
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2987
+#: ../src/ui/dialog/filter-effects-dialog.cpp:3030
 msgid ""
 "This value amplifies the heights of the bump map defined by the input alpha "
 "channel"
@@ -25462,56 +25483,56 @@ msgstr ""
 "Ez az érték felerősíti a bemeneti alfa-csatorna által meghatározott "
 "buckaleképezés magasságait"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3041
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3084
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2988
+#: ../src/ui/dialog/filter-effects-dialog.cpp:3031
 msgid "Constant:"
 msgstr "Konstans:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3041
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3084
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2988
+#: ../src/ui/dialog/filter-effects-dialog.cpp:3031
 msgid "This constant affects the Phong lighting model."
 msgstr "Ez a konstans a Phong világítási modellre van hatással."
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3047
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2994
 #: ../share/ui/page-properties.glade:253 ../share/ui/toolbar-pencil.ui:420
 #: ../share/ui/toolbar-spray.ui:320
 #: ../share/extensions/render_alphabetsoup.inx:7
 msgid "Scale:"
 msgstr "Méretezés:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3047
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2994
 msgid "This defines the intensity of the displacement effect."
 msgstr "Az elmozdítási effektus intenzitását adja meg."
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3048
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2995
 msgid "X displacement:"
 msgstr "X-elmozdítás:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3048
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2995
 msgid "Color component that controls the displacement in the X direction"
 msgstr "Az X irányú elmozdítást megadó színkomponens"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3049
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2996
 msgid "Y displacement:"
 msgstr "Y-elmozdítás:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3049
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2996
 msgid "Color component that controls the displacement in the Y direction"
 msgstr "Az Y irányú elmozdítást megadó színkomponens"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3052
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2999
 msgid "Color:"
 msgstr "Szín:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3052
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2999
 msgid "The whole filter region will be filled with this color."
 msgstr "Ezzel a színnel lesz kitöltve a teljes szűrőterület."
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3056
+#: ../src/ui/dialog/filter-effects-dialog.cpp:3003
 msgid "The standard deviation for the blur operation."
 msgstr "Az elmosási művelet szórása."
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3062
+#: ../src/ui/dialog/filter-effects-dialog.cpp:3009
 msgid ""
 "Erode: performs \"thinning\" of input image.\n"
 "Dilate: performs \"fattening\" of input image."
@@ -25519,103 +25540,103 @@ msgstr ""
 "Zsugorítás: „vékonyabbá” teszi a bemeneti képet.\n"
 "Nyújtás: „kövérebbé” teszi a bemeneti képet."
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3066
+#: ../src/ui/dialog/filter-effects-dialog.cpp:3013
 msgid "Source of Image:"
 msgstr "A kép forrása:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3067
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3093
+#: ../src/ui/dialog/filter-effects-dialog.cpp:3014
+#: ../src/ui/dialog/filter-effects-dialog.cpp:3040
 #: ../src/ui/dialog/knot-properties.cpp:48
 msgid "Position X:"
 msgstr "X-pozíció:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3067
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3093
+#: ../src/ui/dialog/filter-effects-dialog.cpp:3014
+#: ../src/ui/dialog/filter-effects-dialog.cpp:3040
 msgid "Position X"
 msgstr "X-pozíció"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3071
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3094
+#: ../src/ui/dialog/filter-effects-dialog.cpp:3018
+#: ../src/ui/dialog/filter-effects-dialog.cpp:3041
 #: ../src/ui/dialog/knot-properties.cpp:57
 msgid "Position Y:"
 msgstr "Y-pozíció:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3071
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3094
+#: ../src/ui/dialog/filter-effects-dialog.cpp:3018
+#: ../src/ui/dialog/filter-effects-dialog.cpp:3041
 msgid "Position Y"
 msgstr "Y-pozíció"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3078
+#: ../src/ui/dialog/filter-effects-dialog.cpp:3025
 msgid "Delta X:"
 msgstr "X változása:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3078
+#: ../src/ui/dialog/filter-effects-dialog.cpp:3025
 msgid "This is how far the input image gets shifted to the right"
 msgstr "Ilyen messzire lesz eltolva jobbra a bemeneti kép"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3079
+#: ../src/ui/dialog/filter-effects-dialog.cpp:3026
 msgid "Delta Y:"
 msgstr "Y változása:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3079
+#: ../src/ui/dialog/filter-effects-dialog.cpp:3026
 msgid "This is how far the input image gets shifted downwards"
 msgstr "Ilyen messzire lesz eltolva lefelé a bemeneti kép"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3082
+#: ../src/ui/dialog/filter-effects-dialog.cpp:3029
 msgid "Specular Color:"
 msgstr "Tükröződési szín:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3085
+#: ../src/ui/dialog/filter-effects-dialog.cpp:3032
 #: ../share/extensions/interp.inx:5
 msgid "Exponent:"
 msgstr "Kitevő:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3085
+#: ../src/ui/dialog/filter-effects-dialog.cpp:3032
 msgid "Exponent for specular term, larger is more \"shiny\"."
 msgstr ""
 "Kitevő a tükröződési értékhez (specular term). A nagyobb kitevő „fényesebb” "
 "hatást jelent."
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3100
+#: ../src/ui/dialog/filter-effects-dialog.cpp:3047
 msgid ""
 "Indicates whether the filter primitive should perform a noise or turbulence "
 "function."
 msgstr ""
 "Azt adja meg, hogy a szűrőprimitív zaj- vagy örvényeffektust hozzon létre."
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3102
+#: ../src/ui/dialog/filter-effects-dialog.cpp:3049
 msgid "Detail:"
 msgstr "Részlet:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3103
+#: ../src/ui/dialog/filter-effects-dialog.cpp:3050
 msgid "Seed:"
 msgstr "Véletlenség rögzítő"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3103
+#: ../src/ui/dialog/filter-effects-dialog.cpp:3050
 msgid "The starting number for the pseudo random number generator."
 msgstr "Az álvéletlenszám-generátor kezdőértéke."
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3110
+#: ../src/ui/dialog/filter-effects-dialog.cpp:3057
 msgid "Add filter primitive"
 msgstr "Szűrőprimitív felvétele"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3129
+#: ../src/ui/dialog/filter-effects-dialog.cpp:3076
 msgid "Duplicate filter primitive"
 msgstr "Szűrőprimitív kettőzése"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3209
+#: ../src/ui/dialog/filter-effects-dialog.cpp:3156
 msgid "Set filter primitive attribute"
 msgstr "Szűrőprimitív tulajdonságának beállítása"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3265
+#: ../src/ui/dialog/filter-effects-dialog.cpp:3212
 msgid "Add effect from the search bar"
 msgstr "Effektus hozzáadása a keresési mezőből"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3268
+#: ../src/ui/dialog/filter-effects-dialog.cpp:3215
 msgid "Select a filter"
 msgstr "Jelöljön ki egy szűrőt"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:3271
+#: ../src/ui/dialog/filter-effects-dialog.cpp:3218
 msgid "No filters in the document"
 msgstr "Nincsenek szűrők a dokumentumban"
 
@@ -25999,8 +26020,8 @@ msgid "Error loading palette %1: %2"
 msgstr "Hiba a paletta betöltésekor %1: %2"
 
 #: ../src/ui/dialog/global-palettes.cpp:453
-msgid "Unknown error loading palette %"
-msgstr "Ismeretlen hiba a paletta betöltésekor: %"
+msgid "Unknown error loading palette %1"
+msgstr "Ismeretlen hiba a paletta betöltése során: %1"
 
 #: ../src/ui/dialog/global-palettes.cpp:495
 msgid "Gimp Color Palette"
@@ -31750,11 +31771,11 @@ msgstr "Átlátszatlanság módosítása"
 msgid "Change blend mode"
 msgstr "Színkeverési mód módosítása"
 
-#: ../src/ui/dialog/objects.cpp:1226 ../src/ui/dialog/objects.cpp:1493
+#: ../src/ui/dialog/objects.cpp:1226 ../src/ui/dialog/objects.cpp:1492
 msgid "Toggle item visibility"
 msgstr "Elem láthatóságának átváltása"
 
-#: ../src/ui/dialog/objects.cpp:1293 ../src/ui/dialog/objects.cpp:1497
+#: ../src/ui/dialog/objects.cpp:1293 ../src/ui/dialog/objects.cpp:1496
 msgid "Toggle item locking"
 msgstr "Elem zárolásának átváltása"
 
@@ -31766,11 +31787,11 @@ msgstr ""
 "<b>ALT billentyű lenyomva</b> az elem felett: kiemelés, <b>SHIFT billentyű "
 "lenyomva</b> és kattintás: összes elrejtése/zárolása."
 
-#: ../src/ui/dialog/objects.cpp:1665
+#: ../src/ui/dialog/objects.cpp:1669
 msgid "Rename object"
 msgstr "Objektum átnevezése"
 
-#: ../src/ui/dialog/objects.cpp:1826
+#: ../src/ui/dialog/objects.cpp:1830
 msgid "Move items"
 msgstr "Elemek mozgatása"
 
@@ -31999,11 +32020,11 @@ msgstr "<i>Ellenőrzés…</i>"
 msgid "Fix spelling"
 msgstr "Helyesírás javítása"
 
-#: ../src/ui/dialog/startup.cpp:324
+#: ../src/ui/dialog/startup.cpp:320
 msgid "Browse for other files..."
 msgstr "További fájlok tallózása…"
 
-#: ../src/ui/dialog/startup.cpp:412
+#: ../src/ui/dialog/startup.cpp:408
 msgid "Open a different file"
 msgstr "Egy másik fájl megnyitása"
 
@@ -33240,29 +33261,29 @@ msgstr "Szakasz eltávolítása"
 msgid "Straighten segments"
 msgstr "Szakaszok egyenesítése"
 
-#: ../src/ui/tool/curve-drag-point.cpp:203
+#: ../src/ui/tool/curve-drag-point.cpp:204
 msgctxt "Path segment tip"
 msgid "<b>Shift</b>: drag to open or move BSpline handles"
 msgstr "<b>Shift</b>. B-spline-fogantyúk megnyitása vagy mozgatása: húzással."
 
-#: ../src/ui/tool/curve-drag-point.cpp:207
+#: ../src/ui/tool/curve-drag-point.cpp:208
 msgctxt "Path segment tip"
 msgid "<b>Shift</b>: click to toggle segment selection"
 msgstr ""
 "<b>Shift</b>. Szakasz kijelölése, illetve kijelölésének megszüntetése: "
 "kattintással."
 
-#: ../src/ui/tool/curve-drag-point.cpp:211
+#: ../src/ui/tool/curve-drag-point.cpp:212
 msgctxt "Path segment tip"
 msgid "<b>Ctrl+Alt</b>: click to insert a node"
 msgstr "<b>Ctrl+Alt</b>. Csomópont beszúrása: kattintással."
 
-#: ../src/ui/tool/curve-drag-point.cpp:214
+#: ../src/ui/tool/curve-drag-point.cpp:215
 msgctxt "Path segment tip"
 msgid "<b>Alt</b>: double click to change line type"
 msgstr "<b>Alt</b>: vonaltípus módosítása dupla kattintással"
 
-#: ../src/ui/tool/curve-drag-point.cpp:217
+#: ../src/ui/tool/curve-drag-point.cpp:218
 msgctxt "Path segment tip"
 msgid ""
 "<b>BSpline segment</b>: drag to shape the segment, doubleclick to insert "
@@ -33272,7 +33293,7 @@ msgstr ""
 "dupla kattintással. Kijelölés: kattintással. (Továbbiak: Alt, Shift, "
 "Ctrl+Alt.)"
 
-#: ../src/ui/tool/curve-drag-point.cpp:221
+#: ../src/ui/tool/curve-drag-point.cpp:222
 msgctxt "Path segment tip"
 msgid ""
 "<b>Linear segment</b>: drag to convert to a Bezier segment, doubleclick to "
@@ -33282,7 +33303,7 @@ msgstr ""
 "beszúrása: dupla kattintással. Kijelölés: kattintással. (Továbbiak: Alt, "
 "Shift, Ctrl+Alt.)"
 
-#: ../src/ui/tool/curve-drag-point.cpp:224
+#: ../src/ui/tool/curve-drag-point.cpp:225
 msgctxt "Path segment tip"
 msgid ""
 "<b>Bezier segment</b>: drag to shape the segment, doubleclick to insert "
@@ -33788,81 +33809,239 @@ msgstr ""
 "<b>Forgatási középpont</b>: transzformációk origójának módosítása: húzással"
 
 #: ../src/ui/toolbar/arc-toolbar.cpp:72
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:102
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:182
 #: ../src/ui/toolbar/lpe-toolbar.cpp:115
 #: ../src/ui/toolbar/measure-toolbar.cpp:82
 #: ../src/ui/toolbar/node-toolbar.cpp:99
-#: ../src/ui/toolbar/paintbucket-toolbar.cpp:115
+#: ../src/ui/toolbar/paintbucket-toolbar.cpp:119
 #: ../src/ui/toolbar/rect-toolbar.cpp:73
 #: ../src/ui/toolbar/select-toolbar.cpp:79
-#: ../src/ui/toolbar/text-toolbar.cpp:377
-#: ../src/ui/toolbar/text-toolbar.cpp:386 ../share/ui/dialog-export.glade:442
+#: ../src/ui/toolbar/text-toolbar.cpp:395
+#: ../src/ui/toolbar/text-toolbar.cpp:404 ../share/ui/dialog-export.glade:442
 msgid "Units"
 msgstr "Mértékegység"
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:220
+#: ../src/ui/toolbar/arc-toolbar.cpp:250
 msgid "Ellipse: Change radius"
 msgstr "Ellipszis: sugár módosítása"
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:267
+#: ../src/ui/toolbar/arc-toolbar.cpp:297
 msgid "Arc: Change start/end"
 msgstr "Ellipszisív: kezdet/vég módosítása"
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:321
+#: ../src/ui/toolbar/arc-toolbar.cpp:351
 msgid "Arc: Change arc type"
 msgstr "Körív: ív típusának módosítása"
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:389 ../src/ui/toolbar/rect-toolbar.cpp:250
-#: ../src/ui/toolbar/spiral-toolbar.cpp:177
-#: ../src/ui/toolbar/star-toolbar.cpp:389 ../share/ui/toolbar-arc.ui:69
+#: ../src/ui/toolbar/arc-toolbar.cpp:419 ../src/ui/toolbar/rect-toolbar.cpp:300
+#: ../src/ui/toolbar/spiral-toolbar.cpp:205
+#: ../src/ui/toolbar/star-toolbar.cpp:420 ../share/ui/toolbar-arc.ui:69
 #: ../share/ui/toolbar-gradient.ui:44 ../share/ui/toolbar-mesh.ui:51
 #: ../share/ui/toolbar-rect.ui:45 ../share/ui/toolbar-spiral.ui:31
 #: ../share/ui/toolbar-star.ui:54
 msgid "<b>New:</b>"
 msgstr "<b>Új:</b>"
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:392 ../src/ui/toolbar/arc-toolbar.cpp:406
-#: ../src/ui/toolbar/rect-toolbar.cpp:254
-#: ../src/ui/toolbar/rect-toolbar.cpp:269
-#: ../src/ui/toolbar/spiral-toolbar.cpp:179
-#: ../src/ui/toolbar/spiral-toolbar.cpp:190
-#: ../src/ui/toolbar/star-toolbar.cpp:391
+#: ../src/ui/toolbar/arc-toolbar.cpp:422 ../src/ui/toolbar/arc-toolbar.cpp:436
+#: ../src/ui/toolbar/rect-toolbar.cpp:304
+#: ../src/ui/toolbar/rect-toolbar.cpp:319
+#: ../src/ui/toolbar/spiral-toolbar.cpp:207
+#: ../src/ui/toolbar/spiral-toolbar.cpp:218
+#: ../src/ui/toolbar/star-toolbar.cpp:422
 msgid "<b>Change:</b>"
 msgstr "<b>Módosítás:</b>"
 
-#: ../src/ui/toolbar/box3d-toolbar.cpp:141
+#: ../src/ui/toolbar/box3d-toolbar.cpp:165
 msgid "3D Box: Change perspective (angle of infinite axis)"
 msgstr "3D téglatest: perspektíva módosítása (a végtelen tengely szöge)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:314
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:411
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:98
+#: ../src/ui/toolbar/eraser-toolbar.cpp:73
+msgid "(hairline)"
+msgstr "(hajszálvékony)"
+
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:102
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:136
+#: ../src/ui/toolbar/eraser-toolbar.cpp:77
+#: ../src/ui/toolbar/pencil-toolbar.cpp:113
+#: ../src/ui/toolbar/spray-toolbar.cpp:106
+#: ../src/ui/toolbar/spray-toolbar.cpp:119
+#: ../src/ui/toolbar/spray-toolbar.cpp:125
+#: ../src/ui/toolbar/spray-toolbar.cpp:136
+#: ../src/ui/toolbar/spray-toolbar.cpp:154
+#: ../src/ui/toolbar/spray-toolbar.cpp:159
+#: ../src/ui/toolbar/spray-toolbar.cpp:174
+#: ../src/ui/toolbar/tweak-toolbar.cpp:70
+#: ../src/ui/toolbar/tweak-toolbar.cpp:81
+#: ../src/ui/toolbar/tweak-toolbar.cpp:92
+msgid "(default)"
+msgstr "(alapértelmezett)"
+
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:107
+#: ../src/ui/toolbar/eraser-toolbar.cpp:82
+msgid "(broad stroke)"
+msgstr "(széles körvonal)"
+
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:111
+msgid "(speed blows up stroke"
+msgstr "(a sebesség erősen szélesíti a körvonalat)"
+
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:114
+#: ../src/ui/toolbar/eraser-toolbar.cpp:89
+msgid "(slight widening)"
+msgstr "(enyhe szélesedés)"
+
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:115
+#: ../src/ui/toolbar/eraser-toolbar.cpp:90
+msgid "(constant width)"
+msgstr "(állandó szélesség)"
+
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:116
+msgid "(slight thining, default)"
+msgstr "(enyhe elvékonyodás, alapértelmezett)"
+
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:119
+#: ../src/ui/toolbar/eraser-toolbar.cpp:94
+msgid "(speed deflates stroke)"
+msgstr "(a sebesség erősen keskenyíti a körvonalt)"
+
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:123
+#: ../src/ui/toolbar/eraser-toolbar.cpp:116
+msgid "(no inertia)"
+msgstr "(nincs tehetetlenség)"
+
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:124
+#: ../src/ui/toolbar/eraser-toolbar.cpp:117
+msgid "(slight smoothing, default)"
+msgstr "(enyhe simítás, alapértelmezett)"
+
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:125
+#: ../src/ui/toolbar/eraser-toolbar.cpp:118
+msgid "(noticeable lagging)"
+msgstr "(észrevehető késleltetés)"
+
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:128
+#: ../src/ui/toolbar/eraser-toolbar.cpp:121
+msgid "(maximum inertia)"
+msgstr "(maximális tehetetlenség)"
+
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:132
+msgid "(left edge up)"
+msgstr "(a bal oldali él van fent)"
+
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:135
+msgid "(horizontal)"
+msgstr "(vízszintes)"
+
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:138
+msgid "(right edge up)"
+msgstr "(a jobb oldali él van fent)"
+
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:143
+msgid "(perpendicular to stroke, \"brush\")"
+msgstr "(merőleges a körvonalra, „ecset”)"
+
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:147
+msgid "(almost fixed, default)"
+msgstr "(majdnem rögzített, alapértelmezés)"
+
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:148
+msgid "(fixed by Angle, \"pen\")"
+msgstr "(szögben rögzített, „toll”)"
+
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:152
+#: ../src/ui/toolbar/eraser-toolbar.cpp:98
+msgid "(blunt caps, default)"
+msgstr "(tompa vonalvégek, alapértelmezett)"
+
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:153
+#: ../src/ui/toolbar/eraser-toolbar.cpp:99
+msgid "(slightly bulging)"
+msgstr "(enyhén kidudorodó)"
+
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:156
+#: ../src/ui/toolbar/eraser-toolbar.cpp:102
+msgid "(approximately round)"
+msgstr "(nagyjából kerek)"
+
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:157
+#: ../src/ui/toolbar/eraser-toolbar.cpp:103
+msgid "(long protruding caps)"
+msgstr "(hosszan kiálló vonalvégek)"
+
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:161
+#: ../src/ui/toolbar/eraser-toolbar.cpp:107
+msgid "(smooth line)"
+msgstr "(sima vonal)"
+
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:162
+#: ../src/ui/toolbar/eraser-toolbar.cpp:108
+msgid "(slight tremor)"
+msgstr "(enyhe remegés)"
+
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:163
+#: ../src/ui/toolbar/eraser-toolbar.cpp:109
+msgid "(noticeable tremor)"
+msgstr "(észrevehető remegés)"
+
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:166
+#: ../src/ui/toolbar/eraser-toolbar.cpp:112
+msgid "(maximum tremor)"
+msgstr "(maximális remegés)"
+
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:170
+msgid "(no wiggle)"
+msgstr "(nincs tekeredés)"
+
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:171
+msgid "(slight deviation)"
+msgstr "(enyhe elhajlás)"
+
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:174
+msgid "(wild waves and curls)"
+msgstr "(vad hullámok és csavarodások)"
+
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:394
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:491
 msgid "No preset"
 msgstr "Nincs előbeállítás"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:184
+#: ../src/ui/toolbar/connector-toolbar.cpp:189
 msgid "Set connector type: orthogonal"
 msgstr "Kapocstípus beállítása: derékszögű"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:184
+#: ../src/ui/toolbar/connector-toolbar.cpp:189
 msgid "Set connector type: polyline"
 msgstr "Kapocstípus beállítása: kapcsolódó vonalak"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:227
+#: ../src/ui/toolbar/connector-toolbar.cpp:232
 msgid "Change connector curvature"
 msgstr "Kapocs görbületének módosítása"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:271
+#: ../src/ui/toolbar/connector-toolbar.cpp:276
 msgid "Change connector spacing"
 msgstr "Kapcsok helykihagyásának módosítása"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:294
+#: ../src/ui/toolbar/connector-toolbar.cpp:299
 msgid "Arrange connector network"
 msgstr "Kapocshálózat elrendezése"
 
+#: ../src/ui/toolbar/eraser-toolbar.cpp:72
+msgid "(no width)"
+msgstr "(nincs szélesség)"
+
+#: ../src/ui/toolbar/eraser-toolbar.cpp:86
+msgid "(speed blows up stroke)"
+msgstr "(a sebesség erősen szélesíti a körvonalt)"
+
+#: ../src/ui/toolbar/eraser-toolbar.cpp:91
+msgid "(slight thinning, default)"
+msgstr "(enyhe keskenyedés, alapértelmezett)"
+
 #: ../src/ui/toolbar/gradient-toolbar.cpp:130
 #: ../src/ui/toolbar/gradient-toolbar.cpp:153
-#: ../src/ui/toolbar/gradient-toolbar.cpp:378
-#: ../src/ui/toolbar/gradient-toolbar.cpp:923
+#: ../src/ui/toolbar/gradient-toolbar.cpp:381
+#: ../src/ui/toolbar/gradient-toolbar.cpp:926
 msgid "No gradient"
 msgstr "Nincs színátmenet"
 
@@ -33874,27 +34053,27 @@ msgid "Nothing selected"
 msgstr "Semmi nincs kijelölve"
 
 #: ../src/ui/toolbar/gradient-toolbar.cpp:162
-#: ../src/ui/toolbar/gradient-toolbar.cpp:911
+#: ../src/ui/toolbar/gradient-toolbar.cpp:914
 msgid "Multiple gradients"
 msgstr "Több színátmenet"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:413
+#: ../src/ui/toolbar/gradient-toolbar.cpp:416
 msgctxt "Gradient repeat type"
 msgid "None"
 msgstr "Nincs"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:414
+#: ../src/ui/toolbar/gradient-toolbar.cpp:417
 #: ../src/ui/widget/gradient-editor.cpp:281
 msgid "Reflected"
 msgstr "Tükrözött"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:415
+#: ../src/ui/toolbar/gradient-toolbar.cpp:418
 #: ../src/ui/widget/gradient-editor.cpp:280
 msgid "Direct"
 msgstr "Közvetlen"
 
 #. TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/pservers.html#LinearGradientSpreadMethodAttribute
-#: ../src/ui/toolbar/gradient-toolbar.cpp:426
+#: ../src/ui/toolbar/gradient-toolbar.cpp:429
 msgid ""
 "Whether to fill with flat color beyond the ends of the gradient vector "
 "(spreadMethod=\"pad\"), or repeat the gradient in the same direction "
@@ -33907,34 +34086,34 @@ msgstr ""
 "pedig ismétlődjön az átmenet ellentétesen, azaz váltakozó irányban "
 "(spreadMethod=\"reflect\", tükrözéses ismétlődés)"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:449
+#: ../src/ui/toolbar/gradient-toolbar.cpp:452
 msgid "No stops"
 msgstr "Nincs fázis"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:455
+#: ../src/ui/toolbar/gradient-toolbar.cpp:458
 #: ../share/ui/gradient-edit.glade:130
 msgid "Stops"
 msgstr "Fázisok"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:557
+#: ../src/ui/toolbar/gradient-toolbar.cpp:560
 msgid "Assign gradient to object"
 msgstr "Színátmenet hozzárendelése egy objektumhoz"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:601
+#: ../src/ui/toolbar/gradient-toolbar.cpp:604
 #: ../src/ui/widget/gradient-editor.cpp:503
 msgid "Set gradient repeat"
 msgstr "Színátmenet ismétlődésének beállítása"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:710
+#: ../src/ui/toolbar/gradient-toolbar.cpp:713
 #: ../src/ui/widget/gradient-editor.cpp:649
 msgid "Change gradient stop offset"
 msgstr "Színátmenet-fázis eltolásának módosítása"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:931
+#: ../src/ui/toolbar/gradient-toolbar.cpp:934
 msgid "No stops in gradient"
 msgstr "Nincs fázis a színátmenetben"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1050
+#: ../src/ui/toolbar/gradient-toolbar.cpp:1053
 msgid "Multiple stops"
 msgstr "Több fázis"
 
@@ -33946,43 +34125,43 @@ msgstr "Vonaltípus:"
 msgid "Choose a line segment type"
 msgstr "Vonalszakasz-típus kijelölése"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:229
+#: ../src/ui/toolbar/measure-toolbar.cpp:235
 msgid "Measures only selected."
 msgstr "Csak a kijelöltek mérése."
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:231
+#: ../src/ui/toolbar/measure-toolbar.cpp:237
 msgid "Measure all."
 msgstr "Összes mérése."
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:244
+#: ../src/ui/toolbar/measure-toolbar.cpp:250
 msgid "Start and end measures inactive."
 msgstr "Az első és az utolsó pont mérése inaktív."
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:246
+#: ../src/ui/toolbar/measure-toolbar.cpp:252
 msgid "Start and end measures active."
 msgstr "Az első és az utolsó pont mérése aktív."
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:259
+#: ../src/ui/toolbar/measure-toolbar.cpp:265
 msgid "Compute all elements."
 msgstr "Minden elem kiszámítása."
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:261
+#: ../src/ui/toolbar/measure-toolbar.cpp:267
 msgid "Compute max length."
 msgstr "Teljes hosszúság kiszámítása."
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:274
+#: ../src/ui/toolbar/measure-toolbar.cpp:280
 msgid "Show all crossings."
 msgstr "Minden metszés megjelenítése."
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:276
+#: ../src/ui/toolbar/measure-toolbar.cpp:282
 msgid "Show visible crossings."
 msgstr "Látható metszések megjelenítése."
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:289
+#: ../src/ui/toolbar/measure-toolbar.cpp:295
 msgid "Use all layers in the measure."
 msgstr "Minden réteg belefoglalása a mérésbe."
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:291
+#: ../src/ui/toolbar/measure-toolbar.cpp:297
 msgid "Use current layer in the measure."
 msgstr "Csak az aktuális rétegen való mérés."
 
@@ -34005,7 +34184,7 @@ msgid "Coons: no smoothing. Bicubic: smoothing across patch boundaries."
 msgstr ""
 "Coons-foltok: nincs simítás. Bikubikus: simítás a hálófolt határai mentén."
 
-#: ../src/ui/toolbar/mesh-toolbar.cpp:420
+#: ../src/ui/toolbar/mesh-toolbar.cpp:447
 msgid ""
 "Mesh gradients are part of SVG 2:\n"
 "* Syntax may change.\n"
@@ -34021,7 +34200,7 @@ msgstr ""
 "Webre: Átalakítás bitképre (Szerkesztés→Bitkép-másolat készítése)\n"
 "Nyomtatáshoz: exportálás PDF-be."
 
-#: ../src/ui/toolbar/mesh-toolbar.cpp:449
+#: ../src/ui/toolbar/mesh-toolbar.cpp:476
 msgid "Set mesh type"
 msgstr "Háló típusának módosítása"
 
@@ -34072,57 +34251,70 @@ msgstr "Egyoldalas dokumentum"
 msgid "1/-"
 msgstr "1/-"
 
-#: ../src/ui/toolbar/paintbucket-toolbar.cpp:77
+#: ../src/ui/toolbar/paintbucket-toolbar.cpp:81
 msgid "Fill by"
 msgstr "Kitöltés"
 
-#: ../src/ui/toolbar/paintbucket-toolbar.cpp:106
+#: ../src/ui/toolbar/paintbucket-toolbar.cpp:110
 msgid "Close gaps"
 msgstr "Lezárandó rések"
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:154
+#: ../src/ui/toolbar/pencil-toolbar.cpp:112
+msgid "(many nodes, rough)"
+msgstr "(sok csomópont, durva)"
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:118
+msgid "(few nodes, smooth)"
+msgstr "(néhány csomópont, simított)"
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:175
 msgctxt "Cap"
 msgid "Butt"
 msgstr "Tompa"
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:163
+#: ../src/ui/toolbar/pencil-toolbar.cpp:184
 msgid "Caps"
 msgstr "Vonalvég"
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:163 ../share/ui/toolbar-pencil.ui:308
+#: ../src/ui/toolbar/pencil-toolbar.cpp:184 ../share/ui/toolbar-pencil.ui:308
 msgid "Line endings when drawing with pressure-sensitive PowerPencil"
 msgstr "Vonalvégződések nyomásérzékeny okos ceruzával való rajzoláskor"
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:182
+#: ../src/ui/toolbar/pencil-toolbar.cpp:203
 msgctxt "Freehand shape"
 msgid "None"
 msgstr "Nincs"
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:183
+#: ../src/ui/toolbar/pencil-toolbar.cpp:204
 msgid "Triangle in"
 msgstr "Háromszög, befelé"
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:184
+#: ../src/ui/toolbar/pencil-toolbar.cpp:205
 msgid "Triangle out"
 msgstr "Háromszög, kifelé"
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:186
+#: ../src/ui/toolbar/pencil-toolbar.cpp:207
 msgid "From clipboard"
 msgstr "A vágólapról"
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:187
+#: ../src/ui/toolbar/pencil-toolbar.cpp:208
 msgid "Bend from clipboard"
 msgstr "Hajlítás a vágólapról"
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:188
+#: ../src/ui/toolbar/pencil-toolbar.cpp:209
 msgid "Last applied"
 msgstr "Legutóbb alkalmazott"
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:197 ../share/ui/toolbar-pencil.ui:407
+#: ../src/ui/toolbar/pencil-toolbar.cpp:218 ../share/ui/toolbar-pencil.ui:407
 msgid "Shape of new paths drawn by this tool"
 msgstr "Az ezen eszközzel rajzolt új útvonalak alakja"
 
-#: ../src/ui/toolbar/rect-toolbar.cpp:174
+#: ../src/ui/toolbar/rect-toolbar.cpp:114
+#: ../src/ui/toolbar/rect-toolbar.cpp:126
+msgid "not rounded"
+msgstr "nem lekerekített"
+
+#: ../src/ui/toolbar/rect-toolbar.cpp:224
 msgid "Change rectangle"
 msgstr "Téglalap módosítása"
 
@@ -34192,145 +34384,324 @@ msgstr ""
 "A <b>minták</b> a továbbiakban az objektumok transzformációjakor "
 "(áthelyezés, méretezés, forgatás, nyírás) <b>rögzítve</b> maradnak."
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:136
+#: ../src/ui/toolbar/spiral-toolbar.cpp:67
+msgid "just a curve"
+msgstr "csak ív"
+
+#: ../src/ui/toolbar/spiral-toolbar.cpp:69
+msgid "one full revolution"
+msgstr "egy teljes körbefordulás"
+
+#: ../src/ui/toolbar/spiral-toolbar.cpp:79
+msgid "circle"
+msgstr "kör"
+
+#: ../src/ui/toolbar/spiral-toolbar.cpp:80
+msgid "edge is much denser"
+msgstr "az objektum éle sokkal sűrűbb"
+
+#: ../src/ui/toolbar/spiral-toolbar.cpp:81
+msgid "edge is denser"
+msgstr "az objektum éle sűrűbb"
+
+#: ../src/ui/toolbar/spiral-toolbar.cpp:82
+msgid "even"
+msgstr "egyenletes"
+
+#: ../src/ui/toolbar/spiral-toolbar.cpp:83
+msgid "center is denser"
+msgstr "a középpont sűrűbb"
+
+#: ../src/ui/toolbar/spiral-toolbar.cpp:84
+msgid "center is much denser"
+msgstr "a középpont sokkal sűrűbb"
+
+#: ../src/ui/toolbar/spiral-toolbar.cpp:89
+msgid "starts from center"
+msgstr "a középpontból indul"
+
+#: ../src/ui/toolbar/spiral-toolbar.cpp:90
+msgid "starts mid-way"
+msgstr "félútról indul"
+
+#: ../src/ui/toolbar/spiral-toolbar.cpp:91
+msgid "starts near edge"
+msgstr "az objektum élének közeléből indul"
+
+#: ../src/ui/toolbar/spiral-toolbar.cpp:164
 msgid "Change spiral"
 msgstr "Spirál módosítása"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:71
+#: ../src/ui/toolbar/spray-toolbar.cpp:102
+msgid "(narrow spray)"
+msgstr "(keskeny festékszóró)"
+
+#: ../src/ui/toolbar/spray-toolbar.cpp:111
+msgid "(broad spray)"
+msgstr "(széles festékszóró)"
+
+#: ../src/ui/toolbar/spray-toolbar.cpp:115
+msgid "(low population)"
+msgstr "(kicsi elemszám)"
+
+#: ../src/ui/toolbar/spray-toolbar.cpp:121
+msgid "(high population)"
+msgstr "(nagy elemszám)"
+
+#: ../src/ui/toolbar/spray-toolbar.cpp:132
+msgid "(high rotation variation)"
+msgstr "(magas elforgatási ingadozás)"
+
+#: ../src/ui/toolbar/spray-toolbar.cpp:143
+msgid "(high scale variation)"
+msgstr "(magas méretbeli ingadozás)"
+
+#: ../src/ui/toolbar/spray-toolbar.cpp:148
+msgid "(minimum scatter)"
+msgstr "(minimális szétszórás)"
+
+#: ../src/ui/toolbar/spray-toolbar.cpp:155
+msgid "(maximum scatter)"
+msgstr "(maximális szétszórás)"
+
+#: ../src/ui/toolbar/spray-toolbar.cpp:166
+msgid "(maximum mean)"
+msgstr "(maximális középérték)"
+
+#: ../src/ui/toolbar/spray-toolbar.cpp:170
+msgid "(minimum offset)"
+msgstr "(minimális eltolás)"
+
+#: ../src/ui/toolbar/spray-toolbar.cpp:177
+msgid "(maximum offset)"
+msgstr "(maximális eltolás)"
+
+#: ../src/ui/toolbar/star-toolbar.cpp:74
 msgid "triangle/tri-star"
 msgstr "háromszög/háromágú csillag"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:72
+#: ../src/ui/toolbar/star-toolbar.cpp:75
 msgid "square/quad-star"
 msgstr "négyzet/négyágú csillag"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:73
+#: ../src/ui/toolbar/star-toolbar.cpp:76
 msgid "pentagon/five-pointed star"
 msgstr "ötszög/ötágú csillag"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:74
+#: ../src/ui/toolbar/star-toolbar.cpp:77
 msgid "hexagon/six-pointed star"
 msgstr "hatszög/hatágú csillag"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:187
+#: ../src/ui/toolbar/star-toolbar.cpp:86
+msgid "thin-ray star"
+msgstr "vékony ágú csillag"
+
+#: ../src/ui/toolbar/star-toolbar.cpp:88
+msgid "pentagram"
+msgstr "pentagram"
+
+#: ../src/ui/toolbar/star-toolbar.cpp:89
+msgid "hexagram"
+msgstr "hexagram"
+
+#: ../src/ui/toolbar/star-toolbar.cpp:90
+msgid "heptagram"
+msgstr "heptagram"
+
+#: ../src/ui/toolbar/star-toolbar.cpp:91
+msgid "octagram"
+msgstr "oktagram"
+
+#: ../src/ui/toolbar/star-toolbar.cpp:92
+msgid "regular polygon"
+msgstr "szabályos sokszög"
+
+#: ../src/ui/toolbar/star-toolbar.cpp:96 ../src/ui/toolbar/star-toolbar.cpp:105
+msgid "stretched"
+msgstr "nyújtott"
+
+#: ../src/ui/toolbar/star-toolbar.cpp:97
+msgid "twisted"
+msgstr "görbített"
+
+#: ../src/ui/toolbar/star-toolbar.cpp:98
+msgid "slightly pinched"
+msgstr "enyhén hajlított"
+
+#: ../src/ui/toolbar/star-toolbar.cpp:99
+msgid "NOT rounded"
+msgstr "NEM lekerekített"
+
+#: ../src/ui/toolbar/star-toolbar.cpp:100
+msgid "slightly rounded"
+msgstr "enyhén lekerekített"
+
+#: ../src/ui/toolbar/star-toolbar.cpp:101
+msgid "visibly rounded"
+msgstr "láthatóan lekerekített"
+
+#: ../src/ui/toolbar/star-toolbar.cpp:102
+msgid "well rounded"
+msgstr "eléggé lekerekített"
+
+#: ../src/ui/toolbar/star-toolbar.cpp:103
+msgid "amply rounded"
+msgstr "erősen lekerekített"
+
+#: ../src/ui/toolbar/star-toolbar.cpp:106
+#: ../src/ui/toolbar/star-toolbar.cpp:114
+msgid "blown up"
+msgstr "felfújt"
+
+#: ../src/ui/toolbar/star-toolbar.cpp:110
+msgid "NOT randomized"
+msgstr "NEM véletlenszerűsített"
+
+#: ../src/ui/toolbar/star-toolbar.cpp:111
+msgid "slightly irregular"
+msgstr "kissé szabálytalan"
+
+#: ../src/ui/toolbar/star-toolbar.cpp:112
+msgid "visibly randomized"
+msgstr "láthatóan véletlenszerűsített"
+
+#: ../src/ui/toolbar/star-toolbar.cpp:113
+msgid "strongly randomized"
+msgstr "erősen véletlenszerűsített"
+
+#: ../src/ui/toolbar/star-toolbar.cpp:218
 msgid "Make polygon"
 msgstr "Sokszöggé tevés"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:187
+#: ../src/ui/toolbar/star-toolbar.cpp:218
 msgid "Make star"
 msgstr "Csillaggá tevés"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:221
+#: ../src/ui/toolbar/star-toolbar.cpp:252
 msgid "Star: Change number of corners"
 msgstr "Csillag: csúcsok számának módosítása"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:263
+#: ../src/ui/toolbar/star-toolbar.cpp:294
 msgid "Star: Change spoke ratio"
 msgstr "Csillag: ágarány módosítása"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:293
+#: ../src/ui/toolbar/star-toolbar.cpp:324
 msgid "Star: Change rounding"
 msgstr "Csillag: lekerekítettség módosítása"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:323
+#: ../src/ui/toolbar/star-toolbar.cpp:354
 msgid "Star: Change randomization"
 msgstr "Csillag: véletlenszerűség módosítása"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:354
+#: ../src/ui/toolbar/star-toolbar.cpp:385
 msgid "Star: Reset to defaults"
 msgstr "Csillag: Alapállapotba"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:305
+#: ../src/ui/toolbar/text-toolbar.cpp:274
+msgid "Single spaced"
+msgstr "Egyszeres"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:274
+msgid "Double spaced"
+msgstr "Dupla"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:275
+#: ../src/ui/toolbar/text-toolbar.cpp:276
+msgctxt "Text tool"
+msgid "Normal"
+msgstr "Normál"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:323
 msgid "Font Family"
 msgstr "Betűkészlet-család"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:306
+#: ../src/ui/toolbar/text-toolbar.cpp:324
 msgid "Select Font Family (Alt-X to access)"
 msgstr "Betűkészlet-család kiválasztása (elérés: Alt+X)"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:317
+#: ../src/ui/toolbar/text-toolbar.cpp:335
 msgid "Select all text with this font-family"
 msgstr "Minden szöveg kijelölése ezzel a betűkészlet-családdal"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:320
+#: ../src/ui/toolbar/text-toolbar.cpp:338
 msgid "Font not found on system"
 msgstr "Ilyen betűkészlet nem található a rendszeren"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:335
+#: ../src/ui/toolbar/text-toolbar.cpp:353
 msgid "Font Style"
 msgstr "Betűstílus"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:336
+#: ../src/ui/toolbar/text-toolbar.cpp:354
 msgid "Font style"
 msgstr "Betűstílus"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:356
-#: ../src/ui/toolbar/text-toolbar.cpp:1701
+#: ../src/ui/toolbar/text-toolbar.cpp:374
+#: ../src/ui/toolbar/text-toolbar.cpp:1719
 #: ../src/ui/widget/font-selector.cpp:52 ../src/ui/widget/font-selector.cpp:252
 msgid "Font size"
 msgstr "Betűméret"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:360
+#: ../src/ui/toolbar/text-toolbar.cpp:378
 msgid "Font Size"
 msgstr "Betűkészlet-méret"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:601
+#: ../src/ui/toolbar/text-toolbar.cpp:619
 msgid "Text: Change font family"
 msgstr "Szöveg: betűkészlet-család módosítása"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:669
+#: ../src/ui/toolbar/text-toolbar.cpp:687
 msgid "Text: Change font size"
 msgstr "Szöveg: betűméret módosítása"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:701
+#: ../src/ui/toolbar/text-toolbar.cpp:719
 msgid "Text: Change font style"
 msgstr "Szöveg: betűstílus módosítása"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:781
+#: ../src/ui/toolbar/text-toolbar.cpp:799
 msgid "Text: Change superscript or subscript"
 msgstr "Szöveg: felső index vagy alsó index módosítása"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:909
+#: ../src/ui/toolbar/text-toolbar.cpp:927
 msgid "Text: Change alignment"
 msgstr "Szöveg: igazítás módosítása"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:951
+#: ../src/ui/toolbar/text-toolbar.cpp:969
 msgid "Text: Change writing mode"
 msgstr "Szöveg: írásmód módosítása"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:993
+#: ../src/ui/toolbar/text-toolbar.cpp:1011
 msgid "Text: Change orientation"
 msgstr "Szöveg: tájolás módosítása"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:1028
+#: ../src/ui/toolbar/text-toolbar.cpp:1046
 msgid "Text: Change direction"
 msgstr "Szöveg Irány módosítása"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:1128
+#: ../src/ui/toolbar/text-toolbar.cpp:1146
 msgid "Text: Change line-height"
 msgstr "Szöveg: sormagasság módosítása"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:1356
+#: ../src/ui/toolbar/text-toolbar.cpp:1374
 msgid "Text: Change line-height unit"
 msgstr "Szöveg: sormagasság mértékegységének módosítása"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:1398
+#: ../src/ui/toolbar/text-toolbar.cpp:1416
 msgid "Text: Change word-spacing"
 msgstr "Szöveg: szótávolság módosítása"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:1423
+#: ../src/ui/toolbar/text-toolbar.cpp:1441
 msgid "Text: Change letter-spacing"
 msgstr "Szöveg: betűtávolság módosítása"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:1454
+#: ../src/ui/toolbar/text-toolbar.cpp:1472
 msgid "Text: Change dx (kern)"
 msgstr "Szöveg: dx módosítása (alávágás)"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:1482
+#: ../src/ui/toolbar/text-toolbar.cpp:1500
 msgid "Text: Change dy"
 msgstr "Szöveg: dy módosítása"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:1511
+#: ../src/ui/toolbar/text-toolbar.cpp:1529
 msgid "Text: Change rotate"
 msgstr "Szöveg: elforgatás módosítása"
 
@@ -34381,6 +34752,30 @@ msgstr "Területkitöltési objektumok stílusa"
 #: ../src/ui/toolbar/toolbars.cpp:96 ../src/ui/toolbar/toolbars.cpp:97
 msgid "TBD"
 msgstr "TBD"
+
+#: ../src/ui/toolbar/tweak-toolbar.cpp:65
+msgid "(pinch tweak)"
+msgstr "(manipulálás kis területen)"
+
+#: ../src/ui/toolbar/tweak-toolbar.cpp:74
+msgid "(broad tweak)"
+msgstr "(manipulálás nagy területen)"
+
+#: ../src/ui/toolbar/tweak-toolbar.cpp:78
+msgid "(minimum force)"
+msgstr "(minimális erő)"
+
+#: ../src/ui/toolbar/tweak-toolbar.cpp:85
+msgid "(maximum force)"
+msgstr "(maximális erő)"
+
+#: ../src/ui/toolbar/tweak-toolbar.cpp:89
+msgid "(rough, simplified)"
+msgstr "(durva, egyszerűsített)"
+
+#: ../src/ui/toolbar/tweak-toolbar.cpp:95
+msgid "(fine, but many nodes)"
+msgstr "(finom, de sok csomópont)"
 
 #: ../src/ui/tools/arc-tool.cpp:208
 msgid ""
@@ -34898,7 +35293,7 @@ msgstr ""
 "Csomópontok kijelölése: <b>húzással való körülrajzolással</b>. Váltás "
 "téglalapos kijelölésre: <b>%s</b>."
 
-#: ../src/ui/tools/node-tool.cpp:673
+#: ../src/ui/tools/node-tool.cpp:664
 msgctxt "Node tool tip"
 msgid ""
 "<b>Shift</b>: drag to add nodes to the selection, click to toggle object "
@@ -34907,54 +35302,54 @@ msgstr ""
 "<b>Shift</b>. Csomópontok felvétele a kijelölésbe: húzással. "
 "Objektumkijelölés átváltása: kattintással."
 
-#: ../src/ui/tools/node-tool.cpp:677
+#: ../src/ui/tools/node-tool.cpp:668
 msgctxt "Node tool tip"
 msgid "<b>Shift</b>: drag to add nodes to the selection"
 msgstr "<b>Shift</b>. Csomópontok felvétele a kijelölésbe: húzással."
 
-#: ../src/ui/tools/node-tool.cpp:695
+#: ../src/ui/tools/node-tool.cpp:686
 msgid "<b>%1 of %2</b> node selected."
 msgid_plural "<b>%1 of %2</b> nodes selected."
 msgstr[0] "<b>%1 / %2</b> csomópont kijelölve."
 msgstr[1] "<b>%1 / %2</b> csomópont kijelölve."
 
 #. TRANSLATORS: %1 is an angle in degrees, formatted with two decimal places.
-#: ../src/ui/tools/node-tool.cpp:713
+#: ../src/ui/tools/node-tool.cpp:704
 msgid "Angle: %1°."
 msgstr "Szög: %1°."
 
-#: ../src/ui/tools/node-tool.cpp:720
+#: ../src/ui/tools/node-tool.cpp:711
 msgctxt "Node tool tip"
 msgid "%1 Drag to select nodes, click to edit only this object (more: Shift)"
 msgstr ""
 "%1 Csomópontok kijelölése: húzással. Csak ezen objektum szerkesztése: "
 "kattintással. (Továbbiak: Shift)"
 
-#: ../src/ui/tools/node-tool.cpp:726
+#: ../src/ui/tools/node-tool.cpp:717
 msgctxt "Node tool tip"
 msgid "%1 Drag to select nodes, click to clear the selection"
 msgstr "%1 Csomópontok kijelölése: húzással. Kijelölés törlése: kattintással."
 
-#: ../src/ui/tools/node-tool.cpp:733
+#: ../src/ui/tools/node-tool.cpp:724
 msgctxt "Node tool tip"
 msgid "Drag to select nodes, click to edit only this object"
 msgstr ""
 "Csomópontok kijelölése: húzással. Csak ezen objektum szerkesztése: "
 "kattintással."
 
-#: ../src/ui/tools/node-tool.cpp:736
+#: ../src/ui/tools/node-tool.cpp:727
 msgctxt "Node tool tip"
 msgid "Drag to select nodes, click to clear the selection"
 msgstr "Csomópontok kijelölése: húzással. Kijelölés törlése: kattintással."
 
-#: ../src/ui/tools/node-tool.cpp:741
+#: ../src/ui/tools/node-tool.cpp:732
 msgctxt "Node tool tip"
 msgid "Drag to select objects to edit, click to edit this object (more: Shift)"
 msgstr ""
 "Szerkesztendő objektumok kijelölése: húzással. Ezen objektum szerkesztése: "
 "kattintással. (Továbbiak: Shift.)"
 
-#: ../src/ui/tools/node-tool.cpp:744
+#: ../src/ui/tools/node-tool.cpp:735
 msgctxt "Node tool tip"
 msgid "Drag to select objects to edit"
 msgstr "Szerkesztendő objektumok kijelölése: húzással."
@@ -38053,10 +38448,6 @@ msgstr ""
 "Magasság\n"
 "(px)"
 
-#: ../share/ui/dialog-export.glade:506
-msgid "Show Preview"
-msgstr "Előnézet megjelenítése"
-
 #: ../share/ui/dialog-export.glade:515 ../share/ui/dialog-export.glade:850
 msgid "Export Selected Only"
 msgstr "Csak kijelölt exportálása"
@@ -39342,11 +39733,11 @@ msgstr "Válassza ki a rajzvászon alapértelmezett háttérszínét"
 msgid "Set to dark theme"
 msgstr "Sötét téma beállítása"
 
-#: ../share/ui/inkscape-start.glade:704
+#: ../share/ui/inkscape-start.glade:686
 msgid "Quick Setup"
 msgstr "Gyors beállítás"
 
-#: ../share/ui/inkscape-start.glade:725
+#: ../share/ui/inkscape-start.glade:707
 msgid ""
 "<b>The Inkscape project is supported by users like you.</b> Through our "
 "collective time, money and skill, we have made this software for everyone in "
@@ -39361,7 +39752,7 @@ msgstr ""
 "Ha szeretne részt venni az Inkscape következő verziójának még jobbá "
 "tételében, fontolja meg még ma az Inkscape projekthez való csatlakozást.</b>"
 
-#: ../share/ui/inkscape-start.glade:784
+#: ../share/ui/inkscape-start.glade:766
 msgid ""
 "Learn how to\n"
 "Contribute Time"
@@ -39369,7 +39760,7 @@ msgstr ""
 "Hozzájárulás\n"
 "idővel"
 
-#: ../share/ui/inkscape-start.glade:844
+#: ../share/ui/inkscape-start.glade:826
 msgid ""
 "Learn how to\n"
 "Fund Inkscape"
@@ -39377,50 +39768,40 @@ msgstr ""
 "Pénzügyi\n"
 "támogatás"
 
-#: ../share/ui/inkscape-start.glade:877
+#: ../share/ui/inkscape-start.glade:859
 msgid "Thanks!"
 msgstr "Köszönöm!"
 
-#: ../share/ui/inkscape-start.glade:905
+#: ../share/ui/inkscape-start.glade:884
 msgid "Supported by You"
 msgstr "Személyes támogatás"
 
-#: ../share/ui/inkscape-start.glade:941
+#: ../share/ui/inkscape-start.glade:920
 msgctxt "Welcome dialog"
 msgid "Recent Files"
 msgstr "Legutóbbi fájlok"
 
-#: ../share/ui/inkscape-start.glade:958
+#: ../share/ui/inkscape-start.glade:937
 msgctxt "Welcome dialog"
 msgid "Emergency Save"
 msgstr "Vészhelyzeti mentés"
 
-#: ../share/ui/inkscape-start.glade:974
+#: ../share/ui/inkscape-start.glade:953
 msgctxt "Welcome dialog"
 msgid "Existing Files"
 msgstr "Létező fájlok"
 
-#: ../share/ui/inkscape-start.glade:994
+#: ../share/ui/inkscape-start.glade:974
 msgid "Show this every time"
 msgstr "Minden alkalommal jelenjen meg"
 
-#: ../share/ui/inkscape-start.glade:1029
+#: ../share/ui/inkscape-start.glade:1009
 msgid "New Document"
 msgstr "Új dokumentum"
 
-#: ../share/ui/inkscape-start.glade:1060
+#: ../share/ui/inkscape-start.glade:1039
 msgid "Time to Draw"
 msgstr "Ideje rajzolni"
-
-#. Not automatic, but will be turned into start-welcome-text.svg
-#: ../share/ui/inkscape-start.glade:1106
-msgid "Welcome!"
-msgstr "Üdvözöljük!"
-
-#. Not automatic, but will be turned into start-welcome-text.svg
-#: ../share/ui/inkscape-start.glade:1112
-msgid "Let's set up a few things..."
-msgstr "Állítsunk be néhány dolgot!"
 
 #: ../share/ui/marker-popup.glade:104 ../share/extensions/layout_nup.inx:14
 #: ../share/extensions/layout_nup.inx:25
@@ -41436,7 +41817,7 @@ msgstr "A téglalap szélessége"
 msgid "Height of rectangle"
 msgstr "A téglalap magassága"
 
-#: ../share/ui/toolbar-rect.ui:120 ../share/ui/toolbar-snap.ui:59
+#: ../share/ui/toolbar-rect.ui:120 ../share/ui/toolbar-snap.ui:60
 msgid "Corners"
 msgstr "Csúcsok"
 
@@ -41483,111 +41864,111 @@ msgstr ""
 msgid "Height of selection"
 msgstr "A kijelölés magassága"
 
-#: ../share/ui/toolbar-snap.ui:15 ../share/ui/toolbar-snap.ui:807
+#: ../share/ui/toolbar-snap.ui:16 ../share/ui/toolbar-snap.ui:809
 msgid "Enable snapping"
 msgstr "Illesztés bekapcsolása"
 
-#: ../share/ui/toolbar-snap.ui:30 ../share/ui/toolbar-snap.ui:844
+#: ../share/ui/toolbar-snap.ui:31 ../share/ui/toolbar-snap.ui:846
 msgid "Bounding boxes"
 msgstr "Határoló téglalapok"
 
-#: ../share/ui/toolbar-snap.ui:45 ../share/extensions/polyhedron_3d.inx:78
+#: ../share/ui/toolbar-snap.ui:46 ../share/extensions/polyhedron_3d.inx:78
 msgid "Edges"
 msgstr "Élek"
 
-#: ../share/ui/toolbar-snap.ui:73
+#: ../share/ui/toolbar-snap.ui:74
 msgid "Edge midpoints"
 msgstr "Élek középpontjai"
 
-#: ../share/ui/toolbar-snap.ui:87
+#: ../share/ui/toolbar-snap.ui:88
 msgid "Centers"
 msgstr "Középpontok"
 
-#: ../share/ui/toolbar-snap.ui:101 ../share/ui/toolbar-snap.ui:875
+#: ../share/ui/toolbar-snap.ui:102 ../share/ui/toolbar-snap.ui:877
 msgid "Nodes"
 msgstr "Csomópontok"
 
-#: ../share/ui/toolbar-snap.ui:130
+#: ../share/ui/toolbar-snap.ui:131
 msgid "Path intersections"
 msgstr "Útvonal-metszetek"
 
-#: ../share/ui/toolbar-snap.ui:144
+#: ../share/ui/toolbar-snap.ui:145
 msgid "Cusp nodes"
 msgstr "Csúcs-csomópontok"
 
-#: ../share/ui/toolbar-snap.ui:158
+#: ../share/ui/toolbar-snap.ui:159
 msgid "Smooth nodes"
 msgstr "Íves csomópontok"
 
-#: ../share/ui/toolbar-snap.ui:172
+#: ../share/ui/toolbar-snap.ui:173
 msgid "Line midpoints"
 msgstr "Vonalak középpontjai"
 
-#: ../share/ui/toolbar-snap.ui:186
+#: ../share/ui/toolbar-snap.ui:187
 msgid "Object midpoints"
 msgstr "Objektumközéppontok"
 
-#: ../share/ui/toolbar-snap.ui:200
+#: ../share/ui/toolbar-snap.ui:201
 msgid "Other points"
 msgstr "Egyéb pontok"
 
-#: ../share/ui/toolbar-snap.ui:215
+#: ../share/ui/toolbar-snap.ui:216
 msgid "Object rotation centers"
 msgstr "Objektum forgatási középpontok"
 
-#: ../share/ui/toolbar-snap.ui:229
+#: ../share/ui/toolbar-snap.ui:230
 msgid "Text baselines and anchors"
 msgstr "Szövegalapvonalak és horgonypontok"
 
-#: ../share/ui/toolbar-snap.ui:258
+#: ../share/ui/toolbar-snap.ui:259
 msgid "Guide lines"
 msgstr "Segédvonalak"
 
-#: ../share/ui/toolbar-snap.ui:274
+#: ../share/ui/toolbar-snap.ui:275
 msgid "Page borders"
 msgstr "Oldalkeretek"
 
-#: ../share/ui/toolbar-snap.ui:290 ../share/ui/toolbar-snap.ui:906
+#: ../share/ui/toolbar-snap.ui:291 ../share/ui/toolbar-snap.ui:908
 msgid "Alignment"
 msgstr "Igazítás"
 
-#: ../share/ui/toolbar-snap.ui:305
+#: ../share/ui/toolbar-snap.ui:306
 msgid "Nodes in same path"
 msgstr "Csomópontok ugyanazon az útvonalon"
 
-#: ../share/ui/toolbar-snap.ui:319
+#: ../share/ui/toolbar-snap.ui:320
 msgid "Reset to simple snapping mode"
 msgstr "Egyszerű illesztési mód visszaállítása"
 
-#: ../share/ui/toolbar-snap.ui:514
+#: ../share/ui/toolbar-snap.ui:515
 msgid "Masks"
 msgstr "Maszkok"
 
-#: ../share/ui/toolbar-snap.ui:528
+#: ../share/ui/toolbar-snap.ui:529
 msgid "Clips"
 msgstr "Vágóútvonalak"
 
-#: ../share/ui/toolbar-snap.ui:566
+#: ../share/ui/toolbar-snap.ui:567
 msgid "Same distances"
 msgstr "Ugyanazok a távolságok"
 
-#: ../share/ui/toolbar-snap.ui:616
+#: ../share/ui/toolbar-snap.ui:617
 msgid "Perpendicular lines"
 msgstr "Merőleges vonalak"
 
-#: ../share/ui/toolbar-snap.ui:630
+#: ../share/ui/toolbar-snap.ui:631
 msgid "Tangential lines"
 msgstr "Érintő vonalak"
 
-#: ../share/ui/toolbar-snap.ui:738 ../share/extensions/layout_nup.inx:16
+#: ../share/ui/toolbar-snap.ui:739 ../share/extensions/layout_nup.inx:16
 msgid "Page margins"
 msgstr "Oldal margója"
 
-#: ../share/ui/toolbar-snap.ui:765
+#: ../share/ui/toolbar-snap.ui:766
 msgid "Grid Lines"
 msgstr "Rácsvonalak"
 
-#: ../share/ui/toolbar-snap.ui:928
+#: ../share/ui/toolbar-snap.ui:930
 msgid "Advanced mode"
 msgstr "Fejlett mód"
 
@@ -42133,15 +42514,20 @@ msgstr "Új dokumentum (nincs mentve)"
 msgid "This is a single page document."
 msgstr "Ez egy egyoldalas dokumentum."
 
-#: ../share/extensions/dxf_input.py:1320
+#: ../share/extensions/dxf_input.py:1367
+#, python-brace-format
 msgid ""
-"Inkscape cannot read binary DXF files. \n"
-"Please convert to ASCII format first."
+"Encountered key of unknown format, id={0} while parsing DXF. This is "
+"probably a bug."
 msgstr ""
-"Az Inkscape nem tud bináris DXF fájlokat olvasni.\n"
-"Előbb konvertálja át ASCII formátumba."
+"Ismeretlen formátumú kulcsot találtunk, a DXF elemzése során:  id={0}. Ez "
+"valószínűleg egy hiba."
 
-#: ../share/extensions/dxf_input.py:1621
+#: ../share/extensions/dxf_input.py:1400
+msgid "Binary DXF file has unexpected header."
+msgstr "A bináris DXF fájlnak nem várt fejléce van."
+
+#: ../share/extensions/dxf_input.py:1697
 msgid ""
 "An object that has the extrude parameter set was detected. The imported "
 "figure may be displayed incorrectly."
