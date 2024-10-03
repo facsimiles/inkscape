@@ -20,12 +20,13 @@
 # Michael Rack <miohna@freenet.de>, 2018.
 # Frank Beckmann, 2019.
 # ModProg <dev@modprog.de>, 2021.
+# Roland Illig <roland.illig@gmx.de>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2024-09-28 10:42+0000\n"
-"PO-Revision-Date: 2024-10-01 16:15+0200\n"
+"PO-Revision-Date: 2024-10-03 16:13+0200\n"
 "Last-Translator: Maren Hachmann <marenhachmann@yahoo.com>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -390,7 +391,7 @@ msgstr "Altern"
 
 #: ../build/share/filters/filters.svg.h:92
 msgid "Imitate aged photograph"
-msgstr "Imitiere gealterte Fotografie"
+msgstr "Gealterte Fotografie imitieren"
 
 #: ../build/share/filters/filters.svg.h:94
 msgid "Organic"
@@ -603,7 +604,7 @@ msgstr "Dünne Membrane"
 
 #: ../build/share/filters/filters.svg.h:160
 msgid "Thin like a soap membrane"
-msgstr "Dünn, wie eine Seifenblase"
+msgstr "Dünn wie eine Seifenblase"
 
 #: ../build/share/filters/filters.svg.h:162
 msgid "Matte Ridge"
@@ -865,7 +866,7 @@ msgstr "In kleine verstreute Partikel mit etwas Dicke umwandeln"
 
 #: ../build/share/filters/filters.svg.h:278
 msgid "Warm Inside"
-msgstr "Warm innen"
+msgstr "Warme Innenseite"
 
 #: ../build/share/filters/filters.svg.h:280
 msgid "Blurred colorized contour, filled inside"
@@ -877,7 +878,7 @@ msgstr "Kalte Außenseite"
 
 #: ../build/share/filters/filters.svg.h:284
 msgid "Blurred colorized contour, empty inside"
-msgstr "Verschwommene farbige Kontur, leer"
+msgstr "Verschwommene farbige Kontur, innen leer"
 
 #: ../build/share/filters/filters.svg.h:286
 msgid "Electronic Microscopy"
@@ -29786,7 +29787,7 @@ msgid ""
 "Uncheck this to be able to keep the current objects selected when the "
 "current layer changes"
 msgstr ""
-"Dieses abwählen um Objekte ausgewählt zu lassen, wenn die aktuelle Ebene "
+"Dieses abwählen, um Objekte ausgewählt zu lassen, wenn die aktuelle Ebene "
 "geändert wird"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2534
@@ -29839,7 +29840,7 @@ msgid ""
 "Uncheck this to be able to select objects that are locked (either by "
 "themselves or by being in a locked layer)"
 msgstr ""
-"Dieses abwählen damit gesperrte Objekte ausgewählt werden können (gilt auch "
+"Dieses abwählen, damit gesperrte Objekte ausgewählt werden können (gilt auch "
 "für Objekte in gesperrten Ebenen/Gruppierungen)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2551
@@ -32394,7 +32395,7 @@ msgstr ""
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:848
 #: ../share/extensions/setup_typography_canvas.inx:6
 msgid "Ascender:"
-msgstr "Aufsteigend:"
+msgstr "Oberlänge:"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:848
 msgid ""
@@ -32425,7 +32426,7 @@ msgstr ""
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:851
 #: ../share/extensions/setup_typography_canvas.inx:9
 msgid "Descender:"
-msgstr "Absteigend:"
+msgstr "Unterlänge:"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:851
 msgid "Amount of space taken up by descenders like the tail on the letter 'g'"
@@ -33316,7 +33317,7 @@ msgid ""
 "lock ratio or stretch in one dimension only"
 msgstr ""
 "<b>Höhe/Breite</b> des Rechtecks anpassen; <b>Strg</b> um Seitenverhältnis "
-"bei zu behalten oder nur in eine Richtung zu strecken"
+"beizubehalten oder nur in eine Richtung zu strecken"
 
 #: ../src/ui/shape-editor-knotholders.cpp:592
 msgid "Drag to move the rectangle"
@@ -33745,8 +33746,8 @@ msgid ""
 "<b>%s</b>: drag to shape the path, hover to lock, Shift+S to make smooth, "
 "Shift+Y to make symmetric. (more: %s)"
 msgstr ""
-"<b>%s</b>: Ziehen um den Pfad zu formen, Maus darüberhalten um zu sperren, "
-"Umschalt+S um zu glätten, Umschalt+Y um symmetrisch zu machen (mehr: %s)"
+"<b>%s</b>: Ziehen, um den Pfad zu formen, Maus darüberhalten, um zu sperren, "
+"Umschalt+S glättet, Umschalt+Y macht symmetrisch (mehr: %s)"
 
 #: ../src/ui/tool/node.cpp:686
 #, c-format
@@ -33755,8 +33756,8 @@ msgid ""
 "<b>%s</b>: drag to shape the path, hover to lock, Shift+Y to make symmetric. "
 "(more: %s)"
 msgstr ""
-"<b>%s</b>: Ziehen um den Pfad zu formen, Maus darüberhalten um zu sperren, "
-"Umschalt+Y um symmetrisch zu machen (mehr: %s)"
+"<b>%s</b>: Ziehen, um den Pfad zu formen, Maus darüberhalten, um zu sperren, "
+"Umschalt+Y macht symmetrisch (mehr: %s)"
 
 #: ../src/ui/tool/node.cpp:695
 #, c-format
@@ -33772,7 +33773,7 @@ msgstr ""
 #, c-format
 msgctxt "Status line hint"
 msgid "<b>%s</b>: drag to shape the path. (more: %s)"
-msgstr "<b>%s</b>: Ziehen um den Pfad zu formen (mehr: %s)"
+msgstr "<b>%s</b>: Ziehen, um den Pfad zu formen (mehr: %s)"
 
 #: ../src/ui/tool/node.cpp:711
 msgctxt "Status line hint"
@@ -33826,7 +33827,7 @@ msgstr "<b>Alt</b>: Knoten formen"
 #, c-format
 msgctxt "Path node tip"
 msgid "<b>%s</b>: drag to shape the path. (more: Shift, Ctrl, Alt)"
-msgstr "<b>%s</b>: Ziehen um den Pfad zu formen (mehr: Umschalt, Strg, Alt)"
+msgstr "<b>%s</b>: Ziehen, um den Pfad zu formen (mehr: Umschalt, Strg, Alt)"
 
 #: ../src/ui/tool/node.cpp:1628
 #, c-format
@@ -33845,8 +33846,8 @@ msgid ""
 "<b>%s</b>: drag to shape the path, click to toggle scale/rotation handles. "
 "(more: Shift, Ctrl, Alt)"
 msgstr ""
-"<b>%s</b>:Ziehen um den Pfad zu formen, klicken um zwischen Skalieren/Drehen-"
-"Anfassern umzuschalten (mehr: Umschalt, Strg, Alt)"
+"<b>%s</b>:Ziehen, um den Pfad zu formen, klicken schaltet zwischen"
+" Skalieren-/Drehen-Anfassern um (mehr: Umschalt, Strg, Alt)"
 
 #: ../src/ui/tool/node.cpp:1645
 #, c-format
@@ -33855,7 +33856,7 @@ msgid ""
 "<b>%s</b>: drag to shape the path, click to select only this node. (more: "
 "Shift, Ctrl, Alt)"
 msgstr ""
-"<b>%s</b>: Ziehen um den Pfad zu formen, klicken um nur diesen Knoten "
+"<b>%s</b>: Ziehen, um den Pfad zu formen, klicken, um nur diesen Knoten "
 "auszuwählen (mehr: Umschalt, Strg, Alt)"
 
 #: ../src/ui/tool/node.cpp:1653
@@ -33865,8 +33866,8 @@ msgid ""
 "<b>BSpline node</b> (%.3g power): drag to shape the path, click to select "
 "only this node. (more: Shift, Ctrl, Alt)"
 msgstr ""
-"<b>B-Spline Knoten</b> (Gewichtung: %.3g): Ziehen um den Pfad zu formen, "
-"klicken um nur diesen Knoten auszuwählen (mehr: Umschalt, Strg, Alt). "
+"<b>B-Spline Knoten</b> (Gewichtung: %.3g): Ziehen, um den Pfad zu formen, "
+"klicken, um nur diesen Knoten auszuwählen (mehr: Umschalt, Strg, Alt). "
 
 #: ../src/ui/tool/node.cpp:1672
 #, c-format
@@ -33977,7 +33978,7 @@ msgctxt "Transform handle tip"
 msgid ""
 "<b>Rotation handle</b>: drag to rotate the selection around the rotation "
 "center"
-msgstr "<b>Drehanfaser</b>: Ziehen, um die Auswahl um den Drehpunkt zu drehen"
+msgstr "<b>Drehanfasser</b>: Ziehen, um die Auswahl um den Drehpunkt zu drehen"
 
 #: ../src/ui/tool/transform-handle-set.cpp:452
 #, c-format
@@ -41856,7 +41857,7 @@ msgstr ""
 
 #: ../share/ui/toolbar-mesh.ui:407
 msgid "WARNING: Mesh SVG Syntax Subject to Change"
-msgstr "WARNUNG: SVG Syntax zu Verlaufsgittern noch im Entwurfsstadium"
+msgstr "WARNUNG: SVG-Syntax zu Verlaufsgittern noch im Entwurfsstadium"
 
 #: ../share/ui/toolbar-node.ui:20
 msgid "Insert node at min X"
@@ -42008,8 +42009,8 @@ msgid ""
 "Reset paint bucket parameters to defaults (use Inkscape Preferences > Tools "
 "to change defaults)"
 msgstr ""
-"Die Parameter des Farbeimers auf Vorgabewerte zurücksetzen (Menü Datei "
-"„ Inkscape-Einstellungen „ Werkzeuge, um die Vorgabeeinstellungen zu ändern)"
+"Die Parameter des Farbeimers auf Vorgabewerte zurücksetzen (Menü Datei >"
+" Inkscape-Einstellungen > Werkzeuge, um die Vorgabeeinstellungen zu ändern)"
 
 #: ../share/ui/toolbar-pencil.ui:75
 msgid "Mode of new lines drawn by this tool"
@@ -42270,8 +42271,8 @@ msgid ""
 "Reset shape parameters to defaults (use Inkscape Preferences > Tools to "
 "change defaults)"
 msgstr ""
-"Die Parameter der Formen auf Vorgabewerte zurücksetzen (Menü Datei "
-"„ Inkscape-Einstellungen „ Werkzeuge, um die Vorgabeeinstellungen zu ändern)"
+"Die Parameter von Formwerkzeugen auf Vorgabewerte zurücksetzen (Menü Datei "
+"> Inkscape-Einstellungen > Werkzeuge, um die Vorgabeeinstellungen zu ändern)"
 
 #: ../share/ui/toolbar-spray.ui:140
 msgid "Spray copies of the initial selection"
@@ -52574,17 +52575,17 @@ msgstr "Gon, Neugrad (360/400 deg/gon)"
 # File: ../share/ui/units.xml, line: 74
 #: ../share/ui/units.xml:74
 msgid "turn"
-msgstr "Turn"
+msgstr "Vollwinkel"
 
 #: ../share/ui/units.xml:75
 msgid "turns"
-msgstr "Turns"
+msgstr "Vollwinkel"
 
 #
 # File: ../share/ui/units.xml, line: 78
 #: ../share/ui/units.xml:78
 msgid "Turns (360 deg/turn)"
-msgstr "Drehungen (360 deg/turn)"
+msgstr "Vollwinkel (360°)"
 
 #: ../share/ui/units.xml:81
 msgid "font-height"
