@@ -9710,11 +9710,11 @@ msgstr "Alegeți un instrument secundar din bara de instrumente"
 
 #: ../src/actions/actions-tools.cpp:118
 msgid "Create and manage pages."
-msgstr ""
+msgstr "Creează și administrează pagini"
 
 #: ../src/actions/actions-tools.cpp:362
 msgid "Selector Tool"
-msgstr ""
+msgstr "Unealtă pentru selecție"
 
 #: ../src/actions/actions-tools.cpp:362
 msgid "Select and transform objects"
@@ -9722,7 +9722,7 @@ msgstr "Selectează și transformă obiectele"
 
 #: ../src/actions/actions-tools.cpp:363 ../src/ui/modifiers.cpp:68
 msgid "Node Tool"
-msgstr ""
+msgstr "Unealtă pentru noduri"
 
 #: ../src/actions/actions-tools.cpp:363
 msgid "Edit paths by nodes"
@@ -9766,11 +9766,11 @@ msgstr ""
 
 #: ../src/actions/actions-tools.cpp:369
 msgid "Create 3D Boxes"
-msgstr ""
+msgstr "Creează cutii tridimensionale"
 
 #: ../src/actions/actions-tools.cpp:370
 msgid "Spiral Tool"
-msgstr ""
+msgstr "Unealta pentru spirale"
 
 #: ../src/actions/actions-tools.cpp:370
 msgid "Create spirals"
@@ -9778,15 +9778,15 @@ msgstr "Creează spirale"
 
 #: ../src/actions/actions-tools.cpp:371
 msgid "Marker Tool"
-msgstr ""
+msgstr "Unealta marcatori"
 
 #: ../src/actions/actions-tools.cpp:371
 msgid "Edit markers"
-msgstr ""
+msgstr "Modificare marcatori"
 
 #: ../src/actions/actions-tools.cpp:373
 msgid "Pen Tool"
-msgstr ""
+msgstr "Unealta creion"
 
 #: ../src/actions/actions-tools.cpp:373
 msgid "Draw Bezier curves and straight lines"
@@ -9794,7 +9794,7 @@ msgstr "Desenează curbe Bézier și linii drepte"
 
 #: ../src/actions/actions-tools.cpp:374
 msgid "Pencil Tool"
-msgstr ""
+msgstr "Unealta stilou"
 
 #: ../src/actions/actions-tools.cpp:374
 msgid "Draw freehand lines"
@@ -9802,7 +9802,7 @@ msgstr "Desenează linii cu mâna liberă"
 
 #: ../src/actions/actions-tools.cpp:375
 msgid "Calligraphy Tool"
-msgstr ""
+msgstr "Unealta caligrafica"
 
 # hm ? sau de penel ?
 #: ../src/actions/actions-tools.cpp:375
@@ -9811,7 +9811,7 @@ msgstr "Desenează trasee caligrafice sau penelate"
 
 #: ../src/actions/actions-tools.cpp:376
 msgid "Text Tool"
-msgstr ""
+msgstr "Unealta pentru text"
 
 #: ../src/actions/actions-tools.cpp:376
 msgid "Create and edit text objects"
@@ -9819,7 +9819,7 @@ msgstr "Creează și editează obiecte text"
 
 #: ../src/actions/actions-tools.cpp:378
 msgid "Gradient Tool"
-msgstr ""
+msgstr "Unealta degradeuri"
 
 #: ../src/actions/actions-tools.cpp:378
 msgid "Create and edit gradients"
@@ -9827,7 +9827,7 @@ msgstr "Creează și editează degradeuri"
 
 #: ../src/actions/actions-tools.cpp:379
 msgid "Mesh Tool"
-msgstr ""
+msgstr "Unealta meșă"
 
 #: ../src/actions/actions-tools.cpp:379
 msgid "Create and edit meshes"
@@ -9835,7 +9835,7 @@ msgstr "Creează și editează plase"
 
 #: ../src/actions/actions-tools.cpp:380
 msgid "Dropper Tool"
-msgstr ""
+msgstr "Unealta pentru copiere culori"
 
 #: ../src/actions/actions-tools.cpp:380 ../src/ui/widget/color-notebook.cpp:198
 msgid "Pick colors from image"
@@ -9843,7 +9843,7 @@ msgstr "Prelevă culori din imagine"
 
 #: ../src/actions/actions-tools.cpp:381
 msgid "Paint Bucket Tool"
-msgstr ""
+msgstr "Unealta pentru colorarea unei forme închise"
 
 #: ../src/actions/actions-tools.cpp:381
 msgid "Fill bounded areas"
@@ -9851,7 +9851,7 @@ msgstr "Umple zonele circumscrise"
 
 #: ../src/actions/actions-tools.cpp:383
 msgid "Tweak Tool"
-msgstr ""
+msgstr "Unealta pentru mici modificări"
 
 #: ../src/actions/actions-tools.cpp:383
 msgid "Tweak objects by sculpting or painting"
@@ -9859,23 +9859,23 @@ msgstr "Ajustează obiectele prin sculptură sau prin pictură"
 
 #: ../src/actions/actions-tools.cpp:384
 msgid "Spray Tool"
-msgstr ""
+msgstr "Unealta pulverizare"
 
 #: ../src/actions/actions-tools.cpp:384
 msgid "Spray copies or clones of objects"
-msgstr ""
+msgstr "Pulverizează copii sau clone ale elementelor"
 
 #: ../src/actions/actions-tools.cpp:385
 msgid "Eraser Tool"
-msgstr ""
+msgstr "Unealta radieră"
 
 #: ../src/actions/actions-tools.cpp:385
 msgid "Erase objects or paths"
-msgstr ""
+msgstr "Șterge elemente sau linii"
 
 #: ../src/actions/actions-tools.cpp:386
 msgid "Connector Tool"
-msgstr ""
+msgstr "Unealta conector"
 
 #: ../src/actions/actions-tools.cpp:386
 msgid "Create diagram connectors"
@@ -9887,11 +9887,11 @@ msgstr "Instrument LPE"
 
 #: ../src/actions/actions-tools.cpp:387
 msgid "Do geometric constructions"
-msgstr ""
+msgstr "Creează construcții geometrice"
 
 #: ../src/actions/actions-tools.cpp:389
 msgid "Zoom Tool"
-msgstr ""
+msgstr "Unealta pentru magnificare"
 
 #: ../src/actions/actions-tools.cpp:389
 msgid "Zoom in or out"
@@ -9899,48 +9899,48 @@ msgstr "Zoom strâns sau larg"
 
 #: ../src/actions/actions-tools.cpp:390
 msgid "Measure Tool"
-msgstr ""
+msgstr "Unealta pentru măsurare"
 
 #: ../src/actions/actions-tools.cpp:390
 msgid "Measure objects"
-msgstr ""
+msgstr "Măsoară elemente"
 
 #: ../src/actions/actions-tools.cpp:391
 msgid "Pages Tool"
-msgstr ""
+msgstr "Unealta pentru lucrul cu pagini"
 
 #: ../src/actions/actions-tools.cpp:391
 msgid "Create and edit document pages"
-msgstr ""
+msgstr "Creează si modifică pagini de document"
 
 #: ../src/actions/actions-tools.cpp:393
 msgid "Toggle Selector Tool"
-msgstr ""
+msgstr "Comută unealta de selecție"
 
 #: ../src/actions/actions-tools.cpp:393
 msgid "Toggle between Selector tool and last used tool"
-msgstr ""
+msgstr "Comută intre unealta de selecție si ultima unealtă folosită"
 
 #: ../src/actions/actions-tools.cpp:394
 msgid "Toggle Dropper"
-msgstr ""
+msgstr "Comută unealta de copiere a culorilor"
 
 #: ../src/actions/actions-tools.cpp:394
 msgid "Toggle between Dropper tool and last used tool"
-msgstr ""
+msgstr "Comută intre unealta de copiere a culorilor și ultima unealtă folosită"
 
 #: ../src/actions/actions-transform.cpp:114
 #: ../src/actions/actions-transform.cpp:128
 msgid "Reapply Transforms"
-msgstr "Aplică transformările din nou"
+msgstr "Reaplică transformările"
 
 #: ../src/actions/actions-transform.cpp:121
 msgid "Translate"
-msgstr ""
+msgstr "Deplasează"
 
 #: ../src/actions/actions-transform.cpp:121
 msgid "Translate selected objects (dx,dy)"
-msgstr ""
+msgstr "Deplasează selecțiile"
 
 #: ../src/actions/actions-transform.cpp:122 ../src/selection-chemistry.cpp:1968
 #: ../src/seltrans.cpp:493 ../src/ui/dialog/transformation.cpp:837
@@ -9949,7 +9949,7 @@ msgstr "Rotește"
 
 #: ../src/actions/actions-transform.cpp:122
 msgid "Rotate selected objects by degrees"
-msgstr ""
+msgstr "Rotește selecțiile după un unghi"
 
 # hm ? corect așa la page properties, dar nu știu dacă în alte meniuri este tot corect sau trebui la imperativ
 #: ../src/actions/actions-transform.cpp:123
@@ -9958,75 +9958,75 @@ msgstr ""
 #: ../src/ui/dialog/transformation.cpp:812
 #: ../share/extensions/interp_att_g.inx:10
 msgid "Scale"
-msgstr "Scară"
+msgstr "Dimensiune"
 
 #: ../src/actions/actions-transform.cpp:123
 msgid "Scale selected objects by scale factor"
-msgstr ""
+msgstr "Dimensionează selecțiile cu un factor"
 
 #: ../src/actions/actions-transform.cpp:124
 msgid "Grow/Shrink"
-msgstr ""
+msgstr "Mărește/micșorează"
 
 #: ../src/actions/actions-transform.cpp:124
 msgid "Grow/shrink selected objects"
-msgstr ""
+msgstr "Mărește/micșorează elementele din selecție"
 
 #: ../src/actions/actions-transform.cpp:125
 msgid "Grow/Shrink Step"
-msgstr ""
+msgstr "Mărește/micșorează pasul"
 
 #: ../src/actions/actions-transform.cpp:125
 msgid "Grow/shrink selected objects by multiple of step value"
-msgstr ""
+msgstr "Mărește/micșorează selecțiile cu un multiplu de pas"
 
 #: ../src/actions/actions-transform.cpp:126
 msgid "Grow/Shrink Screen"
-msgstr ""
+msgstr "Mărește/micșorează ecranul"
 
 #: ../src/actions/actions-transform.cpp:126
 msgid "Grow/shrink selected objects relative to zoom level"
-msgstr ""
+msgstr "Mărește/micșorează selecțiile relativ cu nivelul de magnificare"
 
 #: ../src/actions/actions-transform.cpp:127
 msgid "Remove Transforms"
-msgstr ""
+msgstr "Înlătură transformările"
 
 #: ../src/actions/actions-transform.cpp:127
 msgid "Remove any transforms from selected objects"
-msgstr ""
+msgstr "Înlătură orice transformare a selecțiilor"
 
 #: ../src/actions/actions-transform.cpp:128
 msgid "Reapply the last transformation to the selection"
-msgstr "Aplică din nou ultima transformare la selecție"
+msgstr "Reaplică ultima transformare selecției"
 
 #: ../src/actions/actions-transform.cpp:135
 msgid "Enter two comma-separated numbers, e.g. 50,-2.5"
-msgstr ""
+msgstr "Introdu două valori separate de o virgulă"
 
 #: ../src/actions/actions-transform.cpp:136
 msgid "Enter angle (in degrees) for clockwise rotation"
-msgstr ""
+msgstr "Introdu un unghi în grade pentru rotirea în sensul acelor de ceas"
 
 #: ../src/actions/actions-transform.cpp:137
 msgid "Enter scaling factor, e.g. 1.5"
-msgstr ""
+msgstr "Introdu un factor de dimensionare"
 
 #: ../src/actions/actions-transform.cpp:138
 msgid "Enter positive or negative number to grow/shrink selection"
-msgstr ""
+msgstr "Introdu un număr întreg pentru a mări/micșora selecția"
 
 #: ../src/actions/actions-transform.cpp:139
 msgid ""
-"Enter positive or negative number to grow or shrink selection relative to "
+"Enter a positive or negative number to grow or shrink selection relative to "
 "preference step value"
-msgstr ""
+msgstr "Introdu un număr întreg pentru a mări/micșora selecția relativ cu pasul setat in preferințe"
 
 #: ../src/actions/actions-transform.cpp:140
 msgid ""
 "Enter positive or negative number to grow or shrink selection relative to "
 "zoom level"
-msgstr ""
+msgstr "Introdu un număr întreg pentru a mări/micșora selecția relativ cu nivelul de magnificare setat in preferințe"
 
 #. TRANSLATORS: Please don't translate link unless the page exists in your language. Add your language code to
 #. the link this way: https://inkscape.org/[lang]/learn/tutorials/
@@ -10041,7 +10041,7 @@ msgstr ""
 
 #: ../src/actions/actions-tutorial.cpp:60
 msgid "Inkscape: Basic"
-msgstr ""
+msgstr "Inkscape: Noțiuni elementare"
 
 #: ../src/actions/actions-tutorial.cpp:60
 msgid "Getting started with Inkscape"
@@ -10049,7 +10049,7 @@ msgstr "Primii pași cu Inkscape"
 
 #: ../src/actions/actions-tutorial.cpp:61
 msgid "Inkscape: Shapes"
-msgstr ""
+msgstr "Inkscape: Forme"
 
 #: ../src/actions/actions-tutorial.cpp:61
 msgid "Using shape tools to create and edit shapes"
@@ -10058,7 +10058,7 @@ msgstr ""
 
 #: ../src/actions/actions-tutorial.cpp:62
 msgid "Inkscape: Advanced"
-msgstr ""
+msgstr "Inkscape: Noțiuni avansate"
 
 #: ../src/actions/actions-tutorial.cpp:62
 msgid "Advanced Inkscape topics"
@@ -10066,39 +10066,39 @@ msgstr "Subiecte Inkscape avansate"
 
 #: ../src/actions/actions-tutorial.cpp:63
 msgid "Inkscape: Tracing"
-msgstr ""
+msgstr "Trasare"
 
 #: ../src/actions/actions-tutorial.cpp:63
 msgid "Using bitmap tracing"
-msgstr ""
+msgstr "Cum folosim trasarea peste imagini"
 
 #: ../src/actions/actions-tutorial.cpp:64 ../share/ui/menus.ui:1254
 msgid "Inkscape: Tracing Pixel Art"
-msgstr ""
+msgstr "Trasarea imaginilor stilizate pixelat"
 
 #: ../src/actions/actions-tutorial.cpp:64
 msgid "Using Trace Pixel Art dialog"
-msgstr ""
+msgstr "Cum folosim fereastra de trasare a imaginilor stilizate pixelat"
 
 #: ../src/actions/actions-tutorial.cpp:65
 msgid "Inkscape: Calligraphy"
-msgstr ""
+msgstr "Inkscape: Caligrafie"
 
 #: ../src/actions/actions-tutorial.cpp:65
 msgid "Using the Calligraphy pen tool"
-msgstr ""
+msgstr "Cum folosim creionul caligrafic"
 
 #: ../src/actions/actions-tutorial.cpp:66
 msgid "Inkscape: Interpolate"
-msgstr ""
+msgstr "Interpolare"
 
 #: ../src/actions/actions-tutorial.cpp:66
 msgid "Using the interpolate extension"
-msgstr ""
+msgstr "Cum folosim extensia de interpolare"
 
 #: ../src/actions/actions-tutorial.cpp:67
 msgid "Elements of Design"
-msgstr ""
+msgstr "Elemente de design"
 
 #: ../src/actions/actions-tutorial.cpp:67
 msgid "Principles of design in the tutorial form"
@@ -10106,7 +10106,7 @@ msgstr "Principiile de design sub formă de tutorial"
 
 #: ../src/actions/actions-tutorial.cpp:68
 msgid "Tips and Tricks"
-msgstr ""
+msgstr "Ponturi si trucuri"
 
 #: ../src/actions/actions-tutorial.cpp:68
 msgid "Miscellaneous tips and tricks"
@@ -10114,7 +10114,7 @@ msgstr "Chichițe și șmecherii diverse"
 
 #: ../src/actions/actions-tutorial.cpp:69
 msgid "About Inkscape"
-msgstr ""
+msgstr "Despre Inkscape"
 
 #: ../src/actions/actions-tutorial.cpp:69
 msgid "Inkscape version, authors, license"
@@ -10122,7 +10122,7 @@ msgstr "Versiune Inkscape, autori, licență"
 
 #: ../src/actions/actions-undo-document.cpp:95
 msgid "Undo"
-msgstr ""
+msgstr "Desfă"
 
 #: ../src/actions/actions-undo-document.cpp:95
 msgid "Undo last action"
@@ -10130,7 +10130,7 @@ msgstr "Anulează ultima acțiune"
 
 #: ../src/actions/actions-undo-document.cpp:96
 msgid "Redo"
-msgstr ""
+msgstr "Refă"
 
 #: ../src/actions/actions-undo-document.cpp:96
 msgid "Do again the last undone action"
@@ -10138,7 +10138,7 @@ msgstr "Reefectuează ultima acțiune care a fost anulată"
 
 #: ../src/actions/actions-view-mode.cpp:265
 msgid "Commands Bar"
-msgstr ""
+msgstr "Bara de comenzi"
 
 #: ../src/actions/actions-view-mode.cpp:265
 msgid "Show or hide the Commands bar (under the menu)"
@@ -10146,7 +10146,7 @@ msgstr "Arată sau ascunde bara de comenzi (sub meniu)"
 
 #: ../src/actions/actions-view-mode.cpp:266
 msgid "Snap Controls Bar"
-msgstr ""
+msgstr "Alipește bara de control"
 
 #: ../src/actions/actions-view-mode.cpp:266
 msgid "Show or hide the snapping controls"
@@ -10154,7 +10154,7 @@ msgstr "Arată sau ascunde controalele de acroșare"
 
 #: ../src/actions/actions-view-mode.cpp:267
 msgid "Tool Controls Bar"
-msgstr ""
+msgstr "Bara de control cu unelte"
 
 #: ../src/actions/actions-view-mode.cpp:267
 msgid "Show or hide the Tool Controls bar"
@@ -10162,15 +10162,15 @@ msgstr "Arată sau ascunde bara de control a acroșărilor"
 
 #: ../src/actions/actions-view-mode.cpp:268
 msgid "Toolbox"
-msgstr ""
+msgstr "Trusa cu unelte"
 
 #: ../src/actions/actions-view-mode.cpp:268
 msgid "Show or hide the main toolbox (on the left)"
-msgstr "Arată sau ascunde trusa de instrumente (în stânga)"
+msgstr "Arată sau ascunde trusa de instrumente principale (în stânga)"
 
 #: ../src/actions/actions-view-mode.cpp:269
 msgid "Rulers"
-msgstr ""
+msgstr "Rigle"
 
 #: ../src/actions/actions-view-mode.cpp:269
 msgid "Show or hide the canvas rulers"
@@ -10178,7 +10178,7 @@ msgstr "Arată sau ascunde riglele de la canava"
 
 #: ../src/actions/actions-view-mode.cpp:270
 msgid "Scroll bars"
-msgstr ""
+msgstr "Bare de derulare"
 
 #: ../src/actions/actions-view-mode.cpp:270
 msgid "Show or hide the canvas scrollbars"
@@ -10195,7 +10195,7 @@ msgstr "Arată sau ascunde paleta de culori"
 
 #: ../src/actions/actions-view-mode.cpp:272
 msgid "Statusbar"
-msgstr ""
+msgstr "Bara de informații"
 
 #: ../src/actions/actions-view-mode.cpp:272
 msgid "Show or hide the statusbar (at the bottom of the window)"
@@ -10212,7 +10212,7 @@ msgstr "Arată sau ascunde paleta de comenzi de pe canava"
 
 #: ../src/actions/actions-view-mode.cpp:275
 msgid "Fullscreen"
-msgstr ""
+msgstr "Pe tot ecranul"
 
 #: ../src/actions/actions-view-mode.cpp:275
 #: ../src/actions/actions-view-mode.cpp:277
@@ -10225,23 +10225,23 @@ msgstr "Ecran complet și mod de focalizare"
 
 #: ../src/actions/actions-view-mode.cpp:278
 msgid "Focus Mode"
-msgstr ""
+msgstr "Mod concentrare"
 
 #: ../src/actions/actions-view-mode.cpp:278
 msgid "Remove excess toolbars to focus on drawing"
-msgstr "Elimină barele de unelte în exces pentru a focaliza pe desen"
+msgstr "Elimină barele de unelte în exces pentru a te concentra pe desen"
 
 #: ../src/actions/actions-view-mode.cpp:280
 msgid "Interface Mode"
-msgstr ""
+msgstr "Mod de interfațare"
 
 #: ../src/actions/actions-view-mode.cpp:280
 msgid "Toggle wide or narrow screen setup"
-msgstr ""
+msgstr "Comută între ecran lat și îngust"
 
 #: ../src/actions/actions-view-window.cpp:48
 msgid "Duplicate Window"
-msgstr ""
+msgstr "Duplică fereastra"
 
 #: ../src/actions/actions-view-window.cpp:48
 msgid "Open a new window with the same document"
@@ -10249,7 +10249,7 @@ msgstr "Deschide o fereastră nouă cu același document"
 
 #: ../src/actions/actions-view-window.cpp:49
 msgid "Previous Window"
-msgstr ""
+msgstr "Fereastra anterioară"
 
 #: ../src/actions/actions-view-window.cpp:49
 msgid "Switch to the previous document window"
@@ -10257,7 +10257,7 @@ msgstr "Comută la fereastra de document precedentă"
 
 #: ../src/actions/actions-view-window.cpp:50
 msgid "Next Window"
-msgstr ""
+msgstr "Fereastra unmătoare"
 
 #: ../src/actions/actions-view-window.cpp:50
 msgid "Switch to the next document window"
@@ -10265,51 +10265,51 @@ msgstr "Comută la fereastra de document următoare"
 
 #: ../src/actions/actions-window.cpp:102
 msgid "Enter comma-separated string for x, y, width, height"
-msgstr ""
+msgstr "Introdu un șir de valori despărțite de virgulă pentru x, y, lațime și înalțime"
 
 #: ../src/actions/actions-window.cpp:109
 msgid "Window Open"
-msgstr ""
+msgstr "Deschidere fereastră"
 
 #: ../src/actions/actions-window.cpp:109
 msgid "Open a window for the active document; GUI only"
-msgstr ""
+msgstr "Deschide o fereastră pentru documentul activ; doar prin interfața grafică"
 
 #: ../src/actions/actions-window.cpp:110
 msgid "Window Close"
-msgstr ""
+msgstr "Închidere fereastră"
 
 #: ../src/actions/actions-window.cpp:110
 msgid "Close the active window, does not check for data loss"
-msgstr ""
+msgstr "Închide fereastra activă, nu se verifică pierderile de date"
 
 #: ../src/actions/actions-window.cpp:111
 msgid "Window Query Geometry"
-msgstr ""
+msgstr "Aflarea geometriei ferestrei"
 
 #: ../src/actions/actions-window.cpp:111
 msgid "Query the active window's location and size"
-msgstr ""
+msgstr "Aflarea locației si mărimii ferestrei active"
 
 #: ../src/actions/actions-window.cpp:112
 msgid "Window Set Geometry"
-msgstr ""
+msgstr "Setarea geometriei ferestrei"
 
 #: ../src/actions/actions-window.cpp:112
 msgid "Set the active window's location and size (x, y, width, height)"
-msgstr ""
+msgstr "Stabilește locația și poziția ferestrei active ( x, y, lațime și înalțime )"
 
 #: ../src/actions/actions-window.cpp:113
 msgid "Force Crash"
-msgstr ""
+msgstr "Închidere forțată"
 
 #: ../src/actions/actions-window.cpp:113
 msgid "Force Inkscape to crash, useful for testing."
-msgstr ""
+msgstr "Forțează aplicația să se închidă, folositor pentru teste"
 
 #: ../src/auto-save.cpp:151
 msgid "Autosave failed! Could not find inkscape extension to save document."
-msgstr ""
+msgstr "Salvarea automată a eșuat! Nu s-a putut găsi extensia Inkscape pentru a salva documentul"
 
 #: ../src/auto-save.cpp:154 ../src/auto-save.cpp:160
 #, c-format
