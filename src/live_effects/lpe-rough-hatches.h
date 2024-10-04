@@ -46,6 +46,8 @@ public:
 
   Geom::Piecewise<Geom::D2<Geom::SBasis> > 
   smoothSnake(std::vector<std::vector<Geom::Point> > const &linearSnake);
+  Geom::Piecewise<Geom::D2<Geom::SBasis> >
+  smoothSnakeStripes(std::vector<std::vector<Geom::Point> > const &linearSnake);
     
 private:
   double hatch_dist;
@@ -61,7 +63,7 @@ private:
   RandomParam top_smth_variation;
   RandomParam bot_smth_variation;
 
-  BoolParam fat_output, do_bend;
+  BoolParam fat_output, do_bend, single_direction;
   ScalarParam stroke_width_top;
   ScalarParam stroke_width_bot;
   ScalarParam front_thickness, back_thickness;

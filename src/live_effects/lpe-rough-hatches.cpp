@@ -228,6 +228,7 @@ LPERoughHatches::LPERoughHatches(LivePathEffectObject *lpeobject) :
 //
     fat_output(_("Vary stroke width"), _("Simulate a stroke of varying width"), "fat_output", &wr, this, true),
     do_bend(_("Bend hatches"), _("Add a global bending to the hatches (slower)"), "do_bend", &wr, this, true),
+    single_direction(_("↓ Only"), _("Use only down strokes"), "only_down", &wr, this, false),
     stroke_width_top(_("↓ Width"), _("Width at 'bottom' half-turns"), "stroke_width_top", &wr, this, 1.),
     stroke_width_bot(_("↑ Width"), _("Width at 'top' half-turns"), "stroke_width_bottom", &wr, this, 1.),
 //
@@ -253,6 +254,7 @@ LPERoughHatches::LPERoughHatches(LivePathEffectObject *lpeobject) :
     registerParameter(&scale_bb);
     registerParameter(&top_smth_variation);
     registerParameter(&bot_smth_variation);
+    registerParameter(&single_direction);
     registerParameter(&fat_output);
     registerParameter(&stroke_width_top);
     registerParameter(&stroke_width_bot);
@@ -325,7 +327,9 @@ LPERoughHatches::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const &
     std::vector<std::vector<Point> > snakePoints;
     snakePoints = linearSnake(transformed_pwd2_in, transformed_org);
     if (!snakePoints.empty()){
-        Piecewise<D2<SBasis> >smthSnake = smoothSnake(snakePoints);
+        Piecewise<D2<SBasis> >smthSnake = single_direction.get_value()
+                                              ? smoothSnakeStripes(snakePoints)
+                                              : smoothSnake(snakePoints);
         smthSnake = smthSnake*mat.inverse();
         if (do_bend.get_value()){
             smthSnake = smthSnake*bend_mat;
@@ -525,6 +529,84 @@ LPERoughHatches::smoothSnake(std::vector<std::vector<Point> > const &linearSnake
                 res_comp.append(res_comp_top.reversed());
             }
             result.concat(res_comp.toPwSb());
+        }
+    }
+    return result;
+}
+
+Piecewise<D2<SBasis>> LPERoughHatches::smoothSnakeStripes(std::vector<std::vector<Point>> const &linearSnake)
+{
+    Piecewise<D2<SBasis>> result;
+    for (const auto &comp : linearSnake) {
+        if (comp.size() < 2) {
+            continue;
+        }
+
+        Geom::Path res_comp;
+        bool is_top = (comp[0][Y] > comp[1][Y]);
+
+        for (unsigned i = 0; i + 1 < comp.size(); i += 2) {
+            Point pt0 = comp[i];
+            Point pt1 = comp[i + 1];
+            Point tgt0(0, 0), tgt1(0, 0);
+            if (i + 3 < comp.size()) {
+                tgt0 = comp[i + 3] - pt0;
+            } else if (i >= 1) {
+                tgt0 = pt0 - comp[i - 1];
+            }
+            if (i + 2 < comp.size()) {
+                tgt1 = comp[i + 2] - pt1;
+            } else if (i + 1 >= 3) {
+                tgt1 = pt1 - comp[i + 1 - 3];
+            }
+
+            if (!is_top) {
+                std::swap(pt0, pt1);
+                std::swap(tgt0, tgt1);
+            }
+
+            if (top_edge_variation.get_value() != 0)
+                pt0[Y] += double(top_edge_variation) - top_edge_variation.get_value() / 2.;
+            if (top_tgt_variation.get_value() != 0)
+                pt0[X] += double(top_tgt_variation) - top_tgt_variation.get_value() / 2.;
+
+            if (bot_edge_variation.get_value() != 0)
+                pt1[Y] += double(bot_edge_variation) - bot_edge_variation.get_value() / 2.;
+            if (bot_tgt_variation.get_value() != 0)
+                pt1[X] += double(bot_tgt_variation) - bot_tgt_variation.get_value() / 2.;
+
+            double scale_top = scale_tf;
+            double scale_bt = scale_bb;
+            if (top_smth_variation.get_value() != 0) {
+                scale_top *= (100. - double(top_smth_variation)) / 100.;
+            }
+            if (bot_smth_variation.get_value() != 0) {
+                scale_bt *= (100. - double(bot_smth_variation)) / 100.;
+            }
+
+            Point new_hdle_top = (-tgt0) * (scale_top / 2.);
+            Point new_hdle_bot = (-tgt1) * (scale_bt / 2.);
+
+            if (fat_output.get_value()) {
+                Point new_hdle_top2 = new_hdle_top;
+                Point new_hdle_bot2 = new_hdle_bot;
+
+                new_hdle_top -= tgt0 / (tgt0[X] * 2) * (front_thickness + stroke_width_top);
+                new_hdle_top2 += tgt0 / (tgt0[X] * 2) * (back_thickness + stroke_width_top);
+
+                new_hdle_bot -= tgt1 / (tgt1[X] * 2) * (front_thickness + stroke_width_bot);
+                new_hdle_bot2 += tgt1 / (tgt1[X] * 2) * (back_thickness + stroke_width_bot);
+
+                res_comp = Path(pt0);
+                res_comp.appendNew<CubicBezier>(pt0 + new_hdle_top, pt1 + new_hdle_bot, pt1);
+                res_comp.appendNew<CubicBezier>(pt1 + new_hdle_bot2, pt0 + new_hdle_top2, pt0);
+                result.concat(res_comp.toPwSb());
+            } else {
+                res_comp = Path(pt0);
+                res_comp.appendNew<CubicBezier>(new_hdle_top + pt0, new_hdle_bot + pt1, pt1);
+                result.concat(res_comp.toPwSb());
+            }
+            is_top = !is_top;
         }
     }
     return result;
