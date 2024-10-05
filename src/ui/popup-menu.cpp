@@ -20,6 +20,7 @@
 #include <gtkmm/gesturemultipress.h>
 #include <gtkmm/popover.h>
 #include <gtkmm/widget.h>
+#include <gtkmm.h>
 
 #include "controller.h"
 #include "manage.h"
@@ -71,7 +72,15 @@ sigc::connection on_popup_menu(Gtk::Widget &widget, PopupMenuSlot slot)
 
 sigc::connection on_hide_reset(std::shared_ptr<Gtk::Widget> widget)
 {
-    return widget->signal_hide().connect( [widget = std::move(widget)]() mutable { widget.reset(); });
+//    return widget->signal_hide().connect( [widget = std::move(widget)]() mutable { widget.reset(); });
+    return widget->signal_hide().connect([widget = std::move(widget)] () mutable {
+        if (widget) {
+            Glib::signal_idle().connect([widget = std::move(widget)] () mutable {
+                widget.reset();
+                return false;
+            });
+        }
+    });
 }
 
 static void popup_at(Gtk::Popover &popover, Gtk::Widget &widget,
