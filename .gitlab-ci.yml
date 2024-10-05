@@ -212,6 +212,7 @@ inkscape:windows:dist:
     - inkscape:windows:build
   script:
     - 7z x build.7z
+    - if ("${DIST}" -eq "msi") { & "$Env:CI_PROJECT_DIR\buildtools\windows-deps-install-wix4.ps1" }
     - . "C:/$Env:IDW_NAME/msys2_shell.cmd" -defterm -no-start -ucrt64 -here -c "ninja -C build dist-win-${DIST}"
   artifacts:
     paths:
