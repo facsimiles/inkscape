@@ -63,6 +63,7 @@ if(WIN32)
     ${MINGW_BIN}/libgtkmm-3.0-[0-9]*.dll
     ${MINGW_BIN}/libgtksourceview-4-[0-9]*.dll
     ${MINGW_BIN}/libharfbuzz-[0-9]*.dll
+    ${MINGW_BIN}/libharfbuzz-subset-[0-9]*.dll
     ${MINGW_BIN}/libheif.dll
     ${MINGW_BIN}/libiconv-[0-9]*.dll
     ${MINGW_BIN}/libicudt[0-9]*.dll
