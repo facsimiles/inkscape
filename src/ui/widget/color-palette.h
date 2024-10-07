@@ -49,7 +49,7 @@ public:
     ~ColorPalette() override;
 
     // set colors presented in a palette
-    void set_colors(std::vector<Dialog::ColorItem*> const &swatches);
+    void set_colors(std::vector<std::unique_ptr<Dialog::ColorItem>> coloritems);
     // list of palettes to present in the menu
     void set_palettes(const std::vector<palette_t>& palettes);
     // enable compact mode (true) with mini-scroll buttons, or normal mode (false) with regular scrollbars
@@ -116,8 +116,8 @@ private:
     void rebuild_widgets();
     void refresh();
 
-    std::vector<Dialog::ColorItem *> _normal_items;
-    std::vector<Dialog::ColorItem *> _pinned_items;
+    std::vector<std::unique_ptr<Dialog::ColorItem>> _normal_items;
+    std::vector<std::unique_ptr<Dialog::ColorItem>> _pinned_items;
 
     Glib::RefPtr<Gtk::Builder> _builder;
     Gtk::FlowBox& _normal_box;

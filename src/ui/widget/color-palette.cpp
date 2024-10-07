@@ -596,7 +596,7 @@ void ColorPalette::resize() {
 
     int width = get_tile_width();
     int height = get_tile_height();
-    for (auto item : _normal_items) {
+    for (auto const &item : _normal_items) {
         item->set_size_request(width, height);
     }
 
@@ -606,23 +606,18 @@ void ColorPalette::resize() {
         double mult = _rows > 2 ? _rows / 2.0 : 2.0;
         pinned_width = pinned_height = static_cast<int>((height + _border) * mult - _border);
     }
-    for (auto item : _pinned_items) {
+    for (auto const &item : _pinned_items) {
         item->set_size_request(pinned_width, pinned_height);
     }
 }
 
-void ColorPalette::set_colors(std::vector<Dialog::ColorItem*> const &swatches)
+void ColorPalette::set_colors(std::vector<std::unique_ptr<Dialog::ColorItem>> coloritems)
 {
     _normal_items.clear();
     _pinned_items.clear();
     
-    for (auto item : swatches) {
-        if (item->is_pinned()) {
-            _pinned_items.emplace_back(item);
-        } else {
-            _normal_items.emplace_back(item);
-        }
-        item->signal_modified().connect([=] {
+    for (auto &item : coloritems) {
+        item->signal_modified().connect([item = item.get()] {
             UI::for_each_child(*item->get_parent(), [=](Gtk::Widget& w) {
                 if (auto label = dynamic_cast<Gtk::Label *>(&w)) {
                     label->set_text(item->get_description());
@@ -630,16 +625,18 @@ void ColorPalette::set_colors(std::vector<Dialog::ColorItem*> const &swatches)
                 return UI::ForEachResult::_continue;
             });
         });
+        if (item->is_pinned()) {
+            _pinned_items.push_back(std::move(item));
+        } else {
+            _normal_items.push_back(std::move(item));
+        }
     }
     rebuild_widgets();
     refresh();
 }
 
 Gtk::Widget *ColorPalette::_get_widget(Dialog::ColorItem *item) {
-    if (auto parent = item->get_parent()) {
-        auto &flowbox = dynamic_cast<Gtk::FlowBox &>(*parent);
-        flowbox.remove(*item);
-    }
+    assert(!item->get_parent());
     if (_show_labels) {
         item->set_valign(Gtk::Align::CENTER);
         auto const box = Gtk::make_managed<Gtk::Box>();
@@ -648,7 +645,7 @@ Gtk::Widget *ColorPalette::_get_widget(Dialog::ColorItem *item) {
         box->append(*label);
         return box;
     }
-    return Gtk::manage(item);
+    return item;
 }
 
 void ColorPalette::rebuild_widgets()
@@ -659,17 +656,17 @@ void ColorPalette::rebuild_widgets()
     UI::remove_all_children(_normal_box);
     UI::remove_all_children(_pinned_box);
 
-    for (auto item : _normal_items) {
+    for (auto const &item : _normal_items) {
         // in a tile mode (no labels) group headers are hidden:
         if (!_show_labels && item->is_group()) continue;
 
         // in a list mode with labels, do not show fillers:
         if (_show_labels && item->is_filler()) continue;
 
-        _normal_box.append(*_get_widget(item));
+        _normal_box.append(*_get_widget(item.get()));
     }
-    for (auto item : _pinned_items) {
-        _pinned_box.append(*_get_widget(item));
+    for (auto const &item : _pinned_items) {
+        _pinned_box.append(*_get_widget(item.get()));
     }
 
     set_up_scrolling();
