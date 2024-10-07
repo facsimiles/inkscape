@@ -5,7 +5,7 @@ Inkscape. Draw Freely.
 
 Inkscape is a Free and open source vector graphics editor. It offers a rich set
 of features and is widely used for both artistic and technical illustrations
-such as cartoons, clip art, logos, typography, diagramming and flowcharting.
+such as cartoons, clip art, logos, typography, diagramming, and flowcharting.
 It uses vector graphics to allow for sharp printouts and renderings at
 unlimited resolution and is not bound to a fixed number of pixels like raster
 graphics. Inkscape uses the standardized SVG file format as its main format,
