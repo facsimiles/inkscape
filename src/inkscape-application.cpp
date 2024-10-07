@@ -650,16 +650,20 @@ InkscapeApplication::InkscapeApplication()
         _gio_application = Gio::Application::create(app_id, flags);
         _with_gui = false;
     }
+    // ==================== Initializations =====================
+
+    // Garbage Collector
+    Inkscape::GC::init();
+
+    if (_with_gui && Inkscape::Preferences::get()->getBool("/options/splash/enabled", true)) {
+        _start_screen = Inkscape::UI::Dialog::StartScreen::show_splash();
+    }
 
     auto *gapp = gio_app();
 
     gapp->signal_startup().connect([this]() { this->on_startup(); });
     gapp->signal_activate().connect([this]() { this->on_activate(); });
     gapp->signal_open().connect(sigc::mem_fun(*this, &InkscapeApplication::on_open));
-
-    // ==================== Initializations =====================
-    // Garbage Collector
-    Inkscape::GC::init();
 
 #ifndef NDEBUG
     // Use environment variable INKSCAPE_DEBUG_LOG=log.txt for event logging
@@ -846,6 +850,8 @@ InkscapeApplication::create_window(SPDocument *document, bool replace)
         window = window_open (document);
     }
     window->set_visible(true);
+
+    startup_close();
 
     return window;
 }
@@ -1104,20 +1110,15 @@ InkscapeApplication::on_activate()
     } else if(prefs->getBool("/options/boot/enabled", true)
                && !_use_command_line_argument
                && (gtk_app() && gtk_app()->get_windows().empty())) {
+        _start_screen = Inkscape::UI::Dialog::StartScreen::show_welcome();
 
-        Inkscape::UI::Dialog::StartScreen start_screen;
-
-        // add start window to gtk_app to ensure proper closing on quit
-        gtk_app()->add_window(start_screen);
-
-        Inkscape::UI::dialog_run(start_screen);
-        document = start_screen.get_document();
+        _start_screen->run();
+        document = _start_screen->get_document();
     } else {
 
         // Create a blank document from template
         document = document_new();
     }
-    startup_close();
 
     if (!document) {
         std::cerr << "ConcreteInkscapeApplication::on_activate: failed to create document!" << std::endl;
@@ -1136,14 +1137,7 @@ InkscapeApplication::on_activate()
 void
 InkscapeApplication::startup_close()
 {
-    if (auto app = gtk_app()) {
-        // Close any open start screens preventing double opens
-        for (auto win : app->get_windows()) {
-            if (auto start = dynamic_cast<Inkscape::UI::Dialog::StartScreen *>(win)) {
-                start->close();
-            }
-        }
-    }
+    _start_screen.reset();
 }
 
 // Open document window for each file. Either this or on_activate() is called.
