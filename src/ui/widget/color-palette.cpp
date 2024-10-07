@@ -14,6 +14,7 @@
 #include <glibmm/i18n.h>
 #include <glibmm/main.h>
 #include <glibmm/ustring.h>
+#include <gdkmm/frameclock.h>
 #include <gtkmm/adjustment.h>
 #include <gtkmm/builder.h>
 #include <gtkmm/button.h>
@@ -167,11 +168,7 @@ ColorPalette::ColorPalette():
     }
 }
 
-ColorPalette::~ColorPalette() {
-    if (_active_timeout) {
-        g_source_remove(_active_timeout);
-    }
-}
+ColorPalette::~ColorPalette() = default;
 
 Gtk::Popover& ColorPalette::get_settings_popover() {
     return get_widget<Gtk::Popover>(_builder, "config-popup");
@@ -191,9 +188,9 @@ void ColorPalette::do_scroll(int dx, int dy) {
     }
 }
 
-std::pair<double, double> get_range(Gtk::Scrollbar& sb) {
+static Geom::Interval get_range(Gtk::Scrollbar const &sb) {
     auto adj = sb.get_adjustment();
-    return std::make_pair(adj->get_lower(), adj->get_upper() - adj->get_page_size());
+    return {adj->get_lower(), adj->get_upper() - adj->get_page_size()};
 }
 
 void ColorPalette::update_scroll_arrows_sensitivity() {
@@ -209,30 +206,43 @@ void ColorPalette::update_scroll_arrows_sensitivity() {
     }
 }
 
-gboolean ColorPalette::scroll_cb(gpointer self) {
-    auto ptr = static_cast<ColorPalette*>(self);
+// Update scrolling animation when up/down arrows are clicked.
+bool ColorPalette::scroll_cb(Glib::RefPtr<Gdk::FrameClock> const &clock)
+{
+    // Get or estimate elapsed time since last animation update.
+    auto const timings = clock->get_current_timings();
+    auto const t = timings->get_frame_time();
+    if (!_scroll_cb_last_time) {
+        _scroll_cb_last_time = t;
+        return true;
+    }
+    double const dt = t - *_scroll_cb_last_time;
+    _scroll_cb_last_time = t;
+
     bool fire_again = false;
 
-    if (auto vert = ptr->_scroll.get_vscrollbar()) {
+    if (auto vert = _scroll.get_vscrollbar()) {
+        // Ensure target remains within range.
+        _scroll_final = get_range(*vert).clamp(_scroll_final);
+
+        // Compute the amount to step by.
+        constexpr double SCROLL_SPEED = 4.0; // pixels per 1/60 sec
+        double const step = SCROLL_SPEED * dt * 6e-5;
+
         auto value = vert->get_adjustment()->get_value();
         // is this the final adjustment step?
-        if (fabs(ptr->_scroll_final - value) < fabs(ptr->_scroll_step)) {
-            vert->get_adjustment()->set_value(ptr->_scroll_final);
+        if (std::abs(_scroll_final - value) <= step) {
+            vert->get_adjustment()->set_value(_scroll_final);
             fire_again = false; // cancel timer
-        }
-        else {
-            auto pos = value + ptr->_scroll_step;
+        } else {
+            auto pos = value + step * Geom::sgn(_scroll_final - value);
             vert->get_adjustment()->set_value(pos);
-            auto range = get_range(*vert);
-            if (pos > range.first && pos < range.second) {
-                // not yet done
-                fire_again = true; // fire this callback again
-            }
+            fire_again = true; // fire this callback again
         }
     }
 
     if (!fire_again) {
-        ptr->_active_timeout = 0;
+        _active_timeout = 0;
     }
 
     return fire_again;
@@ -246,17 +256,10 @@ void ColorPalette::scroll(int dx, int dy, double snap, bool smooth) {
                 // round it to whole 'dy' increments
                 _scroll_final -= fmod(_scroll_final, snap);
             }
-            auto range = get_range(*vert);
-            if (_scroll_final < range.first) {
-                _scroll_final = range.first;
-            }
-            else if (_scroll_final > range.second) {
-                _scroll_final = range.second;
-            }
-            _scroll_step = dy / 4.0;
+            _scroll_final = get_range(*vert).clamp(_scroll_final);
             if (!_active_timeout && vert->get_adjustment()->get_value() != _scroll_final) {
-                // limit refresh to 60 fps, in practice it will be slower
-                _active_timeout = g_timeout_add(1000 / 60, &ColorPalette::scroll_cb, this);
+                _active_timeout = add_tick_callback(sigc::mem_fun(*this, &ColorPalette::scroll_cb));
+                _scroll_cb_last_time = {};
             }
         }
         else {

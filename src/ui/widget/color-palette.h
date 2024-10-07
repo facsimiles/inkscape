@@ -97,7 +97,7 @@ private:
     void update_scroll_arrows_sensitivity();
     void scroll(int dx, int dy, double snap, bool smooth);
     void do_scroll(int dx, int dy);
-    static gboolean scroll_cb(gpointer self);
+    bool scroll_cb(Glib::RefPtr<Gdk::FrameClock> const &);
     void _set_tile_size(int size_px);
     void _set_tile_border(int border_px);
     void _set_rows(int rows);
@@ -141,8 +141,8 @@ private:
     guint _active_timeout = 0;
     bool _force_scrollbar = false;
     bool _stretch_tiles = false;
-    double _scroll_step = 0.0; // smooth scrolling step
     double _scroll_final = 0.0; // smooth scroll final value
+    std::optional<gint64> _scroll_cb_last_time;
     bool _large_pinned_panel = false;
     bool _show_labels = false;
     int _page_size = 0;
