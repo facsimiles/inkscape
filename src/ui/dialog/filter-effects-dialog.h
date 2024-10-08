@@ -337,6 +337,7 @@ class FilterEditorPrimitiveNode : public FilterEditorNode{
         FilterEditorPrimitiveNode(int node_id, int x, int y, Glib::ustring label_text, SPFilterPrimitive* _primitive, int num_inputs = 1):
         FilterEditorNode(node_id, x, y, label_text, 1, num_inputs), primitive(_primitive){
             // update_sink_results();
+            // in_attr = 
         };
 
         
@@ -347,9 +348,11 @@ class FilterEditorPrimitiveNode : public FilterEditorNode{
         void update_sink_results();
         virtual void set_sink_result(FilterEditorSink* sink, std::string result_string);
         virtual void set_sink_result(FilterEditorSink* sink, int inp_index);
+        FilterEditorSink* get_sink(int index);
 
     protected:
         void set_result_string(std::string _result_string);
+        
         
         SPFilterPrimitive* primitive;
 };
@@ -380,6 +383,9 @@ class FilterEditorOutputNode : public FilterEditorNode{
     public:
         FilterEditorOutputNode(int node_id, SPFilter* _filter, int x, int y, Glib::ustring label_text, int num_inputs = 1):
         FilterEditorNode(node_id, x, y, label_text, 0, num_inputs), filter(_filter){};
+        FilterEditorSink* get_sink();
+        virtual void set_sink_result(FilterEditorSink* sink, std::string result_string);
+        virtual void set_sink_result(FilterEditorSink* sink, int inp_index);
     protected:
         SPFilter* filter;
 };
@@ -402,7 +408,7 @@ class FilterEditorCanvas : public Gtk::ScrolledWindow{
         FilterEditorConnection *create_connection(FilterEditorSource *source, FilterEditorSink *sink, bool break_connection = true);
         FilterEditorConnection *create_connection(FilterEditorPrimitiveNode *source_node, FilterEditorNode *sink_node);
 
-        bool destroy_connection(FilterEditorConnection *connection);
+        bool destroy_connection(FilterEditorConnection *connection, bool update_document = true);
         
         
         FilterEditorFixed* get_canvas();
@@ -413,9 +419,11 @@ class FilterEditorCanvas : public Gtk::ScrolledWindow{
         void add_output_node();
         void auto_arrange_nodes(bool selection_only = false);
         void delete_nodes();
+        void delete_nodes_without_prims();
         void duplicate_nodes();
         void select_nodes(std::vector<FilterEditorNode*> nodes);
         void select_node(NODE_TYPE node);
+        void update_canvas_new();
         void update_canvas();
         bool primitive_node_exists(SPFilterPrimitive *primitive);
         void remove_filter(SPFilter* filter);
@@ -452,7 +460,8 @@ class FilterEditorCanvas : public Gtk::ScrolledWindow{
         void clear_nodes();
         void update_editor();
         void update_filter(SPFilter* filter);
-        void update_document();
+        void update_document(bool add_undo = false);
+        void update_document_new(bool add_undo = false);
 
         std::vector<SPFilter*> filter_list;
         int current_filter_id = -1;
