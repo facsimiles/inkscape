@@ -469,8 +469,7 @@ void CanvasPrivate::activate()
 
     active = true;
 
-    // Run the first redraw at high priority so it happens before the first call to paint_widget().
-    schedule_redraw(Glib::PRIORITY_HIGH);
+    // The canvas size is not set yet, so don't schedule the redraw.
 }
 
 void CanvasPrivate::deactivate()
@@ -584,6 +583,14 @@ void CanvasPrivate::schedule_redraw(int priority)
 // Update state and launch redraw process in background. Requires a current OpenGL context.
 void CanvasPrivate::launch_redraw()
 {
+    // This is a fix for https://gitlab.com/inkscape/inkscape/-/issues/5122
+    // GTK has a problem where the size is not set correctly to start with.
+    if (q->get_width() < 10 || q->get_height() < 10) {
+        redraw_active = false;
+        std::cout << "Canvas size is wrong, drawing later" << std::endl;
+        return;
+    }
+
     assert(redraw_active);
 
     if (q->_render_mode != render_mode) {
@@ -1883,7 +1890,7 @@ void Canvas::size_allocate_vfunc(int const width, int const height, int const ba
     }
 
     // Trigger the size update to be applied to the stores before the next redraw of the window.
-    d->schedule_redraw();
+    d->schedule_redraw(Glib::PRIORITY_HIGH);
 
     // Keep canvas centered and optionally zoomed in.
     if (_desktop && new_dimensions != d->old_dimensions) {
@@ -1940,13 +1947,15 @@ void Canvas::paint_widget(Cairo::RefPtr<Cairo::Context> const &cr)
 
     _signal_pre_draw.emit();
 
-    if constexpr (false) d->canvasitem_ctx->root()->canvas_item_print_tree();
+    if constexpr (false)
+        d->canvasitem_ctx->root()->canvas_item_print_tree();
 
-    // On activation, launch_redraw() is scheduled at a priority much higher than draw, so it
-    // should have been called at least one before this point to perform vital initialisation
-    // (needed not to crash). However, we don't want to rely on that, hence the following check.
+    // On activation, launch_redraw() should have been scheduled at a priority much higher than draw,
+    // so it should have been called at least once before this point to perform vital initialisation
+    // (needed not to crash). However, since that might not be the case due to a problem with GTK,
+    // Check for that possibility and handle it.
     if (d->stores.mode() == Stores::Mode::None) {
-        std::cerr << "Canvas::paint_widget: Called while active but uninitialised!" << std::endl;
+        std::cout << "Canvas::paint_widget: Called while active but uninitialised!" << std::endl;
         return;
     }
 
