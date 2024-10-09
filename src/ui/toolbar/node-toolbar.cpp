@@ -403,7 +403,8 @@ void NodeToolbar::edit_delete()
 {
     NodeTool *nt = get_node_tool();
     if (nt) {
-        nt->_multipath->deleteNodes(Preferences::get()->getBool("/tools/nodes/delete_preserves_shape", true));
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        nt->_multipath->deleteNodes((NodeDeleteMode)prefs->getInt("/tools/node/delete-mode-default", (int)NodeDeleteMode::automatic));
     }
 }
 
