@@ -764,19 +764,19 @@ button.square-button image {
     font-size: smaller;
 }
 
-.toolbar {
+.inkscape-toolbar {
     margin: 4px;
 }
 
-.toolbar > * {
+.inkscape-toolbar > * {
     margin-right: 2px;
 }
 
-.toolbar > * > * {
+.inkscape-toolbar > * > * {
     margin-right: 2px;
 }
 
-.toolbar > * > *:last-child {
+.inkscape-toolbar > * > *:last-child {
     margin-right: 0;
 }
 
