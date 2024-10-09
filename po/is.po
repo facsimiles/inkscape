@@ -1,14 +1,14 @@
 # Þýðing inkscape.po á íslensku
-# Copyright (C) 2022 Icelandic Inksape Translators
+# Copyright (C) 2024 Icelandic Inksape Translators
 # This file is distributed under the same license as the Inkscape package.
 #
-# Sveinn í Felli (sv1@fellsnet.is), 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
+# SPDX-FileCopyrightText: 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024 Sveinn í Felli (sv1@fellsnet.is)
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2023-06-08 13:53+0200\n"
-"PO-Revision-Date: 2023-10-25 08:41+0000\n"
+"PO-Revision-Date: 2024-10-07 16:57+0000\n"
 "Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
 "Language-Team: Icelandic\n"
 "Language: is\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 22.04.3\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #: ../../build/share/filters/filters.svg.h:2
 msgid "Fast Crop"
@@ -2041,7 +2041,7 @@ msgstr "Þrílitað"
 
 #: ../../build/share/filters/filters.svg.h:832
 msgid "Like Duochrome but with three colors"
-msgstr ""
+msgstr "Líkist tvílituðu en með þremur litum"
 
 #: ../../build/share/filters/filters.svg.h:834
 msgid "Simulate CMY"
@@ -3393,7 +3393,7 @@ msgstr "Gólfflísar"
 
 #: ../../build/share/paint/patterns.svg.h:1
 msgid "Hexagons packing grid"
-msgstr ""
+msgstr "Sexhyrnt pökkunarmynstur"
 
 #: ../../build/share/paint/patterns.svg.h:1
 msgid "Wire Fence"
@@ -6660,6 +6660,8 @@ msgid ""
 "Show objects as outlines, and the actual drawing below them with reduced "
 "opacity"
 msgstr ""
+"Sýnir alla hluti sem útlínur, en með raunverulega teikningu  fyrir neðan með"
+" meira gegnsæi"
 
 #: ../src/actions/actions-canvas-mode.cpp:272
 msgid "Display Mode: Cycle"
@@ -7149,7 +7151,7 @@ msgstr "Opna tilföng skjals"
 
 #: ../src/actions/actions-dialogs.cpp:37
 msgid "Show document overview and resources"
-msgstr ""
+msgstr "Birta yfirlit og tilföng skjals"
 
 #: ../src/actions/actions-dialogs.cpp:38
 msgid "Open Export"
@@ -7757,6 +7759,9 @@ msgid ""
 "Failed to edit external image.\n"
 "<small>Note: Path to editor can be set in Preferences dialog.</small>"
 msgstr ""
+"Mistókst að breyta útværri mynd.\n"
+"<small>Athugaðu: Slóð á forrit er hægt að stilla í kjörstillingaglugganum.<"
+"/small>"
 
 #: ../src/actions/actions-element-image.cpp:114
 msgid "System error message: %1"
@@ -7801,7 +7806,7 @@ msgstr "Skera utan af mynd að afmörkun"
 
 #: ../src/actions/actions-element-image.cpp:208
 msgid "Remove parts of the image outside the applied clipping area."
-msgstr ""
+msgstr "Fjarlægja þá hluta myndar sem liggja utan virks afmörkunarsvæðis."
 
 #: ../src/actions/actions-element-image.cpp:209
 msgid "Edit externally"
@@ -7810,6 +7815,8 @@ msgstr "Breyta með öðru forriti"
 #: ../src/actions/actions-element-image.cpp:209
 msgid "Edit image externally (image must be selected and not embedded)."
 msgstr ""
+"Breyta mynd með utanaðkomandi forriti (myndin verður að vera valin og ekki"
+" innfelld)."
 
 #: ../src/actions/actions-file-window.cpp:117
 #: ../src/ui/dialog/document-properties.cpp:850
@@ -7971,7 +7978,7 @@ msgstr "Settu inn skráarheiti"
 
 #: ../src/actions/actions-file.cpp:119
 msgid "Namedview; Update=1, Replace=0"
-msgstr ""
+msgstr "Nefndsýn; Uppfæra=1, Skipta út=0"
 
 #: ../src/actions/actions-help-url.cpp:114 ../share/ui/menus.ui:1232
 msgid "Ask Us a Question"
@@ -8403,7 +8410,7 @@ msgstr "Jafna hnútum lárétt"
 #: ../src/actions/actions-node-align.cpp:91
 msgid ""
 "Align selected nodes horizontally; usage [last|first|middle|min|max|pref]"
-msgstr ""
+msgstr "Jafna völdum hnútum lárétt; notkun [last|first|middle|min|max|pref]"
 
 #: ../src/actions/actions-node-align.cpp:92
 msgid "Align nodes vertically"
@@ -8411,7 +8418,7 @@ msgstr "Jafna hnútum lóðrétt"
 
 #: ../src/actions/actions-node-align.cpp:92
 msgid "Align selected nodes vertically; usage [last|first|middle|min|max|pref]"
-msgstr ""
+msgstr "Jafna völdum hnútum lóðrétt; notkun [last|first|middle|min|max|pref]"
 
 #: ../src/actions/actions-node-align.cpp:93
 msgid "Distribute nodes horizontally"
@@ -9844,6 +9851,8 @@ msgid ""
 "Flow text around a frame (path or shape), only available for SVG 2.0 Flow "
 "text."
 msgstr ""
+"Flæða texta í kringum ramma (feril eða lögun), einungis í boði fyrir SVG 2.0"
+" flæðitexta."
 
 #: ../src/actions/actions-text.cpp:71
 msgid "Unflow"
@@ -15186,7 +15195,7 @@ msgstr "Lesa inntaksskrá úr staðalinntaki (stdin)"
 
 #: ../src/inkscape-application.cpp:735
 msgid "Page numbers to import from multi-page document, i.e. PDF"
-msgstr ""
+msgstr "Blaðsíðunúmer til að flytja unn úr margsíðna skjali, t.d. PDF"
 
 #: ../src/inkscape-application.cpp:735
 msgid "PAGE[,PAGE]"
@@ -15201,6 +15210,9 @@ msgid ""
 "How fonts are parsed in the internal PDF importer [draw-missing|draw-all|"
 "delete-missing|delete-all|substitute|keep]"
 msgstr ""
+"Hvernig letur er túlkað í innra PDF-innflutningskerfinu"
+" [draw-missing|draw-all|"
+"delete-missing|delete-all|substitute|keep]"
 
 #: ../src/inkscape-application.cpp:737
 msgid "STRATEGY"
@@ -16905,7 +16917,7 @@ msgstr "Aðferð við röðun"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:58
 msgid "Method used to order sub paths"
-msgstr ""
+msgstr "Aðferð notuð við að raða undirferlum"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:59
 msgid "Connection method"
@@ -16913,7 +16925,7 @@ msgstr "Aðferð við tengingu"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:59
 msgid "Method to connect end points of sub paths"
-msgstr ""
+msgstr "Aðferð notuð við að tengja endapunkta á undirferlum"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:60
 msgid "Stitch length"
@@ -17375,7 +17387,7 @@ msgstr ""
 
 #: ../src/live_effects/lpe-knot.cpp:365
 msgid "_Gaps in both"
-msgstr ""
+msgstr "_Bil í báðum"
 
 #: ../src/live_effects/lpe-knot.cpp:365
 msgid "At path intersections, both parts will have a gap"
@@ -17798,7 +17810,7 @@ msgstr "Staðsetning"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:76
 msgid "Distance of dimension line from the path"
-msgstr ""
+msgstr "Fjarlægð málsetningalínu frá ferlinum"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:77
 msgid "Label position"
@@ -17822,11 +17834,11 @@ msgstr "Lengd hjálparlínu"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:79
 msgid "Distance of the perpendicular lines' ends from the dimension line"
-msgstr ""
+msgstr "Fjarlægð enda á samhliða línum frá málsetningalínu"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:80
 msgid "Dimension line width. DIN standard: 0.25 or 0.35 mm"
-msgstr ""
+msgstr "Breidd málsetningarlínu. DIN-staðall: 0.25 eða 0.35 mm"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:81
 msgid "Scaling factor"
@@ -17955,7 +17967,7 @@ msgstr "Vegalengd"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:98
 msgid "Distance of the dimension lines from the outermost node"
-msgstr ""
+msgstr "Fjarlægð málsetningalínanna frá ysta liðnum"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:99
 msgid "Angle of projection"
@@ -28337,7 +28349,7 @@ msgstr "Eftir grip er tákn teiknað við hnútinn sem gripið er í"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2610
 msgid "Snap indicator persistence (in seconds):"
-msgstr "Þrjóska vísbendingar um grip (í sekúndum):"
+msgstr "Viðvera vísbendinga um grip (í sekúndum):"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2611
 msgid ""
@@ -29138,7 +29150,6 @@ msgid "Temporarily disable the idle redraw process completely"
 msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2974
-#, fuzzy
 msgid "Sticky decoupled mode"
 msgstr "Viðloðandi aftengdur hamur"
 
@@ -30148,7 +30159,7 @@ msgstr "Haka við til að gera hlutinn ónæman (ekki veljanlegan með bendli)"
 
 #: ../src/ui/dialog/object-properties.cpp:261
 msgid "Check to preserve aspect ratio on images"
-msgstr ""
+msgstr "Haka við til að halda stærðarhlutföllum mynda"
 
 #: ../src/ui/dialog/object-properties.cpp:270
 msgid "_Set"
@@ -30702,7 +30713,7 @@ msgstr "Fjarlægja stafhnikunarpar"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:1340
 msgid "Toggle layer solo"
-msgstr ""
+msgstr "Víxla stöku lagi af/á"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:1361
 msgid "Missing glyph"
@@ -33196,6 +33207,8 @@ msgid ""
 "Make selected sides elliptical by changing length of handles. Works best if "
 "handles already approximate ellipse."
 msgstr ""
+"Gera valdar hliðar sporöskjulaga með því að breyta lengd haldfanga. Virkar"
+" best ef haldföngin eru þegar með nálgun við sporöskju."
 
 #: ../src/ui/toolbar/mesh-toolbar.cpp:290
 msgid "Pick colors:"
@@ -34456,7 +34469,7 @@ msgstr "Víxla lágletruðu af/á"
 
 #: ../src/ui/toolbar/text-toolbar.cpp:516
 msgid "Kerning, word spacing, character positioning"
-msgstr ""
+msgstr "Stafhnikun, orðabil, staðsetning stafa"
 
 #: ../src/ui/toolbar/text-toolbar.cpp:517
 msgid "Spacing"
@@ -40364,7 +40377,7 @@ msgstr "Ógild tegund strikamerkis: {}.{}"
 
 #: ../share/extensions/barcode/__init__.py:76
 msgid "Barcode module is missing barcode class: {}.{}"
-msgstr ""
+msgstr "Strikamerkjaeininguna vantar strikamerkjaflokk: {}.{}"
 
 #: ../share/extensions/color_randomize.py:80
 msgid "Ignoring unusual opacity value: {}"
@@ -40432,11 +40445,15 @@ msgid ""
 "Failed to import the numpy or numpy.linalg modules. These modules are "
 "required by the ROBO option.Please install them and try again."
 msgstr ""
+"Mistókst að flytja inn numpy eða numpylinalg einingar Þessar einingar eru"
+" nauðsynlegar fyrir ROBO-valkostinn. Settu þær upp og prófaðu svo aftur."
 
 #: ../share/extensions/dxf_outlines.py:367
 msgid ""
 "Too many nested groups. Please use the \"Deep Ungroup\" extension first."
 msgstr ""
+"Of margir faldaðir hópar (nested groups). Notaðu fyrst \"Djúp uppskipting"
+" hópa\" (Deep Ungroup) forritsaukann."
 
 #: ../share/extensions/dxf_outlines.py:382
 msgid ""
@@ -40515,7 +40532,7 @@ msgstr "Letur fannst ekki; tókst ekki að útbúa staftáknatöflu."
 
 #: ../share/extensions/hershey.py:1379
 msgid "Unable to process text. Consider unlinking cloned text."
-msgstr ""
+msgstr "Tókst ekki að meðhöndla texta. Íhugaðu að aftengja klónaða textann."
 
 #: ../share/extensions/hershey.py:2007
 msgid "Warning: unable to load SVG stroke fonts."
@@ -41609,7 +41626,7 @@ msgstr "Litur frá"
 
 #: ../share/extensions/color_replace.inx:9
 msgid "Ignore opacity when searching for colors to replace"
-msgstr ""
+msgstr "Hunsa ógegnsæi þegar leitað er að litum til útskiptingar"
 
 #: ../share/extensions/color_replace.inx:11
 msgid "New color"
@@ -41856,7 +41873,7 @@ msgstr "Venjuleg hliðrun:"
 
 #: ../share/extensions/distribute_along_path.inx:12
 msgid "Tangential offset (percentage of pattern length):"
-msgstr ""
+msgstr "Snertilhliðrun (tangens í prósentum af lengd mynsturs):"
 
 #: ../share/extensions/distribute_along_path.inx:13
 msgid "Rotate pattern 90° clockwise"
@@ -42604,7 +42621,7 @@ msgstr "Þykkt aukauppskiptinga á X-ás:"
 
 #: ../share/extensions/grid_cartesian.inx:29
 msgid "Subminor X Division Thickness:"
-msgstr ""
+msgstr "Þykkt undiraukauppskiptinga á X-ás:"
 
 #: ../share/extensions/grid_cartesian.inx:30
 msgid "X Division Thickness Unit:"
@@ -42652,7 +42669,7 @@ msgstr "Þykkt aukauppskiptinga á Y-ás:"
 
 #: ../share/extensions/grid_cartesian.inx:52
 msgid "Subminor Y Division Thickness:"
-msgstr ""
+msgstr "Þykkt undiraukauppskiptinga á Y-ás:"
 
 #: ../share/extensions/grid_cartesian.inx:53
 msgid "Y Division Thickness Unit:"
@@ -42692,7 +42709,7 @@ msgstr "Þykkt aukauppskiptinga (px):"
 
 #: ../share/extensions/grid_isometric.inx:12
 msgid "Subminor Division Thickness (px):"
-msgstr ""
+msgstr "Þykkt undiraukauppskiptinga (px):"
 
 #: ../share/extensions/grid_isometric.inx:13
 msgid "Border Thickness (px):"
@@ -48987,7 +49004,7 @@ msgstr "Inkscape 1.0"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:104
 msgid "Theming support and more new customization options"
-msgstr ""
+msgstr "Stuðningur við þemu og fleiri valkostir sérsníðinga"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:105
 msgid "Better HiDPI (high resolution) screen support"
@@ -49089,7 +49106,7 @@ msgstr "Ný 0.92.x útgáfa með lagfæringum á villum."
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:140
 msgid "Improvements to the align and distribute tool"
-msgstr ""
+msgstr "Endurbætur á verkfæri fyrir jöfnun og dreifingu"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:141
 msgid "Support for piping standard input and output"
@@ -49114,7 +49131,7 @@ msgstr ""
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:154
 msgid "Support for left-to-right languages in the text tool"
-msgstr ""
+msgstr "Stuðningur við vinstri til hægri tungumál í textaverkfærinu"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:155
 msgid "Improvements to the circle/ellipse/arc tool"
@@ -49130,7 +49147,7 @@ msgstr "Betri inn- og útflutningur"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:167
 msgid "Greater stability when printing on Windows"
-msgstr ""
+msgstr "Meiri stöðugleiki við prentun á Windows"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:168
 msgid "Improved fill and stroke HSL color selection"
@@ -49138,7 +49155,7 @@ msgstr "Bæting á HSL-litavali útlínu og fyllingar"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:169
 msgid "Greater stability when reverting and saving files"
-msgstr ""
+msgstr "Meiri stöðugleiki við endurheimt og vistun skráa"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:170
 msgid "An additional handle at the center of shapes"
@@ -51931,3 +51948,4 @@ msgstr "Helmingur leturhæðar"
 
 #~ msgid "_Color Display Mode"
 #~ msgstr "_Litbirtingarhamur"
+
