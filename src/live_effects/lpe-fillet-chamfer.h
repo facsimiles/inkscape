@@ -38,7 +38,7 @@ public:
     Geom::PathVector doEffect_path(Geom::PathVector const &path_in) override;
     void doOnApply(SPLPEItem const *lpeItem) override;
     Gtk::Widget *newWidget() override;
-    void adjustForNewPath() override;
+    void adjustForNewPath(bool removed = false) override;
     Geom::Ray getRay(Geom::Point start, Geom::Point end, Geom::Curve *curve, bool reverse);
     void addChamferSteps(Geom::Path &tmp_path, Geom::Path path_chamfer, Geom::Point end_arc_point, size_t steps);
     void addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom::PathVector> &hp_vec) override;
