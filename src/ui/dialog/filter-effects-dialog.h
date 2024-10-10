@@ -123,6 +123,7 @@ class FilterEditorSource : public Gtk::Box{
             // width = 15*std::max(static_cast<std::size_t>(1), connections.size());
             this->set_size_request(width, 15);
         };
+        void sort_connections();
 
         void get_connection_starting_coordinates(double& x, double& y, FilterEditorConnection* conn){
             auto alloc = this->get_allocation();
@@ -257,6 +258,8 @@ protected:
     FilterEditorCanvas* canvas; 
     // std::vector<FilterEditorConnection*>& connections;
     std::map<int, std::vector<FilterEditorConnection*>> connections;
+
+    // virtual void sort_connections(std::vector<FilterEditorConnection*>&);
     virtual void snapshot_vfunc(const std::shared_ptr<Gtk::Snapshot>& cr) override;
 };
 
@@ -346,6 +349,7 @@ class FilterEditorPrimitiveNode : public FilterEditorNode{
 
         std::string get_result_string();
         void update_sink_results();
+        void update_position_from_document();
         virtual void set_sink_result(FilterEditorSink* sink, std::string result_string);
         virtual void set_sink_result(FilterEditorSink* sink, int inp_index);
         FilterEditorSink* get_sink(int index);
@@ -417,6 +421,8 @@ class FilterEditorCanvas : public Gtk::ScrolledWindow{
         void update_offsets(double x, double y);
         void update_positions();
         void add_output_node();
+        // std::vector<FilterEditorConnection*> sort_connections(std::vector<FilterEditorConnection*>&);
+        void sort_connections(std::vector<FilterEditorConnection*>&);
         void auto_arrange_nodes(bool selection_only = false);
         void delete_nodes();
         void delete_nodes_without_prims();
