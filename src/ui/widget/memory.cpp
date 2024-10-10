@@ -11,49 +11,61 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "memory.h"
+
 #include <sigc++/functors/mem_fun.h>
+
+#include <gio/gio.h>
+#include <gtk/gtknoselection.h>
 #include <glibmm/i18n.h>
 #include <glibmm/main.h>
 #include <glibmm/refptr.h>
 #include <glibmm/ustring.h>
-#include <gtkmm/box.h>
+#include "gtkmm/columnviewcolumn.h"
+#include <giomm/liststore.h>
 #include <gtkmm/button.h>
-#include <gtkmm/liststore.h>
-#include <gtkmm/treemodelcolumn.h>
-#include <gtkmm/treeview.h>
+#include <gtkmm/columnview.h>
+#include <gtkmm/listview.h>
+#include <gtkmm/widget.h>
+#include <memory>
 
 #include "debug/heap.h"
 #include "inkgc/gc-core.h"
-#include "ui/dialog/memory.h"
 #include "ui/pack.h"
 #include "util/format_size.h"
 
 using Inkscape::Util::format_size;
 
-namespace Inkscape {
-namespace UI {
-namespace Dialog {
+namespace Inkscape::UI::Widget {
 
-struct Memory::Private {
-    class ModelColumns : public Gtk::TreeModel::ColumnRecord {
+struct Memory::Private
+{
+    class ModelColumns : public Gtk::ColumnView
+    {
     public:
-        Gtk::TreeModelColumn<Glib::ustring> name;
-        Gtk::TreeModelColumn<Glib::ustring> used;
-        Gtk::TreeModelColumn<Glib::ustring> slack;
-        Gtk::TreeModelColumn<Glib::ustring> total;
+        Glib::RefPtr<Gtk::ColumnViewColumn> name;
+        Glib::RefPtr<Gtk::ColumnViewColumn> used;
+        Glib::RefPtr<Gtk::ColumnViewColumn> slack;
+        Glib::RefPtr<Gtk::ColumnViewColumn> total;
 
-        ModelColumns() { add(name); add(used); add(slack); add(total); }
+        ModelColumns()
+        {
+            append_column(name);
+            append_column(used);
+            append_column(slack);
+            append_column(total);
+        }
     };
 
-    Private() {
-        model = Gtk::ListStore::create(columns);
-        view.set_model(model);
-        view.append_column(_("Heap"), columns.name);
-        view.append_column(_("In Use"), columns.used);
+    Private()
+    {
+        view.set_factory(factory);
+        columns.name->set_title(_("Heap"));
+        columns.used->set_title(_("In Use"));
         // TRANSLATORS: "Slack" refers to memory which is in the heap but currently unused.
         //  More typical usage is to call this memory "free" rather than "slack".
-        view.append_column(_("Slack"), columns.slack);
-        view.append_column(_("Total"), columns.total);
+        columns.slack->set_title(_("Slack"));
+        columns.total->set_title(_("Total"));
     }
 
     void update();
@@ -62,29 +74,30 @@ struct Memory::Private {
     void stop_update_task();
 
     ModelColumns columns;
-    Glib::RefPtr<Gtk::ListStore> model;
-    Gtk::TreeView view;
+    Glib::RefPtr<Gtk::ListItemFactory> factory;
+    Gtk::ListView view;
 
     sigc::connection update_task;
 };
 
-void Memory::Private::update() {
-    Debug::Heap::Stats total = { 0, 0 };
+void Memory::Private::update()
+{
+    Debug::Heap::Stats total = {0, 0};
 
     int aggregate_features = Debug::Heap::SIZE_AVAILABLE | Debug::Heap::USED_AVAILABLE;
     Gtk::ListStore::iterator row;
 
-    row = model->children().begin();
+    // row = model->children().begin();
 
-    for ( unsigned i = 0 ; i < Debug::heap_count() ; i++ ) {
-        Debug::Heap *heap=Debug::get_heap(i);
+    for (unsigned i = 0; i < Debug::heap_count(); i++) {
+        Debug::Heap *heap = Debug::get_heap(i);
         if (heap) {
-            Debug::Heap::Stats stats=heap->stats();
-            int features=heap->features();
+            Debug::Heap::Stats stats = heap->stats();
+            int features = heap->features();
 
             aggregate_features &= features;
 
-            if ( row == model->children().end() ) {
+            /*if ( row == model->children().end() ) {
                 row = model->append();
             }
 
@@ -109,11 +122,11 @@ void Memory::Private::update() {
                 row->set_value(columns.slack, Glib::ustring(_("Unknown")));
             }
 
-            ++row;
+            ++row;*/
         }
     }
 
-    if ( row == model->children().end() ) {
+    /*if ( row == model->children().end() ) {
         row = model->append();
     }
 
@@ -145,23 +158,22 @@ void Memory::Private::update() {
 
     while ( row != model->children().end() ) {
         row = model->erase(row);
-    }
+    }*/
 }
 
-void Memory::Private::start_update_task() {
+void Memory::Private::start_update_task()
+{
     update_task.disconnect();
-    update_task = Glib::signal_timeout().connect(
-        sigc::bind_return(sigc::mem_fun(*this, &Private::update), true),
-        500
-    );
+    update_task = Glib::signal_timeout().connect(sigc::bind_return(sigc::mem_fun(*this, &Private::update), true), 500);
 }
 
-void Memory::Private::stop_update_task() {
+void Memory::Private::stop_update_task()
+{
     update_task.disconnect();
 }
 
 Memory::Memory()
-    : DialogBase("/dialogs/memory", "Memory")
+    : Box()
     , _private(std::make_unique<Private>())
 {
     UI::pack_start(*this, _private->view);
@@ -195,9 +207,7 @@ void Memory::apply()
     _private->update();
 }
 
-} // namespace Dialog
-} // namespace UI
-} // namespace Inkscape
+} // namespace Inkscape::UI::Widget
 
 /*
   Local Variables:

@@ -30,6 +30,7 @@
 #include "inkscape-window.h"
 #include "ui/dialog/clonetiler.h"
 #include "ui/dialog/dialog-data.h"
+#include "ui/dialog/debug.h"
 #include "ui/dialog/dialog-multipaned.h"
 #include "ui/dialog/dialog-notebook.h"
 #include "ui/dialog/dialog-window.h"
@@ -45,8 +46,6 @@
 #include "ui/dialog/icon-preview.h"
 #include "ui/dialog/inkscape-preferences.h"
 #include "ui/dialog/livepatheffect-editor.h"
-#include "ui/dialog/memory.h"
-#include "ui/dialog/messages.h"
 #include "ui/dialog/object-attributes.h"
 #include "ui/dialog/objects.h"
 #include "ui/dialog/paint-servers.h"
@@ -127,8 +126,7 @@ std::unique_ptr<DialogBase> DialogContainer::dialog_factory(Glib::ustring const 
     else if (dialog_type == "Glyphs")             return std::make_unique<GlyphsPanel>();
     else if (dialog_type == "IconPreview")        return std::make_unique<IconPreviewPanel>();
     else if (dialog_type == "LivePathEffect")     return std::make_unique<LivePathEffectEditor>();
-    else if (dialog_type == "Memory")             return std::make_unique<Memory>();
-    else if (dialog_type == "Messages")           return std::make_unique<Messages>();
+    else if (dialog_type == "DebugWindow")        return std::make_unique<Debug>();
     else if (dialog_type == "ObjectProperties")   return std::make_unique<ObjectAttributes>();
     else if (dialog_type == "Objects")            return std::make_unique<ObjectsPanel>();
     else if (dialog_type == "PaintServers")       return std::make_unique<PaintServersDialog>();

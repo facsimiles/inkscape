@@ -9,21 +9,16 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#ifndef SEEN_INKSCAPE_UI_DIALOG_MEMORY_H
-#define SEEN_INKSCAPE_UI_DIALOG_MEMORY_H
 
-#include <memory>
-#include "ui/dialog/dialog-base.h"
+#include <gtkmm/box.h>
 
-namespace Inkscape {
-namespace UI {
-namespace Dialog {
+namespace Inkscape::UI::Widget {
 
-class Memory : public DialogBase
+class Memory : public Gtk::Box
 {
 public:
     Memory();
-    ~Memory() override;
+    ~Memory();
 
 protected:
     void apply();
@@ -33,11 +28,7 @@ private:
     std::unique_ptr<Private> _private;
 };
 
-} // namespace Dialog
-} // namespace UI
-} // namespace Inkscape
-
-#endif
+} // namespace Inkscape::UI::Widget
 
 /*
   Local Variables:

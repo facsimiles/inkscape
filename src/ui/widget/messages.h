@@ -14,8 +14,8 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#ifndef INKSCAPE_UI_DIALOG_MESSAGES_H
-#define INKSCAPE_UI_DIALOG_MESSAGES_H
+#ifndef INKSCAPE_UI_WIDGET_MESSAGES_H
+#define INKSCAPE_UI_WIDGET_MESSAGES_H
 
 #include <glibmm/i18n.h>
 #include <gtkmm/box.h>
@@ -23,12 +23,11 @@
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/textview.h>
+#include <gtkmm/widget.h>
 
-#include "ui/dialog/dialog-base.h"
+namespace Inkscape::UI::Widget {
 
-namespace Inkscape::UI::Dialog {
-
-class Messages final : public DialogBase
+class Messages final : public Gtk::Box
 {
 public:
     Messages();
@@ -57,23 +56,23 @@ public:
 
 private:
     Gtk::ScrolledWindow textScroll;
-    Gtk::TextView       messageText;
-    Gtk::Box            buttonBox;
-    Gtk::Button         buttonClear;
-    Gtk::CheckButton    checkCapture;
+    Gtk::TextView messageText;
+    Gtk::Box buttonBox;
+    Gtk::Button buttonClear;
+    Gtk::CheckButton checkCapture;
 
-    //Handler ID's
+    // Handler ID's
     unsigned handlerDefault = 0;
-    unsigned handlerGlibmm  = 0;
-    unsigned handlerAtkmm   = 0;
+    unsigned handlerGlibmm = 0;
+    unsigned handlerAtkmm = 0;
     unsigned handlerPangomm = 0;
-    unsigned handlerGdkmm   = 0;
-    unsigned handlerGtkmm   = 0;
+    unsigned handlerGdkmm = 0;
+    unsigned handlerGtkmm = 0;
 };
 
-} // namespace Inkscape::UI::Dialog
+} // namespace Inkscape::UI::Widget
 
-#endif // INKSCAPE_UI_DIALOG_MESSAGES_H
+#endif // INKSCAPE_UI_WIDGET_MESSAGES
 
 /*
   Local Variables:
