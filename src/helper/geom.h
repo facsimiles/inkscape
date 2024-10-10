@@ -37,6 +37,7 @@ size_t count_path_curves(Geom::Path const &path);
 size_t count_pathvector_degenerations(Geom::PathVector const &pathv );
 size_t count_path_degenerations(Geom::Path const &path);
 bool pointInTriangle(Geom::Point const &p, Geom::Point const &p1, Geom::Point const &p2, Geom::Point const &p3);
+Geom::PathVector pathv_to_linear_and_cubic_beziers_and_arcs(Geom::PathVector const &pathv);
 Geom::PathVector pathv_to_linear_and_cubic_beziers( Geom::PathVector const &pathv );
 Geom::PathVector pathv_to_linear( Geom::PathVector const &pathv, double maxdisp );
 Geom::PathVector pathv_to_cubicbezier( Geom::PathVector const &pathv, bool nolines);
