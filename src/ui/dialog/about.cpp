@@ -47,6 +47,7 @@
 #include "inkscape.h"
 #include "inkscape-window.h"
 #include "io/resource.h"
+#include "helper/sigc-track-obj.h"
 #include "ui/builder-utils.h"
 #include "ui/builder-utils.h"
 #include "ui/svg-renderer.h"
@@ -213,13 +214,13 @@ static void copy(Gtk::Button * const button, Gtk::Label * const label, Glib::ust
     if (label) {
         reveal_widget(button, false);
         reveal_widget(label, true);
-        Glib::signal_timeout().connect_seconds(
-            sigc::bind(&show_copy_button, button, label), 2);
+        Glib::signal_timeout().connect_seconds(SIGC_TRACKING_ADAPTOR(
+            sigc::bind(&show_copy_button, button, label), *button), 2);
     }
 }
 
 // Free function to handle key events
-static void on_key_pressed(GtkEventControllerKey const * const controller,
+static gboolean on_key_pressed(GtkEventControllerKey const * const controller,
                            unsigned const keyval, 
                            unsigned const keycode,
                            GdkModifierType const state,
@@ -227,7 +228,9 @@ static void on_key_pressed(GtkEventControllerKey const * const controller,
     if (keyval == GDK_KEY_Escape) {
         auto const window = static_cast<AboutWindow*>(user_data);
         window->close();
+        return true;
     }
+    return false;
 }
 
 template <class Random>
