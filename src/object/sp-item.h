@@ -380,7 +380,7 @@ public:
      * Sets item private transform (not propagated to repr), without compensating stroke widths,
      * gradients, patterns as sp_item_write_transform does.
      */
-    void set_item_transform(Geom::Affine const &transform_matrix);
+    virtual void set_item_transform(Geom::Affine const &transform_matrix);
 
     /**
      * Return the arenaitem corresponding to the given item in the display
