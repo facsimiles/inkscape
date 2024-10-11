@@ -348,8 +348,8 @@ class FilterEditorPrimitiveNode : public FilterEditorNode{
         SPFilterPrimitive *get_primitive();
 
         std::string get_result_string();
-        void update_sink_results();
         void update_position_from_document();
+        virtual void update_sink_results();
         virtual void set_sink_result(FilterEditorSink* sink, std::string result_string);
         virtual void set_sink_result(FilterEditorSink* sink, int inp_index);
         FilterEditorSink* get_sink(int index);
@@ -366,10 +366,13 @@ class FilterEditorPrimitiveMergeNode final : public FilterEditorPrimitiveNode{
         FilterEditorPrimitiveMergeNode(int node_id, int x, int y, SPFilterPrimitive* merge_primitive, int starting_num_inputs = 1) : FilterEditorPrimitiveNode(node_id, x, y, "Merge Node", merge_primitive, starting_num_inputs){
         };
         void add_sink();
+        void add_sink(SPFeMergeNode* node);
         void remove_extra_sinks();
+        void map_to_sink_node(FilterEditorSink* sink, SPFeMergeNode* node);
         void create_sink_merge_node(FilterEditorSink* sink, FilterEditorPrimitiveNode* prev_node);
         bool set_connection(FilterEditorSink* sink, FilterEditorConnection* connection, bool replace = false);
-        
+        void set_sink_result(FilterEditorSink* sink, std::string result_string); 
+        virtual void update_sink_results();
         std::map<FilterEditorSink*, SPFeMergeNode*> sink_nodes;
 
     private:
