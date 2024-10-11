@@ -131,9 +131,7 @@ class FilterEditorSource : public Gtk::Box{
             x = alloc.get_x() + width_conn/2.0 + spacing +index*(width_conn+spacing);
             y = alloc.get_y()+alloc.get_height()/2.0;
         }
-
         
-
     protected:
         // int source_id;
         // int node_id;

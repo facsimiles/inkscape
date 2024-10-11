@@ -2027,8 +2027,6 @@ void FilterEditorCanvas::update_document(bool add_undo){
     // delete_nodes_without_prims(); 
     // update_canvas();
     if(output_node == nullptr){
-        // output_node = create_output_node(_dialog._filter_modifier.get_selected_filter(), 100, 100, "Output");
-        // g_message("Created the output node");
         g_error("This should never happen");
     }
     /*Ensure that each primitive is wired correctly:
@@ -2686,7 +2684,14 @@ void FilterEditorCanvas::event_handler(double x, double y)
         if (widget != nullptr) {
             auto sink = resolve_to_type<FilterEditorSink>(widget);
             if (sink != nullptr) {
-                create_connection(starting_source, sink);
+                // TODO: Consider moving this check to another function
+                if(output_node->get_connected_up_nodes().size() > 0 && output_node->get_connected_up_nodes()[0].second == starting_source->get_parent_node()){
+                    // Don't create a connection, the upper node is connected to the output node.
+                    // TODO: Give an error message
+                }
+                else{
+                    create_connection(starting_source, sink);
+                }
                 g_message("Created a connection between starting source and sink");
                 update_document();
             }
@@ -2729,7 +2734,12 @@ void FilterEditorCanvas::event_handler(double x, double y)
         if (widget != nullptr) {
             auto source = resolve_to_type<FilterEditorSource>(widget);
             if (source != nullptr) {
-                create_connection(source, starting_sink);
+                if(output_node->get_connected_up_nodes().size() > 0 && output_node->get_connected_up_nodes()[0].second == source->get_parent_node()){
+                    // Don't create a connection, the upper node is connected to the output node.
+                }
+                else{
+                    create_connection(source, starting_sink);
+                }
                 
                 // if(dynamic_cast<FilterEditorPrimitiveMergeNode*>(starting_sink->get_parent_node()) != nullptr){
                 //     // dynamic_cast<FilterEditorPrimitiveMergeNode*>(starting_sink->get_parent_node())->remove_extra_sinks();
@@ -2880,6 +2890,7 @@ void FilterEditorCanvas::initialize_gestures()
     gesture_drag = Gtk::GestureDrag::create();
     gesture_drag->set_button(0);
     gesture_drag->signal_drag_begin().connect([this](double start_x, double start_y) {
+        if(current_event_type == FilterEditorEvent::NONE){
         in_drag = false;
         get_widget_under(start_x, start_y);
         if (gesture_drag->get_current_button() == GDK_BUTTON_MIDDLE) {
@@ -2888,13 +2899,18 @@ void FilterEditorCanvas::initialize_gestures()
             in_drag = true;
 
         } else {
+        }}
+        else{
+            
         }
     });
     gesture_drag->signal_drag_update().connect([this](double x, double y) {
+        // if(current_event_type == FilterEditorEvent::NONE){
+        //     return;
+        // }
         if (in_drag && !in_click) {
             if (gesture_drag->get_current_button() == GDK_BUTTON_PRIMARY) {
                 // Left click
-                // Add your code here
                 if (active_widget != nullptr) {
                     if (resolve_to_type<FilterEditorSource>(active_widget) != nullptr) {
                         current_event_type = FilterEditorEvent::CONNECTION_UPDATE;
@@ -2915,6 +2931,9 @@ void FilterEditorCanvas::initialize_gestures()
         }
     });
     gesture_drag->signal_drag_end().connect([this](double x, double y) {
+        if(current_event_type == FilterEditorEvent::NONE){
+            return;
+        }
         if (in_drag) {
             if (current_event_type == FilterEditorEvent::CONNECTION_UPDATE) {
                 current_event_type = FilterEditorEvent::CONNECTION_END;
