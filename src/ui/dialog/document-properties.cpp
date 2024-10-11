@@ -1742,6 +1742,7 @@ GridWidget::GridWidget(SPGrid *grid)
         auto dimensions = grid->document->getDimensions();
         dimensions[Geom::X] *= align % 3 * 0.5;
         dimensions[Geom::Y] *= align / 3 * 0.5;
+        dimensions *= grid->document->doc2dt();
         dimensions *= grid->document->getDocumentScale().inverse();
         grid->setOrigin(dimensions);
     });
