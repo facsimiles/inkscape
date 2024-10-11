@@ -2066,7 +2066,7 @@ void FilterEditorCanvas::update_document(bool add_undo){
         create_nodes_order(nullptr, static_cast<FilterEditorPrimitiveNode*>(output_node->connected_up_nodes[0].second), nodes_order, visited, true, true);
         for(auto it : visited){
             if(dynamic_cast<FilterEditorPrimitiveMergeNode*>(it.first) != nullptr){
-                dynamic_cast<FilterEditorPrimitiveMergeNode*>(it.first)->update_sink_results();
+                // dynamic_cast<FilterEditorPrimitiveMergeNode*>(it.first)->update_sink_results();
             }
             else{
                 it.first->update_sink_results();
@@ -2633,9 +2633,22 @@ void FilterEditorCanvas::event_handler(double x, double y)
         }
         break;
     case FilterEditorEvent::MOVE_END:
+    {
+        // TODO: Consider moving this to a seperate function
+        auto filter = _dialog._filter_modifier.get_selected_filter();
+        if(filter)
+            DocumentUndo::maybeDone(filter->document,"moving", _("Moved primitive nodes"), INKSCAPE_ICON("dialog-filters"));
+        // for(auto pr: start_positions){
+        //     auto prim_node = dynamic_cast<FilterEditorPrimitiveNode*>(pr.first);
+        //     if(prim_node != nullptr){
+        //         auto prim = prim_node->get_primitive();
+        //         // prim->getRepr()->setAttribute
+        //     }
+        // }
         start_positions.clear(); // Clearing the start positions for safety
         current_event_type = FilterEditorEvent::NONE;
         break;
+    }
     case FilterEditorEvent::CONNECTION_START:
         if (active_widget != nullptr) {
             if (dynamic_cast<FilterEditorSource *>(active_widget) != nullptr) {
@@ -3061,8 +3074,6 @@ void FilterEditorCanvas::place_node(FilterEditorNode *node, double x, double y, 
         } else {
             canvas.move(*node, x, y);
         }
-        // canvas.get_children()
-        // g_error("%d", canvas.get_children().size());
     }
 };
 
