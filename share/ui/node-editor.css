@@ -1,28 +1,49 @@
-/* @import url('https://fonts.googleapis.com/css2?family=Manjari:wght@100;400;700&display=swap'); */
 @define-color node_bg #000000;
-/* @define-color node_bg_selected #100024; */
 @define-color node_bg_selected #100024; 
 
 .node > .nodebox-alt{
-    /* background-color: #242424; */
-    background-color: #242424;
+    background-color: #111111;
     border-radius: 20px;
-    border: 1px solid #000000; 
+    border: 2px solid #323232; 
     padding: 10px 20px;
+filter: drop-shadow(0 0 4px #000000);
     /* filter: drop-shadow(0 0 2px black); */ 
     /* filter: drop-shadow(0 0 0.75rem crimson); */
   }
   .node-selected > .nodebox-alt{
-    background-color: #242424;
+background-color: #111111;
+/*    background-color: #100024;*/
     border-radius: 20px;
-    border: 1px solid #FFFFFF;
+    border: 2px solid #AAAAAA;
     padding: 10px 20px;
+	filter: drop-shadow(0 0 6px #999999);
+
     /* transform: scale(2); */
     /* filter: drop-shadow(0 0 2px #ffffff); */
     /* filter: drop-shadow(0 0 0.25rem #b9b9b99a); */
     /* filter: drop-shadow(0 0 0.75rem crimson); */
   }
 
+
+  /*Old CSS code for nodes*/
+/* .node > .nodebox-alt{
+    background-color: #242424;
+    border-radius: 20px;
+    border: 1px solid #000000; 
+    padding: 10px 20px;
+  }
+
+  .node-selected > .nodebox-alt{
+    background-color: #242424;
+    border-radius: 20px;
+    border: 1px solid #FFFFFF;
+    padding: 10px 20px;
+    /* transform: scale(2); 
+    /* filter: drop-shadow(0 0 2px #ffffff); 
+    /* filter: drop-shadow(0 0 0.25rem #b9b9b99a); 
+    /* filter: drop-shadow(0 0 0.75rem crimson); 
+  }
+ */
 .node > .nodebox {
     /* background-color: #242424; */
     background-color: @node_bg;
@@ -45,7 +66,6 @@
     /* transform: scale(2); */
     filter: drop-shadow(0 0 5px #ffffff);
     /* filter: drop-shadow(0 0 0.25rem #b9b9b99a); */
-    font-family: "Manjari", sans-serif;
     font-weight: 1000;
     font-style: normal;
     /* filter: drop-shadow(0 0 0.75rem crimson); */
@@ -53,7 +73,6 @@
 
 
 .nodebutton{
-    /* font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; */
     color: #242424;
     background-image: none;
     background-color: #B9B9B9;
@@ -61,7 +80,6 @@
 }
 
 .nodebutton:hover{
-    /* font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; */
     background-image: none;
     /* background-color: #B9B9B988; */
     filter: drop-shadow(0 0 0.5rem #B9B9B988);
@@ -69,7 +87,6 @@
 }
 
 .nodebutton:active{
-    /* font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; */
     background-image: none;
     filter: drop-shadow(0 0 0.25rem #B9B9B988);
     background-color: #B9B9B988;
