@@ -410,7 +410,7 @@ class FilterEditorCanvas : public Gtk::ScrolledWindow{
         // ~FilterEditorCanvas() override;
 
         FilterEditorPrimitiveNode *add_primitive_node(SPFilterPrimitive *primitive, double x_click, double y_click, Filters::FilterPrimitiveType type,
-                                                      Glib::ustring label_text, int num_sinks);
+                                                      Glib::ustring label_text, int num_sinks, bool local = true);
         NODE_TYPE *add_node(SPFilterPrimitive *primitive, double x_click, double y_click, Glib::ustring label_text,
                             int num_sources = 1, int num_sinks = 1);
         FilterEditorConnection *create_connection(FilterEditorSource *source, FilterEditorSink *sink, bool break_connection = true);
@@ -422,7 +422,8 @@ class FilterEditorCanvas : public Gtk::ScrolledWindow{
         FilterEditorFixed* get_canvas();
 
         double get_zoom_factor();
-        void update_offsets(double x, double y);
+        void update_offsets(double x, double y, bool update_to_document = true);
+        void update_offset_from_document();
         void update_positions();
         void add_output_node();
         // std::vector<FilterEditorConnection*> sort_connections(std::vector<FilterEditorConnection*>&);
@@ -544,8 +545,6 @@ class FilterEditorCanvas : public Gtk::ScrolledWindow{
 
             }
 
-
-                int largest = 0;
 
             // for (auto it: Glib::) {
             //     if (is<SPFilterPrimitive>(&primitive_obj)) {
