@@ -1209,6 +1209,7 @@ void FilterEditorCanvas::update_canvas_new(){
     clear_nodes();
     delete_nodes_without_prims();
     if(filter){
+        update_offset_from_document();
         if (std::find(filter_list.begin(), filter_list.end(), filter) == filter_list.end()){
             filter_list.push_back(filter);
             current_filter_id = filter_list.size()-1;
@@ -1223,10 +1224,11 @@ void FilterEditorCanvas::update_canvas_new(){
             output_node->update_position_from_document();
             // g_message("Output node created %d", __LINE__);
         }
-        update_offset_from_document();
 
         current_filter_id = std::find(filter_list.begin(), filter_list.end(), filter) - filter_list.begin();
         // Clear the connections and recreate them. 
+        // double x_position = filter->getRepr()->getAttributeDouble("inkscape:output-x", 100.0);
+        // double y_position = filter->getRepr()->getAttributeDouble("inkscape:output-y", 100.0); 
         output_node->update_filter(filter);
         output_node->update_position_from_document();
         place_node(output_node, output_node->x, output_node->y);
