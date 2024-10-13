@@ -346,15 +346,15 @@ class FilterEditorPrimitiveNode : public FilterEditorNode{
         FilterEditorSource* get_source();
         SPFilterPrimitive *get_primitive();
 
-        std::string get_result_string();
+        std::string get_result_string() override;
         void update_position_from_document() override;
         virtual void update_sink_results();
-        virtual void set_sink_result(FilterEditorSink* sink, std::string result_string);
-        virtual void set_sink_result(FilterEditorSink* sink, int inp_index);
+        void set_sink_result(FilterEditorSink* sink, std::string result_string) override;
+        void set_sink_result(FilterEditorSink* sink, int inp_index) override;
         FilterEditorSink* get_sink(int index);
 
     protected:
-        void set_result_string(std::string _result_string);
+        void set_result_string(std::string _result_string) override;
         
         
         SPFilterPrimitive* primitive;
@@ -370,8 +370,8 @@ class FilterEditorPrimitiveMergeNode final : public FilterEditorPrimitiveNode{
         void map_to_sink_node(FilterEditorSink* sink, SPFeMergeNode* node);
         void create_sink_merge_node(FilterEditorSink* sink, FilterEditorPrimitiveNode* prev_node);
         bool set_connection(FilterEditorSink* sink, FilterEditorConnection* connection, bool replace = false);
-        void set_sink_result(FilterEditorSink* sink, std::string result_string); 
-        virtual void update_sink_results();
+        void set_sink_result(FilterEditorSink* sink, std::string result_string) override; 
+        void update_sink_results() override;
         std::map<FilterEditorSink*, SPFeMergeNode*> sink_nodes;
 
     private:
@@ -390,8 +390,8 @@ class FilterEditorOutputNode : public FilterEditorNode{
         FilterEditorOutputNode(int node_id, SPFilter* _filter, int x, int y, Glib::ustring label_text, int num_inputs = 1):
         FilterEditorNode(node_id, x, y, label_text, 0, num_inputs), filter(_filter){};
         FilterEditorSink* get_sink();
-        virtual void set_sink_result(FilterEditorSink* sink, std::string result_string);
-        virtual void set_sink_result(FilterEditorSink* sink, int inp_index);
+        void set_sink_result(FilterEditorSink* sink, std::string result_string) override;
+        void set_sink_result(FilterEditorSink* sink, int inp_index) override;
         void update_position_from_document() override;
         void update_filter(SPFilter* _filter) {
             filter = _filter;
@@ -438,6 +438,7 @@ class FilterEditorCanvas : public Gtk::ScrolledWindow{
         void update_canvas();
         bool primitive_node_exists(SPFilterPrimitive *primitive);
         void remove_filter(SPFilter* filter);
+        void align_to_output();
 
         void modify_observer(bool disable);
         enum class FilterEditorEvent
