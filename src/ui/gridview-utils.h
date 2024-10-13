@@ -30,7 +30,7 @@ namespace Inkscape::UI::Utils {
 class GridViewList : public Gtk::FlowBox {
 public:
     // type of content elements
-    enum Type { Label, Color, Button, Spin };
+    enum Type { Label, ColorLong, ColorCompact, Button, Spin };
     GridViewList(Type type);
     GridViewList(Glib::RefPtr<Gtk::Adjustment> adjustment, int digits);
     ~GridViewList() override;
@@ -57,6 +57,13 @@ public:
 
     void update_store(size_t count, std::function<Glib::RefPtr<Glib::Object> (size_t)> callback);
 
+    sigc::signal<void (const std::string& id, double original)> get_signal_button_clicked() {
+        return _signal_button_clicked;
+    }
+    sigc::signal<void (const std::string& id, double original, double new_value)> get_signal_value_changed() {
+        return _signal_value_changed;
+    }
+
 private:
     GridViewList(Type type, Glib::RefPtr<Gtk::Adjustment> adjustment, int digits);
     Type _type;
@@ -66,7 +73,8 @@ private:
     Glib::RefPtr<Gio::ListStoreBase> _store;
     int _tile_size = 16;
     sigc::signal<void ()> _signal_selection_changed;
-    sigc::signal<void (const std::string& id, double value)> _signal_value_changed;
+    sigc::signal<void (const std::string& id, double original)> _signal_button_clicked;
+    sigc::signal<void (const std::string& id, double original, double new_value)> _signal_value_changed;
     Gtk::Popover _popover;
     std::unique_ptr<UI::Widget::PaintSwitch> _paint;
 };

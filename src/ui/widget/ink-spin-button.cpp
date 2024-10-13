@@ -144,7 +144,9 @@ void InkSpinButton::construct() {
         }
     });
     _focus->signal_leave().connect([this]() {
-        commit_entry();
+        if (_entry.is_visible()) {
+            commit_entry();
+        }
         exit_edit();
         set_focusable(true);
     });
@@ -158,6 +160,7 @@ void InkSpinButton::construct() {
     set_focus_on_click();
 
     _key_entry = Gtk::EventControllerKey::create();
+    _key_entry->set_propagation_phase(Gtk::PropagationPhase::CAPTURE);
     _key_entry->signal_key_pressed().connect(sigc::mem_fun(*this, &InkSpinButton::on_key_pressed), false); // Before default handler.
     _entry.add_controller(_key_entry);
 
@@ -233,8 +236,9 @@ void InkSpinButton::measure_vfunc(Gtk::Orientation orientation, int for_size, in
         _ = _value.measure(orientation);
         _ = _label.measure(orientation);
 
+        auto btn = _enable_arrows ? _button_width : 0;
         // always reserve space for inc/dec buttons and label, whichever is greater
-        minimum = natural = std::max(_label_width + text_width, _button_width + text_width + _button_width);
+        minimum = natural = std::max(_label_width + text_width, btn + text_width + btn);
     }
     else {
         minimum_baseline = natural_baseline = _baseline;
@@ -295,7 +299,7 @@ void InkSpinButton::set_adjustment(const Glib::RefPtr<Gtk::Adjustment>& adjustme
 
     _connection.disconnect();
     _adjustment = adjustment;
-    _connection = _adjustment->signal_value_changed().connect(sigc::mem_fun(*this, &InkSpinButton::update));
+    _connection = _adjustment->signal_value_changed().connect([this](){ update(); });
     update();
 }
 
@@ -393,7 +397,7 @@ std::string InkSpinButton::format(double value, bool with_prefix_suffix, bool wi
     return number;
 }
 
-void InkSpinButton::update() {
+void InkSpinButton::update(bool fire_change_notification) {
     if (!_adjustment) return;
 
     auto value = _adjustment->get_value();
@@ -409,7 +413,9 @@ void InkSpinButton::update() {
     _minus.set_sensitive(_adjustment->get_value() > _adjustment->get_lower());
     _plus.set_sensitive(_adjustment->get_value() < _adjustment->get_upper());
 
-    _signal_value_changed.emit(value / _scaling_factor);
+    if (fire_change_notification) {
+        _signal_value_changed.emit(value / _scaling_factor);
+    }
 }
 
 void InkSpinButton::set_new_value(double new_value) {
@@ -556,6 +562,11 @@ void InkSpinButton::exit_edit() {
     _value.show();
 }
 
+void InkSpinButton::cancel_editing() {
+    update(false); // take current recorder value and update text/display
+    exit_edit();
+}
+
 inline void InkSpinButton::enter_edit() {
     show_arrows(false);
     show_label(false);
@@ -568,22 +579,34 @@ inline void InkSpinButton::enter_edit() {
 }
 
 bool InkSpinButton::defocus() {
+printf("defoc\n");
     if (_focus->contains_focus()) {
         // move focus away
         if (_defocus_widget) {
             if (_defocus_widget->grab_focus()) return true;
         }
-        for (auto widget = this->get_next_sibling(); widget; widget = widget->get_next_sibling()) {
-            if (widget != this && widget->get_can_focus()) {
-                if (widget->grab_focus()) return true;
-            }
-        }
-        for (auto widget = this->get_prev_sibling(); widget; widget = widget->get_prev_sibling()) {
-            if (widget != this && widget->get_can_focus()) {
-                if (widget->grab_focus()) return true;
-            }
-        }
+printf("child focus\n");
+        if (_entry.child_focus(Gtk::DirectionType::TAB_FORWARD)) return true;
+
+        // for (auto widget = this->get_next_sibling(); widget; widget = widget->get_next_sibling()) {
+        //     if (widget != this && widget->get_can_focus()) {
+        //         if (widget->grab_focus()) return true;
+        //     }
+        // }
+        // for (auto widget = this->get_prev_sibling(); widget; widget = widget->get_prev_sibling()) {
+        //     if (widget != this && widget->get_can_focus()) {
+        //         if (widget->grab_focus()) return true;
+        //     }
+        // }
+        // if (get_can_focus()) {
+        //     if (grab_focus()) return true;
+        // }
+        // auto parent = get_parent();
+        // if (parent != this && parent->get_can_focus()) {
+        //     if (parent->grab_focus()) return true;
+        // }
     }
+printf("defoc maybe failed\n");
     return false;
 }
 
@@ -647,9 +670,12 @@ void InkSpinButton::change_value(double inc, Gdk::ModifierType state) {
 
 bool InkSpinButton::on_key_pressed(guint keyval, guint keycode, Gdk::ModifierType state) {
    switch (keyval) {
-     case GDK_KEY_Escape: // Defocus
-         //todo: should Esc undo?
-         return defocus();
+   case GDK_KEY_Escape: // Cancel
+       // Esc pressed - cancel editing
+       cancel_editing();
+printf("spin esc\n");
+       defocus();
+       return false; // allow Esc to be handled by dialog too
 
    // signal "activate" uses this key, so we won't see it:
    // case GDK_KEY_Return:
@@ -664,7 +690,7 @@ bool InkSpinButton::on_key_pressed(guint keyval, guint keycode, Gdk::ModifierTyp
        return true;
 
    default:
-     break;
+       break;
    }
 
    return false;
@@ -687,7 +713,13 @@ void InkSpinButton::on_pressed_minus(int n_press, double x, double y) {
 }
 
 void InkSpinButton::on_activate() {
-    commit_entry();
+    bool ok = commit_entry();
+    if (ok && _enter_exit_edit) {
+        set_focusable(true);
+        ok=defocus();
+        printf("defocus: %d\n",ok);
+        exit_edit();
+    }
 }
 
 void InkSpinButton::on_changed() {
@@ -758,7 +790,12 @@ void InkSpinButton::set_has_arrows(bool enable) {
     if (_enable_arrows == enable) return;
 
     _enable_arrows = enable;
+    queue_resize();
     show_arrows(enable);
+}
+
+void InkSpinButton::set_enter_exit_edit(bool enable) {
+    _enter_exit_edit = enable;
 }
 
 } // namespace Inkscape::UI::Widget

@@ -54,12 +54,14 @@ public:
     void set_evaluator_function(std::function<double (const Glib::ustring&)> cb);
     // Pass true to enable decrement/increment arrow buttons (on by default)
     void set_has_arrows(bool enable = true);
+    // Pass true to make Enter key exit editing mode
+    void set_enter_exit_edit(bool enable = true);
     // ----------- PROPERTIES ------------
     // Glib::PropertyProxy<int> property_digits() { return prop_digits.get_proxy(); }
 
 private:
     void construct();
-    void update();
+    void update(bool fire_change_notification = true);
     void set_new_value(double new_value);
     Gtk::SizeRequestMode get_request_mode_vfunc() const override;
     void measure_vfunc(Gtk::Orientation orientation, int for_size, int& minimum, int& natural, int& minimum_baseline, int& natural_baseline) const override;
@@ -113,6 +115,7 @@ private:
     void on_editing_done();
     void enter_edit();
     void exit_edit();
+    void cancel_editing();
     bool defocus();
     void show_arrows(bool on = true);
     void show_label(bool on = true);
@@ -140,6 +143,7 @@ private:
     sigc::scoped_connection _spinning;
     Gtk::Widget* _defocus_widget = nullptr;
     bool _dont_evaluate = false; // turn off expression evaluator?
+    bool _enter_exit_edit = false;
     Glib::RefPtr<Gdk::Cursor> _old_cursor;
     Glib::RefPtr<Gdk::Cursor> _current_cursor;
     struct Point { double x = 0; double y = 0; } _drag_start;

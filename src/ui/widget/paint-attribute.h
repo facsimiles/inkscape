@@ -30,7 +30,7 @@ class PaintAttribute {
 public:
     PaintAttribute();
 
-    void insert_widgets(InkPropertyGrid& grid, int row);
+    void insert_widgets(InkPropertyGrid& grid);
     void set_document(SPDocument* document);
     void set_desktop(SPDesktop* desktop);
     // update UI from passed object style

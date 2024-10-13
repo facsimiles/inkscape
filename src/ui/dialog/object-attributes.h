@@ -44,6 +44,7 @@ public:
     void set_document(SPDocument* document);
     void set_desktop(SPDesktop* desktop);
     void update_panel(SPObject* object, SPDesktop* desktop);
+    virtual void subselection_changed(const std::vector<SPItem*>& items) {}
     Gtk::Widget& widget() { if(!_widget) throw "missing widget in attributes panel"; return *_widget; }
     virtual Glib::ustring get_title(Selection* selection) const { return _title; }
     bool supports_fill_stroke() const {return _show_fill_stroke; }
@@ -59,6 +60,8 @@ protected:
     void change_angle(SPObject* object, const Glib::RefPtr<Gtk::Adjustment>& adj, std::function<void (double)>&& setter);
     // modify current object
     void change_value(SPObject* object, const Glib::RefPtr<Gtk::Adjustment>& adj, std::function<void (double)>&& setter);
+    //
+    void add_fill_and_stroke();
 
     SPDesktop* _desktop = nullptr;
     OperationBlocker _update;
@@ -104,6 +107,7 @@ private:
     void update_panel(SPObject* object);
     void update_vis_lock(SPObject* object);
     void show_properties_section(bool show);
+    void cursor_moved(Tools::TextTool* tool);
 
     details::AttributesPanel* _current_panel = nullptr;
     OperationBlocker _update;
@@ -115,6 +119,7 @@ private:
     SPItem* _current_item = nullptr;
     ObjectProperties& _obj_properties;
     XML::SignalObserver _observer;
+    auto_connection _cursor_move;
 };
 
 } // namespace Inkscape::UI::Dialog

@@ -321,7 +321,7 @@ PaintAttribute::PaintStripe::PaintStripe(const Glib::ustring& title, bool fill) 
     });
 }
 
-void PaintAttribute::insert_widgets(InkPropertyGrid& grid, int row) {
+void PaintAttribute::insert_widgets(InkPropertyGrid& grid) {
     _markers.add_css_class("border-box");
     _markers.set_overflow(Gtk::Overflow::HIDDEN);
     _markers.set_spacing(0);
