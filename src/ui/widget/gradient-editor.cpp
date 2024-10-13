@@ -61,20 +61,6 @@ namespace Inkscape::UI::Widget {
 using namespace Inkscape::IO;
 using Inkscape::UI::Widget::ColorNotebook;
 
-// class scope {
-// public:
-//     scope(bool& flag): _flag(flag) {
-//         flag = true;
-//     }
-//
-//     ~scope() {
-//         _flag = false;
-//     }
-//
-// private:
-//     bool& _flag;
-// };
-
 void set_icon(Gtk::Button &btn, char const *pixmap)
 {
     btn.set_image_from_icon_name(pixmap, Gtk::IconSize::NORMAL);
@@ -197,10 +183,7 @@ GradientEditor::GradientEditor(const char* prefs, Space::Type space):
     });
 
     auto& gradBox = get_widget<Gtk::Box>(_builder, "gradientBox");
-    const int dot_size = 8;
     _gradient_image.set_visible(true);
-    // _gradient_image.set_margin_start(dot_size / 2);
-    // _gradient_image.set_margin_end(dot_size / 2);
     // gradient stop selected in a gradient widget; sync list selection
     _gradient_image.signal_stop_selected().connect([this](size_t index) {
         select_stop(index);
@@ -238,6 +221,7 @@ GradientEditor::GradientEditor(const char* prefs, Space::Type space):
         _signal_changed.emit(gradient);
     });
 
+    //todo: retire this store
     // construct store for a list of stops
     _stop_columns.add(_stopObj);
     _stop_columns.add(_stopIdx);
@@ -305,11 +289,10 @@ GradientEditor::GradientEditor(const char* prefs, Space::Type space):
         reparent("angle", _angle_btn);
         _angle_btn.set_adjustment(_angle_adj);
         set_degree_suffix(_angle_btn);
-        _angle_btn.set_min_size("99.9");
     }
     {
         reparent("offsetSpin", _offset_btn);
-        _offset_btn.set_min_size("99.9");
+        set_percent_suffix(_offset_btn);
     }
     _offset_btn.signal_value_changed().connect([this](double offset) {
         if (auto row = current_stop()) {
@@ -318,11 +301,21 @@ GradientEditor::GradientEditor(const char* prefs, Space::Type space):
         }
     });
 
+    auto pattern = "-180.0";
+    _angle_btn.set_min_size(pattern);
+    _offset_btn.set_min_size(pattern);
+    _color_picker->get_last_column_size()->add_widget(_angle_btn);
+    _color_picker->get_last_column_size()->add_widget(_offset_btn);
+
     append(_main_grid);
 
+    _stops_list_visible = false;
+    /* == retired list of stops -> todo: remove completely
     // restore visibility of the stop list view
     _stops_list_visible = Inkscape::Preferences::get()->getBool(_prefs + "/stoplist", true);
-    // _show_stops_list.set_expanded(_stops_list_visible);
+    _show_stops_list.set_expanded(_stops_list_visible);
+    */
+    _stops_gallery.set_visible(false);
     update_stops_layout();
 }
 
@@ -584,11 +577,6 @@ ColorPickerPanel::PlateType GradientEditor::get_color_picker_plate() const {
 SPGradient* GradientEditor::get_gradient_vector() {
     if (!_gradient) return nullptr;
     return sp_gradient_get_forked_vector_if_necessary(_gradient, false);
-}
-
-void GradientEditor::set_spinner_size_pattern(const std::string& pattern) {
-    _angle_btn.set_min_size(pattern);
-    _offset_btn.set_min_size(pattern);
 }
 
 SPGradientType GradientEditor::get_type() const {

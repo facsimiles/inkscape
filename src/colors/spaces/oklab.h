@@ -23,6 +23,7 @@ public:
 
     Type getType() const override { return Type::OKLAB; }
     std::string const getName() const override { return "OkLab"; }
+    std::string const getShortName() const override { return "OkLab"; }
     std::string const getIcon() const override { return "color-selector-oklab"; }
 
 protected:

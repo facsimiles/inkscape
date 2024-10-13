@@ -40,7 +40,7 @@ public:
 
     virtual void set_desktop(SPDesktop* desktop) = 0;
     virtual void set_document(SPDocument* document) = 0;
-    static std::unique_ptr<PaintSwitch> create();
+    static std::unique_ptr<PaintSwitch> create(bool support_no_paint);
     virtual void set_mode(PaintMode mode) = 0;
     virtual void update_from_paint(const SPIPaint& paint) = 0;
 

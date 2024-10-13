@@ -1393,6 +1393,7 @@ gridview.grid-view-compact > child box.item-box {
 }
 gridview.grid-view-no-margins > child {
     padding: 2px;
+    border-radius: 2px;
 }
 gridview.grid-view-no-margins > child box.item-box {
     padding: 0;

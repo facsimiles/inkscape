@@ -51,6 +51,7 @@ public:
 
     virtual Type getType() const = 0;
     virtual std::string const getName() const = 0;
+    virtual std::string const getShortName() const = 0;
     virtual std::string const getIcon() const = 0;
     virtual Type getComponentType() const { return getType(); }
     virtual unsigned int getComponentCount() const = 0;

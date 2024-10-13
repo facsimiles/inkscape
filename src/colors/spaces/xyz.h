@@ -36,6 +36,7 @@ public:
 
     Type getType() const override { return Type::XYZ; }
     std::string const getName() const override { return "XYZ"; }
+    std::string const getShortName() const override { return "XYZ"; }
     std::string const getIcon() const override { return "color-selector-xyz"; }
 
 protected:

@@ -26,14 +26,12 @@
 #include "colors/spaces/base.h"
 #include "ui/tools/dropper-tool.h"
 
-const std::string spinner_pattern = "999.";
+const std::string spinner_pattern = "999.9%";
 constexpr int ROW_PLATE = 0; // color plate, if any
 constexpr int ROW_EDIT = 1;  // dropper, rgb edit box, color type selector
 constexpr int ROW_PAGE = 3;  // color page with sliders
 
 namespace Inkscape::UI::Widget {
-
-const std::string& get_color_picker_spinner_pattern() { return spinner_pattern; }
 
 using namespace Colors;
 
@@ -72,12 +70,16 @@ public:
         attach(*_page, 0, ROW_PAGE, 3);
         if (plate_type == Circle) {
             _plate = _page->create_color_wheel(type, true);
-            _plate->get_widget().set_margin_top(4);
-            _plate->get_widget().set_margin_bottom(4);
+            if (_plate) {
+                _plate->get_widget().set_margin_top(4);
+                _plate->get_widget().set_margin_bottom(4);
+            }
         }
         else if (plate_type == Rect) {
             _plate = _page->create_color_wheel(type, false);
-            _plate->get_widget().set_margin_bottom(0);
+            if (_plate) {
+                _plate->get_widget().set_margin_bottom(0);
+            }
         }
         if (_plate) {
             _plate->get_widget().set_expand();
@@ -112,6 +114,10 @@ public:
         return _last_column;
     }
 
+    sigc::signal<void (Colors::Space::Type)> get_color_space_changed() override {
+        return _color_space_changed;
+    }
+
     Glib::RefPtr<Gtk::SizeGroup> _first_column = Gtk::SizeGroup::create(Gtk::SizeGroup::Mode::HORIZONTAL);
     Glib::RefPtr<Gtk::SizeGroup> _last_column = Gtk::SizeGroup::create(Gtk::SizeGroup::Mode::HORIZONTAL);
     // eye dropper - color picker
@@ -121,7 +127,7 @@ public:
     ColorPreview _preview;
     ColorEntry _rgb_edit;
     // color type space selector
-    IconComboBox _spaces = IconComboBox(true, true);
+    IconComboBox _spaces = IconComboBox(true, IconComboBox::LabelOnly);
     bool _with_expander = true;
     // color type this picker is working in
     Space::Type _space_type = Space::Type::NONE;
@@ -133,6 +139,7 @@ public:
     auto_connection _rgb_changed;
     auto_connection _color_picking;
     SPDesktop* _desktop = nullptr;
+    sigc::signal<void (Colors::Space::Type)> _color_space_changed;
 };
 
 std::unique_ptr<ColorPickerPanel> ColorPickerPanel::create(Colors::Space::Type space, PlateType type, std::shared_ptr<Colors::ColorSet> color) {
@@ -154,7 +161,7 @@ ColorPickerPanelImpl::ColorPickerPanelImpl(Space::Type space, PlateType type, st
 
     // list available color space types
     for (auto&& meta : Manager::get().spaces(Space::Traits::Picker)) {
-        _spaces.add_row(meta->getIcon(), meta->getName(), int(meta->getType()));
+        _spaces.add_row(meta->getIcon(), meta->getName(), _(meta->getShortName().c_str()), int(meta->getType()));
     }
     _spaces.refilter();
     _spaces.set_tooltip_text(_("Select color picker type"));
@@ -166,6 +173,7 @@ ColorPickerPanelImpl::ColorPickerPanelImpl(Space::Type space, PlateType type, st
         auto type = static_cast<Space::Type>(id);
         if (type != Space::Type::NONE) {
             set_picker_type(type);
+            _color_space_changed.emit(type);
         }
     });
 

@@ -23,6 +23,7 @@ public:
 
     Type getType() const override { return Type::linearRGB; }
     std::string const getName() const override { return "linearRGB"; }
+    std::string const getShortName() const override { return "LRGB"; }
     std::string const getIcon() const override { return "color-selector-linear-rgb"; }
 
 protected:

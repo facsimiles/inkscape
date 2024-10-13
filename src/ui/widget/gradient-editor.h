@@ -75,11 +75,10 @@ public:
     void setSpread(SPGradientSpread spread) final;
     SPGradientSpread getSpread() final;
     void selectStop(SPStop *selected) final;
-    // ColorPickerPanel& get_color_picker() { return *_color_picker; };
     void set_color_picker_plate(ColorPickerPanel::PlateType type);
     ColorPickerPanel::PlateType get_color_picker_plate() const;
-    void set_spinner_size_pattern(const std::string& pattern);
     SPGradientType get_type() const;
+    ColorPickerPanel& get_picker() { return *_color_picker; }
 
 private:
     void set_gradient(SPGradient* gradient);

@@ -8,6 +8,7 @@
 
 #include "ui/widget/color-page.h"
 
+#include <glibmm/i18n.h>
 #include <gtkmm/adjustment.h>
 #include <gtkmm/box.h>
 #include <gtkmm/grid.h>
@@ -30,13 +31,14 @@
 namespace Inkscape::UI::Widget {
 
 ColorPage::ColorPage(std::shared_ptr<Space::AnySpace> space, std::shared_ptr<ColorSet> colors)
-    : Gtk::Box()
+    : Gtk::Box(Gtk::Orientation::VERTICAL, 4)
     , _space(std::move(space))
     , _selected_colors(colors)
     , _specific_colors(std::make_shared<Colors::ColorSet>(_space, colors->getAlphaConstraint().value_or(true)))
-    // , _expander(get_widget<Gtk::Expander>(_builder, "wheel-expander"))
 {
     set_name("ColorPage");
+    append(_expander);
+    _expander.set_label(_("Color wheel"));
     append(_grid);
     _grid.set_column_spacing(2);
     _grid.set_row_spacing(4);
@@ -79,6 +81,7 @@ ColorPage::ColorPage(std::shared_ptr<Space::AnySpace> space, std::shared_ptr<Col
         auto label = Gtk::make_managed<Gtk::Label>();
         auto slider = Gtk::make_managed<ColorSlider>(_specific_colors, component);
         auto spin = Gtk::make_managed<InkSpinButton>();
+        spin->set_digits(component.id == "alpha" ? 0 : 1);
         _grid.attach(*label, 0, row);
         _grid.attach(*slider, 1, row);
         _grid.attach(*spin, 2, row++);
@@ -120,6 +123,8 @@ ColorWheel* ColorPage::create_color_wheel(Space::Type type, bool disc) {
     }
 
     _color_wheel = create_managed_color_wheel(type, disc);
+    if (!_color_wheel) return nullptr;
+
     if (!_specific_colors->isEmpty()) {
         _color_wheel->set_color(_specific_colors->getAverage());
     }
@@ -181,8 +186,11 @@ ColorPageChannel::ColorPageChannel(
     _adj->set_page_increment(0.0);
     _adj->set_page_size(0.0);
 
-    if (component.scale == 360) {
+    if (component.unit == Space::Component::Unit::Degree) {
         set_degree_suffix(_spin);
+    }
+    else if (component.unit == Space::Component::Unit::Percent) {
+        set_percent_suffix(_spin);
     }
 
     _color_changed = _color->signal_changed.connect([this]() {
