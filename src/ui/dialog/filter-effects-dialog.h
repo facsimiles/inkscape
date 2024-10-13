@@ -533,7 +533,7 @@ class FilterEditorCanvas : public Gtk::ScrolledWindow{
             return "result" + std::to_string(largest+1);
         }
 
-        Glib::ustring update_result_for_primitive(FilterEditorPrimitiveNode* node){
+        /* Glib::ustring update_result_for_primitive(FilterEditorPrimitiveNode* node){
             if(current_filter_id == -1){
                 return "";
             }
@@ -570,7 +570,7 @@ class FilterEditorCanvas : public Gtk::ScrolledWindow{
             //             }
             //         }
             //     }
-        }
+        } */
         Glib::ustring get_result_from_primitive(FilterEditorPrimitiveNode* node){
             if(current_filter_id == -1){
                 return "";
