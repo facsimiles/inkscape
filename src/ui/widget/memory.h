@@ -9,6 +9,8 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#ifndef INKSCAPE_UI_WIDGET_MEMORY_H
+#define INKSCAPE_UI_WIDGET_MEMORY_H
 
 #include <gtkmm/box.h>
 
@@ -29,6 +31,8 @@ private:
 };
 
 } // namespace Inkscape::UI::Widget
+
+#endif
 
 /*
   Local Variables:
