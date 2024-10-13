@@ -1,18 +1,19 @@
-@define-color node_bg #000000;
-@define-color node_bg_selected #100024; 
+/* @define-color node_bg #000000; */
+/* @define-color node_bg_selected #100024;  */
 
-.node > .nodebox-alt{
+.node>.nodebox-alt {
     background-color: #111111;
     border-radius: 20px;
     border: 2px solid #323232; 
     padding: 10px 20px;
-filter: drop-shadow(0 0 4px #000000);
+    filter: drop-shadow(0 2px 2px #000000);
+
     /* filter: drop-shadow(0 0 2px black); */ 
     /* filter: drop-shadow(0 0 0.75rem crimson); */
   }
-  .node-selected > .nodebox-alt{
-background-color: #111111;
-/*    background-color: #100024;*/
+  .node-selected>.nodebox-alt {
+    background-color: #111111;
+    /*    background-color: #100024;*/
     border-radius: 20px;
     border: 2px solid #AAAAAA;
     padding: 10px 20px;
@@ -52,7 +53,7 @@ background-color: #111111;
     padding: 15px;
     
 
-    filter: drop-shadow(0 0 5px black);
+    /* filter: drop-shadow(0 0 5px black); */
     
     /* filter: drop-shadow(0 0 0.75rem crimson); */
   }
