@@ -13,14 +13,16 @@
 #include <gtkmm/box.h>
 #include <gtkmm/button.h>
 
+#include "desktop.h"
+#include "inkscape.h"
 #include "colors/color.h"
+#include "widget/canvas.h"
 #include "widget/color-page.h"
 #include "widget/color-preview.h"
 #include "widget/ink-spin-button.h"
 #include "widget/paint-switch.h"
 
 namespace Inkscape::UI::Utils {
-
 using namespace Inkscape::UI;
 
 namespace {
@@ -140,6 +142,10 @@ void GridViewList::update_store(size_t count, std::function<Glib::RefPtr<Glib::O
         _store->append(item);
     }
     _store->thaw_notify();
+
+    for (auto* box : get_children()) {
+        box->set_focusable(false);
+    }
 }
 
 /*
@@ -290,6 +296,9 @@ Glib::RefPtr<Gtk::SignalListItemFactory> GridViewList::create_spin_factory() {
     return factory;
 }
 */
+
+namespace {
+
 Widget::InkSpinButton* create_spin_button(const Glib::RefPtr<ItemData>& item, const Glib::RefPtr<Gtk::Adjustment>& adjustment, int digits) {
     auto button = Gtk::make_managed<Widget::InkSpinButton>();
     button->set_hexpand();
@@ -302,18 +311,10 @@ Widget::InkSpinButton* create_spin_button(const Glib::RefPtr<ItemData>& item, co
     }
     button->set_digits(digits);
     button->set_value(item->value);
-    // button->signal_value_changed().connect([this](auto) {
-        //todo
-    // });
     return button;
 }
 
-Gtk::Button* create_color_button(const Glib::RefPtr<ItemData>& item, int tile_size) {
-    auto box = Gtk::make_managed<Gtk::Box>();
-    box->add_css_class("item-box");
-    box->set_orientation(Gtk::Orientation::HORIZONTAL);
-    box->set_spacing(4);
-
+Gtk::Widget* create_color_preview(const Glib::RefPtr<ItemData>& item, int tile_size) {
     if (item->color.has_value()) {
         auto& color = *Gtk::make_managed<Widget::ColorPreview>();
         color.set_size_request(tile_size, tile_size);
@@ -323,7 +324,7 @@ Gtk::Button* create_color_button(const Glib::RefPtr<ItemData>& item, int tile_si
         color.setRgba32(item->color->toRGBA());
         color.setIndicator(item->is_swatch ? Widget::ColorPreview::Swatch : Widget::ColorPreview::None);
         color.set_tooltip_text(item->tooltip);
-        box->append(color);
+        return &color;
     }
     else if (item->pattern) {
         auto& color = *Gtk::make_managed<Widget::ColorPreview>();
@@ -335,14 +336,33 @@ Gtk::Button* create_color_button(const Glib::RefPtr<ItemData>& item, int tile_si
         // todo: swatch gradient
         // color.setIndicator(item->is_swatch ? UI::Widget::ColorPreview::Swatch : UI::Widget::ColorPreview::None);
         color.set_tooltip_text(item->tooltip);
-        box->append(color);
+        return &color;
     }
     else {
         auto& image = *Gtk::make_managed<Gtk::Image>();
         image.set_size_request(tile_size, tile_size);
         image.set_from_icon_name(item->icon);
-        box->append(image);
+        return &image;
     }
+}
+
+Gtk::Button* create_compact_color_button(const Glib::RefPtr<ItemData>& item, int tile_size) {
+    auto button = Gtk::make_managed<Gtk::Button>();
+    auto color = create_color_preview(item, tile_size);
+    color->set_halign(Gtk::Align::CENTER);
+    color->set_valign(Gtk::Align::CENTER);
+    button->set_child(*color);
+    button->set_tooltip_text(item->tooltip);
+    return button;
+}
+
+Gtk::Button* create_color_button(const Glib::RefPtr<ItemData>& item, int tile_size) {
+    auto box = Gtk::make_managed<Gtk::Box>();
+    box->add_css_class("item-box");
+    box->set_orientation(Gtk::Orientation::HORIZONTAL);
+    box->set_spacing(4);
+
+    box->append(*create_color_preview(item, tile_size));
 
     auto label = Gtk::make_managed<Gtk::Label>();
     label->set_hexpand();
@@ -365,6 +385,8 @@ Gtk::Button* create_color_button(const Glib::RefPtr<ItemData>& item, int tile_si
     return button;
 }
 
+} // namespace
+
 void GridViewList::create_store() {
     auto store = Gio::ListStore<ItemData>::create();
     _store = store;
@@ -373,15 +395,40 @@ void GridViewList::create_store() {
     set_row_spacing(0);
     set_column_spacing(0);
     set_min_children_per_line(1);
+    set_max_children_per_line(999);
+    set_halign(Gtk::Align::START);
     set_selection_mode(); // none
     bind_list_store(store, [this](const Glib::RefPtr<ItemData>& item) -> Widget* {
         switch (_type) {
         case Button:
-            return Gtk::make_managed<Gtk::Button>(item->label);
+            {
+                auto button = Gtk::make_managed<Gtk::Button>(item->label);
+                button->signal_clicked().connect([this, id = item->id, value = item->value]() {
+                    _signal_button_clicked.emit(id, value);
+                });
+                return button;
+            }
 
-        case Color:
+        case ColorLong:
             {
                 auto button = create_color_button(item, _tile_size);
+                auto id = item->id;
+                button->signal_clicked().connect([this, button]() {
+                    int x = 0, y = 0;
+                    auto alloc = button->get_allocation();
+                    _popover.unparent();
+                    _popover.set_parent(*button);
+                    _popover.set_pointing_to(Gdk::Rectangle(x, y, alloc.get_width(), alloc.get_height()));
+                    _popover.set_offset(0, -8);
+                    _popover.set_position(Gtk::PositionType::BOTTOM);
+                    _popover.popup();
+                });
+                return button;
+            }
+
+        case ColorCompact:
+            {
+                auto button = create_compact_color_button(item, _tile_size);
                 auto id = item->id;
                 button->signal_clicked().connect([this, button]() {
                     int x = 0, y = 0;
@@ -406,9 +453,10 @@ void GridViewList::create_store() {
         case Spin:
             {
                 auto spin = create_spin_button(item, _adjustment, _digits);
-                auto id = item->id;
-                spin->signal_value_changed().connect([this, spin, id](double value) {
-                    _signal_value_changed.emit(id, value);
+                spin->set_enter_exit_edit();
+    spin->set_defocus_widget( SP_ACTIVE_DESKTOP->getCanvas());
+                spin->signal_value_changed().connect([this, id = item->id, orig = item->value](double new_value) {
+                    _signal_value_changed.emit(id, orig, new_value);
                 });
                 return spin;
             }
