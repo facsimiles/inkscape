@@ -91,12 +91,15 @@ public:
         _picker(ColorPickerPanel::create(space, get_plate_type_preference(_prefs, ColorPickerPanel::Rect), colors)) {
         append(*_picker);
     }
-
     void set_color_picker_plate(ColorPickerPanel::PlateType type) {
         _picker->set_plate_type(type);
+        set_plate_type_preference(_prefs, type);
     }
     ColorPickerPanel::PlateType get_color_picker_plate() const {
         return _picker->get_plate_type();
+    }
+    ColorPickerPanel& get_picker() {
+        return *_picker;
     }
 };
 
@@ -122,13 +125,22 @@ PaintSwitch::PaintSwitch():
     set_name("PaintSwitch");
 }
 
-//TODO: persist those settings
-Colors::Space::Type tt = Space::Type::HSL;
-ColorPickerPanel::PlateType pt = ColorPickerPanel::Rect;
+namespace {
+
+Colors::Space::Type get_color_type() {
+    auto type = static_cast<Space::Type>(Preferences::get()->getInt("/color-picker/color-type", int(Space::Type::HSL)));
+    return type;
+}
+
+void store_color_type(Colors::Space::Type type) {
+    Preferences::get()->setInt("/color-picker/color-type", int(type));
+}
+
+} // namespace
 
 class PaintSwitchImpl : public PaintSwitch {
 public:
-    PaintSwitchImpl();
+    PaintSwitchImpl(bool support_no_paint);
 
     void set_desktop(SPDesktop* desktop) override {
         _swatch.set_desktop(desktop);
@@ -222,10 +234,10 @@ public:
     sigc::signal<void (SPGradient* swatch, EditOperation, SPGradient*, std::optional<Color>, Glib::ustring)> _signal_swatch_changed;
     sigc::signal<void (SPPattern*, std::optional<Color>, const Glib::ustring&, const Geom::Affine&, const Geom::Point&,
                        bool, const Geom::Scale&)> _signal_pattern_changed;
-    FlatColorEditor _flat_color{tt, _color};
-    GradientEditor _gradient{"/gradient-edit", tt};
-    PatternEditor _pattern{"/pattern-edit", PatternManager::get()};
-    SwatchEditor _swatch{tt, "/swatch-edit"};
+    FlatColorEditor _flat_color{get_color_type(), _color};
+    GradientEditor _gradient{"/gradient-editor", get_color_type()};
+    PatternEditor _pattern{"/pattern-editor", PatternManager::get()};
+    SwatchEditor _swatch{get_color_type(), "/swatch-editor"};
     MeshEditor _mesh;
     Gtk::Box _unset = Gtk::Box{Gtk::Orientation::VERTICAL};
     OperationBlocker _update;
@@ -234,7 +246,7 @@ public:
     WidgetGroup _plate_type;
 };
 
-PaintSwitchImpl::PaintSwitchImpl() {
+PaintSwitchImpl::PaintSwitchImpl(bool support_no_paint) {
     _color->set(Color(0x000000ff));
     auto header = Gtk::make_managed<Gtk::Box>(Gtk::Orientation::HORIZONTAL);
     header->set_margin_top(1);
@@ -246,6 +258,8 @@ PaintSwitchImpl::PaintSwitchImpl() {
 
     // add buttons switching paint mode
     for (auto i : paint_modes) {
+        if (i.mode == PaintMode::None && !support_no_paint) continue;
+
         auto btn = Gtk::make_managed<Gtk::ToggleButton>();
         btn->set_icon_name(i.icon);
         btn->set_has_frame(false);
@@ -283,6 +297,10 @@ PaintSwitchImpl::PaintSwitchImpl() {
     header->append(*types);
     header->append(*pickers);
 
+    _flat_color.get_picker().get_color_space_changed().connect([](auto type) {
+        store_color_type(type);
+    });
+
     _mesh.signal_changed().connect([this](auto mesh) { fire_mesh_changed(mesh); });
 
     _swatch.signal_changed().connect([this](auto swatch, auto operation, auto replacement) {
@@ -294,11 +312,15 @@ PaintSwitchImpl::PaintSwitchImpl() {
     _swatch.signal_label_changed().connect([this](auto swatch, auto& label) {
         fire_swatch_changed(swatch, EditOperation::Rename, nullptr, {}, label);
     });
+    _swatch.get_picker().get_color_space_changed().connect([](auto type) {
+        store_color_type(type);
+    });
 
-    //TODO: improve: Gtk::SizeGroup?
-    _gradient.set_spinner_size_pattern(get_color_picker_spinner_pattern());
     _gradient.signal_changed().connect([this](auto gradient) { fire_gradient_changed(gradient, _mode); });
     _gradient.set_margin_top(4);
+    _gradient.get_picker().get_color_space_changed().connect([](auto type) {
+        store_color_type(type);
+    });
 
     append(*header);
     auto separator = Gtk::make_managed<Gtk::Separator>();
@@ -311,6 +333,7 @@ PaintSwitchImpl::PaintSwitchImpl() {
     _stack.set_hhomogeneous(); // maintain same width
     _stack.set_vhomogeneous(false); // but let height vary
     _stack.set_size_request(-1, 120); // min height
+    // cross fade would be great, but doesn't play nice with delayed popup refresh before opening
     // _stack.set_transition_type(Gtk::StackTransitionType::CROSSFADE);
 
     auto undef = Gtk::make_managed<Gtk::Label>(_("Paint is undefined."));
@@ -397,7 +420,6 @@ void PaintSwitchImpl::set_mode(PaintMode mode) {
 }
 
 void PaintSwitchImpl::_set_mode(PaintMode mode) {
-    // auto scoped(_update.block());
     _mode = mode;
     bool has_color_picker = false;
 
@@ -492,8 +514,8 @@ void PaintSwitchImpl::update_from_paint(const SPIPaint& paint) {
     }
 }
 
-std::unique_ptr<PaintSwitch> PaintSwitch::create() {
-    return std::make_unique<PaintSwitchImpl>();
+std::unique_ptr<PaintSwitch> PaintSwitch::create(bool support_no_paint) {
+    return std::make_unique<PaintSwitchImpl>(support_no_paint);
 }
 
 } // namespace

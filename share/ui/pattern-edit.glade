@@ -572,9 +572,10 @@
         </child>
         <child>
           <object class="GtkBox">
+            <property name="hexpand">False</property>
             <child>
               <object class="GtkScale" id="gap-x">
-                <property name="hexpand">False</property>
+                <property name="hexpand">True</property>
                 <property name="draw-value">True</property>
                 <property name="focusable">True</property>
                 <property name="adjustment">adjustment-gap-x</property>
@@ -603,9 +604,10 @@
         </child>
         <child>
           <object class="GtkBox">
+            <property name="hexpand">False</property>
             <child>
               <object class="GtkScale" id="gap-y">
-                <property name="hexpand">False</property>
+                <property name="hexpand">True</property>
                 <property name="draw-value">True</property>
                 <property name="focusable">True</property>
                 <property name="adjustment">adjustment-gap-y</property>

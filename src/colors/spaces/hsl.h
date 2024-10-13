@@ -23,6 +23,7 @@ public:
 
     Type getType() const override { return Type::HSL; }
     std::string const getName() const override { return "HSL"; }
+    std::string const getShortName() const override { return "HSL"; }
     std::string const getIcon() const override { return "color-selector-hsx"; }
 
 protected:

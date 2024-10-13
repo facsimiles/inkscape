@@ -23,6 +23,7 @@ public:
 
     Type getType() const override { return Type::OKHSV; }
     std::string const getName() const override { return "OkHsv"; }
+    std::string const getShortName() const override { return "OkHsv"; }
     std::string const getIcon() const override { return "color-selector-okhsv"; }
 
 protected:

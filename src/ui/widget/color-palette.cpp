@@ -634,24 +634,10 @@ void ColorPalette::resize() {
 
 void ColorPalette::set_colors(std::vector<std::unique_ptr<Dialog::ColorItem>> coloritems)
 {
-    for (auto item : _normal_items) {
-        item->unreference();
-    }
-    for (auto item : _pinned_items) {
-        item->unreference();
-    }
     _normal_items.clear();
     _pinned_items.clear();
 
     for (auto& item : coloritems) {
-        if (item->is_pinned()) {
-            _pinned_items.emplace_back(item);
-        } else {
-            _normal_items.emplace_back(item);
-        }
-        // commented out: there's no lifetime control for items; this callback crashes
-        // TODO: move to swatches.cpp
-        //
         item->signal_modified().connect([item = item.get()] {
             UI::for_each_child(*item->get_parent(), [=](Gtk::Widget& w) {
                 if (auto label = dynamic_cast<Gtk::Label *>(&w)) {

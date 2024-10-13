@@ -29,6 +29,7 @@ public:
 
     Type getType() const override { return _profile_type; }
     std::string const getName() const override { return _profile_name; }
+    std::string const getShortName() const override { return _profile_name; }
     std::string const getIcon() const override { return "color-selector-cms"; }
     unsigned int getComponentCount() const override;
 

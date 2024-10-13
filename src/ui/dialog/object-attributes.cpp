@@ -86,6 +86,8 @@ namespace Inkscape::UI::Dialog {
 
 using namespace Inkscape::UI::Utils;
 
+constexpr bool IncludeExperimentalPanels = false;
+
 namespace {
 
 // Take "style" attribute from source object and apply it to destination.
@@ -118,7 +120,6 @@ void enter_group(SPDesktop* desktop, SPGroup* group) {
 
     auto selection = desktop->getSelection();
     desktop->layerManager().setCurrentLayer(group);
-    // selection->clear();
 }
 
 } // namespace
@@ -1475,10 +1476,6 @@ void visit_objects(SPObject* object, F f) {
         }
         else if (auto text = cast<SPText>(object)) {
             visit_children_fn(text, visit_children_fn);
-            // f(text);
-            // for (auto child : get_object_children(text)) {
-                // f(child);
-            // }
         }
         else if (object) {
             f(object);
@@ -1534,11 +1531,11 @@ public:
                         if (item->style->stroke_width.computed == orig) {
                             printf("stroke match %s\n", o->getId());
                             changed = true;
-    // auto css = new_css_attr();
+    //todo: this is test
     auto css = boost::intrusive_ptr(sp_repr_css_attr_new(), false);
     sp_repr_css_set_property_double(css.get(), "stroke-width", value);
     item->changeCSS(css.get(), "style");
-    // set_item_style(item, css.get());
+    // end of test
                         }
                         else {
                             printf("stroke no match %.8f, %s\n", item->style->stroke_width.computed, o->getId());
@@ -1560,7 +1557,7 @@ private:
 
     void update(SPObject* object) override {
         if (!_desktop) return;
-printf("multi upd: %p\n", object);
+
         auto selection = _desktop->getSelection();
         auto objects = selection->objects();
 
@@ -1594,7 +1591,6 @@ printf("multi upd: %p\n", object);
         // };
 
         auto collect_attr = [&](SPObject* obj) {
-        // printf("collect attr on %s, item: %p\n", obj->getId(), cast<SPItem>(obj));
             if (auto repr = obj->getRepr()) {
                 types.insert(repr->name());
             }
@@ -1605,7 +1601,6 @@ printf("multi upd: %p\n", object);
                 auto stroke = item->style->getFillOrStroke(false);
                 strokes.insert(get_paint(stroke));
 
-        // printf("collect stroke: %.8f on %s painto: %x\n", item->style->stroke_width.computed, item->getId(), item->style->stroke.paintOrigin);
                 stroke_widths.insert(item->style->stroke_width.computed);
             }
             //todo: groups and text
@@ -1707,11 +1702,15 @@ void ObjectAttributes::create_panels() {
     _panels[typeid(SPStar).name()] = std::make_unique<StarPanel>(_builder);
     _panels[typeid(SPAnchor).name()] = std::make_unique<AnchorPanel>();
     _panels[typeid(SPPath).name()] = std::make_unique<PathPanel>(_builder);
-    _panels[typeid(SPText).name()] = std::make_unique<TextPanel>(_builder); //todo: tref, tspan, textpath, flowtext?
-    _panels[typeid(SPGroup).name()] = std::make_unique<GroupPanel>(_builder);
-    _panels[typeid(SPUse).name()] = std::make_unique<ClonePanel>(_builder);
 
-    _multi_obj_panel = std::make_unique<MultiObjPanel>();
+    //todo: those panels are not ready yet
+    if (IncludeExperimentalPanels) {
+        _panels[typeid(SPText).name()] = std::make_unique<TextPanel>(_builder); //todo: tref, tspan, textpath, flowtext?
+        _panels[typeid(SPGroup).name()] = std::make_unique<GroupPanel>(_builder);
+        _panels[typeid(SPUse).name()] = std::make_unique<ClonePanel>(_builder);
+
+        _multi_obj_panel = std::make_unique<MultiObjPanel>();
+    }
 }
 
 } // namespace Inkscape::UI::Dialog

@@ -57,7 +57,7 @@ private:
         bool can_update() const;
         Gtk::MenuButton _paint_btn;
         Gtk::Popover _popover;
-        std::unique_ptr<PaintSwitch> _switch = PaintSwitch::create();
+        std::unique_ptr<PaintSwitch> _switch = PaintSwitch::create(false);
         ColorPreview _color_preview = ColorPreview(0);
         Gtk::Image _paint_icon;
         Gtk::Label _paint_type;

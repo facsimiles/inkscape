@@ -38,16 +38,6 @@ struct ItemData : public Glib::Object {
     bool is_swatch = false;
     bool is_radial = false;
 
-    // static Glib::RefPtr<ItemData> create(
-    //     const char* id,
-    //     const Glib::ustring& label
-    // ) {
-    //     auto item = Glib::make_refptr_for_instance<ItemData>(new ItemData());
-    //     item->id = id ? id : "";
-    //     item->label = label;
-    //     return item;
-    // }
-
     static Glib::RefPtr<ItemData> create(
         const std::string& id,
         double value,
@@ -110,7 +100,7 @@ GridViewList::GridViewList(Type type, Glib::RefPtr<Gtk::Adjustment> adjustment, 
 
     create_store();
     add_css_class("compact-flowbox");
-    _paint = UI::Widget::PaintSwitch::create();
+    _paint = UI::Widget::PaintSwitch::create(true);
     _popover.set_child(*_paint);
 }
 
@@ -147,155 +137,6 @@ void GridViewList::update_store(size_t count, std::function<Glib::RefPtr<Glib::O
         box->set_focusable(false);
     }
 }
-
-/*
-Glib::RefPtr<Gtk::SignalListItemFactory> GridViewList::create_color_factory() {
-    auto factory = Gtk::SignalListItemFactory::create();
-
-    factory->signal_setup().connect([this](const Glib::RefPtr<Gtk::ListItem>& list_item) {
-        auto box = Gtk::make_managed<Gtk::Box>();
-        box->add_css_class("item-box");
-        box->set_orientation(Gtk::Orientation::HORIZONTAL);
-        box->set_spacing(4);
-
-        auto color = Gtk::make_managed<UI::Widget::ColorPreview>();
-        color->set_size_request(_tile_size, _tile_size);
-        color->set_frame(true);
-        box->append(*color);
-
-        auto image = Gtk::make_managed<Gtk::Image>();
-        image->set_size_request(_tile_size, _tile_size);
-        box->append(*image);
-
-        if (_show_labels) {
-            auto label = Gtk::make_managed<Gtk::Label>();
-            label->set_hexpand();
-            label->set_xalign(0);
-            label->set_valign(Gtk::Align::CENTER);
-            box->append(*label);
-        }
-        auto img = Gtk::make_managed<Gtk::Image>();
-        img->set_from_icon_name("pan-down");
-        img->set_halign(Gtk::Align::END);
-        img->set_hexpand();
-        box->append(*img);
-
-        auto button = Gtk::make_managed<Gtk::Button>();
-        button->set_child(*box);
-        list_item->set_child(*button);
-    });
-
-    factory->signal_bind().connect([this](const Glib::RefPtr<Gtk::ListItem>& list_item) {
-        auto obj = list_item->get_item();
-
-        auto& button = dynamic_cast<Gtk::Button&>(*list_item->get_child());
-        auto& box = dynamic_cast<Gtk::Box&>(*button.get_first_child());
-        auto first = box.get_first_child();
-        if (!first) throw std::runtime_error("Missing widget in swatch editor factory binding");
-        auto& color = dynamic_cast<UI::Widget::ColorPreview&>(*first);
-        auto& image = dynamic_cast<Gtk::Image&>(*first->get_next_sibling());
-        auto label = dynamic_cast<Gtk::Label*>(image.get_next_sibling());
-
-        auto item = std::dynamic_pointer_cast<ItemData>(obj);
-
-        color.set_size_request(_tile_size, _tile_size);
-        image.set_size_request(_tile_size, _tile_size);
-        if (item->color.has_value()) {
-            image.set_visible(false);
-            color.setRgba32(item->color->toRGBA());
-            color.setIndicator(item->is_swatch ? UI::Widget::ColorPreview::Swatch : UI::Widget::ColorPreview::None);
-            color.set_tooltip_text(item->tooltip);
-            color.set_visible();
-        }
-        else {
-            color.set_visible(false);
-            image.set_from_icon_name(item->icon);
-            image.set_visible();
-        }
-        // color.setRgba32(item->color.has_value() ? item->color->toRGBA() : 0x000000ff);
-        if (label) {
-            label->set_label(item->label);
-            label->set_tooltip_text(item->tooltip);
-        }
-    });
-    return factory;
-}
-
-Glib::RefPtr<Gtk::SignalListItemFactory> GridViewList::create_label_factory() {
-    auto factory = Gtk::SignalListItemFactory::create();
-
-    factory->signal_setup().connect([this](const Glib::RefPtr<Gtk::ListItem>& list_item) {
-        auto label = Gtk::make_managed<Gtk::Label>();
-        label->set_hexpand();
-        label->set_xalign(0);
-        // label->set_valign(Gtk::Align::CENTER);
-        list_item->set_child(*label);
-    });
-
-    factory->signal_bind().connect([this](const Glib::RefPtr<Gtk::ListItem>& list_item) {
-        auto obj = list_item->get_item();
-        auto& label = dynamic_cast<Gtk::Label&>(*list_item->get_child());
-        auto item = std::dynamic_pointer_cast<ItemData>(obj);
-
-        label.set_label(item->label);
-    });
-    return factory;
-}
-
-Glib::RefPtr<Gtk::SignalListItemFactory> GridViewList::create_button_factory() {
-    auto factory = Gtk::SignalListItemFactory::create();
-
-    factory->signal_setup().connect([this](const Glib::RefPtr<Gtk::ListItem>& list_item) {
-        auto button = Gtk::make_managed<Gtk::Button>();
-        button->set_hexpand();
-        // label->set_xalign(0);
-        // label->set_valign(Gtk::Align::CENTER);
-        list_item->set_child(*button);
-    });
-
-    factory->signal_bind().connect([this](const Glib::RefPtr<Gtk::ListItem>& list_item) {
-        auto obj = list_item->get_item();
-        auto& button = dynamic_cast<Gtk::Button&>(*list_item->get_child());
-        auto item = std::dynamic_pointer_cast<ItemData>(obj);
-
-        button.set_label(item->label);
-        button.signal_clicked().connect([this]() {
-            //todo
-        });
-    });
-    return factory;
-}
-
-Glib::RefPtr<Gtk::SignalListItemFactory> GridViewList::create_spin_factory() {
-    auto factory = Gtk::SignalListItemFactory::create();
-
-    factory->signal_setup().connect([this](const Glib::RefPtr<Gtk::ListItem>& list_item) {
-        auto button = Gtk::make_managed<UI::Widget::InkSpinButton>();
-        button->set_hexpand();
-        list_item->set_child(*button);
-        button->set_drag_sensitivity(0); // disable
-        if (_adjustment) {
-            auto adj = Gtk::Adjustment::create(_adjustment->get_value(), _adjustment->get_lower(), _adjustment->get_upper(),
-                _adjustment->get_step_increment(), _adjustment->get_page_increment());
-            button->set_adjustment(adj);
-            button->set_digits(_digits);
-        }
-    });
-
-    factory->signal_bind().connect([this](const Glib::RefPtr<Gtk::ListItem>& list_item) {
-        auto obj = list_item->get_item();
-        auto& button = dynamic_cast<UI::Widget::InkSpinButton&>(*list_item->get_child());
-        auto item = std::dynamic_pointer_cast<ItemData>(obj);
-
-        // button.set_label(item->label);
-        button.set_value(item->value);
-        button.signal_value_changed().connect([this](auto) {
-            //todo
-        });
-    });
-    return factory;
-}
-*/
 
 namespace {
 

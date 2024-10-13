@@ -27,6 +27,7 @@ namespace Inkscape::UI::Widget {
 struct IconComboBox::ListItem : public Glib::Object {
     int id;
     Glib::ustring label;
+    Glib::ustring short_name;
     Glib::ustring icon;  // icon's name to load if icons have been enabled
     Glib::RefPtr<Gdk::Texture> image;  // image to present instead of icon if icons are disabled
     bool is_visible = true;
@@ -34,12 +35,14 @@ struct IconComboBox::ListItem : public Glib::Object {
     static Glib::RefPtr<ListItem> create(
         int id,
         Glib::ustring label,
+        Glib::ustring short_name,
         Glib::ustring icon,
         Glib::RefPtr<Gdk::Texture> image
     ) {
         auto item = Glib::make_refptr_for_instance<ListItem>(new ListItem());
         item->id = id;
         item->label = label;
+        item->short_name = short_name;
         item->icon = icon;
         item->image = image;
         return item;
@@ -48,7 +51,7 @@ private:
     ListItem() {}
 };
 
-IconComboBox::IconComboBox(bool use_icons, bool compact_header)
+IconComboBox::IconComboBox(bool use_icons, HeaderType header)
 {
     _factory = Gtk::SignalListItemFactory::create();
 
@@ -136,7 +139,8 @@ IconComboBox::IconComboBox(bool use_icons, bool compact_header)
 
     set_list_factory(_factory);
 
-    if (compact_header) {
+    if (header == ImageOnly) {
+        // show only icon in closed combobox
         _compact_factory = Gtk::SignalListItemFactory::create();
 
         _compact_factory->signal_setup().connect([=](const Glib::RefPtr<Gtk::ListItem>& list_item) {
@@ -160,6 +164,27 @@ IconComboBox::IconComboBox(bool use_icons, bool compact_header)
             else {
                 dynamic_cast<Gtk::Picture&>(*first).set_paintable(item->image);
             }
+        });
+
+        set_factory(_compact_factory);
+    }
+    else if (header == LabelOnly) {
+        // show only label in closed combobox
+        _compact_factory = Gtk::SignalListItemFactory::create();
+
+        _compact_factory->signal_setup().connect([=](const Glib::RefPtr<Gtk::ListItem>& list_item) {
+            auto label = Gtk::make_managed<Gtk::Label>();
+            label->set_hexpand();
+            label->set_xalign(0.5);
+            label->set_valign(Gtk::Align::FILL);
+            list_item->set_child(*label);
+        });
+
+        _compact_factory->signal_bind().connect([=](const Glib::RefPtr<Gtk::ListItem>& list_item) {
+            auto obj = list_item->get_item();
+            auto item = std::dynamic_pointer_cast<ListItem>(obj);
+            auto& label = dynamic_cast<Gtk::Label&>(*list_item->get_child());
+            label.set_label(item->short_name.empty() ? item->label : item->short_name);
         });
 
         set_factory(_compact_factory);
@@ -200,12 +225,16 @@ void IconComboBox::refilter() {
 
 void IconComboBox::add_row(Glib::ustring const &icon_name, Glib::ustring const &label, int const id)
 {
-    _store->append(ListItem::create(id, label, icon_name, Glib::RefPtr<Gdk::Texture>() ));
+    _store->append(ListItem::create(id, label, {}, icon_name, Glib::RefPtr<Gdk::Texture>() ));
+}
+
+void IconComboBox::add_row(const Glib::ustring& icon_name, const Glib::ustring& full_name, const Glib::ustring& short_name, int id) {
+    _store->append(ListItem::create(id, full_name, short_name, icon_name, Glib::RefPtr<Gdk::Texture>() ));
 }
 
 void IconComboBox::add_row(Cairo::RefPtr<Cairo::Surface> image, const Glib::ustring& label, int id) {
     auto tex = to_texture(image);
-    _store->append(ListItem::create(id, label, Glib::ustring(), tex));
+    _store->append(ListItem::create(id, label, {}, {}, tex));
 }
 
 void IconComboBox::set_active_by_id(int const id)

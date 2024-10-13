@@ -72,6 +72,21 @@ IGNORE_ICONS = [
     # Those are UI elements in form of icons; themes may define them, but they shouldn't have to
     'resizing-handle-horizontal-symbolic.svg',
     'resizing-handle-vertical-symbolic.svg',
+    # There's no need to redefine color picker icons in each theme
+    'color-selector-cms-symbolic.svg',
+    'color-selector-oklch-symbolic.svg',
+    'color-selector-rgb-symbolic.svg',
+    'color-selector-hsx-symbolic.svg',
+    'color-selector-okhsl-symbolic.svg',
+    'color-selector-hsluv-symbolic.svg',
+    'color-selector-cmyk-symbolic.svg',
+    'color-selector-cms.svg',
+    'color-selector-oklch.svg',
+    'color-selector-rgb.svg',
+    'color-selector-hsx.svg',
+    'color-selector-okhsl.svg',
+    'color-selector-hsluv.svg',
+    'color-selector-cmyk.svg',
 ]
 
 NO_PROBLEM,\

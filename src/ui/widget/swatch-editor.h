@@ -38,6 +38,7 @@ public:
     sigc::signal<void (SPGradient*, EditOperation, SPGradient*)> signal_changed() const { return _signal_changed; }
     sigc::signal<void (SPGradient*, const Colors::Color&)> signal_color_changed() const { return _signal_color_changed; }
     sigc::signal<void (SPGradient*, const Glib::ustring&)> signal_label_changed() const { return _signal_label_changed; }
+    ColorPickerPanel& get_picker() { return *_color_picker; }
 
 private:
     void build_grid();
