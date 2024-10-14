@@ -108,12 +108,12 @@ CalligraphyToolbar::CalligraphyToolbar(SPDesktop *desktop)
     });
 
     _thinning_item.set_custom_numeric_menu_data({
-        {-100, _("(speed blows up stroke")},
+        {-100, _("(speed blows up stroke)")},
         { -40, ""},
         { -20, ""},
         { -10, _("(slight widening)")},
         {   0, _("(constant width)")},
-        {  10, _("(slight thining, default)")},
+        {  10, _("(slight thinning, default)")},
         {  20, ""},
         {  40, ""},
         { 100, _("(speed deflates stroke)")}
