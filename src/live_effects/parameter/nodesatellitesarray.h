@@ -59,7 +59,8 @@ public:
     void setEffectType(EffectType et);
     void reloadKnots();
     void updateAmmount(double amount);
-    void setPathVectorNodeSatellites(PathVectorNodeSatellites *pathVectorNodeSatellites, bool write = true);
+    void setPathVectorNodeSatellites(PathVectorNodeSatellites *pathVectorNodeSatellites, bool update = true, bool write = false);
+    void write_to_SVG();
 
     void set_oncanvas_looks(Inkscape::CanvasItemCtrlShape shape, uint32_t color);
 
