@@ -383,7 +383,7 @@
     <child>
       <object class="GtkBox" id="cap_rounding_box">
         <property name="visible">True</property>
-        <property name="tooltip-text" translatable="yes">Increase to make caps at the ends of strokes protrude more (0 = no caps, 1 = round caps</property>
+        <property name="tooltip-text" translatable="yes">Increase to make caps at the ends of strokes protrude more (0 = no caps, 1 = round caps)</property>
         <property name="margin-end">3</property>
         <child>
           <object class="GtkLabel">
@@ -397,7 +397,7 @@
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="width-chars">5</property>
-            <property name="text" translatable="yes">0</property>
+            <property name="text">0</property>
             <property name="adjustment">_cap_rounding_adj</property>
             <property name="climb-rate">1</property>
             <property name="digits">2</property>
