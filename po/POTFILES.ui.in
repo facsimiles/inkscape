@@ -43,9 +43,11 @@
 ../share/ui/toolbar-eraser.ui
 ../share/ui/toolbar-gradient.ui
 ../share/ui/toolbar-lpe.ui
+../share/ui/toolbar-marker.ui
 ../share/ui/toolbar-measure.ui
 ../share/ui/toolbar-mesh.ui
 ../share/ui/toolbar-node.ui
+../share/ui/toolbar-objectpicker.ui
 ../share/ui/toolbar-page.ui
 ../share/ui/toolbar-paintbucket.ui
 ../share/ui/toolbar-pencil.ui
