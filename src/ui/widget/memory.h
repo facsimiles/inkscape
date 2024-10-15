@@ -20,7 +20,7 @@ class Memory : public Gtk::Box
 {
 public:
     Memory();
-    ~Memory();
+    ~Memory() override;
 
 protected:
     void apply();
