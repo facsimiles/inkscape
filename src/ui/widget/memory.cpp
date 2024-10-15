@@ -168,7 +168,6 @@ void Memory::Private::stop_update_task()
 }
 
 Memory::Memory()
-    : Box()
     , _private(std::make_unique<Private>())
 {
     UI::pack_start(*this, _private->view);

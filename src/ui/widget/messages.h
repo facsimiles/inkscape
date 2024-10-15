@@ -23,7 +23,6 @@
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/textview.h>
-#include <gtkmm/widget.h>
 
 namespace Inkscape::UI::Widget {
 
