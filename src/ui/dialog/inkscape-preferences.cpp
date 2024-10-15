@@ -42,6 +42,7 @@
 #include <gtkmm/dialog.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/enums.h>
+#include <gtkmm/eventcontrollerkey.h>
 #include <gtkmm/fontchooserdialog.h>
 #include <gtkmm/icontheme.h>
 #include <gtkmm/image.h>
@@ -86,14 +87,10 @@
 #include "colors/cms/profile.h"
 #include "colors/manager.h"
 #include "colors/spaces/base.h"
-#include "display/control/canvas-item-grid.h"
 #include "display/nr-filter-gaussian.h"
-#include "extension/internal/gdkpixbuf-input.h"
 #include "helper/auto-connection.h"
 #include "io/resource.h"
 #include "ui/builder-utils.h"
-#include "ui/controller.h"
-#include "ui/desktop/menubar.h"
 #include "ui/dialog-run.h"
 #include "ui/interface.h"
 #include "ui/modifiers.h"
@@ -368,7 +365,9 @@ InkscapePreferences::InkscapePreferences()
         }
     });
 
-    Controller::add_key<&InkscapePreferences::on_navigate_key_pressed>(_search, *this);
+    auto const key = Gtk::EventControllerKey::create();
+    key->signal_key_pressed().connect([this](auto &&...args) { return on_navigate_key_pressed(args...); }, true);
+    _search.add_controller(key);
 
     _page_list_model_filter->set_visible_func([this](Gtk::TreeModel::const_iterator const &row){
         auto key_lower = _search.get_text().lowercase();
@@ -431,7 +430,7 @@ void InkscapePreferences::get_widgets_in_grid(Glib::ustring const &key, Gtk::Wid
 
     if (auto const label = dynamic_cast<Gtk::Label *>(widget)) {
         if (fuzzy_search(key, label->get_text())) {
-            _search_results.push_back(widget);
+            _search_results.push_back(label);
         }
     }
 
@@ -476,7 +475,7 @@ void InkscapePreferences::on_search_changed()
     _num_results = 0;
     if (_search_results.size() > 0) {
         for (auto *result : _search_results) {
-            remove_highlight(static_cast<Gtk::Label *>(result));
+            remove_highlight(result);
         }
         _search_results.clear();
     }
@@ -637,16 +636,15 @@ Gtk::TreePath InkscapePreferences::get_prev_result(Gtk::TreeModel::iterator &ite
  * @return Always returns False to label the key press event as handled, this
  * prevents the search bar from retaining focus for other keyboard event.
  */
-bool InkscapePreferences::on_navigate_key_pressed(GtkEventControllerKey const * /*controller*/,
-                                                  unsigned keyval, unsigned /*keycode*/,
-                                                  GdkModifierType state)
+bool InkscapePreferences::on_navigate_key_pressed(unsigned keyval, unsigned /*keycode*/,
+                                                  Gdk::ModifierType state)
 {
     if (keyval != GDK_KEY_F3 || _search_results.size() == 0) {
         return false;
     }
 
-    GdkModifierType modmask = gtk_accelerator_get_default_mod_mask();
-    if ((state & modmask) == GDK_SHIFT_MASK) {
+    auto const modmask = Gtk::Accelerator::get_default_mod_mask();
+    if ((state & modmask) == Gdk::ModifierType::SHIFT_MASK) {
         Gtk::TreeModel::iterator curr = _page_list.get_selection()->get_selected();
         auto _page_list_selection = _page_list.get_selection();
         auto prev = get_prev_result(curr);
@@ -812,7 +810,7 @@ static void StyleFromSelectionToTool(Glib::ustring const &prefs_path, StyleSwatc
     Inkscape::Selection *selection = desktop->getSelection();
 
     if (selection->isEmpty()) {
-        desktop->getMessageStack()->flash(Inkscape::ERROR_MESSAGE,
+        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE,
                                        _("<b>No objects selected</b> to take the style from."));
         return;
     }
@@ -821,7 +819,7 @@ static void StyleFromSelectionToTool(Glib::ustring const &prefs_path, StyleSwatc
         /* TODO: If each item in the selection has the same style then don't consider it an error.
          * Maybe we should try to handle multiple selections anyway, e.g. the intersection of the
          * style attributes for the selected items. */
-        desktop->getMessageStack()->flash(Inkscape::ERROR_MESSAGE,
+        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE,
                                        _("<b>More than one object selected.</b>  Cannot take style from multiple objects."));
         return;
     }
@@ -1332,7 +1330,7 @@ void InkscapePreferences::changeIconsColors()
 void InkscapePreferences::toggleSymbolic()
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    Gtk::Window *window = SP_ACTIVE_DESKTOP->getToplevel();
+    Gtk::Window *window = SP_ACTIVE_DESKTOP->getInkscapeWindow();
     if (prefs->getBool("/theme/symbolicIcons", false)) {
         if (window ) {
             window->add_css_class("symbolic");
@@ -1382,7 +1380,7 @@ void InkscapePreferences::contrastThemeChange()
 
 void InkscapePreferences::themeChange(bool contrastslider)
 {
-    Gtk::Window *window = SP_ACTIVE_DESKTOP->getToplevel();
+    Gtk::Window *window = SP_ACTIVE_DESKTOP->getInkscapeWindow();
 
     if (window) {
         auto const display = Gdk::Display::get_default();
@@ -1415,7 +1413,7 @@ void InkscapePreferences::themeChange(bool contrastslider)
 
 void InkscapePreferences::preferDarkThemeChange()
 {
-    Gtk::Window *window = SP_ACTIVE_DESKTOP->getToplevel();
+    Gtk::Window *window = SP_ACTIVE_DESKTOP->getInkscapeWindow();
     if (window) {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         auto const dark = INKSCAPE.themecontext->isCurrentThemeDark(window);
@@ -2105,7 +2103,6 @@ void InkscapePreferences::initPageUI()
 
     // default colors in RGBA
     static auto GRID_DEFAULT_MAJOR_COLOR = "#0099e54d";
-    static auto GRID_DEFAULT_MINOR_COLOR = "#0099e526";
     static auto GRID_DEFAULT_BLOCK_COLOR = "#0047cb4d";
 
     // Color pickers
@@ -2552,6 +2549,15 @@ void InkscapePreferences::initPageBehavior()
     _misc_simpl.init("/options/simplifythreshold/value", 0.0001, 1.0, 0.0001, 0.0010, 0.0010, false, false);
     _page_behavior.add_line( false, _("_Simplification threshold:"), _misc_simpl, "",
                            _("How strong is the Node tool's Simplify command by default. If you invoke this command several times in quick succession, it will act more and more aggressively; invoking it again after a pause restores the default threshold."), false);
+
+    _undo_limit.init("", "/options/undo/limit", true);
+    _page_behavior.add_line(false, _("Limit Undo Size:"), _undo_limit, "",
+                         _("Enable the undo limit and remove old changes. Disabling this option will use more memory."));
+    _undo_size.init("/options/undo/size", 1.0, 32000.0, 1.0, 1.0, 200.0, true, false);
+    _page_behavior.add_line(false, _("Maximum _Undo Size:"), _undo_size, "",
+                         _("How large the undo log will be allowed to get before being trimmed to free memory."), false );
+    _undo_limit.changed_signal.connect(sigc::mem_fun(_undo_size, &Gtk::Widget::set_sensitive));
+    _undo_size.set_sensitive(_undo_limit.get_active());
 
     _markers_color_stock.init ( _("Color stock markers the same color as object"), "/options/markers/colorStockMarkers", true);
     _markers_color_custom.init ( _("Color custom markers the same color as object"), "/options/markers/colorCustomMarkers", false);
@@ -3300,9 +3306,12 @@ void InkscapePreferences::initKeyboardShortcuts(Gtk::TreeModel::iterator iter_ui
     kb_reset->signal_clicked().connect( sigc::mem_fun(*this, &InkscapePreferences::onKBReset) );
     kb_import->signal_clicked().connect( sigc::mem_fun(*this, &InkscapePreferences::onKBImport) );
     kb_export->signal_clicked().connect( sigc::mem_fun(*this, &InkscapePreferences::onKBExport) );
-    Controller::add_key<nullptr, &InkscapePreferences::onKBSearchKeyReleased>(_kb_search, *this);
     _kb_filelist.signal_changed().connect( sigc::mem_fun(*this, &InkscapePreferences::onKBList) );
     _page_keyshortcuts.signal_realize().connect( sigc::mem_fun(*this, &InkscapePreferences::onKBRealize) );
+
+    auto const key = Gtk::EventControllerKey::create();
+    key->signal_key_released().connect([this](auto &&...args) { onKBSearchKeyReleased(); });
+    _kb_search.add_controller(key);
 
     _keyboard_sizegroup = Gtk::SizeGroup::create(Gtk::SizeGroup::Mode::HORIZONTAL);
     _keyboard_sizegroup->add_widget(*kb_reset);
@@ -3352,9 +3361,7 @@ void InkscapePreferences::onKBExport()
     Inkscape::Shortcuts::getInstance().export_shortcuts();
 }
 
-bool InkscapePreferences::onKBSearchKeyReleased(GtkEventControllerKey const * /*controller*/,
-                                                unsigned /*keyval*/, unsigned /*keycode*/,
-                                                GdkModifierType /*state*/)
+void InkscapePreferences::onKBSearchKeyReleased()
 {
     _kb_filter->refilter();
     auto search = _kb_search.get_text();
@@ -3363,7 +3370,6 @@ bool InkscapePreferences::onKBSearchKeyReleased(GtkEventControllerKey const * /*
     } else {
         _kb_tree.collapse_all();
     }
-    return FALSE;
 }
 
 void InkscapePreferences::onKBTreeCleared(const Glib::ustring& path)

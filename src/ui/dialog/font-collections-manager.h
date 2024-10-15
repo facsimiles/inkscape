@@ -72,7 +72,7 @@ private:
     Gtk::Button &_create_button;
     Gtk::Button &_edit_button;
     Gtk::Button &_delete_button;
-    Inkscape::UI::Widget::FontSelector _font_selector;
+    Inkscape::UI::Widget::FontSelector *_font_selector;
     Inkscape::UI::Widget::FontCollectionSelector _user_font_collections;
 
     // Signals

@@ -3,7 +3,6 @@ set(ui_SRC
 	builder-utils.cpp
 	clipboard.cpp
 	contextmenu.cpp
-	controller.cpp
 	cursor-utils.cpp
 	dialog-events.cpp
 	dialog-run.cpp
@@ -300,6 +299,7 @@ set(ui_SRC
 	pack.h
 	popup-menu.h
 	shape-editor.h
+        shape-editor-knotholders.h
 	simple-pref-pusher.h
 	shortcuts.h
 	svg-renderer.h

@@ -21,6 +21,7 @@
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/combobox.h>
 #include <gtkmm/cssprovider.h>
+#include <gtkmm/eventcontrollerkey.h>
 #include <gtkmm/infobar.h>
 #include <gtkmm/liststore.h>
 #include <gtkmm/notebook.h>
@@ -173,7 +174,10 @@ StartScreen::StartScreen()
     // Add signals and setup things.
     auto prefs = Inkscape::Preferences::get();
 
-    Controller::add_key<&StartScreen::on_key_pressed>(*this, *this);
+    auto const key = Gtk::EventControllerKey::create();
+    key->signal_key_pressed().connect(sigc::mem_fun(*this, &StartScreen::on_key_pressed), true);
+    add_controller(key);
+
     _tabs_switch_page_conn = tabs.signal_switch_page().connect(sigc::mem_fun(*this, &StartScreen::notebook_switch));
 
     // Setup the lists of items
@@ -221,7 +225,7 @@ StartScreen::StartScreen()
     load_btn.signal_clicked().connect(sigc::mem_fun(*this, &StartScreen::load_document));
     templates.connectItemSelected(sigc::mem_fun(*this, &StartScreen::new_document));
     new_btn->signal_clicked().connect(sigc::mem_fun(*this, &StartScreen::new_document));
-    close_btn->signal_clicked().connect([this] { response(GTK_RESPONSE_CANCEL); });
+    close_btn->signal_clicked().connect([this] { response(GTK_RESPONSE_CLOSE); });
 
     // Parent to our dialog window
     set_titlebar(banners);
@@ -239,12 +243,12 @@ StartScreen::StartScreen()
         tabs.set_current_page(2);
         notebook_switch(nullptr, 2);
     }
-
+    // Refresh keyboard warning message
+    keyboard_changed();
     set_modal(true);
     // set_position(Gtk::WIN_POS_CENTER_ALWAYS); // Gone.
     property_resizable() = false;
     set_default_size(700, 360);
-    set_visible(true);
 }
 
 StartScreen::~StartScreen()
@@ -303,8 +307,7 @@ StartScreen::enlist_recent_files()
 {
     RecentCols cols;
 
-    // We're not sure why we have to ask C for the TreeStore object
-    auto store = Glib::wrap(GTK_LIST_STORE(gtk_tree_view_get_model(recent_treeview.gobj())));
+    auto store = &dynamic_cast<Gtk::ListStore &>(*recent_treeview.get_model());
     store->clear();
     // Now sort the result by visited time
     store->set_sort_column(cols.col_dt, Gtk::SortType::DESCENDING);
@@ -434,13 +437,11 @@ StartScreen::notebook_next(Gtk::Widget *button)
 /**
  * When a key is pressed in the main window.
  */
-bool StartScreen::on_key_pressed(GtkEventControllerKey const * /*controller*/,
-                                 unsigned const keyval, unsigned /*keycode*/,
-                                 GdkModifierType const state)
+bool StartScreen::on_key_pressed(unsigned keyval, unsigned /*keycode*/, Gdk::ModifierType state)
 {
 #ifdef GDK_WINDOWING_QUARTZ
     // On macOS only, if user press Cmd+Q => exit
-    if (keyval == 'q' && state == (GDK_MOD2_MASK | GDK_META_MASK)) {
+    if (keyval == 'q' && static_cast<GdkModifierType>(state) == (GDK_MOD2_MASK | GDK_META_MASK)) {
         close();
         return false;
     }
@@ -462,7 +463,7 @@ bool StartScreen::on_key_pressed(GtkEventControllerKey const * /*controller*/,
 void
 StartScreen::on_response(int response_id)
 {
-    if (response_id == GTK_RESPONSE_DELETE_EVENT) {
+    if (response_id == GTK_RESPONSE_DELETE_EVENT || response_id == GTK_RESPONSE_CLOSE) {
         // Don't open a window for force closing.
         return;
     }
@@ -624,7 +625,7 @@ StartScreen::filter_themes()
 {
     ThemeCols cols;
     // We need to disable themes which aren't available.
-    auto store = Glib::wrap(GTK_LIST_STORE(gtk_combo_box_get_model(themes.gobj())));
+    auto store = &dynamic_cast<Gtk::ListStore &>(*themes.get_model());
     auto available = INKSCAPE.themecontext->get_available_themes();
 
     // Detect use of custom theme here, detect defaults used in many systems.
@@ -660,7 +661,7 @@ StartScreen::enlist_keys()
     NameIdCols cols;
     auto &keys = get_widget<Gtk::ComboBox>(builder, "keys");
 
-    auto store = Glib::wrap(GTK_LIST_STORE(gtk_combo_box_get_model(keys.gobj())));
+    auto store = &dynamic_cast<Gtk::ListStore &>(*keys.get_model());
     store->clear();
 
     for (auto const &item : Inkscape::Shortcuts::get_file_names()) {
@@ -692,16 +693,15 @@ StartScreen::keyboard_changed()
 
     auto &keys_warning = get_widget<Gtk::InfoBar>(builder, "keys_warning");
     if (set_to != "inkscape.xml" && set_to != "default.xml") {
-        keys_warning.set_message_type(Gtk::MessageType::WARNING);
         keys_warning.set_visible(true);
     } else {
+        keys_warning.set_message_type(Gtk::MessageType::WARNING);
         keys_warning.set_visible(false);
     }
 }
 
 /**
- * Set Dark Switch based on current selected theme.
- * We will disable switch if current theme doesn't have prefer dark theme option.
+ * Set current state of Dark Switch based on current selected theme.
  */
 
 void StartScreen::refresh_dark_switch()
@@ -717,7 +717,6 @@ void StartScreen::refresh_dark_switch()
     Glib::ustring current_theme = prefs->getString("/theme/gtkTheme", prefs->getString("/theme/defaultGtkTheme", ""));
 
     auto &dark_toggle = get_widget<Gtk::Switch>(builder, "dark_toggle");
-    dark_toggle.set_sensitive(themes[current_theme]);
     dark_toggle.set_active(dark);
 }
 

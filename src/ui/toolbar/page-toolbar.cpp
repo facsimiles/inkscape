@@ -339,6 +339,8 @@ double PageToolbar::_unit_to_size(std::string number, std::string unit_str,
         unit_str = backup;
     if (unit_str == "\"")
         unit_str = "in";
+    if (unit_str == "'")
+        unit_str = "ft";
 
     // Output is always in px as it's the most useful.
     auto px = Inkscape::Util::UnitTable::get().getUnit("px");
@@ -379,9 +381,9 @@ void PageToolbar::sizeChanged()
     std::string text = cb_text;
 
     // This does not support negative values, because pages can not be negatively sized.
-    static std::string arg = "([0-9]+[\\.,]?[0-9]*|\\.[0-9]+) ?(px|mm|cm|in|\\\")?";
+    static const std::string arg = "([0-9]+[\\.,]?[0-9]*|\\.[0-9]+) ?(px|mm|cm|m|in|\\\"|ft|')?";
     // We can't support × here since it's UTF8 and this doesn't match
-    static std::regex re_size("^ *" + arg + " *([ *Xx,\\-]) *" + arg + " *$");
+    static const std::regex re_size("^ *" + arg + " *([ *Xx,\\-]) *" + arg + " *$");
 
     std::smatch matches;
     if (std::regex_match(text, matches, re_size)) {

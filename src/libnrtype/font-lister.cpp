@@ -141,15 +141,17 @@ void FontLister::init_default_styles()
     update_signal.emit();
 }
 
-std::string FontLister::get_font_count_label() const
+std::pair<bool, std::string> FontLister::get_font_count_label() const
 {
     std::string label;
+    bool all_fonts = false;
 
     int size = font_list_store->children().size();
     int total_families = get_font_families_size();
 
     if (size >= total_families) {
         label += _("All Fonts");
+        all_fonts = true;
     } else {
         label += _("Fonts ");
         label += std::to_string(size);
@@ -157,7 +159,7 @@ std::string FontLister::get_font_count_label() const
         label += std::to_string(total_families);
     }
 
-    return label;
+    return std::make_pair(all_fonts, label);
 }
 
 FontLister *FontLister::get_instance()
@@ -492,8 +494,6 @@ int FontLister::add_document_fonts_at_top(SPDocument *document)
     // For document fonts.
     auto document_fonts = Inkscape::DocumentFonts::get();
     document_fonts->update_document_fonts(font_data);
-    auto recently_used = Inkscape::RecentlyUsedFonts::get();
-    recently_used->prepend_to_list(current_family);
 
     return font_data.size();
 }
@@ -854,8 +854,6 @@ std::pair<Glib::ustring, Glib::ustring> FontLister::set_font_family(Glib::ustrin
     std::pair<Glib::ustring, Glib::ustring> ui = new_font_family(new_family, check_style);
     current_family = ui.first;
     current_style = ui.second;
-    RecentlyUsedFonts *recently_used = Inkscape::RecentlyUsedFonts::get();
-    recently_used->prepend_to_list(current_family);
 
 #ifdef DEBUG_FONT
     std::cout << "   family_row:           :" << current_family_row << ":" << std::endl;

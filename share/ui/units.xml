@@ -36,6 +36,13 @@
     <description>Inches (96 px/in)</description>
 </unit>
 <unit type="LINEAR" pri="n">
+    <name>foot</name>
+    <plural>feet</plural>
+    <abbr>ft</abbr>
+    <factor>1152.0</factor>
+    <description>Feet (12 in/ft)</description>
+</unit>
+<unit type="LINEAR" pri="n">
     <name>millimeter</name>
     <plural>millimeters</plural>
     <abbr>mm</abbr>
@@ -48,6 +55,13 @@
     <abbr>cm</abbr>
     <factor>37.79527559055119</factor>
     <description>Centimeters (10 mm/cm)</description>
+</unit>
+<unit type="LINEAR" pri="n">
+    <name>meter</name>
+    <plural>meters</plural>
+    <abbr>m</abbr>
+    <factor>3779.527559055119</factor>
+    <description>Meters (100 cm/m)</description>
 </unit>
 <unit type="RADIAL" pri="y">
     <name>degree</name>

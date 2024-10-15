@@ -27,10 +27,12 @@
 #include <glibmm/i18n.h>
 #include <glibmm/ustring.h>
 #include <glibmm/utility.h>
+#include <gtkmm/accelerator.h>
 #include <gtkmm/box.h>
 #include <gtkmm/builder.h>
 #include <gtkmm/button.h>
 #include <gtkmm/cellrenderertext.h>
+#include <gtkmm/eventcontrollerkey.h>
 #include <gtkmm/label.h>
 #include <gtkmm/menubutton.h>
 #include <gtkmm/searchentry2.h>
@@ -101,7 +103,10 @@ SwatchesPanel::SwatchesPanel(bool compact, char const *prefsPath)
 
         _palette->set_settings_visibility(false);
 
-        get_widget<Gtk::MenuButton>(_builder, "settings").set_popover(_palette->get_settings_popover());
+        // Steal popover from colour palette and attach it to our button instead. Fixme: Bad, fragile.
+        auto &popover = _palette->get_settings_popover();
+        popover.unparent();
+        get_widget<Gtk::MenuButton>(_builder, "settings").set_popover(popover);
 
         _palette->set_filter([this](Dialog::ColorItem const &color){
             return filter_callback(color);
@@ -275,7 +280,7 @@ void SwatchesPanel::track_gradients()
     conn_gradients.disconnect();
     conn_gradients = doc->connectResourcesChanged("gradient", [this] {
         gradients_changed = true;
-        queue_resize();
+        _scheduleUpdate();
     });
 
     // Subscribe to child modifications of the defs section. We will use this to monitor
@@ -284,7 +289,7 @@ void SwatchesPanel::track_gradients()
     conn_defs = doc->getDefs()->connectModified([this] (SPObject*, unsigned flags) {
         if (flags & SP_OBJECT_CHILD_MODIFIED_FLAG) {
             defs_changed = true;
-            queue_resize();
+            _scheduleUpdate();
         }
     });
 
@@ -308,21 +313,34 @@ void SwatchesPanel::untrack_gradients()
 void SwatchesPanel::selectionChanged(Selection*)
 {
     selection_changed = true;
-    queue_resize();
+    _scheduleUpdate();
 }
 
 void SwatchesPanel::selectionModified(Selection*, guint flags)
 {
     if (flags & SP_OBJECT_STYLE_MODIFIED_FLAG) {
         selection_changed = true;
-        queue_resize();
+        _scheduleUpdate();
     }
 }
 
-// Document updates are handled asynchronously by setting a flag and queuing a resize. This results in
-// the following function being run at the last possible moment before the widget will be repainted.
-// This ensures that multiple document updates only result in a single UI update.
-void SwatchesPanel::size_allocate_vfunc(int const width, int const height, int const baseline)
+void SwatchesPanel::_scheduleUpdate()
+{
+    if (_tick_callback) {
+        return;
+    }
+
+    _tick_callback = add_tick_callback([this] (auto &&) {
+        _tick_callback = 0;
+        _update();
+        return false;
+    });
+}
+
+// Document updates are handled asynchronously by setting a flag and queuing a tick callback.
+// This results in the following function being run just before the widget is relayouted,
+// so that multiple document updates only result in a single UI update.
+void SwatchesPanel::_update()
 {
     if (gradients_changed) {
         assert(_current_palette_id == auto_id);
@@ -347,9 +365,6 @@ void SwatchesPanel::size_allocate_vfunc(int const width, int const height, int c
     selection_changed = false;
     gradients_changed = false;
     defs_changed = false;
-
-    // Necessary to perform *after* the above widget modifications, so GTK can process the new layout.
-    DialogBase::size_allocate_vfunc(width, height, baseline);
 }
 
 void SwatchesPanel::rebuild_isswatch()
@@ -496,7 +511,7 @@ void SwatchesPanel::update_palettes(bool compact) {
  */
 void SwatchesPanel::rebuild()
 {
-    std::vector<ColorItem*> palette;
+    std::vector<std::unique_ptr<ColorItem>> palette;
 
     // The pointers in widgetmap are to widgets owned by the ColorPalette. It is assumed it will not
     // delete them unless we ask, via the call to set_colors() later in this function.
@@ -505,45 +520,45 @@ void SwatchesPanel::rebuild()
     current_stroke.clear();
 
     // Add the "remove-color" color.
-    auto const w = Gtk::make_managed<ColorItem>(this);
+    auto w = std::make_unique<ColorItem>(this);
     w->set_pinned_pref(_prefs_path);
-    palette.emplace_back(w);
-    widgetmap.emplace(std::monostate{}, w);
+    widgetmap.emplace(std::monostate{}, w.get());
+    palette.push_back(std::move(w));
+
     _palette->set_page_size(0);
     if (auto pal = get_palette(_current_palette_id)) {
         _palette->set_page_size(pal->columns);
         palette.reserve(palette.size() + pal->colors.size());
+        auto dialog = this;
         for (auto &c : pal->colors) {
-            auto dialog = this;
             auto w = std::visit(VariantVisitor {
                 [](const PaletteFileData::SpacerItem&) {
-                    return Gtk::make_managed<ColorItem>("");
+                    return std::make_unique<ColorItem>("");
                 },
                 [](const PaletteFileData::GroupStart& g) {
-                    return Gtk::make_managed<ColorItem>(g.name);
+                    return std::make_unique<ColorItem>(g.name);
                 },
                 [=, this](const Colors::Color& c) {
-                    auto w = Gtk::make_managed<ColorItem>(c, dialog);
+                    auto w = std::make_unique<ColorItem>(c, dialog);
                     w->set_pinned_pref(_prefs_path);
-                    widgetmap.emplace(c, w);
+                    widgetmap.emplace(c, w.get());
                     return w;
                 },
             }, c);
-
-            palette.emplace_back(w);
+            palette.push_back(std::move(w));
         }
     } else if (_current_palette_id == auto_id && getDocument()) {
         auto grads = getDocument()->getResourceList("gradient");
         for (auto obj : grads) {
             auto grad = cast_unsafe<SPGradient>(obj);
             if (grad->isSwatch()) {
-                auto const w = Gtk::make_managed<ColorItem>(grad, this);
-                palette.emplace_back(w);
-                widgetmap.emplace(grad, w);
+                auto w = std::make_unique<ColorItem>(grad, this);
+                widgetmap.emplace(grad, w.get());
                 // Rebuild if the gradient gets pinned or unpinned
                 w->signal_pinned().connect([this]{
                     rebuild();
                 });
+                palette.push_back(std::move(w));
             }
         }
     }
@@ -552,7 +567,7 @@ void SwatchesPanel::rebuild()
         update_fillstroke_indicators();
     }
 
-    _palette->set_colors(palette);
+    _palette->set_colors(std::move(palette));
     _palette->set_selected(_current_palette_id);
 }
 
@@ -599,16 +614,17 @@ void SwatchesPanel::update_loaded_palette_entry() {
 
 void SwatchesPanel::setup_selector_menu()
 {
+    auto const key = Gtk::EventControllerKey::create();
+    key->signal_key_pressed().connect(sigc::mem_fun(*this, &SwatchesPanel::on_selector_key_pressed), true);
     _selector.set_popover(*_selector_menu);
-    Controller::add_key<&SwatchesPanel::on_selector_key_pressed>(_selector, *this);
+    _selector.add_controller(key);
 }
 
-bool SwatchesPanel::on_selector_key_pressed(GtkEventControllerKey const * controller,
-                                            unsigned const keyval, unsigned /*keycode*/,
-                                            GdkModifierType const state)
+bool SwatchesPanel::on_selector_key_pressed(unsigned const keyval, unsigned /*keycode*/,
+                                            Gdk::ModifierType const state)
 {
     // We act like GtkComboBox in that we only move the active item if no modifier key was pressed:
-    if (Controller::has_flag(state, gtk_accelerator_get_default_mod_mask())) return false;
+    if (Controller::has_flag(state, Gtk::Accelerator::get_default_mod_mask())) return false;
 
     auto const begin = _palettes.cbegin(), end = _palettes.cend();
     auto it = std::find_if(begin, end, [&](auto &p){ return p.first.id == _current_palette_id; });

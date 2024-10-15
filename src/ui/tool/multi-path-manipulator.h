@@ -35,7 +35,7 @@ struct PathSharedData;
 class MultiPathManipulator : public PointManipulator
 {
 public:
-    MultiPathManipulator(PathSharedData &data, sigc::connection &chg);
+    MultiPathManipulator(PathSharedData &data);
     ~MultiPathManipulator() override;
 
     bool event(Inkscape::UI::Tools::ToolBase *tool, CanvasEvent const &event) override;
@@ -69,6 +69,7 @@ public:
     void distributeNodes(Geom::Dim2 d);
     void reverseSubpaths();
     void move(Geom::Point const &delta);
+    void scale(Geom::Point const &center, Geom::Point const &scale);
 
     void showOutline(bool show);
     void showHandles(bool show);
@@ -133,7 +134,6 @@ public:
     PathSharedData const &_path_data;
 
 private:
-    sigc::connection &_changed;
     ModifierTracker _tracker;
     bool _show_handles;
     bool _show_outline;

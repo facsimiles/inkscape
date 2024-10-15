@@ -4,45 +4,49 @@
   <object class="GtkBox" id="contents">
     <property name="name">TextEdit Dialog Box</property>
     <property name="width-request">510</property>
+    <property name="focusable">False</property>
     <property name="orientation">vertical</property>
-    <property name="spacing">4</property>
-    <child>
-      <object class="GtkBox" id="font_list_filter_box">
-        <child>
-          <object class="GtkSearchEntry" id="search_entry">
-            <property name="focusable">True</property>
-            <property name="tooltip-text" translatable="yes">Search fonts present in the font list</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkButton" id="reset_button">
-            <property name="focusable">True</property>
-            <property name="receives-default">True</property>
-            <property name="tooltip-text" translatable="yes">Reset the font list</property>
-            <property name="margin-start">2</property>
-            <child>
-              <object class="GtkImage" id="refresh_button_image">
-                <property name="icon-name">view-refresh</property>
-              </object>
-            </child>
-          </object>
-        </child>
-      </object>
-    </child>
     <child>
       <object class="GtkPaned" id="paned">
-        <property name="resize-end-child">0</property>
         <property name="focusable">True</property>
         <property name="vexpand">True</property>
-        <property name="position">250</property>
         <property name="wide-handle">True</property>
+        <property name="margin-top">4</property>
+        <property name="margin-bottom">4</property>
+        <property name="resize-start-child">False</property>
         <property name="start-child">
           <object class="GtkBox" id="font_list_box">
+            <property name="focusable">False</property>
             <property name="orientation">vertical</property>
+            <property name="spacing">4</property>
+            <child>
+              <object class="GtkBox" id="font_list_filter_box">
+                <property name="focusable">False</property>
+                <property name="spacing">4</property>
+                <child>
+                  <object class="GtkSearchEntry" id="search_entry">
+                    <property name="focusable">True</property>
+                    <property name="tooltip-text" translatable="yes">Search fonts present in the font list</property>
+                    <property name="hexpand">False</property>
+                    <property name="halign">fill</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="reset_button">
+                    <property name="focusable">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="tooltip-text" translatable="yes">Reset the font list</property>
+                    <property name="icon-name">view-refresh</property>
+                    <property name="hexpand">False</property>
+                    <property name="halign">fill</property>
+                  </object>
+                </child>
+              </object>
+            </child>
             <child>
               <object class="GtkLabel" id="font_count_label">
                 <property name="halign">start</property>
-                <property name="label" translatable="no">label</property>
+                <property name="hexpand">False</property>
               </object>
             </child>
           </object>
@@ -51,10 +55,10 @@
           <object class="GtkBox" id="collections_box">
             <property name="margin-start">8</property>
             <property name="orientation">vertical</property>
+            <property name="spacing">4</property>
             <child>
               <object class="GtkBox" id="buttons_box">
-                <property name="margin-top">8</property>
-                <property name="margin-bottom">8</property>
+                <property name="spacing">4</property>
                 <child>
                   <object class="GtkButton" id="create_button">
                     <property name="focusable">True</property>

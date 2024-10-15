@@ -366,6 +366,8 @@ void FontCollections::add_font(const Glib::ustring& collection_name, const Glib:
             Inkscape::FontLister::get_instance()->apply_collections(_selected_collections);
         }
     }
+
+    update_signal.emit();
 }
 
 // Remove a font.
@@ -397,6 +399,8 @@ void FontCollections::remove_font(const Glib::ustring& collection_name, const Gl
             Inkscape::FontLister::get_instance()->apply_collections(_selected_collections);
         }
     }
+
+    update_signal.emit();
 }
 
 void FontCollections::update_selected_collections(const Glib::ustring& collection_name)
@@ -448,7 +452,6 @@ std::string& FontCollections::trim_left_and_right(std::string& s, const char* t)
 int FontCollections::get_user_collection_location(const Glib::ustring& collection_name)
 {
     // This is a binary-search function on the elements of a set.
-    // std::vector <Glib::ustring> collections(_user_collection_font_map.size());
     std::vector <Glib::ustring> collections(_user_collections.size());
 
     // Copy the elements of the set in a vector.
@@ -457,9 +460,7 @@ int FontCollections::get_user_collection_location(const Glib::ustring& collectio
         collections[i++] = collection.name;
     }
 
-    int position = (lower_bound(collections.begin(), collections.end(), collection_name) - collections.begin());
-
-    return position + _system_collections.size();
+    return std::lower_bound(collections.begin(), collections.end(), collection_name) - collections.begin();
 }
 
 std::string FontCollections::generate_filename_from_collection(const Glib::ustring &collection_name, bool is_system)
@@ -485,6 +486,11 @@ int FontCollections::get_collections_count(bool is_system) const
     }
 
     return _user_collections.size();
+}
+
+int FontCollections::get_selected_collections_count() const
+{
+    return _selected_collections.size();
 }
 
 bool FontCollections::find_collection(Glib::ustring const &collection_name, bool is_system) const
@@ -558,6 +564,15 @@ std::set<Glib::ustring> const &FontCollections::get_fonts(const Glib::ustring& c
 
     static std::set<Glib::ustring> empty_set;
     return empty_set;
+}
+
+bool FontCollections::is_font_in_collection(const Glib::ustring& collection_name, const Glib::ustring& font_name) const {
+    auto& set = get_fonts(collection_name);
+    return set.contains(font_name);
+}
+
+const std::set<Glib::ustring>& FontCollections::get_selected_collections() const {
+    return _selected_collections;
 }
 
 } // Namespace

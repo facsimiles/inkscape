@@ -27,16 +27,11 @@
 #include "display/curve.h"
 #include "inkscape.h"
 #include "live_effects/effect.h"
-#include "live_effects/lpe-bool.h"
-#include "live_effects/lpe-clone-original.h"
-#include "live_effects/lpe-copy_rotate.h"
 #include "live_effects/lpe-lattice2.h"
 #include "live_effects/lpe-measure-segments.h"
-#include "live_effects/lpe-slice.h"
-#include "live_effects/lpe-mirror_symmetry.h"
-#include "live_effects/lpe-tiling.h"
+#include "live_effects/lpeobject-reference.h"
 #include "message-stack.h"
-#include "path-chemistry.h"
+#include "preferences.h"
 #include "sp-clippath.h"
 #include "sp-ellipse.h"
 #include "sp-spiral.h"
@@ -44,12 +39,9 @@
 #include "sp-item-group.h"
 #include "sp-mask.h"
 #include "sp-path.h"
-#include "sp-rect.h"
 #include "sp-root.h"
 #include "sp-symbol.h"
 #include "svg/svg.h"
-#include "ui/shape-editor.h"
-#include "uri.h"
 
 /* LPEItem base class */
 
@@ -733,10 +725,16 @@ SPLPEItem * SPLPEItem::removeAllPathEffects(bool keep_paths, bool recursive)
         if (grp) {
             std::vector<SPItem *> item_list = grp->item_list();
             for (auto iter : item_list) {
+                sp_object_ref(iter);
+            }
+            for (auto iter : item_list) {
                 auto subitem = cast<SPLPEItem>(iter);
-                if (subitem) {
+                if (subitem && subitem->document) {
                     subitem->removeAllPathEffects(keep_paths, recursive);
                 }
+            }
+            for (auto iter : item_list) {
+                sp_object_unref(iter);
             }
         }
     }

@@ -14,8 +14,6 @@
 # include "config.h"  // only include where actually required!
 #endif
 
-#ifdef HAVE_POPPLER
-
 #include "pdf-parser.h"
 
 #ifdef USE_GCC_PRAGMAS
@@ -309,6 +307,17 @@ PdfParser::PdfParser(std::shared_ptr<PDFDoc> pdf_doc, Inkscape::Extension::Inter
     if (cropBox && getRect(cropBox) != page_box) {
         builder->cropPage(getRect(cropBox) * scale);
     }
+
+    if (auto meta = pdf_doc->readMetadata()) {
+        // TODO: Parse this metadat RDF document and extract SVG RDF details from it.
+        // meta->getCString()
+    }
+
+    builder->setMetadata("title", getString(pdf_doc->getDocInfoStringEntry("Title")));
+    builder->setMetadata("description", getString(pdf_doc->getDocInfoStringEntry("Subject")));
+    builder->setMetadata("creator", getString(pdf_doc->getDocInfoStringEntry("Author")));
+    builder->setMetadata("subject", getString(pdf_doc->getDocInfoStringEntry("Keywords")));
+    builder->setMetadata("date", getString(pdf_doc->getDocInfoStringEntry("CreationDate")));
 
     saveState();
     formDepth = 0;
@@ -3182,8 +3191,6 @@ void PdfParser::loadColorProfile()
     builder->addColorProfile(profBuf, length);
 #endif
 }
-
-#endif /* HAVE_POPPLER */
 
 void PdfParser::build_annots(const Object &annot, int page_num)
 {

@@ -44,6 +44,7 @@ Messages::Messages()
     , buttonBox(Gtk::Orientation::HORIZONTAL)
 {
     messageText.set_editable(false);
+    messageText.set_size_request(400, -1);
     textScroll.set_child(messageText);
     textScroll.set_policy(Gtk::PolicyType::ALWAYS, Gtk::PolicyType::ALWAYS);
     UI::pack_start(*this, textScroll);
@@ -52,9 +53,6 @@ Messages::Messages()
     UI::pack_start(buttonBox, checkCapture, true, true, 6);
     UI::pack_end(buttonBox, buttonClear, false, false, 10);
     UI::pack_start(*this, buttonBox, UI::PackOptions::shrink);
-
-    // sick of this thing shrinking too much
-    set_size_request(400, -1);
 
     message(_("Ready."));
 

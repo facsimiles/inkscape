@@ -26,6 +26,7 @@
 #include "display/drawing-item.h"
 #include "attributes.h"
 #include "document.h"
+#include "preferences.h"
 
 #include "inkscape.h"
 #include "desktop.h"
@@ -1463,7 +1464,7 @@ void SPItem::adjust_stroke( gdouble ex )
 
     SPStyle *style = this->style;
 
-    if (style && !Geom::are_near(ex, 1.0, Geom::EPSILON)) {
+    if (style && !Geom::are_near(ex, 1.0, Geom::EPSILON) && !style->stroke_extensions.hairline) {
         style->stroke_width.computed *= ex;
         style->stroke_width.set = TRUE;
 

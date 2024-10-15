@@ -20,6 +20,9 @@
 #include <stdexcept>
 #include <string>
 #include <vector>
+#include <glibmm/i18n.h>
+#include <glibmm/main.h>         // SignalIdle
+#include <glibmm/markup.h>
 #include <memory>
 
 #include "font-selector.h"
@@ -30,6 +33,7 @@
 // For updating from selection
 #include "inkscape.h"
 #include "desktop.h"
+#include "preferences.h"
 #include "object/sp-text.h"
 #include "ui/controller.h"
 #include "util-string/ustring-format.h"
@@ -146,10 +150,10 @@ FontSelector::FontSelector(bool with_size, bool with_variations)
     update_variations(font_lister->get_fontspec());
 
     // For drag and drop.
-    Controller::add_drag_source(family_treeview, {
-        .prepare = sigc::mem_fun(*this, &FontSelector::on_drag_prepare),
-        .begin   = sigc::mem_fun(*this, &FontSelector::on_drag_begin  )
-    });
+    auto const drag = Gtk::DragSource::create();
+    drag->signal_prepare().connect(sigc::mem_fun(*this, &FontSelector::on_drag_prepare), false); // before
+    drag->signal_drag_begin().connect([this, &drag = *drag](auto &&...args) { on_drag_begin(drag, args...); });
+    family_treeview.add_controller(drag);
 
     // Add signals
     family_treeview.get_selection()->signal_changed().connect(sigc::mem_fun(*this, &FontSelector::on_family_changed));
@@ -166,15 +170,14 @@ FontSelector::FontSelector(bool with_size, bool with_variations)
 
 void FontSelector::on_realize_list() {
     family_treecolumn.set_cell_data_func (family_cell, &font_lister_cell_data_func);
-    g_idle_add(FontSelector::set_cell_markup, this);
+    _idle_connection = Glib::signal_idle().connect(sigc::mem_fun(*this, &FontSelector::set_cell_markup));
 }
 
-gboolean FontSelector::set_cell_markup(gpointer data)
+bool FontSelector::set_cell_markup()
 {
-    FontSelector *self = static_cast<FontSelector *>(data);
-    self->family_treeview.set_visible(false);
-    self->family_treecolumn.set_cell_data_func (self->family_cell, &font_lister_cell_data_func_markup);
-    self->family_treeview.set_visible(true);
+    family_treeview.set_visible(false);
+    family_treecolumn.set_cell_data_func (family_cell, &font_lister_cell_data_func_markup);
+    family_treeview.set_visible(true);
     return false;
 }
 
@@ -199,8 +202,7 @@ void FontSelector::on_drag_begin(Gtk::DragSource &source,
     source.set_icon(paintable, 0, 0);
 }
 
-Glib::RefPtr<Gdk::ContentProvider> FontSelector::on_drag_prepare(Gtk::DragSource const &/*source*/,
-                                                                 double /*x*/, double /*y*/)
+Glib::RefPtr<Gdk::ContentProvider> FontSelector::on_drag_prepare(double /*x*/, double /*y*/)
 {
     Inkscape::FontLister *font_lister = Inkscape::FontLister::get_instance();
     Glib::ustring family_name = font_lister->get_dragging_family();
@@ -530,7 +532,7 @@ FontSelector::changed_emit() {
         initial = false;
         family_treecolumn.unset_cell_data_func (family_cell);
         family_treecolumn.set_cell_data_func (family_cell, &font_lister_cell_data_func);
-        g_idle_add(FontSelector::set_cell_markup, this);
+        _idle_connection = Glib::signal_idle().connect(sigc::mem_fun(*this, &FontSelector::set_cell_markup));
     }
     signal_block = false;
 }

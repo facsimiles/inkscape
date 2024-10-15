@@ -174,6 +174,8 @@ public: // FIXME: make more of this private!
     void selectByStop(SPStop *stop,  bool add_to_selection = true, bool override = true);
     void selectRect(Geom::Rect const &r);
 
+    void addColorToDragger(GrDragger &dragger, const char *color);
+    void dropColorOnCorrespondingRegion(const char *color, Geom::Point p);
     bool dropColor(SPItem *item, gchar const *c, Geom::Point p);
 
     SPStop *addStopNearPoint(SPItem *item, Geom::Point mouse_p, double tolerance);

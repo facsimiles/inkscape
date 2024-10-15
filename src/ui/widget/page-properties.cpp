@@ -171,10 +171,11 @@ public:
             });
         }
 
-        _display_units.setUnitType(UNIT_TYPE_LINEAR);
+        _display_units.setUnitType(UNIT_TYPE_LINEAR, false);
         _display_units.signal_changed().connect([this](){ set_display_unit(); });
 
-        _page_units.setUnitType(UNIT_TYPE_LINEAR);
+        // Page units can ONLY be in SVGLength units, any customisations must be ignored.
+        _page_units.setUnitType(UNIT_TYPE_LINEAR, true);
         _current_page_unit = _page_units.getUnit();
         _page_units.signal_changed().connect([this](){ set_page_unit(); });
 

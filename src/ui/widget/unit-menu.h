@@ -45,8 +45,12 @@ public:
      * units from the unit map matching the given type, and appends them
      * to the dropdown widget.  It causes the primary unit for the given
      * unit_type to be selected.
+     *
+     * @param svg_length - If set to true will limit the drop down to only units
+     *                     available in SVGLength. i.e. the ones we ship and are valid
+     *                     in the SVG specification.
      */
-    bool          setUnitType(UnitType unit_type);
+    bool          setUnitType(UnitType unit_type, bool svg_length = false);
 
     /**
      * Removes all unit entries, then adds the unit type to the widget.
@@ -55,7 +59,7 @@ public:
      * to the dropdown widget.  It causes the primary unit for the given
      * unit_type to be selected.
      */
-    bool          resetUnitType(UnitType unit_type);
+    bool          resetUnitType(UnitType unit_type, bool svg_length = false);
 
     /**
      * Adds a unit, possibly user-defined, to the menu.

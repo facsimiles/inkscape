@@ -300,13 +300,13 @@ void Inkscape::ObjectSnapper::_collectPaths(Geom::Point /*p*/,
         for (auto page : document->getPageManager().getPages()) {
             if (_snapmanager->snapprefs.isTargetSnappable(SNAPTARGET_PAGE_EDGE_BORDER) && _snapmanager->snapprefs.isAnyCategorySnappable()) {
                 auto pathv = _getPathvFromRect(page->getDesktopRect());
-                _paths_to_snap_to->push_back(SnapCandidatePath(pathv, SNAPTARGET_PAGE_EDGE_BORDER, Geom::OptRect()));
+                _paths_to_snap_to->emplace_back(pathv, SNAPTARGET_PAGE_EDGE_BORDER, Geom::OptRect());
             }
             if (_snapmanager->snapprefs.isTargetSnappable(SNAPTARGET_PAGE_MARGIN_BORDER) && _snapmanager->snapprefs.isAnyCategorySnappable()) {
                 auto margin = _getPathvFromRect(page->getDesktopMargin());
-                _paths_to_snap_to->push_back(SnapCandidatePath(margin, SNAPTARGET_PAGE_MARGIN_BORDER, Geom::OptRect()));
+                _paths_to_snap_to->emplace_back(margin, SNAPTARGET_PAGE_MARGIN_BORDER, Geom::OptRect());
                 auto bleed = _getPathvFromRect(page->getDesktopBleed());
-                _paths_to_snap_to->push_back(SnapCandidatePath(bleed, SNAPTARGET_PAGE_BLEED_BORDER, Geom::OptRect()));
+                _paths_to_snap_to->emplace_back(bleed, SNAPTARGET_PAGE_BLEED_BORDER, Geom::OptRect());
             }
         }
 
@@ -314,7 +314,7 @@ void Inkscape::ObjectSnapper::_collectPaths(Geom::Point /*p*/,
             // Consider the page border for snapping
             if (_snapmanager->snapprefs.isTargetSnappable(SNAPTARGET_PAGE_EDGE_BORDER) && _snapmanager->snapprefs.isAnyCategorySnappable()) {
                 auto pathv = _getPathvFromRect(*(_snapmanager->getDocument()->preferredBounds()));
-                _paths_to_snap_to->push_back(SnapCandidatePath(pathv, SNAPTARGET_PAGE_EDGE_BORDER, Geom::OptRect()));
+                _paths_to_snap_to->emplace_back(pathv, SNAPTARGET_PAGE_EDGE_BORDER, Geom::OptRect());
             }
         }
 
@@ -347,7 +347,7 @@ void Inkscape::ObjectSnapper::_collectPaths(Geom::Point /*p*/,
                                 Geom::Affine transform = root_item->i2dt_affine() * _candidate.additional_affine * _snapmanager->getDesktop()->doc2dt();
                                 auto pv = Geom::PathVector();
                                 pv.push_back(layout->baseline() * transform);
-                                _paths_to_snap_to->push_back(SnapCandidatePath(std::move(pv), SNAPTARGET_TEXT_BASELINE, Geom::OptRect()));
+                                _paths_to_snap_to->emplace_back(std::move(pv), SNAPTARGET_TEXT_BASELINE, Geom::OptRect());
                             }
                         }
                     } else {
@@ -369,7 +369,7 @@ void Inkscape::ObjectSnapper::_collectPaths(Geom::Point /*p*/,
                                     transform *= _snapmanager->getDesktop()->doc2dt();  // Account for inverted y-axis
                                     auto pv = curve->get_pathvector();
                                     pv *= transform;
-                                    _paths_to_snap_to->push_back(SnapCandidatePath(std::move(pv), SNAPTARGET_PATH, Geom::OptRect())); // Perhaps for speed, get a reference to the Geom::pathvector, and store the transformation besides it
+                                    _paths_to_snap_to->emplace_back(std::move(pv), SNAPTARGET_PATH, Geom::OptRect()); // Perhaps for speed, get a reference to the Geom::pathvector, and store the transformation besides t
                                 }
                             }
                         }
@@ -386,7 +386,7 @@ void Inkscape::ObjectSnapper::_collectPaths(Geom::Point /*p*/,
                         if (auto rect = root_item->bounds(bbox_type, i2doc)) {
                             auto path = _getPathvFromRect(*rect);
                             rect = root_item->desktopBounds(bbox_type);
-                            _paths_to_snap_to->push_back(SnapCandidatePath(std::move(path), SNAPTARGET_BBOX_EDGE, rect));
+                            _paths_to_snap_to->emplace_back(std::move(path), SNAPTARGET_BBOX_EDGE, rect);
                         }
                     }
                 }
@@ -419,8 +419,8 @@ void Inkscape::ObjectSnapper::_snapPaths(IntermSnapResults &isr,
         if (node_tool_active) {
             // TODO fix the function to be const correct:
             if (auto curve = curve_for_item(const_cast<SPPath *>(selected_path))) {
-                _paths_to_snap_to->push_back(SnapCandidatePath(curve->get_pathvector() * selected_path->i2doc_affine(),
-                                                               SNAPTARGET_PATH, Geom::OptRect(), true));
+                _paths_to_snap_to->emplace_back(curve->get_pathvector() * selected_path->i2doc_affine(),
+                                                SNAPTARGET_PATH, Geom::OptRect(), true);
             }
         }
     }
@@ -578,7 +578,7 @@ void Inkscape::ObjectSnapper::_snapPathsConstrained(IntermSnapResults &isr,
         if (node_tool_active) {
             // TODO fix the function to be const correct:
             if (auto curve = curve_for_item(const_cast<SPPath *>(selected_path))) {
-                _paths_to_snap_to->push_back(SnapCandidatePath(curve->get_pathvector() * selected_path->i2doc_affine(), SNAPTARGET_PATH, Geom::OptRect(), true));
+                _paths_to_snap_to->emplace_back(curve->get_pathvector() * selected_path->i2doc_affine(), SNAPTARGET_PATH, Geom::OptRect(), true);
             }
         }
     }
@@ -768,17 +768,17 @@ void Inkscape::getBBoxPoints(Geom::OptRect const bbox,
 {
     if (bbox) {
         // collect the corners of the bounding box
-        for ( unsigned k = 0 ; k < 4 ; k++ ) {
+        for (unsigned k = 0; k < 4; k++) {
             if (corner_src || corner_tgt) {
-                points->push_back(SnapCandidatePoint(bbox->corner(k), corner_src, -1, corner_tgt, *bbox));
+                points->emplace_back(bbox->corner(k), corner_src, -1, corner_tgt, *bbox);
             }
             // optionally, collect the midpoints of the bounding box's edges too
             if (edge_src || edge_tgt) {
-                points->push_back(SnapCandidatePoint((bbox->corner(k) + bbox->corner((k+1) % 4))/2, edge_src, -1, edge_tgt, *bbox));
+                points->emplace_back((bbox->corner(k) + bbox->corner((k + 1) % 4)) / 2, edge_src, -1, edge_tgt, *bbox);
             }
         }
         if (mid_src || mid_tgt) {
-            points->push_back(SnapCandidatePoint(bbox->midpoint(), mid_src, -1, mid_tgt, *bbox));
+            points->emplace_back(bbox->midpoint(), mid_src, -1, mid_tgt, *bbox);
         }
     }
 }

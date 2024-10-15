@@ -75,7 +75,9 @@ private:
     void selectionChanged(Selection *selection) final;
     void selectionModified(Selection *selection, guint flags) final;
 
-    void size_allocate_vfunc(int width, int height, int baseline) final;
+    unsigned _tick_callback = 0;
+    void _scheduleUpdate();
+    void _update();
 
     void update_palettes(bool compact);
     void rebuild();
@@ -83,8 +85,7 @@ private:
     bool load_swatches(std::string const &path);
     void update_loaded_palette_entry();
     void setup_selector_menu();
-    bool on_selector_key_pressed(GtkEventControllerKey const * controller,
-                                 unsigned keyval, unsigned keycode, GdkModifierType state);
+    bool on_selector_key_pressed(unsigned keyval, unsigned keycode, Gdk::ModifierType state);
     void update_selector_menu();
     void update_selector_label(Glib::ustring const &active_id);
     void clear_filter();

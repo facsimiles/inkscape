@@ -15,7 +15,6 @@
 # include "config.h"  // only include where actually required!
 #endif
 
-#ifdef HAVE_POPPLER
 #include "poppler-transition-api.h"
 
 class SPDocument;
@@ -104,6 +103,7 @@ public:
     void setDocumentSize(double width, double height);  // Document size in px
     void setMargins(const Geom::Rect &page, const Geom::Rect &margins, const Geom::Rect &bleed);
     void cropPage(const Geom::Rect &bbox);
+    void setMetadata(char const * name, const std::string &content);
     void setAsLayer(const char *layer_name = nullptr, bool visible = true);
     void setGroupOpacity(double opacity);
     Inkscape::XML::Node *getPreferences() {
@@ -289,8 +289,6 @@ private:
 } // namespace Internal
 } // namespace Extension
 } // namespace Inkscape
-
-#endif // HAVE_POPPLER
 
 #endif // SEEN_EXTENSION_INTERNAL_PDFINPUT_SVGBUILDER_H
 

@@ -17,6 +17,8 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include <gtkmm/eventcontrollerkey.h>
+#include "preferences.h"
 #ifdef HAVE_CONFIG_H
 # include "config.h"  // only include where actually required!
 #endif
@@ -52,21 +54,21 @@
 #include "dialog-container.h"
 #include "document-undo.h"
 #include "inkscape.h"
-#include "selection.h"
-#include "style.h"
-#include "text-editing.h"
-
 #include "libnrtype/font-factory.h"
 #include "libnrtype/font-lister.h"
 #include "object/sp-flowtext.h"
 #include "object/sp-text.h"
+#include "selection.h"
+#include "style.h"
 #include "svg/css-ostringstream.h"
+#include "text-editing.h"
 #include "ui/builder-utils.h"
 #include "ui/controller.h"
 #include "ui/icon-names.h"
 #include "ui/pack.h"
 #include "ui/util.h"
 #include "util/font-collections.h"
+#include "util/recently-used-fonts.h"
 #include "util/units.h"
 
 namespace Inkscape::UI::Dialog {
@@ -117,7 +119,7 @@ TextEdit::TextEdit()
         Inkscape::UI::Widget::FontList::create_font_list("/font-selector") :
         Inkscape::UI::Widget::FontSelector::create_font_selector();
 
-    Inkscape::FontCollections *font_collections = Inkscape::FontCollections::get();
+    auto font_collections = Inkscape::FontCollections::get();
 
     auto contents = &get_widget<Gtk::Box>     (builder, "contents");
     auto notebook = &get_widget<Gtk::Notebook>(builder, "notebook");
@@ -152,8 +154,6 @@ TextEdit::TextEdit()
         display_font_collections();
     }, false);
 
-    filter_menu_button.set_icon_name(INKSCAPE_ICON("font_collections"));
-
 #ifdef WITH_LIBSPELLING
     // TODO: Use computed xml:lang attribute of relevant element, if present, to specify the language.
     // onReadSelection() looks like a suitable place.
@@ -166,7 +166,10 @@ TextEdit::TextEdit()
     append(*contents);
 
     /* Signal handlers */
-    Controller::add_key<&TextEdit::captureUndo, nullptr>(*text_view, *this);
+    auto const key = Gtk::EventControllerKey::create();
+    key->signal_key_pressed().connect([this, &key = *key](auto&& ...args) { return captureUndo(key, args...); }, true);
+    text_view->add_controller(key);
+
     text_buffer->signal_changed().connect([this] { onChange(); });
 
     setasdefault_button.signal_clicked().connect([this] { onSetDefault(); });
@@ -176,8 +179,13 @@ TextEdit::TextEdit()
     reset_button.signal_clicked().connect([this] { on_reset_button_pressed(); });
     collection_editor_button.signal_clicked().connect([this] { on_fcm_button_clicked(); });
     Inkscape::FontLister::get_instance()->connectUpdate(sigc::mem_fun(*this, &TextEdit::change_font_count_label));
-    fontCollectionsUpdate = font_collections->connect_update([this]  { display_font_collections(); });
-    fontCollectionsChangedSelection = font_collections->connect_selection_update([this]  { display_font_collections(); });
+    fontCollectionsUpdate = font_collections->connect_update([this] { display_font_collections(); });
+    fontCollectionsChangedSelection = font_collections->connect_selection_update([this] {
+        auto font_collections = Inkscape::FontCollections::get();
+        display_font_collections();
+        int selected_count = font_collections->get_selected_collections_count();
+        reset_button.set_sensitive(selected_count != 0);
+    });
 
     change_font_count_label();
 
@@ -191,9 +199,8 @@ TextEdit::TextEdit()
 
 TextEdit::~TextEdit() = default;
 
-bool TextEdit::captureUndo(GtkEventControllerKey const * const controller,
-                           unsigned const keyval, unsigned const keycode,
-                           GdkModifierType const state)
+bool TextEdit::captureUndo(Gtk::EventControllerKey const &controller,
+                           unsigned keyval, unsigned keycode, Gdk::ModifierType state)
 {
     for (auto const accel: {&_undo, &_redo}) {
         if (accel->isTriggeredBy(controller, keyval, keycode, state)) {
@@ -504,10 +511,19 @@ void TextEdit::apply_changes(bool continuous) {
 
     // Update FontLister
     Glib::ustring fontspec = font_list->get_fontspec();
+    Inkscape::FontLister *fontlister = Inkscape::FontLister::get_instance();
     if( !fontspec.empty() ) {
-        Inkscape::FontLister *fontlister = Inkscape::FontLister::get_instance();
         fontlister->set_fontspec( fontspec, false );
     }
+
+    auto recent_fonts = Inkscape::RecentlyUsedFonts::get();
+
+    if (continuous && recent_fonts->get_continuous_streak()) {
+        recent_fonts->pop_front();
+    }
+
+    recent_fonts->prepend_to_list(fontlister->get_font_family());
+    recent_fonts->set_continuous_streak(continuous);
 
     // complete the transaction
     if (continuous) {
@@ -613,7 +629,7 @@ void TextEdit::on_reset_button_pressed()
 
 void TextEdit::change_font_count_label()
 {
-    auto label = Inkscape::FontLister::get_instance()->get_font_count_label();
+    auto [_, label] = Inkscape::FontLister::get_instance()->get_font_count_label();
     font_count_label.set_label(label);
 }
 

@@ -93,11 +93,13 @@ public:
     int get_user_collection_location(const Glib::ustring& collection_name);
     std::string generate_filename_from_collection(const Glib::ustring &collection_name, bool is_system);
     int get_collections_count(bool is_system = false) const;
+    int get_selected_collections_count() const;
     bool find_collection(Glib::ustring const &collection_name, bool is_system = false) const;
-
+    bool is_font_in_collection(const Glib::ustring& collection_name, const Glib::ustring& font_name) const;
     std::vector<Glib::ustring> get_collections(bool is_system = false) const;
     std::vector<Glib::ustring> get_all_collections() const;
     std::set<Glib::ustring> const &get_fonts(Glib::ustring const &name, bool is_system = false) const;
+    const std::set<Glib::ustring>& get_selected_collections() const;
 
     // This signal will be emitted whenever there's a change in the font collections
     // This includes: Creating/deleting collection, and adding/deleting fonts.

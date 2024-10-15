@@ -332,7 +332,7 @@ public:
 
     void init_font_families(int group_offset = -1, int group_size = -1);
     void init_default_styles();
-    std::string get_font_count_label() const;
+    std::pair<bool, std::string> get_font_count_label() const;
 
 private:
     FontLister();

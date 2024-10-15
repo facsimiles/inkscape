@@ -24,6 +24,10 @@
 
 #include "xml/document.h"
 
+namespace Gdk {
+enum class ModifierType;
+}
+
 namespace Gio {
 class Action;
 } // namespace Gio
@@ -131,7 +135,7 @@ public:
     void close();
     void toggle();
 
-    Gtk::Box &get_base_widget();
+    Gtk::Box &get_base_widget() { return _CPBase; }
 
 private:
     using ActionPtr = Glib::RefPtr<Gio::Action>;
@@ -150,12 +154,11 @@ private:
     bool on_filter_full_action_name(Gtk::ListBoxRow *child);
     bool on_filter_recent_file(Gtk::ListBoxRow *child, bool const is_import);
 
-    bool on_window_key_pressed(GtkEventControllerKey const *controller,
-                               unsigned keyval, unsigned keycode, GdkModifierType state);
+    bool on_key_pressed(unsigned keyval, unsigned keycode, Gdk::ModifierType state);
     void on_window_focus(Gtk::Widget const *focus);
 
     void on_activate_cpfilter();
-    bool on_focus_cpfilter(Gtk::DirectionType direction);
+    bool on_entry_keypress(unsigned keyval, unsigned, Gdk::ModifierType);
 
     // when search bar is empty
     void hide_suggestions();

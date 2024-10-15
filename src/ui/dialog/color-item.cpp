@@ -30,6 +30,7 @@
 #include <gdkmm/texture.h>
 #include <gtkmm/binlayout.h>
 #include <gtkmm/dragsource.h>
+#include <gtkmm/eventcontrollermotion.h>
 #include <gtkmm/gestureclick.h>
 #include <gtkmm/popover.h>
 #include <gtkmm/popovermenu.h>
@@ -54,29 +55,24 @@
 #include "ui/dialog/dialog-container.h"
 #include "ui/icon-names.h"
 #include "ui/util.h"
+#include "util/variant-visitor.h"
 
 namespace Inkscape::UI::Dialog {
 namespace {
 
-// Return the result of executing a lambda, and cache the result for future calls.
-template <typename F>
-auto &staticify(F &&f)
-{
-    static auto result = std::forward<F>(f)();
-    return result;
-}
-
-// Get the "remove-color" image.
+/// Get the "remove-color" image.
 Glib::RefPtr<Gdk::Pixbuf> get_removecolor()
 {
-    return staticify([] {
+    // Load the pixbuf only once
+    static const auto remove_color = [] {
         auto path = IO::Resource::get_path(IO::Resource::SYSTEM, IO::Resource::UIS, "resources", "remove-color.png");
         auto pixbuf = Gdk::Pixbuf::create_from_file(path.pointer());
         if (!pixbuf) {
             std::cerr << "Null pixbuf for " << Glib::filename_to_utf8(path.pointer()) << std::endl;
         }
         return pixbuf;
-    });
+    }();
+    return remove_color;
 }
 
 } // namespace
@@ -158,21 +154,23 @@ void ColorItem::common_setup()
 
     set_draw_func(sigc::mem_fun(*this, &ColorItem::draw_func));
 
-    Controller::add_drag_source(*this, {
-        .button  = Controller::Button::left,
-        .actions = Gdk::DragAction::MOVE | Gdk::DragAction::COPY,
-        .prepare = sigc::mem_fun(*this, &ColorItem::on_drag_prepare),
-        .begin   = sigc::mem_fun(*this, &ColorItem::on_drag_begin)
-    });
+    auto const drag = Gtk::DragSource::create();
+    drag->set_button(1); // left
+    drag->set_actions(Gdk::DragAction::MOVE | Gdk::DragAction::COPY);
+    drag->signal_prepare().connect([this](auto &&...) { return on_drag_prepare(); }, false); // before
+    drag->signal_drag_begin().connect([this, &drag = *drag](auto &&...) { on_drag_begin(drag); });
+    add_controller(drag);
 
-    Controller::add_motion<&ColorItem::on_motion_enter,
-                           nullptr,
-                           &ColorItem::on_motion_leave>
-                          (*this, *this, Gtk::PropagationPhase::TARGET);
+    auto const motion = Gtk::EventControllerMotion::create();
+    motion->set_propagation_phase(Gtk::PropagationPhase::TARGET);
+    motion->signal_enter().connect([this](auto &&...) { on_motion_enter(); });
+    motion->signal_leave().connect([this](auto &&...) { on_motion_leave(); });
+    add_controller(motion);
 
-    Controller::add_click(*this,
-                          sigc::mem_fun(*this, &ColorItem::on_click_pressed),
-                          sigc::mem_fun(*this, &ColorItem::on_click_released));
+    auto const click = Gtk::GestureClick::create();
+    click->signal_pressed().connect(Controller::use_state([this](auto& controller, auto &&...) { return on_click_pressed(controller); }, *click));
+    click->signal_released().connect(Controller::use_state([this](auto& controller, auto &&...) { return on_click_released(controller); }, *click));
+    add_controller(click);
 }
 
 void ColorItem::set_pinned_pref(const std::string &path)
@@ -182,7 +180,8 @@ void ColorItem::set_pinned_pref(const std::string &path)
 
 void ColorItem::draw_color(Cairo::RefPtr<Cairo::Context> const &cr, int w, int h) const
 {
-    if (std::holds_alternative<Undefined>(data)) {
+    std::visit(VariantVisitor{
+    [&] (Undefined) {
         // there's no color to paint; indicate clearly that there is nothing to select:
         auto y = h / 2 + 0.5;
         auto width = w / 4;
@@ -193,8 +192,8 @@ void ColorItem::draw_color(Cairo::RefPtr<Cairo::Context> const &cr, int w, int h
         cr->set_source_rgba(fg.get_red(), fg.get_green(), fg.get_blue(), 0.5);
         cr->set_line_width(1);
         cr->stroke();
-    }
-    else if (is_paint_none()) {
+    },
+    [&] (PaintNone) {
         if (auto const pixbuf = get_removecolor()) {
             const auto device_scale = get_scale_factor();
             cr->save();
@@ -203,8 +202,9 @@ void ColorItem::draw_color(Cairo::RefPtr<Cairo::Context> const &cr, int w, int h
             cr->paint();
             cr->restore();
         }
-    } else if (auto const color = std::get_if<Colors::Color>(&data)) {
-        ink_cairo_set_source_color(cr, *color);
+    },
+    [&] (Colors::Color const &color) {
+        ink_cairo_set_source_color(cr, color);
         cr->paint();
         // there's no way to query background color to check if color item stands out,
         // so we apply faint outline to let users make out color shapes blending with background
@@ -213,9 +213,10 @@ void ColorItem::draw_color(Cairo::RefPtr<Cairo::Context> const &cr, int w, int h
         cr->set_source_rgba(fg.get_red(), fg.get_green(), fg.get_blue(), 0.07);
         cr->set_line_width(1);
         cr->stroke();
-    } else if (auto const graddata = std::get_if<GradientData>(&data)) {
+    },
+    [&] (GradientData graddata) {
         // Gradient pointer may be null if the gradient was destroyed.
-        auto grad = graddata->gradient;
+        auto grad = graddata.gradient;
         if (!grad) return;
 
         auto pat_checkerboard = Cairo::RefPtr<Cairo::Pattern>(new Cairo::Pattern(ink_cairo_pattern_create_checkerboard(), true));
@@ -225,7 +226,7 @@ void ColorItem::draw_color(Cairo::RefPtr<Cairo::Context> const &cr, int w, int h
         cr->paint();
         cr->set_source(pat_gradient);
         cr->paint();
-    }
+    }}, data);
 }
 
 void ColorItem::draw_func(Cairo::RefPtr<Cairo::Context> const &cr, int const w, int const h)
@@ -287,8 +288,7 @@ void ColorItem::size_allocate_vfunc(int width, int height, int baseline)
     cache_dirty = true;
 }
 
-void ColorItem::on_motion_enter(GtkEventControllerMotion const * /*motion*/,
-                                double /*x*/, double /*y*/)
+void ColorItem::on_motion_enter()
 {
     assert(dialog);
 
@@ -299,7 +299,7 @@ void ColorItem::on_motion_enter(GtkEventControllerMotion const * /*motion*/,
     }
 }
 
-void ColorItem::on_motion_leave(GtkEventControllerMotion const * /*motion*/)
+void ColorItem::on_motion_leave()
 {
     assert(dialog);
 
@@ -309,8 +309,7 @@ void ColorItem::on_motion_leave(GtkEventControllerMotion const * /*motion*/)
     }
 }
 
-Gtk::EventSequenceState ColorItem::on_click_pressed(Gtk::GestureClick const &click,
-                                                    int /*n_press*/, double /*x*/, double /*y*/)
+Gtk::EventSequenceState ColorItem::on_click_pressed(Gtk::GestureClick const &click)
 {
     assert(dialog);
 
@@ -322,8 +321,7 @@ Gtk::EventSequenceState ColorItem::on_click_pressed(Gtk::GestureClick const &cli
     return Gtk::EventSequenceState::CLAIMED;
 }
 
-Gtk::EventSequenceState ColorItem::on_click_released(Gtk::GestureClick const &click,
-                                                     int /*n_press*/, double /*x*/, double /*y*/)
+Gtk::EventSequenceState ColorItem::on_click_released(Gtk::GestureClick const &click)
 {
     assert(dialog);
 
@@ -507,7 +505,7 @@ void ColorItem::action_convert(Glib::ustring const &name)
     DocumentUndo::done(doc, _("Add gradient stop"), INKSCAPE_ICON("color-gradient"));
 }
 
-Glib::RefPtr<Gdk::ContentProvider> ColorItem::on_drag_prepare(Gtk::DragSource const &, double, double)
+Glib::RefPtr<Gdk::ContentProvider> ColorItem::on_drag_prepare()
 {
     if (!dialog) return {};
 
@@ -521,7 +519,7 @@ Glib::RefPtr<Gdk::ContentProvider> ColorItem::on_drag_prepare(Gtk::DragSource co
     return Gdk::ContentProvider::create(value);
 }
 
-void ColorItem::on_drag_begin(Gtk::DragSource &source, Glib::RefPtr<Gdk::Drag> const &/*drag*/)
+void ColorItem::on_drag_begin(Gtk::DragSource &source)
 {
     constexpr int w = 32;
     constexpr int h = 24;
@@ -561,12 +559,20 @@ bool ColorItem::is_pinned() const
  */
 Colors::Color ColorItem::getColor() const
 {
-    if (is_paint_none()) {
+    return std::visit(VariantVisitor{
+    [] (Undefined) {
+        assert(false);
+        return Colors::Color{0xffffffff};
+    },
+    [] (PaintNone) {
         return Colors::Color(0xffffffff);
-    } else if (auto const color = std::get_if<Colors::Color>(&data)) {
-        return *color;
-    } else if (auto const graddata = std::get_if<GradientData>(&data)) {
-        auto grad = graddata->gradient;
+    },
+    [] (Colors::Color const &color) {
+        return color;
+    },
+    [] (GradientData graddata) {
+        auto grad = graddata.gradient;
+        assert(grad);
         auto pat = Cairo::RefPtr<Cairo::Pattern>(new Cairo::Pattern(grad->create_preview_pattern(1), true));
         auto img = Cairo::ImageSurface::create(Cairo::Surface::Format::ARGB32, 1, 1);
         auto cr = Cairo::Context::create(img);
@@ -575,11 +581,7 @@ Colors::Color ColorItem::getColor() const
         auto color = ink_cairo_surface_average_color(img->cobj());
         color.setName(grad->getId());
         return color;
-    }
-
-    // unreachable
-    assert(false);
-    return Colors::Color(0xffffffff);
+    }}, data);
 }
 
 bool ColorItem::is_paint_none() const {

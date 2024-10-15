@@ -36,6 +36,25 @@
             <property name="margin-top">4</property>
           </object>
         </child>
+        <child>
+          <object class="GtkButton" id="reset_button">
+            <property name="label" translatable="yes">Clear all filters</property>
+            FIXME ^^^
+            <property name="focusable">True</property>
+            <property name="receives-default">True</property>
+            <property name="tooltip-text" translatable="yes">Reset filters and show all available fonts</property>
+            <property name="margin-top">4</property>
+            <property name="hexpand">False</property>
+            <property name="vexpand">False</property>
+            <property name="halign">fill</property>
+            <property name="valign">fill</property>
+            <child>
+              <object class="GtkImage" id="reset_image">
+                <property name="icon-name">view-refresh</property>
+              </object>
+            </child>
+          </object>
+        </child>
       </object>
     </property>
   </object>
@@ -67,27 +86,28 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkButton" id="reset_button">
-                        <property name="focusable">True</property>
-                        <property name="receives-default">True</property>
-                        <property name="tooltip-text" translatable="yes">Reset filters and show all available fonts</property>
-                        <property name="margin-start">2</property>
-                        <child>
-                          <object class="GtkImage" id="reset_image">
-                            <property name="icon-name">view-refresh</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
                       <object class="GtkMenuButton" id="filter_menu_button">
                         <property name="focusable">True</property>
                         <property name="focus-on-click">False</property>
-                        <property name="label" translatable="yes">Collections</property>
                         <property name="receives-default">True</property>
                         <property name="tooltip-text" translatable="yes">Font Collections</property>
                         <property name="margin-start">2</property>
                         <property name="popover">filter_popover</property>
+                        <property name="child">
+                          <object class="GtkBox">
+                            <property name="spacing">2</property>
+                            <child>
+                              <object class="GtkImage">
+                                <property name="icon-name">font_collections</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="label" translatable="yes">Collections</property>
+                              </object>
+                            </child>
+                          </object>
+                        </property>
                       </object>
                     </child>
                   </object>
@@ -171,6 +191,7 @@
         <property name="valign">center</property>
         <property name="can-focus">False</property>
         <property name="spacing">4</property>
+        <property name="margin-bottom">4</property>
         <child>
           <object class="GtkButton" id="setasdefault_button">
             <property name="label" translatable="yes">Set as _default</property>

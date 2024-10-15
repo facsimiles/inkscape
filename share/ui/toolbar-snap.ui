@@ -508,6 +508,8 @@
         </child>
         <child>
           <object class="GtkImage">
+            <property name="halign">start</property>
+            <property name="valign">center</property>
             <property name="icon-name">snap-alignment</property>
             <layout>
               <property name="column">2</property>
@@ -517,6 +519,8 @@
         </child>
         <child>
           <object class="GtkImage">
+            <property name="halign">start</property>
+            <property name="valign">center</property>
             <property name="icon-name">snap-alignment-self</property>
             <layout>
               <property name="column">2</property>
@@ -526,6 +530,8 @@
         </child>
         <child>
           <object class="GtkImage">
+            <property name="halign">start</property>
+            <property name="valign">center</property>
             <property name="icon-name">snap-distribution</property>
             <layout>
               <property name="column">2</property>
@@ -559,6 +565,8 @@
         </child>
         <child>
           <object class="GtkImage">
+            <property name="halign">start</property>
+            <property name="valign">center</property>
             <property name="icon-name">snap-lines-perpendicular</property>
             <layout>
               <property name="column">2</property>
@@ -568,6 +576,8 @@
         </child>
         <child>
           <object class="GtkImage">
+            <property name="halign">start</property>
+            <property name="valign">center</property>
             <property name="icon-name">snap-lines-tangential</property>
             <layout>
               <property name="column">2</property>
@@ -719,6 +729,8 @@
             <property name="action-name">win.simple-snap-bbox</property>
             <child>
               <object class="GtkImage" id="image1">
+                <property name="halign">start</property>
+                <property name="valign">center</property>
                 <property name="icon-name">snap-bounding-box-center</property>
               </object>
             </child>
@@ -745,6 +757,8 @@
             <property name="action-name">win.simple-snap-nodes</property>
             <child>
               <object class="GtkImage" id="image2">
+                <property name="halign">start</property>
+                <property name="valign">center</property>
                 <property name="icon-name">snap-nodes-cusp</property>
               </object>
             </child>
@@ -771,6 +785,8 @@
             <property name="action-name">win.simple-snap-alignment</property>
             <child>
               <object class="GtkImage" id="image3">
+                <property name="halign">start</property>
+                <property name="valign">center</property>
                 <property name="icon-name">align-horizontal-left-to-anchor-symbolic</property>
               </object>
             </child>
@@ -829,12 +845,17 @@
     <property name="halign">start</property>
     <property name="spacing">4</property>
     <property name="margin-end">4</property>
+    <style>
+        <class name="toolbar"/>
+    </style>
     <child>
       <object class="GtkToggleButton">
         <property name="action-name">win.snap-global-toggle</property>
         <property name="has-frame">False</property>
         <child>
           <object class="GtkImage">
+            <property name="halign">start</property>
+            <property name="valign">center</property>
             <property name="icon-name">snap</property>
           </object>
         </child>
@@ -879,6 +900,8 @@
                 <property name="has-frame">False</property>
                 <child>
                   <object class="GtkImage">
+                    <property name="halign">start</property>
+                    <property name="valign">center</property>
                     <property name="icon-name">snap-bounding-box</property>
                   </object>
                 </child>
@@ -890,6 +913,8 @@
                 <property name="has-frame">False</property>
                 <child>
                   <object class="GtkImage">
+                    <property name="halign">start</property>
+                    <property name="valign">center</property>
                     <property name="icon-name">snap-bounding-box-edges</property>
                   </object>
                 </child>
@@ -901,6 +926,8 @@
                 <property name="has-frame">False</property>
                 <child>
                   <object class="GtkImage">
+                    <property name="halign">start</property>
+                    <property name="valign">center</property>
                     <property name="icon-name">snap-bounding-box-corners</property>
                   </object>
                 </child>
@@ -912,6 +939,8 @@
                 <property name="has-frame">False</property>
                 <child>
                   <object class="GtkImage">
+                    <property name="halign">start</property>
+                    <property name="valign">center</property>
                     <property name="icon-name">snap-bounding-box-midpoints</property>
                   </object>
                 </child>
@@ -923,6 +952,8 @@
                 <property name="has-frame">False</property>
                 <child>
                   <object class="GtkImage">
+                    <property name="halign">start</property>
+                    <property name="valign">center</property>
                     <property name="icon-name">snap-bounding-box-center</property>
                   </object>
                 </child>
@@ -940,6 +971,8 @@
                 <property name="has-frame">False</property>
                 <child>
                   <object class="GtkImage">
+                    <property name="halign">start</property>
+                    <property name="valign">center</property>
                     <property name="icon-name">snap-nodes</property>
                   </object>
                 </child>
@@ -951,6 +984,8 @@
                 <property name="has-frame">False</property>
                 <child>
                   <object class="GtkImage">
+                    <property name="halign">start</property>
+                    <property name="valign">center</property>
                     <property name="icon-name">snap-nodes-path</property>
                   </object>
                 </child>
@@ -962,6 +997,8 @@
                 <property name="has-frame">False</property>
                 <child>
                   <object class="GtkImage">
+                    <property name="halign">start</property>
+                    <property name="valign">center</property>
                     <property name="icon-name">snap-nodes-intersection</property>
                   </object>
                 </child>
@@ -973,6 +1010,8 @@
                 <property name="has-frame">False</property>
                 <child>
                   <object class="GtkImage">
+                    <property name="halign">start</property>
+                    <property name="valign">center</property>
                     <property name="icon-name">snap-nodes-cusp</property>
                   </object>
                 </child>
@@ -984,6 +1023,8 @@
                 <property name="has-frame">False</property>
                 <child>
                   <object class="GtkImage">
+                    <property name="halign">start</property>
+                    <property name="valign">center</property>
                     <property name="icon-name">snap-nodes-smooth</property>
                   </object>
                 </child>
@@ -995,6 +1036,8 @@
                 <property name="has-frame">False</property>
                 <child>
                   <object class="GtkImage">
+                    <property name="halign">start</property>
+                    <property name="valign">center</property>
                     <property name="icon-name">snap-nodes-midpoint</property>
                   </object>
                 </child>
@@ -1006,6 +1049,8 @@
                 <property name="has-frame">False</property>
                 <child>
                   <object class="GtkImage">
+                    <property name="halign">start</property>
+                    <property name="valign">center</property>
                     <property name="icon-name">snap-lines-perpendicular</property>
                   </object>
                 </child>
@@ -1017,6 +1062,8 @@
                 <property name="has-frame">False</property>
                 <child>
                   <object class="GtkImage">
+                    <property name="halign">start</property>
+                    <property name="valign">center</property>
                     <property name="icon-name">snap-lines-tangential</property>
                   </object>
                 </child>
@@ -1034,6 +1081,8 @@
                 <property name="has-frame">False</property>
                 <child>
                   <object class="GtkImage">
+                    <property name="halign">start</property>
+                    <property name="valign">center</property>
                     <property name="icon-name">snap-others</property>
                   </object>
                 </child>
@@ -1045,6 +1094,8 @@
                 <property name="has-frame">False</property>
                 <child>
                   <object class="GtkImage">
+                    <property name="halign">start</property>
+                    <property name="valign">center</property>
                     <property name="icon-name">snap-nodes-center</property>
                   </object>
                 </child>
@@ -1056,6 +1107,8 @@
                 <property name="has-frame">False</property>
                 <child>
                   <object class="GtkImage">
+                    <property name="halign">start</property>
+                    <property name="valign">center</property>
                     <property name="icon-name">snap-nodes-rotation-center</property>
                   </object>
                 </child>
@@ -1067,6 +1120,8 @@
                 <property name="has-frame">False</property>
                 <child>
                   <object class="GtkImage">
+                    <property name="halign">start</property>
+                    <property name="valign">center</property>
                     <property name="icon-name">snap-text-baseline</property>
                   </object>
                 </child>
@@ -1078,6 +1133,8 @@
                 <property name="has-frame">False</property>
                 <child>
                   <object class="GtkImage">
+                    <property name="halign">start</property>
+                    <property name="valign">center</property>
                     <property name="icon-name">path-mask-edit</property>
                   </object>
                 </child>
@@ -1089,6 +1146,8 @@
                 <property name="has-frame">False</property>
                 <child>
                   <object class="GtkImage">
+                    <property name="halign">start</property>
+                    <property name="valign">center</property>
                     <property name="icon-name">path-clip-edit</property>
                   </object>
                 </child>
@@ -1106,6 +1165,8 @@
                 <property name="has-frame">False</property>
                 <child>
                   <object class="GtkImage">
+                    <property name="halign">start</property>
+                    <property name="valign">center</property>
                     <property name="icon-name">snap-alignment</property>
                   </object>
                 </child>
@@ -1117,6 +1178,8 @@
                 <property name="has-frame">False</property>
                 <child>
                   <object class="GtkImage">
+                    <property name="halign">start</property>
+                    <property name="valign">center</property>
                     <property name="icon-name">snap-alignment-self</property>
                   </object>
                 </child>
@@ -1128,6 +1191,8 @@
                 <property name="has-frame">False</property>
                 <child>
                   <object class="GtkImage">
+                    <property name="halign">start</property>
+                    <property name="valign">center</property>
                     <property name="icon-name">snap-distribution</property>
                   </object>
                 </child>
@@ -1145,6 +1210,8 @@
                 <property name="has-frame">False</property>
                 <child>
                   <object class="GtkImage">
+                    <property name="halign">start</property>
+                    <property name="valign">center</property>
                     <property name="icon-name">grid-rectangular</property>
                   </object>
                 </child>
@@ -1156,6 +1223,8 @@
                 <property name="has-frame">False</property>
                 <child>
                   <object class="GtkImage">
+                    <property name="halign">start</property>
+                    <property name="valign">center</property>
                     <property name="icon-name">guides</property>
                   </object>
                 </child>
@@ -1167,6 +1236,8 @@
                 <property name="has-frame">False</property>
                 <child>
                   <object class="GtkImage">
+                    <property name="halign">start</property>
+                    <property name="valign">center</property>
                     <property name="icon-name">snap-page</property>
                   </object>
                 </child>
@@ -1174,9 +1245,6 @@
             </child>
           </object>
         </property>
-        <style>
-          <class name="toolbar"/>
-        </style>
       </object>
     </child>
   </object>

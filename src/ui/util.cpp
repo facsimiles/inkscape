@@ -34,6 +34,7 @@
 
 #include "colors/color.h"
 #include "colors/utils.h" // color to hex string
+#include "inkscape-window.h"
 #include "util/numeric/converters.h"
 
 #if (defined (_WIN32) || defined (_WIN64))
@@ -132,7 +133,7 @@ void gui_warning(const std::string &msg, Gtk::Window *parent_window) {
     g_warning("%s", msg.c_str());
     if (INKSCAPE.active_desktop()) {
         Gtk::MessageDialog warning(_(msg.c_str()), false, Gtk::MessageType::WARNING, Gtk::ButtonsType::OK, true);
-        warning.set_transient_for( parent_window ? *parent_window : *(INKSCAPE.active_desktop()->getToplevel()) );
+        warning.set_transient_for(parent_window ? *parent_window : *INKSCAPE.active_desktop()->getInkscapeWindow());
         dialog_run(warning);
     }
 }
@@ -539,6 +540,11 @@ void restrict_minsize_to_square(Gtk::Widget& widget, int min_size_px) {
     auto style_context = widget.get_style_context();
     // load with a priority higher than that of the "style.css"
     style_context->add_provider(css, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION + 2);
+}
+
+char const *get_text(Gtk::Editable const &editable)
+{
+    return gtk_editable_get_text(const_cast<GtkEditable *>(editable.gobj())); // C API is const-incorrect
 }
 
 /*

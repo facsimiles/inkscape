@@ -23,6 +23,7 @@
 #include <gdkmm/device.h>
 #include <gdkmm/display.h>
 #include <gdkmm/seat.h>
+#include <gtkmm/eventcontrollerkey.h>
 #include <gtkmm/window.h>
 #include <glibmm/i18n.h>
 
@@ -113,7 +114,7 @@ ToolBase::ToolBase(SPDesktop *desktop, std::string &&prefs_path, std::string &&c
     set_cursor(_cursor_default);
     _desktop->getCanvas()->grab_focus();
 
-    message_context = std::make_unique<Inkscape::MessageContext>(desktop->messageStack());
+    message_context = std::make_unique<Inkscape::MessageContext>(*desktop->messageStack());
 
     // Make sure no delayed snapping events are carried over after switching tools
     // (this is only an additional safety measure against sloppy coding, because each
@@ -291,23 +292,24 @@ bool ToolBase::_keyboardMove(KeyEvent const &event, Geom::Point const &dir)
 
     bool const rotated = prefs->getBool("/options/moverotated/value", true);
     if (rotated) {
-        delta *= Geom::Rotate(-_desktop->current_rotation());
+        delta *= _desktop->current_rotation().inverse();
     }
 
     bool moved = false;
     if (shape_editor && shape_editor->has_knotholder()) {
-        KnotHolder * knotholder = shape_editor->knotholder;
+        auto &knotholder = shape_editor->knotholder;
         if (knotholder && knotholder->knot_selected()) {
             knotholder->transform_selected(Geom::Translate(delta));
             moved = true;
         }
     } else {
+        // TODO: eliminate this dynamic cast by using inheritance
         auto nt = dynamic_cast<Inkscape::UI::Tools::NodeTool *>(_desktop->getTool());
         if (nt) {
             for (auto &_shape_editor : nt->_shape_editors) {
                 ShapeEditor *shape_editor = _shape_editor.second.get();
                 if (shape_editor && shape_editor->has_knotholder()) {
-                    KnotHolder * knotholder = shape_editor->knotholder;
+                    auto &knotholder = shape_editor->knotholder;
                     if (knotholder && knotholder->knot_selected()) {
                         knotholder->transform_selected(Geom::Translate(delta));
                         moved = true;
@@ -474,7 +476,7 @@ bool ToolBase::root_handler(CanvasEvent const &event)
                 if (panning_cursor == 0) {
                     panning_cursor = 1;
                     auto window = dynamic_cast<Gtk::Window *>(_desktop->getCanvas()->get_root());
-                    auto cursor = Gdk::Cursor::create("move");
+                    auto cursor = Gdk::Cursor::create(Glib::ustring("move"));
                     window->set_cursor(cursor);
                 }
 
@@ -950,7 +952,7 @@ bool ToolBase::item_handler(SPItem *item, CanvasEvent const &event)
         return true;
     } else if (button.button == 1 && shape_editor && shape_editor->has_knotholder()) {
         // This allows users to select an arbitary position in a pattern to edit on canvas.
-        auto knotholder = shape_editor->knotholder;
+        auto &knotholder = shape_editor->knotholder;
         auto point = button.pos;
         if (_desktop->getItemAtPoint(point, true) == knotholder->getItem()) {
             return knotholder->set_item_clickpos(_desktop->w2d(point) * _desktop->dt2doc());
@@ -1358,6 +1360,14 @@ unsigned get_latin_keyval(GtkEventControllerKey const * const controller,
 {
     auto const group = gtk_event_controller_key_get_group(const_cast<GtkEventControllerKey *>(controller));
     return get_latin_keyval_impl(keyval, keycode, state, group, consumed_modifiers);
+}
+
+unsigned get_latin_keyval(Gtk::EventControllerKey const &controller,
+                          unsigned keyval, unsigned keycode, Gdk::ModifierType state,
+                          unsigned *consumed_modifiers /*= nullptr*/)
+{
+    auto const group = controller.get_group();
+    return get_latin_keyval_impl(keyval, keycode, static_cast<GdkModifierType>(state), group, consumed_modifiers);
 }
 
 unsigned get_latin_keyval(KeyEvent const &event, unsigned *consumed_modifiers)

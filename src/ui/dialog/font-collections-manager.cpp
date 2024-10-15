@@ -43,13 +43,11 @@ FontCollectionsManager::FontCollectionsManager()
     , _edit_button          (UI::get_widget<Gtk::Button>(builder, "edit_button"))
     , _delete_button        (UI::get_widget<Gtk::Button>(builder, "delete_button"))
 {
-    UI::pack_start(_font_list_box, _font_selector, true, true);
-    _font_list_box.reorder_child_after(_font_selector, *_font_list_box.get_first_child());
+    _font_selector = Gtk::make_managed<UI::Widget::FontSelector>(false, false);
+    _font_list_box.insert_child_after(*_font_selector, _font_count_label);
 
-    UI::pack_start(_collections_box, _user_font_collections, true, true);
-    _collections_box.reorder_child_at_start(_user_font_collections);
+    _collections_box.insert_child_after(_user_font_collections, _buttons_box);
 
-    _user_font_collections.populate_system_collections();
     _user_font_collections.populate_user_collections();
     _user_font_collections.change_frame_name(_("Font Collections"));
 
@@ -60,12 +58,7 @@ FontCollectionsManager::FontCollectionsManager()
     _edit_button.set_image_from_icon_name(INKSCAPE_ICON("document-edit"));
     _delete_button.set_image_from_icon_name(INKSCAPE_ICON("edit-delete"));
 
-    // Paned settings.
-    _paned.set_resize_start_child(false);
-    _paned.set_resize_end_child(false);
-
     change_font_count_label();
-    _font_selector.hide_others();
 
     // Setup the signals.
     _font_count_changed_connection = Inkscape::FontLister::get_instance()->connectUpdate(sigc::mem_fun(*this, &FontCollectionsManager::change_font_count_label));
@@ -79,15 +72,16 @@ FontCollectionsManager::FontCollectionsManager()
     // Edit and delete are initially insensitive because nothing is selected.
     _edit_button.set_sensitive(false);
     _delete_button.set_sensitive(false);
+    _font_selector->hide_others();
 }
 
 void FontCollectionsManager::on_search_entry_changed()
 {
     auto search_txt = _search_entry.get_text();
-    _font_selector.unset_model();
+    _font_selector->unset_model();
     Inkscape::FontLister *font_lister = Inkscape::FontLister::get_instance();
     font_lister->show_results(search_txt);
-    _font_selector.set_model();
+    _font_selector->set_model();
     change_font_count_label();
 }
 
@@ -125,8 +119,9 @@ void FontCollectionsManager::on_reset_button_pressed()
 
 void FontCollectionsManager::change_font_count_label()
 {
-    auto label = Inkscape::FontLister::get_instance()->get_font_count_label();
+    auto [all_fonts, label] = Inkscape::FontLister::get_instance()->get_font_count_label();
     _font_count_label.set_label(label);
+    _reset_button.set_sensitive(!all_fonts);
 }
 
 // This function will set the sensitivity of the edit and delete buttons

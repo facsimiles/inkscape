@@ -934,7 +934,7 @@ void SnapManager::_findCandidates(SPObject* parent,
                             auto display_area = getDesktop()->get_display_area().bounds();
                             if (display_area.intersects(*bbox_of_item)) {
                                 // Finally add the object to _candidates.
-                                _align_snapper_candidates->push_back(Inkscape::SnapCandidateItem(item, clip_or_mask, additional_affine));
+                                _align_snapper_candidates->emplace_back(item, clip_or_mask, additional_affine);
                                 // For debugging: print the id of the candidate to the console
                                 // SPObject *obj = (SPObject*)item;
                                 // std::cout << "Snap candidate added: " << obj->getId() << std::endl;
@@ -942,7 +942,7 @@ void SnapManager::_findCandidates(SPObject* parent,
                                 if (bbox_to_snap_incl.intersects(*bbox_of_item)
                                         || (snapprefs.isTargetSnappable(Inkscape::SNAPTARGET_ROTATION_CENTER) && bbox_to_snap_incl.contains(item->getCenter()))) { // rotation center might be outside of the bounding box
                                     // This item is within snapping range, so record it as a candidate
-                                    _obj_snapper_candidates->push_back(Inkscape::SnapCandidateItem(item, clip_or_mask, additional_affine));
+                                    _obj_snapper_candidates->emplace_back(item, clip_or_mask, additional_affine);
                                     // For debugging: print the id of the candidate to the console
                                     // SPObject *obj = (SPObject*)item;
                                     // std::cout << "Snap candidate added: " << obj->getId() << std::endl;

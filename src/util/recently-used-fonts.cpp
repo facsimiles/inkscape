@@ -204,12 +204,8 @@ void RecentlyUsedFonts::prepend_to_list(const Glib::ustring& font_name) {
      if(it != _recent_list.end()) {
          _recent_list.erase(it);
      }
-     else {
-         /*
-          * Insert the element in the list.
-          */
-         _recent_list.push_front(font_name);
-     }
+
+     _recent_list.push_front(font_name);
 
      /*
       * Check if the current size exceeds the max size
@@ -221,6 +217,28 @@ void RecentlyUsedFonts::prepend_to_list(const Glib::ustring& font_name) {
 
      write_recently_used_fonts();
      update_signal.emit();
+}
+
+void RecentlyUsedFonts::pop_front()
+{
+    if (_recent_list.empty()) {
+        return;
+    }
+
+    _recent_list.pop_front();
+
+    write_recently_used_fonts();
+    update_signal.emit();
+}
+
+bool RecentlyUsedFonts::get_continuous_streak() const
+{
+    return continuous_streak;
+}
+
+void RecentlyUsedFonts::set_continuous_streak(bool streak)
+{
+    continuous_streak = streak;
 }
 
 /*

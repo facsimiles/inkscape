@@ -114,11 +114,14 @@ void SvgGlyphRenderer::snapshot_vfunc(
     Glib::ustring glyph = _property_glyph.get_value();
     Cairo::TextExtents ext;
     cr->get_text_extents(glyph, ext);
-    cr->move_to(cell_area.get_x() + (_width - ext.width) / 2, cell_area.get_y() + 1);
+    cr->move_to(cell_area.get_x() + (cell_area.get_width() - ext.width) / 2, cell_area.get_y() + (cell_area.get_height() + ext.height) / 2);
 
     auto const selected = (flags & Gtk::CellRendererState::SELECTED) != Gtk::CellRendererState{};
-    auto const css_class = selected ? "theme_selected_bg_color" : "";
-    auto const fg = get_color_with_class(*_tree, css_class);
+    Gdk::RGBA fg;
+    if (!_tree->get_style_context()->lookup_color(selected ? "theme_selected_fg_color" : "theme_fg_color", fg)) {
+        // some themes don't have standard color names defined
+        fg = Gdk::RGBA{"#000"};
+    }
     cr->set_source_rgb(fg.get_red(), fg.get_green(), fg.get_blue());
 
     // crash on macos: https://gitlab.com/inkscape/inkscape/-/issues/266
@@ -1076,7 +1079,7 @@ void SvgFontsDialog::set_glyph_description_from_selected_path() {
     if (!selection)
         return;
 
-    Inkscape::MessageStack *msgStack = getDesktop()->getMessageStack();
+    Inkscape::MessageStack *msgStack = getDesktop()->messageStack();
     if (selection->isEmpty()){
         char *msg = _("Select a <b>path</b> to define the curves of a glyph");
         msgStack->flash(Inkscape::ERROR_MESSAGE, msg);
@@ -1116,7 +1119,7 @@ void SvgFontsDialog::missing_glyph_description_from_selected_path(){
     if (!selection)
         return;
 
-    Inkscape::MessageStack *msgStack = getDesktop()->getMessageStack();
+    Inkscape::MessageStack *msgStack = getDesktop()->messageStack();
     if (selection->isEmpty()){
         char *msg = _("Select a <b>path</b> to define the curves of a glyph");
         msgStack->flash(Inkscape::ERROR_MESSAGE, msg);

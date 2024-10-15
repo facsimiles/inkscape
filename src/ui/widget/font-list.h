@@ -71,11 +71,11 @@ private:
     void add_font(const Glib::ustring& fontspec, bool select);
     bool select_font(const Glib::ustring& fontspec);
     void update_font_count();
-    void add_categories(const std::vector<FontTag>& tags);
+    void add_categories();
     void toggle_category();
     void update_categories(const std::string& tag, bool select);
     void update_filterbar();
-    Gtk::Box* create_pill_box(const FontTag& ftag);
+    Gtk::Box* create_pill_box(const Glib::ustring& display_name, const Glib::ustring& tag, bool tags);
     void sync_font_tag(const FontTag* ftag, bool selected);
     void scroll_to_row(Gtk::TreePath path);
     Gtk::TreeModel::iterator get_selected_font() const;
@@ -111,6 +111,8 @@ private:
     bool _view_mode_list = true;
     auto_connection _font_stream;
     std::size_t _initializing = 0;
+    auto_connection _font_collections_update;
+    auto_connection _font_collections_selection;
 };
 
 } // namespaces

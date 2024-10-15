@@ -8501,7 +8501,7 @@ msgstr "Korvaa teksti"
 #: ../src/actions/actions-file.cpp:105
 #, fuzzy
 msgid "File Open"
-msgstr "_Avaa"
+msgstr "Avaa"
 
 #: ../src/actions/actions-file.cpp:105
 #, fuzzy
@@ -16250,7 +16250,7 @@ msgstr "Peru"
 #: ../src/ui/widget/preferences-widget.cpp:970
 #: ../share/ui/inkscape-start.glade:1065
 msgid "Open"
-msgstr "_Avaa"
+msgstr "Avaa"
 
 #: ../src/helper/save-image.cpp:33
 #: ../share/extensions/image_extract_selected.inx:3

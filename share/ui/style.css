@@ -695,6 +695,7 @@ button.square-button image {
 }
 
 .tag-box label {
+    min-width: 2em; /* don't let it collapse */
     margin-right: 1px;
     margin-left: 8px;
 }
@@ -770,7 +771,7 @@ button.square-button image {
 }
 
 .inkscape-toolbar {
-    margin: 4px 2px;
+    margin: 4px;
 }
 
 .inkscape-toolbar > * {
@@ -1335,6 +1336,10 @@ popover.popup-menu contents {
     min-height: 256px;
 }
 
+#Symbols .item-box {
+    /* symbol items should be tightly packed */
+    margin: 1px;
+}
 
 /* IconPreview */
 frame.icon-preview {

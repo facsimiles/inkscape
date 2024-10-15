@@ -27,14 +27,17 @@ UnitMenu::UnitMenu(BaseObjectType * const cobject, Glib::RefPtr<Gtk::Builder> co
 
 UnitMenu::~UnitMenu() = default;
 
-bool UnitMenu::setUnitType(UnitType unit_type) 
+bool UnitMenu::setUnitType(UnitType unit_type, bool svg_length)
 {
     // Expand the unit widget with unit entries from the unit table
     auto const &unit_table = Util::UnitTable::get();
     auto const &m = unit_table.units(unit_type);
 
     for (auto & i : m) {
-        append(i.first);
+        // We block the use of non SVG units if requested
+        if (!svg_length || i.second.svgUnit() > 0) {
+            append(i.first);
+        }
     }
     _type = unit_type;
     set_active_text(unit_table.primary(unit_type));
@@ -42,11 +45,11 @@ bool UnitMenu::setUnitType(UnitType unit_type)
     return true;
 }
 
-bool UnitMenu::resetUnitType(UnitType unit_type) 
+bool UnitMenu::resetUnitType(UnitType unit_type, bool svg_length)
 {
     remove_all();
 
-    return setUnitType(unit_type);
+    return setUnitType(unit_type, svg_length);
 }
 
 void UnitMenu::addUnit(Unit const& u)

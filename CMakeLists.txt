@@ -116,8 +116,8 @@ option(WITH_OPENMP "Compile with OpenMP support" ON)
 option(WITH_PROFILING "Turn on profiling" OFF) # Set to true if compiler/linker should enable profiling
 option(BUILD_SHARED_LIBS "Compile libraries as shared and not static" ON)
 
-option(ENABLE_POPPLER "Compile with support of libpoppler" ON)
-option(ENABLE_POPPLER_CAIRO "Compile with support of libpoppler-cairo for rendering PDF preview (depends on ENABLE_POPPLER)" ON)
+option(WITH_POPPLER "Compile with support of libpoppler" ON)
+option(ENABLE_POPPLER_CAIRO "Compile with support of libpoppler-cairo for rendering PDF preview (depends on WITH_POPPLER)" ON)
 option(WITH_IMAGE_MAGICK "Compile with support of ImageMagick for raster extensions and image import resolution (requires ImageMagick 6; set to OFF if you prefer GraphicsMagick)" ON)
 option(WITH_GRAPHICS_MAGICK "Compile with support of GraphicsMagick for raster extensions and image import resolution" ON)
 option(WITH_LIBCDR "Compile with support of libcdr for CorelDRAW Diagrams" ON)
@@ -129,6 +129,7 @@ option(WITH_NLS "Compile with Native Language Support (using gettext)" ON)
 option(WITH_JEMALLOC "Compile with JEMALLOC support" OFF)
 option(WITH_ASAN "Compile with Clang's AddressSanitizer (for debugging purposes)" OFF)
 option(WITH_INTERNAL_2GEOM "Prefer internal copy of lib2geom" OFF)
+option(WITH_CROSSINK "Cross-compiling with Crossroads" OFF)
 cmake_dependent_option(WITH_X11 "Compile with X11 support" ON "UNIX; NOT APPLE" OFF)
 
 option(WITH_FUZZ "Compile for fuzzing purpose (use 'make fuzz' only)" OFF)
@@ -275,7 +276,7 @@ endif()
 
 # dependency info
 message("ENABLE_LCMS:             ${ENABLE_LCMS}")
-message("ENABLE_POPPLER:          ${ENABLE_POPPLER}")
+message("WITH_POPPLER:            ${WITH_POPPLER}")
 message("ENABLE_POPPLER_CAIRO:    ${ENABLE_POPPLER_CAIRO}")
 message("WITH_GNU_READLINE:       ${WITH_GNU_READLINE}")
 message("WITH_LIBSPELLING:        ${WITH_LIBSPELLING}")

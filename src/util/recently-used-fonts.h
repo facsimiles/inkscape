@@ -49,6 +49,9 @@ public:
 
     void change_max_list_size(const int& max_size);
     void prepend_to_list(const Glib::ustring& font_name);
+    void pop_front();
+    bool get_continuous_streak() const;
+    void set_continuous_streak(bool streak);
 
     std::list<Glib::ustring> const &get_fonts() const;
     int get_count() const;
@@ -69,6 +72,7 @@ private:
     // TODO: Add an option in the preferences to change the maximum size of
     // the recently used font list.
     int _max_size{};
+    bool continuous_streak = false;
 
     sigc::signal <void ()> update_signal;
 };
