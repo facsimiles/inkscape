@@ -829,6 +829,24 @@ Inkscape::XML::Node *SvgBuilder::_getClip(const Geom::Affine &node_tr)
 
 Inkscape::XML::Node *SvgBuilder::_createClip(const std::string &d, const Geom::Affine tr, bool even_odd)
 {
+    if (_prev_clip) {
+        // Check if the previous clipping path would be identical to the new one.
+        std::string prev_d = _prev_clip->firstChild()->attribute("d");
+        std::string prev_tr = sp_svg_transform_write(Geom::identity());
+        if (_prev_clip->firstChild()->attribute("transform")) {
+            prev_tr = _prev_clip->firstChild()->attribute("transform");
+        }
+
+        bool prev_even_odd = false;
+        if (_prev_clip->firstChild()->attribute("clip-rule")) {
+            prev_even_odd = _prev_clip->firstChild()->attribute("clip-rule") == "evenodd";
+        }
+
+        if (prev_d == d && prev_tr == sp_svg_transform_write(tr) && prev_even_odd == even_odd) {
+            return _prev_clip;
+        }
+    }
+
     Inkscape::XML::Node *clip_path = _xml_doc->createElement("svg:clipPath");
     clip_path->setAttribute("clipPathUnits", "userSpaceOnUse");
 
@@ -846,6 +864,10 @@ Inkscape::XML::Node *SvgBuilder::_createClip(const std::string &d, const Geom::A
     // Append clipPath to defs and get id
     _doc->getDefs()->getRepr()->appendChild(clip_path);
     Inkscape::GC::release(clip_path);
+
+    // update the previous clip path
+    _prev_clip = clip_path;
+
     return clip_path;
 }
 

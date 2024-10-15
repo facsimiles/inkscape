@@ -283,6 +283,9 @@ private:
     ClipHistoryEntry *_clip_history; // clip path stack
     Inkscape::XML::Node *_clip_text = nullptr;
     Inkscape::XML::Node *_clip_text_group = nullptr;
+    
+    // Keep track of the previously created clip path
+    Inkscape::XML::Node *_prev_clip = nullptr;
 };
 
 
