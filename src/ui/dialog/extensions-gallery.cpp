@@ -324,7 +324,7 @@ ExtensionsGallery::ExtensionsGallery(ExtensionsGallery::Type type) :
         paned->get_start_child()->set_visible(show);
     };
     paned->set_position(position);
-    paned->property_position().signal_changed().connect([this](){
+    paned->property_position().signal_changed().connect([=, this](){
         if (auto const w = paned->get_start_child()) {
             if (w->is_visible()) prefs->setInt(_prefs_path + "/position", paned->get_position());
         }
@@ -333,7 +333,7 @@ ExtensionsGallery::ExtensionsGallery(ExtensionsGallery::Type type) :
     // show/hide categories
     auto toggle = &get_widget<Gtk::ToggleButton>(_builder, "toggle");
     toggle->set_active(show_list);
-    toggle->signal_toggled().connect([this](){
+    toggle->signal_toggled().connect([=, this](){
         auto visible = toggle->get_active();
         show_categories_list(visible);
         if (!visible) show_category("all"); // don't leave hidden category selection filter active
@@ -445,7 +445,7 @@ ExtensionsGallery::ExtensionsGallery(ExtensionsGallery::Type type) :
 
     update_name();
 
-    scale->signal_value_changed().connect([this](){
+    scale->signal_value_changed().connect([=, this](){
         _thumb_size_index = scale->get_value();
         rebuild();
         prefs->setInt(_prefs_path + "/tile-size", _thumb_size_index);

@@ -170,7 +170,7 @@ PatternEditor::PatternEditor(const char* prefs, Inkscape::PatternManager& manage
     _orient_slider.set_increments(1, 1);
     _orient_slider.set_digits(0);
     _orient_slider.set_value(0);
-    _orient_slider.signal_change_value().connect([this](Gtk::ScrollType st, double value){
+    _orient_slider.signal_change_value().connect([=, this, &max](Gtk::ScrollType st, double value){
         if (_update.pending()) return false;
         auto scoped(_update.block());
         // slider works with 15deg discrete steps
@@ -180,7 +180,7 @@ PatternEditor::PatternEditor(const char* prefs, Inkscape::PatternManager& manage
     }, true);
 
     for (auto spin : {&_gap_x_spin, &_gap_y_spin}) {
-        spin->signal_value_changed().connect([this](){
+        spin->signal_value_changed().connect([=, this](){
             if (_update.pending() || !spin->is_sensitive()) return;
             _signal_changed.emit();
         });
@@ -224,7 +224,7 @@ PatternEditor::PatternEditor(const char* prefs, Inkscape::PatternManager& manage
     });
 
     for (auto el : {&_scale_x, &_scale_y, &_offset_x, &_offset_y}) {
-        el->signal_value_changed().connect([this]() {
+        el->signal_value_changed().connect([=, this, &el]() {
             if (_update.pending()) return;
             if (_scale_linked && (el == &_scale_x || el == &_scale_y)) {
                 auto scoped(_update.block());
@@ -262,7 +262,7 @@ PatternEditor::PatternEditor(const char* prefs, Inkscape::PatternManager& manage
         int previous = _combo_set.get_active_row_number() - 1;
         if (previous >= 0) _combo_set.set_active(previous);
     });
-    get_widget<Gtk::Button>(_builder, "next").signal_clicked().connect([this](){
+    get_widget<Gtk::Button>(_builder, "next").signal_clicked().connect([=, this](){
         auto next = _combo_set.get_active_row_number() + 1;
         if (next < cat_count) _combo_set.set_active(next);
     });
