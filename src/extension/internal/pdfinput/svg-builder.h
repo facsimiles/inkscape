@@ -222,7 +222,8 @@ private:
     std::vector<GfxState *> _mask_groups;
     int _clip_groups = 0;
 
-    Inkscape::XML::Node *_getClip(const Geom::Affine &node_tr);
+    Inkscape::XML::Node *_getClip(const Inkscape::XML::Node *node);
+    bool _shouldClip(const Inkscape::XML::Node *node);
     Inkscape::XML::Node *_addToContainer(const char *name);
     Inkscape::XML::Node *_renderText(std::shared_ptr<CairoFont> cairo_font, double font_size,
                                      const Geom::Affine &transform,
