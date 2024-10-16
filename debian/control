@@ -90,6 +90,7 @@ Recommends:
  python3-scour,
  python3-cssselect,
  python3-packaging,
+ python3-tinycss2,
  python3-gi,
  python3-gi-cairo,
  python3-appdirs,
