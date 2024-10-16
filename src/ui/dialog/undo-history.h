@@ -24,6 +24,7 @@
 #include <gtkmm/treeselection.h>
 
 #include "event-log.h"
+#include "helper/sigc-notifiable.h"
 #include "ui/dialog/dialog-base.h"
 
 namespace Inkscape::UI::Dialog {
@@ -90,6 +91,7 @@ private:
     Glib::RefPtr<Gtk::TreeSelection> _event_list_selection;
 
     EventLog::CallbackMap _callback_connections;
+    notifiable_wrapper<UndoHistory> _destroy_notifier;
 
     static void _handleEventLogDestroyCB(sigc::notifiable *data);
 

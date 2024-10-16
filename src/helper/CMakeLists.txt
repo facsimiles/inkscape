@@ -28,6 +28,7 @@ set(helper_SRC
 	pixbuf-ops.h
 	png-write.h
     save-image.h
+	sigc-notifiable.h
 	sigc-track-obj.h
 	stock-items.h
 )
