@@ -31,32 +31,11 @@
 #include "ui/dialog-events.h"
 #include "extension/output.h"
 
-
 namespace Inkscape::UI::Dialog {
 
 /*#########################################################################
   ### U T I L I T Y
   #########################################################################*/
-
-bool hasSuffix(const Glib::ustring &str, const Glib::ustring &ext)
-{
-    int strLen = str.length();
-    int extLen = ext.length();
-    if (extLen > strLen)
-        return false;
-    int strpos = strLen-1;
-    for (int extpos = extLen-1 ; extpos>=0 ; extpos--, strpos--) {
-        Glib::ustring::value_type ch = str[strpos];
-        if (ch != ext[extpos]) {
-            if ( ((ch & 0xff80) != 0) ||
-                 static_cast<Glib::ustring::value_type>( g_ascii_tolower( static_cast<gchar>(0x07f & ch) ) ) != ext[extpos] )
-            {
-                return false;
-            }
-        }
-    }
-    return true;
-}
 
 // start_path is usually a static string.
 // try_document_dir only used by WIN32.
@@ -108,21 +87,6 @@ void get_start_directory(std::string &start_path, Glib::ustring const &prefs_pat
         start_path = Glib::get_home_dir();
         start_path.append(G_DIR_SEPARATOR_S);
     }
-}
-
-bool isValidImageFile(const Glib::ustring &fileName)
-{
-    std::vector<Gdk::PixbufFormat>formats = Gdk::Pixbuf::get_formats(); // Returns Glib::ustrings!
-    for (auto format : formats)
-    {
-        std::vector<Glib::ustring>extensions = format.get_extensions();
-        for (auto ext : extensions)
-        {
-            if (hasSuffix(fileName, ext))
-                return true;
-        }
-    }
-    return false;
 }
 
 /*#########################################################################
