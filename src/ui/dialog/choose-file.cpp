@@ -2,6 +2,9 @@
 
 #include "choose-file.h"
 
+#include <cassert>
+#include <iostream>
+
 #include <glib/gi18n.h>
 #include <glibmm/main.h>
 #include <glibmm/ustring.h>
@@ -12,6 +15,8 @@
 #include <gtkmm/filedialog.h>
 #include <gtkmm/filefilter.h>
 #include <glibmm/miscutils.h>
+
+#include "preferences.h"
 
 namespace Inkscape {
 
@@ -54,18 +59,17 @@ using FinishMethod = Glib::RefPtr<Gio::File> (Gtk::FileDialog::*)
     file_dialog.set_initial_folder(Gio::File::create_for_path(current_folder));
 
     bool responded = false;
-    std::string file_path;
+    Glib::RefPtr<Gio::File> file;
 
     (file_dialog.*start)(parent, [&](Glib::RefPtr<Gio::AsyncResult> const &result)
     {
         try {
             responded = true;
 
-            auto const file = (file_dialog.*finish)(result);
-            if (!file) return;
-
-            file_path = file->get_path();
-            if (file_path.empty()) return;
+            file = (file_dialog.*finish)(result);
+            if (!file) {
+                return;
+            }
 
             current_folder = file->get_parent()->get_path();
         } catch (Gtk::DialogError const &error) {
@@ -82,13 +86,13 @@ using FinishMethod = Glib::RefPtr<Gio::File> (Gtk::FileDialog::*)
          main_context->iteration(true);
     }
 
-    return file_path;
+    return file;
 }
 
-std::string choose_file_save(Glib::ustring const &title, Gtk::Window *parent,
-                             Glib::ustring const &mime_type,
-                             Glib::ustring const &file_name,
-                             std::string &current_folder)
+Glib::RefPtr<Gio::File> choose_file_save(Glib::ustring const &title, Gtk::Window *parent,
+                                         Glib::ustring const &mime_type,
+                                         Glib::ustring const &file_name,
+                                         std::string &current_folder)
 {
     if (!parent) return {};
 
@@ -108,58 +112,64 @@ std::string choose_file_save(Glib::ustring const &title, Gtk::Window *parent,
                &Gtk::FileDialog::save, &Gtk::FileDialog::save_finish);
 }
 
-static std::string _choose_file_open(Glib::ustring const &title, Gtk::Window *parent,
-                                     std::vector<std::pair<Glib::ustring, Glib::ustring>> const &filters,
-                                     std::vector<Glib::ustring> const &mime_types,
-                                     std::string &current_folder)
-{       
-    if (!parent) return {};
+Glib::RefPtr<Gio::File> choose_file_open(Glib::ustring const &title, Gtk::Window *parent,
+                                         Glib::RefPtr<Gio::ListStore<Gtk::FileFilter>> const &filters_model,
+                                         std::string &current_folder,
+                                         Glib::ustring const &accept)
+{
+    if (!parent) return Glib::RefPtr<Gio::File>();
 
     if (current_folder.empty()) {
         current_folder = Glib::get_home_dir();
     }
 
-    auto const file_dialog = create_file_dialog(title, _("Open"));
+    auto const file_dialog = create_file_dialog(title, accept.empty() ? _("Open") : accept);
 
-    auto filters_model = Gio::ListStore<Gtk::FileFilter>::create();
-    if (!filters.empty()) {
-        auto all_supported = Gtk::FileFilter::create();
-        all_supported->set_name(_("All Supported Formats"));
-        if (filters.size() > 1) filters_model->append(all_supported);
-
-        for (auto const &f : filters) {
-            auto filter = Gtk::FileFilter::create();
-            filter->set_name(f.first);
-            filter->add_pattern(f.second);
-            all_supported->add_pattern(f.second);
-            filters_model->append(filter);
-        }
+    if (filters_model) {
+        set_filters(*file_dialog, filters_model);
     }
-    else {
-        auto filter = Gtk::FileFilter::create();
-        for (auto const &t : mime_types) {
-            filter->add_mime_type(t);
-        }
-        filters_model->append(filter);
-    }
-    set_filters(*file_dialog, filters_model);
 
     return run(*file_dialog, *parent, current_folder,
                &Gtk::FileDialog::open, &Gtk::FileDialog::open_finish);
 }
 
-std::string choose_file_open(Glib::ustring const &title, Gtk::Window *parent,
-                             std::vector<Glib::ustring> const &mime_types,
-                             std::string &current_folder)
+Glib::RefPtr<Gio::File> choose_file_open(Glib::ustring const &title, Gtk::Window *parent,
+                                         std::vector<Glib::ustring> const &mime_types,
+                                         std::string &current_folder,
+                                         Glib::ustring const &accept)
 {
-    return _choose_file_open(title, parent, {}, mime_types, current_folder);
+    auto filters_model = Gio::ListStore<Gtk::FileFilter>::create();
+    auto filter = Gtk::FileFilter::create();
+    for (auto const &t : mime_types) {
+        filter->add_mime_type(t);
+    }
+    filters_model->append(filter);
+
+    return choose_file_open(title, parent, filters_model, current_folder, accept);
 }
 
-std::string choose_file_open(Glib::ustring const &title, Gtk::Window *parent,
-                             std::vector<std::pair<Glib::ustring, Glib::ustring>> const &filters,
-                             std::string &current_folder)
+Glib::RefPtr<Gio::File> choose_file_open(Glib::ustring const &title, Gtk::Window *parent,
+                                         std::vector<std::pair<Glib::ustring, Glib::ustring>> const &filters,
+                                         std::string &current_folder,
+                                         Glib::ustring const &accept)
 {
-    return _choose_file_open(title, parent, filters, {}, current_folder);
+    auto filters_model = Gio::ListStore<Gtk::FileFilter>::create();
+
+    auto all_supported = Gtk::FileFilter::create();
+    if (filters.size() > 1) {
+        all_supported->set_name(_("All Supported Formats"));
+        filters_model->append(all_supported);
+    }
+
+    for (auto const &f : filters) {
+        auto filter = Gtk::FileFilter::create();
+        filter->set_name(f.first);
+        filter->add_pattern(f.second);
+        filters_model->append(filter);
+        all_supported->add_pattern(f.second);
+    }
+
+    return choose_file_open(title, parent, filters_model, current_folder, accept);
 }
 
 } // namespace Inkscape

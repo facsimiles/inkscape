@@ -112,11 +112,13 @@ set(ui_SRC
 
 	dialog/about.cpp
 	dialog/align-and-distribute.cpp
+	dialog/attrdialog.cpp
 	dialog/calligraphic-profile-rename.cpp
 	dialog/clonetiler.cpp
 	dialog/color-item.cpp
 	dialog/command-palette.cpp
 	dialog/attrdialog.cpp
+	dialog/choose-file.cpp
 	dialog/debug.cpp
 	dialog/dialog-base.cpp
 	dialog/dialog-container.cpp
@@ -156,6 +158,7 @@ set(ui_SRC
 	dialog/polar-arrange-tab.cpp
 	dialog/print.cpp
 	dialog/prototype.cpp
+	dialog/save-image.cpp
 	dialog/selectorsdialog.cpp
 	dialog/startup.cpp
 	dialog/styledialog.cpp
@@ -322,6 +325,7 @@ set(ui_SRC
 	dialog/align-and-distribute.h
 	dialog/arrange-tab.h
 	dialog/calligraphic-profile-rename.h
+	dialog/choose-file.h
 	dialog/clonetiler.h
 	dialog/color-item.h
 	dialog/command-palette.h
@@ -365,6 +369,7 @@ set(ui_SRC
 	dialog/polar-arrange-tab.h
 	dialog/print.h
 	dialog/prototype.h
+	dialog/save-image.h
 	dialog/selectorsdialog.h
 	dialog/startup.h
 	dialog/styledialog.h
