@@ -542,6 +542,7 @@ private:
     Inkscape::auto_connection _reconstruction_start_connection;
     Inkscape::auto_connection _reconstruction_finish_connection;
     Inkscape::auto_connection _schedule_zoom_from_document_connection;
+    Inkscape::auto_connection _layer_changed_connection;
 
     bool drawing_handler(Inkscape::CanvasEvent const &event, Inkscape::DrawingItem *item);
     void reconstruction_start();
@@ -555,6 +556,8 @@ private:
 
     void onStatusMessage(Inkscape::MessageType type, char const *message);
     void onDocumentFilenameSet(char const *filename);
+
+    void updateTranslucenyGroups();
 };
 
 #endif // INKSCAPE_DESKTOP_H

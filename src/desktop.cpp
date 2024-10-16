@@ -191,6 +191,10 @@ SPDesktop::SPDesktop(SPNamedView *namedview_, Inkscape::UI::Widget::Canvas *canv
     _translucency_group = std::make_unique<Inkscape::Display::TranslucencyGroup>(dkey);
     _snapindicator = std::make_unique<Inkscape::Display::SnapIndicator>(this);
 
+    _layer_changed_connection = _layer_manager->connectCurrentLayerChanged([this](SPGroup *group) {
+        updateTranslucenyGroups();
+    });
+
     /* --------- End Canvas Items ----------- */
 
     namedview->show(this);
@@ -1403,6 +1407,17 @@ void SPDesktop::on_zoom_scale(double const scale)
 void SPDesktop::on_zoom_end(Gdk::EventSequence * /*sequence*/)
 {
     _begin_zoom.reset();
+}
+
+/**
+ * Set or unset the translucency group if needed.
+ */
+void SPDesktop::updateTranslucenyGroups()
+{
+    auto group = _layer_manager->currentLayer();
+    bool enabled = !group->isLayer();
+    // TODO: Add preference to control this here?
+    _translucency_group->setSolidItem(enabled ? group : nullptr);
 }
 
 /*
