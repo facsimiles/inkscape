@@ -90,10 +90,15 @@ Recommends:
  python3-scour,
  python3-cssselect,
  python3-packaging,
+ python3-pyparsing,
+ python3-requests,
  python3-tinycss2,
+ python3-filelock,
  python3-gi,
  python3-gi-cairo,
  python3-appdirs,
+ python3-pil,
+ python3-zstandard,
  gir1.2-gtk-3.0,
  adwaita-icon-theme-full
 Suggests:
