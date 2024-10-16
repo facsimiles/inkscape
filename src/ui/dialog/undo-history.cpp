@@ -28,8 +28,9 @@ namespace Inkscape::UI::Dialog {
 const CellRendererInt::Filter &CellRendererInt::no_filter = CellRendererInt::NoFilter();
 
 UndoHistory::UndoHistory()
-    : DialogBase("/dialogs/undo-history", "UndoHistory"),
-      _event_list_selection(_event_list_view.get_selection())
+    : DialogBase("/dialogs/undo-history", "UndoHistory")
+    , _event_list_selection(_event_list_view.get_selection())
+    , _destroy_notifier(this)
 {
     auto const columns = &EventLog::getColumns();
 
@@ -104,7 +105,7 @@ void UndoHistory::disconnectEventLog()
 {
     if (_event_log) {
         _event_log->removeDialogConnection(&_event_list_view, &_callback_connections);
-        _event_log->remove_destroy_notify_callback(this);
+        _event_log->remove_destroy_notify_callback(&_destroy_notifier);
     }
 }
 
@@ -112,7 +113,7 @@ void UndoHistory::connectEventLog()
 {
     if (auto document = getDocument()) {
         _event_log = document->get_event_log();
-        _event_log->add_destroy_notify_callback(this, &_handleEventLogDestroyCB);
+        _event_log->add_destroy_notify_callback(&_destroy_notifier, &_handleEventLogDestroyCB);
         _event_list_store = _event_log->getEventListStore();
         _event_list_view.set_model(_event_list_store);
         _event_log->addDialogConnection(&_event_list_view, &_callback_connections);
@@ -120,10 +121,10 @@ void UndoHistory::connectEventLog()
     }
 }
 
-void UndoHistory::_handleEventLogDestroyCB(sigc::notifiable * const data)
+void UndoHistory::_handleEventLogDestroyCB(sigc::notifiable *data)
 {
     if (data) {
-        UndoHistory *self = reinterpret_cast<UndoHistory*>(data);
+        UndoHistory *self = static_cast<notifiable_wrapper<UndoHistory> *>(data)->get();
         self->_handleEventLogDestroy();
     }
 }
