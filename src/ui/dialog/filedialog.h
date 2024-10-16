@@ -75,11 +75,6 @@ enum FileDialogSelectionType
 bool hasSuffix(const Glib::ustring &str, const Glib::ustring &ext);
 
 /**
- * Set initial directory for dialog given a preference path.
- */
-void get_start_directory(std::string &start_path, Glib::ustring const &prefs_path, bool try_document_dir = false);
-
-/**
  * Return true if the image is loadable by Gdk, else false.
  * Only user is svg-preview.cpp which is disappearing, don't worry about string type.
  */

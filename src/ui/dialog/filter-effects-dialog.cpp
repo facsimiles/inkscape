@@ -82,6 +82,7 @@
 #include "ui/builder-utils.h"
 #include "ui/column-menu-builder.h"
 #include "ui/controller.h"
+#include "ui/dialog/choose-file-utils.h"
 #include "ui/dialog/filedialog.h"
 #include "ui/icon-names.h"
 #include "ui/pack.h"

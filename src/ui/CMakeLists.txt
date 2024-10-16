@@ -120,6 +120,7 @@ set(ui_SRC
 	dialog/attrdialog.cpp
 	dialog/choose-file.cpp
 	dialog/debug.cpp
+	dialog/choose-file-utils.cpp
 	dialog/dialog-base.cpp
 	dialog/dialog-container.cpp
 	dialog/dialog-data.cpp
@@ -326,6 +327,7 @@ set(ui_SRC
 	dialog/arrange-tab.h
 	dialog/calligraphic-profile-rename.h
 	dialog/choose-file.h
+	dialog/choose-file-utils.h
 	dialog/clonetiler.h
 	dialog/color-item.h
 	dialog/command-palette.h

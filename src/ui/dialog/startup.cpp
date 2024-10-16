@@ -43,6 +43,7 @@
 #include "preferences.h"
 #include "ui/builder-utils.h"
 #include "ui/controller.h"
+#include "ui/dialog/choose-file-utils.h"
 #include "ui/dialog/filedialog.h"
 #include "ui/shortcuts.h"
 #include "ui/themes.h"

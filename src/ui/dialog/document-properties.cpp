@@ -24,6 +24,12 @@
 #include <algorithm>
 #include <array>
 #include <cmath>
+#include <iterator>
+#include <optional>
+#include <set>
+#include <string>
+#include <tuple>
+
 #include <giomm/themedicon.h>
 #include <glibmm/main.h>
 #include <gtkmm/adjustment.h>
@@ -41,11 +47,6 @@
 #include <gtkmm/spinbutton.h>
 #include <gtkmm/togglebutton.h>
 #include <gtkmm/widget.h>
-#include <iterator>
-#include <optional>
-#include <set>
-#include <string>
-#include <tuple>
 #include <glibmm/convert.h>
 #include <gtkmm/image.h>
 #include <gtkmm/liststore.h>
@@ -75,6 +76,7 @@
 #include "ui/pack.h"
 #include "ui/popup-menu.h"
 #include "ui/util.h"
+#include "ui/dialog/choose-file-utils.h"
 #include "ui/widget/alignment-selector.h"
 #include "ui/widget/entity-entry.h"
 #include "ui/widget/labelled.h"

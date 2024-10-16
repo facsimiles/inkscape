@@ -34,6 +34,7 @@
 #include "include/gtkmm_version.h"
 #include "io/sys.h"
 #include "ui/dialog/choose-file.h"
+#include "ui/dialog/choose-file-utils.h"
 #include "ui/dialog/filedialog.h"
 #include "ui/icon-loader.h"
 #include "ui/pack.h"

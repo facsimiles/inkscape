@@ -65,6 +65,7 @@
 #include "selection.h"
 #include "style.h"
 #include "svg/svg.h" // for sp_svg_transform_write, used in sp_import_document
+#include "ui/dialog/choose-file-utils.h"
 #include "ui/dialog/filedialog.h"
 #include "ui/icon-names.h"
 #include "ui/interface.h"

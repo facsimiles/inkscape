@@ -58,58 +58,6 @@ bool hasSuffix(const Glib::ustring &str, const Glib::ustring &ext)
     return true;
 }
 
-// start_path is usually a static string.
-// try_document_dir only used by WIN32.
-void get_start_directory(std::string &start_path, Glib::ustring const &prefs_path, bool try_document_dir)
-{
-    // Get the current directory for finding files.
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    std::string attr = prefs->getString(prefs_path); // Glib::ustring -> std::string
-    if (!attr.empty()) {
-        start_path = attr;
-    }
-
-    // Test if the path directory exists.
-    if (!Glib::file_test(start_path, Glib::FileTest::EXISTS)) {
-        start_path = "";
-    }
-
-#ifdef _WIN32
-    // If no start path, default to our win32 documents folder.
-    if (start_path.empty() && try_document_dir) {
-
-        // The path to the My Documents folder is read from the
-        // value "HKEY_CURRENT_USER\Software\Windows\CurrentVersion\Explorer\Shell Folders\Personal"
-        HKEY key = NULL;
-        if (RegOpenKeyExA(HKEY_CURRENT_USER,
-                          "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders",
-                          0, KEY_QUERY_VALUE, &key) == ERROR_SUCCESS)
-        {
-            WCHAR utf16path[_MAX_PATH];
-            DWORD value_type;
-            DWORD data_size = sizeof(utf16path);
-            if(RegQueryValueExW(key, L"Personal", NULL, &value_type,
-                                (BYTE*)utf16path, &data_size) == ERROR_SUCCESS)
-            {
-                g_assert(value_type == REG_SZ);
-                gchar *utf8path = g_utf16_to_utf8(
-                    (const gunichar2*)utf16path, -1, NULL, NULL, NULL);
-                if (utf8path) {
-                    start_path = Glib::ustring(utf8path); // Glib::ustring -> std::string
-                    g_free(utf8path);
-                }
-            }
-        }
-    }
-#endif
-
-    // If no start path, default to our home directory.
-    if (start_path.empty()) {
-        start_path = Glib::get_home_dir();
-        start_path.append(G_DIR_SEPARATOR_S);
-    }
-}
-
 bool isValidImageFile(const Glib::ustring &fileName)
 {
     std::vector<Gdk::PixbufFormat>formats = Gdk::Pixbuf::get_formats(); // Returns Glib::ustrings!
