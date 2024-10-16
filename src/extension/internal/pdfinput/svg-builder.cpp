@@ -828,7 +828,7 @@ Inkscape::XML::Node *SvgBuilder::_getClip(const Inkscape::XML::Node *node)
     return nullptr;
 }
 
-bool SvgBuilder::_shouldClip(const Inkscape::XML::Node *node)
+bool SvgBuilder::_shouldClip(const Inkscape::XML::Node *node) const
 {
     if (!_clip_history->hasClipPath()) {
         return false;
