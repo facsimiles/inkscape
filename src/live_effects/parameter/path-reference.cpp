@@ -10,7 +10,6 @@
 #include "live_effects/parameter/path-reference.h"
 
 #include "object/sp-shape.h"
-#include "object/sp-text.h"
 
 namespace Inkscape {
 namespace LivePathEffect {
@@ -22,7 +21,7 @@ SPItem *PathReference::getObject() const
 
 bool PathReference::_acceptObject(SPObject *obj) const
 {
-    if (is<SPShape>(obj) || is<SPText>(obj)) {
+    if (is<SPShape>(obj)) {
         /* Refuse references to lpeobject */
         if (obj == getOwner()) {
             return false;

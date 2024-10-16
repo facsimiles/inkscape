@@ -846,14 +846,18 @@ void SnapManager::_findCandidates(SPObject* parent,
     for (auto& o: parent->children) {
         auto item = cast<SPItem>(&o);
         if (item && !(dt->itemIsHidden(item) && !clip_or_mask)) {
-            // Fix LPE boolops self-snapping
+            // Fix LPE boolops and connector lines self-snaping
+            auto lpeitem = cast<SPLPEItem>(item);
             bool stop = false;
+            // We're not snapping to Connector lines.
+            if (lpeitem && lpeitem->hasPathEffectOfType(Inkscape::LivePathEffect::EffectType::CONNECTOR_LINE)) {
+                continue;
+            }
             if (item->style) {
                 SPFilter *filt = item->style->getFilter();
                 if (filt && filt->getId() && strcmp(filt->getId(), "selectable_hidder_filter") == 0) {
                     stop = true;
                 }
-                auto lpeitem = cast<SPLPEItem>(item);
                 if (lpeitem && lpeitem->hasPathEffectOfType(Inkscape::LivePathEffect::EffectType::BOOL_OP)) {
                     stop = true;
                 }

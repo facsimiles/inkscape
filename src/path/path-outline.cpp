@@ -182,8 +182,7 @@ item_find_paths(const SPItem *item, Geom::PathVector& fill, Geom::PathVector& st
 
 // ======================== Item to Outline ===================== //
 
-static
-void item_to_outline_add_marker_child( SPItem const *item, Geom::Affine marker_transform, Geom::PathVector* pathv_in )
+void item_to_outline_recursive(SPItem const *item, Geom::Affine const &marker_transform, Geom::PathVector &pathv_in)
 {
     Geom::Affine tr(marker_transform);
     tr = item->transform * tr;
@@ -193,24 +192,23 @@ void item_to_outline_add_marker_child( SPItem const *item, Geom::Affine marker_t
         // recurse through all childs:
         for (auto& o: item->children) {
             if (auto childitem = cast<SPItem>(&o)) {
-                item_to_outline_add_marker_child(childitem, tr, pathv_in);
+                item_to_outline_recursive(childitem, tr, pathv_in);
             }
         }
     } else {
-        Geom::PathVector* marker_pathv = item_to_outline(item);
+        auto const marker_pathv = item_to_outline(item);
 
-        if (marker_pathv) {
-            for (const auto & j : *marker_pathv) {
-                pathv_in->push_back(j * tr);
+        if (!marker_pathv.empty()) {
+            for (auto const &path : marker_pathv) {
+                pathv_in.push_back(path * tr);
             }
-            delete marker_pathv;
         }
     }
 }
 
 static
-void item_to_outline_add_marker( SPObject const *marker_object, Geom::Affine marker_transform,
-                              Geom::Scale stroke_scale, Geom::PathVector* pathv_in )
+void item_to_outline_add_marker(SPObject const *marker_object, Geom::Affine marker_transform,
+                              Geom::Scale stroke_scale, Geom::PathVector &pathv_in)
 {
     SPMarker const * marker = cast<SPMarker>(marker_object);
 
@@ -223,7 +221,7 @@ void item_to_outline_add_marker( SPObject const *marker_object, Geom::Affine mar
 
     SPItem const * marker_item = sp_item_first_item_child(marker_object); // why only consider the first item? can a marker only consist of a single item (that may be a group)?
     if (marker_item) {
-        item_to_outline_add_marker_child(marker_item, tr, pathv_in);
+        item_to_outline_recursive(marker_item, tr, pathv_in);
     }
 }
 
@@ -235,24 +233,24 @@ void item_to_outline_add_marker( SPObject const *marker_object, Geom::Affine mar
  *  TODO: See if SPShape::either_bbox's union with markers is the same as one would get
  *  with bbox_only false.
  */
-Geom::PathVector* item_to_outline(SPItem const *item, bool exclude_markers)
+Geom::PathVector item_to_outline(SPItem const *item, bool exclude_markers)
 {
     Geom::PathVector fill;   // Used for locating markers.
     Geom::PathVector stroke; // Used for creating outline (and finding bbox).
     item_find_paths(item, fill, stroke, true); // Skip cleaning up stroke shape.
 
-    Geom::PathVector *ret_pathv = nullptr;
-
     if (fill.curveCount() == 0) {
         std::cerr << "item_to_outline: fill path has no segments!" << std::endl;
-        return ret_pathv;
+        return {};
     }
 
-    if (stroke.size() > 0) {
-        ret_pathv = new Geom::PathVector(stroke);
+    Geom::PathVector ret_pathv;
+
+    if (!stroke.empty()) {
+        ret_pathv = stroke;
     } else {
         // No stroke, use fill path.
-        ret_pathv = new Geom::PathVector(fill);
+        ret_pathv = fill;
     }
 
     if (exclude_markers) {
@@ -267,9 +265,9 @@ Geom::PathVector* item_to_outline(SPItem const *item, bool exclude_markers)
 
         // START marker
         for (int i = 0; i < 2; i++) {  // SP_MARKER_LOC and SP_MARKER_LOC_START
-            if ( SPObject *marker_obj = shape->_marker[i] ) {
-                Geom::Affine const m (sp_shape_marker_get_transform_at_start(fill.front().front()));
-                item_to_outline_add_marker( marker_obj, m, scale, ret_pathv );
+            if (auto marker_obj = shape->_marker[i]) {
+                auto const m = sp_shape_marker_get_transform_at_start(fill.front().front());
+                item_to_outline_add_marker(marker_obj, m, scale, ret_pathv);
             }
         }
 
@@ -283,8 +281,8 @@ Geom::PathVector* item_to_outline(SPItem const *item, bool exclude_markers)
                 if ( path_it != fill.begin() &&
                      ! ((path_it == (fill.end()-1)) && (path_it->size_default() == 0)) ) // if this is the last path and it is a moveto-only, there is no mid marker there
                 {
-                    Geom::Affine const m (sp_shape_marker_get_transform_at_start(path_it->front()));
-                    item_to_outline_add_marker( midmarker_obj, m, scale, ret_pathv);
+                    auto const m = sp_shape_marker_get_transform_at_start(path_it->front());
+                    item_to_outline_add_marker(midmarker_obj, m, scale, ret_pathv);
                 }
 
                 // MID position
@@ -297,8 +295,8 @@ Geom::PathVector* item_to_outline(SPItem const *item, bool exclude_markers)
                          * Loop to end_default (so including closing segment), because when a path is closed,
                          * there should be a midpoint marker between last segment and closing straight line segment
                          */
-                        Geom::Affine const m (sp_shape_marker_get_transform(*curve_it1, *curve_it2));
-                        item_to_outline_add_marker( midmarker_obj, m, scale, ret_pathv);
+                        auto const m = sp_shape_marker_get_transform(*curve_it1, *curve_it2);
+                        item_to_outline_add_marker(midmarker_obj, m, scale, ret_pathv);
 
                         ++curve_it1;
                         ++curve_it2;
@@ -308,8 +306,8 @@ Geom::PathVector* item_to_outline(SPItem const *item, bool exclude_markers)
                 // END position
                 if ( path_it != (fill.end()-1) && !path_it->empty()) {
                     Geom::Curve const &lastcurve = path_it->back_default();
-                    Geom::Affine const m = sp_shape_marker_get_transform_at_end(lastcurve);
-                    item_to_outline_add_marker( midmarker_obj, m, scale, ret_pathv );
+                    auto const m = sp_shape_marker_get_transform_at_end(lastcurve);
+                    item_to_outline_add_marker(midmarker_obj, m, scale, ret_pathv);
                 }
             }
         }
@@ -326,8 +324,8 @@ Geom::PathVector* item_to_outline(SPItem const *item, bool exclude_markers)
                 }
                 Geom::Curve const &lastcurve = path_last[index];
 
-                Geom::Affine const m = sp_shape_marker_get_transform_at_end(lastcurve);
-                item_to_outline_add_marker( marker_obj, m, scale, ret_pathv );
+                auto const m = sp_shape_marker_get_transform_at_end(lastcurve);
+                item_to_outline_add_marker(marker_obj, m, scale, ret_pathv);
             }
         }
     }

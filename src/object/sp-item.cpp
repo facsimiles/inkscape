@@ -31,7 +31,6 @@
 #include "inkscape.h"
 #include "desktop.h"
 #include "gradient-chemistry.h"
-#include "conn-avoid-ref.h"
 #include "conditions.h"
 #include "enums.h"
 #include "filter-chemistry.h"
@@ -49,6 +48,7 @@
 #include "sp-textpath.h"
 #include "sp-title.h"
 #include "sp-use.h"
+#include "sp-point.h"
 
 #include "style.h"
 #include "display/nr-filter.h"
@@ -93,8 +93,6 @@ SPItem::SPItem()
     style->signal_fill_ps_changed.connect  ([this] (auto old_obj, auto obj) { fill_ps_ref_changed  (old_obj, obj); });
     style->signal_stroke_ps_changed.connect([this] (auto old_obj, auto obj) { stroke_ps_ref_changed(old_obj, obj); });
     style->signal_filter_changed.connect   ([this] (auto old_obj, auto obj) { filter_ref_changed   (old_obj, obj); });
-
-    avoidRef = nullptr;
 }
 
 SPItem::~SPItem() = default;
@@ -184,14 +182,6 @@ SPClipPathReference &SPItem::getClipRef()
     }
 
     return *clip_ref;
-}
-
-SPAvoidRef &SPItem::getAvoidRef()
-{
-    if (!avoidRef) {
-        avoidRef = new SPAvoidRef(this);
-    }
-    return *avoidRef;
 }
 
 bool SPItem::isVisibleAndUnlocked() const {
@@ -509,8 +499,6 @@ void SPItem::build(SPDocument *document, Inkscape::XML::Node *repr) {
     object->readAttr(SPAttr::SODIPODI_INSENSITIVE);
     object->readAttr(SPAttr::TRANSFORM_CENTER_X);
     object->readAttr(SPAttr::TRANSFORM_CENTER_Y);
-    object->readAttr(SPAttr::CONNECTOR_AVOID);
-    object->readAttr(SPAttr::CONNECTION_POINTS);
     object->readAttr(SPAttr::INKSCAPE_HIGHLIGHT_COLOR);
 
     SPObject::build(document, repr);
@@ -521,11 +509,6 @@ void SPItem::build(SPDocument *document, Inkscape::XML::Node *repr) {
 
 void SPItem::release()
 {
-    // Note: do this here before the clip_ref is deleted, since calling
-    // ensureUpToDate() for triggered routing may reference
-    // the deleted clip_ref.
-    delete avoidRef;
-    avoidRef = nullptr;
 
     // we do NOT disconnect from the changed signal of those before deletion.
     // The destructor will call *_ref_changed with NULL as the new value,
@@ -589,11 +572,6 @@ void SPItem::set(SPAttr key, gchar const* value) {
             item->_highlightColor = Inkscape::Colors::Color::parse(value);
             break;
         }
-        case SPAttr::CONNECTOR_AVOID:
-            if (value || item->avoidRef) {
-                item->getAvoidRef().setAvoid(value);
-            }
-            break;
         case SPAttr::TRANSFORM_CENTER_X:
             if (value) {
                 item->transform_center_x = g_strtod(value, nullptr);
@@ -820,11 +798,6 @@ void SPItem::update(SPCtx *ctx, unsigned flags)
             }
         }
     }
-
-    // Update libavoid with item geometry (for connector routing).
-    if (avoidRef && document) {
-        avoidRef->handleSettingChange();
-    }
 }
 
 void SPItem::modified(unsigned int /*flags*/)
@@ -902,6 +875,16 @@ Inkscape::XML::Node* SPItem::write(Inkscape::XML::Document *xml_doc, Inkscape::X
 Geom::OptRect SPItem::bbox(Geom::Affine const & /*transform*/, SPItem::BBoxType /*type*/) const {
     //throw;
     return Geom::OptRect();
+}
+
+/**
+ * Returns a best attempt to get the item outline for the item.
+ * Which could be multiple path shapes combined representing each
+ * of the parts of the shape or a simple bounding box shape.
+ */
+Geom::PathVector SPItem::outline() const
+{
+    return {};
 }
 
 Geom::OptRect SPItem::geometricBounds(Geom::Affine const &transform) const
@@ -1940,6 +1923,29 @@ void SPItem::move_rel( Geom::Translate const &tr)
     set_i2d_affine(i2dt_affine() * tr);
 
     doWriteTransform(transform);
+}
+
+/**
+ * Return a list of connection point objects (usually children)
+ */
+std::vector<SPPoint *> SPItem::getConnectionPoints()
+{
+    std::vector<SPPoint *> result;
+    for (auto &child : children) {
+        if (auto point = cast<SPPoint>(&child)) {
+            result.push_back(point);
+        }
+    }
+    return result;
+}
+
+/**
+ * Return a list of virtual connection points that act as hints
+ */
+PointHints SPItem::getConnectionHints() const
+{
+    // No default points, put your hints in the sub-class.
+    return {};
 }
 
 /*

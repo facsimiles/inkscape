@@ -259,7 +259,6 @@ namespace XML {}
  * - SPDrawContext [\ref draw-context.cpp, \ref draw-context.h]
  *   - PenTool [\ref pen-context.cpp, \ref pen-context.h]
  *   - PencilTool [\ref pencil-context.cpp, \ref pencil-context.h]
- *   - ConnectorTool [\ref connector-context.cpp, \ref connector-context.h, \ref sp-conn-end.cpp, \ref sp-conn-end-pair.cpp]
  * - GradientTool [\ref gradient-context.cpp, \ref gradient-context.h, \ref gradient-drag.cpp, \ref gradient-toolbar.cpp]
  * - RectTool [\ref rect-context.cpp, \ref rect-context.h]
  * - SelectTool [\ref select-context.cpp, \ref select-context.h]

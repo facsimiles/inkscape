@@ -23,6 +23,7 @@
 
 #include <cstdint>
 #include <vector>
+#include <map>
 #include <2geom/forward.h>
 #include <2geom/affine.h>
 #include <2geom/rect.h>
@@ -32,16 +33,20 @@
 #include "sp-object.h"
 #include "sp-marker-loc.h"
 #include "display/drawing-item-ptr.h"
+#include "live_effects/effect-enum.h"
 #include "xml/repr.h"
 
 class SPGroup;
+class SPPoint;
 class SPClipPath;
 class SPClipPathReference;
 class SPMask;
 class SPMaskReference;
-class SPAvoidRef;
 class SPPattern;
 struct SPPrintContext;
+
+// Virtual connection point hints map
+using PointHints = std::map<std::string, Geom::Point>;
 
 namespace Inkscape {
 class Drawing;
@@ -148,15 +153,11 @@ public:
     std::optional<Geom::PathVector> getClipPathVector() const;
     std::optional<Geom::PathVector> getClipPathVector(SPItem const *root) const;
 
-    SPAvoidRef &getAvoidRef();
     std::vector<std::pair <Glib::ustring, Glib::ustring> > rootsatellites;
 
 private:
     SPClipPathReference *clip_ref;
     SPMaskReference *mask_ref;
-
-    // Used for object-avoiding connectors
-    SPAvoidRef *avoidRef;
 
 public:
     std::vector<SPItemView> views;
@@ -440,6 +441,7 @@ public:
 	Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags) override;
 
 	virtual Geom::OptRect bbox(Geom::Affine const &transform, SPItem::BBoxType type) const;
+    virtual Geom::PathVector outline() const;
 	virtual void print(SPPrintContext *ctx);
     virtual const char* typeName() const;
     virtual const char* displayName() const;
@@ -451,6 +453,10 @@ public:
     virtual void removeTransformsRecursively(SPObject const *root);
 
     virtual void convert_to_guides() const;
+
+    // Connection tool introspection of points is object specific
+    virtual std::vector<SPPoint *> getConnectionPoints();
+    virtual PointHints getConnectionHints() const;
 };
 
 // Utility

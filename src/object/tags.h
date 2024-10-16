@@ -86,6 +86,7 @@ X(SPObject,\
                 X(SPStar)\
             )\
         )\
+        X(SPPoint)\
         X(SPTRef)\
         X(SPTSpan)\
         X(SPText)\

@@ -210,10 +210,10 @@ int lpetool_item_has_construction(SPItem *item)
 bool lpetool_try_construction(SPDesktop *desktop, LivePathEffect::EffectType const type)
 {
     auto const selection = desktop->getSelection();
-    auto const item = selection->singleItem();
+    auto const item = cast<SPLPEItem>(selection->single());
 
     // TODO: should we check whether type represents a valid geometric construction?
-    if (item && is<SPLPEItem>(item) && LivePathEffect::Effect::acceptsNumClicks(type) == 0) {
+    if (item && LivePathEffect::Effect::acceptsNumClicks(type) == 0) {
         LivePathEffect::Effect::createAndApply(type, desktop->getDocument(), item);
         return true;
     }
