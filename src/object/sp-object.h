@@ -91,7 +91,7 @@ class SPDocument;
 
 /// Internal class consisting of two bits.
 class SPIXmlSpace {
-public:    
+public:
     SPIXmlSpace(): set(0), value(SP_XML_SPACE_DEFAULT) {};
     unsigned int set : 1;
     unsigned int value : 1;
@@ -756,12 +756,6 @@ public:
     void appendChild(Inkscape::XML::Node *child);
 
     void addChild(Inkscape::XML::Node *child,Inkscape::XML::Node *prev=nullptr);
-
-    /**
-     * Call virtual set() function of object.
-     */
-    void setKeyValue(SPAttr key, char const *value);
-
 
     void setAttribute(Inkscape::Util::const_char_ptr key,
                       Inkscape::Util::const_char_ptr value);
