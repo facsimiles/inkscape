@@ -157,53 +157,6 @@ void sp_file_revert_dialog()
     }
 }
 
-/**
- *  Display an file Open selector.  Open a document if OK is pressed.
- *  Can select single or multiple files for opening.
- */
-void
-sp_file_open_dialog(Gtk::Window &parentWindow, gpointer /*object*/, gpointer /*data*/)
-{
-    // Get the current directory for finding files.
-    static std::string open_path;
-    Inkscape::UI::Dialog::get_start_directory(open_path, "/dialogs/open/path", true);
-
-    // Create a dialog.
-    auto openDialogInstance = Inkscape::UI::Dialog::FileOpenDialog::create(
-        parentWindow,
-        open_path,
-        Inkscape::UI::Dialog::SVG_TYPES,
-        _("Select file to open"));
-
-    // Show the dialog.
-    bool const success = openDialogInstance->show();
-
-    // Save the folder the user selected for later.
-    open_path = openDialogInstance->getCurrentDirectory()->get_path();
-
-    if (!success) {
-        return;
-    }
-
-    // Open selected files.
-    auto *app = InkscapeApplication::instance();
-    auto files = openDialogInstance->getFiles();
-    for (int i = 0; i < files->get_n_items(); i++) {
-        auto file = files->get_typed_object<Gio::File>(i);
-        app->create_window(file);
-    }
-
-    // Save directory to preferences (if only one file selected as we could have files from
-    // multiple directories).
-    if (files->get_n_items() == 1) {
-        open_path = Glib::path_get_dirname(files->get_typed_object<Gio::File>(0)->get_path());
-        open_path.append(G_DIR_SEPARATOR_S);
-        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        prefs->setString("/dialogs/open/path", open_path);
-    }
-
-    return;
-}
 
 /*######################
 ## V A C U U M
@@ -799,7 +752,8 @@ void sp_import_document(SPDesktop *desktop, SPDocument *clipdoc, bool in_place, 
 }
 
 /**
- *  Import a resource.  Called by sp_file_import() (Drag and Drop)
+ *  Import a resource.  Called by document_import() and Drag and Drop.
+ *  The only place 'key' is used non-null is in drag-and-drop of a GDK_TYPE_TEXTURE.
  */
 SPObject *
 file_import(SPDocument *in_doc, const std::string &path, Inkscape::Extension::Extension *key)
@@ -994,52 +948,6 @@ void file_import_pages(SPDocument *this_doc, SPDocument *that_doc)
         }
     }
     set.applyAffine(tr, true, false, true);
-}
-
-/**
- *  Display an Open dialog, import a resource if OK pressed.
- */
-void
-sp_file_import(Gtk::Window &parentWindow)
-{
-    SPDocument *doc = SP_ACTIVE_DOCUMENT;
-    if (!doc) {
-        return;
-    }
-
-    static std::string import_path;
-    Inkscape::UI::Dialog::get_start_directory(import_path, "/dialogs/import/path");
-
-    // Create new dialog (don't use an old one, because parentWindow has probably changed)
-    auto importDialogInstance =
-        Inkscape::UI::Dialog::FileOpenDialog::create(
-            parentWindow,
-            import_path,
-            Inkscape::UI::Dialog::IMPORT_TYPES,
-            (char const *)_("Select file to import"));
-
-    bool success = importDialogInstance->show();
-    if (!success) {
-        return;
-    }
-
-    auto files = importDialogInstance->getFiles();
-    auto extension = importDialogInstance->getExtension();
-    for (int i = 0; i < files->get_n_items(); i++) {
-        auto file = files->get_typed_object<Gio::File>(i);
-        file_import(doc, file->get_path(), extension);
-    }
-
-    // Save directory to preferences (if only one file selected as we could have files from
-    // multiple directories).
-    if (files->get_n_items() == 1) {
-        import_path = Glib::path_get_dirname(files->get_typed_object<Gio::File>(0)->get_path());
-        import_path.append(G_DIR_SEPARATOR_S);
-        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        prefs->setString("/dialogs/import/path", import_path);
-    }
-
-    return;
 }
 
 /*######################

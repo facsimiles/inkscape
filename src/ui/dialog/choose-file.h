@@ -73,6 +73,15 @@ Glib::RefPtr<Gio::File> choose_file_open(Glib::ustring const &title, Gtk::Window
                                          std::string& current_folder,
                                          Glib::ustring const &accept={});
 
+/// Synchronously run a Gtk::FileDialog to open a one or more image files.
+/// @param pref_path Preference path (i.e. "/dialog/open/path").
+/// @returns vector of selected Gio::Files.
+[[nodiscard]]
+std::vector<Glib::RefPtr<Gio::File>> choose_file_open_images(Glib::ustring const &title,
+                                                             Gtk::Window *parent,
+                                                             std::string const &pref_path,
+                                                             Glib::ustring const &accept={});
+
 } // namespace Inkscape
 
 #endif // SEEN_CHOOSE_FILE_H

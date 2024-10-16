@@ -17,6 +17,7 @@
 #include <glibmm/miscutils.h>
 
 #include "preferences.h"
+#include "choose-file-utils.h"
 
 namespace Inkscape {
 
@@ -172,7 +173,57 @@ Glib::RefPtr<Gio::File> choose_file_open(Glib::ustring const &title, Gtk::Window
     return choose_file_open(title, parent, filters_model, current_folder, accept);
 }
 
-} // namespace Inkscape
+// Open one or more image files.
+std::vector<Glib::RefPtr<Gio::File>> choose_file_open_images(Glib::ustring const &title,
+                                                             Gtk::Window* parent,
+                                                             std::string const &pref_path,
+                                                             Glib::ustring const &accept)
+{
+    auto const file_dialog = create_file_dialog(title, accept);
+    auto filter_model = Inkscape::UI::Dialog::create_open_filters();
+    set_filters(*file_dialog, filter_model);
+
+    std::string current_folder;
+    Inkscape::UI::Dialog::get_start_directory(current_folder, pref_path, true);
+    if (current_folder.empty()) {
+        current_folder = Glib::get_home_dir();
+    }
+    file_dialog->set_initial_folder(Gio::File::create_for_path(current_folder));
+
+    bool responded = false;
+    std::vector<Glib::RefPtr<Gio::File>> files;
+
+    file_dialog->open_multiple(*parent, [&](Glib::RefPtr<Gio::AsyncResult> const &result)
+    {
+        try {
+            responded = true;
+
+            files = file_dialog->open_multiple_finish(result);
+            if (files.size() == 0) {
+                return;
+            }
+            if (files.size() == 1) {
+                // Save current_folder.
+                current_folder = files[0]->get_parent()->get_path();
+                Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+                prefs->setString(pref_path, current_folder);
+            }
+        } catch (Gtk::DialogError const &error) {
+            if (error.code() == Gtk::DialogError::Code::DISMISSED) {
+                responded = true;
+            } else {
+                throw;
+            }
+        }
+    }, Glib::RefPtr<Gio::Cancellable>{});
+
+    auto const main_context = Glib::MainContext::get_default();
+    while (!responded) {
+        main_context->iteration(true);
+    }
+
+    return files;
+}} // namespace Inkscape
 
 /*
   Local Variables:

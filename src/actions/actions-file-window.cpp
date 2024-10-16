@@ -23,6 +23,7 @@
 #include "desktop.h"
 #include "file.h"
 #include "preferences.h"
+#include "ui/dialog/choose-file.h"
 #include "ui/dialog/save-template-dialog.h"
 #include "ui/dialog/new-from-template.h"
 
@@ -42,7 +43,11 @@ void
 document_open(InkscapeWindow* win)
 {
     // Open File Dialog
-    sp_file_open_dialog(*win, nullptr, nullptr);
+    auto files = Inkscape::choose_file_open_images(_("Select file(s) to open"), win, "/dialog/open/path", _("Open"));
+    auto *app = InkscapeApplication::instance();
+    for (auto file : files) {
+        app->create_window(file);
+    }
 }
 
 void
@@ -82,9 +87,12 @@ document_save_template(InkscapeWindow* win)
 void
 document_import(InkscapeWindow* win)
 {
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-
-    sp_file_import(*win);
+    // Import File Dialog
+    auto files = Inkscape::choose_file_open_images(_("Select file(s) to import"), win, "/dialog/import/path", _("Import"));
+    auto document = win->get_document(); // Target document.
+    for (auto file : files) {
+        file_import(document, file->get_path(), nullptr);
+    }
 }
 
 void
