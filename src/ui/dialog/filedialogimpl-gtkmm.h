@@ -84,43 +84,6 @@ protected:
     std::map<Inkscape::Extension::Extension *, Glib::RefPtr<Gtk::FileFilter>> extensionFilterMap;
 };
 
-/*#########################################################################
-### F I L E    O P E N
-#########################################################################*/
-
-/**
- * Our implementation class for the FileOpenDialog interface..
- */
-class FileOpenDialogImplGtk final
-    : public FileOpenDialog
-    , public FileDialogBaseGtk
-{
-public:
-    FileOpenDialogImplGtk(Gtk::Window& parentWindow,
-                          std::string const &dir,
-                          FileDialogType fileTypes,
-                          Glib::ustring const &title);
-
-    bool show() override;
-
-    void setSelectMultiple(bool value) override { set_select_multiple(value); }
-    Glib::RefPtr<Gio::ListModel> getFiles() override { return get_files(); }
-    Glib::RefPtr<Gio::File> getFile() override { return get_file(); }
-
-    Glib::RefPtr<Gio::File> getCurrentDirectory() override { return get_current_folder(); }
-
-    void addFilterMenu(Glib::ustring const &name, Glib::ustring pattern = "",
-                       Inkscape::Extension::Extension *mod = nullptr) override
-    {
-        addFilter(name, pattern, mod);
-    }
-
-private:
-    /**
-     *  Create a filter menu for this type of dialog
-     */
-    void createFilterMenu();
-};
 
 //########################################################################
 //# F I L E    S A V E

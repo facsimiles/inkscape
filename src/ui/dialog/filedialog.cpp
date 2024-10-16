@@ -73,20 +73,6 @@ bool isValidImageFile(const Glib::ustring &fileName)
     return false;
 }
 
-/*#########################################################################
-  ### F I L E    O P E N
-  #########################################################################*/
-
-/**
- * Public factory.  Called by file.cpp, among others.
- */
-std::unique_ptr<FileOpenDialog> FileOpenDialog::create(Gtk::Window &parentWindow,
-                                                       std::string const &path,
-                                                       FileDialogType fileTypes,
-                                                       char const *title)
-{
-    return std::make_unique<FileOpenDialogImplGtk>(parentWindow, path, fileTypes, title);
-}
 
 //########################################################################
 //# F I L E    S A V E

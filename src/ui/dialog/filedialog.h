@@ -114,35 +114,6 @@ protected:
 };
 
 /**
- * This class provides an implementation-independent API for
- * file "Open" dialogs.  Using a standard interface obviates the need
- * for ugly #ifdefs in file open code
- */
-class FileOpenDialog : public FileDialog
-{
-public:
-    virtual ~FileOpenDialog() = default;
-
-    /**
-     * Factory.
-     * @param path the directory where to start searching
-     * @param fileTypes one of FileDialogTypes
-     * @param title the title of the dialog
-     */
-    static std::unique_ptr<FileOpenDialog> create(Gtk::Window &parentWindow,
-                                                  std::string const &path,
-                                                  FileDialogType fileTypes,
-                                                  char const *title);
-
-    virtual void setSelectMultiple(bool value) = 0;
-    virtual Glib::RefPtr<Gio::ListModel> getFiles() = 0;
-    virtual Glib::RefPtr<Gio::File> getFile() = 0;
-
-protected:
-    FileOpenDialog() = default;
-};
-
-/**
  * This class provides an implementation-independent API for file "Save" dialogs.
  */
 class FileSaveDialog : public FileDialog
