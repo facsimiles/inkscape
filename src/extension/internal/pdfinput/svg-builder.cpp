@@ -357,7 +357,7 @@ void SvgBuilder::_setClipPath(Inkscape::XML::Node *node)
         if (auto attr = node->attribute("transform")) {
             sp_svg_transform_read(attr, &tr);
         }
-        if (auto clip_path = _getClip(tr)) {
+        if (auto clip_path = _getClip(tr) && _hasClipEffect(node, clip_path)) {
             gchar *urltext = g_strdup_printf("url(#%s)", clip_path->attribute("id"));
             node->setAttribute("clip-path", urltext);
             g_free(urltext);
@@ -831,17 +831,13 @@ Inkscape::XML::Node *SvgBuilder::_createClip(const std::string &d, const Geom::A
 {
     if (_prev_clip) {
         // Check if the previous clipping path would be identical to the new one.
-        std::string prev_d = _prev_clip->firstChild()->attribute("d");
-        std::string prev_tr = sp_svg_transform_write(Geom::identity());
-        if (_prev_clip->firstChild()->attribute("transform")) {
-            prev_tr = _prev_clip->firstChild()->attribute("transform");
-        }
-
-        bool prev_even_odd = false;
-        if (_prev_clip->firstChild()->attribute("clip-rule")) {
-            prev_even_odd = _prev_clip->firstChild()->attribute("clip-rule") == "evenodd";
-        }
-
+        auto prev_path = _prev_clip->firstChild();
+        std::string prev_d = prev_path->attribute("d");
+        std::string prev_tr = prev_path->attribute("transform") ? prev_path->attribute("transform")
+                                                                : sp_svg_transform_write(Geom::identity());
+        bool prev_even_odd = prev_path->attribute("clip-rule") ? prev_path->attribute("clip-rule") == "evenodd" : false;
+        
+        // Don't create an identical new clipping path
         if (prev_d == d && prev_tr == sp_svg_transform_write(tr) && prev_even_odd == even_odd) {
             return _prev_clip;
         }
