@@ -70,7 +70,7 @@
 #include "object/sp-root.h"
 #include "object/sp-script.h"
 #include "streq.h"
-#include "ui/dialog/filedialog.h"
+#include "ui/dialog/choose-file.h"
 #include "ui/icon-loader.h"
 #include "ui/icon-names.h"
 #include "ui/pack.h"
@@ -1117,8 +1117,6 @@ void DocumentProperties::addExternalScript(){
     }
 }
 
-static Inkscape::UI::Dialog::FileOpenDialog * selectPrefsFileInstance = nullptr;
-
 void  DocumentProperties::browseExternalScript() {
 
     // Get the current directory for finding files.
@@ -1126,39 +1124,22 @@ void  DocumentProperties::browseExternalScript() {
     Inkscape::UI::Dialog::get_start_directory(open_path, _prefs_path);
 
     // Create a dialog.
-    SPDesktop *desktop = getDesktop();
-    if (desktop && !selectPrefsFileInstance) {
-        selectPrefsFileInstance =
-            Inkscape::UI::Dialog::FileOpenDialog::create(
-                *desktop->getInkscapeWindow(),
-                open_path,
-                Inkscape::UI::Dialog::CUSTOM_TYPE,
-                _("Select a script to load")).release();
-        selectPrefsFileInstance->addFilterMenu(_("JavaScript Files"), "*.js");
-    }
+    static std::vector<std::pair<Glib::ustring, Glib::ustring>> const filters {
+        {_("JavaScript Files"), "*.js"}
+    };
 
-    // Show the dialog.
-    bool const success = selectPrefsFileInstance->show();
+    auto window = getDesktop()->getInkscapeWindow();
+    auto file = choose_file_open(_("Select a script to load"),
+                                 window,
+                                 filters,
+                                 open_path);
 
-    if (!success) {
-        return;
-    }
-
-    // User selected something, get file.
-    auto file = selectPrefsFileInstance->getFile();
     if (!file) {
-        return;
+        return; // Cancel
     }
 
-    auto path = file->get_path();
-    if (!path.empty()) {
-        open_path = path;;
-    }
-
-    if (!open_path.empty()) {
-        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        prefs->setString(_prefs_path, open_path);
-    }
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    prefs->setString(_prefs_path, open_path);
 
     _script_entry.set_text(file->get_parse_name());
 }

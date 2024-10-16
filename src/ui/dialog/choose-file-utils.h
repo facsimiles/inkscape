@@ -8,6 +8,10 @@
 #include <vector>
 #include <glibmm/refptr.h>
 
+namespace Gio {
+template <typename> class ListStore;
+} // namespace Gio
+
 namespace Glib {
 class ustring;
 }
@@ -20,6 +24,10 @@ namespace Inkscape::UI::Dialog {
 
 /// Find the start directory for a file dialog.
 void get_start_directory(std::string &start_path, Glib::ustring const &prefs_path, bool try_document_dir = false);
+
+/// Create a Gtk::FileFilter for all image file types.
+[[nodiscard]] Glib::RefPtr<Gio::ListStore<Gtk::FileFilter>> create_open_filters();
+
 
 } // namespace Inkscape::UI::Dialog
 
