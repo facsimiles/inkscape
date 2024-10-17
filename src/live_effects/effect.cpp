@@ -1474,7 +1474,7 @@ void Effect::doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/)
 {
 }
 
-void Effect::adjustForNewPath()
+void Effect::adjustForNewPath(bool removed)
 {
     _adjust_path = true;
 }
