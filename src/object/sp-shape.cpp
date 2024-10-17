@@ -122,16 +122,25 @@ Inkscape::XML::Node* SPShape::write(Inkscape::XML::Document *xml_doc, Inkscape::
 	return repr;
 }
 
+void SPShape::set_item_transform(Geom::Affine const &transform_matrix)
+{
+    // when we release the mouse still have transform as affine 
+    // we check the affine is empty to allow recheck the bbox cache
+    cache_bbox_valid = !Geom::are_near(transform_matrix, Geom::Affine());
+    SPItem::set_item_transform(transform_matrix);
+}
+
 void SPShape::update(SPCtx* ctx, guint flags) {
     // Any update can change the bounding box,
     // so the cached version can no longer be used.
     // But the idle checker usually is just moving the objects around.
-    bbox_vis_cache_is_valid = false;
-    bbox_geom_cache_is_valid = false;
-
+    if (!cache_bbox_valid) {
+        bbox_vis_cache_is_valid = false;
+        bbox_geom_cache_is_valid = false;
+    }
+    cache_bbox_valid = false;
     // std::cout << "SPShape::update(): " << (getId()?getId():"null") << std::endl;
     SPLPEItem::update(ctx, flags);
-
     /* This stanza checks that an object's marker style agrees with
      * the marker objects it has allocated.  sp_shape_set_marker ensures
      * that the appropriate marker objects are present (or absent) to
@@ -541,7 +550,8 @@ Geom::OptRect SPShape::either_bbox(Geom::Affine const &transform, SPItem::BBoxTy
     // Return the cache if possible.
     auto delta = transform_cache.inverse() * transform;
     if (cache_is_valid && bbox_cache && delta.isTranslation()) {
-
+        // uncomenting cout fail some output based tests
+        // std::cout << "using cache bbox" << std::endl;
         // Don't re-adjust the cache if we haven't moved
         if (!delta.isNonzeroTranslation()) {
             return bbox_cache;
@@ -549,7 +559,7 @@ Geom::OptRect SPShape::either_bbox(Geom::Affine const &transform, SPItem::BBoxTy
         // delta is pure translation so it's safe to use it as is
         return *bbox_cache * delta;
     }
-
+    // std::cout << "not using cache bbox" << std::endl;
     if (!this->_curve || this->_curve->get_pathvector().empty()) {
     	return bbox;
     }
