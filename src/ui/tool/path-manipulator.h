@@ -17,6 +17,7 @@
 #include <2geom/pathvector.h>
 #include <2geom/path-sink.h>
 #include <2geom/affine.h>
+#include <2geom/sbasis-to-bezier.h>
 #include "ui/tool/node.h"
 #include "ui/tool/manipulator.h"
 #include "display/curve.h"
@@ -96,6 +97,9 @@ public:
     void reverseSubpaths(bool selected_only);
     void setSegmentType(SegmentType);
 
+    void setArcSegmentLarge(bool large);
+    void toggleArcSegmentSweep();
+
     void scaleHandle(Node *n, int which, int dir, bool pixel);
     void rotateHandle(Node *n, int which, int dir, bool pixel);
 
@@ -113,6 +117,7 @@ public:
     NodeList::iterator subdivideSegment(NodeList::iterator after, double t);
     NodeList::iterator extremeNode(NodeList::iterator origin, bool search_selected,
     bool search_unselected, bool closest);
+    void replaceSegmentWithPath(NodeList::iterator segment, Geom::Path newPath);
 
     int _bsplineGetSteps() const;
     // this is necessary for Tab-selection in MultiPathManipulator

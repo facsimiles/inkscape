@@ -881,24 +881,108 @@ void PathManipulator::reverseSubpaths(bool selected_only)
 void PathManipulator::setSegmentType(SegmentType type)
 {
     if (_selection.empty()) return;
+
+    // Changing arc segments to cubic beziers can introduce new nodes.
+    // For these non-trivial updates we record the changes required and apply them at the end.
+    std::vector<std::tuple<NodeList::iterator, Geom::Path>> nontrivial_replacements;
+
     for (auto & _subpath : _subpaths) {
         for (NodeList::iterator j = _subpath->begin(); j != _subpath->end(); ++j) {
             NodeList::iterator k = j.next();
             if (!(k && j->selected() && k->selected())) continue;
             switch (type) {
             case SEGMENT_STRAIGHT:
-                if (j->front()->isDegenerate() && k->back()->isDegenerate())
+                if ((j->front()->isDegenerate() && k->back()->isDegenerate()) &&
+                    (j->arc_rx()->isDegenerate() && j->arc_ry()->isDegenerate()))
                     break;
                 j->front()->move(j->position());
                 k->back()->move(k->position());
+                j->retractArcHandles();
                 break;
             case SEGMENT_CUBIC_BEZIER:
-                if (!j->front()->isDegenerate() || !k->back()->isDegenerate())
+                if (!j->front()->isDegenerate() || !k->back()->isDegenerate()) {
+                    // Already a cubic bezier
                     break;
+                }
+                if (!j->arc_rx()->isDegenerate() || !j->arc_ry()->isDegenerate()) {
+                    // This is an elliptical arc that is being converted to a cubic bezier
+                    // Generate the bezier path and use it to replace the current segment
+                    Geom::Path cubicbezier_path =
+                        Geom::cubicbezierpath_from_sbasis(j->getEllipticalArc().toSBasis(), 0.1);
+                    std::tuple<NodeList::iterator, Geom::Path> replacement = std::make_tuple(j, cubicbezier_path);
+                    nontrivial_replacements.push_back(replacement);
+                    break;
+                }
+
                 // move both handles to 1/3 of the line
                 j->front()->move(j->position() + (k->position() - j->position()) / 3);
                 k->back()->move(k->position() + (j->position() - k->position()) / 3);
+                j->retractArcHandles();
                 break;
+            case SEGMENT_ELLIPTICAL_ARC:
+                if (!(j->front()->isDegenerate() && k->back()->isDegenerate())) {
+                    j->front()->move(j->position());
+                    k->back()->move(k->position());
+                }
+
+                if (j->arc_rx()->isDegenerate() && j->arc_ry()->isDegenerate()) {
+                    Geom::Point midPointOffset = ((k->position() - j->position()) / 2);
+                    Geom::Point handleOrigin = j->position() + midPointOffset;
+
+                    j->arc_rx()->setOffset(midPointOffset);
+                    j->arc_ry()->setOffset(midPointOffset);
+                    j->arc_rx()->move(j->position() + ((k->position() - handleOrigin) / 2));
+                    j->updateArcHandleConstriants(j->arc_rx());
+                }
+                break;
+            }
+        }
+    }
+
+    for (auto r : nontrivial_replacements) {
+        auto j = std::get<0>(r);
+        auto cubicbezier_path = std::get<1>(r);
+        replaceSegmentWithPath(j, cubicbezier_path);
+    }
+}
+
+/** Set the large flag on selected arcs */
+void PathManipulator::setArcSegmentLarge(bool large)
+{
+    if (_selection.empty()) {
+        return;
+    }
+    for (auto i : _subpaths) {
+        for (NodeList::iterator j = i->begin(); j != i->end(); ++j) {
+            NodeList::iterator k = j.next();
+            if (!(k && j->selected() && k->selected())) {
+                continue;
+            }
+            // This code executes for every selected segment
+            if (!j->arc_rx()->isDegenerate() || !j->arc_ry()->isDegenerate()) {
+                // This code executes for every selected ARC segment
+                *(j->arc_large()) = large;
+            }
+        }
+    }
+}
+
+/** Set the sweep flag on selected arcs */
+void PathManipulator::toggleArcSegmentSweep()
+{
+    if (_selection.empty()) {
+        return;
+    }
+    for (auto i : _subpaths) {
+        for (NodeList::iterator j = i->begin(); j != i->end(); ++j) {
+            NodeList::iterator k = j.next();
+            if (!(k && j->selected() && k->selected())) {
+                continue;
+            }
+            // This code executes for every selected segment
+            if (!j->arc_rx()->isDegenerate() || !j->arc_ry()->isDegenerate()) {
+                // This code executes for every selected ARC segment
+                *(j->arc_sweep()) = !*j->arc_sweep();
             }
         }
     }
@@ -1168,6 +1252,72 @@ NodeList::iterator PathManipulator::extremeNode(NodeList::iterator origin, bool 
     return match;
 }
 
+/** Replace a segment with a path.
+ * @param segment The segment to replace
+ * @param newPath The path to insert in place of 'segment'
+ *
+ * Currently, newPath must be composed only of cubic beziers, the caller must
+ * ensure that the path only contains cubic beziers (until other segments are
+ * implemented in this function)  */
+void PathManipulator::replaceSegmentWithPath(NodeList::iterator segment, Geom::Path newPath)
+{
+    if (!segment) {
+        throw std::invalid_argument("Invalid iterator for replacement");
+    }
+    NodeList &list = NodeList::get(segment);
+    NodeList::iterator insert_at = segment.next();
+    if (!insert_at) {
+        throw std::invalid_argument("Replace after last node in open path");
+    }
+
+    // Retract all handles relating to this segment
+    segment->retractArcHandles();
+    segment->front()->retract();
+
+    // Path is to be inserted in reverse order
+    Geom::Path reversedPath = newPath.reversed();
+
+    // Iterate over the path
+    for (Geom::Path::iterator i = reversedPath.begin(); i != reversedPath.end(); ++i) {
+        const Geom::Curve &thisCurve = *i;
+
+        // Try converting to a bezier
+        const Geom::BezierCurve *bezier = dynamic_cast<const Geom::BezierCurve *>(&thisCurve);
+        if (bezier) {
+            // Check order of bezier (currently only cubic beziers are supported)
+            if (bezier->order() == 3) {
+                auto bez = *bezier;
+                if (std::next(i) == reversedPath.end()) {
+                    (*insert_at).back()->setPosition((*bezier)[1]);
+                    insert_at.prev()->front()->setPosition((*bezier)[2]);
+                } else {
+                    // Create one new node
+                    Node *newNode = new Node(_multi_path_manipulator._path_data.node_data, bezier->finalPoint());
+                    newNode->front()->setPosition((*bezier)[2]);
+                    auto p = (*bezier)[1];
+                    auto b = insert_at->back();
+                    b->setPosition(p);
+                    // All new nodes are smooth
+                    newNode->setType(NODE_SMOOTH, false);
+
+                    // Insert new node
+                    list.insert(insert_at, newNode);
+                    // Move along to next node
+                    insert_at--;
+                }
+            } else {
+                throw std::invalid_argument(
+                    "Only cubic bezier curves are implemented in PathManipulator::replaceSegment."
+                    " newPath contains beziers with order!=3.");
+            }
+        } else {
+            // Not a bezier
+            throw std::invalid_argument("Only cubic bezier curves are implemented in PathManipulator::replaceSegment."
+                                        " newPath contains non-bezier segments.");
+        }
+    }
+}
+
 /* Called when a process updates the path in-situe */
 void PathManipulator::updatePath()
 {
@@ -1241,8 +1391,9 @@ void PathManipulator::_createControlPointsFromGeometry()
     if (_is_bspline) {
         pathv = pathv_to_cubicbezier(_spcurve.get_pathvector(), false);
     } else {
-        pathv = pathv_to_linear_and_cubic_beziers(_spcurve.get_pathvector());
+        pathv = pathv_to_linear_and_cubic_beziers_and_arcs(_spcurve.get_pathvector());
     }
+
     for (Geom::PathVector::iterator i = pathv.begin(); i != pathv.end(); ) {
         // NOTE: this utilizes the fact that Geom::PathVector is an std::vector.
         // When we erase an element, the next one slides into position,
@@ -1286,14 +1437,19 @@ void PathManipulator::_createControlPointsFromGeometry()
                 subpath->push_back(current_node);
             }
             // if this is a bezier segment, move handles appropriately
-            // TODO: I don't know why the dynamic cast below doesn't want to work
-            //       when I replace BezierCurve with CubicBezier. Might be a bug
-            //       somewhere in pathv_to_linear_and_cubic_beziers
-            Geom::BezierCurve const *bezier = dynamic_cast<Geom::BezierCurve const*>(&*cit);
-            if (bezier && bezier->order() == 3)
-            {
+            Geom::BezierCurve const *bezier = dynamic_cast<Geom::BezierCurve const *>(&*cit);
+            if (bezier && bezier->order() == 3) {
                 previous_node->front()->setPosition((*bezier)[1]);
                 current_node ->back() ->setPosition((*bezier)[2]);
+            }
+            Geom::EllipticalArc const *arc = dynamic_cast<Geom::EllipticalArc const *>(&*cit);
+            if (arc) {
+                Geom::Coord angleX = arc->rotationAngle();
+                Geom::Coord angleY = angleX + Geom::rad_from_deg(90);
+                previous_node->moveArcHandles(current_node->position() - previous_node->position(), arc->ray(Geom::X),
+                                              arc->ray(Geom::Y), angleX, angleY);
+                *(previous_node->arc_large()) = arc->largeArc();
+                *(previous_node->arc_sweep()) = arc->sweep();
             }
             previous_node = current_node;
         }
@@ -1445,8 +1601,9 @@ void PathManipulator::_createGeometryFromControlPoints(bool alert_LPE)
         }
         if (subpath->closed()) {
             // Here we link the last and first node if the path is closed.
-            // If the last segment is Bezier, we add it.
-            if (!prev->front()->isDegenerate() || !subpath->begin()->back()->isDegenerate()) {
+            // If the last segment is Bezier or arc, we add it.
+            if (!prev->front()->isDegenerate() || !subpath->begin()->back()->isDegenerate() ||
+                !prev->arc_rx()->isDegenerate() || !prev->arc_ry()->isDegenerate()) {
                 build_segment(builder, prev.ptr(), subpath->begin().ptr());
             }
             // if that segment is linear, we just call closePath().
@@ -1498,17 +1655,23 @@ void PathManipulator::_createGeometryFromControlPoints(bool alert_LPE)
  * @relates PathManipulator */
 void build_segment(Geom::PathBuilder &builder, Node *prev_node, Node *cur_node)
 {
-    if (cur_node->back()->isDegenerate() && prev_node->front()->isDegenerate())
-    {
-        // NOTE: It seems like the renderer cannot correctly handle vline / hline segments,
-        // and trying to display a path using them results in funny artifacts.
-        builder.lineTo(cur_node->position());
+    if (prev_node->arc_rx()->isDegenerate() || prev_node->arc_ry()->isDegenerate()) {
+        // This is not an eliptical arc, check if it is a straight line or bezier
+        if (cur_node->back()->isDegenerate() && prev_node->front()->isDegenerate()) {
+            // NOTE: It seems like the renderer cannot correctly handle vline / hline segments,
+            // and trying to display a path using them results in funny artifacts.
+            builder.lineTo(cur_node->position());
+        } else {
+            // this is a bezier segment
+            builder.curveTo(prev_node->front()->position(), cur_node->back()->position(), cur_node->position());
+        }
     } else {
-        // this is a bezier segment
-        builder.curveTo(
-            prev_node->front()->position(),
-            cur_node->back()->position(),
-            cur_node->position());
+        // This is an eliptical arc, get the x and y set by the xy handle
+        Geom::Coord rx = prev_node->arc_rx()->length();
+        Geom::Coord ry = prev_node->arc_ry()->length();
+        Geom::Angle rot = prev_node->arc_rx()->angle();
+
+        builder.arcTo(rx, ry, rot, *prev_node->arc_large(), *prev_node->arc_sweep(), cur_node->position());
     }
 }
 
