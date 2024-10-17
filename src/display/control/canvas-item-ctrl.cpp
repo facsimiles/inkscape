@@ -212,6 +212,10 @@ void CanvasItemCtrl::set_shape(CanvasItemCtrlShape shape)
     });
 }
 
+Geom::Point CanvasItemCtrl::get_position() const {
+    return _position;
+}
+
 void CanvasItemCtrl::_set_size(int size)
 {
     defer([=, this] {

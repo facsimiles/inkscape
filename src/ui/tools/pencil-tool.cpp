@@ -309,7 +309,7 @@ bool PencilTool::_handleMotionNotify(MotionEvent const &event) {
 
                 if ( !sa && !green_anchor ) {
                     /* Create green anchor */
-                    green_anchor = std::make_unique<SPDrawAnchor>(this, green_curve, true, p_array[0]);
+                    green_anchor = std::make_shared<SPDrawAnchor>(this, green_curve, true, p_array[0]);
                 }
                 if (anchor) {
                     p = anchor->dp;
