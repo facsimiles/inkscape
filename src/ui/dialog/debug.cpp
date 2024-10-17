@@ -17,8 +17,8 @@ namespace Inkscape::UI::Dialog {
 Debug::Debug()
     : DialogBase("/dialogs/debug", "DebugWindow")
 {
-    notebook.append_page(memory);
-    notebook.append_page(messages);
+    notebook.append_page(memory, "Memory");
+    notebook.append_page(messages, "Messages");
 
     insert_child_at_start(notebook);
 };
