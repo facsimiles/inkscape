@@ -141,7 +141,7 @@ void BatchItem::init(std::shared_ptr<PreviewDrawing> drawing) {
     set_valign(Gtk::Align::START);
     set_halign(Gtk::Align::START);
     set_child(_grid);
-    this->set_focusable(false);
+    set_focusable(false);
 
     _selector.signal_toggled().connect([this]() {
         set_selected(_selector.get_active());
@@ -197,13 +197,15 @@ void BatchItem::on_mode_changed(Gtk::SelectionMode mode)
 /**
  * Update the connection to the parent FlowBox
  */
-void BatchItem::on_parent_changed() {
+void BatchItem::on_parent_changed()
+{
     auto parent = dynamic_cast<Gtk::FlowBox *>(get_parent());
-    if (!parent)
+    if (!parent) {
         return;
+    }
 
     _selection_widget_changed_conn = parent->signal_selected_children_changed().connect([this]() {
-        // Syncronise the active widget state to the Flowbox selection.
+        // Synchronise the active widget state to the Flowbox selection.
         if (_selector.get_visible()) {
             _selector.set_active(is_selected());
         } else if (_option.get_visible()) {
@@ -212,14 +214,18 @@ void BatchItem::on_parent_changed() {
     });
     update_selected();
 
-    if (auto first = dynamic_cast<BatchItem *>(parent->get_child_at_index(0))) {
-        auto group = first->get_radio_group();
-        _option.set_group(*group);
+    for (auto child = parent->get_first_child(); child; child = child->get_next_sibling()) {
+        if (child != this) {
+            if (auto item = dynamic_cast<BatchItem *>(child)) {
+                auto group = item->get_radio_group();
+                _option.set_group(*group);
+                break;
+            }
+        }
     }
 }
 
-
-void BatchItem::refresh(bool hide, guint32 bg_color)
+void BatchItem::refresh(bool hide, uint32_t bg_color)
 {
     if (_page) {
         _preview.setBox(_page->getDocumentRect());
@@ -231,10 +237,16 @@ void BatchItem::refresh(bool hide, guint32 bg_color)
     // So all items must be packed differently on refresh.
     if (hide != is_hide) {
         is_hide = hide;
-        _grid.remove(_selector);
-        _grid.remove(_option);
-        _grid.remove(_label);
-        _grid.remove(_preview);
+
+        auto remove_grid_child = [&] (Gtk::Widget &widget) {
+            if (widget.get_parent() == &_grid) {
+                _grid.remove(widget);
+            }
+        };
+        remove_grid_child(_selector);
+        remove_grid_child(_option);
+        remove_grid_child(_label);
+        remove_grid_child(_preview);
 
         if (hide) {
             _selector.set_valign(Gtk::Align::BASELINE);
