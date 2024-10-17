@@ -1326,6 +1326,11 @@
           <attribute name="action">win.help-url-donate</attribute>
         </item>
         <item>
+          <attribute name="label" translatable="yes">Open Debugger</attribute>
+          <attribute name="action">win.dialog-open</attribute>
+          <attribute name="target">DebugWindow</attribute>
+        </item>
+        <item>
           <attribute name="label" translatable="yes">_About Inkscape</attribute>
           <attribute name="action">app.about</attribute>
           <attribute name="icon">inkscape-logo</attribute>

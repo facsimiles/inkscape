@@ -49,8 +49,9 @@ Messages::Messages()
     UI::pack_start(*this, textScroll);
 
     buttonBox.set_spacing(6);
-    UI::pack_start(buttonBox, checkCapture, true, true, 6);
-    UI::pack_end(buttonBox, buttonClear, false, false, 10);
+    buttonBox.set_margin(4);
+    UI::pack_start(buttonBox, checkCapture, true, true);
+    UI::pack_end(buttonBox, buttonClear, false, false);
     UI::pack_start(*this, buttonBox, UI::PackOptions::shrink);
 
     // sick of this thing shrinking too much

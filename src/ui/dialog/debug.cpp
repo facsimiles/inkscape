@@ -20,7 +20,7 @@ Debug::Debug()
     notebook.append_page(memory, "Memory");
     notebook.append_page(messages, "Messages");
 
-    insert_child_at_start(notebook);
+    append(notebook);
 };
 
 Debug::~Debug() = default;

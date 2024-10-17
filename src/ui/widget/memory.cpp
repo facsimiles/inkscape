@@ -168,7 +168,8 @@ void Memory::Private::stop_update_task()
 }
 
 Memory::Memory()
-    : _private(std::make_unique<Private>())
+    : Gtk::Box(Gtk::Orientation::VERTICAL)
+    , _private(std::make_unique<Private>())
 {
     UI::pack_start(*this, _private->view);
 
