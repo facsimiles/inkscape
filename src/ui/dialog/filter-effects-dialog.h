@@ -311,6 +311,7 @@ class FilterEditorNode : public Gtk::Box{
         bool is_selected = false;
 
         void prepare_for_delete();
+        virtual void update_position_from_document(){};
         virtual void set_result_string(std::string _result_string);
         virtual void set_sink_result(FilterEditorSink* sink, std::string result_string);
         virtual void set_sink_result(FilterEditorSink* sink, int inp_index);
@@ -346,7 +347,7 @@ class FilterEditorPrimitiveNode : public FilterEditorNode{
         SPFilterPrimitive *get_primitive();
 
         std::string get_result_string();
-        void update_position_from_document();
+        void update_position_from_document() override;
         virtual void update_sink_results();
         virtual void set_sink_result(FilterEditorSink* sink, std::string result_string);
         virtual void set_sink_result(FilterEditorSink* sink, int inp_index);
@@ -391,6 +392,10 @@ class FilterEditorOutputNode : public FilterEditorNode{
         FilterEditorSink* get_sink();
         virtual void set_sink_result(FilterEditorSink* sink, std::string result_string);
         virtual void set_sink_result(FilterEditorSink* sink, int inp_index);
+        void update_position_from_document() override;
+        void update_filter(SPFilter* _filter) {
+            filter = _filter;
+        };
     protected:
         SPFilter* filter;
 };
@@ -399,8 +404,6 @@ class FilterEditorOutputNode : public FilterEditorNode{
 
 
 class FilterEditorCanvas : public Gtk::ScrolledWindow{
-// class FilterEditorCanvas : public Gtk::Grid{
-// class FilterEditorCanvas : public Gtk::Window{
     public:
         friend class FilterEditorFixed;
         FilterEditorCanvas(FilterEffectsDialog& dialog);
@@ -469,6 +472,19 @@ class FilterEditorCanvas : public Gtk::ScrolledWindow{
         void update_filter(SPFilter* filter);
         void update_document(bool add_undo = false);
         void update_document_new(bool add_undo = false);
+
+
+        /* Utility functions for testing and assertions, to be removed later*/
+        /* 
+        Check if there are any two primitives in the currently selected filter
+        with the same result, if yes, returns false.
+        Use with an error in cases to ensure that no two primitives have the same
+        results, at plaaces where the check is required
+
+        */
+
+        bool check_all_different_result_names(); 
+
 
         std::vector<SPFilter*> filter_list;
         int current_filter_id = -1;

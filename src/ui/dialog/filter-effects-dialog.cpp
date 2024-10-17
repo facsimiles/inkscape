@@ -41,6 +41,7 @@
 #include "filter-enums.h"
 #include "inkscape-window.h"
 #include "layer-manager.h"
+#include "display/nr-filter-types.h"
 #include "object/filters/blend.h"
 #include "object/filters/colormatrix.h"
 #include "object/filters/componenttransfer-funcnode.h"
@@ -51,6 +52,7 @@
 #include "object/filters/mergenode.h"
 #include "object/filters/pointlight.h"
 #include "object/filters/spotlight.h"
+#include "object/filters/sp-filter-primitive.h"
 #include "preferences.h"
 #include "selection-chemistry.h"
 #include "selection.h"
@@ -98,7 +100,7 @@ static int input_count(const SPFilterPrimitive* prim);
 
 FilterEditorNode::FilterEditorNode(int node_id, int x, int y, 
                                    Glib::ustring label_text, int num_sources, int num_sinks)
-    : Gtk::Box(Gtk::Orientation::VERTICAL, -10)
+    : Gtk::Box(Gtk::Orientation::VERTICAL, 0)
     , node_id(node_id)
     , x(x)
     , y(y)
@@ -439,7 +441,10 @@ void FilterEditorOutputNode::set_sink_result(FilterEditorSink* sink, std::string
 void FilterEditorOutputNode::set_sink_result(FilterEditorSink* sink, int inp_index){
     return;
 }
-
+void FilterEditorOutputNode::update_position_from_document(){
+    x = filter->getRepr()->getAttributeDouble("inkscape:output-x", x);
+    y = filter->getRepr()->getAttributeDouble("inkscape:output-y", y);
+}
 FilterEditorSource::FilterEditorSource(FilterEditorNode* _node, Glib::ustring _label_string)
     : Gtk::Box(Gtk::Orientation::VERTICAL, 0)
     , label_string(_label_string)
@@ -1215,7 +1220,9 @@ void FilterEditorCanvas::update_canvas_new(){
             selected_nodes.insert({current_filter_id, std::vector<FilterEditorNode*>()});
             connections.insert({current_filter_id, std::vector<FilterEditorConnection*>()});
             result_manager.insert({current_filter_id, std::map<Glib::ustring, FilterEditorPrimitiveNode*> ()});
-            output_node = create_output_node(filter, 100, 100, "Output");
+            double x_position = filter->getRepr()->getAttributeDouble("inkscape:output-x", 100.0);
+            double y_position = filter->getRepr()->getAttributeDouble("inkscape:output-y", 100.0);
+            output_node = create_output_node(filter, x_position, y_position, "Output");
             // g_message("Output node created %d", __LINE__);
         }
 
@@ -1225,6 +1232,8 @@ void FilterEditorCanvas::update_canvas_new(){
             output_node = create_output_node(filter, 100, 100, "Output");
         }
         place_node(output_node, output_node->x, output_node->y);
+        output_node->update_filter(filter);
+        output_node->update_position_from_document();
         auto connections_copy = connections[current_filter_id];
         for(auto conn : connections_copy){
             destroy_connection(conn, false);
@@ -1812,21 +1821,57 @@ void FilterEditorCanvas::update_canvas(){
 void FilterEditorCanvas::duplicate_nodes(){
     // for(auto node : selected_nodes){
     // Should I update the document first?
-    std::map<Glib::ustring, Glib::ustring> old_to_new_map;
+    modify_observer(true);
+    auto filter = _dialog._filter_modifier.get_selected_filter();
+    if(!filter){
+        return;
+    }
+
+    /*
+    Approach for duplicating:
+    Duplicate the primitives for each of the nodes. To preserve the connections,
+    the approach is to copy all the nodes and place them at the start of the document
+    since anyways, they wouldn't be connected to the output node after copying,
+    and so we can safely place them at the start of the document.
+    The order to be placed is the order in which they occur in the document,
+    this way connections will be copied
+    */
+    std::vector<SPFilterPrimitive*> primitives_order;
+    for(auto &child : filter->children){
+        auto prim = cast<SPFilterPrimitive>(&child);
+        if(prim == nullptr){
+            continue;
+        }
+        primitives_order.push_back(prim);
+
+    }
+    std::set<std::pair<int, SPFilterPrimitive*>> new_primitives;
     for(auto node : selected_nodes[current_filter_id]){
         if(dynamic_cast<FilterEditorPrimitiveNode*>(node) != nullptr){
             auto prim_node = dynamic_cast<FilterEditorPrimitiveNode *>(node);
             auto prim = prim_node->get_primitive();
-            auto new_prim = prim->getRepr()->duplicate(prim->getRepr()->document());
+            // auto new_prim = prim->getRepr()->duplicate(prim->getRepr()->document());
             auto filter = _dialog._filter_modifier.get_selected_filter();
-            filter->getRepr()->addChildAtPos(new_prim, 0); 
-            if(dynamic_cast<FilterEditorPrimitiveMergeNode*>(node) != nullptr){
-                while(new_prim->firstChild() != nullptr){
-                    new_prim->removeChild(new_prim->firstChild());
-                }
-            }
+
+            // filter->getRepr()->addChildAtPos(new_prim, 0); 
+            new_primitives.insert({std::find(primitives_order.begin(), primitives_order.end(), prim) - primitives_order.begin(), prim});
+            // filter->getRepr()->addChildAtPost
+            // if(dynamic_cast<FilterEditorPrimitiveMergeNode*>(node) != nullptr){
+            //     while(new_prim->firstChild() != nullptr){
+            //         new_prim->removeChild(new_prim->firstChild());
+            //     }
+            // }
         }
     }
+    for(auto it = new_primitives.rbegin(); it != new_primitives.rend(); it++){
+        auto new_prim = it->second->getRepr()->duplicate(it->second->getRepr()->document());
+        auto filter = _dialog._filter_modifier.get_selected_filter();
+        filter->getRepr()->addChild(new_prim, 0);
+        // new_primitives.insert({std::find(primitives_order.begin(), primitives_order.end(), prim), prim});
+    }
+    DocumentUndo::done(filter->document, _("Duplicated primitives"), INKSCAPE_ICON("dialog-filters"));
+    update_canvas_new();
+    modify_observer(false);
 }
 
 // void FilterEditorCanvas::duplicate_nodes(){
@@ -2414,8 +2459,8 @@ void FilterEditorCanvas::update_positions()
 {
     for (auto child : canvas.get_children()) {
         double x, y;
-        dynamic_cast<NODE_TYPE *>(child)->get_position(x, y);
-        place_node(dynamic_cast<NODE_TYPE *>(child), x, y);
+        dynamic_cast<FilterEditorNode*>(child)->get_position(x, y);
+        place_node(dynamic_cast<FilterEditorNode*>(child), x, y);
     }
 }
 Gtk::Widget *FilterEditorCanvas::get_widget_under(double xl, double yl)
@@ -2957,8 +3002,6 @@ void FilterEditorCanvas::initialize_gestures()
         canvas.grab_focus();
         _popover_menu->set_parent(canvas);
         _popover_menu->popup_at(canvas, x, y);
-        // duplicate_nodes();
-        // clear_nodes();
     });
     canvas.add_controller(gesture_right_click);
 
@@ -3070,10 +3113,35 @@ void FilterEditorCanvas::place_node(FilterEditorNode *node, double x, double y, 
 {
     if(dynamic_cast<FilterEditorPrimitiveNode*>(node) != nullptr){
         if(dynamic_cast<FilterEditorPrimitiveNode*>(node)->get_primitive()->getRepr() != nullptr){
-            dynamic_cast<FilterEditorPrimitiveNode*>(node)->get_primitive()->getRepr()->setAttributeSvgDouble("inkscape:filter-x", x);
-            dynamic_cast<FilterEditorPrimitiveNode*>(node)->get_primitive()->getRepr()->setAttributeSvgDouble("inkscape:filter-y", y);
+            double update_x, update_y;
+            if(local){
+                local_to_global(x, y, update_x, update_y);
+            }
+            else{
+                update_x = x;
+                update_y = y;
+            }
+            dynamic_cast<FilterEditorPrimitiveNode*>(node)->get_primitive()->getRepr()->setAttributeSvgDouble("inkscape:filter-x", update_x);
+            dynamic_cast<FilterEditorPrimitiveNode*>(node)->get_primitive()->getRepr()->setAttributeSvgDouble("inkscape:filter-y", update_y);
         }
         
+    }
+    else if(dynamic_cast<FilterEditorOutputNode*>(node) != nullptr){
+            double update_x, update_y;
+            if (local) {
+                local_to_global(x, y, update_x, update_y);
+            } else {
+                update_x = x;
+                update_y = y;
+            }
+            auto filter = _dialog._filter_modifier.get_selected_filter();  
+            if(filter){
+                filter->getRepr()->setAttributeSvgDouble("inkscape:output-x", update_x);
+                filter->getRepr()->setAttributeSvgDouble("inkscape:output-y", update_y);
+            }
+    }
+    else{
+
     }
     if (!local) {
         node->update_position(x, y);
