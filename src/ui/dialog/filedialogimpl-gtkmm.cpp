@@ -446,20 +446,20 @@ void FileSaveDialogImplGtk::setExtension(Inkscape::Extension::Extension *key)
     // Save module.
     FileDialog::setExtension(key);
 
-    if (!from_filefilter_changed) {
+    if (from_filename_changed) {
         // Update filter.
         set_filter(extensionFilterMap[key]);
-
-        // Update filename.
-        auto filename_utf8 = get_current_name(); // UTF8 encoded!
-        auto output = dynamic_cast<Inkscape::Extension::Output *>(getExtension());
-        if (output && get_choice("Extension") == "true") {
-            // Append the file extension if it's not already present and display it in the file name entry field.
-            appendExtension(filename_utf8, output);
-            set_current_name(filename_utf8);
-        }
+        from_filename_changed = false;
     }
-    from_filename_changed = false;
+
+    // Update filename.
+    auto filename_utf8 = get_current_name(); // UTF8 encoded!
+    auto output = dynamic_cast<Inkscape::Extension::Output *>(getExtension());
+    if (output && get_choice("Extension") == "true") {
+        // Append the file extension if it's not already present and display it in the file name entry field.
+        appendExtension(filename_utf8, output);
+        set_current_name(filename_utf8);
+    }
 }
 
 void FileSaveDialogImplGtk::createFilterMenu()
@@ -490,7 +490,6 @@ void FileSaveDialogImplGtk::createFilterMenu()
  */
 void FileSaveDialogImplGtk::filefilterChanged()
 {
-    from_filefilter_changed = true;
     setExtension(filterExtensionMap[get_filter()]);
 }
 
