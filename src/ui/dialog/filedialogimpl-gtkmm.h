@@ -184,7 +184,6 @@ private:
      * Callback for filefilter.
      */
     void filefilterChanged();
-    bool from_filefilter_changed = false;
 
     /**
      * Callback for filename.
