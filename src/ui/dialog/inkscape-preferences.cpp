@@ -1672,7 +1672,7 @@ void InkscapePreferences::initPageUI()
         });
 
         box->append(*cb);
-        _handle_size = Preferences::PreferencesObserver::create("/options/grabsize/value", [img, this](const Preferences::Entry&){
+        _handle_size = Preferences::PreferencesObserver::create("/options/grabsize/value", [=, this](const Preferences::Entry&){
             img->set_paintable(to_texture(draw_handles_preview(get_scale_factor())));
         });
         _page_ui.add_line(true, _("Handle colors"), *box, "", "Select handle color scheme.");
@@ -2636,7 +2636,7 @@ void InkscapePreferences::initPageBehavior()
                                _("If possible, apply transformation to objects without adding a transform= attribute"));
     _page_transforms.add_line( true, "", _trans_preserved, "",
                                _("Always store transformation as a transform= attribute on objects"));
-    
+
     this->AddPage(_page_transforms, _("Transforms"), iter_behavior, PREFS_PAGE_BEHAVIOR_TRANSFORMS);
 
     // Scrolling options
@@ -3024,7 +3024,7 @@ void InkscapePreferences::initPageRendering()
         grid->attach_next_to(*label_widget, Gtk::PositionType::BOTTOM);
     };
 
-    //TRANSLATORS: The following are options for fine-tuning rendering, meant to be used by developers, 
+    //TRANSLATORS: The following are options for fine-tuning rendering, meant to be used by developers,
     //find more explanations at https://gitlab.com/inkscape/inbox/-/issues/6544#note_886540227
     add_devmode_group_header(_("Low-level tuning options"));
     _canvas_tile_size.init("/options/rendering/tile_size", 1.0, 10000.0, 1.0, 0.0, 300.0, true, false);
