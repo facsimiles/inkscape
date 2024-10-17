@@ -259,10 +259,10 @@ void BatchItem::refresh(bool hide, uint32_t bg_color)
             _selector.set_valign(Gtk::Align::END);
             _label.set_xalign(0.5);
             _label.set_max_width_chars(18);
+            _grid.attach(_preview, 0, 0, 2, 2);
             _grid.attach(_selector, 0, 1, 1, 1);
             _grid.attach(_option, 0, 1, 1, 1);
             _grid.attach(_label, 0, 2, 2, 1);
-            _grid.attach(_preview, 0, 0, 2, 2);
         }
         update_selected();
     }
