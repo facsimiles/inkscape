@@ -19,6 +19,7 @@
 #include <glibmm/miscutils.h>
 #include <gtkmm/builder.h>
 #include <gtkmm/button.h>
+#include <gtkmm/error.h>
 #include <gtkmm/flowbox.h>
 #include <gtkmm/filedialog.h>
 #include <gtkmm/messagedialog.h>
@@ -589,19 +590,17 @@ void BatchExport::loadExportHints(bool rename_file)
 
 void BatchExport::pickBatchPath()
 {
-    // Fixme: Remove event pump.
     auto dialog = Gtk::FileDialog::create();
-    Glib::RefPtr<Gio::AsyncResult> result;
-    dialog->select_folder([&] (auto &res) { result = res; });
-    while (!result) {
-        Glib::MainContext::get_default()->iteration(true);
-    }
-
-    if (auto old_file = dialog->select_folder_finish(result)) {
-        path_chooser.set_label(Glib::filename_to_utf8(old_file->get_path()));
-    } else {
+    dialog->select_folder(dynamic_cast<Gtk::Window &>(*get_root()), sigc::track_object([&dialog = *dialog, this] (auto &result) {
+        try {
+            if (auto old_file = dialog.select_folder_finish(result)) {
+                path_chooser.set_label(Glib::filename_to_utf8(old_file->get_path()));
+                return;
+            }
+        } catch (Gtk::DialogError const &) {
+        }
         path_chooser.set_label(getBatchPath());
-    }
+    }, *this), {});
 }
 
 // Signals CallBack
