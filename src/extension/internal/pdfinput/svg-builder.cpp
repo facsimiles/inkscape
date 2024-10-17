@@ -51,6 +51,7 @@
 #include "xml/node.h"
 #include "xml/repr.h"
 #include "xml/sp-css-attr.h"
+#include <2geom/path-intersection.h>
 
 namespace Inkscape {
 namespace Extension {
@@ -850,11 +851,20 @@ bool SvgBuilder::_shouldClip(const Inkscape::XML::Node *node) const
     node_vec *= node_tr;
     clip_vec *= clip_tr;
 
-    Geom::OptRect node_bbox = node_vec.boundsFast();
-    Geom::OptRect clip_bbox = clip_vec.boundsFast();
+    bool all_empty = true;
+    
+    // weird things were happening with CrossingSet, and this should save some calcs anyway
+    for (auto n_it = node_vec.begin(); n_it != node_vec.end() && all_empty; ++n_it) {
+        for (auto c_it = clip_vec.begin(); c_it != clip_vec.end() && all_empty; ++c_it) {
+            Geom::Crossings cs = crossings(*n_it, *c_it);
+            if (!cs.empty()) {
+                all_empty = false;
+            }
+        }
+    }
 
-    // If the the intersection is the same as the node bbox, then the clip path has no effect
-    if ((clip_bbox & node_bbox) == node_bbox) {
+    // If the paths don't intersect, the clipping path isn't doing anything
+    if (all_empty) {
         return false;
     }
 
