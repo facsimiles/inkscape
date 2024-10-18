@@ -73,7 +73,7 @@ public:
     // Green - New path as it's drawn.
     std::vector<CanvasItemPtr<CanvasItemBpath>> green_bpaths;
     std::shared_ptr<SPCurve> green_curve;
-    std::unique_ptr<SPDrawAnchor> green_anchor;
+    std::shared_ptr<SPDrawAnchor> green_anchor;
     bool green_closed = false; // a flag meaning we hit the green anchor, so close the path on itself
 
     // White

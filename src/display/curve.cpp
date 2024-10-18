@@ -14,12 +14,13 @@
 
 #include "display/curve.h"
 
-#include <glib.h> // g_error
+#include <2geom/point.h>
 #include <2geom/sbasis-geometric.h>
 #include <2geom/sbasis-to-bezier.h>
-#include <2geom/point.h>
-#include "helper/geom.h"
+#include <glib.h> // g_error
+
 #include "helper/geom-pathstroke.h"
+#include "helper/geom.h"
 
 /**
  * Routines for SPCurve and for its Geom::PathVector
@@ -34,9 +35,9 @@ SPCurve::SPCurve(Geom::Rect const &rect, bool all_four_sides)
     }
 
     if (all_four_sides) {
-        // When _constrained_ snapping to a path, the 2geom::SimpleCrosser will be invoked which doesn't consider the closing segment.
-        // of a path. Consequently, in case we want to snap to for example the page border, we must provide all four sides of the
-        // rectangle explicitly
+        // When _constrained_ snapping to a path, the 2geom::SimpleCrosser will be invoked which doesn't consider the
+        // closing segment. of a path. Consequently, in case we want to snap to for example the page border, we must
+        // provide all four sides of the rectangle explicitly
         lineto(rect.corner(0));
     } else {
         // ... instead of just three plus a closing segment
@@ -255,15 +256,15 @@ bool SPCurve::is_closed() const
 {
     if (is_empty()) {
         return false;
-    } 
-    
+    }
+
     for (auto const &it : _pathv) {
         if (!it.closed()) {
             return false;
         }
     }
-    
-    return true;    
+
+    return true;
 }
 
 /**
@@ -424,7 +425,8 @@ SPCurve SPCurve::reversed() const
 /**
  * Append \a curve2 to \a this.
  * If \a use_lineto is false, simply add all paths in \a curve2 to \a this;
- * if \a use_lineto is true, combine \a this's last path and \a curve2's first path and add the rest of the paths in \a curve2 to \a this.
+ * if \a use_lineto is true, combine \a this's last path and \a curve2's first path and add the rest of the paths in \a
+ * curve2 to \a this.
  */
 void SPCurve::append(SPCurve const &curve2, bool use_lineto)
 {
@@ -458,9 +460,10 @@ void SPCurve::append(Geom::PathVector const &pathv, bool use_lineto)
 }
 
 /**
- * Append \a c1 to \a this with possible fusing of close endpoints. If the end of this curve and the start of c1 are within tolerance distance,
- * then the startpoint of c1 is moved to the end of this curve and the first subpath of c1 is appended to the last subpath of this curve.
- * When one of the curves is empty, this curves path becomes the non-empty path.
+ * Append \a c1 to \a this with possible fusing of close endpoints. If the end of this curve and the start of c1 are
+ * within tolerance distance, then the startpoint of c1 is moved to the end of this curve and the first subpath of c1 is
+ * appended to the last subpath of this curve. When one of the curves is empty, this curves path becomes the non-empty
+ * path.
  *
  * @param tolerance Tolerance for endpoint fusion (applied to x and y separately)
  * @return False if one of the curves (this curve or the argument curve) is closed, true otherwise.
@@ -482,9 +485,9 @@ bool SPCurve::append_continuous(SPCurve const &c1, double tolerance)
 
     if ((fabs(last_point()->x() - c1.first_point()->x()) <= tolerance) &&
         (fabs(last_point()->y() - c1.first_point()->y()) <= tolerance)) {
-    // c1's first subpath can be appended to this curve's last subpath
+        // c1's first subpath can be appended to this curve's last subpath
         Geom::PathVector::const_iterator path_it = c1._pathv.begin();
-        Geom::Path & lastpath = _pathv.back();
+        Geom::Path &lastpath = _pathv.back();
 
         Geom::Path newfirstpath(*path_it);
         newfirstpath.setInitial(lastpath.finalPoint());
@@ -523,7 +526,8 @@ void SPCurve::backspace()
 (2:08:29 AM) Johan: to move the knots
 (2:08:36 AM) Johan: then i add it
 (2:08:40 AM) Johan: then convert back to path
-If I remember correctly, this moves the firstpoint to new_p0, and the lastpoint to new_p1, and moves all nodes in between according to their arclength (interpolates the movement amount)
+If I remember correctly, this moves the firstpoint to new_p0, and the lastpoint to new_p1, and moves all nodes in
+between according to their arclength (interpolates the movement amount)
  */
 void SPCurve::stretch_endpoints(Geom::Point const &new_p0, Geom::Point const &new_p1)
 {
@@ -539,12 +543,13 @@ void SPCurve::stretch_endpoints(Geom::Point const &new_p0, Geom::Point const &ne
     if (arclength.lastValue() <= 0) {
         g_error("SPCurve::stretch_endpoints - arclength <= 0");
     }
-    arclength *= 1./arclength.lastValue();
+    arclength *= 1. / arclength.lastValue();
     auto const A = offset0;
     auto const B = offset1;
-    Geom::Piecewise<Geom::SBasis> offsetx = (arclength*-1.+1)*A[0] + arclength*B[0];
-    Geom::Piecewise<Geom::SBasis> offsety = (arclength*-1.+1)*A[1] + arclength*B[1];
-    Geom::Piecewise<Geom::D2<Geom::SBasis>> offsetpath = Geom::sectionize(Geom::D2<Geom::Piecewise<Geom::SBasis>>(offsetx, offsety));
+    Geom::Piecewise<Geom::SBasis> offsetx = (arclength * -1. + 1) * A[0] + arclength * B[0];
+    Geom::Piecewise<Geom::SBasis> offsety = (arclength * -1. + 1) * A[1] + arclength * B[1];
+    Geom::Piecewise<Geom::D2<Geom::SBasis>> offsetpath =
+        Geom::sectionize(Geom::D2<Geom::Piecewise<Geom::SBasis>>(offsetx, offsety));
     pwd2 += offsetpath;
     _pathv = Geom::path_from_piecewise(pwd2, 0.001);
 }
@@ -564,7 +569,8 @@ void SPCurve::move_endpoints(Geom::Point const &new_p0, Geom::Point const &new_p
 /**
  * returns the number of nodes in a path, used for statusbar text when selecting an spcurve.
  * Sum of nodes in all the paths. When a path is closed, and its closing line segment is of zero-length,
- * this function will not count the closing knot double (so basically ignores the closing line segment when it has zero length)
+ * this function will not count the closing knot double (so basically ignores the closing line segment when it has zero
+ * length)
  */
 size_t SPCurve::nodes_in_path() const
 {
@@ -593,6 +599,108 @@ size_t SPCurve::nodes_in_path() const
 }
 
 /**
+ * Adds p to the last point of the nth path and first point of the (n+1)th path and changes their handles accordingly
+ */
+void SPCurve::nth_point_additive_move(const Geom::Point &p, const int n)
+{
+    if (is_empty()) {
+        return;
+    }
+
+    // Finding the indices of the path
+    int index = -1;
+    int count = n;
+    for (int i = 0; i < _pathv.size(); i++) {
+        if (count_path_nodes(_pathv[i]) >= count) {
+            index = i;
+            break;
+        }
+        count -= count_path_nodes(_pathv[i]);
+    }
+
+    if (index == -1) {
+        // The index is larger then total number of nodes
+        return;
+    }
+
+    Geom::Path newpath;
+
+    if (count == 0) {
+        if (index == 0) {
+            // This is the first path of the curve
+            first_point_additive_move(p);
+            return;
+        }
+
+        // This is the first path of the given path-vector
+        // So prevcube will be the last segment of the previous path
+        if (auto const prevcube = dynamic_cast<Geom::CubicBezier const *>(&_pathv[index - 1].back())) {
+            Geom::CubicBezier newcube(*prevcube);
+            newcube.setPoint(2, newcube[2] + p);
+            newcube.setFinal(newcube.finalPoint() + p);
+            newpath.append(newcube);
+        }
+
+        // This is the first segment of the given path
+        if (auto const nextcube = dynamic_cast<Geom::CubicBezier const *>(&_pathv[index].front())) {
+            Geom::CubicBezier newcube(*nextcube);
+            newcube.setPoint(1, newcube[1] + p);
+            newcube.setInitial(newcube.initialPoint() + p);
+            newpath.append(newcube);
+        }
+
+        _pathv[index - 1].replace(--_pathv[index - 1].end(), newpath.front());
+        _pathv[index].replace(_pathv[index].begin(), newpath[1]);
+
+    } else if (count == count_path_nodes(_pathv[index])) {
+        if (index == _pathv.size() - 1) {
+            // This is the last part of the curve
+            last_point_additive_move(p);
+            return;
+        }
+
+        // This is the last path of the given path-vector
+        // So prevcube will be the last segment of the current path
+        if (auto const prevcube = dynamic_cast<Geom::CubicBezier const *>(&_pathv[index][count - 1])) {
+            Geom::CubicBezier newcube(*prevcube);
+            newcube.setPoint(2, newcube[2] + p);
+            newcube.setFinal(newcube.finalPoint() + p);
+            newpath.append(newcube);
+        }
+
+        // This is the first segment of the next path
+        if (auto const nextcube = dynamic_cast<Geom::CubicBezier const *>(&_pathv[index + 1].front())) {
+            Geom::CubicBezier newcube(*nextcube);
+            newcube.setPoint(1, newcube[1] + p);
+            newcube.setInitial(newcube.initialPoint() + p);
+            newpath.append(newcube);
+        }
+
+        _pathv[index].replace(--_pathv[index].end(), newpath.front());
+        _pathv[index + 1].replace(_pathv[index + 1].begin(), newpath[1]);
+    } else {
+        // This is a path in the middle of the path-vector
+        // The prevcube will be at the previous index of same path
+        if (auto const prevcube = dynamic_cast<Geom::CubicBezier const *>(&_pathv[index][count - 1])) {
+            Geom::CubicBezier newcube(*prevcube);
+            newcube.setPoint(2, newcube[2] + p);
+            newcube.setFinal(newcube.finalPoint() + p);
+            newpath.append(newcube);
+        }
+
+        // The nextcube will be at the current index of the same path
+        if (auto const nextcube = dynamic_cast<Geom::CubicBezier const *>(&_pathv[index][count])) {
+            Geom::CubicBezier newcube(*nextcube);
+            newcube.setPoint(1, newcube[1] + p);
+            newcube.setInitial(newcube.initialPoint() + p);
+            newpath.append(newcube);
+        }
+
+        _pathv[index].replace(_pathv[index].begin() + count - 1, _pathv[index].begin() + count + 1, newpath);
+    }
+}
+
+/**
  *  Adds p to the last point (and last handle if present) of the last path
  */
 void SPCurve::last_point_additive_move(Geom::Point const &p)
@@ -609,6 +717,25 @@ void SPCurve::last_point_additive_move(Geom::Point const &p)
         Geom::CubicBezier newcube(*lastcube);
         newcube.setPoint(2, newcube[2] + p);
         _pathv.back().replace(--_pathv.back().end(), newcube);
+    }
+}
+
+/**
+ * Adds p to the first point (and the first handle if present) of the first path
+ */
+void SPCurve::first_point_additive_move(Geom::Point const &p)
+{
+    if (is_empty()) {
+        return;
+    }
+
+    _pathv.front().setInitial(_pathv.front().initialPoint() + p);
+
+    // Move handle as well when the last segment is a cubic bezier segment:
+    if (auto const firstcube = dynamic_cast<Geom::CubicBezier const *>(&_pathv.front().front())) {
+        Geom::CubicBezier newcube(*firstcube);
+        newcube.setPoint(1, newcube[1] + p);
+        _pathv.front().replace(_pathv.front().begin(), newcube);
     }
 }
 
