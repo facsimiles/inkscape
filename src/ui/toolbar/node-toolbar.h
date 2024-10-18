@@ -118,6 +118,10 @@ private:
     void edit_auto();
     void edit_toline();
     void edit_tocurve();
+    void edit_toarc();
+    void edit_arc_shallow();
+    void edit_arc_bulge();
+    void edit_arc_flip();
     void on_pref_toggled(Gtk::ToggleButton *item, const Glib::ustring &path);
 
     void setup_derived_spin_button(Inkscape::UI::Widget::SpinButton &btn, Glib::ustring const &name);

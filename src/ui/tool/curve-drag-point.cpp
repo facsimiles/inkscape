@@ -23,6 +23,7 @@ namespace UI {
 
 bool CurveDragPoint::_drags_stroke = false;
 bool CurveDragPoint::_segment_was_degenerate = false;
+bool CurveDragPoint::_can_drag = true;
 
 CurveDragPoint::CurveDragPoint(PathManipulator &pm) :
     ControlPoint(pm._multi_path_manipulator._path_data.node_data.desktop, Geom::Point(), SP_ANCHOR_CENTER,
@@ -49,6 +50,15 @@ bool CurveDragPoint::grabbed(MotionEvent const &/*event*/)
     _pm._selection.hideTransformHandles();
     NodeList::iterator second = first.next();
 
+    _can_drag = true;
+
+    if (!first->arc_rx()->isDegenerate() && !first->arc_ry()->isDegenerate()) {
+        // This is an arc node
+        // TODO implement dragging of elliptical arc nodes
+        _can_drag = false;
+        return false;
+    }
+
     // move the handles to 1/3 the length of the segment for line segments
     if (first->front()->isDegenerate() && second->back()->isDegenerate()) {
         _segment_was_degenerate = true;
@@ -71,6 +81,10 @@ void CurveDragPoint::dragged(Geom::Point &new_pos, MotionEvent const &event)
 {
     if (!first || !first.next()) return;
     NodeList::iterator second = first.next();
+
+    if (!_can_drag) {
+        return;
+    }
 
     // special cancel handling - retract handles when if the segment was degenerate
     if (_is_drag_cancelled(event) && _segment_was_degenerate) {

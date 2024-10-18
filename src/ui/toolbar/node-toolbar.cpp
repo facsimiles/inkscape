@@ -153,6 +153,19 @@ NodeToolbar::NodeToolbar(SPDesktop *desktop)
     get_widget<Gtk::Button>(_builder, "curve_btn")
         .signal_clicked()
         .connect(sigc::mem_fun(*this, &NodeToolbar::edit_tocurve));
+    get_widget<Gtk::Button>(_builder, "arc_btn")
+        .signal_clicked()
+        .connect(sigc::mem_fun(*this, &NodeToolbar::edit_toarc));
+
+    get_widget<Gtk::Button>(_builder, "arc_shallow_btn")
+        .signal_clicked()
+        .connect(sigc::mem_fun(*this, &NodeToolbar::edit_arc_shallow));
+    get_widget<Gtk::Button>(_builder, "arc_bulge_btn")
+        .signal_clicked()
+        .connect(sigc::mem_fun(*this, &NodeToolbar::edit_arc_bulge));
+    get_widget<Gtk::Button>(_builder, "arc_flip_btn")
+        .signal_clicked()
+        .connect(sigc::mem_fun(*this, &NodeToolbar::edit_arc_flip));
 
     _pusher_show_outline.reset(new UI::SimplePrefPusher(_show_helper_path_btn, "/tools/nodes/show_outline"));
     _show_helper_path_btn->signal_toggled().connect(sigc::bind(sigc::mem_fun(*this, &NodeToolbar::on_pref_toggled),
@@ -484,6 +497,38 @@ void NodeToolbar::edit_tocurve()
     NodeTool *nt = get_node_tool();
     if (nt) {
         nt->_multipath->setSegmentType(Inkscape::UI::SEGMENT_CUBIC_BEZIER);
+    }
+}
+
+void NodeToolbar::edit_toarc()
+{
+    NodeTool *nt = get_node_tool();
+    if (nt) {
+        nt->_multipath->setSegmentType(Inkscape::UI::SEGMENT_ELLIPTICAL_ARC);
+    }
+}
+
+void NodeToolbar::edit_arc_shallow()
+{
+    NodeTool *nt = get_node_tool();
+    if (nt) {
+        nt->_multipath->setArcSegmentLarge(false);
+    }
+}
+
+void NodeToolbar::edit_arc_bulge()
+{
+    NodeTool *nt = get_node_tool();
+    if (nt) {
+        nt->_multipath->setArcSegmentLarge(true);
+    }
+}
+
+void NodeToolbar::edit_arc_flip()
+{
+    NodeTool *nt = get_node_tool();
+    if (nt) {
+        nt->_multipath->toggleArcSegmentSweep();
     }
 }
 
