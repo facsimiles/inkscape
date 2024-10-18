@@ -530,17 +530,17 @@ FilterEditorFixed::FilterEditorFixed(std::map<int, std::vector<FilterEditorConne
     , x_offset(_x_offset)
     , y_offset(_y_offset)
     , connections(_connections) {};
-void FilterEditorFixed::update_positions(double x_offset_new, double y_offset_new)
-{
-    x_offset = x_offset_new;
-    y_offset = y_offset_new;
-    for (auto child : get_children()) {
-        if(dynamic_cast<FilterEditorPrimitiveNode*>(child) != nullptr){
-            double x, y;
-            dynamic_cast<FilterEditorPrimitiveNode*>(child)->get_position(x, y);
-        }
-    }
-}
+// void FilterEditorFixed::update_positions(double x_offset_new, double y_offset_new)
+// {
+//     x_offset = x_offset_new;
+//     y_offset = y_offset_new;
+//     for (auto child : get_children()) {
+//         if(dynamic_cast<FilterEditorPrimitiveNode*>(child) != nullptr){
+//             double x, y;
+//             dynamic_cast<FilterEditorPrimitiveNode*>(child)->get_position(x, y);
+//         }
+//     }
+// }
 
 double FilterEditorFixed::get_x_offset()
 {
@@ -1382,11 +1382,12 @@ void FilterEditorCanvas::update_canvas_new(){
                         }
                         else{
                             // TODO: Use source graphic, but don't update it over here, by default it should use SourceGraphic
+                            sink->set_result_inp(0);
                         }
                     } 
                     else{
                         if(std::find(result_inputs.begin(), result_inputs.end(), inp) != result_inputs.end()){
-                            
+                            g_message("Valid result input");
                         }
                         else{
                             if(result_to_primitive.find(inp) != result_to_primitive.end()){
@@ -1404,6 +1405,7 @@ void FilterEditorCanvas::update_canvas_new(){
                                 }
                                 else{
                                     // TODO: Use SourceGraphic
+                                    sink->set_result_inp(0);
                                 }
                             }
                         }
@@ -2667,7 +2669,6 @@ void FilterEditorCanvas::event_handler(double x, double y)
                     toggle_node_selection(active_node);
                 }
             }
-
         } else {
             clear_selection();
             if (active_widget != nullptr) {
@@ -2682,6 +2683,7 @@ void FilterEditorCanvas::event_handler(double x, double y)
     case FilterEditorEvent::PAN_START:
         drag_start_x = canvas.get_x_offset();
         drag_start_y = canvas.get_y_offset();
+        g_message("At pan start: %lf %lf", drag_start_x, drag_start_y);
         current_event_type = FilterEditorEvent::PAN_UPDATE;
         break;
     case FilterEditorEvent::PAN_UPDATE:
@@ -3009,7 +3011,10 @@ void FilterEditorCanvas::initialize_gestures()
                 }
                 event_handler(x, y);
             } else if (gesture_drag->get_current_button() == GDK_BUTTON_MIDDLE) {
-                current_event_type = FilterEditorEvent::PAN_UPDATE;
+                // current_event_type == FilterEditorEvent::UPDATE;
+                // if(current_event_type == FilterEditorEvent::NONE){
+                //     current_event_type = FilterEditorEvent::PAN_START;
+                // }
                 event_handler(x, y);
             }
         }
@@ -3027,7 +3032,10 @@ void FilterEditorCanvas::initialize_gestures()
                 current_event_type = FilterEditorEvent::MOVE_END;
             } else if (current_event_type == FilterEditorEvent::RUBBERBAND_UPDATE) {
                 current_event_type = FilterEditorEvent::RUBBERBAND_END;
+            } else if (current_event_type == FilterEditorEvent::PAN_UPDATE) {
+                current_event_type = FilterEditorEvent::PAN_END;
             }
+            
             event_handler(x, y);
         }
     });
