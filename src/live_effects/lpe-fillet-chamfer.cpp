@@ -29,7 +29,7 @@
 #include <glibmm/i18n.h>
 
 namespace Inkscape::LivePathEffect {
-
+static std::vector<std::pair<Geom::PathVector,NodeSatellites> > removedsatellites = {};
 static const Util::EnumData<Filletmethod> FilletmethodData[] = {
     { FM_AUTO, N_("Auto"), "auto" },
     { FM_ARC, N_("Force arc"), "arc" },
@@ -301,12 +301,27 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
         nodesatellites_param.setCurrentZoom(current_zoom);
         //mandatory call
         nodesatellites_param.setEffectType(effectType());
-        Geom::PathVector const pathv = pathv_to_linear_and_cubic_beziers(pathvector_before_effect);
         NodeSatellites nodesatellites = nodesatellites_param.data();
-        if (nodesatellites.empty()) {
+        if (lpeItem && nodesatellites.empty()) {
             doOnApply(lpeItem); // dont want _impl to not update versioning
             nodesatellites = nodesatellites_param.data();
         }
+        bool updated = false;
+        if (!removedsatellites.empty()) {
+            Geom::PathVector base = pathvector_before_effect;
+            for (auto ns : removedsatellites) {
+                for (size_t i = 0; i < ns.second.size(); ++i) {
+                    nodesatellites.push_back(ns.second[i]);
+                    base.push_back(ns.first[i]);
+                }
+            }
+            _pathvector_nodesatellites->setPathVector(base);
+            _pathvector_nodesatellites->setNodeSatellites(nodesatellites);
+            removedsatellites.clear();
+            _adjust_path = true;
+            updated = true;
+        }
+        Geom::PathVector const pathv = pathv_to_linear_and_cubic_beziers(pathvector_before_effect);
         for (size_t i = 0; i < nodesatellites.size(); ++i) {
             for (size_t j = 0; j < nodesatellites[i].size(); ++j) {
                 if (pathv.size() <= i || j >= count_path_curves(pathv[i])) {
@@ -341,7 +356,7 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
         if (!_pathvector_nodesatellites) {
             _pathvector_nodesatellites = new PathVectorNodeSatellites();
         }
-        if (is_load || _adjust_path) {
+        if (_adjust_path) {
             double power = radius;
             if (!flexible) {
                 power = Inkscape::Util::Quantity::convert(power, unit.get_abbreviation(), "px") / getSPDoc()->getDocumentScale()[Geom::X];
@@ -376,8 +391,11 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
 }
 
 void
-LPEFilletChamfer::adjustForNewPath() {
-    _adjust_path = true;
+LPEFilletChamfer::adjustForNewPath(bool removed) {
+    _adjust_path = !removed;
+    if(removed) {
+        removedsatellites.emplace_back(pathvector_before_effect, nodesatellites_param.data());
+    }
 }
 
 void
