@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SPDX-License-Identifier: GPL-2.0-or-later -->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+	<head>
+		<title>SVG viewer</title>
+		<meta charset="UTF-8"/>
+	</head>
+	<body>
+		<h1>SVG viewer</h1>
+
+		<form id="connection">
+			<input type="email" id="jid" placeholder="JID" title="Enter your JID (or XMPP address), on the form “you@your-server.tld”"/>
+			<input type="password" id="pass" placeholder="Password" title="Enter the password used for this JID"/>
+			<input type="submit" id="connect" value="Log in"/>
+			<img width="24" height="24" id="connect-spinner" hidden=""/>
+		</form>
+
+		<div id="connected" hidden="">
+			<table id="roster">
+				<thead>
+					<tr><th>JID</th></tr>
+				</thead>
+				<tbody/>
+			</table>
+			<div id="canvas" style="width: 640px; height: 480px; border: solid 1px black"></div>
+		</div>
+
+		<script src="strophe.js"></script>
+		<script src="svg.js"></script>
+	</body>
+</html>
