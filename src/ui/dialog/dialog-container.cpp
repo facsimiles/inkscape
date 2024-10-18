@@ -12,23 +12,24 @@
 
 #include "dialog-container.h"
 
-#include <iostream>
+#include <giomm/file.h>
 #include <glibmm/i18n.h>
 #include <glibmm/keyfile.h>
 #include <glibmm/value.h>
-#include <giomm/file.h>
 #include <gtkmm/accelerator.h>
 #include <gtkmm/box.h>
 #include <gtkmm/image.h>
 #include <gtkmm/viewport.h>
+#include <iostream>
 #include <sigc++/adaptors/bind.h>
 #include <sigc++/functors/mem_fun.h>
 
 #include "enums.h"
-#include "inkscape.h"
 #include "inkscape-application.h"
 #include "inkscape-window.h"
+#include "inkscape.h"
 #include "ui/dialog/clonetiler.h"
+#include "ui/dialog/debug.h"
 #include "ui/dialog/dialog-data.h"
 #include "ui/dialog/dialog-multipaned.h"
 #include "ui/dialog/dialog-notebook.h"
@@ -45,8 +46,6 @@
 #include "ui/dialog/icon-preview.h"
 #include "ui/dialog/inkscape-preferences.h"
 #include "ui/dialog/livepatheffect-editor.h"
-#include "ui/dialog/memory.h"
-#include "ui/dialog/messages.h"
 #include "ui/dialog/object-attributes.h"
 #include "ui/dialog/objects.h"
 #include "ui/dialog/paint-servers.h"
@@ -127,8 +126,7 @@ std::unique_ptr<DialogBase> DialogContainer::dialog_factory(Glib::ustring const 
     else if (dialog_type == "Glyphs")             return std::make_unique<GlyphsPanel>();
     else if (dialog_type == "IconPreview")        return std::make_unique<IconPreviewPanel>();
     else if (dialog_type == "LivePathEffect")     return std::make_unique<LivePathEffectEditor>();
-    else if (dialog_type == "Memory")             return std::make_unique<Memory>();
-    else if (dialog_type == "Messages")           return std::make_unique<Messages>();
+    else if (dialog_type == "DebugWindow")        return std::make_unique<Debug>();
     else if (dialog_type == "ObjectProperties")   return std::make_unique<ObjectAttributes>();
     else if (dialog_type == "Objects")            return std::make_unique<ObjectsPanel>();
     else if (dialog_type == "PaintServers")       return std::make_unique<PaintServersDialog>();
@@ -490,7 +488,7 @@ DialogWindow *DialogContainer::create_new_floating_dialog(const Glib::ustring& d
         }
         return nullptr;
     }
-    
+
     // check if this dialog *was* open and floating; if so recreate its window
     if (auto state = DialogManager::singleton().find_dialog_state(dialog_type)) {
         if (recreate_dialogs_from_state(_inkscape_window, state.get())) {
