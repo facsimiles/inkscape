@@ -446,9 +446,8 @@ static void sp_anchor_render(SPAnchor const *a, CairoRenderContext *ctx, SPItem 
         }
         // Write a box for this hyperlink so it's contained and positioned correctly.
         if (auto vbox = a->visualBounds()) {
-            // Convert from 92dpi (svg) to 72dpi (pdf) and apply item transforms as we are writing out the box directly.
-            auto static doc_scale = Geom::Scale(72.0 / 96.0);
-            auto bbox = *vbox * ctx->getItemTransform() * doc_scale;
+            // Apply transforms as we are writing out the box directly.
+            auto bbox = *vbox * ctx->getTransform();
             link += Glib::ustring::compose(" rect=[%1 %2 %3 %4]", bbox.left(), bbox.top(), bbox.width(), bbox.height());
         }
         ctx->tagBegin(link.c_str());
