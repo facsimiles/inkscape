@@ -49,6 +49,7 @@
 #include "sp-page.h"
 #include "sp-path.h"
 #include "sp-pattern.h"
+#include "sp-point.h"
 #include "sp-polyline.h"
 #include "sp-radial-gradient.h"
 #include "sp-rect.h"
@@ -211,6 +212,7 @@ private:
         { "inkscape:offset", make<SPOffset> },
         { "svg:path", make<SPPath> },
         { "svg:pattern", make<SPPattern> },
+        { "inkscape:point", make<SPPoint> },
         { "svg:polygon", make<SPPolygon> },
         { "svg:polyline", make<SPPolyLine> },
         { "svg:radialGradient", make<SPRadialGradient> },

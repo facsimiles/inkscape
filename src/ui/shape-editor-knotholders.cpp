@@ -20,6 +20,8 @@
 #include "desktop.h"
 #include "document.h"
 #include "live_effects/effect.h"
+#include "live_effects/lpe-connector-line.h"
+
 #include "object/box3d.h"
 #include "object/sp-ellipse.h"
 #include "object/sp-flowtext.h"
@@ -37,6 +39,9 @@
 #include "svg/css-ostringstream.h"
 #include "ui/knot/knot-holder-entity.h"
 #include "ui/knot/knot-holder.h"
+#include "ui/tools/connector-tool-knotholders.h"
+
+using Inkscape::UI::Tools::ConnectorLineKnotHolder;
 
 class RectKnotHolder : public KnotHolder {
 public:
@@ -142,6 +147,8 @@ std::unique_ptr<KnotHolder> create_knot_holder(SPItem *item, SPDesktop *desktop,
         if (!is_on_path) {
             knotholder = std::make_unique<TextKnotHolder>(desktop, item);
         }
+    } else if (Inkscape::LivePathEffect::isConnector(item)) {
+        knotholder = std::make_unique<ConnectorLineKnotHolder>(desktop, item);
     } else {
         auto flowtext = cast<SPFlowtext>(item);
         if (flowtext && flowtext->has_internal_frame()) {

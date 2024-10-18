@@ -46,8 +46,6 @@ static SPStyleProp const props[] = {
     {SPAttr::TRANSFORM, "transform"},
     {SPAttr::SODIPODI_TYPE, "sodipodi:type"},
     {SPAttr::SODIPODI_INSENSITIVE, "sodipodi:insensitive"},
-    {SPAttr::CONNECTOR_AVOID, "inkscape:connector-avoid"},
-    {SPAttr::CONNECTION_POINTS, "inkscape:connection-points"},
     {SPAttr::TRANSFORM_CENTER_X, "inkscape:transform-center-x"},
     {SPAttr::TRANSFORM_CENTER_Y, "inkscape:transform-center-y"},
     {SPAttr::INKSCAPE_PATH_EFFECT, "inkscape:path-effect"},
@@ -167,14 +165,6 @@ static SPStyleProp const props[] = {
     {SPAttr::SVG_DPI, "inkscape:svg-dpi"},
     /* SPPath */
     {SPAttr::INKSCAPE_ORIGINAL_D, "inkscape:original-d"},
-    /* (Note: XML representation of connectors may change in future.) */
-    {SPAttr::CONNECTOR_TYPE, "inkscape:connector-type"},
-    {SPAttr::CONNECTOR_CURVATURE, "inkscape:connector-curvature"},
-    {SPAttr::INKSCAPE_CONNECTOR_SPACING, "inkscape:connector-spacing"},
-    {SPAttr::CONNECTION_START, "inkscape:connection-start"},
-    {SPAttr::CONNECTION_END, "inkscape:connection-end"},
-    {SPAttr::CONNECTION_START_POINT, "inkscape:connection-start-point"},
-    {SPAttr::CONNECTION_END_POINT, "inkscape:connection-end-point"},
     /* SPRect */
     {SPAttr::RX, "rx"},
     {SPAttr::RY, "ry"},
@@ -592,6 +582,9 @@ static SPStyleProp const props[] = {
     {SPAttr::INKSCAPE_DESK_COLOR, "inkscape:deskcolor"},
     {SPAttr::INKSCAPE_DESK_OPACITY, "inkscape:deskopacity"},
     {SPAttr::INKSCAPE_DESK_CHECKERBOARD, "inkscape:pagecheckerboard"}, // old attr
+
+    /* Connectors */
+    {SPAttr::VIRTUAL_POINT_REF, "inkscape:original-point"},
     // rendering mode
     {SPAttr::INKSCAPE_CLIP_TO_PAGE_RENDERING, "inkscape:clip-to-page"},
     {SPAttr::INKSCAPE_ANTIALIAS_RENDERING, "inkscape:antialias-rendering"},

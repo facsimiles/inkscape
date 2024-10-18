@@ -82,6 +82,7 @@ public:
 	void set(SPAttr key, char const* value) override;
 	Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags) override;
 
+    Geom::PathVector outline() const override;
 	Geom::OptRect bbox(Geom::Affine const &transform, SPItem::BBoxType bboxtype) const override;
     Geom::OptRect either_bbox(Geom::Affine const &transform, SPItem::BBoxType bboxtype, bool cache_is_valid,
                               Geom::OptRect bbox_cache, Geom::Affine const &transform_cache) const;

@@ -52,7 +52,6 @@
 #include "object/object-set.h"
 #include "object/persp3d.h"
 #include "object/sp-clippath.h"
-#include "object/sp-conn-end.h"
 #include "object/sp-defs.h"
 #include "object/sp-ellipse.h"
 #include "object/sp-flowregion.h"
@@ -553,20 +552,6 @@ void ObjectSet::duplicate(bool suppressDone, bool duplicateLayer)
                 for (guint j = 0; j < old_ids.size(); j++) {
                     if (!strcmp(source_href, old_ids[j])) {
                         doc->getObjectById(new_ids[i])->firstChild()->setAttribute("xlink:href", Glib::ustring("#") + new_ids[j]);
-                    }
-                }
-            } else if (path) {
-                if (old_clone->getAttribute("inkscape:connection-start") != nullptr) {
-                    const char *old_start = old_clone->getAttribute("inkscape:connection-start");
-                    const char *old_end = old_clone->getAttribute("inkscape:connection-end");
-                    SPObject *new_clone = doc->getObjectById(new_ids[i]);
-                    for (guint j = 0; j < old_ids.size(); j++) {
-                        if(old_start == Glib::ustring("#") + old_ids[j]) {
-                            new_clone->setAttribute("inkscape:connection-start", Glib::ustring("#") + new_ids[j]);
-                        }
-                        if(old_end == Glib::ustring("#") + old_ids[j]) {
-                            new_clone->setAttribute("inkscape:connection-end", Glib::ustring("#") + new_ids[j]);
-                        }
                     }
                 }
             }
@@ -1709,24 +1694,6 @@ void ObjectSet::applyAffine(Geom::Affine const &affine, bool set_i2d, bool compe
         Geom::Point old_center(0,0);
         if (set_i2d && item->isCenterSet())
             old_center = item->getCenter();
-
-        // If we're moving a connector, we want to detach it
-        // from shapes that aren't part of the selection, but
-        // leave it attached if they are
-        if (Inkscape::UI::Tools::cc_item_is_connector(item)) {
-            auto path = cast<SPPath>(item);
-            if (path) {
-                SPItem *attItem[2] = {nullptr, nullptr};
-                path->connEndPair.getAttachedItems(attItem);
-                for (int n = 0; n < 2; ++n) {
-                    if (!includes(attItem[n])) {
-                        sp_conn_end_detach(item, n);
-                    }
-                }
-            } else {
-                g_assert_not_reached();
-            }
-        }
 
         // "clones are unmoved when original is moved" preference
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();

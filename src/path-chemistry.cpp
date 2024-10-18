@@ -37,6 +37,7 @@
 #include "object/sp-text.h"
 #include "style.h"
 
+#include "live_effects/lpe-connector-line.h"
 #include "ui/icon-names.h"
 
 #include "svg/svg.h"
@@ -675,6 +676,14 @@ ObjectSet::pathReverse()
             path->setAttribute("inkscape:original-d", str);
         } else {
             path->setAttribute("d", str);
+        }
+
+        // Reverse connection, start and end
+        if (auto connector = dynamic_cast<Inkscape::LivePathEffect::LPEConnectorLine *>(path->getCurrentLPE())) {
+            auto repr = connector->getRepr();
+            auto start = repr->attribute("connection-start");
+            repr->setAttributeOrRemoveIfEmpty("connection-start", repr->attribute("connection-end"));
+            repr->setAttributeOrRemoveIfEmpty("connection-end", start);
         }
 
         // reverse nodetypes order (Bug #179866)

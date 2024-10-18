@@ -800,6 +800,12 @@ void InkscapePreferences::AddBaseSimplifySpinbutton(DialogPage &p, Glib::ustring
                        false );
 }
 
+void InkscapePreferences::AddRouterPenaltySpinbutton(DialogPage &p, Glib::ustring const &pref, Glib::ustring const &name, Glib::ustring const &tip, double def_value)
+{
+    auto const sb = Gtk::make_managed<PrefSpinButton>();
+    sb->init("/tools/connector/penalty/" + pref, 0.0, 1000.0, 0.1, 10.0, def_value, false, false);
+    p.add_line(false, name, *sb, "", tip, false);
+}
 
 static void StyleFromSelectionToTool(Glib::ustring const &prefs_path, StyleSwatch *swatch)
 {
@@ -858,9 +864,8 @@ void InkscapePreferences::AddNewObjectsStyle(DialogPage &p, Glib::ustring const 
     else
         p.add_group_header( _("Style of new objects"));
     auto const current = Gtk::make_managed<PrefRadioButton>();
-    current->init ( _("Last used style"), prefs_path + "/usecurrent", 1, true, nullptr);
-    p.add_line( true, "", *current, "",
-                _("Apply the style you last set on an object"));
+    current->init(_("Last used style"), prefs_path + "/usecurrent", 1, true, nullptr);
+    p.add_line( true, "", *current, "", _("Apply the style you last set on an object"));
 
     auto const own = Gtk::make_managed<PrefRadioButton>();
     auto const hb = Gtk::make_managed<Gtk::Box>();
@@ -1137,8 +1142,33 @@ void InkscapePreferences::initPageTools()
 
     //Connector
     this->AddSelcueCheckbox(_page_connector, "/tools/connector", true);
+    this->AddNewObjectsStyle(_page_connector, "/tools/connector");
     _page_connector.add_line(false, "", _connector_ignore_text, "",
             _("If on, connector attachment points will not be shown for text objects"));
+
+    PrefSpinButton* sb = Gtk::manage( new PrefSpinButton);
+    sb->init("/tools/connector/checkpoint/tolerance", 0, 500, 1, 10, 0, false, false);
+    _page_connector.add_line(false, "Drag Checkpoint Tolerance", *sb, "", "Automatic unlocking of checkpoint nodes when dragging (0 means do not unlock)", false);
+
+    _page_connector.add_group_header( _("Router Penalties"));
+    AddRouterPenaltySpinbutton(_page_connector, "angle", _("Acute Angles:"),
+        _("This penalty increases as the angle of the bend increases to an acute angle. "), 0);
+    AddRouterPenaltySpinbutton(_page_connector, "segment", _("Multiple Segments:"),
+        _("This penalty is applied for each segment in the connector. Required for orthogonal routing."), 20);
+    AddRouterPenaltySpinbutton(_page_connector, "crossing", _("Crossing Lines:"),
+        _("This penalty is applied whenever a connector path crosses another connector path."), 0);
+    AddRouterPenaltySpinbutton(_page_connector, "shape_buffer", _("Shape buffer:"),
+        _("This parameter defines the spacing distance that will be added to the sides of each shape when determining obstacle sizes."), 0);
+    AddRouterPenaltySpinbutton(_page_connector, "port_direction", _("Port Direction:"),
+        _("This penalty is applied to port selection choice when the other end of the connector being routed does not appear in any of the 90 degree visibility cones centered on the visibility directions for the port."), 1000);
+    AddRouterPenaltySpinbutton(_page_connector, "ideal_nudge", _("Ideal Nudge:"),
+        _("This parameter defines the spacing distance that will be used for nudging apart overlapping corners."), 4);
+    AddRouterPenaltySpinbutton(_page_connector, "cluster", _("Cluster Crossing:"),
+        _("This penalty is applied whenever a connector path crosses a cluster boundary."), 4000);
+    AddRouterPenaltySpinbutton(_page_connector, "shared_path", _("Shared Path:"),
+        _("This penalty is applied whenever a connector path shares some segments with an immovable portion of an existing connector route"), 0);
+    AddRouterPenaltySpinbutton(_page_connector, "reverse_direction", _("Reverse Direction:"),
+        _("This penalty is applied whenever a connector path travels in the direction opposite of the destination from the source endpoint."), 50);
 
 #ifdef WITH_LPETOOL
     //LPETool

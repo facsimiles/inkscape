@@ -73,6 +73,8 @@ public:
 
     void modified(unsigned int flags) override;
 
+    PointHints getConnectionHints() const override;
+
     /**
      * @brief Makes sure that start and end lie between 0 and 2 * PI.
      */

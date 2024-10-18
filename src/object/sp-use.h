@@ -61,6 +61,7 @@ public:
 	Inkscape::DrawingItem* show(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags) override;
 	void hide(unsigned int key) override;
 	void snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) const override;
+    PointHints getConnectionHints() const override;
 
 	SPItem *root();
 	SPItem const *root() const;

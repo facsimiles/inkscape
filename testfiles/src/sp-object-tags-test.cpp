@@ -39,6 +39,7 @@
 #include "object/sp-page.h"
 #include "object/sp-path.h"
 #include "object/sp-pattern.h"
+#include "object/sp-point.h"
 #include "object/sp-polyline.h"
 #include "object/sp-radial-gradient.h"
 #include "object/sp-rect.h"
@@ -194,6 +195,7 @@ TEST(SPObjectTagsTest, compare_dynamic_cast)
         SPLine,
         SPOffset,
         SPPath,
+        SPPoint,
         SPPolyLine,
         SPPolygon,
         Box3DSide,

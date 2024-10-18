@@ -44,8 +44,6 @@ enum class SPAttr {
     TRANSFORM,
     SODIPODI_TYPE,
     SODIPODI_INSENSITIVE,
-    CONNECTOR_AVOID,
-    CONNECTION_POINTS,
     TRANSFORM_CENTER_X,
     TRANSFORM_CENTER_Y,
     INKSCAPE_PATH_EFFECT,
@@ -167,13 +165,6 @@ enum class SPAttr {
     /* SPPath */
     // D,  Promoted to property in SVG 2
     INKSCAPE_ORIGINAL_D,
-    CONNECTOR_TYPE,
-    CONNECTOR_CURVATURE,
-    INKSCAPE_CONNECTOR_SPACING,
-    CONNECTION_START,
-    CONNECTION_END,
-    CONNECTION_START_POINT,
-    CONNECTION_END_POINT,
     /* SPRect */
     RX,
     RY,
@@ -594,6 +585,10 @@ enum class SPAttr {
     INKSCAPE_DESK_COLOR,
     INKSCAPE_DESK_OPACITY,
     INKSCAPE_DESK_CHECKERBOARD,
+
+    /* SPPoint to VirtualPoint Ref */
+    VIRTUAL_POINT_REF,
+
     // Inkscape-specific mode: clip content rendering to pages' boundaries
     INKSCAPE_CLIP_TO_PAGE_RENDERING,
     INKSCAPE_ANTIALIAS_RENDERING,

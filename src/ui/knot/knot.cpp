@@ -234,6 +234,7 @@ bool SPKnot::eventHandler(Inkscape::CanvasEvent const &event)
     [&] (Inkscape::EnterEvent const &event) {
         setFlag(SP_KNOT_MOUSEOVER, true);
         setFlag(SP_KNOT_GRABBED, false);
+        enter_signal.emit(this, event.modifiers);
 
         if (!_tip.empty() && desktop && desktop->getTool()) {
             desktop->getTool()->defaultMessageContext()->set(Inkscape::NORMAL_MESSAGE, _tip.c_str());
@@ -248,6 +249,7 @@ bool SPKnot::eventHandler(Inkscape::CanvasEvent const &event)
     [&] (Inkscape::LeaveEvent const &event) {
         setFlag(SP_KNOT_MOUSEOVER, false);
         setFlag(SP_KNOT_GRABBED, false);
+        leave_signal.emit(this, event.modifiers);
 
         if (!_tip.empty() && desktop && desktop->getTool()) {
             desktop->getTool()->defaultMessageContext()->clear();

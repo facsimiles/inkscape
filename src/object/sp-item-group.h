@@ -79,6 +79,7 @@ public:
 
     Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags) override;
 
+    Geom::PathVector outline() const override;
     Geom::OptRect bbox(Geom::Affine const &transform, SPItem::BBoxType bboxtype) const override;
     void print(SPPrintContext *ctx) override;
     const char* typeName() const override;

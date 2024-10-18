@@ -105,8 +105,7 @@ void SPPath::convert_to_guides() const {
     sp_guide_pt_pairs_to_guides(this->document, pts);
 }
 
-SPPath::SPPath() : SPShape(), connEndPair(this) {
-}
+SPPath::SPPath() = default;
 
 SPPath::~SPPath() = default;
 
@@ -116,8 +115,6 @@ void SPPath::build(SPDocument *document, Inkscape::XML::Node *repr) {
     this->readAttr(SPAttr::MARKER_START);
     this->readAttr(SPAttr::MARKER_MID);
     this->readAttr(SPAttr::MARKER_END);
-
-    sp_conn_end_pair_build(this);
 
     SPShape::build(document, repr);
     // Our code depends on 'd' being an attribute (LPE's, etc.). To support 'd' as a property, we
@@ -183,8 +180,6 @@ void SPPath::build(SPDocument *document, Inkscape::XML::Node *repr) {
 }
 
 void SPPath::release() {
-    this->connEndPair.release();
-
     SPShape::release();
 }
 
@@ -223,15 +218,6 @@ void SPPath::set(SPAttr key, const gchar* value) {
             this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
 
-        case SPAttr::CONNECTOR_TYPE:
-        case SPAttr::CONNECTOR_CURVATURE:
-        case SPAttr::CONNECTION_START:
-        case SPAttr::CONNECTION_END:
-        case SPAttr::CONNECTION_START_POINT:
-        case SPAttr::CONNECTION_END_POINT:
-            this->connEndPair.setAttr(key, value);
-            break;
-
         default:
             SPShape::set(key, value);
             break;
@@ -261,8 +247,6 @@ g_message("sp_path_write writes 'd' attribute");
         }
     }
 
-    this->connEndPair.writeRepr(repr);
-
     SPShape::write(xml_doc, repr, flags);
 
     return repr;
@@ -278,7 +262,6 @@ void SPPath::update(SPCtx *ctx, guint flags) {
     }
 
     SPShape::update(ctx, flags);
-    this->connEndPair.update();
 }
 
 Geom::Affine SPPath::set_transform(Geom::Affine const &transform) {

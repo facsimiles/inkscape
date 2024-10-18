@@ -30,6 +30,8 @@
 #include "live_effects/lpe-circle_3pts.h"
 #include "live_effects/lpe-circle_with_radius.h"
 #include "live_effects/lpe-clone-original.h"
+#include "live_effects/lpe-connector-avoid.h"
+#include "live_effects/lpe-connector-line.h"
 #include "live_effects/lpe-constructgrid.h"
 #include "live_effects/lpe-copy_rotate.h"
 #include "live_effects/lpe-curvestitch.h"
@@ -908,7 +910,35 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         false ,//experimental
     },
 #endif
-
+    /* 1.2 */
+    {
+        CONNECTOR_AVOID,
+        NC_("path effect", "Connector Avoided") ,//label
+        "connector_avoid" ,//key
+        "connector-avoid" ,//icon
+        N_("Avoid this shape when routing connector lines.") ,//description
+        LPECategory::Generate ,//category
+        false ,//on_path
+        true ,//on_shape
+        true ,//on_group
+        true ,//on_image
+        true ,//on_text
+        false ,//experimental
+    },
+    {
+        CONNECTOR_LINE,
+        NC_("path effect", "Connector Line") ,//label
+        "connector_line" ,//key
+        "connector-line" ,//icon
+        N_("A line connecting two objects, see connector tool.") ,//description
+        LPECategory::Generate ,//category
+        true  ,//on_path
+        false ,//on_shape
+        false ,//on_group
+        false ,//on_image
+        false ,//on_text
+        false ,//experimental
+    },
 };
 
 const EnumEffectDataConverter<EffectType> LPETypeConverter(LPETypeData, sizeof(LPETypeData) / sizeof(*LPETypeData));
@@ -931,6 +961,12 @@ Effect::New(EffectType lpenr, LivePathEffectObject *lpeobj)
 {
     Effect* neweffect = nullptr;
     switch (lpenr) {
+        case CONNECTOR_AVOID:
+            neweffect = new LPEConnectorAvoid(lpeobj);
+            break;
+        case CONNECTOR_LINE:
+            neweffect = new LPEConnectorLine(lpeobj);
+            break;
         case EMBRODERY_STITCH:
             neweffect = static_cast<Effect*> ( new LPEEmbroderyStitch(lpeobj) );
             break;
@@ -1115,24 +1151,45 @@ Effect::New(EffectType lpenr, LivePathEffectObject *lpeobj)
     return neweffect;
 }
 
-void Effect::createAndApply(const char* name, SPDocument *doc, SPItem *item)
+
+/**
+ * Create a path-effect in this document's defs and return its xml repr.
+ * It is not entirely set up yet and you are required to call applyEffect
+ * and release the repr when finished.
+ */
+Inkscape::XML::Node *
+Effect::createEffect(char const *name, SPDocument *doc)
 {
-    // Path effect definition
     Inkscape::XML::Document *xml_doc = doc->getReprDoc();
     Inkscape::XML::Node *repr = xml_doc->createElement("inkscape:path-effect");
     repr->setAttribute("effect", name);
 
-    doc->getDefs()->getRepr()->addChild(repr, nullptr); // adds to <defs> and assigns the 'id' attribute
-    const gchar * repr_id = repr->attribute("id");
-    Inkscape::GC::release(repr);
+    // adds to <defs> and assigns the 'id' attribute
+    doc->getDefs()->getRepr()->addChild(repr, nullptr);
+    return repr;
+}
 
-    gchar *href = g_strdup_printf("#%s", repr_id);
+/**
+ * Adds the given path effect to the item, it MUST be added to defs already
+ * and have a valid id before you call this function, see createEffect.
+ */
+void Effect::applyEffect(Inkscape::XML::Node *repr, SPItem *item)
+{
+    auto repr_id = repr->attribute("id");
+    auto href = g_strdup_printf("#%s", repr_id);
     cast<SPLPEItem>(item)->addPathEffect(href, true);
     g_free(href);
 }
 
-void
-Effect::createAndApply(EffectType type, SPDocument *doc, SPItem *item)
+void Effect::createAndApply(char const *name, SPDocument *doc, SPItem *item)
+{
+    // Path effect definition
+    auto repr = createEffect(name, doc);
+    applyEffect(repr, item);
+    Inkscape::GC::release(repr);
+}
+
+void Effect::createAndApply(EffectType type, SPDocument *doc, SPItem *item)
 {
     createAndApply(LPETypeConverter.get_key(type).c_str(), doc, item);
 }

@@ -505,8 +505,8 @@ void PagesTool::addDragShapes(SPPage *page, Geom::Affine tr)
  */
 void PagesTool::addDragShape(SPItem *item, Geom::Affine tr)
 {
-    if (auto shape = item_to_outline(item)) {
-        addDragShape(*shape * item->i2dt_affine(), tr);
+    if (auto const shape = item_to_outline(item); !shape.empty()) {
+        addDragShape(shape * item->i2dt_affine(), tr);
     }
 }
 

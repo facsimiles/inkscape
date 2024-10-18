@@ -747,15 +747,15 @@ public:
 
     void invoke_build(SPDocument *document, Inkscape::XML::Node *repr, unsigned int cloned);
 
-    int getIntAttribute(char const *key, int def);
+    int getIntAttribute(char const *key, int def) const;
 
-    unsigned getPosition();
+    unsigned getPosition() const;
 
-    char const * getAttribute(char const *name) const;
+    char const *getAttribute(char const *name) const;
 
     void appendChild(Inkscape::XML::Node *child);
 
-    void addChild(Inkscape::XML::Node *child,Inkscape::XML::Node *prev=nullptr);
+    void addChild(Inkscape::XML::Node *child, Inkscape::XML::Node *prev = nullptr);
 
     /**
      * Call virtual set() function of object.

@@ -36,7 +36,6 @@
 #include <gtkmm/paned.h>
 #include <gtkmm/widget.h>
 
-#include "conn-avoid-ref.h"
 #include "desktop.h"
 #include "document.h"
 #include "document-undo.h"
@@ -200,10 +199,6 @@ SPDesktopWidget::SPDesktopWidget(InkscapeWindow *inkscape_window, SPDocument *do
     // Initialize the command toolbar only after contructing the desktop. Else, it'll crash.
     command_toolbar = std::make_unique<Inkscape::UI::Toolbar::CommandToolbar>(_desktop.get());
     _top_toolbars->attach(*command_toolbar, 0, 0);
-
-    // Add the shape geometry to libavoid for autorouting connectors.
-    // This needs desktop set for its spacing preferences.
-    init_avoided_shape_geometry(_desktop.get());
 
     _statusbar->set_desktop(_desktop.get());
 
