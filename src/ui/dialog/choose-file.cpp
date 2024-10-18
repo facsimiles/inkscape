@@ -91,8 +91,8 @@ using FinishMethod = Glib::RefPtr<Gio::File> (Gtk::FileDialog::*)
 }
 
 Glib::RefPtr<Gio::File> choose_file_save(Glib::ustring const &title, Gtk::Window *parent,
-                                         Glib::ustring const &mime_type,
-                                         Glib::ustring const &file_name,
+                                         Glib::RefPtr<Gio::ListStore<Gtk::FileFilter>> const &filters_model,
+                                         std::string const &file_name,
                                          std::string &current_folder)
 {
     if (!parent) return {};
@@ -103,14 +103,34 @@ Glib::RefPtr<Gio::File> choose_file_save(Glib::ustring const &title, Gtk::Window
 
     auto const file_dialog = create_file_dialog(title, _("Save"));
 
-    auto filter = Gtk::FileFilter::create();
-    filter->add_mime_type(mime_type);
-    set_filter(*file_dialog, filter);
+    if (filters_model) {
+        set_filters(*file_dialog, filters_model);
+        // for (int i = 0; i < filters_model->get_n_items(); ++i) {
+        //     std::cout << filters_model->get_item(i)->get_name() << std::endl;
+        // }
+    }
 
     file_dialog->set_initial_name(file_name);
 
     return run(*file_dialog, *parent, current_folder,
                &Gtk::FileDialog::save, &Gtk::FileDialog::save_finish);
+}
+
+Glib::RefPtr<Gio::File> choose_file_save(Glib::ustring const &title, Gtk::Window *parent,
+                                         Glib::ustring const &mime_type,
+                                         std::string const &file_name,
+                                         std::string &current_folder)
+{
+    if (!parent) return {};
+
+    auto filters_model = Gio::ListStore<Gtk::FileFilter>::create();
+    auto filter = Gtk::FileFilter::create();
+    if (!mime_type.empty()) {
+        auto filter = Gtk::FileFilter::create();
+        filter->add_mime_type(mime_type);
+    }
+
+    return choose_file_save(title, parent, filters_model, file_name, current_folder);
 }
 
 Glib::RefPtr<Gio::File> choose_file_open(Glib::ustring const &title, Gtk::Window *parent,
