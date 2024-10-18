@@ -153,14 +153,15 @@ build_menu()
 
         // Remove non-inkscape files.
         std::erase_if(recent_files, [](auto const &recent_file) -> bool {
-            bool valid_file = recent_file->exists() && (
+            // Note: Do not check if the file exists, to avoid long delays. See https://gitlab.com/inkscape/inkscape/-/issues/2348.
+            bool valid_file =
                 recent_file->has_application(g_get_prgname())         ||
                 recent_file->has_application("org.inkscape.Inkscape") ||
                 recent_file->has_application("inkscape")
 #ifdef _WIN32
              || recent_file->has_application("inkscape.exe")
 #endif
-            );
+            ;
             return !valid_file;
         });
 
