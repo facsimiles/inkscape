@@ -524,6 +524,22 @@
         </child>
       </object>
     </child>
+    <child>
+      <object class="GtkToggleButton" id="_toggle_handle_mode_btn">
+        <property name="valign">center</property>
+        <property name="focusable">True</property>
+        <property name="tooltip-text" translatable="yes">Manipulate multiple handles</property>
+        <property name="has-frame">False</property>
+        <style>
+            <class name="priority1"/>
+        </style>
+        <child>
+          <object class="GtkImage" id="image23">
+            <property name="icon-name">node-type-symmetric</property>
+          </object>
+        </child>
+      </object>
+    </child>
     <style>
       <class name="inkscape-toolbar"/>
     </style>
