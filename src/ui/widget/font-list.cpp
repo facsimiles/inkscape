@@ -334,7 +334,7 @@ FontList::FontList(Glib::ustring preferences_path) :
     auto search = &get_widget<Gtk::SearchEntry2>(_builder, "font-search");
     search->signal_changed().connect([this](){ filter(); });
 
-    auto set_row_height = [font_renderer, this](int font_size_percent) {
+    auto set_row_height = [=, this](int font_size_percent) {
         font_renderer->_font_size = font_size_percent;
         // TODO: use pango layout to calc sizes
         int hh = (font_renderer->_show_font_name ? 10 : 0) + 18 * font_renderer->_font_size / 100;
@@ -343,7 +343,7 @@ FontList::FontList(Glib::ustring preferences_path) :
         _font_list.set_fixed_height_mode(false);
         _font_list.set_fixed_height_mode();
     };
-    auto set_grid_size = [=](int font_size_percent) {
+    auto set_grid_size = [=, this](int font_size_percent) {
         grid_renderer->_font_size = font_size_percent;
         set_grid_cell_size(grid_renderer, font_size_percent);
     };
@@ -482,7 +482,7 @@ FontList::FontList(Glib::ustring preferences_path) :
     }, true);
     _font_grid.property_has_tooltip() = true;
 
-    auto font_selected = [this](const FontInfo& font) {
+    auto font_selected = [=, this](const FontInfo& font) {
         if (_update.pending()) return;
 
         auto scoped = _update.block();
@@ -494,7 +494,7 @@ FontList::FontList(Glib::ustring preferences_path) :
         _signal_changed.emit();
     };
 
-    _font_grid.signal_selection_changed().connect([font_selected, this](){
+    _font_grid.signal_selection_changed().connect([=, this](){
         auto sel = _font_grid.get_selected_items();
         if (sel.size() == 1) {
             auto it = _font_list_store->get_iter(sel.front());
@@ -505,7 +505,7 @@ FontList::FontList(Glib::ustring preferences_path) :
 
     auto show_grid = &get_widget<Gtk::ToggleButton>(_builder, "view-grid");
     auto show_list = &get_widget<Gtk::ToggleButton>(_builder, "view-list");
-    auto set_list_view_mode = [prefs, this](bool show_list) {
+    auto set_list_view_mode = [=, this](bool show_list) {
         auto& list = get_widget<Gtk::ScrolledWindow>(_builder, "list");
         auto& grid = get_widget<Gtk::ScrolledWindow>(_builder, "grid");
         // TODO: sync selection between font widgets
@@ -533,7 +533,7 @@ FontList::FontList(Glib::ustring preferences_path) :
     _info_box.set_visible(false);
     _progress_box.show();
 
-    auto prepare_tags = [this](){
+    auto prepare_tags = [=, this](){
         // prepare dynamic tags
         for (auto&& f : _fonts) {
             auto kind = f.family_kind >> 8;

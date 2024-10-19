@@ -164,7 +164,7 @@ public:
       // clang-format-on
     {
         for (auto element : {Color::Background, Color::Border, Color::Desk}) {
-            get_color_picker(element).connectChanged([element, this](Colors::Color const &color) {
+            get_color_picker(element).connectChanged([=, this](Colors::Color const &color) {
                 update_preview_color(element, color);
                 if (_update.pending()) return;
                 _signal_color_changed.emit(color, element);
@@ -237,7 +237,7 @@ public:
             auto b2 = &pair.second;
             if (dim == Dimension::Scale) {
                 // uniform scale: report the same x and y
-                b1->signal_value_changed().connect([=, this](){
+                b1->signal_value_changed().connect([=, this, &dim](){
                     // Report the dimention differently if locked
                     fire_value_changed(*b1, *b1, nullptr, _locked_content_scale ? Dimension::ScaleContent : Dimension::Scale);
                 });
