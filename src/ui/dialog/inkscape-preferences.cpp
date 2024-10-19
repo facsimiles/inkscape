@@ -15,7 +15,6 @@
  */
 
 #include "inkscape-preferences.h"
-#include "helper/sigc-track-obj.h"
 
 #ifdef HAVE_CONFIG_H
 # include "config.h"  // only include where actually required!
@@ -1665,7 +1664,7 @@ void InkscapePreferences::initPageUI()
         cb->set_active_by_id(mgr.get_selected_theme());
 
         // Update on auto-reload or theme change
-        mgr.connectCssUpdated(SIGC_TRACKING_ADAPTOR(
+        mgr.connectCssUpdated(sigc::track_object(
             [=, this]() { img->set_paintable(to_texture(draw_handles_preview(get_scale_factor()))); }, *this));
         cb->signal_changed().connect([=, this](int id) {
             Handles::Manager::get().select_theme(id);
