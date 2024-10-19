@@ -31,6 +31,7 @@
 #include "sp-flowregion.h"
 #include "sp-flowtext.h"
 #include "sp-mask.h"
+#include "sp-point.h"
 #include "sp-root.h"
 #include "sp-shape.h"
 #include "sp-symbol.h"
@@ -873,6 +874,29 @@ void SPUse::getLinked(std::vector<SPObject *> &objects, LinkedObjectNature direc
     SPObject::getLinked(objects, direction);
 }
 
+/**
+ * A clone's virtual points are the actual points of the parent object
+ */
+PointHints SPUse::getConnectionHints() const
+{
+    PointHints ret;
+    if (ref) {
+        int index = 0;
+        for (auto &conn : ref->getObject()->getConnectionPoints()) {
+            std::string name = "sub_point_" + std::to_string(index);
+            index += 1;
+            if (conn->getId()) {
+                name = conn->getId();
+            }
+            if (auto point = conn->parentPoint()) {
+                ret[name] = *point;
+            } else {
+                g_warning("Can't hint point: %s", name.c_str());
+            }
+        }
+    }
+    return ret;
+}
 /*
   Local Variables:
   mode:c++

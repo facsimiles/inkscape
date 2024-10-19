@@ -78,8 +78,6 @@ public:
     
     GQuark default_layer_id;
 
-    double connector_spacing;
-
     std::vector<SPGuide *> guides;
     std::vector<SPGrid *> grids;
     std::vector<SPDesktop *> views;

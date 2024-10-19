@@ -26,7 +26,6 @@
 
 #include "attributes.h"
 #include "colors/manager.h"
-#include "conn-avoid-ref.h" // for defaultConnSpacing.
 #include "desktop.h"
 #include "document-undo.h"
 #include "document.h"
@@ -81,8 +80,6 @@ SPNamedView::SPNamedView()
 
     this->default_layer_id = 0;
 
-    this->connector_spacing = defaultConnSpacing;
-
     this->_viewport = new Inkscape::CanvasPage();
     this->_viewport->hide();
 }
@@ -129,7 +126,6 @@ void SPNamedView::build(SPDocument *document, Inkscape::XML::Node *repr) {
     this->readAttr(SPAttr::INKSCAPE_WINDOW_Y);
     this->readAttr(SPAttr::INKSCAPE_WINDOW_MAXIMIZED);
     this->readAttr(SPAttr::INKSCAPE_CURRENT_LAYER);
-    this->readAttr(SPAttr::INKSCAPE_CONNECTOR_SPACING);
     this->readAttr(SPAttr::INKSCAPE_LOCKGUIDES);
     readAttr(SPAttr::INKSCAPE_CLIP_TO_PAGE_RENDERING);
     readAttr(SPAttr::INKSCAPE_ANTIALIAS_RENDERING);
@@ -377,9 +373,6 @@ void SPNamedView::set(SPAttr key, const gchar* value) {
         break;
     case SPAttr::INKSCAPE_CURRENT_LAYER:
         this->default_layer_id = value ? g_quark_from_string(value) : 0;
-        break;
-    case SPAttr::INKSCAPE_CONNECTOR_SPACING:
-        this->connector_spacing = value ? g_ascii_strtod(value, nullptr) : defaultConnSpacing;
         break;
     case SPAttr::INKSCAPE_DOCUMENT_UNITS:
         display_units = sp_parse_document_units(value);

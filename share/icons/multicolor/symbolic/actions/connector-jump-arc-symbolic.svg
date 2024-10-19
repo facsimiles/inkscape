@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) and export_objects.py -->
+
+<svg version="1.1" id="svg1" width="16" height="16" viewBox="0 0 16 16" sodipodi:docname="connector-jump-arc-symbolic.svg" inkscape:version="1.1 (1:1.1+202105261517+ce6663b3b7)" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
+  <defs id="defs10" />
+  <sodipodi:namedview objecttolerance="10" gridtolerance="10" guidetolerance="10" id="namedview" showgrid="true" inkscape:zoom="41.25" inkscape:cx="8" inkscape:cy="8" inkscape:window-width="1534" inkscape:window-height="843" inkscape:window-x="66" inkscape:window-y="20" inkscape:window-maximized="1" inkscape:current-layer="svg1" pagecolor="#ffffff" bordercolor="#999999" borderopacity="1" inkscape:pageshadow="0" inkscape:pageopacity="0" inkscape:pagecheckerboard="0">
+    <inkscape:grid type="xygrid" id="grid" />
+  </sodipodi:namedview>
+  <path style="color:#000000;fill:#000000;stroke-linecap:round;stroke-linejoin:bevel;-inkscape-stroke:none;paint-order:stroke markers fill" d="M 7.7281801,3.853519 C 6.9608378,3.855619 6.1947413,4.114137 5.5415512,4.630929 4.3974591,5.536095 3.7996133,7.053822 3.6487262,8.686982 H 1.6284994 A 0.6656088,0.6656088 0 0 0 0.96289057,9.352591 0.6656088,0.6656088 0 0 0 1.6284994,10.0182 H 4.1869332 L 4.852542,9.352591 C 4.848022,7.796931 5.478501,6.38017 6.3683621,5.676143 7.2582201,4.972103 8.2072548,4.969718 9.0983981,5.668343 9.9895386,6.366979 10.622018,7.778717 10.622018,9.334391 L 11.287626,10 h 3.065442 A 0.6656088,0.6656088 0 0 0 15.018677,9.334391 0.6656088,0.6656088 0 0 0 14.353068,8.668782 H 11.823234 C 11.667937,7.035588 11.067812,5.520383 9.920009,4.620529 9.2649371,4.106976 8.4955223,3.851467 7.7281801,3.853519 Z" id="path1650" />
+  <path style="color:#000000;fill:#000000;stroke-linecap:round;stroke-linejoin:bevel;-inkscape-stroke:none;paint-order:stroke markers fill" d="M 7.6683793,6.710956 A 0.6656088,0.6656088 0 0 0 7.0027705,7.376565 V 12.99524 A 0.6656088,0.6656088 0 0 0 7.6683793,13.660849 0.6656088,0.6656088 0 0 0 8.3339881,12.99524 V 7.376565 A 0.6656088,0.6656088 0 0 0 7.6683793,6.710956 Z" id="path1552" />
+</svg>

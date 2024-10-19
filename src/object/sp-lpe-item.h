@@ -92,6 +92,8 @@ public:
     SPLPEItem const * getTopPathEffect() const;
     bool hasPathEffectOnClipOrMask(SPLPEItem * shape) const;
     bool hasPathEffectOnClipOrMaskRecursive(SPLPEItem * shape) const;
+    bool providesOwnFlashPaths() const;
+    bool providesOwnKnotholder() const;
     std::size_t getLPEIndex(Inkscape::LivePathEffect::Effect *lpe) const;
     std::size_t countLPEOfType(int const type, bool inc_hidden = true, bool is_ready = true) const;
     std::size_t getLPEReferenceIndex(PathEffectSharedPtr const &lperef) const;

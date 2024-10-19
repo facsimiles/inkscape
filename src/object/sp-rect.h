@@ -72,6 +72,8 @@ public:
 
 	void snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) const override;
 	void convert_to_guides() const override;
+
+    PointHints getConnectionHints() const override;
 	GenericRectType type;
 	SVGLength x;
 	SVGLength y;

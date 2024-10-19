@@ -33,20 +33,17 @@
 #include "3rdparty/adaptagrams/libcola/cola.h"
 #include "3rdparty/adaptagrams/libcola/connected_components.h"
 
+#include "live_effects/lpe-connector-line.h"
+
+#include "ui/tools/connector-tool.h"
 #include "object/sp-namedview.h"
 #include "object/sp-path.h"
 #include "style.h"
 
+using namespace Inkscape::UI::Tools;
+using namespace Inkscape::LivePathEffect;
 using namespace cola;
 using namespace vpsc;
-
-/**
- * Returns true if item is a connector
- */
-bool isConnector(SPItem const * const item) {
-    auto path = cast<SPPath>(item);
-    return path && path->connEndPair.isAutoRoutingConn();
-}
 
 struct CheckProgress: TestConvergence {
     CheckProgress(double d, unsigned i, std::list<SPItem*> & selected, Rectangles & rs,
@@ -57,24 +54,6 @@ struct CheckProgress: TestConvergence {
         , nodelookup(nodelookup)
     {}
     bool operator()(const double new_stress, std::valarray<double> & X, std::valarray<double> & Y) override {
-        /* This is where, if we wanted to animate the layout, we would need to update
-         * the positions of all objects and redraw the canvas and maybe sleep a bit
-         cout << "stress="<<new_stress<<endl;
-        cout << "x[0]="<<rs[0]->getMinX()<<endl;
-        for (std::list<SPItem *>::iterator it(selected.begin());
-            it != selected.end();
-            ++it)
-        {
-            SPItem *u=*it;
-            if(!isConnector(u)) {
-                Rectangle* r=rs[nodelookup[u->id]];
-                Geom::Rect const item_box(sp_item_bbox_desktop(u));
-                Geom::Point const curr(item_box.midpoint());
-                Geom::Point const dest(r->getCentreX(),r->getCentreY());
-                u->move_rel(Geom::Translate(dest - curr));
-            }
-        }
-        */
         return TestConvergence::operator()(new_stress, X, Y);
     }
     std::list<SPItem*> & selected;
@@ -111,9 +90,7 @@ void graphlayout(std::vector<SPItem*> const & items) {
 
     // add the connector spacing to the size of node bounding boxes
     // so that connectors can always be routed between shapes
-    SPDesktop * desktop = SP_ACTIVE_DESKTOP;
     double spacing = 0;
-    if (desktop) spacing = desktop->getNamedView()->connector_spacing + 0.1;
 
     std::map<std::string, unsigned> nodelookup;
     Rectangles rs;
@@ -144,15 +121,30 @@ void graphlayout(std::vector<SPItem*> const & items) {
     bool avoid_overlaps = prefs->getBool("/tools/connector/avoidoverlaplayout");
 
     for (SPItem* conn: connectors) {
-        auto path = cast<SPPath>(conn);
-        std::array<SPItem*, 2> attachedItems;
-        path->connEndPair.getAttachedItems(attachedItems.data());
-        if (attachedItems[0] == nullptr) continue;
-        if (attachedItems[1] == nullptr) continue;
-        std::map<std::string, unsigned>::iterator i_iter=nodelookup.find(attachedItems[0]->getId());
+        auto lpe = LPEConnectorLine::get(conn);
+        if (!lpe) {
+            continue;
+        }
+
+        auto conn_start = lpe->getConnStart();
+        auto conn_end = lpe->getConnEnd();
+
+        // Make sure sp-point connections map to their parent
+        if (auto sp_point = cast<SPPoint>(conn_start)) {
+            conn_start = cast<SPItem>(sp_point->parent);
+        }
+        if (auto sp_point = cast<SPPoint>(conn_end)) {
+            conn_end = cast<SPItem>(sp_point->parent);
+        }
+
+        if (!conn_start || !conn_end) {
+            continue;
+        }
+
+        std::map<std::string, unsigned>::iterator i_iter=nodelookup.find(conn_start->getId());
         if (i_iter == nodelookup.end()) continue;
         unsigned rect_index_first = i_iter->second;
-        i_iter = nodelookup.find(attachedItems[1]->getId());
+        i_iter = nodelookup.find(conn_end->getId());
         if (i_iter == nodelookup.end()) continue;
         unsigned rect_index_second = i_iter->second;
         es.emplace_back(rect_index_first, rect_index_second);

@@ -81,6 +81,7 @@ set(ui_SRC
 	tools/box3d-tool.cpp
 	tools/calligraphic-tool.cpp
 	tools/connector-tool.cpp
+        tools/connector-tool-knotholders.cpp
 	tools/dropper-tool.cpp
 	tools/dynamic-base.cpp
 	tools/eraser-tool.cpp
@@ -435,6 +436,7 @@ set(ui_SRC
 	tools/box3d-tool.h
 	tools/calligraphic-tool.h
 	tools/connector-tool.h
+        tools/connector-tool-knotholders.h
 	tools/dropper-tool.h
 	tools/dynamic-base.h
 	tools/eraser-tool.h

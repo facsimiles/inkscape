@@ -92,8 +92,6 @@ Other related files:
 
   object-set.h:
   persp3d-reference.h
-  sp-conn-end-pair.h
-  sp-conn-end.h
   sp-dimensions.h
   sp-factory.h
   sp-filter-reference.h

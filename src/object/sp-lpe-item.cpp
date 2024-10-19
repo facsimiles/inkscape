@@ -1075,6 +1075,38 @@ bool SPLPEItem::hasPathEffectOnClipOrMaskRecursive(SPLPEItem * shape) const
     }
 }
 
+bool SPLPEItem::providesOwnFlashPaths() const
+{
+    if (!path_effect_list || path_effect_list->empty()) {
+        return false;
+    }
+    PathEffectList path_effect_list(*this->path_effect_list);
+    for (auto &lperef : path_effect_list) {
+        if (auto lpeobj = lperef->lpeobject) {
+            if (lpeobj->get_lpe()->providesOwnFlashPaths()) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+bool SPLPEItem::providesOwnKnotholder() const
+{
+    if (!path_effect_list || path_effect_list->empty()) {
+        return false;
+    }
+    PathEffectList path_effect_list(*this->path_effect_list);
+    for (auto &lperef : path_effect_list) {
+        if (auto lpeobj = lperef->lpeobject) {
+            if (lpeobj->get_lpe()->providesOwnKnotholder()) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 bool SPLPEItem::hasPathEffect() const
 {
     if (!path_effect_list || path_effect_list->empty()) {

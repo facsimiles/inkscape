@@ -470,6 +470,10 @@ void SPShape::modified(unsigned int flags) {
     }
 }
 
+Geom::PathVector SPShape::outline() const {
+    return item_to_outline(this, true);
+}
+
 bool SPShape::checkBrokenPathEffect()
 {
     if (hasBrokenPathEffect()) {
@@ -566,11 +570,10 @@ Geom::OptRect SPShape::either_bbox(Geom::Affine const &transform, SPItem::BBoxTy
         // convert the stroke to a path and calculate that path's geometric bbox
 
         if (!this->style->stroke.isNone() && !this->style->stroke_extensions.hairline) {
-            Geom::PathVector *pathv = item_to_outline(this, true);  // calculate bbox_only
+            auto const pathv = outline();  // calculate bbox_only
 
-            if (pathv) {
-                bbox |= bounds_exact_transformed(*pathv, transform);
-                delete pathv;
+            if (!pathv.empty()) {
+                bbox |= bounds_exact_transformed(pathv, transform);
             }
         }
 

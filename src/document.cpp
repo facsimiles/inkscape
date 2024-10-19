@@ -115,7 +115,6 @@ SPDocument::SPDocument() :
     document_name(nullptr),
     actionkey(),
     object_id_counter(1),
-    _router(std::make_unique<Avoid::Router>(Avoid::PolyLineRouting|Avoid::OrthogonalRouting)),
     current_persp3d(nullptr),
     current_persp3d_impl(nullptr),
     _activexmltree(nullptr)
@@ -134,10 +133,6 @@ SPDocument::SPDocument() :
     if (!prefs->getBool("/options/yaxisdown", true)) {
         _doc2dt[3] = -1;
     }
-
-    // Penalise libavoid for choosing paths with needless extra segments.
-    // This results in much better looking orthogonal connector paths.
-    _router->setRoutingPenalty(Avoid::segmentPenalty);
 
     _serial = next_serial++;
 
@@ -206,7 +201,6 @@ SPDocument::~SPDocument() {
     }
 
     modified_connection.disconnect();
-    rerouting_connection.disconnect();
 
     if (keepalive) {
         inkscape_unref(INKSCAPE);
@@ -1401,12 +1395,6 @@ void SPDocument::requestModified()
             Glib::signal_idle().connect(sigc::mem_fun(*this, &SPDocument::idle_handler),
                                         SP_DOCUMENT_UPDATE_PRIORITY);
     }
-
-    if (rerouting_connection.empty()) {
-        rerouting_connection =
-            Glib::signal_idle().connect(sigc::mem_fun(*this, &SPDocument::rerouting_handler),
-                                        SP_DOCUMENT_REROUTING_PRIORITY);
-    }
 }
 
 void SPDocument::setupViewport(SPItemCtx *ctx)
@@ -1453,40 +1441,22 @@ SPDocument::_updateDocument(int update_flags)
  * more than 32 iterations.  So we bail out if we hit 32 iterations,
  * since this typically indicates we're stuck in an update loop.
  */
-gint SPDocument::ensureUpToDate()
+int SPDocument::ensureUpToDate()
 {
-    // Bring the document up-to-date, specifically via the following:
-    //   1a) Process all document updates.
-    //   1b) When completed, process connector routing changes.
-    //   2a) Process any updates resulting from connector reroutings.
+    // Bring the document up-to-date
     int counter = 32;
-    for (unsigned int pass = 1; pass <= 2; ++pass) {
-        // Process document updates.
-        while (!_updateDocument(0)) {
-            if (counter == 0) {
-                g_warning("More than 32 iteration while updating document '%s'", document_filename);
-                break;
-            }
-            counter--;
-        }
-        if (counter == 0)
-        {
+    while (!_updateDocument(0)) {
+        if (counter == 0) {
+            g_warning("More than 32 iterations while updating document '%s'", document_filename);
             break;
         }
-
-        // After updates on the first pass we get libavoid to process all the
-        // changed objects and provide new routings.  This may cause some objects
-            // to be modified, hence the second update pass.
-        if (pass == 1) {
-            _router->processTransaction();
-        }
+        counter--;
     }
 
-    // Remove handlers
+    // Remove idle handler
     modified_connection.disconnect();
-    rerouting_connection.disconnect();
 
-    return (counter > 0);
+    return counter > 0;
 }
 
 /**
@@ -1501,22 +1471,6 @@ SPDocument::idle_handler()
         modified_connection.disconnect();
     }
     return status;
-}
-
-/**
- * An idle handler to reroute connectors in the document.
- */
-bool
-SPDocument::rerouting_handler()
-{
-    // Process any queued movement actions and determine new routings for
-    // object-avoiding connectors.  Callbacks will be used to update and
-    // redraw affected connectors.
-    _router->processTransaction();
-
-    // We don't need to handle rerouting again until there are further
-    // diagram updates.
-    return false;
 }
 
 static bool is_within(Geom::Rect const &area, Geom::Rect const &box)
@@ -2298,6 +2252,31 @@ SPDocument::install_reference_document::install_reference_document(SPDocument* i
 
 SPDocument::install_reference_document::~install_reference_document() {
     _parent->set_reference_document(nullptr);
+}
+
+/**
+ * Generate a libavoid router specific to this document on demand.
+ */
+Avoid::Router *SPDocument::getRouter()
+{
+    if (!_router) {
+        _router = std::make_unique<Avoid::Router>(Avoid::PolyLineRouting | Avoid::OrthogonalRouting);
+    }
+
+    auto prefs = Inkscape::Preferences::get();
+    // Load penalty options from inkscape settings, this could be done via a PrefsObserver instead of
+    // at each read of the router. But this is a quick and dirty way of making sure the prefs are up to date.
+    _router->setRoutingPenalty(Avoid::anglePenalty, prefs->getDouble("/tools/connector/penalty/angle", 0));
+    _router->setRoutingPenalty(Avoid::segmentPenalty, prefs->getDouble("/tools/connector/penalty/segment", 20));
+    _router->setRoutingPenalty(Avoid::crossingPenalty, prefs->getDouble("/tools/connector/penalty/crossing", 0));
+    _router->setRoutingPenalty(Avoid::shapeBufferDistance, prefs->getDouble("/tools/connector/penalty/shape_buffer", 0));
+    _router->setRoutingPenalty(Avoid::portDirectionPenalty, prefs->getDouble("/tools/connector/penalty/port_direction", 1000));
+    _router->setRoutingPenalty(Avoid::idealNudgingDistance, prefs->getDouble("/tools/connector/penalty/ideal_nudge", 4));
+    _router->setRoutingPenalty(Avoid::clusterCrossingPenalty, prefs->getDouble("/tools/connector/penalty/cluster", 4000));
+    _router->setRoutingPenalty(Avoid::fixedSharedPathPenalty, prefs->getDouble("/tools/connector/penalty/shared_path", 0));
+    _router->setRoutingPenalty(Avoid::reverseDirectionPenalty, prefs->getDouble("/tools/connector/penalty/reverse_direction", 50));
+
+    return _router.get();
 }
 
 /*

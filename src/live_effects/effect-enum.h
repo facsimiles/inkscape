@@ -78,6 +78,9 @@ enum EffectType {
     RECURSIVE_SKELETON,
     TEXT_LABEL,
     EMBRODERY_STITCH,
+    // 1.2
+    CONNECTOR_AVOID,
+    CONNECTOR_LINE,
     INVALID_LPE // This must be last (I made it such that it is not needed anymore I think..., Don't trust on it being
                 // last. - johan)
 };
@@ -98,6 +101,7 @@ enum ParamType {
     PATH,
     PATH_ARRAY,
     POINT,
+    ITEM,
     POWERSTROKE_POINT_ARRAY,
     RANDOM,
     SATELLITE,

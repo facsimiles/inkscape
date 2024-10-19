@@ -15,6 +15,7 @@
  *
  */
 
+#include <gdk/gdk.h>
 #include <2geom/forward.h>
 #include <2geom/affine.h>
 #include <list>
@@ -25,7 +26,7 @@
 #define SEEN_SP_KNOTHOLDER_H
 
 namespace Inkscape {
-
+class CanvasEvent;
 namespace UI {
 class ShapeEditor;
 } // namespace UI
@@ -61,6 +62,9 @@ public:
     void knot_clicked_handler(SPKnot *knot, unsigned int state);
     void knot_grabbed_handler(SPKnot *knot, unsigned state);
     void knot_ungrabbed_handler(SPKnot *knot, unsigned int state);
+    void knot_enter_handler(SPKnot *knot, unsigned state);
+    void knot_leave_handler(SPKnot *knot, unsigned state);
+    bool knot_event_handler(SPKnot *knot, Inkscape::CanvasEvent const &event);
     void transform_selected(Geom::Affine transform);
     void add(KnotHolderEntity *e);
     void remove(KnotHolderEntity *e);

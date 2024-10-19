@@ -32,10 +32,10 @@
 #include "object/sp-text.h"
 #include "object/sp-marker.h"
 
+#include "live_effects/lpe-connector-line.h"
 #include "ui/dialog/dialog-container.h"
 #include "ui/dialog/dialog-manager.h"
 #include "ui/dialog/inkscape-preferences.h"
-#include "ui/tools/connector-tool.h"
 #include "ui/tools/text-tool.h"
 
 class ToolData {
@@ -178,10 +178,9 @@ set_active_tool(InkscapeWindow *win, SPItem *item, Geom::Point const p)
     } else if (is<SPMarker>(item)) {
         tool_switch("Marker", win);
     } else if (is<SPPath>(item)) {
-        if (Inkscape::UI::Tools::cc_item_is_connector(item)) {
+        if (Inkscape::LivePathEffect::isConnector(item)) {
             tool_switch("Connector", win);
-        }
-        else {
+        } else {
             tool_switch("Node", win);
         }
     } else if (is<SPText>(item) || is<SPFlowtext>(item))  {

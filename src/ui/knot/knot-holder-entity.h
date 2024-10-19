@@ -59,6 +59,9 @@ public:
     virtual bool knot_missing() const { return false; }
     virtual Geom::Point knot_get() const = 0;
     virtual void knot_click(unsigned /*state*/) {}
+    virtual void knot_enter(unsigned /*state*/) {}
+    virtual void knot_leave(unsigned /*state*/) {}
+    virtual bool knot_event(Inkscape::CanvasEvent const &event) { return false; }
     virtual bool set_item_clickpos(Geom::Point loc) { return false; }
 
     virtual void on_created() {}
@@ -78,6 +81,9 @@ private:
     Inkscape::auto_connection _moved_connection;
     Inkscape::auto_connection _click_connection;
     Inkscape::auto_connection _ungrabbed_connection;
+    Inkscape::auto_connection _enter_connection;
+    Inkscape::auto_connection _leave_connection;
+    Inkscape::auto_connection _event_connection;
 };
 
 // LPEs

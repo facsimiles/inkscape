@@ -1,182 +1,136 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
-#ifndef SEEN_CONNECTOR_CONTEXT_H
-#define SEEN_CONNECTOR_CONTEXT_H
+#ifndef INKSCAPE_UI_TOOLS_CONNECTOR_TOOL_H
+#define INKSCAPE_UI_TOOLS_CONNECTOR_TOOL_H
 
 /*
  * Connector creation tool
  *
  * Authors:
- *   Michael Wybrow <mjwybrow@users.sourceforge.net>
+ *   Martin Owens <doctormo@geek-2.com>
  *
- * Copyright (C) 2005 Michael Wybrow
+ * Copyright (C) 2021 Martin Owens
  *
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <map>
-#include <optional>
-#include <string>
-
-#include <2geom/point.h>
 #include <sigc++/connection.h>
 
-#include "display/curve.h"
-
+#include "display/control/canvas-item-bpath.h"
+#include "display/control/canvas-item-ptr.h"
+#include "display/control/canvas-item-rect.h"
+#include "helper/auto-connection.h"
+#include "live_effects/lpe-connector-line.h"
+#include "object/sp-point.h"
+#include "object/sp-shape.h"
+#include "selection.h"
 #include "ui/tools/tool-base.h"
+#include "ui/toolbar/connector-toolbar.h"
 
-#include "xml/node-observer.h"
-
-class SPItem;
-class SPCurve;
-class SPKnot;
-
-namespace Avoid {
-    class ConnRef;
-}
-
-namespace Inkscape {
-class CanvasItemBpath;
-class Selection;
-namespace XML { class Node; }
-struct ButtonPressEvent;
-struct MotionEvent;
-struct ButtonReleaseEvent;
-} // namespace Inkscape
-
-#define SP_CONNECTOR_CONTEXT(obj) (dynamic_cast<Inkscape::UI::Tools::ConnectorTool*>((Inkscape::UI::Tools::ToolBase*)obj))
-
-enum {
-    SP_CONNECTOR_CONTEXT_IDLE,
-    SP_CONNECTOR_CONTEXT_DRAGGING,
-    SP_CONNECTOR_CONTEXT_CLOSE,
-    SP_CONNECTOR_CONTEXT_STOP,
-    SP_CONNECTOR_CONTEXT_REROUTING,
-    SP_CONNECTOR_CONTEXT_NEWCONNPOINT
-};
-
-using SPKnotList = std::map<SPKnot *, int>;
+using Inkscape::LivePathEffect::LPEConnectorLine;
 
 namespace Inkscape::UI::Tools {
 
-class ConnectorTool;
+class ConnectorObjectKnotHolder;
+class ConnectorPointsKnotHolder;
+class ConnectorLineKnotHolder;
 
-class CCToolShapeNodeObserver : public Inkscape::XML::NodeObserver
+enum ToolModes
 {
-    friend class ConnectorTool;
-    ~CCToolShapeNodeObserver() override = default; // can only exist as a direct base of ConnectorTool
-
-    void notifyAttributeChanged(Inkscape::XML::Node &, GQuark, Util::ptr_shared, Util::ptr_shared) final;
+    CONNECTOR_LINE_MODE,
+    CONNECTOR_POINT_MODE,
 };
 
-class CCToolLayerNodeObserver : public Inkscape::XML::NodeObserver
-{
-    friend class ConnectorTool;
-    ~CCToolLayerNodeObserver() override = default; // can only exist as a direct base of ConnectorTool
-
-    void notifyChildRemoved(Inkscape::XML::Node &, Inkscape::XML::Node &, Inkscape::XML::Node *) final;
-};
-
-class ConnectorTool
-    : public ToolBase
-    , private CCToolShapeNodeObserver
-    , private CCToolLayerNodeObserver
+class ConnectorTool : public ToolBase
 {
 public:
     ConnectorTool(SPDesktop *desktop);
     ~ConnectorTool() override;
 
-    Inkscape::Selection *selection{nullptr};
-    Geom::Point p[5];
-
-    /** \invar npoints in {0, 2}. */
-    gint npoints{0};
-    unsigned int state : 4;
-
-    // Red curve
-    Inkscape::CanvasItemBpath *red_bpath{nullptr};
-    std::optional<SPCurve> red_curve;
-    guint32 red_color{0xff00007f};
-
-    // Green curve
-    std::optional<SPCurve> green_curve;
-
-    // The new connector
-    SPItem *newconn{nullptr};
-    Avoid::ConnRef *newConnRef{nullptr};
-    gdouble curvature{0.0};
-    bool isOrthogonal{false};
-
-    // The active shape
-    SPItem *active_shape{nullptr};
-    Inkscape::XML::Node *active_shape_repr{nullptr};
-    Inkscape::XML::Node *active_shape_layer_repr{nullptr};
-
-    // Same as above, but for the active connector
-    SPItem *active_conn{nullptr};
-    Inkscape::XML::Node *active_conn_repr{nullptr};
-    sigc::connection sel_changed_connection;
-
-    // The activehandle
-    SPKnot *active_handle{nullptr};
-
-    // The selected handle, used in editing mode
-    SPKnot *selected_handle{nullptr};
-
-    SPItem *clickeditem{nullptr};
-    SPKnot *clickedhandle{nullptr};
-
-    SPKnotList knots;
-    SPKnot *endpt_handle[2]{};
-    sigc::connection endpt_handler_connection[2];
-    gchar *shref{nullptr};
-    gchar *sub_shref{nullptr};
-    gchar *ehref {nullptr};
-    gchar *sub_ehref{nullptr};
+    static LPEConnectorLine *getLPE(SPShape *line);
 
     void set(Preferences::Entry const &val) override;
     bool root_handler(CanvasEvent const &event) override;
-    bool item_handler(SPItem* item, CanvasEvent const &event) override;
 
-    void cc_clear_active_shape();
-    void cc_set_active_conn(SPItem *item);
-    void cc_clear_active_conn();
+    void setToolMode(int mode);
+
+    // Public and called from knot-holder-entity.
+    void setHighlightArea(CanvasItemPtr<CanvasItemRect> &rect, SPItem *item, Geom::Point *point = nullptr);
+
+    void highlightPoint(SPItem *item, SPPoint *point = nullptr);
+    void highlightPoint(SPItem *item, std::string name, Geom::Point parent_point);
+
+    void unhighlightPoint();
+
+    bool activateHoverPoint();
+    void activatePoint(SPItem *item, SPPoint *point = nullptr);
+    void activatePoint(SPItem *item, std::string name, Geom::Point parent_point);
+    void activateLine(SPShape *line, bool is_end);
+
+    std::vector<SPPoint *> selected_points;
+
+    int tool_mode;
+
+    bool addCheckpoint(SPShape *line, Geom::Point point);
+    void selectionChange();
 
 private:
-    void _selectionChanged(Inkscape::Selection *selection);
+    SPItem *findShapeAtPoint(Geom::Point last_post, bool ignore_lines = false);
+    SPItem *findShapeNearPoint(Geom::Point dt_point, int distance = 3.0);
 
-    bool _handleButtonPress(ButtonPressEvent const &bevent);
-    bool _handleMotionNotify(MotionEvent const &mevent);
-    bool _handleButtonRelease(ButtonReleaseEvent const &revent);
-    bool _handleKeyPress(guint const keyval);
+    Geom::PathVector drawSimpleLine(Geom::Point drawn_end);
+    void moveDrawnLine(Geom::Point *point, Geom::Point *hover_sub_point = nullptr);
+    void moveReconnectLine(Geom::Point *point, Geom::Point *hover_sub_point = nullptr);
+    void finishDrawnLine(SPItem *end_item, SPPoint *end_point = nullptr);
+    void finishReconnectLine(SPItem *end_item, SPPoint *end_point = nullptr);
+    void deactivateLineDrawing();
 
-    void _setInitialPoint(Geom::Point const p);
-    void _setSubsequentPoint(Geom::Point const p);
-    void _finishSegment(Geom::Point p);
-    void _resetColors();
-    void _finish();
-    void _concatColorsAndFlush();
-    void _flushWhite(SPCurve *gc);
+    void selectionClear();
+    void selectionChanged(Inkscape::Selection *selection);
+    void selectObject(SPObject *object);
 
-    void _activeShapeAddKnot(SPItem* item, SPItem* subitem);
-    void _setActiveShape(SPItem *item);
-    bool _ptHandleTest(Geom::Point& p, gchar **href, gchar **subhref);
+    auto_connection sel_changed_connection;
 
-    void _reroutingFinish(Geom::Point *const p);
+    // Toolbar settings
+    Toolbar::ConnectorToolbar *toolbar = nullptr;
+    int steps = 0;
+    double spacing = 0.0;
+    double curvature = 0.0;
+    double jump_size = 0.0;
+    Inkscape::LivePathEffect::JumpMode jump_type = Inkscape::LivePathEffect::JumpMode::Arc;
+    Avoid::ConnType conn_type = Avoid::ConnType_PolyLine;
 
-    CCToolShapeNodeObserver &shapeNodeObserver() { return *this; }
-    CCToolLayerNodeObserver &layerNodeObserver() { return *this; }
-    friend CCToolShapeNodeObserver;
-    friend CCToolLayerNodeObserver;
+    // This holds knots of points when a user hovers over an item
+    ConnectorPointsKnotHolder *hover_knots = nullptr;
+    ConnectorObjectKnotHolder *point_editing_holder = nullptr;
+    CanvasItemPtr<CanvasItemRect> point_editing_rect;
+    // A knot holder for each selected line, or line connected to selected objects
+    std::vector<ConnectorLineKnotHolder *> selected_line_holders;
+    std::vector<SPShape *> selected_lines;
+    // Active means that the user has clicked on the item and is drawing a line
+    SPItem *active_item = nullptr;
+    SPItem *hover_item = nullptr;
+    SPPoint *active_point = nullptr;
+    SPPoint *hover_point = nullptr;
+    SPShape *modify_line = nullptr;
+    bool modify_end = false;
+    // The hint will be turned into an SPPoint once the line is drawn.
+    std::string active_hint_name = "";
+    Geom::Point *active_hint_point = nullptr;
+    std::string hover_hint_name = "";
+    Geom::Point *hover_hint_point = nullptr;
+    // Store the "drawn-line" as the last calculated route
+    Geom::PathVector last_route;
+
+    // Highlighting and indication of connection process
+    CanvasItemPtr<CanvasItemRect> highlight_a;
+    CanvasItemPtr<CanvasItemRect> highlight_b;
+    CanvasItemPtr<CanvasItemBpath> drawn_line;
+    std::optional<Geom::Point> drawn_start;
 };
-
-void cc_selection_set_avoid(SPDesktop *, bool const set_ignore);
-void cc_create_connection_point(ConnectorTool* cc);
-void cc_remove_connection_point(ConnectorTool* cc);
-bool cc_item_is_connector(SPItem *item);
 
 } // namespace Inkscape::UI::Tools
 
-#endif /* !SEEN_CONNECTOR_CONTEXT_H */
+#endif // INKSCAPE_UI_TOOLS_CONNECTOR_TOOL_H
 
 /*
   Local Variables:

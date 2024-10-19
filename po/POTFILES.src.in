@@ -164,6 +164,8 @@ ${_build_dir}/share/templates/templates.h
 ../src/live_effects/lpe-bspline.cpp
 ../src/live_effects/lpe-circle_with_radius.cpp
 ../src/live_effects/lpe-clone-original.cpp
+../src/live_effects/lpe-connector-line.cpp
+../src/live_effects/lpe-connector-line.h
 ../src/live_effects/lpe-constructgrid.cpp
 ../src/live_effects/lpe-copy_rotate.cpp
 ../src/live_effects/lpe-curvestitch.cpp
@@ -211,6 +213,7 @@ ${_build_dir}/share/templates/templates.h
 ../src/live_effects/parameter/enum.h
 ../src/live_effects/parameter/enumarray.h
 ../src/live_effects/parameter/fontbutton.cpp
+../src/live_effects/parameter/item.cpp
 ../src/live_effects/parameter/nodesatellitesarray.cpp
 ../src/live_effects/parameter/originalpath.cpp
 ../src/live_effects/parameter/originalsatellite.cpp
@@ -369,6 +372,7 @@ ${_build_dir}/share/templates/templates.h
 ../src/ui/tools/booleans-tool.cpp
 ../src/ui/tools/box3d-tool.cpp
 ../src/ui/tools/calligraphic-tool.cpp
+../src/ui/tools/connector-tool-knotholders.cpp
 ../src/ui/tools/connector-tool.cpp
 ../src/ui/tools/dropper-tool.cpp
 ../src/ui/tools/eraser-tool.cpp

@@ -76,7 +76,9 @@ inline std::ostream &operator<<(std::ostream &os, LPEItemShapesNumbers const &lp
 class Effect {
 public:
     static Effect* New(EffectType lpenr, LivePathEffectObject *lpeobj);
-    static void createAndApply(const char* name, SPDocument *doc, SPItem *item);
+    static Inkscape::XML::Node *createEffect(const char* name, SPDocument *doc);
+    static void applyEffect(Inkscape::XML::Node *repr, SPItem *item);
+    static void createAndApply(char const *name, SPDocument *doc, SPItem *item);
     static void createAndApply(EffectType type, SPDocument *doc, SPItem *item);
 
     virtual ~Effect();
@@ -131,7 +133,7 @@ public:
 
     // /TODO: providesKnotholder() is currently used as an indicator of whether a nodepath is
     // created for an item or not. When we allow both at the same time, this needs rethinking!
-    bool providesKnotholder() const;
+    virtual bool providesKnotholder() const;
     // /TODO: in view of providesOwnFlashPaths() below, this is somewhat redundant
     //       (but spiro lpe still needs it!)
     virtual LPEPathFlashType pathFlashType() const { return DEFAULT; }
@@ -140,6 +142,9 @@ public:
     void update_helperpath();
     bool has_exception;
 
+    // Should the path's knotholder be suppressed?
+    virtual bool providesOwnKnotholder() const { return false; }
+    // Should the node tool's flash path be suppressed?
     inline bool providesOwnFlashPaths() const {
         return provides_own_flash_paths || show_orig_path;
     }

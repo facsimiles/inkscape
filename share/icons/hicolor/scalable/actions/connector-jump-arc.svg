@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg id="svg1" width="11.223939" height="10.880276" version="1.1" sodipodi:docname="connector-jump-arc.svg" inkscape:version="1.1 (1:1.1+202105261517+ce6663b3b7)" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview id="base" showgrid="true" pagecolor="#ffffff" bordercolor="#999999" borderopacity="1" inkscape:pageshadow="0" inkscape:pageopacity="0" inkscape:pagecheckerboard="0" inkscape:snap-global="false" inkscape:zoom="38.049646" inkscape:cx="6.6229262" inkscape:cy="6.9908666" inkscape:window-width="1534" inkscape:window-height="843" inkscape:window-x="66" inkscape:window-y="20" inkscape:window-maximized="1" inkscape:current-layer="svg1">
+    <inkscape:grid id="GridFromPre046Settings" type="xygrid" originx="0pt" originy="0pt" spacingx="1pt" spacingy="1pt" color="#3f3fff" empcolor="#3f3fff" opacity="0.15" empopacity="0.38" empspacing="5" />
+  </sodipodi:namedview>
+  <defs id="defs3">
+    <linearGradient id="linearGradient10585">
+      <stop id="stop10587" offset="0" style="stop-color:#d7d7d7;stop-opacity:1" />
+      <stop id="stop10595" offset="1" style="stop-color:#000000;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <path style="color:#000000;fill:#000000;stroke-linecap:round;stroke-linejoin:bevel;-inkscape-stroke:none;paint-order:stroke markers fill" d="M 5.3261719,2.5351563 C 4.7497505,2.5366975 4.174265,2.7309306 3.6835938,3.1191406 2.824161,3.7990941 2.375064,4.9391984 2.2617188,6.1660156 H 0.74414062 a 0.5,0.5 0 0 0 -0.49999999,0.5 0.5,0.5 0 0 0 0.49999999,0.5 H 2.6660156 l 0.5,-0.5 C 3.1626235,5.4974161 3.636231,4.4331565 4.3046875,3.9042969 4.9731417,3.3754282 5.686049,3.3736363 6.3554687,3.8984375 7.0248863,4.4232477 7.4999999,5.483734 7.5,6.6523437 l 0.5,0.5 h 2.302734 a 0.5,0.5 0 0 0 0.5,-0.5 0.5,0.5 0 0 0 -0.5,-0.5 H 8.4023438 C 8.2856852,4.9255013 7.8348762,3.7872916 6.9726562,3.1113281 6.4805715,2.7255512 5.9025932,2.533615 5.3261719,2.5351563 Z" id="path1650" />
+  <path style="color:#000000;fill:#000000;stroke-linecap:round;stroke-linejoin:bevel;-inkscape-stroke:none;paint-order:stroke markers fill" d="m 5.28125,4.6816406 a 0.5,0.5 0 0 0 -0.5,0.5 v 4.2207032 a 0.5,0.5 0 0 0 0.5,0.5 0.5,0.5 0 0 0 0.5,-0.5 V 5.1816406 a 0.5,0.5 0 0 0 -0.5,-0.5 z" id="path1552" />
+</svg>
