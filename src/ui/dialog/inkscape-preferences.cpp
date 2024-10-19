@@ -87,7 +87,7 @@
 #include "colors/manager.h"
 #include "colors/spaces/base.h"
 #include "display/nr-filter-gaussian.h"
-#include "helper/auto-connection.h"
+#include <sigc++/scoped_connection.h>
 #include "io/resource.h"
 #include "ui/builder-utils.h"
 #include "ui/dialog-run.h"
@@ -1318,7 +1318,7 @@ void InkscapePreferences::changeIconsColors()
             g_critical("CSSProviderError::load_from_data(): failed to load '%s'\n(%s)",
                        css_str.c_str(), error.what());
         };
-        auto_connection _ = colorize_provider->signal_parsing_error().connect(on_error);
+        sigc::scoped_connection _ = colorize_provider->signal_parsing_error().connect(on_error);
         colorize_provider->load_from_data(css_str);
     }
 

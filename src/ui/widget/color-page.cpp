@@ -16,6 +16,7 @@
 #include <utility>
 
 #include "color-wheel-factory.h"
+#include "helper/scoped-block.h"
 #include "ink-color-wheel.h"
 #include "ink-spin-button.h"
 #include "colors/color.h"
@@ -41,7 +42,7 @@ ColorPage::ColorPage(std::shared_ptr<Space::AnySpace> space, std::shared_ptr<Col
 
     // Keep the selected colorset in-sync with the space specific colorset.
     _specific_changed_connection = _specific_colors->signal_changed.connect([this]() {
-        auto scoped(_selected_changed_connection.block_here());
+        auto scoped = scoped_block{_selected_changed_connection};
         for (auto &[id, color] : *_specific_colors) {
             _selected_colors->set(id, color);
         }
@@ -52,7 +53,7 @@ ColorPage::ColorPage(std::shared_ptr<Space::AnySpace> space, std::shared_ptr<Col
 
     // Keep the child in-sync with the selected colorset.
     _selected_changed_connection = _selected_colors->signal_changed.connect([this]() {
-        auto scoped(_specific_changed_connection.block_here());
+        auto scoped = scoped_block{_specific_changed_connection};
         for (auto &[id, color] : *_selected_colors) {
             _specific_colors->set(id, color);
         }
@@ -106,7 +107,7 @@ ColorPage::ColorPage(std::shared_ptr<Space::AnySpace> space, std::shared_ptr<Col
                 _expander.set_child(_color_wheel->get_widget());
                 _color_wheel->set_color(_specific_colors->getAverage());
                 _color_wheel_changed = _color_wheel->connect_color_changed([this](const Color& color) {
-                    auto scoped(_color_wheel_changed.block_here());
+                    auto scoped = scoped_block{_color_wheel_changed};
                     _specific_colors->setAll(color);
                 });
             }
@@ -152,11 +153,11 @@ ColorPageChannel::ColorPageChannel(
         }
     });
     _adj_changed = _adj->signal_value_changed().connect([this]() {
-        auto scoped(_slider_changed.block_here());
+        auto scoped = scoped_block{_slider_changed};
         _slider.setScaled(_adj->get_value());
     });
     _slider_changed = _slider.signal_value_changed.connect([this]() {
-        auto scoped(_adj_changed.block_here());
+        auto scoped = scoped_block{_adj_changed};
         _adj->set_value(_slider.getScaled());
     });
 }
