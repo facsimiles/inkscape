@@ -178,7 +178,9 @@ sp_file_open_dialog(Gtk::Window &parentWindow, gpointer /*object*/, gpointer /*d
     bool const success = openDialogInstance->show();
 
     // Save the folder the user selected for later.
-    open_path = openDialogInstance->getCurrentDirectory()->get_path();
+    if (auto dir = openDialogInstance->getCurrentDirectory()) {
+        open_path = dir->get_path();
+    }
 
     if (!success) {
         return;
@@ -187,15 +189,14 @@ sp_file_open_dialog(Gtk::Window &parentWindow, gpointer /*object*/, gpointer /*d
     // Open selected files.
     auto *app = InkscapeApplication::instance();
     auto files = openDialogInstance->getFiles();
-    for (int i = 0; i < files->get_n_items(); i++) {
-        auto file = files->get_typed_object<Gio::File>(i);
+    for (auto &file : files) {
         app->create_window(file);
     }
 
     // Save directory to preferences (if only one file selected as we could have files from
     // multiple directories).
-    if (files->get_n_items() == 1) {
-        open_path = Glib::path_get_dirname(files->get_typed_object<Gio::File>(0)->get_path());
+    if (files.size() == 1) {
+        open_path = Glib::path_get_dirname(files.front()->get_path());
         open_path.append(G_DIR_SEPARATOR_S);
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         prefs->setString("/dialogs/open/path", open_path);
@@ -1024,15 +1025,14 @@ sp_file_import(Gtk::Window &parentWindow)
 
     auto files = importDialogInstance->getFiles();
     auto extension = importDialogInstance->getExtension();
-    for (int i = 0; i < files->get_n_items(); i++) {
-        auto file = files->get_typed_object<Gio::File>(i);
+    for (auto &file : files) {
         file_import(doc, file->get_path(), extension);
     }
 
     // Save directory to preferences (if only one file selected as we could have files from
     // multiple directories).
-    if (files->get_n_items() == 1) {
-        import_path = Glib::path_get_dirname(files->get_typed_object<Gio::File>(0)->get_path());
+    if (files.size() == 1) {
+        import_path = Glib::path_get_dirname(files.front()->get_path());
         import_path.append(G_DIR_SEPARATOR_S);
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         prefs->setString("/dialogs/import/path", import_path);
