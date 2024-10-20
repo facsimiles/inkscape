@@ -28,7 +28,6 @@ set(helper_SRC
 	pixbuf-ops.h
 	png-write.h
     save-image.h
-    scoped-block.h
 	stock-items.h
 )
 
