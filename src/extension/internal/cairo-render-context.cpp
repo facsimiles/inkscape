@@ -625,8 +625,14 @@ CairoRenderContext::popLayer(cairo_operator_t composite)
                 // If a mask won't be applied set opacity too. (The clip is represented by a solid Cairo mask.)
                 cairo_set_source_rgba(clip_ctx->_cr, 1.0, 1.0, 1.0, mask ? 1.0 : opacity);
 
-                // It must be copied before pushState and stored after.
-                auto item_transform = getItemTransform();
+                // copy over the correct CTM
+                // It must be stored in item_transform of current state after pushState.
+                Geom::Affine item_transform;
+                if (_state->parent_has_userspace)
+                    item_transform = getParentState()->transform * _state->item_transform;
+                else
+                    item_transform = _state->item_transform;
+
                 // apply the clip path
                 clip_ctx->pushState();
                 clip_ctx->getCurrentState()->item_transform = item_transform;
@@ -669,7 +675,6 @@ CairoRenderContext::popLayer(cairo_operator_t composite)
             // copy the correct CTM to mask context
             mask_ctx->setTransform(_state->parent_has_userspace ? _state->item_transform * getParentState()->transform
                                                                 : _state->transform);
-
             // render mask contents to mask_ctx
             _renderer->applyMask(mask_ctx, mask);
 
@@ -1070,13 +1075,6 @@ Geom::Affine CairoRenderContext::getTransform() const
     ret[4] = ctm.x0;
     ret[5] = ctm.y0;
     return ret;
-}
-
-Geom::Affine CairoRenderContext::getItemTransform() const
-{
-    if (_state->parent_has_userspace)
-        return getParentTransform() * _state->item_transform;
-    return _state->item_transform;
 }
 
 Geom::Affine CairoRenderContext::getParentTransform() const
