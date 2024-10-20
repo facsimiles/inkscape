@@ -163,6 +163,7 @@
             <property name="width-chars">1</property>
             <property name="width-request">57</property>
             <property name="value">100</property>
+            <property name="valign">center</property>
           </object>
         </child>
       </object>
@@ -186,6 +187,7 @@
             <property name="adjustment">statusbar-rotate-adjustment</property>
             <property name="width-chars">1</property>
             <property name="width-request">57</property>
+            <property name="valign">center</property>
           </object>
         </child>
       </object>
