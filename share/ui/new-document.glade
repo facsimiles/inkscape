@@ -75,8 +75,18 @@
         <object class="GtkGrid" id="bottom-grid">
             <property name="halign">right</property>
             <child>
-                <object class="GtkButton" translatable="yes">Cancel</object>
-                <object class="GtkButton" translatable="yes">Create</object>
+                <object class="GtkButton" translatable="yes">
+                    <property name="label" translatable="yes">Cancel</property>
+                    <style>
+                        <class name="suggested-action"/>
+                    </style>
+                </object>
+                <object class="GtkButton" translatable="yes">
+                    <property name="label" translatable="yes">Create</property>
+                    <style>
+                        <class name="suggested-action"/>
+                    </style>
+                </object>
             </child>
         </object>
       </child>
