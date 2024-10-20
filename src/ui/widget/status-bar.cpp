@@ -188,10 +188,9 @@ StatusBar::set_coordinate(const Geom::Point& p)
 {
     char * const str_x = g_strdup_printf("%7.2f", p[Geom::X]);
     char * const str_y = g_strdup_printf("%7.2f", p[Geom::Y]);
-    char * str_total;
+    char str_total[46];
     sprintf(str_total, "(%s, %s)", str_x, str_y);
     coordinates->set_markup(str_total);
-    g_free(str_total);
     g_free(str_x);
     g_free(str_y);
 }
