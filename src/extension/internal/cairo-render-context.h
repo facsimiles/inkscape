@@ -157,7 +157,6 @@ public:
     void transform(Geom::Affine const &transform);
     void setTransform(Geom::Affine const &transform);
     Geom::Affine getTransform() const;
-    Geom::Affine getItemTransform() const;
     Geom::Affine getParentTransform() const;
 
     /* Clipping methods */
