@@ -219,6 +219,7 @@ SelectedStyle::SelectedStyle()
     opacity_adjustment = Gtk::Adjustment::create(100, 0.0, 100, 1.0, 10.0);
     opacity_sb = Gtk::make_managed<Inkscape::UI::Widget::SpinButton>(0.02, 0);
     opacity_sb->set_adjustment(opacity_adjustment);
+    opacity_sb->set_valign(GTK_ALIGN_CENTER);
     opacity_sb->set_size_request(SELECTED_STYLE_SB_WIDTH);
     opacity_sb->set_sensitive(false);
 
