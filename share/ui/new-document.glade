@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+    <requires lib="gtk" version="4.0"/>
+    <object class="GtkGrid" id="main-grid">
+      <child>
+        <object class="GtkGrid" id="top-grid">
+          <property name="valign">start</property>
+          <property name="row-spacing">4</property>
+          <child>
+            <object class="GtkLabel">
+              <property name="halign">start</property>
+              <property name="label" translatable="yes">Front page</property>
+              <style>
+                <class name="heading"/>
+                <class name="top"/>
+              </style>
+              <layout>
+                <property name="column">0</property>
+                <property name="row">0</property>
+                <property name="column-span">3</property>
+              </layout>
+            </object>
+          </child>
+          <child>
+            <object class="GtkLabel">
+              <property name="halign">start</property>
+              <property name="valign">center</property>
+              <property name="label" translatable="yes">Width:</property>
+              <layout>
+                <property name="column">0</property>
+                <property name="row">2</property>
+              </layout>
+            </object>
+          </child>
+          <child>
+            <object class="GtkLabel">
+              <property name="halign">start</property>
+              <property name="valign">center</property>
+              <property name="label" translatable="yes">Height:</property>
+              <layout>
+                <property name="column">0</property>
+                <property name="row">3</property>
+              </layout>
+            </object>
+          </child>
+          <child>
+            <object class="GtkSpinButton" id="page-width">
+              <property name="focusable">True</property>
+              <property name="tooltip-text" translatable="yes">Width of front page</property>
+              <property name="width-chars">9</property>
+              <property name="adjustment">adj-page-width</property>
+              <property name="digits">3</property>
+              <layout>
+                <property name="column">1</property>
+                <property name="row">2</property>
+                <property name="column-span">2</property>
+              </layout>
+            </object>
+          </child>
+          <child>
+            <object class="GtkSpinButton" id="page-height">
+              <property name="focusable">True</property>
+              <property name="tooltip-text" translatable="yes">Height of front page</property>
+              <property name="width-chars">9</property>
+              <property name="adjustment">adj-page-height</property>
+              <property name="digits">3</property>
+              <layout>
+                <property name="column">1</property>
+                <property name="row">3</property>
+                <property name="column-span">2</property>
+              </layout>
+            </object>
+          </child>
+        </object>
+        <object class="GtkGrid" id="bottom-grid">
+            <property name="halign">right</property>
+            <child>
+                <object class="GtkButton" translatable="yes">
+                    <property name="label" translatable="yes">Cancel</property>
+                    <style>
+                        <class name="suggested-action"/>
+                    </style>
+                </object>
+                <object class="GtkButton" translatable="yes">
+                    <property name="label" translatable="yes">Create</property>
+                    <style>
+                        <class name="suggested-action"/>
+                    </style>
+                </object>
+            </child>
+        </object>
+      </child>
+    </object>
+</interface>
