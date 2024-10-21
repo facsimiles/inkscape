@@ -56,11 +56,11 @@
 #include "ui/widget/unit-tracker.h"
 #include "widgets/widget-sizes.h"
 
-using Inkscape::UI::Widget::UnitTracker;
-using Inkscape::Util::Unit;
-using Inkscape::Util::Quantity;
 using Inkscape::DocumentUndo;
 using Inkscape::UI::Tools::NodeTool;
+using Inkscape::UI::Widget::UnitTracker;
+using Inkscape::Util::Quantity;
+using Inkscape::Util::Unit;
 
 /** Temporary hack: Returns the node tool in the active desktop.
  * Will go away during tool refactoring. */
@@ -85,6 +85,7 @@ NodeToolbar::NodeToolbar(SPDesktop *desktop)
     , _show_transform_handles_btn(&get_widget<Gtk::ToggleButton>(_builder, "_show_transform_handles_btn"))
     , _object_edit_mask_path_btn(&get_widget<Gtk::ToggleButton>(_builder, "_object_edit_mask_path_btn"))
     , _object_edit_clip_path_btn(&get_widget<Gtk::ToggleButton>(_builder, "_object_edit_clip_path_btn"))
+    , _toggle_handle_mode_btn(&get_widget<Gtk::ToggleButton>(_builder, "_toggle_handle_mode_btn"))
     , _nodes_x_item(get_derived_widget<UI::Widget::SpinButton>(_builder, "_nodes_x_item"))
     , _nodes_y_item(get_derived_widget<UI::Widget::SpinButton>(_builder, "_nodes_y_item"))
     , _nodes_d_item(get_derived_widget<UI::Widget::SpinButton>(_builder, "_nodes_d_item"))
@@ -178,6 +179,12 @@ NodeToolbar::NodeToolbar(SPDesktop *desktop)
                                                                     _object_edit_clip_path_btn,
                                                                     "/tools/nodes/edit_clipping_paths"));
 
+    _pusher_edit_clipping_paths.reset(
+        new SimplePrefPusher(_toggle_handle_mode_btn, "/tools/nodes/manipulate_handles"));
+    _toggle_handle_mode_btn->signal_toggled().connect(sigc::bind(sigc::mem_fun(*this, &NodeToolbar::on_pref_toggled),
+                                                                    _toggle_handle_mode_btn,
+                                                                    "/tools/nodes/manipulate_handles"));
+
     sel_changed(desktop->getSelection());
     desktop->connectEventContextChanged(sigc::mem_fun(*this, &NodeToolbar::watch_ec));
 }
@@ -250,7 +257,7 @@ void NodeToolbar::value_changed(Glib::ustring const &name, Glib::RefPtr<Gtk::Adj
             oldval -= page.corner(0)[d];
         }
 
-        Geom::Point delta(0,0);
+        Geom::Point delta(0, 0);
         delta[d] = val - oldval;
         nt->_multipath->move(delta);
     }
@@ -277,10 +284,10 @@ void NodeToolbar::watch_ec(SPDesktop *desktop, Inkscape::UI::Tools::ToolBase *to
     if (INK_IS_NODE_TOOL(tool)) {
         // watch selection
         c_selection_changed = desktop->getSelection()->connectChanged(sigc::mem_fun(*this, &NodeToolbar::sel_changed));
-        c_selection_modified = desktop->getSelection()->connectModified(sigc::mem_fun(*this, &NodeToolbar::sel_modified));
-        c_subselection_changed = desktop->connect_control_point_selected([this] (Inkscape::UI::ControlPointSelection *selection) {
-            coord_changed(selection);
-        });
+        c_selection_modified =
+            desktop->getSelection()->connectModified(sigc::mem_fun(*this, &NodeToolbar::sel_modified));
+        c_subselection_changed = desktop->connect_control_point_selected(
+            [this](Inkscape::UI::ControlPointSelection *selection) { coord_changed(selection); });
 
         sel_changed(desktop->getSelection());
     } else {
