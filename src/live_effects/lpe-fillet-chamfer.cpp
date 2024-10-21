@@ -102,6 +102,7 @@ void LPEFilletChamfer::doOnApply(SPLPEItem const *lpeItem)
         g_warning("LPE Fillet/Chamfer can only be applied to shapes (not groups).");
         SPLPEItem *item = const_cast<SPLPEItem *>(lpeItem);
         item->removeCurrentPathEffect(false);
+        return;
     }
     auto rect = cast<SPRect>(splpeitem);
     Geom::PathVector pathv = pathv_to_linear_and_cubic_beziers(shape->curve()->get_pathvector());
@@ -153,7 +154,7 @@ void LPEFilletChamfer::doOnApply(SPLPEItem const *lpeItem)
     nodesatellite.setHasMirror(true);
     nodesatellite.setHidden(hide_knots);
     _pathvector_nodesatellites->recalculateForNewPathVector(pathv, nodesatellite);
-    nodesatellites_param.setPathVectorNodeSatellites(_pathvector_nodesatellites);
+    nodesatellites_param.setPathVectorNodeSatellites(_pathvector_nodesatellites, true, true);
 }
 
 Gtk::Widget *LPEFilletChamfer::newWidget()
@@ -238,7 +239,7 @@ void LPEFilletChamfer::updateAmount()
     }
     _pathvector_nodesatellites->updateAmount(power, apply_no_radius, apply_with_radius, only_selected,
                                              use_knot_distance, flexible);
-    nodesatellites_param.setPathVectorNodeSatellites(_pathvector_nodesatellites);
+    nodesatellites_param.setPathVectorNodeSatellites(_pathvector_nodesatellites, true, true);
 }
 
 void LPEFilletChamfer::updateChamferSteps()
@@ -248,7 +249,7 @@ void LPEFilletChamfer::updateChamferSteps()
     }
     setSelected(_pathvector_nodesatellites);
     _pathvector_nodesatellites->updateSteps(chamfer_steps, apply_no_radius, apply_with_radius, only_selected);
-    nodesatellites_param.setPathVectorNodeSatellites(_pathvector_nodesatellites);
+    nodesatellites_param.setPathVectorNodeSatellites(_pathvector_nodesatellites, true, true);
 }
 
 void LPEFilletChamfer::updateNodeSatelliteType(NodeSatelliteType nodesatellitetype)
@@ -262,7 +263,7 @@ void LPEFilletChamfer::updateNodeSatelliteType(NodeSatelliteType nodesatellitety
     setSelected(_pathvector_nodesatellites);
     _pathvector_nodesatellites->updateNodeSatelliteType(nodesatellitetype, apply_no_radius, apply_with_radius,
                                                         only_selected);
-    nodesatellites_param.setPathVectorNodeSatellites(_pathvector_nodesatellites);
+    nodesatellites_param.setPathVectorNodeSatellites(_pathvector_nodesatellites, true, true);
 }
 
 void LPEFilletChamfer::setSelected(PathVectorNodeSatellites *_pathvector_nodesatellites)
@@ -280,6 +281,12 @@ void LPEFilletChamfer::setSelected(PathVectorNodeSatellites *_pathvector_nodesat
             NodeSatellites nodesatellites = _pathvector_nodesatellites->getNodeSatellites();
             for (size_t i = 0; i < nodesatellites.size(); ++i) {
                 for (size_t j = 0; j < nodesatellites[i].size(); ++j) {
+                    if (pathv.size() <= i || j >= count_path_curves(pathv[i])) {
+                        // we are on the end of a open path
+                        // for the moment we dont want to use
+                        // this nodesatellite so simplest do nothing with it
+                        continue;
+                    }
                     Geom::Curve const &curve_in = pathv[i][j];
                     if (only_selected && isNodePointSelected(curve_in.initialPoint()) ){
                         nodesatellites[i][j].setSelected(true);
@@ -303,10 +310,11 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
         nodesatellites_param.setEffectType(effectType());
         Geom::PathVector const pathv = pathv_to_linear_and_cubic_beziers(pathvector_before_effect);
         NodeSatellites nodesatellites = nodesatellites_param.data();
-        if (nodesatellites.empty()) {
+        if (lpeItem && nodesatellites.empty()) {
             doOnApply(lpeItem); // dont want _impl to not update versioning
             nodesatellites = nodesatellites_param.data();
         }
+        bool updated = _adjust_path;
         for (size_t i = 0; i < nodesatellites.size(); ++i) {
             for (size_t j = 0; j < nodesatellites[i].size(); ++j) {
                 if (pathv.size() <= i || j >= count_path_curves(pathv[i])) {
@@ -325,50 +333,42 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
                     } else {
                         double size = arcLengthAt(amount, curve_in);
                         nodesatellites[i][j].amount = size;
-                     }
+                    }
+                    updated = true;
                 }
-                nodesatellites[i][j].hidden = hide_knots;
-                if (only_selected && isNodePointSelected(curve_in.initialPoint()) ){
+                if (nodesatellites[i][j].hidden != hide_knots) {
+                    updated = true;
+                    nodesatellites[i][j].hidden = hide_knots;
+                }
+                if (!nodesatellites[i][j].selected && only_selected && isNodePointSelected(curve_in.initialPoint()) ){
+                    updated = true;
                     nodesatellites[i][j].setSelected(true);
                 }
             }
-
-            if (pathv.size() > i && !pathv[i].closed()) {
+            if ((nodesatellites[i].front().amount || nodesatellites[i].front().amount) && 
+                pathv.size() > i && !pathv[i].closed()) 
+            {
                 nodesatellites[i].front().amount = 0;
                 nodesatellites[i].back().amount = 0;
+                updated = true;
             }
         }
+        
         if (!_pathvector_nodesatellites) {
             _pathvector_nodesatellites = new PathVectorNodeSatellites();
+            updated = true;
         }
-        if (is_load || _adjust_path) {
-            double power = radius;
-            if (!flexible) {
-                power = Inkscape::Util::Quantity::convert(power, unit.get_abbreviation(), "px") / getSPDoc()->getDocumentScale()[Geom::X];
-            }
-            _adjust_path = false; // not wait till effect finish
-            NodeSatelliteType nodesatellite_type = FILLET;
-            std::map<std::string, NodeSatelliteType> gchar_map_to_nodesatellite_type = boost::assign::map_list_of(
-                "F", FILLET)("IF", INVERSE_FILLET)("C", CHAMFER)("IC", INVERSE_CHAMFER)("KO", INVALID_SATELLITE);
-            auto mode_str = mode.param_getSVGValue();
-            auto it = gchar_map_to_nodesatellite_type.find(mode_str.raw());
-            if (it != gchar_map_to_nodesatellite_type.end()) {
-                nodesatellite_type = it->second;
-            }
-            NodeSatellite nodesatellite(nodesatellite_type);
-            nodesatellite.setSteps(chamfer_steps);
-            nodesatellite.setAmount(power);
-            nodesatellite.setIsTime(flexible);
-            nodesatellite.setHasMirror(true);
-            nodesatellite.setHidden(hide_knots);
-            _pathvector_nodesatellites->setNodeSatellites(nodesatellites);
-            _pathvector_nodesatellites->recalculateForNewPathVector(pathv, nodesatellite);
+        _pathvector_nodesatellites->setNodeSatellites(nodesatellites);
+        if (_adjust_path) {
+            _adjust_path = false; 
+            auto S = nodesatellites[0].front();
+            S.amount = 0;
+            _pathvector_nodesatellites->recalculateForNewPathVector(pathv, S);
             nodesatellites_param.setPathVectorNodeSatellites(_pathvector_nodesatellites, true);
             nodesatellites_param.reloadKnots();
         } else {
             _pathvector_nodesatellites->setPathVector(pathv);
-            _pathvector_nodesatellites->setNodeSatellites(nodesatellites);
-            nodesatellites_param.setPathVectorNodeSatellites(_pathvector_nodesatellites, false);
+            nodesatellites_param.setPathVectorNodeSatellites(_pathvector_nodesatellites, updated);
         }
     } else {
         g_warning("LPE Fillet can only be applied to shapes (not groups).");
