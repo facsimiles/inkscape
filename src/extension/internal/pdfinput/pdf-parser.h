@@ -137,7 +137,7 @@ public:
     void loadPatternColorProfiles(Dict *resources);
     void loadColorProfile();
     void loadColorSpaceProfile(GfxColorSpace *space, Object *obj);
-    GfxPattern *lookupPattern(Object *obj, GfxState *state);
+    _POPPLER_GFX_PATTERN_TYPE lookupPattern(Object *obj, GfxState *state);
 
     std::shared_ptr<CairoFontEngine> getFontEngine();
 
@@ -173,10 +173,7 @@ private:
 
     OpHistoryEntry *operatorHistory; // list containing the last N operators
 
-    //! Caches color spaces by name
-    std::map<std::string, std::unique_ptr<GfxColorSpace>> colorSpacesCache;
-
-    GfxColorSpace *lookupColorSpaceCopy(Object &);
+    _POPPLER_GFX_COLOR_SPACE_TYPE lookupColorSpaceCopy(Object &);
 
     void setDefaultApproximationPrecision(); // init color deltas
     void pushOperator(const char *name);
@@ -202,7 +199,7 @@ private:
     void opSetMiterLimit(Object args[], int numArgs);
     void opSetLineWidth(Object args[], int numArgs);
     void opSetExtGState(Object args[], int numArgs);
-    void doSoftMask(Object *str, GBool alpha, GfxColorSpace *blendingColorSpace, GBool isolated, GBool knockout,
+    void doSoftMask(Object *str, GBool alpha, _POPPLER_GFX_COLOR_SPACE_TYPE _POPPLER_CONSTREF_2410 blendingColorSpace, GBool isolated, GBool knockout,
                     Function *transferFunc, GfxColor *backdropColor);
     void opSetRenderingIntent(Object args[], int numArgs);
 
@@ -296,7 +293,7 @@ private:
   void doForm(Object *str, double *offset = nullptr);
   void doForm1(Object *str, Dict *resDict, double *matrix, double *bbox,
 	       GBool transpGroup = gFalse, GBool softMask = gFalse,
-	       GfxColorSpace *blendingColorSpace = nullptr,
+	       _POPPLER_GFX_COLOR_SPACE_TYPE _POPPLER_CONSTREF_2410 blendingColorSpace = nullptr,
 	       GBool isolated = gFalse, GBool knockout = gFalse,
 	       GBool alpha = gFalse, Function *transferFunc = nullptr,
 	       GfxColor *backdropColor = nullptr);
