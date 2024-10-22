@@ -137,7 +137,7 @@ protected:
     SPDesktop *_desktop = nullptr;
 
     // Widgets
-    Gtk::Grid  *grid;
+    Gtk::Box  *box;
 
     Gtk::Label *tag[2];      // 'a', 'm', or empty.
 
