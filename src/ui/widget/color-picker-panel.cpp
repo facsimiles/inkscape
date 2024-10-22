@@ -135,9 +135,7 @@ public:
     PlateType _plate_type;
     std::unique_ptr<ColorPage> _page;
     ColorWheel* _plate = nullptr;
-    auto_connection _color_changed;
-    auto_connection _rgb_changed;
-    auto_connection _color_picking;
+    sigc::scoped_connection _color_picking;
     SPDesktop* _desktop = nullptr;
     sigc::signal<void (Colors::Space::Type)> _color_space_changed;
 };
@@ -153,7 +151,6 @@ ColorPickerPanelImpl::ColorPickerPanelImpl(Space::Type space, PlateType type, st
     _color_set(color),
     _plate_type(type)
 {
-
     _color_set->signal_changed.connect([this]() { update_color(); });
 
     set_row_spacing(0);

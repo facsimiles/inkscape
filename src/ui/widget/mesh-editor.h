@@ -10,7 +10,6 @@
 #include <gtkmm/gridview.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/singleselection.h>
-#include <helper/auto-connection.h>
 #include <ui/iconview-item-factory.h>
 #include <ui/operation-blocker.h>
 
@@ -44,8 +43,8 @@ private:
     Glib::RefPtr<Gtk::SingleSelection> _selection_model;
     SPDocument* _document = nullptr;
     unsigned int _tick_callback = 0;
-    auto_connection _gradients;
-    auto_connection _defs;
+    sigc::scoped_connection _gradients;
+    sigc::scoped_connection _defs;
     bool _gradients_changed = false;
     SPGradient* _selected = nullptr;
     std::string _selected_id;

@@ -13,7 +13,6 @@ set(util_SRC
 	font-tags.cpp
 	funclog.cpp
 	share.cpp
-	ok-color.cpp
 	object-renderer.cpp
 	paper.cpp
 	parse-int-range.cpp
@@ -49,7 +48,6 @@ set(util_SRC
 	funclog.h
 	hybrid-pointer.h
 	longest-common-suffix.h
-	ok-color.h
     object-renderer.h
 	optstr.h
 	pages-skeleton.h

@@ -10,7 +10,7 @@
 
 #include "okhsv.h"
 
-#include "util/ok-color.h"
+#include "colors/ok-color.h"
 
 namespace Inkscape::Colors::Space {
 

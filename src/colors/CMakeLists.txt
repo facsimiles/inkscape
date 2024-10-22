@@ -8,6 +8,7 @@ set(colors_SRC
 	document-cms.cpp
 	dragndrop.cpp
 	manager.cpp
+	ok-color.cpp
 	parser.cpp
 	printer.cpp
 	color-set.cpp
@@ -42,6 +43,7 @@ set(colors_SRC
 	document-cms.h
 	dragndrop.h
 	manager.h
+	ok-color.h
 	parser.h
 	printer.h
 	color-set.h
