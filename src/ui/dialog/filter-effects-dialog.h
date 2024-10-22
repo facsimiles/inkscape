@@ -57,6 +57,7 @@
 #include "attributes.h"
 #include "display/nr-filter-types.h"
 #include "helper/auto-connection.h"
+#include "object/filters/mergenode.h"
 #include "ui/dialog/dialog-base.h"
 #include "ui/widget/bin.h"
 #include "ui/widget/combo-enums.h"
@@ -379,9 +380,11 @@ class FilterEditorPrimitiveMergeNode final : public FilterEditorPrimitiveNode{
         void add_sink(SPFeMergeNode* node);
         void remove_extra_sinks();
         void map_to_sink_node(FilterEditorSink* sink, SPFeMergeNode* node);
-        void create_sink_merge_node(FilterEditorSink* sink, FilterEditorPrimitiveNode* prev_node);
+        SPFeMergeNode* create_sink_merge_node(FilterEditorSink* sink);
         bool set_connection(FilterEditorSink* sink, FilterEditorConnection* connection, bool replace = false);
         void set_sink_result(FilterEditorSink* sink, std::string result_string) override; 
+        void set_sink_result(FilterEditorSink* sink, int inp_index) override; 
+        bool is_last_sink(FilterEditorSink* sink);
         void update_sink_results() override;
         std::map<FilterEditorSink*, SPFeMergeNode*> sink_nodes;
 
