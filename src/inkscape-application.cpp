@@ -1140,9 +1140,15 @@ InkscapeApplication::parse_actions(const Glib::ustring& input, action_vector_t& 
 {
     const auto re_colon = Glib::Regex::create("\\s*:\\s*");
 
-    // Split action list
-    std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("\\s*;\\s*", input);
-    for (auto token : tokens) {
+    // Split action list at ";" if not preceded by "\"
+    std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("(?<!\\\\);", input);
+    for (auto& token : tokens) {
+        // Replace escaped semicolons with unescaped semicolons
+        int pos = token.find("\\;");
+        while (pos > -1) {
+            token = token.replace(pos, 2, ";");
+            pos = token.find("\\;");
+        }
         // Note: split into 2 tokens max ("param:value"); allows value to contain colon (e.g. abs. paths on Windows)
         std::vector<Glib::ustring> tokens2 = re_colon->split(token, 0,  static_cast<Glib::Regex::MatchFlags>(0), 2);
         Glib::ustring action;
