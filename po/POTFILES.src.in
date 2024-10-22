@@ -273,7 +273,6 @@ ${_build_dir}/share/templates/templates.h
 ../src/text-editing.cpp
 ../src/trace/trace.cpp
 ../src/ui/clipboard.cpp
-../src/ui/color-picker-metadata.cpp
 ../src/ui/contextmenu.cpp
 ../src/ui/desktop/document-check.cpp
 ../src/ui/desktop/menubar.cpp

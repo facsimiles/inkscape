@@ -75,9 +75,9 @@ private:
     sigc::signal<void (SPGradient*, EditOperation, SPGradient*)> _signal_changed;
     sigc::signal<void (SPGradient*, const Colors::Color&)> _signal_color_changed;
     sigc::signal<void (SPGradient*, const Glib::ustring&)> _signal_label_changed;
-    auto_connection _defs_changed;
-    auto_connection _rsrc_changed;
-    auto_connection _idle_update;
+    sigc::scoped_connection _defs_changed;
+    sigc::scoped_connection _rsrc_changed;
+    sigc::scoped_connection _idle_update;
     int _tile_size = 16;
     int _list_height = 200;
     Glib::ustring _prefs_path;

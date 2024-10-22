@@ -129,7 +129,7 @@ ColorWheel* ColorPage::create_color_wheel(Space::Type type, bool disc) {
         _color_wheel->set_color(_specific_colors->getAverage());
     }
     _color_wheel_changed = _color_wheel->connect_color_changed([this](const Color& color) {
-        auto scoped(_color_wheel_changed.block_here());
+        auto scoped = SignalBlocker{_color_wheel_changed};
         _specific_colors->setAll(color);
     });
     return _color_wheel;
