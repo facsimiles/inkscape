@@ -189,9 +189,8 @@ SelectedStyle::SelectedStyle()
         click->signal_released().connect(Controller::use_state(std::move(callback), *click));
         swatch[i]->add_controller(click);
 
-        //grid->attach(*label[i],  0, i, 1, 1);
-        grid->attach(*tag[i],    0, i, 1, 1);
-        grid->attach(*swatch[i], 1, i, 1, 1);
+        grid->attach(*tag[i],    i, 0, 1, 1);
+        grid->attach(*swatch[i], i, 0, 1, 1);
 
         make_popup(static_cast<FillOrStroke>(i));
         _mode[i] = SS_NA;
