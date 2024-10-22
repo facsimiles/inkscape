@@ -809,6 +809,7 @@ std::unique_ptr<UI::Widget::PopoverMenu> FilterEditorCanvas::create_menu()
     };
     append(_("_Duplicate selected nodes"            ), &FilterEditorCanvas::duplicate_nodes      );
     append(_("_Remove selected nodes"               ), &FilterEditorCanvas::delete_nodes         );
+    append(_("_Focus to output"), &FilterEditorCanvas::align_to_output);
     return menu;
 }
 
@@ -1187,7 +1188,6 @@ bool FilterEditorCanvas::primitive_node_exists(SPFilterPrimitive* primitive){
     }
 }
 
-
 void FilterEditorCanvas::remove_filter(SPFilter* filter){
     modify_observer(true);
     if(filter){
@@ -1207,6 +1207,27 @@ void FilterEditorCanvas::remove_filter(SPFilter* filter){
             if (nodes.find(filter_id) != nodes.end())
                 nodes.erase(nodes.find(filter_id));
 
+        }
+    }
+}
+
+void FilterEditorCanvas::align_to_output(){
+    auto filter = _dialog._filter_modifier.get_selected_filter();
+    if(filter){
+        if(output_node){
+            // Place the centre of the output node at the centre of the canvas
+            double centre_node_x, centre_node_y;
+            auto alloc_node = output_node->get_allocation();
+            auto alloc_canvas = canvas.get_allocation();
+            auto zoom_fac = get_zoom_factor();
+            output_node->translate_coordinates(canvas, alloc_node.get_width()/2, alloc_node.get_height()/2, centre_node_x, centre_node_y);
+            centre_node_x -= alloc_canvas.get_width()/(2 * zoom_fac);
+            centre_node_y -= alloc_canvas.get_height()/(2 * zoom_fac);
+            // TODO: Implement with zoom
+            // centre_node_x/=zoom_fac;
+            // centre_node_y/=zoom_fac;
+            update_offsets(canvas.get_x_offset() + centre_node_x, canvas.get_y_offset() + centre_node_y, true);
+            update_positions();
         }
     }
 }
@@ -1247,16 +1268,24 @@ void FilterEditorCanvas::update_canvas_new(){
             output_node = create_output_node(filter, x_position, y_position, "Output");
             output_node->update_filter(filter);
             output_node->update_position_from_document();
-            // g_message("Output node created %d", __LINE__);
+            g_message("Output node created %d", __LINE__);
         }
 
         current_filter_id = std::find(filter_list.begin(), filter_list.end(), filter) - filter_list.begin();
-        // Clear the connections and recreate them. 
-        // double x_position = filter->getRepr()->getAttributeDouble("inkscape:output-x", 100.0);
-        // double y_position = filter->getRepr()->getAttributeDouble("inkscape:output-y", 100.0); 
+        // g_message("Starting canvas update");
+        // g_message("Offsets: %lf %lf", canvas.get_x_offset(), canvas.get_y_offset());
+        double x_position, y_position;
+        local_to_global(100.0, 100.0, x_position, y_position);
+        // g_message("X Position, Y Position before: %lf %lf", x_position, y_position);
+        x_position = filter->getRepr()->getAttributeDouble("inkscape:output-x", x_position);
+        y_position = filter->getRepr()->getAttributeDouble("inkscape:output-y", y_position); 
+        // g_message("X Position, Y Position: %lf %lf", x_position, y_position);
+        place_node(output_node, x_position, y_position);
         output_node->update_filter(filter);
         output_node->update_position_from_document();
         place_node(output_node, output_node->x, output_node->y);
+        // Clear the connections and recreate them. 
+        update_positions();
         auto connections_copy = connections[current_filter_id];
         for(auto conn : connections_copy){
             destroy_connection(conn, false);
@@ -1335,7 +1364,9 @@ void FilterEditorCanvas::update_canvas_new(){
                         } 
                     } else {
                         if (std::find(result_inputs.begin(), result_inputs.end(), inp) != result_inputs.end()) {
-                            continue;
+                            merge_node->add_sink(merge_child);
+                            merge_node->set_sink_result(merge_node->get_sink(counter++), std::find(result_inputs.begin(), result_inputs.end(), inp) - result_inputs.begin());
+
                         } else {
                             if (result_to_primitive.find(inp) != result_to_primitive.end()) {
                                 // Perfect, we found the node we were looking for. Now just create a connection between that and this sink of it.
@@ -1358,6 +1389,7 @@ void FilterEditorCanvas::update_canvas_new(){
                     }
                 }
                 merge_node->add_sink();
+                g_assert(merge_node->sinks.size() == merge->children.size() + 1);
                 // g_message("Size of sinks: %ld", merge_node->sinks.size());
                 // g_message("Size of merge->children: %ld", merge->children.size());
             }
@@ -1386,7 +1418,7 @@ void FilterEditorCanvas::update_canvas_new(){
                     } 
                     else{
                         if(std::find(result_inputs.begin(), result_inputs.end(), inp) != result_inputs.end()){
-                            g_message("Valid result input");
+                            // g_message("Valid result input");
                         }
                         else{
                             if(result_to_primitive.find(inp) != result_to_primitive.end()){
@@ -2081,13 +2113,7 @@ void FilterEditorCanvas::update_document_new(bool add_undo){
     modify_observer(false);
 }
 void FilterEditorCanvas::update_document(bool add_undo){
-    // SPFilter* filter = _dialog._filter_modifier.get_selected_filter();
-    // g_assert(filter);
-
-    // int j = 0, total_nodes = 0;
-    // g_error("Updating the document");
-    // g_message("Updating the document");
-
+    
     modify_observer(true);
     if(add_undo){
         auto filter = _dialog._filter_modifier.get_selected_filter();
@@ -2122,7 +2148,6 @@ void FilterEditorCanvas::update_document(bool add_undo){
                 }
                 visited.insert({dynamic_cast<FilterEditorPrimitiveNode*>(node.get()), {-1, G_MININT}});
             }
-            
         }
         visited.find(static_cast<FilterEditorPrimitiveNode*>(output_node->connected_up_nodes[0].second))->second = {0, 0};
         create_nodes_order(nullptr, static_cast<FilterEditorPrimitiveNode*>(output_node->connected_up_nodes[0].second), nodes_order, visited, true, true);
@@ -2181,6 +2206,7 @@ void FilterEditorCanvas::update_document(bool add_undo){
                     auto merge_child = cast<SPFeMergeNode>(&child);
                     auto inp = merge_child->getAttribute("in");
                     if (inp == nullptr) {
+                        g_message("Created the connection from here");
                         // Shouldn't be happening but should handle anyways
                         if(primitive_list.size() > 0){
                             auto prev_prim = primitive_list.back();
@@ -2379,6 +2405,7 @@ FilterEditorConnection* FilterEditorCanvas::create_connection(FilterEditorSource
         if(dynamic_cast<FilterEditorPrimitiveMergeNode*>(sink->get_parent_node()) != nullptr && dynamic_cast<FilterEditorPrimitiveNode*>(source->get_parent_node()) != nullptr){
             // dynamic_cast<FilterEditorPrimitiveMergeNode*>(sink->get_parent_node())->create_sink_merge_node(sink, dynamic_cast<FilterEditorPrimitiveNode*>(source->get_parent_node()));
             dynamic_cast<FilterEditorPrimitiveMergeNode*>(sink->get_parent_node())->create_sink_merge_node(sink);
+            dynamic_cast<FilterEditorPrimitiveMergeNode*>(sink->get_parent_node())->set_sink_result(sink, dynamic_cast<FilterEditorPrimitiveNode*>(source->get_parent_node())->get_result_string());
         }
          
         return connection;
@@ -2480,7 +2507,6 @@ double FilterEditorCanvas::get_zoom_factor()
 void FilterEditorCanvas::update_offsets(double x, double y, bool update_to_document)
 {
     canvas.update_offset(x, y);
-    update_positions();
     if(update_to_document){
         modify_observer(true);
         auto filter = _dialog._filter_modifier.get_selected_filter();
@@ -2490,6 +2516,7 @@ void FilterEditorCanvas::update_offsets(double x, double y, bool update_to_docum
         }
         modify_observer(false);
     }
+    // update_positions();
 }
 
 
@@ -2499,13 +2526,17 @@ void FilterEditorCanvas::update_offset_from_document(){
         double x, y;
         x = filter->getRepr()->getAttributeDouble("inkscape:offset-x", 0.0);
         y = filter->getRepr()->getAttributeDouble("inkscape:offset-y", 0.0);
-        update_offsets(x, y, false);
+        update_offsets(x, y, true);
     } 
 }
 void FilterEditorCanvas::update_positions()
 {
     for (auto child : canvas.get_children()) {
         double x, y;
+        if(!dynamic_cast<FilterEditorNode*>(child)){
+            continue;
+            // TODO: Figure out why the rubberband tool sometimes stays as a child
+        }
         dynamic_cast<FilterEditorNode*>(child)->get_position(x, y);
         place_node(dynamic_cast<FilterEditorNode*>(child), x, y);
     }
@@ -2679,7 +2710,8 @@ void FilterEditorCanvas::event_handler(double x, double y)
                 }
             }
         }
-        // current_event_type = FilterEditorEvent::NONE;
+        current_event_type = FilterEditorEvent::NONE;
+        /* TODO: why was the line above commented */
         break;
     case FilterEditorEvent::PAN_START:
         drag_start_x = canvas.get_x_offset();
@@ -2691,8 +2723,12 @@ void FilterEditorCanvas::event_handler(double x, double y)
         double offset_x, offset_y;
         gesture_drag->get_offset(offset_x, offset_y);
         update_offsets(drag_start_x - offset_x, drag_start_y - offset_y);
+        update_positions();
         break;
     case FilterEditorEvent::PAN_END:
+        drag_start_x = canvas.get_x_offset();
+        drag_start_y = canvas.get_y_offset();
+        g_message("Pan End x offset: %lf .. y offset: %lf", drag_start_x, drag_start_y);
         current_event_type = FilterEditorEvent::NONE;
         break;
     case FilterEditorEvent::MOVE_START:
@@ -2866,12 +2902,14 @@ void FilterEditorCanvas::event_handler(double x, double y)
     {
         double x_start, y_start;
         gesture_drag->get_start_point(x_start, y_start);
+        g_message("From here");
         canvas.put(*rubberband_rectangle, x_start, y_start);
         rubberband_rectangle->set_size_request(0, 0);
         current_event_type = FilterEditorEvent::RUBBERBAND_UPDATE;
     }
     case FilterEditorEvent::RUBBERBAND_UPDATE:{
         if (rubberband_rectangle->get_parent() == nullptr) {
+            g_message("Noo from here");
             canvas.put(*rubberband_rectangle, x, y);
         }
         double x_start, y_start;
@@ -2916,13 +2954,14 @@ void FilterEditorCanvas::initialize_gestures()
         canvas.grab_focus();
         active_widget = get_widget_under(x, y);
         current_event_type = FilterEditorEvent::NONE;
-        in_click = true;
+        in_click = false;
         in_drag = false;
     });
     gesture_click->signal_stopped().connect([this]() {
-        // g_message("in stopped");
-        // if (! in_click) {
-        if (current_event_type != FilterEditorEvent::SELECT) {
+        g_message("in stopped");
+        if (!in_click) {
+            g_message("Beginning from here");
+        // if (current_event_type != FilterEditorEvent::SELECT) {
             in_click = false;
             in_drag = true;
             if (active_widget != nullptr) {
@@ -2946,10 +2985,12 @@ void FilterEditorCanvas::initialize_gestures()
         }
         else{
             current_event_type = FilterEditorEvent::NONE;
+            in_click = false;
+            in_drag = false;
         }
     });
     gesture_click->signal_released().connect([this](int n_press, double x, double y) {
-        // g_message("in released");
+        g_message("in released");
         if (!in_drag) {
             if(resolve_to_type<FilterEditorSink>(active_widget) != nullptr){
                 auto sink = resolve_to_type<FilterEditorSink>(active_widget);
@@ -2987,8 +3028,13 @@ void FilterEditorCanvas::initialize_gestures()
                 current_event_type = FilterEditorEvent::SELECT;
                 event_handler(x, y);
             }
+            in_drag = false;
+            in_click = true;
         }
-        in_click = false;
+        else{
+            in_drag = false;
+            in_click = false;
+        }
     });
     canvas.add_controller(gesture_click);
 
@@ -3006,7 +3052,9 @@ void FilterEditorCanvas::initialize_gestures()
         } else {
         }}
         else{
-            
+           g_message("Some filter editor event");
+
+
         }
     });
     gesture_drag->signal_drag_update().connect([this](double x, double y) {
@@ -3125,6 +3173,7 @@ void FilterEditorCanvas::initialize_gestures()
                     return true;
                 } else {
                     update_offsets(canvas.get_x_offset() + dx * SCROLL_SENS, canvas.get_y_offset() + dy * SCROLL_SENS);
+                    update_positions();
                     return true;
                 }
                 canvas.queue_draw();
