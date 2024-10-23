@@ -15,6 +15,27 @@
 #include <glib/poppler-features.h>
 #include <poppler/UTF.h>
 
+#if POPPLER_CHECK_VERSION(24, 10, 0)
+#define _POPPLER_GFX_COLOR_SPACE_TYPE std::unique_ptr<GfxColorSpace>
+#define _POPPLER_GFX_PATTERN_TYPE std::unique_ptr<GfxPattern>
+#define _POPPLER_GFX_SHADING_TYPE std::unique_ptr<GfxShading>
+#define _POPPLER_MAKE_GFX_COLOR_SPACE(ptr) std::unique_ptr<GfxColorSpace>(ptr)
+#define _POPPLER_DELETE_UNIQUE_2410(ptr)
+#define _POPPLER_COPY_UNIQUE_2410(ptr) ptr->copy()
+#define _POPPLER_GET_UNIQUE_2410(ptr) ptr.get()
+#define _POPPLER_CONSTREF_2410 const &
+#else
+#define _POPPLER_GFX_COLOR_SPACE_TYPE GfxColorSpace*
+#define _POPPLER_GFX_PATTERN_TYPE GfxPattern*
+#define _POPPLER_GFX_SHADING_TYPE GfxShading*
+#define _POPPLER_MAKE_GFX_COLOR_SPACE(ptr) ptr
+#define _POPPLER_DELETE_UNIQUE_2410(ptr) delete ptr;
+#define _POPPLER_COPY_UNIQUE_2410(ptr) ptr
+#define _POPPLER_GET_UNIQUE_2410(ptr) ptr
+#define _POPPLER_CONSTREF_2410
+#endif
+
+
 #if POPPLER_CHECK_VERSION(24, 5, 0)
 #define _POPPLER_HAS_UNICODE_BOM(value) (hasUnicodeByteOrderMark(value->toStr()))
 #define _POPPLER_HAS_UNICODE_BOMLE(value) (hasUnicodeByteOrderMarkLE(value->toStr()))
