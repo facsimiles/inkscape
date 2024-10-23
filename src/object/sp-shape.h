@@ -58,6 +58,7 @@ public:
     int numberOfMarkers (int type) const;
 
     // bbox cache
+    mutable bool cache_bbox_valid = false;
     mutable bool bbox_geom_cache_is_valid = false;
     mutable bool bbox_vis_cache_is_valid = false;
     mutable Geom::Affine bbox_geom_cache_transform;
@@ -78,6 +79,7 @@ public:
 	void release() override;
 	void update(SPCtx* ctx, unsigned int flags) override;
 	void modified(unsigned int flags) override;
+    void set_item_transform(Geom::Affine const &transform_matrix) override;
 
 	void set(SPAttr key, char const* value) override;
 	Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags) override;
