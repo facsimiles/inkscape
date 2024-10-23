@@ -35,6 +35,7 @@
 #include "pattern-manipulation.h"
 #include "ui/builder-utils.h"
 #include "ui/pack.h"
+#include "ui/reparent-spinbutton.h"
 #include "ui/util.h"
 #include "util-string/ustring-format.h"
 
@@ -78,16 +79,16 @@ const double ANGLE_STEP = 15.0;
 PatternEditor::PatternEditor(const char* prefs, Inkscape::PatternManager& manager) :
     _manager(manager),
     _builder(create_builder("pattern-edit.glade")),
-    _offset_x(get_widget<Gtk::SpinButton>(_builder, "offset-x")),
-    _offset_y(get_widget<Gtk::SpinButton>(_builder, "offset-y")),
-    _scale_x(get_widget<Gtk::SpinButton>(_builder, "scale-x")),
-    _scale_y(get_widget<Gtk::SpinButton>(_builder, "scale-y")),
-    _angle_btn(get_widget<Gtk::SpinButton>(_builder, "angle")),
-    _orient_slider(get_widget<Gtk::Scale>(_builder, "orient")),
+    // _offset_x(get_widget<Gtk::SpinButton>(_builder, "offset-x")),
+    // _offset_y(get_widget<Gtk::SpinButton>(_builder, "offset-y")),
+    // _scale_x(get_widget<Gtk::SpinButton>(_builder, "scale-x")),
+    // _scale_y(get_widget<Gtk::SpinButton>(_builder, "scale-y")),
+    // _angle_btn(get_widget<Gtk::SpinButton>(_builder, "angle")),
+    // _orient_slider(get_widget<Gtk::Scale>(_builder, "orient")),
     _gap_x_slider(get_widget<Gtk::Scale>(_builder, "gap-x")),
     _gap_y_slider(get_widget<Gtk::Scale>(_builder, "gap-y")),
-    _gap_x_spin(get_widget<Gtk::SpinButton>(_builder, "gap-x-spin")),
-    _gap_y_spin(get_widget<Gtk::SpinButton>(_builder, "gap-y-spin")),
+    // _gap_x_spin(get_widget<Gtk::SpinButton>(_builder, "gap-x-spin")),
+    // _gap_y_spin(get_widget<Gtk::SpinButton>(_builder, "gap-y-spin")),
     _edit_btn(get_widget<Gtk::Button>(_builder, "edit-pattern")),
     _preview_img(get_widget<Gtk::Picture>(_builder, "preview")),
     _preview(get_widget<Gtk::Viewport>(_builder, "preview-box")),
@@ -106,6 +107,21 @@ PatternEditor::PatternEditor(const char* prefs, Inkscape::PatternManager& manage
     _color_picker(get_derived_widget<ColorPicker>(_builder, "color-btn", _("Pattern color"), false)),
     _prefs(prefs)
 {
+    for (auto [btn, id] :
+        {std::make_tuple(&_offset_x, "offset-x"),
+        {&_offset_y, "offset-y"},
+        {&_scale_x, "scale-x"},
+        {&_scale_y, "scale-y"},
+        {&_angle_btn, "angle"},
+        {&_gap_x_spin, "gap-x-spin"},
+        {&_gap_y_spin, "gap-y-spin"},
+        }) {
+
+        replace_spinbutton_widget(get_widget<Gtk::SpinButton>(_builder, id), *btn);
+// btn->set_halign(Gtk::Align::START);
+// btn->set_hexpand(false);
+    }
+
     _color_picker.connectChanged([this](Colors::Color const &color){
         if (_update.pending()) return;
         _signal_color_changed.emit(color);
@@ -165,22 +181,22 @@ PatternEditor::PatternEditor(const char* prefs, Inkscape::PatternManager& manage
         Inkscape::Preferences::get()->setBool(_prefs + "/showLabels", _show_names.get_active());
     });
 
-    const auto max = 180.0 / ANGLE_STEP;
-    _orient_slider.set_range(-max, max);
-    _orient_slider.set_increments(1, 1);
-    _orient_slider.set_digits(0);
-    _orient_slider.set_value(0);
-    _orient_slider.signal_change_value().connect([=, this](Gtk::ScrollType st, double value){
-        if (_update.pending()) return false;
-        auto scoped(_update.block());
-        // slider works with 15deg discrete steps
-        _angle_btn.set_value(round(CLAMP(value, -max, max)) * ANGLE_STEP);
-        _signal_changed.emit();
-        return true;
-    }, true);
+    // const auto max = 180.0 / ANGLE_STEP;
+    // _orient_slider.set_range(-max, max);
+    // _orient_slider.set_increments(1, 1);
+    // _orient_slider.set_digits(0);
+    // _orient_slider.set_value(0);
+    // _orient_slider.signal_change_value().connect([=, this](Gtk::ScrollType st, double value){
+    //     if (_update.pending()) return false;
+    //     auto scoped(_update.block());
+    //     // slider works with 15deg discrete steps
+    //     _angle_btn.set_value(round(CLAMP(value, -max, max)) * ANGLE_STEP);
+    //     _signal_changed.emit();
+    //     return true;
+    // }, true);
 
     for (auto spin : {&_gap_x_spin, &_gap_y_spin}) {
-        spin->signal_value_changed().connect([spin, this](){
+        spin->signal_value_changed().connect([spin, this](double value){
             if (_update.pending() || !spin->is_sensitive()) return;
             _signal_changed.emit();
         });
@@ -190,7 +206,7 @@ PatternEditor::PatternEditor(const char* prefs, Inkscape::PatternManager& manage
         slider->set_increments(1, 1);
         slider->set_digits(0);
         slider->set_value(0);
-        slider->set_format_value_func([=](double val){
+        slider->set_format_value_func([this,slider](double val){
             auto upper = slider->get_adjustment()->get_upper();
             return Inkscape::ustring::format_classic(std::fixed, std::setprecision(0), slider_to_gap(val, upper)) + "%";
         });
@@ -203,11 +219,11 @@ PatternEditor::PatternEditor(const char* prefs, Inkscape::PatternManager& manage
 
     set_gap_control();
 
-    _angle_btn.signal_value_changed().connect([this]() {
+    _angle_btn.signal_value_changed().connect([this](double angle) {
         if (_update.pending() || !_angle_btn.is_sensitive()) return;
         auto scoped(_update.block());
-        auto angle = _angle_btn.get_value();
-        _orient_slider.set_value(round(angle / ANGLE_STEP));
+        // auto angle = _angle_btn.get_value();
+        // _orient_slider.set_value(round(angle / ANGLE_STEP));
         _signal_changed.emit();
     });
 
@@ -224,12 +240,12 @@ PatternEditor::PatternEditor(const char* prefs, Inkscape::PatternManager& manage
     });
 
     for (auto el : {&_scale_x, &_scale_y, &_offset_x, &_offset_y}) {
-        el->signal_value_changed().connect([el, this]() {
+        el->signal_value_changed().connect([el, this](double value) {
             if (_update.pending()) return;
             if (_scale_linked && (el == &_scale_x || el == &_scale_y)) {
                 auto scoped(_update.block());
                 // enforce uniform scaling
-                (el == &_scale_x) ? _scale_y.set_value(el->get_value()) : _scale_x.set_value(el->get_value());
+                (el == &_scale_x) ? _scale_y.set_value(value) : _scale_x.set_value(value);
             }
             _signal_changed.emit();
         });
@@ -381,7 +397,7 @@ void PatternEditor::update_widgets_from_pattern(Glib::RefPtr<PatternItem>& patte
     _offset_y.set_value(item.offset.y());
 
     auto degrees = 180.0 / M_PI * Geom::atan2(item.transform.xAxis());
-    _orient_slider.set_value(round(degrees / ANGLE_STEP));
+    // _orient_slider.set_value(round(degrees / ANGLE_STEP));
     _angle_btn.set_value(degrees);
 
     double x_index = gap_to_slider(item.gap[Geom::X], _gap_x_slider.get_adjustment()->get_upper());
@@ -620,6 +636,13 @@ void PatternEditor::set_active(Gtk::FlowBox& gallery, PatternStore& pat, Glib::R
 
 std::pair<std::string, SPDocument*> PatternEditor::get_selected() {
     // document patterns first
+    auto id = get_selected_doc_pattern();
+    if (!id.empty()) {
+        return std::make_pair(id, nullptr);
+    }
+    // stock patterns next
+    return get_selected_stock_pattern();
+    /*
     auto active = get_active();
     auto sel = active.first;
     auto stock_doc = active.second;
@@ -648,6 +671,39 @@ std::pair<std::string, SPDocument*> PatternEditor::get_selected() {
         }
 
         // no stock patterns available
+        return std::make_pair("", nullptr);
+    }
+    */
+}
+
+std::string PatternEditor::get_selected_doc_pattern() {
+    if (auto sel = get_active(_doc_gallery, _doc_pattern_store)) {
+        // for current document, if selection hasn't changed return linked pattern ID
+        // so that we can modify its properties (transform, offset, gap)
+        if (sel->id == _current_pattern.id.raw()) {
+            return _current_pattern.link_id;
+        }
+        // different pattern from current document selected; use its root pattern
+        // as a starting point; link pattern will be injected by adjust_pattern()
+        return sel->id;
+    }
+    return std::string{};
+}
+
+std::pair<std::string, SPDocument*> PatternEditor::get_selected_stock_pattern() {
+    auto sel = get_active(_stock_gallery, _stock_pattern_store);
+    if (sel) {
+        // return pattern ID and stock document it comes from
+        return std::make_pair(sel->id, sel->collection);
+    }
+    else {
+        // if nothing is selected, pick first stock pattern, so we have something to assign
+        // to selected object(s); without it, pattern editing will not be activated
+        if (auto first = _stock_pattern_store.store.get_store()->get_item(0)) {
+            return std::make_pair(first->id, first->collection);
+        }
+
+        // no stock patterns available; that's not good, transition to pattern fill won't work
         return std::make_pair("", nullptr);
     }
 }

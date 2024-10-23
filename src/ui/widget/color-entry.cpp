@@ -25,7 +25,6 @@ ColorEntry::ColorEntry(std::shared_ptr<Colors::ColorSet> colors)
     , _updating(false)
     , _updatingrgba(false)
     , _prevpos(0)
-    , _lastcolor()
 {
     set_name("ColorEntry");
 
@@ -37,7 +36,7 @@ ColorEntry::ColorEntry(std::shared_ptr<Colors::ColorSet> colors)
     // add extra character for pasting a hash, '#11223344'
     set_max_length(9);
     set_width_chars(8);
-    set_tooltip_text(_("Hexadecimal RGBA value of the color"));
+    set_tooltip_text(_("Hexadecimal RGB value of the color"));
 }
 
 ColorEntry::~ColorEntry()
@@ -62,6 +61,9 @@ void ColorEntry::on_changed()
 
     _updatingrgba = true;
     if (new_color) {
+        if (auto color = _colors->get()) {
+            new_color->setOpacity(color->getOpacity());
+        }
         _colors->setAll(*new_color);
     }
     _updatingrgba = false;
@@ -79,11 +81,10 @@ void ColorEntry::_onColorChanged()
         return;
     }
 
-    _lastcolor = _colors->getAverage();;
-    auto text = _lastcolor->toString();
+    auto color = _colors->getAverage().converted(Colors::Space::Type::RGB);
+    auto text = color.has_value() ? color->toString(false) : "?";
 
-    std::string old_text = get_text();
-    if (old_text != text) {
+    if (get_text().raw() != text) {
         _updating = true;
         set_text(text);
         _updating = false;

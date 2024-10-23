@@ -1542,10 +1542,10 @@ Cairo::RefPtr<Cairo::Pattern> ink_cairo_pattern_create_slanting_stripes(uint32_t
 }
 
 cairo_pattern_t *
-ink_cairo_pattern_create_checkerboard(guint32 rgba, bool use_alpha)
+ink_cairo_pattern_create_checkerboard(guint32 rgba, bool use_alpha, int size)
 {
-    int const w = 6;
-    int const h = 6;
+    int const w = size;
+    int const h = size;
 
     auto color_a = Colors::Color(rgba, use_alpha);
     auto color_b = Inkscape::Colors::make_contrasted_color(color_a, 1.0);
@@ -1572,6 +1572,21 @@ ink_cairo_pattern_create_checkerboard(guint32 rgba, bool use_alpha)
     return p;
 }
 
+Cairo::RefPtr<Cairo::Pattern> create_checkerboard_pattern(uint32_t dark, uint32_t light, unsigned size) {
+    auto img = Cairo::ImageSurface::create(Cairo::Surface::Format::ARGB32, 2 * size, 2 * size);
+    auto ctx = Cairo::Context::create(img);
+    ctx->set_source_rgb(SP_RGBA32_R_F(dark), SP_RGBA32_G_F(dark), SP_RGBA32_B_F(dark));
+    ctx->paint();
+    ctx->set_source_rgb(SP_RGBA32_R_F(light), SP_RGBA32_G_F(light), SP_RGBA32_B_F(light));
+    ctx->rectangle(0, 0, size, size);
+    ctx->fill();
+    ctx->rectangle(size, size, size, size);
+    ctx->fill();
+    auto pattern = Cairo::SurfacePattern::create(img);
+    pattern->set_extend(Cairo::Pattern::Extend::REPEAT);
+    pattern->set_filter(Cairo::SurfacePattern::Filter::NEAREST);
+    return pattern;
+}
 
 /** 
  * Draw drop shadow around the 'rect' with given 'size' and 'color'; shadow extends to the right and bottom of rect.

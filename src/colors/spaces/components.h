@@ -40,8 +40,10 @@ inline Traits operator | (const Traits lhs, const Traits rhs) {
 
 struct Component
 {
-    Component(Type type, unsigned int index, std::string id, std::string name, std::string tip, unsigned scale);
-    Component(std::string id, std::string name, std::string tip, unsigned scale);
+    enum class Unit { None, Percent, Degree };
+
+    Component(Type type, unsigned int index, std::string id, std::string name, std::string tip, unsigned scale, Unit unit = Unit::None);
+    Component(std::string id, std::string name, std::string tip, unsigned scale, Unit unit = Unit::None);
 
     Type type;
     unsigned int index;
@@ -49,6 +51,7 @@ struct Component
     std::string name;
     std::string tip;
     unsigned scale;
+    Unit unit = Unit::None;
 
     double normalize(double value) const;
 };
@@ -71,7 +74,7 @@ public:
     Type getType() const { return _type; }
     unsigned size() const { return _components.size(); }
 
-    void add(std::string id, std::string name, std::string tip, unsigned scale);
+    void add(std::string id, std::string name, std::string tip, unsigned scale, Component::Unit unit = Component::Unit::None);
     void setType(Type type, Type color_wheel = Type::NONE) { _type = type; _wheel_type = color_wheel; }
     // Says which space the color wheel should be in when picking this color space
     Type get_wheel_type() const;

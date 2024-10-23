@@ -19,22 +19,29 @@
 #include <sigc++/functors/mem_fun.h>
 #include <utility>
 
+#include "ink-spin-button.h"
 #include "colors/color.h"
 #include "colors/color-set.h"
-#include "colors/spaces/base.h"
 #include "colors/spaces/components.h"
-#include "preferences.h"
 #include "ui/controller.h"
 #include "ui/util.h"
 #include "util/drawing-utils.h"
 #include "util/theme-utils.h"
 
-static constexpr int THUMB_SPACE = 16;
-static constexpr int THUMB_SIZE = 10;
+constexpr int THUMB_SPACE = 16;
+constexpr int THUMB_SIZE = 10;
+constexpr int CHECKERBOARD_TILE = 7;
 constexpr uint32_t ERR_DARK = 0xff00ff00;    // Green
 constexpr uint32_t ERR_LIGHT = 0xffff00ff;   // Magenta
 
 namespace Inkscape::UI::Widget {
+
+ColorSlider::ColorSlider(std::shared_ptr<Colors::ColorSet> colors, Colors::Space::Component component) :
+    _colors(std::move(colors)),
+    _component(std::move(component)) {
+
+    construct();
+}
 
 ColorSlider::ColorSlider(
     BaseObjectType *cobject,
@@ -43,8 +50,12 @@ ColorSlider::ColorSlider(
     Colors::Space::Component component)
     : Gtk::DrawingArea(cobject)
     , _colors(std::move(colors))
-    , _component(std::move(component))
-{
+    , _component(std::move(component)) {
+
+    construct();
+}
+
+void ColorSlider::construct() {
     set_name("ColorSlider");
 
     set_draw_func(sigc::mem_fun(*this, &ColorSlider::draw_func));
@@ -57,6 +68,14 @@ ColorSlider::ColorSlider(
     auto const motion = Gtk::EventControllerMotion::create();
     motion->signal_motion().connect([this, &motion = *motion](auto &&...args) { on_motion(motion, args...); });
     add_controller(motion);
+
+    _drag = Gtk::GestureDrag::create();
+    _drag->set_button(1); // left
+    _drag->signal_begin().connect([this](auto){ _dragging = true; });
+    _drag->signal_update().connect([this](auto seq){ on_drag(seq); });
+    _drag->signal_end().connect([this](auto){ _dragging = false; });
+    _drag->set_propagation_phase(Gtk::PropagationPhase::CAPTURE);
+    add_controller(_drag);
 
     _changed_connection = _colors->signal_changed.connect([this]() {
         queue_draw();
@@ -93,6 +112,7 @@ void ColorSlider::on_motion(Gtk::EventControllerMotion const &motion, double x, 
         // don't rely on any click/release events, as release event might be lost leading to unintended updates
         update_component(x, y, state);
     }
+    _dragging = false;
 }
 
 void ColorSlider::update_component(double x, double y, Gdk::ModifierType const state)
@@ -102,6 +122,25 @@ void ColorSlider::update_component(double x, double y, Gdk::ModifierType const s
     // XXX We don't know how to deal with constraints yet.
     if (_colors->isValid(_component) && _colors->setAll(_component, get_value_at(*this, x, y))) {
         signal_value_changed.emit();
+    }
+}
+
+void ColorSlider::on_drag(Gdk::EventSequence* sequence) {
+    if (!_drag->get_current_button() || !_drag->is_active()) {
+        _dragging = false;
+        return;
+    }
+
+    // only update color if user is dragging the slider
+    if (_dragging) {
+        double x = 0.0;
+        double y = 0.0;
+        _drag->get_start_point(x, y);
+        double dx = 0.0;
+        double dy = 0.0;
+        _drag->get_offset(dx, dy);
+        auto state = _drag->get_current_event_state();
+        update_component(x + dx, y + dy, state);
     }
 }
 
@@ -118,7 +157,7 @@ void ColorSlider::update_component(double x, double y, Gdk::ModifierType const s
 Glib::RefPtr<Gdk::Pixbuf> _make_checkerboard(uint32_t dark, uint32_t light, unsigned scale, std::vector<uint32_t> &buffer)
 {
     // A pattern of 2x2 blocks is enough for REPEAT mode to do the rest, this way we never need to recalculate the checkerboard
-    static auto block = 0x09 * scale;
+    static auto block = CHECKERBOARD_TILE * scale;
     static auto pattern = block * 2;
 
     buffer = std::vector<uint32_t>(pattern * pattern);
@@ -130,9 +169,18 @@ Glib::RefPtr<Gdk::Pixbuf> _make_checkerboard(uint32_t dark, uint32_t light, unsi
     return Gdk::Pixbuf::create_from_data((guint8*)buffer.data(), Gdk::Colorspace::RGB, true, 8, pattern, pattern, pattern * 4);
 }
 
-static void draw_slider_thumb(const Cairo::RefPtr<Cairo::Context>& ctx, const Geom::Point& location, double size, const Gdk::RGBA& fill, const Gdk::RGBA& stroke, int device_scale) {
+static void draw_slider_thumb(const Cairo::RefPtr<Cairo::Context>& ctx, const Geom::Point& location, double size, const Gdk::RGBA& fill, const Gdk::RGBA& stroke, int device_scale, bool ring) {
     auto center = location.round(); //todo - verify pix grid fit + Geom::Point(0.5, 0.5);
     auto radius = size / 2;
+    if (ring) {
+        // donut-shaped handle?
+        ctx->save();
+        ctx->begin_new_path();
+        ctx->rectangle(location.x() - size, location.y() - size, size * 2, size * 2);
+        ctx->arc(center.x(), center.y(), radius / 2, 0, 2 * M_PI);
+        ctx->set_fill_rule(Cairo::Context::FillRule::EVEN_ODD);
+        ctx->clip();
+    }
     auto alpha = 0.06 / device_scale;
     double step = 1.0 / device_scale;
     for (int i = 2 * device_scale; i > 0; --i) {
@@ -144,12 +192,21 @@ static void draw_slider_thumb(const Cairo::RefPtr<Cairo::Context>& ctx, const Ge
     }
     // border/outline
     ctx->arc(center.x(), center.y(), radius+1, 0, 2 * M_PI);
-    ctx->set_source_rgb(stroke.get_red(), stroke.get_green(), stroke.get_blue());
+    ctx->set_source_rgba(stroke.get_red(), stroke.get_green(), stroke.get_blue(), 0.6);
     ctx->fill();
     // fill
     ctx->arc(center.x(), center.y(), radius, 0, 2 * M_PI);
     ctx->set_source_rgb(fill.get_red(), fill.get_green(), fill.get_blue());
     ctx->fill();
+
+    if (ring) {
+        ctx->restore();
+        // inner outline of the ring
+        ctx->arc(center.x(), center.y(), radius / 2 - 0.5, 0, 2 * M_PI);
+        ctx->set_source_rgba(stroke.get_red(), stroke.get_green(), stroke.get_blue(), 0.3);
+        ctx->set_line_width(1);
+        ctx->stroke();
+    }
 }
 
 void ColorSlider::draw_func(Cairo::RefPtr<Cairo::Context> const &cr,
@@ -164,12 +221,11 @@ void ColorSlider::draw_func(Cairo::RefPtr<Cairo::Context> const &cr,
     // expand border past active area on both sides, so slider's thumb doesn't hang at any extreme, but looks confined
     auto border = area;
     border.expandBy(1, 0);
-    double radius = 3;
+    double radius = 2;
     Util::rounded_rectangle(cr, border, radius);
 
     auto const scale = get_scale_factor();
     auto width = border.width() * scale;
-    // auto height = area->height() * scale;
     auto left = border.left() * scale;
     auto top = border.top() * scale;
     bool const is_alpha = _component.id == "a";
@@ -195,7 +251,7 @@ void ColorSlider::draw_func(Cairo::RefPtr<Cairo::Context> const &cr,
     // The alpha background is a checkerboard pattern of light and dark pixels
     if (is_alpha) {
         std::vector<uint32_t> bg_buffer;
-        auto [col1, col2] = Util::get_checkerboard_colors(*this);
+        auto [col1, col2] = Util::get_checkerboard_colors(*this, true);
         Glib::RefPtr<Gdk::Pixbuf> background = _make_checkerboard(col1, col2, scale, bg_buffer);
 
         // Paint the alpha background
@@ -245,7 +301,7 @@ void ColorSlider::draw_func(Cairo::RefPtr<Cairo::Context> const &cr,
     }
     if (_colors->isValid(_component)) {
         double value = _colors->getAverage(_component);
-        draw_slider_thumb(cr, Geom::Point(area.left() + value * area.width(), area.midpoint().y()), THUMB_SIZE, *fill, *stroke, get_scale_factor());
+        draw_slider_thumb(cr, Geom::Point(area.left() + value * area.width(), area.midpoint().y()), THUMB_SIZE, *fill, *stroke, get_scale_factor(), false);
     }
 }
 
@@ -264,6 +320,10 @@ void ColorSlider::setScaled(double value)
     }
     // setAll replaces every color with the same value, setAverage moves them all by the same amount.
     _colors->setAll(_component, value / _component.scale);
+}
+
+int ColorSlider::get_checkerboard_tile_size() {
+    return CHECKERBOARD_TILE;
 }
 
 } // namespace Inkscape::UI::Widget

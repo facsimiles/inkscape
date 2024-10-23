@@ -14,10 +14,7 @@
 #define SEEN_DIALOGS_OBJECT_ATTRIBUTES_H
 
 #include <glibmm/ustring.h>
-#include <gtkmm/expander.h>
-#include <gtkmm/grid.h>
 #include <gtkmm/label.h>
-#include <gtkmm/separator.h>
 #include <gtkmm/widget.h>
 #include <memory>
 #include <string>
@@ -28,9 +25,9 @@
 #include "ui/dialog/dialog-base.h"
 #include "ui/dialog/object-properties.h"
 #include "ui/operation-blocker.h"
-#include "ui/widget/spinbutton.h"
-#include "ui/widget/style-swatch.h"
+#include "ui/widget/paint-attribute.h"
 #include "ui/widget/unit-tracker.h"
+#include "xml/helper-observer.h"
 
 class SPAttributeTable;
 class SPItem;
@@ -41,29 +38,41 @@ namespace details {
 
 class AttributesPanel {
 public:
-    AttributesPanel();
+    AttributesPanel(bool show_fill_stroke = true, bool show_properties = true);
     virtual ~AttributesPanel() = default;
 
+    void set_document(SPDocument* document);
+    void set_desktop(SPDesktop* desktop);
     void update_panel(SPObject* object, SPDesktop* desktop);
-    Gtk::Widget& widget() { if(!_widget) throw "crap"; return *_widget; }
-    Glib::ustring get_title() const { return _title; }
+    virtual void subselection_changed(const std::vector<SPItem*>& items) {}
+    Gtk::Widget& widget() { if(!_widget) throw "missing widget in attributes panel"; return *_widget; }
+    virtual Glib::ustring get_title(Selection* selection) const { return _title; }
     bool supports_fill_stroke() const {return _show_fill_stroke; }
+    bool supports_props_section() const {return _show_properties; }
 
 protected:
     virtual void update(SPObject* object) = 0;
+    virtual void update_paint(SPObject* object);
+    virtual void document_replaced(SPDocument* document) {}
     // value with units changed by the user; modify current object
     void change_value_px(SPObject* object, const Glib::RefPtr<Gtk::Adjustment>& adj, const char* attr, std::function<void (double)>&& setter);
     // angle in degrees changed by the user; modify current object
     void change_angle(SPObject* object, const Glib::RefPtr<Gtk::Adjustment>& adj, std::function<void (double)>&& setter);
     // modify current object
     void change_value(SPObject* object, const Glib::RefPtr<Gtk::Adjustment>& adj, std::function<void (double)>&& setter);
+    //
+    void add_fill_and_stroke();
 
     SPDesktop* _desktop = nullptr;
     OperationBlocker _update;
-    bool _show_fill_stroke = true;
     Glib::ustring _title;
     Gtk::Widget* _widget = nullptr;
     std::unique_ptr<UI::Widget::UnitTracker> _tracker;
+    std::unique_ptr<Widget::PaintAttribute> _paint;
+    Widget::InkPropertyGrid _grid;
+private:
+    bool _show_fill_stroke = true;
+    bool _show_properties = true;
 };
 
 } // namespace details
@@ -81,6 +90,7 @@ public:
     void selectionModified(Selection *selection, guint flags) override;
 
     void desktopReplaced() override;
+    void documentReplaced() override;
 
     /**
      * Updates entries and other child widgets on selection change, object modification, etc.
@@ -92,17 +102,24 @@ private:
 
     void create_panels();
     std::map<std::string, std::unique_ptr<details::AttributesPanel>> _panels;
+    std::unique_ptr<details::AttributesPanel> _multi_obj_panel;
     details::AttributesPanel* get_panel(SPObject* object);
     void update_panel(SPObject* object);
+    void update_vis_lock(SPObject* object);
+    void show_properties_section(bool show);
+    void cursor_moved(Tools::TextTool* tool);
 
     details::AttributesPanel* _current_panel = nullptr;
     OperationBlocker _update;
     Gtk::Box& _main_panel;
     Gtk::Label& _obj_title;
+    Gtk::Button& _obj_locked;
+    Gtk::Button& _obj_visible;
     // Contains a pointer to the currently selected item (NULL in case nothing is or multiple objects are selected).
     SPItem* _current_item = nullptr;
-    Inkscape::UI::Widget::StyleSwatch _style_swatch;
     ObjectProperties& _obj_properties;
+    XML::SignalObserver _observer;
+    sigc::scoped_connection _cursor_move;
 };
 
 } // namespace Inkscape::UI::Dialog

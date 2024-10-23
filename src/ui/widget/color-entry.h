@@ -38,7 +38,6 @@ private:
     bool _updating;
     bool _updatingrgba;
     int _prevpos;
-    std::optional<Colors::Color> _lastcolor;
 
     sigc::connection _color_changed_connection;
 };

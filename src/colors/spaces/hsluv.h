@@ -29,6 +29,7 @@ public:
 
     Type getType() const override { return Type::HSLUV; }
     std::string const getName() const override { return "HSLuv"; }
+    std::string const getShortName() const override { return "HSLuv"; }
     std::string const getIcon() const override { return "color-selector-hsluv"; }
 
 protected:

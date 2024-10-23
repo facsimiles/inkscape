@@ -79,6 +79,20 @@ void sp_repr_css_attr_unref(SPCSSAttr *css)
     Inkscape::GC::release((Node *) css);
 }
 
+void intrusive_ptr_add_ref(SPCSSAttr* css) {
+    // sp_repr_css_attr_ref(css);
+    g_assert(css != nullptr);
+    Inkscape::GC::anchor((Node*)css);
+}
+
+void intrusive_ptr_release(SPCSSAttr* css) {
+    sp_repr_css_attr_unref(css);
+}
+// void sp_repr_css_attr_ref(SPCSSAttr* css) {
+//     g_assert(css != nullptr);
+//     Inkscape::GC::anchor((Node*)css);
+// }
+
 /**
  * Creates a new SPCSSAttr with one attribute (i.e. style) copied from an existing repr (node). The
  * repr attribute data is in the form of a char const * string (e.g. fill:#00ff00;stroke:none). The

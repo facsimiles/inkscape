@@ -27,6 +27,7 @@ public:
 
     Type getType() const override { return Type::LUV; }
     std::string const getName() const override { return "Luv"; }
+    std::string const getShortName() const override { return "Luv"; }
     std::string const getIcon() const override { return "color-selector-luv"; }
 
 protected:

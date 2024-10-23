@@ -28,6 +28,7 @@ public:
     Type getType() const override { return Type::CSSNAME; }
     Type getComponentType() const override { return Type::RGB; }
     std::string const getName() const override { return "CSSNAME"; }
+    std::string const getShortName() const override { return "CSS"; }
     std::string const getIcon() const override { return "color-selector-named"; }
 
     static std::string getNameFor(unsigned int rgba);

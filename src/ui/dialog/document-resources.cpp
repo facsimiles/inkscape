@@ -64,6 +64,7 @@
 #include "colors/color-set.h"
 #include "desktop.h"
 #include "document-undo.h"
+#include "global-palettes.h"
 #include "helper/choose-file.h"
 #include "helper/save-image.h"
 #include "inkscape.h"
@@ -183,34 +184,10 @@ bool is_resource_present(std::string const &id, details::Statistics const &stats
 
 std::string choose_file(Glib::ustring title, Gtk::Window* parent, Glib::ustring mime_type, Glib::ustring file_name) {
     static std::string current_folder;
-    return Inkscape::choose_file_save(title, parent, mime_type, file_name, current_folder);
+    return Inkscape::choose_file_save(title, parent, mime_type, _("GIMP color palette"), file_name, current_folder);
 }
 
-void save_gimp_palette(std::string fname, const std::vector<int>& colors, const char* name) {
-    try {
-        std::ostringstream ost;
-        ost << "GIMP Palette\n";
-        if (name && *name) {
-            ost << "Name: " << name << "\n";
-        }
-        ost << "#\n";
-        for (auto c : colors) {
-            auto r = (c >> 16) & 0xff;
-            auto g = (c >> 8) & 0xff;
-            auto b = c & 0xff;
-            ost << r << ' ' << g << ' ' << b << '\n';
-        }
-        Glib::file_set_contents(fname, ost.str());
-    }
-    catch (Glib::Error const &ex) {
-        g_warning("Error saving color palette: %s", ex.what());
-    }
-    catch (...) {
-        g_warning("Error saving color palette.");
-    }
-}
-
-void extract_colors(Gtk::Window* parent, const std::vector<int>& colors, const char* name) {
+void extract_colors(Gtk::Window* parent, const std::vector<std::pair<int, std::string>>& colors, const char* name) {
     if (colors.empty() || !parent) return;
 
     auto fname = choose_file(_("Export Color Palette"), parent, "application/color-palette", "color-palette.gpl");
@@ -585,12 +562,12 @@ DocumentResources::DocumentResources()
         case Colors:
             // export colors into a GIMP palette
             if (_document) {
-                std::vector<int> colors;
+                std::vector<std::pair<int, std::string>> colors;
                 const size_t N = _item_store->get_n_items();
                 colors.reserve(N);
                 for (size_t i = 0; i < N; ++i) {
                     if (auto r = _item_store->get_typed_object<details::ResourceItem>(i)) {
-                        colors.push_back(r->color);
+                        colors.push_back(std::make_pair(r->color, std::string()));
                     }
                 }
                 extract_colors(window, colors, _document->getDocumentName());

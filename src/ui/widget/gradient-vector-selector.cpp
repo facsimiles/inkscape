@@ -33,6 +33,8 @@
 #include "preferences.h"
 
 #include "object/sp-defs.h"
+#include "object/sp-object-iterator.h"
+#include "object/sp-root.h"
 #include "object/sp-stop.h"
 
 #include "ui/widget/gradient-image.h"
@@ -261,8 +263,9 @@ void gr_get_usage_counts(SPDocument *doc, std::map<SPGradient *, gint> *mapUsage
     if (!doc)
         return;
 
-    for (auto item : sp_get_all_document_items(doc)) {
-        if (!item->getId())
+    for (auto obj : doc->getRoot()) {
+        auto item = cast<SPItem>(obj);
+        if (!item || !item->getId())
             continue;
         SPGradient *gr = nullptr;
         gr = sp_item_get_gradient(item, true); // fill

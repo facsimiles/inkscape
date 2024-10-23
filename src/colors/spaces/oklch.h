@@ -23,6 +23,7 @@ public:
 
     Type getType() const override { return Type::OKLCH; }
     std::string const getName() const override { return "OkLch"; }
+    std::string const getShortName() const override { return "OkLch"; }
     std::string const getIcon() const override { return "color-selector-oklch"; }
 
 protected:

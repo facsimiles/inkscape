@@ -7,13 +7,13 @@ Directories=scalable/actions,symbolic/actions
 [scalable/actions]
 MinSize=16
 Size=20
-MaxSize=20
+MaxSize=256
 Context=Actions
 Type=Scalable
 
 [symbolic/actions]
 MinSize=16
 Size=20
-MaxSize=20
+MaxSize=256
 Context=Actions
 Type=Scalable

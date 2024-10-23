@@ -97,8 +97,10 @@ void ColorNotebook::_initUI()
 
     // combo mode selection is compact and only shows one entry (active)
     _combo = Gtk::make_managed<IconComboBox>();
+    // Important: add "regular" class to render non-symbolic color icons;
+    // otherwise they will be rendered black&white
+    _combo->add_css_class("regular");
     _combo->set_focusable(false);
-    _combo->set_visible();
     _combo->set_tooltip_text(_("Choose style of color selection"));
 
     // Add all universal (non-document icc profile) color spaces
@@ -124,8 +126,11 @@ void ColorNotebook::_initUI()
 
     row++;
 
-    _book->set_margin_top(YPAD);
-    _book->set_margin_bottom(YPAD);
+    // book's margins chosen to line up ColorPage's widgets with our widgets
+    _book->set_margin_top(3);
+    _book->set_margin_bottom(3);
+    _book->set_margin_start(2);
+    _book->set_margin_end(2);
     _book->set_hexpand();
     _book->set_vexpand();
     attach(*_book, 0, row, 2, 1);
@@ -169,8 +174,8 @@ void ColorNotebook::_initUI()
     gtk_box_append(rgbabox_box, _btn_picker);
     g_signal_connect(G_OBJECT(_btn_picker), "clicked", G_CALLBACK(ColorNotebook::_onPickerClicked), this);
 
-    /* Create RGBA entry and color preview */
-    _rgbal = gtk_label_new_with_mnemonic(_("RGBA_:"));
+    /* Create RGB entry and color preview */
+    _rgbal = gtk_label_new_with_mnemonic(_("RGB_:"));
     gtk_widget_set_halign(_rgbal, GTK_ALIGN_END);
     gtk_widget_set_hexpand(_rgbal, TRUE);
     gtk_box_append(rgbabox_box, _rgbal);

@@ -22,6 +22,7 @@
 
 #include <glibmm/refptr.h>
 #include <gtkmm/box.h>
+#include <gtkmm/entry.h>
 
 namespace Gtk {
 class DrawingArea;
@@ -36,14 +37,16 @@ namespace Inkscape::UI::Widget {
 class DashSelector final : public Gtk::Box {
 
 public:
-    DashSelector();
+    DashSelector(bool compact = false);
     ~DashSelector() final;
 
     void set_dash_pattern(const std::vector<double>& dash, double offset);
     const std::vector<double>& get_dash_pattern() { return dash_pattern; }
     double get_offset() { return offset; }
+    std::vector<double> get_custom_dash_pattern() const;
 
-    sigc::signal<void ()> changed_signal;
+    enum Change { Dash, Offset, Pattern };
+    sigc::signal<void (Change)> changed_signal;
 
 private:
     // Functions
@@ -67,6 +70,7 @@ private:
     Gtk::DrawingArea* drawing_area = nullptr; // MenuButton
     Gtk::Popover* popover = nullptr;
     Glib::RefPtr<Gtk::Adjustment> adjustment; // Dash offset
+    Gtk::Entry* _pattern_entry = nullptr;
 };
 
 } // namespace Inkscape::UI::Widget

@@ -2,7 +2,7 @@ set(THEME Dash)
 install(FILES "index.theme" DESTINATION ${INKSCAPE_SHARE_INSTALL}/icons/${THEME} COMPONENT themes)
 install(FILES "highlights.css" DESTINATION ${INKSCAPE_SHARE_INSTALL}/icons/${THEME} COMPONENT themes)
 
-set(PIXMAP_SIZES "symbolic")
+set(PIXMAP_SIZES "scalable" "symbolic")
 set(CONTENT "actions")
 
 foreach(pixmap_size ${PIXMAP_SIZES})

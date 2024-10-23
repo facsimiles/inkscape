@@ -14,12 +14,12 @@
  */
 
 #include "marker-combo-box.h"
-
+#include <cairo-deprecated.h>
+#include <cairo.h>
 #include <chrono>
 #include <optional>
 #include <sstream>
 #include <utility>
-
 #include <gtkmm/layoutmanager.h>
 #include <gtkmm/binlayout.h>
 #include <glibmm/fileutils.h>
@@ -36,10 +36,10 @@
 #include <gtkmm/spinbutton.h>
 #include <gtkmm/togglebutton.h>
 #include <gtkmm/window.h>
-
 #include "helper/stock-items.h"
 #include "io/resource.h"
 #include "object/sp-defs.h"
+#include "object/sp-marker-loc.h"
 #include "object/sp-marker.h"
 #include "object/sp-root.h"
 #include "ui/builder-utils.h"
@@ -61,23 +61,42 @@ static constexpr int ITEM_HEIGHT = 32;
 namespace Inkscape::UI::Widget {
 
 // separator for FlowBox widget
-static cairo_surface_t* create_separator(double alpha, int width, int height, int device_scale) {
+static cairo_surface_t* create_separator(double alpha, int width, int height, int device_scale, int location) {
     width *= device_scale;
     height *= device_scale;
     cairo_surface_t* surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
     cairo_t* ctx = cairo_create(surface);
+    if (device_scale & 1) { // pixel grid fitting
+        cairo_matrix_t transform;
+        cairo_matrix_init(&transform, 1, 0, 0, 1, 0.5, 0.5);
+        cairo_set_matrix(ctx, &transform);
+    }
+    auto x = 0.0;
     cairo_set_source_rgba(ctx, 0.5, 0.5, 0.5, alpha);
-    cairo_move_to(ctx, 0.5, height / 2 + 0.5);
-    cairo_line_to(ctx, width + 0.5, height / 2 + 0.5);
-    cairo_set_line_width(ctx, 1.0 * device_scale);
+    auto mid = height / 2;
+    cairo_move_to(ctx, x, mid);
+    cairo_line_to(ctx, x + width, mid);
+    auto stroke = 2.0 * device_scale;
+    cairo_set_line_width(ctx, stroke);
     cairo_stroke(ctx);
+    auto h = 3 * device_scale;
+    if (location == SP_MARKER_LOC_START) {
+        cairo_move_to(ctx, x + stroke / 2, mid - h);
+        cairo_line_to(ctx, x + stroke / 2, mid + h);
+        cairo_stroke(ctx);
+    }
+    else if (location == SP_MARKER_LOC_END) {
+        cairo_move_to(ctx, x + width - stroke / 2, mid - h);
+        cairo_line_to(ctx, x + width - stroke / 2, mid + h);
+        cairo_stroke(ctx);
+    }
     cairo_surface_flush(surface);
     cairo_surface_set_device_scale(surface, device_scale, device_scale);
     return surface;
 }
 
-// empty image; "no marker"
-static Cairo::RefPtr<Cairo::Surface> g_image_none;
+// empty images; "no marker" for start/middle/end markers
+static std::map<int, Cairo::RefPtr<Cairo::Surface>> g_image_none;
 // error extracting/rendering marker; "bad marker"
 static Cairo::RefPtr<Cairo::Surface> g_bad_marker;
 
@@ -125,9 +144,9 @@ MarkerComboBox::MarkerComboBox(Glib::ustring id, int l) :
     _background_color = 0x808080ff;
     _foreground_color = 0x808080ff;
 
-    if (!g_image_none) {
+    if (!g_image_none[_loc]) {
         auto device_scale = get_scale_factor();
-        g_image_none = Cairo::RefPtr<Cairo::Surface>(new Cairo::Surface(create_separator(1, ITEM_WIDTH, ITEM_HEIGHT, device_scale)));
+        g_image_none[_loc] = Cairo::RefPtr<Cairo::Surface>(new Cairo::Surface(create_separator(1, ITEM_WIDTH, ITEM_HEIGHT, device_scale, _loc)));
     }
 
     if (!g_bad_marker) {
@@ -274,7 +293,7 @@ MarkerComboBox::MarkerComboBox(Glib::ustring id, int l) :
     _menu_btn.get_popover()->signal_show().connect([this](){ update_ui(get_current(), false); }, false);
 
     update_scale_link();
-    _current_img.set_paintable(to_texture(g_image_none));
+    _current_img.set_paintable(to_texture(g_image_none[_loc]));
     set_visible(true);
 }
 
@@ -317,7 +336,7 @@ void MarkerComboBox::update_scale_link() {
 
 // update marker image inside the menu button
 void MarkerComboBox::update_menu_btn(Glib::RefPtr<MarkerItem> marker) {
-    _current_img.set_paintable(to_texture(marker ? marker->pix : g_image_none));
+    _current_img.set_paintable(to_texture(marker ? marker->pix : g_image_none[_loc]));
 }
 
 // update marker preview image in the popover panel
@@ -507,7 +526,7 @@ Glib::RefPtr<MarkerComboBox::MarkerItem> MarkerComboBox::add_separator(bool fill
     item->stock = false;
     if (!filler) {
         auto device_scale = get_scale_factor();
-        static Cairo::RefPtr<Cairo::Surface> separator(new Cairo::Surface(create_separator(0.7, ITEM_WIDTH, 10, device_scale)));
+        static Cairo::RefPtr<Cairo::Surface> separator(new Cairo::Surface(create_separator(0.7, ITEM_WIDTH, 10, device_scale, SP_MARKER_LOC_MID)));
         item->pix = separator;
     }
     item->height = 10;
@@ -707,7 +726,7 @@ void MarkerComboBox::add_markers (std::vector<SPMarker *> const& marker_list, SP
     if (history) {
         // add "None"
         auto item = MarkerItem::create();
-        item->pix = g_image_none;
+        item->pix = g_image_none[_loc];
         item->history = true;
         item->separator = false;
         item->id = "None";
@@ -813,6 +832,25 @@ sigc::connection MarkerComboBox::connect_changed(sigc::slot<void ()> slot)
 sigc::connection MarkerComboBox::connect_edit(sigc::slot<void ()> slot)
 {
     return _signal_edit.connect(std::move(slot));
+}
+
+void MarkerComboBox::set_flat(bool flat) {
+    _menu_btn.set_has_frame(!flat);
+    get_widget<Gtk::Image>(_builder, "down-arrow").set_visible(!flat);
+    get_widget<Gtk::Box>(_builder, "btn-box").set_halign(flat ? Gtk::Align::CENTER : Gtk::Align::FILL);
+    if (flat) {
+        _menu_btn.add_css_class("rectangle");
+    }
+    else {
+        _menu_btn.remove_css_class("rectangle");
+    }
+}
+
+void MarkerComboBox::preview_scale(double scale) {
+    if (_preview_scale != scale) {
+        _preview_scale = scale;
+        _current_img.set_size_request(static_cast<int>(std::round(scale * ITEM_WIDTH)), static_cast<int>(std::round(scale * ITEM_HEIGHT)));
+    }
 }
 
 } // namespace Inkscape::UI::Widget

@@ -8,6 +8,7 @@ set(colors_SRC
 	document-cms.cpp
 	dragndrop.cpp
 	manager.cpp
+	ok-color.cpp
 	parser.cpp
 	printer.cpp
 	color-set.cpp
@@ -24,6 +25,7 @@ set(colors_SRC
 	spaces/linear-rgb.cpp
 	spaces/luv.cpp
 	spaces/okhsl.cpp
+	spaces/okhsv.cpp
 	spaces/oklab.cpp
 	spaces/oklch.cpp
 	spaces/named.cpp
@@ -41,6 +43,7 @@ set(colors_SRC
 	document-cms.h
 	dragndrop.h
 	manager.h
+	ok-color.h
 	parser.h
 	printer.h
 	color-set.h
@@ -58,6 +61,7 @@ set(colors_SRC
 	spaces/linear-rgb.h
 	spaces/luv.h
 	spaces/okhsl.h
+	spaces/okhsv.h
 	spaces/oklab.h
 	spaces/oklch.h
 	spaces/named.h

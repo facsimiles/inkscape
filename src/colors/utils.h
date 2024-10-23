@@ -11,6 +11,7 @@
 #include <optional>
 #include <string>
 #include <vector>
+#include <algorithm>
 
 /* Useful composition macros */
 
@@ -20,7 +21,7 @@ constexpr double SP_COLOR_U_TO_F(uint32_t v)
 }
 constexpr uint32_t SP_COLOR_F_TO_U(double v)
 {
-    return (unsigned int)(v * 255. + .5);
+    return (unsigned int)(std::clamp(v, 0.0, 1.0) * 255. + .5);
 }
 constexpr uint32_t SP_RGBA32_R_U(uint32_t v)
 {
@@ -66,6 +67,10 @@ constexpr uint32_t SP_RGBA32_F_COMPOSE(double r, double g, double b, double a)
 constexpr uint32_t SP_RGBA32_C_COMPOSE(uint32_t c, double o)
 {
     return SP_RGBA32_U_COMPOSE(SP_RGBA32_R_U(c), SP_RGBA32_G_U(c), SP_RGBA32_B_U(c), SP_COLOR_F_TO_U(o));
+}
+
+constexpr uint32_t compose_argb32(double a, double r, double g, double b) {
+    return SP_RGBA32_U_COMPOSE(SP_COLOR_F_TO_U(a), SP_COLOR_F_TO_U(r), SP_COLOR_F_TO_U(g), SP_COLOR_F_TO_U(b));
 }
 
 /**
