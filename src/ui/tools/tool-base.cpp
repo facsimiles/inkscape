@@ -31,6 +31,7 @@
 #include "desktop-style.h"
 #include "desktop.h"
 #include "gradient-drag.h"
+#include "inkscape-application.h"
 #include "layer-manager.h"
 #include "message-context.h"
 #include "rubberband.h"
@@ -620,11 +621,19 @@ bool ToolBase::root_handler(CanvasEvent const &event)
             ret = Inkscape::Shortcuts::getInstance().invoke_action(event);
             break;
         case GDK_KEY_Tab:
-            sp_selection_item_next(_desktop);
+            if (mod_ctrl(event)) {
+                _desktop->getDesktopWidget()->advanceTab(1);
+            } else {
+                sp_selection_item_next(_desktop);
+            }
             ret = true;
             break;
         case GDK_KEY_ISO_Left_Tab:
-            sp_selection_item_prev(_desktop);
+            if (mod_ctrl(event)) {
+                _desktop->getDesktopWidget()->advanceTab(-1);
+            } else {
+                sp_selection_item_prev(_desktop);
+            }
             ret = true;
             break;
 
@@ -633,9 +642,10 @@ bool ToolBase::root_handler(CanvasEvent const &event)
 #ifndef __APPLE__
         case GDK_KEY_F4:
 #endif
-            // Close view
+            // Close tab
             if (mod_ctrl_only(event)) {
-                sp_ui_close_view();
+                auto app = InkscapeApplication::instance();
+                app->destroy_window(_desktop, true); // Keep inkscape alive!
                 ret = true;
             }
             break;
