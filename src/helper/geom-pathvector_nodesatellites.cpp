@@ -197,51 +197,36 @@ void PathVectorNodeSatellites::updateNodeSatelliteType(NodeSatelliteType nodesat
     }
 }
 
-void PathVectorNodeSatellites::recalculateForNewPathVector(Geom::PathVector const pathv, NodeSatellite const S)
+std::optional<NodeSatellite> PathVectorNodeSatellites::findNearSatelite(Geom::Point point, double precission)
 {
-    // pathv && _pathvector came here:
-    // * with different number of nodes
-    // * without empty subpats
-    // * _pathvector and nodesatellites (old data) are paired
-    NodeSatellites nodesatellites;
+    size_t npaths = _pathvector.size();
+    for (size_t i = 0; i < npaths; ++i) {
+        size_t count = count_path_nodes(_pathvector[i]);
+        for (size_t j = 0; j < count; ++j) {
+            if (i < _nodesatellites.size() && j < _nodesatellites[i].size()) {
+                if (Geom::are_near(point, _pathvector[i][j].initialPoint(), precission)) {
+                    return std::make_optional(_nodesatellites[i][j]);
+                }
+            }
+        }
+    }
+    return std::nullopt;
+}
 
-    // TODO evaluate fix on nodes at same position
-    // size_t number_nodes = count_pathvector_nodes(pathv);
-    // size_t previous_number_nodes = getTotalNodeSatellites();
+void PathVectorNodeSatellites::adjustForNewPath(Geom::PathVector const pathv, double precission)
+{
+    NodeSatellites nodesatellites;
+    // TODO issue for nodes in same place
     size_t npaths = pathv.size();
+    NodeSatellite ns = _nodesatellite;
+    if (_nodesatellites.size() && _nodesatellites[0].size()) {
+        ns.setNodeSatellitesType(_nodesatellites[0][0].getNodeSatellitesTypeGchar());
+    }
     for (size_t i = 0; i < npaths; ++i) {
         std::vector<NodeSatellite> path_nodesatellites;
         size_t count = count_path_nodes(pathv[i]);
         for (size_t j = 0; j < count; ++j) {
-            bool found = false;
-            for (size_t k = 0; k < _pathvector.size(); ++k) {
-                size_t countnodes = count_path_nodes(_pathvector[k]);
-                size_t countcurves = count_path_curves(_pathvector[k]);
-                if (!_nodesatellites.empty() && !_nodesatellites[k].empty()) {
-                    assert(countnodes == _nodesatellites[k].size());
-                    for (size_t l = 0; l < countcurves; ++l) {
-                        if (Geom::are_near(_pathvector[k][l].initialPoint(),  pathv[i][j].initialPoint(), 0.001)) { // epsilon is not enought big
-                            path_nodesatellites.push_back(_nodesatellites[k][l]);
-                            found = true;
-                            break;
-                        }
-                    }
-                }
-                if (found) {
-                    break;
-                }
-            }
-            if (!found) {
-                if (_pathvector.empty()) {
-                    if (i < _nodesatellites.size() && j < _nodesatellites[i].size()) {
-                        path_nodesatellites.push_back(_nodesatellites[i][j]);
-                    } else {
-                        path_nodesatellites.push_back(S);
-                    }
-                } else {
-                    path_nodesatellites.push_back(S);
-                }
-            }
+            path_nodesatellites.push_back(findNearSatelite(pathv[i][j].initialPoint()).value_or(ns));
         }
         nodesatellites.push_back(path_nodesatellites);
     }

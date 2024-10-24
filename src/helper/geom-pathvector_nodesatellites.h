@@ -34,6 +34,7 @@ public:
     void setNodeSatellites(NodeSatellites nodesatellites);
     size_t getTotalNodeSatellites();
     void setSelected(std::vector<size_t> selected);
+    void setDefaultNodeSatellite(NodeSatellite nodesatellite) { _nodesatellite = nodesatellite; };
     void updateSteps(size_t steps, bool apply_no_radius, bool apply_with_radius, bool only_selected);
     void updateAmount(double radius, bool apply_no_radius, bool apply_with_radius, bool only_selected, 
                       bool use_knot_distance, bool flexible);
@@ -41,11 +42,13 @@ public:
     void updateNodeSatelliteType(NodeSatelliteType nodesatellitetype, bool apply_no_radius, bool apply_with_radius,
                                  bool only_selected);
     std::pair<size_t, size_t> getIndexData(size_t index);
-    void recalculateForNewPathVector(Geom::PathVector const pathv, NodeSatellite const S);
+    std::optional<NodeSatellite> findNearSatelite(Geom::Point point, double precission = 0.01);
+    void adjustForNewPath(Geom::PathVector const pathv, double precission = 0.01);
 
 private:
     Geom::PathVector _pathvector;
     NodeSatellites _nodesatellites;
+    NodeSatellite _nodesatellite;
 };
 
 #endif //SEEN_PATHVECTORSATELLITES_H
