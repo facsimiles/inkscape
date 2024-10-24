@@ -15,16 +15,17 @@
 
 #include <glib.h>
 
-#include "dispatch-pool.h"
-
 // single-threaded operation if the number of pixels is below this threshold
 static const int POOL_THRESHOLD = 2048;
 
-#include <cmath>
 #include <algorithm>
 #include <cairo.h>
-#include "display/nr-3dutils.h"
+#include <cmath>
+
 #include "display/cairo-utils.h"
+#include "display/dispatch-pool.h"
+#include "display/nr-3dutils.h"
+#include "display/threading.h"
 
 template <typename T>
 struct surface_accessor {

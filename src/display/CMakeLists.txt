@@ -39,6 +39,7 @@ set(display_SRC
     nr-light.cpp
     nr-style.cpp
     nr-svgfonts.cpp
+    threading.cpp
     translucency-group.cpp
 
     control/canvas-temporary-item-list.cpp
@@ -111,6 +112,7 @@ set(display_SRC
     nr-svgfonts.h
     rendermode.h
     tags.h
+    threading.h
     translucency-group.h
 
     control/canvas-temporary-item-list.h

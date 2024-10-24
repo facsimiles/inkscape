@@ -10,7 +10,6 @@
 
 #include <condition_variable>
 #include <functional>
-#include <memory>
 #include <mutex>
 #include <thread>
 #include <vector>
@@ -109,8 +108,6 @@ private:
     dispatch_func _function;
     std::vector<std::thread> _threads;
 };
-
-std::shared_ptr<dispatch_pool> get_global_dispatch_pool();
 
 } // namespace Inkscape
 

@@ -7,8 +7,6 @@
 
 #include "dispatch-pool.h"
 
-#include "cairo-utils.h"
-
 namespace Inkscape {
 
 dispatch_pool::dispatch_pool(int size)
@@ -112,30 +110,6 @@ void dispatch_pool::execute_batch(std::unique_lock<std::mutex> &lk, local_id id,
     if (_completed_work == _target_work) {
         _completed_cv.notify_one();
     }
-}
-
-namespace {
-
-std::mutex g_dispatch_lock;
-std::shared_ptr<dispatch_pool> g_dispatch_pool;
-int g_dispatch_threads;
-
-} // namespace
-
-std::shared_ptr<dispatch_pool> get_global_dispatch_pool()
-{
-    int const num_threads = get_num_filter_threads();
-
-    std::scoped_lock lk(g_dispatch_lock);
-
-    if (g_dispatch_pool && num_threads == g_dispatch_threads) {
-        return g_dispatch_pool;
-    }
-
-    g_dispatch_pool = std::make_shared<dispatch_pool>(num_threads);
-    g_dispatch_threads = num_threads;
-
-    return g_dispatch_pool;
 }
 
 } // namespace Inkscape

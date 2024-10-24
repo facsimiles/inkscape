@@ -12,6 +12,7 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include <2geom/affine.h>
 #include <algorithm>
 #include <cmath>
 #include <complex>
@@ -21,17 +22,12 @@
 
 #include "display/cairo-utils.h"
 #include "display/dispatch-pool.h"
-#include "display/nr-filter-primitive.h"
 #include "display/nr-filter-gaussian.h"
-#include "display/nr-filter-types.h"
-#include "display/nr-filter-units.h"
+#include "display/nr-filter-primitive.h"
 #include "display/nr-filter-slot.h"
-#include <2geom/affine.h>
+#include "display/nr-filter-units.h"
+#include "display/threading.h"
 #include "util/fixed_point.h"
-
-#ifndef INK_UNUSED
-#define INK_UNUSED(x) ((void)(x))
-#endif
 
 // IIR filtering method based on:
 // L.J. van Vliet, I.T. Young, and P.W. Verbeek, Recursive Gaussian Derivative Filters,
