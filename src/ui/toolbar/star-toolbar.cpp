@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 /**
- * @file
- * Star aux toolbar
+ * @file Star toolbar
  */
 /* Authors:
  *   MenTaLguY <mental@rydia.net>
@@ -42,29 +41,26 @@
 #include "ui/icon-names.h"
 #include "ui/tools/star-tool.h"
 #include "ui/util.h"
-#include "ui/widget/canvas.h"
 #include "ui/widget/spinbutton.h"
 
 using Inkscape::DocumentUndo;
 
 namespace Inkscape::UI::Toolbar {
 
-StarToolbar::StarToolbar(SPDesktop *desktop)
-    : Toolbar(desktop)
-    , _builder(create_builder("toolbar-star.ui"))
-    , _mode_item(get_widget<Gtk::Label>(_builder, "_mode_item"))
-    , _magnitude_item(get_derived_widget<UI::Widget::SpinButton>(_builder, "_magnitude_item"))
-    , _spoke_box(get_widget<Gtk::Box>(_builder, "_spoke_box"))
-    , _spoke_item(get_derived_widget<UI::Widget::SpinButton>(_builder, "_spoke_item"))
-    , _roundedness_item(get_derived_widget<UI::Widget::SpinButton>(_builder, "_roundedness_item"))
-    , _randomization_item(get_derived_widget<UI::Widget::SpinButton>(_builder, "_randomization_item"))
+StarToolbar::StarToolbar()
+    : StarToolbar{create_builder("toolbar-star.ui")}
+{}
+
+StarToolbar::StarToolbar(Glib::RefPtr<Gtk::Builder> const &builder)
+    : Toolbar{get_widget<Gtk::Box>(builder, "star-toolbar")}
+    , _mode_item{get_widget<Gtk::Label>(builder, "_mode_item")}
+    , _magnitude_item{get_derived_widget<UI::Widget::SpinButton>(builder, "_magnitude_item")}
+    , _spoke_box{get_widget<Gtk::Box>(builder, "_spoke_box")}
+    , _spoke_item{get_derived_widget<UI::Widget::SpinButton>(builder, "_spoke_item")}
+    , _roundedness_item{get_derived_widget<UI::Widget::SpinButton>(builder, "_roundedness_item")}
+    , _randomization_item{get_derived_widget<UI::Widget::SpinButton>(builder, "_randomization_item")}
 {
-    _toolbar = &get_widget<Gtk::Box>(_builder, "star-toolbar");
-
-    bool is_flat_sided = Inkscape::Preferences::get()->getBool("/tools/shapes/star/isflatsided", false);
-
-    setup_derived_spin_button(_magnitude_item, "magnitude", is_flat_sided ? 3 : 2,
-                              &StarToolbar::magnitude_value_changed);
+    bool is_flat_sided = Preferences::get()->getBool("/tools/shapes/star/isflatsided", false);
 
     _magnitude_item.set_custom_numeric_menu_data({
         {2, ""},
@@ -79,53 +75,109 @@ StarToolbar::StarToolbar(SPDesktop *desktop)
         {20, ""}
     });
 
+    _spoke_item.set_custom_numeric_menu_data({
+        {0.010, _("thin-ray star")},
+        {0.200, ""},
+        {0.382, _("pentagram")},
+        {0.577, _("hexagram")},
+        {0.692, _("heptagram")},
+        {0.765, _("octagram")},
+        {1.000, _("regular polygon")}
+    });
+
+    _roundedness_item.set_custom_numeric_menu_data({
+        {-1.0 , _("stretched")},
+        {-0.2 , _("twisted")},
+        {-0.03, _("slightly pinched")},
+        { 0.0 , _("NOT rounded")},
+        { 0.05, _("slightly rounded")},
+        { 0.1 , _("visibly rounded")},
+        { 0.2 , _("well rounded")},
+        { 0.3 , _("amply rounded")},
+        { 0.5 , ""},
+        { 1.0 , _("stretched")},
+        {10.0 , _("blown up")}
+    });
+
+    _randomization_item.set_custom_numeric_menu_data({
+        { 0.00, _("NOT randomized")},
+        { 0.01, _("slightly irregular")},
+        { 0.10, _("visibly randomized")},
+        { 0.50, _("strongly randomized")},
+        {10.00, _("blown up")}
+    });
+
+    setup_derived_spin_button(_magnitude_item, "magnitude", is_flat_sided ? 3 : 2, &StarToolbar::magnitude_value_changed);
     setup_derived_spin_button(_spoke_item, "proportion", 0.5, &StarToolbar::proportion_value_changed);
     setup_derived_spin_button(_roundedness_item, "rounded", 0.0, &StarToolbar::rounded_value_changed);
     setup_derived_spin_button(_randomization_item, "randomized", 0.0, &StarToolbar::randomized_value_changed);
 
-    /* Flatsided checkbox */
-    _flat_item_buttons.push_back(&get_widget<Gtk::ToggleButton>(_builder, "flat_polygon_button"));
-    _flat_item_buttons.push_back(&get_widget<Gtk::ToggleButton>(_builder, "flat_star_button"));
+    // Flatsided checkbox
+    _flat_item_buttons.push_back(&get_widget<Gtk::ToggleButton>(builder, "flat_polygon_button"));
+    _flat_item_buttons.push_back(&get_widget<Gtk::ToggleButton>(builder, "flat_star_button"));
     _flat_item_buttons[is_flat_sided ? 0 : 1]->set_active();
 
     int btn_index = 0;
-
     for (auto btn : _flat_item_buttons) {
         btn->signal_clicked().connect(sigc::bind(sigc::mem_fun(*this, &StarToolbar::side_mode_changed), btn_index++));
     }
 
-    desktop->connectEventContextChanged(sigc::mem_fun(*this, &StarToolbar::watch_tool));
-
-    set_child(*_toolbar);
-    init_menu_btns();
-
-    // Signals.
-    get_widget<Gtk::Button>(_builder, "reset_btn")
+    get_widget<Gtk::Button>(builder, "reset_btn")
         .signal_clicked()
-        .connect(sigc::mem_fun(*this, &StarToolbar::defaults));
+        .connect(sigc::mem_fun(*this, &StarToolbar::_setDefaults));
 
     _spoke_box.set_visible(!is_flat_sided);
+
+    _initMenuBtns();
+}
+
+StarToolbar::~StarToolbar() = default;
+
+void StarToolbar::_attachRepr(XML::Node *repr)
+{
+    assert(!_repr);
+    _repr = repr;
+    GC::anchor(_repr);
+    _repr->addObserver(*this);
+}
+
+void StarToolbar::_detachRepr()
+{
+    assert(_repr);
+    _repr->removeObserver(*this);
+    GC::release(_repr);
+    _repr = nullptr;
 }
 
 void StarToolbar::setup_derived_spin_button(UI::Widget::SpinButton &btn, Glib::ustring const &name,
-                                            double default_value, ValueChangedMemFun const value_changed_mem_fun)
+                                            double default_value, ValueChangedMemFun value_changed_mem_fun)
 {
-    const Glib::ustring path = "/tools/shapes/star/" + name;
+    auto const path = "/tools/shapes/star/" + name;
     auto const val = Preferences::get()->getDouble(path, default_value);
 
     auto adj = btn.get_adjustment();
     adj->set_value(val);
     adj->signal_value_changed().connect(sigc::mem_fun(*this, value_changed_mem_fun));
 
-    btn.set_defocus_widget(_desktop->getCanvas());
+    btn.setDefocusTarget(this);
 }
 
-StarToolbar::~StarToolbar()
+void StarToolbar::setDesktop(SPDesktop *desktop)
 {
-    if (_repr) { // remove old listener
-        _repr->removeObserver(*this);
-        Inkscape::GC::release(_repr);
-        _repr = nullptr;
+    if (_desktop) {
+        _selection_changed_conn.disconnect();
+
+        if (_repr) {
+            _detachRepr();
+        }
+    }
+
+    Toolbar::setDesktop(desktop);
+
+    if (_desktop) {
+        auto sel = _desktop->getSelection();
+        _selection_changed_conn = sel->connectChanged(sigc::mem_fun(*this, &StarToolbar::_selectionChanged));
+        _selectionChanged(sel); // Synthesize an emission to trigger the update
     }
 }
 
@@ -138,12 +190,12 @@ void StarToolbar::side_mode_changed(int mode)
     }
 
     // quit if run by the attr_changed listener
-    if (_freeze) {
+    if (_blocker.pending()) {
         return;
     }
 
     // in turn, prevent listener from responding
-    _freeze = true;
+    auto guard = _blocker.block();
 
     auto adj = _magnitude_item.get_adjustment();
     _spoke_box.set_visible(!flat);
@@ -171,8 +223,6 @@ void StarToolbar::side_mode_changed(int mode)
     if (!_batchundo) {
         DocumentUndo::done(_desktop->getDocument(), flat ? _("Make polygon") : _("Make star"), INKSCAPE_ICON("draw-polygon-star"));
     }
-
-    _freeze = false;
 }
 
 void StarToolbar::magnitude_value_changed()
@@ -186,12 +236,12 @@ void StarToolbar::magnitude_value_changed()
     }
 
     // quit if run by the attr_changed listener
-    if (_freeze) {
+    if (_blocker.pending()) {
         return;
     }
 
     // in turn, prevent listener from responding
-    _freeze = true;
+    auto guard = _blocker.block();
 
     for (auto item : _desktop->getSelection()->items()) {
         if (is<SPStar>(item)) {
@@ -202,11 +252,10 @@ void StarToolbar::magnitude_value_changed()
             item->updateRepr();
         }
     }
+
     if (!_batchundo) {
         DocumentUndo::maybeDone(_desktop->getDocument(), "star:numcorners", _("Star: Change number of corners"), INKSCAPE_ICON("draw-polygon-star"));
     }
-
-    _freeze = false;
 }
 
 void StarToolbar::proportion_value_changed()
@@ -220,12 +269,12 @@ void StarToolbar::proportion_value_changed()
     }
 
     // quit if run by the attr_changed listener
-    if (_freeze) {
+    if (_blocker.pending()) {
         return;
     }
 
     // in turn, prevent listener from responding
-    _freeze = true;
+    auto guard = _blocker.block();
 
     for (auto item : _desktop->getSelection()->items()) {
         if (is<SPStar>(item)) {
@@ -247,8 +296,6 @@ void StarToolbar::proportion_value_changed()
     if (!_batchundo) {
         DocumentUndo::maybeDone(_desktop->getDocument(), "star:spokeratio", _("Star: Change spoke ratio"), INKSCAPE_ICON("draw-polygon-star"));
     }
-
-    _freeze = false;
 }
 
 void StarToolbar::rounded_value_changed()
@@ -260,12 +307,12 @@ void StarToolbar::rounded_value_changed()
     }
 
     // quit if run by the attr_changed listener
-    if (_freeze) {
+    if (_blocker.pending()) {
         return;
     }
 
     // in turn, prevent listener from responding
-    _freeze = true;
+    auto guard = _blocker.block();
 
     for (auto item : _desktop->getSelection()->items()) {
         if (is<SPStar>(item)) {
@@ -274,11 +321,10 @@ void StarToolbar::rounded_value_changed()
             item->updateRepr();
         }
     }
+
     if (!_batchundo) {
         DocumentUndo::maybeDone(_desktop->getDocument(), "star:rounding", _("Star: Change rounding"), INKSCAPE_ICON("draw-polygon-star"));
     }
-
-    _freeze = false;
 }
 
 void StarToolbar::randomized_value_changed()
@@ -290,12 +336,12 @@ void StarToolbar::randomized_value_changed()
     }
 
     // quit if run by the attr_changed listener
-    if (_freeze) {
+    if (_blocker.pending()) {
         return;
     }
 
     // in turn, prevent listener from responding
-    _freeze = true;
+    auto guard = _blocker.block();
 
     for (auto item : _desktop->getSelection()->items()) {
         if (is<SPStar>(item)) {
@@ -304,14 +350,13 @@ void StarToolbar::randomized_value_changed()
             item->updateRepr();
         }
     }
+
     if (!_batchundo) {
         DocumentUndo::maybeDone(_desktop->getDocument(), "star:randomisation", _("Star: Change randomization"), INKSCAPE_ICON("draw-polygon-star"));
     }
-
-    _freeze = false;
 }
 
-void StarToolbar::defaults()
+void StarToolbar::_setDefaults()
 {
     _batchundo = true;
 
@@ -340,28 +385,14 @@ void StarToolbar::defaults()
     _batchundo = false;
 }
 
-void StarToolbar::watch_tool(SPDesktop *desktop, UI::Tools::ToolBase *tool)
+void StarToolbar::_selectionChanged(Selection *selection)
 {
-    _changed.disconnect();
-    if (dynamic_cast<UI::Tools::StarTool const*>(tool)) {
-        _changed = desktop->getSelection()->connectChanged(sigc::mem_fun(*this, &StarToolbar::selection_changed));
-        selection_changed(desktop->getSelection());
+    if (_repr) {
+        _detachRepr();
     }
-}
 
-/**
- *  \param selection Should not be NULL.
- */
-void StarToolbar::selection_changed(Selection *selection)
-{
     int n_selected = 0;
     XML::Node *repr = nullptr;
-
-    if (_repr) { // remove old listener
-        _repr->removeObserver(*this);
-        Inkscape::GC::release(_repr);
-        _repr = nullptr;
-    }
 
     for (auto item : selection->items()) {
         if (is<SPStar>(item)) {
@@ -370,50 +401,40 @@ void StarToolbar::selection_changed(Selection *selection)
         }
     }
 
-    if (n_selected == 0) {
-        _mode_item.set_markup(_("<b>New:</b>"));
-    } else if (n_selected == 1) {
-        _mode_item.set_markup(_("<b>Change:</b>"));
+    _mode_item.set_markup(n_selected == 0 ? _("<b>New:</b>") : _("<b>Change:</b>"));
 
-        if (repr) {
-            _repr = repr;
-            Inkscape::GC::anchor(_repr);
-            _repr->addObserver(*this);
-            _repr->synthesizeEvents(*this);
-        }
-    } else {
-        // FIXME: implement averaging of all parameters for multiple selected stars
-        //gtk_label_set_markup(GTK_LABEL(l), _("<b>Average:</b>"));
-        //gtk_label_set_markup(GTK_LABEL(l), _("<b>Change:</b>"));
+    if (n_selected == 1) {
+        _attachRepr(repr);
+        _repr->synthesizeEvents(*this); // Fixme: BAD
     }
 }
 
-void StarToolbar::notifyAttributeChanged(Inkscape::XML::Node &repr, GQuark name_,
-                                         Inkscape::Util::ptr_shared,
-                                         Inkscape::Util::ptr_shared)
+void StarToolbar::notifyAttributeChanged(XML::Node &, GQuark name_, Util::ptr_shared, Util::ptr_shared)
 {
+    assert(_repr);
+
     // quit if run by the _changed callbacks
-    if (_freeze) {
+    if (_blocker.pending()) {
         return;
     }
 
     auto const name = g_quark_to_string(name_);
 
     // in turn, prevent callbacks from responding
-    _freeze = true;
+    auto guard = _blocker.block();
 
     bool isFlatSided = Preferences::get()->getBool("/tools/shapes/star/isflatsided", false);
     auto mag_adj = _magnitude_item.get_adjustment();
     auto spoke_adj = _spoke_item.get_adjustment();
 
     if (!strcmp(name, "inkscape:randomized")) {
-        double randomized = repr.getAttributeDouble("inkscape:randomized", 0.0);
+        double randomized = _repr->getAttributeDouble("inkscape:randomized", 0.0);
         _randomization_item.get_adjustment()->set_value(randomized);
     } else if (!strcmp(name, "inkscape:rounded")) {
-        double rounded = repr.getAttributeDouble("inkscape:rounded", 0.0);
+        double rounded = _repr->getAttributeDouble("inkscape:rounded", 0.0);
         _roundedness_item.get_adjustment()->set_value(rounded);
     } else if (!strcmp(name, "inkscape:flatsided")) {
-        char const *flatsides = repr.attribute("inkscape:flatsided");
+        char const *flatsides = _repr->attribute("inkscape:flatsided");
         if (flatsides && !strcmp(flatsides,"false")) {
             _flat_item_buttons[1]->set_active();
             _spoke_box.set_visible(true);
@@ -424,8 +445,8 @@ void StarToolbar::notifyAttributeChanged(Inkscape::XML::Node &repr, GQuark name_
             mag_adj->set_lower(3);
         }
     } else if (!strcmp(name, "sodipodi:r1") || !strcmp(name, "sodipodi:r2") && !isFlatSided) {
-        double r1 = repr.getAttributeDouble("sodipodi:r1", 1.0);
-        double r2 = repr.getAttributeDouble("sodipodi:r2", 1.0);
+        double r1 = _repr->getAttributeDouble("sodipodi:r1", 1.0);
+        double r2 = _repr->getAttributeDouble("sodipodi:r2", 1.0);
 
         if (r2 < r1) {
             spoke_adj->set_value(r2 / r1);
@@ -433,11 +454,9 @@ void StarToolbar::notifyAttributeChanged(Inkscape::XML::Node &repr, GQuark name_
             spoke_adj->set_value(r1 / r2);
         }
     } else if (!strcmp(name, "sodipodi:sides")) {
-        int sides = repr.getAttributeInt("sodipodi:sides", 0);
+        int sides = _repr->getAttributeInt("sodipodi:sides", 0);
         mag_adj->set_value(sides);
     }
-
-    _freeze = false;
 }
 
 } // namespace Inkscape::UI::Toolbar

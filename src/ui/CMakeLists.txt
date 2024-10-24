@@ -57,6 +57,7 @@ set(ui_SRC
 	toolbar/measure-toolbar.cpp
 	toolbar/mesh-toolbar.cpp
 	toolbar/node-toolbar.cpp
+	toolbar/objectpicker-toolbar.cpp
 	toolbar/page-toolbar.cpp
 	toolbar/paintbucket-toolbar.cpp
 	toolbar/pencil-toolbar.cpp
@@ -287,6 +288,7 @@ set(ui_SRC
 	controller.h
 	cursor-utils.h
 	control-types.h
+	defocus-target.h
 	dialog-events.h
 	dialog-run.h
 	drag-and-drop.h
@@ -331,6 +333,7 @@ set(ui_SRC
 	dialog/dialog-notebook.h
 	dialog/dialog-window.h
 	dialog/document-properties.h
+	dialog/document-resources.h
 	dialog/export.h
 	dialog/export-batch.h
 	dialog/export-single.h
@@ -409,6 +412,7 @@ set(ui_SRC
 	toolbar/measure-toolbar.h
 	toolbar/mesh-toolbar.h
 	toolbar/node-toolbar.h
+	toolbar/objectpicker-toolbar.h
 	toolbar/page-toolbar.h
 	toolbar/paintbucket-toolbar.h
 	toolbar/pencil-toolbar.h
@@ -513,6 +517,7 @@ set(ui_SRC
 	widget/filter-effect-chooser.h
 	widget/font-button.h
 	widget/font-collection-selector.h
+	widget/font-list.h
 	widget/font-selector.h
 	widget/font-variants.h
 	widget/font-variations.h
