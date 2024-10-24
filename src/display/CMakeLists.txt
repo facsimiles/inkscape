@@ -3,6 +3,7 @@
 set(display_SRC
     cairo-utils.cpp
     curve.cpp
+    dispatch-pool.cpp
     drawing-context.cpp
     drawing-group.cpp
     drawing-image.cpp
@@ -67,6 +68,7 @@ set(display_SRC
     cairo-templates.h
     cairo-utils.h
     curve.h
+    dispatch-pool.h
     drawing-context.h
     drawing-group.h
     drawing-image.h

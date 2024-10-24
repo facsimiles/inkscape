@@ -13,17 +13,12 @@
 #ifndef SEEN_INKSCAPE_DISPLAY_CAIRO_TEMPLATES_H
 #define SEEN_INKSCAPE_DISPLAY_CAIRO_TEMPLATES_H
 
-#ifdef HAVE_CONFIG_H
-# include "config.h"  // only include where actually required!
-#endif
-
 #include <glib.h>
 
-#ifdef HAVE_OPENMP
-#include <omp.h>
+#include "dispatch-pool.h"
+
 // single-threaded operation if the number of pixels is below this threshold
-static const int OPENMP_THRESHOLD = 2048;
-#endif
+static const int POOL_THRESHOLD = 2048;
 
 #include <cmath>
 #include <algorithm>
@@ -69,20 +64,14 @@ void ink_cairo_surface_blend_internal(cairo_surface_t *out, cairo_surface_t *in1
     surface_accessor<Acc2> acc_in2(in2);
 
     // NOTE
-    // OpenMP probably doesn't help much here.
+    // This probably doesn't help much here.
     // It would be better to render more than 1 tile at a time.
-    #if HAVE_OPENMP
-    int const num_threads = get_num_filter_threads();
-    #endif
-
-    #if HAVE_OPENMP
-    #pragma omp parallel for if((w * h) > OPENMP_THRESHOLD) num_threads(num_threads)
-    #endif
-    for (int i = 0; i < h; ++i) {
+    auto const pool = get_global_dispatch_pool();
+    pool->dispatch_threshold(h, (w * h) > POOL_THRESHOLD, [&](int i, int) {
         for (int j = 0; j < w; ++j) {
             acc_out.set(j, i, blend(acc_in1.get(j, i), acc_in2.get(j, i)));
         }
-    }
+    });
 }
 
 template <typename AccOut, typename AccIn, typename Filter>
@@ -92,20 +81,14 @@ void ink_cairo_surface_filter_internal(cairo_surface_t *out, cairo_surface_t *in
     surface_accessor<AccIn> acc_in(in);
 
     // NOTE
-    // OpenMP probably doesn't help much here.
+    // This probably doesn't help much here.
     // It would be better to render more than 1 tile at a time.
-    #if HAVE_OPENMP
-    int const num_threads = get_num_filter_threads();
-    #endif
-
-    #if HAVE_OPENMP
-    #pragma omp parallel for if((w * h) > OPENMP_THRESHOLD) num_threads(num_threads)
-    #endif
-    for (int i = 0; i < h; ++i) {
+    auto const pool = get_global_dispatch_pool();
+    pool->dispatch_threshold(h, (w * h) > POOL_THRESHOLD, [&](int i, int) {
         for (int j = 0; j < w; ++j) {
             acc_out.set(j, i, filter(acc_in.get(j, i)));
         }
-    }
+    });
 }
 
 template <typename AccOut, typename Synth>
@@ -114,21 +97,17 @@ void ink_cairo_surface_synthesize_internal(cairo_surface_t *out, int x0, int y0,
     surface_accessor<AccOut> acc_out(out);
 
     // NOTE
-    // OpenMP probably doesn't help much here.
+    // This probably doesn't help much here.
     // It would be better to render more than 1 tile at a time.
-    #if HAVE_OPENMP
-    int const num_threads = get_num_filter_threads();
-    #endif
-
-    #if HAVE_OPENMP
     int const limit = (x1 - x0) * (y1 - y0);
-    #pragma omp parallel for if(limit > OPENMP_THRESHOLD) num_threads(num_threads)
-    #endif
-    for (int i = y0; i < y1; ++i) {
+    auto const pool = get_global_dispatch_pool();
+    pool->dispatch_threshold(y1 - y0, limit > POOL_THRESHOLD, [&](int y, int) {
+        int const i = y0 + y;
+
         for (int j = x0; j < x1; ++j) {
             acc_out.set(j, i, synth(j, i));
         }
-    }
+    });
 }
 
 /**
