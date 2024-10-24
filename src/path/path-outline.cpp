@@ -543,10 +543,11 @@ item_to_paths(SPItem *item, bool legacy, SPItem *context)
     // The stroke ------------------------
     Inkscape::XML::Node *stroke = nullptr;
     if (s_val && g_strcmp0(s_val,"none") != 0 && stroke_path.size() > 0) {
+        auto stroke_style = new SPStyle(doc);
+        stroke_style->mergeCSS(ncss);
+
         stroke = xml_doc->createElement("svg:path");
-        style->clear();
-        style->mergeCSS(ncss);
-        stroke->setAttribute("style", style->writeIfDiff(item->parent->style));
+        stroke->setAttribute("style", stroke_style->writeIfDiff(item->parent->style));
         stroke->setAttribute("d", sp_svg_write_path(stroke_path));
     }
     sp_repr_css_attr_unref(ncss);
@@ -554,10 +555,11 @@ item_to_paths(SPItem *item, bool legacy, SPItem *context)
     // The fill --------------------------
     Inkscape::XML::Node *fill = nullptr;
     if (f_val && g_strcmp0(f_val,"none") != 0 && !legacy) {
+        auto fill_style = new SPStyle(doc);
+        fill_style->mergeCSS(ncsf);
+
         fill = xml_doc->createElement("svg:path");
-        style->clear();
-        style->mergeCSS(ncsf);
-        fill->setAttribute("style", style->writeIfDiff(item->parent->style));
+        fill->setAttribute("style", fill_style->writeIfDiff(item->parent->style));
         fill->setAttribute("d", sp_svg_write_path(fill_path));
     }
     sp_repr_css_attr_unref(ncsf);
