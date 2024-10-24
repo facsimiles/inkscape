@@ -507,6 +507,37 @@ bool pathvs_have_nonempty_overlap(Geom::PathVector const &a, Geom::PathVector co
 }
 
 /*
+* Checks whether any part of pathvector b extends outside pathvector a.
+*/
+bool pathv_fully_contains(Geom::PathVector const &a, Geom::PathVector const &b) {
+     // At minimum, BBox of a must contain bbox of b
+     if (!a.boundsFast().contains(b.boundsFast())) {
+        return false;
+     }
+
+    // check windings - all nodes of b need to be contained by a to be fully contained
+    for (auto &node : b.nodes()) {
+        if (!a.winding(node)) {
+            return false;
+        }
+    }
+
+    // As in pathvs_have_nonempty_overlap, windings do not account for nodeless Bézier arc intersections.
+    auto crossings = Geom::SimpleCrosser().crossings(a, b);
+    if (crossings.empty()) {
+        return true;
+    }
+
+    auto is_empty = [](Geom::Crossings const &xings) -> bool { return xings.empty(); };
+    if (!std::all_of(crossings.begin(), crossings.end(), is_empty)) { // An intersection has been found
+        return false;
+    }
+    // BBox is fully contained, passed the winding test, no intersections, the path must be contained
+    return true;
+}
+
+
+/*
  * Converts all segments in all paths to Geom::LineSegment or Geom::HLineSegment or
  * Geom::VLineSegment or Geom::CubicBezier.
  */
