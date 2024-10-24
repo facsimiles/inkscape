@@ -19,7 +19,6 @@
 #include <2geom/point.h>
 #include <2geom/sbasis-to-bezier.h>
 #include <2geom/transforms.h>
-#include <atomic>
 #include <boost/algorithm/string.hpp>
 #include <boost/operators.hpp>
 #include <boost/optional/optional.hpp>
@@ -33,7 +32,6 @@
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <glib/gstdio.h>
 #include <glibmm/fileutils.h>
-#include <stdexcept>
 
 #include "cairo-templates.h"
 #include "colors/manager.h"
@@ -967,18 +965,6 @@ std::optional<Geom::PathVector> extract_pathvector_from_cairo(cairo_t *ct)
 
     res.flush();
     return res.peek();
-}
-
-static std::atomic<int> num_filter_threads = 4;
-
-int get_num_filter_threads()
-{
-    return num_filter_threads.load(std::memory_order_relaxed);
-}
-
-void set_num_filter_threads(int n)
-{
-    num_filter_threads.store(n, std::memory_order_relaxed);
 }
 
 SPColorInterpolation

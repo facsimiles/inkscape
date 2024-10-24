@@ -26,6 +26,7 @@
 #include "display/nr-filter-types.h"
 #include "display/nr-filter-units.h"
 #include "display/nr-filter-slot.h"
+#include "display/threading.h"
 #include <2geom/affine.h>
 #include "util/fixed_point.h"
 

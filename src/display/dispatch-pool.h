@@ -10,7 +10,6 @@
 
 #include <condition_variable>
 #include <functional>
-#include <memory>
 #include <mutex>
 #include <thread>
 #include <vector>
@@ -56,8 +55,6 @@ private:
     global_id _target_work;
     bool _shutdown;
 };
-
-std::shared_ptr<dispatch_pool> get_global_dispatch_pool();
 
 } // namespace Inkscape
 
