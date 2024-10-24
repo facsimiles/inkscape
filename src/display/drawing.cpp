@@ -21,6 +21,7 @@
 #include "control/canvas-item-drawing.h"
 #include "nr-filter-gaussian.h"
 #include "nr-filter-types.h"
+#include "threading.h"
 
 namespace Inkscape {
 

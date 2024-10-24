@@ -12,26 +12,21 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#ifdef HAVE_CONFIG_H
-# include "config.h"  // only include where actually required!
-#endif
-
 #include <algorithm>
 #include <cmath>
 #include <complex>
 #include <cstdlib>
 #include <glib.h>
 #include <limits>
-#if HAVE_OPENMP
-#include <omp.h>
-#endif //HAVE_OPENMP
 
 #include "display/cairo-utils.h"
+#include "display/dispatch-pool.h"
 #include "display/nr-filter-primitive.h"
 #include "display/nr-filter-gaussian.h"
 #include "display/nr-filter-types.h"
 #include "display/nr-filter-units.h"
 #include "display/nr-filter-slot.h"
+#include "display/threading.h"
 #include <2geom/affine.h>
 #include "util/fixed_point.h"
 
@@ -285,12 +280,10 @@ static void calcTriggsSdikaInitialization(double const M[N*N], IIRValue const uo
 }
 
 // Filters over 1st dimension
-template<typename PT, unsigned int PC, bool PREMULTIPLIED_ALPHA>
-static void
-filter2D_IIR(PT *const dest, int const dstr1, int const dstr2,
-             PT const *const src, int const sstr1, int const sstr2,
-             int const n1, int const n2, IIRValue const b[N+1], double const M[N*N],
-             IIRValue *const tmpdata[], int const num_threads)
+template <typename PT, unsigned int PC, bool PREMULTIPLIED_ALPHA>
+static void filter2D_IIR(PT *const dest, int const dstr1, int const dstr2, PT const *const src, int const sstr1,
+                         int const sstr2, int const n1, int const n2, IIRValue const b[N + 1], double const M[N * N],
+                         IIRValue *const tmpdata[], dispatch_pool &pool)
 {
     assert(src && dest);
 
@@ -302,32 +295,29 @@ filter2D_IIR(PT *const dest, int const dstr1, int const dstr2,
     #define PREMUL_ALPHA_LOOP for(unsigned int c=1; c<PC; ++c)
 #endif
 
-INK_UNUSED(num_threads); // to suppress unused argument compiler warning
-#if HAVE_OPENMP
-#pragma omp parallel for num_threads(num_threads)
-#endif // HAVE_OPENMP
-    for ( int c2 = 0 ; c2 < n2 ; c2++ ) {
-#if HAVE_OPENMP
-        unsigned int tid = omp_get_thread_num();
-#else
-        unsigned int tid = 0;
-#endif // HAVE_OPENMP
+    pool.dispatch(n2, [&](int c2, int tid) {
         // corresponding line in the source and output buffer
         PT const * srcimg = src  + c2*sstr2;
         PT       * dstimg = dest + c2*dstr2 + n1*dstr1;
         // Border constants
-        IIRValue imin[PC];  copy_n(srcimg + (0)*sstr1, PC, imin);
-        IIRValue iplus[PC]; copy_n(srcimg + (n1-1)*sstr1, PC, iplus);
+        IIRValue imin[PC];
+        copy_n(srcimg + (0) * sstr1, PC, imin);
+        IIRValue iplus[PC];
+        copy_n(srcimg + (n1 - 1) * sstr1, PC, iplus);
         // Forward pass
         IIRValue u[N+1][PC];
-        for(unsigned int i=0; i<N; i++) copy_n(imin, PC, u[i]);
+        for (unsigned int i = 0; i < N; i++)
+            copy_n(imin, PC, u[i]);
         for ( int c1 = 0 ; c1 < n1 ; c1++ ) {
-            for(unsigned int i=N; i>0; i--) copy_n(u[i-1], PC, u[i]);
+            for (unsigned int i = N; i > 0; i--)
+                copy_n(u[i - 1], PC, u[i]);
             copy_n(srcimg, PC, u[0]);
             srcimg += sstr1;
-            for(unsigned int c=0; c<PC; c++) u[0][c] *= b[0];
+            for (unsigned int c = 0; c < PC; c++)
+                u[0][c] *= b[0];
             for(unsigned int i=1; i<N+1; i++) {
-                for(unsigned int c=0; c<PC; c++) u[0][c] += u[i][c]*b[i];
+                for (unsigned int c = 0; c < PC; c++)
+                    u[0][c] += u[i][c] * b[i];
             }
             copy_n(u[0], PC, tmpdata[tid]+c1*PC);
         }
@@ -339,46 +329,45 @@ INK_UNUSED(num_threads); // to suppress unused argument compiler warning
             dstimg[alpha_PC] = clip_round_cast<PT>(v[0][alpha_PC]);
             PREMUL_ALPHA_LOOP dstimg[c] = clip_round_cast_varmax<PT>(v[0][c], dstimg[alpha_PC]);
         } else {
-            for(unsigned int c=0; c<PC; c++) dstimg[c] = clip_round_cast<PT>(v[0][c]);
+            for (unsigned int c = 0; c < PC; c++)
+                dstimg[c] = clip_round_cast<PT>(v[0][c]);
         }
         int c1=n1-1;
         while(c1-->0) {
-            for(unsigned int i=N; i>0; i--) copy_n(v[i-1], PC, v[i]);
+            for (unsigned int i = N; i > 0; i--)
+                copy_n(v[i - 1], PC, v[i]);
             copy_n(tmpdata[tid]+c1*PC, PC, v[0]);
-            for(unsigned int c=0; c<PC; c++) v[0][c] *= b[0];
+            for (unsigned int c = 0; c < PC; c++)
+                v[0][c] *= b[0];
             for(unsigned int i=1; i<N+1; i++) {
-                for(unsigned int c=0; c<PC; c++) v[0][c] += v[i][c]*b[i];
+                for (unsigned int c = 0; c < PC; c++)
+                    v[0][c] += v[i][c] * b[i];
             }
             dstimg -= dstr1;
             if ( PREMULTIPLIED_ALPHA ) {
                 dstimg[alpha_PC] = clip_round_cast<PT>(v[0][alpha_PC]);
                 PREMUL_ALPHA_LOOP dstimg[c] = clip_round_cast_varmax<PT>(v[0][c], dstimg[alpha_PC]);
             } else {
-                for(unsigned int c=0; c<PC; c++) dstimg[c] = clip_round_cast<PT>(v[0][c]);
+                for (unsigned int c = 0; c < PC; c++)
+                    dstimg[c] = clip_round_cast<PT>(v[0][c]);
             }
         }
-    }
+    });
 }
 
 // Filters over 1st dimension
 // Assumes kernel is symmetric
 // Kernel should have scr_len+1 elements
-template<typename PT, unsigned int PC>
-static void
-filter2D_FIR(PT *const dst, int const dstr1, int const dstr2,
-             PT const *const src, int const sstr1, int const sstr2,
-             int const n1, int const n2, FIRValue const *const kernel, int const scr_len, int const num_threads)
+template <typename PT, unsigned int PC>
+static void filter2D_FIR(PT *const dst, int const dstr1, int const dstr2, PT const *const src, int const sstr1,
+                         int const sstr2, int const n1, int const n2, FIRValue const *const kernel, int const scr_len,
+                         dispatch_pool &pool)
 {
     assert(src && dst);
 
-    // Past pixels seen (to enable in-place operation)
-    PT history[scr_len+1][PC];
-
-INK_UNUSED(num_threads); // suppresses unused argument compiler warning
-#if HAVE_OPENMP
-#pragma omp parallel for num_threads(num_threads) private(history)
-#endif // HAVE_OPENMP
-    for ( int c2 = 0 ; c2 < n2 ; c2++ ) {
+    pool.dispatch(n2, [&](int c2, int) {
+        // Past pixels seen (to enable in-place operation)
+        PT history[scr_len + 1][PC];
 
         // corresponding line in the source buffer
         int const src_line = c2 * sstr2;
@@ -389,8 +378,10 @@ INK_UNUSED(num_threads); // suppresses unused argument compiler warning
         int skipbuf[4] = {INT_MIN, INT_MIN, INT_MIN, INT_MIN};
 
         // history initialization
-        PT imin[PC]; copy_n(src + src_line, PC, imin);
-        for(int i=0; i<scr_len; i++) copy_n(imin, PC, history[i]);
+        PT imin[PC];
+        copy_n(src + src_line, PC, imin);
+        for (int i = 0; i < scr_len; i++)
+            copy_n(imin, PC, history[i]);
 
         for ( int c1 = 0 ; c1 < n1 ; c1++ ) {
 
@@ -398,13 +389,14 @@ INK_UNUSED(num_threads); // suppresses unused argument compiler warning
             int const dst_disp = dst_line + c1 * dstr1;
 
             // update history
-            for(int i=scr_len; i>0; i--) copy_n(history[i-1], PC, history[i]);
+            for (int i = scr_len; i > 0; i--)
+                copy_n(history[i - 1], PC, history[i]);
             copy_n(src + src_disp, PC, history[0]);
 
             // for all bytes of the pixel
             for ( unsigned int byte = 0 ; byte < PC ; byte++) {
-
-                if(skipbuf[byte] > c1) continue;
+                if (skipbuf[byte] > c1)
+                    continue;
 
                 FIRValue sum = 0;
                 int last_in = -1;
@@ -416,7 +408,8 @@ INK_UNUSED(num_threads); // suppresses unused argument compiler warning
                     PT in_byte = history[i][byte];
 
                     // is it the same as last one we saw?
-                    if(in_byte != last_in) different_count++;
+                    if (in_byte != last_in)
+                        different_count++;
                     last_in = in_byte;
 
                     // sum pixels weighted by the kernel
@@ -438,7 +431,8 @@ INK_UNUSED(num_threads); // suppresses unused argument compiler warning
                     PT in_byte = src[nb_src_disp];
 
                     // is it the same as last one we saw?
-                    if(in_byte != last_in) different_count++;
+                    if (in_byte != last_in)
+                        different_count++;
                     last_in = in_byte;
 
                     // sum pixels weighted by the kernel
@@ -465,12 +459,11 @@ INK_UNUSED(num_threads); // suppresses unused argument compiler warning
                 }
             }
         }
-    }
+    });
 }
 
-static void
-gaussian_pass_IIR(Geom::Dim2 d, double deviation, cairo_surface_t *src, cairo_surface_t *dest,
-    IIRValue **tmpdata, int num_threads)
+static void gaussian_pass_IIR(Geom::Dim2 d, double deviation, cairo_surface_t *src, cairo_surface_t *dest,
+                              IIRValue **tmpdata, dispatch_pool &pool)
 {
     // Filter variables
     IIRValue b[N+1];  // scaling coefficient + filter coefficients (can be 10.21 fixed point)
@@ -497,25 +490,24 @@ gaussian_pass_IIR(Geom::Dim2 d, double deviation, cairo_surface_t *src, cairo_su
     // Filter
     switch (cairo_image_surface_get_format(src)) {
     case CAIRO_FORMAT_A8:        ///< Grayscale
-        filter2D_IIR<unsigned char,1,false>(
-            cairo_image_surface_get_data(dest), d == Geom::X ? 1 : stride, d == Geom::X ? stride : 1,
-            cairo_image_surface_get_data(src),  d == Geom::X ? 1 : stride, d == Geom::X ? stride : 1,
-            w, h, b, M, tmpdata, num_threads);
+        filter2D_IIR<unsigned char, 1, false>(cairo_image_surface_get_data(dest), d == Geom::X ? 1 : stride,
+                                              d == Geom::X ? stride : 1, cairo_image_surface_get_data(src),
+                                              d == Geom::X ? 1 : stride, d == Geom::X ? stride : 1, w, h, b, M, tmpdata,
+                                              pool);
         break;
     case CAIRO_FORMAT_ARGB32: ///< Premultiplied 8 bit RGBA
-        filter2D_IIR<unsigned char,4,true>(
-            cairo_image_surface_get_data(dest), d == Geom::X ? 4 : stride, d == Geom::X ? stride : 4,
-            cairo_image_surface_get_data(src),  d == Geom::X ? 4 : stride, d == Geom::X ? stride : 4,
-            w, h, b, M, tmpdata, num_threads);
+        filter2D_IIR<unsigned char, 4, true>(cairo_image_surface_get_data(dest), d == Geom::X ? 4 : stride,
+                                             d == Geom::X ? stride : 4, cairo_image_surface_get_data(src),
+                                             d == Geom::X ? 4 : stride, d == Geom::X ? stride : 4, w, h, b, M, tmpdata,
+                                             pool);
         break;
     default:
         g_warning("gaussian_pass_IIR: unsupported image format");
     };
 }
 
-static void
-gaussian_pass_FIR(Geom::Dim2 d, double deviation, cairo_surface_t *src, cairo_surface_t *dest,
-    int num_threads)
+static void gaussian_pass_FIR(Geom::Dim2 d, double deviation, cairo_surface_t *src, cairo_surface_t *dest,
+                              dispatch_pool &pool)
 {
     int scr_len = _effect_area_scr(deviation);
     // Filter kernel for x direction
@@ -530,16 +522,16 @@ gaussian_pass_FIR(Geom::Dim2 d, double deviation, cairo_surface_t *src, cairo_su
     // Filter (x)
     switch (cairo_image_surface_get_format(src)) {
     case CAIRO_FORMAT_A8:        ///< Grayscale
-        filter2D_FIR<unsigned char,1>(
-            cairo_image_surface_get_data(dest), d == Geom::X ? 1 : stride, d == Geom::X ? stride : 1,
-            cairo_image_surface_get_data(src),  d == Geom::X ? 1 : stride, d == Geom::X ? stride : 1,
-            w, h, &kernel[0], scr_len, num_threads);
+        filter2D_FIR<unsigned char, 1>(cairo_image_surface_get_data(dest), d == Geom::X ? 1 : stride,
+                                       d == Geom::X ? stride : 1, cairo_image_surface_get_data(src),
+                                       d == Geom::X ? 1 : stride, d == Geom::X ? stride : 1, w, h, &kernel[0], scr_len,
+                                       pool);
         break;
     case CAIRO_FORMAT_ARGB32: ///< Premultiplied 8 bit RGBA
-        filter2D_FIR<unsigned char,4>(
-            cairo_image_surface_get_data(dest), d == Geom::X ? 4 : stride, d == Geom::X ? stride : 4,
-            cairo_image_surface_get_data(src),  d == Geom::X ? 4 : stride, d == Geom::X ? stride : 4,
-            w, h, &kernel[0], scr_len, num_threads);
+        filter2D_FIR<unsigned char, 4>(cairo_image_surface_get_data(dest), d == Geom::X ? 4 : stride,
+                                       d == Geom::X ? stride : 4, cairo_image_surface_get_data(src),
+                                       d == Geom::X ? 4 : stride, d == Geom::X ? stride : 4, w, h, &kernel[0], scr_len,
+                                       pool);
         break;
     default:
         g_warning("gaussian_pass_FIR: unsupported image format");
@@ -597,8 +589,9 @@ void FilterGaussian::render_cairo(FilterSlot &slot) const
             bytes_per_pixel = 4; break;
     }
 
+    auto const pool = get_global_dispatch_pool();
     int quality = slot.get_blurquality();
-    int threads = get_num_filter_threads();
+    int threads = pool->size();
     int x_step = 1 << _effect_subsample_step_log2(deviation_x_orig, quality);
     int y_step = 1 << _effect_subsample_step_log2(deviation_y_orig, quality);
     bool resampling = x_step > 1 || y_step > 1;
@@ -647,17 +640,17 @@ void FilterGaussian::render_cairo(FilterSlot &slot) const
 
     if (scr_len_x > 0) {
         if (use_IIR_x) {
-            gaussian_pass_IIR(Geom::X, deviation_x, downsampled, downsampled, tmpdata, threads);
+            gaussian_pass_IIR(Geom::X, deviation_x, downsampled, downsampled, tmpdata, *pool);
         } else {
-            gaussian_pass_FIR(Geom::X, deviation_x, downsampled, downsampled, threads);
+            gaussian_pass_FIR(Geom::X, deviation_x, downsampled, downsampled, *pool);
         }
     }
 
     if (scr_len_y > 0) {
         if (use_IIR_y) {
-            gaussian_pass_IIR(Geom::Y, deviation_y, downsampled, downsampled, tmpdata, threads);
+            gaussian_pass_IIR(Geom::Y, deviation_y, downsampled, downsampled, tmpdata, *pool);
         } else {
-            gaussian_pass_FIR(Geom::Y, deviation_y, downsampled, downsampled, threads);
+            gaussian_pass_FIR(Geom::Y, deviation_y, downsampled, downsampled, *pool);
         }
     }
 
