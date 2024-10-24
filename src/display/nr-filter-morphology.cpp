@@ -65,11 +65,9 @@ void morphologicalFilter1D(cairo_surface_t * const input, cairo_surface_t * cons
     int ri = round(radius); // TODO: Support fractional radii?
     int wi = 2*ri+1;
 
-    #if HAVE_OPENMP
-    int limit = w * h;
-    #pragma omp parallel for if(limit > OPENMP_THRESHOLD) num_threads(get_num_filter_threads())
-    #endif // HAVE_OPENMP
-    for (int i = 0; i < h; ++i) {
+    int const limit = w * h;
+    auto const pool = get_global_dispatch_pool();
+    pool->dispatch_threshold(h, limit > POOL_THRESHOLD, [&](int i, int) {
         // TODO: Store position and value in one 32 bit integer? 24 bits should be enough for a position, it would be quite strange to have an image with a width/height of more than 16 million(!).
         std::deque<std::pair<int, unsigned char>> vals[BPP]; // In my tests it was actually slightly faster to allocate it here than allocate it once for all threads and retrieving the correct set based on the thread id.
 
@@ -106,20 +104,25 @@ void morphologicalFilter1D(cairo_surface_t * const input, cairo_surface_t * cons
         for (int j = 0; j < std::min(ri,w); ++j) {
             for(int p = 0; p < BPP; ++p) { // Iterate over channels
                 // Push new value onto FIFO, erasing any previous values that are "useless" (see paper) or out-of-range
-                if (!vals[p].empty() && vals[p].front().first <= j) vals[p].pop_front(); // out-of-range
-                while(!vals[p].empty() && !comp(vals[p].back().second, *in_p)) vals[p].pop_back(); // useless
+                if (!vals[p].empty() && vals[p].front().first <= j)
+                    vals[p].pop_front(); // out-of-range
+                while (!vals[p].empty() && !comp(vals[p].back().second, *in_p))
+                    vals[p].pop_back(); // useless
                 vals[p].emplace_back(j + wi, *in_p);
                 ++in_p;
             }
-            if (axis == Geom::Y) in_p += stridein - BPP;
+            if (axis == Geom::Y)
+                in_p += stridein - BPP;
         }
         // We have now done all preparatory work.
         // If w<=ri, then the following loop does nothing (which is as it should).
         for (int j = ri; j < w; ++j) {
             for(int p = 0; p < BPP; ++p) { // Iterate over channels
                 // Push new value onto FIFO, erasing any previous values that are "useless" (see paper) or out-of-range
-                if (!vals[p].empty() && vals[p].front().first <= j) vals[p].pop_front(); // out-of-range
-                while(!vals[p].empty() && !comp(vals[p].back().second, *in_p)) vals[p].pop_back(); // useless
+                if (!vals[p].empty() && vals[p].front().first <= j)
+                    vals[p].pop_front(); // out-of-range
+                while (!vals[p].empty() && !comp(vals[p].back().second, *in_p))
+                    vals[p].pop_back(); // useless
                 vals[p].emplace_back(j + wi, *in_p);
                 ++in_p;
                 // Set output
@@ -134,21 +137,24 @@ void morphologicalFilter1D(cairo_surface_t * const input, cairo_surface_t * cons
         // We have now done all work which involves both input and output.
         // The following loop makes sure that the border is handled correctly.
         for(int p = 0; p < BPP; ++p) { // Iterate over channels
-            while(!vals[p].empty() && !comp(vals[p].back().second, 0)) vals[p].pop_back();
+            while (!vals[p].empty() && !comp(vals[p].back().second, 0))
+                vals[p].pop_back();
             vals[p].emplace_back(w + wi, 0);
         }
         // Now we just have to finish the output.
         for (int j = std::max(w,ri); j < w+ri; ++j) {
             for(int p = 0; p < BPP; ++p) { // Iterate over channels
                 // Remove out-of-range values
-                if (!vals[p].empty() && vals[p].front().first <= j) vals[p].pop_front(); // out-of-range
+                if (!vals[p].empty() && vals[p].front().first <= j)
+                    vals[p].pop_front(); // out-of-range
                 // Set output
                 *out_p = vals[p].front().second;
                 ++out_p;
             }
-            if (axis == Geom::Y) out_p += strideout - BPP;
+            if (axis == Geom::Y)
+                out_p += strideout - BPP;
         }
-    }
+    });
 
     cairo_surface_mark_dirty(out);
 }

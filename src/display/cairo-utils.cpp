@@ -1294,7 +1294,7 @@ static int ink_cairo_surface_average_color_internal(cairo_surface_t *surface, do
     int stride = cairo_image_surface_get_stride(surface);
     unsigned char *data = cairo_image_surface_get_data(surface);
 
-    /* TODO convert this to OpenMP somehow */
+    // TODO parallelize this somehow
     for (int y = 0; y < height; ++y, data += stride) {
         for (int x = 0; x < width; ++x) {
             guint32 px = *reinterpret_cast<guint32*>(data + 4*x);
