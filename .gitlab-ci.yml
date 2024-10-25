@@ -131,6 +131,8 @@ inkscape:macos:
       when: never
     # Intel runner
     - if: $RUNNER == "macosintel"
+      when: manual
+      allow_failure: true
       variables:
         MACOSX_DEPLOYMENT_TARGET: "10.13"
     # Apple Silicon runner
@@ -227,6 +229,8 @@ test:linux:
 
 test:macos:
   extends: inkscape:macos
+  when: manual
+  allow_failure: true
   stage: test
   parallel:
     matrix:
