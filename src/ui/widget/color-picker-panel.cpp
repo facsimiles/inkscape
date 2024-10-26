@@ -91,7 +91,7 @@ public:
         update_color();
     }
 
-    Gtk::Widget* add_gap(int size, int row) {
+    Widget* add_gap(int size, int row) {
         auto gap = Gtk::make_managed<Gtk::Box>();
         gap->set_size_request(1, size);
         attach(*gap, 0, row);
@@ -114,7 +114,7 @@ public:
         return _last_column;
     }
 
-    sigc::signal<void (Colors::Space::Type)> get_color_space_changed() override {
+    sigc::signal<void (Space::Type)> get_color_space_changed() override {
         return _color_space_changed;
     }
 
@@ -126,6 +126,9 @@ public:
     Gtk::Box _frame;
     ColorPreview _preview;
     ColorEntry _rgb_edit;
+    Gtk::Image _warning;
+    //todo: let user choose display/input format of ColorEntry
+    // Gtk::MenuButton _display_choices;
     // color type space selector
     IconComboBox _spaces = IconComboBox(true, IconComboBox::LabelOnly);
     bool _with_expander = true;
@@ -137,10 +140,10 @@ public:
     ColorWheel* _plate = nullptr;
     sigc::scoped_connection _color_picking;
     SPDesktop* _desktop = nullptr;
-    sigc::signal<void (Colors::Space::Type)> _color_space_changed;
+    sigc::signal<void (Space::Type)> _color_space_changed;
 };
 
-std::unique_ptr<ColorPickerPanel> ColorPickerPanel::create(Colors::Space::Type space, PlateType type, std::shared_ptr<Colors::ColorSet> color) {
+std::unique_ptr<ColorPickerPanel> ColorPickerPanel::create(Space::Type space, PlateType type, std::shared_ptr<ColorSet> color) {
     return std::make_unique<ColorPickerPanelImpl>(space, type, color, false);
 }
 
@@ -198,12 +201,21 @@ ColorPickerPanelImpl::ColorPickerPanelImpl(Space::Type space, PlateType type, st
     _rgb_edit.set_has_frame(false);
     _rgb_edit.set_alignment(Gtk::Align::CENTER);
     _rgb_edit.add_css_class("small-entry");
+    _rgb_edit.get_out_of_gamut_signal().connect([this](auto& msg) {
+        _warning.set_opacity(msg.empty() ? 0 : 1);
+        _warning.set_tooltip_text(msg);
+    });
+    _warning.set_from_icon_name("warning");
+    _warning.set_margin_end(3);
+    _warning.set_opacity(0);
     _frame.append(_rgb_edit);
+    _frame.append(_warning);
+
     // color space type selector
     _spaces.set_halign(Gtk::Align::END);
     _last_column->add_widget(_spaces);
 
-    Gtk::Widget* one_row[3] ={&_dropper, &_frame, &_spaces};
+    Widget* one_row[3] ={&_dropper, &_frame, &_spaces};
     for (auto widget : one_row) {
         widget->set_margin_top(4);
         widget->set_margin_bottom(4);

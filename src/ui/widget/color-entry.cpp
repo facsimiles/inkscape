@@ -14,11 +14,12 @@
 #include <iostream>
 
 #include "color-entry.h"
-#include "util-string/ustring-format.h"
 
-namespace Inkscape {
-namespace UI {
-namespace Widget {
+#include "colors/printer.h"
+#include "colors/spaces/base.h"
+// #include "util-string/ustring-format.h"
+
+namespace Inkscape::UI::Widget {
 
 ColorEntry::ColorEntry(std::shared_ptr<Colors::ColorSet> colors)
     : _colors(std::move(colors))
@@ -82,6 +83,23 @@ void ColorEntry::_onColorChanged()
     }
 
     auto color = _colors->getAverage().converted(Colors::Space::Type::RGB);
+    if (color.has_value()) {
+        if (color->getSpace()->outOfGamut(color->getValues())) {
+            // out of sRGB gamut warning
+            auto r = color->get(0);
+            auto g = color->get(1);
+            auto b = color->get(2);
+            auto rgb = Colors::CssLegacyPrinter(3, "rgb", false);
+            rgb << r << g << b;
+            _signal_out_of_gamut.emit(Glib::ustring::compose(_("Color %1 is out of sRGB gamut.\nIt has been clipped to sRGB boundary."), static_cast<std::string>(rgb).c_str()));
+            _warning = true;
+        }
+        else if (_warning) {
+            // clear warning
+            _warning = false;
+            _signal_out_of_gamut.emit({});
+        }
+    }
     auto text = color.has_value() ? color->toString(false) : "?";
 
     if (get_text().raw() != text) {
@@ -90,9 +108,9 @@ void ColorEntry::_onColorChanged()
         _updating = false;
     }
 }
-}
-}
-}
+
+} // namespace
+
 /*
   Local Variables:
   mode:c++

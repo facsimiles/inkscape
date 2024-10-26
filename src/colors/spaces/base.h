@@ -57,6 +57,7 @@ public:
     virtual unsigned int getComponentCount() const = 0;
     virtual std::shared_ptr<Colors::CMS::Profile> const getProfile() const = 0;
     virtual RenderingIntent getIntent() const { return RenderingIntent::UNKNOWN; }
+    virtual bool outOfGamut(const std::vector<double>& input) const { return false; }
 
     Components const &getComponents(bool alpha = false) const;
     std::string const getPrefsPath() const { return "/colorselector/" + getName() + "/"; }

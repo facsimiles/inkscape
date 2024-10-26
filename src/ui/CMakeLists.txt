@@ -241,6 +241,8 @@ set(ui_SRC
 	widget/layer-selector.cpp
 	widget/licensor.cpp
 	widget/marker-combo-box.cpp
+	widget/memory.cpp
+	widget/messages.cpp
 	widget/mesh-editor.cpp
 	widget/notebook-page.cpp
 	widget/object-composite-settings.cpp
@@ -554,6 +556,8 @@ set(ui_SRC
 	widget/layer-selector.h
 	widget/licensor.h
 	widget/marker-combo-box.h
+	widget/memory.h
+	widget/messages.h
 	widget/mesh-editor.h
 	widget/notebook-page.h
 	widget/object-composite-settings.h

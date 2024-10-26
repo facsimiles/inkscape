@@ -29,6 +29,22 @@ std::shared_ptr<Inkscape::Colors::CMS::Profile> const RGB::getProfile() const
     return srgb_profile;
 }
 
+bool RGB::outOfGamut(const std::vector<double>& input) const {
+    if (input.empty()) return false;
+
+    if (input.size() < 3) {
+        throw ColorError("Color values should be size 3 for RGB or 4 for RGBA.");
+    }
+
+    // simple check for RGB channels outside of 0..1 range
+    for (int i = 0; i < 3; ++i) {
+        if (input[i] < 0 || input[i] > 1) {
+            return true; // out of sRGB gamut
+        }
+    }
+    return false; // in gamut
+}
+
 /**
  * Print the RGB color to a CSS Hex code of 6 or 8 digits.
  *

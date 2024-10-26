@@ -27,6 +27,7 @@ public:
     std::string const getIcon() const override { return "color-selector-rgb"; }
     unsigned int getComponentCount() const override { return 3; }
     std::shared_ptr<Colors::CMS::Profile> const getProfile() const override;
+    bool outOfGamut(const std::vector<double>& input) const override;
 
 protected:
     friend class Inkscape::Colors::Color;
