@@ -42,8 +42,10 @@
 #include <gtkmm/eventcontrollerscroll.h>
 #include <gtkmm/adjustment.h>
 #include <gtkmm/snapshot.h>
+#include <gtkmm/editablelabel.h>
 
 #include "filter-enums.h"
+#include "gtkmm/enums.h"
 #include "io/resource.h"
 #include "attributes.h"
 #include "display/nr-filter-types.h"
@@ -63,7 +65,7 @@ class Drag;
 namespace Gtk {
 class Button;
 class CheckButton;
-class DragSource;
+// class DragSource;
 class GestureClick;
 class Grid;
 class Label;
@@ -240,6 +242,7 @@ class FilterEditorSink : public Gtk::Box{
         Glib::ustring result_string;
         int inp_index = 0;
         Gtk::Label label;
+        // Gtk::EditableLabel label;
 
 };
 class FilterEditorFixed : public Gtk::Fixed {
@@ -317,6 +320,8 @@ class FilterEditorNode : public Gtk::Box{
         virtual void set_result_string(std::string _result_string);
         virtual void set_sink_result(FilterEditorSink* sink, std::string result_string);
         virtual void set_sink_result(FilterEditorSink* sink, int inp_index);
+
+        // virtual void label_updated();
         virtual std::string get_result_string();
 
 
@@ -327,7 +332,7 @@ class FilterEditorNode : public Gtk::Box{
 
 
         std::string result_string;
-
+        Gtk::EditableLabel label;
 
 
         std::vector<FilterEditorConnection*> connections;
@@ -339,9 +344,15 @@ class FilterEditorNode : public Gtk::Box{
 class FilterEditorPrimitiveNode : public FilterEditorNode{
     public:
         FilterEditorPrimitiveNode(int node_id, int x, int y, Glib::ustring label_text, SPFilterPrimitive* _primitive, int num_inputs = 1):
-        FilterEditorNode(node_id, x, y, label_text, 1, num_inputs), primitive(_primitive){
-            // update_sink_results();
-            // in_attr = 
+        FilterEditorNode(node_id, x, y, label_text, 1, num_inputs), primitive(_primitive), secondary_text(label_text){
+            secondary_text.set_halign(Gtk::Align::CENTER);
+            secondary_text.add_css_class("seclabel");
+            label.set_editable(false);
+            label.property_editing().signal_changed().connect([this]{label_updated();});
+            
+            // label.signal_changed().connect([this] { label_updated(); });
+            // label.signal_insert_text().connect([this] { label_updated(); });
+            // label.signal_delete_text().connect([this] (int a, int b){ label_updated(); });
         };
 
         
@@ -351,9 +362,13 @@ class FilterEditorPrimitiveNode : public FilterEditorNode{
         std::string get_result_string() override;
         void update_position_from_document() override;
         virtual void update_sink_results();
+
         void set_sink_result(FilterEditorSink* sink, std::string result_string) override;
         void set_sink_result(FilterEditorSink* sink, int inp_index) override;
         FilterEditorSink* get_sink(int index);
+
+        Gtk::Label secondary_text;
+        virtual void label_updated();
 
     protected:
         void set_result_string(std::string _result_string) override;
@@ -441,6 +456,7 @@ class FilterEditorCanvas : public Gtk::ScrolledWindow{
         void update_canvas_new();
         void update_canvas();
         bool primitive_node_exists(SPFilterPrimitive *primitive);
+        void toggle_params();
         void remove_filter(SPFilter* filter);
         void align_to_output();
 
@@ -692,6 +708,7 @@ public:
     ~FilterEffectsDialog() override;
 
     void set_attrs_locked(const bool);
+    bool toggle_params();
 
 private:
     void documentReplaced() override;
@@ -924,6 +941,7 @@ private:
     Gtk::Box& _params_box;
     Gtk::Box& _search_box;
     Gtk::Box& _search_wide_box;
+    Gtk::ScrolledWindow& _params_wnd;
     Gtk::ScrolledWindow& _filter_wnd;
     FilterEditorCanvas _filter_canvas;
     Gtk::Box testing_box;
