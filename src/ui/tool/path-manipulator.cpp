@@ -53,6 +53,18 @@ enum PathChange {
     PATH_CHANGE_TRANSFORM
 };
 
+/// Remove empty paths from a path vector.
+void sanitize_path_vector(Geom::PathVector &pathvector)
+{
+    for (auto it = pathvector.begin(); it != pathvector.end();) {
+        if (it->empty()) {
+            it = pathvector.erase(it);
+        } else {
+            ++it;
+        }
+    }
+}
+
 } // anonymous namespace
 static constexpr double BSPLINE_TOL = 0.001;
 static constexpr double NO_POWER = 0.0;
@@ -1265,24 +1277,16 @@ void PathManipulator::_createControlPointsFromGeometry()
 {
     clear();
 
-    // sanitize pathvector and store it in SPCurve,
-    // so that _updateDragPoint doesn't crash on paths with naked movetos
     Geom::PathVector pathv;
     if (_is_bspline) {
         pathv = pathv_to_cubicbezier(_spcurve.get_pathvector(), false);
     } else {
         pathv = pathv_to_linear_and_cubic_beziers(_spcurve.get_pathvector());
     }
-    for (Geom::PathVector::iterator i = pathv.begin(); i != pathv.end(); ) {
-        // NOTE: this utilizes the fact that Geom::PathVector is an std::vector.
-        // When we erase an element, the next one slides into position,
-        // so we do not increment the iterator even though it is theoretically invalidated.
-        if (i->empty()) {
-            i = pathv.erase(i);
-        } else {
-            ++i;
-        }
-    }
+
+    // sanitize pathvector and store it in SPCurve,
+    // so that _updateDragPoint doesn't crash on paths with naked movetos
+    sanitize_path_vector(pathv);
     if (pathv.empty()) {
         return;
     }
@@ -1486,16 +1490,7 @@ void PathManipulator::_createGeometryFromControlPoints(bool alert_LPE)
     }
     builder.flush();
     Geom::PathVector pathv = builder.peek() * _getTransform().inverse();
-    for (Geom::PathVector::iterator i = pathv.begin(); i != pathv.end(); ) {
-        // NOTE: this utilizes the fact that Geom::PathVector is an std::vector.
-        // When we erase an element, the next one slides into position,
-        // so we do not increment the iterator even though it is theoretically invalidated.
-        if (i->empty()) {
-            i = pathv.erase(i);
-        } else {
-            ++i;
-        }
-    }
+    sanitize_path_vector(pathv);
     if (pathv.empty()) {
         return;
     }
