@@ -11,6 +11,7 @@
 #define INKSCAPE_UI_TOOL_CURVE_DRAG_POINT_H
 
 #include "ui/tool/control-point.h"
+#include "ui/tool/curve-event-handler.h"
 #include "ui/tool/node.h"
 
 class SPDesktop;
@@ -35,7 +36,9 @@ public:
     void setSize(double sz) { _setSize(sz); }
     void setTimeValue(double t) { _t = t; }
     double getTimeValue() { return _t; }
-    void setIterator(NodeList::iterator i) { first = i; }
+
+    /// Set iterator to the start node of the curve on which the dragpoint is located.
+    void setIterator(NodeList::iterator iterator);
     NodeList::iterator getIterator() { return first; }
     bool _eventHandler(Inkscape::UI::Tools::ToolBase *event_context, CanvasEvent const &event) override;
 
@@ -48,9 +51,13 @@ protected:
     bool doubleclicked(ButtonReleaseEvent const &) override;
 
 private:
+    void _adjustPointToSnappedPosition(Geom::Point &point_to_adjust, CanvasEvent const &event,
+                                       SPItem const &item_to_ignore) const;
+
     double _t;
     PathManipulator &_pm;
     NodeList::iterator first;
+    std::unique_ptr<CurveHandler> _curve_event_handler;
 
     static bool _drags_stroke;
     static bool _segment_was_degenerate;
