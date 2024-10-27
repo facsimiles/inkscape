@@ -21,7 +21,9 @@
 #include "object/sp-namedview.h"
 #include "snap.h"
 #include "ui/modifiers.h"
+#include "ui/tool/bezier-curve-handler.h"
 #include "ui/tool/control-point-selection.h"
+#include "ui/tool/elliptical-manipulator.h"
 #include "ui/tool/path-manipulator.h"
 #include "ui/tools/node-tool.h"
 #include "ui/widget/events/canvas-event.h"
@@ -295,16 +297,8 @@ void Handle::setPosition(Geom::Point const &p)
     _handle_line->set_coords(_parent->position(), position());
 
     // update degeneration info and visibility
-    if (Geom::are_near(position(), _parent->position()))
-        _degenerate = true;
-    else
-        _degenerate = false;
-
-    if (_parent->_handles_shown && _parent->visible() && !_degenerate) {
-        setVisible(true);
-    } else {
-        setVisible(false);
-    }
+    _degenerate = Geom::are_near(position(), _parent->position());
+    setVisible(!_degenerate && _parent->areHandlesVisible());
 }
 
 void Handle::setLength(double len)
@@ -829,6 +823,9 @@ void Node::move(Geom::Point const &new_pos)
             nextNode->back()->setPosition(_pm()._bsplineHandleReposition(nextNode->back(), nextNodeWeight));
         }
     }
+    if (nextNode) {
+        nextNode->notifyPrecedingNodeUpdate(*this);
+    }
     Inkscape::UI::Tools::sp_update_helperpath(_desktop);
 }
 
@@ -855,6 +852,10 @@ void Node::transform(Geom::Affine const &m)
     setPosition(position() * m);
     _front.setPosition(_front.position() * m);
     _back.setPosition(_back.position() * m);
+
+    if (nextNode) {
+        nextNode->notifyPrecedingNodeUpdate(*this);
+    }
 
     // move the involved handles. First the node ones, later the adjoining ones.
     if (_pm()._isBSpline()) {
@@ -971,12 +972,35 @@ void Node::showHandles(bool v)
     }
 }
 
+bool Node::isPrecedingSegmentStraight() const
+{
+    auto const *previous_node = _prev();
+    return previous_node && _back.isDegenerate() && previous_node->_front.isDegenerate();
+}
+
 void Node::updateHandles()
 {
     _handleControlStyling();
 
     _front._handleControlStyling();
     _back._handleControlStyling();
+}
+
+void Node::writeSegment(Geom::PathSink &output, Node const &previous) const
+{
+    if (_back.isDegenerate() && previous._front.isDegenerate()) {
+        // NOTE: It seems like the renderer cannot correctly handle vline / hline segments,
+        // and trying to display a path using them results in funny artifacts.
+        output.lineTo(position());
+    } else {
+        // The preceding segment is a Bezier curve
+        output.curveTo(previous._front.position(), _back.position(), position());
+    }
+}
+
+std::unique_ptr<CurveHandler> Node::createEventHandlerForPrecedingCurve()
+{
+    return std::make_unique<BezierCurveHandler>(_pm()._isBSpline());
 }
 
 void Node::setType(NodeType type, bool update_handles)
