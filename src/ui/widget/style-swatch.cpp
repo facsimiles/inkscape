@@ -111,17 +111,17 @@ StyleSwatch::StyleSwatch(SPCSSAttr *css, gchar const *main_tip, Gtk::Orientation
     UI::pack_start(_stroke, _stroke_width, UI::PackOptions::shrink);
 
     if (orient == Gtk::Orientation::VERTICAL) {
-    /*_table->attach(_place[SS_FILL],   1, 0, 1, 1);
+        _table->attach(_place[SS_FILL],   1, 0, 1, 1);
         _table->attach(_stroke,           1, 1, 1, 1);
-        _table->attach(_empty_space,      2, 0, 1, 2);*/
+        _table->attach(_empty_space,      2, 0, 1, 2);
         UI::pack_start(*this, *_table, true, true);
 
         set_size_request (STYLE_SWATCH_WIDTH, -1);
     }
     else {
         _table->set_column_spacing(4);
-        /*_table->attach(_place[SS_FILL],   1, 0, 1, 1);
-        _table->attach(_stroke,           3, 0, 1, 1);*/
+        _table->attach(_place[SS_FILL],   1, 0, 1, 1);
+        _table->attach(_stroke,           3, 0, 1, 1);
         UI::pack_start(*this, *_table, true, true);
 
         int patch_w = 6 * 6;
