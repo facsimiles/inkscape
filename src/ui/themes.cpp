@@ -626,7 +626,7 @@ void ThemeContext::adjustGlobalFontScale(double factor) {
 
     os << ".mono-font {";
     auto desc = getMonospacedFont();
-    os << "font-family: " << desc.get_family() << ";";
+    os << "font-family: '" << desc.get_family() << "';";
     switch (desc.get_style()) {
         case Pango::STYLE_ITALIC:
             os << "font-style: italic;";
