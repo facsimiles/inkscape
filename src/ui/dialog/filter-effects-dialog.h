@@ -44,6 +44,7 @@
 #include <gtkmm/snapshot.h>
 #include <gtkmm/editablelabel.h>
 
+#include "document.h"
 #include "filter-enums.h"
 #include "gtkmm/enums.h"
 #include "io/resource.h"
@@ -321,7 +322,7 @@ class FilterEditorNode : public Gtk::Box{
         virtual void set_sink_result(FilterEditorSink* sink, std::string result_string);
         virtual void set_sink_result(FilterEditorSink* sink, int inp_index);
 
-        // virtual void label_updated();
+        virtual void label_updated();
         virtual std::string get_result_string();
 
 
@@ -368,7 +369,7 @@ class FilterEditorPrimitiveNode : public FilterEditorNode{
         FilterEditorSink* get_sink(int index);
 
         Gtk::Label secondary_text;
-        virtual void label_updated();
+        void label_updated() override;
 
     protected:
         void set_result_string(std::string _result_string) override;
@@ -406,7 +407,7 @@ class FilterEditorInputNode : public FilterEditorNode{
 
 class FilterEditorOutputNode : public FilterEditorNode{
     public:
-        FilterEditorOutputNode(int node_id, SPFilter* _filter, int x, int y, Glib::ustring label_text, int num_inputs = 1):
+        FilterEditorOutputNode(int node_id, SPFilter* _filter, int x, int y, Glib::ustring label_text, int num_inputs = 1, FilterEditorCanvas* canvas = nullptr):
         FilterEditorNode(node_id, x, y, label_text, 0, num_inputs), filter(_filter){};
         FilterEditorSink* get_sink();
         void set_sink_result(FilterEditorSink* sink, std::string result_string) override;
@@ -415,7 +416,9 @@ class FilterEditorOutputNode : public FilterEditorNode{
         void update_filter(SPFilter* _filter) {
             filter = _filter;
         };
+        void label_updated() override;
     protected:
+        FilterEditorCanvas* canvas;
         SPFilter* filter;
 };
 
@@ -491,11 +494,12 @@ class FilterEditorCanvas : public Gtk::ScrolledWindow{
         FilterEditorOutputNode* create_output_node(SPFilter* filter, double x, double y, Glib::ustring label_text);
         void clear_nodes();
         void update_editor();
+        SPFilter* get_current_filter();
         void update_filter(SPFilter* filter);
         void update_document(bool add_undo = false);
         void update_document_new(bool add_undo = false);
 
-
+        std::unique_ptr<SPDocument> preview_doc;
         /* Utility functions for testing and assertions, to be removed later*/
         /* 
         Check if there are any two primitives in the currently selected filter
@@ -510,6 +514,7 @@ class FilterEditorCanvas : public Gtk::ScrolledWindow{
 
         std::vector<SPFilter*> filter_list;
         int current_filter_id = -1;
+        FilterEffectsDialog &_dialog; 
 
         const std::vector<Glib::ustring> result_inputs = {"SourceGraphic", "SourceAlpha", "BackgroundImage", "BackgroundAlpha", "FillPaint", "StrokePaint"}; 
 
@@ -603,7 +608,6 @@ class FilterEditorCanvas : public Gtk::ScrolledWindow{
 
     private:
 
-        FilterEffectsDialog &_dialog; 
         // void create_nodes_order(FilterEditorPrimitiveNode* node, std::vector<FilterEditorPrimitiveNode*>& nodes_order, std::set<FilterEditorPrimitiveNode*>& visited);
         void create_nodes_order(FilterEditorPrimitiveNode* prev_node, FilterEditorPrimitiveNode* node, std::vector<FilterEditorPrimitiveNode*>& nodes_order, std::map<FilterEditorPrimitiveNode*, std::pair<int, int>>& visited,bool dir, bool reset = false);
         std::map<SPFilterPrimitive *, FilterEditorPrimitiveNode *> primitive_to_node;
