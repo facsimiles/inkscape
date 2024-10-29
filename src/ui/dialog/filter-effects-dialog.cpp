@@ -22,6 +22,7 @@
 #include <glib.h>
 #include <gtk/gtk.h>
 #include <map>
+#include <memory>
 #include <set>
 #include <string>
 #include <sstream>
@@ -50,7 +51,9 @@
 #include <gtkmm/textview.h>
 #include <gtkmm/togglebutton.h>
 
+#include "colors/color.h"
 #include "desktop.h"
+#include "display/nr-filter-morphology.h"
 #include "display/nr-filter.h"
 #include "document-undo.h"
 #include "filter-chemistry.h"
@@ -86,6 +89,7 @@
 #include "ui/util.h"
 #include "ui/widget/color-picker.h"
 #include "ui/widget/custom-tooltip.h"
+#include "ui/widget/export-preview.h"
 #include "ui/widget/filter-effect-chooser.h"
 #include "ui/widget/spinbutton.h"
 
@@ -95,6 +99,10 @@
 // #define DELETE_NODES
 #define filtered(x) x[current_filter_id]
 #define dbg g_message("%d", __LINE__)
+
+
+#define ORIENTATION_EDITOR_INVERSE VERTICAL
+#define ORIENTATION_EDITOR HORIZONTAL
 
 
 /*
@@ -119,14 +127,14 @@ static int input_count(const SPFilterPrimitive* prim);
 
 FilterEditorNode::FilterEditorNode(int node_id, int x, int y, 
                                    Glib::ustring label_text, int num_sources, int num_sinks)
-    : Gtk::Box(Gtk::Orientation::VERTICAL, 0)
+    : Gtk::Box(Gtk::Orientation::ORIENTATION_EDITOR, 0)
     , node_id(node_id)
     , x(x)
     , y(y)
-    , node(Gtk::Orientation::VERTICAL, 0)
-    , source_dock(Gtk::Orientation::HORIZONTAL, 10)
+    , node(Gtk::Orientation::ORIENTATION_EDITOR, 0)
+    , source_dock(Gtk::Orientation::ORIENTATION_EDITOR_INVERSE, 10)
     , sources(0)
-    , sink_dock(Gtk::Orientation::HORIZONTAL, 10)
+    , sink_dock(Gtk::Orientation::ORIENTATION_EDITOR_INVERSE, 10)
     , sinks(0)
     , connected_down_nodes(0)
     , connected_up_nodes(0)
@@ -847,6 +855,16 @@ FilterEditorCanvas::FilterEditorCanvas(FilterEffectsDialog& dialog)
     int i = 0;
 
     preview_doc = SPDocument::createNewDoc(nullptr, true, true, nullptr);
+    _preview = std::make_unique<UI::Dialog::ExportPreview>();
+    // _preview->setBox();
+    if(_dialog.getDocument()){
+        // _preview->setBox(Geom::Rect(0, 0, 100, 100) * _dialog.getDocument()->dt2doc());
+
+        // auto col = Colors::Color::parse("#ffffff");
+        // _preview->setBackgroundColor(col->toRGBA());
+        // _preview->queueRefresh();
+    }
+    canvas.put(*_preview, 0, 0);
      
     while(controllers->get_object(i) != nullptr){
         // this->remove_controller()
@@ -1334,6 +1352,65 @@ void FilterEditorCanvas::toggle_params(){
 }
 
 
+void FilterEditorCanvas::refreshPreview()
+{
+
+    
+
+    std::vector<SPItem const *> selected;
+    // auto _desktop = _dialog.
+    SPDesktop* _desktop = _dialog.getDesktop();
+
+    if(!_desktop){
+        return;
+    }
+    // auto sel_range = _desktop->getSelection()->items();
+    // selected = {sel_range.begin(), sel_range.end()};
+
+
+    g_message("%ld", selected.size());
+    _preview->resetPixels();
+    // g_message("Previews parent is %s", _preview->get_parent()->get_name().c_str());
+    if(!_preview_drawing){
+        _preview_drawing = std::make_shared<PreviewDrawing>(_dialog.getDocument());
+        _preview->setDrawing(_preview_drawing);
+    }
+    
+    _preview_drawing->set_shown_items(std::move(selected));
+    _preview->set_size_request(200, 100);
+    // _preview->set_size_request(-1, -1);
+
+    // bool show = si_show_preview.get_active();
+    // if (!show || current_key == SELECTION_PAGE) {
+    //     bool have_pages = false;
+    //     for (auto const child : UI::get_children(pages_list)) {
+    //         if (auto bi = dynamic_cast<BatchItem *>(child)) {
+    //             bi->refresh(!show, _background_color.get_current_color().toRGBA());
+    //             have_pages = true;
+    //         }
+    //     }
+    //     if (have_pages) {
+    //         // We don't want to update the main preview for pages, it's hidden
+    //         preview.resetPixels();
+    //         return;
+    //     }
+    // }
+
+    // Unit const *unit = units.getUnit();
+    // float x0 = unit->convert(spin_buttons[SPIN_X0]->get_value(), "px");
+    // float x1 = unit->convert(spin_buttons[SPIN_X1]->get_value(), "px");
+    // float y0 = unit->convert(spin_buttons[SPIN_Y0]->get_value(), "px");
+    // float y1 = unit->convert(spin_buttons[SPIN_Y1]->get_value(), "px");
+    auto _document = _dialog.getDocument();
+    if(_desktop->getSelection()){
+        auto bbox = _desktop->getSelection()->visualBounds(); 
+        g_message("Setting Box: %lf %lf %lf %lf", bbox->min()[Geom::X], bbox->min()[Geom::Y], bbox->max()[Geom::X], bbox->max()[Geom::Y]);
+        _preview->setBox(Geom::Rect(bbox->min()[Geom::X], bbox->min()[Geom::Y], bbox->max()[Geom::X], bbox->max()[Geom::Y]) * _document->dt2doc());
+    }
+    _preview->setBackgroundColor(Colors::Color(0).toRGBA(1.0));
+    _preview->queueRefresh();
+}
+
 
 /**
 * Update the canvas according to the current contents of the document.
@@ -1343,6 +1420,11 @@ void FilterEditorCanvas::toggle_params(){
 */
 void FilterEditorCanvas::update_canvas_new(){
     modify_observer(true);
+    // if (_dialog.getDocument()) {
+        
+    // }
+    
+    canvas.put(*_preview, 0, 0);
 
     SPFilter* filter = _dialog._filter_modifier.get_selected_filter();
     
@@ -1350,12 +1432,25 @@ void FilterEditorCanvas::update_canvas_new(){
     clear_nodes();
     delete_nodes_without_prims();
     if(filter){
+        SPDocument* document = preview_doc.get();
+        auto _preview_drawing = std::make_shared<PreviewDrawing>(document);
+        _preview->setDrawing(_preview_drawing);
+        auto col = Colors::Color::parse("#ffffff");
+        // refreshPreview();
         auto filters_parent = filter->getRepr()->parent();
         auto node = filters_parent->duplicate(preview_doc.get()->getReprDoc());
-        preview_doc->getReprRoot()->addChild(node, nullptr);
         for (int i = 0; i != preview_doc->getReprDoc()->childCount(); i++) {
-            g_message("I have child %d as %s\n", i, preview_doc->getReprDoc()->nthChild(i)->name());
+            g_message("child %d as %s", i, preview_doc->getReprRoot()->nthChild(i)->name());
+            if(Glib::ustring(preview_doc->getReprRoot()->nthChild(i)->name()) == "svg:defs"){
+                for(int j = 0; j != preview_doc->getReprRoot()->nthChild(i)->childCount(); j++){
+                    g_message(">> child %d as %s", i, preview_doc->getReprRoot()->nthChild(i)->nthChild(j)->name());
+                }
+                // preview_doc->getReprDoc()->removeChild(preview_doc->getReprRoot()->nthChild(i));
+                // i--;
+            }
         }
+
+        preview_doc->getReprRoot()->addChild(node, nullptr);
         update_offset_from_document();
         if (std::find(filter_list.begin(), filter_list.end(), filter) == filter_list.end()){
             filter_list.push_back(filter);
@@ -2025,11 +2120,15 @@ void FilterEditorCanvas::duplicate_nodes(){
     for(auto it = new_primitives.rbegin(); it != new_primitives.rend(); it++){
         auto new_prim = it->second->getRepr()->duplicate(it->second->getRepr()->document());
         auto filter = _dialog._filter_modifier.get_selected_filter();
-        filter->getRepr()->addChild(new_prim, 0);
+        filter->getRepr()->addChild(new_prim, 0); 
+        g_assert(new_prim->attribute("inkscape:filter-x") != nullptr);
+        new_prim->setAttributeCssDouble("inkscape:filter-x", new_prim->getAttributeDouble("inkscape:filter-x", 0.0) + 50.0);
+
         // new_primitives.insert({std::find(primitives_order.begin(), primitives_order.end(), prim), prim});
     }
     DocumentUndo::done(filter->document, _("Duplicated primitives"), INKSCAPE_ICON("dialog-filters"));
     update_canvas_new();
+    update_document();
     modify_observer(false);
 }
 
@@ -2063,11 +2162,17 @@ void FilterEditorCanvas::clear_nodes(){
     
 
 
-    
-    // TODO : Reimplement and remove only the nodes of the current filter
-    while(canvas.get_first_child() != nullptr){
-        canvas.remove(*canvas.get_first_child());
+    auto _canvas_children = canvas.get_children();
+    for(auto it: _canvas_children){
+        if(dynamic_cast<FilterEditorNode*>(it) != nullptr){
+            canvas.remove(*it);
+        }
+
     }
+    
+    // while(canvas.get_first_child() != nullptr){
+    //     canvas.remove(*canvas.get_first_child());
+    // }
 
     #ifdef DELETE_NODES // TODO: Remove this
     nodes[current_filter_id].clear();
