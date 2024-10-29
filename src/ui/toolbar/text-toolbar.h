@@ -90,7 +90,7 @@ private:
     UI::Widget::ComboBoxEntryToolItem *_font_family_item;
     UI::Widget::EntryDropDown *_font_size_item;
     UI::Widget::ComboToolItem *_font_size_units_item;
-    UI::Widget::ComboBoxEntryToolItem *_font_style_item;
+    UI::Widget::EntryDropDown *_font_style_item;
     UI::Widget::ComboToolItem *_line_height_units_item;
     UI::Widget::SpinButton &_line_height_item;
     Gtk::ToggleButton &_superscript_btn;
