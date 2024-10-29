@@ -93,15 +93,14 @@ StyleSwatch::StyleSwatch(SPCSSAttr *css, gchar const *main_tip, Gtk::Orientation
     : Gtk::Box(Gtk::Orientation::HORIZONTAL),
       _desktop(nullptr),
       _css(nullptr),
-      _table(Gtk::make_managed<Gtk::Grid>()),
+      _box(Gtk::make_managed<Gtk::Box>()),
       _sw_unit(nullptr),
       _stroke(Gtk::Orientation::HORIZONTAL)
 {
     set_name("StyleSwatch");
     add_css_class(orient == Gtk::Orientation::HORIZONTAL ? "horizontal" : "vertical");
 
-    _table->set_column_spacing(2);
-    _table->set_row_spacing(0);
+    _box->set_spacing(2);
 
     // We let pack()ed children expand but donʼt propagate expand upwards.
     set_hexpand(false);
@@ -111,18 +110,18 @@ StyleSwatch::StyleSwatch(SPCSSAttr *css, gchar const *main_tip, Gtk::Orientation
     UI::pack_start(_stroke, _stroke_width, UI::PackOptions::shrink);
 
     if (orient == Gtk::Orientation::VERTICAL) {
-        _table->attach(_place[SS_FILL],   1, 0, 1, 1);
-        _table->attach(_stroke,           1, 1, 1, 1);
-        _table->attach(_empty_space,      2, 0, 1, 2);
-        UI::pack_start(*this, *_table, true, true);
+        _box->append(_place[SS_FILL]);
+        _box->append(_stroke);
+        _box->append(_empty_space);
+        UI::pack_start(*this, *_box, true, true);
 
         set_size_request (STYLE_SWATCH_WIDTH, -1);
     }
     else {
-        _table->set_column_spacing(4);
-        _table->attach(_place[SS_FILL],   1, 0, 1, 1);
-        _table->attach(_stroke,           3, 0, 1, 1);
-        UI::pack_start(*this, *_table, true, true);
+        _box->set_spacing(4);
+        _box->append(_place[SS_FILL]);
+        _box->append(_stroke);
+        UI::pack_start(*this, *_box, true, true);
 
         int patch_w = 6 * 6;
         _place[SS_FILL].set_size_request(patch_w, -1);
@@ -132,7 +131,7 @@ StyleSwatch::StyleSwatch(SPCSSAttr *css, gchar const *main_tip, Gtk::Orientation
     setStyle (css);
 
     if (main_tip) {
-        _table->set_tooltip_text(main_tip);
+        _box->set_tooltip_text(main_tip);
     }
 }
 
