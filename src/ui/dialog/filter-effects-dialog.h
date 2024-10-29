@@ -68,6 +68,7 @@
 #include "ui/widget/popover-bin.h"
 #include "ui/widget/widget-vfuncs-class-init.h"
 #include "xml/helper-observer.h"
+#include "ui/widget/export-preview.h"
 
 namespace Gdk {
 class Drag;
@@ -458,7 +459,6 @@ class FilterEditorCanvas : public Gtk::ScrolledWindow{
         void update_offset_from_document();
         void update_positions();
         void add_output_node();
-        // std::vector<FilterEditorConnection*> sort_connections(std::vector<FilterEditorConnection*>&);
         void sort_connections(std::vector<FilterEditorConnection*>&);
         void auto_arrange_nodes(bool selection_only = false);
         void delete_nodes();
@@ -520,6 +520,9 @@ class FilterEditorCanvas : public Gtk::ScrolledWindow{
         */
 
         bool check_all_different_result_names(); 
+
+        /*Preview related functions*/
+        void refreshPreview();
 
 
         std::vector<SPFilter*> filter_list;
@@ -615,6 +618,8 @@ class FilterEditorCanvas : public Gtk::ScrolledWindow{
         std::unique_ptr<UI::Widget::PopoverMenu> create_menu();
         std::map<int, std::vector<FilterEditorConnection*>> connections;
         std::unique_ptr<UI::Widget::PopoverMenu> _popover_menu;
+        std::unique_ptr<UI::Dialog::ExportPreview> _preview;
+        std::shared_ptr<UI::Dialog::PreviewDrawing> _preview_drawing;
 
     private:
 
