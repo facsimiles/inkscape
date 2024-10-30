@@ -44,6 +44,7 @@
 #include "ui/builder-utils.h"
 #include "ui/controller.h"
 #include "ui/dialog/filedialog.h"
+#include "ui/dialog-new-document.h"
 #include "ui/shortcuts.h"
 #include "ui/themes.h"
 #include "ui/util.h"
@@ -365,7 +366,8 @@ void StartScreen::on_kind_changed(Gtk::Widget *tab, unsigned page_num)
 void
 StartScreen::new_document()
 {
-    abort();
+    auto dialog = NewDocumentDialog();
+    dialog.show();
 }
 /**
  * Called when template is double clicked.
