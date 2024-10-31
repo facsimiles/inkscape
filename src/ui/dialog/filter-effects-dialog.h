@@ -83,6 +83,12 @@ class SPFilterPrimitive;
 #define NODE_TYPE FilterEditorNode
 #define SCROLL_SENS (10.0)
 #define SHIFT_DOWN ((modifier_state & Gdk::ModifierType::SHIFT_MASK)!=Gdk::ModifierType::SHIFT_MASK)
+
+namespace Inkscape::Testing{
+    extern SPFilter* current_filter;
+    extern Filters::Filter* filterrr;
+}
+
 namespace Inkscape::UI {
 
 namespace Widget {
@@ -247,10 +253,27 @@ class FilterEditorSink : public Gtk::Box{
         // Gtk::EditableLabel label;
 
 };
+
+class ConnectionsRenderer : public Gtk::Box {
+    public:
+    ConnectionsRenderer(FilterEditorFixed* _parent_fixed, FilterEditorCanvas* _parent_canvas){
+        parent_fixed = _parent_fixed;
+        canvas = _parent_canvas;
+    };
+    
+    protected:
+        FilterEditorFixed* parent_fixed;
+        FilterEditorCanvas* canvas;
+        void snapshot_vfunc(const std::shared_ptr<Gtk::Snapshot>& cr) override;
+};
+
 class FilterEditorFixed : public Gtk::Fixed {
 public:
+    friend class ConnectionsRenderer;
+    friend class FilterEditorCanvas;
     FilterEditorFixed(std::map<int, std::vector<FilterEditorConnection*>>& _connections, FilterEditorCanvas* _canvas, double _x_offset = 0, double _y_offset = 0);
 
+    ConnectionsRenderer connection_renderer;
     void update_positions(double x_offset_new, double y_offset_new);
 
     double get_x_offset();
@@ -265,7 +288,7 @@ protected:
     std::map<int, std::vector<FilterEditorConnection*>> connections;
 
     // virtual void sort_connections(std::vector<FilterEditorConnection*>&);
-    virtual void snapshot_vfunc(const std::shared_ptr<Gtk::Snapshot>& cr) override;
+    void snapshot_vfunc(const std::shared_ptr<Gtk::Snapshot>& cr) override;
 };
 
 class FilterEditorConnection{
@@ -429,6 +452,7 @@ class FilterEditorOutputNode : public FilterEditorNode{
 class FilterEditorCanvas : public Gtk::ScrolledWindow{
     public:
         friend class FilterEditorFixed;
+        friend class ConnectionsRenderer;
         FilterEditorCanvas(FilterEffectsDialog& dialog);
         // ~FilterEditorCanvas() override;
 
@@ -500,6 +524,7 @@ class FilterEditorCanvas : public Gtk::ScrolledWindow{
         void update_document_new(bool add_undo = false);
 
         std::unique_ptr<SPDocument> preview_doc;
+        Inkscape::Drawing drawing;
         /* Utility functions for testing and assertions, to be removed later*/
         /* 
         Check if there are any two primitives in the currently selected filter
@@ -512,7 +537,10 @@ class FilterEditorCanvas : public Gtk::ScrolledWindow{
         bool check_all_different_result_names(); 
 
         /*Preview related functions*/
-        void refreshPreview();
+        void refreshPreview(bool single_primitive = false);
+        void update_preview_filter(bool single_primitive = false);
+        void reset_primitive_inputs(SPFilterPrimitive* primitive);
+        SPFilter* preview_filter;
 
 
         std::vector<SPFilter*> filter_list;
@@ -695,7 +723,7 @@ class FilterEditorCanvas : public Gtk::ScrolledWindow{
         /*Geometry related*/
         void global_to_local(double xg, double yg, double& xl, double& yl);
         void local_to_global(double xl, double yl, double& xg, double& yg);
-        void place_node(NODE_TYPE* node, double x,  double y, bool local = false);
+        void place_node(NODE_TYPE* node, double x,  double y, bool local = false, bool update = true);
 
         
 
