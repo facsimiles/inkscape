@@ -31,9 +31,19 @@
 
 #include "object/sp-item.h"
 
+#include "ui/dialog/filter-effects-dialog.h"
+
+
+
+// extern SPFilter* Inkscape::UI::Dialog::filter;
+
 static constexpr auto CACHE_SCORE_THRESHOLD = 50000.0; ///< Do not consider objects for caching below this score.
 
 namespace Inkscape {
+    namespace Testing{
+        extern SPFilter* current_filter;
+        // extern Filters::Filter filterr;
+    }
 
 struct CacheData
 {
@@ -430,7 +440,7 @@ void DrawingItem::setFilterRenderer(std::unique_ptr<Filters::Filter> filter)
     defer([=, this, filter = std::move(filter)] () mutable {
         _filter = std::move(filter);
         _markForRendering();
-    });
+    }); 
 }
 
 /**
@@ -702,6 +712,15 @@ struct MaskLuminanceToAlpha
  */
 unsigned DrawingItem::render(DrawingContext &dc, RenderContext &rc, Geom::IntRect const &area, unsigned flags, DrawingItem const *stop_at) const
 {
+    g_message("Render called");
+    // std::uni filterr = nullptr;
+    if(Inkscape::Testing::current_filter != nullptr){
+        auto filterr = Inkscape::Testing::current_filter->build_renderer(const_cast<DrawingItem*>(this));
+        return render_alt(dc, rc, area, filterr.get(), flags, stop_at);
+    }
+    else{
+        return render_alt(dc, rc, area, nullptr, flags, stop_at);
+    }
     bool const outline = flags & RENDER_OUTLINE;
     bool const render_filters = !(flags & RENDER_NO_FILTERS);
     bool const forcecache = _filter && render_filters;
@@ -874,6 +893,7 @@ unsigned DrawingItem::render(DrawingContext &dc, RenderContext &rc, Geom::IntRec
     apply_antialias(ict, antialias);
     render_result = _renderItem(ict, rc, *carea, flags, stop_at);
 
+ 
     // 4. Apply filter.
     if (_filter && render_filters) {
         bool rendered = false;
@@ -938,6 +958,245 @@ unsigned DrawingItem::render(DrawingContext &dc, RenderContext &rc, Geom::IntRec
     return render_result;
 }
 
+unsigned DrawingItem::render_alt(DrawingContext &dc, RenderContext &rc, Geom::IntRect const &area, Inkscape::Filters::Filter* filter, unsigned flags, DrawingItem const *stop_at) const
+{
+    g_message("Render alt called");
+    bool const outline = flags & RENDER_OUTLINE;
+    bool const render_filters = !(flags & RENDER_NO_FILTERS);
+    bool const forcecache = filter && render_filters;
+
+    // stop_at is handled in DrawingGroup, but this check is required to handle the case
+    // where a filtered item with background-accessing filter has enable-background: new
+    if (this == stop_at) {
+        return RENDER_STOP;
+    }
+
+    // If we are invisible, return immediately
+    if (!_visible) {
+        return RENDER_OK;
+    }
+
+    if (_ctm.isSingular(1e-18)) {
+        return RENDER_OK;
+    }
+
+    // TODO convert outline rendering to a separate virtual function
+    if (outline) {
+        _renderOutline(dc, rc, area, flags);
+        return RENDER_OK;
+    }
+
+    Geom::OptIntRect carea = area & _drawbox;
+    if (!carea) {
+        return RENDER_OK;
+    }
+
+    Geom::OptIntRect iarea = carea;
+    // expand carea to contain the dependent area of filters.
+    if (forcecache) {
+        iarea = _cacheRect();
+        if (!iarea) {
+            iarea = carea;
+            filter->area_enlarge(*iarea, this);
+            iarea.intersectWith(_drawbox);
+        }
+    }
+    // carea is the area to paint
+    carea = iarea & _drawbox;
+    if (!carea) {
+        return RENDER_OK;
+    }
+
+    // Device scale for HiDPI screens (typically 1 or 2)
+    int const device_scale = dc.surface()->device_scale();
+
+    std::unique_lock<std::mutex> lock;
+
+    // Render from cache if possible, unless requested not to (hatches).
+    if (_cache && !(flags & RENDER_BYPASS_CACHE)) {
+        lock = std::unique_lock(_cache->mutables);
+
+        if (_cache->surface) {
+            if (_cache->surface->device_scale() != device_scale) {
+                _cache->surface->markDirty();
+            }
+            _cache->surface->prepare();
+            dc.setOperator(ink_css_blend_to_cairo_operator(_blend_mode));
+            _cache->surface->paintFromCache(dc, carea, forcecache);
+            if (!carea) {
+                dc.setSource(0, 0, 0, 0);
+                return RENDER_OK;
+            }
+        } else {
+            // There is no cache. This could be because caching of this item
+            // was just turned on after the last update phase, or because
+            // we were previously outside of the canvas.
+            Geom::OptIntRect cl = _cacheRect();
+            if (!cl)
+                cl = carea;
+            _cache->surface.emplace(*cl, device_scale);
+        }
+
+        if (!forcecache) {
+            lock.unlock(); // Only hold the lock for the full duration of rendering for filters.
+        }
+    } else {
+        // if our caching was turned off after the last update, it was already deleted in setCached()
+    }
+
+    // determine whether this shape needs intermediate rendering.
+    bool const greyscale = _drawing.colorMode() == ColorMode::GRAYSCALE && !(flags & RENDER_OUTLINE);
+    bool const isolate_root = _contains_unisolated_blend || greyscale;
+    bool const needs_intermediate_rendering =
+           _clip                                  // 1. it has a clipping path
+        || _mask                                  // 2. it has a mask
+        || (filter && render_filters)            // 3. it has a filter
+        || _opacity < 0.995                       // 4. it is non-opaque
+        || _blend_mode != SP_CSS_BLEND_NORMAL     // 5. it has blend mode
+        || _isolation == SP_CSS_ISOLATION_ISOLATE // 6. it is isolated
+        || (_child_type == ChildType::ROOT && isolate_root) // 7. it is the root and needs isolation
+        || (bool)_cache;                          // 8. it is to be cached
+
+    auto antialias = rc.antialiasing_override.value_or(_antialias);
+
+    /* How the rendering is done.
+     *
+     * Clipping, masking and opacity are done by rendering them to a surface
+     * and then compositing the object's rendering onto it with the IN operator.
+     * The object itself is rendered to a group.
+     *
+     * Opacity is done by rendering the clipping path with an alpha
+     * value corresponding to the opacity. If there is no clipping path,
+     * the entire intermediate surface is painted with alpha corresponding
+     * to the opacity value.
+     * 
+     */
+    // Short-circuit the simple case.
+    // We also use this path for filter background rendering, because masking, clipping,
+    // filters and opacity do not apply when rendering the ancestors of the filtered
+    // element
+
+    if ((flags & RENDER_FILTER_BACKGROUND) || !needs_intermediate_rendering) {
+        dc.setOperator(ink_css_blend_to_cairo_operator(SP_CSS_BLEND_NORMAL));
+        apply_antialias(dc, antialias);
+        return _renderItem(dc, rc, *carea, flags & ~RENDER_FILTER_BACKGROUND, stop_at);
+    }
+
+    DrawingSurface intermediate(*carea, device_scale);
+    DrawingContext ict(intermediate);
+    cairo_set_antialias(ict.raw(), cairo_get_antialias(dc.raw())); // propagate antialias setting
+
+    // This path fails for patterns/hatches when stepping the pattern to handle overflows.
+    // The offsets are applied to drawing context (dc) but they are not copied to the
+    // intermediate context. Something like this is needed:
+    // Copy cairo matrix from dc to intermediate, needed for patterns/hatches
+    // cairo_matrix_t cairo_matrix;
+    // cairo_get_matrix(dc.raw(), &cairo_matrix);
+    // cairo_set_matrix(ict.raw(), &cairo_matrix);
+    // For the moment we disable caching for patterns,
+    //   see https://gitlab.com/inkscape/inkscape/-/issues/309
+
+    unsigned render_result = RENDER_OK;
+
+    // 1. Render clipping path with alpha = opacity.
+    ict.setSource(0,0,0,_opacity);
+    // Since clip can be combined with opacity, the result could be incorrect
+    // for overlapping clip children. To fix this we use the SOURCE operator
+    // instead of the default OVER.
+    ict.setOperator(CAIRO_OPERATOR_SOURCE);
+    ict.paint();
+    if (_clip) {
+        ict.pushGroup();
+        _clip->clip(ict, rc, *carea);
+        ict.popGroupToSource();
+        ict.setOperator(CAIRO_OPERATOR_IN);
+        ict.paint();
+    }
+    ict.setOperator(CAIRO_OPERATOR_OVER); // reset back to default
+
+    // 2. Render the mask if present and compose it with the clipping path + opacity.
+    if (_mask) {
+        ict.pushGroup();
+        _mask->render(ict, rc, *carea, flags);
+
+        cairo_surface_t *mask_s = ict.rawTarget();
+        // Convert mask's luminance to alpha
+        ink_cairo_surface_filter(mask_s, mask_s, MaskLuminanceToAlpha());
+        ict.popGroupToSource();
+        ict.setOperator(CAIRO_OPERATOR_IN);
+        ict.paint();
+        ict.setOperator(CAIRO_OPERATOR_OVER);
+    }
+
+    // 3. Render object itself
+    ict.pushGroup();
+    apply_antialias(ict, antialias);
+    render_result = _renderItem(ict, rc, *carea, flags, stop_at);
+
+ 
+    // 4. Apply filter.
+    if (filter && render_filters) {
+        bool rendered = false;
+        if (filter->uses_background() && _background_accumulate) {
+            auto bg_root = this;
+            for (; bg_root; bg_root = bg_root->_parent) {
+                if (bg_root->_background_new || bg_root->_filter) break;
+            }
+            if (bg_root) {
+                DrawingSurface bg(*carea, device_scale);
+                DrawingContext bgdc(bg);
+                bg_root->render(bgdc, rc, *carea, flags | RENDER_FILTER_BACKGROUND, this);
+                filter->render(this, ict, &bgdc, rc);
+                rendered = true;
+            }
+        }
+        if (!rendered) {
+            filter->render(this, ict, nullptr, rc);
+        }
+        // Note that because the object was rendered to a group,
+        // the internals of the filter need to use cairo_get_group_target()
+        // instead of cairo_get_target().
+    }
+
+    // 4b. Apply greyscale rendering mode, if root node.
+    if (greyscale && _child_type == ChildType::ROOT) {
+        ink_cairo_surface_filter(ict.rawTarget(), ict.rawTarget(), _drawing.grayscaleMatrix());
+    }
+
+    // 5. Render object inside the composited mask + clip
+    ict.popGroupToSource();
+    ict.setOperator(CAIRO_OPERATOR_IN);
+    ict.paint();
+
+    // 6. Paint the completed rendering onto the base context (or into cache)
+    if (_cache && !(flags & RENDER_BYPASS_CACHE)) {
+        if (!forcecache) {
+            lock.lock(); // Only hold the lock for the full duration of rendering for filters.
+        }
+        assert(lock);
+        assert(_cache->surface);
+
+        auto cachect = DrawingContext(*_cache->surface);
+        cachect.rectangle(*carea);
+        cachect.setOperator(CAIRO_OPERATOR_SOURCE);
+        cachect.setSource(&intermediate);
+        cachect.fill();
+        _cache->surface->markClean(*carea);
+    }
+
+    dc.rectangle(*carea);
+    dc.setSource(&intermediate);
+
+    // 7. Render blend mode
+    dc.setOperator(ink_css_blend_to_cairo_operator(_blend_mode));
+    dc.fill();
+    dc.setSource(0,0,0,0);
+    // Web isolation only works if parent doesn't have transform
+
+    // the call above is to clear a ref on the intermediate surface held by dc
+
+    return render_result;
+}
 /**
  * A stand alone render, ignoring all other objects in the document.
  */
@@ -949,6 +1208,15 @@ unsigned DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsi
         .dithering = _drawing._use_dithering
     };
     return render(dc, rc, area, flags);
+}
+unsigned DrawingItem::render_alt(DrawingContext &dc, Geom::IntRect const &area, Inkscape::Filters::Filter* filter, unsigned flags) const
+{
+    auto rc = RenderContext{
+        .outline_color = 0xff,
+        .antialiasing_override = _drawing._antialiasing_override,
+        .dithering = _drawing._use_dithering
+    };
+    return render_alt(dc, rc, area, filter, flags);
 }
 
 void DrawingItem::_renderOutline(DrawingContext &dc, RenderContext &rc, Geom::IntRect const &area, unsigned flags) const

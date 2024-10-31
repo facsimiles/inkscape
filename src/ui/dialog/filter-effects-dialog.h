@@ -93,6 +93,12 @@ class SPFilterPrimitive;
 #define NODE_TYPE FilterEditorNode
 #define SCROLL_SENS (10.0)
 #define SHIFT_DOWN ((modifier_state & Gdk::ModifierType::SHIFT_MASK)!=Gdk::ModifierType::SHIFT_MASK)
+
+namespace Inkscape::Testing{
+    extern SPFilter* current_filter;
+    extern Filters::Filter* filterrr;
+}
+
 namespace Inkscape::UI {
 
 namespace Widget {
@@ -510,6 +516,7 @@ class FilterEditorCanvas : public Gtk::ScrolledWindow{
         void update_document_new(bool add_undo = false);
 
         std::unique_ptr<SPDocument> preview_doc;
+        Inkscape::Drawing drawing;
         /* Utility functions for testing and assertions, to be removed later*/
         /* 
         Check if there are any two primitives in the currently selected filter

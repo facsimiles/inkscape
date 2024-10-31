@@ -9,6 +9,7 @@
 
 #include "export-preview.h"
 
+#include <glib.h>
 #include <utility>
 #include <glibmm/convert.h>
 #include <glibmm/main.h>
@@ -20,6 +21,7 @@
 #include "object/sp-root.h"
 #include "util/preview.h"
 #include "io/resource.h"
+#include "display/nr-filter.h"
 
 namespace Inkscape::UI::Dialog {
 
@@ -91,18 +93,25 @@ bool PreviewDrawing::render(ExportPreview *widget, uint32_t bg, SPItem const *it
 
     Geom::OptRect bbox = dbox;
     DrawingItem *di = nullptr;
+    
 
     if (item) {
         bbox = item->documentVisualBounds();
         if (only_item)
             di = item->get_arenaitem(_visionkey);
-    } else if (!dbox)
+    } else if (!dbox) {
         bbox = _document->getRoot()->documentVisualBounds();
+    }
 
     if (!bbox)
-        return true; // Force quit
-
-    // Use a callback to set the preview rendering;
+        return true; // Force quit 
+    // Use a callback to set the preview rendering; 
+    if(di){
+        di->_filter = nullptr;
+    }
+    if(_drawing){
+        _drawing->root()->_filter = nullptr;
+    }
     widget->setPreview(UI::Preview::render_preview(_document, _drawing, bg, di, size, size, *bbox));
     return true;
 }
@@ -176,8 +185,9 @@ void ExportPreview::queueRefresh()
 {
     if (!_drawing || _render_idle.connected())
         return;
-
+    g_message("Refresh queued");
     _render_idle = Glib::signal_timeout().connect([this]() {
+        // _drawing-> 
         return !_drawing->render(this, _bg_color, _item, size, _dbox, _is_layer);
     }, 100);
 }

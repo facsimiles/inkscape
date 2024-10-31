@@ -158,12 +158,16 @@ public:
 
     void update(Geom::IntRect const &area = Geom::IntRect::infinite(), UpdateContext const &ctx = UpdateContext(), unsigned flags = STATE_ALL, unsigned reset = 0);
     unsigned render(DrawingContext &dc, RenderContext &rc, Geom::IntRect const &area, unsigned flags = 0, DrawingItem const *stop_at = nullptr) const;
+    unsigned render_alt(DrawingContext &dc, RenderContext &rc, Geom::IntRect const &area, Inkscape::Filters::Filter* filter,unsigned flags = 0, DrawingItem const *stop_at = nullptr) const;
     unsigned render(DrawingContext &dc, Geom::IntRect const &area, unsigned flags = 0) const;
+    unsigned render_alt(DrawingContext &dc, Geom::IntRect const &area, Inkscape::Filters::Filter* filter, unsigned flags = 0) const;
     void clip(DrawingContext &dc, RenderContext &rc, Geom::IntRect const &area) const;
     DrawingItem *pick(Geom::Point const &p, double delta, unsigned flags = 0);
 
     Glib::ustring name() const; // For debugging
     void recursivePrintTree(unsigned level = 0) const;  // For debugging
+
+    std::unique_ptr<Inkscape::Filters::Filter> _filter;
 
 protected:
     enum class ChildType : unsigned char
@@ -227,7 +231,6 @@ protected:
     DrawingItem *_mask;
     DrawingPattern *_fill_pattern;
     DrawingPattern *_stroke_pattern;
-    std::unique_ptr<Inkscape::Filters::Filter> _filter;
     std::unique_ptr<CacheData> _cache;
     int _update_complexity = 0;
     bool _contains_unisolated_blend : 1;

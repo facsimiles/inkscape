@@ -21,6 +21,7 @@
 #include "control/canvas-item-drawing.h"
 #include "nr-filter-gaussian.h"
 #include "nr-filter-types.h"
+#include "nr-filter.h"
 
 namespace Inkscape {
 
@@ -251,7 +252,7 @@ void Drawing::render(DrawingContext &dc, Geom::IntRect const &area, unsigned fla
         dc.path(*_clip * _root->_ctm);
         dc.clip();
     }
-    _root->render(dc, rc, area, flags);
+    _root->render_alt(dc, rc, area, nullptr, flags);
     if (_clip) {
         dc.restore();
     }

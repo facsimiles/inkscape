@@ -981,6 +981,7 @@ void SingleExport::refreshPreview()
     std::vector<SPItem const *> selected;
     if (si_hide_all.get_active()) {
         // This is because selection items is not a std::vector yet. FIXME.
+        g_message("Si Hide All is active");
         auto sel_range = _desktop->getSelection()->items();
         selected = {sel_range.begin(), sel_range.end()};
     }

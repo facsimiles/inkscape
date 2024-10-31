@@ -63,6 +63,7 @@
 #include <sigc++/functors/mem_fun.h>
 
 #include "colors/color.h"
+#include "coord.h"
 #include "desktop.h"
 #include "display/nr-filter-morphology.h"
 #include "display/nr-filter.h"
@@ -73,8 +74,12 @@
 #include "gdkmm/enums.h"
 #include "gtkmm/stringlist.h"
 #include "inkscape-window.h"
+#include "io/resource.h"
 #include "layer-manager.h"
+#include "object/sp-root.h"
+#include "object/sp-item.h"
 #include "object/sp-filter.h"
+#include "point.h"
 #include "preferences.h"
 #include "object/filters/sp-filter-primitive.h"
 #include "selection.h"
@@ -116,8 +121,8 @@
 #define dbg g_message("%d", __LINE__)
 
 
-#define ORIENTATION_EDITOR_INVERSE VERTICAL
-#define ORIENTATION_EDITOR HORIZONTAL
+#define ORIENTATION_EDITOR_INVERSE HORIZONTAL
+#define ORIENTATION_EDITOR VERTICAL
 
 
 /*
@@ -133,7 +138,10 @@ Crashes:
 - Behaviour Crashes - Right Clicking while in the middle of another event types
 */
 
-
+namespace Inkscape::Testing{
+    SPFilter* current_filter = nullptr;
+    Filters::Filter* filterrr = nullptr;
+}
 using namespace Inkscape::Filters;
 
 namespace Inkscape::UI::Dialog {
@@ -868,16 +876,16 @@ FilterEditorCanvas::FilterEditorCanvas(FilterEffectsDialog& dialog)
     grab_focus();
     auto controllers = observe_controllers();
     int i = 0;
-
-    preview_doc = SPDocument::createNewDoc(nullptr, true, true, nullptr);
+    Glib::ustring preview = Inkscape::IO::Resource::get_filename(Inkscape::IO::Resource::UIS, "filter_editor_preview.svg");
+    preview_doc = SPDocument::createNewDoc(preview.c_str(), true, true, nullptr);
     _preview = std::make_unique<UI::Dialog::ExportPreview>();
-    // _preview->setBox();
-    if(_dialog.getDocument()){
+    auto document = preview_doc.get();
+    if(document){
         // _preview->setBox(Geom::Rect(0, 0, 100, 100) * _dialog.getDocument()->dt2doc());
 
-        // auto col = Colors::Color::parse("#ffffff");
-        // _preview->setBackgroundColor(col->toRGBA());
-        // _preview->queueRefresh();
+        auto col = Colors::Color::parse("#ffffff");
+        _preview->setBackgroundColor(col->toRGBA());
+        _preview->queueRefresh();
     }
     canvas.put(*_preview, 0, 0);
      
@@ -1369,9 +1377,6 @@ void FilterEditorCanvas::toggle_params(){
 
 void FilterEditorCanvas::refreshPreview()
 {
-
-    
-
     std::vector<SPItem const *> selected;
     // auto _desktop = _dialog.
     SPDesktop* _desktop = _dialog.getDesktop();
@@ -1385,44 +1390,39 @@ void FilterEditorCanvas::refreshPreview()
 
     g_message("%ld", selected.size());
     _preview->resetPixels();
+    auto document = preview_doc.get();
     // g_message("Previews parent is %s", _preview->get_parent()->get_name().c_str());
+    static unsigned int key;
     if(!_preview_drawing){
-        _preview_drawing = std::make_shared<PreviewDrawing>(_dialog.getDocument());
+        _preview_drawing = std::make_shared<PreviewDrawing>(document);
+        // key = SPItem::display_key_new(1);
+        // drawing.setRoot(document->getRoot()->invoke_show(drawing, key, SP_ITEM_SHOW_DISPLAY));
         _preview->setDrawing(_preview_drawing);
     }
-    
+    SPItem *item_ptr = cast<SPItem>(preview_doc->getObjectById("path234"));
+    if(item_ptr != nullptr) {
+        selected.emplace_back(item_ptr);
+    }
+    else{
+        g_message("Didn't work");
+    }
     _preview_drawing->set_shown_items(std::move(selected));
     _preview->set_size_request(200, 100);
-    // _preview->set_size_request(-1, -1);
-
-    // bool show = si_show_preview.get_active();
-    // if (!show || current_key == SELECTION_PAGE) {
-    //     bool have_pages = false;
-    //     for (auto const child : UI::get_children(pages_list)) {
-    //         if (auto bi = dynamic_cast<BatchItem *>(child)) {
-    //             bi->refresh(!show, _background_color.get_current_color().toRGBA());
-    //             have_pages = true;
-    //         }
-    //     }
-    //     if (have_pages) {
-    //         // We don't want to update the main preview for pages, it's hidden
-    //         preview.resetPixels();
-    //         return;
-    //     }
+    
+    auto bbox = item_ptr->documentVisualBounds();
+    g_message("Setting Box: %lf %lf %lf %lf", bbox->min()[Geom::X], bbox->min()[Geom::Y], bbox->max()[Geom::X],
+              bbox->max()[Geom::Y]);
+    _preview->setBox(
+        Geom::Rect(bbox->min()[Geom::X], bbox->min()[Geom::Y], bbox->max()[Geom::X], bbox->max()[Geom::Y]) *
+        document->dt2doc());
     // }
-
-    // Unit const *unit = units.getUnit();
-    // float x0 = unit->convert(spin_buttons[SPIN_X0]->get_value(), "px");
-    // float x1 = unit->convert(spin_buttons[SPIN_X1]->get_value(), "px");
-    // float y0 = unit->convert(spin_buttons[SPIN_Y0]->get_value(), "px");
-    // float y1 = unit->convert(spin_buttons[SPIN_Y1]->get_value(), "px");
-    auto _document = _dialog.getDocument();
-    if(_desktop->getSelection()){
-        auto bbox = _desktop->getSelection()->visualBounds(); 
-        g_message("Setting Box: %lf %lf %lf %lf", bbox->min()[Geom::X], bbox->min()[Geom::Y], bbox->max()[Geom::X], bbox->max()[Geom::Y]);
-        _preview->setBox(Geom::Rect(bbox->min()[Geom::X], bbox->min()[Geom::Y], bbox->max()[Geom::X], bbox->max()[Geom::Y]) * _document->dt2doc());
-    }
     _preview->setBackgroundColor(Colors::Color(0).toRGBA(1.0));
+    if(_dialog._filter_modifier.get_selected_filter()){
+        auto filter = _dialog._filter_modifier.get_selected_filter();
+        Testing::current_filter = filter;
+        // item_ptr->document->
+        // item_ptr->get_arenaitem(0)->setFilterRenderer(filter->build_renderer(item_ptr->get_arenaitem(0)));
+    }
     _preview->queueRefresh();
 }
 
@@ -1436,7 +1436,6 @@ void FilterEditorCanvas::refreshPreview()
 void FilterEditorCanvas::update_canvas_new(){
     modify_observer(true);
     // if (_dialog.getDocument()) {
-        
     // }
     
     canvas.put(*_preview, 0, 0);
@@ -1448,24 +1447,26 @@ void FilterEditorCanvas::update_canvas_new(){
     delete_nodes_without_prims();
     if(filter){
         SPDocument* document = preview_doc.get();
-        auto _preview_drawing = std::make_shared<PreviewDrawing>(document);
-        _preview->setDrawing(_preview_drawing);
+        // auto document = _dialog.getDocument();
+        // auto _preview_drawing = std::make_shared<PreviewDrawing>(document);
+        auto key = SPItem::display_key_new(1);
+        drawing.setRoot(document->getRoot()->invoke_show(drawing, key, SP_ITEM_SHOW_DISPLAY));
+        // drawing.setRoot(preview_doc->getRoot()->invoke_show());
+        // _preview->setDrawing(_preview_drawing);
         auto col = Colors::Color::parse("#ffffff");
-        // refreshPreview();
+        refreshPreview();
         auto filters_parent = filter->getRepr()->parent();
-        auto node = filters_parent->duplicate(preview_doc.get()->getReprDoc());
-        for (int i = 0; i != preview_doc->getReprDoc()->childCount(); i++) {
+        // auto node = filters_parent->duplicate(preview_doc.get()->getReprDoc());
+        for (int i = 0; i != preview_doc->getReprRoot()->childCount(); i++) {
             g_message("child %d as %s", i, preview_doc->getReprRoot()->nthChild(i)->name());
-            if(Glib::ustring(preview_doc->getReprRoot()->nthChild(i)->name()) == "svg:defs"){
-                for(int j = 0; j != preview_doc->getReprRoot()->nthChild(i)->childCount(); j++){
-                    g_message(">> child %d as %s", i, preview_doc->getReprRoot()->nthChild(i)->nthChild(j)->name());
-                }
-                // preview_doc->getReprDoc()->removeChild(preview_doc->getReprRoot()->nthChild(i));
-                // i--;
-            }
+            // if(Glib::ustring(preview_doc->getReprRoot()->nthChild(i)->name()) == "svg:defs"){
+            //     for(int j = 0; j != preview_doc->getReprRoot()->nthChild(i)->childCount(); j++){
+            //         g_message(">> child %d as %s", i, preview_doc->getReprRoot()->nthChild(i)->nthChild(j)->name());
+            //     }
+            // }
         }
 
-        preview_doc->getReprRoot()->addChild(node, nullptr);
+        // preview_doc->getReprRoot()->addChild(node, nullptr);
         update_offset_from_document();
         if (std::find(filter_list.begin(), filter_list.end(), filter) == filter_list.end()){
             filter_list.push_back(filter);
@@ -1676,10 +1677,7 @@ void FilterEditorCanvas::update_canvas_new(){
         }
         // Get the nodes corresponding to prim
     }
-
     modify_observer(false);
-    
-
 }
 
 void FilterEditorCanvas::update_canvas(){

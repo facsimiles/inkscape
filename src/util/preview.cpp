@@ -17,6 +17,7 @@
 
 #include "display/cairo-utils.h"
 #include "display/drawing-context.h"
+#include "display/nr-filter.h"
 
 namespace Inkscape {
 namespace UI {
@@ -31,6 +32,7 @@ render_preview(SPDocument *doc, std::shared_ptr<Inkscape::Drawing> drawing, uint
 
     // Calculate a scaling factor for the requested bounding box.
     double sf = 1.0;
+    
     Geom::IntRect ibox = dboxIn.roundOutwards();
     if (ibox.width() != width_in || ibox.height() != height_in) {
         // Adjust by one pixel to fit in anti-aliasing pixels
@@ -74,9 +76,11 @@ render_preview(SPDocument *doc, std::shared_ptr<Inkscape::Drawing> drawing, uint
     auto dc = Inkscape::DrawingContext(surface->cobj(), ua.min());
     if (item) {
         // Render just one item
-        item->render(dc, ua);
+        item->setFilterRenderer(nullptr);
+        item->render_alt(dc, ua, nullptr);
     } else {
         // Render drawing.
+        drawing->root()->setFilterRenderer(nullptr);
         drawing->render(dc, ua);
     }
 
