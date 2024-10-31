@@ -48,7 +48,6 @@
               <property name="focusable">True</property>
               <property name="tooltip-text" translatable="yes">Width of front page</property>
               <property name="width-chars">9</property>
-              <property name="adjustment">adj-page-width</property>
               <property name="digits">3</property>
               <layout>
                 <property name="column">1</property>
@@ -62,7 +61,6 @@
               <property name="focusable">True</property>
               <property name="tooltip-text" translatable="yes">Height of front page</property>
               <property name="width-chars">9</property>
-              <property name="adjustment">adj-page-height</property>
               <property name="digits">3</property>
               <layout>
                 <property name="column">1</property>
@@ -73,15 +71,15 @@
           </child>
         </object>
         <object class="GtkGrid" id="bottom-grid">
-            <property name="halign">right</property>
+            <property name="halign">end</property>
             <child>
-                <object class="GtkButton" translatable="yes">
+                <object class="GtkButton">
                     <property name="label" translatable="yes">Cancel</property>
                     <style>
                         <class name="suggested-action"/>
                     </style>
                 </object>
-                <object class="GtkButton" translatable="yes">
+                <object class="GtkButton">
                     <property name="label" translatable="yes">Create</property>
                     <style>
                         <class name="suggested-action"/>
