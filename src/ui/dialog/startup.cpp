@@ -225,7 +225,7 @@ StartScreen::StartScreen()
     show_toggle->signal_toggled().connect(sigc::mem_fun(*this, &StartScreen::show_toggle));
     load_btn.signal_clicked().connect(sigc::mem_fun(*this, &StartScreen::load_document));
     templates.connectItemSelected(sigc::mem_fun(*this, &StartScreen::load_selected_template));
-    new_btn->signal_clicked().connect(sigc::mem_fun(*this, &StartScreen::load_selected_template));
+    new_btn->signal_clicked().connect(sigc::mem_fun(*this, &StartScreen::new_document));
     close_btn->signal_clicked().connect([this] { response(GTK_RESPONSE_CLOSE); });
 
     // Parent to our dialog window
