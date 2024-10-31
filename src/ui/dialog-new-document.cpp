@@ -5,11 +5,11 @@
 
 #include "dialog-new-document.h"
 
-namespace Inskcape::UI {
+using Inkscape::UI::NewDocumentDialog;
 
 NewDocumentDialog::NewDocumentDialog()
     : _builder(create_builder("new-document.glade")) {
 
-};
+}
 
-} // namespace Inkscape::UI
+NewDocumentDialog::~NewDocumentDialog() {}
