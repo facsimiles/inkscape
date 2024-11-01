@@ -49,9 +49,7 @@ StatusBar::StatusBar()
 
     // **** Coordinates  ****
 
-    coordinates  = &UI::get_widget<Gtk::Grid> (builder, "statusbar-coordinates");
-    coordinate_x = &UI::get_widget<Gtk::Label>(builder, "statusbar-coordinate-x");
-    coordinate_y = &UI::get_widget<Gtk::Label>(builder, "statusbar-coordinate-y");
+    coordinates  = &UI::get_widget<Gtk::Label> (builder, "statusbar-coordinates");
 
     // ******** Zoom ********
 
@@ -83,6 +81,7 @@ StatusBar::StatusBar()
     zoom_value->signal_output().connect(sigc::mem_fun(*this, &StatusBar::zoom_output), true);
     zoom_value->signal_value_changed().connect(sigc::mem_fun(*this, &StatusBar::zoom_value_changed));
     on_popup_menu(*zoom_value, sigc::mem_fun(*this, &StatusBar::zoom_popup));
+    zoom_value->setDefocusTarget(this);
 
     auto zoom_adjustment = zoom_value->get_adjustment();
     zoom_adjustment->set_lower(log(SP_DESKTOP_ZOOM_MIN)/log(2));
@@ -119,6 +118,7 @@ StatusBar::StatusBar()
     rotate_value->signal_output().connect(sigc::mem_fun(*this, &StatusBar::rotate_output), true);
     rotate_value->signal_value_changed().connect(sigc::mem_fun(*this, &StatusBar::rotate_value_changed));
     on_popup_menu(*rotate_value, sigc::mem_fun(*this, &StatusBar::rotate_popup));
+    rotate_value->setDefocusTarget(this);
 
     // Add rest by hand for now.
 
@@ -157,8 +157,6 @@ StatusBar::set_desktop(SPDesktop* desktop_in)
 
     // A desktop is always "owned" by a desktop widget.
     desktop_widget = desktop->getDesktopWidget();
-    zoom_value->set_defocus_widget(desktop_widget->get_canvas());
-    rotate_value->set_defocus_widget(desktop_widget->get_canvas());
 
     // We add page widget here as it requires desktop for constructor.
     auto &box = dynamic_cast<Gtk::Box &>(*UI::get_children(*this).at(0));
@@ -188,13 +186,9 @@ StatusBar::set_message(const Inkscape::MessageType type, const char* message)
 void
 StatusBar::set_coordinate(const Geom::Point& p)
 {
-    char * const str_x = g_strdup_printf("%7.2f", p[Geom::X]);
-    coordinate_x->set_markup(str_x);
-    g_free(str_x);
-
-    char * const str_y = g_strdup_printf("%7.2f", p[Geom::Y]);
-    coordinate_y->set_markup(str_y);
-    g_free(str_y);
+    char * str_total = g_strdup_printf("(%7.2f, %7.2f)", p.x(), p.y());
+    coordinates->set_markup(str_total);
+    g_free(str_total);
 }
 
 void
@@ -207,6 +201,11 @@ void
 StatusBar::zoom_grab_focus()
 {
     zoom_value->grab_focus();
+}
+
+void StatusBar::onDefocus()
+{
+    desktop_widget->get_canvas()->grab_focus();
 }
 
 // ******** Zoom ********
@@ -231,7 +230,7 @@ StatusBar::zoom_output()
         g_snprintf(b, 64, "%4.0f%%", value);
     }
     zoom_value->set_text(b);
-       
+
     return true;
 }
 
@@ -282,7 +281,7 @@ StatusBar::rotate_output()
     char b[64];
     g_snprintf(b, 64, "%7.2f°", val);
     rotate_value->set_text(b);
-       
+
     return true;
 }
 

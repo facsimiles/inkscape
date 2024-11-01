@@ -51,7 +51,7 @@
 #include "xml/node.h"
 #include "xml/repr.h"
 #include "xml/sp-css-attr.h"
-#include <2geom/path-intersection.h>
+#include "helper/geom.h"
 
 namespace Inkscape {
 namespace Extension {
@@ -837,6 +837,13 @@ bool SvgBuilder::_shouldClip(const Inkscape::XML::Node *node) const
 
     // Calculate bounding boxes for both the node and the clip path
     Geom::PathVector node_vec = sp_svg_read_pathv(node->attribute("d"));
+
+    if (node_vec.empty()) {
+        // some other type of node (e.g. text), just always clip for now
+        // Better solution: compute bounding box and convert to pathvector?
+        return true;
+    }
+
     Geom::PathVector clip_vec = sp_svg_read_pathv(svgInterpretPath(_clip_history->getClipPath()));
 
     // Clip transform is compounded with page, node inverse, and node transforms
@@ -851,24 +858,7 @@ bool SvgBuilder::_shouldClip(const Inkscape::XML::Node *node) const
     node_vec *= node_tr;
     clip_vec *= clip_tr;
 
-    bool all_empty = true;
-    
-    // weird things were happening with CrossingSet, and this should save some calcs anyway
-    for (auto n_it = node_vec.begin(); n_it != node_vec.end() && all_empty; ++n_it) {
-        for (auto c_it = clip_vec.begin(); c_it != clip_vec.end() && all_empty; ++c_it) {
-            Geom::Crossings cs = crossings(*n_it, *c_it);
-            if (!cs.empty()) {
-                all_empty = false;
-            }
-        }
-    }
-
-    // If the paths don't intersect, the clipping path isn't doing anything
-    if (all_empty) {
-        return false;
-    }
-
-    return true;
+    return !pathv_fully_contains(clip_vec, node_vec);
 }
 
 Inkscape::XML::Node *SvgBuilder::_createClip(const std::string &d, const Geom::Affine tr, bool even_odd)
