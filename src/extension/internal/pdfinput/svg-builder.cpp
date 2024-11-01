@@ -43,6 +43,7 @@
 #include "display/nr-filter-utils.h"
 #include "object/sp-defs.h"
 #include "object/sp-namedview.h"
+#include "object/sp-text.h"
 #include "svg/css-ostringstream.h"
 #include "svg/path-string.h"
 #include "svg/svg.h"
@@ -839,9 +840,17 @@ bool SvgBuilder::_shouldClip(const Inkscape::XML::Node *node) const
     Geom::PathVector node_vec = sp_svg_read_pathv(node->attribute("d"));
 
     if (node_vec.empty()) {
-        // some other type of node (e.g. text), just always clip for now
-        // Better solution: compute bounding box and convert to pathvector?
-        return true;
+        // Probably a text node (could it be anything else?)
+        // Create a PathVector of the bounding box instead
+        auto item = cast<SPItem>(_doc->getObjectById(node->attribute("id")));
+        if (auto text = cast<SPText>(item)) {
+            auto bounds = text->visualBounds(Geom::identity(), true, false, false);
+            std::cout << "Found text node with bounds " << bounds << std::endl;
+            node_vec.push_back(Geom::Path(*bounds));
+        } else {
+            // not sure what this is, default to clipping it
+            return true;
+        }
     }
 
     Geom::PathVector clip_vec = sp_svg_read_pathv(svgInterpretPath(_clip_history->getClipPath()));
