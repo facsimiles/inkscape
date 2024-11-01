@@ -837,6 +837,13 @@ bool SvgBuilder::_shouldClip(const Inkscape::XML::Node *node) const
 
     // Calculate bounding boxes for both the node and the clip path
     Geom::PathVector node_vec = sp_svg_read_pathv(node->attribute("d"));
+
+    if (node_vec.empty()) {
+        // some other type of node (e.g. text), just always clip for now
+        // Better solution: compute bounding box and convert to pathvector?
+        return true;
+    }
+
     Geom::PathVector clip_vec = sp_svg_read_pathv(svgInterpretPath(_clip_history->getClipPath()));
 
     // Clip transform is compounded with page, node inverse, and node transforms
