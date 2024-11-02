@@ -202,7 +202,6 @@ set(ui_SRC
 	widget/color-preview.cpp
 	widget/color-slider.cpp
 	widget/color-wheel-factory.cpp
-	widget/combo-box-entry-tool-item.cpp
 	widget/combo-tool-item.cpp
 	widget/css-name-class-init.cpp
 	widget/custom-tooltip.cpp
@@ -508,7 +507,6 @@ set(ui_SRC
 	widget/color-wheel.h
 	widget/color-wheel-factory.h
 	widget/combo-enums.h
-	widget/combo-box-entry-tool-item.h
 	widget/combo-tool-item.h
 	widget/css-name-class-init.h
 	widget/custom-tooltip.h

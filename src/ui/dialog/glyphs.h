@@ -14,6 +14,7 @@
 #include <gtkmm/treemodel.h>
 
 #include <sigc++/scoped_connection.h>
+#include "libnrtype/font-lister.h"
 #include "ui/dialog/dialog-base.h"
 
 namespace Gtk {
@@ -38,14 +39,14 @@ class GlyphColumns;
 /**
  * A panel that displays character glyphs.
  */
-class GlyphsPanel final : public DialogBase
+class GlyphsPanel : public DialogBase
 {
 public:
     GlyphsPanel();
-    ~GlyphsPanel() final;
+    ~GlyphsPanel() override;
 
-    void selectionChanged (Selection *selection                ) final;
-    void selectionModified(Selection *selection, unsigned flags) final;
+    void selectionChanged (Selection *selection) override;
+    void selectionModified(Selection *selection, unsigned flags) override;
 
 private:
     static GlyphColumns *getColumns();
@@ -66,6 +67,8 @@ private:
     Gtk::ComboBoxText                  *scriptCombo  = nullptr;
     Gtk::ComboBoxText                  *rangeCombo   = nullptr;
     Inkscape::UI::Widget::FontSelector *fontSelector = nullptr;
+
+    LocalFontLister localfontlister;
 
     std::vector<sigc::scoped_connection> instanceConns;
 };

@@ -63,7 +63,6 @@
 #include "svg/css-ostringstream.h"
 #include "text-editing.h"
 #include "ui/builder-utils.h"
-#include "ui/controller.h"
 #include "ui/icon-names.h"
 #include "ui/pack.h"
 #include "ui/util.h"
@@ -119,6 +118,7 @@ TextEdit::TextEdit()
         Inkscape::UI::Widget::FontList::create_font_list("/font-selector") :
         Inkscape::UI::Widget::FontSelector::create_font_selector();
     font_list->setDefocusTarget(this);
+    font_list->set_model(localfontlister);
 
     auto font_collections = Inkscape::FontCollections::get();
 
@@ -271,14 +271,12 @@ void TextEdit::onReadSelection ( bool dostyle, bool /*docontent*/ )
             query.readFromPrefs("/tools/text");
         }
 
-        Inkscape::FontLister* font_lister = Inkscape::FontLister::get_instance();
-
         // Update family/style based on selection.
-        font_lister->selection_update();
-        Glib::ustring fontspec = font_lister->get_fontspec();
+        localfontlister.selectionUpdate(getDesktop());
+        auto fontspec = localfontlister.getFontspec();
         // Update Font Face.
         // font_selector.update_font ();
-        font_list->set_current_font(font_lister->get_font_family(), font_lister->get_font_style());
+        font_list->set_current_font(localfontlister.family, localfontlister.style);
 
         // Update Size.
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -427,10 +425,8 @@ SPCSSAttr *TextEdit::fillTextStyle ()
 
         Glib::ustring fontspec = font_list->get_fontspec();
 
-        if( !fontspec.empty() ) {
-
-            Inkscape::FontLister *fontlister = Inkscape::FontLister::get_instance();
-            fontlister->fill_css( css, fontspec );
+        if (!fontspec.empty()) {
+            fill_css_from_fontspec(css, fontspec);
 
             // TODO, possibly move this to FontLister::set_css to be shared.
             Inkscape::CSSOStringStream os;
@@ -512,9 +508,8 @@ void TextEdit::apply_changes(bool continuous) {
 
     // Update FontLister
     Glib::ustring fontspec = font_list->get_fontspec();
-    Inkscape::FontLister *fontlister = Inkscape::FontLister::get_instance();
-    if( !fontspec.empty() ) {
-        fontlister->set_fontspec( fontspec, false );
+    if (!fontspec.empty()) {
+        localfontlister.setFontspec(fontspec);
     }
 
     auto recent_fonts = Inkscape::RecentlyUsedFonts::get();
@@ -523,7 +518,7 @@ void TextEdit::apply_changes(bool continuous) {
         recent_fonts->pop_front();
     }
 
-    recent_fonts->prepend_to_list(fontlister->get_font_family());
+    recent_fonts->prepend_to_list(localfontlister.family);
     recent_fonts->set_continuous_streak(continuous);
 
     // complete the transaction
@@ -535,8 +530,7 @@ void TextEdit::apply_changes(bool continuous) {
         apply_button.set_sensitive(false);
     }
 
-    sp_repr_css_attr_unref (css);
-    Inkscape::FontLister::get_instance()->update_font_list(desktop->getDocument());
+    sp_repr_css_attr_unref(css);
 
     blocked = false;
 }
@@ -604,13 +598,10 @@ void TextEdit::on_page_changed(Gtk::Widget*, int pos)
 void TextEdit::on_search_entry_changed()
 {
     auto search_txt = search_entry.get_text();
-    font_list->unset_model();
-    Inkscape::FontLister *font_lister = Inkscape::FontLister::get_instance();
+    //font_list->unset_model();
+    auto font_lister = Inkscape::FontLister::get_instance();
     font_lister->show_results(search_txt);
-
-    SPDocument *document = getDesktop()->getDocument();
-    font_lister->add_document_fonts_at_top(document);
-    font_list->set_model();
+    //font_list->set_model();
 }
 
 void TextEdit::on_reset_button_pressed()
@@ -624,8 +615,6 @@ void TextEdit::on_reset_button_pressed()
     Inkscape::FontLister *font_lister = Inkscape::FontLister::get_instance();
     font_lister->init_font_families();
     font_lister->init_default_styles();
-    SPDocument *document = getDesktop()->getDocument();
-    font_lister->add_document_fonts_at_top(document);
 }
 
 void TextEdit::change_font_count_label()

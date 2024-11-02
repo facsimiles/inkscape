@@ -40,8 +40,7 @@
 #include <gtkmm/label.h>
 #include <gtkmm/singleselection.h>
 #include <gtkmm/scrolledwindow.h>
-#include <gtkmm/treemodel.h>
-#include <gtkmm/treeview.h>
+#include <gtkmm/listview.h>
 #include <sigc++/connection.h>
 #include <memory>
 #include <sigc++/signal.h>
@@ -96,9 +95,8 @@ protected:
     // Font family
     Gtk::Frame          family_frame;
     Gtk::ScrolledWindow family_scroll;
-    Gtk::TreeView       family_treeview;
-    Gtk::TreeViewColumn family_treecolumn;
-    Gtk::CellRendererText family_cell;
+    Glib::RefPtr<Gtk::SingleSelection> family_selection;
+    Gtk::ListView       family_listview;
 
     // Font style
     Gtk::Frame          style_frame;
@@ -138,14 +136,11 @@ private:
 
     // Variables
     double font_size;
-
-    bool initial = true;
+    LocalFontLister *_localfontlister = nullptr;
 
     // control font variations update and UI element size
     void update_variations(const Glib::ustring& fontspec);
 
-    bool set_cell_markup();
-    void on_realize_list();
     // For drag and drop.
     Glib::RefPtr<Gdk::ContentProvider> on_drag_prepare(double x, double y);
     void on_drag_begin(Gtk::DragSource &source, Glib::RefPtr<Gdk::Drag> const &drag);
@@ -167,7 +162,7 @@ public:
     void update_font ();
     void update_size (double size);
     void unset_model() override;
-    void set_model() override;
+    void set_model(Inkscape::LocalFontLister &localfontlister) override;
 
     /**
      * Get fontspec based on current settings. (Does not handle size, yet.)

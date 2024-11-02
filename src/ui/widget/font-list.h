@@ -56,10 +56,6 @@ public:
 
     ~FontList() override = default;
 
-    // no op, not used
-    void set_model() override {};
-    void unset_model() override {};
-
     void setDefocusTarget(Inkscape::UI::DefocusTarget *) override;
 
 private:

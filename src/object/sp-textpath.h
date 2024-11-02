@@ -11,7 +11,7 @@
 #define INKSCAPE_SP_TEXTPATH_H
 
 #include "svg/svg-length.h"
-#include "sp-item.h"
+#include "sp-text-item.h"
 #include "sp-text.h"
 
 class SPUsePath;
@@ -22,18 +22,19 @@ enum TextPathSide {
     SP_TEXT_PATH_SIDE_RIGHT
 };
 
-class SPTextPath final : public SPItem {
+class SPTextPath final : public SPTextItem {
 public:
     SPTextPath();
     ~SPTextPath() override;
     int tag() const override { return tag_of<decltype(*this)>; }
+    using Base = SPTextItem;
 
     TextTagAttributes attributes;
     SVGLength startOffset;
-    TextPathSide side;
+    TextPathSide side = SP_TEXT_PATH_SIDE_LEFT;
 
-    Path *originalPath;
-    bool isUpdating;
+    Path *originalPath = nullptr;
+    bool isUpdating = false;
     SPUsePath *sourcePath;
 
     void build(SPDocument* doc, Inkscape::XML::Node* repr) override;

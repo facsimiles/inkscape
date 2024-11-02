@@ -75,6 +75,7 @@ set(object_SRC
   sp-tag-use.cpp
   sp-tag.cpp
   sp-text.cpp
+  sp-text-item.cpp
   sp-title.cpp
   sp-tref-reference.cpp
   sp-tref.cpp
@@ -167,6 +168,7 @@ set(object_SRC
   sp-tag-use.h
   sp-tag-use-reference.h
   sp-text.h
+  sp-text-item.h
   sp-textpath.h
   sp-title.h
   sp-tref-reference.h

@@ -33,8 +33,7 @@
 class FontInstance;
 
 // Constructs a PangoFontDescription from SPStyle. Font size is not included.
-// User must free return value.
-PangoFontDescription *ink_font_description_from_style(SPStyle const *style);
+Pango::FontDescription ink_font_description_from_style(SPStyle const *style);
 
 // Wraps calls to pango_font_description_get_family with some name substitution
 char const *sp_font_description_get_family(PangoFontDescription const *fontDescr);

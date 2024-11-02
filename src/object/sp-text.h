@@ -18,7 +18,7 @@
 #include <sigc++/sigc++.h>
 
 #include "desktop.h"
-#include "sp-item.h"
+#include "sp-text-item.h"
 #include "sp-string.h" // Provides many other headers with is<SPString>
 #include "text-tag-attributes.h"
 #include "display/curve.h"
@@ -35,11 +35,12 @@
 class SPShape;
 
 /* SPText */
-class SPText final : public SPItem {
+class SPText final : public SPTextItem {
 public:
 	SPText();
 	~SPText() override;
     int tag() const override { return tag_of<decltype(*this)>; }
+    using Base = SPTextItem;
 
     /** Converts the text object to its component curves */
     SPCurve getNormalizedBpath() const;

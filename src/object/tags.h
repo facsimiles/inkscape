@@ -56,12 +56,8 @@ X(SPObject,\
     X(SPGuide)\
     X(SPHatchPath)\
     X(SPItem,\
-        X(SPFlowdiv)\
-        X(SPFlowpara)\
         X(SPFlowregion)\
         X(SPFlowregionExclude)\
-        X(SPFlowtext)\
-        X(SPFlowtspan)\
         X(SPImage)\
         X(SPLPEItem,\
             X(SPGroup,\
@@ -86,10 +82,16 @@ X(SPObject,\
                 X(SPStar)\
             )\
         )\
-        X(SPTRef)\
-        X(SPTSpan)\
-        X(SPText)\
-        X(SPTextPath)\
+        X(SPTextItem,\
+            X(SPTRef)\
+            X(SPTSpan)\
+            X(SPText)\
+            X(SPTextPath)\
+            X(SPFlowdiv)\
+            X(SPFlowpara)\
+            X(SPFlowtext)\
+            X(SPFlowtspan)\
+        )\
         X(SPUse)\
     )\
     X(SPMeshpatch)\

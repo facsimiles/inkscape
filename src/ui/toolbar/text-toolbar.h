@@ -28,8 +28,10 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include <giomm/liststore.h>
 #include <sigc++/connection.h>
 
+#include "libnrtype/font-lister.h"
 #include "object/sp-item.h"
 #include "object/sp-object.h"
 #include "style.h"
@@ -51,7 +53,6 @@ class ToolBase;
 class TextTool;
 } // namespace Tools
 namespace Widget {
-class ComboBoxEntryToolItem;
 class ComboToolItem;
 class EntryDropDown;
 class SpinButton;
@@ -87,7 +88,7 @@ private:
     Gtk::ListBox &_font_collections_list;
     Gtk::Button &_reset_button;
 
-    UI::Widget::ComboBoxEntryToolItem *_font_family_item;
+    UI::Widget::EntryDropDown *_font_family_item;
     UI::Widget::EntryDropDown *_font_size_item;
     UI::Widget::ComboToolItem *_font_size_units_item;
     UI::Widget::EntryDropDown *_font_style_item;
@@ -113,6 +114,8 @@ private:
     int _cursor_numbers = 0;
     SPStyle _query_cursor;
     double selection_fontsize;
+
+    LocalFontLister localfontlister;
 
     sigc::scoped_connection fc_changed_selection;
     sigc::scoped_connection fc_update;

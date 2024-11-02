@@ -43,148 +43,145 @@
 #include "libnrtype/font-instance.h"
 #include "libnrtype/OpenTypeUtil.h"
 
-#include "util/statics.h"
-
 #ifdef _WIN32
 #undef NOGDI
 #include <glibmm.h>
 #include <windows.h>
 #endif
 
-// User must free return value.
-PangoFontDescription *ink_font_description_from_style(SPStyle const *style)
+Pango::FontDescription ink_font_description_from_style(SPStyle const *style)
 {
-    PangoFontDescription *descr = pango_font_description_new();
+    Pango::FontDescription descr;
 
-    pango_font_description_set_family(descr, style->font_family.value());
+    descr.set_family(style->font_family.value());
 
     // This duplicates Layout::EnumConversionItem... perhaps we can share code?
     switch (style->font_style.computed) {
         case SP_CSS_FONT_STYLE_ITALIC:
-            pango_font_description_set_style(descr, PANGO_STYLE_ITALIC);
+            descr.set_style(Pango::Style::ITALIC);
             break;
 
         case SP_CSS_FONT_STYLE_OBLIQUE:
-            pango_font_description_set_style(descr, PANGO_STYLE_OBLIQUE);
+            descr.set_style(Pango::Style::OBLIQUE);
             break;
 
         case SP_CSS_FONT_STYLE_NORMAL:
         default:
-            pango_font_description_set_style(descr, PANGO_STYLE_NORMAL);
+            descr.set_style(Pango::Style::NORMAL);
             break;
     }
 
     switch (style->font_weight.computed) {
         case SP_CSS_FONT_WEIGHT_100:
-            pango_font_description_set_weight(descr, PANGO_WEIGHT_THIN);
+            descr.set_weight(Pango::Weight::THIN);
             break;
 
         case SP_CSS_FONT_WEIGHT_200:
-            pango_font_description_set_weight(descr, PANGO_WEIGHT_ULTRALIGHT);
+            descr.set_weight(Pango::Weight::ULTRALIGHT);
             break;
 
         case SP_CSS_FONT_WEIGHT_300:
-            pango_font_description_set_weight(descr, PANGO_WEIGHT_LIGHT);
+            descr.set_weight(Pango::Weight::LIGHT);
             break;
 
         case SP_CSS_FONT_WEIGHT_400:
         case SP_CSS_FONT_WEIGHT_NORMAL:
-            pango_font_description_set_weight(descr, PANGO_WEIGHT_NORMAL);
+            descr.set_weight(Pango::Weight::NORMAL);
             break;
 
         case SP_CSS_FONT_WEIGHT_500:
-            pango_font_description_set_weight(descr, PANGO_WEIGHT_MEDIUM);
+            descr.set_weight(Pango::Weight::MEDIUM);
             break;
 
         case SP_CSS_FONT_WEIGHT_600:
-            pango_font_description_set_weight(descr, PANGO_WEIGHT_SEMIBOLD);
+            descr.set_weight(Pango::Weight::SEMIBOLD);
             break;
 
         case SP_CSS_FONT_WEIGHT_700:
         case SP_CSS_FONT_WEIGHT_BOLD:
-            pango_font_description_set_weight(descr, PANGO_WEIGHT_BOLD);
+            descr.set_weight(Pango::Weight::BOLD);
             break;
 
         case SP_CSS_FONT_WEIGHT_800:
-            pango_font_description_set_weight(descr, PANGO_WEIGHT_ULTRABOLD);
+            descr.set_weight(Pango::Weight::ULTRABOLD);
             break;
 
         case SP_CSS_FONT_WEIGHT_900:
-            pango_font_description_set_weight(descr, PANGO_WEIGHT_HEAVY);
+            descr.set_weight(Pango::Weight::HEAVY);
             break;
 
         case SP_CSS_FONT_WEIGHT_LIGHTER:
         case SP_CSS_FONT_WEIGHT_BOLDER:
         default:
             if (style->font_weight.computed > 0 && style->font_weight.computed <= 1000) {
-                pango_font_description_set_weight(descr, static_cast<PangoWeight>(style->font_weight.computed));
+                descr.set_weight(static_cast<Pango::Weight>(style->font_weight.computed));
             }
             else {
                 g_warning("FaceFromStyle: Unrecognized font_weight.computed value");
-                pango_font_description_set_weight(descr, PANGO_WEIGHT_NORMAL);
+                descr.set_weight(Pango::Weight::NORMAL);
             }
             break;
     }
-    // PANGO_WIEGHT_ULTRAHEAVY not used (not CSS2)
+    // Pango::Weight::ULTRAHEAVY not used (not CSS2)
 
     switch (style->font_stretch.computed) {
         case SP_CSS_FONT_STRETCH_ULTRA_CONDENSED:
-            pango_font_description_set_stretch(descr, PANGO_STRETCH_ULTRA_CONDENSED);
+            descr.set_stretch(Pango::Stretch::ULTRA_CONDENSED);
             break;
 
         case SP_CSS_FONT_STRETCH_EXTRA_CONDENSED:
-            pango_font_description_set_stretch(descr, PANGO_STRETCH_EXTRA_CONDENSED);
+            descr.set_stretch(Pango::Stretch::EXTRA_CONDENSED);
             break;
 
         case SP_CSS_FONT_STRETCH_CONDENSED:
-            pango_font_description_set_stretch(descr, PANGO_STRETCH_CONDENSED);
+            descr.set_stretch(Pango::Stretch::CONDENSED);
             break;
 
         case SP_CSS_FONT_STRETCH_SEMI_CONDENSED:
-            pango_font_description_set_stretch(descr, PANGO_STRETCH_SEMI_CONDENSED);
+            descr.set_stretch(Pango::Stretch::SEMI_CONDENSED);
             break;
 
         case SP_CSS_FONT_STRETCH_NORMAL:
-            pango_font_description_set_stretch(descr, PANGO_STRETCH_NORMAL);
+            descr.set_stretch(Pango::Stretch::NORMAL);
             break;
 
         case SP_CSS_FONT_STRETCH_SEMI_EXPANDED:
-            pango_font_description_set_stretch(descr, PANGO_STRETCH_SEMI_EXPANDED);
+            descr.set_stretch(Pango::Stretch::SEMI_EXPANDED);
             break;
 
         case SP_CSS_FONT_STRETCH_EXPANDED:
-            pango_font_description_set_stretch(descr, PANGO_STRETCH_EXPANDED);
+            descr.set_stretch(Pango::Stretch::EXPANDED);
             break;
 
         case SP_CSS_FONT_STRETCH_EXTRA_EXPANDED:
-            pango_font_description_set_stretch(descr, PANGO_STRETCH_EXTRA_EXPANDED);
+            descr.set_stretch(Pango::Stretch::EXTRA_EXPANDED);
             break;
 
         case SP_CSS_FONT_STRETCH_ULTRA_EXPANDED:
-            pango_font_description_set_stretch(descr, PANGO_STRETCH_ULTRA_EXPANDED);
+            descr.set_stretch(Pango::Stretch::ULTRA_EXPANDED);
 
         case SP_CSS_FONT_STRETCH_WIDER:
         case SP_CSS_FONT_STRETCH_NARROWER:
         default:
             g_warning("FaceFromStyle: Unrecognized font_stretch.computed value");
-            pango_font_description_set_stretch(descr, PANGO_STRETCH_NORMAL);
+            descr.set_stretch(Pango::Stretch::NORMAL);
             break;
     }
 
     switch (style->font_variant.computed) {
         case SP_CSS_FONT_VARIANT_SMALL_CAPS:
-            pango_font_description_set_variant(descr, PANGO_VARIANT_SMALL_CAPS);
+            descr.set_variant(Pango::Variant::SMALL_CAPS);
             break;
 
         case SP_CSS_FONT_VARIANT_NORMAL:
         default:
-            pango_font_description_set_variant(descr, PANGO_VARIANT_NORMAL);
+            descr.set_variant(Pango::Variant::NORMAL);
             break;
     }
 
     // Check if not empty as Pango will add @ to string even if empty (bug in Pango?).
     if (!style->font_variation_settings.axes.empty()) {
-        pango_font_description_set_variations(descr, style->font_variation_settings.toString().c_str());
+        descr.set_variations(style->font_variation_settings.toString());
     }
 
     return descr;
@@ -558,9 +555,7 @@ std::shared_ptr<FontInstance> FontFactory::FaceFromStyle(SPStyle const *style)
 
         // If that failed, try using the CSS information in the style
         if (!font) {
-            auto temp_descr = ink_font_description_from_style(style);
-            font = Face(temp_descr);
-            pango_font_description_free(temp_descr);
+            font = Face(ink_font_description_from_style(style).gobj());
         }
     }
 
@@ -569,11 +564,9 @@ std::shared_ptr<FontInstance> FontFactory::FaceFromStyle(SPStyle const *style)
 
 std::shared_ptr<FontInstance> FontFactory::FaceFromDescr(char const *family, char const *style)
 {
-    PangoFontDescription *temp_descr = pango_font_description_from_string(style);
-    pango_font_description_set_family(temp_descr,family);
-    auto res = Face(temp_descr);
-    pango_font_description_free(temp_descr);
-    return res;
+    auto temp_descr = Pango::FontDescription(style);
+    temp_descr.set_family(family);
+    return Face(temp_descr.gobj());
 }
 
 std::shared_ptr<FontInstance> FontFactory::FaceFromPangoString(char const *pangoString)
