@@ -104,42 +104,6 @@ void recursively_set_properties(SPObject *object, SPCSSAttr *css, bool unset_des
     sp_repr_css_attr_unref(css_unset);
 }
 
-Glib::RefPtr<Gio::ListModel> create_sizes_store_uncached(int unit)
-{
-    // List of font sizes for dropdown menu
-    constexpr int sizes[] = {
-        4, 6, 8, 9, 10, 11, 12, 13, 14, 16, 18, 20, 22, 24, 28,
-        32, 36, 40, 48, 56, 64, 72, 144
-    };
-
-    // Array must be same length as SPCSSUnit in style.h
-    constexpr double ratios[] = {1, 1, 1, 10, 4, 40, 100, 16, 8, 0.16};
-
-    auto store = Gio::ListStore<WrapAsGObject<double>>::create();
-
-    for (int size : sizes) {
-        store->append(WrapAsGObject<double>::create(size / ratios[unit]));
-    }
-
-    return store;
-}
-
-/**
- * Create a ListStore containing the default list of font sizes scaled for the given unit.
- */
-Glib::RefPtr<Gio::ListModel> create_sizes_store(int unit)
-{
-    static std::unordered_map<int, Glib::RefPtr<Gio::ListModel>> cache;
-
-    auto &result = cache[unit];
-
-    if (!result) {
-        result = create_sizes_store_uncached(unit);
-    }
-
-    return result;
-}
-
 // TODO: possibly share with font-selector by moving most code to font-lister (passing family name)
 void sp_text_toolbox_select_cb(Gtk::Entry const &entry)
 {

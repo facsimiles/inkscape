@@ -48,7 +48,6 @@ FontSelector::FontSelector(bool with_size, bool with_variations)
     , family_frame(_("Font family"))
     , style_frame(C_("Font selector", "Style"))
     , size_label(_("Font size"))
-    , size_combobox(true) // With entry
     , signal_block(false)
     , font_size(18)
 {
@@ -111,13 +110,12 @@ FontSelector::FontSelector(bool with_size, bool with_variations)
     style_frame.set_child(style_scroll);
 
     // Size
-    size_combobox.set_name ("FontSelectorSize");
-    if (auto entry = size_combobox.get_entry()) {
-        // limit min size of the entry box to 6 chars, so it doesn't inflate entire dialog!
-        entry->set_width_chars(6);
-    }
+    size_combobox.set_name("FontSelectorSize");
+    // limit min size of the entry box to 6 chars, so it doesn't inflate entire dialog!
+    size_combobox.setWidthChars(6);
     set_sizes();
-    size_combobox.set_active_text( "18" );
+    size_combobox.setStringFuncAndFactory(unwrap_arg_adaptor<double>(Inkscape::ustring::format_classic<double>));
+    size_combobox.setText("18");
 
     // Font Variations
     font_variations.set_vexpand (true);
@@ -157,7 +155,7 @@ FontSelector::FontSelector(bool with_size, bool with_variations)
     // Add signals
     family_treeview.get_selection()->signal_changed().connect(sigc::mem_fun(*this, &FontSelector::on_family_changed));
     style_selection->signal_selection_changed().connect([this] (auto...) { on_style_changed(); });
-    size_combobox.signal_changed().connect(sigc::mem_fun(*this, &FontSelector::on_size_changed));
+    size_combobox.connectChanged(sigc::mem_fun(*this, &FontSelector::on_size_changed));
     font_variations.connectChanged(sigc::mem_fun(*this, &FontSelector::on_variations_changed));
     family_treeview.signal_realize().connect(sigc::mem_fun(*this, &FontSelector::on_realize_list));
 
@@ -189,6 +187,11 @@ void FontSelector::hide_others()
     font_variations_scroll.set_vexpand(false);
 }
 
+void FontSelector::setDefocusTarget(DefocusTarget *defocus_target)
+{
+    size_combobox.setDefocusTarget(defocus_target);
+}
+
 // TODO: Dropping doesnʼt seem to be implemented anywhere
 void FontSelector::on_drag_begin(Gtk::DragSource &source,
                                  Glib::RefPtr<Gdk::Drag> const &drag)
@@ -212,28 +215,12 @@ Glib::RefPtr<Gdk::ContentProvider> FontSelector::on_drag_prepare(double /*x*/, d
     return Gdk::ContentProvider::create(value);
 }
 
-void
-FontSelector::set_sizes ()
+void FontSelector::set_sizes()
 {
-    size_combobox.remove_all();
-
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    auto prefs = Inkscape::Preferences::get();
     int unit = prefs->getInt("/options/font/unitType", SP_CSS_UNIT_PT);
 
-    int sizes[] = {
-        4, 6, 8, 9, 10, 11, 12, 13, 14, 16, 18, 20, 22, 24, 28,
-        32, 36, 40, 48, 56, 64, 72, 144
-    };
-
-    // Array must be same length as SPCSSUnit in style-internal.h
-    //                    PX  PT  PC  MM  CM   IN  EM  EX     %
-    double ratios[] = {1,  1,  1, 10,  4, 40, 100, 16,  8, 0.16};
-
-    for (int i : sizes)
-    {
-        double size = i/ratios[unit];
-        size_combobox.append( Inkscape::ustring::format_classic(size) );
-    }
+    size_combobox.setModel(create_sizes_store(unit));
 }
 
 void
@@ -314,15 +301,14 @@ void FontSelector::update_font()
     signal_block = false;
 }
 
-void
-FontSelector::update_size (double size)
+void FontSelector::update_size(double size)
 {
     signal_block = true;
 
     // Set font size
     std::stringstream ss;
     ss << size;
-    size_combobox.get_entry()->set_text( ss.str() );
+    size_combobox.setText(ss.str());
     font_size = size; // Store value
     set_fontsize_tooltip();
 
@@ -477,7 +463,7 @@ FontSelector::on_size_changed() {
     if (signal_block) return;
 
     double size;
-    Glib::ustring input = size_combobox.get_active_text();
+    Glib::ustring input = size_combobox.getText();
     try {
         size = std::stod (input);
     }

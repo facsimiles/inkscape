@@ -47,6 +47,7 @@
 #include <sigc++/signal.h>
 
 #include <sigc++/scoped_connection.h>
+#include "ui/widget/entry-dropdown.h"
 #include "ui/widget/font-selector-interface.h"
 #include "ui/widget/font-variations.h"
 
@@ -88,6 +89,8 @@ public:
     FontSelector (bool with_size = true, bool with_variations = true);
     void hide_others();
 
+    void setDefocusTarget(Inkscape::UI::DefocusTarget *) override;
+
 protected:
 
     // Font family
@@ -105,7 +108,7 @@ protected:
 
     // Font size
     Gtk::Label          size_label;
-    Gtk::ComboBoxText   size_combobox;
+    EntryDropDown size_combobox;
 
     // Font variations
     Gtk::ScrolledWindow font_variations_scroll;

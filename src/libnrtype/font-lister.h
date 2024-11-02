@@ -360,6 +360,11 @@ void font_lister_cell_data_func2(Gtk::CellRenderer &cell,
                                  Gtk::TreeModel::const_iterator const &iter,
                                  bool with_markup);
 
+/**
+ * Create a ListStore containing the default list of font sizes scaled for the given unit.
+ */
+Glib::RefPtr<Gio::ListModel> create_sizes_store(int unit);
+
 #endif // FONT_LISTER_H
 
 /*

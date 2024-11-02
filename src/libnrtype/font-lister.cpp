@@ -1331,6 +1331,39 @@ void font_lister_cell_data_func2(Gtk::CellRenderer &cell,
     g_free(family_escaped);
 }
 
+static Glib::RefPtr<Gio::ListModel> create_sizes_store_uncached(int unit)
+{
+    // List of font sizes for dropdown menu
+    constexpr int sizes[] = {
+        4, 6, 8, 9, 10, 11, 12, 13, 14, 16, 18, 20, 22, 24, 28,
+        32, 36, 40, 48, 56, 64, 72, 144
+    };
+
+    // Array must be same length as SPCSSUnit in style.h
+    constexpr double ratios[] = {1, 1, 1, 10, 4, 40, 100, 16, 8, 0.16};
+
+    auto store = Gio::ListStore<WrapAsGObject<double>>::create();
+
+    for (int size : sizes) {
+        store->append(WrapAsGObject<double>::create(size / ratios[unit]));
+    }
+
+    return store;
+}
+
+Glib::RefPtr<Gio::ListModel> create_sizes_store(int unit)
+{
+    static std::unordered_map<int, Glib::RefPtr<Gio::ListModel>> cache;
+
+    auto &result = cache[unit];
+
+    if (!result) {
+        result = create_sizes_store_uncached(unit);
+    }
+
+    return result;
+}
+
 /*
   Local Variables:
   mode:c++

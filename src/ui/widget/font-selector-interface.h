@@ -33,7 +33,7 @@ public:
     virtual void unset_model() = 0;
 
     // defocus handling
-    virtual void setDefocusTarget(Inkscape::UI::DefocusTarget *) {}
+    virtual void setDefocusTarget(Inkscape::UI::DefocusTarget *) = 0;
 };
 
 #endif
