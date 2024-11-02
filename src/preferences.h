@@ -566,6 +566,9 @@ public:
 
     /**
      * Register a preference observer.
+     *
+     * Limitations: If the observed preferences path does not exist or is removed,
+     * then the observer may stop working, even if the path is re-added later.
      */
     void addObserver(Observer &);
 
@@ -775,9 +778,6 @@ inline Glib::ustring Preferences::Entry::getString(Glib::ustring const &def = ""
     Glib::ustring ret = def;
     if (this->isValid()) {
         ret = Inkscape::Preferences::get()->_extractString(*this);
-        if (ret == "") {
-            ret = def;
-        }
     }
     return ret;
 }

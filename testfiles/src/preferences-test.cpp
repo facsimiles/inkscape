@@ -23,8 +23,12 @@ public:
     virtual void notify(Inkscape::Preferences::Entry const &val)
     {
         value = val.getInt();
+        value_str = val.getString();
+        value_valid = val.isValid();
     }
     int value;
+    std::string value_str;
+    bool value_valid;
 };
 
 class PreferencesTest : public ::testing::Test
@@ -45,6 +49,20 @@ TEST_F(PreferencesTest, testStartingState)
 {
     ASSERT_TRUE(prefs);
     ASSERT_EQ(prefs->isWritable(), true);
+}
+
+TEST_F(PreferencesTest, testRemove)
+{
+    prefs->setString("/test/hello", "foo");
+    ASSERT_EQ(prefs->getString("/test/hello"), "foo");
+    prefs->remove("/test/hello");
+    ASSERT_EQ(prefs->getString("/test/hello", "default"), "default");
+    // empty string is not the same as removed:
+    prefs->setString("/test/hello", "");
+    // repeated twice to also test caching
+    for (int i = 0; i < 1; i++) {
+        ASSERT_EQ(prefs->getString("/test/hello", "default"), "");
+    }
 }
 
 TEST_F(PreferencesTest, testOverwrite)
@@ -104,12 +122,94 @@ TEST_F(PreferencesTest, testKeyObserverNotification)
     prefs->addObserver(obs);
     prefs->setInt(path, 10);
     ASSERT_EQ(obs.value, 10);
-    prefs->setInt("/some/other/random/path", 10);
+    ASSERT_TRUE(obs.value_valid);
+    prefs->setInt("/some/other/random/path", 42);
     ASSERT_EQ(obs.value, 10); // value should not change
 
     prefs->removeObserver(obs);
     prefs->setInt(path, 15);
     ASSERT_EQ(obs.value, 10); // no notifications sent after removal
+}
+
+/// Test PreferencesObserver when pref value is added / emptied / removed
+TEST_F(PreferencesTest, testKeyObserverNotificationAddRemove)
+{
+    Glib::ustring const path = "/some/random/path";
+    // Initial state: pref key ("folder") to be observed exists before adding observer
+    prefs->remove("/some/random");
+    prefs->setInt("/some/random/whatever", 42);
+
+    // Set up observer
+    TestObserver obs("/some/random");
+    prefs->addObserver(obs);
+
+    // value is added (set for the first time)
+    prefs->setInt(path, 10);
+    ASSERT_EQ(obs.value, 10);
+    ASSERT_TRUE(obs.value_valid);
+
+    // set to empty string --> observer should still receive a valid (but empty) entry
+    prefs->setString(path, "");
+    ASSERT_EQ(obs.value_str, "");
+    ASSERT_EQ(obs.value, 0); // fallback value for int
+    ASSERT_TRUE(obs.value_valid);
+
+    // remove preference --> observer should still receive a non-existing entry (isValid==false)
+    prefs->remove(path);
+    ASSERT_FALSE(obs.value_valid);
+
+    // Remove key and then set again.
+    // In this case the observer may stop working.
+    // This limitation is documented in Preferences::addObserver.
+    prefs->remove("/some/random");
+    obs.value = 1234;
+    prefs->setInt(path, 15);
+    // Ideal result:
+    // ASSERT_EQ(obs.value, 15);
+    // ASSERT_TRUE(obs.value_valid);
+    // Due to the above limitations: Observer is never notified
+    ASSERT_EQ(obs.value, 1234);
+
+    prefs->removeObserver(obs);
+}
+
+TEST_F(PreferencesTest, testEntryObserverNotificationAddRemove)
+{
+    // initial state: path to be observed exists
+    prefs->remove("/some/random");
+    Glib::ustring const path = "/some/random/path";
+    prefs->setInt(path, 2);
+
+    TestObserver obs(path);
+    obs.value = 1;
+    prefs->setInt(path, 5);
+    ASSERT_EQ(obs.value, 1); // no notifications sent before adding
+
+    prefs->addObserver(obs);
+    prefs->setInt(path, 10);
+    ASSERT_TRUE(obs.value_valid);
+    ASSERT_EQ(obs.value, 10);
+
+    // empty string (not the same as removed)
+    prefs->setString(path, "");
+    ASSERT_TRUE(obs.value_valid);
+    ASSERT_EQ(obs.value_str, "");
+    ASSERT_EQ(obs.value, 0); // fallback value for int conversion
+
+    prefs->setInt(path, 15);
+    ASSERT_EQ(obs.value, 15);
+
+    prefs->remove(path);
+    ASSERT_FALSE(obs.value_valid);
+
+    // Note: Here we are re-adding a removed preference.
+    // The observer still works, but would also be allowed to fail, see Preferences::addObserver.
+    prefs->setInt(path, 20);
+    ASSERT_EQ(obs.value, 20);
+
+    prefs->removeObserver(obs);
+    prefs->setInt(path, 25);
+    ASSERT_EQ(obs.value, 20); // no notifications sent after removal
 }
 
 TEST_F(PreferencesTest, testEntryObserverNotification)

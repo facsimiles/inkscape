@@ -605,6 +605,9 @@ void Preferences::addObserver(Observer &o)
             } else {
                 node->addSubtreeObserver( *(_observer_map[&o]) );
             }
+        } else {
+            g_warning("Failed to add a preference observer because the key does not exist: %s",
+                      o.observed_path.c_str());
         }
     }
 }
@@ -778,7 +781,7 @@ void Preferences::_setRawValue(Glib::ustring const &path, Glib::ustring const &v
 
     // set the attribute
     Inkscape::XML::Node *node = _getNode(node_key, true);
-    node->setAttributeOrRemoveIfEmpty(attr_key, value);
+    node->setAttribute(attr_key, value);
 }
 
 // The _extract* methods are where the actual work is done - they define how preferences are stored
