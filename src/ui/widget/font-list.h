@@ -60,6 +60,8 @@ public:
     void set_model() override {};
     void unset_model() override {};
 
+    void setDefocusTarget(Inkscape::UI::DefocusTarget *) override;
+
 private:
     void sort_fonts(Inkscape::FontOrder order);
     void filter();

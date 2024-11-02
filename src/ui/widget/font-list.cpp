@@ -896,6 +896,11 @@ void FontList::set_current_size(double size) {
     _font_size.setText(os.str());
 }
 
+void FontList::setDefocusTarget(DefocusTarget *defocus_target)
+{
+    _font_size.setDefocusTarget(defocus_target);
+}
+
 void FontList::add_font(const Glib::ustring& fontspec, bool select) {
     bool found = select_font(fontspec); // found in the tree view?
     if (found) return;

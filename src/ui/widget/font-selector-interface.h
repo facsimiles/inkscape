@@ -6,7 +6,10 @@
 #include <gtkmm/widget.h>
 #include <sigc++/signal.h>
 
-class FontSelectorInterface {
+namespace Inkscape::UI { class DefocusTarget; }
+
+class FontSelectorInterface
+{
 public:
     virtual ~FontSelectorInterface() {};
 
@@ -28,6 +31,9 @@ public:
     // legacy font selector
     virtual void set_model() = 0;
     virtual void unset_model() = 0;
+
+    // defocus handling
+    virtual void setDefocusTarget(Inkscape::UI::DefocusTarget *) {}
 };
 
 #endif
