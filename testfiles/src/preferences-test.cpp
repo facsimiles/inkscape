@@ -9,9 +9,11 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "preferences.h"
+
 #include <gtest/gtest.h>
 
-#include "preferences.h"
+#include "colors/color.h"
 
 // test observer
 class TestObserver : public Inkscape::Preferences::Observer {
@@ -68,6 +70,7 @@ TEST_F(PreferencesTest, testRemove)
 TEST_F(PreferencesTest, testOverwrite)
 {
     prefs->setInt("/test/intvalue", 123);
+    ASSERT_EQ(prefs->getInt("/test/intvalue"), 123);
     prefs->setInt("/test/intvalue", 321);
     ASSERT_EQ(prefs->getInt("/test/intvalue"), 321);
 }
@@ -95,7 +98,10 @@ TEST_F(PreferencesTest, testDblPrecision)
 
 TEST_F(PreferencesTest, testDefaultReturn)
 {
-    ASSERT_EQ(prefs->getInt("/this/path/does/not/exist", 123), 123);
+    // repeated twice to also test negative caching
+    for (int i = 0; i < 1; i++) {
+        ASSERT_EQ(prefs->getInt("/this/path/does/not/exist", 123), 123);
+    }
 }
 
 TEST_F(PreferencesTest, testLimitedReturn)
@@ -109,6 +115,19 @@ TEST_F(PreferencesTest, testLimitedReturn)
     // corner cases
     ASSERT_EQ(prefs->getIntLimited("/test/intvalue", 123, 0, 1000), 1000);
     ASSERT_EQ(prefs->getIntLimited("/test/intvalue", 123, 1000, 5000), 1000);
+}
+
+TEST_F(PreferencesTest, testColor)
+{
+    const auto blue = Inkscape::Colors::Color::parse("blue").value();
+    prefs->setColor("/test/colorvalue", blue);
+    ASSERT_EQ(prefs->getColor("/test/colorvalue", "green"), blue);
+}
+
+TEST_F(PreferencesTest, testColorDefaultReturn)
+{
+    const auto green = Inkscape::Colors::Color::parse("green").value();
+    ASSERT_EQ(prefs->getColor("/test/colorvalueNonExistent", "green"), green);
 }
 
 TEST_F(PreferencesTest, testKeyObserverNotification)
