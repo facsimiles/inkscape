@@ -18,7 +18,6 @@
 #include <gtkmm/builder.h>
 #include <gtkmm/grid.h>
 #include <gtkmm/box.h>
-#include <gtkmm/comboboxtext.h>
 #include <gtkmm/iconview.h>
 #include <gtkmm/treeview.h>
 #include <gtkmm/listbox.h>
@@ -32,6 +31,8 @@
 #include "font-selector-interface.h"
 
 namespace Inkscape::UI::Widget {
+
+class EntryDropDown;
 
 class FontList : public Gtk::Box, public FontSelectorInterface {
 public:
@@ -95,7 +96,7 @@ private:
     std::vector<FontInfo> _fonts;
     Inkscape::FontOrder _order = Inkscape::FontOrder::by_name;
     Glib::ustring _filter;
-    Gtk::ComboBoxText& _font_size;
+    EntryDropDown &_font_size;
     Gtk::Scale& _font_size_scale;
     std::unique_ptr<Gtk::CellRendererText> _cell_renderer;
     std::unique_ptr<Gtk::CellRenderer> _cell_icon_renderer;
