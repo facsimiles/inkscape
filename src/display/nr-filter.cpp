@@ -98,7 +98,6 @@ void Filter::update()
 
 int Filter::render(Inkscape::DrawingItem const *item, DrawingContext &graphic, DrawingContext *bgdc, RenderContext &rc) const
 {
-    g_message("Rendering the filter");
     // std::cout << "Filter::render() for: " << const_cast<Inkscape::DrawingItem *>(item)->name() << std::endl;
     // std::cout << "  graphic drawing_scale: " << graphic.surface()->device_scale() << std::endl;
 

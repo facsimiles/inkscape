@@ -78,8 +78,6 @@ public:
 
     static std::shared_ptr<Inkscape::Drawing> makeDrawing(SPDocument *doc);
 
-    std::shared_ptr<PreviewDrawing> _drawing;
-
 private:
     int size = 128; // size of preview image
     sigc::connection refresh_conn;
@@ -88,6 +86,7 @@ private:
     SPItem const *_item = nullptr;
     Geom::OptRect _dbox;
 
+    std::shared_ptr<PreviewDrawing> _drawing;
     std::uint32_t _bg_color = 0;
 
     Inkscape::auto_connection _render_idle;
