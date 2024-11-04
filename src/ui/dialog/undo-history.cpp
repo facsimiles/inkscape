@@ -103,6 +103,9 @@ void UndoHistory::disconnectEventLog()
 {
     if (_event_log) {
         _event_log->removeDialogConnection(&_event_list_view, &_callback_connections);
+        _event_list_view.unset_model();
+        _event_list_store.reset();
+        _event_log = nullptr;
     }
 }
 
