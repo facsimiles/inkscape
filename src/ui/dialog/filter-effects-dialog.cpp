@@ -900,6 +900,7 @@ FilterEditorCanvas::FilterEditorCanvas(FilterEffectsDialog& dialog)
     Glib::ustring preview = Inkscape::IO::Resource::get_filename(Inkscape::IO::Resource::UIS, "filter_editor_preview.svg");
     preview_doc = SPDocument::createNewDoc(preview.c_str(), true, true, nullptr);
     _preview = std::make_unique<UI::Dialog::ExportPreview>();
+    _preview->usePreviewLoading(false);
     auto document = preview_doc.get();
     if(document){
         auto col = Colors::Color::parse("#ffffff");
@@ -1111,8 +1112,7 @@ void FilterEditorCanvas::delete_nodes_without_prims(){
 void FilterEditorCanvas::delete_nodes_without_undo(){
 
     modify_observer(true);
-    auto filter = filter_list[current_filter_id]; 
-        
+     
     for(auto it = selected_nodes[current_filter_id].begin(); it != selected_nodes[current_filter_id].end();){
         auto node = *it;
         
@@ -1313,7 +1313,6 @@ void FilterEditorCanvas::update_preview_filter(bool single_primitive){
                 repr->setAttribute("inkscape:collect", "always");
 
                 primitive->getRepr()->appendChild(repr);
-                auto node = cast<SPFeMergeNode>(primitive->document->getObjectByRepr(repr));
                 Inkscape::GC::release(repr);
                 auto last_primitive = new_filter->childList(false)[last_index];
                 g_assert(cast<SPFilterPrimitive>(last_primitive));
@@ -1414,7 +1413,18 @@ void FilterEditorCanvas::toggle_preview(bool hide){
     }
     else{
         if(!_preview->get_parent()){
+            
             canvas.put(*_preview, 0, 0);
+            for(auto it: canvas.get_children()){
+                // auto node = dynamic_cast<FilterEditorNode*>(it);
+                if(it != static_cast<Gtk::Widget*>(_preview.get())){
+                    double x, y;
+                    canvas.get_child_position(*it, x, y);
+                    canvas.remove(*it);
+                    canvas.put(*it, x, y);
+                }
+            }
+
         } 
     }
     queue_draw();
@@ -1480,7 +1490,6 @@ void FilterEditorCanvas::update_canvas_new(){
     clear_nodes();
     delete_nodes_without_prims();
     if(filter){
-        SPDocument* document = preview_doc.get(); 
         auto col = Colors::Color::parse("#ffffff"); 
         // refreshPreview();
         update_offset_from_document();
@@ -2272,7 +2281,6 @@ void FilterEditorCanvas::event_handler(double x, double y)
     auto const surface = dynamic_cast<Gtk::Native &>(*get_root()).get_surface();
     g_assert(surface);
     surface->get_device_position(device, mx, my, mask);
-    bool shift_pressed = ((mask & Gdk::ModifierType::SHIFT_MASK) == Gdk::ModifierType::SHIFT_MASK);
     static std::vector<std::pair<NODE_TYPE *, std::pair<double, double>>> start_positions;
     switch (current_event_type){
     case FilterEditorEvent::NONE:

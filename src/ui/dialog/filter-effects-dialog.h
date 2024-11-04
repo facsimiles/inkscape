@@ -53,6 +53,7 @@
 #include "object/filters/mergenode.h"
 #include "ui/dialog/dialog-base.h"
 #include "ui/widget/bin.h"
+#include "ui/widget/color-picker.h"
 #include "ui/widget/combo-enums.h"
 #include "ui/widget/completion-popup.h"
 #include "ui/widget/popover-bin.h"

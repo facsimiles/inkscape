@@ -64,6 +64,7 @@ public:
     void setBox(Geom::Rect const &bbox);
     void queueRefresh();
     void resetPixels(bool new_size = false);
+    void usePreviewLoading(bool use);
     void setSize(int newSize);
     void setPreview(Cairo::RefPtr<Cairo::ImageSurface>);
     void setBackgroundColor(std::uint32_t bg_color);
@@ -77,6 +78,8 @@ private:
     bool _is_layer = false;
     SPItem const *_item = nullptr;
     Geom::OptRect _dbox;
+
+    bool use_preview_loading = true;
 
     std::shared_ptr<PreviewDrawing> _drawing;
     std::uint32_t _bg_color = 0;

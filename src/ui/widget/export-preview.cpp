@@ -123,10 +123,13 @@ void ExportPreview::resetPixels(bool new_size)
         auto path = Glib::filename_from_utf8(path_utf8);
         preview_loading = Gdk::Pixbuf::create_from_file(path, size, size);
     }
-    if (preview_loading) {
+    if (preview_loading && use_preview_loading) {
         set_pixbuf(preview_loading);
     }
     set_visible(true);
+}
+void ExportPreview::usePreviewLoading(bool use){
+    use_preview_loading = use;
 }
 
 void ExportPreview::setSize(int newSize)
