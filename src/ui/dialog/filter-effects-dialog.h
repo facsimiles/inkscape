@@ -215,7 +215,6 @@ class FilterEditorSink : public Gtk::Box{
                 return;
             }
             else if(_inp_index == -2){
-                g_message(".h %d", __LINE__);
                 inp_index++;
                 inp_index = inp_index%6;
                 auto strs = get_result_inputs(inp_index);
