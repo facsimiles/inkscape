@@ -507,13 +507,14 @@ bool pathvs_have_nonempty_overlap(Geom::PathVector const &a, Geom::PathVector co
 }
 
 /*
-* Checks whether pathvector b is completely within the bounds of pathvector a.
-*/
-bool pathv_fully_contains(Geom::PathVector const &a, Geom::PathVector const &b) {
-     // At minimum, BBox of a must contain bbox of b
-     if (!a.boundsFast().contains(b.boundsFast())) {
+ * Checks whether pathvector b is completely within the bounds of pathvector a.
+ */
+bool pathv_fully_contains(Geom::PathVector const &a, Geom::PathVector const &b)
+{
+    // At minimum, BBox of a must contain bbox of b
+    if (!a.boundsFast().contains(b.boundsFast())) {
         return false;
-     }
+    }
 
     // check winding numbers - all nodes of b need to be contained by a to be fully contained.
     // Non-zero winding is a necessary but not sufficient condition.
@@ -532,18 +533,11 @@ bool pathv_fully_contains(Geom::PathVector const &a, Geom::PathVector const &b) 
     // I'm not entirely sure why there might be a crossing set composed entirely of empty crossings
     auto is_empty = [](Geom::Crossings const &xings) -> bool { return xings.empty(); };
     if (!std::all_of(crossings.begin(), crossings.end(), is_empty)) { // An intersection has been found
-        // for (const auto &xing : crossings) {
-        //     std::cout << "Found crossings of size " << xing.size() << ": \n";
-        //     for (auto &x: xing)
-        //         std::cout << "\talong a: " << std::boolalpha << x.dir << ", " << x.a << ", " 
-        //                   << x.b << ", " << x.ta << ", " << x.tb;
-        // }
         return false;
     }
     // BBox is fully contained, passed the winding test, no intersections, the path must be contained
     return true;
 }
-
 
 /*
  * Converts all segments in all paths to Geom::LineSegment or Geom::HLineSegment or

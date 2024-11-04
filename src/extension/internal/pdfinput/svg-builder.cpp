@@ -840,12 +840,15 @@ bool SvgBuilder::_shouldClip(const Inkscape::XML::Node *node) const
     Geom::PathVector node_vec = sp_svg_read_pathv(node->attribute("d"));
 
     if (node_vec.empty()) {
-        // Probably a text node (could it be anything else?)
+        // Non-path node (text, image, etc)
         // Create a PathVector of the bounding box instead
-        auto item = cast<SPItem>(_doc->getObjectById(node->attribute("id")));
-        if (auto text = cast<SPText>(item)) {
-            auto bounds = text->visualBounds(Geom::identity(), true, false, false);
-            std::cout << "Found text node with bounds " << bounds << std::endl;
+        _doc->ensureUpToDate();
+        auto item = cast<SPItem>(_doc->getObjectByRepr(const_cast<Inkscape::XML::Node *>(node)));
+        // transform will be applied later, so default identity is good
+        Geom::OptRect bounds;
+        bounds = item ? item->visualBounds() : bounds;
+
+        if (!bounds.empty()) {
             node_vec.push_back(Geom::Path(*bounds));
         } else {
             // not sure what this is, default to clipping it
