@@ -475,6 +475,7 @@ class FilterEditorCanvas : public Gtk::ScrolledWindow{
         void sort_connections(std::vector<FilterEditorConnection*>&);
         void auto_arrange_nodes(bool selection_only = false);
         void delete_nodes();
+        void delete_nodes_without_undo();
         void delete_nodes_without_prims();
         void duplicate_nodes();
         void select_nodes(std::vector<FilterEditorNode*> nodes);
@@ -539,6 +540,8 @@ class FilterEditorCanvas : public Gtk::ScrolledWindow{
         void refreshPreview(bool single_primitive = false);
         void update_preview_filter(bool single_primitive = false);
         void reset_primitive_inputs(SPFilterPrimitive* primitive);
+        void toggle_preview(bool hide = false);
+        bool preview_active = true;
         SPFilter* preview_filter;
 
 

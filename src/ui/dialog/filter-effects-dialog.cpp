@@ -729,11 +729,12 @@ void ConnectionsRenderer::snapshot_vfunc(const std::shared_ptr<Gtk::Snapshot> &s
 
 void FilterEditorFixed::snapshot_vfunc(const std::shared_ptr<Gtk::Snapshot> &snapshot)
 {
-    snapshot_child(*canvas->_preview, snapshot);
+    if(canvas->_preview->get_parent() == static_cast<Gtk::Widget*>(this))
+        snapshot_child(*canvas->_preview, snapshot);
     auto const cr = snapshot->append_cairo(get_allocation());
     // const double t = 100;
     if(canvas->current_event_type == FilterEditorCanvas::FilterEditorEvent::CONNECTION_UPDATE){
-        cr->set_source_rgba(1.0, 1.0, 1.0, 1.0);
+        cr->set_source_rgba(1.0, 72/255, 0.0, 1.0);
         cr->set_line_width(5.0);
         double x1, y1, x2, y2;
         x1 = canvas->drag_global_coordinates.first.first;
@@ -781,7 +782,7 @@ void FilterEditorFixed::snapshot_vfunc(const std::shared_ptr<Gtk::Snapshot> &sna
 
         if (1) {
             auto gradient = Cairo::LinearGradient::create(x1, y1, x2, y2);
-            double opacity = 0.5;
+            double opacity = 0.1;
             gradient->add_color_stop_rgba(0.0, 1.0, 0.5, 0.0,
                                           opacity + (1.0 - opacity) * conn->get_source_node()->get_selected()); // Red at 0%
             gradient->add_color_stop_rgba(1.0, 1.0, 0.5, 0.0,
@@ -860,7 +861,8 @@ void FilterEditorConnection::get_position(double &x1, double &y1, double &x2, do
     x1 = x;
     y1 = y;
     alloc = sink->get_allocation();
-    sink->translate_coordinates(*(canvas->get_canvas()), alloc.get_width() / 2, alloc.get_height() / 2, x, y);
+    
+    sink->translate_coordinates(*(canvas->get_canvas()), alloc.get_width() / 2 - 4, alloc.get_height() / 2, x, y);
     x2 = x;
     y2 = y;
 }
@@ -956,7 +958,7 @@ std::unique_ptr<UI::Widget::PopoverMenu> FilterEditorCanvas::create_menu()
     append(_("_Remove selected nodes"               ), &FilterEditorCanvas::delete_nodes         );
     append(_("_Focus to output"), &FilterEditorCanvas::align_to_output);
     append(_("_Toggle Attribute Editor"), &FilterEditorCanvas::toggle_params);
-    
+
     return menu;
 }
 
@@ -1106,7 +1108,7 @@ void FilterEditorCanvas::delete_nodes_without_prims(){
     
 }
 
-void FilterEditorCanvas::delete_nodes(){
+void FilterEditorCanvas::delete_nodes_without_undo(){
 
     modify_observer(true);
     auto filter = filter_list[current_filter_id]; 
@@ -1151,6 +1153,52 @@ void FilterEditorCanvas::delete_nodes(){
     canvas.queue_draw();
     modify_observer(false);
 }
+void FilterEditorCanvas::delete_nodes(){
+
+    modify_observer(true);
+    auto filter = filter_list[current_filter_id]; 
+        
+    for(auto it = selected_nodes[current_filter_id].begin(); it != selected_nodes[current_filter_id].end();){
+        auto node = *it;
+        
+        if(dynamic_cast<FilterEditorOutputNode*>(node) == nullptr){
+            // Delete all the connections
+            for (auto connection : node->connections) {
+                destroy_connection(connection);
+            }
+            while (node->sink_dock.get_first_child() != nullptr) {
+                node->sink_dock.remove(*node->sink_dock.get_first_child());
+            }
+            while (node->source_dock.get_first_child() != nullptr) {
+                node->source_dock.remove(*node->source_dock.get_first_child());
+            }
+            // Delete the node
+            auto prim_node = dynamic_cast<FilterEditorPrimitiveNode*>(node);
+            if (prim_node == nullptr){
+            } else {
+                auto prim = prim_node->get_primitive();
+                prim_node->unparent();
+                it = selected_nodes[current_filter_id].erase(it);
+                for(auto it2 = nodes[current_filter_id].begin(); it2 != nodes[current_filter_id].end();){
+                    if((it2->get()) == node){
+                        it2 = nodes[current_filter_id].erase(it2);
+                    }
+                    else{
+                        it2++;
+                    }
+                }
+                sp_repr_unparent(prim->getRepr()); 
+            }
+        }
+        else{
+            it++;
+        }
+    } 
+    update_document();
+    canvas.queue_draw();
+    DocumentUndo::done(filter->document, _("Deleted Nodes"), INKSCAPE_ICON("dialog-filters"));
+    modify_observer(false);
+}
 
 
 bool FilterEditorCanvas::primitive_node_exists(SPFilterPrimitive* primitive){
@@ -1171,7 +1219,7 @@ void FilterEditorCanvas::remove_filter(SPFilter* filter){
             for(int i = 0; i != nodes[filter_id].size(); i++){
                 selected_nodes[filter_id].push_back(nodes[filter_id][i].get());
             }
-            delete_nodes();
+            delete_nodes_without_undo();
             if(connections.find(filter_id) != connections.end())
                 connections.erase(connections.find(filter_id));
             if (selected_nodes.find(filter_id) != selected_nodes.end())
@@ -1355,9 +1403,21 @@ void FilterEditorCanvas::update_preview_filter(bool single_primitive){
 
         }
     }
-   
-    
+}
 
+void FilterEditorCanvas::toggle_preview(bool hide){
+    preview_active = !hide;
+    if(hide){
+        if(_preview->get_parent())
+            canvas.remove(*_preview);
+            // _preview->unparent();
+    }
+    else{
+        if(!_preview->get_parent()){
+            canvas.put(*_preview, 0, 0);
+        } 
+    }
+    queue_draw();
 }
 
 
@@ -1365,6 +1425,9 @@ void FilterEditorCanvas::update_preview_filter(bool single_primitive){
 
 void FilterEditorCanvas::refreshPreview(bool single_primitive)
 {
+    if(!preview_active){
+        return;
+    }
     std::vector<SPItem const *> selected;
     SPDesktop* _desktop = _dialog.getDesktop();
 
@@ -1387,6 +1450,7 @@ void FilterEditorCanvas::refreshPreview(bool single_primitive)
     _preview_drawing->set_shown_items(std::move(selected));
     auto alloc = get_allocation();
     _preview->set_size_request(alloc.get_width()/(zoom_fac), alloc.get_height()/(zoom_fac));
+    _preview->setSize(alloc.get_width()/(zoom_fac));
     
     auto bbox = item_ptr->documentVisualBounds();
     
@@ -1418,7 +1482,7 @@ void FilterEditorCanvas::update_canvas_new(){
     if(filter){
         SPDocument* document = preview_doc.get(); 
         auto col = Colors::Color::parse("#ffffff"); 
-        refreshPreview();
+        // refreshPreview();
         update_offset_from_document();
         if (std::find(filter_list.begin(), filter_list.end(), filter) == filter_list.end()){
             filter_list.push_back(filter);
@@ -2329,16 +2393,24 @@ void FilterEditorCanvas::event_handler(double x, double y)
                     // TODO: Give an error message
                 }
                 else{
-                    if(dynamic_cast<FilterEditorOutputNode*>(sink->get_parent_node()) != nullptr && starting_sink->get_parent_node()->get_connected_down_nodes().size() != 0){
+                    if(dynamic_cast<FilterEditorOutputNode*>(sink->get_parent_node()) != nullptr && starting_source->get_parent_node()->get_connected_down_nodes().size() != 0){
                         SPFilter* filter = get_current_filter();
                         _dialog._filter_modifier._observer->set(nullptr);
                         SPFilterPrimitive *prim = filter_add_primitive(filter, Filters::FilterPrimitiveType::NR_FILTER_MERGE);
                         int num_sinks = input_count(prim);
-                        add_primitive_node(prim, 0, 0, Filters::FilterPrimitiveType::NR_FILTER_MERGE, FPConverter.get_label(Filters::FilterPrimitiveType::NR_FILTER_MERGE), num_sinks);
+                        double x1, y1, x2, y2;
+                        sink->get_parent_node()->get_position(x1, y1);
+                        starting_source->get_parent_node()->get_position(x2, y2);
+                        double x_final, y_final;
+                        global_to_local((x1+x2)/2, (y1+y2)/2, x_final, y_final);
+                        auto merge_node = add_primitive_node(prim, x_final, y_final, Filters::FilterPrimitiveType::NR_FILTER_MERGE, FPConverter.get_label(Filters::FilterPrimitiveType::NR_FILTER_MERGE), num_sinks);
+                        create_connection(starting_source, merge_node->get_sink(0));
+                        create_connection(merge_node->get_source(), sink); 
                         update_document(); 
                         _dialog._filter_modifier._observer->set(filter);
+                    } else {
+                        create_connection(starting_source, sink);
                     }
-                    create_connection(starting_source, sink);
                 }
                 update_document();
             }
@@ -2648,10 +2720,18 @@ void FilterEditorCanvas::initialize_gestures()
             } else if (keyval == GDK_KEY_5) {
                 align_to_output();
             } else if (keyval == GDK_KEY_r) {
+                toggle_preview();
                 refreshPreview();
             } else if (keyval == GDK_KEY_s) {
+                toggle_preview();
                 refreshPreview(true);
+            } else if (keyval == GDK_KEY_h){
+                toggle_preview(preview_active);
+            } else if (keyval == GDK_KEY_Delete){
+
+                delete_nodes();
             }
+            grab_focus();
             return true;
         },
         false);
@@ -2687,13 +2767,14 @@ void FilterEditorCanvas::initialize_gestures()
                 auto const surface = dynamic_cast<Gtk::Native &>(*get_root()).get_surface();
                 g_assert(surface);
                 surface->get_device_position(device, mx, my, mask);
-                if ((mask & Gdk::ModifierType::SHIFT_MASK) == Gdk::ModifierType::SHIFT_MASK) {
-                    zoom_fac = zoom_fac + dy * 0.1;
+                if ((mask & Gdk::ModifierType::CONTROL_MASK) == Gdk::ModifierType::CONTROL_MASK) {
+                    zoom_fac = zoom_fac - dy * 0.1;
                     zoom_fac = std::max(0.5, std::min(2.0, zoom_fac));
 
                     Glib::RefPtr<Gtk::CssProvider> provider = Gtk::CssProvider::create();
                     canvas.get_style_context()->add_provider(provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
                     provider->load_from_data(".canvas-fixed { transform: scale(" + std::to_string(zoom_fac) + "); }");
+                    refreshPreview();
                     return true;
                 } else {
                     update_offsets(canvas.get_x_offset() + dx * SCROLL_SENS, canvas.get_y_offset() + dy * SCROLL_SENS);
