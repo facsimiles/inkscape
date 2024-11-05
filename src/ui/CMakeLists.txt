@@ -134,8 +134,6 @@ set(ui_SRC
 	dialog/export-batch.cpp
 	dialog/export-single.cpp
 	dialog/extensions-gallery.cpp
-	dialog/filedialog.cpp
-	dialog/filedialogimpl-gtkmm.cpp
 	dialog/fill-and-stroke.cpp
 	dialog/filter-effects-dialog.cpp
 	dialog/find.cpp
@@ -346,8 +344,6 @@ set(ui_SRC
 	dialog/export-batch.h
 	dialog/export-single.h
 	dialog/extensions-gallery.h
-	dialog/filedialog.h
-	dialog/filedialogimpl-gtkmm.h
 	dialog/fill-and-stroke.h
 	dialog/filter-effects-dialog.h
 	dialog/find.h
