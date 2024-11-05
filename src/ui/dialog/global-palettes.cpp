@@ -315,8 +315,8 @@ void load_ase_swatches(PaletteFileData& palette, std::string const &fname) {
             else if (mode == "LAB ") {
                 //TODO - verify scale
                 auto l = read_float(stream) * 100;
-                auto a = read_float(stream) * 100;
-                auto b = read_float(stream) * 100;
+                auto a = read_float(stream);
+                auto b = read_float(stream);
                 auto type = read_value<uint16_t>(stream);
                 auto mode = to_mode(type);
                 auto rgb = Hsluv::lab_to_rgb(l, a, b);
