@@ -122,8 +122,11 @@ create_open_filters() {
     return filters;
 }
 
+// Return a list of file filters for the Export dialog.
+// Optionally, return a custom list for the Save dialog (hopefully to disappear).
+// With native dialogs, we can only examine the file path on return.
 Glib::RefPtr<Gio::ListStore<Gtk::FileFilter>>
-create_export_filters() {
+create_export_filters(bool for_save) {
 
     auto filters = Gio::ListStore<Gtk::FileFilter>::create();
 
@@ -140,6 +143,18 @@ create_export_filters() {
 
     for (auto omod : extension_list) {
 
+        // std::cout << "  " << extension
+        //           << "  exported: " << std::boolalpha << omod->is_exported()
+        //           << "  raster: "   << std::boolalpha << omod->is_raster()
+        //           << "  save copy only: " << std::boolalpha << omod->savecopy_only()  // Always false!
+        //           << "  " << omod->get_filetypename()
+        //           << std::endl;
+
+        // Save dialogs cannot handle raster images.
+        if (for_save && omod->is_raster()) {
+            continue;
+        }
+
         gchar const * extension = omod->get_extension();
         if (extension[0]) {
             extension = extension + 1; // extension begins with '.', we need it without!
@@ -153,12 +168,6 @@ create_export_filters() {
         }
         file_extensions.push_back(extension);
 
-        // std::cout << "  " << extension
-        //           << "  exported: " << std::boolalpha << omod->is_exported()
-        //           << "  raster: "   << std::boolalpha << omod->is_raster()
-        //           << "  save copy only: " << std::boolalpha << omod->savecopy_only()  // Always false!
-        //           << "  " << omod->get_filetypename()
-        //           << std::endl;
 
         // For duplicate filename extensions, use simplified name.
         auto name = omod->get_filetypename(true);
