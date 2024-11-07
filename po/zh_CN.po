@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: Inkscape 0.92.x\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2024-10-14 20:04+0000\n"
-"PO-Revision-Date: 2024-10-20 13:17+0800\n"
+"PO-Revision-Date: 2024-11-06 11:29+0800\n"
 "Last-Translator: 驿窗 <classenu@163.com>\n"
 "Language-Team: <https://chat.inkscape.org>\n"
 "Language: zh_CN\n"
@@ -7063,7 +7063,7 @@ msgstr "从平铺填充图案提取对象"
 
 #: ../src/actions/actions-edit.cpp:293
 msgid "Objects to Marker"
-msgstr "对象转化为箭头"
+msgstr "对象转为箭头"
 
 #: ../src/actions/actions-edit.cpp:293
 msgid "Convert selection to a line marker"
@@ -9219,13 +9219,13 @@ msgstr "选择所有带有相同描边的对象作为选择对象"
 
 #: ../src/actions/actions-selection-window.cpp:129
 msgid "Stroke Style"
-msgstr "描边样式"
+msgstr "描边线型"
 
 #: ../src/actions/actions-selection-window.cpp:129
 msgid ""
 "Select all objects with the same stroke style (width, dash, markers) as the "
 "selected objects"
-msgstr "选择所有带有相同描边样式(宽度、画线、箭头)的对象为选择的对象"
+msgstr "选择所有带有相同描边线型(宽度、画线、箭头)的对象为选择的对象"
 
 #: ../src/actions/actions-selection-window.cpp:130
 msgid "Object Type"
@@ -10117,15 +10117,15 @@ msgstr "使用书法工具"
 
 #: ../src/actions/actions-tutorial.cpp:62
 msgid "Inkscape: Interpolate"
-msgstr "Inkscape：插值"
+msgstr "Inkscape：插补"
 
 #: ../src/actions/actions-tutorial.cpp:62
 msgid "Using the interpolate extension"
-msgstr "使用插值扩展"
+msgstr "使用插补扩展"
 
 #: ../src/actions/actions-tutorial.cpp:63
 msgid "Elements of Design"
-msgstr "设计元素"
+msgstr "设计要素"
 
 #: ../src/actions/actions-tutorial.cpp:63
 msgid "Principles of design in the tutorial form"
@@ -14948,7 +14948,7 @@ msgstr "填充绘制"
 
 #: ../src/filter-enums.cpp:50
 msgid "Stroke Paint"
-msgstr "描边绘制"
+msgstr "描边"
 
 #: ../src/filter-enums.cpp:57
 msgid "Matrix"
@@ -15070,24 +15070,24 @@ msgstr "线性渐变<b>中间色标</b>"
 #: ../src/gradient-drag.cpp:78 ../src/ui/tools/gradient-tool.cpp:84
 #: ../src/ui/tools/mesh-tool.cpp:114
 msgid "Radial gradient <b>center</b>"
-msgstr "辐向渐变<b>中心</b>"
+msgstr "径向渐变<b>中心</b>"
 
 #: ../src/gradient-drag.cpp:79 ../src/gradient-drag.cpp:80
 #: ../src/ui/tools/gradient-tool.cpp:85 ../src/ui/tools/gradient-tool.cpp:86
 #: ../src/ui/tools/mesh-tool.cpp:115 ../src/ui/tools/mesh-tool.cpp:116
 msgid "Radial gradient <b>radius</b>"
-msgstr "辐向渐变<b>半径</b>"
+msgstr "径向渐变<b>半径</b>"
 
 #: ../src/gradient-drag.cpp:81 ../src/ui/tools/gradient-tool.cpp:87
 #: ../src/ui/tools/mesh-tool.cpp:117
 msgid "Radial gradient <b>focus</b>"
-msgstr "辐向渐变<b>焦点</b>"
+msgstr "径向渐变<b>焦点</b>"
 
 #: ../src/gradient-drag.cpp:82 ../src/gradient-drag.cpp:83
 #: ../src/ui/tools/gradient-tool.cpp:88 ../src/ui/tools/gradient-tool.cpp:89
 #: ../src/ui/tools/mesh-tool.cpp:118 ../src/ui/tools/mesh-tool.cpp:119
 msgid "Radial gradient <b>mid stop</b>"
-msgstr "辐向渐变<b>中间色标</b>"
+msgstr "径向渐变<b>中间色标</b>"
 
 #: ../src/gradient-drag.cpp:84 ../src/ui/tools/gradient-tool.cpp:90
 #: ../src/ui/tools/mesh-tool.cpp:120
@@ -15146,7 +15146,7 @@ msgstr ""
 msgid ""
 "Radial gradient <b>center</b> and <b>focus</b>; drag with <b>Shift</b> to "
 "separate focus"
-msgstr "辐向渐变<b>中心</b><b>焦点</b>；按住 <b>Shift</b> 拖动分开焦点"
+msgstr "径向渐变<b>中心</b><b>焦点</b>；按住 <b>Shift</b> 拖动分开焦点"
 
 #: ../src/gradient-drag.cpp:1541
 #, c-format
@@ -15822,7 +15822,7 @@ msgstr "标尺"
 msgid ""
 "Add ruler marks to the object in adjustable intervals, using the object's stroke "
 "style."
-msgstr "使用对象的描边样式，以可调整的间隔在对象上添加标尺标记。"
+msgstr "使用对象的描边线型，以可调整的间隔在对象上添加标尺标记。"
 
 #: ../src/live_effects/effect.cpp:286
 msgctxt "path effect"
@@ -19642,19 +19642,19 @@ msgstr "选择是否偏移行或列"
 
 #: ../src/live_effects/lpe-tiling.cpp:101
 msgid "Interpolate scale X"
-msgstr "X 方向插值缩放"
+msgstr "X 方向插补缩放"
 
 #: ../src/live_effects/lpe-tiling.cpp:101
 msgid "Interpolate tile size in each row"
-msgstr "在每一行插值拼贴尺寸"
+msgstr "在每一行插补拼贴尺寸"
 
 #: ../src/live_effects/lpe-tiling.cpp:102
 msgid "Interpolate scale Y"
-msgstr "Y 方向插值缩放"
+msgstr "Y 方向插补缩放"
 
 #: ../src/live_effects/lpe-tiling.cpp:102
 msgid "Interpolate tile size in each column"
-msgstr "在每一列插值拼贴尺寸"
+msgstr "在每一列插补拼贴尺寸"
 
 #: ../src/live_effects/lpe-tiling.cpp:103
 msgid "Minimize gaps"
@@ -19667,19 +19667,19 @@ msgstr "最小化缩放对象之间的间隙(不适用旋转/对角线模式)"
 
 #: ../src/live_effects/lpe-tiling.cpp:104
 msgid "Interpolate rotation X"
-msgstr "X 方向插值旋转"
+msgstr "X 方向插补旋转"
 
 #: ../src/live_effects/lpe-tiling.cpp:104
 msgid "Interpolate tile rotation in row"
-msgstr "按行插值拼贴旋转"
+msgstr "按行插补拼贴旋转"
 
 #: ../src/live_effects/lpe-tiling.cpp:105
 msgid "Interpolate rotation Y"
-msgstr "Y 方向插值旋转"
+msgstr "Y 方向插补旋转"
 
 #: ../src/live_effects/lpe-tiling.cpp:105
 msgid "Interpolate tile rotation in column"
-msgstr "按列插值拼贴旋转"
+msgstr "按列插补拼贴旋转"
 
 #: ../src/live_effects/lpe-tiling.cpp:106
 msgid ""
@@ -19802,23 +19802,23 @@ msgstr "偏移间隔的列"
 
 #: ../src/live_effects/lpe-tiling.cpp:851 ../src/live_effects/lpe-tiling.cpp:888
 msgid "Interpolate X"
-msgstr "插值 X"
+msgstr "插补 X"
 
 #: ../src/live_effects/lpe-tiling.cpp:852 ../src/live_effects/lpe-tiling.cpp:889
 msgid "Interpolate Y"
-msgstr "插值 Y"
+msgstr "插补 Y"
 
 #: ../src/live_effects/lpe-tiling.cpp:853 ../src/live_effects/lpe-tiling.cpp:890
 msgid "Interpolate both"
-msgstr "都插值"
+msgstr "都插补"
 
 #: ../src/live_effects/lpe-tiling.cpp:854 ../src/live_effects/lpe-tiling.cpp:891
 msgid "No interpolation"
-msgstr "无插值"
+msgstr "无插补"
 
 #: ../src/live_effects/lpe-tiling.cpp:855 ../src/live_effects/lpe-tiling.cpp:892
 msgid "Interpolate random"
-msgstr "随机插值"
+msgstr "随机插补"
 
 #: ../src/live_effects/lpe-tiling.cpp:867
 msgid ""
@@ -21867,7 +21867,7 @@ msgstr "描边颜色(_S)"
 
 #: ../src/ui/contextmenu.cpp:257 ../share/ui/menus.ui:300
 msgid "Stroke St_yle"
-msgstr "描边样式(_Y)"
+msgstr "描边线型(_Y)"
 
 #: ../src/ui/contextmenu.cpp:258 ../share/ui/menus.ui:305
 msgid "_Object Type"
@@ -22884,7 +22884,7 @@ msgstr "输入搜索内容查找命令"
 
 #: ../src/ui/dialog/command-palette.cpp:1117
 msgid "Enter action argument"
-msgstr "插值方式"
+msgstr "输入操作参数"
 
 #: ../src/ui/dialog/command-palette.cpp:1145
 msgid "History mode"
@@ -23908,11 +23908,11 @@ msgstr "填充(_F)"
 
 #: ../src/ui/dialog/fill-and-stroke.cpp:55
 msgid "Stroke _paint"
-msgstr "描边绘制(_P)"
+msgstr "描边(_P)"
 
 #: ../src/ui/dialog/fill-and-stroke.cpp:56
 msgid "Stroke st_yle"
-msgstr "描边样式(_Y)"
+msgstr "描边线型(_Y)"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:315
 msgid "Select color"
@@ -23979,7 +23979,7 @@ msgstr "数值"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:984
 msgid "List of stops with interpolated output"
-msgstr "带插值结果的色标列表"
+msgstr "带插补结果的色标列表"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:987
 msgid "List of discrete values for a step function"
@@ -24292,7 +24292,7 @@ msgstr "值:"
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2959
 msgctxt "color"
 msgid "R:"
-msgstr "旋转:"
+msgstr "红色:"
 
 #. TRANSLATORS: Abbreviation for green color channel in RGBA
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2961
@@ -28975,7 +28975,7 @@ msgstr "剪裁路径和蒙版"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2804
 msgid "Stroke Style Markers"
-msgstr "描边样式箭头"
+msgstr "描边线型箭头"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2806
 #: ../src/ui/dialog/inkscape-preferences.cpp:2808
@@ -31599,13 +31599,13 @@ msgstr "图形生成"
 msgid ""
 "Adjust the <b>horizontal rounding</b> radius; with <b>Ctrl</b> to make the "
 "vertical radius the same"
-msgstr "调节<b>水平圆角</b>半径;按住 <b>Ctrl</b> 使垂直半径也相同"
+msgstr "调节<b>圆角x轴</b>半径; 按住<b>Ctrl</b>使y轴半径也相同"
 
 #: ../src/ui/shape-editor-knotholders.cpp:580
 msgid ""
 "Adjust the <b>vertical rounding</b> radius; with <b>Ctrl</b> to make the "
 "horizontal radius the same"
-msgstr "调节<b>垂直圆角</b>半径;按住 <b>Ctrl</b> 使水平半径也相同"
+msgstr "调节<b>圆角y轴</b>半径; 按住<b>Ctrl</b>使x轴半径也相同"
 
 #: ../src/ui/shape-editor-knotholders.cpp:584
 #: ../src/ui/shape-editor-knotholders.cpp:588
@@ -32457,7 +32457,7 @@ msgstr "(剧烈的波浪和卷曲)"
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:394
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:491
 msgid "No preset"
-msgstr "无预置"
+msgstr "无预设"
 
 #: ../src/ui/toolbar/connector-toolbar.cpp:189
 msgid "Set connector type: orthogonal"
@@ -34406,7 +34406,7 @@ msgstr "修正RGB回落匹配icc-color()值。"
 #: ../src/ui/widget/color-scales.cpp:694 ../src/ui/widget/color-scales.cpp:730
 #: ../src/ui/widget/color-scales.cpp:770
 msgid "_A:"
-msgstr "透明(_A)："
+msgstr "_A:"
 
 #: ../src/ui/widget/color-icc-selector.cpp:418
 #: ../src/ui/widget/color-icc-selector.cpp:429 ../src/ui/widget/color-scales.cpp:590
@@ -35654,7 +35654,7 @@ msgstr "线性渐变"
 
 #: ../src/ui/widget/paint-selector.cpp:167 ../share/ui/gradient-edit.glade:48
 msgid "Radial gradient"
-msgstr "辐向渐变"
+msgstr "径向渐变"
 
 #: ../src/ui/widget/paint-selector.cpp:170
 msgid "Mesh gradient"
@@ -35847,11 +35847,11 @@ msgstr "<b>辐</b>"
 
 #: ../src/ui/widget/selected-style.cpp:85 ../src/ui/widget/style-swatch.cpp:264
 msgid "Radial gradient (fill)"
-msgstr "辐向渐变(填充)"
+msgstr "径向渐变(填充)"
 
 #: ../src/ui/widget/selected-style.cpp:86 ../src/ui/widget/style-swatch.cpp:264
 msgid "Radial gradient (stroke)"
-msgstr "辐向渐变(描边)"
+msgstr "径向渐变(描边)"
 
 #: ../src/ui/widget/selected-style.cpp:87 ../src/ui/widget/selected-style.cpp:88
 msgid "<b>M</b>"
@@ -36243,7 +36243,7 @@ msgstr "设置描边斜接"
 
 #: ../src/ui/widget/stroke-style.cpp:1135
 msgid "Set stroke style"
-msgstr "设置描边样式"
+msgstr "设置描边线型"
 
 #: ../src/ui/widget/style-swatch.cpp:258
 msgid "L Gradient"
@@ -37173,7 +37173,7 @@ msgstr "稀疏像素："
 
 #: ../share/ui/dialog-trace.glade:931 ../share/ui/dialog-trace.glade:974
 msgid "The heuristic computed vote will be multiplied by this value"
-msgstr "启发式计算的票数将会乘以该值"
+msgstr "探测方式计算的票数将会乘以该值"
 
 #: ../share/ui/dialog-trace.glade:946
 msgid "A constant vote value"
@@ -37185,11 +37185,11 @@ msgstr "分析的窗口的半径"
 
 #: ../share/ui/dialog-trace.glade:989
 msgid " Heuristics:"
-msgstr " 启发式："
+msgstr " 探测方式："
 
 #: ../share/ui/dialog-trace.glade:1056
 msgid "B-splines"
-msgstr "B样线条"
+msgstr "B-splines"
 
 #: ../share/ui/dialog-trace.glade:1059
 msgid "Preserve staircasing artifacts"
@@ -38062,7 +38062,7 @@ msgstr "垂直方向圆角半径"
 #: ../share/ui/toolbar-page.ui:143 ../share/ui/toolbar-page.ui:171
 #: ../share/ui/toolbar-page.ui:200 ../share/ui/toolbar-rect.ui:223
 msgid "Make corners sharp"
-msgstr "使角度锐利"
+msgstr "圆角改直角"
 
 #: ../share/ui/object-attributes.glade:607
 msgid "Make corners independent (path effect)"
@@ -39129,11 +39129,11 @@ msgstr "Inkscape：书法(_C)"
 
 #: ../share/ui/menus.ui:1264
 msgid "Inkscape: _Interpolate"
-msgstr "Inkscape：插值(_I)"
+msgstr "Inkscape：插补(_I)"
 
 #: ../share/ui/menus.ui:1268
 msgid "_Elements of Design"
-msgstr "设计元素(_E)"
+msgstr "设计要素(_E)"
 
 #: ../share/ui/menus.ui:1272
 msgid "_Tips and Tricks"
@@ -40897,7 +40897,7 @@ msgstr "你选择了“其他”。请输入要插入的属性。"
 
 #: ../share/extensions/interp_att_g.py:185
 msgid "There is no selection to interpolate"
-msgstr "没有选择要插值的内容"
+msgstr "没有选择要插补的对象"
 
 #: ../share/extensions/jessyink_autotexts.py:35
 msgid ""
@@ -43763,22 +43763,22 @@ msgstr "模糊高度:"
 
 #: ../share/extensions/interp.inx:3
 msgid "Interpolate Between Paths"
-msgstr "内插子路径"
+msgstr "插补"
 
 #: ../share/extensions/interp.inx:6
 msgid "Interpolation steps:"
-msgstr "插值步数:"
+msgstr "插补步数:"
 
 #: ../share/extensions/interp.inx:7
 msgid "Interpolation method:"
-msgstr "插值方式:"
+msgstr "插补方式:"
 
 #: ../share/extensions/interp.inx:7
 msgid ""
 "The first option rediscretizes both paths before the interpolation with the other "
 "path's node positions. The second option removes extra nodes of the longer path."
 msgstr ""
-"第一个选项在用另一条路径的节点位置进行插值之前对两条路径进行重新分解。第二个选项是"
+"第一个选项在用另一条路径的节点位置进行插补之前对两条路径进行重新分解。第二个选项是"
 "删除较长路径的额外节点(如果两条子路径的长度相等，会产生很好的结果)"
 
 #: ../share/extensions/interp.inx:8
@@ -43791,11 +43791,11 @@ msgstr "丢弃较长路径的多余节点"
 
 #: ../share/extensions/interp.inx:11
 msgid "Duplicate endpaths"
-msgstr "创建终点路径的副本"
+msgstr "创建两端路径的副本"
 
 #: ../share/extensions/interp.inx:12
 msgid "Interpolate style"
-msgstr "插值样式"
+msgstr "插补样式"
 
 #: ../share/extensions/interp.inx:13 ../share/extensions/interp_att_g.inx:42
 msgid "Use Z-order"
@@ -43810,11 +43810,11 @@ msgstr "在实时预览循环中反向选择顺序的解决方案"
 
 #: ../share/extensions/interp_att_g.inx:3
 msgid "Interpolate Attribute in a Group"
-msgstr "群组中的插值属性"
+msgstr "群组中的插补属性"
 
 #: ../share/extensions/interp_att_g.inx:7
 msgid "Attribute to Interpolate:"
-msgstr "要插值的属性:"
+msgstr "要插补的属性:"
 
 #: ../share/extensions/interp_att_g.inx:11
 msgid "Translate X"
@@ -43888,8 +43888,8 @@ msgid ""
 "This effect applies a value for any interpolatable attribute for all elements "
 "inside the selected group or for all elements in a multiple selection."
 msgstr ""
-"这个效果应用一个值于选择组中的所有元素的任何可插值属性，或者一个多项选择中的所有元"
-"素的任何可插值属性。"
+"这个效果应用一个值于选择组中的所有元素的任何可插补属性，或者一个多项选择中的所有元"
+"素的任何可插补属性。"
 
 #: ../share/extensions/jessyink_autotexts.inx:3
 msgid "Auto-texts"
@@ -45274,7 +45274,7 @@ msgstr ""
 "\n"
 "Gcodetools 插件：\n"
 "将路径转换为Gcode(使用圆弧插补)、制作偏移路径并使用锥形铣刀雕刻锐角。\n"
-"该插件可在需要时使用圆弧插值或线性运动为路径计算Gcode。\n"
+"该插件可在需要时使用圆弧插补或线性运动为路径计算Gcode。\n"
 "\n"
 "教程、手册和支持可在\n"
 "英语支持论坛找到：\n"
@@ -45409,7 +45409,7 @@ msgstr "Gcode的路径"
 #: ../share/extensions/other/gcodetools/gcodetools_lathe.inx:29
 #: ../share/extensions/other/gcodetools/gcodetools_path_to_gcode.inx:9
 msgid "Biarc interpolation tolerance:"
-msgstr "双弧插值公差:"
+msgstr "双弧插补公差:"
 
 #: ../share/extensions/other/gcodetools/gcodetools_area.inx:49
 #: ../share/extensions/other/gcodetools/gcodetools_lathe.inx:30
@@ -45466,8 +45466,8 @@ msgid ""
 "depth defined by orientation points, s - surface defined by orientation points.\n"
 msgstr ""
 "\n"
-"Biarc 插值公差是路径和其近似值之间的最大距离。\n"
-"如果路径的线段与其近似值之间的距离超过biarc插值公差，则该段将被分成两段。\n"
+"Biarc 插补公差是路径和其近似值之间的最大距离。\n"
+"如果路径的线段与其近似值之间的距离超过biarc插补公差，则该段将被分成两段。\n"
 "对于深度函数 c = 从 0.0(白色)到 1.0(黑色)的颜色强度，d 是由方向点定义的深度，s - "
 "由方向点限定的曲面。\n"
 
@@ -45918,7 +45918,7 @@ msgstr ""
 "\n"
 "Gcodetools 插件：\n"
 "将路径转换为Gcode(使用圆弧插补)、制作偏移路径并使用锥形铣刀雕刻锐角。该插件可在需"
-"要时使用圆弧插值或线性运动为路径计算Gcode。\n"
+"要时使用圆弧插补或线性运动为路径计算Gcode。\n"
 "\n"
 "教程、手册和支持可在英语支持论坛 http://www.cnc-club.ru/gcodetools 和俄语支持论坛 "
 "http://www.cnc-club.ru/gcodetoolsru 上找到。\n"
@@ -46075,8 +46075,8 @@ msgid ""
 msgstr ""
 "\n"
 "Gcodetools 插件：\n"
-"将路径转换为Gcode(使用圆弧插值)、制作偏移路径并使用锥形铣刀雕刻锐角。\n"
-"该插件可在需要时使用圆弧插值或线性运动为路径计算Gcode。\n"
+"将路径转换为Gcode(使用圆弧插补)、制作偏移路径并使用锥形铣刀雕刻锐角。\n"
+"该插件可在需要时使用圆弧插补或线性运动为路径计算Gcode。\n"
 "\n"
 "教程、手册和支持可在\n"
 "英语支持论坛找到：\n"
@@ -50051,9 +50051,6 @@ msgstr "字体高度的一半"
 #~ msgid "Arc (Open)"
 #~ msgstr "弧(开放)"
 
-#~ msgid "Make whole"
-#~ msgstr "补完形状"
-
 #~ msgid "State of VP in X direction"
 #~ msgstr "X 向消失点(VP)的状态"
 
@@ -50438,10 +50435,6 @@ msgstr "字体高度的一半"
 #~ "由 <b>%d</b> 个立方体共用<b>有限</b>消失点;按下 <b>Shift</b> 拖拽可分离选中的立"
 #~ "方体"
 
-#~ msgctxt "canvas"
-#~ msgid "R:"
-#~ msgstr "旋转:"
-
 #~ msgid "Centre Page"
 #~ msgstr "置中页面"
 
@@ -50465,12 +50458,6 @@ msgstr "字体高度的一半"
 
 #~ msgid "LPEName"
 #~ msgstr "LPE 名称"
-
-#~ msgid "Move up"
-#~ msgstr "上移"
-
-#~ msgid "Move down"
-#~ msgstr "下移"
 
 #~ msgid "_Input Devices..."
 #~ msgstr "输入设备(_I)"
@@ -51274,7 +51261,7 @@ msgstr "字体高度的一半"
 #~ msgstr "勾选这个显示路径之间的移动(默认:不勾选)"
 
 #~ msgid "Interpolate"
-#~ msgstr "插值"
+#~ msgstr "插补"
 
 #~ msgid "Motion"
 #~ msgstr "运动"
@@ -52307,9 +52294,6 @@ msgstr "字体高度的一半"
 #~ msgid "Width scale all points"
 #~ msgstr "列出所有字体"
 
-#~ msgid "Slice the arc"
-#~ msgstr "执行临摹"
-
 #~ msgid "Start point of the taper"
 #~ msgstr "锥体的起点"
 
@@ -52752,9 +52736,6 @@ msgstr "字体高度的一半"
 #~ msgid "Close gaps:"
 #~ msgstr "闭合缺口："
 
-#~ msgid "Shape:"
-#~ msgstr "形状："
-
 #~ msgid "Cap for powerstroke pressure"
 #~ msgstr "薄纸纹理上的蜡染"
 
@@ -53010,7 +52991,7 @@ msgstr "字体高度的一半"
 #~ msgstr "从渐变中删除当前控制分段点"
 
 #~ msgid "<b>Radial gradient</b>"
-#~ msgstr "<b>辐向渐变</b>"
+#~ msgstr "<b>径向渐变</b>"
 
 #~ msgid "Create a single path or create a group of paths"
 #~ msgstr "创建一条路径或一组路径"
