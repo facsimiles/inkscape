@@ -1312,7 +1312,7 @@ void SvgBuilder::updateFont(GfxState *state, std::shared_ptr<CairoFont> cairo_fo
     TRACE(("updateFont()\n"));
     updateTextMatrix(state, flip);    // Ensure that we have a text matrix built
 
-    auto font = state->getFont();
+    auto font = state->getFont();  // GfxFont
     auto font_id = font->getID()->num;
 
     auto new_font_size = state->getFontSize();
@@ -1777,6 +1777,10 @@ void SvgBuilder::_setTextStyle(Inkscape::XML::Node *node, GfxState *state, SPCSS
 /**
  * Renders the text as a path object using cairo and returns the node object.
  *
+ * If the path is empty (e.g. due to trying to render a color bitmap font),
+ * return path node with empty "d" attribute. The aria attribute will still
+ * contain the original text.
+ *
  * cairo_font   - The font that cairo can use to convert text to path.
  * font_size    - The size of the text when drawing the path.
  * transform    - The matrix which will place the text on the page, this is critical
@@ -1788,8 +1792,13 @@ Inkscape::XML::Node *SvgBuilder::_renderText(std::shared_ptr<CairoFont> cairo_fo
                                              const Geom::Affine &transform,
                                              cairo_glyph_t *cairo_glyphs, unsigned int count)
 {
-    if (!cairo_glyphs || !cairo_font || _aria_label.empty())
-        return nullptr;
+    Inkscape::XML::Node *path = _addToContainer("svg:path");
+    path->setAttribute("d", "");
+
+    if (!cairo_glyphs || !cairo_font || _aria_label.empty()) {
+        std::cerr << "SvgBuilder::_renderText: Invalid argument!" << std::endl;
+        return path;
+    }
 
     // The surface isn't actually used, no rendering in cairo takes place.
     cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, _width, _height);
@@ -1804,16 +1813,17 @@ Inkscape::XML::Node *SvgBuilder::_renderText(std::shared_ptr<CairoFont> cairo_fo
 
     // Failing to render text.
     if (!pathv) {
-        g_warning("Failed to render PDF text!");
-        return nullptr;
+        std::cerr << "SvgBuilder::_renderText: Failed to render PDF text! " << _aria_label << std::endl;
+        return path;
     }
 
     auto textpath = sp_svg_write_path(*pathv);
-    if (textpath.empty())
-        return nullptr;
-
-    Inkscape::XML::Node *path = _addToContainer("svg:path");
     path->setAttribute("d", textpath);
+
+    if (textpath.empty()) {
+        std::cerr << "SvgBuilder::_renderText: Empty path! " << _aria_label << std::endl;
+    }
+
     return path;
 }
 
@@ -1851,7 +1861,7 @@ void SvgBuilder::endString(GfxState *state)
  * dx, dy:  Advance of glyph.
  * originX, originY
  * code: 8-bit char code, 16 bit CID, or Unicode of glyph.
- * u: Unicode mapping of character.
+ * u: Unicode mapping of character. "Unicode" is an unsigned int.
  */
 void SvgBuilder::addChar(GfxState *state, double x, double y, double dx, double dy, double originX, double originY,
                          CharCode code, int /*nBytes*/, Unicode const *u, int uLen)
@@ -1867,9 +1877,13 @@ void SvgBuilder::addChar(GfxState *state, double x, double y, double dx, double 
     }
     _aria_space = false;
 
+    std::string utf8_code;
     static std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> conv1;
+    // Note std::wstring_convert and std::codecvt_utf are deprecated and will be removed in C++26.
     if (u) {
-        _aria_label += conv1.to_bytes(*u);
+        // 'u' maybe null if there is not a "ToUnicode" table in the PDF!
+        utf8_code = conv1.to_bytes(*u);
+        _aria_label += utf8_code;
     }
 
     // Skip control characters, found in LaTeX generated PDFs
@@ -1901,6 +1915,7 @@ void SvgBuilder::addChar(GfxState *state, double x, double y, double dx, double 
     }
 
     SvgGlyph new_glyph;
+    new_glyph.code = utf8_code;
     new_glyph.is_space = is_space;
     new_glyph.delta = delta;
     new_glyph.position = Geom::Point( x - originX, y - originY );
@@ -1914,23 +1929,6 @@ void SvgBuilder::addChar(GfxState *state, double x, double y, double dx, double 
         new_glyph.cairo_index = _cairo_font->getGlyph(code, u, uLen);
     }
     _text_position += delta;
-
-    // Convert the character to UTF-8 since that's our SVG document's encoding
-    {
-        gunichar2 uu[8] = {0};
-
-        for (int i = 0; i < uLen; i++) {
-            uu[i] = u[i];
-        }
-
-        gchar *tmp = g_utf16_to_utf8(uu, uLen, nullptr, nullptr, nullptr);
-        if ( tmp && *tmp ) {
-            new_glyph.code = tmp;
-        } else {
-            new_glyph.code.clear();
-        }
-        g_free(tmp);
-    }
 
     // Copy current style if it has changed since the previous glyph
     if (_invalidated_style || _glyphs.empty()) {
