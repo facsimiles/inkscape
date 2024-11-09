@@ -694,6 +694,10 @@ ObjectWatcher* ObjectsPanel::getWatcher(Node *node)
 {
     assert(node);
 
+    if (root_watcher == nullptr) {
+        return nullptr;
+    }
+
     if (root_watcher->getRepr() == node) {
         return root_watcher.get();
     }
@@ -1145,6 +1149,10 @@ bool ObjectsPanel::showChildInTree(SPItem *item) {
  */
 ObjectWatcher *ObjectsPanel::unpackToObject(SPObject *item)
 {
+    if (root_watcher == nullptr) {
+        return nullptr;
+    }
+
     ObjectWatcher *watcher = nullptr;
 
     for (auto &parent : item->ancestorList(true)) {
@@ -1176,6 +1184,10 @@ void ObjectsPanel::selectionChanged(Selection *selected /* not used */)
 
 bool ObjectsPanel::_selectionChanged()
 {
+    if (root_watcher == nullptr) {
+        return false;
+    }
+
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     root_watcher->setSelectedBitRecursive(SELECTED_OBJECT, false);
     bool keep_current_item = false;
@@ -1219,6 +1231,10 @@ bool ObjectsPanel::_selectionChanged()
  */
 void ObjectsPanel::layerChanged(SPObject *layer)
 {
+    if (root_watcher == nullptr) {
+        return;
+    }
+
     root_watcher->setSelectedBitRecursive(LAYER_FOCUS_CHILD | LAYER_FOCUSED, false);
 
     if (!layer || !layer->getRepr()) return;
@@ -1272,7 +1288,7 @@ bool ObjectsPanel::toggleVisible(Gdk::ModifierType const state, Gtk::TreeModel::
     auto desktop = getDesktop();
     auto selection = getSelection();
 
-    if (SPItem* item = getItem(row)) { 
+    if (SPItem* item = getItem(row)) {
         if (Controller::has_flag(state, Gdk::ModifierType::SHIFT_MASK)) {
             // Toggle Visible for layers (hide all other layers)
             if (desktop->layerManager().isLayer(item)) {
@@ -1342,7 +1358,7 @@ bool ObjectsPanel::toggleLocked(Gdk::ModifierType const state, Gtk::TreeModel::R
     auto desktop = getDesktop();
     auto selection = getSelection();
 
-    if (SPItem* item = getItem(row)) { 
+    if (SPItem* item = getItem(row)) {
         if (Controller::has_flag(state, Gdk::ModifierType::SHIFT_MASK)) {
             // Toggle lock for layers (lock all other layers)
             if (desktop->layerManager().isLayer(item)) {
@@ -1918,7 +1934,7 @@ bool ObjectsPanel::on_drag_drop(Glib::ValueBase const &/*value*/, double x, doub
             return true;
         }
     }
-    
+
     auto drop_repr = getRepr(*_store->get_iter(path));
     bool const drop_into = pos != Gtk::TreeView::DropPosition::BEFORE && //
                            pos != Gtk::TreeView::DropPosition::AFTER;
