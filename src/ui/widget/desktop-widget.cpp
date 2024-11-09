@@ -487,21 +487,6 @@ bool SPDesktopWidget::warnDialog (Glib::ustring const &text)
     return response == Gtk::ResponseType::OK;
 }
 
-void
-SPDesktopWidget::fullscreen()
-{
-    GtkWindow *topw = GTK_WINDOW(gtk_widget_get_root(_canvas->Gtk::Widget::gobj()));
-    if (GTK_IS_WINDOW(topw)) {
-        if (_desktop->is_fullscreen()) {
-            gtk_window_unfullscreen(topw);
-            // widget layout is triggered by the resulting window_state_event
-        } else {
-            gtk_window_fullscreen(topw);
-            // widget layout is triggered by the resulting window_state_event
-        }
-    }
-}
-
 /**
  * Hide whatever the user does not want to see in the window.
  * Also move command toolbar to top or side as required.
