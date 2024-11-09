@@ -254,24 +254,29 @@ SelectedStyle::SelectedStyle()
     make_popup_units();
 }
 
-void
-SelectedStyle::setDesktop(SPDesktop *desktop)
+void SelectedStyle::setDesktop(SPDesktop *desktop)
 {
+    if (_desktop) {
+        selection_changed_connection.disconnect();
+        selection_modified_connection.disconnect();
+    }
+
     _desktop = desktop;
 
-    Inkscape::Selection *selection = desktop->getSelection();
+    if (_desktop) {
+        auto selection = desktop->getSelection();
 
-    selection_changed_connection = selection->connectChanged(
-        sigc::bind(&ss_selection_changed, this)
-    );
-    selection_modified_connection = selection->connectModified(
-        sigc::bind(&ss_selection_modified, this)
-    );
+        selection_changed_connection = selection->connectChanged(
+            sigc::bind(&ss_selection_changed, this)
+        );
+        selection_modified_connection = selection->connectModified(
+            sigc::bind(&ss_selection_modified, this)
+        );
+        update();
 
-    _sw_unit = desktop->getNamedView()->display_units;
+        _sw_unit = desktop->getNamedView()->display_units;
+    }
 }
-
-
 
 void SelectedStyle::on_fill_remove() {
     SPCSSAttr *css = sp_repr_css_attr_new ();
