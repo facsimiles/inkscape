@@ -1049,6 +1049,18 @@ SPDesktop::warnDialog (Glib::ustring const &text)
     return _widget->warnDialog (text);
 }
 
+void SPDesktop::setRenderMode(Inkscape::RenderMode mode)
+{
+    canvas->set_render_mode(mode);
+    setWindowTitle();
+}
+
+void SPDesktop::setColorMode(Inkscape::ColorMode mode)
+{
+    canvas->set_color_mode(mode);
+    setWindowTitle();
+}
+
 void
 SPDesktop::toggleCommandPalette() {
     _widget->toggle_command_palette();

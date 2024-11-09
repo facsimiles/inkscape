@@ -42,6 +42,7 @@
 #include <2geom/transforms.h>
 #include <2geom/parallelogram.h>
 
+#include "display/rendermode.h"
 #include <sigc++/scoped_connection.h>
 #include "message-stack.h"
 #include "object/sp-gradient.h" // TODO refactor enums out to their own .h file
@@ -373,6 +374,9 @@ public:
 
     void showInfoDialog(Glib::ustring const &message);
     bool warnDialog (Glib::ustring const &text);
+
+    void setRenderMode(Inkscape::RenderMode mode);
+    void setColorMode(Inkscape::ColorMode  mode);
 
     void toggleCommandPalette();
     void toggleRulers();
