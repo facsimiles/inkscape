@@ -237,10 +237,6 @@ SPDesktop::~SPDesktop()
     }
 
     _guides_message_context = nullptr;
-
-    if (document) {
-        INKSCAPE.remove_document(document);
-    }
 }
 
 //--------------------------------------------------------------------
@@ -1278,9 +1274,7 @@ SPDesktop::setDocument (SPDocument *doc)
     // Formerly in View::View VVVVVVVVVVVVVVVVVVV
     if (document) {
         _document_uri_set_connection.disconnect();
-        INKSCAPE.remove_document(document);
     }
-    INKSCAPE.add_document(doc);
     document = doc;
 
     _document_uri_set_connection = document->connectFilenameSet([this](auto const filename) {
