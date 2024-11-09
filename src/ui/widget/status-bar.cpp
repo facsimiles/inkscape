@@ -25,7 +25,6 @@
 
 #include "desktop.h"
 #include "ui/builder-utils.h"
-#include "ui/pack.h"
 #include "ui/util.h"
 #include "ui/widget/canvas.h"
 #include "ui/widget/desktop-widget.h"
@@ -124,18 +123,17 @@ StatusBar::StatusBar()
 
     // Selected Style
     selected_style = Gtk::make_managed<Inkscape::UI::Widget::SelectedStyle>();
-    UI::pack_start(statusbar, *selected_style, false, false);
-    statusbar.reorder_child_at_start(*selected_style);
+    statusbar.prepend(*selected_style);
 
     // Layer Selector
     layer_selector = Gtk::make_managed<Inkscape::UI::Widget::LayerSelector>();
-    UI::pack_start(statusbar, *layer_selector, false, false, 1);  // Expand Fill Padding
-    statusbar.reorder_child_after(*layer_selector, *selected_style);
+    layer_selector->set_hexpand(false);
+    statusbar.insert_child_after(*layer_selector, *selected_style);
 
     // Page selector
     _page_selector = Gtk::make_managed<PageSelector>();
-    UI::pack_start(statusbar, *_page_selector, false, false);
-    statusbar.reorder_child_after(*_page_selector, *layer_selector);
+    _page_selector->set_hexpand(false);
+    statusbar.insert_child_after(*_page_selector, *layer_selector);
 
     // Selector status
     append(statusbar);
