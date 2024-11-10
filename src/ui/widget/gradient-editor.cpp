@@ -148,7 +148,7 @@ Glib::ustring get_repeat_icon(SPGradientSpread mode) {
     return ico;
 }
 
-GradientEditor::GradientEditor(const char* prefs, Space::Type space):
+GradientEditor::GradientEditor(const char* prefs, Space::Type space, bool show_type_selector, bool show_colorwheel_expander):
     _prefs(prefs),
     _builder(Inkscape::UI::create_builder("gradient-edit.glade")),
     _selector(Gtk::make_managed<GradientSelector>()),
@@ -163,7 +163,7 @@ GradientEditor::GradientEditor(const char* prefs, Space::Type space):
     _stops_gallery(get_widget<Gtk::Box>(_builder, "stopsGallery")),
     _colors_box(get_widget<Gtk::Box>(_builder, "colorsBox")),
     _main_grid(get_widget<Gtk::Grid>(_builder, "mainGrid")),
-    _color_picker(ColorPickerPanel::create(space, get_plate_type_preference(prefs, ColorPickerPanel::Rect), _colors)),
+    _color_picker(ColorPickerPanel::create(space, get_plate_type_preference(prefs, ColorPickerPanel::None), _colors)),
     _linear_btn(get_widget<Gtk::ToggleButton>(_builder, "type-linear")),
     _radial_btn(get_widget<Gtk::ToggleButton>(_builder, "type-radial"))
 {
@@ -171,6 +171,10 @@ GradientEditor::GradientEditor(const char* prefs, Space::Type space):
     _linear_btn.set_active();
     _linear_btn.signal_clicked().connect([this](){ fire_change_type(true); });
     _radial_btn.signal_clicked().connect([this](){ fire_change_type(false); });
+    if (!show_type_selector) {
+        _linear_btn.set_visible(false);
+        _radial_btn.set_visible(false);
+    }
 
     auto& reverse = get_widget<Gtk::Button>(_builder, "reverseBtn");
     set_icon(reverse, INKSCAPE_ICON("object-flip-horizontal"));
@@ -199,6 +203,16 @@ GradientEditor::GradientEditor(const char* prefs, Space::Type space):
         delete_stop(index);
     });
     gradBox.append(_gradient_image);
+
+    if (show_colorwheel_expander) {
+        auto expander = Gtk::make_managed<Gtk::Expander>();
+        expander->set_label(_("Color wheel"));
+        expander->set_margin_top(8);
+        expander->property_expanded().signal_changed().connect([this, expander]{
+            _color_picker->set_plate_type(expander->get_expanded() ? ColorPickerPanel::Circle : ColorPickerPanel::None);
+        });
+        _colors_box.append(*expander);
+    }
 
     // add color selector
     _colors_box.append(*_color_picker);

@@ -51,7 +51,7 @@ class GradientSelector;
 
 class GradientEditor final : public Gtk::Box, public GradientSelectorInterface {
 public:
-    GradientEditor(const char* prefs, Space::Type space);
+    GradientEditor(const char* prefs, Space::Type space, bool show_type_selector, bool show_colorwheel_expander);
     ~GradientEditor() noexcept override = default;
 
 private:

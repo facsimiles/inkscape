@@ -235,7 +235,7 @@ public:
     sigc::signal<void (SPPattern*, std::optional<Color>, const Glib::ustring&, const Geom::Affine&, const Geom::Point&,
                        bool, const Geom::Scale&)> _signal_pattern_changed;
     FlatColorEditor _flat_color{get_color_type(), _color};
-    GradientEditor _gradient{"/gradient-editor", get_color_type()};
+    GradientEditor _gradient{"/gradient-editor", get_color_type(), true, false};
     PatternEditor _pattern{"/pattern-editor", PatternManager::get()};
     SwatchEditor _swatch{get_color_type(), "/swatch-editor"};
     MeshEditor _mesh;
