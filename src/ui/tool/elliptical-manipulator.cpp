@@ -18,19 +18,30 @@
 #include <2geom/point.h>
 
 #include "ui/tool/elliptical-arc-end-node.h"
+#include "ui/tool/multi-path-manipulator.h"
 #include "ui/tool/node.h"
+#include "ui/tool/path-manipulator.h"
 
 namespace Inkscape::UI {
 
 EllipticalManipulator::EllipticalManipulator(SPDesktop &desktop, Geom::EllipticalArc const &arc,
-                                             NodeSharedData const &data)
+                                             NodeSharedData const &data, SPItem const *path, PathManipulator &parent)
     : _arc{arc}
+    , _center_node{desktop, data, arc.center(), *this, path}
     , _node_shared_data{&data}
+    , _path{path}
+    , _parent{&parent}
 {}
 
-void EllipticalManipulator::updateDisplay()
+void EllipticalManipulator::update()
 {
-    // TODO: implement the center node
+    _center_node.setPosition(_arc.center());
+    _parent->update();
+}
+
+void EllipticalManipulator::commitUndoEvent(CommitEvent event_type)
+{
+    _parent->mpm().commit(event_type);
 }
 
 void EllipticalManipulator::writeSegment(Geom::PathSink &output) const
@@ -41,7 +52,7 @@ void EllipticalManipulator::writeSegment(Geom::PathSink &output) const
 
 void EllipticalManipulator::setVisible(bool visible)
 {
-    // TODO: implement the center node
+    _center_node.setVisible(visible);
 }
 
 void EllipticalManipulator::setArcGeometry(Geom::EllipticalArc const &new_arc)
@@ -50,10 +61,9 @@ void EllipticalManipulator::setArcGeometry(Geom::EllipticalArc const &new_arc)
     auto const old_final_point = _arc.finalPoint();
 
     _arc = new_arc;
-    _arc.setInitial(old_initial_point);
-    _arc.setFinal(old_final_point);
+    _arc.setEndpoints(old_initial_point, old_final_point);
 
-    updateDisplay();
+    update();
 }
 
 void EllipticalManipulator::setArcFinalPoint(Geom::Point const &new_point)
@@ -63,10 +73,9 @@ void EllipticalManipulator::setArcFinalPoint(Geom::Point const &new_point)
     auto const new_chord_line = Geom::Line(old_initial_point, new_point);
 
     _arc.transform(old_chord_line.transformTo(new_chord_line));
-    _arc.setInitial(old_initial_point);
-    _arc.setFinal(new_point);
+    _arc.setEndpoints(old_initial_point, new_point);
 
-    updateDisplay();
+    update();
 }
 
 void EllipticalManipulator::setArcInitialPoint(Geom::Point const &new_point)
@@ -76,10 +85,9 @@ void EllipticalManipulator::setArcInitialPoint(Geom::Point const &new_point)
     auto const new_chord_line = Geom::Line(new_point, old_final_point);
 
     _arc.transform(old_chord_line.transformTo(new_chord_line));
-    _arc.setInitial(new_point);
-    _arc.setFinal(old_final_point);
+    _arc.setEndpoints(new_point, old_final_point);
 
-    updateDisplay();
+    update();
 }
 
 std::unique_ptr<Node> EllipticalManipulator::subdivideArc(double subdivision_time)
@@ -96,16 +104,13 @@ std::unique_ptr<Node> EllipticalManipulator::subdivideArc(double subdivision_tim
 
     assert(first_arc && second_arc);
 
-    first_arc->setInitial(_arc.initialPoint());
-    first_arc->setFinal(subdivision_point);
-
-    second_arc->setInitial(subdivision_point);
-    second_arc->setFinal(_arc.finalPoint());
+    first_arc->setEndpoints(_arc.initialPoint(), subdivision_point);
+    second_arc->setEndpoints(subdivision_point, _arc.finalPoint());
 
     _arc = *second_arc;
-    updateDisplay();
+    update();
 
-    return std::make_unique<EllipticalArcEndNode>(*first_arc, *_node_shared_data);
+    return std::make_unique<EllipticalArcEndNode>(*first_arc, *_node_shared_data, _path, *_parent);
 }
 } // namespace Inkscape::UI
 

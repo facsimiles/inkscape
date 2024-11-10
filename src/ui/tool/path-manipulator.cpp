@@ -1284,7 +1284,8 @@ void PathManipulator::_createControlPointsFromGeometry()
             if (closed && cit == --(pit.end())) {
                 current_node = subpath->begin().get_pointer();
             } else if (auto const *arc = dynamic_cast<Geom::EllipticalArc const *>(&*cit)) {
-                current_node = new EllipticalArcEndNode(*arc, _multi_path_manipulator._path_data.node_data);
+                current_node =
+                    new EllipticalArcEndNode(*arc, _multi_path_manipulator._path_data.node_data, _path, *this);
                 subpath->push_back(current_node);
             } else {
                 /* regardless of segment type, create a new node at the end

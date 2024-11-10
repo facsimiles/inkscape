@@ -15,12 +15,21 @@
 
 #include "elliptical-arc-handler.h"
 #include "inkscape.h"
+#include "object/sp-item.h"
+#include "util/cast.h"
 
 namespace Inkscape::UI {
 
-EllipticalArcEndNode::EllipticalArcEndNode(Geom::EllipticalArc const &preceding_arc, NodeSharedData const &data)
+EllipticalArcEndNode::EllipticalArcEndNode(Geom::EllipticalArc const &preceding_arc, NodeSharedData const &data,
+                                           SPItem const *path, PathManipulator &manipulator)
     : Node{data, preceding_arc.finalPoint()}
-    , _manipulator{_desktop ? *_desktop : *SP_ACTIVE_DESKTOP, preceding_arc, data}
+    , _path{path}
+    , _manipulator{_desktop ? *_desktop : *SP_ACTIVE_DESKTOP, preceding_arc, data, _path, manipulator}
+{}
+
+EllipticalArcEndNode::EllipticalArcEndNode(Geom::EllipticalArc const &preceding_arc, NodeSharedData const &data,
+                                           SPObject const *path, PathManipulator &manipulator)
+    : EllipticalArcEndNode(preceding_arc, data, cast<SPItem>(path), manipulator)
 {}
 
 std::unique_ptr<CurveHandler> EllipticalArcEndNode::createEventHandlerForPrecedingCurve()
@@ -67,7 +76,7 @@ void EllipticalArcEndNode::setType(NodeType, bool)
 {
     /// TODO: replace setType with polymorphism
     updateState();
-    _manipulator.updateDisplay();
+    _manipulator.update();
 }
 
 std::unique_ptr<Node> EllipticalArcEndNode::subdivideArc(double curve_time)

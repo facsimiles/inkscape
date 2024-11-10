@@ -55,6 +55,7 @@ All available selectors:
     .inkscape-node-cusp
     .inkscape-node-smooth
     .inkscape-node-symmetrical
+    .inkscape-node-ellipse-center
     .inkscape-mesh
     .inkscape-invisible
     .inkscape-guide-handle
@@ -117,7 +118,8 @@ Notes:
 
 .inkscape-node-auto,
 .inkscape-margin, /* page tool */
-.inkscape-move { /* LPE chamfer fillet */
+.inkscape-move, /* LPE chamfer fillet */
+.inkscape-node-ellipse-center /* Node tool */ {
     shape: "circle";
     scale: 2.256758; /* 4 / sqrt(PI) */
     size-extra: 2px;

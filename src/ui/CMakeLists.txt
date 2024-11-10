@@ -39,6 +39,7 @@ set(ui_SRC
 	tool/control-point-selection.cpp
 	tool/control-point.cpp
 	tool/curve-drag-point.cpp
+	tool/ellipse-center.cpp
 	tool/elliptical-arc-end-node.cpp
 	tool/elliptical-arc-handler.cpp
 	tool/elliptical-manipulator.cpp
@@ -396,6 +397,7 @@ set(ui_SRC
 	tool/control-point.h
 	tool/curve-drag-point.h
 	tool/curve-event-handler.h
+	tool/ellipse-center.h
 	tool/elliptical-arc-end-node.h
 	tool/elliptical-arc-handler.h
 	tool/elliptical-manipulator.h

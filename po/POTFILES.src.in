@@ -339,6 +339,7 @@ ${_build_dir}/share/templates/templates.h
 ../src/ui/shortcuts.cpp
 ../src/ui/tool/bezier-curve-handler.cpp
 ../src/ui/tool/curve-drag-point.cpp
+../src/ui/tool/ellipse-center.cpp
 ../src/ui/tool/elliptical-arc-handler.cpp
 ../src/ui/tool/multi-path-manipulator.cpp
 ../src/ui/tool/node.cpp

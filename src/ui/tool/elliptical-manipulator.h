@@ -17,9 +17,12 @@
 #include <glib/gi18n.h>
 #include <glibmm/ustring.h>
 
+#include "ui/tool/commit-events.h"
 #include "ui/tool/control-point.h"
+#include "ui/tool/ellipse-center.h"
 
 class SPDesktop;
+class SPItem;
 
 namespace Geom {
 class Ellipse;
@@ -29,12 +32,14 @@ class PathSink;
 
 namespace Inkscape::UI {
 class Node;
+class PathManipulator;
 class NodeSharedData;
 
 class EllipticalManipulator
 {
 public:
-    EllipticalManipulator(SPDesktop &desktop, Geom::EllipticalArc const &arc, NodeSharedData const &data);
+    EllipticalManipulator(SPDesktop &desktop, Geom::EllipticalArc const &arc, NodeSharedData const &data,
+                          SPItem const *path, PathManipulator &parent);
 
     /// Read-only access to the geometric arc.
     Geom::EllipticalArc const &arc() const { return _arc; }
@@ -56,14 +61,19 @@ public:
     /// Replace the manipulated arc with a new one.
     void setArcGeometry(Geom::EllipticalArc const &new_arc);
 
-    void updateDisplay();
+    void update();
+
+    void commitUndoEvent(CommitEvent event_type);
 
     /// Feed the manipulated elliptical arc into a path sink.
     void writeSegment(Geom::PathSink &output) const;
 
 private:
     Geom::EllipticalArc _arc;
+    EllipseCenter _center_node;
     NodeSharedData const *_node_shared_data = nullptr;
+    SPItem const *_path = nullptr;
+    PathManipulator *_parent = nullptr;
 };
 } // namespace Inkscape::UI
 
