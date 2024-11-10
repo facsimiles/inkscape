@@ -29,7 +29,7 @@ std::unique_ptr<SPDocument> get_preview_document() {
   </defs>
   <g id="layer1">
     <rect
-       style="fill:#f0f0f0;fill-opacity:1;stroke:none"
+       style="fill:#f6f6f6;fill-opacity:1;stroke:none"
        id="rect2620"
        width="100%" height="100%" x="0" y="0" />
     <rect

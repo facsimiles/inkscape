@@ -577,9 +577,14 @@ button.link:hover image {
     padding: 1px 3px;
 }
 
-.link-edit-button {
-    padding: 5px 3px;
-    min-width: 0.5em;
+/* This is a button placed next to spinbuttons with a link/unlink icon.
+ * It is supposed to be narrow and tall, so let it be narrow: */
+button.link-edit-button {
+    padding: 5px 0;
+    min-width: 16px; /* icon size */
+}
+button.link-edit-button image {
+    padding: 0;
 }
 
 /* In some themes stack switcher buttons are extra wide forcing dialogs too wide */
@@ -1522,10 +1527,3 @@ menubutton.rectangle button {
 scrolledwindow.small-window slider {
     min-height: 16px;
 }
-
-/*#InkPropertyGrid > button,*/
-/*#InkPropertyGrid > menubutton button {*/
-/*    min-height: 22px;*/
-/*}*/
-
-/*#MarkerComboBox*/

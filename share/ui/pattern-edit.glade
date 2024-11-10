@@ -515,7 +515,6 @@
         </child>
         <child>
           <object class="GtkButton" id="link-scale">
-            <property name="name">LockGuides</property>
             <property name="focus-on-click">False</property>
             <property name="receives-default">True</property>
             <property name="halign">end</property>
@@ -523,6 +522,9 @@
             <property name="margin-top">5</property>
             <property name="margin-bottom">5</property>
             <property name="has-frame">False</property>
+            <style>
+              <class name="link-edit-button"/>
+            </style>
             <layout>
               <property name="column">2</property>
               <property name="row">0</property>
