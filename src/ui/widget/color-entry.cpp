@@ -36,6 +36,7 @@ ColorEntry::ColorEntry(std::shared_ptr<Colors::ColorSet> colors)
 
     // add extra character for pasting a hash, '#11223344'
     set_max_length(9);
+    set_max_width_chars(9);
     set_width_chars(8);
     set_tooltip_text(_("Hexadecimal RGB value of the color"));
 }

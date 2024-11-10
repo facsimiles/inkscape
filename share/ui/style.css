@@ -1439,10 +1439,10 @@ listview.list-view-small > row > box.item-box.separator {
 
 /* Establish minimal size for custom spin buttons */
 #InkSpinButton {
-    min-height: 20px;
+    min-height: 22px;
 }
 #InkSpinButton.frame {
-    min-height: 22px;
+    min-height: 24px;
 }
 /*#InkSpinButton entry {*/
 /*    !* we need to set entry size too, so it doesn't enlarge spin button *!*/
@@ -1504,7 +1504,12 @@ scrolledwindow.inkscape-start-exception.frame {
 
 .border-box {
     border-radius: 2px;
-    border: 1px solid @unfocused_borders;
+    border: 1px solid @borders;
+}
+
+.entry-box {
+    /* Entry background color */
+    background-color: @theme_base_color;
 }
 
 /* MenuButton with sharp corners */

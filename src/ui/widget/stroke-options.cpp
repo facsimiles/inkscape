@@ -26,7 +26,7 @@ struct Props {
 
 StrokeOptions::StrokeOptions() {
     set_column_spacing(4);
-    set_row_spacing(4);
+    set_row_spacing(8);
 
     Props properties[] = {
         // TRANSLATORS: The line join style specifies the shape to be used at the

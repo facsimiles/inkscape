@@ -132,6 +132,7 @@ SwatchEditor::SwatchEditor(Colors::Space::Type space, Glib::ustring prefs_path):
     auto col_3 = Gtk::make_managed<Gtk::Box>();
     _color_picker->get_first_column_size()->add_widget(*col_1);
     _color_picker->get_last_column_size()->add_widget(*col_3);
+    _label.set_max_width_chars(20);
     grid->attach(*col_1, 0, 0);
     grid->attach(_label, 1, 0);
     grid->attach(*col_3, 2, 0);
@@ -294,6 +295,9 @@ void SwatchEditor::build_grid() {
     _scroll.set_child(_gridview);
     _scroll.set_policy(Gtk::PolicyType::NEVER, Gtk::PolicyType::AUTOMATIC);
     _scroll.set_vexpand();
+    _scroll.set_has_frame();
+    _scroll.set_margin_top(2);
+    _scroll.set_margin_bottom(4);
 }
 
 void SwatchEditor::build_settings() {

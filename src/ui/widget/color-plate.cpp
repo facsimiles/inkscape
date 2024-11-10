@@ -82,6 +82,9 @@ static void draw_color_plate(const Cairo::RefPtr<Cairo::Context>& ctx, const Geo
 }
 
 static Geom::Point get_color_coordinates(double val1, double val2, bool circular) {
+    val1 = std::clamp(val1, 0.0, 1.0);
+    val2 = std::clamp(val2, 0.0, 1.0);
+
     if (circular) {
         // point in a circle
         // val1 is an angle (0..1 -> -2pi..2pi), while val2 is a distance

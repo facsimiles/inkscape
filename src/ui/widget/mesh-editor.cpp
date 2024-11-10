@@ -77,6 +77,7 @@ MeshEditor::MeshEditor() :
     });
 
     _gridview.add_css_class("grid-view-compact");
+    _gridview.add_css_class("frame");
     _gridview.set_factory(_item_factory->get_factory());
     _gridview.set_model(_selection_model);
     // 3 columns to prevent fill popup from expanding horizontally too much

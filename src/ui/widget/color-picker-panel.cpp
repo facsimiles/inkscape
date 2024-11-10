@@ -185,6 +185,7 @@ ColorPickerPanelImpl::ColorPickerPanelImpl(Space::Type space, PlateType type, st
     _frame.set_hexpand();
     _frame.set_spacing(4);
     _frame.add_css_class("border-box");
+    _frame.add_css_class("entry-box");
     // match frame size visually with color sliders width
     _frame.set_margin_start(8);
     _frame.set_margin_end(8);
@@ -193,7 +194,7 @@ ColorPickerPanelImpl::ColorPickerPanelImpl(Space::Type space, PlateType type, st
     _preview.set_border_radius(0);
     _preview.set_size_request(16, 16);
     _preview.set_checkerboard_tile_size(4);
-    _preview.set_margin_start(3);
+    _preview.set_margin_start(4);
     _preview.set_halign(Gtk::Align::START);
     _preview.set_valign(Gtk::Align::CENTER);
     _frame.append(_preview);
