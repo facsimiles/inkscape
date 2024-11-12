@@ -89,7 +89,8 @@ private:
     Gtk::Button _reset_opacity;
     Gtk::Entry _filter_primitive;
     InkSpinButton _blur;
-    Gtk::Button _clear_blur;
+    Gtk::Button _clear_filters;
+    Gtk::Button _add_blur;
     Gtk::Button _edit_filter;
     Gtk::Box _filter_buttons;
     WidgetGroup _filter_widgets;

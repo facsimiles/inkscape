@@ -502,11 +502,17 @@ void PaintAttribute::insert_widgets(InkPropertyGrid& grid) {
     for (auto& def : properties) {
         init_spin_button(def);
     }
-    init_property_button(_clear_blur, Reset);
+    init_property_button(_clear_filters, Remove, _("Remove filter"));
+    init_property_button(_add_blur, Add, _("Add blur filter"));
     init_property_button(_edit_filter, Edit, _("Edit filter"));
-    _edit_filter.set_visible(false);
-    _filter_buttons.append(_clear_blur);
-    _filter_buttons.append(_edit_filter);
+    auto hbox = Gtk::make_managed<Gtk::Box>();
+    hbox->set_spacing(4);
+    hbox->append(_blur);
+    _blur.set_hexpand();
+    hbox->append(_edit_filter);
+    _add_blur.set_visible(false);
+    _filter_buttons.append(_clear_filters);
+    _filter_buttons.append(_add_blur);
     _filter_primitive.set_editable(false);
     _filter_primitive.set_can_focus(false);
     _filter_primitive.set_focusable(false);
@@ -515,15 +521,30 @@ void PaintAttribute::insert_widgets(InkPropertyGrid& grid) {
     init_property_button(_reset_blend, Reset, _("Normal blend mode"));
     grid.add_property(_("Opacity"), nullptr, &_opacity, nullptr, &_reset_opacity);
     grid.add_property(_("Blend mode"), nullptr, &_blend, nullptr, &_reset_blend);
-    _filter_widgets = grid.add_property(_("Filter"), nullptr, &_filter_primitive, &_blur, &_filter_buttons);
+    _filter_widgets = grid.add_property(_("Filter"), nullptr, &_filter_primitive, hbox, &_filter_buttons);
     grid.add_gap();
 
-    _clear_blur.signal_clicked().connect([this]() {
+    _clear_filters.signal_clicked().connect([this]() {
         if (!can_update()) return;
 
         auto scoped(_update.block());
-        if (remove_filter_gaussian_blur(_current_item)) {
-            DocumentUndo::done(_current_item->document, _("Remove filter"), "dialog-fill-and-stroke");
+        remove_filter(_current_item, false);
+        DocumentUndo::done(_current_item->document, _("Remove filter"), "dialog-fill-and-stroke");
+    });
+    _add_blur.signal_clicked().connect([this]() {
+        if (!can_update()) return;
+
+        auto scoped(_update.block());
+        if (modify_filter_gaussian_blur_amount(_current_item, 10.0)) {
+            DocumentUndo::done(_current_item->document, _("Add blur filter"), "dialog-fill-and-stroke");
+        }
+    });
+    _blur.signal_value_changed().connect([this](auto value) {
+        if (!can_update()) return;
+
+        auto scoped(_update.block());
+        if (modify_filter_gaussian_blur_amount(_current_item, value * 100)) {
+            DocumentUndo::maybeDone(_current_item->document, "change-blur-radius", _("Change blur filter"), "dialog-fill-and-stroke");
         }
     });
     _edit_filter.signal_clicked().connect([this]() {
@@ -761,6 +782,7 @@ void PaintAttribute::update_from_object(SPObject* object) {
 
         auto filters = get_filter_primitive_count(object);
         double blur = 0;
+        bool gausian_blur = false;
         if (filters == 1) {
             auto primitive = get_first_filter_component(object);
             auto id = FPConverter.get_id_from_key(primitive->getRepr()->name());
@@ -773,9 +795,10 @@ void PaintAttribute::update_from_object(SPObject* object) {
                         blur = std::sqrt(*radius * BLUR_MULTIPLIER / perimeter);
                     }
                 }
+                gausian_blur = true;
             }
             _blur.set_value(blur);
-            _blur.set_sensitive(blur > 0);
+            _blur.set_sensitive(gausian_blur);
         }
         else if (filters > 1) {
             _filter_primitive.set_text(_("Compound filter"));
@@ -787,9 +810,11 @@ void PaintAttribute::update_from_object(SPObject* object) {
             _blur.set_value(0);
             _blur.set_sensitive(false);
         }
-        _filter_widgets.set_visible(filters > 0);
-        _clear_blur.set_visible(blur != 0);
-        _edit_filter.set_visible(blur == 0 && filters > 0);
+        _filter_primitive.set_visible(filters > 0);
+        _blur.set_visible(gausian_blur && filters > 0);
+        _edit_filter.set_visible(!gausian_blur && filters > 0);
+        _clear_filters.set_visible(filters > 0);
+        _add_blur.set_visible(filters == 0);
     }
 
     // else if (object && object->style) {

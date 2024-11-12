@@ -614,6 +614,26 @@ size_t get_filter_primitive_count(const SPObject* object) {
     return count;
 }
 
+constexpr double BLUR_MULTIPLIER = 4.0;
+
+bool modify_filter_gaussian_blur_amount(SPItem* item, double amount) {
+    if (!item) return false;
+
+    double radius = 0;
+    if (Geom::OptRect bbox = item->desktopGeometricBounds()) {
+        double perimeter = bbox->dimensions()[Geom::X] + bbox->dimensions()[Geom::Y];   // fixme: this is only half the perimeter, is that correct?
+        double blur_value = amount / 100.0;
+        radius = blur_value * blur_value * perimeter / BLUR_MULTIPLIER;
+    }
+    // if (!radius) return false;
+
+    SPFilter* filter = modify_filter_gaussian_blur_from_item(item->document, item, radius);
+    filter->update_filter_region(item);
+    sp_style_set_property_url(item, "filter", filter, false);
+    item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
+    return true;
+}
+
 /*
   Local Variables:
   mode:c++
