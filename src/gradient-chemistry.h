@@ -155,6 +155,9 @@ int sp_cleanup_document_swatches(SPDocument* document);
 // Scan document gradient resources and return all swatches
 std::vector<SPGradient*> sp_collect_all_swatches(SPDocument* document);
 
+// find matching swatch, if any
+SPGradient* sp_find_matching_swatch(SPDocument* document, const Color& color);
+
 #endif // SEEN_SP_GRADIENT_CHEMISTRY_H
 
 /*

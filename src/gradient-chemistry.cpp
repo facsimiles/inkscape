@@ -2133,6 +2133,27 @@ int sp_cleanup_document_swatches(SPDocument* document) {
     return removed;
 }
 
+SPGradient* sp_find_matching_swatch(SPDocument* document, const Color& color) {
+    if (!document) return nullptr;
+
+    auto rgb = color.converted(Colors::Space::Type::RGB);
+    if (!rgb) return nullptr;
+    rgb->enableOpacity(false);
+
+    auto gradients = document->getResourceList("gradient");
+    for (auto grad : gradients) {
+        auto g = static_cast<SPGradient*>(grad);
+        if (g->isSwatch()) {
+            if (auto c = g->getFirstStop()->getColor().converted(Colors::Space::Type::RGB)) {
+                c->enableOpacity(false);
+                if (*c == *rgb) return g;
+            }
+        }
+    }
+
+    return nullptr;
+}
+
 /*
   Local Variables:
   mode:c++

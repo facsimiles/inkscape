@@ -141,12 +141,27 @@ void edit_marker(int location, SPDesktop* desktop) {
     }
 }
 
+std::optional<Colors::Color> get_item_color(SPItem* item, bool fill) {
+    if (!item || !item->style) return {};
+
+    auto paint = item->style->getFillOrStroke(fill);
+    return paint && paint->isColor() ? std::optional(paint->getColor()) : std::nullopt;
+}
+
 void swatch_operation(SPItem* item, SPGradient* vector, SPDesktop* desktop, bool fill, EditOperation operation, SPGradient* replacement, std::optional<Color> color, Glib::ustring label) {
     auto kind = fill ? FILL : STROKE;
 
     switch (operation) {
     case EditOperation::New:
-        sp_item_apply_gradient(item, nullptr, desktop, SP_GRADIENT_TYPE_LINEAR, true, kind);
+        // try to find existing swatch with matching color definition:
+        if (auto clr = get_item_color(item, fill)) {
+            vector = sp_find_matching_swatch(item->document, *clr);
+        }
+        else {
+            // create a new swatch
+            vector = nullptr;
+        }
+        sp_item_apply_gradient(item, vector, desktop, SP_GRADIENT_TYPE_LINEAR, true, kind);
         DocumentUndo::done(item->document, fill ? _("Set swatch on fill") : _("Set swatch on stroke"), "dialog-fill-and-stroke");
         break;
     case EditOperation::Change:
