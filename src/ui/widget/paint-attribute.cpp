@@ -57,21 +57,21 @@ PaintAttribute::PaintAttribute():
     }, false);
 }
 
-void PaintAttribute::PaintStripe::hide() {
+void PaintAttribute::PaintStrip::hide() {
     _paint_btn.set_visible(false);
     _alpha.set_visible(false);
     _define.set_visible();
     _clear.set_visible(false);
 }
 
-void PaintAttribute::PaintStripe::show() {
+void PaintAttribute::PaintStrip::show() {
     _paint_btn.set_visible();
     _alpha.set_visible();
     _define.set_visible(false);
     _clear.set_visible();
 }
 
-bool PaintAttribute::PaintStripe::can_update() const {
+bool PaintAttribute::PaintStrip::can_update() const {
     return _current_item && _update && !_update->pending();
 }
 
@@ -192,7 +192,7 @@ void swatch_operation(SPItem* item, SPGradient* vector, SPDesktop* desktop, bool
 // size of color preview tiles
 constexpr int COLOR_TILE = 16;
 
-PaintAttribute::PaintStripe::PaintStripe(const Glib::ustring& title, bool fill) :
+PaintAttribute::PaintStrip::PaintStrip(const Glib::ustring& title, bool fill) :
   _label(title)
 {
     _paint_btn.set_direction(Gtk::ArrowType::DOWN);
@@ -628,37 +628,37 @@ void PaintAttribute::set_paint(const SPIPaint& paint, double opacity, bool fill)
     auto scoped(_update.block());
 
     auto mode = get_mode_from_paint(paint);
-    auto& stripe = fill ? _fill : _stroke;
-    stripe._switch->set_mode(mode);
+    auto& strip = fill ? _fill : _stroke;
+    strip._switch->set_mode(mode);
     if (paint.isColor()) {
         auto color = paint.getColor();
         color.setOpacity(opacity);
-        stripe._switch->set_color(color);
+        strip._switch->set_color(color);
     }
-    stripe._switch->update_from_paint(paint);
+    strip._switch->update_from_paint(paint);
 }
 
 // set correct icon for current fill/stroke type
 void PaintAttribute::set_preview(const SPIPaint& paint, double paint_opacity, PaintMode mode, bool fill) {
-    auto& stripe = fill ? _fill : _stroke;
+    auto& strip = fill ? _fill : _stroke;
     if (mode == PaintMode::None) {
-        stripe.hide();
+        strip.hide();
         return;
     }
 
-    stripe._paint_type.set_text(get_paint_mode_name(mode));
+    strip._paint_type.set_text(get_paint_mode_name(mode));
 
     if (mode == PaintMode::Solid || mode == PaintMode::Swatch || mode == PaintMode::Gradient) {
-        stripe._alpha.set_value(paint_opacity);
+        strip._alpha.set_value(paint_opacity);
         if (mode == PaintMode::Solid) {
             auto color = paint.getColor();
             color.addOpacity(paint_opacity);
-            stripe._color_preview.setRgba32(color.toRGBA());
-            stripe._color_preview.setIndicator(ColorPreview::None);
+            strip._color_preview.setRgba32(color.toRGBA());
+            strip._color_preview.setIndicator(ColorPreview::None);
         }
         else if (mode == PaintMode::Swatch) {
             // swatch
-            stripe._color_preview.setIndicator(ColorPreview::Swatch);
+            strip._color_preview.setIndicator(ColorPreview::Swatch);
             auto server = paint.href->getObject();
             auto swatch = cast<SPGradient>(server);
             assert(swatch);
@@ -669,26 +669,26 @@ void PaintAttribute::set_preview(const SPIPaint& paint, double paint_opacity, Pa
                 color = stop->getColor();
             }
             color.addOpacity(paint_opacity);
-            stripe._color_preview.setRgba32(color.toRGBA());
+            strip._color_preview.setRgba32(color.toRGBA());
         }
         else {
             // gradients
             auto server = paint.href->getObject();
             auto pat_t = cast<SPGradient>(server)->create_preview_pattern(COLOR_TILE);
             auto pat = Cairo::RefPtr<Cairo::Pattern>(new Cairo::Pattern(pat_t, true));
-            stripe._color_preview.setPattern(pat);
-            stripe._color_preview.setIndicator(is<SPRadialGradient>(server) ? ColorPreview::RadialGradient : ColorPreview::LinearGradient);
+            strip._color_preview.setPattern(pat);
+            strip._color_preview.setIndicator(is<SPRadialGradient>(server) ? ColorPreview::RadialGradient : ColorPreview::LinearGradient);
         }
-        stripe._color_preview.set_visible();
-        stripe._paint_icon.set_visible(false);
-        stripe.show();
+        strip._color_preview.set_visible();
+        strip._paint_icon.set_visible(false);
+        strip.show();
     }
     else {
         auto icon = get_paint_mode_icon(mode);
-        stripe._color_preview.set_visible(false);
-        stripe._paint_icon.set_from_icon_name(icon);
-        stripe._paint_icon.set_visible();
-        stripe.show();
+        strip._color_preview.set_visible(false);
+        strip._paint_icon.set_from_icon_name(icon);
+        strip._paint_icon.set_visible();
+        strip.show();
     }
 }
 
@@ -731,8 +731,6 @@ bool PaintAttribute::can_update() const {
 }
 
 void PaintAttribute::update_from_object(SPObject* object) {
-    // if (_update.pending()) return;
-
     auto scoped(_update.block());
 
     _current_item = cast<SPItem>(object);
@@ -817,14 +815,6 @@ void PaintAttribute::update_from_object(SPObject* object) {
         _add_blur.set_visible(filters == 0);
     }
 
-    // else if (object && object->style) {
-    //     if (auto fill = object->style->getFillOrStroke(true)) {
-    //         set_preview(*fill, true);
-    //     }
-    //     if (auto stroke = object->style->getFillOrStroke(false)) {
-    //         set_preview(*stroke, false);
-    //     }
-    // }
 }
 
 } // namespace

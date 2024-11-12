@@ -97,8 +97,6 @@ StrokeOptions::StrokeOptions() {
 }
 
 void StrokeOptions::update_widgets(SPStyle& style) {
-    if (style.stroke.isNone()) return;
-
     auto scope(_update.block());
 
     auto limit = style.stroke_miterlimit.value;

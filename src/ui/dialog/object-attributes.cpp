@@ -301,6 +301,7 @@ void ObjectAttributes::cursor_moved(Tools::TextTool* tool) {
         auto s = tool->get_subselection();
         _current_panel->subselection_changed(s);
     }
+    //TODO: text panel
 // printf("text sel: %d\n", (int)s.size());
 }
 
@@ -322,7 +323,6 @@ void ObjectAttributes::selectionModified(Selection* _selection, guint flags) {
     if (_update.pending() || !getDesktop() || !_current_panel) return;
 
     auto selection = getDesktop()->getSelection();
-// printf("sel modif: %x sel %p  cur: %p\n", flags, selection->singleItem(), _current_item);
     if (flags & (SP_OBJECT_MODIFIED_FLAG |
                  SP_OBJECT_CHILD_MODIFIED_FLAG |
                  SP_OBJECT_PARENT_MODIFIED_FLAG |
@@ -423,7 +423,7 @@ details::AttributesPanel::AttributesPanel(bool show_fill_stroke, bool show_prope
     if (show_fill_stroke) {
         add_fill_and_stroke();
     }
-    //todo:
+    //todo: is this needed?
     // auto init_units = desktop->getNamedView()->display_units;
     // _tracker->setActiveUnit(init_units);
 }

@@ -149,7 +149,6 @@ void DialogBase::focus_dialog() {
 }
 
 void DialogBase::defocus_dialog() {
-    printf("defoc dlg\n");
     if (auto wnd = dynamic_cast<Gtk::Window*>(get_root())) {
         // defocus floating dialog:
         sp_dialog_defocus(wnd);
