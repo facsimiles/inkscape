@@ -42,7 +42,9 @@
 #include "object/sp-marker-loc.h"
 #include "object/sp-marker.h"
 #include "object/sp-root.h"
+#include "svg/css-ostringstream.h"
 #include "ui/builder-utils.h"
+#include "ui/reparent-spinbutton.h"
 #include "ui/widget/size-reporter.h"
 #include "ui/svg-renderer.h"
 #include "ui/util.h"
@@ -105,9 +107,9 @@ Glib::ustring get_attrib(SPMarker* marker, const char* attrib) {
     return value ? value : "";
 }
 
-double get_attrib_num(SPMarker* marker, const char* attrib) {
+double get_attrib_num(SPMarker* marker, const char* attrib, double default_value = 0) {
     auto val = get_attrib(marker, attrib);
-    return strtod(val.c_str(), nullptr);
+    return val.empty() ? default_value : strtod(val.c_str(), nullptr);
 }
 
 MarkerComboBox::MarkerComboBox(Glib::ustring id, int l) :
@@ -118,17 +120,11 @@ MarkerComboBox::MarkerComboBox(Glib::ustring id, int l) :
     _loc(l),
     _builder(create_builder("marker-popup.glade")),
     _marker_list(get_widget<Gtk::FlowBox>(_builder, "flowbox")),
-    // _preview_bin(get_derived_widget<UI::Widget::Bin>(_builder, "preview-bin")),
     _preview(get_widget<Gtk::Picture>(_builder, "preview")),
     _marker_name(get_widget<Gtk::Label>(_builder, "marker-id")),
     _link_scale(get_widget<Gtk::Button>(_builder, "link-scale")),
-    _scale_x(get_widget<Gtk::SpinButton>(_builder, "scale-x")),
-    _scale_y(get_widget<Gtk::SpinButton>(_builder, "scale-y")),
     _scale_with_stroke(get_widget<Gtk::CheckButton>(_builder, "scale-with-stroke")),
     _menu_btn(get_widget<Gtk::MenuButton>(_builder, "menu-btn")),
-    _angle_btn(get_widget<Gtk::SpinButton>(_builder, "angle")),
-    _offset_x(get_widget<Gtk::SpinButton>(_builder, "offset-x")),
-    _offset_y(get_widget<Gtk::SpinButton>(_builder, "offset-y")),
     _input_grid(get_widget<Gtk::Grid>(_builder, "input-grid")),
     _orient_auto_rev(get_widget<Gtk::ToggleButton>(_builder, "orient-auto-rev")),
     _orient_auto(get_widget<Gtk::ToggleButton>(_builder, "orient-auto")),
@@ -154,6 +150,20 @@ MarkerComboBox::MarkerComboBox(Glib::ustring id, int l) :
         Inkscape::svg_renderer renderer(path.c_str());
         g_bad_marker = renderer.render_surface(1.0);
     }
+
+    auto reparent = [this](const char* id, InkSpinButton& subst) {
+        auto& orig = get_widget<Gtk::SpinButton>(_builder, id);
+        replace_spinbutton_widget(orig, subst);
+    };
+    reparent("angle", _angle_btn);
+    set_degree_suffix(_angle_btn);
+    reparent("offset-x", _offset_x);
+    reparent("offset-y", _offset_y);
+    reparent("scale-x", _scale_x);
+    reparent("scale-y", _scale_y);
+    reparent("alpha", _marker_alpha);
+    set_percent_suffix(_marker_alpha);
+    _marker_alpha.set_scaling_factor(100);
 
     prepend(_menu_btn);
 
@@ -214,12 +224,18 @@ MarkerComboBox::MarkerComboBox(Glib::ustring id, int l) :
     };
     _orient_auto_rev.signal_toggled().connect([=](){ set_orient(false, "auto-start-reverse"); });
     _orient_auto.signal_toggled().connect([=]()    { set_orient(false, "auto"); });
-    _orient_angle.signal_toggled().connect([=, this]()   { set_orient(true, _angle_btn.get_text().c_str()); });
+    _orient_angle.signal_toggled().connect([=, this]() {
+        Inkscape::CSSOStringStream os;
+        os << _angle_btn.get_value();
+        set_orient(true, os.str().c_str());
+    });
     _orient_flip_horz.signal_clicked().connect([this]()  { sp_marker_flip_horizontally(get_current()); });
 
-    _angle_btn.signal_value_changed().connect([this]() {
+    _angle_btn.signal_value_changed().connect([this](auto angle) {
         if (_update.pending() || !_angle_btn.is_sensitive()) return;
-        sp_marker_set_orient(get_current(), _angle_btn.get_text().c_str());
+        Inkscape::CSSOStringStream os;
+        os << angle;
+        sp_marker_set_orient(get_current(), os.str().c_str());
     });
 
     auto set_scale = [this](bool changeWidth) {
@@ -271,8 +287,8 @@ MarkerComboBox::MarkerComboBox(Glib::ustring id, int l) :
         update_scale_link();
     });
 
-    _scale_x.signal_value_changed().connect([=]() { idle_set_scale(true); });
-    _scale_y.signal_value_changed().connect([=]() { idle_set_scale(false); });
+    _scale_x.signal_value_changed().connect([=](auto) { idle_set_scale(true); });
+    _scale_y.signal_value_changed().connect([=](auto) { idle_set_scale(false); });
 
     _scale_with_stroke.signal_toggled().connect([this](){
         if (_update.pending()) return;
@@ -283,9 +299,14 @@ MarkerComboBox::MarkerComboBox(Glib::ustring id, int l) :
         if (_update.pending()) return;
         sp_marker_set_offset(get_current(), _offset_x.get_value(), _offset_y.get_value());
     };
-    _offset_x.signal_value_changed().connect([=]() { set_offset(); });
-    _offset_y.signal_value_changed().connect([=]() { set_offset(); });
+    _offset_x.signal_value_changed().connect([=](auto) { set_offset(); });
+    _offset_y.signal_value_changed().connect([=](auto) { set_offset(); });
 
+    _marker_alpha.signal_value_changed().connect([this](double alpha) {
+        if (_update.pending()) return;
+        // change opacity
+        sp_marker_set_opacity(get_current(), alpha);
+    });
     // request to edit marker on canvas; close popup to get it out of the way and call marker edit tool
     _edit_marker.signal_clicked().connect([this]{ _menu_btn.get_popover()->popdown(); _signal_edit(); });
 
@@ -311,6 +332,7 @@ void MarkerComboBox::update_widgets_from_marker(SPMarker* marker) {
     // marker->setAttribute("markerUnits", scale_with_stroke ? "strokeWidth" : "userSpaceOnUse");
         _offset_x.set_value(get_attrib_num(marker, "refX"));
         _offset_y.set_value(get_attrib_num(marker, "refY"));
+        _marker_alpha.set_value(get_attrib_num(marker, "fill-opacity", 100.0));
         auto orient = get_attrib(marker, "orient");
 
         // try parsing as number

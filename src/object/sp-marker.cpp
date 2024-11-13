@@ -642,6 +642,18 @@ void sp_marker_flip_horizontally(SPMarker* marker) {
     }
 }
 
+void sp_marker_set_opacity(SPMarker* marker, double alpha) {
+    if (!marker) return;
+
+    // "opacity" alone doesn't have any impact; using fill and stroke opacity instead
+    marker->setAttributeDouble("fill-opacity", alpha);
+    marker->setAttributeDouble("stroke-opacity", alpha);
+
+    if (marker->document) {
+        DocumentUndo::maybeDone(marker->document, "marker", _("Set marker opacity"), INKSCAPE_ICON("dialog-fill-and-stroke"));
+    }
+}
+
 /*
   Local Variables:
   mode:c++

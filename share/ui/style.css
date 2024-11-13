@@ -568,8 +568,7 @@ button.link:hover image {
 }
 
 .tight-button {
-    padding-left: 3px;
-    padding-right: 3px;
+    padding: 4px;
 }
 
 .small-button {
@@ -1523,7 +1522,7 @@ scrolledwindow.inkscape-start-exception.frame {
 }
 
 /* MenuButton with sharp corners */
-menubutton.rectangle button {
+menubutton.rectangle > button {
     border-radius: 0;
     padding: 0px;
 }

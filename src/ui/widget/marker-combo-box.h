@@ -31,6 +31,8 @@
 #include "display/drawing.h"
 #include "document.h"
 #include <sigc++/scoped_connection.h>
+
+#include "ink-spin-button.h"
 #include "ui/operation-blocker.h"
 #include "ui/widget/widget-vfuncs-class-init.h"
 
@@ -118,13 +120,14 @@ private:
     Gtk::Picture& _preview;
     bool _preview_no_alloc = true;
     Gtk::Button& _link_scale;
-    Gtk::SpinButton& _angle_btn;
+    InkSpinButton _angle_btn;
     Gtk::MenuButton& _menu_btn;
-    Gtk::SpinButton& _scale_x;
-    Gtk::SpinButton& _scale_y;
+    InkSpinButton _scale_x;
+    InkSpinButton _scale_y;
     Gtk::CheckButton& _scale_with_stroke;
-    Gtk::SpinButton& _offset_x;
-    Gtk::SpinButton& _offset_y;
+    InkSpinButton _offset_x;
+    InkSpinButton _offset_y;
+    InkSpinButton _marker_alpha;
     Gtk::Widget& _input_grid;
     Gtk::ToggleButton& _orient_auto_rev;
     Gtk::ToggleButton& _orient_auto;
