@@ -463,7 +463,7 @@ void PaintAttribute::insert_widgets(InkPropertyGrid& grid) {
         set_stroke_style("stroke-linecap", style);
     });
     _stroke_options._order_changed.connect([=](auto style) {
-        set_stroke_style("pant-order", style);
+        set_stroke_style("paint-order", style);
     });
     _stroke_options._miter_changed.connect([=](auto value) {
         set_stroke_miter_limit(value);
