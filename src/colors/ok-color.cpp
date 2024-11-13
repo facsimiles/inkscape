@@ -547,6 +547,8 @@ HSL srgb_to_okhsl(RGB rgb)
 		});
 
 	float C = sqrtf(lab.a * lab.a + lab.b * lab.b);
+	if (C == 0) return {0, 0, lab.L};
+
 	float a_ = lab.a / C;
 	float b_ = lab.b / C;
 
@@ -592,6 +594,9 @@ RGB okhsv_to_srgb(HSV hsv)
 	float h = hsv.h;
 	float s = hsv.s;
 	float v = hsv.v;
+
+    if (v == 0) return { 0, 0, 0 };
+    if (v == 1) return { 1, 1, 1 };
 
 	float a_ = cosf(2.f * pi * h);
 	float b_ = sinf(2.f * pi * h);

@@ -6,6 +6,7 @@
 
 #include <glib/gi18n.h>
 #include <gtkmm/box.h>
+#include <gtkmm/enums.h>
 #include <gtkmm/label.h>
 
 #include "property-utils.h"
@@ -65,8 +66,11 @@ StrokeOptions::StrokeOptions() {
         label.set_xalign(0);
         attach(label, 0, row);
         auto box = Gtk::make_managed<Gtk::Box>();
-        box->set_spacing(4);
-        attach(*box, 1, row++);
+        box->add_css_class("linked");
+        box->add_css_class("large-icon");
+        box->add_css_class("reduced-padding");
+        box->set_spacing(0);
+        attach(*box, 1, row, row == 0 ? 1 : 2);
 
         auto first = prop.buttons[0].button;
         for (auto btn : prop.buttons) {
@@ -87,8 +91,11 @@ StrokeOptions::StrokeOptions() {
         }
 
         if (first == &_join_bevel) {
-            box->append(_miter_limit);
+            _miter_limit.set_valign(Gtk::Align::CENTER);
+            attach(_miter_limit, 2, row);
         }
+
+        ++row;
     }
 
     _miter_limit.signal_value_changed().connect([this](double value) {

@@ -182,7 +182,7 @@ DialogNotebook::DialogNotebook(DialogContainer *container)
     menubtn->set_popover(_menu);
     _notebook.set_action_widget(menubtn, Gtk::PackType::END);
     menubtn->set_visible(true);
-    menubtn->set_has_frame(true);
+    menubtn->set_has_frame(false);
     menubtn->set_valign(Gtk::Align::CENTER);
     menubtn->set_halign(Gtk::Align::CENTER);
     menubtn->set_focusable(false);

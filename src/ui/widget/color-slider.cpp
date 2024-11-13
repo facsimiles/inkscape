@@ -11,15 +11,17 @@
 
 #include "color-slider.h"
 
+#include <algorithm>
 #include <cairomm/pattern.h>
+#include <cmath>
 #include <gdkmm/general.h>
 #include <gtkmm/drawingarea.h>
 #include <gtkmm/eventcontrollermotion.h>
 #include <gtkmm/gestureclick.h>
+#include <gtkmm/gesturedrag.h>
 #include <sigc++/functors/mem_fun.h>
 #include <utility>
 
-#include "ink-spin-button.h"
 #include "colors/color.h"
 #include "colors/color-set.h"
 #include "colors/spaces/components.h"
@@ -300,8 +302,10 @@ void ColorSlider::draw_func(Cairo::RefPtr<Cairo::Context> const &cr,
         stroke = Gdk::RGBA(x, x, x);
     }
     if (_colors->isValid(_component)) {
-        double value = _colors->getAverage(_component);
-        draw_slider_thumb(cr, Geom::Point(area.left() + value * area.width(), area.midpoint().y()), THUMB_SIZE, *fill, *stroke, get_scale_factor(), false);
+        double value = std::clamp(_colors->getAverage(_component), 0.0, 1.0);
+        if (std::isfinite(value)) {
+            draw_slider_thumb(cr, Geom::Point(area.left() + value * area.width(), area.midpoint().y()), THUMB_SIZE, *fill, *stroke, get_scale_factor(), false);
+        }
     }
 }
 

@@ -1531,3 +1531,11 @@ menubutton.rectangle > button {
 scrolledwindow.small-window slider {
     min-height: 16px;
 }
+
+.large-icon {
+    -gtk-icon-size: 20px;
+}
+
+button.reduced-padding {
+    padding: 1px;
+}

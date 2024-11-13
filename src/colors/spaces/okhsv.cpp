@@ -9,13 +9,17 @@
  */
 
 #include "okhsv.h"
+#include <algorithm>
 
 #include "colors/ok-color.h"
 
 namespace Inkscape::Colors::Space {
 
 void OkHsv::spaceToProfile(std::vector<double>& output) const {
-    ok_color::HSV hsv{(float)output[0], (float)output[1], (float)output[2]};
+    auto h = std::clamp(output[0], 0.0, 1.0);
+    auto s = std::clamp(output[1], 0.0, 1.0);
+    auto v = std::clamp(output[2], 0.0, 1.0);
+    ok_color::HSV hsv{(float)h, (float)s, (float)v};
     auto rgb = ok_color::okhsv_to_srgb(hsv);
     output[0] = rgb.r;
     output[1] = rgb.g;
