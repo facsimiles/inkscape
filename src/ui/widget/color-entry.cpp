@@ -91,6 +91,8 @@ void ColorEntry::_onColorChanged()
             auto g = color->get(1);
             auto b = color->get(2);
             auto rgb = Colors::CssLegacyPrinter(3, "rgb", false);
+            // high precision, so we show values just barely above/below limits
+            rgb.precision(5);
             rgb << r << g << b;
             _signal_out_of_gamut.emit(Glib::ustring::compose(_("Color %1 is out of sRGB gamut.\nIt has been clipped to sRGB boundary."), static_cast<std::string>(rgb).c_str()));
             _warning = true;

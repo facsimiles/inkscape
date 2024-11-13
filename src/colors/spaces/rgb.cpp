@@ -36,9 +36,11 @@ bool RGB::outOfGamut(const std::vector<double>& input) const {
         throw ColorError("Color values should be size 3 for RGB or 4 for RGBA.");
     }
 
-    // simple check for RGB channels outside of 0..1 range
+    // simple check for RGB channels outside of 0..1 range;
+    // using epsilon value to ignore conversion rounding errors
+    constexpr double eps = 0.0001;
     for (int i = 0; i < 3; ++i) {
-        if (input[i] < 0 || input[i] > 1) {
+        if (input[i] < 0 - eps || input[i] > 1 + eps) {
             return true; // out of sRGB gamut
         }
     }

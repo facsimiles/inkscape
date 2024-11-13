@@ -7,6 +7,7 @@
 #include "color-plate.h"
 #include "ink-color-wheel.h"
 #include "oklab-color-wheel.h"
+#include "colors/spaces/base.h"
 
 namespace Inkscape::UI::Widget {
 
@@ -80,39 +81,12 @@ static std::pair<ColorWheel*, bool> create_color_wheel_helper(Type type, bool cr
     case Type::OKHSL:
         if (create_widget) {
             wheel = create_plate(type, Type::OKHSV, disc);
-            // if (!disc) {
-            //     //TODO: we need OKHSV
-            //     auto hue = 0;   // hue is fixed
-            //     auto sat = 1;
-            //     auto luminocity = 2;
-            //     wheel = new FastColorWheel(Type::OKHSL, Type::OKHSL, hue, sat, luminocity, disc);
-            // }
-            // else {
-            //     auto luminocity = 2; // if luma changes, color wheel needs to be rebuilt
-            //     auto hue = 0;   // vary hue with angle (while painting the disc)
-            //     auto sat = 1;   // vary saturation with distance from the center of the disc (while painting the disc)
-            //     wheel = new FastColorWheel(Type::OKHSL, Type::OKHSL, luminocity, hue, sat, disc);
-            // }
         }
         break;
 
     case Type::OKLCH:
         if (create_widget) {
-                //TODO: we need OKHSV
             wheel = create_plate(type, Type::OKHSV, disc);
-            // if (!disc) {
-            //     //TODO: we need OKHSV
-            //     auto hue = 0;   // hue is fixed
-            //     auto sat = 1;
-            //     auto luminocity = 2;
-            //     wheel = new FastColorWheel(Type::OKLCH, Type::OKLCH, hue, sat, luminocity, disc);
-            // }
-            // else {
-            //     auto luminocity = 2; // if luma changes, color wheel needs to be rebuilt
-            //     auto hue = 0;   // vary hue with angle (while painting the disc)
-            //     auto sat = 1;   // vary saturation with distance from the center of the disc (while painting the disc)
-            //     wheel = new FastColorWheel(Type::OKLCH, Type::OKLCH, luminocity, hue, sat, disc);
-            // }
         }
         break;
 

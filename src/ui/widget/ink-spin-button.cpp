@@ -578,15 +578,14 @@ inline void InkSpinButton::enter_edit() {
 }
 
 bool InkSpinButton::defocus() {
-printf("defoc\n");
     if (_focus->contains_focus()) {
         // move focus away
         if (_defocus_widget) {
             if (_defocus_widget->grab_focus()) return true;
         }
-printf("child focus\n");
         if (_entry.child_focus(Gtk::DirectionType::TAB_FORWARD)) return true;
 
+        //TODO: not found good way to defocus yet
         // for (auto widget = this->get_next_sibling(); widget; widget = widget->get_next_sibling()) {
         //     if (widget != this && widget->get_can_focus()) {
         //         if (widget->grab_focus()) return true;
@@ -605,7 +604,6 @@ printf("child focus\n");
         //     if (parent->grab_focus()) return true;
         // }
     }
-printf("defoc maybe failed\n");
     return false;
 }
 
@@ -672,7 +670,6 @@ bool InkSpinButton::on_key_pressed(guint keyval, guint keycode, Gdk::ModifierTyp
    case GDK_KEY_Escape: // Cancel
        // Esc pressed - cancel editing
        cancel_editing();
-printf("spin esc\n");
        defocus();
        return false; // allow Esc to be handled by dialog too
 
@@ -715,8 +712,7 @@ void InkSpinButton::on_activate() {
     bool ok = commit_entry();
     if (ok && _enter_exit_edit) {
         set_focusable(true);
-        ok=defocus();
-        printf("defocus: %d\n",ok);
+        defocus();
         exit_edit();
     }
 }

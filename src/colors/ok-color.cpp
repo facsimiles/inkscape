@@ -643,6 +643,8 @@ HSV srgb_to_okhsv(RGB rgb)
 		});
 
 	float C = sqrtf(lab.a * lab.a + lab.b * lab.b);
+	if (C == 0) return {0, 0, lab.L};
+
 	float a_ = lab.a / C;
 	float b_ = lab.b / C;
 
