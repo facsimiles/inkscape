@@ -26,6 +26,7 @@ namespace Inkscape {
 }
 
 #define Operator Operator_Gfx
+#include <gdkmm/enums.h>
 #include <poppler/Gfx.h>
 #undef Operator
 
