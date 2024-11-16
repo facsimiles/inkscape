@@ -15,6 +15,8 @@
 #include "elliptical-manipulator.h"
 #include "ui/tool/node.h"
 
+class SPObject;
+
 namespace Geom {
 class Affine;
 class EllipticalArc;
@@ -24,10 +26,13 @@ class Point;
 namespace Inkscape::UI {
 class NodeSharedData;
 class CurveHandler;
+class PathManipulator;
 
-class EllipticalArcEndNode : public Node {
+class EllipticalArcEndNode : public Node
+{
 public:
-    EllipticalArcEndNode(Geom::EllipticalArc const &preceding_arc, NodeSharedData const &data);
+    EllipticalArcEndNode(Geom::EllipticalArc const &preceding_arc, NodeSharedData const &data, SPObject const *path,
+                         PathManipulator &parent);
 
     ~EllipticalArcEndNode() override = default;
 

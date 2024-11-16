@@ -15,12 +15,15 @@
 
 #include "elliptical-arc-handler.h"
 #include "inkscape.h"
+#include "object/sp-item.h"
+#include "util/cast.h"
 
 namespace Inkscape::UI {
 
-EllipticalArcEndNode::EllipticalArcEndNode(Geom::EllipticalArc const &preceding_arc, NodeSharedData const &data)
+EllipticalArcEndNode::EllipticalArcEndNode(Geom::EllipticalArc const &preceding_arc, NodeSharedData const &data,
+                                           SPObject const *path, PathManipulator &parent)
     : Node{data, preceding_arc.finalPoint()}
-    , _manipulator{_desktop ? *_desktop : *SP_ACTIVE_DESKTOP, preceding_arc, data}
+    , _manipulator{_desktop ? *_desktop : *SP_ACTIVE_DESKTOP, preceding_arc, data, cast<SPItem>(path), parent}
 {}
 
 std::unique_ptr<CurveHandler> EllipticalArcEndNode::createEventHandlerForPrecedingCurve()

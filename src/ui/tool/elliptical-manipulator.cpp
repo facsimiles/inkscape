@@ -15,22 +15,68 @@
 #include <2geom/elliptical-arc.h>
 #include <2geom/line.h>
 #include <2geom/path-sink.h>
+#include <2geom/pathvector.h>
 #include <2geom/point.h>
 
+#include "display/control/canvas-item-bpath.h"
+#include "display/control/canvas-item-enums.h"
+#include "display/control/canvas-item-ptr.h"
+#include "object/sp-item.h"
 #include "ui/tool/elliptical-arc-end-node.h"
+#include "ui/tool/multi-path-manipulator.h"
 #include "ui/tool/node.h"
+#include "ui/tool/path-manipulator.h"
+
+namespace {
+
+/// Given the arc of an ellipse, return the other arc making up the ellipse.
+Geom::PathVector arc_complement(Geom::EllipticalArc const &arc)
+{
+    Geom::PathVector result;
+    Geom::PathBuilder builder{result};
+
+    auto const [rx, ry] = arc.rays();
+    builder.moveTo(arc.finalPoint());
+    builder.arcTo(rx, ry, arc.rotationAngle(), !arc.largeArc(), arc.sweep(), arc.initialPoint());
+    builder.flush();
+    return result;
+}
+
+double constexpr CONTOUR_WIDTH = 2.0;
+double constexpr DASH_LENGTH = 2.0;
+} // namespace
 
 namespace Inkscape::UI {
 
 EllipticalManipulator::EllipticalManipulator(SPDesktop &desktop, Geom::EllipticalArc const &arc,
-                                             NodeSharedData const &data)
+                                             NodeSharedData const &data, SPItem const *path, PathManipulator &parent)
     : _arc{arc}
     , _node_shared_data{&data}
-{}
+    , _contour{make_canvasitem<CanvasItemBpath>(data.handle_line_group)}
+    , _path{path}
+    , _parent{&parent}
+{
+    _contour->set_bpath(arc_complement(_arc));
+    _contour->set_name("CanvasItemBPath:EllipseContour");
+    _contour->set_stroke(CANVAS_ITEM_PRIMARY);
+    _contour->lower_to_bottom();
+    _contour->set_pickable(false);
+    _contour->CanvasItem::set_fill(0U);
+    _contour->set_stroke_width(CONTOUR_WIDTH);
+    _contour->set_dashes({DASH_LENGTH, DASH_LENGTH});
+}
 
 void EllipticalManipulator::updateDisplay()
 {
-    // TODO: implement the center node
+    // TODO: implement the arc controller
+    // _center_node.setPosition(_arc.center());
+    _contour->set_bpath(arc_complement(_arc));
+    _parent->update();
+}
+
+void EllipticalManipulator::commitUndoEvent(CommitEvent event_type) const
+{
+    _parent->mpm().commit(event_type);
 }
 
 void EllipticalManipulator::writeSegment(Geom::PathSink &output) const
@@ -41,7 +87,8 @@ void EllipticalManipulator::writeSegment(Geom::PathSink &output) const
 
 void EllipticalManipulator::setVisible(bool visible)
 {
-    // TODO: implement the center node
+    // TODO: implement the halo node
+    _contour->set_visible(visible);
 }
 
 void EllipticalManipulator::setArcGeometry(Geom::EllipticalArc const &new_arc)
@@ -105,7 +152,7 @@ std::unique_ptr<Node> EllipticalManipulator::subdivideArc(double subdivision_tim
     _arc = *second_arc;
     updateDisplay();
 
-    return std::make_unique<EllipticalArcEndNode>(*first_arc, *_node_shared_data);
+    return std::make_unique<EllipticalArcEndNode>(*first_arc, *_node_shared_data, _path, *_parent);
 }
 } // namespace Inkscape::UI
 
