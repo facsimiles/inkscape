@@ -18,6 +18,8 @@
 #include <glibmm/ustring.h>
 
 #include "ui/tool/commit-events.h"
+#include "display/control/canvas-item-bpath.h"
+#include "display/control/canvas-item-ptr.h"
 #include "ui/tool/control-point.h"
 #include "ui/tool/ellipse-center.h"
 
@@ -72,6 +74,7 @@ private:
     Geom::EllipticalArc _arc;
     EllipseCenter _center_node;
     NodeSharedData const *_node_shared_data = nullptr;
+    CanvasItemPtr<CanvasItemBpath> _contour;
     SPItem const *_path = nullptr;
     PathManipulator *_parent = nullptr;
 };
