@@ -195,7 +195,8 @@ bool pathv_similar(Geom::PathVector const &apv, Geom::PathVector const &bpv, dou
 /*
 * Checks if the path describes a simple rectangle, returning true and populating rect if it does.
 */
-bool is_simple_rect(Geom::PathVector const &pathv, Geom::OptRect &rect, double precision) {
+bool is_simple_rect(Geom::PathVector const &pathv, Geom::OptRect &rect, double precision)
+{
     // "Simple rectangle" is a single path with 4 line segments.
     if (pathv.size() != 1) {
         return false;
@@ -214,8 +215,7 @@ bool is_simple_rect(Geom::PathVector const &pathv, Geom::OptRect &rect, double p
     for (auto const &seg : path) {
         auto end = seg.finalPoint();
         // define a change in X as 1, change in Y as -1. Both is 0
-        int change = (abs(end[X] - start[X]) < precision ? 0 : 1)
-                   + (abs(end[Y] - start[Y]) < precision ? 0 : -1);
+        int change = (abs(end[X] - start[X]) < precision ? 0 : 1) + (abs(end[Y] - start[Y]) < precision ? 0 : -1);
         if (change == 0 || change == prev_change) {
             // Changing in both x and y, or continuing the same direction as the previous segment.
             return false;
@@ -570,17 +570,12 @@ bool pathv_fully_contains(Geom::PathVector const &a, Geom::PathVector const &b)
         }
     }
 
-    // As in pathvs_have_nonempty_overlap, windings do not account for nodeless Bézier arc intersections.
-    auto crossings = Geom::SimpleCrosser().crossings(a, b);
-    if (crossings.empty()) {
-        return true;
-    }
-
-    // I'm not entirely sure why there might be a crossing set composed entirely of empty crossings
-    auto is_empty = [](Geom::Crossings const &xings) -> bool { return xings.empty(); };
-    if (!std::all_of(crossings.begin(), crossings.end(), is_empty)) { // An intersection has been found
+    // As in pathvs_have_nonempty_overlap, windings may not account for nodeless Bézier arc intersections.
+    auto intersections = a.intersect(b);
+    if (!intersections.empty()) {
         return false;
     }
+
     // BBox is fully contained, passed the winding test, no intersections, the path must be contained
     return true;
 }
