@@ -53640,25 +53640,25 @@ msgstr "Половина кегля данного шрифта"
 #~ msgid "Snapchat advertisement"
 #~ msgstr "Реклама Snapchat"
 
-#~ msgid "Twitter card image"
+#~ msgid "X (Twitter) card image"
 #~ msgstr "Изображение карты Twitter"
 
-#~ msgid "Twitter header"
+#~ msgid "X (Twitter) header"
 #~ msgstr "Заголовок Twitter"
 
-#~ msgid "Twitter post image"
+#~ msgid "X (Twitter) post image"
 #~ msgstr "Изображение для публикации Twitter"
 
-#~ msgid "Twitter profile picture"
+#~ msgid "X (Twitter) profile picture"
 #~ msgstr "Изображение профиля Twitter"
 
-#~ msgid "Twitter video landscape"
+#~ msgid "X (Twitter) video landscape"
 #~ msgstr "Видео Twitter (альбомный режим)"
 
-#~ msgid "Twitter video portrait"
+#~ msgid "X (Twitter) video portrait"
 #~ msgstr "Видео Twitter (портретный режим)"
 
-#~ msgid "Twitter video square"
+#~ msgid "X (Twitter) video square"
 #~ msgstr "Видео Twitter (квадратное)"
 
 #~ msgid "Video DCI 2k (Full Frame)"

@@ -15141,31 +15141,31 @@ msgid "Snapchat advertisement"
 msgstr "Snapchat auglýsing"
 
 #: ../src/extension/internal/template-social.cpp:54
-msgid "Twitter card image"
+msgid "X (Twitter) card image"
 msgstr "Mynd með Twitter-spjaldi"
 
 #: ../src/extension/internal/template-social.cpp:55
-msgid "Twitter header"
+msgid "X (Twitter) header"
 msgstr "Twitter forsíðumynd"
 
 #: ../src/extension/internal/template-social.cpp:56
-msgid "Twitter post image"
+msgid "X (Twitter) post image"
 msgstr "Mynd með Twitter-færslu"
 
 #: ../src/extension/internal/template-social.cpp:57
-msgid "Twitter profile picture"
+msgid "X (Twitter) profile picture"
 msgstr "Twitter notandamynd"
 
 #: ../src/extension/internal/template-social.cpp:58
-msgid "Twitter video landscape"
+msgid "X (Twitter) video landscape"
 msgstr "Lárétt Twitter-myndskeið"
 
 #: ../src/extension/internal/template-social.cpp:59
-msgid "Twitter video portrait"
+msgid "X (Twitter) video portrait"
 msgstr "Lóðrétt Twitter-myndskeið"
 
 #: ../src/extension/internal/template-social.cpp:60
-msgid "Twitter video square"
+msgid "X (Twitter) video square"
 msgstr "Ferningslaga Twitter-myndskeið"
 
 #: ../src/extension/internal/template-video.cpp:28

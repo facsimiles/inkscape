@@ -50657,25 +50657,25 @@ msgstr "Metade da altura da fonte"
 #~ msgstr "Snapchat - anúncio"
 
 # tradução correta?
-#~ msgid "Twitter card image"
+#~ msgid "X (Twitter) card image"
 #~ msgstr "Twitter - imagem de cartão"
 
-#~ msgid "Twitter header"
+#~ msgid "X (Twitter) header"
 #~ msgstr "Twitter - cabeçalho"
 
-#~ msgid "Twitter post image"
+#~ msgid "X (Twitter) post image"
 #~ msgstr "Twitter - imagem postada"
 
-#~ msgid "Twitter profile picture"
+#~ msgid "X (Twitter) profile picture"
 #~ msgstr "Twitter - imagem de perfil"
 
-#~ msgid "Twitter video landscape"
+#~ msgid "X (Twitter) video landscape"
 #~ msgstr "Twitter - vídeo horizontal"
 
-#~ msgid "Twitter video portrait"
+#~ msgid "X (Twitter) video portrait"
 #~ msgstr "Twitter - vídeo vertical"
 
-#~ msgid "Twitter video square"
+#~ msgid "X (Twitter) video square"
 #~ msgstr "Twitter - vídeo quadrado"
 
 #, fuzzy

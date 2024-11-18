@@ -16330,38 +16330,38 @@ msgstr ""
 
 #: ../src/extension/internal/template-social.cpp:54
 #, fuzzy
-msgid "Twitter card image"
+msgid "X (Twitter) card image"
 msgstr "Αντιστροφή εικόνας"
 
 #
 #: ../src/extension/internal/template-social.cpp:55
 #, fuzzy
-msgid "Twitter header"
+msgid "X (Twitter) header"
 msgstr "Διακύμανση κόμβων"
 
 #: ../src/extension/internal/template-social.cpp:56
 #, fuzzy
-msgid "Twitter post image"
+msgid "X (Twitter) post image"
 msgstr "Αντιστροφή εικόνας"
 
 #: ../src/extension/internal/template-social.cpp:57
 #, fuzzy
-msgid "Twitter profile picture"
+msgid "X (Twitter) profile picture"
 msgstr "Αντιστροφή εικόνας"
 
 #: ../src/extension/internal/template-social.cpp:58
 #, fuzzy
-msgid "Twitter video landscape"
+msgid "X (Twitter) video landscape"
 msgstr "_Τοπίο"
 
 #: ../src/extension/internal/template-social.cpp:59
 #, fuzzy
-msgid "Twitter video portrait"
+msgid "X (Twitter) video portrait"
 msgstr "_Τοπίο"
 
 #: ../src/extension/internal/template-social.cpp:60
 #, fuzzy
-msgid "Twitter video square"
+msgid "X (Twitter) video square"
 msgstr "_Τοπίο"
 
 # #-#-#-#-#  anjuta.master.el.po (anjuta.HEAD)  #-#-#-#-#

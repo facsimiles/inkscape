@@ -14924,31 +14924,31 @@ msgid "Snapchat advertisement"
 msgstr "Snapchat 廣告"
 
 #: ../src/extension/internal/template-social.cpp:54
-msgid "Twitter card image"
+msgid "X (Twitter) card image"
 msgstr "Twitter 卡片影像"
 
 #: ../src/extension/internal/template-social.cpp:55
-msgid "Twitter header"
+msgid "X (Twitter) header"
 msgstr "Twitter 頁首"
 
 #: ../src/extension/internal/template-social.cpp:56
-msgid "Twitter post image"
+msgid "X (Twitter) post image"
 msgstr "Twitter 貼文影像"
 
 #: ../src/extension/internal/template-social.cpp:57
-msgid "Twitter profile picture"
+msgid "X (Twitter) profile picture"
 msgstr "Twitter 個人資料相片"
 
 #: ../src/extension/internal/template-social.cpp:58
-msgid "Twitter video landscape"
+msgid "X (Twitter) video landscape"
 msgstr "Twitter 影片橫向"
 
 #: ../src/extension/internal/template-social.cpp:59
-msgid "Twitter video portrait"
+msgid "X (Twitter) video portrait"
 msgstr "Twitter 影片直向"
 
 #: ../src/extension/internal/template-social.cpp:60
-msgid "Twitter video square"
+msgid "X (Twitter) video square"
 msgstr "Twitter 影片正方形"
 
 #: ../src/extension/internal/template-video.cpp:28
