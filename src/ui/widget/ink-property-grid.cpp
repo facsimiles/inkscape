@@ -36,7 +36,6 @@ constexpr int COL_FILED_1  = 2; // property widget
 constexpr int COL_BUTTON_2 = 3; // button at the end of property (like a reset/clear)
 
 WidgetGroup InkPropertyGrid::add_property(Gtk::Label* label, Gtk::Widget* button1, Gtk::Widget* w1, Gtk::Widget* w2, Gtk::Widget* btn, int margin) {
-    // Gtk::Widget* group = w1;
     WidgetGroup group;
 
     if (label) {
@@ -137,17 +136,20 @@ void InkPropertyGrid::add_row(Gtk::Widget* widget, Gtk::Widget* button, bool who
     ++_row;
 }
 
-void InkPropertyGrid::add_row(const std::string& label, Gtk::Widget* widget, Gtk::Widget* button, int margin) {
+WidgetGroup InkPropertyGrid::add_row(const std::string& label, Gtk::Widget* widget, Gtk::Widget* button, int margin) {
+    WidgetGroup group;
     if (!label.empty()) {
         auto l = Gtk::make_managed<Gtk::Label>(label);
         l->set_halign(Gtk::Align::START);
         l->set_margin(margin);
         _grid.attach(*l, COL_LABEL, _row);
+        group.add(l);
     }
 
     if (widget) {
         widget->set_margin(margin);
         _grid.attach(*widget, COL_FILED_1, _row);
+        group.add(widget);
     }
 
     if (button) {
@@ -155,9 +157,11 @@ void InkPropertyGrid::add_row(const std::string& label, Gtk::Widget* widget, Gtk
         button->set_margin_start(0);
         button->set_margin_end(0);
         _grid.attach(*button, COL_BUTTON_2, _row);
+        group.add(button);
     }
 
     ++_row;
+    return group;
 }
 
 void InkPropertyGrid::set_single_column(bool single) {

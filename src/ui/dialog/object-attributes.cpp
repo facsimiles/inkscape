@@ -215,12 +215,13 @@ void ObjectAttributes::widget_setup() {
         _obj_title.set_text("");
     }
 
-    if (panel != _current_panel) {
-        show_properties_section(panel && panel->supports_props_section());
-    }
+    // show properties section if new panel supports it or if there is no dedicated panel
+    // note: current "object properties" subdialog doesn't handle multiselection
+    bool show_props = (panel && panel->supports_props_section()) || (!panel && item);
+    show_properties_section(show_props);
+
     _current_panel = panel;
     _current_item = nullptr;
-    bool enable_props = panel != nullptr;
 
     update_vis_lock(item);
 
@@ -231,8 +232,6 @@ void ObjectAttributes::widget_setup() {
         panel->update_panel(item, getDesktop());
         panel->widget().set_visible(true);
     }
-    // TODO
-    // show no of LPEs?
 
     Glib::ustring title = panel ? panel->get_title(selection) : "";
     if (!panel) {
@@ -240,13 +239,9 @@ void ObjectAttributes::widget_setup() {
             if (auto name = item->displayName()) {
                 title = name;
             }
-            // show properties for element without dedicated attributes panel
-            enable_props = true;
         }
         else if (selection->size() > 1) {
             title = _("Multiple objects selected");
-            // current "object properties" subdialog doesn't handle multiselection
-            enable_props = false;
         }
         else {
             title = _("No selection");
@@ -321,6 +316,8 @@ void ObjectAttributes::selectionChanged(Selection* selection) {
 
 void ObjectAttributes::selectionModified(Selection* _selection, guint flags) {
     if (_update.pending() || !getDesktop() || !_current_panel) return;
+
+    if (flags & SP_OBJECT_USER_MODIFIED_TAG_1) return;
 
     auto selection = getDesktop()->getSelection();
     if (flags & (SP_OBJECT_MODIFIED_FLAG |

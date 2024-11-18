@@ -130,7 +130,11 @@ ColorWheel* ColorPage::create_color_wheel(Space::Type type, bool disc) {
     }
     _color_wheel_changed = _color_wheel->connect_color_changed([this](const Color& color) {
         auto scoped = SignalBlocker{_color_wheel_changed};
-        _specific_colors->setAll(color);
+        // add alpha; color wheel doesn't use it, but current color does
+        auto opacity = _specific_colors->getAverage().getOpacity();
+        auto c = color;
+        c.setOpacity(opacity);
+        _specific_colors->setAll(c);
     });
     return _color_wheel;
 }

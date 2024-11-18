@@ -36,6 +36,9 @@ class SPObject;
 /* Convenience */
 #define SP_OBJECT_FLAGS_ALL 0xff
 
+#define SP_OBJECT_USER_MODIFIED_TAG_1 (1 << 8)
+#define SP_OBJECT_USER_MODIFIED_TAG_2 (1 << 9)
+
 /* Flags that mark object as modified */
 /* Object, Child, Style, Viewport, User */
 #define SP_OBJECT_MODIFIED_STATE (SP_OBJECT_FLAGS_ALL & ~(SP_OBJECT_PARENT_MODIFIED_FLAG))
@@ -165,8 +168,8 @@ public:
 
     unsigned int cloned : 1;
     SPObject *clone_original{nullptr};
-    unsigned int uflags : 8;
-    unsigned int mflags : 8;
+    unsigned int uflags : 16;
+    unsigned int mflags : 16;
     SPIXmlSpace xml_space;
     Glib::ustring lang;
     unsigned int hrefcount{0};        /* number of xlink:href references */

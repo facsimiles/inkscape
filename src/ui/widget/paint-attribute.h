@@ -39,8 +39,6 @@ public:
 private:
     void set_paint(const SPIPaint& paint, double opacity, bool fill);
     void set_paint(const SPObject* object, bool fill);
-    // set icon representing current fill/stroke type
-    void set_preview(const SPIPaint& paint, double paint_opacity, PaintMode mode, bool fill);
     //
     void update_markers(SPIString* markers[], SPObject* object);
     // show/hide stroke widgets
@@ -52,9 +50,16 @@ private:
     struct PaintStrip {
         PaintStrip(const Glib::ustring& title, bool fill);
 
+        // set icon representing current fill/stroke type
+        void set_preview(const SPIPaint& paint, double paint_opacity, PaintMode mode);
+        PaintMode update_preview_indicators(const SPObject* object);
+        // mark object as modified
+        void request_update();
         void show();
         void hide();
         bool can_update() const;
+
+        bool _is_fill;
         Gtk::MenuButton _paint_btn;
         Gtk::Popover _popover;
         std::unique_ptr<PaintSwitch> _switch = PaintSwitch::create(false);
@@ -96,6 +101,9 @@ private:
     WidgetGroup _filter_widgets;
     ComboBoxEnum<SPBlendMode> _blend;
     Gtk::Button _reset_blend;
+    Gtk::Entry _applied_lpe;
+    Gtk::Button _edit_lpe;
+    WidgetGroup _lpe_widgets;
     SPItem* _current_item = nullptr;
     Glib::RefPtr<Gtk::SizeGroup> _size_group = Gtk::SizeGroup::create(Gtk::SizeGroup::Mode::HORIZONTAL);
     WidgetGroup _stroke_widgets;

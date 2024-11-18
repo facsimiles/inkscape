@@ -547,7 +547,9 @@ HSL srgb_to_okhsl(RGB rgb)
 		});
 
 	float C = sqrtf(lab.a * lab.a + lab.b * lab.b);
-	if (C == 0) return {0, 0, lab.L};
+	if (C == 0) {
+		return {0, 0, lab.L};
+	}
 
 	float a_ = lab.a / C;
 	float b_ = lab.b / C;
@@ -595,9 +597,6 @@ RGB okhsv_to_srgb(HSV hsv)
 	float s = hsv.s;
 	float v = hsv.v;
 
-    if (v == 0) return { 0, 0, 0 };
-    if (v == 1) return { 1, 1, 1 };
-
 	float a_ = cosf(2.f * pi * h);
 	float b_ = sinf(2.f * pi * h);
 
@@ -622,7 +621,8 @@ RGB okhsv_to_srgb(HSV hsv)
 	float C_vt = C_v * L_vt / L_v;
 
 	float L_new = toe_inv(L);
-	C = C * L_new / L;
+	// this is a fix and a hack: don't blow up on L==0 (a fix), keep C>0 when L==0 to preserve hue (a hack)
+	C = L > 0 && L_new > 0 ? C * L_new / L : 0.002;
 	L = L_new;
 
 	RGB rgb_scale = oklab_to_linear_srgb({ L_vt, a_ * C_vt, b_ * C_vt });
@@ -648,7 +648,9 @@ HSV srgb_to_okhsv(RGB rgb)
 		});
 
 	float C = sqrtf(lab.a * lab.a + lab.b * lab.b);
-	if (C == 0) return {0, 0, lab.L};
+	if (C == 0) {
+		return {0, 0, lab.L};
+	}
 
 	float a_ = lab.a / C;
 	float b_ = lab.b / C;

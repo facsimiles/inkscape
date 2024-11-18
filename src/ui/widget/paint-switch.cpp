@@ -375,30 +375,33 @@ void PaintSwitchImpl::switch_paint_mode(PaintMode mode) {
     _signal_mode_changed.emit(mode);
 
     switch (mode) {
-        case PaintMode::None:
-            break;
-        case PaintMode::Solid:
-            fire_flat_color_changed();
-            break;
-        case PaintMode::Pattern:
-            fire_pattern_changed();
-            break;
-        case PaintMode::Gradient:
-            fire_gradient_changed(nullptr, mode);
-            break;
-        case PaintMode::Mesh:
-            fire_mesh_changed(nullptr);
-            break;
-        case PaintMode::Swatch:
+    case PaintMode::None:
+        break;
+    case PaintMode::Solid:
+        fire_flat_color_changed();
+        // set_color();
+        break;
+    case PaintMode::Pattern:
+        fire_pattern_changed();
+        break;
+    case PaintMode::Gradient:
+        fire_gradient_changed(nullptr, mode);
+        break;
+    case PaintMode::Mesh:
+        fire_mesh_changed(nullptr);
+        break;
+    case PaintMode::Swatch:
         //todo: verify: .getGradientSelector()->getVector();
-            fire_swatch_changed(_swatch.get_selected_vector(), EditOperation::New, nullptr, {}, {});
-            break;
-        case PaintMode::NotSet:
-            break;
-        default:
-            assert(false);
-            break;
+        fire_swatch_changed(_swatch.get_selected_vector(), EditOperation::New, nullptr, {}, {});
+        break;
+    case PaintMode::NotSet:
+        break;
+    default:
+        assert(false);
+        break;
     }
+
+    set_mode(mode);
 }
 
 void PaintSwitchImpl::set_color(const Colors::Color& color) {

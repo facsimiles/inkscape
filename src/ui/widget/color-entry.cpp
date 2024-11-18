@@ -15,9 +15,8 @@
 
 #include "color-entry.h"
 
-#include "colors/printer.h"
 #include "colors/spaces/base.h"
-// #include "util-string/ustring-format.h"
+#include "svg/css-ostringstream.h"
 
 namespace Inkscape::UI::Widget {
 
@@ -90,11 +89,11 @@ void ColorEntry::_onColorChanged()
             auto r = color->get(0);
             auto g = color->get(1);
             auto b = color->get(2);
-            auto rgb = Colors::CssLegacyPrinter(3, "rgb", false);
+            CSSOStringStream rgb;
             // high precision, so we show values just barely above/below limits
-            rgb.precision(5);
-            rgb << r << g << b;
-            _signal_out_of_gamut.emit(Glib::ustring::compose(_("Color %1 is out of sRGB gamut.\nIt has been clipped to sRGB boundary."), static_cast<std::string>(rgb).c_str()));
+            rgb.precision(2);
+            rgb << "rgb(" << 100 * r << "% " << 100 * g << "% " << 100 * b << "%)";
+            _signal_out_of_gamut.emit(Glib::ustring::compose(_("Color %1 is out of sRGB gamut.\nIt has been clipped to sRGB boundary."), rgb.str().c_str()));
             _warning = true;
         }
         else if (_warning) {

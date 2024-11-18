@@ -33,13 +33,16 @@ public:
         // move color indicator to correct spot on the disc
         move_indicator_to(dest);
     }
+
     Widget& get_widget() override { return *this; }
+
     sigc::connection connect_color_changed(sigc::slot<void(const Colors::Color&)> cb) override {
         return signal_color_changed().connect([this, cb](auto& c) {
             auto color = c.converted(_source);
             if (color) cb(*color); else g_warning("Color conversion from type %d to type %d failed.", int(_plate), int(_source));
         });
     }
+
     void redraw(const Cairo::RefPtr<Cairo::Context>& ctx) override { draw_plate(ctx); }
 
 private:

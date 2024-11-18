@@ -37,7 +37,7 @@ public:
     Gtk::Widget* add_gap(int size = 8);
     // add a widget to the grid that will occupy both columns
     void add_row(Gtk::Widget* widget, Gtk::Widget* button = nullptr, bool whole_row = true, int margin = 2);
-    void add_row(const std::string& label, Gtk::Widget* widget, Gtk::Widget* button = nullptr, int margin = 2);
+    WidgetGroup add_row(const std::string& label, Gtk::Widget* widget, Gtk::Widget* button = nullptr, int margin = 2);
 
 private:
     void construct();
