@@ -14309,31 +14309,31 @@ msgid "Snapchat advertisement"
 msgstr "Snapchat - Anuncio"
 
 #: ../src/extension/internal/template-social.cpp:54
-msgid "Twitter card image"
+msgid "X (Twitter) card image"
 msgstr "Twitter - imagen de carta"
 
 #: ../src/extension/internal/template-social.cpp:55
-msgid "Twitter header"
+msgid "X (Twitter) header"
 msgstr "Twitter - Cabecera"
 
 #: ../src/extension/internal/template-social.cpp:56
-msgid "Twitter post image"
+msgid "X (Twitter) post image"
 msgstr "Twitter - Imagen de publicación"
 
 #: ../src/extension/internal/template-social.cpp:57
-msgid "Twitter profile picture"
+msgid "X (Twitter) profile picture"
 msgstr "Twitter - Foto de perfil"
 
 #: ../src/extension/internal/template-social.cpp:58
-msgid "Twitter video landscape"
+msgid "X (Twitter) video landscape"
 msgstr "Twitter - Vídeo en paisaje"
 
 #: ../src/extension/internal/template-social.cpp:59
-msgid "Twitter video portrait"
+msgid "X (Twitter) video portrait"
 msgstr "Twitter - Vídeo retrato"
 
 #: ../src/extension/internal/template-social.cpp:60
-msgid "Twitter video square"
+msgid "X (Twitter) video square"
 msgstr "Twitter - Vídeo cuadrado"
 
 #: ../src/extension/internal/template-video.cpp:28

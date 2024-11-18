@@ -14958,31 +14958,31 @@ msgid "Snapchat advertisement"
 msgstr "פרסומת בסנאפצ׳ט"
 
 #: ../src/extension/internal/template-social.cpp:54
-msgid "Twitter card image"
+msgid "X (Twitter) card image"
 msgstr "תמונת כרטיס בטוויטר"
 
 #: ../src/extension/internal/template-social.cpp:55
-msgid "Twitter header"
+msgid "X (Twitter) header"
 msgstr "כותרת בטוויטר"
 
 #: ../src/extension/internal/template-social.cpp:56
-msgid "Twitter post image"
+msgid "X (Twitter) post image"
 msgstr "תמונת רשומה בטוויטר"
 
 #: ../src/extension/internal/template-social.cpp:57
-msgid "Twitter profile picture"
+msgid "X (Twitter) profile picture"
 msgstr "תמונת פרופיל בטוויטר"
 
 #: ../src/extension/internal/template-social.cpp:58
-msgid "Twitter video landscape"
+msgid "X (Twitter) video landscape"
 msgstr "וידאו לרוחב בטוויטר"
 
 #: ../src/extension/internal/template-social.cpp:59
-msgid "Twitter video portrait"
+msgid "X (Twitter) video portrait"
 msgstr "וידאו לאורך בטוויטר"
 
 #: ../src/extension/internal/template-social.cpp:60
-msgid "Twitter video square"
+msgid "X (Twitter) video square"
 msgstr "ריבוע וידאו בטוויטר"
 
 #: ../src/extension/internal/template-video.cpp:28

@@ -56350,25 +56350,25 @@ msgstr "HEIGHT"
 #~ msgid "Snapchat advertisement"
 #~ msgstr "تبلیغات اسنپ‌چت"
 
-#~ msgid "Twitter card image"
+#~ msgid "X (Twitter) card image"
 #~ msgstr "تصویر کارت توییتر"
 
-#~ msgid "Twitter header"
+#~ msgid "X (Twitter) header"
 #~ msgstr "سرصفحهٔ توییتر"
 
-#~ msgid "Twitter post image"
+#~ msgid "X (Twitter) post image"
 #~ msgstr "تصویر فرستهٔ توییتر"
 
-#~ msgid "Twitter profile picture"
+#~ msgid "X (Twitter) profile picture"
 #~ msgstr "عکس نمایهٔ توییتر"
 
-#~ msgid "Twitter video landscape"
+#~ msgid "X (Twitter) video landscape"
 #~ msgstr "ویدیوی افقی توییتر"
 
-#~ msgid "Twitter video portrait"
+#~ msgid "X (Twitter) video portrait"
 #~ msgstr "ویدیوی عمودی توییتر"
 
-#~ msgid "Twitter video square"
+#~ msgid "X (Twitter) video square"
 #~ msgstr "ویدیوی مربعی توییتر"
 
 #~ msgid "Video DCI 2k (Full Frame)"
