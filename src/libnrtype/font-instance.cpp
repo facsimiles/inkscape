@@ -194,7 +194,7 @@ void FontInstance::init_face()
     FT_Select_Charmap(face, ft_encoding_symbol);
 
     data = std::make_shared<Data>();
-    readOpenTypeSVGTable(hb_font, data->openTypeSVGGlyphs);
+    readOpenTypeSVGTable(hb_font, data->openTypeSVGGlyphs, data->openTypeSVGData);
     readOpenTypeFvarAxes(face, data->openTypeVarAxes);
 
 #if FREETYPE_MAJOR == 2 && FREETYPE_MINOR >= 8  // 2.8 does not seem to work even though it has some support.
@@ -551,13 +551,13 @@ Inkscape::Pixbuf const *FontInstance::PixBuf(int glyph_id)
         return glyph_iter->second.pixbuf.get(); // already loaded
     }
 
-    Glib::ustring svg = glyph_iter->second.svg;
+    Glib::ustring svg = data->openTypeSVGData[glyph_iter->second.entry_index];
 
     // Create new viewbox which determines pixbuf size.
     Glib::ustring viewbox("viewBox=\"0 ");
     viewbox += std::to_string(-_design_units);
     viewbox += " ";
-    viewbox += std::to_string(_design_units);
+    viewbox += std::to_string(_design_units*2); // Noto emoji leaks outside of em-box.
     viewbox += " ";
     viewbox += std::to_string(_design_units*2);
     viewbox += "\"";
@@ -634,6 +634,11 @@ Inkscape::Pixbuf const *FontInstance::PixBuf(int glyph_id)
         viewbox.insert(0, "<svg ");
         svg = regex->replace_literal(svg, 0, viewbox, static_cast<Glib::RegexMatchFlags>(0));
     }
+
+    // Make glyph visible.
+    auto pattern = Glib::ustring::compose("(id=\"\\s*glyph%1\\s*\")\\s*visibility=\"hidden\"", glyph_id);
+    auto regex2 = Glib::Regex::create(pattern, Glib::RegexCompileFlags::REGEX_OPTIMIZE);
+    svg = regex2->replace(svg, 0, "\\1", static_cast<Glib::RegexMatchFlags>(0));
 
     // Finally create pixbuf!
     auto pixbuf = Inkscape::Pixbuf::create_from_buffer(svg.raw());

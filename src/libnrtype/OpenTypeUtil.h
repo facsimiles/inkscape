@@ -105,11 +105,11 @@ inline FT_Fixed FTDoubleToFixed (double value) {
 
 namespace Inkscape { class Pixbuf; }
 
-struct SVGTableEntry
+struct SVGGlyphEntry
 {
-    std::string svg;
+    unsigned int entry_index;
     std::unique_ptr<Inkscape::Pixbuf const> pixbuf;
-    ~SVGTableEntry();
+    ~SVGGlyphEntry();
 };
 
 // This would be better if one had std::vector<OTSubstitution> instead of OTSubstitution where each
@@ -125,7 +125,8 @@ void readOpenTypeFvarNamed (const FT_Face ft_face,
                             std::map<Glib::ustring, OTVarInstance>& named);
 
 void readOpenTypeSVGTable  (hb_font_t* hb_font,
-                            std::map<int, SVGTableEntry>& glyphs);
+                            std::map<int, SVGGlyphEntry>& glyphs,
+                            std::map<int, std::string>& svgs);
 
 #endif /* !USE_PANGO_WIND32    */
 #endif /* !SEEN_OPENTYPEUTIL_H */
