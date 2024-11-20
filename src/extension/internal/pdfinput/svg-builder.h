@@ -78,6 +78,8 @@ struct SvgGlyph {
     Geom::Point origin;        // Origin of glyph (used for fixing vertical text position)
     Geom::Point delta;         // X, Y advance values
     double rise;               // Text rise parameter
+    double char_space;         // Character spacing
+    double word_space;         // Word spacing
     Glib::ustring code;        // UTF-8 coded character
     bool is_space;
 

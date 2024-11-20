@@ -1437,6 +1437,10 @@ Inkscape::XML::Node* SvgBuilder::_flushTextText(GfxState *state, double text_sca
         if (glyphs_in_tspan != 0) {
             // Subtract off previous glyph position and advance.
             delta_dpos = glyph.text_position - prev_glyph.text_position - prev_glyph.delta;
+            delta_dpos[0] += glyph.char_space;
+            if (glyph.is_space) {
+                delta_dpos[0] += glyph.word_space;
+            }
         }
 
         // Eliminate small rounding errors.
@@ -1449,6 +1453,7 @@ Inkscape::XML::Node* SvgBuilder::_flushTextText(GfxState *state, double text_sca
 
         delta_dpos[1] += glyph.rise;
         delta_dpos[1] *= -1.0;   // flip it
+
         delta_dpos *= Geom::Scale(text_scale);
 
 
@@ -1880,7 +1885,8 @@ void SvgBuilder::addChar(GfxState *state, double x, double y, double dx, double 
     }
     new_glyph.font_specification = _font_specification;
     new_glyph.rise = state->getRise();
-
+    new_glyph.char_space = state->getCharSpace();
+    new_glyph.word_space = state->getWordSpace();
     _glyphs.push_back(new_glyph);
 
     IFTRACE(
