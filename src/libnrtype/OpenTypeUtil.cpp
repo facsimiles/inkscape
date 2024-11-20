@@ -25,6 +25,8 @@
 #include <harfbuzz/hb-ft.h>
 #include <harfbuzz/hb-ot.h>
 
+#include <glibmm/regex.h>
+
 // SVG in OpenType
 #include "io/stream/gzipstream.h"
 #include "io/stream/bufferstream.h"
@@ -106,7 +108,7 @@ void get_glyphs(GlyphToUnicodeMap& glyphMap, HbSet& set, Glib::ustring& characte
     }
 }
 
-SVGTableEntry::~SVGTableEntry() = default;
+SVGGlyphEntry::~SVGGlyphEntry() = default;
 
 // Make a list of all tables found in the GSUB
 // This list includes all tables regardless of script or language.
@@ -362,7 +364,8 @@ void readOpenTypeFvarNamed(const FT_Face ft_face,
 
 // Get SVG glyphs out of an OpenType font.
 void readOpenTypeSVGTable(hb_font_t* hb_font,
-                          std::map<int, SVGTableEntry>& glyphs) {
+                          std::map<int, SVGGlyphEntry>& glyphs,
+                          std::map<int, std::string>& svgs) {
 
     hb_face_t* hb_face = hb_font_get_face (hb_font);
 
@@ -434,13 +437,24 @@ void readOpenTypeSVGTable(hb_font_t* hb_font,
             }
         }
 
+        // Make all glyphs hidden (for SVG files with multiple glyphs, we'll need to pickout just one).
+        static auto regex = Glib::Regex::create("(id=\"\\s*glyph\\d+\\s*\")", Glib::RegexCompileFlags::REGEX_OPTIMIZE);
+        svg = regex->replace(svg, 0, "\\1 visibility=\"hidden\"", static_cast<Glib::RegexMatchFlags>(0));
+
+        svgs[entry] = svg;
+
         for (unsigned int i = startGlyphID; i < endGlyphID+1; ++i) {
-            glyphs[i].svg = svg;
+            glyphs[i].entry_index = entry;
         }
 
-        // for (auto glyph : glyphs) {
+        // for (auto const& glyph : glyphs) {
         //     std::cout << "Glyph: " << glyph.first << std::endl;
-        //     std::cout << glyph.second.svg << std::endl;
+        //     auto length = svgs[glyph.second.entry_index].length();
+        //     if (length < 1000) {
+        //         std::cout << svgs[glyph.second.entry_index] << std::endl;
+        //     } else {
+        //         std::cout << "glyph svg string length: " << length << std::endl;
+        //     }
         // }
     }
 }
