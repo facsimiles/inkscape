@@ -7,6 +7,7 @@ set(colors_SRC
 	color.cpp
 	document-cms.cpp
 	dragndrop.cpp
+    gamut.cpp
 	manager.cpp
 	ok-color.cpp
 	parser.cpp
@@ -42,6 +43,7 @@ set(colors_SRC
 	color.h
 	document-cms.h
 	dragndrop.h
+    gamut.h
 	manager.h
 	ok-color.h
 	parser.h

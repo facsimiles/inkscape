@@ -24,7 +24,10 @@
 
 #include "colors/color.h"
 #include "colors/color-set.h"
+#include "colors/gamut.h"
+#include "colors/manager.h"
 #include "colors/spaces/components.h"
+#include "colors/spaces/enum.h"
 #include "ui/controller.h"
 #include "ui/util.h"
 #include "util/drawing-utils.h"
@@ -277,9 +280,11 @@ void ColorSlider::draw_func(Cairo::RefPtr<Cairo::Context> const &cr,
     }
 
     double lim = width > 1 ? width - 1.0 : 1.0;
+    auto space_rgb = Colors::Manager::get().find(Colors::Space::Type::RGB);
     for (int x = 0; x < width; x++) {
         paint_color.set(_component.index, x / lim);
-        _gr_buffer[x] = paint_color.toABGR();
+        auto c = Colors::to_gamut_css(paint_color, space_rgb);
+        _gr_buffer[x] = c.toABGR();// paint_color.toABGR();
     }
 
     Gdk::Cairo::set_source_pixbuf(cr, _gradient, left, top);

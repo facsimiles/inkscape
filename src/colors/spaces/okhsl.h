@@ -25,6 +25,7 @@ public:
     std::string const getName() const override { return "OkHsl"; }
     std::string const getShortName() const override { return "OkHsl"; }
     std::string const getIcon() const override { return "color-selector-okhsl"; }
+    bool isUnbounded() const override { return true; }
 
 protected:
     friend class Inkscape::Colors::Color;

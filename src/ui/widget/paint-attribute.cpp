@@ -25,6 +25,7 @@
 #include "style.h"
 #include "actions/actions-tools.h"
 #include "colors/spaces/base.h"
+#include "colors/gamut.h"
 #include "live_effects/effect.h"
 #include "live_effects/lpeobject-reference.h"
 #include "live_effects/lpeobject.h"
@@ -253,9 +254,13 @@ PaintAttribute::PaintStrip::PaintStrip(const Glib::ustring& title, bool fill) :
     auto set_flat_color = [this, fill](const Color& color) {
         if (!can_update()) return;
 
+        auto c = color;
+        if (Colors::out_of_gamut(color, color.getSpace())) {
+            c = Colors::to_gamut_css(color, color.getSpace());
+        }
+
         sp_desktop_set_color(_desktop, color, false, fill);
 
-        auto c = color;
         c.enableOpacity(false);
         if (fill) {
             _current_item->style->fill.setColor(c);

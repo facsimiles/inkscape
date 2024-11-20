@@ -15,6 +15,7 @@
 
 #include "color-entry.h"
 
+#include "colors/gamut.h"
 #include "colors/spaces/base.h"
 #include "svg/css-ostringstream.h"
 
@@ -82,27 +83,26 @@ void ColorEntry::_onColorChanged()
         return;
     }
 
-    auto color = _colors->getAverage().converted(Colors::Space::Type::RGB);
-    if (color.has_value()) {
-        if (color->getSpace()->outOfGamut(color->getValues())) {
-            // out of sRGB gamut warning
-            auto r = color->get(0);
-            auto g = color->get(1);
-            auto b = color->get(2);
-            CSSOStringStream rgb;
-            // high precision, so we show values just barely above/below limits
-            rgb.precision(2);
-            rgb << "rgb(" << 100 * r << "% " << 100 * g << "% " << 100 * b << "%)";
-            _signal_out_of_gamut.emit(Glib::ustring::compose(_("Color %1 is out of sRGB gamut.\nIt has been clipped to sRGB boundary."), rgb.str().c_str()));
-            _warning = true;
-        }
-        else if (_warning) {
-            // clear warning
-            _warning = false;
-            _signal_out_of_gamut.emit({});
-        }
+    auto color = *_colors->getAverage().converted(Colors::Space::Type::RGB);
+    if (Colors::out_of_gamut(color, color.getSpace())) {
+        // out of sRGB gamut warning
+        auto r = color[0];
+        auto g = color[1];
+        auto b = color[2];
+        CSSOStringStream rgb;
+        // high precision, so we show values just barely above/below limits
+        rgb.precision(2);
+        rgb << "rgb(" << 100 * r << "% " << 100 * g << "% " << 100 * b << "%)";
+        _signal_out_of_gamut.emit(Glib::ustring::compose(_("Color %1 is out of sRGB gamut.\nIt has been mapped to sRGB gamut."), rgb.str().c_str()));
+        _warning = true;
+        color = Colors::to_gamut_css(color, color.getSpace());
     }
-    auto text = color.has_value() ? color->toString(false) : "?";
+    else if (_warning) {
+        // clear warning
+        _warning = false;
+        _signal_out_of_gamut.emit({});
+    }
+    auto text = color.toString(false);
 
     if (get_text().raw() != text) {
         _updating = true;
