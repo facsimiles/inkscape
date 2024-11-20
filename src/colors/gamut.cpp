@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 #include "gamut.h"
+#include <cmath>
 #include <stdexcept>
 #include "color.h"
 #include "colors/manager.h"
