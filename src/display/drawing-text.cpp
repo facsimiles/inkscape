@@ -614,16 +614,25 @@ unsigned DrawingText::_renderItem(DrawingContext &dc, RenderContext &rc, Geom::I
             if (g->_ctm.isSingular()) continue;
             dc.transform(g->_ctm);
             if (g->pathvec) {
+
+                // Draw various boxes for debugging
+                // auto path_copy = cairo_copy_path(dc.raw()); // Cairo save/restore doesn't apply to path!
+                // {
+                //     Geom::OptRect box = bounds_exact(*g->pathvec);
+                //     if (box) {
+                //         Inkscape::DrawingContext::Save save(dc);
+                //         dc.newPath();
+                //         dc.rectangle(*box);
+                //         dc.setLineWidth(0.02);
+                //         dc.setSource(0xff000080);
+                //         dc.stroke();
+                //     }
+                // }
+                // cairo_append_path(dc.raw(), path_copy); // Restore path.
+                // cairo_path_destroy(path_copy);
+                // End debug boxes.
+
                 if (g->pixbuf) {
-                    // Geom::OptRect box = bounds_exact(*g->pathvec);
-                    // if (box) {
-                    //     Inkscape::DrawingContext::Save save(dc);
-                    //     dc.newPath();
-                    //     dc.rectangle(*box);
-                    //     dc.setLineWidth(0.01);
-                    //     dc.setSource(0x8080ffff);
-                    //     dc.stroke();
-                    // }
                     {
                         // pixbuf is in font design units, scale to embox.
                         double scale = g->design_units;

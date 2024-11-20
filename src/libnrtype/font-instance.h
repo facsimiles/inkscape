@@ -162,8 +162,11 @@ private:
          * Tables
          */
 
+        // Map of SVG in OpenType entries
+        std::map<int, std::string> openTypeSVGData;
+
         // Map of SVG in OpenType glyphs
-        std::map<int, SVGTableEntry> openTypeSVGGlyphs;
+        std::map<int, SVGGlyphEntry> openTypeSVGGlyphs;
 
         // Maps for font variations.
         std::map<Glib::ustring, OTVarAxis> openTypeVarAxes; // Axes with ranges
