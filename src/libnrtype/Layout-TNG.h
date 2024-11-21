@@ -809,7 +809,7 @@ private:
 
     // A glyph
     struct Glyph {
-        int glyph;
+        unsigned int glyph;
         unsigned in_character;
         bool hidden;
         float x;         /// relative to the start of the chunk

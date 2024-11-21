@@ -60,6 +60,21 @@ Glib::ustring extract_tag( guint32 *tag ) {
     return tag_name;
 }
 
+void readOpenTypeTableList(hb_font_t* hb_font, std::unordered_set<std::string>& list) {
+
+    hb_face_t* hb_face = hb_font_get_face (hb_font);
+
+    static const unsigned int MAX_TABLES = 100;
+    unsigned int table_count = MAX_TABLES;
+    hb_tag_t table_tags[MAX_TABLES];
+    auto count = hb_face_get_table_tags(hb_face, 0, &table_count, table_tags);
+
+    for (unsigned int i = 0; i < count; ++i) {
+        char buf[5] = {}; // 4 characters plus null termination.
+        hb_tag_to_string(table_tags[i], buf);
+        list.emplace(buf);
+    }
+}
 
 // Later (see get_glyphs) we need to lookup the Unicode codepoint for a glyph
 // but there's no direct API for that. So, we need a way to iterate over all
@@ -364,7 +379,7 @@ void readOpenTypeFvarNamed(const FT_Face ft_face,
 
 // Get SVG glyphs out of an OpenType font.
 void readOpenTypeSVGTable(hb_font_t* hb_font,
-                          std::map<int, SVGGlyphEntry>& glyphs,
+                          std::map<unsigned int, SVGGlyphEntry>& glyphs,
                           std::map<int, std::string>& svgs) {
 
     hb_face_t* hb_face = hb_font_get_face (hb_font);
