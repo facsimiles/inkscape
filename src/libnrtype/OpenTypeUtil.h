@@ -16,6 +16,7 @@
 
 #include <map>
 #include <memory>
+#include <unordered_set>
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
@@ -112,6 +113,9 @@ struct SVGGlyphEntry
     ~SVGGlyphEntry();
 };
 
+void readOpenTypeTableList (hb_font_t* hb_font,
+                            std::unordered_set<std::string>& list);
+
 // This would be better if one had std::vector<OTSubstitution> instead of OTSubstitution where each
 // entry corresponded to one substitution (e.g. ff -> ﬀ) but Harfbuzz at the moment cannot return
 // individual substitutions. See Harfbuzz issue #673.
@@ -125,7 +129,7 @@ void readOpenTypeFvarNamed (const FT_Face ft_face,
                             std::map<Glib::ustring, OTVarInstance>& named);
 
 void readOpenTypeSVGTable  (hb_font_t* hb_font,
-                            std::map<int, SVGGlyphEntry>& glyphs,
+                            std::map<unsigned int, SVGGlyphEntry>& glyphs,
                             std::map<int, std::string>& svgs);
 
 #endif /* !USE_PANGO_WIND32    */
