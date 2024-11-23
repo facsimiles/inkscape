@@ -18,8 +18,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Inkscape 0.92.x\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
-"POT-Creation-Date: 2024-09-19 18:42+0000\n"
-"PO-Revision-Date: 2024-10-02 18:13+0800\n"
+"POT-Creation-Date: 2024-10-14 20:04+0000\n"
+"PO-Revision-Date: 2024-11-06 11:29+0800\n"
 "Last-Translator: 驿窗 <classenu@163.com>\n"
 "Language-Team: <https://chat.inkscape.org>\n"
 "Language: zh_CN\n"
@@ -7063,7 +7063,7 @@ msgstr "从平铺填充图案提取对象"
 
 #: ../src/actions/actions-edit.cpp:293
 msgid "Objects to Marker"
-msgstr "对象转化为标记"
+msgstr "对象转为箭头"
 
 #: ../src/actions/actions-edit.cpp:293
 msgid "Convert selection to a line marker"
@@ -8477,7 +8477,7 @@ msgstr "逆时针旋转选中对象90°"
 msgid "Object Flip Horizontal"
 msgstr "水平翻转对象"
 
-#: ../src/actions/actions-object.cpp:395 ../share/ui/toolbar-select.ui:199
+#: ../src/actions/actions-object.cpp:395 ../share/ui/toolbar-select.ui:247
 msgid "Flip selected objects horizontally"
 msgstr "水平地翻转已选对象"
 
@@ -8485,7 +8485,7 @@ msgstr "水平地翻转已选对象"
 msgid "Object Flip Vertical"
 msgstr "垂直翻转对象"
 
-#: ../src/actions/actions-object.cpp:396 ../share/ui/toolbar-select.ui:217
+#: ../src/actions/actions-object.cpp:396 ../share/ui/toolbar-select.ui:266
 msgid "Flip selected objects vertically"
 msgstr "垂直地翻转已选对象"
 
@@ -9112,7 +9112,7 @@ msgstr "对选中的对象添加锚点"
 msgid "Raise to Top"
 msgstr "置于顶层(_T)"
 
-#: ../src/actions/actions-selection-object.cpp:152 ../share/ui/toolbar-select.ui:266
+#: ../src/actions/actions-selection-object.cpp:152 ../share/ui/toolbar-select.ui:316
 msgid "Raise selection to top"
 msgstr "选中对象上移到顶层"
 
@@ -9122,7 +9122,7 @@ msgid "Raise"
 msgstr "上移"
 
 #: ../src/actions/actions-selection-object.cpp:153
-#: ../share/ui/dialog-objects.glade:118 ../share/ui/toolbar-select.ui:285
+#: ../share/ui/dialog-objects.glade:118 ../share/ui/toolbar-select.ui:335
 msgid "Raise selection one step"
 msgstr "选中对象上移一层"
 
@@ -9131,7 +9131,7 @@ msgid "Lower"
 msgstr "下"
 
 #: ../src/actions/actions-selection-object.cpp:154
-#: ../share/ui/dialog-objects.glade:133 ../share/ui/toolbar-select.ui:304
+#: ../share/ui/dialog-objects.glade:133 ../share/ui/toolbar-select.ui:354
 msgid "Lower selection one step"
 msgstr "选中对象下移一层"
 
@@ -9139,7 +9139,7 @@ msgstr "选中对象下移一层"
 msgid "Lower to Bottom"
 msgstr "置于底层"
 
-#: ../src/actions/actions-selection-object.cpp:155 ../share/ui/toolbar-select.ui:323
+#: ../src/actions/actions-selection-object.cpp:155 ../share/ui/toolbar-select.ui:373
 msgid "Lower selection to bottom"
 msgstr "选中对象下移到底层"
 
@@ -9161,11 +9161,11 @@ msgstr "按堆栈顺序向下移动所选内容"
 
 #: ../src/actions/actions-selection-object.cpp:160
 msgid "Make a Bitmap Copy"
-msgstr "制作一个位图副本"
+msgstr "创建位图副本"
 
 #: ../src/actions/actions-selection-object.cpp:160
 msgid "Export selection to a bitmap and insert it into document"
-msgstr "把选中对象导出到位图，然后再加入文档"
+msgstr "选中对象导出为位图，再导回文档中"
 
 #: ../src/actions/actions-selection-object.cpp:161
 msgid "Resize Page to Selection"
@@ -9219,13 +9219,13 @@ msgstr "选择所有带有相同描边的对象作为选择对象"
 
 #: ../src/actions/actions-selection-window.cpp:129
 msgid "Stroke Style"
-msgstr "描边样式"
+msgstr "描边线型"
 
 #: ../src/actions/actions-selection-window.cpp:129
 msgid ""
 "Select all objects with the same stroke style (width, dash, markers) as the "
 "selected objects"
-msgstr "选择所有带有相同描边样式(宽度、画线、箭头)的对象为选择的对象"
+msgstr "选择所有带有相同描边线型(宽度、画线、箭头)的对象为选择的对象"
 
 #: ../src/actions/actions-selection-window.cpp:130
 msgid "Object Type"
@@ -9531,16 +9531,16 @@ msgstr "把文字放到框架(路径或图形)里，创建链接到框架对象�
 
 #: ../src/actions/actions-text.cpp:76
 msgid "Set Subtraction Frames"
-msgstr "设置减去框架"
+msgstr "文字回避图形"
 
 #: ../src/actions/actions-text.cpp:76
 msgid ""
 "Flow text around a frame (path or shape), only available for SVG 2.0 Flow text."
-msgstr "围绕框架(路径或图形)的浮动文本，仅适用于SVG 2.0浮动文本。"
+msgstr "图形中填充的文字避开指定图形，仅适用于SVG 2.0浮动文本。"
 
 #: ../src/actions/actions-text.cpp:77
 msgid "Unflow"
-msgstr "解除浮动"
+msgstr "从图形填充脱离"
 
 #: ../src/actions/actions-text.cpp:77
 msgid "Remove text from frame (creates a single-line text object)"
@@ -9775,11 +9775,11 @@ msgstr "创建星形或多边形"
 
 #: ../src/actions/actions-tools.cpp:366
 msgid "3D Box Tool"
-msgstr "立方体工具"
+msgstr "透视工具"
 
 #: ../src/actions/actions-tools.cpp:366
 msgid "Create 3D Boxes"
-msgstr "创建三维立方体"
+msgstr "透视法创建立体盒型"
 
 #: ../src/actions/actions-tools.cpp:367
 msgid "Spiral Tool"
@@ -9907,7 +9907,7 @@ msgstr "缩放工具"
 
 #: ../src/actions/actions-tools.cpp:386
 msgid "Zoom in or out"
-msgstr "放大或缩小"
+msgstr "放大或缩小视图"
 
 #: ../src/actions/actions-tools.cpp:387
 msgid "Measure Tool"
@@ -10117,15 +10117,15 @@ msgstr "使用书法工具"
 
 #: ../src/actions/actions-tutorial.cpp:62
 msgid "Inkscape: Interpolate"
-msgstr "Inkscape：插值"
+msgstr "Inkscape：插补"
 
 #: ../src/actions/actions-tutorial.cpp:62
 msgid "Using the interpolate extension"
-msgstr "使用插值扩展"
+msgstr "使用插补扩展"
 
 #: ../src/actions/actions-tutorial.cpp:63
 msgid "Elements of Design"
-msgstr "设计元素"
+msgstr "设计要素"
 
 #: ../src/actions/actions-tutorial.cpp:63
 msgid "Principles of design in the tutorial form"
@@ -12537,12 +12537,12 @@ msgstr "淡化为:"
 
 #: ../src/extension/internal/filter/color.h:854
 #: ../src/ui/widget/color-icc-selector.cpp:177 ../src/ui/widget/color-scales.cpp:690
-#: ../src/ui/widget/color-scales.cpp:691 ../src/ui/widget/selected-style.cpp:699
+#: ../src/ui/widget/color-scales.cpp:691 ../src/ui/widget/selected-style.cpp:704
 msgid "Black"
 msgstr "黑色"
 
 #: ../src/extension/internal/filter/color.h:855
-#: ../src/ui/widget/selected-style.cpp:697
+#: ../src/ui/widget/selected-style.cpp:702
 msgid "White"
 msgstr "白色"
 
@@ -12565,7 +12565,7 @@ msgid "Customize greyscale components"
 msgstr "自定义灰阶组件"
 
 #: ../src/extension/internal/filter/color.h:1024
-#: ../src/ui/widget/selected-style.cpp:692
+#: ../src/ui/widget/selected-style.cpp:697
 msgid "Invert"
 msgstr "反转"
 
@@ -12816,7 +12816,7 @@ msgstr "输出"
 
 #: ../src/extension/internal/filter/distort.h:79
 #: ../src/extension/internal/filter/textures.h:77
-#: ../src/ui/widget/selected-style.cpp:144 ../src/ui/widget/style-swatch.cpp:100
+#: ../src/ui/widget/selected-style.cpp:149 ../src/ui/widget/style-swatch.cpp:100
 msgid "Stroke:"
 msgstr "描边:"
 
@@ -12968,7 +12968,7 @@ msgstr "打开(XOR)"
 #: ../src/extension/internal/template-video.cpp:33
 #: ../src/ui/dialog/filter-effects-dialog.cpp:3020
 #: ../src/ui/dialog/filter-effects-dialog.cpp:3042
-#: ../src/ui/tools/measure-tool.cpp:1089 ../src/ui/widget/selected-style.cpp:751
+#: ../src/ui/tools/measure-tool.cpp:1089 ../src/ui/widget/selected-style.cpp:756
 #: ../share/ui/dialog-export.glade:290 ../share/extensions/interp_att_g.inx:8
 msgid "Width"
 msgstr "字宽"
@@ -13556,7 +13556,7 @@ msgid ""
 "Embed results in stand-alone, larger SVG files. Link references a file outside "
 "this SVG document and all files must be moved together."
 msgstr ""
-"用独立的内嵌方式，SVG文件会比较大。链接则会参考此SVG文档之外的文件，并且所有文件必"
+"用独立的嵌入方式，SVG文件会比较大。链接则会参考此SVG文档之外的文件，并且所有文件必"
 "须一起移动。"
 
 #: ../src/extension/internal/gdkpixbuf-input.cpp:196
@@ -13564,7 +13564,7 @@ msgstr ""
 #: ../src/ui/dialog/inkscape-preferences.cpp:3077
 #: ../share/ui/image-properties.glade:134
 msgid "Embed"
-msgstr "内嵌"
+msgstr "嵌入"
 
 #. TRANSLATORS: Image is displayed, and stored as a link or embedded
 #: ../src/extension/internal/gdkpixbuf-input.cpp:198
@@ -13589,12 +13589,12 @@ msgstr "从文件"
 
 #: ../src/extension/internal/gdkpixbuf-input.cpp:203
 msgid "Default import resolution"
-msgstr "缺省导入分辨率"
+msgstr "默认导入分辨率"
 
 #: ../src/extension/internal/gdkpixbuf-input.cpp:206
 #: ../src/extension/internal/svg.h:31
 msgid "Image Rendering Mode:"
-msgstr "图形渲染模式:"
+msgstr "图像渲染模式:"
 
 #: ../src/extension/internal/gdkpixbuf-input.cpp:206
 #: ../src/extension/internal/svg.h:31
@@ -14023,7 +14023,7 @@ msgstr "其他"
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:41
 #: ../src/live_effects/lpe-measure-segments.cpp:73
 #: ../src/live_effects/lpe-offset.cpp:73 ../src/live_effects/lpe-ruler.cpp:41
-#: ../src/live_effects/lpe-tiling.cpp:91 ../src/ui/widget/selected-style.cpp:735
+#: ../src/live_effects/lpe-tiling.cpp:91 ../src/ui/widget/selected-style.cpp:740
 msgid "Unit"
 msgstr "单位"
 
@@ -14948,7 +14948,7 @@ msgstr "填充绘制"
 
 #: ../src/filter-enums.cpp:50
 msgid "Stroke Paint"
-msgstr "描边绘制"
+msgstr "描边"
 
 #: ../src/filter-enums.cpp:57
 msgid "Matrix"
@@ -15070,24 +15070,24 @@ msgstr "线性渐变<b>中间色标</b>"
 #: ../src/gradient-drag.cpp:78 ../src/ui/tools/gradient-tool.cpp:84
 #: ../src/ui/tools/mesh-tool.cpp:114
 msgid "Radial gradient <b>center</b>"
-msgstr "辐向渐变<b>中心</b>"
+msgstr "径向渐变<b>中心</b>"
 
 #: ../src/gradient-drag.cpp:79 ../src/gradient-drag.cpp:80
 #: ../src/ui/tools/gradient-tool.cpp:85 ../src/ui/tools/gradient-tool.cpp:86
 #: ../src/ui/tools/mesh-tool.cpp:115 ../src/ui/tools/mesh-tool.cpp:116
 msgid "Radial gradient <b>radius</b>"
-msgstr "辐向渐变<b>半径</b>"
+msgstr "径向渐变<b>半径</b>"
 
 #: ../src/gradient-drag.cpp:81 ../src/ui/tools/gradient-tool.cpp:87
 #: ../src/ui/tools/mesh-tool.cpp:117
 msgid "Radial gradient <b>focus</b>"
-msgstr "辐向渐变<b>焦点</b>"
+msgstr "径向渐变<b>焦点</b>"
 
 #: ../src/gradient-drag.cpp:82 ../src/gradient-drag.cpp:83
 #: ../src/ui/tools/gradient-tool.cpp:88 ../src/ui/tools/gradient-tool.cpp:89
 #: ../src/ui/tools/mesh-tool.cpp:118 ../src/ui/tools/mesh-tool.cpp:119
 msgid "Radial gradient <b>mid stop</b>"
-msgstr "辐向渐变<b>中间色标</b>"
+msgstr "径向渐变<b>中间色标</b>"
 
 #: ../src/gradient-drag.cpp:84 ../src/ui/tools/gradient-tool.cpp:90
 #: ../src/ui/tools/mesh-tool.cpp:120
@@ -15146,7 +15146,7 @@ msgstr ""
 msgid ""
 "Radial gradient <b>center</b> and <b>focus</b>; drag with <b>Shift</b> to "
 "separate focus"
-msgstr "辐向渐变<b>中心</b><b>焦点</b>；按住 <b>Shift</b> 拖动分开焦点"
+msgstr "径向渐变<b>中心</b><b>焦点</b>；按住 <b>Shift</b> 拖动分开焦点"
 
 #: ../src/gradient-drag.cpp:1541
 #, c-format
@@ -15822,7 +15822,7 @@ msgstr "标尺"
 msgid ""
 "Add ruler marks to the object in adjustable intervals, using the object's stroke "
 "style."
-msgstr "使用对象的描边样式，以可调整的间隔在对象上添加标尺标记。"
+msgstr "使用对象的描边线型，以可调整的间隔在对象上添加标尺标记。"
 
 #: ../src/live_effects/effect.cpp:286
 msgctxt "path effect"
@@ -19642,19 +19642,19 @@ msgstr "选择是否偏移行或列"
 
 #: ../src/live_effects/lpe-tiling.cpp:101
 msgid "Interpolate scale X"
-msgstr "X 方向插值缩放"
+msgstr "X 方向插补缩放"
 
 #: ../src/live_effects/lpe-tiling.cpp:101
 msgid "Interpolate tile size in each row"
-msgstr "在每一行插值拼贴尺寸"
+msgstr "在每一行插补拼贴尺寸"
 
 #: ../src/live_effects/lpe-tiling.cpp:102
 msgid "Interpolate scale Y"
-msgstr "Y 方向插值缩放"
+msgstr "Y 方向插补缩放"
 
 #: ../src/live_effects/lpe-tiling.cpp:102
 msgid "Interpolate tile size in each column"
-msgstr "在每一列插值拼贴尺寸"
+msgstr "在每一列插补拼贴尺寸"
 
 #: ../src/live_effects/lpe-tiling.cpp:103
 msgid "Minimize gaps"
@@ -19667,19 +19667,19 @@ msgstr "最小化缩放对象之间的间隙(不适用旋转/对角线模式)"
 
 #: ../src/live_effects/lpe-tiling.cpp:104
 msgid "Interpolate rotation X"
-msgstr "X 方向插值旋转"
+msgstr "X 方向插补旋转"
 
 #: ../src/live_effects/lpe-tiling.cpp:104
 msgid "Interpolate tile rotation in row"
-msgstr "按行插值拼贴旋转"
+msgstr "按行插补拼贴旋转"
 
 #: ../src/live_effects/lpe-tiling.cpp:105
 msgid "Interpolate rotation Y"
-msgstr "Y 方向插值旋转"
+msgstr "Y 方向插补旋转"
 
 #: ../src/live_effects/lpe-tiling.cpp:105
 msgid "Interpolate tile rotation in column"
-msgstr "按列插值拼贴旋转"
+msgstr "按列插补拼贴旋转"
 
 #: ../src/live_effects/lpe-tiling.cpp:106
 msgid ""
@@ -19802,23 +19802,23 @@ msgstr "偏移间隔的列"
 
 #: ../src/live_effects/lpe-tiling.cpp:851 ../src/live_effects/lpe-tiling.cpp:888
 msgid "Interpolate X"
-msgstr "插值 X"
+msgstr "插补 X"
 
 #: ../src/live_effects/lpe-tiling.cpp:852 ../src/live_effects/lpe-tiling.cpp:889
 msgid "Interpolate Y"
-msgstr "插值 Y"
+msgstr "插补 Y"
 
 #: ../src/live_effects/lpe-tiling.cpp:853 ../src/live_effects/lpe-tiling.cpp:890
 msgid "Interpolate both"
-msgstr "都插值"
+msgstr "都插补"
 
 #: ../src/live_effects/lpe-tiling.cpp:854 ../src/live_effects/lpe-tiling.cpp:891
 msgid "No interpolation"
-msgstr "无插值"
+msgstr "无插补"
 
 #: ../src/live_effects/lpe-tiling.cpp:855 ../src/live_effects/lpe-tiling.cpp:892
 msgid "Interpolate random"
-msgstr "随机插值"
+msgstr "随机插补"
 
 #: ../src/live_effects/lpe-tiling.cpp:867
 msgid ""
@@ -20302,7 +20302,7 @@ msgstr "弦"
 msgid "Arc"
 msgstr "弧"
 
-#: ../src/object/sp-ellipse.cpp:425 ../src/ui/dialog/object-attributes.cpp:545
+#: ../src/object/sp-ellipse.cpp:425 ../src/ui/dialog/object-attributes.cpp:568
 #: ../src/ui/toolbar/pencil-toolbar.cpp:206 ../share/extensions/frame.inx:7
 msgid "Ellipse"
 msgstr "椭圆"
@@ -20488,7 +20488,7 @@ msgstr "内缩"
 msgid "Page %d"
 msgstr "页面 %d"
 
-#: ../src/object/sp-path.cpp:52 ../src/ui/dialog/object-attributes.cpp:802
+#: ../src/object/sp-path.cpp:52 ../src/ui/dialog/object-attributes.cpp:825
 msgid "Path"
 msgstr "路径"
 
@@ -20511,7 +20511,7 @@ msgstr "<b>多边形</b>"
 msgid "<b>Polyline</b>"
 msgstr "<b>折线</b>"
 
-#: ../src/object/sp-rect.cpp:246 ../src/ui/dialog/object-attributes.cpp:457
+#: ../src/object/sp-rect.cpp:246 ../src/ui/dialog/object-attributes.cpp:480
 #: ../share/extensions/frame.inx:6
 msgid "Rectangle"
 msgstr "矩形"
@@ -20528,7 +20528,7 @@ msgstr "螺旋"
 msgid "with %3f turns"
 msgstr "有%3f个圈"
 
-#: ../src/object/sp-star.cpp:236 ../src/ui/dialog/object-attributes.cpp:675
+#: ../src/object/sp-star.cpp:236 ../src/ui/dialog/object-attributes.cpp:698
 msgid "Star"
 msgstr "星形"
 
@@ -21191,7 +21191,7 @@ msgstr "选择要移动的<b>对象</b>。"
 
 #: ../src/selection-chemistry.cpp:1707 ../src/seltrans.cpp:377
 msgid "Cannot transform an embedded SVG."
-msgstr "无法变形内嵌的 SVG。"
+msgstr "无法变换嵌入的SVG。"
 
 #: ../src/selection-chemistry.cpp:1858
 msgid "Remove transform"
@@ -21650,11 +21650,11 @@ msgstr "浮动文本填充图形"
 
 #: ../src/text-chemistry.cpp:448
 msgid "Select <b>a flowed text</b> to unflow it."
-msgstr "选择<b>浮动文本</b>解除浮动。"
+msgstr "选择<b>浮动文本</b>从图形填充脱离。"
 
 #: ../src/text-chemistry.cpp:567
 msgid "Unflow flowed text"
-msgstr "解除浮动文本"
+msgstr "文字从图形填充脱离"
 
 #: ../src/text-chemistry.cpp:645
 msgid "Select <b>text(s)</b> to convert to glyphs."
@@ -21867,7 +21867,7 @@ msgstr "描边颜色(_S)"
 
 #: ../src/ui/contextmenu.cpp:257 ../share/ui/menus.ui:300
 msgid "Stroke St_yle"
-msgstr "描边样式(_Y)"
+msgstr "描边线型(_Y)"
 
 #: ../src/ui/contextmenu.cpp:258 ../share/ui/menus.ui:305
 msgid "_Object Type"
@@ -22884,7 +22884,7 @@ msgstr "输入搜索内容查找命令"
 
 #: ../src/ui/dialog/command-palette.cpp:1117
 msgid "Enter action argument"
-msgstr "插值方式"
+msgstr "输入操作参数"
 
 #: ../src/ui/dialog/command-palette.cpp:1145
 msgid "History mode"
@@ -23908,11 +23908,11 @@ msgstr "填充(_F)"
 
 #: ../src/ui/dialog/fill-and-stroke.cpp:55
 msgid "Stroke _paint"
-msgstr "描边绘制(_P)"
+msgstr "描边(_P)"
 
 #: ../src/ui/dialog/fill-and-stroke.cpp:56
 msgid "Stroke st_yle"
-msgstr "描边样式(_Y)"
+msgstr "描边线型(_Y)"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:315
 msgid "Select color"
@@ -23979,7 +23979,7 @@ msgstr "数值"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:984
 msgid "List of stops with interpolated output"
-msgstr "带插值结果的色标列表"
+msgstr "带插补结果的色标列表"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:987
 msgid "List of discrete values for a step function"
@@ -24292,7 +24292,7 @@ msgstr "值:"
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2959
 msgctxt "color"
 msgid "R:"
-msgstr "旋转:"
+msgstr "红色:"
 
 #. TRANSLATORS: Abbreviation for green color channel in RGBA
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2961
@@ -25977,7 +25977,7 @@ msgstr "安排到网格"
 #: ../src/ui/widget/registered-widget.cpp:559
 #: ../share/ui/object-attributes.glade:1124 ../share/ui/page-properties.glade:282
 #: ../share/ui/statusbar.ui:141 ../share/ui/toolbar-node.ui:443
-#: ../share/ui/toolbar-select.ui:349
+#: ../share/ui/toolbar-select.ui:399
 msgid "X:"
 msgstr "X:"
 
@@ -25989,7 +25989,7 @@ msgstr "列间的水平间隔"
 #: ../src/ui/widget/registered-widget.cpp:560
 #: ../share/ui/object-attributes.glade:1098 ../share/ui/page-properties.glade:297
 #: ../share/ui/statusbar.ui:152 ../share/ui/toolbar-node.ui:474
-#: ../share/ui/toolbar-select.ui:374
+#: ../share/ui/toolbar-select.ui:424
 msgid "Y:"
 msgstr "Y:"
 
@@ -28101,8 +28101,8 @@ msgid ""
 "SVG 2 allows markers to automatically match the stroke color by using "
 "'context_paint' or 'context_fill'. This adjusts the markers own colors."
 msgstr ""
-"SVG2允许箭头用 'context_paint' 或 'context_fill' 自动匹配描边颜色。这样可以调整标"
-"记本身的颜色。"
+"SVG2允许箭头用 'context_paint' 或 'context_fill' 自动匹配描边颜色。这样可以调整箭"
+"头本身的颜色。"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2380
 msgid "SVG export"
@@ -28441,19 +28441,19 @@ msgstr "描边粗细变化时，虚线间隔同时变化"
 msgid "Preserved"
 msgstr "保持"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2577 ../share/ui/toolbar-select.ui:474
+#: ../src/ui/dialog/inkscape-preferences.cpp:2577 ../share/ui/toolbar-select.ui:550
 msgid "When scaling objects, scale the stroke width by the same proportion"
 msgstr "缩放对象时，按照相同比例缩放描边宽度"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2579 ../share/ui/toolbar-select.ui:488
+#: ../src/ui/dialog/inkscape-preferences.cpp:2579 ../share/ui/toolbar-select.ui:567
 msgid "When scaling rectangles, scale the radii of rounded corners"
 msgstr "缩放矩形时，缩放圆角半径"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2581 ../share/ui/toolbar-select.ui:502
+#: ../src/ui/dialog/inkscape-preferences.cpp:2581 ../share/ui/toolbar-select.ui:584
 msgid "Move gradients (in fill or stroke) along with the objects"
 msgstr "随对象缩放渐变(填充或描边)"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2583 ../share/ui/toolbar-select.ui:516
+#: ../src/ui/dialog/inkscape-preferences.cpp:2583 ../share/ui/toolbar-select.ui:601
 msgid "Move patterns (in fill or stroke) along with the objects"
 msgstr "随对象缩放图案(填充或描边)"
 
@@ -28765,7 +28765,7 @@ msgstr "%"
 #: ../src/ui/dialog/inkscape-preferences.cpp:2710
 msgid ""
 "Zoom tool click, +/- keys, and middle click zoom in and out by this multiplier"
-msgstr "缩放工具单击，+/- 键和鼠标中键单击按照此系数缩放"
+msgstr "视图缩放工具单击，+/- 键和鼠标中键单击按照此系数缩放"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2712
 msgid "Zoom with middle mouse click"
@@ -28975,7 +28975,7 @@ msgstr "剪裁路径和蒙版"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2804
 msgid "Stroke Style Markers"
-msgstr "描边样式箭头"
+msgstr "描边线型箭头"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2806
 #: ../src/ui/dialog/inkscape-preferences.cpp:2808
@@ -29470,7 +29470,7 @@ msgid "dpi"
 msgstr "dpi"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3045
-msgid "Default image resolution (in dots per inch) in the Export dialog"
+msgid "Default image resolution (DPI) in the Export dialog"
 msgstr "“导出”对话框中的默认图像分辨率(单位：每英寸点数)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3046
@@ -29487,19 +29487,19 @@ msgstr "创建位图副本命令所使用的分辨率"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3052
 msgid "Ask about linking and scaling when importing bitmap images"
-msgstr "在导入位图时询问链接和缩放"
+msgstr "导入位图时询问链接和缩放"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3054
 msgid "Pop-up linking and scaling dialog when importing bitmap image."
-msgstr "当导入位图图像时弹出链接和缩放对话框。"
+msgstr "导入位图时打开导入对话框。"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3055
 msgid "Ask about linking and scaling when importing SVG images"
-msgstr "在导入SVG图像时询问链接和缩放处理方式"
+msgstr "导入SVG时询问链接和缩放"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3057
 msgid "Pop-up linking and scaling dialog when importing SVG image."
-msgstr "在导入SVG图像时弹出链接和缩放对话框。"
+msgstr "导入SVG时打开导入对话框。"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3059
 msgid "Store absolute file path for linked images"
@@ -29521,7 +29521,7 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3073
 msgid "Bitmap import/open mode:"
-msgstr "位图导入/打开模式:"
+msgstr "位图导入模式:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3077
 msgid "Include"
@@ -29545,8 +29545,8 @@ msgid "Default _import resolution:"
 msgstr "默认导入分辨率(_i):"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3093
-msgid "Default import resolution (in dots per inch) for bitmap and SVG import"
-msgstr "位图和SVG导入的默认分辨率(单位：每英寸点数)"
+msgid "Default import resolution (DPI) for bitmap and SVG import"
+msgstr "位图和SVG默认导入分辨率(DPI)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3094
 msgid "Override file resolution"
@@ -29558,7 +29558,7 @@ msgstr "使用来自文件所支持的默认位图分辨率"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3100
 msgid "Images in Outline Mode"
-msgstr "轮廓模式显示图片"
+msgstr "轮廓模式正常显示位图"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3101
 msgid ""
@@ -29569,7 +29569,7 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3103
 msgid "Imported Images"
-msgstr "导入的图像"
+msgstr "导入导出"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3124
 msgid ""
@@ -30190,19 +30190,19 @@ msgstr "移除实时路径效果"
 msgid "Change object attribute"
 msgstr "修改对象特性"
 
-#: ../src/ui/dialog/object-attributes.cpp:498
+#: ../src/ui/dialog/object-attributes.cpp:521
 msgid "Add fillet/chamfer effect"
 msgstr "添加路径效果"
 
-#: ../src/ui/dialog/object-attributes.cpp:641
+#: ../src/ui/dialog/object-attributes.cpp:664
 msgid "Change arc type"
 msgstr "修改弧线类型"
 
-#: ../src/ui/dialog/object-attributes.cpp:882
+#: ../src/ui/dialog/object-attributes.cpp:905
 msgid "Nodes: "
 msgstr "节点: "
 
-#: ../src/ui/dialog/object-attributes.cpp:903
+#: ../src/ui/dialog/object-attributes.cpp:926
 msgid "Change path"
 msgstr "改变路径"
 
@@ -30347,7 +30347,7 @@ msgstr "高亮色"
 
 #: ../src/ui/dialog/objects.cpp:796
 #: ../src/ui/widget/object-composite-settings.cpp:161
-#: ../src/ui/widget/selected-style.cpp:650 ../src/ui/widget/selected-style.cpp:1057
+#: ../src/ui/widget/selected-style.cpp:655 ../src/ui/widget/selected-style.cpp:1061
 msgid "Change opacity"
 msgstr "改变不透明度"
 
@@ -31281,7 +31281,7 @@ msgid "Drop color on gradient"
 msgstr "将颜色放置到渐变上"
 
 #: ../src/ui/drag-and-drop.cpp:171 ../src/ui/drag-and-drop.cpp:269
-#: ../src/ui/widget/selected-style.cpp:316
+#: ../src/ui/widget/selected-style.cpp:321
 msgid "Drop color"
 msgstr "放置颜色"
 
@@ -31416,7 +31416,7 @@ msgstr "左右移动"
 
 #: ../src/ui/modifiers.cpp:89
 msgid "Canvas zoom"
-msgstr "画布缩放"
+msgstr "画布视图缩放"
 
 #: ../src/ui/modifiers.cpp:89
 msgid "Zoom in and out with scroll wheel"
@@ -31424,7 +31424,7 @@ msgstr "使用滚轮缩放"
 
 #: ../src/ui/modifiers.cpp:90
 msgid "Canvas rotate"
-msgstr "画布旋转"
+msgstr "画布视图旋转"
 
 #: ../src/ui/modifiers.cpp:90
 msgid "Rotate the canvas with scroll wheel"
@@ -31581,7 +31581,7 @@ msgstr "画布"
 #: ../src/ui/modifiers.cpp:124 ../share/ui/dialog-export.glade:56
 #: ../share/ui/dialog-export.glade:783 ../share/extensions/printing_marks.inx:18
 msgid "Selection"
-msgstr "选择"
+msgstr "选中对象范围"
 
 #: ../src/ui/modifiers.cpp:125
 msgid "Movement"
@@ -31599,13 +31599,13 @@ msgstr "图形生成"
 msgid ""
 "Adjust the <b>horizontal rounding</b> radius; with <b>Ctrl</b> to make the "
 "vertical radius the same"
-msgstr "调节<b>水平圆角</b>半径;按住 <b>Ctrl</b> 使垂直半径也相同"
+msgstr "调节<b>圆角x轴</b>半径; 按住<b>Ctrl</b>使y轴半径也相同"
 
 #: ../src/ui/shape-editor-knotholders.cpp:580
 msgid ""
 "Adjust the <b>vertical rounding</b> radius; with <b>Ctrl</b> to make the "
 "horizontal radius the same"
-msgstr "调节<b>垂直圆角</b>半径;按住 <b>Ctrl</b> 使水平半径也相同"
+msgstr "调节<b>圆角y轴</b>半径; 按住<b>Ctrl</b>使x轴半径也相同"
 
 #: ../src/ui/shape-editor-knotholders.cpp:584
 #: ../src/ui/shape-editor-knotholders.cpp:588
@@ -32334,8 +32334,9 @@ msgid "(broad stroke)"
 msgstr "(宽笔画)"
 
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:111
-msgid "(speed blows up stroke"
-msgstr "(加速炸开"
+#: ../src/ui/toolbar/eraser-toolbar.cpp:86
+msgid "(speed blows up stroke)"
+msgstr "(加速炸开笔画)"
 
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:114
 #: ../src/ui/toolbar/eraser-toolbar.cpp:89
@@ -32348,8 +32349,8 @@ msgid "(constant width)"
 msgstr "(恒定宽度)"
 
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:116
-#, fuzzy
-msgid "(slight thining, default)"
+#: ../src/ui/toolbar/eraser-toolbar.cpp:91
+msgid "(slight thinning, default)"
 msgstr "(略微变窄，默认)"
 
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:119
@@ -32456,7 +32457,7 @@ msgstr "(剧烈的波浪和卷曲)"
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:394
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:491
 msgid "No preset"
-msgstr "无预置"
+msgstr "无预设"
 
 #: ../src/ui/toolbar/connector-toolbar.cpp:189
 msgid "Set connector type: orthogonal"
@@ -32482,14 +32483,6 @@ msgstr "整理连接器网络"
 msgid "(no width)"
 msgstr "(无宽度)"
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:86
-msgid "(speed blows up stroke)"
-msgstr "(加速炸开笔画)"
-
-#: ../src/ui/toolbar/eraser-toolbar.cpp:91
-msgid "(slight thinning, default)"
-msgstr "(略微变窄，默认)"
-
 #: ../src/ui/toolbar/gradient-toolbar.cpp:130
 #: ../src/ui/toolbar/gradient-toolbar.cpp:153
 #: ../src/ui/toolbar/gradient-toolbar.cpp:381
@@ -32497,8 +32490,8 @@ msgstr "(略微变窄，默认)"
 msgid "No gradient"
 msgstr "无渐变"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:141 ../src/ui/widget/selected-style.cpp:69
-#: ../src/ui/widget/selected-style.cpp:70 ../src/ui/widget/selected-style.cpp:955
+#: ../src/ui/toolbar/gradient-toolbar.cpp:141 ../src/ui/widget/selected-style.cpp:71
+#: ../src/ui/widget/selected-style.cpp:72 ../src/ui/widget/selected-style.cpp:959
 msgid "Nothing selected"
 msgstr "无选中对象"
 
@@ -32760,48 +32753,48 @@ msgstr "不进行舍入"
 msgid "Change rectangle"
 msgstr "更改矩形"
 
-#: ../src/ui/toolbar/select-toolbar.cpp:311
+#: ../src/ui/toolbar/select-toolbar.cpp:323
 msgid "Transform by toolbar"
 msgstr "按照工具栏变换"
 
-#: ../src/ui/toolbar/select-toolbar.cpp:446
+#: ../src/ui/toolbar/select-toolbar.cpp:458
 msgid "Now <b>stroke width</b> is <b>scaled</b> when objects are scaled."
 msgstr "对象缩放<b>描边宽度</b>也会跟着<b>缩放</b>。"
 
-#: ../src/ui/toolbar/select-toolbar.cpp:448
+#: ../src/ui/toolbar/select-toolbar.cpp:460
 msgid "Now <b>stroke width</b> is <b>not scaled</b> when objects are scaled."
 msgstr "对象缩放<b>描边宽度不会</b>跟着<b>缩放</b>。"
 
-#: ../src/ui/toolbar/select-toolbar.cpp:457
+#: ../src/ui/toolbar/select-toolbar.cpp:469
 msgid ""
 "Now <b>rounded rectangle corners</b> are <b>scaled</b> when rectangles are scaled."
 msgstr "矩形缩放<b>圆角矩形的圆角</b>也会跟着<b>缩放</b>。"
 
-#: ../src/ui/toolbar/select-toolbar.cpp:459
+#: ../src/ui/toolbar/select-toolbar.cpp:471
 msgid ""
 "Now <b>rounded rectangle corners</b> are <b>not scaled</b> when rectangles are "
 "scaled."
 msgstr "矩形缩放<b>圆角矩形的圆角不会</b>跟着<b>缩放</b>。"
 
-#: ../src/ui/toolbar/select-toolbar.cpp:468
+#: ../src/ui/toolbar/select-toolbar.cpp:480
 msgid ""
 "Now <b>gradients</b> are <b>transformed</b> along with their objects when those "
 "are transformed (moved, scaled, rotated, or skewed)."
 msgstr "<b>渐变</b>随着对象<b>变换</b>(移动、缩放、旋转或错切)。"
 
-#: ../src/ui/toolbar/select-toolbar.cpp:470
+#: ../src/ui/toolbar/select-toolbar.cpp:482
 msgid ""
 "Now <b>gradients</b> remain <b>fixed</b> when objects are transformed (moved, "
 "scaled, rotated, or skewed)."
 msgstr "<b>渐变不</b>随对象<b>变换</b>(移动、缩放、旋转或错切)。"
 
-#: ../src/ui/toolbar/select-toolbar.cpp:479
+#: ../src/ui/toolbar/select-toolbar.cpp:491
 msgid ""
 "Now <b>patterns</b> are <b>transformed</b> along with their objects when those "
 "are transformed (moved, scaled, rotated, or skewed)."
 msgstr "<b>图案</b>随着对象<b>变换</b>(移动、缩放、旋转或错切)。"
 
-#: ../src/ui/toolbar/select-toolbar.cpp:481
+#: ../src/ui/toolbar/select-toolbar.cpp:493
 msgid ""
 "Now <b>patterns</b> remain <b>fixed</b> when objects are transformed (moved, "
 "scaled, rotated, or skewed)."
@@ -33129,47 +33122,48 @@ msgstr "文本：改变旋转"
 msgid "Open tool preferences"
 msgstr "打开工具首选项"
 
-#: ../src/ui/toolbar/toolbars.cpp:77
+#: ../src/ui/toolbar/toolbars.cpp:78
 msgid "Style of new rectangles"
 msgstr "新矩形的样式"
 
-#: ../src/ui/toolbar/toolbars.cpp:78
+#: ../src/ui/toolbar/toolbars.cpp:79
 msgid "Style of new ellipses"
 msgstr "新椭圆的样式"
 
-#: ../src/ui/toolbar/toolbars.cpp:79
+#: ../src/ui/toolbar/toolbars.cpp:80
 msgid "Style of new stars"
 msgstr "新星形的样式"
 
-#: ../src/ui/toolbar/toolbars.cpp:80
+#: ../src/ui/toolbar/toolbars.cpp:81
 msgid "Style of new 3D boxes"
 msgstr "新三维透视图的样式"
 
-#: ../src/ui/toolbar/toolbars.cpp:81
+#: ../src/ui/toolbar/toolbars.cpp:82
 msgid "Style of new spirals"
 msgstr "新螺旋线的样式"
 
-#: ../src/ui/toolbar/toolbars.cpp:82
+#: ../src/ui/toolbar/toolbars.cpp:83
 msgid "Style of new paths created by Pencil"
 msgstr "铅笔创建的新路径的样式"
 
-#: ../src/ui/toolbar/toolbars.cpp:83
+#: ../src/ui/toolbar/toolbars.cpp:84
 msgid "Style of new paths created by Pen"
 msgstr "钢笔创建的新路径的样式"
 
-#: ../src/ui/toolbar/toolbars.cpp:84
+#: ../src/ui/toolbar/toolbars.cpp:85
 msgid "Style of new calligraphic strokes"
 msgstr "新书法轮廓的样式"
 
-#: ../src/ui/toolbar/toolbars.cpp:91
+#: ../src/ui/toolbar/toolbars.cpp:92
 msgid "Color/opacity used for color tweaking"
 msgstr "色彩扭曲使用的颜色/不透明度"
 
-#: ../src/ui/toolbar/toolbars.cpp:95
+#: ../src/ui/toolbar/toolbars.cpp:96
 msgid "Style of Paint Bucket fill objects"
 msgstr "油漆桶填充样式"
 
-#: ../src/ui/toolbar/toolbars.cpp:96 ../src/ui/toolbar/toolbars.cpp:97
+#: ../src/ui/toolbar/toolbars.cpp:97 ../src/ui/toolbar/toolbars.cpp:98
+#: ../src/ui/toolbar/toolbars.cpp:99
 msgid "TBD"
 msgstr "待续 (TBD)"
 
@@ -34412,7 +34406,7 @@ msgstr "修正RGB回落匹配icc-color()值。"
 #: ../src/ui/widget/color-scales.cpp:694 ../src/ui/widget/color-scales.cpp:730
 #: ../src/ui/widget/color-scales.cpp:770
 msgid "_A:"
-msgstr "透明(_A)："
+msgstr "_A:"
 
 #: ../src/ui/widget/color-icc-selector.cpp:418
 #: ../src/ui/widget/color-icc-selector.cpp:429 ../src/ui/widget/color-scales.cpp:590
@@ -34586,11 +34580,11 @@ msgstr "设置填充颜色"
 msgid "Set stroke color"
 msgstr "设置描边颜色"
 
-#: ../src/ui/widget/fill-style.cpp:426 ../src/ui/widget/selected-style.cpp:325
+#: ../src/ui/widget/fill-style.cpp:426 ../src/ui/widget/selected-style.cpp:330
 msgid "Remove fill"
 msgstr "移除填充"
 
-#: ../src/ui/widget/fill-style.cpp:426 ../src/ui/widget/selected-style.cpp:333
+#: ../src/ui/widget/fill-style.cpp:426 ../src/ui/widget/selected-style.cpp:338
 msgid "Remove stroke"
 msgstr "移除描边"
 
@@ -34618,13 +34612,13 @@ msgstr "设置填充图案"
 msgid "Set pattern on stroke"
 msgstr "设置描边图案"
 
-#: ../src/ui/widget/fill-style.cpp:712 ../src/ui/widget/selected-style.cpp:73
-#: ../src/ui/widget/selected-style.cpp:341 ../src/ui/widget/style-swatch.cpp:292
+#: ../src/ui/widget/fill-style.cpp:712 ../src/ui/widget/selected-style.cpp:75
+#: ../src/ui/widget/selected-style.cpp:346 ../src/ui/widget/style-swatch.cpp:292
 msgid "Unset fill"
 msgstr "取消填充"
 
-#: ../src/ui/widget/fill-style.cpp:712 ../src/ui/widget/selected-style.cpp:74
-#: ../src/ui/widget/selected-style.cpp:357 ../src/ui/widget/style-swatch.cpp:292
+#: ../src/ui/widget/fill-style.cpp:712 ../src/ui/widget/selected-style.cpp:76
+#: ../src/ui/widget/selected-style.cpp:362 ../src/ui/widget/style-swatch.cpp:292
 msgid "Unset stroke"
 msgstr "取消描边"
 
@@ -35660,14 +35654,14 @@ msgstr "线性渐变"
 
 #: ../src/ui/widget/paint-selector.cpp:167 ../share/ui/gradient-edit.glade:48
 msgid "Radial gradient"
-msgstr "辐向渐变"
+msgstr "径向渐变"
 
 #: ../src/ui/widget/paint-selector.cpp:170
 msgid "Mesh gradient"
 msgstr "网格渐变"
 
-#: ../src/ui/widget/paint-selector.cpp:172 ../src/ui/widget/selected-style.cpp:77
-#: ../src/ui/widget/selected-style.cpp:78 ../src/ui/widget/style-swatch.cpp:266
+#: ../src/ui/widget/paint-selector.cpp:172 ../src/ui/widget/selected-style.cpp:79
+#: ../src/ui/widget/selected-style.cpp:80 ../src/ui/widget/style-swatch.cpp:266
 msgid "Pattern"
 msgstr "图案"
 
@@ -35761,7 +35755,7 @@ msgid "Bitmap options"
 msgstr "位图选项"
 
 #: ../src/ui/widget/rendering-options.cpp:33
-msgid "Preferred resolution of rendering, in dots per inch."
+msgid "Preferred resolution of rendering, DPI."
 msgstr "首选渲染分辨率，按点每英寸计。"
 
 #: ../src/ui/widget/rendering-options.cpp:42
@@ -35782,249 +35776,249 @@ msgstr ""
 "将所有内容渲染为位图。产生的图像通常文件尺寸较大，不能任意缩放而不丢失质量，但所有"
 "对象都将完全按照显示的方式进行渲染。"
 
-#: ../src/ui/widget/selected-style.cpp:69 ../src/ui/widget/selected-style.cpp:70
+#: ../src/ui/widget/selected-style.cpp:71 ../src/ui/widget/selected-style.cpp:72
 msgid "N/A"
 msgstr "N/A"
 
-#: ../src/ui/widget/selected-style.cpp:71
+#: ../src/ui/widget/selected-style.cpp:73
 msgctxt "Fill"
 msgid "<i>None</i>"
 msgstr "<i>无</i>"
 
-#: ../src/ui/widget/selected-style.cpp:71
+#: ../src/ui/widget/selected-style.cpp:73
 msgid "No fill, middle-click for black fill"
 msgstr "无填充，点击鼠标中键填充黑色"
 
-#: ../src/ui/widget/selected-style.cpp:72
+#: ../src/ui/widget/selected-style.cpp:74
 msgctxt "Stroke"
 msgid "<i>None</i>"
 msgstr "<i>无</i>"
 
-#: ../src/ui/widget/selected-style.cpp:72
+#: ../src/ui/widget/selected-style.cpp:74
 msgid "No stroke, middle-click for black stroke"
 msgstr "无描边，点击鼠标中键填充黑色描边"
 
-#: ../src/ui/widget/selected-style.cpp:73 ../src/ui/widget/selected-style.cpp:74
+#: ../src/ui/widget/selected-style.cpp:75 ../src/ui/widget/selected-style.cpp:76
 #: ../src/ui/widget/style-swatch.cpp:290
 msgid "<b>Unset</b>"
 msgstr "<b>未设置</b>"
 
-#: ../src/ui/widget/selected-style.cpp:75 ../src/ui/widget/selected-style.cpp:76
+#: ../src/ui/widget/selected-style.cpp:77 ../src/ui/widget/selected-style.cpp:78
 msgid "≠"
 msgstr "≠"
 
-#: ../src/ui/widget/selected-style.cpp:75
+#: ../src/ui/widget/selected-style.cpp:77
 msgid "Different fills"
 msgstr "相差填充"
 
-#: ../src/ui/widget/selected-style.cpp:76
+#: ../src/ui/widget/selected-style.cpp:78
 msgid "Different strokes"
 msgstr "相差描边"
 
-#: ../src/ui/widget/selected-style.cpp:77 ../src/ui/widget/selected-style.cpp:79
+#: ../src/ui/widget/selected-style.cpp:79 ../src/ui/widget/selected-style.cpp:81
 #: ../src/ui/widget/style-swatch.cpp:268
 msgid "Pattern (fill)"
 msgstr "填充图案"
 
-#: ../src/ui/widget/selected-style.cpp:78 ../src/ui/widget/selected-style.cpp:80
+#: ../src/ui/widget/selected-style.cpp:80 ../src/ui/widget/selected-style.cpp:82
 #: ../src/ui/widget/style-swatch.cpp:268
 msgid "Pattern (stroke)"
 msgstr "描边图案"
 
-#: ../src/ui/widget/selected-style.cpp:79 ../src/ui/widget/selected-style.cpp:80
+#: ../src/ui/widget/selected-style.cpp:81 ../src/ui/widget/selected-style.cpp:82
 msgid "Hatch"
 msgstr "影线"
 
-#: ../src/ui/widget/selected-style.cpp:81 ../src/ui/widget/selected-style.cpp:82
+#: ../src/ui/widget/selected-style.cpp:83 ../src/ui/widget/selected-style.cpp:84
 msgid "<b>L</b>"
 msgstr "<b>线</b>"
 
-#: ../src/ui/widget/selected-style.cpp:81 ../src/ui/widget/style-swatch.cpp:260
+#: ../src/ui/widget/selected-style.cpp:83 ../src/ui/widget/style-swatch.cpp:260
 msgid "Linear gradient (fill)"
 msgstr "线性渐变(填充)"
 
-#: ../src/ui/widget/selected-style.cpp:82 ../src/ui/widget/style-swatch.cpp:260
+#: ../src/ui/widget/selected-style.cpp:84 ../src/ui/widget/style-swatch.cpp:260
 msgid "Linear gradient (stroke)"
 msgstr "线性渐变(描边)"
 
-#: ../src/ui/widget/selected-style.cpp:83 ../src/ui/widget/selected-style.cpp:84
+#: ../src/ui/widget/selected-style.cpp:85 ../src/ui/widget/selected-style.cpp:86
 msgid "<b>R</b>"
 msgstr "<b>辐</b>"
 
-#: ../src/ui/widget/selected-style.cpp:83 ../src/ui/widget/style-swatch.cpp:264
+#: ../src/ui/widget/selected-style.cpp:85 ../src/ui/widget/style-swatch.cpp:264
 msgid "Radial gradient (fill)"
-msgstr "辐向渐变(填充)"
+msgstr "径向渐变(填充)"
 
-#: ../src/ui/widget/selected-style.cpp:84 ../src/ui/widget/style-swatch.cpp:264
+#: ../src/ui/widget/selected-style.cpp:86 ../src/ui/widget/style-swatch.cpp:264
 msgid "Radial gradient (stroke)"
-msgstr "辐向渐变(描边)"
+msgstr "径向渐变(描边)"
 
-#: ../src/ui/widget/selected-style.cpp:85 ../src/ui/widget/selected-style.cpp:86
+#: ../src/ui/widget/selected-style.cpp:87 ../src/ui/widget/selected-style.cpp:88
 msgid "<b>M</b>"
 msgstr "<b>网</b>"
 
-#: ../src/ui/widget/selected-style.cpp:85
+#: ../src/ui/widget/selected-style.cpp:87
 msgid "Mesh gradient (fill)"
 msgstr "网格渐变(填充)"
 
-#: ../src/ui/widget/selected-style.cpp:86
+#: ../src/ui/widget/selected-style.cpp:88
 msgid "Mesh gradient (stroke)"
 msgstr "网格渐变(描边)"
 
-#: ../src/ui/widget/selected-style.cpp:87 ../src/ui/widget/selected-style.cpp:88
+#: ../src/ui/widget/selected-style.cpp:89 ../src/ui/widget/selected-style.cpp:90
 msgid "<b>C</b>"
 msgstr "<b>线</b>"
 
-#: ../src/ui/widget/selected-style.cpp:87
+#: ../src/ui/widget/selected-style.cpp:89
 msgid "Flat color (fill)"
 msgstr "纯色(填充)"
 
-#: ../src/ui/widget/selected-style.cpp:88
+#: ../src/ui/widget/selected-style.cpp:90
 msgid "Flat color (stroke)"
 msgstr "纯色(描边)"
 
-#: ../src/ui/widget/selected-style.cpp:144 ../src/ui/widget/style-swatch.cpp:99
+#: ../src/ui/widget/selected-style.cpp:149 ../src/ui/widget/style-swatch.cpp:99
 msgid "Fill:"
 msgstr "填充:"
 
-#: ../src/ui/widget/selected-style.cpp:216
+#: ../src/ui/widget/selected-style.cpp:221
 msgid "O:"
 msgstr "O:"
 
-#: ../src/ui/widget/selected-style.cpp:365 ../src/ui/widget/selected-style.cpp:373
+#: ../src/ui/widget/selected-style.cpp:370 ../src/ui/widget/selected-style.cpp:378
 msgid "Make fill opaque"
 msgstr "使填充不透明"
 
-#: ../src/ui/widget/selected-style.cpp:384
+#: ../src/ui/widget/selected-style.cpp:389
 msgid "Apply last set color to fill"
 msgstr "应用最近设置的颜色填充"
 
-#: ../src/ui/widget/selected-style.cpp:395
+#: ../src/ui/widget/selected-style.cpp:400
 msgid "Apply last set color to stroke"
 msgstr "应用最近设置的颜色到描边"
 
-#: ../src/ui/widget/selected-style.cpp:405
+#: ../src/ui/widget/selected-style.cpp:410
 msgid "Apply last selected color to fill"
 msgstr "应用最近选择的颜色填充"
 
-#: ../src/ui/widget/selected-style.cpp:415
+#: ../src/ui/widget/selected-style.cpp:420
 msgid "Apply last selected color to stroke"
 msgstr "应用最近选择的颜色到描边"
 
-#: ../src/ui/widget/selected-style.cpp:440
+#: ../src/ui/widget/selected-style.cpp:445
 msgid "Invert fill"
 msgstr "反向填充"
 
-#: ../src/ui/widget/selected-style.cpp:463
+#: ../src/ui/widget/selected-style.cpp:468
 msgid "Invert stroke"
 msgstr "反向描边"
 
-#: ../src/ui/widget/selected-style.cpp:474
+#: ../src/ui/widget/selected-style.cpp:479
 msgid "White fill"
 msgstr "白色填充"
 
-#: ../src/ui/widget/selected-style.cpp:485
+#: ../src/ui/widget/selected-style.cpp:490
 msgid "White stroke"
 msgstr "白色描边"
 
-#: ../src/ui/widget/selected-style.cpp:496
+#: ../src/ui/widget/selected-style.cpp:501
 msgid "Black fill"
 msgstr "黑色填充"
 
-#: ../src/ui/widget/selected-style.cpp:507
+#: ../src/ui/widget/selected-style.cpp:512
 msgid "Black stroke"
 msgstr "黑色描边"
 
-#: ../src/ui/widget/selected-style.cpp:549
+#: ../src/ui/widget/selected-style.cpp:554
 msgid "Paste fill"
 msgstr "粘贴填充"
 
-#: ../src/ui/widget/selected-style.cpp:566
+#: ../src/ui/widget/selected-style.cpp:571
 msgid "Paste stroke"
 msgstr "粘贴描边"
 
-#: ../src/ui/widget/selected-style.cpp:679
+#: ../src/ui/widget/selected-style.cpp:684
 msgid "Edit Fill..."
 msgstr "编辑填充…"
 
-#: ../src/ui/widget/selected-style.cpp:680
+#: ../src/ui/widget/selected-style.cpp:685
 msgid "Edit Stroke..."
 msgstr "编辑描边…"
 
-#: ../src/ui/widget/selected-style.cpp:685
+#: ../src/ui/widget/selected-style.cpp:690
 msgid "Last Set Color"
 msgstr "最近设置的颜色"
 
-#: ../src/ui/widget/selected-style.cpp:687
+#: ../src/ui/widget/selected-style.cpp:692
 msgid "Last Selected Color"
 msgstr "最近选择的颜色"
 
-#: ../src/ui/widget/selected-style.cpp:705
+#: ../src/ui/widget/selected-style.cpp:710
 msgid "Copy Color"
 msgstr "复制颜色"
 
-#: ../src/ui/widget/selected-style.cpp:709
+#: ../src/ui/widget/selected-style.cpp:714
 msgid "Paste Color"
 msgstr "粘贴颜色"
 
-#: ../src/ui/widget/selected-style.cpp:711
+#: ../src/ui/widget/selected-style.cpp:716
 msgid "Swap Fill and Stroke"
 msgstr "互换填充与描边"
 
-#: ../src/ui/widget/selected-style.cpp:716
+#: ../src/ui/widget/selected-style.cpp:721
 msgid "Make Fill Opaque"
 msgstr "使填充不透明"
 
-#: ../src/ui/widget/selected-style.cpp:717
+#: ../src/ui/widget/selected-style.cpp:722
 msgid "Make Stroke Opaque"
 msgstr "使描边不透明"
 
 #. TRANSLATORS COMMENT: unset is a verb here
-#: ../src/ui/widget/selected-style.cpp:719
+#: ../src/ui/widget/selected-style.cpp:724
 msgid "Unset Fill"
 msgstr "取消填充"
 
-#: ../src/ui/widget/selected-style.cpp:720
+#: ../src/ui/widget/selected-style.cpp:725
 msgid "Unset Stroke"
 msgstr "取消描边"
 
-#: ../src/ui/widget/selected-style.cpp:721
+#: ../src/ui/widget/selected-style.cpp:726
 msgid "Remove Fill"
 msgstr "移除填充"
 
-#: ../src/ui/widget/selected-style.cpp:722 ../src/ui/widget/selected-style.cpp:759
+#: ../src/ui/widget/selected-style.cpp:727 ../src/ui/widget/selected-style.cpp:764
 msgid "Remove Stroke"
 msgstr "移除描边"
 
-#: ../src/ui/widget/selected-style.cpp:731
+#: ../src/ui/widget/selected-style.cpp:736
 msgid "<b>Stroke Width</b>"
 msgstr "</b>描边宽度</b>"
 
-#: ../src/ui/widget/selected-style.cpp:784
+#: ../src/ui/widget/selected-style.cpp:789
 msgid "Change stroke width"
 msgstr "改变描边宽度"
 
-#: ../src/ui/widget/selected-style.cpp:900
+#: ../src/ui/widget/selected-style.cpp:905
 msgid ", drag to adjust, middle-click to remove"
 msgstr "，拖动调整，中键点击删除"
 
-#: ../src/ui/widget/selected-style.cpp:923
+#: ../src/ui/widget/selected-style.cpp:927
 msgid "Fill is averaged over selected objects"
 msgstr "平均填充已选对象"
 
-#: ../src/ui/widget/selected-style.cpp:924
+#: ../src/ui/widget/selected-style.cpp:928
 msgid "Stroke is averaged over selected objects"
 msgstr "平均描边已选对象"
 
-#: ../src/ui/widget/selected-style.cpp:930
+#: ../src/ui/widget/selected-style.cpp:934
 msgid "Multiple selected objects have same fill"
 msgstr "多选对象填充相同"
 
-#: ../src/ui/widget/selected-style.cpp:931
+#: ../src/ui/widget/selected-style.cpp:935
 msgid "Multiple selected objects have same stroke"
 msgstr "多选对象描边相同"
 
-#: ../src/ui/widget/selected-style.cpp:961
+#: ../src/ui/widget/selected-style.cpp:965
 msgid ""
 "<b>Opacity (%)</b>\n"
 "Middle-click cycles through 0%, 50%, 100%"
@@ -36032,37 +36026,37 @@ msgstr ""
 "<b>不透明度 (%)</b>\n"
 "鼠标中键切换0%, 50%, 100%"
 
-#: ../src/ui/widget/selected-style.cpp:984 ../src/ui/widget/stroke-style.cpp:232
+#: ../src/ui/widget/selected-style.cpp:988 ../src/ui/widget/stroke-style.cpp:232
 #: ../src/ui/widget/style-swatch.cpp:301 ../src/ui/widget/style-swatch.cpp:304
 msgid "Hairline"
 msgstr "细线"
 
-#: ../src/ui/widget/selected-style.cpp:985
+#: ../src/ui/widget/selected-style.cpp:989
 msgid "Stroke width: Hairline"
 msgstr "描边宽度: 细线"
 
-#: ../src/ui/widget/selected-style.cpp:1004
+#: ../src/ui/widget/selected-style.cpp:1008
 #, c-format
 msgid "Stroke width: %.5g%s%s"
 msgstr "描边宽度:%.5g%s%s"
 
-#: ../src/ui/widget/selected-style.cpp:1008
+#: ../src/ui/widget/selected-style.cpp:1012
 msgid " (averaged)"
 msgstr " (平均)"
 
-#: ../src/ui/widget/selected-style.cpp:1031
+#: ../src/ui/widget/selected-style.cpp:1035
 msgid "0% (Transparent)"
 msgstr "0%(透明)"
 
-#: ../src/ui/widget/selected-style.cpp:1035
+#: ../src/ui/widget/selected-style.cpp:1039
 msgid "100% (Opaque)"
 msgstr "100%(不透明)"
 
-#: ../src/ui/widget/selected-style.cpp:1178
+#: ../src/ui/widget/selected-style.cpp:1182
 msgid "Adjust alpha"
 msgstr "调整 Alpha"
 
-#: ../src/ui/widget/selected-style.cpp:1182
+#: ../src/ui/widget/selected-style.cpp:1186
 #, c-format
 msgid ""
 "Adjusting <b>alpha</b>: was %.3g, now <b>%.3g</b> (diff %.3g); with <b>Ctrl</b> "
@@ -36072,11 +36066,11 @@ msgstr ""
 "正在调整 <b>alpha</b>:从 %.3g 到 <b>%.3g</b>(差异 %.3g);按下 <b>Ctrl</b> 调整亮"
 "度，按住 <b>Shift</b> 调整饱和度，不带修改键调整色调"
 
-#: ../src/ui/widget/selected-style.cpp:1186
+#: ../src/ui/widget/selected-style.cpp:1190
 msgid "Adjust saturation"
 msgstr "调整饱和度"
 
-#: ../src/ui/widget/selected-style.cpp:1190
+#: ../src/ui/widget/selected-style.cpp:1194
 #, c-format
 msgid ""
 "Adjusting <b>saturation</b>: was %.3g, now <b>%.3g</b> (diff %.3g); with <b>Ctrl</"
@@ -36086,11 +36080,11 @@ msgstr ""
 "正在调整<b>饱和度</b>:从 %.3g 到 <b>%.3g</b>(差异 %.3g);按住 <b>Ctrl</b> 调整亮"
 "度，按住 <b>Alt</b> 调整alpha，不带修改键调整色调"
 
-#: ../src/ui/widget/selected-style.cpp:1194
+#: ../src/ui/widget/selected-style.cpp:1198
 msgid "Adjust lightness"
 msgstr "调整亮度"
 
-#: ../src/ui/widget/selected-style.cpp:1198
+#: ../src/ui/widget/selected-style.cpp:1202
 #, c-format
 msgid ""
 "Adjusting <b>lightness</b>: was %.3g, now <b>%.3g</b> (diff %.3g); with <b>Shift</"
@@ -36100,11 +36094,11 @@ msgstr ""
 "正在调整<b>亮度</b>:从 %.3g 到 <b>%.3g</b>(差异 %.3g);按住 <b>Shift</b> 调整饱和"
 "度，按住 <b>Alt</b> 调整alpha，不带修改键调整色调"
 
-#: ../src/ui/widget/selected-style.cpp:1202
+#: ../src/ui/widget/selected-style.cpp:1206
 msgid "Adjust hue"
 msgstr "调整色调"
 
-#: ../src/ui/widget/selected-style.cpp:1206
+#: ../src/ui/widget/selected-style.cpp:1210
 #, c-format
 msgid ""
 "Adjusting <b>hue</b>: was %.3g, now <b>%.3g</b> (diff %.3g); with <b>Shift</b> to "
@@ -36114,11 +36108,11 @@ msgstr ""
 "正在调整<b>色调</b>:从 %.3g 到 <b>%.3g</b>(差异 %.3g);按住 <b>Shift</b> 调整饱和"
 "度，按住 <b>Alt</b> 调整alpha，按住 <b>Ctrl</b> 调整亮度"
 
-#: ../src/ui/widget/selected-style.cpp:1307 ../src/ui/widget/selected-style.cpp:1321
+#: ../src/ui/widget/selected-style.cpp:1311 ../src/ui/widget/selected-style.cpp:1325
 msgid "Adjust stroke width"
 msgstr "调整描边宽度"
 
-#: ../src/ui/widget/selected-style.cpp:1308
+#: ../src/ui/widget/selected-style.cpp:1312
 #, c-format
 msgid "Adjusting <b>stroke width</b>: was %.3g, now <b>%.3g</b> (diff %.3g)"
 msgstr "调整 <b>描边宽度</b>:从 %.3g 到 <b>%.3g</b>(相差 %.3g)"
@@ -36249,7 +36243,7 @@ msgstr "设置描边斜接"
 
 #: ../src/ui/widget/stroke-style.cpp:1135
 msgid "Set stroke style"
-msgstr "设置描边样式"
+msgstr "设置描边线型"
 
 #: ../src/ui/widget/style-swatch.cpp:258
 msgid "L Gradient"
@@ -36613,7 +36607,7 @@ msgstr "高度(px)"
 
 #: ../share/ui/dialog-export.glade:515 ../share/ui/dialog-export.glade:850
 msgid "Export Selected Only"
-msgstr "仅导出选中部分"
+msgstr "仅导出选中对象"
 
 #: ../share/ui/dialog-export.glade:539 ../share/ui/dialog-export.glade:872
 msgid "Background Color"
@@ -37179,7 +37173,7 @@ msgstr "稀疏像素："
 
 #: ../share/ui/dialog-trace.glade:931 ../share/ui/dialog-trace.glade:974
 msgid "The heuristic computed vote will be multiplied by this value"
-msgstr "启发式计算的票数将会乘以该值"
+msgstr "探测方式计算的票数将会乘以该值"
 
 #: ../share/ui/dialog-trace.glade:946
 msgid "A constant vote value"
@@ -37191,11 +37185,11 @@ msgstr "分析的窗口的半径"
 
 #: ../share/ui/dialog-trace.glade:989
 msgid " Heuristics:"
-msgstr " 启发式："
+msgstr " 探测方式："
 
 #: ../share/ui/dialog-trace.glade:1056
 msgid "B-splines"
-msgstr "B样线条"
+msgstr "B-splines"
 
 #: ../share/ui/dialog-trace.glade:1059
 msgid "Preserve staircasing artifacts"
@@ -37658,7 +37652,7 @@ msgstr "更改图像..."
 
 #: ../share/ui/image-properties.glade:122
 msgid "Embed image in the document"
-msgstr "文档中的内嵌图像"
+msgstr "文档中嵌入的图像"
 
 #: ../share/ui/image-properties.glade:147
 msgid "Save a copy of this image to a file"
@@ -38034,7 +38028,7 @@ msgid "Dimensions"
 msgstr "尺寸"
 
 #: ../share/ui/object-attributes.glade:444 ../share/ui/object-attributes.glade:1159
-#: ../share/ui/toolbar-rect.ui:56 ../share/ui/toolbar-select.ui:400
+#: ../share/ui/toolbar-rect.ui:56 ../share/ui/toolbar-select.ui:450
 msgid "W:"
 msgstr "宽:"
 
@@ -38043,7 +38037,7 @@ msgid "Width of rectangle (without stroke)"
 msgstr "矩形宽度(无描边)"
 
 #: ../share/ui/object-attributes.glade:471 ../share/ui/object-attributes.glade:1185
-#: ../share/ui/toolbar-rect.ui:85 ../share/ui/toolbar-select.ui:440
+#: ../share/ui/toolbar-rect.ui:85 ../share/ui/toolbar-select.ui:490
 msgctxt "Abbreviation of Height"
 msgid "H:"
 msgstr "高:"
@@ -38068,7 +38062,7 @@ msgstr "垂直方向圆角半径"
 #: ../share/ui/toolbar-page.ui:143 ../share/ui/toolbar-page.ui:171
 #: ../share/ui/toolbar-page.ui:200 ../share/ui/toolbar-rect.ui:223
 msgid "Make corners sharp"
-msgstr "使角度锐利"
+msgstr "圆角改直角"
 
 #: ../share/ui/object-attributes.glade:607
 msgid "Make corners independent (path effect)"
@@ -39046,11 +39040,11 @@ msgstr "文字填充图形(_F)"
 
 #: ../share/ui/menus.ui:1138
 msgid "Set _Subtraction Frames"
-msgstr "设置减去框架"
+msgstr "文字回避图形"
 
 #: ../share/ui/menus.ui:1143
 msgid "_Unflow"
-msgstr "解除浮动(_U)"
+msgstr "从图形填充脱离(_U)"
 
 #: ../share/ui/menus.ui:1148
 msgid "_Convert to Text"
@@ -39135,11 +39129,11 @@ msgstr "Inkscape：书法(_C)"
 
 #: ../share/ui/menus.ui:1264
 msgid "Inkscape: _Interpolate"
-msgstr "Inkscape：插值(_I)"
+msgstr "Inkscape：插补(_I)"
 
 #: ../share/ui/menus.ui:1268
 msgid "_Elements of Design"
-msgstr "设计元素(_E)"
+msgstr "设计要素(_E)"
 
 #: ../share/ui/menus.ui:1272
 msgid "_Tips and Tricks"
@@ -39282,15 +39276,15 @@ msgid ""
 msgstr "笔尖角度(°;0=水平; 固定=0时没有效果)"
 
 #: ../share/ui/toolbar-calligraphy.ui:295 ../share/ui/toolbar-calligraphy.ui:341
-#: ../share/ui/toolbar-calligraphy.ui:400 ../share/ui/toolbar-calligraphy.ui:435
-#: ../share/ui/toolbar-calligraphy.ui:461 ../share/ui/toolbar-connector.ui:129
-#: ../share/ui/toolbar-connector.ui:176 ../share/ui/toolbar-eraser.ui:316
-#: ../share/ui/toolbar-measure.ui:454 ../share/ui/toolbar-pencil.ui:264
-#: ../share/ui/toolbar-pencil.ui:292 ../share/ui/toolbar-pencil.ui:337
-#: ../share/ui/toolbar-pencil.ui:428 ../share/ui/toolbar-spray.ui:264
-#: ../share/ui/toolbar-spray.ui:421 ../share/ui/toolbar-spray.ui:552
-#: ../share/ui/toolbar-text.ui:841 ../share/ui/toolbar-tweak.ui:378
-#: ../share/ui/toolbar-tweak.ui:407 ../share/ui/toolbar-tweak.ui:453
+#: ../share/ui/toolbar-calligraphy.ui:435 ../share/ui/toolbar-calligraphy.ui:461
+#: ../share/ui/toolbar-connector.ui:129 ../share/ui/toolbar-connector.ui:176
+#: ../share/ui/toolbar-eraser.ui:316 ../share/ui/toolbar-measure.ui:454
+#: ../share/ui/toolbar-pencil.ui:264 ../share/ui/toolbar-pencil.ui:292
+#: ../share/ui/toolbar-pencil.ui:337 ../share/ui/toolbar-pencil.ui:428
+#: ../share/ui/toolbar-spray.ui:264 ../share/ui/toolbar-spray.ui:421
+#: ../share/ui/toolbar-spray.ui:552 ../share/ui/toolbar-text.ui:841
+#: ../share/ui/toolbar-tweak.ui:378 ../share/ui/toolbar-tweak.ui:407
+#: ../share/ui/toolbar-tweak.ui:453
 msgid "0"
 msgstr "0"
 
@@ -39308,11 +39302,11 @@ msgstr "角度行为(0=笔尖总是垂直于描边方向，100=固定角度)"
 msgid "Fixation:"
 msgstr "固定:"
 
-#: ../share/ui/toolbar-calligraphy.ui:386
+#: ../share/ui/toolbar-calligraphy.ui:386 ../share/ui/toolbar-eraser.ui:242
 msgid ""
 "Increase to make caps at the ends of strokes protrude more (0 = no caps, 1 = "
-"round caps"
-msgstr "增大此值使端点凸凹程度增加(0=无封口，1=圆角封口)"
+"round caps)"
+msgstr "增大此值使端点凸凹程度增加(0 = 无封口，1 = 圆角封口)"
 
 #: ../share/ui/toolbar-calligraphy.ui:392 ../share/ui/toolbar-eraser.ui:246
 msgid "Caps:"
@@ -39441,12 +39435,6 @@ msgstr "从对象裁剪"
 msgid "The width of the eraser pen (relative to the visible canvas area)"
 msgstr "橡皮擦宽度(相对于可见画布)"
 
-#: ../share/ui/toolbar-eraser.ui:242
-msgid ""
-"Increase to make caps at the ends of strokes protrude more (0 = no caps, 1 = "
-"round caps)"
-msgstr "增大此值使端点凸凹程度增加(0 = 无封口，1 = 圆角封口)"
-
 #: ../share/ui/toolbar-eraser.ui:345
 msgid "Break apart cut items"
 msgstr "打散项目"
@@ -39471,7 +39459,7 @@ msgstr "在描边里面创建渐变"
 msgid "Link gradients to change all related gradients"
 msgstr "链接渐变为更改所有相关的渐变"
 
-#: ../share/ui/toolbar-gradient.ui:273 ../share/ui/toolbar-select.ui:407
+#: ../share/ui/toolbar-gradient.ui:273 ../share/ui/toolbar-select.ui:457
 msgid "Width of selection"
 msgstr "选中对象的宽度"
 
@@ -39516,6 +39504,10 @@ msgstr "显示选中对象的测量信息"
 #: ../share/ui/toolbar-lpe.ui:315
 msgid "Open LPE dialog (to adapt parameters numerically)"
 msgstr "打开 LPE 对话框(通过数字修改参数)"
+
+#: ../share/ui/toolbar-marker.ui:16
+msgid "Edit marker on canvas."
+msgstr "在画布上编辑箭头。"
 
 #: ../share/ui/toolbar-measure.ui:60
 msgid "The font size to be used in the measurement labels"
@@ -39745,6 +39737,10 @@ msgstr "显示所选对象的蒙版"
 msgid "Show clipping path(s) of selected object(s)"
 msgstr "显示选中对象的剪裁路径"
 
+#: ../share/ui/toolbar-objectpicker.ui:15
+msgid "Select object on canvas"
+msgstr "选中画布上的对象"
+
 #: ../share/ui/toolbar-page.ui:122
 msgid "Page Margins"
 msgstr "页边距"
@@ -39866,43 +39862,43 @@ msgstr "矩形高度"
 msgid "Corners"
 msgstr "角"
 
-#: ../share/ui/toolbar-select.ui:86
+#: ../share/ui/toolbar-select.ui:106
 msgid "Select all objects"
 msgstr "选择所有对象"
 
-#: ../share/ui/toolbar-select.ui:104
+#: ../share/ui/toolbar-select.ui:124
 msgid "Select all in all layers"
 msgstr "在所有层全选"
 
-#: ../share/ui/toolbar-select.ui:122
+#: ../share/ui/toolbar-select.ui:142
 msgid "Deselect any selected objects"
 msgstr "取消选择任何已选对象"
 
-#: ../share/ui/toolbar-select.ui:141
+#: ../share/ui/toolbar-select.ui:161
 msgid "Toggle selection box to select all touched objects"
 msgstr "切换选择框，选择所有被触碰到的对象"
 
-#: ../share/ui/toolbar-select.ui:163
+#: ../share/ui/toolbar-select.ui:209
 msgid "Rotate selection 90\\xc2\\xb0 counter-clockwise"
 msgstr "逆时针旋转选中对象90°"
 
-#: ../share/ui/toolbar-select.ui:181
+#: ../share/ui/toolbar-select.ui:228
 msgid "Rotate selection 90\\xc2\\xb0 clockwise"
 msgstr "顺时针旋转选中对象90°"
 
-#: ../share/ui/toolbar-select.ui:356
+#: ../share/ui/toolbar-select.ui:406
 msgid "Horizontal coordinate of selection"
 msgstr "选中对象的横坐标"
 
-#: ../share/ui/toolbar-select.ui:381
+#: ../share/ui/toolbar-select.ui:431
 msgid "Vertical coordinate of selection"
 msgstr "选中对象的纵坐标"
 
-#: ../share/ui/toolbar-select.ui:424
+#: ../share/ui/toolbar-select.ui:474
 msgid "When locked, change width and height by the same proportion"
 msgstr "锁定时, 按照相同比例改变宽度和高度"
 
-#: ../share/ui/toolbar-select.ui:447
+#: ../share/ui/toolbar-select.ui:497
 msgid "Height of selection"
 msgstr "选中对象的高度"
 
@@ -40645,7 +40641,7 @@ msgid ""
 "support for help."
 msgstr ""
 "警告：无法转换浮动在框架内的文本。\n"
-"请在使用前使用 \"文字 > 解除浮动 \"来转换。\n"
+"请在使用前使用 \"文字 > 从图形填充脱离 \"来转换。\n"
 "如果你无法确定有问题的对象，请联系技术支持寻求帮助。"
 
 #: ../share/extensions/hpgl2_input.py:99
@@ -40901,7 +40897,7 @@ msgstr "你选择了“其他”。请输入要插入的属性。"
 
 #: ../share/extensions/interp_att_g.py:185
 msgid "There is no selection to interpolate"
-msgstr "没有选择要插值的内容"
+msgstr "没有选择要插补的对象"
 
 #: ../share/extensions/jessyink_autotexts.py:35
 msgid ""
@@ -43767,22 +43763,22 @@ msgstr "模糊高度:"
 
 #: ../share/extensions/interp.inx:3
 msgid "Interpolate Between Paths"
-msgstr "内插子路径"
+msgstr "插补"
 
 #: ../share/extensions/interp.inx:6
 msgid "Interpolation steps:"
-msgstr "插值步数:"
+msgstr "插补步数:"
 
 #: ../share/extensions/interp.inx:7
 msgid "Interpolation method:"
-msgstr "插值方式:"
+msgstr "插补方式:"
 
 #: ../share/extensions/interp.inx:7
 msgid ""
 "The first option rediscretizes both paths before the interpolation with the other "
 "path's node positions. The second option removes extra nodes of the longer path."
 msgstr ""
-"第一个选项在用另一条路径的节点位置进行插值之前对两条路径进行重新分解。第二个选项是"
+"第一个选项在用另一条路径的节点位置进行插补之前对两条路径进行重新分解。第二个选项是"
 "删除较长路径的额外节点(如果两条子路径的长度相等，会产生很好的结果)"
 
 #: ../share/extensions/interp.inx:8
@@ -43795,11 +43791,11 @@ msgstr "丢弃较长路径的多余节点"
 
 #: ../share/extensions/interp.inx:11
 msgid "Duplicate endpaths"
-msgstr "创建终点路径的副本"
+msgstr "创建两端路径的副本"
 
 #: ../share/extensions/interp.inx:12
 msgid "Interpolate style"
-msgstr "插值样式"
+msgstr "插补样式"
 
 #: ../share/extensions/interp.inx:13 ../share/extensions/interp_att_g.inx:42
 msgid "Use Z-order"
@@ -43814,11 +43810,11 @@ msgstr "在实时预览循环中反向选择顺序的解决方案"
 
 #: ../share/extensions/interp_att_g.inx:3
 msgid "Interpolate Attribute in a Group"
-msgstr "群组中的插值属性"
+msgstr "群组中的插补属性"
 
 #: ../share/extensions/interp_att_g.inx:7
 msgid "Attribute to Interpolate:"
-msgstr "要插值的属性:"
+msgstr "要插补的属性:"
 
 #: ../share/extensions/interp_att_g.inx:11
 msgid "Translate X"
@@ -43892,8 +43888,8 @@ msgid ""
 "This effect applies a value for any interpolatable attribute for all elements "
 "inside the selected group or for all elements in a multiple selection."
 msgstr ""
-"这个效果应用一个值于选择组中的所有元素的任何可插值属性，或者一个多项选择中的所有元"
-"素的任何可插值属性。"
+"这个效果应用一个值于选择组中的所有元素的任何可插补属性，或者一个多项选择中的所有元"
+"素的任何可插补属性。"
 
 #: ../share/extensions/jessyink_autotexts.inx:3
 msgid "Auto-texts"
@@ -45278,7 +45274,7 @@ msgstr ""
 "\n"
 "Gcodetools 插件：\n"
 "将路径转换为Gcode(使用圆弧插补)、制作偏移路径并使用锥形铣刀雕刻锐角。\n"
-"该插件可在需要时使用圆弧插值或线性运动为路径计算Gcode。\n"
+"该插件可在需要时使用圆弧插补或线性运动为路径计算Gcode。\n"
 "\n"
 "教程、手册和支持可在\n"
 "英语支持论坛找到：\n"
@@ -45413,7 +45409,7 @@ msgstr "Gcode的路径"
 #: ../share/extensions/other/gcodetools/gcodetools_lathe.inx:29
 #: ../share/extensions/other/gcodetools/gcodetools_path_to_gcode.inx:9
 msgid "Biarc interpolation tolerance:"
-msgstr "双弧插值公差:"
+msgstr "双弧插补公差:"
 
 #: ../share/extensions/other/gcodetools/gcodetools_area.inx:49
 #: ../share/extensions/other/gcodetools/gcodetools_lathe.inx:30
@@ -45470,8 +45466,8 @@ msgid ""
 "depth defined by orientation points, s - surface defined by orientation points.\n"
 msgstr ""
 "\n"
-"Biarc 插值公差是路径和其近似值之间的最大距离。\n"
-"如果路径的线段与其近似值之间的距离超过biarc插值公差，则该段将被分成两段。\n"
+"Biarc 插补公差是路径和其近似值之间的最大距离。\n"
+"如果路径的线段与其近似值之间的距离超过biarc插补公差，则该段将被分成两段。\n"
 "对于深度函数 c = 从 0.0(白色)到 1.0(黑色)的颜色强度，d 是由方向点定义的深度，s - "
 "由方向点限定的曲面。\n"
 
@@ -45922,7 +45918,7 @@ msgstr ""
 "\n"
 "Gcodetools 插件：\n"
 "将路径转换为Gcode(使用圆弧插补)、制作偏移路径并使用锥形铣刀雕刻锐角。该插件可在需"
-"要时使用圆弧插值或线性运动为路径计算Gcode。\n"
+"要时使用圆弧插补或线性运动为路径计算Gcode。\n"
 "\n"
 "教程、手册和支持可在英语支持论坛 http://www.cnc-club.ru/gcodetools 和俄语支持论坛 "
 "http://www.cnc-club.ru/gcodetoolsru 上找到。\n"
@@ -46079,8 +46075,8 @@ msgid ""
 msgstr ""
 "\n"
 "Gcodetools 插件：\n"
-"将路径转换为Gcode(使用圆弧插值)、制作偏移路径并使用锥形铣刀雕刻锐角。\n"
-"该插件可在需要时使用圆弧插值或线性运动为路径计算Gcode。\n"
+"将路径转换为Gcode(使用圆弧插补)、制作偏移路径并使用锥形铣刀雕刻锐角。\n"
+"该插件可在需要时使用圆弧插补或线性运动为路径计算Gcode。\n"
 "\n"
 "教程、手册和支持可在\n"
 "英语支持论坛找到：\n"
@@ -49856,6 +49852,18 @@ msgstr "一半字宽"
 msgid "Half of font height"
 msgstr "字体高度的一半"
 
+#~ msgid "(speed blows up stroke"
+#~ msgstr "(加速炸开"
+
+#, fuzzy
+#~ msgid "(slight thining, default)"
+#~ msgstr "(略微变窄，默认)"
+
+#~ msgid ""
+#~ "Increase to make caps at the ends of strokes protrude more (0 = no caps, 1 = "
+#~ "round caps"
+#~ msgstr "增大此值使端点凸凹程度增加(0=无封口，1=圆角封口)"
+
 #~ msgid "Welcome!"
 #~ msgstr "欢迎！"
 
@@ -50042,9 +50050,6 @@ msgstr "字体高度的一半"
 
 #~ msgid "Arc (Open)"
 #~ msgstr "弧(开放)"
-
-#~ msgid "Make whole"
-#~ msgstr "补完形状"
 
 #~ msgid "State of VP in X direction"
 #~ msgstr "X 向消失点(VP)的状态"
@@ -50430,10 +50435,6 @@ msgstr "字体高度的一半"
 #~ "由 <b>%d</b> 个立方体共用<b>有限</b>消失点;按下 <b>Shift</b> 拖拽可分离选中的立"
 #~ "方体"
 
-#~ msgctxt "canvas"
-#~ msgid "R:"
-#~ msgstr "旋转:"
-
 #~ msgid "Centre Page"
 #~ msgstr "置中页面"
 
@@ -50457,12 +50458,6 @@ msgstr "字体高度的一半"
 
 #~ msgid "LPEName"
 #~ msgstr "LPE 名称"
-
-#~ msgid "Move up"
-#~ msgstr "上移"
-
-#~ msgid "Move down"
-#~ msgstr "下移"
 
 #~ msgid "_Input Devices..."
 #~ msgstr "输入设备(_I)"
@@ -51266,7 +51261,7 @@ msgstr "字体高度的一半"
 #~ msgstr "勾选这个显示路径之间的移动(默认:不勾选)"
 
 #~ msgid "Interpolate"
-#~ msgstr "插值"
+#~ msgstr "插补"
 
 #~ msgid "Motion"
 #~ msgstr "运动"
@@ -52299,9 +52294,6 @@ msgstr "字体高度的一半"
 #~ msgid "Width scale all points"
 #~ msgstr "列出所有字体"
 
-#~ msgid "Slice the arc"
-#~ msgstr "执行临摹"
-
 #~ msgid "Start point of the taper"
 #~ msgstr "锥体的起点"
 
@@ -52744,9 +52736,6 @@ msgstr "字体高度的一半"
 #~ msgid "Close gaps:"
 #~ msgstr "闭合缺口："
 
-#~ msgid "Shape:"
-#~ msgstr "形状："
-
 #~ msgid "Cap for powerstroke pressure"
 #~ msgstr "薄纸纹理上的蜡染"
 
@@ -53002,7 +52991,7 @@ msgstr "字体高度的一半"
 #~ msgstr "从渐变中删除当前控制分段点"
 
 #~ msgid "<b>Radial gradient</b>"
-#~ msgstr "<b>辐向渐变</b>"
+#~ msgstr "<b>径向渐变</b>"
 
 #~ msgid "Create a single path or create a group of paths"
 #~ msgstr "创建一条路径或一组路径"
@@ -55655,7 +55644,7 @@ msgstr "字体高度的一半"
 #~ "件没用到的 ID 名称”。\n"
 #~ "    * 创建相似属性的群组：创建 g 组件以让运行的组件至少共有一种属性 (例如，填"
 #~ "充、笔刷不透明度...)。\n"
-#~ "    * 内嵌位图：将位图内嵌为 base64 编码数据网址。\n"
+#~ "    * 嵌入位图：将位图内嵌为 base64 编码数据网址。\n"
 #~ "    * 保留软件数据：不移除 Inkscape、Sodipodi 或 Adobe Illustrator 组件和属"
 #~ "性。\n"
 #~ "    * 移除中继数据：移除中继数据标签和里面的所有信息，这些信息可能包含授权中继"
