@@ -389,6 +389,7 @@ std::map<std::string, PangoFontFamily *> FontFactory::GetUIFamilies()
 
     // Gather the family names as listed by Pango
     PangoFontFamily **families = nullptr;
+    PangoFontFamily *sansFamily = nullptr;
     int numFamilies = 0;
     pango_font_map_list_families(fontServer, &families, &numFamilies);
 
@@ -405,8 +406,16 @@ std::map<std::string, PangoFontFamily *> FontFactory::GetUIFamilies()
             std::cerr << "Ignoring font '" << displayName << "'" << std::endl;
             continue;
         }
+
+        // Save the PangoFontFamily of the Sans font for sans-serif.
+        if (strcmp(displayName, "Sans") == 0) {
+            sansFamily = families[currentFamily];
+        }
         result.emplace(displayName, families[currentFamily]);
     }
+
+    // Workaround for default fallback font.
+    result.emplace("sans-serif", sansFamily);
 
     g_free(families);
     return result;
