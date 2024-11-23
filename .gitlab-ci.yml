@@ -41,7 +41,12 @@ variables:
 .cmake: &cmake
 - mkdir -p build/conf
 - cd build
-- cmake .. -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX:PATH=$PWD/install_dir/ -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+- cmake .. -DCMAKE_C_COMPILER_LAUNCHER=ccache
+           -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
+           -DCMAKE_BUILD_TYPE=Debug
+           -DCMAKE_INSTALL_PREFIX:PATH=$PWD/install_dir/
+           -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+           -DWITH_COVERAGE=ON
 
 # basic workflow setup:
 # - run pipelines for all branches without an open MR
@@ -214,11 +219,21 @@ test:linux:
     - sed -i '/<policy domain="coder" rights="none"/d' /etc/ImageMagick-6/policy.xml
     - cd build
     - ctest -V
+    - find . -type f -name '*.gcno' | xargs touch # Suppress gcov warning due to GitLab updating source timestamps.
+    - make -j3 coverage_xml_inkscape
+  coverage: /^\s*lines:\s*\d+.\d+\%/
   artifacts:
+    name: ${CI_JOB_NAME}-${CI_COMMIT_REF_NAME}-${CI_COMMIT_SHA}
+    expire_in: 1 month
     paths:
-      - build/testfiles
       - build/Testing
+      - build/testfiles
+    expose_as: 'Test logs'
     when: on_failure
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: build/coverage_xml_inkscape.xml
 
 .test:macos:
   extends: inkscape:macos

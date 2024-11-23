@@ -301,4 +301,19 @@ message("MINGW_PATH:              ${MINGW_PATH}")
 message("MINGW_ARCH:              ${MINGW_ARCH}")
 endif()
 
+# Set up code coverage collection
+option(WITH_COVERAGE
+    "Enable generation of code coverage reports."
+    OFF)
+
+if(WITH_COVERAGE)
+    set(GCOVR_ADDITIONAL_ARGS "-s")
+    include(CMakeScripts/CodeCoverageInkscape.cmake)
+    set(COVERAGE_EXCLUDES
+        "${PROJECT_SOURCE_DIR}/src/3rdparty/*")
+    setup_target_for_coverage_gcovr_xml(NAME coverage_xml_inkscape EXECUTABLE ctest)
+    setup_target_for_coverage_gcovr_html(NAME coverage_html_inkscape EXECUTABLE ctest)
+    append_coverage_compiler_flags()
+endif()
+
 message("------------------------------------------------------------------------")
