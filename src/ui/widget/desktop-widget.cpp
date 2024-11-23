@@ -62,6 +62,7 @@
 #include "ui/toolbar/toolbar-constants.h"
 #include "ui/toolbar/toolbars.h"
 #include "ui/toolbar/tool-toolbar.h"
+#include "ui/tools/tool-data.h"
 #include "ui/util.h"
 #include "ui/widget/canvas-grid.h"
 #include "ui/widget/canvas.h"
@@ -276,7 +277,7 @@ void SPDesktopWidget::switchDesktop(SPDesktop *desktop)
         // Update window's current active tool, display mode, colour mode, cms mode
         // Todo: These should really be tab-level actions.
         if (auto action = dynamic_cast<Gio::SimpleAction *>(_window->lookup_action("tool-switch").get())) {
-            action->set_state(Glib::Variant<Glib::ustring>::create(pref_path_to_tool_name(_desktop->getTool()->getPrefsPath())));
+            action->set_state(Glib::Variant<Glib::ustring>::create(pref_path_to_tool_name(_desktop->getTool()->getPrefsPath().c_str())));
         }
         if (auto action = dynamic_cast<Gio::SimpleAction *>(_window->lookup_action("canvas-display-mode").get())) {
             action->set_state(Glib::Variant<int>::create((int)_desktop->getCanvas()->get_render_mode()));
