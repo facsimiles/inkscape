@@ -52,9 +52,9 @@ private:
     void _updateVisibility();
     Glib::ustring _getTitle(SPDesktop *desktop) const;
     void _setTooltip(SPDesktop *desktop, Glib::RefPtr<Gtk::Tooltip> const &tooltip);
-    int _computeDropLocation(int tab_x) const;
+    int _computeDropPosition(int tab_x) const;
     void _resetLayout();
-    void _adjustLayoutForDropLocation(int i, int width);
+    void _adjustLayoutForDropPosition(int i, int width);
     std::pair<std::weak_ptr<Tab>, Geom::Point> _tabAtPoint(Geom::Point const &pos);
     void _reorderTab(int from, int to);
 };

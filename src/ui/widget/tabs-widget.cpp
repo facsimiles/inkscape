@@ -100,19 +100,6 @@ struct TabDnD
     int width;
 };
 
-// Attempt to extract a TabDnD from the content provider of a drag.
-std::optional<TabDnD> get_tabdnd(Gdk::Drag &drag)
-{
-    Glib::ValueBase value;
-    value.init(GlibValue::type<TabDnD>());
-    try {
-        drag.get_content()->get_value(value);
-    } catch (Glib::Error const &) {
-        return {};
-    }
-    return *GlibValue::get<TabDnD>(value);
-}
-
 struct DumbTab : Gtk::Box
 {
     Gtk::Label &name;
@@ -139,13 +126,6 @@ struct DumbTab : Gtk::Box
         get_style_context()->remove_class("tab_active");
     }
 };
-
-// Necessary since GTKmm vfunc is protected.
-void snapshot_widget(Gtk::Widget &widget, Gtk::Snapshot &snapshot)
-{
-    auto widget_c = widget.gobj();
-    GTK_WIDGET_GET_CLASS(widget_c)->snapshot(widget_c, snapshot.gobj());
-}
 
 // Only needed for a workaround; see below.
 std::optional<Geom::Point> get_current_pointer_pos(Glib::RefPtr<Gdk::Device> const &pointer, Gtk::Widget &widget)
@@ -174,9 +154,9 @@ struct Tab : DumbTab
     }
 };
 
-// This is necessary to ensure that TabsWidget::_tabs remains the *unique* owner of tabs.
-// We want tabs to be deleted when it removes them - no zombies, please!
-SPDesktop *consume_locked_tab_return_desktop(std::shared_ptr<Tab> &&tab)
+// This is used to ensure that a Tab never outlives its parent TabsWidget,
+// which would result in Tab::parent dangling.
+SPDesktop *consume_tab_return_desktop(std::shared_ptr<Tab> tab)
 {
     return tab ? tab->desktop : nullptr;
 }
@@ -217,7 +197,7 @@ TabsWidget::TabsWidget(SPDesktopWidget *desktop_widget)
                 break;
             }
             case GDK_BUTTON_MIDDLE:
-                InkscapeApplication::instance()->destroyDesktop(consume_locked_tab_return_desktop(std::move(tab)));
+                InkscapeApplication::instance()->destroyDesktop(consume_tab_return_desktop(std::move(tab)));
                 break;
             default:
                 break;
@@ -244,7 +224,7 @@ TabsWidget::TabsWidget(SPDesktopWidget *desktop_widget)
         return Gdk::ContentProvider::create(GlibValue::create<TabDnD>(std::move(tabdnd)));
     }, false);
     dragsource->signal_drag_begin().connect([this, dragsource = dragsource.get()] (auto const &drag) {
-        auto const tabdnd = get_tabdnd(*drag);
+        auto const tabdnd = GlibValue::from_content_provider<TabDnD>(*drag->get_content());
         if (!tabdnd) {
             return;
         }
@@ -269,8 +249,8 @@ TabsWidget::TabsWidget(SPDesktopWidget *desktop_widget)
         auto const [mx, my] = get_current_pointer_pos(dragsource->get_current_event_device(), *tab).value_or(tabdnd->offset);
         if (contains(mx, my)) {
             int const tab_x = mx - static_cast<int>(std::round(tabdnd->offset.x()));
-            int const i = _computeDropLocation(tab_x);
-            _adjustLayoutForDropLocation(i, tabdnd->width);
+            int const i = _computeDropPosition(tab_x);
+            _adjustLayoutForDropPosition(i, tabdnd->width);
         }
 
         // Handle drag cancellation.
@@ -289,7 +269,7 @@ TabsWidget::TabsWidget(SPDesktopWidget *desktop_widget)
                 drag->drag_drop_done(true); // suppress drag-failed animation
 
                 // Detach tab.
-                auto const desktop = consume_locked_tab_return_desktop(std::move(tab));
+                auto const desktop = consume_tab_return_desktop(std::move(tab));
                 InkscapeApplication::instance()->detachDesktopToNewWindow(desktop);
             }
         }, false);
@@ -303,7 +283,7 @@ TabsWidget::TabsWidget(SPDesktopWidget *desktop_widget)
         if (!drag) {
             return {}; // not in-app
         }
-        auto const tabdnd = get_tabdnd(*drag);
+        auto const tabdnd = GlibValue::from_content_provider<TabDnD>(*drag->get_content());
         if (!tabdnd) {
             return {}; // not a tab
         }
@@ -311,11 +291,11 @@ TabsWidget::TabsWidget(SPDesktopWidget *desktop_widget)
         // Compute x coordinate of tab.
         int const tab_x = x - static_cast<int>(std::round(tabdnd->offset.x()));
 
-        // Compute index of drop location.
-        int const i = _computeDropLocation(tab_x);
+        // Compute index of drop position.
+        int const i = _computeDropPosition(tab_x);
 
         // Adjust tab positions to simulate drop.
-        _adjustLayoutForDropLocation(i, tabdnd->width);
+        _adjustLayoutForDropPosition(i, tabdnd->width);
 
         return Gdk::DragAction::COPY;
     };
@@ -337,8 +317,8 @@ TabsWidget::TabsWidget(SPDesktopWidget *desktop_widget)
         // Compute x coordinate of tab.
         int const tab_x = x - static_cast<int>(std::round(tabdnd->offset.x()));
 
-        // Compute index of drop location.
-        int const i = _computeDropLocation(tab_x);
+        // Compute index of drop position.
+        int const i = _computeDropPosition(tab_x);
 
         // Reset widget modifications.
         tab->set_visible(true);
@@ -353,7 +333,7 @@ TabsWidget::TabsWidget(SPDesktopWidget *desktop_widget)
             int const to = i - (i > from);
             _reorderTab(from, to);
         } else { // Migrate.
-            auto const desktop = consume_locked_tab_return_desktop(std::move(tab));
+            auto const desktop = consume_tab_return_desktop(std::move(tab));
             desktop->getDesktopWidget()->removeDesktop(desktop);
             _desktop_widget->addDesktop(desktop, i);
         }
@@ -364,18 +344,18 @@ TabsWidget::TabsWidget(SPDesktopWidget *desktop_widget)
 
     auto actiongroup = Gio::SimpleActionGroup::create();
     actiongroup->add_action("detach", [this] {
-        if (auto desktop = consume_locked_tab_return_desktop(_right_clicked.lock())) {
+        if (auto desktop = consume_tab_return_desktop(_right_clicked.lock())) {
             InkscapeApplication::instance()->detachDesktopToNewWindow(desktop);
         }
     });
     actiongroup->add_action("duplicate", [this] {
-        if (auto desktop = consume_locked_tab_return_desktop(_right_clicked.lock())) {
-            // Fixme: After current tab.
+        if (auto desktop = consume_tab_return_desktop(_right_clicked.lock())) {
+            // Todo: Place after current tab.
             InkscapeApplication::instance()->desktopOpen(desktop->getDocument());
         }
     });
     actiongroup->add_action("close", [this] {
-        if (auto desktop = consume_locked_tab_return_desktop(_right_clicked.lock())) {
+        if (auto desktop = consume_tab_return_desktop(_right_clicked.lock())) {
             InkscapeApplication::instance()->destroyDesktop(desktop);
         }
     });
@@ -522,7 +502,7 @@ void TabsWidget::_setTooltip(SPDesktop *desktop, Glib::RefPtr<Gtk::Tooltip> cons
             constexpr double scale = 0.2;
             auto snapshot = Gtk::Snapshot::create();
             snapshot->scale(scale, scale);
-            snapshot_widget(*desktop->getCanvas(), *snapshot);
+            desktop->getCanvas()->snapshot_vfunc(snapshot);
             tooltip_ui->preview.set_paintable(snapshot->to_paintable());
         }
     }
@@ -531,7 +511,7 @@ void TabsWidget::_setTooltip(SPDesktop *desktop, Glib::RefPtr<Gtk::Tooltip> cons
     tooltip->set_custom(tooltip_ui->root);
 }
 
-int TabsWidget::_computeDropLocation(int tab_x) const
+int TabsWidget::_computeDropPosition(int tab_x) const
 {
     int x = 0;
     int i = 0;
@@ -557,7 +537,7 @@ void TabsWidget::_resetLayout()
     }
 }
 
-void TabsWidget::_adjustLayoutForDropLocation(int i, int width)
+void TabsWidget::_adjustLayoutForDropPosition(int i, int width)
 {
     _resetLayout();
     for (int j = i; j < _tabs.size(); j++) {
