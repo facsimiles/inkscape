@@ -555,8 +555,18 @@ Geom::OptRect SPShape::either_bbox(Geom::Affine const &transform, SPItem::BBoxTy
     if (!this->_curve || this->_curve->get_pathvector().empty()) {
     	return bbox;
     }
-
-    bbox = bounds_exact_transformed(this->_curve->get_pathvector(), transform);
+    if (bboxtype == SPItem::VISUAL_BBOX) {
+        // convert the stroke to a path and calculate that path's geometric bbox
+        if (!this->style->stroke.isNone() && !this->style->stroke_extensions.hairline) {
+            if (Geom::PathVector *pathv = item_to_outline(this, true)) { // calculate bbox_only
+                bbox = bounds_exact_transformed(*pathv, transform);
+                delete pathv;
+            }
+        }
+    }
+    if (!bbox) {
+        bbox = bounds_exact_transformed(this->_curve->get_pathvector(), transform);
+    }
 
     if (!bbox) {
     	return bbox;
@@ -564,16 +574,6 @@ Geom::OptRect SPShape::either_bbox(Geom::Affine const &transform, SPItem::BBoxTy
 
     if (bboxtype == SPItem::VISUAL_BBOX) {
         // convert the stroke to a path and calculate that path's geometric bbox
-
-        if (!this->style->stroke.isNone() && !this->style->stroke_extensions.hairline) {
-            Geom::PathVector *pathv = item_to_outline(this, true);  // calculate bbox_only
-
-            if (pathv) {
-                bbox |= bounds_exact_transformed(*pathv, transform);
-                delete pathv;
-            }
-        }
-
         // Union with bboxes of the markers, if any
         if ( this->hasMarkers()  && !this->_curve->get_pathvector().empty() ) {
             /** \todo make code prettier! */
