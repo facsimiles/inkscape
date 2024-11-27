@@ -10,6 +10,7 @@ set(ui_SRC
 	drag-and-drop.cpp
 	icon-loader.cpp
 	interface.cpp
+	item-factories.cpp
 	monitor.cpp
 	pack.cpp
 	popup-menu.cpp
@@ -208,6 +209,7 @@ set(ui_SRC
 	widget/desktop-widget.cpp
 	widget/entity-entry.cpp
 	widget/entry.cpp
+	widget/entry-dropdown.cpp
 	widget/export-lists.cpp
 	widget/export-preview.cpp
 	widget/filter-effect-chooser.cpp
@@ -298,6 +300,7 @@ set(ui_SRC
 	icon-names.h
 	icon-loader.h
 	interface.h
+	item-factories.h
 	monitor.h
 	pack.h
 	popup-menu.h
@@ -508,6 +511,7 @@ set(ui_SRC
 	widget/desktop-widget.h
 	widget/entity-entry.h
 	widget/entry.h
+	widget/entry-dropdown.h
 	widget/events/canvas-event.h
 	widget/events/debug.h
 	widget/events/enums.h

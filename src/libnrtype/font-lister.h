@@ -23,15 +23,19 @@
 #include <memory>
 #include <set>
 #include <vector>
-#include <unordered_map>
+#include <map>
 
 #include <glibmm/ustring.h>
 #include <glibmm/stringutils.h> // For strescape()
 
+#include <giomm/liststore.h>
 #include <gtkmm/liststore.h>
 #include <gtkmm/treemodel.h>
 #include <gtkmm/treemodelcolumn.h>
 #include <gtkmm/treepath.h>
+
+#include "libnrtype/font-factory.h"
+#include "ui/item-factories.h"
 
 inline constexpr int FONT_FAMILIES_GROUP_SIZE = 30;
 
@@ -39,7 +43,6 @@ class SPObject;
 class SPDocument;
 class SPCSSAttr;
 class SPStyle;
-class StyleNames;
 
 namespace Gtk {
 class CellRenderer;
@@ -125,23 +128,6 @@ public:
 
     FontListClass font_list;
 
-    struct FontStyleListClass : Gtk::TreeModelColumnRecord
-    {
-        /// Column containing the styles as Font designer used.
-        Gtk::TreeModelColumn<Glib::ustring> displayStyle;
-
-        /// Column containing the styles in CSS/Pango format.
-        Gtk::TreeModelColumn<Glib::ustring> cssStyle;
-
-        FontStyleListClass()
-        {
-            add(cssStyle);
-            add(displayStyle);
-        }
-    };
-
-    FontStyleListClass font_style_list;
-
     /**
      * The list of fonts, sorted by the order they will appear in the UI.
      * Also used to give log-time access to each font's PangoFontFamily, owned by the FontFactory.
@@ -159,7 +145,7 @@ public:
     /**
      * @return the ListStore with the styles
      */
-    Glib::RefPtr<Gtk::ListStore> const &get_style_list() const { return style_list_store; }
+    Glib::RefPtr<Gio::ListStore<WrapAsGObject<StyleNames>>> const &get_style_list() const { return style_list_store; }
 
     /** 
      * Inserts a font family or font-fallback list (for use when not
@@ -174,7 +160,6 @@ public:
      */
     void update_font_list(SPDocument *document);
 
-public:
     static Inkscape::FontLister *get_instance();
 
     /**
@@ -289,12 +274,6 @@ public:
 
     bool is_path_for_font(Gtk::TreePath path, Glib::ustring family);
 
-    Gtk::TreeModel::Row get_row_for_style() { return get_row_for_style(current_style); }
-
-    Gtk::TreeModel::Row get_row_for_style(Glib::ustring const &style);
-
-    Gtk::TreePath get_path_for_style(Glib::ustring const &style);
-
     std::pair<Gtk::TreePath, Gtk::TreePath> get_paths(Glib::ustring const &family, Glib::ustring const &style);
 
     /**
@@ -343,7 +322,7 @@ private:
     void font_family_row_update(int start = 0);
 
     Glib::RefPtr<Gtk::ListStore> font_list_store;
-    Glib::RefPtr<Gtk::ListStore> style_list_store;
+    Glib::RefPtr<Gio::ListStore<WrapAsGObject<StyleNames>>> style_list_store;
 
     /**
      * Info for currently selected font (what is shown in the UI).
@@ -380,9 +359,6 @@ void font_lister_cell_data_func_markup(Gtk::CellRenderer *renderer,
 void font_lister_cell_data_func2(Gtk::CellRenderer &cell,
                                  Gtk::TreeModel::const_iterator const &iter,
                                  bool with_markup);
-
-void font_lister_style_cell_data_func(Gtk::CellRenderer *renderer,
-                                      Gtk::TreeModel::const_iterator const &iter);
 
 #endif // FONT_LISTER_H
 

@@ -53,6 +53,7 @@ class TextTool;
 namespace Widget {
 class ComboBoxEntryToolItem;
 class ComboToolItem;
+class EntryDropDown;
 class SpinButton;
 class UnitTracker;
 } // namespace Widget
@@ -87,9 +88,9 @@ private:
     Gtk::Button &_reset_button;
 
     UI::Widget::ComboBoxEntryToolItem *_font_family_item;
-    UI::Widget::ComboBoxEntryToolItem *_font_size_item;
+    UI::Widget::EntryDropDown *_font_size_item;
     UI::Widget::ComboToolItem *_font_size_units_item;
-    UI::Widget::ComboBoxEntryToolItem *_font_style_item;
+    UI::Widget::EntryDropDown *_font_style_item;
     UI::Widget::ComboToolItem *_line_height_units_item;
     UI::Widget::SpinButton &_line_height_item;
     Gtk::ToggleButton &_superscript_btn;
