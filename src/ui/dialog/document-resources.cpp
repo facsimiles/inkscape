@@ -64,8 +64,6 @@
 #include "colors/color-set.h"
 #include "desktop.h"
 #include "document-undo.h"
-#include "helper/choose-file.h"
-#include "helper/save-image.h"
 #include "inkscape.h"
 #include "object/color-profile.h"
 #include "object/filters/sp-filter-primitive.h"
@@ -87,6 +85,8 @@
 #include "selection.h"
 #include "style.h"
 #include "ui/builder-utils.h"
+#include "ui/dialog/choose-file.h"
+#include "ui/dialog/save-image.h"
 #include "ui/icon-names.h"
 #include "ui/themes.h"
 #include "ui/util.h"
@@ -181,7 +181,8 @@ bool is_resource_present(std::string const &id, details::Statistics const &stats
     return get_resource_count(id, stats) > 0;
 }
 
-std::string choose_file(Glib::ustring title, Gtk::Window* parent, Glib::ustring mime_type, Glib::ustring file_name) {
+Glib::RefPtr<Gio::File> choose_file(Glib::ustring title, Gtk::Window* parent,
+                                    Glib::ustring mime_type, Glib::ustring file_name) {
     static std::string current_folder;
     return Inkscape::choose_file_save(title, parent, mime_type, file_name, current_folder);
 }
@@ -213,11 +214,11 @@ void save_gimp_palette(std::string fname, const std::vector<int>& colors, const 
 void extract_colors(Gtk::Window* parent, const std::vector<int>& colors, const char* name) {
     if (colors.empty() || !parent) return;
 
-    auto fname = choose_file(_("Export Color Palette"), parent, "application/color-palette", "color-palette.gpl");
-    if (fname.empty()) return;
+    auto file = choose_file(_("Export Color Palette"), parent, "application/color-palette", "color-palette.gpl");
+    if (!file) return;
 
     // export palette
-    save_gimp_palette(fname, colors, name);
+    save_gimp_palette(file->get_path(), colors, name);
 }
 
 void delete_object(SPObject* object, Inkscape::Selection* selection) {
@@ -369,7 +370,7 @@ DocumentResources::DocumentResources()
     auto model = Gtk::SortListModel::create(filtered_items, sorter);
     // model->set_sort_column(g_item_columns.label.index(), Gtk::SortType::ASCENDING);
 
-    _item_factory = IconViewItemFactory::create([=](auto& ptr) -> IconViewItemFactory::ItemData {
+    _item_factory = IconViewItemFactory::create([this](auto& ptr) -> IconViewItemFactory::ItemData {
         auto rsrc = std::dynamic_pointer_cast<details::ResourceItem>(ptr);
         if (!rsrc) return {};
 
@@ -413,7 +414,7 @@ DocumentResources::DocumentResources()
     for (int i = 0; i < cols->get_n_items(); ++i) {
         auto info_factory = Gtk::SignalListItemFactory::create();
         info_factory->signal_setup().connect(set_up_label);
-        info_factory->signal_bind().connect([=](auto& list_item) {
+        info_factory->signal_bind().connect([this, i, bind_label](auto& list_item) {
             auto item = std::dynamic_pointer_cast<InfoItem>(list_item->get_item());
             if (!item) return;
             Glib::ustring text;
@@ -525,7 +526,7 @@ DocumentResources::DocumentResources()
         auto pos = paned->get_position();
         get_widget<Gtk::Label>(_builder, "spacer").set_size_request(pos);
     };
-    paned->property_position().signal_changed().connect([=](){ move(); });
+    paned->property_position().signal_changed().connect([move](){ move(); });
     move();
 
     _edit.signal_clicked().connect([this]{
@@ -559,7 +560,7 @@ DocumentResources::DocumentResources()
         }
     });
 
-    _search.signal_search_changed().connect([=, this](){
+    _search.signal_search_changed().connect([this, refilter_info](){
         refilter_info();
         _item_filter->refilter(_search.get_text());
     });
@@ -1262,7 +1263,7 @@ void DocumentResources::end_editing(const Glib::ustring& path, const Glib::ustri
 
     setter(*object, new_text);
 
-    auto id = get_id(object);
+    // auto id = get_id(object);
     // row[g_item_columns.label] = label_fmt(new_text.c_str(), id);
 
     if (auto document = object->document) {
