@@ -394,12 +394,10 @@ void SelectorsDialog::_readStyleElement()
     content.erase(std::remove(content.begin(), content.end(), '\n'), content.end());
 
     // Remove comments (/* xxx */)
-#if 0
-        while(content.find("/*") != std::string::npos) {
-            size_t start = content.find("/*");
-            content.erase(start, (content.find("*\/", start) - start) +2);
-        }
-#endif
+    while(content.find("/*") != std::string::npos) {
+        size_t start = content.find("/*");
+        content.erase(start, (content.find("*/", start) - start) +2);
+    }
 
     // Split on curly brackets. Even tokens are selectors, odd are values.
     std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("[}{]", content.c_str());
