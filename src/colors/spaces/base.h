@@ -51,11 +51,13 @@ public:
 
     virtual Type getType() const = 0;
     virtual std::string const getName() const = 0;
+    virtual std::string const getShortName() const = 0;
     virtual std::string const getIcon() const = 0;
     virtual Type getComponentType() const { return getType(); }
     virtual unsigned int getComponentCount() const = 0;
     virtual std::shared_ptr<Colors::CMS::Profile> const getProfile() const = 0;
     virtual RenderingIntent getIntent() const { return RenderingIntent::UNKNOWN; }
+    virtual bool isUnbounded() const { return false; }
 
     Components const &getComponents(bool alpha = false) const;
     std::string const getPrefsPath() const { return "/colorselector/" + getName() + "/"; }

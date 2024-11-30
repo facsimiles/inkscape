@@ -198,12 +198,25 @@ StartScreen::StartScreen()
     auto const start_support_time  = Resource::get_filename(Resource::SCREENS, "start-support-time.png");
     auto const start_support_money = Resource::get_filename(Resource::SCREENS, "start-support-money.png");
 
-    get_widget<Gtk::Picture>(builder, "welcome_text"       ).set_filename(welcome_text_file);
-    get_widget<Gtk::Picture>(builder, "start-welcome"      ).set_filename(start_welcome_file);
-    get_widget<Gtk::Picture>(builder, "start-support"      ).set_filename(start_support_file);
-    get_widget<Gtk::Picture>(builder, "start-splash"       ).set_filename(start_splash_file);
-    get_widget<Gtk::Picture>(builder, "start-support-time" ).set_filename(start_support_time);
-    get_widget<Gtk::Picture>(builder, "start-support-money").set_filename(start_support_money);
+    for (auto [file, id] : { std::make_tuple(
+         welcome_text_file,   "welcome_text"),
+        {start_welcome_file,  "start-welcome"},
+        {start_support_file,  "start-support"},
+        {start_splash_file,   "start-splash"},
+        {start_support_time,  "start-support-time"},
+        {start_support_money, "start-support-money"}
+    }) {
+        auto& picture = get_widget<Gtk::Picture>(builder, id);
+        picture.set_layout_manager(Gtk::BinLayout::create());
+        picture.set_filename(file);
+    }
+    // get_widget<Gtk::Picture>(builder, "welcome_text"       ).set_filename(welcome_text_file);
+    // get_widget<Gtk::Picture>(builder, "start-welcome"      ).set_filename(start_welcome_file);
+    // get_widget<Gtk::Picture>(builder, "start-support"      ).set_filename(start_support_file);
+    // get_widget<Gtk::Picture>(builder, "start-splash"       ).set_filename(start_splash_file);
+    // get_widget<Gtk::Picture>(builder, "start-support-time" ).set_filename(start_support_time);
+    // get_widget<Gtk::Picture>(builder, "start-support-money").set_filename(start_support_money);
+    // get_widget<Gtk::Picture>(builder, "start-welcome").set_layout_manager(Gtk::BinLayout::create());
 
     // Welcome! tab
     canvas->signal_changed().connect(sigc::mem_fun(*this, &StartScreen::canvas_changed));

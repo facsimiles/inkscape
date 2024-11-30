@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
+  <object class="GtkAdjustment" id="adjustment-alpha">
+    <property name="lower">0</property>
+    <property name="upper">100.0</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
+  </object>
   <object class="GtkAdjustment" id="adjustment-angle">
     <property name="lower">-360</property>
     <property name="upper">360.00999999999999</property>
@@ -49,7 +55,7 @@
     <property name="child">
       <object class="GtkBox">
         <property name="width-request">378</property>
-        <property name="height-request">500</property>
+        <property name="height-request">480</property>
         <property name="orientation">vertical</property>
         <child>
           <object class="GtkScrolledWindow">
@@ -157,59 +163,69 @@
             <child>
               <object class="GtkBox">
                 <property name="spacing">4</property>
+
                 <child>
-                  <object class="GtkToggleButton" id="orient-auto-rev">
-                    <property name="focusable">True</property>
-                    <property name="receives-default">True</property>
-                    <property name="tooltip-text" translatable="yes">Orient along the path, reversing at the start</property>
-                    <property name="group">radio-orient</property>
-                    <style>
-                      <class name="tight-button"/>
-                    </style>
+                  <object class="GtkBox">
+                    <property name="spacing">0</property>
                     <child>
-                      <object class="GtkImage" id="image1">
-                        <property name="icon-name">orient-auto-reverse</property>
+                      <object class="GtkToggleButton" id="orient-auto-rev">
+                        <property name="focusable">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="tooltip-text" translatable="yes">Orient along the path, reversing at the start</property>
+                        <property name="group">radio-orient</property>
+                        <style>
+                          <class name="tight-button"/>
+                        </style>
+                        <child>
+                          <object class="GtkImage" id="image1">
+                            <property name="icon-name">orient-auto-reverse</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkToggleButton" id="orient-auto">
-                    <property name="focusable">True</property>
-                    <property name="receives-default">True</property>
-                    <property name="tooltip-text" translatable="yes">Orient along the path</property>
-                    <property name="group">radio-orient</property>
-                    <style>
-                      <class name="tight-button"/>
-                    </style>
                     <child>
-                      <object class="GtkImage" id="image2">
-                        <property name="icon-name">orient-auto</property>
+                      <object class="GtkToggleButton" id="orient-auto">
+                        <property name="focusable">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="tooltip-text" translatable="yes">Orient along the path</property>
+                        <property name="group">radio-orient</property>
+                        <style>
+                          <class name="tight-button"/>
+                        </style>
+                        <child>
+                          <object class="GtkImage" id="image2">
+                            <property name="icon-name">orient-auto</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkToggleButton" id="orient-angle">
-                    <property name="focusable">True</property>
-                    <property name="tooltip-text" translatable="yes">Fixed specified angle</property>
-                    <property name="active">True</property>
-                    <property name="group">radio-orient</property>
-                    <style>
-                      <class name="tight-button"/>
-                    </style>
                     <child>
-                      <object class="GtkImage" id="image3">
-                        <property name="icon-name">orient-angle</property>
+                      <object class="GtkToggleButton" id="orient-angle">
+                        <property name="focusable">True</property>
+                        <property name="tooltip-text" translatable="yes">Fixed specified angle</property>
+                        <property name="active">True</property>
+                        <property name="group">radio-orient</property>
+                        <style>
+                          <class name="tight-button"/>
+                        </style>
+                        <child>
+                          <object class="GtkImage" id="image3">
+                            <property name="icon-name">orient-angle</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
+                    <style>
+                      <class name="linked"/>
+                    </style>
                   </object>
                 </child>
+
                 <child>
                   <object class="GtkButton" id="btn-horz-flip">
                     <property name="receives-default">True</property>
                     <property name="tooltip-text" translatable="yes">Flip marker horizontally</property>
-                    <property name="margin-start">8</property>
+                    <property name="margin-start">0</property>
                     <style>
                       <class name="tight-button"/>
                     </style>
@@ -297,15 +313,52 @@
                 </layout>
               </object>
             </child>
+
+            <child>
+              <object class="GtkImage" id="spacer2">
+                <property name="pixel-size">4</property>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="row">8</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="halign">start</property>
+                <property name="margin-end">4</property>
+                <property name="label" translatable="yes">Alpha:</property>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="row">9</property>
+                  <property name="column-span">2</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkSpinButton" id="alpha">
+                <property name="focusable">True</property>
+                <property name="adjustment">adjustment-alpha</property>
+                <property name="digits">2</property>
+                <property name="numeric">True</property>
+                <property name="valign">center</property>
+                <layout>
+                  <property name="column">3</property>
+                  <property name="row">9</property>
+                </layout>
+              </object>
+            </child>
+
             <child>
               <object class="GtkButton" id="edit-marker">
                 <property name="label" translatable="yes">Edit on canvas</property>
                 <property name="focus-on-click">False</property>
                 <property name="receives-default">True</property>
                 <property name="halign">center</property>
+                <property name="valign">center</property>
                 <layout>
                   <property name="column">0</property>
-                  <property name="row">7</property>
+                  <property name="row">9</property>
                 </layout>
               </object>
             </child>
@@ -339,7 +392,7 @@
                 <layout>
                   <property name="column">0</property>
                   <property name="row">0</property>
-                  <property name="row-span">7</property>
+                  <property name="row-span">9</property>
                 </layout>
               </object>
             </child>
@@ -362,7 +415,7 @@
             </child>
             <child>
               <object class="GtkImage" id="spacer">
-                <property name="pixel-size">5</property>
+                <property name="pixel-size">4</property>
                 <layout>
                   <property name="column">1</property>
                   <property name="row">5</property>
@@ -400,7 +453,7 @@
           </object>
         </child>
         <child>
-          <object class="GtkImage">
+          <object class="GtkImage" id="down-arrow">
             <property name="halign">end</property>
             <property name="icon-name">pan-down-symbolic</property>
             <style>

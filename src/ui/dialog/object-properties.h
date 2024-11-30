@@ -108,10 +108,10 @@ private:
     void _highlightChanged(Colors::Color const &color);
 
     /// Callback for checkbox Lock.
-    void _sensitivityToggled();
+    // void _sensitivityToggled();
 
     /// Callback for checkbox Hide.
-    void _hiddenToggled();
+    // void _hiddenToggled();
 
     /// Callback for checkbox Preserve Aspect Ratio.
     void _aspectRatioToggled();

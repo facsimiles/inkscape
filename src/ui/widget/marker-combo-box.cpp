@@ -14,12 +14,12 @@
  */
 
 #include "marker-combo-box.h"
-
+#include <cairo-deprecated.h>
+#include <cairo.h>
 #include <chrono>
 #include <optional>
 #include <sstream>
 #include <utility>
-
 #include <gtkmm/layoutmanager.h>
 #include <gtkmm/binlayout.h>
 #include <glibmm/fileutils.h>
@@ -36,13 +36,15 @@
 #include <gtkmm/spinbutton.h>
 #include <gtkmm/togglebutton.h>
 #include <gtkmm/window.h>
-
 #include "helper/stock-items.h"
 #include "io/resource.h"
 #include "object/sp-defs.h"
+#include "object/sp-marker-loc.h"
 #include "object/sp-marker.h"
 #include "object/sp-root.h"
+#include "svg/css-ostringstream.h"
 #include "ui/builder-utils.h"
+#include "ui/reparent-spinbutton.h"
 #include "ui/widget/size-reporter.h"
 #include "ui/svg-renderer.h"
 #include "ui/util.h"
@@ -61,23 +63,42 @@ static constexpr int ITEM_HEIGHT = 32;
 namespace Inkscape::UI::Widget {
 
 // separator for FlowBox widget
-static cairo_surface_t* create_separator(double alpha, int width, int height, int device_scale) {
+static cairo_surface_t* create_separator(double alpha, int width, int height, int device_scale, int location) {
     width *= device_scale;
     height *= device_scale;
     cairo_surface_t* surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
     cairo_t* ctx = cairo_create(surface);
+    if (device_scale & 1) { // pixel grid fitting
+        cairo_matrix_t transform;
+        cairo_matrix_init(&transform, 1, 0, 0, 1, 0.5, 0.5);
+        cairo_set_matrix(ctx, &transform);
+    }
+    auto x = 0.0;
     cairo_set_source_rgba(ctx, 0.5, 0.5, 0.5, alpha);
-    cairo_move_to(ctx, 0.5, height / 2 + 0.5);
-    cairo_line_to(ctx, width + 0.5, height / 2 + 0.5);
-    cairo_set_line_width(ctx, 1.0 * device_scale);
+    auto mid = height / 2;
+    cairo_move_to(ctx, x, mid);
+    cairo_line_to(ctx, x + width, mid);
+    auto stroke = 2.0 * device_scale;
+    cairo_set_line_width(ctx, stroke);
     cairo_stroke(ctx);
+    auto h = 3 * device_scale;
+    if (location == SP_MARKER_LOC_START) {
+        cairo_move_to(ctx, x + stroke / 2, mid - h);
+        cairo_line_to(ctx, x + stroke / 2, mid + h);
+        cairo_stroke(ctx);
+    }
+    else if (location == SP_MARKER_LOC_END) {
+        cairo_move_to(ctx, x + width - stroke / 2, mid - h);
+        cairo_line_to(ctx, x + width - stroke / 2, mid + h);
+        cairo_stroke(ctx);
+    }
     cairo_surface_flush(surface);
     cairo_surface_set_device_scale(surface, device_scale, device_scale);
     return surface;
 }
 
-// empty image; "no marker"
-static Cairo::RefPtr<Cairo::Surface> g_image_none;
+// empty images; "no marker" for start/middle/end markers
+static std::map<int, Cairo::RefPtr<Cairo::Surface>> g_image_none;
 // error extracting/rendering marker; "bad marker"
 static Cairo::RefPtr<Cairo::Surface> g_bad_marker;
 
@@ -86,9 +107,9 @@ Glib::ustring get_attrib(SPMarker* marker, const char* attrib) {
     return value ? value : "";
 }
 
-double get_attrib_num(SPMarker* marker, const char* attrib) {
+double get_attrib_num(SPMarker* marker, const char* attrib, double default_value = 0) {
     auto val = get_attrib(marker, attrib);
-    return strtod(val.c_str(), nullptr);
+    return val.empty() ? default_value : strtod(val.c_str(), nullptr);
 }
 
 MarkerComboBox::MarkerComboBox(Glib::ustring id, int l) :
@@ -99,17 +120,11 @@ MarkerComboBox::MarkerComboBox(Glib::ustring id, int l) :
     _loc(l),
     _builder(create_builder("marker-popup.glade")),
     _marker_list(get_widget<Gtk::FlowBox>(_builder, "flowbox")),
-    // _preview_bin(get_derived_widget<UI::Widget::Bin>(_builder, "preview-bin")),
     _preview(get_widget<Gtk::Picture>(_builder, "preview")),
     _marker_name(get_widget<Gtk::Label>(_builder, "marker-id")),
     _link_scale(get_widget<Gtk::Button>(_builder, "link-scale")),
-    _scale_x(get_widget<Gtk::SpinButton>(_builder, "scale-x")),
-    _scale_y(get_widget<Gtk::SpinButton>(_builder, "scale-y")),
     _scale_with_stroke(get_widget<Gtk::CheckButton>(_builder, "scale-with-stroke")),
     _menu_btn(get_widget<Gtk::MenuButton>(_builder, "menu-btn")),
-    _angle_btn(get_widget<Gtk::SpinButton>(_builder, "angle")),
-    _offset_x(get_widget<Gtk::SpinButton>(_builder, "offset-x")),
-    _offset_y(get_widget<Gtk::SpinButton>(_builder, "offset-y")),
     _input_grid(get_widget<Gtk::Grid>(_builder, "input-grid")),
     _orient_auto_rev(get_widget<Gtk::ToggleButton>(_builder, "orient-auto-rev")),
     _orient_auto(get_widget<Gtk::ToggleButton>(_builder, "orient-auto")),
@@ -125,9 +140,9 @@ MarkerComboBox::MarkerComboBox(Glib::ustring id, int l) :
     _background_color = 0x808080ff;
     _foreground_color = 0x808080ff;
 
-    if (!g_image_none) {
+    if (!g_image_none[_loc]) {
         auto device_scale = get_scale_factor();
-        g_image_none = Cairo::RefPtr<Cairo::Surface>(new Cairo::Surface(create_separator(1, ITEM_WIDTH, ITEM_HEIGHT, device_scale)));
+        g_image_none[_loc] = Cairo::RefPtr<Cairo::Surface>(new Cairo::Surface(create_separator(1, ITEM_WIDTH, ITEM_HEIGHT, device_scale, _loc)));
     }
 
     if (!g_bad_marker) {
@@ -135,6 +150,20 @@ MarkerComboBox::MarkerComboBox(Glib::ustring id, int l) :
         Inkscape::svg_renderer renderer(path.c_str());
         g_bad_marker = renderer.render_surface(1.0);
     }
+
+    auto reparent = [this](const char* id, InkSpinButton& subst) {
+        auto& orig = get_widget<Gtk::SpinButton>(_builder, id);
+        replace_spinbutton_widget(orig, subst);
+    };
+    reparent("angle", _angle_btn);
+    set_degree_suffix(_angle_btn);
+    reparent("offset-x", _offset_x);
+    reparent("offset-y", _offset_y);
+    reparent("scale-x", _scale_x);
+    reparent("scale-y", _scale_y);
+    reparent("alpha", _marker_alpha);
+    set_percent_suffix(_marker_alpha);
+    _marker_alpha.set_scaling_factor(100);
 
     prepend(_menu_btn);
 
@@ -195,12 +224,18 @@ MarkerComboBox::MarkerComboBox(Glib::ustring id, int l) :
     };
     _orient_auto_rev.signal_toggled().connect([=](){ set_orient(false, "auto-start-reverse"); });
     _orient_auto.signal_toggled().connect([=]()    { set_orient(false, "auto"); });
-    _orient_angle.signal_toggled().connect([=, this]()   { set_orient(true, _angle_btn.get_text().c_str()); });
+    _orient_angle.signal_toggled().connect([=, this]() {
+        Inkscape::CSSOStringStream os;
+        os << _angle_btn.get_value();
+        set_orient(true, os.str().c_str());
+    });
     _orient_flip_horz.signal_clicked().connect([this]()  { sp_marker_flip_horizontally(get_current()); });
 
-    _angle_btn.signal_value_changed().connect([this]() {
+    _angle_btn.signal_value_changed().connect([this](auto angle) {
         if (_update.pending() || !_angle_btn.is_sensitive()) return;
-        sp_marker_set_orient(get_current(), _angle_btn.get_text().c_str());
+        Inkscape::CSSOStringStream os;
+        os << angle;
+        sp_marker_set_orient(get_current(), os.str().c_str());
     });
 
     auto set_scale = [this](bool changeWidth) {
@@ -252,8 +287,8 @@ MarkerComboBox::MarkerComboBox(Glib::ustring id, int l) :
         update_scale_link();
     });
 
-    _scale_x.signal_value_changed().connect([=]() { idle_set_scale(true); });
-    _scale_y.signal_value_changed().connect([=]() { idle_set_scale(false); });
+    _scale_x.signal_value_changed().connect([=](auto) { idle_set_scale(true); });
+    _scale_y.signal_value_changed().connect([=](auto) { idle_set_scale(false); });
 
     _scale_with_stroke.signal_toggled().connect([this](){
         if (_update.pending()) return;
@@ -264,9 +299,14 @@ MarkerComboBox::MarkerComboBox(Glib::ustring id, int l) :
         if (_update.pending()) return;
         sp_marker_set_offset(get_current(), _offset_x.get_value(), _offset_y.get_value());
     };
-    _offset_x.signal_value_changed().connect([=]() { set_offset(); });
-    _offset_y.signal_value_changed().connect([=]() { set_offset(); });
+    _offset_x.signal_value_changed().connect([=](auto) { set_offset(); });
+    _offset_y.signal_value_changed().connect([=](auto) { set_offset(); });
 
+    _marker_alpha.signal_value_changed().connect([this](double alpha) {
+        if (_update.pending()) return;
+        // change opacity
+        sp_marker_set_opacity(get_current(), alpha);
+    });
     // request to edit marker on canvas; close popup to get it out of the way and call marker edit tool
     _edit_marker.signal_clicked().connect([this]{ _menu_btn.get_popover()->popdown(); _signal_edit(); });
 
@@ -274,7 +314,7 @@ MarkerComboBox::MarkerComboBox(Glib::ustring id, int l) :
     _menu_btn.get_popover()->signal_show().connect([this](){ update_ui(get_current(), false); }, false);
 
     update_scale_link();
-    _current_img.set_paintable(to_texture(g_image_none));
+    _current_img.set_paintable(to_texture(g_image_none[_loc]));
     set_visible(true);
 }
 
@@ -292,6 +332,7 @@ void MarkerComboBox::update_widgets_from_marker(SPMarker* marker) {
     // marker->setAttribute("markerUnits", scale_with_stroke ? "strokeWidth" : "userSpaceOnUse");
         _offset_x.set_value(get_attrib_num(marker, "refX"));
         _offset_y.set_value(get_attrib_num(marker, "refY"));
+        _marker_alpha.set_value(get_attrib_num(marker, "fill-opacity", 100.0));
         auto orient = get_attrib(marker, "orient");
 
         // try parsing as number
@@ -317,7 +358,7 @@ void MarkerComboBox::update_scale_link() {
 
 // update marker image inside the menu button
 void MarkerComboBox::update_menu_btn(Glib::RefPtr<MarkerItem> marker) {
-    _current_img.set_paintable(to_texture(marker ? marker->pix : g_image_none));
+    _current_img.set_paintable(to_texture(marker ? marker->pix : g_image_none[_loc]));
 }
 
 // update marker preview image in the popover panel
@@ -507,7 +548,7 @@ Glib::RefPtr<MarkerComboBox::MarkerItem> MarkerComboBox::add_separator(bool fill
     item->stock = false;
     if (!filler) {
         auto device_scale = get_scale_factor();
-        static Cairo::RefPtr<Cairo::Surface> separator(new Cairo::Surface(create_separator(0.7, ITEM_WIDTH, 10, device_scale)));
+        static Cairo::RefPtr<Cairo::Surface> separator(new Cairo::Surface(create_separator(0.7, ITEM_WIDTH, 10, device_scale, SP_MARKER_LOC_MID)));
         item->pix = separator;
     }
     item->height = 10;
@@ -707,7 +748,7 @@ void MarkerComboBox::add_markers (std::vector<SPMarker *> const& marker_list, SP
     if (history) {
         // add "None"
         auto item = MarkerItem::create();
-        item->pix = g_image_none;
+        item->pix = g_image_none[_loc];
         item->history = true;
         item->separator = false;
         item->id = "None";
@@ -813,6 +854,25 @@ sigc::connection MarkerComboBox::connect_changed(sigc::slot<void ()> slot)
 sigc::connection MarkerComboBox::connect_edit(sigc::slot<void ()> slot)
 {
     return _signal_edit.connect(std::move(slot));
+}
+
+void MarkerComboBox::set_flat(bool flat) {
+    _menu_btn.set_has_frame(!flat);
+    get_widget<Gtk::Image>(_builder, "down-arrow").set_visible(!flat);
+    get_widget<Gtk::Box>(_builder, "btn-box").set_halign(flat ? Gtk::Align::CENTER : Gtk::Align::FILL);
+    if (flat) {
+        _menu_btn.add_css_class("rectangle");
+    }
+    else {
+        _menu_btn.remove_css_class("rectangle");
+    }
+}
+
+void MarkerComboBox::preview_scale(double scale) {
+    if (_preview_scale != scale) {
+        _preview_scale = scale;
+        _current_img.set_size_request(static_cast<int>(std::round(scale * ITEM_WIDTH)), static_cast<int>(std::round(scale * ITEM_HEIGHT)));
+    }
 }
 
 } // namespace Inkscape::UI::Widget

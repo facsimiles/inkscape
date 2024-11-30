@@ -42,7 +42,7 @@ namespace Inkscape::UI::Widget {
  */
 class ColorPreview final : public Gtk::DrawingArea {
 public:
-    ColorPreview(std::uint32_t rgba);
+    ColorPreview(std::uint32_t rgba = 0);
     // set preview color RGBA with opacity (alpha)
     void setRgba32(std::uint32_t rgba);
     // set arbitrary pattern-based preview
@@ -51,14 +51,29 @@ public:
     enum Style { Simple, Outlined };
     void setStyle(Style style);
     // add indicator on top of the preview: swatch or spot color
-    enum Indicator { None, Swatch, SpotColor };
+    enum Indicator { None = 0, Swatch = 1, SpotColor = 2, LinearGradient = 4, RadialGradient = 8 };
     void setIndicator(Indicator indicator);
+    // add frame for a 'Simple' preview
+    void set_frame(bool frame);
+    // set border radius; -1 to auto
+    void set_border_radius(int radius);
+    // adjust size of checkerboard tiles
+    void set_checkerboard_tile_size(unsigned size);
+    // Update the fill indicator, showing this widget is the fill of the current item.
+    void set_fill(bool on);
+    // Update the stroke indicator, showing this widget is the stroke of the current item.
+    void set_stroke(bool on);
 private:
     std::uint32_t _rgba; // requested RGBA color, used if there is no pattern given
     Cairo::RefPtr<Cairo::Pattern> _pattern; // pattern to show, if provided
     Style _style = Simple;
     Indicator _indicator = None;
+    int _radius = -1;
+    bool _frame = false;
+    bool _is_fill = false;
+    bool _is_stroke = false;
     void draw_func(Cairo::RefPtr<Cairo::Context> const &cr, int width, int height);
+    int _checkerboard_tile_size = 6;
 };
 
 } // namespace Inkscape::UI::Widget

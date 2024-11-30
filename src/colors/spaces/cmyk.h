@@ -26,6 +26,7 @@ public:
 
     Type getType() const override { return Type::CMYK; }
     std::string const getName() const override { return "DeviceCMYK"; }
+    std::string const getShortName() const override { return "CMYK"; }
     std::string const getIcon() const override { return "color-selector-cmyk"; }
     unsigned int getComponentCount() const override { return 4; }
 

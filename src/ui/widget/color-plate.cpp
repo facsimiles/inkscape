@@ -10,6 +10,10 @@
 #include <gtkmm/eventcontrollermotion.h>
 #include <gtkmm/gestureclick.h>
 
+#include <gtkmm/droptarget.h>
+#include <gtkmm/gestureclick.h>
+#include <gtkmm/gesturedrag.h>
+
 #include "colors/color.h"
 #include "colors/utils.h"
 #include "ui/controller.h"
@@ -22,22 +26,6 @@ using namespace Colors;
 
 void circle(const Cairo::RefPtr<Cairo::Context>& ctx, const Geom::Point& center, double radius) {
     ctx->arc(center.x(), center.y(), radius, 0, 2 * M_PI);
-}
-
-// draw a circle around given point to show currently selected color
-static void draw_point_indicator(const Cairo::RefPtr<Cairo::Context>& ctx, const Geom::Point& point, double size) {
-    ctx->save();
-
-    auto pt = point.round();
-    ctx->set_line_width(1.0);
-    circle(ctx, pt, (size - 2) / 2);
-    ctx->set_source_rgb(1, 1, 1);
-    ctx->stroke();
-    circle(ctx, pt, size / 2);
-    ctx->set_source_rgb(0, 0, 0);
-    ctx->stroke();
-
-    ctx->restore();
 }
 
 static void draw_color_plate(const Cairo::RefPtr<Cairo::Context>& ctx, const Geom::Rect& area, double radius, const Cairo::RefPtr<Cairo::ImageSurface>& preview, bool circular) {
@@ -94,6 +82,9 @@ static void draw_color_plate(const Cairo::RefPtr<Cairo::Context>& ctx, const Geo
 }
 
 static Geom::Point get_color_coordinates(double val1, double val2, bool circular) {
+    val1 = std::clamp(val1, 0.0, 1.0);
+    val2 = std::clamp(val2, 0.0, 1.0);
+
     if (circular) {
         // point in a circle
         // val1 is an angle (0..1 -> -2pi..2pi), while val2 is a distance
@@ -228,6 +219,7 @@ static Geom::Point local_to_screen(const Geom::Rect& active, Geom::Point point, 
     return active.min() + point * active.dimensions();
 }
 
+
 ColorPlate::ColorPlate() {
     set_name("ColorPlate");
     set_disc(_disc); // add right CSS class
@@ -284,8 +276,7 @@ void ColorPlate::draw_plate(const Cairo::RefPtr<Cairo::Context>& ctx) {
 
     if (auto maybe = get_active_area(); _down && maybe) {
         auto pt = local_to_screen(*maybe, *_down, _disc);
-        double size = 8;
-        draw_point_indicator(ctx, pt, size);
+        Util::draw_point_indicator(ctx, pt);
     }
 }
 
@@ -336,6 +327,13 @@ void ColorPlate::fire_color_changed() {
 void ColorPlate::on_motion(Gtk::EventControllerMotion const &motion, double x, double y) {
     if (!_drag) return;
 
+    if (x == 0 && y == 0) {
+        // this value is legit, but motion controller also reports it when
+        // mouse button leaves the popover, leading to unexpected jump;
+        // skip it (as of gtk 4.15.7)
+        return;
+    }
+
     auto state = motion.get_current_event_state();
     auto drag = Controller::has_flag(state, Gdk::ModifierType::BUTTON1_MASK);
     if (!drag) return;
@@ -385,4 +383,4 @@ sigc::signal<void(const Color&)>& ColorPlate::signal_color_changed() {
     return _signal_color_changed;
 }
 
-}
+} // namespace

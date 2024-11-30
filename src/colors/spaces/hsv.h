@@ -23,6 +23,7 @@ public:
 
     Type getType() const override { return Type::HSV; }
     std::string const getName() const override { return "HSV"; }
+    std::string const getShortName() const override { return "HSV"; }
     std::string const getIcon() const override { return "color-selector-hsx"; }
 
     void spaceToProfile(std::vector<double> &output) const override;

@@ -90,7 +90,7 @@ SPDesktopWidget::SPDesktopWidget(InkscapeWindow *inkscape_window, SPDocument *do
     prepend(*_statusbar);
 
     /* Swatch Bar */
-    _panels = Gtk::make_managed<Inkscape::UI::Dialog::SwatchesPanel>(true, "/embedded/swatches");
+    _panels = Gtk::make_managed<Inkscape::UI::Dialog::SwatchesPanel>(UI::Dialog::SwatchesPanel::Compact, "/embedded/swatches");
     _panels->set_vexpand(false);
     prepend(*_panels);
 

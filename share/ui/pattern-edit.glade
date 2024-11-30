@@ -160,7 +160,7 @@
     <child>
       <object class="GtkBox">
         <property name="margin-bottom">2</property>
-        <property name="spacing">5</property>
+        <property name="spacing">4</property>
         <child>
           <object class="GtkLabel">
             <property name="valign">center</property>
@@ -299,6 +299,9 @@
     </child>
     <child>
       <object class="GtkSeparator">
+        <style>
+          <class name="thin"/>
+        </style>
         <property name="valign">center</property>
         <property name="margin-top">3</property>
         <property name="margin-bottom">3</property>
@@ -306,9 +309,9 @@
     </child>
     <child>
       <object class="GtkGrid" id="input-grid">
-        <property name="margin-end">4</property>
+        <property name="margin-end">0</property>
         <property name="margin-top">4</property>
-        <property name="margin-bottom">4</property>
+        <property name="margin-bottom">0</property>
         <property name="row-spacing">4</property>
         <property name="vexpand">False</property>
         <child>
@@ -380,21 +383,21 @@
             </layout>
           </object>
         </child>
-        <child>
-          <object class="GtkScale" id="orient">
-            <property name="draw-value">False</property>
-            <property name="focusable">True</property>
-            <property name="round-digits">0</property>
-            <property name="has-origin">False</property>
-            <style>
-              <class name="tight-slider"/>
-            </style>
-            <layout>
-              <property name="column">3</property>
-              <property name="row">3</property>
-            </layout>
-          </object>
-        </child>
+<!--        <child>-->
+<!--          <object class="GtkScale" id="orient">-->
+<!--            <property name="draw-value">False</property>-->
+<!--            <property name="focusable">True</property>-->
+<!--            <property name="round-digits">0</property>-->
+<!--            <property name="has-origin">False</property>-->
+<!--            <style>-->
+<!--              <class name="tight-slider"/>-->
+<!--            </style>-->
+<!--            <layout>-->
+<!--              <property name="column">3</property>-->
+<!--              <property name="row">3</property>-->
+<!--            </layout>-->
+<!--          </object>-->
+<!--        </child>-->
         <child>
           <object class="GtkLabel">
             <property name="halign">start</property>
@@ -402,7 +405,7 @@
             <property name="label" translatable="yes">Offset X:</property>
             <layout>
               <property name="column">1</property>
-              <property name="row">4</property>
+              <property name="row">3</property>
               <property name="column-span">2</property>
             </layout>
           </object>
@@ -414,7 +417,7 @@
             <property name="label" translatable="yes">Offset Y:</property>
             <layout>
               <property name="column">1</property>
-              <property name="row">5</property>
+              <property name="row">4</property>
               <property name="column-span">2</property>
             </layout>
           </object>
@@ -427,7 +430,7 @@
             <property name="numeric">True</property>
             <layout>
               <property name="column">3</property>
-              <property name="row">4</property>
+              <property name="row">3</property>
             </layout>
           </object>
         </child>
@@ -439,7 +442,7 @@
             <property name="numeric">True</property>
             <layout>
               <property name="column">3</property>
-              <property name="row">5</property>
+              <property name="row">4</property>
             </layout>
           </object>
         </child>
@@ -449,7 +452,7 @@
             <property name="label" translatable="yes">Gap X:</property>
             <layout>
               <property name="column">1</property>
-              <property name="row">6</property>
+              <property name="row">5</property>
               <property name="column-span">2</property>
             </layout>
           </object>
@@ -460,22 +463,8 @@
             <property name="label" translatable="yes">Gap Y:</property>
             <layout>
               <property name="column">1</property>
-              <property name="row">7</property>
+              <property name="row">6</property>
               <property name="column-span">2</property>
-            </layout>
-          </object>
-        </child>
-        <child>
-          <object class="GtkButton" id="edit-pattern">
-            <property name="label" translatable="yes">Edit on canvas</property>
-            <property name="focus-on-click">False</property>
-            <property name="receives-default">True</property>
-            <property name="halign">center</property>
-            <property name="valign">center</property>
-            <property name="margin-end">4</property>
-            <layout>
-              <property name="column">0</property>
-              <property name="row">7</property>
             </layout>
           </object>
         </child>
@@ -491,7 +480,7 @@
                 <property name="margin-end">4</property>
                 <property name="margin-bottom">3</property>
                 <property name="has-frame">False</property>
-                <property name="width-chars">10</property>
+                <property name="max-width-chars">10</property>
                 <property name="xalign">0.5</property>
                 <property name="placeholder-text" translatable="yes" comments="This is a hint that shows up when pattern name is blank">name</property>
                 <style>
@@ -503,7 +492,7 @@
               <object class="GtkScrolledWindow">
                 <property name="vexpand">True</property>
                 <property name="focusable">True</property>
-                <property name="margin-end">4</property>
+                <property name="margin-end">8</property>
                 <property name="hscrollbar-policy">external</property>
                 <property name="vscrollbar-policy">external</property>
                 <property name="child">
@@ -520,13 +509,12 @@
             <layout>
               <property name="column">0</property>
               <property name="row">0</property>
-              <property name="row-span">6</property>
+              <property name="row-span">5</property>
             </layout>
           </object>
         </child>
         <child>
           <object class="GtkButton" id="link-scale">
-            <property name="name">LockGuides</property>
             <property name="focus-on-click">False</property>
             <property name="receives-default">True</property>
             <property name="halign">end</property>
@@ -534,6 +522,9 @@
             <property name="margin-top">5</property>
             <property name="margin-bottom">5</property>
             <property name="has-frame">False</property>
+            <style>
+              <class name="link-edit-button"/>
+            </style>
             <layout>
               <property name="column">2</property>
               <property name="row">0</property>
@@ -544,27 +535,46 @@
         <child>
           <object class="GtkBox">
             <property name="halign">center</property>
+            <property name="orientation">vertical</property>
             <child>
-              <object class="GtkLabel" id="color-label">
-                <property name="halign">start</property>
-                <property name="label" translatable="yes">Color: </property>
+              <object class="GtkBox">
+                <property name="halign">center</property>
+                <child>
+                  <object class="GtkLabel" id="color-label">
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes">Color: </property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkMenuButton" id="color-btn">
+                    <property name="valign">center</property>
+                    <property name="receives-default">True</property>
+                    <property name="tooltip-text" translatable="yes">Apply color to the current pattern</property>
+                  </object>
+                </child>
               </object>
             </child>
             <child>
-              <object class="GtkMenuButton" id="color-btn">
-                <property name="valign">center</property>
+              <object class="GtkButton" id="edit-pattern">
+                <property name="label" translatable="yes">Edit on canvas</property>
+                <property name="focus-on-click">False</property>
                 <property name="receives-default">True</property>
-                <property name="tooltip-text" translatable="yes">Apply color to the current pattern</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <property name="margin-top">4</property>
+                <property name="margin-end">4</property>
               </object>
             </child>
             <layout>
               <property name="column">0</property>
-              <property name="row">6</property>
+              <property name="row">5</property>
+              <property name="row-span">2</property>
             </layout>
           </object>
         </child>
         <child>
           <object class="GtkBox">
+            <property name="hexpand">False</property>
             <child>
               <object class="GtkScale" id="gap-x">
                 <property name="hexpand">True</property>
@@ -590,12 +600,13 @@
             </child>
             <layout>
               <property name="column">3</property>
-              <property name="row">6</property>
+              <property name="row">5</property>
             </layout>
           </object>
         </child>
         <child>
           <object class="GtkBox">
+            <property name="hexpand">False</property>
             <child>
               <object class="GtkScale" id="gap-y">
                 <property name="hexpand">True</property>
@@ -621,7 +632,7 @@
             </child>
             <layout>
               <property name="column">3</property>
-              <property name="row">7</property>
+              <property name="row">6</property>
             </layout>
           </object>
         </child>

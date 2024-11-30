@@ -66,8 +66,8 @@ ObjectProperties::ObjectProperties()
     , _label_dpi(_("_DPI SVG:"), true)
     , _label_color(_("Highlight Color:"), true)
     , _highlight_color(_("Highlight Color"), "", Colors::Color(0xff0000ff), true)
-    , _cb_hide(_("_Hide"), true)
-    , _cb_lock(_("L_ock"), true)
+    // , _cb_hide(_("_Hide"), true)
+    // , _cb_lock(_("L_ock"), true)
     , _cb_aspect_ratio(_("Preserve Ratio"), true)
     , _exp_interactivity(_("_Interactivity"), true)
     , _attr_table(Gtk::make_managed<SPAttributeTable>(Syntax::SyntaxMode::JavaScript))
@@ -230,21 +230,21 @@ void ObjectProperties::_init()
     UI::pack_start(*hb_checkboxes, *grid_cb, true, true);
 
     /* Hide */
-    _cb_hide.set_tooltip_text (_("Check to make the object invisible"));
-    _cb_hide.set_hexpand();
-    _cb_hide.set_valign(Gtk::Align::CENTER);
-    grid_cb->attach(_cb_hide, 0, 0, 1, 1);
+    // _cb_hide.set_tooltip_text (_("Check to make the object invisible"));
+    // _cb_hide.set_hexpand();
+    // _cb_hide.set_valign(Gtk::Align::CENTER);
+    // grid_cb->attach(_cb_hide, 0, 0, 1, 1);
 
-    _cb_hide.signal_toggled().connect(sigc::mem_fun(*this, &ObjectProperties::_hiddenToggled));
+    // _cb_hide.signal_toggled().connect(sigc::mem_fun(*this, &ObjectProperties::_hiddenToggled));
 
     /* Lock */
     // TRANSLATORS: "Lock" is a verb here
-    _cb_lock.set_tooltip_text(_("Check to make the object insensitive (not selectable by mouse)"));
-    _cb_lock.set_hexpand();
-    _cb_lock.set_valign(Gtk::Align::CENTER);
-    grid_cb->attach(_cb_lock, 1, 0, 1, 1);
+    // _cb_lock.set_tooltip_text(_("Check to make the object insensitive (not selectable by mouse)"));
+    // _cb_lock.set_hexpand();
+    // _cb_lock.set_valign(Gtk::Align::CENTER);
+    // grid_cb->attach(_cb_lock, 1, 0, 1, 1);
 
-    _cb_lock.signal_toggled().connect(sigc::mem_fun(*this, &ObjectProperties::_sensitivityToggled));
+    // _cb_lock.signal_toggled().connect(sigc::mem_fun(*this, &ObjectProperties::_sensitivityToggled));
 
     /* Preserve aspect ratio */
     _cb_aspect_ratio.set_tooltip_text(_("Check to preserve aspect ratio on images"));
@@ -482,20 +482,20 @@ void ObjectProperties::_highlightChanged(Colors::Color const &color)
     }
 }
 
-void ObjectProperties::_sensitivityToggled()
-{
-    if (_blocked) {
-        return;
-    }
-
-    SPItem *item = getSelection()->singleItem();
-    g_return_if_fail(item != nullptr);
-
-    _blocked = true;
-    item->setLocked(_cb_lock.get_active());
-    DocumentUndo::done(getDocument(), _cb_lock.get_active() ? _("Lock object") : _("Unlock object"), INKSCAPE_ICON("dialog-object-properties"));
-    _blocked = false;
-}
+// void ObjectProperties::_sensitivityToggled()
+// {
+//     if (_blocked) {
+//         return;
+//     }
+//
+//     SPItem *item = getSelection()->singleItem();
+//     g_return_if_fail(item != nullptr);
+//
+//     _blocked = true;
+//     item->setLocked(_cb_lock.get_active());
+//     DocumentUndo::done(getDocument(), _cb_lock.get_active() ? _("Lock object") : _("Unlock object"), INKSCAPE_ICON("dialog-object-properties"));
+//     _blocked = false;
+// }
 
 void ObjectProperties::_aspectRatioToggled()
 {
@@ -524,20 +524,20 @@ void ObjectProperties::_aspectRatioToggled()
     _blocked = false;
 }
 
-void ObjectProperties::_hiddenToggled()
-{
-    if (_blocked) {
-        return;
-    }
-
-    SPItem *item = getSelection()->singleItem();
-    g_return_if_fail(item != nullptr);
-
-    _blocked = true;
-    item->setExplicitlyHidden(_cb_hide.get_active());
-    DocumentUndo::done(getDocument(), _cb_hide.get_active() ? _("Hide object") : _("Unhide object"), INKSCAPE_ICON("dialog-object-properties"));
-    _blocked = false;
-}
+// void ObjectProperties::_hiddenToggled()
+// {
+//     if (_blocked) {
+//         return;
+//     }
+//
+//     SPItem *item = getSelection()->singleItem();
+//     g_return_if_fail(item != nullptr);
+//
+//     _blocked = true;
+//     item->setExplicitlyHidden(_cb_hide.get_active());
+//     DocumentUndo::done(getDocument(), _cb_hide.get_active() ? _("Hide object") : _("Unhide object"), INKSCAPE_ICON("dialog-object-properties"));
+//     _blocked = false;
+// }
 
 void ObjectProperties::selectionChanged(Selection *selection)
 {

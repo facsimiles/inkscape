@@ -58,6 +58,7 @@ public:
     Text::Layout::iterator text_sel_start;
     Text::Layout::iterator text_sel_end;
 
+    std::vector<SPItem*> get_subselection();
 protected:
     bool root_handler(CanvasEvent const &event) override;
     bool item_handler(SPItem *item, CanvasEvent const &event) override;

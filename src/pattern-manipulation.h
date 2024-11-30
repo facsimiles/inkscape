@@ -7,6 +7,9 @@
 #include <2geom/transforms.h>
 #include <2geom/2geom.h>
 
+#include "fill-or-stroke.h"
+
+class SPItem;
 class SPDocument;
 class SPPattern;
 
@@ -48,5 +51,9 @@ Geom::Scale sp_pattern_get_gap(SPPattern* link_pattern);
 
 // get pattern display name
 std::string sp_get_pattern_label(SPPattern* pattern);
+
+//
+void sp_item_apply_pattern(SPItem* item, SPPattern* pattern, FillOrStroke kind, std::optional<Inkscape::Colors::Color> color, const Glib::ustring& label,
+    const Geom::Affine& transform, const Geom::Point& offset, bool uniform_scale, const Geom::Scale& gap);
 
 #endif

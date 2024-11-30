@@ -11,65 +11,118 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "ui/dialog/object-attributes.h"
+
 #include <cmath>
 #include <cstddef>
 #include <cstdio>
-#include <gtkmm/entry.h>
-#include <gtkmm/eventcontrollerkey.h>
-#include <gtkmm/menubutton.h>
-#include <gtkmm/scrolledwindow.h>
-#include <gtkmm/textview.h>
 #include <memory>
 #include <optional>
 #include <string>
 #include <tuple>
+#include <2geom/rect.h>
+#include <boost/smart_ptr/intrusive_ptr.hpp>
 #include <glibmm/i18n.h>
 #include <glibmm/markup.h>
 #include <glibmm/ustring.h>
 #include <gtkmm/button.h>
 #include <gtkmm/entry.h>
+#include <gtkmm/entry.h>
 #include <gtkmm/enums.h>
+#include <gtkmm/eventcontrollerkey.h>
 #include <gtkmm/grid.h>
 #include <gtkmm/label.h>
+#include <gtkmm/menubutton.h>
+#include <gtkmm/scrolledwindow.h>
 #include <gtkmm/spinbutton.h>
+#include <gtkmm/textview.h>
 #include <gtkmm/togglebutton.h>
-#include <gtkmm/treemodel.h>
-#include <2geom/rect.h>
 
 #include "desktop.h"
 #include "document-undo.h"
+#include "layer-manager.h"
 #include "mod360.h"
 #include "preferences.h"
 #include "selection.h"
+#include "style.h"
 #include "actions/actions-tools.h"
 #include "live_effects/effect-enum.h"
 #include "live_effects/effect.h"
 #include "live_effects/lpeobject.h"
 #include "object/sp-anchor.h"
 #include "object/sp-ellipse.h"
+#include "object/sp-gradient.h"
 #include "object/sp-image.h"
 #include "object/sp-item.h"
 #include "object/sp-lpe-item.h"
 #include "object/sp-namedview.h"
+#include "object/sp-object-iterator.h"
 #include "object/sp-object.h"
 #include "object/sp-path.h"
+#include "object/sp-pattern.h"
+#include "object/sp-radial-gradient.h"
 #include "object/sp-rect.h"
 #include "object/sp-star.h"
+#include "object/sp-stop.h"
+#include "object/sp-text.h"
+#include "object/sp-textpath.h"
+#include "object/sp-use.h"
 #include "ui/builder-utils.h"
 #include "ui/controller.h"
-#include "ui/dialog/object-attributes.h"
+#include "ui/gridview-utils.h"
 #include "ui/icon-names.h"
 #include "ui/pack.h"
-#include "ui/tools/object-picker-tool.h"
 #include "ui/syntax.h"
 #include "ui/util.h"
+#include "ui/tools/object-picker-tool.h"
+#include "ui/tools/text-tool.h"
 #include "ui/widget/image-properties.h"
-#include "ui/widget/spinbutton.h"
-#include "ui/widget/style-swatch.h"
+#include "ui/widget/ink-property-grid.h"
+#include "ui/widget/property-utils.h"
 #include "widgets/sp-attribute-widget.h"
 #include "xml/href-attribute-helper.h"
 
 namespace Inkscape::UI::Dialog {
+
+using namespace Inkscape::UI::Utils;
+
+constexpr bool IncludeExperimentalPanels = false;
+
+namespace {
+
+// Take "style" attribute from source object and apply it to destination.
+// Leave source object without "style" attribute.
+bool transfer_item_style(SPObject* src, SPObject* dest) {
+    if (!src || !dest) return false;
+
+    auto style = src->getAttribute("style");
+    if (style && *style) {
+        dest->setAttribute("style", style);
+        src->removeAttribute("style");
+        return true;
+    }
+    return false;
+}
+
+bool remove_item_style(SPObject* obj) {
+    if (!obj) return false;
+
+    auto style = obj->getAttribute("style");
+    if (style && *style) {
+        obj->removeAttribute("style");
+        return true;
+    }
+    return false;
+}
+
+void enter_group(SPDesktop* desktop, SPGroup* group) {
+    if (!desktop || !group) return;
+
+    auto selection = desktop->getSelection();
+    desktop->layerManager().setCurrentLayer(group);
+}
+
+} // namespace
 
 struct SPAttrDesc {
     char const *label;
@@ -101,19 +154,42 @@ ObjectAttributes::ObjectAttributes()
     _builder(create_builder("object-attributes.glade")),
     _main_panel(get_widget<Gtk::Box>(_builder, "main-panel")),
     _obj_title(get_widget<Gtk::Label>(_builder, "main-obj-name")),
-    _style_swatch(nullptr, _("Item's fill, stroke and opacity"), Gtk::Orientation::HORIZONTAL),
+    _obj_locked(get_widget<Gtk::Button>(_builder, "main-obj-locked")),
+    _obj_visible(get_widget<Gtk::Button>(_builder, "main-obj-visible")),
     _obj_properties(*Gtk::make_managed<ObjectProperties>())
 {
     auto& main = get_widget<Gtk::Box>(_builder, "main-widget");
     main.append(_obj_properties);
 
     _obj_title.set_text("");
-    _style_swatch.set_hexpand(false);
-    _style_swatch.set_valign(Gtk::Align::CENTER);
-    get_widget<Gtk::Box>(_builder, "main-header").append(_style_swatch);
     append(main);
     create_panels();
-    _style_swatch.set_visible(false);
+
+    _obj_locked.signal_clicked().connect([this]() {
+        if (_update.pending() || !_current_item) return;
+
+        bool lock = _current_item->sensitive;
+        _current_item->setLocked(lock);
+        DocumentUndo::done(getDocument(), lock ? _("Lock object") : _("Unlock object"), "dialog-object-properties");
+    });
+
+    _obj_visible.signal_clicked().connect([this]() {
+        if (_update.pending() || !_current_item) return;
+
+        bool hide = !_current_item->isExplicitlyHidden();
+        _current_item->setExplicitlyHidden(hide);
+        DocumentUndo::done(getDocument(), hide ? _("Hide object") : _("Unhide object"), "dialog-object-properties");
+    });
+
+    _observer.signal_changed().connect([this](auto change, auto str) {
+        if (change == XML::SignalObserver::Attribute) {
+            if (_update.pending() || !getDesktop() || !_current_panel || !_current_item) return;
+
+            update_vis_lock(_current_item);
+        }
+    });
+
+    show_properties_section(false);
 }
 
 void ObjectAttributes::widget_setup() {
@@ -122,32 +198,50 @@ void ObjectAttributes::widget_setup() {
     auto selection = getDesktop()->getSelection();
     auto item = selection->singleItem();
 
+    if (item != _current_item) {
+        _observer.set(item);
+    }
+
     auto scoped(_update.block());
 
     auto panel = get_panel(item);
+    if (!panel && selection->size() > 1) {
+        panel = _multi_obj_panel.get();
+    }
+
     if (panel != _current_panel && _current_panel) {
         _current_panel->update_panel(nullptr, nullptr);
         _main_panel.remove(_current_panel->widget());
         _obj_title.set_text("");
     }
 
+    // show properties section if new panel supports it or if there is no dedicated panel
+    // note: current "object properties" subdialog doesn't handle multiselection
+    bool show_props = (panel && panel->supports_props_section()) || (!panel && item);
+    show_properties_section(show_props);
+
     _current_panel = panel;
     _current_item = nullptr;
-    bool enable_props = panel != nullptr;
 
-    Glib::ustring title = panel ? panel->get_title() : "";
+    update_vis_lock(item);
+
+    if (panel) {
+        if (_main_panel.get_children().empty()) {
+            UI::pack_start(_main_panel, panel->widget(), true, true);
+        }
+        panel->update_panel(item, getDesktop());
+        panel->widget().set_visible(true);
+    }
+
+    Glib::ustring title = panel ? panel->get_title(selection) : "";
     if (!panel) {
         if (item) {
             if (auto name = item->displayName()) {
                 title = name;
             }
-            // show properties for element without dedicated attributes panel
-            enable_props = true;
         }
         else if (selection->size() > 1) {
             title = _("Multiple objects selected");
-            // current "object properties" subdialog doesn't handle multiselection
-            enable_props = false;
         }
         else {
             title = _("No selection");
@@ -155,45 +249,64 @@ void ObjectAttributes::widget_setup() {
     }
     _obj_title.set_markup("<b>" + Glib::Markup::escape_text(title) + "</b>");
 
-    if (!panel) {
-        _style_swatch.set_visible(false);
-    }
-    else {
-        if (_main_panel.get_children().empty()) {
-            UI::pack_start(_main_panel, panel->widget(), true, true);
-        }
-        bool show_style = false;
-        if (panel->supports_fill_stroke()) {
-            if (auto style = item ? item->style : nullptr) {
-                _style_swatch.setStyle(style);
-                show_style = true;
-            }
-        }
-        _style_swatch.set_visible(show_style);
-        panel->update_panel(item, getDesktop());
-        panel->widget().set_visible(true);
-    }
-
     _current_item = item;
-
-    // TODO
-    // show no of LPEs?
-    // show locked status?
 }
 
 void ObjectAttributes::update_panel(SPObject* item) {
-    if (!_current_panel) return;
+    update_vis_lock(item);
 
-    if (_current_panel->supports_fill_stroke()) {
-        if (auto style = item ? item->style : nullptr) {
-            _style_swatch.setStyle(style);
-        }
+    if (_current_panel) {
+        _current_panel->update_panel(item, getDesktop());
     }
-    _current_panel->update_panel(item, getDesktop());
+}
+
+void ObjectAttributes::update_vis_lock(SPObject* object) {
+    bool show = false;
+    if (auto item = cast<SPItem>(object)) {
+        show = true;
+        _obj_visible.set_icon_name(item->isExplicitlyHidden() ? "object-hidden" : "object-visible");
+        _obj_locked.set_icon_name(item->isLocked() ? "object-locked" : "object-unlocked");
+    }
+    // don't actually hide buttons, it shifts everything
+    _obj_visible.set_opacity(show ? 1 : 0);
+    _obj_locked.set_opacity(show ? 1 : 0);
+    _obj_visible.set_sensitive(show);
+    _obj_locked.set_sensitive(show);
+}
+
+void ObjectAttributes::show_properties_section(bool show) {
+    auto& separator = get_widget<Gtk::Separator>(_builder, "main-separator");
+    separator.set_visible(show);
+    _obj_properties.set_visible(show);
 }
 
 void ObjectAttributes::desktopReplaced() {
+    if (_current_panel) {
+        _current_panel->set_desktop(getDesktop());
+    }
+    if (auto desktop = getDesktop()) {
+        _cursor_move = desktop->connect_text_cursor_moved([this](auto tool) {
+            cursor_moved(tool);
+        });
+    }
+}
+
+void ObjectAttributes::cursor_moved(Tools::TextTool* tool) {
+    if (_current_panel) {
+        auto s = tool->get_subselection();
+        _current_panel->subselection_changed(s);
+    }
+    //TODO: text panel
+// printf("text sel: %d\n", (int)s.size());
+}
+
+void ObjectAttributes::documentReplaced() {
+    auto doc = getDocument();
+    for (auto& kv : _panels) {
+        kv.second->set_document(doc);
+    }
     _obj_properties.update_entries();
+    //todo: watch doc modified to update locked state of current obj
 }
 
 void ObjectAttributes::selectionChanged(Selection* selection) {
@@ -204,8 +317,11 @@ void ObjectAttributes::selectionChanged(Selection* selection) {
 void ObjectAttributes::selectionModified(Selection* _selection, guint flags) {
     if (_update.pending() || !getDesktop() || !_current_panel) return;
 
+    if (flags & SP_OBJECT_USER_MODIFIED_TAG_1) return;
+
     auto selection = getDesktop()->getSelection();
     if (flags & (SP_OBJECT_MODIFIED_FLAG |
+                 SP_OBJECT_CHILD_MODIFIED_FLAG |
                  SP_OBJECT_PARENT_MODIFIED_FLAG |
                  SP_OBJECT_STYLE_MODIFIED_FLAG)) {
 
@@ -221,6 +337,8 @@ void ObjectAttributes::selectionModified(Selection* _selection, guint flags) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
+namespace {
+
 std::tuple<bool, double, double> round_values(double x, double y) {
     auto a = std::round(x);
     auto b = std::round(y);
@@ -228,6 +346,10 @@ std::tuple<bool, double, double> round_values(double x, double y) {
 }
 
 std::tuple<bool, double, double> round_values(Gtk::SpinButton& x, Gtk::SpinButton& y) {
+    return round_values(x.get_adjustment()->get_value(), y.get_adjustment()->get_value());
+}
+
+std::tuple<bool, double, double> round_values(Widget::InkSpinButton& x, Widget::InkSpinButton& y) {
     return round_values(x.get_adjustment()->get_value(), y.get_adjustment()->get_value());
 }
 
@@ -278,13 +400,48 @@ void align_star_shape(SPStar* path) {
     path->updateRepr();
 }
 
+void set_dimension_adj(Widget::InkSpinButton& btn) {
+    btn.set_adjustment(Gtk::Adjustment::create(0, 0, 1'000'000, 1, 5));
+}
+
+void set_location_adj(Widget::InkSpinButton& btn) {
+    btn.set_adjustment(Gtk::Adjustment::create(0, -1'000'000, 1'000'000, 1, 5));
+}
+
+} // namespace
+
 ///////////////////////////////////////////////////////////////////////////////
 
-details::AttributesPanel::AttributesPanel() {
+details::AttributesPanel::AttributesPanel(bool show_fill_stroke, bool show_properties) {
+    _widget = &_grid;
     _tracker = std::make_unique<UI::Widget::UnitTracker>(Inkscape::Util::UNIT_TYPE_LINEAR);
-    //todo:
+    _show_fill_stroke = show_fill_stroke;
+    _show_properties = show_properties;
+    if (show_fill_stroke) {
+        add_fill_and_stroke();
+    }
+    //todo: is this needed?
     // auto init_units = desktop->getNamedView()->display_units;
     // _tracker->setActiveUnit(init_units);
+}
+
+void details::AttributesPanel::add_fill_and_stroke() {
+    _paint.reset(new Widget::PaintAttribute());
+    _paint->insert_widgets(_grid);
+    _show_fill_stroke = true;
+}
+
+void details::AttributesPanel::set_document(SPDocument* document) {
+    if (supports_fill_stroke()) {
+        _paint->set_document(document);
+    }
+}
+
+void details::AttributesPanel::set_desktop(SPDesktop* desktop) {
+    _desktop = desktop;
+    if (supports_fill_stroke()) {
+        _paint->set_desktop(desktop);
+    }
 }
 
 void details::AttributesPanel::update_panel(SPObject* object, SPDesktop* desktop) {
@@ -295,10 +452,17 @@ void details::AttributesPanel::update_panel(SPObject* object, SPDesktop* desktop
         if (units) _tracker->setActiveUnit(units);
     }
 
-    _desktop = desktop;
+    set_desktop(desktop);
 
     if (!_update.pending()) {
+        update_paint(object);
         update(object);
+    }
+}
+
+void details::AttributesPanel::update_paint(SPObject* object) {
+    if (supports_fill_stroke()) {
+        _paint->update_from_object(object);
     }
 }
 
@@ -345,9 +509,8 @@ void details::AttributesPanel::change_value(SPObject* object, const Glib::RefPtr
 
 class ImagePanel : public details::AttributesPanel {
 public:
-    ImagePanel() {
+    ImagePanel(): AttributesPanel(false) {
         _title = _("Image");
-        _show_fill_stroke = false;
         _panel = std::make_unique<Inkscape::UI::Widget::ImageProperties>();
         _widget = _panel.get();
     }
@@ -363,9 +526,8 @@ private:
 
 class AnchorPanel : public details::AttributesPanel {
 public:
-    AnchorPanel() {
+    AnchorPanel(): AttributesPanel(false) {
         _title = _("Anchor");
-        _show_fill_stroke = false;
         _table = std::make_unique<SPAttributeTable>();
         _table->set_visible(true);
         _table->set_hexpand();
@@ -420,9 +582,11 @@ public:
                         return;
                     }
 
-                    // activate object picker tool
-                    set_active_tool(_desktop, "Picker");
-
+                    auto active_tool = get_active_tool(_desktop);
+                    if (active_tool != "Picker") {
+                        // activate object picker tool
+                        set_active_tool(_desktop, "Picker");
+                    }
                     if (auto tool = dynamic_cast<Inkscape::UI::Tools::ObjectPickerTool*>(_desktop->getTool())) {
                         _picker = tool->signal_object_picked.connect([grid, this](SPObject* item){
                             // set anchor href
@@ -464,17 +628,25 @@ private:
 
 class RectPanel : public details::AttributesPanel {
 public:
-    RectPanel(Glib::RefPtr<Gtk::Builder> builder) :
-        _main(get_widget<Gtk::Grid>(builder, "rect-main")),
-        _width(get_derived_widget<Inkscape::UI::Widget::SpinButton>(builder, "rect-width")),
-        _height(get_derived_widget<Inkscape::UI::Widget::SpinButton>(builder, "rect-height")),
-        _rx(get_derived_widget<Inkscape::UI::Widget::SpinButton>(builder, "rect-rx")),
-        _ry(get_derived_widget<Inkscape::UI::Widget::SpinButton>(builder, "rect-ry")),
+    RectPanel(Glib::RefPtr<Gtk::Builder> builder):
+        _main(get_widget<Gtk::Box>(builder, "rect-main")),
         _sharp(get_widget<Gtk::Button>(builder, "rect-sharp")),
-        _round(get_widget<Gtk::Button>(builder, "rect-corners"))
+        _corners(get_widget<Gtk::Button>(builder, "rect-corners"))
     {
         _title = _("Rectangle");
-        _widget = &_main;
+
+        SpinPropertyDef properties[] = {
+            {&_width,  { 0, 1'000'000, 0.1, 1, 3}, C_("Abbreviation of Width", "W"),  _("Width of rectangle (without stroke)")},
+            {&_height, { 0, 1'000'000, 0.1, 1, 3}, C_("Abbreviation of Height", "H"), _("Height of rectangle (without stroke)")},
+            {&_rx, { 0, 1'000'000, 0.5, 1, 3}, C_("Corner radius in X", "Rx"), _("Horizontal radius of rounded corners")},
+            {&_ry, { 0, 1'000'000, 0.5, 1, 3}, C_("Corner radius in Y", "Ry"), _("Vertical radius of rounded corners")},
+        };
+        for (auto& def : properties) {
+            init_spin_button(def);
+        }
+        _grid.add_property(_("Size"), nullptr, &_width, &_height, &_round);
+        _grid.add_property(_("Corners"), nullptr, &_rx, &_ry, nullptr);
+        _grid.add_property(nullptr, nullptr, &_main, nullptr, nullptr);
 
         _width.get_adjustment()->signal_value_changed().connect([this](){
             change_value_px(_rect, _width.get_adjustment(), "width", [this](double w){ _rect->setVisibleWidth(w); });
@@ -488,13 +660,18 @@ public:
         _ry.get_adjustment()->signal_value_changed().connect([this](){
             change_value_px(_rect, _ry.get_adjustment(), "ry", [this](double ry){ _rect->setVisibleRy(ry); });
         });
-        get_widget<Gtk::Button>(builder, "rect-round").signal_clicked().connect([this](){
+
+        _round.set_tooltip_text(_("Round numbers to nearest integer"));
+        _round.set_has_frame(false);
+        _round.set_icon_name("rounding");
+        _round.signal_clicked().connect([this](){
             auto [changed, x, y] = round_values(_width, _height);
             if (changed) {
                 _width.get_adjustment()->set_value(x);
                 _height.get_adjustment()->set_value(y);
             }
         });
+
         _sharp.signal_clicked().connect([this](){
             if (!_rect) return;
 
@@ -503,7 +680,7 @@ public:
             _rx.get_adjustment()->set_value(0);
             _ry.get_adjustment()->set_value(0);
         });
-        _round.signal_clicked().connect([this](){
+        _corners.signal_clicked().connect([this](){
             if (!_rect || !_desktop) return;
 
             // switch to node tool to show handles
@@ -521,6 +698,10 @@ public:
 
     ~RectPanel() override = default;
 
+    void document_replaced(SPDocument* document) override {
+        _paint->set_document(document);
+    }
+
     void update(SPObject* object) override {
         _rect = cast<SPRect>(object);
         if (!_rect) return;
@@ -532,18 +713,19 @@ public:
         _ry.set_value(_rect->ry.value);
         auto lpe = find_lpeffect(_rect, LivePathEffect::FILLET_CHAMFER);
         _sharp.set_sensitive(_rect->rx.value > 0 || _rect->ry.value > 0 || lpe);
-        _round.set_sensitive(!lpe);
+        _corners.set_sensitive(!lpe);
     }
 
 private:
     SPRect* _rect = nullptr;
-    Gtk::Widget& _main;
-    Inkscape::UI::Widget::SpinButton& _width;
-    Inkscape::UI::Widget::SpinButton& _height;
-    Inkscape::UI::Widget::SpinButton& _rx;
-    Inkscape::UI::Widget::SpinButton& _ry;
+    Widget::InkSpinButton _width;
+    Widget::InkSpinButton _height;
+    Widget::InkSpinButton _rx;
+    Widget::InkSpinButton _ry;
     Gtk::Button& _sharp;
-    Gtk::Button& _round;
+    Gtk::Button& _corners;
+    Gtk::Button _round;
+    Gtk::Box& _main;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -551,18 +733,13 @@ private:
 class EllipsePanel : public details::AttributesPanel {
 public:
     EllipsePanel(Glib::RefPtr<Gtk::Builder> builder) :
-        _main(get_widget<Gtk::Grid>(builder, "ellipse-main")),
-        _rx(get_derived_widget<Inkscape::UI::Widget::SpinButton>(builder, "el-rx")),
-        _ry(get_derived_widget<Inkscape::UI::Widget::SpinButton>(builder, "el-ry")),
-        _start(get_derived_widget<Inkscape::UI::Widget::SpinButton>(builder, "el-start")),
-        _end(get_derived_widget<Inkscape::UI::Widget::SpinButton>(builder, "el-end")),
+        _main(get_widget<Gtk::Box>(builder, "ellipse-main")),
         _slice(get_widget<Gtk::ToggleButton>(builder, "el-slice")),
         _arc(get_widget<Gtk::ToggleButton>(builder, "el-arc")),
         _chord(get_widget<Gtk::ToggleButton>(builder, "el-chord")),
         _whole(get_widget<Gtk::Button>(builder, "el-whole"))
     {
         _title = _("Ellipse");
-        _widget = &_main;
 
         _type[0] = &_slice;
         _type[1] = &_arc;
@@ -585,20 +762,37 @@ public:
             _ellipse->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         };
 
-        _rx.get_adjustment()->signal_value_changed().connect([=, this](){
-            change_value_px(_ellipse, _rx.get_adjustment(), nullptr, [=, this](double rx){ _ellipse->setVisibleRx(rx); normalize(); });
+        SpinPropertyDef properties[] = {
+            {&_rx, { 0, 1'000'000, 0.1, 1, 3}, C_("Horizontal radius - X", "Rx"), _("Horizontal radius of the circle, ellipse, or arc")},
+            {&_ry, { 0, 1'000'000, 0.1, 1, 3}, C_("Vertical radius - Y", "Ry"),   _("Vertical radius of the circle, ellipse, or arc")},
+            {&_start, { -360, 360, 1, 10, 3 }, C_("Start angle", "S"), _("The angle (in degrees) from the horizontal to the arc's start point"), Degree},
+            {&_end,   { -360, 360, 1, 10, 3 }, C_("End angle", "E"),   _("The angle (in degrees) from the horizontal to the arc's end point"), Degree},
+        };
+        for (auto& def : properties) {
+            init_spin_button(def);
+        }
+
+        _rx.get_adjustment()->signal_value_changed().connect([=,this](){
+            change_value_px(_ellipse, _rx.get_adjustment(), nullptr, [=,this](double rx){ _ellipse->setVisibleRx(rx); normalize(); });
         });
-        _ry.get_adjustment()->signal_value_changed().connect([=, this](){
-            change_value_px(_ellipse, _ry.get_adjustment(), nullptr, [=, this](double ry){ _ellipse->setVisibleRy(ry); normalize(); });
+        _ry.get_adjustment()->signal_value_changed().connect([=,this](){
+            change_value_px(_ellipse, _ry.get_adjustment(), nullptr, [=,this](double ry){ _ellipse->setVisibleRy(ry); normalize(); });
         });
-        _start.get_adjustment()->signal_value_changed().connect([=, this](){
-            change_angle(_ellipse, _start.get_adjustment(), [=, this](double s){ _ellipse->start = s; normalize(); });
+        _start.get_adjustment()->signal_value_changed().connect([=,this](){
+            change_angle(_ellipse, _start.get_adjustment(), [=,this](double s){ _ellipse->start = s; normalize(); });
         });
-        _end.get_adjustment()->signal_value_changed().connect([=, this](){
-            change_angle(_ellipse, _end.get_adjustment(), [=, this](double e){ _ellipse->end = e; normalize(); });
+        _end.get_adjustment()->signal_value_changed().connect([=,this](){
+            change_angle(_ellipse, _end.get_adjustment(), [=,this](double e){ _ellipse->end = e; normalize(); });
         });
 
-        get_widget<Gtk::Button>(builder, "el-round").signal_clicked().connect([this](){
+        _grid.add_property(_("Radii"), nullptr, &_rx, &_ry, &_round);
+        _grid.add_property(_("Angles"), nullptr, &_start, &_end, nullptr);
+        _grid.add_row(&_main, nullptr, false);
+
+        _round.set_tooltip_text(_("Round numbers to nearest integer"));
+        _round.set_has_frame(false);
+        _round.set_icon_name("rounding");
+        _round.signal_clicked().connect([this](){
             auto [changed, x, y] = round_values(_rx, _ry);
             if (changed && x > 0 && y > 0) {
                 _rx.get_adjustment()->set_value(x);
@@ -663,15 +857,16 @@ public:
 private:
     SPGenericEllipse* _ellipse = nullptr;
     Gtk::Widget& _main;
-    Inkscape::UI::Widget::SpinButton& _rx;
-    Inkscape::UI::Widget::SpinButton& _ry;
-    Inkscape::UI::Widget::SpinButton& _start;
-    Inkscape::UI::Widget::SpinButton& _end;
+    Widget::InkSpinButton _rx;
+    Widget::InkSpinButton _ry;
+    Widget::InkSpinButton _start;
+    Widget::InkSpinButton _end;
     Gtk::ToggleButton &_slice;
     Gtk::ToggleButton &_arc;
     Gtk::ToggleButton &_chord;
     Gtk::Button& _whole;
     Gtk::ToggleButton *_type[3];
+    Gtk::Button _round;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -680,20 +875,21 @@ class StarPanel : public details::AttributesPanel {
 public:
     StarPanel(Glib::RefPtr<Gtk::Builder> builder) :
         _main(get_widget<Gtk::Grid>(builder, "star-main")),
-        _corners(get_derived_widget<Inkscape::UI::Widget::SpinButton>(builder, "star-corners")),
-        _ratio(get_derived_widget<Inkscape::UI::Widget::SpinButton>(builder, "star-ratio")),
-        _rounded(get_derived_widget<Inkscape::UI::Widget::SpinButton>(builder, "star-rounded")),
-        _rand(get_derived_widget<Inkscape::UI::Widget::SpinButton>(builder, "star-rand")),
         _poly(get_widget<Gtk::ToggleButton>(builder, "star-poly")),
         _star(get_widget<Gtk::ToggleButton>(builder, "star-star")),
-        _align(get_widget<Gtk::Button>(builder, "star-align")),
-        _clear_rnd(get_widget<Gtk::Button>(builder, "star-rnd-clear")),
-        _clear_round(get_widget<Gtk::Button>(builder, "star-round-clear")),
-        _clear_ratio(get_widget<Gtk::Button>(builder, "star-ratio-clear"))
+        _align(get_widget<Gtk::Button>(builder, "star-align"))
     {
         _title = _("Star");
-        _widget = &_main;
 
+        SpinPropertyDef properties[] = {
+            {&_corners, {   3, 1024, 1,    5,    0 }, nullptr, _("Number of corners of a polygon or star")},
+            {&_ratio,   {   0,    1, 0.01, 0.10, 4 }, nullptr, _("Base radius to tip radius ratio")},
+            {&_rounded, { -10,   10, 0.1,  1,    3 }, nullptr, _("How rounded are the corners (0 for sharp)")},
+            {&_rand,    { -10,   10, 0.1,  1,    3 }, nullptr, _("Scatter randomly the corners and angles")},
+        };
+        for (auto& def : properties) {
+            init_spin_button(def);
+        }
         _corners.get_adjustment()->signal_value_changed().connect([this](){
             change_value(_path, _corners.get_adjustment(), [this](double sides) {
                 _path->setAttributeDouble("sodipodi:sides", (int)sides);
@@ -729,6 +925,12 @@ public:
         _clear_rnd.signal_clicked().connect([this](){ _rand.get_adjustment()->set_value(0); });
         _clear_round.signal_clicked().connect([this](){ _rounded.get_adjustment()->set_value(0); });
         _clear_ratio.signal_clicked().connect([this](){ _ratio.get_adjustment()->set_value(0.5); });
+
+        _grid.add_property(_("Corner"), nullptr, &_corners, nullptr);
+        _grid.add_property(_("Spoke ratio"), nullptr, &_ratio, nullptr);
+        _grid.add_property(_("Rounded"), nullptr, &_rounded, nullptr);
+        _grid.add_property(_("Randomized"), nullptr, &_rand, nullptr);
+        _grid.add_row(_("Shape"), &_main);
 
         _poly.signal_toggled().connect([this](){ set_flat(true); });
         _star.signal_toggled().connect([this](){ set_flat(false); });
@@ -778,13 +980,13 @@ public:
 private:
     SPStar* _path = nullptr;
     Gtk::Widget& _main;
-    Inkscape::UI::Widget::SpinButton& _corners;
-    Inkscape::UI::Widget::SpinButton& _ratio;
-    Inkscape::UI::Widget::SpinButton& _rounded;
-    Inkscape::UI::Widget::SpinButton& _rand;
-    Gtk::Button& _clear_rnd;
-    Gtk::Button& _clear_round;
-    Gtk::Button& _clear_ratio;
+    Widget::InkSpinButton _corners;
+    Widget::InkSpinButton _ratio;
+    Widget::InkSpinButton _rounded;
+    Widget::InkSpinButton _rand;
+    Gtk::Button _clear_rnd;
+    Gtk::Button _clear_round;
+    Gtk::Button _clear_ratio;
     Gtk::Button& _align;
     Gtk::ToggleButton &_poly;
     Gtk::ToggleButton &_star;
@@ -792,17 +994,179 @@ private:
 
 ///////////////////////////////////////////////////////////////////////////////
 
+namespace {
+
+struct PaintKey {
+    // paint mode
+    Widget::PaintMode mode = Widget::PaintMode::None;
+    // for flat colors and swatches
+    std::optional<Colors::Color> color;
+    std::string id;
+    // display only label
+    std::string label;
+    // gradient or pattern, if any
+    SPObject* server = nullptr;
+    SPObject* vector = nullptr;
+
+    bool operator < (const PaintKey& p) const {
+        if (mode != p.mode) return mode < p.mode;
+
+        // ignore color, server and vector, it's a payload
+        // ignore label too for now
+
+        return id < p.id;
+    }
+};
+
+PaintKey get_paint(SPIPaint* paint) {
+    auto mode = paint ? Widget::get_mode_from_paint(*paint) : Widget::PaintMode::NotSet;
+    PaintKey key;
+    key.mode = mode;
+    if (mode == Widget::PaintMode::Solid) {
+        key.id = paint->getColor().toString(false);
+        key.color = paint->getColor();
+    }
+    else if (mode != Widget::PaintMode::NotSet && mode != Widget::PaintMode::None) {
+        if (auto server = paint->href ? paint->href->getObject() : nullptr) {
+            if (auto gradient = cast<SPGradient>(server)) {
+                // gradients, meshes
+                key.vector = gradient->getVector(false);
+            }
+            else if (auto pattern = cast<SPPattern>(server)) {
+                key.vector = pattern->rootPattern();
+            }
+            auto s = key.vector ? key.vector : server;
+            key.id = s->getId() ? s->getId() : "";
+            key.label = s->defaultLabel();
+            key.server = server;
+        }
+    }
+    return key;
+};
+
+// paint servers, colors, or no paint
+auto paint_to_item(const PaintKey& paint) {
+    auto mode_name = get_paint_mode_name(paint.mode);
+    auto tooltip = paint.vector || !paint.color ? mode_name : Glib::ustring(paint.color->toString(false));
+    if (paint.vector) tooltip = tooltip + " " + paint.vector->defaultLabel();
+    auto label = paint.label.empty() ? paint.id : paint.label;
+    if (label.empty()) label = mode_name;
+    if (paint.mode == Widget::PaintMode::Swatch) {
+        Colors::Color color{0};
+        auto swatch = cast<SPGradient>(paint.vector);
+        if (swatch && swatch->hasStops()) {
+            color = swatch->getFirstStop()->getColor();
+        }
+        return GridViewList::create_item(paint.id, 0, label, {}, tooltip, color, {}, true);
+    }
+    else if (paint.mode == Widget::PaintMode::Solid) {
+        return GridViewList::create_item(paint.id, 0, label, {}, tooltip, paint.color, {}, false);
+    }
+    else if (paint.mode == Widget::PaintMode::Gradient) {
+        // todo: pattern size needs to match tile size
+        auto pat_t = cast<SPGradient>(paint.vector)->create_preview_pattern(16);
+        auto pat = Cairo::RefPtr<Cairo::Pattern>(new Cairo::Pattern(pat_t, true));
+        return GridViewList::create_item(paint.id, 0, label, {}, tooltip, {}, pat, false, is<SPRadialGradient>(paint.server));
+    }
+    else {
+        auto icon = get_paint_mode_icon(paint.mode);
+        return GridViewList::create_item(paint.id, 0, label, icon, tooltip, {}, {}, false);
+    }
+}
+
+} // namespace
+
 class TextPanel : public details::AttributesPanel {
 public:
-    TextPanel(Glib::RefPtr<Gtk::Builder> builder) :
-        _main(get_widget<Gtk::Grid>(builder, "text-main"))
-    {
+    TextPanel(Glib::RefPtr<Gtk::Builder>): AttributesPanel(false, true) {
         // TODO - text panel
+        _title = _("Text");
+        // add all fill paints widgets:
+        //
+        _fill_paint.set_hexpand();
+        _grid.add_row(_("Fills"), &_fill_paint);
+
+        // add F&S for main text element
+        add_fill_and_stroke();
     }
 
 private:
-    Gtk::Widget& _main;
 
+    void update(SPObject* object) override {
+        auto text = cast<SPText>(object);
+        _current_item = text;
+        if (text) {
+            // set title; there are various "text" types
+            //todo: is text-in-a-shape a flow text?
+            _title = text->displayName();
+            if (SP_IS_TEXT_TEXTPATH(text)) {
+                // sp-text description uses similar (and translation dubious) concatenation approach
+                _title += " ";
+                _title += C_("<text> on path", "on path");
+            }
+        }
+
+        auto spans = get_subselection();
+        auto fills = spans.empty() ? collect_paints(text) : collect_paints(spans);
+        update_paints(fills);
+    }
+
+    void subselection_changed(const std::vector<SPItem*>& items) override {
+        update_paints(collect_paints(items));
+    }
+
+    std::set<PaintKey> collect_paints(SPText* text) {
+        if (!text) return {};
+
+        std::set<PaintKey> fills; // fill paints
+        for (auto obj : text) {
+            if (obj == _current_item) continue;
+
+            if (auto item = cast<SPItem>(obj)) {
+                auto fill = item->style->getFillOrStroke(true);
+                fills.insert(get_paint(fill));
+            }
+        }
+        return fills;
+    }
+
+    std::set<PaintKey> collect_paints(const std::vector<SPItem*>& spans) {
+        std::set<PaintKey> fills; // fill paints
+        for (auto item : spans) {
+            if (item == _current_item) continue;
+
+            auto fill = item->style->getFillOrStroke(true);
+            fills.insert(get_paint(fill));
+        }
+        return fills;
+    }
+
+    void update_paints(const std::set<PaintKey>& fills) {
+        if (fills.size() <= 1) {
+            // hide fill paints
+            //todo
+            _fill_paint.update_store(0, {});
+        }
+        else {
+            auto it = fills.begin();
+            _fill_paint.update_store(fills.size(), [&](auto index) {
+                return paint_to_item(*it++);
+            });
+        }
+    }
+
+    std::vector<SPItem*> get_subselection() {
+        if (!_desktop) return {};
+
+        if (auto tool = dynamic_cast<Tools::TextTool*>(_desktop->getTool())) {
+            return tool->get_subselection();
+        }
+
+        return {};
+    }
+
+    SPText* _current_item = nullptr;
+    GridViewList _fill_paint{GridViewList::ColorCompact};
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -811,17 +1175,26 @@ class PathPanel : public details::AttributesPanel {
 public:
     PathPanel(Glib::RefPtr<Gtk::Builder> builder) :
         _main(get_widget<Gtk::Grid>(builder, "path-main")),
-        _width(get_derived_widget<Inkscape::UI::Widget::SpinButton>(builder, "path-width")),
-        _height(get_derived_widget<Inkscape::UI::Widget::SpinButton>(builder, "path-height")),
-        _x(get_derived_widget<Inkscape::UI::Widget::SpinButton>(builder, "path-x")),
-        _y(get_derived_widget<Inkscape::UI::Widget::SpinButton>(builder, "path-y")),
         _info(get_widget<Gtk::Label>(builder, "path-info")),
         _data(_svgd_edit->getTextView())
     {
         _title = _("Path");
-        _widget = &_main;
 
         //TODO: do we need to duplicate x/y/w/h toolbar widgets here?
+        _x.set_label(C_("Object's location X", "X"));
+        set_location_adj(_x);
+        _y.set_label(C_("Object's location Y", "Y"));
+        set_location_adj(_y);
+        _round_loc.set_tooltip_text(_("Round numbers to nearest integer"));
+        _round_loc.set_icon_name("rounding");
+        _round_loc.set_has_frame(false);
+        _grid.add_property(_("Location"), nullptr, &_x, &_y, &_round_loc);
+        _width.set_label(C_("Object's width", "W"));
+        set_dimension_adj(_width);
+        _height.set_label(C_("Object's height", "H"));
+        set_dimension_adj(_height);
+        _grid.add_property(_("Size"), nullptr, &_width, &_height, 0);
+        _grid.add_row(&_main);
         /*
         _width.get_adjustment()->signal_value_changed().connect([=](){
         });
@@ -845,7 +1218,7 @@ public:
         auto& wnd = get_widget<Gtk::ScrolledWindow>(builder, "path-data-wnd");
         wnd.set_child(_data);
 
-        auto set_precision = [=, this](int const n) {
+        auto set_precision = [=,this](int const n) {
             _precision = n;
             auto& menu_button = get_widget<Gtk::MenuButton>(builder, "path-menu");
             auto const menu = menu_button.get_menu_model();
@@ -863,7 +1236,7 @@ public:
         set_precision(_precision);
         auto group = Gio::SimpleActionGroup::create();
         auto action = group->add_action_radio_integer("precision", _precision);
-        action->property_state().signal_changed().connect([=, this]{ int n; action->get_state(n);
+        action->property_state().signal_changed().connect([=,this]{ int n; action->get_state(n);
                                                                     set_precision(n); });
         _main.insert_action_group("attrdialog", std::move(group));
 
@@ -898,7 +1271,7 @@ public:
         if (curve) {
             node_count = curve->get_segment_count();
         }
-        _info.set_text(_("Nodes: ") + std::to_string(node_count));
+        _info.set_text(C_("Number of path nodes follows", "Nodes: ") + std::to_string(node_count));
 
         //TODO: we can consider adding more stats, like perimeter, area, etc.
     }
@@ -925,15 +1298,382 @@ private:
 
     SPPath* _path = nullptr;
     bool _original = false;
-    Gtk::Widget& _main;
-    Inkscape::UI::Widget::SpinButton& _width;
-    Inkscape::UI::Widget::SpinButton& _height;
-    Inkscape::UI::Widget::SpinButton& _x;
-    Inkscape::UI::Widget::SpinButton& _y;
+    Gtk::Grid& _main;
+    Gtk::Button _round_loc;
+    Widget::InkSpinButton _x;
+    Widget::InkSpinButton _y;
+    Widget::InkSpinButton _width;
+    Widget::InkSpinButton _height;
     Gtk::Label& _info;
     std::unique_ptr<Syntax::TextEditView> _svgd_edit = Syntax::TextEditView::create(Syntax::SyntaxMode::SvgPathData);
     Gtk::TextView& _data;
     int _precision = 2;
+};
+
+///////////////////////////////////////////////////////////////////////////////
+
+class GroupPanel : public details::AttributesPanel {
+public:
+    GroupPanel(Glib::RefPtr<Gtk::Builder> builder) {
+        _title = _("Group");
+
+        auto remove = Gtk::make_managed<Gtk::Button>(_("Remove style"));
+        remove->set_tooltip_text(_("Remove style from group elements\nto override it with group style"));
+        remove->signal_clicked().connect([this]() {
+            // remove style from group's children
+            remove_styles(_group);
+        });
+        auto enter = Gtk::make_managed<Gtk::Button>(_("Enter group"));
+        enter->set_tooltip_text(_("Enter into this group to select objects"));
+        enter->signal_clicked().connect([this]() {
+            enter_group(_desktop, _group);
+        });
+        _grid.add_property(_("Elements"), nullptr, remove, enter);
+    }
+
+private:
+    void update(SPObject* object) override {
+        _group = cast<SPGroup>(object);
+    }
+
+    void remove_styles(SPObject* parent) {
+        if (!parent) return;
+
+        if (remove_children_styles(parent, true)) {
+            DocumentUndo::done(parent->document, _("Removed style"), "");
+        }
+    }
+
+    bool remove_children_styles(SPObject* parent, bool recursive) {
+        auto changed = false;
+        for (auto obj = parent->firstChild(); obj; obj = obj->getNext()) {
+            if (remove_item_style(obj)) {
+                changed = true;
+            }
+            if (recursive && remove_children_styles(obj, true)) {
+                changed = true;
+            }
+        }
+        return changed;
+    }
+
+    SPGroup* _group = nullptr;
+};
+
+///////////////////////////////////////////////////////////////////////////////
+
+class ClonePanel : public details::AttributesPanel {
+public:
+    ClonePanel(Glib::RefPtr<Gtk::Builder> builder) {
+        _title = _("Clone");
+
+        auto remove = Gtk::make_managed<Gtk::Button>(_("Steal style"));
+        remove->set_tooltip_text(_("Remove style from original element\nand place it on this clone"));
+        remove->signal_clicked().connect([this]() {
+            // remove style from original element
+            remove_styles(_clone);
+        });
+
+        auto link = Gtk::make_managed<Gtk::Button>(_("Original"));
+        link->set_tooltip_text(_("Link this clone to original element"));
+        link->signal_clicked().connect([this]() {
+            // link clone to original object if it points to another <use> element
+            link_to_original(_clone);
+        });
+        _link = link;
+
+        auto go_to = create_button(_("Go to"), "object-pick");
+        go_to->set_tooltip_text(_("Select original object"));
+        go_to->signal_clicked().connect([this]() {
+            if (_desktop) {
+                // go to original; this method should take clone as input
+                //todo: go to true original
+                _desktop->getSelection()->cloneOriginal();
+            }
+        });
+        _grid.add_property(_("Original"), nullptr, remove, go_to);
+        _grid.add_property(_("Link to"), nullptr, link, nullptr);
+    }
+
+private:
+    void update(SPObject* object) override {
+        _clone = cast<SPUse>(object);
+        _link->set_sensitive(_clone && _clone->trueOriginal() != _clone->get_original());
+    }
+
+    void link_to_original(SPUse* clone) {
+        if (!clone) return;
+
+        if (auto original = clone->trueOriginal()) {
+            if (auto id = original->getId()) {
+                std::string url = "#";
+                url += id;
+                // re-link
+                clone->setAttribute("xlink:href", url.c_str());
+            }
+        }
+    }
+
+    void remove_styles(SPUse* clone) {
+        if (!clone) return;
+
+        auto original = clone->get_original();
+        if (transfer_item_style(original, clone)) {
+            DocumentUndo::done(clone->document, _("Transferred style"), "");
+        }
+    }
+
+    bool remove_children_styles(SPObject* parent, bool recursive) {
+        auto changed = false;
+        for (auto obj = parent->firstChild(); obj; obj = obj->getNext()) {
+            auto style = obj->getAttribute("style");
+            if (style && *style) {
+                obj->removeAttribute("style");
+                changed = true;
+            }
+            if (recursive && remove_children_styles(obj, true)) {
+                changed = true;
+            }
+        }
+        return changed;
+    }
+
+    SPUse* _clone = nullptr;
+    Gtk::Button* _link = nullptr;
+};
+
+///////////////////////////////////////////////////////////////////////////////
+
+namespace {
+
+template<typename F>
+void visit_objects(SPObject* object, F f) {
+    auto visit_children_fn = [&](SPItem* item, auto& self) -> void {
+        f(item);
+        for (auto& child : item->children) {
+            if (auto i = cast<SPItem>(&child)) {
+                self(i, self);
+            }
+        }
+    };
+
+    auto visit_objects_fn = [&](SPObject* object, auto& self) -> void {
+        if (auto group = cast<SPGroup>(object)) {
+            f(group);
+            for (auto& child : group->children) {
+            // for (auto child : get_object_children(group)) {
+                self(&child, self);
+            }
+        }
+        else if (auto clone = cast<SPUse>(object)) {
+            f(clone);
+            if (auto original = clone->trueOriginal()) {
+                f(original);
+            }
+        }
+        else if (auto text = cast<SPText>(object)) {
+            visit_children_fn(text, visit_children_fn);
+        }
+        else if (object) {
+            f(object);
+        }
+    };
+
+    visit_objects_fn(object, visit_objects_fn);
+}
+
+} // namespace
+
+
+class MultiObjPanel : public details::AttributesPanel {
+public:
+    MultiObjPanel() : AttributesPanel(false, false) {
+        _title = _("Multiple objects");
+
+        //todo: should those options be exposed? =======================
+        // auto box = Gtk::make_managed<Gtk::Box>();
+        // box->set_spacing(4);
+        // auto enter = Gtk::make_managed<Gtk::CheckButton>(_("Enter groups"));
+        // enter->set_tooltip_text(_("Scan objects inside groups"));
+        // auto original = Gtk::make_managed<Gtk::CheckButton>(_("Scan originals"));
+        // original->set_tooltip_text(_("Scan originals pointed to be clones"));
+        // box->append(*enter);
+        // box->append(*original);
+        // _grid.add_row(box);
+        // _grid.add_property(_("Fill"), nullptr, )
+        //todo: end ====================================================
+
+        _types.set_hexpand();
+        _grid.add_row(_("Types"), &_types);
+        _grid.add_row(Gtk::make_managed<Gtk::Separator>(), nullptr, true);
+
+        _fill_paint.set_hexpand();
+        _grid.add_row(_("Fills"), &_fill_paint);
+        _grid.add_row(Gtk::make_managed<Gtk::Separator>(), nullptr, true);
+
+        _stroke_paint.set_hexpand();
+        _grid.add_row(_("Strokes"), &_stroke_paint);
+        _grid.add_row(Gtk::make_managed<Gtk::Separator>(), nullptr, true);
+
+        _stroke_width.set_hexpand();
+        _grid.add_row(_("Stroke widths"), &_stroke_width);
+        _stroke_width.get_signal_value_changed().connect([this](auto id, auto orig, auto value) {
+            printf("val chg: %s %.8f -> %.8f\n", id.c_str(), orig, value);
+            auto selection = _desktop->getSelection();
+            auto objects = selection->objects();
+            bool changed = false;
+            for (auto obj: objects) {
+                visit_objects(obj, [&](SPObject* o) {
+                    if (auto item = cast<SPItem>(o)) {
+                        if (item->style->stroke_width.computed == orig) {
+                            printf("stroke match %s\n", o->getId());
+                            changed = true;
+    //todo: this is test
+    auto css = boost::intrusive_ptr(sp_repr_css_attr_new(), false);
+    sp_repr_css_set_property_double(css.get(), "stroke-width", value);
+    item->changeCSS(css.get(), "style");
+    // end of test
+                        }
+                        else {
+                            printf("stroke no match %.8f, %s\n", item->style->stroke_width.computed, o->getId());
+                        }
+                    }
+                });
+            }
+            if (changed) {
+                DocumentUndo::done(_desktop->getDocument(), "stroke width", "");
+            }
+        });
+    }
+
+private:
+    Glib::ustring get_title(Selection* selection) const override {
+        auto n = selection->size();
+        return Glib::ustring::compose(ngettext("%1 Object", "%1 Objects", n), n);
+    }
+
+    void update(SPObject* object) override {
+        if (!_desktop) return;
+
+        auto selection = _desktop->getSelection();
+        auto objects = selection->objects();
+
+        std::set<std::string> types;
+        std::set<PaintKey> fills; // fill paints
+        std::set<PaintKey> strokes;
+        std::set<double> stroke_widths;
+
+        // auto get_paint = [](SPIPaint* paint) {
+        //     auto mode = paint ? Widget::get_mode_from_paint(*paint) : Widget::PaintMode::NotSet;
+        //     PaintKey key;
+        //     key.mode = mode;
+        //     if (mode == Widget::PaintMode::Solid) {
+        //         key.id = paint->getColor().toString(false);
+        //         key.color = paint->getColor();
+        //     }
+        //     else if (auto server = paint->href ? paint->href->getObject() : nullptr) {
+        //         if (auto gradient = cast<SPGradient>(server)) {
+        //             // gradients, meshes
+        //             key.vector = gradient->getVector(false);
+        //         }
+        //         else if (auto pattern = cast<SPPattern>(server)) {
+        //             key.vector = pattern->rootPattern();
+        //         }
+        //         auto s = key.vector ? key.vector : server;
+        //         key.id = s->getId() ? s->getId() : "";
+        //         key.label = s->defaultLabel();
+        //         key.server = server;
+        //     }
+        //     return key;
+        // };
+
+        auto collect_attr = [&](SPObject* obj) {
+            if (auto repr = obj->getRepr()) {
+                types.insert(repr->name());
+            }
+            if (auto item = cast<SPItem>(obj)) {
+                auto fill = item->style->getFillOrStroke(true);
+                fills.insert(get_paint(fill));
+
+                auto stroke = item->style->getFillOrStroke(false);
+                strokes.insert(get_paint(stroke));
+
+                stroke_widths.insert(item->style->stroke_width.computed);
+            }
+            //todo: groups and text
+        };
+
+        for (auto obj: objects) {
+            visit_objects(obj, collect_attr);
+        }
+
+        {
+            auto it = types.begin();
+            _types.update_store(types.size(), [&](auto i) {
+                auto&& name = *it;
+                ++it;
+                return GridViewList::create_item(name, 0, name, {}, {}, {}, {}, false);
+            });
+        }
+        {
+            auto it = stroke_widths.begin();
+            _stroke_width.update_store(stroke_widths.size(), [&](auto i) {
+                auto width = *it++;
+                auto id = std::to_string(i);
+                return GridViewList::create_item(id, width, {}, {}, {}, {}, {}, false);
+            });
+        }
+
+        {
+            // paint servers, colors, or no paint
+            // auto paint_to_item = [](const PaintKey& paint) {
+            //     auto mode_name = get_paint_mode_name(paint.mode);
+            //     auto tooltip = paint.vector || !paint.color ? mode_name : Glib::ustring(paint.color->toString(false));
+            //     if (paint.vector) tooltip = tooltip + " " + paint.vector->defaultLabel();
+            //     auto label = paint.label.empty() ? paint.id : paint.label;
+            //     if (label.empty()) label = mode_name;
+            //     if (paint.mode == Widget::PaintMode::Swatch) {
+            //         Colors::Color color{0};
+            //         auto swatch = cast<SPGradient>(paint.vector);
+            //         if (swatch && swatch->hasStops()) {
+            //             color = swatch->getFirstStop()->getColor();
+            //         }
+            //         return GridViewList::create_item(paint.id, 0, label, {}, tooltip, color, {}, true);
+            //     }
+            //     else if (paint.mode == Widget::PaintMode::Solid) {
+            //         return GridViewList::create_item(paint.id, 0, label, {}, tooltip, paint.color, {}, false);
+            //     }
+            //     else if (paint.mode == Widget::PaintMode::Gradient) {
+            //         // todo: pattern size needs to match tile size
+            //         auto pat_t = cast<SPGradient>(paint.vector)->create_preview_pattern(16);
+            //         auto pat = Cairo::RefPtr<Cairo::Pattern>(new Cairo::Pattern(pat_t, true));
+            //         return GridViewList::create_item(paint.id, 0, label, {}, tooltip, {}, pat, false, is<SPRadialGradient>(paint.server));
+            //     }
+            //     else {
+            //         auto icon = get_paint_mode_icon(paint.mode);
+            //         return GridViewList::create_item(paint.id, 0, label, icon, tooltip, {}, {}, false);
+            //     }
+            // };
+            {
+                auto it = fills.begin();
+                _fill_paint.update_store(fills.size(), [&](auto index) {
+                    return paint_to_item(*it++);
+                });
+            }
+            {
+                auto it = strokes.begin();
+                _stroke_paint.update_store(strokes.size(), [&](auto index) {
+                    return paint_to_item(*it++);
+                });
+            }
+        }
+    }
+
+    // bool _enter_groups = true;
+    GridViewList _types{GridViewList::Label};
+    GridViewList _fill_paint{GridViewList::ColorLong};
+    GridViewList _stroke_paint{GridViewList::ColorLong};
+    GridViewList _stroke_width{Gtk::Adjustment::create(0, 0, 1e5, 0.1, 1), 8};
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -959,6 +1699,15 @@ void ObjectAttributes::create_panels() {
     _panels[typeid(SPStar).name()] = std::make_unique<StarPanel>(_builder);
     _panels[typeid(SPAnchor).name()] = std::make_unique<AnchorPanel>();
     _panels[typeid(SPPath).name()] = std::make_unique<PathPanel>(_builder);
+
+    //todo: those panels are not ready yet
+    if (IncludeExperimentalPanels) {
+        _panels[typeid(SPText).name()] = std::make_unique<TextPanel>(_builder); //todo: tref, tspan, textpath, flowtext?
+        _panels[typeid(SPGroup).name()] = std::make_unique<GroupPanel>(_builder);
+        _panels[typeid(SPUse).name()] = std::make_unique<ClonePanel>(_builder);
+
+        _multi_obj_panel = std::make_unique<MultiObjPanel>();
+    }
 }
 
 } // namespace Inkscape::UI::Dialog

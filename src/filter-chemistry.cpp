@@ -421,8 +421,10 @@ bool has_hidder_filter(SPObject const *item)
 /* TODO: the removed filter primitive may had had a named result image, so
  * after removing, the filter may be in erroneous state, this situation should
  * be handled gracefully */
-void remove_filter_gaussian_blur (SPObject *item)
+bool remove_filter_gaussian_blur (SPObject *item)
 {
+    bool changed = false;
+
     if (item->style && item->style->filter.set && item->style->getFilter()) {
         // Search for the first blur primitive and remove it. (if found)
         Inkscape::XML::Node *repr = item->style->getFilter()->getRepr();
@@ -430,6 +432,7 @@ void remove_filter_gaussian_blur (SPObject *item)
         while (primitive) {
             if (strcmp("svg:feGaussianBlur", primitive->name()) == 0) {
                 sp_repr_unparent(primitive);
+                changed = true;
                 break;
             }
             primitive = primitive->next();
@@ -438,8 +441,11 @@ void remove_filter_gaussian_blur (SPObject *item)
         // If there are no more primitives left in this filter, discard it.
         if (repr->childCount() == 0) {
             remove_filter(item, false);
+            changed = true;
         }
     }
+
+    return changed;
 }
 
 /**
@@ -566,6 +572,67 @@ bool set_blend_mode(SPItem* item, SPBlendMode blend_mode) {
     return change_blend;
 }
 
+std::optional<double> object_query_blur_filter(const SPObject* object) {
+    auto item = cast<SPItem>(object);
+    if (!item || !item->style || !item->style->filter.set || !item->style->getFilter()) return {};
+
+    for (auto& primitive: item->style->getFilter()->children) {
+        if (auto blur = cast<SPGaussianBlur>(&primitive)) {
+            double num = blur->get_std_deviation().getNumber();
+            Geom::Affine i2d = item->i2dt_affine();
+            double radius = num * i2d.descrim();
+            if (!std::isnan(radius)) {
+                return radius;
+            }
+        }
+    }
+
+    return {};
+}
+
+SPFilterPrimitive* get_first_filter_component(SPObject* object) {
+    auto item = cast<SPItem>(object);
+    if (!item || !item->style || !item->style->filter.set || !item->style->getFilter()) return nullptr;
+
+    auto& filters = item->style->getFilter()->children;
+    for (auto& child : filters) {
+        if (auto f = cast<SPFilterPrimitive>(&child)) return f;
+    }
+    return nullptr;
+}
+
+size_t get_filter_primitive_count(const SPObject* object) {
+    auto item = cast<SPItem>(object);
+    if (!item || !item->style || !item->style->filter.set || !item->style->getFilter()) return 0;
+
+    auto& filters = item->style->getFilter()->children;
+    size_t count = 0;
+    for (auto& child : filters) {
+        // only count filter primitives
+        if (is<SPFilterPrimitive>(&child)) ++count;
+    }
+    return count;
+}
+
+constexpr double BLUR_MULTIPLIER = 4.0;
+
+bool modify_filter_gaussian_blur_amount(SPItem* item, double amount) {
+    if (!item) return false;
+
+    double radius = 0;
+    if (Geom::OptRect bbox = item->desktopGeometricBounds()) {
+        double perimeter = bbox->dimensions()[Geom::X] + bbox->dimensions()[Geom::Y];   // fixme: this is only half the perimeter, is that correct?
+        double blur_value = amount / 100.0;
+        radius = blur_value * blur_value * perimeter / BLUR_MULTIPLIER;
+    }
+    // if (!radius) return false;
+
+    SPFilter* filter = modify_filter_gaussian_blur_from_item(item->document, item, radius);
+    filter->update_filter_region(item);
+    sp_style_set_property_url(item, "filter", filter, false);
+    item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
+    return true;
+}
 
 /*
   Local Variables:

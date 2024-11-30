@@ -23,7 +23,9 @@ public:
 
     Type getType() const override { return Type::LCH; }
     std::string const getName() const override { return "Lch"; }
+    std::string const getShortName() const override { return "Lch"; }
     std::string const getIcon() const override { return "color-selector-lch"; }
+    bool isUnbounded() const override { return true; }
 
 protected:
     friend class Inkscape::Colors::Color;

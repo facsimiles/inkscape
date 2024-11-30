@@ -31,6 +31,8 @@
 #include "display/drawing.h"
 #include "document.h"
 #include <sigc++/scoped_connection.h>
+
+#include "ink-spin-button.h"
 #include "ui/operation-blocker.h"
 #include "ui/widget/widget-vfuncs-class-init.h"
 
@@ -62,8 +64,6 @@ class MarkerComboBox final
     : public WidgetVfuncsClassInit
     , public Gtk::Box
 {
-    using parent_type = Gtk::Box;
-
 public:
     MarkerComboBox(Glib::ustring id, int loc);
 
@@ -77,11 +77,13 @@ public:
 
     sigc::connection connect_changed(sigc::slot<void ()> slot);
     sigc::connection connect_edit   (sigc::slot<void ()> slot);
+    // set flat look
+    void set_flat(bool flat);
+    // scale default marker preview size; 1.0 by default (=40x32)
+    void preview_scale(double scale);
 
 private:
-    class MarkerItem : public Glib::Object
-    {
-    public:
+    struct MarkerItem : Glib::Object {
         Cairo::RefPtr<Cairo::Surface> pix;
         SPDocument* source = nullptr;
         std::string id;
@@ -107,7 +109,7 @@ private:
 
     sigc::signal<void ()> _signal_changed;
     sigc::signal<void ()> _signal_edit;
-
+    double _preview_scale = 1.0;
     Glib::RefPtr<Gtk::Builder> _builder;
     Gtk::FlowBox& _marker_list;
     Gtk::Label& _marker_name;
@@ -118,13 +120,14 @@ private:
     Gtk::Picture& _preview;
     bool _preview_no_alloc = true;
     Gtk::Button& _link_scale;
-    Gtk::SpinButton& _angle_btn;
+    InkSpinButton _angle_btn;
     Gtk::MenuButton& _menu_btn;
-    Gtk::SpinButton& _scale_x;
-    Gtk::SpinButton& _scale_y;
+    InkSpinButton _scale_x;
+    InkSpinButton _scale_y;
     Gtk::CheckButton& _scale_with_stroke;
-    Gtk::SpinButton& _offset_x;
-    Gtk::SpinButton& _offset_y;
+    InkSpinButton _offset_x;
+    InkSpinButton _offset_y;
+    InkSpinButton _marker_alpha;
     Gtk::Widget& _input_grid;
     Gtk::ToggleButton& _orient_auto_rev;
     Gtk::ToggleButton& _orient_auto;
