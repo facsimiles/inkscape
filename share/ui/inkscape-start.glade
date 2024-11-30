@@ -723,6 +723,9 @@
                 <child>
                   <object class="GtkButton" id="new">
                     <property name="label" translatable="yes">New Document</property>
+                    <style>
+                        <class name="suggested-action"/>
+                    </style>
                     <property name="focusable">True</property>
                     <property name="focus-on-click">False</property>
                     <property name="receives-default">True</property>

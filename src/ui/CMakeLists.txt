@@ -5,6 +5,7 @@ set(ui_SRC
 	contextmenu.cpp
 	cursor-utils.cpp
 	dialog-events.cpp
+	dialog-new-document.cpp
 	dialog-run.cpp
 	draw-anchor.cpp
 	drag-and-drop.cpp
@@ -291,6 +292,7 @@ set(ui_SRC
 	control-types.h
 	defocus-target.h
 	dialog-events.h
+	dialog-new-document.h
 	dialog-run.h
 	drag-and-drop.h
 	draw-anchor.h

@@ -44,6 +44,7 @@
 #include "ui/builder-utils.h"
 #include "ui/controller.h"
 #include "ui/dialog/filedialog.h"
+#include "ui/dialog-new-document.h"
 #include "ui/shortcuts.h"
 #include "ui/themes.h"
 #include "ui/util.h"
@@ -223,7 +224,7 @@ StartScreen::StartScreen()
 
     show_toggle->signal_toggled().connect(sigc::mem_fun(*this, &StartScreen::show_toggle));
     load_btn.signal_clicked().connect(sigc::mem_fun(*this, &StartScreen::load_document));
-    templates.connectItemSelected(sigc::mem_fun(*this, &StartScreen::new_document));
+    templates.connectItemSelected(sigc::mem_fun(*this, &StartScreen::load_selected_template));
     new_btn->signal_clicked().connect(sigc::mem_fun(*this, &StartScreen::new_document));
     close_btn->signal_clicked().connect([this] { response(GTK_RESPONSE_CLOSE); });
 
@@ -360,10 +361,19 @@ void StartScreen::on_kind_changed(Gtk::Widget *tab, unsigned page_num)
 }
 
 /**
- * Called when new button clicked or template is double clicked, or escape pressed.
+ * Called when new document button is clicked.
  */
 void
 StartScreen::new_document()
+{
+    auto dialog = NewDocumentDialog();
+    dialog.show();
+}
+/**
+ * Called when template is double clicked.
+ */
+void
+StartScreen::load_selected_template()
 {
     // Generate a new document from the selected template.
     _document = templates.new_document();
