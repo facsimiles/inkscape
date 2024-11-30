@@ -190,6 +190,10 @@ public:
     // make handle look like "selected" one without participating in selection
     void set_selected_appearance(bool selected);
 
+    static bool is_drag_cancelled(MotionEvent const &event);
+
+    static bool is_drag_initiated() { return _drag_initiated; }
+
 protected:
     /**
      * Create a regular control point.
@@ -278,9 +282,6 @@ protected:
     static Geom::Point const &_last_click_event_point() { return _drag_event_origin; }
     static Geom::Point const &_last_drag_origin() { return _drag_origin; }
 
-    static bool _is_drag_cancelled(MotionEvent const &event);
-
-    static bool _drag_initiated;
 
 private:
     static void _setMouseover(ControlPoint *, unsigned state);
@@ -302,6 +303,7 @@ private:
     /** Stores the desktop point from which the last drag was initiated. */
     static Geom::Point _drag_origin;
     static bool _event_grab;
+    static bool _drag_initiated;
 
     bool _double_clicked = false;
     bool _selected_appearance = false;

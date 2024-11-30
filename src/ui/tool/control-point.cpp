@@ -440,7 +440,7 @@ void ControlPoint::_handleControlStyling()
     _canvas_item_ctrl->set_size_default();
 }
 
-bool ControlPoint::_is_drag_cancelled(MotionEvent const &event)
+bool ControlPoint::is_drag_cancelled(MotionEvent const &event)
 {
     return event.control_point_synthesized;
 }

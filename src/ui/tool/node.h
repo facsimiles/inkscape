@@ -31,6 +31,7 @@ class CanvasItemCurve;
 
 namespace UI {
 
+class CurveHandler;
 class PathManipulator;
 class MultiPathManipulator;
 
@@ -147,11 +148,22 @@ public:
      *                       and when making cusp nodes during some node algorithms.
      *                       Pass true when used in response to an UI node type button.
      */
-    void setType(NodeType type, bool update_handles = true);
+    virtual void setType(NodeType type, bool update_handles);
 
-    void showHandles(bool v);
+    virtual void showHandles(bool v);
 
+    /// Create a CurveHandler object which can process events such as drag on the curve segment before the node.
+    virtual std::unique_ptr<CurveHandler> createEventHandlerForPrecedingCurve();
+
+    /// \todo: Create a BezierNode class deriving from Node and move all functionality related to handles there.
     void updateHandles();
+
+    virtual bool handlesAllowedOnPrecedingSegment() const { return true; }
+
+    virtual bool areHandlesVisible() const { return visible() && _handles_shown; }
+
+    /// Notify this node that the previous node in the path underwent an update.
+    virtual void notifyPrecedingNodeUpdate(Node & /* previous_node */) {}
 
     /**
      * Pick the best type for this node, based on the position of its handles.
@@ -160,6 +172,8 @@ public:
     void pickBestType(); // automatically determine the type from handle positions
 
     bool isDegenerate() const { return _front.isDegenerate() && _back.isDegenerate(); }
+    virtual bool isPrecedingSegmentStraight() const;
+
     bool isEndNode() const;
     Handle *front() { return &_front; }
     Handle *back()  { return &_back;  }
@@ -188,7 +202,10 @@ public:
      */
     Node *nodeAwayFrom(Handle *h);
 
-    NodeList &nodeList() { return *(static_cast<ListNode*>(this)->ln_list); }
+    /// Append the preceding curve segment to a path sink.
+    virtual void writeSegment(Geom::PathSink &output, Node const &previous) const;
+
+    NodeList &nodeList() { return *(static_cast<ListNode *>(this)->ln_list); }
     NodeList &nodeList() const { return *(static_cast<ListNode const*>(this)->ln_list); }
 
     /**

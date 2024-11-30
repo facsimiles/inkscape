@@ -118,16 +118,10 @@ MultiPathManipulator::MultiPathManipulator(PathSharedData &data)
     : PointManipulator(data.node_data.desktop, *data.node_data.selection)
     , _path_data(data)
 {
-    _selection.signal_commit.connect(
-        sigc::mem_fun(*this, &MultiPathManipulator::_commit));
+    _selection.signal_commit.connect(sigc::mem_fun(*this, &MultiPathManipulator::commit));
     _selection.signal_selection_changed.connect(
         sigc::hide( sigc::hide(
             signal_coords_changed.make_slot())));
-}
-
-MultiPathManipulator::~MultiPathManipulator()
-{
-    _mmap.clear();
 }
 
 /** Remove empty manipulators. */
@@ -296,7 +290,7 @@ void MultiPathManipulator::setNodeType(NodeType type)
         Node *node = dynamic_cast<Node*>(i);
         if (node) {
             retract_handles &= (node->type() == NODE_CUSP);
-            node->setType(type);
+            node->setType(type, true);
         }
     }
 
@@ -811,9 +805,8 @@ bool MultiPathManipulator::event(Inkscape::UI::Tools::ToolBase *tool, CanvasEven
     return ret;
 }
 
-/** Commit changes to XML and add undo stack entry based on the action that was done. Invoked
- * by sub-manipulators, for example TransformHandleSet and ControlPointSelection. */
-void MultiPathManipulator::_commit(CommitEvent cps)
+/// Commit changes to XML and add undo stack entry based on the action that was done.
+void MultiPathManipulator::commit(CommitEvent cps)
 {
     gchar const *reason = nullptr;
     gchar const *key = nullptr;

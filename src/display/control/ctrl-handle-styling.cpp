@@ -66,6 +66,7 @@ std::unordered_map<std::string, CanvasItemCtrlType> const ctrl_type_map = {
     {".inkscape-node-cusp", CANVAS_ITEM_CTRL_TYPE_NODE_CUSP},
     {".inkscape-node-smooth", CANVAS_ITEM_CTRL_TYPE_NODE_SMOOTH},
     {".inkscape-node-symmetrical", CANVAS_ITEM_CTRL_TYPE_NODE_SYMMETRICAL},
+    {".inkscape-node-ellipse-center", CANVAS_ITEM_CTRL_TYPE_ELLIPSE_CENTER},
     {".inkscape-mesh", CANVAS_ITEM_CTRL_TYPE_MESH},
     {".inkscape-invisible", CANVAS_ITEM_CTRL_TYPE_INVISIPOINT},
     {".inkscape-guide-handle", CANVAS_ITEM_CTRL_TYPE_GUIDE_HANDLE},

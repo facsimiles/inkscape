@@ -35,9 +35,14 @@ set(ui_SRC
 	knot/knot-holder-entity.cpp
 	knot/knot-ptr.cpp
 
+	tool/bezier-curve-handler.cpp
 	tool/control-point-selection.cpp
 	tool/control-point.cpp
 	tool/curve-drag-point.cpp
+	tool/ellipse-center.cpp
+	tool/elliptical-arc-end-node.cpp
+	tool/elliptical-arc-handler.cpp
+	tool/elliptical-manipulator.cpp
 	tool/modifier-tracker.cpp
 	tool/multi-path-manipulator.cpp
 	tool/node.cpp
@@ -386,10 +391,16 @@ set(ui_SRC
 	knot/knot-holder-entity.h
 	knot/knot-ptr.h
 
+	tool/bezier-curve-handler.h
 	tool/commit-events.h
 	tool/control-point-selection.h
 	tool/control-point.h
 	tool/curve-drag-point.h
+	tool/curve-event-handler.h
+	tool/ellipse-center.h
+	tool/elliptical-arc-end-node.h
+	tool/elliptical-arc-handler.h
+	tool/elliptical-manipulator.h
 	tool/manipulator.h
 	tool/modifier-tracker.h
 	tool/multi-path-manipulator.h
