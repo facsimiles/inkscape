@@ -131,14 +131,11 @@ SelectedStyle::SelectedStyle()
     set_name("SelectedStyle");
     set_size_request (SELECTED_STYLE_WIDTH, -1);
 
-    grid = Gtk::make_managed<Gtk::Grid>();
-    grid->set_size_request(SELECTED_STYLE_WIDTH, -1);
+    box = Gtk::make_managed<Gtk::Box>();
+    box->set_size_request(SELECTED_STYLE_WIDTH, -1);
 
     // Fill and stroke
     for (int i = 0; i <2; i++) {
-        label[i] = Gtk::make_managed<Gtk::Label>(i == 0 ? _("Fill:") : _("Stroke:"));
-        label[i]->set_halign(Gtk::Align::END);
-
         // Multiple, Average, or Single
         tag[i] = Gtk::make_managed<Gtk::Label>(); // "m", "a", or empty
         tag[i]->set_size_request(SELECTED_STYLE_FLAG_WIDTH, -1);
@@ -201,9 +198,8 @@ SelectedStyle::SelectedStyle()
         click->signal_released().connect(Controller::use_state(std::move(callback), *click));
         swatch[i]->add_controller(click);
 
-        grid->attach(*label[i],  0, i, 1, 1);
-        grid->attach(*tag[i],    1, i, 1, 1);
-        grid->attach(*swatch[i], 2, i, 1, 1);
+        box->append(*tag[i]);
+        box->append(*swatch[i]);
 
         make_popup(static_cast<FillOrStroke>(i));
         _mode[i] = SS_NA;
@@ -220,7 +216,7 @@ SelectedStyle::SelectedStyle()
         click->signal_released().connect(Controller::use_state(sigc::mem_fun(*this, &SelectedStyle::on_sw_click), *click));
         stroke_width_rotateable->add_controller(click);
     }
-    grid->attach(*stroke_width_rotateable, 3, 1, 1, 1);
+    box->append(*stroke_width_rotateable);
 
     // Opacity
     make_popup_opacity();
@@ -246,10 +242,10 @@ SelectedStyle::SelectedStyle()
     on_popup_menu(*opacity_box, sigc::mem_fun(*this, &SelectedStyle::on_opacity_popup));
     opacity_sb->signal_value_changed().connect(sigc::mem_fun(*this, &SelectedStyle::on_opacity_changed));
 
-    grid->attach(*opacity_box, 4, 0, 1, 2);
+    box->append(*opacity_box);
 
-    grid->set_column_spacing(4);
-    setChild(grid);
+    box->set_spacing(4);
+    setChild(box);
 
     make_popup_units();
 }
