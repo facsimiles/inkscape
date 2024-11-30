@@ -107,6 +107,7 @@ set(ui_SRC
 	tools/star-tool.cpp
 	tools/text-tool.cpp
 	tools/tool-base.cpp
+    tools/tool-data.cpp
 	tools/tweak-tool.cpp
 	tools/zoom-tool.cpp
 
@@ -265,11 +266,13 @@ set(ui_SRC
 	widget/shapeicon.cpp
 	widget/spin-scale.cpp
 	widget/spinbutton.cpp
+	widget/stack.cpp
 	widget/status-bar.cpp
 	widget/stroke-style.cpp
 	widget/style-subject.cpp
 	widget/style-swatch.cpp
 	widget/swatch-selector.cpp
+	widget/tabs-widget.cpp
 	widget/template-list.cpp
 	widget/text.cpp
 	widget/unit-menu.cpp
@@ -463,6 +466,7 @@ set(ui_SRC
 	tools/star-tool.h
 	tools/text-tool.h
 	tools/tool-base.h
+    tools/tool-data.h
 	tools/tweak-tool.h
 	tools/zoom-tool.h
 
@@ -569,11 +573,13 @@ set(ui_SRC
 	widget/size-reporter.h
 	widget/spin-scale.h
 	widget/spinbutton.h
+	widget/stack.h
 	widget/status-bar.h
 	widget/stroke-style.h
 	widget/style-subject.h
 	widget/style-swatch.h
 	widget/swatch-selector.h
+	widget/tabs-widget.h
 	widget/template-list.h
 	widget/text.h
 	widget/unit-menu.h
