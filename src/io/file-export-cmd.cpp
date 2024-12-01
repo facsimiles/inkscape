@@ -846,13 +846,13 @@ int InkFileExportCmd::do_export_ps_pdf(SPDocument *doc, std::string const &filen
     // Start with options that are once per document.
 
     // Set export options.
-    if (export_text_to_path) {
+    /*if (export_text_to_path) {
         extension.set_param_optiongroup("textToPath", "paths");
     } else if (export_latex) {
         extension.set_param_optiongroup("textToPath", "LaTeX");
     } else {
         extension.set_param_optiongroup("textToPath", "embed");
-    }
+    }*/
 
     if (export_ignore_filters) {
         extension.set_param_bool("blurToBitmap", false);

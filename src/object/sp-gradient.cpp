@@ -714,6 +714,14 @@ void SPGradient::ensureVector()
     }
 }
 
+SPGradientVector const &SPGradient::getGradientVector() const
+{
+    if (!vector.built) {
+        rebuildVector();
+    }
+    return vector;
+}
+
 /**
  * Forces the array to be built, if not present (i.e., changed).
  *
@@ -854,9 +862,10 @@ SPGradient *SPGradient::getArray(bool force_vector)
  *
  * \pre is<SPGradient>(gradient).
  */
-SPGradientSpread SPGradient::fetchSpread()
+SPGradientSpread SPGradient::fetchSpread() const
 {
-    SPGradient const *src = chase_hrefs(this, has_spread_set);
+    // TODO: chase_hrefs should allow for const
+    SPGradient const *src = chase_hrefs(const_cast<SPGradient *>(this), has_spread_set);
     return ( src
              ? src->spread
              : SP_GRADIENT_SPREAD_PAD ); // pad is the default
@@ -975,7 +984,7 @@ bool SPGradient::invalidateArray()
 }
 
 /** Creates normalized color vector */
-void SPGradient::rebuildVector()
+void SPGradient::rebuildVector() const
 {
     gint len = 0;
     for (auto& child: children) {
@@ -983,8 +992,6 @@ void SPGradient::rebuildVector()
             len ++;
         }
     }
-
-    has_stops = (len != 0);
 
     vector.stops.clear();
 

@@ -851,6 +851,7 @@ public:
 
     bool equals(const SPIBase& rhs) const override;
 
+    std::array<SPPaintOrderLayer, PAINT_ORDER_LAYERS> get_layers() const;
 
   // To do: make private
 public:

@@ -167,6 +167,20 @@ if(WIN32)
 	)
 endif()
 
+if(WITH_CAPYPDF)
+    list(APPEND extension_SRC
+	internal/pdfoutput/build-paths.cpp
+	internal/pdfoutput/build-styles.cpp
+	internal/pdfoutput/build-gradients.cpp
+	internal/pdfoutput/pdf-builder.cpp
+	internal/pdfoutput/pdf-output.cpp
+
+        #Header
+	internal/pdfoutput/pdf-builder.h
+	internal/pdfoutput/pdf-output.h
+    )
+endif()
+
 if(WITH_POPPLER)
     list(APPEND extension_SRC
         internal/pdfinput/pdf-utils.cpp

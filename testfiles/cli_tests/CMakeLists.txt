@@ -948,6 +948,29 @@ add_pdfinput_test(XObj_layer all draw-all)
 add_pdfinput_test(Annot_w_AP all draw-all)
 add_pdfinput_test(clipping_shift 1 keep)
 
+function(add_pdfoutput_test name)
+    add_cli_test(pdfoutput-${name}
+        INPUT_FILENAME pdfoutput/${name}.svg
+        REFERENCE_FILENAME pdfoutput/${name}.svg
+        OUTPUT_FILENAME pdfoutput/${name}.pdf
+    )
+endfunction(add_pdfoutput_test)
+
+add_pdfoutput_test(00-one-thing)
+add_pdfoutput_test(01-test-pages)
+add_pdfoutput_test(02-test-fills)
+add_pdfoutput_test(03-test-strokes)
+add_pdfoutput_test(04-test-transforms)
+add_pdfoutput_test(05-test-transparencies)
+add_pdfoutput_test(06-test-paint-order)
+add_pdfoutput_test(07-test-shapes)
+add_pdfoutput_test(08-clones)
+add_pdfoutput_test(01-text)
+add_pdfoutput_test(10-flow-text)
+add_pdfoutput_test(11-rasters)
+add_pdfoutput_test(12-clips)
+add_pdfoutput_test(13-filters)
+
 ###########################
 ### file format support ###
 ###########################
