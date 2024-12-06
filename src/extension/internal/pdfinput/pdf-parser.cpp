@@ -2400,6 +2400,7 @@ void PdfParser::doImage(Object * /*ref*/, Stream *str, GBool inlineImg)
     int bits;
     GBool interpolate;
     StreamColorSpaceMode csMode;
+    GBool hasAlpha;
     GBool mask;
     GBool invert;
     Object maskObj, smaskObj;
@@ -2411,7 +2412,8 @@ void PdfParser::doImage(Object * /*ref*/, Stream *str, GBool inlineImg)
     // get info from the stream
     bits = 0;
     csMode = streamCSNone;
-    str->getImageParams(&bits, &csMode);
+    hasAlpha = false;
+    str->_POPPLER_GET_IMAGE_PARAMS(&bits, &csMode, &hasAlpha);
     
     // get stream dict
     dict = str->getDict();
