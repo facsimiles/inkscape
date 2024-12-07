@@ -77,6 +77,7 @@ std::unordered_map<std::string, CanvasItemCtrlType> const ctrl_type_map = {
     {".inkscape-selection-path.eraser", RUBBERBAND_TOUCHPATH_ERASER},
     {".inkscape-selection-path.paint-bucket", RUBBERBAND_TOUCHPATH_FLOOD},
     {".inkscape-selection-touchrect", RUBBERBAND_TOUCHRECT},
+    {".inkscape-pages-tool.drag-outline", PAGES_TOOL_DRAG_OUTLINE},
 };
 
 /**

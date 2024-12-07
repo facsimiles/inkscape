@@ -16,6 +16,7 @@
 #include <glibmm/i18n.h>
 
 #include "desktop.h"
+#include "display/control/ctrl-handle-manager.h"
 #include "document-undo.h"
 #include "pure-transform.h"
 #include "selection.h"
@@ -523,9 +524,14 @@ void PagesTool::addDragShape(SPItem *item, Geom::Affine tr)
  */
 void PagesTool::addDragShape(Geom::PathVector &&pth, Geom::Affine tr)
 {
+    auto const &css = Handles::Manager::get().getCss()->style_map;
+    auto const &style = css.at(Handles::TypeState{.type = _handle});
     auto shape = new CanvasItemBpath(drag_group.get(), pth * tr, false);
-    shape->set_stroke(0x00ff007f);
-    shape->set_fill(0x00000000, SP_WIND_RULE_EVENODD);
+    shape->set_stroke(style.getStroke());
+    shape->set_stroke_width(style.stroke_width());
+    shape->set_fill(style.getFill(), SP_WIND_RULE_EVENODD);
+    shape->set_outline(style.getOutline());
+    shape->set_outline_width(style.outline_width());
     drag_shapes.push_back(shape);
 }
 

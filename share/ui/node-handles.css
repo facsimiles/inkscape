@@ -274,3 +274,11 @@ Notes:
    stroke-width: 2px;
    outline-width: 1px;
 }
+
+/* outline of objects when dragging pages using pages tool*/
+.inkscape-pages-tool.drag-outline {
+  fill: #277fff;
+  fill-opacity: 10%;
+  stroke: #277fff;
+  outline-opacity: 0%;
+}
