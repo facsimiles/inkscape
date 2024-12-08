@@ -208,14 +208,9 @@ private:
     void _cleanStyle(SPCSSAttr *);
     void _copySelection(ObjectSet *);
     void _copyCompleteStyle(SPItem *item, Inkscape::XML::Node *target, bool child = false);
-    void _copyUsedDefs(SPItem *);
-    void _copyGradient(SPGradient *);
-    void _copyPattern(SPPattern *);
-    void _copyHatch(SPHatch *);
-    void _copyTextPath(SPTextPath *);
+    void _copyUsedDefs(std::vector<SPItem *> const &);
     bool _copyNodes(SPDesktop *desktop, ObjectSet *set);
     Inkscape::XML::Node *_copyNode(Inkscape::XML::Node *, Inkscape::XML::Document *, Inkscape::XML::Node *);
-    Inkscape::XML::Node *_copyIgnoreDup(Inkscape::XML::Node *, Inkscape::XML::Document *, Inkscape::XML::Node *);
 
     bool _pasteImage(SPDocument *doc);
     bool _pasteText(SPDesktop *desktop);
@@ -243,7 +238,6 @@ private:
     Inkscape::XML::Node *_root; ///< Reference to the clipboard's root node
     Inkscape::XML::Node *_clipnode; ///< The node that holds extra information
     Inkscape::XML::Document *_doc; ///< Reference to the clipboard's Inkscape::XML::Document
-    std::set<SPItem*> cloned_elements;
     std::vector<SPCSSAttr*> te_selected_style;
     std::vector<unsigned> te_selected_style_positions;
 
@@ -390,7 +384,7 @@ void ClipboardManagerImpl::copySymbol(Inkscape::XML::Node* symbol, gchar const* 
     // bypasses the "prevent_id_classes" routine. We'll get rid of it
     // when we paste.
     auto original = cast<SPItem>(source->getObjectByRepr(symbol));
-    _copyUsedDefs(original);
+    _copyUsedDefs({original});
     Inkscape::XML::Node *repr = symbol->duplicate(_doc);
     Glib::ustring symbol_name;
     // disambiguate symbols from various symbol sets
@@ -1065,100 +1059,60 @@ std::vector<Glib::ustring> ClipboardManagerImpl::getElementsOfType(SPDesktop *de
 }
 
 /**
+ * Get the page from first item in the selection which is liked to a page.
+ */
+static SPPage *get_first_page_from_items(ObjectSet *selection)
+{
+    for (auto *item : selection->items()) {
+        if (auto *page = item->document->getPageManager().getPageFor(item, false)) {
+            return page;
+        }
+    }
+
+    return nullptr;
+}
+
+/**
  * Iterate over a list of items and copy them to the clipboard.
  */
 void ClipboardManagerImpl::_copySelection(ObjectSet *selection)
 {
     auto prefs = Preferences::get();
     auto const copy_computed = prefs->getBool("/options/copycomputedstyle/value", true);
-    SPPage *page = nullptr;
 
-    // copy the defs used by all items
-    auto itemlist = selection->items();
-    cloned_elements.clear();
-    std::vector<SPItem *> items(itemlist.begin(), itemlist.end());
-    for (auto item : itemlist) {
-        if (!page) {
-            page = item->document->getPageManager().getPageFor(item, false);
-        }
-        auto lpeitem = cast<SPLPEItem>(item);
-        if (lpeitem) {
-            for (auto satellite : lpeitem->get_satellites(false, true)) {
-                if (satellite) {
-                    auto item2 = cast<SPItem>(satellite);
-                    if (item2 && std::find(items.begin(), items.end(), item2) == items.end()) {
-                        items.push_back(item2);
-                    }
-                }
-            }
-        }
-    }
-    cloned_elements.clear();
-    for (auto item : items) {
-        if (item) {
-            _copyUsedDefs(item);
-        } else {
-            g_assert_not_reached();
-        }
-    }
-
-    // copy the representation of the items
-    std::vector<SPObject *> sorted_items(items.begin(), items.end());
-    {
-        // Get external text references and add them to sorted_items
-        auto ext_refs = text_categorize_refs(selection->document(),
-                sorted_items.begin(), sorted_items.end(),
-                TEXT_REF_EXTERNAL);
-        for (auto const &ext_ref : ext_refs) {
-            sorted_items.push_back(selection->document()->getObjectById(ext_ref.first));
-        }
-    }
+    std::vector<SPItem *> sorted_items = selection->items_vector();
     sort(sorted_items.begin(), sorted_items.end(), sp_object_compare_position_bool);
 
-    //remove already copied elements from cloned_elements
-    std::vector<SPItem*>tr;
-    for(auto cloned_element : cloned_elements){
-        if(std::find(sorted_items.begin(),sorted_items.end(),cloned_element)!=sorted_items.end())
-            tr.push_back(cloned_element);
-    }
-    for(auto & it : tr){
-        cloned_elements.erase(it);
-    }
+    // copy the defs used by all items
+    _copyUsedDefs(sorted_items);
 
     // One group per shared parent
     std::map<SPObject const *, Inkscape::XML::Node *> groups;
 
-    sorted_items.insert(sorted_items.end(),cloned_elements.begin(),cloned_elements.end());
-    for(auto sorted_item : sorted_items){
-        auto item = cast<SPItem>(sorted_item);
-        if (item) {
-            // Create a group with the parent transform. This group will be ungrouped when pasting
-            // und takes care of transform relationships of clones, text-on-path, etc.
-            auto &group = groups[item->parent];
-            if (!group) {
-                group = _doc->createElement("svg:g");
-                _root->appendChild(group);
-                Inkscape::GC::release(group);
+    // copy the representation of the items
+    for (auto *item : sorted_items) {
+        // Create a group with the parent transform. This group will be ungrouped when pasting
+        // und takes care of transform relationships of clones, text-on-path, etc.
+        auto &group = groups[item->parent];
+        if (!group) {
+            group = _doc->createElement("svg:g");
+            _root->appendChild(group);
+            Inkscape::GC::release(group);
 
-                if (auto parent = cast<SPItem>(item->parent)) {
-                    auto transform_str = sp_svg_transform_write(parent->i2doc_affine());
-                    group->setAttributeOrRemoveIfEmpty("transform", transform_str);
-                }
-            }
-
-            Inkscape::XML::Node *obj = item->getRepr();
-            Inkscape::XML::Node *obj_copy;
-            if(cloned_elements.find(item)==cloned_elements.end())
-                obj_copy = _copyNode(obj, _doc, group);
-            else
-                obj_copy = _copyNode(obj, _doc, _clipnode);
-
-            if (copy_computed) {
-                // copy complete inherited style
-                _copyCompleteStyle(item, obj_copy);
+            if (auto parent = cast<SPItem>(item->parent)) {
+                auto transform_str = sp_svg_transform_write(parent->i2doc_affine());
+                group->setAttributeOrRemoveIfEmpty("transform", transform_str);
             }
         }
+
+        Inkscape::XML::Node *obj_copy = _copyNode(item->getRepr(), _doc, group);
+
+        if (copy_computed) {
+            // copy complete inherited style
+            _copyCompleteStyle(item, obj_copy);
+        }
     }
+
     // copy style for Paste Style action
     if (auto item = selection->singleItem()) {
         if (copy_computed) {
@@ -1185,7 +1139,7 @@ void ClipboardManagerImpl::_copySelection(ObjectSet *selection)
         _clipnode->setAttributePoint("geom-min", geom_size->min());
         _clipnode->setAttributePoint("geom-max", geom_size->max());
     }
-    if (page) {
+    if (auto *page = get_first_page_from_items(selection)) {
         auto page_rect = page->getDesktopRect();
         _clipnode->setAttributePoint("page-min", page_rect.min());
         _clipnode->setAttributePoint("page-max", page_rect.max());
@@ -1232,225 +1186,91 @@ void ClipboardManagerImpl::_copyCompleteStyle(SPItem *item, Inkscape::XML::Node 
 }
 
 /**
- * Recursively copy all the definitions used by a given item to the clipboard defs.
+ * True if obj is a child of a <defs> element
  */
-void ClipboardManagerImpl::_copyUsedDefs(SPItem *item)
+static bool has_defs_anchestor(SPObject const *obj)
 {
-    bool recurse = true;
-
-    if (auto use = cast<SPUse>(item)) {
-        if (auto original = use->get_original()) {
-            if (original->document != use->document) {
-                recurse = false;
-            } else {
-                cloned_elements.insert(original);
-            }
+    for (auto *ancestor = obj->parent; ancestor; ancestor = ancestor->parent) {
+        if (cast<SPDefs>(ancestor)) {
+            return true;
         }
     }
+    return false;
+}
 
-    // copy fill and stroke styles (patterns and gradients)
-    SPStyle *style = item->style;
-
-    if (style && (style->fill.isPaintserver())) {
-        SPPaintServer *server = item->style->getFillPaintServer();
-        if (is<SPLinearGradient>(server) || is<SPRadialGradient>(server) || is<SPMeshGradient>(server) ) {
-            _copyGradient(cast<SPGradient>(server));
-        }
-        auto pattern = cast<SPPattern>(server);
-        if (pattern) {
-            _copyPattern(pattern);
-        }
-        auto hatch = cast<SPHatch>(server);
-        if (hatch) {
-            _copyHatch(hatch);
-        }
-    }
-    if (style && (style->stroke.isPaintserver())) {
-        SPPaintServer *server = item->style->getStrokePaintServer();
-        if (is<SPLinearGradient>(server) || is<SPRadialGradient>(server) || is<SPMeshGradient>(server) ) {
-            _copyGradient(cast<SPGradient>(server));
-        }
-        auto pattern = cast<SPPattern>(server);
-        if (pattern) {
-            _copyPattern(pattern);
-        }
-        auto hatch = cast<SPHatch>(server);
-        if (hatch) {
-            _copyHatch(hatch);
-        }
-    }
-
-    // For shapes, copy all of the shape's markers
-    auto shape = cast<SPShape>(item);
-    if (shape) {
-        for (auto & i : shape->_marker) {
-            if (i) {
-                _copyNode(i->getRepr(), _doc, _defs);
-            }
-        }
-    }
-
-    // For 3D boxes, copy perspectives
-    if (auto box = cast<SPBox3D>(item)) {
-        if (auto perspective = box->get_perspective()) {
-            _copyNode(perspective->getRepr(), _doc, _defs);
-        }
-    }
-
-    // Copy text paths
-    {
-        auto text = cast<SPText>(item);
-        SPTextPath *textpath = text ? cast<SPTextPath>(text->firstChild()) : nullptr;
-        if (textpath) {
-            _copyTextPath(textpath);
-        }
-        if (text) {
-            for (auto &&shape_prop_ptr : {
-                    reinterpret_cast<SPIShapes SPStyle::*>(&SPStyle::shape_inside),
-                    reinterpret_cast<SPIShapes SPStyle::*>(&SPStyle::shape_subtract) }) {
-                for (auto *href : (text->style->*shape_prop_ptr).hrefs) {
-                    auto shape_obj = href->getObject();
-                    if (!shape_obj)
-                        continue;
-                    auto shape_repr = shape_obj->getRepr();
-                    if (sp_repr_is_def(shape_repr)) {
-                        _copyIgnoreDup(shape_repr, _doc, _defs);
-                    }
-                }
-            }
-        }
-    }
-
-    // Copy clipping objects
-    if (SPObject *clip = item->getClipObject()) {
-        _copyNode(clip->getRepr(), _doc, _defs);
-        // recurse
-        for (auto &o : clip->children) {
-            if (auto childItem = cast<SPItem>(&o)) {
-                _copyUsedDefs(childItem);
-            }
-        }
-    }
-    // Copy mask objects
-    if (SPObject *mask = item->getMaskObject()) {
-            _copyNode(mask->getRepr(), _doc, _defs);
-            // recurse into the mask for its gradients etc.
-            for(auto& o: mask->children) {
-                auto childItem = cast<SPItem>(&o);
-                if (childItem) {
-                    _copyUsedDefs(childItem);
-                }
-            }
-    }
-
-    // Copy filters
-    if (style->getFilter()) {
-        SPObject *filter = style->getFilter();
-        if (is<SPFilter>(filter)) {
-            _copyNode(filter->getRepr(), _doc, _defs);
-        }
-    }
-
-    // For lpe items, copy lpe stack if applicable
-    auto lpeitem = cast<SPLPEItem>(item);
-    if (lpeitem) {
-        if (lpeitem->hasPathEffect()) {
-            PathEffectList path_effect_list( *lpeitem->path_effect_list);
-            for (auto &lperef : path_effect_list) {
-                LivePathEffectObject *lpeobj = lperef->lpeobject;
-                if (lpeobj) {
-                  _copyNode(lpeobj->getRepr(), _doc, _defs);
-                }
-            }
-        }
-    }
-
-    if (!recurse) {
+/**
+ * Copy all the definitions used by the given items to the clipboard defs.
+ */
+void ClipboardManagerImpl::_copyUsedDefs(std::vector<SPItem *> const & items)
+{
+    if (items.empty()) {
         return;
     }
 
-    // recurse
-    for(auto& o: item->children) {
-        auto childItem = cast<SPItem>(&o);
-        if (childItem) {
-            _copyUsedDefs(childItem);
-        }
-    }
-}
+    SPDocument *document = items.front()->document;
+    std::set<SPObject const *> done_elements;
+    std::vector<SPObject *> ref_elements;
+    std::map<SPObject const *, std::vector<SPObject *>> back_references;
 
-/**
- * Copy a single gradient to the clipboard's defs element.
- */
-void ClipboardManagerImpl::_copyGradient(SPGradient *gradient)
-{
-    while (gradient) {
-        // climb up the refs, copying each one in the chain
-        _copyNode(gradient->getRepr(), _doc, _defs);
-        if (gradient->ref){
-            gradient = gradient->ref->getObject();
-        }
-        else {
-            gradient = nullptr;
-        }
-    }
-}
-
-/**
- * Copy a single pattern to the clipboard document's defs element.
- */
-void ClipboardManagerImpl::_copyPattern(SPPattern *pattern)
-{
-    // climb up the references, copying each one in the chain
-    while (pattern) {
-        _copyNode(pattern->getRepr(), _doc, _defs);
-
-        // items in the pattern may also use gradients and other patterns, so recurse
-        for (auto& child: pattern->children) {
-            auto childItem = cast<SPItem>(&child);
-            if (childItem) {
-                _copyUsedDefs(childItem);
+    std::function<void(SPObject const *)> const add_to_done_recursively = [&](SPObject const *obj) {
+        if (!obj->cloned) {
+            done_elements.insert(obj);
+            for (auto &child : obj->children) {
+                add_to_done_recursively(&child);
             }
         }
-        pattern = pattern->ref.getObject();
+    };
+
+    for (auto *item : items) {
+        add_to_done_recursively(item);
     }
-}
 
-/**
- * Copy a single hatch to the clipboard document's defs element.
- */
-void ClipboardManagerImpl::_copyHatch(SPHatch *hatch)
-{
-    // climb up the references, copying each one in the chain
-    while (hatch) {
-        _copyNode(hatch->getRepr(), _doc, _defs);
-
-        for (auto &child : hatch->children) {
-            auto childItem = cast<SPItem>(&child);
-            if (childItem) {
-                _copyUsedDefs(childItem);
+    std::function<void(SPObject *)> const collect_back_references = [&](SPObject *obj) {
+        if (!obj->cloned) {
+            for (auto const *owner : obj->hrefList) {
+                back_references[owner].push_back(obj);
+            }
+            for (auto &child : obj->children) {
+                collect_back_references(&child);
             }
         }
-        if (hatch->ref) {
-            hatch = hatch->ref->getObject();
+    };
+
+    collect_back_references(document->getRoot());
+
+    for (bool repeat = true; repeat;) {
+        repeat = false;
+        for (auto *obj : decltype(done_elements)(done_elements)) {
+            for (auto *ref : back_references[obj]) {
+                if (!done_elements.count(ref)) {
+                    add_to_done_recursively(ref);
+                    ref_elements.push_back(ref);
+                    repeat = true;
+                }
+            }
+        }
+    }
+
+    auto const has_ref_elements_ancestor = [&](SPObject const *obj) {
+        for (auto *anchestor : ref_elements) {
+            if (anchestor->isAncestorOf(obj)) {
+                return true;
+            }
+        }
+        return false;
+    };
+
+    sort(ref_elements.begin(), ref_elements.end(), sp_object_compare_position_bool);
+
+    for (auto *obj : ref_elements) {
+        if (has_ref_elements_ancestor(obj)) {
+            continue;
+        }
+        if (has_defs_anchestor(obj)) {
+            _copyNode(obj->getRepr(), _doc, _defs);
         } else {
-            hatch = nullptr;
+            _copyNode(obj->getRepr(), _doc, _clipnode);
         }
-    }
-}
-
-/**
- * Copy a text path to the clipboard's defs element.
- */
-void ClipboardManagerImpl::_copyTextPath(SPTextPath *tp)
-{
-    SPItem *path = sp_textpath_get_path_item(tp);
-    if (!path) {
-        return;
-    }
-    // textpaths that aren't in defs (on the canvas) shouldn't be copied because if
-    // both objects are being copied already, this ends up stealing the refs id.
-    if(path->parent && is<SPDefs>(path->parent)) {
-        _copyIgnoreDup(path->getRepr(), _doc, _defs);
     }
 }
 
@@ -1463,18 +1283,6 @@ void ClipboardManagerImpl::_copyTextPath(SPTextPath *tp)
  */
 Inkscape::XML::Node *ClipboardManagerImpl::_copyNode(Inkscape::XML::Node *node, Inkscape::XML::Document *target_doc, Inkscape::XML::Node *parent)
 {
-    Inkscape::XML::Node *dup = node->duplicate(target_doc);
-    parent->appendChild(dup);
-    Inkscape::GC::release(dup);
-    return dup;
-}
-
-Inkscape::XML::Node *ClipboardManagerImpl::_copyIgnoreDup(Inkscape::XML::Node *node, Inkscape::XML::Document *target_doc, Inkscape::XML::Node *parent)
-{
-    if (sp_repr_lookup_child(_root, "id", node->attribute("id"))) {
-        // node already copied
-        return nullptr;
-    }
     Inkscape::XML::Node *dup = node->duplicate(target_doc);
     parent->appendChild(dup);
     Inkscape::GC::release(dup);
