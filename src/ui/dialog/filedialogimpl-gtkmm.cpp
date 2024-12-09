@@ -47,7 +47,12 @@ FileDialogBaseGtk::FileDialogBaseGtk(Gtk::Window &parentWindow, Glib::ustring co
                                      Gtk::FileChooserAction const dialogType,
                                      FileDialogType const type,
                                      char const * const preferenceBase)
+#ifdef LINUX_SNAP_PACKAGE
+    // the snap package uses the native file dialog (which is then redirected via XDG desktop portal)
+    : Gtk::FileChooserNative(title, parentWindow, dialogType, accept_label(dialogType), cancel_label())
+#else
     : Gtk::FileChooserDialog{parentWindow, title, dialogType}
+#endif
     , _preferenceBase{preferenceBase ? preferenceBase : "unknown"}
     , _dialogType(type)
 {
@@ -89,6 +94,24 @@ Glib::ustring FileDialogBaseGtk::extToPattern(const Glib::ustring &extension) co
     return pattern;
 }
 
+#ifdef LINUX_SNAP_PACKAGE
+// Small function so the translatable strings stay out of the header
+const char * FileDialogBaseGtk::accept_label(Gtk::FileChooserAction dialogType)
+ {
+    if (dialogType == Gtk::FILE_CHOOSER_ACTION_OPEN) {
+        return _("_Open");
+    } else {
+        return _("_Save");
+     }
+}
+
+// Small function so the translatable strings stay out of the header
+const char * FileDialogBaseGtk::cancel_label()
+{
+    return _("_Cancel");
+}
+#endif
+
 /*#########################################################################
 ### F I L E    O P E N
 #########################################################################*/
@@ -114,7 +137,7 @@ FileOpenDialogImplGtk::FileOpenDialogImplGtk(Gtk::Window &parentWindow, const st
     _dialogType = fileTypes;
 
     /* Set the pwd and/or the filename */
-    if (dir.size() > 0) {
+    if (dir.size() > 0  && Glib::getenv("GTK_USE_PORTAL").empty()) {
         std::string udir(dir);
         std::string::size_type len = udir.length();
         // leaving a trailing backslash on the directory name leads to the infamous
@@ -136,10 +159,11 @@ FileOpenDialogImplGtk::FileOpenDialogImplGtk(Gtk::Window &parentWindow, const st
     // Add the file types menu.
     createFilterMenu();
 
+#ifndef LINUX_SNAP_PACKAGE
     add_button(_("_Cancel"), Gtk::RESPONSE_CANCEL);
     add_button(_("_Open"),   Gtk::RESPONSE_OK);
     set_default_response(Gtk::RESPONSE_OK);
-
+#endif
     // Allow easy access to our examples folder.
     using namespace Inkscape::IO::Resource;
     auto examplesdir = get_path_string(SYSTEM, EXAMPLES);
@@ -258,10 +282,17 @@ void FileOpenDialogImplGtk::createFilterMenu()
 bool FileOpenDialogImplGtk::show()
 {
     set_modal(true); // Window
+    
+#ifdef LINUX_SNAP_PACKAGE
+    int response = run(); // Dialog
+    const int response_ok = Gtk::RESPONSE_ACCEPT;
+#else
     sp_transientize(GTK_WIDGET(gobj())); // Make transient
     int response = dialog_run(*this); // Dialog
+    const int response_ok = Gtk::RESPONSE_OK;
+#endif
 
-    if (response == Gtk::RESPONSE_OK) {
+    if (response == response_ok) {
         setExtension(filterExtensionMap[get_filter()]);
         return true;
     }
@@ -332,16 +363,19 @@ FileSaveDialogImplGtk::FileSaveDialogImplGtk(Gtk::Window &parentWindow, const st
         add_shortcut_folder(templates);
     }
 
-    // ===== Buttons =====
 
+    // ===== Buttons =====
+#ifndef LINUX_SNAP_PACKAGE
     add_button(_("_Cancel"), Gtk::RESPONSE_CANCEL);
     add_button(_("_Save"),   Gtk::RESPONSE_OK);
     set_default_response(Gtk::RESPONSE_OK);
+#endif
+
 
     // ===== Initial Value =====
 
     // Set the directory or filename. Do this last, after dialog is completely set up.
-    if (dir.size() > 0) {
+    if (dir.size() > 0  && Glib::getenv("GTK_USE_PORTAL").empty()) {
         std::string udir(dir);
         std::string::size_type len = udir.length();
         // Leaving a trailing backslash on the directory name leads to the infamous
@@ -370,7 +404,9 @@ FileSaveDialogImplGtk::FileSaveDialogImplGtk(Gtk::Window &parentWindow, const st
                 std::cerr << "FileDialogImplGtk: Unknown file type: " << (int)type << std::endl;
         }
     }
+#ifndef LINUX_SNAP_PACKAGE
     show_all_children();
+#endif
 
     property_filter().signal_changed().connect([this]() { filefilterChanged(); });
     signal_selection_changed().connect([this]() { filenameChanged(); });
@@ -382,11 +418,17 @@ FileSaveDialogImplGtk::FileSaveDialogImplGtk(Gtk::Window &parentWindow, const st
 bool FileSaveDialogImplGtk::show()
 {
     set_modal(true); // Window
+    #ifdef LINUX_SNAP_PACKAGE
+    int response = run();
+    const int response_ok = Gtk::RESPONSE_ACCEPT;
+    #else 
+
     sp_transientize(GTK_WIDGET(gobj())); // Make transient
-
     int response = dialog_run(*this); // Dialog
+    const int response_ok = Gtk::RESPONSE_OK;
+    #endif
 
-    if (response == Gtk::RESPONSE_OK) {
+    if (response == response_ok) {
 
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 

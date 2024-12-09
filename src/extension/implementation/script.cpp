@@ -759,11 +759,17 @@ int Script::execute (const std::list<std::string> &in_command,
     //for(int i=0;i<argv.size(); ++i){printf("%s ",argv[i].c_str());}printf("\n");
 
     int stdout_pipe, stderr_pipe;
-
+    auto spawn_flags = Glib::SpawnFlags::SPAWN_DEFAULT;
+    if (Glib::getenv("SNAP") != "") {
+        // If we are running within the Linux "snap" package format,
+        // we need different spawn flags to avoid that Inkscape hangs when
+        // starting an extension.
+        spawn_flags = Glib::SpawnFlags::SPAWN_LEAVE_DESCRIPTORS_OPEN;
+    }
     try {
         Glib::spawn_async_with_pipes(working_directory, // working directory
                                      argv,  // arg v
-                                     static_cast<Glib::SpawnFlags>(0), // no flags
+                                     spawn_flags, // spawn flags
                                      sigc::slot<void ()>(),
                                      &_pid,          // Pid
                                      nullptr,           // STDIN

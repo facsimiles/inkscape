@@ -138,6 +138,7 @@ mark_as_advanced(WITH_MANPAGE_COMPRESSION)
 
 option(ENABLE_BINRELOC "Enable relocatable binaries" OFF)
 
+option(LINUX_SNAP_PACKAGE "Compile for use in Linux snap package format" OFF)
 
 include(CMakeScripts/DefineDependsandFlags.cmake) # Includes, Compiler Flags, and Link Libraries
 include(CMakeScripts/HelperMacros.cmake) # Misc Utility Macros

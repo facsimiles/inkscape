@@ -22,7 +22,13 @@
 #include <vector>
 #include <giomm/file.h>
 #include <glibmm/ustring.h>
+
+#ifdef LINUX_SNAP_PACKAGE
+// the snap package uses the native file dialog (which is then redirected via XDG desktop portal)
+#include <gtkmm/filechoosernative.h>
+#else
 #include <gtkmm/filechooserdialog.h>
+#endif
 
 #include "filedialog.h"
 #include "ui/dialog/svg-preview.h"
@@ -53,7 +59,12 @@ namespace Dialog {
  * This class is the base implementation for the others.  This
  * reduces redundancies and bugs.
  */
-class FileDialogBaseGtk : public Gtk::FileChooserDialog
+class FileDialogBaseGtk :
+#ifdef LINUX_SNAP_PACKAGE
+ public Gtk::FileChooserNative
+#else
+ public Gtk::FileChooserDialog
+#endif
 {
 public:
     FileDialogBaseGtk(Gtk::Window &parentWindow, Glib::ustring const &title,
@@ -69,6 +80,11 @@ public:
 
     Glib::ustring extToPattern(const Glib::ustring &extension) const;
 
+private:
+#ifdef LINUX_SNAP_PACKAGE
+    const char * accept_label(Gtk::FileChooserAction dialogType);
+    const char * cancel_label();
+#endif
 protected:
 
     Glib::ustring const _preferenceBase;

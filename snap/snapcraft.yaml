@@ -25,14 +25,17 @@ slots:
     bus: session
     name: org.inkscape.Inkscape
 
-assumes: [ command-chain ]
+# commented out to work around https://github.com/canonical/snapcraft/issues/4931
+# assumes: [ command-chain ]
 
 parts:
   inkscape:
     plugin: cmake
     source: .
+    source-type: local
     cmake-parameters:
       - '-DCMAKE_INSTALL_PREFIX='
+      - '-DLINUX_SNAP_PACKAGE=1'
     build-packages:
       - build-essential
       - cmake
@@ -108,8 +111,6 @@ parts:
       - -*canberra*so* # We don't have sound permissions anyway
       - -usr/lib/*/gtk-2.0
     override-build: |
-      patch -p1 --batch --directory=$SNAPCRAFT_PART_SRC --input=$SNAPCRAFT_PART_SRC/snap/local/filedialog-native.patch
-      patch -p1 --batch --directory=$SNAPCRAFT_PART_SRC --input=$SNAPCRAFT_PART_SRC/snap/local/glib-spawn-no-close.patch
       sed -i.bak -e 's|Icon=${INKSCAPE_ICONPATH}|Icon=${SNAP}/share/inkscape/branding/inkscape.svg|g' $SNAPCRAFT_PART_SRC/org.inkscape.Inkscape.desktop.template
       snapcraftctl build
       INKSCAPE_VERSION=`g++ -I${SNAPCRAFT_PART_SRC}/src ${SNAPCRAFT_PART_BUILD}/src/inkscape-version.cpp ${SNAPCRAFT_PROJECT_DIR}/snap/local/print-inkscape-version.cpp -o print-inkscape-version && ./print-inkscape-version`
@@ -136,6 +137,12 @@ parts:
       - packaging
       - scour
       - virtualenv
+      - tinycss2
+      - lxml
+      - numpy
+      - packaging
+      - pyparsing
+      - cssselect
     stage-packages:
       - optipng
       - pstoedit
@@ -145,6 +152,7 @@ parts:
     source: snap/local/scripts
   desktop-helpers:
     source: https://github.com/ubuntu/snapcraft-desktop-helpers.git
+    source-type: git
     source-subdir: gtk
     plugin: make
     make-parameters: ["FLAVOR=gtk3"]

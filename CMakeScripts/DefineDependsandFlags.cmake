@@ -250,6 +250,10 @@ else()
     add_definitions(-UWITH_MESH -UWITH_CSSBLEND -UWITH_SVG2)
 endif()
 
+if(LINUX_SNAP_PACKAGE)
+    add_definitions(-DLINUX_SNAP_PACKAGE)
+endif()
+
 # ----------------------------------------------------------------------------
 # CMake's builtin
 # ----------------------------------------------------------------------------
