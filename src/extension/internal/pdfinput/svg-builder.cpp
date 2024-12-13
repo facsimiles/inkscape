@@ -1436,11 +1436,7 @@ Inkscape::XML::Node* SvgBuilder::_flushTextText(GfxState *state, double text_sca
         Geom::Point delta_dpos;
         if (glyphs_in_tspan != 0) {
             // Subtract off previous glyph position and advance.
-            delta_dpos = glyph.text_position - prev_glyph.text_position - prev_glyph.delta;
-            delta_dpos[0] += glyph.char_space;
-            if (glyph.is_space) {
-                delta_dpos[0] += glyph.word_space;
-            }
+            delta_dpos = glyph.text_position - prev_glyph.text_position - prev_glyph.advance;
         }
 
         // Eliminate small rounding errors.
@@ -1515,17 +1511,28 @@ Inkscape::XML::Node* SvgBuilder::_flushTextText(GfxState *state, double text_sca
             }
 
             // Remove ' 0's at end.
-            while (dx_coords.ends_with("0 ")) {
+            while (dx_coords.ends_with(" 0 ")) {
                 dx_coords.erase(dx_coords.length() - 2);
             }
-            while (dy_coords.ends_with("0 ")) {
+
+            while (dy_coords.ends_with(" 0 ")) {
                 dy_coords.erase(dy_coords.length() - 2);
+            }
+
+            // Remove last entry if 0.
+            if (dx_coords == "0 ") {
+                dx_coords.clear();
+            }
+
+            if (dy_coords == "0 ") {
+                dy_coords.clear();
             }
 
             // Remove space at end.
             if (dx_coords.length() > 0) {
                 dx_coords.pop_back();
             }
+
             if (dy_coords.length() > 0) {
                 dy_coords.pop_back();
             }
@@ -1802,7 +1809,11 @@ void SvgBuilder::endString(GfxState *state)
  * code: 8-bit char code, 16 bit CID, or Unicode of glyph.
  * u: Unicode mapping of character. "Unicode" is an unsigned int.
  */
-void SvgBuilder::addChar(GfxState *state, double x, double y, double dx, double dy, double originX, double originY,
+void SvgBuilder::addChar(GfxState *state,
+                         double x, double y,
+                         double dx, double dy,
+                         double ax, double ay,
+                         double originX, double originY,
                          CharCode code, int /*nBytes*/, Unicode const *u, int uLen)
 {
     assert (state);
@@ -1839,24 +1850,15 @@ void SvgBuilder::addChar(GfxState *state, double x, double y, double dx, double 
     }
 
     Geom::Point delta(dx, dy);
+    Geom::Point advance(ax, ay);
 
     bool is_space = ( uLen == 1 && u[0] == 32 );
-    // Skip beginning space
-    if ( is_space && _glyphs.empty()) {
-         _text_position += delta;
-         return;
-    }
-    // Allow only one space in a row  WHY??
-    if ( is_space && (_glyphs[_glyphs.size() - 1].code.size() == 1) &&
-         (_glyphs[_glyphs.size() - 1].code[0] == 32) ) {
-        _text_position += delta;
-        return;
-    }
 
     SvgGlyph new_glyph;
     new_glyph.code = utf8_code;
     new_glyph.is_space = is_space;
     new_glyph.delta = delta;
+    new_glyph.advance = advance;
     new_glyph.position = Geom::Point( x - originX, y - originY );
     new_glyph.origin = Geom::Point(originX, -originY);
     new_glyph.text_position = _text_position;
@@ -1887,6 +1889,7 @@ void SvgBuilder::addChar(GfxState *state, double x, double y, double dx, double 
     new_glyph.rise = state->getRise();
     new_glyph.char_space = state->getCharSpace();
     new_glyph.word_space = state->getWordSpace();
+    new_glyph.horiz_scaling = state->getHorizScaling() / 100.0;
     _glyphs.push_back(new_glyph);
 
     IFTRACE(
