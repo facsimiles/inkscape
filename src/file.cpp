@@ -312,7 +312,7 @@ file_save(Gtk::Window &parentWindow,
         doc->getReprRoot()->setAttribute("inkscape:version", sp_version_to_string( save ));
         return false;
     } catch (...) {
-        g_critical("Extension '%s' threw an unspecified exception.", key->get_id());
+        g_critical("Extension '%s' threw an unspecified exception.", key ? key->get_id() : nullptr);
         gchar *text = g_strdup_printf(_("File %s could not be saved."), display_name.c_str());
         SP_ACTIVE_DESKTOP->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("Document not saved."));
         sp_ui_error_dialog(text);
