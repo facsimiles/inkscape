@@ -100,6 +100,10 @@ StyleSwatch::StyleSwatch(SPCSSAttr *css, gchar const *main_tip, Gtk::Orientation
     set_name("StyleSwatch");
     add_css_class(orient == Gtk::Orientation::HORIZONTAL ? "horizontal" : "vertical");
 
+    for (int i = SS_FILL; i <= SS_STROKE; i++) {
+        _color_preview[i] = std::make_unique<ColorPreview>(0);
+    }
+
     _box->set_spacing(2);
 
     // We let pack()ed children expand but donʼt propagate expand upwards.
