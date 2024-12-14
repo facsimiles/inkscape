@@ -708,8 +708,6 @@ void sp_import_document(SPDesktop *desktop, SPDocument *clipdoc, bool in_place, 
         node_after = obj_copy;
         Inkscape::GC::release(obj_copy);
 
-        pasted_objects.push_back(obj_copy);
-
         // if we are pasting a clone to an already existing object, its
         // transform is relative to the document, not to its original (see ui/clipboard.cpp)
         auto spobject = target_document->getObjectByRepr(obj_copy);
@@ -720,6 +718,10 @@ void sp_import_document(SPDesktop *desktop, SPDocument *clipdoc, bool in_place, 
                 Geom::Affine relative_use_transform = original->transform.inverse() * use->transform;
                 obj_copy->setAttributeOrRemoveIfEmpty("transform", sp_svg_transform_write(relative_use_transform));
             }
+        }
+
+        if (is<SPItem>(spobject)) {
+            pasted_objects.push_back(obj_copy);
         }
     }
 
