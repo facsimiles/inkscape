@@ -35,6 +35,8 @@
 #include <giomm/menulinkiter.h>
 #include <giomm/menumodel.h>
 #include <gtkmm/builder.h>
+#include <gtkmm/headerbar.h>
+#include <gtkmm/popovermenubar.h>
 #include <gtkmm/recentmanager.h>
 
 #include "actions/actions-effect-data.h"
@@ -294,11 +296,35 @@ build_menu()
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     auto useicons = static_cast<UseIcons>(prefs->getInt("/theme/menuIcons", 0));
 
-    // Remove all or some icons. Also create label to tooltip map.
-    auto gmenu_copy = Gio::Menu::create();
-    // menu gets recreated; keep track of new recent items submenu
-    rebuild_menu(gmenu, gmenu_copy, useicons, recent_menu_quark, recent_gmenu);
-    app->gtk_app()->set_menubar(gmenu_copy);
+    // Whether to merge the menubar with the application's titlebar.
+    // Extracted from: https://gitlab.gnome.org/GNOME/gimp/-/commit/317aa803d2b0291cc2153a8f1148c220ea910895
+    auto merge_menu_titlebar = prefs->getBool("/window/mergeMenuTitlebar", false);
+    //auto gtk_application = app->gtk_app();
+
+    // Do not merge titlebar in MacOS
+    #ifndef G_OS_DARWIN
+    if (true) {
+        Gtk::HeaderBar *headerBar;
+        headerBar->set_show_title_buttons(true);
+
+        /*auto window = gtk_application->get_active_window();
+        window->set_titlebar(*headerBar);*/
+
+        Gtk::PopoverMenuBar *popovermenubar;
+        popovermenubar->set_menu_model(gmenu);
+
+        headerBar->pack_start(*popovermenubar);
+        headerBar->show();
+    } else {
+    #else
+        // Remove all or some icons. Also create label to tooltip map.
+        auto gmenu_copy = Gio::Menu::create();
+        // menu gets recreated; keep track of new recent items submenu
+        rebuild_menu(gmenu, gmenu_copy, useicons, recent_menu_quark, recent_gmenu);
+
+        gtk_application->set_menubar(gmenu_copy);
+    #endif
+    }
 
     // rebuild recent items submenu when the list changes
     recent_manager->signal_changed().connect([=](){ rebuild_recent(recent_gmenu); });
