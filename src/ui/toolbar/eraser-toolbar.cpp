@@ -38,28 +38,28 @@
 #include "ui/simple-pref-pusher.h"
 #include "ui/tools/eraser-tool.h"
 #include "ui/util.h"
-#include "ui/widget/canvas.h"  // Focus widget
 #include "ui/widget/spinbutton.h"
 
 using Inkscape::DocumentUndo;
 
 namespace Inkscape::UI::Toolbar {
 
-EraserToolbar::EraserToolbar(SPDesktop *desktop)
-    : Toolbar(desktop)
-    , _builder(create_builder("toolbar-eraser.ui"))
-    , _width_item(get_derived_widget<UI::Widget::SpinButton>(_builder, "_width_item"))
-    , _thinning_item(get_derived_widget<UI::Widget::SpinButton>(_builder, "_thinning_item"))
-    , _cap_rounding_item(get_derived_widget<UI::Widget::SpinButton>(_builder, "_cap_rounding_item"))
-    , _tremor_item(get_derived_widget<UI::Widget::SpinButton>(_builder, "_tremor_item"))
-    , _mass_item(get_derived_widget<UI::Widget::SpinButton>(_builder, "_mass_item"))
-    , _usepressure_btn(&get_widget<Gtk::ToggleButton>(_builder, "_usepressure_btn"))
-    , _split_btn(get_widget<Gtk::ToggleButton>(_builder, "_split_btn"))
-{
-    auto prefs = Inkscape::Preferences::get();
-    int const eraser_mode = prefs->getInt("/tools/eraser/mode", _modeAsInt(Tools::DEFAULT_ERASER_MODE));
+EraserToolbar::EraserToolbar()
+    : EraserToolbar{create_builder("toolbar-eraser.ui")}
+{}
 
-    _toolbar = &get_widget<Gtk::Box>(_builder, "eraser-toolbar");
+EraserToolbar::EraserToolbar(Glib::RefPtr<Gtk::Builder> const &builder)
+    : Toolbar{get_widget<Gtk::Box>(builder, "eraser-toolbar")}
+    , _width_item(get_derived_widget<UI::Widget::SpinButton>(builder, "_width_item"))
+    , _thinning_item(get_derived_widget<UI::Widget::SpinButton>(builder, "_thinning_item"))
+    , _cap_rounding_item(get_derived_widget<UI::Widget::SpinButton>(builder, "_cap_rounding_item"))
+    , _tremor_item(get_derived_widget<UI::Widget::SpinButton>(builder, "_tremor_item"))
+    , _mass_item(get_derived_widget<UI::Widget::SpinButton>(builder, "_mass_item"))
+    , _usepressure_btn(&get_widget<Gtk::ToggleButton>(builder, "_usepressure_btn"))
+    , _split_btn(get_widget<Gtk::ToggleButton>(builder, "_split_btn"))
+{
+    auto prefs = Preferences::get();
+    int const eraser_mode = prefs->getInt("/tools/eraser/mode", _modeAsInt(Tools::DEFAULT_ERASER_MODE));
 
     // Setup the spin buttons.
     setup_derived_spin_button(_width_item, "width", 15, &EraserToolbar::width_value_changed);
@@ -68,9 +68,62 @@ EraserToolbar::EraserToolbar(SPDesktop *desktop)
     setup_derived_spin_button(_tremor_item, "tremor", 0.0, &EraserToolbar::tremor_value_changed);
     setup_derived_spin_button(_mass_item, "mass", 10, &EraserToolbar::mass_value_changed);
 
+     _width_item.set_custom_numeric_menu_data({
+        {  0, _("(no width)")},
+        {  1, _("(hairline)")},
+        {  3, ""},
+        {  5, ""},
+        { 10, ""},
+        { 15, _("(default)")},
+        { 20, ""},
+        { 30, ""},
+        { 50, ""},
+        { 75, ""},
+        {100, _("(broad stroke)")}
+    });
+
+     _thinning_item.set_custom_numeric_menu_data({
+        {-100, _("(speed blows up stroke)")},
+        { -40, ""},
+        { -20, ""},
+        { -10, _("(slight widening)")},
+        {   0, _("(constant width)")},
+        {  10, _("(slight thinning, default)")},
+        {  20, ""},
+        {  40, ""},
+        { 100, _("(speed deflates stroke)")}
+    });
+
+    _cap_rounding_item.set_custom_numeric_menu_data({
+        {  0, _("(blunt caps, default)")},
+        {0.3, _("(slightly bulging)")},
+        {0.5, ""},
+        {1.0, ""},
+        {1.4, _("(approximately round)")},
+        {5.0, _("(long protruding caps)")}
+    });
+
+     _tremor_item.set_custom_numeric_menu_data({
+        {  0, _("(smooth line)")},
+        { 10, _("(slight tremor)")},
+        { 20, _("(noticeable tremor)")},
+        { 40, ""},
+        { 60, ""},
+        {100, _("(maximum tremor)")}
+    });
+
+     _mass_item.set_custom_numeric_menu_data({
+        {  0, _("(no inertia)")},
+        {  2, _("(slight smoothing, default)")},
+        { 10, _("(noticeable lagging)")},
+        { 20, ""},
+        { 50, ""},
+        {100, _("(maximum inertia)")}
+    });
+
     // Configure mode buttons
     int btn_index = 0;
-    for_each_child(get_widget<Gtk::Box>(_builder, "mode_buttons_box"), [&](Gtk::Widget &item){
+    for_each_child(get_widget<Gtk::Box>(builder, "mode_buttons_box"), [&](Gtk::Widget &item){
         auto &btn = dynamic_cast<Gtk::ToggleButton &>(item);
         btn.set_active(btn_index == eraser_mode);
         btn.signal_clicked().connect(sigc::bind(sigc::mem_fun(*this, &EraserToolbar::mode_changed), btn_index++));
@@ -78,13 +131,12 @@ EraserToolbar::EraserToolbar(SPDesktop *desktop)
     });
 
     // Pressure button
-    _pressure_pusher.reset(new UI::SimplePrefPusher(_usepressure_btn, "/tools/eraser/usepressure"));
+    _pressure_pusher = std::make_unique<UI::SimplePrefPusher>(_usepressure_btn, "/tools/eraser/usepressure");
 
     // Split button
     _split_btn.set_active(prefs->getBool("/tools/eraser/break_apart", false));
 
-    set_child(*_toolbar);
-    init_menu_btns();
+    _initMenuBtns();
 
     // Signals.
     _usepressure_btn->signal_toggled().connect(sigc::mem_fun(*this, &EraserToolbar::usepressure_toggled));
@@ -98,14 +150,14 @@ EraserToolbar::~EraserToolbar() = default;
 void EraserToolbar::setup_derived_spin_button(UI::Widget::SpinButton &btn, Glib::ustring const &name,
                                               double default_value, ValueChangedMemFun const value_changed_mem_fun)
 {
-    const Glib::ustring path = "/tools/eraser/" + name;
+    auto const path = "/tools/eraser/" + name;
     auto const val = Preferences::get()->getDouble(path, default_value);
 
     auto adj = btn.get_adjustment();
     adj->set_value(val);
     adj->signal_value_changed().connect(sigc::mem_fun(*this, value_changed_mem_fun));
 
-    btn.set_defocus_widget(_desktop->getCanvas());
+    btn.setDefocusTarget(this);
 }
 
 /**
@@ -137,19 +189,15 @@ void EraserToolbar::mode_changed(int mode)
     set_eraser_mode_visibility(mode);
 
     // only take action if run by the attr_changed listener
-    if (!_freeze) {
+    /*if (!_blocker.pending()) {
         // in turn, prevent listener from responding
-        _freeze = true;
+        auto guard = _blocker.block();
 
-        /*
         if ( eraser_mode != ERASER_MODE_DELETE ) {
         } else {
         }
-        */
         // TODO finish implementation
-
-        _freeze =  false;
-    }
+    }*/
 }
 
 void EraserToolbar::set_eraser_mode_visibility(unsigned const eraser_mode)
@@ -157,8 +205,8 @@ void EraserToolbar::set_eraser_mode_visibility(unsigned const eraser_mode)
     using namespace Inkscape::UI::Tools;
 
     bool const visibility = eraser_mode != _modeAsInt(EraserToolMode::DELETE);
-    auto children = UI::get_children(*_toolbar);
-    const int visible_children_count = 2;
+    auto children = UI::get_children(_toolbar);
+    constexpr int visible_children_count = 2;
 
     // Set all the children except the modes as invisible.
     int child_index = 0;
@@ -200,8 +248,7 @@ void EraserToolbar::tremor_value_changed()
 
 void EraserToolbar::toggle_break_apart()
 {
-    bool active = _split_btn.get_active();
-    Preferences::get()->setBool("/tools/eraser/break_apart", active);
+    Preferences::get()->setBool("/tools/eraser/break_apart", _split_btn.get_active());
 }
 
 void EraserToolbar::usepressure_toggled()

@@ -23,8 +23,6 @@
 #include <gtkmm/window.h>
 #include <random>
 #include <regex>
-#include <sstream>
-#include <streambuf>
 #include <string>
 #include <utility>
 #include <vector>
@@ -41,7 +39,7 @@
 
 #include "desktop.h"
 #include "display/cairo-utils.h"
-#include "helper/auto-connection.h"
+#include <sigc++/scoped_connection.h>
 #include "inkscape-version-info.h"
 #include "inkscape.h"
 #include "inkscape-window.h"
@@ -58,7 +56,6 @@ constexpr int SLIDESHOW_DELAY_sec = 10;
 using namespace Inkscape::IO;
 
 namespace Inkscape::UI::Dialog {
-
 namespace {
 
 class AboutWindow : public Gtk::Window {
@@ -104,7 +101,7 @@ private:
     Glib::RefPtr<Glib::TimeoutSource> _timer;
     Gtk::Picture *_viewer1;
     Gtk::Picture *_viewer2;
-    auto_connection _refresh;
+    sigc::scoped_connection _refresh;
     Gtk::AspectFrame* _frame = nullptr;
 
     void find_about_screens() {
@@ -149,7 +146,7 @@ private:
 
         // calculate footer color: light/dark depending on a theme
         bool dark = INKSCAPE.themecontext->isCurrentThemeDark(this);
-        auto foot = Colors::make_theme_color(ink_cairo_surface_average_color_premul(surface->cobj()), dark);
+        auto foot = Colors::make_theme_color(ink_cairo_surface_average_color(surface->cobj()), dark);
 
         auto style_context = _footer->get_style_context();
         _footer_style = Gtk::CssProvider::create();
@@ -178,39 +175,23 @@ private:
     }
 };
 
-} // namespace
-
-
-static bool show_copy_button(Gtk::Button * const button, Gtk::Label * const label)
-{
-    reveal_widget(button, true);
-    reveal_widget(label, false);
-    return false;
-}
-
-static void copy(Gtk::Button * const button, Gtk::Label * const label, Glib::ustring const &text)
+void copy(Gtk::Button *button, Gtk::Label *label, Glib::ustring const &text)
 {
     auto clipboard = Gdk::Display::get_default()->get_clipboard();
     clipboard->set_text(text);
-    if (label) {
-        reveal_widget(button, false);
-        reveal_widget(label, true);
-        Glib::signal_timeout().connect_seconds(
-            sigc::bind(&show_copy_button, button, label), 2);
-    }
+    reveal_widget(button, false);
+    reveal_widget(label, true);
+    Glib::signal_timeout().connect_seconds(
+        sigc::track_object([=] { // disconnects on destruction
+            reveal_widget(button, true);
+            reveal_widget(label, false);
+            return false;
+        },
+        *button),
+    2);
 }
 
-// Free function to handle key events
-static void on_key_pressed(GtkEventControllerKey const * const controller,
-                           unsigned const keyval, 
-                           unsigned const keycode,
-                           GdkModifierType const state,
-                           void *user_data) {
-    if (keyval == GDK_KEY_Escape) {
-        auto const window = static_cast<AboutWindow*>(user_data);
-        window->close();
-    }
-}
+} // namespace
 
 template <class Random>
 [[nodiscard]] static auto get_shuffled_lines(std::string const &filename, Random &&random)
@@ -277,10 +258,18 @@ void show_about()
                         std::istreambuf_iterator<char>());
     license->set_markup(str.c_str());
 
-    // Connect the key event to the on_key_pressed function
-    auto const controller = gtk_event_controller_key_new();
-    gtk_widget_add_controller(window->Gtk::Widget::gobj(), controller);
-    g_signal_connect(controller, "key-pressed", G_CALLBACK(on_key_pressed), window);
+    // Handle Esc to close the window
+    auto const controller = Gtk::EventControllerKey::create();
+    controller->signal_key_pressed().connect(
+        sigc::track_object([window] (unsigned keyval, unsigned, Gdk::ModifierType) {
+            if (keyval == GDK_KEY_Escape) {
+                window->close();
+                return true;
+            }
+            return false;
+        }, *window),
+    false);
+    window->add_controller(controller);
 
     if (auto top = SP_ACTIVE_DESKTOP ? SP_ACTIVE_DESKTOP->getInkscapeWindow() : nullptr) {
         window->set_transient_for(*top);

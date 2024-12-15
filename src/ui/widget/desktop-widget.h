@@ -41,7 +41,7 @@
 #include <glibmm/refptr.h>
 #include <gtkmm/box.h>
 
-#include "helper/auto-connection.h"
+#include <sigc++/scoped_connection.h>
 #include "message.h"
 #include "preferences.h"
 
@@ -113,7 +113,7 @@ public:
     void on_unrealize() override;
 
 private:
-    Inkscape::auto_connection modified_connection;
+    sigc::scoped_connection modified_connection;
 
     std::unique_ptr<SPDesktop> _desktop;
     InkscapeWindow *_window = nullptr;
@@ -162,17 +162,12 @@ public:
     void update_rotation();
     void repack_snaptoolbar();
 
-    void fullscreen();
-
     void layoutWidgets();
     void toggle_scrollbars();
     void toggle_command_palette();
     void toggle_rulers();
     void sticky_zoom_toggled();
     void sticky_zoom_updated();
-
-    Gtk::Widget *get_tool_toolbox() const { return tool_toolbox; }
-    Gtk::Widget *get_hbox() const { return _hbox; }
 
 private:
     Gtk::Widget *tool_toolbox;

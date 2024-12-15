@@ -310,8 +310,6 @@ ${_build_dir}/share/templates/templates.h
 ../src/ui/dialog/livepatheffect-editor.cpp
 ../src/ui/dialog/lpe-fillet-chamfer-properties.cpp
 ../src/ui/dialog/lpe-powerstroke-properties.cpp
-../src/ui/dialog/memory.cpp
-../src/ui/dialog/messages.cpp
 ../src/ui/dialog/new-from-template.cpp
 ../src/ui/dialog/object-attributes.cpp
 ../src/ui/dialog/object-properties.cpp
@@ -348,6 +346,7 @@ ${_build_dir}/share/templates/templates.h
 ../src/ui/toolbar/box3d-toolbar.cpp
 ../src/ui/toolbar/calligraphy-toolbar.cpp
 ../src/ui/toolbar/connector-toolbar.cpp
+../src/ui/toolbar/eraser-toolbar.cpp
 ../src/ui/toolbar/gradient-toolbar.cpp
 ../src/ui/toolbar/lpe-toolbar.cpp
 ../src/ui/toolbar/measure-toolbar.cpp
@@ -359,9 +358,11 @@ ${_build_dir}/share/templates/templates.h
 ../src/ui/toolbar/rect-toolbar.cpp
 ../src/ui/toolbar/select-toolbar.cpp
 ../src/ui/toolbar/spiral-toolbar.cpp
+../src/ui/toolbar/spray-toolbar.cpp
 ../src/ui/toolbar/star-toolbar.cpp
 ../src/ui/toolbar/text-toolbar.cpp
 ../src/ui/toolbar/tool-toolbar.cpp
+../src/ui/toolbar/tweak-toolbar.cpp
 ../src/ui/tools/arc-tool.cpp
 ../src/ui/tools/booleans-tool.cpp
 ../src/ui/tools/box3d-tool.cpp
@@ -387,6 +388,7 @@ ${_build_dir}/share/templates/templates.h
 ../src/ui/tools/star-tool.cpp
 ../src/ui/tools/text-tool.cpp
 ../src/ui/tools/tool-base.cpp
+../src/ui/tools/tool-data.cpp
 ../src/ui/tools/tweak-tool.cpp
 ../src/ui/util.cpp
 ../src/ui/widget/canvas-grid.cpp
@@ -412,6 +414,8 @@ ${_build_dir}/share/templates/templates.h
 ../src/ui/widget/layer-selector.cpp
 ../src/ui/widget/licensor.cpp
 ../src/ui/widget/marker-combo-box.cpp
+../src/ui/widget/memory.cpp
+../src/ui/widget/messages.cpp
 ../src/ui/widget/object-composite-settings.cpp
 ../src/ui/widget/page-properties.cpp
 ../src/ui/widget/page-selector.cpp

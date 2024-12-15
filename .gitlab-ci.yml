@@ -186,6 +186,8 @@ inkscape:windows:
     - *run_otherwise
   script:
     - . "C:/$Env:IDW_NAME/msys2_shell.cmd" -defterm -no-start -ucrt64 -here -c "cmake -B build -G Ninja -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache"
+    # If we are building the MSI package, install extra build dependencies
+    - if ("${DIST}" -eq "msi") { & "$Env:CI_PROJECT_DIR\buildtools\windows-deps-install-wix4.ps1" }
     # Kill the job before hitting runner's timeout. This way we can preserve the cache so the next retry
     # will be able to advance the build further and eventually finish (after up to two retries, 3 jobs in total).
     # Calculation is:  20 minutes for download and extraction of msys2
@@ -251,7 +253,7 @@ codequality:
   script:
     - git fetch $CI_MERGE_REQUEST_PROJECT_URL.git $CI_MERGE_REQUEST_TARGET_BRANCH_NAME
     - echo "Your commit does not comply exactly with the clang-format style checker.\nPlease review the following diff or apply it with\n \$ git apply <<EOF"
-    - git diff $CI_MERGE_REQUEST_DIFF_BASE_SHA -U0 --no-color | clang-format-diff -p1 -style file | tee clang_format.diff
+    - bash buildtools/codequality.sh $CI_MERGE_REQUEST_DIFF_BASE_SHA | tee clang_format.diff
     - echo "EOF"
     - if [[ -s clang_format.diff ]]; then false; fi
   allow_failure: true
@@ -337,11 +339,7 @@ clangtidy:linux:
     - *run_for_MR
   script:
     - git fetch $CI_MERGE_REQUEST_PROJECT_URL.git $CI_MERGE_REQUEST_TARGET_BRANCH_NAME
-    # "borrow" a 3rdparty file to dump header includes
-    - git diff $CI_MERGE_REQUEST_DIFF_BASE_SHA --name-only -- '**.h' | sed 's!.*!#include"../../../../&"!' | tee src/3rdparty/adaptagrams/libcola/box.cpp
-    - git diff $CI_MERGE_REQUEST_DIFF_BASE_SHA --name-only -- '**.cpp' | tee clang_tidy_files
-    - bash buildtools/clangtidy-helper.sh $(cat clang_tidy_files)
-
+    - bash buildtools/clangtidy.sh $CI_MERGE_REQUEST_DIFF_BASE_SHA
 
 # ... here on master commits
 clangtidyfull:linux:

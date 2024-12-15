@@ -186,19 +186,15 @@ canvas_interface_mode(InkscapeWindow *win)
     desktop_widget->layoutWidgets();
 }
 
-void
-view_fullscreen(InkscapeWindow *win)
+void view_fullscreen(InkscapeWindow *win)
 {
-    SPDesktop* dt = win->get_desktop();
-    dt->fullscreen();
+    win->toggleFullscreen();
 }
 
-void
-view_full_screen_focus(InkscapeWindow *win)
+void view_full_screen_focus(InkscapeWindow *win)
 {
-    SPDesktop* dt = win->get_desktop();    
-    dt->fullscreen();
-    dt->focusMode(!dt->is_fullscreen());
+    win->toggleFullscreen();
+    win->get_desktop()->focusMode(!win->isFullscreen());
 }
 
 void
@@ -291,18 +287,8 @@ void
 add_actions_view_mode(InkscapeWindow* win)
 {
     auto prefs = Inkscape::Preferences::get();
-    SPDesktop* desktop = win->get_desktop();
 
-    if (!desktop) {
-        show_output("add_actions_view_mode: no desktop!");
-    }
-
-    Glib::ustring pref_root = "/window/";
-    if (desktop && desktop->is_focusMode()) {
-        pref_root = "/focus/";
-    } else if (desktop && desktop->is_fullscreen()) {
-        pref_root = "/fullscreen/";
-    }
+    Glib::ustring const pref_root = "/window/";
 
     // Initial States of Actions
 

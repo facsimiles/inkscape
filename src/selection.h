@@ -25,7 +25,7 @@
 #include <sigc++/signal.h>
 #include <sigc++/slot.h>
 
-#include "helper/auto-connection.h"
+#include <sigc++/scoped_connection.h>
 #include "object/object-set.h"
 
 namespace Inkscape {
@@ -53,8 +53,6 @@ class Node;
  */
 class Selection : public ObjectSet
 {
-    friend class ObjectSet;
-
 public:
     /**
      * Constructs an selection object, bound to a particular
@@ -66,11 +64,6 @@ public:
     Selection(SPDesktop *desktop);
     Selection(SPDocument *document);
     ~Selection() override;
-
-    /** no copy. */
-    Selection(Selection const &) = delete;
-    /** no assign. */
-    void operator=(Selection const &) = delete;
 
     /**
      * Returns active layer for selection (currentLayer or its parent).
@@ -158,8 +151,18 @@ public:
      *
      * @return the resulting connection
      */
-    sigc::connection connectChanged     (sigc::slot<void (Selection *)> slot);
-    sigc::connection connectChangedFirst(sigc::slot<void (Selection *)> slot);
+    sigc::connection connectChanged(sigc::slot<void (Selection *)> slot) {
+        return _changed_signal.connect(std::move(slot));
+    }
+
+    /**
+     * Similar to connectChanged, but will be run first.
+     *
+     * This is a hack; see cf86d4abd17 for explanation.
+     */
+    sigc::connection connectChangedFirst(sigc::slot<void (Selection *)> slot) {
+        return _changed_signal.connect_first(std::move(slot));
+    }
 
     /**
      * Set the anchor point of the selection, used for telling it how transforms
@@ -170,8 +173,7 @@ public:
     void setAnchor(double x, double y, bool set = true);
     // Allow the selection to specify a facus anchor (helps with transforming against this point)
     bool has_anchor = false;
-    double anchor_x;
-    double anchor_y;
+    Geom::Point anchor;
 
     /**
      * Connects a slot to be notified of selected object modifications.
@@ -185,8 +187,16 @@ public:
      * @return the resulting connection
      *
      */
-    sigc::connection connectModified     (sigc::slot<void (Selection *, unsigned)> slot);
-    sigc::connection connectModifiedFirst(sigc::slot<void (Selection *, unsigned)> slot);
+    sigc::connection connectModified(sigc::slot<void (Selection *, unsigned)> slot) {
+        return _modified_signal.connect(std::move(slot));
+    }
+
+    /**
+     * Similar to connectModified, but will be run first.
+     */
+    sigc::connection connectModifiedFirst(sigc::slot<void (Selection *, unsigned)> slot) {
+        return _modified_signal.connect_first(std::move(slot));
+    }
 
     /**
      * Set a backup of current selection and store it also to be command line readable by extension system
@@ -230,18 +240,18 @@ private:
     /** Releases an active layer object that is being removed. */
     void _releaseContext(SPObject *obj);
 
-    SPObject* _selection_context;
-    unsigned int _flags;
-    unsigned int _idle;
+    SPObject *_selection_context = nullptr;
+    unsigned _flags = 0;
+    unsigned _idle = 0;
     bool _change_layer = true;
     bool _change_page = true;
-    std::vector<std::pair<std::string, std::pair<int, int> > > _seldata;
+    std::vector<std::pair<std::string, std::pair<int, int>>> _seldata;
     std::vector<std::string> _selected_ids;
-    std::unordered_map<SPObject *, auto_connection> _modified_connections;
-    auto_connection _context_release_connection;
+    std::unordered_map<SPObject *, sigc::scoped_connection> _modified_connections;
+    sigc::scoped_connection _context_release_connection;
 
-    std::list<sigc::signal<void (Selection *)>> _changed_signals;
-    std::list<sigc::signal<void (Selection *, unsigned int)>> _modified_signals;
+    sigc::signal<void (Selection *)> _changed_signal;
+    sigc::signal<void (Selection *, unsigned)> _modified_signal;
 };
 
 } // namespace Inkscape

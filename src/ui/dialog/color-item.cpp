@@ -45,7 +45,6 @@
 #include "selection.h"
 #include "actions/actions-tools.h"
 #include "display/cairo-utils.h"
-#include "helper/sigc-track-obj.h"
 #include "io/resource.h"
 #include "object/sp-gradient.h"
 #include "object/tags.h"
@@ -55,6 +54,7 @@
 #include "ui/dialog/dialog-container.h"
 #include "ui/icon-names.h"
 #include "ui/util.h"
+#include "util/value-utils.h"
 #include "util/variant-visitor.h"
 
 namespace Inkscape::UI::Dialog {
@@ -104,11 +104,11 @@ ColorItem::ColorItem(SPGradient *gradient, DialogBase *dialog)
     description = gradient->defaultLabel();
     color_id = gradient->getId();
 
-    gradient->connectRelease(SIGC_TRACKING_ADAPTOR([this] (SPObject*) {
+    gradient->connectRelease(sigc::track_object([this] (SPObject*) {
         std::get<GradientData>(data).gradient = nullptr;
     }, *this));
 
-    gradient->connectModified(SIGC_TRACKING_ADAPTOR([this] (SPObject *obj, unsigned flags) {
+    gradient->connectModified(sigc::track_object([this] (SPObject *obj, unsigned flags) {
         if (flags & SP_OBJECT_STYLE_MODIFIED_FLAG) {
             cache_dirty = true;
             queue_draw();
@@ -509,14 +509,12 @@ Glib::RefPtr<Gdk::ContentProvider> ColorItem::on_drag_prepare()
 {
     if (!dialog) return {};
 
-    Glib::Value<Colors::Paint> value;
-    value.init(value.value_type());
-    if (is_paint_none()) {
-        value.set(Colors::NoColor{});
-    } else {
-        value.set(getColor());
+    Colors::Paint paint;
+    if (!is_paint_none()) {
+        paint = getColor();
     }
-    return Gdk::ContentProvider::create(value);
+
+    return Gdk::ContentProvider::create(Util::GlibValue::create<Colors::Paint>(std::move(paint)));
 }
 
 void ColorItem::on_drag_begin(Gtk::DragSource &source)

@@ -28,7 +28,7 @@
 #include <gtkmm/combobox.h>
 #include <gtkmm/cellrenderertext.h>
 #include <sigc++/signal.h>
-#include "helper/auto-connection.h"
+#include <sigc++/scoped_connection.h>
 
 namespace Gtk {
 class TreeModel;
@@ -54,8 +54,7 @@ public:
                           int           entry_width    = -1,
                           int           extra_width    = -1,
                           CellDataFunc  cell_data_func = {},
-                          SeparatorFunc separator_func = {},
-                          Gtk::Widget  *focusWidget    = nullptr);
+                          SeparatorFunc separator_func = {});
 
     Glib::ustring const &get_active_text() const { return _text; }
     bool set_active_text(Glib::ustring text, int row = -1);
@@ -82,6 +81,8 @@ public:
 
     void set_model(Glib::RefPtr<Gtk::TreeModel> model) { _model = std::move(model); }
 
+    void setDefocusWidget(Gtk::Widget *widget) { _focusWidget = widget; }
+
 private:
     Glib::ustring       _tooltip;
     Glib::ustring       _label;
@@ -93,21 +94,23 @@ private:
     CellDataFunc        _cell_data_func; // drop-down menu format
     bool                _popup = false; // Do we pop-up an entry-completion dialog?
     Glib::RefPtr<Gtk::EntryCompletion> _entry_completion;
-    Gtk::Widget        *_focusWidget; ///< The widget to return focus to
+    Gtk::Widget        *_focusWidget = nullptr; ///< The widget to return focus to
     std::optional<Gtk::CellRendererText> _cell;
 
     int                 _active = -1; // Index of active menu item (-1 if not in list).
     Glib::ustring       _text; // Text of active menu item or entry box.
     Glib::ustring       _info;       // Text for tooltip info about entry.
     InfoCallback        _info_cb; // Callback for clicking info icon.
-    auto_connection     _info_cb_id;
+    sigc::scoped_connection     _info_cb_id;
     bool                _info_cb_blocked = false;
     Glib::ustring       _warning; // Text for tooltip warning that entry isn't in list.
     InfoCallback        _warning_cb; // Callback for clicking warning icon.
-    auto_connection     _warning_cb_id;
+    sigc::scoped_connection     _warning_cb_id;
     bool                _warning_cb_blocked = false;
 
-    auto_connection idle_conn;
+    bool _combo_box_changed_cb_blocked = false;
+
+    sigc::scoped_connection idle_conn;
 
     sigc::signal<void ()> _signal_changed;
 

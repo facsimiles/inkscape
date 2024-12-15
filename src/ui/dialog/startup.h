@@ -18,7 +18,7 @@
 #include <gtk/gtk.h>          // for GtkEventControllerKey
 #include <gtkmm/dialog.h>     // for Dialog
 #include <gtkmm/treemodel.h>  // for TreeModel
-#include "helper/auto-connection.h"
+#include <sigc++/scoped_connection.h>
 
 namespace Gtk {
 class Builder;
@@ -56,6 +56,7 @@ private:
     Gtk::TreeModel::Row active_combo(std::string widget_name);
     void set_active_combo(std::string widget_name, std::string unique_id);
     void show_toggle();
+    void refresh_keys_warning();
     void enlist_recent_files();
     void enlist_keys();
     void filter_themes();
@@ -81,8 +82,8 @@ private:
     Inkscape::UI::Widget::TemplateList &templates;
 
     SPDocument* _document = nullptr;
-    auto_connection _tabs_switch_page_conn;
-    auto_connection _templates_switch_page_conn;
+    sigc::scoped_connection _tabs_switch_page_conn;
+    sigc::scoped_connection _templates_switch_page_conn;
 };
 
 } // namespace Dialog

@@ -32,6 +32,7 @@ class SnapCandidatePoint;
 class CanvasItemGroup;
 class CanvasItemRect;
 class CanvasItemBpath;
+class ObjectSet;
 } // namespace Inkscape
 
 namespace Inkscape::UI::Tools {
@@ -44,6 +45,7 @@ public:
 
     bool root_handler(CanvasEvent const &event) override;
     void menu_popup(CanvasEvent const &event, SPObject *obj = nullptr) override;
+    void switching_away(std::string const &new_tool) override;
 
 private:
     void selectionChanged(SPDocument *doc, SPPage *page);

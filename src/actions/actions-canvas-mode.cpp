@@ -43,12 +43,10 @@ canvas_set_display_mode(Inkscape::RenderMode value, InkscapeWindow *win, Glib::R
     saction->change_state((int)value);
 
     // Save value as a preference
-    Inkscape::Preferences *pref = Inkscape::Preferences::get();
+    auto pref = Inkscape::Preferences::get();
     pref->setInt("/options/displaymode", (int)value);
 
-    SPDesktop* dt = win->get_desktop();
-    auto canvas = dt->getCanvas();
-    canvas->set_render_mode(Inkscape::RenderMode(value));
+    win->get_desktop()->setRenderMode(Inkscape::RenderMode(value));
 }
 
 /**
@@ -223,11 +221,8 @@ canvas_color_mode_toggle(InkscapeWindow *win)
         canvas_color_mode_gray(win);
     }
 
-    SPDesktop* dt = win->get_desktop();
-    auto canvas = dt->getCanvas();
-    canvas->set_color_mode(state ? Inkscape::ColorMode::GRAYSCALE : Inkscape::ColorMode::NORMAL);
+    win->get_desktop()->setColorMode(state ? Inkscape::ColorMode::GRAYSCALE : Inkscape::ColorMode::NORMAL);
 }
-
 
 /**
  * Toggle Color management on/off.
@@ -286,8 +281,6 @@ std::vector<std::vector<Glib::ustring>> raw_data_canvas_mode =
 void
 add_actions_canvas_mode(InkscapeWindow* win)
 {
-    apply_preferences_canvas_mode(win);
-
     // Sync action with desktop variables. TODO: Remove!
     auto prefs = Inkscape::Preferences::get();
 
@@ -312,7 +305,7 @@ add_actions_canvas_mode(InkscapeWindow* win)
     app->get_action_extra_data().add_data(raw_data_canvas_mode);
 }
 
-void apply_preferences_canvas_mode(InkscapeWindow *win)
+void apply_preferences_canvas_mode(SPDesktop *dt)
 {
     // Sync action with desktop variables. TODO: Remove!
     auto prefs = Inkscape::Preferences::get();
@@ -322,14 +315,8 @@ void apply_preferences_canvas_mode(InkscapeWindow *win)
         "/options/displaymode", 0, 0, static_cast<int>(Inkscape::RenderMode::size) - 1); // Default, minimum, maximum
     bool color_manage = prefs->getBool("/options/displayprofile/enable");
 
-    SPDesktop *dt = win->get_desktop();
-    if (dt) {
-        auto canvas = dt->getCanvas();
-        canvas->set_render_mode(Inkscape::RenderMode(display_mode));
-        canvas->set_cms_active(color_manage);
-    } else {
-        show_output("apply_preferences_canvas_mode: no desktop!");
-    }
+    dt->setRenderMode(Inkscape::RenderMode(display_mode));
+    dt->getCanvas()->set_cms_active(color_manage);
 }
 
 /*

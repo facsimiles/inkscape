@@ -21,7 +21,7 @@
 #include <gdkmm/toplevel.h>
 #include <gtkmm/applicationwindow.h>
 
-#include "helper/auto-connection.h"
+#include <sigc++/scoped_connection.h>
 
 namespace Gtk { class Box; }
 
@@ -41,18 +41,25 @@ public:
     SPDesktopWidget* get_desktop_widget() { return _desktop_widget; }
     void change_document(SPDocument* document);
 
+    Gdk::Toplevel::State get_toplevel_state() const;
+
+    bool isFullscreen() const;
+    bool isMaximised() const;
+    bool isMinimised() const;
+
+    void toggleFullscreen();
+
 private:
     InkscapeApplication *_app = nullptr;
     SPDocument*          _document = nullptr;
     SPDesktop*           _desktop = nullptr;
     SPDesktopWidget*     _desktop_widget = nullptr;
-    Gtk::Box*      _mainbox = nullptr;
     Glib::RefPtr<Gtk::ShortcutController> _shortcut_controller;
 
     void setup_view();
     void add_document_actions();
 
-    Inkscape::auto_connection _toplevel_state_connection;
+    sigc::scoped_connection _toplevel_state_connection;
     Gdk::Toplevel::State _old_toplevel_state{};
 
     void on_realize() override;

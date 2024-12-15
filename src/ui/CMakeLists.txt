@@ -57,6 +57,7 @@ set(ui_SRC
 	toolbar/measure-toolbar.cpp
 	toolbar/mesh-toolbar.cpp
 	toolbar/node-toolbar.cpp
+	toolbar/objectpicker-toolbar.cpp
 	toolbar/page-toolbar.cpp
 	toolbar/paintbucket-toolbar.cpp
 	toolbar/pencil-toolbar.cpp
@@ -106,6 +107,7 @@ set(ui_SRC
 	tools/star-tool.cpp
 	tools/text-tool.cpp
 	tools/tool-base.cpp
+	tools/tool-data.cpp
 	tools/tweak-tool.cpp
 	tools/zoom-tool.cpp
 
@@ -116,6 +118,7 @@ set(ui_SRC
 	dialog/color-item.cpp
 	dialog/command-palette.cpp
 	dialog/attrdialog.cpp
+	dialog/debug.cpp
 	dialog/dialog-base.cpp
 	dialog/dialog-container.cpp
 	dialog/dialog-data.cpp
@@ -147,8 +150,6 @@ set(ui_SRC
 	dialog/livepatheffect-editor.cpp
 	dialog/lpe-fillet-chamfer-properties.cpp
 	dialog/lpe-powerstroke-properties.cpp
-	dialog/memory.cpp
-	dialog/messages.cpp
 	dialog/new-from-template.cpp
 	dialog/object-attributes.cpp
 	dialog/object-properties.cpp
@@ -236,6 +237,8 @@ set(ui_SRC
 	widget/layer-selector.cpp
 	widget/licensor.cpp
 	widget/marker-combo-box.cpp
+	widget/memory.cpp
+	widget/messages.cpp
 	widget/notebook-page.cpp
 	widget/object-composite-settings.cpp
 	widget/objects-dialog-cells.cpp
@@ -287,6 +290,7 @@ set(ui_SRC
 	controller.h
 	cursor-utils.h
 	control-types.h
+	defocus-target.h
 	dialog-events.h
 	dialog-run.h
 	drag-and-drop.h
@@ -323,6 +327,7 @@ set(ui_SRC
 	dialog/color-item.h
 	dialog/command-palette.h
 	dialog/attrdialog.h
+	dialog/debug.h
 	dialog/dialog-base.h
 	dialog/dialog-container.h
 	dialog/dialog-data.h
@@ -331,6 +336,7 @@ set(ui_SRC
 	dialog/dialog-notebook.h
 	dialog/dialog-window.h
 	dialog/document-properties.h
+	dialog/document-resources.h
 	dialog/export.h
 	dialog/export-batch.h
 	dialog/export-single.h
@@ -353,8 +359,6 @@ set(ui_SRC
 	dialog/livepatheffect-editor.h
 	dialog/lpe-fillet-chamfer-properties.h
 	dialog/lpe-powerstroke-properties.h
-	dialog/memory.h
-	dialog/messages.h
 	dialog/new-from-template.h
 	dialog/object-attributes.h
 	dialog/object-properties.h
@@ -409,6 +413,7 @@ set(ui_SRC
 	toolbar/measure-toolbar.h
 	toolbar/mesh-toolbar.h
 	toolbar/node-toolbar.h
+	toolbar/objectpicker-toolbar.h
 	toolbar/page-toolbar.h
 	toolbar/paintbucket-toolbar.h
 	toolbar/pencil-toolbar.h
@@ -459,6 +464,7 @@ set(ui_SRC
 	tools/star-tool.h
 	tools/text-tool.h
 	tools/tool-base.h
+	tools/tool-data.h
 	tools/tweak-tool.h
 	tools/zoom-tool.h
 
@@ -513,6 +519,7 @@ set(ui_SRC
 	widget/filter-effect-chooser.h
 	widget/font-button.h
 	widget/font-collection-selector.h
+	widget/font-list.h
 	widget/font-selector.h
 	widget/font-variants.h
 	widget/font-variations.h
@@ -534,6 +541,8 @@ set(ui_SRC
 	widget/layer-selector.h
 	widget/licensor.h
 	widget/marker-combo-box.h
+	widget/memory.h
+	widget/messages.h
 	widget/notebook-page.h
 	widget/object-composite-settings.h
 	widget/objects-dialog-cells.h

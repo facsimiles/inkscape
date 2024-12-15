@@ -32,7 +32,6 @@
 
 #include "object/sp-defs.h"
 #include "object/sp-page.h"
-#include "object/sp-path.h"
 #include "object/sp-shape.h"
 #include "ui/tool/control-point-selection.h"
 #include "ui/tool/path-manipulator.h"
@@ -42,25 +41,13 @@ static constexpr auto SP_SELECTION_UPDATE_PRIORITY = G_PRIORITY_HIGH_IDLE + 1;
 
 namespace Inkscape {
 
-Selection::Selection(SPDesktop *desktop):
-    ObjectSet(desktop),
-    _selection_context(nullptr),
-    _flags(0),
-    _idle(0),
-    anchor_x(0.0),
-    anchor_y(0.0)
-{
-}
+Selection::Selection(SPDesktop *desktop)
+    : ObjectSet(desktop)
+{}
 
-Selection::Selection(SPDocument *document):
-    ObjectSet(document),
-    _selection_context(nullptr),
-    _flags(0),
-    _idle(0),
-    anchor_x(0.0),
-    anchor_y(0.0)
-{
-}
+Selection::Selection(SPDocument *document)
+    : ObjectSet(document)
+{}
 
 Selection::~Selection() {
     if (_idle) {
@@ -96,14 +83,7 @@ gboolean Selection::_emit_modified(Selection *selection)
 
 void Selection::_emitModified(guint flags)
 {
-    for (auto it = _modified_signals.begin(); it != _modified_signals.end(); ) {
-        if (it->empty()) {
-            it = _modified_signals.erase(it);
-        } else {
-            it->emit(this, flags);
-            ++it;
-        }
-    }
+    _modified_signal.emit(this, flags);
 
     if (!_desktop || isEmpty()) {
         return;
@@ -125,7 +105,8 @@ void Selection::_emitModified(guint flags)
     }
 }
 
-void Selection::_emitChanged(bool persist_selection_context/* = false */) {
+void Selection::_emitChanged(bool persist_selection_context)
+{
     ObjectSet::_emitChanged();
     if (persist_selection_context) {
         if (nullptr == _selection_context) {
@@ -156,20 +137,14 @@ void Selection::_emitChanged(bool persist_selection_context/* = false */) {
         DocumentUndo::resetKey(_document);
     }
 
-    for (auto it = _changed_signals.begin(); it != _changed_signals.end(); ) {
-        if (it->empty()) {
-            it = _changed_signals.erase(it);
-        } else {
-            it->emit(this);
-            ++it;
-        }
-    }
+    _changed_signal.emit(this);
 }
 
 void Selection::_releaseContext(SPObject *obj)
 {
-    if (nullptr == _selection_context || _selection_context != obj)
+    if (!_selection_context || _selection_context != obj) {
         return;
+    }
 
     _context_release_connection.disconnect();
 
@@ -177,9 +152,11 @@ void Selection::_releaseContext(SPObject *obj)
     _selection_context = nullptr;
 }
 
-SPObject *Selection::activeContext() {
-    if (nullptr != _selection_context)
+SPObject *Selection::activeContext()
+{
+    if (_selection_context) {
         return _selection_context;
+    }
     return _desktop->layerManager().currentLayer();
 }
 
@@ -205,37 +182,15 @@ std::vector<Inkscape::SnapCandidatePoint> Selection::getSnapPoints(SnapPreferenc
     return p;
 }
 
-sigc::connection Selection::connectChanged(sigc::slot<void (Selection *)> slot)
-{
-    if (_changed_signals.empty()) _changed_signals.emplace_back();
-    return _changed_signals.back().connect(std::move(slot));
-}
-
-sigc::connection Selection::connectChangedFirst(sigc::slot<void (Selection *)> slot)
-{
-    return _changed_signals.emplace_front().connect(std::move(slot));
-}
-
 void Selection::setAnchor(double x, double y, bool set)
 {
-    double const epsilon = 1e-12;
-    if (std::fabs(anchor_x - x) > epsilon || std::fabs(anchor_y - y) > epsilon || set != has_anchor) {
-        anchor_x = x;
-        anchor_y = y;
+    constexpr double epsilon = 1e-12;
+    auto const pt = Geom::Point{x, y};
+    if (Geom::LInfty(anchor - pt) > epsilon || set != has_anchor) {
+        anchor = pt;
         has_anchor = set;
-        this->_emitModified(SP_OBJECT_MODIFIED_FLAG);
+        _emitModified(SP_OBJECT_MODIFIED_FLAG);
     }
-}
-
-sigc::connection Selection::connectModified(sigc::slot<void (Selection *, unsigned)> slot)
-{
-    if (_modified_signals.empty()) _modified_signals.emplace_back();
-    return _modified_signals.back().connect(std::move(slot));
-}
-
-sigc::connection Selection::connectModifiedFirst(sigc::slot<void (Selection *, unsigned)> slot)
-{
-    return _modified_signals.emplace_front().connect(std::move(slot));
 }
 
 SPObject *Selection::_objectForXMLNode(Inkscape::XML::Node *repr) const {

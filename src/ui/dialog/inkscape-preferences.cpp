@@ -15,7 +15,6 @@
  */
 
 #include "inkscape-preferences.h"
-#include "helper/sigc-track-obj.h"
 
 #ifdef HAVE_CONFIG_H
 # include "config.h"  // only include where actually required!
@@ -88,7 +87,7 @@
 #include "colors/manager.h"
 #include "colors/spaces/base.h"
 #include "display/nr-filter-gaussian.h"
-#include "helper/auto-connection.h"
+#include <sigc++/scoped_connection.h>
 #include "io/resource.h"
 #include "ui/builder-utils.h"
 #include "ui/dialog-run.h"
@@ -1319,7 +1318,7 @@ void InkscapePreferences::changeIconsColors()
             g_critical("CSSProviderError::load_from_data(): failed to load '%s'\n(%s)",
                        css_str.c_str(), error.what());
         };
-        auto_connection _ = colorize_provider->signal_parsing_error().connect(on_error);
+        sigc::scoped_connection _ = colorize_provider->signal_parsing_error().connect(on_error);
         colorize_provider->load_from_data(css_str);
     }
 
@@ -1665,7 +1664,7 @@ void InkscapePreferences::initPageUI()
         cb->set_active_by_id(mgr.get_selected_theme());
 
         // Update on auto-reload or theme change
-        mgr.connectCssUpdated(SIGC_TRACKING_ADAPTOR(
+        mgr.connectCssUpdated(sigc::track_object(
             [=, this]() { img->set_paintable(to_texture(draw_handles_preview(get_scale_factor()))); }, *this));
         cb->signal_changed().connect([=, this](int id) {
             Handles::Manager::get().select_theme(id);
@@ -2785,6 +2784,8 @@ void InkscapePreferences::initPageBehavior()
                                   SP_CLONE_ORPHANS_UNLINK, true, nullptr);
     _clone_option_delete.init ( _("Are deleted"), "/options/cloneorphans/value",
                                   SP_CLONE_ORPHANS_DELETE, false, &_clone_option_unlink);
+    _clone_option_keep.init ( _("Become orphans"), "/options/cloneorphans/value",
+                                  SP_CLONE_ORPHANS_KEEP, false, &_clone_option_unlink);
 
     _page_clones.add_group_header( _("Moving original: clones and linked offsets"));
     _page_clones.add_line(true, "", _clone_option_parallel, "",
@@ -2798,6 +2799,8 @@ void InkscapePreferences::initPageBehavior()
                            _("Orphaned clones are converted to regular objects"));
     _page_clones.add_line(true, "", _clone_option_delete, "",
                            _("Orphaned clones are deleted along with their original"));
+    _page_clones.add_line(true, "", _clone_option_keep, "",
+                           _("Orphaned clones are not modified"));
 
     _page_clones.add_group_header( _("Duplicating original+clones/linked offset"));
 
@@ -3740,11 +3743,22 @@ void InkscapePreferences::initPageSystem()
 
     _sys_user_prefs.set_text(prefs->getPrefsFilename());
     _sys_user_prefs.set_editable(false);
-    auto const reset_prefs = Gtk::make_managed<Gtk::Button>(_("Reset Preferences"));
+
+    auto const hbox = Gtk::make_managed<Gtk::Box>();
+
+    auto const reset_prefs = Gtk::make_managed<Gtk::Button>(_("Reset"));
+    reset_prefs->set_tooltip_text(_("Reset the preferences to default"));
     reset_prefs->signal_clicked().connect(sigc::mem_fun(*this, &InkscapePreferences::on_reset_prefs_clicked));
+    hbox->append(*reset_prefs);
+
+    auto const save_prefs = Gtk::make_managed<Gtk::Button>(_("Save"));
+    save_prefs->set_tooltip_text(_("Save the preferences to disk"));
+    save_prefs->set_action_name("app.save-preferences");
+    hbox->append(*save_prefs);
+    hbox->set_hexpand(false);
 
     _page_system.add_line(true, _("User preferences:"), _sys_user_prefs, "",
-                          _("Location of the user’s preferences file"), true, reset_prefs);
+                          _("Location of the user’s preferences file"), true, hbox);
     auto profilefolder = Inkscape::IO::Resource::profile_path();
     _sys_user_config.init(profilefolder.c_str(), _("Open preferences folder"));
     _page_system.add_line(true, _("User config:"), _sys_user_config, "", _("Location of users configuration"), true);

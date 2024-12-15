@@ -22,8 +22,9 @@
 #include <gtkmm/label.h>
 
 #include "colors/color.h"
-#include "helper/auto-connection.h"
+#include <sigc++/scoped_connection.h>
 #include "rotateable.h"
+#include "ui/defocus-target.h"
 #include "ui/popup-menu.h"
 #include "ui/widget/spinbutton.h"
 #include "ui/widget/popover-bin.h"
@@ -115,7 +116,9 @@ private:
 /**
  * Selected style indicator (fill, stroke, opacity).
  */
-class SelectedStyle : public UI::Widget::PopoverBin
+class SelectedStyle
+    : public UI::Widget::PopoverBin
+    , private DefocusTarget
 {
 public:
     bool dragging = false;
@@ -156,8 +159,8 @@ protected:
     Glib::ustring _paintserver_id[2];
 
     // Signals
-    auto_connection selection_changed_connection;
-    auto_connection selection_modified_connection;
+    sigc::scoped_connection selection_changed_connection;
+    sigc::scoped_connection selection_modified_connection;
 
     Gtk::EventSequenceState on_fill_click   (Gtk::GestureClick const &click,
                                              int n_press, double x, double y);
@@ -217,6 +220,9 @@ protected:
 
     std::unique_ptr<SelectedStyleDropTracker> drop[2];
     bool dropEnabled[2] = {false, false};
+
+private:
+    void onDefocus() override;
 };
 
 } // namespace UI::Widget

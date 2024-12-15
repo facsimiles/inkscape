@@ -398,17 +398,16 @@ static guint32 getPickerData(Geom::IntRect area, SPDesktop *desktop)
     Inkscape::Drawing *drawing = canvas_item_drawing->get_drawing();
 
     // Get average color.
-    double R, G, B, A;
-    drawing->averageColor(area, R, G, B, A);
+    auto avg = drawing->averageColor(area);
 
     //this can fix the bug #1511998 if confirmed
-    if ( A < 1e-6) {
-        R = 1.0;
-        G = 1.0;
-        B = 1.0;
+    if (avg.getOpacity() < 1e-6) {
+        avg.set(0, 1.0);
+        avg.set(1, 1.0);
+        avg.set(2, 1.0);
     }
 
-    return SP_RGBA32_F_COMPOSE(R, G, B, A);
+    return avg.toRGBA();
 }
 
 static void showHidden(std::vector<SPItem *> items_down){
@@ -1125,7 +1124,7 @@ static void sp_spray_switch_mode(SprayTool *tc, gint mode, bool with_shift)
     auto tb = dynamic_cast<UI::Toolbar::SprayToolbar*>(tc->getDesktop()->get_toolbar_by_name("SprayToolbar"));
 
     if(tb) {
-        tb->set_mode(mode);
+        tb->setMode(mode);
     } else {
         std::cerr << "Could not access Spray toolbar" << std::endl;
     }

@@ -23,9 +23,8 @@
 #include <gtkmm/checkbutton.h>
 
 #include "selected-style.h"
-
-#include "colors/dragndrop.h"
 #include "colors/manager.h"
+#include "colors/xml-color.h"
 #include "desktop-style.h"
 #include "document-undo.h"
 #include "gradient-chemistry.h"
@@ -48,13 +47,15 @@
 #include "ui/dialog/fill-and-stroke.h"
 #include "ui/icon-names.h"
 #include "ui/tools/tool-base.h"
+#include "ui/widget/canvas.h"
 #include "ui/widget/color-preview.h"
 #include "ui/widget/gradient-image.h"
 #include "ui/widget/popover-menu.h"
 #include "ui/widget/popover-menu-item.h"
-#include "util/safe-printf.h"
 #include "util/units.cpp"
+#include "util/value-utils.h"
 #include "util-string/ustring-format.h"
+#include "util/variant-visitor.h"
 
 static constexpr int SELECTED_STYLE_SB_WIDTH     =  48;
 static constexpr int SELECTED_STYLE_PLACE_WIDTH  =  50;
@@ -65,29 +66,34 @@ static constexpr int SELECTED_STYLE_WIDTH        = 250;
 static constexpr std::array<double, 15> _sw_presets{
     32, 16, 10, 8, 6, 4, 3, 2, 1.5, 1, 0.75, 0.5, 0.25, 0.1};
 
-// In order of PaintType enum: fill, stroke; label, tooltip.
-static const Glib::ustring type_strings[][2][2] = {
-    {{ _("N/A"),                    _("Nothing selected")},
-     { _("N/A"),                    _("Nothing selected")}},
-    {{C_("Fill", "<i>None</i>"),    _("No fill, middle-click for black fill")},
-     {C_("Stroke", "<i>None</i>"),  _("No stroke, middle-click for black stroke")}},
-    {{ _("<b>Unset</b>"),           _("Unset fill")},
-     { _("<b>Unset</b>"),           _("Unset stroke")}},
-    {{ _("≠"),                      _("Different fills")},
-     { _("≠"),                      _("Different strokes")}},
-    {{ _("Pattern"),                _("Pattern (fill)")},
-     { _("Pattern"),                _("Pattern (stroke)")}},
-    {{ _("Hatch"),                  _("Pattern (fill)")},
-     { _("Hatch"),                  _("Pattern (stroke)")}},
-    {{ _("<b>L</b>"),               _("Linear gradient (fill)")},
-     { _("<b>L</b>"),               _("Linear gradient (stroke)")}},
-    {{ _("<b>R</b>"),               _("Radial gradient (fill)")},
-     { _("<b>R</b>"),               _("Radial gradient (stroke)")}},
-    {{ _("<b>M</b>"),               _("Mesh gradient (fill)")},
-     { _("<b>M</b>"),               _("Mesh gradient (stroke)")}},
-    {{ _("<b>C</b>"),               _("Flat color (fill)")},
-     { _("<b>C</b>"),               _("Flat color (stroke)")}}
-};
+static const Glib::ustring (*get_type_strings())[2][2] {
+    // In order of PaintType enum: fill, stroke; label, tooltip.
+    static const Glib::ustring type_strings[][2][2] = {
+        // clang-format off
+        {{ _("N/A"),                    _("Nothing selected")},
+         { _("N/A"),                    _("Nothing selected")}},
+        {{C_("Fill", "<i>None</i>"),    _("No fill, middle-click for black fill")},
+         {C_("Stroke", "<i>None</i>"),  _("No stroke, middle-click for black stroke")}},
+        {{ _("<b>Unset</b>"),           _("Unset fill")},
+         { _("<b>Unset</b>"),           _("Unset stroke")}},
+        {{ _("≠"),                      _("Different fills")},
+         { _("≠"),                      _("Different strokes")}},
+        {{ _("Pattern"),                _("Pattern (fill)")},
+         { _("Pattern"),                _("Pattern (stroke)")}},
+        {{ _("Hatch"),                  _("Pattern (fill)")},
+         { _("Hatch"),                  _("Pattern (stroke)")}},
+        {{ _("<b>L</b>"),               _("Linear gradient (fill)")},
+         { _("<b>L</b>"),               _("Linear gradient (stroke)")}},
+        {{ _("<b>R</b>"),               _("Radial gradient (fill)")},
+         { _("<b>R</b>"),               _("Radial gradient (stroke)")}},
+        {{ _("<b>M</b>"),               _("Mesh gradient (fill)")},
+         { _("<b>M</b>"),               _("Mesh gradient (stroke)")}},
+        {{ _("<b>C</b>"),               _("Flat color (fill)")},
+         { _("<b>C</b>"),               _("Flat color (stroke)")}}
+        // clang-format on
+    };
+    return type_strings;
+}
 
 static void
 ss_selection_changed (Inkscape::Selection *, gpointer data)
@@ -136,7 +142,7 @@ SelectedStyle::SelectedStyle()
         tag[i]->set_name("Tag");
 
         // Type of fill
-        type_label[i] = std::make_unique<Gtk::Label>(type_strings[0][i][0]);
+        type_label[i] = std::make_unique<Gtk::Label>(get_type_strings()[0][i][0]);
         type_label[i]->set_hexpand(true);
 
         // CSS sets width to 54.
@@ -155,22 +161,25 @@ SelectedStyle::SelectedStyle()
         swatch[i]->append(*type_label[i]);
         swatch[i]->append(*gradient_preview[i]);
         swatch[i]->append(*color_preview[i]);
-        swatch[i]->set_tooltip_text(type_strings[0][i][1]);
+        swatch[i]->set_tooltip_text(get_type_strings()[0][i][1]);
         swatch[i]->set_size_request(SELECTED_STYLE_PLACE_WIDTH, -1);
 
         // Drag color from color palette, for example.
         drop[i] = std::make_unique<SelectedStyleDropTracker>();
         drop[i]->parent = this;
         drop[i]->item = i;
-        auto target = Gtk::DropTarget::create(Glib::Value<std::optional<Colors::Color>>::value_type(), Gdk::DragAction::COPY | Gdk::DragAction::MOVE);
+        auto target = Gtk::DropTarget::create(Util::GlibValue::type<Colors::Paint>(), Gdk::DragAction::COPY | Gdk::DragAction::MOVE);
         target->signal_drop().connect([this, i] (Glib::ValueBase const &value, double, double) {
             if (!dropEnabled[i]) {
                 return false;
             }
 
             auto const &tracker = *drop[i];
-            auto const &color = *reinterpret_cast<std::optional<Colors::Color>*>(g_value_get_boxed(value.gobj()));
-            std::string colorspec = color ? color->toString(false) : "none";
+            auto const paint = Util::GlibValue::get<Colors::Paint>(value);
+            auto const colorspec = std::visit(VariantVisitor{
+                [] (Colors::Color const &color) { return color.toString(false); },
+                [] (Colors::NoColor) -> std::string { return "none"; }
+            }, *paint);
 
             auto const css = sp_repr_css_attr_new();
             sp_repr_css_set_property_string(css, tracker.item == SS_FILL ? "fill" : "stroke", colorspec);
@@ -217,6 +226,7 @@ SelectedStyle::SelectedStyle()
     opacity_sb->set_adjustment(opacity_adjustment);
     opacity_sb->set_size_request(SELECTED_STYLE_SB_WIDTH);
     opacity_sb->set_sensitive(false);
+    opacity_sb->setDefocusTarget(this);
 
     auto opacity_box = Gtk::make_managed<Gtk::Box>();
     opacity_box->append(*opacity_label);
@@ -240,24 +250,29 @@ SelectedStyle::SelectedStyle()
     make_popup_units();
 }
 
-void
-SelectedStyle::setDesktop(SPDesktop *desktop)
+void SelectedStyle::setDesktop(SPDesktop *desktop)
 {
+    if (_desktop) {
+        selection_changed_connection.disconnect();
+        selection_modified_connection.disconnect();
+    }
+
     _desktop = desktop;
 
-    Inkscape::Selection *selection = desktop->getSelection();
+    if (_desktop) {
+        auto selection = desktop->getSelection();
 
-    selection_changed_connection = selection->connectChanged(
-        sigc::bind(&ss_selection_changed, this)
-    );
-    selection_modified_connection = selection->connectModified(
-        sigc::bind(&ss_selection_modified, this)
-    );
+        selection_changed_connection = selection->connectChanged(
+            sigc::bind(&ss_selection_changed, this)
+        );
+        selection_modified_connection = selection->connectModified(
+            sigc::bind(&ss_selection_modified, this)
+        );
+        update();
 
-    _sw_unit = desktop->getNamedView()->display_units;
+        _sw_unit = desktop->getNamedView()->display_units;
+    }
 }
-
-
 
 void SelectedStyle::on_fill_remove() {
     SPCSSAttr *css = sp_repr_css_attr_new ();
@@ -690,6 +705,13 @@ void SelectedStyle::on_popup_preset(int i) {
     DocumentUndo::done(_desktop->getDocument(), _("Change stroke width"), INKSCAPE_ICON("swatches"));
 }
 
+void SelectedStyle::onDefocus()
+{
+    if (_desktop) {
+        _desktop->getCanvas()->grab_focus();
+    }
+}
+
 void
 SelectedStyle::update()
 {
@@ -722,8 +744,8 @@ SelectedStyle::update()
 
             tag[i]->set_markup("");
 
-            type_label[i]->set_markup(type_strings[SS_NA][i][0]);
-            swatch[i]->set_tooltip_text(type_strings[SS_NA][i][1]);
+            type_label[i]->set_markup(get_type_strings()[SS_NA][i][0]);
+            swatch[i]->set_tooltip_text(get_type_strings()[SS_NA][i][1]);
 
             if (dropEnabled[i]) {
                 dropEnabled[i] = false;
@@ -747,8 +769,8 @@ SelectedStyle::update()
                     if (is<SPLinearGradient>(server)) {
                         auto vector = cast<SPGradient>(server)->getVector();
 
-                        type_label[i]->set_markup(  type_strings[SS_LGRADIENT][i][0]);
-                        swatch[i]->set_tooltip_text(type_strings[SS_LGRADIENT][i][1]);
+                        type_label[i]->set_markup(  get_type_strings()[SS_LGRADIENT][i][0]);
+                        swatch[i]->set_tooltip_text(get_type_strings()[SS_LGRADIENT][i][1]);
                         gradient_preview[i]->set_gradient(vector);
                         gradient_preview[i]->show();
 
@@ -756,8 +778,8 @@ SelectedStyle::update()
                     } else if (is<SPRadialGradient>(server)) {
                         auto vector = cast<SPGradient>(server)->getVector();
 
-                        type_label[i]->set_markup(  type_strings[SS_RGRADIENT][i][0]);
-                        swatch[i]->set_tooltip_text(type_strings[SS_RGRADIENT][i][1]);
+                        type_label[i]->set_markup(  get_type_strings()[SS_RGRADIENT][i][0]);
+                        swatch[i]->set_tooltip_text(get_type_strings()[SS_RGRADIENT][i][1]);
                         gradient_preview[i]->set_gradient(vector);
                         gradient_preview[i]->show();
 
@@ -765,20 +787,20 @@ SelectedStyle::update()
                     } else if (is<SPMeshGradient>(server)) {
                         auto array = cast<SPGradient>(server)->getArray();
 
-                        type_label[i]->set_markup(  type_strings[SS_MGRADIENT][i][0]);
-                        swatch[i]->set_tooltip_text(type_strings[SS_MGRADIENT][i][1]);
+                        type_label[i]->set_markup(  get_type_strings()[SS_MGRADIENT][i][0]);
+                        swatch[i]->set_tooltip_text(get_type_strings()[SS_MGRADIENT][i][1]);
                         gradient_preview[i]->set_gradient(array);
                         gradient_preview[i]->show();
 
                         _mode[i] = SS_MGRADIENT;
                     } else if (is<SPPattern>(server)) {
-                        type_label[i]->set_markup(  type_strings[SS_PATTERN][i][0]);
-                        swatch[i]->set_tooltip_text(type_strings[SS_PATTERN][i][1]);
+                        type_label[i]->set_markup(  get_type_strings()[SS_PATTERN][i][0]);
+                        swatch[i]->set_tooltip_text(get_type_strings()[SS_PATTERN][i][1]);
 
                         _mode[i] = SS_PATTERN;
                     } else if (is<SPHatch>(server)) {
-                        type_label[i]->set_markup(  type_strings[SS_HATCH][i][0]);
-                        swatch[i]->set_tooltip_text(type_strings[SS_HATCH][i][1]);
+                        type_label[i]->set_markup(  get_type_strings()[SS_HATCH][i][0]);
+                        swatch[i]->set_tooltip_text(get_type_strings()[SS_HATCH][i][1]);
 
                         _mode[i] = SS_HATCH;
                     }
@@ -793,7 +815,7 @@ SelectedStyle::update()
                 _thisselected[i] = color; // include opacity
 
                 // No type_label.
-                swatch[i]->set_tooltip_text(type_strings[SS_COLOR][i][1] + ": " + color.toString() +
+                swatch[i]->set_tooltip_text(get_type_strings()[SS_COLOR][i][1] + ": " + color.toString() +
                                             _(", drag to adjust, middle-click to remove"));
                 type_label[i]->set_visible(false);
                 color_preview[i]->setRgba32(color.toRGBA());
@@ -802,13 +824,12 @@ SelectedStyle::update()
                 _mode[i] = SS_COLOR;
                 _popup_copy[i]->set_sensitive(true);
             } else if (paint->set && paint->isNone()) {
-                type_label[i]->set_markup(type_strings[  SS_NONE][i][0]);
-                swatch[i]->set_tooltip_text(type_strings[SS_NONE][i][1]);
-
+                type_label[i]->set_markup(get_type_strings()[  SS_NONE][i][0]);
+                swatch[i]->set_tooltip_text(get_type_strings()[SS_NONE][i][1]);
                 _mode[i] = SS_NONE;
             } else if (!paint->set) {
-                type_label[i]->set_markup(type_strings[  SS_UNSET][i][0]);
-                swatch[i]->set_tooltip_text(type_strings[SS_UNSET][i][1]);
+                type_label[i]->set_markup(get_type_strings()[  SS_UNSET][i][0]);
+                swatch[i]->set_tooltip_text(get_type_strings()[SS_UNSET][i][1]);
 
                 _mode[i] = SS_UNSET;
             }
@@ -834,8 +855,8 @@ SelectedStyle::update()
         }
 
         case QUERY_STYLE_MULTIPLE_DIFFERENT:
-            type_label[i]->set_markup(type_strings[  SS_MANY][i][0]);
-            swatch[i]->set_tooltip_text(type_strings[SS_MANY][i][1]);
+            type_label[i]->set_markup(get_type_strings()[  SS_MANY][i][0]);
+            swatch[i]->set_tooltip_text(get_type_strings()[SS_MANY][i][1]);
 
             _mode[i] = SS_MANY;
             break;
