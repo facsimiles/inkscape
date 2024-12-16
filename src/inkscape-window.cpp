@@ -108,7 +108,7 @@ InkscapeWindow::InkscapeWindow(SPDocument *document)
 
     // This is called here (rather than in InkscapeApplication) solely to add win level action
     // tooltips to the menu label-to-tooltip map.
-    build_menu();
+    build_menu(this);
 
     // =============== Build interface ===============
 
@@ -214,7 +214,7 @@ InkscapeWindow::setup_view()
 {
     // Resize the window to match the document properties
     sp_namedview_window_from_document(_desktop); // This should probably be a member function here.
-    
+
     _desktop->schedule_zoom_from_document();
     sp_namedview_update_layers_from_document(_desktop);
 

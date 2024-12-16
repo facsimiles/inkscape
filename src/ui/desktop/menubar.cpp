@@ -38,6 +38,7 @@
 #include <gtkmm/headerbar.h>
 #include <gtkmm/popovermenubar.h>
 #include <gtkmm/recentmanager.h>
+#include <gtkmm/label.h>
 
 #include "actions/actions-effect-data.h"
 #include "actions/actions-effect.h"
@@ -48,7 +49,7 @@
 
 // =================== Main Menu ================
 void
-build_menu()
+build_menu(Gtk::Window *mainWindow)
 {
     std::string filename = Inkscape::IO::Resource::get_filename(Inkscape::IO::Resource::UIS, "menus.ui");
     auto refBuilder = Gtk::Builder::create();
@@ -299,20 +300,15 @@ build_menu()
     // Whether to merge the menubar with the application's titlebar.
     // Extracted from: https://gitlab.gnome.org/GNOME/gimp/-/commit/317aa803d2b0291cc2153a8f1148c220ea910895
     auto merge_menu_titlebar = prefs->getBool("/window/mergeMenuTitlebar", false);
-    //auto gtk_application = app->gtk_app();
 
     // Do not merge titlebar in MacOS
     #ifndef G_OS_DARWIN
-    if (true) {
-        Gtk::HeaderBar *headerBar;
+    if (merge_menu_titlebar && mainWindow != nullptr) {
+        auto headerBar = Gtk::make_managed<Gtk::HeaderBar>();
         headerBar->set_show_title_buttons(true);
+        mainWindow->set_titlebar(*headerBar);
 
-        /*auto window = gtk_application->get_active_window();
-        window->set_titlebar(*headerBar);*/
-
-        Gtk::PopoverMenuBar *popovermenubar;
-        popovermenubar->set_menu_model(gmenu);
-
+        auto popovermenubar = Gtk::make_managed<Gtk::PopoverMenuBar>();
         headerBar->pack_start(*popovermenubar);
         headerBar->show();
     } else {
@@ -322,7 +318,7 @@ build_menu()
         // menu gets recreated; keep track of new recent items submenu
         rebuild_menu(gmenu, gmenu_copy, useicons, recent_menu_quark, recent_gmenu);
 
-        gtk_application->set_menubar(gmenu_copy);
+        app->gtk_app()->set_menubar(gmenu_copy);
     #endif
     }
 
