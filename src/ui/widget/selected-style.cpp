@@ -58,7 +58,7 @@
 #include "util/variant-visitor.h"
 
 static constexpr int SELECTED_STYLE_SB_WIDTH     =  48;
-static constexpr int SELECTED_STYLE_PLACE_WIDTH  =  50;
+static constexpr int SELECTED_STYLE_PLACE_WIDTH  =  34;
 static constexpr int SELECTED_STYLE_STROKE_WIDTH =  40;
 static constexpr int SELECTED_STYLE_FLAG_WIDTH   =  12;
 static constexpr int SELECTED_STYLE_WIDTH        = 250;
@@ -151,7 +151,7 @@ SelectedStyle::SelectedStyle()
 
         color_preview[i] = std::make_unique<Inkscape::UI::Widget::ColorPreview>(0);
         color_preview[i]->set_size_request(SELECTED_STYLE_PLACE_WIDTH, -1);
-        color_preview[i]->set_hexpand(true);
+        color_preview[i]->set_hexpand(false);
         color_preview[i]->set_visible(false);
 
         // Shows one or two children at a time.
