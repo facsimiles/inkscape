@@ -308,7 +308,7 @@ build_menu(Gtk::Window *mainWindow)
         headerBar->set_show_title_buttons(true);
         mainWindow->set_titlebar(*headerBar);
 
-        auto popovermenubar = Gtk::make_managed<Gtk::PopoverMenuBar>();
+        auto popovermenubar = Gtk::make_managed<Gtk::PopoverMenuBar>(gmenu);
         headerBar->pack_start(*popovermenubar);
         headerBar->show();
     } else {
