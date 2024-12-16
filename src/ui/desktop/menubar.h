@@ -32,7 +32,11 @@ class MenuModel;
 class Menu;
 } // namespace Gio;
 
-void build_menu();
+namespace Gtk {
+class Window;
+} // namespace Gtk
+
+void build_menu(Gtk::Window *mainWindow);
 
 enum class UseIcons {
     never = -1, // Match existing preference numbering.
