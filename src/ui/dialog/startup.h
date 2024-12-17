@@ -64,6 +64,7 @@ private:
     void notebook_switch(Gtk::Widget *tab, unsigned page_num);
 
     void theme_changed();
+    void toggle_merge_menu_titlebar();
     void canvas_changed();
     void refresh_theme(Glib::ustring theme_name);
     void refresh_dark_switch();

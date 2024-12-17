@@ -19,6 +19,7 @@
 #include "inkscape-application.h"
 #include "inkscape-window.h"
 #include "util-string/ustring-format.h"
+#include "preferences.h"
 
 // Actions for window handling (should be integrated with file dialog).
 
@@ -52,7 +53,7 @@ void window_query_geometry(InkscapeApplication *app)
     }
 }
 
-void 
+void
 window_set_geometry(const Glib::VariantBase& value, InkscapeApplication *app)
 {
     Glib::Variant<Glib::ustring> s = Glib::VariantBase::cast_dynamic<Glib::Variant<Glib::ustring> >(value);
@@ -97,6 +98,7 @@ std::vector<std::vector<Glib::ustring>> raw_data_window =
     {"app.window-query-geometry",  N_("Window Query Geometry"),  "Window",     N_("Query the active window's location and size") },
     {"app.window-set-geometry",    N_("Window Set Geometry"),    "Window",     N_("Set the active window's location and size (x, y, width, height)") },
     {"app.window-crash",           N_("Force Crash"),            "Window",     N_("Force Inkscape to crash, useful for testing.") },
+    {"app.merge-menu-titlebar", N_("Merge Menu Titlebar"), "Window", N_("Merges the application's Menu with the windows' titlebar.")}
     // clang-format on
 };
 
@@ -112,6 +114,11 @@ add_actions_window(InkscapeApplication* app)
     gapp->add_action_with_parameter( "window-set-geometry",    String, sigc::bind(sigc::ptr_fun(&window_set_geometry), app));
     gapp->add_action("window-crash", [=](){
         abort();
+    });
+    gapp->add_action("toggle-merge-menu-titlebar", [=]() {
+        auto prefs = Inkscape::Preferences::get();
+        auto merge_menu_titlebar = prefs->getBool("/window/mergeMenuTitlebar", false);
+        prefs->setBool("/window/mergeMenuTitlebar", !merge_menu_titlebar);
     });
     // clang-format on
 
