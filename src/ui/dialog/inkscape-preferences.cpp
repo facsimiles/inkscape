@@ -2098,8 +2098,10 @@ void InkscapePreferences::initPageUI()
                             _("Zoom drawing when document window is resized, to keep the same area visible (this is the default which can be changed in any window using the button above the right scrollbar)"));
     _page_windows.add_line( true, "", _win_save_viewport, "",
                             _("Save documents viewport (zoom and panning position). Useful to turn off when sharing version controlled files."));
+    #ifndef G_OS_DARWIN
     _page_windows.add_line( true, "", _win_merge_titlebar_menu, "",
                             _("Whether to merge the titlebar and menu to save space. This is an experimental option that may not work in all systems."));
+    #endif
 
     this->AddPage(_page_windows, _("Windows"), iter_ui, PREFS_PAGE_UI_WINDOWS);
 
