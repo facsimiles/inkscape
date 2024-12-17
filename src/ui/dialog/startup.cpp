@@ -172,6 +172,10 @@ StartScreen::StartScreen()
     auto dark_toggle = &get_widget<Gtk::Switch>      (builder, "dark_toggle");
     auto merge_menu_titlebar = &get_widget<Gtk::CheckButton>(builder, "merge_menu_titlebar");
 
+    #ifdef G_OS_DARWIN // if in macos,
+    merge_menu_titlebar.hide(); // hide "merge menu titlebar" preference
+    #endif
+
     // Add signals and setup things.
     auto prefs = Inkscape::Preferences::get();
 
