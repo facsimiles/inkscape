@@ -170,6 +170,7 @@ StartScreen::StartScreen()
     auto new_btn     = &get_widget<Gtk::Button>      (builder, "new");
     auto show_toggle = &get_widget<Gtk::CheckButton> (builder, "show_toggle");
     auto dark_toggle = &get_widget<Gtk::Switch>      (builder, "dark_toggle");
+    auto merge_menu_titlebar = &get_widget<Gtk::CheckButton>(builder, "merge_menu_titlebar");
 
     // Add signals and setup things.
     auto prefs = Inkscape::Preferences::get();
@@ -210,6 +211,7 @@ StartScreen::StartScreen()
     keys->signal_changed().connect(sigc::mem_fun(*this, &StartScreen::keyboard_changed));
     themes.signal_changed().connect(sigc::mem_fun(*this, &StartScreen::theme_changed));
     dark_toggle->property_active().signal_changed().connect(sigc::mem_fun(*this, &StartScreen::theme_changed));
+    merge_menu_titlebar->property_active().signal_changed().connect(sigc::mem_fun(*this, &StartScreen::toggle_merge_menu_titlebar));
     save->signal_clicked().connect(sigc::bind(sigc::mem_fun(*this, &StartScreen::notebook_next), save));
 
     // "Supported by You" tab
@@ -587,6 +589,16 @@ StartScreen::theme_changed()
     } catch(int e) {
         g_warning("Couldn't find theme value.");
     }
+}
+
+/**
+ * Called when toggling the setting of whether to merge the menu and titlebar.
+ */
+void
+StartScreen::toggle_merge_menu_titlebar() {
+    auto prefs = Inkscape::Preferences::get();
+    auto merge_menu_titlebar = prefs->getBool("/window/mergeMenuTitlebar", false);
+    prefs->setBool("/window/mergeMenuTitlebar", !merge_menu_titlebar);
 }
 
 /**

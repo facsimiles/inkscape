@@ -588,6 +588,11 @@
           <attribute name="icon">show-dialogs</attribute>
         </item>
         <item>
+            <attribute name="label" translatable="yes">Merge menu and titlebar</attribute>
+            <attribute name="action">app.toggle-merge-menu-titlebar</attribute>
+            <attribute name="icon">view-continuous</attribute>
+        </item>
+        <item>
           <attribute name="label" translatable="yes">_Command Palette</attribute>
           <attribute name="action">win.canvas-command-palette</attribute>
         </item>
