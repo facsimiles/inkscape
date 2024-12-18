@@ -115,11 +115,6 @@ add_actions_window(InkscapeApplication* app)
     gapp->add_action("window-crash", [=](){
         abort();
     });
-    gapp->add_action("toggle-merge-menu-titlebar", [=]() {
-        auto prefs = Inkscape::Preferences::get();
-        auto merge_menu_titlebar = prefs->getBool("/window/mergeMenuTitlebar", false);
-        prefs->setBool("/window/mergeMenuTitlebar", !merge_menu_titlebar);
-    });
     // clang-format on
 
     app->get_action_extra_data().add_data(raw_data_window);
