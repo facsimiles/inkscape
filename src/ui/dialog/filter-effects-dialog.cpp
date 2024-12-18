@@ -2870,7 +2870,6 @@ FilterEffectsDialog::FilterEffectsDialog()
                 get_widget<Gtk::Box>(_builder, "connect-box-wide").remove(*_show_sources);
                 get_widget<Gtk::Box>(_builder, "connect-box").append(*_show_sources);
                 _narrow_dialog = true;
-                ensure_size();
             }
         } else if (ratio > 1 + hysteresis && width > threshold_width) {
             // make wide/short
@@ -2883,7 +2882,6 @@ FilterEffectsDialog::FilterEffectsDialog()
                 get_widget<Gtk::Box>(_builder, "connect-box").remove(*_show_sources);
                 get_widget<Gtk::Box>(_builder, "connect-box-wide").append(*_show_sources);
                 _narrow_dialog = false;
-                ensure_size();
             }
         }
     });
@@ -3232,8 +3230,6 @@ void FilterEffectsDialog::update_settings_view()
         _filter_general_settings->show_and_update(0, filter);
         _no_filter_selected.set_visible(false);
     }
-
-    ensure_size();
 }
 
 void FilterEffectsDialog::update_settings_sensitivity()
