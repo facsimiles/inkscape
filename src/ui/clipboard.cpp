@@ -1199,18 +1199,43 @@ static bool has_defs_anchestor(SPObject const *obj)
 }
 
 /**
- * Copy all the definitions used by the given items to the clipboard defs.
+ * Build a mapping from "owner" objects to their directly linked dependencies
+ * inside the given document.
+ *
+ * @pre Document is up-to-date
  */
-void ClipboardManagerImpl::_copyUsedDefs(std::vector<SPItem *> const & items)
+static auto buildLinkedDependenciesMapping(SPDocument *document)
+{
+    std::map<SPObject const *, std::vector<SPObject *>> mapping;
+
+    std::function<void(SPObject *)> const traverse = [&](SPObject *obj) {
+        if (!obj->cloned) {
+            for (auto const *owner : obj->hrefList) {
+                mapping[owner].push_back(obj);
+            }
+            for (auto &child : obj->children) {
+                traverse(&child);
+            }
+        }
+    };
+
+    traverse(document->getRoot());
+
+    return mapping;
+}
+
+/**
+ * Collect all elements which are referenced (directly or indirectly) by the
+ * given items, are in the same document, and are not in the items list itself.
+ */
+static std::vector<SPObject *> collectLinkedDependencies(std::vector<SPItem *> const &items)
 {
     if (items.empty()) {
-        return;
+        return {};
     }
 
-    SPDocument *document = items.front()->document;
     std::set<SPObject const *> done_elements;
     std::vector<SPObject *> ref_elements;
-    std::map<SPObject const *, std::vector<SPObject *>> back_references;
 
     std::function<void(SPObject const *)> const add_to_done_recursively = [&](SPObject const *obj) {
         if (!obj->cloned) {
@@ -1225,18 +1250,13 @@ void ClipboardManagerImpl::_copyUsedDefs(std::vector<SPItem *> const & items)
         add_to_done_recursively(item);
     }
 
-    std::function<void(SPObject *)> const collect_back_references = [&](SPObject *obj) {
-        if (!obj->cloned) {
-            for (auto const *owner : obj->hrefList) {
-                back_references[owner].push_back(obj);
-            }
-            for (auto &child : obj->children) {
-                collect_back_references(&child);
-            }
-        }
-    };
+    auto back_references = buildLinkedDependenciesMapping(items.front()->document);
 
-    collect_back_references(document->getRoot());
+    auto prune_descendants_of = [&ref_elements](SPObject *ref) {
+        auto is_descendant_of_ref = [ref](SPObject const *obj) { return ref->isAncestorOf(obj); };
+        ref_elements.erase(std::remove_if(ref_elements.begin(), ref_elements.end(), is_descendant_of_ref),
+                           ref_elements.end());
+    };
 
     for (bool repeat = true; repeat;) {
         repeat = false;
@@ -1244,6 +1264,7 @@ void ClipboardManagerImpl::_copyUsedDefs(std::vector<SPItem *> const & items)
             for (auto *ref : back_references[obj]) {
                 if (!done_elements.count(ref)) {
                     add_to_done_recursively(ref);
+                    prune_descendants_of(ref);
                     ref_elements.push_back(ref);
                     repeat = true;
                 }
@@ -1251,21 +1272,19 @@ void ClipboardManagerImpl::_copyUsedDefs(std::vector<SPItem *> const & items)
         }
     }
 
-    auto const has_ref_elements_ancestor = [&](SPObject const *obj) {
-        for (auto *anchestor : ref_elements) {
-            if (anchestor->isAncestorOf(obj)) {
-                return true;
-            }
-        }
-        return false;
-    };
+    return ref_elements;
+}
+
+/**
+ * Copy all the definitions used by the given items to the clipboard defs.
+ */
+void ClipboardManagerImpl::_copyUsedDefs(std::vector<SPItem *> const & items)
+{
+    auto ref_elements = collectLinkedDependencies(items);
 
     sort(ref_elements.begin(), ref_elements.end(), sp_object_compare_position_bool);
 
     for (auto *obj : ref_elements) {
-        if (has_ref_elements_ancestor(obj)) {
-            continue;
-        }
         if (has_defs_anchestor(obj)) {
             _copyNode(obj->getRepr(), _doc, _defs);
         } else {
