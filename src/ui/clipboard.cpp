@@ -1092,7 +1092,7 @@ void ClipboardManagerImpl::_copySelection(ObjectSet *selection)
     // copy the representation of the items
     for (auto *item : sorted_items) {
         // Create a group with the parent transform. This group will be ungrouped when pasting
-        // und takes care of transform relationships of clones, text-on-path, etc.
+        // and takes care of transform relationships of clones, text-on-path, etc.
         auto &group = groups[item->parent];
         if (!group) {
             group = _doc->createElement("svg:g");
@@ -1191,7 +1191,7 @@ void ClipboardManagerImpl::_copyCompleteStyle(SPItem *item, Inkscape::XML::Node 
 static bool has_defs_anchestor(SPObject const *obj)
 {
     for (auto *ancestor = obj->parent; ancestor; ancestor = ancestor->parent) {
-        if (cast<SPDefs>(ancestor)) {
+        if (is<SPDefs>(ancestor)) {
             return true;
         }
     }
