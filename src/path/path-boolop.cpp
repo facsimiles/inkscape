@@ -37,6 +37,7 @@
 #include "object/sp-text.h"
 #include "ui/icon-names.h"
 #include "xml/repr-sorting.h"
+#include "style.h"
 
 using Inkscape::DocumentUndo;
 
@@ -507,16 +508,11 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(BooleanOp bop, const bool skip_undo
                 }
             }
 
-            auto css = sp_repr_css_attr(il[0]->getRepr(), "style");
-            auto val = sp_repr_css_property(css, "fill-rule", nullptr);
-            if (val && strcmp(val, "nonzero") == 0) {
-                origWind[curOrig]= fill_nonZero;
-            } else if (val && strcmp(val, "evenodd") == 0) {
+            if (item->style->fill_rule.computed == SP_WIND_RULE_EVENODD) {
                 origWind[curOrig]= fill_oddEven;
             } else {
                 origWind[curOrig]= fill_nonZero;
             }
-            sp_repr_css_attr_unref(css);
 
             if (auto curve = curve_for_item(item)) {
                 auto pathv = curve->get_pathvector() * item->i2doc_affine();

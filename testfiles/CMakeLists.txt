@@ -62,6 +62,7 @@ set(TEST_SOURCES
     async_channel-test
     async_funclog-test
     async_progress-test
+    boolop-attr-test
     uri-test
     util-test
     drag-and-drop-svgz
