@@ -145,7 +145,6 @@ StartScreen::StartScreen()
     , banners        (get_widget<Gtk::Overlay>         (builder, "banner"))
     , themes         (get_widget<Gtk::ComboBox>        (builder, "themes"))
     , recent_treeview(get_widget<Gtk::TreeView>        (builder, "recent_treeview"))
-    , load_btn       (get_widget<Gtk::Button>          (builder, "load"))
 {
     set_name("start-screen-window");
     set_title(Inkscape::inkscape_version());
@@ -219,10 +218,8 @@ StartScreen::StartScreen()
     recent_treeview.signal_row_activated().connect(sigc::hide(sigc::hide((sigc::mem_fun(*this, &StartScreen::load_document)))));
     recent_treeview.get_selection()->signal_changed().connect(sigc::mem_fun(*this, &StartScreen::on_recent_changed));
     _templates_switch_page_conn = templates.signal_switch_page().connect(sigc::mem_fun(*this, &StartScreen::on_kind_changed));
-    load_btn.set_sensitive(true);
 
     show_toggle->signal_toggled().connect(sigc::mem_fun(*this, &StartScreen::show_toggle));
-    load_btn.signal_clicked().connect(sigc::mem_fun(*this, &StartScreen::load_document));
     templates.connectItemSelected(sigc::mem_fun(*this, &StartScreen::new_document));
     new_btn->signal_clicked().connect(sigc::mem_fun(*this, &StartScreen::new_document));
     close_btn->signal_clicked().connect([this] { response(GTK_RESPONSE_CLOSE); });
@@ -356,7 +353,6 @@ StartScreen::on_recent_changed()
  */
 void StartScreen::on_kind_changed(Gtk::Widget *tab, unsigned page_num)
 {
-    load_btn.set_visible(page_num == 0);
 }
 
 /**

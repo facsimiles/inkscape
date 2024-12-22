@@ -711,15 +711,6 @@
                   </object>
                 </child>
                 <child>
-                  <object class="GtkButton" id="load">
-                    <property name="label" translatable="yes">Open</property>
-                    <property name="sensitive">False</property>
-                    <property name="focusable">True</property>
-                    <property name="focus-on-click">False</property>
-                    <property name="receives-default">True</property>
-                    <property name="valign">center</property>
-                  </object>
-                </child>
                 <child>
                   <object class="GtkButton" id="new">
                     <property name="label" translatable="yes">New Document</property>
