@@ -711,7 +711,6 @@
                   </object>
                 </child>
                 <child>
-                <child>
                   <object class="GtkButton" id="new">
                     <property name="label" translatable="yes">New Document</property>
                     <property name="focusable">True</property>
