@@ -39,6 +39,10 @@
 #include <gtkmm/popovermenubar.h>
 #include <gtkmm/recentmanager.h>
 #include <gtkmm/label.h>
+#include <gtkmm/cssprovider.h>
+#include <gtkmm/styleprovider.h>
+#include <gtkmm/stylecontext.h>
+#include <gdkmm/display.h>
 
 #include "actions/actions-effect-data.h"
 #include "actions/actions-effect.h"
@@ -306,6 +310,24 @@ build_menu(Gtk::Window *mainWindow)
     if (merge_menu_titlebar && mainWindow != nullptr) {
         auto headerBar = Gtk::make_managed<Gtk::HeaderBar>();
         headerBar->set_show_title_buttons(true);
+
+        /* Change size and background color of HeaderBar */
+        /* Should this be in a theme? */
+        auto cssProvider = Gtk::make_managed<Gtk::CssProvider>();
+        cssProvider->load_from_string(
+            """headerbar {"""
+            """background: transparent;"""
+            """border-left: 0;"""
+            """border-right: 0;"""
+            """border-top: 0"""
+            """}"""
+        );
+        Gtk::StyleContext::add_provider_for_display(
+            Gdk::Display::get_default(),
+            cssProvider,
+            GTK_STYLE_PROVIDER_PRIORITY_APPLICATION
+        );
+
         mainWindow->set_titlebar(*headerBar);
 
         auto popovermenubar = Gtk::make_managed<Gtk::PopoverMenuBar>(gmenu);
