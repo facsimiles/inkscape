@@ -28,6 +28,7 @@ set(ui_SRC
 
 	desktop/document-check.cpp
 	desktop/menubar.cpp
+	desktop/menubar-windows.cpp
 	desktop/menu-set-tooltips-shift-icons.cpp
 
 	knot/knot.cpp
@@ -319,6 +320,7 @@ set(ui_SRC
 
 	desktop/document-check.h
 	desktop/menubar.h
+	desktop/menubar-windows.h
 	desktop/menu-set-tooltips-shift-icons.h
 
 	dialog/about.h
