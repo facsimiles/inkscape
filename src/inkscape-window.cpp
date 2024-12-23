@@ -180,22 +180,6 @@ void InkscapeWindow::change_document(SPDocument *document)
     update_dialogs();
 }
 
-// Sets up the window and view according to user preferences and <namedview> of the just loaded document
-void
-InkscapeWindow::setup_view()
-{
-    // Resize the window to match the document properties
-    sp_namedview_window_from_document(_desktop); // This should probably be a member function here.
-
-    _desktop->schedule_zoom_from_document();
-    sp_namedview_update_layers_from_document(_desktop);
-
-    SPNamedView *nv = _desktop->getNamedView();
-    if (nv && nv->lockguides) {
-        nv->setLockGuides(true);
-    }
-}
-
 /**
  * If "dialogs on top" is activated in the preferences, set `parent` as the
  * new transient parent for all DialogWindow windows of the application.
