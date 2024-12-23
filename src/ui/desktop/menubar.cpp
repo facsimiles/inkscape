@@ -25,6 +25,7 @@
 #include <regex>
 #include <string>
 #include <unordered_map>
+#include <iostream>
 #include <glibmm/i18n.h>
 #include <glibmm/quark.h>
 #include <glibmm/regex.h>
@@ -301,13 +302,34 @@ build_menu(Gtk::Window *mainWindow)
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     auto useicons = static_cast<UseIcons>(prefs->getInt("/theme/menuIcons", 0));
 
+    {
+
     // Whether to merge the menubar with the application's titlebar.
     // Extracted from: https://gitlab.gnome.org/GNOME/gimp/-/commit/317aa803d2b0291cc2153a8f1148c220ea910895
-    auto merge_menu_titlebar = prefs->getBool("/window/mergeMenuTitlebar", false);
+    auto merge_menu_titlebar = prefs->getString("/window/mergeMenuTitlebar", "platform-default");
+    auto is_force_disabled = merge_menu_titlebar.compare("off");
 
     // Do not merge titlebar in MacOS
     #ifndef G_OS_DARWIN
-    if (merge_menu_titlebar && mainWindow != nullptr) {
+
+    // If set to 'off', return immediately.
+    if (is_force_disabled) return;
+
+    auto is_platform_default = merge_menu_titlebar.compare("platform-default");
+    auto desktop_session = std::getenv("DESKTOP_SESSION");
+    // GNOME environments where the user would want it enabled by default
+    auto is_gnome_desktop = desktop_session == "gnome" ||
+        desktop_session == "ubuntu-desktop" ||
+        desktop_session == "pantheon";
+
+    // Whether the user has set the preference to be always 'on'
+    auto is_force_enabled = merge_menu_titlebar.compare("on");
+
+    // If set to 'on' or 'platform-default' and platform is a GNOME desktop environment
+    if ((
+        is_force_enabled ||
+        is_platform_default && is_gnome_desktop
+        ) && mainWindow != nullptr) {
         auto headerBar = Gtk::make_managed<Gtk::HeaderBar>();
         headerBar->set_show_title_buttons(true);
 
@@ -343,6 +365,8 @@ build_menu(Gtk::Window *mainWindow)
 
         app->gtk_app()->set_menubar(gmenu_copy);
     #endif
+    }
+
     }
 
     // rebuild recent items submenu when the list changes

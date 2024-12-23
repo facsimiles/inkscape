@@ -2009,7 +2009,7 @@ void InkscapePreferences::initPageUI()
     _win_gtk.init ( _("GTK open/save dialogs"), "/options/desktopintegration/value", 0, false, &_win_native);
 
     _win_show_boot.init ( _("Show Welcome dialog"), "/options/boot/enabled", true);
-    _win_merge_titlebar_menu.init( _("Merge titlebar and menu"), "/window/mergeMenuTitlebar", false);
+    _win_merge_titlebar_menu.init( _("Merge titlebar and menu"), "/window/mergeMenuTitlebar", "platform-default");
     _win_hide_task.init ( _("Dialogs are hidden in taskbar"), "/options/dialogsskiptaskbar/value", true);
     _win_save_viewport.init ( _("Save and restore documents viewport"), "/options/savedocviewport/value", true);
     _win_zoom_resize.init ( _("Zoom when window is resized"), "/options/stickyzoom/value", false);
