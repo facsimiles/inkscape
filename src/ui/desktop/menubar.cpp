@@ -50,7 +50,6 @@
 #include "preferences.h"          // Use icons or not
 #include "io/fix-broken-links.h"
 #include "io/resource.h"          // UI File location
-#include "menubar-windows.h"      // Windows-style titlebar buttons
 
 // =================== Main Menu ================
 void
@@ -329,13 +328,6 @@ build_menu(Gtk::Window *mainWindow)
             cssProvider,
             GTK_STYLE_PROVIDER_PRIORITY_APPLICATION
         );
-
-        #ifdef G_OS_WINDOWS // if Windows, replace HeaderBar close buttons
-            headerBar->set_show_title_buttons(false);
-            WindowsTitlebar *windowsTitlebar(mainWindow);
-
-            headerBar->pack_end(windowsTitlebar);
-        #endif
 
         mainWindow->set_titlebar(*headerBar);
 
