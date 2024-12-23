@@ -217,6 +217,7 @@ StartScreen::StartScreen()
     themes.signal_changed().connect(sigc::mem_fun(*this, &StartScreen::theme_changed));
     dark_toggle->property_active().signal_changed().connect(sigc::mem_fun(*this, &StartScreen::theme_changed));
     save->signal_clicked().connect(sigc::bind(sigc::mem_fun(*this, &StartScreen::notebook_next), save));
+    merge_menu_titlebar->property_active().signal_changed().connect(sigc::mem_fun(*this, &StartScreen::toggle_merge_menu_titlebar));
 
     // "Supported by You" tab
     thanks->signal_clicked().connect(sigc::bind(sigc::mem_fun(*this, &StartScreen::notebook_next), thanks));
