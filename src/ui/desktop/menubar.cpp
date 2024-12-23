@@ -316,6 +316,7 @@ build_menu(Gtk::Window *mainWindow)
         auto cssProvider = Gtk::CssProvider::create();
         cssProvider->load_from_string(
             """headerbar {"""
+            """min-height: 0px;"""
             """background: transparent;"""
             """border-left: 0;"""
             """border-right: 0;"""
