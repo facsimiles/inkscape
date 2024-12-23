@@ -10,6 +10,7 @@
 
 #include "startup.h"
 
+#include <cstdio>
 #include <limits>
 #include <string>
 #include <glibmm/i18n.h>
@@ -215,7 +216,6 @@ StartScreen::StartScreen()
     keys->signal_changed().connect(sigc::mem_fun(*this, &StartScreen::keyboard_changed));
     themes.signal_changed().connect(sigc::mem_fun(*this, &StartScreen::theme_changed));
     dark_toggle->property_active().signal_changed().connect(sigc::mem_fun(*this, &StartScreen::theme_changed));
-    merge_menu_titlebar->property_active().signal_changed().connect(sigc::mem_fun(*this, &StartScreen::toggle_merge_menu_titlebar));
     save->signal_clicked().connect(sigc::bind(sigc::mem_fun(*this, &StartScreen::notebook_next), save));
 
     // "Supported by You" tab
@@ -601,8 +601,43 @@ StartScreen::theme_changed()
 void
 StartScreen::toggle_merge_menu_titlebar() {
     auto prefs = Inkscape::Preferences::get();
-    auto merge_menu_titlebar = prefs->getBool("/window/mergeMenuTitlebar", false);
-    prefs->setBool("/window/mergeMenuTitlebar", !merge_menu_titlebar);
+    auto merge_menu_titlebar = prefs->getString("/window/mergeMenuTitlebar", "platform-default");
+    auto is_enabled = merge_menu_titlebar.compare("on");
+    auto is_disabled = merge_menu_titlebar.compare("off");
+
+    // FIXME: duplicated code here and in ui/desktop/menubar.cpp:307
+
+    if (is_enabled) {
+        prefs->setString("/window/mergeMenuTitlebar", "off");
+        return;
+    }
+    if (is_disabled) {
+        prefs->setString("/window/mergeMenuTitlebar", "on");
+        return;
+    }
+
+    #ifdef G_OS_LINUX
+
+    auto is_platform_determined = merge_menu_titlebar.compare("platform-default");
+
+    if (!is_platform_determined) {
+        sprintf(stderr, 'merge_menu_titlebar: setting is neither "on" nor "off" nor "platform-default"');
+        return;
+    }
+
+    // Determine whether DE wants to merge menu titlebar
+    auto desktop_session = std::getenv("DESKTOP_SESSION");
+    auto is_gnome_de = desktop_session.compare("gnome") ||
+                       desktop_session.compare("ubuntu-desktop") ||
+                       desktop_session.compare("pantheon");
+
+    if (is_gnome_de) {
+        prefs->setString("/window/mergeMenuTitlebar", "off");
+        return;
+    }
+    prefs->setString("/window/mergeMenuTitlebar", "on");
+
+    #endif
 }
 
 /**
