@@ -313,7 +313,7 @@ build_menu(Gtk::Window *mainWindow)
 
         /* Change size and background color of HeaderBar */
         /* Should this be in a theme? */
-        auto cssProvider = Gtk::make_managed<Gtk::CssProvider>();
+        auto cssProvider = Gtk::CssProvider::create();
         cssProvider->load_from_string(
             """headerbar {"""
             """background: transparent;"""
