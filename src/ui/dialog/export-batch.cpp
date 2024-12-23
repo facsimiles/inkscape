@@ -644,7 +644,7 @@ void BatchExport::onExport()
 
     if (!Inkscape::IO::file_test(path.c_str(), (GFileTest)(G_FILE_TEST_IS_DIR))) {
         Gtk::Window *window = _desktop->getToplevel();
-        if (!Inkscape::IO::file_test(path.c_str(), (GFileTest)(G_FILE_TEST_EXISTS))) {
+        if (Inkscape::IO::file_test(path.c_str(), (GFileTest)(G_FILE_TEST_EXISTS))) {
             Gtk::MessageDialog(*window, _("Can not save to a directory that is actually a file."), true, Gtk::MESSAGE_ERROR, Gtk::BUTTONS_OK).run();
             return;
         }
