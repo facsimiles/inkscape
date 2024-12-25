@@ -451,18 +451,11 @@ void Handle::dragged(Geom::Point &new_pos, MotionEvent const &event)
     bool snap = held_shift(event) ? false : sm.someSnapperMightSnap();
     std::optional<Inkscape::Snapper::SnapConstraint> ctrl_constraint;
 
-    // with Alt + Shift, preserve length and direction of handles and move parent
-    if (held_alt(event) & held_shift(event)) {
-        Geom::Point parent_pos = new_pos - _saved_dir * _saved_length;
-        _parent->move(parent_pos);
-        snap = false;
-
-    } else if (held_alt(event)) {
+    if (held_alt(event)) {
         // with Alt, preserve length of the handle
         new_pos = parent_pos + Geom::unit_vector(new_pos - parent_pos) * _saved_length;
         snap = false;
         _saved_dir = Geom::unit_vector(relativePos());
-
     } else {
         // with nothing pressed we update the lengths
         _saved_length = _drag_out ? 0 : length();
