@@ -142,8 +142,6 @@ protected:
     // Widgets
     Gtk::Box  *box;
 
-    Gtk::Label *tag[2];      // 'a', 'm', or empty.
-
     std::unique_ptr<Gtk::Label> type_label[2]; // 'L', 'R', 'M', or empty.
     std::unique_ptr<GradientImage> gradient_preview[2];
     std::unique_ptr<ColorPreview> color_preview[2];
