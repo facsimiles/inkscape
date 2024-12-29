@@ -1292,7 +1292,7 @@ void PenTool::_moveNode(Geom::Point const p)
     auto prefs = Inkscape::Preferences::get();
     bool const rotated = prefs->getBool("/options/moverotated/value", true);
     if (rotated) {
-        delta *= Geom::Rotate(-_desktop->current_rotation());
+        delta *= Geom::Rotate(-_desktop->current_rotation().angle());
     }
 
     // Move green curve
