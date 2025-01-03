@@ -10,7 +10,6 @@
 
 #include "startup.h"
 
-#include <cstdio>
 #include <limits>
 #include <string>
 #include <glibmm/i18n.h>
