@@ -433,11 +433,6 @@
                     <child>
                       <object class="GtkBox">
                         <child>
-                            <object class="GtkCheckButton" id="merge_menu_titlebar">
-                                <property name="label">Merge menu and titlebar</property>
-                            </object>
-                        </child>
-                        <child>
                           <object class="GtkLabel">
                             <property name="valign">center</property>
                             <property name="margin-end">5</property>
