@@ -15,6 +15,7 @@ set(util_SRC
 	paper.cpp
 	parse-int-range.cpp
 	preview.cpp
+	platform-check.cpp
 	source_date_epoch.cpp
 	statics.cpp
 	theme-utils.cpp
@@ -51,6 +52,7 @@ set(util_SRC
 	parse-int-range.h
 	pool.h
 	preview.h
+	platform-check.h
     recently-used-fonts.h
 	reference.h
 	scope_exit.h
