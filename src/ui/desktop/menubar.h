@@ -34,9 +34,12 @@ class Menu;
 
 namespace Gtk {
 class Window;
+class HeaderBar;
 } // namespace Gtk
 
-void build_menu(Gtk::Window *mainWindow);
+Gtk::HeaderBar *build_csd_menu();
+
+Gio::Menu *build_menu();
 
 enum class UseIcons {
     never = -1, // Match existing preference numbering.

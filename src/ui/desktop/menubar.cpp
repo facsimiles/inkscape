@@ -36,14 +36,8 @@
 #include <giomm/menulinkiter.h>
 #include <giomm/menumodel.h>
 #include <gtkmm/builder.h>
-#include <gtkmm/headerbar.h>
-#include <gtkmm/popovermenubar.h>
 #include <gtkmm/recentmanager.h>
 #include <gtkmm/label.h>
-#include <gtkmm/cssprovider.h>
-#include <gtkmm/styleprovider.h>
-#include <gtkmm/stylecontext.h>
-#include <gdkmm/display.h>
 
 #include "actions/actions-effect-data.h"
 #include "actions/actions-effect.h"
@@ -53,8 +47,8 @@
 #include "io/resource.h"          // UI File location
 
 // =================== Main Menu ================
-void
-build_menu(Gtk::Window *mainWindow)
+Gio::Menu *
+build_menu()
 {
     std::string filename = Inkscape::IO::Resource::get_filename(Inkscape::IO::Resource::UIS, "menus.ui");
     auto refBuilder = Gtk::Builder::create();
@@ -65,7 +59,7 @@ build_menu(Gtk::Window *mainWindow)
         std::cerr << "build_menu: failed to load Main menu from: "
                     << filename <<": "
                     << err.what() << std::endl;
-        return;
+        return nullptr;
     }
 
     const auto object = refBuilder->get_object("menus");
@@ -73,7 +67,7 @@ build_menu(Gtk::Window *mainWindow)
 
     if (!gmenu) {
         std::cerr << "build_menu: failed to build Main menu!" << std::endl;
-        return;
+        return nullptr;
     }
 
     static auto app = InkscapeApplication::instance();
@@ -299,78 +293,10 @@ build_menu(Gtk::Window *mainWindow)
 
     rebuild_recent(recent_gmenu);
 
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    auto useicons = static_cast<UseIcons>(prefs->getInt("/theme/menuIcons", 0));
-
-    {
-
-    // Whether to merge the menubar with the application's titlebar.
-    // Extracted from: https://gitlab.gnome.org/GNOME/gimp/-/commit/317aa803d2b0291cc2153a8f1148c220ea910895
-    auto merge_menu_titlebar = prefs->getString("/window/mergeMenuTitlebar", "platform-default");
-    auto is_force_disabled = merge_menu_titlebar.compare("off");
-
-    // Do not merge titlebar in MacOS
-    #ifndef G_OS_DARWIN
-
-    // If set to 'off', return immediately.
-    if (is_force_disabled) return;
-
-    auto is_platform_default = merge_menu_titlebar.compare("platform-default");
-    auto desktop_session = std::getenv("DESKTOP_SESSION");
-    // GNOME environments where the user would want it enabled by default
-    auto is_gnome_desktop = desktop_session == "gnome" ||
-        desktop_session == "ubuntu-desktop" ||
-        desktop_session == "pantheon";
-
-    // Whether the user has set the preference to be always 'on'
-    auto is_force_enabled = merge_menu_titlebar.compare("on");
-
-    // If set to 'on' or 'platform-default' and platform is a GNOME desktop environment
-    if ((
-        is_force_enabled ||
-        is_platform_default && is_gnome_desktop
-        ) && mainWindow != nullptr) {
-        auto headerBar = Gtk::make_managed<Gtk::HeaderBar>();
-        headerBar->set_show_title_buttons(true);
-
-        /* Change size and background color of HeaderBar */
-        /* Should this be in a theme? */
-        auto cssProvider = Gtk::CssProvider::create();
-        cssProvider->load_from_string(
-            """headerbar {"""
-            """min-height: 0px;"""
-            """background: transparent;"""
-            """border-left: 0;"""
-            """border-right: 0;"""
-            """border-top: 0"""
-            """}"""
-        );
-        Gtk::StyleContext::add_provider_for_display(
-            Gdk::Display::get_default(),
-            cssProvider,
-            GTK_STYLE_PROVIDER_PRIORITY_APPLICATION
-        );
-
-        mainWindow->set_titlebar(*headerBar);
-
-        auto popovermenubar = Gtk::make_managed<Gtk::PopoverMenuBar>(gmenu);
-        headerBar->pack_start(*popovermenubar);
-        headerBar->show();
-    } else {
-    #else
-        // Remove all or some icons. Also create label to tooltip map.
-        auto gmenu_copy = Gio::Menu::create();
-        // menu gets recreated; keep track of new recent items submenu
-        rebuild_menu(gmenu, gmenu_copy, useicons, recent_menu_quark, recent_gmenu);
-
-        app->gtk_app()->set_menubar(gmenu_copy);
-    #endif
-    }
-
-    }
-
     // rebuild recent items submenu when the list changes
     recent_manager->signal_changed().connect([=](){ rebuild_recent(recent_gmenu); });
+
+    return gmenu;
 }
 
 /*
