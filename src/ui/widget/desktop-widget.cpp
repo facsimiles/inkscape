@@ -106,25 +106,16 @@ SPDesktopWidget::SPDesktopWidget(InkscapeWindow *inkscape_window)
     _hbox->set_vexpand(true);
     _hbox->set_name("DesktopHbox");
 
-    _tbbox = Gtk::make_managed<Gtk::Paned>(Gtk::Orientation::HORIZONTAL);
-    _tbbox->set_vexpand(true);
-    _tbbox->set_name("ToolboxCanvasPaned");
-    _hbox->append(*_tbbox);
-
     prepend(*_hbox);
 
     _top_toolbars = Gtk::make_managed<Gtk::Grid>();
     _top_toolbars->set_name("TopToolbars");
-    prepend(*_top_toolbars);
 
     /* Toolboxes */
     tool_toolbars = std::make_unique<Inkscape::UI::Toolbar::Toolbars>();
     _top_toolbars->attach(*tool_toolbars, 0, 1);
 
     tool_toolbox = Gtk::make_managed<Inkscape::UI::Toolbar::ToolToolbar>(inkscape_window);
-    _tbbox->set_start_child(*tool_toolbox);
-    _tbbox->set_resize_start_child(false);
-    _tbbox->set_shrink_start_child(false);
     auto adjust_pos = [=, this](){
         int minimum_width, natural_width;
         int ignore;
@@ -178,9 +169,7 @@ SPDesktopWidget::SPDesktopWidget(InkscapeWindow *inkscape_window)
     _container = std::make_unique<DialogContainer>(inkscape_window);
     _columns = _container->get_columns();
     _columns->set_dropzone_sizes(2, -1);
-    _tbbox->set_end_child(*_container);
-    _tbbox->set_resize_end_child(true);
-    _tbbox->set_shrink_end_child(true);
+    _hbox->append(*_container);
 
     // separator widget in tbox
     auto& tbox_separator = *_tbbox->get_children().at(1);
@@ -188,6 +177,7 @@ SPDesktopWidget::SPDesktopWidget(InkscapeWindow *inkscape_window)
 
     _canvas_grid->set_hexpand(true);
     _canvas_grid->set_vexpand(true);
+    _columns->append(*_top_toolbars);
     _columns->append(std::move(cg));
 
     // ------------------ Finish Up -------------------- //
