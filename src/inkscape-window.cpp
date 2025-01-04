@@ -20,6 +20,7 @@
 #include <gtkmm/box.h>
 #include <gtkmm/popovermenubar.h>
 #include <gtkmm/shortcutcontroller.h>
+#include <gtkmm/headerbar.h>
 #include <sigc++/functors/mem_fun.h>
 
 #include "desktop.h"
@@ -27,6 +28,7 @@
 #include "document.h"
 #include "enums.h"      // PREFS_WINDOW_GEOMETRY_NONE
 #include "inkscape-application.h"
+#include "preferences.h"
 
 #include "actions/actions-canvas-mode.h"
 #include "actions/actions-canvas-snapping.h"
@@ -54,6 +56,7 @@
 #include "ui/util.h"
 #include "ui/widget/desktop-widget.h"
 #include "util/enums.h"
+#include "util/platform-check.h"  // PlatformCheck::is_gnome()
 
 using Inkscape::UI::Dialog::DialogManager;
 using Inkscape::UI::Dialog::DialogContainer;
@@ -101,9 +104,50 @@ InkscapeWindow::InkscapeWindow(SPDesktop *desktop)
         connection->export_action_group(document_action_group_name, _document->getActionGroup());
     }
 
-    // This is called here (rather than in InkscapeApplication) solely to add win level action
-    // tooltips to the menu label-to-tooltip map.
-    build_menu(this);
+    // ============== Build menu ==================
+    auto prefs = Inkscape::Preferences::get();
+
+    // Whether to merge the menubar with the application's titlebar.
+    // Extracted from: https://gitlab.gnome.org/GNOME/gimp/-/commit/317aa803d2b0291cc2153a8f1148c220ea910895
+    auto merge_menu_titlebar = prefs->getString("/window/mergeMenuTitlebar", "platform-default");
+    auto is_force_disabled = merge_menu_titlebar.compare("off");
+
+    // Do not merge titlebar in MacOS
+    #ifndef G_OS_DARWIN
+
+    // If set to 'off', return immediately.
+    if (is_force_disabled) return;
+
+    auto is_platform_default = merge_menu_titlebar.compare("platform-default");
+    auto is_gnome = Inkscape::Util::PlatformCheck::is_gnome();
+
+    // Whether the user has set the preference to be always 'on'
+    auto is_force_enabled = merge_menu_titlebar.compare("on");
+
+    auto gmenu = build_menu();
+
+    // If set to 'on' or 'platform-default' and platform is a GNOME desktop environment
+    if (
+        is_force_enabled ||
+        is_platform_default && is_gnome) {
+        auto headerBar = Gtk::make_managed<Gtk::HeaderBar>();
+        headerBar->set_show_title_buttons(true);
+
+        set_titlebar(*headerBar);
+
+        auto popovermenubar = Gtk::make_managed<Gtk::PopoverMenuBar>(gmenu);
+        headerBar->pack_start(*popovermenubar);
+        headerBar->show();
+    } else {
+    #else
+        // Remove all or some icons. Also create label to tooltip map.
+        auto gmenu_copy = Gio::Menu::create();
+        // menu gets recreated; keep track of new recent items submenu
+        rebuild_menu(gmenu, gmenu_copy, useicons, recent_menu_quark, recent_gmenu);
+
+        app->gtk_app()->set_menubar(gmenu_copy);
+    #endif
+    }
 
     // =============== Build interface ===============
 
@@ -127,7 +171,6 @@ InkscapeWindow::InkscapeWindow(SPDesktop *desktop)
     // ================= Shift Icons =================
     // Note: The menu is defined at the app level but shifting icons requires actual widgets and
     // must be done on the window level.
-    auto prefs = Inkscape::Preferences::get();
     bool shift_icons = prefs->getInt("/theme/shiftIcons", true);
     for (auto const child : Inkscape::UI::get_children(*this)) {
         if (auto const menubar = dynamic_cast<Gtk::PopoverMenuBar *>(child)) {
