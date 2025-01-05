@@ -55,7 +55,6 @@
 #include "ui/util.h"
 #include "ui/widget/desktop-widget.h"
 #include "util/enums.h"
-#include "util/platform-check.h"  // PlatformCheck::is_gnome()
 
 using Inkscape::UI::Dialog::DialogManager;
 using Inkscape::UI::Dialog::DialogContainer;
@@ -103,42 +102,7 @@ InkscapeWindow::InkscapeWindow(SPDesktop *desktop)
     }
 
     // ============== Build menu ==================
-    auto prefs = Inkscape::Preferences::get();
-
-    // Whether to merge the menubar with the application's titlebar.
-    // Extracted from: https://gitlab.gnome.org/GNOME/gimp/-/commit/317aa803d2b0291cc2153a8f1148c220ea910895
-    auto merge_menu_titlebar = prefs->getString("/window/mergeMenuTitlebar", "platform-default");
-    auto is_force_disabled = merge_menu_titlebar.compare("off");
-
-    auto gmenu = build_menu();
-
-    // Do not merge titlebar in MacOS
-    #ifndef G_OS_DARWIN
-
-    // If set to 'off', return immediately.
-    if (!is_force_disabled) {
-
-    auto is_platform_default = merge_menu_titlebar.compare("platform-default");
-    auto is_gnome = Inkscape::Util::PlatformCheck::is_gnome();
-
-    // Whether the user has set the preference to be always 'on'
-    auto is_force_enabled = merge_menu_titlebar.compare("on");
-
-    // If set to 'on' or 'platform-default' and platform is a GNOME desktop environment
-    // TODO: enable by default on Windows when gtk 4.18 drops
-    if (
-        is_force_enabled ||
-        is_platform_default && is_gnome) {
-        auto headerBar = build_csd_menu(gmenu);
-        set_titlebar(*headerBar);
-    }
-
-    } else {
-    #endif
-        _app->gtk_app()->set_menubar(gmenu);
-    #ifndef G_OS_DARWIN // This brace isn't necessary in MacOS
-    }
-    #endif
+    update_menus(_app->gtk_app());
 
     // =============== Build interface ===============
 
@@ -162,6 +126,7 @@ InkscapeWindow::InkscapeWindow(SPDesktop *desktop)
     // ================= Shift Icons =================
     // Note: The menu is defined at the app level but shifting icons requires actual widgets and
     // must be done on the window level.
+    auto prefs = Inkscape::Preferences::get();
     bool shift_icons = prefs->getInt("/theme/shiftIcons", true);
     for (auto const child : Inkscape::UI::get_children(*this)) {
         if (auto const menubar = dynamic_cast<Gtk::PopoverMenuBar *>(child)) {

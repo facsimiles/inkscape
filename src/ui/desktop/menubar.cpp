@@ -46,6 +46,7 @@
 #include "preferences.h"          // Use icons or not
 #include "io/fix-broken-links.h"
 #include "io/resource.h"          // UI File location
+#include "util/platform-check.h"  // PlatformCheck::is_gnome()
 
 // =================== Main Menu ================
 // The task of this function is to build and return a Gio::Menu model to use in the InkscapeWindow
@@ -310,6 +311,49 @@ Gtk::HeaderBar *build_csd_menu(std::shared_ptr<Gio::Menu> gmenu) {
 
     headerBar->show();
     return headerBar;
+}
+
+void update_menus(Gtk::Application *app) {
+    auto prefs = Inkscape::Preferences::get();
+
+    // Whether to merge the menubar with the application's titlebar.
+    // Extracted from: https://gitlab.gnome.org/GNOME/gimp/-/commit/317aa803d2b0291cc2153a8f1148c220ea910895
+    auto merge_menu_titlebar = prefs->getString("/window/mergeMenuTitlebar", "platform-default");
+    auto is_force_disabled = merge_menu_titlebar.compare("off");
+
+    auto gmenu = build_menu();
+
+    // Do not merge titlebar in MacOS
+#ifdef G_OS_DARWIN
+    app->set_menubar(gmenu);
+    return;
+#endif
+
+    // If set to 'off', return immediately.
+    if (is_force_disabled) {
+        app->set_menubar(gmenu);
+        return;
+    }
+
+    auto is_platform_default = merge_menu_titlebar.compare("platform-default");
+    auto is_gnome = Inkscape::Util::PlatformCheck::is_gnome();
+
+    // Whether the user has set the preference to be always 'on'
+    auto is_force_enabled = merge_menu_titlebar.compare("on");
+
+    // If set to 'on' or 'platform-default' and platform is a GNOME desktop environment
+    // TODO: enable by default on Windows when gtk 4.18 drops
+    if (
+        is_force_enabled ||
+        is_platform_default && is_gnome) {
+            auto headerBar = build_csd_menu(gmenu);
+
+            // update headerbar for all windows
+            auto windows = app->get_windows();
+            for (auto window : windows) {
+                window->set_titlebar(*headerBar);
+            }
+        }
 }
 
 /*
