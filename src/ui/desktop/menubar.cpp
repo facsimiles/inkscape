@@ -47,6 +47,7 @@
 #include "io/resource.h"          // UI File location
 
 // =================== Main Menu ================
+// The task of this function is to build and return a Gio::Menu model to use in the InkscapeWindow
 Gio::Menu *
 build_menu()
 {
@@ -296,7 +297,7 @@ build_menu()
     // rebuild recent items submenu when the list changes
     recent_manager->signal_changed().connect([=](){ rebuild_recent(recent_gmenu); });
 
-    return gmenu;
+    return std::move(gmenu);
 }
 
 /*
