@@ -110,6 +110,8 @@ InkscapeWindow::InkscapeWindow(SPDesktop *desktop)
     auto merge_menu_titlebar = prefs->getString("/window/mergeMenuTitlebar", "platform-default");
     auto is_force_disabled = merge_menu_titlebar.compare("off");
 
+    auto gmenu = build_menu();
+
     // Do not merge titlebar in MacOS
     #ifndef G_OS_DARWIN
 
@@ -124,7 +126,6 @@ InkscapeWindow::InkscapeWindow(SPDesktop *desktop)
     // Whether the user has set the preference to be always 'on'
     auto is_force_enabled = merge_menu_titlebar.compare("on");
 
-    auto gmenu = build_menu();
 
     // If set to 'on' or 'platform-default' and platform is a GNOME desktop environment
     if (
