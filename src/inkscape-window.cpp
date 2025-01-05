@@ -113,6 +113,8 @@ InkscapeWindow::InkscapeWindow(SPDesktop *desktop)
     // Do not merge titlebar in MacOS
     #ifndef G_OS_DARWIN
 
+    {
+
     // If set to 'off', return immediately.
     if (is_force_disabled) return;
 
@@ -139,6 +141,8 @@ InkscapeWindow::InkscapeWindow(SPDesktop *desktop)
 
         app->gtk_app()->set_menubar(gmenu);
     #endif
+    }
+
     }
 
     // =============== Build interface ===============
