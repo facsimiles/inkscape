@@ -108,7 +108,7 @@ SPDesktopWidget::SPDesktopWidget(InkscapeWindow *inkscape_window)
 
     prepend(*_hbox);
 
-    _top_toolbars = Gtk::make_managed<Gtk::Grid>();
+    _top_toolbars = std::make_unique<Gtk::Grid>();
     _top_toolbars->set_name("TopToolbars");
 
     /* Toolboxes */
@@ -177,7 +177,7 @@ SPDesktopWidget::SPDesktopWidget(InkscapeWindow *inkscape_window)
 
     _canvas_grid->set_hexpand(true);
     _canvas_grid->set_vexpand(true);
-    _columns->append(*_top_toolbars);
+    _columns->append(std::move(_top_toolbars));
     _columns->append(std::move(cg));
 
     // ------------------ Finish Up -------------------- //
