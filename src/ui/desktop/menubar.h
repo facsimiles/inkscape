@@ -21,6 +21,7 @@
 #ifndef SEEN_DESKTOP_MENUBAR_H
 #define SEEN_DESKTOP_MENUBAR_H
 
+#include <memory>
 #include <glibmm/refptr.h>
 
 namespace Glib {
@@ -39,7 +40,7 @@ class HeaderBar;
 
 Gtk::HeaderBar *build_csd_menu();
 
-Gio::Menu *build_menu();
+std::shared_ptr<Gio::Menu> build_menu();
 
 enum class UseIcons {
     never = -1, // Match existing preference numbering.

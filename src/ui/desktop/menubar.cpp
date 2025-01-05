@@ -48,7 +48,7 @@
 
 // =================== Main Menu ================
 // The task of this function is to build and return a Gio::Menu model to use in the InkscapeWindow
-Gio::Menu *
+std::shared_ptr<Gio::Menu>
 build_menu()
 {
     std::string filename = Inkscape::IO::Resource::get_filename(Inkscape::IO::Resource::UIS, "menus.ui");
