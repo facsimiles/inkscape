@@ -8,6 +8,7 @@
 namespace Inkscape::Util {
 
 class PlatformCheck {
+public:
     static bool is_gnome();
 };
 
