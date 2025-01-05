@@ -25,7 +25,6 @@
 #include <regex>
 #include <string>
 #include <unordered_map>
-#include <iostream>
 #include <glibmm/i18n.h>
 #include <glibmm/quark.h>
 #include <glibmm/regex.h>
