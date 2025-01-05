@@ -37,6 +37,8 @@
 #include <gtkmm/builder.h>
 #include <gtkmm/recentmanager.h>
 #include <gtkmm/label.h>
+#include <gtkmm/headerbar.h>
+#include <gtkmm/popovermenubar.h>
 
 #include "actions/actions-effect-data.h"
 #include "actions/actions-effect.h"
@@ -297,6 +299,17 @@ build_menu()
     recent_manager->signal_changed().connect([=](){ rebuild_recent(recent_gmenu); });
 
     return std::move(gmenu);
+}
+
+Gtk::HeaderBar *build_csd_menu(std::shared_ptr<Gio::Menu> gmenu) {
+    auto headerBar = Gtk::make_managed<Gtk::HeaderBar>();
+    headerBar->set_show_title_buttons(true);
+
+    auto popoverMenuBar = Gtk::make_managed<Gtk::PopoverMenuBar>(gmenu);
+    headerBar->pack_start(*popoverMenuBar);
+
+    headerBar->show();
+    return headerBar;
 }
 
 /*
