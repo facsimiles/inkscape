@@ -130,7 +130,7 @@ private:
     Gtk::Box *_hbox = nullptr;
     std::unique_ptr<Inkscape::UI::Dialog::DialogContainer> _container;
     Inkscape::UI::Dialog::DialogMultipaned *_columns = nullptr;
-    std::unique_ptr<Gtk::Grid> _top_toolbars = nullptr;
+    std::unique_ptr<Gtk::Grid> _top_toolbars;
 
     Inkscape::UI::Widget::StatusBar *_statusbar = nullptr;
     Inkscape::UI::Dialog::SwatchesPanel *_panels;
