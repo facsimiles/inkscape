@@ -558,7 +558,7 @@ void Script::effect(Inkscape::Extension::Effect *module, ExecutionEnv *execution
         //       call that instead when there's a change that requires extensions to reload
         if (!g_strcmp0(module->get_id(), "org.inkscape.extension.manager")) {
             Inkscape::Extension::refresh_user_extensions();
-            build_menu(); // Rebuild main menubar.
+            update_menus(); // Rebuild main menubar.
         }
 
         return;
