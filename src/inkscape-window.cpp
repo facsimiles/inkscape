@@ -117,10 +117,8 @@ InkscapeWindow::InkscapeWindow(SPDesktop *desktop)
     // Do not merge titlebar in MacOS
     #ifndef G_OS_DARWIN
 
-    {
-
     // If set to 'off', return immediately.
-    if (is_force_disabled) return;
+    if (!is_force_disabled) {
 
     auto is_platform_default = merge_menu_titlebar.compare("platform-default");
     auto is_gnome = Inkscape::Util::PlatformCheck::is_gnome();
@@ -128,25 +126,20 @@ InkscapeWindow::InkscapeWindow(SPDesktop *desktop)
     // Whether the user has set the preference to be always 'on'
     auto is_force_enabled = merge_menu_titlebar.compare("on");
 
-
     // If set to 'on' or 'platform-default' and platform is a GNOME desktop environment
     if (
         is_force_enabled ||
         is_platform_default && is_gnome) {
         auto headerBar = build_csd_menu(gmenu);
         set_titlebar(*headerBar);
+    }
+
     } else {
-    #else
-        // Remove all or some icons. Also create label to tooltip map.
-        //auto gmenu_copy = Gio::Menu::create();
-        // menu gets recreated; keep track of new recent items submenu
-        //rebuild_menu(gmenu, gmenu_copy, useicons, recent_menu_quark, recent_gmenu);
-
-        app->gtk_app()->set_menubar(gmenu);
     #endif
+        _app->gtk_app()->set_menubar(gmenu);
+    #ifndef G_OS_DARWIN // This brace isn't necessary in MacOS
     }
-
-    }
+    #endif
 
     // =============== Build interface ===============
 
