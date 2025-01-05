@@ -125,6 +125,7 @@ InkscapeWindow::InkscapeWindow(SPDesktop *desktop)
     auto is_force_enabled = merge_menu_titlebar.compare("on");
 
     // If set to 'on' or 'platform-default' and platform is a GNOME desktop environment
+    // TODO: enable by default on Windows when gtk 4.18 drops
     if (
         is_force_enabled ||
         is_platform_default && is_gnome) {
