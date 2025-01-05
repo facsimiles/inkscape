@@ -130,22 +130,16 @@ InkscapeWindow::InkscapeWindow(SPDesktop *desktop)
     if (
         is_force_enabled ||
         is_platform_default && is_gnome) {
-        auto headerBar = Gtk::make_managed<Gtk::HeaderBar>();
-        headerBar->set_show_title_buttons(true);
-
+        auto headerBar = build_csd_menu(gmenu);
         set_titlebar(*headerBar);
-
-        auto popovermenubar = Gtk::make_managed<Gtk::PopoverMenuBar>(gmenu);
-        headerBar->pack_start(*popovermenubar);
-        headerBar->show();
     } else {
     #else
         // Remove all or some icons. Also create label to tooltip map.
-        auto gmenu_copy = Gio::Menu::create();
+        //auto gmenu_copy = Gio::Menu::create();
         // menu gets recreated; keep track of new recent items submenu
-        rebuild_menu(gmenu, gmenu_copy, useicons, recent_menu_quark, recent_gmenu);
+        //rebuild_menu(gmenu, gmenu_copy, useicons, recent_menu_quark, recent_gmenu);
 
-        app->gtk_app()->set_menubar(gmenu_copy);
+        app->gtk_app()->set_menubar(gmenu);
     #endif
     }
 

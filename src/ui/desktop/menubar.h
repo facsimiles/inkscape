@@ -38,7 +38,7 @@ class Window;
 class HeaderBar;
 } // namespace Gtk
 
-Gtk::HeaderBar *build_csd_menu();
+Gtk::HeaderBar *build_csd_menu(std::shared_ptr<Gio::Menu> gmenu);
 
 std::shared_ptr<Gio::Menu> build_menu();
 
