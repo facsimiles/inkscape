@@ -12,9 +12,9 @@
 #define INKSCAPE_UI_WIDGET_UNIT_H
 
 #include <glibmm/refptr.h>
-#include <gtkmm/comboboxtext.h>
 
 #include "util/units.h"
+#include "ui/widget/drop-down-list.h"
 
 namespace Gtk {
 class Builder;
@@ -27,7 +27,7 @@ namespace Inkscape::UI::Widget {
 /**
  * A drop down menu for choosing unit types.
  */
-class UnitMenu : public Gtk::ComboBoxText
+class UnitMenu : public DropDownList
 {
 public:
     /**
@@ -36,7 +36,7 @@ public:
     UnitMenu();
 
     /* GtkBuilder constructor */
-    UnitMenu(BaseObjectType *cobject, Glib::RefPtr<Gtk::Builder> const & /*builder*/);
+    UnitMenu(DropDown::BaseObjectType *cobject, Glib::RefPtr<Gtk::Builder> const & /*builder*/);
 
     ~UnitMenu() override;
 
@@ -130,9 +130,14 @@ public:
      */
     bool          isRadial() const;
 
+    // unit selection change
+    Glib::SignalProxyProperty signal_changed();
+    // unit changed
+    virtual void on_changed();
+
 private:
+    Glib::ustring get_selected_string() const;
     UnitType          _type;
-    Gtk::ComboBoxText* _combo;
 };
 
 } // namespace Inkscape::UI::Widget

@@ -207,6 +207,7 @@ set(ui_SRC
 	widget/custom-tooltip.cpp
 	widget/dash-selector.cpp
 	widget/desktop-widget.cpp
+	widget/drop-down-list.cpp
 	widget/entity-entry.cpp
 	widget/entry.cpp
 	widget/export-lists.cpp
@@ -266,11 +267,13 @@ set(ui_SRC
 	widget/shapeicon.cpp
 	widget/spin-scale.cpp
 	widget/spinbutton.cpp
+	widget/stack.cpp
 	widget/status-bar.cpp
 	widget/stroke-style.cpp
 	widget/style-subject.cpp
 	widget/style-swatch.cpp
 	widget/swatch-selector.cpp
+	widget/tabs-widget.cpp
 	widget/template-list.cpp
 	widget/text.cpp
 	widget/unit-menu.cpp
@@ -508,6 +511,7 @@ set(ui_SRC
 	widget/custom-tooltip.h
 	widget/dash-selector.h
 	widget/desktop-widget.h
+	widget/drop-down-list.h
 	widget/entity-entry.h
 	widget/entry.h
 	widget/events/canvas-event.h
@@ -571,11 +575,13 @@ set(ui_SRC
 	widget/size-reporter.h
 	widget/spin-scale.h
 	widget/spinbutton.h
+	widget/stack.h
 	widget/status-bar.h
 	widget/stroke-style.h
 	widget/style-subject.h
 	widget/style-swatch.h
 	widget/swatch-selector.h
+	widget/tabs-widget.h
 	widget/template-list.h
 	widget/text.h
 	widget/unit-menu.h

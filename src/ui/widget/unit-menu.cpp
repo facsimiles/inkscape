@@ -16,13 +16,16 @@ namespace Inkscape::UI::Widget {
 
 UnitMenu::UnitMenu() : _type(UNIT_TYPE_NONE)
 {
-    set_active(0);
+    set_selected(0);
+    property_selected().signal_changed().connect([this](){ on_changed(); });
 }
 
 UnitMenu::UnitMenu(BaseObjectType * const cobject, Glib::RefPtr<Gtk::Builder> const &builder)
-    : Gtk::ComboBoxText{cobject}
+    : DropDownList{cobject, builder}
 {
     // We assume the UI file sets the active item & thus we do not do that here.
+
+    property_selected().signal_changed().connect([this](){ on_changed(); });
 }
 
 UnitMenu::~UnitMenu() = default;
@@ -40,7 +43,7 @@ bool UnitMenu::setUnitType(UnitType unit_type, bool svg_length)
         }
     }
     _type = unit_type;
-    set_active_text(unit_table.primary(unit_type));
+    setUnit(unit_table.primary(unit_type));
 
     return true;
 }
@@ -61,11 +64,12 @@ void UnitMenu::addUnit(Unit const& u)
 Unit const * UnitMenu::getUnit() const
 {
     auto const &unit_table = Util::UnitTable::get();
-    if (get_active_text() == "") {
+    auto current = get_selected_string();
+    if (current.empty()) {
         g_assert(_type != UNIT_TYPE_NONE);
         return unit_table.getUnit(unit_table.primary(_type));
     }
-    return unit_table.getUnit(get_active_text());
+    return unit_table.getUnit(current);
 }
 
 bool UnitMenu::setUnit(Glib::ustring const & unit)
@@ -73,13 +77,21 @@ bool UnitMenu::setUnit(Glib::ustring const & unit)
     // TODO:  Determine if 'unit' is available in the dropdown.
     //        If not, return false
 
-    set_active_text(unit);
+    // search for "unit" string
+    // Note: find() method is not yet available (https://docs.gtk.org/gtk4/method.StringList.find.html), so use the loop
+    // TODO: replace with "find" when it becomes practical to do so
+    for (int i = 0; i < get_item_count(); ++i) {
+        if (get_string(i) == unit) {
+            set_selected(i);
+            break;
+        }
+    }
     return true;
 }
 
 Glib::ustring UnitMenu::getUnitAbbr() const
 {
-    if (get_active_text() == "") {
+    if (get_selected_string().empty()) {
         return "";
     }
     return getUnit()->abbr;
@@ -139,6 +151,19 @@ bool UnitMenu::isAbsolute() const
 bool UnitMenu::isRadial() const
 {
     return getUnitType() == UNIT_TYPE_RADIAL;
+}
+
+Glib::SignalProxyProperty UnitMenu::signal_changed() {
+    return property_selected().signal_changed();
+}
+
+void UnitMenu::on_changed() {
+    // no op
+}
+
+Glib::ustring UnitMenu::get_selected_string() const {
+    auto n = get_selected();
+    return get_string(n);
 }
 
 } // namespace Inkscape::UI::Widget
