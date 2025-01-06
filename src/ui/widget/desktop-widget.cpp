@@ -678,7 +678,7 @@ void SPDesktopWidget::repack_snaptoolbar()
 
     // Only remove from the parent if the status has changed
     auto parent = snap.get_parent();
-    if (parent && ((is_perm && parent != _hbox) || (!is_perm && parent != _top_toolbars.get()))) {
+    if (parent && ((is_perm && parent != _hbox) || (!is_perm && parent != _top_toolbars))) {
         remove_from_top_toolbar_or_hbox(snap);
     }
 
@@ -803,7 +803,7 @@ void SPDesktopWidget::remove_from_top_toolbar_or_hbox(Gtk::Widget &widget)
     auto const parent = widget.get_parent();
     if (!parent) return;
 
-    if (parent == _top_toolbars.get()) {
+    if (parent == _top_toolbars) {
         _top_toolbars->remove(widget);
     } else if (parent == _hbox) {
         _hbox->remove(widget);
