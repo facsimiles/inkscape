@@ -115,7 +115,6 @@ SPDesktopWidget::SPDesktopWidget(InkscapeWindow *inkscape_window)
 
     _top_toolbars = Gtk::make_managed<Gtk::Grid>();
     _top_toolbars->set_name("TopToolbars");
-    prepend(*_top_toolbars);
 
     /* Toolboxes */
     tool_toolbars = std::make_unique<Inkscape::UI::Toolbar::Toolbars>();
@@ -167,8 +166,7 @@ SPDesktopWidget::SPDesktopWidget(InkscapeWindow *inkscape_window)
 
     /* Canvas Grid (canvas, rulers, scrollbars, etc.) */
     // DialogMultipaned owns it
-    auto cg = std::make_unique<Inkscape::UI::Widget::CanvasGrid>(this);
-    _canvas_grid = cg.get();
+    _canvas_grid = Gtk::make_managed<Inkscape::UI::Widget::CanvasGrid>(this);
 
     /* Canvas */
     _ds_sticky_zoom = prefs->createObserver("/options/stickyzoom/value", [this]() { sticky_zoom_updated(); });
@@ -188,7 +186,10 @@ SPDesktopWidget::SPDesktopWidget(InkscapeWindow *inkscape_window)
 
     _canvas_grid->set_hexpand(true);
     _canvas_grid->set_vexpand(true);
-    _columns->append(std::move(cg));
+    auto main_container = std::make_unique<Gtk::Box>(Gtk::Orientation::VERTICAL);
+    main_container->append(*_top_toolbars);
+    main_container->append(*_canvas_grid);
+    _columns->append(std::move(main_container));
 
     // ------------------ Finish Up -------------------- //
     _canvas_grid->ShowCommandPalette(false);
