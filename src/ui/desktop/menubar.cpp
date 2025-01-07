@@ -329,9 +329,9 @@ void update_menus() {
     return;
 #endif
 
-    auto is_force_disabled = (merge_menu_titlebar.compare("off")) == 0;
+    auto is_force_disabled = merge_menu_titlebar.compare("off") == 0;
 
-    auto is_platform_default = (merge_menu_titlebar.compare("platform-default")) == 0;
+    auto is_platform_default = merge_menu_titlebar.compare("platform-default") == 0;
     auto is_gnome = Inkscape::Util::PlatformCheck::is_gnome();
 
     // If neither 'off' nor 'on' nor 'platform-default', set to 'platform-default'
@@ -341,20 +341,21 @@ void update_menus() {
     }
 
     // If set to 'off', or not enabled in platform, return immediately.
-    if (is_force_disabled || is_platform_default && !is_gnome) {
+    if (is_force_disabled ||
+       (is_platform_default && !is_gnome)) {
         app->set_menubar(gmenu);
         return;
     }
 
 
     // Whether the user has set the preference to be always 'on'
-    auto is_force_enabled = (merge_menu_titlebar.compare("on")) == 0;
+    auto is_force_enabled = merge_menu_titlebar.compare("on") == 0;
 
     // If set to 'on' or 'platform-default' and platform is a GNOME desktop environment
     // TODO: enable by default on Windows when gtk 4.18 drops
     if (
         is_force_enabled ||
-        is_platform_default && is_gnome) {
+        (is_platform_default && is_gnome)) {
             auto headerBar = build_csd_menu(gmenu);
 
             // update headerbar for all windows
