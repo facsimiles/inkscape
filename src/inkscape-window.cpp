@@ -102,7 +102,7 @@ InkscapeWindow::InkscapeWindow(SPDesktop *desktop)
     }
 
     // ============== Build menu ==================
-    update_menus(_app->gtk_app());
+    update_menus();
 
     // =============== Build interface ===============
 
