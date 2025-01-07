@@ -46,7 +46,6 @@ public:
     ~SelectToolbar() override;
 
     void setDesktop(SPDesktop *desktop) override;
-    void setActiveUnit(Util::Unit const *unit) override;
 
 private:
     SelectToolbar(Glib::RefPtr<Gtk::Builder> const &builder);
@@ -60,12 +59,6 @@ private:
     Gtk::ToggleButton &_transform_gradient_btn;
     Gtk::ToggleButton &_transform_pattern_btn;
 
-    UI::Widget::SpinButton &_x_item;
-    UI::Widget::SpinButton &_y_item;
-    UI::Widget::SpinButton &_w_item;
-    UI::Widget::SpinButton &_h_item;
-    Gtk::ToggleButton &_lock_btn;
-
     std::vector<Gtk::Widget *> _context_items;
 
     OperationBlocker _blocker;
@@ -73,16 +66,12 @@ private:
     std::string _action_key;
     std::string const _action_prefix;
 
-    char const *get_action_key(double mh, double sh, double mv, double sv);
-    void any_value_changed(Glib::RefPtr<Gtk::Adjustment> const &adj);
     void layout_widget_update(Selection *sel);
-    void toggle_lock();
     void toggle_touch();
     void toggle_stroke();
     void toggle_corners();
     void toggle_gradient();
     void toggle_pattern();
-    void setup_derived_spin_button(UI::Widget::SpinButton &btn, Glib::ustring const &name);
     void _sensitize();
 
     void _selectionChanged(Selection *selection);
