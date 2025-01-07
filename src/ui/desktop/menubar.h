@@ -46,7 +46,7 @@ Gtk::HeaderBar *build_csd_menu(std::shared_ptr<Gio::Menu> gmenu);
 std::shared_ptr<Gio::Menu> build_menu();
 
 // Updates menus in all windows
-void update_menus(Gtk::Application *app);
+void update_menus();
 
 enum class UseIcons {
     never = -1, // Match existing preference numbering.

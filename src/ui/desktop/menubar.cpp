@@ -313,15 +313,15 @@ Gtk::HeaderBar *build_csd_menu(std::shared_ptr<Gio::Menu> gmenu) {
     return headerBar;
 }
 
-void update_menus(Gtk::Application *app) {
-    auto prefs = Inkscape::Preferences::get();
+void update_menus() {
+    auto gmenu = build_menu();
+    static auto inkscapeApp = InkscapeApplication::instance();
+    auto app = inkscapeApp->gtk_app();
 
+    auto prefs = Inkscape::Preferences::get();
     // Whether to merge the menubar with the application's titlebar.
     // Extracted from: https://gitlab.gnome.org/GNOME/gimp/-/commit/317aa803d2b0291cc2153a8f1148c220ea910895
     auto merge_menu_titlebar = prefs->getString("/window/mergeMenuTitlebar", "platform-default");
-    auto is_force_disabled = merge_menu_titlebar.compare("off");
-
-    auto gmenu = build_menu();
 
     // Do not merge titlebar in MacOS
 #ifdef G_OS_DARWIN
@@ -329,17 +329,18 @@ void update_menus(Gtk::Application *app) {
     return;
 #endif
 
+    auto is_force_disabled = merge_menu_titlebar.compare("off") == 0;
     // If set to 'off', return immediately.
     if (is_force_disabled) {
         app->set_menubar(gmenu);
         return;
     }
 
-    auto is_platform_default = merge_menu_titlebar.compare("platform-default");
+    auto is_platform_default = merge_menu_titlebar.compare("platform-default") == 0;
     auto is_gnome = Inkscape::Util::PlatformCheck::is_gnome();
 
     // Whether the user has set the preference to be always 'on'
-    auto is_force_enabled = merge_menu_titlebar.compare("on");
+    auto is_force_enabled = merge_menu_titlebar.compare("on") == 0;
 
     // If set to 'on' or 'platform-default' and platform is a GNOME desktop environment
     // TODO: enable by default on Windows when gtk 4.18 drops
@@ -353,7 +354,11 @@ void update_menus(Gtk::Application *app) {
             for (auto window : windows) {
                 window->set_titlebar(*headerBar);
             }
+            return;
         }
+
+    // If neither 'off' nor 'on' nor 'platform-default', set to 'platform-default'
+
 }
 
 /*
