@@ -330,14 +330,22 @@ void update_menus() {
 #endif
 
     auto is_force_disabled = (merge_menu_titlebar.compare("off")) == 0;
-    // If set to 'off', return immediately.
-    if (is_force_disabled) {
+
+    auto is_platform_default = (merge_menu_titlebar.compare("platform-default")) == 0;
+    auto is_gnome = Inkscape::Util::PlatformCheck::is_gnome();
+
+    // If neither 'off' nor 'on' nor 'platform-default', set to 'platform-default'
+    if (!is_platform_default && !is_force_enabled && !is_force_disabled) {
+        g_warning("Merge menu titlebar setting has an invalid value. Setting back to \"platform-default\".");
+        prefs->setString("/window/mergeMenuTitlebar", "platform-default");
+    }
+
+    // If set to 'off', or not enabled in platform, return immediately.
+    if (is_force_disabled || is_platform_default && !is_gnome) {
         app->set_menubar(gmenu);
         return;
     }
 
-    auto is_platform_default = (merge_menu_titlebar.compare("platform-default")) == 0;
-    auto is_gnome = Inkscape::Util::PlatformCheck::is_gnome();
 
     // Whether the user has set the preference to be always 'on'
     auto is_force_enabled = (merge_menu_titlebar.compare("on")) == 0;
@@ -356,12 +364,6 @@ void update_menus() {
             }
             return;
         }
-
-    // If neither 'off' nor 'on' nor 'platform-default', set to 'platform-default'
-    g_warning("Merge menu titlebar setting has an invalid value. Setting back to \"platform-default\". RESTART for changes to take EFFECT or you won't have a menubar!");
-    prefs->setString("/window/mergeMenuTitlebar", "platform-default");
-    // Careful! Dangerous loop here?
-    return update_menus();
 }
 
 /*
