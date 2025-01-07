@@ -523,6 +523,31 @@ void SPStar::update_patheffect(bool write) {
 }
 
 /**
+ * Calculate the average side length of the polygon.
+ *
+ * For spoked polygons (stars) this is the radius delta; for non-spokjed
+ * polygons this is the regular side length directly.
+ *
+ * @returns the average length of the polygon sides.
+ */
+double SPStar::getSideLength() const
+{
+    if (!flatsided) {
+        // Pointy star
+        std::cout << "getSideLength(star: " << std::abs(r[0] - r[1]) << ")\n";
+        return std::abs(r[0] - r[1]);
+    }
+    double diameter = 0.0;
+    auto tr = i2doc_affine();
+    for (gint i = 1; i < sides; i++) {
+        diameter += Geom::distance(sp_star_get_xy(this, SP_STAR_POINT_KNOT1, i - 1, false) * tr,
+                                   sp_star_get_xy(this, SP_STAR_POINT_KNOT1, i, false) * tr);
+    }
+    std::cout << "getSideLength(polygon: " << (diameter / sides) << ")\n";
+    return diameter / sides;
+}
+
+/**
  * sp_star_get_xy: Get X-Y value as item coordinate system
  * @star: star item
  * @point: point type to obtain X-Y value
