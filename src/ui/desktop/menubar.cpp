@@ -329,18 +329,18 @@ void update_menus() {
     return;
 #endif
 
-    auto is_force_disabled = merge_menu_titlebar.compare("off") == 0;
+    auto is_force_disabled = (merge_menu_titlebar.compare("off")) == 0;
     // If set to 'off', return immediately.
     if (is_force_disabled) {
         app->set_menubar(gmenu);
         return;
     }
 
-    auto is_platform_default = merge_menu_titlebar.compare("platform-default") == 0;
+    auto is_platform_default = (merge_menu_titlebar.compare("platform-default")) == 0;
     auto is_gnome = Inkscape::Util::PlatformCheck::is_gnome();
 
     // Whether the user has set the preference to be always 'on'
-    auto is_force_enabled = merge_menu_titlebar.compare("on") == 0;
+    auto is_force_enabled = (merge_menu_titlebar.compare("on")) == 0;
 
     // If set to 'on' or 'platform-default' and platform is a GNOME desktop environment
     // TODO: enable by default on Windows when gtk 4.18 drops
@@ -358,7 +358,10 @@ void update_menus() {
         }
 
     // If neither 'off' nor 'on' nor 'platform-default', set to 'platform-default'
-
+    g_warning("Merge menu titlebar setting has an invalid value. Setting back to \"platform-default\". RESTART for changes to take EFFECT or you won't have a menubar!");
+    prefs->setString("/window/mergeMenuTitlebar", "platform-default");
+    // Careful! Dangerous loop here?
+    return update_menus();
 }
 
 /*
