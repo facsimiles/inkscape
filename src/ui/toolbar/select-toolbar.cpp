@@ -56,7 +56,6 @@ SelectToolbar::SelectToolbar()
 SelectToolbar::SelectToolbar(Glib::RefPtr<Gtk::Builder> const &builder)
     : Toolbar{get_widget<Gtk::Box>(builder, "select-toolbar")}
     , _tracker{std::make_unique<UnitTracker>(Util::UNIT_TYPE_LINEAR)}
-    , _action_prefix{"selector:toolbar:"}
     , _select_touch_btn{get_widget<Gtk::ToggleButton>(builder, "_select_touch_btn")}
     , _transform_stroke_btn{get_widget<Gtk::ToggleButton>(builder, "_transform_stroke_btn")}
     , _transform_corners_btn{get_widget<Gtk::ToggleButton>(builder, "_transform_corners_btn")}
@@ -97,51 +96,8 @@ SelectToolbar::~SelectToolbar() = default;
 
 void SelectToolbar::setDesktop(SPDesktop *desktop)
 {
-    if (_desktop) {
-        _selection_changed_conn.disconnect();
-        _selection_modified_conn.disconnect();
-    }
-
     Toolbar::setDesktop(desktop);
-
-    if (_desktop) {
-        auto sel = _desktop->getSelection();
-
-        // Force update when selection changes.
-        _selection_changed_conn = sel->connectChanged(sigc::mem_fun(*this, &SelectToolbar::_selectionChanged));
-        _selection_modified_conn = sel->connectModified(sigc::mem_fun(*this, &SelectToolbar::_selectionModified));
-    }
 }
-
-void SelectToolbar::_sensitize()
-{
-    auto const selection = _desktop->getSelection();
-    bool const sensitive = selection && !selection->isEmpty();
-    for (auto item : _context_items) {
-        item->set_sensitive(sensitive);
-    }
-}
-
-void SelectToolbar::layout_widget_update(Selection *sel) {}
-
-void SelectToolbar::_selectionChanged(Selection *selection)
-{
-    assert(_desktop->getSelection() == selection);
-    layout_widget_update(selection);
-    _sensitize();
-}
-
-void SelectToolbar::_selectionModified(Selection *selection, unsigned flags)
-{
-    assert(_desktop->getSelection() == selection);
-    if (flags & (SP_OBJECT_MODIFIED_FLAG        |
-                 SP_OBJECT_PARENT_MODIFIED_FLAG |
-                 SP_OBJECT_CHILD_MODIFIED_FLAG  ))
-    {
-        layout_widget_update(selection);
-    }
-}
-
 
 void SelectToolbar::toggle_touch()
 {

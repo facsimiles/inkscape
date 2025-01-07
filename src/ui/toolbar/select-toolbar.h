@@ -61,23 +61,11 @@ private:
 
     std::vector<Gtk::Widget *> _context_items;
 
-    OperationBlocker _blocker;
-
-    std::string _action_key;
-    std::string const _action_prefix;
-
-    void layout_widget_update(Selection *sel);
     void toggle_touch();
     void toggle_stroke();
     void toggle_corners();
     void toggle_gradient();
     void toggle_pattern();
-    void _sensitize();
-
-    void _selectionChanged(Selection *selection);
-    void _selectionModified(Selection *selection, unsigned flags);
-    sigc::connection _selection_changed_conn;
-    sigc::connection _selection_modified_conn;
 };
 
 } // namespace Inkscape::UI::Toolbar
