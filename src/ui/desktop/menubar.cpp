@@ -329,6 +329,7 @@ void update_menus() {
     return;
 #endif
 
+    auto is_force_enabled = merge_menu_titlebar.compare("on") == 0;
     auto is_force_disabled = merge_menu_titlebar.compare("off") == 0;
 
     auto is_platform_default = merge_menu_titlebar.compare("platform-default") == 0;
@@ -346,10 +347,6 @@ void update_menus() {
         app->set_menubar(gmenu);
         return;
     }
-
-
-    // Whether the user has set the preference to be always 'on'
-    auto is_force_enabled = merge_menu_titlebar.compare("on") == 0;
 
     // If set to 'on' or 'platform-default' and platform is a GNOME desktop environment
     // TODO: enable by default on Windows when gtk 4.18 drops
