@@ -21,7 +21,6 @@
 #include "ui/widget/spinbutton.h"
 #include "ui/builder-utils.h"
 
-#include "desktop.h"
 #include "preferences.h"
 
 namespace Inkscape::UI::Dialog {
@@ -50,7 +49,6 @@ MeasureToolSettingsDialog::MeasureToolSettingsDialog(const char* _prefPath)
     _shape_Y_btn{get_widget<Gtk::CheckButton>(builder, "shape_Y")},
     _shape_length_btn{get_widget<Gtk::CheckButton>(builder, "shape_length")}
 {
-    _desktop = this->getDesktop();
     auto prefs = Preferences::get();
     Preferences::get()->setString("/tools/measure/MTSpath", _prefPath); // will use it to retrieve the settings
     

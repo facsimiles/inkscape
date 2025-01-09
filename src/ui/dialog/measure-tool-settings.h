@@ -35,7 +35,6 @@ public:
 
 protected:
     Glib::RefPtr<Gtk::Builder> builder;
-    SPDesktop *_desktop = nullptr;
     Gtk::Box &_main;
     Gtk::CheckButton &_show_angle;
     Gtk::CheckButton &_show_deltas;
