@@ -318,50 +318,30 @@ void update_menus() {
     static auto inkscapeApp = InkscapeApplication::instance();
     auto app = inkscapeApp->gtk_app();
 
-    auto prefs = Inkscape::Preferences::get();
-    // Whether to merge the menubar with the application's titlebar.
-    // Extracted from: https://gitlab.gnome.org/GNOME/gimp/-/commit/317aa803d2b0291cc2153a8f1148c220ea910895
-    auto merge_menu_titlebar = prefs->getString("/window/mergeMenuTitlebar", "platform-default");
-
     // Do not merge titlebar in MacOS
 #ifdef G_OS_DARWIN
     app->set_menubar(gmenu);
     return;
 #endif
 
-    auto is_force_enabled = merge_menu_titlebar.compare("on") == 0;
-    auto is_force_disabled = merge_menu_titlebar.compare("off") == 0;
-
-    auto is_platform_default = merge_menu_titlebar.compare("platform-default") == 0;
-    auto is_gnome = Inkscape::Util::PlatformCheck::is_gnome();
-
-    // If neither 'off' nor 'on' nor 'platform-default', set to 'platform-default'
-    if (!is_platform_default && !is_force_enabled && !is_force_disabled) {
-        g_warning("Merge menu titlebar setting has an invalid value. Setting back to \"platform-default\".");
-        prefs->setString("/window/mergeMenuTitlebar", "platform-default");
-    }
+    auto prefs = Inkscape::Preferences::get();
+    // Whether to merge the menubar with the application's titlebar.
+    // Extracted from: https://gitlab.gnome.org/GNOME/gimp/-/commit/317aa803d2b0291cc2153a8f1148c220ea910895
+    bool merge_menu_titlebar = prefs->get_merge_menu_titlebar_value();
 
     // If set to 'off', or not enabled in platform, return immediately.
-    if (is_force_disabled ||
-       (is_platform_default && !is_gnome)) {
+    if (!merge_menu_titlebar) {
         app->set_menubar(gmenu);
         return;
     }
 
-    // If set to 'on' or 'platform-default' and platform is a GNOME desktop environment
-    // TODO: enable by default on Windows when gtk 4.18 drops
-    if (
-        is_force_enabled ||
-        (is_platform_default && is_gnome)) {
-            auto headerBar = build_csd_menu(gmenu);
+    auto headerBar = build_csd_menu(gmenu);
 
-            // update headerbar for all windows
-            auto windows = app->get_windows();
-            for (auto window : windows) {
-                window->set_titlebar(*headerBar);
-            }
-            return;
-        }
+    // update headerbar for all windows
+    auto windows = app->get_windows();
+    for (auto window : windows) {
+        window->set_titlebar(*headerBar);
+    }
 }
 
 /*

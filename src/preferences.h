@@ -662,6 +662,10 @@ public:
         });
     }
 
+    // Toggles "/window/mergeMenuTitlebar" between "on" and "off" (default is: "platform-default")
+    void toggle_merge_menu_titlebar();
+    bool get_merge_menu_titlebar_value();
+
 protected:
     // helper methods used by Entry
     /**
@@ -731,9 +735,9 @@ typedef std::unique_ptr<Preferences::PreferencesObserver> PrefObserver;
  *
  * will cause the new value to be printed after each subsequent change. Pref<T> can be temporarily
  * disabled with a call to
- * 
+ *
  *     mybool.set_enabled(false);
- * 
+ *
  * during which time it will revert to its default value and ignore further updates until
  * re-enabled again.
  *

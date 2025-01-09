@@ -715,8 +715,6 @@ private:
   void resetIconsColorsWrapper();
   void get_highlight_colors(guint32 &colorsetbase, guint32 &colorsetsuccess, guint32 &colorsetwarning,
                             guint32 &colorseterror);
-  // Toggles "/window/mergeMenuTitlebar" between "on" and "off" (default is: "platform-default")
-  void toggle_merge_menu_titlebar();
 
   std::map<Glib::ustring, bool> dark_themes;
   bool _init;
