@@ -2105,7 +2105,7 @@ void InkscapePreferences::initPageUI()
     _page_windows.add_line( true, "", _win_save_viewport, "",
                             _("Save documents viewport (zoom and panning position). Useful to turn off when sharing version controlled files."));
     #ifndef G_OS_DARWIN
-    _page_windows.add_line( true, "", _win_merge_titlebar_menu, "",
+    _page_windows.add_line( prefs->get_merge_menu_titlebar_value(), "", _win_merge_titlebar_menu, "",
                             _("Whether to merge the titlebar and menu to save space. This is an experimental option that may not work in all systems."));
     #endif
 
@@ -3738,54 +3738,6 @@ static void appendList(Glib::ustring& tmp, const std::vector<string_type> &listi
         tmp += str;
         tmp += "\n";
     }
-}
-
-/**
- * Toggles "/window/mergeMenuTitlebar" between "on" and "off" (default is: "platform-default")
- */
-void
-InkscapePreferences::toggle_merge_menu_titlebar() {
-    auto prefs = Inkscape::Preferences::get();
-    auto merge_menu_titlebar = prefs->getString("/window/mergeMenuTitlebar", "platform-default");
-    auto is_enabled = merge_menu_titlebar.compare("on");
-    auto is_disabled = merge_menu_titlebar.compare("off");
-
-    // If "on" or "off", toggle directly.
-
-    if (is_enabled) {
-        prefs->setString("/window/mergeMenuTitlebar", "off");
-        return;
-    }
-    if (is_disabled) {
-        prefs->setString("/window/mergeMenuTitlebar", "on");
-        return;
-    }
-
-
-    #ifdef G_OS_LINUX
-
-    auto is_platform_determined = merge_menu_titlebar.compare("platform-default");
-
-    if (!is_platform_determined) {
-        sprintf(stderr, 'merge_menu_titlebar: setting is neither "on" nor "off" nor "platform-default"');
-        return;
-    }
-
-    // On linux, if "platform-default", check what DE is being used and toggle
-
-    // Determine if DE is gnome-based
-    auto desktop_session = std::getenv("DESKTOP_SESSION");
-    auto is_gnome = PlatformUtil::PlatformCheck::is_gnome();
-
-    if (is_gnome) {
-        prefs->setString("/window/mergeMenuTitlebar", "off");
-        return;
-    }
-
-    // If using KDE or another non-GNOME DE, toggle to "on" (default value: off)
-    prefs->setString("/window/mergeMenuTitlebar", "on");
-
-    #endif
 }
 
 void InkscapePreferences::initPageSystem()
