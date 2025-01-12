@@ -327,13 +327,11 @@ void update_menus() {
     auto prefs = Inkscape::Preferences::get();
     std::optional<bool> merge_titlebar_menu = prefs->getOptionalBool("/window/mergeMenuTitlebar");
 
-    auto is_true = std::move(*merge_titlebar_menu);
-    auto is_gnome = Inkscape::Util::PlatformCheck::is_gnome();
-    // True on GNOME, false on all other platforms
-    auto default_value = !merge_titlebar_menu.has_value() && is_gnome;
+    // Whether default value should be true or false
+    auto default_value = Inkscape::Util::PlatformCheck::is_gnome();
 
     // If set to false, or undefined and platform is KDE or Windows
-    if (!is_true || !default_value) {
+    if (!merge_titlebar_menu.value_or(default_value)) {
         app->set_menubar(gmenu);
         return;
     }
