@@ -15,6 +15,7 @@
  */
 
 #include "inkscape-preferences.h"
+#include <optional>
 
 #ifdef HAVE_CONFIG_H
 # include "config.h"  // only include where actually required!
@@ -2100,7 +2101,15 @@ void InkscapePreferences::initPageUI()
     _page_windows.add_line( true, "", _win_save_viewport, "",
                             _("Save documents viewport (zoom and panning position). Useful to turn off when sharing version controlled files."));
     #ifndef G_OS_DARWIN
-    _page_windows.add_line( prefs->get_merge_menu_titlebar_value(), "", _win_merge_titlebar_menu, "",
+    // This lambda toggles the value of /window/mergeMenuTitlebar, if it exists
+    _page_windows.add_line( [] {
+        std::optional<bool> pref_value = prefs->getOptionalBool();
+        auto default_value = Inkscape::Util::PlatformCheck::is_gnome();
+
+        // If setting is defined, simply toggle it
+        // else, toggle OS default value
+        prefs->setBool("/window/mergeMenuTitlebar", pref_value.has_value() ? !pref_value : !default_value);
+    }, "", _win_merge_titlebar_menu, "",
                             _("Whether to merge the titlebar and menu to save space. This is an experimental option that may not work in all systems."));
     #endif
 

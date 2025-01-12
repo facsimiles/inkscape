@@ -325,15 +325,20 @@ void update_menus() {
 #endif
 
     auto prefs = Inkscape::Preferences::get();
-    // Whether to merge the menubar with the application's titlebar.
-    // Extracted from: https://gitlab.gnome.org/GNOME/gimp/-/commit/317aa803d2b0291cc2153a8f1148c220ea910895
-    bool merge_menu_titlebar = prefs->get_merge_menu_titlebar_value();
+    std::optional<bool> merge_titlebar_menu = prefs->getOptionalBool("/window/mergeMenuTitlebar");
 
-    // If set to 'off', or not enabled in platform, return immediately.
-    if (!merge_menu_titlebar) {
+    auto is_true = std::move(*merge_titlebar_menu);
+    auto is_gnome = Inkscape::Util::PlatformCheck::is_gnome();
+    // True on GNOME, false on all other platforms
+    auto default_value = !merge_titlebar_menu.has_value() && is_gnome;
+
+    // If set to false, or undefined and platform is KDE or Windows
+    if (!is_true || !default_value) {
         app->set_menubar(gmenu);
         return;
     }
+
+    // Set to true, or platform default value is 'true'
 
     auto headerBar = build_csd_menu(gmenu);
 

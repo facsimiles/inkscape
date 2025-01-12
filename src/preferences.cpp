@@ -1081,51 +1081,6 @@ Colors::Color Preferences::getColor(Glib::ustring const &pref_path, std::string 
     return getEntry(pref_path).getColor(def);
 }
 
-bool
-Preferences::get_merge_menu_titlebar_value() {
-    #ifdef G_OS_DARWIN
-        // Do not merge menu titlebar on MacOS
-        return false;
-    #endif
-
-    auto prefs = Inkscape::Preferences::get();
-    auto merge_menu_titlebar = prefs->getString("/window/mergeMenuTitlebar", "platform-default");
-
-    auto is_enabled = merge_menu_titlebar.compare("on") == 0;
-    auto is_disabled = merge_menu_titlebar.compare("off") == 0;
-
-    // Returns true if "on", false if "off"
-    if (is_enabled || is_disabled) {
-        return is_enabled || !is_disabled;
-    }
-
-    #ifdef G_OS_LINUX
-
-    // If running GNOME and "platform-default" is set, merge menu titlebar
-    auto is_gnome = PlatformUtil::PlatformCheck::is_gnome();
-    return is_gnome;
-
-    #endif
-
-    // TODO: merge menu titlebar on windows since gtk 4.18
-
-    // Return 'false' default value for KDE and Windows
-    return false;
-}
-
-/**
- * Toggles "/window/mergeMenuTitlebar" between "on" and "off" (default is: "platform-default")
- */
-void
-Preferences::toggle_merge_menu_titlebar() {
-    auto prefs = Inkscape::Preferences::get();
-    bool merge_menu_titlebar = get_merge_menu_titlebar_value();
-
-    // If set to true, toggle to false and vice-versa
-    prefs->setString("/window/mergeMenuTitlebar", merge_menu_titlebar ? "off" : "on");
-}
-
-
 } // namespace Inkscape
 
 /*
