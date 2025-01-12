@@ -191,6 +191,7 @@ class ClipboardManagerImpl : public ClipboardManager
 public:
     void copy(ObjectSet *set) override;
     void copyPathParameter(Inkscape::LivePathEffect::PathParam *) override;
+    bool copyString(Glib::ustring str) override;
     void copySymbol(Inkscape::XML::Node* symbol, gchar const* style, SPDocument *source, const char* symbol_set, Geom::Rect const &bbox, bool set_clipboard) override;
     void insertSymbol(SPDesktop *desktop, Geom::Point const &shift_dt, bool read_clipboard) override;
     bool paste(SPDesktop *desktop, bool in_place, bool on_page) override;
@@ -368,6 +369,20 @@ void ClipboardManagerImpl::copyPathParameter(Inkscape::LivePathEffect::PathParam
 
     fit_canvas_to_drawing(_clipboardSPDoc.get());
     _setClipboardTargets();
+}
+
+/**
+ * @brief copies a string to the clipboard
+ *
+ * @param str string to copy
+ */
+bool ClipboardManagerImpl::copyString(Glib::ustring str) {
+    if (!str.empty()) {
+        _discardInternalClipboard();
+        _clipboard->set_text(str);
+        return true;
+    }
+    return false;
 }
 
 /**
@@ -884,7 +899,7 @@ bool ClipboardManagerImpl::pasteSize(ObjectSet *set, bool separately, bool apply
         // resize the selection as a whole
         Geom::OptRect sel_size = set->preferredBounds();
         if (sel_size) {
-            set->setScaleRelative(sel_size->midpoint(),
+            set->scaleRelative(sel_size->midpoint(),
                                          _getScale(set->desktop(), min, max, *sel_size, apply_x, apply_y));
         }
     }

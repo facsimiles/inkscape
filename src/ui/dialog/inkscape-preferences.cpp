@@ -161,6 +161,10 @@ static bool fuzzy_search(Glib::ustring const &pattern, Glib::ustring const &stri
 
 [[nodiscard]] static auto get_children_or_mnemonic_labels(Gtk::Widget &widget)
 {
+    if (dynamic_cast<Gtk::DropDown *>(&widget)) {
+        std::vector<Gtk::Widget *> children;
+        return children;
+    }
     auto children = UI::get_children(widget);
     if (children.empty()) {
         children = widget.list_mnemonic_labels();
@@ -1604,6 +1608,7 @@ void InkscapePreferences::initPageUI()
     }
 
     _ui_languages.init( "/ui/language", languages, langValues, languages[0]);
+    _ui_languages.enable_search();
     _page_ui.add_line( false, _("Language:"), _ui_languages, "",
                               _("Set the language for menus and number formats"), false, reset_icon());
 
