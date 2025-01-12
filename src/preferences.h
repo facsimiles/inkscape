@@ -683,10 +683,6 @@ public:
         });
     }
 
-    // Toggles "/window/mergeMenuTitlebar" between "on" and "off" (default is: "platform-default")
-    void toggle_merge_menu_titlebar();
-    bool get_merge_menu_titlebar_value();
-
 protected:
     // helper methods used by Entry
     /**
