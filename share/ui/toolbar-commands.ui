@@ -308,6 +308,27 @@
       </packing>
     </child>
     <child>
+      <object class="GtkMenuButton" id="menu_btn1">
+        <property name="visible">True</property>
+        <property name="can-focus">True</property>
+        <property name="focus-on-click">False</property>
+        <property name="receives-default">True</property>
+        <property name="popover">popover1</property>
+        <child>
+          <object class="GtkImage" id="image33">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="icon-name">pan-down</property>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">24</property>
+      </packing>
+    </child>
+    <child>
       <object class="GtkButton">
         <property name="visible">True</property>
         <property name="can-focus">True</property>
@@ -315,6 +336,9 @@
         <property name="tooltip-text" translatable="yes">Zoom Selection</property>
         <property name="action-name">win.canvas-zoom-selection</property>
         <property name="relief">none</property>
+        <style>
+          <class name="tag1"/>
+        </style>
         <child>
           <object class="GtkImage" id="image12">
             <property name="visible">True</property>
@@ -337,6 +361,9 @@
         <property name="tooltip-text" translatable="yes">Zoom Drawing</property>
         <property name="action-name">win.canvas-zoom-drawing</property>
         <property name="relief">none</property>
+        <style>
+          <class name="tag1"/>
+        </style>
         <child>
           <object class="GtkImage" id="image13">
             <property name="visible">True</property>
@@ -359,6 +386,9 @@
         <property name="tooltip-text" translatable="yes">Zoom Page</property>
         <property name="action-name">win.canvas-zoom-page</property>
         <property name="relief">none</property>
+        <style>
+          <class name="tag1"/>
+        </style>
         <child>
           <object class="GtkImage" id="image14">
             <property name="visible">True</property>
@@ -381,6 +411,9 @@
         <property name="tooltip-text" translatable="yes">Zoom Center Page</property>
         <property name="action-name">win.canvas-zoom-center-page</property>
         <property name="relief">none</property>
+        <style>
+          <class name="tag1"/>
+        </style>
         <child>
           <object class="GtkImage" id="image15">
             <property name="visible">True</property>
@@ -404,27 +437,6 @@
         <property name="expand">False</property>
         <property name="fill">True</property>
         <property name="position">23</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkMenuButton" id="menu_btn1">
-        <property name="visible">True</property>
-        <property name="can-focus">True</property>
-        <property name="focus-on-click">False</property>
-        <property name="receives-default">True</property>
-        <property name="popover">popover1</property>
-        <child>
-          <object class="GtkImage" id="image33">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="icon-name">pan-down</property>
-          </object>
-        </child>
-      </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">24</property>
       </packing>
     </child>
     <child>
