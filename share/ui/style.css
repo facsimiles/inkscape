@@ -1,6 +1,5 @@
 /* GTK3 WIDGET STYLING */
 
-
 /*
  * Keep in order of:
  *   General -> Specific
@@ -12,7 +11,6 @@
  *
  * As of Gtk 3.20, you cannot use widget names.
  */
-
 
 /* Standard theme based colors. Prefer these.
  *
@@ -67,7 +65,7 @@
     * "..combobright" Combo bright
     */
 
-*{
+* {
     font-feature-settings: "tnum";
 }
 
@@ -118,32 +116,50 @@
 
 .highlight {
     color: @theme_fg_color;
-    background-color: alpha(@theme_selected_bg_color,0.5);
-    background-image: image(alpha(@theme_selected_bg_color,0.5));
+    background-color: alpha(@theme_selected_bg_color, 0.5);
+    background-image: image(alpha(@theme_selected_bg_color, 0.5));
     caret-color: @theme_bg_color;
-    border-radius:4px;
+    border-radius: 4px;
     -gtk-secondary-caret-color: @theme_fg_color;
 }
 
-.noborder{
-    border-width:0;
+.noborder {
+    border-width: 0;
 }
 
 /* blinking animation for dialogs reopen*/
 @keyframes blink_border {
-  0% { border-color: @theme_selected_fg_color;}
-  90%   { border-color: @theme_selected_bg_color; }
-  100%   { border-color: @theme_selected_fg_color;  }
+    0% {
+        border-color: @theme_selected_fg_color;
+    }
+    90% {
+        border-color: @theme_selected_bg_color;
+    }
+    100% {
+        border-color: @theme_selected_fg_color;
+    }
 }
 @keyframes blink_background {
-  0% { background-color: @theme_bg_color;  }
-  90%   { background-color: @theme_selected_bg_color; }
-  100%   { background-color: @theme_bg_color;  }
+    0% {
+        background-color: @theme_bg_color;
+    }
+    90% {
+        background-color: @theme_selected_bg_color;
+    }
+    100% {
+        background-color: @theme_bg_color;
+    }
 }
 @keyframes blink_background_img {
-  0%   { background-image: image(@theme_bg_color); }
-  90%  { background-image: image(@theme_selected_bg_color); }
-  100% { background-image: image(@theme_bg_color); }
+    0% {
+        background-image: image(@theme_bg_color);
+    }
+    90% {
+        background-image: image(@theme_selected_bg_color);
+    }
+    100% {
+        background-image: image(@theme_bg_color);
+    }
 }
 
 button.blink {
@@ -151,36 +167,46 @@ button.blink {
 }
 
 notebook.blink {
-  animation: 0.5s blink_border 0.1s ease 1;
+    animation: 0.5s blink_border 0.1s ease 1;
 }
 
 notebook.blink > header > tabs > tab:checked {
-  animation: 0.5s blink_background 0.1s ease 1;
+    animation: 0.5s blink_background 0.1s ease 1;
 }
 
-.inverted :not(menuitem):not(.rawstyle):not(overshoot):not(undershoot):not(selection),
-.bright .forcedark :not(menuitem):not(.rawstyle):not(overshoot):not(undershoot):not(selection),
-.dark .forcebright :not(menuitem):not(.rawstyle):not(overshoot):not(undershoot):not(selection) {
+.inverted
+    :not(menuitem):not(.rawstyle):not(overshoot):not(undershoot):not(selection),
+.bright
+    .forcedark
+    :not(menuitem):not(.rawstyle):not(overshoot):not(undershoot):not(selection),
+.dark
+    .forcebright
+    :not(menuitem):not(.rawstyle):not(overshoot):not(undershoot):not(
+        selection
+    ) {
     color: inherit;
     background-color: inherit;
     background-image: inherit;
 }
 
 .dark .combobright .combo,
-.dark .combobright menu{
+.dark .combobright menu {
     background-color: @theme_text_color;
-    background-image: linear-gradient(to top, @theme_text_color, @theme_fd_color);
+    background-image: linear-gradient(
+        to top,
+        @theme_text_color,
+        @theme_fd_color
+    );
     caret-color: @theme_base_color;
     -gtk-secondary-caret-color: @theme_base_color;
 }
-.dark .combobright box *{
+.dark .combobright box * {
     color: @theme_base_color;
 }
 .dark .combobright .combo *,
-.dark .combobright menu *{
+.dark .combobright menu * {
     color: inherit;
 }
-
 
 /* atribute dialog popup size */
 .attrpop textview {
@@ -214,6 +240,20 @@ notebook.blink > header > tabs > tab:checked {
     color: @success_color;
 }
 
+/* This is for the mainWindow's custom CSD
+ *
+ * Makes the background the same color as the application,
+ * makes it occupy less space and removes colored frame except in the bottom
+**/
+
+headerbar {
+    min-height: 0px;
+    background: transparent;
+    border-left: 0;
+    border-right: 0;
+    border-top: 0;
+}
+
 iconview *:hover {
     border-width: 1px;
     border-color: @theme_fg_color;
@@ -225,10 +265,10 @@ iconview *:hover {
     border-color: @theme_bg_color;
 }
 
-#startscreennotebook iconview *:hover{
-    background-color:@theme_selected_bg_color;
-    border-radius:5px;
-    border-width:0;
+#startscreennotebook iconview *:hover {
+    background-color: @theme_selected_bg_color;
+    border-radius: 5px;
+    border-width: 0;
 }
 
 .inksmall {
@@ -263,7 +303,6 @@ iconview *:hover {
 #CommandPaletteBase list row:not(:last-child) {
     border-bottom: 1px solid @bg_color5;
 }
-
 
 /* Selector dialog */
 #SelectorsAndStyleDialog button {
@@ -308,18 +347,18 @@ iconview *:hover {
     border-width: 0;
 }
 
-#SelectorsAndStyleDialog #StyleDialog treeview button *{
-    font-size:5px;
-    min-height:1px;
-    padding:0;
-    margin:0;
+#SelectorsAndStyleDialog #StyleDialog treeview button * {
+    font-size: 5px;
+    min-height: 1px;
+    padding: 0;
+    margin: 0;
 }
 
 #SelectorsAndStyleDialog #StyleDialog treeview button {
-    padding:0;
-    min-height:1px;
-    border-left-width:4px;
-    border-color:@success_color;
+    padding: 0;
+    min-height: 1px;
+    border-left-width: 4px;
+    border-color: @success_color;
 }
 
 /* ink-ruler */
@@ -346,10 +385,10 @@ iconview *:hover {
 /* Ensure ui/themes.cpp excludes these classes on applying overridebasecolor: */
 
 .bright #InkRuler.shadow {
-    color: rgba(0,0,0,0.3);
+    color: rgba(0, 0, 0, 0.3);
 }
 .dark #InkRuler.shadow {
-    color: rgba(0,0,0,0.5);
+    color: rgba(0, 0, 0, 0.5);
 }
 
 .bright #InkRuler.page {
@@ -360,11 +399,11 @@ iconview *:hover {
 }
 
 .bright #InkRuler.selection.border,
-.dark   #InkRuler.selection.border {
+.dark #InkRuler.selection.border {
     color: @theme_selected_bg_color;
 }
 .bright #InkRuler.selection.background,
-.dark   #InkRuler.selection.background {
+.dark #InkRuler.selection.background {
     color: transparent;
 }
 
@@ -374,7 +413,9 @@ SPCanvas {
 }
 
 /* Those are three buttons in canvas corners; their size dictates how large scrollbars are */
-#QuickActions, #LockGuides, #CMS_Adjust {
+#QuickActions,
+#LockGuides,
+#CMS_Adjust {
     padding: 0;
     margin: 0;
     outline: none;
@@ -384,7 +425,9 @@ SPCanvas {
     min-height: 22px;
 }
 /* Don't let images inside those buttons inflate their sizes */
-#QuickActions *, #LockGuides *, #CMS_Adjust * {
+#QuickActions *,
+#LockGuides *,
+#CMS_Adjust * {
     padding: 0;
 }
 #QuickActions image {
@@ -433,7 +476,7 @@ SPCanvas {
 
 #InkSpinScale scale {
     padding: 0px;
-    margin:0;
+    margin: 0;
 }
 
 #InkSpinScale trough {
@@ -451,7 +494,7 @@ SPCanvas {
 #InkSpinScale spinbutton {
     box-shadow: none;
     min-height: 10px;
-    border-left:0;
+    border-left: 0;
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
 }
@@ -476,9 +519,9 @@ SPCanvas {
     border-width: 1px 0px;
 }
 #Objects .search {
-  padding: 2px 4px;
-  min-height: 16px;
-  font-size: smaller;
+    padding: 2px 4px;
+    min-height: 16px;
+    font-size: smaller;
 }
 
 #SimpleFilterModifier #InkSpinScale {
@@ -514,7 +557,7 @@ treeview.view:drop(active).before {
     border-radius: 10px;
 }
 
-button.close-button{
+button.close-button {
     background-image: none;
     padding: 0px;
     min-height: 1px;
@@ -524,7 +567,7 @@ button.close-button{
     box-shadow: none;
 }
 
-button.close-button:hover{
+button.close-button:hover {
     box-shadow: none;
     opacity: 1;
 }
@@ -533,27 +576,32 @@ button.close-button:hover{
  * Inkscape start dialog styles
  */
 
-#start-screen-window .titlebar stack { /* banner-stack */
+#start-screen-window .titlebar stack {
+    /* banner-stack */
     padding: 0;
     /* opaque bg at bottom corners, rather than having gap, which in GTK3 glitches in transition */
-    background: linear-gradient(to bottom, transparent 0%, transparent 50%, @theme_bg_color);
+    background: linear-gradient(
+        to bottom,
+        transparent 0%,
+        transparent 50%,
+        @theme_bg_color
+    );
 }
 
 #start-screen-window .combo {
-    padding:1px 10px;
-
+    padding: 1px 10px;
 }
 #start-screen-window .combo * {
-    padding:2px;
+    padding: 2px;
 }
 
 #start-screen-window grid label {
-    font-size:small;
-    margin:12px;
+    font-size: small;
+    margin: 12px;
 }
 
 #start-screen-window * {
-    outline:0;
+    outline: 0;
 }
 
 button.link:hover image {
@@ -629,27 +677,27 @@ stackswitcher button {
 }
 
 @keyframes pulse {
-  0% {
-    opacity: 0.3;
-  }
-  50% {
-    opacity: 0.9;
-  }
-  100% {
-    opacity: 0.3;
-  }
+    0% {
+        opacity: 0.3;
+    }
+    50% {
+        opacity: 0.9;
+    }
+    100% {
+        opacity: 0.3;
+    }
 }
 
 .backgnd-active {
-  animation-name: pulse;
-  background-color: @theme_selected_bg_color;
-  animation-duration: 1s;
-  animation-timing-function: ease;
-  animation-iteration-count: infinite;
+    animation-name: pulse;
+    background-color: @theme_selected_bg_color;
+    animation-duration: 1s;
+    animation-timing-function: ease;
+    animation-iteration-count: infinite;
 }
 
 .nb-highlight > header.top {
-  background-color: @theme_selected_bg_color;
+    background-color: @theme_selected_bg_color;
 }
 
 .tight-flowbox flowboxchild {
@@ -706,11 +754,10 @@ button.square-button image {
 }
 
 /* Give layer selector button label a highlight color */
-#LayerSelector label
-{
+#LayerSelector label {
     padding-left: 6px;
     border-left-style: solid;
-    border-left-width: 3px  ;
+    border-left-width: 3px;
     /* Color is set in src/ui/widget/layer-selector.cpp */
 }
 
@@ -793,7 +840,7 @@ button.square-button image {
 .inkscape-toolbar > box > label {
     margin-right: 2px;
 }
-.inkscape-toolbar  popover content > * {
+.inkscape-toolbar popover content > * {
     margin-right: 2px;
     margin-left: 2px;
 }
@@ -837,7 +884,7 @@ button.menu-btn-tight {
 /*
  * Inkscape Export Dialog
  */
-#ExportDialog #export_selection{
+#ExportDialog #export_selection {
     border-radius: 0px;
 }
 #ExportDialog #export_preview_single {
@@ -859,7 +906,8 @@ combobox.flat-combobox button {
     background-image: image(transparent);
 }
 
-.filter-effects, .effects-params {
+.filter-effects,
+.effects-params {
     min-height: 50px;
 }
 
@@ -872,7 +920,7 @@ popover.background.filter-effects-info textview > text {
 .dark .symbolsoverlay iconview:not(:selected) {
     background-color: #f0f0f0; /* bright background color for typically black symbols */
     /* background-color: @theme_fg_color; - this doesn't work for some themes (like MonoThemeDark) */
-    color:@theme_bg_color; /* symbol text labels */
+    color: @theme_bg_color; /* symbol text labels */
 }
 
 .dark .symbolsoverlay {
@@ -881,7 +929,7 @@ popover.background.filter-effects-info textview > text {
 
 /* LPE Dialog add */
 #LPEScrolled {
-    border:none;
+    border: none;
 }
 
 #LPESelectorFlowBox GtkFlowBoxChild,
@@ -945,12 +993,12 @@ popover.background.filter-effects-info textview > text {
     margin: 0px 0px 10px 0px;
     border-radius: 0px;
     border-width: 0 0 1px 0;
-    padding:5px;
+    padding: 5px;
 }
 
-#LPESelectorFlowBox image{
-    background-color:@theme_bg_color;
-    border-color:transparent;
+#LPESelectorFlowBox image {
+    background-color: @theme_bg_color;
+    border-color: transparent;
 }
 
 #LPEExperimental image {
@@ -964,165 +1012,173 @@ popover.background.filter-effects-info textview > text {
 }
 
 #LPEDialogSelector.LPEPackMore flowboxchild {
-margin:5px 1px 0px;
-padding:3px 3px 10px 3px;
+    margin: 5px 1px 0px;
+    padding: 3px 3px 10px 3px;
 }
-
 
 #LPEDialogSelector.LPEList .lpename {
     margin-bottom: 1px;
-    font-weight:bold;
+    font-weight: bold;
 }
 
 #LPEDialogSelector.LPEList flowboxchild {
-    padding:3px 1px 3px 10px;
-    margin:1px 0px 1px;
-    border-radius:0;
-    border-style:dotted;
-    border-color:@theme_fg_color;
+    padding: 3px 1px 3px 10px;
+    margin: 1px 0px 1px;
+    border-radius: 0;
+    border-style: dotted;
+    border-color: @theme_fg_color;
     border-width: 0 0 1px 0;
 }
 
 #LPEDialogSelector.LPEList flowboxchild:selected {
-    border-style:none;
-    margin:-3px 0px 0px;
-    padding:4px 1px 4px 10px;
+    border-style: none;
+    margin: -3px 0px 0px;
+    padding: 4px 1px 4px 10px;
 }
 
-#LPEDialogSelector.LPEList #LPESelectorFlowBox *:selected #LPESelectorEffectFavTop,
-#LPEDialogSelector.LPEList #LPESelectorFlowBox *:selected:focus #LPESelectorEffectFavTop {
+#LPEDialogSelector.LPEList
+    #LPESelectorFlowBox
+    *:selected
+    #LPESelectorEffectFavTop,
+#LPEDialogSelector.LPEList
+    #LPESelectorFlowBox
+    *:selected:focus
+    #LPESelectorEffectFavTop {
     opacity: 1;
 }
 
 #LivePathEffect {
-    padding-top:5px;
+    padding-top: 5px;
 }
 
-#LivePathEffect expander:focus, #LivePathEffect expander > label:focus{
-    outline-width:0;
+#LivePathEffect expander:focus,
+#LivePathEffect expander > label:focus {
+    outline-width: 0;
 }
 
-#LivePathEffect list{
-    margin:5px 5px 0 5px;
+#LivePathEffect list {
+    margin: 5px 5px 0 5px;
 }
 
-#LivePathEffect list row{
-    margin:0;
-    padding:0;
-    border-width:0;
-    border-style:none;
-    outline-width:0;
+#LivePathEffect list row {
+    margin: 0;
+    padding: 0;
+    border-width: 0;
+    border-style: none;
+    outline-width: 0;
 }
-#LivePathEffect list row > box{
-    margin:0;
-    padding:1px;
-    border-width:1px;
-    border-radius:4px;
-    margin-bottom:5px;
-    border-style:solid;
-    border-color:@borders;
-    outline-width:0;
-}
-
-#LivePathEffect list row:last-child  > box{
-    margin-bottom:0px;
+#LivePathEffect list row > box {
+    margin: 0;
+    padding: 1px;
+    border-width: 1px;
+    border-radius: 4px;
+    margin-bottom: 5px;
+    border-style: solid;
+    border-color: @borders;
+    outline-width: 0;
 }
 
-#LPEEffectItem{
-    border-radius:3px;
-    padding:2px;
-    outline:0;
+#LivePathEffect list row:last-child > box {
+    margin-bottom: 0px;
+}
+
+#LPEEffectItem {
+    border-radius: 3px;
+    padding: 2px;
+    outline: 0;
 }
 
 #LPEEffectItem .minbutton {
-    padding:0;
-    margin:0;
-    outline:0;
-    border-color:@borders;
+    padding: 0;
+    margin: 0;
+    outline: 0;
+    border-color: @borders;
 }
 
 #LPEEffectItem expander title label {
-    min-height:26px;
+    min-height: 26px;
 }
 
-#LPEEffectItem expander, 
+#LPEEffectItem expander,
 #LPEEffectItem expander *,
-#LPEEffectItem expander:focus, 
+#LPEEffectItem expander:focus,
 #LPEEffectItem expander *:focus {
-    outline:0;
+    outline: 0;
 }
 
-.LPEDrag,.LPEDrag:active,.LPEDrag:focus,.LPEDrag:hover {
-    margin:0;
-    padding:0;
-    border-style:none;
-    opacity:0.7;
-    background-color:transparent;
-    background-image:none;
-    outline:0;
+.LPEDrag,
+.LPEDrag:active,
+.LPEDrag:focus,
+.LPEDrag:hover {
+    margin: 0;
+    padding: 0;
+    border-style: none;
+    opacity: 0.7;
+    background-color: transparent;
+    background-image: none;
+    outline: 0;
 }
 
 .LPEDrag:hover {
-    opacity:1;
-    background-color:transparent;
-    background-image:none;
+    opacity: 1;
+    background-color: transparent;
+    background-image: none;
 }
 
-#LivePathEffect list#LPEParentBox row{
-    border-style:none;
-    outline:0;
+#LivePathEffect list#LPEParentBox row {
+    border-style: none;
+    outline: 0;
 }
 
 #LivePathEffect list#LPEParentBox row > button {
-    padding:2px;
-    margin:0;
+    padding: 2px;
+    margin: 0;
 }
 
 #LPEContainer:drop(active) {
-    box-shadow:none;
+    box-shadow: none;
 }
 
-#LPECurrentItem *{
-    color:@theme_fg_color;
+#LPECurrentItem * {
+    color: @theme_fg_color;
 }
 
-#LPEContainer #LPEListBox{
+#LPEContainer #LPEListBox {
     border-style: solid none solid none;
     border-color: @theme_base_color;
-    border-width:0;
-    padding:0;
+    border-width: 0;
+    padding: 0;
 }
-#LPEListBox row:drop(active){
-    box-shadow:none;
+#LPEListBox row:drop(active) {
+    box-shadow: none;
 }
 #LPEContainer:drop(active).before row:first-child > box,
-#LPEListBox row:drop(active).before > box{
-    border-width:6px 1px 1px 1px;
+#LPEListBox row:drop(active).before > box {
+    border-width: 6px 1px 1px 1px;
     border-color: @theme_selected_bg_color @borders @borders @borders;
-    box-shadow:none;
-    border-radius:6px 6px 0 0;
+    box-shadow: none;
+    border-radius: 6px 6px 0 0;
 }
 
 #LPEContainer:drop(active).after row:last-child > box,
-#LPEListBox row:drop(active).after > box{
-    border-width:1px 1px 6px 1px;
+#LPEListBox row:drop(active).after > box {
+    border-width: 1px 1px 6px 1px;
     border-color: @borders @borders @theme_selected_bg_color @borders;
-    border-radius:0 0 6px 6px;
-    box-shadow:none;
+    border-radius: 0 0 6px 6px;
+    box-shadow: none;
 }
 
 #LPEEffectItem expander title label {
-    min-height:34px;
+    min-height: 34px;
 }
 
 #LPEMenu menuitem:not(.menu-category):disabled {
-    color:alpha(@theme_text_color,0.4);
+    color: alpha(@theme_text_color, 0.4);
 }
 
 #LPEListBox row > *:disabled * {
-    color:@theme_text_color;
+    color: @theme_text_color;
 }
-
 
 #LivePathEffect list row,
 #LPEListBox row.activatable:hover {
@@ -1132,44 +1188,44 @@ padding:3px 3px 10px 3px;
 #LivePathEffect list row .drag-icon,
 #LPEListBox row.activatable .drag-icon:hover {
     background-color: @theme_base_color;
-    border-width:1px;
-    border-radius:0;
-    margin:0;
-    padding:5px;
-    border-style:solid;
-    border-color:@borders;
-    outline-width:0;
+    border-width: 1px;
+    border-radius: 0;
+    margin: 0;
+    padding: 5px;
+    border-style: solid;
+    border-color: @borders;
+    outline-width: 0;
 }
 
 #LivePathEffect list row .drag-icon * {
-    outline:0;
+    outline: 0;
 }
 
-#LPEActionButtons #eventbutton:nth-child(1) button{
-    border-radius:3px 0 0 3px;
-    border-width:1px 0 1px 1px;
+#LPEActionButtons #eventbutton:nth-child(1) button {
+    border-radius: 3px 0 0 3px;
+    border-width: 1px 0 1px 1px;
 }
 
-#LPEActionButtons #eventbutton:nth-child(2) button{
-    border-radius:0;
-    border-width:1px 0 1px 1px;
+#LPEActionButtons #eventbutton:nth-child(2) button {
+    border-radius: 0;
+    border-width: 1px 0 1px 1px;
 }
 #LPECurrentItem * {
-    border-width:0;
-    border-style:none;
+    border-width: 0;
+    border-style: none;
 }
 #LPECurrentItem {
-    margin-top:0;
+    margin-top: 0;
 }
-#LPECurrentItem image{
-    margin-right:6px;
+#LPECurrentItem image {
+    margin-right: 6px;
 }
 #LPECurrentItem {
-    margin-top:0;
+    margin-top: 0;
 }
-#LPEParentBox{
-    margin:10px 4px;
-    padding:0;
+#LPEParentBox {
+    margin: 10px 4px;
+    padding: 0;
 }
 
 /* min size for an angle slider in gradient editor */
@@ -1180,7 +1236,8 @@ padding:3px 3px 10px 3px;
 /* Gtk::PopoverMenu and Inkscape::UI::Widget::PopoverMenu */
 /* Make it look basically like GtkMenu; see comments @ original merge request */
 popover.menu, /* GTK sets .menu/make_menuized_popover() sets .menuize */
-popover.popover-menu { /* Inkscape::UI::Widget::PopoverMenu */
+popover.popover-menu {
+    /* Inkscape::UI::Widget::PopoverMenu */
     /* Rounded corners can glitch in GTK3 with submenus, and GtkMenu was square anyway = emulate */
     border-radius: 0;
     border-color: @borders;
@@ -1230,8 +1287,7 @@ popover.menu > stack > box {
     margin: -2px -6px;
 }
 /* Detect submenu headings & replicate GTK .dim-label, looks nicer than leaving normal fg colour */
-popover.menu > stack > box > modelbutton:first-child > * /* Affect children not bgcolour */
-{
+popover.menu > stack > box > modelbutton:first-child > * /* Affect children not bgcolour */ {
     opacity: 0.55;
 }
 
@@ -1255,15 +1311,14 @@ popover.popup-menu contents {
     margin-right: 1px;
 }
 #tool-toolbar {
-    margin: 1px;    /* toolbar box itself, so it has some breathing space; other toolbars have much larger margins */
+    margin: 1px; /* toolbar box itself, so it has some breathing space; other toolbars have much larger margins */
 }
 
 /* used @ ui/themes to get correct foreground color; get_color() can be wrong */
 /* Asterisks & stuff in the selectors are just to ensure sufficient priority. */
 *.theme_fg_color,
 *.theme_fg_color:not(:backdrop),
-*.theme_fg_color:backdrop
-{
+*.theme_fg_color:backdrop {
     color: @theme_fg_color;
 }
 
@@ -1272,21 +1327,19 @@ popover.popup-menu contents {
    Asterisks & stuff in the selectors are just to ensure sufficient priority. */
 *.theme_bg_color,
 *.theme_bg_color:not(:backdrop),
-*.theme_bg_color:backdrop
-{
+*.theme_bg_color:backdrop {
     color: @theme_bg_color;
 }
 *.theme_selected_bg_color,
 *.theme_selected_bg_color:not(:backdrop),
-*.theme_selected_bg_color:backdrop
-{
+*.theme_selected_bg_color:backdrop {
     color: @theme_selected_bg_color;
 }
 
 /* ColorSlider */
 #ColorSlider {
-    min-width : 96px;
-    min-height:  8px;
+    min-width: 96px;
+    min-height: 8px;
 }
 
 #ColorPicker {
@@ -1305,11 +1358,11 @@ popover.popup-menu contents {
 
 /* ColorPreview */
 #ColorPreview {
-    min-width : 16px;
+    min-width: 16px;
     min-height: 16px;
 }
 #ColorPreview.simple {
-    min-width : 32px;
+    min-width: 32px;
     min-height: 12px;
 }
 #ColorPreview:hover:not(.simple) {
@@ -1319,13 +1372,13 @@ popover.popup-menu contents {
 
 /* GradientImage */
 #GradientImage {
-    min-width : 54px;
+    min-width: 54px;
     min-height: 12px;
 }
 
 /* GradientWithStops */
 #GradientEdit {
-    min-width : 60px;
+    min-width: 60px;
 
     /* widget's height; it should take stop template's height into account
      * current value is fine-tuned to make stop handles overlap gradient image
@@ -1344,7 +1397,7 @@ popover.popup-menu contents {
 
 /* Canvas */
 #InkscapeCanvas {
-    min-width : 256px;
+    min-width: 256px;
     min-height: 256px;
 }
 
@@ -1358,7 +1411,7 @@ frame.icon-preview {
     border-radius: 0;
 }
 button.icon-preview {
-    min-width : 0;
+    min-width: 0;
     min-height: 0;
     padding: 5px;
 }
@@ -1369,9 +1422,9 @@ frame.flat {
 }
 
 /*we dont want higlight with tab order only want checked ones */
-#ToolToolbar flowboxchild:selected { 
-    background-color:transparent;
-    background-image:image(@theme_bg_color);
+#ToolToolbar flowboxchild:selected {
+    background-color: transparent;
+    background-image: image(@theme_bg_color);
 }
 
 /* Adding some margins for popup dialogs, so the content is not touching the window borders */
@@ -1380,43 +1433,47 @@ frame.flat {
 }
 
 /* Tabs widget */
-#DocumentTab { padding: 3px; }
+#DocumentTab {
+    padding: 3px;
+}
 
 #DocumentTab:hover {
-    background-color:shade(@theme_bg_color, 0.97);
+    background-color: shade(@theme_bg_color, 0.97);
 }
 
 #DocumentTab.tab_active {
     box-shadow: inset 0 -2px @theme_selected_bg_color;
-    background-color:@theme_bg_color;
+    background-color: @theme_bg_color;
 }
 
-#DocumentTabsWidget { box-shadow: none; }
+#DocumentTabsWidget {
+    box-shadow: none;
+}
 
 @keyframes pulse-border {
-  0% {
-    box-shadow: inset alpha(@theme_selected_bg_color, 0.4) 0px 0px 2px 1px;
-  }
-  50% {
-    box-shadow: inset @theme_selected_bg_color 0px 0px 6px 2px;
-  }
-  100% {
-    box-shadow: inset alpha(@theme_selected_bg_color, 0.4) 0px 0px 2px 1px;
-  }
+    0% {
+        box-shadow: inset alpha(@theme_selected_bg_color, 0.4) 0px 0px 2px 1px;
+    }
+    50% {
+        box-shadow: inset @theme_selected_bg_color 0px 0px 6px 2px;
+    }
+    100% {
+        box-shadow: inset alpha(@theme_selected_bg_color, 0.4) 0px 0px 2px 1px;
+    }
 }
 
 #DocumentTabsWidget.drop-highlight > #Overlay {
-   box-shadow: inset @theme_selected_bg_color 0px 0px 5px 1px;
-   animation-name: pulse-border;
-   animation-duration: 1s;
-   animation-timing-function: ease;
-   animation-iteration-count: infinite;
+    box-shadow: inset @theme_selected_bg_color 0px 0px 5px 1px;
+    animation-name: pulse-border;
+    animation-duration: 1s;
+    animation-timing-function: ease;
+    animation-iteration-count: infinite;
 }
 
 /*helper info in popover menu*/
-.menu_search{
-    background-color:alpha(@theme_fg_color,0.1);
-    margin:0 0 -8px -8px;
+.menu_search {
+    background-color: alpha(@theme_fg_color, 0.1);
+    margin: 0 0 -8px -8px;
 }
 
 /* limit height of list view items */
@@ -1443,12 +1500,20 @@ listview.list-view-small > row > box.item-box.separator {
 
 /* About screen slide show transitions >>>>>>>>>>>>>>>>>>>>>>>>> */
 @keyframes fade_in_opacity {
-    0%   { opacity: 0; }
-    100% { opacity: 1; }
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
 }
 @keyframes fade_out_opacity {
-    0%   { opacity: 1; }
-    100% { opacity: 0; }
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
 }
 .fade-in {
     animation: 1.2s fade_in_opacity 0s both;
@@ -1500,18 +1565,22 @@ separator.faint {
 
 /* Simple decorators for resizing handles giving them borders */
 #MultipanedHandle.horizontal {
-    background-image: linear-gradient(to right,
+    background-image: linear-gradient(
+        to right,
         alpha(@theme_fg_color, 0.25) 0%,
         @theme_bg_color 10%,
         @theme_bg_color 90%,
-        alpha(@theme_fg_color, 0.25) 100%);
+        alpha(@theme_fg_color, 0.25) 100%
+    );
 }
 #MultipanedHandle.vertical {
-    background-image: linear-gradient(to bottom,
+    background-image: linear-gradient(
+        to bottom,
         alpha(@theme_fg_color, 0.25) 0%,
         @theme_bg_color 10%,
         @theme_bg_color 90%,
-        alpha(@theme_fg_color, 0.25) 100%);
+        alpha(@theme_fg_color, 0.25) 100%
+    );
 }
 
 /* Adds an exception to StartScreen recent files tab
@@ -1525,7 +1594,9 @@ scrolledwindow.inkscape-start-exception.frame {
 listview row.top-separator {
     margin-top: 6px;
     /* choose separator color that's going to be visible in a popup with both light and dark theme */
-    box-shadow: 0 -4px alpha(@theme_fg_color, 0.2), 0 -3px @theme_base_color;
+    box-shadow:
+        0 -4px alpha(@theme_fg_color, 0.2),
+        0 -3px @theme_base_color;
 }
 
 /* Eliminate mysterious blue frame that shows up in a list popup of the dropdownlist widget */

@@ -15,6 +15,7 @@
  */
 
 #include "inkscape-preferences.h"
+#include <optional>
 
 #ifdef HAVE_CONFIG_H
 # include "config.h"  // only include where actually required!
@@ -103,6 +104,7 @@
 #include "ui/widget/style-swatch.h"
 #include "util/recently-used-fonts.h"
 #include "util/trim.h"
+#include "util/platform-check.h"
 #include "util-string/ustring-format.h"
 #include "widgets/spw-utilities.h"
 
@@ -2014,6 +2016,7 @@ void InkscapePreferences::initPageUI()
     _win_gtk.init ( _("GTK open/save dialogs"), "/options/desktopintegration/value", 0, false, &_win_native);
 
     _win_show_boot.init ( _("Show Welcome dialog"), "/options/boot/enabled", true);
+    _win_merge_titlebar_menu.init( _("Merge titlebar and menu"), "/window/mergeMenuTitlebar", "platform-default");
     _win_hide_task.init ( _("Dialogs are hidden in taskbar"), "/options/dialogsskiptaskbar/value", true);
     _win_save_viewport.init ( _("Save and restore documents viewport"), "/options/savedocviewport/value", true);
     _win_zoom_resize.init ( _("Zoom when window is resized"), "/options/stickyzoom/value", false);
@@ -2102,6 +2105,18 @@ void InkscapePreferences::initPageUI()
                             _("Zoom drawing when document window is resized, to keep the same area visible (this is the default which can be changed in any window using the button above the right scrollbar)"));
     _page_windows.add_line( true, "", _win_save_viewport, "",
                             _("Save documents viewport (zoom and panning position). Useful to turn off when sharing version controlled files."));
+    #ifndef G_OS_DARWIN
+    // This lambda toggles the value of /window/mergeMenuTitlebar, if it exists
+    _page_windows.add_line( [] {
+        std::optional<bool> pref_value = prefs->getOptionalBool();
+        auto default_value = Inkscape::Util::PlatformCheck::is_gnome();
+
+        // If setting is defined, simply toggle it
+        // else, toggle OS default value
+        prefs->setBool("/window/mergeMenuTitlebar", pref_value.has_value() ? !pref_value : !default_value);
+    }, "", _win_merge_titlebar_menu, "",
+                            _("Whether to merge the titlebar and menu to save space. This is an experimental option that may not work in all systems."));
+    #endif
 
     this->AddPage(_page_windows, _("Windows"), iter_ui, PREFS_PAGE_UI_WINDOWS);
 
@@ -2640,7 +2655,7 @@ void InkscapePreferences::initPageBehavior()
                                _("If possible, apply transformation to objects without adding a transform= attribute"));
     _page_transforms.add_line( true, "", _trans_preserved, "",
                                _("Always store transformation as a transform= attribute on objects"));
-    
+
     this->AddPage(_page_transforms, _("Transforms"), iter_behavior, PREFS_PAGE_BEHAVIOR_TRANSFORMS);
 
     // Scrolling options
@@ -3032,7 +3047,7 @@ void InkscapePreferences::initPageRendering()
         grid->attach_next_to(*label_widget, Gtk::PositionType::BOTTOM);
     };
 
-    //TRANSLATORS: The following are options for fine-tuning rendering, meant to be used by developers, 
+    //TRANSLATORS: The following are options for fine-tuning rendering, meant to be used by developers,
     //find more explanations at https://gitlab.com/inkscape/inbox/-/issues/6544#note_886540227
     add_devmode_group_header(_("Low-level tuning options"));
     _canvas_tile_size.init("/options/rendering/tile_size", 1.0, 10000.0, 1.0, 0.0, 300.0, true, false);
@@ -3733,7 +3748,6 @@ static void appendList(Glib::ustring& tmp, const std::vector<string_type> &listi
         tmp += "\n";
     }
 }
-
 
 void InkscapePreferences::initPageSystem()
 {

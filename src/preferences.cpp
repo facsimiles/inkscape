@@ -1081,7 +1081,6 @@ Colors::Color Preferences::getColor(Glib::ustring const &pref_path, std::string 
     return getEntry(pref_path).getColor(def);
 }
 
-
 } // namespace Inkscape
 
 /*

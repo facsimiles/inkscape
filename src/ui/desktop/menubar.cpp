@@ -36,6 +36,9 @@
 #include <giomm/menumodel.h>
 #include <gtkmm/builder.h>
 #include <gtkmm/recentmanager.h>
+#include <gtkmm/label.h>
+#include <gtkmm/headerbar.h>
+#include <gtkmm/popovermenubar.h>
 
 #include "actions/actions-effect-data.h"
 #include "actions/actions-effect.h"
@@ -43,9 +46,11 @@
 #include "preferences.h"          // Use icons or not
 #include "io/fix-broken-links.h"
 #include "io/resource.h"          // UI File location
+#include "util/platform-check.h"  // PlatformCheck::is_gnome()
 
 // =================== Main Menu ================
-void
+// The task of this function is to build and return a Gio::Menu model to use in the InkscapeWindow
+std::shared_ptr<Gio::Menu>
 build_menu()
 {
     std::string filename = Inkscape::IO::Resource::get_filename(Inkscape::IO::Resource::UIS, "menus.ui");
@@ -57,7 +62,7 @@ build_menu()
         std::cerr << "build_menu: failed to load Main menu from: "
                     << filename <<": "
                     << err.what() << std::endl;
-        return;
+        return nullptr;
     }
 
     const auto object = refBuilder->get_object("menus");
@@ -65,7 +70,7 @@ build_menu()
 
     if (!gmenu) {
         std::cerr << "build_menu: failed to build Main menu!" << std::endl;
-        return;
+        return nullptr;
     }
 
     static auto app = InkscapeApplication::instance();
@@ -291,17 +296,55 @@ build_menu()
 
     rebuild_recent(recent_gmenu);
 
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    auto useicons = static_cast<UseIcons>(prefs->getInt("/theme/menuIcons", 0));
-
-    // Remove all or some icons. Also create label to tooltip map.
-    auto gmenu_copy = Gio::Menu::create();
-    // menu gets recreated; keep track of new recent items submenu
-    rebuild_menu(gmenu, gmenu_copy, useicons, recent_menu_quark, recent_gmenu);
-    app->gtk_app()->set_menubar(gmenu_copy);
-
     // rebuild recent items submenu when the list changes
     recent_manager->signal_changed().connect([=](){ rebuild_recent(recent_gmenu); });
+
+    return std::move(gmenu);
+}
+
+Gtk::HeaderBar *build_csd_menu(std::shared_ptr<Gio::Menu> gmenu) {
+    auto headerBar = Gtk::make_managed<Gtk::HeaderBar>();
+    headerBar->set_show_title_buttons(true);
+
+    auto popoverMenuBar = Gtk::make_managed<Gtk::PopoverMenuBar>(gmenu);
+    headerBar->pack_start(*popoverMenuBar);
+
+    headerBar->show();
+    return headerBar;
+}
+
+void update_menus() {
+    auto gmenu = build_menu();
+    static auto inkscapeApp = InkscapeApplication::instance();
+    auto app = inkscapeApp->gtk_app();
+
+    // Do not merge titlebar in MacOS
+#ifdef G_OS_DARWIN
+    app->set_menubar(gmenu);
+    return;
+#endif
+
+    auto prefs = Inkscape::Preferences::get();
+    std::optional<bool> merge_titlebar_menu = prefs->getOptionalBool("/window/mergeMenuTitlebar");
+
+    // Whether default value should be true or false
+    auto default_value = Inkscape::Util::PlatformCheck::is_gnome();
+
+    // If set to false, or undefined and platform is KDE or Windows
+    if (!merge_titlebar_menu.value_or(default_value)) {
+        app->set_menubar(gmenu);
+        return;
+    }
+
+    // Set to true, or platform default value is 'true'
+
+    auto headerBar = build_csd_menu(gmenu);
+
+    // update headerbar for all windows
+    auto windows = app->get_windows();
+    for (auto window : windows) {
+        window->set_titlebar(*headerBar);
+    }
 }
 
 /*

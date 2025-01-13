@@ -21,7 +21,9 @@
 #ifndef SEEN_DESKTOP_MENUBAR_H
 #define SEEN_DESKTOP_MENUBAR_H
 
+#include <memory>
 #include <glibmm/refptr.h>
+#include <gtkmm/application.h>
 
 namespace Glib {
 class Quark;
@@ -32,7 +34,19 @@ class MenuModel;
 class Menu;
 } // namespace Gio;
 
-void build_menu();
+namespace Gtk {
+class Window;
+class HeaderBar;
+} // namespace Gtk
+
+// Builds a GtkHeaderBar with the provided Gio::Menu
+Gtk::HeaderBar *build_csd_menu(std::shared_ptr<Gio::Menu> gmenu);
+
+// Builds the Gio::Menu
+std::shared_ptr<Gio::Menu> build_menu();
+
+// Updates menus in all windows
+void update_menus();
 
 enum class UseIcons {
     never = -1, // Match existing preference numbering.

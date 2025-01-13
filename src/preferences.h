@@ -752,9 +752,9 @@ typedef std::unique_ptr<Preferences::PreferencesObserver> PrefObserver;
  *
  * will cause the new value to be printed after each subsequent change. Pref<T> can be temporarily
  * disabled with a call to
- * 
+ *
  *     mybool.set_enabled(false);
- * 
+ *
  * during which time it will revert to its default value and ignore further updates until
  * re-enabled again.
  *

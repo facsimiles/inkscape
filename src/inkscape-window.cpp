@@ -20,6 +20,7 @@
 #include <gtkmm/box.h>
 #include <gtkmm/popovermenubar.h>
 #include <gtkmm/shortcutcontroller.h>
+#include <gtkmm/headerbar.h>
 #include <sigc++/functors/mem_fun.h>
 
 #include "desktop.h"
@@ -27,6 +28,7 @@
 #include "document.h"
 #include "enums.h"      // PREFS_WINDOW_GEOMETRY_NONE
 #include "inkscape-application.h"
+#include "preferences.h"
 
 #include "actions/actions-canvas-mode.h"
 #include "actions/actions-canvas-snapping.h"
@@ -101,9 +103,8 @@ InkscapeWindow::InkscapeWindow(SPDesktop *desktop)
         connection->export_action_group(document_action_group_name, _document->getActionGroup());
     }
 
-    // This is called here (rather than in InkscapeApplication) solely to add win level action
-    // tooltips to the menu label-to-tooltip map.
-    build_menu();
+    // ============== Build menu ==================
+    update_menus();
 
     // =============== Build interface ===============
 
