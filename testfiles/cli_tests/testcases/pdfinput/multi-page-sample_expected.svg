@@ -135,6 +135,14 @@
          offset="1"
          id="..." />
     </linearGradient>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="...">
+      <path
+         d="M 224.531,601.039 H 338.035 V 714.418 H 224.531 Z"
+         transform="scale(1.3333333)"
+         id="..." />
+    </clipPath>
     <linearGradient
        x1="93.60907"
        y1="227.65356"
@@ -284,8 +292,16 @@
        clipPathUnits="userSpaceOnUse"
        id="...">
       <path
-         d="M 351,482 H 512 V 630 H 351 Z"
+         d="M 0,0 H 551 V 700 H 0 Z"
          transform="translate(2.5000001e-5)"
+         id="..." />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="...">
+      <path
+         d="M 351,482 H 512 V 630 H 351 Z"
+         transform="matrix(1.3333333,0,0,1.3333333,1789.3333,0)"
          id="..." />
     </clipPath>
     <clipPath
@@ -619,6 +635,7 @@
          d="m 211.543,511.203 c 0,33.637 -27.234,60.91 -60.828,60.91 -33.594,0 -60.824,-27.273 -60.824,-60.91 0,-33.641 27.23,-60.91 60.824,-60.91 33.594,0 60.828,27.269 60.828,60.91 z"
          transform="scale(1.3333333)"
          style="fill:url(#...);stroke:none"
+         opacity="1"
          id="..." />
     </g>
     <path
@@ -661,7 +678,7 @@
        id="..."
        clip-path="url(#...)">
       <path
-         d="M 224.531,601.039 H 338.035 V 714.418 H 224.531 Z"
+         d="M 0,0 H 596 V 842 H 0 Z"
          transform="scale(1.3333333)"
          style="fill:url(#...);stroke:none"
          opacity="1"
@@ -1142,13 +1159,17 @@
        opacity="1"
        mask="url(#...)"
        id="...">
-      <path
-         d="m 351.457,482.199 h 160.09 V 630 h -160.09 z"
-         transform="matrix(1.3333333,0,0,1.3333333,1789.3333,0)"
-         style="fill:url(#...);stroke:none"
-         opacity="1"
+      <g
          clip-path="url(#...)"
-         id="..." />
+         id="...">
+        <path
+           d="m 351.457,482.199 h 160.09 V 630 h -160.09 z"
+           transform="matrix(1.3333333,0,0,1.3333333,1789.3333,0)"
+           style="fill:url(#...);stroke:none"
+           opacity="1"
+           clip-path="url(#...)"
+           id="..." />
+      </g>
     </g>
     <g
        id="..."
