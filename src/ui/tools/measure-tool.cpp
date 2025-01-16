@@ -38,23 +38,26 @@
 #include "display/control/canvas-item-group.h"
 #include "display/control/canvas-item-text.h"
 
+#include "helper/geom.h"
+
 #include "object/sp-defs.h"
+#include "object/sp-ellipse.h"
 #include "object/sp-flowtext.h"
 #include "object/sp-namedview.h"
+#include "object/sp-path.h"
 #include "object/sp-root.h"
 #include "object/sp-shape.h"
 #include "object/sp-text.h"
 
 #include "svg/svg.h"
 
+#include "ui/clipboard.h"
 #include "ui/dialog/knot-properties.h"
 #include "ui/icon-names.h"
 #include "ui/knot/knot.h"
 #include "ui/tools/freehand-base.h"
 #include "ui/widget/canvas.h" // Canvas area
 #include "ui/widget/events/canvas-event.h"
-
-#include "ui/clipboard.h"
 
 #include "util/units.h"
 #include "util-string/ustring-format.h"
@@ -1221,7 +1224,15 @@ void MeasureTool::showCanvasItems(bool to_guides, bool to_item, bool to_phantom,
             continue;
         }
         if (all_layers || _desktop->layerManager().layerForObject(item) == current_layer) {
-            if (auto shape = cast<SPShape>(item)) {
+            if (auto e = cast<SPGenericEllipse>(item)) { // this fixes a bug with the calculation of the intersection on
+                e->set_shape();                          // ellipses and circles. If the calculate_intersections(...) is fixed
+                                                         // then this if() can be removed
+                Geom::PathVector new_pv = pathv_to_linear_and_cubic_beziers(e->curve()->get_pathvector());
+                SPPath newPath;
+                newPath.setCurve(SPCurve(new_pv));
+                newPath.set_shape();
+                calculate_intersections(_desktop, item, lineseg, *newPath.curve(), intersection_times);
+            } else if (auto shape = cast<SPShape>(item)) {
                 calculate_intersections(_desktop, item, lineseg, *shape->curve(), intersection_times);
             } else {
                 if (is<SPText>(item) || is<SPFlowtext>(item)) {
