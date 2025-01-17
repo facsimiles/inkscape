@@ -1082,7 +1082,7 @@ void MeasureTool::showInfoBox(Geom::Point cursor, bool into_groups)
         over = newover;
         auto affine = over->i2dt_affine() * Geom::Scale(scale);
         // Correct for the current page's position.
-        if (prefs->getBool("/options/origincorrection/page", true)) {
+        if (_desktop->getDocument()->get_origin_follows_page()) {
             affine *= _desktop->getDocument()->getPageManager().getSelectedPageAffine().inverse();
         }
         if (auto bbox = over->bounds(box_type, affine)) {
