@@ -684,12 +684,14 @@ public:
         _ratio(get_derived_widget<Inkscape::UI::Widget::SpinButton>(builder, "star-ratio")),
         _rounded(get_derived_widget<Inkscape::UI::Widget::SpinButton>(builder, "star-rounded")),
         _rand(get_derived_widget<Inkscape::UI::Widget::SpinButton>(builder, "star-rand")),
+        _length(get_derived_widget<Inkscape::UI::Widget::SpinButton>(builder, "star-length")),
         _poly(get_widget<Gtk::ToggleButton>(builder, "star-poly")),
         _star(get_widget<Gtk::ToggleButton>(builder, "star-star")),
         _align(get_widget<Gtk::Button>(builder, "star-align")),
         _clear_rnd(get_widget<Gtk::Button>(builder, "star-rnd-clear")),
         _clear_round(get_widget<Gtk::Button>(builder, "star-round-clear")),
-        _clear_ratio(get_widget<Gtk::Button>(builder, "star-ratio-clear"))
+        _clear_ratio(get_widget<Gtk::Button>(builder, "star-ratio-clear")),
+        _clear_length(get_widget<Gtk::Button>(builder, "star-length-clear"))
     {
         _title = _("Star");
         _widget = &_main;
@@ -726,9 +728,31 @@ public:
                 _path->updateRepr();
             });
         });
+        _length.get_adjustment()->signal_value_changed().connect([this](){
+            change_value(_path, _length.get_adjustment(), [this](double length){
+                _path->setAttributeDouble("inkscape:length", length);
+                _path->updateRepr();
+
+                auto adj = _length.get_adjustment();
+                auto value = Util::Quantity::convert(adj->get_value(), _tracker->getActiveUnit(), "px");
+
+                if (auto star = cast<SPStar>(_path)) {
+                    auto scale = Geom::Scale(value / star->getSideLength());
+                    auto set_tmp = ObjectSet{_desktop};
+                    set_tmp.add(_path);
+                    set_tmp.scaleRelative(star->center, scale);
+
+                    auto repr = _path->getRepr();
+                    repr->setAttributeSvgDouble("inkscape:length", adj->get_value());
+                    _path->updateRepr();
+                }
+            });
+        });
+
         _clear_rnd.signal_clicked().connect([this](){ _rand.get_adjustment()->set_value(0); });
         _clear_round.signal_clicked().connect([this](){ _rounded.get_adjustment()->set_value(0); });
         _clear_ratio.signal_clicked().connect([this](){ _ratio.get_adjustment()->set_value(0.5); });
+        _clear_length.signal_clicked().connect([this](){ _length.get_adjustment()->set_value(_path->length); });
 
         _poly.signal_toggled().connect([this](){ set_flat(true); });
         _star.signal_toggled().connect([this](){ set_flat(false); });
@@ -755,9 +779,11 @@ public:
         }
         _rounded.set_value(_path->rounded);
         _rand.set_value(_path->randomized);
+        _length.set_value(_path->length);
         _clear_rnd  .set_visible(_path->randomized != 0);
         _clear_round.set_visible(_path->rounded != 0);
         _clear_ratio.set_visible(std::abs(_ratio.get_value() - 0.5) > 0.0005);
+        _clear_length.set_visible(std::abs(_length.get_value() - 1.0) > 0.0005);
 
         _poly.set_active(_path->flatsided);
         _star.set_active(!_path->flatsided);
@@ -782,9 +808,11 @@ private:
     Inkscape::UI::Widget::SpinButton& _ratio;
     Inkscape::UI::Widget::SpinButton& _rounded;
     Inkscape::UI::Widget::SpinButton& _rand;
+    Inkscape::UI::Widget::SpinButton& _length;
     Gtk::Button& _clear_rnd;
     Gtk::Button& _clear_round;
     Gtk::Button& _clear_ratio;
+    Gtk::Button& _clear_length;
     Gtk::Button& _align;
     Gtk::ToggleButton &_poly;
     Gtk::ToggleButton &_star;
