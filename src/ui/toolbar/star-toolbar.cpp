@@ -379,17 +379,13 @@ void StarToolbar::length_value_changed()
         auto guard = _blocker.block();
 
         auto adj = _length_item.get_adjustment();
+        Preferences::get()->setDouble("/tools/shapes/star/length", adj->get_value());
+        
         auto value = Util::Quantity::convert(adj->get_value(), _tracker->getActiveUnit(), "px");
+
         for (auto item : _desktop->getSelection()->items()) {
             if (auto star = cast<SPStar>(item)) {
-                auto scale = Geom::Scale(value / star->getSideLength());
-                auto set_tmp = ObjectSet{_desktop};
-                set_tmp.add(item);
-                set_tmp.scaleRelative(star->center, scale);
-
-                auto repr = item->getRepr();
-                repr->setAttributeSvgDouble("inkscape:length", adj->get_value());
-                item->updateRepr();
+                star -> setSideLength(value);
             }
         }
     }
@@ -464,10 +460,6 @@ void StarToolbar::_selectionModified(Selection *selection)
             if (auto star = cast<SPStar>(item)) {
                 n_selected++;
                 lengths += star->getSideLength();
-
-                auto repr = item->getRepr();
-                repr->setAttributeSvgDouble("inkscape:length", length_adj->get_value());
-                item->updateRepr();
             }
         }
         if (n_selected > 0) {
@@ -526,9 +518,19 @@ void StarToolbar::notifyAttributeChanged(XML::Node &, GQuark name_, Util::ptr_sh
         int sides = _repr->getAttributeInt("sodipodi:sides", 0);
         mag_adj->set_value(sides);
     }
-    else if (!strcmp(name, "inkscape:length")) {
-        double length = _repr->getAttributeDouble("inkscape:length", 0.0);
-        length_adj->set_value(length);
+
+    double lengths = 0;
+    int n_selected = 0;
+    for (auto item : _desktop->getSelection()->items()) {
+        if (auto star = cast<SPStar>(item)) {
+            n_selected++;
+            lengths += star->getSideLength();
+        }
+    }
+
+    if (n_selected > 0) {
+        auto value = Util::Quantity::convert(lengths / n_selected, "px", _tracker->getActiveUnit());
+        length_adj->set_value(value);
     }
 }
 

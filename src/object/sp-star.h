@@ -37,7 +37,6 @@ public:
 
 	double rounded;
 	double randomized;
-	double length;
 
 	void build(SPDocument *document, Inkscape::XML::Node *repr) override;
 	Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags) override;
@@ -52,6 +51,7 @@ public:
 	void set_shape() override;
 	Geom::Affine set_transform(Geom::Affine const& xform) override;
 	double getSideLength() const;
+	void setSideLength(double length);
 };
 
 void sp_star_position_set (SPStar *star, int sides, Geom::Point center, double r1, double r2, double arg1, double arg2, bool isflat, double rounded, double randomized);

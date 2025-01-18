@@ -211,7 +211,6 @@ static SPStyleProp const props[] = {
     {SPAttr::INKSCAPE_FLATSIDED, "inkscape:flatsided"},
     {SPAttr::INKSCAPE_ROUNDED, "inkscape:rounded"},
     {SPAttr::INKSCAPE_RANDOMIZED, "inkscape:randomized"},
-    {SPAttr::INKSCAPE_LENGTH, "inkscape:length"},
     /* SPSpiral */
     {SPAttr::SODIPODI_EXPANSION, "sodipodi:expansion"},
     {SPAttr::SODIPODI_REVOLUTION, "sodipodi:revolution"},
