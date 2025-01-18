@@ -665,9 +665,9 @@
             <property name="focusable">True</property>
             <property name="tooltip-text" translatable="yes">Lenght of side</property>
             <property name="hexpand">True</property>
-            <property name="width-chars">6</property>
+            <property name="width-chars">7</property>
             <property name="adjustment">adjustment-star-length</property>
-            <property name="digits">2</property>
+            <property name="digits">3</property>
             <layout>
                 <property name="column">1</property>
                 <property name="row">5</property>
@@ -789,21 +789,6 @@
         <layout>
           <property name="column">2</property>
           <property name="row">2</property>
-        </layout>
-      </object>
-    </child>
-    <child>
-      <object class="GtkButton" id="star-length-clear">
-        <property name="receives-default">True</property>
-        <property name="halign">start</property>
-        <property name="has-frame">False</property>
-        <property name="icon-name">edit-clear-value</property>
-        <style>
-          <class name="small-button"/>
-        </style>
-        <layout>
-          <property name="column">2</property>
-          <property name="row">5</property>
         </layout>
       </object>
     </child>
