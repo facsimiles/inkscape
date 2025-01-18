@@ -40,6 +40,57 @@ enum class AlignTargetNode {
     MAX_NODE
 };
 
+/// Characters used in the sodipodi:nodetype and LPE-related nodetype XML attributes
+enum class XmlNodeType : char
+{
+    AUTO = 'a',
+    BOGUS = 'b',
+    CUSP = 'c',
+    ELLIPSE_MODIFIER = 'e',
+    SMOOTH = 's',
+    SYMMETRIC = 'z',
+};
+
+inline constexpr XmlNodeType encode_node_type(NodeType type)
+{
+    switch (type) {
+        case NODE_CUSP:
+            return XmlNodeType::CUSP;
+
+        case NODE_SMOOTH:
+            return XmlNodeType::SMOOTH;
+
+        case NODE_AUTO:
+            return XmlNodeType::AUTO;
+
+        case NODE_SYMMETRIC:
+            return XmlNodeType::SYMMETRIC;
+
+        default:
+            return XmlNodeType::BOGUS;
+    }
+}
+
+inline constexpr NodeType decode_node_type(XmlNodeType xml_type)
+{
+    switch (xml_type) {
+        case XmlNodeType::AUTO:
+            return NODE_AUTO;
+
+        case XmlNodeType::CUSP:
+            return NODE_CUSP;
+
+        case XmlNodeType::SMOOTH:
+            return NODE_SMOOTH;
+
+        case XmlNodeType::SYMMETRIC:
+            return NODE_SYMMETRIC;
+
+        default:
+            return NODE_PICK_BEST;
+    }
+}
+
 } // namespace UI
 } // namespace Inkscape
 

@@ -131,6 +131,11 @@ bool are_collinear_within_serializing_error(const Geom::Point &A, const Geom::Po
     return Geom::are_near(C_reflect_scaled, A, tolerance_C_reflect_scaled + tolerance_A);
 }
 
+/// Compute a unit vector in the direction from first to second control point
+Geom::Point direction(Geom::Point const &first, Geom::Point const &second)
+{
+    return Geom::unit_vector(second - first);
+}
 } // namespace
 
 namespace Inkscape {
@@ -142,30 +147,7 @@ const double DEFAULT_START_POWER = 1.0 / 3.0;
 
 std::ostream &operator<<(std::ostream &out, NodeType type)
 {
-    switch (type) {
-        case NODE_CUSP:
-            out << 'c';
-            break;
-        case NODE_SMOOTH:
-            out << 's';
-            break;
-        case NODE_AUTO:
-            out << 'a';
-            break;
-        case NODE_SYMMETRIC:
-            out << 'z';
-            break;
-        default:
-            out << 'b';
-            break;
-    }
-    return out;
-}
-
-/** Computes an unit vector of the direction from first to second control point */
-static Geom::Point direction(Geom::Point const &first, Geom::Point const &second)
-{
-    return Geom::unit_vector(second - first);
+    return out << static_cast<char>(encode_node_type(type));
 }
 
 Geom::Point Handle::_saved_other_pos(0, 0);
@@ -1174,22 +1156,6 @@ bool Node::isEndNode() const
 void Node::sink()
 {
     _canvas_item_ctrl->lower_to_bottom();
-}
-
-NodeType Node::parse_nodetype(char x)
-{
-    switch (x) {
-        case 'a':
-            return NODE_AUTO;
-        case 'c':
-            return NODE_CUSP;
-        case 's':
-            return NODE_SMOOTH;
-        case 'z':
-            return NODE_SYMMETRIC;
-        default:
-            return NODE_PICK_BEST;
-    }
 }
 
 bool Node::_eventHandler(Tools::ToolBase *event_context, CanvasEvent const &event)

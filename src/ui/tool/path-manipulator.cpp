@@ -17,6 +17,7 @@
 #include <2geom/forward.h>
 #include <2geom/path-sink.h>
 #include <2geom/point.h>
+#include <string_view>
 #include <utility>
 #include <vector>
 
@@ -35,6 +36,7 @@
 #include "ui/tool/curve-drag-point.h"
 #include "ui/tool/elliptical-arc-end-node.h"
 #include "ui/tool/multi-path-manipulator.h"
+#include "ui/tool/node-factory.h"
 #include "ui/tool/node-types.h"
 #include "ui/tools/node-tool.h"
 #include "ui/widget/events/canvas-event.h"
@@ -264,6 +266,11 @@ void PathManipulator::invertSelectionInSubpaths()
             }
         }
     }
+}
+
+NodeFactory PathManipulator::createNodeFactory(std::span<const NodeTypeRequest> request_sequence)
+{
+    return {request_sequence, this, _path};
 }
 
 /** Insert a new node in the middle of each selected segment. */
@@ -1105,6 +1112,11 @@ void PathManipulator::hideDragPoint()
     _dragpoint->setIterator(NodeList::iterator());
 }
 
+NodeSharedData const &PathManipulator::getNodeSharedData() const
+{
+    return _multi_path_manipulator._path_data.node_data;
+}
+
 /** Insert a node in the segment beginning with the supplied iterator,
  * at the given time value */
 NodeList::iterator PathManipulator::subdivideSegment(NodeList::iterator first, double t)
@@ -1292,43 +1304,38 @@ void PathManipulator::_createControlPointsFromGeometry()
         return;
     }
     _spcurve = SPCurve(pathv);
-
     pathv *= _getTransform();
 
+    // XML Tree being used here directly while it shouldn't be.
+    auto const requests =
+        read_node_type_requests(_path ? _path->getRepr()->attribute(_nodetypesKey().data()) : nullptr);
+    auto factory = createNodeFactory(requests);
+
     // in this loop, we know that there are no zero-segment subpaths
-    for (auto & pit : pathv) {
-        // prepare new subpath
-        SubpathPtr subpath(new NodeList(_subpaths));
+    for (auto const &geometric_path : pathv) {
+        auto subpath = std::make_shared<NodeList>(_subpaths);
         _subpaths.push_back(subpath);
 
-        Node *previous_node = new Node(_multi_path_manipulator._path_data.node_data, pit.initialPoint());
-        subpath->push_back(previous_node);
+        auto first_node_on_path = factory.createInitialNode(geometric_path);
+        Node *previous_node = first_node_on_path.get();
+        subpath->push_back(first_node_on_path.release());
 
-        bool const closed = pit.closed();
+        bool const closed = geometric_path.closed();
 
-        for (Geom::Path::iterator cit = pit.begin(); cit != pit.end(); ++cit) {
-            Geom::Point pos = cit->finalPoint();
-            Node *current_node;
+        for (auto curve_it = geometric_path.begin(); curve_it != geometric_path.end(); ++curve_it) {
+            Node *current_node = nullptr;
             // if the closing segment is degenerate and the path is closed, we need to move
             // the handle of the first node instead of creating a new one
-            if (closed && cit == --(pit.end())) {
+            if (closed && curve_it == std::prev(geometric_path.end())) {
                 current_node = subpath->begin().get_pointer();
-            } else if (auto const *arc = dynamic_cast<Geom::EllipticalArc const *>(&*cit)) {
-                current_node =
-                    new EllipticalArcEndNode(*arc, _multi_path_manipulator._path_data.node_data, _path, *this);
-                subpath->push_back(current_node);
             } else {
-                /* regardless of segment type, create a new node at the end
-                 * of this segment (unless this is the last segment of a closed path
-                 * with a degenerate closing segment */
-                current_node = new Node(_multi_path_manipulator._path_data.node_data, pos);
-                subpath->push_back(current_node);
+                auto new_node = factory.createNextNode(*curve_it);
+                current_node = new_node.get();
+                subpath->push_back(new_node.release());
             }
             // if this is a bezier segment, move handles appropriately
-            // TODO: I don't know why the dynamic cast below doesn't want to work
-            //       when I replace BezierCurve with CubicBezier. Might be a bug
-            //       somewhere in pathv_to_linear_and_cubic_beziers
-            Geom::BezierCurve const *bezier = dynamic_cast<Geom::BezierCurve const*>(&*cit);
+            // TODO: this probably isn't the right place for this code
+            Geom::BezierCurve const *bezier = dynamic_cast<Geom::BezierCurve const *>(&*curve_it);
             if (bezier && bezier->order() == 3)
             {
                 previous_node->front()->setPosition((*bezier)[1]);
@@ -1338,43 +1345,19 @@ void PathManipulator::_createControlPointsFromGeometry()
         }
         // If the path is closed, make the list cyclic
         if (closed) {
-            if (pit.size_open() && pit.closingSegment().isDegenerate()) {
-                if (auto const *arc = dynamic_cast<Geom::EllipticalArc const *>(&pit.back_open())) {
-                    subpath->pop_front();
-                    subpath->push_front(
-                        new EllipticalArcEndNode(*arc, _multi_path_manipulator._path_data.node_data, _path, *this));
-                }
+            // If the closing segment is degenerate, the first node of the subpath is at the end
+            // of the last "real" segment of the path (excluding the closing segment) and may therefore
+            // be affected by the geometry of that segment
+            if (geometric_path.size_open() && geometric_path.closingSegment().isDegenerate()) {
+                auto replacement_node = factory.createNextNode(geometric_path.back_open());
+                subpath->pop_front();
+                subpath->push_front(replacement_node.release());
             }
             subpath->setClosed(true);
         }
     }
 
-    // we need to set the nodetypes after all the handles are in place,
-    // so that pickBestType works correctly
-    // TODO maybe migrate to inkscape:node-types?
-    // TODO move this into SPPath - do not manipulate directly
-
-    //XML Tree being used here directly while it shouldn't be.
-    gchar const *nts_raw = _path ? _path->getRepr()->attribute(_nodetypesKey().data()) : nullptr;
-    /* Calculate the needed length of the nodetype string.
-     * For closed paths, the entry is duplicated for the starting node,
-     * so we can just use the count of segments including the closing one
-     * to include the extra end node. */
-    /* pad the string to required length with a bogus value.
-     * 'b' and any other letter not recognized by the parser causes the best fit to be set
-     * as the node type */
-    auto const *tsi = nts_raw ? nts_raw : "";
-    for (auto & _subpath : _subpaths) {
-        for (auto & j : *_subpath) {
-            char nodetype = (*tsi) ? (*tsi++) : 'b';
-            j.setType(Node::parse_nodetype(nodetype), false);
-        }
-        if (_subpath->closed() && *tsi) {
-            // STUPIDITY ALERT: it seems we need to use the duplicate type symbol instead of
-            // the first one to remain backward compatible.
-            _subpath->begin()->setType(Node::parse_nodetype(*tsi++), false);
-        }
-    }
+    set_node_types(_subpaths, requests);
 }
 
 //determines if the trace has a bspline effect and the number of steps that it takes
@@ -1533,19 +1516,24 @@ void PathManipulator::_createGeometryFromControlPoints(bool alert_LPE)
     }
 }
 
-/** Construct a node type string to store in the sodipodi:nodetypes attribute. */
+/** Construct a node type string to store in the sodipodi:nodetypes attribute.
+ *  @pre no single-node subpaths
+ */
 std::string PathManipulator::_createTypeString()
 {
-    // precondition: no single-node subpaths
-    std::stringstream tstr;
-    for (auto & _subpath : _subpaths) {
-        for (auto & j : *_subpath) {
-            tstr << j.type();
+    std::stringstream output;
+
+    for (auto const &subpath : _subpaths) {
+        for (auto const &node : *subpath) {
+            node.writeType(output);
         }
         // nodestring format peculiarity: first node is counted twice for closed paths
-        if (_subpath->closed()) tstr << _subpath->begin()->type();
+        if (subpath->closed()) {
+            subpath->begin()->writeType(output);
+        }
     }
-    return tstr.str();
+
+    return output.str();
 }
 
 /** Update the path outline. */
@@ -1641,12 +1629,10 @@ void PathManipulator::_setGeometry()
 /** Figure out in what attribute to store the nodetype string. */
 Glib::ustring PathManipulator::_nodetypesKey()
 {
-    auto lpeobj = cast<LivePathEffectObject>(_path);
-    if (!lpeobj) {
-        return "sodipodi:nodetypes";
-    } else {
+    if (is<LivePathEffectObject>(_path)) {
         return _lpe_key + "-nodetypes";
     }
+    return "sodipodi:nodetypes";
 }
 
 /** Return the XML node we are editing.

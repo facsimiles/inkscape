@@ -50,14 +50,7 @@ struct ListNode
     NodeList *ln_list;
 };
 
-struct NodeSharedData
-{
-    SPDesktop *desktop;
-    ControlPointSelection *selection;
-    Inkscape::CanvasItemGroup *node_group;
-    Inkscape::CanvasItemGroup *handle_group;
-    Inkscape::CanvasItemGroup *handle_line_group;
-};
+struct NodeSharedData;
 
 class Handle : public ControlPoint
 {
@@ -140,6 +133,9 @@ public:
 
     NodeType type() const { return _type; }
 
+    /// Write a textual representation of the node type to an output stream
+    virtual void writeType(std::ostream &output_stream) const { output_stream << _type; }
+
     /**
      * Sets the node type and optionally restores the invariants associated with the given type.
      * @param type The type to set.
@@ -214,7 +210,6 @@ public:
      */
     void sink();
 
-    static NodeType parse_nodetype(char x);
     static char const *node_type_to_localized_string(NodeType type);
 
     // temporarily public

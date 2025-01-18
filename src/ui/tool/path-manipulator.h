@@ -12,14 +12,17 @@
 #ifndef INKSCAPE_UI_TOOL_PATH_MANIPULATOR_H
 #define INKSCAPE_UI_TOOL_PATH_MANIPULATOR_H
 
-#include <string>
-#include <memory>
-#include <2geom/pathvector.h>
-#include <2geom/path-sink.h>
 #include <2geom/affine.h>
-#include "ui/tool/node.h"
-#include "ui/tool/manipulator.h"
+#include <2geom/path-sink.h>
+#include <2geom/pathvector.h>
+#include <memory>
+#include <span>
+#include <string>
+
 #include "display/curve.h"
+#include "ui/tool/manipulator.h"
+#include "ui/tool/node-factory.h"
+#include "ui/tool/node.h"
 
 class SPCurve;
 class SPPath;
@@ -84,6 +87,9 @@ public:
     void selectSubpaths();
     void invertSelectionInSubpaths();
 
+    /// Create a new node factory able to produce nodes for this manipulator.
+    NodeFactory createNodeFactory(std::span<const NodeTypeRequest> request_sequence = {});
+
     void insertNodeAtExtremum(ExtremumType extremum);
     void insertNodes();
     void insertNode(Geom::Point);
@@ -111,6 +117,8 @@ public:
     void updatePath();
     void setControlsTransform(Geom::Affine const &);
     void hideDragPoint();
+    NodeSharedData const &getNodeSharedData() const;
+
     MultiPathManipulator &mpm() { return _multi_path_manipulator; }
 
     NodeList::iterator subdivideSegment(NodeList::iterator after, double t);
@@ -164,7 +172,7 @@ private:
 
     SubpathList _subpaths;
     MultiPathManipulator &_multi_path_manipulator;
-    SPObject *_path; ///< can be an SPPath or an Inkscape::LivePathEffect::Effect  !!!
+    SPObject *_path;  ///< can be an SPPath or a LivePathEffectObject
     SPCurve _spcurve; // in item coordinates
     CanvasItemPtr<Inkscape::CanvasItemBpath> _outline;
     CurveDragPoint *_dragpoint; // an invisible control point hovering over curve
