@@ -1597,6 +1597,11 @@ Node *Node::nodeAwayFrom(Handle *h)
     return nullptr;
 }
 
+void Node::_replace(Node *replacement) &&
+{
+    ln_list->replace(NodeList::get_iterator(this), replacement);
+}
+
 Glib::ustring Node::_getTip(unsigned state) const
 {
     bool isBSpline = _pm()._isBSpline();
@@ -1781,6 +1786,26 @@ NodeList::iterator NodeList::insert(iterator pos, Node *x)
     ins->ln_prev = x;
     x->ln_list = this;
     return iterator(x);
+}
+
+void NodeList::replace(iterator pos, Node *replacement)
+{
+    assert(replacement);
+    Node *to_replace = static_cast<Node *>(pos._node);
+    const bool was_selected = to_replace->selected();
+
+    ListNode *prev = to_replace->ln_prev;
+    ListNode *next = to_replace->ln_next;
+
+    to_replace->_pm().hideDragPoint();
+    delete to_replace;
+
+    prev->ln_next = replacement;
+    next->ln_prev = replacement;
+    replacement->ln_prev = prev;
+    replacement->ln_next = next;
+    replacement->ln_list = this;
+    replacement->select(was_selected);
 }
 
 void NodeList::splice(iterator pos, NodeList &list)

@@ -227,6 +227,11 @@ protected:
     Glib::ustring _getTip(unsigned state) const override;
     Glib::ustring _getDragTip(MotionEvent const &event) const override;
     bool _hasDragTips() const override { return true; }
+    inline PathManipulator &_pm();
+    inline PathManipulator &_pm() const;
+
+    /// Destroy this node and replace it with another one.
+    void _replace(Node *replacement) &&;
 
 private:
     void _updateAutoHandles();
@@ -243,8 +248,6 @@ private:
     Node const *_prev() const;
     Inkscape::SnapSourceType _snapSourceType() const;
     Inkscape::SnapTargetType _snapTargetType() const;
-    inline PathManipulator &_pm();
-    inline PathManipulator &_pm() const;
 
     /** Determine whether two nodes are joined by a linear segment. */
     static bool _is_line_segment(Node *first, Node *second);
@@ -399,6 +402,9 @@ public:
 
     /** insert a node before pos. */
     iterator insert(iterator pos, Node *x);
+
+    /// Replace the node at a given position with a new one
+    void replace(iterator pos, Node *replacement);
 
     template <class InputIterator>
     void insert(iterator pos, InputIterator first, InputIterator last) {
