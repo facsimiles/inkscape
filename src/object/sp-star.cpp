@@ -547,16 +547,21 @@ double SPStar::getSideLength() const
 {
     if (!flatsided) {
         // Pointy star
-        // return std::abs(r[0] - r[1]);
-        double theta = 2 * M_PI / sides; // Angle between two outer vertices
-        double delta_theta = theta / 2; // Offset for inner vertex
-        double x1 = r[0] * cos(0);
-        double y1 = r[0] * sin(0);
-        double x2 = r[1] * cos(delta_theta);
-        double y2 = r[1] * sin(delta_theta);
+        double totalLength = 0.0;
+        auto tr = i2doc_affine();
+        
+        for (gint i = 0; i < sides; i++) {
+            Geom::Point outer1 = sp_star_get_xy(this, SP_STAR_POINT_KNOT1, i, false) * tr;
+            Geom::Point inner1 = sp_star_get_xy(this, SP_STAR_POINT_KNOT2, i, false) * tr;
+            
+            totalLength += Geom::distance(outer1, inner1);
 
-        // Distance between the two points (outer and inner)
-        return Geom::distance(Geom::Point(x1, y1), Geom::Point(x2, y2));
+            Geom::Point outer2 = sp_star_get_xy(this, SP_STAR_POINT_KNOT1, (i + 1) % sides, false) * tr;
+            totalLength += Geom::distance(inner1, outer2);
+        }
+        
+        // Return the average side length (since we have 2 * sides distances, divide by 2 * sides)
+        return totalLength / (2 * sides);
     }
     
     double diameter = 0.0;
