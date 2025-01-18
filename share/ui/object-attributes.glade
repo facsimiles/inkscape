@@ -560,6 +560,12 @@
     <property name="step-increment">0.01</property>
     <property name="page-increment">0.10</property>
   </object>
+  <object class="GtkAdjustment" id="adjustment-star-length">
+    <property name="lower">0</property>
+    <property name="upper">10000</property>
+    <property name="step-increment">0.10</property>
+    <property name="page-increment">5</property>
+  </object>
   <object class="GtkGrid" id="star-main">
     <property name="row-spacing">4</property>
     <property name="column-spacing">4</property>
@@ -604,6 +610,16 @@
       </object>
     </child>
     <child>
+        <object class="GtkLabel">
+            <property name="halign">start</property>
+            <property name="label" translatable="yes">Length:</property>
+            <layout>
+                <property name="column">0</property>
+                <property name="row">5</property>
+            </layout>
+        </object>
+    </child>
+    <child>
       <object class="GtkSpinButton" id="star-corners">
         <property name="focusable">True</property>
         <property name="tooltip-text" translatable="yes">Number of corners of a polygon or star</property>
@@ -643,6 +659,20 @@
           <property name="row">4</property>
         </layout>
       </object>
+    </child>
+    <child>
+        <object class="GtkSpinButton" id="star-length">
+            <property name="focusable">True</property>
+            <property name="tooltip-text" translatable="yes">Lenght of side</property>
+            <property name="hexpand">True</property>
+            <property name="width-chars">6</property>
+            <property name="adjustment">adjustment-star-length</property>
+            <property name="digits">2</property>
+            <layout>
+                <property name="column">1</property>
+                <property name="row">5</property>
+            </layout>
+        </object>
     </child>
     <child>
       <object class="GtkBox">
@@ -759,6 +789,21 @@
         <layout>
           <property name="column">2</property>
           <property name="row">2</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkButton" id="star-length-clear">
+        <property name="receives-default">True</property>
+        <property name="halign">start</property>
+        <property name="has-frame">False</property>
+        <property name="icon-name">edit-clear-value</property>
+        <style>
+          <class name="small-button"/>
+        </style>
+        <layout>
+          <property name="column">2</property>
+          <property name="row">5</property>
         </layout>
       </object>
     </child>

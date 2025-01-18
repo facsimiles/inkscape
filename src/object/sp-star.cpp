@@ -38,7 +38,8 @@ SPStar::SPStar() : SPShape() ,
 	center(0, 0),
 	flatsided(false),
 	rounded(0.0),
-	randomized(0.0)
+	randomized(0.0),
+    length(1.0)
 {
 	this->r[0] = 1.0;
 	this->r[1] = 0.001;
@@ -61,6 +62,7 @@ void SPStar::build(SPDocument * document, Inkscape::XML::Node * repr) {
     this->readAttr(SPAttr::SODIPODI_ARG2);
     this->readAttr(SPAttr::INKSCAPE_ROUNDED);
     this->readAttr(SPAttr::INKSCAPE_RANDOMIZED);
+    this->readAttr(SPAttr::INKSCAPE_LENGTH);
 }
 
 Inkscape::XML::Node* SPStar::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
@@ -80,6 +82,7 @@ Inkscape::XML::Node* SPStar::write(Inkscape::XML::Document *xml_doc, Inkscape::X
         repr->setAttributeSvgDouble("sodipodi:arg2", this->arg[1]);
         repr->setAttributeSvgDouble("inkscape:rounded", this->rounded);
         repr->setAttributeSvgDouble("inkscape:randomized", this->randomized);
+        repr->setAttributeSvgDouble("inkscape:length", this->length);
     }
 
     this->set_shape();
@@ -201,6 +204,16 @@ void SPStar::set(SPAttr key, const gchar* value) {
             this->randomized = g_ascii_strtod (value, nullptr);
         } else {
             this->randomized = 0.0;
+        }
+
+        this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+        break;
+
+    case SPAttr::INKSCAPE_LENGTH:
+        if (value) {
+            this->length = g_ascii_strtod (value, nullptr);
+        } else {
+            this->length = 1.0;
         }
 
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
@@ -520,6 +533,39 @@ Geom::Affine SPStar::set_transform(Geom::Affine const &xform)
 
 void SPStar::update_patheffect(bool write) {
     SPShape::update_patheffect(write);
+}
+
+/**
+ * Calculate the average side length of the polygon.
+ *
+ * For spoked polygons (stars) this is the radius delta; for non-spoked
+ * polygons this is the regular side length directly.
+ *
+ * @returns the average length of the polygon sides.
+ */
+double SPStar::getSideLength() const
+{
+    if (!flatsided) {
+        // Pointy star
+        // return std::abs(r[0] - r[1]);
+        double theta = 2 * M_PI / sides; // Angle between two outer vertices
+        double delta_theta = theta / 2; // Offset for inner vertex
+        double x1 = r[0] * cos(0);
+        double y1 = r[0] * sin(0);
+        double x2 = r[1] * cos(delta_theta);
+        double y2 = r[1] * sin(delta_theta);
+
+        // Distance between the two points (outer and inner)
+        return Geom::distance(Geom::Point(x1, y1), Geom::Point(x2, y2));
+    }
+    
+    double diameter = 0.0;
+    auto tr = i2doc_affine();
+    for (gint i = 0; i < sides; i++) {
+        diameter += Geom::distance(sp_star_get_xy(this, SP_STAR_POINT_KNOT1, i, false) * tr,
+                                   sp_star_get_xy(this, SP_STAR_POINT_KNOT1, (i + 1) % sides, false) * tr);
+    }
+    return diameter / sides;
 }
 
 /**
