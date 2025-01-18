@@ -39,7 +39,7 @@ SPStar::SPStar() : SPShape() ,
 	flatsided(false),
 	rounded(0.0),
 	randomized(0.0),
-    length(1.0)
+    length(0.0)
 {
 	this->r[0] = 1.0;
 	this->r[1] = 0.001;
@@ -213,7 +213,7 @@ void SPStar::set(SPAttr key, const gchar* value) {
         if (value) {
             this->length = g_ascii_strtod (value, nullptr);
         } else {
-            this->length = 1.0;
+            this->length = 0.0;
         }
 
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
