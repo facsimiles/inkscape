@@ -60,8 +60,39 @@ bool CairoRendererPdfOutput::check(Inkscape::Extension::Extension * /*module*/)
 // TODO: Make this function more generic so that it can do both PostScript and PDF; expose in the headers
 static bool
 pdf_render_document_to_file(SPDocument *doc, gchar const *filename, unsigned int level, PDFOptions flags,
-                            int resolution)
+                            int resolution, gchar const *mail_merge_csv)
 {
+    Inkscape::XML::Node* modify;
+    if (flags.mail_merge) {
+        g_warning("Parameter <mail_merge> activated but not implemented.");
+        std::cout << "Mail merge csv: " << mail_merge_csv << std::endl;
+
+        const char* search_text = "Antimilitaristische Grüsse";
+        std::vector<SPObject*> elements = doc->getObjectsByElement("tspan");
+        g_warning("<mail_merge>  got elements");
+        for (SPObject* element : elements) {
+            g_warning("<mail_merge> iterating elements");
+            g_warning("Name: %s", element->getRepr()->name());
+            g_warning("ID: %s", element->getRepr()->attribute("id"));
+            g_warning("Content: %s", element->getRepr()->content());
+            // Traverse child nodes for text
+            g_warning("Checking child nodes...");
+            for (Inkscape::XML::Node* child = element->getRepr()->firstChild(); child; child = child->next()) {
+                if (child->content()) {
+                    g_warning("Child text content: '%s'", child->content());
+                    g_warning("Child name: %s", child->name());
+                    g_warning("Child id: %s", child->attribute("id"));
+                    if (g_strcmp0(child->content(), search_text) == 0) {
+                        g_warning("Marking node to modify.");
+                        modify = child;
+                    }
+                }
+            }
+            g_warning("Children: %d", element->getRepr()->childCount());
+
+        }
+    }
+
     if (flags.text_to_path) {
         assert(!flags.text_to_latex);
         // Cairo's text-to-path method has numerical precision and font matching
@@ -92,13 +123,38 @@ pdf_render_document_to_file(SPDocument *doc, gchar const *filename, unsigned int
     ctx.setFilterToBitmap(flags.rasterize_filters);
     ctx.setBitmapResolution(resolution);
 
-    bool ret = ctx.setPdfTarget(filename)
-               && renderer.setupDocument(&ctx, doc, root)
-               && renderer.renderPages(&ctx, doc, flags.stretch_to_fit);
-    if (ret) {
-        ctx.finish();
+    int repeat = 1;
+    bool ret = false;
+    if (flags.mail_merge) {
+        repeat = 100;
     }
+    std::cout << "repeat: " << repeat << std::endl;
+    gchar* filename_var;
+    
+    for (int i=0; i<repeat; i++) {
+        if (flags.mail_merge) {
+            std::cout << "Test save number " << i << std::endl;
+            filename_var = g_strdup_printf("%s-%d.pdf", filename, i);
+            g_warning("filename_var set");
+            modify->setContent(filename_var);
+            g_warning("Content changed");
+            doc->ensureUpToDate();
+        } else {
+            filename_var = g_strdup(filename);
+        }
 
+        g_warning("<mail_merge> exporting");
+        ret = ctx.setPdfTarget(filename_var)
+              && renderer.setupDocument(&ctx, doc, root)
+              && renderer.renderPages(&ctx, doc, flags.stretch_to_fit);
+        
+        g_warning("Export mostly done");
+        if (ret) {
+            ctx.finish();
+        }
+    }
+    g_free(filename_var);
+    g_warning("Export done");
     root->invoke_hide(dkey);
     return ret;
 }
@@ -174,11 +230,33 @@ CairoRendererPdfOutput::save(Inkscape::Extension::Output *mod, SPDocument *doc, 
         g_warning("Parameter <stretch> might not exist");
     }
 
+    flags.mail_merge = false;
+    try {
+        flags.mail_merge = mod->get_param_bool("mail_merge");
+    } catch(...) {
+        g_warning("Parameter <mail_merge> might not exist");
+    }
+    g_warning("Mail merge is %d", flags.mail_merge);
+
+    const gchar *mail_merge_csv;
+    try {
+        mail_merge_csv = mod->get_param_string("mail_merge_csv");
+    } catch(...) {
+        if (flags.mail_merge) {
+            g_error("Mail merge: No data file path supplied, disabled.");
+            flags.mail_merge = false;
+        }
+    }
+    if (flags.mail_merge && strlen(mail_merge_csv) == 0) {
+        g_error("Mail merge: No data file path supplied, disabled.");
+        flags.mail_merge = false;
+    } 
+
     // Create PDF file
     {
         gchar * final_name;
         final_name = g_strdup_printf("> %s", filename);
-        ret = pdf_render_document_to_file(doc, final_name, level, flags, new_bitmapResolution);
+        ret = pdf_render_document_to_file(doc, final_name, level, flags, new_bitmapResolution, mail_merge_csv);
         g_free(final_name);
 
         if (!ret)
@@ -222,6 +300,9 @@ CairoRendererPdfOutput::init ()
             "</param>\n"
             "<param name=\"blurToBitmap\" gui-text=\"" N_("Rasterize filter effects") "\" type=\"bool\">true</param>\n"
             "<param name=\"resolution\" gui-text=\"" N_("Resolution for rasterization (dpi):") "\" type=\"int\" min=\"1\" max=\"10000\">96</param>\n"
+            "<spacer size=\"10\" />"
+            "<param name=\"mail_merge\" gui-text=\"" N_("Apply mail merge") "\" type=\"bool\">false</param>\n"
+            "<param name=\"mail_merge_csv\" gui-text=\"" N_("Data source for mail merge (.csv)") "\" type=\"string\"></param>"
             "<spacer size=\"10\" />"
             "<param name=\"stretch\" gui-text=\"" N_("Rounding compensation:") "\" gui-description=\""
                 N_("Exporting to PDF rounds the document size to the next whole number in pt units. Compensation may stretch the drawing slightly (up to 0.35mm for width and/or height). When not compensating, object sizes will be preserved strictly, but this can sometimes cause white gaps along the page margins.")

@@ -152,6 +152,20 @@ export_text_to_path(const Glib::VariantBase& value, InkscapeApplication *app)
 }
 
 void
+export_mail_merge(const Glib::VariantBase& value, InkscapeApplication *app)
+{
+    Glib::Variant<bool> b = Glib::VariantBase::cast_dynamic<Glib::Variant<bool> >(value);
+    app->file_export()->export_mail_merge = b.get();
+}
+
+void
+export_mail_merge_csv(const Glib::VariantBase& value, InkscapeApplication *app)
+{
+    Glib::Variant<std::string> s = Glib::VariantBase::cast_dynamic<Glib::Variant<std::string> >(value);
+    app->file_export()->export_mail_merge_csv = s.get();
+}
+
+void
 export_ps_level(const Glib::VariantBase& value, InkscapeApplication *app)
 {
     Glib::Variant<int> i = Glib::VariantBase::cast_dynamic<Glib::Variant<int> >(value);
@@ -266,6 +280,8 @@ std::vector<std::vector<Glib::ustring>> raw_data_output =
     {"app.export-dpi",                N_("Export DPI"),                "Export",     N_("Set export DPI")                                     },
     {"app.export-ignore-filters",     N_("Export Ignore Filters"),     "Export",     N_("Export without filters to avoid rasterization for PDF, PS, EPS")},
     {"app.export-text-to-path",       N_("Export Text to Path"),       "Export",     N_("Convert texts to paths in the exported file")        },
+    {"app.export-mail-merge",         N_("Export with mail merge"),    "Export",     N_("Use current file as template and fill with values from csv file")},
+    {"app.export-mail-merge-csv",     N_("Export mail merge data"),    "Export",     N_("CSV file to use as data source for mail merge export")},
     {"app.export-ps-level",           N_("Export PS Level"),           "Export",     N_("Set PostScript level")                               },
     {"app.export-pdf-version",        N_("Export PDF Version"),        "Export",     N_("Set PDF version")                                    },
     {"app.export-latex",              N_("Export LaTeX"),              "Export",     N_("Export LaTeX")                                       },
@@ -303,6 +319,8 @@ std::vector<std::vector<Glib::ustring>> hint_data_output =
     {"app.export-dpi",                N_("Enter integer number for export DPI")                          },
     {"app.export-ignore-filters",     N_("Enter 1/0 for Yes/No to export ignoring filters")              },
     {"app.export-text-to-path",       N_("Enter 1/0 for Yes/No to convert text to path on export")       },
+    {"app.export-mail-merge",         N_("Enter 1/0 for Yes/No to mail merge on export")                 },
+    {"app.export-mail-merge-csv",     N_("Enter string with path to csv data file for mail merge export")},
     {"app.export-ps-level",           N_("Enter integer number 2 or 3 for PS Level")                     },
     {"app.export-pdf-version",        N_("Enter string for PDF Version, e.g. 1.4 or 1.5")                },
     {"app.export-latex",              N_("Enter 1/0 for Yes/No to export to PDF and LaTeX")              },
@@ -351,6 +369,8 @@ add_actions_output(InkscapeApplication* app)
     gapp->add_action_with_parameter( "export-dpi",               Double, sigc::bind(sigc::ptr_fun(&export_dpi),          app));
     gapp->add_action_with_parameter( "export-ignore-filters",    Bool,   sigc::bind(sigc::ptr_fun(&export_plain_svg),    app));
     gapp->add_action_with_parameter( "export-text-to-path",      Bool,   sigc::bind(sigc::ptr_fun(&export_text_to_path), app));
+    gapp->add_action_with_parameter( "export-mail-merge",        Bool,   sigc::bind(sigc::ptr_fun(&export_mail_merge),   app));
+    gapp->add_action_with_parameter( "export-mail-merge-csv",    String, sigc::bind(sigc::ptr_fun(&export_mail_merge_csv), app));
     gapp->add_action_with_parameter( "export-ps-level",          Int,    sigc::bind(sigc::ptr_fun(&export_ps_level),     app));
     gapp->add_action_with_parameter( "export-pdf-version",       String, sigc::bind(sigc::ptr_fun(&export_pdf_level),    app));
     gapp->add_action_with_parameter( "export-latex",             Bool,   sigc::bind(sigc::ptr_fun(&export_latex),        app));
