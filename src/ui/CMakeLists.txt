@@ -48,6 +48,7 @@ set(ui_SRC
 	tool/node-factory.cpp
 	tool/node.cpp
 	tool/path-manipulator.cpp
+	tool/remove-elliptical-arcs.cpp
 	tool/selectable-control-point.cpp
 	tool/transform-handle-set.cpp
 
@@ -419,6 +420,7 @@ set(ui_SRC
 	tool/node-types.h
 	tool/node.h
 	tool/path-manipulator.h
+	tool/remove-elliptical-arcs.h
 	tool/selectable-control-point.h
 	tool/shape-record.h
 	tool/transform-handle-set.h

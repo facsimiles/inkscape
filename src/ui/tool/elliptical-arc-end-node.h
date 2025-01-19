@@ -50,7 +50,9 @@ public:
 
     void notifyPrecedingNodeUpdate(Node &previous_node) final;
 
-    void setType(NodeType, bool) final;
+    void setType(NodeType type, bool update_handles) final;
+
+    void writeType(std::ostream &output_stream) const final;
 
     /// Subdivide the arc preceding this node and return a new node at the prescribed curve time parameter.
     std::unique_ptr<Node> subdivideArc(double curve_time);

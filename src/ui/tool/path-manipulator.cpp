@@ -17,6 +17,7 @@
 #include <2geom/forward.h>
 #include <2geom/path-sink.h>
 #include <2geom/point.h>
+#include <optional>
 #include <string_view>
 #include <utility>
 #include <vector>
@@ -30,6 +31,7 @@
 #include "live_effects/parameter/path.h"
 #include "object/sp-path.h"
 #include "path/splinefit/bezier-fit.h"
+#include "remove-elliptical-arcs.h"
 #include "style.h"
 #include "ui/icon-names.h"
 #include "ui/tool/control-point-selection.h"
@@ -61,6 +63,27 @@ void sanitize_path_vector(Geom::PathVector &pathvector)
         } else {
             ++it;
         }
+    }
+}
+
+enum class BezierHandleType
+{
+    INITIAL,
+    FINAL
+};
+
+std::optional<Geom::Point> compute_handle_position(Geom::BezierCurve const *bezier, BezierHandleType type)
+{
+    if (!bezier || bezier->order() != 3) {
+        return {};
+    }
+    return bezier->controlPoint(type == BezierHandleType::INITIAL ? 1 : 2);
+}
+
+void set_handle_position(Handle *handle, std::optional<Geom::Point> const &position)
+{
+    if (handle && position) {
+        handle->setPosition(*position);
     }
 }
 
@@ -1290,11 +1313,15 @@ void PathManipulator::_createControlPointsFromGeometry()
 {
     clear();
 
+    // XML Tree being used here directly while it shouldn't be.
+    auto const requests =
+        read_node_type_requests(_path ? _path->getRepr()->attribute(_nodetypesKey().data()) : nullptr);
+
     Geom::PathVector pathv;
     if (_is_bspline) {
         pathv = pathv_to_cubicbezier(_spcurve.get_pathvector(), false);
     } else {
-        pathv = _spcurve.get_pathvector();
+        pathv = remove_elliptical_arcs_if_not_requested(_spcurve.get_pathvector(), requests);
     }
 
     // sanitize pathvector and store it in SPCurve,
@@ -1306,9 +1333,6 @@ void PathManipulator::_createControlPointsFromGeometry()
     _spcurve = SPCurve(pathv);
     pathv *= _getTransform();
 
-    // XML Tree being used here directly while it shouldn't be.
-    auto const requests =
-        read_node_type_requests(_path ? _path->getRepr()->attribute(_nodetypesKey().data()) : nullptr);
     auto factory = createNodeFactory(requests);
 
     // in this loop, we know that there are no zero-segment subpaths
@@ -1336,11 +1360,9 @@ void PathManipulator::_createControlPointsFromGeometry()
             // if this is a bezier segment, move handles appropriately
             // TODO: this probably isn't the right place for this code
             Geom::BezierCurve const *bezier = dynamic_cast<Geom::BezierCurve const *>(&*curve_it);
-            if (bezier && bezier->order() == 3)
-            {
-                previous_node->front()->setPosition((*bezier)[1]);
-                current_node ->back() ->setPosition((*bezier)[2]);
-            }
+            set_handle_position(previous_node->front(), compute_handle_position(bezier, BezierHandleType::INITIAL));
+            set_handle_position(current_node->back(), compute_handle_position(bezier, BezierHandleType::FINAL));
+
             previous_node = current_node;
         }
         // If the path is closed, make the list cyclic
@@ -1352,6 +1374,16 @@ void PathManipulator::_createControlPointsFromGeometry()
                 auto replacement_node = factory.createNextNode(geometric_path.back_open());
                 subpath->pop_front();
                 subpath->push_front(replacement_node.release());
+
+                // Since the node was recreated, set up its Bézier handles again
+                set_handle_position(
+                    subpath->front().front(),
+                    compute_handle_position(dynamic_cast<Geom::BezierCurve const *>(&geometric_path.front()),
+                                            BezierHandleType::INITIAL));
+                set_handle_position(
+                    subpath->front().back(),
+                    compute_handle_position(dynamic_cast<Geom::BezierCurve const *>(&geometric_path.back_open()),
+                                            BezierHandleType::FINAL));
             }
             subpath->setClosed(true);
         }

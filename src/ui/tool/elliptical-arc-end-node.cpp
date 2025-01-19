@@ -16,6 +16,7 @@
 #include "elliptical-arc-handler.h"
 #include "inkscape.h"
 #include "object/sp-item.h"
+#include "ui/tool/node-types.h"
 #include "util/cast.h"
 
 namespace Inkscape::UI {
@@ -66,11 +67,22 @@ void EllipticalArcEndNode::showHandles(bool v)
     }
 }
 
-void EllipticalArcEndNode::setType(NodeType, bool)
+void EllipticalArcEndNode::setType(NodeType type, bool)
 {
-    /// TODO: replace setType with polymorphism
+    if (type == NODE_PICK_BEST) {
+        type = NODE_CUSP;
+    }
+    Node::setType(type, false);
+    /// TODO: update handles manually
+
     updateState();
     _manipulator.updateDisplay();
+}
+
+void EllipticalArcEndNode::writeType(std::ostream &output_stream) const
+{
+    output_stream << static_cast<char>(XmlNodeType::ELLIPSE_MODIFIER);
+    Node::writeType(output_stream);
 }
 
 std::unique_ptr<Node> EllipticalArcEndNode::subdivideArc(double curve_time)
