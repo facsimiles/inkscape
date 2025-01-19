@@ -43,6 +43,7 @@
 #include "util/units.h"
 
 #include "rapidcsv.h"
+#include <regex>
 
 namespace Inkscape {
 namespace Extension {
@@ -59,51 +60,104 @@ bool CairoRendererPdfOutput::check(Inkscape::Extension::Extension * /*module*/)
     return result;
 }
 
+void prepare_template_nodes(Inkscape::XML::Node* node, std::vector<std::pair<Inkscape::XML::Node*, std::vector<std::string>>>& template_nodes) {
+    std::regex var_regex("%VAR_[^%]*%");
+    if (node->content()) {
+        std::smatch match;
+        std::string content = node->content();
+        if (std::regex_search(content, match, var_regex)) {
+            std::vector<std::string> split_content;
+            std::sregex_token_iterator iter(content.begin(), content.end(), var_regex, {-1, 0});
+            std::sregex_token_iterator end;
+            for (; iter != end; ++iter) {
+                split_content.push_back(*iter);
+            }
+            template_nodes.push_back(std::make_pair(node, split_content));
+        }
+    }
+
+    for (Inkscape::XML::Node* child = node->firstChild(); child; child = child->next()) {
+        prepare_template_nodes(child, template_nodes);
+    }
+}
+
 // TODO: Make this function more generic so that it can do both PostScript and PDF; expose in the headers
 static bool
 pdf_render_document_to_file(SPDocument *doc, gchar const *filename, unsigned int level, PDFOptions flags,
                             int resolution, gchar const *mail_merge_csv)
 {
-    Inkscape::XML::Node* modify;
+    std::vector<std::pair<Inkscape::XML::Node*, std::vector<std::string>>> template_nodes;
+    std::vector<std::tuple<int, int, int>> replacements;
     rapidcsv::Document data_csv("");
     if (flags.mail_merge) {
         g_warning("Parameter <mail_merge> activated.");
-        
+
+        auto separator_params = rapidcsv::SeparatorParams();
+        separator_params.mQuotedLinebreaks = true;
         try {
-            data_csv = rapidcsv::Document(mail_merge_csv);
+            data_csv = rapidcsv::Document(mail_merge_csv, rapidcsv::LabelParams(), separator_params);
         }
         catch(...) {
             g_error("Failed opening csv data file '%s'.", mail_merge_csv);
         }
 
-        std::cout << "Column headers:" << std::endl;
-        for (const std::string name : data_csv.GetColumnNames()) {
-            std::cout << name << std::endl;
+        // For demonstration, print the data file
+        std::cout << "Data file:" << std::endl;
+        for (int i = 0; i < data_csv.GetRowCount(); i++) {
+            std::vector<std::string> row = data_csv.GetRow<std::string>(i);
+            std::cout << "Row " << i << ":" << std::endl;
+            for (const std::string& cell : row) {
+                std::cout << cell << std::endl;
+            }
         }
 
-        const char* search_text = "Antimilitaristische Grüsse";
-        std::vector<SPObject*> elements = doc->getObjectsByElement("tspan");
-        g_warning("<mail_merge>  got elements");
-        for (SPObject* element : elements) {
-            g_warning("<mail_merge> iterating elements");
-            g_warning("Name: %s", element->getRepr()->name());
-            g_warning("ID: %s", element->getRepr()->attribute("id"));
-            g_warning("Content: %s", element->getRepr()->content());
-            // Traverse child nodes for text
-            g_warning("Checking child nodes...");
-            for (Inkscape::XML::Node* child = element->getRepr()->firstChild(); child; child = child->next()) {
-                if (child->content()) {
-                    g_warning("Child text content: '%s'", child->content());
-                    g_warning("Child name: %s", child->name());
-                    g_warning("Child id: %s", child->attribute("id"));
-                    if (g_strcmp0(child->content(), search_text) == 0) {
-                        g_warning("Marking node to modify.");
-                        modify = child;
+        std::cout << "Column headers:" << std::endl;
+        // throw an error if there is a duplicate column name
+        std::set<std::string> column_names;
+        for (const std::string name : data_csv.GetColumnNames()) {
+            std::cout << name << ", " << data_csv.GetColumnIdx(name) << std::endl;
+            if (column_names.find(name) != column_names.end()) {
+                g_error("Duplicate column name '%s' in data file.", name.c_str());
+            }
+            column_names.insert(name);
+        }
+
+        // for each node in doc check if its content contains %VAR_[^%]*%
+        // if so, save the node and the split content in a list
+        // the split should be before and after the % marking the variables
+        // template_nodes = node, original content split at the beginning and end of each variable
+        prepare_template_nodes(doc->getRoot()->getRepr(), template_nodes);
+
+        // For demonstration, print the nodes with variables and their split content
+        for (const auto& pair : template_nodes) {
+            std::cout << "Node content: " << pair.first->content() << std::endl;
+            std::cout << "Split content: ";
+            for (const auto& part : pair.second) {
+                std::cout << part << " | ";
+            }
+            std::cout << std::endl;
+        }
+
+        // template: save for each node that has a matching column
+        // save for each replacement: index in templateNodes, csv column index, split content index
+        for (int node_index = 0; node_index < template_nodes.size(); node_index++) {
+            auto pair = template_nodes[node_index];
+            for (const std::string name : data_csv.GetColumnNames()) {
+                int col_idx = data_csv.GetColumnIdx(name);
+                for (int i = 0; i < pair.second.size(); i++) {
+                    if (pair.second[i] == "%VAR_" + name + "%") {
+                        replacements.push_back(std::make_tuple(node_index, col_idx, i));
                     }
                 }
             }
-            g_warning("Children: %d", element->getRepr()->childCount());
+        }
 
+        // For demonstration, print the replacements
+        for (const auto& replacement : replacements) {
+            std::cout << "Replacement: ";
+            std::cout << "Node index: " << std::get<0>(replacement) << ", ";
+            std::cout << "Column index: " << std::get<1>(replacement) << ", ";
+            std::cout << "Split content index: " << std::get<2>(replacement) << std::endl;
         }
     }
 
@@ -137,38 +191,52 @@ pdf_render_document_to_file(SPDocument *doc, gchar const *filename, unsigned int
     ctx.setFilterToBitmap(flags.rasterize_filters);
     ctx.setBitmapResolution(resolution);
 
-    int repeat = 1;
     bool ret = false;
-    if (flags.mail_merge) {
-        repeat = 100;
-    }
-    std::cout << "repeat: " << repeat << std::endl;
-    gchar* filename_var;
-    
-    for (int i=0; i<repeat; i++) {
-        if (flags.mail_merge) {
-            std::cout << "Test save number " << i << std::endl;
-            filename_var = g_strdup_printf("%s-%d.pdf", filename, i);
-            g_warning("filename_var set");
-            modify->setContent(filename_var);
-            g_warning("Content changed");
-            doc->ensureUpToDate();
-        } else {
-            filename_var = g_strdup(filename);
-        }
 
-        g_warning("<mail_merge> exporting");
-        ret = ctx.setPdfTarget(filename_var)
+    if (flags.mail_merge) {
+        for(int i = 0; i < data_csv.GetRowCount(); i++) {
+            std::cout << "Getting row " << i << std::endl;
+            std::vector<std::string> row = data_csv.GetRow<std::string>(i);
+            for (const auto& replacement : replacements) {
+                std::cout << "Replacement on row " << i << std::endl;
+                int node_index = std::get<0>(replacement);
+                int col_idx = std::get<1>(replacement);
+                int split_idx = std::get<2>(replacement);
+                std::cout << "Got replacement" << std::endl;
+                auto pair = template_nodes[node_index];
+                std::cout << "Got pair" << std::endl;
+                std::string content = pair.first->content();
+                std::cout << "Got content" << std::endl;
+                std::cout << "col count: " << row.size() << std::endl;
+                std::cout << "col idx: " << col_idx << std::endl;
+                std::string replacement_text = row[col_idx];
+                std::cout << "About to write to split_idx" << std::endl;
+                pair.second[split_idx] = replacement_text;
+                std::string new_content;
+                for (const auto& part : pair.second) {
+                    new_content += part;
+                }
+                std::cout << "Replacing " << content << " with " << new_content << std::endl;
+                pair.first->setContent(new_content.c_str());
+            }
+            doc->ensureUpToDate();
+            ret = ctx.setPdfTarget(g_strdup_printf("%s-%d.pdf", filename, i))
+                  && renderer.setupDocument(&ctx, doc, root)
+                  && renderer.renderPages(&ctx, doc, flags.stretch_to_fit);
+            
+            if (ret) {
+                ctx.finish();
+            }
+        }
+    } else {
+        ret = ctx.setPdfTarget(filename)
               && renderer.setupDocument(&ctx, doc, root)
               && renderer.renderPages(&ctx, doc, flags.stretch_to_fit);
         
-        g_warning("Export mostly done");
         if (ret) {
             ctx.finish();
         }
     }
-    g_free(filename_var);
-    g_warning("Export done");
     root->invoke_hide(dkey);
     return ret;
 }
