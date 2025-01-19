@@ -42,6 +42,8 @@
 
 #include "util/units.h"
 
+#include "rapidcsv.h"
+
 namespace Inkscape {
 namespace Extension {
 namespace Internal {
@@ -63,9 +65,21 @@ pdf_render_document_to_file(SPDocument *doc, gchar const *filename, unsigned int
                             int resolution, gchar const *mail_merge_csv)
 {
     Inkscape::XML::Node* modify;
+    rapidcsv::Document data_csv("");
     if (flags.mail_merge) {
-        g_warning("Parameter <mail_merge> activated but not implemented.");
-        std::cout << "Mail merge csv: " << mail_merge_csv << std::endl;
+        g_warning("Parameter <mail_merge> activated.");
+        
+        try {
+            data_csv = rapidcsv::Document(mail_merge_csv);
+        }
+        catch(...) {
+            g_error("Failed opening csv data file '%s'.", mail_merge_csv);
+        }
+
+        std::cout << "Column headers:" << std::endl;
+        for (const std::string name : data_csv.GetColumnNames()) {
+            std::cout << name << std::endl;
+        }
 
         const char* search_text = "Antimilitaristische Grüsse";
         std::vector<SPObject*> elements = doc->getObjectsByElement("tspan");
