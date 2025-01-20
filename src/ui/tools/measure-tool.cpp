@@ -1228,10 +1228,7 @@ void MeasureTool::showCanvasItems(bool to_guides, bool to_item, bool to_phantom,
                 e->set_shape();                          // ellipses and circles. If the calculate_intersections(...) is fixed
                                                          // then this if() can be removed
                 Geom::PathVector new_pv = pathv_to_linear_and_cubic_beziers(e->curve()->get_pathvector());
-                SPPath newPath;
-                newPath.setCurve(SPCurve(new_pv));
-                newPath.set_shape();
-                calculate_intersections(_desktop, item, lineseg, *newPath.curve(), intersection_times);
+                calculate_intersections(_desktop, item, lineseg, SPCurve(new_pv), intersection_times);
             } else if (auto shape = cast<SPShape>(item)) {
                 calculate_intersections(_desktop, item, lineseg, *shape->curve(), intersection_times);
             } else {
