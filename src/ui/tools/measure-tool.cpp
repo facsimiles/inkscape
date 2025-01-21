@@ -44,7 +44,6 @@
 #include "object/sp-ellipse.h"
 #include "object/sp-flowtext.h"
 #include "object/sp-namedview.h"
-#include "object/sp-path.h"
 #include "object/sp-root.h"
 #include "object/sp-shape.h"
 #include "object/sp-text.h"
