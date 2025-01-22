@@ -1435,8 +1435,10 @@ bool ClipboardManagerImpl::_pasteImage(SPDocument *doc)
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     Glib::ustring attr_saved = prefs->getString("/dialogs/import/link");
     bool ask_saved = prefs->getBool("/dialogs/import/ask");
+    auto mode_saved = prefs->getString("/dialogs/import/import_mode_svg");
     prefs->setString("/dialogs/import/link", "embed");
     prefs->setBool("/dialogs/import/ask", false);
+    prefs->setString("/dialogs/import/import_mode_svg", "embed");
     png->set_gui(false);
 
     gchar *filename = g_build_filename( g_get_user_cache_dir(), "inkscape-clipboard-import", nullptr );
@@ -1445,6 +1447,7 @@ bool ClipboardManagerImpl::_pasteImage(SPDocument *doc)
     g_free(filename);
     prefs->setString("/dialogs/import/link", attr_saved);
     prefs->setBool("/dialogs/import/ask", ask_saved);
+    prefs->setString("/dialogs/import/import_mode_svg", mode_saved);
     png->set_gui(true);
 
     return true;
