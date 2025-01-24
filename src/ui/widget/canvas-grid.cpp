@@ -165,6 +165,11 @@ CanvasGrid::CanvasGrid(SPDesktopWidget *dtw)
                           Controller::Button::left);
     Controller::add_motion<nullptr, &CanvasGrid::_rulerMotion<false>, nullptr>(*_vruler, *this);
 
+    auto prefs = Inkscape::Preferences::get();
+    _box_observer = prefs->createObserver("/tools/bounding_box", [this](const Preferences::Entry& entry) {
+        updateRulers();
+    });
+
     show_all();
 }
 
@@ -232,7 +237,6 @@ Gtk::ToggleButton* CanvasGrid::GetStickyZoom() {
 // get_display_area should be a member of _canvas.
 void CanvasGrid::updateRulers()
 {
-    auto prefs = Inkscape::Preferences::get();
     auto const desktop = _dtw->get_desktop();
     auto document = desktop->getDocument();
     auto &pm = document->getPageManager();
@@ -257,6 +261,7 @@ void CanvasGrid::updateRulers()
 
     Geom::Rect viewbox = _canvas->get_area_world();
     Geom::Rect startbox = viewbox;
+    auto prefs = Inkscape::Preferences::get();
     if (prefs->getBool("/options/origincorrection/page", true)) {
         // Move viewbox according to the selected page's position (if any)
         auto page_transform = pm.getSelectedPageAffine().inverse() * desktop->d2w();

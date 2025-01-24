@@ -25,6 +25,7 @@
 #include <gtkmm/togglebutton.h>
 
 #include "display/control/canvas-item-ptr.h"
+#include "preferences.h"
 #include "helper/auto-connection.h"
 
 namespace Gtk {
@@ -99,6 +100,8 @@ private:
     // Signal callbacks
     void on_size_allocate(Gtk::Allocation &allocation) final;
     void on_realize() final;
+
+    PrefObserver _box_observer;
 
     // The widgets
     std::unique_ptr<Inkscape::UI::Widget::Canvas> _canvas;

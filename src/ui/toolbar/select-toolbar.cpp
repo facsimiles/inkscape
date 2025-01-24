@@ -144,6 +144,12 @@ SelectToolbar::SelectToolbar(SPDesktop *desktop)
     _lock_btn.signal_toggled().connect(sigc::mem_fun(*this, &SelectToolbar::toggle_lock));
     _lock_btn.set_active(prefs->getBool("/tools/select/lock_aspect_ratio", false));
 
+    _box_observer = prefs->createObserver("/tools/bounding_box", [this](const Preferences::Entry& entry) {
+        if (_desktop) {
+            layout_widget_update(_desktop->getSelection());
+        }
+    });
+
     assert(desktop);
     auto *selection = desktop->getSelection();
 
@@ -202,7 +208,7 @@ void SelectToolbar::any_value_changed(Glib::RefPtr<Gtk::Adjustment> &adj)
         return;
     }
 
-    if ( !_tracker || _tracker->isUpdating() ) {
+    if (!_tracker || _tracker->isUpdating() || !_desktop) {
         /*
          * When only units are being changed, don't treat changes
          * to adjuster values as object changes.

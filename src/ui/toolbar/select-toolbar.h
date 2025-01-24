@@ -21,6 +21,7 @@
 #include <vector>
 #include <glibmm/refptr.h>
 
+#include "preferences.h"
 #include "toolbar.h"
 #include "helper/auto-connection.h"
 
@@ -72,6 +73,8 @@ private:
 
     std::vector<Gtk::Widget *> _context_items;
     std::vector<auto_connection> _connections;
+
+    PrefObserver _box_observer;
 
     bool _update;
     std::string _action_key;
