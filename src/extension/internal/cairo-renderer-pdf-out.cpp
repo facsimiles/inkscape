@@ -162,6 +162,8 @@ pdf_render_document_to_file(SPDocument *doc, gchar const *filename, unsigned int
     ctx.setBitmapResolution(resolution);
 
     bool ret = false;
+    // + 2 to skip "> " at the beginning of the filename
+    gchar *escaped_filename = g_shell_quote(filename + 2);
 
     if (flags.mail_merge) {        
         for(int i = 0; i < data_csv.GetRowCount(); i++) {
@@ -184,11 +186,7 @@ pdf_render_document_to_file(SPDocument *doc, gchar const *filename, unsigned int
                 pair.first->setContent(new_content.c_str());
             }
             doc->ensureUpToDate();
-            if (i == 0) {
-                ret = ctx.setPdfTarget(filename);
-            } else {
-                ret = ctx.setPdfTarget(g_strdup_printf("%s-tmp-%d.pdf", filename, i));
-            }
+            ret = ctx.setPdfTarget(g_strdup_printf("%s-tmp-%d.pdf", filename, i));
             ret = ret && renderer.setupDocument(&ctx, doc, root)
                   && renderer.renderPages(&ctx, doc, flags.stretch_to_fit);
             
@@ -199,9 +197,8 @@ pdf_render_document_to_file(SPDocument *doc, gchar const *filename, unsigned int
             if (i != 0 && (i % 100 == 0 || i == data_csv.GetRowCount() - 1)) {
                 g_info("Merging pdf files (iteration %d)", i);
                 // merge all pdf files that have filename prefix filename into filename using gs
-                gchar *escaped_filename = g_shell_quote(filename + 2);
                 // note: the glob could (on some unsual systems) return the files in a different order
-                gchar *command = g_strdup_printf("gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=%s-merged.pdf %s %s-tmp-*.pdf", escaped_filename, escaped_filename, escaped_filename);
+                gchar *command = g_strdup_printf("gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=%s-batch-%d.pdf %s-tmp-*.pdf", escaped_filename, i, escaped_filename);
                 g_debug(command);
                 if (system(command) != 0) {
                     g_error("Failed to merge pdf files.");
@@ -212,16 +209,24 @@ pdf_render_document_to_file(SPDocument *doc, gchar const *filename, unsigned int
                 if (system(command) != 0) {
                     g_error("Failed to remove pdf files.");
                 }
-                // rename the merged file to filename
-                command = g_strdup_printf("mv %s-merged.pdf %s", escaped_filename, escaped_filename);
-                g_debug(command);
-                if (system(command) != 0) {
-                    g_error("Failed to rename merged pdf file.");
-                }
                 g_free(command);
-                g_free(escaped_filename);
             }
         }
+        // merge all batch pdf files into filename using gs
+        // note: the glob could (on some unsual systems) return the files in a different order
+        gchar *command = g_strdup_printf("gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=%s %s-batch-*.pdf", escaped_filename, escaped_filename);
+        g_debug(command);
+        if (system(command) != 0) {
+            g_error("Failed to merge pdf files.");
+        }
+        // remove all batch pdf files
+        command = g_strdup_printf("rm %s-batch-*.pdf", escaped_filename);
+        g_debug(command);
+        if (system(command) != 0) {
+            g_error("Failed to remove pdf files.");
+        }
+        g_free(escaped_filename);
+        g_free(command);
     } else {
         ret = ctx.setPdfTarget(filename)
               && renderer.setupDocument(&ctx, doc, root)
@@ -310,22 +315,19 @@ CairoRendererPdfOutput::save(Inkscape::Extension::Output *mod, SPDocument *doc, 
     try {
         flags.mail_merge = mod->get_param_bool("mail_merge");
     } catch(...) {
-        g_warning("Parameter <mail_merge> might not exist");
+        g_error("Parameter <mail_merge> might not exist.");
     }
-    g_warning("Mail merge is %d", flags.mail_merge);
 
     const gchar *mail_merge_csv;
     try {
         mail_merge_csv = mod->get_param_string("mail_merge_csv");
     } catch(...) {
         if (flags.mail_merge) {
-            g_error("Mail merge: No data file path supplied, disabled.");
-            flags.mail_merge = false;
+            g_error("Mail merge: No data file path supplied.");
         }
     }
     if (flags.mail_merge && strlen(mail_merge_csv) == 0) {
-        g_error("Mail merge: No data file path supplied, disabled.");
-        flags.mail_merge = false;
+        g_error("Mail merge: No data file path supplied.");
     } 
 
     // Create PDF file

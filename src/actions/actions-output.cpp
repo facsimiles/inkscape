@@ -156,6 +156,7 @@ export_mail_merge(const Glib::VariantBase& value, InkscapeApplication *app)
 {
     Glib::Variant<bool> b = Glib::VariantBase::cast_dynamic<Glib::Variant<bool> >(value);
     app->file_export()->export_mail_merge = b.get();
+    g_debug("export-mail-merge: %d", b.get());
 }
 
 void
@@ -163,6 +164,7 @@ export_mail_merge_csv(const Glib::VariantBase& value, InkscapeApplication *app)
 {
     Glib::Variant<std::string> s = Glib::VariantBase::cast_dynamic<Glib::Variant<std::string> >(value);
     app->file_export()->export_mail_merge_csv = s.get();
+    g_debug("export-mail-merge-csv: %s", s.get().c_str());
 }
 
 void

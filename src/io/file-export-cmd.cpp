@@ -857,12 +857,19 @@ int InkFileExportCmd::do_export_ps_pdf(SPDocument *doc, std::string const &filen
     }
 
     if (export_mail_merge) {
+        g_debug("Enabling mail merge for export");
         if(!export_mail_merge_csv.empty()) {
-            extension.set_param_bool("export_mail_merge", true);
-            extension.set_param_string("export_mail_merge_csv", export_mail_merge_csv.c_str());
+            extension.set_param_bool("mail_merge", true);
+            extension.set_param_string("mail_merge_csv", export_mail_merge_csv.c_str());
         } else {
-            extension.set_param_bool("export_mail_merge", false);
+            extension.set_param_bool("mail_merge", false);
         }
+    } else {
+        g_debug("Disabling mail merge for export");
+        extension.set_param_bool("mail_merge", false);
+        g_debug("Set the boolean extension param export_mail_merge to false");
+        extension.set_param_string("mail_merge_csv", "");
+        g_debug("Set the string extension param export_mail_merge_csv to empty string");
     }
 
     if (export_ignore_filters) {
