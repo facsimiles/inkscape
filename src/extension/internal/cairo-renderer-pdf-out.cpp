@@ -90,8 +90,6 @@ pdf_render_document_to_file(SPDocument *doc, gchar const *filename, unsigned int
     std::vector<std::tuple<int, int, int>> replacements;
     rapidcsv::Document data_csv("");
     if (flags.mail_merge) {
-        g_warning("Parameter <mail_merge> activated.");
-
         auto separator_params = rapidcsv::SeparatorParams();
         separator_params.mQuotedLinebreaks = true;
         try {
@@ -101,21 +99,11 @@ pdf_render_document_to_file(SPDocument *doc, gchar const *filename, unsigned int
             g_error("Failed opening csv data file '%s'.", mail_merge_csv);
         }
 
-        // For demonstration, print the data file
-        std::cout << "Data file:" << std::endl;
-        for (int i = 0; i < data_csv.GetRowCount(); i++) {
-            std::vector<std::string> row = data_csv.GetRow<std::string>(i);
-            std::cout << "Row " << i << ":" << std::endl;
-            for (const std::string& cell : row) {
-                std::cout << cell << std::endl;
-            }
-        }
+        g_info("Export has mail_merge activated, data file has %zu rows and %zu columns.", data_csv.GetRowCount(), data_csv.GetColumnCount());
 
-        std::cout << "Column headers:" << std::endl;
         // throw an error if there is a duplicate column name
         std::set<std::string> column_names;
         for (const std::string name : data_csv.GetColumnNames()) {
-            std::cout << name << ", " << data_csv.GetColumnIdx(name) << std::endl;
             if (column_names.find(name) != column_names.end()) {
                 g_error("Duplicate column name '%s' in data file.", name.c_str());
             }
@@ -128,17 +116,7 @@ pdf_render_document_to_file(SPDocument *doc, gchar const *filename, unsigned int
         // template_nodes = node, original content split at the beginning and end of each variable
         prepare_template_nodes(doc->getRoot()->getRepr(), template_nodes);
 
-        // For demonstration, print the nodes with variables and their split content
-        for (const auto& pair : template_nodes) {
-            std::cout << "Node content: " << pair.first->content() << std::endl;
-            std::cout << "Split content: ";
-            for (const auto& part : pair.second) {
-                std::cout << part << " | ";
-            }
-            std::cout << std::endl;
-        }
-
-        // template: save for each node that has a matching column
+        // template: save for each text fragment of a node that has a matching column
         // save for each replacement: index in templateNodes, csv column index, split content index
         for (int node_index = 0; node_index < template_nodes.size(); node_index++) {
             auto pair = template_nodes[node_index];
@@ -150,14 +128,6 @@ pdf_render_document_to_file(SPDocument *doc, gchar const *filename, unsigned int
                     }
                 }
             }
-        }
-
-        // For demonstration, print the replacements
-        for (const auto& replacement : replacements) {
-            std::cout << "Replacement: ";
-            std::cout << "Node index: " << std::get<0>(replacement) << ", ";
-            std::cout << "Column index: " << std::get<1>(replacement) << ", ";
-            std::cout << "Split content index: " << std::get<2>(replacement) << std::endl;
         }
     }
 
@@ -193,39 +163,63 @@ pdf_render_document_to_file(SPDocument *doc, gchar const *filename, unsigned int
 
     bool ret = false;
 
-    if (flags.mail_merge) {
+    if (flags.mail_merge) {        
         for(int i = 0; i < data_csv.GetRowCount(); i++) {
-            std::cout << "Getting row " << i << std::endl;
             std::vector<std::string> row = data_csv.GetRow<std::string>(i);
             for (const auto& replacement : replacements) {
-                std::cout << "Replacement on row " << i << std::endl;
                 int node_index = std::get<0>(replacement);
                 int col_idx = std::get<1>(replacement);
                 int split_idx = std::get<2>(replacement);
-                std::cout << "Got replacement" << std::endl;
                 auto pair = template_nodes[node_index];
-                std::cout << "Got pair" << std::endl;
                 std::string content = pair.first->content();
-                std::cout << "Got content" << std::endl;
-                std::cout << "col count: " << row.size() << std::endl;
-                std::cout << "col idx: " << col_idx << std::endl;
+                if (row.size() != data_csv.GetColumnCount()) {
+                    g_error("Row %d has %zu columns, but the header of the file has %zu columns.", i, row.size(), data_csv.GetColumnCount());
+                }
                 std::string replacement_text = row[col_idx];
-                std::cout << "About to write to split_idx" << std::endl;
                 pair.second[split_idx] = replacement_text;
                 std::string new_content;
                 for (const auto& part : pair.second) {
                     new_content += part;
                 }
-                std::cout << "Replacing " << content << " with " << new_content << std::endl;
                 pair.first->setContent(new_content.c_str());
             }
             doc->ensureUpToDate();
-            ret = ctx.setPdfTarget(g_strdup_printf("%s-%d.pdf", filename, i))
-                  && renderer.setupDocument(&ctx, doc, root)
+            if (i == 0) {
+                ret = ctx.setPdfTarget(filename);
+            } else {
+                ret = ctx.setPdfTarget(g_strdup_printf("%s-tmp-%d.pdf", filename, i));
+            }
+            ret = ret && renderer.setupDocument(&ctx, doc, root)
                   && renderer.renderPages(&ctx, doc, flags.stretch_to_fit);
             
             if (ret) {
                 ctx.finish();
+            }
+            // merge the pdfs regularly and at the end to avoid using too much disk space
+            if (i != 0 && (i % 100 == 0 || i == data_csv.GetRowCount() - 1)) {
+                g_info("Merging pdf files (iteration %d)", i);
+                // merge all pdf files that have filename prefix filename into filename using gs
+                gchar *escaped_filename = g_shell_quote(filename + 2);
+                // note: the glob could (on some unsual systems) return the files in a different order
+                gchar *command = g_strdup_printf("gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=%s-merged.pdf %s %s-tmp-*.pdf", escaped_filename, escaped_filename, escaped_filename);
+                g_debug(command);
+                if (system(command) != 0) {
+                    g_error("Failed to merge pdf files.");
+                }
+                // remove all pdf files that have filename prefix filename
+                command = g_strdup_printf("rm %s-tmp-*.pdf", escaped_filename);
+                g_debug(command);
+                if (system(command) != 0) {
+                    g_error("Failed to remove pdf files.");
+                }
+                // rename the merged file to filename
+                command = g_strdup_printf("mv %s-merged.pdf %s", escaped_filename, escaped_filename);
+                g_debug(command);
+                if (system(command) != 0) {
+                    g_error("Failed to rename merged pdf file.");
+                }
+                g_free(command);
+                g_free(escaped_filename);
             }
         }
     } else {
