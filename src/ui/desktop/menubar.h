@@ -34,15 +34,9 @@ class Menu;
 
 void build_menu();
 
-enum class UseIcons {
-    never = -1, // Match existing preference numbering.
-    as_requested,
-    always,
-};
-
 // Rebuild menu with icons enabled or disabled. Recursive.
 void rebuild_menu(Glib::RefPtr<Gio::MenuModel> const &menu, Glib::RefPtr<Gio::Menu> const &menu_copy,
-                  UseIcons useIcons, Glib::Quark const &quark, Glib::RefPtr<Gio::Menu>& recent_files);
+                  Glib::Quark const &quark, Glib::RefPtr<Gio::Menu>& recent_files);
 
 #endif // SEEN_DESKTOP_MENUBAR_H
 

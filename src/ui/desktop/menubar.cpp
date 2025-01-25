@@ -178,12 +178,11 @@ build_menu()
     rebuild_recent(recent_gmenu);
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    auto useicons = static_cast<UseIcons>(prefs->getInt("/theme/menuIcons", 0));
 
     // Remove all or some icons. Also create label to tooltip map.
     auto gmenu_copy = Gio::Menu::create();
     // menu gets recreated; keep track of new recent items submenu
-    rebuild_menu(gmenu, gmenu_copy, useicons, recent_menu_quark, recent_gmenu);
+    rebuild_menu(gmenu, gmenu_copy, recent_menu_quark, recent_gmenu);
     app->gtk_app()->set_menubar(gmenu_copy);
 
     // rebuild recent items submenu when the list changes
@@ -206,7 +205,7 @@ build_menu()
  * NOTE: Input is a Gio::MenuModel, Output is a Gio::Menu!!
  */
 void rebuild_menu(Glib::RefPtr<Gio::MenuModel> const &menu, Glib::RefPtr<Gio::Menu> const &menu_copy,
-                  UseIcons const useIcons, Glib::Quark const &quark, Glib::RefPtr<Gio::Menu>& recent_files)
+                  Glib::Quark const &quark, Glib::RefPtr<Gio::Menu>& recent_files)
 {
     static auto app = InkscapeApplication::instance();
     auto& extra_data = app->get_action_extra_data();
@@ -254,7 +253,6 @@ void rebuild_menu(Glib::RefPtr<Gio::MenuModel> const &menu, Glib::RefPtr<Gio::Me
         //           << "  label: " << std::setw(30) << label.c_str()
         //           << "  use_icon (.ui): " << std::setw(6) << use_icon
         //           << "  icon: " << (icon ? "yes" : "no ")
-        //           << "  useIcons: " << (int)useIcons
         //           << "  use_icon.size(): " << use_icon.size()
         //           << "  tooltip: " << tooltip.c_str()
         //           << std::endl;
@@ -268,11 +266,7 @@ void rebuild_menu(Glib::RefPtr<Gio::MenuModel> const &menu, Glib::RefPtr<Gio::Me
 #endif
 
         auto menu_item = Gio::MenuItem::create(label, detailed_action);
-        if (icon &&
-            (useIcons == UseIcons::always ||
-             (useIcons == UseIcons::as_requested && use_icon.size() > 0))) {
-            menu_item->set_attribute_value("icon", icon);
-        }
+        menu_item->set_attribute_value("icon", icon);
 
         // Add remaining attributes
         for (auto const& [key, value] : attributes) {
@@ -293,7 +287,7 @@ void rebuild_menu(Glib::RefPtr<Gio::MenuModel> const &menu, Glib::RefPtr<Gio::Me
             } else {
                 std::cerr << "rebuild_menu: Unknown link type: " << link_iter->get_name().raw() << std::endl;
             }
-            rebuild_menu (link_iter->get_value(), submenu, useIcons, quark, recent_files);
+            rebuild_menu (link_iter->get_value(), submenu, quark, recent_files);
         }
 
         menu_copy->append_item(menu_item);
