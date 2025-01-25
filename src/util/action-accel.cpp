@@ -13,6 +13,7 @@
 #include "util/action-accel.h"
 
 #include <utility>
+#include <gtkmm/Accelerator.h>
 
 #include "inkscape-application.h"
 #include "ui/shortcuts.h"
@@ -83,6 +84,13 @@ bool ActionAccel::isTriggeredBy(Gtk::EventControllerKey const &controller,
     return _accels.find(accelerator) != _accels.end();
 }
 
+std::vector<Glib::ustring> ActionAccel::getShortcutText() const {
+    std::vector<Glib::ustring> acceleratorLabels;
+    for(const auto &acceleratorKey : getKeys()) {
+        acceleratorLabels.emplace_back(Gtk::Accelerator::get_label(acceleratorKey.get_key(), acceleratorKey.get_mod()));
+    }
+    return acceleratorLabels;
+}
 } // namespace Inkscape::Util
 
 /*

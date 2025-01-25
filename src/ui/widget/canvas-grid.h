@@ -91,10 +91,7 @@ public:
     void addTab(Canvas *canvas);
     void removeTab(Canvas *canvas);
     void switchTab(Canvas *canvas);
-
-    void updateQuickPreviewLabel();
-    void updateQuickZoomLabel();
-
+    
     Canvas *GetCanvas() { return _canvas; };
 
     // Hopefully temp.

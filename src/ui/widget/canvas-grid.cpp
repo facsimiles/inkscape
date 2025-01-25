@@ -28,7 +28,6 @@
 #include <gtkmm/image.h>
 #include <gtkmm/label.h>
 #include <gtkmm/popover.h>
-#include <gtkmm/accelerator.h>
 #include <sigc++/adaptors/bind.h>
 #include <sigc++/functors/mem_fun.h>
 
@@ -58,7 +57,6 @@
 #include "ui/widget/stack.h"
 #include "ui/widget/tabs-widget.h"
 #include "util/units.h"
-#include "util/action-accel.h"
 
 namespace Inkscape::UI::Widget {
 
@@ -161,12 +159,20 @@ CanvasGrid::CanvasGrid(SPDesktopWidget *dtw)
     _quick_preview_label = &get_widget<Gtk::Label>(_builder_display_popup, "quick_preview_label");
     _quick_zoom_label = &get_widget<Gtk::Label>(_builder_display_popup, "quick_zoom_label");
 
-    updateQuickPreviewLabel();
-    updateQuickZoomLabel();
+    _quick_preview_label->set_label("<b>" + _preview_accel.getShortcutText()[0] + "</b>");
+    _quick_zoom_label->set_label("<b>" + _zoom_accel.getShortcutText()[0] + "</b>");
 
-    _update_preview_connection = _preview_accel.connectModified([this]() { updateQuickPreviewLabel(); });
+    _update_preview_connection = _preview_accel.connectModified([this]() {
+        
+        _quick_preview_label->set_label("<b>" + _preview_accel.getShortcutText()[0] + "</b>");
+        
+    });
 
-    _update_zoom_connection = _zoom_accel.connectModified([this]() { updateQuickZoomLabel(); });
+    _update_zoom_connection = _zoom_accel.connectModified([this]() {
+        
+        _quick_zoom_label->set_label("<b>" + _zoom_accel.getShortcutText()[0] + "</b>");
+ 
+    });
 
     // Main grid
     attach(*_tabs_widget,  0, 0);
@@ -778,29 +784,6 @@ void CanvasGrid::_adjustmentChanged()
 
     _updating = false;
 }
-
-void CanvasGrid::updateQuickPreviewLabel()
-{
-    std::vector<Gtk::AccelKey> quick_preview_keys = _preview_accel.getKeys();
-    if (!quick_preview_keys.empty()) {
-        guint key = quick_preview_keys[0].get_key();
-        Gdk::ModifierType mod = quick_preview_keys[0].get_mod();
-        Glib::ustring markup = "<b>" + Gtk::Accelerator::get_label(key, mod) + "</b>";
-        _quick_preview_label->set_label(markup);
-    }
-}
-
-void CanvasGrid::updateQuickZoomLabel()
-{
-    std::vector<Gtk::AccelKey> quick_zoom_keys = _zoom_accel.getKeys();
-    if (!quick_zoom_keys.empty()) {
-        guint key = quick_zoom_keys[0].get_key();
-        Gdk::ModifierType mod = quick_zoom_keys[0].get_mod();
-        Glib::ustring markup = "<b>" + Gtk::Accelerator::get_label(key, mod) + "</b>";
-        _quick_zoom_label->set_label(markup);
-    }
-}
-
 // TODO Add actions so we can set shortcuts.
 // * Sticky Zoom
 // * CMS Adjust
