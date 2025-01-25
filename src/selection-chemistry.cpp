@@ -2873,22 +2873,12 @@ void ObjectSet::cloneOriginal()
     auto use = cast<SPUse>(item);
     if (use) {
         original = use->get_original();
-    } else {
-        auto offset = cast<SPOffset>(item);
-        if (offset && offset->sourceHref) {
-            original = sp_offset_get_source(offset);
-        } else {
-            auto text = cast<SPText>(item);
-            SPTextPath *textpath = (text) ? cast<SPTextPath>(text->firstChild()) : nullptr;
-            if (text && textpath) {
-                original = sp_textpath_get_path_item(textpath);
-            } else {
-                auto flowtext = cast<SPFlowtext>(item);
-                if (flowtext) {
-                    original = flowtext->get_frame(nullptr); // first frame only
-                }
-            }
-        }
+    } else if (auto offset = cast<SPOffset>(item)) {
+        original = sp_offset_get_source(offset);
+    } else if (auto text = cast<SPText>(item)) {
+        original = text->get_first_shape_dependency();
+    } else if (auto flowtext = cast<SPFlowtext>(item)) {
+        original = flowtext->get_frame(nullptr); // first frame only
     }
 
     if (original == nullptr) { // it's an object that we don't know what to do with
@@ -3573,7 +3563,16 @@ void ObjectSet::createBitmapCopy()
         bbox = bbox->roundOutwards();
     }
 
-    Inkscape::Pixbuf *pb = sp_generate_internal_bitmap(doc, *bbox, res, items_);
+    // anti-aliasing override
+    std::optional<Antialiasing> antialias;
+    if (auto nv = doc->getNamedView()) {
+        // if off, then disable antialiasing; if on, then let SVG dictate what it is
+        if (!nv->antialias_rendering) {
+            antialias = Antialiasing::None;
+        }
+    }
+
+    Inkscape::Pixbuf *pb = sp_generate_internal_bitmap(doc, *bbox, res, items_, false, nullptr, 1, antialias);
 
     if (pb) {
         // Create the repr for the image
