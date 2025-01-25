@@ -202,11 +202,11 @@
     </child>
     <child>
       <object class="GtkBox" id="length_box">
-        <property name="tooltip-text" translatable="yes">Length of side</property>
+        <property name="tooltip-text" translatable="yes">Length of edge</property>
         <child>
           <object class="GtkLabel">
             <property name="margin-start">5</property>
-            <property name="label" translatable="yes">Length:</property>
+            <property name="label" translatable="yes">Edge:</property>
           </object>
         </child>
         <child>
