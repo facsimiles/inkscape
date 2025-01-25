@@ -631,6 +631,9 @@
           <object class="GtkBox">
             <property name="orientation">vertical</property>
             <child>
+              <object class="GtkBox">
+                <property name="orientation">horizontal</property>
+                <child>
               <object class="GtkNotebook" id="kinds">
                 <property name="focusable">True</property>
                 <property name="vexpand">True</property>
@@ -693,6 +696,30 @@
                   </object>
                 </child>
               </object>
+                </child>
+                <child>
+                  <object class="GtkGrid">
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="label">Width:</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="label">Width:</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkEntry">
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkEntry">
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
             </child>
             <child>
               <object class="GtkBox">
@@ -708,16 +735,6 @@
                     <property name="margin-start">2</property>
                     <property name="margin-end">2</property>
                     <property name="active">True</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkButton" id="load">
-                    <property name="label" translatable="yes">Open</property>
-                    <property name="sensitive">False</property>
-                    <property name="focusable">True</property>
-                    <property name="focus-on-click">False</property>
-                    <property name="receives-default">True</property>
-                    <property name="valign">center</property>
                   </object>
                 </child>
                 <child>

@@ -78,7 +78,6 @@ private:
     Gtk::Overlay  &banners;
     Gtk::ComboBox &themes;
     Gtk::TreeView &recent_treeview;
-    Gtk::Button   &load_btn;
     Inkscape::UI::Widget::TemplateList &templates;
 
     SPDocument* _document = nullptr;
