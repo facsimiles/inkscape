@@ -17,11 +17,17 @@
 #include <map>
 #include <memory>
 #include <unordered_set>
+#include <vector>
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
 #include <glibmm/ustring.h>
+#include <glibmm/refptr.h>
+
+namespace Gdk {
+class Pixbuf;
+} // Gdk
 
 /*
  * A set of utilities to extract data from OpenType fonts.
@@ -106,6 +112,9 @@ void readOpenTypeFvarNamed (const FT_Face ft_face,
 void readOpenTypeSVGTable  (hb_font_t* hb_font,
                             std::map<unsigned int, SVGGlyphEntry>& glyphs,
                             std::map<int, std::string>& svgs);
+
+void readOpenTypePNG       (hb_font_t* hb_font,
+                            std::vector<Glib::RefPtr<Gdk::Pixbuf>>& pixbufs);
 
 #endif /* !USE_PANGO_WIND32    */
 #endif /* !SEEN_OPENTYPEUTIL_H */
