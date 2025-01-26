@@ -13,7 +13,7 @@
 #include "util/action-accel.h"
 
 #include <utility>
-#include <gtkmm/Accelerator.h>
+#include <gtkmm/accelerator.h>
 
 #include "inkscape-application.h"
 #include "ui/shortcuts.h"
