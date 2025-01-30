@@ -201,6 +201,11 @@ import_style_cb (CRDocHandler *a_handler,
     auto import_file =
         Inkscape::IO::Resource::get_filename (document->getDocumentFilename(), a_uri->stryng->str);
 
+    if (import_file.empty()) {
+        std::cerr << "import_style_cb: Skipping style '" << a_uri->stryng->str << "': File not found" << std::endl;
+        return;
+    }
+
     // Parse file
     CRStyleSheet *stylesheet = cr_stylesheet_new (nullptr);
     ParseTmp parse_new(stylesheet, document);
