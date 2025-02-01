@@ -6,6 +6,15 @@ confinement: strict
 base: core24
 compression: lzo
 
+# ----
+# hacks to make `evince` work for the print preview
+layout:
+  /usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/evince/4/backends:
+    bind: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/evince/4/backends
+  /usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/glib-2.0:
+    bind: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/glib-2.0
+# ----
+
 plugs:
   dot-config-inkscape:
     interface: personal-files
@@ -18,6 +27,14 @@ plugs:
     interface: content
     target: $SNAP/data-dir/icons
     default-provider: gtk-common-themes
+# ----
+# hack needed to ensure that the "cups" slot is available on the host, see https://snapcraft.io/docs/cups-interface
+  foo-install-cups:
+    interface: content
+    content: foo
+    default-provider: cups
+    target: $SNAP_DATA/foo
+# ----
 
 slots:
   inkscape-dbus:
@@ -79,6 +96,11 @@ parts:
       - transfig
       - libsvg-perl
       - libxml-xql-perl
+# ----
+# needed by the print preview feature
+      - evince
+      - libglib2.0-0t64
+# ----
     prime:
       - -lib/inkscape/*.a
       - -*canberra*so* # We don't have sound permissions anyway
