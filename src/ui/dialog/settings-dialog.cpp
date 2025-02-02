@@ -882,6 +882,11 @@ Gtk::Widget* create_ui_element(Context& ctx, XML::Node* node) {
     else if (name == "toggle") {
         auto mnemonic = false; // todo
         auto toggle = Gtk::make_managed<Gtk::ToggleButton>(label, mnemonic);
+        // ellipsize long labels, so they obey grid column constraints
+        if (auto l = dynamic_cast<Gtk::Label*>(toggle->get_children().at(0))) {
+            l->set_ellipsize(Pango::EllipsizeMode::END);
+            l->set_max_width_chars(0);
+        }
         toggle->add_css_class("toggle");
         auto size = to_size(element_attr(node, "size"), THIRD);
         toggle->set_size_request(size);
