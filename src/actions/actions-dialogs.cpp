@@ -21,9 +21,11 @@
 
 #include "inkscape-application.h"
 #include "inkscape-window.h"
+#include "ui/dialog-run.h"
 
 #include "ui/dialog/dialog-container.h"
 #include "ui/dialog/dialog-data.h"
+#include "ui/dialog/settings-dialog.h"
 
 // Note the "AttrDialog" is now part of the "XMLDialog" and the "Style" dialog is part of the "Selectors" dialog.
 // Also note that the "AttrDialog" does not correspond to SP_VERB_DIALOG_ATTR!!!!! (That would be the "ObjectAttributes" dialog.)
@@ -157,6 +159,12 @@ void add_actions_dialogs(InkscapeWindow *win)
         show_output("add_actions_dialogs: no app!");
         return;
     }
+
+    gapp->add_action("settings", [win] {
+        Inkscape::UI::Dialog::SettingsDialog dialog(*win);
+        Inkscape::UI::dialog_run(dialog);
+        dialog.close();
+    });
 
     app->get_action_extra_data().add_data(raw_data_dialogs);
 }

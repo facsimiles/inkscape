@@ -1705,6 +1705,80 @@ listview row.top-separator {
     min-height: 2.25em;
 }
 
+#Settings .row { margin: 2px; }
+#Settings .row .label:first-child { margin-right: 0.5em; margin-left: 2px; }
+#Settings .text { margin: 0 4px; }
+#Settings .text.strong { font-weight: 500; }
+#Settings .expander {
+    padding-left: 2px; /* to align with other labels in a panel */
+    font-weight: bold;
+}
+#Settings .expander label {
+    text-transform: uppercase;
+}
+#Settings .checkbox { padding-left: 1px; }
+#Settings .number { min-height: 24px; }
+#Settings .panel {
+    margin-bottom: 4px;
+    padding: 0;
+    border-radius: 3px;
+    border: solid 1px alpha(@theme_fg_color, 0.12);
+}
+#Settings .panel.open {
+    padding-bottom: 4px;
+}
+#Settings .panel .panel-shortcut {
+    margin-left: 0.5em;
+    font-weight: 500;
+    opacity: 0.6;
+}
+#Settings .header {
+    min-height: 2em;
+    font-weight: 500;
+    padding: 0;
+    border-radius: 3px;
+    background-color: alpha(@theme_fg_color, 0.08);
+}
+#Settings .open .header {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+#Settings .header .button {
+    padding: 0;
+}
+#Settings .header .icon {
+    margin: 0 6px;
+}
+#Settings .group.indent {
+    margin-left: 26px;
+}
+#Settings #PageSelector {
+    margin: 12px;
+}
+#Settings #Pages {
+    background-color: @theme_bg_color;
+    min-width: 10em;
+}
+#Settings #Pages row {
+    min-height: 2em;
+    border-radius: 2px;
+}
+#Settings .switch.small {
+    margin: 0 14px 0 6px;
+}
+#Settings .switch.small slider {
+    min-width: 10px;
+    min-height: 10px;
+}
+#Settings .switch.small image {
+    -gtk-icon-size: 8px;
+}
+#Settings .error {
+    color: red; /* mark invalid settings, so it possible to spot them */
+    outline: solid 1px red;
+    outline-offset: 0px;
+}
+
 .border-box {
     border-radius: 2px;
     border: 1px solid @borders;
