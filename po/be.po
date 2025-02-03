@@ -23,7 +23,7 @@ msgstr ""
 "Project-Id-Version: inkscape 0.47+devel\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2024-09-04 12:31+0300\n"
-"PO-Revision-Date: 2024-10-05 13:49\n"
+"PO-Revision-Date: 2025-02-01 13:49\n"
 "Last-Translator: Ubuntu Belarusian Translators Team <ubuntu@i18n.be>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
 "Language: be\n"
@@ -467,7 +467,7 @@ msgstr "Укладка"
 #: ../build/share/filters/filters.svg.h:815
 #: ../src/extension/internal/filter/shadows.h:90
 msgid "Shadows and Glows"
-msgstr "Цені й сьвячэньні"
+msgstr "Цені і свячэнні"
 
 #: ../build/share/filters/filters.svg.h:116
 msgid "Shadowy outer bevel"
@@ -5589,12 +5589,12 @@ msgstr ""
 #: ../build/share/symbols/symbols.h:705 ../build/share/symbols/symbols.h:737
 msgctxt "Symbol"
 msgid "Art gallery"
-msgstr ""
+msgstr "Мастацкая галерэя"
 
 #: ../build/share/symbols/symbols.h:706 ../build/share/symbols/symbols.h:738
 msgctxt "Symbol"
 msgid "Art gallery 2"
-msgstr ""
+msgstr "Мастацкая галерэя 2"
 
 #: ../build/share/symbols/symbols.h:707 ../build/share/symbols/symbols.h:739
 msgctxt "Symbol"
@@ -10047,7 +10047,7 @@ msgstr ""
 
 #: ../src/actions/actions-tools.cpp:109
 msgid "<b>Drag</b> to erase."
-msgstr "<b>Перацягнуць</b> каб сцерці."
+msgstr "<b>Перацягнуць</b>, каб сцерці."
 
 #: ../src/actions/actions-tools.cpp:110
 msgid "Choose a subtool from the toolbar"
@@ -10220,7 +10220,7 @@ msgstr "Інструмент «Гумка»"
 
 #: ../src/actions/actions-tools.cpp:382
 msgid "Erase objects or paths"
-msgstr "Сцерці аб'екты альбо контуры"
+msgstr "Сцерці аб'екты або контуры"
 
 #: ../src/actions/actions-tools.cpp:383
 msgid "Connector Tool"
@@ -11917,12 +11917,12 @@ msgstr "Кампенсацыя для акруглення (рэкамендов
 
 #: ../src/extension/internal/cairo-renderer-pdf-out.cpp:238
 msgid "Do not compensate"
-msgstr ""
+msgstr "Не выкарыстоўваць кампенсацыю"
 
 #: ../src/extension/internal/cdr-input.cpp:100
 #: ../src/extension/internal/vsd-input.cpp:99
 msgid "Page Selector"
-msgstr ""
+msgstr "Выбар старонкі"
 
 #: ../src/extension/internal/cdr-input.cpp:116
 #: ../src/extension/internal/vsd-input.cpp:115
@@ -11966,7 +11966,7 @@ msgstr "Няма перадпрагляду"
 
 #: ../src/extension/internal/cdr-input.cpp:318
 msgid "Corel DRAW Input"
-msgstr "Чытаньне Corel DRAW"
+msgstr "Імпарт Corel DRAW"
 
 #: ../src/extension/internal/cdr-input.cpp:323
 msgid "Corel DRAW 7-X4 files (*.cdr)"
@@ -11978,11 +11978,11 @@ msgstr "Адкрыць файлы, захаваныя ў Corel DRAW 7-X4"
 
 #: ../src/extension/internal/cdr-input.cpp:330
 msgid "Corel DRAW templates input"
-msgstr "Чытаньне шаблёнаў Corel DRAW"
+msgstr "Імпарт шаблонаў Corel DRAW"
 
 #: ../src/extension/internal/cdr-input.cpp:335
 msgid "Corel DRAW 7-13 template files (*.cdt)"
-msgstr ""
+msgstr "Файлы шаблонаў Corel DRAW 7-13 (*.cdt)"
 
 #: ../src/extension/internal/cdr-input.cpp:336
 msgid "Open files saved in Corel DRAW 7-13"
@@ -11990,31 +11990,31 @@ msgstr "Адкрыць файлы, захаваныя ў Corel DRAW 7-13"
 
 #: ../src/extension/internal/cdr-input.cpp:342
 msgid "Corel DRAW Compressed Exchange files input"
-msgstr "Чытаньне сьціснутых абменных файлаў Corel DRAW"
+msgstr "Імпарт файлаў Corel DRAW Compressed Exchange"
 
 #: ../src/extension/internal/cdr-input.cpp:347
 msgid "Corel DRAW Compressed Exchange files (*.ccx)"
-msgstr ""
+msgstr "Файлы Corel DRAW Compressed Exchange (*.ccx)"
 
 #: ../src/extension/internal/cdr-input.cpp:348
 msgid "Open compressed exchange files saved in Corel DRAW"
-msgstr "Адкрыць сьціснутыя абменныя файлы, захаваныя ў Corel DRAW"
+msgstr "Адкрыць сціснутыя файлы для абмену, захаваныя ў Corel DRAW"
 
 #: ../src/extension/internal/cdr-input.cpp:354
 msgid "Corel DRAW Presentation Exchange files input"
-msgstr "Чытаньне абменных файлаў прэзэнтацый Corel DRAW"
+msgstr "Імпарт файлаў Corel DRAW Presentation Exchange"
 
 #: ../src/extension/internal/cdr-input.cpp:359
 msgid "Corel DRAW Presentation Exchange files (*.cmx)"
-msgstr ""
+msgstr "Файлы Corel DRAW Presentation Exchange (*.ccx)"
 
 #: ../src/extension/internal/cdr-input.cpp:360
 msgid "Open presentation exchange files saved in Corel DRAW"
-msgstr "Адкрыць абменныя файлы прэзэнтацый, захаваныя ў Corel DRAW"
+msgstr "Адкрыць файлы прэзентацый для абмену, захаваныя ў Corel DRAW"
 
 #: ../src/extension/internal/emf-inout.cpp:3637
 msgid "EMF Input"
-msgstr "Чытаньне EMF"
+msgstr "Імпарт EMF"
 
 #: ../src/extension/internal/emf-inout.cpp:3642
 msgid "Enhanced Metafiles (*.emf)"
@@ -12026,7 +12026,7 @@ msgstr "Файлы Enhanced Metafile"
 
 #: ../src/extension/internal/emf-inout.cpp:3652
 msgid "EMF Output"
-msgstr "Выводжаньне EMF"
+msgstr "Экспарт у EMF"
 
 #: ../src/extension/internal/emf-inout.cpp:3654
 #: ../src/extension/internal/wmf-inout.cpp:3228
@@ -12036,57 +12036,59 @@ msgstr "Ператварыць тэкст у контуры"
 #: ../src/extension/internal/emf-inout.cpp:3655
 #: ../src/extension/internal/wmf-inout.cpp:3229
 msgid "Map Unicode to Symbol font"
-msgstr ""
+msgstr "Супаставіць Unicode да сімвальнага шрыфту"
 
 #: ../src/extension/internal/emf-inout.cpp:3656
 #: ../src/extension/internal/wmf-inout.cpp:3230
 msgid "Map Unicode to Wingdings"
-msgstr ""
+msgstr "Супаставіць Unicode да Wingdings"
 
 #: ../src/extension/internal/emf-inout.cpp:3657
 #: ../src/extension/internal/wmf-inout.cpp:3231
 msgid "Map Unicode to Zapf Dingbats"
-msgstr ""
+msgstr "Супаставіць Unicode да Zapf Dingbats"
 
 #: ../src/extension/internal/emf-inout.cpp:3658
 #: ../src/extension/internal/wmf-inout.cpp:3232
 msgid "Use MS Unicode PUA (0xF020-0xF0FF) for converted characters"
 msgstr ""
+"Выкарыстоўваць MS Unicode PUA (0xF020-0xF0FF) для пераўтварэння сімвалаў"
 
 #: ../src/extension/internal/emf-inout.cpp:3659
 #: ../src/extension/internal/wmf-inout.cpp:3233
 msgid "Compensate for PPT font bug"
-msgstr ""
+msgstr "Кампенсаваць памылку для шрыфтоў PPT"
 
 #: ../src/extension/internal/emf-inout.cpp:3660
 #: ../src/extension/internal/wmf-inout.cpp:3234
 msgid "Convert dashed/dotted lines to single lines"
-msgstr ""
+msgstr "Пераўтварыць штрыхавыя/пункцірныя лініі ў суцэльныя"
 
 #: ../src/extension/internal/emf-inout.cpp:3661
 #: ../src/extension/internal/wmf-inout.cpp:3235
 msgid "Convert gradients to colored polygon series"
-msgstr ""
+msgstr "Пераўтварыць градыенты ў паслядоўнасць каляровых многавугольнікаў"
 
 #: ../src/extension/internal/emf-inout.cpp:3662
 msgid "Use native rectangular linear gradients"
-msgstr ""
+msgstr "Выкарыстоўваць родныя прамавугольныя лінейныя градыенты"
 
 #: ../src/extension/internal/emf-inout.cpp:3663
 msgid "Map all fill patterns to standard EMF hatches"
 msgstr ""
+"Супаставіць усе ўзоры запаўнення да стандартных графічных абазначэнняў EMF"
 
 #: ../src/extension/internal/emf-inout.cpp:3664
 msgid "Ignore image rotations"
-msgstr ""
+msgstr "Ігнараваць паварот відарыса"
 
 #: ../src/extension/internal/emf-inout.cpp:3668
 msgid "Enhanced Metafile (*.emf)"
-msgstr ""
+msgstr "Файлы Enhanced Metafile (*.emf)"
 
 #: ../src/extension/internal/emf-inout.cpp:3669
 msgid "Enhanced Metafile"
-msgstr ""
+msgstr "Enhanced Metafile"
 
 #: ../src/extension/internal/filter/bevels.h:55
 msgid "Diffuse Light"
@@ -12105,19 +12107,19 @@ msgstr "Згладжанасць"
 #: ../src/extension/internal/filter/bevels.h:141
 #: ../src/extension/internal/filter/bevels.h:227
 msgid "Elevation (°)"
-msgstr ""
+msgstr "Вышыня (°)"
 
 #: ../src/extension/internal/filter/bevels.h:59
 #: ../src/extension/internal/filter/bevels.h:142
 #: ../src/extension/internal/filter/bevels.h:228
 msgid "Azimuth (°)"
-msgstr ""
+msgstr "Азімут (°)"
 
 #: ../src/extension/internal/filter/bevels.h:60
 #: ../src/extension/internal/filter/bevels.h:143
 #: ../src/extension/internal/filter/bevels.h:229
 msgid "Lighting color"
-msgstr ""
+msgstr "Колер асвятлення"
 
 #: ../src/extension/internal/filter/bevels.h:64
 #: ../src/extension/internal/filter/bevels.h:147
@@ -12205,22 +12207,22 @@ msgstr "Адлюстраванае святло"
 #: ../src/extension/internal/filter/blurs.h:347
 #: ../src/extension/internal/filter/distort.h:75
 msgid "Horizontal blur"
-msgstr ""
+msgstr "Гарызантальная размытасць"
 
 #: ../src/extension/internal/filter/blurs.h:59
 #: ../src/extension/internal/filter/blurs.h:200
 #: ../src/extension/internal/filter/blurs.h:348
 #: ../src/extension/internal/filter/distort.h:76
 msgid "Vertical blur"
-msgstr ""
+msgstr "Вертыкальная размытасць"
 
 #: ../src/extension/internal/filter/blurs.h:60
 msgid "Blur content only"
-msgstr ""
+msgstr "Размытасць толькі змесціва"
 
 #: ../src/extension/internal/filter/blurs.h:68
 msgid "Simple vertical and horizontal blur effect"
-msgstr ""
+msgstr "Просты эфект вертыкальнай і гарызантальнай размытасці"
 
 #: ../src/extension/internal/filter/blurs.h:131
 msgid "Clean Edges"
@@ -12232,15 +12234,15 @@ msgstr "Чыстыя краі"
 #: ../src/extension/internal/filter/paint.h:346
 #: ../src/extension/internal/filter/paint.h:351
 msgid "Strength"
-msgstr ""
+msgstr "Сіла"
 
 #: ../src/extension/internal/filter/blurs.h:141
 msgid ""
 "Removes or decreases glows and jaggeries around objects edges after applying"
 " some filters"
 msgstr ""
-"Выдаліць ці зьменшыць сьвячэньні й выступы уздоўж краёў абʼектаў, які "
-"засталіся ад некаторых фільтраў"
+"Выдаляе ці паменшае свячэнне і няроўнасці ўздоўж краёў аб'ектаў пасля "
+"ўжывання некаторых фільтраў"
 
 #: ../src/extension/internal/filter/blurs.h:195
 msgid "Cross Blur"
@@ -12248,12 +12250,12 @@ msgstr "Перакрыжаваная размытасць"
 
 #: ../src/extension/internal/filter/blurs.h:198
 msgid "Fading"
-msgstr ""
+msgstr "Згасанне"
 
 #: ../src/extension/internal/filter/blurs.h:201
 #: ../src/extension/internal/filter/textures.h:76
 msgid "Blend:"
-msgstr ""
+msgstr "Змешванне:"
 
 #: ../src/extension/internal/filter/blurs.h:202
 #: ../src/extension/internal/filter/blurs.h:357
@@ -12269,7 +12271,7 @@ msgstr ""
 #: ../src/extension/internal/filter/paint.h:727
 #: ../src/extension/internal/filter/transparency.h:65
 msgid "Darken"
-msgstr ""
+msgstr "Зацямненне"
 
 #: ../src/extension/internal/filter/blurs.h:203
 #: ../src/extension/internal/filter/blurs.h:358
@@ -12304,7 +12306,7 @@ msgstr "Экран"
 #: ../src/extension/internal/filter/paint.h:723
 #: ../src/extension/internal/filter/transparency.h:62
 msgid "Multiply"
-msgstr ""
+msgstr "Памножыць"
 
 #: ../src/extension/internal/filter/blurs.h:205
 #: ../src/extension/internal/filter/blurs.h:360
@@ -12319,11 +12321,11 @@ msgstr ""
 #: ../src/extension/internal/filter/paint.h:726
 #: ../src/extension/internal/filter/transparency.h:66
 msgid "Lighten"
-msgstr ""
+msgstr "Асвятленне"
 
 #: ../src/extension/internal/filter/blurs.h:214
 msgid "Combine vertical and horizontal blur"
-msgstr ""
+msgstr "Аб'яднанне вертыкальнай і гарызантальнай размытасці"
 
 #: ../src/extension/internal/filter/blurs.h:274
 msgid "Feather"
@@ -12331,7 +12333,7 @@ msgstr "Растушоўка"
 
 #: ../src/extension/internal/filter/blurs.h:284
 msgid "Blurred mask on the edge without altering the contents"
-msgstr "Размытая маска на краі, не зьмяняючы зьмесьціва"
+msgstr "Размытая маска па краях без змянення змесціва"
 
 #: ../src/extension/internal/filter/blurs.h:343
 msgid "Out of Focus"
@@ -12344,7 +12346,7 @@ msgstr "Паза фокусам"
 #: ../src/extension/internal/filter/paint.h:352
 #: ../src/extension/internal/filter/paint.h:356
 msgid "Dilatation"
-msgstr ""
+msgstr "Расшырэнне"
 
 #: ../src/extension/internal/filter/blurs.h:350
 #: ../src/extension/internal/filter/distort.h:78
@@ -12356,7 +12358,7 @@ msgstr ""
 #: ../src/extension/internal/filter/transparency.h:218
 #: ../src/extension/internal/filter/transparency.h:296
 msgid "Erosion"
-msgstr ""
+msgstr "Эрозія"
 
 #: ../src/extension/internal/filter/blurs.h:354
 #: ../src/extension/internal/filter/color.h:1336
@@ -12366,12 +12368,12 @@ msgstr ""
 #: ../src/ui/dialog/export-single.cpp:119
 #: ../src/ui/widget/page-properties.cpp:164
 msgid "Background color"
-msgstr "Колер асноведзі"
+msgstr "Колер фону"
 
 #: ../src/extension/internal/filter/blurs.h:355
 #: ../src/extension/internal/filter/bumps.h:131
 msgid "Blend type:"
-msgstr ""
+msgstr "Тып змешвання:"
 
 #: ../src/extension/internal/filter/blurs.h:356
 #: ../src/extension/internal/filter/bumps.h:132
@@ -12400,11 +12402,11 @@ msgstr "Звычайны"
 
 #: ../src/extension/internal/filter/blurs.h:362
 msgid "Blend to background"
-msgstr ""
+msgstr "Змяшаць з фонам"
 
 #: ../src/extension/internal/filter/blurs.h:372
 msgid "Blur eroded by white or transparency"
-msgstr ""
+msgstr "Размытасць з пашкоджаннямі з белага колеру або празрыстасці"
 
 #: ../src/extension/internal/filter/bumps.h:82
 msgid "Bump"
@@ -12413,17 +12415,17 @@ msgstr "Рэльеф"
 #: ../src/extension/internal/filter/bumps.h:86
 #: ../src/extension/internal/filter/bumps.h:319
 msgid "Image simplification"
-msgstr ""
+msgstr "Спрашчэнне відарыса"
 
 #: ../src/extension/internal/filter/bumps.h:87
 #: ../src/extension/internal/filter/bumps.h:320
 msgid "Bump simplification"
-msgstr ""
+msgstr "Спрашчэнне рэльефу"
 
 #: ../src/extension/internal/filter/bumps.h:89
 #: ../src/extension/internal/filter/bumps.h:322
 msgid "Bump source"
-msgstr ""
+msgstr "Крыніца рэльефу"
 
 #: ../src/extension/internal/filter/bumps.h:90
 #: ../src/extension/internal/filter/bumps.h:323
@@ -12463,19 +12465,19 @@ msgstr "Сіні"
 
 #: ../src/extension/internal/filter/bumps.h:93
 msgid "Bump from background"
-msgstr ""
+msgstr "Рэльеф з фону"
 
 #: ../src/extension/internal/filter/bumps.h:96
 msgid "Lighting type:"
-msgstr ""
+msgstr "Тып асвятлення:"
 
 #: ../src/extension/internal/filter/bumps.h:97
 msgid "Specular"
-msgstr ""
+msgstr "Адлюстраванне"
 
 #: ../src/extension/internal/filter/bumps.h:98
 msgid "Diffuse"
-msgstr ""
+msgstr "Рассейванне"
 
 #: ../src/extension/internal/filter/bumps.h:100
 #: ../src/extension/internal/filter/bumps.h:335
@@ -12502,7 +12504,7 @@ msgstr "Вышыня"
 #: ../src/ui/widget/color-scales.cpp:726 ../src/ui/widget/color-scales.cpp:727
 #: ../src/ui/widget/color-scales.cpp:766 ../src/ui/widget/color-scales.cpp:767
 msgid "Lightness"
-msgstr "Асвятленне"
+msgstr "Асветленасць"
 
 #: ../src/extension/internal/filter/bumps.h:102
 #: ../src/extension/internal/filter/bumps.h:337
@@ -12512,15 +12514,15 @@ msgstr "Дакладнасць"
 
 #: ../src/extension/internal/filter/bumps.h:105
 msgid "Light source"
-msgstr ""
+msgstr "Крыніца святла"
 
 #: ../src/extension/internal/filter/bumps.h:106
 msgid "Light source:"
-msgstr ""
+msgstr "Крыніца святла:"
 
 #: ../src/extension/internal/filter/bumps.h:107
 msgid "Distant"
-msgstr ""
+msgstr "Аддаленая"
 
 #: ../src/extension/internal/filter/bumps.h:108
 msgid "Point"
@@ -12528,11 +12530,11 @@ msgstr "Пункт"
 
 #: ../src/extension/internal/filter/bumps.h:109
 msgid "Spot"
-msgstr ""
+msgstr "Пражэктар (накіраваная крыніца)"
 
 #: ../src/extension/internal/filter/bumps.h:111
 msgid "Distant light options"
-msgstr ""
+msgstr "Параметры аддаленага святла"
 
 #: ../src/extension/internal/filter/bumps.h:112
 #: ../src/extension/internal/filter/bumps.h:338
@@ -12546,58 +12548,58 @@ msgstr "Вышыня"
 
 #: ../src/extension/internal/filter/bumps.h:114
 msgid "Point light options"
-msgstr ""
+msgstr "Параметры святла з пункту"
 
 #: ../src/extension/internal/filter/bumps.h:115
 #: ../src/extension/internal/filter/bumps.h:119
 msgid "X location"
-msgstr ""
+msgstr "Размяшчэнне па X"
 
 #: ../src/extension/internal/filter/bumps.h:116
 #: ../src/extension/internal/filter/bumps.h:120
 msgid "Y location"
-msgstr ""
+msgstr "Размяшчэнне па Y"
 
 #: ../src/extension/internal/filter/bumps.h:117
 #: ../src/extension/internal/filter/bumps.h:121
 msgid "Z location"
-msgstr ""
+msgstr "Размяшчэнне па Z"
 
 #: ../src/extension/internal/filter/bumps.h:118
 msgid "Spot light options"
-msgstr ""
+msgstr "Параметры накіраванага святла"
 
 #: ../src/extension/internal/filter/bumps.h:122
 msgid "X target"
-msgstr ""
+msgstr "X цэлі"
 
 #: ../src/extension/internal/filter/bumps.h:123
 msgid "Y target"
-msgstr ""
+msgstr "Y цэлі"
 
 #: ../src/extension/internal/filter/bumps.h:124
 msgid "Z target"
-msgstr ""
+msgstr "Z цэлі"
 
 #: ../src/extension/internal/filter/bumps.h:125
 msgid "Specular exponent"
-msgstr ""
+msgstr "Паказчык ступені адлюстравання"
 
 #: ../src/extension/internal/filter/bumps.h:126
 msgid "Cone angle"
-msgstr ""
+msgstr "Вугал конусу"
 
 #: ../src/extension/internal/filter/bumps.h:129
 msgid "Image color"
-msgstr ""
+msgstr "Колер відарыса"
 
 #: ../src/extension/internal/filter/bumps.h:130
 msgid "Color bump"
-msgstr ""
+msgstr "Рэльефнасць колерам"
 
 #: ../src/extension/internal/filter/bumps.h:147
 msgid "All purposes bump filter"
-msgstr ""
+msgstr "Мнагамэтавы фільтр рэльефу"
 
 #: ../src/extension/internal/filter/bumps.h:315
 msgid "Wax Bump"
@@ -12605,7 +12607,7 @@ msgstr "Васковы рэльеф"
 
 #: ../src/extension/internal/filter/bumps.h:326
 msgid "Background:"
-msgstr ""
+msgstr "Фон:"
 
 #: ../src/extension/internal/filter/bumps.h:328
 #: ../src/extension/internal/filter/transparency.h:59
@@ -12616,11 +12618,11 @@ msgstr "Відарыс"
 
 #: ../src/extension/internal/filter/bumps.h:329
 msgid "Blurred image"
-msgstr ""
+msgstr "Размыты відарыс"
 
 #: ../src/extension/internal/filter/bumps.h:331
 msgid "Background opacity"
-msgstr ""
+msgstr "Непразрыстасць фону"
 
 #: ../src/extension/internal/filter/bumps.h:333
 #: ../src/extension/internal/filter/color.h:1163
@@ -12629,29 +12631,29 @@ msgstr "Асвятленне"
 
 #: ../src/extension/internal/filter/bumps.h:340
 msgid "Lighting blend:"
-msgstr ""
+msgstr "Змешванне асвятлення:"
 
 #: ../src/extension/internal/filter/bumps.h:347
 msgid "Highlight blend:"
-msgstr ""
+msgstr "Змешванне падсвечвання:"
 
 #: ../src/extension/internal/filter/bumps.h:356
 msgid "Bump color"
-msgstr ""
+msgstr "Колер рэльефу"
 
 #: ../src/extension/internal/filter/bumps.h:357
 msgid "Revert bump"
-msgstr ""
+msgstr "Адваротная рэльефнасць"
 
 #: ../src/extension/internal/filter/bumps.h:358
 msgid "Transparency type:"
-msgstr ""
+msgstr "Тып празрыстасці:"
 
 #: ../src/extension/internal/filter/bumps.h:359
 #: ../src/extension/internal/filter/morphology.h:182
 #: ../src/filter-enums.cpp:72
 msgid "Atop"
-msgstr "Наверсе"
+msgstr "Зверху"
 
 #: ../src/extension/internal/filter/bumps.h:360
 #: ../src/extension/internal/filter/distort.h:72
@@ -12662,7 +12664,7 @@ msgstr "Унутар"
 
 #: ../src/extension/internal/filter/bumps.h:371
 msgid "Turns an image to jelly"
-msgstr ""
+msgstr "Ператварыць відарыс у жэле"
 
 #: ../src/extension/internal/filter/color.h:76
 msgid "Brilliance"
@@ -12671,7 +12673,7 @@ msgstr "Бляск"
 #: ../src/extension/internal/filter/color.h:79
 #: ../src/extension/internal/filter/color.h:1556
 msgid "Over-saturation"
-msgstr ""
+msgstr "Перанасычанасць"
 
 #: ../src/extension/internal/filter/color.h:81
 #: ../src/extension/internal/filter/color.h:169
@@ -12681,11 +12683,11 @@ msgstr ""
 #: ../src/extension/internal/filter/transparency.h:142
 #: ../src/extension/internal/filter/transparency.h:220
 msgid "Inverted"
-msgstr ""
+msgstr "Інвертаваць"
 
 #: ../src/extension/internal/filter/color.h:89
 msgid "Brightness filter"
-msgstr ""
+msgstr "Фільтр яркасці"
 
 #: ../src/extension/internal/filter/color.h:160
 msgid "Channel Painting"
@@ -12714,7 +12716,7 @@ msgstr "Альфа"
 
 #: ../src/extension/internal/filter/color.h:182
 msgid "Replace RGB by any color"
-msgstr ""
+msgstr "Замяніць RGB любым колерам"
 
 #: ../src/extension/internal/filter/color.h:265
 msgid "Color Blindness"
@@ -12722,43 +12724,43 @@ msgstr "Колеравая слепата"
 
 #: ../src/extension/internal/filter/color.h:269
 msgid "Blindness type:"
-msgstr ""
+msgstr "Тып дальтанізму:"
 
 #: ../src/extension/internal/filter/color.h:270
 msgid "Rod monochromacy (atypical achromatopsia)"
-msgstr ""
+msgstr "Палачкавая манахрамазія (атыповая ахроматопсія)"
 
 #: ../src/extension/internal/filter/color.h:271
 msgid "Cone monochromacy (typical achromatopsia)"
-msgstr ""
+msgstr "Колбачкавая манахрамазія (тыповая ахроматопсія)"
 
 #: ../src/extension/internal/filter/color.h:272
 msgid "Green weak (deuteranomaly)"
-msgstr ""
+msgstr "Слабы зялёны (дэйтэранамалія)"
 
 #: ../src/extension/internal/filter/color.h:273
 msgid "Green blind (deuteranopia)"
-msgstr ""
+msgstr "Слепата да зялёнага (дэйтэранапія)"
 
 #: ../src/extension/internal/filter/color.h:274
 msgid "Red weak (protanomaly)"
-msgstr ""
+msgstr "Слабы чырвоны (пратаномалія)"
 
 #: ../src/extension/internal/filter/color.h:275
 msgid "Red blind (protanopia)"
-msgstr ""
+msgstr "Слепата да чырвонага (пратанопія)"
 
 #: ../src/extension/internal/filter/color.h:276
 msgid "Blue weak (tritanomaly)"
-msgstr ""
+msgstr "Слабы сіні (трытаномалія)"
 
 #: ../src/extension/internal/filter/color.h:277
 msgid "Blue blind (tritanopia)"
-msgstr ""
+msgstr "Слепата да сіняга (трытанопія)"
 
 #: ../src/extension/internal/filter/color.h:297
 msgid "Simulate color blindness"
-msgstr ""
+msgstr "Імітаваць колеравую слепату"
 
 #: ../src/extension/internal/filter/color.h:344
 msgid "Color Shift"
@@ -12766,37 +12768,37 @@ msgstr "Зрух колеру"
 
 #: ../src/extension/internal/filter/color.h:346
 msgid "Shift (°)"
-msgstr ""
+msgstr "Зрух (°)"
 
 #: ../src/extension/internal/filter/color.h:355
 msgid "Rotate and desaturate hue"
-msgstr ""
+msgstr "Павярнуць і пазбавіць колер адценне"
 
 #: ../src/extension/internal/filter/color.h:415
 msgid "Harsh light"
-msgstr ""
+msgstr "Рэзкае святло"
 
 #: ../src/extension/internal/filter/color.h:416
 msgid "Normal light"
-msgstr ""
+msgstr "Звычайнае святло"
 
 #: ../src/extension/internal/filter/color.h:417
 msgid "Duotone"
-msgstr "Дзьве фарбы"
+msgstr "Два адценні"
 
 #: ../src/extension/internal/filter/color.h:418
 #: ../src/extension/internal/filter/color.h:1551
 msgid "Blend 1:"
-msgstr ""
+msgstr "Змешванне 1:"
 
 #: ../src/extension/internal/filter/color.h:425
 #: ../src/extension/internal/filter/color.h:1557
 msgid "Blend 2:"
-msgstr ""
+msgstr "Змешванне 2:"
 
 #: ../src/extension/internal/filter/color.h:444
 msgid "Blend image or object with a flood color"
-msgstr ""
+msgstr "Змяшаць відарыс або аб'ект з колерам запаўнення"
 
 #: ../src/extension/internal/filter/color.h:522 ../src/filter-enums.cpp:25
 msgid "Component Transfer"
@@ -12828,7 +12830,7 @@ msgstr "Гама"
 
 #: ../src/extension/internal/filter/color.h:538
 msgid "Basic component transfer structure"
-msgstr ""
+msgstr "Структура перадачы базавага кампанента"
 
 #: ../src/extension/internal/filter/color.h:611
 msgid "Duochrome"
@@ -12836,39 +12838,39 @@ msgstr "Двухкаляровы"
 
 #: ../src/extension/internal/filter/color.h:615
 msgid "Fluorescence level"
-msgstr ""
+msgstr "Узровень флюарэсцэнцыі"
 
 #: ../src/extension/internal/filter/color.h:616
 msgid "Swap:"
-msgstr ""
+msgstr "Абмен:"
 
 #: ../src/extension/internal/filter/color.h:617
 msgid "No swap"
-msgstr ""
+msgstr "Без своп"
 
 #: ../src/extension/internal/filter/color.h:618
 msgid "Color and alpha"
-msgstr ""
+msgstr "Колер і альфа"
 
 #: ../src/extension/internal/filter/color.h:619
 msgid "Color only"
-msgstr ""
+msgstr "Толькі колер"
 
 #: ../src/extension/internal/filter/color.h:620
 msgid "Alpha only"
-msgstr ""
+msgstr "Толькі альфа"
 
 #: ../src/extension/internal/filter/color.h:624
 msgid "Color 1"
-msgstr ""
+msgstr "Колер 1"
 
 #: ../src/extension/internal/filter/color.h:627
 msgid "Color 2"
-msgstr ""
+msgstr "Колер 2"
 
 #: ../src/extension/internal/filter/color.h:637
 msgid "Convert luminance values to a duochrome palette"
-msgstr ""
+msgstr "Пераўтварыць значэнне асветленасці ў двух колеравую палітру"
 
 #: ../src/extension/internal/filter/color.h:740
 msgid "Extract Channel"
@@ -12897,23 +12899,23 @@ msgstr "Жоўты"
 
 #: ../src/extension/internal/filter/color.h:750
 msgid "Background blend mode:"
-msgstr ""
+msgstr "Рэжым змешвання фону:"
 
 #: ../src/extension/internal/filter/color.h:755
 msgid "Channel to alpha"
-msgstr ""
+msgstr "Канал у альфа"
 
 #: ../src/extension/internal/filter/color.h:763
 msgid "Extract color channel as a transparent image"
-msgstr ""
+msgstr "Выняць колеравы канал як празрысты відарыс"
 
 #: ../src/extension/internal/filter/color.h:850
 msgid "Fade to Black or White"
-msgstr ""
+msgstr "Згасанне ў чорны або белы колер"
 
 #: ../src/extension/internal/filter/color.h:853
 msgid "Fade to:"
-msgstr ""
+msgstr "Згасанне ў:"
 
 #: ../src/extension/internal/filter/color.h:854
 #: ../src/ui/widget/color-icc-selector.cpp:177
@@ -12929,7 +12931,7 @@ msgstr "Белы"
 
 #: ../src/extension/internal/filter/color.h:864
 msgid "Fade to black or white"
-msgstr "Згасанне ў чорны альбо белы"
+msgstr "Згасанне ў чорны або белы"
 
 #: ../src/extension/internal/filter/color.h:933
 msgid "Greyscale"
@@ -12939,11 +12941,11 @@ msgstr "Градацыі шэрага"
 #: ../src/extension/internal/filter/paint.h:85
 #: ../src/extension/internal/filter/paint.h:245
 msgid "Transparent"
-msgstr ""
+msgstr "Празрысты"
 
 #: ../src/extension/internal/filter/color.h:947
 msgid "Customize greyscale components"
-msgstr ""
+msgstr "Наладзіць кампаненты градацыі шэрага"
 
 #: ../src/extension/internal/filter/color.h:1024
 #: ../src/ui/widget/selected-style.cpp:692
@@ -12952,27 +12954,27 @@ msgstr "Інвертаваць"
 
 #: ../src/extension/internal/filter/color.h:1026
 msgid "Invert channels:"
-msgstr ""
+msgstr "Інвертаваць каналы:"
 
 #: ../src/extension/internal/filter/color.h:1027
 msgid "No inversion"
-msgstr ""
+msgstr "Без інвертавання"
 
 #: ../src/extension/internal/filter/color.h:1028
 msgid "Red and blue"
-msgstr ""
+msgstr "Чырвоны і сіні"
 
 #: ../src/extension/internal/filter/color.h:1029
 msgid "Red and green"
-msgstr ""
+msgstr "Чырвоны і зялёны"
 
 #: ../src/extension/internal/filter/color.h:1030
 msgid "Green and blue"
-msgstr ""
+msgstr "Зялёны і сіні"
 
 #: ../src/extension/internal/filter/color.h:1032
 msgid "Light transparency"
-msgstr ""
+msgstr "Празрыстасць святла"
 
 #: ../src/extension/internal/filter/color.h:1033
 msgid "Invert hue"
@@ -12984,23 +12986,23 @@ msgstr "Інвертаваць асветленасць"
 
 #: ../src/extension/internal/filter/color.h:1035
 msgid "Invert transparency"
-msgstr ""
+msgstr "Інвертаваць празрыстасць"
 
 #: ../src/extension/internal/filter/color.h:1043
 msgid "Manage hue, lightness and transparency inversions"
-msgstr ""
+msgstr "Кіраваць інверсіяй адцення, асветленасці і празрыстасці"
 
 #: ../src/extension/internal/filter/color.h:1165
 msgid "Lights"
-msgstr ""
+msgstr "Святло"
 
 #: ../src/extension/internal/filter/color.h:1166
 msgid "Shadows"
-msgstr ""
+msgstr "Цені"
 
 #: ../src/extension/internal/filter/color.h:1175
 msgid "Modify lights and shadows separately"
-msgstr ""
+msgstr "Змяняць святло і цені асобна"
 
 #: ../src/extension/internal/filter/color.h:1238
 msgid "Lightness-Contrast"
@@ -13008,7 +13010,7 @@ msgstr "Асветленасць-кантраст"
 
 #: ../src/extension/internal/filter/color.h:1249
 msgid "Modify lightness and contrast separately"
-msgstr ""
+msgstr "Змяняць асветленасць і кантраст асобна"
 
 #: ../src/extension/internal/filter/color.h:1321
 msgid "Nudge RGB"
@@ -13016,7 +13018,7 @@ msgstr "Зрух RGB"
 
 #: ../src/extension/internal/filter/color.h:1325
 msgid "Red offset"
-msgstr ""
+msgstr "Зрух чырвонага"
 
 #: ../src/extension/internal/filter/color.h:1327
 #: ../src/extension/internal/filter/color.h:1330
@@ -13025,21 +13027,21 @@ msgstr ""
 #: ../src/extension/internal/filter/color.h:1446
 #: ../src/extension/internal/filter/color.h:1449
 msgid "Y"
-msgstr ""
+msgstr "Y"
 
 #: ../src/extension/internal/filter/color.h:1328
 msgid "Green offset"
-msgstr ""
+msgstr "Зрух зялёнага"
 
 #: ../src/extension/internal/filter/color.h:1331
 msgid "Blue offset"
-msgstr ""
+msgstr "Зрух сіняга"
 
 #: ../src/extension/internal/filter/color.h:1346
 msgid ""
 "Nudge RGB channels separately and blend them to different types of "
 "backgrounds"
-msgstr ""
+msgstr "Зрушыць RGB каналы асобна і змяшаць іх з рознымі тыпамі фону"
 
 #: ../src/extension/internal/filter/color.h:1437
 msgid "Nudge CMY"
@@ -13047,21 +13049,21 @@ msgstr "Зрух CMY"
 
 #: ../src/extension/internal/filter/color.h:1441
 msgid "Cyan offset"
-msgstr ""
+msgstr "Зрух блакітнага"
 
 #: ../src/extension/internal/filter/color.h:1444
 msgid "Magenta offset"
-msgstr ""
+msgstr "Зрух пурпуровага"
 
 #: ../src/extension/internal/filter/color.h:1447
 msgid "Yellow offset"
-msgstr ""
+msgstr "Зрух жоўтага"
 
 #: ../src/extension/internal/filter/color.h:1462
 msgid ""
 "Nudge CMY channels separately and blend them to different types of "
 "backgrounds"
-msgstr ""
+msgstr "Зрушыць CMY каналы асобна і змяшаць іх з рознымі тыпамі фону"
 
 #: ../src/extension/internal/filter/color.h:1547
 msgid "Quadritone Fantasy"
@@ -13069,7 +13071,7 @@ msgstr "Фантазія з чатырох колераў"
 
 #: ../src/extension/internal/filter/color.h:1549
 msgid "Hue distribution (°)"
-msgstr ""
+msgstr "Размеркаванне адцення (°)"
 
 #: ../src/extension/internal/filter/color.h:1550
 #: ../src/ui/dialog/document-resources.cpp:900
@@ -13080,7 +13082,7 @@ msgstr "Колеры"
 
 #: ../src/extension/internal/filter/color.h:1571
 msgid "Replace hue by two colors"
-msgstr "Замяніць адценьне двума колерамі"
+msgstr "Замяніць адценне двума колерамі"
 
 #: ../src/extension/internal/filter/color.h:1634
 msgid "Simple blend"
@@ -13096,23 +13098,23 @@ msgstr "Рэжым змешвання:"
 
 #: ../src/extension/internal/filter/color.h:1645
 msgid "Luminosity"
-msgstr ""
+msgstr "Яркасць"
 
 #: ../src/extension/internal/filter/color.h:1646
 msgid "Overlay"
-msgstr ""
+msgstr "Накладанне"
 
 #: ../src/extension/internal/filter/color.h:1647
 msgid "Color Dodge"
-msgstr ""
+msgstr "Асвятленне асновы"
 
 #: ../src/extension/internal/filter/color.h:1648
 msgid "Color Burn"
-msgstr ""
+msgstr "Зацямненне асновы"
 
 #: ../src/extension/internal/filter/color.h:1650
 msgid "Hard Light"
-msgstr ""
+msgstr "Рэзкае святло"
 
 #: ../src/extension/internal/filter/color.h:1651
 #: ../src/ui/tools/flood-tool.cpp:81
@@ -13127,43 +13129,43 @@ msgstr "Адценне"
 
 #: ../src/extension/internal/filter/color.h:1661
 msgid "Simple blend filter"
-msgstr ""
+msgstr "Просты фільтр змешвання"
 
 #: ../src/extension/internal/filter/color.h:1726
 msgid "Hue rotation (°)"
-msgstr ""
+msgstr "Паварот адцення (°)"
 
 #: ../src/extension/internal/filter/color.h:1729
 msgid "Moonarize"
-msgstr "Месяцаваць"
+msgstr "Колеры пад месяцам"
 
 #: ../src/extension/internal/filter/color.h:1738
 msgid "Classic photographic solarization effect"
-msgstr ""
+msgstr "Класічны фотаэфект салярызацыі"
 
 #: ../src/extension/internal/filter/color.h:1815
 msgid "Tritone"
-msgstr "Тры колера"
+msgstr "Тры адцення"
 
 #: ../src/extension/internal/filter/color.h:1821
 msgid "Enhance hue"
-msgstr ""
+msgstr "Палепшыць адценне"
 
 #: ../src/extension/internal/filter/color.h:1822
 msgid "Phosphorescence"
-msgstr ""
+msgstr "Фасфарэсцэнцыя"
 
 #: ../src/extension/internal/filter/color.h:1823
 msgid "Colored nights"
-msgstr ""
+msgstr "Каляровыя ночы"
 
 #: ../src/extension/internal/filter/color.h:1824
 msgid "Hue to background"
-msgstr ""
+msgstr "Адценне ў фон"
 
 #: ../src/extension/internal/filter/color.h:1826
 msgid "Global blend:"
-msgstr ""
+msgstr "Агульнае змешванне:"
 
 #: ../src/extension/internal/filter/color.h:1832
 msgid "Glow"
@@ -13171,25 +13173,27 @@ msgstr "Свячэнне"
 
 #: ../src/extension/internal/filter/color.h:1833
 msgid "Glow blend:"
-msgstr ""
+msgstr "Змешванне свячэння:"
 
 #: ../src/extension/internal/filter/color.h:1838
 msgid "Local light"
-msgstr ""
+msgstr "Мясцовае асвятленне"
 
 #: ../src/extension/internal/filter/color.h:1839
 msgid "Global light"
-msgstr ""
+msgstr "Агульнае асвятленне"
 
 #: ../src/extension/internal/filter/color.h:1842
 msgid "Hue distribution (°):"
-msgstr ""
+msgstr "Размеркаванне адцення (°):"
 
 #: ../src/extension/internal/filter/color.h:1853
 msgid ""
 "Create a custom tritone palette with additional glow, blend modes and hue "
 "moving"
 msgstr ""
+"Стварыць карыстальніцкую палітру трох адценняў з дадатковым свячэннем, "
+"рэжымам змешвання і змяненнем адцення"
 
 #: ../src/extension/internal/filter/distort.h:69
 msgid "Felt Feather"
@@ -13199,7 +13203,7 @@ msgstr "Растушоўка фетру"
 #: ../src/extension/internal/filter/morphology.h:181
 #: ../src/filter-enums.cpp:71
 msgid "Out"
-msgstr "Вонкі"
+msgstr "Выхад"
 
 #: ../src/extension/internal/filter/distort.h:79
 #: ../src/extension/internal/filter/textures.h:77
@@ -13216,15 +13220,15 @@ msgstr "Шырокі"
 #: ../src/extension/internal/filter/distort.h:82
 #: ../src/extension/internal/filter/textures.h:80
 msgid "Narrow"
-msgstr ""
+msgstr "Вузкі"
 
 #: ../src/extension/internal/filter/distort.h:83
 msgid "No fill"
-msgstr "Не запоўнены"
+msgstr "Без запаўнення"
 
 #: ../src/extension/internal/filter/distort.h:85
 msgid "Turbulence:"
-msgstr ""
+msgstr "Турбулентнасць:"
 
 #: ../src/extension/internal/filter/distort.h:86
 #: ../src/extension/internal/filter/distort.h:199
@@ -13239,21 +13243,21 @@ msgstr "Фрактальны шум"
 #: ../src/extension/internal/filter/paint.h:715 ../src/filter-enums.cpp:38
 #: ../src/filter-enums.cpp:126
 msgid "Turbulence"
-msgstr "Узбуранасьць"
+msgstr "Турбулентнасць"
 
 #: ../src/extension/internal/filter/distort.h:89
 #: ../src/extension/internal/filter/distort.h:202
 #: ../src/extension/internal/filter/paint.h:95
 #: ../src/extension/internal/filter/paint.h:717
 msgid "Horizontal frequency"
-msgstr ""
+msgstr "Гарызантальная частата"
 
 #: ../src/extension/internal/filter/distort.h:90
 #: ../src/extension/internal/filter/distort.h:203
 #: ../src/extension/internal/filter/paint.h:96
 #: ../src/extension/internal/filter/paint.h:718
 msgid "Vertical frequency"
-msgstr ""
+msgstr "Вертыкальная частата"
 
 #: ../src/extension/internal/filter/distort.h:91
 #: ../src/extension/internal/filter/distort.h:204
@@ -13268,16 +13272,16 @@ msgstr "Складанасць"
 #: ../src/extension/internal/filter/paint.h:98
 #: ../src/extension/internal/filter/paint.h:720
 msgid "Variation"
-msgstr ""
+msgstr "Варыяцыя"
 
 #: ../src/extension/internal/filter/distort.h:93
 #: ../src/extension/internal/filter/distort.h:206
 msgid "Intensity"
-msgstr ""
+msgstr "Інтэнсіўнасць"
 
 #: ../src/extension/internal/filter/distort.h:101
 msgid "Blur and displace edges of shapes and pictures"
-msgstr ""
+msgstr "Размыць і перамясціць краі фігур і відарысаў"
 
 #: ../src/extension/internal/filter/distort.h:196
 msgid "Roughen"
@@ -13288,16 +13292,16 @@ msgstr "Агрубіць"
 #: ../src/extension/internal/filter/paint.h:713
 #: ../src/extension/internal/filter/textures.h:66
 msgid "Turbulence type:"
-msgstr ""
+msgstr "Тып турбулентнасці:"
 
 #: ../src/extension/internal/filter/distort.h:214
 msgid "Small-scale roughening to edges and content"
-msgstr "Невялікае агрубленьне краёў і зьмесьціва"
+msgstr "Невялікае агрубленне краёў і змесціва"
 
 #: ../src/extension/internal/filter/filter-file.cpp:66
 #: ../src/extension/internal/filter/filter-file.cpp:69
 msgid "Personal"
-msgstr "Уласныя"
+msgstr "Асабістае"
 
 #: ../src/extension/internal/filter/filter-file.cpp:72
 msgid "Bundled"
@@ -13309,19 +13313,19 @@ msgstr "Выяўленне краю"
 
 #: ../src/extension/internal/filter/image.h:53
 msgid "Detect:"
-msgstr ""
+msgstr "Выявіць:"
 
 #: ../src/extension/internal/filter/image.h:54
 msgid "All"
-msgstr ""
+msgstr "Усе"
 
 #: ../src/extension/internal/filter/image.h:55
 msgid "Vertical lines"
-msgstr ""
+msgstr "Вертыкальныя лініі"
 
 #: ../src/extension/internal/filter/image.h:56
 msgid "Horizontal lines"
-msgstr ""
+msgstr "Гарызантальныя лініі"
 
 #: ../src/extension/internal/filter/image.h:59
 msgid "Invert colors"
@@ -13329,7 +13333,7 @@ msgstr "Інвертаваць колеры"
 
 #: ../src/extension/internal/filter/image.h:67
 msgid "Detect color edges in object"
-msgstr "Вызначыць у абʼекце межы колераў"
+msgstr "Вызначыць межы колераў у аб'екце"
 
 #: ../src/extension/internal/filter/morphology.h:60
 msgid "Cross-smooth"
@@ -13338,16 +13342,16 @@ msgstr "Згладзіць перакрыжаванні"
 #: ../src/extension/internal/filter/morphology.h:63
 #: ../src/extension/internal/filter/shadows.h:75
 msgid "Inner"
-msgstr ""
+msgstr "Унутраны"
 
 #: ../src/extension/internal/filter/morphology.h:64
 #: ../src/extension/internal/filter/shadows.h:74
 msgid "Outer"
-msgstr ""
+msgstr "Знешні"
 
 #: ../src/extension/internal/filter/morphology.h:65
 msgid "Open (XOR)"
-msgstr ""
+msgstr "Адкрыць (XOR)"
 
 #: ../src/extension/internal/filter/morphology.h:67
 #: ../src/extension/internal/template-screen.cpp:33
@@ -13363,15 +13367,15 @@ msgstr "Шырыня"
 #: ../src/extension/internal/filter/morphology.h:71
 #: ../src/extension/internal/filter/morphology.h:196
 msgid "Antialiasing"
-msgstr ""
+msgstr "Згладжванне"
 
 #: ../src/extension/internal/filter/morphology.h:72
 msgid "Blur content"
-msgstr "Размыць зьмесьціва"
+msgstr "Размытасць змесціва"
 
 #: ../src/extension/internal/filter/morphology.h:81
 msgid "Smooth edges and angles of shapes"
-msgstr ""
+msgstr "Згладзіць краі і вуглы фігур"
 
 #: ../src/extension/internal/filter/morphology.h:172
 #: ../share/ui/display-popup.glade:58 ../share/ui/menus.ui:478
@@ -13380,20 +13384,20 @@ msgstr "Абрыс"
 
 #: ../src/extension/internal/filter/morphology.h:176
 msgid "Fill image"
-msgstr ""
+msgstr "Запоўніць відарыс"
 
 #: ../src/extension/internal/filter/morphology.h:177
 msgid "Hide image"
-msgstr ""
+msgstr "Схаваць відарыс"
 
 #: ../src/extension/internal/filter/morphology.h:178
 msgid "Composite type:"
-msgstr ""
+msgstr "Тып сумяшчэння:"
 
 #: ../src/extension/internal/filter/morphology.h:179
 #: ../src/filter-enums.cpp:69
 msgid "Over"
-msgstr "Па-над"
+msgstr "Над"
 
 #: ../src/extension/internal/filter/morphology.h:183
 #: ../src/filter-enums.cpp:73
@@ -13408,39 +13412,39 @@ msgstr "Пазіцыя:"
 
 #: ../src/extension/internal/filter/morphology.h:186
 msgid "Inside"
-msgstr ""
+msgstr "Унутры"
 
 #: ../src/extension/internal/filter/morphology.h:187
 msgid "Outside"
-msgstr ""
+msgstr "Звонку"
 
 #: ../src/extension/internal/filter/morphology.h:188
 msgid "Overlayed"
-msgstr ""
+msgstr "Накладанне"
 
 #: ../src/extension/internal/filter/morphology.h:190
 msgid "Width 1"
-msgstr ""
+msgstr "Шырыня 1"
 
 #: ../src/extension/internal/filter/morphology.h:191
 msgid "Dilatation 1"
-msgstr ""
+msgstr "Расшырэнне 1"
 
 #: ../src/extension/internal/filter/morphology.h:192
 msgid "Erosion 1"
-msgstr ""
+msgstr "Эрозія 1"
 
 #: ../src/extension/internal/filter/morphology.h:193
 msgid "Width 2"
-msgstr ""
+msgstr "Шырыня 2"
 
 #: ../src/extension/internal/filter/morphology.h:194
 msgid "Dilatation 2"
-msgstr ""
+msgstr "Расшырэнне 2"
 
 #: ../src/extension/internal/filter/morphology.h:195
 msgid "Erosion 2"
-msgstr ""
+msgstr "Эрозія 2"
 
 #: ../src/extension/internal/filter/morphology.h:197
 #: ../src/live_effects/lpe-roughen.cpp:44 ../share/ui/dialog-trace.glade:624
@@ -13457,7 +13461,7 @@ msgstr "Непразрыстасць абвядзення:"
 
 #: ../src/extension/internal/filter/morphology.h:212
 msgid "Adds a colorizable outline"
-msgstr ""
+msgstr "Дадае каляровы абрыс"
 
 #: ../src/extension/internal/filter/overlays.h:58
 msgid "Noise Fill"
@@ -13475,29 +13479,29 @@ msgstr "Параметры"
 
 #: ../src/extension/internal/filter/overlays.h:66
 msgid "Horizontal frequency:"
-msgstr ""
+msgstr "Гарызантальная частата:"
 
 #: ../src/extension/internal/filter/overlays.h:67
 msgid "Vertical frequency:"
-msgstr ""
+msgstr "Вертыкальная частата:"
 
 #: ../src/extension/internal/filter/overlays.h:68
 #: ../src/extension/internal/filter/textures.h:71
 msgid "Complexity:"
-msgstr ""
+msgstr "Складанасць:"
 
 #: ../src/extension/internal/filter/overlays.h:69
 #: ../src/extension/internal/filter/textures.h:72
 msgid "Variation:"
-msgstr ""
+msgstr "Варыяцыя:"
 
 #: ../src/extension/internal/filter/overlays.h:70
 msgid "Dilatation:"
-msgstr ""
+msgstr "Расшырэнне:"
 
 #: ../src/extension/internal/filter/overlays.h:71
 msgid "Erosion:"
-msgstr ""
+msgstr "Эрозія:"
 
 #: ../src/extension/internal/filter/overlays.h:74
 msgid "Noise color"
@@ -13517,11 +13521,11 @@ msgstr "Рэжым рысавання"
 
 #: ../src/extension/internal/filter/paint.h:78
 msgid "Drawing blend:"
-msgstr ""
+msgstr "Змешванне малявання:"
 
 #: ../src/extension/internal/filter/paint.h:86
 msgid "Dented"
-msgstr ""
+msgstr "Шчарбаты"
 
 #: ../src/extension/internal/filter/paint.h:90
 #: ../src/extension/internal/filter/paint.h:721
@@ -13534,21 +13538,21 @@ msgstr "Зярністасць"
 
 #: ../src/extension/internal/filter/paint.h:94
 msgid "Grain mode"
-msgstr ""
+msgstr "Рэжым зярністасці"
 
 #: ../src/extension/internal/filter/paint.h:99
 #: ../src/extension/internal/filter/transparency.h:217
 #: ../src/extension/internal/filter/transparency.h:295
 msgid "Expansion"
-msgstr ""
+msgstr "Пашырэнне"
 
 #: ../src/extension/internal/filter/paint.h:102
 msgid "Grain blend:"
-msgstr ""
+msgstr "Змешванне зярністасці:"
 
 #: ../src/extension/internal/filter/paint.h:118
 msgid "Chromo effect with customizable edge drawing and graininess"
-msgstr ""
+msgstr "Эфект хрому з магчымасць наладжваць краі малявання і зярністасць"
 
 #: ../src/extension/internal/filter/paint.h:238
 msgid "Cross Engraving"
@@ -13557,7 +13561,7 @@ msgstr "Гравюра перакрыжавання"
 #: ../src/extension/internal/filter/paint.h:240
 #: ../src/extension/internal/filter/paint.h:347
 msgid "Clean-up"
-msgstr ""
+msgstr "Ачыстка"
 
 #: ../src/extension/internal/filter/paint.h:244
 #: ../src/live_effects/lpe-sketch.cpp:59 ../src/ui/tools/measure-tool.cpp:1057
@@ -13566,7 +13570,7 @@ msgstr "Даўжыня"
 
 #: ../src/extension/internal/filter/paint.h:253
 msgid "Convert image to an engraving made of vertical and horizontal lines"
-msgstr ""
+msgstr "Пераўтварыць відарыс у гравюру з вертыкальных і гарызантальных ліній"
 
 #: ../src/extension/internal/filter/paint.h:341
 #: ../share/ui/align-and-distribute.ui:64
@@ -13576,11 +13580,11 @@ msgstr "Маляванне"
 #: ../src/extension/internal/filter/paint.h:348
 #: ../src/extension/internal/filter/paint.h:731
 msgid "Erase"
-msgstr ""
+msgstr "Сцерці"
 
 #: ../src/extension/internal/filter/paint.h:354
 msgid "Melt"
-msgstr ""
+msgstr "Расплаўленне"
 
 #: ../src/extension/internal/filter/paint.h:360
 #: ../src/extension/internal/filter/paint.h:734
@@ -13590,19 +13594,19 @@ msgstr "Колер запаўнення"
 #: ../src/extension/internal/filter/paint.h:361
 #: ../src/extension/internal/filter/paint.h:736
 msgid "Image on fill"
-msgstr ""
+msgstr "Відарыс пры запаўненні"
 
 #: ../src/extension/internal/filter/paint.h:364
 msgid "Stroke color"
-msgstr ""
+msgstr "Колер абвядзення"
 
 #: ../src/extension/internal/filter/paint.h:365
 msgid "Image on stroke"
-msgstr ""
+msgstr "Відарыс на абвядзенні"
 
 #: ../src/extension/internal/filter/paint.h:376
 msgid "Convert images to duochrome drawings"
-msgstr ""
+msgstr "Пераўтварыць відарысы ў двухкаляровыя малюнкі"
 
 #: ../src/extension/internal/filter/paint.h:508
 msgid "Electrize"
@@ -13611,7 +13615,7 @@ msgstr "Электрызаваць"
 #: ../src/extension/internal/filter/paint.h:511
 #: ../src/extension/internal/filter/paint.h:878
 msgid "Effect type:"
-msgstr ""
+msgstr "Тып эфекту:"
 
 #: ../src/extension/internal/filter/paint.h:515
 #: ../src/extension/internal/filter/paint.h:886
@@ -13621,7 +13625,7 @@ msgstr "Узроўні"
 
 #: ../src/extension/internal/filter/paint.h:524
 msgid "Electro solarization effects"
-msgstr ""
+msgstr "Эфекты электрасалярызацыі"
 
 #: ../src/extension/internal/filter/paint.h:602
 msgid "Neon Draw"
@@ -13629,15 +13633,15 @@ msgstr "Неонавы малюнак"
 
 #: ../src/extension/internal/filter/paint.h:604
 msgid "Line type:"
-msgstr ""
+msgstr "Тып лініі:"
 
 #: ../src/extension/internal/filter/paint.h:605
 msgid "Smoothed"
-msgstr ""
+msgstr "Згладжаны"
 
 #: ../src/extension/internal/filter/paint.h:606
 msgid "Contrasted"
-msgstr ""
+msgstr "Кантрасны"
 
 #: ../src/extension/internal/filter/paint.h:609
 #: ../src/live_effects/lpe-jointype.cpp:54
@@ -13661,19 +13665,19 @@ msgstr "Змешванне шуму:"
 
 #: ../src/extension/internal/filter/paint.h:730
 msgid "Grain lightness"
-msgstr ""
+msgstr "Асветленасць зярністасці"
 
 #: ../src/extension/internal/filter/paint.h:738
 msgid "Points color"
-msgstr ""
+msgstr "Колер кропак"
 
 #: ../src/extension/internal/filter/paint.h:740
 msgid "Image on points"
-msgstr ""
+msgstr "Відарыс на кропках"
 
 #: ../src/extension/internal/filter/paint.h:750
 msgid "Convert image to a transparent point engraving"
-msgstr ""
+msgstr "Пераўтварыць відарыс у гравіроўку з празрыстымі кропкамі"
 
 #: ../src/extension/internal/filter/paint.h:876
 msgid "Poster Paint"
@@ -13681,7 +13685,7 @@ msgstr "Маляванне плаката"
 
 #: ../src/extension/internal/filter/paint.h:882
 msgid "Transfer type:"
-msgstr ""
+msgstr "Тып пераносу:"
 
 #: ../src/extension/internal/filter/paint.h:883
 msgid "Poster"
@@ -13689,27 +13693,27 @@ msgstr "Плакат"
 
 #: ../src/extension/internal/filter/paint.h:884
 msgid "Painting"
-msgstr ""
+msgstr "Маляванне"
 
 #: ../src/extension/internal/filter/paint.h:894
 msgid "Simplify (primary)"
-msgstr ""
+msgstr "Спрасціць (першаснае)"
 
 #: ../src/extension/internal/filter/paint.h:895
 msgid "Simplify (secondary)"
-msgstr ""
+msgstr "Спрасціць (другаснае)"
 
 #: ../src/extension/internal/filter/paint.h:896
 msgid "Pre-saturation"
-msgstr ""
+msgstr "Папярэдняя насычанасць"
 
 #: ../src/extension/internal/filter/paint.h:897
 msgid "Post-saturation"
-msgstr ""
+msgstr "Канчатковая насычанасць"
 
 #: ../src/extension/internal/filter/paint.h:898
 msgid "Simulate antialiasing"
-msgstr ""
+msgstr "Імітацыя згладжвання"
 
 #: ../src/extension/internal/filter/paint.h:906
 msgid "Poster and painting effects"
@@ -13729,11 +13733,11 @@ msgstr "Снежны грэбень"
 
 #: ../src/extension/internal/filter/protrusions.h:52
 msgid "Drift Size"
-msgstr ""
+msgstr "Памер пласту снегу"
 
 #: ../src/extension/internal/filter/protrusions.h:60
 msgid "Snow has fallen on object"
-msgstr "Сьнег упаў на абʼект"
+msgstr "Аб'екты засыпаныя вялікім пластом снегу"
 
 #: ../src/extension/internal/filter/shadows.h:66
 msgid "Drop Shadow"
@@ -13741,43 +13745,43 @@ msgstr "Падаючы цень"
 
 #: ../src/extension/internal/filter/shadows.h:70
 msgid "Blur radius (px)"
-msgstr ""
+msgstr "Радыус размытасці (px)"
 
 #: ../src/extension/internal/filter/shadows.h:71
 msgid "Horizontal offset (px)"
-msgstr ""
+msgstr "Гарызантальны зрух (px)"
 
 #: ../src/extension/internal/filter/shadows.h:72
 msgid "Vertical offset (px)"
-msgstr ""
+msgstr "Вертыкальны зрух (px)"
 
 #: ../src/extension/internal/filter/shadows.h:73
 msgid "Shadow type:"
-msgstr ""
+msgstr "Тып ценю:"
 
 #: ../src/extension/internal/filter/shadows.h:76
 msgid "Outer cutout"
-msgstr ""
+msgstr "Знешняя выразаная частка"
 
 #: ../src/extension/internal/filter/shadows.h:77
 msgid "Inner cutout"
-msgstr ""
+msgstr "Унутраная выразаная частка"
 
 #: ../src/extension/internal/filter/shadows.h:78
 msgid "Shadow only"
-msgstr ""
+msgstr "Толькі цень"
 
 #: ../src/extension/internal/filter/shadows.h:81
 msgid "Blur color"
-msgstr ""
+msgstr "Колер размытасці"
 
 #: ../src/extension/internal/filter/shadows.h:83
 msgid "Use object's color"
-msgstr ""
+msgstr "Выкарыстоўваць колер аб'екту"
 
 #: ../src/extension/internal/filter/shadows.h:93
 msgid "Colorizable Drop shadow"
-msgstr ""
+msgstr "Каляровая падаючая цень"
 
 #: ../src/extension/internal/filter/textures.h:64
 msgid "Ink Blot"
@@ -13785,15 +13789,15 @@ msgstr "Чарнільная клякса"
 
 #: ../src/extension/internal/filter/textures.h:70
 msgid "Frequency:"
-msgstr ""
+msgstr "Частата:"
 
 #: ../src/extension/internal/filter/textures.h:73
 msgid "Horizontal inlay:"
-msgstr ""
+msgstr "Гарызантальная інкрустацыя:"
 
 #: ../src/extension/internal/filter/textures.h:74
 msgid "Vertical inlay:"
-msgstr ""
+msgstr "Вертыкальная інкрустацыя:"
 
 #: ../src/extension/internal/filter/textures.h:75
 msgid "Displacement:"
@@ -13801,7 +13805,7 @@ msgstr "Перамяшчэнне:"
 
 #: ../src/extension/internal/filter/textures.h:81
 msgid "Overlapping"
-msgstr ""
+msgstr "Накладанне"
 
 #: ../src/extension/internal/filter/textures.h:82
 #: ../share/ui/dialog-document-resources.glade:36
@@ -13820,23 +13824,23 @@ msgstr "Карыстальніцкі"
 
 #: ../src/extension/internal/filter/textures.h:85
 msgid "Custom stroke options"
-msgstr ""
+msgstr "Карыстальніцкія параметры абвядзення"
 
 #: ../src/extension/internal/filter/textures.h:86
 msgid "k1:"
-msgstr ""
+msgstr "k1:"
 
 #: ../src/extension/internal/filter/textures.h:87
 msgid "k2:"
-msgstr ""
+msgstr "k2:"
 
 #: ../src/extension/internal/filter/textures.h:88
 msgid "k3:"
-msgstr ""
+msgstr "k3:"
 
 #: ../src/extension/internal/filter/textures.h:96
 msgid "Inkblot on tissue or rough paper"
-msgstr "Клякса на тканіне ці грубай паперы"
+msgstr "Клякса на тканіне або грубай паперы"
 
 #: ../src/extension/internal/filter/transparency.h:55
 #: ../src/filter-enums.cpp:23
@@ -13862,7 +13866,7 @@ msgstr "Рэжым:"
 
 #: ../src/extension/internal/filter/transparency.h:75
 msgid "Blend objects with background images or with themselves"
-msgstr ""
+msgstr "Змяшаць аб'екты з фонавымі відарысамі або самі з сабой"
 
 #: ../src/extension/internal/filter/transparency.h:136
 msgid "Channel Transparency"
@@ -13870,7 +13874,7 @@ msgstr "Празрыстасць каналу"
 
 #: ../src/extension/internal/filter/transparency.h:150
 msgid "Replace RGB with transparency"
-msgstr ""
+msgstr "Замяніць RGB на празрыстасць"
 
 #: ../src/extension/internal/filter/transparency.h:215
 msgid "Light Eraser"
@@ -13879,15 +13883,15 @@ msgstr "Гумка асвятлення"
 #: ../src/extension/internal/filter/transparency.h:219
 #: ../src/extension/internal/filter/transparency.h:297
 msgid "Global opacity"
-msgstr ""
+msgstr "Агульная непразрыстасць"
 
 #: ../src/extension/internal/filter/transparency.h:228
 msgid "Make the lightest parts of the object progressively transparent"
-msgstr "Зрабіць найсьвятлейшыя часткі абʼекта павелічальна празрыстымі"
+msgstr "Зрабіць найсвятлейшыя часткі аб'екта ўзрастаючы празрыстымі"
 
 #: ../src/extension/internal/filter/transparency.h:305
 msgid "Set opacity and strength of opacity boundaries"
-msgstr ""
+msgstr "Задаць непразрыстасць і сілу непразрыстасці меж"
 
 #: ../src/extension/internal/filter/transparency.h:359
 msgid "Silhouette"
@@ -13895,20 +13899,20 @@ msgstr "Сілуэт"
 
 #: ../src/extension/internal/filter/transparency.h:362
 msgid "Cutout"
-msgstr "Выразак"
+msgstr "Выразка"
 
 #: ../src/extension/internal/filter/transparency.h:371
 msgid "Repaint anything visible monochrome"
-msgstr ""
+msgstr "Перамаляваць усё бачнае адным колерам"
 
 #: ../src/extension/internal/gdkpixbuf-input.cpp:187
 #, c-format
 msgid "%s bitmap image import"
-msgstr ""
+msgstr "Імпарт растравага відарыса %s"
 
 #: ../src/extension/internal/gdkpixbuf-input.cpp:195
 msgid "Image Import Type:"
-msgstr ""
+msgstr "Тып імпарту відарыса:"
 
 #: ../src/extension/internal/gdkpixbuf-input.cpp:195
 msgid ""
@@ -13930,17 +13934,19 @@ msgstr "Убудаваны"
 #: ../src/ui/dialog/inkscape-preferences.cpp:3070
 #: ../src/ui/dialog/inkscape-preferences.cpp:3077
 msgid "Link"
-msgstr ""
+msgstr "Звязаць"
 
 #: ../src/extension/internal/gdkpixbuf-input.cpp:201
 msgid "Image DPI:"
-msgstr ""
+msgstr "DPI відарыса:"
 
 #: ../src/extension/internal/gdkpixbuf-input.cpp:201
 msgid ""
 "Take information from file or use default bitmap import resolution as "
 "defined in the preferences."
 msgstr ""
+"Узяць інфармацыю з файла або выкарыстаць прадвызначаную раздзяляльнасць "
+"растравага відарысы пры імпарце, як вызначана ў параметрах."
 
 #: ../src/extension/internal/gdkpixbuf-input.cpp:202
 msgid "From file"
@@ -13948,12 +13954,12 @@ msgstr "З файла"
 
 #: ../src/extension/internal/gdkpixbuf-input.cpp:203
 msgid "Default import resolution"
-msgstr ""
+msgstr "Прадвызначаная раздзяляльнасць пры імпарту"
 
 #: ../src/extension/internal/gdkpixbuf-input.cpp:206
 #: ../src/extension/internal/svg.h:31
 msgid "Image Rendering Mode:"
-msgstr ""
+msgstr "Рэжым адмалёўкі відарысу:"
 
 #: ../src/extension/internal/gdkpixbuf-input.cpp:206
 #: ../src/extension/internal/svg.h:31
@@ -13961,12 +13967,14 @@ msgid ""
 "When an image is upscaled, apply smoothing or keep blocky (pixelated). (Will"
 " not work in all browsers.)"
 msgstr ""
+"Ужываць згладжванне або пакідаць ступеньчатасць (пікселізацыю) пры "
+"павелічэнні маштабу відарыса. (Працуе не ва ўсіх браўзерах.)"
 
 #: ../src/extension/internal/gdkpixbuf-input.cpp:207
 #: ../src/extension/internal/svg.h:32
 #: ../src/ui/dialog/inkscape-preferences.cpp:3084
 msgid "None (auto)"
-msgstr ""
+msgstr "Няма (аўтаматычна)"
 
 #: ../src/extension/internal/gdkpixbuf-input.cpp:208
 #: ../src/extension/internal/svg.h:33
@@ -13978,17 +13986,19 @@ msgstr "Згладжванне (аптымальная якасць)"
 #: ../src/extension/internal/svg.h:34
 #: ../src/ui/dialog/inkscape-preferences.cpp:3084
 msgid "Blocky (optimizeSpeed)"
-msgstr ""
+msgstr "Ступеньчатасць (аптымальная хуткасць)"
 
 #: ../src/extension/internal/gdkpixbuf-input.cpp:212
 #: ../src/extension/internal/svg.h:36
 msgid "Hide the dialog next time and always apply the same actions."
 msgstr ""
+"Схаваць дыялогавае акно ў наступны раз і заўсёды ўжываць тыя ж самыя "
+"дзеянні."
 
 #: ../src/extension/internal/gdkpixbuf-input.cpp:212
 #: ../src/extension/internal/svg.h:36
 msgid "Don't ask again"
-msgstr ""
+msgstr "Не пытаць больш"
 
 #: ../src/extension/internal/gimpgrad.cpp:270
 msgid "GIMP Gradients"
@@ -14037,7 +14047,7 @@ msgstr "Сеткі"
 
 #: ../src/extension/internal/grid.cpp:207
 msgid "Draw a path which is a grid"
-msgstr "Нарысаваць шлях, які зьяўляецца сеткай"
+msgstr "Намаляваць контур, які з'яўляецца сеткай"
 
 #: ../src/extension/internal/latex-pstricks-out.cpp:93
 msgid "LaTeX Output"
@@ -14053,23 +14063,23 @@ msgstr "Файл LaTeX PSTricks"
 
 #: ../src/extension/internal/latex-pstricks.cpp:317
 msgid "LaTeX Print"
-msgstr "Друкаваньне LaTeX"
+msgstr "Друк у LaTeX"
 
 #: ../src/extension/internal/odf.cpp:2089
 msgid "OpenDocument Drawing Output"
-msgstr "Выводжаньне рысунка OpenDocument"
+msgstr "Экспарт OpenDocument Drawing"
 
 #: ../src/extension/internal/odf.cpp:2094
 msgid "OpenDocument drawing (*.odg)"
-msgstr "Рысункі OpenDocument (*.odg)"
+msgstr "OpenDocument drawing (*.odg)"
 
 #: ../src/extension/internal/odf.cpp:2095
 msgid "OpenDocument drawing file"
-msgstr "Файл рысунка OpenDocument"
+msgstr "Файл малюнка OpenDocument"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:151
 msgid "PDF Import Settings"
-msgstr "Наладкі імпартаваньня PDF"
+msgstr "Налады імпарту PDF"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:279
 msgctxt "PDF input precision"
@@ -14079,29 +14089,29 @@ msgstr ""
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:279
 msgctxt "PDF input precision"
 msgid "medium"
-msgstr ""
+msgstr "сярэдне"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:280
 msgctxt "PDF input precision"
 msgid "fine"
-msgstr ""
+msgstr "добра"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:280
 msgctxt "PDF input precision"
 msgid "very fine"
-msgstr ""
+msgstr "вельмі добра"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:368
 msgid "Convert to paths"
-msgstr ""
+msgstr "Ператварыць у контуры"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:371
 msgid "Keep original font name"
-msgstr ""
+msgstr "Пакінуць зыходную назву шрыфту"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:374
 msgid "Replace by closest-named installed font"
-msgstr ""
+msgstr "Замяніць усталяваным шрыфтам з найбліжэйшай назвай"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:377
 #: ../src/ui/tools/text-tool.cpp:179
@@ -14114,11 +14124,11 @@ msgstr "Імпарт PDF"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:853
 msgid "Portable Document Format (*.pdf)"
-msgstr ""
+msgstr "Фармат партатыўных дакументаў (*.pdf)"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:854
 msgid "Portable Document Format"
-msgstr ""
+msgstr "Фармат партатыўных дакументаў"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:863
 msgid "AI Input"
@@ -14135,15 +14145,15 @@ msgstr ""
 
 #: ../src/extension/internal/png-output.cpp:52
 msgid "Portable Network Graphic"
-msgstr ""
+msgstr "Фармат партатыўнай сеткавай графікі (PNG)"
 
 #: ../src/extension/internal/png-output.cpp:54
 msgid "Interlacing"
-msgstr ""
+msgstr "Празрадковасць"
 
 #: ../src/extension/internal/png-output.cpp:55
 msgid "Bit Depth"
-msgstr ""
+msgstr "Разраднасць"
 
 #: ../src/extension/internal/png-output.cpp:56
 msgid "RGBA 8"
@@ -14155,11 +14165,11 @@ msgstr "RGBA 16"
 
 #: ../src/extension/internal/png-output.cpp:58
 msgid "GrayAlpha 8"
-msgstr ""
+msgstr "Шэры альфа 8"
 
 #: ../src/extension/internal/png-output.cpp:59
 msgid "GrayAlpha 16"
-msgstr ""
+msgstr "Шэры альфа 16"
 
 #: ../src/extension/internal/png-output.cpp:60
 msgid "RGB 8"
@@ -14171,23 +14181,23 @@ msgstr "RGB 16"
 
 #: ../src/extension/internal/png-output.cpp:62
 msgid "Gray 1"
-msgstr ""
+msgstr "Шэры 1"
 
 #: ../src/extension/internal/png-output.cpp:63
 msgid "Gray 2"
-msgstr ""
+msgstr "Шэры 2"
 
 #: ../src/extension/internal/png-output.cpp:64
 msgid "Gray 4"
-msgstr ""
+msgstr "Шэры 4"
 
 #: ../src/extension/internal/png-output.cpp:65
 msgid "Gray 8"
-msgstr ""
+msgstr "Шэры 8"
 
 #: ../src/extension/internal/png-output.cpp:66
 msgid "Gray 16"
-msgstr ""
+msgstr "Шэры 16"
 
 #: ../src/extension/internal/png-output.cpp:68
 msgid "Compression"
@@ -14276,63 +14286,66 @@ msgstr ""
 
 #: ../src/extension/internal/svg.h:23
 msgid "SVG Image Import Type:"
-msgstr ""
+msgstr "Тып імпарту відарыса SVG:"
 
 #: ../src/extension/internal/svg.h:24
 msgid "Include SVG image as editable object(s) in the current file"
-msgstr ""
+msgstr "Уключыць SVG відарыс як аб'ект, які можна рэдагаваць у бягучы файл"
 
 #: ../src/extension/internal/svg.h:25
 msgid "Add SVG as new page(s) in the current file"
-msgstr ""
+msgstr "Дадаць SVG як новую старонку ў бягучы файл"
 
 #: ../src/extension/internal/svg.h:26
 msgid "Embed the SVG file in an image tag (not editable in this document)"
 msgstr ""
+"Убудаваць SVG файл у тэг відарыса (нельга рэдагаваць у гэтым дакуменце)"
 
 #: ../src/extension/internal/svg.h:27
 msgid "Link the SVG file in an image tag (not editable in this document)."
 msgstr ""
+"Звязаць SVG файл з тэгам відарыса (нельга рэдагаваць у гэтым дакуменце)."
 
 #: ../src/extension/internal/svg.h:28
 msgid "Open SVG image as separate document"
-msgstr ""
+msgstr "Адкрыць SVG відарыс як асобны дакумент"
 
 #: ../src/extension/internal/svg.h:30
 msgid "DPI for rendered SVG"
-msgstr ""
+msgstr "DPI для адмалёўкі SVG"
 
 #: ../src/extension/internal/svgz.cpp:45
 msgid "SVGZ Input"
-msgstr "Чытаньне SVGZ"
+msgstr "Імпарт SVGZ"
 
 #: ../src/extension/internal/svgz.cpp:52 ../src/extension/internal/svgz.cpp:65
 msgid "Compressed Inkscape SVG (*.svgz)"
-msgstr "Сьціснуты Inkscape SVG (*.svgz)"
+msgstr "Сціснуты Inkscape SVG (*.svgz)"
 
 #: ../src/extension/internal/svgz.cpp:53
 msgid "SVG file format compressed with GZip"
-msgstr "Фармат SVG, сьціснуты з дапамогай GZip"
+msgstr "Фармат SVG файла, сціснутага з дапамогай GZip"
 
 #: ../src/extension/internal/svgz.cpp:60 ../src/extension/internal/svgz.cpp:74
 msgid "SVGZ Output"
-msgstr "Выводжаньне SVGZ"
+msgstr "Экспарт у SVGZ"
 
 #: ../src/extension/internal/svgz.cpp:66
 msgid "Inkscape's native file format compressed with GZip"
-msgstr "Родны фармат файлаў Inkscape, сьціснуты з дапамогай GZip"
+msgstr "Родны фармат файлаў Inkscape, сціснуты з дапамогай GZip"
 
 #: ../src/extension/internal/svgz.cpp:79
 msgid "Compressed plain SVG (*.svgz)"
-msgstr "Сьціснуты просты SVG (*.svgz)"
+msgstr "Сціснуты просты SVG (*.svgz)"
 
 #: ../src/extension/internal/svgz.cpp:80
 msgid "Scalable Vector Graphics format compressed with GZip"
-msgstr "Фармат SVG, сьціснуты з дапамогай GZip"
+msgstr ""
+"Фармат файлу маштабаванай вектарнай графікі, сціснуты з дапамогай GZip"
 
 #: ../src/extension/internal/template-from-file.cpp:78
 msgid "Custom Template"
-msgstr ""
+msgstr "Карыстальніцкі шаблон"
 
 #: ../src/extension/internal/template-from-file.cpp:114
 msgid "Load from User File"
@@ -14340,7 +14353,7 @@ msgstr "Загрузіць з файла карыстальніка"
 
 #: ../src/extension/internal/template-from-file.cpp:115
 msgid "Custom list of templates for a folder"
-msgstr ""
+msgstr "Карыстальніцкі спіс шаблонаў для папкі"
 
 #: ../src/extension/internal/template-from-file.cpp:116
 msgctxt "TemplateCategory"
@@ -14355,11 +14368,11 @@ msgstr "Назва файла"
 
 #: ../src/extension/internal/template-other.cpp:37
 msgid "Other Sizes"
-msgstr ""
+msgstr "Іншыя памеры"
 
 #: ../src/extension/internal/template-other.cpp:38
 msgid "Miscellaneous document formats"
-msgstr ""
+msgstr "Разнастайныя фарматы дакументаў"
 
 #: ../src/extension/internal/template-other.cpp:39
 msgctxt "TemplateCategory"
@@ -14414,7 +14427,7 @@ msgstr "Памер паперы"
 
 #: ../src/extension/internal/template-paper.cpp:46
 msgid "Standard paper document formats"
-msgstr ""
+msgstr "Стандартныя фарматы паперы дакументаў"
 
 #: ../src/extension/internal/template-paper.cpp:47
 msgctxt "TemplateCategory"
@@ -14423,11 +14436,11 @@ msgstr ""
 
 #: ../src/extension/internal/template-paper.cpp:50
 msgid "Shortest Side"
-msgstr ""
+msgstr "Кароткі бок"
 
 #: ../src/extension/internal/template-paper.cpp:51
 msgid "Longest Side"
-msgstr ""
+msgstr "Доўгі бок"
 
 #: ../src/extension/internal/template-paper.cpp:52
 #: ../src/live_effects/lpe-measure-segments.cpp:74
@@ -14444,19 +14457,19 @@ msgstr "Альбомная"
 
 #: ../src/extension/internal/template-paper.cpp:58
 msgid "A4 (Portrait)"
-msgstr ""
+msgstr "A4 (кніжная)"
 
 #: ../src/extension/internal/template-paper.cpp:59
 msgid "A4 (Landscape)"
-msgstr ""
+msgstr "A4 (альбомная)"
 
 #: ../src/extension/internal/template-paper.cpp:60
 msgid "US Letter (Portrait)"
-msgstr ""
+msgstr "US Letter (кніжная)"
 
 #: ../src/extension/internal/template-paper.cpp:61
 msgid "US Letter (Landscape)"
-msgstr ""
+msgstr "US Letter (альбомная)"
 
 #: ../src/extension/internal/template-paper.cpp:62
 msgid "A0"
@@ -14636,7 +14649,7 @@ msgstr "E6"
 
 #: ../src/extension/internal/template-paper.cpp:106
 msgid "Ledger/Tabloid"
-msgstr ""
+msgstr "Уліковая кніга/таблоід"
 
 #: ../src/extension/internal/template-paper.cpp:107
 msgid "US Executive"
@@ -14644,51 +14657,51 @@ msgstr "US Executive"
 
 #: ../src/extension/internal/template-paper.cpp:108
 msgid "US Legal"
-msgstr ""
+msgstr "US Legal"
 
 #: ../src/extension/internal/template-paper.cpp:109
 msgid "US Letter"
-msgstr ""
+msgstr "US Letter"
 
 #: ../src/extension/internal/template-paper.cpp:110
 msgid "DL Envelope"
-msgstr ""
+msgstr "Канверт DL"
 
 #: ../src/extension/internal/template-paper.cpp:111
 msgid "US #10 Envelope"
-msgstr ""
+msgstr "Канверт US #10"
 
 #: ../src/extension/internal/template-paper.cpp:112
 msgid "Arch A"
-msgstr ""
+msgstr "Arch A"
 
 #: ../src/extension/internal/template-paper.cpp:113
 msgid "Arch B"
-msgstr ""
+msgstr "Arch B"
 
 #: ../src/extension/internal/template-paper.cpp:114
 msgid "Arch C"
-msgstr ""
+msgstr "Arch C"
 
 #: ../src/extension/internal/template-paper.cpp:115
 msgid "Arch D"
-msgstr ""
+msgstr "Arch D"
 
 #: ../src/extension/internal/template-paper.cpp:116
 msgid "Arch E"
-msgstr ""
+msgstr "Arch E"
 
 #: ../src/extension/internal/template-paper.cpp:117
 msgid "Arch E1"
-msgstr ""
+msgstr "Arch E1"
 
 #: ../src/extension/internal/template-screen.cpp:28
 msgid "Screen Sizes"
-msgstr ""
+msgstr "Памеры экранаў"
 
 #: ../src/extension/internal/template-screen.cpp:29
 msgid "Document formats using common screen resolutions"
-msgstr ""
+msgstr "Фарматы дакументаў, якія выкарыстоўваюць звычайныя памеры экранаў"
 
 #: ../src/extension/internal/template-screen.cpp:30
 msgctxt "TemplateCategory"
@@ -14697,209 +14710,209 @@ msgstr ""
 
 #: ../src/extension/internal/template-screen.cpp:38
 msgid "Desktop 1080p"
-msgstr ""
+msgstr "Настольны 1080p"
 
 #: ../src/extension/internal/template-screen.cpp:39
 msgid "Desktop 2K"
-msgstr ""
+msgstr "Настольны 2K"
 
 #: ../src/extension/internal/template-screen.cpp:40
 msgid "Desktop 4K"
-msgstr ""
+msgstr "Настольны 4K"
 
 #: ../src/extension/internal/template-screen.cpp:41
 msgid "Desktop 720p"
-msgstr ""
+msgstr "Настольны 720p"
 
 #: ../src/extension/internal/template-screen.cpp:42
 msgid "Desktop SD"
-msgstr ""
+msgstr "Настольны SD"
 
 #: ../src/extension/internal/template-screen.cpp:43
 msgid "iPhone 5"
-msgstr ""
+msgstr "iPhone 5"
 
 #: ../src/extension/internal/template-screen.cpp:44
 msgid "iPhone X"
-msgstr ""
+msgstr "iPhone X"
 
 #: ../src/extension/internal/template-screen.cpp:45
 msgid "Mobile-smallest"
-msgstr ""
+msgstr "Найменшы мабільны"
 
 #: ../src/extension/internal/template-screen.cpp:46
 msgid "iPad Pro"
-msgstr ""
+msgstr "iPad Pro"
 
 #: ../src/extension/internal/template-screen.cpp:47
 msgid "Tablet-smallest"
-msgstr ""
+msgstr "Найменшы планшэт"
 
 #: ../src/extension/internal/template-social.cpp:28
 msgid "Social Sizes"
-msgstr ""
+msgstr "Памеры для сацыяльных сетак"
 
 #: ../src/extension/internal/template-social.cpp:29
 msgid "Document formats for social media"
-msgstr ""
+msgstr "Фармат дакументаў для сацыяльных сетак"
 
 #: ../src/extension/internal/template-social.cpp:30
 msgctxt "TemplateCategory"
 msgid "Social"
-msgstr ""
+msgstr "Сацыяльныя сеткі"
 
 #: ../src/extension/internal/template-social.cpp:38
 msgid "Facebook cover photo"
-msgstr ""
+msgstr "Фотаздымак вокладкі Facebook"
 
 #: ../src/extension/internal/template-social.cpp:39
 msgid "Facebook event image"
-msgstr ""
+msgstr "Відарыс падзеі Facebook"
 
 #: ../src/extension/internal/template-social.cpp:40
 msgid "Facebook image post"
-msgstr ""
+msgstr "Відарыс публікацыі Facebook"
 
 #: ../src/extension/internal/template-social.cpp:41
 msgid "Facebook link image"
-msgstr ""
+msgstr "Відарыс спасылкі Facebook"
 
 #: ../src/extension/internal/template-social.cpp:42
 msgid "Facebook profile picture"
-msgstr ""
+msgstr "Відарыс профілю Facebook"
 
 #: ../src/extension/internal/template-social.cpp:43
 msgid "Facebook video"
-msgstr ""
+msgstr "Відэа Facebook"
 
 #: ../src/extension/internal/template-social.cpp:44
 msgid "Instagram landscape"
-msgstr ""
+msgstr "Instagram альбомная арыентацыя"
 
 #: ../src/extension/internal/template-social.cpp:45
 msgid "Instagram portrait"
-msgstr ""
+msgstr "Instagram кніжная арыентацыя"
 
 #: ../src/extension/internal/template-social.cpp:46
 msgid "Instagram square"
-msgstr ""
+msgstr "Instagram квадрат"
 
 #: ../src/extension/internal/template-social.cpp:47
 msgid "LinkedIn business banner image"
-msgstr ""
+msgstr "Відарыс бізнес банера LinkedIn"
 
 #: ../src/extension/internal/template-social.cpp:48
 msgid "LinkedIn company logo"
-msgstr ""
+msgstr "Лагатып кампаніі LinkedIn"
 
 #: ../src/extension/internal/template-social.cpp:49
 msgid "LinkedIn cover photo"
-msgstr ""
+msgstr "Фотаздымак вокладкі LinkedIn"
 
 #: ../src/extension/internal/template-social.cpp:50
 msgid "LinkedIn dynamic ad"
-msgstr ""
+msgstr "Дынамічная рэклама LinkedIn"
 
 #: ../src/extension/internal/template-social.cpp:51
 msgid "LinkedIn hero image"
-msgstr ""
+msgstr "Відарыс героя LinkedIn"
 
 #: ../src/extension/internal/template-social.cpp:52
 msgid "LinkedIn sponsored content image"
-msgstr ""
+msgstr "Відарыс спонсарскага змесціва LinkedIn"
 
 #: ../src/extension/internal/template-social.cpp:53
 msgid "Snapchat advertisement"
-msgstr ""
+msgstr "Рэклама Snapchat"
 
 #: ../src/extension/internal/template-social.cpp:54
 msgid "Twitter card image"
-msgstr ""
+msgstr "Відарыс карткі Twitter"
 
 #: ../src/extension/internal/template-social.cpp:55
 msgid "Twitter header"
-msgstr ""
+msgstr "Загаловак Twitter"
 
 #: ../src/extension/internal/template-social.cpp:56
 msgid "Twitter post image"
-msgstr ""
+msgstr "Відарыс публікацыі Twitter"
 
 #: ../src/extension/internal/template-social.cpp:57
 msgid "Twitter profile picture"
-msgstr ""
+msgstr "Відарыс профілю Twitter"
 
 #: ../src/extension/internal/template-social.cpp:58
 msgid "Twitter video landscape"
-msgstr ""
+msgstr "Відэа Twitter, альбомная арыентацыя"
 
 #: ../src/extension/internal/template-social.cpp:59
 msgid "Twitter video portrait"
-msgstr ""
+msgstr "Відэа Twitter, кніжная арыентацыя"
 
 #: ../src/extension/internal/template-social.cpp:60
 msgid "Twitter video square"
-msgstr ""
+msgstr "Відэа Twitter, квадрат"
 
 #: ../src/extension/internal/template-video.cpp:28
 msgid "Video Sizes"
-msgstr ""
+msgstr "Памеры відэа"
 
 #: ../src/extension/internal/template-video.cpp:29
 msgid "Document formats using common video resolutions"
-msgstr ""
+msgstr "Фарматы дакументаў, якія выкарыстоўваюць звычайныя памеры відэа"
 
 #: ../src/extension/internal/template-video.cpp:30
 msgctxt "TemplateCategory"
 msgid "Video"
-msgstr ""
+msgstr "Відэа"
 
 #: ../src/extension/internal/template-video.cpp:38
 msgid "Video SD PAL"
-msgstr ""
+msgstr "Відэа SD PAL"
 
 #: ../src/extension/internal/template-video.cpp:39
 msgid "Video SD Widescreen / PAL"
-msgstr ""
+msgstr "Відэа SD Widescreen / PAL"
 
 #: ../src/extension/internal/template-video.cpp:40
 msgid "Video SD NTSC"
-msgstr ""
+msgstr "Відэа SD NTSC"
 
 #: ../src/extension/internal/template-video.cpp:41
 msgid "Video SD Widescreen NTSC"
-msgstr ""
+msgstr "Шырокаэкраннае відэа SD NTSC"
 
 #: ../src/extension/internal/template-video.cpp:42
 msgid "Video HD 720p"
-msgstr ""
+msgstr "Відэа HD 720p"
 
 #: ../src/extension/internal/template-video.cpp:43
 msgid "Video HD 1080p"
-msgstr ""
+msgstr "Відэа HD 1080p"
 
 #: ../src/extension/internal/template-video.cpp:44
 msgid "Video DCI 2k (Full Frame)"
-msgstr ""
+msgstr "Відэа DCI 2k (Поўны кадр)"
 
 #: ../src/extension/internal/template-video.cpp:45
 msgid "Video UHD 4k"
-msgstr ""
+msgstr "Відэа UHD 4k"
 
 #: ../src/extension/internal/template-video.cpp:46
 msgid "Video DCI 4k (Full Frame)"
-msgstr ""
+msgstr "Відэа DCI 4k (Поўны кадр)"
 
 #: ../src/extension/internal/template-video.cpp:47
 msgid "Video UHD 8k"
-msgstr ""
+msgstr "Відэа UHD 8k"
 
 #: ../src/extension/internal/vsd-input.cpp:318
 msgid "VSD Input"
-msgstr ""
+msgstr "Імпарт VSD"
 
 #: ../src/extension/internal/vsd-input.cpp:323
 msgid "Microsoft Visio Diagram (*.vsd)"
-msgstr ""
+msgstr "Дыяграма Microsoft Visio (*.vsd)"
 
 #: ../src/extension/internal/vsd-input.cpp:324
 msgid "File format used by Microsoft Visio 6 and later"
@@ -14908,11 +14921,11 @@ msgstr ""
 
 #: ../src/extension/internal/vsd-input.cpp:330
 msgid "VDX Input"
-msgstr ""
+msgstr "Імпарт VDX"
 
 #: ../src/extension/internal/vsd-input.cpp:335
 msgid "Microsoft Visio XML Diagram (*.vdx)"
-msgstr ""
+msgstr "Дыяграма Microsoft Visio XML (*.vdx)"
 
 #: ../src/extension/internal/vsd-input.cpp:336
 msgid "File format used by Microsoft Visio 2010 and later"
@@ -14922,11 +14935,11 @@ msgstr ""
 
 #: ../src/extension/internal/vsd-input.cpp:342
 msgid "VSDM Input"
-msgstr ""
+msgstr "Імпарт VSDM"
 
 #: ../src/extension/internal/vsd-input.cpp:347
 msgid "Microsoft Visio 2013 drawing (*.vsdm)"
-msgstr ""
+msgstr "Малюнак Microsoft Visio 2013 (*.vsdm)"
 
 #: ../src/extension/internal/vsd-input.cpp:348
 #: ../src/extension/internal/vsd-input.cpp:360
@@ -14937,15 +14950,15 @@ msgstr ""
 
 #: ../src/extension/internal/vsd-input.cpp:354
 msgid "VSDX Input"
-msgstr ""
+msgstr "Імпарт VSDX"
 
 #: ../src/extension/internal/vsd-input.cpp:359
 msgid "Microsoft Visio 2013 drawing (*.vsdx)"
-msgstr ""
+msgstr "Малюнак Microsoft Visio 2013 (*.vsdx)"
 
 #: ../src/extension/internal/wmf-inout.cpp:3213
 msgid "WMF Input"
-msgstr "Чытаньне WMF"
+msgstr "Імпарт WMF"
 
 #: ../src/extension/internal/wmf-inout.cpp:3218
 msgid "Windows Metafiles (*.wmf)"
@@ -14957,55 +14970,56 @@ msgstr "Файлы Windows Metafile"
 
 #: ../src/extension/internal/wmf-inout.cpp:3226
 msgid "WMF Output"
-msgstr ""
+msgstr "Экспарт у WMF"
 
 #: ../src/extension/internal/wmf-inout.cpp:3236
 msgid "Map all fill patterns to standard WMF hatches"
 msgstr ""
+"Супаставіць усе ўзоры запаўнення да стандартных графічных абазначэнняў WMF"
 
 #: ../src/extension/internal/wmf-inout.cpp:3240
 msgid "Windows Metafile (*.wmf)"
-msgstr ""
+msgstr "Файл Windows Metafile (*.wmf)"
 
 #: ../src/extension/internal/wmf-inout.cpp:3241
 msgid "Windows Metafile"
-msgstr ""
+msgstr "Файл Windows Metafile"
 
 #: ../src/extension/internal/wpg-input.cpp:136
 msgid "WPG Input"
-msgstr "Чытаньне WPG"
+msgstr "Імпарт WPG"
 
 #: ../src/extension/internal/wpg-input.cpp:141
 msgid "WordPerfect Graphics (*.wpg)"
-msgstr "Ґрафіка WordPerfect (*.wpg)"
+msgstr "Графіка WordPerfect (*.wpg)"
 
 #: ../src/extension/internal/wpg-input.cpp:142
 msgid "Vector graphics format used by Corel WordPerfect"
-msgstr "Фармат вэктарнай ґрафікі, які выкарыстоўваецца ў Corel WordPerfect"
+msgstr "Фармат вектарнай графікі, які выкарыстоўваецца ў Corel WordPerfect"
 
 #: ../src/extension/prefdialog/parameter-path.cpp:193
 msgid "Select existing files"
-msgstr ""
+msgstr "Выбраць існуючыя файлы"
 
 #: ../src/extension/prefdialog/parameter-path.cpp:195
 msgid "Select existing file"
-msgstr ""
+msgstr "Выбраць існуючы файл"
 
 #: ../src/extension/prefdialog/parameter-path.cpp:201
 msgid "Select existing folders"
-msgstr ""
+msgstr "Выбраць існуючыя папкі"
 
 #: ../src/extension/prefdialog/parameter-path.cpp:203
 msgid "Select existing folder"
-msgstr ""
+msgstr "Выбраць існуючую папку"
 
 #: ../src/extension/prefdialog/parameter-path.cpp:207
 msgid "Choose file name"
-msgstr ""
+msgstr "Выбраць назву файла"
 
 #: ../src/extension/prefdialog/parameter-path.cpp:210
 msgid "Choose folder name"
-msgstr ""
+msgstr "Выбраць назву папкі"
 
 #: ../src/extension/prefdialog/prefdialog.cpp:65
 #: ../src/ui/dialog/knot-properties.cpp:34 ../share/ui/menus.ui:100
@@ -15023,57 +15037,69 @@ msgstr "Жывы перадпрагляд"
 
 #: ../src/extension/prefdialog/prefdialog.cpp:216
 msgid "Is the effect previewed live on canvas?"
-msgstr "Ці аглядаецца эфэкт «ўжывую» на палатне?"
+msgstr "Ці адразу паказваць перадпрагляд на палатне?"
 
 #: ../src/extension/system.cpp:133 ../src/extension/system.cpp:135
 msgid ""
 "Could not detect file format. Tried to open it as an SVG anyway but this "
 "also failed."
 msgstr ""
+"Не ўдалося вызначыць фармат файлу. Паспрабавана адкрыць яго як SVG але гэта "
+"таксама не ўдалося."
 
 #: ../src/extension/template.cpp:198 ../src/ui/dialog/dialog-data.h:39
 msgid "Other"
-msgstr "Іншы"
+msgstr "Іншая"
 
 #: ../src/file-update.cpp:310
 msgid "Convert legacy Inkscape file"
-msgstr ""
+msgstr "Пераўтварыць файл Inkscape састарэлай версіі"
 
 #: ../src/file-update.cpp:316
 msgid ""
 "was created in an older version of Inkscape (90 DPI) and we need to make it "
 "compatible with newer versions (96 DPI). Tell us about this file:\n"
 msgstr ""
+"быў створаны ў старой версіі Inkscape (90 DPI) і неабходна яго зрабіць "
+"сумяшчальным з новымі версіямі (96 DPI). Паведаміце інфармацыю аб гэтым "
+"файле:\n"
 
 #: ../src/file-update.cpp:323
 msgid ""
 "This file contains digital artwork for screen display. <b>(Choose if "
 "unsure.)</b>"
 msgstr ""
+"Гэты файл змяшчае лічбавую мастацкую працу для адлюстравання на экране. "
+"<b>(Выбраць, калі не ўпэўнены.)</b>"
 
 #: ../src/file-update.cpp:326
 msgid "This file is intended for physical output, such as paper or 3D prints."
 msgstr ""
+"Гэты файл прызначаны для фізічнага вываду, напрыклад на паперы або 3D друку."
 
 #: ../src/file-update.cpp:328
 msgid ""
 "The appearance of elements such as clips, masks, filters, and clones\n"
 "is most important. <b>(Choose if unsure.)</b>"
 msgstr ""
+"Вонкавы выгляд такіх элементаў як адсячэнне, маскі, фільтры і клоны найбольш"
+" важны. <b>(Выбраць калі не ўпэўнены.)</b>"
 
 #: ../src/file-update.cpp:332
 msgid ""
 "The accuracy of the physical unit size and position values of objects\n"
 "in the file is most important. (Experimental.)"
 msgstr ""
+"Дакладнасць значэнняў фізічнага памеру і пазіцыі аб'ектаў найбольш важны. "
+"(Эксперыментальная функцыя.)"
 
 #: ../src/file-update.cpp:334
 msgid "Create a backup file in same directory."
-msgstr ""
+msgstr "Стварыць рэзервовую копію ў тым жа каталогу."
 
 #: ../src/file-update.cpp:335
 msgid "More details..."
-msgstr ""
+msgstr "Больш падрабязнасцей..."
 
 #. TRANSLATORS: Please don't translate link unless the page exists in your
 #. language. Add your language
@@ -15092,6 +15118,15 @@ msgid ""
 "\n"
 "More information about this change are available in the <a href='https://inkscape.org/en/learn/faq#dpi_change'>Inkscape FAQ</a></small>"
 msgstr ""
+"<small>Мы абнавілі Inkscape каб адпавядаць стандарту CSS у 96 DPI для лепшай сумяшчальнасці з браўзерамі; раней мы выкарыстоўвалі 90 DPI. Лічбавыя мастацкія творы для экранаў будуць пераўтвораны ў 96 DPI без маштабавання і не павінны змяніцца.\n"
+"Мастацкія творы намаляваныя ў 90 DPI для вызначаных фізічных памераў будуць вельмі малымі калі іх пераўтварыць ў 96 DPI без маштабавання. Ёсць два метады маштабавання:\n"
+"\n"
+"<b>Маштабаваць увесь дакумент:</b> Метад з найменшай верагоднасцю памылак, які захоўвае вонкавы выгляд мастацкага твору, уключаючы фільтры і размяшчэнне масак і гэтак далей. \n"
+"Маштаб мастацкага твора адносна памеру дакумента можа быць не дакладным.\n"
+"\n"
+"<b>Маштабаванне асобных элементаў у мастацкім творы:</b> Гэты метад менш надзейны і можа прывесці да змянення выгляду, але ён лепшы для фізічнага вываду, дзе важна дакладныя памеры і пазіцыі (напрыклад для 3D друку).\n"
+"\n"
+"Больш інфармацыі пра гэта змяненне даступна на <a href='https://inkscape.org/en/learn/faq#dpi_change'>Inkscape пытанні і адказы</a></small>"
 
 #: ../src/file-update.cpp:373 ../share/ui/attribute-edit-component.glade:210
 msgid "OK"
@@ -15099,15 +15134,16 @@ msgstr "OK"
 
 #: ../src/file-update.cpp:641
 msgid "Update Document"
-msgstr ""
+msgstr "Абнавіць дакумент"
 
 #: ../src/file.cpp:133
 msgid "Document not saved yet.  Cannot revert."
-msgstr "Дакумэнт пакуль не захаваны. Немагчыма вернуць."
+msgstr "Дакумент пакуль не захаваны. Немагчыма вернуць."
 
 #: ../src/file.cpp:139
 msgid "Changes will be lost! Are you sure you want to reload document %1?"
 msgstr ""
+"Змены будуць страчаны! Вы ўпэўнены што хочаце перазагрузіць дакумент %1?"
 
 #: ../src/file.cpp:153
 msgid "Document reverted."
@@ -15119,7 +15155,7 @@ msgstr "Дакумент не вернуты да апошняга захава�
 
 #: ../src/file.cpp:175
 msgid "Select file to open"
-msgstr "Выберы, які файл адкрыць"
+msgstr "Выбраць файл каб адкрыць"
 
 #: ../src/file.cpp:221
 msgid "Clean up document"
@@ -15129,13 +15165,13 @@ msgstr "Ачысціць дакумент"
 #, c-format
 msgid "Removed <b>%i</b> unused definition in &lt;defs&gt;."
 msgid_plural "Removed <b>%i</b> unused definitions in &lt;defs&gt;."
-msgstr[0] "Выдалена <b>%i</b> нявыкарыстанае азначэньне ў &lt;defs&gt;."
-msgstr[1] "Выдалена <b>%i</b> нявыкарыстаныя азначэньні ў &lt;defs&gt;."
-msgstr[2] "Выдалена <b>%i</b> нявыкарыстаных азначэньняў ў &lt;defs&gt;."
+msgstr[0] "Выдалена <b>%i</b> нявыкарыстанае вызначэнне ў &lt;defs&gt;."
+msgstr[1] "Выдалена <b>%i</b> нявыкарыстаныя вызначэнні ў &lt;defs&gt;."
+msgstr[2] "Выдалена <b>%i</b> нявыкарыстаных вызначэнняў у &lt;defs&gt;."
 
 #: ../src/file.cpp:233
 msgid "No unused definitions in &lt;defs&gt;."
-msgstr "&lt;defs&gt; ня мае нявыкарыстаных азначэньняў."
+msgstr "Няма не ўжытых вызначэнняў у &lt;defs&gt;."
 
 #: ../src/file.cpp:271
 #, c-format
@@ -15143,26 +15179,26 @@ msgid ""
 "No Inkscape extension found to save document (%s).  This may have been "
 "caused by an unknown filename extension."
 msgstr ""
-"Не адшуканы пашыральнік Inkscape для захоўваньня дакумэнта (%s). Магчыма, "
-"назва файла мае невядомае пашырэньне."
+"Не знойдзена пашырэнне Inkscape каб захаваць дакумент (%s). Магчыма, што "
+"назва файла мае невядомае пашырэнне."
 
 #: ../src/file.cpp:272 ../src/file.cpp:280 ../src/file.cpp:287
 #: ../src/file.cpp:293 ../src/file.cpp:298 ../src/file.cpp:309
 #: ../src/file.cpp:317
 msgid "Document not saved."
-msgstr "Дакумэнт не захаваны."
+msgstr "Дакумент не захаваны."
 
 #: ../src/file.cpp:279
 #, c-format
 msgid ""
 "File %s is write protected. Please remove write protection and try again."
 msgstr ""
-"Запіс у файл %s забаронены. Выдаліце забарону на запіс і паспрабуйце зноў."
+"Файл %s абаронены ад запісу. Выдаліце забарону на запіс і паспрабуйце зноў."
 
 #: ../src/file.cpp:286 ../src/file.cpp:316
 #, c-format
 msgid "File %s could not be saved."
-msgstr "Файл %s немагчыма захаваць."
+msgstr "Файл %s не ўдалося захаваць."
 
 #: ../src/file.cpp:297
 #, c-format
@@ -15170,7 +15206,7 @@ msgid ""
 "File could not be saved:\n"
 "No object with ID '%s' found."
 msgstr ""
-"Файл немагчыма захаваць:\n"
+"Файл не ўдалося захаваць:\n"
 "Не знойдзены аб'ект з ідэнтыфікатарам '%s'."
 
 #: ../src/file.cpp:306
@@ -15181,30 +15217,30 @@ msgid ""
 "The following additional information was returned by the output extension:\n"
 "'%s'"
 msgstr ""
-"Файл %s немагчыма захаваць.\n"
+"Файл %s не ўдалося захаваць.\n"
 "\n"
 "Наступная дадатковая інфармацыя была выдадзена пашырэннем:\n"
 "'%s'"
 
 #: ../src/file.cpp:340 ../src/file.cpp:342
 msgid "Document saved."
-msgstr "Дакумэнт захаваны."
+msgstr "Дакумент захаваны."
 
 #: ../src/file.cpp:382
 msgid "drawing"
-msgstr ""
+msgstr "малюнак"
 
 #: ../src/file.cpp:387
 msgid "drawing-%1"
-msgstr ""
+msgstr "малюнак-%1"
 
 #: ../src/file.cpp:395
 msgid "Select file to save a copy to"
-msgstr "Выберы файл, у які захаваць копію"
+msgstr "Выбраць файл, каб захаваць копію ў"
 
 #: ../src/file.cpp:396
 msgid "Select file to save to"
-msgstr "Выбраць файл, у які захаваць"
+msgstr "Выбраць файл, каб захаваць у"
 
 #: ../src/file.cpp:485 ../src/file.cpp:487
 msgid "No changes need to be saved."
@@ -15281,7 +15317,7 @@ msgstr "Альфа фону"
 
 #: ../src/filter-enums.cpp:49
 msgid "Fill Paint"
-msgstr "Рысаваньне запаўненьня"
+msgstr "Колер запаўнення"
 
 #: ../src/filter-enums.cpp:50
 msgid "Stroke Paint"
@@ -15293,15 +15329,15 @@ msgstr "Матрыца"
 
 #: ../src/filter-enums.cpp:58
 msgid "Saturate"
-msgstr "Насычэньне"
+msgstr "Насычанасць"
 
 #: ../src/filter-enums.cpp:59
 msgid "Hue Rotate"
-msgstr "Паварот адценьня"
+msgstr "Паварот адцення"
 
 #: ../src/filter-enums.cpp:60
 msgid "Luminance to Alpha"
-msgstr "Сьветласьць у празрыстасьць"
+msgstr "Асветленасць у альфа"
 
 #: ../src/filter-enums.cpp:68 ../share/ui/inkscape-start.glade:50
 msgid "Default"
@@ -15309,23 +15345,23 @@ msgstr "Прадвызначаны"
 
 #: ../src/filter-enums.cpp:74
 msgid "Lighter"
-msgstr ""
+msgstr "Святлей"
 
 #: ../src/filter-enums.cpp:75
 msgid "Arithmetic"
-msgstr "Арытмэтычны"
+msgstr "Арыфметычны"
 
 #: ../src/filter-enums.cpp:84
 msgid "Table Lookup"
-msgstr ""
+msgstr "Пошук у табліцы"
 
 #: ../src/filter-enums.cpp:85
 msgid "Discrete Values"
-msgstr ""
+msgstr "Дыскрэтныя значэнні"
 
 #: ../src/filter-enums.cpp:96
 msgid "Wrap"
-msgstr "Загарнуць"
+msgstr "Перанесці"
 
 #: ../src/filter-enums.cpp:97
 msgctxt "Convolve matrix, edge mode"
@@ -15334,11 +15370,11 @@ msgstr ""
 
 #: ../src/filter-enums.cpp:116
 msgid "Erode"
-msgstr "Разьяданьне"
+msgstr "Эрозія"
 
 #: ../src/filter-enums.cpp:117
 msgid "Dilate"
-msgstr "Пашырэньне"
+msgstr "Пашырэнне"
 
 #: ../src/filter-enums.cpp:125
 msgid "Fractal Noise"
@@ -15346,38 +15382,38 @@ msgstr "Фрактальны шум"
 
 #: ../src/filter-enums.cpp:134
 msgid "Distant Light"
-msgstr "Далёкае сьвятло"
+msgstr "Далёкае святло"
 
 #: ../src/filter-enums.cpp:135
 msgid "Point Light"
-msgstr "Кропкавае сьвятло"
+msgstr "Кропкавая крыніца святла"
 
 #: ../src/filter-enums.cpp:136
 msgid "Spot Light"
-msgstr "Сьветлавая пляма"
+msgstr "Накіраванае святло (пражэктар)"
 
 #: ../src/gradient-chemistry.cpp:779 ../src/gradient-drag.cpp:1233
 msgid "Delete gradient stop"
-msgstr "Выдаліць спын ґрадыента"
+msgstr "Выдаліць апорны пункт градыента"
 
 #: ../src/gradient-chemistry.cpp:868 ../src/gradient-chemistry.cpp:885
 #: ../src/gradient-drag.cpp:1281 ../src/ui/dialog/color-item.cpp:519
 #: ../src/ui/tools/gradient-tool.cpp:275 ../src/ui/tools/gradient-tool.cpp:328
 #: ../src/ui/tools/gradient-tool.cpp:411
 msgid "Add gradient stop"
-msgstr "Дадаць спын ґрадыента"
+msgstr "Дадаць апорную кропку градыента"
 
 #: ../src/gradient-chemistry.cpp:897
 msgid "Change gradient stop color"
-msgstr "Зьмяніць колер пункта ґрадыенту"
+msgstr "Замяніць колер апорнага пункту градыента"
 
 #: ../src/gradient-chemistry.cpp:1839
 msgid "Invert gradient colors"
-msgstr ""
+msgstr "Інвертаваць колеры градыента"
 
 #: ../src/gradient-chemistry.cpp:1865 ../src/ui/widget/gradient-editor.cpp:488
 msgid "Reverse gradient"
-msgstr ""
+msgstr "Градыент у адваротным парадку"
 
 #: ../src/gradient-chemistry.cpp:1878 ../src/ui/dialog/color-item.cpp:464
 #: ../src/ui/widget/gradient-selector.cpp:157
@@ -15388,58 +15424,58 @@ msgstr "Выдаліць узор"
 #: ../src/gradient-drag.cpp:75 ../src/ui/tools/gradient-tool.cpp:81
 #: ../src/ui/tools/mesh-tool.cpp:111
 msgid "Linear gradient <b>start</b>"
-msgstr "<b>Пачатак</b> лінейнага ґрадыента"
+msgstr "Лінейны градыент <b>пачатак</b>"
 
 #: ../src/gradient-drag.cpp:76 ../src/ui/tools/gradient-tool.cpp:82
 #: ../src/ui/tools/mesh-tool.cpp:112
 msgid "Linear gradient <b>end</b>"
-msgstr "<b>Канец</b> лінейнага ґрадыента"
+msgstr "Лінейны градыент <b>канец</b>"
 
 #: ../src/gradient-drag.cpp:77 ../src/ui/tools/gradient-tool.cpp:83
 #: ../src/ui/tools/mesh-tool.cpp:113
 msgid "Linear gradient <b>mid stop</b>"
-msgstr "<b>Сярэдзінны спын</b> лінейнага ґрадыента"
+msgstr "Лінейны градыент <b>сярэдні апорны пункт</b>"
 
 #: ../src/gradient-drag.cpp:78 ../src/ui/tools/gradient-tool.cpp:84
 #: ../src/ui/tools/mesh-tool.cpp:114
 msgid "Radial gradient <b>center</b>"
-msgstr "<b>Цэнтар</b> радыяльнага ґрадыента"
+msgstr "Радыяльны градыент <b>цэнтр</b>"
 
 #: ../src/gradient-drag.cpp:79 ../src/gradient-drag.cpp:80
 #: ../src/ui/tools/gradient-tool.cpp:85 ../src/ui/tools/gradient-tool.cpp:86
 #: ../src/ui/tools/mesh-tool.cpp:115 ../src/ui/tools/mesh-tool.cpp:116
 msgid "Radial gradient <b>radius</b>"
-msgstr "<b>Радыюс</b> радыяльнага ґрадыента"
+msgstr "Радыяльны градыент <b>радыус</b>"
 
 #: ../src/gradient-drag.cpp:81 ../src/ui/tools/gradient-tool.cpp:87
 #: ../src/ui/tools/mesh-tool.cpp:117
 msgid "Radial gradient <b>focus</b>"
-msgstr "<b>Фокус</b> радыяльнага ґрадыента"
+msgstr "Радыяльны градыент <b>фокус</b>"
 
 #: ../src/gradient-drag.cpp:82 ../src/gradient-drag.cpp:83
 #: ../src/ui/tools/gradient-tool.cpp:88 ../src/ui/tools/gradient-tool.cpp:89
 #: ../src/ui/tools/mesh-tool.cpp:118 ../src/ui/tools/mesh-tool.cpp:119
 msgid "Radial gradient <b>mid stop</b>"
-msgstr "<b>Сярэдзінны спын</b> кругавога ґрадыента"
+msgstr "Радыяльны градыент <b>сярэдні апорны пункт</b>"
 
 #: ../src/gradient-drag.cpp:84 ../src/ui/tools/gradient-tool.cpp:90
 #: ../src/ui/tools/mesh-tool.cpp:120
 msgid "Mesh gradient <b>corner</b>"
-msgstr ""
+msgstr "Сеткавы градыент <b>вугал</b>"
 
 #: ../src/gradient-drag.cpp:85 ../src/ui/tools/gradient-tool.cpp:91
 #: ../src/ui/tools/mesh-tool.cpp:121
 msgid "Mesh gradient <b>handle</b>"
-msgstr ""
+msgstr "Сеткавы градыент <b>апорны пункт</b>"
 
 #: ../src/gradient-drag.cpp:86 ../src/ui/tools/gradient-tool.cpp:92
 #: ../src/ui/tools/mesh-tool.cpp:122
 msgid "Mesh gradient <b>tensor</b>"
-msgstr ""
+msgstr "Сеткавы градыент <b>тензар</b>"
 
 #: ../src/gradient-drag.cpp:558
 msgid "Added patch row or column"
-msgstr ""
+msgstr "Дададзена радок або слупок"
 
 #: ../src/gradient-drag.cpp:864
 msgid "Merge gradient handles"
@@ -15447,7 +15483,7 @@ msgstr "Абʼяднаць апорныя пункты градыента"
 
 #: ../src/gradient-drag.cpp:1175
 msgid "Move gradient handle"
-msgstr "Пасунуць ручку ґрадыента"
+msgstr "Перамясціць апорны пункт градыента"
 
 #: ../src/gradient-drag.cpp:1513
 #, c-format
@@ -15455,18 +15491,18 @@ msgid ""
 "%s %d for: %s%s; drag with <b>Ctrl</b> to snap offset; click with "
 "<b>Ctrl+Alt</b> to delete stop"
 msgstr ""
-"%s %d для: %s%s; цягні з <b>Ctrl</b>, каб абмежаваць зрух; пстрыкні з "
-"<b>Ctrl+Alt</b>, каб выдаліць спын"
+"%s %d для: %s%s; перацягнуць з <b>Ctrl</b>, каб абмежаваць зрух; націснуць з"
+" <b>Ctrl+Alt</b>, каб выдаліць апорны пункт"
 
 #: ../src/gradient-drag.cpp:1517 ../src/gradient-drag.cpp:1526
 #: ../src/gradient-drag.cpp:1533
 msgid " (stroke)"
-msgstr " (контур)"
+msgstr " (абвядзенне)"
 
 #: ../src/gradient-drag.cpp:1523
 #, c-format
 msgid "%s for: %s%s"
-msgstr ""
+msgstr "%s для: %s%s"
 
 #: ../src/gradient-drag.cpp:1530
 #, c-format
@@ -15474,17 +15510,17 @@ msgid ""
 "%s for: %s%s; drag with <b>Ctrl</b> to snap angle, with <b>Ctrl+Alt</b> to "
 "preserve angle, with <b>Ctrl+Shift</b> to scale around center"
 msgstr ""
-"%s для: %s%s; пацягні з <b>Ctrl</b>, каб абмежаваць вугал, з "
-"<b>Ctrl+Alt</b>, каб захаваць вугал, з <b>Ctrl+Shift</b> мяняць памер вакол "
-"цэнтра"
+"%s для: %s%s; паерацягнуць з <b>Ctrl</b>, каб абмежаваць вугал, з "
+"<b>Ctrl+Alt</b>, каб захаваць вугал, з <b>Ctrl+Shift</b>, каб маштабаваць "
+"адносна цэнтра"
 
 #: ../src/gradient-drag.cpp:1538
 msgid ""
 "Radial gradient <b>center</b> and <b>focus</b>; drag with <b>Shift</b> to "
 "separate focus"
 msgstr ""
-"<b>Цэнтар</b> і <b>фокус</b> кругавога ґрадыента; пацягні з <b>Shift</b>, "
-"каб адасобіць фокус"
+"Радыяльны градыент <b>цэнтр</b> і <b>фокус</b>; перацягнуць з <b>Shift</b>, "
+"каб раздзяліць фокус"
 
 #: ../src/gradient-drag.cpp:1541
 #, c-format
@@ -15495,26 +15531,26 @@ msgid_plural ""
 "Gradient point shared by <b>%d</b> gradients; drag with <b>Shift</b> to "
 "separate"
 msgstr[0] ""
-"Ґрадыентны пункт агульны для <b>%d</b> ґрадыента; пацягні з <b>Shift</b>, "
-"каб адасобіць"
+"Градыентны пункт абагулены для <b>%d</b> градыента; перацягнуць з "
+"<b>Shift</b>, каб раздзяліць"
 msgstr[1] ""
-"Ґрадыентны пункт агульны для <b>%d</b> ґрадыентаў; пацягні з <b>Shift</b>, "
-"каб адасобіць"
+"Градыентны пункт абагулены для <b>%d</b> градыентаў; перацягнуць з "
+"<b>Shift</b>, каб раздзяліць"
 msgstr[2] ""
-"Ґрадыентны пункт агульны для <b>%d</b> ґрадыентаў; пацягні з <b>Shift</b>, "
-"каб адасобіць"
+"Градыентны пункт абагулены для <b>%d</b> градыентаў; перацягнуць з "
+"<b>Shift</b>, каб раздзяліць"
 
 #: ../src/gradient-drag.cpp:2780
 msgid "Move gradient handle(s)"
-msgstr "Пасунуць ручкі ґрадыента"
+msgstr "Перамясціць апорны(-я) пункт(-ы) градыента"
 
 #: ../src/gradient-drag.cpp:2812
 msgid "Move gradient mid stop(s)"
-msgstr "Пасунуць сярэдзінныя спыны ґрадыента"
+msgstr "Перамясціць сярэдні(-я) апорны(-я) пункт(-ы) градыента"
 
 #: ../src/gradient-drag.cpp:3165
 msgid "Delete gradient stop(s)"
-msgstr "Выдаліць спыны ґрадыента"
+msgstr "Выдаліць апорны(-я) пункт(-ы) градыента"
 
 #: ../src/helper/choose-file.cpp:27 ../src/helper/choose-file.cpp:62
 #: ../src/ui/dialog/save-template-dialog.cpp:38
@@ -15522,7 +15558,7 @@ msgstr "Выдаліць спыны ґрадыента"
 #: ../share/ui/attribute-edit-component.glade:223
 #: ../share/ui/toolbar-booleans.ui:112
 msgid "Cancel"
-msgstr "Адмяніць"
+msgstr "Скасаваць"
 
 #: ../src/helper/choose-file.cpp:63 ../src/ui/dialog/command-palette.cpp:224
 #: ../src/ui/widget/preferences-widget.cpp:829
@@ -15532,7 +15568,7 @@ msgstr "Адкрыць"
 
 #: ../src/helper/choose-file.cpp:68
 msgid "All Supported Formats"
-msgstr ""
+msgstr "Усе фарматы якія падтрымліваюцца"
 
 #: ../src/helper/save-image.cpp:33
 msgid "Extract Image"
@@ -15540,57 +15576,58 @@ msgstr "Выняць відарыс"
 
 #: ../src/inkscape-application.cpp:407
 msgid "Broken links have been changed to point to existing files."
-msgstr ""
+msgstr "Сапсаваныя спасылкі зменены і спасылаюцца на існуючыя файлы."
 
 # File: ../src/inkscape-application.cpp, line: 526
 #: ../src/inkscape-application.cpp:709
 msgid "file1 [file2 [fileN]]"
-msgstr ""
+msgstr "файл1 [файл2 [файлN]]"
 
 # File: ../src/inkscape-application.cpp, line: 527
 #: ../src/inkscape-application.cpp:710
 msgid "Process (or open) one or more files."
-msgstr ""
+msgstr "Апрацоўка (або адкрыццё) аднаго або больш файлаў."
 
 #: ../src/inkscape-application.cpp:711
 msgid "Examples:"
-msgstr ""
+msgstr "Прыклады:"
 
 # File: ../src/inkscape-application.cpp, line: 529
 #: ../src/inkscape-application.cpp:712
 msgid "Export input SVG (%1) to PDF (%2) format:"
-msgstr ""
+msgstr "Экспартаваць уваходны файл SVG (%1) у файл PDF (%2) фармату:"
 
 # File: ../src/inkscape-application.cpp, line: 531
 #: ../src/inkscape-application.cpp:714
 msgid "Export input files (%1) to PNG format keeping original name (%2):"
 msgstr ""
+"Экспартаваць уваходныя файлы (%1) у фармат PNG захоўваючы зыходныя назвы "
+"(%2):"
 
 # File: ../src/inkscape-application.cpp, line: 533
 #: ../src/inkscape-application.cpp:716
 msgid "See %1 and %2 for more details."
-msgstr ""
+msgstr "Глядзіце %1 і %2 для падрабязных звестак."
 
 #: ../src/inkscape-application.cpp:721
 msgid "Print Inkscape version"
-msgstr ""
+msgstr "Вывесці версію Inkscape"
 
 #: ../src/inkscape-application.cpp:722
 msgid "Print debugging information"
-msgstr ""
+msgstr "Вывесці адладачную інфармацыю"
 
 #: ../src/inkscape-application.cpp:723
 msgid "Print system data directory"
-msgstr ""
+msgstr "Вывесці каталог даных сістэмы"
 
 #: ../src/inkscape-application.cpp:724
 msgid "Print user data directory"
-msgstr ""
+msgstr "Вывесці каталог даных карыстальніка"
 
 #: ../src/inkscape-application.cpp:725
-#, fuzzy
 msgid "List all available input file extensions"
-msgstr "Паказаць і запусціць даступныя пашырэнні"
+msgstr "Спіс усіх даступных пашырэняў уваходных файлаў"
 
 #: ../src/inkscape-application.cpp:726
 msgid ""
@@ -15740,15 +15777,15 @@ msgstr ""
 
 #: ../src/inkscape-application.cpp:753
 msgid "MARGIN"
-msgstr ""
+msgstr "ПАЛІ"
 
 #: ../src/inkscape-application.cpp:756
 msgid "Export options"
-msgstr ""
+msgstr "Параметры экспарту"
 
 #: ../src/inkscape-application.cpp:757
 msgid "Page number to export"
-msgstr ""
+msgstr "Нумар старонкі для экспарту"
 
 #: ../src/inkscape-application.cpp:757
 msgid "all|n[,a-b]"
@@ -16009,7 +16046,7 @@ msgstr "Прыдатная да зьмяненьня памеру вэктарн
 
 #: ../src/inkview-application.cpp:140
 msgid "Error"
-msgstr ""
+msgstr "Памылка"
 
 #: ../src/inkview-application.cpp:140
 msgid "No (valid) files to open."
@@ -16029,7 +16066,7 @@ msgstr "Усе шрыфты"
 
 #: ../src/libnrtype/font-lister.cpp:156
 msgid "Fonts "
-msgstr ""
+msgstr "Шрыфты "
 
 #: ../src/live_effects/effect.cpp:102
 msgctxt "path effect"
@@ -16136,7 +16173,7 @@ msgstr ""
 #: ../src/live_effects/effect.cpp:257
 msgctxt "path effect"
 msgid "Sketch"
-msgstr ""
+msgstr "Эскіз"
 
 #: ../src/live_effects/effect.cpp:260
 msgid "Draw multiple short strokes along the path, as in a pencil sketch"
@@ -16145,7 +16182,7 @@ msgstr ""
 #: ../src/live_effects/effect.cpp:271
 msgctxt "path effect"
 msgid "Ruler"
-msgstr ""
+msgstr "Лінейка"
 
 # File: ../src/live_effects/effect.cpp, line: 275
 #: ../src/live_effects/effect.cpp:274
@@ -16835,7 +16872,7 @@ msgstr "Памяняць аперанды месцамі"
 
 #: ../src/live_effects/lpe-bool.cpp:82
 msgid "Swap operands (useful e.g. for difference)"
-msgstr "Памяняць аперанды месцамі (карысна напрыклад для розніцы)"
+msgstr "Памяняць аперанды месцамі (карысна, напрыклад, для розніцы)"
 
 #: ../src/live_effects/lpe-bool.cpp:84
 msgid "Remove inner"
@@ -17883,6 +17920,8 @@ msgstr ""
 #: ../src/live_effects/lpe-lattice2.cpp:46
 msgid "Control 0 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr ""
+"Control 0 - <b>Ctrl+Alt+націск</b>: скінуць, <b>Ctrl</b>: перамясціць уздоўж"
+" восяў"
 
 #: ../src/live_effects/lpe-lattice2.cpp:47
 msgid "Control 1:"
@@ -17891,6 +17930,8 @@ msgstr ""
 #: ../src/live_effects/lpe-lattice2.cpp:47
 msgid "Control 1 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr ""
+"Control 1 - <b>Ctrl+Alt+націск</b>: скінуць, <b>Ctrl</b>: перамясціць уздоўж"
+" восяў"
 
 #: ../src/live_effects/lpe-lattice2.cpp:48
 msgid "Control 2:"
@@ -17899,6 +17940,8 @@ msgstr ""
 #: ../src/live_effects/lpe-lattice2.cpp:48
 msgid "Control 2 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr ""
+"Control 2 - <b>Ctrl+Alt+націск</b>: скінуць, <b>Ctrl</b>: перамясціць уздоўж"
+" восяў"
 
 #: ../src/live_effects/lpe-lattice2.cpp:49
 msgid "Control 3:"
@@ -17907,6 +17950,8 @@ msgstr ""
 #: ../src/live_effects/lpe-lattice2.cpp:49
 msgid "Control 3 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr ""
+"Control 3 - <b>Ctrl+Alt+націск</b>: скінуць, <b>Ctrl</b>: перамясціць уздоўж"
+" восяў"
 
 #: ../src/live_effects/lpe-lattice2.cpp:50
 msgid "Control 4:"
@@ -17915,6 +17960,8 @@ msgstr ""
 #: ../src/live_effects/lpe-lattice2.cpp:50
 msgid "Control 4 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr ""
+"Control 4 - <b>Ctrl+Alt+націск</b>: скінуць, <b>Ctrl</b>: перамясціць уздоўж"
+" восяў"
 
 #: ../src/live_effects/lpe-lattice2.cpp:51
 msgid "Control 5:"
@@ -17923,6 +17970,8 @@ msgstr ""
 #: ../src/live_effects/lpe-lattice2.cpp:51
 msgid "Control 5 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr ""
+"Control 5 - <b>Ctrl+Alt+націск</b>: скінуць, <b>Ctrl</b>: перамясціць уздоўж"
+" восяў"
 
 #: ../src/live_effects/lpe-lattice2.cpp:52
 msgid "Control 6:"
@@ -17931,6 +17980,8 @@ msgstr ""
 #: ../src/live_effects/lpe-lattice2.cpp:52
 msgid "Control 6 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr ""
+"Control 6 - <b>Ctrl+Alt+націск</b>: скінуць, <b>Ctrl</b>: перамясціць уздоўж"
+" восяў"
 
 #: ../src/live_effects/lpe-lattice2.cpp:53
 msgid "Control 7:"
@@ -17939,6 +17990,8 @@ msgstr ""
 #: ../src/live_effects/lpe-lattice2.cpp:53
 msgid "Control 7 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr ""
+"Control 7 - <b>Ctrl+Alt+націск</b>: скінуць, <b>Ctrl</b>: перамясціць уздоўж"
+" восяў"
 
 #: ../src/live_effects/lpe-lattice2.cpp:54
 msgid "Control 8x9:"
@@ -17948,6 +18001,8 @@ msgstr ""
 msgid ""
 "Control 8x9 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr ""
+"Control 8x9 - <b>Ctrl+Alt+націск</b>: скінуць, <b>Ctrl</b>: перамясціць "
+"уздоўж восяў"
 
 #: ../src/live_effects/lpe-lattice2.cpp:55
 msgid "Control 10x11:"
@@ -17957,6 +18012,8 @@ msgstr ""
 msgid ""
 "Control 10x11 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr ""
+"Control 10x11 - <b>Ctrl+Alt+націск</b>: скінуць, <b>Ctrl</b>: перамясціць "
+"уздоўж восяў"
 
 #: ../src/live_effects/lpe-lattice2.cpp:56
 msgid "Control 12:"
@@ -17966,6 +18023,8 @@ msgstr ""
 msgid ""
 "Control 12 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr ""
+"Control 12 - <b>Ctrl+Alt+націск</b>: скінуць, <b>Ctrl</b>: перамясціць "
+"уздоўж восяў"
 
 #: ../src/live_effects/lpe-lattice2.cpp:57
 msgid "Control 13:"
@@ -17975,6 +18034,8 @@ msgstr ""
 msgid ""
 "Control 13 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr ""
+"Control 13 - <b>Ctrl+Alt+націск</b>: скінуць, <b>Ctrl</b>: перамясціць "
+"уздоўж восяў"
 
 #: ../src/live_effects/lpe-lattice2.cpp:58
 msgid "Control 14:"
@@ -17984,6 +18045,8 @@ msgstr ""
 msgid ""
 "Control 14 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr ""
+"Control 14 - <b>Ctrl+Alt+націск</b>: скінуць, <b>Ctrl</b>: перамясціць "
+"уздоўж восяў"
 
 #: ../src/live_effects/lpe-lattice2.cpp:59
 msgid "Control 15:"
@@ -17993,6 +18056,8 @@ msgstr ""
 msgid ""
 "Control 15 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr ""
+"Control 15 - <b>Ctrl+Alt+націск</b>: скінуць, <b>Ctrl</b>: перамясціць "
+"уздоўж восяў"
 
 #: ../src/live_effects/lpe-lattice2.cpp:60
 msgid "Control 16:"
@@ -18002,6 +18067,8 @@ msgstr ""
 msgid ""
 "Control 16 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr ""
+"Control 16 - <b>Ctrl+Alt+націск</b>: скінуць, <b>Ctrl</b>: перамясціць "
+"уздоўж восяў"
 
 #: ../src/live_effects/lpe-lattice2.cpp:61
 msgid "Control 17:"
@@ -18011,6 +18078,8 @@ msgstr ""
 msgid ""
 "Control 17 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr ""
+"Control 17 - <b>Ctrl+Alt+націск</b>: скінуць, <b>Ctrl</b>: перамясціць "
+"уздоўж восяў"
 
 #: ../src/live_effects/lpe-lattice2.cpp:62
 msgid "Control 18:"
@@ -18020,6 +18089,8 @@ msgstr ""
 msgid ""
 "Control 18 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr ""
+"Control 18 - <b>Ctrl+Alt+націск</b>: скінуць, <b>Ctrl</b>: перамясціць "
+"уздоўж восяў"
 
 #: ../src/live_effects/lpe-lattice2.cpp:63
 msgid "Control 19:"
@@ -18029,6 +18100,8 @@ msgstr ""
 msgid ""
 "Control 19 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr ""
+"Control 19 - <b>Ctrl+Alt+націск</b>: скінуць, <b>Ctrl</b>: перамясціць "
+"уздоўж восяў"
 
 #: ../src/live_effects/lpe-lattice2.cpp:64
 msgid "Control 20x21:"
@@ -18038,6 +18111,8 @@ msgstr ""
 msgid ""
 "Control 20x21 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr ""
+"Control 20x21 - <b>Ctrl+Alt+націск</b>: скінуць, <b>Ctrl</b>: перамясціць "
+"уздоўж восяў"
 
 #: ../src/live_effects/lpe-lattice2.cpp:65
 msgid "Control 22x23:"
@@ -18047,6 +18122,8 @@ msgstr ""
 msgid ""
 "Control 22x23 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr ""
+"Control 22x23 - <b>Ctrl+Alt+націск</b>: скінуць, <b>Ctrl</b>: перамясціць "
+"уздоўж восяў"
 
 #: ../src/live_effects/lpe-lattice2.cpp:66
 msgid "Control 24x26:"
@@ -18056,6 +18133,8 @@ msgstr ""
 msgid ""
 "Control 24x26 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr ""
+"Control 24x26 - <b>Ctrl+Alt+націск</b>: скінуць, <b>Ctrl</b>: перамясціць "
+"уздоўж восяў"
 
 #: ../src/live_effects/lpe-lattice2.cpp:67
 msgid "Control 25x27:"
@@ -18065,6 +18144,8 @@ msgstr ""
 msgid ""
 "Control 25x27 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr ""
+"Control 25x27 - <b>Ctrl+Alt+націск</b>: скінуць, <b>Ctrl</b>: перамясціць "
+"уздоўж восяў"
 
 #: ../src/live_effects/lpe-lattice2.cpp:68
 msgid "Control 28x30:"
@@ -18074,6 +18155,8 @@ msgstr ""
 msgid ""
 "Control 28x30 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr ""
+"Control 28x30 - <b>Ctrl+Alt+націск</b>: скінуць, <b>Ctrl</b>: перамясціць "
+"уздоўж восяў"
 
 #: ../src/live_effects/lpe-lattice2.cpp:69
 msgid "Control 29x31:"
@@ -18083,6 +18166,8 @@ msgstr ""
 msgid ""
 "Control 29x31 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr ""
+"Control 29x31 - <b>Ctrl+Alt+націск</b>: скінуць, <b>Ctrl</b>: перамясціць "
+"уздоўж восяў"
 
 #: ../src/live_effects/lpe-lattice2.cpp:70
 msgid "Control 32x33x34x35:"
@@ -18093,6 +18178,8 @@ msgid ""
 "Control 32x33x34x35 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along "
 "axes"
 msgstr ""
+"Control 32x33x34x35 - <b>Ctrl+Alt+націск</b>: скінуць, <b>Ctrl</b>: "
+"перамясціць уздоўж восяў"
 
 #: ../src/live_effects/lpe-lattice2.cpp:236
 msgid "Reset grid"
@@ -18149,7 +18236,7 @@ msgstr ""
 #: ../src/live_effects/lpe-measure-segments.cpp:67
 #: ../share/ui/toolbar-lpe.ui:126
 msgid "Parallel"
-msgstr "Паралель"
+msgstr "Паралельна"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:73
 #: ../src/live_effects/lpe-offset.cpp:73
@@ -18621,7 +18708,7 @@ msgstr ""
 #: ../src/ui/knot/knot-holder-entity.cpp:139
 #: ../src/ui/knot/knot-holder.cpp:344
 msgid "Move handle"
-msgstr "Пасунуць ручку"
+msgstr "Перамясціць апорны пункт"
 
 #: ../src/live_effects/lpe-parallel.cpp:51
 msgid "Adjust the offset"
@@ -18645,19 +18732,19 @@ msgstr ""
 
 #: ../src/live_effects/lpe-patternalongpath.cpp:63
 msgid "Single"
-msgstr "Асобная"
+msgstr "Адна"
 
 #: ../src/live_effects/lpe-patternalongpath.cpp:64
 msgid "Single, stretched"
-msgstr "Асобная, расьцягнутая"
+msgstr "Адна, расцягнутая"
 
 #: ../src/live_effects/lpe-patternalongpath.cpp:65
 msgid "Repeated"
-msgstr "Паўтораная"
+msgstr "Паўтараць"
 
 #: ../src/live_effects/lpe-patternalongpath.cpp:66
 msgid "Repeated, stretched"
-msgstr "Паўтораная, расьцягнутая"
+msgstr "Паўтараць, расцягнутая"
 
 #: ../src/live_effects/lpe-patternalongpath.cpp:73
 msgid "Pattern source:"
@@ -18665,7 +18752,7 @@ msgstr ""
 
 #: ../src/live_effects/lpe-patternalongpath.cpp:73
 msgid "Path to put along the skeleton path"
-msgstr "Шлях, які будзе разьмешчаны ўздоўж шкілетнага"
+msgstr "Контур, які будзе размешчаны ўздоўж каркаснага контуру"
 
 #: ../src/live_effects/lpe-patternalongpath.cpp:75
 msgid "Width of the pattern"
@@ -18677,7 +18764,7 @@ msgstr ""
 
 #: ../src/live_effects/lpe-patternalongpath.cpp:76
 msgid "How many pattern copies to place along the skeleton path"
-msgstr "Колькі ўзорных копій разьмясьціць уздоўж шкілетнага шляха"
+msgstr "Колькі копій узору размясціць уздоўж каркаснага контуру"
 
 #: ../src/live_effects/lpe-patternalongpath.cpp:78
 msgid "Wid_th in units of length"
@@ -20235,7 +20322,7 @@ msgstr ""
 #: ../src/live_effects/lpe-transform_2pts.cpp:41
 #: ../share/ui/extension-pdfinput.glade:257
 msgid "Stretch"
-msgstr ""
+msgstr "Расцягнуць"
 
 #: ../src/live_effects/lpe-transform_2pts.cpp:41
 msgid "Stretch the result"
@@ -20815,7 +20902,7 @@ msgstr "<b>Ламаная</b>"
 
 #: ../src/object/sp-rect.cpp:246 ../src/ui/dialog/object-attributes.cpp:457
 msgid "Rectangle"
-msgstr "Прастакутнік"
+msgstr "Прамавугольнік"
 
 #: ../src/object/sp-spiral.cpp:208
 msgid "Spiral"
@@ -21106,27 +21193,27 @@ msgstr "%s не зьяўляецца дапушчальным каталёґам
 #: ../src/preferences.cpp:151
 #, c-format
 msgid "Failed to create the preferences file %s."
-msgstr "Не ўдалося стварыць файл настаўленьняў %s."
+msgstr "Не ўдалося стварыць файл параметраў %s."
 
 #: ../src/preferences.cpp:187
 #, c-format
 msgid "The preferences file %s is not a regular file."
-msgstr "Файл настаўленьняў %s не зьяўляецца звычайным файлам."
+msgstr "Файл параметраў %s не з'яўляецца звычайным файлам."
 
 #: ../src/preferences.cpp:197
 #, c-format
 msgid "The preferences file %s could not be read."
-msgstr "Файл настаўленьня %s ня можа быць прачытаны."
+msgstr "Не ўдалося прачытаць файл параметраў %s."
 
 #: ../src/preferences.cpp:208
 #, c-format
 msgid "The preferences file %s is not a valid XML document."
-msgstr "Файл настаўленьняў %s не зьяўляецца дапушчальным дакумэнтам XML."
+msgstr "Файл параметраў %s не з'яўляецца сапраўдным дакументам XML."
 
 #: ../src/preferences.cpp:217
 #, c-format
 msgid "The file %s is not a valid Inkscape preferences file."
-msgstr "Файл %s не зьяўляецца дапушчальным файлам настаўленьняў Inkscape."
+msgstr "Файл %s не з'яўляецца сапраўдным файлам параметраў Inkscape."
 
 #: ../src/preferences.cpp:276
 msgid "Preferences file was backed up to"
@@ -21555,7 +21642,7 @@ msgstr "Вылучэньне ня мае ўжытага эфэкту шляха.
 
 #: ../src/selection-chemistry.cpp:2690 ../src/ui/dialog/clonetiler.cpp:2081
 msgid "Select an <b>object</b> to clone."
-msgstr "Выберы <b>абʼект</b> кланаваньня."
+msgstr "Выберыце <b>аб'ект</b> кланіравання."
 
 #: ../src/selection-chemistry.cpp:2726
 msgctxt "Action"
@@ -21928,8 +22015,8 @@ msgid ""
 "You cannot put text on a rectangle in this version. Convert rectangle to "
 "path first."
 msgstr ""
-"У гэтай вэрсіі немагчыма накласьці тэкст на прастакутнік. Перарабі "
-"прастакутнік у шлях."
+"Вы не можаце размясціць тэкст на прамавугольніку ў гэтай версіі. "
+"Пераўтварыце спачатку прамавугольнік у контур."
 
 #: ../src/text-chemistry.cpp:101
 msgid ""
@@ -22006,7 +22093,7 @@ msgstr "Вылучэньне <b>ня мае ўкладзенага тэксту<
 
 #: ../src/text-editing.cpp:43
 msgid "You cannot edit <b>cloned character data</b>."
-msgstr "Немагчыма правіць <b>кланаваныя знакавыя даньні</b>."
+msgstr "Немагчыма рэдагаваць <b>кланіраваныя даныя сімвалаў</b>."
 
 #: ../src/trace/trace.cpp:93
 msgid "Select only one <b>image</b> to trace"
@@ -22516,7 +22603,7 @@ msgstr "_Зрух"
 #: ../src/ui/dialog/clonetiler.cpp:186
 #, no-c-format
 msgid "<b>Shift X:</b>"
-msgstr "<b>Зрух па X:</b>"
+msgstr "<b>Зрух па восі X:</b>"
 
 #: ../src/ui/dialog/clonetiler.cpp:195
 #, no-c-format
@@ -22537,7 +22624,7 @@ msgstr "Адвольна зрушыць па гарызанталі на гэт�
 #: ../src/ui/dialog/clonetiler.cpp:219
 #, no-c-format
 msgid "<b>Shift Y:</b>"
-msgstr "<b>Зрух па Y:</b>"
+msgstr "<b>Зрух па восі Y:</b>"
 
 #: ../src/ui/dialog/clonetiler.cpp:228
 #, no-c-format
@@ -22834,15 +22921,15 @@ msgstr "<b>С:</b>"
 
 #: ../src/ui/dialog/clonetiler.cpp:756
 msgid "Change the color lightness by this percentage for each row"
-msgstr "У кожным радку зьмяніць сьветласьць колеру на гэты адсотак"
+msgstr "Змяніць асветленасць колеру для кожнага радка на гэтыя працэнты"
 
 #: ../src/ui/dialog/clonetiler.cpp:762
 msgid "Change the color lightness by this percentage for each column"
-msgstr "У кожным слупку зьмяніць сьветласьць колеру на гэты адсотак"
+msgstr "Змяніць асветленасць колеру для кожнага слупка на гэтыя працэнты"
 
 #: ../src/ui/dialog/clonetiler.cpp:768
 msgid "Randomize the color lightness by this percentage"
-msgstr "Адвольна зьмяніць сьветласьць колеру на гэты адсотак"
+msgstr "Выпадкова змяніць асветленасць колеру на гэтыя працэнты"
 
 #: ../src/ui/dialog/clonetiler.cpp:783
 msgid "Alternate the sign of color changes for each row"
@@ -22923,11 +23010,11 @@ msgstr "Узяць насычанасьць колеру"
 #: ../src/ui/dialog/clonetiler.cpp:878
 msgctxt "Clonetiler color lightness"
 msgid "L"
-msgstr ""
+msgstr "Ас"
 
 #: ../src/ui/dialog/clonetiler.cpp:879
 msgid "Pick the lightness of the color"
-msgstr "Узяць яркасьць колеру"
+msgstr "Узяць асветленасць колеру"
 
 #: ../src/ui/dialog/clonetiler.cpp:888
 msgid "2. Tweak the picked value:"
@@ -23004,11 +23091,11 @@ msgstr "Колькі слупкоў у мазаіцы"
 
 #: ../src/ui/dialog/clonetiler.cpp:1056
 msgid "Width of the rectangle to be filled"
-msgstr "Шырыня прастакутніка, які трэба запоўніць"
+msgstr "Шырыня прамавугольніка для запаўнення"
 
 #: ../src/ui/dialog/clonetiler.cpp:1080
 msgid "Height of the rectangle to be filled"
-msgstr "Вышыня прастакутніка, які трэба запоўніць"
+msgstr "Вышыня прамавугольніка для запаўнення"
 
 #: ../src/ui/dialog/clonetiler.cpp:1095
 msgid "Rows, columns: "
@@ -23055,7 +23142,7 @@ msgstr "Стварыць мазаіку з клонаў вылучэньня"
 #. evenly.
 #: ../src/ui/dialog/clonetiler.cpp:1172
 msgid " _Unclump "
-msgstr "_Разьляпіць"
+msgstr " _Раздзяліць "
 
 #: ../src/ui/dialog/clonetiler.cpp:1173
 msgid "Spread out clones to reduce clumping; can be applied repeatedly"
@@ -23122,8 +23209,8 @@ msgid ""
 "If you want to clone several objects, <b>group</b> them and <b>clone the "
 "group</b>."
 msgstr ""
-"Калі жадаеш скланаваць некалькі абʼектаў, <b>зґрупуй</b> іх і <b>склануй "
-"ґрупу</b>."
+"Калі вы хочаце кланіраваць некалькі аб'ектаў, то іх неабходна "
+"<b>згрупаваць</b>, а потым <b>кланіраваць групу</b>."
 
 #: ../src/ui/dialog/clonetiler.cpp:2095
 msgid "<small>Creating tiled clones...</small>"
@@ -23273,9 +23360,8 @@ msgid "_Export"
 msgstr "_Экспартаваць"
 
 #: ../src/ui/dialog/dialog-data.cpp:36
-#, fuzzy
 msgid "_Extension Gallery"
-msgstr "Адкрыць галерэю пашырэнняў"
+msgstr "_Галерэя фільтраў"
 
 #: ../src/ui/dialog/dialog-data.cpp:37
 msgid "_Fill and Stroke"
@@ -24173,12 +24259,11 @@ msgstr ""
 
 #: ../src/ui/dialog/extensions-gallery.cpp:252
 msgid "All Effects"
-msgstr ""
+msgstr "Усе эфекты"
 
 #: ../src/ui/dialog/extensions-gallery.cpp:252
-#, fuzzy
 msgid "All Filters"
-msgstr "Усе файлы"
+msgstr "Усе фільтры"
 
 #: ../src/ui/dialog/extensions-gallery.cpp:280
 #, fuzzy
@@ -24188,7 +24273,7 @@ msgstr "_Ужыць"
 
 #: ../src/ui/dialog/extensions-gallery.cpp:284
 msgid "Select extension to run:"
-msgstr ""
+msgstr "Выбраць пашырэнне для запуску:"
 
 #: ../src/ui/dialog/extensions-gallery.cpp:285
 msgid "Select filter to apply:"
@@ -24196,12 +24281,11 @@ msgstr "Выбраць фільтр для ўжывання:"
 
 #: ../src/ui/dialog/extensions-gallery.cpp:309
 msgid "Toggle list of effect categories"
-msgstr ""
+msgstr "Пераключыць спіс катэгорый эфектаў"
 
 #: ../src/ui/dialog/extensions-gallery.cpp:310
-#, fuzzy
 msgid "Toggle list of filter categories"
-msgstr "Вышыня вобласьці фільтра эфэктаў"
+msgstr "Пераключыць спіс катэгорый фільтраў"
 
 #: ../src/ui/dialog/extensions-gallery.cpp:459
 #, fuzzy
@@ -24858,7 +24942,7 @@ msgstr "Гэтая сталая ўплывае на мадэль асьветл�
 #: ../share/ui/page-properties.glade:253 ../share/ui/toolbar-pencil.ui:420
 #: ../share/ui/toolbar-spray.ui:320
 msgid "Scale:"
-msgstr "Зьмена памеру:"
+msgstr "Маштаб:"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:3047
 msgid "This defines the intensity of the displacement effect."
@@ -25094,7 +25178,7 @@ msgstr "Усе тыпы"
 
 #: ../src/ui/dialog/find.cpp:88
 msgid "Rectangles"
-msgstr "Прастакутнікі"
+msgstr "Прамавугольнікі"
 
 #: ../src/ui/dialog/find.cpp:89
 msgid "Ellipses"
@@ -25212,7 +25296,7 @@ msgstr ""
 
 #: ../src/ui/dialog/find.cpp:198
 msgid "Search rectangles"
-msgstr "Пошук прастакутнікаў"
+msgstr "Пошук прамавугольнікаў"
 
 #: ../src/ui/dialog/find.cpp:201
 msgid "Search ellipses, arcs, circles"
@@ -27590,7 +27674,7 @@ msgstr ""
 #: ../share/ui/dialog-text-edit.glade:233 ../share/ui/dialog-trace.glade:1290
 #: ../share/ui/toolbar-spray.ui:449
 msgid "Apply"
-msgstr ""
+msgstr "Ужыць"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1700
 msgid "Apply font size changes to the UI"
@@ -28590,7 +28674,7 @@ msgstr "Абсалючная колерамэтрычная"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2390
 msgid "Display adjustment"
-msgstr "Настаўленьні манітору"
+msgstr "Рэгуліроўка паказу"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2398
 #, c-format
@@ -28900,7 +28984,7 @@ msgstr "Зьмяняць таўшчыню контуру"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2569
 msgid "Scale rounded corners in rectangles"
-msgstr "Зьмяняць радыюс скругленых кутоў прастакутнікаў"
+msgstr "Маштабаваць закругленыя вуглы ў прамавугольніках"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2570
 msgid "Transform gradients"
@@ -28926,7 +29010,8 @@ msgstr "Зьмяняць таўшчыню контуру прапарцыйна 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2579
 #: ../share/ui/toolbar-select.ui:488
 msgid "When scaling rectangles, scale the radii of rounded corners"
-msgstr "Пры зьмяненьні памеру прастакутнікаў зьмяняць радыюс скругленых кутоў"
+msgstr ""
+"Пры маштабаванні прамавугольнікаў, маштабаваць радыусы закругленых вуглоў"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2581
 #: ../share/ui/toolbar-select.ui:502
@@ -29530,7 +29615,7 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2827
 msgid "Clipboard"
-msgstr ""
+msgstr "Буфер абмену"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2830
 msgid "Document cleanup"
@@ -29861,7 +29946,7 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3007
 msgid "Logging"
-msgstr ""
+msgstr "Журналяванне"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3007
 msgid "Log certain events to the console"
@@ -29951,12 +30036,12 @@ msgstr ""
 #: ../src/ui/dialog/inkscape-preferences.cpp:3027
 #: ../src/ui/dialog/print.cpp:90
 msgid "Rendering"
-msgstr "Стварэньне"
+msgstr "Адмалёўка"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3033
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:1384
 msgid "Edit"
-msgstr ""
+msgstr "Рэдагаваць"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3034
 msgid "Automatically reload images"
@@ -29970,17 +30055,17 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3038
 msgid "_Bitmap editor:"
-msgstr ""
+msgstr "_Рэдактар растравых відарысаў:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3040
 msgid "_SVG editor:"
-msgstr ""
+msgstr "Р_эдактар SVG:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3042
 #: ../share/ui/dialog-document-resources.glade:181
 #: ../share/ui/dialog-export.glade:606 ../share/ui/dialog-export.glade:954
 msgid "Export"
-msgstr "Экспартаваць"
+msgstr "Экспарт"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3044
 msgid "Default export _resolution:"
@@ -29990,7 +30075,7 @@ msgstr ""
 #: ../src/ui/dialog/inkscape-preferences.cpp:3048
 #: ../src/ui/dialog/inkscape-preferences.cpp:3092
 msgid "dpi"
-msgstr "п/ц"
+msgstr "dpi"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3045
 msgid "Default image resolution (in dots per inch) in the Export dialog"
@@ -30113,7 +30198,7 @@ msgstr "Апісаньне"
 #: ../src/ui/dialog/inkscape-preferences.cpp:3191
 #: ../share/ui/marker-popup.glade:385
 msgid "ID"
-msgstr "ВЫЗНАЧНІК"
+msgstr "Ідэнтыфікатар"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3174
 msgid "Shortcuts"
@@ -30121,11 +30206,11 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3184
 msgid "Search:"
-msgstr ""
+msgstr "Пошук:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3195
 msgid "Modifier"
-msgstr ""
+msgstr "Мадыфікатар"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3196
 msgid "All keys specified must be held down to activate this functionality."
@@ -30237,7 +30322,7 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3712
 msgid "System info"
-msgstr "Зьвесткі пра сыстэму"
+msgstr "Інфармацыя аб сістэме"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3716
 msgid "Reset Preferences"
@@ -30269,7 +30354,7 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3728
 msgid "User extensions:"
-msgstr ""
+msgstr "Пашырэнні карыстальніка:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3729
 msgid "Location of the user’s extensions"
@@ -30389,11 +30474,11 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3793
 msgid "Inkscape extensions:"
-msgstr ""
+msgstr "Пашырэнні Inkscape:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3793
 msgid "Location of the Inkscape extensions"
-msgstr ""
+msgstr "Месцазнаходжанне пашырэнняў Inkscape"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3804
 msgid "System data:"
@@ -30471,7 +30556,7 @@ msgstr "_Перайменаваць"
 
 #: ../src/ui/dialog/layer-properties.cpp:256
 msgid "Above current"
-msgstr "Па-над бягучым"
+msgstr "Над бягучым"
 
 #: ../src/ui/dialog/layer-properties.cpp:257
 msgid "As sublayer of current"
@@ -31248,6 +31333,7 @@ msgstr ""
 msgid ""
 "Display units per <italic>em</italic> (nominally width of 'M' character)"
 msgstr ""
+"Паказваць адзінкі ў <italic>em</italic> (намінальная шырыня сімвалу 'М')"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:848
 msgid "Ascender:"
@@ -31810,7 +31896,7 @@ msgstr "Кінуць колер"
 
 #: ../src/ui/drag-and-drop.cpp:283
 msgid "Could not parse SVG data"
-msgstr "Немагчыма прааналізаваць даньні SVG"
+msgstr "Не ўдалося прааналізаваць даныя SVG"
 
 #: ../src/ui/drag-and-drop.cpp:321
 msgid "Drop SVG"
@@ -32134,8 +32220,8 @@ msgid ""
 "Adjust the <b>width and height</b> of the rectangle; with <b>Ctrl</b> to "
 "lock ratio or stretch in one dimension only"
 msgstr ""
-"Папраў <b>вышыню й шырыню</b> прастакутніка; з <b>Ctrl</b> замкнуць стасунак"
-" бакоў ці выцягваць адзін вымер"
+"Рэгуляваць <b>вышыню і шырыню</b> прамавугольніка; з <b>Ctrl</b> блакіраваць"
+" суадносіны або расцягнутасць толькі ў адным вымярэнні"
 
 #: ../src/ui/shape-editor-knotholders.cpp:592
 msgid "Drag to move the rectangle"
@@ -33151,7 +33237,7 @@ msgstr "Форма новых шляхоў, створаных гэтым інс
 
 #: ../src/ui/toolbar/rect-toolbar.cpp:174
 msgid "Change rectangle"
-msgstr "Зьмяніць прастакутнік"
+msgstr "Змяніць прамавугольнік"
 
 #: ../src/ui/toolbar/select-toolbar.cpp:311
 msgid "Transform by toolbar"
@@ -33171,16 +33257,16 @@ msgid ""
 "Now <b>rounded rectangle corners</b> are <b>scaled</b> when rectangles are "
 "scaled."
 msgstr ""
-"Цяпер <b>радыюс закругленых кутоў прастакутнікаў</b> <b>мяняецца</b> пры "
-"зьмяненьні памераў прастакутнікаў."
+"Цяпер <b>закругленыя вуглы прамавугольнікаў</b> <b>маштабуюцца</b> пры "
+"змяненні маштабу прамавугольнікаў."
 
 #: ../src/ui/toolbar/select-toolbar.cpp:459
 msgid ""
 "Now <b>rounded rectangle corners</b> are <b>not scaled</b> when rectangles "
 "are scaled."
 msgstr ""
-"Цяпер <b>радыюс закругленых кутоў прастакутнікаў</b> застаецца "
-"<b>нязьменным</b> пры зьмяненьні памераў прастакутнікаў."
+"Цяпер <b>закругленыя вуглы прамавугольнікаў</b> <b>не маштабуюцца</b> пры "
+"змяненні маштабу прамавугольнікаў."
 
 #: ../src/ui/toolbar/select-toolbar.cpp:468
 msgid ""
@@ -33363,7 +33449,7 @@ msgstr "Адкрыць параметры інструмента"
 
 #: ../src/ui/toolbar/toolbars.cpp:77
 msgid "Style of new rectangles"
-msgstr "Стыль новых прастакутнікаў"
+msgstr "Стыль новых прамавугольнікаў"
 
 #: ../src/ui/toolbar/toolbars.cpp:78
 msgid "Style of new ellipses"
@@ -33436,6 +33522,8 @@ msgid ""
 "<b>Ellipse</b>: %s &#215; %s (constrained to golden ratio 1.618 : 1); with "
 "<b>Shift</b> to draw around the starting point"
 msgstr ""
+"<b>Эліпс</b>: %s &#215; %s (абмежаваны залатым сячэннем 1.618 : 1); з "
+"<b>Shift</b> маляваць вакол пачатковага пункту"
 
 #: ../src/ui/tools/arc-tool.cpp:381
 #, c-format
@@ -33443,6 +33531,8 @@ msgid ""
 "<b>Ellipse</b>: %s &#215; %s (constrained to golden ratio 1 : 1.618); with "
 "<b>Shift</b> to draw around the starting point"
 msgstr ""
+"<b>Эліпс</b>: %s &#215; %s (абмежаваны залатым сячэннем 1 : 1.618); з "
+"<b>Shift</b> маляваць вакол пачатковага пункта"
 
 #: ../src/ui/tools/arc-tool.cpp:386
 #, c-format
@@ -33451,6 +33541,9 @@ msgid ""
 "ratio, or golden-ratio ellipse; with <b>Shift</b> to draw around the "
 "starting point"
 msgstr ""
+"<b>Эліпс</b>: %s &#215; %s; з <b>Ctrl</b> стварыць акружнасць, эліпс з "
+"цэлымі суадносінамі старон або залатога сячэння; з <b>Shift</b> маляваць "
+"вакол пачатковага пункту"
 
 #: ../src/ui/tools/arc-tool.cpp:406
 msgid "Create ellipse"
@@ -33572,7 +33665,7 @@ msgstr "<b>Адпусьці кнопку</b>, каб задаць колер."
 
 #: ../src/ui/tools/eraser-tool.cpp:388
 msgid "<b>Drawing</b> an eraser stroke"
-msgstr "<b>Рысаваньне</b> сьціраючых штрыхоў"
+msgstr "<b>Маляванне</b> сціраючых штрыхоў"
 
 #: ../src/ui/tools/eraser-tool.cpp:434
 msgid "Draw eraser stroke"
@@ -34117,8 +34210,8 @@ msgid ""
 "<b>Ctrl</b>: make square or integer-ratio rect, lock a rounded corner "
 "circular"
 msgstr ""
-"<b>Ctrl</b>: зрабіць квадрат ці цэластасункавы прастакутнік, трымаць "
-"закругленыя куты круглымі"
+"<b>Ctrl</b>: зрабіць квадрат або прамавугольнік з цэлымі суадносінамі "
+"старон, блакіраваць закругленыя вуглы круглымі"
 
 #: ../src/ui/tools/rect-tool.cpp:226
 msgid "<b>Alt</b>: use with Ctrl to make square"
@@ -34130,8 +34223,8 @@ msgid ""
 "<b>Rectangle</b>: %s &#215; %s (constrained to ratio %d:%d); with "
 "<b>Shift</b> to draw around the starting point"
 msgstr ""
-"<b>Прастакутнік</b>: %s &#215; %s (абмежаваны стасункам %d:%d); з "
-"<b>Shift</b> рысаваць вакол пачатковага пункту"
+"<b>Прамавугольнік</b>: %s &#215; %s (абмежаваны суадносінамі %d:%d); з "
+"<b>Shift</b> маляваць вакол пачатковага пункту"
 
 #: ../src/ui/tools/rect-tool.cpp:373
 #, c-format
@@ -34139,8 +34232,8 @@ msgid ""
 "<b>Rectangle</b>: %s &#215; %s (constrained to golden ratio 1.618 : 1); with"
 " <b>Shift</b> to draw around the starting point"
 msgstr ""
-"<b>Прастакутнік</b>: %s &#215; %s (замацаванае залатое сечыва 1.618 : 1); з "
-"<b>Shift</b> — рысаваць вакол пачатковага пункта"
+"<b>Прамавугольнік</b>: %s &#215; %s (абмежаваны залатым сячэннем 1.618 : 1);"
+" з <b>Shift</b> маляваць вакол пачатковага пункту"
 
 #: ../src/ui/tools/rect-tool.cpp:377
 #, c-format
@@ -34148,8 +34241,8 @@ msgid ""
 "<b>Rectangle</b>: %s &#215; %s (constrained to golden ratio 1 : 1.618); with"
 " <b>Shift</b> to draw around the starting point"
 msgstr ""
-"<b>Прастакутнік</b>: %s &#215; %s (замацаванае залатое сечыва 1 : 1.618); з "
-"<b>Shift</b> — рысаваць вакол пачатковага пункта"
+"<b>Прамавугольнік</b>: %s &#215; %s (абмежаваны залатым сячэннем 1 : 1.618);"
+" з <b>Shift</b> маляваць вакол пачатковага пункта"
 
 #: ../src/ui/tools/rect-tool.cpp:383
 #, c-format
@@ -34158,10 +34251,13 @@ msgid ""
 "ratio, or golden-ratio rectangle; with <b>Shift</b> to draw around the "
 "starting point"
 msgstr ""
+"<b>Прамавугольнік</b>: %s &#215; %s; з <b>Ctrl</b> стварыць квадрат, "
+"прамавугольнік з цэлымі суадносінамі старон або залатога сячэння; з "
+"<b>Shift</b> маляваць вакол пачатковага пункту"
 
 #: ../src/ui/tools/rect-tool.cpp:403
 msgid "Create rectangle"
-msgstr "Стварыць прастакутнік"
+msgstr "Стварыць прамавугольнік"
 
 #: ../src/ui/tools/select-tool.cpp:74
 #, c-format
@@ -34169,6 +34265,8 @@ msgid ""
 "No objects selected. Click, %s+click, %s+scroll mouse on top of objects, or "
 "drag around objects to select."
 msgstr ""
+"Няма выбраных аб'ектаў. Націснуць, %s+націск, %s+прагартаць мышшу над "
+"аб'ектамі або перацягнуць вакол аб'ектаў каб выбраць."
 
 #: ../src/ui/tools/select-tool.cpp:80
 msgid "Click selection again to toggle scale/rotation handles"
@@ -36033,7 +36131,7 @@ msgstr "Кругавы ґрадыент"
 
 #: ../src/ui/widget/paint-selector.cpp:170
 msgid "Mesh gradient"
-msgstr ""
+msgstr "Сеткавы градыент"
 
 #: ../src/ui/widget/paint-selector.cpp:172
 #: ../src/ui/widget/selected-style.cpp:77
@@ -36261,11 +36359,11 @@ msgstr ""
 
 #: ../src/ui/widget/selected-style.cpp:85
 msgid "Mesh gradient (fill)"
-msgstr ""
+msgstr "Сеткавы градыент (запаўненне)"
 
 #: ../src/ui/widget/selected-style.cpp:86
 msgid "Mesh gradient (stroke)"
-msgstr ""
+msgstr "Сеткавы градыент (абвядзенне)"
 
 #: ../src/ui/widget/selected-style.cpp:87
 #: ../src/ui/widget/selected-style.cpp:88
@@ -36469,6 +36567,9 @@ msgid ""
 "<b>Ctrl</b> to adjust lightness, with <b>Shift</b> to adjust saturation, "
 "without modifiers to adjust hue"
 msgstr ""
+"Рэгуляваць <b>альфа</b>: было %.3g, зараз <b>%.3g</b> (розніца %.3g); з "
+"<b>Ctrl</b> рэгуляваць асветленасць, з <b>Shift</b> рэгуляваць насычанасць, "
+"без мадыфікатара рэгуляваць адценне"
 
 #: ../src/ui/widget/selected-style.cpp:1186
 msgid "Adjust saturation"
@@ -36481,10 +36582,13 @@ msgid ""
 "<b>Ctrl</b> to adjust lightness, with <b>Alt</b> to adjust alpha, without "
 "modifiers to adjust hue"
 msgstr ""
+"Рэгуляваць <b>насычанасць</b>: было %.3g, зараз <b>%.3g</b> (розніца %.3g); "
+"з <b>Ctrl</b> рэгуляваць асветленасць, з <b>Alt</b> рэгуляваць альфа, без "
+"мадыфікатара рэгуляваць адценне"
 
 #: ../src/ui/widget/selected-style.cpp:1194
 msgid "Adjust lightness"
-msgstr "Рэґуляваць сьветласьць"
+msgstr "Рэгуляваць асветленасць"
 
 #: ../src/ui/widget/selected-style.cpp:1198
 #, c-format
@@ -36493,6 +36597,9 @@ msgid ""
 "<b>Shift</b> to adjust saturation, with <b>Alt</b> to adjust alpha, without "
 "modifiers to adjust hue"
 msgstr ""
+"Рэгуляваць <b>асветленасць</b>: было %.3g, зараз <b>%.3g</b> (розніца %.3g);"
+" з <b>Shift</b> рэгуляваць насычанасць, з <b>Alt</b> рэгуляваць альфа, без "
+"мадыфікатара рэгуляваць адценне"
 
 #: ../src/ui/widget/selected-style.cpp:1202
 msgid "Adjust hue"
@@ -36505,6 +36612,9 @@ msgid ""
 "<b>Shift</b> to adjust saturation, with <b>Alt</b> to adjust alpha, with "
 "<b>Ctrl</b> to adjust lightness"
 msgstr ""
+"Рэгуляваць <b>адценне</b>: было %.3g, зараз <b>%.3g</b> (розніца %.3g); з "
+"<b>Shift</b> рэгуляваць насычанасць, з <b>Alt</b> рэгуляваць альфа, з "
+"<b>Ctrl</b> рэгуляваць асветленасць"
 
 #: ../src/ui/widget/selected-style.cpp:1307
 #: ../src/ui/widget/selected-style.cpp:1321
@@ -37785,11 +37895,11 @@ msgstr "Стыль"
 
 #: ../share/ui/extension-pdfinput.glade:245
 msgid "Weight"
-msgstr ""
+msgstr "Вага"
 
 #: ../share/ui/extension-pdfinput.glade:269
 msgid "Strategy"
-msgstr ""
+msgstr "Стратэгія"
 
 #: ../share/ui/extension-pdfinput.glade:291
 msgid "List of all PDF Fonts"
@@ -37809,11 +37919,11 @@ msgstr "грубая"
 
 #: ../share/ui/extension-pdfinput.glade:400
 msgid "Fonts:"
-msgstr ""
+msgstr "Шрыфты:"
 
 #: ../share/ui/extension-pdfinput.glade:414
 msgid "Pages:"
-msgstr ""
+msgstr "Старонкі:"
 
 #: ../share/ui/extension-pdfinput.glade:427
 msgid ""
@@ -37827,7 +37937,7 @@ msgstr "Абрэзаць да:"
 
 #: ../share/ui/extension-pdfinput.glade:475
 msgid "<b>Internal import</b>"
-msgstr ""
+msgstr "<b>Унутраны імпарт</b>"
 
 #: ../share/ui/extension-pdfinput.glade:492
 msgid ""
@@ -37838,7 +37948,7 @@ msgstr ""
 
 #: ../share/ui/extension-pdfinput.glade:505
 msgid "<b>Cairo import</b>"
-msgstr ""
+msgstr "<b>Імпарт Cairo</b>"
 
 #: ../share/ui/font-list.glade:59
 #, fuzzy
@@ -38512,15 +38622,15 @@ msgstr ""
 
 #: ../share/ui/page-properties.glade:68
 msgid "Front page"
-msgstr ""
+msgstr "Першая старонка"
 
 #: ../share/ui/page-properties.glade:108
 msgid "Width of front page"
-msgstr ""
+msgstr "Шырыня першай старонкі"
 
 #: ../share/ui/page-properties.glade:123
 msgid "Height of front page"
-msgstr ""
+msgstr "Вышыня першай старонкі"
 
 #: ../share/ui/page-properties.glade:139
 msgid "Resize to content:"
@@ -38573,7 +38683,7 @@ msgstr ""
 
 #: ../share/ui/page-properties.glade:660
 msgid "Display units:"
-msgstr ""
+msgstr "Адзінкі вымярэння:"
 
 #: ../share/ui/page-properties.glade:671
 msgid "Units used throughout the user interface"
@@ -39447,7 +39557,7 @@ msgstr "_Фільтры"
 
 #: ../share/ui/menus.ui:1177
 msgid "Filter _Gallery..."
-msgstr ""
+msgstr "_Галерэя фільтраў..."
 
 #: ../share/ui/menus.ui:1183
 msgid "Filter _Editor..."
@@ -39467,16 +39577,15 @@ msgstr ""
 
 #: ../share/ui/menus.ui:1205
 msgid "_Previous Extension Settings..."
-msgstr ""
+msgstr "_Папярэднія параметры пашырэння..."
 
 #: ../share/ui/menus.ui:1209
-#, fuzzy
 msgid "_Extension Gallery..."
-msgstr "Адкрыць галерэю пашырэнняў"
+msgstr "_Галерэя фільтраў..."
 
 #: ../share/ui/menus.ui:1218
 msgid "Manage Extensions..."
-msgstr ""
+msgstr "Кіраваць пашырэннямі..."
 
 #: ../share/ui/menus.ui:1224
 msgid "_Help"
@@ -39640,17 +39749,16 @@ msgid ""
 "Trace the lightness of the background by the width of the pen (white - "
 "minimum width, black - maximum width)"
 msgstr ""
-"Вызначаць сьветласьць асноведзі шырынёй пяра (белая — найменшая шырыня, "
-"чорная — найбольшая)"
+"Вызначаць шырыню пяра праз асветленасць фону (белы — мінімальная шырыня, "
+"чорны — максімальная шырыня)"
 
 #: ../share/ui/toolbar-calligraphy.ui:183
 #: ../share/ui/toolbar-calligraphy.ui:265
 #: ../share/ui/toolbar-calligraphy.ui:370 ../share/ui/toolbar-eraser.ui:223
 #: ../share/ui/toolbar-paintbucket.ui:58 ../share/ui/toolbar-spray.ui:368
 #: ../share/ui/toolbar-star.ui:184
-#, fuzzy
 msgid "Parameters"
-msgstr "Парамэтры эфэкта"
+msgstr "Параметры"
 
 #: ../share/ui/toolbar-calligraphy.ui:199 ../share/ui/toolbar-eraser.ui:185
 msgid ""
@@ -39884,11 +39992,11 @@ msgstr "Стварыць радыяльны (эліптычны ці кругл�
 
 #: ../share/ui/toolbar-gradient.ui:103 ../share/ui/toolbar-mesh.ui:110
 msgid "Create gradient in the fill"
-msgstr "Стварыць ґрадыент запаўненьня"
+msgstr "Стварыць градыент у запаўненні"
 
 #: ../share/ui/toolbar-gradient.ui:122 ../share/ui/toolbar-mesh.ui:129
 msgid "Create gradient in the stroke"
-msgstr "Стварыць ґрадыент контуру"
+msgstr "Стварыць градыент у абвядзенні"
 
 #: ../share/ui/toolbar-gradient.ui:195
 msgid "Link gradients to change all related gradients"
@@ -40021,11 +40129,11 @@ msgstr ""
 
 #: ../share/ui/toolbar-mesh.ui:63
 msgid "Create mesh gradient"
-msgstr ""
+msgstr "Стварыць сеткавы градыент"
 
 #: ../share/ui/toolbar-mesh.ui:82
 msgid "Create conical gradient"
-msgstr ""
+msgstr "Стварыць канічны градыент"
 
 #: ../share/ui/toolbar-mesh.ui:152
 msgid "Number of rows in new mesh"
@@ -40290,7 +40398,7 @@ msgstr ""
 
 #: ../share/ui/toolbar-rect.ui:52
 msgid "Width of rectangle"
-msgstr "Шырыня прастакутніка"
+msgstr "Шырыня прамавугольніка"
 
 #: ../share/ui/toolbar-rect.ui:81
 msgid "Height of rectangle"
@@ -40858,7 +40966,7 @@ msgstr ""
 
 #: ../share/ui/toolbar-tweak.ui:545
 msgid "In color mode, act on object's lightness"
-msgstr ""
+msgstr "У колеравым рэжыме ўплывае на асветленасць аб'ектаў"
 
 #: ../share/ui/toolbar-tweak.ui:554
 msgctxt "Opacity"
@@ -40968,11 +41076,11 @@ msgstr ""
 
 #: ../share/extensions/docinfo.py:42
 msgid "New Document (unsaved)"
-msgstr ""
+msgstr "Новы дакумент (незахаваны)"
 
 #: ../share/extensions/docinfo.py:81
 msgid "This is a single page document."
-msgstr ""
+msgstr "Гэта аднастаронкавы дакумент."
 
 #: ../share/extensions/dxf_input.py:1367
 #, python-brace-format
@@ -41207,7 +41315,7 @@ msgstr ""
 # File: ../share/extensions/inkex/deprecated.py, line: 148
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:154
 msgid "{} has been removed"
-msgstr ""
+msgstr "{} быў выдалены"
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:160
 msgid ""
@@ -41657,7 +41765,7 @@ msgstr ""
 
 #: ../share/extensions/printing_marks.py:627
 msgid "Selection is empty"
-msgstr ""
+msgstr "Нічога не вылучана"
 
 #: ../share/extensions/ps_input.py:74
 msgid "No GhostScript executable was found"
