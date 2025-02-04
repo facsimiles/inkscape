@@ -8,16 +8,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
-"POT-Creation-Date: 2025-03-14 13:32+0800\n"
-"PO-Revision-Date: 2023-10-30 13:36+0800\n"
-"Last-Translator: ltlnx <ltlnx@disroot.org>\n"
-"Language-Team: L10N_tw <zh-l10n@lists.slat.org>\n"
+"POT-Creation-Date: 2024-09-10 01:35+0800\n"
+"PO-Revision-Date: 2025-02-04 13:51+0000\n"
+"Last-Translator: Wen-Wei Kao <ltlnx@disroot.org>\n"
+"Language-Team: Chinese (Traditional Han script) <http://5.102.147.179/"
+"projects/inkscape/inkscape-master/zh_Hant/>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 2.4.2\n"
+"X-Generator: Weblate 5.9.2\n"
 
 #: ../build/share/filters/filters.svg.h:2
 msgid "Fast Crop"
@@ -3260,7 +3261,7 @@ msgstr "中空圓形"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Pills vertical"
-msgstr "垂直膠囊"
+msgstr "垂直膠囊狀"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Tiles 1"
@@ -3280,7 +3281,7 @@ msgstr "三角形 2"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Circle horizontal fill 1"
-msgstr "圓形填滿 1"
+msgstr "水平圓形填滿 1"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Snake 2"
@@ -3296,7 +3297,7 @@ msgstr "三角形 5"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Semicircles horizontal"
-msgstr "水平半圓"
+msgstr "水平半圓形"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Triangles 4"
