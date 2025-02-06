@@ -210,12 +210,14 @@ void DialogBase::setDesktop(SPDesktop *new_desktop)
 
         _doc_replaced = desktop->connectDocumentReplaced(sigc::hide<0>(sigc::mem_fun(*this, &DialogBase::setDocument)));
         _desktop_destroyed = desktop->connectDestroy(sigc::mem_fun(*this, &DialogBase::desktopDestroyed));
-        this->setDocument(desktop->getDocument());
+        setDocument(desktop->getDocument());
 
         if (desktop->getSelection()) {
             selectionChanged(selection);
         }
         set_sensitive(true);
+    } else {
+        documentReplaced();
     }
 
     desktopReplaced();
@@ -287,6 +289,7 @@ void DialogBase::desktopDestroyed(SPDesktop* old_desktop)
 {
     if (old_desktop == desktop && desktop) {
         unsetDesktop();
+        documentReplaced();
         desktopReplaced();
         set_sensitive(false);
     }
