@@ -9,16 +9,17 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-02-04 23:42+0100\n"
-"PO-Revision-Date: 2024-08-24 15:53+0300\n"
+"PO-Revision-Date: 2025-02-08 09:06+0000\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
-"Language-Team: צוות התרגום של KDE ישראל\n"
+"Language-Team: Hebrew <https://translate.inkscape.org/projects/inkscape/"
+"inkscape-master/he/>\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Lokalize 24.05.2\n"
+"X-Generator: Weblate 5.9.2\n"
 
 #: ../build/share/filters/filters.svg.h:2
 msgid "Fast Crop"
@@ -973,12 +974,12 @@ msgstr "גבעות הרים בצבעים בולטות מן הערפל"
 
 #: ../build/share/filters/filters.svg.h:342
 msgid "Garden of Delights"
-msgstr "גן של פינוקים"
+msgstr "גן התענוגות"
 
 #: ../build/share/filters/filters.svg.h:344
 msgid ""
 "Phantasmagorical turbulent wisps, like Hieronymus Bosch's Garden of Delights"
-msgstr ""
+msgstr "חזיון תעתועים של חבטות סוערות, כמו „גן התענוגות” של הירונימוס בוש"
 
 #: ../build/share/filters/filters.svg.h:346
 msgid "Cutout Glow"
@@ -1293,7 +1294,7 @@ msgstr ""
 
 #: ../build/share/filters/filters.svg.h:454
 msgid "Dots Transparency"
-msgstr ""
+msgstr "שקיפות נקודות"
 
 #: ../build/share/filters/filters.svg.h:456
 msgid "Gives a pointillist HSL sensitive transparency"
@@ -1534,7 +1535,7 @@ msgstr "שיפוע נוצץ עם קצוות מטושטשים"
 
 #: ../build/share/filters/filters.svg.h:570
 msgid "Combined Lighting"
-msgstr ""
+msgstr "תאורה משולבת"
 
 #: ../build/share/filters/filters.svg.h:572
 #: ../src/extension/internal/filter/bevels.h:219
@@ -1624,11 +1625,11 @@ msgstr ""
 #: ../build/share/filters/filters.svg.h:612
 #: ../build/share/filters/filters.svg.h:620
 msgid "Painting canvas emboss effect"
-msgstr ""
+msgstr "אפקט תבליט לוח ציור"
 
 #: ../build/share/filters/filters.svg.h:614
 msgid "Plasticine"
-msgstr ""
+msgstr "פלסטלינה"
 
 #: ../build/share/filters/filters.svg.h:616
 msgid "Matte modeling paste emboss effect"
@@ -6166,16 +6167,12 @@ msgid "End execution in active window"
 msgstr "סיום ההפעלה בחלון הפעיל"
 
 #: ../src/actions/actions-base.cpp:205
-#, fuzzy
-#| msgid "(No preferences)"
 msgid "Save preferences"
-msgstr "(אין העדפות)"
+msgstr "שמירת ההעדפות"
 
 #: ../src/actions/actions-base.cpp:205
-#, fuzzy
-#| msgid "Failed to create the preferences file %s."
 msgid "Make sure the preferences are saved"
-msgstr "כשל ביצירת קובץ ההעדפות %s."
+msgstr "נא לוודא שההעדפות נשמרו"
 
 #: ../src/actions/actions-base.cpp:206
 msgid "Debug Info"
@@ -7165,7 +7162,7 @@ msgstr "נעילת כל הקווים המנחים"
 #: ../src/ui/dialog/document-properties.cpp:204
 #: ../src/ui/widget/canvas-grid.cpp:112
 msgid "Toggle lock of all guides in the document"
-msgstr "נעילה/שחרור כל כל הקווים המנחים במסמך"
+msgstr "נעילה/שחרור כל הקווים המנחים במסמך"
 
 #: ../src/actions/actions-edit-document.cpp:92
 msgid "Show All Guides"
@@ -7521,10 +7518,8 @@ msgid "System error message: %1"
 msgstr "הודעת שגיאת מערכת: %1"
 
 #: ../src/actions/actions-element-image.cpp:116
-#, fuzzy
-#| msgid "System error message: %1"
 msgid "System error message:"
-msgstr "הודעת שגיאת מערכת: %1"
+msgstr "הודעת שגיאת מערכת:"
 
 #: ../src/actions/actions-element-image.cpp:136
 msgid "Nothing selected."
@@ -7586,7 +7581,7 @@ msgstr "חדש"
 
 #: ../src/actions/actions-file-window.cpp:116
 msgid "Create new document from the default template"
-msgstr "יצירת מסמך חדש מתבנית בררת המחדל"
+msgstr "יצירת מסמך חדש מתבנית ברירת המחדל"
 
 #: ../src/actions/actions-file-window.cpp:117
 msgid "New from Template"
@@ -9266,7 +9261,7 @@ msgstr ""
 
 #: ../src/actions/actions-paths.cpp:270
 msgid "Shape Builder: Add"
-msgstr ""
+msgstr "בונה צורות: הוספה"
 
 #: ../src/actions/actions-paths.cpp:270
 msgid "Add shapes by clicking or clicking and dragging"
@@ -9274,7 +9269,7 @@ msgstr ""
 
 #: ../src/actions/actions-paths.cpp:271
 msgid "Shape Builder: Delete"
-msgstr ""
+msgstr "בונה צורות: מחיקה"
 
 #: ../src/actions/actions-paths.cpp:271
 msgid "Remove shapes by clicking or clicking and dragging"
@@ -9822,7 +9817,7 @@ msgstr "עריכת נתיבים לפי מפרקים"
 
 #: ../src/actions/actions-tools.cpp:282
 msgid "Shape Builder Tool"
-msgstr ""
+msgstr "כלי בונה צורות"
 
 #: ../src/actions/actions-tools.cpp:282
 msgid "Build shapes with the Boolean tool"
@@ -10398,10 +10393,8 @@ msgid "Switch to the next document window"
 msgstr "מעבר לחלון המסמך הבא"
 
 #: ../src/actions/actions-view-window.cpp:65
-#, fuzzy
-#| msgid "Next page:"
 msgid "Next Tab"
-msgstr "העמוד הבא:"
+msgstr "הלשונית הבאה"
 
 #: ../src/actions/actions-view-window.cpp:65
 #, fuzzy
@@ -10410,10 +10403,8 @@ msgid "Switch to the next document tab"
 msgstr "מעבר לחלון המסמך הבא"
 
 #: ../src/actions/actions-view-window.cpp:66
-#, fuzzy
-#| msgid "Previous page:"
 msgid "Previous Tab"
-msgstr "העמוד הקודם:"
+msgstr "הלשונית הקודמת"
 
 #: ../src/actions/actions-view-window.cpp:66
 #, fuzzy
@@ -10757,10 +10748,8 @@ msgstr ""
 
 #: ../src/colors/spaces/components.cpp:113
 #: ../src/colors/spaces/components.cpp:129
-#, fuzzy
-#| msgid "Component Transfer"
 msgid "Component A"
-msgstr "העברת רכיב"
+msgstr "רכיב א"
 
 #: ../src/colors/spaces/components.cpp:114
 msgid "_B<sub>ok</sub>"
@@ -10768,10 +10757,8 @@ msgstr ""
 
 #: ../src/colors/spaces/components.cpp:114
 #: ../src/colors/spaces/components.cpp:130
-#, fuzzy
-#| msgid "Component Transfer"
 msgid "Component B"
-msgstr "העברת רכיב"
+msgstr "רכיב ב"
 
 #: ../src/colors/spaces/components.cpp:121
 msgid "_C<sub>ok</sub>"
@@ -11742,7 +11729,7 @@ msgstr "בהירות:"
 #: ../src/extension/internal/bitmap/modulate.cpp:52
 msgid ""
 "Adjust the amount of hue, saturation, and brightness in selected bitmap(s)"
-msgstr "וויסות כמות הגוון, הרוויה והבהירות של מפת/ות הסיביות הנבחרת/ות."
+msgstr "וויסות כמות הגוון, הרוויה והבהירות של מפת/ות הסיביות הנבחרת/ות"
 
 #: ../src/extension/internal/bitmap/negate.cpp:38
 msgid "Negate"
@@ -15255,16 +15242,13 @@ msgid "No unused definitions in &lt;defs&gt;."
 msgstr "אין הגדרות שאינן בשימוש ב־&lt;defs&gt;."
 
 #: ../src/file.cpp:265
-#, fuzzy, c-format
-#| msgid ""
-#| "No Inkscape extension found to save document (%s).  This may have been "
-#| "caused by an unknown filename extension."
+#, c-format
 msgid ""
 "No Inkscape extension found to save document (%s).  This may have been "
 "caused by an unknown or missing filename extension."
 msgstr ""
 "לא נמצאו הרחבות אינסקייפ לשמירת המסמך (%s). יתכן שבעיה זו נגרמה עקב סיומת "
-"קובץ לא ידועה."
+"קובץ לא ידועה או חסרה."
 
 #: ../src/file.cpp:266 ../src/file.cpp:274 ../src/file.cpp:281
 #: ../src/file.cpp:287 ../src/file.cpp:292 ../src/file.cpp:303
@@ -15300,6 +15284,10 @@ msgid ""
 "The following additional information was returned by the output extension:\n"
 "'%s'"
 msgstr ""
+"לא ניתן לשמור את הקובץ %s.\n"
+"\n"
+"הפרטים הנוספים הבאים הוחזרו על ידי הרחבת הפלט:\n"
+"‚%s’"
 
 #: ../src/file.cpp:334 ../src/file.cpp:336
 msgid "Document saved."
@@ -15425,7 +15413,7 @@ msgstr "נהירות לשקיפות"
 #: ../share/extensions/jessyink_transitions.inx:19
 #: ../share/extensions/measure.inx:13 ../share/extensions/nicechart.inx:67
 msgid "Default"
-msgstr "בררת מחדל"
+msgstr "ברירת מחדל"
 
 #: ../src/filter-enums.cpp:74
 msgid "Lighter"
@@ -17011,7 +16999,7 @@ msgstr "לשנות את אחוז המשקל של האפקט"
 
 #: ../src/live_effects/lpe-bspline.cpp:105
 msgid "Default weight"
-msgstr "משקל בררת המחדל"
+msgstr "משקל ברירת המחדל"
 
 #: ../src/live_effects/lpe-bspline.cpp:110
 msgid "Make cusp"
@@ -17019,7 +17007,7 @@ msgstr ""
 
 #: ../src/live_effects/lpe-bspline.cpp:140
 msgid "Change to default weight"
-msgstr "שינוי למשקל בררת המחדל"
+msgstr "שינוי למשקל ברירת המחדל"
 
 #: ../src/live_effects/lpe-bspline.cpp:147
 msgid "Change to 0 weight"
@@ -17789,7 +17777,7 @@ msgstr "מעוגל"
 #: ../src/live_effects/lpe-powerstroke.cpp:149
 #: ../src/live_effects/lpe-taperstroke.cpp:81
 msgid "Miter"
-msgstr ""
+msgstr "תפר"
 
 #: ../src/live_effects/lpe-jointype.cpp:34
 #: ../src/live_effects/lpe-offset.cpp:60
@@ -17857,12 +17845,12 @@ msgstr ""
 #: ../src/live_effects/lpe-offset.cpp:76
 #: ../src/live_effects/lpe-taperstroke.cpp:115
 msgid "Miter limit:"
-msgstr ""
+msgstr "גבול תפר:"
 
 #: ../src/live_effects/lpe-jointype.cpp:60
 #: ../src/live_effects/lpe-offset.cpp:76
 msgid "Maximum length of the miter join (in units of stroke width)"
-msgstr ""
+msgstr "אורך חיבור התפר המרבי (ביחידות של רוחב מתאר)"
 
 #: ../src/live_effects/lpe-jointype.cpp:61
 #: ../src/live_effects/lpe-offset.cpp:77
@@ -17922,7 +17910,7 @@ msgstr "סימני חצייה"
 
 #: ../src/live_effects/lpe-knot.cpp:364
 msgid "Crossing signs"
-msgstr ""
+msgstr "סימני חצייה"
 
 #: ../src/live_effects/lpe-knot.cpp:660
 msgid ""
@@ -19190,7 +19178,7 @@ msgid ""
 "Set smoothness/sharpness of path when reaching a 'bottom' half-turn. "
 "0=sharp, 1=default"
 msgstr ""
-"הגדרת חדות/חלקלקות הנתיב בעת ההגעה לחצי סיבוב 'תחתון'. 0=חד, 1=בררת מחדל"
+"הגדרת חדות/חלקלקות הנתיב בעת ההגעה לחצי סיבוב 'תחתון'. 0=חד, 1=ברירת מחדל"
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:219
 msgid "Smooth: Bottom →"
@@ -19201,7 +19189,7 @@ msgid ""
 "Set smoothness/sharpness of path when leaving a 'bottom' half-turn. 0=sharp, "
 "1=default"
 msgstr ""
-"הגדרת חדות/חלקלקות הנתיב בעת היציאה מחצי סיבוב 'תחתון'. 0=חד, 1=בררת מחדל"
+"הגדרת חדות/חלקלקות הנתיב בעת היציאה מחצי סיבוב ‚תחתון’. 0=חד, 1=ברירת מחדל"
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:220
 msgid "Smooth: Top ←"
@@ -19212,7 +19200,7 @@ msgid ""
 "Set smoothness/sharpness of path when reaching a 'top' half-turn. 0=sharp, "
 "1=default"
 msgstr ""
-"הגדרת חדות/חלקלקות הנתיב בעת ההגעה לחצי סיבוב 'עליון'. 0=חד, 1=בררת מחדל"
+"הגדרת חדות/חלקלקות הנתיב בעת ההגעה לחצי סיבוב ‚עליון’. 0=חד, 1=ברירת מחדל"
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:221
 msgid "Smooth: Top →"
@@ -19223,7 +19211,7 @@ msgid ""
 "Set smoothness/sharpness of path when leaving a 'top' half-turn. 0=sharp, "
 "1=default"
 msgstr ""
-"הגדרת חדות/חלקלקות הנתיב בעת יציאה מחצי סיבוב 'תחתון'. 0=חד, 1=בררת מחדל"
+"הגדרת חדות/חלקלקות הנתיב בעת יציאה מחצי סיבוב ‚תחתון’. 0=חד, 1=ברירת מחדל"
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:222
 msgid "↑↓ Random: Bottom"
@@ -20399,7 +20387,7 @@ msgstr "מקטע הפניה:"
 
 #: ../src/live_effects/lpe-vonkoch.cpp:53
 msgid "The reference segment. Defaults to the horizontal midline of the bbox."
-msgstr "מקטע ההפניה. בררת המחדל שלי היא לקו האמצע האופקי של התיבה התוחמת."
+msgstr "מקטע ההפניה. ברירת המחדל שלי היא לקו האמצע האופקי של התיבה התוחמת."
 
 #: ../src/live_effects/lpe-vonkoch.cpp:57
 msgid "_Max complexity:"
@@ -20734,16 +20722,12 @@ msgid "Deleted"
 msgstr ""
 
 #: ../src/object/sp-guide.cpp:500
-#, fuzzy
-#| msgid ""
-#| "<b>Shift+drag</b> to rotate, <b>Ctrl+drag</b> to move origin, <b>Del</b> "
-#| "to delete"
 msgid ""
 "<b>Shift+drag</b> to rotate, <b>Ctrl+drag</b> to move origin, <b>Del</b> to "
 "delete; <b>double-click</b> to edit this guide's properties"
 msgstr ""
 "<b>Shift+גרירה</b> כדי להטות, <b>Ctrl+גרירה</b> כדי להזיז את המקור, <b>Del</"
-"b> למחיקה"
+"b> למחיקה; <b>לחיצה כפולה</b> לעריכת מאפייני הקו המנחה"
 
 #: ../src/object/sp-guide.cpp:505
 #, c-format
@@ -21160,7 +21144,7 @@ msgstr "<b>אין נתיבים</b> לצמצום/הרחבת הבחירה."
 
 #: ../src/pattern-manager.cpp:93
 msgid "All patterns"
-msgstr "כל התבניות"
+msgstr "כל הדוגמאות"
 
 #: ../src/preferences-skeleton.h:552
 msgid "Dip pen"
@@ -22097,6 +22081,10 @@ msgid ""
 "\n"
 "Continue the procedure (without saving)?"
 msgstr ""
+"התמונה נראית גדולה מדי. העיבוד עלול לארוך זמן מה ויכול להיות חכם לשמור את "
+"המסמך שלך לפני המשך העבודה.\n"
+"\n"
+"להמשיך בתהליך (בלי לשמור)?"
 
 #: ../src/trace/trace.cpp:351
 msgid "Trace: No active document"
@@ -22446,8 +22434,6 @@ msgid "Unlocked objects"
 msgstr ""
 
 #: ../src/ui/desktop/document-check.cpp:51
-#, fuzzy
-#| msgid "Save document"
 msgid "Save Document"
 msgstr "שמירת המסמך"
 
@@ -22486,6 +22472,10 @@ msgid ""
 "\n"
 "Do you want to save this file as Inkscape SVG?"
 msgstr ""
+"<span weight=\"bold\" size=\"larger\">הקובץ „%s” נשמר בתסדיר שעלול להוביל "
+"לאובדן נתונים!</span>\n"
+"\n"
+"לשמור את הקובץ הזה כ־SVG של אינקסקייפ?"
 
 #: ../src/ui/desktop/menubar.cpp:173
 msgid "No items found"
@@ -23724,19 +23714,19 @@ msgstr "<b>יישויות ליבת דבלין</b>"
 
 #: ../src/ui/dialog/document-properties.cpp:1067
 msgid "_Save as default"
-msgstr "_שמירה כבררת מחדל"
+msgstr "_שמירה כברירת מחדל"
 
 #: ../src/ui/dialog/document-properties.cpp:1068
 msgid "Save this metadata as the default metadata"
-msgstr ""
+msgstr "לשמור את נתוני העל האלה כנתוני העל כברירת מחדל"
 
 #: ../src/ui/dialog/document-properties.cpp:1069
 msgid "Use _default"
-msgstr "שימוש ב_בררת המחדל"
+msgstr "להשתמש ב_ברירת המחדל"
 
 #: ../src/ui/dialog/document-properties.cpp:1070
 msgid "Use the previously saved default metadata here"
-msgstr ""
+msgstr "להשתמש כאן בנתוני על קודמים שנשמרו כברירת מחדל"
 
 #: ../src/ui/dialog/document-properties.cpp:1084
 msgid "<b>License</b>"
@@ -24000,10 +23990,8 @@ msgid "Align grid origin relative to active page."
 msgstr ""
 
 #: ../src/ui/dialog/document-properties.cpp:1964
-#, fuzzy
-#| msgid "Change node type"
 msgid "Change to a different grid type."
-msgstr "שינוי את סוג המפרק"
+msgstr "החלפה לסוג רשת אחר."
 
 #: ../src/ui/dialog/document-properties.cpp:2061
 msgid "Block _width:"
@@ -24157,10 +24145,8 @@ msgstr[2] ""
 msgstr[3] ""
 
 #: ../src/ui/dialog/export-batch.cpp:616
-#, fuzzy
-#| msgid "Choose folder name"
 msgid "Choose folder..."
-msgstr "לבחור שם תיקייה"
+msgstr "בחירת תיקייה…"
 
 #: ../src/ui/dialog/export-batch.cpp:719
 msgid "No items selected."
@@ -24546,7 +24532,7 @@ msgstr "הסרת סינון קדמוני"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2413
 msgid "Remove merge node"
-msgstr "הסרת  מיזוג המפרקים"
+msgstr "הסרת מיזוג המפרקים"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2532
 msgid "Reorder filter primitive"
@@ -25837,7 +25823,7 @@ msgstr ""
 
 #: ../src/ui/dialog/glyphs.cpp:142
 msgid "Mandaic"
-msgstr ""
+msgstr "מנדאית"
 
 #: ../src/ui/dialog/glyphs.cpp:143
 msgid "Chakma"
@@ -27081,7 +27067,7 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1534
 msgid "System default"
-msgstr "בררת המחדל של המערכת"
+msgstr "ברירת המחדל של המערכת"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1535
 msgid "Albanian (sq)"
@@ -27448,12 +27434,12 @@ msgid "Clear list"
 msgstr "פינוי הרשימה"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1620
-#, fuzzy
-#| msgid "Maximum displacement in X (px):"
 msgid ""
 "Maximum documents\n"
 " in Open _Recent:"
-msgstr "פיזור מרבי בציר ה־X (פיקסלים):"
+msgstr ""
+"כמות המסמכים המרבית\n"
+" ב_אחרונים שנפתחו:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1621
 msgid ""
@@ -27827,11 +27813,11 @@ msgstr "אין לשמור את ממדי החלון"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2006
 msgid "Native open/save dialogs"
-msgstr ""
+msgstr "חלוניות פתיחה/שמירה של המערכת"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2007
 msgid "GTK open/save dialogs"
-msgstr ""
+msgstr "חלוניות פתיחה/שמירה של GTK"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2009
 msgid "Show Welcome dialog"
@@ -27843,7 +27829,7 @@ msgstr "החלוניות מוסתרות בסרגל המשימות"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2011
 msgid "Save and restore documents viewport"
-msgstr ""
+msgstr "לשמור ולשחזר את אשנב המסמכים"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2012
 msgid "Zoom when window is resized"
@@ -27874,7 +27860,7 @@ msgstr ""
 #: ../src/ui/dialog/inkscape-preferences.cpp:2022
 msgctxt "Window size"
 msgid "Default"
-msgstr "בררת מחדל"
+msgstr "ברירת מחדל"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2023
 msgctxt "Window size"
@@ -27925,11 +27911,11 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2047
 msgid "Use Windows like open and save dialogs"
-msgstr ""
+msgstr "להשתמש בחלוניות פתיחה וסגירה דמויי Windows"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2049
 msgid "Use GTK open and save dialogs "
-msgstr ""
+msgstr "להשתמש בחלוניות פתיחה ושמירה של GTK "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2051
 msgid "Dialogs settings"
@@ -28044,7 +28030,7 @@ msgid ""
 "above the right scrollbar)"
 msgstr ""
 "התקרבות או התרחקות כלפי הציור כאשר גודל החלון משתנה, כדי לשמור על אותו אזור "
-"גלוי (זוהי בררת המחדל שניתן לשנות בכל חלון באמצעות הכפתור שמעל סרגל הגלילה "
+"גלוי (זוהי ברירת המחדל שניתן לשנות בכל חלון באמצעות הכפתור שמעל סרגל הגלילה "
 "השמאלי)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2097
@@ -28099,7 +28085,7 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2156
 msgid "Default grid settings"
-msgstr "הגדרות רשת בררת מחדל"
+msgstr "הגדרות רשת ברירת מחדל"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2168
 #: ../src/ui/dialog/inkscape-preferences.cpp:2183
@@ -28758,8 +28744,8 @@ msgid ""
 "this command several times in quick succession, it will act more and more "
 "aggressively; invoking it again after a pause restores the default threshold."
 msgstr ""
-"כמה חזקה תהיה פקודת ההפשטה כבררת מחדל. אם פקודה זו תופעל מספר פעמים מהר "
-"וברציפות, היא תתנהג בצורה יותר ויותר תוקפנית; הפעלתה שוב לאחר הפוגה משחזרת "
+"כמה חזקה תהיה פקודת ההפשטה כברירת מחדל. אם פקודה זו תופעל מספר פעמים מהר "
+"וברציפות, היא תתנהג בצורה יותר ויותר תוקפנית, הפעלתה שוב לאחר הפוגה משחזרת "
 "את סף בררת המחדל."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2551
@@ -30257,16 +30243,12 @@ msgid "System info"
 msgstr "נתוני המערכת"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3748
-#, fuzzy
-#| msgid "Reset the values on the current tab to defaults"
 msgid "Reset the preferences to default"
-msgstr "איפוס הערכים בלשונית הנוכחית לבררת המחדל"
+msgstr "איפוס ההעדפות לברירת המחדל"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3753
-#, fuzzy
-#| msgid "Failed to create the preferences file %s."
 msgid "Save the preferences to disk"
-msgstr "כשל ביצירת קובץ ההעדפות %s."
+msgstr "שמירת ההעדפות לכונן"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3758
 msgid "User preferences:"
@@ -30402,7 +30384,7 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3823
 msgid "Location of the temporary files used for autosave"
-msgstr ""
+msgstr "מקום הקבצים הזמניים שמשמשים לשמירה אוטומטית"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3827
 msgid "Inkscape data:"
@@ -30621,11 +30603,11 @@ msgstr ""
 
 #: ../src/ui/dialog/new-from-template.cpp:28
 msgid "New From Template"
-msgstr ""
+msgstr "חדש מתבנית"
 
 #: ../src/ui/dialog/new-from-template.h:32
 msgid "Create from template"
-msgstr ""
+msgstr "יצירה מתבנית"
 
 #: ../src/ui/dialog/new-from-template.h:33
 #: ../src/ui/dialog/save-template-dialog.h:42
@@ -30684,12 +30666,12 @@ msgid "Change object attribute"
 msgstr ""
 
 #: ../src/ui/dialog/object-attributes.cpp:403
-#, fuzzy
-#| msgid "Selected objects only"
 msgid ""
 "<b>Picker Tool</b>\n"
 "Select objects on canvas"
-msgstr "הפריטים הנבחרים בלבד"
+msgstr ""
+"<b>כלי ברירה</b>\n"
+"בחירת עצמים בלוח הציור"
 
 #: ../src/ui/dialog/object-attributes.cpp:517
 msgid "Add fillet/chamfer effect"
@@ -31002,10 +30984,8 @@ msgid "Failed to set CairoRenderContext"
 msgstr "הגדרת CairoRenderContext נכשלה"
 
 #: ../src/ui/dialog/save-template-dialog.cpp:24
-#, fuzzy
-#| msgid "Save Template"
 msgid "Save as Template"
-msgstr "שמירת תבנית"
+msgstr "שמירה כתבנית"
 
 #: ../src/ui/dialog/save-template-dialog.cpp:56
 #, fuzzy
@@ -31022,7 +31002,7 @@ msgstr "ייצוא בדריסה"
 #: ../src/ui/dialog/save-template-dialog.h:35
 #: ../share/ui/dialog-save-template.glade:96
 msgid "Set as default template"
-msgstr "הגדרה כתבנית בררת מחדל"
+msgstr "הגדרה כתבנית ברירת מחדל"
 
 #: ../src/ui/dialog/save-template-dialog.h:36
 #, fuzzy
@@ -31647,7 +31627,7 @@ msgstr "מטרי_צה"
 
 #: ../src/ui/dialog/transformation.cpp:156
 msgid "Reset the values on the current tab to defaults"
-msgstr "איפוס הערכים בלשונית הנוכחית לבררת המחדל"
+msgstr "איפוס הערכים בלשונית הנוכחית לברירות המחדל"
 
 #: ../src/ui/dialog/transformation.cpp:162
 msgid "Apply transformation to selection"
@@ -32015,7 +31995,7 @@ msgstr ""
 
 #: ../src/ui/modifiers.cpp:111
 msgid "Change shape builder mode temporarily by holding a modifier key."
-msgstr ""
+msgstr "החלפת מצב בונה צורות באופן זמני על ידי החזקת מקש החלפה."
 
 #: ../src/ui/modifiers.cpp:113
 msgid "Linear node selection"
@@ -32058,7 +32038,7 @@ msgstr ""
 
 #: ../src/ui/modifiers.cpp:128
 msgid "Shape Builder"
-msgstr ""
+msgstr "בונה צורות"
 
 #: ../src/ui/modifiers.cpp:236
 msgid "[NEVER]"
@@ -32197,7 +32177,7 @@ msgid ""
 "Adjust the <b>tip radius</b> of the star or polygon; with <b>Shift</b> to "
 "round; with <b>Alt</b> to randomize"
 msgstr ""
-"הגדרת <b>רדיוס הקצוות</b> של הכוכב או המצולע; עם <b>Shift</b> כדי לעגל; עם  "
+"הגדרת <b>רדיוס הקצוות</b> של הכוכב או המצולע; עם <b>Shift</b> כדי לעגל; עם "
 "<b>Alt</b> כדי לבחור באקראי"
 
 #: ../src/ui/shape-editor-knotholders.cpp:1840
@@ -32869,7 +32849,7 @@ msgstr "(חוט השערה)"
 #: ../src/ui/toolbar/tweak-toolbar.cpp:80
 #: ../src/ui/toolbar/tweak-toolbar.cpp:91
 msgid "(default)"
-msgstr "(בררת מחדל)"
+msgstr "(ברירת מחדל)"
 
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:105
 #: ../src/ui/toolbar/eraser-toolbar.cpp:82
@@ -32894,7 +32874,7 @@ msgstr "(עובי רציף)"
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:114
 #: ../src/ui/toolbar/eraser-toolbar.cpp:91
 msgid "(slight thinning, default)"
-msgstr "(הצרה קלה, בררת מחדל)"
+msgstr "(הצרה קלה, ברירת מחדל)"
 
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:117
 #: ../src/ui/toolbar/eraser-toolbar.cpp:94
@@ -32909,7 +32889,7 @@ msgstr "(ללא התמדה)"
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:122
 #: ../src/ui/toolbar/eraser-toolbar.cpp:117
 msgid "(slight smoothing, default)"
-msgstr "(החלקה קלה, בררת מחדל)"
+msgstr "(החלקה קלה, ברירת מחדל)"
 
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:123
 #: ../src/ui/toolbar/eraser-toolbar.cpp:118
@@ -32939,7 +32919,7 @@ msgstr "(מאונך לקו המתאר, \"מברשת\")"
 
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:145
 msgid "(almost fixed, default)"
-msgstr "(כמעט מקובע, בררת מחדל)"
+msgstr "(כמעט מקובע, ברירת מחדל)"
 
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:146
 msgid "(fixed by Angle, \"pen\")"
@@ -32948,7 +32928,7 @@ msgstr "(מקובע לפי זווית, \"עט\")"
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:150
 #: ../src/ui/toolbar/eraser-toolbar.cpp:98
 msgid "(blunt caps, default)"
-msgstr "(חודים קהים, בררת מחדל)"
+msgstr "(חודים קהים, ברירת מחדל)"
 
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:151
 #: ../src/ui/toolbar/eraser-toolbar.cpp:99
@@ -33760,11 +33740,11 @@ msgstr "יצירת אליפסה"
 
 #: ../src/ui/tools/booleans-tool.cpp:115
 msgid "You must select some objects to use the Shape Builder tool."
-msgstr ""
+msgstr "יש לבחור פריטים כלשהם כדי להשתמש בכלי בונה הצורות."
 
 #: ../src/ui/tools/booleans-tool.cpp:117
 msgid "The Shape Builder requires regular shapes to be selected."
-msgstr ""
+msgstr "בונה הצורות דורש בחירה של צורות רגילות."
 
 #: ../src/ui/tools/box3d-tool.cpp:299 ../src/ui/tools/box3d-tool.cpp:305
 #: ../src/ui/tools/box3d-tool.cpp:311 ../src/ui/tools/box3d-tool.cpp:317
@@ -34057,7 +34037,7 @@ msgstr "פישוט המדרג"
 
 #: ../src/ui/tools/gradient-tool.cpp:440
 msgid "Create default gradient"
-msgstr "יצירת מדרג בררת המחדל"
+msgstr "יצירת מדרג ברירת המחדל"
 
 #: ../src/ui/tools/gradient-tool.cpp:483 ../src/ui/tools/mesh-tool.cpp:557
 msgid "<b>Draw around</b> handles to select them"
@@ -34138,12 +34118,12 @@ msgid "Crossing %lu"
 msgstr ""
 
 #: ../src/ui/tools/measure-tool.cpp:1644
-#, fuzzy
-#| msgid "Maximum segment length:"
 msgid ""
 "\n"
 "Intersection segments lengths:\n"
-msgstr "אורך מקטע מרבי:"
+msgstr ""
+"\n"
+"אורכי מקטעי ההצטלבות:\n"
 
 #: ../src/ui/tools/measure-tool.cpp:1656
 msgid ""
@@ -34162,10 +34142,8 @@ msgid "Segment"
 msgstr "גודל מקטע"
 
 #: ../src/ui/tools/measure-tool.h:81
-#, fuzzy
-#| msgid "Length Unit:"
 msgid "Length between"
-msgstr "יחידת האורך:"
+msgstr "אורך בין"
 
 #: ../src/ui/tools/measure-tool.h:82
 #, fuzzy
@@ -34181,16 +34159,12 @@ msgstr "Y"
 
 #: ../src/ui/tools/measure-tool.h:84
 #: ../share/ui/dialog-measure-tool-settings.ui:254
-#, fuzzy
-#| msgid "Angle:"
 msgid "Angle"
-msgstr "זווית:"
+msgstr "זווית"
 
 #: ../src/ui/tools/measure-tool.h:85
-#, fuzzy
-#| msgid "Bar length:"
 msgid "Shape length"
-msgstr "אורך עמודה:"
+msgstr "אורך צורה"
 
 #: ../src/ui/tools/measure-tool.h:86
 #, fuzzy
@@ -34962,7 +34936,7 @@ msgid ""
 "path. <b>Arrow keys</b> adjust width (left/right) and angle (up/down)."
 msgstr ""
 "<b>גרירה</b> כדי לצייר קו מתאר קליגרפי; עם <b>Ctrl</b> כדי לעקוב אחר קו "
-"מנחה,  <b>מקשי החצים</b> כדי להתאים את העובי (שמאלה/ימינה) ואת הזווית "
+"מנחה, <b>מקשי החצים</b> כדי להתאים את העובי (שמאלה/ימינה) ואת הזווית "
 "(למעלה/למטה)."
 
 #: ../src/ui/tools/tool-data.cpp:59
@@ -35555,7 +35529,7 @@ msgstr "סגנון ישן"
 #: ../src/ui/widget/font-variants.cpp:181
 msgctxt "Font feature"
 msgid "Default Style"
-msgstr "סגנון בררת מחדל"
+msgstr "סגנון ברירת מחדל"
 
 #: ../src/ui/widget/font-variants.cpp:182
 #: ../src/ui/widget/font-variants.cpp:201
@@ -35571,7 +35545,7 @@ msgstr "טבלאי"
 #: ../src/ui/widget/font-variants.cpp:184
 msgctxt "Font feature"
 msgid "Default Width"
-msgstr "רוחב בררת מחדל"
+msgstr "רוחב ברירת מחדל"
 
 #: ../src/ui/widget/font-variants.cpp:185
 msgctxt "Font feature"
@@ -35586,7 +35560,7 @@ msgstr "מוערם"
 #: ../src/ui/widget/font-variants.cpp:187
 msgctxt "Font feature"
 msgid "Default Fractions"
-msgstr "שברים כבררת מחדל"
+msgstr "שברים כברירת מחדל"
 
 #: ../src/ui/widget/font-variants.cpp:188
 msgctxt "Font feature"
@@ -35607,7 +35581,7 @@ msgstr "מזרח אסיאתי"
 #: ../src/ui/widget/font-variants.cpp:199
 msgctxt "Font feature"
 msgid "Default"
-msgstr "בררת מחדל"
+msgstr "ברירת מחדל"
 
 #: ../src/ui/widget/font-variants.cpp:193
 msgctxt "Font feature"
@@ -37069,16 +37043,14 @@ msgid "R Gradient"
 msgstr "מדרג מ"
 
 #: ../src/ui/widget/style-swatch.cpp:261
-#, fuzzy, c-format
-#| msgid "Fill:"
+#, c-format
 msgid "Fill: %s"
-msgstr "מילוי:"
+msgstr "מילוי: %s"
 
 #: ../src/ui/widget/style-swatch.cpp:263
-#, fuzzy, c-format
-#| msgid "Stroke:"
+#, c-format
 msgid "Stroke: %s"
-msgstr "קו מתאר:"
+msgstr "קו מתאר: %s"
 
 #: ../src/ui/widget/style-swatch.cpp:268
 msgctxt "Fill and stroke"
@@ -37135,16 +37107,12 @@ msgid "Close File"
 msgstr "סגירת לוח"
 
 #: ../src/ui/widget/tabs-widget.cpp:112
-#, fuzzy
-#| msgid "New Document"
 msgid "New Document..."
-msgstr "מסמך חדש"
+msgstr "מסמך חדש…"
 
 #: ../src/ui/widget/tabs-widget.cpp:113
-#, fuzzy
-#| msgid "New Document"
 msgid "Open Document..."
-msgstr "מסמך חדש"
+msgstr "פתיחת מסמך…"
 
 #: ../src/ui/widget/template-list.cpp:130
 #, fuzzy
@@ -37359,10 +37327,8 @@ msgid "Crash Report"
 msgstr ""
 
 #: ../share/ui/dialog-crash.glade:20
-#, fuzzy
-#| msgid "Inkscape has crashed and will now close."
 msgid "<b>Inkscape has crashed and will now close.</b>"
-msgstr "אינקסקייפ קרס והוא ייסגר כעת."
+msgstr "<b>אינקסקייפ קרס והוא ייסגר כעת.</b>"
 
 #: ../share/ui/dialog-crash.glade:26
 msgid ""
@@ -37840,7 +37806,7 @@ msgstr "ת_כונות"
 
 #: ../share/ui/dialog-text-edit.glade:197
 msgid "Set as _default"
-msgstr "ה_גדרה כבררת מחדל"
+msgstr "ה_גדרה כברירת מחדל"
 
 #: ../share/ui/dialog-trace.glade:73
 msgid ""
@@ -38080,7 +38046,7 @@ msgstr "פלט שמורכב מקווים ישרים"
 
 #: ../share/ui/dialog-trace.glade:1011
 msgid " Output:"
-msgstr "פלט:"
+msgstr " פלט:"
 
 #: ../share/ui/dialog-trace.glade:1039
 msgid "Multiplier"
@@ -38427,83 +38393,69 @@ msgid "Font size:"
 msgstr "גודל הגופן:"
 
 #: ../share/ui/font-list.glade:409
-#, fuzzy
-#| msgid "A6"
 msgid "6"
-msgstr "A6"
+msgstr "6"
 
 #: ../share/ui/font-list.glade:410
-#, fuzzy
-#| msgid "A7"
 msgid "7"
-msgstr "A7"
+msgstr "7"
 
 #: ../share/ui/font-list.glade:411
-#, fuzzy
-#| msgid "A8"
 msgid "8"
-msgstr "A8"
+msgstr "8"
 
 #: ../share/ui/font-list.glade:412
-#, fuzzy
-#| msgid "A9"
 msgid "9"
-msgstr "A9"
+msgstr "9"
 
 #: ../share/ui/font-list.glade:413
-#, fuzzy
-#| msgid "A10"
 msgid "10"
-msgstr "A10"
+msgstr "10"
 
 #: ../share/ui/font-list.glade:414
 msgid "12"
-msgstr ""
+msgstr "12"
 
 #: ../share/ui/font-list.glade:415
 msgid "14"
-msgstr ""
+msgstr "14"
 
 #: ../share/ui/font-list.glade:416
 msgid "16"
-msgstr ""
+msgstr "16"
 
 #: ../share/ui/font-list.glade:417
-#, fuzzy
-#| msgid "0"
 msgid "20"
-msgstr "0"
+msgstr "20"
 
 #: ../share/ui/font-list.glade:418
 msgid "24"
-msgstr ""
+msgstr "24"
 
 #: ../share/ui/font-list.glade:419
 msgid "32"
-msgstr ""
+msgstr "32"
 
 #: ../share/ui/font-list.glade:420
 msgid "48"
-msgstr ""
+msgstr "48"
 
 #: ../share/ui/font-list.glade:421
 msgid "72"
-msgstr ""
+msgstr "72"
 
 #: ../share/ui/font-list.glade:422
 msgid "144"
-msgstr ""
+msgstr "144"
 
 #: ../share/ui/font-list.glade:462
 msgctxt "loading-fonts"
 msgid "Initializing"
-msgstr ""
+msgstr "נטען"
 
 #: ../share/ui/font-list.glade:516
-#, fuzzy
-#| msgid "<small>Per row:</small>"
 msgid "<small>256 fonts</small>"
-msgstr "<small>בשורה:</small>"
+msgstr "<small>256 גופנים</small>"
 
 #: ../share/ui/gradient-edit.glade:57 ../share/ui/toolbar-gradient.ui:90
 msgid "Reverse the direction of the gradient"
@@ -38566,7 +38518,7 @@ msgstr ""
 
 #: ../share/ui/image-properties.glade:62
 msgid "URL:"
-msgstr "כתובת אינטרנט:"
+msgstr "כתובת:"
 
 #: ../share/ui/image-properties.glade:83
 msgid "Change image..."
@@ -38610,7 +38562,7 @@ msgstr "מיטוב איכות"
 
 #: ../share/ui/image-properties.glade:200
 msgid "Crisp edges"
-msgstr ""
+msgstr "קצוות פריכים"
 
 #: ../share/ui/image-properties.glade:201
 msgid "Pixelated"
@@ -38618,7 +38570,7 @@ msgstr "מפוקסל"
 
 #: ../share/ui/inkscape-about.glade:6
 msgid "Inkscape. Draw freely."
-msgstr "Inkscape. החופש לצייר."
+msgstr "אינקסקייפ. החופש לצייר."
 
 #: ../share/ui/inkscape-about.glade:51
 msgid "Official splash artwork of this version"
@@ -38762,22 +38714,24 @@ msgid ""
 "<b>Warning:</b> Using a non-standard shortcut keyboard layout could make it "
 "harder to follow tutorials."
 msgstr ""
+"<b>אזהרה:</b> השימוש בקיצורי מקשים שחורגים מהרגיל עלול להקשות עליך בלמידה "
+"ממדריכים."
 
 #: ../share/ui/inkscape-start.glade:273
 msgid "Appearance"
-msgstr ""
+msgstr "מראה"
 
 #: ../share/ui/inkscape-start.glade:299
 msgid "Keyboard"
-msgstr ""
+msgstr "מקלדת"
 
 #: ../share/ui/inkscape-start.glade:409
 msgid "Select the default color background for the canvas"
-msgstr ""
+msgstr "נא לבחור את צבע רקע ברירת המחדל למשטח הציור"
 
 #: ../share/ui/inkscape-start.glade:446
 msgid "Set to dark theme"
-msgstr ""
+msgstr "הגדרה לערכת צבעים כהה"
 
 #: ../share/ui/inkscape-start.glade:494
 msgid "Quick Setup"
@@ -38792,20 +38746,19 @@ msgid ""
 "of Inkscape even better, please consider joining the Inkscape project today."
 "</b>"
 msgstr ""
+"<b>מיזם אינקסקייפ נעזר בסיוע של אנשים כמוך.</b> בזכות הזמן, הכסף והמיומנויות "
+"המשותפים שלנו, יצרנו את התוכנה הזאת כדי שכל אדם בעולם יוכל ליהנות ממנה ללא "
+"הגבלות וללא עלויות. <b>\n"
+"                כדי להשתתף ולבנות את הגרסה הבאה והמוצלחת יותר של אינקסקייפ, "
+"נא לשקול להצטרף למיזם אינקסקייפ עוד היום.</b>"
 
 #: ../share/ui/inkscape-start.glade:551
 msgid "Learn how to Contribute Time"
-msgstr ""
+msgstr "מידע על תרומת זמן"
 
 #: ../share/ui/inkscape-start.glade:587
-#, fuzzy
-#| msgid ""
-#| "Learn how to\n"
-#| "Fund Inkscape"
 msgid "Learn how to Fund Inkscape"
-msgstr ""
-"מידע על מימון\n"
-"אינקסקייפ"
+msgstr "מידע על מימון אינקסקייפ"
 
 #: ../share/ui/inkscape-start.glade:604
 msgid "Thanks!"
@@ -38821,12 +38774,9 @@ msgid "Recent Files"
 msgstr "קבצים אחרונים"
 
 #: ../share/ui/inkscape-start.glade:673
-#, fuzzy
-#| msgctxt "Symbol"
-#| msgid "Emergency phone"
 msgctxt "Welcome dialog"
 msgid "Emergency Save"
-msgstr "טלפון חירום"
+msgstr "שמירת חירום"
 
 #: ../share/ui/inkscape-start.glade:690
 msgctxt "Welcome dialog"
@@ -39104,16 +39054,12 @@ msgid ""
 msgstr "התאמת העמוד לבחירה הנוכחית או לציור אם שום דבר לא נבחר."
 
 #: ../share/ui/page-properties.glade:312
-#, fuzzy
-#| msgid "Coordinates:"
 msgid "Coordinate system"
-msgstr "נקודות הציון:"
+msgstr "מערכת צירים"
 
 #: ../share/ui/page-properties.glade:334
-#, fuzzy
-#| msgid "Origin"
 msgid "Origin:"
-msgstr "מקור"
+msgstr "מקור:"
 
 #: ../share/ui/page-properties.glade:345
 msgid ""
@@ -39269,7 +39215,7 @@ msgstr ""
 
 #: ../share/ui/pattern-edit.glade:550
 msgid "Color: "
-msgstr "צבע:"
+msgstr "צבע: "
 
 #: ../share/ui/pattern-edit.glade:557
 msgid "Apply color to the current pattern"
@@ -39458,10 +39404,8 @@ msgid "Add labels to the intersection segments"
 msgstr ""
 
 #: ../share/ui/dialog-measure-tool-settings.ui:89
-#, fuzzy
-#| msgid "Maximum segment length:"
 msgid "Min. segment length"
-msgstr "אורך מקטע מרבי:"
+msgstr "אורך מקטע מזערי"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:106
 msgid "Intersection segments shorter than this length will not be shown"
@@ -39494,16 +39438,12 @@ msgid "Tab-separated string"
 msgstr ""
 
 #: ../share/ui/dialog-measure-tool-settings.ui:192
-#, fuzzy
-#| msgid "Measurement Type:"
 msgid "Measurements to copy"
-msgstr "סוג מדידה:"
+msgstr "מדידות להעתקה"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:218
-#, fuzzy
-#| msgid "Length (document units):"
 msgid "Length - no end points"
-msgstr "אורך (יחידות מסמך):"
+msgstr "אורך - אין נקודות קצה"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:266
 #, fuzzy
@@ -40263,7 +40203,7 @@ msgstr "הוספה לצורה"
 
 #: ../share/ui/toolbar-booleans.ui:46
 msgid "Remove from Shape"
-msgstr "הסרה מהצורה:"
+msgstr "הסרה מהצורה"
 
 #: ../share/ui/toolbar-booleans.ui:65
 msgid "Finish:"
@@ -40589,10 +40529,8 @@ msgid "Open LPE dialog (to adapt parameters numerically)"
 msgstr "פתיחת חלונית אפקטי נתיב חיים (כדי להשתמש במשתנים מספריים)"
 
 #: ../share/ui/toolbar-marker.ui:12
-#, fuzzy
-#| msgid "Edit on canvas"
 msgid "Edit marker on canvas."
-msgstr "עריכה על משטח הציור"
+msgstr "עריכת סמל על משטח הציור."
 
 #: ../share/ui/toolbar-measure.ui:39
 msgid "The font size to be used in the measurement labels"
@@ -40815,10 +40753,8 @@ msgid "D:"
 msgstr "מזהה:"
 
 #: ../share/ui/toolbar-node.ui:401
-#, fuzzy
-#| msgid "Delete selected nodes"
 msgid "Distance between two selected nodes."
-msgstr "מחיקת המפרקים הנבחרים"
+msgstr "מרחק בין שני המפרקים הנבחרים."
 
 #: ../share/ui/toolbar-node.ui:451
 msgid "Show path outline (without path effects)"
@@ -40888,8 +40824,8 @@ msgid ""
 "Reset paint bucket parameters to defaults (use Inkscape Preferences > Tools "
 "to change defaults)"
 msgstr ""
-"איפוס משתני דלי הצבע לבררת המחדל (ניתן להשתמש בהעדפות אינקסקייפ -> כלים כדי "
-"לשנות את בררות המחדל)"
+"איפוס משתני דלי הצבע לברירת המחדל (ניתן להשתמש בהעדפות אינקסקייפ -> כלים כדי "
+"לשנות את ברירות המחדל)"
 
 #: ../share/ui/toolbar-pencil.ui:28
 msgid "Mode of new lines drawn by this tool"
@@ -41148,8 +41084,8 @@ msgid ""
 "Reset shape parameters to defaults (use Inkscape Preferences > Tools to "
 "change defaults)"
 msgstr ""
-"איפוס המשתנים של הצורה לבררות המחדל (יש להשתמש בהעדפות אינקסקייפ -> כלים כדי "
-"לשנות את בררות המחדל)"
+"איפוס המשתנים של הצורה לברירות המחדל (יש להשתמש בהעדפות אינקסקייפ -> כלים "
+"כדי לשנות את ברירות המחדל)"
 
 #: ../share/ui/toolbar-spray.ui:58
 msgid "Spray copies of the initial selection"
@@ -41280,10 +41216,8 @@ msgid "Length of edge"
 msgstr "גובה המרובע"
 
 #: ../share/ui/toolbar-star.ui:209
-#, fuzzy
-#| msgid "Edge"
 msgid "Edge:"
-msgstr "קצה"
+msgstr "קצה:"
 
 #: ../share/ui/toolbar-text.ui:71
 msgid "Open the Font Collections dialog"
@@ -41584,7 +41518,7 @@ msgstr "אין מצפין ברקוד: {}"
 
 #: ../share/extensions/barcode/__init__.py:63
 msgid "No barcode format given."
-msgstr "לא סופק תסדיר ברקוד"
+msgstr "לא סופק תסדיר ברקוד."
 
 #: ../share/extensions/barcode/__init__.py:72
 msgid "Invalid type of barcode: {}.{}"
@@ -43346,7 +43280,7 @@ msgstr "בחירת ייצוא שכבות:"
 
 #: ../share/extensions/dxf_outlines.inx:30
 msgid "All (default)"
-msgstr "הכול (בררת מחדל)"
+msgstr "הכול (ברירת מחדל)"
 
 #: ../share/extensions/dxf_outlines.inx:31
 msgid "Visible only"
@@ -43748,7 +43682,7 @@ msgstr ""
 
 #: ../share/extensions/gimp_xcf.inx:12
 msgid "File Resolution:"
-msgstr ""
+msgstr "רזולוציית הקובץ:"
 
 #: ../share/extensions/gimp_xcf.inx:12
 msgid "XCF file resolution, in DPI."
@@ -43774,11 +43708,11 @@ msgstr "רשת קרטזית"
 
 #: ../share/extensions/grid_cartesian.inx:6
 msgid "Border Thickness:"
-msgstr ""
+msgstr "עובי המסגרת:"
 
 #: ../share/extensions/grid_cartesian.inx:7
 msgid "Border Thickness Unit:"
-msgstr ""
+msgstr "יחידת עובי המסגרת:"
 
 #: ../share/extensions/grid_cartesian.inx:14
 msgid "X Axis"
@@ -43790,11 +43724,11 @@ msgstr "חלוקות X ראשיות:"
 
 #: ../share/extensions/grid_cartesian.inx:16
 msgid "Major X Division Spacing:"
-msgstr ""
+msgstr "ריווח בין חלוקות X ראשיות:"
 
 #: ../share/extensions/grid_cartesian.inx:17
 msgid "Major X Division Spacing Unit:"
-msgstr ""
+msgstr "יחידת ריווח בין חלוקות X ראשיות:"
 
 #: ../share/extensions/grid_cartesian.inx:23
 msgid "Subdivisions per Major X Division:"
@@ -44109,7 +44043,7 @@ msgstr "גיליוטינה"
 
 #: ../share/extensions/guillotine.inx:8
 msgid "Directory to save images to:"
-msgstr ""
+msgstr "תיקייה אליה לשמור את התמונות:"
 
 #: ../share/extensions/guillotine.inx:9
 msgid "Image name (without extension):"
@@ -44869,7 +44803,7 @@ msgstr "משך בשניות:"
 #: ../share/extensions/jessyink_effects.inx:11
 #: ../share/extensions/jessyink_effects.inx:20
 msgid "None (default)"
-msgstr "ללא (בררת מחדל)"
+msgstr "ללא (ברירת מחדל)"
 
 #: ../share/extensions/jessyink_effects.inx:12
 #: ../share/extensions/jessyink_effects.inx:21
@@ -45023,7 +44957,7 @@ msgstr "מעבר למצב שקופיות:"
 
 #: ../share/extensions/jessyink_key_bindings.inx:23
 msgid "Set path width to default:"
-msgstr "הגדרת עובי הנתיב לבררת המחדל:"
+msgstr "הגדרת עובי הנתיב לברירת המחדל:"
 
 #: ../share/extensions/jessyink_key_bindings.inx:24
 msgid "Set path width to 1:"
@@ -45127,7 +45061,7 @@ msgstr "הגדלת מספר העמודות:"
 
 #: ../share/extensions/jessyink_key_bindings.inx:54
 msgid "Set number of columns to default:"
-msgstr "הגדרת מספר העמודות לבררת המחדל:"
+msgstr "הגדרת מספר העמודות לברירת המחדל:"
 
 #: ../share/extensions/jessyink_key_bindings.inx:57
 msgid ""
@@ -46477,7 +46411,7 @@ msgstr "המרת הבחירה:"
 
 #: ../share/extensions/other/gcodetools/gcodetools_dxf_points.inx:16
 msgid "set as dxfpoint and save shape"
-msgstr ""
+msgstr "הגדרה כ־dxfpoint ושמירת הצורה"
 
 #: ../share/extensions/other/gcodetools/gcodetools_dxf_points.inx:17
 msgid "set as dxfpoint and draw arrow"
@@ -46771,15 +46705,15 @@ msgstr "סוגי הכלים:"
 
 #: ../share/extensions/other/gcodetools/gcodetools_tools_library.inx:11
 msgid "default"
-msgstr "בררת מחדל"
+msgstr "ברירת מחדל"
 
 #: ../share/extensions/other/gcodetools/gcodetools_tools_library.inx:12
 msgid "cylinder"
-msgstr "צילינדר"
+msgstr "גליל"
 
 #: ../share/extensions/other/gcodetools/gcodetools_tools_library.inx:13
 msgid "cone"
-msgstr "קונוס"
+msgstr "חרוט"
 
 #: ../share/extensions/other/gcodetools/gcodetools_tools_library.inx:14
 msgid "plasma"
@@ -46791,7 +46725,7 @@ msgstr "סכין משיקית"
 
 #: ../share/extensions/other/gcodetools/gcodetools_tools_library.inx:16
 msgid "lathe cutter"
-msgstr "כלי חריטה"
+msgstr "כלי מחרטה"
 
 #: ../share/extensions/other/gcodetools/gcodetools_tools_library.inx:17
 msgid "graffiti"
@@ -46842,7 +46776,7 @@ msgstr ""
 #: ../share/extensions/other/templates/template_shape_prefab.inx:7
 msgctxt "TemplateCategory"
 msgid "Shape Builder"
-msgstr ""
+msgstr "בונה צורות"
 
 #: ../share/extensions/other/templates/template_shape_prefab.inx:9
 msgid "Template:"
@@ -48797,7 +48731,7 @@ msgstr "חיצוני (אפיטרוכויד)"
 
 #: ../share/extensions/spirograph.inx:13
 msgid "Quality (Default = 16):"
-msgstr "איכות (בררת מחדל = 16):"
+msgstr "איכות (ברירת מחדל = 16):"
 
 #: ../share/extensions/straightseg.inx:3
 msgid "Straighten Segments"
@@ -49124,7 +49058,7 @@ msgstr ""
 
 #: ../share/extensions/template_business_card.inx:23
 msgid "Various Countries"
-msgstr ""
+msgstr "מגוון מדינות"
 
 #: ../share/extensions/template_dvd_cover.inx:3
 #: ../share/extensions/template_dvd_cover.inx:19
@@ -49216,7 +49150,7 @@ msgstr "נקודה אנכית:"
 
 #: ../share/extensions/text_flipcase.inx:3
 msgid "fLIP cASE"
-msgstr "החלפת רישיות"
+msgstr "היפוך רישיות"
 
 #: ../share/extensions/text_flipcase.inx:9
 #: ../share/extensions/text_lowercase.inx:9
@@ -49225,7 +49159,7 @@ msgstr "החלפת רישיות"
 #: ../share/extensions/text_titlecase.inx:9
 #: ../share/extensions/text_uppercase.inx:9
 msgid "Change Case"
-msgstr ""
+msgstr "החלפת רישיות"
 
 #: ../share/extensions/text_lowercase.inx:3
 msgid "lowercase"
@@ -49249,7 +49183,7 @@ msgstr "רישיות למשפט"
 
 #: ../share/extensions/text_split.inx:3
 msgid "Split Text"
-msgstr ""
+msgstr "פיצול טקסט"
 
 #: ../share/extensions/text_split.inx:7
 msgid "Split:"
@@ -49258,7 +49192,7 @@ msgstr "פיצול:"
 #: ../share/extensions/text_split.inx:8
 msgctxt "split"
 msgid "Lines"
-msgstr "קווים"
+msgstr "שורות"
 
 #: ../share/extensions/text_split.inx:9
 msgctxt "split"
@@ -49302,7 +49236,7 @@ msgstr ""
 
 #: ../share/extensions/text_titlecase.inx:3
 msgid "Title Case"
-msgstr "רישיות למילה"
+msgstr "רישיות לכותרת"
 
 #: ../share/extensions/text_uppercase.inx:3
 msgid "UPPERCASE"
@@ -49342,19 +49276,19 @@ msgstr "משלושה צדדים"
 
 #: ../share/extensions/triangle.inx:13
 msgid "From Sides a, b and Angle c"
-msgstr "מהצדדים a, b והזווית c"
+msgstr "מהצדדים א, ב והזווית ג"
 
 #: ../share/extensions/triangle.inx:14
 msgid "From Sides a, b and Angle a"
-msgstr "מהצדדים a, b והזווית a"
+msgstr "מהצדדים א, ב והזווית א"
 
 #: ../share/extensions/triangle.inx:15
 msgid "From Side a and Angles a, b"
-msgstr "מצד a והזוויות a, b"
+msgstr "מצד א והזוויות א, ב"
 
 #: ../share/extensions/triangle.inx:16
 msgid "From Side c and Angles a, b"
-msgstr "מצד c והזוויות a, b"
+msgstr "מצד ג והזוויות א, ב"
 
 #: ../share/extensions/twirl.inx:3
 msgid "Twirl"
@@ -49370,7 +49304,7 @@ msgstr "ההטיה היא עם כיוון השעון"
 
 #: ../share/extensions/typst_formula.inx:3
 msgid "Formula (typst)"
-msgstr ""
+msgstr "נוסחה (typst)"
 
 #: ../share/extensions/typst_formula.inx:9
 msgid "typst input:"
@@ -49397,10 +49331,8 @@ msgid "Depth to Keep (from bottom)"
 msgstr ""
 
 #: ../share/extensions/ungroup_deep.inx:9
-#, fuzzy
-#| msgid "Preserve"
 msgid "Preserve Layers"
-msgstr "קיבוע"
+msgstr "קיבוע שכבות"
 
 #: ../share/extensions/ungroup_deep.inx:9
 #, fuzzy
@@ -49451,7 +49383,7 @@ msgstr "משולשי צבע"
 
 #: ../share/extensions/voronoi_diagram.inx:21
 msgid "Default (Stroke black and no fill)"
-msgstr "בררת מחדל (קו מתאר שחור בלי מילוי)"
+msgstr "ברירת מחדל (קו מתאר שחור בלי מילוי)"
 
 #: ../share/extensions/voronoi_diagram.inx:22
 msgid "Triangles with item color"
