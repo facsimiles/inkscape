@@ -23,6 +23,7 @@
 #include <gtk/gtk.h>                    // for GtkEventControllerKey
 
 #include <sigc++/scoped_connection.h>     // for sigc::scoped_connection
+#include "libnrtype/font-lister.h"
 #include "ui/dialog/dialog-base.h"      // for DialogBase
 #include "ui/widget/font-selector.h"    // for FontSelector
 #include "ui/widget/font-variants.h"    // for FontVariants
@@ -179,6 +180,7 @@ private:
     Gtk::Label &preview_label;  // Share with variants tab?
 
     std::unique_ptr<FontSelectorInterface> font_list;
+    LocalFontLister localfontlister;
 
     // Tab 2: Text ---------------------- //
     Gtk::TextView *text_view;

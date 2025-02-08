@@ -57,6 +57,7 @@
 #include "colors/document-cms.h"
 #include "rdf.h"
 #include "selection.h"
+#include "util/document-fonts.h"
 
 #include "3rdparty/adaptagrams/libavoid/router.h"
 #include "3rdparty/libcroco/src/cr-sel-eng.h"
@@ -157,6 +158,7 @@ SPDocument::SPDocument() :
 
     _page_manager = std::make_unique<Inkscape::PageManager>(this);
     _cms_manager = std::make_unique<Inkscape::Colors::DocumentCMS>(this);
+    _document_fonts = std::make_unique<Inkscape::DocumentFonts>();
 }
 
 SPDocument::~SPDocument() {

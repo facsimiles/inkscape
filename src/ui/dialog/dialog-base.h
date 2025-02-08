@@ -18,6 +18,7 @@
 #include <gtkmm/box.h>
 
 #include "inkscape-application.h"
+#include "ui/defocus-target.h"
 
 namespace Gtk {
 class EventControllerKey;
@@ -37,7 +38,9 @@ namespace Inkscape::UI::Dialog {
  * DialogContainer classes. DialogContainer instances can have at most one type of dialog,
  * differentiated by the associated type.
  */
-class DialogBase : public Gtk::Box
+class DialogBase
+    : public Gtk::Box
+    , public Inkscape::UI::DefocusTarget
 {
     using parent_type = Gtk::Box;
 
@@ -58,6 +61,7 @@ public:
     // Public for future use, say if the desktop is smartly set when docking dialogs.
     void setDesktop(SPDesktop *new_desktop);
 
+    void onDefocus() override;
     void on_map() override;
 
     Glib::ustring const &get_name    () const { return _name       ; }

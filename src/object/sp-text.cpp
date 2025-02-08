@@ -71,8 +71,7 @@
 /*#####################################################
 #  SPTEXT
 #####################################################*/
-SPText::SPText() : SPItem() {
-}
+SPText::SPText() = default;
 
 SPText::~SPText()
 {
@@ -91,7 +90,7 @@ void SPText::build(SPDocument *doc, Inkscape::XML::Node *repr) {
     // textLength and friends
     this->readAttr(SPAttr::TEXTLENGTH);
     this->readAttr(SPAttr::LENGTHADJUST);
-    SPItem::build(doc, repr);
+    Base::build(doc, repr);
     css = nullptr;
     this->readAttr(SPAttr::SODIPODI_LINESPACING);    // has to happen after the styles are read
 }
@@ -99,7 +98,7 @@ void SPText::build(SPDocument *doc, Inkscape::XML::Node *repr) {
 void SPText::release()
 {
     view_style_attachments.clear();
-    SPItem::release();
+    Base::release();
 }
 
 void SPText::set(SPAttr key, const gchar* value) {
@@ -125,24 +124,23 @@ void SPText::set(SPAttr key, const gchar* value) {
                 break;
 
             default:
-                SPItem::set(key, value);
+                Base::set(key, value);
                 break;
         }
     }
 }
 
-void SPText::child_added(Inkscape::XML::Node *rch, Inkscape::XML::Node *ref) {
-    SPItem::child_added(rch, ref);
-
-    this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_TEXT_CONTENT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
+void SPText::child_added(Inkscape::XML::Node *rch, Inkscape::XML::Node *ref)
+{
+    Base::child_added(rch, ref);
+    requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_TEXT_CONTENT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
 }
 
-void SPText::remove_child(Inkscape::XML::Node *rch) {
-    SPItem::remove_child(rch);
-
-    this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_TEXT_CONTENT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
+void SPText::remove_child(Inkscape::XML::Node *rch)
+{
+    Base::remove_child(rch);
+    requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_TEXT_CONTENT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
 }
-
 
 void SPText::update(SPCtx *ctx, guint flags) {
 
@@ -167,7 +165,7 @@ void SPText::update(SPCtx *ctx, guint flags) {
     }
 
     // update ourselves after updating children
-    SPItem::update(ctx, flags);
+    Base::update(ctx, flags);
 
     if (flags & ( SP_OBJECT_STYLE_MODIFIED_FLAG |
                   SP_OBJECT_CHILD_MODIFIED_FLAG |
@@ -213,8 +211,9 @@ void SPText::update(SPCtx *ctx, guint flags) {
     }
 }
 
-void SPText::modified(guint flags) {
-//	SPItem::onModified(flags);
+void SPText::modified(unsigned flags)
+{
+    Base::modified(flags);
 
     guint cflags = (flags & SP_OBJECT_MODIFIED_CASCADE);
 
@@ -302,7 +301,7 @@ Inkscape::XML::Node *SPText::write(Inkscape::XML::Document *xml_doc, Inkscape::X
 
     this->attributes.writeTo(repr);
 
-    SPItem::write(xml_doc, repr, flags);
+    Base::write(xml_doc, repr, flags);
 
     return repr;
 }

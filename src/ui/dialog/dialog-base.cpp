@@ -203,6 +203,13 @@ void DialogBase::setDesktop(SPDesktop *new_desktop)
     desktopReplaced();
 }
 
+void DialogBase::onDefocus()
+{
+    if (desktop) {
+        desktop->getCanvas()->grab_focus();
+    }
+}
+
 void DialogBase::fix_inner_scroll(Gtk::Widget * const widget)
 {
 #if 0 // Todo: Is this needed anymore?

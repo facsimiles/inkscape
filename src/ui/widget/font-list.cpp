@@ -13,6 +13,7 @@
 #include <gtkmm/progressbar.h>
 #include <gtkmm/separator.h>
 #include <gtkmm/stringlist.h>
+#include <gtkmm/stringobject.h>
 #include <gtkmm/treeiter.h>
 #include <gtkmm/widget.h>
 #include <iostream>
@@ -39,6 +40,7 @@
 #include "preferences.h"
 #include "ui/builder-utils.h"
 #include "ui/icon-loader.h"
+#include "ui/widget/entry-dropdown.h"
 #include "ui/widget/popover-menu-item.h"
 #include "ui/widget/popover-menu.h"
 #include "util/font-collections.h"
@@ -240,12 +242,12 @@ void set_grid_cell_size(Gtk::CellRendererText* renderer, int font_size_percent) 
 
 FontList::FontList(Glib::ustring preferences_path) :
     _prefs(std::move(preferences_path)),
-    _builder(create_builder("font-list.glade")),
+    _builder((EntryDropDown::register_type(), create_builder("font-list.glade"))),
     _main_grid(get_widget<Gtk::Grid>(_builder, "main-grid")),
     _tag_list(get_widget<Gtk::ListBox>(_builder, "categories")),
     _font_list(get_widget<Gtk::TreeView>(_builder, "font-list")),
     _font_grid(get_widget<Gtk::IconView>(_builder, "font-grid")),
-    _font_size(get_widget<Gtk::ComboBoxText>(_builder, "font-size")),
+    _font_size(get_derived_widget<EntryDropDown>(_builder, "font-size")),
     _font_size_scale(get_widget<Gtk::Scale>(_builder, "font-size-scale")),
     _tag_box(get_widget<Gtk::Box>(_builder, "tag-box")),
     _info_box(get_widget<Gtk::Box>(_builder, "info-box")),
@@ -590,15 +592,15 @@ FontList::FontList(Glib::ustring preferences_path) :
 
         auto scoped = _update.block();
         auto size = index_to_font_size(_font_size_scale.get_value());
-        _font_size.get_entry()->set_text(std::to_string(size));
+        _font_size.setText(std::to_string(size));
         _signal_changed.emit();
     });
 
-    _font_size.signal_changed().connect([this](){
+    _font_size.connectChanged([this] {
         if (_update.pending()) return;
 
         auto scoped = _update.block();
-        auto text = _font_size.get_active_text();
+        auto text = _font_size.getText();
         if (!text.empty()) {
             auto size = ::atof(text.c_str());
             if (size > 0) {
@@ -607,8 +609,13 @@ FontList::FontList(Glib::ustring preferences_path) :
             }
         }
     });
-    _font_size.set_active_text("10");
-    _font_size.get_entry()->set_max_width_chars(6);
+    _font_size.setText("10");
+    _font_size.setMaxWidthChars(6);
+    _font_size.setModel(get_object<Gtk::StringList>(_builder, "sizes-stringlist"));
+    _font_size.setStringFuncAndFactory([] (Glib::ObjectBase const &obj) {
+        auto const &stringobj = dynamic_cast<Gtk::StringObject const &>(obj);
+        return stringobj.get_string();
+    });
 
     sort_fonts(Inkscape::FontOrder::by_name);
 
@@ -810,7 +817,7 @@ void FontList::update_font_count() {
 }
 
 double FontList::get_fontsize() const {
-    auto text = _font_size.get_entry()->get_text();
+    auto text = _font_size.getText();
     if (!text.empty()) {
         auto size = ::atof(text.c_str());
         if (size > 0) return size;
@@ -876,7 +883,12 @@ void FontList::set_current_size(double size) {
     os.precision(3);
     os << size;
     _font_size_scale.set_value(font_size_to_index(size));
-    _font_size.get_entry()->set_text(os.str());
+    _font_size.setText(os.str());
+}
+
+void FontList::setDefocusTarget(DefocusTarget *defocus_target)
+{
+    _font_size.setDefocusTarget(defocus_target);
 }
 
 void FontList::add_font(const Glib::ustring& fontspec, bool select) {

@@ -418,7 +418,8 @@ GlyphsPanel::GlyphsPanel()
 
     {
         fontSelector = Gtk::make_managed<UI::Widget::FontSelector>(false, false);
-        fontSelector->set_name ("UnicodeCharacters");
+        fontSelector->set_name("UnicodeCharacters");
+        fontSelector->set_model(localfontlister);
         instanceConns.emplace_back(
             fontSelector->connectChanged(sigc::hide(sigc::mem_fun(*this, &GlyphsPanel::rebuild))));
         table->attach(*fontSelector, 0, row, 3, 1);
@@ -658,18 +659,16 @@ void GlyphsPanel::calcCanInsert()
     }
 }
 
-void GlyphsPanel::readSelection( bool updateStyle, bool updateContent )
+void GlyphsPanel::readSelection(bool updateStyle, bool updateContent)
 {
     calcCanInsert();
 
     if (updateStyle) {
-        Inkscape::FontLister* fontlister = Inkscape::FontLister::get_instance();
-
         // Update family/style based on selection.
-        fontlister->selection_update();
+        localfontlister.selectionUpdate(getDesktop());
 
         // Update GUI (based on fontlister values).
-        fontSelector->update_font ();
+        fontSelector->update_font();
     }
 }
 

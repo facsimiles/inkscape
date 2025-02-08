@@ -22,6 +22,24 @@
       <item translatable="yes" context="font-sample-text" comments="Sample text using diacritical marks and special characters. Add diacritics if your alphabet supports them, or other character variants that may be of interest to speakers of your language, like currency sign, etc. The idea is to test if selected font defines those variants.">Yélløw ťüřtle fröm Áłphårettä íś čōmińġ fôr ďïññęr tòđây.</item>
     </items>
   </object>
+  <object class="GtkStringList" id="sizes-stringlist">
+    <items>
+      <item translatable="yes">6</item>
+      <item translatable="yes">7</item>
+      <item translatable="yes">8</item>
+      <item translatable="yes">9</item>
+      <item translatable="yes">10</item>
+      <item translatable="yes">12</item>
+      <item translatable="yes">14</item>
+      <item translatable="yes">16</item>
+      <item translatable="yes">20</item>
+      <item translatable="yes">24</item>
+      <item translatable="yes">32</item>
+      <item translatable="yes">48</item>
+      <item translatable="yes">72</item>
+      <item translatable="yes">144</item>
+    </items>
+  </object>
   <menu id="samples-menu">
     <section>
       <item>
@@ -398,29 +416,12 @@
           </object>
         </child>
         <child>
-          <object class="GtkComboBoxText" id="font-size">
+          <object class="gtkmm__CustomObject_EntryDropDown" id="font-size">
             <property name="focusable">True</property>
             <property name="hexpand">False</property>
             <property name="valign">center</property>
             <property name="margin-top">4</property>
             <property name="margin-bottom">2</property>
-            <property name="has-entry">True</property>
-            <items>
-              <item translatable="yes">6</item>
-              <item translatable="yes">7</item>
-              <item translatable="yes">8</item>
-              <item translatable="yes">9</item>
-              <item translatable="yes">10</item>
-              <item translatable="yes">12</item>
-              <item translatable="yes">14</item>
-              <item translatable="yes">16</item>
-              <item translatable="yes">20</item>
-              <item translatable="yes">24</item>
-              <item translatable="yes">32</item>
-              <item translatable="yes">48</item>
-              <item translatable="yes">72</item>
-              <item translatable="yes">144</item>
-            </items>
           </object>
         </child>
         <child>
