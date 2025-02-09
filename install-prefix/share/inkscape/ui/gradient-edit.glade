@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <object class="GtkAdjustment" id="adjustmentAngle">
+    <property name="lower">-180</property>
+    <property name="upper">180</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">15</property>
+  </object>
+  <object class="GtkPopover" id="libraryPopover">
+    <property name="width-request">360</property>
+    <property name="height-request">440</property>
+  </object>
+  <object class="GtkAdjustment" id="offset">
+    <property name="upper">1</property>
+    <property name="step-increment">0.01</property>
+    <property name="page-increment">0.10</property>
+  </object>
+  <object class="GtkGrid" id="mainGrid">
+    <property name="name">mainGrid</property>
+    <property name="hexpand">True</property>
+    <property name="column-spacing">4</property>
+    <child>
+      <object class="GtkBox">
+        <property name="hexpand">True</property>
+        <child>
+          <object class="GtkToggleButton" id="linearBtn">
+            <property name="visible">False</property>
+            <property name="sensitive">False</property>
+            <property name="focusable">True</property>
+            <property name="receives-default">True</property>
+            <property name="tooltip-text" translatable="yes">Linear gradient</property>
+            <property name="has-frame">False</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkToggleButton" id="radialBtn">
+            <property name="visible">False</property>
+            <property name="sensitive">False</property>
+            <property name="focusable">True</property>
+            <property name="receives-default">True</property>
+            <property name="tooltip-text" translatable="yes">Radial gradient</property>
+            <property name="has-frame">False</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="hexpand">True</property>
+            <property name="orientation">vertical</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="reverseBtn">
+            <property name="valign">center</property>
+            <property name="focus-on-click">False</property>
+            <property name="receives-default">True</property>
+            <property name="tooltip-text" translatable="yes">Reverse the direction of the gradient</property>
+            <property name="has-frame">False</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="turnBtn">
+            <property name="valign">center</property>
+            <property name="focusable">True</property>
+            <property name="focus-on-click">False</property>
+            <property name="receives-default">True</property>
+            <property name="tooltip-text" translatable="yes">Rotate gradient 90 degrees</property>
+            <property name="margin-end">10</property>
+            <property name="has-frame">False</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkScale" id="angleSlider">
+            <property name="draw-value">False</property>
+            <property name="focusable">True</property>
+            <property name="hexpand">True</property>
+            <property name="adjustment">adjustmentAngle</property>
+            <property name="round-digits">0</property>
+            <property name="has-origin">False</property>
+            <style>
+              <class name="angle-slider"/>
+            </style>
+          </object>
+        </child>
+        <layout>
+          <property name="column">2</property>
+          <property name="row">1</property>
+          <property name="column-span">2</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox" id="stopBox">
+        <property name="margin-top">3</property>
+        <property name="margin-bottom">3</property>
+        <property name="hexpand">True</property>
+        <child>
+          <object class="GtkExpander" id="stopsBtn">
+            <property name="focusable">True</property>
+            <property name="valign">center</property>
+            <child type="label">
+              <object class="GtkLabel">
+                <property name="label" translatable="yes">Stops</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="hexpand">True</property>
+            <property name="halign">end</property>
+            <property name="margin-end">4</property>
+            <property name="label" translatable="yes">Stop Offset:</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkSpinButton" id="offsetSpin">
+            <property name="focusable">True</property>
+            <property name="tooltip-text" translatable="yes">Offset of selected stop</property>
+            <property name="margin-end">12</property>
+            <property name="adjustment">offset</property>
+            <property name="digits">2</property>
+            <property name="numeric">True</property>
+          </object>
+        </child>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">3</property>
+          <property name="column-span">4</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox" id="gradientBox">
+        <property name="margin-end">2</property>
+        <property name="margin-top">2</property>
+        <property name="hexpand">True</property>
+        <property name="orientation">vertical</property>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">2</property>
+          <property name="column-span">4</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <property name="hexpand">True</property>
+        <property name="vexpand">True</property>
+        <child>
+          <object class="GtkBox" id="stopsGallery">
+            <property name="margin-start">4</property>
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkScrolledWindow">
+                <property name="vexpand">True</property>
+                <property name="focusable">True</property>
+                <property name="margin-top">1</property>
+                <property name="margin-bottom">1</property>
+                <property name="has-frame">True</property>
+                <property name="child">
+                  <object class="GtkTreeView" id="stopList">
+                    <property name="width-request">65</property>
+                    <property name="focusable">True</property>
+                    <property name="margin-start">1</property>
+                    <property name="margin-end">1</property>
+                    <property name="margin-top">1</property>
+                    <property name="margin-bottom">1</property>
+                    <property name="headers-visible">False</property>
+                    <property name="enable-search">False</property>
+                    <child internal-child="selection">
+                      <object class="GtkTreeSelection"/>
+                    </child>
+                  </object>
+                </property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox" id="stopButtons">
+                <child>
+                  <object class="GtkButton" id="stopAdd">
+                    <property name="focusable">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="tooltip-text" translatable="yes">Insert new stop</property>
+                    <property name="has-frame">False</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="stopDelete">
+                    <property name="focusable">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="tooltip-text" translatable="yes">Delete stop</property>
+                    <property name="has-frame">False</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox" id="colorsBox">
+            <property name="hexpand">True</property>
+            <property name="vexpand">True</property>
+            <property name="orientation">vertical</property>
+          </object>
+        </child>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">4</property>
+          <property name="column-span">4</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="halign">end</property>
+        <property name="hexpand">True</property>
+        <property name="label" translatable="yes">Orientation:</property>
+        <layout>
+          <property name="column">2</property>
+          <property name="row">0</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSpinButton" id="angle">
+        <property name="focusable">True</property>
+        <property name="tooltip-text" translatable="yes">Adjust angle of the gradient</property>
+        <property name="margin-end">12</property>
+        <property name="adjustment">adjustmentAngle</property>
+        <property name="digits">2</property>
+        <property name="numeric">True</property>
+        <layout>
+          <property name="column">3</property>
+          <property name="row">0</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="halign">start</property>
+        <property name="margin-start">4</property>
+        <property name="label" translatable="yes">Repeat:</property>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">1</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuButton" id="repeatMode">
+        <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
+        <property name="receives-default">True</property>
+        <property name="halign">start</property>
+        <property name="valign">center</property>
+        <property name="has-frame">False</property>
+        <child>
+          <object class="GtkBox">
+            <child>
+              <object class="GtkImage" id="repeatIco">
+                <property name="margin-end">8</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">pan-down-symbolic</property>
+                <style>
+                  <class name="arrow"/>
+                </style>
+              </object>
+            </child>
+          </object>
+        </child>
+        <layout>
+          <property name="column">1</property>
+          <property name="row">1</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="halign">start</property>
+        <property name="margin-start">4</property>
+        <property name="label" translatable="yes">Gradient:</property>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">0</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuButton" id="libraryBtn">
+        <property name="focusable">True</property>
+        <property name="focus-on-click">False</property>
+        <property name="receives-default">True</property>
+        <property name="tooltip-text" translatable="yes">Gradient library</property>
+        <property name="valign">center</property>
+        <property name="popover">libraryPopover</property>
+        <child>
+          <object class="GtkBox">
+            <child>
+              <object class="GtkImage">
+                <property name="margin-end">8</property>
+                <property name="icon-name">gradient-library</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">pan-down-symbolic</property>
+                <style>
+                  <class name="arrow"/>
+                </style>
+              </object>
+            </child>
+          </object>
+        </child>
+        <layout>
+          <property name="column">1</property>
+          <property name="row">0</property>
+        </layout>
+      </object>
+    </child>
+  </object>
+</interface>

@@ -1,0 +1,637 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <object class="GtkAdjustment" id="adjustment-angle">
+    <property name="lower">-360</property>
+    <property name="upper">360.00999999999999</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">15</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment-gap-x">
+    <property name="upper">40</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">2</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment-gap-x-spin">
+    <property name="upper">100000</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment-gap-y">
+    <property name="upper">40</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">2</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment-gap-y-spin">
+    <property name="upper">100000</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment-offset">
+    <property name="lower">-10000</property>
+    <property name="upper">10000</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment-offset-2">
+    <property name="lower">-10000</property>
+    <property name="upper">10000</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment-orient">
+    <property name="lower">-12</property>
+    <property name="upper">12</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">1</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment-scale">
+    <property name="lower">0.01</property>
+    <property name="upper">1000</property>
+    <property name="step-increment">0.10</property>
+    <property name="page-increment">0.20</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment-scale-2">
+    <property name="lower">0.01</property>
+    <property name="upper">1000</property>
+    <property name="step-increment">0.10</property>
+    <property name="page-increment">0.20</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment-tile-size">
+    <property name="upper">20</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">1</property>
+  </object>
+  <object class="GtkPopover" id="popover-options">
+    <property name="width-request">260</property>
+    <property name="child">
+      <object class="GtkBox" id="options">
+        <property name="margin-start">1</property>
+        <property name="margin-end">1</property>
+        <property name="margin-top">1</property>
+        <property name="margin-bottom">1</property>
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkCheckButton" id="show-names">
+            <property name="label" translatable="yes">Show names</property>
+            <property name="focusable">True</property>
+            <property name="halign">start</property>
+            <property name="valign">center</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkGrid">
+            <property name="column-spacing">3</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="halign">start</property>
+                <property name="label" translatable="yes">Tile size:</property>
+                <property name="xalign">0</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkScale" id="tile-slider">
+                <property name="draw-value">True</property>
+                <property name="hexpand">True</property>
+                <property name="focusable">True</property>
+                <property name="adjustment">adjustment-tile-size</property>
+                <property name="round-digits">0</property>
+                <property name="has-origin">False</property>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="row">0</property>
+                  <property name="column-span">2</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="halign">start</property>
+                <property name="label" translatable="yes">Gap control:</property>
+                <property name="xalign">0</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">1</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="gap-slider">
+                <property name="label" translatable="yes">Mouse-friendly</property>
+                <property name="focusable">True</property>
+                <property name="active">True</property>
+                <property name="group">gap-spin</property>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="row">1</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="gap-spin">
+                <property name="label" translatable="yes">Precise</property>
+                <property name="focusable">True</property>
+                <property name="active">True</property>
+                <layout>
+                  <property name="column">2</property>
+                  <property name="row">1</property>
+                </layout>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </property>
+  </object>
+  <object class="GtkImage" id="image-linked">
+    <property name="icon-name">entries-linked-symbolic</property>
+    <property name="icon-size">normal</property>
+  </object>
+  <object class="GtkImage" id="image-unlinked">
+    <property name="icon-name">entries-unlinked-symbolic</property>
+    <property name="icon-size">normal</property>
+  </object>
+  <object class="GtkBox" id="main-box">
+    <property name="orientation">vertical</property>
+    <child>
+      <object class="GtkBox">
+        <property name="margin-bottom">2</property>
+        <property name="spacing">5</property>
+        <child>
+          <object class="GtkLabel">
+            <property name="valign">center</property>
+            <property name="label" translatable="yes">Pattern fill</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkMenuButton">
+            <property name="focusable">True</property>
+            <property name="focus-on-click">False</property>
+            <property name="receives-default">True</property>
+            <property name="halign">end</property>
+            <property name="hexpand">True</property>
+            <property name="has-frame">False</property>
+            <property name="popover">popover-options</property>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">gear</property>
+              </object>
+            </child>
+            <style>
+              <class name="square-button"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkSearchEntry" id="search">
+            <property name="focusable">True</property>
+            <property name="halign">end</property>
+            <property name="max-width-chars">10</property>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkPaned" id="paned">
+        <property name="shrink-end-child">0</property>
+        <property name="shrink-start-child">0</property>
+        <property name="height-request">50</property>
+        <property name="focusable">True</property>
+        <property name="vexpand">True</property>
+        <property name="orientation">vertical</property>
+        <property name="position">50</property>
+        <property name="position-set">True</property>
+        <property name="wide-handle">True</property>
+        <property name="start-child">
+          <object class="GtkScrolledWindow">
+            <property name="focusable">True</property>
+            <property name="hscrollbar-policy">never</property>
+            <property name="child">
+              <object class="GtkViewport">
+                <property name="vscroll-policy">natural</property>
+                <property name="child">
+                  <object class="GtkFlowBox" id="doc-flowbox">
+                    <property name="halign">start</property>
+                    <property name="valign">start</property>
+                    <property name="min-children-per-line">2</property>
+                    <property name="max-children-per-line">999</property>
+                  </object>
+                </property>
+              </object>
+            </property>
+          </object>
+        </property>
+        <property name="end-child">
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkBox">
+                <child>
+                  <object class="GtkComboBoxText" id="pattern-combo">
+                    <property name="margin-top">1</property>
+                    <style>
+                      <class name="flat-combobox"/>
+                    </style>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="previous">
+                    <property name="focusable">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="has-frame">False</property>
+                    <style>
+                      <class name="square-button"/>
+                    </style>
+                    <child>
+                      <object class="GtkImage" id="image1">
+                        <property name="icon-name">go-previous-symbolic</property>
+                        <property name="use-fallback">True</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="next">
+                    <property name="focusable">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="has-frame">False</property>
+                    <style>
+                      <class name="square-button"/>
+                    </style>
+                    <child>
+                      <object class="GtkImage" id="image2">
+                        <property name="icon-name">go-next-symbolic</property>
+                        <property name="use-fallback">True</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow">
+                <property name="vexpand">True</property>
+                <property name="focusable">True</property>
+                <property name="hscrollbar-policy">never</property>
+                <property name="child">
+                  <object class="GtkViewport">
+                    <property name="vscroll-policy">natural</property>
+                    <property name="child">
+                      <object class="GtkFlowBox" id="flowbox">
+                        <property name="focusable">True</property>
+                        <property name="halign">start</property>
+                        <property name="valign">start</property>
+                        <property name="min-children-per-line">2</property>
+                        <property name="max-children-per-line">999</property>
+                      </object>
+                    </property>
+                  </object>
+                </property>
+              </object>
+            </child>
+          </object>
+        </property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparator">
+        <property name="valign">center</property>
+        <property name="margin-top">3</property>
+        <property name="margin-bottom">3</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkGrid" id="input-grid">
+        <property name="margin-end">4</property>
+        <property name="margin-top">4</property>
+        <property name="margin-bottom">4</property>
+        <property name="row-spacing">4</property>
+        <property name="vexpand">False</property>
+        <child>
+          <object class="GtkLabel">
+            <property name="halign">start</property>
+            <property name="label" translatable="yes">Scale X:</property>
+            <layout>
+              <property name="column">1</property>
+              <property name="row">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkSpinButton" id="scale-x">
+            <property name="focusable">True</property>
+            <property name="adjustment">adjustment-scale</property>
+            <property name="digits">3</property>
+            <property name="numeric">True</property>
+            <property name="value">0.0001</property>
+            <layout>
+              <property name="column">3</property>
+              <property name="row">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="halign">start</property>
+            <property name="label" translatable="yes">Scale Y:</property>
+            <layout>
+              <property name="column">1</property>
+              <property name="row">1</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkSpinButton" id="scale-y">
+            <property name="focusable">True</property>
+            <property name="adjustment">adjustment-scale-2</property>
+            <property name="digits">3</property>
+            <property name="numeric">True</property>
+            <property name="value">0.0001</property>
+            <layout>
+              <property name="column">3</property>
+              <property name="row">1</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="halign">start</property>
+            <property name="margin-end">4</property>
+            <property name="label" translatable="yes">Orientation:</property>
+            <layout>
+              <property name="column">1</property>
+              <property name="row">2</property>
+              <property name="column-span">2</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkSpinButton" id="angle">
+            <property name="focusable">True</property>
+            <property name="adjustment">adjustment-angle</property>
+            <property name="digits">2</property>
+            <layout>
+              <property name="column">3</property>
+              <property name="row">2</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkScale" id="orient">
+            <property name="draw-value">False</property>
+            <property name="focusable">True</property>
+            <property name="round-digits">0</property>
+            <property name="has-origin">False</property>
+            <style>
+              <class name="tight-slider"/>
+            </style>
+            <layout>
+              <property name="column">3</property>
+              <property name="row">3</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="halign">start</property>
+            <property name="margin-end">4</property>
+            <property name="label" translatable="yes">Offset X:</property>
+            <layout>
+              <property name="column">1</property>
+              <property name="row">4</property>
+              <property name="column-span">2</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="halign">start</property>
+            <property name="margin-end">4</property>
+            <property name="label" translatable="yes">Offset Y:</property>
+            <layout>
+              <property name="column">1</property>
+              <property name="row">5</property>
+              <property name="column-span">2</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkSpinButton" id="offset-x">
+            <property name="focusable">True</property>
+            <property name="adjustment">adjustment-offset</property>
+            <property name="digits">3</property>
+            <property name="numeric">True</property>
+            <layout>
+              <property name="column">3</property>
+              <property name="row">4</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkSpinButton" id="offset-y">
+            <property name="focusable">True</property>
+            <property name="adjustment">adjustment-offset-2</property>
+            <property name="digits">3</property>
+            <property name="numeric">True</property>
+            <layout>
+              <property name="column">3</property>
+              <property name="row">5</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="halign">start</property>
+            <property name="label" translatable="yes">Gap X:</property>
+            <layout>
+              <property name="column">1</property>
+              <property name="row">6</property>
+              <property name="column-span">2</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="halign">start</property>
+            <property name="label" translatable="yes">Gap Y:</property>
+            <layout>
+              <property name="column">1</property>
+              <property name="row">7</property>
+              <property name="column-span">2</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="edit-pattern">
+            <property name="label" translatable="yes">Edit on canvas</property>
+            <property name="focus-on-click">False</property>
+            <property name="receives-default">True</property>
+            <property name="halign">center</property>
+            <property name="valign">center</property>
+            <property name="margin-end">4</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="row">7</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="margin-top">4</property>
+            <property name="hexpand">True</property>
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkEntry" id="pattern-name">
+                <property name="focusable">True</property>
+                <property name="margin-start">4</property>
+                <property name="margin-end">4</property>
+                <property name="margin-bottom">3</property>
+                <property name="has-frame">False</property>
+                <property name="width-chars">10</property>
+                <property name="xalign">0.5</property>
+                <property name="placeholder-text" translatable="yes" comments="This is a hint that shows up when pattern name is blank">name</property>
+                <style>
+                  <class name="small-font"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow">
+                <property name="vexpand">True</property>
+                <property name="focusable">True</property>
+                <property name="margin-end">4</property>
+                <property name="hscrollbar-policy">external</property>
+                <property name="vscrollbar-policy">external</property>
+                <property name="child">
+                  <object class="GtkViewport" id="preview-box">
+                    <property name="child">
+                      <object class="GtkPicture" id="preview">
+                        <property name="hexpand">True</property>
+                      </object>
+                    </property>
+                  </object>
+                </property>
+              </object>
+            </child>
+            <layout>
+              <property name="column">0</property>
+              <property name="row">0</property>
+              <property name="row-span">6</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="link-scale">
+            <property name="name">LockGuides</property>
+            <property name="focus-on-click">False</property>
+            <property name="receives-default">True</property>
+            <property name="halign">end</property>
+            <property name="margin-end">1</property>
+            <property name="margin-top">5</property>
+            <property name="margin-bottom">5</property>
+            <property name="has-frame">False</property>
+            <layout>
+              <property name="column">2</property>
+              <property name="row">0</property>
+              <property name="row-span">2</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="halign">center</property>
+            <child>
+              <object class="GtkLabel" id="color-label">
+                <property name="halign">start</property>
+                <property name="label" translatable="yes">Color: </property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkMenuButton" id="color-btn">
+                <property name="valign">center</property>
+                <property name="receives-default">True</property>
+                <property name="tooltip-text" translatable="yes">Apply color to the current pattern</property>
+              </object>
+            </child>
+            <layout>
+              <property name="column">0</property>
+              <property name="row">6</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <child>
+              <object class="GtkScale" id="gap-x">
+                <property name="hexpand">True</property>
+                <property name="draw-value">True</property>
+                <property name="focusable">True</property>
+                <property name="adjustment">adjustment-gap-x</property>
+                <property name="round-digits">0</property>
+                <property name="has-origin">False</property>
+                <style>
+                  <class name="tight-slider"/>
+                  <class name="small-font"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkSpinButton" id="gap-x-spin">
+                <property name="hexpand">True</property>
+                <property name="focusable">True</property>
+                <property name="valign">center</property>
+                <property name="adjustment">adjustment-gap-x-spin</property>
+                <property name="digits">1</property>
+              </object>
+            </child>
+            <layout>
+              <property name="column">3</property>
+              <property name="row">6</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <child>
+              <object class="GtkScale" id="gap-y">
+                <property name="hexpand">True</property>
+                <property name="draw-value">True</property>
+                <property name="focusable">True</property>
+                <property name="adjustment">adjustment-gap-y</property>
+                <property name="round-digits">0</property>
+                <property name="has-origin">False</property>
+                <style>
+                  <class name="tight-slider"/>
+                  <class name="small-font"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkSpinButton" id="gap-y-spin">
+                <property name="hexpand">True</property>
+                <property name="focusable">True</property>
+                <property name="valign">center</property>
+                <property name="adjustment">adjustment-gap-y-spin</property>
+                <property name="digits">1</property>
+              </object>
+            </child>
+            <layout>
+              <property name="column">3</property>
+              <property name="row">7</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>

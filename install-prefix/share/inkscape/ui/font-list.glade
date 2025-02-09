@@ -1,0 +1,572 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <object class="GtkAdjustment" id="adjustment-font-size">
+    <property name="upper">20</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">2</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment-size">
+    <property name="lower">100</property>
+    <property name="upper">400</property>
+    <property name="step-increment">10</property>
+    <property name="page-increment">20</property>
+  </object>
+  <object class="GtkStringList" id="samples-stringlist">
+    <items>
+      <item translatable="yes" context="font-sample-text" comments="A few alphanumeric characters to see what font glyphs look like">AbcdEfgh1234</item>
+      <item translatable="yes" context="font-sample-text" comments="Sample text consisting of Arabic numerals">1234567890</item>
+      <item translatable="yes" context="font-sample-text" comments="Sample text of lowercase Latin letters. Feel free to add diacritics if your language uses Latin script.">abcdefghijklmnopqrstuvwxyz</item>
+      <item translatable="yes" context="font-sample-text" comments="Sample text of uppercase Latin letters. Feel free to add diacritics if your language uses Latin script.">ABCDEFGHIJKLMNOPQRSTUVWXYZ</item>
+      <item translatable="yes" context="font-sample-text" comments="Provide a sentence in your language that uses every letter in your alphabet. If your language uses logographs, you may want to include a few to give a glimpse of what selected font looks like.&#10;&#10;https://en.wikipedia.org/wiki/The_quick_brown_fox_jumps_over_the_lazy_dog">The quick brown fox jumps over the lazy dog.</item>
+      <item translatable="yes" context="font-sample-text" comments="Sample text using diacritical marks and special characters. Add diacritics if your alphabet supports them, or other character variants that may be of interest to speakers of your language, like currency sign, etc. The idea is to test if selected font defines those variants.">Yélløw ťüřtle fröm Áłphårettä íś čōmińġ fôr ďïññęr tòđây.</item>
+    </items>
+  </object>
+  <menu id="samples-menu">
+    <section>
+      <item>
+        <attribute name="label" translatable="yes" comments="This is an option to select to show font name as a font preview in font browser">Font name</attribute>
+        <attribute name="action">win.set-sample</attribute>
+        <attribute name="target"></attribute>
+      </item>
+    </section>
+    <!-- This submenu is populated at runtime from 'samples-stringlist' !-->
+    <section id="samples-submenu"/>
+  </menu>
+  <object class="GtkPopover" id="filter-popover">
+    <property name="child">
+      <object class="GtkGrid">
+        <property name="margin-start">10</property>
+        <property name="margin-end">10</property>
+        <property name="margin-top">8</property>
+        <property name="margin-bottom">8</property>
+        <property name="row-spacing">3</property>
+        <property name="column-spacing">3</property>
+        <child>
+          <object class="GtkLabel">
+            <property name="halign">start</property>
+            <property name="label" translatable="yes">Font collections:</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="row">0</property>
+              <property name="column-span">2</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="id-reset-filter">
+            <property name="focusable">True</property>
+            <property name="receives-default">True</property>
+            <property name="tooltip-text" translatable="yes">Show all fonts</property>
+            <property name="halign">center</property>
+            <child>
+              <object class = "GtkBox">
+                <property name="spacing">3</property>
+                <child>
+                  <object class = "GtkImage">
+                    <property name="icon-name">reset-settings-symbolic</property>
+                  </object>
+                </child>
+                <child>
+                  <object class = "GtkLabel">
+                    <property name="label" translatable="yes">All fonts</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <layout>
+              <property name="column">0</property>
+              <property name="row">2</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow">
+            <property name="width-request">180</property>
+            <property name="height-request">240</property>
+            <property name="focusable">True</property>
+            <property name="has-frame">True</property>
+            <property name="child">
+              <object class="GtkViewport">
+                <property name="child">
+                  <object class="GtkListBox" id="categories">
+                    <property name="selection-mode">none</property>
+                  </object>
+                </property>
+              </object>
+            </property>
+            <layout>
+              <property name="column">0</property>
+              <property name="row">1</property>
+              <property name="column-span">2</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="id-edit-collections">
+            <property name="focusable">True</property>
+            <property name="receives-default">True</property>
+            <property name="tooltip-text" translatable="yes">Edit font collections</property>
+            <property name="action-name">win.dialog-open</property>
+            <property name="action-target">'FontCollections'</property>
+            <property name="halign">center</property>
+            <child>
+              <object class = "GtkBox">
+                <property name="spacing">3</property>
+                <child>
+                  <object class = "GtkImage">
+                    <property name="icon-name">edit</property>
+                  </object>
+                </child>
+                <child>
+                  <object class = "GtkLabel">
+                    <property name="label" translatable="yes">Collections</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <layout>
+              <property name="column">1</property>
+              <property name="row">2</property>
+            </layout>
+          </object>
+        </child>
+      </object>
+    </property>
+  </object>
+  <object class="GtkGrid" id="main-grid">
+    <property name="hexpand">True</property>
+    <property name="vexpand">True</property>
+    <property name="column-spacing">3</property>
+    <child>
+      <object class="GtkScrolledWindow" id="list">
+        <property name="focusable">True</property>
+        <property name="hexpand">True</property>
+        <property name="vexpand">True</property>
+        <property name="hscrollbar-policy">never</property>
+        <property name="child">
+          <object class="GtkTreeView" id="font-list">
+            <property name="focusable">True</property>
+            <property name="headers-visible">False</property>
+            <property name="enable-search">False</property>
+            <property name="show-expanders">False</property>
+            <property name="enable-grid-lines">horizontal</property>
+            <child internal-child="selection">
+              <object class="GtkTreeSelection"/>
+            </child>
+          </object>
+        </property>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">4</property>
+          <property name="row-span">2</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparator">
+        <layout>
+          <property name="column">0</property>
+          <property name="row">3</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <property name="margin-start">5</property>
+        <property name="margin-end">5</property>
+        <property name="hexpand">True</property>
+        <property name="spacing">4</property>
+        <child>
+          <object class="GtkMenuButton" id="btn-sort">
+            <property name="focusable">True</property>
+            <property name="focus-on-click">False</property>
+            <property name="receives-default">True</property>
+            <property name="halign">center</property>
+            <property name="has-frame">False</property>
+            <child>
+              <object class="GtkBox">
+                <child>
+                  <object class="GtkImage" id="sort-icon">
+                    <property name="icon-name">sort</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkImage">
+                    <property name="icon-name">pan-down-symbolic</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkMenuButton" id="btn-filter">
+            <property name="focusable">True</property>
+            <property name="focus-on-click">False</property>
+            <property name="receives-default">True</property>
+            <property name="halign">center</property>
+            <property name="has-frame">False</property>
+            <property name="popover">filter-popover</property>
+            <child>
+              <object class="GtkBox">
+                <child>
+                  <object class="GtkImage">
+                    <property name="icon-name">font_collections</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkImage">
+                    <property name="icon-name">pan-down-symbolic</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkToggleButton" id="btn-options">
+            <property name="focusable">True</property>
+            <property name="receives-default">True</property>
+            <property name="icon-name">gear</property>
+            <property name="has-frame">False</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkDrawingArea">
+            <property name="width-request">15</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkSearchEntry" id="font-search">
+            <property name="focusable">True</property>
+            <property name="hexpand">True</property>
+            <property name="width-chars">10</property>
+          </object>
+        </child>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">0</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkGrid" id="options-grid">
+        <property name="visible">False</property>
+        <property name="margin-start">5</property>
+        <property name="margin-end">5</property>
+        <property name="margin-top">5</property>
+        <property name="margin-bottom">3</property>
+        <property name="row-spacing">3</property>
+        <property name="column-spacing">3</property>
+        <child>
+          <object class="GtkLabel">
+            <property name="halign">start</property>
+            <property name="label" translatable="yes">Sample</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="row">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="halign">start</property>
+            <property name="label" translatable="yes">Preview size</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="row">2</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkCheckButton" id="show-font-name">
+            <property name="label" translatable="yes">Show font name</property>
+            <property name="focusable">True</property>
+            <property name="halign">start</property>
+            <property name="active">True</property>
+            <layout>
+              <property name="column">1</property>
+              <property name="row">1</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkEntry" id="sample-text">
+            <property name="focusable">True</property>
+            <property name="hexpand">True</property>
+            <property name="width-chars">10</property>
+            <layout>
+              <property name="column">1</property>
+              <property name="row">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkMenuButton">
+            <property name="focusable">True</property>
+            <property name="focus-on-click">False</property>
+            <property name="receives-default">True</property>
+            <property name="menu-model">samples-menu</property>
+            <layout>
+              <property name="column">2</property>
+              <property name="row">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="halign">start</property>
+            <property name="label" translatable="yes">View</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="row">3</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkScale" id="preview-font-size">
+            <property name="draw-value">True</property>
+            <property name="focusable">True</property>
+            <property name="adjustment">adjustment-size</property>
+            <property name="show-fill-level">True</property>
+            <property name="round-digits">0</property>
+            <property name="digits">0</property>
+            <property name="value-pos">right</property>
+            <layout>
+              <property name="column">1</property>
+              <property name="row">2</property>
+              <property name="column-span">2</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <child>
+              <object class="GtkToggleButton" id="view-list">
+                <property name="receives-default">True</property>
+                <property name="icon-name">glyph-list-symbolic</property>
+                <property name="group">view-grid</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkToggleButton" id="view-grid">
+                <property name="receives-default">True</property>
+                <property name="margin-start">3</property>
+                <property name="icon-name">glyph-grid-symbolic</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkEntry" id="grid-sample">
+                <property name="focusable">True</property>
+                <property name="margin-start">5</property>
+                <property name="max-length">10</property>
+                <property name="width-chars">6</property>
+                <property name="text" translatable="yes" context="font-sample-text" comments="A short text sample for when fonts are arranged in grid">Aa</property>
+              </object>
+            </child>
+            <layout>
+              <property name="column">1</property>
+              <property name="row">3</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">1</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox" id="size-box">
+        <property name="margin-start">5</property>
+        <property name="margin-end">1</property>
+        <property name="spacing">4</property>
+        <child>
+          <object class="GtkLabel" id="font-size-label">
+            <property name="label" translatable="yes">Font size:</property>
+            <property name="xalign">0</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkComboBoxText" id="font-size">
+            <property name="focusable">True</property>
+            <property name="hexpand">False</property>
+            <property name="valign">center</property>
+            <property name="margin-top">4</property>
+            <property name="margin-bottom">2</property>
+            <property name="has-entry">True</property>
+            <items>
+              <item translatable="yes">6</item>
+              <item translatable="yes">7</item>
+              <item translatable="yes">8</item>
+              <item translatable="yes">9</item>
+              <item translatable="yes">10</item>
+              <item translatable="yes">12</item>
+              <item translatable="yes">14</item>
+              <item translatable="yes">16</item>
+              <item translatable="yes">20</item>
+              <item translatable="yes">24</item>
+              <item translatable="yes">32</item>
+              <item translatable="yes">48</item>
+              <item translatable="yes">72</item>
+              <item translatable="yes">144</item>
+            </items>
+          </object>
+        </child>
+        <child>
+          <object class="GtkScale" id="font-size-scale">
+            <property name="hexpand">True</property>
+            <property name="focusable">True</property>
+            <property name="adjustment">adjustment-font-size</property>
+            <property name="round-digits">1</property>
+            <style>
+              <class name="small-slider"/>
+            </style>
+          </object>
+        </child>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">8</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparator">
+        <layout>
+          <property name="column">0</property>
+          <property name="row">7</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <property name="margin-start">4</property>
+        <property name="margin-end">5</property>
+        <property name="margin-top">2</property>
+        <property name="margin-bottom">2</property>
+        <child>
+          <object class="GtkBox" id="progress-box">
+            <property name="hexpand">True</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="yes" context="loading-fonts">Initializing</property>
+                <property name="use-markup">True</property>
+                <style>
+                  <class name="secondary"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkProgressBar" id="init-progress">
+                <property name="valign">center</property>
+                <property name="margin-start">5</property>
+                <property name="hexpand">True</property>
+                <property name="text" translatable="yes">...</property>
+                <property name="show-text">True</property>
+                <property name="ellipsize">end</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox" id="info-box">
+            <property name="hexpand">True</property>
+            <child>
+              <object class="GtkScrolledWindow">
+                <property name="focusable">True</property>
+                <property name="hexpand">True</property>
+                <property name="vscrollbar-policy">never</property>
+                <property name="overlay-scrolling">False</property>
+                <property name="child">
+                  <object class="GtkViewport">
+                    <property name="child">
+                      <object class="GtkBox" id="tag-box">
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                      </object>
+                    </property>
+                  </object>
+                </property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="font-count">
+                <property name="halign">end</property>
+                <property name="valign">center</property>
+                <property name="margin-start">4</property>
+                <property name="margin-top">4</property>
+                <property name="margin-bottom">3</property>
+                <property name="label" translatable="yes">&lt;small&gt;256 fonts&lt;/small&gt;</property>
+                <property name="use-markup">True</property>
+                <style>
+                  <class name="secondary"/>
+                </style>
+              </object>
+            </child>
+          </object>
+        </child>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">2</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkScrolledWindow" id="grid">
+        <property name="focusable">True</property>
+        <property name="hexpand">True</property>
+        <property name="vexpand">True</property>
+        <property name="hscrollbar-policy">never</property>
+        <property name="vscrollbar-policy">always</property>
+        <property name="child">
+          <object class="GtkIconView" id="font-grid">
+            <property name="focusable">True</property>
+            <property name="margin-start">4</property>
+            <property name="margin-end">4</property>
+            <property name="margin-top">4</property>
+            <property name="margin-bottom">4</property>
+            <property name="row-spacing">0</property>
+            <property name="column-spacing">0</property>
+            <property name="item-padding">0</property>
+          </object>
+        </property>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">6</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox" id="variants">
+        <property name="margin-start">5</property>
+        <property name="margin-end">1</property>
+        <property name="margin-bottom">2</property>
+        <property name="orientation">vertical</property>
+        <child>
+          <placeholder/>
+        </child>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">9</property>
+        </layout>
+      </object>
+    </child>
+  </object>
+</interface>
