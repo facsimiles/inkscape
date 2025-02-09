@@ -13,6 +13,7 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "display/control/canvas-item-enums.h"
 #include "ui/tools/tool-base.h"
 #include <2geom/rect.h>
 #include "display/control/canvas-item-ptr.h"
@@ -89,6 +90,7 @@ private:
     std::optional<Geom::Rect> on_screen_rect; ///< On-screen rectangle, in desktop coordinates.
     CanvasItemPtr<CanvasItemRect> visual_box;
     CanvasItemPtr<CanvasItemGroup> drag_group;
+    CanvasItemCtrlType _handle = CanvasItemCtrlType::PAGES_TOOL_DRAG_OUTLINE; // Used for styling through css
     std::vector<Inkscape::CanvasItemBpath *> drag_shapes;
     std::vector<Inkscape::SnapCandidatePoint> _bbox_points;
 

@@ -209,21 +209,12 @@ void item_to_outline_add_marker_child( SPItem const *item, Geom::Affine marker_t
 }
 
 static
-void item_to_outline_add_marker( SPObject const *marker_object, Geom::Affine marker_transform,
-                              Geom::Scale stroke_scale, Geom::PathVector* pathv_in )
+void item_to_outline_add_marker(SPObject const *marker_object, Geom::Affine marker_transform, Geom::PathVector* pathv_in)
 {
-    SPMarker const * marker = cast<SPMarker>(marker_object);
-
-    Geom::Affine tr(marker_transform);
-    if (marker->markerUnits == SP_MARKER_UNITS_STROKEWIDTH) {
-        tr = stroke_scale * tr;
-    }
-    // total marker transform
-    tr = marker->c2p * tr;
-
-    SPItem const * marker_item = sp_item_first_item_child(marker_object); // why only consider the first item? can a marker only consist of a single item (that may be a group)?
-    if (marker_item) {
-        item_to_outline_add_marker_child(marker_item, tr, pathv_in);
+    // why only consider the first item? can a marker only consist of a single item (that may be a group)?
+    auto const marker = cast<SPMarker>(marker_object);
+    if (auto const * marker_item = sp_item_first_item_child(marker)) {
+        item_to_outline_add_marker_child(marker_item, marker->c2p * marker_transform, pathv_in);
     }
 }
 
@@ -267,24 +258,26 @@ Geom::PathVector* item_to_outline(SPItem const *item, bool exclude_markers)
 
         // START marker
         for (int i = 0; i < 2; i++) {  // SP_MARKER_LOC and SP_MARKER_LOC_START
-            if ( SPObject *marker_obj = shape->_marker[i] ) {
-                Geom::Affine const m (sp_shape_marker_get_transform_at_start(fill.front().front()));
-                item_to_outline_add_marker( marker_obj, m, scale, ret_pathv );
+            if (auto const marker = shape->_marker[i]) {
+                Geom::Affine transform (sp_shape_marker_get_transform_at_start(fill.front().front()));
+                transform = marker->get_marker_transform(transform, style->stroke_width.computed, true);
+                item_to_outline_add_marker(marker, transform, ret_pathv);
             }
         }
 
         // MID marker
         for (int i = 0; i < 3; i += 2) {  // SP_MARKER_LOC and SP_MARKER_LOC_MID
-            SPObject *midmarker_obj = shape->_marker[i];
-            if (!midmarker_obj) continue;
+            auto const marker = shape->_marker[i];
+            if (!marker) continue;
             for(Geom::PathVector::const_iterator path_it = fill.begin(); path_it != fill.end(); ++path_it) {
 
                 // START position
                 if ( path_it != fill.begin() &&
                      ! ((path_it == (fill.end()-1)) && (path_it->size_default() == 0)) ) // if this is the last path and it is a moveto-only, there is no mid marker there
                 {
-                    Geom::Affine const m (sp_shape_marker_get_transform_at_start(path_it->front()));
-                    item_to_outline_add_marker( midmarker_obj, m, scale, ret_pathv);
+                    Geom::Affine transform (sp_shape_marker_get_transform_at_start(path_it->front()));
+                    transform = marker->get_marker_transform(transform, style->stroke_width.computed, false);
+                    item_to_outline_add_marker(marker, transform, ret_pathv);
                 }
 
                 // MID position
@@ -297,8 +290,9 @@ Geom::PathVector* item_to_outline(SPItem const *item, bool exclude_markers)
                          * Loop to end_default (so including closing segment), because when a path is closed,
                          * there should be a midpoint marker between last segment and closing straight line segment
                          */
-                        Geom::Affine const m (sp_shape_marker_get_transform(*curve_it1, *curve_it2));
-                        item_to_outline_add_marker( midmarker_obj, m, scale, ret_pathv);
+                        Geom::Affine transform (sp_shape_marker_get_transform(*curve_it1, *curve_it2));
+                        transform = marker->get_marker_transform(transform, style->stroke_width.computed, false);
+                        item_to_outline_add_marker(marker, transform, ret_pathv);
 
                         ++curve_it1;
                         ++curve_it2;
@@ -308,15 +302,16 @@ Geom::PathVector* item_to_outline(SPItem const *item, bool exclude_markers)
                 // END position
                 if ( path_it != (fill.end()-1) && !path_it->empty()) {
                     Geom::Curve const &lastcurve = path_it->back_default();
-                    Geom::Affine const m = sp_shape_marker_get_transform_at_end(lastcurve);
-                    item_to_outline_add_marker( midmarker_obj, m, scale, ret_pathv );
+                    Geom::Affine transform = sp_shape_marker_get_transform_at_end(lastcurve);
+                    transform = marker->get_marker_transform(transform, style->stroke_width.computed, false);
+                    item_to_outline_add_marker(marker, transform, ret_pathv);
                 }
             }
         }
 
         // END marker
         for (int i = 0; i < 4; i += 3) {  // SP_MARKER_LOC and SP_MARKER_LOC_END
-            if ( SPObject *marker_obj = shape->_marker[i] ) {
+            if (auto const marker = shape->_marker[i] ) {
                 /* Get reference to last curve in the path.
                  * For moveto-only path, this returns the "closing line segment". */
                 Geom::Path const &path_last = fill.back();
@@ -326,8 +321,9 @@ Geom::PathVector* item_to_outline(SPItem const *item, bool exclude_markers)
                 }
                 Geom::Curve const &lastcurve = path_last[index];
 
-                Geom::Affine const m = sp_shape_marker_get_transform_at_end(lastcurve);
-                item_to_outline_add_marker( marker_obj, m, scale, ret_pathv );
+                Geom::Affine transform = sp_shape_marker_get_transform_at_end(lastcurve);
+                transform = marker->get_marker_transform(transform, style->stroke_width.computed, false);
+                item_to_outline_add_marker(marker, transform, ret_pathv);
             }
         }
     }
