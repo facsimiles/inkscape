@@ -949,27 +949,16 @@ void PathManipulator::reverseSubpaths(bool selected_only)
 /** Make selected segments curves / lines. */
 void PathManipulator::setSegmentType(SegmentType type)
 {
-    if (_selection.empty()) return;
-    for (auto & _subpath : _subpaths) {
-        for (NodeList::iterator j = _subpath->begin(); j != _subpath->end(); ++j) {
-            NodeList::iterator k = j.next();
-            if (!(k && j->selected() && k->selected())) continue;
-            switch (type) {
-            case SEGMENT_STRAIGHT:
-                if (j->front()->isDegenerate() && k->back()->isDegenerate())
-                    break;
-                j->front()->move(j->position());
-                k->back()->move(k->position());
-                break;
-            case SEGMENT_CUBIC_BEZIER:
-                if (!j->front()->isDegenerate() || !k->back()->isDegenerate())
-                    break;
-                // move both handles to 1/3 of the line
-                j->front()->move(j->position() + (k->position() - j->position()) / 3);
-                k->back()->move(k->position() + (j->position() - k->position()) / 3);
-                break;
-                // TODO: add support for elliptical arc creation
+    if (_selection.empty()) {
+        return;
+    }
+    for (auto &subpath : _subpaths) {
+        for (auto node = subpath->begin(); node != subpath->end(); ++node) {
+            auto next = node.next();
+            if (!next || !node->selected() || !next->selected()) {
+                continue;
             }
+            next->changePrecedingSegmentType(type, *node);
         }
     }
 }
@@ -1132,7 +1121,7 @@ void PathManipulator::setControlsTransform(Geom::Affine const &tnew)
 void PathManipulator::hideDragPoint()
 {
     _dragpoint->setVisible(false);
-    _dragpoint->setIterator(NodeList::iterator());
+    _dragpoint->setIterator({});
 }
 
 NodeSharedData const &PathManipulator::getNodeSharedData() const

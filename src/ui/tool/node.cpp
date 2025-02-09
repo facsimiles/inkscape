@@ -1106,6 +1106,34 @@ void Node::setType(NodeType type, bool update_handles)
     updateState();
 }
 
+void Node::changePrecedingSegmentType(SegmentType new_type, Node &preceding_node)
+{
+    if (new_type == SEGMENT_STRAIGHT) {
+        if (isPrecedingSegmentStraight()) {
+            return; // Nothing to do
+        }
+        preceding_node.front()->move(preceding_node.position());
+        _back.move(position());
+    } else if (new_type == SEGMENT_CUBIC_BEZIER) {
+        if (!preceding_node.front()->isDegenerate() || !_back.isDegenerate()) {
+            return; // Nothing to do
+        }
+
+        // move both handles to 1/3 of the line
+        auto const prev_pos = preceding_node.position();
+        auto const this_pos = position();
+        preceding_node.front()->move(Geom::lerp(1.0 / 3.0, prev_pos, this_pos));
+        _back.move(Geom::lerp(2.0 / 3.0, prev_pos, this_pos));
+    } else if (new_type == SEGMENT_ELLIPTICAL) {
+        Geom::CubicBezier const current_bezier{preceding_node.position(), preceding_node.front()->position(),
+                                               _back.position(), position()};
+        preceding_node.front()->retract();
+        _back.retract();
+        auto replacement_node = _pm().createNodeFactory().createArcEndpointNode(current_bezier);
+        std::move(*this)._replace(replacement_node.release());
+    }
+}
+
 void Node::pickBestType()
 {
     _type = NODE_CUSP;

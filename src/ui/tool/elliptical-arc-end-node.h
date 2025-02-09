@@ -46,6 +46,8 @@ public:
 
     bool isPrecedingSegmentStraight() const final { return false; }
 
+    void changePrecedingSegmentType(SegmentType new_type, Node &preceding_node) final;
+
     bool handlesAllowedOnPrecedingSegment() const final { return false; }
 
     void notifyPrecedingNodeUpdate(Node &previous_node) final;

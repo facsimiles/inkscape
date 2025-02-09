@@ -27,9 +27,11 @@ enum NodeType {
 };
 
 /** Types of segments supported in the node tool. */
-enum SegmentType {
-    SEGMENT_STRAIGHT, ///< Straight linear segment
-    SEGMENT_CUBIC_BEZIER ///< Bezier curve with two control points
+enum SegmentType
+{
+    SEGMENT_STRAIGHT,     ///< Straight linear segment
+    SEGMENT_CUBIC_BEZIER, ///< Bezier curve with two control points
+    SEGMENT_ELLIPTICAL,   ///< Elliptical arc segment
 };
 
 enum class AlignTargetNode {

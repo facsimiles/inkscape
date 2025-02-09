@@ -21,6 +21,7 @@
 #include "display/control/canvas-item-ptr.h"
 #include "ui/tool/commit-events.h"
 #include "ui/tool/control-point.h"
+#include "ui/tool/node-types.h"
 
 class SPDesktop;
 class SPItem;

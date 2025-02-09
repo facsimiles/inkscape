@@ -106,6 +106,7 @@ NodeToolbar::NodeToolbar(Glib::RefPtr<Gtk::Builder> const &builder)
         {"auto_btn", &NodeToolbar::edit_auto},
         {"line_btn", &NodeToolbar::edit_toline},
         {"curve_btn", &NodeToolbar::edit_tocurve},
+        {"arc_btn", &NodeToolbar::edit_toarc},
     };
 
     for (auto const &button_info : button_mapping) {
@@ -431,6 +432,13 @@ void NodeToolbar::edit_tocurve()
 {
     if (auto nt = get_node_tool()) {
         nt->_multipath->setSegmentType(SEGMENT_CUBIC_BEZIER);
+    }
+}
+
+void NodeToolbar::edit_toarc()
+{
+    if (auto nt = get_node_tool()) {
+        nt->_multipath->setSegmentType(SEGMENT_ELLIPTICAL);
     }
 }
 

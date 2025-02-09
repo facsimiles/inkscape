@@ -312,15 +312,30 @@ void MultiPathManipulator::setNodeType(NodeType type)
     _done(retract_handles ? _("Retract handles") : _("Change node type"));
 }
 
+namespace {
+
+char const *get_undo_history_label_for_segment_type_change(SegmentType target_type)
+{
+    switch (target_type) {
+        case SEGMENT_STRAIGHT:
+            return _("Straighten segments");
+        case SEGMENT_CUBIC_BEZIER:
+            return _("Make segments curves");
+        case SEGMENT_ELLIPTICAL:
+            return _("Make segments arcs");
+        default:
+            return "";
+    }
+}
+} // namespace
+
 void MultiPathManipulator::setSegmentType(SegmentType type)
 {
-    if (_selection.empty()) return;
-    invokeForAll(&PathManipulator::setSegmentType, type);
-    if (type == SEGMENT_STRAIGHT) {
-        _done(_("Straighten segments"));
-    } else {
-        _done(_("Make segments curves"));
+    if (_selection.empty()) {
+        return;
     }
+    invokeForAll(&PathManipulator::setSegmentType, type);
+    _done(get_undo_history_label_for_segment_type_change(type));
 }
 
 void MultiPathManipulator::insertNodes()

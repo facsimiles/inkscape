@@ -170,6 +170,8 @@ public:
     bool isDegenerate() const { return _front.isDegenerate() && _back.isDegenerate(); }
     virtual bool isPrecedingSegmentStraight() const;
 
+    virtual void changePrecedingSegmentType(SegmentType new_type, Node &preceding_node);
+
     bool isEndNode() const;
     Handle *front() { return &_front; }
     Handle *back()  { return &_back;  }
