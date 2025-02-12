@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-02-04 23:42+0100\n"
-"PO-Revision-Date: 2025-02-08 09:06+0000\n"
+"PO-Revision-Date: 2025-02-13 18:06+0000\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <https://translate.inkscape.org/projects/inkscape/"
 "inkscape-master/he/>\n"
@@ -15626,11 +15626,11 @@ msgstr "מחיקת עצירת/ות המדרג"
 #: ../src/ui/widget/preferences-widget.cpp:840
 #: ../share/ui/inkscape-start.glade:715
 msgid "Open"
-msgstr "פתוח"
+msgstr "פתיחה"
 
 #: ../src/helper/choose-file.cpp:127
 msgid "All Supported Formats"
-msgstr "All Supported Formats"
+msgstr "כל התסדירים הנתמכים"
 
 #: ../src/helper/save-image.cpp:33
 #: ../share/extensions/image_extract_selected.inx:3
