@@ -7,11 +7,11 @@
 #define SETTINGS_DIALOG_H
 
 #include <gtkmm/dialog.h>
+#include <gtkmm/listbox.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/searchentry2.h>
 
 #include "preferences.h"
-#include "ui/widget/font-list.h"
 
 
 namespace Inkscape::XML {

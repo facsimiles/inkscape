@@ -5,7 +5,15 @@
 
 #include "settings-dialog.h"
 
+#include <gdk/gdkkeysyms.h>
+#include <gdkmm/enums.h>
+#include <gdkmm/event.h>
+#include <gtkmm/accelerator.h>
+#include <gtkmm/entry.h>
+#include <gtkmm/enums.h>
+#include <gtkmm/label.h>
 #include <gtkmm/scrolledwindow.h>
+#include <gtkmm/widget.h>
 #include <iomanip>
 #include <numeric>
 #include <regex>
@@ -16,6 +24,7 @@
 
 #include "preferences.h"
 #include "ui/modifiers.h"
+#include "ui/shortcuts.h"
 #include "ui/widget/color-picker.h"
 #include "ui/widget/ink-spin-button.h"
 #include "util-string/ustring-format.h"
@@ -436,6 +445,36 @@ void connect_radio_buttons(Gtk::Widget* parent) {
     }
 }
 
+void on_key_pressed(unsigned int keyval, unsigned int keycode, Gdk::ModifierType mod) {
+// printf("keydown: %x %x %x\n", keyval, keycode, mod);
+    auto consumed_modifiers = 0u;
+    auto const state = static_cast<GdkModifierType>(mod);
+    int event_group = 0;
+    // auto keyval2 = Inkscape::UI::Tools::get_latin_keyval_impl(
+        // keyval, keycode, state, event_group, &consumed_modifiers);
+// printf("%x, mod %x \n", keyval2, consumed_modifiers);
+}
+
+void edit_shortcut(Gtk::Entry& entry, ReadWrite::IO* io, const std::string& path) {
+    entry.set_icon_from_icon_name("close-button", Gtk::Entry::IconPosition::PRIMARY);
+    entry.set_alignment(Gtk::Align::CENTER);
+    entry.set_text(_("New accelerator..."));
+    entry.set_can_focus();
+    entry.set_focusable();
+    entry.grab_focus_without_selecting();
+    entry.property_cursor_position();
+    return;
+    //
+    auto& shortcuts = Inkscape::Shortcuts::getInstance();
+    auto const state = static_cast<GdkModifierType>(0);
+    unsigned int accel_key = 0;
+    unsigned int hardware_keycode = 0;
+    auto const new_shortcut_key = shortcuts.get_from(nullptr, accel_key, hardware_keycode, state, true);
+    // if (new_shortcut_key.is_null()) return;
+
+    entry.set_text("x");
+}
+
 using Templates = std::map<std::string, XML::Node*, std::less<>>;
 using Observers = std::map<std::string, std::unique_ptr<Preferences::PreferencesObserver>>;
 using Visibility = std::map<std::string, std::vector<Gtk::Widget*>>;
@@ -449,7 +488,6 @@ struct Context {
     XML::Document& ui;
     const Templates& templates;
     ReadWrite::IO* io;
-    // int gap = 0;
     Glib::RefPtr<Gtk::SizeGroup> first_col;
     Observers& observers;
     Visibility& visibility;
@@ -484,6 +522,83 @@ void add_visibility_observer(Context& ctx, Gtk::Widget* widget, XML::Node* node)
 
     ctx.visibility[path].push_back(widget);
 }
+
+struct ShortcutEdit : Gtk::Entry {
+    ShortcutEdit(XML::Node* node, ReadWrite::IO* io) {
+        // auto shortcut = Gtk::make_managed<Gtk::Entry>();
+        add_css_class("shortcut");
+        set_editable(false);
+        auto pos = Gtk::Entry::IconPosition::SECONDARY;
+        set_icon_from_icon_name("edit", pos);
+        set_icon_activatable(true, pos);
+        signal_icon_release().connect([this, node, io, pos](auto icon){
+            if (icon == pos) {
+                edit_shortcut(*this, io, to_path(node));
+            }
+            else {
+                // cancel
+                end_shortcut_edit(false);
+            }
+        });
+        set_can_focus(false);
+        set_focus_on_click(false);
+        set_focusable(false);
+        auto size = to_size(element_attr(node, "size"), WHOLE);
+        set_size_request(size);
+        //todo: validate(shortcut, node, io);
+        auto keys = io->read(to_path(node));
+        if (keys.has_value()) {
+            set_text(*keys);
+        }
+        auto keyctrl = Gtk::EventControllerKey::create();
+        keyctrl->set_propagation_phase(Gtk::PropagationPhase::CAPTURE);
+        keyctrl->signal_key_pressed().connect([this](auto keyval, auto keycode, auto mod){
+            if (keyval == GDK_KEY_Escape) {
+                end_shortcut_edit(false);
+            }
+            on_key_pressed(keyval, keycode, mod);
+            // todo
+            return true;
+        }, false);
+        keyctrl->signal_key_released().connect([this](auto keyval, auto keycode, auto mod){
+            auto root = get_root();
+            if (!root) return;
+            GdkKeymapKey* keymap = 0;
+            guint* keys = 0;
+            int n = 0;
+            gdk_display_map_keycode(root->get_display()->gobj(), keycode, nullptr /*&keymap*/, &keys, &n);
+            for (int i = 0; i < n; ++i) {
+                printf("%x ", keys[i]);
+            }
+            // auto str = gtk_accelerator_get_label_with_keycode(root->get_display()->gobj(), 0, keycode, (GdkModifierType)mod);
+
+            // was <option> modifier held down?
+            if ((mod & Gdk::ModifierType::ALT_MASK) != Gdk::ModifierType::NO_MODIFIER_MASK && n > 1) {
+                // use normal keyval or with <shift>, but without <option> - option produces symbols
+                keyval = keys[(mod & Gdk::ModifierType::SHIFT_MASK) != Gdk::ModifierType::NO_MODIFIER_MASK ? 1 : 0];
+            }
+            g_free(keys);
+            auto s = Gtk::Accelerator::get_label(keyval, mod);
+            if (n > 0) printf("key-up: %x %x %x -> '%s'\n", keyval, keycode, mod, s.c_str());
+        }, false);
+        add_controller(keyctrl);
+    }
+
+    void end_shortcut_edit(bool commit) {
+        unset_icon();
+        get_parent()->child_focus(Gtk::DirectionType::TAB_FORWARD);
+        set_can_focus(false);
+        set_focusable(false);
+        set_alignment(Gtk::Align::START);
+        set_text(_(""));
+
+        if (auto root = get_root()) {
+            root->unset_focus();
+        }
+    }
+
+    bool _edit = false;
+};
 
 
 Gtk::Widget* create_ui_element(Context& ctx, XML::Node* node);
@@ -847,16 +962,35 @@ Gtk::Widget* create_ui_element(Context& ctx, XML::Node* node) {
         number->set_tooltip_text(tooltip);
         validate(number, node, io);
         set_widget(number, node, io);
-        number->signal_value_changed().connect([io, node](auto value) {
+        number->signal_value_changed().connect([node, io](auto value) {
             static constexpr auto digits10 = std::numeric_limits<double>::digits10;
             io->write(to_path(node), Inkscape::ustring::format_classic(std::setprecision(digits10), value).raw());
         });
         return number;
     }
     else if (name == "shortcut") {
+        auto shortcut = Gtk::make_managed<ShortcutEdit>(node, ctx.io);
+        /*
         auto shortcut = Gtk::make_managed<Gtk::Entry>();
         shortcut->add_css_class("shortcut");
         shortcut->set_editable(false);
+        auto pos = Gtk::Entry::IconPosition::SECONDARY;
+        shortcut->set_icon_from_icon_name("edit", pos);
+        shortcut->set_icon_activatable(true, pos);
+        shortcut->signal_icon_release().connect([wnd=ctx.wnd, shortcut, node, io, pos](auto icon){
+            if (icon == pos) {
+                edit_shortcut(*shortcut, io, to_path(node));
+            }
+            else {
+                // cancel
+                end_shortcut_edit(*shortcut, false);
+                wnd->property_focus_widget().set_value(nullptr);
+            }
+        });
+        shortcut->set_can_focus(false);
+        shortcut->set_focus_on_click(false);
+        shortcut->set_focusable(false);
+        // shortcut->set_sensitive();
         auto size = to_size(element_attr(node, "size"), WHOLE);
         shortcut->set_size_request(size);
         //todo: validate(shortcut, node, io);
@@ -864,6 +998,15 @@ Gtk::Widget* create_ui_element(Context& ctx, XML::Node* node) {
         if (keys.has_value()) {
             shortcut->set_text(*keys);
         }
+        auto keyctrl = Gtk::EventControllerKey::create();
+        keyctrl->set_propagation_phase(Gtk::PropagationPhase::CAPTURE);
+        keyctrl->signal_key_pressed().connect([](auto keyval, auto keycode, auto mod){
+            on_key_pressed(keyval, keycode, mod);
+            // todo
+            return true;
+        }, false);
+        shortcut->add_controller(keyctrl);
+        */
         return shortcut;
     }
     else if (name == "expander") {
@@ -1031,6 +1174,7 @@ SettingsDialog::SettingsDialog(Gtk::Window& parent):
     auto ui = _ui->root();
     try {
         Context ctx(*_ui, _templates, _io.get(), *_observers, *_visibility);
+
         for (auto node = ui->firstChild(); node; node = node->next()) {
             auto name = element_name(node);
             if (name == "templates") {
