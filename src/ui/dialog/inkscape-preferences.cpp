@@ -80,6 +80,8 @@
 #include "ui/widget/style-swatch.h"
 #include "util/recently-used-fonts.h"
 #include "util/trim.h"
+#include "util-string/ustring-format.h"
+#include "util/key-helpers.h"
 #include "widgets/spw-utilities.h"
 
 namespace Inkscape::UI::Dialog {
@@ -3646,6 +3648,8 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
     Glib::ustring old_section;
     Gtk::TreeStore::iterator iter_group;
 
+    auto display = get_root()->get_display();
+
     // Fill sections
     for (auto const &action : actions) {
         Glib::ustring section = action_data.get_section_for_action(action);
@@ -3675,7 +3679,7 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
             unsigned int key = 0;
             Gdk::ModifierType mod = Gdk::ModifierType(0);
             Gtk::Accelerator::parse(accel, key, mod);
-            shortcut_label += Gtk::Accelerator::get_label(key, mod) + ", ";
+            shortcut_label += get_key_label(display, key, -1, mod) /* Gtk::Accelerator::get_label(key, mod)*/ + ", ";
         }
 
         if (shortcut_label.size() > 1) {

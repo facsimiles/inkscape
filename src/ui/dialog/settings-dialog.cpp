@@ -6,8 +6,6 @@
 #include "settings-dialog.h"
 
 #include <gdk/gdkkeysyms.h>
-#include <gdkmm/enums.h>
-#include <gdkmm/event.h>
 #include <gtkmm/accelerator.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/enums.h>
@@ -29,6 +27,7 @@
 #include "ui/widget/ink-spin-button.h"
 #include "util-string/ustring-format.h"
 #include "util/action-accel.h"
+#include "util/key-helpers.h"
 #include "xml/attribute-record.h"
 #include "xml/node.h"
 #include "xml/repr.h"
@@ -37,7 +36,7 @@ namespace Inkscape::UI::Dialog {
 
 static Glib::ustring join(const std::vector<Glib::ustring>& accels) {
     auto capacity = std::accumulate(accels.begin(), accels.end(), std::size_t{0},
-        [](std::size_t capacity, auto& accel){ return capacity += accel.size() + 2; });
+        [](std::size_t capacity, auto& accel){ return capacity + accel.size() + 2; });
     Glib::ustring result;
     result.reserve(capacity);
     for (auto& accel : accels) {
@@ -48,7 +47,7 @@ static Glib::ustring join(const std::vector<Glib::ustring>& accels) {
 }
 
 struct PreferencesIO : ReadWrite::IO {
-    PreferencesIO() {}
+    PreferencesIO(Glib::RefPtr<Gdk::Display> display): _display(display) {}
     ~PreferencesIO() override = default;
 
     std::optional<std::string> read(const std::string& path) override {
@@ -85,6 +84,7 @@ struct PreferencesIO : ReadWrite::IO {
             }
             else {
                 Util::ActionAccel accel(subpath);
+                Util::format_accel_keys(_display, accel.getKeys());
                 auto keys = accel.getShortcutText();
                 return join(keys).raw();
             }
@@ -114,6 +114,8 @@ struct PreferencesIO : ReadWrite::IO {
         //todo: for later...
         return Preferences::get()->is_default_valid(path);
     }
+
+    Glib::RefPtr<Gdk::Display> _display;
 };
 
 namespace {
@@ -445,36 +447,6 @@ void connect_radio_buttons(Gtk::Widget* parent) {
     }
 }
 
-void on_key_pressed(unsigned int keyval, unsigned int keycode, Gdk::ModifierType mod) {
-// printf("keydown: %x %x %x\n", keyval, keycode, mod);
-    auto consumed_modifiers = 0u;
-    auto const state = static_cast<GdkModifierType>(mod);
-    int event_group = 0;
-    // auto keyval2 = Inkscape::UI::Tools::get_latin_keyval_impl(
-        // keyval, keycode, state, event_group, &consumed_modifiers);
-// printf("%x, mod %x \n", keyval2, consumed_modifiers);
-}
-
-void edit_shortcut(Gtk::Entry& entry, ReadWrite::IO* io, const std::string& path) {
-    entry.set_icon_from_icon_name("close-button", Gtk::Entry::IconPosition::PRIMARY);
-    entry.set_alignment(Gtk::Align::CENTER);
-    entry.set_text(_("New accelerator..."));
-    entry.set_can_focus();
-    entry.set_focusable();
-    entry.grab_focus_without_selecting();
-    entry.property_cursor_position();
-    return;
-    //
-    auto& shortcuts = Inkscape::Shortcuts::getInstance();
-    auto const state = static_cast<GdkModifierType>(0);
-    unsigned int accel_key = 0;
-    unsigned int hardware_keycode = 0;
-    auto const new_shortcut_key = shortcuts.get_from(nullptr, accel_key, hardware_keycode, state, true);
-    // if (new_shortcut_key.is_null()) return;
-
-    entry.set_text("x");
-}
-
 using Templates = std::map<std::string, XML::Node*, std::less<>>;
 using Observers = std::map<std::string, std::unique_ptr<Preferences::PreferencesObserver>>;
 using Visibility = std::map<std::string, std::vector<Gtk::Widget*>>;
@@ -525,19 +497,18 @@ void add_visibility_observer(Context& ctx, Gtk::Widget* widget, XML::Node* node)
 
 struct ShortcutEdit : Gtk::Entry {
     ShortcutEdit(XML::Node* node, ReadWrite::IO* io) {
-        // auto shortcut = Gtk::make_managed<Gtk::Entry>();
         add_css_class("shortcut");
         set_editable(false);
-        auto pos = Gtk::Entry::IconPosition::SECONDARY;
+        auto pos = IconPosition::SECONDARY;
         set_icon_from_icon_name("edit", pos);
         set_icon_activatable(true, pos);
-        signal_icon_release().connect([this, node, io, pos](auto icon){
-            if (icon == pos) {
-                edit_shortcut(*this, io, to_path(node));
-            }
-            else {
+        signal_icon_release().connect([this, node, io](auto icon){
+            if (_edit) {
                 // cancel
                 end_shortcut_edit(false);
+            }
+            else {
+                edit_shortcut(io, to_path(node));
             }
         });
         set_can_focus(false);
@@ -556,36 +527,44 @@ struct ShortcutEdit : Gtk::Entry {
             if (keyval == GDK_KEY_Escape) {
                 end_shortcut_edit(false);
             }
-            on_key_pressed(keyval, keycode, mod);
-            // todo
             return true;
         }, false);
         keyctrl->signal_key_released().connect([this](auto keyval, auto keycode, auto mod){
+            if (Util::is_key_modifier(keyval)) return;
+
             auto root = get_root();
             if (!root) return;
-            GdkKeymapKey* keymap = 0;
-            guint* keys = 0;
-            int n = 0;
-            gdk_display_map_keycode(root->get_display()->gobj(), keycode, nullptr /*&keymap*/, &keys, &n);
-            for (int i = 0; i < n; ++i) {
-                printf("%x ", keys[i]);
-            }
-            // auto str = gtk_accelerator_get_label_with_keycode(root->get_display()->gobj(), 0, keycode, (GdkModifierType)mod);
 
-            // was <option> modifier held down?
-            if ((mod & Gdk::ModifierType::ALT_MASK) != Gdk::ModifierType::NO_MODIFIER_MASK && n > 1) {
-                // use normal keyval or with <shift>, but without <option> - option produces symbols
-                keyval = keys[(mod & Gdk::ModifierType::SHIFT_MASK) != Gdk::ModifierType::NO_MODIFIER_MASK ? 1 : 0];
-            }
-            g_free(keys);
-            auto s = Gtk::Accelerator::get_label(keyval, mod);
-            if (n > 0) printf("key-up: %x %x %x -> '%s'\n", keyval, keycode, mod, s.c_str());
+            //todo: assign new shortcut
+            auto& shortcuts = Inkscape::Shortcuts::getInstance();
+            auto const state = static_cast<GdkModifierType>(mod);
+            auto const new_shortcut_key = shortcuts.get_from(nullptr, keyval, keycode, state, true);
+            if (new_shortcut_key.is_null()) return;
+
+            //todo: define shortcut
+            //
         }, false);
         add_controller(keyctrl);
     }
 
+    void edit_shortcut(ReadWrite::IO* io, const std::string& path) {
+        if (_edit) return;
+
+        _edit = true;
+        set_icon_from_icon_name("close-button", IconPosition::SECONDARY);
+        set_alignment(Gtk::Align::CENTER);
+        set_text(_("New accelerator..."));
+        set_can_focus();
+        set_focusable();
+        grab_focus_without_selecting();
+    }
+
     void end_shortcut_edit(bool commit) {
-        unset_icon();
+        if (!_edit) return;
+
+        _edit = false;
+        set_icon_from_icon_name("edit", Gtk::Entry::IconPosition::SECONDARY);
+        // unset_icon();
         get_parent()->child_focus(Gtk::DirectionType::TAB_FORWARD);
         set_can_focus(false);
         set_focusable(false);
@@ -1174,7 +1153,7 @@ SettingsDialog::SettingsDialog(Gtk::Window& parent):
     _content.set_expand();
 
     // access to preferences
-    _io = std::make_unique<PreferencesIO>();
+    _io = std::make_unique<PreferencesIO>(get_root()->get_display());
 
     auto ui = _ui->root();
     try {
