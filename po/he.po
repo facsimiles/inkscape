@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-02-04 23:42+0100\n"
-"PO-Revision-Date: 2025-02-15 12:06+0000\n"
+"PO-Revision-Date: 2025-02-16 13:06+0000\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <https://translate.inkscape.org/projects/inkscape/"
 "inkscape-master/he/>\n"
@@ -1665,7 +1665,7 @@ msgstr ""
 
 #: ../build/share/filters/filters.svg.h:634
 msgid "Hue to White"
-msgstr ""
+msgstr "גוון ללבן"
 
 #: ../build/share/filters/filters.svg.h:636
 msgid "Fades hue progressively to white"
@@ -7767,7 +7767,7 @@ msgstr "Beginners' Guide"
 
 #: ../src/actions/actions-help-url.cpp:123 ../share/ui/menus.ui:1291
 msgid "Extension Development Guide"
-msgstr "Extension Development Guide"
+msgstr "מדריך פיתוח הרחבול=ת"
 
 #: ../src/actions/actions-help-url.cpp:124 ../share/ui/menus.ui:1325
 msgid "Donate"
