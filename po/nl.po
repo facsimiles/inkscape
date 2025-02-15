@@ -58,15 +58,16 @@ msgstr ""
 "Project-Id-Version: inkscape 1.0\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-02-04 23:42+0100\n"
-"PO-Revision-Date: 2024-10-01 09:06+0200\n"
+"PO-Revision-Date: 2025-02-16 13:06+0000\n"
 "Last-Translator: Stephan Paternotte <stephan@paternottes.net>\n"
-"Language-Team: Dutch\n"
+"Language-Team: Dutch <https://translate.inkscape.org/projects/inkscape/"
+"inkscape-master/nl/>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.5\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.9.2\n"
 
 #: ../build/share/filters/filters.svg.h:2
 msgid "Fast Crop"
@@ -3405,9 +3406,8 @@ msgid "Abstract 4"
 msgstr "Abstract 4"
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Rain drops vertical"
-msgstr "Regendruppels horizontaal"
+msgstr "Regendruppels verticaal"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Circle diagonal fill 2"
@@ -3622,9 +3622,8 @@ msgid "Table Cloth"
 msgstr "Tafelkleed"
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Circle horizontal lines halftone shading"
-msgstr "Cirkel verticale lijnen halftoontinten"
+msgstr "Cirkel horizontale lijnen halftoontinten"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Rectangles halftone shading 1"
@@ -3651,23 +3650,20 @@ msgid "Zigzag horizontal 2"
 msgstr "Zigzag horizontaal 2"
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Wave horizontal lines shading 2"
-msgstr "Golf horizontale lijnentinten 1"
+msgstr "Golf horizontale lijnen tinten 2"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Wave horizontal lines shading 1"
 msgstr "Golf horizontale lijnentinten 1"
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Horizontal rough lines shading 2"
-msgstr "Horizontale lijnentinten"
+msgstr "Horizontale ruwe lijnen tinten 2"
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Horizontal rough lines shading"
-msgstr "Horizontale lijnentinten"
+msgstr "Horizontale ruwe lijnen tinten"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Horizontal lines shading"
@@ -6216,16 +6212,12 @@ msgid "End execution in active window"
 msgstr "Uitvoering beëindigen in actief venster"
 
 #: ../src/actions/actions-base.cpp:205
-#, fuzzy
-#| msgid "Star Preferences"
 msgid "Save preferences"
-msgstr "Voorkeuren voor sterren"
+msgstr "Voorkeuren opslaan"
 
 #: ../src/actions/actions-base.cpp:205
-#, fuzzy
-#| msgid "Failed to create the preferences file %s."
 msgid "Make sure the preferences are saved"
-msgstr "Aanmaken van het voorkeurenbestand %s is mislukt."
+msgstr "Zorg ervoor dat de voorkeuren worden opgeslagen"
 
 #: ../src/actions/actions-base.cpp:206
 msgid "Debug Info"
@@ -6821,27 +6813,27 @@ msgstr "Volgende zoomniveau (uit de zoomgeschiedenis)"
 
 #: ../src/actions/actions-canvas-transform.cpp:282 ../share/ui/menus.ui:438
 msgid "Rotate Clockwise"
-msgstr "Rechtsom draaien"
+msgstr "Rechtsom roteren"
 
 #: ../src/actions/actions-canvas-transform.cpp:282
 msgid "Rotate canvas clockwise"
-msgstr "Doek rechtsom draaien"
+msgstr "Doek rechtsom roteren"
 
 #: ../src/actions/actions-canvas-transform.cpp:283
 msgid "Rotate Counter-CW"
-msgstr "Linksom draaien"
+msgstr "Linksom roteren"
 
 #: ../src/actions/actions-canvas-transform.cpp:283
 msgid "Rotate canvas counter-clockwise"
-msgstr "Doek linksom draaien"
+msgstr "Doek linksom roteren"
 
 #: ../src/actions/actions-canvas-transform.cpp:284 ../share/ui/menus.ui:446
 msgid "Reset Rotation"
-msgstr "Draaihoek terugzetten"
+msgstr "Rotatiehoek herstellen"
 
 #: ../src/actions/actions-canvas-transform.cpp:284
 msgid "Reset canvas rotation"
-msgstr "Doekrotatie opnieuw instellen"
+msgstr "Doekrotatie herstellen"
 
 #: ../src/actions/actions-canvas-transform.cpp:286
 msgid "Flip Horizontal"
@@ -6889,7 +6881,7 @@ msgstr "Roteren Absoluut (radialen)"
 
 #: ../src/actions/actions-canvas-transform.cpp:293
 msgid "Rotate to an absolute value (radians)"
-msgstr "Roteer met een absolute waarde (radialen)"
+msgstr "Roteren met een absolute waarde (radialen)"
 
 #: ../src/actions/actions-canvas-transform.cpp:294
 msgid "Rotate Relative (Radians)"
@@ -6897,7 +6889,7 @@ msgstr "Roteren Relatief (radialen)"
 
 #: ../src/actions/actions-canvas-transform.cpp:294
 msgid "Rotate by a relative amount (radians)"
-msgstr "Roteer met een relatieve waarde (radialen)"
+msgstr "Roteren met een relatieve waarde (radialen)"
 
 #: ../src/actions/actions-canvas-transform.cpp:295
 msgid "Rotate Absolute (Degrees)"
@@ -6905,7 +6897,7 @@ msgstr "Roteren Absoluut (graden)"
 
 #: ../src/actions/actions-canvas-transform.cpp:295
 msgid "Rotate to an absolute value (degrees)"
-msgstr "Roteer met een absolute waarde (graden)"
+msgstr "Roteren met een absolute waarde (graden)"
 
 #: ../src/actions/actions-canvas-transform.cpp:296
 msgid "Rotate Relative (Degrees)"
@@ -6913,7 +6905,7 @@ msgstr "Roteren Relatief (graden)"
 
 #: ../src/actions/actions-canvas-transform.cpp:296
 msgid "Rotate by a relative amount (degrees)"
-msgstr "Roteer met een relatieve waarde (graden)"
+msgstr "Roteren met een relatieve waarde (graden)"
 
 #: ../src/actions/actions-canvas-transform.cpp:298 ../share/ui/menus.ui:450
 msgid "Lock Rotation"
@@ -6944,16 +6936,12 @@ msgstr ""
 "verstrooien"
 
 #: ../src/actions/actions-dialogs.cpp:35
-#, fuzzy
-#| msgid "Open Messages"
 msgid "Open Debugger"
-msgstr "Berichten openen"
+msgstr "Foutopsporing openen"
 
 #: ../src/actions/actions-dialogs.cpp:35
-#, fuzzy
-#| msgid "Open Messages"
 msgid "Open debugger"
-msgstr "Berichten openen"
+msgstr "Foutopsporing openen"
 
 #: ../src/actions/actions-dialogs.cpp:36
 msgid "Open Document Properties"
@@ -7542,15 +7530,14 @@ msgstr "Paginaformaat aan selectie aanpassen"
 
 #: ../src/actions/actions-edit.cpp:324 ../src/selection-chemistry.cpp:3712
 #: ../src/ui/widget/color-notebook.cpp:177
-#, fuzzy
-#| msgctxt "Palette"
-#| msgid "Chameleon 1"
 msgid "Chameleon Fill"
-msgstr "Kameleon 1"
+msgstr "Kameleon-vulling"
 
 #: ../src/actions/actions-edit.cpp:324
 msgid "Set each object's color to the average of all colors inside that shape."
 msgstr ""
+"Stel de kleur van elk object in op het gemiddelde van alle kleuren in die "
+"vorm."
 
 #: ../src/actions/actions-effect.cpp:80
 msgid "Remove Filters"
@@ -8574,7 +8561,7 @@ msgstr "Uitwisselen rond middelpunt"
 #: ../share/ui/align-and-distribute.ui:718
 msgid "Exchange positions of selected objects - rotate around center point"
 msgstr ""
-"Posities van geselecteerde objecten uitwisselen - draaien rond middelpunt"
+"Posities van geselecteerde objecten uitwisselen - roteren rond middelpunt"
 
 #: ../src/actions/actions-object-align.cpp:805
 msgid "Random exchange"
@@ -8797,7 +8784,7 @@ msgstr "Object 90° roteren"
 
 #: ../src/actions/actions-object.cpp:394
 msgid "Rotate selection 90° clockwise"
-msgstr "Selectie 90° rechtsom draaien"
+msgstr "Selectie 90° rechtsom roteren"
 
 #: ../src/actions/actions-object.cpp:395
 msgid "Object Rotate 90 CCW"
@@ -8805,7 +8792,7 @@ msgstr "Object -90° roteren"
 
 #: ../src/actions/actions-object.cpp:395
 msgid "Rotate selection 90° counter-clockwise"
-msgstr "Selectie 90° linksom draaien"
+msgstr "Selectie 90° linksom roteren"
 
 #: ../src/actions/actions-object.cpp:396
 msgid "Object Flip Horizontal"
@@ -10200,7 +10187,7 @@ msgstr "Roteren"
 
 #: ../src/actions/actions-transform.cpp:141
 msgid "Rotate selected objects by degrees"
-msgstr "Geselecteerde objecten draaien in graden"
+msgstr "Geselecteerde objecten roteren in graden"
 
 #: ../src/actions/actions-transform.cpp:142
 #: ../src/live_effects/lpe-measure-segments.cpp:84
@@ -10241,36 +10228,24 @@ msgstr ""
 "Geselecteerde objecten vergroten/verkleinen relatief aan het zoomniveau"
 
 #: ../src/actions/actions-transform.cpp:146
-#, fuzzy
-#| msgid "Export selected objects"
 msgid "Rotate selected objects"
-msgstr "Geselecteerde objecten exporteren"
+msgstr "Geselecteerde objecten roteren"
 
 #: ../src/actions/actions-transform.cpp:147
-#, fuzzy
-#| msgid "Rotate tweak"
 msgid "Rotate Step"
-msgstr "Roteren"
+msgstr "Rotatiestap"
 
 #: ../src/actions/actions-transform.cpp:147
-#, fuzzy
-#| msgid "Grow/shrink selected objects by multiple of step value"
 msgid "Rotate selected objects by multiple of step value"
-msgstr ""
-"Geselecteerde objecten vergroten/verkleinen met veelvoud van stapgrootte"
+msgstr "Geselecteerde objecten roteren met veelvoud van stapgrootte"
 
 #: ../src/actions/actions-transform.cpp:148
-#, fuzzy
-#| msgid "Rotate Reset"
 msgid "Rotate Screen"
-msgstr "Draaien resetten"
+msgstr "Scherm roteren"
 
 #: ../src/actions/actions-transform.cpp:148
-#, fuzzy
-#| msgid "Grow/shrink selected objects relative to zoom level"
 msgid "Rotate selected objects relative to zoom level"
-msgstr ""
-"Geselecteerde objecten vergroten/verkleinen relatief aan het zoomniveau"
+msgstr "Geselecteerde objecten roteren relatief aan het zoomniveau"
 
 #: ../src/actions/actions-transform.cpp:150
 msgid "Remove Transforms"
@@ -10286,11 +10261,11 @@ msgstr "Laatste transformatie opnieuw toepassen op selectie"
 
 #: ../src/actions/actions-transform.cpp:152
 msgid "Rotate Page 90°"
-msgstr "Pagina 90° draaien"
+msgstr "Pagina 90° roteren"
 
 #: ../src/actions/actions-transform.cpp:152
 msgid "Rotate page by 90-degree rotation steps"
-msgstr "Pagina draaien in stappen van 90°"
+msgstr "Pagina roteren in stappen van 90°"
 
 #: ../src/actions/actions-transform.cpp:159
 msgid "Enter two comma-separated numbers, e.g. 50,-2.5"
@@ -10571,28 +10546,20 @@ msgid "Switch to the next document window"
 msgstr "Naar het volgende documentvenster gaan"
 
 #: ../src/actions/actions-view-window.cpp:65
-#, fuzzy
-#| msgid "Next page:"
 msgid "Next Tab"
-msgstr "Volgende pagina:"
+msgstr "Volgende tab:"
 
 #: ../src/actions/actions-view-window.cpp:65
-#, fuzzy
-#| msgid "Switch to the next document window"
 msgid "Switch to the next document tab"
-msgstr "Naar het volgende documentvenster gaan"
+msgstr "Naar het volgende document-tabblad schakelen"
 
 #: ../src/actions/actions-view-window.cpp:66
-#, fuzzy
-#| msgid "Previous page:"
 msgid "Previous Tab"
-msgstr "Vorige pagina:"
+msgstr "Vorige tab:"
 
 #: ../src/actions/actions-view-window.cpp:66
-#, fuzzy
-#| msgid "Switch to the previous document window"
 msgid "Switch to the previous document tab"
-msgstr "Naar het vorige documentvenster gaan"
+msgstr "Naar het vorige document-tabblad schakelen"
 
 #: ../src/actions/actions-window.cpp:88
 msgid "Enter comma-separated string for x, y, width, height"
@@ -10845,19 +10812,16 @@ msgid "_L*:"
 msgstr "_L*:"
 
 #: ../src/colors/spaces/components.cpp:88
-#, fuzzy
 msgid "_H<sub>ok</sub>:"
-msgstr "_H<sub>ok</sub>"
+msgstr "_H<sub>ok</sub>:"
 
 #: ../src/colors/spaces/components.cpp:89
-#, fuzzy
 msgid "_S<sub>ok</sub>:"
-msgstr "_L<sub>ok</sub>"
+msgstr "_S<sub>ok</sub>:"
 
 #: ../src/colors/spaces/components.cpp:90
-#, fuzzy
 msgid "_L<sub>ok</sub>:"
-msgstr "_L<sub>ok</sub>"
+msgstr "_L<sub>ok</sub>:"
 
 # Lightness - Helderheid.
 #: ../src/colors/spaces/components.cpp:96
@@ -11347,12 +11311,11 @@ msgstr "Naamloos document %d"
 
 #: ../src/event-log.cpp:189
 msgid "[No more changes]"
-msgstr ""
+msgstr "[Geen wijzigingen meer]"
 
 #: ../src/event-log.cpp:387
-#, fuzzy
 msgid "[Changes forgotten]"
-msgstr "Tekst: rotatie aanpassen"
+msgstr "[Wijzigingen vergeten]"
 
 #: ../src/extension/dependency.cpp:342
 msgid "Dependency"
@@ -12976,7 +12939,7 @@ msgstr "Verplaatsing (°)"
 
 #: ../src/extension/internal/filter/color.h:347
 msgid "Rotate and desaturate hue"
-msgstr "Tint roteren en desatureren"
+msgstr "Tint roteren en verzadiging verminderen"
 
 #: ../src/extension/internal/filter/color.h:407
 msgid "Harsh light"
@@ -14511,9 +14474,8 @@ msgstr "Selecteer pagina:"
 
 # Met haakjes is duidelijker.
 #: ../src/extension/internal/rvng-import-dialog.cpp:58
-#, fuzzy
 msgid "out of %1"
-msgstr "van %i"
+msgstr "van %1"
 
 #: ../src/extension/internal/rvng-import-dialog.cpp:130
 msgid "No preview"
@@ -15461,16 +15423,13 @@ msgid "No unused definitions in &lt;defs&gt;."
 msgstr "Er zijn geen ongebruikte definities in &lt;defs&gt;."
 
 #: ../src/file.cpp:265
-#, fuzzy, c-format
-#| msgid ""
-#| "No Inkscape extension found to save document (%s).  This may have been "
-#| "caused by an unknown filename extension."
+#, c-format
 msgid ""
 "No Inkscape extension found to save document (%s).  This may have been "
 "caused by an unknown or missing filename extension."
 msgstr ""
 "Er werd geen Inkscape-uitbreiding aangetroffen om het bestand (%s) op te "
-"slaan. Dit kan komen door een onbekende bestandsextensie."
+"slaan. Dit kan komen door een onbekende of ontbrekende bestandsextensie."
 
 #: ../src/file.cpp:266 ../src/file.cpp:274 ../src/file.cpp:281
 #: ../src/file.cpp:287 ../src/file.cpp:292 ../src/file.cpp:303
@@ -16630,7 +16589,7 @@ msgstr "Transformeren met 2 punten"
 
 #: ../src/live_effects/effect.cpp:375
 msgid "Scale, stretch and rotate an object by two handles"
-msgstr "Een object met twee handgrepen schalen, rekken en draaien"
+msgstr "Een object met twee handgrepen schalen, uitrekken en roteren"
 
 #: ../src/live_effects/effect.cpp:386
 msgctxt "path effect"
@@ -16709,7 +16668,7 @@ msgstr ""
 #: ../src/live_effects/effect.cpp:470
 msgctxt "path effect"
 msgid "Rotate copies"
-msgstr "Kopieën draaien"
+msgstr "Kopieën roteren"
 
 #: ../src/live_effects/effect.cpp:473
 msgid ""
@@ -16875,8 +16834,8 @@ msgid ""
 "Create multiple copies of an object following a grid layout. Customize size, "
 "rotation, distances, style and tiling symmetry."
 msgstr ""
-"Meerdere gedraaide kopieën van een object maken, zoals in een kaleidoscoop. "
-"De stijl van de kopieën is onafhankelijk."
+"Maak meerdere kopieën van een object volgens een rasteropmaak. Pas de "
+"grootte, rotatie, afstanden, stijl en tegelsymmetrie aan."
 
 #: ../src/live_effects/effect.cpp:686
 msgctxt "path effect"
@@ -19381,7 +19340,7 @@ msgstr "Het patroon is _verticaal"
 
 #: ../src/live_effects/lpe-patternalongpath.cpp:92
 msgid "Rotate pattern 90 deg before applying"
-msgstr "Patroon 90° draaien voor toepassing"
+msgstr "Patroon vóór toepassing 90° roteren"
 
 #: ../src/live_effects/lpe-patternalongpath.cpp:95
 msgid "_Fuse nearby ends:"
@@ -19741,11 +19700,11 @@ msgstr ""
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:75
 msgid "Axes rotation"
-msgstr "Draaihoek assen"
+msgstr "Rotatiehoek assen"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:75
 msgid "Axes rotation angle [deg]"
-msgstr "Draaihoek assen [deg]"
+msgstr "Rotatiehoek assen [deg]"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:76
 msgid "Source _path"
@@ -20163,7 +20122,7 @@ msgstr "Markeringshoek:"
 
 #: ../src/live_effects/lpe-ruler.cpp:53
 msgid "Rotate marks (-180° to 180°)"
-msgstr "Markeringen draaien (-180° tot 180°)"
+msgstr "Markeringen roteren (-180° tot 180°)"
 
 #: ../src/live_effects/lpe-ruler.cpp:54
 msgid "Shift marks _by:"
@@ -20644,7 +20603,7 @@ msgstr "Roteren °"
 
 #: ../src/live_effects/lpe-tiling.cpp:94
 msgid "Rotate tiles by this amount of degrees"
-msgstr "Tegels over deze hoek draaien"
+msgstr "Tegels over deze hoek roteren"
 
 #: ../src/live_effects/lpe-tiling.cpp:95
 msgid "Offset %"
@@ -20692,7 +20651,7 @@ msgstr ""
 
 #: ../src/live_effects/lpe-tiling.cpp:100
 msgid "Interpolate rotation X"
-msgstr "Interpoleren rotatie X"
+msgstr "Rotatie X interpoleren"
 
 #: ../src/live_effects/lpe-tiling.cpp:100
 msgid "Interpolate tile rotation in row"
@@ -20700,7 +20659,7 @@ msgstr "Tegelrotatie in rij interpoleren"
 
 #: ../src/live_effects/lpe-tiling.cpp:101
 msgid "Interpolate rotation Y"
-msgstr "Interpoleren rotatie Y"
+msgstr "Rotatie Y interpoleren"
 
 #: ../src/live_effects/lpe-tiling.cpp:101
 msgid "Interpolate tile rotation in column"
@@ -21425,16 +21384,13 @@ msgid "Deleted"
 msgstr "Verwijderd"
 
 #: ../src/object/sp-guide.cpp:500
-#, fuzzy
-#| msgid ""
-#| "<b>Shift+drag</b> to rotate, <b>Ctrl+drag</b> to move origin, <b>Del</b> "
-#| "to delete"
 msgid ""
 "<b>Shift+drag</b> to rotate, <b>Ctrl+drag</b> to move origin, <b>Del</b> to "
 "delete; <b>double-click</b> to edit this guide's properties"
 msgstr ""
-"<b>Shift+sleep</b> om te draaien, <b>Ctrl+sleep</b> om de oorsprong te "
-"verplaatsen, <b>Del</b> om te verwijderen"
+"<b>Shift+sleep</b> om te roteren, <b>Ctrl+sleep</b> om de oorsprong te "
+"verplaatsen, <b>Del</b> om te verwijderen; <b>dubbel-klikken</b> om de "
+"eigenschappen te bewerken"
 
 #: ../src/object/sp-guide.cpp:505
 #, c-format
@@ -22596,11 +22552,11 @@ msgstr "Verkleinen"
 
 #: ../src/selection.cpp:246 ../share/ui/menus.ui:897
 msgid "Rotate 90° CW"
-msgstr "90° rechtsom draaien"
+msgstr "90° rechtsom roteren"
 
 #: ../src/selection.cpp:248 ../share/ui/menus.ui:903
 msgid "Rotate 90° CCW"
-msgstr "90° linksom draaien"
+msgstr "90° linksom roteren"
 
 #: ../src/seltrans.cpp:492 ../src/ui/dialog/transformation.cpp:917
 msgid "Skew"
@@ -22635,8 +22591,8 @@ msgid ""
 "<b>Rotate</b> selection; with <b>%1</b> to snap angle; with <b>%2</b> to "
 "rotate around the opposite corner"
 msgstr ""
-"Selectie <b>draaien</b>; gebruik <b>%1</b> voor hoeken in stappen, gebruik "
-"<b>%2</b> om te draaien rond de overstaande hoek"
+"Selectie <b>roteren</b>; gebruik <b>%1</b> voor hoeken in stappen, gebruik "
+"<b>%2</b> om te roteren rond de overstaande hoek"
 
 #: ../src/seltrans.cpp:797
 msgid ""
@@ -22701,7 +22657,7 @@ msgstr ""
 #: ../src/seltrans.cpp:1476
 #, c-format
 msgid "<b>Rotate</b>: %0.2f&#176;; with <b>%s</b> to snap angle"
-msgstr "<b>Draaien</b>: %0.2f&#176;; gebruik <b>%s</b> voor hoeken in stappen"
+msgstr "<b>Roteren</b>: %0.2f&#176;; gebruik <b>%s</b> voor hoeken in stappen"
 
 #: ../src/seltrans.cpp:1513
 #, c-format
@@ -22952,10 +22908,8 @@ msgid "Height Separately"
 msgstr "Hoogte afzonderlijk"
 
 #: ../src/ui/contextmenu.cpp:100
-#, fuzzy
-#| msgid "P_aste..."
 msgid "Paste..."
-msgstr "Pl_akken…"
+msgstr "Plakken…"
 
 #: ../src/ui/contextmenu.cpp:192
 msgid "_New Page"
@@ -23560,32 +23514,32 @@ msgstr "<b>Hoek:</b>"
 #: ../src/ui/dialog/clonetiler.cpp:500
 #, no-c-format
 msgid "Rotate tiles by this angle for each row"
-msgstr "Voor elke volgende rij de tegels over deze hoek draaien"
+msgstr "Voor elke volgende rij de tegels over deze hoek roteren"
 
 #: ../src/ui/dialog/clonetiler.cpp:508
 #, no-c-format
 msgid "Rotate tiles by this angle for each column"
-msgstr "Voor elke volgende kolom de tegels over deze hoek draaien"
+msgstr "Voor elke volgende kolom de tegels over deze hoek roteren"
 
 #: ../src/ui/dialog/clonetiler.cpp:514
 msgid "Randomize the rotation angle by this percentage"
-msgstr "De draaihoek binnen dit percentage willekeurig aanpassen"
+msgstr "De rotatiehoek binnen dit percentage willekeurig aanpassen"
 
 #: ../src/ui/dialog/clonetiler.cpp:529
 msgid "Alternate the rotation direction for each row"
-msgstr "De draairichting voor elke rij om-en-om afwisselen"
+msgstr "De rotatierichting voor elke rij om-en-om afwisselen"
 
 #: ../src/ui/dialog/clonetiler.cpp:534
 msgid "Alternate the rotation direction for each column"
-msgstr "De draairichting voor elke kolom om-en-om afwisselen"
+msgstr "De rotatierichting voor elke kolom om-en-om afwisselen"
 
 #: ../src/ui/dialog/clonetiler.cpp:548
 msgid "Cumulate the rotation for each row"
-msgstr "De draaiingen voor elke rij optellen"
+msgstr "De rotatie voor elke rij optellen"
 
 #: ../src/ui/dialog/clonetiler.cpp:553
 msgid "Cumulate the rotation for each column"
-msgstr "De draaiingen voor elke kolom optellen"
+msgstr "De rotatie voor elke kolom optellen"
 
 #: ../src/ui/dialog/clonetiler.cpp:562
 msgid "_Blur & opacity"
@@ -24139,7 +24093,7 @@ msgstr "Getegelde klonen aanmaken"
 
 #: ../src/ui/dialog/dialog-data.cpp:33
 msgid "_Debugger"
-msgstr ""
+msgstr "_Foutopsporing"
 
 #: ../src/ui/dialog/dialog-data.cpp:34
 msgid "_Document Properties"
@@ -24425,11 +24379,11 @@ msgstr "Paginalabelstijl in-/uitschakelen"
 
 #: ../src/ui/dialog/document-properties.cpp:565
 msgid "Toggle system coordinate Y axis orientation"
-msgstr ""
+msgstr "Systeemcoördinaat Y-as oriëntatie wisselen"
 
 #: ../src/ui/dialog/document-properties.cpp:568
 msgid "Toggle system coordinate origin correction"
-msgstr ""
+msgstr "Oorsprongscorrectie van systeemcoördinaten in-/uitschakelen"
 
 #: ../src/ui/dialog/document-properties.cpp:603
 msgid "<b>Guides</b>"
@@ -24727,9 +24681,8 @@ msgid "Grid color"
 msgstr "Rasterkleur"
 
 #: ../src/ui/dialog/document-properties.cpp:1860
-#, fuzzy
 msgid "Color of the grid lines"
-msgstr "Kleur van de nevenrasterlijnen"
+msgstr "Kleur van de rasterlijnen"
 
 #: ../src/ui/dialog/document-properties.cpp:1874
 msgid "Major grid line e_very:"
@@ -24924,10 +24877,8 @@ msgstr[0] "%d Pagina"
 msgstr[1] "%d Pagina's"
 
 #: ../src/ui/dialog/export-batch.cpp:616
-#, fuzzy
-#| msgid "Choose folder name"
 msgid "Choose folder..."
-msgstr "Mapnaam kiezen"
+msgstr "Map kiezen…"
 
 #: ../src/ui/dialog/export-batch.cpp:719
 msgid "No items selected."
@@ -27332,8 +27283,7 @@ msgstr "Beweging hulplijnen vastzetten"
 
 #: ../src/ui/dialog/guides.cpp:53
 msgid "Move and/or rotate the guide relative to current settings"
-msgstr ""
-"Hulplijn verplaatsen en/of draaien relatief aan de huidige instellingen"
+msgstr "Hulplijn verplaatsen en/of roteren relatief aan de huidige instellingen"
 
 #: ../src/ui/dialog/guides.cpp:99
 msgid "Set guide properties"
@@ -28317,11 +28267,12 @@ msgid "Clear list"
 msgstr "Lijst leegmaken"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1620
-#, fuzzy
 msgid ""
 "Maximum documents\n"
 " in Open _Recent:"
-msgstr "Maximum aantal documenten in _Recente bestanden:"
+msgstr ""
+"Maximum aantal documenten\n"
+"in _Recent bestanden:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1621
 msgid ""
@@ -28430,7 +28381,7 @@ msgstr "Canvasrotatie weergeven"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1692
 msgid "Control visibility of canvas rotation in status bar."
-msgstr "Zzichtbaarheid van de canvasrotatie beheren in de statusbalk."
+msgstr "Zichtbaarheid van de canvasrotatie beheren in de statusbalk."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1694
 msgid "Mouse cursors"
@@ -29033,9 +28984,8 @@ msgstr "K_leur rasterlijn:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2175
 #: ../src/ui/dialog/inkscape-preferences.cpp:2192
-#, fuzzy
 msgid "Color used for grid lines"
-msgstr "Kleur reguliere rasterlijnen"
+msgstr "Kleur voor rasterlijnen"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2177
 #: ../src/ui/dialog/inkscape-preferences.cpp:2194
@@ -29702,24 +29652,27 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2551
 msgid "Limit Undo Size:"
-msgstr ""
+msgstr "Limiet van ongedaan maken:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2552
 msgid ""
 "Enable the undo limit and remove old changes. Disabling this option will use "
 "more memory."
 msgstr ""
+"Schakel de limiet voor ongedaan maken in en verwijder oude wijzigingen. "
+"Zonder deze optie gebruikt Inkscape meer geheugen."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2554
-#, fuzzy
 msgid "Maximum _Undo Size:"
-msgstr "Minimum grootte:"
+msgstr "Maximum voor _Ongedaan maken:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2555
 msgid ""
 "How large the undo log will be allowed to get before being trimmed to free "
 "memory."
 msgstr ""
+"Hoe groot het logboek voor ongedaan maken mag worden voordat het wordt "
+"beperkt om geheugen vrij te maken."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2559
 msgid "Color stock markers the same color as object"
@@ -30301,7 +30254,7 @@ msgstr "Doek _roteren in stappen van:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2766
 msgid "Rotate canvas clockwise and counter-clockwise by this amount."
-msgstr "Doek links/rechtsom draaien met zoveel graden."
+msgstr "Doek linksom/rechtsom roteren met deze hoeveelheid."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2768
 msgid "Arrow keys move object relative to screen"
@@ -30314,7 +30267,7 @@ msgid ""
 "relative to the screen, not to the rotated document."
 msgstr ""
 "Als dit is ingeschakeld, worden objecten verplaatst ten opzichte van het "
-"scherm. Wanneer het doek wordt gedraaid, wordt de selectie nog steeds "
+"scherm. Wanneer het doek wordt geroteerd, wordt de selectie nog steeds "
 "horizontaal en verticaal verplaatst ten opzichte van het scherm, niet ten "
 "opzichte van het geroteerde document."
 
@@ -30344,7 +30297,7 @@ msgstr "Verwijderen"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2785
 msgid "Become orphans"
-msgstr ""
+msgstr "Worden verweesd"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2788
 msgid "Moving original: clones and linked offsets"
@@ -30379,10 +30332,8 @@ msgid "Orphaned clones are deleted along with their original"
 msgstr "Verweesde klonen worden verwijderd samen met hun origineel"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2801
-#, fuzzy
-#| msgid "Orphaned clones are converted to regular objects"
 msgid "Orphaned clones are not modified"
-msgstr "Verweesde klonen worden geconverteerd naar normale objecten"
+msgstr "Verweesde klonen worden niet gewijzigd"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2803
 msgid "Duplicating original+clones/linked offset"
@@ -31328,16 +31279,12 @@ msgid "System info"
 msgstr "Systeeminfo"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3748
-#, fuzzy
-#| msgid "Reset the values on the current tab to defaults"
 msgid "Reset the preferences to default"
-msgstr "Op het huidige tabblad de standaarwaarden terugzetten"
+msgstr "Voorkeuren herstellen naar standaard"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3753
-#, fuzzy
-#| msgid "Open preferences folder"
 msgid "Save the preferences to disk"
-msgstr "Instellingenmap openen"
+msgstr "Voorkeuren opslaan op schijf"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3758
 msgid "User preferences:"
@@ -31755,11 +31702,12 @@ msgid "Change object attribute"
 msgstr "Object-attribuut aanpassen"
 
 #: ../src/ui/dialog/object-attributes.cpp:403
-#, fuzzy
 msgid ""
 "<b>Picker Tool</b>\n"
 "Select objects on canvas"
-msgstr "Alleen geselecteerde objecten"
+msgstr ""
+"<b>Kiezer</b>\n"
+"Selecteer objecten op het doek"
 
 #: ../src/ui/dialog/object-attributes.cpp:517
 msgid "Add fillet/chamfer effect"
@@ -32081,22 +32029,16 @@ msgid "Failed to set CairoRenderContext"
 msgstr "Instellen van CairoRenderContext is mislukt"
 
 #: ../src/ui/dialog/save-template-dialog.cpp:24
-#, fuzzy
-#| msgid "Save Template"
 msgid "Save as Template"
-msgstr "Sjabloon opslaan"
+msgstr "Opslaan als sjabloon"
 
 #: ../src/ui/dialog/save-template-dialog.cpp:56
-#, fuzzy
-#| msgid "Save a copy of the document as template"
 msgid "Base every other new document on this template"
-msgstr "Een kopie van het document opslaan als sjabloon"
+msgstr "Baseer elk nieuw document op dit sjabloon"
 
 #: ../src/ui/dialog/save-template-dialog.cpp:107
-#, fuzzy
-#| msgid "Export Overwrite"
 msgid "Overwrite"
-msgstr "Bestand overschrijven"
+msgstr "Overschrijven"
 
 #: ../src/ui/dialog/save-template-dialog.h:35
 #: ../share/ui/dialog-save-template.glade:96
@@ -32104,16 +32046,12 @@ msgid "Set as default template"
 msgstr "Instellen als standaardsjabloon"
 
 #: ../src/ui/dialog/save-template-dialog.h:36
-#, fuzzy
-#| msgid "Name"
 msgid "_Name"
-msgstr "Naam"
+msgstr "_Naam"
 
 #: ../src/ui/dialog/save-template-dialog.h:38
-#, fuzzy
-#| msgid "_Description:"
 msgid "_Description"
-msgstr "_Beschrijving:"
+msgstr "_Beschrijving"
 
 #: ../src/ui/dialog/selectorsdialog.cpp:589
 #: ../src/ui/dialog/styledialog.cpp:1097
@@ -32137,18 +32075,16 @@ msgid "No dictionaries installed"
 msgstr "Geen woordenboeken geïnstalleerd"
 
 #: ../src/ui/dialog/spellcheck.cpp:293
-#, fuzzy
 msgid "<b>Finished</b>, <b>%1</b> words added to dictionary"
-msgstr "<b>Voltooid</b>, <b>%d</b> woorden aan woordenboek toegevoegd"
+msgstr "<b>Voltooid</b>, <b>%1</b> woorden toegevoegd aan woordenboek"
 
 #: ../src/ui/dialog/spellcheck.cpp:294
 msgid "<b>Finished</b>, nothing suspicious found"
 msgstr "<b>Voltooid</b>, niets opmerkelijks gevonden"
 
 #: ../src/ui/dialog/spellcheck.cpp:391
-#, fuzzy
 msgid "Not in dictionary: <b>%1</b>"
-msgstr "Niet in het woordenboek: <b>%s</b>"
+msgstr "Niet in woordenboek: <b>%1</b>"
 
 #: ../src/ui/dialog/spellcheck.cpp:474
 msgid "<i>Checking...</i>"
@@ -32640,7 +32576,7 @@ msgstr "Hoe_k:"
 #: ../src/ui/dialog/transformation.cpp:64
 #: ../src/ui/dialog/transformation.cpp:1033
 msgid "Rotation angle (positive = counterclockwise)"
-msgstr "Rotatiehoek (positief is met de klok mee)"
+msgstr "Rotatiehoek (positief is linksom)"
 
 #: ../src/ui/dialog/transformation.cpp:66
 msgid ""
@@ -32788,7 +32724,7 @@ msgstr "Transformatiematrix bewerken"
 
 #: ../src/ui/dialog/transformation.cpp:1040
 msgid "Rotation angle (positive = clockwise)"
-msgstr "Rotatiehoek (positief is met de klok mee)"
+msgstr "Rotatiehoek (positief is rechtsom)"
 
 #: ../src/ui/dialog/xml-tree.cpp:99
 msgid "Drag to reorder nodes"
@@ -33184,45 +33120,33 @@ msgstr "Vormen"
 
 #: ../src/ui/modifiers.cpp:236
 msgid "[NEVER]"
-msgstr ""
+msgstr "[NOOIT]"
 
 #
 # File: ../src/ui/tool/node.cpp, line: 611
 #: ../src/ui/modifiers.cpp:239
-#, fuzzy
-#| msgctxt "Path handle tip"
-#| msgid "Ctrl"
 msgid "Ctrl"
 msgstr "Ctrl"
 
 #: ../src/ui/modifiers.cpp:242
-#, fuzzy
-#| msgid "S_hift"
 msgid "Shift"
-msgstr "Ver_plaatsing"
+msgstr "Shift"
 
 #: ../src/ui/modifiers.cpp:246
-#, fuzzy
-#| msgid "All"
 msgid "Alt"
-msgstr "Alle"
+msgstr "Alt"
 
 #: ../src/ui/modifiers.cpp:250
-#, fuzzy
-#| msgctxt "Symbol"
-#| msgid "Supermarket"
 msgid "Super"
-msgstr "Supermarkt"
+msgstr "Super"
 
 #: ../src/ui/modifiers.cpp:254
 msgid "Hyper"
-msgstr ""
+msgstr "Hyper"
 
 #: ../src/ui/modifiers.cpp:258
-#, fuzzy
-#| msgid "Metadata"
 msgid "Meta"
-msgstr "Metadata"
+msgstr "Meta"
 
 #: ../src/ui/shape-editor-knotholders.cpp:567
 msgid ""
@@ -33593,8 +33517,8 @@ msgid ""
 "<b>Shift+Ctrl+Alt</b>: preserve length and snap rotation angle to %g° "
 "increments, and rotate both handles"
 msgstr ""
-"<b>Shift+Ctrl+Alt</b>: lente behouden en rotatiehoek begrenzen tot stappen "
-"van %g°, en roteer beide handandgrepen"
+"<b>Shift+Ctrl+Alt</b>: lengte behouden en rotatiehoek begrenzen tot stappen "
+"van %g°, en beide handgrepen roteren"
 
 #: ../src/ui/tool/node.cpp:638
 #, c-format
@@ -33636,7 +33560,7 @@ msgstr ""
 msgctxt "Path handle tip"
 msgid "<b>Ctrl</b>: snap rotation angle to %g° increments, click to retract"
 msgstr ""
-"<b>Ctrl</b>: draaihoek beperken tot stappen van %g°, klik voor intrekken"
+"<b>Ctrl</b>: rotatiehoek beperken tot stappen van %g°, klik voor intrekken"
 
 #: ../src/ui/tool/node.cpp:664
 msgctxt "Path handle tip"
@@ -33913,7 +33837,7 @@ msgid ""
 "<b>Rotation handle</b>: drag to rotate the selection around the rotation "
 "center"
 msgstr ""
-"<b>Rotatiehandgreep</b>: sleep om de selectie te draaien rond het "
+"<b>Rotatiehandgreep</b>: sleep om de selectie te roteren rond het "
 "rotatiecentrum"
 
 #: ../src/ui/tool/transform-handle-set.cpp:452
@@ -34599,7 +34523,7 @@ msgstr "(groot aantal)"
 
 #: ../src/ui/toolbar/spray-toolbar.cpp:125
 msgid "(high rotation variation)"
-msgstr "(grote variatie draaihoek)"
+msgstr "(grote variatie rotatiehoek)"
 
 #: ../src/ui/toolbar/spray-toolbar.cpp:136
 msgid "(high scale variation)"
@@ -35328,83 +35252,65 @@ msgid "Crossing %lu"
 msgstr "Kruising %lu"
 
 #: ../src/ui/tools/measure-tool.cpp:1644
-#, fuzzy
-#| msgid "Maximum segment length:"
 msgid ""
 "\n"
 "Intersection segments lengths:\n"
-msgstr "Maximum segmentlengte:"
+msgstr ""
+"\n"
+"Lengtes van snijsegmenten:\n"
 
 #: ../src/ui/tools/measure-tool.cpp:1656
 msgid ""
 "\n"
 "Info about the shape under the pointer:\n"
 msgstr ""
+"\n"
+"Informatie over de vorm onder de aanwijzer:\n"
 
 #: ../src/ui/tools/measure-tool.cpp:1696
 msgid "The measurements have been copied to the clipboard"
-msgstr ""
+msgstr "De afmetingen zijn gekopieerd naar het klembord"
 
 #: ../src/ui/tools/measure-tool.h:79
-#, fuzzy
-#| msgid "Segment size"
 msgid "Segment"
-msgstr "Segmentlengte"
+msgstr "Segment"
 
 #: ../src/ui/tools/measure-tool.h:81
-#, fuzzy
-#| msgid "Length left:"
 msgid "Length between"
-msgstr "Lengte links:"
+msgstr "Lengte tussen"
 
 #: ../src/ui/tools/measure-tool.h:82
-#, fuzzy
-#| msgid "X"
 msgid "dX"
-msgstr "X"
+msgstr "dX"
 
 #: ../src/ui/tools/measure-tool.h:83
-#, fuzzy
-#| msgid "Y"
 msgid "dY"
-msgstr "Y"
+msgstr "dY"
 
 #: ../src/ui/tools/measure-tool.h:84
 #: ../share/ui/dialog-measure-tool-settings.ui:254
-#, fuzzy
-#| msgid "Angle:"
 msgid "Angle"
-msgstr "Hoek:"
+msgstr "Hoek"
 
 #: ../src/ui/tools/measure-tool.h:85
-#, fuzzy
-#| msgid "_Gap length:"
 msgid "Shape length"
-msgstr "_Lengte opening:"
+msgstr "Lengte vorm"
 
 #: ../src/ui/tools/measure-tool.h:86
-#, fuzzy
-#| msgid "Set width:"
 msgid "Shape width"
-msgstr "Breedte instellen:"
+msgstr "Breedte vorm"
 
 #: ../src/ui/tools/measure-tool.h:87
-#, fuzzy
-#| msgid "Caps height:"
 msgid "Shape height"
-msgstr "Hoofdlettergrootte:"
+msgstr "Hoogte vorm"
 
 #: ../src/ui/tools/measure-tool.h:88
-#, fuzzy
-#| msgid "Shape"
 msgid "Shape X"
-msgstr "Vorm"
+msgstr "Vorm X"
 
 #: ../src/ui/tools/measure-tool.h:89
-#, fuzzy
-#| msgid "Shape"
 msgid "Shape Y"
-msgstr "Vorm"
+msgstr "Vorm Y"
 
 #. TRANSLATORS: Mind the space in front. This is part of a compound message
 #: ../src/ui/tools/mesh-tool.cpp:137 ../src/ui/tools/mesh-tool.cpp:148
@@ -36055,11 +35961,11 @@ msgstr "Overhang naar beneden"
 
 #: ../src/ui/tools/text-tool.cpp:1078
 msgid "Rotate counterclockwise"
-msgstr "Tegen de klok in roteren"
+msgstr "Linksom roteren"
 
 #: ../src/ui/tools/text-tool.cpp:1099
 msgid "Rotate clockwise"
-msgstr "Met de klok mee roteren"
+msgstr "Rechtsom roteren"
 
 #: ../src/ui/tools/text-tool.cpp:1117
 msgid "Contract line spacing"
@@ -36238,12 +36144,12 @@ msgstr ""
 "b> om uit te zoomen."
 
 #: ../src/ui/tools/tool-data.cpp:62
-#, fuzzy
-#| msgid "<b>Drag</b> to measure the dimensions of objects."
 msgid ""
 "<b>Drag</b> to measure the dimensions of objects.  Press <b>Alt+C</b> to "
 "copy the length to the clipboard."
-msgstr "<b>Sleep</b> om de afmetingen van objecten te bepalen."
+msgstr ""
+"<b>Slepen</b> om de afmetingen van objecten te bepalen.  Druk op <b>Alt+C</"
+"b> om de lengte naar het klembord te kopiëren."
 
 #: ../src/ui/tools/tool-data.cpp:64
 msgid "To tweak a path by pushing, select it and drag over it."
@@ -36317,7 +36223,7 @@ msgid ""
 "%s. Drag or click to <b>rotate clockwise</b>; with Shift, "
 "<b>counterclockwise</b>."
 msgstr ""
-"%s. Sleep of klik om in <b>met de klok mee te roteren</b>; met Shift om "
+"%s. Sleep of klik om<b> met de klok mee te roteren</b>; met Shift om "
 "<b>tegen de richting van de klok in te roteren</b>."
 
 #: ../src/ui/tools/tweak-tool.cpp:174
@@ -36392,7 +36298,7 @@ msgstr "Vergroten/verkleinen"
 
 #: ../src/ui/tools/tweak-tool.cpp:1120
 msgid "Rotate tweak"
-msgstr "Roteren"
+msgstr "Aanpassing roteren"
 
 #: ../src/ui/tools/tweak-tool.cpp:1123
 msgid "Duplicate/delete tweak"
@@ -36481,9 +36387,8 @@ msgid "Configure..."
 msgstr "Configureren…"
 
 #: ../src/ui/widget/dash-selector.cpp:146
-#, fuzzy
 msgid "Dash pattern offset"
-msgstr "Verschuiving van het patroon"
+msgstr "Verschuiving van het streepjespatroon"
 
 #: ../src/ui/widget/desktop-widget.cpp:381
 msgid "outline"
@@ -36514,10 +36419,8 @@ msgid "Note:"
 msgstr "Nota:"
 
 #: ../src/ui/widget/document-templates.cpp:19
-#, fuzzy
-#| msgid "Select a filter"
 msgid "Select a template"
-msgstr "Selecteer een filter"
+msgstr "Selecteer een sjabloon"
 
 #: ../src/ui/widget/export-lists.cpp:160
 msgid "Add Export"
@@ -37477,7 +37380,7 @@ msgstr ""
 #: ../src/ui/widget/font-variations.cpp:126
 msgctxt "Variable font axis"
 msgid "Rotation"
-msgstr "Draaihoek"
+msgstr "Rotatie"
 
 #: ../src/ui/widget/font-variations.cpp:126
 msgid "Controls the rotation of the glyph in degrees"
@@ -38417,34 +38320,24 @@ msgid "Change swatch color"
 msgstr "Paletkleur aanpassen"
 
 #: ../src/ui/widget/tabs-widget.cpp:94
-#, fuzzy
-#| msgid "Move Tab to New Window"
 msgid "Detach to New Window"
-msgstr "Tab in nieuw venster openen"
+msgstr "Losmaken naar Nieuw venster"
 
 #: ../src/ui/widget/tabs-widget.cpp:95
-#, fuzzy
-#| msgid "Noise Fill"
 msgid "Close File"
-msgstr "Ruis opvulling"
+msgstr "Bestand sluiten"
 
 #: ../src/ui/widget/tabs-widget.cpp:112
-#, fuzzy
-#| msgid "New Document"
 msgid "New Document..."
-msgstr "Nieuw document"
+msgstr "Nieuw document…"
 
 #: ../src/ui/widget/tabs-widget.cpp:113
-#, fuzzy
-#| msgid "New Document"
 msgid "Open Document..."
-msgstr "Nieuw document"
+msgstr "Document openen…"
 
 #: ../src/ui/widget/template-list.cpp:130
-#, fuzzy
-#| msgid "User templates:"
 msgid "<new template>"
-msgstr "Gebruikerssjablonen:"
+msgstr "<nieuw sjabloon>"
 
 #: ../src/util/font-collections.h:35
 msgid "Recently Used Fonts"
@@ -38652,9 +38545,8 @@ msgid "Crash Report"
 msgstr "Foutrapportage"
 
 #: ../share/ui/dialog-crash.glade:20
-#, fuzzy
 msgid "<b>Inkscape has crashed and will now close.</b>"
-msgstr "Inkscape is vastgelopen en wordt nu afgesloten."
+msgstr "<b>Inkscape is vastgelopen en wordt nu afgesloten.</b>"
 
 #: ../share/ui/dialog-crash.glade:26
 msgid ""
@@ -38785,26 +38677,20 @@ msgid "Background Color"
 msgstr "Achtergrondkleur"
 
 #: ../share/ui/dialog-export.glade:484
-#, fuzzy
-#| msgid "Export Area"
 msgid "Export format"
-msgstr "Exportgebied"
+msgstr "Export-formaat"
 
 #: ../share/ui/dialog-export.glade:494
 msgid "Select export format"
 msgstr "Exportindeling kiezen"
 
 #: ../share/ui/dialog-export.glade:527
-#, fuzzy
-#| msgid "No file selected"
 msgid "(No file selected)"
-msgstr "Geen bestand geselecteerd"
+msgstr "(Geen bestand geselecteerd)"
 
 #: ../share/ui/dialog-export.glade:536
-#, fuzzy
-#| msgid "_Browse..."
 msgid "Choose..."
-msgstr "_Bladeren…"
+msgstr "Kiezen…"
 
 #: ../share/ui/dialog-export.glade:589 ../share/ui/dialog-export.glade:892
 msgid "Cancel Export"
@@ -39087,9 +38973,8 @@ msgid "Search for symbol"
 msgstr "Symbool zoeken"
 
 #: ../share/ui/dialog-symbols.glade:264
-#, fuzzy
 msgid "Copy selected symbol onto clipboard"
-msgstr "Selectie naar het klembord kopiëren"
+msgstr "Geselecteerd symbool naar klembord kopiëren"
 
 #: ../share/ui/dialog-symbols.glade:276
 msgid "Convert selected object(s) to symbol"
@@ -39105,7 +38990,7 @@ msgstr ""
 
 #: ../share/ui/dialog-symbols.glade:307
 msgid "Symbols display settings"
-msgstr ""
+msgstr "Instellingen voor weergave van symbolen"
 
 #: ../share/ui/dialog-text-edit.glade:32 ../share/ui/toolbar-text.ui:68
 msgid "Open Collections Editor"
@@ -39841,7 +39726,7 @@ msgstr "Richting kleurverloop omdraaien"
 
 #: ../share/ui/gradient-edit.glade:67
 msgid "Rotate gradient 90 degrees"
-msgstr "Kleurverloop 90° roteren"
+msgstr "Verloop 90° roteren"
 
 #: ../share/ui/gradient-edit.glade:113
 msgid "Stop Offset:"
@@ -40116,7 +40001,6 @@ msgid "Quick Setup"
 msgstr "Snelle instellingen"
 
 #: ../share/ui/inkscape-start.glade:512
-#, fuzzy
 msgid ""
 "<b>The Inkscape project is supported by users like you.</b> Through our "
 "collective time, money and skill, we have made this software for everyone in "
@@ -40129,23 +40013,17 @@ msgstr ""
 "Door onze gezamenlijke tijd, geld en vaardigheid hebben we deze software "
 "gemaakt waar iedereen ter wereld van kan genieten, vrij van beperkingen en "
 "zonder kosten. <b>\n"
-"Als je betrokken wilt raken en de volgende versie van Inkscape nog beter "
-"wilt maken, overweeg dan om vandaag nog deel te nemen aan het Inkscape-"
-"project.</b>"
+"                Als je betrokken wilt raken en de volgende versie van "
+"Inkscape nog beter wilt maken, overweeg dan om vandaag nog deel te nemen aan "
+"het Inkscape-project.</b>"
 
 #: ../share/ui/inkscape-start.glade:551
-#, fuzzy
 msgid "Learn how to Contribute Time"
-msgstr ""
-"Lees hoe je \n"
-"Tijd kunt bijdragen"
+msgstr "Lees hoe je tijd kunt bijdragen"
 
 #: ../share/ui/inkscape-start.glade:587
-#, fuzzy
 msgid "Learn how to Fund Inkscape"
-msgstr ""
-"Lees hoe je \n"
-"Inkscape kunt sponsoren"
+msgstr "Lees hoe je Inkscape kunt sponsoren"
 
 #: ../share/ui/inkscape-start.glade:604
 msgid "Thanks!"
@@ -40447,34 +40325,30 @@ msgstr ""
 "selectie is."
 
 #: ../share/ui/page-properties.glade:312
-#, fuzzy
-#| msgid "Coordinates:"
 msgid "Coordinate system"
-msgstr "Coördinaten:"
+msgstr "Coördinatensysteem"
 
 #: ../share/ui/page-properties.glade:334
-#, fuzzy
-#| msgid "Origin"
 msgid "Origin:"
-msgstr "Oorsprong"
+msgstr "Oorsprong:"
 
 #: ../share/ui/page-properties.glade:345
-#, fuzzy
-#| msgid "Origin at upper left with y-axis pointing down"
 msgid ""
 "Coordinate system origin at the top of the page with Y axis pointing down."
-msgstr "Oorsprong linksboven met y-as naar beneden wijzend"
+msgstr ""
+"De oorsprong van het coördinatensysteem bovenaan de pagina met de y-as "
+"omlaag gericht."
 
 #: ../share/ui/page-properties.glade:358
 msgid ""
 "Coordinate system origin at the bottom of the page with Y axis pointing up."
 msgstr ""
+"De oorsprong van het coördinatensysteem onderaan de pagina met de y-as "
+"omhoog gericht."
 
 #: ../share/ui/page-properties.glade:376
-#, fuzzy
-#| msgid "Current page"
 msgid "Follow current page"
-msgstr "Huidige pagina"
+msgstr "Huidige pagina volgen"
 
 #: ../share/ui/page-properties.glade:378
 msgid ""
@@ -40782,110 +40656,81 @@ msgid "Distribute Nodes"
 msgstr "Knooppunten verdelen"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:37
-#, fuzzy
-#| msgid "Show handles"
 msgid "Show angle"
-msgstr "Handgrepen tonen"
+msgstr "Hoek tonen"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:40
-#, fuzzy
-#| msgid "Unit of measurement"
 msgid "Show the angle measurement"
-msgstr "Meeteenheid"
+msgstr "Toon de hoekmeting"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:50
-#, fuzzy
-#| msgid "Show values"
 msgid "Show delta values"
-msgstr "Waarden tonen"
+msgstr "Verschilwaarden tonen"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:53
-#, fuzzy
-#| msgid "Unit of measurement"
 msgid "Show dX and dY measurements"
-msgstr "Meeteenheid"
+msgstr "Toon dX- en dY-metingen"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:63
-#, fuzzy
-#| msgid "Show color labels"
 msgid "Show delta labels"
-msgstr "Kleurlabels weergeven"
+msgstr "Deltalabels tonen"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:66
 msgid "Add labels to the delta measurements"
-msgstr ""
+msgstr "Labels toevoegen aan de deltametingen"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:76
-#, fuzzy
-#| msgid "Show segment index"
 msgid "Show segment labels"
-msgstr "Segmentindices tonen"
+msgstr "Segmentlabels tonen"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:79
-#, fuzzy
-#| msgid "Add the stroke width to the interruption size"
 msgid "Add labels to the intersection segments"
-msgstr "Lijnbreedte toevoegen aan de breedte van de onderbreking"
+msgstr "Labels toevoegen aan de snijpuntsegmenten"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:89
-#, fuzzy
-#| msgid "Maximum segment length:"
 msgid "Min. segment length"
-msgstr "Maximum segmentlengte:"
+msgstr "Min. segmentlengte"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:106
 msgid "Intersection segments shorter than this length will not be shown"
 msgstr ""
+"Snijpuntsegmenten die korter zijn dan deze lengte worden niet weergegeven"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:128
 msgid "Copy measurements as text"
-msgstr ""
+msgstr "Kopieer metingen als tekst"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:142
-#, fuzzy
-#| msgid "XML formatting"
 msgid "String formatting"
-msgstr "XML-formattering"
+msgstr "Tekenreeks-opmaak"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:156
-#, fuzzy
-#| msgid "Include loc_ked"
 msgid "Include labels"
-msgstr "Ver_grendeld"
+msgstr "Inclusief labels"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:168
-#, fuzzy
-#| msgid "Include"
 msgid "Include units"
-msgstr "Invoegen"
+msgstr "Inclusief eenheden"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:180
 msgid "Tab-separated string"
-msgstr ""
+msgstr "Door tabs gescheiden tekenreeks"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:192
-#, fuzzy
-#| msgid "Measurement Type:"
 msgid "Measurements to copy"
-msgstr "Type meting:"
+msgstr "Afmetingen om te kopiëren"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:218
-#, fuzzy
-#| msgid "Length (document units):"
 msgid "Length - no end points"
-msgstr "Lengte (documenteenheden):"
+msgstr "Lengte - geen eindpunten"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:266
-#, fuzzy
-#| msgid "Delete segment"
 msgid "In-between segments"
-msgstr "Segment verwijderen"
+msgstr "Tussen segmenten"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:278
-#, fuzzy
-#| msgid "Shape"
 msgid "Shape info"
-msgstr "Vorm"
+msgstr "Informatie over de vorm"
 
 #: ../share/ui/dialog-spellcheck.ui:16
 msgid "<b>Press Start</b> to check spelling"
@@ -40924,8 +40769,6 @@ msgid "_Start"
 msgstr "_Begin"
 
 #: ../share/ui/document-tab.ui:18
-#, fuzzy
-#| msgid "Close Tab"
 msgid "Close tab"
 msgstr "Tab sluiten"
 
@@ -41100,7 +40943,7 @@ msgstr "_Oriëntatie"
 
 #: ../share/ui/menus.ui:442
 msgid "Rotate Counter-Clockwise"
-msgstr "Tegen de klok in roteren"
+msgstr "Linksom roteren"
 
 #: ../share/ui/menus.ui:456
 msgid "Flip Horizontally"
@@ -41621,7 +41464,7 @@ msgstr "Z:"
 
 #: ../share/ui/statusbar.ui:128
 msgid "Rotation (also Ctrl+Shift+scroll)"
-msgstr "Draaien (ook Ctrl+Shift+scroll)"
+msgstr "Rotatie (ook Ctrl+Shift+scroll)"
 
 #: ../share/ui/statusbar.ui:133
 msgid "R:"
@@ -42063,11 +41906,8 @@ msgid "Mark dimension offset"
 msgstr "Verschuiving afmetingen markeren"
 
 #: ../share/ui/toolbar-measure.ui:312
-#, fuzzy
-#| msgctxt "Font feature"
-#| msgid "Feature Settings"
 msgid "Measurement settings"
-msgstr "Feature-instellingen"
+msgstr "Meetinstellingen"
 
 #: ../share/ui/toolbar-mesh.ui:33
 msgid "Create mesh gradient"
@@ -42210,14 +42050,12 @@ msgid "Y coordinate of selected node(s)"
 msgstr "Y-coördinaat van geselecteerd knooppunt"
 
 #: ../share/ui/toolbar-node.ui:395
-#, fuzzy
 msgid "D:"
-msgstr "ID:"
+msgstr "D:"
 
 #: ../share/ui/toolbar-node.ui:401
-#, fuzzy
 msgid "Distance between two selected nodes."
-msgstr "Geselecteerde knooppunten verwijderen"
+msgstr "Afstand tussen twee geselecteerde knooppunten."
 
 #: ../share/ui/toolbar-node.ui:451
 msgid "Show path outline (without path effects)"
@@ -42240,9 +42078,8 @@ msgid "Show clipping path(s) of selected object(s)"
 msgstr "Knippad(en) van geselecteerde object(en) tonen"
 
 #: ../share/ui/toolbar-objectpicker.ui:15
-#, fuzzy
 msgid "Select object on canvas"
-msgstr "Alleen geselecteerde objecten"
+msgstr "Selecteer object op canvas"
 
 #: ../share/ui/toolbar-page.ui:101
 msgid "Page Margins"
@@ -42595,7 +42432,7 @@ msgstr ""
 
 #: ../share/ui/toolbar-spray.ui:174
 msgid "Rotation:"
-msgstr "Draaihoek:"
+msgstr "Rotatiehoek:"
 
 #: ../share/ui/toolbar-spray.ui:190
 msgid ""
@@ -42689,16 +42526,12 @@ msgid "Reset all parameters to their default values"
 msgstr "Alle parameters herstellen naar standaardwaarden"
 
 #: ../share/ui/toolbar-star.ui:205
-#, fuzzy
-#| msgid "Even top edges"
 msgid "Length of edge"
-msgstr "Gelijke bovenranden"
+msgstr "Lengte van de rand"
 
 #: ../share/ui/toolbar-star.ui:209
-#, fuzzy
-#| msgid "Edge"
 msgid "Edge:"
-msgstr "Hoek"
+msgstr "Rand:"
 
 #: ../share/ui/toolbar-text.ui:71
 msgid "Open the Font Collections dialog"
@@ -42852,7 +42685,7 @@ msgstr "Objecten verkleinen, met Shift vergroten"
 
 #: ../share/ui/toolbar-tweak.ui:78
 msgid "Rotate objects, with Shift counterclockwise"
-msgstr "Objecten roteren, met Shift tegen de klok in"
+msgstr "Objecten roteren, met Shift linksom"
 
 #: ../share/ui/toolbar-tweak.ui:88
 msgid "Duplicate objects, with Shift delete"
@@ -44266,7 +44099,7 @@ msgstr "Tintrotatie (°)"
 
 #: ../share/extensions/color_hsl_adjust.inx:8
 msgid "Rotate hue by degrees (wraps around)"
-msgstr "Tint roteren in graden (repeteert)"
+msgstr "Tint roteren in graden (repeterend)"
 
 #: ../share/extensions/color_hsl_adjust.inx:9
 msgid "Random hue"
@@ -46194,7 +46027,7 @@ msgstr ""
 
 #: ../share/extensions/hpgl_output.inx:15
 msgid "Rotation (°, Clockwise):"
-msgstr "Rotatie (°,met de klok mee):"
+msgstr "Rotatie (°, rechtsom):"
 
 #: ../share/extensions/hpgl_output.inx:15
 msgid "Rotation of the drawing (Default: 0°)"
@@ -49985,7 +49818,7 @@ msgstr ""
 
 #: ../share/extensions/plotter.inx:71
 msgid "Rotation (°, clockwise):"
-msgstr "Rotatie (°, met de klok mee):"
+msgstr "Rotatie (°, rechtsom):"
 
 #: ../share/extensions/plotter.inx:71
 msgid "Rotation of the drawing (default: 0°)"
@@ -51655,7 +51488,7 @@ msgstr "Mate van kolken:"
 
 #: ../share/extensions/twirl.inx:6
 msgid "Rotation is clockwise"
-msgstr "Rotatie is met de klok mee"
+msgstr "Rotatie is rechtsom"
 
 #
 # File: ../share/extensions/pdflatex.inx, line: 3
@@ -52342,25 +52175,19 @@ msgstr ""
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:45
 msgid "Editing a Flatpak Logo"
-msgstr ""
+msgstr "Een Flatpak-logo bewerken"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:49
-#, fuzzy
-#| msgid "Multiple gradients"
 msgid "Multipage editing"
-msgstr "Meerdere kleurverlopen"
+msgstr "Bewerken van meerdere pagina's"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:53
-#, fuzzy
-#| msgid "Getting started with Inkscape"
 msgid "Editing with Inkscape"
-msgstr "Aan de slag met Inkscape"
+msgstr "Bewerken met Inkscape"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:57
-#, fuzzy
-#| msgid "Enable gradient editing"
 msgid "Gradient editing"
-msgstr "Aanpassen van kleurverlopen toestaan"
+msgstr "Kleurverloop bewerken"
 
 #: ../org.inkscape.Inkscape.desktop.template:8
 msgid "Create and edit Scalable Vector Graphics images"
@@ -52434,15 +52261,15 @@ msgstr "Duimen (96px/in)"
 
 #: ../share/ui/units.xml:39
 msgid "foot"
-msgstr ""
+msgstr "foot"
 
 #: ../share/ui/units.xml:40
 msgid "feet"
-msgstr ""
+msgstr "feet"
 
 #: ../share/ui/units.xml:43
 msgid "Feet (12 in/ft)"
-msgstr ""
+msgstr "Feet (12 in/ft)"
 
 #: ../share/ui/units.xml:46
 msgid "millimeter"
@@ -52471,19 +52298,16 @@ msgid "Centimeters (10 mm/cm)"
 msgstr "Centimeters (10 mm/cm)"
 
 #: ../share/ui/units.xml:60
-#, fuzzy
 msgid "meter"
-msgstr "Parameters"
+msgstr "meter"
 
 #: ../share/ui/units.xml:61
-#, fuzzy
 msgid "meters"
-msgstr "Middelpunten"
+msgstr "meter"
 
 #: ../share/ui/units.xml:64
-#, fuzzy
 msgid "Meters (100 cm/m)"
-msgstr "Centimeters (10 mm/cm)"
+msgstr "Meters (100 cm/m)"
 
 #: ../share/ui/units.xml:67
 msgid "degree"
