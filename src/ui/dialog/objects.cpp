@@ -2001,6 +2001,8 @@ void ObjectsPanel::on_drag_end(Glib::RefPtr<Gdk::Drag> const &/*drag*/, bool /*d
 
 void ObjectsPanel::selectRange(Gtk::TreeModel::Path start, Gtk::TreeModel::Path end)
 {
+    auto &layers = getDesktop()->layerManager();
+
     if (!start || !end) {
         return;
     }
@@ -2028,8 +2030,10 @@ void ObjectsPanel::selectRange(Gtk::TreeModel::Path start, Gtk::TreeModel::Path 
             (gtk_tree_path_compare(end.gobj(), p.gobj()) >= 0)) {
             auto obj = getItem(*it);
             if (obj) {
-                _prev_range.emplace_back(obj);
-                selection->add(obj, false, true);
+                if (!layers.isLayer(obj)) {
+                    _prev_range.emplace_back(obj);
+                    selection->add(obj, false);
+                }
             }
         }
         return false;
@@ -2075,7 +2079,7 @@ bool ObjectsPanel::selectCursorItem(Gdk::ModifierType const state)
             if (selection->includes(item)) {
                 selection->remove(item);
             } else {
-                selection->add(item, false, true);
+                selection->add(item, false);
                 _initial_path = path;
                 _start_new_range = true;
             }
