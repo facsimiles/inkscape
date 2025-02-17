@@ -18,7 +18,6 @@
 
 #include "node-types.h"
 
-class SPObject;
 class SPDesktop;
 
 namespace Geom {
@@ -61,7 +60,7 @@ void set_node_types(SubpathList &subpath_list, std::span<const NodeTypeRequest> 
 class NodeFactory
 {
 public:
-    NodeFactory(std::span<const NodeTypeRequest> request_sequence, PathManipulator *manipulator, SPObject *path);
+    NodeFactory(std::span<const NodeTypeRequest> request_sequence, PathManipulator *manipulator);
 
     NodeFactory(NodeFactory const &) = delete;
     NodeFactory &operator=(NodeFactory const &) = delete;
@@ -88,7 +87,6 @@ private:
     NodeTypeRequest _getNextRequest();
 
     PathManipulator *_manipulator = nullptr;
-    SPObject *_path = nullptr;
     NodeSharedData _shared_data;
     std::span<const NodeTypeRequest> _requests;
     unsigned _pos = 0;

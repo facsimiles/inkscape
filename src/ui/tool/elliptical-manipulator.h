@@ -41,7 +41,7 @@ class EllipticalManipulator
 {
 public:
     EllipticalManipulator(SPDesktop &desktop, Geom::EllipticalArc const &arc, NodeSharedData const &data,
-                          SPItem const *path, PathManipulator &parent);
+                          PathManipulator &parent);
 
     /// Read-only access to the geometric arc.
     Geom::EllipticalArc const &arc() const { return _arc; }
@@ -74,7 +74,6 @@ private:
     Geom::EllipticalArc _arc;
     NodeSharedData const *_node_shared_data = nullptr;
     CanvasItemPtr<CanvasItemBpath> _contour;
-    SPItem const *_path = nullptr;
     PathManipulator *_parent = nullptr;
 };
 } // namespace Inkscape::UI

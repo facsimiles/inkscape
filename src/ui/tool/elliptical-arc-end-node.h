@@ -31,8 +31,7 @@ class PathManipulator;
 class EllipticalArcEndNode : public Node
 {
 public:
-    EllipticalArcEndNode(Geom::EllipticalArc const &preceding_arc, NodeSharedData const &data, SPObject const *path,
-                         PathManipulator &parent);
+    EllipticalArcEndNode(Geom::EllipticalArc const &preceding_arc, NodeSharedData const &data, PathManipulator &parent);
 
     ~EllipticalArcEndNode() override = default;
 

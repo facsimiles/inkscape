@@ -49,11 +49,10 @@ double constexpr DASH_LENGTH = 2.0;
 namespace Inkscape::UI {
 
 EllipticalManipulator::EllipticalManipulator(SPDesktop &desktop, Geom::EllipticalArc const &arc,
-                                             NodeSharedData const &data, SPItem const *path, PathManipulator &parent)
+                                             NodeSharedData const &data, PathManipulator &parent)
     : _arc{arc}
     , _node_shared_data{&data}
     , _contour{make_canvasitem<CanvasItemBpath>(data.handle_line_group)}
-    , _path{path}
     , _parent{&parent}
 {
     _contour->set_bpath(arc_complement(_arc));
@@ -137,14 +136,13 @@ std::unique_ptr<Node> EllipticalManipulator::subdivideArc(double subdivision_tim
     std::unique_ptr<Geom::Curve> first_curve{_arc.portion(0.0, t)};
     std::unique_ptr<Geom::Curve> second_curve{_arc.portion(t, 1.0)};
 
-    // TODO: fix portion() so that dynamic casts are unnecessary
-    auto *first_arc = dynamic_cast<Geom::EllipticalArc *>(first_curve.get());
+    // TODO: fix portion() so that the dynamic cast is unnecessary
     auto *second_arc = dynamic_cast<Geom::EllipticalArc *>(second_curve.get());
 
-    assert(first_arc && second_arc);
+    assert(second_arc);
 
-    first_arc->setInitial(_arc.initialPoint());
-    first_arc->setFinal(subdivision_point);
+    first_curve->setInitial(_arc.initialPoint());
+    first_curve->setFinal(subdivision_point);
 
     second_arc->setInitial(subdivision_point);
     second_arc->setFinal(_arc.finalPoint());
@@ -152,7 +150,7 @@ std::unique_ptr<Node> EllipticalManipulator::subdivideArc(double subdivision_tim
     _arc = *second_arc;
     updateDisplay();
 
-    return std::make_unique<EllipticalArcEndNode>(*first_arc, *_node_shared_data, _path, *_parent);
+    return _parent->createNodeFactory().createArcEndpointNode(*first_curve);
 }
 } // namespace Inkscape::UI
 

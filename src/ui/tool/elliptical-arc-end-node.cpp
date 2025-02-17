@@ -18,10 +18,8 @@
 #include "elliptical-arc-handler.h"
 #include "inkscape.h"
 #include "node-factory.h"
-#include "object/sp-item.h"
 #include "path-manipulator.h"
 #include "ui/tool/node-types.h"
-#include "util/cast.h"
 
 namespace Inkscape::UI {
 
@@ -67,9 +65,9 @@ void set_up_nodes_for_arc_replacement(Node *end_node_of_replacement_curve, Segme
 } // namespace
 
 EllipticalArcEndNode::EllipticalArcEndNode(Geom::EllipticalArc const &preceding_arc, NodeSharedData const &data,
-                                           SPObject const *path, PathManipulator &parent)
+                                           PathManipulator &parent)
     : Node{data, preceding_arc.finalPoint()}
-    , _manipulator{_desktop ? *_desktop : *SP_ACTIVE_DESKTOP, preceding_arc, data, cast<SPItem>(path), parent}
+    , _manipulator{_desktop ? *_desktop : *SP_ACTIVE_DESKTOP, preceding_arc, data, parent}
 {}
 
 std::unique_ptr<CurveHandler> EllipticalArcEndNode::createEventHandlerForPrecedingCurve()

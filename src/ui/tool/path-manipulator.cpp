@@ -293,7 +293,7 @@ void PathManipulator::invertSelectionInSubpaths()
 
 NodeFactory PathManipulator::createNodeFactory(std::span<const NodeTypeRequest> request_sequence)
 {
-    return {request_sequence, this, _path};
+    return {request_sequence, this};
 }
 
 /** Insert a new node in the middle of each selected segment. */

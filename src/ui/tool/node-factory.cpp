@@ -108,10 +108,9 @@ void set_node_types(SubpathList &subpath_list, std::span<const NodeTypeRequest> 
     }
 }
 
-NodeFactory::NodeFactory(std::span<const NodeTypeRequest> request_sequence, PathManipulator *manipulator,
-                         SPObject *path)
-    : _requests{request_sequence}
-    , _manipulator{manipulator}
+NodeFactory::NodeFactory(std::span<const NodeTypeRequest> request_sequence, PathManipulator *manipulator)
+    : _manipulator{manipulator}
+    , _requests{request_sequence}
     , _always_create_elliptical_arcs{request_sequence.empty()}
 {
     assert(_manipulator);
@@ -131,7 +130,7 @@ std::unique_ptr<Node> NodeFactory::createNextNode(Geom::Curve const &preceding_c
     auto const type_request = _getNextRequest();
     if (type_request.elliptical_arc_requested || _always_create_elliptical_arcs) {
         if (auto const *arc = dynamic_cast<Geom::EllipticalArc const *>(&preceding_curve)) {
-            return std::make_unique<EllipticalArcEndNode>(*arc, _shared_data, _path, *_manipulator);
+            return std::make_unique<EllipticalArcEndNode>(*arc, _shared_data, *_manipulator);
         }
     }
     return std::make_unique<Node>(_shared_data, preceding_curve.finalPoint());
@@ -149,7 +148,7 @@ std::unique_ptr<Node> NodeFactory::createArcEndpointNode(Geom::Curve const &curv
             arc = *already_arc;
         }
     }
-    return std::make_unique<EllipticalArcEndNode>(arc, _shared_data, _path, *_manipulator);
+    return std::make_unique<EllipticalArcEndNode>(arc, _shared_data, *_manipulator);
 }
 
 NodeTypeRequest NodeFactory::_getNextRequest()
