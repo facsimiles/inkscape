@@ -64,7 +64,7 @@ Geom::Point triple_intersection(Geom::Line const &a, Geom::Line const &b, Geom::
 
     return std::accumulate(
         intersections.begin(), intersections.end(), Geom::Point{},
-        [coefficient = 1.0 / static_cast<double>(intersections.size())](const auto &accumulated, const auto &incoming) {
+        [coefficient = 1.0 / static_cast<double>(intersections.size())](auto const &accumulated, auto const &incoming) {
             return accumulated + coefficient * incoming.point();
         });
 }

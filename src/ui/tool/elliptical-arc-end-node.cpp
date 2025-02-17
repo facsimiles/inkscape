@@ -153,7 +153,7 @@ std::unique_ptr<Node> EllipticalArcEndNode::subdivideArc(double curve_time)
     return result;
 }
 
-void EllipticalArcEndNode::writeSegment(Geom::PathSink &output, const Node &) const
+void EllipticalArcEndNode::writeSegment(Geom::PathSink &output, Node const &) const
 {
     _manipulator.writeSegment(output);
 }

@@ -1820,7 +1820,7 @@ void NodeList::replace(iterator pos, Node *replacement)
 {
     assert(replacement);
     Node *to_replace = static_cast<Node *>(pos._node);
-    const bool was_selected = to_replace->selected();
+    bool const was_selected = to_replace->selected();
 
     ListNode *prev = to_replace->ln_prev;
     ListNode *next = to_replace->ln_next;

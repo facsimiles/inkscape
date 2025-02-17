@@ -91,7 +91,7 @@ NodeToolbar::NodeToolbar(Glib::RefPtr<Gtk::Builder> const &builder)
     // Attach the signals.
     static constexpr struct
     {
-        const char *button_id;
+        char const *button_id;
         void (NodeToolbar::*callback)();
     } button_mapping[] = {
         {"insert_node_btn", &NodeToolbar::edit_add},

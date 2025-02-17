@@ -44,7 +44,7 @@ std::unique_ptr<Geom::EllipticalArc> fit_arc_to_cubic_bezier(Geom::CubicBezier c
 
     Geom::Ellipse ellipse;
     try {
-        const std::vector points{initial_point, bezier.pointAt(0.25), mid_point, bezier.pointAt(0.75), final_point};
+        std::vector const points{initial_point, bezier.pointAt(0.25), mid_point, bezier.pointAt(0.75), final_point};
         ellipse.fit(points);
     } catch (Geom::RangeError const &) {
         return {};
@@ -87,20 +87,20 @@ std::vector<NodeTypeRequest> read_node_type_requests(char const *xml_node_type_s
     return result;
 }
 
-void set_node_types(SubpathList &subpath_list, std::span<const NodeTypeRequest> requests)
+void set_node_types(SubpathList &subpath_list, std::span<NodeTypeRequest const> requests)
 {
     auto const get_next = [&requests](auto &it) { return it == requests.end() ? NodeTypeRequest{} : *it++; };
 
     auto iterator = requests.begin();
     for (auto &subpath : subpath_list) {
         for (auto &node : *subpath) {
-            const auto [node_type, ellipse_modifier] = get_next(iterator);
+            auto const [node_type, ellipse_modifier] = get_next(iterator);
             node.setType(decode_node_type(node_type), false);
         }
         if (subpath->closed()) {
             // STUPIDITY ALERT: it seems we need to use the duplicate type symbol instead of
             // the first one to remain backward compatible.
-            const auto [node_type, ellipse_modifier] = get_next(iterator);
+            auto const [node_type, ellipse_modifier] = get_next(iterator);
             if (node_type != XmlNodeType::BOGUS) {
                 subpath->begin()->setType(decode_node_type(node_type), false);
             }
@@ -108,7 +108,7 @@ void set_node_types(SubpathList &subpath_list, std::span<const NodeTypeRequest> 
     }
 }
 
-NodeFactory::NodeFactory(std::span<const NodeTypeRequest> request_sequence, PathManipulator *manipulator)
+NodeFactory::NodeFactory(std::span<NodeTypeRequest const> request_sequence, PathManipulator *manipulator)
     : _manipulator{manipulator}
     , _requests{request_sequence}
     , _always_create_elliptical_arcs{request_sequence.empty()}
@@ -140,11 +140,11 @@ std::unique_ptr<Node> NodeFactory::createArcEndpointNode(Geom::Curve const &curv
 {
     Geom::EllipticalArc arc = make_semicircle(curve.initialPoint(), curve.finalPoint());
     if (!curve.isLineSegment()) {
-        if (const auto *cubic_bezier = dynamic_cast<Geom::CubicBezier const *>(&curve)) {
-            if (const auto fitted = fit_arc_to_cubic_bezier(*cubic_bezier)) {
+        if (auto const *cubic_bezier = dynamic_cast<Geom::CubicBezier const *>(&curve)) {
+            if (auto const fitted = fit_arc_to_cubic_bezier(*cubic_bezier)) {
                 arc = *fitted;
             }
-        } else if (const auto *already_arc = dynamic_cast<Geom::EllipticalArc const *>(&curve)) {
+        } else if (auto const *already_arc = dynamic_cast<Geom::EllipticalArc const *>(&curve)) {
             arc = *already_arc;
         }
     }

@@ -90,7 +90,7 @@ void CurveDragPoint::_adjustPointToSnappedPosition(Geom::Point &point_to_adjust,
 
     auto &snap_manager = _desktop->getNamedView()->snap_manager;
     snap_manager.setup(_desktop, true, &item_to_ignore);
-    const SnapCandidatePoint candidate_point{point_to_adjust, Inkscape::SNAPSOURCE_OTHER_HANDLE};
+    SnapCandidatePoint const candidate_point{point_to_adjust, Inkscape::SNAPSOURCE_OTHER_HANDLE};
     point_to_adjust = snap_manager.freeSnap(candidate_point, {}, false).getPoint();
     snap_manager.unSetup();
 }
@@ -100,7 +100,7 @@ void CurveDragPoint::dragged(Geom::Point &new_pos, MotionEvent const &event)
     if (!first || !first.next()) return;
     NodeList::iterator second = first.next();
 
-    const auto *path_item = cast<SPItem>(_pm._path);
+    auto const *path_item = cast<SPItem>(_pm._path);
     if (!_curve_event_handler || !path_item) {
         return;
     }

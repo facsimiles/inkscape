@@ -55,12 +55,12 @@ struct NodeTypeRequest
 std::vector<NodeTypeRequest> read_node_type_requests(char const *xml_node_type_string);
 
 /// Set the node types in the passed list of subpaths according to the passed requests.
-void set_node_types(SubpathList &subpath_list, std::span<const NodeTypeRequest> requests);
+void set_node_types(SubpathList &subpath_list, std::span<NodeTypeRequest const> requests);
 
 class NodeFactory
 {
 public:
-    NodeFactory(std::span<const NodeTypeRequest> request_sequence, PathManipulator *manipulator);
+    NodeFactory(std::span<NodeTypeRequest const> request_sequence, PathManipulator *manipulator);
 
     NodeFactory(NodeFactory const &) = delete;
     NodeFactory &operator=(NodeFactory const &) = delete;
@@ -88,7 +88,7 @@ private:
 
     PathManipulator *_manipulator = nullptr;
     NodeSharedData _shared_data;
-    std::span<const NodeTypeRequest> _requests;
+    std::span<NodeTypeRequest const> _requests;
     unsigned _pos = 0;
     bool _always_create_elliptical_arcs = false;
 };

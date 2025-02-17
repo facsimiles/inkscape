@@ -27,7 +27,7 @@ namespace Inkscape::UI {
  * 'e' in the sodipodi:nodetypes attribute) and after an ellipse is converted to a path manually.
  */
 Geom::PathVector remove_elliptical_arcs_if_not_requested(Geom::PathVector pathvector_to_convert,
-                                                         std::span<const NodeTypeRequest> requested_node_types);
+                                                         std::span<NodeTypeRequest const> requested_node_types);
 
 } // namespace Inkscape::UI
 

@@ -88,7 +88,7 @@ public:
     void invertSelectionInSubpaths();
 
     /// Create a new node factory able to produce nodes for this manipulator.
-    NodeFactory createNodeFactory(std::span<const NodeTypeRequest> request_sequence = {});
+    NodeFactory createNodeFactory(std::span<NodeTypeRequest const> request_sequence = {});
 
     void insertNodeAtExtremum(ExtremumType extremum);
     void insertNodes();

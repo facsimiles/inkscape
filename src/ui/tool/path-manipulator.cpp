@@ -291,7 +291,7 @@ void PathManipulator::invertSelectionInSubpaths()
     }
 }
 
-NodeFactory PathManipulator::createNodeFactory(std::span<const NodeTypeRequest> request_sequence)
+NodeFactory PathManipulator::createNodeFactory(std::span<NodeTypeRequest const> request_sequence)
 {
     return {request_sequence, this};
 }

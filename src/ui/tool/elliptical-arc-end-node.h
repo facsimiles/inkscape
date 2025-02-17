@@ -68,7 +68,7 @@ private:
     EllipticalManipulator _manipulator;
     bool _extra_ui_visible = false;
 };
-}
+} // namespace Inkscape::UI
 
 #endif // INKSCAPE_UI_TOOL_ELLIPTICAL_ARC_END_NODE_H
 
