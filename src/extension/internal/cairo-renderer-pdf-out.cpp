@@ -42,6 +42,9 @@
 
 #include "util/units.h"
 
+#include "rapidcsv.h"
+#include <regex>
+
 namespace Inkscape {
 namespace Extension {
 namespace Internal {
@@ -57,11 +60,77 @@ bool CairoRendererPdfOutput::check(Inkscape::Extension::Extension * /*module*/)
     return result;
 }
 
+void prepare_template_nodes(Inkscape::XML::Node* node, std::vector<std::pair<Inkscape::XML::Node*, std::vector<std::string>>>& template_nodes) {
+    std::regex var_regex("%VAR_[^%]*%");
+    if (node->content()) {
+        std::smatch match;
+        std::string content = node->content();
+        if (std::regex_search(content, match, var_regex)) {
+            std::vector<std::string> split_content;
+            std::sregex_token_iterator iter(content.begin(), content.end(), var_regex, {-1, 0});
+            std::sregex_token_iterator end;
+            for (; iter != end; ++iter) {
+                split_content.push_back(*iter);
+            }
+            template_nodes.push_back(std::make_pair(node, split_content));
+        }
+    }
+
+    for (Inkscape::XML::Node* child = node->firstChild(); child; child = child->next()) {
+        prepare_template_nodes(child, template_nodes);
+    }
+}
+
 // TODO: Make this function more generic so that it can do both PostScript and PDF; expose in the headers
 static bool
 pdf_render_document_to_file(SPDocument *doc, gchar const *filename, unsigned int level, PDFOptions flags,
-                            int resolution)
+                            int resolution, gchar const *mail_merge_csv)
 {
+    std::vector<std::pair<Inkscape::XML::Node*, std::vector<std::string>>> template_nodes;
+    std::vector<std::tuple<int, int, int>> replacements;
+    rapidcsv::Document data_csv("");
+    if (flags.mail_merge) {
+        auto separator_params = rapidcsv::SeparatorParams();
+        separator_params.mQuotedLinebreaks = true;
+        try {
+            data_csv = rapidcsv::Document(mail_merge_csv, rapidcsv::LabelParams(), separator_params);
+        }
+        catch(...) {
+            g_error("Failed opening csv data file '%s'.", mail_merge_csv);
+        }
+
+        g_info("Export has mail_merge activated, data file has %zu rows and %zu columns.", data_csv.GetRowCount(), data_csv.GetColumnCount());
+
+        // throw an error if there is a duplicate column name
+        std::set<std::string> column_names;
+        for (const std::string name : data_csv.GetColumnNames()) {
+            if (column_names.find(name) != column_names.end()) {
+                g_error("Duplicate column name '%s' in data file.", name.c_str());
+            }
+            column_names.insert(name);
+        }
+
+        // for each node in doc check if its content contains %VAR_[^%]*%
+        // if so, save the node and the split content in a list
+        // the split should be before and after the % marking the variables
+        // template_nodes = node, original content split at the beginning and end of each variable
+        prepare_template_nodes(doc->getRoot()->getRepr(), template_nodes);
+
+        // template: save for each text fragment of a node that has a matching column
+        // save for each replacement: index in templateNodes, csv column index, split content index
+        for (int node_index = 0; node_index < template_nodes.size(); node_index++) {
+            auto pair = template_nodes[node_index];
+            for (const std::string name : data_csv.GetColumnNames()) {
+                int col_idx = data_csv.GetColumnIdx(name);
+                for (int i = 0; i < pair.second.size(); i++) {
+                    if (pair.second[i] == "%VAR_" + name + "%") {
+                        replacements.push_back(std::make_tuple(node_index, col_idx, i));
+                    }
+                }
+            }
+        }
+    }
+
     if (flags.text_to_path) {
         assert(!flags.text_to_latex);
         // Cairo's text-to-path method has numerical precision and font matching
@@ -92,13 +161,81 @@ pdf_render_document_to_file(SPDocument *doc, gchar const *filename, unsigned int
     ctx.setFilterToBitmap(flags.rasterize_filters);
     ctx.setBitmapResolution(resolution);
 
-    bool ret = ctx.setPdfTarget(filename)
-               && renderer.setupDocument(&ctx, doc, root)
-               && renderer.renderPages(&ctx, doc, flags.stretch_to_fit);
-    if (ret) {
-        ctx.finish();
-    }
+    bool ret = false;
+    // + 2 to skip "> " at the beginning of the filename
+    gchar *escaped_filename = g_shell_quote(filename + 2);
 
+    if (flags.mail_merge) {        
+        for(int i = 0; i < data_csv.GetRowCount(); i++) {
+            std::vector<std::string> row = data_csv.GetRow<std::string>(i);
+            for (const auto& replacement : replacements) {
+                int node_index = std::get<0>(replacement);
+                int col_idx = std::get<1>(replacement);
+                int split_idx = std::get<2>(replacement);
+                auto pair = template_nodes[node_index];
+                std::string content = pair.first->content();
+                if (row.size() != data_csv.GetColumnCount()) {
+                    g_error("Row %d has %zu columns, but the header of the file has %zu columns.", i, row.size(), data_csv.GetColumnCount());
+                }
+                std::string replacement_text = row[col_idx];
+                pair.second[split_idx] = replacement_text;
+                std::string new_content;
+                for (const auto& part : pair.second) {
+                    new_content += part;
+                }
+                pair.first->setContent(new_content.c_str());
+            }
+            doc->ensureUpToDate();
+            ret = ctx.setPdfTarget(g_strdup_printf("%s-tmp-%06d.pdf", filename, i));
+            ret = ret && renderer.setupDocument(&ctx, doc, root)
+                  && renderer.renderPages(&ctx, doc, flags.stretch_to_fit);
+            
+            if (ret) {
+                ctx.finish();
+            }
+            // merge the pdfs regularly and at the end to avoid using too much disk space
+            if (i != 0 && (i % 100 == 0 || i == data_csv.GetRowCount() - 1)) {
+                g_info("Merging pdf files (iteration %05d)", i);
+                // merge all pdf files that have filename prefix filename into filename using gs
+                // note: the glob could (on some unsual systems) return the files in a different order
+                gchar *command = g_strdup_printf("gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=%s-batch-%05d.pdf %s-tmp-*.pdf", escaped_filename, i, escaped_filename);
+                g_debug(command);
+                if (system(command) != 0) {
+                    g_error("Failed to merge pdf files.");
+                }
+                // remove all pdf files that have filename prefix filename
+                command = g_strdup_printf("rm %s-tmp-*.pdf", escaped_filename);
+                g_debug(command);
+                if (system(command) != 0) {
+                    g_error("Failed to remove pdf files.");
+                }
+                g_free(command);
+            }
+        }
+        // merge all batch pdf files into filename using gs
+        // note: the glob could (on some unsual systems) return the files in a different order
+        gchar *command = g_strdup_printf("gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=%s %s-batch-*.pdf", escaped_filename, escaped_filename);
+        g_debug(command);
+        if (system(command) != 0) {
+            g_error("Failed to merge pdf files.");
+        }
+        // remove all batch pdf files
+        command = g_strdup_printf("rm %s-batch-*.pdf", escaped_filename);
+        g_debug(command);
+        if (system(command) != 0) {
+            g_error("Failed to remove pdf files.");
+        }
+        g_free(escaped_filename);
+        g_free(command);
+    } else {
+        ret = ctx.setPdfTarget(filename)
+              && renderer.setupDocument(&ctx, doc, root)
+              && renderer.renderPages(&ctx, doc, flags.stretch_to_fit);
+        
+        if (ret) {
+            ctx.finish();
+        }
+    }
     root->invoke_hide(dkey);
     return ret;
 }
@@ -174,11 +311,30 @@ CairoRendererPdfOutput::save(Inkscape::Extension::Output *mod, SPDocument *doc, 
         g_warning("Parameter <stretch> might not exist");
     }
 
+    flags.mail_merge = false;
+    try {
+        flags.mail_merge = mod->get_param_bool("mail_merge");
+    } catch(...) {
+        g_error("Parameter <mail_merge> might not exist.");
+    }
+
+    const gchar *mail_merge_csv;
+    try {
+        mail_merge_csv = mod->get_param_string("mail_merge_csv");
+    } catch(...) {
+        if (flags.mail_merge) {
+            g_error("Mail merge: No data file path supplied.");
+        }
+    }
+    if (flags.mail_merge && strlen(mail_merge_csv) == 0) {
+        g_error("Mail merge: No data file path supplied.");
+    } 
+
     // Create PDF file
     {
         gchar * final_name;
         final_name = g_strdup_printf("> %s", filename);
-        ret = pdf_render_document_to_file(doc, final_name, level, flags, new_bitmapResolution);
+        ret = pdf_render_document_to_file(doc, final_name, level, flags, new_bitmapResolution, mail_merge_csv);
         g_free(final_name);
 
         if (!ret)
@@ -222,6 +378,9 @@ CairoRendererPdfOutput::init ()
             "</param>\n"
             "<param name=\"blurToBitmap\" gui-text=\"" N_("Rasterize filter effects") "\" type=\"bool\">true</param>\n"
             "<param name=\"resolution\" gui-text=\"" N_("Resolution for rasterization (dpi):") "\" type=\"int\" min=\"1\" max=\"10000\">96</param>\n"
+            "<spacer size=\"10\" />"
+            "<param name=\"mail_merge\" gui-text=\"" N_("Apply mail merge") "\" type=\"bool\">false</param>\n"
+            "<param name=\"mail_merge_csv\" gui-text=\"" N_("Data source for mail merge (.csv)") "\" type=\"string\"></param>"
             "<spacer size=\"10\" />"
             "<param name=\"stretch\" gui-text=\"" N_("Rounding compensation:") "\" gui-description=\""
                 N_("Exporting to PDF rounds the document size to the next whole number in pt units. Compensation may stretch the drawing slightly (up to 0.35mm for width and/or height). When not compensating, object sizes will be preserved strictly, but this can sometimes cause white gaps along the page margins.")

@@ -37,6 +37,7 @@ struct PDFOptions {
     bool rasterize_filters : 1; ///< Rasterize filter effects?
     bool drawing_only      : 1; ///< Set page size to drawing + margin instead of document page.
     bool stretch_to_fit    : 1; ///< Compensate for Cairo's page size rounding to integers (in pt)?
+    bool mail_merge        : 1; ///< Use the current file as a template and fill it with data from a csv file?
 };
 
 } } }  /* namespace Inkscape, Extension, Internal */

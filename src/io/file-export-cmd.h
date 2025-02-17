@@ -74,6 +74,8 @@ public:
     double        export_dpi;
     bool          export_ignore_filters;
     bool          export_text_to_path;
+    bool          export_mail_merge;
+    std::string   export_mail_merge_csv;
     int           export_ps_level;
     Glib::ustring export_pdf_level;
     bool          export_latex;

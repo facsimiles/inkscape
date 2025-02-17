@@ -1693,6 +1693,11 @@ InkscapeApplication::on_handle_local_options(const Glib::RefPtr<Glib::VariantDic
     if (options->contains("export-ignore-filters")) _file_export.export_ignore_filters = true;
     if (options->contains("export-text-to-path"))   _file_export.export_text_to_path   = true;
 
+    if (options->contains("export-mail-merge"))   _file_export.export_mail_merge   = true;
+    if (options->contains("export-mail-merge-csv")) {
+        options->lookup_value("export-mail-merge-csv",  _file_export.export_mail_merge_csv);
+    }
+
     if (options->contains("export-ps-level")) {
         options->lookup_value("export-ps-level",  _file_export.export_ps_level);
     }
