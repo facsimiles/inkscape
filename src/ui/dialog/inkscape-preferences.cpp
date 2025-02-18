@@ -3679,7 +3679,7 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
             unsigned int key = 0;
             Gdk::ModifierType mod = Gdk::ModifierType(0);
             Gtk::Accelerator::parse(accel, key, mod);
-            shortcut_label += get_key_label(display, key, -1, mod) /* Gtk::Accelerator::get_label(key, mod)*/ + ", ";
+            shortcut_label += Gtk::Accelerator::get_label(key, mod);// get_key_label(display, key, -1, mod) /* Gtk::Accelerator::get_label(key, mod)*/ + ", ";
         }
 
         if (shortcut_label.size() > 1) {

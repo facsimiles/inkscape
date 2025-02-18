@@ -21,6 +21,7 @@
 
 #include "inkscape-application.h"
 #include "inkscape-window.h"
+#include "preferences.h"
 #include "ui/dialog-run.h"
 
 #include "ui/dialog/dialog-container.h"
@@ -71,6 +72,7 @@ static const std::vector<std::vector<Glib::ustring>> raw_data_dialogs = {
 #endif
 
     {"win.dialog-toggle",                     N_("Toggle all dialogs"),        SECTION,  N_("Show or hide all dialogs")                                                               },
+    {"app.settings",                          N_("Open Settings"),             SECTION,  N_("Edit Inkscape settings") },
     // clang-format on
 };
 
@@ -162,6 +164,16 @@ void add_actions_dialogs(InkscapeWindow *win)
 
     gapp->add_action("settings", [win] {
         Inkscape::UI::Dialog::SettingsDialog dialog(*win);
+        if (win->has_css_class("dark")) {
+            dialog.add_css_class("dark");
+        } else {
+            dialog.add_css_class("bright");
+        }
+        if (Inkscape::Preferences::get()->getBool("/theme/symbolicIcons", false)) {
+            dialog.add_css_class("symbolic");
+        } else {
+            dialog.add_css_class("regular");
+        }
         Inkscape::UI::dialog_run(dialog);
         dialog.close();
     });

@@ -5,24 +5,47 @@
 
 #include "settings-dialog.h"
 
+#include <array>
+#include <cstddef>
 #include <gdk/gdkkeysyms.h>
+#include <gdkmm/display.h>
+#include <gdkmm/enums.h>
+#include <glibmm/markup.h>
+#include <glibmm/ustring.h>
 #include <gtkmm/accelerator.h>
+#include <gtkmm/accelkey.h>
+#include <gtkmm/box.h>
+#include <gtkmm/button.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/enums.h>
 #include <gtkmm/label.h>
+#include <gtkmm/object.h>
+#include <gtkmm/overlay.h>
+#include <gtkmm/popover.h>
 #include <gtkmm/scrolledwindow.h>
+#include <gtkmm/shortcuttrigger.h>
+#include <gtkmm/textview.h>
 #include <gtkmm/widget.h>
 #include <iomanip>
 #include <numeric>
+#include <optional>
 #include <regex>
 #include <glibmm/fileutils.h>
 #include <glibmm/i18n.h>
+#include <sigc++/signal.h>
 #include <string>
 #include <string_view>
+#include <vector>
 
+// #include "inkscape.h"
+#include "inkscape-application.h"
+#include "io/resource.h"
 #include "preferences.h"
+#include "ui/containerize.h"
 #include "ui/modifiers.h"
+#include "ui/popup-menu.h"
 #include "ui/shortcuts.h"
+#include "ui/util.h"
 #include "ui/widget/color-picker.h"
 #include "ui/widget/ink-spin-button.h"
 #include "util-string/ustring-format.h"
@@ -59,7 +82,6 @@ struct PreferencesIO : ReadWrite::IO {
                 // modifier keys are handled separately
                 subpath = subpath.substr(strlen("modifiers/"));
                 auto sep = subpath.find('/');
-        // printf("get at '%s'\n", path.c_str());
                 auto m = Modifiers::Modifier::get(subpath.substr(0, sep).c_str());
                 if (m) {
                     auto mask = m->get_and_mask();
@@ -84,9 +106,7 @@ struct PreferencesIO : ReadWrite::IO {
             }
             else {
                 Util::ActionAccel accel(subpath);
-                Util::format_accel_keys(_display, accel.getKeys());
-                auto keys = accel.getShortcutText();
-                return join(keys).raw();
+                return Util::format_accel_keys(_display, accel.getKeys());
             }
         }
         else if (auto entry = Preferences::get()->getEntry(path); entry.isValid()) {
@@ -129,6 +149,29 @@ constexpr int QUARTER=  3 * ONE_COLUMN;
 
 const Glib::Quark NODE_KEY{"node-element"};
 
+const char* get_modifier_key_name(GdkModifierType key) {
+    static std::map<GdkModifierType, std::string, std::less<>> key_names = {
+#ifdef __APPLE__
+        { GDK_SHIFT_MASK, _("⇧") },
+        { GDK_CONTROL_MASK,  _("^") },
+        { GDK_ALT_MASK,   _("⌥") },
+        { GDK_META_MASK,  _("⌘") },
+#else
+        { GDK_SHIFT_MASK, _("Shift") },
+        { GDK_CONTROL_MASK,  _("Ctrl") },
+        { GDK_ALT_MASK,   _("Alt") },
+        { GDK_META_MASK,  _("Meta") },
+#endif
+        { GDK_SUPER_MASK, _("Super") },
+        { GDK_HYPER_MASK, _("Hyper") },
+    };
+
+    if (auto it = key_names.find(key); it != key_names.end()) {
+        return it->second.c_str();
+    }
+    return "";
+}
+
 Glib::ustring get_modifier_name(std::string_view str) {
     if (str.empty()) return {};
 
@@ -155,7 +198,8 @@ Glib::ustring get_modifier_name(std::string_view str) {
 }
 
 XML::Document* get_ui_xml() {
-    auto content = Glib::file_get_contents("/Users/mike/dev/inkscape/share/ui/settings-dialog.xml");
+    auto fname = IO::Resource::get_path_string(IO::Resource::SYSTEM, IO::Resource::UIS, "settings-dialog.xml");
+    auto content = Glib::file_get_contents(fname);
     return sp_repr_read_mem(content.data(), content.length(), nullptr);
 }
 
@@ -495,88 +539,270 @@ void add_visibility_observer(Context& ctx, Gtk::Widget* widget, XML::Node* node)
     ctx.visibility[path].push_back(widget);
 }
 
-struct ShortcutEdit : Gtk::Entry {
-    ShortcutEdit(XML::Node* node, ReadWrite::IO* io) {
+Gtk::Box* create_shortcut_label(const Glib::RefPtr<Gdk::Display>& display, Gtk::Box* container, int keyval, Gdk::ModifierType modifier) {
+    auto create_key = [](const char* text) {
+        auto key = Gtk::make_managed<Gtk::Label>(text);
+        key->add_css_class("key-pillbox");
+        return key;
+    };
+
+    auto accel = Util::transform_key_value(display, keyval, modifier);
+    keyval = accel.get_key();
+    modifier = accel.get_mod();
+    int mod = static_cast<int>(modifier); 
+    std::array<GdkModifierType, 6> mod_keys{GDK_SHIFT_MASK, GDK_CONTROL_MASK, GDK_ALT_MASK, GDK_META_MASK, GDK_SUPER_MASK, GDK_HYPER_MASK};
+    for (auto mask : mod_keys) {
+        if (mod & mask) {
+            container->append(*create_key(get_modifier_key_name(mask)));
+        }
+    }
+    auto key = Gtk::Accelerator::get_label(keyval, Gdk::ModifierType::NO_MODIFIER_MASK);
+
+    if (key.size() == 1 && key[0] >= 'a' && key[0] <= 'z') {
+        key = key.uppercase();
+    }
+    else if (key.empty()) {
+        auto name = gdk_keyval_name(keyval);
+        if (name) {
+            key = name;
+        }
+        else {
+            key = "<unknown>";
+        }
+    }
+    container->append(*create_key(key.c_str()));
+
+    return container;
+}
+
+
+struct ShortcutEdit : Gtk::Overlay {
+    ShortcutEdit(XML::Node* node, ReadWrite::IO* io) : _node(node), _io(io) {
+        set_name("ShortcutEdit");
         add_css_class("shortcut");
-        set_editable(false);
-        auto pos = IconPosition::SECONDARY;
-        set_icon_from_icon_name("edit", pos);
-        set_icon_activatable(true, pos);
-        signal_icon_release().connect([this, node, io](auto icon){
-            if (_edit) {
-                // cancel
-                end_shortcut_edit(false);
+        set_child(_edit);
+        _action_id = to_path(node).substr(strlen("/shortcuts/"));
+        _edit.set_editable(false);
+        // _edit.set_alignment(Gtk::Align::CENTER);
+        auto pos = Gtk::Entry::IconPosition::SECONDARY;
+        _edit.set_icon_from_icon_name("edit", pos);
+        _edit.set_icon_activatable(true, pos);
+        _edit.signal_icon_release().connect([this, node, io](auto icon){
+            if (_in_edit_mode) {
+                cancel_editing();
             }
             else {
-                edit_shortcut(io, to_path(node));
+                edit_shortcut();
             }
         });
-        set_can_focus(false);
-        set_focus_on_click(false);
-        set_focusable(false);
+        _edit.set_can_focus(false);
+        _edit.set_focus_on_click(false);
+        _edit.set_focusable(false);
         auto size = to_size(element_attr(node, "size"), WHOLE);
-        set_size_request(size);
+        _edit.set_size_request(size);
+        _focus->signal_leave().connect([this]{ cancel_editing(); });
+        containerize(*this);
+        _confirm.set_size_request(size);
+        _confirm.set_child(_content);
+        _confirm.set_has_arrow(false);
+        _confirm.set_autohide();
+        _confirm.set_parent(*this);
+        _confirm.signal_closed().connect([this]{ cancel_editing(); });
+        _content.set_margin(4);
+        _content.set_hexpand();
+        _content.set_row_spacing(4);
+        _content.set_column_spacing(4);
+        _message.set_max_width_chars(40);
+        _message.set_wrap();
+        _message.set_wrap_mode(Pango::WrapMode::WORD);
+        _content.attach(_message, 0, 0);
+        auto hbox = Gtk::make_managed<Gtk::Box>();
+        hbox->set_halign(Gtk::Align::CENTER);
+        hbox->set_hexpand();
+        hbox->set_spacing(4);
+        hbox->append(_ok);
+        hbox->append(_cancel);
+        _ok.set_size_request(QUARTER);
+        _cancel.set_size_request(QUARTER);
+        _content.attach(*hbox, 0, 1);
+        _cancel.signal_clicked().connect([this]{
+            _confirm.popdown();
+            edit_shortcut();
+        });
+        _ok.signal_clicked().connect([this]{
+            end_shortcut_edit(_new_shortcut);
+        });
+
         //todo: validate(shortcut, node, io);
-        auto keys = io->read(to_path(node));
-        if (keys.has_value()) {
-            set_text(*keys);
-        }
+        // auto keys = io->read(to_path(node));
+
+        show_shortcuts(_action_id);
         auto keyctrl = Gtk::EventControllerKey::create();
         keyctrl->set_propagation_phase(Gtk::PropagationPhase::CAPTURE);
+
+        // allow Esc to cancel out of shortcut editing
         keyctrl->signal_key_pressed().connect([this](auto keyval, auto keycode, auto mod){
-            if (keyval == GDK_KEY_Escape) {
-                end_shortcut_edit(false);
+            if (keyval == GDK_KEY_Escape && mod == Gdk::ModifierType::NO_MODIFIER_MASK) {
+                cancel_editing();
+            }
+            if (_in_edit_mode && !Util::is_key_modifier(keyval)) {
+                // assign new shortcut
+                auto& shortcuts = Inkscape::Shortcuts::getInstance();
+                auto state = static_cast<GdkModifierType>(mod);
+                auto new_shortcut_key = shortcuts.get_from(nullptr, keyval, keycode, state, true);
+// printf("new keyval: %x  code %d  mod: %x - '%s', kv: %x\n", keyval, keycode, mod, Util::get_accel_key_abbrev( new_shortcut_key).c_str(),new_shortcut_key.get_key());
+                if (verify_shortcut(new_shortcut_key)) {
+                    end_shortcut_edit(new_shortcut_key);
+                }
             }
             return true;
         }, false);
-        keyctrl->signal_key_released().connect([this](auto keyval, auto keycode, auto mod){
-            if (Util::is_key_modifier(keyval)) return;
 
-            auto root = get_root();
-            if (!root) return;
-
-            //todo: assign new shortcut
-            auto& shortcuts = Inkscape::Shortcuts::getInstance();
-            auto const state = static_cast<GdkModifierType>(mod);
-            auto const new_shortcut_key = shortcuts.get_from(nullptr, keyval, keycode, state, true);
-            if (new_shortcut_key.is_null()) return;
-
-            //todo: define shortcut
-            //
-        }, false);
         add_controller(keyctrl);
+        add_controller(_focus);
     }
 
-    void edit_shortcut(ReadWrite::IO* io, const std::string& path) {
-        if (_edit) return;
+    ~ShortcutEdit() override = default;
 
-        _edit = true;
-        set_icon_from_icon_name("close-button", IconPosition::SECONDARY);
-        set_alignment(Gtk::Align::CENTER);
-        set_text(_("New accelerator..."));
-        set_can_focus();
-        set_focusable();
-        grab_focus_without_selecting();
+    void edit_shortcut() {
+        if (_in_edit_mode) return;
+
+        _in_edit_mode = true;
+        if (_keys) _keys->set_visible(false);
+        _edit.set_icon_from_icon_name("close-button", Gtk::Entry::IconPosition::SECONDARY);
+        _edit.set_can_focus();
+        _edit.set_focusable();
+        show_new_accel();
     }
 
-    void end_shortcut_edit(bool commit) {
-        if (!_edit) return;
-
-        _edit = false;
-        set_icon_from_icon_name("edit", Gtk::Entry::IconPosition::SECONDARY);
-        // unset_icon();
-        get_parent()->child_focus(Gtk::DirectionType::TAB_FORWARD);
-        set_can_focus(false);
-        set_focusable(false);
-        set_alignment(Gtk::Align::START);
-        set_text(_(""));
-
-        if (auto root = get_root()) {
-            root->unset_focus();
+    void cancel_editing() {
+        if (_in_edit_mode) {
+            _confirm.popdown();
+            end_shortcut_edit({});
         }
     }
 
-    bool _edit = false;
+    void end_shortcut_edit(std::optional<Gtk::AccelKey> new_key) {
+        if (!_in_edit_mode) return;
+
+        _in_edit_mode = false;
+        _confirm.popdown();
+        _edit.set_icon_from_icon_name("edit", Gtk::Entry::IconPosition::SECONDARY);
+        _edit.set_can_focus(false);
+        _edit.set_focusable(false);
+        // "unfocus"
+        if (auto root = get_root()) {
+            root->unset_focus();
+        }
+        if (new_key.has_value()) {
+            // save
+            auto& shortcuts = Inkscape::Shortcuts::getInstance();
+            shortcuts.add_user_shortcut(_action_id, new_key.value());
+            _signal_changed.emit(*new_key);
+        }
+        show_shortcuts(_action_id);
+    }
+
+    void show_new_accel() {
+        _edit.set_placeholder_text(_("New accelerator..."));
+        _edit.grab_focus();
+        // _edit.grab_focus_without_selecting();
+        if (_keys) _keys->set_visible(false);
+    }
+
+    void show_shortcuts(const std::string& action_id) {
+        Util::ActionAccel accel(action_id);
+        show_shortcuts(accel.getKeys());
+    }
+
+    void show_shortcuts(const std::vector<Gtk::AccelKey>& keys) {
+        auto container = Gtk::make_managed<Gtk::Box>();
+        container->set_spacing(1);
+        container->set_valign(Gtk::Align::CENTER);
+        container->set_halign(Gtk::Align::CENTER);
+        bool first = true;
+        auto display = Gdk::Display::get_default();
+        for (auto key : keys) {
+            if (!first) {
+                container->append(*Gtk::make_managed<Gtk::Label>(",  "));
+            }
+            create_shortcut_label(display, container, key.get_key(), key.get_mod());
+            first = false;
+        }
+        container->set_margin_end(16); // space for icon
+
+        _edit.set_placeholder_text({});
+        if (_keys) remove_overlay(*_keys);
+        _keys = container;
+        add_overlay(*_keys);
+    }
+
+    bool verify_shortcut(const Gtk::AccelKey& new_key) {
+        _new_shortcut.reset();
+
+        if (new_key.is_null()) return false;
+
+        // test roundtrip; gtk cannot parse what gdk created... (like shift+option+1)
+        auto test = Util::parse_accelerator_string(Util::get_accel_key_abbrev(new_key));
+        if (Util::get_accel_key_abbrev(test).empty()) return false;
+
+        Util::ActionAccel action_accel(_action_id);
+        for (auto& acc_key : action_accel.getKeys()) {
+            // same accelerator?
+            if (new_key.get_key() == acc_key.get_key() && new_key.get_mod() == acc_key.get_mod()) {
+                return true;
+            }
+        }
+
+        auto iapp = InkscapeApplication::instance();
+        InkActionExtraData& action_data = iapp->get_action_extra_data();
+
+        // Check if there is currently an action assigned to this shortcut; if yes ask if the shortcut should be reassigned
+        auto& shortcuts = Inkscape::Shortcuts::getInstance();
+        Glib::ustring action_name;
+        Glib::ustring accel = Gtk::Accelerator::name(new_key.get_key(), new_key.get_mod());
+        const auto& actions = shortcuts.get_actions(accel);
+
+        for (auto possible_action : actions) {
+            if (action_data.isSameContext(_action_id, possible_action)) {
+                // TODO: Reformat the data attached here so it's compatible with action_data
+                action_name = possible_action;
+                break;
+            }
+        }
+
+        _new_shortcut = new_key;
+        show_shortcuts({new_key});
+
+        if (!action_name.empty()) {
+            auto action_label = action_data.get_label_for_action(action_name);
+            _message.set_markup(Glib::ustring::compose(_("This shortcut is already assigned to <b>%1</b>."),  Glib::Markup::escape_text(action_label.empty() ? action_name : action_label)));
+            Inkscape::UI::popup_at(_confirm, *this, get_width() / 2, get_height() + 1);
+
+            // wait for user's confirmation
+            return false;
+        }
+        else {
+            // shortcuts.add_user_shortcut(_action_id, new_key);
+
+            return true; // done
+        }
+    }
+
+    sigc::signal<void (const Gtk::AccelKey&)> _signal_changed;
+    Gtk::Popover _confirm;
+    Gtk::Widget* _keys = nullptr;
+    Gtk::Entry _edit;
+    Gtk::Grid _content;
+    Gtk::Label _message;
+    Gtk::Button _ok{_("Reassign")};
+    Gtk::Button _cancel{_("Cancel")};
+    ReadWrite::IO* _io;
+    XML::Node* _node;
+    bool _in_edit_mode = false;
+    std::string _action_id;
+    Glib::RefPtr<Gtk::EventControllerFocus> _focus = Gtk::EventControllerFocus::create();
+    std::optional<Gtk::AccelKey> _new_shortcut;
 };
 
 
@@ -821,9 +1047,17 @@ Gtk::Widget* create_ui_element(Context& ctx, XML::Node* node) {
                 panel->_subgroup->append(*widget);
             }
         });
-        if (auto header = panel->get_header()) {
-            set_shortcut(io, find_shortcut(node), header->_shortcut);
+        auto show_shortcut = [panel, io, node]{
+            if (auto header = panel->get_header()) {
+                set_shortcut(io, find_shortcut(node), header->_shortcut);
+            }
+        };
+        if (auto shortcut = dynamic_cast<ShortcutEdit*>(find_widget_by_name(*panel->_subgroup, "ShortcutEdit", false))) {
+            shortcut->_signal_changed.connect([=](auto&){
+                show_shortcut();
+            });
         }
+        show_shortcut();
         return panel;
     }
     else if (name == "group") {
@@ -954,43 +1188,6 @@ Gtk::Widget* create_ui_element(Context& ctx, XML::Node* node) {
     }
     else if (name == "shortcut") {
         auto shortcut = Gtk::make_managed<ShortcutEdit>(node, ctx.io);
-        /*
-        auto shortcut = Gtk::make_managed<Gtk::Entry>();
-        shortcut->add_css_class("shortcut");
-        shortcut->set_editable(false);
-        auto pos = Gtk::Entry::IconPosition::SECONDARY;
-        shortcut->set_icon_from_icon_name("edit", pos);
-        shortcut->set_icon_activatable(true, pos);
-        shortcut->signal_icon_release().connect([wnd=ctx.wnd, shortcut, node, io, pos](auto icon){
-            if (icon == pos) {
-                edit_shortcut(*shortcut, io, to_path(node));
-            }
-            else {
-                // cancel
-                end_shortcut_edit(*shortcut, false);
-                wnd->property_focus_widget().set_value(nullptr);
-            }
-        });
-        shortcut->set_can_focus(false);
-        shortcut->set_focus_on_click(false);
-        shortcut->set_focusable(false);
-        // shortcut->set_sensitive();
-        auto size = to_size(element_attr(node, "size"), WHOLE);
-        shortcut->set_size_request(size);
-        //todo: validate(shortcut, node, io);
-        auto keys = ctx.io->read(to_path(node));
-        if (keys.has_value()) {
-            shortcut->set_text(*keys);
-        }
-        auto keyctrl = Gtk::EventControllerKey::create();
-        keyctrl->set_propagation_phase(Gtk::PropagationPhase::CAPTURE);
-        keyctrl->signal_key_pressed().connect([](auto keyval, auto keycode, auto mod){
-            on_key_pressed(keyval, keycode, mod);
-            // todo
-            return true;
-        }, false);
-        shortcut->add_controller(keyctrl);
-        */
         return shortcut;
     }
     else if (name == "expander") {
