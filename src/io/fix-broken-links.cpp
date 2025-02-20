@@ -9,6 +9,7 @@
 
 #include <set>
 #include <algorithm>
+#include <cstring>
 
 #include <gtkmm/recentmanager.h>
 #include <glibmm/i18n.h>
@@ -31,26 +32,32 @@
 
 namespace Inkscape {
 
-std::vector<std::string> splitPath( std::string const &path )
+std::vector<std::string> splitPath( std::string const &path_ )
 {
-    std::vector<std::string> parts;
+    std::string path(path_);
+    std::vector<std::string> result;
+    char **parts;
+#ifdef _WIN32
+    const char *separator = "\\";
+#else
+    const char *separator = "/";
+#endif
+  
+#ifdef _WIN32
+    std::replace(path.begin(), path.end(), '/', '\\');
+#endif
 
-    std::string prior;
-    std::string tmp = path;
-    while ( !tmp.empty() && (tmp != prior) ) {
-        prior = tmp;
+    parts = g_strsplit (path.c_str(), separator, -1);
 
-        parts.push_back( Glib::path_get_basename(tmp) );
-        tmp = Glib::path_get_dirname(tmp);
+    for (char **iter = parts; *iter != nullptr; ++iter) {
+        char *p = *iter;
+        if (p[0] != '\0' && std::strcmp (p, ".") != 0)
+            result.push_back(p);
     }
-    if ( !parts.empty() ) {
-        std::reverse(parts.begin(), parts.end());
-        if ( (parts[0] == ".") && (path[0] != '.') ) {
-            parts.erase(parts.begin());
-        }
-    }
 
-    return parts;
+    g_strfreev (parts);
+
+    return result;
 }
 
 /**
