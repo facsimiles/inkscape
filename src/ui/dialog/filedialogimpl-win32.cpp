@@ -1054,18 +1054,29 @@ bool FileOpenDialogImplWin32::set_image_preview()
 
     _mutex->lock();
 
-    try {
-        _preview_bitmap_image = Gdk::Pixbuf::create_from_file(path);
-        if (_preview_bitmap_image) {
+    constexpr int preview_size = 512;
+
+    int width = 0;
+    int height = 0;
+    if (gdk_pixbuf_get_file_info(path.c_str(), &width, &height) &&
+        width > 0 && height > 0)
+    {
+        GdkPixbuf *c_pixbuf = gdk_pixbuf_new_from_file_at_scale(path.c_str(),
+                                                                preview_size,
+                                                                preview_size,
+                                                                TRUE,
+                                                                nullptr);
+        if (c_pixbuf) {
+            _preview_bitmap_image = Glib::wrap(c_pixbuf);
+
             _preview_image_width = _preview_bitmap_image->get_width();
-            _preview_document_width = _preview_image_width;
+            _preview_document_width = width;
             _preview_image_height = _preview_bitmap_image->get_height();
-            _preview_document_height = _preview_image_height;
+            _preview_document_height = height;
+
             successful = true;
         }
     }
-    catch (const Gdk::PixbufError&) {}
-    catch (const Glib::FileError&) {}
 
     _mutex->unlock();
 
