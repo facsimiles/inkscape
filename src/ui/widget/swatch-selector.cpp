@@ -63,7 +63,7 @@ void SwatchSelector::_changedCb()
 
         if (auto stop = ngr->getFirstStop()) {
             stop->setColor(_selected_color.color(), _selected_color.alpha());
-            DocumentUndo::done(ngr->document, _("Change swatch color"), INKSCAPE_ICON("color-gradient"));
+            DocumentUndo::maybeDone(ngr->document, _("change-swatch-color"), _("Change swatch color"), INKSCAPE_ICON("color-gradient"));
         }
     }
 }
