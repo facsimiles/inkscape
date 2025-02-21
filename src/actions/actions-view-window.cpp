@@ -42,12 +42,14 @@ window_new(InkscapeWindow* win)
     sp_ui_new_view();
 }
 
+const Glib::ustring SECTION = NC_("Action Section", "View");
+
 std::vector<std::vector<Glib::ustring>> raw_data_view_window =
 {
     // clang-format off
-    {"win.window-new",                  N_("Duplicate Window"),         "View",             N_("Open a new window with the same document")},
-    {"win.window-previous",             N_("Previous Window"),          "View",             N_("Switch to the previous document window")},
-    {"win.window-next",                 N_("Next Window"),              "View",             N_("Switch to the next document window")},
+    {"win.window-new",      N_("Duplicate Window"), SECTION, N_("Open a new window with the same document")},
+    {"win.window-previous", N_("Previous Window"),  SECTION, N_("Switch to the previous document window")},
+    {"win.window-next",     N_("Next Window"),      SECTION, N_("Switch to the next document window")},
     // clang-format on
 };
 
