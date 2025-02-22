@@ -26,6 +26,7 @@
 #include <sigc++/scoped_connection.h>
 
 #include "implementation.h"
+#include "selection.h"
 #include "undo-stack-observer.h"
 #include "xml/node.h"
 
@@ -122,15 +123,21 @@ private:
     {
     public:
         PreviewObserver(Glib::RefPtr<Glib::IOChannel> channel);
+        void connect(SPDesktop const *desktop, SPDocument *document);
+        void disconnect(SPDocument *document);
 
     private:
+        void selectionChanged(Inkscape::Selection *selection);
         void notifyUndoCommitEvent(Event *log) override;
         void notifyUndoEvent(Event *log) override;
         void notifyRedoEvent(Event *log) override;
         void notifyClearUndoEvent() override;
         void notifyClearRedoEvent() override;
         void notifyUndoExpired(Event *log) override;
+        void createAndSendEvent(
+            std::function<void(Inkscape::XML::Document *doc, Inkscape::XML::Node *)> const &eventPopulator);
 
+        sigc::connection _select_changed;
         Glib::RefPtr<Glib::IOChannel> _channel;
     };
 
