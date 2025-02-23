@@ -1722,10 +1722,16 @@ listview row.top-separator {
     margin-bottom: 4px;
     padding: 0;
     border-radius: 3px;
-    border: solid 1px alpha(@theme_fg_color, 0.12);
+    border: solid 1px alpha(@theme_fg_color, 0.20);
 }
 #Settings .panel.open {
     padding-bottom: 4px;
+}
+#Settings .panel.open .header {
+    border-bottom: solid 1px alpha(@theme_fg_color, 0.08);
+}
+#Settings .panel > .group {
+    padding-top: 6px;
 }
 #Settings .panel .panel-shortcut {
     margin-left: 0.5em;
@@ -1753,7 +1759,7 @@ listview row.top-separator {
     margin-left: 26px;
 }
 #Settings #PageSelector {
-    margin: 12px;
+    margin: 8px 0 0 8px;
 }
 #Settings #Pages {
     background-color: @theme_bg_color;
@@ -1777,6 +1783,13 @@ listview row.top-separator {
     color: red; /* mark invalid settings, so it's possible to spot them */
     outline: solid 1px red;
     outline-offset: 0px;
+}
+#Settings .reset-icon {
+    opacity: 0.6;
+    margin-left: 0.5em;
+}
+#Settings .ruler {
+    opacity: 0.7;
 }
 
 .key-pillbox {

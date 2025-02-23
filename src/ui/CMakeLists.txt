@@ -163,6 +163,7 @@ target_sources(inkscape_base PRIVATE
 	dialog/save-image.cpp
 	dialog/selectorsdialog.cpp
 	dialog/settings-dialog.cpp
+	dialog/settings-helpers.cpp
 	dialog/startup.cpp
 	dialog/styledialog.cpp
 	dialog/svg-fonts-dialog.cpp
@@ -403,6 +404,7 @@ target_sources(inkscape_base PRIVATE
 	dialog/save-image.h
 	dialog/selectorsdialog.h
 	dialog/settings-dialog.h
+	dialog/settings-helpers.h
 	dialog/startup.h
 	dialog/styledialog.h
 	dialog/svg-fonts-dialog.h

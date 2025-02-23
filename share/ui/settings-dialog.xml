@@ -51,9 +51,8 @@
     </template>
 
     <template name="about">
-      <gap/>
       <row label="About">
-        <text class="normal">{label}</text>
+        <text class="strong">{label}</text>
       </row>
       <gap/>
     </template>
@@ -72,11 +71,7 @@
     <gap/>
     <panel path="select" id="tool-select">
       <insert template="tool-header" label="Selector" icon="tool-pointer" tool="Select" />
-      <gap/>
-      <row label="About">
-        <text class="strong">Select, move, rotate and transform objects</text>
-      </row>
-      <gap/>
+      <insert template="about" label="Select, move, rotate and transform objects"/>
       <insert template="tool-shortcut" tool="Select"/>
       <row label="Selection cue">
         <group type="radio" path="/options/selcue/value">
@@ -132,11 +127,7 @@
 
     <panel path="nodes" id="tool-node">
       <insert template="tool-header" label="Node Editor" icon="tool-node-editor" tool="Node" />
-      <gap/>
-      <row label="About">
-        <text class="strong">Edit paths by nodes</text>
-      </row>
-      <gap/>
+      <insert template="about" label="Edit paths by nodes"/>
       <insert template="tool-shortcut" tool="Node"/>
       <row label="On select">
         <checkbox label="Change layer" path="x"/>
@@ -183,11 +174,7 @@
 
     <panel path="shape-builder" id="tool-shape-builder">
       <insert template="tool-header" label="Shape Builder" icon="draw-booleans" tool="Booleans" />
-      <gap/>
-      <row label="About">
-        <text class="strong">Build shapes with the boolean tool</text>
-      </row>
-      <gap/>
+      <insert template="about" label="Build shapes with the boolean tool"/>
       <insert template="tool-shortcut" tool="Booleans"/>
       <expander label="MODIFIER KEYS">
         <row label="Switch mode" tooltip="Change mode temporarily by holding a modifier key">
@@ -198,55 +185,35 @@
 
     <panel path="shapes/rect">
       <insert template="tool-header" label="Draw Rectangle" icon="shape-rect" tool="Rect" />
-      <gap/>
-      <row label="About">
-        <text class="strong">Create rectangles and squares</text>
-      </row>
-      <gap/>
+      <insert template="about" label="Create rectangles and squares"/>
       <insert template="tool-shortcut" tool="Rect"/>
       <insert template="shape-settings" />
     </panel>
 
     <panel path="shapes/arc">
       <insert template="tool-header" label="Draw Ellipse" icon="shape-circle" tool="Arc" />
-      <gap/>
-      <row label="About">
-        <text class="strong">Create ellipses, squares, chords and arcs</text>
-      </row>
-      <gap/>
+      <insert template="about" label="Create ellipses, squares, chords and arcs"/>
       <insert template="tool-shortcut" tool="Arc"/>
       <insert template="shape-settings" />
     </panel>
 
     <panel path="shapes/star">
       <insert template="tool-header" label="Draw Polygon" icon="shape-polygon" tool="Star" />
-      <gap/>
-      <row label="About">
-        <text class="strong">Create stars and polygons</text>
-      </row>
-      <gap/>
+      <insert template="about" label="Create stars and polygons"/>
       <insert template="tool-shortcut" tool="Star"/>
       <insert template="shape-settings" />
     </panel>
 
     <panel path="shapes/3dbox">
       <insert template="tool-header" label="Draw 3D Box" icon="draw-cuboid" tool="3DBox" />
-      <gap/>
-      <row label="About">
-        <text class="strong">Create 3D boxes</text>
-      </row>
-      <gap/>
+      <insert template="about" label="Create 3D boxes"/>
       <insert template="tool-shortcut" tool="3DBox"/>
       <insert template="shape-settings" />
     </panel>
 
     <panel path="shapes/spiral">
       <insert template="tool-header" label="Draw Spiral" icon="shape-spiral" tool="Spiral" />
-      <gap/>
-      <row label="About">
-        <text class="strong">Create spirals</text>
-      </row>
-      <gap/>
+      <insert template="about" label="Create spirals"/>
       <insert template="tool-shortcut" tool="Spiral"/>
       <insert template="shape-settings" />
     </panel>
@@ -367,11 +334,152 @@
       <insert template="about" label="Create and edit document pages"/>
       <insert template="tool-shortcut" tool="Pages"/>
     </panel>
-
   </section>
 
+<!--UI section ================================================================================== -->
   <section label="UI settings" id="ui">
-    <group type="panel">
-    </group>
+    <gap/>
+    <panel id="ui">
+      <header label="User interface" icon="ui"/>
+      <row label="Language" tooltip="Set the language for menus and number formats" reset-icon="yes">
+        <selector path="/ui/language" search="yes" source="languages" />
+      </row>
+      <gap/>
+      <row label="UI theme" tooltip="Select UI look" path="/theme">
+        <selector path="gtkTheme" source="ui-themes" />
+      </row>
+      <row label="" path="/theme">
+        <group type="radio" path="darkTheme">
+          <toggle label="Light" value="0" size="quarter" tooltip="Select light theme variant"/>
+          <toggle label="Dark" value="1" size="quarter" tooltip="Select dark theme variant"/>
+        </group>
+      </row>
+      <gap/>
+      <row label="Icon theme" tooltip="Select icons" path="/theme">
+        <selector path="iconTheme" source="icon-themes" />
+      </row>
+      <expander label="Theme options">
+        <row label="todo">
+        </row>
+      </expander>
+      <row label="XML editor theme" tooltip="Select text color theme and font for XML editor" path="/theme">
+        <selector path="syntax-color-theme" source="xml-themes" />
+      </row>
+      <row label="">
+        <checkbox label="Use monospaced font" path="/dialogs/xml/mono-font" tooltip="Use fixed-width font in XML Editor" />
+      </row>
+      <row label="Font" tooltip="Select XML editor monospaced font" path="/theme">
+        <font-selector monospaced="yes"/>
+      </row>
+      <gap/>
+      <row label="Show in status bar" path="/statusbar/visibility">
+        <checkbox label="Current style" path="style" size="quarter"/>
+        <checkbox label="Layer selector" path="layer" size="quarter"/>
+        <checkbox label="Mouse coordinates" path="coordinates" size="quarter"/>
+        <checkbox label="Canvas rotation" path="rotation" size="quarter"/>
+      </row>
+      <gap/>
+      <row label="Color selector">
+        <checkbox label="Use compact selector" path="x" />
+      </row>
+      <row label="">
+        <group type="segmented" path="show">
+          <toggle label="RGB" path="rgb" size="sixth"/>
+          <toggle label="CMYK" path="cmyk" size="sixth"/>
+          <toggle label="HSL" path="hsl" size="sixth"/>
+          <toggle label="HSV" path="hsv" size="sixth"/>
+          <toggle label="HSLuv" path="hsluv" size="sixth"/>
+          <toggle label="OkHsl" path="okhsl" size="sixth"/>
+        </group>
+      </row>
+      <gap/>
+      <row label="Welcome dialog">
+        <checkbox label="Show on start-up" path="x" />
+      </row>
+      <expander label="ADVANCED">
+        <row label="Command palette">
+          <checkbox label="Show command line argument names" path="x" />
+          <checkbox label="Show untranslated (English) names" path="x" />
+        </row>
+        <row label="Recent docs">
+          <number min="0" max="30" step="1" path="x"/>
+        </row>
+        <row label="Mouse cursor">
+          <checkbox label="Enable high-DPI scaling" path="x" />
+          <checkbox label="Show drop shadow" path="x" />
+        </row>
+        <gap/>
+        <row label="UI text scale">
+          <number unit="%" min="50" max="300" step="5" scaling-factor="100" path="x"/>
+        </row>
+        <row label="Icon scale">
+          <number unit="%" min="50" max="300" step="5" scaling-factor="100" path="x"/>
+        </row>
+        <row label="Snap control bar">
+          <group type="radio" path="x">
+            <toggle label="Simple" value="0" tooltip="Show simplified snap controls"/>
+            <toggle label="Advanced" value="1" tooltip="Show advanced snap controls"/>
+            <toggle label="Permanent" value="2" tooltip="`"/>
+          </group>
+        </row>
+        <row label="Lock canvas" tooltip="Prevent accidental canvas rotation by disabling on-canvas keyboard and mouse actions for rotation">
+          <checkbox label="Lock canvas rotation" path="x" />
+        </row>
+        <row label="Dialog tab labels">
+          <group type="radio" path="x">
+            <toggle label="Show all" value="0" tooltip="Show labels in all docked dialog tabs"/>
+            <toggle label="Active only" value="1" tooltip="Show label of visible docked dialog only"/>
+            <toggle label="Hidden" value="2" tooltip="Hide labels in all docked dialog tabs"/>
+          </group>
+        </row>
+        <row label="Save window size">
+          <group type="radio" path="x">
+            <toggle label="Don't save" value="0" tooltip=""/>
+            <toggle label="Last window" value="1" tooltip=""/>
+            <toggle label="Each document" value="2" tooltip=""/>
+          </group>
+        </row>
+      </expander>
+    </panel>
+
+    <panel id="drawing">
+      <header label="Drawing" icon="canvas"/>
+      <row label="Handle size" path="/options/grabsize/value">
+        <number min="1" max="10" step="1"/>
+      </row>
+      <row label="">
+        <!-- handle preview -->
+      </row>
+      <row label="Handle color" path="x">
+        <selector source="handle-colors"/>
+      </row>
+      <row label="Selection" path="/options/ruler/show_bbox" tooltip="Shows a blue line in the ruler where the selection is.">
+        <checkbox label="Show in ruler"/>
+      </row>
+      <row label="Zoom drawing" path="x">
+        <checkbox label="When window is resized"/>
+      </row>
+      <expander label="ADVANCED">
+        <row label="">
+          <checkbox label="Show zoom percentage corrected by factor" path="/options/zoomcorrection/shown"/>
+        </row>
+        <row label="Zoom correction factor">
+          <number unit="%" min="50" max="300" step="0.1" scaling-factor="100" path="/options/zoomcorrection/value"/>
+        </row>
+<!-- todo         <selector source="units" />-->
+        <ruler/>
+        <gap/>
+        <row label="Document viewports">
+          <checkbox label="Save and restore" path="x" />
+        </row>
+      </expander>
+    </panel>
+
+    <panel id="keyboard">
+      <header label="Keyboard" icon="keyboard"/>
+      <row label="todo">
+      </row>
+    </panel>
   </section>
+
 </ui>
