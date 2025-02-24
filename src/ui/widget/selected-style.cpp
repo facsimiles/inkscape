@@ -58,10 +58,9 @@
 #include "util/variant-visitor.h"
 
 static constexpr int SELECTED_STYLE_SB_WIDTH     =  48;
-static constexpr int SELECTED_STYLE_PLACE_WIDTH  =  50;
+static constexpr int SELECTED_STYLE_PLACE_WIDTH  =  34;
 static constexpr int SELECTED_STYLE_STROKE_WIDTH =  40;
-static constexpr int SELECTED_STYLE_FLAG_WIDTH   =  12;
-static constexpr int SELECTED_STYLE_WIDTH        = 250;
+static constexpr int SELECTED_STYLE_WIDTH        = 230;
 
 static constexpr std::array<double, 15> _sw_presets{
     32, 16, 10, 8, 6, 4, 3, 2, 1.5, 1, 0.75, 0.5, 0.25, 0.1};
@@ -131,19 +130,11 @@ SelectedStyle::SelectedStyle()
     set_name("SelectedStyle");
     set_size_request (SELECTED_STYLE_WIDTH, -1);
 
-    grid = Gtk::make_managed<Gtk::Grid>();
-    grid->set_size_request(SELECTED_STYLE_WIDTH, -1);
+    box = Gtk::make_managed<Gtk::Box>();
+    box->set_size_request(SELECTED_STYLE_WIDTH, -1);
 
     // Fill and stroke
     for (int i = 0; i <2; i++) {
-        label[i] = Gtk::make_managed<Gtk::Label>(i == 0 ? _("Fill:") : _("Stroke:"));
-        label[i]->set_halign(Gtk::Align::END);
-
-        // Multiple, Average, or Single
-        tag[i] = Gtk::make_managed<Gtk::Label>(); // "m", "a", or empty
-        tag[i]->set_size_request(SELECTED_STYLE_FLAG_WIDTH, -1);
-        tag[i]->set_name("Tag");
-
         // Type of fill
         type_label[i] = std::make_unique<Gtk::Label>(get_type_strings()[0][i][0]);
         type_label[i]->set_hexpand(true);
@@ -154,7 +145,7 @@ SelectedStyle::SelectedStyle()
 
         color_preview[i] = std::make_unique<Inkscape::UI::Widget::ColorPreview>(0);
         color_preview[i]->set_size_request(SELECTED_STYLE_PLACE_WIDTH, -1);
-        color_preview[i]->set_hexpand(true);
+        color_preview[i]->set_hexpand(false);
         color_preview[i]->set_visible(false);
 
         // Shows one or two children at a time.
@@ -201,9 +192,7 @@ SelectedStyle::SelectedStyle()
         click->signal_released().connect(Controller::use_state(std::move(callback), *click));
         swatch[i]->add_controller(click);
 
-        grid->attach(*label[i],  0, i, 1, 1);
-        grid->attach(*tag[i],    1, i, 1, 1);
-        grid->attach(*swatch[i], 2, i, 1, 1);
+        box->append(*swatch[i]);
 
         make_popup(static_cast<FillOrStroke>(i));
         _mode[i] = SS_NA;
@@ -220,7 +209,7 @@ SelectedStyle::SelectedStyle()
         click->signal_released().connect(Controller::use_state(sigc::mem_fun(*this, &SelectedStyle::on_sw_click), *click));
         stroke_width_rotateable->add_controller(click);
     }
-    grid->attach(*stroke_width_rotateable, 3, 1, 1, 1);
+    box->append(*stroke_width_rotateable);
 
     // Opacity
     make_popup_opacity();
@@ -246,10 +235,10 @@ SelectedStyle::SelectedStyle()
     on_popup_menu(*opacity_box, sigc::mem_fun(*this, &SelectedStyle::on_opacity_popup));
     opacity_sb->signal_value_changed().connect(sigc::mem_fun(*this, &SelectedStyle::on_opacity_changed));
 
-    grid->attach(*opacity_box, 4, 0, 1, 2);
+    box->append(*opacity_box);
 
-    grid->set_column_spacing(4);
-    setChild(grid);
+    box->set_spacing(4);
+    setChild(box);
 
     make_popup_units();
 }
@@ -746,8 +735,6 @@ SelectedStyle::update()
         switch (result) {
         case QUERY_STYLE_NOTHING:
 
-            tag[i]->set_markup("");
-
             type_label[i]->set_markup(get_type_strings()[SS_NA][i][0]);
             swatch[i]->set_tooltip_text(get_type_strings()[SS_NA][i][1]);
 
@@ -837,24 +824,7 @@ SelectedStyle::update()
 
                 _mode[i] = SS_UNSET;
             }
-
-            if (result == QUERY_STYLE_MULTIPLE_AVERAGED) {
-                // TRANSLATORS: A means "Averaged"
-                tag[i]->set_markup("<b>a</b>");
-                tag[i]->set_tooltip_text(i == 0 ?
-                                         _("Fill is averaged over selected objects") :
-                                         _("Stroke is averaged over selected objects"));
-
-            } else if (result == QUERY_STYLE_MULTIPLE_SAME) {
-                // TRANSLATORS: M means "Multiple"
-                tag[i]->set_markup("<b>m</b>");
-                tag[i]->set_tooltip_text(i == 0 ?
-                                         _("Multiple selected objects have same fill") :
-                                         _("Multiple selected objects have same stroke"));
-            } else {
-                tag[i]->set_markup("");
-                tag[i]->set_tooltip_text("");
-            }
+            // TODO: include 'A', 'M', and empty labels within ColorPreview. UX task?
             break;
         }
 

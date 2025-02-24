@@ -63,8 +63,7 @@ private:
     std::unique_ptr<PrefObs> _tool_obs;
     std::unique_ptr<PrefObs> _style_obs;
     Glib::ustring _tool_path;
-    Gtk::Grid *_table;
-    Gtk::Label _label[2];
+    Gtk::Box *_box;
     Gtk::Box _empty_space;
     Gtk::Label _value[2];
     Gtk::Box _place[2];

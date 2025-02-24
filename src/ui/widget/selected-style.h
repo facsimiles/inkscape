@@ -140,10 +140,7 @@ protected:
     SPDesktop *_desktop = nullptr;
 
     // Widgets
-    Gtk::Grid  *grid;
-
-    Gtk::Label *label[2];    // 'Fill' and 'Stroke'
-    Gtk::Label *tag[2];      // 'a', 'm', or empty.
+    Gtk::Box  *box;
 
     std::unique_ptr<Gtk::Label> type_label[2]; // 'L', 'R', 'M', or empty.
     std::unique_ptr<GradientImage> gradient_preview[2];
