@@ -58,7 +58,7 @@ msgstr ""
 "Project-Id-Version: inkscape 1.0\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-02-04 23:42+0100\n"
-"PO-Revision-Date: 2025-02-16 13:06+0000\n"
+"PO-Revision-Date: 2025-02-26 14:06+0000\n"
 "Last-Translator: Stephan Paternotte <stephan@paternottes.net>\n"
 "Language-Team: Dutch <https://translate.inkscape.org/projects/inkscape/"
 "inkscape-master/nl/>\n"
@@ -10547,7 +10547,7 @@ msgstr "Naar het volgende documentvenster gaan"
 
 #: ../src/actions/actions-view-window.cpp:65
 msgid "Next Tab"
-msgstr "Volgende tab:"
+msgstr "Volgende tab"
 
 #: ../src/actions/actions-view-window.cpp:65
 msgid "Switch to the next document tab"
@@ -10555,7 +10555,7 @@ msgstr "Naar het volgende document-tabblad schakelen"
 
 #: ../src/actions/actions-view-window.cpp:66
 msgid "Previous Tab"
-msgstr "Vorige tab:"
+msgstr "Vorige tab"
 
 #: ../src/actions/actions-view-window.cpp:66
 msgid "Switch to the previous document tab"
@@ -18114,7 +18114,7 @@ msgstr "CubicBezierJohan"
 #: ../src/live_effects/lpe-interpolate_points.cpp:28
 #: ../src/live_effects/lpe-powerstroke.cpp:131
 msgid "SpiroInterpolator"
-msgstr "SpiroInterpolator"
+msgstr "Spiro-Interpolator"
 
 #: ../src/live_effects/lpe-interpolate_points.cpp:29
 #: ../src/live_effects/lpe-powerstroke.cpp:132
@@ -29274,7 +29274,7 @@ msgstr "Significante cijfers van waarden weggeschreven in SVG-bestand"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2361
 msgid "Minimum _exponent:"
-msgstr "Minimum _exponent:"
+msgstr "Minimale _exponent:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2361
 msgid ""
@@ -48020,7 +48020,7 @@ msgstr ""
 "3. Klik op Toepassen\n"
 "\n"
 "Mogelijk te kleine objecten worden gemarkeerd met gekleurde pijlen.\n"
-"             "
+"            "
 
 #: ../share/extensions/other/gcodetools/gcodetools_area.inx:47
 #: ../share/extensions/other/gcodetools/gcodetools_lathe.inx:28
@@ -48303,10 +48303,9 @@ msgstr ""
 "plugin doet). Je kan ook de originele vorm bewaren. Enkel het beginpunt van "
 "elke vorm zal gebruikt worden. \n"
 "\n"
-"Je kan een object ook manueel selecteren, de XML-editor openen "
-"(Shift+Ctrl+X) en de 'dxfpoint'-tag met eender welke waarde toevoegen of "
-"verwijderen.\n"
-"           "
+"Je kan een object ook manueel selecteren, de XML-editor openen (Shift+Ctrl+X)"
+" en de 'dxfpoint'-tag met eender welke waarde toevoegen of verwijderen.\n"
+"          "
 
 #: ../share/extensions/other/gcodetools/gcodetools_dxf_points.inx:15
 msgid "Convert selection:"
@@ -48526,7 +48525,7 @@ msgstr ""
 "\n"
 "            Deze functie past het pad aan zodat het gesneden kan worden met "
 "een rechthoekig snijmes.\n"
-"         "
+"        "
 
 #: ../share/extensions/other/gcodetools/gcodetools_orientation_points.inx:4
 msgid "Orientation Points"
