@@ -241,7 +241,7 @@ selection_set_backup(InkscapeApplication* app)
         return;
     }
 
-    selection->setBackup();
+    // selection->setBackup();
 }
 
 void
@@ -253,7 +253,7 @@ selection_restore_backup(InkscapeApplication* app)
         return;
     }
 
-    selection->restoreBackup();
+    // selection->restoreBackup();
 }
 
 void
@@ -265,7 +265,7 @@ selection_empty_backup(InkscapeApplication* app)
         return;
     }
 
-    selection->emptyBackup();
+    // selection->emptyBackup();
 }
 
 const Glib::ustring SECTION = NC_("Action Section", "Select");
