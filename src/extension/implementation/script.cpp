@@ -578,10 +578,22 @@ void Script::effect(Inkscape::Extension::Effect *module, ExecutionEnv *execution
 
     std::list<std::string> params;
     if (desktop) {
-        Inkscape::Selection * selection = desktop->getSelection();
-        if (selection) {
-            params = selection->params;
-            selection->clear();
+        if (auto selection = desktop->getSelection()) {
+            // Get current selection state
+            auto state = selection->getState();
+
+            // Add selected object IDs
+            for (auto const &id : state.selected_ids) {
+                std::string selected_id = "--id=";
+                selected_id += id;
+                params.push_back(std::move(selected_id));
+            }
+
+            // Add selected nodes
+            for (auto const &node : state.selected_nodes) {
+                params.push_back(Glib::ustring::compose("--selected-nodes=%1:%2:%3", node.path_id, node.subpath_index,
+                                                        node.node_index));
+            }
         }
     }
     _change_extension(module, executionEnv, desktop->getDocument(), params, module->ignore_stderr, module->pipe_diffs);
@@ -935,12 +947,22 @@ void Script::PreviewObserver::connect(SPDesktop const *desktop, SPDocument *docu
     auto selection = desktop->getSelection();
     _select_changed =
         selection->connectChanged([this](Inkscape::Selection *selection) { selectionChanged(selection); });
+    // We don't want to spam deselect / select events
+    // while document reconstruction is ongoing.
+    // The selection is restored after the reconstruction, so
+    // we will emit an event there anyway.
+    _reconstruction_start_connection =
+        document->connectReconstructionStart([this]() { _pause_select_events = true; }, true);
+    _reconstruction_finish_connection =
+        document->connectReconstructionFinish([this]() { _pause_select_events = false; });
 }
 
 void Script::PreviewObserver::disconnect(SPDocument *document)
 {
     document->removeUndoObserver(*this);
     _select_changed.disconnect();
+    _reconstruction_start_connection.disconnect();
+    _reconstruction_finish_connection.disconnect();
 }
 
 void Script::PreviewObserver::createAndSendEvent(
@@ -962,6 +984,9 @@ void Script::PreviewObserver::createAndSendEvent(
 
 void Script::PreviewObserver::selectionChanged(Inkscape::Selection *selection)
 {
+    if (_pause_select_events) {
+        return;
+    }
     createAndSendEvent([&](Inkscape::XML::Document *doc, Inkscape::XML::Node *event_node) {
         event_node->setAttribute("type", "updateSelection");
         for (auto objsel : selection->objects()) {

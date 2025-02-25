@@ -138,7 +138,10 @@ private:
             std::function<void(Inkscape::XML::Document *doc, Inkscape::XML::Node *)> const &eventPopulator);
 
         sigc::connection _select_changed;
+        sigc::connection _reconstruction_start_connection;
+        sigc::connection _reconstruction_finish_connection;
         Glib::RefPtr<Glib::IOChannel> _channel;
+        bool _pause_select_events = false;
     };
 
     int execute(std::list<std::string> const &in_command, std::list<std::string> const &in_params,
