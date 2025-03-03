@@ -93,12 +93,16 @@ std::string get_color_profile_name(cmsHPROFILE profile)
                 data.resize(readLen);
             }
 
-            // Remove nulls at end which will cause an invalid utf8 string.
-            while (!data.empty() && data.back() == 0) {
-                data.pop_back();
+            // Remove nulls at end and invalid ASCII which some icc profiles like to add in. 
+            for(char c : data) {
+                if (c == 0)
+                    break;
+                if (c < 0x80 && c > 0) {
+                    name += c;
+                } else {
+                    name += "?";
+                }
             }
-
-            name = std::string(data.begin(), data.end());
         }
 
         if (name.empty()) {
