@@ -88,9 +88,9 @@ inkscape:linux:
   <<: *ccache_init
   script:
     - *cmake
-    - make -j3 install
-    - make -j3 tests
-    - make -j3 unit_tests
+    - make -j2 install
+    - make -j2 tests
+    - make -j2 unit_tests
     #- cpack -G DEB
     - rm -rf src _CPack_Packages # exclude from artifacts
     - cd ..
@@ -98,6 +98,7 @@ inkscape:linux:
     expire_in: 1 year
     paths:
       - build/
+  timeout: 3h
 
 
 appimage:linux:
