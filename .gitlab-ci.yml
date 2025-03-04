@@ -78,6 +78,7 @@ workflow:
 
 inkscape:linux:
   stage: build
+  timeout: 3h
   rules:
     - *do_not_run_for_schedules
     - *run_otherwise
@@ -103,6 +104,7 @@ inkscape:linux:
 
 appimage:linux:
   stage: build
+  timeout: 3h
   rules:
     - *do_not_run_for_schedules
     - *run_otherwise
@@ -175,6 +177,7 @@ inkscape:macos:
 
 inkscape:windows:
   extends: .windows
+  timeout: 3h
   retry: 2
   parallel:
     matrix:
