@@ -691,6 +691,12 @@ count_pathvector_degenerations(Geom::PathVector const &pathv) {
 
 size_t count_path_degenerations(Geom::Path const &path)
 {
+    if (path.empty()) {
+        std::cerr << "count_path_degenerates: path is empty!" << std::endl;
+        // Hmm, a path always contains a closing segment which has two nodes which are degenerate if path is empty.
+        return 0;
+    }
+
     size_t tot = 0;
     Geom::Path::const_iterator curve_it = path.begin();
     Geom::Path::const_iterator curve_endit = path.end_default();
@@ -717,6 +723,12 @@ size_t count_path_degenerations(Geom::Path const &path)
 
 size_t count_path_nodes(Geom::Path const &path)
 {
+    if (path.empty()) {
+        std::cerr << "count_path_nodes: path is empty!" << std::endl;
+        // Hmm, a path always contains a closing segment which has two (degenerate) nodes...
+        return 0;
+    }
+
     size_t tot = path.size_default() + 1; // if degenerate closing line one is erased no need to duple
     if (path.closed()) {
         tot -= 1;
@@ -736,6 +748,11 @@ size_t count_path_nodes(Geom::Path const &path)
 
 size_t count_path_curves(Geom::Path const &path)
 {
+    if (path.empty()) {
+        std::cerr << "count_path_curves: path is empty!" << std::endl;
+        return 0;
+    }
+
     size_t tot = path.size_default(); // if degenerate closing line one is erased no need to duple
     if (path.closed()) {
         auto const &closingline = path.back_closed();
