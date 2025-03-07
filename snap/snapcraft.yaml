@@ -160,6 +160,7 @@ parts:
       - scour
       - virtualenv
       - tinycss2
+      - zstandard
       - lxml
       - numpy
       - packaging

@@ -109,6 +109,9 @@ apt_bundle \
     make_ld_launcher "python${PY_VER}" python
 )
 
+python${PY_VER} -m pip install --target=./usr/lib/python3/dist-packages/ zstandard
+
+
 # Compile GLib schemas if the subdirectory is present in the AppImage
 # AppRun has to export GSETTINGS_SCHEMA_DIR for this to work
 apt_bundle gnome-settings-daemon-common
