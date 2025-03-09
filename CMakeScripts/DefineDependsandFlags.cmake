@@ -134,7 +134,7 @@ pkg_check_modules(INKSCAPE_DEP REQUIRED
                   bdw-gc #boehm-demers-weiser gc
                   lcms2)
 
-# remove this line and uncomment the doiuble-conversion above when double-conversion.pc file gets shipped on all platforms we support
+# remove this line and uncomment the double-conversion above when double-conversion.pc file gets shipped on all platforms we support
 find_package(DoubleConversion REQUIRED)  # lib2geom dependency
 
 sanitize_ldflags_for_libs(INKSCAPE_DEP_LDFLAGS)
@@ -142,6 +142,7 @@ list(APPEND INKSCAPE_LIBS ${INKSCAPE_DEP_LDFLAGS})
 list(APPEND INKSCAPE_INCS_SYS ${INKSCAPE_DEP_INCLUDE_DIRS})
 
 add_definitions(${INKSCAPE_DEP_CFLAGS_OTHER})
+add_compile_definitions(HAVE_GSL) # used by lib2geom headers
 
 if(WITH_JEMALLOC)
     find_package(JeMalloc)
