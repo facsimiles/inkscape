@@ -15,6 +15,7 @@
 #include <2geom/curve.h>
 #include <2geom/elliptical-arc.h>
 #include <2geom/exception.h>
+#include <2geom/line.h>
 #include <span>
 #include <string_view>
 #include <tuple>
@@ -34,23 +35,18 @@ Geom::EllipticalArc make_semicircle(Geom::Point const &from, Geom::Point const &
     return {from, r, r, 0.0, true, true, to};
 }
 
-std::unique_ptr<Geom::EllipticalArc> fit_arc_to_cubic_bezier(Geom::CubicBezier const &bezier)
+std::optional<Geom::EllipticalArc> fit_arc_to_cubic_bezier(Geom::CubicBezier const &bezier)
 {
     assert(!bezier.isLineSegment());
 
-    auto const initial_point = bezier.initialPoint();
-    auto const mid_point = bezier.pointAt(0.5);
-    auto const final_point = bezier.finalPoint();
-
-    Geom::Ellipse ellipse;
+    Geom::Line const initial_tangent{bezier.initialPoint(), bezier.controlPoint(1)};
+    Geom::Line const final_tangent{bezier.finalPoint(), bezier.controlPoint(2)};
     try {
-        std::vector const points{initial_point, bezier.pointAt(0.25), mid_point, bezier.pointAt(0.75), final_point};
-        ellipse.fit(points);
+        return Geom::EllipticalArc::from_tangents_and_point(initial_tangent, bezier.pointAt(0.5), final_tangent);
     } catch (Geom::RangeError const &) {
         return {};
     }
-
-    return std::unique_ptr<Geom::EllipticalArc>{ellipse.arc(initial_point, mid_point, final_point)};
+    return {};
 }
 } // namespace
 
