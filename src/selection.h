@@ -174,6 +174,23 @@ public:
     double anchor_y;
 
     /**
+     * Scale the selection, anchoring it against the center, or a selected anchor
+     *
+     * @param amount - The amount to scale by, in a fixed or related amount.
+     * @param fixed - If true (default) scales by fixed document units instead of by
+     *                factors of the size of the object.
+     */
+    void scaleAnchored(double amount, bool fixed = true);
+
+    /**
+     * Rotate the selection, anchoring it against the center, or a selected anchor
+     *
+     * @param angle_degrees - The amount to rotate by in degrees.
+     * @param zoom - The zoom amount for screen based rotation amount.
+     */
+    void rotateAnchored(double angle_degrees, double zoom = 1.0);
+
+    /**
      * Connects a slot to be notified of selected object modifications.
      *
      * This method connects the given slot such that it will
@@ -242,6 +259,8 @@ private:
 
     std::list<sigc::signal<void (Selection *)>> _changed_signals;
     std::list<sigc::signal<void (Selection *, unsigned int)>> _modified_signals;
+
+    Geom::Point _previous_rotate_anchor;
 };
 
 } // namespace Inkscape

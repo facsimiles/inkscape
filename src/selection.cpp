@@ -22,6 +22,7 @@
 #include "selection.h"
 
 #include <cmath>
+#include <glibmm/i18n.h>
 
 #include "desktop.h"
 #include "document-undo.h"
@@ -34,6 +35,7 @@
 #include "object/sp-page.h"
 #include "object/sp-path.h"
 #include "object/sp-shape.h"
+#include "ui/icon-names.h"
 #include "ui/tool/control-point-selection.h"
 #include "ui/tool/path-manipulator.h"
 #include "ui/tools/node-tool.h"
@@ -224,6 +226,79 @@ void Selection::setAnchor(double x, double y, bool set)
         anchor_y = y;
         has_anchor = set;
         this->_emitModified(SP_OBJECT_MODIFIED_FLAG);
+
+        // This allows each anchored-event to have it's own maybeDone
+        DocumentUndo::resetKey(document());
+    }
+}
+
+void Selection::scaleAnchored(double amount, bool fixed)
+{
+    if (Geom::OptRect bbox = visualBounds()) {
+        // Scale the amount by the size to get the final scale amount
+        if (fixed) {
+            double const max_len = bbox->maxExtent();
+            if (max_len + amount <= 1e-3) {
+                return;
+            }
+            amount = 1.0 + amount / max_len;
+        }
+
+        auto center = has_anchor ? bbox->min() + bbox->dimensions() * Geom::Scale(anchor_x, anchor_y) : bbox->midpoint();
+        scaleRelative(center, Geom::Scale(amount, amount));
+
+        DocumentUndo::maybeDone(document(),
+                                ((amount > 0) ? "selector:grow:larger" : "selector:grow:smaller" ),
+                                ((amount > 0) ? _("Grow") : _("Shrink")), INKSCAPE_ICON("tool-pointer"));
+    }
+}
+
+void Selection::rotateAnchored(double angle_degrees, double zoom)
+{
+    if (Geom::OptRect bbox = visualBounds()) {
+        auto p_anchor = Geom::Point(anchor_x, anchor_y);
+        auto actionkey = document()->action_key();
+
+        auto mid = center() ? *center() : bbox->midpoint();
+        auto center = has_anchor ? bbox->min() + bbox->dimensions() * Geom::Scale(p_anchor) : mid;
+
+        // Remember the center for previous rotations with the same undo action
+        if (has_anchor && (actionkey == "selector:rotate:ccw" || actionkey == "selector:rotate:cw")) {
+            center = _previous_rotate_anchor;
+        }
+
+        if (auto d = desktop()) {
+            angle_degrees = d->yaxisdir() ? angle_degrees : -angle_degrees;
+        }
+
+        if (zoom != 1.0) {
+            Geom::Point m = bbox->midpoint();
+            unsigned i = 0;
+            if (center[Geom::X] < m[Geom::X]) {
+                i = 1;
+            }
+            if (center[Geom::Y] < m[Geom::Y]) {
+                i = 3 - i;
+            }
+
+            double const r = Geom::L2(bbox->corner(i) - center);
+            angle_degrees = 180 * atan2(angle_degrees / zoom, r) / M_PI;
+        }
+
+        rotateRelative(center, angle_degrees);
+
+        // Remember the rotation anchor for multiple rotation events.
+        _previous_rotate_anchor = center;
+
+        if (angle_degrees == 90.0) {
+            DocumentUndo::maybeDone(document(), "selector:rotate:cw", _("Rotate 90\xc2\xb0 CW"), INKSCAPE_ICON("object-rotate-right"));
+        } else if (angle_degrees == -90.0) {
+            DocumentUndo::maybeDone(document(), "selector:rotate:ccw", _("Rotate 90\xc2\xb0 CCW"), INKSCAPE_ICON("object-rotate-left"));
+        } else {
+            DocumentUndo::maybeDone(document(),
+                                ( ( angle_degrees > 0 )? "selector:rotate:ccw": "selector:rotate:cw" ),
+                                _("Rotate"), INKSCAPE_ICON("tool-pointer"));
+        }
     }
 }
 
