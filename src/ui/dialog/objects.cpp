@@ -1767,6 +1767,11 @@ bool ObjectsPanel::cleanDummyChildren(Gtk::TreeModel::Row const &row)
  */
 bool ObjectsPanel::on_drag_motion(const Glib::RefPtr<Gdk::DragContext> &context, int x, int y, guint time)
 {
+    // Zero time events are bugs from upstream wayland, ignore them.
+    if (time == 0) {
+        return false;
+    }
+
     Gtk::TreeModel::Path path;
     Gtk::TreeViewDropPosition pos;
 
@@ -1840,7 +1845,8 @@ bool ObjectsPanel::on_drag_drop(const Glib::RefPtr<Gdk::DragContext> &context, i
         DocumentUndo::done(document, _("Move items"), INKSCAPE_ICON("selection-move-to-layer"));
     }
 
-    on_drag_end(context);
+    // This will call on_drag_end() and also clean up
+    context->drag_finish(false, true, time);
     return true;
 }
 
