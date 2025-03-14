@@ -54,6 +54,20 @@ public:
 	double getVisibleHeight() const;
 	void setVisibleHeight(double ry);
 
+	bool getLockWh() const;
+	void setLockWh(bool lock);
+
+	bool getLockRxy() const;
+	void setLockRxy(bool lock);
+
+	double getAspectRatioWh() const;
+	void setAspectRatioWh(double ratio);
+
+	double getAspectRatioRxy() const;
+	void setAspectRatioRxy(double ratio);
+
+
+
 	void compensateRxRy(Geom::Affine xform);
 
 	void build(SPDocument* doc, Inkscape::XML::Node* repr) override;
@@ -79,6 +93,10 @@ public:
 	SVGLength height;
 	SVGLength rx;
 	SVGLength ry;
+	bool lock_wh=false;
+	bool lock_rxy=false;
+	double aspect_ratio_wh=0.0;
+	double aspect_ratio_rxy=0.0;
 
 private:
 	static double vectorStretch(Geom::Point p0, Geom::Point p1, Geom::Affine xform);

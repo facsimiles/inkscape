@@ -245,7 +245,15 @@ RectKnotHolderEntityRX::knot_set(Geom::Point const &p, Geom::Point const &/*orig
     if (state & GDK_CONTROL_MASK) {
         gdouble temp = MIN(rect->height.computed, rect->width.computed) / 2.0;
         rect->rx = rect->ry = CLAMP(rect->x.computed + rect->width.computed - s[Geom::X], 0.0, temp);
-    } else {
+    }else if(rect->getLockRxy()&& rect->ry._set)
+    {
+        double new_rx = CLAMP(rect->x.computed + rect->width.computed - s[Geom::X], 0.0, rect->width.computed / 2.0);
+        rect->rx = new_rx;
+        rect->ry = new_rx * rect->getAspectRatioRxy();
+        rect->ry = MIN(rect->ry.computed, rect->height.computed / 2.0);
+        
+    } 
+    else {
         rect->rx = CLAMP(rect->x.computed + rect->width.computed - s[Geom::X], 0.0, rect->width.computed / 2.0);
     }
 
@@ -295,7 +303,14 @@ RectKnotHolderEntityRY::knot_set(Geom::Point const &p, Geom::Point const &/*orig
                                     // resulting in a perfect circle (and not an ellipse)
         gdouble temp = MIN(rect->height.computed, rect->width.computed) / 2.0;
         rect->rx = rect->ry = CLAMP(s[Geom::Y] - rect->y.computed, 0.0, temp);
-    } else {
+    }else if(rect->getLockRxy()&& rect->rx._set)
+    {
+        double new_ry = CLAMP(s[Geom::Y] - rect->y.computed, 0.0, rect->height.computed / 2.0);
+        rect->ry = new_ry;
+        rect->rx = new_ry / rect->getAspectRatioRxy();
+        rect->rx = MIN(rect->rx.computed, rect->width.computed / 2.0);  
+    }  
+    else {
         if (!rect->rx._set || rect->rx.computed == 0) {
             rect->ry = CLAMP(s[Geom::Y] - rect->y.computed,
                              0.0,
@@ -357,6 +372,8 @@ RectKnotHolderEntityWH::set_internal(Geom::Point const &p, Geom::Point const &or
     g_assert(rect != nullptr);
 
     Geom::Point s = p;
+    double old_width = rect->width.computed;
+    double old_height = rect->height.computed;
 
     if (state & GDK_CONTROL_MASK) {
         // original width/height when drag started
@@ -412,7 +429,29 @@ RectKnotHolderEntityWH::set_internal(Geom::Point const &p, Geom::Point const &or
 
         }
 
-    } else {
+    } else if (rect->getLockWh()){
+
+        s = snap_knot_position(p, state);
+        double new_width = MAX(s[Geom::X] - rect->x.computed, 0);
+        double new_height = MAX(s[Geom::Y] - rect->y.computed, 0);
+
+       
+        double aspect = rect->getAspectRatioWh(); // height / width
+        bool width_changed = fabs(new_width - old_width) > 1e-6;
+        bool height_changed = fabs(new_height - old_height) > 1e-6;
+
+        if (width_changed && !height_changed) {
+            new_height = new_width * aspect;
+        } else if (height_changed && !width_changed) {
+            new_width = new_height / aspect;
+        } else if (width_changed && height_changed) {
+            new_height = new_width * aspect; // Prioritize width for corner drag
+        }
+
+        rect->width = new_width;
+        rect->height = new_height;
+    }
+    else {
         // move freely
         s = snap_knot_position(p, state);
         rect->width = MAX(s[Geom::X] - rect->x.computed, 0);

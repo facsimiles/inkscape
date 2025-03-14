@@ -67,6 +67,12 @@ void SPRect::build(SPDocument* doc, Inkscape::XML::Node* repr) {
     this->readAttr(SPAttr::RX);
     this->readAttr(SPAttr::RY);
 
+    // Read custom attributes for lock state and aspect ratio
+    this->readAttr("inkscape:lock-wh");
+    this->readAttr("inkscape:aspect-ratio-wh");
+    this->readAttr("inkscape:lock-rxy");
+    this->readAttr("inkscape:aspect-ratio-rxy");
+
 #ifdef OBJECT_TRACE
     objectTrace( "SPRect::build", false );
 #endif
@@ -132,7 +138,26 @@ void SPRect::set(SPAttr key, gchar const *value) {
             this->ry.update( em, ex, h );
             this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
-
+            // Custom attributes
+            case SPAttr::INVALID: // Handle custom attributes
+                if (strcmp(sp_attribute_name(key), "inkscape:lock-wh") == 0) {
+                    lock_wh = value && strcmp(value, "true") == 0;
+                    requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+                } else if (strcmp(sp_attribute_name(key), "inkscape:aspect-ratio-wh") == 0) {
+                    aspect_ratio_wh = value ? g_ascii_strtod(value, nullptr) : 1.0;
+                    if (aspect_ratio_wh <= 0) aspect_ratio_wh = 1.0; // Prevent division by zero
+                    requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+                } else if (strcmp(sp_attribute_name(key), "inkscape:lock-rxy") == 0) {
+                    lock_rxy = value && strcmp(value, "true") == 0;
+                    requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+                } else if (strcmp(sp_attribute_name(key), "inkscape:aspect-ratio-rxy") == 0) {
+                    aspect_ratio_rxy = value ? g_ascii_strtod(value, nullptr) : 1.0;
+                    if (aspect_ratio_rxy <= 0) aspect_ratio_rxy = 1.0;
+                    requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+                } else {
+                    SPShape::set(key, value);
+                }
+                break;
         default:
             SPShape::set(key, value);
             break;
@@ -223,6 +248,13 @@ Inkscape::XML::Node * SPRect::write(Inkscape::XML::Document *xml_doc, Inkscape::
 
     repr->setAttributeSvgLength("x", this->x);
     repr->setAttributeSvgLength("y", this->y);
+
+    // Write custom attributes
+    repr->setAttribute("inkscape:lock-wh", lock_wh ? "true" : "false");
+    repr->setAttribute("inkscape:aspect-ratio-wh", Glib::ustring::format(aspect_ratio_wh));
+    repr->setAttribute("inkscape:lock-rxy", lock_rxy ? "true" : "false");
+    repr->setAttribute("inkscape:aspect-ratio-rxy", Glib::ustring::format(aspect_ratio_rxy));
+
     // write d=
     if (type == SP_GENERIC_PATH) {
         set_rect_path_attribute(repr); // include set_shape()
@@ -645,6 +677,38 @@ void SPRect::convert_to_guides() const {
     pts.emplace_back(A4, A1);
 
     sp_guide_pt_pairs_to_guides(this->document, pts);
+}
+
+void SPRect::setLockWh(bool lock) {
+    lock_wh = lock;
+}
+
+bool SPRect::getLockWh() const {
+    return lock_wh;
+}
+
+void SPRect::setLockRxy(bool lock) {
+    lock_rxy = lock;
+}
+
+bool SPRect::getLockRxy() const {
+    return lock_rxy;
+}
+
+void SPRect::setAspectRatioWh(double ratio) {
+    aspect_ratio_wh = ratio;
+}
+
+double SPRect::getAspectRatioWh() const {
+    return aspect_ratio_wh;
+}
+
+void SPRect::setAspectRatioRxy(double ratio) {
+    aspect_ratio_rxy = ratio;
+}
+
+double SPRect::getAspectRatioRxy() const {
+    return aspect_ratio_rxy;
 }
 
 /*
