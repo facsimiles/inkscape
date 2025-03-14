@@ -99,8 +99,6 @@ inkscape:linux:
     expire_in: 1 year
     paths:
       - build/
-  timeout: 3h
-
 
 appimage:linux:
   stage: build
@@ -213,6 +211,7 @@ inkscape:windows:
 #tests, always run after building
 test:linux:
   stage: test
+  timeout: 3h
   rules:
     - *do_not_run_for_schedules
     - *run_otherwise
