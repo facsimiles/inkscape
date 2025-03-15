@@ -58,7 +58,7 @@
         <property name="focusable">True</property>
         <property name="receives-default">True</property>
         <property name="has-frame">False</property>
-        <property name="tooltip-text">Lock width and height proportions</property>
+        <property name="tooltip-text" translatable="yes">Lock width and height proportions</property>
         <child>
           <object class="GtkImage">
             <property name="icon-name">object-unlocked</property>
@@ -116,7 +116,7 @@
         <property name="focusable">True</property>
         <property name="receives-default">True</property>
         <property name="has-frame">False</property>
-        <property name="tooltip-text">Lock Rx and Ry proportions</property>
+        <property name="tooltip-text" translatable="yes">Lock Rx and Ry proportions</property>
         <child>
           <object class="GtkImage">
             <property name="icon-name">object-unlocked</property>

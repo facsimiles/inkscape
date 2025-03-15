@@ -598,6 +598,12 @@ static SPStyleProp const props[] = {
     // named view settings
     {SPAttr::INKSCAPE_ORIGIN_CORRECTION, "origin-correction"},
     {SPAttr::INKSCAPE_Y_AXIS_DOWN, "y-axis-down"},
+
+    // rectangle lock aspect ratio state
+    {SPAttr::INKSCAPE_LOCK_WH, "inkscape:lock-wh"},
+    {SPAttr::INKSCAPE_ASPECT_RATIO_WH, "inkscape:aspect-ratio-wh"},
+    {SPAttr::INKSCAPE_LOCK_RXY, "inkscape:lock-rxy"},
+    {SPAttr::INKSCAPE_ASPECT_RATIO_RXY, "inkscape:aspect-ratio-rxy"},
 };
 
 #define n_attrs (sizeof(props) / sizeof(props[0]))

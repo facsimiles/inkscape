@@ -18,6 +18,7 @@
 #include <2geom/forward.h>
 
 #include "svg/svg-length.h"
+#include "svg/svg-bool.h"
 #include "sp-shape.h"
 
 enum GenericRectType {
@@ -93,8 +94,8 @@ public:
 	SVGLength height;
 	SVGLength rx;
 	SVGLength ry;
-	bool lock_wh=false;
-	bool lock_rxy=false;
+	SVGBool lock_wh{false};  // Default false, unset
+    SVGBool lock_rxy{false}; // Default false, unset
 	double aspect_ratio_wh=0.0;
 	double aspect_ratio_rxy=0.0;
 
