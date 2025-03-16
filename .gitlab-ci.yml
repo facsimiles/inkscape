@@ -165,7 +165,7 @@ inkscape:macos:
   variables:
     MSYSTEM: UCRT64
     CCACHE_DIR: $CI_PROJECT_DIR/ccache
-    CCACHE_MAXSIZE: "1.0G"
+    CCACHE_MAXSIZE: "512M"
     IDW_VERSION: 81
     IDW_NAME: ink$IDW_VERSION
     IDW_RELEASE_URL: $CI_API_V4_URL/projects/46863172/packages/generic/windows/r$IDW_VERSION/$IDW_NAME.7z
