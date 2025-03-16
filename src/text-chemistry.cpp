@@ -86,12 +86,6 @@ text_put_on_path()
         return;
     }
 
-    if (is<SPRect>(shape)) {
-        // rect is the only SPShape which is not <path> yet, and thus SVG forbids us from putting text on it
-        desktop->getMessageStack()->flash(Inkscape::ERROR_MESSAGE, _("You cannot put text on a rectangle in this version. Convert rectangle to path first."));
-        return;
-    }
-
     // if a flowed text is selected, convert it to a regular text object
     if (is<SPFlowtext>(text)) {
 
