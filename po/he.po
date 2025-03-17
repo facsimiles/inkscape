@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-02-04 23:42+0100\n"
-"PO-Revision-Date: 2025-02-16 13:06+0000\n"
+"PO-Revision-Date: 2025-03-18 10:06+0000\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <https://translate.inkscape.org/projects/inkscape/"
 "inkscape-master/he/>\n"
@@ -1620,7 +1620,7 @@ msgstr ""
 
 #: ../build/share/filters/filters.svg.h:610
 msgid "Linen Canvas"
-msgstr ""
+msgstr "לוח ציור פשתן"
 
 #: ../build/share/filters/filters.svg.h:612
 #: ../build/share/filters/filters.svg.h:620
@@ -2110,7 +2110,7 @@ msgstr "חץ קליטה למטרה"
 
 #: ../build/share/markers/markers.svg.h:9
 msgid "Concave triangle arrow"
-msgstr ""
+msgstr "חץ משולש קעור"
 
 #: ../build/share/markers/markers.svg.h:10
 msgid "Rounded arrow"
@@ -2126,11 +2126,11 @@ msgstr "זנב חץ"
 
 #: ../build/share/markers/markers.svg.h:13
 msgid "Distance start"
-msgstr ""
+msgstr "התחלת מרחק"
 
 #: ../build/share/markers/markers.svg.h:14
 msgid "Distance end"
-msgstr ""
+msgstr "סוף מרחק"
 
 #: ../build/share/markers/markers.svg.h:15
 msgid "Dot"
@@ -3326,17 +3326,15 @@ msgstr "נחש"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Grid 1"
-msgstr ""
+msgstr "רשת 1"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Abstract 4"
-msgstr ""
+msgstr "מופשט 4"
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
-#| msgid "Rain drops 2"
 msgid "Rain drops vertical"
-msgstr "טיפות גשם 2"
+msgstr "טיפות גשם אנכי"
 
 #: ../build/share/paint/patterns.svg.h:1
 #, fuzzy
@@ -3377,47 +3375,43 @@ msgstr "אלכסוני"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Abstract 1"
-msgstr ""
+msgstr "מופשט 1"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Abstract 3"
-msgstr ""
+msgstr "מופשט 3"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Squares 1"
-msgstr ""
+msgstr "ריבועים 1"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Circle fill 4"
-msgstr ""
+msgstr "מילוי עיגול 4"
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
-#| msgid "Move horizontally"
 msgid "Arrow horizontal fill"
-msgstr "הזזה אופקית"
+msgstr "מילוי חיצים אופקי"
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
-#| msgid "Semicircles 2"
 msgid "Semicircles"
-msgstr "חצאי עיגולים 2"
+msgstr "חצאי עיגולים"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Tiles 2"
-msgstr ""
+msgstr "אריחים 2"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Tiles 3"
-msgstr ""
+msgstr "אריחים 3"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Regular grid"
-msgstr ""
+msgstr "רשת רגילה"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Floor tiles"
-msgstr ""
+msgstr "רצפות"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Hexagons packing grid"
@@ -3425,27 +3419,27 @@ msgstr ""
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Wire Fence"
-msgstr ""
+msgstr "רשת גדר מעויינים"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Stripes grid"
-msgstr ""
+msgstr "רשת רצועות"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Inverted grid"
-msgstr ""
+msgstr "רשת הפוכה"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Geometric grid"
-msgstr ""
+msgstr "רשת גאומטרית"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Hexagonal grid"
-msgstr ""
+msgstr "רשת משושים"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Triangle grid"
-msgstr ""
+msgstr "רשת משולשים"
 
 #: ../build/share/paint/patterns.svg.h:1
 #: ../share/extensions/guides_creator.inx:11
@@ -3454,11 +3448,11 @@ msgstr "יחס הזהב"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Halfcircles grid"
-msgstr ""
+msgstr "רשת חצאי משולשים"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Circles in grid"
-msgstr ""
+msgstr "עיגולים ברשת"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Halftones"
@@ -3484,13 +3478,11 @@ msgstr ""
 #: ../src/ui/dialog/document-resources.cpp:1006
 #: ../share/ui/dialog-document-resources.glade:73
 msgid "Patterns"
-msgstr ""
+msgstr "תבניות"
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
-#| msgid "Tiles 1"
 msgid "Tiles 4"
-msgstr "אריחים 1"
+msgstr "אריחים 4"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Stripes 01 (1:1)"
@@ -4492,7 +4484,7 @@ msgstr "הפלגה"
 #: ../build/share/symbols/symbols.h:261 ../build/share/symbols/symbols.h:262
 msgctxt "Symbol"
 msgid "Sanitary Disposal Station"
-msgstr ""
+msgstr "נקודת ניקוז שפכים"
 
 #: ../build/share/symbols/symbols.h:263 ../build/share/symbols/symbols.h:264
 msgctxt "Symbol"
@@ -4653,17 +4645,17 @@ msgstr "זירה"
 #: ../build/share/symbols/symbols.h:324 ../build/share/symbols/symbols.h:351
 msgctxt "Symbol"
 msgid "Fire station"
-msgstr ""
+msgstr "תחנת כיבוי אש"
 
 #: ../build/share/symbols/symbols.h:325 ../build/share/symbols/symbols.h:352
 msgctxt "Symbol"
 msgid "Fire station 2"
-msgstr ""
+msgstr "תחנת כיבוי אש 2"
 
 #: ../build/share/symbols/symbols.h:326 ../build/share/symbols/symbols.h:353
 msgctxt "Symbol"
 msgid "Fire station 3"
-msgstr ""
+msgstr "תחנת כיבוי אש 3"
 
 #: ../build/share/symbols/symbols.h:327 ../build/share/symbols/symbols.h:354
 #: ../build/share/symbols/symbols.h:716 ../build/share/symbols/symbols.h:748
@@ -4735,7 +4727,7 @@ msgstr ""
 #: ../build/share/symbols/symbols.h:343 ../build/share/symbols/symbols.h:370
 msgctxt "Symbol"
 msgid "Wheelchair-accessible toilets"
-msgstr ""
+msgstr "שירותים נגישים לנכים"
 
 #: ../build/share/symbols/symbols.h:344 ../build/share/symbols/symbols.h:371
 msgctxt "Symbol"
@@ -4780,12 +4772,12 @@ msgstr "בולרד"
 #: ../build/share/symbols/symbols.h:379 ../build/share/symbols/symbols.h:391
 msgctxt "Symbol"
 msgid "Cattle grid"
-msgstr ""
+msgstr "מעבר בקר"
 
 #: ../build/share/symbols/symbols.h:380 ../build/share/symbols/symbols.h:392
 msgctxt "Symbol"
 msgid "Cycle barrier"
-msgstr ""
+msgstr "מחסום אופניים"
 
 #: ../build/share/symbols/symbols.h:381 ../build/share/symbols/symbols.h:393
 msgctxt "Symbol"
@@ -4800,12 +4792,12 @@ msgstr "שער"
 #: ../build/share/symbols/symbols.h:384 ../build/share/symbols/symbols.h:396
 msgctxt "Symbol"
 msgid "Kissing gate"
-msgstr ""
+msgstr "מחסום בקר"
 
 #: ../build/share/symbols/symbols.h:385 ../build/share/symbols/symbols.h:397
 msgctxt "Symbol"
 msgid "Lift gate"
-msgstr ""
+msgstr "שער זרוע"
 
 #: ../build/share/symbols/symbols.h:386 ../build/share/symbols/symbols.h:398
 msgctxt "Symbol"
@@ -4815,12 +4807,12 @@ msgstr "מדרגות"
 #: ../build/share/symbols/symbols.h:387 ../build/share/symbols/symbols.h:399
 msgctxt "Symbol"
 msgid "Stile"
-msgstr ""
+msgstr "מדרגות לבני אדם"
 
 #: ../build/share/symbols/symbols.h:388 ../build/share/symbols/symbols.h:400
 msgctxt "Symbol"
 msgid "Toll booth"
-msgstr ""
+msgstr "עמדת תשלום"
 
 #: ../build/share/symbols/symbols.h:401
 msgctxt "Symbol"
@@ -4830,7 +4822,7 @@ msgstr ""
 #: ../build/share/symbols/symbols.h:402 ../build/share/symbols/symbols.h:411
 msgctxt "Symbol"
 msgid "College"
-msgstr ""
+msgstr "מכללה"
 
 #: ../build/share/symbols/symbols.h:403 ../build/share/symbols/symbols.h:412
 msgctxt "Symbol"
@@ -6242,11 +6234,11 @@ msgstr "נא לבחור מספרי עמודים מה־PDF לייבוא"
 
 #: ../src/actions/actions-base.cpp:215
 msgid "Import DPI Method"
-msgstr "שיטת נק׳ לאינטש בייבוא"
+msgstr "שיטת נק׳ לאינץ׳ בייבוא"
 
 #: ../src/actions/actions-base.cpp:215
 msgid "Set DPI conversion method for legacy Inkscape files"
-msgstr "הגדרת שיטת המרת נק׳ לאינטש לקבצים מיושנים של אינקסקייפ"
+msgstr "הגדרת שיטת המרת נק׳ לאינץ׳ לקבצים מיושנים של אינקסקייפ"
 
 #: ../src/actions/actions-base.cpp:216
 msgid "No Import Baseline Conversion"
@@ -14874,7 +14866,7 @@ msgstr "אינסטגרם לרוחב"
 
 #: ../src/extension/internal/template-social.cpp:45
 msgid "Instagram portrait"
-msgstr "אינטגרם לאורך"
+msgstr "אינסטגרם לאורך"
 
 #: ../src/extension/internal/template-social.cpp:46
 msgid "Instagram square"
@@ -36546,7 +36538,7 @@ msgstr "אפשרויות מפת סיביות"
 
 #: ../src/ui/widget/rendering-options.cpp:33
 msgid "Preferred resolution of rendering, in dots per inch."
-msgstr "רזולוציה מועדפת לעיבוד תמונה, בנקודות לאינטש."
+msgstr "רזולוציה מועדפת לעיבוד תמונה, בנקודות לאינץ׳."
 
 #: ../src/ui/widget/rendering-options.cpp:42
 msgid ""
@@ -44219,7 +44211,7 @@ msgstr "קלט HPGL2"
 
 #: ../share/extensions/hpgl_input.inx:7
 msgid "Resolution (dpi):"
-msgstr "רזולוציה (נק׳ לאינטש):"
+msgstr "רזולוציה (נק׳ לאינץ׳):"
 
 #: ../share/extensions/hpgl_input.inx:7
 msgid ""
@@ -47417,11 +47409,11 @@ msgstr "מאפייני הספר"
 
 #: ../share/extensions/perfectboundcover.inx:6
 msgid "Book Width (inches):"
-msgstr "רוחב הספר (אינטשים):"
+msgstr "רוחב הספר (אינצ׳ים):"
 
 #: ../share/extensions/perfectboundcover.inx:7
 msgid "Book Height (inches):"
-msgstr "גובה הספר (אינטשים):"
+msgstr "גובה הספר (אינצ׳ים):"
 
 #: ../share/extensions/perfectboundcover.inx:8
 msgid "Number of Pages:"
@@ -47442,12 +47434,12 @@ msgstr "מדידת עובי הדף:"
 #: ../share/extensions/perfectboundcover.inx:12
 #: ../share/extensions/perfectboundcover.inx:21
 msgid "Pages Per Inch (PPI)"
-msgstr "עמודים לאינטש (PPI)"
+msgstr "עמודים לאינץ׳ (PPI)"
 
 #: ../share/extensions/perfectboundcover.inx:13
 #: ../share/extensions/perfectboundcover.inx:22
 msgid "Caliper (inches)"
-msgstr "מחוגה (אינטשים)"
+msgstr "מחוגה (אינצ׳ים)"
 
 #: ../share/extensions/perfectboundcover.inx:14
 #: ../share/extensions/perfectboundcover.inx:23
@@ -47479,7 +47471,7 @@ msgstr "מדידת עובי הכריכה:"
 
 #: ../share/extensions/perfectboundcover.inx:28
 msgid "Bleed (in):"
-msgstr "שוליים לחיתוך (אינטש):"
+msgstr "שוליים לחיתוך (אינץ׳):"
 
 #: ../share/extensions/perfectboundcover.inx:29
 msgid "Note: Bond Weight # calculations are a best-guess estimate."
@@ -49457,23 +49449,23 @@ msgstr "הפעלה"
 
 #: ../share/extensions/web_interactive_mockup.inx:12
 msgid "press left mouse button down"
-msgstr ""
+msgstr "להחזיק את הכפתור השמאלי בעכבר לחוץ"
 
 #: ../share/extensions/web_interactive_mockup.inx:13
 msgid "let left mouse button go"
-msgstr ""
+msgstr "לשחרר את כפתור העכבר השמאלי"
 
 #: ../share/extensions/web_interactive_mockup.inx:14
 msgid "move cursor into object"
-msgstr ""
+msgstr "להעביר את העכבר לפריט"
 
 #: ../share/extensions/web_interactive_mockup.inx:15
 msgid "move cursor within object"
-msgstr ""
+msgstr "להעביר את הסמן אל הפריט"
 
 #: ../share/extensions/web_interactive_mockup.inx:16
 msgid "move cursor out of object"
-msgstr ""
+msgstr "להעביר את הסמן מחוץ לפריט"
 
 #: ../share/extensions/web_interactive_mockup.inx:17
 msgid "element is loaded by browser"
@@ -49740,11 +49732,11 @@ msgstr "חותך"
 
 #: ../share/extensions/webslicer_create_rect.inx:3
 msgid "Create a Slicer Rectangle"
-msgstr ""
+msgstr "ליצור משולש חיתוך"
 
 #: ../share/extensions/webslicer_create_rect.inx:12
 msgid "DPI:"
-msgstr ""
+msgstr "נק׳ לאינץ׳:"
 
 #: ../share/extensions/webslicer_create_rect.inx:13
 msgid "Force Dimension:"
@@ -49994,7 +49986,7 @@ msgstr "פיקסל"
 
 #: ../share/ui/units.xml:15
 msgid "CSS Pixels (96/inch)"
-msgstr "פיקסלים של CSS (96 לאינטש)"
+msgstr "פיקסלים של CSS (96 לאינץ׳)"
 
 #: ../share/ui/units.xml:18
 msgid "point"
@@ -50006,7 +49998,7 @@ msgstr "נקודות"
 
 #: ../share/ui/units.xml:22
 msgid "PostScript points (72/inch)"
-msgstr "נקודות PostScript (72 לאינטש)"
+msgstr "נקודות PostScript (72 לאינץ׳)"
 
 #: ../share/ui/units.xml:25
 msgid "pica"
@@ -50022,15 +50014,15 @@ msgstr "12 נקודות"
 
 #: ../share/ui/units.xml:32
 msgid "inch"
-msgstr "אינטש"
+msgstr "אינץ׳"
 
 #: ../share/ui/units.xml:33
 msgid "inches"
-msgstr "אינטשים"
+msgstr "אינצ׳ים"
 
 #: ../share/ui/units.xml:36
 msgid "Inches (96 px/in)"
-msgstr "אינטשים (96 פיקסלים/אינטש)"
+msgstr "אינצ׳ים (96 פיקסלים/אינץ׳)"
 
 #: ../share/ui/units.xml:39
 msgid "foot"
@@ -50042,7 +50034,7 @@ msgstr ""
 
 #: ../share/ui/units.xml:43
 msgid "Feet (12 in/ft)"
-msgstr ""
+msgstr "רגל (12 אינץ׳/רגל)"
 
 #: ../share/ui/units.xml:46
 msgid "millimeter"
@@ -50054,7 +50046,7 @@ msgstr "מילימטרים"
 
 #: ../share/ui/units.xml:50
 msgid "Millimeters (25.4 mm/in)"
-msgstr "מילימטרים (25.4 מ״מ/אינטש)"
+msgstr "מילימטרים (25.4 מ״מ/אינץ׳)"
 
 #: ../share/ui/units.xml:53
 msgid "centimeter"
@@ -50069,22 +50061,16 @@ msgid "Centimeters (10 mm/cm)"
 msgstr "סנטימטרים (10 מ״מ/ס״מ)"
 
 #: ../share/ui/units.xml:60
-#, fuzzy
-#| msgid "millimeter"
 msgid "meter"
-msgstr "מילימטר"
+msgstr "מטר"
 
 #: ../share/ui/units.xml:61
-#, fuzzy
-#| msgid "Centers"
 msgid "meters"
-msgstr "מרכזים"
+msgstr "מטרים"
 
 #: ../share/ui/units.xml:64
-#, fuzzy
-#| msgid "Centimeters (10 mm/cm)"
 msgid "Meters (100 cm/m)"
-msgstr "סנטימטרים (10 מ״מ/ס״מ)"
+msgstr "מטרים (100 ס״מ/מ׳)"
 
 #: ../share/ui/units.xml:67
 msgid "degree"
