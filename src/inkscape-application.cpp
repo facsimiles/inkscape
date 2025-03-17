@@ -655,11 +655,13 @@ InkscapeApplication::InkscapeApplication()
     // Garbage Collector
     Inkscape::GC::init();
 
-    if (_with_gui && Inkscape::Preferences::get()->getBool("/options/splash/enabled", true)) {
-        _start_screen = Inkscape::UI::Dialog::StartScreen::show_splash();
-    }
-
     auto *gapp = gio_app();
+
+    if (_with_gui && !_use_pipe && !_use_command_line_argument && gtk_app() &&
+        Inkscape::UI::Dialog::StartScreen::get_start_mode() > 0) {
+        _start_screen = std::make_unique<Inkscape::UI::Dialog::StartScreen>();
+        _start_screen->show_now();
+    }
 
     gapp->signal_startup().connect([this]() { this->on_startup(); });
     gapp->signal_activate().connect([this]() { this->on_activate(); });
@@ -674,9 +676,6 @@ InkscapeApplication::InkscapeApplication()
     // Native Language Support (shouldn't this always be used?).
     Inkscape::initialize_gettext();
 #endif
-
-    // Autosave
-    Inkscape::AutoSave::getInstance().init(this);
 
     // Don't set application name for now. We don't use it anywhere but
     // it overrides the name used for adding recently opened files and breaks the Gtk::RecentFilter
@@ -1036,6 +1035,11 @@ InkscapeApplication::process_document(SPDocument* document, std::string output_p
 void
 InkscapeApplication::on_startup()
 {
+    // Add the start/splash screen to the app as soon as possible
+    if (_start_screen) {
+        gtk_app()->add_window(*_start_screen);
+    }
+
 #if defined(GDK_WINDOWING_X11)
     if (_with_gui) {
         // The XIM input method can cause graphical artifacts.
@@ -1055,6 +1059,9 @@ InkscapeApplication::on_startup()
         }
     }
 #endif
+
+    // Autosave
+    Inkscape::AutoSave::getInstance().init(this);
 
     // Deprecated...
     Inkscape::Application::create(_with_gui);
@@ -1097,7 +1104,6 @@ InkscapeApplication::on_activate()
 
     // Create new document, either from pipe or from template.
     SPDocument *document = nullptr;
-    auto prefs = Inkscape::Preferences::get();
 
     if (_use_pipe) {
 
@@ -1107,15 +1113,15 @@ InkscapeApplication::on_activate()
         document = document_open (s);
         output = "-";
 
-    } else if(prefs->getBool("/options/boot/enabled", true)
-               && !_use_command_line_argument
-               && (gtk_app() && gtk_app()->get_windows().empty())) {
-        _start_screen = Inkscape::UI::Dialog::StartScreen::show_welcome();
-
-        _start_screen->run();
+    } else if (_start_screen && Inkscape::UI::Dialog::StartScreen::get_start_mode() == 2) {
+        _start_screen->setup_welcome();
+        _start_screen->run(); // Blocks until document selected
         document = _start_screen->get_document();
+        if (!document) {
+            _start_screen.reset();
+            return; // Start screen forcefully closed.
+        }
     } else {
-
         // Create a blank document from template
         document = document_new();
     }

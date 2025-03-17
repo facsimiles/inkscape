@@ -14,6 +14,7 @@
 #include <string>             // for string
 #include <gdk/gdk.h>          // for GdkModifierType
 #include <glibmm/refptr.h>    // for RefPtr
+#include <glibmm/timer.h>     // for Timer
 #include <glibmm/ustring.h>   // for ustring
 #include <gtk/gtk.h>          // for GtkEventControllerKey
 #include <gtkmm/dialog.h>     // for Dialog
@@ -23,6 +24,7 @@ namespace Gtk {
 class Builder;
 class Button;
 class ComboBox;
+class Label;
 class Notebook;
 class Overlay;
 class TreeView;
@@ -45,18 +47,17 @@ public:
     StartScreen();
     ~StartScreen() override;
 
-    static std::unique_ptr<StartScreen> show_splash();
-    static std::unique_ptr<StartScreen> show_welcome();
+    static int get_start_mode();
 
     SPDocument* get_document() { return _document; }
+
+    void show_now();
+    void setup_welcome();
 
 protected:
     void on_response(int response_id) override;
 
 private:
-    void setup_splash();
-    void setup_welcome();
-
     void notebook_next(Gtk::Widget *button);
     gboolean on_key_pressed(GtkEventControllerKey const *controller,
                         unsigned keyval, unsigned keycode, GdkModifierType state);
@@ -79,12 +80,9 @@ private:
     void on_recent_changed();
     void on_kind_changed(Gtk::Widget *tab, unsigned page_num);
 
-protected:
-    // Support for transparent background
-    void set_transparent(bool transparent);
-    bool on_draw(const ::Cairo::RefPtr<::Cairo::Context> &cr) override;
-
 private:
+    Glib::Timer timer;
+
     Glib::RefPtr<Gtk::Builder> builder;
     Gtk::Window   &window;
     Gtk::Notebook &tabs;
@@ -92,6 +90,8 @@ private:
     Gtk::ComboBox &themes;
     Gtk::TreeView &recent_treeview;
     Gtk::Button   &load_btn;
+    Gtk::Button   &close_btn;
+    Gtk::Label    &messages;
     Inkscape::UI::Widget::TemplateList &templates;
 
     SPDocument* _document = nullptr;

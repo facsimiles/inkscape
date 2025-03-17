@@ -273,6 +273,11 @@ along with Inkscape Extensions Manager.  If not, see <http://www.gnu.org/license
       </row>
     </data>
   </object>
+  <object class="GtkLabel" id="messages">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="label" translatable="yes">Loading ...</property>
+  </object>
   <object class="GtkWindow" id="start-screen-window">
     <property name="can-focus">True</property>
     <property name="has-focus">True</property>

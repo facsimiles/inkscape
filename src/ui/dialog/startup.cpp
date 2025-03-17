@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 /** @file
- * @brief A dialog for the about screen
+ * @brief A splash screen and welcome screen
  */
 /*
- * Copyright (C) Martin Owens 2019 <doctormo@gmail.com>
+ * Copyright (C) Martin Owens 2019-2025 <doctormo@geek-2.com>
  *
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
@@ -159,37 +159,36 @@ StartScreen::StartScreen()
     , themes         (get_widget<Gtk::ComboBox>        (builder, "themes"))
     , recent_treeview(get_widget<Gtk::TreeView>        (builder, "recent_treeview"))
     , load_btn       (get_widget<Gtk::Button>          (builder, "load"))
+    , close_btn      (get_widget<Gtk::Button>          (builder, "close_window"))
+    , messages       (get_widget<Gtk::Label>           (builder, "messages"))
 {
     set_name("start-screen-window");
     set_title(Inkscape::inkscape_version());
     set_can_focus(true);
-    grab_focus();
     set_can_default(true);
-    grab_default();
     set_urgency_hint(true);  // Draw user's attention to this window!
     set_modal(true);
     set_position(Gtk::WIN_POS_CENTER_ALWAYS);
+
+    // Move banner to dialog window
+    banners.get_parent()->remove(banners);
+    set_titlebar(banners);
+    get_content_area()->add(messages);
 }
 
-std::unique_ptr<StartScreen> StartScreen::show_splash()
+void StartScreen::show_now()
 {
-    auto start_screen = std::make_unique<StartScreen>();
-    start_screen->setup_splash();
-    return start_screen;
-}
-
-void StartScreen::setup_splash()
-{
-    set_decorated(false);
+    set_default_size(700, 0);
     set_resizable(false);
-    set_transparent(true);
-
-    auto splash = Inkscape::IO::Resource::get_filename(Inkscape::IO::Resource::SCREENS, "start-splash.png");
-    Gtk::Image image(splash);
-    get_content_area()->add(image);
 
     show_all_children();
     show();
+    close_btn.hide();
+
+    property_resizable() = false;
+    set_visible(true);
+    present(); // This makes the widget actually appear
+    timer.start();
 
     // The main loop won't get called until the main window is initialized,
     // so we need to iterate the loop a few times here to show the splash screen.
@@ -197,18 +196,12 @@ void StartScreen::setup_splash()
         Gtk::Main::iteration(false);
 }
 
-std::unique_ptr<StartScreen> StartScreen::show_welcome()
-{
-    auto start_screen = std::make_unique<StartScreen>();
-    start_screen->setup_welcome();
-    return start_screen;
-}
-
 void StartScreen::setup_welcome()
 {
-    set_decorated(true);
-    set_resizable(true);
     set_default_size(700, 360);
+    messages.hide();
+    grab_default();
+    grab_focus();
 
     // Populate with template extensions
     templates.init(Inkscape::Extension::TEMPLATE_NEW_WELCOME);
@@ -218,15 +211,9 @@ void StartScreen::setup_welcome()
     auto keys        = &get_widget<Gtk::ComboBox>(builder, "keys");
     auto save        = &get_widget<Gtk::Button>  (builder, "save");
     auto thanks      = &get_widget<Gtk::Button>  (builder, "thanks");
-    auto close_btn   = &get_widget<Gtk::Button>  (builder, "close_window");
     auto new_btn     = &get_widget<Gtk::Button>  (builder, "new");
     auto show_toggle = &get_widget<Gtk::Button>  (builder, "show_toggle");
     auto dark_toggle = &get_widget<Gtk::Switch>  (builder, "dark_toggle");
-
-    // Unparent to move to our dialog window.
-    auto parent = banners.get_parent();
-    parent->remove(banners);
-    parent->remove(tabs);
 
     // Add signals and setup things.
     auto prefs = Inkscape::Preferences::get();
@@ -264,12 +251,12 @@ void StartScreen::setup_welcome()
     load_btn.signal_clicked().connect(sigc::mem_fun(*this, &StartScreen::load_document));
     templates.connectItemSelected(sigc::mem_fun(*this, &StartScreen::new_document));
     new_btn->signal_clicked().connect(sigc::mem_fun(*this, &StartScreen::new_document));
-    close_btn->signal_clicked().connect([this] { response(GTK_RESPONSE_CLOSE); });
+    close_btn.signal_clicked().connect([this] { response(GTK_RESPONSE_CLOSE); });
+    close_btn.show();
 
-    // Reparent to our dialog window
-    set_titlebar(banners);
-    Gtk::Box* box = get_content_area();
-    box->add(tabs);
+    // Unparent to move to our dialog window.
+    tabs.get_parent()->remove(tabs);
+    get_content_area()->add(tabs);
 
     // Show the first tab ONLY on the first run for this version
     std::string opt_shown = "/options/boot/shown/ver";
@@ -288,13 +275,41 @@ void StartScreen::setup_welcome()
     property_resizable() = false;
     set_default_size(700, 360);
     set_visible(true);
+
+    // Splash screen is now finished
+    timer.stop();
 }
 
 StartScreen::~StartScreen()
 {
+    // Let than a second, we'll hide the splash if needed.
+    if (timer.elapsed() < 1.0) {
+        auto prefs = Inkscape::Preferences::get();
+        // But only if the welcome screen is disabled
+        if (prefs->getInt("/options/boot/mode", 2) == 1) {
+            prefs->setInt("/options/boot/mode", 0);
+        }
+    }
+
     // These are "owned" by builder... don't delete them!
     banners.get_parent()->remove(banners);
+    messages.get_parent()->remove(messages);
     tabs.get_parent()->remove(tabs);
+}
+
+/**
+ * Get the preference for the startup mode.
+ *
+ * @returns
+ *    0 - Show nothing
+ *    1 - Show only the splash screen
+ *    2 = Show the splash and startup screens
+ */
+int StartScreen::get_start_mode()
+{
+    auto prefs = Inkscape::Preferences::get();
+    auto old_enabled = prefs->getBool("/options/boot/enabled", true);
+    return prefs->getInt("/options/boot/mode", old_enabled ? 2 : 1);
 }
 
 /**
@@ -534,7 +549,7 @@ StartScreen::show_toggle()
 {
     auto &button = get_widget<Gtk::ToggleButton>(builder, "show_toggle");
     auto prefs = Inkscape::Preferences::get();
-    prefs->setBool("/options/boot/enabled", button.get_active());
+    prefs->setInt("/options/boot/mode", button.get_active() ? 2 : 1);
 
 }
 
@@ -774,37 +789,6 @@ void StartScreen::refresh_dark_switch()
     auto &dark_toggle = get_widget<Gtk::Switch>(builder, "dark_toggle");
     dark_toggle.set_sensitive(themes[current_theme]);
     dark_toggle.set_active(dark);
-}
-
-// Transparency support
-void StartScreen::set_transparent(bool transparent)
-{
-    set_app_paintable(transparent);
-    _use_alpha = false;
-
-    if (transparent) {
-        auto screen = get_screen();
-        auto visual = screen->get_rgba_visual();
-
-        // Screen supports alpha
-        if (visual)
-            _use_alpha = true;
-
-        gtk_widget_set_visual(GTK_WIDGET(gobj()), visual->gobj());
-    }
-}
-
-bool StartScreen::on_draw(const Cairo::RefPtr<Cairo::Context> &cr)
-{
-    if (_use_alpha) {
-        cr->save();
-        cr->set_source_rgba(1.0, 1.0, 1.0, 0.0);
-        cr->set_operator(Cairo::OPERATOR_SOURCE);
-        cr->paint();
-        cr->restore();
-    }
-
-    return Gtk::Window::on_draw(cr);
 }
 
 } // namespace Inkscape::UI::Dialog
