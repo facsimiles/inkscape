@@ -55,7 +55,7 @@ class ExtensionsGallery : public DialogBase
 public:
     enum Type { Filters, Effects };
     ExtensionsGallery(Type type);
-
+    void focus_dialog() override;
 private:
     Glib::RefPtr<Gtk::Builder> _builder;
     Gtk::GridView& _gridview;

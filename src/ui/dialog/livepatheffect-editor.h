@@ -61,7 +61,7 @@ class LivePathEffectEditor final : public DialogBase
 public:
     LivePathEffectEditor();
     ~LivePathEffectEditor() final;
-
+    void focus_dialog() override;
     void move_list(int origin, int dest);
 
     using LPEExpander = std::pair<Gtk::Expander *, PathEffectSharedPtr>;

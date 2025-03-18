@@ -122,10 +122,10 @@ void DialogBase::blink()
 }
 
 void DialogBase::focus_dialog() {
+    set_visible(true);
     if (auto window = dynamic_cast<Gtk::Window*>(get_root())) {
         window->present();
     }
-
     // widget that had focus, if any
     if (auto child = get_focus_child()) {
         child->grab_focus();
@@ -135,6 +135,7 @@ void DialogBase::focus_dialog() {
             child->grab_focus();
         }
     }
+
 }
 
 void DialogBase::defocus_dialog() {

@@ -137,7 +137,12 @@ DialogNotebook::DialogNotebook(DialogContainer* container) : _container(containe
     _tabs.set_new_tab_popup(&_menu_dialogs);
     _tabs.signal_select_tab().connect([this](auto& tab) {
         _tabs.select_tab(tab);
-        _notebook.set_current_page(_tabs.get_tab_position(tab));
+        int page_pos = _tabs.get_tab_position(tab);
+        _notebook.set_current_page(page_pos);
+        auto curr_page = _notebook.get_nth_page(page_pos);
+        if (auto dialog = dynamic_cast<DialogBase*>(curr_page)) {
+            dialog->focus_dialog();
+        }
     });
     _tabs.signal_close_tab().connect([this](auto& tab) {
         auto index = _tabs.get_tab_position(tab);
@@ -663,6 +668,9 @@ void DialogNotebook::on_size_allocate_scroll(int const width)
 
 void DialogNotebook::on_page_switch(Gtk::Widget *curr_page, guint page) {
     _tabs.select_tab_at(page);
+    if (auto dialog = dynamic_cast<DialogBase*>(curr_page)) {
+        dialog->focus_dialog();
+    }
 }
 
 bool DialogNotebook::on_scroll_event(double dx, double dy)

@@ -68,7 +68,7 @@ public:
 
     void blink();
     // find focusable widget to grab focus
-    void focus_dialog();
+    virtual void focus_dialog();
     // return focus back to canvas
     void defocus_dialog();
     bool getShowing() { return _showing; }

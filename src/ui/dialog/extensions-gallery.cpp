@@ -466,6 +466,7 @@ ExtensionsGallery::ExtensionsGallery(ExtensionsGallery::Type type) :
     });
 
     append(get_widget<Gtk::Box>(_builder, "main"));
+    focus_dialog();
 }
 
 void ExtensionsGallery::update_name() {
@@ -580,6 +581,11 @@ Glib::RefPtr<Gdk::Texture> ExtensionsGallery::get_image(const std::string& key, 
         _image_cache.insert(key, tex);
         return tex;
     }
+}
+void ExtensionsGallery::focus_dialog()
+{
+    DialogBase::focus_dialog();
+    _search.grab_focus();
 }
 
 } // namespace Inkscape::UI::Dialog

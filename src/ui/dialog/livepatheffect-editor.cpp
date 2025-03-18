@@ -1130,6 +1130,12 @@ void LivePathEffectEditor::do_item_action_favorite(PathEffectSharedPtr const &,
     _reload_menu = true;
     _item_type = ""; // here we force reload even with the same tipe item selected
 }
+void LivePathEffectEditor::focus_dialog()
+{
+    DialogBase::focus_dialog();
+    _lpes_popup.get_entry().grab_focus();
+    _lpes_popup.get_entry().queue_draw(); // force redraw to fix delay in hover style
+}
 
 } // namespace Inkscape::UI::Dialog
 
