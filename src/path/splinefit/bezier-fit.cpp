@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <vector>
+#include <glib.h>
 #include "bezier-fit.h"
 #include <2geom/bezier-utils.h>
 #include <2geom/point.h>
