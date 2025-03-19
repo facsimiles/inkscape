@@ -23,19 +23,19 @@
     <section>
       <item>
         <attribute name="label" translatable="yes">Add node to Left</attribute>
-        <attribute name="action">node-toolbar.insert-min-x</attribute>
+        <attribute name="action">node-toolbar.insert-leftmost</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">Add node to Right</attribute>
-        <attribute name="action">node-toolbar.insert-max-x</attribute>
+        <attribute name="action">node-toolbar.insert-rightmost</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">Add node to Top</attribute>
-        <attribute name="action">node-toolbar.insert-min-y</attribute>
+        <attribute name="action">node-toolbar.insert-topmost</attribute>
       </item>
       <item>
-        <attribute name="label" translatable="yes">Add node to Bottm</attribute>
-        <attribute name="action">node-toolbar.insert-max-y</attribute>
+        <attribute name="label" translatable="yes">Add node to Bottom</attribute>
+        <attribute name="action">node-toolbar.insert-bottommost</attribute>
       </item>
     </section>
   </menu>
