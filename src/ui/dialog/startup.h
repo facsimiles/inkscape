@@ -66,9 +66,9 @@ private:
     void show_toggle();
     void enlist_recent_files();
     void enlist_keys();
-    void filter_themes();
+    void filter_themes(Gtk::ComboBox *themes);
     void keyboard_changed();
-    void notebook_switch(Gtk::Widget *tab, unsigned page_num);
+    void banner_switch(unsigned page_num);
 
     void theme_changed();
     void canvas_changed();
@@ -81,21 +81,20 @@ private:
     void on_kind_changed(Gtk::Widget *tab, unsigned page_num);
 
 private:
+    const std::string opt_shown;
     Glib::Timer timer;
 
-    Glib::RefPtr<Gtk::Builder> builder;
-    Gtk::Window   &window;
-    Gtk::Notebook &tabs;
-    Gtk::Overlay  &banners;
-    Gtk::ComboBox &themes;
-    Gtk::TreeView &recent_treeview;
-    Gtk::Button   &load_btn;
-    Gtk::Button   &close_btn;
-    Gtk::Label    &messages;
-    Inkscape::UI::Widget::TemplateList &templates;
+    Glib::RefPtr<Gtk::Builder> build_splash;
+    Gtk::Overlay &banners;
+    Gtk::Button &close_btn;
+    Gtk::Label &messages;
+
+    Glib::RefPtr<Gtk::Builder> build_welcome;
+    UI::Widget::TemplateList *templates = nullptr;
+    Gtk::TreeView *recentfiles = nullptr;
 
     SPDocument* _document = nullptr;
-    bool _use_alpha = false;
+    bool _welcome = false;
 };
 
 } // namespace Dialog

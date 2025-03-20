@@ -657,6 +657,11 @@ InkscapeApplication::InkscapeApplication()
 
     auto *gapp = gio_app();
 
+#ifdef ENABLE_NLS
+    // Native Language Support (shouldn't this always be used?).
+    Inkscape::initialize_gettext();
+#endif
+
     if (_with_gui && !_use_pipe && !_use_command_line_argument && gtk_app() &&
         Inkscape::UI::Dialog::StartScreen::get_start_mode() > 0) {
         _start_screen = std::make_unique<Inkscape::UI::Dialog::StartScreen>();
@@ -672,10 +677,6 @@ InkscapeApplication::InkscapeApplication()
     Inkscape::Debug::Logger::init();
 #endif
 
-#ifdef ENABLE_NLS
-    // Native Language Support (shouldn't this always be used?).
-    Inkscape::initialize_gettext();
-#endif
 
     // Don't set application name for now. We don't use it anywhere but
     // it overrides the name used for adding recently opened files and breaks the Gtk::RecentFilter
