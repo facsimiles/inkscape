@@ -772,12 +772,13 @@ void Preferences::_setRawValue(Glib::ustring const &path, Glib::ustring const &v
     node->setAttribute(attr_key, value);
 }
 
+
 // The Entry::get* methods convert the preference string from the XML file back to the original value.
 // The conversions here are the inverse of Preferences::set*.
 
 bool Preferences::Entry::getBool(bool def) const
 {
-    if (!isValid()) {
+    if (!isSet()) {
         return def;
     }
     if (cached_bool) {
@@ -801,7 +802,7 @@ bool Preferences::Entry::getBool(bool def) const
 
 Colors::Color Preferences::Entry::getColor(std::string const &def) const
 {
-    if (isValid()) {
+    if (isSet()) {
         // Note: we don't cache the resulting Color object
         // because this function is called rarely and therefore not performance-relevant
         // (exemplary Inkscape startup: 40 calls to getColor vs. 10k calls to getBool())
@@ -818,7 +819,7 @@ Colors::Color Preferences::Entry::getColor(std::string const &def) const
 
 int Preferences::Entry::getInt(int def) const
 {
-    if (!isValid()) {
+    if (!isSet()) {
         return def;
     }
     if (cached_int) {
@@ -828,8 +829,10 @@ int Preferences::Entry::getInt(int def) const
     // .raw() is only for performance reasons (std::string comparison is faster than Glib::ustr)
     auto const &s = _value.value().raw();
     if (s == "true") {
+        g_warning("Integer preference value is set as true, treating it as 1: %s", _pref_path.c_str());
         value_int = 1;
     } else if (s == "false") {
+        g_warning("Integer preference value is set as false, treating it as 0: %s", _pref_path.c_str());
         value_int = 0;
     } else {
         int val = 0;
@@ -860,7 +863,7 @@ int Preferences::Entry::getIntLimited(int def, int min, int max) const
 
 unsigned int Preferences::Entry::getUInt(unsigned int def) const
 {
-    if (!isValid()) {
+    if (!isSet()) {
         return def;
     }
     if (cached_uint) {
@@ -902,7 +905,7 @@ double Preferences::Entry::_getDoubleAssumeExisting() const
 
 double Preferences::Entry::getDouble(double def, Glib::ustring const &requested_unit) const
 {
-    if (!isValid()) {
+    if (!isSet()) {
         return def;
     }
 
@@ -927,7 +930,7 @@ Glib::ustring Preferences::Entry::getString(Glib::ustring const &def) const
 
 Glib::ustring Preferences::Entry::getUnit() const
 {
-    if (!isValid()) {
+    if (!isSet()) {
         return "";
     }
     if (cached_unit) {
@@ -945,7 +948,7 @@ Glib::ustring Preferences::Entry::getUnit() const
     }
     if (end_index == 0) {
         [[unlikely]];
-        // isValid()==true but the string
+        // isSet() == true but the string is:
         // - is empty
         // - or does not start with a numeric value
         // - or the number is out of range (double over/underflow)
@@ -963,7 +966,7 @@ Glib::ustring Preferences::Entry::getUnit() const
 
 SPCSSAttr *Preferences::Entry::getStyle() const
 {
-    if (!isValid()) {
+    if (!isSet()) {
         return sp_repr_css_attr_new();
     }
     // Note: the resulting style object is not cached.
@@ -979,7 +982,7 @@ SPCSSAttr *Preferences::Entry::getInheritedStyle() const
     // This method is quite "dirty". We ignore whatever is stored this Entry
     // and just get the style from Preferences.
     // A more beautiful solution would need major refactoring of Entry and Preferences.
-    if (!isValid()) {
+    if (!isSet()) {
         return sp_repr_css_attr_new();
     }
 

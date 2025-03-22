@@ -172,14 +172,28 @@ public:
         Entry(Entry const &other) = default;
 
         /**
-         * Check whether the received entry is valid.
+         * Check whether the received entry is set.
          * This means that the requested preference path exists.
          *
          * If not, then the get...() functions will return the default value.
          *
-         * @return True if the entry valid.
+         * @return True if the entry exists.
          */
-        bool isValid() const { return _value.has_value(); }
+        bool isSet() const { return _value.has_value(); }
+
+        /**
+         * @deprecated This function is deprecated because its name was misleading from its purpose.
+         * Use `isSet()` instead to check whether the preference entry exists.
+         *
+         * Check whether the received entry is set.
+         * This means that the requested preference path exists.
+         *
+         * If not, then the get...() functions will return the default value.
+         *
+         * @return True if the entry exists.
+         */
+        [[deprecated("Use isSet() instead")]]
+        bool isValid() const { return isSet(); }
 
         /**
          * Interpret the preference as a Boolean value.
@@ -378,7 +392,7 @@ public:
      * @param pref_path Path to preference to check.
      */
     bool hasPref(Glib::ustring const &pref_path) {
-        return getEntry(pref_path).isValid();
+        return getEntry(pref_path).isSet();
     }
 
     /**
