@@ -194,7 +194,10 @@ TEST_F(PreferencesTest, testIsValidColor)
 {
     prefs->setColor("/test/colorvalue", Inkscape::Colors::Color::parse("blue").value());
     ASSERT_TRUE(prefs->getEntry("/test/colorvalue").isValidColor());
-    prefs->setString("/test/colorvalue", "invalid");
+    prefs->setString("/test/colorvalue", "#2E3436ff");
+    ASSERT_TRUE(prefs->getEntry("/test/colorvalue").isValidColor());
+
+    prefs->setString("/test/colorvalue", "22px");
     ASSERT_FALSE(prefs->getEntry("/test/colorvalue").isValidColor());
 }
 

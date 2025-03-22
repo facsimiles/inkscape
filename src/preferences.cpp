@@ -772,6 +772,129 @@ void Preferences::_setRawValue(Glib::ustring const &path, Glib::ustring const &v
     node->setAttribute(attr_key, value);
 }
 
+// The Entry::isValid* methods check if the preference exists, and then verify if the data would be
+// correctly converted to the requested type.
+
+bool Preferences::Entry::isValidBool() const
+{
+    if (!isSet()) {
+        return false;
+    }
+    auto const &s = _value.value().raw();
+    // format is currently "0"/"1", may change to "true"/"false" in the future
+    // see Preferences::setBool()
+    return (s == "1" || s == "0" || s == "true" || s == "false");
+}
+
+bool Preferences::Entry::isValidInt() const
+{
+    if (!isSet()) {
+        return false;
+    }
+
+    auto const &s = _value.value().raw();
+
+    // true, false are treated as 1, 0 by getInt(), even though it's not entirely appropriate
+    // we're gonna treat them as valid integers here
+    if (s == "true" || s == "false") {
+        // warn that we're treating "true" and "false" as integers
+        g_warning("Integer preference value are set as boolean: '%s', treating it as %d: %s", s.c_str(),
+                  s == "true" ? 1 : 0, _pref_path.c_str());
+        return true;
+    }
+
+    errno = 0;
+    
+    const char* cstr = s.c_str();
+    char* endPtr = nullptr;
+    long value = strtol(cstr, &endPtr, 0);
+    if (endPtr == cstr) {
+        // no valid number found
+        return false;
+    }
+    // checking for overflow is unecessary because long is the same size
+    // as int on all modern platforms, this is somewhat pedantic
+    if (errno == ERANGE || value < INT_MIN || value > INT_MAX) {
+        return false; // overflow
+    }
+
+    // getInt() will also happily retrieve unsigned integers as overflow them
+    // However we have a getUInt() method for that, we're gonna therefore
+    // treat them as invalid.
+
+    return true;
+}
+
+bool Preferences::Entry::isValidUInt() const
+{
+    if (!isSet()) {
+        return false;
+    }
+
+    auto const &s = _value.value().raw();
+
+    errno = 0;
+    const char* cstr = s.c_str();
+    char* end_ptr = nullptr;
+    unsigned long value = strtoul(cstr, &end_ptr, 0);
+    if (end_ptr == cstr) {
+        return false;
+    }
+    if (errno == ERANGE || value > UINT_MAX) {
+        return false; // overflow
+    }
+
+    return true;
+}
+
+bool Preferences::Entry::isValidDouble() const
+{
+    if (!isSet()) {
+        return false;
+    }
+
+    auto const &value_str = _value.value().raw();
+    std::string::size_type end_index = 0;
+
+    try {
+        Glib::Ascii::strtod(value_str, end_index, 0);
+    } catch (std::runtime_error const &e) {
+        return false;
+    }
+
+    if(end_index == 0) {
+        return false; // failed to read anything numeric
+    }
+
+    // extract the unit if any, and check if it's a valid unit
+    auto unit = value_str.substr(end_index);
+    if(!unit.empty()) {
+        return Util::UnitTable::get().hasUnit(unit);
+    }
+
+    return true;
+}
+
+bool Preferences::Entry::isConvertibleTo(Glib::ustring const &type) const
+{
+    auto from = getUnit();
+    if (!from.empty()) {
+        auto to = Util::UnitTable::get().getUnit(type);
+        return to->compatibleWith(from);
+    }
+
+    // if the unit is empty 
+    return false;
+}
+
+bool Preferences::Entry::isValidColor() const
+{
+    if (!isSet()) {
+        return false;
+    }
+
+    return Colors::Color::parse(_value.value().raw()).has_value();
+}
 
 // The Entry::get* methods convert the preference string from the XML file back to the original value.
 // The conversions here are the inverse of Preferences::set*.
