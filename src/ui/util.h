@@ -211,9 +211,19 @@ Cairo::Matrix geom_to_cairo(const Geom::Affine &affine);
 Geom::IntPoint dimensions(const Cairo::RefPtr<Cairo::ImageSurface> &surface);
 Geom::IntPoint dimensions(const Gdk::Rectangle &allocation);
 
+template <typename T>
+inline Gdk::Graphene::Rect geom_to_gtk(Geom::GenericRect<T> const &rect) {
+    return Gdk::Graphene::Rect(rect.left(), rect.top(), rect.width(), rect.height());
+}
+inline Gdk::Graphene::Point geom_to_gtk(Geom::IntPoint const &point) {
+    return Gdk::Graphene::Point(point.x(), point.y());
+}
+inline Gdk::Graphene::Point geom_to_gtk(Geom::Point const &point) {
+    return Gdk::Graphene::Point(point.x(), point.y());
+}
+
 // create a gradient with multiple steps to approximate profile described by given cubic spline
-Cairo::RefPtr<Cairo::LinearGradient> create_cubic_gradient(
-    Geom::Rect rect,
+std::vector<GskColorStop> create_cubic_gradient(
     const Gdk::RGBA& from,
     const Gdk::RGBA& to,
     Geom::Point ctrl1,

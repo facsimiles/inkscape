@@ -32,6 +32,7 @@
 #include <pangomm/context.h>
 #include <pangomm/fontdescription.h>
 #include <pangomm/layout.h>
+#include <2geom/bezier.h>
 
 #include "colors/color.h"
 #include "colors/utils.h" // color to hex string
@@ -374,8 +375,7 @@ Geom::IntPoint dimensions(const Gdk::Rectangle &allocation)
     return Geom::IntPoint(allocation.get_width(), allocation.get_height());
 }
 
-Cairo::RefPtr<Cairo::LinearGradient> create_cubic_gradient(
-    Geom::Rect rect,
+std::vector<GskColorStop> create_cubic_gradient(
     const Gdk::RGBA& from,
     const Gdk::RGBA& to,
     Geom::Point ctrl1,
@@ -395,22 +395,23 @@ Cairo::RefPtr<Cairo::LinearGradient> create_cubic_gradient(
         throw std::invalid_argument("Invalid number of steps for cubic gradient; 2 to 999 steps expected.");
     }
 
-    auto g = Cairo::LinearGradient::create(rect.min().x(), rect.min().y(), rect.max().x(), rect.max().y());
+    std::vector<GskColorStop> result;
 
     --steps;
     for (int step = 0; step <= steps; ++step) {
-        auto t = 1.0 * step / steps;
-        auto s = 1.0 - t;
-        auto p = (t * t * t) * p0 + (3 * t * t * s) * ctrl1 + (3 * t * s * s) * ctrl2 + (s * s * s) * p1;
+        auto t = static_cast<double>(step) / steps;
+        auto p = Geom::bernstein_value_at(t, std::begin({p0, ctrl1, ctrl2, p1}), 3);
 
-        auto offset = p.x();
-        auto ratio = p.y();
+        float offset = p.x();
+        float ratio = p.y();
 
-        auto color = mix_colors(from, to, ratio);
-        g->add_color_stop_rgba(offset, color.get_red(), color.get_green(), color.get_blue(), color.get_alpha());
+        result.push_back(GskColorStop{
+            .offset = offset,
+            .color = *mix_colors(from, to, ratio).gobj()
+        });
     }
 
-    return g;
+    return result;
 }
 
 Gdk::RGBA change_alpha(const Gdk::RGBA& color, double new_alpha) {

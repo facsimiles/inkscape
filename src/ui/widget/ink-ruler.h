@@ -8,29 +8,22 @@
  *
  */
 
-#ifndef INK_RULER_H
-#define INK_RULER_H
-
-/* Rewrite of the C Ruler. */
+#ifndef INKSCAPE_UI_WIDGET_RULER_H
+#define INKSCAPE_UI_WIDGET_RULER_H
 
 #include <memory>
-#include <unordered_map>
-#include <utility>
 #include <cairomm/refptr.h>
-#include <cairomm/types.h> // Cairo::RectangleInt
 #include <pangomm/fontdescription.h>
 #include <gdkmm/rgba.h>
-#include <gtk/gtk.h> // GtkEventControllerMotion
-#include <gtkmm/drawingarea.h>
 #include <gtkmm/enums.h> // Gtk::Orientation
 #include <gtkmm/gesture.h> // Gtk::EventSequenceState
+#include <2geom/int-rect.h>
 
 #include "preferences.h"
 #include "ui/widget/widget-vfuncs-class-init.h"
+#include "util/delete-with.h"
 
-namespace Cairo {
-class Context;
-} // namespace Cairo
+namespace Cairo { class Context; }
 
 namespace Gtk {
 class EventControllerMotion;
@@ -38,15 +31,15 @@ class GestureClick;
 class Popover;
 } // namespace Gtk
 
-namespace Inkscape::Util {
-class Unit;
-} // namespace Inkscape::Util
+namespace Inkscape::Util { class Unit; }
 
 namespace Inkscape::UI::Widget {
-  
+
+using RenderNodePtr = std::unique_ptr<GskRenderNode, Util::Deleter<gsk_render_node_unref>>;
+
 class Ruler
     : public WidgetVfuncsClassInit
-    , public Gtk::DrawingArea
+    , public Gtk::Widget
 {
 public:
     Ruler(Gtk::Orientation orientation);
@@ -61,11 +54,10 @@ public:
     void clear_track_widget();
 
 private:
-    std::pair<int, int> get_drawing_size();
-    bool draw_scale(const Cairo::RefPtr<::Cairo::Context>& cr);
-    void draw_marker(const Cairo::RefPtr<::Cairo::Context>& cr);
-    Cairo::RectangleInt marker_rect();
-    void draw_func(Cairo::RefPtr<Cairo::Context> const &cr, int width, int height);
+    void draw_ruler(Glib::RefPtr<Gtk::Snapshot> const &snapshot);
+    void draw_marker(Glib::RefPtr<Gtk::Snapshot> const &snapshot);
+    void snapshot_vfunc(Glib::RefPtr<Gtk::Snapshot> const &snapshot) override;
+
     void css_changed(GtkCssStyleChange *) override;
     void on_prefs_changed();
 
@@ -73,16 +65,15 @@ private:
     Gtk::EventSequenceState on_click_pressed(int n_press, double x, double y);
 
     std::unique_ptr<Gtk::Popover> create_context_menu();
-    Cairo::RefPtr<Cairo::Surface> draw_label(Cairo::RefPtr<Cairo::Surface> const &surface_in, int label_value);
 
     Inkscape::PrefObserver _watch_prefs;
     std::unique_ptr<Gtk::Popover> _popover;
-    Gtk::Orientation    _orientation;
-    Inkscape::Util::Unit const* _unit;
-    double _lower;
-    double _upper;
-    double _position;
-    double _max_size;
+    Gtk::Orientation const _orientation;
+    Inkscape::Util::Unit const *_unit = nullptr;
+    double _lower = 0;
+    double _upper = 1000;
+    double _position = 0;
+    double _max_size = 1000;
 
     // Page block
     double _page_lower = 0.0;
@@ -93,26 +84,42 @@ private:
     double _sel_upper = 0.0;
     double _sel_visible = true;
 
-    bool   _backing_store_valid;
-    Cairo::RefPtr<::Cairo::Surface> _backing_store;
-    Cairo::RectangleInt _rect;
-
-    std::unordered_map<int, Cairo::RefPtr<::Cairo::Surface>> _label_cache;
-
     Glib::RefPtr<Gtk::EventControllerMotion> _track_widget_controller;
 
     // Cached style properties
     Gdk::RGBA _shadow;
     Gdk::RGBA _foreground;
-    int _font_size;
+    int _font_size{};
     Gdk::RGBA _page_fill;
     Gdk::RGBA _select_fill;
     Gdk::RGBA _select_stroke;
+
+    // Cached render nodes.
+    RenderNodePtr _shadow_node;
+    RenderNodePtr _scale_tile_node;
+    RenderNodePtr _scale_node;
+    std::map<int, RenderNodePtr> _label_nodes;
+    RenderNodePtr _ruler_node;
+    void redraw_ruler()
+    {
+        _ruler_node.reset();
+        queue_draw();
+    }
+
+    struct LastRenderParams
+    {
+        int aparallel;
+        int aperp;
+        unsigned divide_index;
+        double pixels_per_tick;
+        double pixels_per_major;
+    };
+    std::optional<LastRenderParams> _params;
 };
 
 } // namespace Inkscape::UI::Widget
 
-#endif // INK_RULER_H
+#endif // INKSCAPE_UI_WIDGET_RULER_H
 
 /*
   Local Variables:
