@@ -1,6 +1,7 @@
 ../share/extensions/addnodes.inx
 ../share/extensions/aisvg.inx
 ../share/extensions/cgm_input.inx
+../share/extensions/clean_up_path.inx
 ../share/extensions/color_blackandwhite.inx
 ../share/extensions/color_brighter.inx
 ../share/extensions/color_custom.inx
@@ -91,6 +92,8 @@
 ../share/extensions/nicechart.inx
 ../share/extensions/other/clipart/import_web_image.inx
 ../share/extensions/other/extension-afdesign/inkaf.inx
+../share/extensions/other/extension-curve/inkvn-curve.inx
+../share/extensions/other/extension-curve/inkvn.inx
 ../share/extensions/other/extension-xaml/inkxaml/svg2xaml.inx
 ../share/extensions/other/extension-xaml/inkxaml/xaml2svg.inx
 ../share/extensions/other/gcodetools/gcodetools_about.inx
