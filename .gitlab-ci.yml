@@ -209,6 +209,34 @@ inkscape:windows:
     paths:
       - build/inkscape*.${DIST}
 
+inkscape:windows-pdb:
+  extends: .windows
+  timeout: 3h
+  retry: 2
+  when: manual
+  script:
+    # configure with CMake
+    - . "C:/$Env:IDW_NAME/msys2_shell.cmd" -defterm -no-start -ucrt64 -here -c `
+          "cmake -B build -G Ninja `
+           -DCMAKE_C_COMPILER_LAUNCHER=ccache `
+           -DCMAKE_CXX_COMPILER_LAUNCHER=ccache `
+           -DCMAKE_BUILD_TYPE=RelWithDebInfo `
+           -DENABLE_PDB=ON"
+    # Kill the job before hitting runner's timeout. This way we can preserve the cache so the next retry
+    # will be able to advance the build further and eventually finish (after up to two retries, 3 jobs in total).
+    # Calculation is:  20 minutes for download and extraction of msys2
+    #                  80 minutes build (4800 seconds, see 'sleep' below)
+    #                  20 minutes as buffer and save cache
+    #                 --- --------------------------------
+    #                 120 minutes runner timeout
+    - Start-Job -ScriptBlock{sleep 4800; taskkill /t /F /IM "ninja.exe"}
+    # build with Ninja
+    - . "C:/$Env:IDW_NAME/msys2_shell.cmd" -defterm -no-start -ucrt64 -here -c `
+          "ninja -C build dist-win-7z"
+  artifacts:
+    paths:
+      - build/inkscape*.7z
+
 #tests, always run after building
 test:linux:
   stage: test
