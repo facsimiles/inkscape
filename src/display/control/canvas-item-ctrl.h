@@ -65,6 +65,7 @@ public:
 
     // do not call directly; only used for invisible handle
     void _set_size(int size);
+    Geom::Point get_position() const;
 protected:
     ~CanvasItemCtrl() override = default;
 
