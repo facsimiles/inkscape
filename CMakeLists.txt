@@ -107,6 +107,9 @@ option(WITH_LPETOOL "Compile with LPE Tool" OFF)
 option(LPE_ENABLE_TEST_EFFECTS "Compile with test experimental LPEs enabled" OFF)
 option(WITH_PROFILING "Turn on profiling" OFF) # Set to true if compiler/linker should enable profiling
 option(BUILD_SHARED_LIBS "Compile libraries as shared and not static" ON)
+if (WIN32)
+  option(ENABLE_PDB "Generate debug symbols in PDB format (Windows only)" OFF)
+endif()
 
 option(WITH_POPPLER "Compile with support of libpoppler" ON)
 option(ENABLE_POPPLER_CAIRO "Compile with support of libpoppler-cairo for rendering PDF preview (depends on WITH_POPPLER)" ON)
@@ -286,6 +289,9 @@ message("WITH_X11:                ${WITH_X11}")
 
 message("WITH_PROFILING:          ${WITH_PROFILING}")
 message("BUILD_TESTING:           ${BUILD_TESTING}")
+if(WIN32)
+message("ENABLE_PDB:              ${ENABLE_PDB}")
+endif()
 
 if(WIN32)
 message("")
