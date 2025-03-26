@@ -1017,13 +1017,21 @@ void SelectorsDialog::_addSelector()
             return;
         }
         /**
-         * @brief selectorName
+         * @brief selectorValue
          * This string stores selector name. The text from entrybox is saved as name
          * for selector. If the entrybox is empty, the text (thus selectorName) is
          * set to ".Class1"
          */
-        originalValue = Glib::ustring(textEditPtr->get_text());
-        selectorValue = _style_dialog->fixCSSSelectors(originalValue);
+        originalValue = textEditPtr->get_text();
+        {
+            std::unique_ptr<CRSelector, decltype(&cr_selector_destroy)> selector{
+                cr_selector_parse_from_buf(reinterpret_cast<guchar const *>(originalValue.c_str()), CR_UTF_8),
+                &cr_selector_destroy};
+            if (!selector) {
+                continue; // Try again on parse error
+            }
+            selectorValue = selector_to_validated_string(*selector);
+        }
         _del.set_visible(true);
         if (originalValue.find("@import ") == std::string::npos && selectorValue.empty()) {
             textLabelPtr->set_visible(true);
