@@ -16,9 +16,6 @@
 #include "selectorsdialog.h"
 
 #include <algorithm>
-#include <map>
-#include <string>
-#include <utility>
 #include <glibmm/i18n.h>
 #include <glibmm/regex.h>
 #include <gtkmm/adjustment.h>
@@ -28,6 +25,9 @@
 #include <gtkmm/label.h>
 #include <gtkmm/togglebutton.h>
 #include <gtkmm/treemodelfilter.h>
+#include <map>
+#include <string>
+#include <utility>
 
 #include "attribute-rel-svg.h"
 #include "css/syntactic-decomposition.h"
