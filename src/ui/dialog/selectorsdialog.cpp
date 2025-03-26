@@ -1241,6 +1241,9 @@ void SelectorsDialog::_selectRow()
     std::sort(selected_objs.begin(), selected_objs.end());
 
     for (auto &&row : children) {
+        if (row[_mColumns._colType] != SELECTOR) {
+            continue;
+        }
         // Recalculate the selector, in real time.
         auto row_children = _getObjVec(row[_mColumns._colSelector]);
         std::sort(row_children.begin(), row_children.end());
