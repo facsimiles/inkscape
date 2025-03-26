@@ -153,7 +153,7 @@ public:
     void _addToSelector(Gtk::TreeModel::Row row);
     void _removeFromSelector(Gtk::TreeModel::Row row);
     Glib::ustring _getIdList(std::vector<SPObject *>);
-    std::vector<SPObject *> _getObjVec(Glib::ustring selector);
+    std::vector<SPObject *> _getObjVec(Glib::ustring const &selector);
     void _insertClass(const std::vector<SPObject *>& objVec, const Glib::ustring& className);
     void _insertClass(SPObject *obj, const Glib::ustring &className);
     void _removeClass(const std::vector<SPObject *> &objVec, const Glib::ustring &className, bool all = false);

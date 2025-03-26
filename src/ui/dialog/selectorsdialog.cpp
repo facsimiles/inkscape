@@ -847,9 +847,8 @@ Glib::ustring SelectorsDialog::_getIdList(std::vector<SPObject *> sel)
  * @return objVec: a vector of pointers to SPObject's the selector matches.
  * Return a vector of all objects that selector matches.
  */
-std::vector<SPObject *> SelectorsDialog::_getObjVec(Glib::ustring selector)
+std::vector<SPObject *> SelectorsDialog::_getObjVec(Glib::ustring const &selector)
 {
-
     g_debug("SelectorsDialog::_getObjVec: | %s |", selector.c_str());
 
     g_assert(selector.find(";") == Glib::ustring::npos);
