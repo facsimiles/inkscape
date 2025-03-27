@@ -164,10 +164,9 @@ void FontInstance::acquire(PangoFont *p_font_, PangoFontDescription *descr_)
     hb_ft_font_set_funcs(hb_font_copy);
     face = hb_ft_font_lock_face(hb_font_copy);
 #else
-    if (face) {
-        pango_fc_font_unlock_face(PANGO_FC_FONT(p_font));
-    }
+    face = pango_fc_font_lock_face(PANGO_FC_FONT(p_font));
 #endif
+
     if (!face) {
         release();
         throw CtorException("Failed to get freetype face");
