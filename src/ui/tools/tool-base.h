@@ -178,6 +178,10 @@ private:
     bool rotating = false;
     double start_angle, current_angle;
 
+    bool zooming = false;
+    double start_scale;
+    Geom::Point center;
+
 public:
     bool start_root_handler(CanvasEvent const &event);
     bool tool_root_handler(CanvasEvent const &event);

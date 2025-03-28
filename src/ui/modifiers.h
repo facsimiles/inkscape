@@ -61,7 +61,10 @@ enum class Type {
     CANVAS_PAN_X,         // Pan left and right {SHIFT+SCROLL}
     CANVAS_ZOOM,          // Zoom in and out {CTRL+SCROLL}
     CANVAS_ROTATE,        // Rotate CW and CCW {CTRL+SHIFT+SCROLL}
-
+    CANVAS_BOX_ZOOM,      // Zoom into selected area {MIDDLEMOUSE + DRAG}
+    CANVAS_ZOOM_TABLET,   // Zoom in and out with middle mouse {CTRL + MIDDLEMOUSE + DRAG}
+    CANVAS_ROTATE_TABLET, // Rotate CW and CCW with middle mouse {CTRL + MIDDLEMOUSE + DRAG}
+ 
     // Select tool (minus transform)
     SELECT_ADD_TO,        // Add selection {SHIFT+CLICK}
     SELECT_IN_GROUPS,     // Select within groups {CTRL+CLICK}

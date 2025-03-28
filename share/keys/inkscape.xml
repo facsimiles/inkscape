@@ -31,6 +31,9 @@ override) the bindings in the main default.xml.
   <modifier action="canvas-pan-x" modifiers="Shift"/>
   <modifier action="canvas-zoom" modifiers="Ctrl"/>
   <modifier action="canvas-rotate" modifiers="Shift,Ctrl"/>
+  <modifier action="canvas-box-zoom" modifiers="Shift"/>
+  <modifier action="canvas-zoom-tablet" modifiers="Shift" disabled="true"/>
+  <modifier action="canvas-rotate-tablet" modifiers="Ctrl"/>
 
   <modifier action="select-add-to" modifiers="Shift"/>
   <modifier action="select-in-groups" modifiers="Ctrl"/>
