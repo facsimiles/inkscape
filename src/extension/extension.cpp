@@ -256,15 +256,17 @@ Extension::loaded ()
 bool
 Extension::check ()
 {
-    char const *inx_failure = _("  This is caused by an improper .inx file for this extension."
-                                "  An improper .inx file could have been caused by a faulty installation of Inkscape.");
+    auto get_inx_error_text = []() {
+        return _("  This is caused by an improper .inx file for this extension."
+                 "  An improper .inx file could have been caused by a faulty installation of Inkscape.");
+    };
 
     if (repr == nullptr) {
-        printFailure(Glib::ustring(_("the XML description of it got lost.")) += inx_failure);
+        printFailure(Glib::ustring(_("the XML description of it got lost.")) += get_inx_error_text());
         return false;
     }
     if (!imp) {
-        printFailure(Glib::ustring(_("no implementation was defined for the extension.")) += inx_failure);
+        printFailure(Glib::ustring(_("no implementation was defined for the extension.")) += get_inx_error_text());
         return false;
     }
 
@@ -507,7 +509,6 @@ char const *Extension::get_translation(char const *msgid, char const *msgctxt) c
 
     // Possible enhancement: heterogeneous lookup
     // https://stackoverflow.com/questions/49709548/c-unordered-mapstring-lookup-without-constructing-string
-    // https://devblogs.microsoft.com/oldnewthing/20190227-00/?p=101072
     if (msgctxt) {
         auto& map = _translations_by_context[msgctxt];
 
