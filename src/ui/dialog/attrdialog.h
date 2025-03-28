@@ -147,6 +147,7 @@ private:
     std::unique_ptr<Syntax::TextEditView> _css_edit;    // in-line CSS style
     std::unique_ptr<Syntax::TextEditView> _svgd_edit;   // SVG path data
     std::unique_ptr<Syntax::TextEditView> _points_edit; // points in a <polygon> or <polyline>
+    std::unique_ptr<Syntax::TextEditView> _href_edit;   // long entries without spaces
     std::unique_ptr<Syntax::TextEditView> _attr_edit;   // all other attributes (plain text)
     Syntax::TextEditView* _current_text_edit = nullptr; // current text edit for attribute value editing
     auto_connection _adjust_size;
@@ -162,7 +163,7 @@ private:
     static Glib::ustring round_numbers(const Glib::ustring& text, int precision);
     Gtk::TextView &_activeTextView() const;
     void set_current_textedit(Syntax::TextEditView* edit);
-    static std::unique_ptr<Syntax::TextEditView> init_text_view(AttrDialog* owner, Syntax::SyntaxMode coloring, bool map);
+    static std::unique_ptr<Syntax::TextEditView> init_text_view(AttrDialog* owner, Syntax::SyntaxMode coloring, bool map, bool char_wrap = false);
 };
 
 } // namespace UI::Dialog

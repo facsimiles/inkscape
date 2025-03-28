@@ -92,11 +92,11 @@ constexpr int MAX_POPOVER_HEIGHT = 450;
 constexpr int MAX_POPOVER_WIDTH = 520;
 constexpr int TEXT_MARGIN = 3;
 
-std::unique_ptr<Syntax::TextEditView> AttrDialog::init_text_view(AttrDialog* owner, Syntax::SyntaxMode coloring, bool map)
+std::unique_ptr<Syntax::TextEditView> AttrDialog::init_text_view(AttrDialog* owner, Syntax::SyntaxMode coloring, bool map, bool wrap)
 {
     auto edit = Syntax::TextEditView::create(coloring);
     auto& textview = edit->getTextView();
-    textview.set_wrap_mode(Gtk::WrapMode::WRAP_WORD);
+    textview.set_wrap_mode(wrap ? Gtk::WrapMode::WRAP_CHAR : Gtk::WrapMode::WRAP_WORD);
 
     // this actually sets padding rather than margin and extends textview's background color to the sides
     textview.set_top_margin(TEXT_MARGIN);
@@ -143,6 +143,9 @@ AttrDialog::AttrDialog()
     // string content editing
     _text_edit = init_text_view(this, SyntaxMode::PlainText, false);
     _style_edit = init_text_view(this, SyntaxMode::CssStyle, false);
+
+    // Href editing
+    _href_edit = init_text_view(this, SyntaxMode::PlainText, false, true);
 
     set_size_request(20, 15);
 
@@ -402,6 +405,9 @@ void AttrDialog::startValueEdit(Gtk::CellEditable *cell, const Glib::ustring &pa
     } else if (attribute == "points") {
         enable_rouding = true;
         set_current_textedit(_points_edit.get());
+    } else if (attribute == "href" || attribute == "xlink:href") {
+        set_current_textedit(_href_edit.get());
+        edit_in_popup = true;
     } else {
         set_current_textedit(_attr_edit.get());
         edit_in_popup = false;
