@@ -1966,7 +1966,11 @@ GridWidget::GridWidget(SPGrid *grid)
     column->attach(*_angle_popup, 1, angle_row, 1, 2);
 
     _modified_signal = grid->connectModified([this, grid](SPObject const * /*obj*/, unsigned /*flags*/) {
-        update();
+        if (!_wr.isUpdating()) {
+            _modified_signal.block();
+            update();
+            _modified_signal.unblock();
+        }
     });
     update();
 
@@ -2064,7 +2068,7 @@ void GridWidget::update()
     _tab_lbl->set_label(_grid->getId() ? _grid->getId() : "-");
     _tab_img->set_from_icon_name(_grid->typeName(), Gtk::ICON_SIZE_MENU);
 
-    _wr.setUpdating (false);
+    _wr.setUpdating(false);
 }
 
 } // namespace Widget
