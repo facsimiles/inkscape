@@ -144,13 +144,24 @@ inkscape:macos:
   variables:
     INK_BUILD: $CI_PIPELINE_IID
     WRK_DIR: /Users/Shared/work
+    # ICM: https://gitlab.com/inkscape/infra/inkscape-ci-macos
+    ICM_VERSION: 0.81
+  before_script:
+    - |
+      git clone https://gitlab.com/inkscape/infra/inkscape-ci-macos icm
+      git -C icm checkout v$ICM_VERSION
+      git -C icm submodule update --init --recursive
+    # for more robustness in case a previous job failed
+    - icm/jhb/usr/bin/archive uninstall_dmg
   script:
-    - packaging/macos/build.sh
+    - icm/jhb/usr/bin/archive install_dmg
+    - icm/build_inkscape.sh
+    - icm/jhb/usr/bin/archive uninstall_dmg archive
   artifacts:
-    expire_in: 1 year
+    expire_in: 3 months
     paths:
       - Inkscape*.dmg
-      - toolset_overlay.tar.xz
+      - "*.shadow.bz2"
 
 
 .windows:
@@ -241,7 +252,15 @@ test:macos:
         matrix:
           - RUNNER: macosintel
   script:
-    - packaging/macos/test.sh
+    - icm/jhb/usr/bin/archive install_dmg
+    - |
+      if ! icm/310-inkscape_test.sh; then
+        tar -C $(icm/jhb/usr/bin/config get INK_BLD_DIR) -cpJf testfiles.tar.xz testfiles Testing
+        icm/jhb/usr/bin/archive uninstall_dmg
+        exit 1
+      else
+        icm/jhb/usr/bin/archive uninstall_dmg
+      fi
   artifacts:
     paths:
       - testfiles.tar.xz
