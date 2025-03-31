@@ -49,6 +49,7 @@ if(WIN32)
     ${MINGW_BIN}/libgio-2.0-[0-9]*.dll
     ${MINGW_BIN}/libgiomm-2.4-[0-9]*.dll
     ${MINGW_BIN}/libgirepository-1.0-[0-9].dll
+    ${MINGW_BIN}/libgirepository-2.0-[0-9].dll
     ${MINGW_BIN}/libglib-2.0-[0-9]*.dll
     ${MINGW_BIN}/libglibmm-2.4-[0-9]*.dll
     ${MINGW_BIN}/libgmodule-2.0-[0-9]*.dll
