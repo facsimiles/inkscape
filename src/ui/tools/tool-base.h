@@ -244,7 +244,7 @@ inline int gobble_key_events(unsigned keyval, unsigned mask) { return 0; }
 inline void gobble_motion_events(unsigned mask) {}
 
 void sp_event_show_modifier_tip(MessageContext *message_context, KeyEvent const &event,
-                                char const *ctrl_tip, char const *shift_tip, char const *alt_tip);
+                                char const *ctrl_tip, char const *shift_tip, char const *alt_tip,char const *meta_tip = nullptr);
 
 void init_latin_keys_group();
 // Prefer one of the non-_impl versions below. This is public for shortcuts.cpp.

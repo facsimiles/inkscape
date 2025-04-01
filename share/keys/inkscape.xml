@@ -29,22 +29,20 @@ override) the bindings in the main default.xml.
 
   <modifier action="canvas-pan-y" modifiers=""/>
   <modifier action="canvas-pan-x" modifiers="Shift"/>
-  <modifier action="canvas-zoom" modifiers="Ctrl"/>
-  <modifier action="canvas-rotate" modifiers="Shift,Ctrl"/>
+  <modifier action="canvas-zoom" modifiers="Primary"/>
+  <modifier action="canvas-rotate" modifiers="Shift,Primary"/>
 
   <modifier action="select-add-to" modifiers="Shift"/>
-  <modifier action="select-in-groups" modifiers="Ctrl"/>
+  <modifier action="select-in-groups" modifiers="Primary"/>
   <modifier action="select-touch-path" modifiers="Alt"/>
   <modifier action="select-always-box" modifiers="Shift"/>
-  <modifier action="select-remove-from" modifiers="Ctrl"/>
+  <modifier action="select-first-hit" modifiers="Primary"/>
   <modifier action="select-force-drag" modifiers="Alt"/>
   <modifier action="select-cycle" modifiers="Alt"/>
 
-  <modifier action="move-confine" modifiers="Ctrl"/>
+  <modifier action="move-confine" modifiers="Primary"/>
   <modifier action="move-increment" modifiers="Alt"/>
-  <modifier action="move-snapping" />
-  
-  <modifier action="trans-confine" modifiers="Ctrl"/>
+  <modifier action="trans-confine" modifiers="Primary"/>
   <modifier action="trans-increment" modifiers="Alt"/>
   <modifier action="trans-off-center" modifiers="Shift"/>
   <modifier action="trans-snapping" modifiers="Shift"/>

@@ -246,6 +246,7 @@ void restrict_minsize_to_square(Gtk::Widget& widget, int min_size_px);
 
 /// Get the text from a GtkEditable without the temporary copy imposed by gtkmm.
 char const *get_text(Gtk::Editable const &editable);
+char const* get_ctrl_or_command();
 
 #endif // UI_UTIL_SEEN
 

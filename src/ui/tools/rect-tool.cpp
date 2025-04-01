@@ -39,6 +39,8 @@
 #include "ui/widget/events/canvas-event.h"
 
 #include "util/units.h"
+#include "src/ui/util.h"
+
 
 using Inkscape::DocumentUndo;
 
@@ -379,9 +381,10 @@ void RectTool::drag(Geom::Point const pt, unsigned state) {
             }
         }
     } else {
+        std::string ctrl_command=get_ctrl_or_command();
         this->message_context->setF(Inkscape::IMMEDIATE_MESSAGE,
-                _("<b>Rectangle</b>: %s &#215; %s; with <b>Ctrl</b> to make square, integer-ratio, or golden-ratio rectangle; with <b>Shift</b> to draw around the starting point"),
-                xs.c_str(), ys.c_str());
+                _("<b>Rectangle</b>: %s &#215; %s; with <b>%s</b> to make square, integer-ratio, or golden-ratio rectangle; with <b>Shift</b> to draw around the starting point"),
+                xs.c_str(), ys.c_str(),ctrl_command.c_str());
     }
 }
 

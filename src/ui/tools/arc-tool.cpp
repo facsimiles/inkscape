@@ -42,6 +42,7 @@
 #include "ui/widget/events/canvas-event.h"
 
 #include "util/units.h"
+#include "src/ui/util.h"
 
 using Inkscape::DocumentUndo;
 
@@ -383,7 +384,8 @@ void ArcTool::drag(Geom::Point const &pt, unsigned state)
             }
         }
     } else {
-        this->message_context->setF(Inkscape::IMMEDIATE_MESSAGE, _("<b>Ellipse</b>: %s &#215; %s; with <b>Ctrl</b> to make circle, integer-ratio, or golden-ratio ellipse; with <b>Shift</b> to draw around the starting point"), xs.c_str(), ys.c_str());
+        std::string ctrl_command=get_ctrl_or_command();
+        this->message_context->setF(Inkscape::IMMEDIATE_MESSAGE, _("<b>Ellipse</b>: %s &#215; %s; with <b>%s</b> to make circle, integer-ratio, or golden-ratio ellipse; with <b>Shift</b> to draw around the starting point"), xs.c_str(), ys.c_str(),ctrl_command.c_str());
     }
 }
 

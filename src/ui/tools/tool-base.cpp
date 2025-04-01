@@ -1262,20 +1262,29 @@ void ToolBase::menu_popup(CanvasEvent const &event, SPObject *obj)
  */
 void sp_event_show_modifier_tip(MessageContext *message_context,
                                 KeyEvent const &event, char const *ctrl_tip, char const *shift_tip,
-                                char const *alt_tip)
+                                char const *alt_tip,char const *meta_tip)
 {
     auto const keyval = get_latin_keyval(event);
-
-    bool ctrl =  ctrl_tip  && (mod_ctrl(event)  || keyval == GDK_KEY_Control_L || keyval == GDK_KEY_Control_R);
-    bool shift = shift_tip && (mod_shift(event) || keyval == GDK_KEY_Shift_L   || keyval == GDK_KEY_Shift_R);
-    bool alt =   alt_tip   && (mod_alt(event)   || keyval == GDK_KEY_Alt_L     || keyval == GDK_KEY_Alt_R
-                                                || keyval == GDK_KEY_Meta_L    || keyval == GDK_KEY_Meta_R);
-
-    char *tip = g_strdup_printf("%s%s%s%s%s", ctrl ? ctrl_tip : "",
+    bool meta = false;
+    bool ctrl = ctrl_tip  && (mod_ctrl(event)  || keyval == GDK_KEY_Control_L || keyval == GDK_KEY_Control_R);
+    bool shift = shift_tip && (mod_shift(event) || keyval == GDK_KEY_Shift_L || keyval == GDK_KEY_Shift_R);
+    bool alt = alt_tip   && (mod_alt(event)   || keyval == GDK_KEY_Alt_L     || keyval == GDK_KEY_Alt_R);
+    if(meta_tip){
+        meta = meta_tip && (mod_meta(event) || keyval == GDK_KEY_Meta_L || keyval == GDK_KEY_Meta_R);
+    }
+    else{
+        alt = alt || keyval == GDK_KEY_Meta_L || keyval == GDK_KEY_Meta_R;
+    }
+    
+    char *tip = g_strdup_printf("%s%s%s%s%s%s%s%s", ctrl ? ctrl_tip : "",
                                               ctrl && (shift || alt) ? "; " : "",
                                               shift ? shift_tip : "",
                                               (ctrl || shift) && alt ? "; " : "",
-                                              alt ? alt_tip : "");
+                                              alt ? alt_tip : "",
+                                              meta ? meta_tip: "",
+                                              meta && (shift || alt) ? "; " : "",
+                                              (meta || shift) && alt ? "; " : ""
+                                            );
 
     if (std::strlen(tip) > 0) {
         message_context->flash(INFORMATION_MESSAGE, tip);
