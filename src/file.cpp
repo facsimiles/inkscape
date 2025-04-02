@@ -817,6 +817,11 @@ file_import(SPDocument *in_doc, const std::string &path, Inkscape::Extension::Ex
     // Store mouse pointer location before opening any dialogs, so we can drop the item where initially intended.
     auto pointer_location = desktop->point();
 
+    // We need access to the module locally for our import logic
+    if (!key) {
+        key = Inkscape::Extension::Input::find_by_filename(path.c_str());
+    }
+
     //DEBUG_MESSAGE( fileImport, "file_import( in_doc:%p uri:[%s], key:%p", in_doc, uri, key );
     SPDocument *doc;
     try {
@@ -830,7 +835,9 @@ file_import(SPDocument *in_doc, const std::string &path, Inkscape::Extension::Ex
         cancelled = true;
     }
 
-    if (doc && prefs->getString("/dialogs/import/import_mode_svg") == "new") {
+    bool is_svg = key && !strcmp(key->get_id(), SP_MODULE_KEY_INPUT_SVG);
+
+    if (doc && is_svg && prefs->getString("/dialogs/import/import_mode_svg") == "new") {
         // Opened instead of imported, open and return nothing
         auto *app = InkscapeApplication::instance();
         app->document_add(doc);

@@ -66,19 +66,7 @@ namespace Extension {
  */
 SPDocument *open(Extension *key, gchar const *filename, bool is_importing)
 {
-    Input *imod = nullptr;
-
-    if (key == nullptr) {
-        DB::InputList o;
-        for (auto mod : db.get_input_list(o)) {
-            if (mod->can_open_filename(filename)) {
-                imod = mod;
-                break;
-            }
-        }
-    } else {
-        imod = dynamic_cast<Input *>(key);
-    }
+    Input *imod = dynamic_cast<Input *>(key ? key : Input::find_by_filename(filename));
 
     bool last_chance_svg = false;
     if (key == nullptr && imod == nullptr) {

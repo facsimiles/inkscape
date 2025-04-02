@@ -27,7 +27,7 @@
 #include "layer-manager.h"
 
 #include "extension/db.h"
-#include "extension/find_extension_by_mime.h"
+#include "extension/input.h"
 
 #include "object/sp-shape.h"
 #include "object/sp-text.h"
@@ -339,7 +339,7 @@ static void ink_drag_data_received(GtkWidget *widget,
         case PNG_DATA:
         case JPEG_DATA:
         case IMAGE_DATA: {
-            Inkscape::Extension::Extension *ext = Inkscape::Extension::find_by_mime((info == JPEG_DATA ? "image/jpeg" : "image/png"));
+            Inkscape::Extension::Extension *ext = Inkscape::Extension::Input::find_by_mime((info == JPEG_DATA ? "image/jpeg" : "image/png"));
             bool save = (strcmp(ext->get_param_optiongroup("link"), "embed") == 0);
             ext->set_param_optiongroup("link", "embed");
             ext->set_gui(false);

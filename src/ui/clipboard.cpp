@@ -47,7 +47,6 @@
 
 #include "display/curve.h"
 #include "extension/db.h" // extension database
-#include "extension/find_extension_by_mime.h"
 #include "extension/input.h"
 #include "extension/output.h"
 #include "helper/png-write.h"
@@ -1431,7 +1430,7 @@ bool ClipboardManagerImpl::_pasteImage(SPDocument *doc)
         return false;
     }
 
-    Inkscape::Extension::Extension *png = Inkscape::Extension::find_by_mime("image/png");
+    Inkscape::Extension::Extension *png = Extension::Input::find_by_mime("image/png");
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     Glib::ustring attr_saved = prefs->getString("/dialogs/import/link");
     bool ask_saved = prefs->getBool("/dialogs/import/ask");
