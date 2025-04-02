@@ -197,56 +197,100 @@ void PathVectorNodeSatellites::updateNodeSatelliteType(NodeSatelliteType nodesat
     }
 }
 
-void PathVectorNodeSatellites::recalculateForNewPathVector(Geom::PathVector const pathv, NodeSatellite const S)
+/*
+ * Copy NodeSatellite data from the old path to the new path by matching nodes in the new path to
+ * nodes in the old path geometrically. If more than one node matches, take the first match.
+ *
+ * Empty sub-paths ("M 0,0" or "M 0,0 z") have no curves or nodes and have zero length
+ * NodeSatellite vectors.
+ *
+ * Closed sub-paths have the same number of nodes as curves, but if the closing path is almost
+ * degenerate (less then Geom::Epsilon in length), it is removed. This follows Inkscape's behavior
+ * when editting paths.
+ *
+ * Open sub-paths have one more node that number of curves; the last (as well as the first node) is
+ * not used but we need to include it in NodeSatellite data for backwards compatibility.
+ *
+ * Inputs: new path (new_pathv), default NodeSatellite (S).
+ */
+void PathVectorNodeSatellites::recalculateForNewPathVector(Geom::PathVector const new_pathvector, NodeSatellite const S)
 {
-    // pathv && _pathvector came here:
-    // * with different number of nodes
-    // * without empty subpats
-    // * _pathvector and nodesatellites (old data) are paired
-    NodeSatellites nodesatellites;
+    NodeSatellites new_nodesatellites;
 
-    // TODO evaluate fix on nodes at same position
-    // size_t number_nodes = count_pathvector_nodes(pathv);
-    // size_t previous_number_nodes = getTotalNodeSatellites();
-    size_t npaths = pathv.size();
-    for (size_t i = 0; i < npaths; ++i) {
-        std::vector<NodeSatellite> path_nodesatellites;
-        size_t count = count_path_nodes(pathv[i]);
-        for (size_t j = 0; j < count; ++j) {
+    // Loop over new paths
+    size_t new_paths_size = new_pathvector.size();
+    for (size_t i_np = 0; i_np < new_paths_size; ++i_np) {  // OLD i
+
+        std::vector<NodeSatellite> new_nodesatellite_vector;
+
+        // Find number of curves.
+        size_t new_curves_size = count_path_curves(new_pathvector[i_np]);
+
+        // Loop over curves nodes
+        for (size_t i_nc = 0; i_nc < new_curves_size; ++i_nc) { // OLD j
+
+            // Search for old NodeSatellite match.
             bool found = false;
-            for (size_t k = 0; k < _pathvector.size(); ++k) {
-                size_t countnodes = count_path_nodes(_pathvector[k]);
-                size_t countcurves = count_path_curves(_pathvector[k]);
-                if (!_nodesatellites.empty() && !_nodesatellites[k].empty()) {
-                    assert(countnodes == _nodesatellites[k].size());
-                    for (size_t l = 0; l < countcurves; ++l) {
-                        if (Geom::are_near(_pathvector[k][l].initialPoint(),  pathv[i][j].initialPoint(), 0.001)) { // epsilon is not enought big
-                            path_nodesatellites.push_back(_nodesatellites[k][l]);
-                            found = true;
-                            break;
-                        }
-                    }
+
+            // Loop over old paths (there may not be any old paths, e.g. for stars!).
+            for (size_t i_op = 0; i_op < _pathvector.size(); ++i_op) { // OLD k
+
+                // Check we have data corresponding to path:
+                if (i_op >= _nodesatellites.size()) {
+                    // No use continuing, no data!
+                    break;
                 }
+
+                // Loop over old curves
+                size_t old_curves_size = count_path_curves(_pathvector[i_op]);
+                for (size_t i_oc = 0; i_oc < old_curves_size; ++i_oc) { // OLD l
+
+                    // Check we have data corresponding to node
+                    if (i_oc >= _nodesatellites[i_op].size()) {
+                        // No use continuing, no data!
+                        break;
+                    }
+
+                    if (Geom::are_near(_pathvector[i_op][i_oc].initialPoint(), new_pathvector[i_np][i_nc].initialPoint(), 0.001)) { // epsilon is not big enough.
+                        new_nodesatellite_vector.push_back(_nodesatellites[i_op][i_oc]);
+                        found = true;
+                        break;
+                    }
+                } // Loop over old curves.
+
                 if (found) {
                     break;
                 }
-            }
+            } // Loop over old paths.
+
             if (!found) {
                 if (_pathvector.empty()) {
-                    if (i < _nodesatellites.size() && j < _nodesatellites[i].size()) {
-                        path_nodesatellites.push_back(_nodesatellites[i][j]);
+                    if (i_np < _nodesatellites.size() && i_nc < _nodesatellites[i_np].size()) {
+                        new_nodesatellite_vector.push_back(_nodesatellites[i_np][i_nc]);
                     } else {
-                        path_nodesatellites.push_back(S);
+                        // Use default node satellite.
+                        new_nodesatellite_vector.push_back(S);
                     }
                 } else {
-                    path_nodesatellites.push_back(S);
+                    // Use default node satellite.
+                    new_nodesatellite_vector.push_back(S);
                 }
             }
+
+        } // Loop over new curves.
+
+        // Add entry for final node of non-empty open paths, this is not used but matches previous behavior.
+        if (!new_pathvector[i_np].empty() &&
+            !new_pathvector[i_np].closed()) {
+            new_nodesatellite_vector.push_back(S);
         }
-        nodesatellites.push_back(path_nodesatellites);
-    }
-    setPathVector(pathv);
-    setNodeSatellites(nodesatellites);
+
+        new_nodesatellites.push_back(new_nodesatellite_vector);
+
+    } // Loop over new paths.
+
+    setPathVector(new_pathvector);
+    setNodeSatellites(new_nodesatellites);
 }
 
 /*

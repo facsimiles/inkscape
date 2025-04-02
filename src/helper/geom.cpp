@@ -662,6 +662,16 @@ pathv_to_cubicbezier( Geom::PathVector const &pathv, bool nolines)
 }
 
 //Study move to 2Geom
+
+/*
+ * The following functions are used (mostly) by LPE's. Their main feature is that they exclude
+ * almost degenerate closing curves (lib2geom will only remove exactly zero length closing curves
+ * but Inkscape will remove closing curves with length less than Geom::EPSILON when editing). You
+ * can get almost zero length closing curves due to rounding errors, especially with relative
+ * coordinates.
+ *
+ * Empty paths ("M 0,0", M 0,0 z") are always ignored.
+ */
 size_t
 count_pathvector_nodes(Geom::PathVector const &pathv) {
     size_t tot = 0;
@@ -680,68 +690,15 @@ count_pathvector_curves(Geom::PathVector const &pathv) {
     return tot;
 }
 
-size_t
-count_pathvector_degenerations(Geom::PathVector const &pathv) {
-    size_t tot = 0;
-    for (auto const &subpath : pathv) {
-        tot += count_path_degenerations(subpath);
-    }
-    return tot;
-}
-
-size_t count_path_degenerations(Geom::Path const &path)
-{
-    if (path.empty()) {
-        std::cerr << "count_path_degenerates: path is empty!" << std::endl;
-        // Hmm, a path always contains a closing segment which has two nodes which are degenerate if path is empty.
-        return 0;
-    }
-
-    size_t tot = 0;
-    Geom::Path::const_iterator curve_it = path.begin();
-    Geom::Path::const_iterator curve_endit = path.end_default();
-    if (path.closed()) {
-        auto const &closingline = path.back_closed();
-        // the closing line segment is always of type
-        // Geom::LineSegment.
-        if (are_near(closingline.initialPoint(), closingline.finalPoint())) {
-            // closingline.isDegenerate() did not work, because it only checks for
-            // *exact* zero length, which goes wrong for relative coordinates and
-            // rounding errors...
-            // the closing line segment has zero-length. So stop before that one!
-            curve_endit = path.end_open();
-        }
-    }
-    while (curve_it != curve_endit) {
-        if (Geom::are_near((*curve_it).length(),0)) {
-            tot += 1;
-        }
-        ++curve_it;
-    }
-    return tot;
-}
-
+/*
+ * For closed paths, the number of nodes is exactly the same as the number of curves.
+ * For open paths, there is one more node that number of curves.
+ */
 size_t count_path_nodes(Geom::Path const &path)
 {
-    if (path.empty()) {
-        std::cerr << "count_path_nodes: path is empty!" << std::endl;
-        // Hmm, a path always contains a closing segment which has two (degenerate) nodes...
-        return 0;
-    }
-
-    size_t tot = path.size_default() + 1; // if degenerate closing line one is erased no need to duple
-    if (path.closed()) {
-        tot -= 1;
-        auto const &closingline = path.back_closed();
-        // the closing line segment is always of type
-        // Geom::LineSegment.
-        if (!closingline.isDegenerate() && are_near(closingline.initialPoint(), closingline.finalPoint())) {
-            // closingline.isDegenerate() did not work, because it only checks for
-            // *exact* zero length, which goes wrong for relative coordinates and
-            // rounding errors...
-            // the closing line segment has zero-length. So stop before that one!
-            tot -= 1;
-        }
+    size_t tot = count_path_curves(path);
+    if (!path.closed()) {
+        tot++;
     }
     return tot;
 }
@@ -749,20 +706,17 @@ size_t count_path_nodes(Geom::Path const &path)
 size_t count_path_curves(Geom::Path const &path)
 {
     if (path.empty()) {
-        std::cerr << "count_path_curves: path is empty!" << std::endl;
+        std::cerr << "count_path_curves: path is empty! " << path << std::endl;
         return 0;
     }
 
-    size_t tot = path.size_default(); // if degenerate closing line one is erased no need to duple
+    size_t tot = path.size();
     if (path.closed()) {
-        auto const &closingline = path.back_closed();
-        // the closing line segment is always of type
-        // Geom::LineSegment.
-        if (!closingline.isDegenerate() && are_near(closingline.initialPoint(), closingline.finalPoint())) {
-            // closingline.isDegenerate() did not work, because it only checks for
-            // *exact* zero length, which goes wrong for relative coordinates and
-            // rounding errors...
-            // the closing line segment has zero-length. So stop before that one!
+        auto const &closingline = path.closingSegment(); // Always a Geom::LineSegment.
+        if (!path.closingSegment().isDegenerate() &&  // Degenerate segment already not counted.
+            are_near(closingline.initialPoint(), closingline.finalPoint())) {
+            std::cerr << "count_path_curves: found almost degenerate path! "
+                      << path << std::endl;
             tot -= 1;
         }
     }

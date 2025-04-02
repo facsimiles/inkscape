@@ -313,14 +313,23 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
             doOnApply(lpeItem); // dont want _impl to not update versioning
             nodesatellites = nodesatellites_param.data();
         }
+
         for (size_t i = 0; i < nodesatellites.size(); ++i) {
+
+            if (i >= pathv.size()) {
+                // We have more nodesatellites vectors than paths. This could happen if two paths
+                // are merged.
+                break;
+            }
+
+            size_t curves_in_path = count_path_curves(pathv[i]);
             for (size_t j = 0; j < nodesatellites[i].size(); ++j) {
-                if (pathv.size() <= i || j >= count_path_curves(pathv[i])) {
-                    // we are on the end of a open path
-                    // for the moment we dont want to use
-                    // this nodesatellite so simplest do nothing with it
-                    continue;
+                if (j >= curves_in_path) {
+                    // We have more nodesatellite points than curves in path. This could happen if
+                    // a curve (node) is removed.
+                    break;
                 }
+
                 Geom::Curve const &curve_in = pathv[i][j];
                 if (nodesatellites[i][j].is_time != flexible) {
                     nodesatellites[i][j].is_time = flexible;
@@ -333,20 +342,26 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
                         nodesatellites[i][j].amount = size;
                      }
                 }
+
                 nodesatellites[i][j].hidden = hide_knots;
                 if (only_selected && isNodePointSelected(curve_in.initialPoint()) ){
                     nodesatellites[i][j].setSelected(true);
                 }
             }
 
-            if (pathv.size() > i && !pathv[i].closed()) {
-                nodesatellites[i].front().amount = 0;
-                nodesatellites[i].back().amount = 0;
+            // Set "amount" to zero for nodes at start and end of open path.
+            if (!pathv[i].closed()) {
+                if (nodesatellites[i].size() > 0) {
+                    nodesatellites[i].front().amount = 0;
+                    nodesatellites[i].back().amount = 0;
+                }
             }
         }
+
         if (!_pathvector_nodesatellites) {
             _pathvector_nodesatellites = new PathVectorNodeSatellites();
         }
+
         if (is_load || _adjust_path) {
             double power = radius;
             if (!flexible) {
@@ -404,65 +419,90 @@ LPEFilletChamfer::addChamferSteps(Geom::Path &tmp_path, Geom::Path path_chamfer,
     tmp_path.appendNew<Geom::LineSegment>(end_arc_point);
 }
 
+/*
+ * Convert the original path to the LPE path.
+ */
 Geom::PathVector
 LPEFilletChamfer::doEffect_path(Geom::PathVector const &path_in)
 {
-    if (!_pathvector_nodesatellites) { //empty item pathv with lpe
+    if (!_pathvector_nodesatellites) { // Empty item pathv with lpe
+        std::cerr << "LPEFilletChamfer::doEffect_path:  No node satellites! "
+                  << path_in << std::endl;
         return path_in;
     }
+
     const double GAP_HELPER = 0.00001;
-    Geom::PathVector path_out;
-    std::size_t path = -1;
     const double K = (4.0 / 3.0) * (sqrt(2.0) - 1.0);
+
     Geom::PathVector const pathv = _pathvector_nodesatellites->getPathVector();
     NodeSatellites nodesatellites = _pathvector_nodesatellites->getNodeSatellites();
+    Geom::PathVector path_out;
+    std::size_t path = -1; // Used to keep path and nodesatellites in sync.
+
     for (const auto &path_it : pathv) {
-        ++ path;
-        Geom::Path tmp_path;
-        double time0 = 0;
-        std::size_t curve = -1;
+
+        ++path; // Must increment before skipping empty paths.
+
+        // Skip empty paths ("M 0,0" or "M 0,0 z"). (But must include them in the indexing.)
+        if (path_it.empty()) {
+            continue;
+        }
+
         Geom::Path::const_iterator curve_it1 = path_it.begin();
         Geom::Path::const_iterator curve_endit = path_it.end_default();
+
+        // Treat almost degenerate closing lines as degenerate (allows for rounding errors).
+        // Matches count_path_curves() and count_path_nodes().
         if (path_it.closed()) {
-            auto const &closingline = path_it.back_closed();
-            // the closing line segment is always of type
-            // Geom::LineSegment.
+            auto const &closingline = path_it.closingSegment(); // Always a Geom::LineSegment.
             if (are_near(closingline.initialPoint(), closingline.finalPoint())) {
-                // closingline.isDegenerate() did not work, because it only checks for
-                // *exact* zero length, which goes wrong for relative coordinates and
-                // rounding errors...
-                // the closing line segment has zero-length. So stop before that one!
                 curve_endit = path_it.end_open();
             }
         }
+
+        Geom::Path tmp_path;
+        double time0 = 0;
+        std::size_t curve = -1;
         size_t tcurves = count_path_curves(pathv[path]);
         while (curve_it1 != curve_endit) {
+
             ++curve;
             size_t next_index = curve + 1;
+
+            // Loop around closed paths.
             if (curve == tcurves - 1 && pathv[path].closed()) {
                 next_index = 0;
             }
-            //append last extreme of paths on open paths
-            if (curve == tcurves - 1 && !pathv[path].closed()) { // the path is open and we are at
-                                                                                       // end of path
-                if (time0 != 1) { // Previous nodesatellite not at 100% amount
+
+            // Append last section of last curve for open paths.
+            if (curve == tcurves - 1 && !pathv[path].closed()) {
+                // At end of path and path is open.
+
+                if (time0 != 1) {
+                    // Previous nodesatellite not at 100% amount (thus we still are using part of
+                    // the original path).
                     Geom::Curve *last_curve = curve_it1->portion(time0, 1);
-                    last_curve->setInitial(tmp_path.finalPoint());
+                    last_curve->setInitial(tmp_path.finalPoint()); // Seamless connection.
                     tmp_path.append(*last_curve);
                 }
                 ++curve_it1;
-                continue;
+                break; // We're done!
             }
+
             Geom::Curve const &curve_it2 = pathv.at(path).at(next_index);
             NodeSatellite nodesatellite = nodesatellites.at(path).at(next_index);
 
-            if (!curve) { //curve == 0
+            // Start of path.
+            if (!curve) { // curve == 0
                 if (!path_it.closed()) {
                     time0 = 0;
                 } else {
                     time0 = nodesatellites[path][0].time(*curve_it1);
                 }
             }
+
+            // Find section of original path that we keep (T0 to T1),
+            // and section that is replaced (T1 to T2).
             double s = nodesatellite.arcDistance(curve_it2);
             double time1 = nodesatellite.time(s, true, (*curve_it1));
             double time2 = nodesatellite.time(curve_it2);
@@ -472,27 +512,39 @@ LPEFilletChamfer::doEffect_path(Geom::PathVector const &path_in)
             if (time2 > 1) {
                 time2 = 1;
             }
+
+            // Part of curve we are keeping.
             Geom::Curve *knot_curve_1 = curve_it1->portion(time0, time1);
+
+            // Part of next curve we may be keeping.
             Geom::Curve *knot_curve_2 = curve_it2.portion(time2, 1);
+
+            // Ensure seemless connections.
             if (curve > 0) {
                 knot_curve_1->setInitial(tmp_path.finalPoint());
             } else {
                 tmp_path.start((*curve_it1).pointAt(time0));
             }
 
+            // Start and end points of section we are replacing.
             Geom::Point start_arc_point = knot_curve_1->finalPoint();
             Geom::Point end_arc_point = curve_it2.pointAt(time2);
-            //add a gap helper
+
+            // Add a gap helper (why?)
             if (time2 == 1) {
                 end_arc_point = curve_it2.pointAt(time2 - GAP_HELPER);
             }
             if (time1 == time0) {
                 start_arc_point = curve_it1->pointAt(time1 + GAP_HELPER);
             }
+
+            // Calculate points used corner section.
             Geom::Point curveit1 = curve_it1->finalPoint();
             Geom::Point curveit2 = curve_it2.initialPoint();
             double k1 = distance(start_arc_point, curveit1) * K;
             double k2 = distance(curve_it2.initialPoint(), end_arc_point) * K;
+
+            // What happens if input curves are quadratic?
             Geom::CubicBezier const *cubic_1 = dynamic_cast<Geom::CubicBezier const *>(&*knot_curve_1);
             Geom::CubicBezier const *cubic_2 = dynamic_cast<Geom::CubicBezier const *>(&*knot_curve_2);
             Geom::Ray ray_1(start_arc_point, curveit1);
@@ -519,21 +571,29 @@ LPEFilletChamfer::doEffect_path(Geom::PathVector const &path_in)
                 handle_1 = start_arc_point;
                 inverse_handle_1 = start_arc_point;
             }
-            //remove gap helper
+
+            // Remove gap helper.
             if (time2 == 1) {
                 end_arc_point = curve_it2.pointAt(time2);
             }
             if (time1 == time0) {
                 start_arc_point = curve_it1->pointAt(time0);
             }
-            if (time1 != 1 && !Geom::are_near(angle, Geom::rad_from_deg(360)) &&
-                !curve_it1->isDegenerate() && !curve_it2.isDegenerate())
+
+            // Can part of this test be moved earlier?
+            if (time1 != 1 && // We have a section to replace
+                !Geom::are_near(angle, Geom::rad_from_deg(360)) && // It's not a straight connection
+                !curve_it1->isDegenerate() && // Curves are not degenerate.
+                !curve_it2.isDegenerate())
             {
+                // Add section we're keeping.
                 if (time1 != time0 || (time1 == 1 && time0 == 1)) {
                     if (!knot_curve_1->isDegenerate()) {
                         tmp_path.append(*knot_curve_1);
                     }
                 }
+
+                // More calculations of points for constructing corner section.
                 NodeSatelliteType type = nodesatellite.nodesatellite_type;
                 size_t steps = nodesatellite.steps;
                 if (!steps) steps = 1;
@@ -547,6 +607,8 @@ LPEFilletChamfer::doEffect_path(Geom::PathVector const &path_in)
                 bool eliptical = (is_straight_curve(*curve_it1) &&
                                   is_straight_curve(curve_it2) && method != FM_BEZIER) ||
                                   method == FM_ARC;
+
+                // Add corner.
                 switch (type) {
                 case CHAMFER:
                     {
@@ -582,7 +644,7 @@ LPEFilletChamfer::doEffect_path(Geom::PathVector const &path_in)
                         }
                     }
                     break;
-                default: //fillet
+                default: // Fillet
                     {
                         if (eliptical) {
                             ccw_toggle = !ccw_toggle;
@@ -594,22 +656,29 @@ LPEFilletChamfer::doEffect_path(Geom::PathVector const &path_in)
                     break;
                 }
             } else {
+                // We didn't have a section to replace...
                 if (!knot_curve_1->isDegenerate()) {
                     tmp_path.append(*knot_curve_1);
                 }
             }
+
+            // Move to next curve.
             ++curve_it1;
             time0 = time2;
-        }
+        } // Loop over curves.
+
         if (path_it.closed()) {
             tmp_path.close();
         }
+
         path_out.push_back(tmp_path);
-    }
+    } // Loop over paths (sub-paths).
+
     if (helperpath) {
         _hp = path_out;
-        return pathvector_after_effect;
+        return pathvector_after_effect; // Original path vector
     }
+
     _hp.clear();
     return path_out;
 }
