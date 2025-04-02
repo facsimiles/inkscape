@@ -4,13 +4,6 @@
  *//*
  * Authors: see git history
  * Jabiertxof
- * Nathan Hurst
- * Johan Engelen
- * Josh Andler
- * suv
- * Mc-
- * Liam P. White
- * Krzysztof Kosiński
  *
  * Copyright (C) 2017 Authors
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
@@ -23,8 +16,10 @@
 #include <2geom/pathvector.h>
 #include <helper/geom-nodesatellite.h>
 
+// First index is path, second is node in path.
 typedef std::vector<std::vector<NodeSatellite>> NodeSatellites;
-///@brief PathVectorNodeSatellites a class to manage nodesatellites in a pathvector
+
+///@brief PathVectorNodeSatellites a class to manage nodesatellites in a pathvector. Used by fillet/chamfer LPE.
 class PathVectorNodeSatellites
 {
 public:
