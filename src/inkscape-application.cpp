@@ -662,12 +662,6 @@ InkscapeApplication::InkscapeApplication()
     Inkscape::initialize_gettext();
 #endif
 
-    if (_with_gui && !_use_pipe && !_use_command_line_argument && gtk_app() &&
-        Inkscape::UI::Dialog::StartScreen::get_start_mode() > 0) {
-        _start_screen = std::make_unique<Inkscape::UI::Dialog::StartScreen>();
-        _start_screen->show_now();
-    }
-
     gapp->signal_startup().connect([this]() { this->on_startup(); });
     gapp->signal_activate().connect([this]() { this->on_activate(); });
     gapp->signal_open().connect(sigc::mem_fun(*this, &InkscapeApplication::on_open));
@@ -1037,7 +1031,10 @@ void
 InkscapeApplication::on_startup()
 {
     // Add the start/splash screen to the app as soon as possible
-    if (_start_screen) {
+    if (_with_gui && !_use_pipe && !_use_command_line_argument && gtk_app() &&
+        Inkscape::UI::Dialog::StartScreen::get_start_mode() > 0) {
+        _start_screen = std::make_unique<Inkscape::UI::Dialog::StartScreen>();
+        _start_screen->show_now();
         gtk_app()->add_window(*_start_screen);
     }
 
