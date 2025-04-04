@@ -787,7 +787,6 @@ StartScreen::keyboard_changed()
     auto prefs = Inkscape::Preferences::get();
     Glib::ustring set_to = row[cols.col_id];
     prefs->setString("/options/kbshortcuts/shortcutfile", set_to);
-    Inkscape::Shortcuts::getInstance().init();
 
     auto &keys_warning = get_widget<Gtk::InfoBar>(build_welcome, "keys_warning");
     if (set_to != "inkscape.xml" && set_to != "default.xml") {
