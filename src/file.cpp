@@ -830,7 +830,7 @@ file_import(SPDocument *in_doc, const std::string &path, Inkscape::Extension::Ex
         cancelled = true;
     }
 
-    if (prefs->getString("/dialogs/import/import_mode_svg") == "new") {
+    if (doc && prefs->getString("/dialogs/import/import_mode_svg") == "new") {
         // Opened instead of imported, open and return nothing
         auto *app = InkscapeApplication::instance();
         app->document_add(doc);
