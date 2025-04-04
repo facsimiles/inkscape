@@ -389,6 +389,7 @@ std::vector<SPDocument *> InkscapeApplication::get_documents()
 // Take an already open document and create a new window, adding window to document map.
 SPDesktop *InkscapeApplication::desktopOpen(SPDocument *document)
 {
+    assert(document);
     // Once we've removed Inkscape::Application (separating GUI from non-GUI stuff)
     // it will be more easy to start up the GUI after-the-fact. Until then, prevent
     // opening a window if GUI not selected at start-up time.

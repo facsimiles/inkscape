@@ -794,134 +794,142 @@ file_import(SPDocument *in_doc, const std::string &path, Inkscape::Extension::Ex
 
     bool is_svg = key && !strcmp(key->get_id(), SP_MODULE_KEY_INPUT_SVG);
 
-    if (doc && is_svg && prefs->getString("/dialogs/import/import_mode_svg") == "new") {
-        // Opened instead of imported, open and return nothing
+    if (!doc) {
+        // Open failed or canceled
+        if (!cancelled) {
+            gchar *text = g_strdup_printf(_("Failed to load the requested file %s"), path.c_str());
+            sp_ui_error_dialog(text);
+            g_free(text);
+        }
+        return nullptr;
+    }
+
+    if (is_svg && prefs->getString("/dialogs/import/import_mode_svg") == "new") {
+        // Special case: "SVG Import mode" is set to "New"
+        // (open imported/drag-and-dropped SVGs as new file, do not import them into the current document)
+        // --> open and return nothing
         auto *app = InkscapeApplication::instance();
         auto doc_ptr = app->document_add(std::move(doc));
         app->desktopOpen(doc_ptr);
         return nullptr;
-    } else if (doc) {
-        // Always preserve any imported text kerning / formatting
-        auto root_repr = in_doc->getReprRoot();
-        root_repr->setAttribute("xml:space", "preserve");
-
-        Inkscape::XML::rebase_hrefs(doc.get(), in_doc->getDocumentBase(), false);
-        Inkscape::XML::Document *xml_in_doc = in_doc->getReprDoc();
-        prevent_id_clashes(doc.get(), in_doc, true);
-        sp_file_fix_lpe(doc.get());
-
-        in_doc->importDefs(doc.get());
-
-        // The extension should set it's pages enabled or disabled when opening
-        // in order to indicate if pages are being imported or if objects are.
-        if (doc->getPageManager().hasPages()) {
-            file_import_pages(in_doc, doc.get());
-            DocumentUndo::done(in_doc, _("Import Pages"), INKSCAPE_ICON("document-import"));
-            // This return is only used by dbus in document-interface.cpp (now removed).
-            return nullptr;
-        }
-
-        SPCSSAttr *style = sp_css_attr_from_object(doc->getRoot());
-
-        // Count the number of top-level items in the imported document.
-        guint items_count = 0;
-        SPObject *o = nullptr;
-        for (auto& child: doc->getRoot()->children) {
-            if (is<SPItem>(&child)) {
-                items_count++;
-                o = &child;
-            }
-        }
-
-        //ungroup if necessary
-        bool did_ungroup = false;
-        while(items_count==1 && o && is<SPGroup>(o) && o->children.size()==1){
-            std::vector<SPItem *>v;
-            sp_item_group_ungroup(cast<SPGroup>(o), v);
-            o = v.empty() ? nullptr : v[0];
-            did_ungroup=true;
-        }
-
-        // Create a new group if necessary.
-        Inkscape::XML::Node *newgroup = nullptr;
-        const auto & al = style->attributeList();
-        if ((style && !al.empty()) || items_count > 1) {
-            newgroup = xml_in_doc->createElement("svg:g");
-            sp_repr_css_set(newgroup, style, "style");
-        }
-
-        // Determine the place to insert the new object.
-        // This will be the current layer, if possible.
-        // FIXME: If there's no desktop (command line run?) we need
-        //        a document:: method to return the current layer.
-        //        For now, we just use the root in this case.
-        SPObject *place_to_insert;
-        if (desktop) {
-            place_to_insert = desktop->layerManager().currentLayer();
-        } else {
-            place_to_insert = in_doc->getRoot();
-        }
-
-        // Construct a new object representing the imported image,
-        // and insert it into the current document.
-        SPObject *new_obj = nullptr;
-        for (auto& child: doc->getRoot()->children) {
-            if (is<SPItem>(&child)) {
-                Inkscape::XML::Node *newitem = did_ungroup ? o->getRepr()->duplicate(xml_in_doc) : child.getRepr()->duplicate(xml_in_doc);
-
-                // convert layers to groups, and make sure they are unlocked
-                // FIXME: add "preserve layers" mode where each layer from
-                //        import is copied to the same-named layer in host
-                newitem->removeAttribute("inkscape:groupmode");
-                newitem->removeAttribute("sodipodi:insensitive");
-
-                if (newgroup) newgroup->appendChild(newitem);
-                else new_obj = place_to_insert->appendChildRepr(newitem);
-            }
-
-            // don't lose top-level defs or style elements
-            else if (child.getRepr()->type() == Inkscape::XML::NodeType::ELEMENT_NODE) {
-                const gchar *tag = child.getRepr()->name();
-                if (!strcmp(tag, "svg:style")) {
-                    in_doc->getRoot()->appendChildRepr(child.getRepr()->duplicate(xml_in_doc));
-                }
-            }
-        }
-        in_doc->emitReconstructionFinish();
-        if (newgroup) new_obj = place_to_insert->appendChildRepr(newgroup);
-
-        // release some stuff
-        if (newgroup) Inkscape::GC::release(newgroup);
-        if (style) sp_repr_css_attr_unref(style);
-
-        // select and move the imported item
-        if (auto new_item = cast<SPItem>(new_obj)) {
-            Inkscape::Selection *selection = desktop->getSelection();
-            selection->set(new_item);
-
-            // preserve parent and viewBox transformations
-            // c2p is identity matrix at this point unless ensureUpToDate is called
-            doc->ensureUpToDate();
-            Geom::Affine affine = doc->getRoot()->c2p * cast<SPItem>(place_to_insert)->i2doc_affine().inverse();
-            selection->applyAffine(desktop->dt2doc() * affine * desktop->doc2dt(), true, false, false);
-
-            // move to mouse pointer
-            desktop->getDocument()->ensureUpToDate();
-            if (auto sel_bbox = selection->visualBounds()) {
-                auto m = pointer_location.round() - sel_bbox->midpoint();
-                selection->moveRelative(m, false);
-            }
-        }
-        
-        DocumentUndo::done(in_doc, _("Import"), INKSCAPE_ICON("document-import"));
-        return new_obj;
-    } else if (!cancelled) {
-        gchar *text = g_strdup_printf(_("Failed to load the requested file %s"), path.c_str());
-        sp_ui_error_dialog(text);
-        g_free(text);
     }
 
-    return nullptr;
+    // Standard case: Import
+
+    // Always preserve any imported text kerning / formatting
+    auto root_repr = in_doc->getReprRoot();
+    root_repr->setAttribute("xml:space", "preserve");
+
+    Inkscape::XML::rebase_hrefs(doc.get(), in_doc->getDocumentBase(), false);
+    Inkscape::XML::Document *xml_in_doc = in_doc->getReprDoc();
+    prevent_id_clashes(doc.get(), in_doc, true);
+    sp_file_fix_lpe(doc.get());
+
+    in_doc->importDefs(doc.get());
+
+    // The extension should set it's pages enabled or disabled when opening
+    // in order to indicate if pages are being imported or if objects are.
+    if (doc->getPageManager().hasPages()) {
+        file_import_pages(in_doc, doc.get());
+        DocumentUndo::done(in_doc, _("Import Pages"), INKSCAPE_ICON("document-import"));
+        // This return is only used by dbus in document-interface.cpp (now removed).
+        return nullptr;
+    }
+
+    SPCSSAttr *style = sp_css_attr_from_object(doc->getRoot());
+
+    // Count the number of top-level items in the imported document.
+    guint items_count = 0;
+    SPObject *o = nullptr;
+    for (auto& child: doc->getRoot()->children) {
+        if (is<SPItem>(&child)) {
+            items_count++;
+            o = &child;
+        }
+    }
+
+    //ungroup if necessary
+    bool did_ungroup = false;
+    while(items_count==1 && o && is<SPGroup>(o) && o->children.size()==1){
+        std::vector<SPItem *>v;
+        sp_item_group_ungroup(cast<SPGroup>(o), v);
+        o = v.empty() ? nullptr : v[0];
+        did_ungroup=true;
+    }
+
+    // Create a new group if necessary.
+    Inkscape::XML::Node *newgroup = nullptr;
+    const auto & al = style->attributeList();
+    if ((style && !al.empty()) || items_count > 1) {
+        newgroup = xml_in_doc->createElement("svg:g");
+        sp_repr_css_set(newgroup, style, "style");
+    }
+
+    // Determine the place to insert the new object.
+    // This will be the current layer, if possible.
+    // FIXME: If there's no desktop (command line run?) we need
+    //        a document:: method to return the current layer.
+    //        For now, we just use the root in this case.
+    SPObject *place_to_insert;
+    if (desktop) {
+        place_to_insert = desktop->layerManager().currentLayer();
+    } else {
+        place_to_insert = in_doc->getRoot();
+    }
+
+    // Construct a new object representing the imported image,
+    // and insert it into the current document.
+    SPObject *new_obj = nullptr;
+    for (auto& child: doc->getRoot()->children) {
+        if (is<SPItem>(&child)) {
+            Inkscape::XML::Node *newitem = did_ungroup ? o->getRepr()->duplicate(xml_in_doc) : child.getRepr()->duplicate(xml_in_doc);
+
+            // convert layers to groups, and make sure they are unlocked
+            // FIXME: add "preserve layers" mode where each layer from
+            //        import is copied to the same-named layer in host
+            newitem->removeAttribute("inkscape:groupmode");
+            newitem->removeAttribute("sodipodi:insensitive");
+
+            if (newgroup) newgroup->appendChild(newitem);
+            else new_obj = place_to_insert->appendChildRepr(newitem);
+        }
+
+        // don't lose top-level defs or style elements
+        else if (child.getRepr()->type() == Inkscape::XML::NodeType::ELEMENT_NODE) {
+            const gchar *tag = child.getRepr()->name();
+            if (!strcmp(tag, "svg:style")) {
+                in_doc->getRoot()->appendChildRepr(child.getRepr()->duplicate(xml_in_doc));
+            }
+        }
+    }
+    in_doc->emitReconstructionFinish();
+    if (newgroup) new_obj = place_to_insert->appendChildRepr(newgroup);
+
+    // release some stuff
+    if (newgroup) Inkscape::GC::release(newgroup);
+    if (style) sp_repr_css_attr_unref(style);
+
+    // select and move the imported item
+    if (auto new_item = cast<SPItem>(new_obj)) {
+        Inkscape::Selection *selection = desktop->getSelection();
+        selection->set(new_item);
+
+        // preserve parent and viewBox transformations
+        // c2p is identity matrix at this point unless ensureUpToDate is called
+        doc->ensureUpToDate();
+        Geom::Affine affine = doc->getRoot()->c2p * cast<SPItem>(place_to_insert)->i2doc_affine().inverse();
+        selection->applyAffine(desktop->dt2doc() * affine * desktop->doc2dt(), true, false, false);
+
+        // move to mouse pointer
+        desktop->getDocument()->ensureUpToDate();
+        if (auto sel_bbox = selection->visualBounds()) {
+            auto m = pointer_location.round() - sel_bbox->midpoint();
+            selection->moveRelative(m, false);
+        }
+    }
+
+    DocumentUndo::done(in_doc, _("Import"), INKSCAPE_ICON("document-import"));
+    return new_obj;
 }
 
 /**
