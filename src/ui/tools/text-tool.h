@@ -21,6 +21,7 @@
 #include "display/control/canvas-item-ptr.h"
 #include "libnrtype/Layout-TNG.h"
 #include "ui/tools/tool-base.h"
+#include "util/delete-with.h"
 
 using GtkIMContext = struct _GtkIMContext;
 
@@ -116,6 +117,8 @@ private:
     void _selectionModified(Selection *selection, unsigned flags);
     bool _styleSet(SPCSSAttr const *css);
     int _styleQueried(SPStyle *style, int property);
+
+    std::unique_ptr<SPCSSAttr, Util::Deleter<sp_repr_css_attr_unref>> _pending_style;
 };
 
 Glib::ustring get_selected_text(TextTool const &tool);

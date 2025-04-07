@@ -734,20 +734,31 @@ bool TextTool::root_handler(CanvasEvent const &event)
                             break;
                         case GDK_KEY_B:
                         case GDK_KEY_b:
-                            if (mod_ctrl_only(event) && text) {
-                                auto const style = sp_te_style_at_position(text, std::min(text_sel_start, text_sel_end));
-                                auto const css = sp_repr_css_attr_new();
-                                const auto weight = static_cast<int>(style->font_weight.computed);
-                                if (weight == SP_CSS_FONT_WEIGHT_NORMAL
-                                    || (weight >= SP_CSS_FONT_WEIGHT_100 && weight <= SP_CSS_FONT_WEIGHT_400))
-                                {
-                                    sp_repr_css_set_property(css, "font-weight", "bold");
+                            if (mod_ctrl_only(event) && (text || nascent_object)) {
+                                auto css = sp_repr_css_attr_new();
+                                if (text && text_sel_start != text_sel_end) {
+                                    // Apply to selection
+                                    auto const style = sp_te_style_at_position(text, std::min(text_sel_start, text_sel_end));
+                                    auto const weight = static_cast<int>(style->font_weight.computed);
+                                    if (weight == SP_CSS_FONT_WEIGHT_NORMAL
+                                        || (weight >= SP_CSS_FONT_WEIGHT_100 && weight <= SP_CSS_FONT_WEIGHT_400))
+                                    {
+                                        sp_repr_css_set_property(css, "font-weight", "bold");
+                                    } else {
+                                        sp_repr_css_set_property(css, "font-weight", "normal");
+                                    }
+                                    sp_te_apply_style(text, text_sel_start, text_sel_end, css);
                                 } else {
-                                    sp_repr_css_set_property(css, "font-weight", "normal");
+                                    // No selection - update pending style
+                                    if (!_pending_style) {
+                                        _pending_style.reset(sp_repr_css_attr_new());
+                                    }
+                                    char const *current = sp_repr_css_property(_pending_style.get(), "font-weight", "normal");
+                                    char const *newstyle = std::strcmp(current, "bold") == 0 ? "normal" : "bold";
+                                    sp_repr_css_set_property(_pending_style.get(), "font-weight", newstyle);
                                 }
-                                sp_te_apply_style(text, text_sel_start, text_sel_end, css);
                                 sp_repr_css_attr_unref(css);
-                                DocumentUndo::done(_desktop->getDocument(),  _("Make bold"), INKSCAPE_ICON("draw-text"));
+                                DocumentUndo::done(_desktop->getDocument(), _("Make bold"), INKSCAPE_ICON("draw-text"));
                                 _updateCursor();
                                 _updateTextSelection();
                                 ret = true;
@@ -756,17 +767,28 @@ bool TextTool::root_handler(CanvasEvent const &event)
                             break;
                         case GDK_KEY_I:
                         case GDK_KEY_i:
-                            if (mod_ctrl_only(event) && text) {
-                                auto const style = sp_te_style_at_position(text, std::min(text_sel_start, text_sel_end));
-                                auto const css = sp_repr_css_attr_new();
-                                if (style->font_style.computed != SP_CSS_FONT_STYLE_NORMAL) {
-                                    sp_repr_css_set_property(css, "font-style", "normal");
+                            if (mod_ctrl_only(event) && (text || nascent_object)) {
+                                auto css = sp_repr_css_attr_new();
+                                if (text && text_sel_start != text_sel_end) {
+                                    // Apply to selection
+                                    auto const style = sp_te_style_at_position(text, std::min(text_sel_start, text_sel_end));
+                                    if (style->font_style.computed != SP_CSS_FONT_STYLE_NORMAL) {
+                                        sp_repr_css_set_property(css, "font-style", "normal");
+                                    } else {
+                                        sp_repr_css_set_property(css, "font-style", "italic");
+                                    }
+                                    sp_te_apply_style(text, text_sel_start, text_sel_end, css);
                                 } else {
-                                    sp_repr_css_set_property(css, "font-style", "italic");
+                                    // No selection - update pending style
+                                    if (!_pending_style) {
+                                        _pending_style.reset(sp_repr_css_attr_new());
+                                    }
+                                    char const *current = sp_repr_css_property(_pending_style.get(), "font-style", "normal");
+                                    char const *new_style = std::strcmp(current, "italic") == 0 ? "normal" : "italic";
+                                    sp_repr_css_set_property(_pending_style.get(), "font-style", new_style);
                                 }
-                                sp_te_apply_style(text, text_sel_start, text_sel_end, css);
                                 sp_repr_css_attr_unref(css);
-                                DocumentUndo::done(_desktop->getDocument(),  _("Make italic"), INKSCAPE_ICON("draw-text"));
+                                DocumentUndo::done(_desktop->getDocument(), _("Make italic"), INKSCAPE_ICON("draw-text"));
                                 _updateCursor();
                                 _updateTextSelection();
                                 ret = true;
@@ -1347,6 +1369,8 @@ bool TextTool::deleteSelection()
  */
 void TextTool::_selectionChanged(Selection *selection)
 {
+    _pending_style.reset();
+
     g_assert(selection);
     auto item = selection->singleItem();
 
@@ -1724,6 +1748,7 @@ void TextTool::_blinkCursor()
 
 void TextTool::_forgetText()
 {
+    _pending_style.reset();
     if (!text) {
         return;
     }
@@ -1754,14 +1779,33 @@ void TextTool::_forgetText()
 void TextTool::_commit(GtkIMContext *, char *string)
 {
     if (!text) {
+        auto saved_style = std::move(_pending_style); // _setupText() clears _pending_style
+
         _setupText();
-        nascent_object = false; // we don't need it anymore, having created a real <text>
+        nascent_object = false;
+
+        _pending_style = std::move(saved_style);
     }
 
+    assert(text);
+    if (!text) {
+        return; // Safety check
+    }
+
+    // Store the current selection
+    auto const old_start = text_sel_start;
+
+    // Insert the new text
     text_sel_start = text_sel_end = sp_te_replace(text, text_sel_start, text_sel_end, string);
+
+    // Apply pending style if it exists
+    if (_pending_style) {
+        sp_te_apply_style(text, old_start, text_sel_end, _pending_style.get());
+        // Keep pending style for future typing
+    }
+
     _updateCursor();
     _updateTextSelection();
-
     DocumentUndo::done(text->document, _("Type text"), INKSCAPE_ICON("draw-text"));
 }
 
