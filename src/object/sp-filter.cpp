@@ -504,7 +504,30 @@ std::unique_ptr<Inkscape::Filters::Filter> SPFilter::build_renderer(Inkscape::Dr
     nr_filter->clear_primitives();
     for (auto &primitive_obj : children) {
         if (auto primitive = cast<SPFilterPrimitive>(&primitive_obj)) {
-            nr_filter->add_primitive(primitive->build_renderer(item));
+            auto renderer = primitive->build_renderer(item);
+
+            // Handle feDropShadow by combining required primitives
+            if (auto drop_shadow = dynamic_cast<Inkscape::Filters::FilterDropShadow *>(renderer.get())) {
+                auto flood = std::make_unique<Inkscape::Filters::FilterFlood>();
+                flood->set_color(drop_shadow->get_flood_color());
+
+                auto offset = std::make_unique<Inkscape::Filters::FilterOffset>();
+                offset->set_dx(drop_shadow->get_dx());
+                offset->set_dy(drop_shadow->get_dy());
+
+                auto blur = std::make_unique<Inkscape::Filters::FilterGaussianBlur>();
+                blur->set_std_deviation(drop_shadow->get_std_deviation());
+
+                auto composite = std::make_unique<Inkscape::Filters::FilterComposite>();
+                composite->set_operator(Inkscape::Filters::CompositeOperator::OVER);
+
+                nr_filter->add_primitive(std::move(flood));
+                nr_filter->add_primitive(std::move(offset));
+                nr_filter->add_primitive(std::move(blur));
+                nr_filter->add_primitive(std::move(composite));
+            } else {
+                nr_filter->add_primitive(std::move(renderer));
+            }
         }
     }
 
