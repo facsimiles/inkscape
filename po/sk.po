@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2023-06-08 13:53+0200\n"
-"PO-Revision-Date: 2025-03-28 12:06+0000\n"
+"PO-Revision-Date: 2025-04-12 15:00+0000\n"
 "Last-Translator: Adam Belis <adam.belis@gmail.com>\n"
 "Language-Team: Slovak <https://translate.inkscape.org/projects/inkscape/"
 "1-4-x/sk/>\n"
@@ -2242,19 +2242,16 @@ msgid "Red pin"
 msgstr "Červený Bod na mape"
 
 #: ../../build/share/markers/markers.svg.h:34
-#, fuzzy
 msgid "Triangle cap"
-msgstr "Trojuholník"
+msgstr "Trojuholníkový Koniec"
 
 #: ../../build/share/markers/markers.svg.h:35
-#, fuzzy
 msgid "Ribbon cap"
-msgstr "Stuha"
+msgstr "Stuha koniec"
 
 #: ../../build/share/markers/markers.svg.h:36
-#, fuzzy
 msgid "Ribbon cap, rounded"
-msgstr "hojne zaoblené"
+msgstr "Stuha koniec zaoblená"
 
 #. TRANSLATORS: Butt cap: the line shape does not extend beyond the end point
 #. of the line; the ends of the line are square
@@ -3256,13 +3253,12 @@ msgid "Decorative Paper"
 msgstr "Pijavý papier"
 
 #: ../../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Zig Zag"
-msgstr "Cikcak"
+msgstr "Cik Cak"
 
 #: ../../build/share/paint/patterns.svg.h:1
 msgid "Ticks"
-msgstr ""
+msgstr "Čiarky"
 
 #: ../../build/share/paint/patterns.svg.h:1
 #, fuzzy
@@ -3298,9 +3294,8 @@ msgid "Hollow circle"
 msgstr "Vynútiť oblúk"
 
 #: ../../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Pills"
-msgstr "Kopce"
+msgstr "Pilulky"
 
 #: ../../build/share/paint/patterns.svg.h:1
 #, fuzzy
@@ -3308,14 +3303,12 @@ msgid "Tiles 1"
 msgstr "Dláždiť"
 
 #: ../../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Abstract 2"
-msgstr "Odčítať A-B"
+msgstr "Abstrakt 2"
 
 #: ../../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Triangles 1"
-msgstr "Trojuholník"
+msgstr "Trojuholníky 1"
 
 #: ../../build/share/paint/patterns.svg.h:1
 #, fuzzy
@@ -3323,34 +3316,28 @@ msgid "Triangles 2"
 msgstr "Trojuholník"
 
 #: ../../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Circle fill 1"
-msgstr "Elipsová bublina"
+msgstr "Kruh s výplňov 1"
 
 #: ../../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Snake 2"
-msgstr "Had"
+msgstr "Had 2"
 
 #: ../../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Circle fill 6"
-msgstr "Elipsová bublina"
+msgstr "Elipsová výplň 6"
 
 #: ../../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Triangles 5"
-msgstr "Trojuholník"
+msgstr "Trojuholníky 5"
 
 #: ../../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Semicircles 2"
-msgstr "Pripísané kružnice"
+msgstr "Polkruhy 2"
 
 #: ../../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Triangles 4"
-msgstr "Trojuholník"
+msgstr "Trojuholníky 4"
 
 #: ../../build/share/paint/patterns.svg.h:1
 #, fuzzy
@@ -3363,137 +3350,113 @@ msgid "Snake"
 msgstr "Had"
 
 #: ../../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Grid 1"
-msgstr "Mriežka"
+msgstr "Mriežka 1"
 
 #: ../../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Abstract 4"
-msgstr "Odčítať A-B"
+msgstr "Abstrakt 4"
 
 #: ../../build/share/paint/patterns.svg.h:1
 msgid "Rain drops"
 msgstr "Kvapky"
 
 #: ../../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Circle fill 2"
-msgstr "Elipsová bublina"
+msgstr "Elipsová výplň 2"
 
 #: ../../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Circle fill 3"
-msgstr "Elipsová bublina"
+msgstr "Elipsová výplň 3"
 
 #: ../../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Inverted braid"
-msgstr "Invertované"
+msgstr "Invertované vrkoče"
 
 #: ../../build/share/paint/patterns.svg.h:1
 msgid "Rain drops 2"
 msgstr "Kvapky 2"
 
 #: ../../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Abstract fill 2"
-msgstr "Uhol vyplnenia oblasti"
+msgstr "Abstraktná výplň 2"
 
 #: ../../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Abstract fill 3"
-msgstr "Uhol vyplnenia oblasti"
+msgstr "Abstraktná výplň 3"
 
 #: ../../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Pills 2"
-msgstr "Kopce"
+msgstr "Pipulky 2"
 
 #: ../../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Abstract 1"
-msgstr "Odčítať A-B"
+msgstr "Abstrakt 1"
 
 #: ../../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Abstract 3"
-msgstr "Odčítať A-B"
+msgstr "Abstrakt 3"
 
 # TODO: check
 #: ../../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Squares 1"
-msgstr "Štvorcové"
+msgstr "Štvorcové 1"
 
 #: ../../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Circle fill 4"
-msgstr "Elipsová bublina"
+msgstr "Elipsová výplň 4"
 
 #: ../../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Arrow fill"
-msgstr "Bez výplne"
+msgstr "Šípky"
 
 #: ../../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Semicircles 1"
-msgstr "Pripísané kružnice"
+msgstr "Polkruhy 1"
 
 #: ../../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Tiles 2"
-msgstr "Dláždiť"
+msgstr "Dláždice 2"
 
 #: ../../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Tiles 3"
-msgstr "Dláždiť"
+msgstr "Dláždice 2"
 
 #: ../../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Regular grid"
-msgstr "Pravouhlá mriežka"
+msgstr "Rovnomerná mriežka"
 
 #: ../../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Floor tiles"
-msgstr "Stavidlo"
+msgstr "Podlahové Dláždice"
 
 #: ../../build/share/paint/patterns.svg.h:1
 msgid "Hexagons packing grid"
 msgstr "Hexagónová mriežka"
 
 #: ../../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Wire Fence"
-msgstr "Prítomnosť"
+msgstr "Pletivo"
 
 #: ../../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Stripes grid"
-msgstr "Prúžky 1:1"
+msgstr "Prúžky"
 
 #: ../../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Inverted grid"
-msgstr "Invertované"
+msgstr "Invertovaná Mriežka"
 
 #: ../../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Geometric grid"
-msgstr "Axonometrická mriežka"
+msgstr "Geometrická mriežka"
 
 #: ../../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Hexagonal grid"
-msgstr "Diagonálne vodidlá"
+msgstr "Hexagónová Mriežka"
 
 #: ../../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Triangle grid"
-msgstr "Trojuholník dnu"
+msgstr "Trojuholníká Mriežka"
 
 #: ../../build/share/paint/patterns.svg.h:1
 #: ../share/extensions/guides_creator.inx:11
@@ -3505,14 +3468,12 @@ msgid "Halfcircles grid"
 msgstr "Polkruhová mriežka"
 
 #: ../../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Circles in grid"
-msgstr "Vytvoriť novú mriežku"
+msgstr "Kruhová Mriežka"
 
 #: ../../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Halftones"
-msgstr "Klony"
+msgstr "Halftones"
 
 #: ../../build/share/paint/patterns.svg.h:1
 msgid "Packed circles"
@@ -3615,9 +3576,8 @@ msgid "Grid"
 msgstr "Mriežka"
 
 #: ../../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Table Cloth"
-msgstr "Tablet"
+msgstr "Obus"
 
 #: ../../build/share/paint/patterns.svg.h:1
 msgid "Circle vertical lines halftone shading"
@@ -3641,66 +3601,55 @@ msgstr "Tienovanie Diamant 1"
 
 #: ../../build/share/paint/patterns.svg.h:1
 msgid "Circle halftones shading"
+msgstr "Polkruhové Tienovanie"
+
+#: ../../build/share/paint/patterns.svg.h:1
+msgid "Zigzag vertical lines shading"
+msgstr "Cikcak Tienovanie"
+
+#: ../../build/share/paint/patterns.svg.h:1
+msgid "Wave vertical lines shading 2"
+msgstr "Vlnkové Tienovanie 1"
+
+#: ../../build/share/paint/patterns.svg.h:1
+msgid "Wave vertical lines shading"
+msgstr "Vlnkové Tienovanie 2"
+
+#: ../../build/share/paint/patterns.svg.h:1
+msgid "Vertical rough lines shading 2"
 msgstr ""
 
 #: ../../build/share/paint/patterns.svg.h:1
-#, fuzzy
-msgid "Zigzag vertical lines shading"
-msgstr "Zvislé čiary"
-
-#: ../../build/share/paint/patterns.svg.h:1
-#, fuzzy
-msgid "Wave vertical lines shading 2"
-msgstr "Zvislé čiary"
-
-#: ../../build/share/paint/patterns.svg.h:1
-#, fuzzy
-msgid "Wave vertical lines shading"
-msgstr "Zvislé čiary"
-
-#: ../../build/share/paint/patterns.svg.h:1
-#, fuzzy
-msgid "Vertical rough lines shading 2"
-msgstr "Zvislé čiary"
-
-#: ../../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Vertical rough lines shading"
-msgstr "Zvislé čiary"
+msgstr ""
 
 #: ../../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Vertical lines shading"
-msgstr "Zvislé čiary"
+msgstr ""
 
 #: ../../build/share/paint/patterns.svg.h:1
 msgid "Lines half circle shading "
 msgstr ""
 
 #: ../../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Triangles shading 5"
-msgstr "Trojuholník dnu"
+msgstr "Trojuholníké Tienovanie 5"
 
 #: ../../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Triangles shading 4"
-msgstr "Trojuholník dnu"
+msgstr "Trojuholníké Tienovanie 4"
 
 #: ../../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Triangles shading 3"
-msgstr "Trojuholník dnu"
+msgstr "Trojuholníké Tienovanie 3"
 
 #: ../../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Triangles shading 2"
-msgstr "Trojuholník dnu"
+msgstr "Trojuholníké Tienovanie 2"
 
 #: ../../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Triangles shading 1"
-msgstr "Trojuholník dnu"
+msgstr "Trojuholníké Tienovanie 1"
 
 #: ../../build/share/paint/patterns.svg.h:1
 #, fuzzy
@@ -3708,23 +3657,20 @@ msgid "Lines shading 2"
 msgstr "Riadkovanie:"
 
 #: ../../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Splashing shading"
-msgstr "Zodpovedajúci reťazec"
+msgstr ""
 
 #: ../../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Wave lines 1"
-msgstr "Uložiť vodidlá"
+msgstr "Vlnky 1"
 
 #: ../../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Lines shading small"
-msgstr "Výplň lineárnym farebným prechodom"
+msgstr "Tienovanie čiarami malé"
 
 #: ../../build/share/paint/patterns.svg.h:1
 msgid "Lines shading big"
-msgstr ""
+msgstr "Tienovanie čiarami veľké"
 
 #: ../../build/share/paint/patterns.svg.h:1
 msgid "Sand (bitmap)"
@@ -3739,14 +3685,12 @@ msgid "Old paint (bitmap)"
 msgstr "Stará farba (bitmapa)"
 
 #: ../../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Dirty texture"
-msgstr "Rozdeliť text"
+msgstr "Špinavá Textúra"
 
 #: ../../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Noise"
-msgstr "Pridať šum"
+msgstr "Šum"
 
 #: ../../build/share/symbols/symbols.h:2
 msgctxt "Symbol"
@@ -4750,35 +4694,30 @@ msgstr ""
 
 #: ../../build/share/symbols/symbols.h:293
 #: ../../build/share/symbols/symbols.h:307
-#, fuzzy
 msgctxt "Symbol"
 msgid "Alpine hut"
 msgstr "Horská chata"
 
 #: ../../build/share/symbols/symbols.h:294
 #: ../../build/share/symbols/symbols.h:308
-#, fuzzy
 msgctxt "Symbol"
 msgid "Bed and breakfast"
 msgstr "Bed and Breakfast"
 
 #: ../../build/share/symbols/symbols.h:295
 #: ../../build/share/symbols/symbols.h:309
-#, fuzzy
 msgctxt "Symbol"
 msgid "Bed and breakfast 2"
-msgstr "Bed and Breakfast"
+msgstr "Bed and Breakfast 2"
 
 #: ../../build/share/symbols/symbols.h:296
 #: ../../build/share/symbols/symbols.h:310
-#, fuzzy
 msgctxt "Symbol"
 msgid "Camping"
-msgstr "Lapovanie"
+msgstr "Kempovanie"
 
 #: ../../build/share/symbols/symbols.h:297
 #: ../../build/share/symbols/symbols.h:311
-#, fuzzy
 msgctxt "Symbol"
 msgid "Caravan park"
 msgstr "Parkovanie karavanov"
@@ -4791,10 +4730,9 @@ msgstr "Chata alpského typu"
 
 #: ../../build/share/symbols/symbols.h:299
 #: ../../build/share/symbols/symbols.h:313
-#, fuzzy
 msgctxt "Symbol"
 msgid "Chalet 2"
-msgstr "Chata alpského typu"
+msgstr ""
 
 #: ../../build/share/symbols/symbols.h:300
 #: ../../build/share/symbols/symbols.h:314
@@ -4810,10 +4748,9 @@ msgstr "Hotel"
 
 #: ../../build/share/symbols/symbols.h:302
 #: ../../build/share/symbols/symbols.h:316
-#, fuzzy
 msgctxt "Symbol"
 msgid "Hotel 2"
-msgstr "Hotel"
+msgstr "Hotel 2"
 
 #: ../../build/share/symbols/symbols.h:303
 #: ../../build/share/symbols/symbols.h:317
@@ -4823,14 +4760,12 @@ msgstr "Motel"
 
 #: ../../build/share/symbols/symbols.h:305
 #: ../../build/share/symbols/symbols.h:319
-#, fuzzy
 msgctxt "Symbol"
 msgid "Shelter 2"
-msgstr "Prístrešok"
+msgstr "Prístrešok 2"
 
 #: ../../build/share/symbols/symbols.h:306
 #: ../../build/share/symbols/symbols.h:320
-#, fuzzy
 msgctxt "Symbol"
 msgid "Youth hostel"
 msgstr "Hostel pre mládež"
@@ -5439,17 +5374,15 @@ msgstr "Vrchol"
 
 #: ../../build/share/symbols/symbols.h:503
 #: ../../build/share/symbols/symbols.h:524
-#, fuzzy
 msgctxt "Symbol"
 msgid "Peak 2"
-msgstr "Vrchol"
+msgstr "Vrchol 2"
 
 #: ../../build/share/symbols/symbols.h:504
 #: ../../build/share/symbols/symbols.h:525
-#, fuzzy
 msgctxt "Symbol"
 msgid "Place (city)"
-msgstr "Alfa (krytie)"
+msgstr "Miesto (mesto)"
 
 #: ../../build/share/symbols/symbols.h:505
 #: ../../build/share/symbols/symbols.h:526
@@ -5578,10 +5511,9 @@ msgstr ""
 
 #: ../../build/share/symbols/symbols.h:545
 #: ../../build/share/symbols/symbols.h:555
-#, fuzzy
 msgctxt "Symbol"
 msgid "Transformer"
-msgstr "Transformácie"
+msgstr "Transformér"
 
 #: ../../build/share/symbols/symbols.h:556
 msgctxt "Symbol"
@@ -5709,10 +5641,9 @@ msgstr ""
 
 #: ../../build/share/symbols/symbols.h:575
 #: ../../build/share/symbols/symbols.h:619
-#, fuzzy
 msgctxt "Symbol"
 msgid "Fish"
-msgstr "Rybolov"
+msgstr "Ryba"
 
 #: ../../build/share/symbols/symbols.h:576
 #: ../../build/share/symbols/symbols.h:620
@@ -5723,14 +5654,12 @@ msgstr "Kvetinárstvo"
 # TODO: check
 #: ../../build/share/symbols/symbols.h:577
 #: ../../build/share/symbols/symbols.h:621
-#, fuzzy
 msgctxt "Symbol"
 msgid "Garden center"
 msgstr "Záhradkárske potreby"
 
 #: ../../build/share/symbols/symbols.h:578
 #: ../../build/share/symbols/symbols.h:622
-#, fuzzy
 msgctxt "Symbol"
 msgid "Gift"
 msgstr "Suveníry"
@@ -5743,10 +5672,9 @@ msgstr "Zelenina"
 
 #: ../../build/share/symbols/symbols.h:580
 #: ../../build/share/symbols/symbols.h:624
-#, fuzzy
 msgctxt "Symbol"
 msgid "Hairdresser"
-msgstr "Kaderníctvo"
+msgstr "Kaderník"
 
 #: ../../build/share/symbols/symbols.h:581
 #: ../../build/share/symbols/symbols.h:625
@@ -5759,7 +5687,7 @@ msgstr "Odlety"
 #: ../../build/share/symbols/symbols.h:626
 msgctxt "Symbol"
 msgid "HiFi"
-msgstr ""
+msgstr "HiFi"
 
 #: ../../build/share/symbols/symbols.h:583
 #: ../../build/share/symbols/symbols.h:627
@@ -7028,7 +6956,6 @@ msgid "Snapping"
 msgstr "Prichytávanie"
 
 #: ../src/actions/actions-canvas-snapping.cpp:243
-#, fuzzy
 msgid "Toggle snapping on/off"
 msgstr "Prepnúť prichytávanie"
 
@@ -7038,9 +6965,8 @@ msgstr ""
 
 #: ../src/actions/actions-canvas-snapping.cpp:245
 #: ../src/actions/actions-canvas-snapping.cpp:280
-#, fuzzy
 msgid "Toggle alignment snapping"
-msgstr "Zarovnanie textu"
+msgstr "Spusti Automatické Zarovnávanie"
 
 #: ../src/actions/actions-canvas-snapping.cpp:246
 msgid "Snap Nodes that Align"
@@ -24349,7 +24275,7 @@ msgstr ""
 
 #: ../src/ui/dialog/dialog-multipaned.cpp:515
 msgid "You can drop dockable dialogs here."
-msgstr ""
+msgstr "Potiahni sem akýkoľvek dialóg."
 
 #: ../src/ui/dialog/dialog-notebook.cpp:78
 #, fuzzy
@@ -24518,7 +24444,7 @@ msgstr "Použiť antialiasing"
 
 #: ../src/ui/dialog/document-properties.cpp:409
 msgid "Toggle clip to page mode"
-msgstr ""
+msgstr "Spusti orez obsahu do stránky"
 
 #: ../src/ui/dialog/document-properties.cpp:412
 #, fuzzy
