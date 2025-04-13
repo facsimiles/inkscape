@@ -1646,6 +1646,7 @@ Gtk::EventSequenceState ObjectsPanel::on_click(Gtk::GestureMultiPress const &ges
             // true == hide menu item for opening this dialog!
             std::vector<SPItem*> items = {item};
             auto menu = std::make_shared<ContextMenu>(getDesktop(), item, items, true);
+            menu->set_relative_to(*this);
             // popup context menu pointing to the clicked tree row:
             UI::popup_at(*menu, _tree, ex, ey);
             UI::on_hide_reset(std::move(menu));
