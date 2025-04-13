@@ -456,8 +456,6 @@ void CommandPalette::on_history_selection_changed(Gtk::ListBoxRow *lb)
 
 bool CommandPalette::operate_recent_file(Glib::ustring const &uri, bool const import)
 {
-    static auto prefs = Inkscape::Preferences::get();
-
     bool write_to_history = true;
 
     // if the last element in CPHistory is already this, don't update history file
@@ -491,7 +489,7 @@ bool CommandPalette::operate_recent_file(Glib::ustring const &uri, bool const im
 
     // open
     {
-        get_action_ptr_name("app.file-open").first->activate(uri);
+        get_action_ptr_name("app.file-open-window").first->activate(uri);
         if (write_to_history) {
             _history_xml.add_open(uri);
         }
