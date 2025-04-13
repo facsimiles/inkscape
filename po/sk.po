@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-02-04 23:42+0100\n"
-"PO-Revision-Date: 2025-04-12 15:00+0000\n"
+"PO-Revision-Date: 2025-04-14 07:06+0000\n"
 "Last-Translator: Adam Belis <adam.belis@gmail.com>\n"
 "Language-Team: Slovak <https://translate.inkscape.org/projects/inkscape/"
 "inkscape-master/sk/>\n"
@@ -43,7 +43,7 @@ msgstr "Výplň a priesvitnosť"
 
 #: ../build/share/filters/filters.svg.h:4
 msgid "Does not filter but adds a filter region"
-msgstr ""
+msgstr "Tento filter orezáva objekt, orez sa ovláda cez Nástroj uzla"
 
 #: ../build/share/filters/filters.svg.h:6
 msgid "Smart Jelly"
@@ -3338,9 +3338,8 @@ msgid "Triangles 2"
 msgstr "Trojuholníky 2"
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Circle horizontal fill 1"
-msgstr "Elipsová bublina"
+msgstr "Kruhová Horizontálna výplň 1"
 
 #: ../build/share/paint/patterns.svg.h:1
 #, fuzzy
@@ -3453,9 +3452,8 @@ msgid "Arrow horizontal fill"
 msgstr "Kresliť vodorovne"
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Semicircles"
-msgstr "Pripísané kružnice"
+msgstr "Polokruhy"
 
 #: ../build/share/paint/patterns.svg.h:1
 #, fuzzy
@@ -3463,9 +3461,8 @@ msgid "Tiles 2"
 msgstr "Dláždiť"
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Tiles 3"
-msgstr "Dláždiť"
+msgstr "Dláždice 3"
 
 #: ../build/share/paint/patterns.svg.h:1
 #, fuzzy
@@ -3554,9 +3551,8 @@ msgid "Patterns"
 msgstr "Vzorka"
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Tiles 4"
-msgstr "Dláždiť"
+msgstr "Dláždice 4"
 
 #: ../build/share/paint/patterns.svg.h:1
 #, fuzzy
@@ -3671,36 +3667,28 @@ msgid "Circle halftones shading"
 msgstr ""
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
-#| msgid "Flip horizontal"
 msgid "Zigzag horizontal 2"
-msgstr "Preklopiť vodorovne"
+msgstr "CikCak Horizonvtálny 2"
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Wave horizontal lines shading 2"
-msgstr "Zvislé čiary"
+msgstr "Vlnky tienovacie čiari 2"
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Wave horizontal lines shading 1"
-msgstr "Zvislé čiary"
+msgstr "Vlnky tienovacie čiari 1"
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Horizontal rough lines shading 2"
-msgstr "Zvislé čiary"
+msgstr "Horizontálne Roztrasené tienovacie čiari 2"
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Horizontal rough lines shading"
-msgstr "Zvislé čiary"
+msgstr "Horizontálne Roztrasené tienovacie čiari"
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
-#| msgid "Horizontal lines"
 msgid "Horizontal lines shading"
-msgstr "Vodorovné čiary"
+msgstr "Horizontálne tienovacie čiari"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Lines half circle shading "
@@ -3777,9 +3765,8 @@ msgid "Noise"
 msgstr "Pridať šum"
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Hatches"
-msgstr "Vzorkovník"
+msgstr "Šráfovanie"
 
 #: ../build/share/symbols/symbols.h:2
 msgctxt "Symbol"
@@ -6605,18 +6592,16 @@ msgid "Do not split canvas"
 msgstr ""
 
 #: ../src/actions/actions-canvas-mode.cpp:273
-#, fuzzy
 msgid "Split Mode: Split"
-msgstr "Prepnúť režim _zamerania"
+msgstr "Rozdelený"
 
 #: ../src/actions/actions-canvas-mode.cpp:273
 msgid "Render part of the canvas in outline mode"
 msgstr ""
 
 #: ../src/actions/actions-canvas-mode.cpp:274
-#, fuzzy
 msgid "Split Mode: X-Ray"
-msgstr "Prepnúť režim _zamerania"
+msgstr "Rendgen"
 
 #: ../src/actions/actions-canvas-mode.cpp:274
 msgid "Render a circular area in outline mode"
@@ -7841,11 +7826,11 @@ msgstr "Editovať Obrázok Externe:"
 
 #: ../src/actions/actions-element-image.cpp:110
 msgid "System error message: %1"
-msgstr ""
+msgstr "Systémova chyba: %1"
 
 #: ../src/actions/actions-element-image.cpp:116
 msgid "System error message:"
-msgstr ""
+msgstr "Systémova chyba:"
 
 #: ../src/actions/actions-element-image.cpp:136
 msgid "Nothing selected."
@@ -9081,7 +9066,7 @@ msgstr "Export Typ"
 
 #: ../src/actions/actions-output.cpp:250
 msgid "Set export file type"
-msgstr ""
+msgstr "Nadstav typ súboru pre Export"
 
 #: ../src/actions/actions-output.cpp:251
 #, fuzzy
@@ -9099,7 +9084,7 @@ msgstr "Export Prepísaný"
 
 #: ../src/actions/actions-output.cpp:252
 msgid "Allow to overwrite existing files during export"
-msgstr ""
+msgstr "Povolprepísať exzistujúce súbory počas exportu"
 
 #: ../src/actions/actions-output.cpp:254
 msgid "Export Area"
@@ -9132,7 +9117,7 @@ msgstr "Exportuj Margins"
 
 #: ../src/actions/actions-output.cpp:257
 msgid "Set additional export margin"
-msgstr ""
+msgstr "Pridaj Okraje pri exporte"
 
 #: ../src/actions/actions-output.cpp:258
 #, fuzzy
@@ -9147,9 +9132,8 @@ msgstr ""
 "hodnote (v používateľom zvolených jednotkách SVG)"
 
 #: ../src/actions/actions-output.cpp:259
-#, fuzzy
 msgid "Export Width"
-msgstr "Export"
+msgstr "Export Výšky"
 
 #: ../src/actions/actions-output.cpp:259
 msgid "Set export width"
@@ -9181,7 +9165,7 @@ msgstr "Export"
 
 #: ../src/actions/actions-output.cpp:263
 msgid "Hide any objects not given in export-id option"
-msgstr ""
+msgstr "Schovaj akýkoľvek objekt ktorý nemá export-id možnosť"
 
 #: ../src/actions/actions-output.cpp:265
 #, fuzzy
@@ -9261,7 +9245,7 @@ msgstr "Export Pozadia"
 
 #: ../src/actions/actions-output.cpp:273
 msgid "Include background color in exported file"
-msgstr ""
+msgstr "Pridaj pozadie do exporovaného súboru"
 
 #: ../src/actions/actions-output.cpp:274
 #, fuzzy
@@ -9270,11 +9254,11 @@ msgstr "Nepriesvitnosť pozadia"
 
 #: ../src/actions/actions-output.cpp:274
 msgid "Include background opacity in exported file"
-msgstr ""
+msgstr "Zohladni priesvitnosť pozadia pri exporte súboru"
 
 #: ../src/actions/actions-output.cpp:275
 msgid "Export PNG Color Mode"
-msgstr ""
+msgstr "Exportuj PNG farebný mód"
 
 #: ../src/actions/actions-output.cpp:275
 #, fuzzy
@@ -9322,11 +9306,11 @@ msgstr "Exportuj"
 
 #: ../src/actions/actions-output.cpp:287
 msgid "Enter string for the file type"
-msgstr ""
+msgstr "Pridaj string pre typ súboru"
 
 #: ../src/actions/actions-output.cpp:288
 msgid "Enter string for the file name"
-msgstr ""
+msgstr "Pridaj string pre meno súboru"
 
 #: ../src/actions/actions-output.cpp:289
 msgid "Enter 1/0 for Yes/No to overwrite exported file"
@@ -9674,9 +9658,8 @@ msgid "Offset selected paths by screen pixels"
 msgstr "Posunie zvolené cesty o 1 bod von"
 
 #: ../src/actions/actions-paths.cpp:270
-#, fuzzy
 msgid "Shape Builder: Add"
-msgstr "Spojený Tvar"
+msgstr "Vytváranie Tvarov: Pridaj"
 
 #: ../src/actions/actions-paths.cpp:270
 msgid "Add shapes by clicking or clicking and dragging"
@@ -9684,7 +9667,7 @@ msgstr ""
 
 #: ../src/actions/actions-paths.cpp:271
 msgid "Shape Builder: Delete"
-msgstr ""
+msgstr "Vytváranie Tvarov: Vymaž"
 
 #: ../src/actions/actions-paths.cpp:271
 msgid "Remove shapes by clicking or clicking and dragging"
@@ -10039,7 +10022,7 @@ msgstr "Nastaviť atribút písma SVG"
 
 #: ../src/actions/actions-svg-processing.cpp:698
 msgid "Set the document's SVG version to 1.1"
-msgstr ""
+msgstr "Nadstav verziu dokumentu na SVG 1.1"
 
 #: ../src/actions/actions-svg-processing.cpp:699
 #, fuzzy
@@ -10048,7 +10031,7 @@ msgstr "Nastaviť atribút písma SVG"
 
 #: ../src/actions/actions-svg-processing.cpp:699
 msgid "Set the document's SVG version to 2.0"
-msgstr ""
+msgstr "Nadstav verziu dokumentu na SVG 2.0"
 
 #: ../src/actions/actions-svg-processing.cpp:700
 #, fuzzy
@@ -10057,7 +10040,7 @@ msgstr "Vypíše číslo verzie Inkscape"
 
 #: ../src/actions/actions-svg-processing.cpp:700
 msgid "Remove any Inkscape-specific SVG data"
-msgstr ""
+msgstr "Odstráň akékoľvek Inkscape-specific SVG data"
 
 #: ../src/actions/actions-svg-processing.cpp:701
 msgid "Prune Proprietary Namespaces"
@@ -10293,7 +10276,7 @@ msgstr "Upraviť uzly cesty"
 
 #: ../src/actions/actions-tools.cpp:282
 msgid "Shape Builder Tool"
-msgstr ""
+msgstr "Nástroj Vytváranie Tvarov"
 
 #: ../src/actions/actions-tools.cpp:282
 msgid "Build shapes with the Boolean tool"
@@ -10320,7 +10303,7 @@ msgstr "Vytvorenie kruhov, elíps a oblúkov"
 
 #: ../src/actions/actions-tools.cpp:286
 msgid "Star/Polygon Tool"
-msgstr ""
+msgstr "Nástroj Hviezda/polygón"
 
 #: ../src/actions/actions-tools.cpp:286
 msgid "Create stars and polygons"
@@ -10495,7 +10478,7 @@ msgstr "Zobraziť/skryť ostatné vrstvy"
 
 #: ../src/actions/actions-tools.cpp:311
 msgid "Toggle between Selector tool and last used tool"
-msgstr ""
+msgstr "Prepínaj medzi Nástrojom Označovania a posledným použitým nástrojom"
 
 #: ../src/actions/actions-tools.cpp:312
 #, fuzzy
@@ -10529,7 +10512,7 @@ msgstr "Otočiť"
 
 #: ../src/actions/actions-transform.cpp:141
 msgid "Rotate selected objects by degrees"
-msgstr ""
+msgstr "Otoč označené objekty o stupne"
 
 #: ../src/actions/actions-transform.cpp:142
 #: ../src/live_effects/lpe-measure-segments.cpp:84
@@ -10594,7 +10577,6 @@ msgid "Rotate selected objects relative to zoom level"
 msgstr "Zväčší vybrané objekty vzhľadom k obrazovke"
 
 #: ../src/actions/actions-transform.cpp:150
-#, fuzzy
 msgid "Remove Transforms"
 msgstr "Odstrániť transformáciu"
 
@@ -10616,7 +10598,7 @@ msgstr "Otočiť o +90°"
 
 #: ../src/actions/actions-transform.cpp:152
 msgid "Rotate page by 90-degree rotation steps"
-msgstr ""
+msgstr "Otoč stranu o 90°"
 
 #: ../src/actions/actions-transform.cpp:159
 msgid "Enter two comma-separated numbers, e.g. 50,-2.5"
@@ -10875,7 +10857,7 @@ msgstr "Rozhranie"
 
 #: ../src/actions/actions-view-mode.cpp:282
 msgid "Toggle wide or narrow screen setup"
-msgstr ""
+msgstr "Prerpni medzi širokým a úzkým rozhraním obrazovky"
 
 #: ../src/actions/actions-view-window.cpp:62
 msgid "Duplicate Window"
@@ -11114,9 +11096,8 @@ msgid "Lightness"
 msgstr "Jas"
 
 #: ../src/colors/spaces/components.cpp:57
-#, fuzzy
 msgid "_V:"
-msgstr "_Zvis.:"
+msgstr "_V:"
 
 #: ../src/colors/spaces/components.cpp:57 ../src/ui/dialog/attrdialog.cpp:202
 #: ../share/ui/dialog-document-resources.glade:251
@@ -11389,14 +11370,12 @@ msgid "Unrecognized color '%1'"
 msgstr ""
 
 #: ../src/display/control/ctrl-handle-styling.cpp:146
-#, fuzzy
 msgid "Invalid opacity '%1'"
-msgstr "Neplatný názov programu: %s"
+msgstr "Neplatná priehladnosť '%1'"
 
 #: ../src/display/control/ctrl-handle-styling.cpp:155
-#, fuzzy
 msgid "Invalid opacity units '%1'"
-msgstr "Neplatný názov programu: %s"
+msgstr "Neplatný jednoty priehladnosťi %s"
 
 #: ../src/display/control/ctrl-handle-styling.cpp:159
 #, fuzzy
@@ -11715,10 +11694,8 @@ msgid "[No more changes]"
 msgstr "Prejsť vpred o jednu zmenu"
 
 #: ../src/event-log.cpp:387
-#, fuzzy
-#| msgid "Text: Change rotate"
 msgid "[Changes forgotten]"
-msgstr "Text: Zmeniť otočenie"
+msgstr "[Zmeny Zabudnuté]"
 
 #: ../src/extension/dependency.cpp:342
 #, fuzzy
@@ -12162,7 +12139,7 @@ msgstr "Gausovské rozostrenie"
 #: ../src/extension/internal/bitmap/implode.cpp:41
 #: ../src/extension/internal/bitmap/solarize.cpp:43
 msgid "Factor:"
-msgstr "Pomer:"
+msgstr "Faktor:"
 
 #: ../src/extension/internal/bitmap/gaussianBlur.cpp:49
 msgid "Gaussian blur selected bitmap(s)"
@@ -16270,7 +16247,7 @@ msgstr "Otvoriť"
 
 #: ../src/helper/choose-file.cpp:127
 msgid "All Supported Formats"
-msgstr ""
+msgstr "Všetky podporovaé Formáty"
 
 #: ../src/helper/save-image.cpp:33
 #: ../share/extensions/image_extract_selected.inx:3
@@ -16698,9 +16675,8 @@ msgid "ACTION(:ARG)[;ACTION(:ARG)]*"
 msgstr ""
 
 #: ../src/inkscape-application.cpp:720
-#, fuzzy
 msgid "List all available actions"
-msgstr "Vypísať všetky písma"
+msgstr "Vypísať všetky dostupné akcie"
 
 #: ../src/inkscape-application.cpp:721
 #, fuzzy
@@ -16809,14 +16785,12 @@ msgid "Scalable Vector Graphics"
 msgstr "Scalable Vector Graphic"
 
 #: ../src/inkview-application.cpp:136
-#, fuzzy
 msgid "Error"
-msgstr "Chyby"
+msgstr "Chyba"
 
 #: ../src/inkview-application.cpp:136
-#, fuzzy
 msgid "No (valid) files to open."
-msgstr "Voľba súboru na otvorenie"
+msgstr "Nebol zvolený žiaden valídny súbor na otvorenie."
 
 #: ../src/io/fix-broken-links.cpp:356
 msgid "Fixup broken links"
@@ -16833,7 +16807,7 @@ msgstr "_Písmo"
 
 #: ../src/libnrtype/font-lister.cpp:156
 msgid "Fonts "
-msgstr "Písmo "
+msgstr "Fonty "
 
 #: ../src/live_effects/effect.cpp:103
 #, fuzzy
@@ -16842,29 +16816,26 @@ msgid "Bend"
 msgstr "Ohnúť"
 
 #: ../src/live_effects/effect.cpp:106
-#, fuzzy
 msgid "Bend an object along the curvature of another path"
-msgstr "Odkryť všetky objekty v aktuálnej vrstve"
+msgstr "Ohni objekt podla inej cesty"
 
 #: ../src/live_effects/effect.cpp:117
-#, fuzzy
 msgctxt "path effect"
 msgid "Gears"
-msgstr "Ozubenie"
+msgstr "Ozubené Koliečka"
 
 #: ../src/live_effects/effect.cpp:120
 msgid "Create interlocking, configurable gears based on the nodes of a path"
-msgstr ""
+msgstr "Konvertuj uzly naceste na ozubené koliečka"
 
 #: ../src/live_effects/effect.cpp:131
-#, fuzzy
 msgctxt "path effect"
 msgid "Pattern Along Path"
-msgstr "Vzorka pozdĺž cesty"
+msgstr "Vzor na cestu"
 
 #: ../src/live_effects/effect.cpp:134
 msgid "Place one or more copies of another path along the path"
-msgstr ""
+msgstr "Opakuj kópie vzoru na zvolenú cestu"
 
 #: ../src/live_effects/effect.cpp:145
 #, fuzzy
@@ -16876,9 +16847,9 @@ msgstr "Zošiť podcesty"
 msgid ""
 "Draw perpendicular lines between subpaths of a path, like rungs of a ladder"
 msgstr ""
+"Nakresli čiary medzi podcestami jednej cesty, podobne ako priečky rebríka"
 
 #: ../src/live_effects/effect.cpp:160
-#, fuzzy
 msgctxt "path effect"
 msgid "VonKoch"
 msgstr "VonKoch"
@@ -16895,9 +16866,8 @@ msgid "Knot"
 msgstr "Uzol"
 
 #: ../src/live_effects/effect.cpp:177
-#, fuzzy
 msgid "Create gaps in self-intersections, as in Celtic knots"
-msgstr "Vytvorí prienik zvolených ciest"
+msgstr "Vytvorí medzeri mendzi prienik zvolených ciest. Ako Keltické Ornamenty"
 
 #: ../src/live_effects/effect.cpp:188
 #, fuzzy
@@ -16910,7 +16880,6 @@ msgid "Create a (perspective) grid from a 3-node path"
 msgstr ""
 
 #: ../src/live_effects/effect.cpp:202
-#, fuzzy
 msgctxt "path effect"
 msgid "Spiro spline"
 msgstr "Spiro spline"
@@ -16920,6 +16889,8 @@ msgid ""
 "Make the path curl like wire, using Spiro B-Splines. This effect is usually "
 "used directly on the canvas with the Spiro mode of the drawing tools."
 msgstr ""
+"Zakriví cestu ako hladký drôt . Tento efekt sa zvyčajne používa priamo na "
+"plátne v režime Spiro mód v Pere alebo Ceruzke."
 
 #: ../src/live_effects/effect.cpp:216
 #, fuzzy
@@ -16932,14 +16903,13 @@ msgid "Adjust the shape of an object by transforming paths on its four sides"
 msgstr ""
 
 #: ../src/live_effects/effect.cpp:230
-#, fuzzy
 msgctxt "path effect"
 msgid "Interpolate Sub-Paths"
-msgstr "Interpolácia podciest"
+msgstr "Blendovať podcesty"
 
 #: ../src/live_effects/effect.cpp:233
 msgid "Create a stepwise transition between the 2 subpaths of a path"
-msgstr ""
+msgstr "Vytvorte plynulý prechod medzi dvoma podcestami cesty"
 
 #: ../src/live_effects/effect.cpp:244
 #, fuzzy
@@ -16975,12 +16945,13 @@ msgid ""
 "Add ruler marks to the object in adjustable intervals, using the object's "
 "stroke style."
 msgstr ""
+"Pridaj čiarky pozdlž tvojej cesty ako na pravítku. Možeš upravit vzdailenost "
+"midzi čiarami a ich velkosť."
 
 #: ../src/live_effects/effect.cpp:287
-#, fuzzy
 msgctxt "path effect"
 msgid "Power stroke"
-msgstr "Silný ťah"
+msgstr "Premenlivá širka ťahu"
 
 #: ../src/live_effects/effect.cpp:290
 msgid ""
@@ -16988,6 +16959,8 @@ msgid ""
 "This effect can also be used directly on the canvas with a pressure "
 "sensitive stylus and the Pencil tool."
 msgstr ""
+"Upravuj rôznu hrúbku ťahu na ceste. Tento efekt sa dá oužiť s prítlakmy s "
+"tabletu v nástroji Ceruza."
 
 #: ../src/live_effects/effect.cpp:301
 #, fuzzy
@@ -17015,6 +16988,9 @@ msgid ""
 "Smoothen and simplify a object. This effect is also available in the Pencil "
 "tool's tool controls."
 msgstr ""
+"Vyhladí a zjednoduší objekt. Znemš počet uzlov na ceste a zjedoduší "
+"geometriu.Tento efekt je taktiež dostupný v ovládacích prvkoch nástroja "
+"Ceruzka."
 
 #: ../src/live_effects/effect.cpp:330
 #, fuzzy
@@ -17024,7 +17000,7 @@ msgstr "Deformácia podľa mriežky"
 
 #: ../src/live_effects/effect.cpp:333
 msgid "Warp an object's shape based on a 5x5 grid"
-msgstr ""
+msgstr "Deformuj objekty pomocou 5x5 mriežky"
 
 #: ../src/live_effects/effect.cpp:344
 #, fuzzy
@@ -17050,7 +17026,7 @@ msgstr "Interpolovať body"
 msgid ""
 "Connect the nodes of the object (e.g. corresponding to data points) by "
 "different types of lines."
-msgstr ""
+msgstr "Zmeň typ všetkých uzlov na ceste."
 
 #: ../src/live_effects/effect.cpp:372
 #, fuzzy
@@ -17095,6 +17071,9 @@ msgid ""
 "Create a BSpline that molds into the path's corners. This effect is usually "
 "used directly on the canvas with the BSpline mode of the drawing tools."
 msgstr ""
+"Pridaj BSpline. Je to typ kriviek ktoré sú zaoblené a ovládaju sa inak ako "
+"klasické cesty. Tento efekt sa zvčajne praimo použiva s Nástroju Pero alebo "
+"ceruzka."
 
 #: ../src/live_effects/effect.cpp:428
 #, fuzzy
@@ -17108,7 +17087,7 @@ msgstr "Typ spojenia"
 msgid ""
 "Select among various join types for a object's corner nodes (mitre, rounded, "
 "extrapolated arc, ...)"
-msgstr ""
+msgstr "Vyber typ rohov (ostré,  skosené, zaoblené a tak dalej)"
 
 #: ../src/live_effects/effect.cpp:442
 #, fuzzy
@@ -17142,7 +17121,7 @@ msgstr "Otáčať kópie"
 msgid ""
 "Create multiple rotated copies of an object, as in a kaleidoscope. The "
 "copies can be styled independently."
-msgstr ""
+msgstr "Okopíruj Objekty do kruhu podobne ako kalidoskop alebo mandala."
 
 #: ../src/live_effects/effect.cpp:485
 #, fuzzy
@@ -17153,7 +17132,7 @@ msgstr "Pripojiť cestu"
 #: ../src/live_effects/effect.cpp:488
 msgid ""
 "Glue the current path's ends to a specific position on one or two other paths"
-msgstr ""
+msgstr "Prilep Konce ciest k špecifikovanému bodu na innom objekte."
 
 #: ../src/live_effects/effect.cpp:500
 #, fuzzy
@@ -17166,6 +17145,8 @@ msgid ""
 "Turn the path into a fill between multiple other open paths (e.g. between "
 "paths with PowerStroke applied to them)"
 msgstr ""
+"Vytvor novú výplň medzi rôznimi čiarami. Užitočné na vytvorenie výplne medzi "
+"prerušovaními cestami."
 
 #: ../src/live_effects/effect.cpp:514
 #, fuzzy
@@ -17175,7 +17156,7 @@ msgstr "Elipsa podľa 5 bodov"
 
 #: ../src/live_effects/effect.cpp:517
 msgid "Create an ellipse from 5 nodes on its circumference"
-msgstr ""
+msgstr "Vytvor Elipsu pomocou 5 uzlov. Užitočne pre presné rysovanie"
 
 #: ../src/live_effects/effect.cpp:528
 #, fuzzy
@@ -17186,7 +17167,7 @@ msgstr "Ohraničenie"
 #: ../src/live_effects/effect.cpp:531
 msgid ""
 "Turn the path into a bounding box that entirely encompasses another path"
-msgstr ""
+msgstr "Premeň cestu na oblžnik tak aby úplne prekryl originálnu cestu"
 
 #: ../src/live_effects/effect.cpp:543
 #, fuzzy
@@ -17250,7 +17231,7 @@ msgstr "Posun"
 
 #: ../src/live_effects/effect.cpp:616
 msgid "Offset the path, optionally keeping cusp corners cusp"
-msgstr ""
+msgstr "Posuž obrys čiar dnu alebo von"
 
 #: ../src/live_effects/effect.cpp:627
 #, fuzzy
@@ -17265,16 +17246,15 @@ msgid ""
 msgstr ""
 
 #: ../src/live_effects/effect.cpp:642
-#, fuzzy
 msgctxt "path effect"
 msgid "Boolean operation"
-msgstr "Zlatý rez"
+msgstr "Kombinovanie tvarov"
 
 #: ../src/live_effects/effect.cpp:645
 msgid ""
 "Cut, union, subtract, intersect and divide a path non-destructively with "
 "another path"
-msgstr ""
+msgstr "Strihaj, zlúč, odčitaj a rôzne iné operácie nedeštruktínvnim sposobom"
 
 #: ../src/live_effects/effect.cpp:656
 #, fuzzy
@@ -17285,6 +17265,7 @@ msgstr "Výrezy"
 #: ../src/live_effects/effect.cpp:659
 msgid "Slices the item into parts. It can also be applied multiple times."
 msgstr ""
+"Rozstrihni objekt na dve časti. Tento efekt môže byť aplikované viac krát."
 
 #: ../src/live_effects/effect.cpp:671
 #, fuzzy
@@ -17297,6 +17278,9 @@ msgid ""
 "Create multiple copies of an object following a grid layout. Customize size, "
 "rotation, distances, style and tiling symmetry."
 msgstr ""
+"Vytvor mnoho kópii na mriežke. Tento efekt má vela možností upravy klonov. "
+"Ako napríklad variácie veľkosti, rotácie, odstupov, symetire kopírovania a "
+"vela dalších nadstavení."
 
 #: ../src/live_effects/effect.cpp:686
 #, fuzzy
@@ -17482,7 +17466,7 @@ msgid ""
 "disabled on canvas"
 msgstr ""
 "Ak nie je voľba nastavená, efekt zostane použitý na objekte, ale je dočasne "
-"vypnutý na plátne."
+"vypnutý na plátne"
 
 #: ../src/live_effects/effect.cpp:1145
 #, fuzzy
@@ -17694,9 +17678,8 @@ msgid "Operand path:"
 msgstr "Ohnúť cestu:"
 
 #: ../src/live_effects/lpe-bool.cpp:80
-#, fuzzy
 msgid "Operand for the boolean operation"
-msgstr "Štandardná odchýlka operácie rozostrenie."
+msgstr "Člen pre boolean operaciu"
 
 #: ../src/live_effects/lpe-bool.cpp:81
 #, fuzzy
@@ -20012,9 +19995,8 @@ msgid "Join"
 msgstr "Spojiť"
 
 #: ../src/live_effects/lpe-powerstroke.cpp:164
-#, fuzzy
 msgid "Miter limit"
-msgstr "Limit ostrosti rohu:"
+msgstr "Limit ostrosti rohu"
 
 #: ../src/live_effects/lpe-powerstroke.cpp:164
 #: ../src/ui/widget/stroke-style.cpp:371
@@ -20116,7 +20098,7 @@ msgstr ""
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:65
 msgid "_Arc"
-msgstr ""
+msgstr "Oblúk"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:66
 msgid ""
@@ -20437,7 +20419,7 @@ msgstr ""
 msgid ""
 "Add nodes between existing nodes. Choose <b>Number of segments</b> method "
 "from the dropdown to use this subdivision method."
-msgstr ""
+msgstr "Pridaj nové uzly na exzistujúcu cestu."
 
 #: ../src/live_effects/lpe-roughen.cpp:56
 msgid "Displace ←→"
@@ -20499,14 +20481,12 @@ msgid "For use with Spray Tool in copy mode"
 msgstr "Na použitie s nástrojom Sprej v režime kopírovania"
 
 #: ../src/live_effects/lpe-roughen.cpp:153
-#, fuzzy
 msgid "<b>Resolution</b>"
-msgstr "<b>Vytvorenie</b>"
+msgstr "<b>Rozlíšenie</b>"
 
 #: ../src/live_effects/lpe-roughen.cpp:161
-#, fuzzy
 msgid "<b>Options</b>"
-msgstr "<b>Vytvorenie</b>"
+msgstr "<b>Možnosti</b>"
 
 #: ../src/live_effects/lpe-ruler.cpp:24
 #: ../src/live_effects/lpe-taperstroke.cpp:96
@@ -20571,7 +20551,7 @@ msgstr "Dĺžka vedľajších značiek pravítka"
 
 #: ../src/live_effects/lpe-ruler.cpp:44
 msgid "Minor mark _gap:"
-msgstr ""
+msgstr "Odstup hlavné:"
 
 #: ../src/live_effects/lpe-ruler.cpp:46
 #, no-c-format
@@ -20580,7 +20560,7 @@ msgstr ""
 
 #: ../src/live_effects/lpe-ruler.cpp:48
 msgid "Major mar_k gap:"
-msgstr ""
+msgstr "Odstup sekundárne:"
 
 #: ../src/live_effects/lpe-ruler.cpp:50
 #, no-c-format
@@ -20603,11 +20583,11 @@ msgstr "_Vzdialenosť značiek:"
 
 #: ../src/live_effects/lpe-ruler.cpp:53
 msgid "Rotate marks (-180° to 180°)"
-msgstr ""
+msgstr "Rotácia"
 
 #: ../src/live_effects/lpe-ruler.cpp:54
 msgid "Shift marks _by:"
-msgstr "Posunúť značky _o:"
+msgstr "Posunúť značky o:"
 
 #: ../src/live_effects/lpe-ruler.cpp:54
 msgid "Shift marks by this many steps"
@@ -20654,9 +20634,8 @@ msgid "Show center of node"
 msgstr "Zobraziť stred uzla"
 
 #: ../src/live_effects/lpe-show_handles.cpp:34
-#, fuzzy
 msgid "Show original"
-msgstr "Vybrať originál"
+msgstr "Ukáž originál"
 
 #: ../src/live_effects/lpe-show_handles.cpp:35
 msgid "Scale nodes and handles"
@@ -20675,7 +20654,7 @@ msgstr ""
 
 #: ../src/live_effects/lpe-simplify.cpp:29
 msgid "Drag slider to set the amount of simplification"
-msgstr ""
+msgstr "Ťahaj držadlo na zmenu mierky zjedodušenia"
 
 #: ../src/live_effects/lpe-simplify.cpp:30
 #, fuzzy
@@ -20689,7 +20668,7 @@ msgstr "Veľkosť úchopu"
 
 #: ../src/live_effects/lpe-simplify.cpp:32
 msgid "Size of the handles in the effect visualization (not editable)"
-msgstr ""
+msgstr "Velkosť náhladových držadiel na ploche (ne-editovateľné)"
 
 #: ../src/live_effects/lpe-simplify.cpp:33
 msgid "Paths separately"
@@ -20698,7 +20677,7 @@ msgstr "Cesty oddelene"
 #: ../src/live_effects/lpe-simplify.cpp:33
 msgid ""
 "When there are multiple paths in the selection, simplify each one separately."
-msgstr ""
+msgstr "Ak má objekt viacero ciest, zjeduduš každú zvlášť."
 
 #: ../src/live_effects/lpe-simplify.cpp:35
 msgid "Just coalesce"
@@ -20756,9 +20735,8 @@ msgid "Random variation of overlap (relative to maximum overlap)"
 msgstr "Náhodná variácia prelínania (vzhľadom k maximálnemu prelínaniu)"
 
 #: ../src/live_effects/lpe-sketch.cpp:45
-#, fuzzy
 msgid "Ending"
-msgstr "Koncová krivka"
+msgstr "Koncovka"
 
 #: ../src/live_effects/lpe-sketch.cpp:46
 msgid ""
@@ -20802,9 +20780,8 @@ msgstr ""
 "Mierka vzťahu zakrivenia a dĺžky konštrukčných čiar (skúste 5*posunutie)"
 
 #: ../src/live_effects/lpe-sketch.cpp:57
-#, fuzzy
 msgid "Length max."
-msgstr "Dĺžka"
+msgstr "Dĺžka max."
 
 #: ../src/live_effects/lpe-sketch.cpp:58
 msgid "Maximum length of construction lines"
@@ -20952,7 +20929,7 @@ msgstr "Zvoľte stránku:"
 
 #: ../src/live_effects/lpe-taperstroke.cpp:106
 msgid "Select the subpath you want to modify"
-msgstr ""
+msgstr "Označ pod-cestu ktorú chceš modifikovať"
 
 #: ../src/live_effects/lpe-taperstroke.cpp:107
 #: ../share/extensions/inset_shadow.inx:8 ../share/extensions/nicechart.inx:61
@@ -21066,7 +21043,7 @@ msgstr "Medzera X"
 
 #: ../src/live_effects/lpe-tiling.cpp:91
 msgid "Horizontal gap between tiles (uses selected unit)"
-msgstr ""
+msgstr "Horitontádne rozostupy medzi klonmi (rovnaké jedodtky ako hore)"
 
 #: ../src/live_effects/lpe-tiling.cpp:92
 msgid "Gap Y"
@@ -21074,7 +21051,7 @@ msgstr "Medzera Y"
 
 #: ../src/live_effects/lpe-tiling.cpp:92
 msgid "Vertical gap between tiles (uses selected unit)"
-msgstr ""
+msgstr "Vertikálne rozostupy medzi klonmi (rovnaké jedodtky ako hore)"
 
 #: ../src/live_effects/lpe-tiling.cpp:93
 msgid "Scale %"
@@ -21123,14 +21100,12 @@ msgid "Interpolate tile size in each row"
 msgstr "Interpolovať atribút v skupine"
 
 #: ../src/live_effects/lpe-tiling.cpp:98
-#, fuzzy
 msgid "Interpolate scale Y"
-msgstr "Interpolovať štýl"
+msgstr "Interpolovať velkosť Y"
 
 #: ../src/live_effects/lpe-tiling.cpp:98
-#, fuzzy
 msgid "Interpolate tile size in each column"
-msgstr "Interpolovať atribút v skupine"
+msgstr "Interpolovať velkosť dlaždice pre každý stĺpec"
 
 #: ../src/live_effects/lpe-tiling.cpp:99
 msgid "Minimize gaps"
@@ -21141,6 +21116,7 @@ msgid ""
 "Minimize gaps between scaled objects (does not work with rotation/diagonal "
 "mode)"
 msgstr ""
+"Minimalizuj odstupy medzi klonmi. (Nefunguje s rotáciou a diagonálnom móde)"
 
 #: ../src/live_effects/lpe-tiling.cpp:100
 #, fuzzy
@@ -21167,6 +21143,8 @@ msgid ""
 "Split elements, so they can be selected, styled, and moved (if grouped) "
 "independently"
 msgstr ""
+"Rozdel klony ako individuálne objekty. Takéto klony môžu mať upravený štýl a "
+"pozíciu (ak sú skupina). Užitočné pri použití prechodov a vzorov."
 
 #: ../src/live_effects/lpe-tiling.cpp:103
 #, fuzzy
@@ -21220,7 +21198,7 @@ msgstr "Uložiť transformáciu"
 
 #: ../src/live_effects/lpe-tiling.cpp:108
 msgid "Link styles in split mode, can also be used to reset style of copies"
-msgstr ""
+msgstr "Napoj stýl aj na odpojené klony. Tiež užitelné na reštartovanie štýlu"
 
 #: ../src/live_effects/lpe-tiling.cpp:109
 #, fuzzy
@@ -21338,19 +21316,19 @@ msgstr "Interpolácia"
 msgid ""
 "Blend scale from <b>left to right</b> (left column uses original scale, "
 "right column uses new scale)"
-msgstr ""
+msgstr "Meň velkost <b>s ľava do prava </b>"
 
 #: ../src/live_effects/lpe-tiling.cpp:861
 msgid ""
 "Blend scale from <b>top to bottom</b> (top row uses original scale, bottom "
 "row uses new scale)"
-msgstr ""
+msgstr "Meň velkost <b>s hora do dole </b>"
 
 #: ../src/live_effects/lpe-tiling.cpp:862
 msgid ""
 "Blend scale <b>diagonally</b> (top left tile uses original scale, bottom "
 "right tile uses new scale)"
-msgstr ""
+msgstr "Meň velkost <b>diagonálne</b>"
 
 #: ../src/live_effects/lpe-tiling.cpp:863
 #, fuzzy
@@ -21359,50 +21337,49 @@ msgstr "Rovnomerný šum"
 
 #: ../src/live_effects/lpe-tiling.cpp:864
 msgid "Random scale (hit <b>Randomize</b> button to shuffle)"
-msgstr "Náhodné Velkosti (hit <b>Randomize</b>  na inú náhodnosť)"
+msgstr "Náhodné Velkosti (hit <b>Randomize</b> na inú náhodnosť)"
 
 #: ../src/live_effects/lpe-tiling.cpp:897
 msgid ""
 "Blend rotation from <b>left to right</b> (left column uses original "
 "rotation, right column uses new rotation)"
-msgstr ""
+msgstr "Meň Rotáciu <b>s ľava do prava </b>"
 
 #: ../src/live_effects/lpe-tiling.cpp:898
 msgid ""
 "Blend rotation from <b>top to bottom</b> (top row uses original rotation, "
 "bottom row uses new rotation)"
-msgstr ""
+msgstr "Meň Rotáciu <b>s hora do dole </b>"
 
 #: ../src/live_effects/lpe-tiling.cpp:899
 msgid ""
 "Blend rotation <b>diagonally</b> (top left tile uses original rotation, "
 "bottom right tile uses new rotation)"
-msgstr ""
+msgstr "Meň Rotáciu <b>diagonálne </b>"
 
 #: ../src/live_effects/lpe-tiling.cpp:900
-#, fuzzy
 msgid "Uniform rotation"
-msgstr "Informácie"
+msgstr "Uniformné otáčanie"
 
 #: ../src/live_effects/lpe-tiling.cpp:901
 msgid "Random rotation (hit <b>Randomize</b> button to shuffle)"
-msgstr ""
+msgstr "Náhodná Rotácia"
 
 #: ../src/live_effects/lpe-tiling.cpp:928
 msgid "All horizontal gaps have the same width"
-msgstr ""
+msgstr "Všetky horizontálne medzeri majú rovnakú vzdialenosť"
 
 #: ../src/live_effects/lpe-tiling.cpp:929
 msgid "Random horizontal gaps (hit <b>Randomize</b> button to shuffle)"
-msgstr ""
+msgstr "Náhodné Horizontálne Rozostupy"
 
 #: ../src/live_effects/lpe-tiling.cpp:955
 msgid "All vertical gaps have the same height"
-msgstr ""
+msgstr "Všetky vertikálne medzeri majú rovnakú vzdialenosť"
 
 #: ../src/live_effects/lpe-tiling.cpp:956
 msgid "Random vertical gaps (hit <b>Randomize</b> button to shuffle)"
-msgstr ""
+msgstr "Náhodné Vertikálne Rozostupy"
 
 #: ../src/live_effects/lpe-tiling.cpp:1614
 msgid ""
@@ -21488,7 +21465,7 @@ msgstr "Obnoviť"
 
 #: ../src/live_effects/lpe-vonkoch.cpp:48
 msgid "N_r of generations:"
-msgstr "_Počet generácií:"
+msgstr "N_r Počet generácií:"
 
 #: ../src/live_effects/lpe-vonkoch.cpp:48
 msgid "Depth of the recursion --- keep low!!"
@@ -21668,9 +21645,8 @@ msgid "Link path parameter to path"
 msgstr "Pripojiť parameter cesty k ceste"
 
 #: ../src/live_effects/parameter/patharray.cpp:104
-#, fuzzy
 msgid "Visible"
-msgstr "_Viditeľné"
+msgstr "Viditeľné"
 
 #: ../src/live_effects/parameter/patharray.cpp:111
 #: ../src/live_effects/parameter/satellitearray.cpp:96
@@ -21683,9 +21659,8 @@ msgid "Name"
 msgstr "Meno"
 
 #: ../src/live_effects/parameter/patharray.cpp:146
-#, fuzzy
 msgid "Toggle path parameter visibility"
-msgstr "Pripojiť parameter cesty k ceste"
+msgstr "Zapni parameter Vidiťelnosť cesty"
 
 #: ../src/live_effects/parameter/patharray.cpp:183
 msgid "Remove Path"
@@ -21752,9 +21727,8 @@ msgstr "Odkaz na cestu do schránky"
 #: ../src/live_effects/parameter/satellitearray.cpp:89
 #: ../src/ui/dialog/inkscape-preferences.cpp:2018
 #: ../src/ui/dialog/inkscape-preferences.cpp:2070
-#, fuzzy
 msgid "Active"
-msgstr "Všetky neaktívne"
+msgstr "Aktívne"
 
 #: ../src/live_effects/parameter/satellitearray.cpp:176
 msgid "Active switched"
@@ -21762,22 +21736,18 @@ msgstr ""
 
 #. TRANSLATORS: %1 is the translated version of "up" or "down".
 #: ../src/live_effects/parameter/satellitearray.cpp:255
-#, fuzzy
 msgid "Move item %1"
-msgstr "Posunúť cestu hore"
+msgstr "Posunúť objekt %1"
 
 #. TRANSLATORS: This belongs into the sentence 'Move item up'
 #: ../src/live_effects/parameter/satellitearray.cpp:262
-#, fuzzy
 msgid "up"
-msgstr "Hore"
+msgstr "hore"
 
 #. TRANSLATORS: This belongs into the sentence 'Move item down'
 #: ../src/live_effects/parameter/satellitearray.cpp:268
-#, fuzzy
-#| msgid "Kern down"
 msgid "down"
-msgstr "Kerning nadol"
+msgstr "dole"
 
 #: ../src/live_effects/parameter/satellitearray.cpp:277
 #, fuzzy
@@ -21911,16 +21881,12 @@ msgid "Deleted"
 msgstr "Zmazané"
 
 #: ../src/object/sp-guide.cpp:500
-#, fuzzy
-#| msgid ""
-#| "<b>Shift+drag</b> to rotate, <b>Ctrl+drag</b> to move origin, <b>Del</b> "
-#| "to delete"
 msgid ""
 "<b>Shift+drag</b> to rotate, <b>Ctrl+drag</b> to move origin, <b>Del</b> to "
 "delete; <b>double-click</b> to edit this guide's properties"
 msgstr ""
-"<b>Shift+ťahaním</b> otočíte, <b>Ctrl+ťahaním</b> posuniete počiatok, "
-"pomocou <b>Del</b> zmažete"
+"<b>Shift+ťahaním</b> otočíte, <b>Ctrl+ťahaním</b> posuniete , pomocou "
+"<b>Del</b> zmažete; <b>Dvojklik</b> edituje všetky vlastnosti vodítka"
 
 #: ../src/object/sp-guide.cpp:505
 #, c-format
@@ -22013,34 +21979,28 @@ msgid "An exception occurred during execution of the Path Effect."
 msgstr "Počas vykonávania Efektu cesty sa vyskytla výnimka."
 
 #: ../src/object/sp-marker.cpp:585
-#, fuzzy
 msgid "Set marker orientation"
-msgstr "Text: Zmeniť orientáciu"
+msgstr "Zmeniť orientáciu zakončenia čiary"
 
 #: ../src/object/sp-marker.cpp:596
-#, fuzzy
 msgid "Set marker size"
-msgstr "Nastaviť zakončenia čiar"
+msgstr "Nastaviť veľkosť zakončenia čiar"
 
 #: ../src/object/sp-marker.cpp:606
-#, fuzzy
 msgid "Set marker scale with stroke"
-msgstr "Tvar na konci ťahu"
+msgstr "Zvetšuj zakončenie čiary spolu s ťahom"
 
 #: ../src/object/sp-marker.cpp:617
-#, fuzzy
 msgid "Set marker offset"
-msgstr "Nastaviť zakončenia čiar"
+msgstr "Nastaviť posun zakončenia čiar"
 
 #: ../src/object/sp-marker.cpp:627
-#, fuzzy
 msgid "Set marker uniform scaling"
-msgstr "Podporovať nerovnomernú zmenu mierky"
+msgstr "Nadstav rovnomerné zäčšovanie zakončenia čiary"
 
 #: ../src/object/sp-marker.cpp:640 ../share/ui/marker-popup.glade:211
-#, fuzzy
 msgid "Flip marker horizontally"
-msgstr "Preklopiť vodorovne"
+msgstr "Preklopiť zakončenie čiary vodorovne"
 
 #. TRANSLATORS COMMENT: %s is either "outset" or "inset" depending on sign
 #: ../src/object/sp-offset.cpp:333
@@ -22344,9 +22304,8 @@ msgid "<b>No paths</b> to inset/outset in the selection."
 msgstr "Výber <b>neobsahuje cestu</b> na posun dnu/von."
 
 #: ../src/pattern-manager.cpp:93
-#, fuzzy
 msgid "All patterns"
-msgstr "Všetky drobné"
+msgstr "Všetky vzory"
 
 #: ../src/preferences-skeleton.h:552
 msgid "Dip pen"
@@ -22859,6 +22818,7 @@ msgid ""
 "Unable to unlink. Check the setting for 'Unlinking Clones' in your "
 "preferences."
 msgstr ""
+"Nemožn odpojiť. Skontroluj nadstavenia pre odpojovanie Klonov v Nadstaveniach"
 
 #: ../src/selection-chemistry.cpp:2783
 msgid "Unlink clone recursively"
@@ -23368,7 +23328,7 @@ msgstr "Vektorizácia: Dokončená. Vytvorených %ld uzlov"
 
 #: ../src/ui/clipboard.cpp:553
 msgid "Can't paste text outside of the text tool."
-msgstr ""
+msgstr "Nemožno vyložiť text bez použitia nástroju Text."
 
 #: ../src/ui/clipboard.cpp:556 ../src/ui/clipboard.cpp:972
 #: ../src/ui/clipboard.cpp:1007 ../src/ui/clipboard.cpp:1048
@@ -23480,11 +23440,11 @@ msgstr "Zmazať vodidlo"
 
 #: ../src/ui/contextmenu.cpp:197
 msgid "Move Page _Backward"
-msgstr ""
+msgstr "Posuť Stránku Späť"
 
 #: ../src/ui/contextmenu.cpp:198
 msgid "Move Page _Forward"
-msgstr ""
+msgstr "Posuť Stránku Dopredu"
 
 #: ../src/ui/contextmenu.cpp:219 ../share/ui/toolbar-commands.ui:525
 #, fuzzy
@@ -23526,7 +23486,7 @@ msgstr "_Vektorizovať bitmapu..."
 
 #: ../src/ui/contextmenu.cpp:247
 msgid "Crop Image to Clip"
-msgstr ""
+msgstr "Orež obrázok na Cestu"
 
 #: ../src/ui/contextmenu.cpp:251
 #, fuzzy
@@ -23640,7 +23600,7 @@ msgstr "Zoskupí zvolené objekty"
 
 #: ../src/ui/contextmenu.cpp:333
 msgid "_Open Link in Browser"
-msgstr ""
+msgstr "_Otvor Link v Prehliadači"
 
 #: ../src/ui/contextmenu.cpp:334
 msgid "_Remove Link"
@@ -24885,9 +24845,8 @@ msgid "Move Tab to New Window"
 msgstr "Posunúť cestu dolu"
 
 #: ../src/ui/dialog/dialog-window.cpp:59
-#, fuzzy
 msgid "Dialog Window"
-msgstr "Duplikov_ať okno"
+msgstr "Dialógové Okno"
 
 #: ../src/ui/dialog/document-properties.cpp:165
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1257
@@ -25032,11 +24991,11 @@ msgstr "Prepnúť kurzívu"
 
 #: ../src/ui/dialog/document-properties.cpp:565
 msgid "Toggle system coordinate Y axis orientation"
-msgstr ""
+msgstr "Zmeň Kordinačný systém na Y osy. Užitočné pre CNC"
 
 #: ../src/ui/dialog/document-properties.cpp:568
 msgid "Toggle system coordinate origin correction"
-msgstr ""
+msgstr "Zmeň Kordinačný systém"
 
 #: ../src/ui/dialog/document-properties.cpp:603
 msgid "<b>Guides</b>"
@@ -25182,13 +25141,13 @@ msgstr "Axonometrická mriežka"
 #: ../src/ui/dialog/document-properties.cpp:1710
 msgctxt "Grid"
 msgid "Modular"
-msgstr ""
+msgstr "Modulárny"
 
 #
 # File: ../src/display/canvas-grid.cpp, line: 306
 #: ../src/ui/dialog/document-properties.cpp:1735
 msgid "Makes the grid available for working with on the canvas."
-msgstr ""
+msgstr "Spístupní mriežku na používanie na plátne"
 
 #: ../src/ui/dialog/document-properties.cpp:1739
 msgid "Snap to visible _grid lines only"
@@ -25239,6 +25198,8 @@ msgid ""
 "Automatically calculate angles from width to height ratio\n"
 "of a single grid parallelogram"
 msgstr ""
+"Automaticky vypočíta uhol s pomeru výšky a šírky\n"
+"s jednej mriežky parallelogram"
 
 #: ../src/ui/dialog/document-properties.cpp:1827
 msgid "Grid _units:"
@@ -25278,7 +25239,7 @@ msgstr "Vzdialenosť medzi zvislými čiarami mriežky"
 
 #: ../src/ui/dialog/document-properties.cpp:1842
 msgid "Gap _X:"
-msgstr ""
+msgstr "Medzera X:"
 
 #: ../src/ui/dialog/document-properties.cpp:1842
 #: ../src/ui/dialog/inkscape-preferences.cpp:2214
@@ -25289,7 +25250,7 @@ msgstr "Vodorovné rozostupy medzi stĺpcami."
 
 #: ../src/ui/dialog/document-properties.cpp:1845
 msgid "Gap _Y:"
-msgstr ""
+msgstr "Medzera Y:"
 
 #: ../src/ui/dialog/document-properties.cpp:1845
 #: ../src/ui/dialog/inkscape-preferences.cpp:2215
@@ -25415,7 +25376,7 @@ msgstr "Zarovnať"
 
 #: ../src/ui/dialog/document-properties.cpp:1932
 msgid "Align grid origin relative to active page."
-msgstr ""
+msgstr "Zarovnaj Začiatočný bod mriežky relatívne na aktývnu stránku."
 
 #: ../src/ui/dialog/document-properties.cpp:1964
 #, fuzzy
@@ -25601,7 +25562,7 @@ msgstr "Neboli vybrané žiadne položky."
 
 #: ../src/ui/dialog/export-batch.cpp:734
 msgid "Can not save to a directory that is actually a file."
-msgstr ""
+msgstr "Nemoňo uložiť lebo toto je súbor a nie zložka"
 
 #: ../src/ui/dialog/export-batch.cpp:739
 #, c-format
@@ -25609,6 +25570,8 @@ msgid ""
 "<span weight=\"bold\" size=\"larger\">Directory \"%s\" doesn't exist. Create "
 "it now?</span>"
 msgstr ""
+"<span weight=\"bold\" size=\"larger\">Zložka \"%s\" zatial nexyistuje. Chceš "
+"ju teraz vytvriť?</span>"
 
 #: ../src/ui/dialog/export-batch.cpp:751
 msgid "Set Batch Export Options"
@@ -25642,9 +25605,9 @@ msgid "Select a filename for exporting"
 msgstr "Voľba súboru pre export"
 
 #: ../src/ui/dialog/export.cpp:206
-#, fuzzy, c-format
+#, c-format
 msgid "Directory <b>%s</b> does not exist and can't be created.\n"
-msgstr "Adresár %s neexistuje alebo to nie je adresár.\n"
+msgstr "Adresár <b>%s</b> neexistuje alebo nemožno vytvoriť.\n"
 
 #: ../src/ui/dialog/export.cpp:233
 msgid "The chosen area to be exported is invalid."
@@ -25664,11 +25627,11 @@ msgstr "Musíte zadať názov súboru"
 
 #: ../src/ui/dialog/export.cpp:244
 msgid "Raster Export Error"
-msgstr ""
+msgstr "Chyba pri exporte Bitmapy"
 
 #: ../src/ui/dialog/export.cpp:245
 msgid "Raster export Method is used for NON RASTER EXTENSION"
-msgstr ""
+msgstr "Bitmapový Export je použitý pre NON RASTER EXTENSION"
 
 #: ../src/ui/dialog/export.cpp:292 ../src/ui/dialog/export.cpp:458
 #, fuzzy, c-format
@@ -25690,7 +25653,7 @@ msgstr "Chyba Vektorového Exportu"
 
 #: ../src/ui/dialog/export.cpp:365
 msgid "Vector export Method is used for RASTER EXTENSION"
-msgstr ""
+msgstr "Vektorová Export je použitý pre RASTER EXTENSION"
 
 #: ../src/ui/dialog/export.cpp:431
 #, fuzzy, c-format
@@ -25778,6 +25741,7 @@ msgstr "Automaticky pridávať rozšírenie názvu súboru"
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:249
 msgid "Export as SVG 1.1 per settings in Preferences dialog"
 msgstr ""
+"Exportuj ako SVG 1.1 podla rovnakých nadstaveni ako v Dialógu Nadstavenia"
 
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:424
 msgid "Guess from extension"
@@ -26047,7 +26011,7 @@ msgstr ""
 msgid ""
 "Offsets the input by an user-defined amount. Commonly used for drop shadow "
 "effects."
-msgstr ""
+msgstr "Posuň zdroj v priestore. často sa používa na pohyb tieňu pod objektom."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2610
 msgid ""
@@ -26654,9 +26618,8 @@ msgid "_Desc"
 msgstr ""
 
 #: ../src/ui/dialog/find.cpp:84
-#, fuzzy
 msgid "Title"
-msgstr "Titulok:"
+msgstr "Titulok"
 
 #: ../src/ui/dialog/find.cpp:85 ../src/ui/dialog/object-properties.cpp:125
 msgid "Properties"
@@ -26892,11 +26855,8 @@ msgid "Font Collections"
 msgstr "Výber písma"
 
 #: ../src/ui/dialog/font-substitution.cpp:46
-#, fuzzy
 msgid "Some fonts are not available and have been substituted."
-msgstr ""
-"\n"
-"Niektoré písma nie sú k dispozícii a boli nahradené."
+msgstr "Niektoré fonty nie sú k dispozícii a boli nahradené."
 
 #: ../src/ui/dialog/font-substitution.cpp:49
 msgid "Font substitution"
@@ -26916,7 +26876,7 @@ msgstr "Písmo „%1“ nahradené písmom „%2“"
 
 #: ../src/ui/dialog/global-palettes.cpp:134
 msgid "ACB file header not recognized."
-msgstr ""
+msgstr "ACB súbor nerozpoznaný."
 
 #: ../src/ui/dialog/global-palettes.cpp:197
 #, fuzzy
@@ -26926,11 +26886,11 @@ msgstr "Paralelné spojenia (LPT) nie sú podporované."
 
 #: ../src/ui/dialog/global-palettes.cpp:228
 msgid "ASE file header not recognized."
-msgstr ""
+msgstr "ASE súbor nerozpoznaný."
 
 #: ../src/ui/dialog/global-palettes.cpp:263
 msgid "ASE color mode not recognized:"
-msgstr ""
+msgstr "ASE farebný mód nerozpozaný:"
 
 #: ../src/ui/dialog/global-palettes.cpp:299
 #, fuzzy
@@ -26955,11 +26915,11 @@ msgstr "Neplatný Riadok "
 
 #: ../src/ui/dialog/global-palettes.cpp:355
 msgid "Error loading palette %1: %2"
-msgstr ""
+msgstr "Chyba pri načítanií palety %1: %2"
 
 #: ../src/ui/dialog/global-palettes.cpp:380
 msgid "Unknown error loading palette %1"
-msgstr ""
+msgstr "Neznáma chyba pri načítaní palety%1"
 
 #: ../src/ui/dialog/global-palettes.cpp:422
 #, fuzzy
@@ -26968,11 +26928,11 @@ msgstr "Exportovať ako Paletu GIMP"
 
 #: ../src/ui/dialog/global-palettes.cpp:423
 msgid "Adobe Color Book"
-msgstr ""
+msgstr "Adobe Color Book"
 
 #: ../src/ui/dialog/global-palettes.cpp:424
 msgid "Adobe Swatch Exchange"
-msgstr ""
+msgstr "Adobe Swatch Exchange"
 
 #: ../src/ui/dialog/global-palettes.cpp:426
 #, fuzzy
@@ -28552,15 +28512,15 @@ msgstr "Použi SVG2 na Auto-flowed text"
 #: ../src/ui/dialog/inkscape-preferences.cpp:1083
 msgid ""
 "Use SVG2 auto-flowed text instead of SVG1.2 auto-flowed text. (Recommended)"
-msgstr ""
+msgstr "Požívaj SVG2 auto-flowed text miesto SVG1.2. (Odporúča sa)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1086
 msgid "Fonts in 'Recently used' collection:"
-msgstr ""
+msgstr "Fonty v kolekcii 'Nedávno použité':"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1087
 msgid "Maximum number of fonts in the 'Recently used' font collection"
-msgstr ""
+msgstr "Maximálny počet fontov v kolekcii 'Nedávno použité'"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1097
 msgid "Font directories"
@@ -29104,7 +29064,7 @@ msgstr "Farby trojuholníkov"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1677
 msgid "Use narrow number entry boxes"
-msgstr ""
+msgstr "Zmenši Číselné polia"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1678
 msgid "Make number editing boxes smaller by limiting padding"
@@ -29131,7 +29091,7 @@ msgstr "Žiadny efekt nebol zvolený"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1686
 msgid "Control visibility of layer selection menu in status bar."
-msgstr ""
+msgstr "Ovláda viditelnošt vrstiev v statusbare."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1688
 #, fuzzy
@@ -29140,7 +29100,7 @@ msgstr "Súradnice kurzoru"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1689
 msgid "Control visibility of mouse coordinates X & Y in status bar."
-msgstr ""
+msgstr "Ovláda viditelnošt X a Y kordinacii v statusbare."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1691
 msgid "Show canvas rotation"
@@ -29148,7 +29108,7 @@ msgstr "Ukáž Orientácia stránky"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1692
 msgid "Control visibility of canvas rotation in status bar."
-msgstr ""
+msgstr "Ovláda viditelnošt rotácie plátna v statusbare."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1694
 msgid "Mouse cursors"
@@ -29163,7 +29123,7 @@ msgstr "Zapnúť prichytávanie"
 msgid ""
 "When off, cursor scaling is disabled. Cursor scaling may be broken when "
 "fractional scaling is enabled."
-msgstr ""
+msgstr "Ovláda velkosť kurzoru mysi."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1697
 #, fuzzy
@@ -29172,16 +29132,16 @@ msgstr "_Zobraziť tieň okraja"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1698
 msgid "Control visibility of drop shadow for Inkscape cursors."
-msgstr ""
+msgstr "Ovláda viditelnošt tieňu pod kurzorom myši."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1701
 msgid "Theme"
-msgstr ""
+msgstr "Téma"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1702
 #: ../src/ui/dialog/inkscape-preferences.cpp:1735
 msgid "Use dark theme"
-msgstr ""
+msgstr "Použi tmavú tému"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1722
 #, fuzzy
@@ -29324,7 +29284,7 @@ msgstr "Z troch strán"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1871
 msgid "Show icons in menus:"
-msgstr ""
+msgstr "Zobrazuj ikonky v menu:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1872
 msgid ""
@@ -29573,7 +29533,7 @@ msgstr "Zam_knuté"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2054
 msgid "Allow dialog docking"
-msgstr ""
+msgstr "Povol pripínanie dialógov"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2055
 msgid "Floating"
@@ -29608,11 +29568,11 @@ msgstr "Dialógy na vrchu"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2069
 msgid "Dialog names will be displayed when there is enough space"
-msgstr ""
+msgstr "Mená dialógov sa zobrazia ak na to majú miesto"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2070
 msgid "Only show label on active"
-msgstr ""
+msgstr "Ukazuj mená iba na aktývnych dialógoch"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2071
 #, fuzzy
@@ -29682,7 +29642,7 @@ msgstr "Rôzne"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2093
 msgid "Whether the Welcome dialog will be shown when Inkscape starts."
-msgstr ""
+msgstr "Zapni Uvítaci dialóg keď sa spustí Inkscape."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2095
 msgid ""
@@ -29708,7 +29668,7 @@ msgstr "Okná"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2106
 msgid "Use compact color selector mode switch"
-msgstr ""
+msgstr "Zapni kompaktné farebné ovládanie"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2107
 msgid "Use compact combo box for selecting color modes"
@@ -29893,7 +29853,7 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2251
 msgid "Show untranslated (English) names"
-msgstr ""
+msgstr "Ukazuj nepreložené (Anglické) mená"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2252
 msgid "Also show the English names of the command"
@@ -30215,27 +30175,27 @@ msgstr "Výstup SVG"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2403
 msgid "SVG 2"
-msgstr ""
+msgstr "SVG 2"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2404
 msgid "Insert SVG 1.1 fallback in text"
-msgstr ""
+msgstr "Vlož SVG 1.1 zálohu do text"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2405
 msgid "Insert JavaScript code for mesh gradients"
-msgstr ""
+msgstr "Vlož JavaScript kód pre 2D prechody (krajšie vykreslovanie na webe)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2406
 msgid "Insert JavaScript code for SVG2 hatches"
-msgstr ""
+msgstr "Vlož JavaScript kód pre SVG2 hatches"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2408
 msgid "Adds fallback options for non-SVG 2 renderers."
-msgstr ""
+msgstr "Vlož zálohé nadstavenia pre pre vykreslovače ktoré nepodporujú SVG2"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2409
 msgid "Adds a JavaScript polyfill for rendering meshes in web browsers."
-msgstr ""
+msgstr "Vlož JavaScript kód pre 2D prechody (vykreslovanie na webe)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2410
 msgid "Adds a JavaScript polyfill for rendering hatches in web browsers."
@@ -30243,7 +30203,7 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2413
 msgid "SVG 2 to SVG 1.1"
-msgstr ""
+msgstr "SVG 2 na SVG 1.1"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2415
 msgid "Use correct marker direction in SVG 1.1 renderers"
@@ -30677,7 +30637,7 @@ msgstr "Presúvať vzorky (vo výplni a ťahu) spolu s objektami"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2630
 msgid "When changing stroke width, scale dash array"
-msgstr ""
+msgstr "Pri"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2631
 msgid "Store transformation"
@@ -31144,7 +31104,7 @@ msgid ""
 msgstr ""
 "Pri duplikovaní výberu, ktorý obsahuje originál aj jeho klony (prípadne v "
 "zoskupení), vytvoriť odkaz klonu vytvoreného duplikovaním na duplikát "
-"originálu namiesto originálu:"
+"originálu namiesto originálu"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2809
 #, fuzzy
@@ -31524,7 +31484,7 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3034
 msgid "Render time limit"
-msgstr "Veľkosť vyrovnáva_ej pamäte vykresľovania:"
+msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3034
 #, fuzzy
@@ -31578,18 +31538,16 @@ msgid "Use buffers bigger than the window by this amount"
 msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3044
-#, fuzzy
 msgid "Prerender margin"
-msgstr "Okraj hlavičky:"
+msgstr "Okraj hlavičky"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3044
 msgid "Pre-render a margin around the visible region."
 msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3046
-#, fuzzy
 msgid "Preempt size"
-msgstr "Veľkosť palety:"
+msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3046
 msgid ""
@@ -31900,9 +31858,8 @@ msgstr ""
 "Akékoľvek vlastné klávesové skratky, ktoré vytvoríte budú pridané oddelene"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3178
-#, fuzzy
 msgid "Keyboard file:"
-msgstr "Zo súboru"
+msgstr "Zo súboru:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3192
 #: ../share/ui/command-palette-operation.glade:82
@@ -31917,7 +31874,7 @@ msgstr "Popis"
 #: ../src/ui/dialog/inkscape-preferences.cpp:3242
 #: ../share/ui/marker-popup.glade:323
 msgid "ID"
-msgstr "ID:"
+msgstr "ID"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3225
 #, fuzzy
@@ -32128,9 +32085,8 @@ msgid "Open templates folder"
 msgstr "nebola vybraná žiadna šablóna"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3783
-#, fuzzy
 msgid "User templates:"
-msgstr "Nový dokumen_t zo šablóny..."
+msgstr "Nový dokument zo šablóny:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3784
 #, fuzzy
@@ -33003,9 +32959,8 @@ msgstr "Doladiť hodnotu kerningu"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:786
 #: ../share/extensions/setup_typography_canvas.py:69
-#, fuzzy
 msgid "ascender"
-msgstr "Stúpanie:"
+msgstr "stúpanie"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:787
 #: ../share/extensions/setup_typography_canvas.py:70
@@ -33039,9 +32994,8 @@ msgid "Font Attributes"
 msgstr "Atribúty písma"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:844
-#, fuzzy
 msgid "Horizontal advance X:"
-msgstr "Vodorovné čiary"
+msgstr ""
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:844
 #, fuzzy
@@ -33113,9 +33067,8 @@ msgid ""
 msgstr ""
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:852
-#, fuzzy
 msgid "x-height:"
-msgstr "Výška"
+msgstr "x- výška:"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:852
 msgid ""
@@ -33125,7 +33078,7 @@ msgstr ""
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:853
 #: ../share/extensions/setup_typography_canvas.inx:9
 msgid "Descender:"
-msgstr "Klesanie"
+msgstr ""
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:853
 msgid "Amount of space taken up by descenders like the tail on the letter 'g'"
@@ -33284,14 +33237,12 @@ msgid "Select glyphs:"
 msgstr "Zvoľte stránku:"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:1567
-#, fuzzy
 msgid "First glyph"
-msgstr "1. znak:"
+msgstr "1. znak"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:1568
-#, fuzzy
 msgid "Second glyph"
-msgstr "Druhá cesta:"
+msgstr "2. znak"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:1578
 #, fuzzy
@@ -33352,9 +33303,8 @@ msgid "Document swatches"
 msgstr "Dokument bol uložený."
 
 #: ../src/ui/dialog/symbols.cpp:152
-#, fuzzy
 msgid "All symbol sets"
-msgstr "Množina symbolov:"
+msgstr "Všetky kolkecie symbolov"
 
 #: ../src/ui/dialog/symbols.cpp:666 ../src/ui/dialog/symbols.cpp:669
 #, fuzzy
@@ -33621,14 +33571,12 @@ msgid ""
 msgstr ""
 
 #: ../src/ui/dialog/xml-tree.cpp:187
-#, fuzzy
 msgid "Horizontal panel layout"
-msgstr "Vodorovné vloženie:"
+msgstr "Vodorovné rozloženie"
 
 #: ../src/ui/dialog/xml-tree.cpp:189
-#, fuzzy
 msgid "Vertical panel layout"
-msgstr "Zvislé vloženie:"
+msgstr "Zvislé rozloženie"
 
 #: ../src/ui/dialog/xml-tree.cpp:607
 #, fuzzy
@@ -33815,18 +33763,16 @@ msgid "Node or handle drag canceled."
 msgstr "Ťahanie uzla alebo úchopu zrušené."
 
 #: ../src/ui/modifiers.cpp:87
-#, fuzzy
 msgid "Vertical pan"
-msgstr "Zvislé rozostupy:"
+msgstr "Vodorovný Posun"
 
 #: ../src/ui/modifiers.cpp:87
 msgid "Pan/Scroll up and down"
 msgstr ""
 
 #: ../src/ui/modifiers.cpp:88
-#, fuzzy
 msgid "Horizontal pan"
-msgstr "Vodorovné rozostupy:"
+msgstr "Zvyslý Posun"
 
 #: ../src/ui/modifiers.cpp:88
 msgid "Pan/Scroll left and right"
@@ -33842,9 +33788,8 @@ msgid "Zoom in and out with scroll wheel"
 msgstr ""
 
 #: ../src/ui/modifiers.cpp:90
-#, fuzzy
 msgid "Canvas rotate"
-msgstr "_Orientácia stránky:"
+msgstr "Otáčanie Plátna"
 
 #: ../src/ui/modifiers.cpp:90
 #, fuzzy
@@ -33852,48 +33797,40 @@ msgid "Rotate the canvas with scroll wheel"
 msgstr "Otočenie v smere hodinových ručičiek"
 
 #: ../src/ui/modifiers.cpp:93
-#, fuzzy
 msgid "Add to selection"
-msgstr "Stred výberu"
+msgstr "Pridať do výberu"
 
 #: ../src/ui/modifiers.cpp:93
-#, fuzzy
 msgid "Add items to existing selection"
-msgstr "Sprejovať kópie pôvodného výberu"
+msgstr "Pridať objekty do existujúceho výberu"
 
 #: ../src/ui/modifiers.cpp:94
-#, fuzzy
 msgid "Select inside groups"
-msgstr "Zmazať existujúce vodidlá"
+msgstr "Označ vo vnútri Skupín"
 
 #: ../src/ui/modifiers.cpp:94
-#, fuzzy
 msgid "Ignore groups when selecting items"
-msgstr "Zrušiť zoskupenie skupín pri nastavení orezania/masky"
+msgstr "Ignoruj skupiny ked označuješ objekty"
 
 #: ../src/ui/modifiers.cpp:95
-#, fuzzy
 msgid "Select with touch-path"
-msgstr "Vybrať novú cestu"
+msgstr "Označ dotykom cesty"
 
 #: ../src/ui/modifiers.cpp:95
-#, fuzzy
 msgid "Draw a band around items to select them"
-msgstr "<b>Kreslením okolo</b> úchopov ich vyberiete"
+msgstr "Označ tak že zakrúžkuješ Objekty"
 
 #: ../src/ui/modifiers.cpp:96
-#, fuzzy
 msgid "Select with box"
-msgstr "Vybrať novú cestu"
+msgstr "Označ cez štvorec"
 
 #: ../src/ui/modifiers.cpp:96
 msgid "Don't drag items, select more with a box"
 msgstr ""
 
 #: ../src/ui/modifiers.cpp:97
-#, fuzzy
 msgid "Select the first"
-msgstr "_Vybrať toto"
+msgstr "Vybrať prvé"
 
 #: ../src/ui/modifiers.cpp:97
 msgid "Drag the first item the mouse hits"
@@ -33992,6 +33929,7 @@ msgstr "Režim skice"
 #: ../src/ui/modifiers.cpp:111
 msgid "Change shape builder mode temporarily by holding a modifier key."
 msgstr ""
+"Dočasne zmeň mód Vytvárania Tvarov pokial držíš modifikačnú klávesu (SHIFT)."
 
 #: ../src/ui/modifiers.cpp:113
 #, fuzzy
@@ -34037,9 +33975,8 @@ msgid "Transformations"
 msgstr "Transformácia"
 
 #: ../src/ui/modifiers.cpp:128
-#, fuzzy
 msgid "Shape Builder"
-msgstr "Spojený Tvar"
+msgstr "Vytváranie Tvarov"
 
 #: ../src/ui/modifiers.cpp:236
 msgid "[NEVER]"
@@ -35145,9 +35082,8 @@ msgid "Multiple stops"
 msgstr "Viaceré priehradky"
 
 #: ../src/ui/toolbar/lpe-toolbar.cpp:74
-#, fuzzy
 msgid "Line Type"
-msgstr "Typ čiar:"
+msgstr "Typ čiar"
 
 #: ../src/ui/toolbar/lpe-toolbar.cpp:74 ../share/ui/toolbar-lpe.ui:123
 #, fuzzy
@@ -35206,9 +35142,8 @@ msgid "Bicubic"
 msgstr "bikubické"
 
 #: ../src/ui/toolbar/mesh-toolbar.cpp:149
-#, fuzzy
 msgid "Smoothing"
-msgstr "Vyhladzovanie:"
+msgstr "Vyhladzovanie"
 
 #. TRANSLATORS: Type of Smoothing. See https://en.wikipedia.org/wiki/Coons_patch
 #: ../src/ui/toolbar/mesh-toolbar.cpp:151
@@ -35312,9 +35247,8 @@ msgid "Butt"
 msgstr "Zrezané"
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:161
-#, fuzzy
 msgid "Caps"
-msgstr "Zakončenie:"
+msgstr "Zakončenie"
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:161 ../share/ui/toolbar-pencil.ui:162
 msgid "Line endings when drawing with pressure-sensitive PowerPencil"
@@ -35832,13 +35766,15 @@ msgid "Create ellipse"
 msgstr "Vytvoriť elipsu"
 
 #: ../src/ui/tools/booleans-tool.cpp:115
-#, fuzzy
 msgid "You must select some objects to use the Shape Builder tool."
-msgstr "Viaceré vybrané objekty majú rovnakú výplň"
+msgstr ""
+"Musíš označiť niekolko objektov na to aby si moholo použiť nástroj "
+"Vytváranie Tvarov."
 
 #: ../src/ui/tools/booleans-tool.cpp:117
 msgid "The Shape Builder requires regular shapes to be selected."
 msgstr ""
+"Nástroj Vytváranie Tvarov potrebuje aby si najskor označil aspoň 2 tvary."
 
 #: ../src/ui/tools/box3d-tool.cpp:299 ../src/ui/tools/box3d-tool.cpp:305
 #: ../src/ui/tools/box3d-tool.cpp:311 ../src/ui/tools/box3d-tool.cpp:317
@@ -36229,12 +36165,12 @@ msgid "Crossing %lu"
 msgstr "Pretína %lu"
 
 #: ../src/ui/tools/measure-tool.cpp:1644
-#, fuzzy
-#| msgid "Maximum segment length:"
 msgid ""
 "\n"
 "Intersection segments lengths:\n"
-msgstr "Maximálna dĺžka úseku:"
+msgstr ""
+"\n"
+"Maximálna dĺžka úseku:\n"
 
 #: ../src/ui/tools/measure-tool.cpp:1656
 msgid ""
@@ -36273,10 +36209,8 @@ msgid "Angle"
 msgstr "Uhol"
 
 #: ../src/ui/tools/measure-tool.h:85
-#, fuzzy
-#| msgid "_Gap length:"
 msgid "Shape length"
-msgstr "_Dľžka medzery:"
+msgstr "Dľžka Tvaru"
 
 #: ../src/ui/tools/measure-tool.h:86
 #, fuzzy
@@ -36285,9 +36219,8 @@ msgid "Shape width"
 msgstr "Šírka medzery"
 
 #: ../src/ui/tools/measure-tool.h:87
-#, fuzzy
 msgid "Shape height"
-msgstr "Výška kapitálok:"
+msgstr "Výška Tvaru"
 
 #: ../src/ui/tools/measure-tool.h:88
 #, fuzzy
@@ -38197,10 +38130,9 @@ msgstr ""
 
 #. TRANSLATORS: “Parametric Uppercase Counter Height”
 #: ../src/ui/widget/font-variations.cpp:72
-#, fuzzy
 msgctxt "Variable font axis"
 msgid "Uppercase height"
-msgstr "Výška kapitálok:"
+msgstr "Výška kapitálok"
 
 #: ../src/ui/widget/font-variations.cpp:72
 msgid "Vary the height of uppercase letterforms"
@@ -38232,11 +38164,9 @@ msgstr ""
 
 #. TRANSLATORS: “Parametric Figure Height”
 #: ../src/ui/widget/font-variations.cpp:78
-#, fuzzy
-#| msgid "Blur height:"
 msgctxt "Variable font axis"
 msgid "Figure height"
-msgstr "Výška rozostrenia:"
+msgstr "Výška číslic"
 
 #: ../src/ui/widget/font-variations.cpp:78
 msgid "Vary the height of figures"
@@ -38244,10 +38174,9 @@ msgstr ""
 
 #. TRANSLATORS: "Serif rise" - found in the wild (https://github.com/googlefonts/amstelvar)
 #: ../src/ui/widget/font-variations.cpp:80
-#, fuzzy
 msgctxt "Variable font axis"
 msgid "Serif rise"
-msgstr "Sériový port:"
+msgstr ""
 
 #: ../src/ui/widget/font-variations.cpp:80
 #, fuzzy
@@ -38322,10 +38251,9 @@ msgid "Fill can turn transparent forms opaque"
 msgstr ""
 
 #: ../src/ui/widget/font-variations.cpp:95
-#, fuzzy
 msgctxt "Variable font axis"
 msgid "Monospace"
-msgstr "Šírka mesiaca:"
+msgstr ""
 
 #: ../src/ui/widget/font-variations.cpp:95
 msgid "Adjust the glyphs from a proportional width to a fixed width"
@@ -38366,11 +38294,9 @@ msgstr ""
 #. such as 14 pt or 144 pt. Small (or body) optical sizes tend to have less stroke contrast, more open and wider spacing,
 #. and a taller x-height than those of their large (or display) counterparts.
 #: ../src/ui/widget/font-variations.cpp:106
-#, fuzzy
-#| msgid "Initial size:"
 msgctxt "Variable font axis"
 msgid "Optical size"
-msgstr "Počiatočná veľkosť:"
+msgstr "Optická veľkosť"
 
 #: ../src/ui/widget/font-variations.cpp:106
 msgid "Optimize the typeface for use at specific size"
@@ -38463,10 +38389,8 @@ msgid "Reflection"
 msgstr "Výber"
 
 #: ../src/ui/widget/font-variations.cpp:119
-#, fuzzy
-#| msgid "Convert selection:"
 msgid "Controls the Y reflection"
-msgstr "Konvertovať výber:"
+msgstr "Ovláda Y prevrátenie"
 
 #: ../src/ui/widget/font-variations.cpp:120
 #, fuzzy
@@ -38557,11 +38481,9 @@ msgid "Controls the glyph’s unicode ID"
 msgstr "Nastaviť kód znaku Unicode"
 
 #: ../src/ui/widget/font-variations.cpp:128
-#, fuzzy
-#| msgid "Length variation:"
 msgctxt "Variable font axis"
 msgid "Feature variation"
-msgstr "Variácia dĺžky:"
+msgstr "Variácia Možností"
 
 #: ../src/ui/widget/font-variations.cpp:128
 msgid "Controls the glyph’s feature variation"
@@ -38597,9 +38519,8 @@ msgid "Create a duplicate gradient"
 msgstr "Vytvoriť duplicitný farebný prechod"
 
 #: ../src/ui/widget/gradient-selector.cpp:136
-#, fuzzy
 msgid "Delete unused gradient"
-msgstr "Zmazať segment"
+msgstr "Zmazať nepužité prechody"
 
 #: ../src/ui/widget/gradient-selector.cpp:147
 msgid "Edit gradient"
@@ -38662,9 +38583,8 @@ msgid "Linked"
 msgstr "Odkazovať"
 
 #: ../src/ui/widget/image-properties.cpp:225
-#, fuzzy
 msgid "Color profile:"
-msgstr "Pripojiť farebný profil"
+msgstr "Farebný profil:"
 
 #: ../src/ui/widget/image-properties.cpp:229
 #, fuzzy
@@ -38795,9 +38715,8 @@ msgid "Others"
 msgstr "Ďalšie"
 
 #: ../src/ui/widget/page-properties.cpp:165
-#, fuzzy
 msgid "Border and shadow color"
-msgstr "Farba _okraja:"
+msgstr "Farba a Tieň okrajov"
 
 #: ../src/ui/widget/page-selector.cpp:36
 #, fuzzy
@@ -38820,7 +38739,7 @@ msgstr "Bez farby"
 
 #: ../src/ui/widget/paint-selector.cpp:151
 msgid "Flat color"
-msgstr "Jednoduchá farba:"
+msgstr "Jednoduchá farba"
 
 #: ../src/ui/widget/paint-selector.cpp:153 ../share/ui/gradient-edit.glade:32
 msgid "Linear gradient"
@@ -38918,9 +38837,8 @@ msgstr ""
 "náhodných čísel."
 
 #: ../src/ui/widget/registered-widget.cpp:608
-#, fuzzy
 msgid "Distance:"
-msgstr "Vzdialený"
+msgstr "Vzdialenosť:"
 
 #: ../src/ui/widget/rendering-options.cpp:28
 msgid "Backend"
@@ -39274,10 +39192,8 @@ msgid "Hairline"
 msgstr "(hrúbka vlasu)"
 
 #: ../src/ui/widget/selected-style.cpp:907
-#, fuzzy
-#| msgid "Stroke width:"
 msgid "Stroke width: Hairline"
-msgstr "Šírka ťahu:"
+msgstr "Šírka ťahu: Hairline"
 
 #: ../src/ui/widget/selected-style.cpp:926
 #, c-format
@@ -39381,9 +39297,8 @@ msgid "Dashes:"
 msgstr "Typ čiary:"
 
 #: ../src/ui/widget/stroke-style.cpp:289
-#, fuzzy
 msgid "_Pattern:"
-msgstr "Vzorka"
+msgstr "Vzorka:"
 
 #: ../src/ui/widget/stroke-style.cpp:290
 msgid "Repeating \"dash gap ...\" pattern"
@@ -40337,9 +40252,8 @@ msgstr "Vyhladiť ostré hrany vo vektorizácii"
 
 #: ../share/ui/dialog-trace.glade:209 ../share/ui/dialog-trace.glade:678
 #: ../share/ui/dialog-trace.glade:1024
-#, fuzzy
 msgid "Optimize"
-msgstr "Optimalizované"
+msgstr "Optimalizacia"
 
 #: ../share/ui/dialog-trace.glade:211 ../share/ui/dialog-trace.glade:680
 #: ../share/ui/dialog-trace.glade:1026
@@ -40349,9 +40263,8 @@ msgstr ""
 "kriviek"
 
 #: ../share/ui/dialog-trace.glade:246
-#, fuzzy
 msgid "Edge threshold"
-msgstr "Zhruba prah:"
+msgstr "Prah Kraja"
 
 #: ../share/ui/dialog-trace.glade:266
 #, fuzzy
@@ -40379,9 +40292,8 @@ msgid "Brightness cutoff"
 msgstr "Orezanie jasu"
 
 #: ../share/ui/dialog-trace.glade:377
-#, fuzzy
 msgid "Edge detection"
-msgstr "D_etekcia hrán"
+msgstr "Detekcia hrán"
 
 #: ../share/ui/dialog-trace.glade:378
 msgid "Color quantization"
@@ -40440,9 +40352,8 @@ msgid "Grays"
 msgstr "Šedé"
 
 #: ../share/ui/dialog-trace.glade:549
-#, fuzzy
 msgid "Autotrace (slower)"
-msgstr "Lepšia kvalita (pomalšie)"
+msgstr "Autotrace (pomalšie)"
 
 #: ../share/ui/dialog-trace.glade:563
 msgid "Scans"
@@ -40453,9 +40364,8 @@ msgid "Apply Gaussian blur to the bitmap before tracing"
 msgstr "Použiť na bitmapu pred vektorizáciou gaussovské rozostrenie"
 
 #: ../share/ui/dialog-trace.glade:598
-#, fuzzy
 msgid "Remove background"
-msgstr "_Odstrániť pozadie"
+msgstr "Odstrániť pozadie"
 
 #: ../share/ui/dialog-trace.glade:600
 msgid "Remove bottom (background) layer when done"
@@ -40466,9 +40376,8 @@ msgid "The desired number of scans"
 msgstr "Požadovaný počet skenov"
 
 #: ../share/ui/dialog-trace.glade:785
-#, fuzzy
 msgid "Stack"
-msgstr "Skladané"
+msgstr "Naskladané"
 
 #: ../share/ui/dialog-trace.glade:787
 msgid ""
@@ -40497,9 +40406,8 @@ msgid "Avoid single disconnected pixels (weight)"
 msgstr "Vynúť sa samostatným pixelom"
 
 #: ../share/ui/dialog-trace.glade:838
-#, fuzzy
 msgid "Islands"
-msgstr "_Ostrovčeky (váha):"
+msgstr "Ostrovčeky"
 
 #: ../share/ui/dialog-trace.glade:847 ../share/ui/dialog-trace.glade:1037
 #: ../share/ui/dialog-trace.glade:1048
@@ -40507,9 +40415,8 @@ msgid "Favors connections that are part of foreground color"
 msgstr "Uprednostňuje spojenia, ktoré sú súčasťou farby popredia"
 
 #: ../share/ui/dialog-trace.glade:850
-#, fuzzy
 msgid "Sparse pixels:"
-msgstr "Radius (v pixeloch):"
+msgstr "Pixely:"
 
 #: ../share/ui/dialog-trace.glade:862 ../share/ui/dialog-trace.glade:905
 msgid "The heuristic computed vote will be multiplied by this value"
@@ -40524,9 +40431,8 @@ msgid "The radius of the window analyzed"
 msgstr "Polomer analyzovaného okna"
 
 #: ../share/ui/dialog-trace.glade:919
-#, fuzzy
 msgid " Heuristics:"
-msgstr " Heuristika"
+msgstr " Možnosti:"
 
 #: ../share/ui/dialog-trace.glade:982
 #, fuzzy
@@ -40557,9 +40463,8 @@ msgid "Multiplier"
 msgstr "Násobiť"
 
 #: ../share/ui/dialog-trace.glade:1050
-#, fuzzy
 msgid "Window radius"
-msgstr "Okná"
+msgstr "Zaoblovanie"
 
 #: ../share/ui/dialog-trace.glade:1064
 #, fuzzy
@@ -40578,7 +40483,7 @@ msgstr "Vytvoriť náhľad"
 
 #: ../share/ui/dialog-trace.glade:1121
 msgid "Preview:"
-msgstr "Náhľad\""
+msgstr "Náhľad:"
 
 #: ../share/ui/dialog-trace.glade:1138
 msgid "Instructions"
@@ -40594,14 +40499,12 @@ msgid "Automatic Layout"
 msgstr "Automatické Orzloženie"
 
 #: ../share/ui/dialog-xml.glade:12
-#, fuzzy
 msgid "Horizontal Layout"
-msgstr "Vodorovné vloženie:"
+msgstr "Vodorovné rozlženie"
 
 #: ../share/ui/dialog-xml.glade:17
-#, fuzzy
 msgid "Vertical Layout"
-msgstr "Zvislé vloženie:"
+msgstr "Zvislé rozloženie"
 
 #: ../share/ui/dialog-xml.glade:33
 msgid "New element node"
@@ -40632,9 +40535,8 @@ msgid "Lower node"
 msgstr "Zníži uzol"
 
 #: ../share/ui/display-popup.glade:18
-#, fuzzy
 msgid "Display mode:"
-msgstr "_Zobrazovací režim"
+msgstr "Zobrazovací režim:"
 
 #: ../share/ui/display-popup.glade:71
 #, fuzzy
@@ -40647,9 +40549,8 @@ msgid "Enhance thin lines"
 msgstr "Rozšírené metasúbory"
 
 #: ../share/ui/display-popup.glade:108
-#, fuzzy
 msgid "No filters"
-msgstr "žiadne filtre"
+msgstr "Žiadne filtre"
 
 #: ../share/ui/display-popup.glade:119
 #, fuzzy
@@ -40657,9 +40558,8 @@ msgid "Quick zoom:"
 msgstr "Vybrať farby:"
 
 #: ../share/ui/display-popup.glade:129
-#, fuzzy
 msgid "Quick preview:"
-msgstr "Živý náhľad"
+msgstr "Rýchly náhľad:"
 
 #: ../share/ui/display-popup.glade:160
 #, fuzzy
@@ -40695,9 +40595,8 @@ msgid "Media Box"
 msgstr "ohraničenie nosiča"
 
 #: ../share/ui/extension-pdfinput.glade:20
-#, fuzzy
 msgid "Crop Box"
-msgstr "Orezať na:"
+msgstr "Orezať na"
 
 #: ../share/ui/extension-pdfinput.glade:24
 #, fuzzy
@@ -40715,18 +40614,16 @@ msgid "Art Box"
 msgstr "Kváder"
 
 #: ../share/ui/extension-pdfinput.glade:81
-#, fuzzy
 msgid "Draw missing fonts"
-msgstr "Kreslenie ukončené"
+msgstr "Vykresli chýbajúce fonty"
 
 #: ../share/ui/extension-pdfinput.glade:85
-#, fuzzy
 msgid "Substitute missing fonts"
-msgstr "Rozdeliť spojnice"
+msgstr "Nahraď chýbajúce fonty"
 
 #: ../share/ui/extension-pdfinput.glade:89
 msgid "Keep missing fonts' names"
-msgstr ""
+msgstr "Nechaj mená chýbajúchich fontov"
 
 #: ../share/ui/extension-pdfinput.glade:93
 #, fuzzy
@@ -40770,9 +40667,8 @@ msgid ""
 msgstr ""
 
 #: ../share/ui/extension-pdfinput.glade:193
-#, fuzzy
 msgid "Family Name"
-msgstr "Názov rodiny:"
+msgstr "Názov rodiny"
 
 #: ../share/ui/extension-pdfinput.glade:211
 #: ../share/extensions/interp_att_g.inx:27
@@ -40809,14 +40705,12 @@ msgid "rough"
 msgstr "drsný"
 
 #: ../share/ui/extension-pdfinput.glade:369
-#, fuzzy
 msgid "Fonts:"
-msgstr "_Písmo"
+msgstr "Písmo:"
 
 #: ../share/ui/extension-pdfinput.glade:382
-#, fuzzy
 msgid "Pages:"
-msgstr "Stránka"
+msgstr "Stránky:"
 
 #: ../share/ui/extension-pdfinput.glade:394
 msgid ""
@@ -40889,14 +40783,12 @@ msgstr ""
 
 #. This is an option to select to show font name as a font preview in font browser
 #: ../share/ui/font-list.glade:28
-#, fuzzy
 msgid "Font name"
-msgstr "Štýl písma"
+msgstr "Meno písma"
 
 #: ../share/ui/font-list.glade:48
-#, fuzzy
 msgid "Font collections:"
-msgstr "Výber písma"
+msgstr "Kolekcie písma:"
 
 #: ../share/ui/font-list.glade:60
 #, fuzzy
@@ -40914,16 +40806,12 @@ msgid "Edit font collections"
 msgstr "Výber písma"
 
 #: ../share/ui/font-list.glade:265
-#, fuzzy
-#| msgid "Samples:"
 msgid "Sample"
-msgstr "Vzorky:"
+msgstr "Vzorka"
 
 #: ../share/ui/font-list.glade:275
-#, fuzzy
-#| msgid "Preview's size (px):"
 msgid "Preview size"
-msgstr "Veľkosť náhľadu (px):"
+msgstr "Veľkosť náhľadu"
 
 #: ../share/ui/font-list.glade:284
 #, fuzzy
@@ -40946,7 +40834,7 @@ msgstr "Plocha"
 #: ../share/ui/font-list.glade:396 ../share/extensions/nicechart.inx:52
 #: ../share/extensions/path_number_nodes.inx:8
 msgid "Font size:"
-msgstr "Veľkosť písma"
+msgstr "Veľkosť písma:"
 
 #: ../share/ui/font-list.glade:409
 #, fuzzy
@@ -41072,9 +40960,8 @@ msgid "Repeat:"
 msgstr "Opakovať:"
 
 #: ../share/ui/gradient-edit.glade:285
-#, fuzzy
 msgid "Gradient:"
-msgstr "Lineárny prechod"
+msgstr "Prechod:"
 
 #: ../share/ui/gradient-edit.glade:297
 #, fuzzy
@@ -41098,14 +40985,12 @@ msgid "URL:"
 msgstr "URL:"
 
 #: ../share/ui/image-properties.glade:83
-#, fuzzy
 msgid "Change image..."
-msgstr "Zmeniť veľkosť písmen"
+msgstr "Zmeniť obrázok..."
 
 #: ../share/ui/image-properties.glade:102
-#, fuzzy
 msgid "Embed image in the document"
-msgstr "Zmeniť všetky obrázky v dokumente"
+msgstr "Embedovať všetky obrázky do dokumentu"
 
 #: ../share/ui/image-properties.glade:123
 #, fuzzy
@@ -41128,9 +41013,8 @@ msgid "Preserve"
 msgstr "Zachované"
 
 #: ../share/ui/image-properties.glade:170
-#, fuzzy
 msgid "Stretch image"
-msgstr "Hľadať obrázky"
+msgstr "Natiahni Obrázok"
 
 #: ../share/ui/image-properties.glade:186
 msgid "Rendering:"
@@ -41367,41 +41251,34 @@ msgstr ""
 
 #: ../share/ui/inkscape-start.glade:623
 msgid "Supported by You"
-msgstr ""
+msgstr "Podpor Nás"
 
 #: ../share/ui/inkscape-start.glade:656
-#, fuzzy
 msgctxt "Welcome dialog"
 msgid "Recent Files"
-msgstr "Odst_rániť filtre"
+msgstr "Nedávne Súbory"
 
 #: ../share/ui/inkscape-start.glade:673
-#, fuzzy
-#| msgid "Emergence"
 msgctxt "Welcome dialog"
 msgid "Emergency Save"
-msgstr "Vznik"
+msgstr "Záchranné Uloženie"
 
 #: ../share/ui/inkscape-start.glade:690
-#, fuzzy
 msgctxt "Welcome dialog"
 msgid "Existing Files"
-msgstr "Exportuje sa %1 súborov"
+msgstr "Exzistujúce Súbory"
 
 #: ../share/ui/inkscape-start.glade:704
-#, fuzzy
 msgid "Show this every time"
-msgstr "Zobraziť vonkajší štýl"
+msgstr "Vždy ukazuj toto okno"
 
 #: ../share/ui/inkscape-start.glade:725
-#, fuzzy
 msgid "New Document"
-msgstr "Nový dokument %d"
+msgstr "Nový Dokument"
 
 #: ../share/ui/inkscape-start.glade:739
-#, fuzzy
 msgid "Time to Draw"
-msgstr "Neónová kresba"
+msgstr "Čas Kresliť"
 
 #: ../share/ui/marker-popup.glade:90 ../share/extensions/layout_nup.inx:14
 #: ../share/extensions/layout_nup.inx:25
@@ -41433,9 +41310,8 @@ msgid "Fixed specified angle"
 msgstr "Uhol pera"
 
 #: ../share/ui/marker-popup.glade:233
-#, fuzzy
 msgid "Fixed angle:"
-msgstr "Uhol pera"
+msgstr "Zamknutý Uhol:"
 
 #: ../share/ui/marker-popup.glade:256 ../share/ui/pattern-edit.glade:402
 #, fuzzy
@@ -41543,21 +41419,17 @@ msgstr "Šírka obdĺžnika"
 #: ../share/ui/object-attributes.glade:371
 #: ../share/ui/object-attributes.glade:922 ../share/ui/toolbar-rect.ui:61
 #: ../share/ui/toolbar-select.ui:426
-#, fuzzy
-#| msgid "H:"
 msgctxt "Abbreviation of Height"
 msgid "H:"
 msgstr "V:"
 
 #: ../share/ui/object-attributes.glade:381
-#, fuzzy
 msgid "Height of rectangle (without stroke)"
-msgstr "Výška obdĺžnika"
+msgstr "Výška obdĺžnika (bez ťahu)"
 
 #: ../share/ui/object-attributes.glade:396
-#, fuzzy
 msgid "Corner radius"
-msgstr "Vnútorný polomer"
+msgstr "Polomer Zaoblenia"
 
 #: ../share/ui/object-attributes.glade:417 ../share/ui/toolbar-rect.ui:78
 msgid "Horizontal radius of rounded corners"
@@ -41632,16 +41504,12 @@ msgid "Path vertical position"
 msgstr "Poloha X"
 
 #: ../share/ui/object-attributes.glade:850
-#, fuzzy
-#| msgid "Horizontal point:"
 msgid "Path horizontal position"
-msgstr "Vodorovný bod:"
+msgstr "Pozícia Horizonálnej cesty"
 
 #: ../share/ui/object-attributes.glade:886
-#, fuzzy
-#| msgid "Location:"
 msgid "Location"
-msgstr "Umiestnenie:"
+msgstr "Umiestnenie"
 
 #: ../share/ui/object-attributes.glade:907
 #, fuzzy
@@ -41660,9 +41528,8 @@ msgid "Press Shift+Enter to commit editing changes"
 msgstr ""
 
 #: ../share/ui/page-properties.glade:61
-#, fuzzy
 msgid "Front page"
-msgstr "Písmo:"
+msgstr "Predná Stránka"
 
 #: ../share/ui/page-properties.glade:79
 msgid "Predefined paper sizes to choose from"
@@ -41688,9 +41555,8 @@ msgid "Unsupported percentage size!"
 msgstr "Použiť veľkosť exportovaného objektu"
 
 #: ../share/ui/page-properties.glade:273
-#, fuzzy
 msgid "Resize to content:"
-msgstr "_Prispôsobiť veľkosť stránky obsahu..."
+msgstr "Prispôsobiť veľkosť stránky obsahu:"
 
 #: ../share/ui/page-properties.glade:284
 #, fuzzy
@@ -41700,16 +41566,12 @@ msgstr ""
 "Prispôsobiť stránku súčasnému výberu alebo kresbe ak nie je nič vybrané"
 
 #: ../share/ui/page-properties.glade:312
-#, fuzzy
-#| msgid "Coordinates:"
 msgid "Coordinate system"
-msgstr "Súradnice:"
+msgstr "Súradnice"
 
 #: ../share/ui/page-properties.glade:334
-#, fuzzy
-#| msgid "Origin"
 msgid "Origin:"
-msgstr "Počiatok"
+msgstr "Počiatok:"
 
 #: ../share/ui/page-properties.glade:345
 msgid ""
@@ -41755,9 +41617,8 @@ msgid "Non-uniform scale!"
 msgstr "Podporovať nerovnomernú zmenu mierky"
 
 #: ../share/ui/page-properties.glade:616
-#, fuzzy
 msgid "per user unit"
-msgstr "Základná jednotka:"
+msgstr "Základná jednotka"
 
 #: ../share/ui/page-properties.glade:635
 msgid ""
@@ -41778,9 +41639,8 @@ msgid "Page background color used during editing and exporting"
 msgstr ""
 
 #: ../share/ui/page-properties.glade:755
-#, fuzzy
 msgid "Page border and drop shadow color"
-msgstr "Farba okraja stránky"
+msgstr "Farba okraja a tieňu stránky"
 
 #: ../share/ui/page-properties.glade:767
 #, fuzzy
@@ -41853,9 +41713,8 @@ msgid "If unset, no antialiasing will be done on the drawing."
 msgstr "Ak nie je voľba nastavená, na kresbu sa nepoužije antialiasing"
 
 #: ../share/ui/pattern-edit.glade:114
-#, fuzzy
 msgid "Gap control:"
-msgstr "P_anel Ovládacích prvkov prichytávania"
+msgstr "Medzery:"
 
 #: ../share/ui/pattern-edit.glade:124
 msgid "Mouse-friendly"
@@ -41932,18 +41791,16 @@ msgid "Selection Area"
 msgstr "Oblasť výberu"
 
 #: ../share/ui/align-and-distribute.ui:127 ../share/extensions/frame.inx:10
-#, fuzzy
 msgid "Treat selection as group"
-msgstr "_Pracovať s výberom ako so skupinou:"
+msgstr "Pracovať s výberom ako so skupinou"
 
 #: ../share/ui/align-and-distribute.ui:143
 msgid "Alignment handles with third click"
 msgstr ""
 
 #: ../share/ui/align-and-distribute.ui:154
-#, fuzzy
 msgid "Move/align selection as group"
-msgstr "_Pracovať s výberom ako so skupinou:"
+msgstr "Hýb s výberom ako so skupinou"
 
 #: ../share/ui/align-and-distribute.ui:168
 #: ../share/ui/align-and-distribute.ui:873
@@ -42006,11 +41863,9 @@ msgid "Align text anchors vertically"
 msgstr "Zvislo rozmiestniť vybrané uzly"
 
 #: ../share/ui/align-and-distribute.ui:801
-#, fuzzy
-#| msgid "H:"
 msgctxt "Abbreviation of Horizontal"
 msgid "H:"
-msgstr "V:"
+msgstr "H:"
 
 #: ../share/ui/align-and-distribute.ui:809
 #, fuzzy
@@ -42018,9 +41873,8 @@ msgid "Minimum horizontal gap (in pixel units) between bounding boxes"
 msgstr "Najmenšie vodorovné rozostupy (v px) medzi ohraničeniami"
 
 #: ../share/ui/align-and-distribute.ui:815
-#, fuzzy
 msgid "V:"
-msgstr "_Zvis.:"
+msgstr "V:"
 
 #: ../share/ui/align-and-distribute.ui:823
 #, fuzzy
@@ -42059,9 +41913,8 @@ msgid "Show angle"
 msgstr "Zobraziť úchopy"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:40
-#, fuzzy
 msgid "Show the angle measurement"
-msgstr "Meranie hrúbky papiera:"
+msgstr "Zobraz uhol merania"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:50
 #, fuzzy
@@ -42070,9 +41923,8 @@ msgid "Show delta values"
 msgstr "Zobraziť hodnoty"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:53
-#, fuzzy
 msgid "Show dX and dY measurements"
-msgstr "Meranie hrúbky papiera:"
+msgstr "Zobraz dX a dY merania"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:63
 #, fuzzy
@@ -42095,10 +41947,8 @@ msgid "Add labels to the intersection segments"
 msgstr "Pridať šírku ťahu k šírke prerušenia"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:89
-#, fuzzy
-#| msgid "Maximum segment length:"
 msgid "Min. segment length"
-msgstr "Maximálna dĺžka úseku:"
+msgstr "Min. dĺžka úseku"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:106
 msgid "Intersection segments shorter than this length will not be shown"
@@ -42130,14 +41980,12 @@ msgid "Tab-separated string"
 msgstr ""
 
 #: ../share/ui/dialog-measure-tool-settings.ui:192
-#, fuzzy
 msgid "Measurements to copy"
-msgstr "Typ merania:"
+msgstr "Skopíruj Odomerané"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:218
-#, fuzzy
 msgid "Length - no end points"
-msgstr "Jednotka dĺžky:"
+msgstr "Dĺžka - bez koncových bodov"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:266
 #, fuzzy
@@ -42233,9 +42081,8 @@ msgid "_Import..."
 msgstr "_Importovať..."
 
 #: ../share/ui/menus.ui:59
-#, fuzzy
 msgid "Import _Web Image..."
-msgstr "Vkladať obrázky"
+msgstr "Importovať Obrázky s Webu"
 
 #: ../share/ui/menus.ui:64
 #, fuzzy
@@ -42399,9 +42246,8 @@ msgid "Enhance Thin Lines"
 msgstr "Rozšíriť odtieň"
 
 #: ../share/ui/menus.ui:493
-#, fuzzy
 msgid "No Filters"
-msgstr "Žiadne _filtre"
+msgstr "Žiadne Filtre"
 
 #: ../share/ui/menus.ui:500
 msgid "Cycle"
@@ -42418,9 +42264,8 @@ msgid "_Split Mode"
 msgstr "Prepnúť režim _zamerania"
 
 #: ../share/ui/menus.ui:518
-#, fuzzy
 msgid "Split"
-msgstr "Rozdeliť:"
+msgstr "Rozdeliť"
 
 #: ../share/ui/menus.ui:523
 msgid "X-Ray"
@@ -42585,7 +42430,7 @@ msgstr "Vyňať vybrané objekty zo sku_piny"
 
 #: ../share/ui/menus.ui:812
 msgid "Cli_p"
-msgstr "_Orezanie"
+msgstr "Orezanie"
 
 #: ../share/ui/menus.ui:815
 #, fuzzy
@@ -44602,7 +44447,7 @@ msgstr ""
 
 #: ../share/extensions/image_embed.py:93 ../share/extensions/media_zip.py:106
 msgid "File not found \"{}\". Unable to embed image."
-msgstr ""
+msgstr "Súbr nenájdený\"{}\". Nemožno embedovať tento obrázok."
 
 #: ../share/extensions/image_embed.py:114
 #, python-format
@@ -44616,9 +44461,9 @@ msgstr ""
 #: ../share/extensions/image_extract.py:124
 msgid "{} error occurred"
 msgid_plural "{} errors occurred."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Nastala {} chyba"
+msgstr[1] "Nastali {} chyby."
+msgstr[2] "Nastalo {} chýb."
 
 #: ../share/extensions/image_extract.py:146
 #, fuzzy
@@ -44627,23 +44472,23 @@ msgstr "Automatické uloženie sa nepodarilo! Nepodarilo sa vytvoriť adresár %
 
 #: ../share/extensions/image_extract.py:168
 msgid "Unable to extract image, is it maybe already linked?"
-msgstr ""
+msgstr "Nepodarilo sa Extrahovať obrázok, možno je napojený na iný ?"
 
 #: ../share/extensions/image_extract.py:178
 msgid "Invalid image format found."
-msgstr ""
+msgstr "Nájdený nevalídny typ formátu obrázku."
 
 #: ../share/extensions/image_extract.py:182
 msgid "Unable to decode encoding {}."
-msgstr ""
+msgstr "Nepodarilo sa dekódovať {}."
 
 #: ../share/extensions/image_extract.py:195
 msgid "Unable to extract image, file {} already exists."
-msgstr ""
+msgstr "Nepodatilo sa extrahovať obrázok, súbor {} už exzistuje."
 
 #: ../share/extensions/image_extract.py:203
 msgid "Unable to write to {}"
-msgstr ""
+msgstr "Nemožno zapisovať do {}"
 
 #: ../share/extensions/image_extract.py:206
 #, fuzzy
@@ -44661,7 +44506,7 @@ msgstr "Plocha je nulová, nie je možné vypočítať ťažisko"
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:63
 msgid "{} is deprecated and should be removed"
-msgstr ""
+msgstr "{} je zastaralý a mal by byť odstránený"
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:76
 msgid ""
@@ -46319,7 +46164,6 @@ msgid "Layer match name:"
 msgstr "Názov vrstvy:"
 
 #: ../share/extensions/dxf_outlines.inx:37
-#, fuzzy
 msgid ""
 "- AutoCAD Release 14 DXF format.\n"
 "- The base unit parameter specifies in what unit the coordinates are output "
@@ -46335,10 +46179,10 @@ msgid ""
 "- You can choose to export all layers, only visible ones or by name match "
 "(case insensitive and use comma ',' as separator)"
 msgstr ""
-" - Formát DXF AutoCAD Release 14.\n"
-" - Parameter Základná jednotka určuje, v akých jednotkách sa vypisujú "
+"- Formát DXF AutoCAD Release 14.\n"
+"- Parameter Základná jednotka určuje, v akých jednotkách sa vypisujú "
 "súradnice (96 px = 1 palec).\n"
-" - Podporované typy prvkov\n"
+"- Podporované typy prvkov\n"
 "   - cesty (čiary a krivky spline)\n"
 "   - obdĺžniky\n"
 "   - klony (krížový odkaz na pôvodný sa stratí)\n"
@@ -47152,11 +46996,12 @@ msgid "Hershey Text"
 msgstr "Hershey Text"
 
 #: ../share/extensions/hershey.inx:9
-#, fuzzy
 msgid ""
 "\n"
 "Hershey Text\n"
-msgstr "Hershey Text"
+msgstr ""
+"\n"
+"Hershey Text\n"
 
 #: ../share/extensions/hershey.inx:13
 msgid "A tool to replace text with stroke fonts"
@@ -49331,14 +49176,15 @@ msgid ""
 "\n"
 "Gcodetools ver. 1.7\n"
 msgstr ""
+"\n"
 "Zásuvný modul Gcodetools: prevedie cesty na Gcode (pomocou kruhovej "
 "interpolácie), vytvorí posunuté cesty a vyryje ostré rohy pomocou "
 "kužeľosečiek. Tento zásuvný modul vypočíta Gcode ciest pomocou kruhovej "
 "interpolácie alebo lineárneho pohybu ak treba. Návody, príručky a podporu "
 "nájdete na anglickom fóre podpory: \thttp://www.cnc-club.ru/gcodetools a "
 "ruskom fóre podpory: http://www.cnc-club.ru/gcodetoolsru Autori: Nick "
-"Drobchenko, Vladimir Kalyaev, John Brooker, Henry Nicolas. Gcodetools ver. "
-"1.7"
+"Drobchenko, Vladimir Kalyaev, John Brooker, Henry Nicolas. Gcodetools ver. 1."
+"7\n"
 
 #: ../share/extensions/other/gcodetools/gcodetools_about.inx:46
 #: ../share/extensions/other/gcodetools/gcodetools_area.inx:126
@@ -49510,7 +49356,6 @@ msgstr "Zoradením ciest redukovať rýchlu vzdialenosť"
 #: ../share/extensions/other/gcodetools/gcodetools_area.inx:59
 #: ../share/extensions/other/gcodetools/gcodetools_lathe.inx:40
 #: ../share/extensions/other/gcodetools/gcodetools_path_to_gcode.inx:20
-#, fuzzy
 msgid ""
 "\n"
 "Biarc interpolation tolerance is the maximum distance between path and its "
@@ -49521,11 +49366,13 @@ msgid ""
 "the depth defined by orientation points, s - surface defined by orientation "
 "points.\n"
 msgstr ""
+"\n"
 "Tolerancia bioblúkovej interpolácie je maximálna vzdialenosť medzi cestou a "
 "jej aproximáciou. Úsek sa rozdelí na dva úseky ak vzdialenosť medzi úsekom "
 "cesty a jeho aproximáciou prekračuje toleranciu bioblúkovej interpolácie. "
 "Pre funkciu hĺbky c = intenzita farby od 0.0 (biela) do 1.0 (čierna), d je "
 "hĺbka definovaná orientáciou bodov, s je povrch definovaný orientáciou bodov."
+"\n"
 
 #: ../share/extensions/other/gcodetools/gcodetools_area.inx:67
 #: ../share/extensions/other/gcodetools/gcodetools_engraving.inx:26
@@ -49785,12 +49632,13 @@ msgid ""
 "sphere..(radius r)...........................: math.sqrt(max(0,r**2-w**2))\n"
 "ellipse.(minor axis r, major 4r).....: math.sqrt(max(0,r**2-w**2))*4"
 msgstr ""
+"\n"
 "Táto funkcia vytvorí cestu na vyrytie písmen alebo akéhokoľvek tvaru s "
 "ostrými uhlami. Nástroj definuje hĺbku rezania ako funkciu polomeru. Hĺbka "
-"môže byť vyjadrená ľubovoľným výrazom v Pythone. Napr.: kužeľ...."
-"(45°)......................: w kužeľ....(výška/priemer=10/3)..: 10*w/3 guľa.."
-"(polomer r)...........................: math.sqrt(max(0,r**2-w**2)) elipsa."
-"(vedľ. os r, hl. os 4r).....: math.sqrt(max(0,r**2-w**2))*4"
+"môže byť vyjadrená ľubovoľným výrazom v Pythone. Napr.: "
+"kužeľ....(45°)......................: w kužeľ....(výška/priemer=10/3)..: 10*"
+"w/3 guľa..(polomer r)...........................: math.sqrt(max(0,r**2-w**2))"
+" elipsa.(vedľ. os r, hl. os 4r).....: math.sqrt(max(0,r**2-w**2))*4"
 
 #: ../share/extensions/other/gcodetools/gcodetools_graffiti.inx:4
 #: ../share/extensions/other/gcodetools/gcodetools_graffiti.inx:8
@@ -50134,7 +49982,6 @@ msgstr ""
 "            "
 
 #: ../share/extensions/other/gcodetools/gcodetools_tools_library.inx:34
-#, fuzzy
 msgid ""
 "\n"
 "Gcodetools plug-in: converts paths to Gcode (using circular interpolation), "
@@ -50154,24 +50001,33 @@ msgid ""
 "\n"
 "Gcodetools ver. 1.7\n"
 msgstr ""
-"Zásuvný modul Gcodetools: prevedie cesty na Gcode (pomocou kruhovej "
-"interpolácie), vytvorí posunuté cesty a vyryje ostré rohy pomocou "
-"kužeľosečiek. Tento zásuvný modul vypočíta Gcode ciest pomocou kruhovej "
-"interpolácie alebo lineárneho pohybu ak treba. Návody, príručky a podporu "
-"nájdete na anglickom fóre podpory: \thttp://www.cnc-club.ru/gcodetools a "
-"ruskom fóre podpory: http://www.cnc-club.ru/gcodetoolsru Autori: Nick "
-"Drobchenko, Vladimir Kalyaev, John Brooker, Henry Nicolas. Gcodetools ver. "
-"1.7"
+"\n"
+"Gcodetools plug-in: konvertuje cesty na Gcode (s použitím kruhovej "
+"interpolácie), vytvára posunuté cesty a gravíruje ostré rohy pomocou "
+"kužeľových fréz.\n"
+"Tento plug-in vypočítava Gcode pre cesty pomocou kruhovej interpolácie alebo "
+"lineárneho pohybu, keď je to potrebné.\n"
+"\n"
+"Tutorialy, príručky a podpora sú dostupné na\n"
+"English support forum:\n"
+"http://www.cnc-club.ru/gcodetools\n"
+"\n"
+"a Russian support forum:\n"
+"http://www.cnc-club.ru/gcodetoolsru\n"
+"\n"
+"Credits: Nick Drobchenko, Vladimir Kalyaev, John Brooker, Henry Nicolas, "
+"Chris Lusby Taylor.\n"
+"\n"
+"Gcodetools ver. 1.7\n"
 
 #: ../share/extensions/other/templates/template_shape_prefab.inx:3
 msgid "Shape Builder Prefab"
-msgstr ""
+msgstr "Vytváranie Tvarov Predloha"
 
 #: ../share/extensions/other/templates/template_shape_prefab.inx:7
-#, fuzzy
 msgctxt "TemplateCategory"
 msgid "Shape Builder"
-msgstr "Spojený Tvar"
+msgstr "Vytváranie Tvarov"
 
 #: ../share/extensions/other/templates/template_shape_prefab.inx:9
 #, fuzzy
@@ -52492,9 +52348,8 @@ msgid "Week number color:"
 msgstr "Farba čísla týždňa:"
 
 #: ../share/extensions/svgcalendar.inx:38
-#, fuzzy
 msgid "Year font:"
-msgstr "Hľadá písma"
+msgstr "Font roky:"
 
 #: ../share/extensions/svgcalendar.inx:39
 #, fuzzy
