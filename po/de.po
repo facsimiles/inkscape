@@ -26,15 +26,17 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2024-09-28 10:42+0000\n"
-"PO-Revision-Date: 2024-11-19 19:40+0100\n"
-"Last-Translator: Mohammed Chelouti <m.chelouti@bluewin.ch>\n"
-"Language-Team: German <kde-i18n-de@kde.org>\n"
+"PO-Revision-Date: 2025-04-18 10:06+0000\n"
+"Last-Translator: Maren Hachmann <moini@users.noreply.translate.inkscape.org>"
+"\n"
+"Language-Team: German <https://translate.inkscape.org/projects/inkscape/"
+"1-4-x/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Poedit 3.4.2\n"
+"X-Generator: Weblate 5.9.2\n"
 "X-Poedit-Basepath: .\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Language: de_DE\n"
@@ -3632,7 +3634,7 @@ msgstr "Spitz zulaufende Linien (Halbton)"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Lines half circle shading "
-msgstr "Halbkreislinien (Halbton)"
+msgstr "Halbkreislinien (Halbton) "
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Triangles shading 5"
@@ -7617,7 +7619,7 @@ msgstr "Ein neues Dokument aus Vorlage anlegen"
 
 #: ../src/actions/actions-file-window.cpp:117
 msgid "Open File Dialog"
-msgstr "'Datei öffnen' öffnen"
+msgstr "Dateidialog öffnen"
 
 #: ../src/actions/actions-file-window.cpp:117
 msgid "Open an existing document"
@@ -8439,7 +8441,7 @@ msgstr "Mittelpunkte vertikal verteilen"
 msgid "Distribute vertically with even spacing between centers"
 msgstr ""
 "Vertikal gleichmäßig verteilen, mit gleichen Abständen zwischen den "
-"Mittelpunkten."
+"Mittelpunkten"
 
 #: ../src/actions/actions-object-align.cpp:794
 msgid "Even bottom edges"
@@ -9109,7 +9111,7 @@ msgid ""
 "RGB_8/RGB_16/GrayAlpha_8/GrayAlpha_16/RGBA_8/RGBA_16"
 msgstr ""
 "Farbmodus für zu exportierendes PNG angeben. Optionen: Gray_1/Gray_2/Gray_4/"
-"Gray_8/Gray_16/RGB_8/RGB_16/GrayAlpha_8/GrayAlpha_16/RGBA_8/RGBA_16."
+"Gray_8/Gray_16/RGB_8/RGB_16/GrayAlpha_8/GrayAlpha_16/RGBA_8/RGBA_16"
 
 #: ../src/actions/actions-output.cpp:313
 msgid "Enter 1/0 for Yes/No to use dithering"
@@ -10458,10 +10460,10 @@ msgid ""
 "The tutorials can also be found online at https://inkscape.org/en/learn/"
 "tutorials/"
 msgstr ""
-"Die Dateien für die Einführungen sind nicht installiert. \n"
-"Unter Linux muss eventuell das Paket „inkscape-tutorials“ installiert "
-"werden; unter Windows kann man die Installation erneut starten und "
-"„Einführungen“ auswählen.\n"
+"Die Dateien für die Einführungen sind nicht installiert.\n"
+"Unter Linux muss eventuell das Paket „inkscape-tutorials“ installiert werden;"
+" unter Windows kann man die Installation erneut starten und „Einführungen“ "
+"auswählen.\n"
 "Die Tutorials stehen auch online unter https://inkscape.org/de/lernen/"
 "tutorials/ zur Verfügung."
 
@@ -11143,7 +11145,7 @@ msgstr "  Beschreibung: "
 #: ../src/extension/execution-env.cpp:127
 #, c-format
 msgid "'%s' complete, loading result..."
-msgstr "'%s' abgeschlossen,  Ergebnis wird geladen …"
+msgstr "'%s' abgeschlossen, Ergebnis wird geladen …"
 
 #: ../src/extension/extension.cpp:259
 msgid ""
@@ -13053,7 +13055,7 @@ msgstr "Grün und Blau"
 
 #: ../src/extension/internal/filter/color.h:1032
 msgid "Light transparency"
-msgstr "Lichttransparenz:"
+msgstr "Lichttransparenz"
 
 #: ../src/extension/internal/filter/color.h:1033
 msgid "Invert hue"
@@ -13097,7 +13099,7 @@ msgstr "Präzisionsausrichtung RGB"
 
 #: ../src/extension/internal/filter/color.h:1325
 msgid "Red offset"
-msgstr "Rot-Versatz:"
+msgstr "Rot-Versatz"
 
 #: ../src/extension/internal/filter/color.h:1327
 #: ../src/extension/internal/filter/color.h:1330
@@ -13106,15 +13108,15 @@ msgstr "Rot-Versatz:"
 #: ../src/extension/internal/filter/color.h:1446
 #: ../src/extension/internal/filter/color.h:1449
 msgid "Y"
-msgstr "Y:"
+msgstr "Y"
 
 #: ../src/extension/internal/filter/color.h:1328
 msgid "Green offset"
-msgstr "Grün-Versatz:"
+msgstr "Grün-Versatz"
 
 #: ../src/extension/internal/filter/color.h:1331
 msgid "Blue offset"
-msgstr "Blau-Versatz:"
+msgstr "Blau-Versatz"
 
 #: ../src/extension/internal/filter/color.h:1346
 msgid ""
@@ -13126,7 +13128,7 @@ msgstr ""
 
 #: ../src/extension/internal/filter/color.h:1437
 msgid "Nudge CMY"
-msgstr "Präzisionsausrichtung RGB"
+msgstr "Präzisionsausrichtung CMY"
 
 #: ../src/extension/internal/filter/color.h:1441
 msgid "Cyan offset"
@@ -13789,7 +13791,7 @@ msgstr "Rauschmischung:"
 
 #: ../src/extension/internal/filter/paint.h:730
 msgid "Grain lightness"
-msgstr "Körnige Helligkeit:"
+msgstr "Körnige Helligkeit"
 
 # !!! correct?
 #: ../src/extension/internal/filter/paint.h:738
@@ -15206,9 +15208,8 @@ msgid ""
 "was created in an older version of Inkscape (90 DPI) and we need to make it "
 "compatible with newer versions (96 DPI). Tell us about this file:\n"
 msgstr ""
-"wurde in einer alten Version von Inkscape (90 DPI) erstellt\n"
-" und muss nun mit neueren Versionen kompatibel (96 DPI) gemacht werden. \n"
-"Bitte wählen Sie aus:\n"
+"wurde in einer alten Version von Inkscape (90 DPI) erstellt und muss nun mit "
+"neueren Versionen kompatibel (96 DPI) gemacht werden. Bitte wählen Sie aus:\n"
 
 #: ../src/file-update.cpp:323
 msgid ""
@@ -16099,7 +16100,7 @@ msgstr "Dithering erzwingen oder deaktivieren"
 
 #: ../src/inkscape-application.cpp:773
 msgid "Compression level for PNG export (0 to 9); default is 6"
-msgstr "Kompressionslevel für den Export als PNG (0 to 9);  Voreinstellung: 6"
+msgstr "Kompressionslevel für den Export als PNG (0 to 9); Voreinstellung: 6"
 
 #: ../src/inkscape-application.cpp:775
 msgid "Antialias level for PNG export (0 to 3); default is 2"
@@ -16301,7 +16302,7 @@ msgstr "Alle Schriftarten"
 
 #: ../src/libnrtype/font-lister.cpp:156
 msgid "Fonts "
-msgstr "Schriftarten"
+msgstr "Schriftarten "
 
 #: ../src/live_effects/effect.cpp:102
 msgctxt "path effect"
@@ -16423,7 +16424,7 @@ msgstr "Skizze"
 msgid "Draw multiple short strokes along the path, as in a pencil sketch"
 msgstr ""
 "Zeichnet mehrere kurze Striche entlang des Pfades, wie in einer "
-"Bleistiftskizze."
+"Bleistiftskizze"
 
 #: ../src/live_effects/effect.cpp:271
 msgctxt "path effect"
@@ -16790,7 +16791,7 @@ msgid ""
 "Draw a line that halves the angle between the first three nodes of the path"
 msgstr ""
 "Zeichnet eine Linie die den Winkel zwischen den ersten drei Knoten eines "
-"Pfades halbiert."
+"Pfades halbiert"
 
 #: ../src/live_effects/effect.cpp:699
 msgctxt "path effect"
@@ -16804,7 +16805,7 @@ msgid ""
 msgstr ""
 "Erzeugt einen Kreis anhand von Mittelpunkt und Radius. Der Mittelpunkt "
 "entspricht dem ersten Knoten des Pfades, und der Radius wird durch den "
-"letzten Knoten bestimmt."
+"letzten Knoten bestimmt"
 
 #: ../src/live_effects/effect.cpp:713
 msgctxt "path effect"
@@ -17528,7 +17529,7 @@ msgstr "Gleicher Stil für alle im 'Getrennt'-Modus"
 
 #: ../src/live_effects/lpe-curvestitch.cpp:32
 msgid "Stitch path:"
-msgstr "Stich-Pfad"
+msgstr "Stich-Pfad:"
 
 #: ../src/live_effects/lpe-curvestitch.cpp:32
 msgid "The path that will be used as stitch."
@@ -17552,7 +17553,7 @@ msgid ""
 "& outside the guide path"
 msgstr ""
 "Mittlere Größe der Abstände, um die die Startpunkte der einzelnen Stiche "
-"inner- und außerhalb des Pfades zufällig versetzt werden."
+"inner- und außerhalb des Pfades zufällig versetzt werden"
 
 #: ../src/live_effects/lpe-curvestitch.cpp:35
 msgid "Sta_rt spacing variance:"
@@ -17564,7 +17565,7 @@ msgid ""
 "& forth along the guide path"
 msgstr ""
 "Mittlere Größe der Abstände, um die die Startpunkte der Kopien entlang des "
-"Führungspfades zufällig versetzt werden."
+"Führungspfades zufällig versetzt werden"
 
 #: ../src/live_effects/lpe-curvestitch.cpp:36
 msgid "End ed_ge variance:"
@@ -17576,7 +17577,7 @@ msgid ""
 "outside the guide path"
 msgstr ""
 "Mittlere Größe der Abstände, um die die Endpunkte der Kopien inner- und "
-"außerhalb des Führungspfades zufällig versetzt werden."
+"außerhalb des Führungspfades zufällig versetzt werden"
 
 #: ../src/live_effects/lpe-curvestitch.cpp:37
 msgid "End spa_cing variance:"
@@ -17588,7 +17589,7 @@ msgid ""
 "forth along the guide path"
 msgstr ""
 "Mittlere Größe der Abstände, um die die Endpunkte der Kopien entlang des "
-"Führungspfades zufällig versetzt werden."
+"Führungspfades zufällig versetzt werden"
 
 #: ../src/live_effects/lpe-curvestitch.cpp:38
 msgid "Scale _width:"
@@ -17608,7 +17609,7 @@ msgstr "Skalieren der Breite des Stichpfades relativ zu seiner Länge"
 
 #: ../src/live_effects/lpe-dashed-stroke.cpp:18
 msgid "Number of dashes"
-msgstr "Anzahl der Striche:"
+msgstr "Anzahl der Striche"
 
 #: ../src/live_effects/lpe-dashed-stroke.cpp:19
 msgid "Hole factor"
@@ -18579,7 +18580,7 @@ msgstr "Horizontal"
 #: ../src/live_effects/lpe-measure-segments.cpp:66
 #: ../src/live_effects/lpe-slice.cpp:108
 msgid "Vertical"
-msgstr "Vertikal:"
+msgstr "Vertikal"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:67
 #: ../share/ui/toolbar-lpe.ui:126 ../share/extensions/plotter.inx:10
@@ -19068,7 +19069,7 @@ msgstr "Original nicht zeichnen"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:64
 msgid "Only keep mirrored part of the path, remove the original."
-msgstr "Nur der gespiegelte Teil wird angezeigt, das Original wird entfernt"
+msgstr "Nur der gespiegelte Teil wird angezeigt, das Original wird entfernt."
 
 #
 # File: ../src/live_effects/lpe-mirror_symmetry.cpp, line: 57
@@ -19086,7 +19087,7 @@ msgstr "Umgekehrt vereinigen"
 msgid "Picks the part on the other side of the mirror line as the original."
 msgstr ""
 "Der Teil des Objektes auf der anderen Seite der Spiegelachse wird zum "
-"Original"
+"Original."
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:67
 msgid ""
@@ -19909,7 +19910,7 @@ msgid ""
 "dropdown to use this subdivision method."
 msgstr ""
 "Knoten in gleichmäßigen Abständen hinzufügen. Um diese Unterteilungsmethode "
-"verwenden zu können, muss im Ausklappmenü die  Option <b>Segmentlänge</b> "
+"verwenden zu können, muss im Ausklappmenü die Option <b>Segmentlänge</b> "
 "gewählt werden."
 
 #: ../src/live_effects/lpe-roughen.cpp:52
@@ -34440,7 +34441,7 @@ msgid ""
 "Type in width & height of a page. (ex.: 15x10cm, 10in x 100mm)\n"
 "or choose preset from dropdown."
 msgstr ""
-"Breite x Höhe der Seite eingeben (z.B. 15x10cm,  10in x 100mm)\n"
+"Breite x Höhe der Seite eingeben (z.B. 15x10cm, 10in x 100mm)\n"
 "oder Format aus der Klappliste wählen"
 
 #: ../src/ui/toolbar/page-toolbar.cpp:137
@@ -38465,10 +38466,10 @@ msgid_plural ""
 "Collection of <b>%d</b> vanishing points shared by <b>%d</b> boxes; drag "
 "with <b>Shift</b> to separate"
 msgstr[0] ""
-"Kollektion von <b>%d</b> Fluchtpunkten der Box;  Ziehen mit <b>Umschalt</b> "
+"Kollektion von <b>%d</b> Fluchtpunkten der Box; Ziehen mit <b>Umschalt</b> "
 "trennt in mehrere Punkte auf"
 msgstr[1] ""
-"Kollektion von <b>%d</b> Fluchtpunkten geteilt von <b>%d</b> Boxen;  Ziehen "
+"Kollektion von <b>%d</b> Fluchtpunkten geteilt von <b>%d</b> Boxen; Ziehen "
 "mit <b>Umschalt</b> trennt in mehrere Punkte auf"
 
 # CHECK
