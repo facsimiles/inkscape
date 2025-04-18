@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-02-04 23:42+0100\n"
-"PO-Revision-Date: 2025-03-18 10:06+0000\n"
+"PO-Revision-Date: 2025-04-19 09:29+0000\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <https://translate.inkscape.org/projects/inkscape/"
 "inkscape-master/he/>\n"
@@ -1645,7 +1645,7 @@ msgstr ""
 
 #: ../build/share/filters/filters.svg.h:624
 msgid "Paper like emboss effect"
-msgstr ""
+msgstr "אפקט הבלטה דמוי נייר"
 
 #: ../build/share/filters/filters.svg.h:626
 msgid "Jelly Bump"
@@ -1653,15 +1653,15 @@ msgstr ""
 
 #: ../build/share/filters/filters.svg.h:628
 msgid "Convert pictures to thick jelly"
-msgstr ""
+msgstr "המרת תמונות לג׳לי סמיך"
 
 #: ../build/share/filters/filters.svg.h:630
 msgid "Blend Opposites"
-msgstr ""
+msgstr "ערבול הפכים"
 
 #: ../build/share/filters/filters.svg.h:632
 msgid "Blend an image with its hue opposite"
-msgstr ""
+msgstr "ערבול תמונה עם הגוון ההופכי שלה"
 
 #: ../build/share/filters/filters.svg.h:634
 msgid "Hue to White"
@@ -1669,7 +1669,7 @@ msgstr "גוון ללבן"
 
 #: ../build/share/filters/filters.svg.h:636
 msgid "Fades hue progressively to white"
-msgstr ""
+msgstr "עמעום הגוון ללבן בהדרגה"
 
 #: ../build/share/filters/filters.svg.h:638
 #: ../src/extension/internal/bitmap/swirl.cpp:39
@@ -1910,7 +1910,7 @@ msgstr ""
 
 #: ../build/share/filters/filters.svg.h:762
 msgid "Emboss Shader"
-msgstr ""
+msgstr "מצליל הבלטה"
 
 #: ../build/share/filters/filters.svg.h:764
 msgid "Combination of satiny and emboss effect"
@@ -1918,27 +1918,27 @@ msgstr ""
 
 #: ../build/share/filters/filters.svg.h:766
 msgid "Sharp Metal"
-msgstr ""
+msgstr "מתכת חדה"
 
 #: ../build/share/filters/filters.svg.h:768
 msgid "Chrome effect with darkened edges"
-msgstr ""
+msgstr "אפקט כרום עם קצוות כהים"
 
 #: ../build/share/filters/filters.svg.h:770
 msgid "Brush Draw"
-msgstr ""
+msgstr "ציור במברשת"
 
 #: ../build/share/filters/filters.svg.h:774
 msgid "Chrome Emboss"
-msgstr ""
+msgstr "הבלטת כרום"
 
 #: ../build/share/filters/filters.svg.h:776
 msgid "Embossed chrome effect"
-msgstr ""
+msgstr "אפקט כרום מובלט"
 
 #: ../build/share/filters/filters.svg.h:778
 msgid "Contour Emboss"
-msgstr ""
+msgstr "הבלטת מתאר"
 
 #: ../build/share/filters/filters.svg.h:780
 msgid "Satiny and embossed contour effect"
@@ -1950,19 +1950,19 @@ msgstr ""
 
 #: ../build/share/filters/filters.svg.h:784
 msgid "Unrealistic reflections with sharp edges"
-msgstr ""
+msgstr "השתקפויות לא מציאותיות עם קצוות חדים"
 
 #: ../build/share/filters/filters.svg.h:786
 msgid "Deep Metal"
-msgstr ""
+msgstr "מתכת עמוקה"
 
 #: ../build/share/filters/filters.svg.h:788
 msgid "Deep and dark metal shading"
-msgstr ""
+msgstr "הצללת מתכת עמוקה וכהה"
 
 #: ../build/share/filters/filters.svg.h:790
 msgid "Aluminium Emboss"
-msgstr ""
+msgstr "הבלטת אלומיניום"
 
 #: ../build/share/filters/filters.svg.h:792
 msgid "Satiny aluminium effect with embossing"
@@ -1990,15 +1990,15 @@ msgstr ""
 
 #: ../build/share/filters/filters.svg.h:804
 msgid "Carving emboss effect"
-msgstr ""
+msgstr "אפקט הבלטת חריטה"
 
 #: ../build/share/filters/filters.svg.h:806
 msgid "Chromolitho Alternate"
-msgstr ""
+msgstr "כרומוליתוגרפיה מתחלפת"
 
 #: ../build/share/filters/filters.svg.h:808
 msgid "Old chromolithographic effect"
-msgstr ""
+msgstr "אפקט כרומוליתוגרפיה ישן"
 
 #: ../build/share/filters/filters.svg.h:810
 msgid "Convoluted Bump"
@@ -2010,7 +2010,7 @@ msgstr ""
 
 #: ../build/share/filters/filters.svg.h:814
 msgid "Emergence"
-msgstr ""
+msgstr "הגחה"
 
 #: ../build/share/filters/filters.svg.h:816
 msgid "Cut out, add inner shadow and colorize some parts of an image"
@@ -2018,19 +2018,19 @@ msgstr ""
 
 #: ../build/share/filters/filters.svg.h:818
 msgid "Litho"
-msgstr ""
+msgstr "ליתו"
 
 #: ../build/share/filters/filters.svg.h:820
 msgid "Create a two colors lithographic effect"
-msgstr ""
+msgstr "יצירת אפקט שני צבעים ליתוגרפי"
 
 #: ../build/share/filters/filters.svg.h:822
 msgid "Paint Channels"
-msgstr ""
+msgstr "ערוצי צביעה"
 
 #: ../build/share/filters/filters.svg.h:824
 msgid "Colorize separately the three color channels"
-msgstr ""
+msgstr "צביעת שלושה ערוצי הצבע בנפרד"
 
 #: ../build/share/filters/filters.svg.h:826
 msgid "Posterized Light Eraser"
@@ -2042,11 +2042,11 @@ msgstr ""
 
 #: ../build/share/filters/filters.svg.h:830
 msgid "Trichrome"
-msgstr ""
+msgstr "טריכרום"
 
 #: ../build/share/filters/filters.svg.h:832
 msgid "Like Duochrome but with three colors"
-msgstr ""
+msgstr "כמו דואוכרום אבל עם שלושה צבעים"
 
 #: ../build/share/filters/filters.svg.h:834
 msgid "Simulate CMY"
@@ -3245,7 +3245,7 @@ msgstr "לבנים"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Alternating chevron"
-msgstr ""
+msgstr "שברון מתחלף"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Inverted circle"
@@ -3306,10 +3306,8 @@ msgid "Triangles 5"
 msgstr "משולשים 5"
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
-#| msgid "Scale nodes horizontally"
 msgid "Semicircles horizontal"
-msgstr "שינוי יחס המפרקים אופקית"
+msgstr "חצאי עיגולים אופקיים"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Triangles 4"
@@ -3622,10 +3620,8 @@ msgid "Lines half circle shading "
 msgstr ""
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
-#| msgid "Triangles shading 5"
 msgid "Triangles horizontal shading 5"
-msgstr "הצללת משולשים 5"
+msgstr "הצללת משולשים אופקית 5"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Triangles shading 4"
@@ -3649,21 +3645,19 @@ msgstr "הצללת קווים 2"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Splashing shading"
-msgstr ""
+msgstr "הצללת התזה"
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
-#| msgid "Vertical lines"
 msgid "Wave vertical lines"
-msgstr "קווים אנכיים"
+msgstr "קווים אנכיים גליים"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Lines shading small"
-msgstr ""
+msgstr "הצללת קווים קטנה"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Lines shading big"
-msgstr ""
+msgstr "הצללת קווים גדולה"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Sand (bitmap)"
@@ -4972,37 +4966,37 @@ msgstr ""
 #: ../build/share/symbols/symbols.h:465 ../build/share/symbols/symbols.h:473
 msgctxt "Symbol"
 msgid "Coniferous"
-msgstr ""
+msgstr "מחטנאים"
 
 #: ../build/share/symbols/symbols.h:466 ../build/share/symbols/symbols.h:474
 msgctxt "Symbol"
 msgid "Coniferous and deciduous"
-msgstr ""
+msgstr "מחטנאים ונשירים"
 
 #: ../build/share/symbols/symbols.h:467 ../build/share/symbols/symbols.h:475
 msgctxt "Symbol"
 msgid "Deciduous"
-msgstr ""
+msgstr "נשירים"
 
 #: ../build/share/symbols/symbols.h:468 ../build/share/symbols/symbols.h:476
 msgctxt "Symbol"
 msgid "Grass"
-msgstr ""
+msgstr "דשא"
 
 #: ../build/share/symbols/symbols.h:469 ../build/share/symbols/symbols.h:477
 msgctxt "Symbol"
 msgid "Hills"
-msgstr ""
+msgstr "גבעות"
 
 #: ../build/share/symbols/symbols.h:470 ../build/share/symbols/symbols.h:478
 msgctxt "Symbol"
 msgid "Quarry"
-msgstr ""
+msgstr "מחצבה"
 
 #: ../build/share/symbols/symbols.h:471 ../build/share/symbols/symbols.h:479
 msgctxt "Symbol"
 msgid "Scrub"
-msgstr ""
+msgstr "צמחייה נמוכה"
 
 #: ../build/share/symbols/symbols.h:472 ../build/share/symbols/symbols.h:480
 msgctxt "Symbol"
@@ -5017,12 +5011,12 @@ msgstr ""
 #: ../build/share/symbols/symbols.h:482 ../build/share/symbols/symbols.h:487
 msgctxt "Symbol"
 msgid "Automated teller machine"
-msgstr ""
+msgstr "כספומט"
 
 #: ../build/share/symbols/symbols.h:483 ../build/share/symbols/symbols.h:488
 msgctxt "Symbol"
 msgid "Automated teller machine 2"
-msgstr ""
+msgstr "כספומט 2"
 
 #: ../build/share/symbols/symbols.h:484 ../build/share/symbols/symbols.h:489
 msgctxt "Symbol"
@@ -5102,7 +5096,7 @@ msgstr "פסגה 2"
 #: ../build/share/symbols/symbols.h:504 ../build/share/symbols/symbols.h:525
 msgctxt "Symbol"
 msgid "Place (city)"
-msgstr ""
+msgstr "מקום (עיר)"
 
 #: ../build/share/symbols/symbols.h:505 ../build/share/symbols/symbols.h:526
 msgctxt "Symbol"
@@ -5112,17 +5106,17 @@ msgstr ""
 #: ../build/share/symbols/symbols.h:506 ../build/share/symbols/symbols.h:527
 msgctxt "Symbol"
 msgid "Place (suburb)"
-msgstr ""
+msgstr "מקום (פרוור)"
 
 #: ../build/share/symbols/symbols.h:507 ../build/share/symbols/symbols.h:528
 msgctxt "Symbol"
 msgid "Place (town)"
-msgstr ""
+msgstr "מקום (עיירה)"
 
 #: ../build/share/symbols/symbols.h:508 ../build/share/symbols/symbols.h:529
 msgctxt "Symbol"
 msgid "Place (village)"
-msgstr ""
+msgstr "מקום (כפר)"
 
 #: ../build/share/symbols/symbols.h:509 ../build/share/symbols/symbols.h:530
 msgctxt "Symbol"
@@ -5183,7 +5177,7 @@ msgstr "טורבינות רוח"
 #: ../build/share/symbols/symbols.h:541 ../build/share/symbols/symbols.h:551
 msgctxt "Symbol"
 msgid "Substation"
-msgstr ""
+msgstr "תחנת משנה"
 
 #: ../build/share/symbols/symbols.h:542 ../build/share/symbols/symbols.h:552
 msgctxt "Symbol"
@@ -5193,17 +5187,17 @@ msgstr "מגדל תמסורת (גבוה)"
 #: ../build/share/symbols/symbols.h:543 ../build/share/symbols/symbols.h:553
 msgctxt "Symbol"
 msgid "Transmission tower (high) 2"
-msgstr ""
+msgstr "מגדל תמסורת (גבוה) 2"
 
 #: ../build/share/symbols/symbols.h:544 ../build/share/symbols/symbols.h:554
 msgctxt "Symbol"
 msgid "Transmission tower (low)"
-msgstr ""
+msgstr "מגדל תמסורת (נמוך)"
 
 #: ../build/share/symbols/symbols.h:545 ../build/share/symbols/symbols.h:555
 msgctxt "Symbol"
 msgid "Transformer"
-msgstr ""
+msgstr "שנאי"
 
 #: ../build/share/symbols/symbols.h:556
 msgctxt "Symbol"
@@ -5213,7 +5207,7 @@ msgstr ""
 #: ../build/share/symbols/symbols.h:557 ../build/share/symbols/symbols.h:601
 msgctxt "Symbol"
 msgid "Alcoholic beverage"
-msgstr ""
+msgstr "משקה אלכוהולי"
 
 #: ../build/share/symbols/symbols.h:558 ../build/share/symbols/symbols.h:602
 msgctxt "Symbol"
@@ -5723,17 +5717,17 @@ msgstr "סמלי מפה SJJB [סדרת התעבורה]"
 #: ../build/share/symbols/symbols.h:768 ../build/share/symbols/symbols.h:812
 msgctxt "Symbol"
 msgid "Aerodrome"
-msgstr ""
+msgstr "שדה תעופה"
 
 #: ../build/share/symbols/symbols.h:769 ../build/share/symbols/symbols.h:813
 msgctxt "Symbol"
 msgid "Aerodrome 2"
-msgstr ""
+msgstr "שדה תעופה 2"
 
 #: ../build/share/symbols/symbols.h:771 ../build/share/symbols/symbols.h:815
 msgctxt "Symbol"
 msgid "Airport 2"
-msgstr ""
+msgstr "נמל תעופה 2"
 
 #: ../build/share/symbols/symbols.h:772 ../build/share/symbols/symbols.h:816
 msgctxt "Symbol"
@@ -5773,7 +5767,7 @@ msgstr "טלפון חירום"
 #: ../build/share/symbols/symbols.h:779 ../build/share/symbols/symbols.h:823
 msgctxt "Symbol"
 msgid "Ford"
-msgstr ""
+msgstr "מעבר מים"
 
 #: ../build/share/symbols/symbols.h:780 ../build/share/symbols/symbols.h:824
 msgctxt "Symbol"
@@ -5948,92 +5942,92 @@ msgstr ""
 #: ../build/share/symbols/symbols.h:864 ../build/share/symbols/symbols.h:884
 msgctxt "Symbol"
 msgid "Bahai"
-msgstr ""
+msgstr "בהאי"
 
 #: ../build/share/symbols/symbols.h:865 ../build/share/symbols/symbols.h:885
 msgctxt "Symbol"
 msgid "Bahai 2"
-msgstr ""
+msgstr "בהאי 2"
 
 #: ../build/share/symbols/symbols.h:866 ../build/share/symbols/symbols.h:886
 msgctxt "Symbol"
 msgid "Buddhist"
-msgstr ""
+msgstr "בודהיסטי"
 
 #: ../build/share/symbols/symbols.h:867 ../build/share/symbols/symbols.h:887
 msgctxt "Symbol"
 msgid "Buddhist 2"
-msgstr ""
+msgstr "בודהיסטי 2"
 
 #: ../build/share/symbols/symbols.h:868 ../build/share/symbols/symbols.h:888
 msgctxt "Symbol"
 msgid "Christian"
-msgstr ""
+msgstr "נוצרי"
 
 #: ../build/share/symbols/symbols.h:869 ../build/share/symbols/symbols.h:889
 msgctxt "Symbol"
 msgid "Christian 2"
-msgstr ""
+msgstr "נוצרי 2"
 
 #: ../build/share/symbols/symbols.h:870 ../build/share/symbols/symbols.h:890
 msgctxt "Symbol"
 msgid "Hindu"
-msgstr ""
+msgstr "הינדו"
 
 #: ../build/share/symbols/symbols.h:871 ../build/share/symbols/symbols.h:891
 msgctxt "Symbol"
 msgid "Hindu 2"
-msgstr ""
+msgstr "הינדו 2"
 
 #: ../build/share/symbols/symbols.h:872 ../build/share/symbols/symbols.h:892
 msgctxt "Symbol"
 msgid "Muslim"
-msgstr ""
+msgstr "מוסלמי"
 
 #: ../build/share/symbols/symbols.h:873 ../build/share/symbols/symbols.h:893
 msgctxt "Symbol"
 msgid "Muslim 2"
-msgstr ""
+msgstr "מוסלמי 2"
 
 #: ../build/share/symbols/symbols.h:874 ../build/share/symbols/symbols.h:894
 msgctxt "Symbol"
 msgid "Jain"
-msgstr ""
+msgstr "ג׳ייני"
 
 #: ../build/share/symbols/symbols.h:875 ../build/share/symbols/symbols.h:895
 msgctxt "Symbol"
 msgid "Jain 2"
-msgstr ""
+msgstr "ג׳ייני 2"
 
 #: ../build/share/symbols/symbols.h:876 ../build/share/symbols/symbols.h:896
 msgctxt "Symbol"
 msgid "Jewish"
-msgstr ""
+msgstr "יהודי"
 
 #: ../build/share/symbols/symbols.h:877 ../build/share/symbols/symbols.h:897
 msgctxt "Symbol"
 msgid "Jewish 2"
-msgstr ""
+msgstr "יהודי 2"
 
 #: ../build/share/symbols/symbols.h:878 ../build/share/symbols/symbols.h:898
 msgctxt "Symbol"
 msgid "Shinto"
-msgstr ""
+msgstr "שינטו"
 
 #: ../build/share/symbols/symbols.h:879 ../build/share/symbols/symbols.h:899
 msgctxt "Symbol"
 msgid "Shinto 2"
-msgstr ""
+msgstr "שינטו 2"
 
 #: ../build/share/symbols/symbols.h:880 ../build/share/symbols/symbols.h:900
 msgctxt "Symbol"
 msgid "Sikh"
-msgstr ""
+msgstr "סיקי"
 
 #: ../build/share/symbols/symbols.h:881 ../build/share/symbols/symbols.h:901
 msgctxt "Symbol"
 msgid "Sikh 2"
-msgstr ""
+msgstr "סיקי 2"
 
 #: ../build/share/symbols/symbols.h:882 ../build/share/symbols/symbols.h:902
 msgctxt "Symbol"
@@ -6065,11 +6059,11 @@ msgstr "עטיפה של תקליטור 120מ״מ×120מ״מ "
 
 #: ../build/share/templates/templates.h:1
 msgid "Simple CD Label template with disc's pattern."
-msgstr ""
+msgstr "תבנית תווית תקליטור פשוטה עם מרקם של תקליטור."
 
 #: ../build/share/templates/templates.h:1
 msgid "CD label 120x120 disc disk"
-msgstr ""
+msgstr "תווית תקליטור לתקליטור 120×120"
 
 #: ../build/share/templates/templates.h:1
 #: ../src/actions/actions-file-window.cpp:125 ../src/ui/dialog/print.cpp:59
@@ -6317,7 +6311,7 @@ msgstr "לא לתצג מסננים (הגברת המהירות)"
 
 #: ../src/actions/actions-canvas-mode.cpp:266
 msgid "Display Mode: Enhance Thin Lines"
-msgstr ""
+msgstr "מצב תצוגה: עיבוי קווים דקים"
 
 #: ../src/actions/actions-canvas-mode.cpp:266
 #: ../share/ui/display-popup.glade:85
@@ -6437,27 +6431,27 @@ msgstr ""
 
 #: ../src/actions/actions-canvas-snapping.cpp:252
 msgid "Snap Bounding Boxes"
-msgstr ""
+msgstr "הצמדה לתיבות תוחמות"
 
 #: ../src/actions/actions-canvas-snapping.cpp:252
 msgid "Toggle snapping to bounding boxes (global)"
-msgstr ""
+msgstr "החלפת מצב הצמדה לתיבות תוחמות (כללי)"
 
 #: ../src/actions/actions-canvas-snapping.cpp:253
 msgid "Snap Bounding Box Edges"
-msgstr ""
+msgstr "הצמדה לדפנות תיבות תוחמות"
 
 #: ../src/actions/actions-canvas-snapping.cpp:253
 msgid "Toggle snapping to bounding-box edges"
-msgstr ""
+msgstr "החלפת מצב הצמדה לדפנות תיבות תוחמות"
 
 #: ../src/actions/actions-canvas-snapping.cpp:254
 msgid "Snap Bounding Box Corners"
-msgstr ""
+msgstr "הצמדה לפינות תיבות תוחמות"
 
 #: ../src/actions/actions-canvas-snapping.cpp:254
 msgid "Toggle snapping to bounding-box corners"
-msgstr ""
+msgstr "החלפת מצב הצמדה לפינות תיבות תוחמות"
 
 #: ../src/actions/actions-canvas-snapping.cpp:255
 msgid "Snap Bounding Box Edge Midpoints"
@@ -6589,11 +6583,11 @@ msgstr ""
 
 #: ../src/actions/actions-canvas-snapping.cpp:274
 msgid "Snap Grids"
-msgstr ""
+msgstr "הצמדה לרשתות"
 
 #: ../src/actions/actions-canvas-snapping.cpp:274
 msgid "Toggle snapping to grids"
-msgstr ""
+msgstr "החלפת מצב הצמדה לרשתות"
 
 #: ../src/actions/actions-canvas-snapping.cpp:275
 msgid "Snap Grid Lines"
@@ -7802,19 +7796,19 @@ msgstr ""
 
 #: ../src/actions/actions-hide-lock.cpp:165
 msgid "Hid selected items."
-msgstr ""
+msgstr "הוסתרו הפריטים הנבחרים."
 
 #: ../src/actions/actions-hide-lock.cpp:165
 msgid "Unhid selected items."
-msgstr ""
+msgstr "בוטלה הסתרת הפריטים הנבחרים."
 
 #: ../src/actions/actions-hide-lock.cpp:189
 msgid "Locked selected items."
-msgstr ""
+msgstr "הפריטים הנבחרים ננעלו."
 
 #: ../src/actions/actions-hide-lock.cpp:189
 msgid "Unlocked selected items."
-msgstr ""
+msgstr "הפריטים הנבחרים שוחררו."
 
 #: ../src/actions/actions-hide-lock.cpp:197 ../share/ui/menus.ui:923
 msgid "Unhide All"
@@ -7822,7 +7816,7 @@ msgstr "הצגת הכול"
 
 #: ../src/actions/actions-hide-lock.cpp:197
 msgid "Unhide all objects"
-msgstr ""
+msgstr "ביטול הסתרת כל הפריטים"
 
 #: ../src/actions/actions-hide-lock.cpp:198 ../share/ui/menus.ui:927
 msgid "Unlock All"
@@ -7830,55 +7824,55 @@ msgstr "שחרור הכול"
 
 #: ../src/actions/actions-hide-lock.cpp:198
 msgid "Unlock all objects"
-msgstr ""
+msgstr "שחרור כל הפריטים"
 
 #: ../src/actions/actions-hide-lock.cpp:200
 msgid "Hide selection"
-msgstr ""
+msgstr "הסתרת הבחירה"
 
 #: ../src/actions/actions-hide-lock.cpp:200
 msgid "Hide all selected objects"
-msgstr ""
+msgstr "הסתרת כל הפריטים הנבחרים"
 
 #: ../src/actions/actions-hide-lock.cpp:201
 msgid "Unhide selection"
-msgstr ""
+msgstr "ביטול הסתרת הבחירה"
 
 #: ../src/actions/actions-hide-lock.cpp:201
 msgid "Unhide all selected objects"
-msgstr ""
+msgstr "ביטול הסתרת כל הפריטים הנבחרים"
 
 #: ../src/actions/actions-hide-lock.cpp:202
 msgid "Unhide descendents"
-msgstr ""
+msgstr "ביטול הסתרת כל הצאצאים"
 
 #: ../src/actions/actions-hide-lock.cpp:202
 msgid "Unhide all items inside selected objects"
-msgstr ""
+msgstr "ביטול הסתרת כל הפריטים בתוך פריטים נבחרים"
 
 #: ../src/actions/actions-hide-lock.cpp:204
 msgid "Lock selection"
-msgstr ""
+msgstr "נעילת הבחירה"
 
 #: ../src/actions/actions-hide-lock.cpp:204
 msgid "Lock all selected objects"
-msgstr ""
+msgstr "נעילת כל הפריטים הנבחרים"
 
 #: ../src/actions/actions-hide-lock.cpp:205
 msgid "Unlock selection"
-msgstr ""
+msgstr "ביטול נעילת הבחירה"
 
 #: ../src/actions/actions-hide-lock.cpp:205
 msgid "Unlock all selected objects"
-msgstr ""
+msgstr "ביטול נעילת כל הפריטים הנבחרים"
 
 #: ../src/actions/actions-hide-lock.cpp:206
 msgid "Unlock descendents"
-msgstr ""
+msgstr "ביטול נעילת הצאצאים"
 
 #: ../src/actions/actions-hide-lock.cpp:206
 msgid "Unlock all items inside selected objects"
-msgstr ""
+msgstr "ביטול נעילת כל הפריטים בתוך הפריטים הנבחרים"
 
 #: ../src/actions/actions-layer.cpp:64
 #: ../src/ui/dialog/layer-properties.cpp:164
@@ -8332,12 +8326,12 @@ msgstr ""
 
 #: ../src/actions/actions-object-align.cpp:787
 msgid "Even horizontal gaps"
-msgstr ""
+msgstr "רווחים אופקיים שווים"
 
 #: ../src/actions/actions-object-align.cpp:787
 #: ../share/ui/align-and-distribute.ui:496
 msgid "Distribute horizontally with even horizontal gaps"
-msgstr ""
+msgstr "פיזור אופקי עם רווחים אופקיים שווים"
 
 #: ../src/actions/actions-object-align.cpp:788
 msgid "Even left edges"
@@ -8844,7 +8838,7 @@ msgstr ""
 
 #: ../src/actions/actions-output.cpp:269
 msgid "Set PostScript level"
-msgstr ""
+msgstr "הגדרת רמת PostScript"
 
 #: ../src/actions/actions-output.cpp:270
 msgid "Export PDF Version"
@@ -9634,7 +9628,7 @@ msgstr ""
 
 #: ../src/actions/actions-svg-processing.cpp:705
 msgid "Remove context paints from markers"
-msgstr ""
+msgstr "הסרת צבעי הקשר מהסמנים"
 
 #: ../src/actions/actions-svg-processing.cpp:707
 msgid "Insert Text Fallback"
@@ -9722,11 +9716,11 @@ msgstr "ניקוי המסמך"
 
 #: ../src/actions/actions-svg-processing.cpp:719
 msgid "Remove unused definitions (gradients, etc.)"
-msgstr ""
+msgstr "הסרת הגדרות שאינן בשימוש (מדרגים וכו׳)"
 
 #: ../src/actions/actions-text.cpp:73
 msgid "Put on Path"
-msgstr ""
+msgstr "הצבה על נתיב"
 
 #: ../src/actions/actions-text.cpp:73 ../src/text-chemistry.cpp:176
 msgid "Put text on path"
@@ -9734,7 +9728,7 @@ msgstr "הנחת טקסט על נתיב"
 
 #: ../src/actions/actions-text.cpp:74
 msgid "Remove from Path"
-msgstr ""
+msgstr "הסרה מנתיב"
 
 #: ../src/actions/actions-text.cpp:74 ../src/text-chemistry.cpp:208
 msgid "Remove text from path"
@@ -9771,7 +9765,7 @@ msgstr "הסרת טקסט מהמסגרת (יווצר פריט טקסט בשור�
 
 #: ../src/actions/actions-text.cpp:78
 msgid "Convert to Text"
-msgstr ""
+msgstr "המרה לטקסט"
 
 #: ../src/actions/actions-text.cpp:78
 msgid "Convert flowed text to regular text object (preserves appearance)"
@@ -9787,7 +9781,7 @@ msgstr "המרת טקסט לגליפים עצמאיים"
 
 #: ../src/actions/actions-text.cpp:80
 msgid "Remove Manual Kerns"
-msgstr ""
+msgstr "הסרת כיוונוני ריווח ידניים"
 
 #: ../src/actions/actions-text.cpp:80
 msgid "Remove all manual kerns and glyph rotations from a text object"
@@ -9795,7 +9789,7 @@ msgstr "הסרת כל שינוי מרווחי האותיות הידני והטי
 
 #: ../src/actions/actions-tools.cpp:280
 msgid "Selector Tool"
-msgstr ""
+msgstr "כלי בחירה"
 
 #: ../src/actions/actions-tools.cpp:280
 msgid "Select and transform objects"
@@ -9803,7 +9797,7 @@ msgstr "בחירה ושינוי צורה של פריטים"
 
 #: ../src/actions/actions-tools.cpp:281 ../src/ui/modifiers.cpp:127
 msgid "Node Tool"
-msgstr ""
+msgstr "כלי מפרקים"
 
 #: ../src/actions/actions-tools.cpp:281
 msgid "Edit paths by nodes"
@@ -9815,11 +9809,11 @@ msgstr "כלי בונה צורות"
 
 #: ../src/actions/actions-tools.cpp:282
 msgid "Build shapes with the Boolean tool"
-msgstr ""
+msgstr "בניית צורות עם הכלי הבוליאני"
 
 #: ../src/actions/actions-tools.cpp:284
 msgid "Rectangle Tool"
-msgstr ""
+msgstr "כלי מרובעים"
 
 #: ../src/actions/actions-tools.cpp:284
 msgid "Create rectangles and squares"
@@ -9827,15 +9821,15 @@ msgstr "יצירת מרובעים וריבועים"
 
 #: ../src/actions/actions-tools.cpp:285
 msgid "Ellipse/Arc Tool"
-msgstr ""
+msgstr "כלי אליפסות/קשתות"
 
 #: ../src/actions/actions-tools.cpp:285
 msgid "Create circles, ellipses and arcs"
-msgstr ""
+msgstr "יצירת עיגולים, אליפסות וקשתות"
 
 #: ../src/actions/actions-tools.cpp:286
 msgid "Star/Polygon Tool"
-msgstr ""
+msgstr "כלי כוכבים/מצולעים"
 
 #: ../src/actions/actions-tools.cpp:286
 msgid "Create stars and polygons"
@@ -9843,15 +9837,15 @@ msgstr "יצירת כוכבים ומצולעים"
 
 #: ../src/actions/actions-tools.cpp:287
 msgid "3D Box Tool"
-msgstr ""
+msgstr "כלי תיבות תלת־ממדיות"
 
 #: ../src/actions/actions-tools.cpp:287
 msgid "Create 3D Boxes"
-msgstr ""
+msgstr "יצירת תיבות תלת־ממדיות"
 
 #: ../src/actions/actions-tools.cpp:288
 msgid "Spiral Tool"
-msgstr ""
+msgstr "כלי ספירלות"
 
 #: ../src/actions/actions-tools.cpp:288
 msgid "Create spirals"
@@ -9859,15 +9853,15 @@ msgstr "יצירת ספירלות"
 
 #: ../src/actions/actions-tools.cpp:289
 msgid "Marker Tool"
-msgstr ""
+msgstr "כלי הדגשה"
 
 #: ../src/actions/actions-tools.cpp:289
 msgid "Edit markers"
-msgstr ""
+msgstr "עריכת סמנים"
 
 #: ../src/actions/actions-tools.cpp:291
 msgid "Pen Tool"
-msgstr ""
+msgstr "כלי עט"
 
 #: ../src/actions/actions-tools.cpp:291
 msgid "Draw Bezier curves and straight lines"
@@ -9875,7 +9869,7 @@ msgstr "ציור עקומות בזייה וקווים ישרים"
 
 #: ../src/actions/actions-tools.cpp:292
 msgid "Pencil Tool"
-msgstr ""
+msgstr "כלי עיפרון"
 
 #: ../src/actions/actions-tools.cpp:292
 msgid "Draw freehand lines"
@@ -9883,7 +9877,7 @@ msgstr "ציור קווים ביד חופשית"
 
 #: ../src/actions/actions-tools.cpp:293
 msgid "Calligraphy Tool"
-msgstr ""
+msgstr "כלי קליגרפיה"
 
 #: ../src/actions/actions-tools.cpp:293
 msgid "Draw calligraphic or brush strokes"
@@ -9891,7 +9885,7 @@ msgstr "ציור קווי מתאר קליגרפיים או למברשת"
 
 #: ../src/actions/actions-tools.cpp:294
 msgid "Text Tool"
-msgstr ""
+msgstr "כלי טקסט"
 
 #: ../src/actions/actions-tools.cpp:294
 msgid "Create and edit text objects"
@@ -9899,7 +9893,7 @@ msgstr "יצירה ועריכה של פריטי טקסט"
 
 #: ../src/actions/actions-tools.cpp:296
 msgid "Gradient Tool"
-msgstr ""
+msgstr "כלי מדרגים"
 
 #: ../src/actions/actions-tools.cpp:296
 msgid "Create and edit gradients"
@@ -9915,7 +9909,7 @@ msgstr "יצירת ועריכת מדרגים שלובים"
 
 #: ../src/actions/actions-tools.cpp:298
 msgid "Dropper Tool"
-msgstr ""
+msgstr "כלי טפטפת"
 
 #: ../src/actions/actions-tools.cpp:298 ../src/ui/widget/color-notebook.cpp:169
 msgid "Pick colors from image"
@@ -9923,7 +9917,7 @@ msgstr "בחירת צבעים מהתמונה"
 
 #: ../src/actions/actions-tools.cpp:299
 msgid "Paint Bucket Tool"
-msgstr ""
+msgstr "כלי דלי צבע"
 
 #: ../src/actions/actions-tools.cpp:299
 msgid "Fill bounded areas"
@@ -9939,23 +9933,23 @@ msgstr "ויסות פריטים על ידי מתיחה או ציור"
 
 #: ../src/actions/actions-tools.cpp:302
 msgid "Spray Tool"
-msgstr ""
+msgstr "כלי ריסוס"
 
 #: ../src/actions/actions-tools.cpp:302
 msgid "Spray copies or clones of objects"
-msgstr ""
+msgstr "ריסוס עותקים או שכפולים של פריטים"
 
 #: ../src/actions/actions-tools.cpp:303
 msgid "Eraser Tool"
-msgstr ""
+msgstr "כלי מוחק"
 
 #: ../src/actions/actions-tools.cpp:303
 msgid "Erase objects or paths"
-msgstr ""
+msgstr "מחיקת פריטים או נתיבים"
 
 #: ../src/actions/actions-tools.cpp:304
 msgid "Connector Tool"
-msgstr ""
+msgstr "כלי חיבור"
 
 #: ../src/actions/actions-tools.cpp:304
 msgid "Create diagram connectors"
@@ -9971,7 +9965,7 @@ msgstr "בניית מבנים גאומטריים"
 
 #: ../src/actions/actions-tools.cpp:307
 msgid "Zoom Tool"
-msgstr ""
+msgstr "כלי תקריב"
 
 #: ../src/actions/actions-tools.cpp:307
 msgid "Zoom in or out"
@@ -9979,31 +9973,31 @@ msgstr "התקרבות או התרחקות"
 
 #: ../src/actions/actions-tools.cpp:308
 msgid "Measure Tool"
-msgstr ""
+msgstr "כלי מדידה"
 
 #: ../src/actions/actions-tools.cpp:308
 msgid "Measure objects"
-msgstr ""
+msgstr "מדידת פריטים"
 
 #: ../src/actions/actions-tools.cpp:309
 msgid "Pages Tool"
-msgstr ""
+msgstr "כלי עמודים"
 
 #: ../src/actions/actions-tools.cpp:309
 msgid "Create and edit document pages"
-msgstr ""
+msgstr "יצירת ועריכת עמודי מסמכים"
 
 #: ../src/actions/actions-tools.cpp:311
 msgid "Toggle Selector Tool"
-msgstr ""
+msgstr "החלפה בכלי בחירה"
 
 #: ../src/actions/actions-tools.cpp:311
 msgid "Toggle between Selector tool and last used tool"
-msgstr ""
+msgstr "החלפה בין כלי הבחירה לכלי האחרון שהיה בשימוש"
 
 #: ../src/actions/actions-tools.cpp:312
 msgid "Toggle Dropper"
-msgstr ""
+msgstr "החלפת מצב טפטפת"
 
 #: ../src/actions/actions-tools.cpp:312
 msgid "Toggle between Dropper tool and last used tool"
