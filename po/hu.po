@@ -15,14 +15,16 @@ msgstr ""
 "Project-Id-Version: hu\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2024-09-28 10:42+0000\n"
-"PO-Revision-Date: 2017-09-29 09:20+0000\n"
-"Last-Translator: Gyuris Gellért <jobel@ujevangelizacio.hu>, 2024\n"
-"Language-Team: Hungarian (https://app.transifex.com/fsf-hu/teams/77907/hu/)\n"
+"PO-Revision-Date: 2025-04-18 10:06+0000\n"
+"Last-Translator: Gyuris Gellért <jobel@ujevangelizacio.hu>\n"
+"Language-Team: Hungarian <https://translate.inkscape.org/projects/inkscape/"
+"1-4-x/hu/>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.9.2\n"
 
 #: ../build/share/filters/filters.svg.h:2
 msgid "Fast Crop"
@@ -9993,8 +9995,8 @@ msgid ""
 "path. <b>Arrow keys</b> adjust width (left/right) and angle (up/down)."
 msgstr ""
 "Művészi vonal rajzolása: <b>húzással</b>. Vezetőútvonal követése: <b>Ctrl</"
-"b>. Szélesség állítása: <b>Balra</b>/<b>Jobbra</b> nyíl. Szög állítása: "
-"<b>Fel</b>/<b>Le</b> nyíl."
+"b>. <b>Nyíl billentyűkkel</b>: szélesség állítása (balra/jobbra), szög "
+"állítása (fel/le)."
 
 #: ../src/actions/actions-tools.cpp:99 ../src/ui/tools/text-tool.cpp:1663
 msgid ""
@@ -24688,7 +24690,7 @@ msgstr "%1 exportálása"
 
 #: ../src/ui/dialog/export-batch.cpp:782
 msgid "Format %1, Selection %2"
-msgstr " %1 formátum, %2 kijelölés"
+msgstr "%1 formátum, %2 kijelölés"
 
 #: ../src/ui/dialog/export-batch.cpp:811
 msgid "Select where to save the exported files"
@@ -35219,8 +35221,8 @@ msgstr "%lu keresztezése"
 #, c-format
 msgid " out of %d mesh handle"
 msgid_plural " out of %d mesh handles"
-msgstr[0] "%d háló-vezérlőelemből"
-msgstr[1] "%d háló-fogantyúból"
+msgstr[0] " %d háló-vezérlőelemből"
+msgstr[1] " %d háló-fogantyúból"
 
 #: ../src/ui/tools/mesh-tool.cpp:166
 #, c-format
@@ -39056,7 +39058,7 @@ msgstr "A vizsgált ablak sugara"
 
 #: ../share/ui/dialog-trace.glade:989
 msgid " Heuristics:"
-msgstr "Heurisztika:"
+msgstr " Heurisztika:"
 
 #: ../share/ui/dialog-trace.glade:1056
 msgid "B-splines"
@@ -39076,7 +39078,7 @@ msgstr "A kimenet egyenesekből áll össze"
 
 #: ../share/ui/dialog-trace.glade:1090
 msgid " Output:"
-msgstr "Kimenet:"
+msgstr " Kimenet:"
 
 #: ../share/ui/dialog-trace.glade:1121
 msgid "Multiplier"
@@ -39931,7 +39933,7 @@ msgstr "Téglalap szélessége (körvonal nélkül)"
 #: ../share/ui/toolbar-select.ui:440
 msgctxt "Abbreviation of Height"
 msgid "H:"
-msgstr "V:"
+msgstr "M:"
 
 #: ../share/ui/object-attributes.glade:482
 msgid "Height of rectangle (without stroke)"
@@ -42561,7 +42563,7 @@ msgstr ""
 
 #: ../share/extensions/dxf_outlines.py:449
 msgid "Warning: Layer '{}' not found!"
-msgstr "Figyelmeztetés: a(z) „{}” réteg nem található."
+msgstr "Figyelmeztetés: a(z) „{}” réteg nem található!"
 
 #: ../share/extensions/extrude.py:109
 msgid "Need at least 2 paths selected"
@@ -44195,7 +44197,7 @@ msgstr ""
 
 #: ../share/extensions/doc_ai_convert.inx:18
 msgid "How to export SVG from Illustrator"
-msgstr "Hogyan lehet SVG-t exportálni az Illustratorból?"
+msgstr "Hogyan lehet SVG-t exportálni az Illustratorból"
 
 #: ../share/extensions/doc_ai_convert.inx:19
 msgid ""
