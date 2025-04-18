@@ -16,15 +16,16 @@ msgstr ""
 "Project-Id-Version: Inkscape 1.4.0\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2024-10-05 22:30+0000\n"
-"PO-Revision-Date: 2024-10-06 15:54+0200\n"
-"Last-Translator: Firas Hanife <firashanife@gmail.com>\n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-04-19 11:06+0000\n"
+"Last-Translator: marco riva <oelimar@mail.com>\n"
+"Language-Team: Italian <https://translate.inkscape.org/projects/inkscape/"
+"1-4-x/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.5\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.9.2\n"
 
 #: ../build/share/filters/filters.svg.h:2
 msgid "Fast Crop"
@@ -7694,8 +7695,8 @@ msgid ""
 "Remove unused definitions (such as gradients or clipping paths) from the "
 "document"
 msgstr ""
-"Elimina definizioni inutilizzate (come gradienti o tracciati di fissaggio) "
-"dal documento"
+"Elimina dal documento le definizioni inutilizzate (come gradienti o "
+"tracciati di fissaggio)"
 
 #: ../src/actions/actions-file-window.cpp:126
 #: ../src/live_effects/lpe-fill-between-many.cpp:37
@@ -7705,9 +7706,7 @@ msgstr "Chiudi"
 
 #: ../src/actions/actions-file-window.cpp:126
 msgid "Close window (unless last window)"
-msgstr ""
-"Chiude il documento attivo (se viene chiuso l'ultimo documento ne viene "
-"creato uno nuovo con i valori predefiniti). Usa Esci per chiudere Inkscape"
+msgstr "Chiude il documento attivo (se non è l'ultimo)"
 
 #: ../src/actions/actions-file.cpp:89
 msgid "Replace file contents"
@@ -7799,7 +7798,7 @@ msgstr "Guida per principianti"
 
 #: ../src/actions/actions-help-url.cpp:123 ../share/ui/menus.ui:1291
 msgid "Extension Development Guide"
-msgstr "Guida sviluppo estensioni"
+msgstr "Guida allo sviluppo di estensioni"
 
 #: ../src/actions/actions-help-url.cpp:124 ../share/ui/menus.ui:1325
 msgid "Donate"
@@ -7834,27 +7833,27 @@ msgstr "Sblocca tutti gli oggetti nel livello attuale"
 
 #: ../src/actions/actions-hide-lock.cpp:119
 msgid "Unhid selected items and their descendents."
-msgstr "Mostra gli oggetti selezionati e i loro discendenti"
+msgstr "Mostra gli oggetti selezionati e i loro discendenti."
 
 #: ../src/actions/actions-hide-lock.cpp:142
 msgid "Unlocked selected items and their descendents."
-msgstr "Sblocca gli oggetti selezionati e i loro discendenti"
+msgstr "Sblocca gli oggetti selezionati e i loro discendenti."
 
 #: ../src/actions/actions-hide-lock.cpp:165
 msgid "Hid selected items."
-msgstr "Nascondi oggetti selezionati"
+msgstr "Nascondi gli oggetti selezionati."
 
 #: ../src/actions/actions-hide-lock.cpp:165
 msgid "Unhid selected items."
-msgstr "Mostra oggetti selezionati"
+msgstr "Mostra gli oggetti selezionati."
 
 #: ../src/actions/actions-hide-lock.cpp:189
 msgid "Locked selected items."
-msgstr "Gli oggetti selezionati sono stati bloccati"
+msgstr "Gli oggetti selezionati sono stati bloccati."
 
 #: ../src/actions/actions-hide-lock.cpp:189
 msgid "Unlocked selected items."
-msgstr "Gli oggetti selezionati sono stati sbloccati"
+msgstr "Gli oggetti selezionati sono stati sbloccati."
 
 #: ../src/actions/actions-hide-lock.cpp:197 ../share/ui/menus.ui:923
 msgid "Unhide All"
@@ -7876,7 +7875,7 @@ msgstr "Sblocca tutti gli oggetti"
 # msgid is incorrect: it unblocks objects even of non-selected layers Giambattista Caltabiano
 #: ../src/actions/actions-hide-lock.cpp:200
 msgid "Hide selection"
-msgstr "Nascondi selezionati"
+msgstr "Nascondi selezione"
 
 #: ../src/actions/actions-hide-lock.cpp:200
 msgid "Hide all selected objects"
@@ -7884,7 +7883,7 @@ msgstr "Nasconde tutti gli oggetti selezionati"
 
 #: ../src/actions/actions-hide-lock.cpp:201
 msgid "Unhide selection"
-msgstr "Mostra selezionati"
+msgstr "Mostra selezione"
 
 #: ../src/actions/actions-hide-lock.cpp:201
 msgid "Unhide all selected objects"
@@ -7896,11 +7895,11 @@ msgstr "Mostra discendenti"
 
 #: ../src/actions/actions-hide-lock.cpp:202
 msgid "Unhide all items inside selected objects"
-msgstr "Mostra tutti gli oggetti nascosti contenuti dagli oggetti selezionati"
+msgstr "Mostra tutti gli oggetti nascosti contenuti negli oggetti selezionati"
 
 #: ../src/actions/actions-hide-lock.cpp:204
 msgid "Lock selection"
-msgstr "Blocca selezionati"
+msgstr "Blocca selezione"
 
 #: ../src/actions/actions-hide-lock.cpp:204
 msgid "Lock all selected objects"
@@ -7908,7 +7907,7 @@ msgstr "Blocca tutti gli oggetti selezionati"
 
 #: ../src/actions/actions-hide-lock.cpp:205
 msgid "Unlock selection"
-msgstr "Sblocca selezionati"
+msgstr "Sblocca selezione"
 
 #: ../src/actions/actions-hide-lock.cpp:205
 msgid "Unlock all selected objects"
@@ -7920,7 +7919,7 @@ msgstr "Sblocca discendenti"
 
 #: ../src/actions/actions-hide-lock.cpp:206
 msgid "Unlock all items inside selected objects"
-msgstr "Sblocca tutti gli oggetti contenuti dagli oggetti selezionati"
+msgstr "Sblocca tutti gli oggetti contenuti negli oggetti selezionati"
 
 #: ../src/actions/actions-layer.cpp:64
 #: ../src/ui/dialog/layer-properties.cpp:168
@@ -7931,7 +7930,7 @@ msgstr "Aggiungi livello"
 #: ../src/actions/actions-layer.cpp:65
 #: ../src/ui/dialog/layer-properties.cpp:169
 msgid "New layer created."
-msgstr "Creato un nuovo livello"
+msgstr "Creato un nuovo livello."
 
 #: ../src/actions/actions-layer.cpp:76
 msgid "Duplicate layer"
@@ -7939,7 +7938,7 @@ msgstr "Duplica livello"
 
 #: ../src/actions/actions-layer.cpp:77
 msgid "Duplicated layer."
-msgstr "Livello duplicato"
+msgstr "Livello duplicato."
 
 #: ../src/actions/actions-layer.cpp:80 ../src/actions/actions-layer.cpp:132
 #: ../src/actions/actions-layer.cpp:168 ../src/actions/actions-layer.cpp:181
@@ -7948,7 +7947,7 @@ msgstr "Livello duplicato"
 #: ../src/actions/actions-layer.cpp:352 ../src/actions/actions-layer.cpp:379
 #: ../src/actions/actions-layer.cpp:407
 msgid "No current layer."
-msgstr "Nessun livello attuale"
+msgstr "Nessun livello attuale."
 
 #: ../src/actions/actions-layer.cpp:128
 msgid "Delete layer"
@@ -20364,7 +20363,7 @@ msgstr "Centro"
 
 #: ../src/live_effects/lpe-taperstroke.cpp:97
 msgid "Clamp"
-msgstr ""
+msgstr "Blocca"
 
 #: ../src/live_effects/lpe-taperstroke.cpp:105
 msgid "Select subpath:"
@@ -30798,7 +30797,7 @@ msgstr "px"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2991
 msgid "Use buffers bigger than the window by this amount"
-msgstr ""
+msgstr "Utilizzare buffer più grandi della finestra di questa quantità"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2993
 msgid "Prerender margin"
@@ -30815,7 +30814,7 @@ msgstr "Dimensione anticipazione"
 #: ../src/ui/dialog/inkscape-preferences.cpp:2995
 msgid ""
 "Prevent thin tiles at the rendering edge by making them at least this size."
-msgstr ""
+msgstr "Dimensione minima degli elementi al bordo di rendering."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2997
 msgid "Min size for coarsener algorithm"
@@ -37167,9 +37166,10 @@ msgid "Vary the shape of the serifs"
 msgstr "Varia la forma delle grazie"
 
 #: ../src/ui/widget/font-variations.cpp:80
+#, fuzzy
 msgctxt "Variable font axis"
 msgid "Flare"
-msgstr ""
+msgstr "Flare"
 
 #: ../src/ui/widget/font-variations.cpp:80
 msgid "Controls the flaring of the stems"
@@ -37422,8 +37422,9 @@ msgid "Feature variation"
 msgstr "Variazione di caratteristiche"
 
 #: ../src/ui/widget/font-variations.cpp:126
+#, fuzzy
 msgid "Controls the glyph’s feature variation"
-msgstr ""
+msgstr "Controlla la variazione delle caratteristiche del glifo"
 
 #: ../src/ui/widget/gradient-editor.cpp:216
 msgid "Stop color"
@@ -39555,13 +39556,14 @@ msgstr "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 #: ../share/ui/font-list.glade:184
 msgctxt "font-sample-text"
 msgid "The quick brown fox jumps over the lazy dog."
-msgstr ""
+msgstr "Fu questa volpe a ghermir d'un balzo il cane."
 
 #. Sample text using diacritical marks and special characters. Add diacritics if your alphabet supports them, or other character variants that may be of interest to speakers of your language, like currency sign, etc. The idea is to test if selected font defines those variants.
 #: ../share/ui/font-list.glade:192
+#, fuzzy
 msgctxt "font-sample-text"
 msgid "Yélløw ťüřtle fröm Áłphårettä íś čōmińġ fôr ďïññęr tòđây."
-msgstr ""
+msgstr "Yélløw ьüřtle fröm Áłphårettä íś čōmińgil fôr ïñęr đtòy."
 
 #: ../share/ui/font-list.glade:205
 msgid "Sort alphabetically"
@@ -40341,7 +40343,7 @@ msgstr "Controllo varchi:"
 
 #: ../share/ui/pattern-edit.glade:135
 msgid "Mouse-friendly"
-msgstr ""
+msgstr "Adatto per il mouse"
 
 #: ../share/ui/pattern-edit.glade:150
 msgid "Precise"
@@ -42681,10 +42683,12 @@ msgid ""
 "Encountered key of unknown format, id={0} while parsing DXF. This is "
 "probably a bug."
 msgstr ""
+"Incontrata una chiave di formato sconosciuto, id={0} mentre si analizza DXF. "
+"Questo è probabilmente un bug."
 
 #: ../share/extensions/dxf_input.py:1400
 msgid "Binary DXF file has unexpected header."
-msgstr ""
+msgstr "Il file Binario DXF ha un'intestazione inaspettata."
 
 #: ../share/extensions/dxf_input.py:1697
 msgid ""
@@ -42830,6 +42834,7 @@ msgstr ""
 #: ../share/extensions/hpgl2_input.py:99
 msgid "Unsupported commands encountered. The following commands were ignored:"
 msgstr ""
+"Incontrati comandi non supportati. I seguenti comandi sono stati ignorati:"
 
 #: ../share/extensions/hpgl_output.py:79
 msgid "No convertible objects were found"
@@ -43361,6 +43366,11 @@ msgid ""
 "\n"
 "Consider moving them to a layer or disabling this option."
 msgstr ""
+"Hai abilitato \"Livelli come risorse\", ma ci sono elementi visivi che non "
+"fanno parte di alcun livello ma contenuti direttamente nell'elemento radice. "
+"Questi elementi saranno mancanti nell'esportazione.\n"
+"\n"
+"Considera di includerli in un livello o di disabilitare questa opzione."
 
 #: ../share/extensions/output_scour.py:14
 msgid ""
@@ -44552,6 +44562,8 @@ msgid ""
 "Some tools do not support curves in DXF files. Enabling this will export "
 "curves as series of straight line segments."
 msgstr ""
+"Alcuni strumenti non supportano le curve nei file DXF. Abilitando questo "
+"esporterai le curve come serie di segmenti di linea retta."
 
 #: ../share/extensions/dxf_outlines.inx:13
 msgid "Use Document unit as base unit"
