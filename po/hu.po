@@ -43071,20 +43071,20 @@ msgstr "{0}\t„{1}” objektum"
 
 #: ../share/extensions/jessyink_summary.py:133
 msgid " will appear"
-msgstr "meg fog jelenni"
+msgstr " meg fog jelenni"
 
 #: ../share/extensions/jessyink_summary.py:135
 msgid " will disappear"
-msgstr "el fog tűnni"
+msgstr " el fog tűnni"
 
 #: ../share/extensions/jessyink_summary.py:138
 #, python-brace-format
 msgid " using effect \"{0}\""
-msgstr "„{0}” effektus használatával"
+msgstr " „{0}” effektus használatával"
 
 #: ../share/extensions/jessyink_summary.py:141
 msgid " in {0!s} s"
-msgstr "{0!s} mp alatt"
+msgstr " {0!s} mp alatt"
 
 #: ../share/extensions/jessyink_transitions.py:41
 msgid "Please enter a layer name."
