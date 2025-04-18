@@ -27,15 +27,16 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-02-04 23:42+0100\n"
-"PO-Revision-Date: 2024-05-05 05:32+0100\n"
+"PO-Revision-Date: 2025-04-19 09:29+0000\n"
 "Last-Translator: Duarte Farrajota Ramos <duarte.framos@gmail.com>\n"
-"Language-Team: \n"
-"Language: pt_PT\n"
+"Language-Team: Portuguese <https://translate.inkscape.org/projects/inkscape/"
+"inkscape-master/pt/>\n"
+"Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.4.2\n"
+"X-Generator: Weblate 5.9.2\n"
 
 #: ../build/share/filters/filters.svg.h:2
 msgid "Fast Crop"
@@ -3287,10 +3288,8 @@ msgid "Decorative Paper"
 msgstr "Papel decorativo"
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
-#| msgid "Flip horizontal"
 msgid "Zigzag horizontal 1"
-msgstr "Espelhar na horizontal"
+msgstr "Zigzag horizontal 1"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Ticks"
@@ -3327,10 +3326,8 @@ msgid "Hollow circle"
 msgstr "Círculo oco"
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
-#| msgid "Flip vertical"
 msgid "Pills vertical"
-msgstr "Espelhar na vertical"
+msgstr "Cápsulas vertical"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Tiles 1"
@@ -3349,10 +3346,8 @@ msgid "Triangles 2"
 msgstr "Triângulos 2"
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
-#| msgid "Circle fill 1"
 msgid "Circle horizontal fill 1"
-msgstr "Preenchimento em círculo 1"
+msgstr "Preenchimento em círculo horizontal 1"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Snake 2"
@@ -3367,10 +3362,8 @@ msgid "Triangles 5"
 msgstr "Triângulos 5"
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
-#| msgid "Scale nodes horizontally"
 msgid "Semicircles horizontal"
-msgstr "Redimensionar nós horizontalmente"
+msgstr "Semicírculos horizontal"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Triangles 4"
@@ -3394,16 +3387,12 @@ msgid "Abstract 4"
 msgstr "Abstracto 4"
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
-#| msgid "Rain drops 2"
 msgid "Rain drops vertical"
-msgstr "Gotas de chuva 2"
+msgstr "Gotas de chuva vertical"
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
-#| msgid "Circle fill 2"
 msgid "Circle diagonal fill 2"
-msgstr "Preenchimento em círculo 2"
+msgstr "Preenchimento círculo diagonal 2"
 
 #: ../build/share/paint/patterns.svg.h:1
 #, fuzzy
