@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: hu\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2024-09-28 10:42+0000\n"
-"PO-Revision-Date: 2025-04-18 10:06+0000\n"
+"PO-Revision-Date: 2025-04-19 11:06+0000\n"
 "Last-Translator: Gyuris Gellért <jobel@ujevangelizacio.hu>\n"
 "Language-Team: Hungarian <https://translate.inkscape.org/projects/inkscape/"
 "1-4-x/hu/>\n"
@@ -2200,7 +2200,7 @@ msgstr "Színes pont"
 
 #: ../build/share/markers/markers.svg.h:19
 msgid "Colored square"
-msgstr "Színes négyzet "
+msgstr "Színes négyzet"
 
 #: ../build/share/markers/markers.svg.h:20
 msgid "Colored diamond"
@@ -3630,7 +3630,7 @@ msgstr "Rácsbontott árnyalat vízszintes vonalakból"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Lines half circle shading "
-msgstr "Árnyalás félkörökből álló vonalakból"
+msgstr "Árnyalás félkörökből álló vonalakból "
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Triangles shading 5"
@@ -5134,7 +5134,7 @@ msgstr "Helység (falu)"
 #: ../build/share/symbols/symbols.h:509 ../build/share/symbols/symbols.h:530
 msgctxt "Symbol"
 msgid "Point of interest"
-msgstr "Érdeklődésre számot tartó pont "
+msgstr "Érdeklődésre számot tartó pont"
 
 #: ../build/share/symbols/symbols.h:510 ../build/share/symbols/symbols.h:531
 msgctxt "Symbol"
@@ -5960,7 +5960,7 @@ msgstr "Bahái"
 #: ../build/share/symbols/symbols.h:865 ../build/share/symbols/symbols.h:885
 msgctxt "Symbol"
 msgid "Bahai 2"
-msgstr "Bahái  2"
+msgstr "Bahái 2"
 
 #: ../build/share/symbols/symbols.h:866 ../build/share/symbols/symbols.h:886
 msgctxt "Symbol"
@@ -6124,7 +6124,7 @@ msgstr "üres, rétegek nélküli"
 
 #: ../build/share/templates/templates.h:1
 msgid "Zine Booklet (A4)"
-msgstr "Zine füzet  (A4)"
+msgstr "Zine füzet (A4)"
 
 #: ../build/share/templates/templates.h:1
 msgid "A foldable one page booklet (A4)"
@@ -6136,7 +6136,7 @@ msgstr "297 × 210 mm"
 
 #: ../build/share/templates/templates.h:1
 msgid "Zine Booklet (US)"
-msgstr "Zine füzet  (US)"
+msgstr "Zine füzet (US)"
 
 #: ../build/share/templates/templates.h:1
 msgid "A foldable one page booklet (US Letter)"
@@ -6418,7 +6418,7 @@ msgstr "Illesztés átváltása: be/ki"
 
 #: ../src/actions/actions-canvas-snapping.cpp:246
 msgid "Snap Objects that Align"
-msgstr "Igazított objektumok illesztése "
+msgstr "Igazított objektumok illesztése"
 
 #: ../src/actions/actions-canvas-snapping.cpp:246
 #: ../src/actions/actions-canvas-snapping.cpp:282
@@ -6793,7 +6793,7 @@ msgstr "Elforgatás visszaállítása"
 
 #: ../src/actions/actions-canvas-transform.cpp:284
 msgid "Reset canvas rotation"
-msgstr "Rajzvászon elforgatásának visszaállítása "
+msgstr "Rajzvászon elforgatásának visszaállítása"
 
 #: ../src/actions/actions-canvas-transform.cpp:286
 msgid "Flip Horizontal"
@@ -7027,7 +7027,7 @@ msgstr "Objektumtulajdonságok megnyitása"
 
 #: ../src/actions/actions-dialogs.cpp:51
 msgid "Edit the object attributes (context dependent)..."
-msgstr "Objektum attribútumainak szerkesztése  (kontextusfüggő)…"
+msgstr "Objektum attribútumainak szerkesztése (kontextusfüggő)…"
 
 #: ../src/actions/actions-dialogs.cpp:52
 msgid "Open Objects"
@@ -7543,7 +7543,7 @@ msgstr "Rendszerhiba üzenet: %1"
 
 #: ../src/actions/actions-element-image.cpp:123
 msgid "External Edit Image:"
-msgstr "Külső képszerkesztés"
+msgstr "Külső képszerkesztés:"
 
 #: ../src/actions/actions-element-image.cpp:150
 msgid "Nothing selected."
@@ -10672,7 +10672,7 @@ msgstr "Váltás a következő dokumentum ablakára"
 #: ../src/actions/actions-window.cpp:99
 msgid "Enter comma-separated string for x, y, width, height"
 msgstr ""
-"Vesszővel tagolt szövegként adja meg az x, y, szélesség, magasság értéket "
+"Vesszővel tagolt szövegként adja meg az x, y, szélesség, magasság értéket"
 
 #: ../src/actions/actions-window.cpp:106
 msgid "Window Open"
@@ -11125,8 +11125,8 @@ msgid ""
 "  This is caused by an improper .inx file for this extension.  An improper ."
 "inx file could have been caused by a faulty installation of Inkscape."
 msgstr ""
-" Ennek oka: helytelen „.inx”-fájl tartozik a kiterjesztéshez. Helytelen „."
-"inx”-fájl például egy hibás Inkscape-telepítésből származhat."
+"  Ennek oka: helytelen „.inx”-fájl tartozik a kiterjesztéshez. Helytelen "
+"„.inx”-fájl például egy hibás Inkscape-telepítésből származhat."
 
 #: ../src/extension/extension.cpp:263
 msgid "the XML description of it got lost."
@@ -15738,7 +15738,7 @@ msgstr "Bemeneti SVG (%1) exportálása PDF (%2) formátumba:"
 msgid "Export input files (%1) to PNG format keeping original name (%2):"
 msgstr ""
 "Bemeneti fájlok (%1) exportálása PNG formátumba az eredeti név (%2) "
-"megtartásával"
+"megtartásával:"
 
 #: ../src/inkscape-application.cpp:716
 msgid "See %1 and %2 for more details."
@@ -15982,7 +15982,7 @@ msgstr "Szövegobjektum átalakítása útvonalakká (PS, EPS, PDF, SVG)"
 
 #: ../src/inkscape-application.cpp:764
 msgid "Export text separately to LaTeX file (PS/EPS/PDF)"
-msgstr "A szöveg külön exportálása LaTeX fájlba (PS/EPS/PDF) "
+msgstr "A szöveg külön exportálása LaTeX fájlba (PS/EPS/PDF)"
 
 #: ../src/inkscape-application.cpp:765
 msgid "Render objects without filters instead of rasterizing (PS/EPS/PDF)"
@@ -16596,7 +16596,7 @@ msgid ""
 "Add dimensioning for distances between nodes, optionally with projection and "
 "many other configuration options"
 msgstr ""
-"Méretezés hozzáadása a csomópontok közti távolsághoz,  opcionálisan "
+"Méretezés hozzáadása a csomópontok közti távolsághoz, opcionálisan "
 "vetülettel és több további beállítási lehetőséggel"
 
 #: ../src/live_effects/effect.cpp:556
@@ -17399,8 +17399,7 @@ msgstr "Hézag"
 #: ../src/live_effects/lpe-copy_rotate.cpp:66
 msgid "Gap space between copies, use small negative gaps to fix some joins"
 msgstr ""
-"Másolatok közötti hézag; pici negatív értékkel lehet javítani néha a "
-"sarkokat "
+"Másolatok közötti hézag; pici negatív értékkel lehet javítani néha a sarkokat"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:67
 msgid "Distribute evenly"
@@ -17654,7 +17653,7 @@ msgstr "Öltéshossz"
 msgid "Divide path into straight segments of given length (in user units)"
 msgstr ""
 "Útvonal felosztása (felhasználói mértékegységben) megadott hosszúságú "
-"egyenes szegmensekre "
+"egyenes szegmensekre"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:61
 msgid "Minimum stitch length [%]"
@@ -18479,7 +18478,7 @@ msgstr "Végződés típusa:"
 
 #: ../src/live_effects/lpe-line_segment.cpp:35
 msgid "Determines on which side the line or line segment is infinite."
-msgstr "Annak meghatározása, hogy mely vonal- vagy szakaszvég végtelen "
+msgstr "Annak meghatározása, hogy mely vonal- vagy szakaszvég végtelen"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:65
 #: ../src/live_effects/lpe-slice.cpp:112
@@ -18596,8 +18595,8 @@ msgid ""
 "Comma-separated list of indices of segments that should not be measured. You "
 "can use another LPE with different parameters to measure these."
 msgstr ""
-"Nem méretezendő szegmensek sorszámainak vesszővel elválasztott listája.  "
-"Akár egy másik élő útvonaleffektus más paraméterekkel méretezheti ezeket."
+"Nem méretezendő szegmensek sorszámainak vesszővel elválasztott listája. Akár "
+"egy másik élő útvonaleffektus más paraméterekkel méretezheti ezeket."
 
 #: ../src/live_effects/lpe-measure-segments.cpp:89
 msgid "Invert blacklist"
@@ -18764,7 +18763,7 @@ msgstr "Csak max. és min."
 
 #: ../src/live_effects/lpe-measure-segments.cpp:108
 msgid "Compute only max/min projection values"
-msgstr "Csak a max. és min. vetületi  értékek kiszámítása"
+msgstr "Csak a max. és min. vetületi értékek kiszámítása"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:109
 #: ../src/live_effects/lpe-measure-segments.cpp:268
@@ -19432,7 +19431,7 @@ msgstr "_Keret (izometrikus téglalap)"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:59
 msgid "Draw parallelogram around the ellipse"
-msgstr "Paralelogramma rajzolása az ellipszis köré "
+msgstr "Paralelogramma rajzolása az ellipszis köré"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:62
 msgid "_Perspective square"
@@ -19766,7 +19765,7 @@ msgstr "Elmozdítás ←→"
 
 #: ../src/live_effects/lpe-roughen.cpp:53
 msgid "Maximal displacement in x direction"
-msgstr "Maximális elmozdítás x irányban:"
+msgstr "Maximális elmozdítás x irányban"
 
 #: ../src/live_effects/lpe-roughen.cpp:54
 msgid "Displace ↑↓"
@@ -19774,7 +19773,7 @@ msgstr "Elmozdítás ↑↓"
 
 #: ../src/live_effects/lpe-roughen.cpp:54
 msgid "Maximal displacement in y direction"
-msgstr "Maximális elmozdítás y irányban:"
+msgstr "Maximális elmozdítás y irányban"
 
 #: ../src/live_effects/lpe-roughen.cpp:55
 msgid "Global randomize"
@@ -19991,7 +19990,7 @@ msgid ""
 "that need to be significantly simplified. "
 msgstr ""
 "Módosítja az egyszerűsítő művelet ismétléseinek számát. Olyan összetett "
-"útvonalak esetében hasznos, amelyeket jelentősen egyszerűsíteni kell."
+"útvonalak esetében hasznos, amelyeket jelentősen egyszerűsíteni kell. "
 
 #: ../src/live_effects/lpe-simplify.cpp:28
 msgid "Drag slider to set the amount of simplification"
@@ -20253,7 +20252,7 @@ msgstr "Lecsípett"
 
 #: ../src/live_effects/lpe-taperstroke.cpp:105
 msgid "Select subpath:"
-msgstr "Kijelölt alútvonal"
+msgstr "Kijelölt alútvonal:"
 
 #: ../src/live_effects/lpe-taperstroke.cpp:105
 msgid "Select the subpath you want to modify"
@@ -21672,7 +21671,7 @@ msgstr "A(z) %s fájl nem egy érvényes Inkscape-beállításfájl."
 
 #: ../src/preferences.cpp:276
 msgid "Preferences file was backed up to"
-msgstr "A beállításfájl le lett mentve:"
+msgstr "A beállításfájl le lett mentve"
 
 #: ../src/preferences.cpp:277
 msgid "There was an error trying to reset the preferences file."
@@ -23450,7 +23449,7 @@ msgstr "Vekt_orizálás"
 
 #: ../src/ui/dialog/clonetiler.cpp:802
 msgid "Trace the drawing under the clones/sprayed items"
-msgstr "A klónok vagy a permetezett elemek alatti rajzok  vektorizálása"
+msgstr "A klónok vagy a permetezett elemek alatti rajzok vektorizálása"
 
 #: ../src/ui/dialog/clonetiler.cpp:806
 msgid ""
@@ -23887,7 +23886,7 @@ msgstr "S_zűrőszerkesztő"
 
 #: ../src/ui/dialog/dialog-data.cpp:39
 msgid "Filter Gallery"
-msgstr "Szűrő galéria "
+msgstr "Szűrő galéria"
 
 #: ../src/ui/dialog/dialog-data.cpp:40
 msgid "_Find/Replace"
@@ -24632,7 +24631,7 @@ msgstr "Külső URI-k"
 
 #: ../src/ui/dialog/document-resources.cpp:971
 msgid "Style "
-msgstr "Stílus"
+msgstr "Stílus "
 
 #: ../src/ui/dialog/document-resources.cpp:1179
 msgid "Edit object title"
@@ -24719,7 +24718,7 @@ msgstr "Adjon meg egy fájlnevet az exportáláshoz"
 #: ../src/ui/dialog/export.cpp:189
 #, c-format
 msgid "Directory <b>%s</b> does not exist and can't be created.\n"
-msgstr "A mappa:  <b>%s</b> nem létezik és nem hozható létre.\n"
+msgstr "A mappa: <b>%s</b> nem létezik és nem hozható létre.\n"
 
 #: ../src/ui/dialog/export.cpp:210
 msgid "The chosen area to be exported is invalid."
@@ -25111,8 +25110,8 @@ msgid ""
 "Uniformly blurs its input. Commonly used together with Offset to create a "
 "drop shadow effect."
 msgstr ""
-"Egyenletesen elmossa a bemenetet. Általában az Elmozdítással  kombinálva "
-"„vetett árnyék” effektus előállítására használatos."
+"Egyenletesen elmossa a bemenetet. Általában az Elmozdítással kombinálva „"
+"vetett árnyék” effektus előállítására használatos."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2596
 msgid ""
@@ -25612,7 +25611,7 @@ msgstr "Részlet:"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:3050
 msgid "Seed:"
-msgstr "Véletlenség rögzítő"
+msgstr "Véletlenség rögzítő:"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:3050
 msgid "The starting number for the pseudo random number generator."
@@ -25683,7 +25682,7 @@ msgstr "_Tulajdonságok"
 
 #: ../src/ui/dialog/find.cpp:68
 msgid "Search in"
-msgstr "Keresés itt:"
+msgstr "Keresés itt"
 
 #: ../src/ui/dialog/find.cpp:69
 msgid "Scope"
@@ -25998,7 +25997,7 @@ msgstr "Az ASE-fájl fejléce nem ismerhető fel."
 
 #: ../src/ui/dialog/global-palettes.cpp:341
 msgid "ASE color mode not recognized:"
-msgstr "Az ASE színmód nem ismerhető fel."
+msgstr "Az ASE színmód nem ismerhető fel:"
 
 #: ../src/ui/dialog/global-palettes.cpp:366
 msgid "Failed to open file"
@@ -26015,7 +26014,7 @@ msgstr "Az első sok hibás"
 #: ../src/ui/dialog/global-palettes.cpp:414
 msgctxt "Palette"
 msgid "Invalid line "
-msgstr "Érvénytelen sor"
+msgstr "Érvénytelen sor "
 
 #: ../src/ui/dialog/global-palettes.cpp:428
 msgid "Error loading palette %1: %2"
@@ -26971,7 +26970,7 @@ msgstr "Alkímiai szimbólumok"
 
 #: ../src/ui/dialog/glyphs.cpp:374
 msgid "Geometric Shapes Extended"
-msgstr "Bővített geometriai alakzatok "
+msgstr "Bővített geometriai alakzatok"
 
 #: ../src/ui/dialog/glyphs.cpp:375
 msgid "Supplemental Arrows-C"
@@ -27961,7 +27960,7 @@ msgstr "Manipuri bengáli írással (mni@beng)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1524
 msgid "Marathi (mr)"
-msgstr "Maráthi  (mr)"
+msgstr "Maráthi (mr)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1524
 msgid "Mongolian (mn)"
@@ -28303,7 +28302,7 @@ msgstr "Állítsa be a felhasználói felület betűtípusainak méretét"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1717
 msgid "_Contrast:"
-msgstr "_Kontraszt"
+msgstr "_Kontraszt:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1718
 msgid "Make background brighter or darker to adjust contrast"
@@ -28353,7 +28352,7 @@ msgstr "Ikon alapszín"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1803
 msgid "Base color for icons"
-msgstr "Ikonok alapértelmezett színe "
+msgstr "Ikonok alapértelmezett színe"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1808
 msgid "Icon color highlights"
@@ -31038,7 +31037,7 @@ msgid ""
 "Remove all your customized keyboard shortcuts, and revert to the shortcuts "
 "in the shortcut file listed above"
 msgstr ""
-"Minden egyéni gyorsbillentyű eltávolítása és visszatérés a fenti  "
+"Minden egyéni gyorsbillentyű eltávolítása és visszatérés a fenti "
 "gyorsbillentyű-fájl beállításaihoz"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3247
@@ -31606,7 +31605,7 @@ msgstr "Körív típusának módosítása"
 
 #: ../src/ui/dialog/object-attributes.cpp:882
 msgid "Nodes: "
-msgstr "Csomópontok:"
+msgstr "Csomópontok: "
 
 #: ../src/ui/dialog/object-attributes.cpp:903
 msgid "Change path"
@@ -32012,7 +32011,7 @@ msgstr "Az ellenőrzés <b>befejeződött</b>, nem talált hibát"
 #: ../src/ui/dialog/spellcheck.cpp:477
 #, c-format
 msgid "Not in dictionary: <b>%s</b>"
-msgstr "Nincs a szótárban: <b>%s</b> "
+msgstr "Nincs a szótárban: <b>%s</b>"
 
 #: ../src/ui/dialog/spellcheck.cpp:602
 msgid "<i>Checking...</i>"
@@ -32644,10 +32643,10 @@ msgid ""
 "html#TransformMatrixDefined\">2D transformation matrix</a> that combines "
 "translation (E,F), scaling (A,D), rotation (A-D) and shearing (B,C).</small>"
 msgstr ""
-"<small><a href=\"https://www.w3.org/TR/SVG11/coords."
-"html#TransformMatrixDefined\">2D transzformációs mátrix</a>, mely kombinálja "
-"az eltolást (E,F), az átméretezést (A,D), a forgatást  (A-D) és a nyírást (B,"
-"C).</small>"
+"<small><a href="
+"\"https://www.w3.org/TR/SVG11/coords.html#TransformMatrixDefined\">2D "
+"transzformációs mátrix</a>, mely kombinálja az eltolást (E,F), az "
+"átméretezést (A,D), a forgatást (A-D) és a nyírást (B,C).</small>"
 
 #: ../src/ui/dialog/transformation.cpp:844
 #: ../src/ui/dialog/transformation.cpp:855
@@ -32849,9 +32848,9 @@ msgid ""
 "makes x equal to y; <b>Shift</b>+<b>Ctrl</b>+<b>Drag</b> scales blur "
 "proportionately "
 msgstr ""
-"Elmosás <b>módosítása</b> x-irányban: <b>húzással</b>. x legyen egyenlő y-"
-"nal: <b>Ctrl</b> + <b>húzás</b>. Elmosás arányos átméretezése: <b>Shift</b> "
-"+ <b>Ctrl</b> + <b>húzás</b>."
+"Elmosás <b>módosítása</b> x-irányban: <b>húzással</b>. x legyen egyenlő "
+"y-nal: <b>Ctrl</b> + <b>húzás</b>. Elmosás arányos átméretezése: <b>Shift</"
+"b> + <b>Ctrl</b> + <b>húzás</b>. "
 
 #: ../src/ui/knot/knot-holder.cpp:473
 msgid ""
@@ -32859,9 +32858,9 @@ msgid ""
 "makes y equal to x; <b>Shift</b>+<b>Ctrl</b>+<b>Drag</b> scales blur "
 "proportionately "
 msgstr ""
-"Elmosás <b>módosítása</b> y-irányban: <b>húzással</b>. y legyen egyenlő x-"
-"el: <b>Ctrl</b> + <b>húzás</b>. Elmosás arányos átméretezése: <b>Shift</b> + "
-"<b>Ctrl</b> + <b>húzás</b>."
+"Elmosás <b>módosítása</b> y-irányban: <b>húzással</b>. y legyen egyenlő x-el:"
+" <b>Ctrl</b> + <b>húzás</b>. Elmosás arányos átméretezése: <b>Shift</b> + "
+"<b>Ctrl</b> + <b>húzás</b>. "
 
 #: ../src/ui/knot/knot.cpp:278
 msgid "Node or handle drag canceled."
@@ -34121,7 +34120,7 @@ msgstr "Több fázis"
 
 #: ../src/ui/toolbar/lpe-toolbar.cpp:92
 msgid "Line Type"
-msgstr "Vonaltípus:"
+msgstr "Vonaltípus"
 
 #: ../src/ui/toolbar/lpe-toolbar.cpp:92 ../share/ui/toolbar-lpe.ui:261
 msgid "Choose a line segment type"
@@ -34225,7 +34224,7 @@ msgstr "Oldal átméretezése"
 
 #: ../src/ui/toolbar/page-toolbar.cpp:228
 msgid "Relabel Page"
-msgstr "Oldal átcímkézése "
+msgstr "Oldal átcímkézése"
 
 #: ../src/ui/toolbar/page-toolbar.cpp:242
 msgid "Edit page bleed"
@@ -35723,7 +35722,7 @@ msgid ""
 "%s. Drag, click or click and scroll to spray into a <b>single path</b>. "
 "Right-click + move to update single click item.."
 msgstr ""
-"%s.  <b>Egyetlen útvonalba</b> permetezés: húzással, kattintással vagy "
+"%s. <b>Egyetlen útvonalba</b> permetezés: húzással, kattintással vagy "
 "kattintással + görgetéssel. Egykattintásos elem frissítése: jobb egérgombbal "
 "kattintás + mozgatás."
 
@@ -38280,7 +38279,7 @@ msgstr "N,NNNNN"
 #: ../share/ui/attribute-edit-component.glade:144
 #: ../share/ui/object-attributes.glade:1271
 msgid "Round selected numbers to n digits"
-msgstr "Kijelölt számok kerekítése n számjegyre "
+msgstr "Kijelölt számok kerekítése n számjegyre"
 
 #: ../share/ui/attribute-edit-component.glade:202
 msgid "Shift+Return to close"
@@ -38721,7 +38720,7 @@ msgstr "Színek keresése név szerint"
 
 #: ../share/ui/dialog-swatches.glade:102
 msgid "Load palette of colors or swatches"
-msgstr "Színpaletta vagy szinminták betöltése "
+msgstr "Színpaletta vagy szinminták betöltése"
 
 #: ../share/ui/dialog-swatches.glade:118
 msgid "New swatch"
@@ -38936,7 +38935,7 @@ msgstr "Középvonalas vektorizálás (autotrace)"
 
 #: ../share/ui/dialog-trace.glade:424 ../share/ui/dialog-trace.glade:611
 msgid "Detection mode:"
-msgstr "Észlelési mód"
+msgstr "Észlelési mód:"
 
 #: ../share/ui/dialog-trace.glade:497 ../share/ui/dialog-trace.glade:698
 msgid "Speckles of up to this many pixels will be suppressed"
@@ -39042,7 +39041,7 @@ msgstr "Az előtérszínhez tartozó színek előnyben részesítése"
 
 #: ../share/ui/dialog-trace.glade:919
 msgid "Sparse pixels:"
-msgstr "Ritkás pixelek"
+msgstr "Ritkás pixelek:"
 
 #: ../share/ui/dialog-trace.glade:931 ../share/ui/dialog-trace.glade:974
 msgid "The heuristic computed vote will be multiplied by this value"
@@ -39749,7 +39748,7 @@ msgid ""
 msgstr ""
 "<b>Az Inkscape projektet olyan felhasználók támogatják, mint Ön.</b> Az "
 "együttes időnk, pénzünk és képességeink révén alkottuk meg ezt a szoftvert "
-"mindenkinek a világon, hogy kedvét lelje benne  korlátozások és költségek "
+"mindenkinek a világon, hogy kedvét lelje benne korlátozások és költségek "
 "nélkül.<b>\n"
 "Ha szeretne részt venni az Inkscape következő verziójának még jobbá "
 "tételében, fontolja meg még ma az Inkscape projekthez való csatlakozást.</b>"
@@ -40206,7 +40205,7 @@ msgstr "név"
 
 #: ../share/ui/pattern-edit.glade:652
 msgid "Color: "
-msgstr "Szín:"
+msgstr "Szín: "
 
 #: ../share/ui/pattern-edit.glade:659
 msgid "Apply color to the current pattern"
@@ -42522,7 +42521,7 @@ msgid ""
 "Encountered key of unknown format, id={0} while parsing DXF. This is "
 "probably a bug."
 msgstr ""
-"Ismeretlen formátumú kulcsot találtunk, a DXF elemzése során:  id={0}. Ez "
+"Ismeretlen formátumú kulcsot találtunk, a DXF elemzése során: id={0}. Ez "
 "valószínűleg egy hiba."
 
 #: ../share/extensions/dxf_input.py:1400
@@ -42760,7 +42759,7 @@ msgid ""
 "{} method is now a required method. It should be created on {cls}, even if "
 "it does nothing."
 msgstr ""
-"{} metódus most már egy  szükséges metódus. Létre kell hozni a {cls}-ban "
+"{} metódus most már egy szükséges metódus. Létre kell hozni a {cls}-ban "
 "akkor is, ha nem tesz semmit."
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:112
@@ -43270,7 +43269,7 @@ msgstr ""
 
 #: ../share/extensions/pdflatex.py:75
 msgid "An exception occurred during LaTeX compilation: "
-msgstr "Kivétel történt a LaTeX fordítása során:"
+msgstr "Kivétel történt a LaTeX fordítása során: "
 
 #: ../share/extensions/perspective.py:44
 msgid ""
@@ -43500,11 +43499,11 @@ msgstr "Érvénytelen háromszög-specifikáció."
 
 #: ../share/extensions/typst_formula.py:63
 msgid "An exception occurred during typst compilation: "
-msgstr "Kivétel történt a typst fordítása során:"
+msgstr "Kivétel történt a typst fordítása során: "
 
 #: ../share/extensions/typst_formula.py:68
 msgid "No svg has been produced by compilation: "
-msgstr "Az összeállítás során nem keletkezett SVG:"
+msgstr "Az összeállítás során nem keletkezett SVG: "
 
 #: ../share/extensions/typst_formula.py:69
 #, python-brace-format
@@ -43687,7 +43686,8 @@ msgstr ""
 "Példa (vörös fele, zöld és kék cseréje:\n"
 " Vörös-függvény: r*0.5\n"
 " Zöld-függvény: b\n"
-" Kék-függvény: g"
+" Kék-függvény: g\n"
+"            "
 
 #: ../share/extensions/color_darker.inx:3
 msgid "Darker"
@@ -43746,7 +43746,7 @@ msgid ""
 msgstr ""
 "\n"
 "Beállítja a kiválasztott objektum színeinek HSL-szerinti árnyalat, "
-"telítettség és fényesség fényesség komponensét.\n"
+"telítettség és fényesség komponensét.\n"
 "      "
 
 #: ../share/extensions/color_lesshue.inx:3
@@ -44033,9 +44033,9 @@ msgstr ""
 "\n"
 "A Python összes szabványos matematikai függvénye felhasználható: ceil(x); "
 "fabs(x); floor(x); fmod(x,y); frexp(x); ldexp(x,i); modf(x); exp(x); log(x "
-"[, alap]); log10(x); pow(x,y); sqrt(x); acos(x); asin(x); atan(x); atan2(y,"
-"x); hypot(x,y); cos(x); sin(x); tan(x); degrees(x); radians(x); cosh(x); "
-"sinh(x); tanh(x).\n"
+"[, alap]); log10(x); pow(x,y); sqrt(x); acos(x); asin(x); atan(x); "
+"atan2(y,x); hypot(x,y); cos(x); sin(x); tan(x); degrees(x); radians(x); "
+"cosh(x); sinh(x); tanh(x).\n"
 "\n"
 "Az inverz trigonometriai függvények is felhasználhatók: sec(x); csc(x); "
 "cot(x).\n"
@@ -44044,7 +44044,7 @@ msgstr ""
 "tartalmazhatja az oldalhosszokat, a szögeket stb. A pont izogonális és "
 "izotom konjugáltja is megrajzolható. Ne feledje, hogy ez bizonyos pontok "
 "esetében nullával való osztási hibát is okozhat.\n"
-"\t"
+"            "
 
 #: ../share/extensions/convert2dashes.inx:3
 msgid "Convert Dashes to Path"
@@ -44585,19 +44585,20 @@ msgstr ""
 "összes kijelölt útvonalnak azonos számú csomópontja van. \n"
 "\n"
 "3 fő lehetőség van:\n"
-"- A megfelelő csomópontok között szegmensek jönnek létre. Lehetőség van a "
-"„Vonalak összevonása egyetlen útvonallá” opció kiválasztására, így a "
+"- A megfelelő csomópontok között szegmensek jönnek létre. Lehetőség van a „"
+"Vonalak összevonása egyetlen útvonallá” opció kiválasztására, így a "
 "létrehozott szegmensek egyetlen útvonal alútvonalai lesznek; ellenkező "
-"esetben a létrehozott szegmensek különálló, csoportosított útvonalak "
-"lesznek.\n"
+"esetben a létrehozott szegmensek különálló, csoportosított útvonalak lesznek."
+"\n"
 "- poligonok: Az egyes útvonalak megfelelő csomópontpárjai között egyenes "
-"vonalakkal ellátott sokszögek jönnek létre. A sokszögek csoportosítva "
-"vannak.\n"
+"vonalakkal ellátott sokszögek jönnek létre. A sokszögek csoportosítva vannak."
+"\n"
 "- görbék követése: Ugyanaz, mint a poligonok, de az eredeti útvonalak "
 "tetején fekvő \"szegmensek\" ugyanazokat a görbéket követik, mint az eredeti "
 "ösvényen.\n"
 "\n"
-"A vonalak a két elem alja fölé kerülnek beillesztésre."
+"A vonalak a két elem alja fölé kerülnek beillesztésre.\n"
+"            "
 
 #: ../share/extensions/fig_input.inx:3
 msgid "XFIG Input"
@@ -45006,7 +45007,7 @@ msgstr "Y-alcellánkénti al-alcellák száma:"
 #: ../share/extensions/grid_cartesian.inx:49
 msgid "Halve Y Subsubdiv. Frequency after 'n' Subdivs. (log only):"
 msgstr ""
-"Y-al-alcellák frekvenciájának felezése „n” alcella után (csak logaritmus)"
+"Y-al-alcellák frekvenciájának felezése „n” alcella után (csak logaritmus):"
 
 #: ../share/extensions/grid_cartesian.inx:50
 msgid "Major Y Division Thickness:"
@@ -45437,7 +45438,9 @@ msgstr ""
 "A teljes felhasználói útmutató a következő címen érhető el:\n"
 "http://wiki.evilmadscientist.com/hershey\n"
 "\n"
-"További segítség ezen a fülön az „Alkalmazás” gombra kattintva kérhető."
+"További segítség ezen a fülön az „Alkalmazás” gombra kattintva kérhető.\n"
+"\n"
+"  "
 
 #: ../share/extensions/hershey.inx:104
 msgid "Credits"
@@ -45708,7 +45711,7 @@ msgid ""
 "Curves are divided into lines, this number controls how fine the curves will "
 "be reproduced, the smaller the finer (Default: '1.2')"
 msgstr ""
-"Az ívek vonalakká vannak bontva. Ez a szám befolyásolja az  ívek finomságát. "
+"Az ívek vonalakká vannak bontva. Ez a szám befolyásolja az ívek finomságát. "
 "A kisebb érték a finomabb (alapértelmezett: 1.2)"
 
 #: ../share/extensions/hpgl_output.inx:32 ../share/extensions/plotter.inx:88
@@ -46220,19 +46223,19 @@ msgstr "Diavetítés üzemmód"
 
 #: ../share/extensions/jessyink_key_bindings.inx:7
 msgid "Back (with effects):"
-msgstr "Vissza (effektusokkal)"
+msgstr "Vissza (effektusokkal):"
 
 #: ../share/extensions/jessyink_key_bindings.inx:8
 msgid "Next (with effects):"
-msgstr "Következő (effektusokkal)"
+msgstr "Következő (effektusokkal):"
 
 #: ../share/extensions/jessyink_key_bindings.inx:9
 msgid "Back (without effects):"
-msgstr "Vissza (effektusok nélkül)"
+msgstr "Vissza (effektusok nélkül):"
 
 #: ../share/extensions/jessyink_key_bindings.inx:10
 msgid "Next (without effects):"
-msgstr "Következő (effektusok nélkül)"
+msgstr "Következő (effektusok nélkül):"
 
 #: ../share/extensions/jessyink_key_bindings.inx:11
 #: ../share/extensions/jessyink_key_bindings.inx:49
@@ -47095,7 +47098,7 @@ msgstr "Eltolás (px):"
 
 #: ../share/extensions/measure.inx:52
 msgid "Scale Factor (Real:Drawing Length):"
-msgstr "Méretezési tényező (valós: rajzolt hossz)"
+msgstr "Méretezési tényező (valós: rajzolt hossz):"
 
 #: ../share/extensions/measure.inx:53
 msgid "Length Unit:"
@@ -47518,7 +47521,7 @@ msgstr "Terület szélessége:"
 
 #: ../share/extensions/other/gcodetools/gcodetools_area.inx:11
 msgid "Area tool overlap (0..0.9):"
-msgstr "Terület eszköz átfedése  (0…0,9):"
+msgstr "Terület eszköz átfedése (0…0,9):"
 
 #: ../share/extensions/other/gcodetools/gcodetools_area.inx:13
 msgid ""
@@ -47540,7 +47543,8 @@ msgstr ""
 "A körvonalak „1/2 D”-től kezdődnek a „Terület szélessége” teljes mértékéig, "
 "„D” lépékkel, ahol a „D” értéke a legközelebbi eszközdefinícióból származik "
 "(„Eszköz átmérője” értéke)\n"
-"Csak egy eltolás jön létre, ha a „Terület szélessége” egyenlő „1/2 D”-vel."
+"Csak egy eltolás jön létre, ha a „Terület szélessége” egyenlő „1/2 D”-vel.\n"
+"            "
 
 #: ../share/extensions/other/gcodetools/gcodetools_area.inx:21
 msgid "Fill area"
@@ -47599,7 +47603,8 @@ msgstr ""
 "2. Objektum/Csoport szétbontása (Shift+Ctrl+G)\n"
 "3. Nyomja meg az Alkalmazás gombot\n"
 "\n"
-"A feltételezett kis objektumok meg lesz jelölve egy színes nyíllal."
+"A feltételezett kis objektumok meg lesz jelölve egy színes nyíllal.\n"
+"            "
 
 #: ../share/extensions/other/gcodetools/gcodetools_area.inx:47
 #: ../share/extensions/other/gcodetools/gcodetools_lathe.inx:28
@@ -47866,7 +47871,8 @@ msgstr ""
 "\n"
 "Vagyis kézzel ki lehet jelölni az objektumot, megnyitni az XML-szerkesztőt "
 "(Shift+Ctrl+X) és hozzáadni vagy törölni a  'dxfpoint'  XML-címkét bármely "
-"értékkel."
+"értékkel.\n"
+"          "
 
 #: ../share/extensions/other/gcodetools/gcodetools_dxf_points.inx:15
 msgid "Convert selection:"
@@ -48020,8 +48026,8 @@ msgstr ""
 "Csak 3 pontos mód: Ne legyen mind a három egy vonalon (a 2 pontos módod "
 "használja inkább).\n"
 "\n"
-"Módosíthatja a Z-felületet, Z-mélység értéket később a szöveges eszközzel "
-"(3. koordináták).\n"
+"Módosíthatja a Z-felületet, Z-mélység értéket később a szöveges eszközzel ("
+"3. koordináták).\n"
 "\n"
 "Ha nincsenek tájolási pontok a jelenlegi rétegen, akkor felsőbb rétegről "
 "lesznek véve.\n"
@@ -48029,8 +48035,9 @@ msgstr ""
 "Ne bontsa szét a tájoló pontokat. Dupla kattintással ki lehet jelölni őket "
 "és belépni a csoportba, vagy Ctrl+kattintással.\n"
 "\n"
-"Most nyomja meg az „Alkalmaz” gombot a vezérlőpontok létrehozásához "
-"(független készlet minden réteg számára)."
+"Most nyomja meg az „Alkalmaz” gombot a vezérlőpontok létrehozásához ("
+"független készlet minden réteg számára).\n"
+"            "
 
 #: ../share/extensions/other/gcodetools/gcodetools_lathe.inx:4
 #: ../share/extensions/other/gcodetools/gcodetools_lathe.inx:8
@@ -48082,8 +48089,9 @@ msgid ""
 "        "
 msgstr ""
 "\n"
-"\t\t\tEz a funkció módosítja az útvonalat így lehetséges lesz elvágni egy "
-"négyszögletes vágóval."
+"            Ez a funkció módosítja az útvonalat így lehetséges lesz elvágni "
+"egy négyszögletes vágóval.\n"
+"        "
 
 #: ../share/extensions/other/gcodetools/gcodetools_orientation_points.inx:4
 msgid "Orientation Points"
@@ -48110,14 +48118,15 @@ msgstr ""
 "használatosak (eltolás, méretezés, tükrözés, forgatás XY síkban).\n"
 "Csak 3 pontos mód: Ne legyen mind a három egy vonalon (a 2 pontos módod "
 "használja inkább).\n"
-"Módosíthatja a Z-felületet, Z-mélység értéket később a szöveges eszközzel "
-"(3. koordináták).\n"
+"Módosíthatja a Z-felületet, Z-mélység értéket később a szöveges eszközzel ("
+"3. koordináták).\n"
 "Ha nincsenek tájolási pontok a jelenlegi rétegen, akkor felsőbb rétegről "
 "lesznek véve.\n"
 "Ne bontsa szét a tájoló pontokat. Dupla kattintással ki lehet jelölni őket "
 "és belépni a csoportba, vagy Ctrl+kattintással.\n"
-"Most nyomja meg az „Alkalmaz” gombot a vezérlőpontok létrehozásához "
-"(független készlet minden réteg számára)."
+"Most nyomja meg az „Alkalmaz” gombot a vezérlőpontok létrehozásához ("
+"független készlet minden réteg számára).\n"
+"      "
 
 #: ../share/extensions/other/gcodetools/gcodetools_orientation_points.inx:35
 msgid ""
@@ -48151,7 +48160,8 @@ msgstr ""
 "Köszönet: Nick Drobchenko, Vladimir Kalyaev, John Brooker, Henry Nicolas, "
 "Chris Lusby Taylor.\n"
 "\n"
-"Gcodetools 1.7 verzió"
+"Gcodetools 1.7 verzió\n"
+"      "
 
 #: ../share/extensions/other/gcodetools/gcodetools_prepare_path_for_plasma.inx:4
 msgid "Prepare Path for Plasma"
@@ -48276,7 +48286,8 @@ msgstr ""
 "Az aktív réteg legfelső (Z-sorrend) eszköze lesz alkalmazva.  Ha nincs "
 "eszköz a jelenlegi rétegen, akkor felsőbb rétegről lesz véve.\n"
 "\n"
-"Nyomja meg az „Alkalmaz” gombot az eszköz létrehozásához."
+"Nyomja meg az „Alkalmaz” gombot az eszköz létrehozásához.\n"
+"            "
 
 #: ../share/extensions/other/gcodetools/gcodetools_tools_library.inx:34
 msgid ""
@@ -49099,7 +49110,7 @@ msgstr "A borító vastagságának mértéke:"
 
 #: ../share/extensions/perfectboundcover.inx:28
 msgid "Bleed (in):"
-msgstr "Kifutó (hüvelyk)"
+msgstr "Kifutó (hüvelyk):"
 
 #: ../share/extensions/perfectboundcover.inx:29
 msgid "Note: Bond Weight # calculations are a best-guess estimate."
@@ -49137,7 +49148,7 @@ msgstr ""
 
 #: ../share/extensions/pixelsnap.inx:10
 msgid "Maximum slope to consider straight (%)"
-msgstr "A maximális, még egyenesnek tekintendő dőlésszög  (%)"
+msgstr "A maximális, még egyenesnek tekintendő dőlésszög (%)"
 
 #: ../share/extensions/pixelsnap.inx:11
 msgid "Origin of the coordinate system:"
@@ -49429,7 +49440,7 @@ msgid ""
 "Curves are divided into lines. This number controls how fine the curves will "
 "be reproduced, the smaller the finer (default: 1.2)."
 msgstr ""
-"Az ívek vonalakká vannak bontva. Ez a szám befolyásolja az  ívek finomságát. "
+"Az ívek vonalakká vannak bontva. Ez a szám befolyásolja az ívek finomságát. "
 "A kisebb érték a finomabb (alapértelmezett: 1.2)."
 
 #: ../share/extensions/plotter.inx:88
@@ -49615,7 +49626,7 @@ msgstr "Kitöltés átlátszatlansága (%):"
 
 #: ../share/extensions/polyhedron_3d.inx:70
 msgid "Stroke opacity (%):"
-msgstr "Körvonal átlátszatlansága (%)"
+msgstr "Körvonal átlátszatlansága (%):"
 
 #: ../share/extensions/polyhedron_3d.inx:71
 msgid "Stroke width (px):"
@@ -50056,7 +50067,7 @@ msgstr "Rajzolási típus:"
 
 #: ../share/extensions/render_barcode_qrcode.inx:71
 msgid "Smooth type:"
-msgstr "Simítás típusa"
+msgstr "Simítás típusa:"
 
 #: ../share/extensions/render_barcode_qrcode.inx:72
 msgid "Neutral"
@@ -50303,7 +50314,8 @@ msgstr ""
 "elemei külső objektumokkal együtt vannak kijelölve, a csoport \n"
 "elemei kivonásra kerülnek, és a többi újrarendezett objektum \n"
 "mellé kerülnek (a különböző rétegeken lévő elemek ugyanarra \n"
-"a rétegre kerülnek)."
+"a rétegre kerülnek).\n"
+"            "
 
 #: ../share/extensions/restack.inx:57 ../share/extensions/ungroup_deep.inx:13
 msgid "Arrange"
@@ -50479,7 +50491,7 @@ msgstr "Év (4 számjegy):"
 
 #: ../share/extensions/svgcalendar.inx:8
 msgid "Month (0 for all):"
-msgstr "Hónap (összes: 0)"
+msgstr "Hónap (összes: 0):"
 
 #: ../share/extensions/svgcalendar.inx:9
 msgid "Fill empty day boxes with next month's days"
@@ -50604,7 +50616,7 @@ msgstr "Napok nevei:"
 
 #: ../share/extensions/svgcalendar.inx:46
 msgid "Sun Mon Tue Wed Thu Fri Sat"
-msgstr "V   H   K   Sze Cs  P   Szo"
+msgstr "V H K Sze Cs P Szo"
 
 #: ../share/extensions/svgcalendar.inx:47
 msgid "The day names list must start with Sunday."
