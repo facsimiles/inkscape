@@ -13,16 +13,17 @@ msgstr ""
 "Project-Id-Version: uk\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-02-04 23:42+0100\n"
-"PO-Revision-Date: 2023-07-03 19:57+0300\n"
+"PO-Revision-Date: 2025-04-19 09:29+0000\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
-"Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
+"Language-Team: Ukrainian <https://translate.inkscape.org/projects/inkscape/"
+"inkscape-master/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Lokalize 20.12.0\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 5.9.2\n"
 
 #: ../build/share/filters/filters.svg.h:2
 msgid "Fast Crop"
@@ -3292,10 +3293,8 @@ msgid "Decorative Paper"
 msgstr "Декоративний папір"
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
-#| msgid "Flip horizontal"
 msgid "Zigzag horizontal 1"
-msgstr "Віддзеркалити горизонтально"
+msgstr "Горизонтальний зиґзаґ 1"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Ticks"
@@ -3332,10 +3331,8 @@ msgid "Hollow circle"
 msgstr "Порожнє коло"
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
-#| msgid "Flip vertical"
 msgid "Pills vertical"
-msgstr "Віддзеркалити вертикально"
+msgstr "Пігулки вертикально"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Tiles 1"
@@ -3354,10 +3351,8 @@ msgid "Triangles 2"
 msgstr "Трикутники 2"
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
-#| msgid "Circle fill 1"
 msgid "Circle horizontal fill 1"
-msgstr "Заповнення колами 1"
+msgstr "Заповнення колами горизонтально 1"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Snake 2"
@@ -3372,10 +3367,8 @@ msgid "Triangles 5"
 msgstr "Трикутники 5"
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
-#| msgid "Scale nodes horizontally"
 msgid "Semicircles horizontal"
-msgstr "Масштабувати вузли горизонтально"
+msgstr "Напівкола горизонтально"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Triangles 4"
@@ -3399,32 +3392,24 @@ msgid "Abstract 4"
 msgstr "Абстрактний 4"
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
-#| msgid "Rain drops 2"
 msgid "Rain drops vertical"
-msgstr "Краплі дощу 2"
+msgstr "Краплі дощу вертикально"
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
-#| msgid "Circle fill 2"
 msgid "Circle diagonal fill 2"
-msgstr "Заповнення колами 2"
+msgstr "Заповнення колами діагонально 2"
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
-#| msgid "Circle fill 3"
 msgid "Circle vertical fill 3"
-msgstr "Заповнення колами 3"
+msgstr "Заповнення колами вертикально 3"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Inverted braid"
 msgstr "Інвертована коса"
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
-#| msgid "Flip horizontal"
 msgid "Rain drops horizontal"
-msgstr "Віддзеркалити горизонтально"
+msgstr "Краплі дощу горизонтально"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Abstract fill 2"
@@ -3435,11 +3420,8 @@ msgid "Abstract fill 3"
 msgstr "Абстрактне заповнення 3"
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
-#| msgctxt "Font feature"
-#| msgid "Diagonal"
 msgid "Pills diagonal"
-msgstr "Діагональні"
+msgstr "Пігулки діагонально"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Abstract 1"
@@ -3458,16 +3440,12 @@ msgid "Circle fill 4"
 msgstr "Заповнення колами 4"
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
-#| msgid "Draw horizontally"
 msgid "Arrow horizontal fill"
-msgstr "Малювати горизонтально"
+msgstr "Горизонтальне заповнення стрілками"
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
-#| msgid "Semicircles 2"
 msgid "Semicircles"
-msgstr "Напівкола 2"
+msgstr "Напівкола"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Tiles 2"
@@ -3553,10 +3531,8 @@ msgid "Patterns"
 msgstr "Візерунки"
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
-#| msgid "Tiles 1"
 msgid "Tiles 4"
-msgstr "Плитки 1"
+msgstr "Плитки 4"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Stripes 01 (1:1)"
@@ -3632,10 +3608,8 @@ msgid "Table Cloth"
 msgstr "Скатерка"
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
-#| msgid "Circle vertical lines halftone shading"
 msgid "Circle horizontal lines halftone shading"
-msgstr "Затінення пів тоном вертикальних кругових ліній"
+msgstr "Затінення пів тоном горизонтальних кругових ліній"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Rectangles halftone shading 1"
@@ -3658,50 +3632,36 @@ msgid "Circle halftones shading"
 msgstr "Затінення пів тоном кіл"
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
-#| msgid "Flip horizontal"
 msgid "Zigzag horizontal 2"
-msgstr "Віддзеркалити горизонтально"
+msgstr "Горизонтальний зиґзаґ 2"
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
-#| msgid "Wave vertical lines shading 2"
 msgid "Wave horizontal lines shading 2"
-msgstr "Хвилясті вертикальні лінії із тінню 2"
+msgstr "Хвилясті горизонтальні лінії із тінню 2"
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
-#| msgid "Wave vertical lines shading 2"
 msgid "Wave horizontal lines shading 1"
-msgstr "Хвилясті вертикальні лінії із тінню 2"
+msgstr "Хвилясті горизонтальні лінії із тінню 1"
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
-#| msgid "Vertical rough lines shading 2"
 msgid "Horizontal rough lines shading 2"
-msgstr "Затінення вертикальних грубих ліній 2"
+msgstr "Хвилясті горизонтальні грубі лінії з тінню 2"
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
-#| msgid "Vertical rough lines shading"
 msgid "Horizontal rough lines shading"
-msgstr "Затінення вертикальних грубих ліній"
+msgstr "Хвилясті горизонтальні грубі лінії з тінню"
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
-#| msgid "Horizontal lines"
 msgid "Horizontal lines shading"
-msgstr "Горизонтальні лінії"
+msgstr "Горизонтальні лінії з тінню"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Lines half circle shading "
 msgstr "Затінення пів колом ліній"
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
-#| msgid "Triangles shading 5"
 msgid "Triangles horizontal shading 5"
-msgstr "Затінення трикутників 5"
+msgstr "Трикутники з горизонтальною тінню 5"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Triangles shading 4"
@@ -3728,10 +3688,8 @@ msgid "Splashing shading"
 msgstr "Розбризкані тіні"
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
-#| msgid "Wave vertical lines shading"
 msgid "Wave vertical lines"
-msgstr "Хвилясті вертикальні лінії із тінню"
+msgstr "Хвилясті вертикальні лінії"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Lines shading small"
@@ -3762,10 +3720,8 @@ msgid "Noise"
 msgstr "Шум"
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
-#| msgid "Patches"
 msgid "Hatches"
-msgstr "Латки"
+msgstr "Штрихування"
 
 #: ../build/share/symbols/symbols.h:2
 msgctxt "Symbol"
@@ -6195,27 +6151,27 @@ msgstr "порожній без шарів"
 
 #: ../build/share/templates/templates.h:1
 msgid "Zine Booklet (A4)"
-msgstr ""
+msgstr "Зин-буклет (A4)"
 
 #: ../build/share/templates/templates.h:1
 msgid "A foldable one page booklet (A4)"
-msgstr ""
+msgstr "Згортаний буклет з однієї сторінки (A4)"
 
 #: ../build/share/templates/templates.h:1
 msgid "297 × 210 mm"
-msgstr ""
+msgstr "297 × 210 мм"
 
 #: ../build/share/templates/templates.h:1
 msgid "Zine Booklet (US)"
-msgstr ""
+msgstr "Зин-буклет (США)"
 
 #: ../build/share/templates/templates.h:1
 msgid "A foldable one page booklet (US Letter)"
-msgstr ""
+msgstr "Згортаний буклет з однієї сторінки (лист США)"
 
 #: ../build/share/templates/templates.h:1
 msgid "11 × 8.5 in"
-msgstr ""
+msgstr "11 × 8,5 дюйми"
 
 #: ../src/actions/actions-base.cpp:202
 msgid "Inkscape Version"
@@ -6242,16 +6198,12 @@ msgid "End execution in active window"
 msgstr "Завершити виконання в активному вікні"
 
 #: ../src/actions/actions-base.cpp:205
-#, fuzzy
-#| msgid "Star Preferences"
 msgid "Save preferences"
-msgstr "Властивості зірки"
+msgstr "Зберегти налаштування"
 
 #: ../src/actions/actions-base.cpp:205
-#, fuzzy
-#| msgid "Failed to create the preferences file %s."
 msgid "Make sure the preferences are saved"
-msgstr "На вдалося створити файл налаштувань %s."
+msgstr "Переконайтеся, що налаштування збережено"
 
 #: ../src/actions/actions-base.cpp:206
 msgid "Debug Info"
@@ -6286,16 +6238,12 @@ msgid "Print a list of actions and exit"
 msgstr "Вивести список дій і завершити роботу"
 
 #: ../src/actions/actions-base.cpp:210
-#, fuzzy
-#| msgid "Phonetic Extensions"
 msgid "List Input File Extensions"
-msgstr "фонетичні розширення"
+msgstr "Вивести список суфіксів назв вхідних файлів"
 
 #: ../src/actions/actions-base.cpp:210
-#, fuzzy
-#| msgid "Print a list of actions and exit"
 msgid "Print a list of input file extensions and exit"
-msgstr "Вивести список дій і завершити роботу"
+msgstr "Вивести список суфіксів назв вхідних файлів і завершити роботу"
 
 #: ../src/actions/actions-base.cpp:211
 msgid "Quit"
@@ -6696,16 +6644,12 @@ msgid "Toggle snapping to grids"
 msgstr "Увімкнути або вимкнути прилипання до сіток"
 
 #: ../src/actions/actions-canvas-snapping.cpp:275
-#, fuzzy
-#| msgid "Snap Guide Lines"
 msgid "Snap Grid Lines"
-msgstr "Прилипання до ліній напрямних"
+msgstr "Прилипання до ліній ґратки"
 
 #: ../src/actions/actions-canvas-snapping.cpp:275
-#, fuzzy
-#| msgid "Toggle snapping to guide lines"
 msgid "Toggle snapping to grid lines"
-msgstr "Увімкнути або вимкнути прилипання до ліній напрямних"
+msgstr "Увімкнути або вимкнути прилипання до ліній ґратки"
 
 #: ../src/actions/actions-canvas-snapping.cpp:276
 msgid "Snap Guide Lines"
@@ -6907,66 +6851,52 @@ msgid "Reset canvas flipping"
 msgstr "Скасувати перевертання полотна"
 
 #: ../src/actions/actions-canvas-transform.cpp:290
-#, fuzzy
-#| msgid "To Absolute"
 msgid "Zoom Absolute"
-msgstr "До абсолютного"
+msgstr "Абсолютне масштабування"
 
 #: ../src/actions/actions-canvas-transform.cpp:290
-#, fuzzy
-#| msgid "A constant vote value"
 msgid "Zoom to an absolute value"
-msgstr "Стале значення рівня"
+msgstr "Масштабувати до абсолютного значення"
 
 #: ../src/actions/actions-canvas-transform.cpp:291
-#, fuzzy
-#| msgid "Relative"
 msgid "Zoom Relative"
-msgstr "Відносний"
+msgstr "Відносне масштабування"
 
 #: ../src/actions/actions-canvas-transform.cpp:291
 msgid "Zoom by a relative amount"
-msgstr ""
+msgstr "Масштабувати на відносну величину"
 
 #: ../src/actions/actions-canvas-transform.cpp:293
 msgid "Rotate Absolute (Radians)"
-msgstr ""
+msgstr "Абсолютне обертання (у радіанах)"
 
 #: ../src/actions/actions-canvas-transform.cpp:293
 msgid "Rotate to an absolute value (radians)"
-msgstr ""
+msgstr "Обертати на абсолютне значення (у радіанах)"
 
 #: ../src/actions/actions-canvas-transform.cpp:294
 msgid "Rotate Relative (Radians)"
-msgstr ""
+msgstr "Відносне обертання (у радіанах)"
 
 #: ../src/actions/actions-canvas-transform.cpp:294
 msgid "Rotate by a relative amount (radians)"
-msgstr ""
+msgstr "Обертати на відносне значення (у радіанах)"
 
 #: ../src/actions/actions-canvas-transform.cpp:295
-#, fuzzy
-#| msgid "Rotate selected objects by degrees"
 msgid "Rotate Absolute (Degrees)"
-msgstr "Обертати позначені об'єкти на кут у градусах"
+msgstr "Абсолютне обертання (у градусах)"
 
 #: ../src/actions/actions-canvas-transform.cpp:295
-#, fuzzy
-#| msgid "Rotate tiles by this amount of degrees"
 msgid "Rotate to an absolute value (degrees)"
-msgstr "Обертати плитки на цю кількість градусів"
+msgstr "Обертати на абсолютне значення (у градусах)"
 
 #: ../src/actions/actions-canvas-transform.cpp:296
-#, fuzzy
-#| msgid "Rotate selected objects by degrees"
 msgid "Rotate Relative (Degrees)"
-msgstr "Обертати позначені об'єкти на кут у градусах"
+msgstr "Відносне обертання (у градусах)"
 
 #: ../src/actions/actions-canvas-transform.cpp:296
-#, fuzzy
-#| msgid "Rotate tiles by this amount of degrees"
 msgid "Rotate by a relative amount (degrees)"
-msgstr "Обертати плитки на цю кількість градусів"
+msgstr "Обертати на відносну величину (у градусах)"
 
 #: ../src/actions/actions-canvas-transform.cpp:298 ../share/ui/menus.ui:450
 msgid "Lock Rotation"
@@ -6997,16 +6927,12 @@ msgstr ""
 "візерунка або покриття"
 
 #: ../src/actions/actions-dialogs.cpp:35
-#, fuzzy
-#| msgid "Open Messages"
 msgid "Open Debugger"
-msgstr "Відкрити повідомлення"
+msgstr "Відкрити засіб діагностики"
 
 #: ../src/actions/actions-dialogs.cpp:35
-#, fuzzy
-#| msgid "Open Messages"
 msgid "Open debugger"
-msgstr "Відкрити повідомлення"
+msgstr "Відкрити засіб діагностики"
 
 #: ../src/actions/actions-dialogs.cpp:36
 msgid "Open Document Properties"
@@ -7027,16 +6953,12 @@ msgid "Show document overview and resources"
 msgstr "Показати огляд документа і ресурси"
 
 #: ../src/actions/actions-dialogs.cpp:38
-#, fuzzy
-#| msgid "Open extensions folder"
 msgid "Open Extension Gallery"
-msgstr "Відкрити теку розширень"
+msgstr "Відкрити галерею розширень"
 
 #: ../src/actions/actions-dialogs.cpp:38
-#, fuzzy
-#| msgid "Show all available fonts"
 msgid "Show and run available extensions"
-msgstr "Показати усі доступні шрифти"
+msgstr "Показ і запуск доступних розширень"
 
 #: ../src/actions/actions-dialogs.cpp:39
 msgid "Open Export"
@@ -7067,16 +6989,12 @@ msgid "Manage, edit, and apply SVG filters"
 msgstr "Керування, редагування і застосування фільтрів SVG"
 
 #: ../src/actions/actions-dialogs.cpp:42
-#, fuzzy
-#| msgid "Open LPE Gallery"
 msgid "Open Filter Gallery"
-msgstr "Відкрити галерею інтерактивних ефектів контурів"
+msgstr "Відкрити галерею фільтрів"
 
 #: ../src/actions/actions-dialogs.cpp:42
-#, fuzzy
-#| msgid "Show all available fonts"
 msgid "Show and apply available filters"
-msgstr "Показати усі доступні шрифти"
+msgstr "Показ і застосування доступних фільтрів"
 
 #: ../src/actions/actions-dialogs.cpp:43
 msgid "Open Find"
@@ -7611,15 +7529,14 @@ msgstr "Підігнати полотно до поточної позначен
 
 #: ../src/actions/actions-edit.cpp:324 ../src/selection-chemistry.cpp:3712
 #: ../src/ui/widget/color-notebook.cpp:177
-#, fuzzy
-#| msgctxt "Palette"
-#| msgid "Chameleon 1"
 msgid "Chameleon Fill"
-msgstr "Хамелеон 1"
+msgstr "Заповнення-хамелеон"
 
 #: ../src/actions/actions-edit.cpp:324
 msgid "Set each object's color to the average of all colors inside that shape."
 msgstr ""
+"Встановити для кольору кожного об'єкта середній колір за усіма кольорами у "
+"цій формі."
 
 #: ../src/actions/actions-effect.cpp:80
 msgid "Remove Filters"
@@ -7672,10 +7589,8 @@ msgid "System error message: %1"
 msgstr "Повідомлення про помилку системи: %1"
 
 #: ../src/actions/actions-element-image.cpp:116
-#, fuzzy
-#| msgid "System error message: %1"
 msgid "System error message:"
-msgstr "Повідомлення про помилку системи: %1"
+msgstr "Повідомлення про помилку системи:"
 
 #: ../src/actions/actions-element-image.cpp:136
 msgid "Nothing selected."
@@ -7919,11 +7834,11 @@ msgstr "Підручник з Inkscape"
 
 #: ../src/actions/actions-help-url.cpp:122 ../share/ui/menus.ui:1234
 msgid "Beginners' Guide"
-msgstr ""
+msgstr "Підручник для початківців"
 
 #: ../src/actions/actions-help-url.cpp:123 ../share/ui/menus.ui:1291
 msgid "Extension Development Guide"
-msgstr ""
+msgstr "Настанови щодо розробки розширень"
 
 #: ../src/actions/actions-help-url.cpp:124 ../share/ui/menus.ui:1325
 msgid "Donate"
@@ -8185,16 +8100,12 @@ msgid "Create a new layer"
 msgstr "Створити новий шар"
 
 #: ../src/actions/actions-layer.cpp:481
-#, fuzzy
-#| msgid "Add Layer"
 msgid "Add Layer Above"
-msgstr "Додавання шару"
+msgstr "Додавання шару вище"
 
 #: ../src/actions/actions-layer.cpp:481
-#, fuzzy
-#| msgid "Create a new layer"
 msgid "Create a new layer above current"
-msgstr "Створити новий шар"
+msgstr "Створити новий шар над поточним"
 
 #: ../src/actions/actions-layer.cpp:482
 msgid "Duplicate Current Layer"
@@ -9106,28 +9017,20 @@ msgid "Set dithering for PNG export"
 msgstr "Встановити розмиття для експортування PNG"
 
 #: ../src/actions/actions-output.cpp:277
-#, fuzzy
-#| msgid "0 - No Compression"
 msgid "Export PNG Compression"
-msgstr "0 — без стискання"
+msgstr "Стискання в експортованому PNG"
 
 #: ../src/actions/actions-output.cpp:277
-#, fuzzy
-#| msgid "Set color mode for PNG export"
 msgid "Set compression level for PNG export"
-msgstr "Встановити режим кольорів для експортування PNG"
+msgstr "Встановити рівень стискання для експортування PNG"
 
 #: ../src/actions/actions-output.cpp:278
-#, fuzzy
-#| msgid "Export PNG Dithering"
 msgid "Export PNG Antialiasing"
-msgstr "Розмиття при експортуванні PNG"
+msgstr "Усування розмиття при експортуванні PNG"
 
 #: ../src/actions/actions-output.cpp:278
-#, fuzzy
-#| msgid "Set dithering for PNG export"
 msgid "Set antialiasing level for PNG export"
-msgstr "Встановити розмиття для експортування PNG"
+msgstr "Встановити рівень усування розмиття для експортування PNG"
 
 #: ../src/actions/actions-output.cpp:280
 msgid "Do Export"
@@ -9245,11 +9148,12 @@ msgstr "Введіть 1/0 замість так/ні для використа�
 
 #: ../src/actions/actions-output.cpp:314
 msgid "Enter integer for PNG compression level (0 (none) to 9 (max))"
-msgstr ""
+msgstr "Введіть ціле значення рівня стискання PNG (від 0 (немає) до 9 (макс.))"
 
 #: ../src/actions/actions-output.cpp:315
 msgid "Enter integer for PNG antialiasing level (0 (none) to 3 (best))"
 msgstr ""
+"Введіть ціле значення рівня згладжування PNG (від 0 (немає) до 3 (найкраще))"
 
 #: ../src/actions/actions-pages.cpp:98 ../src/actions/actions-pages.cpp:129
 msgid "New Page"
@@ -9501,14 +9405,14 @@ msgid "Remove shapes by clicking or clicking and dragging"
 msgstr "Вилучити форми за допомогою клацання або клацання з перетягуванням"
 
 #: ../src/actions/actions-paths.cpp:272
-#, fuzzy
-#| msgid "Open Objects"
 msgid "Replace Objects"
-msgstr "Відкрити список об'єктів"
+msgstr ""
+"Введіть ціле число для рівня стискання PNG (від 0 (немає) до 9 "
+"(максимальний))"
 
 #: ../src/actions/actions-paths.cpp:272
 msgid "Remove selected objects when shape building is completed"
-msgstr ""
+msgstr "Вилучити позначені об'єкти, коли побудову форми буде завершено"
 
 #: ../src/actions/actions-selection-object.cpp:37
 #: ../src/actions/actions-selection-object.cpp:147
@@ -9826,88 +9730,70 @@ msgid "Empty stored backup of selection of objects or nodes"
 msgstr "Спорожнити збережені резервні копії позначення об'єктів або вузлів"
 
 #: ../src/actions/actions-svg-processing.cpp:698
-#, fuzzy
-#| msgid "Set SVG font name"
 msgid "Set SVG Version to 1.1"
-msgstr "Встановити назву шрифту SVG"
+msgstr "Встановити версію SVG у значення 1.1"
 
 #: ../src/actions/actions-svg-processing.cpp:698
 msgid "Set the document's SVG version to 1.1"
-msgstr ""
+msgstr "Встановити для документа версію SVG у значення 1.1"
 
 #: ../src/actions/actions-svg-processing.cpp:699
-#, fuzzy
-#| msgid "Set SVG font name"
 msgid "Set SVG Version to 2.0"
-msgstr "Встановити назву шрифту SVG"
+msgstr "Встановити версію SVG у значення 2.0"
 
 #: ../src/actions/actions-svg-processing.cpp:699
 msgid "Set the document's SVG version to 2.0"
-msgstr ""
+msgstr "Встановити для документа версію SVG у значення 2.0"
 
 #: ../src/actions/actions-svg-processing.cpp:700
-#, fuzzy
-#| msgid "Print Inkscape version"
 msgid "Prune Inkscape Namespaces"
-msgstr "Вивести дані щодо версії Inkscape"
+msgstr "Очистити простори назв Inkscape"
 
 #
 # File: ../src/inkscape-application.cpp, line: 568
 #: ../src/actions/actions-svg-processing.cpp:700
-#, fuzzy
-#| msgid "Remove Inkscape-specific SVG attributes/properties"
 msgid "Remove any Inkscape-specific SVG data"
-msgstr "Вилучити специфічні для Inkscape атрибути і властивості SVG"
+msgstr "Вилучити усі специфічні для Inkscape дані SVG"
 
 #: ../src/actions/actions-svg-processing.cpp:701
 msgid "Prune Proprietary Namespaces"
-msgstr ""
+msgstr "Вилучити закриті простори назв"
 
 #: ../src/actions/actions-svg-processing.cpp:701
 msgid "Remove any known proprietary SVG data"
-msgstr ""
+msgstr "Вилучити усі відомі закриті дані SVG"
 
 #: ../src/actions/actions-svg-processing.cpp:703
-#, fuzzy
-#| msgid "Reverses the second path order"
 msgid "Reverse Auto Start Markers"
-msgstr "Обернути напрямок другого контуру"
+msgstr "Обернути позначки автоматичного початку"
 
 #: ../src/actions/actions-svg-processing.cpp:703
 msgid "Remove auto start positions from markers"
-msgstr ""
+msgstr "Вилучити автоматичні позиції початку з позначок"
 
 #: ../src/actions/actions-svg-processing.cpp:704
-#, fuzzy
-#| msgid "Remove Transforms"
 msgid "Try to Remove All Transforms"
-msgstr "Прибрати перетворення"
+msgstr "Спробувати вилучти усі перетворення"
 
 #: ../src/actions/actions-svg-processing.cpp:704
-#, fuzzy
-#| msgid "Remove any transforms from selected objects"
 msgid "Attempt to remove all transforms from all shapes"
-msgstr "Прибрати усі наслідки перетворень з позначених об'єктів"
+msgstr "Спробувати вилучити усі перетворення з усіх форм"
 
 #: ../src/actions/actions-svg-processing.cpp:705
-#, fuzzy
-#| msgid "Remove kerning pair"
 msgid "Remove Marker Context Paint"
-msgstr "Вилучити апрош пари"
+msgstr "Вилучити контекстне малювання позначок"
 
 #: ../src/actions/actions-svg-processing.cpp:705
-#, fuzzy
-#| msgid "Remove text from path"
 msgid "Remove context paints from markers"
-msgstr "Зняти текст з контуру"
+msgstr "Вилучити контекстні малювання з позначок"
 
 #: ../src/actions/actions-svg-processing.cpp:707
 msgid "Insert Text Fallback"
-msgstr ""
+msgstr "Вставити замінник тексту"
 
 #: ../src/actions/actions-svg-processing.cpp:707
 msgid "Replace SVG2 text with SVG1.1 text"
-msgstr ""
+msgstr "Замінити текст SVG2 на текст SVG1.1"
 
 #: ../src/actions/actions-svg-processing.cpp:708
 #, fuzzy
