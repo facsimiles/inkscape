@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-02-04 23:42+0100\n"
-"PO-Revision-Date: 2025-04-19 09:29+0000\n"
+"PO-Revision-Date: 2025-04-20 10:06+0000\n"
 "Last-Translator: Christian Wia <w9204-gi@yahoo.com>\n"
 "Language-Team: French <https://translate.inkscape.org/projects/inkscape/"
 "inkscape-master/fr/>\n"
@@ -6222,7 +6222,7 @@ msgstr "Enregistrer les préférences"
 
 #: ../src/actions/actions-base.cpp:205
 msgid "Make sure the preferences are saved"
-msgstr "Vérifier que les préférences ont été sauvegardées."
+msgstr "Vérifier que les préférences ont été sauvegardées"
 
 #: ../src/actions/actions-base.cpp:206
 msgid "Debug Info"
@@ -7813,7 +7813,7 @@ msgstr "Définir le nom du fichier"
 
 #: ../src/actions/actions-file.cpp:126
 msgid "Namedview; Update=1, Replace=0"
-msgstr "Namedview; Update=1, Replace=0"
+msgstr "Namedview ; Update=1, Replace=0"
 
 #: ../src/actions/actions-help-url.cpp:115 ../share/ui/menus.ui:1309
 msgid "Ask Us a Question"
@@ -8272,7 +8272,7 @@ msgstr "Aligner les nœuds horizontalement"
 msgid ""
 "Align selected nodes horizontally; usage [last|first|middle|min|max|pref]"
 msgstr ""
-"Aligner les nœuds horizontalement; avec [last|first|middle|min|max|pref]"
+"Aligner les nœuds horizontalement ; avec [last|first|middle|min|max|pref]"
 
 #: ../src/actions/actions-node-align.cpp:93
 msgid "Align nodes vertically"
@@ -8281,8 +8281,8 @@ msgstr "Aligner les nœuds verticalement"
 #: ../src/actions/actions-node-align.cpp:93
 msgid "Align selected nodes vertically; usage [last|first|middle|min|max|pref]"
 msgstr ""
-"Aligner les nœuds sélectionnés verticalement; utilisation [last|first|middle|"
-"min|max|pref]"
+"Aligner les nœuds sélectionnés verticalement ; utilisation "
+"[last|first|middle|min|max|pref]"
 
 #: ../src/actions/actions-node-align.cpp:94
 msgid "Distribute nodes horizontally"
@@ -8350,9 +8350,9 @@ msgid ""
 "bottom]] [last|first|biggest|smallest|page|drawing|selection|pref]? group? "
 "anchor?"
 msgstr ""
-"Aligner les objets sélectionnés; utilisation : [[left|hcenter|right] || [top|"
-"vcenter|bottom]] [last|first|biggest|smallest|page|drawing|selection|pref]? "
-"group? anchor?"
+"Aligner les objets sélectionnés ; utilisation : [[left|hcenter|right] || "
+"[top|vcenter|bottom]] "
+"[last|first|biggest|smallest|page|drawing|selection|pref] ? group ? anchor ?"
 
 #: ../src/actions/actions-object-align.cpp:777
 msgid "Align to left edge"
@@ -8419,8 +8419,9 @@ msgid ""
 "Align selected text anchors; usage: [[vertical | horizontal] [last|first|"
 "biggest|smallest|page|drawing|selection]?"
 msgstr ""
-"Aligner les ancres de texte sélectionnées; utilisation : [[vertical | "
-"horizontal] [last|first|biggest|smallest|page|drawing|selection]?"
+"Aligner les ancres de texte sélectionnées ; utilisation : "
+"[[vertical | horizontal] [last|first|biggest|smallest|page|drawing|selection]"
+" ?"
 
 #: ../src/actions/actions-object-align.cpp:786
 msgid "Distribute objects"
@@ -8431,8 +8432,8 @@ msgid ""
 "Distribute selected objects; usage: [hgap | left | hcenter | right | vgap | "
 "top | vcenter | bottom]"
 msgstr ""
-"Distribue les objets sélectionnés; utilisation : [hgap | left | hcenter | "
-"right | vgap | top | vcenter | bottom]"
+"Distribuer les objets sélectionnés ; utilisation : "
+"[hgap | left | hcenter | right | vgap | top | vcenter | bottom]"
 
 #: ../src/actions/actions-object-align.cpp:787
 msgid "Even horizontal gaps"
@@ -8518,7 +8519,7 @@ msgstr "Distribuer des objets texte"
 
 #: ../src/actions/actions-object-align.cpp:796
 msgid "Distribute text anchors; usage [vertical | horizontal]"
-msgstr "Distribuer des ancres de texte; avec [vertical | horizontal]"
+msgstr "Distribuer des ancres de texte ; avec [vertical | horizontal]"
 
 #: ../src/actions/actions-object-align.cpp:797
 #: ../share/ui/align-and-distribute.ui:516
@@ -8541,8 +8542,8 @@ msgid ""
 "Rearrange selected objects; usage: [graph | exchange | exchangez | rotate | "
 "randomize | unclump]"
 msgstr ""
-"Réarrange les objets sélectionnés; utilisation : [graph | exchange | "
-"exchangez | rotate | randomize | unclump]"
+"Réarranger les objets sélectionnés ; utilisation : "
+"[graph | exchange | exchangez | rotate | randomize | unclump]"
 
 #: ../src/actions/actions-object-align.cpp:801
 msgid "Rearrange as graph"
@@ -8614,8 +8615,8 @@ msgid ""
 "anchors: last, first, biggest, smallest, page, drawing, selection, pref; "
 "possible alignments: left, hcenter, right, top, vcenter, bottom."
 msgstr ""
-"Entrer : \"ancrer<space>alignement<space>second alignement\". Ancres : last, "
-"first, biggest, smallest, page, drawing, selection, pref; Alignements : "
+"Entrer : \"ancrer<space>alignement<space>second alignement\". Ancres : last, "
+"first, biggest, smallest, page, drawing, selection, pref ; Alignements : "
 "left, hcenter, right, top, vcenter, bottom."
 
 #: ../src/actions/actions-object-align.cpp:816
@@ -8689,8 +8690,8 @@ msgid ""
 "Set or update an attribute of selected objects; usage: object-set-attribute:"
 "attribute name, attribute value;"
 msgstr ""
-"Définier ou mettre à jour les attributs des objets sélectionnés; "
-"utilisation : object-set-attribute:nom de l'attribut, valeur de l'attribut;"
+"Définir ou mettre à jour les attributs des objets sélectionnés ; utilisation "
+": object-set-attribute:nom de l'attribut, valeur de l'attribut ;"
 
 #: ../src/actions/actions-object.cpp:379
 msgid "Set Property"
@@ -8701,8 +8702,8 @@ msgid ""
 "Set or update a property on selected objects; usage: object-set-property:"
 "property name, property value;"
 msgstr ""
-"Définir ou mettre à jour une propriété de l'objet sélectionné; utilisation : "
-"object-set-property:nom de la propriété, valeur de la propriété;"
+"Définir ou mettre à jour une propriété de l'objet sélectionné ; utilisation :"
+" object-set-property:nom de la propriété, valeur de la propriété ;"
 
 #: ../src/actions/actions-object.cpp:381
 msgid "Unlink Clones"
@@ -9714,9 +9715,9 @@ msgid ""
 "layers' (top level objects in layers), 'groups' (all groups including "
 "layers), 'no-groups' (all objects other than groups and layers, default)"
 msgstr ""
-"Sélectionner tout; options: 'all' (tous les objets ou groupes), "
-"'layers' (calques), 'no-layers' (objets de plus haut niveau dans les "
-"calques), 'groups', 'no-groups' (par défaut)"
+"Tout sélectionner ; options : 'all' (tous les objets ou groupes), 'layers' "
+"(calques), 'no-layers' (objets de plus haut niveau dans les calques), "
+"'groups', 'no-groups' (par défaut)"
 
 #: ../src/actions/actions-selection.cpp:283
 msgid "List Selection"
@@ -10333,10 +10334,10 @@ msgid ""
 "tutorials/"
 msgstr ""
 "Les fichiers de didacticiels ne sont pas installés.\n"
-"Pour Linux, il peut être nécessaire d'installer 'inkscape-tutorials'; pour "
+"Pour Linux, il peut être nécessaire d'installer 'inkscape-tutorials' ; pour "
 "Windows, relancer le fichier d'installation et sélectionner 'Tutorials'.\n"
-"Les didacticiels sont disponibles en ligne à https://inkscape.org/fr/learn/"
-"tutorials/"
+"Les didacticiels sont aussi disponibles en ligne sur https://inkscape.org/fr/"
+"learn/tutorials/"
 
 #: ../src/actions/actions-tutorial.cpp:56
 msgid "Inkscape: Basic"
@@ -10565,7 +10566,7 @@ msgstr "Passer à la fenêtre (document) suivante"
 
 #: ../src/actions/actions-view-window.cpp:65
 msgid "Next Tab"
-msgstr "Onglet suivant :"
+msgstr "Onglet suivant"
 
 #: ../src/actions/actions-view-window.cpp:65
 msgid "Switch to the next document tab"
@@ -10573,7 +10574,7 @@ msgstr "Passer à l'onglet du document suivant"
 
 #: ../src/actions/actions-view-window.cpp:66
 msgid "Previous Tab"
-msgstr "Onglet précédent :"
+msgstr "Onglet précédent"
 
 #: ../src/actions/actions-view-window.cpp:66
 msgid "Switch to the previous document tab"
@@ -10590,7 +10591,7 @@ msgstr "Ouvrir une fenêtre"
 
 #: ../src/actions/actions-window.cpp:95
 msgid "Open a window for the active document; GUI only"
-msgstr "Ouvrir une nouvelle fenêtre avec le même document; GUI seulement"
+msgstr "Ouvrir une fenêtre pour le document actif ; GUI seulement"
 
 #: ../src/actions/actions-window.cpp:96
 msgid "Window Close"
@@ -10689,7 +10690,7 @@ msgstr "Bleu"
 
 #: ../src/colors/spaces/components.cpp:39
 msgid "<sub>l</sub>_R:"
-msgstr "<sub>l</sub>_R:"
+msgstr "<sub>l</sub>_R :"
 
 #: ../src/colors/spaces/components.cpp:39
 msgid "Linear Red"
@@ -10697,7 +10698,7 @@ msgstr "Linéaire Rouge"
 
 #: ../src/colors/spaces/components.cpp:40
 msgid "<sub>l</sub>_G:"
-msgstr "<sub>l</sub>_G:"
+msgstr "<sub>l</sub>_G :"
 
 #: ../src/colors/spaces/components.cpp:40
 msgid "Linear Green"
@@ -10705,7 +10706,7 @@ msgstr "Linéaire Vert"
 
 #: ../src/colors/spaces/components.cpp:41
 msgid "<sub>l</sub>_B:"
-msgstr "<sub>l</sub>_B:"
+msgstr "<sub>l</sub>_B :"
 
 #: ../src/colors/spaces/components.cpp:41
 msgid "Linear Blue"
@@ -10827,15 +10828,15 @@ msgstr "Noir"
 
 #: ../src/colors/spaces/components.cpp:80
 msgid "_H*:"
-msgstr "_H*:"
+msgstr "_H* :"
 
 #: ../src/colors/spaces/components.cpp:81
 msgid "_S*:"
-msgstr "_S*:"
+msgstr "_S* :"
 
 #: ../src/colors/spaces/components.cpp:82
 msgid "_L*:"
-msgstr "_L*:"
+msgstr "_L* :"
 
 #: ../src/colors/spaces/components.cpp:88
 msgid "_H<sub>ok</sub>:"
@@ -14188,8 +14189,8 @@ msgid ""
 "When an image is upscaled, apply smoothing or keep blocky (pixelated). (Will "
 "not work in all browsers.)"
 msgstr ""
-"Lorsqu'une image est agrandie, la lisser ou bien conserver des blocs (gros "
-"pixels). Non géré par certains navigateurs."
+"Lisser l'image quand elle est agrandie, ou bien conserver des blocs (gros "
+"pixels) - (non géré par certains navigateurs)"
 
 #: ../src/extension/internal/gdkpixbuf-input.cpp:195
 #: ../src/extension/internal/svg.h:32
@@ -15534,7 +15535,9 @@ msgid ""
 "'%s'"
 msgstr ""
 "Le fichier %s n'a pas pu être enregistré.\n"
-"L'information suivante a été fournie par l'extension :\n"
+"\n"
+"L'information suivante complémentaire a été fournie par l'extension de "
+"sortie :\n"
 "« %s »"
 
 #: ../src/file.cpp:334 ../src/file.cpp:336
@@ -15669,7 +15672,7 @@ msgstr "Éclaircir"
 
 #: ../src/filter-enums.cpp:75
 msgid "Arithmetic"
-msgstr "Arithmetic"
+msgstr "Arithmétique"
 
 #: ../src/filter-enums.cpp:84
 msgid "Table Lookup"
@@ -15995,7 +15998,7 @@ msgid ""
 "scale-document]"
 msgstr ""
 "Méthode employée pour convertir les ppp des documents en version antérieure "
-"à 0.92, si nécessaire ([none|scale-viewbox|scale-document])."
+"à 0.92, si nécessaire ([none|scale-viewbox|scale-document])"
 
 #: ../src/inkscape-application.cpp:660
 msgid "METHOD"
@@ -16076,7 +16079,7 @@ msgstr ""
 #: ../src/inkscape-application.cpp:676
 msgid "Resolution for bitmaps and rasterized filters; default is 96"
 msgstr ""
-"Résolution pour l'exportation en matriciel et la rastérisation des filtres; "
+"Résolution pour l'exportation en matriciel et la rastérisation des filtres ; "
 "96 par défaut"
 
 #: ../src/inkscape-application.cpp:676 ../src/ui/widget/export-lists.cpp:174
@@ -16087,7 +16090,7 @@ msgstr "PPP"
 
 #: ../src/inkscape-application.cpp:677
 msgid "Bitmap width in pixels (overrides --export-dpi)"
-msgstr "Largeur en pixels de l'image matricielle (préempte --export-dpi)."
+msgstr "Largeur en pixels de l'image matricielle (préempte --export-dpi)"
 
 #: ../src/inkscape-application.cpp:677
 msgid "WIDTH"
@@ -16095,7 +16098,7 @@ msgstr "LARGEUR"
 
 #: ../src/inkscape-application.cpp:678
 msgid "Bitmap height in pixels (overrides --export-dpi)"
-msgstr "Hauteur en pixels de l'image matricielle (préempte --export-dpi)."
+msgstr "Hauteur en pixels de l'image matricielle (préempte --export-dpi)"
 
 #: ../src/inkscape-application.cpp:678
 msgid "HEIGHT"
@@ -16104,8 +16107,8 @@ msgstr "HAUTEUR"
 #: ../src/inkscape-application.cpp:679
 msgid "Margin around export area: units of page size for SVG, mm for PS/PDF"
 msgstr ""
-"Marges autour de la zone à exporter; dans l'unité des dimensions de la page "
-"en SVG, en mm pour PS/EPS/PDF"
+"Marges autour de la zone à exporter ; dans l'unité des dimensions de la page "
+"en SVG, en mm pour PS/PDF"
 
 #: ../src/inkscape-application.cpp:679
 msgid "MARGIN"
@@ -16145,7 +16148,7 @@ msgstr "Supprimer les attributs/propriétés SVG spécifiques à Inkscape"
 
 #: ../src/inkscape-application.cpp:687
 msgid "Postscript level (2 or 3); default is 3"
-msgstr "Niveau PostScript (2 ou 3); 3 par défaut"
+msgstr "Niveau PostScript (2 ou 3) ; 3 par défaut"
 
 #: ../src/inkscape-application.cpp:687 ../src/inkscape-application.cpp:699
 #: ../src/inkscape-application.cpp:701
@@ -16154,7 +16157,7 @@ msgstr "NIVEAU"
 
 #: ../src/inkscape-application.cpp:688
 msgid "PDF version (1.4 or 1.5); default is 1.5"
-msgstr "Version PDF (1.4 ou 1.5); par défaut 1.5"
+msgstr "Version PDF (1.4 ou 1.5) ; par défaut 1.5"
 
 #: ../src/inkscape-application.cpp:688
 msgid "VERSION"
@@ -16225,7 +16228,7 @@ msgstr "Niveau de compression pour l'export PNG (0-9), 6 par défaut"
 
 #: ../src/inkscape-application.cpp:701
 msgid "Antialias level for PNG export (0 to 3); default is 2"
-msgstr "Niveau d'antialias pour l'export PNG (0-3); 2 par défaut"
+msgstr "Niveau d'antialias pour l'export PNG (0-3) ; 2 par défaut"
 
 #
 # File: ../src/inkscape-application.cpp, line: 579
@@ -16880,7 +16883,7 @@ msgstr "Tranche"
 
 #: ../src/live_effects/effect.cpp:659
 msgid "Slices the item into parts. It can also be applied multiple times."
-msgstr "Découpe l'objet en parties (peut être appliqué plusieurs fois)"
+msgstr "Découpe l'objet en parties ; peut être appliqué plusieurs fois."
 
 #: ../src/live_effects/effect.cpp:671
 msgctxt "path effect"
@@ -17265,7 +17268,7 @@ msgstr "division"
 
 #: ../src/live_effects/lpe-bool.cpp:70
 msgid "even-odd"
-msgstr "even-odd"
+msgstr "pair-impair"
 
 #: ../src/live_effects/lpe-bool.cpp:71
 msgid "non-zero"
@@ -17463,7 +17466,7 @@ msgid ""
 "separated list; e.g. 'transform, style, clip-path, X, Y'."
 msgstr ""
 "Attributs de l'original à copier par les clones, sous forme de liste avec "
-"virgules; e.g. 'transform, style, clip-path, X, Y'."
+"virgule pour séparateur ; e.g. 'transform, style, clip-path, X, Y'."
 
 #: ../src/live_effects/lpe-clone-original.cpp:56
 msgid "CSS Properties"
@@ -17475,7 +17478,7 @@ msgid ""
 "comma-separated list; e.g. 'fill, filter, opacity'."
 msgstr ""
 "Propriétés CSS de l'original à copier par les clones, sous forme de liste "
-"avec virgules; e.g. 'fill, filter, opacity'."
+"avec virgule pour séparateur ; e.g. 'fill, filter, opacity'."
 
 #: ../src/live_effects/lpe-clone-original.cpp:59
 #: ../src/live_effects/lpe-slice.cpp:56
@@ -18738,8 +18741,8 @@ msgid ""
 "Minimum angle at which overlapping dimension lines are merged into one, use "
 "180° to disable merging"
 msgstr ""
-"Angle minimum à partir duquel les lignes de cotes sont fusionnées; utiliser "
-"180° pour désactiver la fusion"
+"Angle minimum à partir duquel les lignes des cotes sont fusionnées en une "
+"seule ; utiliser 180° pour désactiver la fusion"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:79
 msgid "Position"
@@ -19982,7 +19985,7 @@ msgid ""
 "<b>Segment size:</b> add nodes to path evenly; <b>Number of segments:</b> "
 "add nodes between existing nodes"
 msgstr ""
-"<b>Taille de segment :</b> ajoute des nœuds au chemin uniformément; "
+"<b>Taille de segment :</b> ajoute des nœuds au chemin uniformément ; "
 "<b>Nombre de segments :</b> ajoute des nœuds entre les nœuds existants"
 
 #: ../src/live_effects/lpe-roughen.cpp:54
@@ -21029,7 +21032,7 @@ msgstr "Nomb_re d'itérations :"
 
 #: ../src/live_effects/lpe-vonkoch.cpp:48
 msgid "Depth of the recursion --- keep low!!"
-msgstr "Niveau de récursion (garder une valeur faible !)"
+msgstr "Niveau de récursion - garder une valeur faible !!"
 
 #: ../src/live_effects/lpe-vonkoch.cpp:49
 msgid "Generating path:"
@@ -21876,8 +21879,8 @@ msgstr "Gravure"
 msgid ""
 "Inkscape will run with default settings, and new settings will not be saved. "
 msgstr ""
-"Inkscape va démarrer avec les préférences par défaut.\n"
-"Les nouvelles préférences ne seront pas enregistrées. "
+"Inkscape va démarrer avec les paramètres par défaut et les nouveaux "
+"paramètres ne seront pas sauvegardés. "
 
 #: ../src/preferences.cpp:125
 #, c-format
@@ -22643,8 +22646,8 @@ msgid ""
 "<b>Center</b> of transformation: drag to reposition; scaling, rotation and "
 "skew with %1 also uses this center"
 msgstr ""
-"<b>Centre</b> de rotation/inclinaison : cliquer-glisser pour le déplacer ; "
-"redimensionner avec <b>%1</b> utilise aussi ce centre"
+"<b>Centre</b> de la transformation : cliquer-glisser pour déplacer ; "
+"redimensionner, pivoter et incliner avec %1 utilise aussi ce centre"
 
 #
 # File: ../src/seltrans-handles.cpp, line: 23
@@ -24691,7 +24694,7 @@ msgstr "Espace X :"
 #: ../src/ui/dialog/document-properties.cpp:1842
 #: ../src/ui/dialog/inkscape-preferences.cpp:2214
 msgid "Horizontal distance between blocks"
-msgstr "Espace horizontal entre les blocs."
+msgstr "Espace horizontal entre les blocs"
 
 #: ../src/ui/dialog/document-properties.cpp:1845
 msgid "Gap _Y:"
@@ -25601,7 +25604,7 @@ msgid ""
 "values of the first and second inputs respectively."
 msgstr ""
 "Si une opération arithmétique est sélectionnée, chaque pixel du résultat est "
-"calculé par: k1*i1*i2 + k2*i1 + k3*i2 + k4. i1 et i2 sont les valeurs de la "
+"calculé par : k1*i1*i2 + k2*i1 + k3*i2 + k4. i1 et i2 sont les valeurs de la "
 "première et de la deuxième entrée."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2966
@@ -27879,7 +27882,7 @@ msgid ""
 "Use SVG2 auto-flowed text instead of SVG1.2 auto-flowed text. (Recommended)"
 msgstr ""
 "Créer les textes encadrés au format SVG 2 au lieu du format SVG 1.2 "
-"(recommandé)."
+"(recommandé)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1086
 msgid "Fonts in 'Recently used' collection:"
@@ -27939,7 +27942,7 @@ msgid ""
 "may affect other objects using the same gradient"
 msgstr ""
 "Si coché, les définitions communes de dégradés sont automatiquement "
-"dupliquées lors d'une modification; décocher pour autoriser le partage des "
+"dupliquées lors d'une modification ; décocher pour autoriser le partage des "
 "définitions de dégradé de manière à ce que la modification d'un objet puisse "
 "affecter tous les objets utilisant le même dégradé"
 
@@ -29367,8 +29370,8 @@ msgid ""
 "Force repeating of the same path command (for example, 'L 1,2 L 3,4' instead "
 "of 'L 1,2 3,4')"
 msgstr ""
-"Si coché, impose la répétition de la même commande de chemin (écrit 'L 1,2 L "
-"3,4' à la place de 'L 1,2 3,4')."
+"Force la répétition de la même commande de chemin (écrit 'L 1,2 L 3,4' à la "
+"place de 'L 1,2 3,4' par exemple)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2355
 msgid "Numbers"
@@ -29605,7 +29608,7 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2440
 msgid "User monitor profile:"
-msgstr "Profil de couleurs utilisateur pour l'écran"
+msgstr "Profil des couleurs utilisateur pour l'écran :"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2445
 msgid "Use profile from user"
@@ -30291,7 +30294,7 @@ msgid ""
 "clockwise; otherwise with 0 at east, -180 to 180 range, positive "
 "counterclockwise"
 msgstr ""
-"Si coché, les angles sont affichés en sens horaire de 0 (au nord) à 360; si "
+"Si coché, les angles sont affichés en sens horaire de 0 (au nord) à 360 ; si "
 "décoché, ils sont affichés de -180 à 180 en sens anti-horaire (0 étant à "
 "l'est)"
 
@@ -30314,8 +30317,8 @@ msgid ""
 "Rotating with Ctrl pressed snaps every that much degrees; also, pressing "
 "[ or ] rotates by this amount"
 msgstr ""
-"Ctrl appuyé forcera des rotations de tant de degrés; de même en appuyant sur "
-"[ ou ], les rotations se feront selon cet incrément"
+"Ctrl appuyé forcera des rotations de tant de degrés ; de même en appuyant "
+"sur [ ou ], les rotations se feront selon cet incrément"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2750
 msgid "Relative snapping of guideline angles"
@@ -31562,7 +31565,7 @@ msgstr "Emplacement des données du système"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3846
 msgid "Custom Font directories"
-msgstr "Dossiers des polices"
+msgstr "Dossiers des polices personnalisées"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3859
 msgid "Icon theme:"
@@ -31883,7 +31886,7 @@ msgstr "_Interactivité"
 msgid ""
 "The id= attribute (only letters, digits, and the characters .-_: allowed)"
 msgstr ""
-"L'attribut id= (seuls les chiffres, lettres, et les caractères .-_: sont "
+"L'attribut id= (seuls les chiffres, lettres, et les caractères . - _ : sont "
 "autorisés)"
 
 #: ../src/ui/dialog/object-properties.cpp:153
@@ -32757,7 +32760,7 @@ msgid ""
 "Add the specified relative displacement to the current position; otherwise, "
 "edit the current absolute position directly"
 msgstr ""
-"Ajoute le déplacement relatif spécifié à la position actuelle; sinon, "
+"Ajoute le déplacement relatif spécifié à la position actuelle ; sinon, "
 "modifie directement la position absolue actuelle"
 
 #: ../src/ui/dialog/transformation.cpp:99
@@ -32769,8 +32772,8 @@ msgid ""
 "Apply the scale/rotate/skew to each selected object separately; otherwise, "
 "transform the selection as a whole"
 msgstr ""
-"Appliquer la transformation à chaque objet séparément; sinon, transformer la "
-"sélection comme un tout"
+"Appliquer la transformation à chaque objet séparément ; sinon, transformer "
+"la sélection comme un tout"
 
 #: ../src/ui/dialog/transformation.cpp:105
 msgid ""
@@ -33026,8 +33029,8 @@ msgid ""
 "makes x equal to y; <b>Shift</b>+<b>Ctrl</b>+<b>Drag</b> scales blur "
 "proportionately "
 msgstr ""
-"<b>Glisser</b> pour <b>ajuster</b> le flou en x; <b>Ctrl</b>+<b>Glisser</b> "
-"pour égaliser x à y; <b>Shift</b>+<b>Ctrl</b>+<b>Glisser</b> pour modifier "
+"<b>Glisser</b> pour <b>ajuster</b> le flou en x ; <b>Ctrl</b>+<b>Glisser</b> "
+"pour égaliser x à y ; <b>Shift</b>+<b>Ctrl</b>+<b>Glisser</b> pour modifier "
 "le flou proportionnellement "
 
 #: ../src/ui/knot/knot-holder.cpp:449
@@ -33036,8 +33039,8 @@ msgid ""
 "makes y equal to x; <b>Shift</b>+<b>Ctrl</b>+<b>Drag</b> scales blur "
 "proportionately "
 msgstr ""
-"<b>Glisser</b> pour <b>ajuster</b> le flou en y; <b>Ctrl</b>+<b>Glisser</b> "
-"pour égaliser y à x; <b>Shift</b>+<b>Ctrl</b>+<b>Glisser</b> pour modifier "
+"<b>Glisser</b> pour <b>ajuster</b> le flou en y ; <b>Ctrl</b>+<b>Glisser</b> "
+"pour égaliser y à x ; <b>Shift</b>+<b>Ctrl</b>+<b>Glisser</b> pour modifier "
 "le flou proportionnellement "
 
 #: ../src/ui/knot/knot.cpp:278
@@ -33280,7 +33283,7 @@ msgid ""
 "Adjust the <b>horizontal rounding</b> radius; with <b>Ctrl</b> to make the "
 "vertical radius the same"
 msgstr ""
-"Ajuster le rayon <b>d'arrondi horizontal</b>; <b>Ctrl</b> que le rayon "
+"Ajuster le rayon <b>d'arrondi horizontal</b> ; <b>Ctrl</b> que le rayon "
 "vertical soit identique"
 
 #: ../src/ui/shape-editor-knotholders.cpp:571
@@ -33288,7 +33291,7 @@ msgid ""
 "Adjust the <b>vertical rounding</b> radius; with <b>Ctrl</b> to make the "
 "horizontal radius the same"
 msgstr ""
-"Ajuster le rayon <b>d'arrondi vertical</b>; <b>Ctrl</b> pour que le rayon "
+"Ajuster le rayon <b>d'arrondi vertical</b> ; <b>Ctrl</b> pour que le rayon "
 "horizontal soit identique"
 
 #: ../src/ui/shape-editor-knotholders.cpp:575
@@ -33297,8 +33300,8 @@ msgid ""
 "Adjust the <b>width and height</b> of the rectangle; with <b>Ctrl</b> to "
 "lock ratio or stretch in one dimension only"
 msgstr ""
-"Ajuster la <b>hauteur</b> et la <b>largeur</b> du rectangle ; <b>Ctrl</b> "
-"pour verrouiller le rapport des dimensions ou incliner dans une seule "
+"Ajuster la <b>largeur</b> et la <b>hauteur</b> du rectangle ; avec <b>Ctrl</"
+"b> pour verrouiller le rapport des dimensions ou incliner dans une seule "
 "dimension"
 
 #: ../src/ui/shape-editor-knotholders.cpp:583
@@ -33313,8 +33316,8 @@ msgid ""
 "Resize box in X/Y direction; with <b>Shift</b> along the Z axis; with "
 "<b>Ctrl</b> to constrain to the directions of edges or diagonals"
 msgstr ""
-"Redimensionner la boîte suivant les axes X/Y ; avec <b>Maj</b>, suivant "
-"l'axe Z; avec <b>Ctrl</b> pour préserver les directions des arêtes ou des "
+"Redimensionner la boîte suivant les axes X/Y ; avec <b>Maj</b>, suivant "
+"l'axe Z ; avec <b>Ctrl</b> pour préserver les directions des arêtes ou des "
 "diagonales"
 
 #: ../src/ui/shape-editor-knotholders.cpp:855
@@ -33325,8 +33328,8 @@ msgid ""
 "Resize box along the Z axis; with <b>Shift</b> in X/Y direction; with "
 "<b>Ctrl</b> to constrain to the directions of edges or diagonals"
 msgstr ""
-"Redimensionner la boîte suivant l'axe Z ; avec <b>Maj</b>, suivant les axes "
-"X/Y; avec <b>Ctrl</b> pour préserver les directions des arêtes ou des "
+"Redimensionner la boîte suivant l'axe Z ; avec <b>Maj</b>, suivant les axes "
+"X/Y ; avec <b>Ctrl</b> pour préserver les directions des arêtes ou des "
 "diagonales"
 
 #: ../src/ui/shape-editor-knotholders.cpp:871
@@ -33350,12 +33353,12 @@ msgstr "Ajuster la <b>taille</b> du marqueur"
 #: ../src/ui/shape-editor-knotholders.cpp:1639
 msgid "Adjust ellipse <b>width</b>, with <b>Ctrl</b> to make circle"
 msgstr ""
-"Ajuster la <b>largeur</b> de l'ellipse; <b>Ctrl</b> pour en faire un cercle"
+"Ajuster la <b>largeur</b> de l'ellipse ; <b>Ctrl</b> pour en faire un cercle"
 
 #: ../src/ui/shape-editor-knotholders.cpp:1642
 msgid "Adjust ellipse <b>height</b>, with <b>Ctrl</b> to make circle"
 msgstr ""
-"Ajuster la <b>hauteur</b> de l'ellipse; <b>Ctrl</b> pour en faire un cercle"
+"Ajuster la <b>hauteur</b> de l'ellipse ; <b>Ctrl</b> pour en faire un cercle"
 
 #: ../src/ui/shape-editor-knotholders.cpp:1645
 msgid ""
@@ -33388,8 +33391,8 @@ msgid ""
 "Adjust the <b>tip radius</b> of the star or polygon; with <b>Shift</b> to "
 "round; with <b>Alt</b> to randomize"
 msgstr ""
-"Ajuster le <b>rayon des sommets</b> de l'étoile ou du polygone; <b>Maj</b> "
-"pour arrondir; <b>Alt</b> pour rendre aléatoire"
+"Ajuster le <b>rayon des sommets</b> de l'étoile ou du polygone ; <b>Maj</b> "
+"pour arrondir ; <b>Alt</b> pour rendre aléatoire"
 
 #: ../src/ui/shape-editor-knotholders.cpp:1840
 msgid ""
@@ -33397,9 +33400,9 @@ msgid ""
 "rays radial (no skew); with <b>Shift</b> to round; with <b>Alt</b> to "
 "randomize"
 msgstr ""
-"Ajuster le <b>rayon de base</b> de l'étoile; <b>Ctrl</b> pour garder "
-"l'étoile parfaitement radiale (pas d'inclinaison); <b>Maj</b> pour arrondir; "
-"<b>Alt</b> pour rendre aléatoire"
+"Ajuster le <b>rayon de base</b> de l'étoile ; <b>Ctrl</b> pour garder "
+"l'étoile parfaitement radiale (pas d'inclinaison) ; <b>Maj</b> pour arrondir "
+"; <b>Alt</b> pour rendre aléatoire"
 
 #: ../src/ui/shape-editor-knotholders.cpp:1847
 msgid "Drag to move the star"
@@ -33414,8 +33417,8 @@ msgid ""
 "Roll/unroll the spiral from <b>inside</b>; with <b>Ctrl</b> to snap angle; "
 "with <b>Alt</b> to converge/diverge"
 msgstr ""
-"Enrouler/dérouler la spirale depuis <b>l'intérieur</b>; <b>Ctrl</b> pour "
-"tourner par incréments; <b>Alt</b> pour la faire converger/diverger"
+"Enrouler/dérouler la spirale depuis <b>l'intérieur</b> ; avec <b>Ctrl</b> "
+"pour tourner par incréments ;  <b>Alt</b> pour la faire converger/diverger"
 
 #: ../src/ui/shape-editor-knotholders.cpp:2096
 msgid ""
@@ -33729,8 +33732,8 @@ msgid ""
 "<b>BSpline node handle</b> (%.3g power): Shift-drag to move, double-click to "
 "reset. (more: %s)"
 msgstr ""
-"<b>Poignée de nœud de B-spline</b> (puissance %.3g): Maj pour déplacer, "
-"double-clic pour réinitialiser (plus : %s)"
+"<b>Poignée de nœud de B-spline</b> (puissance %.3g) : Maj pour déplacer, "
+"double-clic pour réinitialiser (plus : %s)"
 
 #: ../src/ui/tool/node.cpp:686
 #, c-format
@@ -34424,7 +34427,7 @@ msgstr "Définir le type de filet"
 
 #: ../src/ui/toolbar/page-toolbar.cpp:140
 msgid "ex.: 100x100cm"
-msgstr "ex.: 100x100cm"
+msgstr "ex. : 100x100cm"
 
 #: ../src/ui/toolbar/page-toolbar.cpp:141
 msgid ""
@@ -34983,8 +34986,8 @@ msgid ""
 "<b>Ellipse</b>: %s &#215; %s (constrained to golden ratio 1.618 : 1); with "
 "<b>Shift</b> to draw around the starting point"
 msgstr ""
-"<b>Ellipse</b> : %s × %s; (contrainte au ratio du nombre d'or 1,618:1) ; "
-"<b>Maj</b> dessiner autour du point de départ"
+"<b>Ellipse</b> : %s #215;  %s ; (contrainte du ratio du nombre d'or 1,618:1) "
+"; avec <b>Maj</b> dessiner autour du point de départ"
 
 #: ../src/ui/tools/arc-tool.cpp:381
 #, c-format
@@ -34992,8 +34995,8 @@ msgid ""
 "<b>Ellipse</b>: %s &#215; %s (constrained to golden ratio 1 : 1.618); with "
 "<b>Shift</b> to draw around the starting point"
 msgstr ""
-"<b>Ellipse</b> : %s × %s; (contrainte au ratio du nombre d'or 1:1.618) ; "
-"<b>Maj</b> pour dessiner autour du point de départ"
+"<b>Ellipse</b> : %s #215;  %s ; (contrainte du ratio du nombre d'or 1 :1.618)"
+" ; <b>Maj</b> pour dessiner autour du point de départ"
 
 #: ../src/ui/tools/arc-tool.cpp:386
 #, c-format
@@ -35045,7 +35048,7 @@ msgstr ""
 
 #: ../src/ui/tools/calligraphic-tool.cpp:454
 msgid "<b>Select a guide path</b> to track with <b>Ctrl</b>"
-msgstr "Choisir un chemin comme guide avec <b>Ctrl</b>"
+msgstr "<b>Choisir un chemin comme guide</b> à suivre avec <b>Ctrl</b>"
 
 #: ../src/ui/tools/calligraphic-tool.cpp:588
 msgid "Tracking: <b>connection to guide path lost!</b>"
@@ -35161,8 +35164,8 @@ msgstr ""
 msgid ""
 "Cannot cut out from a path with zero area, use <b>Clip</b> mode instead."
 msgstr ""
-"Impossible de découper un chemin qui ne délimite pas une zone, utilisez un "
-"mode de découpe."
+"Impossible de découper un chemin qui ne délimite pas une zone, utilisez le "
+"mode <b>Clip</b> à la place."
 
 #: ../src/ui/tools/flood-tool.cpp:78
 msgid "Visible Colors"
@@ -35288,11 +35291,11 @@ msgid ""
 msgid_plural ""
 "One handle merging %d stops (drag with <b>Shift</b> to separate) selected"
 msgstr[0] ""
-"Une poignée de dégradé rassemblant %d stops (cliquer-glisser avec <b>Maj</b> "
-"pour les séparer) sélectionnée"
+"Une poignée sélectionnée rassemblant %d stop (cliquer-glisser avec <b>Maj</"
+"b> pour séparer)"
 msgstr[1] ""
-"Une poignée de dégradé rassemblant %d stops (cliquer-glisser avec <b>Maj</b> "
-"pour les séparer) sélectionnée"
+"Une poignée sélectionnée rassemblant %d stops (cliquer-glisser avec <b>Maj</"
+"b> pour les séparer)"
 
 #: ../src/ui/tools/gradient-tool.cpp:132
 #, c-format
@@ -35707,8 +35710,8 @@ msgid ""
 "<b>Curve handle</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</b> to snap "
 "angle"
 msgstr ""
-"<b>Poignée de contrôle</b>: angle %3.2f°, longueur %s ; <b>Ctrl</b> pour "
-"tourner par incréments"
+"<b>Poignée de contrôle de la courbe</b> : angle %3.2f &#176;, longueur %s ; "
+"avec <b>Ctrl</b> pour tourner par incréments"
 
 #: ../src/ui/tools/pen-tool.cpp:1757
 #, c-format
@@ -35771,7 +35774,7 @@ msgstr ""
 
 #: ../src/ui/tools/rect-tool.cpp:226
 msgid "<b>Alt</b>: use with Ctrl to make square"
-msgstr "<b>Alt</b>: utilisez avec Ctrl pour faire un carré"
+msgstr "<b>Alt</b> : utiliser avec Ctrl pour faire un carré"
 
 #: ../src/ui/tools/rect-tool.cpp:368
 #, c-format
@@ -35788,8 +35791,8 @@ msgid ""
 "<b>Rectangle</b>: %s &#215; %s (constrained to golden ratio 1.618 : 1); with "
 "<b>Shift</b> to draw around the starting point"
 msgstr ""
-"<b>Rectangle</b> : %s × %s; (contraint au ratio du nombre d'or 1,618:1) ; "
-"<b>Maj</b> dessiner autour du point de départ"
+"<b>Rectangle</b> : %s  &#215; %s (contrainte du ratio du nombre d'or 1,618:1)"
+" ; avec <b>Maj</b> pour dessiner autour du point de départ"
 
 #: ../src/ui/tools/rect-tool.cpp:377
 #, c-format
@@ -35797,8 +35800,8 @@ msgid ""
 "<b>Rectangle</b>: %s &#215; %s (constrained to golden ratio 1 : 1.618); with "
 "<b>Shift</b> to draw around the starting point"
 msgstr ""
-"<b>Rectangle</b> : %s × %s; (contraint au ratio du nombre d'or 1:1.618) ; "
-"<b>Maj</b> pour dessiner autour du point de départ"
+"<b>Rectangle</b> : %s &#215; %s ; (contrainte du ratio du nombre d'or "
+"1:1.618) ; avec <b>Maj</b> pour dessiner autour du point de départ"
 
 #: ../src/ui/tools/rect-tool.cpp:383
 #, c-format
@@ -35915,7 +35918,7 @@ msgstr "Segments de stylo vers guides"
 
 #: ../src/ui/tools/shortcuts.cpp:26
 msgid "Convert the pen shape into guides."
-msgstr "Convertit la forme en guides"
+msgstr "Convertir la forme du crayon en guides."
 
 #: ../src/ui/tools/spiral-tool.cpp:207
 msgid "<b>Ctrl</b>: snap angle"
@@ -35996,8 +35999,7 @@ msgstr "Pulvérisation par union des formes"
 
 #: ../src/ui/tools/star-tool.cpp:214
 msgid "<b>Ctrl</b>: snap angle; keep rays radial"
-msgstr ""
-"<b>Ctrl</b> pour tourner par incréments; forcer la radialité des branches"
+msgstr "<b>Ctrl</b> : angle de rotation ; garder les rayons radiaux"
 
 #: ../src/ui/tools/star-tool.cpp:344
 #, c-format
@@ -36274,9 +36276,9 @@ msgid ""
 "<b>Drag</b> to draw a calligraphic stroke; with <b>Ctrl</b> to track a guide "
 "path. <b>Arrow keys</b> adjust width (left/right) and angle (up/down)."
 msgstr ""
-"<b>Cliquer-glisser</b> pour calligraphier ; <b>Ctrl</b> pour suivre un "
-"guide. Les flèches <b>gauche</b>/<b>droite</b> ajustent la largeur de la "
-"plume, <b>haut</b>/<b>bas</b> son angle."
+"<b>Cliquer-glisser</b> pour calligraphier ; <b>Ctrl</b> pour suivre le "
+"chemin d'un guide. Les flèches <b>gauche</b>/<b>droite</b> ajustent la "
+"largeur de la plume, <b>haut</b>/<b>bas</b> son angle."
 
 #: ../src/ui/tools/tool-data.cpp:59
 msgid ""
@@ -36546,7 +36548,7 @@ msgstr "Trop d'encre !"
 
 #: ../src/ui/widget/color-notebook.cpp:181
 msgid "RGBA_:"
-msgstr "RVBA _:"
+msgstr "RVBA_ :"
 
 #: ../src/ui/widget/color-palette.cpp:50
 msgid "Configure..."
@@ -37822,7 +37824,7 @@ msgid ""
 "evenodd)"
 msgstr ""
 "Toute intersection d'un chemin avec lui-même ou avec un de ses sous-chemins "
-"créera des trous dans le remplissage (fill-rule: evenodd)"
+"créera des trous dans le remplissage (fill-rule : evenodd)"
 
 #. TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/painting.html#FillRuleProperty
 #: ../src/ui/widget/paint-selector.cpp:185
@@ -37830,7 +37832,7 @@ msgid ""
 "Fill is solid unless a subpath is counterdirectional (fill-rule: nonzero)"
 msgstr ""
 "Le remplissage est complet à moins qu'un sous-chemin soit en sens inverse "
-"(fill-rule: nonzero)"
+"(fill-rule : nonzero)"
 
 #: ../src/ui/widget/paint-selector.cpp:433
 msgid "<b>No objects</b>"
@@ -38242,8 +38244,9 @@ msgid ""
 "modifiers to adjust hue"
 msgstr ""
 "Ajustement de la <b>saturation</b> : valeur précédente %.3g, désormais "
-"<b>%.3g</b> (diff. %.3g) ; <b>Ctrl</b> pour ajuster la luminosité, sans "
-"touche modificatrice pour ajuster la teinte"
+"<b>%.3g</b> (diff. %.3g) ; <b>Ctrl</b> pour ajuster la luminosité, avec "
+"<b>Alt</b> pour ajuster le canal alpha, sans touche modificatrice pour "
+"ajuster la teinte"
 
 #: ../src/ui/widget/selected-style.cpp:1061
 msgid "Adjust lightness"
@@ -38564,10 +38567,10 @@ msgid "<b>Finite</b> vanishing point shared by the box"
 msgid_plural ""
 "<b>Finite</b> vanishing point shared by <b>%d</b> boxes; drag with <b>Shift</"
 "b> to separate selected box(es)"
-msgstr[0] "Point de fuite <b>infini</b> partagé par la boîte"
+msgstr[0] "Point de fuite <b>fini</b> partagé par la boîte"
 msgstr[1] ""
-"Point de fuite <b>infini</b> partagé par <b>%d</b> boîtes ; cliquer-glisser "
-"avec <b>Maj</b> pour séparer la/les boîte(s) sélectionnée(s)"
+"Point de fuite <b>fini</b> partagé par <b>%d</b> boîtes ; cliquer-glisser "
+"avec <b>Maj</b> pour séparer les boîtes sélectionnées"
 
 #: ../src/vanishing-point.cpp:315
 #, c-format
@@ -38578,7 +38581,7 @@ msgid_plural ""
 msgstr[0] "Point de fuite <b>infini</b> partagé par la boîte"
 msgstr[1] ""
 "Point de fuite <b>infini</b> partagé par <b>%d</b> boîtes ; cliquer-glisser "
-"avec <b>Maj</b> pour séparer la/les boîte(s) sélectionnée(s)"
+"avec <b>Maj</b> pour séparer les boîtes sélectionnées"
 
 #: ../src/vanishing-point.cpp:324
 #, c-format
@@ -39395,7 +39398,7 @@ msgstr ""
 
 #: ../share/ui/dialog-trace.glade:802
 msgid "Multicolor"
-msgstr "Multicolor"
+msgstr "Multicolore"
 
 #: ../share/ui/dialog-trace.glade:825
 msgid "Favors connections that are part of a long curve (multiplier)"
@@ -43004,7 +43007,8 @@ msgstr "Nombre d'objets non convertis : {}\n"
 #: ../share/extensions/dhw_input.py:63
 msgid "Could not load file, not a ACECAD DHW file!"
 msgstr ""
-"Impossible de charger le fichier, pas un fichier ACECAD Digimemo (*.dhw)"
+"Impossible de charger le fichier, ce n'est pas un fichier ACECAD Digimemo "
+"(*.dhw) !"
 
 #: ../share/extensions/dhw_input.py:78
 msgid "Unsupported tag: {}\n"
@@ -43183,7 +43187,9 @@ msgid ""
 "technical support for help."
 msgstr ""
 "Attention : impossible de convertir le texte encadré.\n"
-"Utilisez Texte -> Désencadrer pour le convertir."
+"Utiliser Texte > Désencadrer pour le convertir avant de l'utiliser.\n"
+"Si vous n'arrivez pas à identifier l'objet en question, contactez le support "
+"technique pour obtenir de l'aide."
 
 #: ../share/extensions/hpgl2_input.py:99
 msgid "Unsupported commands encountered. The following commands were ignored:"
@@ -43216,7 +43222,7 @@ msgstr ""
 msgid "{} error occurred"
 msgid_plural "{} errors occurred."
 msgstr[0] "Erreur {}"
-msgstr[1] "Erreurs {}."
+msgstr[1] "Erreurs {} ."
 
 #: ../share/extensions/image_extract.py:146
 msgid "Unable to create directory {}."
@@ -44422,7 +44428,7 @@ msgstr "Hauteurs"
 
 #: ../share/extensions/construct_from_triangle.inx:19
 msgid "Angle Bisectors"
-msgstr "Bissectrices"
+msgstr "Bissectrices d'angles"
 
 #: ../share/extensions/construct_from_triangle.inx:20
 #: ../share/extensions/polyhedron_3d.inx:85
@@ -44985,16 +44991,17 @@ msgstr ""
 "- Le paramètre unité de base spécifie dans quelle unité les coordonnées sont "
 "générées (96 px = 1 in).\n"
 "- Types d'éléments acceptés :\n"
-"    - chemins (lignes et splines) ;\n"
-"    - rectangles ;\n"
-"    - clones (la référence croisée vers l'original est perdue).\n"
+"    - chemins (lignes et splines) \n"
+"    - rectangles\n"
+"    - clones (la référence croisée vers l'original est perdue)\n"
 "- L'option ROBO-Master génère une spline spécialisée qui ne peut être "
-"utilisée que par des lecteurs ROBO-Master et AutoDesk, pas Inkscape.\n"
+"utilisée que par des lecteurs ROBO-Master et AutoDesk, mais pas par Inkscape."
+"\n"
 "- La sortie LWPOLYLINE est une polyligne multi-connectée. Désactivez cette "
 "option pour utiliser une ancienne version de la sortie LINE.\n"
 "- Vous pouvez choisir d'exporter tous les calques, seulement ceux qui sont "
-"visibles ou bien filtrés par nom (casse ignorée ; utilisez une virgule « , » "
-"pour séparer)."
+"visibles ou bien filtrés par nom (casse ignorée ; utilisez la virgule « , » "
+"comme séparateur)"
 
 #: ../share/extensions/dxf_outlines.inx:51
 msgid "Desktop Cutting Plotter (AutoCAD DXF R14) (*.dxf)"
@@ -46109,8 +46116,8 @@ msgid ""
 "The number of the pen (tool) to use (Standard: '1')Can be defined in the "
 "layer name. eg. (Pen 1)"
 msgstr ""
-"Le numéro du stylo (outil) à utiliser (en standard : 1). Peut être défini "
-"dans le nom du calque (\"Pen1\")."
+"Numéro du stylo (outil) à utiliser (en standard : 1). Peut être défini dans "
+"le nom du calque (par exemple \"Pen1\")"
 
 #: ../share/extensions/hpgl_output.inx:13 ../share/extensions/plotter.inx:69
 msgid "Pen force (g):"
@@ -46225,7 +46232,7 @@ msgid ""
 "align the tool orientation. (Default: Checked)"
 msgstr ""
 "Cocher pour faire une petite coupure avant que le dessin réel commence à "
-"aligner correctement l'orientation de l'outil (par défaut : coché)."
+"aligner correctement l'orientation de l'outil (par défaut : coché)"
 
 #: ../share/extensions/hpgl_output.inx:31 ../share/extensions/plotter.inx:87
 msgid "Curve flatness:"
@@ -46252,7 +46259,8 @@ msgid ""
 msgstr ""
 "Cocher pour aligner automatiquement le dessin au point zéro (auquel s'ajoute "
 "le décalage de l'outil si utilisé). Si décoché, vous devez vous assurer que "
-"tous vos objets sont dans la bordure du document (par défaut : coché)."
+"chaque partie de votre dessin se trouve à l'intérieur de la bordure du "
+"document (par défaut : coché)"
 
 #: ../share/extensions/hpgl_output.inx:35 ../share/extensions/plotter.inx:92
 msgid ""
@@ -46378,9 +46386,9 @@ msgid ""
 "image id for the file names. The file extension will be appended "
 "automatically."
 msgstr ""
-"Préfixe du nom de fichier de l'image; un compteur sera ajouté. Laisser vide "
-"pour utiliser l'id de l'image comme nom de fichier. L'extension sera ajoutée "
-"automatiquement."
+"Préfixe du nom de fichier de l'image ; un compteur sera ajouté en suffixe. "
+"Laisser vide pour utiliser l'id de l'image comme nom de fichier. L'extension "
+"sera ajoutée automatiquement."
 
 #: ../share/extensions/image_extract.inx:9
 #: ../share/extensions/image_extract_selected.inx:10
@@ -46565,7 +46573,7 @@ msgstr "Valeur initiale :"
 #: ../share/extensions/interp_att_g.inx:32
 #: ../share/extensions/interp_att_g.inx:33
 msgid "Examples: 0.5, 5, #rgb, #rrggbb or r, g, b"
-msgstr "Exemples: 0.5, 5, #rvb, #rrvvbb ou r, v, b"
+msgstr "Exemples : 0.5, 5, #rvb, #rrvvbb ou r, v, b"
 
 #: ../share/extensions/interp_att_g.inx:33
 msgid "End Value:"
@@ -47174,9 +47182,9 @@ msgid ""
 "the name of the {rectangle ID}.png (use Object Properties to set this)."
 msgstr ""
 "Si vous créez un calque (avec le nom par défaut \"slices\") contenant des "
-"rectangles, cette extension va exporter un ficheir PNG par rectangle, avec "
-"le nom {rectangle ID}.png (utilisez les propriétés de l'objet pour définir "
-"les ID)"
+"rectangles, cette extension va exporter dans le dossier un fichier PNG par "
+"rectangle avec pour nom {rectangle ID}.png (utilisez les propriétés de "
+"l'objet pour définir les ID)."
 
 #: ../share/extensions/layer2png.inx:17
 msgid ""
@@ -48004,10 +48012,11 @@ msgid ""
 msgstr ""
 "\n"
 "Greffon Gcodetools :\n"
-"Il convertit des chemins en G-code (en utilisant l'interpolation "
-"circulaire), crée des décalages de chemin et grave les coins pointus avec "
-"des tranchets coniques. Ce greffon calcule le G-code pour les chemins en "
-"utilisant l'interpolation circulaire ou le mouvement linéaire si besoin.\n"
+"Il convertit des chemins en G-code (en utilisant l'interpolation circulaire)"
+", crée des décalages de chemin et grave les coins pointus avec des tranchets "
+"coniques.\n"
+"Ce greffon calcule le G-code pour les chemins en utilisant l'interpolation "
+"circulaire ou le mouvement linéaire si besoin.\n"
 "\n"
 "Des tutoriels, des manuels et des forums d'aide sont disponibles.\n"
 "Forum anglais :\n"
@@ -48699,16 +48708,14 @@ msgid ""
 "      "
 msgstr ""
 "\n"
-"Greffon Gcodetools : convertit des chemins en G-code (en utilisant "
-"l'interpolation circulaire), crée des décalages de chemin et grave les coins "
-"pointus avec des tranchets coniques. Ce greffon calcule le G-code pour les "
-"chemins en utilisant l'interpolation circulaire ou le mouvement linéaire si "
-"besoin.\n"
+"Greffon Gcodetools : \n"
+"convertit des chemins en G-code (en utilisant l'interpolation circulaire), "
+"crée des décalages de chemin et grave les coins pointus avec des tranchets "
+"coniques. Ce greffon calcule le G-code pour les chemins en utilisant "
+"l'interpolation circulaire ou le mouvement linéaire si besoin.\n"
 "\n"
-"Des tutoriels, des manuels et des forums d'aide sont disponibles.\n"
-"Forum anglais :\n"
-"http://www.cnc-club.ru/gcodetools\n"
-"Forum russe :\n"
+"Des tutoriels, des manuels et des forums d'aide sont disponibles sur le "
+"forum d'aide en anglais : http://www.cnc-club.ru/gcodetools et en russe : "
 "http://www.cnc-club.ru/gcodetoolsru\n"
 "\n"
 "Crédits : Nick Drobchenko, Vladimir Kalyaev, John Brooker, Henry Nicolas, "
@@ -48870,14 +48877,15 @@ msgstr ""
 "\n"
 "Greffon Gcodetools : convertit des chemins en G-code (en utilisant "
 "l'interpolation circulaire), crée des décalages de chemin et grave les coins "
-"pointus avec des tranchets coniques. Ce greffon calcule le G-code pour les "
-"chemins en utilisant l'interpolation circulaire ou le mouvement linéaire si "
-"besoin.\n"
+"pointus avec des tranchets coniques. Ce greffon calcule le G-code\n"
+"pour les chemins en utilisant l'interpolation circulaire ou le mouvement "
+"linéaire si besoin.\n"
 "\n"
-"Des tutoriels, des manuels et des forums d'aide sont disponibles.\n"
-"Forum anglais :\n"
+"Des tutoriels, des manuels et des forums d'aide sont disponibles :\n"
+"Forum du support en anglais :\n"
 "    http://www.cnc-club.ru/gcodetools\n"
-"Forum russe :\n"
+"\n"
+"Forum du support en russe :\n"
 "    http://www.cnc-club.ru/gcodetoolsru\n"
 "\n"
 "Crédits : Nick Drobchenko, Vladimir Kalyaev, John Brooker, Henry Nicolas, "
@@ -50009,7 +50017,7 @@ msgid ""
 msgstr ""
 "Cocher pour aligner automatiquement le dessin au point zéro (auquel s'ajoute "
 "le décalage de l'outil si utilisé). Si décoché, vous devez vous assurer que "
-"tous vos objets sont dans la bordure du document (par défaut : coché)."
+"tous vos objets sont dans la bordure du document (par défaut : coché)"
 
 #: ../share/extensions/polyhedron_3d.inx:3
 msgid "3D Polyhedron"
@@ -50869,15 +50877,15 @@ msgstr ""
 "\n"
 "Cette extension modifie l'ordre d'empilement des objets (position sur l'axe "
 "Z)\n"
-" en fonction de leur position sur le canevas ou de leur ordre d'empilement "
+"en fonction de leur position sur le canevas ou de leur ordre d'empilement "
 "actuel.\n"
 "L'extension empile à nouveau les objets sélectionnés. Les groupes sont\n"
 "traités comme des objets uniques.\n"
-"Si les éléments d'un groupe sont sélectionnés avec des objets externes, \n"
+"Si les éléments d'un groupe sont sélectionnés avec des objets externes,\n"
 "ils seront extraits du groupe et placés à la suite des autres objets à "
 "empiler\n"
-"(les éléments se trouvant sur différents calques sont rassemblés dans un "
-"même calque).\n"
+"(les éléments se trouvant sur différents calques sont rassemblés\n"
+"dans un même calque).\n"
 "            "
 
 #: ../share/extensions/restack.inx:57 ../share/extensions/ungroup_deep.inx:13
