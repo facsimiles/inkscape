@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: uk\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-02-04 23:42+0100\n"
-"PO-Revision-Date: 2025-04-19 09:29+0000\n"
+"PO-Revision-Date: 2025-04-20 10:06+0000\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <https://translate.inkscape.org/projects/inkscape/"
 "inkscape-master/uk/>\n"
@@ -9796,92 +9796,76 @@ msgid "Replace SVG2 text with SVG1.1 text"
 msgstr "Замінити текст SVG2 на текст SVG1.1"
 
 #: ../src/actions/actions-svg-processing.cpp:708
-#, fuzzy
-#| msgid "Set mesh on fill"
 msgid "Insert Mesh Polyfill"
-msgstr "Встановлення сітки для заповнення"
+msgstr "Вставити полізаповнення сіткою"
 
 #: ../src/actions/actions-svg-processing.cpp:708
-#, fuzzy
-#| msgid "Insert JavaScript code for mesh gradients"
 msgid "Insert JavaScript for rendering meshes"
-msgstr "Вставити код JavaScript для сіткових градієнтів"
+msgstr "Вставити код JavaScript для обробки сіток"
 
 #: ../src/actions/actions-svg-processing.cpp:709
-#, fuzzy
-#| msgid "Invert fill"
 msgid "Insert Hatch Polyfill"
-msgstr "Інвертувати заливку"
+msgstr "Вставити полізаповнення штрихуванням"
 
 #: ../src/actions/actions-svg-processing.cpp:709
-#, fuzzy
-#| msgid "Insert JavaScript code for SVG2 hatches"
 msgid "Insert JavaScript for rendering hatches"
-msgstr "Вставити код JavaScript для штрихувань SVG2"
+msgstr "Вставити код JavaScript для обробки штрихувань"
 
 #: ../src/actions/actions-svg-processing.cpp:711
-#, fuzzy
-#| msgid "Unlink Clones"
 msgid "Unlink All Clones"
-msgstr "Від'єднати клони"
+msgstr "Від'єднати усі клони"
 
 #: ../src/actions/actions-svg-processing.cpp:711
-#, fuzzy
-#| msgid "Unlink clones and symbols"
 msgid "Recursively unlink all clones and symbols"
-msgstr "Від'єднати клони і символи"
+msgstr "Рекурсивно від'єднати усі клони і символи"
 
 #: ../src/actions/actions-svg-processing.cpp:712
-#, fuzzy
-#| msgid "_Object to Path"
 msgid "All Objects to Paths"
-msgstr "_Об'єкт у контур"
+msgstr "Усі об'єкти у контури"
 
 #: ../src/actions/actions-svg-processing.cpp:712
 msgid "Turn all shapes recursively into path elements"
-msgstr ""
+msgstr "Рекурсивно перетворити усіх форми на елементи контуру"
 
 #: ../src/actions/actions-svg-processing.cpp:713
-#, fuzzy
-#| msgid "Stroke to Path"
 msgid "All Strokes to Paths"
-msgstr "Штрих у контур"
+msgstr "Усі штрихи у контури"
 
 #: ../src/actions/actions-svg-processing.cpp:713
 msgid "Turn all strokes recursively into fill-only paths"
-msgstr ""
+msgstr "Перетворити усі штрихи рекурсивно у контури лише заповнення"
 
 #: ../src/actions/actions-svg-processing.cpp:714
-#, fuzzy
-#| msgid "Normalize"
 msgid "Normalize Path Data"
-msgstr "Нормалізація"
+msgstr "Нормалізація даних контуру"
 
 #: ../src/actions/actions-svg-processing.cpp:714
 msgid "Make all paths absolute and predictable"
-msgstr ""
+msgstr "Зробити усі контури абсолютними і передбачуваними"
 
 #: ../src/actions/actions-svg-processing.cpp:716
-#, fuzzy
-#| msgid "Snap Bounding Boxes"
 msgid "Annotate all Bounding Boxes"
-msgstr "Прилипання до рамок-обгорток"
+msgstr "Анотувати усі рамки-обгортки"
 
 #: ../src/actions/actions-svg-processing.cpp:716
 msgid ""
 "Annotate every shape and group with its current bounding box (not kept up to "
 "date)"
 msgstr ""
+"Анотувати усі форми і згрупувати з її поточною рамкою-обгорткою (не "
+"підтримується актуальною)"
 
 #: ../src/actions/actions-svg-processing.cpp:717
 msgid "Annotate all Shape Paths"
-msgstr ""
+msgstr "Анотувати усі контури форми"
 
 #: ../src/actions/actions-svg-processing.cpp:717
 msgid ""
 "Annotate every non-path shape with their equivalent path string (not kept up "
 "to date)"
 msgstr ""
+"Анотувати усі відмінні від контуру форми еквівалентним рядком контуру ("
+"актуальність не підтримується)"
 
 #: ../src/actions/actions-svg-processing.cpp:719
 msgid "Clean up Document"
@@ -9950,16 +9934,12 @@ msgstr ""
 "Перетворити текст з перетіканням на звичайний текст (із збереженням вигляду)"
 
 #: ../src/actions/actions-text.cpp:79
-#, fuzzy
-#| msgid "Convert to paths"
 msgid "Convert to Glyphs"
-msgstr "Перетворити на контури"
+msgstr "Перетворити на гліфи"
 
 #: ../src/actions/actions-text.cpp:79
-#, fuzzy
-#| msgid "Convert text to paths"
 msgid "Convert text into individual glyphs"
-msgstr "Перетворити текст на контури"
+msgstr "Перетворити текст на окремі гліфи"
 
 #: ../src/actions/actions-text.cpp:80
 msgid "Remove Manual Kerns"
@@ -10248,34 +10228,24 @@ msgid "Grow/shrink selected objects relative to zoom level"
 msgstr "Збільшити або зменшити позначені об'єкти відносно рівня масштабування"
 
 #: ../src/actions/actions-transform.cpp:146
-#, fuzzy
-#| msgid "Export selected objects"
 msgid "Rotate selected objects"
-msgstr "Експортувати позначені об'єкти"
+msgstr "Обертати позначені об'єкти"
 
 #: ../src/actions/actions-transform.cpp:147
-#, fuzzy
-#| msgid "Rotate tweak"
 msgid "Rotate Step"
-msgstr "Корекція обертанням"
+msgstr "Крок обертання"
 
 #: ../src/actions/actions-transform.cpp:147
-#, fuzzy
-#| msgid "Grow/shrink selected objects by multiple of step value"
 msgid "Rotate selected objects by multiple of step value"
-msgstr "Збільшити або зменшити позначені об'єкти на значення кроку"
+msgstr "Обертати позначені об'єкти на значення кроку"
 
 #: ../src/actions/actions-transform.cpp:148
-#, fuzzy
-#| msgid "Rename gradient"
 msgid "Rotate Screen"
-msgstr "Перейменувати градієнт"
+msgstr "Обернути екран"
 
 #: ../src/actions/actions-transform.cpp:148
-#, fuzzy
-#| msgid "Grow/shrink selected objects relative to zoom level"
 msgid "Rotate selected objects relative to zoom level"
-msgstr "Збільшити або зменшити позначені об'єкти відносно рівня масштабування"
+msgstr "Обертати позначені об'єкти відносно рівня масштабування"
 
 #: ../src/actions/actions-transform.cpp:150
 msgid "Remove Transforms"
@@ -10290,16 +10260,12 @@ msgid "Reapply the last transformation to the selection"
 msgstr "Повторно застосувати останнє перетворення до позначеного"
 
 #: ../src/actions/actions-transform.cpp:152
-#, fuzzy
-#| msgid "Rotate 90° CW"
 msgid "Rotate Page 90°"
-msgstr "Обернути на 90° за годинниковою стрілкою"
+msgstr "Обернути сторінку на 90°"
 
 #: ../src/actions/actions-transform.cpp:152
-#, fuzzy
-#| msgid "Rotate hue by degrees (wraps around)"
 msgid "Rotate page by 90-degree rotation steps"
-msgstr "Обертати відтінок на кут у градусах (із циклічним переходом)"
+msgstr "Обертати сторінку кроками обертання у 90 градусів"
 
 #: ../src/actions/actions-transform.cpp:159
 msgid "Enter two comma-separated numbers, e.g. 50,-2.5"
@@ -10335,7 +10301,7 @@ msgstr ""
 
 #: ../src/actions/actions-transform.cpp:165
 msgid "Enter number of 90-degree rotation steps"
-msgstr ""
+msgstr "Введіть кількість кроків обертання у 90 градусів"
 
 #. TRANSLATORS: Please don't translate link unless the page exists in your language. Add your language code to
 #. the link this way: https://inkscape.org/[lang]/learn/tutorials/
@@ -10580,28 +10546,20 @@ msgid "Switch to the next document window"
 msgstr "Перейти до наступного вікна документа"
 
 #: ../src/actions/actions-view-window.cpp:65
-#, fuzzy
-#| msgid "Next page:"
 msgid "Next Tab"
-msgstr "Наступна сторінка:"
+msgstr "Наступна вкладка"
 
 #: ../src/actions/actions-view-window.cpp:65
-#, fuzzy
-#| msgid "Switch to the next document window"
 msgid "Switch to the next document tab"
-msgstr "Перейти до наступного вікна документа"
+msgstr "Перейти до наступної вкладки документа"
 
 #: ../src/actions/actions-view-window.cpp:66
-#, fuzzy
-#| msgid "Previous page:"
 msgid "Previous Tab"
-msgstr "Попередня сторінка:"
+msgstr "Попередня вкладка"
 
 #: ../src/actions/actions-view-window.cpp:66
-#, fuzzy
-#| msgid "Switch to the previous document window"
 msgid "Switch to the previous document tab"
-msgstr "Перейти до попереднього вікна документа"
+msgstr "Перейти до попередньої вкладки документа"
 
 #: ../src/actions/actions-window.cpp:88
 msgid "Enter comma-separated string for x, y, width, height"
@@ -10707,40 +10665,28 @@ msgid "Blue"
 msgstr "Синій"
 
 #: ../src/colors/spaces/components.cpp:39
-#, fuzzy
-#| msgid "_H<sub>OK</sub>:"
 msgid "<sub>l</sub>_R:"
-msgstr "_H<sub>OK</sub>:"
+msgstr "<sub>l</sub>_R:"
 
 #: ../src/colors/spaces/components.cpp:39
-#, fuzzy
-#| msgid "Linear B"
 msgid "Linear Red"
-msgstr "лінійна писемність B"
+msgstr "Лінійний червоний"
 
 #: ../src/colors/spaces/components.cpp:40
-#, fuzzy
-#| msgid "_H<sub>OK</sub>:"
 msgid "<sub>l</sub>_G:"
-msgstr "_H<sub>OK</sub>:"
+msgstr "<sub>l</sub>_G:"
 
 #: ../src/colors/spaces/components.cpp:40
-#, fuzzy
-#| msgid "Linear gradient"
 msgid "Linear Green"
-msgstr "Лінійний градієнт"
+msgstr "Лінійний зелений"
 
 #: ../src/colors/spaces/components.cpp:41
-#, fuzzy
-#| msgid "_H<sub>OK</sub>:"
 msgid "<sub>l</sub>_B:"
-msgstr "_H<sub>OK</sub>:"
+msgstr "<sub>l</sub>_B:"
 
 #: ../src/colors/spaces/components.cpp:41
-#, fuzzy
-#| msgid "Linear B"
 msgid "Linear Blue"
-msgstr "лінійна писемність B"
+msgstr "Лінійний синій"
 
 #: ../src/colors/spaces/components.cpp:47
 #: ../src/colors/spaces/components.cpp:55
@@ -10815,8 +10761,6 @@ msgstr "_C:"
 
 #: ../src/colors/spaces/components.cpp:63
 #: ../src/colors/spaces/components.cpp:72
-#, fuzzy
-#| msgid "Cyan"
 msgctxt "CMYK"
 msgid "Cyan"
 msgstr "Блакитний"
@@ -10828,8 +10772,6 @@ msgstr "_M:"
 
 #: ../src/colors/spaces/components.cpp:64
 #: ../src/colors/spaces/components.cpp:73
-#, fuzzy
-#| msgid "Magenta"
 msgctxt "CMYK"
 msgid "Magenta"
 msgstr "Бузковий"
@@ -10841,8 +10783,6 @@ msgstr "_Y:"
 
 #: ../src/colors/spaces/components.cpp:65
 #: ../src/colors/spaces/components.cpp:74
-#, fuzzy
-#| msgid "Yellow"
 msgctxt "CMYK"
 msgid "Yellow"
 msgstr "Жовтий"
@@ -10852,8 +10792,6 @@ msgid "_K:"
 msgstr "_K:"
 
 #: ../src/colors/spaces/components.cpp:66
-#, fuzzy
-#| msgid "Black"
 msgctxt "CMYK"
 msgid "Black"
 msgstr "Чорний"
@@ -10871,141 +10809,99 @@ msgid "_L*:"
 msgstr "_L*:"
 
 #: ../src/colors/spaces/components.cpp:88
-#, fuzzy
-#| msgid "_H<sub>OK</sub>:"
 msgid "_H<sub>ok</sub>:"
-msgstr "_H<sub>OK</sub>:"
+msgstr "_H<sub>ok</sub>:"
 
 #: ../src/colors/spaces/components.cpp:89
-#, fuzzy
-#| msgid "_S<sub>OK</sub>:"
 msgid "_S<sub>ok</sub>:"
-msgstr "_S<sub>OK</sub>:"
+msgstr "_S<sub>ok</sub>:"
 
 #: ../src/colors/spaces/components.cpp:90
-#, fuzzy
-#| msgid "_L<sub>OK</sub>:"
 msgid "_L<sub>ok</sub>:"
-msgstr "_L<sub>OK</sub>:"
+msgstr "_L<sub>ok</sub>:"
 
 #: ../src/colors/spaces/components.cpp:96
 #: ../src/colors/spaces/components.cpp:104
 #: ../src/colors/spaces/components.cpp:128
-#, fuzzy
-#| msgid "_L:"
 msgid "_L"
-msgstr "_L:"
+msgstr "_L"
 
 #: ../src/colors/spaces/components.cpp:96
 #: ../src/colors/spaces/components.cpp:104
-#, fuzzy
-#| msgid "Luminance to Alpha"
 msgid "Luminance"
-msgstr "Освітленість до прозорості"
+msgstr "Яскравість"
 
 #: ../src/colors/spaces/components.cpp:97
-#, fuzzy
-#| msgid "_C:"
 msgid "_C"
-msgstr "_C:"
+msgstr "_C"
 
 #: ../src/colors/spaces/components.cpp:97
 #: ../src/colors/spaces/components.cpp:121
-#, fuzzy
-#| msgid "Chrome"
 msgid "Chroma"
-msgstr "Хромування"
+msgstr "Колірність"
 
 #: ../src/colors/spaces/components.cpp:98
-#, fuzzy
-#| msgid "_H:"
 msgid "_H"
-msgstr "_H:"
+msgstr "_H"
 
 #: ../src/colors/spaces/components.cpp:105
 msgid "_U"
-msgstr ""
+msgstr "_U"
 
 #: ../src/colors/spaces/components.cpp:105
-#, fuzzy
-#| msgid "Chrome"
 msgid "Chroma U"
-msgstr "Хромування"
+msgstr "Колірність U"
 
 #: ../src/colors/spaces/components.cpp:106
-#, fuzzy
-#| msgid "_V:"
 msgid "_V"
-msgstr "_В:"
+msgstr "_V"
 
 #: ../src/colors/spaces/components.cpp:106
-#, fuzzy
-#| msgid "Chrome"
 msgid "Chroma V"
-msgstr "Хромування"
+msgstr "Колірність V"
 
 #: ../src/colors/spaces/components.cpp:112
 #: ../src/colors/spaces/components.cpp:120
-#, fuzzy
-#| msgid "_L<sub>OK</sub>:"
 msgid "_L<sub>ok</sub>"
-msgstr "_L<sub>OK</sub>:"
+msgstr "_L<sub>ok</sub>"
 
 #: ../src/colors/spaces/components.cpp:113
-#, fuzzy
-#| msgid "_H<sub>OK</sub>:"
 msgid "_A<sub>ok</sub>"
-msgstr "_H<sub>OK</sub>:"
+msgstr "_A<sub>ok</sub>"
 
 #: ../src/colors/spaces/components.cpp:113
 #: ../src/colors/spaces/components.cpp:129
-#, fuzzy
-#| msgid "Component Transfer"
 msgid "Component A"
-msgstr "Перенесення компоненти"
+msgstr "Компонент A"
 
 #: ../src/colors/spaces/components.cpp:114
-#, fuzzy
-#| msgid "_H<sub>OK</sub>:"
 msgid "_B<sub>ok</sub>"
-msgstr "_H<sub>OK</sub>:"
+msgstr "_B<sub>ok</sub>"
 
 #: ../src/colors/spaces/components.cpp:114
 #: ../src/colors/spaces/components.cpp:130
-#, fuzzy
-#| msgid "Component Transfer"
 msgid "Component B"
-msgstr "Перенесення компоненти"
+msgstr "Компонент B"
 
 #: ../src/colors/spaces/components.cpp:121
-#, fuzzy
-#| msgid "_H<sub>OK</sub>:"
 msgid "_C<sub>ok</sub>"
-msgstr "_H<sub>OK</sub>:"
+msgstr "_C<sub>ok</sub>"
 
 #: ../src/colors/spaces/components.cpp:122
-#, fuzzy
-#| msgid "_H<sub>OK</sub>:"
 msgid "_H<sub>ok</sub>"
-msgstr "_H<sub>OK</sub>:"
+msgstr "_H<sub>ok</sub>"
 
 #: ../src/colors/spaces/components.cpp:129
-#, fuzzy
-#| msgid "_A:"
 msgid "_A"
-msgstr "_A:"
+msgstr "_A"
 
 #: ../src/colors/spaces/components.cpp:130
-#, fuzzy
-#| msgid "_B:"
 msgid "_B"
-msgstr "_B:"
+msgstr "_B"
 
 #: ../src/colors/spaces/components.cpp:136
-#, fuzzy
-#| msgid "_Y:"
 msgid "_Y"
-msgstr "_Y:"
+msgstr "_Y"
 
 #: ../src/colors/spaces/components.cpp:136
 #: ../src/extension/internal/filter/color.h:1294
@@ -11019,27 +10915,20 @@ msgid "Y"
 msgstr "Y"
 
 #: ../src/colors/spaces/components.cpp:137
-#, fuzzy
-#| msgid "Co_lor"
 msgid "C_r"
-msgstr "_Колір"
+msgstr "C_r"
 
 #: ../src/colors/spaces/components.cpp:137
-#, fuzzy
-#| msgid "Club"
 msgid "Cb"
-msgstr "Трефи"
+msgstr "Cb"
 
 #: ../src/colors/spaces/components.cpp:138
 msgid "C_b"
-msgstr ""
+msgstr "C_b"
 
 #: ../src/colors/spaces/components.cpp:138
-#, fuzzy
-#| msgctxt "Symbol"
-#| msgid "Car"
 msgid "Cr"
-msgstr "Автомобілі"
+msgstr "Cr"
 
 #: ../src/colors/spaces/components.cpp:160
 msgid "G:"
@@ -11101,67 +10990,59 @@ msgstr "lg1p$"
 
 #: ../src/display/control/ctrl-handle-styling.cpp:117
 msgid "Empty or improper value, skipped"
-msgstr ""
+msgstr "Порожнє або неналежне значення, пропущено"
 
 #: ../src/display/control/ctrl-handle-styling.cpp:127
 msgid "Unrecognized shape '%1'"
-msgstr ""
+msgstr "Нерозпізнана форма «%1»"
 
 #: ../src/display/control/ctrl-handle-styling.cpp:137
 msgid "Unrecognized color '%1'"
-msgstr ""
+msgstr "Нерозпізнаний колір «%1»"
 
 #: ../src/display/control/ctrl-handle-styling.cpp:146
-#, fuzzy
-#| msgid "Invalid property set"
 msgid "Invalid opacity '%1'"
-msgstr "Некоректний набір властивостей"
+msgstr "Некоректна непрозорість «%1»"
 
 #: ../src/display/control/ctrl-handle-styling.cpp:155
-#, fuzzy
-#| msgid "Invalid property set"
 msgid "Invalid opacity units '%1'"
-msgstr "Некоректний набір властивостей"
+msgstr "Некоректні одиниці непрозорості «%1»"
 
 #: ../src/display/control/ctrl-handle-styling.cpp:159
-#, fuzzy
-#| msgid "Opacity range (%)"
 msgid "Opacity '%1' out of range"
-msgstr "Діапазон непрозорості (у %)"
+msgstr "Непрозорість «%1» поза припустимим діапазоном"
 
 #: ../src/display/control/ctrl-handle-styling.cpp:170
 msgid "Invalid width '%1'"
-msgstr ""
+msgstr "Некоректна ширина «%1»"
 
 #: ../src/display/control/ctrl-handle-styling.cpp:177
 msgid "Invalid width units '%1'"
-msgstr ""
+msgstr "Некоректна одиниця ширини «%1»"
 
 #: ../src/display/control/ctrl-handle-styling.cpp:187
-#, fuzzy
-#| msgid "Invalid bit value, {}!"
 msgid "Invalid scale '%1'"
-msgstr "Некоректне бітове значення, {}!"
+msgstr "Некоректний масштаб «%1»"
 
 #: ../src/display/control/ctrl-handle-styling.cpp:196
 msgid "Invalid scale units '%1'"
-msgstr ""
+msgstr "Некоректні одиниці масштабування «%1»"
 
 #: ../src/display/control/ctrl-handle-styling.cpp:200
 msgid "Scale '%1' out of range"
-msgstr ""
+msgstr "Масштаб «%1» поза припустимим діапазоном"
 
 #: ../src/display/control/ctrl-handle-styling.cpp:241
 msgid "Unrecognized selector '%1'"
-msgstr ""
+msgstr "Нерозпізнаний вибір «%1»"
 
 #: ../src/display/control/ctrl-handle-styling.cpp:327
 msgid "Empty or improper property, skipped."
-msgstr ""
+msgstr "Порожня або неналежна властивість, пропускаємо."
 
 #: ../src/display/control/ctrl-handle-styling.cpp:333
 msgid "Unrecognized property '%1'"
-msgstr ""
+msgstr "Нерозпізнана властивість «%1»"
 
 #: ../src/display/control/snap-indicator.cpp:43
 #: ../src/display/control/snap-indicator.cpp:68
@@ -11426,13 +11307,11 @@ msgstr "Документ без назви %d"
 
 #: ../src/event-log.cpp:189
 msgid "[No more changes]"
-msgstr ""
+msgstr "[Більше змін немає]"
 
 #: ../src/event-log.cpp:387
-#, fuzzy
-#| msgid "Text: Change rotate"
 msgid "[Changes forgotten]"
-msgstr "Текст: Зміна кута обертання"
+msgstr "[Зміни забуто]"
 
 #: ../src/extension/dependency.cpp:342
 msgid "Dependency"
@@ -11514,10 +11393,8 @@ msgid "Deactivated"
 msgstr "Вимкнено"
 
 #: ../src/extension/implementation/script.cpp:303
-#, fuzzy
-#| msgid "New document %d"
 msgid "New document %1"
-msgstr "Новий документ %d"
+msgstr "Новий документ %1"
 
 #: ../src/extension/implementation/script.cpp:632
 msgid "The output from the extension could not be parsed."
@@ -14568,10 +14445,8 @@ msgid "Antialias"
 msgstr "Згладжування"
 
 #: ../src/extension/internal/png-output.cpp:85
-#, fuzzy
-#| msgid "JPEG (*.jpg)"
 msgid "PNG (*.png)"
-msgstr "JPEG (*.jpg)"
+msgstr "PNG (*.png)"
 
 #: ../src/extension/internal/png-output.cpp:86
 msgid "Default raster graphic export"
@@ -14598,10 +14473,8 @@ msgid "Select page:"
 msgstr "Вибрати сторінку:"
 
 #: ../src/extension/internal/rvng-import-dialog.cpp:58
-#, fuzzy
-#| msgid "out of %i"
 msgid "out of %1"
-msgstr "з %i"
+msgstr "з %1"
 
 #: ../src/extension/internal/rvng-import-dialog.cpp:130
 msgid "No preview"
@@ -14823,20 +14696,16 @@ msgid "Landscape"
 msgstr "Альбомна"
 
 #: ../src/extension/internal/template-paper.cpp:58
-#, fuzzy
-#| msgid "Portrait"
 msgid "A4 (Portrait)"
-msgstr "Книжкова"
+msgstr "A4 (книжкова орієнтація)"
 
 #: ../src/extension/internal/template-paper.cpp:59
 msgid "A4 (Landscape)"
 msgstr "A4 (альбомна орієнтація)"
 
 #: ../src/extension/internal/template-paper.cpp:60
-#, fuzzy
-#| msgid "Vertical (Portrait)"
 msgid "US Letter (Portrait)"
-msgstr "Вертикальна (книжкова)"
+msgstr "Лист США (книжкова)"
 
 #: ../src/extension/internal/template-paper.cpp:61
 msgid "US Letter (Landscape)"
@@ -14868,177 +14737,155 @@ msgstr "A5"
 
 #: ../src/extension/internal/template-paper.cpp:68
 msgid "A6"
-msgstr ""
+msgstr "A6"
 
 #: ../src/extension/internal/template-paper.cpp:69
 msgid "A7"
-msgstr ""
+msgstr "A7"
 
 #: ../src/extension/internal/template-paper.cpp:70
 msgid "A8"
-msgstr ""
+msgstr "A8"
 
 #: ../src/extension/internal/template-paper.cpp:71
 msgid "A9"
-msgstr ""
+msgstr "A9"
 
 #: ../src/extension/internal/template-paper.cpp:72
-#, fuzzy
-#| msgid "A0"
 msgid "A10"
-msgstr "A0"
+msgstr "A10"
 
 #: ../src/extension/internal/template-paper.cpp:73
-#, fuzzy
-#| msgid "B"
 msgid "B0"
-msgstr "B"
+msgstr "B0"
 
 #: ../src/extension/internal/template-paper.cpp:74
-#, fuzzy
-#| msgid "B"
 msgid "B1"
-msgstr "B"
+msgstr "B1"
 
 #: ../src/extension/internal/template-paper.cpp:75
-#, fuzzy
-#| msgid "B"
 msgid "B2"
-msgstr "B"
+msgstr "B2"
 
 #: ../src/extension/internal/template-paper.cpp:76
-#, fuzzy
-#| msgid "B"
 msgid "B3"
-msgstr "B"
+msgstr "B3"
 
 #: ../src/extension/internal/template-paper.cpp:77
-#, fuzzy
-#| msgid "B"
 msgid "B4"
-msgstr "B"
+msgstr "B4"
 
 #: ../src/extension/internal/template-paper.cpp:78
-#, fuzzy
-#| msgid "B"
 msgid "B5"
-msgstr "B"
+msgstr "B5"
 
 #: ../src/extension/internal/template-paper.cpp:79
-#, fuzzy
-#| msgid "B"
 msgid "B6"
-msgstr "B"
+msgstr "B6"
 
 #: ../src/extension/internal/template-paper.cpp:80
-#, fuzzy
-#| msgid "B"
 msgid "B7"
-msgstr "B"
+msgstr "B7"
 
 #: ../src/extension/internal/template-paper.cpp:81
-#, fuzzy
-#| msgid "B"
 msgid "B8"
-msgstr "B"
+msgstr "B8"
 
 #: ../src/extension/internal/template-paper.cpp:82
-#, fuzzy
-#| msgid "B"
 msgid "B9"
-msgstr "B"
+msgstr "B9"
 
 #: ../src/extension/internal/template-paper.cpp:83
 msgid "B10"
-msgstr ""
+msgstr "B10"
 
 #: ../src/extension/internal/template-paper.cpp:84
 msgid "C0"
-msgstr ""
+msgstr "C0"
 
 #: ../src/extension/internal/template-paper.cpp:85
 msgid "C1"
-msgstr ""
+msgstr "C1"
 
 #: ../src/extension/internal/template-paper.cpp:86
 msgid "C2"
-msgstr ""
+msgstr "C2"
 
 #: ../src/extension/internal/template-paper.cpp:87
 msgid "C3"
-msgstr ""
+msgstr "C3"
 
 #: ../src/extension/internal/template-paper.cpp:88
 msgid "C4"
-msgstr ""
+msgstr "C4"
 
 #: ../src/extension/internal/template-paper.cpp:89
 msgid "C5"
-msgstr ""
+msgstr "C5"
 
 #: ../src/extension/internal/template-paper.cpp:90
 msgid "C6"
-msgstr ""
+msgstr "C6"
 
 #: ../src/extension/internal/template-paper.cpp:91
 msgid "C7"
-msgstr ""
+msgstr "C7"
 
 #: ../src/extension/internal/template-paper.cpp:92
 msgid "C8"
-msgstr ""
+msgstr "C8"
 
 #: ../src/extension/internal/template-paper.cpp:93
 msgid "C9"
-msgstr ""
+msgstr "C9"
 
 #: ../src/extension/internal/template-paper.cpp:94
 msgid "C10"
-msgstr ""
+msgstr "C10"
 
 #: ../src/extension/internal/template-paper.cpp:95
 msgid "D1"
-msgstr ""
+msgstr "D1"
 
 #: ../src/extension/internal/template-paper.cpp:96
 msgid "D2"
-msgstr ""
+msgstr "D2"
 
 #: ../src/extension/internal/template-paper.cpp:97
 msgid "D3"
-msgstr ""
+msgstr "D3"
 
 #: ../src/extension/internal/template-paper.cpp:98
 msgid "D4"
-msgstr ""
+msgstr "D4"
 
 #: ../src/extension/internal/template-paper.cpp:99
 msgid "D5"
-msgstr ""
+msgstr "D5"
 
 #: ../src/extension/internal/template-paper.cpp:100
 msgid "D6"
-msgstr ""
+msgstr "D6"
 
 #: ../src/extension/internal/template-paper.cpp:101
 msgid "D7"
-msgstr ""
+msgstr "D7"
 
 #: ../src/extension/internal/template-paper.cpp:102
 msgid "E3"
-msgstr ""
+msgstr "E3"
 
 #: ../src/extension/internal/template-paper.cpp:103
 msgid "E4"
-msgstr ""
+msgstr "E4"
 
 #: ../src/extension/internal/template-paper.cpp:104
 msgid "E5"
-msgstr ""
+msgstr "E5"
 
 #: ../src/extension/internal/template-paper.cpp:105
 msgid "E6"
-msgstr ""
+msgstr "E6"
 
 #: ../src/extension/internal/template-paper.cpp:106
 msgid "Ledger/Tabloid"
@@ -15065,43 +14912,28 @@ msgid "US #10 Envelope"
 msgstr "Конверт 10 США"
 
 #: ../src/extension/internal/template-paper.cpp:112
-#, fuzzy
-#| msgctxt "Symbol"
-#| msgid "Archery"
 msgid "Arch A"
-msgstr "Стрільба з лука"
+msgstr "Arch A"
 
 #: ../src/extension/internal/template-paper.cpp:113
-#, fuzzy
-#| msgctxt "Symbol"
-#| msgid "Archery"
 msgid "Arch B"
-msgstr "Стрільба з лука"
+msgstr "Arch B"
 
 #: ../src/extension/internal/template-paper.cpp:114
-#, fuzzy
-#| msgctxt "Symbol"
-#| msgid "Archery"
 msgid "Arch C"
-msgstr "Стрільба з лука"
+msgstr "Arch C"
 
 #: ../src/extension/internal/template-paper.cpp:115
-#, fuzzy
-#| msgctxt "Symbol"
-#| msgid "Archery"
 msgid "Arch D"
-msgstr "Стрільба з лука"
+msgstr "Arch D"
 
 #: ../src/extension/internal/template-paper.cpp:116
-#, fuzzy
-#| msgctxt "Symbol"
-#| msgid "Archery"
 msgid "Arch E"
-msgstr "Стрільба з лука"
+msgstr "Arch E"
 
 #: ../src/extension/internal/template-paper.cpp:117
 msgid "Arch E1"
-msgstr ""
+msgstr "Arch E1"
 
 #: ../src/extension/internal/template-screen.cpp:28
 msgid "Screen Sizes"
@@ -15122,10 +14954,8 @@ msgid "Desktop 1080p"
 msgstr "Стільниця 1080p"
 
 #: ../src/extension/internal/template-screen.cpp:39
-#, fuzzy
-#| msgid "Desktop 4K"
 msgid "Desktop 2K"
-msgstr "Стільниця 4K"
+msgstr "Стільниця 2K"
 
 #: ../src/extension/internal/template-screen.cpp:40
 msgid "Desktop 4K"
@@ -15141,11 +14971,11 @@ msgstr "Стільниця SD"
 
 #: ../src/extension/internal/template-screen.cpp:43
 msgid "iPhone 5"
-msgstr ""
+msgstr "iPhone 5"
 
 #: ../src/extension/internal/template-screen.cpp:44
 msgid "iPhone X"
-msgstr ""
+msgstr "iPhone X"
 
 #: ../src/extension/internal/template-screen.cpp:45
 msgid "Mobile-smallest"
@@ -15153,7 +14983,7 @@ msgstr "Мобільний, найменший"
 
 #: ../src/extension/internal/template-screen.cpp:46
 msgid "iPad Pro"
-msgstr ""
+msgstr "iPad Pro"
 
 #: ../src/extension/internal/template-screen.cpp:47
 msgid "Tablet-smallest"
@@ -15225,10 +15055,8 @@ msgid "LinkedIn dynamic ad"
 msgstr "Динамічна реклама LinkedIn"
 
 #: ../src/extension/internal/template-social.cpp:51
-#, fuzzy
-#| msgid "LinkedIn business banner image"
 msgid "LinkedIn hero image"
-msgstr "Зображення ділового банера LinkedIn"
+msgstr "Зображення героя LinkedIn"
 
 #: ../src/extension/internal/template-social.cpp:52
 msgid "LinkedIn sponsored content image"
@@ -15281,28 +15109,20 @@ msgid "Video"
 msgstr "Відео"
 
 #: ../src/extension/internal/template-video.cpp:38
-#, fuzzy
-#| msgid "Video SD / PAL"
 msgid "Video SD PAL"
-msgstr "Відео SD / PAL"
+msgstr "Відео SD PAL"
 
 #: ../src/extension/internal/template-video.cpp:39
-#, fuzzy
-#| msgid "Video SD-Widescreen / PAL"
 msgid "Video SD Widescreen / PAL"
 msgstr "Відео SD-широкоекранне / PAL"
 
 #: ../src/extension/internal/template-video.cpp:40
-#, fuzzy
-#| msgid "Video SD / NTSC"
 msgid "Video SD NTSC"
-msgstr "Відео SD / NTSC"
+msgstr "Відео SD NTSC"
 
 #: ../src/extension/internal/template-video.cpp:41
-#, fuzzy
-#| msgid "Video SD-Widescreen / NTSC"
 msgid "Video SD Widescreen NTSC"
-msgstr "Відео SD-широкоекранне / NTSC"
+msgstr "Відео SD-широкоекранне NTSC"
 
 #: ../src/extension/internal/template-video.cpp:42
 msgid "Video HD 720p"
@@ -15619,16 +15439,13 @@ msgid "No unused definitions in &lt;defs&gt;."
 msgstr "Немає непотрібних елементів у &lt;defs&gt;."
 
 #: ../src/file.cpp:265
-#, fuzzy, c-format
-#| msgid ""
-#| "No Inkscape extension found to save document (%s).  This may have been "
-#| "caused by an unknown filename extension."
+#, c-format
 msgid ""
 "No Inkscape extension found to save document (%s).  This may have been "
 "caused by an unknown or missing filename extension."
 msgstr ""
-"Не знайдено модуль збереження документа (%s). Можливо, невідоме розширення "
-"назви файла."
+"Не знайдено модуль збереження документа (%s). Можливо, невідомий або "
+"пропущений суфікс назви файла."
 
 #: ../src/file.cpp:266 ../src/file.cpp:274 ../src/file.cpp:281
 #: ../src/file.cpp:287 ../src/file.cpp:292 ../src/file.cpp:303
@@ -16013,7 +15830,7 @@ msgstr "Відкрите"
 
 #: ../src/helper/choose-file.cpp:127
 msgid "All Supported Formats"
-msgstr ""
+msgstr "Усі підтримувані формати"
 
 #: ../src/helper/save-image.cpp:33
 #: ../share/extensions/image_extract_selected.inx:3
@@ -16076,10 +15893,8 @@ msgid "Print user data directory"
 msgstr "Вивести каталог даних користувача"
 
 #: ../src/inkscape-application.cpp:651
-#, fuzzy
-#| msgid "List all available actions"
 msgid "List all available input file extensions"
-msgstr "Вивести список усіх доступних дій"
+msgstr "Вивести список усіх доступних суфіксів назв вхідних файлів"
 
 #: ../src/inkscape-application.cpp:652
 msgid ""
@@ -16359,16 +16174,12 @@ msgid "Force dithering or disables it"
 msgstr "Примусове розмиття або його вимикання"
 
 #: ../src/inkscape-application.cpp:699
-#, fuzzy
-#| msgid "Postscript level (2 or 3); default is 3"
 msgid "Compression level for PNG export (0 to 9); default is 6"
-msgstr "Рівень Postscript (2 або 3). Типовим є рівень 3."
+msgstr "Рівень стискання для експортованого PNG (від 0 до 9); типовий — 6"
 
 #: ../src/inkscape-application.cpp:701
-#, fuzzy
-#| msgid "Postscript level (2 or 3); default is 3"
 msgid "Antialias level for PNG export (0 to 3); default is 2"
-msgstr "Рівень Postscript (2 або 3). Типовим є рівень 3."
+msgstr "Рівень згладжування для експортованого PNG (від 0 до 3); типовий — 2"
 
 #
 # File: ../src/inkscape-application.cpp, line: 579
@@ -18909,10 +18720,8 @@ msgid "Distance of the perpendicular lines' ends from the dimension line"
 msgstr "Відстань від кінців ліній перпендикулярів від розмірної лінії"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:83
-#, fuzzy
-#| msgid "Dimension line width. DIN standard: 0.25 or 0.35 mm"
 msgid "Dimension line width in mm. DIN standard: 0.25 or 0.35 mm"
-msgstr "Товщина розмірної лінії. Стандарт DIN: 0.25 або 0.35 мм"
+msgstr "Товщина розмірної лінії у міліметрах. Стандарт DIN: 0.25 або 0.35 мм"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:84
 msgid "Scaling factor"
@@ -19068,10 +18877,8 @@ msgstr "Відстань"
 #
 # File: ../src/live_effects/lpe-measure-segments.cpp, line: 94
 #: ../src/live_effects/lpe-measure-segments.cpp:101
-#, fuzzy
-#| msgid "Distance of the dimension lines from the outermost node"
 msgid "Distance of the dimension lines from the outermost node (mm)"
-msgstr "Відстань розмірних ліній від зовнішнього вузла"
+msgstr "Відстань розмірних ліній від зовнішнього вузла (у мм)"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:102
 msgid "Angle of projection"
@@ -19249,6 +19056,10 @@ msgid ""
 "The LPE will be kept, but we recommend you remove and re-add it for better "
 "results.\n"
 msgstr ""
+"<b><big>ВАЖЛИВО</big></b>\n"
+"Цю геометричну побудову було додано у застарілій версії.\n"
+"Геометричну побудову буде збережено, але ми рекомендуємо вилучити її і "
+"повторно додати, щоб отримати оптимальні результати.\n"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:44
 msgid "Vertical page center"
@@ -20248,21 +20059,25 @@ msgstr "Довжина проміжних позначок лінійки"
 
 #: ../src/live_effects/lpe-ruler.cpp:44
 msgid "Minor mark _gap:"
-msgstr ""
+msgstr "_Інтервал проміжної позначки:"
 
 #: ../src/live_effects/lpe-ruler.cpp:46
 #, no-c-format
 msgid "Space between path and minor ruler mark, % of mark length"
 msgstr ""
+"Інтервал між контуром і проміжною позначкою лінійки, у відсотках від довжини "
+"позначки"
 
 #: ../src/live_effects/lpe-ruler.cpp:48
 msgid "Major mar_k gap:"
-msgstr ""
+msgstr "Інтервал _основної позначки:"
 
 #: ../src/live_effects/lpe-ruler.cpp:50
 #, no-c-format
 msgid "Space between path and major ruler mark, % of mark length"
 msgstr ""
+"Інтервал між контуром і основою позначкою лінійки, у відсотках від довжини "
+"позначки"
 
 #: ../src/live_effects/lpe-ruler.cpp:52
 msgid "Major steps_:"
@@ -20273,14 +20088,12 @@ msgid "Draw a major mark every ... steps"
 msgstr "Малювати основну позначку кожні … кроків"
 
 #: ../src/live_effects/lpe-ruler.cpp:53
-#, fuzzy
-#| msgid "_Mark distance:"
 msgid "Mark angle:"
-msgstr "Ві_дстань між позначками:"
+msgstr "Кут позначки:"
 
 #: ../src/live_effects/lpe-ruler.cpp:53
 msgid "Rotate marks (-180° to 180°)"
-msgstr ""
+msgstr "Позначки обертання (від -180° до 180°)"
 
 #: ../src/live_effects/lpe-ruler.cpp:54
 msgid "Shift marks _by:"
@@ -20607,7 +20420,7 @@ msgstr "Центр"
 
 #: ../src/live_effects/lpe-taperstroke.cpp:98
 msgid "Clamp"
-msgstr ""
+msgstr "Затискання"
 
 #: ../src/live_effects/lpe-taperstroke.cpp:106
 msgid "Select subpath:"
@@ -21402,24 +21215,18 @@ msgstr "Перемкнуто активність"
 
 #. TRANSLATORS: %1 is the translated version of "up" or "down".
 #: ../src/live_effects/parameter/satellitearray.cpp:255
-#, fuzzy
-#| msgid "Move item up"
 msgid "Move item %1"
-msgstr "Пересунути елемент вище"
+msgstr "Пересунути елемент %1"
 
 #. TRANSLATORS: This belongs into the sentence 'Move item up'
 #: ../src/live_effects/parameter/satellitearray.cpp:262
-#, fuzzy
-#| msgid "Bump"
 msgid "up"
-msgstr "Витиснення"
+msgstr "вгору"
 
 #. TRANSLATORS: This belongs into the sentence 'Move item down'
 #: ../src/live_effects/parameter/satellitearray.cpp:268
-#, fuzzy
-#| msgid "Kern down"
 msgid "down"
-msgstr "Відбивка донизу"
+msgstr "вниз"
 
 #: ../src/live_effects/parameter/satellitearray.cpp:277
 msgid "Remove item"
@@ -21536,26 +21343,21 @@ msgid "Axonometric Grid"
 msgstr "Аксонометрична сітка"
 
 #: ../src/object/sp-grid.cpp:610 ../src/ui/dialog/inkscape-preferences.cpp:2164
-#, fuzzy
-#| msgid "Polar Grid"
 msgid "Modular Grid"
-msgstr "Полярна сітка"
+msgstr "Модульна сітка"
 
 #: ../src/object/sp-guide.cpp:490
 msgid "Deleted"
 msgstr "Вилучено"
 
 #: ../src/object/sp-guide.cpp:500
-#, fuzzy
-#| msgid ""
-#| "<b>Shift+drag</b> to rotate, <b>Ctrl+drag</b> to move origin, <b>Del</b> "
-#| "to delete"
 msgid ""
 "<b>Shift+drag</b> to rotate, <b>Ctrl+drag</b> to move origin, <b>Del</b> to "
 "delete; <b>double-click</b> to edit this guide's properties"
 msgstr ""
 "<b>Shift+Перетягування</b> починає обертання. <b>Ctrl+Перетягування</b> "
-"пересуває центр обертання. <b>Del</b> вилучає."
+"пересуває центр обертання. <b>Del</b> вилучає; <b>подвійне клацання</b> — "
+"редагування властивостей цієї напрямної"
 
 #: ../src/object/sp-guide.cpp:505
 #, c-format
@@ -21900,19 +21702,19 @@ msgid "Select <b>at least 1 path</b> to perform a boolean union."
 msgstr "Виберіть <b>хоча б 1 контур</b> для виконання об'єднання."
 
 #: ../src/path/path-boolop.cpp:371
-#, fuzzy
-#| msgid "Select <b>at least 2 paths</b> to perform a boolean operation."
 msgid ""
 "Select <b>at least 2 paths</b> to perform an intersection or symmetric "
 "difference."
-msgstr "Для логічної операції треба позначити <b>не менше двох</b> контурів."
+msgstr ""
+"Для перетинання або симетричної різниці треба позначити <b>не менше двох</b> "
+"контурів."
 
 #: ../src/path/path-boolop.cpp:378
-#, fuzzy
-#| msgid "Select <b>at least 2 paths</b> to perform a boolean operation."
 msgid ""
 "Select <b>exactly 2 paths</b> to perform difference, division, or path cut."
-msgstr "Для логічної операції треба позначити <b>не менше двох</b> контурів."
+msgstr ""
+"Для різниці, ділення або обрізання за контуром треба позначити <b>точно два "
+"контури</b>."
 
 #: ../src/path/path-object-set.cpp:35
 msgid "Select <b>stroked path(s)</b> to convert stroke to path."
@@ -22906,16 +22708,12 @@ msgid "Unflow flowed text"
 msgstr "Вийняти текст з рамки"
 
 #: ../src/text-chemistry.cpp:646
-#, fuzzy
-#| msgid "Select <b>object(s)</b> to convert to path."
 msgid "Select <b>text(s)</b> to convert to glyphs."
-msgstr "Позначте <b>об'єкти</b> для перетворення на контур."
+msgstr "Позначте <b>текст</b> для перетворення на гліфи."
 
 #: ../src/text-chemistry.cpp:648
-#, fuzzy
-#| msgid "Convert text to paths"
 msgid "Convert text to glyphs"
-msgstr "Перетворити текст на контури"
+msgstr "Перетворити текст на гліфи"
 
 #: ../src/text-chemistry.cpp:662
 msgid "Select <b>flowed text(s)</b> to convert."
@@ -22978,10 +22776,8 @@ msgid "Trace bitmap"
 msgstr "Векторизація растрового зображення"
 
 #: ../src/trace/trace.cpp:537
-#, fuzzy
-#| msgid "Trace: Done. %ld nodes created"
 msgid "Trace: Done. %1 node(s) created"
-msgstr "Векторизація: Завершено. Створено %ld вузлів."
+msgstr "Векторизація: Завершено. Створено %1 вузлів"
 
 #: ../src/ui/clipboard.cpp:553
 msgid "Can't paste text outside of the text tool."
@@ -23075,10 +22871,8 @@ msgid "Height Separately"
 msgstr "Висота окремо"
 
 #: ../src/ui/contextmenu.cpp:100
-#, fuzzy
-#| msgid "P_aste..."
 msgid "Paste..."
-msgstr "Вс_тавити…"
+msgstr "Вставити..."
 
 #: ../src/ui/contextmenu.cpp:192
 msgid "_New Page"
@@ -23184,8 +22978,6 @@ msgid "_Move to Layer..."
 msgstr "П_ересунути на шар…"
 
 #: ../src/ui/contextmenu.cpp:288
-#, fuzzy
-#| msgid "Create anchor (hyperlink)"
 msgid "Create Anchor (Hyperlink)"
 msgstr "Створити прив'язку (гіперпосилання)"
 
@@ -23198,8 +22990,6 @@ msgid "_Ungroup"
 msgstr "Розгр_упувати"
 
 #: ../src/ui/contextmenu.cpp:292
-#, fuzzy
-#| msgid "Enter group %1"
 msgid "Enter Group %1"
 msgstr "Увійти до групи %1"
 
@@ -23208,8 +22998,6 @@ msgid "Group to Layer"
 msgstr "Групу на шар"
 
 #: ../src/ui/contextmenu.cpp:302
-#, fuzzy
-#| msgid "_Pop selection out of group"
 msgid "_Pop Selection out of Group"
 msgstr "Ви_ключити позначене з групи"
 
@@ -23242,10 +23030,8 @@ msgid "Lock Selected Objects"
 msgstr "Заблокувати позначені об'єкти"
 
 #: ../src/ui/contextmenu.cpp:333
-#, fuzzy
-#| msgid "_Open link in browser"
 msgid "_Open Link in Browser"
-msgstr "_Відкрити посилання в інтернет-навігаторі"
+msgstr "_Відкрити посилання у Інтернет-навігаторі"
 
 #: ../src/ui/contextmenu.cpp:334
 msgid "_Remove Link"
@@ -23288,38 +23074,26 @@ msgid "_Lower Layer"
 msgstr "_Опустити шар"
 
 #: ../src/ui/contextmenu.cpp:366
-#, fuzzy
-#| msgid "_Hide/show other layers"
 msgid "_Hide/Show Other Layers"
 msgstr "С_ховати або показати інші шари"
 
 #: ../src/ui/contextmenu.cpp:367
-#, fuzzy
-#| msgid "_Hide all layers"
 msgid "_Hide All Layers"
 msgstr "При_ховати всі шари"
 
 #: ../src/ui/contextmenu.cpp:368
-#, fuzzy
-#| msgid "_Show all layers"
 msgid "_Show All Layers"
 msgstr "По_казати всі шари"
 
 #: ../src/ui/contextmenu.cpp:372
-#, fuzzy
-#| msgid "_Lock/unlock other layers"
 msgid "_Lock/Unlock Other Layers"
 msgstr "Заблокувати чи розблокувати ін_ші шари"
 
 #: ../src/ui/contextmenu.cpp:373
-#, fuzzy
-#| msgid "_Lock all layers"
 msgid "_Lock All Layers"
 msgstr "За_блокувати всі шари"
 
 #: ../src/ui/contextmenu.cpp:374
-#, fuzzy
-#| msgid "_Unlock all layers"
 msgid "_Unlock All Layers"
 msgstr "_Розблокувати всі шари"
 
@@ -23332,8 +23106,6 @@ msgid "Unlocked objects"
 msgstr "Розблоковані об'єкти"
 
 #: ../src/ui/desktop/document-check.cpp:51
-#, fuzzy
-#| msgid "Save document"
 msgid "Save Document"
 msgstr "Зберегти документ"
 
@@ -24155,11 +23927,9 @@ msgid "<small>Randomize:</small>"
 msgstr "<small>Випадковість:</small>"
 
 #: ../src/ui/dialog/color-item.cpp:86
-#, fuzzy
-#| msgid "None"
 msgctxt "Paint"
 msgid "None"
-msgstr "немає"
+msgstr "Немає"
 
 #: ../src/ui/dialog/color-item.cpp:297
 msgid ""
@@ -24186,14 +23956,10 @@ msgstr "Встановити колір заливки зі зразків"
 
 #. TRANSLATORS: An item in context menu on a colour in the swatches
 #: ../src/ui/dialog/color-item.cpp:382
-#, fuzzy
-#| msgid "Set fill"
 msgid "Set Fill"
-msgstr "Встановлення заливки"
+msgstr "Встановлення заповнення"
 
 #: ../src/ui/dialog/color-item.cpp:383
-#, fuzzy
-#| msgid "Set stroke"
 msgid "Set Stroke"
 msgstr "Встановлення штриха"
 
@@ -24224,49 +23990,37 @@ msgstr "Відшпилити зразок"
 
 #: ../src/ui/dialog/command-palette.cpp:542
 msgid "boolean"
-msgstr ""
+msgstr "булеве"
 
 #: ../src/ui/dialog/command-palette.cpp:545
-#, fuzzy
-#| msgid "Slide number"
 msgid "whole number"
-msgstr "Номер слайда"
+msgstr "ціле число"
 
 #: ../src/ui/dialog/command-palette.cpp:548
-#, fuzzy
-#| msgid "Slide number"
 msgid "decimal number"
-msgstr "Номер слайда"
+msgstr "десяткове число"
 
 #: ../src/ui/dialog/command-palette.cpp:551
-#, fuzzy
-#| msgid "string"
 msgid "text string"
-msgstr "рядок"
+msgstr "текстовий рядок"
 
 #: ../src/ui/dialog/command-palette.cpp:554
-#, fuzzy
-#| msgid "Invalid input! Enter a decimal number."
 msgid "pair of decimal numbers"
-msgstr "Некоректні вхідні дані! Введіть десяткове число."
+msgstr "пару десяткових чисел"
 
 #. TRANSLATORS: %1 will be replaced with the type of parameter
 #. *              expected by the action, e.g., “whole number”.
 #: ../src/ui/dialog/command-palette.cpp:568
-#, fuzzy
-#| msgid "Enter group %1"
 msgid "Enter a %1..."
-msgstr "Увійти до групи %1"
+msgstr "Введіть %1…"
 
 #: ../src/ui/dialog/command-palette.cpp:1074
 msgid "Enter search term to search for a command"
-msgstr ""
+msgstr "Введіть критерій пошуку для пошуку команди"
 
 #: ../src/ui/dialog/command-palette.cpp:1104
-#, fuzzy
-#| msgid "Interpolation method:"
 msgid "Enter action argument"
-msgstr "Метод інтерполяції:"
+msgstr "Введіть аргумент дії"
 
 #: ../src/ui/dialog/command-palette.cpp:1130
 msgid "History mode"
@@ -24298,7 +24052,7 @@ msgstr "Створити мозаїку з клонів"
 
 #: ../src/ui/dialog/dialog-data.cpp:33
 msgid "_Debugger"
-msgstr ""
+msgstr "З_асіб діагностики"
 
 #: ../src/ui/dialog/dialog-data.cpp:34
 msgid "_Document Properties"
@@ -24313,9 +24067,8 @@ msgid "_Export"
 msgstr "_Експортувати"
 
 #: ../src/ui/dialog/dialog-data.cpp:37
-#, fuzzy
 msgid "_Extension Gallery"
-msgstr "Кут обертання"
+msgstr "Галерея _розширень"
 
 #: ../src/ui/dialog/dialog-data.cpp:38
 msgid "_Fill and Stroke"
@@ -24326,11 +24079,8 @@ msgid "Filter _Editor"
 msgstr "Р_едактор фільтрів"
 
 #: ../src/ui/dialog/dialog-data.cpp:40
-#, fuzzy
-#| msgctxt "Symbol"
-#| msgid "Art gallery"
 msgid "Filter Gallery"
-msgstr "Художня галерея"
+msgstr "Галерея фільтрів"
 
 #: ../src/ui/dialog/dialog-data.cpp:41
 msgid "_Find/Replace"
@@ -24587,11 +24337,11 @@ msgstr "Перемкнути стиль міток сторінки"
 
 #: ../src/ui/dialog/document-properties.cpp:565
 msgid "Toggle system coordinate Y axis orientation"
-msgstr ""
+msgstr "Перемкнути орієнтацію вісі Y системних координат"
 
 #: ../src/ui/dialog/document-properties.cpp:568
 msgid "Toggle system coordinate origin correction"
-msgstr ""
+msgstr "Перемкнути виправлення початку системних координат"
 
 #: ../src/ui/dialog/document-properties.cpp:603
 msgid "<b>Guides</b>"
@@ -24687,10 +24437,8 @@ msgid "Select a script to load"
 msgstr "Виберіть скрипт для завантаження"
 
 #: ../src/ui/dialog/document-properties.cpp:1142
-#, fuzzy
-#| msgid "JavaScript"
 msgid "JavaScript Files"
-msgstr "JavaScript"
+msgstr "файли JavaScript"
 
 #: ../src/ui/dialog/document-properties.cpp:1179
 msgid "Add embedded script..."
@@ -24709,37 +24457,31 @@ msgid "Edit embedded script"
 msgstr "Редагувати вбудований скрипт"
 
 #: ../src/ui/dialog/document-properties.cpp:1448
-#, fuzzy
-#| msgid "Save Grid"
 msgid "New Grid"
-msgstr "Зберегти сітку"
+msgstr "Нова сітка"
 
 #: ../src/ui/dialog/document-properties.cpp:1459
 msgid "There are no grids defined."
-msgstr ""
+msgstr "Не визначено жодної сітки."
 
 #: ../src/ui/dialog/document-properties.cpp:1673
 msgid "Create new grid"
 msgstr "Створити нову сітку"
 
 #: ../src/ui/dialog/document-properties.cpp:1708
-#, fuzzy
-#| msgid "Rectangular Grid"
 msgctxt "Grid"
 msgid "Rectangular"
-msgstr "Прямокутна сітка"
+msgstr "Прямокутна"
 
 #: ../src/ui/dialog/document-properties.cpp:1709
-#, fuzzy
-#| msgid "Axonometric Grid"
 msgctxt "Grid"
 msgid "Axonometric"
-msgstr "Аксонометрична сітка"
+msgstr "Аксонометрична проєкція"
 
 #: ../src/ui/dialog/document-properties.cpp:1710
 msgctxt "Grid"
 msgid "Modular"
-msgstr ""
+msgstr "Модульна"
 
 #
 # File: ../src/display/canvas-grid.cpp, line: 306
@@ -24780,10 +24522,8 @@ msgid "Align to page:"
 msgstr "Вирівнювання за сторінкою:"
 
 #: ../src/ui/dialog/document-properties.cpp:1775
-#, fuzzy
-#| msgid "Keep aspect ratio"
 msgid "Set angle from aspect ratio:"
-msgstr "Зберігати пропорції"
+msgstr "Встановити кут за пропорціями:"
 
 #: ../src/ui/dialog/document-properties.cpp:1785
 msgid "Set"
@@ -24797,6 +24537,8 @@ msgid ""
 "Automatically calculate angles from width to height ratio\n"
 "of a single grid parallelogram"
 msgstr ""
+"Автоматично обчислювати кути за відношенням ширини до висоти\n"
+"окремого паралелограма сітки"
 
 #: ../src/ui/dialog/document-properties.cpp:1827
 msgid "Grid _units:"
@@ -24835,62 +24577,44 @@ msgid "Distance between vertical grid lines"
 msgstr "Відстань між вертикальними лініями сітки"
 
 #: ../src/ui/dialog/document-properties.cpp:1842
-#, fuzzy
-#| msgid "Gap X:"
 msgid "Gap _X:"
-msgstr "Прогалина за X:"
+msgstr "Прогалина за _X:"
 
 #: ../src/ui/dialog/document-properties.cpp:1842
 #: ../src/ui/dialog/inkscape-preferences.cpp:2214
-#, fuzzy
-#| msgid "Horizontal spacing between columns."
 msgid "Horizontal distance between blocks"
-msgstr "Горизонтальний інтервал між стовпчиками."
+msgstr "Горизонтальна відстань між блоками"
 
 #: ../src/ui/dialog/document-properties.cpp:1845
-#, fuzzy
-#| msgid "Gap Y:"
 msgid "Gap _Y:"
-msgstr "Прогалина за Y:"
+msgstr "Прогалина за _Y:"
 
 #: ../src/ui/dialog/document-properties.cpp:1845
 #: ../src/ui/dialog/inkscape-preferences.cpp:2215
-#, fuzzy
-#| msgid "Vertical spacing between rows."
 msgid "Vertical distance between blocks"
-msgstr "Вертикальний проміжок між рядками."
+msgstr "Вертикальна відстань між блоками"
 
 #: ../src/ui/dialog/document-properties.cpp:1848
-#, fuzzy
-#| msgid "_Origin X:"
 msgid "_Margin X:"
-msgstr "_Початок за X:"
+msgstr "_Поле за X:"
 
 #: ../src/ui/dialog/document-properties.cpp:1848
 #: ../src/ui/dialog/inkscape-preferences.cpp:2216
-#, fuzzy
-#| msgid "Right margin"
 msgid "Right and left margins"
-msgstr "Праве поле"
+msgstr "Праве і ліве поля"
 
 #: ../src/ui/dialog/document-properties.cpp:1851
-#, fuzzy
-#| msgid "O_rigin Y:"
 msgid "M_argin Y:"
-msgstr "П_очаток по Y:"
+msgstr "П_оле за Y:"
 
 #: ../src/ui/dialog/document-properties.cpp:1851
 #: ../src/ui/dialog/inkscape-preferences.cpp:2217
-#, fuzzy
-#| msgid "Bottom margin"
 msgid "Top and bottom margins"
-msgstr "Нижнє поле"
+msgstr "Верхнє і нижнє поля"
 
 #: ../src/ui/dialog/document-properties.cpp:1855
-#, fuzzy
-#| msgid "Angle X:"
 msgid "An_gle X:"
-msgstr "Кут X:"
+msgstr "Ку_т X:"
 
 #: ../src/ui/dialog/document-properties.cpp:1855
 #: ../src/ui/dialog/inkscape-preferences.cpp:2189
@@ -24898,10 +24622,8 @@ msgid "Angle of x-axis"
 msgstr "Кут осі x"
 
 #: ../src/ui/dialog/document-properties.cpp:1857
-#, fuzzy
-#| msgid "Angle Z:"
 msgid "Ang_le Z:"
-msgstr "Кут Z:"
+msgstr "К_ут Z:"
 
 #: ../src/ui/dialog/document-properties.cpp:1857
 #: ../src/ui/dialog/inkscape-preferences.cpp:2190
@@ -24909,97 +24631,71 @@ msgid "Angle of z-axis"
 msgstr "Кут осі z"
 
 #: ../src/ui/dialog/document-properties.cpp:1859
-#, fuzzy
-#| msgid "Border color"
 msgid "Grid color"
-msgstr "Колір рамки"
+msgstr "Колір сітки"
 
 #: ../src/ui/dialog/document-properties.cpp:1860
-#, fuzzy
-#| msgid "Color of the minor grid lines"
 msgid "Color of the grid lines"
-msgstr "Колір ліній другорядної сітки"
+msgstr "Колір ліній сітки"
 
 #: ../src/ui/dialog/document-properties.cpp:1874
-#, fuzzy
-#| msgid "Major grid line every:"
 msgid "Major grid line e_very:"
-msgstr "Основна лінія через кожні:"
+msgstr "Основна лінія через _кожні:"
 
 #: ../src/ui/dialog/document-properties.cpp:1874
-#, fuzzy
-#| msgid "Number of slides"
 msgid "Number of lines"
-msgstr "Кількість слайдів"
+msgstr "Кількість ліній"
 
 #: ../src/ui/dialog/document-properties.cpp:1878
-#, fuzzy
-#| msgid "Change index of knot"
 msgid "Change grid units"
-msgstr "Змінити індекс вузла"
+msgstr "Змінити одиниці виміру сітки"
 
 #: ../src/ui/dialog/document-properties.cpp:1879
 #: ../src/ui/dialog/document-properties.cpp:1880
 #: ../src/ui/dialog/document-properties.cpp:1884
-#, fuzzy
-#| msgid "Page dimensions"
 msgid "Change grid dimensions"
-msgstr "Розмірності сторінки"
+msgstr "Змінити розмірності сітки"
 
 #: ../src/ui/dialog/document-properties.cpp:1881
-#, fuzzy
-#| msgid "Change gradient stop color"
 msgid "Change grid color"
-msgstr "Змінити колір опорної точки градієнта"
+msgstr "Змінити колір сітки"
 
 #: ../src/ui/dialog/document-properties.cpp:1882
-#, fuzzy
-#| msgid "Change number of simplify steps "
 msgid "Change grid number of lines"
-msgstr "Змінити кількість кроків спрощення "
+msgstr "Змінити кількість ліній у сітці"
 
 #: ../src/ui/dialog/document-properties.cpp:1911
-#, fuzzy
-#| msgid "Delete guide"
 msgid "Delete this grid"
-msgstr "Вилучити напрямну"
+msgstr "Вилучити цю сітку"
 
 #: ../src/ui/dialog/document-properties.cpp:1915
 msgid "Remove grid"
 msgstr "Вилучити сітку"
 
 #: ../src/ui/dialog/document-properties.cpp:1931
-#, fuzzy
-#| msgid "Align"
 msgctxt "popup-align-grid-origin"
 msgid "Align"
 msgstr "Вирівняти"
 
 #: ../src/ui/dialog/document-properties.cpp:1932
 msgid "Align grid origin relative to active page."
-msgstr ""
+msgstr "Вирівняти початок координат сітки відносно активної сторінки."
 
 #: ../src/ui/dialog/document-properties.cpp:1964
-#, fuzzy
-#| msgid "Change node type"
 msgid "Change to a different grid type."
-msgstr "Змінити тип вузла"
+msgstr "Змінити тип сітки."
 
 #: ../src/ui/dialog/document-properties.cpp:2061
-#, fuzzy
-#| msgid "Blur width:"
 msgid "Block _width:"
-msgstr "Ширина розмиття:"
+msgstr "_Ширина блоку:"
 
 #: ../src/ui/dialog/document-properties.cpp:2061
 msgid "Spacing _X:"
 msgstr "Інтервал за _X:"
 
 #: ../src/ui/dialog/document-properties.cpp:2062
-#, fuzzy
-#| msgid "Blur height:"
 msgid "Block _height:"
-msgstr "Висота розмиття:"
+msgstr "_Висота блоку:"
 
 #: ../src/ui/dialog/document-properties.cpp:2062
 msgid "Spacing _Y:"
@@ -25138,10 +24834,8 @@ msgstr[1] "%d сторінки"
 msgstr[2] "%d сторінок"
 
 #: ../src/ui/dialog/export-batch.cpp:616
-#, fuzzy
-#| msgid "Choose folder name"
 msgid "Choose folder..."
-msgstr "Виберіть назву теки"
+msgstr "Вибрати каталог…"
 
 #: ../src/ui/dialog/export-batch.cpp:719
 msgid "No items selected."
@@ -25149,7 +24843,7 @@ msgstr "Не позначено жодного елемента."
 
 #: ../src/ui/dialog/export-batch.cpp:734
 msgid "Can not save to a directory that is actually a file."
-msgstr ""
+msgstr "Неможливо зберегти до каталогу, який насправді є файлом"
 
 #: ../src/ui/dialog/export-batch.cpp:739
 #, c-format
@@ -25157,12 +24851,12 @@ msgid ""
 "<span weight=\"bold\" size=\"larger\">Directory \"%s\" doesn't exist. Create "
 "it now?</span>"
 msgstr ""
+"<span weight=\"bold\" size=\"larger\">Каталогу «%s» не існує. Створити "
+"його?</span>"
 
 #: ../src/ui/dialog/export-batch.cpp:751
-#, fuzzy
-#| msgid "Set Export Options"
 msgid "Set Batch Export Options"
-msgstr "Встановити параметри експортування"
+msgstr "Встановити параметри пакетного експортування"
 
 #: ../src/ui/dialog/export-batch.cpp:871 ../src/ui/dialog/export-single.cpp:731
 msgid "Exporting %1"
@@ -25189,10 +24883,9 @@ msgid "Select a filename for exporting"
 msgstr "Виберіть назву файла для експорту"
 
 #: ../src/ui/dialog/export.cpp:206
-#, fuzzy, c-format
-#| msgid "Directory <b>%s</b> does not exist or is not a directory.\n"
+#, c-format
 msgid "Directory <b>%s</b> does not exist and can't be created.\n"
-msgstr "Каталогу <b>%s</b> не існує, або ж це не каталог.\n"
+msgstr "Каталогу <b>%s</b> не існує, і його не вдалося створити.\n"
 
 #: ../src/ui/dialog/export.cpp:233
 msgid "The chosen area to be exported is invalid."
@@ -25252,51 +24945,35 @@ msgid "bitmap"
 msgstr "растровий"
 
 #: ../src/ui/dialog/extensions-gallery.cpp:289
-#, fuzzy
-#| msgid "Effects"
 msgid "All Effects"
-msgstr "Ефекти"
+msgstr "Усі ефекти"
 
 #: ../src/ui/dialog/extensions-gallery.cpp:289
-#, fuzzy
-#| msgid "All Files"
 msgid "All Filters"
-msgstr "Усі файли"
+msgstr "Усі фільтри"
 
 #: ../src/ui/dialog/extensions-gallery.cpp:317
-#, fuzzy
-#| msgid "_Apply"
 msgctxt "apply-filter"
 msgid "_Apply"
 msgstr "_Застосувати"
 
 #: ../src/ui/dialog/extensions-gallery.cpp:321
-#, fuzzy
-#| msgid "Select existing folder"
 msgid "Select extension to run:"
-msgstr "Виберіть наявну теку"
+msgstr "Виберіть розширення для запуску:"
 
 #: ../src/ui/dialog/extensions-gallery.cpp:322
-#, fuzzy
-#| msgid "Select file to open"
 msgid "Select filter to apply:"
-msgstr "Виберіть файл"
+msgstr "Виберіть фільтр для застосування:"
 
 #: ../src/ui/dialog/extensions-gallery.cpp:346
-#, fuzzy
-#| msgid "Toggle visibility of current layer"
 msgid "Toggle list of effect categories"
-msgstr "Увімкнути/Вимкнути видимість поточного шару"
+msgstr "Увімкнути/Вимкнути список категорій ефектів"
 
 #: ../src/ui/dialog/extensions-gallery.cpp:347
-#, fuzzy
-#| msgid "Height of filter effects region"
 msgid "Toggle list of filter categories"
-msgstr "Висота ділянки дії ефектів фільтра"
+msgstr "Увімкнути/Вимкнути список категорій фільтрів"
 
 #: ../src/ui/dialog/extensions-gallery.cpp:486
-#, fuzzy
-#| msgid "..."
 msgctxt "take-input"
 msgid "..."
 msgstr "…"
@@ -25515,8 +25192,6 @@ msgid "R_ename"
 msgstr "Пере_йменувати"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1375
-#, fuzzy
-#| msgid "Select filter elements"
 msgid "Select Filter Elements"
 msgstr "Виберіть елементи для фільтрування"
 
@@ -26447,74 +26122,60 @@ msgstr "Шрифт «%1» замінено шрифтом «%2»"
 
 #: ../src/ui/dialog/global-palettes.cpp:134
 msgid "ACB file header not recognized."
-msgstr ""
+msgstr "Не розпізнано заголовок файла ACB."
 
 #: ../src/ui/dialog/global-palettes.cpp:197
-#, fuzzy
-#| msgid "Parallel (LPT) connections are not supported."
 msgid "ACB file color space not supported."
-msgstr "Підтримки паралельних з'єднань (LPT) не передбачено."
+msgstr "Підтримки простору кольорів ACB не передбачено."
 
 #: ../src/ui/dialog/global-palettes.cpp:228
 msgid "ASE file header not recognized."
-msgstr ""
+msgstr "Не розпізнано заголовок файла ASE."
 
 #: ../src/ui/dialog/global-palettes.cpp:263
 msgid "ASE color mode not recognized:"
-msgstr ""
+msgstr "Не розпізнано режим кольорів ASE:"
 
 #: ../src/ui/dialog/global-palettes.cpp:299
-#, fuzzy
-#| msgid "Failed to open default printer"
 msgid "Failed to open file"
-msgstr "Не вдалося відкрити канал типового принтера"
+msgstr "Не вдалося відкрити файл"
 
 #: ../src/ui/dialog/global-palettes.cpp:302
-#, fuzzy
-#| msgid "File import"
 msgid "File is empty"
-msgstr "Імпортування файлів"
+msgstr "Файл порожній"
 
 #: ../src/ui/dialog/global-palettes.cpp:303
-#, fuzzy
-#| msgid "First line contains headings"
 msgid "First line is wrong"
-msgstr "У першому рядку містяться заголовки"
+msgstr "Помилка у першому рядку"
 
 #: ../src/ui/dialog/global-palettes.cpp:341
-#, fuzzy
-#| msgid "Invalid symbol size."
 msgctxt "Palette"
 msgid "Invalid line "
-msgstr "Некоректний розмір символу."
+msgstr "Некоректний рядок "
 
 #: ../src/ui/dialog/global-palettes.cpp:355
 msgid "Error loading palette %1: %2"
-msgstr ""
+msgstr "Помилка під час спроби завантаження палітри %1: %2"
 
 #: ../src/ui/dialog/global-palettes.cpp:380
 msgid "Unknown error loading palette %1"
-msgstr ""
+msgstr "Невідома помилка під час завантаження палітри %1"
 
 #: ../src/ui/dialog/global-palettes.cpp:422
-#, fuzzy
-#| msgid "Export Color Palette"
 msgid "Gimp Color Palette"
-msgstr "Експорт палітри кольорів"
+msgstr "Палітра кольорів Gimp"
 
 #: ../src/ui/dialog/global-palettes.cpp:423
 msgid "Adobe Color Book"
-msgstr ""
+msgstr "Книга кольорів Adobe"
 
 #: ../src/ui/dialog/global-palettes.cpp:424
 msgid "Adobe Swatch Exchange"
-msgstr ""
+msgstr "Обмін плашками Adobe"
 
 #: ../src/ui/dialog/global-palettes.cpp:426
-#, fuzzy
-#| msgid "Export Color Palette"
 msgid "Load color palette"
-msgstr "Експорт палітри кольорів"
+msgstr "Завантажити палітру кольорів"
 
 #: ../src/ui/dialog/glyphs.cpp:46 ../src/ui/dialog/glyphs.cpp:213
 msgid "all"
@@ -27493,10 +27154,8 @@ msgid "X:"
 msgstr "X:"
 
 #: ../src/ui/dialog/grid-arrange-tab.cpp:476
-#, fuzzy
-#| msgid "Horizontal spacing between columns."
 msgid "Horizontal spacing between columns"
-msgstr "Горизонтальний інтервал між стовпчиками."
+msgstr "Горизонтальний інтервал між стовпчиками"
 
 #: ../src/ui/dialog/grid-arrange-tab.cpp:477
 #: ../src/ui/widget/registered-widget.cpp:611
@@ -27507,10 +27166,8 @@ msgid "Y:"
 msgstr "Y:"
 
 #: ../src/ui/dialog/grid-arrange-tab.cpp:477
-#, fuzzy
-#| msgid "Vertical spacing between rows."
 msgid "Vertical spacing between rows"
-msgstr "Вертикальний проміжок між рядками."
+msgstr "Вертикальний проміжок між рядками"
 
 #: ../src/ui/dialog/grid-arrange-tab.cpp:495
 msgid "_Rows:"
@@ -27541,10 +27198,8 @@ msgstr ""
 "об'єкта в ньому"
 
 #: ../src/ui/dialog/grid-arrange-tab.cpp:567
-#, fuzzy
-#| msgid "<b>Content:</b>"
 msgid "<b>Alignment:</b>"
-msgstr "<b>Вміст:</b>"
+msgstr "<b>Вирівнювання:</b>"
 
 #: ../src/ui/dialog/grid-arrange-tab.cpp:580
 msgid "_Fit into selection box"
@@ -27653,29 +27308,20 @@ msgid "Whether selected objects display gradient editing controls"
 msgstr "Визначає, чи буде показано засоби редагування градієнтів"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:771
-#, fuzzy
-#| msgid "Change all images in selection"
 msgid "Change layer on selection"
-msgstr "Змінити усі зображення у позначеному"
+msgstr "Змінити шар при позначенні"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:772
-#, fuzzy
-#| msgid ""
-#| "Whether selected objects display a selection cue (the same as in selector)"
 msgid "Whether selecting objects in another layer changes the active layer"
-msgstr "Визначає, чи слід показувати підказку позначення (як і у селекторі)"
+msgstr "Визначає, чи змінює активний шар позначення об'єктів в іншому шарі"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:778
-#, fuzzy
-#| msgid "Change all images in selection"
 msgid "Change page on selection"
-msgstr "Змінити усі зображення у позначеному"
+msgstr "Змінити шар при позначенні"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:779
-#, fuzzy
-#| msgid "Move selection to the layer above the current"
 msgid "Whether selecting objects on another page changes the current page"
-msgstr "Перемістити на шар, що знаходиться над поточним"
+msgstr "Визначає, чи змінює вибір об'єктів на іншій сторінці поточну сторінку"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:784
 msgid "Conversion to guides uses edges instead of bounding box"
@@ -27999,13 +27645,15 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1011
 msgid "Cusp considered flat for deletion:"
-msgstr ""
+msgstr "Достатньо пласка вершина для вилучення:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1011
 msgid ""
 "Preserve shape when deleting flat nodes.\n"
 "Insert segments for sharp ones."
 msgstr ""
+"Зберігати форму при вилученні плоских вершин.\n"
+"Вставляти сегменти для гострих вершин."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1014
 msgid "Object paint style"
@@ -28569,12 +28217,12 @@ msgid "Clear list"
 msgstr "Спорожнити список"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1620
-#, fuzzy
-#| msgid "Maximum documents in Open _Recent:"
 msgid ""
 "Maximum documents\n"
 " in Open _Recent:"
-msgstr "Максимальна кількість _недавніх документів:"
+msgstr ""
+"Максимальна кількість\n"
+"_недавніх документів:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1621
 msgid ""
@@ -28635,10 +28283,8 @@ msgid "Set the relative size of node handles"
 msgstr "Встановити відносний розмір вусів вузла"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1675
-#, fuzzy
-#| msgid "Triangles color"
 msgid "Handle colors"
-msgstr "Колір трикутників"
+msgstr "Кольори елементів керування"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1677
 msgid "Use narrow number entry boxes"
@@ -29151,38 +28797,28 @@ msgstr ""
 "менеджера"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2083
-#, fuzzy
-#| msgid "_Text and Font"
 msgid "Text and Font dialog"
-msgstr "_Текст та шрифт"
+msgstr "Вікно тексту і шрифту"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2085
-#, fuzzy
-#| msgid "Last used style"
 msgid "List fonts and styles"
-msgstr "Останній використаний стиль"
+msgstr "Вивести список шрифтів і стилів"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2085
-#, fuzzy
-#| msgid "Modify lights and shadows separately"
 msgid "List fonts and styles separately"
-msgstr "Змінювати світлі і темні ділянки окремо"
+msgstr "Вивести список шрифтів і стилів окремо"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2086
 msgid "Unified font browser (experimental)"
-msgstr ""
+msgstr "Універсальний навігатор шрифтами (експериментальний)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2086
-#, fuzzy
-#| msgid "Show font samples in the drop-down list"
 msgid "Show all font styles in a single list"
-msgstr "Показувати зразки шрифтів у розкривному списку"
+msgstr "Показати усі стилі шрифтів у єдиному списку"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2088
-#, fuzzy
-#| msgid "From selection"
 msgid "Font selector"
-msgstr "Дані з позначеного"
+msgstr "Вибір шрифту"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2090
 msgid "Miscellaneous"
@@ -29292,17 +28928,13 @@ msgstr "Інтервал за Y:"
 #: ../src/ui/dialog/inkscape-preferences.cpp:2192
 #: ../src/ui/dialog/inkscape-preferences.cpp:2207
 #: ../src/ui/dialog/inkscape-preferences.cpp:2218
-#, fuzzy
-#| msgid "Guide co_lor:"
 msgid "Grid color:"
-msgstr "Ко_лір напрямних:"
+msgstr "Колір сітки:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2175
 #: ../src/ui/dialog/inkscape-preferences.cpp:2192
-#, fuzzy
-#| msgid "Color used for normal grid lines"
 msgid "Color used for grid lines"
-msgstr "Колір, що використовуватиметься для звичайних ліній сітки."
+msgstr "Колір, що використовуватиметься для ліній сітки."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2177
 #: ../src/ui/dialog/inkscape-preferences.cpp:2194
@@ -29332,28 +28964,20 @@ msgid "Angle Z:"
 msgstr "Кут Z:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2212
-#, fuzzy
-#| msgid "Blur width:"
 msgid "Block width:"
-msgstr "Ширина розмиття:"
+msgstr "Ширина блока:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2212
-#, fuzzy
-#| msgid "Switch to index mode:"
 msgid "Width of grid modules"
-msgstr "Перемкнутися у режим покажчика:"
+msgstr "Ширина модулів сітки"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2213
-#, fuzzy
-#| msgid "Blur height:"
 msgid "Block height:"
-msgstr "Висота розмиття:"
+msgstr "Висота блока:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2213
-#, fuzzy
-#| msgid "Height of rectangle"
 msgid "Height of grid modules"
-msgstr "Висота прямокутника"
+msgstr "Висота модулів сітки"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2214
 #: ../share/ui/pattern-edit.glade:449
@@ -29366,22 +28990,16 @@ msgid "Gap Y:"
 msgstr "Прогалина за Y:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2216
-#, fuzzy
-#| msgid "Origin X:"
 msgid "Margin X:"
-msgstr "Початок за X:"
+msgstr "Поле за X:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2217
-#, fuzzy
-#| msgid "Origin Y:"
 msgid "Margin Y:"
-msgstr "Початок за Y:"
+msgstr "Поле за Y:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2218
-#, fuzzy
-#| msgid "Color used for normal grid lines"
 msgid "Color used for grid blocks"
-msgstr "Колір, що використовуватиметься для звичайних ліній сітки."
+msgstr "Колір, що використовуватиметься для блоків сітки"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2246
 msgid "Display Options"
@@ -29817,22 +29435,21 @@ msgstr ""
 "Каталоги для пошуку:%s"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2440
-#, fuzzy
-#| msgid "Color profile:"
 msgid "User monitor profile:"
-msgstr "Профіль кольорів:"
+msgstr "Профіль монітора від користувача:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2445
-#, fuzzy
-#| msgid "Retrieve profile from display"
 msgid "Use profile from user"
-msgstr "Отримати профіль з дисплея"
+msgstr "Використати профіль користувача"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2447
 msgid ""
 "Use a user-specified ICC profile for monitor color correction. Warning: "
 "System wide color correction should be disabled."
 msgstr ""
+"Використати вказаний користувачем профіль ICC для стеження за виправленнями "
+"кольорів. Увага! Загальносистемні засоби виправлення кольорів має бути "
+"вимкнено."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2450
 msgid "Display rendering intent:"
@@ -29982,25 +29599,27 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2551
 msgid "Limit Undo Size:"
-msgstr ""
+msgstr "Граничний розмір скасувань:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2552
 msgid ""
 "Enable the undo limit and remove old changes. Disabling this option will use "
 "more memory."
 msgstr ""
+"Увімкнути обмеження на кількість скасувань і вилучати застарілі зміни. Якщо "
+"вимкнути обмеження, програма споживатиме більше пам'яті."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2554
-#, fuzzy
-#| msgid "Minimum size:"
 msgid "Maximum _Undo Size:"
-msgstr "Мінімальний розмір:"
+msgstr "Мінімальний розмір с_писку скасування:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2555
 msgid ""
 "How large the undo log will be allowed to get before being trimmed to free "
 "memory."
 msgstr ""
+"Припустимий розмір журналу скасувань, перш ніж програма почне вилучати запис "
+"для звільнення пам'яті."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2559
 msgid "Color stock markers the same color as object"
@@ -30388,25 +30007,23 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2699
 msgid "Restrict Snap Targets"
-msgstr ""
+msgstr "Обмежити цілі прилипання"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2701
-#, fuzzy
-#| msgid "Toggle snapping to grids"
 msgid "Always snap to grids"
-msgstr "Увімкнути або вимкнути прилипання до сіток"
+msgstr "Завжди прилипати до сіток"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2702
 msgid ""
 "When a grid is visible, and snapping to grids is active, other snap targets "
 "will be ignored, unless explicitly allowed below."
 msgstr ""
+"Якщо сітка є видимою і активним є прилипання до сіток, інші цілі прилипання "
+"буде проігноровано, якщо їх не увімкнено явним чином нижче."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2704
-#, fuzzy
-#| msgid "Always show outline"
 msgid "Always snap to guides"
-msgstr "Завжди показувати обрис"
+msgstr "Завжди прилипати до напрямних"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2705
 msgid ""
@@ -30414,46 +30031,49 @@ msgid ""
 "guides is active, other snap targets will be ignored, unless explicitly "
 "allowed below."
 msgstr ""
+"Якщо у поточній області перегляду є якісь напрямні, і активним є прилипання "
+"до напрямних, інші цілі прилипання буде проігноровано, якщо їх не увімкнено "
+"нижче явним чином."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2707
-#, fuzzy
-#| msgid "Toggle snapping to grids"
 msgid "While Always Snapping to Grid/Guides"
-msgstr "Увімкнути або вимкнути прилипання до сіток"
+msgstr "Доки безумовним є прилипання до сіток/напрямних"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2709
-#, fuzzy
-#| msgid "Toggle snapping to nodes"
 msgid "Allow snapping to objects"
-msgstr "Увімкнути або вимкнути прилипання до вузлів"
+msgstr "Увімкнути прилипання до об'єктів"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2710
 msgid ""
 "Allow snapping to objects while 'Always snap to grids / guides' is active, "
 "if an object is closer."
 msgstr ""
+"Увімкнути прилипання до об'єктів, якщо активним є «Завжди прилипати до "
+"сіток/напрямних», якщо об'єкт є ближчим."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2712
-#, fuzzy
-#| msgid "Toggle alignment snapping"
 msgid "Allow alignment snapping"
-msgstr "Увімкнути або вимкнути прилипання з вирівнюванням"
+msgstr "Увімкнути прилипання до вирівнювання"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2713
 msgid ""
 "Allow alignment snapping while 'Always snap to grids / guides' is active, if "
 "an alignment snap target is closer."
 msgstr ""
+"Увімкнути прилипання до вирівнювання, якщо активним є «Завжди прилипати до "
+"сіток/напрямних», якщо ціль прилипання до вирівнювання є ближчою."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2715
 msgid "Allow distribution snapping"
-msgstr ""
+msgstr "Увімкнути прилипання розподілу"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2716
 msgid ""
 "Allow distribution snapping while 'Always snap to grids / guides' is active, "
 "if a distribution snap target is closer."
 msgstr ""
+"Увімкнути прилипання до розподілу, якщо активним є «Завжди прилипати до "
+"сіток/напрямних», якщо ціль прилипання розподілу є ближчою."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2724
 msgid "_Arrow keys move by:"
@@ -30563,8 +30183,6 @@ msgstr ""
 "змінює масштаб."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2762
-#, fuzzy
-#| msgid "Canvas rotate"
 msgid "Canvas rotation"
 msgstr "Обертання полотна"
 
@@ -30578,10 +30196,8 @@ msgstr ""
 "Обернути полотно за годинниковою стрілкою або проти неї на вказаний кут."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2768
-#, fuzzy
-#| msgid "Make selected objects smaller relative to screen"
 msgid "Arrow keys move object relative to screen"
-msgstr "Зробити позначені об'єкти меншими відносно екрана"
+msgstr "Клавіші зі стрілками пересувають об'єкт відносно екрана"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2770
 msgid ""
@@ -30589,6 +30205,10 @@ msgid ""
 "rotated, the selection will then still be moved horizontally and vertically "
 "relative to the screen, not to the rotated document."
 msgstr ""
+"Якщо увімкнено, клавіші зі стрілками пересуватимуть об'єкти відносно екрана. "
+"Якщо полотно буде обернуто, позначене все одно буде пересуватися "
+"горизонтально і вертикально відносно екрана, а не відносно обернутого "
+"документа."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2772
 msgid "Steps"
@@ -30616,7 +30236,7 @@ msgstr "Вилучаються"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2785
 msgid "Become orphans"
-msgstr ""
+msgstr "Осиротіють"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2788
 msgid "Moving original: clones and linked offsets"
@@ -30652,10 +30272,8 @@ msgid "Orphaned clones are deleted along with their original"
 msgstr "Осиротілі клони вилучаються разом з оригіналом"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2801
-#, fuzzy
-#| msgid "Orphaned clones are converted to regular objects"
 msgid "Orphaned clones are not modified"
-msgstr "Осиротілі клони перетворюються на звичайні об'єкти"
+msgstr "Осиротілі клони не змінюватимуться"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2803
 msgid "Duplicating original+clones/linked offset"
@@ -31487,10 +31105,8 @@ msgid "Change:"
 msgstr "Зміна:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3273
-#, fuzzy
-#| msgid "Modifiers"
 msgid "Tools Modifiers"
-msgstr "Модифікатори"
+msgstr "Модифікатори інструментів"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3294
 msgid ""
@@ -31517,10 +31133,8 @@ msgid "Import custom keyboard shortcuts from a file"
 msgstr "Імпортувати нетипові клавіатурні скорочення з файла"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3322
-#, fuzzy
-#| msgid "Open keyboard shortcuts folder"
 msgid "Keyboard Shortcuts"
-msgstr "Відкрити теку даних клавіатурних скорочень"
+msgstr "Клавіатурні скорочення"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3326
 #: ../src/ui/dialog/inkscape-preferences.cpp:3334
@@ -31603,16 +31217,12 @@ msgid "System info"
 msgstr "Відомості щодо системи"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3748
-#, fuzzy
-#| msgid "Reset the values on the current tab to defaults"
 msgid "Reset the preferences to default"
-msgstr "Змінити величини у поточній вкладці на типові"
+msgstr "Скинути налаштування до типових"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3753
-#, fuzzy
-#| msgid "Open preferences folder"
 msgid "Save the preferences to disk"
-msgstr "Відкрити теку налаштувань"
+msgstr "Зберегти налаштування на диск"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3758
 msgid "User preferences:"
@@ -32020,10 +31630,8 @@ msgid "Multiple objects selected"
 msgstr "Позначено декілька об'єктів"
 
 #: ../src/ui/dialog/object-attributes.cpp:153
-#, fuzzy
-#| msgid "Lock selection"
 msgid "No selection"
-msgstr "Заблокувати позначене"
+msgstr "Нічого не позначено"
 
 #: ../src/ui/dialog/object-attributes.cpp:247
 msgid "Removed live path effect"
@@ -32036,34 +31644,28 @@ msgid "Change object attribute"
 msgstr "Змінити атрибут об'єкта"
 
 #: ../src/ui/dialog/object-attributes.cpp:403
-#, fuzzy
-#| msgid "Selected objects only"
 msgid ""
 "<b>Picker Tool</b>\n"
 "Select objects on canvas"
-msgstr "Лише позначені об'єкти"
+msgstr ""
+"<b>Піпетка</b>\n"
+"Вибір об'єктів на полотні"
 
 #: ../src/ui/dialog/object-attributes.cpp:517
-#, fuzzy
-#| msgid "Add Live Path Effect"
 msgid "Add fillet/chamfer effect"
-msgstr "Додати інтерактивний ефект контуру"
+msgstr "Додати ефект кромки/фаски"
 
 #: ../src/ui/dialog/object-attributes.cpp:660
 msgid "Change arc type"
 msgstr "Змінити тип дуги"
 
 #: ../src/ui/dialog/object-attributes.cpp:902
-#, fuzzy
-#| msgid "Nodes"
 msgid "Nodes: "
-msgstr "Вузли"
+msgstr "Вузли: "
 
 #: ../src/ui/dialog/object-attributes.cpp:923
-#, fuzzy
-#| msgid "Change opacity"
 msgid "Change path"
-msgstr "Зміна непрозорості"
+msgstr "Змінити контур"
 
 #: ../src/ui/dialog/object-properties.cpp:63
 #: ../src/ui/dialog/object-properties.cpp:371
@@ -32123,6 +31725,8 @@ msgid ""
 "Set resolution for vector images (press Enter to see change in rendering "
 "quality)"
 msgstr ""
+"Встановити роздільну здатність векторних зображень (натисніть Enter, щоб "
+"переглянути зміни у якості обробки)"
 
 #: ../src/ui/dialog/object-properties.cpp:233
 msgid "Check to make the object invisible"
@@ -32146,6 +31750,8 @@ msgid ""
 "<small><i>Enter JavaScript code for interactive behavior in a browser.</i></"
 "small>"
 msgstr ""
+"<small><i>Введіть код JavaScript для інтерактивної поведінки у "
+"навігаторі.</i></small>"
 
 #: ../src/ui/dialog/object-properties.cpp:358
 #: ../src/ui/dialog/object-properties.cpp:363
@@ -32283,12 +31889,9 @@ msgid "Starting angle"
 msgstr "Початковий кут"
 
 #: ../src/ui/dialog/polar-arrange-tab.cpp:41
-#, fuzzy
-#| msgctxt "Polar arrange tab"
-#| msgid "Anchor point:"
 msgctxt "Polar arrange tab"
 msgid "<b>Anchor point:</b>"
-msgstr "Точка прив'язки:"
+msgstr "<b>Точка прив’язки:</b>"
 
 #: ../src/ui/dialog/polar-arrange-tab.cpp:45
 msgctxt "Polar arrange tab"
@@ -32301,11 +31904,9 @@ msgid "Objects' rotational centers"
 msgstr "Центри обертання об'єктів"
 
 #: ../src/ui/dialog/polar-arrange-tab.cpp:61
-#, fuzzy
-#| msgid "<b>Angle:</b>"
 msgctxt "Polar arrange tab"
 msgid "<b>Arrange on:</b>"
-msgstr "<b>Кут:</b>"
+msgstr "<b>Крива компонування:</b>"
 
 #: ../src/ui/dialog/polar-arrange-tab.cpp:66
 msgctxt "Polar arrange tab"
@@ -32365,22 +31966,16 @@ msgid "Failed to set CairoRenderContext"
 msgstr "Не вдалося встановити CairoRenderContext"
 
 #: ../src/ui/dialog/save-template-dialog.cpp:24
-#, fuzzy
-#| msgid "Save Template"
 msgid "Save as Template"
-msgstr "Зберегти шаблон"
+msgstr "Зберегти як шаблон"
 
 #: ../src/ui/dialog/save-template-dialog.cpp:56
-#, fuzzy
-#| msgid "Save a copy of the document as template"
 msgid "Base every other new document on this template"
-msgstr "Зберегти копію документа як шаблон"
+msgstr "Використовувати для усіх інших нових документів цей шаблон"
 
 #: ../src/ui/dialog/save-template-dialog.cpp:107
-#, fuzzy
-#| msgid "Export Overwrite"
 msgid "Overwrite"
-msgstr "Перезапис при експортуванні"
+msgstr "Перезаписати"
 
 #: ../src/ui/dialog/save-template-dialog.h:35
 #: ../share/ui/dialog-save-template.glade:96
@@ -32388,16 +31983,12 @@ msgid "Set as default template"
 msgstr "Зробити типовим шаблоном"
 
 #: ../src/ui/dialog/save-template-dialog.h:36
-#, fuzzy
-#| msgid "Name"
 msgid "_Name"
-msgstr "Назва"
+msgstr "_Назва"
 
 #: ../src/ui/dialog/save-template-dialog.h:38
-#, fuzzy
-#| msgid "_Description:"
 msgid "_Description"
-msgstr "Оп_ис:"
+msgstr "_Опис"
 
 #: ../src/ui/dialog/selectorsdialog.cpp:589
 #: ../src/ui/dialog/styledialog.cpp:1097
@@ -32421,20 +32012,16 @@ msgid "No dictionaries installed"
 msgstr "Словників не встановлено"
 
 #: ../src/ui/dialog/spellcheck.cpp:293
-#, fuzzy
-#| msgid "<b>Finished</b>, <b>%d</b> words added to dictionary"
 msgid "<b>Finished</b>, <b>%1</b> words added to dictionary"
-msgstr "<b>Завершено</b>, до словника додано <b>%d</b> слів"
+msgstr "<b>Завершено</b>, до словника додано <b>%1</b> слів"
 
 #: ../src/ui/dialog/spellcheck.cpp:294
 msgid "<b>Finished</b>, nothing suspicious found"
 msgstr "<b>Завершено</b>, видимих помилок не знайдено"
 
 #: ../src/ui/dialog/spellcheck.cpp:391
-#, fuzzy
-#| msgid "Not in dictionary: <b>%s</b>"
 msgid "Not in dictionary: <b>%1</b>"
-msgstr "Немає у словнику: <b>%s</b>"
+msgstr "Немає у словнику: <b>%1</b>"
 
 #: ../src/ui/dialog/spellcheck.cpp:474
 msgid "<i>Checking...</i>"
@@ -32468,16 +32055,12 @@ msgid "Current value"
 msgstr "Поточне значення"
 
 #: ../src/ui/dialog/styledialog.cpp:547
-#, fuzzy
-#| msgid "Delete attribute"
 msgid "Used in style attribute"
-msgstr "Вилучити атрибут"
+msgstr "Використано у атрибуті стилю"
 
 #: ../src/ui/dialog/styledialog.cpp:723
-#, fuzzy
-#| msgid "Stylesheet"
 msgid "Stylesheet value"
-msgstr "Таблиця стилів"
+msgstr "Значення у таблиці стилів"
 
 #: ../src/ui/dialog/styledialog.cpp:729
 msgid "This value is commented out."
@@ -32490,10 +32073,8 @@ msgid "Used in %1"
 msgstr "Використано у %1"
 
 #: ../src/ui/dialog/styledialog.cpp:842
-#, fuzzy
-#| msgid "Inline attributes"
 msgid "Used in inline attributes"
-msgstr "Вбудовані атрибути"
+msgstr "Використано у вбудованих атрибутах"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:186
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:256
@@ -32723,16 +32304,12 @@ msgstr ""
 "Перемкнутися на шар із назвою, яка збігається із назвою поточного гліфу"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:1393
-#, fuzzy
-#| msgid "_Sort glyphs"
 msgid "Sort glyphs"
-msgstr "_Упорядкувати гліфи"
+msgstr "Упорядкувати гліфи"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:1394
-#, fuzzy
-#| msgid "Set glyph unicode"
 msgid "Sort glyphs in Unicode order"
-msgstr "Встановити unicode-кодування гліфу"
+msgstr "Упорядкувати гліфи за порядком у Unicode"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:1399
 msgid "Add new glyph"
@@ -32759,10 +32336,8 @@ msgid "Add pair"
 msgstr "Додати пару"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:1556
-#, fuzzy
-#| msgid "Remove path"
 msgid "Remove pair"
-msgstr "Вилучити контур"
+msgstr "Вилучити пару"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:1560
 msgid "Select glyphs:"
@@ -32823,10 +32398,8 @@ msgstr "Перегляд тексту:"
 
 #. TRANSLATORS: A list of swatches in the document
 #: ../src/ui/dialog/swatches.cpp:493
-#, fuzzy
-#| msgid "Document saved."
 msgid "Document swatches"
-msgstr "Документ збережено."
+msgstr "Плашки документа"
 
 #: ../src/ui/dialog/symbols.cpp:152
 msgid "All symbol sets"
@@ -33175,23 +32748,16 @@ msgid "Drop bitmap image"
 msgstr "Скинути растрове зображення"
 
 #: ../src/ui/interface.cpp:82
-#, fuzzy
-#| msgid ""
-#| "<span weight=\"bold\" size=\"larger\">A file named \"%s\" already exists. "
-#| "Do you want to replace it?</span>\n"
-#| "\n"
-#| "The file already exists in \"%s\". Replacing it will overwrite its "
-#| "contents."
 msgid ""
 "<span weight=\"bold\" size=\"larger\">A file named \"%1\" already exists. Do "
 "you want to replace it?</span>\n"
 "\n"
 "The file already exists in \"%2\". Replacing it will overwrite its contents."
 msgstr ""
-"<span weight=\"bold\" size=\"larger\">Файл з назвою «%s» вже існує. Замінити "
+"<span weight=\"bold\" size=\"larger\">Файл з назвою «%1» вже існує. Замінити "
 "його?</span>\n"
 "\n"
-"Файл вже існує у «%s». Заміна призведе до перезапису його вмісту."
+"Файл вже існує у «%2». Заміна призведе до перезапису його вмісту."
 
 #: ../src/ui/interface.cpp:89 ../share/extensions/web_set_att.inx:25
 #: ../share/extensions/web_transmit_att.inx:23
@@ -33491,45 +33057,33 @@ msgstr "Побудовник форм"
 
 #: ../src/ui/modifiers.cpp:236
 msgid "[NEVER]"
-msgstr ""
+msgstr "[НІКОЛИ]"
 
 #
 # File: ../src/ui/tool/node.cpp, line: 611
 #: ../src/ui/modifiers.cpp:239
-#, fuzzy
-#| msgctxt "Path handle tip"
-#| msgid "Ctrl"
 msgid "Ctrl"
 msgstr "Ctrl"
 
 #: ../src/ui/modifiers.cpp:242
-#, fuzzy
-#| msgid "S_hift"
 msgid "Shift"
-msgstr "Зс_ув"
+msgstr "Shift"
 
 #: ../src/ui/modifiers.cpp:246
-#, fuzzy
-#| msgid "All"
 msgid "Alt"
-msgstr "Всі"
+msgstr "Alt"
 
 #: ../src/ui/modifiers.cpp:250
-#, fuzzy
-#| msgctxt "Symbol"
-#| msgid "Supermarket"
 msgid "Super"
-msgstr "Супермаркет"
+msgstr "Super"
 
 #: ../src/ui/modifiers.cpp:254
 msgid "Hyper"
-msgstr ""
+msgstr "Hyper"
 
 #: ../src/ui/modifiers.cpp:258
-#, fuzzy
-#| msgid "Metadata"
 msgid "Meta"
-msgstr "Метадані"
+msgstr "Meta"
 
 #: ../src/ui/shape-editor-knotholders.cpp:567
 msgid ""
@@ -33738,19 +33292,11 @@ msgid "<b>Ctrl+Alt</b>: click to insert a node"
 msgstr "<b>Ctrl+Alt</b>: клацання вставляє вузол"
 
 #: ../src/ui/tool/curve-drag-point.cpp:215
-#, fuzzy
-#| msgctxt "Path segment tip"
-#| msgid "<b>Ctrl</b>: click to change line type"
 msgctxt "Path segment tip"
 msgid "<b>Alt</b>: double click to change line type"
-msgstr "<b>Ctrl</b>: клацніть, щоб змінити тип лінії"
+msgstr "<b>Alt</b>: двічі клацніть, щоб змінити тип лінії"
 
 #: ../src/ui/tool/curve-drag-point.cpp:218
-#, fuzzy
-#| msgctxt "Path segment tip"
-#| msgid ""
-#| "<b>BSpline segment</b>: drag to shape the segment, doubleclick to insert "
-#| "node, click to select (more: Shift, Ctrl+Alt)"
 msgctxt "Path segment tip"
 msgid ""
 "<b>BSpline segment</b>: drag to shape the segment, doubleclick to insert "
@@ -33758,14 +33304,9 @@ msgid ""
 msgstr ""
 "<b>Сегмент B-сплайна</b>: перетягніть, щоб змінити форму сегмента, двічі "
 "клацніть лівою кнопкою миші, щоб вставити вузол, клацніть один раз, щоб "
-"позначити (більше: Shift, Ctrl+Alt)"
+"позначити (більше: Alt, Shift, Ctrl+Alt)"
 
 #: ../src/ui/tool/curve-drag-point.cpp:222
-#, fuzzy
-#| msgctxt "Path segment tip"
-#| msgid ""
-#| "<b>Linear segment</b>: drag to convert to a Bezier segment, doubleclick "
-#| "to insert node, click to select (more: Shift, Ctrl+Alt)"
 msgctxt "Path segment tip"
 msgid ""
 "<b>Linear segment</b>: drag to convert to a Bezier segment, doubleclick to "
@@ -33773,14 +33314,9 @@ msgid ""
 msgstr ""
 "<b>Лінійний сегмент кривої</b>: перетягніть, щоб перетворити на сегмент "
 "кривої Безьє, двічі клацніть лівою кнопкою миші, щоб вставити вузол, "
-"клацніть один раз, щоб позначити (більше: Shift, Ctrl+Alt)"
+"клацніть один раз, щоб позначити (більше: Alt, Shift, Ctrl+Alt)"
 
 #: ../src/ui/tool/curve-drag-point.cpp:225
-#, fuzzy
-#| msgctxt "Path segment tip"
-#| msgid ""
-#| "<b>Bezier segment</b>: drag to shape the segment, doubleclick to insert "
-#| "node, click to select (more: Shift, Ctrl+Alt)"
 msgctxt "Path segment tip"
 msgid ""
 "<b>Bezier segment</b>: drag to shape the segment, doubleclick to insert "
@@ -33788,7 +33324,7 @@ msgid ""
 msgstr ""
 "<b>Сегмент кривої Безьє</b>: перетягніть, щоб змінити форму сегмента, двічі "
 "клацніть лівою кнопкою миші, щоб вставити вузол, клацніть один раз, щоб "
-"позначити (більше: Shift, Ctrl+Alt)"
+"позначити (більше: Alt, Shift, Ctrl+Alt)"
 
 #: ../src/ui/tool/multi-path-manipulator.cpp:313
 msgid "Retract handles"
@@ -35071,22 +34607,16 @@ msgid "Star: Change randomization"
 msgstr "Зірка: Зміна викривлення"
 
 #: ../src/ui/toolbar/star-toolbar.cpp:419
-#, fuzzy
-#| msgid "Set custom defaults"
 msgid "Star: Reset to defaults"
-msgstr "Встановити нетипові стандартні значення"
+msgstr "Зірка: відновити типові параметри"
 
 #: ../src/ui/toolbar/text-toolbar.cpp:233
-#, fuzzy
-#| msgid "Single scan"
 msgid "Single spaced"
-msgstr "Одинарне сканування"
+msgstr "Одинарний інтервал"
 
 #: ../src/ui/toolbar/text-toolbar.cpp:236
-#, fuzzy
-#| msgid "No-break space"
 msgid "Double spaced"
-msgstr "Нерозривний пропуск"
+msgstr "Подвійний інтервал"
 
 #: ../src/ui/toolbar/text-toolbar.cpp:238
 #: ../src/ui/toolbar/text-toolbar.cpp:239
@@ -35228,11 +34758,8 @@ msgid "<b>Shift</b>: draw around the starting point"
 msgstr "<b>Shift</b>: малювати навколо початкової точки"
 
 #: ../src/ui/tools/arc-tool.cpp:210
-#, fuzzy
-#| msgctxt "Transform handle tip"
-#| msgid "<b>Alt</b>: scale using an integer ratio"
 msgid "<b>Alt</b>: snap ellipse to mouse pointer"
-msgstr "<b>Alt</b>: масштабування, кратне до початкових розмірів"
+msgstr "<b>Alt</b>: прилипання еліпса до вказівника миші"
 
 #: ../src/ui/tools/arc-tool.cpp:372
 #, c-format
@@ -35673,83 +35200,65 @@ msgid "Crossing %lu"
 msgstr "Перетин %lu"
 
 #: ../src/ui/tools/measure-tool.cpp:1644
-#, fuzzy
-#| msgid "Maximum segment length:"
 msgid ""
 "\n"
 "Intersection segments lengths:\n"
-msgstr "Максимальна довжина сегмента:"
+msgstr ""
+"\n"
+"Довжини сегментів перетину:\n"
 
 #: ../src/ui/tools/measure-tool.cpp:1656
 msgid ""
 "\n"
 "Info about the shape under the pointer:\n"
 msgstr ""
+"\n"
+"Дані щодо форми під вказівником:\n"
 
 #: ../src/ui/tools/measure-tool.cpp:1696
 msgid "The measurements have been copied to the clipboard"
-msgstr ""
+msgstr "Виміри було скопійовано до буфера обміну даними"
 
 #: ../src/ui/tools/measure-tool.h:79
-#, fuzzy
-#| msgid "Segment size"
 msgid "Segment"
-msgstr "Розмір сегмента"
+msgstr "Сегмент"
 
 #: ../src/ui/tools/measure-tool.h:81
-#, fuzzy
-#| msgid "Length left:"
 msgid "Length between"
-msgstr "Довжина ліворуч:"
+msgstr "Довжина проміжку"
 
 #: ../src/ui/tools/measure-tool.h:82
-#, fuzzy
-#| msgid "X"
 msgid "dX"
-msgstr "X"
+msgstr "dX"
 
 #: ../src/ui/tools/measure-tool.h:83
-#, fuzzy
-#| msgid "Y"
 msgid "dY"
-msgstr "Y"
+msgstr "dY"
 
 #: ../src/ui/tools/measure-tool.h:84
 #: ../share/ui/dialog-measure-tool-settings.ui:254
-#, fuzzy
-#| msgid "Angle:"
 msgid "Angle"
-msgstr "Кут:"
+msgstr "Кут"
 
 #: ../src/ui/tools/measure-tool.h:85
-#, fuzzy
-#| msgid "_Gap length:"
 msgid "Shape length"
-msgstr "Довжина _проміжку:"
+msgstr "Довжина форми"
 
 #: ../src/ui/tools/measure-tool.h:86
-#, fuzzy
-#| msgid "Scale _width:"
 msgid "Shape width"
-msgstr "Зміна тов_щини:"
+msgstr "Ширина форми"
 
 #: ../src/ui/tools/measure-tool.h:87
-#, fuzzy
-#| msgid "Caps height:"
 msgid "Shape height"
-msgstr "Висота великих літер:"
+msgstr "Висота форми"
 
 #: ../src/ui/tools/measure-tool.h:88
-#, fuzzy
-#| msgid "Shape"
 msgid "Shape X"
-msgstr "Форма"
+msgstr "X форми"
 
 #: ../src/ui/tools/measure-tool.h:89
-#, fuzzy
-#| msgid "Shape"
 msgid "Shape Y"
-msgstr "Форма"
+msgstr "Y форми"
 
 #. TRANSLATORS: Mind the space in front. This is part of a compound message
 #: ../src/ui/tools/mesh-tool.cpp:137 ../src/ui/tools/mesh-tool.cpp:148
@@ -35849,14 +35358,11 @@ msgid "<b>Shift</b>: drag to add nodes to the selection"
 msgstr "<b>Shift</b>: перетягування додає вузли до позначеного фрагмента"
 
 #: ../src/ui/tools/node-tool.cpp:678
-#, fuzzy
-#| msgid "<b>%u of %u</b> node selected."
-#| msgid_plural "<b>%u of %u</b> nodes selected."
 msgid "<b>%1 of %2</b> node selected."
 msgid_plural "<b>%1 of %2</b> nodes selected."
-msgstr[0] "Позначено <b>%u з %u</b> вузла."
-msgstr[1] "Позначено <b>%u з %u</b> вузлів."
-msgstr[2] "Позначено <b>%u з %u</b> вузлів."
+msgstr[0] "Позначено <b>%1 з %2</b> вузла."
+msgstr[1] "Позначено <b>%1 з %2</b> вузлів."
+msgstr[2] "Позначено <b>%1 з %2</b> вузлів."
 
 #. TRANSLATORS: %1 is an angle in degrees, formatted with two decimal places.
 #: ../src/ui/tools/node-tool.cpp:696
@@ -35864,24 +35370,17 @@ msgid "Angle: %1°."
 msgstr "Кут: %1°."
 
 #: ../src/ui/tools/node-tool.cpp:703
-#, fuzzy
-#| msgctxt "Node tool tip"
-#| msgid ""
-#| "%s Drag to select nodes, click to edit only this object (more: Shift)"
 msgctxt "Node tool tip"
 msgid "%1 Drag to select nodes, click to edit only this object (more: Shift)"
 msgstr ""
-"%s Перетягніть, щоб позначити вузли, клацніть, щоб редагувати лише цей "
+"%1 Перетягніть, щоб позначити вузли, клацніть, щоб редагувати лише цей "
 "об'єкт (інше: Shift)"
 
 #: ../src/ui/tools/node-tool.cpp:709
-#, fuzzy
-#| msgctxt "Node tool tip"
-#| msgid "Drag to select nodes, click to clear the selection"
 msgctxt "Node tool tip"
 msgid "%1 Drag to select nodes, click to clear the selection"
 msgstr ""
-"Перетягніть вказівник, щоб позначити вузли, клацніть, щоб зняти позначення"
+"%1 Перетягніть вказівник, щоб позначити вузли, клацніть, щоб зняти позначення"
 
 #: ../src/ui/tools/node-tool.cpp:716
 msgctxt "Node tool tip"
@@ -36064,7 +35563,7 @@ msgstr ""
 
 #: ../src/ui/tools/rect-tool.cpp:226
 msgid "<b>Alt</b>: use with Ctrl to make square"
-msgstr ""
+msgstr "<b>Alt</b>: скористайтеся разом із Ctrl для створення квадрата"
 
 #: ../src/ui/tools/rect-tool.cpp:368
 #, c-format
@@ -36162,69 +35661,53 @@ msgid "Selected object is not a group. Cannot enter."
 msgstr "Позначений об'єкт не є групою. Неможливо увійти."
 
 #: ../src/ui/tools/shortcuts.cpp:20
-#, fuzzy
-#| msgid "Quick preview:"
 msgid "Quick Preview"
-msgstr "Швидкий попередній перегляд:"
+msgstr "Швидкий попередній перегляд"
 
 #: ../src/ui/tools/shortcuts.cpp:20
 msgid "Preview how the document will look while the key is pressed."
-msgstr ""
+msgstr "Попередній перегляд вигляду документа, доки натиснуто клавішу."
 
 #: ../src/ui/tools/shortcuts.cpp:21
-#, fuzzy
-#| msgid "Quick zoom:"
 msgid "Quick Zoom"
-msgstr "Швидке масштабування:"
+msgstr "Швидке масштабування"
 
 #: ../src/ui/tools/shortcuts.cpp:21
-#, fuzzy
-#| msgid "Multiple selected objects have the same stroke"
 msgid "Zoom into the selected objects while the key is pressed."
-msgstr "Множина позначених об'єктів має однакові штрихи"
+msgstr "Масштабувати до позначених об'єктів, доки натиснуто клавішу."
 
 #: ../src/ui/tools/shortcuts.cpp:22
-#, fuzzy
-#| msgid "Linen Canvas"
 msgid "Quick Pan Canvas"
-msgstr "Льняне полотно"
+msgstr "Швидке панорамування плотна"
 
 #: ../src/ui/tools/shortcuts.cpp:22
 msgid "Pan the canvas with the mouse while the key is pressed."
 msgstr ""
+"Панорамувати полотно за допомогою вказівника миші, доки натиснуто клавішу."
 
 #: ../src/ui/tools/shortcuts.cpp:24
-#, fuzzy
-#| msgid "Segment size"
 msgid "Pen Segment To Line"
-msgstr "Розмір сегмента"
+msgstr "Сегмент пера на пряму"
 
 #: ../src/ui/tools/shortcuts.cpp:24
 msgid "Convert the last pen segment to a straight line."
-msgstr ""
+msgstr "Перетворити останній сегмент, намальований пером, на пряму."
 
 #: ../src/ui/tools/shortcuts.cpp:25
-#, fuzzy
-#| msgctxt "path effect"
-#| msgid "Tangent to curve"
 msgid "Pen Segment To Curve"
-msgstr "Дотична до кривої"
+msgstr "Сегмент пера на криву"
 
 #: ../src/ui/tools/shortcuts.cpp:25
 msgid "Convert the last pen segment to a curved line."
-msgstr ""
+msgstr "Перетворити останній сегмент, намальований пером, на криву."
 
 #: ../src/ui/tools/shortcuts.cpp:26
-#, fuzzy
-#| msgid "Make segments curves"
 msgid "Pen Segments To Guides"
-msgstr "Зробити сегменти кривими"
+msgstr "Сегменти пера на напрямні"
 
 #: ../src/ui/tools/shortcuts.cpp:26
-#, fuzzy
-#| msgid "Conversion to guides"
 msgid "Convert the pen shape into guides."
-msgstr "Перетворення на напрямні"
+msgstr "Перетворити форму, яку намальовано пером, на напрямні."
 
 #: ../src/ui/tools/spiral-tool.cpp:207
 msgid "<b>Ctrl</b>: snap angle"
@@ -36257,40 +35740,34 @@ msgid "<b>Nothing</b> selected"
 msgstr "<b>Нічого</b> не вибрано"
 
 #: ../src/ui/tools/spray-tool.cpp:205
-#, fuzzy, c-format
-#| msgid ""
-#| "%s. Drag, click or click and scroll to spray <b>copies</b> of the initial "
-#| "selection."
+#, c-format
 msgid ""
 "%s. Drag, click or click and scroll to spray <b>copies</b> of the initial "
 "selection. Right-click + move to update single click item."
 msgstr ""
 "%s. Перетягніть, клацніть або натисніть і прокрутіть коліщатко миші, щоб "
-"розкидати <b>копії</b> позначеної ділянки."
+"розкидати <b>копії</b> позначеної ділянки. Клацніть правою і пересуньте "
+"вказівник для оновлення елемента, створеного в одне клацання."
 
 #: ../src/ui/tools/spray-tool.cpp:208
-#, fuzzy, c-format
-#| msgid ""
-#| "%s. Drag, click or click and scroll to spray <b>clones</b> of the initial "
-#| "selection."
+#, c-format
 msgid ""
 "%s. Drag, click or click and scroll to spray <b>clones</b> of the initial "
 "selection. Right-click + move to update single click item."
 msgstr ""
 "%s. Перетягніть, клацніть або натисніть і прокрутіть коліщатко миші, щоб "
-"розкидати <b>клони</b> позначеної ділянки."
+"розкидати <b>клони</b> позначеної ділянки. Клацніть правою і пересуньте "
+"вказівник для оновлення елемента, створеного в одне клацання."
 
 #: ../src/ui/tools/spray-tool.cpp:211
-#, fuzzy, c-format
-#| msgid ""
-#| "%s. Drag, click or click and scroll to spray in a <b>single path</b> of "
-#| "the initial selection."
+#, c-format
 msgid ""
 "%s. Drag, click or click and scroll to spray into a <b>single path</b>. "
 "Right-click + move to update single click item.."
 msgstr ""
 "%s. Перетягніть, клацніть або натисніть і прокрутіть коліщатко миші, щоб "
-"розкидати позначену ділянку в <b>один контур</b>."
+"розкидати позначену ділянку в <b>один контур</b>. Клацніть правою і "
+"пересуньте вказівник для оновлення елемента, створеного в одне клацання."
 
 #: ../src/ui/tools/spray-tool.cpp:1245
 msgid "<b>Nothing selected!</b> Select objects to spray."
@@ -36617,12 +36094,12 @@ msgstr ""
 "віддаляють полотно."
 
 #: ../src/ui/tools/tool-data.cpp:62
-#, fuzzy
-#| msgid "<b>Drag</b> to measure the dimensions of objects."
 msgid ""
 "<b>Drag</b> to measure the dimensions of objects.  Press <b>Alt+C</b> to "
 "copy the length to the clipboard."
-msgstr "<b>Перетягніть</b> вказівник, щоб виміряти об'єкти."
+msgstr ""
+"<b>Перетягніть</b> вказівник, щоб виміряти об'єкти. Натисніть <b>Alt+C</b>, "
+"щоб скопіювати довжину до буфера обміну даними."
 
 #: ../src/ui/tools/tool-data.cpp:64
 msgid "To tweak a path by pushing, select it and drag over it."
@@ -36664,10 +36141,8 @@ msgid "Create and manage pages."
 msgstr "Створення сторінок та керування ними."
 
 #: ../src/ui/tools/tool-data.cpp:71
-#, fuzzy
-#| msgid "Lock objects"
 msgid "Pick objects."
-msgstr "Заблокувати об'єкти"
+msgstr "Вибрати об'єкти."
 
 #: ../src/ui/tools/tweak-tool.cpp:142
 #, c-format
@@ -36862,10 +36337,8 @@ msgid "Configure..."
 msgstr "Налаштувати…"
 
 #: ../src/ui/widget/dash-selector.cpp:146
-#, fuzzy
-#| msgid "Pattern offset"
 msgid "Dash pattern offset"
-msgstr "Зміщення пунктиру"
+msgstr "Зміщення рисок взірця"
 
 #: ../src/ui/widget/desktop-widget.cpp:381
 msgid "outline"
@@ -36896,10 +36369,8 @@ msgid "Note:"
 msgstr "Примітка:"
 
 #: ../src/ui/widget/document-templates.cpp:19
-#, fuzzy
-#| msgid "Select a filter"
 msgid "Select a template"
-msgstr "Виберіть фільтр"
+msgstr "Виберіть шаблон"
 
 #: ../src/ui/widget/export-lists.cpp:160
 msgid "Add Export"
@@ -37064,43 +36535,34 @@ msgstr "Ви справді хочете вилучити збірку шриф�
 
 #: ../src/ui/widget/font-list.cpp:111
 msgid "Sans Serif"
-msgstr ""
+msgstr "Без засічок"
 
 #: ../src/ui/widget/font-list.cpp:292
 msgid "Sort alphabetically"
-msgstr ""
+msgstr "Упорядкувати за абеткою"
 
 #: ../src/ui/widget/font-list.cpp:293
-#, fuzzy
-#| msgid "Right to left"
 msgid "Light to heavy"
-msgstr "Справа ліворуч"
+msgstr "Світлий у щільний"
 
 #: ../src/ui/widget/font-list.cpp:294
 msgid "Condensed to expanded"
-msgstr ""
+msgstr "Стиснений у розгорнутий"
 
 #: ../src/ui/widget/font-list.cpp:808
-#, fuzzy
-#| msgid "All Fonts"
 msgctxt "N-of-fonts"
 msgid "All fonts"
 msgstr "Усі шрифти"
 
 #: ../src/ui/widget/font-list.cpp:808
-#, fuzzy
-#| msgctxt "Symbol"
-#| msgid "Golf"
 msgctxt "N-of-fonts"
 msgid "of"
-msgstr "Гольф"
+msgstr "з"
 
 #: ../src/ui/widget/font-list.cpp:808
-#, fuzzy
-#| msgid "font"
 msgctxt "N-of-fonts"
 msgid "fonts"
-msgstr "шрифт"
+msgstr "шрифти"
 
 #: ../src/ui/widget/font-selector.cpp:49
 msgid "Font family"
@@ -37480,492 +36942,410 @@ msgstr "Параметри можливостей у формі CSS (напри�
 #. TRANSLATORS: “Grade” (GRAD in CSS) is an axis that can be used to alter stroke thicknesses (or other forms)
 #. without affecting the type's overall width, inter-letter spacing, or kerning — unlike altering weight.
 #: ../src/ui/widget/font-variations.cpp:54
-#, fuzzy
-#| msgid "Gradient"
 msgctxt "Variable font axis"
 msgid "Grade"
-msgstr "Градієнт"
+msgstr "Ухил"
 
 #: ../src/ui/widget/font-variations.cpp:54
 msgid ""
 "Alter stroke thicknesses (or other forms) without affecting the type’s "
 "overall width"
 msgstr ""
+"Змінна товщина штриха (або інших форм) без впливу на загальну товщину типу"
 
 #. TRANSLATORS: “Parametric Thick Stroke”, XOPQ, is a reference to its logical name, “X Opaque”,
 #. which describes how it alters the opaque stroke forms of glyphs typically in the X dimension
 #: ../src/ui/widget/font-variations.cpp:57
-#, fuzzy
-#| msgid "100% (opaque)"
 msgctxt "Variable font axis"
 msgid "X opaque"
-msgstr "100% (непрозорий)"
+msgstr "X-непрозорість"
 
 #: ../src/ui/widget/font-variations.cpp:57
 msgid "Alter the opaque stroke forms of glyphs in the X dimension"
-msgstr ""
+msgstr "Змінні форми непрозорого штриха гліфів у напрямку вісі X"
 
 #. TRANSLATORS: “Parametric Thin Stroke”, YOPQ, is a reference to its logical name, “Y Opaque”,
 #. which describes how it alters the opaque stroke forms of glyphs typically in the Y dimension
 #: ../src/ui/widget/font-variations.cpp:60
-#, fuzzy
-#| msgid "100% (opaque)"
 msgctxt "Variable font axis"
 msgid "Y opaque"
-msgstr "100% (непрозорий)"
+msgstr "Y-непрозорість"
 
 #: ../src/ui/widget/font-variations.cpp:60
 msgid "Alter the opaque stroke forms of glyphs in the Y dimension"
-msgstr ""
+msgstr "Змінні форми непрозорого штриха гліфів у напрямку вісі Y"
 
 #. TRANSLATORS: “Parametric Counter Width”, XTRA, is a reference to its logical name, “X-Transparent,”
 #. which describes how it alters a font’s transparent spaces (also known as negative shapes)
 #. inside and around all glyphs along the X dimension
 #: ../src/ui/widget/font-variations.cpp:64
-#, fuzzy
-#| msgid "0 (transparent)"
 msgctxt "Variable font axis"
 msgid "X transparent"
-msgstr "0 (прозорий)"
+msgstr "X-прозорість"
 
 #: ../src/ui/widget/font-variations.cpp:64
 msgid ""
 "Alter the transparent spaces inside and around all glyphs along the X "
 "dimension"
-msgstr ""
+msgstr "Змінні прозорі інтервали всередині і навколо гліфів у напрямку вісі X"
 
 #: ../src/ui/widget/font-variations.cpp:65
-#, fuzzy
-#| msgid "0 (transparent)"
 msgctxt "Variable font axis"
 msgid "Y transparent"
-msgstr "0 (прозорий)"
+msgstr "Y-прозорість"
 
 #: ../src/ui/widget/font-variations.cpp:65
 msgid ""
 "Alter the transparent spaces inside and around all glyphs along the Y "
 "dimension"
-msgstr ""
+msgstr "Змінні прозорі інтервали всередині і навколо гліфів у напрямку вісі Y"
 
 #. TRANSLATORS: Width/height of Chinese glyphs
 #: ../src/ui/widget/font-variations.cpp:67
-#, fuzzy
-#| msgid "0 (transparent)"
 msgctxt "Variable font axis"
 msgid "X transparent Chinese"
-msgstr "0 (прозорий)"
+msgstr "X-прозорість китайських"
 
 #: ../src/ui/widget/font-variations.cpp:67
-#, fuzzy
-#| msgid "Scale the width of the stitch path"
 msgid "Alter the width of Chinese glyphs"
-msgstr "Змінити товщину контуру зшивання"
+msgstr "Змінна ширина китайських гліфів"
 
 #: ../src/ui/widget/font-variations.cpp:68
-#, fuzzy
-#| msgid "0 (transparent)"
 msgctxt "Variable font axis"
 msgid "Y transparent Chinese"
-msgstr "0 (прозорий)"
+msgstr "Y-прозорість китайських"
 
 #: ../src/ui/widget/font-variations.cpp:68
 msgid "Alter the height of Chinese glyphs"
-msgstr ""
+msgstr "Змінна висота китайських гліфів"
 
 #. TRANSLATORS: “Parametric Lowercase Height”
 #: ../src/ui/widget/font-variations.cpp:70
-#, fuzzy
-#| msgid "Local light"
 msgctxt "Variable font axis"
 msgid "Lowercase height"
-msgstr "Локальне освітлення"
+msgstr "Висота малих літер"
 
 #: ../src/ui/widget/font-variations.cpp:70
 msgid ""
 "Vary the height of counters and other spaces between the baseline and x-"
 "height"
 msgstr ""
+"Змінна висота лічильників та інших пробілів між базовою лінією та висотою за "
+"X"
 
 #. TRANSLATORS: “Parametric Uppercase Counter Height”
 #: ../src/ui/widget/font-variations.cpp:72
-#, fuzzy
-#| msgid "Caps height:"
 msgctxt "Variable font axis"
 msgid "Uppercase height"
-msgstr "Висота великих літер:"
+msgstr "Висота великих літер"
 
 #: ../src/ui/widget/font-variations.cpp:72
 msgid "Vary the height of uppercase letterforms"
-msgstr ""
+msgstr "Змінна висота літерних форм верхнього регістру"
 
 #. TRANSLATORS: “Parametric Ascender Height”
 #: ../src/ui/widget/font-variations.cpp:74
-#, fuzzy
-#| msgid "Ascender:"
 msgctxt "Variable font axis"
 msgid "Ascender height"
-msgstr "Верхній елемент:"
+msgstr "Висота надрядкових"
 
 #: ../src/ui/widget/font-variations.cpp:74
 msgid "Vary the height of lowercase ascenders"
-msgstr ""
+msgstr "Змінна висота надрядкових символів нижнього регістру"
 
 #. TRANSLATORS: “Parametric Descender Depth”
 #: ../src/ui/widget/font-variations.cpp:76
-#, fuzzy
-#| msgid "Descender:"
 msgctxt "Variable font axis"
 msgid "Descender depth"
-msgstr "Нижній елемент:"
+msgstr "Глибина підрядкових"
 
 #: ../src/ui/widget/font-variations.cpp:76
 msgid "Vary the depth of lowercase descenders"
-msgstr ""
+msgstr "Змінна висота підрядкових символів нижнього регістру"
 
 #. TRANSLATORS: “Parametric Figure Height”
 #: ../src/ui/widget/font-variations.cpp:78
-#, fuzzy
-#| msgid "Blur height:"
 msgctxt "Variable font axis"
 msgid "Figure height"
-msgstr "Висота розмиття:"
+msgstr "Висота фігури"
 
 #: ../src/ui/widget/font-variations.cpp:78
 msgid "Vary the height of figures"
-msgstr ""
+msgstr "Змінна висота фігур"
 
 #. TRANSLATORS: "Serif rise" - found in the wild (https://github.com/googlefonts/amstelvar)
 #: ../src/ui/widget/font-variations.cpp:80
-#, fuzzy
-#| msgid "Serif cap"
 msgctxt "Variable font axis"
 msgid "Serif rise"
-msgstr "Кінчик з засічкою"
+msgstr "Підняття засічки"
 
 #: ../src/ui/widget/font-variations.cpp:80
-#, fuzzy
-#| msgid "Determines the shape of the path's corners"
 msgid "Vary the shape of the serifs"
-msgstr "Визначає форму кутів контуру"
+msgstr "Змінна форма засічок"
 
 #. TRANSLATORS: Flare - flaring of the stems
 #: ../src/ui/widget/font-variations.cpp:82
 msgctxt "Variable font axis"
 msgid "Flare"
-msgstr ""
+msgstr "Відблиск"
 
 #: ../src/ui/widget/font-variations.cpp:82
 msgid "Controls the flaring of the stems"
-msgstr ""
+msgstr "Керує відблисками стовбурів"
 
 #. TRANSLATORS: Volume - The volume axis works only in combination with the Flare axis. It transforms the serifs
 #. and adds a little more edge to details.
 #: ../src/ui/widget/font-variations.cpp:85
-#, fuzzy
-#| msgid "Columns"
 msgctxt "Variable font axis"
 msgid "Volume"
-msgstr "Стовпчики"
+msgstr "Об'єм"
 
 #: ../src/ui/widget/font-variations.cpp:85
 msgid "Volume works in combination with flare to transform serifs"
-msgstr ""
+msgstr "Об'єм працює у поєднанні з відблиском для перетворення засічок"
 
 #: ../src/ui/widget/font-variations.cpp:87
-#, fuzzy
-#| msgid "Smoothness"
 msgctxt "Variable font axis"
 msgid "Softness"
-msgstr "Плавність"
+msgstr "М’якість"
 
 #: ../src/ui/widget/font-variations.cpp:87
 msgid "Softness makes letterforms more soft and rounded"
-msgstr ""
+msgstr "М'якість робить форми літер м'якішими і заокругленішими"
 
 #: ../src/ui/widget/font-variations.cpp:89
-#, fuzzy
-#| msgid "Visual"
 msgctxt "Variable font axis"
 msgid "Casual"
-msgstr "візуальна"
+msgstr "Неформальність"
 
 #: ../src/ui/widget/font-variations.cpp:89
 msgid "Adjust the letterforms from a more serious style to a more casual style"
-msgstr ""
+msgstr "Коригує форми літер з серйозного стилю до простішого стилю"
 
 #: ../src/ui/widget/font-variations.cpp:91
-#, fuzzy
-#| msgid "Cursor size"
 msgctxt "Variable font axis"
 msgid "Cursive"
-msgstr "Розмір курсора"
+msgstr "Cursive"
 
 #: ../src/ui/widget/font-variations.cpp:91
 msgid "Control the substitution of cursive forms"
-msgstr ""
+msgstr "Керує заміною курсивних форм"
 
 #: ../src/ui/widget/font-variations.cpp:93
-#, fuzzy
-#| msgid "Fill"
 msgctxt "Variable font axis"
 msgid "Fill"
 msgstr "Заповнення"
 
 #: ../src/ui/widget/font-variations.cpp:93
 msgid "Fill can turn transparent forms opaque"
-msgstr ""
+msgstr "Заповнення може перетворити прозорі форми на непрозорі"
 
 #: ../src/ui/widget/font-variations.cpp:95
-#, fuzzy
-#| msgid "Monospaced font:"
 msgctxt "Variable font axis"
 msgid "Monospace"
-msgstr "Моноширинний шрифт:"
+msgstr "Моноширинний"
 
 #: ../src/ui/widget/font-variations.cpp:95
 msgid "Adjust the glyphs from a proportional width to a fixed width"
-msgstr ""
+msgstr "Коригує гліфи з пропорційної ширини до фіксованої ширини"
 
 #: ../src/ui/widget/font-variations.cpp:97
 msgctxt "Variable font axis"
 msgid "Wonky"
-msgstr ""
+msgstr "Хилитання"
 
 #: ../src/ui/widget/font-variations.cpp:97
 msgid "Binary switch used to control substitution of “wonky” forms"
 msgstr ""
+"Двійковий перемикач, який використовують для керування заміною форм з "
+"«хилитанням»"
 
 #: ../src/ui/widget/font-variations.cpp:99
-#, fuzzy
-#| msgid "Level shape"
 msgctxt "Variable font axis"
 msgid "Element shape"
-msgstr "Форма рівня"
+msgstr "Форма елемента"
 
 #: ../src/ui/widget/font-variations.cpp:99
 msgid "Selection of the base element glyphs are composed of"
-msgstr ""
+msgstr "Позначені гліфи базових елементів складаються з"
 
 #: ../src/ui/widget/font-variations.cpp:101
-#, fuzzy
-#| msgid "Reset grid"
 msgctxt "Variable font axis"
 msgid "Element grid"
-msgstr "Скинути сітку"
+msgstr "Ґратка елементів"
 
 #: ../src/ui/widget/font-variations.cpp:101
 msgid "Controls how many elements are used per one grid unit"
-msgstr ""
+msgstr "Керує тим, скільки елементів буде використано в одному модулі сітки"
 
 #. TRANSLATORS: “Optical Size”
 #. Optical sizes in a variable font are different versions of a typeface optimized for use at singular specific sizes,
 #. such as 14 pt or 144 pt. Small (or body) optical sizes tend to have less stroke contrast, more open and wider spacing,
 #. and a taller x-height than those of their large (or display) counterparts.
 #: ../src/ui/widget/font-variations.cpp:106
-#, fuzzy
-#| msgid "Initial size:"
 msgctxt "Variable font axis"
 msgid "Optical size"
-msgstr "Початковий розмір:"
+msgstr "Оптичний розмір"
 
 #: ../src/ui/widget/font-variations.cpp:106
-#, fuzzy
-#| msgid "Optimize PNG output for file size."
 msgid "Optimize the typeface for use at specific size"
-msgstr "Оптимізувати розмір результату у форматі PNG."
+msgstr "Оптимізувати гарнітуру для використання з певним розміром"
 
 #. TRANSLATORS: Slant controls the font file’s slant parameter for oblique styles.
 #: ../src/ui/widget/font-variations.cpp:108
 msgctxt "Variable font axis"
 msgid "Slant"
-msgstr ""
+msgstr "Нахил"
 
 #: ../src/ui/widget/font-variations.cpp:108
 msgid "Controls the font file’s slant parameter for oblique styles"
-msgstr ""
+msgstr "Керує параметром нахилу файла шрифту для похилих стилів"
 
 #: ../src/ui/widget/font-variations.cpp:110
-#, fuzzy
-#| msgid "Old Italic"
 msgctxt "Variable font axis"
 msgid "Italic"
-msgstr "давня італійська"
+msgstr "Курсив"
 
 #: ../src/ui/widget/font-variations.cpp:110
 msgid "Turns on the font’s italic forms"
-msgstr ""
+msgstr "Вмикає форми курсиву шрифту"
 
 #. TRANSLATORS: Weight controls the font file’s weight parameter.
 #: ../src/ui/widget/font-variations.cpp:112
-#, fuzzy
-#| msgid "Weight"
 msgctxt "Variable font axis"
 msgid "Weight"
 msgstr "Вага"
 
 #: ../src/ui/widget/font-variations.cpp:112
 msgid "Controls the font file’s weight parameter"
-msgstr ""
+msgstr "Керує параметром ваги файла шрифту"
 
 #. TRANSLATORS: Width controls the font file’s width parameter.
 #: ../src/ui/widget/font-variations.cpp:114
-#, fuzzy
-#| msgid "Width"
 msgctxt "Variable font axis"
 msgid "Width"
 msgstr "Ширина"
 
 #: ../src/ui/widget/font-variations.cpp:114
 msgid "Controls the font file’s width parameter"
-msgstr ""
+msgstr "Керує параметром ширини файла шрифту"
 
 #: ../src/ui/widget/font-variations.cpp:116
-#, fuzzy
-#| msgctxt "Font feature"
-#| msgid "Tabular"
 msgctxt "Variable font axis"
 msgid "Tabular width"
-msgstr "Табличні"
+msgstr "Таблична ширина"
 
 #: ../src/ui/widget/font-variations.cpp:116
 msgid "Controls the tabular width"
-msgstr ""
+msgstr "Керує табличною шириною"
 
 #: ../src/ui/widget/font-variations.cpp:117
-#, fuzzy
-#| msgid "Guideline"
 msgctxt "Variable font axis"
 msgid "Underline"
-msgstr "Напрямна"
+msgstr "Підкреслення"
 
 #: ../src/ui/widget/font-variations.cpp:117
 msgid "Controls the weight of an underline"
-msgstr ""
+msgstr "Керує вагою підкреслення"
 
 #: ../src/ui/widget/font-variations.cpp:118
-#, fuzzy
-#| msgid "Shadows"
 msgctxt "Variable font axis"
 msgid "Shadow"
-msgstr "Темні ділянки"
+msgstr "Тінь"
 
 #: ../src/ui/widget/font-variations.cpp:118
 msgid "Controls the depth of a shadow"
-msgstr ""
+msgstr "Керує глибиною тіні"
 
 #: ../src/ui/widget/font-variations.cpp:119
-#, fuzzy
-#| msgid "Selection"
 msgctxt "Variable font axis"
 msgid "Reflection"
-msgstr "позначене"
+msgstr "Відбиття"
 
 #: ../src/ui/widget/font-variations.cpp:119
-#, fuzzy
-#| msgid "Convert selection:"
 msgid "Controls the Y reflection"
-msgstr "Перетворення позначеного:"
+msgstr "Керує відбиттям за Y"
 
 #: ../src/ui/widget/font-variations.cpp:120
-#, fuzzy
-#| msgid "Outline"
 msgctxt "Variable font axis"
 msgid "Outline"
 msgstr "Обрис"
 
 #: ../src/ui/widget/font-variations.cpp:120
 msgid "Controls the weight of a font’s outline"
-msgstr ""
+msgstr "Керує вагою обрису шрифту"
 
 #: ../src/ui/widget/font-variations.cpp:121
-#, fuzzy
-#| msgid "Engraving"
 msgctxt "Variable font axis"
 msgid "Engrave"
 msgstr "Гравірування"
 
 #: ../src/ui/widget/font-variations.cpp:121
 msgid "Controls the width of an engraving"
-msgstr ""
+msgstr "Керує товщиною гравірування"
 
 #: ../src/ui/widget/font-variations.cpp:122
-#, fuzzy
-#| msgid "Emboss"
 msgctxt "Variable font axis"
 msgid "Emboss"
-msgstr "Рельєф"
+msgstr "Барельєф"
 
 #: ../src/ui/widget/font-variations.cpp:122
 msgid "Controls the depth of an emboss"
-msgstr ""
+msgstr "Керує глибиною рельєфу"
 
 #: ../src/ui/widget/font-variations.cpp:123
-#, fuzzy
-#| msgid "Rela_tive change"
 msgctxt "Variable font axis"
 msgid "Relative X advance"
-msgstr "Відно_сна зміна"
+msgstr "Відносний рух за X"
 
 #: ../src/ui/widget/font-variations.cpp:123
 msgid "Controls the relative X advance - horizontal motion of the glyph"
-msgstr ""
+msgstr "Керує відносним рухом за X — горизонтальним рухом гліфу"
 
 #: ../src/ui/widget/font-variations.cpp:124
-#, fuzzy
-#| msgid "Rela_tive change"
 msgctxt "Variable font axis"
 msgid "Relative Y advance"
-msgstr "Відно_сна зміна"
+msgstr "Відносний рух за Y"
 
 #: ../src/ui/widget/font-variations.cpp:124
 msgid "Controls the relative Y advance - vertical motion of the glyph"
-msgstr ""
+msgstr "Керує відносним рухом за Y — вертикальним рухом гліфу"
 
 #: ../src/ui/widget/font-variations.cpp:125
-#, fuzzy
-#| msgid "Relative to:"
 msgctxt "Variable font axis"
 msgid "Relative second"
-msgstr "Відносно:"
+msgstr "Відносна секунда"
 
 #: ../src/ui/widget/font-variations.cpp:125
 msgid "Controls the relative second value - as in one second of animation time"
-msgstr ""
+msgstr "Керує відносним значенням секунди — як в одній секунді часу анімації"
 
 #: ../src/ui/widget/font-variations.cpp:126
-#, fuzzy
-#| msgid "_Rotation"
 msgctxt "Variable font axis"
 msgid "Rotation"
-msgstr "_Обертання"
+msgstr "Обертання"
 
 #: ../src/ui/widget/font-variations.cpp:126
 msgid "Controls the rotation of the glyph in degrees"
-msgstr ""
+msgstr "Керує обертанням гліфу у градусах"
 
 #: ../src/ui/widget/font-variations.cpp:127
-#, fuzzy
-#| msgid "Unicode character:"
 msgctxt "Variable font axis"
 msgid "Unicode variation"
-msgstr "Символ Unicode:"
+msgstr "Варіація Unicode"
 
 #: ../src/ui/widget/font-variations.cpp:127
-#, fuzzy
-#| msgid "Set glyph unicode"
 msgid "Controls the glyph’s unicode ID"
-msgstr "Встановити unicode-кодування гліфу"
+msgstr "Керує ідентифікатором unicode гліфу"
 
 #: ../src/ui/widget/font-variations.cpp:128
-#, fuzzy
-#| msgid "Length variation:"
 msgctxt "Variable font axis"
 msgid "Feature variation"
-msgstr "Варіація довжини:"
+msgstr "Варіація елементів"
 
 #: ../src/ui/widget/font-variations.cpp:128
 msgid "Controls the glyph’s feature variation"
-msgstr ""
+msgstr "Керує варіативністю елементів гліфів"
 
 #: ../src/ui/widget/gradient-editor.cpp:218
 msgid "Stop color"
@@ -37981,10 +37361,8 @@ msgid "None"
 msgstr "немає"
 
 #: ../src/ui/widget/gradient-editor.cpp:473
-#, fuzzy
-#| msgid "Rename gradient"
 msgid "Rotate gradient"
-msgstr "Перейменувати градієнт"
+msgstr "Обернути градієнт"
 
 #: ../src/ui/widget/gradient-selector.cpp:69
 #: ../src/ui/widget/gradient-selector.cpp:193
@@ -38163,23 +37541,18 @@ msgstr "Змінити відокремлення"
 
 #. TRANSLATORS: "US" is an abbreviation for United States.
 #: ../src/ui/widget/page-properties.cpp:70
-#, fuzzy
-#| msgctxt "Clonetiler color saturation"
-#| msgid "S"
 msgid "US"
-msgstr "Н"
+msgstr "США"
 
 #. TRANSLATORS: %1 is a paper size class, e.g. 'A' or 'B' – as in "A4".
 #: ../src/ui/widget/page-properties.cpp:78
 msgid "ISO %1"
-msgstr ""
+msgstr "ISO %1"
 
 #. TRANSLATORS: This refers to page sizes
 #: ../src/ui/widget/page-properties.cpp:83
-#, fuzzy
-#| msgid "Other"
 msgid "Others"
-msgstr "Інше"
+msgstr "Інші"
 
 #: ../src/ui/widget/page-properties.cpp:165
 msgid "Border and shadow color"
@@ -38349,9 +37722,6 @@ msgid "<i>None</i>"
 msgstr "<i>Немає</i>"
 
 #: ../src/ui/widget/selected-style.cpp:75
-#, fuzzy
-#| msgctxt "Fill and stroke"
-#| msgid "No fill, middle-click for black fill"
 msgid "No fill, middle-click for black fill"
 msgstr "Без заповнення, клацніть середньою кнопкою для заповнення чорним"
 
@@ -38361,9 +37731,6 @@ msgid "<i>None</i>"
 msgstr "<i>Немає</i>"
 
 #: ../src/ui/widget/selected-style.cpp:76
-#, fuzzy
-#| msgctxt "Fill and stroke"
-#| msgid "No stroke, middle-click for black stroke"
 msgid "No stroke, middle-click for black stroke"
 msgstr "Без штрихів, клацніть середньою кнопкою для чорних штрихів"
 
@@ -38441,10 +37808,8 @@ msgstr "Сітковий градієнт (штрих)"
 
 #: ../src/ui/widget/selected-style.cpp:91
 #: ../src/ui/widget/selected-style.cpp:92
-#, fuzzy
-#| msgid "<b>L</b>"
 msgid "<b>C</b>"
-msgstr "<b>Л</b>"
+msgstr "<b>C</b>"
 
 #: ../src/ui/widget/selected-style.cpp:91
 msgid "Flat color (fill)"
@@ -38517,90 +37882,62 @@ msgid "Paste stroke"
 msgstr "Вставити штрих"
 
 #: ../src/ui/widget/selected-style.cpp:603
-#, fuzzy
-#| msgid "Edit fill..."
 msgid "Edit Fill..."
-msgstr "Редагувати заливку…"
+msgstr "Редагувати заповнення…"
 
 #: ../src/ui/widget/selected-style.cpp:604
-#, fuzzy
-#| msgid "Edit stroke..."
 msgid "Edit Stroke..."
-msgstr "Редагування штриха…"
+msgstr "Редагувати штрих…"
 
 #: ../src/ui/widget/selected-style.cpp:609
-#, fuzzy
-#| msgid "Last set color"
 msgid "Last Set Color"
 msgstr "Останній використаний колір"
 
 #: ../src/ui/widget/selected-style.cpp:611
-#, fuzzy
-#| msgid "Last selected color"
 msgid "Last Selected Color"
 msgstr "Останній вибраний колір"
 
 #: ../src/ui/widget/selected-style.cpp:629
-#, fuzzy
-#| msgid "Copy color"
 msgid "Copy Color"
 msgstr "Копіювати колір"
 
 #: ../src/ui/widget/selected-style.cpp:633
-#, fuzzy
-#| msgid "Plaster Color"
 msgid "Paste Color"
-msgstr "Кольорова штукатурка"
+msgstr "Вставити колір"
 
 #: ../src/ui/widget/selected-style.cpp:635
-#, fuzzy
-#| msgid "Swap fill and stroke"
 msgid "Swap Fill and Stroke"
 msgstr "Поміняти місцями кольори заливки та штриха"
 
 #: ../src/ui/widget/selected-style.cpp:640
-#, fuzzy
-#| msgid "Make fill opaque"
 msgid "Make Fill Opaque"
-msgstr "Зробити заливку непрозорою"
+msgstr "Зробити заповнення непрозорою"
 
 #: ../src/ui/widget/selected-style.cpp:641
-#, fuzzy
-#| msgid "Make stroke opaque"
 msgid "Make Stroke Opaque"
 msgstr "Зробити штрихи непрозорими"
 
 #. TRANSLATORS COMMENT: unset is a verb here
 #: ../src/ui/widget/selected-style.cpp:643
-#, fuzzy
-#| msgid "Unset fill"
 msgid "Unset Fill"
-msgstr "Невизначена заливка"
+msgstr "Скасувати заповнення"
 
 #: ../src/ui/widget/selected-style.cpp:644
-#, fuzzy
-#| msgid "Unset stroke"
 msgid "Unset Stroke"
-msgstr "Невизначений штрих"
+msgstr "Скасувати штрих"
 
 #: ../src/ui/widget/selected-style.cpp:645
-#, fuzzy
-#| msgid "Remove fill"
 msgid "Remove Fill"
-msgstr "Вилучити заливку"
+msgstr "Вилучити заповнення"
 
 #: ../src/ui/widget/selected-style.cpp:646
 #: ../src/ui/widget/selected-style.cpp:686
-#, fuzzy
-#| msgid "Remove stroke"
 msgid "Remove Stroke"
 msgstr "Вилучити штрих"
 
 #: ../src/ui/widget/selected-style.cpp:653
-#, fuzzy
-#| msgid "Stroke width"
 msgid "<b>Stroke Width</b>"
-msgstr "Товщина штриха"
+msgstr "<b>Товщина штриха</b>"
 
 #: ../src/ui/widget/selected-style.cpp:709
 msgid "Change stroke width"
@@ -38619,14 +37956,10 @@ msgid "Stroke is averaged over selected objects"
 msgstr "Штрих усереднено для позначених об'єктів"
 
 #: ../src/ui/widget/selected-style.cpp:852
-#, fuzzy
-#| msgid "Multiple selected objects have the same fill"
 msgid "Multiple selected objects have same fill"
 msgstr "Множина позначених об'єктів має однакове заповнення"
 
 #: ../src/ui/widget/selected-style.cpp:853
-#, fuzzy
-#| msgid "Multiple selected objects have the same stroke"
 msgid "Multiple selected objects have same stroke"
 msgstr "Множина позначених об'єктів має однакові штрихи"
 
@@ -38635,6 +37968,8 @@ msgid ""
 "<b>Opacity (%)</b>\n"
 "Middle-click cycles through 0%, 50%, 100%"
 msgstr ""
+"<b>Непрозорість (%)</b>\n"
+"Клацання середньою кнопкою — циклічний перехід 0%, 50%, 100%"
 
 #: ../src/ui/widget/selected-style.cpp:906
 #: ../src/ui/widget/stroke-style.cpp:238 ../src/ui/widget/style-swatch.cpp:284
@@ -38643,10 +37978,8 @@ msgid "Hairline"
 msgstr "Волосяна лінія"
 
 #: ../src/ui/widget/selected-style.cpp:907
-#, fuzzy
-#| msgid "Stroke width:"
 msgid "Stroke width: Hairline"
-msgstr "Товщина штриха:"
+msgstr "Товщина штриха: волосяна лінія"
 
 #: ../src/ui/widget/selected-style.cpp:926
 #, c-format
@@ -38658,14 +37991,10 @@ msgid " (averaged)"
 msgstr " (осереднений)"
 
 #: ../src/ui/widget/selected-style.cpp:954
-#, fuzzy
-#| msgid "0 (transparent)"
 msgid "0% (Transparent)"
-msgstr "0 (прозорий)"
+msgstr "0% (прозорий)"
 
 #: ../src/ui/widget/selected-style.cpp:958
-#, fuzzy
-#| msgid "100% (opaque)"
 msgid "100% (Opaque)"
 msgstr "100% (непрозорий)"
 
@@ -38879,16 +38208,14 @@ msgid "R Gradient"
 msgstr "Рад. градієнт"
 
 #: ../src/ui/widget/style-swatch.cpp:261
-#, fuzzy, c-format
-#| msgid "Fill:"
+#, c-format
 msgid "Fill: %s"
-msgstr "Заповнення:"
+msgstr "Заповнення: %s"
 
 #: ../src/ui/widget/style-swatch.cpp:263
-#, fuzzy, c-format
-#| msgid "Stroke:"
+#, c-format
 msgid "Stroke: %s"
-msgstr "Штрих:"
+msgstr "Штрих: %s"
 
 #: ../src/ui/widget/style-swatch.cpp:268
 msgctxt "Fill and stroke"
@@ -38933,34 +38260,24 @@ msgid "Change swatch color"
 msgstr "Змінити колір зразка"
 
 #: ../src/ui/widget/tabs-widget.cpp:94
-#, fuzzy
-#| msgid "Move Tab to New Window"
 msgid "Detach to New Window"
-msgstr "Пересунути вкладку до нового вікна"
+msgstr "Від'єднати до нового вікна"
 
 #: ../src/ui/widget/tabs-widget.cpp:95
-#, fuzzy
-#| msgid "Noise Fill"
 msgid "Close File"
-msgstr "Заливання шумом"
+msgstr "Закрити файл"
 
 #: ../src/ui/widget/tabs-widget.cpp:112
-#, fuzzy
-#| msgid "New Document"
 msgid "New Document..."
-msgstr "Новий документ"
+msgstr "Створити документ…"
 
 #: ../src/ui/widget/tabs-widget.cpp:113
-#, fuzzy
-#| msgid "New Document"
 msgid "Open Document..."
-msgstr "Новий документ"
+msgstr "Відкрити документ…"
 
 #: ../src/ui/widget/template-list.cpp:130
-#, fuzzy
-#| msgid "User templates:"
 msgid "<new template>"
-msgstr "Шаблони користувача:"
+msgstr "<новий шаблон>"
 
 #: ../src/util/font-collections.h:35
 msgid "Recently Used Fonts"
@@ -38973,47 +38290,37 @@ msgstr "Шрифти документа"
 #: ../src/util/font-tags.cpp:15
 msgctxt "Font category"
 msgid "Sans Serif"
-msgstr ""
+msgstr "Без засічок"
 
 #: ../src/util/font-tags.cpp:16
-#, fuzzy
-#| msgid "Serial"
 msgctxt "Font category"
 msgid "Serif"
-msgstr "Послідовний"
+msgstr "З засічками"
 
 #: ../src/util/font-tags.cpp:17
-#, fuzzy
-#| msgid "Script: "
 msgctxt "Font category"
 msgid "Script"
-msgstr "Писемність: "
+msgstr "Рукописний"
 
 #: ../src/util/font-tags.cpp:19
-#, fuzzy
-#| msgid "Symbols"
 msgctxt "Font category"
 msgid "Symbols"
 msgstr "Символи"
 
 #: ../src/util/font-tags.cpp:20
-#, fuzzy
-#| msgid "Monospaced font:"
 msgctxt "Font category"
 msgid "Monospace"
-msgstr "Моноширинний шрифт:"
+msgstr "Моноширинний"
 
 #: ../src/util/font-tags.cpp:21
-#, fuzzy
-#| msgid "Disabled"
 msgctxt "Font category"
 msgid "Variable"
-msgstr "Вимкнено"
+msgstr "Змінний"
 
 #: ../src/util/font-tags.cpp:22
 msgctxt "Font category"
 msgid "Oblique"
-msgstr ""
+msgstr "Похилий"
 
 #: ../src/util/paper.cpp:35
 msgid "Failed to create the page file."
@@ -39032,17 +38339,13 @@ msgid "3D box: Move vanishing point"
 msgstr "Просторовий об'єкт: Пересування точки сходу"
 
 #: ../src/vanishing-point.cpp:306
-#, fuzzy, c-format
-#| msgid "<b>Infinite</b> vanishing point shared by the box"
-#| msgid_plural ""
-#| "<b>Infinite</b> vanishing point shared by <b>%d</b> boxes; drag with "
-#| "<b>Shift</b> to separate selected box(es)"
+#, c-format
 msgid "<b>Finite</b> vanishing point shared by the box"
 msgid_plural ""
 "<b>Finite</b> vanishing point shared by <b>%d</b> boxes; drag with <b>Shift</"
 "b> to separate selected box(es)"
 msgstr[0] "<b>Нескінченна</b> точка сходу для <b>%d</b> об'єкта"
-msgstr[1] "<b>Нескінченна</b> точка сходу, спільна для <b>%d</b> об'єктів"
+msgstr[1] "<b>Скінченна</b> точка сходу, спільна для <b>%d</b> об'єктів"
 msgstr[2] "<b>Нескінченна</b> точка сходу, спільна для <b>%d</b> об'єктів"
 
 #: ../src/vanishing-point.cpp:315
@@ -39131,16 +38434,12 @@ msgstr "Shift+Enter – замкнути"
 #: ../share/ui/color-page.glade:140 ../share/ui/color-page.glade:153
 #: ../share/ui/color-page.glade:167 ../share/ui/color-page.glade:181
 #: ../share/ui/color-page.glade:195 ../share/ui/color-page.glade:209
-#, fuzzy
-#| msgid "_L:"
 msgid "L:"
-msgstr "_L:"
+msgstr "L:"
 
 #: ../share/ui/color-page.glade:244
-#, fuzzy
-#| msgid "Color Markers"
 msgid "Color Picker"
-msgstr "Маркери кольорів"
+msgstr "Піпетка"
 
 #: ../share/ui/color-palette.glade:207 ../share/ui/pattern-edit.glade:88
 msgid "Tile size:"
@@ -39183,13 +38482,12 @@ msgstr "Клацніть для копіювання"
 
 #: ../share/ui/dialog-crash.glade:6
 msgid "Crash Report"
-msgstr ""
+msgstr "Звіт щодо аварії"
 
 #: ../share/ui/dialog-crash.glade:20
-#, fuzzy
-#| msgid "Inkscape has crashed and will now close."
 msgid "<b>Inkscape has crashed and will now close.</b>"
-msgstr "Аварійне завершення роботи Inkscape. Вікно програми буде закрито."
+msgstr ""
+"<b>Аварійне завершення роботи Inkscape. Вікно програми буде закрито.</b>"
 
 #: ../share/ui/dialog-crash.glade:26
 msgid ""
@@ -39251,10 +38549,8 @@ msgid "Export Format Options"
 msgstr "Параметри форматування при експортуванні"
 
 #: ../share/ui/dialog-export-prefs.glade:37
-#, fuzzy
-#| msgid "Export Format Options"
 msgid "View export format options"
-msgstr "Параметри форматування при експортуванні"
+msgstr "Переглянути параметри форматування при експортуванні"
 
 #: ../share/ui/dialog-export.glade:47
 msgid "Export selected objects"
@@ -39319,32 +38615,24 @@ msgid "Export Selected Only"
 msgstr "Експортувати лише позначене"
 
 #: ../share/ui/dialog-export.glade:463 ../share/ui/dialog-export.glade:756
-#, fuzzy
-#| msgid "Background color"
 msgid "Background Color"
 msgstr "Колір тла"
 
 #: ../share/ui/dialog-export.glade:484
-#, fuzzy
-#| msgid "Export Area"
 msgid "Export format"
-msgstr "Ділянка для експортування"
+msgstr "Формат експортування"
 
 #: ../share/ui/dialog-export.glade:494
 msgid "Select export format"
 msgstr "Виберіть формат експортування"
 
 #: ../share/ui/dialog-export.glade:527
-#, fuzzy
-#| msgid "No file selected"
 msgid "(No file selected)"
-msgstr "Не вибрано файла"
+msgstr "(не вибрано жодного файла)"
 
 #: ../share/ui/dialog-export.glade:536
-#, fuzzy
-#| msgid "_Browse..."
 msgid "Choose..."
-msgstr "Ви_брати…"
+msgstr "Вибрати…"
 
 #: ../share/ui/dialog-export.glade:589 ../share/ui/dialog-export.glade:892
 msgid "Cancel Export"
@@ -39375,16 +38663,16 @@ msgid "Preview"
 msgstr "Перегляд"
 
 #: ../share/ui/dialog-export.glade:787
-#, fuzzy
-#| msgid "Overwrite existing exports"
 msgid "Overwrite existing files"
-msgstr "Перезаписати наявні дані"
+msgstr "Перезаписати наявні файли"
 
 #: ../share/ui/dialog-export.glade:790
 msgid ""
 "When exporting each of the images in the batch, generated filenames which "
 "already exist will be overwritten without confirmation."
 msgstr ""
+"При пакетному експортуванні кожного з зображень файли зі створеними назвами, "
+"дублікати яких вже існують, буде перезаписано без підтвердження."
 
 #: ../share/ui/dialog-export.glade:815
 msgid "Browse export directory"
@@ -39399,22 +38687,18 @@ msgid "Batch Export"
 msgstr "Пакетне експортування"
 
 #: ../share/ui/dialog-extensions.glade:19
-#, fuzzy
-#| msgid "Tile size:"
 msgid "Thumbnail size:"
-msgstr "Розмір плитки:"
+msgstr "Розмір мініатюри:"
 
 #: ../share/ui/dialog-extensions.glade:134
-#, fuzzy
-#| msgid "Columns"
 msgid "column"
-msgstr "Стовпчики"
+msgstr "стовпчик"
 
 #. This verb is used to execute an extension. If extension accepts input parameters, then ellipsis will be appended to this word -> _Run...
 #: ../share/ui/dialog-extensions.glade:208
 msgctxt "run-extension"
 msgid "_Run"
-msgstr ""
+msgstr "З_апустити"
 
 #: ../share/ui/dialog-filter-editor.glade:43
 #: ../share/ui/dialog-filter-editor.glade:230
@@ -39490,14 +38774,10 @@ msgid "Flatten"
 msgstr "Спростити"
 
 #: ../share/ui/dialog-livepatheffect-item.glade:25
-#, fuzzy
-#| msgid "Set custom defaults"
 msgid "Set Custom Defaults"
 msgstr "Встановити нетипові стандартні значення"
 
 #: ../share/ui/dialog-livepatheffect-item.glade:30
-#, fuzzy
-#| msgid "Forget custom defaults"
 msgid "Forget Custom Defaults"
 msgstr "Забути нетипові стандартні значення"
 
@@ -39585,40 +38865,28 @@ msgid "Keywords: "
 msgstr "Ключові слова: "
 
 #: ../share/ui/dialog-swatches.glade:45
-#, fuzzy
-#| msgid "Search attribute name"
 msgid "Search colors by their name"
-msgstr "Шукати назву атрибута"
+msgstr "Шукати кольори за назвою"
 
 #: ../share/ui/dialog-swatches.glade:81
-#, fuzzy
-#| msgid "Set fill color from swatch"
 msgid "Load palette of colors or swatches"
-msgstr "Встановити колір заливки зі зразків"
+msgstr "Завантажити палітру кольорів або плашки"
 
 #: ../share/ui/dialog-swatches.glade:90
-#, fuzzy
-#| msgid "Pin swatch"
 msgid "New swatch"
-msgstr "Пришпилити плашку"
+msgstr "Нова плашка"
 
 #: ../share/ui/dialog-swatches.glade:99
-#, fuzzy
-#| msgid "Pin swatch"
 msgid "Edit swatch"
-msgstr "Пришпилити плашку"
+msgstr "Редагувати плашку"
 
 #: ../share/ui/dialog-swatches.glade:121
-#, fuzzy
-#| msgid "Show color labels"
 msgid "Show colors with names"
-msgstr "Показувати мітки кольорів"
+msgstr "Показувати кольори з назвами"
 
 #: ../share/ui/dialog-swatches.glade:131
-#, fuzzy
-#| msgid "Show or hide the page grid"
 msgid "Show colors in a grid"
-msgstr "Показати або сховати сітку сторінки"
+msgstr "Показувати кольори у таблиці"
 
 #: ../share/ui/dialog-symbols.glade:55 ../share/ui/pattern-edit.glade:76
 msgid "Show names"
@@ -39645,10 +38913,8 @@ msgid "Search for symbol"
 msgstr "Шукати символ"
 
 #: ../share/ui/dialog-symbols.glade:264
-#, fuzzy
-#| msgid "Copy selection to clipboard"
 msgid "Copy selected symbol onto clipboard"
-msgstr "Скопіювати позначені об'єкти у буфер обміну"
+msgstr "Скопіювати позначений символ до буфера обміну"
 
 #: ../share/ui/dialog-symbols.glade:276
 msgid "Convert selected object(s) to symbol"
@@ -39664,7 +38930,7 @@ msgstr ""
 
 #: ../share/ui/dialog-symbols.glade:307
 msgid "Symbols display settings"
-msgstr ""
+msgstr "Параметри показу символів"
 
 #: ../share/ui/dialog-text-edit.glade:32 ../share/ui/toolbar-text.ui:68
 msgid "Open Collections Editor"
@@ -39675,10 +38941,8 @@ msgid "Open the Font Collections Manager dialogue"
 msgstr "Відкрити вікно керування збірками шрифтів"
 
 #: ../share/ui/dialog-text-edit.glade:41
-#, fuzzy
-#| msgid "Select a filter"
 msgid "Clear all filters"
-msgstr "Виберіть фільтр"
+msgstr "Зняти усі фільтри"
 
 #: ../share/ui/dialog-text-edit.glade:45
 msgid "Reset filters and show all available fonts"
@@ -40011,20 +39275,14 @@ msgid "Abort trace operation"
 msgstr "Перервати дію з векторизації"
 
 #: ../share/ui/dialog-xml.glade:7
-#, fuzzy
-#| msgid "Automatic layout"
 msgid "Automatic Layout"
 msgstr "Автоматичне компонування"
 
 #: ../share/ui/dialog-xml.glade:12
-#, fuzzy
-#| msgid "Horizontal layout"
 msgid "Horizontal Layout"
 msgstr "Горизонтальне компонування"
 
 #: ../share/ui/dialog-xml.glade:17
-#, fuzzy
-#| msgid "Vertical layout"
 msgid "Vertical Layout"
 msgstr "Вертикальне компонування"
 
@@ -40255,25 +39513,25 @@ msgstr "<b>Імпортування Cairo</b>"
 #: ../share/ui/font-list.glade:17
 msgctxt "font-sample-text"
 msgid "AbcdEfgh1234"
-msgstr ""
+msgstr "AbcdEfgh1234"
 
 #. Sample text consisting of Arabic numerals
 #: ../share/ui/font-list.glade:18
 msgctxt "font-sample-text"
 msgid "1234567890"
-msgstr ""
+msgstr "1234567890"
 
 #. Sample text of lowercase Latin letters. Feel free to add diacritics if your language uses Latin script.
 #: ../share/ui/font-list.glade:19
 msgctxt "font-sample-text"
 msgid "abcdefghijklmnopqrstuvwxyz"
-msgstr ""
+msgstr "абвгґдеєжзиіїйклмнопрстуфхцчшщьюя"
 
 #. Sample text of uppercase Latin letters. Feel free to add diacritics if your language uses Latin script.
 #: ../share/ui/font-list.glade:20
 msgctxt "font-sample-text"
 msgid "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-msgstr ""
+msgstr "АБВГҐДЕЄЖЗИІЇЙКЛМНОПРСТУФХЦЧШЩЬЮЯ"
 
 #. Provide a sentence in your language that uses every letter in your alphabet. If your language uses logographs, you may want to include a few to give a glimpse of what selected font looks like.
 #.
@@ -40281,60 +39539,46 @@ msgstr ""
 #: ../share/ui/font-list.glade:21
 msgctxt "font-sample-text"
 msgid "The quick brown fox jumps over the lazy dog."
-msgstr ""
+msgstr "Тест українських та English символів."
 
 #. Sample text using diacritical marks and special characters. Add diacritics if your alphabet supports them, or other character variants that may be of interest to speakers of your language, like currency sign, etc. The idea is to test if selected font defines those variants.
 #: ../share/ui/font-list.glade:22
 msgctxt "font-sample-text"
 msgid "Yélløw ťüřtle fröm Áłphårettä íś čōmińġ fôr ďïññęr tòđây."
-msgstr ""
+msgstr "Yélløw ťüřtle fröm Áłphårettä íś čōmińġ fôr ďïññęr tòđây."
 
 #. This is an option to select to show font name as a font preview in font browser
 #: ../share/ui/font-list.glade:28
-#, fuzzy
-#| msgid "Font sample"
 msgid "Font name"
-msgstr "Зразок шрифту"
+msgstr "Назва шрифту"
 
 #: ../share/ui/font-list.glade:48
-#, fuzzy
 msgid "Font collections:"
-msgstr "Колір шрифту:"
+msgstr "Збірки шрифтів:"
 
 #: ../share/ui/font-list.glade:60
-#, fuzzy
-#| msgid "Show all available fonts"
 msgid "Show all fonts"
-msgstr "Показати усі доступні шрифти"
+msgstr "Показати усі шрифти"
 
 #: ../share/ui/font-list.glade:72
-#, fuzzy
-#| msgid "All Fonts"
 msgid "All fonts"
 msgstr "Усі шрифти"
 
 #: ../share/ui/font-list.glade:109
-#, fuzzy
 msgid "Edit font collections"
-msgstr "Колір шрифту:"
+msgstr "Редагувати збірки шрифтів"
 
 #: ../share/ui/font-list.glade:265
-#, fuzzy
-#| msgid "Samples:"
 msgid "Sample"
-msgstr "Фрагменти:"
+msgstr "Зразок"
 
 #: ../share/ui/font-list.glade:275
-#, fuzzy
-#| msgid "Preview's size (px):"
 msgid "Preview size"
-msgstr "Розмір попереднього перегляду (у пк):"
+msgstr "Розмір перегляду"
 
 #: ../share/ui/font-list.glade:284
-#, fuzzy
-#| msgid "Show names"
 msgid "Show font name"
-msgstr "Показувати назви"
+msgstr "Показати назву шрифту"
 
 #: ../share/ui/font-list.glade:320 ../share/extensions/jessyink_view.inx:3
 #: ../share/extensions/polyhedron_3d.inx:32
@@ -40343,11 +39587,9 @@ msgstr "Перегляд"
 
 #. A short text sample for when fonts are arranged in grid
 #: ../share/ui/font-list.glade:365
-#, fuzzy
-#| msgid "Area"
 msgctxt "font-sample-text"
 msgid "Aa"
-msgstr "Ділянка"
+msgstr "Aa"
 
 #: ../share/ui/font-list.glade:396 ../share/extensions/nicechart.inx:52
 #: ../share/extensions/path_number_nodes.inx:8
@@ -40356,82 +39598,76 @@ msgstr "Розмір шрифту:"
 
 #: ../share/ui/font-list.glade:409
 msgid "6"
-msgstr ""
+msgstr "6"
 
 #: ../share/ui/font-list.glade:410
 msgid "7"
-msgstr ""
+msgstr "7"
 
 #: ../share/ui/font-list.glade:411
 msgid "8"
-msgstr ""
+msgstr "8"
 
 #: ../share/ui/font-list.glade:412
 msgid "9"
-msgstr ""
+msgstr "9"
 
 #: ../share/ui/font-list.glade:413
 msgid "10"
-msgstr ""
+msgstr "10"
 
 #: ../share/ui/font-list.glade:414
 msgid "12"
-msgstr ""
+msgstr "12"
 
 #: ../share/ui/font-list.glade:415
 msgid "14"
-msgstr ""
+msgstr "14"
 
 #: ../share/ui/font-list.glade:416
 msgid "16"
-msgstr ""
+msgstr "16"
 
 #: ../share/ui/font-list.glade:417
 msgid "20"
-msgstr ""
+msgstr "20"
 
 #: ../share/ui/font-list.glade:418
 msgid "24"
-msgstr ""
+msgstr "24"
 
 #: ../share/ui/font-list.glade:419
 msgid "32"
-msgstr ""
+msgstr "32"
 
 #: ../share/ui/font-list.glade:420
 msgid "48"
-msgstr ""
+msgstr "48"
 
 #: ../share/ui/font-list.glade:421
 msgid "72"
-msgstr ""
+msgstr "72"
 
 #: ../share/ui/font-list.glade:422
 msgid "144"
-msgstr ""
+msgstr "144"
 
 #: ../share/ui/font-list.glade:462
-#, fuzzy
-#| msgid "Antialiasing"
 msgctxt "loading-fonts"
 msgid "Initializing"
-msgstr "Згладжування"
+msgstr "Ініціалізація"
 
 #: ../share/ui/font-list.glade:516
-#, fuzzy
-#| msgid "<small>Per row:</small>"
 msgid "<small>256 fonts</small>"
-msgstr "<small>На рядок:</small>"
+msgstr "<small>256 шрифтів</small>"
 
 #: ../share/ui/gradient-edit.glade:57 ../share/ui/toolbar-gradient.ui:90
 msgid "Reverse the direction of the gradient"
 msgstr "Обернути напрямок градієнта"
 
 #: ../share/ui/gradient-edit.glade:67
-#, fuzzy
-#| msgid "Rotate selected objects by degrees"
 msgid "Rotate gradient 90 degrees"
-msgstr "Обертати позначені об'єкти на кут у градусах"
+msgstr "Обернути градієнт на 90 градусів"
 
 #: ../share/ui/gradient-edit.glade:113
 msgid "Stop Offset:"
@@ -40455,10 +39691,8 @@ msgid "Orientation:"
 msgstr "Орієнтація:"
 
 #: ../share/ui/gradient-edit.glade:228
-#, fuzzy
-#| msgid "Adjust origin of the rotation"
 msgid "Adjust angle of the gradient"
-msgstr "Скоригувати центр обертання"
+msgstr "Скоригувати кут градієнта"
 
 #: ../share/ui/gradient-edit.glade:243
 msgid "Repeat:"
@@ -40708,13 +39942,6 @@ msgid "Quick Setup"
 msgstr "Швидке налаштовування"
 
 #: ../share/ui/inkscape-start.glade:512
-#, fuzzy
-#| msgid ""
-#| "<b>The Inkscape project is supported by users like you.</b> Through our "
-#| "collective time, money and skill, we have made this software for everyone "
-#| "in the world to enjoy free from restrictions and free from costs. <b>\n"
-#| "If you would like to get involved and make the next version of Inkscape "
-#| "even better, please consider joining the Inkscape project today.</b>"
 msgid ""
 "<b>The Inkscape project is supported by users like you.</b> Through our "
 "collective time, money and skill, we have made this software for everyone in "
@@ -40723,32 +39950,20 @@ msgid ""
 "of Inkscape even better, please consider joining the Inkscape project today."
 "</b>"
 msgstr ""
-"<b>Підтримку проєкту Inkscape здійснюють такі самі користувачі, як ви.</b> "
-"Інвестуючи наше час, гроші та навички, ми створили це програмне забезпечення "
-"для усіх у світі, хто хоче бути вільним від обмежень та отримувати програми "
-"безкоштовно. <b>\n"
+"<big><b>Підтримку проєкту Inkscape здійснюють такі самі користувачі, як ви.</"
+"b> Інвестуючи наше час, гроші та навички, ми створили це програмне "
+"забезпечення для усіх у світі, хто хоче бути вільним від обмежень та "
+"отримувати програми безкоштовно. <b>\n"
 "Якщо ви хочете взяти участь у проєкті і зробити наступну версію Inkscape ще "
-"кращою, будь ласка, долучайтеся до проєкту Inkscape вже сьогодні.</b>"
+"кращою, будь ласка, долучайтеся до проєкту Inkscape вже сьогодні.</b></big>"
 
 #: ../share/ui/inkscape-start.glade:551
-#, fuzzy
-#| msgid ""
-#| "Learn how to\n"
-#| "Contribute Time"
 msgid "Learn how to Contribute Time"
-msgstr ""
-"Дізнайтеся про те,\n"
-"як взяти участь"
+msgstr "Дізнайтеся про те, як взяти участь"
 
 #: ../share/ui/inkscape-start.glade:587
-#, fuzzy
-#| msgid ""
-#| "Learn how to\n"
-#| "Fund Inkscape"
 msgid "Learn how to Fund Inkscape"
-msgstr ""
-"Дізнайтеся про те,\n"
-"як підтримати Inkscape"
+msgstr "Дізнайтеся про те, як підтримати Inkscape"
 
 #: ../share/ui/inkscape-start.glade:604
 msgid "Thanks!"
@@ -40764,11 +39979,9 @@ msgid "Recent Files"
 msgstr "Нещодавні файли"
 
 #: ../share/ui/inkscape-start.glade:673
-#, fuzzy
-#| msgid "Emergence"
 msgctxt "Welcome dialog"
 msgid "Emergency Save"
-msgstr "Вихід на поверхню"
+msgstr "Аварійне збереження"
 
 #: ../share/ui/inkscape-start.glade:690
 msgctxt "Welcome dialog"
@@ -40913,8 +40126,6 @@ msgstr "Ширина прямокутника (без штриха)"
 #: ../share/ui/object-attributes.glade:371
 #: ../share/ui/object-attributes.glade:922 ../share/ui/toolbar-rect.ui:61
 #: ../share/ui/toolbar-select.ui:426
-#, fuzzy
-#| msgid "H:"
 msgctxt "Abbreviation of Height"
 msgid "H:"
 msgstr "В:"
@@ -40991,38 +40202,28 @@ msgid "Base radius to tip radius ratio"
 msgstr "Відношення радіусів основи та вершини променя"
 
 #: ../share/ui/object-attributes.glade:825
-#, fuzzy
-#| msgid "Label position"
 msgid "Path vertical position"
-msgstr "Розташування мітки:"
+msgstr "Вертикальна позиція контуру"
 
 #: ../share/ui/object-attributes.glade:850
-#, fuzzy
-#| msgid "Horizontal point:"
 msgid "Path horizontal position"
-msgstr "Горизонтальна точка:"
+msgstr "Горизонтальна позиція контуру"
 
 #: ../share/ui/object-attributes.glade:886
-#, fuzzy
-#| msgid "Location:"
 msgid "Location"
-msgstr "Розташування:"
+msgstr "Місце"
 
 #: ../share/ui/object-attributes.glade:907
-#, fuzzy
-#| msgid "Width of paper"
 msgid "Width of path shape"
-msgstr "Ширина полотна"
+msgstr "Ширина форми контуру"
 
 #: ../share/ui/object-attributes.glade:932
-#, fuzzy
-#| msgid "Height of paper"
 msgid "Height of path shape"
-msgstr "Висота полотна"
+msgstr "Висота форми контуру"
 
 #: ../share/ui/object-attributes.glade:1040
 msgid "Press Shift+Enter to commit editing changes"
-msgstr ""
+msgstr "Натисніть Shift+Enter, щоб внести зміни з редагування"
 
 #: ../share/ui/page-properties.glade:61
 msgid "Front page"
@@ -41061,34 +40262,26 @@ msgstr ""
 "якщо нічого не позначено"
 
 #: ../share/ui/page-properties.glade:312
-#, fuzzy
-#| msgid "Coordinates:"
 msgid "Coordinate system"
-msgstr "Координати:"
+msgstr "Система координат"
 
 #: ../share/ui/page-properties.glade:334
-#, fuzzy
-#| msgid "Origin"
 msgid "Origin:"
-msgstr "Центр"
+msgstr "Початок:"
 
 #: ../share/ui/page-properties.glade:345
-#, fuzzy
-#| msgid "Origin at upper left with y-axis pointing down"
 msgid ""
 "Coordinate system origin at the top of the page with Y axis pointing down."
-msgstr "Початок координат у верхньому лівому куті, вісь y спрямовано донизу"
+msgstr "Початок координат на верхньому краю сторінки, а вісь Y спрямовано вниз."
 
 #: ../share/ui/page-properties.glade:358
 msgid ""
 "Coordinate system origin at the bottom of the page with Y axis pointing up."
-msgstr ""
+msgstr "Початок координат на нижньому краю сторінки, а вісь Y спрямовано вгору."
 
 #: ../share/ui/page-properties.glade:376
-#, fuzzy
-#| msgid "Current page"
 msgid "Follow current page"
-msgstr "Поточна сторінка"
+msgstr "За поточною сторінкою"
 
 #: ../share/ui/page-properties.glade:378
 msgid ""
@@ -41127,7 +40320,7 @@ msgstr "на одиницю користувача"
 #: ../share/ui/page-properties.glade:635
 msgid ""
 "Link the scale of the viewbox to the scale of the content in the document."
-msgstr ""
+msgstr "Пов'язати масштаб області перегляду із масштабом вмісту документа."
 
 #: ../share/ui/page-properties.glade:704
 msgid "Display units:"
@@ -41206,20 +40399,16 @@ msgstr ""
 "згладжування."
 
 #: ../share/ui/pattern-edit.glade:114
-#, fuzzy
-#| msgid "Snap controls bar:"
 msgid "Gap control:"
-msgstr "Панель керування прилипанням:"
+msgstr "Керування прогалинами:"
 
 #: ../share/ui/pattern-edit.glade:124
 msgid "Mouse-friendly"
-msgstr ""
+msgstr "Зручний для миші"
 
 #: ../share/ui/pattern-edit.glade:136
-#, fuzzy
-#| msgid "Precision"
 msgid "Precise"
-msgstr "Точність"
+msgstr "Точно"
 
 #: ../share/ui/pattern-edit.glade:167
 msgid "Pattern fill"
@@ -41235,10 +40424,8 @@ msgstr "Масштаб Y:"
 
 #. This is a hint that shows up when pattern name is blank
 #: ../share/ui/pattern-edit.glade:496
-#, fuzzy
-#| msgid "_Rename"
 msgid "name"
-msgstr "Пере_йменувати"
+msgstr "назва"
 
 #: ../share/ui/pattern-edit.glade:550
 msgid "Color: "
@@ -41320,10 +40507,8 @@ msgid "Align left edges of objects to the right edge of anchor"
 msgstr "Вирівняти ліві краї об'єктів за правим краєм якоря"
 
 #: ../share/ui/align-and-distribute.ui:284
-#, fuzzy
-#| msgid "Distribute text anchors horizontally"
 msgid "Align text anchors horizontally"
-msgstr "Розподілити прив'язки тексту по горизонталі"
+msgstr "Вирівняти прив'язки тексту горизонтально"
 
 #: ../share/ui/align-and-distribute.ui:302
 msgid "Align bottom edges of objects to the top edge of anchor"
@@ -41346,14 +40531,10 @@ msgid "Align top edges of objects to bottom edge of anchor"
 msgstr "Вирівняти верхні краї об'єктів за нижнім краєм якоря"
 
 #: ../share/ui/align-and-distribute.ui:392
-#, fuzzy
-#| msgid "Distribute text anchors vertically"
 msgid "Align text anchors vertically"
-msgstr "Розподілити прив'язки тексту по вертикалі"
+msgstr "Вирівняти прив'язки тексту вертикально"
 
 #: ../share/ui/align-and-distribute.ui:801
-#, fuzzy
-#| msgid "H:"
 msgctxt "Abbreviation of Horizontal"
 msgid "H:"
 msgstr "В:"
@@ -41393,114 +40574,84 @@ msgid "Distribute Nodes"
 msgstr "Розподілити вузли"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:37
-#, fuzzy
-#| msgid "Show handles"
 msgid "Show angle"
-msgstr "Показувати елементи керування"
+msgstr "Показувати кут"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:40
-#, fuzzy
-#| msgid "Unit of measurement"
 msgid "Show the angle measurement"
-msgstr "Одиниця вимірювання"
+msgstr "Показувати виміряний кут"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:50
-#, fuzzy
-#| msgid "Show values"
 msgid "Show delta values"
-msgstr "Показати значення"
+msgstr "Показувати значення приростів"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:53
-#, fuzzy
-#| msgid "Unit of measurement"
 msgid "Show dX and dY measurements"
-msgstr "Одиниця вимірювання"
+msgstr "Показувати виміряні dX і dY"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:63
-#, fuzzy
-#| msgid "Show color labels"
 msgid "Show delta labels"
-msgstr "Показувати мітки кольорів"
+msgstr "Показувати мітки приростів"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:66
 msgid "Add labels to the delta measurements"
-msgstr ""
+msgstr "Додати мітки до вимірів приростів"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:76
-#, fuzzy
-#| msgid "Show segment index"
 msgid "Show segment labels"
-msgstr "Показувати номер сегмента"
+msgstr "Показувати мітки сегментів"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:79
-#, fuzzy
-#| msgid "Toggle snapping to path intersections"
 msgid "Add labels to the intersection segments"
-msgstr "Увімкнути або вимкнути прилипання до перетинів контурів"
+msgstr "Додати мітки до сегментів перетину"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:89
-#, fuzzy
-#| msgid "Maximum segment length:"
 msgid "Min. segment length"
-msgstr "Максимальна довжина сегмента:"
+msgstr "Мінімальна довжина сегмента:"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:106
 msgid "Intersection segments shorter than this length will not be shown"
-msgstr ""
+msgstr "Сегменти перетину, довжина яких є меншою за вказану, не буде показано"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:128
 msgid "Copy measurements as text"
-msgstr ""
+msgstr "Копіювати виміри як текст"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:142
-#, fuzzy
-#| msgid "XML formatting"
 msgid "String formatting"
-msgstr "XML-форматування"
+msgstr "Форматування рядків"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:156
-#, fuzzy
-#| msgid "Include loc_ked"
 msgid "Include labels"
-msgstr "Включити за_блоковані"
+msgstr "Включити мітки"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:168
-#, fuzzy
-#| msgid "Include"
 msgid "Include units"
-msgstr "Включення"
+msgstr "Включити одиниці"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:180
 msgid "Tab-separated string"
-msgstr ""
+msgstr "Рядок відокремлених Tab значень"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:192
-#, fuzzy
-#| msgid "Measurement Type:"
 msgid "Measurements to copy"
-msgstr "Тип вимірювання:"
+msgstr "Виміри, які слід копіювати"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:218
-#, fuzzy
-#| msgid "Length (document units):"
 msgid "Length - no end points"
-msgstr "Довжина (в одиницях документа):"
+msgstr "Довжина — без кінцевих точок"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:266
-#, fuzzy
-#| msgid "Delete segment"
 msgid "In-between segments"
-msgstr "Вилучити сегмент"
+msgstr "Проміжні сегменти"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:278
-#, fuzzy
-#| msgid "Shape"
 msgid "Shape info"
-msgstr "Форма"
+msgstr "Дані щодо форми"
 
 #: ../share/ui/dialog-spellcheck.ui:16
 msgid "<b>Press Start</b> to check spelling"
-msgstr ""
+msgstr "<b>Натисніть «Почати»</b>, щоб перевірити правопис"
 
 #: ../share/ui/dialog-spellcheck.ui:38
 msgid "Suggestions:"
@@ -41535,8 +40686,6 @@ msgid "_Start"
 msgstr "П_уск"
 
 #: ../share/ui/document-tab.ui:18
-#, fuzzy
-#| msgid "Close Tab"
 msgid "Close tab"
 msgstr "Закрити вкладку"
 
@@ -42122,20 +41271,16 @@ msgid "Remove Manual _Kerns"
 msgstr "Вилучити ручний _міжлітерний інтервал"
 
 #: ../share/ui/menus.ui:1160
-#, fuzzy
-#| msgid "Open Glyphs"
 msgid "Text to Glyphs"
-msgstr "Відкрити панель гліфів"
+msgstr "Текст у гліфи"
 
 #: ../share/ui/menus.ui:1174
 msgid "Filter_s"
 msgstr "Філ_ьтри"
 
 #: ../share/ui/menus.ui:1177
-#, fuzzy
-#| msgid "Filter _Editor..."
 msgid "Filter _Gallery..."
-msgstr "Р_едактор фільтрів…"
+msgstr "_Галерея фільтрів…"
 
 #: ../share/ui/menus.ui:1183
 msgid "Filter _Editor..."
@@ -42158,10 +41303,8 @@ msgid "_Previous Extension Settings..."
 msgstr "П_араметри попереднього додатка…"
 
 #: ../share/ui/menus.ui:1209
-#, fuzzy
-#| msgid "Edit Externally..."
 msgid "_Extension Gallery..."
-msgstr "Редагувати в зовнішній програмі…"
+msgstr "Галерея _розширень…"
 
 #: ../share/ui/menus.ui:1218
 #: ../share/extensions/other/inkman/manage_extensions.inx:3
@@ -42209,10 +41352,8 @@ msgid "_Tips and Tricks"
 msgstr "_Поради та прийоми"
 
 #: ../share/ui/menus.ui:1278
-#, fuzzy
-#| msgid "Grain mode"
 msgid "Learn more"
-msgstr "Режим зерна"
+msgstr "Дізнатись більше"
 
 #: ../share/ui/menus.ui:1329
 msgid "_About Inkscape"
@@ -42232,28 +41373,18 @@ msgid "Cursor coordinates"
 msgstr "Координати вказівника"
 
 #: ../share/ui/statusbar.ui:104
-#, fuzzy
-#| msgid "Rotation. (Also Ctrl+Shift+Scroll)"
 msgid "Zoom (also Ctrl+scroll)"
-msgstr "Обертання. (Також Ctrl+Shift+Гортання)"
+msgstr "Масштабування (також Ctrl+гортання)"
 
 #: ../share/ui/statusbar.ui:109
-#, fuzzy
-#| msgctxt "canvas"
-#| msgid "Z:"
 msgid "Z:"
 msgstr "Z:"
 
 #: ../share/ui/statusbar.ui:128
-#, fuzzy
-#| msgid "Rotation. (Also Ctrl+Shift+Scroll)"
 msgid "Rotation (also Ctrl+Shift+scroll)"
-msgstr "Обертання. (Також Ctrl+Shift+Гортання)"
+msgstr "Обертання (також Ctrl+Shift+гортання)"
 
 #: ../share/ui/statusbar.ui:133
-#, fuzzy
-#| msgctxt "color"
-#| msgid "R:"
 msgid "R:"
 msgstr "Ч:"
 
@@ -42274,56 +41405,44 @@ msgid "Accept"
 msgstr "Прийняти"
 
 #: ../share/ui/toolbar-box3d.ui:28
-#, fuzzy
-#| msgid "Angle of PLs in X direction"
 msgid "Angle of perspective lines in x-direction"
-msgstr "Кут між ЛП у напрямку осі X"
+msgstr "Кут ліній перспективи у напрямку вісі x"
 
 #: ../share/ui/toolbar-box3d.ui:51
-#, fuzzy
-#| msgid "Toggle VP in X direction between 'finite' and 'infinite' (=parallel)"
 msgid ""
 "Toggle vanishing point in x-direction between 'finite' and 'infinite' (= "
 "parallel)"
 msgstr ""
-"Перемикач ТС у напрямку осі X між значеннями 'скінченна' і "
-"'нескінченна' (=паралельність)"
+"Перемикач нескінченно віддаленої точки у напрямку осі X між значеннями "
+"'скінченна' і 'нескінченна' (=паралельність)"
 
 #: ../share/ui/toolbar-box3d.ui:62
-#, fuzzy
-#| msgid "Angle of PLs in X direction"
 msgid "Angle of perspective lines in y-direction"
-msgstr "Кут між ЛП у напрямку осі X"
+msgstr "Кут ліній перспективи у напрямку вісі y"
 
 #: ../share/ui/toolbar-box3d.ui:65
 msgid "Angle Y:"
 msgstr "Кут Y:"
 
 #: ../share/ui/toolbar-box3d.ui:86
-#, fuzzy
-#| msgid "Toggle VP in X direction between 'finite' and 'infinite' (=parallel)"
 msgid ""
 "Toggle vanishing point in y-direction between 'finite' and 'infinite' (= "
 "parallel)"
 msgstr ""
-"Перемикач ТС у напрямку осі X між значеннями 'скінченна' і "
-"'нескінченна' (=паралельність)"
+"Перемикач нескінченно віддаленої точки у напрямку осі Y між значеннями "
+"'скінченна' і 'нескінченна' (=паралельність)"
 
 #: ../share/ui/toolbar-box3d.ui:96
-#, fuzzy
-#| msgid "Angle of PLs in X direction"
 msgid "Angle of perspective lines in z-direction"
-msgstr "Кут між ЛП у напрямку осі X"
+msgstr "Кут ліній перспективи у напрямку вісі z"
 
 #: ../share/ui/toolbar-box3d.ui:120
-#, fuzzy
-#| msgid "Toggle VP in X direction between 'finite' and 'infinite' (=parallel)"
 msgid ""
 "Toggle vanishing point in z-direction between 'finite' and 'infinite' (= "
 "parallel)"
 msgstr ""
-"Перемикач ТС у напрямку осі X між значеннями 'скінченна' і "
-"'нескінченна' (=паралельність)"
+"Перемикач нескінченно віддаленої точки у напрямку осі Z між значеннями "
+"'скінченна' і 'нескінченна' (=паралельність)"
 
 #: ../share/ui/toolbar-calligraphy.ui:54
 msgid "Choose a preset"
@@ -42424,58 +41543,40 @@ msgid "Wiggle:"
 msgstr "Погойдування:"
 
 #: ../share/ui/toolbar-commands.ui:31
-#, fuzzy
-#| msgid "_Open..."
 msgid "Open..."
-msgstr "_Відкрити…"
+msgstr "Відкрити…"
 
 #: ../share/ui/toolbar-commands.ui:67
-#, fuzzy
-#| msgid "_Print..."
 msgid "Print..."
-msgstr "Над_рукувати…"
+msgstr "Надрукувати…"
 
 #: ../share/ui/toolbar-commands.ui:92
-#, fuzzy
-#| msgid "_Import..."
 msgid "Import..."
-msgstr "_Імпортувати…"
+msgstr "Імпортувати…"
 
 #: ../share/ui/toolbar-commands.ui:110
-#, fuzzy
-#| msgid "_Export..."
 msgid "Export..."
-msgstr "_Експортувати…"
+msgstr "Експортувати…"
 
 #: ../share/ui/toolbar-commands.ui:428
-#, fuzzy
-#| msgid "_Text and Font"
 msgid "Text and Font"
-msgstr "_Текст та шрифт"
+msgstr "Текст і шрифт"
 
 #: ../share/ui/toolbar-commands.ui:446
-#, fuzzy
-#| msgid "Layers and Object_s"
 msgid "Layers and Objects"
-msgstr "Шари і о_б'єкти"
+msgstr "Шари і об'єкти"
 
 #: ../share/ui/toolbar-commands.ui:482
-#, fuzzy
-#| msgid "_Selectors and CSS..."
 msgid "Selectors and CSS..."
-msgstr "С_електори і CSS…"
+msgstr "Селектори і CSS…"
 
 #: ../share/ui/toolbar-commands.ui:500
-#, fuzzy
-#| msgid "_Align and Distribute..."
 msgid "Align and Distribute..."
-msgstr "Вирів_няти та розподілити…"
+msgstr "Вирівняти і розподілити…"
 
 #: ../share/ui/toolbar-commands.ui:543
-#, fuzzy
-#| msgid "Preferences"
 msgid "Preferences..."
-msgstr "Налаштування"
+msgstr "Налаштування…"
 
 #: ../share/ui/toolbar-connector.ui:57
 msgid "Make connector orthogonal or polyline"
@@ -42505,10 +41606,8 @@ msgstr "Інтервал:"
 #: ../share/ui/toolbar-spray.ui:352 ../share/ui/toolbar-text.ui:403
 #: ../share/ui/toolbar-tweak.ui:187 ../share/ui/toolbar-tweak.ui:211
 #: ../share/ui/toolbar-tweak.ui:247
-#, fuzzy
-#| msgid "A0"
 msgid "0"
-msgstr "A0"
+msgstr "0"
 
 #: ../share/ui/toolbar-connector.ui:130
 msgid "Ideal length for connectors when layout is applied"
@@ -42589,47 +41688,30 @@ msgid "Link gradients to change all related gradients"
 msgstr "Зв'язати градієнти, щоб змінювалися всі пов'язані градієнти"
 
 #: ../share/ui/toolbar-gradient.ui:125 ../share/ui/toolbar-select.ui:396
-#, fuzzy
-#| msgctxt "Select toolbar"
-#| msgid "Width of selection"
 msgid "Width of selection"
-msgstr "Ширина позначення"
+msgstr "Ширина позначеного"
 
 #: ../share/ui/toolbar-lpe.ui:15
 msgid "No geometric tool is active"
 msgstr "Жоден з геометричних інструментів не задіяно"
 
 #: ../share/ui/toolbar-lpe.ui:25
-#, fuzzy
-#| msgctxt "path effect"
-#| msgid "Line Segment"
 msgid "Line Segment"
 msgstr "Відрізок прямої"
 
 #: ../share/ui/toolbar-lpe.ui:35
-#, fuzzy
-#| msgctxt "path effect"
-#| msgid "Circle by 3 points"
 msgid "Circle by 3 points"
 msgstr "Коло за 3 точками"
 
 #: ../share/ui/toolbar-lpe.ui:65
-#, fuzzy
-#| msgctxt "path effect"
-#| msgid "Perpendicular bisector"
 msgid "Perpendicular bisector"
 msgstr "Серединний перпендикуляр"
 
 #: ../share/ui/toolbar-lpe.ui:75
-#, fuzzy
-#| msgid "Angle Bisectors"
 msgid "Angle Bisector"
-msgstr "Кутові бісектриси"
+msgstr "Бісектриса кута"
 
 #: ../share/ui/toolbar-lpe.ui:85
-#, fuzzy
-#| msgctxt "path effect"
-#| msgid "Mirror symmetry"
 msgid "Mirror symmetry"
 msgstr "Дзеркальна симетрія"
 
@@ -42657,10 +41739,8 @@ msgstr ""
 "параметрів)"
 
 #: ../share/ui/toolbar-marker.ui:12
-#, fuzzy
-#| msgid "Edit on canvas"
 msgid "Edit marker on canvas."
-msgstr "Редагувати на полотні"
+msgstr "Редагувати позначку на полотні."
 
 #: ../share/ui/toolbar-measure.ui:39
 msgid "The font size to be used in the measurement labels"
@@ -42735,11 +41815,8 @@ msgid "Mark dimension offset"
 msgstr "Відступ позначки розмірності"
 
 #: ../share/ui/toolbar-measure.ui:312
-#, fuzzy
-#| msgctxt "Font feature"
-#| msgid "Feature Settings"
 msgid "Measurement settings"
-msgstr "Параметри модифікацій"
+msgstr "Параметри вимірів"
 
 #: ../share/ui/toolbar-mesh.ui:33
 msgid "Create mesh gradient"
@@ -42879,16 +41956,12 @@ msgid "Y coordinate of selected node(s)"
 msgstr "Y-координата вибраних вузлів"
 
 #: ../share/ui/toolbar-node.ui:395
-#, fuzzy
-#| msgid "ID:"
 msgid "D:"
-msgstr "Ідентифікатор:"
+msgstr "В:"
 
 #: ../share/ui/toolbar-node.ui:401
-#, fuzzy
-#| msgid "Delete selected nodes"
 msgid "Distance between two selected nodes."
-msgstr "Вилучити позначені вузли"
+msgstr "Відстань між двома позначеними вузлами."
 
 #: ../share/ui/toolbar-node.ui:451
 msgid "Show path outline (without path effects)"
@@ -42911,10 +41984,8 @@ msgid "Show clipping path(s) of selected object(s)"
 msgstr "Показувати контури обрізання позначених об'єктів"
 
 #: ../share/ui/toolbar-objectpicker.ui:15
-#, fuzzy
-#| msgid "Selected objects only"
 msgid "Select object on canvas"
-msgstr "Лише позначені об'єкти"
+msgstr "Позначити об'єкт на полотні"
 
 #: ../share/ui/toolbar-page.ui:101
 msgid "Page Margins"
@@ -43045,8 +42116,6 @@ msgid "Select all objects"
 msgstr "Позначити усі об'єкти"
 
 #: ../share/ui/toolbar-select.ui:53
-#, fuzzy
-#| msgid "Select in all layers"
 msgid "Select all in all layers"
 msgstr "Позначити все в усіх шарах"
 
@@ -43055,51 +42124,34 @@ msgid "Deselect any selected objects"
 msgstr "Зняти позначення з усіх об'єктів"
 
 #: ../share/ui/toolbar-select.ui:87
-#, fuzzy
-#| msgid "Toggle selection box to select all touched objects."
 msgid "Toggle selection box to select all touched objects"
 msgstr ""
 "Перемкнути рамку позначення так, щоб позначати можна було усі об'єкти, яких "
-"вона торкається."
+"вона торкається"
 
 #: ../share/ui/toolbar-select.ui:110
-#, fuzzy
-#| msgid "Rotate selection 90° counter-clockwise"
 msgid "Rotate selection 90\\xc2\\xb0 counter-clockwise"
-msgstr "Обернути позначені об'єкти на 90° проти годинникової стрілки"
+msgstr "Обернути позначені об'єкти на 90\\xc2\\xb0 проти годинникової стрілки"
 
 #: ../share/ui/toolbar-select.ui:131
-#, fuzzy
-#| msgid "Rotate selection 90° clockwise"
 msgid "Rotate selection 90\\xc2\\xb0 clockwise"
-msgstr "Обернути позначені об'єкти на 90° за годинниковою стрілкою"
+msgstr "Обернути позначені об'єкти на 90\\xc2\\xb0 за годинниковою стрілкою"
 
 #: ../share/ui/toolbar-select.ui:349
-#, fuzzy
-#| msgctxt "Select toolbar"
-#| msgid "Horizontal coordinate of selection"
 msgid "Horizontal coordinate of selection"
 msgstr "Горизонтальна координата позначення"
 
 #: ../share/ui/toolbar-select.ui:372
-#, fuzzy
-#| msgctxt "Select toolbar"
-#| msgid "Vertical coordinate of selection"
 msgid "Vertical coordinate of selection"
 msgstr "Вертикальна координата позначення"
 
 #: ../share/ui/toolbar-select.ui:412
-#, fuzzy
-#| msgid "When locked, change both width and height by the same proportion"
 msgid "When locked, change width and height by the same proportion"
 msgstr "Коли заблоковано, пропорційно змінювати ширину та висоту"
 
 #: ../share/ui/toolbar-select.ui:432
-#, fuzzy
-#| msgctxt "Select toolbar"
-#| msgid "Height of selection"
 msgid "Height of selection"
-msgstr "Висота позначення"
+msgstr "Висота позначеного"
 
 #: ../share/ui/toolbar-snap.ui:14 ../share/ui/toolbar-snap.ui:714
 msgid "Enable snapping"
@@ -43206,10 +42258,8 @@ msgid "Page margins"
 msgstr "Поля сторінки"
 
 #: ../share/ui/toolbar-snap.ui:678
-#, fuzzy
-#| msgid "Guide lines"
 msgid "Grid Lines"
-msgstr "Напрямні"
+msgstr "Лінії сітки"
 
 #: ../share/ui/toolbar-snap.ui:822
 msgid "Advanced mode"
@@ -43228,18 +42278,14 @@ msgid "How much denser/sparser are outer revolutions; 1 = uniform"
 msgstr "Ступінь збільшення/зменшення відстані між витками; 1 = рівномірно"
 
 #: ../share/ui/toolbar-spiral.ui:57
-#, fuzzy
-#| msgid "Divergence:"
 msgid "Divergence"
-msgstr "Розходження:"
+msgstr "Розходження"
 
 #: ../share/ui/toolbar-spiral.ui:74
 msgid "Radius of the innermost revolution (relative to the spiral size)"
 msgstr "Радіус першого внутрішнього витка (відносно розміру спіралі)"
 
 #: ../share/ui/toolbar-spiral.ui:78
-#, fuzzy
-#| msgid "Inner radius:"
 msgid "Inner Radius:"
 msgstr "Внутрішній радіус:"
 
@@ -43314,9 +42360,6 @@ msgid "Increase to scatter sprayed objects"
 msgstr "Збільшити розсіювання розкиданих об'єктів"
 
 #: ../share/ui/toolbar-spray.ui:240
-#, fuzzy
-#| msgctxt "Spray tool"
-#| msgid "Scatter:"
 msgid "Scatter:"
 msgstr "Розсіювання:"
 
@@ -43377,46 +42420,32 @@ msgid "Pick from center instead of average area."
 msgstr "Вибрати з центра, а не середній за ділянкою."
 
 #: ../share/ui/toolbar-star.ui:28
-#, fuzzy
-#| msgctxt "Font feature"
-#| msgid "Traditional"
 msgid "radiobutton"
-msgstr "Традиційні"
+msgstr "п.Перемикач"
 
 #: ../share/ui/toolbar-star.ui:94
 msgid "Corners:"
 msgstr "Кути:"
 
 #: ../share/ui/toolbar-star.ui:117
-#, fuzzy
-#| msgid "Spoke ratio:"
 msgid "Spoke Ratio:"
 msgstr "Відношення радіусів:"
 
 #: ../share/ui/toolbar-star.ui:191
-#, fuzzy
-#| msgid "Reset default settings of this LPE to Inkscape's default values"
 msgid "Reset all parameters to their default values"
-msgstr ""
-"Відновити стандартні значення Inkscape для типових значень параметрів ІЕК"
+msgstr "Відновити стандартні значення для усіх параметрів"
 
 #: ../share/ui/toolbar-star.ui:205
-#, fuzzy
-#| msgid "Even top edges"
 msgid "Length of edge"
-msgstr "Рівномірні верхні краї"
+msgstr "Довжина краю"
 
 #: ../share/ui/toolbar-star.ui:209
-#, fuzzy
-#| msgid "Edge"
 msgid "Edge:"
-msgstr "Позначити краї"
+msgstr "Край:"
 
 #: ../share/ui/toolbar-text.ui:71
-#, fuzzy
-#| msgid "Open the Font Collections Manager dialog"
 msgid "Open the Font Collections dialog"
-msgstr "Відкрити вікно керування збірками шрифтів"
+msgstr "Відкрити вікно збірок шрифтів"
 
 #: ../share/ui/toolbar-text.ui:88
 msgid "Select Font Collections"
@@ -43427,6 +42456,8 @@ msgid ""
 "Reset the font list (Deselects all the font collections and clears search "
 "results)"
 msgstr ""
+"Відновити початкові параметри списку шрифтів (знімає позначення з усіх "
+"збірок шрифтів і усування обмеження результатів пошуку)"
 
 #: ../share/ui/toolbar-text.ui:129
 msgid "Spacing between baselines"
@@ -43667,22 +42698,16 @@ msgid "In color mode, act on object's opacity"
 msgstr "У кольоровому режимі працює як прозорість об'єкта"
 
 #: ../share/ui/toolbar-zoom.ui:41
-#, fuzzy
-#| msgid "Zoom 1:1"
 msgid "Zoom 1-1"
-msgstr "Масштаб 1:1"
+msgstr "Масштаб 1-1"
 
 #: ../share/ui/toolbar-zoom.ui:54
-#, fuzzy
-#| msgid "Zoom 1:2"
 msgid "Zoom 1-2"
-msgstr "Масштаб 1:2"
+msgstr "Масштаб 1-2"
 
 #: ../share/ui/toolbar-zoom.ui:67
-#, fuzzy
-#| msgid "Zoom 2:1"
 msgid "Zoom 2-1"
-msgstr "Масштаб 2:1"
+msgstr "Масштаб 2-1"
 
 #: ../share/extensions/barcode/Base.py:49
 msgid "Error encoding '{}' as {} barcode: {}\n"
@@ -43783,10 +42808,12 @@ msgid ""
 "Encountered key of unknown format, id={0} while parsing DXF. This is "
 "probably a bug."
 msgstr ""
+"Під час обробки DXF виявлено ключ у невідомому форматі id={0}. Ймовірно, це "
+"пов'язано із вадою."
 
 #: ../share/extensions/dxf_input.py:1400
 msgid "Binary DXF file has unexpected header."
-msgstr ""
+msgstr "Неочікуваний заголовок у двійковому файлі DXF."
 
 #: ../share/extensions/dxf_input.py:1697
 msgid ""
@@ -44175,7 +43202,7 @@ msgstr ""
 #: ../share/extensions/inkex/elements/_parser.py:116
 #, python-brace-format
 msgid "{error_message}. Line {line_number}, column {column_number}"
-msgstr ""
+msgstr "{error_message}. Рядок {line_number}, стовпчик {column_number}"
 
 #: ../share/extensions/inkex/elements/_parser.py:125
 msgid ""
@@ -44760,19 +43787,17 @@ msgid "Invalid Triangle Specifications."
 msgstr "Некоректні специфікації трикутника."
 
 #: ../share/extensions/typst_formula.py:63
-#, fuzzy
-#| msgid "An exception occurred during LaTeX compilation: "
 msgid "An exception occurred during typst compilation: "
-msgstr "Під час компіляції коду LaTeX сталася помилка: "
+msgstr "Під час компіляції коду typst сталася помилка: "
 
 #: ../share/extensions/typst_formula.py:68
 msgid "No svg has been produced by compilation: "
-msgstr ""
+msgstr "У результаті компіляції не було створено жодного svg: "
 
 #: ../share/extensions/typst_formula.py:69
 #, python-brace-format
 msgid "Expected file name was: {svg_file}."
-msgstr ""
+msgstr "Очікувана назва файла: {svg_file}."
 
 #: ../share/extensions/voronoi_diagram.py:163
 msgid "Please select objects!"
@@ -44881,22 +43906,16 @@ msgid "Cleans the cruft out of Adobe Illustrator SVGs before opening"
 msgstr "Очищення коду файлів Adobe Illustrator SVG перед імпортом"
 
 #: ../share/extensions/cgm_input.inx:3
-#, fuzzy
-#| msgid "EMF Input"
 msgid "CGM Input"
-msgstr "Імпорт EMF"
+msgstr "Імпорт CGM"
 
 #: ../share/extensions/cgm_input.inx:11
-#, fuzzy
-#| msgid "XFIG Graphics File (*.fig)"
 msgid "Computer Graphics Metafile (*.cgm)"
-msgstr "Файл графіки XFIG (*.fig)"
+msgstr "Метафайл комп'ютерної графіки (*.cgm)"
 
 #: ../share/extensions/cgm_input.inx:12
-#, fuzzy
-#| msgid "Import an HP Graphics Language file"
 msgid "Import a Computer Graphics Metafile (CGM)"
-msgstr "Імпортувати з файла графічної мови HP"
+msgstr "Імпортувати метафайл комп'ютерної графіки (CGM)"
 
 #: ../share/extensions/color_blackandwhite.inx:3
 msgid "Black and White"
@@ -48620,18 +47639,16 @@ msgid "Import Web Image..."
 msgstr "Імпортувати вебзображення…"
 
 #: ../share/extensions/other/extension-afdesign/inkaf.inx:10
-#, fuzzy
-#| msgid "Open Input"
 msgid "Afdesign Input"
-msgstr "Відкрити панель вхідних даних"
+msgstr "Імпорт Afdesign"
 
 #: ../share/extensions/other/extension-afdesign/inkaf.inx:15
 msgid "Affinity Designer file (*.afdesign)"
-msgstr ""
+msgstr "Файл Affinity Designer (*.afdesign)"
 
 #: ../share/extensions/other/extension-afdesign/inkaf.inx:16
 msgid "Import an Affinity Designer file"
-msgstr ""
+msgstr "Імпортувати файл Affinity Designer"
 
 #: ../share/extensions/other/extension-xaml/inkxaml/svg2xaml.inx:3
 msgid "XAML Output"
@@ -52423,14 +51440,12 @@ msgstr "Обертання за годинниковою стрілкою"
 
 # File: ../share/extensions/pdflatex.inx, line: 3
 #: ../share/extensions/typst_formula.inx:3
-#, fuzzy
-#| msgid "Formula (pdflatex)"
 msgid "Formula (typst)"
-msgstr "Формула (pdflatex)"
+msgstr "Формула (typst)"
 
 #: ../share/extensions/typst_formula.inx:9
 msgid "typst input:"
-msgstr ""
+msgstr "Вхідний код typst:"
 
 #: ../share/extensions/ungroup_deep.inx:3
 msgid "Deep Ungroup"
@@ -52453,16 +51468,12 @@ msgid "Depth to Keep (from bottom)"
 msgstr "Глибина зберігання (знизу)"
 
 #: ../share/extensions/ungroup_deep.inx:9
-#, fuzzy
-#| msgid "Preserve"
 msgid "Preserve Layers"
-msgstr "Зберегти"
+msgstr "Зберігати шари"
 
 #: ../share/extensions/ungroup_deep.inx:9
-#, fuzzy
-#| msgid "Lock other layers"
 msgid "Do not ungroup layers"
-msgstr "Заблокувати інші шари"
+msgstr "Не розгруповувати шари"
 
 #: ../share/extensions/voronoi_diagram.inx:3
 #: ../share/extensions/voronoi_diagram.inx:9
@@ -53115,25 +52126,19 @@ msgstr ""
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:45
 msgid "Editing a Flatpak Logo"
-msgstr ""
+msgstr "Редагування логотипу Flatpak"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:49
-#, fuzzy
-#| msgid "Multiple gradients"
 msgid "Multipage editing"
-msgstr "Декілька градієнтів"
+msgstr "Багатосторінкове редагування"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:53
-#, fuzzy
-#| msgid "Getting started with Inkscape"
 msgid "Editing with Inkscape"
-msgstr "Починаємо роботу з Inkscape"
+msgstr "Редагування у Inkscape"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:57
-#, fuzzy
-#| msgid "Enable gradient editing"
 msgid "Gradient editing"
-msgstr "Увімкнути редагування градієнтів"
+msgstr "Редагування градієнтів"
 
 #: ../org.inkscape.Inkscape.desktop.template:8
 msgid "Create and edit Scalable Vector Graphics images"
@@ -53206,15 +52211,15 @@ msgstr "Дюйми (96 пк/дюйм)"
 
 #: ../share/ui/units.xml:39
 msgid "foot"
-msgstr ""
+msgstr "фут"
 
 #: ../share/ui/units.xml:40
 msgid "feet"
-msgstr ""
+msgstr "фути"
 
 #: ../share/ui/units.xml:43
 msgid "Feet (12 in/ft)"
-msgstr ""
+msgstr "Фути (12 дюймів/фут)"
 
 #: ../share/ui/units.xml:46
 msgid "millimeter"
@@ -53241,22 +52246,16 @@ msgid "Centimeters (10 mm/cm)"
 msgstr "Сантиметри (10 мм/1 см)"
 
 #: ../share/ui/units.xml:60
-#, fuzzy
-#| msgid "millimeter"
 msgid "meter"
-msgstr "міліметр"
+msgstr "метр"
 
 #: ../share/ui/units.xml:61
-#, fuzzy
-#| msgid "Centers"
 msgid "meters"
-msgstr "Центри"
+msgstr "метри"
 
 #: ../share/ui/units.xml:64
-#, fuzzy
-#| msgid "Centimeters (10 mm/cm)"
 msgid "Meters (100 cm/m)"
-msgstr "Сантиметри (10 мм/1 см)"
+msgstr "Метри (100 см/м)"
 
 #: ../share/ui/units.xml:67
 msgid "degree"
