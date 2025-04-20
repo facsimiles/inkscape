@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2023-06-08 13:53+0200\n"
-"PO-Revision-Date: 2025-04-14 08:06+0000\n"
+"PO-Revision-Date: 2025-04-20 19:06+0000\n"
 "Last-Translator: Adam Belis <adam.belis@gmail.com>\n"
 "Language-Team: Slovak <https://translate.inkscape.org/projects/inkscape/"
 "1-4-x/sk/>\n"
@@ -3271,7 +3271,7 @@ msgstr "Tehly"
 
 #: ../../build/share/paint/patterns.svg.h:1
 msgid "Alternating chevron"
-msgstr ""
+msgstr "Chevron"
 
 #: ../../build/share/paint/patterns.svg.h:1
 #, fuzzy
@@ -3617,15 +3617,15 @@ msgstr "Vlnkové Tienovanie 2"
 
 #: ../../build/share/paint/patterns.svg.h:1
 msgid "Vertical rough lines shading 2"
-msgstr ""
+msgstr "Tienovanie - Roztrasené čiari 2"
 
 #: ../../build/share/paint/patterns.svg.h:1
 msgid "Vertical rough lines shading"
-msgstr ""
+msgstr "Tienovanie - Roztrasené čiari"
 
 #: ../../build/share/paint/patterns.svg.h:1
 msgid "Vertical lines shading"
-msgstr ""
+msgstr "Tienovanie - čiari"
 
 #: ../../build/share/paint/patterns.svg.h:1
 msgid "Lines half circle shading "
@@ -3658,7 +3658,7 @@ msgstr "Riadkovanie:"
 
 #: ../../build/share/paint/patterns.svg.h:1
 msgid "Splashing shading"
-msgstr ""
+msgstr "Tienovnie Frkancami"
 
 #: ../../build/share/paint/patterns.svg.h:1
 msgid "Wave lines 1"
@@ -4732,7 +4732,7 @@ msgstr "Chata alpského typu"
 #: ../../build/share/symbols/symbols.h:313
 msgctxt "Symbol"
 msgid "Chalet 2"
-msgstr ""
+msgstr "Chata 2"
 
 #: ../../build/share/symbols/symbols.h:300
 #: ../../build/share/symbols/symbols.h:314
@@ -4789,24 +4789,21 @@ msgstr "Súd"
 
 #: ../../build/share/symbols/symbols.h:324
 #: ../../build/share/symbols/symbols.h:351
-#, fuzzy
 msgctxt "Symbol"
 msgid "Fire station"
-msgstr "Fixácia"
+msgstr "Požiarna stanica 1"
 
 #: ../../build/share/symbols/symbols.h:325
 #: ../../build/share/symbols/symbols.h:352
-#, fuzzy
 msgctxt "Symbol"
 msgid "Fire station 2"
-msgstr "Požiarna stanica"
+msgstr "Požiarna stanica 2"
 
 #: ../../build/share/symbols/symbols.h:326
 #: ../../build/share/symbols/symbols.h:353
-#, fuzzy
 msgctxt "Symbol"
 msgid "Fire station 3"
-msgstr "Požiarna stanica"
+msgstr "Požiarna stanica 3"
 
 #: ../../build/share/symbols/symbols.h:327
 #: ../../build/share/symbols/symbols.h:354
@@ -4818,10 +4815,9 @@ msgstr "Fontána"
 
 #: ../../build/share/symbols/symbols.h:328
 #: ../../build/share/symbols/symbols.h:355
-#, fuzzy
 msgctxt "Symbol"
 msgid "Fountain 2"
-msgstr "Fontána"
+msgstr "Fontána 2"
 
 #: ../../build/share/symbols/symbols.h:329
 #: ../../build/share/symbols/symbols.h:356
@@ -4831,10 +4827,9 @@ msgstr "Knižnica"
 
 #: ../../build/share/symbols/symbols.h:330
 #: ../../build/share/symbols/symbols.h:357
-#, fuzzy
 msgctxt "Symbol"
 msgid "Library 2"
-msgstr "Knižnica"
+msgstr "Knižnica 2"
 
 #: ../../build/share/symbols/symbols.h:331
 #: ../../build/share/symbols/symbols.h:358
@@ -4846,24 +4841,21 @@ msgstr "Detské ihrisko"
 
 #: ../../build/share/symbols/symbols.h:332
 #: ../../build/share/symbols/symbols.h:359
-#, fuzzy
 msgctxt "Symbol"
 msgid "Police"
-msgstr "Výrezy"
+msgstr "Polícia"
 
 #: ../../build/share/symbols/symbols.h:333
 #: ../../build/share/symbols/symbols.h:360
-#, fuzzy
 msgctxt "Symbol"
 msgid "Police 2"
-msgstr "Policajná stanica"
+msgstr "Polícia 2"
 
 #: ../../build/share/symbols/symbols.h:334
 #: ../../build/share/symbols/symbols.h:361
-#, fuzzy
 msgctxt "Symbol"
 msgid "Post box"
-msgstr "ohraničenie diela"
+msgstr "Poštová schránka"
 
 #: ../../build/share/symbols/symbols.h:335
 #: ../../build/share/symbols/symbols.h:362
@@ -4887,52 +4879,45 @@ msgstr "Verejná budova"
 
 #: ../../build/share/symbols/symbols.h:338
 #: ../../build/share/symbols/symbols.h:365
-#, fuzzy
 msgctxt "Symbol"
 msgid "Public building 2"
-msgstr "Verejná budova"
+msgstr "Verejná budova 2"
 
 #: ../../build/share/symbols/symbols.h:340
 #: ../../build/share/symbols/symbols.h:367
-#, fuzzy
 msgctxt "Symbol"
 msgid "Survey point"
-msgstr "Výhľad"
+msgstr "Výhľadňa"
 
 #: ../../build/share/symbols/symbols.h:343
 #: ../../build/share/symbols/symbols.h:370
-#, fuzzy
 msgctxt "Symbol"
 msgid "Wheelchair-accessible toilets"
-msgstr "Bezbariérový prístup"
+msgstr "Bezbariérové toalety"
 
 #: ../../build/share/symbols/symbols.h:344
 #: ../../build/share/symbols/symbols.h:371
-#, fuzzy
 msgctxt "Symbol"
 msgid "Toilets (men)"
-msgstr "Toalety - ženy"
+msgstr "Toalety - muži"
 
 #: ../../build/share/symbols/symbols.h:345
 #: ../../build/share/symbols/symbols.h:372
-#, fuzzy
 msgctxt "Symbol"
 msgid "Toilets (women)"
 msgstr "Toalety - ženy"
 
 #: ../../build/share/symbols/symbols.h:346
 #: ../../build/share/symbols/symbols.h:373
-#, fuzzy
 msgctxt "Symbol"
 msgid "Town hall"
 msgstr "Radnica"
 
 #: ../../build/share/symbols/symbols.h:347
 #: ../../build/share/symbols/symbols.h:374
-#, fuzzy
 msgctxt "Symbol"
 msgid "Town hall 2"
-msgstr "Radnica"
+msgstr "Radnica 2"
 
 #: ../../build/share/symbols/symbols.h:348
 #: ../../build/share/symbols/symbols.h:375
@@ -4960,14 +4945,12 @@ msgstr "Piloty"
 
 #: ../../build/share/symbols/symbols.h:379
 #: ../../build/share/symbols/symbols.h:391
-#, fuzzy
 msgctxt "Symbol"
 msgid "Cattle grid"
-msgstr "Mriežka proti pohybu dobytka"
+msgstr "Ohrada proti pohybu dobytka"
 
 #: ../../build/share/symbols/symbols.h:380
 #: ../../build/share/symbols/symbols.h:392
-#, fuzzy
 msgctxt "Symbol"
 msgid "Cycle barrier"
 msgstr "Bariéra proti cyklistom"
@@ -4986,17 +4969,15 @@ msgstr "Brána"
 
 #: ../../build/share/symbols/symbols.h:384
 #: ../../build/share/symbols/symbols.h:396
-#, fuzzy
 msgctxt "Symbol"
 msgid "Kissing gate"
 msgstr "Bozkávacia brána"
 
 #: ../../build/share/symbols/symbols.h:385
 #: ../../build/share/symbols/symbols.h:397
-#, fuzzy
 msgctxt "Symbol"
 msgid "Lift gate"
-msgstr "Zdvíhacie vráta"
+msgstr ""
 
 #: ../../build/share/symbols/symbols.h:386
 #: ../../build/share/symbols/symbols.h:398
@@ -5012,7 +4993,6 @@ msgstr "Turniket"
 
 #: ../../build/share/symbols/symbols.h:388
 #: ../../build/share/symbols/symbols.h:400
-#, fuzzy
 msgctxt "Symbol"
 msgid "Toll booth"
 msgstr "Mýtna búdka"
@@ -5024,37 +5004,33 @@ msgstr ""
 
 #: ../../build/share/symbols/symbols.h:402
 #: ../../build/share/symbols/symbols.h:411
-#, fuzzy
 msgctxt "Symbol"
 msgid "College"
-msgstr "Usporiadanie"
+msgstr "Vysoká škola"
 
 #: ../../build/share/symbols/symbols.h:403
 #: ../../build/share/symbols/symbols.h:412
 msgctxt "Symbol"
 msgid "College (vocational)"
-msgstr ""
+msgstr "Vysoká škola 2"
 
 #: ../../build/share/symbols/symbols.h:404
 #: ../../build/share/symbols/symbols.h:413
-#, fuzzy
 msgctxt "Symbol"
 msgid "Nursery school"
 msgstr "Škôlka"
 
 #: ../../build/share/symbols/symbols.h:405
 #: ../../build/share/symbols/symbols.h:414
-#, fuzzy
 msgctxt "Symbol"
 msgid "Nursery school 2"
-msgstr "Škôlka"
+msgstr "Škôlka 2"
 
 #: ../../build/share/symbols/symbols.h:406
 #: ../../build/share/symbols/symbols.h:415
-#, fuzzy
 msgctxt "Symbol"
 msgid "Nursery school 3"
-msgstr "Škôlka"
+msgstr "Škôlka 3"
 
 #: ../../build/share/symbols/symbols.h:407
 #: ../../build/share/symbols/symbols.h:416
@@ -5066,11 +5042,10 @@ msgstr "Škola"
 #: ../../build/share/symbols/symbols.h:417
 msgctxt "Symbol"
 msgid "Primary school"
-msgstr ""
+msgstr "Základná škola"
 
 #: ../../build/share/symbols/symbols.h:409
 #: ../../build/share/symbols/symbols.h:418
-#, fuzzy
 msgctxt "Symbol"
 msgid "Secondary school"
 msgstr "Stredná škola"
@@ -5088,57 +5063,51 @@ msgstr ""
 
 #: ../../build/share/symbols/symbols.h:422
 #: ../../build/share/symbols/symbols.h:433
-#, fuzzy
 msgctxt "Symbol"
 msgid "Biergarten"
-msgstr "Materská škola"
+msgstr "Pivná záhrada"
 
 #: ../../build/share/symbols/symbols.h:423
 #: ../../build/share/symbols/symbols.h:434
-#, fuzzy
 msgctxt "Symbol"
 msgid "Coffee house"
 msgstr "Kaviareň"
 
 #: ../../build/share/symbols/symbols.h:424
 #: ../../build/share/symbols/symbols.h:435
-#, fuzzy
 msgctxt "Symbol"
 msgid "Drinking tap"
 msgstr "Pitná voda"
 
 #: ../../build/share/symbols/symbols.h:425
 #: ../../build/share/symbols/symbols.h:436
-#, fuzzy
 msgctxt "Symbol"
 msgid "Fast food"
 msgstr "Fast food"
 
 #: ../../build/share/symbols/symbols.h:426
 #: ../../build/share/symbols/symbols.h:437
-#, fuzzy
 msgctxt "Symbol"
 msgid "Fast food 2"
-msgstr "Fast food"
+msgstr "Fast food 2"
 
 #: ../../build/share/symbols/symbols.h:427
 #: ../../build/share/symbols/symbols.h:438
-#, fuzzy
 msgctxt "Symbol"
 msgid "Fast food (pizza)"
-msgstr "Fast food"
+msgstr "Fast food (Pizza)"
 
 #: ../../build/share/symbols/symbols.h:428
 #: ../../build/share/symbols/symbols.h:439
 msgctxt "Symbol"
 msgid "Ice cream"
-msgstr ""
+msgstr "Zmrzlina"
 
 #: ../../build/share/symbols/symbols.h:429
 #: ../../build/share/symbols/symbols.h:440
 msgctxt "Symbol"
 msgid "Pizza"
-msgstr ""
+msgstr "Pizza"
 
 #: ../../build/share/symbols/symbols.h:430
 #: ../../build/share/symbols/symbols.h:441
@@ -5161,34 +5130,31 @@ msgstr "Zubár"
 #: ../../build/share/symbols/symbols.h:455
 msgctxt "Symbol"
 msgid "Physician"
-msgstr ""
+msgstr "Doktor"
 
 #: ../../build/share/symbols/symbols.h:446
 #: ../../build/share/symbols/symbols.h:456
 msgctxt "Symbol"
 msgid "Physician 2"
-msgstr ""
+msgstr "Doktor 2"
 
 #: ../../build/share/symbols/symbols.h:448
 #: ../../build/share/symbols/symbols.h:458
-#, fuzzy
 msgctxt "Symbol"
 msgid "Emergency department"
-msgstr "Núdzový telefón"
+msgstr "Urgentný príjem"
 
 #: ../../build/share/symbols/symbols.h:449
 #: ../../build/share/symbols/symbols.h:459
-#, fuzzy
 msgctxt "Symbol"
 msgid "Emergency department 2"
-msgstr "Núdzový telefón"
+msgstr "Urgentný príjem 2"
 
 #: ../../build/share/symbols/symbols.h:450
 #: ../../build/share/symbols/symbols.h:460
-#, fuzzy
 msgctxt "Symbol"
 msgid "Optician"
-msgstr "Možnosti"
+msgstr "Optik"
 
 #: ../../build/share/symbols/symbols.h:451
 #: ../../build/share/symbols/symbols.h:461
@@ -5200,11 +5166,10 @@ msgstr "Lekáreň"
 #: ../../build/share/symbols/symbols.h:462
 msgctxt "Symbol"
 msgid "Pharmacy (dispensing)"
-msgstr ""
+msgstr "Lekáreň (okienko)"
 
 #: ../../build/share/symbols/symbols.h:453
 #: ../../build/share/symbols/symbols.h:463
-#, fuzzy
 msgctxt "Symbol"
 msgid "Veterinary"
 msgstr "Veterinárny lekár"
@@ -5223,10 +5188,9 @@ msgstr "Ihličnatý les"
 
 #: ../../build/share/symbols/symbols.h:466
 #: ../../build/share/symbols/symbols.h:474
-#, fuzzy
 msgctxt "Symbol"
 msgid "Coniferous and deciduous"
-msgstr "Ihličnatý les"
+msgstr "Zmiešaný les"
 
 #: ../../build/share/symbols/symbols.h:467
 #: ../../build/share/symbols/symbols.h:475
@@ -5252,14 +5216,13 @@ msgstr "Kopce"
 #: ../../build/share/symbols/symbols.h:478
 msgctxt "Symbol"
 msgid "Quarry"
-msgstr ""
+msgstr "Lom"
 
 #: ../../build/share/symbols/symbols.h:471
 #: ../../build/share/symbols/symbols.h:479
-#, fuzzy
 msgctxt "Symbol"
 msgid "Scrub"
-msgstr "Scrub"
+msgstr "Krovina"
 
 #: ../../build/share/symbols/symbols.h:472
 #: ../../build/share/symbols/symbols.h:480
@@ -5276,13 +5239,13 @@ msgstr ""
 #: ../../build/share/symbols/symbols.h:487
 msgctxt "Symbol"
 msgid "Automated teller machine"
-msgstr ""
+msgstr "Bankomat"
 
 #: ../../build/share/symbols/symbols.h:483
 #: ../../build/share/symbols/symbols.h:488
 msgctxt "Symbol"
 msgid "Automated teller machine 2"
-msgstr ""
+msgstr "Bankomat 2"
 
 #: ../../build/share/symbols/symbols.h:484
 #: ../../build/share/symbols/symbols.h:489
@@ -5292,10 +5255,9 @@ msgstr "Banka"
 
 #: ../../build/share/symbols/symbols.h:485
 #: ../../build/share/symbols/symbols.h:490
-#, fuzzy
 msgctxt "Symbol"
 msgid "Bank 2"
-msgstr "Banka"
+msgstr "Banka 2"
 
 #: ../../build/share/symbols/symbols.h:486
 #: ../../build/share/symbols/symbols.h:491
@@ -5335,10 +5297,9 @@ msgstr "Veľvyslanectvo"
 
 #: ../../build/share/symbols/symbols.h:497
 #: ../../build/share/symbols/symbols.h:518
-#, fuzzy
 msgctxt "Symbol"
 msgid "Embassy 2"
-msgstr "Veľvyslanectvo"
+msgstr "Veľvyslanectvo 2"
 
 #: ../../build/share/symbols/symbols.h:498
 #: ../../build/share/symbols/symbols.h:519
@@ -5357,7 +5318,7 @@ msgstr "Baňa"
 #: ../../build/share/symbols/symbols.h:521
 msgctxt "Symbol"
 msgid "Mine (abandoned)"
-msgstr ""
+msgstr "Opustená baňa"
 
 #: ../../build/share/symbols/symbols.h:501
 #: ../../build/share/symbols/symbols.h:522
@@ -5427,7 +5388,7 @@ msgstr "Voda do chladiča"
 #: ../../build/share/symbols/symbols.h:532
 msgctxt "Symbol"
 msgid "Lookout"
-msgstr ""
+msgstr "Výľad"
 
 #: ../../build/share/symbols/symbols.h:512
 #: ../../build/share/symbols/symbols.h:533
@@ -5440,10 +5401,9 @@ msgstr "Vysielač"
 #: ../../build/share/symbols/symbols.h:534
 #: ../../build/share/symbols/symbols.h:858
 #: ../../build/share/symbols/symbols.h:861
-#, fuzzy
 msgctxt "Symbol"
 msgid "Water tower"
-msgstr "Rozhľadňa"
+msgstr "Vodná Veža"
 
 #: ../../build/share/symbols/symbols.h:535
 msgctxt "Symbol"
@@ -5452,62 +5412,57 @@ msgstr ""
 
 #: ../../build/share/symbols/symbols.h:536
 #: ../../build/share/symbols/symbols.h:546
-#, fuzzy
 msgctxt "Symbol"
 msgid "Power station (coal)"
-msgstr "Poloha (%):"
+msgstr "Tepelná Elektráreň (Uhlie)"
 
 #: ../../build/share/symbols/symbols.h:537
 #: ../../build/share/symbols/symbols.h:547
-#, fuzzy
 msgctxt "Symbol"
 msgid "Power station (gas)"
-msgstr "Rotácia (stupne):"
+msgstr "Tepelná Elektráreň (Plyn)"
 
 #: ../../build/share/symbols/symbols.h:538
 #: ../../build/share/symbols/symbols.h:548
 msgctxt "Symbol"
 msgid "Power station (solar)"
-msgstr ""
+msgstr "Solárna Elektráreň"
 
 #: ../../build/share/symbols/symbols.h:539
 #: ../../build/share/symbols/symbols.h:549
-#, fuzzy
 msgctxt "Symbol"
 msgid "Power station (water)"
-msgstr "Nižšia kvalita (rýchlejšie)"
+msgstr "Vodná Elektráreň"
 
 #: ../../build/share/symbols/symbols.h:540
 #: ../../build/share/symbols/symbols.h:550
-#, fuzzy
 msgctxt "Symbol"
 msgid "Power station (wind)"
-msgstr "Šírka cieľa"
+msgstr "Veterná Elektráreň"
 
 #: ../../build/share/symbols/symbols.h:541
 #: ../../build/share/symbols/symbols.h:551
-#, fuzzy
 msgctxt "Symbol"
 msgid "Substation"
-msgstr "Sýtosť"
+msgstr "Elektrická stanica"
 
 #: ../../build/share/symbols/symbols.h:542
 #: ../../build/share/symbols/symbols.h:552
 msgctxt "Symbol"
 msgid "Transmission tower (high)"
-msgstr ""
+msgstr "Elektrické vedenie 1 - vysoké"
 
 #: ../../build/share/symbols/symbols.h:543
 #: ../../build/share/symbols/symbols.h:553
 msgctxt "Symbol"
 msgid "Transmission tower (high) 2"
-msgstr ""
+msgstr "Elektrické vedenie 2 - vysoké"
 
 #: ../../build/share/symbols/symbols.h:544
 #: ../../build/share/symbols/symbols.h:554
 msgctxt "Symbol"
 msgid "Transmission tower (low)"
-msgstr ""
+msgstr "Elektrické vedenie 1 - nízke"
 
 #: ../../build/share/symbols/symbols.h:545
 #: ../../build/share/symbols/symbols.h:555
@@ -5524,27 +5479,25 @@ msgstr ""
 #: ../../build/share/symbols/symbols.h:601
 msgctxt "Symbol"
 msgid "Alcoholic beverage"
-msgstr ""
+msgstr "Alkoholický Nápoj"
 
 #: ../../build/share/symbols/symbols.h:558
 #: ../../build/share/symbols/symbols.h:602
-#, fuzzy
 msgctxt "Symbol"
 msgid "Bakery"
 msgstr "Pekáreň"
 
 #: ../../build/share/symbols/symbols.h:559
 #: ../../build/share/symbols/symbols.h:603
-#, fuzzy
 msgctxt "Symbol"
 msgid "Bicycle"
-msgstr "Cyklotrasa"
+msgstr "Bicykel"
 
 #: ../../build/share/symbols/symbols.h:560
 #: ../../build/share/symbols/symbols.h:604
 msgctxt "Symbol"
 msgid "Book"
-msgstr ""
+msgstr "Kniha"
 
 #: ../../build/share/symbols/symbols.h:561
 #: ../../build/share/symbols/symbols.h:605
@@ -5554,42 +5507,36 @@ msgstr "Mäsiar"
 
 #: ../../build/share/symbols/symbols.h:562
 #: ../../build/share/symbols/symbols.h:606
-#, fuzzy
 msgctxt "Symbol"
 msgid "Butcher 2"
-msgstr "Mäsiar"
+msgstr "Mäsiar 2"
 
 #: ../../build/share/symbols/symbols.h:563
 #: ../../build/share/symbols/symbols.h:607
-#, fuzzy
 msgctxt "Symbol"
 msgid "Car"
-msgstr "Vyčistiť"
+msgstr "Auto"
 
 #: ../../build/share/symbols/symbols.h:564
 #: ../../build/share/symbols/symbols.h:608
-#, fuzzy
 msgctxt "Symbol"
 msgid "Car repair"
-msgstr "Predajňa áut"
+msgstr "Automechanik"
 
 #: ../../build/share/symbols/symbols.h:565
 #: ../../build/share/symbols/symbols.h:609
-#, fuzzy
 msgctxt "Symbol"
 msgid "Clothes"
 msgstr "Oblečenie"
 
 #: ../../build/share/symbols/symbols.h:566
 #: ../../build/share/symbols/symbols.h:610
-#, fuzzy
 msgctxt "Symbol"
 msgid "Computer"
-msgstr "Obchod s výpočtovou technikou"
+msgstr "Počítač"
 
 #: ../../build/share/symbols/symbols.h:567
 #: ../../build/share/symbols/symbols.h:611
-#, fuzzy
 msgctxt "Symbol"
 msgid "Confectionery"
 msgstr "Cukráreň"
@@ -5598,21 +5545,19 @@ msgstr "Cukráreň"
 #: ../../build/share/symbols/symbols.h:612
 msgctxt "Symbol"
 msgid "Convenience"
-msgstr ""
+msgstr "Včierka"
 
 #: ../../build/share/symbols/symbols.h:569
 #: ../../build/share/symbols/symbols.h:613
-#, fuzzy
 msgctxt "Symbol"
 msgid "Copy shop"
-msgstr "Kopírovať cestu"
+msgstr "Tlačiareň"
 
 #: ../../build/share/symbols/symbols.h:570
 #: ../../build/share/symbols/symbols.h:614
-#, fuzzy
 msgctxt "Symbol"
 msgid "Department store"
-msgstr "Rozdielne ťahy"
+msgstr "Obchodný dom"
 
 #: ../../build/share/symbols/symbols.h:571
 #: ../../build/share/symbols/symbols.h:615
@@ -5625,19 +5570,19 @@ msgstr "DPI"
 #: ../../build/share/symbols/symbols.h:616
 msgctxt "Symbol"
 msgid "Estate agent"
-msgstr ""
+msgstr "Realitný Maklér"
 
 #: ../../build/share/symbols/symbols.h:573
 #: ../../build/share/symbols/symbols.h:617
 msgctxt "Symbol"
 msgid "Estate agent 2"
-msgstr ""
+msgstr "Realitný Maklér 2"
 
 #: ../../build/share/symbols/symbols.h:574
 #: ../../build/share/symbols/symbols.h:618
 msgctxt "Symbol"
 msgid "Estate agent 3"
-msgstr ""
+msgstr "Realitný Maklér 3"
 
 #: ../../build/share/symbols/symbols.h:575
 #: ../../build/share/symbols/symbols.h:619
@@ -5678,10 +5623,9 @@ msgstr "Kaderník"
 
 #: ../../build/share/symbols/symbols.h:581
 #: ../../build/share/symbols/symbols.h:625
-#, fuzzy
 msgctxt "Symbol"
 msgid "Hearing aids"
-msgstr "Odlety"
+msgstr "Načuvací prístroj"
 
 #: ../../build/share/symbols/symbols.h:582
 #: ../../build/share/symbols/symbols.h:626
@@ -5691,29 +5635,27 @@ msgstr "HiFi"
 
 #: ../../build/share/symbols/symbols.h:583
 #: ../../build/share/symbols/symbols.h:627
-#, fuzzy
 msgctxt "Symbol"
 msgid "Jewelry"
-msgstr "Smaltované klenoty"
+msgstr "Šperky"
 
 #: ../../build/share/symbols/symbols.h:584
 #: ../../build/share/symbols/symbols.h:628
-#, fuzzy
 msgctxt "Symbol"
 msgid "Jewelry 2"
-msgstr "Smaltované klenoty"
+msgstr "Šperky 2"
 
 #: ../../build/share/symbols/symbols.h:585
 #: ../../build/share/symbols/symbols.h:629
 msgctxt "Symbol"
 msgid "Kiosk"
-msgstr ""
+msgstr "Stánok"
 
 #: ../../build/share/symbols/symbols.h:586
 #: ../../build/share/symbols/symbols.h:630
 msgctxt "Symbol"
 msgid "Self-service laundry"
-msgstr ""
+msgstr "Práčovňa"
 
 #: ../../build/share/symbols/symbols.h:587
 #: ../../build/share/symbols/symbols.h:631
@@ -5724,20 +5666,18 @@ msgstr "Typ zakončenia:"
 
 #: ../../build/share/symbols/symbols.h:588
 #: ../../build/share/symbols/symbols.h:632
-#, fuzzy
 msgctxt "Symbol"
 msgid "Mobile phone"
-msgstr "Telefón"
+msgstr "Mobilný Telefón"
 
 #: ../../build/share/symbols/symbols.h:589
 #: ../../build/share/symbols/symbols.h:633
 msgctxt "Symbol"
 msgid "Motorcycle"
-msgstr ""
+msgstr "Motocykel"
 
 #: ../../build/share/symbols/symbols.h:590
 #: ../../build/share/symbols/symbols.h:634
-#, fuzzy
 msgctxt "Symbol"
 msgid "Music"
 msgstr "Hudba"
@@ -5746,25 +5686,25 @@ msgstr "Hudba"
 #: ../../build/share/symbols/symbols.h:635
 msgctxt "Symbol"
 msgid "Newspaper"
-msgstr ""
+msgstr "Noviny"
 
 #: ../../build/share/symbols/symbols.h:592
 #: ../../build/share/symbols/symbols.h:636
 msgctxt "Symbol"
 msgid "Pet shop"
-msgstr ""
+msgstr "Zverimex"
 
 #: ../../build/share/symbols/symbols.h:593
 #: ../../build/share/symbols/symbols.h:637
 msgctxt "Symbol"
 msgid "Pet shop 2"
-msgstr ""
+msgstr "Zverimex 2"
 
 #: ../../build/share/symbols/symbols.h:594
 #: ../../build/share/symbols/symbols.h:638
 msgctxt "Symbol"
 msgid "Photo"
-msgstr ""
+msgstr "Fotka"
 
 #: ../../build/share/symbols/symbols.h:595
 #: ../../build/share/symbols/symbols.h:639
@@ -5774,7 +5714,6 @@ msgstr "Supermarket"
 
 #: ../../build/share/symbols/symbols.h:596
 #: ../../build/share/symbols/symbols.h:640
-#, fuzzy
 msgctxt "Symbol"
 msgid "Fishing supplies"
 msgstr "Rybolov"
@@ -5783,27 +5722,25 @@ msgstr "Rybolov"
 #: ../../build/share/symbols/symbols.h:641
 msgctxt "Symbol"
 msgid "Tobacco"
-msgstr ""
+msgstr "Tabak"
 
 #: ../../build/share/symbols/symbols.h:598
 #: ../../build/share/symbols/symbols.h:642
 msgctxt "Symbol"
 msgid "Toys"
-msgstr ""
+msgstr "Hračky"
 
 #: ../../build/share/symbols/symbols.h:599
 #: ../../build/share/symbols/symbols.h:643
-#, fuzzy
 msgctxt "Symbol"
 msgid "Vending machine"
-msgstr "Koncový uhol"
+msgstr "Automat"
 
 #: ../../build/share/symbols/symbols.h:600
 #: ../../build/share/symbols/symbols.h:644
-#, fuzzy
 msgctxt "Symbol"
 msgid "Video rental"
-msgstr "Plátno videa"
+msgstr "Video požičovňa"
 
 #: ../../build/share/symbols/symbols.h:645
 msgctxt "Symbol"
@@ -5818,34 +5755,30 @@ msgstr "Lukostreľba"
 
 #: ../../build/share/symbols/symbols.h:647
 #: ../../build/share/symbols/symbols.h:675
-#, fuzzy
 msgctxt "Symbol"
 msgid "Baseball"
-msgstr "Základ"
+msgstr "Baseball"
 
 #: ../../build/share/symbols/symbols.h:648
 #: ../../build/share/symbols/symbols.h:676
-#, fuzzy
 msgctxt "Symbol"
 msgid "Canoe"
-msgstr "Prístup pre kánoe"
+msgstr "Kanoe"
 
 #: ../../build/share/symbols/symbols.h:649
 #: ../../build/share/symbols/symbols.h:677
 msgctxt "Symbol"
 msgid "Cricket"
-msgstr ""
+msgstr "Kriket"
 
 #: ../../build/share/symbols/symbols.h:650
 #: ../../build/share/symbols/symbols.h:678
-#, fuzzy
 msgctxt "Symbol"
 msgid "Diving"
-msgstr "Rozdelenie"
+msgstr "Potápanie"
 
 #: ../../build/share/symbols/symbols.h:651
 #: ../../build/share/symbols/symbols.h:679
-#, fuzzy
 msgctxt "Symbol"
 msgid "Golf"
 msgstr "Golf"
@@ -5860,39 +5793,34 @@ msgstr "Telocvičňa"
 #: ../../build/share/symbols/symbols.h:681
 msgctxt "Symbol"
 msgid "Gymnasium"
-msgstr ""
+msgstr "Telocvičňa 1"
 
 #: ../../build/share/symbols/symbols.h:654
 #: ../../build/share/symbols/symbols.h:682
-#, fuzzy
 msgctxt "Symbol"
 msgid "Gymnasium 2"
-msgstr "Hliník 2"
+msgstr "Telocvičňa 2"
 
 #: ../../build/share/symbols/symbols.h:655
 #: ../../build/share/symbols/symbols.h:683
-#, fuzzy
 msgctxt "Symbol"
 msgid "Hill climbing"
 msgstr "Horolezectvo"
 
 #: ../../build/share/symbols/symbols.h:656
 #: ../../build/share/symbols/symbols.h:684
-#, fuzzy
 msgctxt "Symbol"
 msgid "Horse racing"
 msgstr "Jazda na koni"
 
 #: ../../build/share/symbols/symbols.h:658
 #: ../../build/share/symbols/symbols.h:686
-#, fuzzy
 msgctxt "Symbol"
 msgid "Jet ski"
-msgstr "Uhľovočierna"
+msgstr "Vodný Skúter"
 
 #: ../../build/share/symbols/symbols.h:659
 #: ../../build/share/symbols/symbols.h:687
-#, fuzzy
 msgctxt "Symbol"
 msgid "Leisure center"
 msgstr "Centrum voľného času"
@@ -5901,45 +5829,43 @@ msgstr "Centrum voľného času"
 #: ../../build/share/symbols/symbols.h:688
 msgctxt "Symbol"
 msgid "Miniature golf"
-msgstr ""
+msgstr "Mini Golf"
 
 #: ../../build/share/symbols/symbols.h:661
 #: ../../build/share/symbols/symbols.h:689
-#, fuzzy
 msgctxt "Symbol"
 msgid "Motor racing"
-msgstr "Rozostup konektorov"
+msgstr "Pretekárska Dráha"
 
 #: ../../build/share/symbols/symbols.h:664
 #: ../../build/share/symbols/symbols.h:692
-#, fuzzy
 msgctxt "Symbol"
 msgid "Shooting"
-msgstr "Osvetlenie"
+msgstr "Streľba"
 
 #: ../../build/share/symbols/symbols.h:665
 #: ../../build/share/symbols/symbols.h:693
 msgctxt "Symbol"
 msgid "Skiing (crosscountry)"
-msgstr ""
+msgstr "Bežkovanie"
 
 #: ../../build/share/symbols/symbols.h:666
 #: ../../build/share/symbols/symbols.h:694
 msgctxt "Symbol"
 msgid "Skiing (downhill)"
-msgstr ""
+msgstr "Lyžovanie"
 
 #: ../../build/share/symbols/symbols.h:667
 #: ../../build/share/symbols/symbols.h:695
 msgctxt "Symbol"
 msgid "Snooker"
-msgstr ""
+msgstr "Potápanie sa"
 
 #: ../../build/share/symbols/symbols.h:668
 #: ../../build/share/symbols/symbols.h:696
 msgctxt "Symbol"
 msgid "Soccer"
-msgstr ""
+msgstr "futbal"
 
 #: ../../build/share/symbols/symbols.h:669
 #: ../../build/share/symbols/symbols.h:697
@@ -5950,17 +5876,15 @@ msgstr "Polomer"
 
 #: ../../build/share/symbols/symbols.h:670
 #: ../../build/share/symbols/symbols.h:698
-#, fuzzy
 msgctxt "Symbol"
 msgid "Swimming (indoor)"
-msgstr "Plávanie"
+msgstr "Plávanie Vnútorné"
 
 #: ../../build/share/symbols/symbols.h:671
 #: ../../build/share/symbols/symbols.h:699
-#, fuzzy
 msgctxt "Symbol"
 msgid "Swimming (outdoor)"
-msgstr "Plávanie"
+msgstr "Plávanie Vonkajšie"
 
 #: ../../build/share/symbols/symbols.h:672
 #: ../../build/share/symbols/symbols.h:700
@@ -5982,29 +5906,27 @@ msgstr ""
 
 #: ../../build/share/symbols/symbols.h:703
 #: ../../build/share/symbols/symbols.h:735
-#, fuzzy
 msgctxt "Symbol"
 msgid "Archaeological site"
 msgstr "Archeológia / zrúcaniny"
 
 #: ../../build/share/symbols/symbols.h:704
 #: ../../build/share/symbols/symbols.h:736
-#, fuzzy
 msgctxt "Symbol"
 msgid "Archaeological site 2"
-msgstr "Archeológia / zrúcaniny"
+msgstr "Archeológia / zrúcaniny 2"
 
 #: ../../build/share/symbols/symbols.h:705
 #: ../../build/share/symbols/symbols.h:737
 msgctxt "Symbol"
 msgid "Art gallery"
-msgstr ""
+msgstr "Geléria Umenia"
 
 #: ../../build/share/symbols/symbols.h:706
 #: ../../build/share/symbols/symbols.h:738
 msgctxt "Symbol"
 msgid "Art gallery 2"
-msgstr ""
+msgstr "Geléria Umenia 2"
 
 #: ../../build/share/symbols/symbols.h:707
 #: ../../build/share/symbols/symbols.h:739
@@ -6030,13 +5952,13 @@ msgstr "Pláž"
 #: ../../build/share/symbols/symbols.h:742
 msgctxt "Symbol"
 msgid "Casino"
-msgstr ""
+msgstr "Kasíno"
 
 #: ../../build/share/symbols/symbols.h:711
 #: ../../build/share/symbols/symbols.h:743
 msgctxt "Symbol"
 msgid "Castle"
-msgstr ""
+msgstr "Hrad"
 
 #: ../../build/share/symbols/symbols.h:712
 #: ../../build/share/symbols/symbols.h:744
@@ -6049,33 +5971,31 @@ msgstr "Mriežka proti pohybu dobytka"
 #: ../../build/share/symbols/symbols.h:745
 msgctxt "Symbol"
 msgid "Cinema"
-msgstr ""
+msgstr "Kino"
 
 #: ../../build/share/symbols/symbols.h:714
 #: ../../build/share/symbols/symbols.h:746
 msgctxt "Symbol"
 msgid "Cinema 2"
-msgstr ""
+msgstr "Kino 2"
 
 #: ../../build/share/symbols/symbols.h:715
 #: ../../build/share/symbols/symbols.h:747
 msgctxt "Symbol"
 msgid "Clock"
-msgstr ""
+msgstr "Hodiny"
 
 #: ../../build/share/symbols/symbols.h:717
 #: ../../build/share/symbols/symbols.h:749
-#, fuzzy
 msgctxt "Symbol"
 msgid "Guidepost"
-msgstr "Vodidlá"
+msgstr "Navigačná ceduľa"
 
 #: ../../build/share/symbols/symbols.h:719
 #: ../../build/share/symbols/symbols.h:751
-#, fuzzy
 msgctxt "Symbol"
 msgid "Map"
-msgstr "Medzera"
+msgstr "Mapa"
 
 #: ../../build/share/symbols/symbols.h:720
 #: ../../build/share/symbols/symbols.h:752
@@ -6094,7 +6014,7 @@ msgstr "Pamätihodnosť"
 #: ../../build/share/symbols/symbols.h:754
 msgctxt "Symbol"
 msgid "Museum"
-msgstr ""
+msgstr "Múzeum"
 
 #: ../../build/share/symbols/symbols.h:723
 #: ../../build/share/symbols/symbols.h:755
@@ -6107,13 +6027,13 @@ msgstr "Piknik"
 #: ../../build/share/symbols/symbols.h:756
 msgctxt "Symbol"
 msgid "Ruin"
-msgstr ""
+msgstr "Zrúcanina"
 
 #: ../../build/share/symbols/symbols.h:725
 #: ../../build/share/symbols/symbols.h:757
 msgctxt "Symbol"
 msgid "Steam train"
-msgstr ""
+msgstr "Parný Vlak"
 
 #: ../../build/share/symbols/symbols.h:726
 #: ../../build/share/symbols/symbols.h:758
@@ -6129,14 +6049,12 @@ msgstr "Zábavný park"
 
 #: ../../build/share/symbols/symbols.h:728
 #: ../../build/share/symbols/symbols.h:760
-#, fuzzy
 msgctxt "Symbol"
 msgid "View point"
-msgstr "Zaoblenie rohu"
+msgstr "Výhľad"
 
 #: ../../build/share/symbols/symbols.h:729
 #: ../../build/share/symbols/symbols.h:761
-#, fuzzy
 msgctxt "Symbol"
 msgid "Water wheel"
 msgstr "Vodné koleso"
@@ -6145,19 +6063,19 @@ msgstr "Vodné koleso"
 #: ../../build/share/symbols/symbols.h:762
 msgctxt "Symbol"
 msgid "Wayside cross"
-msgstr ""
+msgstr "kríž pri ceste"
 
 #: ../../build/share/symbols/symbols.h:731
 #: ../../build/share/symbols/symbols.h:763
 msgctxt "Symbol"
 msgid "Wayside shrine"
-msgstr ""
+msgstr "Kaplnka"
 
 #: ../../build/share/symbols/symbols.h:732
 #: ../../build/share/symbols/symbols.h:764
 msgctxt "Symbol"
 msgid "Windmill"
-msgstr ""
+msgstr "veterný mlyn"
 
 #: ../../build/share/symbols/symbols.h:733
 #: ../../build/share/symbols/symbols.h:765
@@ -6180,20 +6098,19 @@ msgstr ""
 #: ../../build/share/symbols/symbols.h:812
 msgctxt "Symbol"
 msgid "Aerodrome"
-msgstr ""
+msgstr "Pristávacia dráha 1"
 
 #: ../../build/share/symbols/symbols.h:769
 #: ../../build/share/symbols/symbols.h:813
 msgctxt "Symbol"
 msgid "Aerodrome 2"
-msgstr ""
+msgstr "Pristávacia dráha 2"
 
 #: ../../build/share/symbols/symbols.h:771
 #: ../../build/share/symbols/symbols.h:815
-#, fuzzy
 msgctxt "Symbol"
 msgid "Airport 2"
-msgstr "Letisko"
+msgstr "Letisko 2"
 
 #: ../../build/share/symbols/symbols.h:772
 #: ../../build/share/symbols/symbols.h:816
@@ -6211,34 +6128,30 @@ msgstr "Proporcionálne"
 
 #: ../../build/share/symbols/symbols.h:774
 #: ../../build/share/symbols/symbols.h:818
-#, fuzzy
 msgctxt "Symbol"
 msgid "Bus station"
-msgstr "Čerpacia stanica"
+msgstr "Autobusová stanica"
 
 #: ../../build/share/symbols/symbols.h:775
 #: ../../build/share/symbols/symbols.h:819
-#, fuzzy
 msgctxt "Symbol"
 msgid "Bus stop"
 msgstr "Autobusová zastávka"
 
 #: ../../build/share/symbols/symbols.h:776
 #: ../../build/share/symbols/symbols.h:820
-#, fuzzy
 msgctxt "Symbol"
 msgid "Bus stop 2"
-msgstr "Autobusová zastávka"
+msgstr "Autobusová zastávka 2"
 
 #: ../../build/share/symbols/symbols.h:777
 #: ../../build/share/symbols/symbols.h:821
 msgctxt "Symbol"
 msgid "Car sharing"
-msgstr ""
+msgstr "Požičovňa áut"
 
 #: ../../build/share/symbols/symbols.h:778
 #: ../../build/share/symbols/symbols.h:822
-#, fuzzy
 msgctxt "Symbol"
 msgid "Emergency phone"
 msgstr "Núdzový telefón"
@@ -6253,33 +6166,31 @@ msgstr ""
 #: ../../build/share/symbols/symbols.h:824
 msgctxt "Symbol"
 msgid "Fuel"
-msgstr ""
+msgstr "Palivo"
 
 #: ../../build/share/symbols/symbols.h:781
 #: ../../build/share/symbols/symbols.h:825
 msgctxt "Symbol"
 msgid "Fuel (LPG)"
-msgstr ""
+msgstr "Palivo ( Plyn LPG )"
 
 #: ../../build/share/symbols/symbols.h:782
 #: ../../build/share/symbols/symbols.h:826
-#, fuzzy
 msgctxt "Symbol"
 msgid "Helicopter"
-msgstr "Heliport"
+msgstr "Helikoptéra"
 
 #: ../../build/share/symbols/symbols.h:783
 #: ../../build/share/symbols/symbols.h:827
 msgctxt "Symbol"
 msgid "Helicopter pad"
-msgstr ""
+msgstr "Pristávacia plocha pre Helikoptéry"
 
 #: ../../build/share/symbols/symbols.h:784
 #: ../../build/share/symbols/symbols.h:828
-#, fuzzy
 msgctxt "Symbol"
 msgid "Lighthouse"
-msgstr "Svetlá"
+msgstr "Maják"
 
 #: ../../build/share/symbols/symbols.h:786
 #: ../../build/share/symbols/symbols.h:830
@@ -6299,44 +6210,43 @@ msgstr "Otočenie (°, v smere hodinových ručičiek):"
 #: ../../build/share/symbols/symbols.h:833
 msgctxt "Symbol"
 msgid "Parking (bicycle)"
-msgstr ""
+msgstr "Parkovanie bicyklov"
 
 #: ../../build/share/symbols/symbols.h:790
 #: ../../build/share/symbols/symbols.h:834
-#, fuzzy
 msgctxt "Symbol"
 msgid "Parking (car)"
-msgstr "Parkovanie"
+msgstr "Parkovanie áut"
 
 #: ../../build/share/symbols/symbols.h:791
 #: ../../build/share/symbols/symbols.h:835
 msgctxt "Symbol"
 msgid "Parking (car, paid)"
-msgstr ""
+msgstr "Platené Parkovisko"
 
 #: ../../build/share/symbols/symbols.h:792
 #: ../../build/share/symbols/symbols.h:836
 msgctxt "Symbol"
 msgid "Parking (disabled)"
-msgstr ""
+msgstr "Parkovanie pre postihnutých"
 
 #: ../../build/share/symbols/symbols.h:793
 #: ../../build/share/symbols/symbols.h:837
 msgctxt "Symbol"
 msgid "Parking (private)"
-msgstr ""
+msgstr "Súkromné Parkovisko"
 
 #: ../../build/share/symbols/symbols.h:794
 #: ../../build/share/symbols/symbols.h:838
 msgctxt "Symbol"
 msgid "Parking (private) 2"
-msgstr ""
+msgstr "Súkromné Parkovisko 2"
 
 #: ../../build/share/symbols/symbols.h:795
 #: ../../build/share/symbols/symbols.h:839
 msgctxt "Symbol"
 msgid "Parking (private) 3"
-msgstr ""
+msgstr "Súkromné Parkovisko 3"
 
 #: ../../build/share/symbols/symbols.h:796
 #: ../../build/share/symbols/symbols.h:840
@@ -6348,88 +6258,79 @@ msgstr "Prístav"
 #: ../../build/share/symbols/symbols.h:841
 msgctxt "Symbol"
 msgid "Rental (bicycle)"
-msgstr ""
+msgstr "Požičovna bicyklov"
 
 #: ../../build/share/symbols/symbols.h:798
 #: ../../build/share/symbols/symbols.h:842
-#, fuzzy
 msgctxt "Symbol"
 msgid "Rental (car)"
-msgstr "katalánčina (ca)"
+msgstr "Požičovna áut"
 
 #: ../../build/share/symbols/symbols.h:799
 #: ../../build/share/symbols/symbols.h:843
-#, fuzzy
 msgctxt "Symbol"
 msgid "Roundabout (anticlockwise)"
-msgstr "Otočenie v smere hodinových ručičiek"
+msgstr "Kruhový Objazd 1"
 
 #: ../../build/share/symbols/symbols.h:800
 #: ../../build/share/symbols/symbols.h:844
-#, fuzzy
 msgctxt "Symbol"
 msgid "Roundabout (clockwise)"
-msgstr "Otočenie v smere hodinových ručičiek"
+msgstr "Kruhový Objazd 2"
 
 #: ../../build/share/symbols/symbols.h:801
 #: ../../build/share/symbols/symbols.h:845
 msgctxt "Symbol"
 msgid "Slipway"
-msgstr ""
+msgstr "Kĺzačka"
 
 #: ../../build/share/symbols/symbols.h:802
 #: ../../build/share/symbols/symbols.h:846
-#, fuzzy
 msgctxt "Symbol"
 msgid "Speed bump"
-msgstr "Vrátiť hrče"
+msgstr "Spomalovač"
 
 #: ../../build/share/symbols/symbols.h:803
 #: ../../build/share/symbols/symbols.h:847
 msgctxt "Symbol"
 msgid "Subway"
-msgstr ""
+msgstr "Metro"
 
 #: ../../build/share/symbols/symbols.h:804
 #: ../../build/share/symbols/symbols.h:848
-#, fuzzy
 msgctxt "Symbol"
 msgid "Taxi rank"
-msgstr "Taxi"
+msgstr "Stanovisko taxíkov"
 
 #: ../../build/share/symbols/symbols.h:805
 #: ../../build/share/symbols/symbols.h:849
-#, fuzzy
 msgctxt "Symbol"
 msgid "Traffic lights"
-msgstr "Ľahkosť zrnitosti"
+msgstr "Semafór"
 
 #: ../../build/share/symbols/symbols.h:806
 #: ../../build/share/symbols/symbols.h:850
-#, fuzzy
 msgctxt "Symbol"
 msgid "Train station"
-msgstr "Orientácia"
+msgstr "Vlaková Stanica"
 
 #: ../../build/share/symbols/symbols.h:807
 #: ../../build/share/symbols/symbols.h:851
-#, fuzzy
 msgctxt "Symbol"
 msgid "Train station 2"
-msgstr "Orientácia"
+msgstr "Vlaková Stanica 2"
 
 #: ../../build/share/symbols/symbols.h:808
 #: ../../build/share/symbols/symbols.h:852
 msgctxt "Symbol"
 msgid "Tram stop"
-msgstr ""
+msgstr "električková zastávka"
 
 #: ../../build/share/symbols/symbols.h:809
 #: ../../build/share/symbols/symbols.h:853
-#, fuzzy
 msgctxt "Symbol"
 msgid "Turning circle"
-msgstr "Vpísaná kružnica"
+msgstr "Otočka"
 
 #: ../../build/share/symbols/symbols.h:810
 #: ../../build/share/symbols/symbols.h:854
@@ -6439,10 +6340,9 @@ msgstr "Chôdza"
 
 #: ../../build/share/symbols/symbols.h:811
 #: ../../build/share/symbols/symbols.h:855
-#, fuzzy
 msgctxt "Symbol"
 msgid "Zebra crossing"
-msgstr "Zobraziť všetky pretnutia."
+msgstr "Prechod pre chodcov"
 
 #: ../../build/share/symbols/symbols.h:856
 msgctxt "Symbol"
@@ -6453,13 +6353,13 @@ msgstr ""
 #: ../../build/share/symbols/symbols.h:860
 msgctxt "Symbol"
 msgid "Dam"
-msgstr ""
+msgstr "Priehrada"
 
 #: ../../build/share/symbols/symbols.h:859
 #: ../../build/share/symbols/symbols.h:862
 msgctxt "Symbol"
 msgid "Weir"
-msgstr ""
+msgstr "hrádza"
 
 #: ../../build/share/symbols/symbols.h:863
 msgctxt "Symbol"
@@ -6480,101 +6380,99 @@ msgstr ""
 
 #: ../../build/share/symbols/symbols.h:866
 #: ../../build/share/symbols/symbols.h:886
-#, fuzzy
 msgctxt "Symbol"
 msgid "Buddhist"
-msgstr "Zoznam kontaktov"
+msgstr "Budhista"
 
 #: ../../build/share/symbols/symbols.h:867
 #: ../../build/share/symbols/symbols.h:887
-#, fuzzy
 msgctxt "Symbol"
 msgid "Buddhist 2"
-msgstr "Zoznam kontaktov"
+msgstr "Budhista 2"
 
 #: ../../build/share/symbols/symbols.h:868
 #: ../../build/share/symbols/symbols.h:888
 msgctxt "Symbol"
 msgid "Christian"
-msgstr ""
+msgstr "Kresťan"
 
 #: ../../build/share/symbols/symbols.h:869
 #: ../../build/share/symbols/symbols.h:889
 msgctxt "Symbol"
 msgid "Christian 2"
-msgstr ""
+msgstr "Kresťan 2"
 
 #: ../../build/share/symbols/symbols.h:870
 #: ../../build/share/symbols/symbols.h:890
 msgctxt "Symbol"
 msgid "Hindu"
-msgstr ""
+msgstr "Hind"
 
 #: ../../build/share/symbols/symbols.h:871
 #: ../../build/share/symbols/symbols.h:891
 msgctxt "Symbol"
 msgid "Hindu 2"
-msgstr ""
+msgstr "Hind2"
 
 #: ../../build/share/symbols/symbols.h:872
 #: ../../build/share/symbols/symbols.h:892
 msgctxt "Symbol"
 msgid "Muslim"
-msgstr ""
+msgstr "Moslim"
 
 #: ../../build/share/symbols/symbols.h:873
 #: ../../build/share/symbols/symbols.h:893
 msgctxt "Symbol"
 msgid "Muslim 2"
-msgstr ""
+msgstr "Moslim 2"
 
 #: ../../build/share/symbols/symbols.h:874
 #: ../../build/share/symbols/symbols.h:894
 msgctxt "Symbol"
 msgid "Jain"
-msgstr ""
+msgstr "Jaint"
 
 #: ../../build/share/symbols/symbols.h:875
 #: ../../build/share/symbols/symbols.h:895
 msgctxt "Symbol"
 msgid "Jain 2"
-msgstr ""
+msgstr "Jaint 2"
 
 #: ../../build/share/symbols/symbols.h:876
 #: ../../build/share/symbols/symbols.h:896
 msgctxt "Symbol"
 msgid "Jewish"
-msgstr ""
+msgstr "Žid 1"
 
 #: ../../build/share/symbols/symbols.h:877
 #: ../../build/share/symbols/symbols.h:897
 msgctxt "Symbol"
 msgid "Jewish 2"
-msgstr ""
+msgstr "Žid 2"
 
 #: ../../build/share/symbols/symbols.h:878
 #: ../../build/share/symbols/symbols.h:898
 msgctxt "Symbol"
 msgid "Shinto"
-msgstr ""
+msgstr "Shintoista"
 
 #: ../../build/share/symbols/symbols.h:879
 #: ../../build/share/symbols/symbols.h:899
 msgctxt "Symbol"
 msgid "Shinto 2"
-msgstr ""
+msgstr "Shintoista 2"
 
 #: ../../build/share/symbols/symbols.h:880
 #: ../../build/share/symbols/symbols.h:900
 msgctxt "Symbol"
 msgid "Sikh"
-msgstr ""
+msgstr "Sikh"
 
 #: ../../build/share/symbols/symbols.h:881
 #: ../../build/share/symbols/symbols.h:901
 msgctxt "Symbol"
 msgid "Sikh 2"
-msgstr ""
+msgstr "Sikh 2"
 
 #: ../../build/share/symbols/symbols.h:882
 #: ../../build/share/symbols/symbols.h:902
@@ -6585,14 +6483,13 @@ msgstr "Neznáme"
 
 #: ../../build/share/symbols/symbols.h:883
 #: ../../build/share/symbols/symbols.h:903
-#, fuzzy
 msgctxt "Symbol"
 msgid "Unknown 2"
-msgstr "Neznáme"
+msgstr "Neznáme 2"
 
 #: ../../build/share/templates/templates.h:1
 msgid "A4 leaflet 3-fold Roll"
-msgstr ""
+msgstr "A4 leták - Preložený na 3 časti"
 
 #: ../../build/share/templates/templates.h:1
 msgid ""
@@ -6653,14 +6550,12 @@ msgid "no layers empty"
 msgstr "prázdny bez vrstiev"
 
 #: ../src/actions/actions-base.cpp:203
-#, fuzzy
 msgid "Inkscape Version"
-msgstr "Vypíše číslo verzie Inkscape"
+msgstr "Verzia Inkscapu"
 
 #: ../src/actions/actions-base.cpp:203
-#, fuzzy
 msgid "Print Inkscape version and exit"
-msgstr "Vypíše číslo verzie Inkscape"
+msgstr "Vypíše verziu Inkscapu a zatvor Inkscape"
 
 #: ../src/actions/actions-base.cpp:204
 msgid "Active Window: Start Call"
@@ -10955,11 +10850,11 @@ msgstr ""
 
 #: ../src/actions/actions-transform.cpp:136
 msgid "Enter angle (in degrees) for clockwise rotation"
-msgstr ""
+msgstr "Zadaj uhol v stupňoch na rotáciu v smere hodinových ručičiek"
 
 #: ../src/actions/actions-transform.cpp:137
 msgid "Enter scaling factor, e.g. 1.5"
-msgstr ""
+msgstr "Zadaj násobok zväčsovania, napr: 1,5"
 
 #: ../src/actions/actions-transform.cpp:138
 msgid "Enter positive or negative number to grow/shrink selection"
@@ -19072,7 +18967,7 @@ msgstr ""
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:66
 msgid "Do not automatically close paths along the split line."
-msgstr ""
+msgstr "Nezatváraj cesty v strede symetrie."
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:67
 #, fuzzy
@@ -19617,7 +19512,7 @@ msgstr "Vytvorenie kruhov, elíps a oblúkov"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:71
 msgid "A_xes"
-msgstr ""
+msgstr "Priečky"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:71
 msgid "Draw both semi-major and semi-minor axes"
@@ -19954,6 +19849,8 @@ msgid ""
 "Uncheck to use this LPE for just adding nodes, without roughening; useful "
 "for further interactive processing."
 msgstr ""
+"Vyzuálne sa objekt nebude meniť ale na geometriu budú pridané nové body. "
+"Toto je užitočné pri kombinovaní s inými spracovanim napr pridanie Markerov"
 
 #: ../src/live_effects/lpe-roughen.cpp:53
 msgid "Fixed displacement"
@@ -20535,28 +20432,24 @@ msgid "Scale %"
 msgstr "Mierka v %"
 
 #: ../src/live_effects/lpe-tiling.cpp:83
-#, fuzzy
 msgid "Scale tiles by this percentage"
-msgstr "Znáhodniť odtieň dlaždice o túto percentuálnu hodnotu"
+msgstr "Zneň velkost o tolkoto percent"
 
 #: ../src/live_effects/lpe-tiling.cpp:84
-#, fuzzy
 msgid "Rotate °"
-msgstr "Otočiť"
+msgstr "Rotácia °"
 
 #: ../src/live_effects/lpe-tiling.cpp:84
-#, fuzzy
 msgid "Rotate tiles by this amount of degrees"
-msgstr "Otáčať dlaždice o tento uhol každý riadok"
+msgstr "Otáčať dlaždice o tento uhol"
 
 #: ../src/live_effects/lpe-tiling.cpp:85
 msgid "Offset %"
 msgstr "Posunutie %"
 
 #: ../src/live_effects/lpe-tiling.cpp:85
-#, fuzzy
 msgid "Offset tiles by this percentage of width/height"
-msgstr "Rozostriť dlaždice o túto hodnotu v percentách pre každý riadok"
+msgstr "Odsaď dlaždice o vzdialenosť v percentách"
 
 #: ../src/live_effects/lpe-tiling.cpp:86
 #, fuzzy
@@ -20568,14 +20461,12 @@ msgid "Choose whether to offset rows or columns"
 msgstr "Vyber odstup radov alebo stĺpcov"
 
 #: ../src/live_effects/lpe-tiling.cpp:87
-#, fuzzy
 msgid "Interpolate scale X"
-msgstr "Interpolovať štýl"
+msgstr "Prechod Veľkostí X"
 
 #: ../src/live_effects/lpe-tiling.cpp:87
-#, fuzzy
 msgid "Interpolate tile size in each row"
-msgstr "Interpolovať atribút v skupine"
+msgstr "Sprav prechod velkostí v každom riadku"
 
 #: ../src/live_effects/lpe-tiling.cpp:88
 #, fuzzy
@@ -20599,24 +20490,20 @@ msgid ""
 msgstr ""
 
 #: ../src/live_effects/lpe-tiling.cpp:90
-#, fuzzy
 msgid "Interpolate rotation X"
-msgstr "Interpolovať body"
+msgstr "Prechod Rotácie X"
 
 #: ../src/live_effects/lpe-tiling.cpp:90
-#, fuzzy
 msgid "Interpolate tile rotation in row"
-msgstr "Interpolovať atribút v skupine"
+msgstr "Sprav prechod rotácie v každom riadku"
 
 #: ../src/live_effects/lpe-tiling.cpp:91
-#, fuzzy
 msgid "Interpolate rotation Y"
-msgstr "Interpolovať body"
+msgstr "Prechod Rotácie Y"
 
 #: ../src/live_effects/lpe-tiling.cpp:91
-#, fuzzy
 msgid "Interpolate tile rotation in column"
-msgstr "Striedať smer otáčania každý stĺpec"
+msgstr "Sprav prechod rotácie v každom stĺpci"
 
 #: ../src/live_effects/lpe-tiling.cpp:92
 msgid ""
@@ -20625,112 +20512,92 @@ msgid ""
 msgstr ""
 
 #: ../src/live_effects/lpe-tiling.cpp:93
-#, fuzzy
 msgid "Mirror rows in X"
-msgstr "Koniec čiary zrkadlenia"
+msgstr "Zrkadlenie Riadkov na X"
 
 #: ../src/live_effects/lpe-tiling.cpp:93
-#, fuzzy
 msgid "Mirror rows horizontally"
-msgstr "Posúvať uzly vodorovne"
+msgstr "Zrkadlenie Riadkov Horizontálne"
 
 #: ../src/live_effects/lpe-tiling.cpp:94
-#, fuzzy
 msgid "Mirror rows in Y"
-msgstr "Koniec čiary zrkadlenia"
+msgstr "Zrkadlenie Riadkov na Y"
 
 #: ../src/live_effects/lpe-tiling.cpp:94
-#, fuzzy
 msgid "Mirror rows vertically"
-msgstr "Posúvať uzly zvisle"
+msgstr "Zrkadlenie Riadkov Vertikálne"
 
 #: ../src/live_effects/lpe-tiling.cpp:95
-#, fuzzy
 msgid "Mirror cols in X"
-msgstr "Koniec čiary zrkadlenia"
+msgstr "Zrkadlenie Stĺpcov na X"
 
 #: ../src/live_effects/lpe-tiling.cpp:95
-#, fuzzy
 msgid "Mirror columns horizontally"
-msgstr "Zrkadliť pohyby vodorovne"
+msgstr "Zrkadlenie Stĺpcov Horizontálne"
 
 #: ../src/live_effects/lpe-tiling.cpp:96
-#, fuzzy
 msgid "Mirror cols in Y"
-msgstr "Koniec čiary zrkadlenia"
+msgstr "Zrkadlenie Stĺpcov na Y"
 
 #: ../src/live_effects/lpe-tiling.cpp:96
-#, fuzzy
 msgid "Mirror columns vertically"
-msgstr "Zrkadliť pohyby zvisle"
+msgstr "Zrkadliť stĺpce zvisle"
 
 #: ../src/live_effects/lpe-tiling.cpp:97
-#, fuzzy
 msgid "Mirror transforms"
-msgstr "Povoľ Transformácie"
+msgstr "Zrkadlenie Transformácie"
 
 #: ../src/live_effects/lpe-tiling.cpp:97
-#, fuzzy
 msgid "Mirror transformations"
-msgstr "Uložiť transformáciu"
+msgstr "Zrkadlenie Transformácie"
 
 #: ../src/live_effects/lpe-tiling.cpp:98
 msgid "Link styles in split mode, can also be used to reset style of copies"
 msgstr ""
 
 #: ../src/live_effects/lpe-tiling.cpp:99
-#, fuzzy
 msgid "Random gaps X"
-msgstr "Náhodný jas"
+msgstr "Náhodný medzery X"
 
 #: ../src/live_effects/lpe-tiling.cpp:99
-#, fuzzy
 msgid "Randomize horizontal gaps"
-msgstr "Znáhodniť pozície"
+msgstr "Znáhodniť horizontálne pozície"
 
 #: ../src/live_effects/lpe-tiling.cpp:100
-#, fuzzy
 msgid "Random gaps Y"
-msgstr "Náhodný jas"
+msgstr "Náhodný medzery Y"
 
 #: ../src/live_effects/lpe-tiling.cpp:100
-#, fuzzy
 msgid "Randomize vertical gaps"
-msgstr "Vzorka je vertikálne"
+msgstr "Zrkadlenie Stĺpcov Vertikálne"
 
 #: ../src/live_effects/lpe-tiling.cpp:101
-#, fuzzy
 msgid "Random rotation"
-msgstr "Náhodná sýtosť"
+msgstr "Náhodná Rotácia"
 
 #: ../src/live_effects/lpe-tiling.cpp:101
-#, fuzzy
 msgid "Randomize tile rotation"
-msgstr "Znáhodniť pozície"
+msgstr "Náhodná rotácia"
 
 #: ../src/live_effects/lpe-tiling.cpp:102
-#, fuzzy
 msgid "Random scale"
-msgstr "Náhodný odtieň"
+msgstr "Náhodná Velkosť"
 
 #: ../src/live_effects/lpe-tiling.cpp:102
-#, fuzzy
 msgid "Randomize scale"
-msgstr "Náhodná"
+msgstr "Zmeň Náhodnú Velkosť"
 
 #: ../src/live_effects/lpe-tiling.cpp:103
 msgid "Seed"
 msgstr "Báza"
 
 #: ../src/live_effects/lpe-tiling.cpp:103
-#, fuzzy
 msgid "Randomization seed"
-msgstr "Náhodné"
+msgstr "Zmeň Náhodnosť"
 
 #: ../src/live_effects/lpe-tiling.cpp:722
-#, fuzzy
 msgid "Mirroring mode"
-msgstr "Koniec čiary zrkadlenia"
+msgstr "Mód Zrkadlenia"
 
 #: ../src/live_effects/lpe-tiling.cpp:761
 #: ../share/extensions/color_randomize.inx:3
@@ -20743,14 +20610,12 @@ msgid "Randomization seed for random mode for scaling, rotation and gaps"
 msgstr "Zmeň náhodnosť pre velkosti, rotáciu a rozostupy"
 
 #: ../src/live_effects/lpe-tiling.cpp:796
-#, fuzzy
 msgid "Offset rows"
-msgstr "Posuny"
+msgstr "Posuny riadkov"
 
 #: ../src/live_effects/lpe-tiling.cpp:797
-#, fuzzy
 msgid "Offset columns"
-msgstr "Body posunutia"
+msgstr "Posuny Stĺpcov"
 
 #: ../src/live_effects/lpe-tiling.cpp:798
 msgid "Offset alternate rows"
@@ -20762,33 +20627,28 @@ msgstr "Posuň každý druhý stĺpec"
 
 #: ../src/live_effects/lpe-tiling.cpp:813
 #: ../src/live_effects/lpe-tiling.cpp:850
-#, fuzzy
 msgid "Interpolate X"
-msgstr "Interpolácia"
+msgstr "Interpolácia X"
 
 #: ../src/live_effects/lpe-tiling.cpp:814
 #: ../src/live_effects/lpe-tiling.cpp:851
-#, fuzzy
 msgid "Interpolate Y"
-msgstr "Interpolácia"
+msgstr "Interpolácia Y"
 
 #: ../src/live_effects/lpe-tiling.cpp:815
 #: ../src/live_effects/lpe-tiling.cpp:852
-#, fuzzy
 msgid "Interpolate both"
-msgstr "Interpolovať body"
+msgstr "Interpolovať Obe"
 
 #: ../src/live_effects/lpe-tiling.cpp:816
 #: ../src/live_effects/lpe-tiling.cpp:853
-#, fuzzy
 msgid "No interpolation"
-msgstr "Bez inverzie"
+msgstr "Bez Interpletácie"
 
 #: ../src/live_effects/lpe-tiling.cpp:817
 #: ../src/live_effects/lpe-tiling.cpp:854
-#, fuzzy
 msgid "Interpolate random"
-msgstr "Interpolácia"
+msgstr "Náhodná Interpolácia"
 
 #: ../src/live_effects/lpe-tiling.cpp:829
 msgid ""
@@ -20809,9 +20669,8 @@ msgid ""
 msgstr ""
 
 #: ../src/live_effects/lpe-tiling.cpp:832
-#, fuzzy
 msgid "Uniform scale"
-msgstr "Rovnomerný šum"
+msgstr "Rovomerná Veľkosť"
 
 #: ../src/live_effects/lpe-tiling.cpp:833
 msgid "Random scale (hit <b>Randomize</b> button to shuffle)"
@@ -20865,12 +20724,16 @@ msgid ""
 "<b>Horizontal gaps between tiles</b>: drag to adjust, <b>Shift+click</b> to "
 "reset"
 msgstr ""
+"<b>Horizontálne medzeri medzi dlaždicami</b>: ňahaj na zmenu, "
+"<b>Shift+click</b> na obnovenie"
 
 #: ../src/live_effects/lpe-tiling.cpp:1576
 msgid ""
 "<b>Vertical gaps between tiles</b>: drag to adjust, <b>Shift+click</b> to "
 "reset"
 msgstr ""
+"<b>Vertikálne medzeri medzi dlaždicami</b>: ňahaj na zmenu, <b>Shift+click</"
+"b> na obnovenie"
 
 #: ../src/live_effects/lpe-transform_2pts.cpp:33
 msgid "Elastic"
@@ -20997,9 +20860,8 @@ msgid "Change bool parameter"
 msgstr "Zmeniť parameter bool"
 
 #: ../src/live_effects/parameter/colorpicker.cpp:128
-#, fuzzy
 msgid "Change color button parameter"
-msgstr "Zmeniť parameter tlačidla písma"
+msgstr "Zmena Parameter farby tlačítka"
 
 #: ../src/live_effects/parameter/enum.h:55
 #: ../src/live_effects/parameter/enumarray.h:55
@@ -21011,25 +20873,22 @@ msgid "Change font button parameter"
 msgstr "Zmeniť parameter tlačidla písma"
 
 #: ../src/live_effects/parameter/nodesatellitesarray.cpp:208
-#, fuzzy
 msgid ""
 "<b>Chamfer</b>: <b>Ctrl+Click</b> toggles type, <b>Shift+Click</b> open "
 "dialog, <b>Ctrl+Alt+Click</b> reset"
 msgstr ""
-"<b>Úkos</b>: <b>Ctrl+kliknutie</b> prepnúť typ, <b>Shift+kliknutie</b> "
-"otvoriť dialóg, <b>Ctrl+Alt+kliknutie</b> obnoviť"
+"<b>Skosený Roh</b>: <b>Ctrl+kliknutie</b> prepnúť typ, <b>Shift+kliknutie</"
+"b> otvoriť dialóg, <b>Ctrl+Alt+kliknutie</b> obnoviť"
 
 #: ../src/live_effects/parameter/nodesatellitesarray.cpp:212
-#, fuzzy
 msgid ""
 "<b>Inverse Chamfer</b>: <b>Ctrl+Click</b> toggles type, <b>Shift+Click</b> "
 "open dialog, <b>Ctrl+Alt+Click</b> reset"
 msgstr ""
-"<b>Inverzný úkos</b>: <b>Ctrl+kliknutie</b> prepnúť typ, <b>Shift+kliknutie</"
-"b> otvoriť dialóg, <b>Ctrl+Alt+kliknutie</b> obnoviť"
+"<b>Invertovaný Skosený Roh </b>: <b>Ctrl+kliknutie</b> prepnúť typ, "
+"<b>Shift+kliknutie</b> otvoriť dialóg, <b>Ctrl+Alt+kliknutie</b> obnoviť"
 
 #: ../src/live_effects/parameter/nodesatellitesarray.cpp:216
-#, fuzzy
 msgid ""
 "<b>Inverse Fillet</b>: <b>Ctrl+Click</b> toggles type, <b>Shift+Click</b> "
 "open dialog, <b>Ctrl+Alt+Click</b> reset"
@@ -21038,7 +20897,6 @@ msgstr ""
 "<b>Shift+kliknutie</b> otvoriť dialóg, <b>Ctrl+Alt+kliknutie</b> obnoviť"
 
 #: ../src/live_effects/parameter/nodesatellitesarray.cpp:220
-#, fuzzy
 msgid ""
 "<b>Fillet</b>: <b>Ctrl+Click</b> toggles type, <b>Shift+Click</b> open "
 "dialog, <b>Ctrl+Alt+Click</b> reset"
@@ -21047,22 +20905,20 @@ msgstr ""
 "otvoriť dialóg, <b>Ctrl+Alt+kliknutie</b> obnoviť"
 
 #: ../src/live_effects/parameter/nodesatellitesarray.cpp:533
-#, fuzzy
 msgid ""
 "<b>Chamfer</b>: <b>Ctrl+Click</b> toggles type, <b>Shift+Click</b> open "
 "dialog, <b>Ctrl+Alt+Click</b> resets"
 msgstr ""
-"<b>Úkos</b>: <b>Ctrl+kliknutie</b> prepnúť typ, <b>Shift+kliknutie</b> "
+"<b>Zaoblenie</b>: <b>Ctrl+kliknutie</b> prepnúť typ, <b>Shift+kliknutie</b> "
 "otvoriť dialóg, <b>Ctrl+Alt+kliknutie</b> obnoviť"
 
 #: ../src/live_effects/parameter/nodesatellitesarray.cpp:537
-#, fuzzy
 msgid ""
 "<b>Inverse Chamfer</b>: <b>Ctrl+Click</b> toggles type, <b>Shift+Click</b> "
 "open dialog, <b>Ctrl+Alt+Click</b> resets"
 msgstr ""
-"<b>Inverzný úkos</b>: <b>Ctrl+kliknutie</b> prepnúť typ, <b>Shift+kliknutie</"
-"b> otvoriť dialóg, <b>Ctrl+Alt+kliknutie</b> obnoviť"
+"<b>Inverzné Zaoblenie</b>: <b>Ctrl+kliknutie</b> prepnúť typ, "
+"<b>Shift+kliknutie</b> otvoriť dialóg, <b>Ctrl+Alt+kliknutie</b> obnoviť"
 
 #: ../src/live_effects/parameter/nodesatellitesarray.cpp:541
 #, fuzzy
@@ -21085,9 +20941,8 @@ msgstr ""
 #: ../src/live_effects/parameter/originalpath.cpp:62
 #: ../src/live_effects/parameter/path.cpp:312
 #: ../src/live_effects/parameter/patharray.cpp:179
-#, fuzzy
 msgid "Link to path in clipboard"
-msgstr "Odkaz na cestu do schránky"
+msgstr "Napojiť cestu zo Schranky"
 
 #: ../src/live_effects/parameter/originalpath.cpp:75
 #: ../src/live_effects/parameter/originalsatellite.cpp:68
@@ -21096,9 +20951,8 @@ msgstr "Vybrať originál"
 
 #: ../src/live_effects/parameter/originalsatellite.cpp:55
 #: ../src/live_effects/parameter/satellitearray.cpp:350
-#, fuzzy
 msgid "Link to item"
-msgstr "Pripojiť k ceste"
+msgstr "Napojiť k objektu"
 
 #: ../src/live_effects/parameter/path.cpp:277
 msgid "Edit on-canvas"
@@ -21198,9 +21052,8 @@ msgid "Link item parameter to path"
 msgstr "Pripojiť parameter cesty k ceste"
 
 #: ../src/live_effects/parameter/satellite.cpp:284
-#, fuzzy
 msgid "Link to item on clipboard"
-msgstr "Odkaz na cestu do schránky"
+msgstr "Napoj objekt na Schránku"
 
 #: ../src/live_effects/parameter/satellitearray.cpp:74
 #: ../src/ui/dialog/inkscape-preferences.cpp:2003
@@ -21224,9 +21077,8 @@ msgid "Move item down"
 msgstr "Posunúť cestu dolu"
 
 #: ../src/live_effects/parameter/satellitearray.cpp:278
-#, fuzzy
 msgid "Remove item"
-msgstr "Odstrániť filter"
+msgstr "Odstrániť objekt"
 
 #: ../src/live_effects/parameter/satellitearray.cpp:325
 #, fuzzy
@@ -21234,9 +21086,8 @@ msgid "Link itemarray parameter to item"
 msgstr "Pripojiť parameter cesty k ceste"
 
 #: ../src/live_effects/parameter/satellitearray.cpp:362
-#, fuzzy
 msgid "Remove Item"
-msgstr "Odstrániť položku/sadu"
+msgstr "Odstrániť objekt"
 
 #: ../src/live_effects/parameter/text.cpp:139
 msgid "Change text parameter"
@@ -21272,10 +21123,9 @@ msgid "Toggle multiple vanishing points"
 msgstr "Prepnúť viacero spojníc"
 
 #: ../src/object/sp-anchor.cpp:146
-#, fuzzy
 msgctxt "Hyperlink|Noun"
 msgid "Link"
-msgstr "Odkazovať"
+msgstr "Link"
 
 #: ../src/object/sp-anchor.cpp:152
 #, c-format
@@ -21287,13 +21137,12 @@ msgid "without URI"
 msgstr "bez URI"
 
 #: ../src/object/sp-ellipse.cpp:420 ../src/ui/toolbar/arc-toolbar.cpp:152
-#, fuzzy
 msgid "Slice"
 msgstr "Výrezy"
 
 #: ../src/object/sp-ellipse.cpp:423 ../src/ui/toolbar/arc-toolbar.cpp:162
 msgid "Chord"
-msgstr ""
+msgstr "Tetiva"
 
 #: ../src/object/sp-ellipse.cpp:426
 msgid "Arc"
@@ -21341,13 +21190,11 @@ msgstr[2] "(%d znakov%s)"
 #: ../src/object/sp-grid.cpp:505 ../src/ui/dialog/document-properties.cpp:1560
 #: ../src/ui/dialog/document-properties.cpp:1563
 #: ../src/ui/dialog/inkscape-preferences.cpp:2127
-#, fuzzy
 msgid "Rectangular Grid"
-msgstr "Pravouhlá mriežka"
+msgstr "Mriežka"
 
 #: ../src/object/sp-grid.cpp:506 ../src/ui/dialog/document-properties.cpp:1561
 #: ../src/ui/dialog/inkscape-preferences.cpp:2128
-#, fuzzy
 msgid "Axonometric Grid"
 msgstr "Axonometrická mriežka"
 
@@ -21565,14 +21412,12 @@ msgid "Conditional Group"
 msgstr "Podmienená skupina"
 
 #: ../src/object/sp-text.cpp:342
-#, fuzzy
 msgid "Auto-wrapped text"
-msgstr "Pridať text"
+msgstr "Samo orezávací text"
 
 #: ../src/object/sp-text.cpp:344
-#, fuzzy
 msgid "Text in-a-shape"
-msgstr "Tok textu do tvaru"
+msgstr "Text v Tvare"
 
 #: ../src/object/sp-text.cpp:346 ../share/extensions/hershey.inx:124
 #: ../share/extensions/lorem_ipsum.inx:19 ../share/extensions/pdflatex.inx:27
@@ -21858,14 +21703,12 @@ msgid "The file %s is not a valid Inkscape preferences file."
 msgstr "Súbor %s nie je platný súbor s nastavením Inkscape."
 
 #: ../src/preferences.cpp:279
-#, fuzzy
 msgid "Preferences file was backed up to"
-msgstr "Súbor s nastavením %s nebolo možné prečítať."
+msgstr "Nadstavenia boli zálohované do"
 
 #: ../src/preferences.cpp:280
-#, fuzzy
 msgid "There was an error trying to reset the preferences file."
-msgstr "Nepodarilo sa vytvoriť súbor s nastavením %s."
+msgstr "Pri pokuse o obnovie nadstavení nastala nečakaná chyba."
 
 #: ../src/rdf.cpp:179
 msgid "CC Attribution"
@@ -22129,36 +21972,30 @@ msgid "Lower to bottom"
 msgstr "Presunúť na spodok"
 
 #: ../src/selection-chemistry.cpp:1184
-#, fuzzy
 msgid "Select <b>object(s)</b> to stack up."
-msgstr "Vyberte <b>objekty</b>, ktoré sa majú presunúť vyššie."
+msgstr "Vyberte <b>objekt</b>, ktoré sa majú presunúť vyššie."
 
 #: ../src/selection-chemistry.cpp:1195
-#, fuzzy
 msgid "We hit top."
-msgstr "Presunúť na vrch"
+msgstr "Presunuté na vrch."
 
 #: ../src/selection-chemistry.cpp:1201
-#, fuzzy
 msgctxt "Undo action"
 msgid "stack up"
-msgstr "Znova naskladať"
+msgstr "naskladať na seba"
 
 #: ../src/selection-chemistry.cpp:1206
-#, fuzzy
 msgid "Select <b>object(s)</b> to stack down."
-msgstr "Vyberte <b>objekty</b>, ktoré sa majú skombinovať."
+msgstr "Vyberte <b>objekty</b>, ktoré sa majú presunúť nižšie."
 
 #: ../src/selection-chemistry.cpp:1217
-#, fuzzy
 msgid "We hit bottom."
-msgstr "Presunúť na spodok"
+msgstr "Presunuté na spodok."
 
 #: ../src/selection-chemistry.cpp:1223
-#, fuzzy
 msgctxt "Undo action"
 msgid "stack down"
-msgstr "Režim preskladania"
+msgstr "naskladať pod seba"
 
 #: ../src/selection-chemistry.cpp:1234
 msgid "Nothing to undo."
@@ -22169,9 +22006,8 @@ msgid "Nothing to redo."
 msgstr "Nie je čo opakovať."
 
 #: ../src/selection-chemistry.cpp:1256
-#, fuzzy
 msgid "Cut text"
-msgstr "Vytvoriť text"
+msgstr "Vystrihnúť text"
 
 #: ../src/selection-chemistry.cpp:1342
 msgid "Paste style"
@@ -22371,9 +22207,8 @@ msgid "Fill between many"
 msgstr "Výplň medzi mnohými"
 
 #: ../src/selection-chemistry.cpp:3122
-#, fuzzy
 msgid "Clone original"
-msgstr "Klonovať pôvodnú cestu"
+msgstr "Klonovať originál"
 
 #: ../src/selection-chemistry.cpp:3128
 msgid "Select path(s) to fill."
@@ -22466,14 +22301,12 @@ msgid "Select <b>object(s)</b> to fit canvas to."
 msgstr "Vyberte <b>objekt(y)</b>, ktorým sa má prispôsobiť plátno."
 
 #: ../src/selection-chemistry.cpp:4234
-#, fuzzy
 msgid "Select <b>path(s)</b> to create fill between."
-msgstr "Vyberte <b>cestu</b>, ktorej smer sa má obrátiť."
+msgstr "Vyberte <b>cesty</b>, na vyrvorenie výplňe nedzi mnohými"
 
 #: ../src/selection-chemistry.cpp:4288
-#, fuzzy
 msgid "Create linked fill object between paths"
-msgstr "Vytvorí zjednotenie zvolených ciest"
+msgstr "Vytvorí výplň medzi mnohými cestami."
 
 #: ../src/selection-describer.cpp:119
 msgid "root"
@@ -22718,9 +22551,8 @@ msgid "Remove manual kerns"
 msgstr "Odstrániť manuálny kerning"
 
 #: ../src/text-chemistry.cpp:300
-#, fuzzy
 msgid "Flow text subtract shape"
-msgstr "Tok textu do tvaru"
+msgstr ""
 
 #: ../src/text-chemistry.cpp:303
 msgid "Subtraction not available for SVG 1.2 Flowed text."
@@ -22854,14 +22686,12 @@ msgid "Clipboard does not contain a path."
 msgstr "Schránka neobsahuje cestu."
 
 #: ../src/ui/clipboard.cpp:1004
-#, fuzzy
 msgid "Clipboard does not contain any objects of type \"%1\"."
-msgstr "Schránka neobsahuje cestu."
+msgstr "Schránka neobsahuje žiaden objekt typu \"%1\"."
 
 #: ../src/ui/contextmenu.cpp:97
-#, fuzzy
 msgid "_New Page"
-msgstr "_Stránka"
+msgstr "Nová Stránka"
 
 #: ../src/ui/contextmenu.cpp:101
 msgid "_Delete Page"
@@ -22884,7 +22714,6 @@ msgid "Duplic_ate"
 msgstr "_Duplikovať"
 
 #: ../src/ui/contextmenu.cpp:129
-#, fuzzy
 msgid "_Clone"
 msgstr "Klon"
 
@@ -22920,14 +22749,12 @@ msgid "Crop Image to Clip"
 msgstr ""
 
 #: ../src/ui/contextmenu.cpp:154
-#, fuzzy
 msgid "Extract Image..."
 msgstr "Extrahovať obrázok..."
 
 #: ../src/ui/contextmenu.cpp:157
-#, fuzzy
 msgid "Embed Image"
-msgstr "Vkladať obrázky"
+msgstr "Vkladať obrázkok"
 
 #: ../src/ui/contextmenu.cpp:158
 msgid "Edit Externally..."
@@ -22988,7 +22815,6 @@ msgid "Enter group %1"
 msgstr "Zadajte skupinu #%1"
 
 #: ../src/ui/contextmenu.cpp:194
-#, fuzzy
 msgid "Group to Layer"
 msgstr "Skupinu na vrstvu"
 
@@ -23017,14 +22843,12 @@ msgid "Release Mask"
 msgstr "Uvoľniť masku"
 
 #: ../src/ui/contextmenu.cpp:224
-#, fuzzy
 msgid "Hide Selected Objects"
-msgstr "Duplikuje vybrané objekty"
+msgstr "Skry Vybrané Objekty"
 
 #: ../src/ui/contextmenu.cpp:225
-#, fuzzy
 msgid "Lock Selected Objects"
-msgstr "Zoskupí zvolené objekty"
+msgstr "Zamkni Vybrané Objekty"
 
 #: ../src/ui/contextmenu.cpp:231
 msgid "Link _Properties..."
@@ -23039,28 +22863,24 @@ msgid "_Remove Link"
 msgstr "Odstrániť odkaz"
 
 #: ../src/ui/contextmenu.cpp:242
-#, fuzzy
 msgid "Unhide Objects Below Cursor"
-msgstr "Odkryť objekty"
+msgstr "Odkryť objekty pod kurzorom"
 
 #: ../src/ui/contextmenu.cpp:245
-#, fuzzy
 msgid "Unlock Objects Below Cursor"
-msgstr "Odomknúť objekty"
+msgstr "Odomknúť objekty pod kurzorom"
 
 #: ../src/ui/contextmenu.cpp:253 ../share/ui/menus.ui:670
 msgid "_Add Layer..."
 msgstr "_Nová vrstva..."
 
 #: ../src/ui/contextmenu.cpp:254
-#, fuzzy
 msgid "D_uplicate Layer"
-msgstr "Duplikovať vrstvu"
+msgstr "Duplikovať Vrstvu"
 
 #: ../src/ui/contextmenu.cpp:255
-#, fuzzy
 msgid "_Delete Layer"
-msgstr "Odstrániť vrstvu"
+msgstr "Odstrániť Vrstvu"
 
 #: ../src/ui/contextmenu.cpp:256 ../share/ui/menus.ui:675
 msgid "Re_name Layer..."
@@ -23117,14 +22937,12 @@ msgid "_Paste"
 msgstr "_Vložiť"
 
 #: ../src/ui/contextmenu.cpp:352
-#, fuzzy
 msgid "Unhid objects"
 msgstr "Odkryť objekty"
 
 #: ../src/ui/contextmenu.cpp:352
-#, fuzzy
 msgid "Unlocked objects"
-msgstr "Odomknúť objekty"
+msgstr "Odomknuté objekty"
 
 #: ../src/ui/desktop/document-check.cpp:43
 #, c-format
@@ -23169,7 +22987,6 @@ msgid "_Save as Inkscape SVG"
 msgstr "_Uložiť ako Inkscape SVG"
 
 #: ../src/ui/desktop/menubar.cpp:187
-#, fuzzy
 msgid "No items found"
 msgstr "Neboli nájdené žiadne objekty"
 
@@ -23178,17 +22995,14 @@ msgid "Type text"
 msgstr "Napísať text"
 
 #: ../src/ui/dialog/attrdialog.cpp:165
-#, fuzzy
 msgid "Add a new attribute"
-msgstr "Zmeniť atribút"
+msgstr "Pridaj nový atribút"
 
 #: ../src/ui/dialog/attrdialog.cpp:177
-#, fuzzy
 msgid "Attribute Name"
 msgstr "Názov atribútu"
 
 #: ../src/ui/dialog/attrdialog.cpp:195
-#, fuzzy
 msgid "Attribute Value"
 msgstr "Hodnota atribútu"
 
@@ -23216,14 +23030,12 @@ msgid "Delete attribute"
 msgstr "Zmazať atribút"
 
 #: ../src/ui/dialog/attrdialog.cpp:806
-#, fuzzy
 msgid "Rename attribute"
-msgstr "Odstrániť atribúty"
+msgstr "Premenovať atribúty"
 
 #: ../src/ui/dialog/attrdialog.cpp:844
-#, fuzzy
 msgid "Change attribute value"
-msgstr "Zmeniť atribút"
+msgstr "Zmeniť hodnotu atribútu"
 
 #: ../src/ui/dialog/calligraphic-profile-rename.cpp:31
 #: ../src/ui/dialog/calligraphic-profile-rename.cpp:118
@@ -23959,11 +23771,10 @@ msgid "<small>Randomize:</small>"
 msgstr "<small>Znáhodniť:</small>"
 
 #: ../src/ui/dialog/color-item.cpp:233
-#, fuzzy
 msgid ""
 "Color: <b>%1</b>; <b>Click</b> to set fill, <b>Shift+click</b> to set stroke"
 msgstr ""
-"Farba: <b>%s</b>; <b>Kliknutím</b> nastavíte výplň, <b>Shift+kliknutím</b> "
+"Farba: <b>%1</b>; <b>Kliknutím</b> nastavíte výplň, <b>Shift+kliknutím</b> "
 "nastavíte ťah"
 
 #: ../src/ui/dialog/color-item.cpp:279
@@ -23996,19 +23807,16 @@ msgid "Edit..."
 msgstr "Upraviť..."
 
 #: ../src/ui/dialog/color-item.cpp:352
-#, fuzzy
 msgid "Unpin Color"
-msgstr "Farba výplne"
+msgstr "Odopnúť Farbu"
 
 #: ../src/ui/dialog/color-item.cpp:352
-#, fuzzy
 msgid "Pin Color"
-msgstr "Vybrať farbu"
+msgstr "Pripúť Farbu"
 
 #: ../src/ui/dialog/color-item.cpp:358
-#, fuzzy
 msgid "Pin swatch"
-msgstr "Vzorkovník"
+msgstr "Pripúť Vzorkovník"
 
 #: ../src/ui/dialog/color-item.cpp:358
 msgid "Unpin swatch"
@@ -24021,7 +23829,7 @@ msgstr "Konvertovať"
 
 #: ../src/ui/dialog/command-palette.cpp:1199
 msgid "History mode"
-msgstr ""
+msgstr "Mód Histórie"
 
 #: ../src/ui/dialog/command-palette.cpp:1277
 msgid "Invalid input! Enter an integer number."
@@ -24052,18 +23860,16 @@ msgid "Release log messages"
 msgstr "Uvoľniť správy záznamu"
 
 #: ../src/ui/dialog/dialog-container.cpp:181
-#, fuzzy
 msgid "Close Tab"
-msgstr "Uzatvoriť cestu"
+msgstr "Uzatvoriť Záložku"
 
 #: ../src/ui/dialog/dialog-data.cpp:31
 msgid "_Align and Distribute"
 msgstr "Zarovnanie a umiestnenie"
 
 #: ../src/ui/dialog/dialog-data.cpp:32
-#, fuzzy
 msgid "Create Tiled Clones"
-msgstr "Vytvoriť dlaždicové klony..."
+msgstr "Vytvoriť dlaždicové klony"
 
 #: ../src/ui/dialog/dialog-data.cpp:33
 msgid "_Document Properties"
@@ -24078,7 +23884,6 @@ msgid "_Export"
 msgstr "_Exportovať"
 
 #: ../src/ui/dialog/dialog-data.cpp:36
-#, fuzzy
 msgid "_Fill and Stroke"
 msgstr "Výplň a ťah"
 
@@ -24095,7 +23900,6 @@ msgid "_Font Collections"
 msgstr "Kolekcie Fontov"
 
 #: ../src/ui/dialog/dialog-data.cpp:40
-#, fuzzy
 msgid "_Unicode Characters"
 msgstr "Znak Unicode"
 
@@ -24126,9 +23930,8 @@ msgid "_Object Attributes"
 msgstr "Atribúty _objektu..."
 
 #: ../src/ui/dialog/dialog-data.cpp:47
-#, fuzzy
 msgid "_Object Properties"
-msgstr "_Vlastnosti objektu"
+msgstr "Vlastnosti objektu"
 
 #: ../src/ui/dialog/dialog-data.cpp:48
 msgid "Layers and Object_s"
@@ -24139,7 +23942,6 @@ msgid "_Paint Servers"
 msgstr ""
 
 #: ../src/ui/dialog/dialog-data.cpp:50 ../share/ui/menus.ui:360
-#, fuzzy
 msgid "P_references"
 msgstr "Nastavenia"
 
@@ -24148,18 +23950,16 @@ msgid "_Selectors and CSS"
 msgstr "Selektory a CSS"
 
 #: ../src/ui/dialog/dialog-data.cpp:52
-#, fuzzy
 msgid "SVG Font Editor"
-msgstr "Editor SVG písiem..."
+msgstr "Editor SVG Fontu"
 
 #: ../src/ui/dialog/dialog-data.cpp:53
 msgid "S_watches"
 msgstr "Vzorkovník"
 
 #: ../src/ui/dialog/dialog-data.cpp:54
-#, fuzzy
 msgid "S_ymbols"
-msgstr "Symbol"
+msgstr "Symboly"
 
 #: ../src/ui/dialog/dialog-data.cpp:55
 msgid "_Text and Font"
@@ -24214,7 +24014,7 @@ msgstr "Nastavenia"
 
 #: ../src/ui/dialog/dialog-data.h:38
 msgid "Diagnostic"
-msgstr ""
+msgstr "Diagnostika"
 
 #: ../src/ui/dialog/dialog-multipaned.cpp:515
 msgid "You can drop dockable dialogs here."
@@ -24225,14 +24025,12 @@ msgid "Close Current Tab"
 msgstr "Zatvoriť túto zložku"
 
 #: ../src/ui/dialog/dialog-notebook.cpp:85
-#, fuzzy
 msgid "Close Panel"
-msgstr "Uzatvoriť cestu"
+msgstr "Uzatvoriť Panel"
 
 #: ../src/ui/dialog/dialog-notebook.cpp:92
-#, fuzzy
 msgid "Move Tab to New Window"
-msgstr "Posunúť cestu dolu"
+msgstr "Posunúť záložku do nového okna"
 
 #: ../src/ui/dialog/dialog-window.cpp:58
 msgid "Dialog Window"
@@ -24247,7 +24045,6 @@ msgid "Show or hide guides"
 msgstr "Zobraziť alebo skryť vodidlá"
 
 #: ../src/ui/dialog/document-properties.cpp:77
-#, fuzzy
 msgid "Lock all guides"
 msgstr "Zamknuté všetky vodidlá"
 
@@ -24276,9 +24073,8 @@ msgid "Color of a guideline when it is under mouse"
 msgstr "Farba vodidla, keď sa nad ním nachádza myš"
 
 #: ../src/ui/dialog/document-properties.cpp:81
-#, fuzzy
 msgid "Create guides around the current page"
-msgstr "Vytvorí vodidlá okolo stránky"
+msgstr "Vytvorí vodidlá okolo aktuálnej stránky"
 
 #: ../src/ui/dialog/document-properties.cpp:82
 #, fuzzy
@@ -24334,9 +24130,8 @@ msgid "Set page size"
 msgstr "Nastaviť veľkosť stránky:"
 
 #: ../src/ui/dialog/document-properties.cpp:232
-#, fuzzy
 msgid "Set viewbox position"
-msgstr "Nastaviť „viewBox“"
+msgstr "Nastaviť pozíciu „viewBox“-u"
 
 #: ../src/ui/dialog/document-properties.cpp:244
 #, fuzzy
@@ -24349,9 +24144,8 @@ msgstr "Nastaviť mierku stránky"
 
 #: ../src/ui/dialog/document-properties.cpp:351
 #: ../src/ui/widget/page-properties.cpp:110
-#, fuzzy
 msgid "Desk color"
-msgstr "Nová farba"
+msgstr "Farba Plochy"
 
 #: ../src/ui/dialog/document-properties.cpp:357
 #, fuzzy
@@ -24364,33 +24158,28 @@ msgid "Toggle checkerboard"
 msgstr "Šachovnica"
 
 #: ../src/ui/dialog/document-properties.cpp:397
-#, fuzzy
 msgid "Toggle page border"
-msgstr "okraj stránky"
+msgstr "Okraj stránky"
 
 #: ../src/ui/dialog/document-properties.cpp:400
-#, fuzzy
 msgid "Toggle border on top"
-msgstr "Farba okraja stránky"
+msgstr "Okraje stránky vždy na vrchu"
 
 #: ../src/ui/dialog/document-properties.cpp:403
-#, fuzzy
 msgid "Toggle page shadow"
-msgstr "Zobraziť/skryť ostatné vrstvy"
+msgstr "Teiň Stránky"
 
 #: ../src/ui/dialog/document-properties.cpp:406
-#, fuzzy
 msgid "Toggle anti-aliasing"
-msgstr "Použiť antialiasing"
+msgstr "Použiť Antialiasing"
 
 #: ../src/ui/dialog/document-properties.cpp:409
 msgid "Toggle clip to page mode"
 msgstr "Spusti orez obsahu do stránky"
 
 #: ../src/ui/dialog/document-properties.cpp:412
-#, fuzzy
 msgid "Toggle page label style"
-msgstr "Prepnúť kurzívu"
+msgstr "Zobraziť meno Stránky na plátne"
 
 #: ../src/ui/dialog/document-properties.cpp:448
 msgid "<b>Guides</b>"
@@ -24676,19 +24465,16 @@ msgid "Remove grid"
 msgstr "Odstrániť mriežku"
 
 #: ../src/ui/dialog/document-resources.cpp:217
-#, fuzzy
 msgid "Export Color Palette"
-msgstr "Exportovať ako Paletu GIMP"
+msgstr "Exportovať Farebnú Paletu"
 
 #: ../src/ui/dialog/document-resources.cpp:232
-#, fuzzy
 msgid "Delete pattern"
-msgstr "Odstrániť vrstvu"
+msgstr "Odstrániť Vzorku"
 
 #: ../src/ui/dialog/document-resources.cpp:237
-#, fuzzy
 msgid "Delete gradient"
-msgstr "Zmazať priehradku farebného prechodu"
+msgstr "Zmazať Prechod"
 
 #: ../src/ui/dialog/document-resources.cpp:877
 #: ../share/ui/dialog-export.glade:82 ../share/extensions/doc_ai_convert.inx:33
@@ -24702,15 +24488,13 @@ msgid "Document"
 msgstr "Dokument"
 
 #: ../src/ui/dialog/document-resources.cpp:879
-#, fuzzy
 msgctxt "Adjective for Metadata status"
 msgid "Present"
 msgstr "Predvoľby"
 
 #: ../src/ui/dialog/document-resources.cpp:889
-#, fuzzy
 msgid "Color profiles"
-msgstr "Pripojiť farebný profil"
+msgstr "Farebné Profily"
 
 #: ../src/ui/dialog/document-resources.cpp:890
 #: ../share/ui/dialog-document-resources.glade:115
@@ -24721,9 +24505,8 @@ msgstr "Vzorkovník"
 #: ../src/ui/dialog/document-resources.cpp:891
 #: ../share/ui/dialog-document-resources.glade:73
 #: ../share/extensions/svgcalendar.inx:37
-#, fuzzy
 msgid "Fonts"
-msgstr "_Písmo"
+msgstr "Písmo"
 
 #: ../src/ui/dialog/document-resources.cpp:892
 #: ../share/ui/dialog-document-resources.glade:79
@@ -24737,18 +24520,16 @@ msgstr "Sieťkový farebný prechod"
 
 #: ../src/ui/dialog/document-resources.cpp:894
 #: ../share/ui/dialog-document-resources.glade:103
-#, fuzzy
 msgid "Patterns"
-msgstr "Vzorka"
+msgstr "Vzorky"
 
 #: ../src/ui/dialog/document-resources.cpp:895
 #: ../src/ui/dialog/symbols.cpp:1086 ../src/ui/dialog/symbols.cpp:1089
 #: ../src/ui/dialog/symbols.cpp:1092
 #: ../share/ui/dialog-document-resources.glade:121
 #: ../share/extensions/render_barcode_qrcode.inx:87
-#, fuzzy
 msgid "Symbols"
-msgstr "Symbol"
+msgstr "Symboly"
 
 #: ../src/ui/dialog/document-resources.cpp:896
 #: ../src/ui/dialog/inkscape-preferences.cpp:2760
@@ -24765,20 +24546,17 @@ msgid "Images"
 msgstr "Obrázok"
 
 #: ../src/ui/dialog/document-resources.cpp:899
-#, fuzzy
 msgid "SVG fonts"
-msgstr "Spravovať SVG písma"
+msgstr "SVG fonty"
 
 #: ../src/ui/dialog/document-resources.cpp:900
 #: ../share/ui/dialog-export.glade:900
-#, fuzzy
 msgid "Layers"
-msgstr "Vrstva"
+msgstr "Vrstvy"
 
 #: ../src/ui/dialog/document-resources.cpp:901
-#, fuzzy
 msgid "Total elements"
-msgstr "Vypočítať všetky prvky."
+msgstr "Všetky elementy"
 
 #: ../src/ui/dialog/document-resources.cpp:902 ../src/ui/dialog/find.cpp:98
 msgid "Groups"
@@ -24790,24 +24568,20 @@ msgid "Paths"
 msgstr "Cesty"
 
 #: ../src/ui/dialog/document-resources.cpp:904
-#, fuzzy
 msgid "External URIs"
-msgstr "Externý"
+msgstr "Externé URL"
 
 #: ../src/ui/dialog/document-resources.cpp:959
-#, fuzzy
 msgid "Style "
-msgstr "Štýl"
+msgstr "Štýl "
 
 #: ../src/ui/dialog/document-resources.cpp:1166
-#, fuzzy
 msgid "Edit object title"
-msgstr "Nastaviť názov objektu"
+msgstr "Edituj názov objektu"
 
 #: ../src/ui/dialog/export-batch.cpp:280
-#, fuzzy
 msgid "Color used to fill the image background"
-msgstr "Pridá vyfarbiteľné nepriehľadné pozadie"
+msgstr "Farba pozadia obrázku"
 
 #: ../src/ui/dialog/export-batch.cpp:388
 #, c-format
@@ -24838,28 +24612,24 @@ msgid "No items selected."
 msgstr "Neboli vybrané žiadne položky."
 
 #: ../src/ui/dialog/export-batch.cpp:646 ../src/ui/dialog/export-single.cpp:642
-#, fuzzy
 msgid "Exporting %1"
-msgstr "Exportuje sa %1 súborov"
+msgstr "Exportuje sa %1"
 
 #: ../src/ui/dialog/export-batch.cpp:647
-#, fuzzy
 msgid "Format %1, Selection %2"
-msgstr "Výber písma"
+msgstr "Formát %1, Výber %2"
 
 #: ../src/ui/dialog/export-batch.cpp:681 ../src/ui/dialog/export-single.cpp:717
 msgid "Select a filename for exporting"
 msgstr "Voľba súboru pre export"
 
 #: ../src/ui/dialog/export-single.cpp:122
-#, fuzzy
 msgid "Color used to fill background"
-msgstr "Zmiešanie na pozadie"
+msgstr "Farba pozadia"
 
 #: ../src/ui/dialog/export-single.cpp:613
-#, fuzzy
 msgid "Exporting"
-msgstr "Export"
+msgstr "Exportujem"
 
 #: ../src/ui/dialog/export-single.cpp:632
 msgid "Exporting %1 (%2 x %3)"
@@ -24900,9 +24670,9 @@ msgid "Directory <b>%s</b> does not exist or is not a directory.\n"
 msgstr "Adresár %s neexistuje alebo to nie je adresár.\n"
 
 #: ../src/ui/dialog/export.cpp:276 ../src/ui/dialog/export.cpp:441
-#, fuzzy, c-format
+#, c-format
 msgid "Could not export to filename <b>%s</b>.\n"
-msgstr "Nebolo možné exportovať do súboru s názvom <b>%s</b>."
+msgstr "Nebolo možné exportovať do súboru s názvom <b>%s</b>.\n"
 
 #: ../src/ui/dialog/export.cpp:290
 msgid "Export aborted."
@@ -24922,9 +24692,10 @@ msgid "Vector export Method is used for RASTER EXTENSION"
 msgstr ""
 
 #: ../src/ui/dialog/export.cpp:414
-#, fuzzy, c-format
+#, c-format
 msgid "Could not export to filename <b>%s</b>. (missing object)\n"
-msgstr "Nebolo možné exportovať do súboru s názvom <b>%s</b>."
+msgstr ""
+"Nebolo možné exportovať do súboru s názvom <b>%s</b>. (Chýbaju Objekty)\n"
 
 #: ../src/ui/dialog/export.cpp:456 ../src/ui/dialog/export.cpp:495
 msgid "bitmap"
@@ -25002,9 +24773,8 @@ msgid "Stroke st_yle"
 msgstr "Štýl ť_ahu"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:334
-#, fuzzy
 msgid "Select color"
-msgstr "Výber"
+msgstr "Výber Farbu"
 
 #. TRANSLATORS: this dialog is accessible via menu Filters - Filter editor
 #: ../src/ui/dialog/filter-effects-dialog.cpp:544
@@ -25026,24 +24796,20 @@ msgid "None"
 msgstr "Žiadny"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:678
-#, fuzzy
 msgid "Choose image file"
-msgstr "Nastaviť názov súboru"
+msgstr "Nastaviť typ súboru"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:681
-#, fuzzy
 msgid "SVG Element"
-msgstr "Vybraný SVG element"
+msgstr "SVG Element"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:682
-#, fuzzy
 msgid "Use selected SVG element"
-msgstr "Vybraný SVG element"
+msgstr "Použi vybraný SVG element"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:748
-#, fuzzy
 msgid "Select an image to be used as input."
-msgstr "Vyberte obrázok pre použitie ako vstup feImage"
+msgstr "Vyberte obrázok pre použitie ako vstup."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:855
 msgid "This SVG filter effect does not require any parameters."
@@ -25206,9 +24972,8 @@ msgid "Reorder filter primitive"
 msgstr "Zmeniť poradie primitív filtra"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2676
-#, fuzzy
 msgid "Effect"
-msgstr "_Efekt"
+msgstr "Efekt"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2677
 #, fuzzy
@@ -26155,7 +25920,7 @@ msgstr ""
 
 #: ../src/ui/dialog/glyphs.cpp:57 ../src/ui/dialog/glyphs.cpp:260
 msgid "Cherokee"
-msgstr ""
+msgstr "Chata"
 
 #: ../src/ui/dialog/glyphs.cpp:58 ../src/ui/dialog/glyphs.cpp:313
 msgid "Coptic"
@@ -26167,7 +25932,7 @@ msgstr "Azbuka"
 
 #: ../src/ui/dialog/glyphs.cpp:60
 msgid "Deseret"
-msgstr ""
+msgstr "púšť"
 
 #: ../src/ui/dialog/glyphs.cpp:61 ../src/ui/dialog/glyphs.cpp:242
 msgid "Devanagari"
@@ -26589,9 +26354,8 @@ msgid "Mende Kikakui"
 msgstr ""
 
 #: ../src/ui/dialog/glyphs.cpp:165
-#, fuzzy
 msgid "Modi"
-msgstr "Z_meniť"
+msgstr ""
 
 #: ../src/ui/dialog/glyphs.cpp:166
 msgid "Mro"
@@ -28209,27 +27973,26 @@ msgid "When off, origin is at lower left corner and y-axis points up"
 msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1645
-#, fuzzy
 msgid "Lock canvas rotation by default"
-msgstr "Obnov rotáciu strany na nula stupňov"
+msgstr "Zamkni rotáciu strany na nula stupňov ako prednadstavené"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1647
 msgid ""
 "Prevent accidental canvas rotation by disabling on-canvas keyboard and mouse "
 "actions for rotation"
 msgstr ""
+"Zabráň nevyžiadanej rotácii stránky tak že vypneme všetky skratky na rotáciu "
+"stránky."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1649
-#, fuzzy
 msgid "Show selection in ruler"
-msgstr "Zobraziť označenie výberu"
+msgstr "Zobrazuj označené v Pravítkach"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1650
 msgid "Shows a blue line in the ruler where the selection is."
-msgstr ""
+msgstr "Ukazuj velkosť vybraných objektov ako modrú čiaru v pravítkach."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1652
-#, fuzzy
 msgid "User Interface"
 msgstr "Rozhranie"
 
@@ -28246,32 +28009,28 @@ msgid "Make number editing boxes smaller by limiting padding"
 msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1659
-#, fuzzy
 msgid "Status bar"
-msgstr "_Stavový riadok"
+msgstr "Stavový riadok"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1661
-#, fuzzy
 msgid "Show current style"
-msgstr "Zobraziť vonkajší štýl"
+msgstr "Zobraziť aktuálny štýl"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1662
 msgid "Control visibility of current fill, stroke and opacity in status bar."
 msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1664
-#, fuzzy
 msgid "Show layer selector"
-msgstr "Žiadny efekt nebol zvolený"
+msgstr "Zobrazuj Vrstvy"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1665
 msgid "Control visibility of layer selection menu in status bar."
 msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1667
-#, fuzzy
 msgid "Show mouse coordinates"
-msgstr "Súradnice kurzoru"
+msgstr "Zobrazuj súradnice myši"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1668
 msgid "Control visibility of mouse coordinates X & Y in status bar."
@@ -28292,9 +28051,8 @@ msgid "Mouse cursors"
 msgstr " pod kurzorom"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1674
-#, fuzzy
 msgid "Enable scaling"
-msgstr "Zapnúť prichytávanie"
+msgstr "Zapnúť Zväčšovanie"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1675
 msgid ""
@@ -28303,9 +28061,8 @@ msgid ""
 msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1676
-#, fuzzy
 msgid "Show drop shadow"
-msgstr "_Zobraziť tieň okraja"
+msgstr "Zobraziť tieň"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1677
 msgid "Control visibility of drop shadow for Inkscape cursors."
@@ -28321,9 +28078,8 @@ msgid "Use dark theme"
 msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1705
-#, fuzzy
 msgid "Use system theme"
-msgstr "Zmazať segment"
+msgstr "Použi tému systému"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1710
 #, fuzzy
@@ -28338,9 +28094,8 @@ msgstr "Otvoriť súbor s reláciou"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1715
 #: ../src/ui/dialog/inkscape-preferences.cpp:3669
-#, fuzzy
 msgid "User themes:"
-msgstr "Používateľská vyrovnávacia pamäť:"
+msgstr "Uživatelské Témy:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1715
 #: ../src/ui/dialog/inkscape-preferences.cpp:3669
@@ -28354,9 +28109,8 @@ msgstr "Obnov normálnu velkosť písma"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1736
 #: ../share/ui/dialog-text-edit.glade:291 ../share/ui/dialog-trace.glade:1483
-#, fuzzy
 msgid "Apply"
-msgstr "_Použiť"
+msgstr "Použiť"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1737
 msgid "Apply font size changes to the UI"
@@ -28368,9 +28122,8 @@ msgid "_Font scale:"
 msgstr "Štýl písma"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1750
-#, fuzzy
 msgid "Adjust size of UI fonts"
-msgstr "Prispôsobiť <b>vzdialenosť posunu</b>"
+msgstr "Zmeň veľkosť písma Rozhrania"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1754
 #, fuzzy
@@ -28382,14 +28135,12 @@ msgid "Make background brighter or darker to adjust contrast"
 msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1767
-#, fuzzy
 msgid "Icons"
-msgstr "Ikona"
+msgstr "Ikony"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1795
-#, fuzzy
 msgid "Use system icons"
-msgstr "Zmazať segment"
+msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1800
 #, fuzzy
@@ -28398,34 +28149,29 @@ msgstr "Téma ikon: "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1803
 #: ../src/ui/dialog/inkscape-preferences.cpp:3672
-#, fuzzy
 msgid "Open icons folder"
-msgstr "Otvoriť súbor s reláciou"
+msgstr "Otvoriť súbor s iknomi"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1804
-#, fuzzy
 msgid "User icons: "
-msgstr "Používateľská konfigurácia: "
+msgstr "Ikony Uživateľa: "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1804
 #: ../src/ui/dialog/inkscape-preferences.cpp:3673
-#, fuzzy
 msgid "Location of the user’s icons"
-msgstr "Umiestnenie používateľských rozšírení"
+msgstr "Umiestnenie používateľských ikoniek"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1807
 msgid "Use symbolic icons"
 msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1810
-#, fuzzy
 msgid "Use default base color for icons"
-msgstr "Nastaviť farbu výplne na žiadnu"
+msgstr "Použi prednadstavené farby ikon"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1813
-#, fuzzy
 msgid "Use default highlight colors for icons"
-msgstr "Nastaviť farbu výplne na žiadnu"
+msgstr "Použi prednadstavené farby ikon"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1839
 #, fuzzy
@@ -28433,9 +28179,8 @@ msgid "Icon color base"
 msgstr "Farba písma:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1840
-#, fuzzy
 msgid "Base color for icons"
-msgstr "Nastaviť farbu výplne na žiadnu"
+msgstr "Základná Farba"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1846
 #, fuzzy
@@ -28447,23 +28192,20 @@ msgid "Highlight colors supported by some symbolic icon themes"
 msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1853
-#, fuzzy
 msgid "Reset theme colors for some symbolic icon themes"
-msgstr "Prepnúť „umiestňovanie“ symbolov do priestoru ikony."
+msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1855
 msgid "Yes"
 msgstr "Áno"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1855
-#, fuzzy
 msgid "No"
-msgstr "Neón"
+msgstr "Nie"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1855
-#, fuzzy
 msgid "Theme decides"
-msgstr "Z troch strán"
+msgstr "Automatické"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1858
 msgid "Show icons in menus:"
@@ -28486,9 +28228,8 @@ msgid "This preference fixes icon positions in menus."
 msgstr "Súbor s nastavením %s nebolo možné prečítať."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1864
-#, fuzzy
 msgid "XML Editor"
-msgstr "_XML editor..."
+msgstr "XML editor"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1884
 #, fuzzy
@@ -28500,19 +28241,16 @@ msgid "Syntax coloring for XML Editor"
 msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1911
-#, fuzzy
 msgid "Monospaced font:"
-msgstr "Šírka mesiaca:"
+msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1911
-#, fuzzy
 msgid "Select fixed-width font"
-msgstr "Voľba súboru na otvorenie"
+msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1914
-#, fuzzy
 msgid "Use monospaced font"
-msgstr "Nahradiť písmo"
+msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1915
 #, fuzzy
@@ -28524,20 +28262,17 @@ msgid "Use fixed-width font in XML Editor"
 msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1920
-#, fuzzy
 msgid "Theming"
-msgstr "Rela_tívna zmena"
+msgstr "Téma"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1924
 #: ../src/ui/dialog/inkscape-preferences.cpp:1984
-#, fuzzy
 msgid "Toolbars"
-msgstr "Nástroje"
+msgstr "Panel Nástrojov"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1953
-#, fuzzy
 msgid "Select visible tool buttons"
-msgstr "Voľba súboru na otvorenie"
+msgstr "Vyber ktoré nástroje uvidíš v paneli Nástrojov"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1956
 msgid "Toolbox icon size:"
@@ -28553,9 +28288,8 @@ msgid "Adjust toolbar icon size"
 msgstr "Veľkosť ikon sekundárneho panelu nástrojov:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1975
-#, fuzzy
 msgid "Simple"
-msgstr "Zjednodušiť"
+msgstr "Jednoduché"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1975
 msgid "Present simplified snapping options that manage all advanced settings"
@@ -28566,9 +28300,8 @@ msgid "Expose all snapping options for manual control"
 msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1977
-#, fuzzy
 msgid "Permanent"
-msgstr "nemčina (de)"
+msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1977
 msgid "All advanced snap options appear in a permanent bar"
@@ -28600,9 +28333,8 @@ msgid "GTK open/save dialogs"
 msgstr "Použiť dialógy Otvoriť a Uložiť z GTK"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1994
-#, fuzzy
 msgid "Show Welcome dialog"
-msgstr "Zobrazí alebo skryje všetky aktívne dialógy"
+msgstr "Ukazovať Uvítacie Dialóg"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1995
 msgid "Dialogs are hidden in taskbar"
@@ -28630,18 +28362,15 @@ msgstr "Agresívny"
 #: ../src/ui/dialog/inkscape-preferences.cpp:2002
 #: ../src/ui/dialog/inkscape-preferences.cpp:2053
 #: ../share/ui/image-properties.glade:264
-#, fuzzy
 msgid "Automatic"
-msgstr "Automatické ukladanie"
+msgstr "Automatická"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2004
 #: ../src/ui/dialog/inkscape-preferences.cpp:2055
-#, fuzzy
 msgid "Off"
-msgstr "Posun"
+msgstr "Vypnuté"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2007
-#, fuzzy
 msgctxt "Window size"
 msgid "Default"
 msgstr "Štandardné"
@@ -28670,9 +28399,8 @@ msgid "Set the default window size"
 msgstr "Nastaviť predvolenú veľkosť okna"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2021
-#, fuzzy
 msgid "Saving window size and position"
-msgstr "Uložiť geometriu okien (veľkosť a polohu)"
+msgstr "Uložiť rozloženie a veľkosť okien"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2023
 msgid "Let the window manager determine placement of all windows"
@@ -28713,9 +28441,8 @@ msgid "Dialogs settings"
 msgstr "Nastavenia stránky:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2039
-#, fuzzy
 msgid "Docked"
-msgstr "Zam_knuté"
+msgstr "Pripnuté"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2039
 msgid "Allow dialog docking"
@@ -28726,14 +28453,12 @@ msgid "Floating"
 msgstr "Plávajúci"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2040
-#, fuzzy
 msgid "Disable dialog docking"
-msgstr "Parkovanie pre hendikepovaných"
+msgstr "Zakáž pripínanie dialógov"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2042
-#, fuzzy
 msgid "Dialog behavior"
-msgstr "Správanie dialógov (vyžaduje reštart)"
+msgstr "Správanie dialógov"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2046
 msgid "Dialogs are treated as regular windows"
@@ -28762,14 +28487,12 @@ msgid "Only show label on active"
 msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2055
-#, fuzzy
 msgid "Only show dialog icons"
-msgstr "Zobrazovať úvodný dialóg"
+msgstr "Zobrazuj iba Ikonky dialógov"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2057
-#, fuzzy
 msgid "Labels behavior"
-msgstr "Správanie"
+msgstr "Správanie Názvov"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2060
 #, fuzzy
@@ -28833,14 +28556,12 @@ msgid "Visible color pickers"
 msgstr "Viditeľné farby"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2110
-#, fuzzy
 msgid "Select color pickers"
-msgstr "Vybrať vo všetkých vrstvách"
+msgstr "Vybrať vo Farebné Rozhrania"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2113
-#, fuzzy
 msgid "Color Selector"
-msgstr "Výber písma"
+msgstr "Výber Farieb"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2117
 msgid "Line color when zooming out"
@@ -29489,9 +29210,8 @@ msgid "Autosave"
 msgstr "Automatické ukladanie"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2486
-#, fuzzy
 msgid "No matches were found, try another search!"
-msgstr "Vášmu hľadaniu nezodpovedajú žiadne súbory"
+msgstr "Nenašli sa žiadne výsledky, skús hľadať iný výraz!"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2491
 msgid "Behavior"
@@ -29546,21 +29266,19 @@ msgstr "Ignorovať zamknuté objekty a vrstvy"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2507
 msgid "Select same behaves like select all"
-msgstr ""
+msgstr "Označiť Rovnaké sa správa rovnako ako Vybrať Všetko"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2509
 msgid "Deselect upon layer change"
 msgstr "Zrušiť výber pri zmene vrstvy"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2511
-#, fuzzy
 msgid "Select the topmost items only when in touch selection mode"
-msgstr "Vyberie objekt, na ktorý je klon prepojený"
+msgstr "Označ Horný objekt iba v Ozančovaciom móde dotyk"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2512
-#, fuzzy
 msgid "Select transparent objects, strokes, and fills"
-msgstr "Vyberie nasledovný objekt alebo uzol"
+msgstr "Dovol označovať neviditelné Objekty na ploche"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2515
 msgid ""
@@ -29910,9 +29628,8 @@ msgstr ""
 "vzdialenosť"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2647
-#, fuzzy
 msgid "&gt; and &lt; _scale by:"
-msgstr "> a < _zmenia mierku o:"
+msgstr "&gt; a &lt; _scale o:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2648
 msgid "Pressing > or < scales selection up or down by this increment"
@@ -29994,7 +29711,7 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2668
 msgid "Zoom with middle mouse click"
-msgstr ""
+msgstr "Kliknutie na stredné tlačítko myši približuje"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2670
 msgid ""
@@ -30003,9 +29720,8 @@ msgid ""
 msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2672
-#, fuzzy
 msgid "_Rotate canvas by:"
-msgstr "_Rotácia prichytáva každých:"
+msgstr "Otoč plochu o:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2673
 #, fuzzy
@@ -38419,10 +38135,9 @@ msgid "Slashed Zero"
 msgstr "Nula s prečiarknutím"
 
 #: ../src/ui/widget/font-variants.cpp:186
-#, fuzzy
 msgctxt "Font feature"
 msgid "East Asian"
-msgstr "Gaussovské"
+msgstr ""
 
 #: ../src/ui/widget/font-variants.cpp:187
 #: ../src/ui/widget/font-variants.cpp:194
@@ -48905,7 +48620,7 @@ msgstr ""
 
 #: ../share/extensions/pdflatex.inx:3
 msgid "Formula (pdflatex)"
-msgstr ""
+msgstr "Formula (pdflatex)"
 
 #: ../share/extensions/pdflatex.inx:8
 #, fuzzy
