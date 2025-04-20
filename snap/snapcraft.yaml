@@ -27,14 +27,6 @@ plugs:
     interface: content
     target: $SNAP/data-dir/icons
     default-provider: gtk-common-themes
-# ----
-# hack needed to ensure that the "cups" slot is available on the host, see https://snapcraft.io/docs/cups-interface
-  foo-install-cups:
-    interface: content
-    content: foo
-    default-provider: cups
-    target: $SNAP_DATA/foo
-# ----
 
 slots:
   inkscape-dbus:
@@ -205,6 +197,9 @@ parts:
     override-prime: |
       craftctl default
       sed -i "s|_have.*$||" $SNAPCRAFT_PRIME/share/bash-completion/completions/inkscape
+    override-pull: |
+      craftctl default
+      snap install cups
     parse-info: [ share/metainfo/org.inkscape.Inkscape.appdata.xml ]
     after: [python-deps] # Grab the network stuff first
 
