@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2023-06-08 13:53+0200\n"
-"PO-Revision-Date: 2025-04-20 19:06+0000\n"
+"PO-Revision-Date: 2025-04-21 20:06+0000\n"
 "Last-Translator: Adam Belis <adam.belis@gmail.com>\n"
 "Language-Team: Slovak <https://translate.inkscape.org/projects/inkscape/"
 "1-4-x/sk/>\n"
@@ -9929,7 +9929,7 @@ msgstr "Spojený Tvar"
 
 #: ../src/actions/actions-paths.cpp:248
 msgid "Add shapes by clicking or clicking and dragging"
-msgstr ""
+msgstr "Spoj tvary Kliknutím a tahanim cez ne"
 
 #: ../src/actions/actions-paths.cpp:249
 msgid "Shape Builder: Delete"
@@ -9937,7 +9937,7 @@ msgstr ""
 
 #: ../src/actions/actions-paths.cpp:249
 msgid "Remove shapes by clicking or clicking and dragging"
-msgstr ""
+msgstr "Vymaž časti tvaru tak že cez ne klikneš a ťaháš"
 
 #: ../src/actions/actions-selection-object.cpp:41
 #: ../src/actions/actions-selection-object.cpp:151
@@ -10732,9 +10732,8 @@ msgid "Measure objects"
 msgstr "Presunuté objekty"
 
 #: ../src/actions/actions-tools.cpp:391
-#, fuzzy
 msgid "Pages Tool"
-msgstr "Nástroje na prácu s pixlami"
+msgstr "Nástroj Stránky"
 
 #: ../src/actions/actions-tools.cpp:391
 #, fuzzy
@@ -12107,7 +12106,7 @@ msgid ""
 "Alter the resolution of selected image by resizing it to the given pixel size"
 msgstr ""
 "Zmeniť rozlíšenie zvoleného obrázka tým, že sa zmení jeho veľkosť na dané "
-"rozmery v pixeloch."
+"rozmery v pixeloch"
 
 #: ../src/extension/internal/bitmap/shade.cpp:42
 msgid "Shade"
@@ -15741,7 +15740,7 @@ msgstr ""
 
 #: ../src/inkscape-application.cpp:735
 msgid "Page numbers to import from multi-page document, i.e. PDF"
-msgstr "Čísla Strán ktoré importuje s dokumentu."
+msgstr "Čísla Strán ktoré importuje s dokumentu"
 
 #: ../src/inkscape-application.cpp:735
 msgid "PAGE[,PAGE]"
@@ -16274,10 +16273,9 @@ msgid "Create a (perspective) grid from a 3-node path"
 msgstr ""
 
 #: ../src/live_effects/effect.cpp:201
-#, fuzzy
 msgctxt "path effect"
 msgid "Spiro spline"
-msgstr "Spiro spline"
+msgstr "Spiro kryvka"
 
 #: ../src/live_effects/effect.cpp:204
 msgid ""
@@ -16508,9 +16506,10 @@ msgid "Attach path"
 msgstr "Pripojiť cestu"
 
 #: ../src/live_effects/effect.cpp:487
+#, fuzzy
 msgid ""
 "Glue the current path's ends to a specific position on one or two other paths"
-msgstr ""
+msgstr "Prilep Konce ciest k špecifikovanému bodu na innom objekte"
 
 #: ../src/live_effects/effect.cpp:499
 #, fuzzy
@@ -16523,6 +16522,8 @@ msgid ""
 "Turn the path into a fill between multiple other open paths (e.g. between "
 "paths with PowerStroke applied to them)"
 msgstr ""
+"Vytvor novú výplň medzi rôznimi čiarami. Užitočné na vytvorenie výplne medzi "
+"prerušovaními cestami"
 
 #: ../src/live_effects/effect.cpp:513
 #, fuzzy
@@ -16671,6 +16672,8 @@ msgid ""
 "Draw a circle by center and radius, where the first node of the path is the "
 "center, and the last determines its radius"
 msgstr ""
+"Nakresli Kruh od stredu po polomer podľa Cesty. Prvý uzol je stred druhý je "
+"poloha koncu polomeru"
 
 #: ../src/live_effects/effect.cpp:713
 #, fuzzy
@@ -16682,7 +16685,7 @@ msgstr "Kruh 3 bodov"
 msgid ""
 "Draw a circle whose circumference passes through the first three nodes of "
 "the path"
-msgstr ""
+msgstr "Nakresli Kruh tak aby prechádzal cez tri body podla cesty"
 
 #: ../src/live_effects/effect.cpp:727
 #, fuzzy
@@ -16702,7 +16705,7 @@ msgstr "Segment úsečky"
 
 #: ../src/live_effects/effect.cpp:744
 msgid "Draw a straight line that connects the first and last node of a path"
-msgstr ""
+msgstr "Nakresli čiaru ktorá sája prvý a posledný uzol na ceste"
 
 #: ../src/live_effects/effect.cpp:755
 #, fuzzy
@@ -19567,7 +19570,7 @@ msgstr "Rast:"
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:220
 msgid "Growth of distance between hatches."
-msgstr "Nárast vzdialenosti medzi šrafovaním"
+msgstr "Nárast vzdialenosti medzi šrafovaním."
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:223
 msgid "Smooth: Bottom ←"
@@ -47966,7 +47969,7 @@ msgstr "sústruh"
 
 #: ../share/extensions/other/gcodetools/gcodetools_tools_library.inx:17
 msgid "graffiti"
-msgstr "graffiti"
+msgstr "graffity"
 
 #: ../share/extensions/other/gcodetools/gcodetools_tools_library.inx:20
 msgid "Just check tools"
