@@ -20,21 +20,21 @@ msgstr ""
 "Project-Id-Version: Arabic Inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2023-06-08 13:53+0200\n"
-"PO-Revision-Date: 2022-05-21 13:03+0300\n"
-"Last-Translator: zer0-x <zer0-x.7ty50@aleeas.com>\n"
-"Language-Team: Arabic\n"
+"PO-Revision-Date: 2025-04-21 20:06+0000\n"
+"Last-Translator: NA <nisreenalaas@gmail.com>\n"
+"Language-Team: Arabic <https://translate.inkscape.org/projects/inkscape/"
+"1-4-x/ar/>\n"
 "Language: ar\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
-"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
-"X-Generator: Lokalize 22.04.0\n"
+"&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
+"X-Generator: Weblate 5.9.2\n"
 
 #: ../../build/share/filters/filters.svg.h:2
-#, fuzzy
 msgid "Fast Crop"
-msgstr "اِقتصاص"
+msgstr "قص سريع"
 
 #: ../../build/share/filters/filters.svg.h:3
 #: ../../build/share/filters/filters.svg.h:527
@@ -51,10 +51,12 @@ msgid "Fill and Transparency"
 msgstr "تعبئة وشفافيَّة"
 
 #: ../../build/share/filters/filters.svg.h:4
+#, fuzzy
 msgid "Does not filter but adds a filter region"
-msgstr ""
+msgstr "إضافة منطقة تصفية"
 
 #: ../../build/share/filters/filters.svg.h:6
+#, fuzzy
 msgid "Smart Jelly"
 msgstr "هُلام ذكي"
 
@@ -87,8 +89,9 @@ msgid "Bevels"
 msgstr "الحواف"
 
 #: ../../build/share/filters/filters.svg.h:8
+#, fuzzy
 msgid "Same as Matte jelly but with more controls"
-msgstr "كما في الهُلام غير اللَّامِع، لكن مع مزيد مِنَ التَّحكُم"
+msgstr "Same as Matte jelly but with more controls"
 
 #: ../../build/share/filters/filters.svg.h:10
 msgid "Metal Casting"
