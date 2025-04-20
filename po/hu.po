@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: hu\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2024-09-28 10:42+0000\n"
-"PO-Revision-Date: 2025-04-19 11:06+0000\n"
+"PO-Revision-Date: 2025-04-20 19:06+0000\n"
 "Last-Translator: Gyuris Gellért <jobel@ujevangelizacio.hu>\n"
 "Language-Team: Hungarian <https://translate.inkscape.org/projects/inkscape/"
 "1-4-x/hu/>\n"
@@ -10440,8 +10440,9 @@ msgstr ""
 "Az ismertetők állományai nincsenek telepítve.\n"
 "Linuxon az „inkscape-tutorials” csomag telepítése ajánlott, Windowson pedig "
 "újra kell telepíteni az alkalmazást és ki kell közben jelölni az „Ismertető”-"
-"t (Tutorials). Az ismertetők online is elérhetőek a https://inkscape.org/en/"
-"learn/tutorials/ címen."
+"t (Tutorials).\n"
+"Az ismertetők online is elérhetőek a https://inkscape.org/en/learn/tutorials/"
+" címen."
 
 #: ../src/actions/actions-tutorial.cpp:56
 msgid "Inkscape: Basic"
@@ -31074,7 +31075,9 @@ msgstr "A billentyűzetmódosító nem tölthető be."
 msgid ""
 "Keyboard shortcut \"%1\"\n"
 "is already assigned to \"%2\""
-msgstr "Ez a gyorsbillentyű (%1) már hozzá lett rendelve a funkcióhoz: „%2”"
+msgstr ""
+"Ez a gyorsbillentyű (%1) \n"
+"már hozzá lett rendelve a funkcióhoz: „%2”"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3381
 msgid "Reassign shortcut?"
@@ -34214,7 +34217,7 @@ msgid ""
 "Type in width & height of a page. (ex.: 15x10cm, 10in x 100mm)\n"
 "or choose preset from dropdown."
 msgstr ""
-"Írja be az oldal szélességét és magasságát (pl.: 15x10 cm, 10 in x 100 mm) "
+"Írja be az oldal szélességét és magasságát (pl.: 15x10 cm, 10 in x 100 mm) \n"
 "vagy válasszon egy előre beállított értéket a legördülő menüből."
 
 #: ../src/ui/toolbar/page-toolbar.cpp:137
@@ -42479,9 +42482,7 @@ msgstr "Nem sikerült betölteni a fájlt, nem egy ACECAD DHW fájl!"
 
 #: ../share/extensions/dhw_input.py:78
 msgid "Unsupported tag: {}\n"
-msgstr ""
-"Nem támogatott címke: {}\n"
-"\n"
+msgstr "Nem támogatott címke: {}\n"
 
 #: ../share/extensions/dimension.py:107 ../share/extensions/voronoi_fill.py:81
 msgid "Please select an object"
@@ -42974,6 +42975,7 @@ msgstr ""
 "verzióval, mint a JessyInk kiterjesztés. A „Kiterjesztés” menü, „JessyInk” "
 "almenüpontban a „Telepítés/frissítés…” menüponttal lehet telepíteni vagy "
 "frissíteni a JessyInk parancsfájlt.\n"
+"\n"
 
 #: ../share/extensions/jessyink_master_slide.py:48
 msgid "Layer not found. Removed current master slide selection.\n"
