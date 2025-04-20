@@ -8,15 +8,16 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-02-04 23:42+0100\n"
-"PO-Revision-Date: 2024-10-07 16:57+0000\n"
+"PO-Revision-Date: 2025-04-21 13:06+0000\n"
 "Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
-"Language-Team: Icelandic\n"
+"Language-Team: Icelandic <https://translate.inkscape.org/projects/inkscape/"
+"inkscape-master/is/>\n"
 "Language: is\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.08.5\n"
+"X-Generator: Weblate 5.9.2\n"
 
 #: ../build/share/filters/filters.svg.h:2
 msgid "Fast Crop"
@@ -7556,7 +7557,7 @@ msgstr[1] "<b>%d</b> myndir utanskornar"
 msgid "%s byte removed"
 msgid_plural "%s bytes removed"
 msgstr[0] "%s bæti fjarlægt"
-msgstr[1] "%s bæti fjarlægt"
+msgstr[1] "%s bæti fjarlægð"
 
 #: ../src/actions/actions-element-image.cpp:183
 #, c-format
@@ -10990,9 +10991,8 @@ msgid "Invalid width units '%1'"
 msgstr ""
 
 #: ../src/display/control/ctrl-handle-styling.cpp:187
-#, fuzzy
 msgid "Invalid scale '%1'"
-msgstr "Ógilt bitagildi, {}!"
+msgstr "Ógildur kvarði '%1'"
 
 #: ../src/display/control/ctrl-handle-styling.cpp:196
 msgid "Invalid scale units '%1'"
@@ -21007,16 +21007,13 @@ msgid "Deleted"
 msgstr "Eytt"
 
 #: ../src/object/sp-guide.cpp:500
-#, fuzzy
-#| msgid ""
-#| "<b>Shift+drag</b> to rotate, <b>Ctrl+drag</b> to move origin, <b>Del</b> "
-#| "to delete"
 msgid ""
 "<b>Shift+drag</b> to rotate, <b>Ctrl+drag</b> to move origin, <b>Del</b> to "
 "delete; <b>double-click</b> to edit this guide's properties"
 msgstr ""
 "<b>Shift+draga</b> til að snúa, <b>Ctrl+draga</b> til að færa upphafspunkt, "
-"<b>Del</b> til að eyða"
+"<b>Del</b> til að eyða; <b>tvísmella</b> til að breyta eiginleikum þessarar "
+"stoðlínu"
 
 #: ../src/object/sp-guide.cpp:505
 #, c-format
@@ -21071,7 +21068,7 @@ msgstr "Hópur"
 msgid "of <b>%d</b> object"
 msgid_plural "of <b>%d</b> objects"
 msgstr[0] "af <b>%d</b> hlut"
-msgstr[1] "af <b>%d</b> hlut"
+msgstr[1] "af <b>%d</b> hlutum"
 
 #: ../src/object/sp-item.cpp:1173
 msgid "Object"
@@ -21162,7 +21159,7 @@ msgstr ", ferilbrella: %s"
 msgid "%i node%s"
 msgid_plural "%i nodes%s"
 msgstr[0] "%i hnútur%s"
-msgstr[1] "%i hnútur%s"
+msgstr[1] "%i hnútar%s"
 
 #: ../src/object/sp-polygon.cpp:224
 msgid "<b>Polygon</b>"
@@ -21202,7 +21199,7 @@ msgstr "Marghyrningur"
 msgid "with %d vertex"
 msgid_plural "with %d vertices"
 msgstr[0] "með %d hlið"
-msgstr[1] "með %d hlið"
+msgstr[1] "með %d hliðar"
 
 #: ../src/object/sp-switch.cpp:68
 msgid "Conditional Group"
@@ -31319,10 +31316,9 @@ msgid "Starting angle"
 msgstr "Upphafshorn"
 
 #: ../src/ui/dialog/polar-arrange-tab.cpp:41
-#, fuzzy
 msgctxt "Polar arrange tab"
 msgid "<b>Anchor point:</b>"
-msgstr "Festipunktur:"
+msgstr "<b>Festipunktur:</b>"
 
 #: ../src/ui/dialog/polar-arrange-tab.cpp:45
 msgctxt "Polar arrange tab"
@@ -32292,7 +32288,7 @@ msgid ""
 "makes y equal to x; <b>Shift</b>+<b>Ctrl</b>+<b>Drag</b> scales blur "
 "proportionately "
 msgstr ""
-"Draga</b> til að <b>aðlaga</b> móðun í y-stefnu; <b>Ctrl</b>+<b>Draga</b> "
+"<b>Draga</b> til að <b>aðlaga</b> móðun í y-stefnu; <b>Ctrl</b>+<b>Draga</b> "
 "gerir y jafnt og x; <b>Shift</b>+<b>Ctrl</b>+<b>Draga</b> kvarðar móðun "
 "hlutfallslega "
 
@@ -33817,7 +33813,7 @@ msgid ""
 "Now <b>patterns</b> are <b>transformed</b> along with their objects when "
 "those are transformed (moved, scaled, rotated, or skewed)."
 msgstr ""
-"Núna eru <b>mynstur <b>ummynduð</b> ásamt hlutum sínum þegar þeim er "
+"Núna eru <b>mynstur</b> <b>ummynduð</b> ásamt hlutum sínum þegar þeim er "
 "umbreytt (fært, kvarðað, snúið eða skekkt)."
 
 #: ../src/ui/toolbar/select-toolbar.cpp:431
@@ -33825,8 +33821,8 @@ msgid ""
 "Now <b>patterns</b> remain <b>fixed</b> when objects are transformed (moved, "
 "scaled, rotated, or skewed)."
 msgstr ""
-"Núna haldast <b>mynstur <b>föst</b> þegar hlutum er umbreytt (fært, kvarðað, "
-"snúið eða skekkt)."
+"Núna haldast <b>mynstur</b> <b>föst</b> þegar hlutum er umbreytt (fært, "
+"kvarðað, snúið eða skekkt)."
 
 #: ../src/ui/toolbar/spiral-toolbar.cpp:67
 msgid "just a curve"
@@ -34611,12 +34607,12 @@ msgid "Crossing %lu"
 msgstr "Þverar %lu"
 
 #: ../src/ui/tools/measure-tool.cpp:1644
-#, fuzzy
-#| msgid "Maximum segment length:"
 msgid ""
 "\n"
 "Intersection segments lengths:\n"
-msgstr "Hámarkslengd búts:"
+msgstr ""
+"\n"
+"Lengdir skaraðra búta:\n"
 
 #: ../src/ui/tools/measure-tool.cpp:1656
 msgid ""
@@ -37418,9 +37414,8 @@ msgid "Remove Stroke"
 msgstr "Fjarlægja útlínu"
 
 #: ../src/ui/widget/selected-style.cpp:653
-#, fuzzy
 msgid "<b>Stroke Width</b>"
-msgstr "Breidd útlínu"
+msgstr "<b>Breidd útlínu</b>"
 
 #: ../src/ui/widget/selected-style.cpp:709
 msgid "Change stroke width"
@@ -37694,14 +37689,14 @@ msgid "R Gradient"
 msgstr "H litstigull"
 
 #: ../src/ui/widget/style-swatch.cpp:261
-#, fuzzy, c-format
+#, c-format
 msgid "Fill: %s"
-msgstr "Fylling:"
+msgstr "Fylling: %s"
 
 #: ../src/ui/widget/style-swatch.cpp:263
-#, fuzzy, c-format
+#, c-format
 msgid "Stroke: %s"
-msgstr "Útlína:"
+msgstr "Stroka: %s"
 
 #: ../src/ui/widget/style-swatch.cpp:268
 msgctxt "Fill and stroke"
@@ -37987,9 +37982,8 @@ msgid "Crash Report"
 msgstr ""
 
 #: ../share/ui/dialog-crash.glade:20
-#, fuzzy
 msgid "<b>Inkscape has crashed and will now close.</b>"
-msgstr "Inkscape hrundi og verður núna lokað."
+msgstr "<b>Inkscape hrundi og verður núna lokað.</b>"
 
 #: ../share/ui/dialog-crash.glade:26
 msgid ""
