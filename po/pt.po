@@ -27,7 +27,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-02-04 23:42+0100\n"
-"PO-Revision-Date: 2025-04-19 09:29+0000\n"
+"PO-Revision-Date: 2025-04-21 13:06+0000\n"
 "Last-Translator: Duarte Farrajota Ramos <duarte.framos@gmail.com>\n"
 "Language-Team: Portuguese <https://translate.inkscape.org/projects/inkscape/"
 "inkscape-master/pt/>\n"
@@ -1286,7 +1286,7 @@ msgstr "Sombreadores 3D não realistas"
 
 #: ../build/share/filters/filters.svg.h:432
 msgid "Comics shader with creamy waves transparency"
-msgstr "Shader de banda desenhada com transparência de ondas cremosas"
+msgstr "Sombreador de banda desenhada com transparência de ondas cremosas"
 
 #: ../build/share/filters/filters.svg.h:434
 msgid "Chewing Gum"
@@ -3395,20 +3395,16 @@ msgid "Circle diagonal fill 2"
 msgstr "Preenchimento círculo diagonal 2"
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
-#| msgid "Circle fill 3"
 msgid "Circle vertical fill 3"
-msgstr "Preenchimento em círculo 3"
+msgstr "Preenchimento em círculo vertical 3"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Inverted braid"
 msgstr "Trança invertida"
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
-#| msgid "Flip horizontal"
 msgid "Rain drops horizontal"
-msgstr "Espelhar na horizontal"
+msgstr "Gotas de chuva horizontais"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Abstract fill 2"
@@ -3419,11 +3415,8 @@ msgid "Abstract fill 3"
 msgstr "Preenchimento abstracto 3"
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
-#| msgctxt "Font feature"
-#| msgid "Diagonal"
 msgid "Pills diagonal"
-msgstr "Diagonal"
+msgstr "Cápsulas diagonal"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Abstract 1"
@@ -3442,16 +3435,12 @@ msgid "Circle fill 4"
 msgstr "Preenchimento em círculo 4"
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
-#| msgid "Draw horizontally"
 msgid "Arrow horizontal fill"
-msgstr "Desenhar horizontalmente"
+msgstr "Preenchimento setas horizontal"
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
-#| msgid "Semicircles 2"
 msgid "Semicircles"
-msgstr "Semicírculos 2"
+msgstr "Semicírculos"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Tiles 2"
@@ -3538,10 +3527,8 @@ msgid "Patterns"
 msgstr "Padrões"
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
-#| msgid "Tiles 1"
 msgid "Tiles 4"
-msgstr "Azulejos 1"
+msgstr "Azulejos 4"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Stripes 01 (1:1)"
@@ -3617,10 +3604,8 @@ msgid "Table Cloth"
 msgstr "Toalha de Mesa"
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
-#| msgid "Circle vertical lines halftone shading"
 msgid "Circle horizontal lines halftone shading"
-msgstr "Sombreado de círculo em linhas verticais de meio-tom"
+msgstr "Sombreado de círculo em linhas horizontais de meio-tom"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Rectangles halftone shading 1"
@@ -3643,50 +3628,36 @@ msgid "Circle halftones shading"
 msgstr "Sombreado de círculo de meio-tom"
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
-#| msgid "Flip horizontal"
 msgid "Zigzag horizontal 2"
-msgstr "Espelhar na horizontal"
+msgstr "Zigzag horizontal 2"
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
-#| msgid "Wave vertical lines shading 2"
 msgid "Wave horizontal lines shading 2"
-msgstr "Sombreado de linhas ondulantes verticais 2"
+msgstr "Sombreado de linhas ondulantes horizontais 2"
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
-#| msgid "Wave vertical lines shading 2"
 msgid "Wave horizontal lines shading 1"
-msgstr "Sombreado de linhas ondulantes verticais 2"
+msgstr "Sombreado de linhas ondulantes horizontais 1"
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
-#| msgid "Vertical rough lines shading 2"
 msgid "Horizontal rough lines shading 2"
-msgstr "Sombreado de linhas grosseiras verticais 2"
+msgstr "Sombreado de linhas grosseiras horizontais 2"
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
-#| msgid "Vertical rough lines shading"
 msgid "Horizontal rough lines shading"
-msgstr "Sombreado de linhas grosseiras verticais"
+msgstr "Sombreado de linhas grosseiras horizontais"
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
-#| msgid "Horizontal lines"
 msgid "Horizontal lines shading"
-msgstr "Linhas horizontais"
+msgstr "Sombreado linhas horizontais"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Lines half circle shading "
 msgstr "Sombreado semicircular em linhas verticais "
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
-#| msgid "Triangles shading 5"
 msgid "Triangles horizontal shading 5"
-msgstr "Sombreado de triângulos 5"
+msgstr "Sombreado de triângulos horizontais 5"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Triangles shading 4"
@@ -3713,10 +3684,8 @@ msgid "Splashing shading"
 msgstr "Sombreado de salpico"
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
-#| msgid "Wave vertical lines shading"
 msgid "Wave vertical lines"
-msgstr "Sombreado de onda/ondulação em linhas verticais"
+msgstr "Ondas linhas verticais"
 
 #: ../build/share/paint/patterns.svg.h:1
 msgid "Lines shading small"
@@ -3747,9 +3716,8 @@ msgid "Noise"
 msgstr "Ruído"
 
 #: ../build/share/paint/patterns.svg.h:1
-#, fuzzy
 msgid "Hatches"
-msgstr "Escotilhas"
+msgstr "Tramas"
 
 #: ../build/share/symbols/symbols.h:2
 msgctxt "Symbol"
@@ -6179,27 +6147,27 @@ msgstr "sem camadas vazias"
 
 #: ../build/share/templates/templates.h:1
 msgid "Zine Booklet (A4)"
-msgstr ""
+msgstr "Livrete Revista (A4)"
 
 #: ../build/share/templates/templates.h:1
 msgid "A foldable one page booklet (A4)"
-msgstr ""
+msgstr "Um livrete dobrável de uma página (A4)"
 
 #: ../build/share/templates/templates.h:1
 msgid "297 × 210 mm"
-msgstr ""
+msgstr "297 × 210 mm"
 
 #: ../build/share/templates/templates.h:1
 msgid "Zine Booklet (US)"
-msgstr ""
+msgstr "Livrete Revista (US)"
 
 #: ../build/share/templates/templates.h:1
 msgid "A foldable one page booklet (US Letter)"
-msgstr ""
+msgstr "Um livrete dobrável de uma página (Carta EUA)"
 
 #: ../build/share/templates/templates.h:1
 msgid "11 × 8.5 in"
-msgstr ""
+msgstr "11 × 8.5 pol"
 
 #: ../src/actions/actions-base.cpp:202
 msgid "Inkscape Version"
@@ -6226,16 +6194,12 @@ msgid "End execution in active window"
 msgstr "Terminar execução na janela activa"
 
 #: ../src/actions/actions-base.cpp:205
-#, fuzzy
-#| msgid "Star Preferences"
 msgid "Save preferences"
-msgstr "Preferências da ferramenta polígono e estrela"
+msgstr "Guardar Preferências"
 
 #: ../src/actions/actions-base.cpp:205
-#, fuzzy
-#| msgid "Failed to create the preferences file %s."
 msgid "Make sure the preferences are saved"
-msgstr "Não foi possível criar o ficheiro das preferências %s."
+msgstr "Certifique-se que as preferências foram guardadas"
 
 #: ../src/actions/actions-base.cpp:206
 msgid "Debug Info"
@@ -6881,62 +6845,52 @@ msgid "Reset canvas flipping"
 msgstr "Repor espelhamento da tela"
 
 #: ../src/actions/actions-canvas-transform.cpp:290
-#, fuzzy
 msgid "Zoom Absolute"
-msgstr "Para o absoluto"
+msgstr "Ampliação Absoluta"
 
 #: ../src/actions/actions-canvas-transform.cpp:290
-#, fuzzy
 msgid "Zoom to an absolute value"
 msgstr "Ampliar para um valor absoluto"
 
 #: ../src/actions/actions-canvas-transform.cpp:291
-#, fuzzy
 msgid "Zoom Relative"
-msgstr "Relativo"
+msgstr "Ampliação Relativa"
 
 #: ../src/actions/actions-canvas-transform.cpp:291
-#, fuzzy
 msgid "Zoom by a relative amount"
-msgstr "Ampliar"
+msgstr "Ampliar por um valor relativo"
 
 #: ../src/actions/actions-canvas-transform.cpp:293
-#, fuzzy
 msgid "Rotate Absolute (Radians)"
-msgstr "Rotação (graus)"
+msgstr "Rotação Absoluta (Radianos)"
 
 #: ../src/actions/actions-canvas-transform.cpp:293
 msgid "Rotate to an absolute value (radians)"
 msgstr "Rodar para um valor absoluto (radianos)"
 
 #: ../src/actions/actions-canvas-transform.cpp:294
-#, fuzzy
 msgid "Rotate Relative (Radians)"
-msgstr "Rotação (graus)"
+msgstr "Rotação Relativa (Radianos)"
 
 #: ../src/actions/actions-canvas-transform.cpp:294
-#, fuzzy
 msgid "Rotate by a relative amount (radians)"
-msgstr "Rodar ladrilhos por este ângulo para cada linha"
+msgstr "Rotação por um valor relativo (radianos)"
 
 #: ../src/actions/actions-canvas-transform.cpp:295
-#, fuzzy
 msgid "Rotate Absolute (Degrees)"
-msgstr "Rotação (graus)"
+msgstr "Rotação Absoluta (Graus)"
 
 #: ../src/actions/actions-canvas-transform.cpp:295
 msgid "Rotate to an absolute value (degrees)"
 msgstr "Rodar para um valor absoluto (graus)"
 
 #: ../src/actions/actions-canvas-transform.cpp:296
-#, fuzzy
 msgid "Rotate Relative (Degrees)"
-msgstr "Rotação (graus)"
+msgstr "Rotação Relativa (Graus)"
 
 #: ../src/actions/actions-canvas-transform.cpp:296
-#, fuzzy
 msgid "Rotate by a relative amount (degrees)"
-msgstr "Rodar ladrilhos por este ângulo para cada linha"
+msgstr "Rotação por um valor relativo (graus)"
 
 #: ../src/actions/actions-canvas-transform.cpp:298 ../share/ui/menus.ui:450
 msgid "Lock Rotation"
@@ -6967,16 +6921,12 @@ msgstr ""
 "dispersão"
 
 #: ../src/actions/actions-dialogs.cpp:35
-#, fuzzy
-#| msgid "Open Messages"
 msgid "Open Debugger"
-msgstr "Abrir Mensagens"
+msgstr "Abrir Depurador de Erros"
 
 #: ../src/actions/actions-dialogs.cpp:35
-#, fuzzy
-#| msgid "Open Messages"
 msgid "Open debugger"
-msgstr "Abrir Mensagens"
+msgstr "Abrir depurador de erros"
 
 #: ../src/actions/actions-dialogs.cpp:36
 msgid "Open Document Properties"
@@ -6996,8 +6946,6 @@ msgid "Show document overview and resources"
 msgstr "Exibir visão global e recursos do documento"
 
 #: ../src/actions/actions-dialogs.cpp:38
-#, fuzzy
-#| msgid "Open Extensions Gallery"
 msgid "Open Extension Gallery"
 msgstr "Abrir Galeria de Extensões"
 
@@ -7034,16 +6982,12 @@ msgid "Manage, edit, and apply SVG filters"
 msgstr "Gerir, editar e aplicar filtros SVG"
 
 #: ../src/actions/actions-dialogs.cpp:42
-#, fuzzy
-#| msgid "Filter Gallery"
 msgid "Open Filter Gallery"
-msgstr "Galeria de Filtros"
+msgstr "Abrir Galeria de Filtros"
 
 #: ../src/actions/actions-dialogs.cpp:42
-#, fuzzy
-#| msgid "Show all available fonts"
 msgid "Show and apply available filters"
-msgstr "MOstrar todas as fontes disponíveis"
+msgstr "Mostrar e aplicar filtros disponíveis"
 
 #: ../src/actions/actions-dialogs.cpp:43
 msgid "Open Find"
@@ -7577,15 +7521,14 @@ msgstr "Ajusta a página à selecção actual"
 
 #: ../src/actions/actions-edit.cpp:324 ../src/selection-chemistry.cpp:3712
 #: ../src/ui/widget/color-notebook.cpp:177
-#, fuzzy
-#| msgctxt "Palette"
-#| msgid "Chameleon 1"
 msgid "Chameleon Fill"
-msgstr "Camaleão 1"
+msgstr "Preenchimento Camaleão"
 
 #: ../src/actions/actions-edit.cpp:324
 msgid "Set each object's color to the average of all colors inside that shape."
 msgstr ""
+"Definir cor de cada objecto como a média de todas as cores dentro dessa "
+"forma."
 
 #: ../src/actions/actions-effect.cpp:80
 msgid "Remove Filters"
@@ -7637,10 +7580,8 @@ msgid "System error message: %1"
 msgstr "Mensagem de erro de sistema: 1%"
 
 #: ../src/actions/actions-element-image.cpp:116
-#, fuzzy
-#| msgid "System error message: %1"
 msgid "System error message:"
-msgstr "Mensagem de erro de sistema: 1%"
+msgstr "Mensagem de erro de sistema:"
 
 #: ../src/actions/actions-element-image.cpp:136
 msgid "Nothing selected."
@@ -7882,11 +7823,11 @@ msgstr "Manual do Inkscape"
 
 #: ../src/actions/actions-help-url.cpp:122 ../share/ui/menus.ui:1234
 msgid "Beginners' Guide"
-msgstr ""
+msgstr "Guia do Principiante"
 
 #: ../src/actions/actions-help-url.cpp:123 ../share/ui/menus.ui:1291
 msgid "Extension Development Guide"
-msgstr ""
+msgstr "Guia de Desenvolvimento de Extensões"
 
 #: ../src/actions/actions-help-url.cpp:124 ../share/ui/menus.ui:1325
 msgid "Donate"
@@ -8148,14 +8089,12 @@ msgid "Create a new layer"
 msgstr "Cria uma nova camada"
 
 #: ../src/actions/actions-layer.cpp:481
-#, fuzzy
 msgid "Add Layer Above"
-msgstr "Adicionar camada"
+msgstr "Adicionar Camada Acima"
 
 #: ../src/actions/actions-layer.cpp:481
-#, fuzzy
 msgid "Create a new layer above current"
-msgstr "Cria uma nova camada"
+msgstr "Cria uma nova camada acima da actual"
 
 #: ../src/actions/actions-layer.cpp:482
 msgid "Duplicate Current Layer"
@@ -9079,14 +9018,12 @@ msgid "Set compression level for PNG export"
 msgstr "Definir nível de compressão para exportação PNG"
 
 #: ../src/actions/actions-output.cpp:278
-#, fuzzy
 msgid "Export PNG Antialiasing"
-msgstr "Exportar PNG"
+msgstr "Suavização de Exportação PNG"
 
 #: ../src/actions/actions-output.cpp:278
-#, fuzzy
 msgid "Set antialiasing level for PNG export"
-msgstr "Definir nível de  para exportação PNG"
+msgstr "Definir nível de suavização para exportação de PNG"
 
 #: ../src/actions/actions-output.cpp:280
 msgid "Do Export"
@@ -9210,9 +9147,10 @@ msgstr ""
 "(máximo))"
 
 #: ../src/actions/actions-output.cpp:315
-#, fuzzy
 msgid "Enter integer for PNG antialiasing level (0 (none) to 3 (best))"
-msgstr "Inserir número inteiro para "
+msgstr ""
+"Inserir número inteiro para nível de suavização de PNG (0 (nenhum) a 3 "
+"(melhor))"
 
 #: ../src/actions/actions-pages.cpp:98 ../src/actions/actions-pages.cpp:129
 msgid "New Page"
@@ -9352,10 +9290,9 @@ msgstr ""
 "Fracturar um ou mais objectos sobrepostos em todos os segmentos possíveis"
 
 #: ../src/actions/actions-paths.cpp:258
-#, fuzzy
 msgctxt "Path flatten"
 msgid "Flatten"
-msgstr "Nivelar/Espalmar"
+msgstr "Achatar"
 
 #: ../src/actions/actions-paths.cpp:258
 msgid "Flatten one or more overlapping objects into their visible parts"
@@ -9807,24 +9744,20 @@ msgid "Set the document's SVG version to 2.0"
 msgstr "Definir a versão do documento SVG para 2.0"
 
 #: ../src/actions/actions-svg-processing.cpp:700
-#, fuzzy
 msgid "Prune Inkscape Namespaces"
-msgstr "Imprimir versão do Inkscape"
+msgstr "Remover Namespaces do Inkscape"
 
 #: ../src/actions/actions-svg-processing.cpp:700
-#, fuzzy
 msgid "Remove any Inkscape-specific SVG data"
-msgstr "Remover todos os dados específicos de SVG"
+msgstr "Remover quaisquer dados SVG específicos do Inkscape"
 
 #: ../src/actions/actions-svg-processing.cpp:701
-#, fuzzy
 msgid "Prune Proprietary Namespaces"
-msgstr "Imprimir versão do Inkscape"
+msgstr "Remover Namespaces Proprietários"
 
 #: ../src/actions/actions-svg-processing.cpp:701
-#, fuzzy
 msgid "Remove any known proprietary SVG data"
-msgstr "Remover todos os dados de proprietário de SVG"
+msgstr "Remover quaisquer dados SVG proprietários conhecidos"
 
 #: ../src/actions/actions-svg-processing.cpp:703
 msgid "Reverse Auto Start Markers"
@@ -9835,39 +9768,32 @@ msgid "Remove auto start positions from markers"
 msgstr "Remover posições iniciais automáticas de marcadores"
 
 #: ../src/actions/actions-svg-processing.cpp:704
-#, fuzzy
-#| msgid "Remove All Transforms"
 msgid "Try to Remove All Transforms"
-msgstr "Remover todas as transformações"
+msgstr "Tentar Remover Todas as Transformações"
 
 #: ../src/actions/actions-svg-processing.cpp:704
-#, fuzzy
-#| msgid "Remove all transforms from all shapes"
 msgid "Attempt to remove all transforms from all shapes"
-msgstr "Remover quaisquer transformações de todas as formas"
+msgstr "Tentar remover quaisquer transformações de todas as formas"
 
 #: ../src/actions/actions-svg-processing.cpp:705
-#, fuzzy
 msgid "Remove Marker Context Paint"
-msgstr "Remover Pintura de contexto marcador"
+msgstr "Remover Pintura de Contexto de Marcador"
 
 #: ../src/actions/actions-svg-processing.cpp:705
-#, fuzzy
 msgid "Remove context paints from markers"
-msgstr "Remover Pinturas de contexto de marcadores"
+msgstr "Remover pinturas de contexto de marcadores"
 
 #: ../src/actions/actions-svg-processing.cpp:707
 msgid "Insert Text Fallback"
-msgstr ""
+msgstr "Inserir Texto de Reserva"
 
 #: ../src/actions/actions-svg-processing.cpp:707
 msgid "Replace SVG2 text with SVG1.1 text"
 msgstr "Substituir texto SVG2 com SVG1.1"
 
 #: ../src/actions/actions-svg-processing.cpp:708
-#, fuzzy
 msgid "Insert Mesh Polyfill"
-msgstr "Aplicar malha no preenchimento"
+msgstr "Inserir Poli Preenchimento em Malha"
 
 #: ../src/actions/actions-svg-processing.cpp:708
 msgid "Insert JavaScript for rendering meshes"
@@ -9875,15 +9801,12 @@ msgstr "Inserir código Java para renderização de malhas"
 
 # File: ../src/ui/dialog/inkscape-preferences.cpp, line: 1555
 #: ../src/actions/actions-svg-processing.cpp:709
-#, fuzzy
 msgid "Insert Hatch Polyfill"
-msgstr ""
-"Inserir padrão de sombreado do servidor de pintura JavaScript polyfill."
+msgstr "Inserir Poli Preenchimento em Malha Trama"
 
 #: ../src/actions/actions-svg-processing.cpp:709
-#, fuzzy
 msgid "Insert JavaScript for rendering hatches"
-msgstr "Inserir código JavaScript para padrões de sombreado SVG2"
+msgstr "Inserir código JavaScript para representar padrões"
 
 #: ../src/actions/actions-svg-processing.cpp:711
 msgid "Unlink All Clones"
@@ -9906,11 +9829,9 @@ msgid "All Strokes to Paths"
 msgstr "Todos os traços num caminho"
 
 #: ../src/actions/actions-svg-processing.cpp:713
-#, fuzzy
-#| msgid "Turn all strokes recursively into fill only paths"
 msgid "Turn all strokes recursively into fill-only paths"
 msgstr ""
-"Converter recursivamente todo os traços em caminhos só de preenchimento"
+"Converter recursivamente todo os traços em caminhos apenas de preenchimento"
 
 #: ../src/actions/actions-svg-processing.cpp:714
 msgid "Normalize Path Data"
@@ -9921,20 +9842,20 @@ msgid "Make all paths absolute and predictable"
 msgstr "Tornar todos os caminhos absolutos e previsíveis"
 
 #: ../src/actions/actions-svg-processing.cpp:716
-#, fuzzy
-#| msgid "Snap Bounding Boxes"
 msgid "Annotate all Bounding Boxes"
-msgstr "Atrair caixas limitadoras"
+msgstr "Anotar todas as Caixas Delimitadoras"
 
 #: ../src/actions/actions-svg-processing.cpp:716
 msgid ""
 "Annotate every shape and group with its current bounding box (not kept up to "
 "date)"
 msgstr ""
+"Anotar cada forma e grupo com a sua actual caixa delimitadora (não mantida "
+"actualizada)"
 
 #: ../src/actions/actions-svg-processing.cpp:717
 msgid "Annotate all Shape Paths"
-msgstr ""
+msgstr "Anotar todas as formas de caminhos"
 
 #: ../src/actions/actions-svg-processing.cpp:717
 msgid ""
