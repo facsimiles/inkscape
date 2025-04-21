@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-02-04 23:42+0100\n"
-"PO-Revision-Date: 2025-04-21 13:06+0000\n"
+"PO-Revision-Date: 2025-04-22 10:27+0000\n"
 "Last-Translator: Christian Wia <w9204-gi@yahoo.com>\n"
 "Language-Team: French <https://translate.inkscape.org/projects/inkscape/"
 "inkscape-master/fr/>\n"
@@ -46675,7 +46675,7 @@ msgstr "Aucun (défaut)"
 #: ../share/extensions/jessyink_transitions.inx:12
 #: ../share/extensions/jessyink_transitions.inx:20
 msgid "Appear"
-msgstr "Apparition"
+msgstr "Apparaître"
 
 #: ../share/extensions/jessyink_effects.inx:13
 msgid "Fade in"
