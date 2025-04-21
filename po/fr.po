@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2024-09-24 13:17+0000\n"
-"PO-Revision-Date: 2025-04-20 19:06+0000\n"
+"PO-Revision-Date: 2025-04-21 20:06+0000\n"
 "Last-Translator: Christian Wia <w9204-gi@yahoo.com>\n"
 "Language-Team: French <https://translate.inkscape.org/projects/inkscape/"
 "1-4-x/fr/>\n"
@@ -6042,7 +6042,7 @@ msgstr "Version d'Inkscape"
 
 #: ../src/actions/actions-base.cpp:195
 msgid "Print Inkscape version and exit"
-msgstr "Afficher la version d'Inkscape"
+msgstr "Afficher la version d'Inkscape et sortir"
 
 #: ../src/actions/actions-base.cpp:196
 msgid "Active Window: Start Call"
@@ -6208,11 +6208,11 @@ msgstr "Ne pas afficher les filtres (rendu plus rapide)"
 
 #: ../src/actions/actions-canvas-mode.cpp:271
 msgid "Display Mode: Enhance Thin Lines"
-msgstr "Mode d'affichage: Améliorer les traits fins"
+msgstr "Mode d'affichage : Améliorer les traits fins"
 
 #: ../src/actions/actions-canvas-mode.cpp:271 ../share/ui/display-popup.glade:88
 msgid "Ensure all strokes are displayed on screen as at least 1 pixel wide"
-msgstr "S'assure que tous es contours affichés font au moins un pixel de large"
+msgstr "S'assure que tous les contours affichés ont au moins un pixel de large"
 
 #: ../src/actions/actions-canvas-mode.cpp:272
 msgid "Display Mode: Outline Overlay"
@@ -6222,8 +6222,8 @@ msgstr "Mode d'affichage : superposition de contours"
 msgid ""
 "Show objects as outlines, and the actual drawing below them with reduced opacity"
 msgstr ""
-"Montre les objets comme des contours, et le reste du dessin sous les contours et "
-"partiellement transparents"
+"Montre les objets comme des contours, et le reste du dessin sous les "
+"contours est partiellement transparent"
 
 #: ../src/actions/actions-canvas-mode.cpp:273
 msgid "Display Mode: Cycle"
@@ -7395,8 +7395,8 @@ msgid ""
 "Failed to edit external image.\n"
 "<small>Note: Path to editor can be set in Preferences dialog.</small>"
 msgstr ""
-"Échec de l'édition de l'image.\n"
-"<small>Note: Le chemin vers l'éditeur externe peut être défini dans les "
+"Échec de l'édition de l'image externe.\n"
+"<small>Note : le chemin vers l'éditeur peut être défini dans les "
 "Préférences.</small>"
 
 #: ../src/actions/actions-element-image.cpp:118
@@ -29230,7 +29230,7 @@ msgstr "Sélectionner dans le calque actif et ses sous-calques"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2521
 msgid "Ignore hidden objects and layers"
-msgstr "Ignorer les objets et calques cachés"
+msgstr "Ignorer les objets et les calques cachés"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2522
 msgid "Ignore locked objects and layers"
@@ -29395,7 +29395,7 @@ msgstr "Déplacer les dégradés (dans le fond ou le contour) avec les objets"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2583 ../share/ui/toolbar-select.ui:516
 msgid "Move patterns (in fill or stroke) along with the objects"
-msgstr "Déplacer les motifs (dans le fond ou le contour) avec les objets"
+msgstr "Déplacer les motifs (du fond ou du contour) avec les objets"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2584
 msgid "When changing stroke width, scale dash array"
