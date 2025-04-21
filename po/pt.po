@@ -27,7 +27,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-02-04 23:42+0100\n"
-"PO-Revision-Date: 2025-04-21 13:06+0000\n"
+"PO-Revision-Date: 2025-04-22 10:27+0000\n"
 "Last-Translator: Duarte Farrajota Ramos <duarte.framos@gmail.com>\n"
 "Language-Team: Portuguese <https://translate.inkscape.org/projects/inkscape/"
 "inkscape-master/pt/>\n"
@@ -9862,6 +9862,8 @@ msgid ""
 "Annotate every non-path shape with their equivalent path string (not kept up "
 "to date)"
 msgstr ""
+"Anotar todas as formas que não são caminho com o texto de caminho "
+"equivalente (não mantido actualizado="
 
 #: ../src/actions/actions-svg-processing.cpp:719
 msgid "Clean up Document"
@@ -10223,36 +10225,24 @@ msgstr ""
 "Dilatar/Contrair objectos seleccionados em relação ao nível de ampliação"
 
 #: ../src/actions/actions-transform.cpp:146
-#, fuzzy
-#| msgid "Export selected objects"
 msgid "Rotate selected objects"
-msgstr "Exportar objectos seleccionados"
+msgstr "Rodar objectos seleccionados"
 
 #: ../src/actions/actions-transform.cpp:147
-#, fuzzy
-#| msgid "Rotate tweak"
 msgid "Rotate Step"
-msgstr "Forças: rotação"
+msgstr "Passo de Rotação"
 
 #: ../src/actions/actions-transform.cpp:147
-#, fuzzy
-#| msgid "Grow/shrink selected objects by multiple of step value"
 msgid "Rotate selected objects by multiple of step value"
-msgstr ""
-"Expandir/Encolher objectos seleccionados por múltiplos do valor de passo"
+msgstr "Rodar objectos seleccionados por múltiplos do valor de passo"
 
 #: ../src/actions/actions-transform.cpp:148
-#, fuzzy
-#| msgid "Rotate gradient"
 msgid "Rotate Screen"
-msgstr "Rodar gradiente"
+msgstr "Rodar Relativo ao Ecrã"
 
 #: ../src/actions/actions-transform.cpp:148
-#, fuzzy
-#| msgid "Grow/shrink selected objects relative to zoom level"
 msgid "Rotate selected objects relative to zoom level"
-msgstr ""
-"Dilatar/Contrair objectos seleccionados em relação ao nível de ampliação"
+msgstr "Rodar objectos seleccionados em relação ao nível de ampliação"
 
 #: ../src/actions/actions-transform.cpp:150
 msgid "Remove Transforms"
@@ -10271,9 +10261,8 @@ msgid "Rotate Page 90°"
 msgstr "Rodar Página 90°"
 
 #: ../src/actions/actions-transform.cpp:152
-#, fuzzy
 msgid "Rotate page by 90-degree rotation steps"
-msgstr "Rodar página 90º de rotação"
+msgstr "Rodar página por passos de rotação de 90º"
 
 #: ../src/actions/actions-transform.cpp:159
 msgid "Enter two comma-separated numbers, e.g. 50,-2.5"
@@ -10308,9 +10297,8 @@ msgstr ""
 "relativamente ao nível de ampliação"
 
 #: ../src/actions/actions-transform.cpp:165
-#, fuzzy
 msgid "Enter number of 90-degree rotation steps"
-msgstr "Inserir número de 90 graus de rotação"
+msgstr "Inserir número de passos de rotação de 90 graus"
 
 #. TRANSLATORS: Please don't translate link unless the page exists in your language. Add your language code to
 #. the link this way: https://inkscape.org/[lang]/learn/tutorials/
@@ -10555,28 +10543,20 @@ msgid "Switch to the next document window"
 msgstr "Mudar para a próxima janela do documento"
 
 #: ../src/actions/actions-view-window.cpp:65
-#, fuzzy
-#| msgid "Next page:"
 msgid "Next Tab"
-msgstr "Página seguinte:"
+msgstr "Separador Seguinte"
 
 #: ../src/actions/actions-view-window.cpp:65
-#, fuzzy
-#| msgid "Switch to the next document window"
 msgid "Switch to the next document tab"
-msgstr "Mudar para a próxima janela do documento"
+msgstr "Mudar para o próximo separador de documento"
 
 #: ../src/actions/actions-view-window.cpp:66
-#, fuzzy
-#| msgid "Previous page:"
 msgid "Previous Tab"
-msgstr "Página anterior:"
+msgstr "Separador Anterior"
 
 #: ../src/actions/actions-view-window.cpp:66
-#, fuzzy
-#| msgid "Switch to the previous document window"
 msgid "Switch to the previous document tab"
-msgstr "Mudar para a janela anterior do documento"
+msgstr "Mudar para o separador anterior de documento"
 
 #: ../src/actions/actions-window.cpp:88
 msgid "Enter comma-separated string for x, y, width, height"
@@ -10682,40 +10662,28 @@ msgid "Blue"
 msgstr "Canal azul"
 
 #: ../src/colors/spaces/components.cpp:39
-#, fuzzy
-#| msgid "_H<sub>OK</sub>:"
 msgid "<sub>l</sub>_R:"
-msgstr "_H<sub>OK</sub>:"
+msgstr "<sub>l</sub>_R:"
 
 #: ../src/colors/spaces/components.cpp:39
-#, fuzzy
-#| msgid "Linear B"
 msgid "Linear Red"
-msgstr "Linear B"
+msgstr "Linear Vermelho"
 
 #: ../src/colors/spaces/components.cpp:40
-#, fuzzy
-#| msgid "_H<sub>OK</sub>:"
 msgid "<sub>l</sub>_G:"
-msgstr "_H<sub>OK</sub>:"
+msgstr "<sub>l</sub>_G:"
 
 #: ../src/colors/spaces/components.cpp:40
-#, fuzzy
-#| msgid "Linear gradient"
 msgid "Linear Green"
-msgstr "Gradiente linear"
+msgstr "Linear Verde"
 
 #: ../src/colors/spaces/components.cpp:41
-#, fuzzy
-#| msgid "_H<sub>OK</sub>:"
 msgid "<sub>l</sub>_B:"
-msgstr "_H<sub>OK</sub>:"
+msgstr "<sub>l</sub>_B:"
 
 #: ../src/colors/spaces/components.cpp:41
-#, fuzzy
-#| msgid "Linear B"
 msgid "Linear Blue"
-msgstr "Linear B"
+msgstr "Linear Azul"
 
 #: ../src/colors/spaces/components.cpp:47
 #: ../src/colors/spaces/components.cpp:55
@@ -10790,8 +10758,6 @@ msgstr "_C:"
 
 #: ../src/colors/spaces/components.cpp:63
 #: ../src/colors/spaces/components.cpp:72
-#, fuzzy
-#| msgid "Cyan"
 msgctxt "CMYK"
 msgid "Cyan"
 msgstr "Ciano"
@@ -10803,8 +10769,6 @@ msgstr "_M:"
 
 #: ../src/colors/spaces/components.cpp:64
 #: ../src/colors/spaces/components.cpp:73
-#, fuzzy
-#| msgid "Magenta"
 msgctxt "CMYK"
 msgid "Magenta"
 msgstr "Magenta"
@@ -10816,8 +10780,6 @@ msgstr "_Y:"
 
 #: ../src/colors/spaces/components.cpp:65
 #: ../src/colors/spaces/components.cpp:74
-#, fuzzy
-#| msgid "Yellow"
 msgctxt "CMYK"
 msgid "Yellow"
 msgstr "Amarelo"
@@ -10827,8 +10789,6 @@ msgid "_K:"
 msgstr "_K:"
 
 #: ../src/colors/spaces/components.cpp:66
-#, fuzzy
-#| msgid "Black"
 msgctxt "CMYK"
 msgid "Black"
 msgstr "Preto"
@@ -10846,135 +10806,95 @@ msgid "_L*:"
 msgstr "_L*:"
 
 #: ../src/colors/spaces/components.cpp:88
-#, fuzzy
-#| msgid "_H<sub>OK</sub>:"
 msgid "_H<sub>ok</sub>:"
-msgstr "_H<sub>OK</sub>:"
+msgstr "_H<sub>ok</sub>:"
 
 #: ../src/colors/spaces/components.cpp:89
-#, fuzzy
-#| msgid "_S<sub>OK</sub>:"
 msgid "_S<sub>ok</sub>:"
-msgstr "_S<sub>OK</sub>:"
+msgstr "_S<sub>ok</sub>:"
 
 #: ../src/colors/spaces/components.cpp:90
-#, fuzzy
-#| msgid "_L<sub>OK</sub>:"
 msgid "_L<sub>ok</sub>:"
-msgstr "_L<sub>OK</sub>:"
+msgstr "_L<sub>ok</sub>:"
 
 #: ../src/colors/spaces/components.cpp:96
 #: ../src/colors/spaces/components.cpp:104
 #: ../src/colors/spaces/components.cpp:128
-#, fuzzy
-#| msgid "_L:"
 msgid "_L"
 msgstr "_L:"
 
 #: ../src/colors/spaces/components.cpp:96
 #: ../src/colors/spaces/components.cpp:104
-#, fuzzy
-#| msgid "Luminance to Alpha"
 msgid "Luminance"
-msgstr "Luminância para transparência"
+msgstr "Luminância"
 
 #: ../src/colors/spaces/components.cpp:97
-#, fuzzy
-#| msgid "_C:"
 msgid "_C"
-msgstr "_C:"
+msgstr "_C"
 
 #: ../src/colors/spaces/components.cpp:97
 #: ../src/colors/spaces/components.cpp:121
-#, fuzzy
-#| msgid "Chrome"
 msgid "Chroma"
-msgstr "Cromado"
+msgstr "Croma"
 
 #: ../src/colors/spaces/components.cpp:98
-#, fuzzy
-#| msgid "_H:"
 msgid "_H"
-msgstr "_M:"
+msgstr "_H:"
 
 #: ../src/colors/spaces/components.cpp:105
 msgid "_U"
-msgstr ""
+msgstr "_U"
 
 #: ../src/colors/spaces/components.cpp:105
-#, fuzzy
-#| msgid "Chrome"
 msgid "Chroma U"
-msgstr "Cromado"
+msgstr "Croma U"
 
 #: ../src/colors/spaces/components.cpp:106
-#, fuzzy
-#| msgid "_V:"
 msgid "_V"
-msgstr "_V:"
+msgstr "_V"
 
 #: ../src/colors/spaces/components.cpp:106
-#, fuzzy
-#| msgid "Chrome"
 msgid "Chroma V"
-msgstr "Cromado"
+msgstr "Croma V"
 
 #: ../src/colors/spaces/components.cpp:112
 #: ../src/colors/spaces/components.cpp:120
-#, fuzzy
-#| msgid "_L<sub>OK</sub>:"
 msgid "_L<sub>ok</sub>"
-msgstr "_L<sub>OK</sub>:"
+msgstr "_L<sub>ok</sub>"
 
 #: ../src/colors/spaces/components.cpp:113
-#, fuzzy
-#| msgid "_H<sub>OK</sub>:"
 msgid "_A<sub>ok</sub>"
-msgstr "_H<sub>OK</sub>:"
+msgstr "_A<sub>ok</sub>"
 
 #: ../src/colors/spaces/components.cpp:113
 #: ../src/colors/spaces/components.cpp:129
-#, fuzzy
-#| msgid "Component Transfer"
 msgid "Component A"
-msgstr "Transferência de componente"
+msgstr "Componente A"
 
 #: ../src/colors/spaces/components.cpp:114
-#, fuzzy
-#| msgid "_H<sub>OK</sub>:"
 msgid "_B<sub>ok</sub>"
-msgstr "_H<sub>OK</sub>:"
+msgstr "_B<sub>ok</sub>"
 
 #: ../src/colors/spaces/components.cpp:114
 #: ../src/colors/spaces/components.cpp:130
-#, fuzzy
-#| msgid "Component Transfer"
 msgid "Component B"
-msgstr "Transferência de componente"
+msgstr "Componente B"
 
 #: ../src/colors/spaces/components.cpp:121
-#, fuzzy
-#| msgid "_H<sub>OK</sub>:"
 msgid "_C<sub>ok</sub>"
-msgstr "_H<sub>OK</sub>:"
+msgstr "_C<sub>ok</sub>"
 
 #: ../src/colors/spaces/components.cpp:122
-#, fuzzy
-#| msgid "_H<sub>OK</sub>:"
 msgid "_H<sub>ok</sub>"
-msgstr "_H<sub>OK</sub>:"
+msgstr "_H<sub>ok</sub>"
 
 #: ../src/colors/spaces/components.cpp:129
-#, fuzzy
-#| msgid "_A:"
 msgid "_A"
-msgstr "_T:"
+msgstr "_A"
 
 #: ../src/colors/spaces/components.cpp:130
-#, fuzzy
-#| msgid "_B:"
 msgid "_B"
-msgstr "_B:"
+msgstr "_B"
 
 #: ../src/colors/spaces/components.cpp:136
 msgid "_Y"
@@ -10992,27 +10912,20 @@ msgid "Y"
 msgstr "Y"
 
 #: ../src/colors/spaces/components.cpp:137
-#, fuzzy
-#| msgid "Co_lor"
 msgid "C_r"
-msgstr "_Cor"
+msgstr "C_r"
 
 #: ../src/colors/spaces/components.cpp:137
-#, fuzzy
-#| msgid "Club"
 msgid "Cb"
-msgstr "Paus"
+msgstr "Cb"
 
 #: ../src/colors/spaces/components.cpp:138
 msgid "C_b"
-msgstr ""
+msgstr "C_b"
 
 #: ../src/colors/spaces/components.cpp:138
-#, fuzzy
-#| msgctxt "Symbol"
-#| msgid "Car"
 msgid "Cr"
-msgstr "Carro"
+msgstr "Cr"
 
 #: ../src/colors/spaces/components.cpp:160
 msgid "G:"
@@ -11071,15 +10984,12 @@ msgid "lg1p$"
 msgstr "lg1p$"
 
 #: ../src/display/control/ctrl-handle-styling.cpp:117
-#, fuzzy
 msgid "Empty or improper value, skipped"
-msgstr "Valor vazio ou impróprio, "
+msgstr "Valor vazio ou impróprio, ignorado"
 
 #: ../src/display/control/ctrl-handle-styling.cpp:127
-#, fuzzy
-#| msgid "Unrecognized shape %1"
 msgid "Unrecognized shape '%1'"
-msgstr "Forma não reconhecida %1"
+msgstr "Forma não reconhecida '%1'"
 
 #: ../src/display/control/ctrl-handle-styling.cpp:137
 msgid "Unrecognized color '%1'"
@@ -11122,9 +11032,8 @@ msgid "Unrecognized selector '%1'"
 msgstr "Selector não reconhecido '%1'"
 
 #: ../src/display/control/ctrl-handle-styling.cpp:327
-#, fuzzy
 msgid "Empty or improper property, skipped."
-msgstr "Propriedade vazia ou imprópria, "
+msgstr "Propriedade vazia ou imprópria, ingorada"
 
 #: ../src/display/control/ctrl-handle-styling.cpp:333
 msgid "Unrecognized property '%1'"
@@ -11337,14 +11246,12 @@ msgid "page margin center"
 msgstr "limite do canto da página"
 
 #: ../src/display/control/snap-indicator.cpp:99
-#, fuzzy
 msgid "page bleed border"
 msgstr "borda da página"
 
 #: ../src/display/control/snap-indicator.cpp:100
-#, fuzzy
 msgid "page bleed corner"
-msgstr "canto da página"
+msgstr "canto da borda da página"
 
 #: ../src/display/control/snap-indicator.cpp:101
 msgid "object midpoint"
@@ -11394,16 +11301,12 @@ msgid "Unnamed document %d"
 msgstr "Documento sem nome %d"
 
 #: ../src/event-log.cpp:189
-#, fuzzy
-#| msgid "Theme changes"
 msgid "[No more changes]"
-msgstr "Alterações nos temas"
+msgstr "[Sem mais alterações]"
 
 #: ../src/event-log.cpp:387
-#, fuzzy
-#| msgid "Text: Change rotate"
 msgid "[Changes forgotten]"
-msgstr "Texto: alterar rotação"
+msgstr "[Alterações esquecidas]"
 
 #: ../src/extension/dependency.cpp:342
 msgid "Dependency"
@@ -11486,10 +11389,8 @@ msgid "Deactivated"
 msgstr "Desactivado"
 
 #: ../src/extension/implementation/script.cpp:303
-#, fuzzy
-#| msgid "New document %d"
 msgid "New document %1"
-msgstr "Novo documento %d"
+msgstr "Novo documento %1"
 
 #: ../src/extension/implementation/script.cpp:632
 msgid "The output from the extension could not be parsed."
@@ -14542,10 +14443,8 @@ msgid "Antialias"
 msgstr "Suavizar"
 
 #: ../src/extension/internal/png-output.cpp:85
-#, fuzzy
-#| msgid "JPEG (*.jpg)"
 msgid "PNG (*.png)"
-msgstr "JPEG (*.jpg)"
+msgstr "PNG (*.png)"
 
 #: ../src/extension/internal/png-output.cpp:86
 msgid "Default raster graphic export"
@@ -14572,10 +14471,8 @@ msgid "Select page:"
 msgstr "Seleccionar página:"
 
 #: ../src/extension/internal/rvng-import-dialog.cpp:58
-#, fuzzy
-#| msgid "out of %i"
 msgid "out of %1"
-msgstr "de um total de %i"
+msgstr "de um total de %1"
 
 #: ../src/extension/internal/rvng-import-dialog.cpp:130
 msgid "No preview"
@@ -14804,7 +14701,6 @@ msgid "A4 (Landscape)"
 msgstr "A4 (horizontal)"
 
 #: ../src/extension/internal/template-paper.cpp:60
-#, fuzzy
 msgid "US Letter (Portrait)"
 msgstr "Carta US (Retrato)"
 
@@ -15103,7 +14999,6 @@ msgid "Social"
 msgstr "Social"
 
 #: ../src/extension/internal/template-social.cpp:38
-#, fuzzy
 msgid "Facebook cover photo"
 msgstr "Imagem de capa Facebook"
 
@@ -15116,7 +15011,6 @@ msgid "Facebook image post"
 msgstr "Facebook - publicação de imagem"
 
 #: ../src/extension/internal/template-social.cpp:41
-#, fuzzy
 msgid "Facebook link image"
 msgstr "Imagem de ligação Facebook"
 
@@ -15211,24 +15105,20 @@ msgid "Video"
 msgstr "Vídeo"
 
 #: ../src/extension/internal/template-video.cpp:38
-#, fuzzy
 msgid "Video SD PAL"
-msgstr "Video SD / PAL"
+msgstr "Vídeo SD / PAL"
 
 #: ../src/extension/internal/template-video.cpp:39
-#, fuzzy
 msgid "Video SD Widescreen / PAL"
-msgstr "Vídeo SD-Widescreen / NTSC"
+msgstr "Vídeo SD Ecrã Panorâmico / PAL"
 
 #: ../src/extension/internal/template-video.cpp:40
-#, fuzzy
 msgid "Video SD NTSC"
-msgstr "Video SD / NTSC"
+msgstr "Video SD NTSC"
 
 #: ../src/extension/internal/template-video.cpp:41
-#, fuzzy
 msgid "Video SD Widescreen NTSC"
-msgstr "Vídeo SD-Widescreen / NTSC"
+msgstr "Vídeo SD Ecrã Panorâmico / NTSC"
 
 #: ../src/extension/internal/template-video.cpp:42
 msgid "Video HD 720p"
@@ -15542,16 +15432,14 @@ msgid "No unused definitions in &lt;defs&gt;."
 msgstr "Sem definições não usadas em &lt;defs&gt;."
 
 #: ../src/file.cpp:265
-#, fuzzy, c-format
-#| msgid ""
-#| "No Inkscape extension found to save document (%s).  This may have been "
-#| "caused by an unknown filename extension."
+#, c-format
 msgid ""
 "No Inkscape extension found to save document (%s).  This may have been "
 "caused by an unknown or missing filename extension."
 msgstr ""
-"Não foi encontrada nenhuma extensão do Inkscape para guardar o documento "
-"(%s).  Isto deve ter sido causado por uma extensão de ficheiro desconhecida."
+"Não foi encontrada nenhuma extensão Inkscape para guardar o documento (%s).  "
+"Isto deve ter sido causado por uma extensão de ficheiro desconhecida ou em "
+"falta."
 
 #: ../src/file.cpp:266 ../src/file.cpp:274 ../src/file.cpp:281
 #: ../src/file.cpp:287 ../src/file.cpp:292 ../src/file.cpp:303
@@ -16264,10 +16152,8 @@ msgid "Compression level for PNG export (0 to 9); default is 6"
 msgstr "Nível de compressão para exportar PNG (0 ao 9); pré-definição é 6"
 
 #: ../src/inkscape-application.cpp:701
-#, fuzzy
-#| msgid "Compression level for PNG export (0 to 9); default is 6"
 msgid "Antialias level for PNG export (0 to 3); default is 2"
-msgstr "Nível de compressão para exportar PNG (0 ao 9); pré-definição é 6"
+msgstr "Nível de compressão para exportar PNG (0 ao 3); pré-definição é 2"
 
 #: ../src/inkscape-application.cpp:704
 msgid "Query object/document geometry"
@@ -18787,10 +18673,8 @@ msgid "Distance of the perpendicular lines' ends from the dimension line"
 msgstr "Distância das extremidades perpendiculares da linha de dimensão"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:83
-#, fuzzy
-#| msgid "Dimension line width. DIN standard: 0.25 or 0.35 mm"
 msgid "Dimension line width in mm. DIN standard: 0.25 or 0.35 mm"
-msgstr "Largura da linha de dimensão em mm. Standard DIN: 0.25 ou 0.35 mm"
+msgstr "Espessura da linha de dimensão em mm. Standard DIN: 0.25 ou 0.35 mm"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:84
 msgid "Scaling factor"
@@ -18923,10 +18807,8 @@ msgid "Distance"
 msgstr "Distância"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:101
-#, fuzzy
-#| msgid "Distance of the dimension lines from the outermost node"
 msgid "Distance of the dimension lines from the outermost node (mm)"
-msgstr "Distância das linhas de dimensão do nó mais externo"
+msgstr "Distância das linhas de dimensão ao nó mais externo (mm)"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:102
 msgid "Angle of projection"
@@ -20099,26 +19981,22 @@ msgid "Length of minor ruler marks"
 msgstr "Comprimento das marcas secundárias da régua"
 
 #: ../src/live_effects/lpe-ruler.cpp:44
-#, fuzzy
 msgid "Minor mark _gap:"
-msgstr "Marca de _intervalo menor:"
+msgstr "_Intervalo de marca de menor:"
 
 #: ../src/live_effects/lpe-ruler.cpp:46
-#, fuzzy, no-c-format
-#| msgid "Percentage space between path and minor ruler mark"
+#, no-c-format
 msgid "Space between path and minor ruler mark, % of mark length"
-msgstr "Espaço percentual entre caminho e marca de régua menor"
+msgstr "Espaço entre caminho e marca menor de régua, % do comprimento da marca"
 
 #: ../src/live_effects/lpe-ruler.cpp:48
-#, fuzzy
 msgid "Major mar_k gap:"
-msgstr "Marca maior apó_s N menores:"
+msgstr "Intervalo de marca maior:"
 
 #: ../src/live_effects/lpe-ruler.cpp:50
-#, fuzzy, no-c-format
-#| msgid "Percentage space between path and major ruler mark"
+#, no-c-format
 msgid "Space between path and major ruler mark, % of mark length"
-msgstr "Espaço percentual entre caminho e marca de régua maior"
+msgstr "Espaço entre caminho e marca maior de régua, % do comprimento da marca"
 
 #: ../src/live_effects/lpe-ruler.cpp:52
 msgid "Major steps_:"
@@ -20129,15 +20007,12 @@ msgid "Draw a major mark every ... steps"
 msgstr "Mostrar uma marca principal a cada … passos"
 
 #: ../src/live_effects/lpe-ruler.cpp:53
-#, fuzzy
-#| msgid "_Mark distance:"
 msgid "Mark angle:"
-msgstr "_Distância entre marcas:"
+msgstr "Ângulo da Marca:"
 
 #: ../src/live_effects/lpe-ruler.cpp:53
-#, fuzzy
 msgid "Rotate marks (-180° to 180°)"
-msgstr "Rode graus de marcas (-180,180)"
+msgstr "Rodar marcas (-180 a 180)"
 
 #: ../src/live_effects/lpe-ruler.cpp:54
 msgid "Shift marks _by:"
@@ -20466,7 +20341,7 @@ msgstr "Centro"
 
 #: ../src/live_effects/lpe-taperstroke.cpp:98
 msgid "Clamp"
-msgstr ""
+msgstr "Cortar"
 
 #: ../src/live_effects/lpe-taperstroke.cpp:106
 msgid "Select subpath:"
@@ -21251,22 +21126,18 @@ msgstr "Activo trocado"
 
 #. TRANSLATORS: %1 is the translated version of "up" or "down".
 #: ../src/live_effects/parameter/satellitearray.cpp:255
-#, fuzzy
-#| msgid "Move item up"
 msgid "Move item %1"
-msgstr "Mover item para cima"
+msgstr "Mover item %1"
 
 #. TRANSLATORS: This belongs into the sentence 'Move item up'
 #: ../src/live_effects/parameter/satellitearray.cpp:262
-#, fuzzy
 msgid "up"
-msgstr "Acima"
+msgstr "cima"
 
 #. TRANSLATORS: This belongs into the sentence 'Move item down'
 #: ../src/live_effects/parameter/satellitearray.cpp:268
-#, fuzzy
 msgid "down"
-msgstr "Entrelinha para baixo"
+msgstr "baixo"
 
 #: ../src/live_effects/parameter/satellitearray.cpp:277
 msgid "Remove item"
@@ -21382,25 +21253,21 @@ msgid "Axonometric Grid"
 msgstr "Grelha Axonométrica"
 
 #: ../src/object/sp-grid.cpp:610 ../src/ui/dialog/inkscape-preferences.cpp:2164
-#, fuzzy
 msgid "Modular Grid"
-msgstr "Grelha polar"
+msgstr "Grelha Modular"
 
 #: ../src/object/sp-guide.cpp:490
 msgid "Deleted"
 msgstr "Eliminado"
 
 #: ../src/object/sp-guide.cpp:500
-#, fuzzy
-#| msgid ""
-#| "<b>Shift+drag</b> to rotate, <b>Ctrl+drag</b> to move origin, <b>Del</b> "
-#| "to delete"
 msgid ""
 "<b>Shift+drag</b> to rotate, <b>Ctrl+drag</b> to move origin, <b>Del</b> to "
 "delete; <b>double-click</b> to edit this guide's properties"
 msgstr ""
 "<b>Shift+arrastar</b> para rodar, <b>Ctrl+arrastar</b> para mover a origem, "
-"<b>Del</b> para eliminar"
+"<b>Del</b> para eliminar; <b>duplo-clique</b> para editar as propriedades da "
+"guia"
 
 #: ../src/object/sp-guide.cpp:505
 #, c-format
@@ -21744,21 +21611,19 @@ msgid "Select <b>at least 1 path</b> to perform a boolean union."
 msgstr "Seleccionar <b>pelo menos 1 caminho</b> para fazer uma união booleana."
 
 #: ../src/path/path-boolop.cpp:371
-#, fuzzy
-#| msgid "Select <b>at least 2 paths</b> to perform a boolean operation."
 msgid ""
 "Select <b>at least 2 paths</b> to perform an intersection or symmetric "
 "difference."
 msgstr ""
-"Seleccionar <b>pelo menos 2 caminhos</b> para fazer uma operação booleana."
+"Seleccionar <b>pelo menos 2 caminhos</b> para fazer uma intersecção ou "
+"diferença simétrica."
 
 #: ../src/path/path-boolop.cpp:378
-#, fuzzy
 msgid ""
 "Select <b>exactly 2 paths</b> to perform difference, division, or path cut."
 msgstr ""
-"Seleccione <b>exatamente 2 caminhos</b> para fazer diferença, ou-exclusivo, "
-"divisão ou corte de caminho."
+"Seleccione <b>exactamente 2 caminhos</b> para calcular diferença, divisão ou "
+"corte de caminho."
 
 #: ../src/path/path-object-set.cpp:35
 msgid "Select <b>stroked path(s)</b> to convert stroke to path."
@@ -22820,10 +22685,8 @@ msgid "Trace bitmap"
 msgstr "Vectorizar mapa de bits"
 
 #: ../src/trace/trace.cpp:537
-#, fuzzy
-#| msgid "Trace: Done. %ld nodes created"
 msgid "Trace: Done. %1 node(s) created"
-msgstr "Vectorizar: Terminado. %ld nós criados"
+msgstr "Vectorizar: Terminado. %1 nós criados"
 
 #: ../src/ui/clipboard.cpp:553
 msgid "Can't paste text outside of the text tool."
@@ -22916,8 +22779,6 @@ msgid "Height Separately"
 msgstr "Altura Separadamente"
 
 #: ../src/ui/contextmenu.cpp:100
-#, fuzzy
-#| msgid "P_aste..."
 msgid "Paste..."
 msgstr "C_olar..."
 
@@ -23025,8 +22886,6 @@ msgid "_Move to Layer..."
 msgstr "_Mover para a Camada…"
 
 #: ../src/ui/contextmenu.cpp:288
-#, fuzzy
-#| msgid "Create anchor (hyperlink)"
 msgid "Create Anchor (Hyperlink)"
 msgstr "Criar Âncora (_Hiperligação)"
 
@@ -23039,8 +22898,6 @@ msgid "_Ungroup"
 msgstr "_Desagrupar"
 
 #: ../src/ui/contextmenu.cpp:292
-#, fuzzy
-#| msgid "Enter group %1"
 msgid "Enter Group %1"
 msgstr "Entrar em Grupo %1"
 
@@ -23049,10 +22906,8 @@ msgid "Group to Layer"
 msgstr "Grupo em Camada"
 
 #: ../src/ui/contextmenu.cpp:302
-#, fuzzy
-#| msgid "_Pop selection out of group"
 msgid "_Pop Selection out of Group"
-msgstr "Remover _selecção de grupo"
+msgstr "Remover _Selecção de Grupo"
 
 #: ../src/ui/contextmenu.cpp:309
 msgid "Set Cl_ip"
@@ -23083,10 +22938,8 @@ msgid "Lock Selected Objects"
 msgstr "Bloquear objectos seleccionados"
 
 #: ../src/ui/contextmenu.cpp:333
-#, fuzzy
-#| msgid "_Open link in browser"
 msgid "_Open Link in Browser"
-msgstr "Abrir ligação no _navegador"
+msgstr "Abrir Ligação no _Navegador"
 
 #: ../src/ui/contextmenu.cpp:334
 msgid "_Remove Link"
@@ -23129,10 +22982,8 @@ msgid "_Lower Layer"
 msgstr "_Baixar camada"
 
 #: ../src/ui/contextmenu.cpp:366
-#, fuzzy
-#| msgid "_Hide/show other layers"
 msgid "_Hide/Show Other Layers"
-msgstr "_Ocultar/revelar outras camadas"
+msgstr "_Ocultar/Revelar Outras Camadas"
 
 #: ../src/ui/contextmenu.cpp:367
 msgid "_Hide All Layers"
@@ -23143,19 +22994,16 @@ msgid "_Show All Layers"
 msgstr "_Mostrar todas as camadas"
 
 #: ../src/ui/contextmenu.cpp:372
-#, fuzzy
-#| msgid "_Lock/unlock other layers"
 msgid "_Lock/Unlock Other Layers"
-msgstr "Blo_quear/desbloquear outras camadas"
+msgstr "Blo_quear/Desbloquear Outras Camadas"
 
 #: ../src/ui/contextmenu.cpp:373
 msgid "_Lock All Layers"
 msgstr "_Bloquear todas as camadas"
 
 #: ../src/ui/contextmenu.cpp:374
-#, fuzzy
 msgid "_Unlock All Layers"
-msgstr "_Desbloquear todas as camadas"
+msgstr "_Desbloquear Todas as Camadas"
 
 #: ../src/ui/contextmenu.cpp:423
 msgid "Unhid objects"
@@ -23166,10 +23014,8 @@ msgid "Unlocked objects"
 msgstr "Objectos desbloqueados"
 
 #: ../src/ui/desktop/document-check.cpp:51
-#, fuzzy
-#| msgid "Save document"
 msgid "Save Document"
-msgstr "Guardar documento"
+msgstr "Guardar Documento"
 
 #: ../src/ui/desktop/document-check.cpp:52
 msgid "Close _without saving"
@@ -30206,19 +30052,16 @@ msgid "Allow snapping to objects"
 msgstr "Alternar atrair aos nós"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2710
-#, fuzzy
 msgid ""
 "Allow snapping to objects while 'Always snap to grids / guides' is active, "
 "if an object is closer."
 msgstr ""
-"Permitir atracção de objecto quando se atrai sempre às grelhas ou guias, se "
-"o objecto estiver mais perto."
+"Permitir atracção a objecto quando se atrai sempre às grelhas / guias, se um "
+"objecto estiver mais perto."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2712
-#, fuzzy
-#| msgid "Toggle alignment snapping"
 msgid "Allow alignment snapping"
-msgstr "Alternar atracção de alinhamento"
+msgstr "Permitir atracção de alinhamento"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2713
 #, fuzzy
