@@ -76,7 +76,19 @@ Notes:
 
     Color can be #RRGGBB or name
 */
+.inkscape-lpe {
+    shape: "circle";
+    fill: orange;
+    size-extra: 2px;
+}
 
+.inkscape-lpe:hover {
+    fill: darkorange;
+}
+
+.inkscape-lpe:selected:click {
+    fill: darkorange;
+}
 * {
     fill: white;
     stroke: black;
@@ -99,13 +111,13 @@ Notes:
 }
 
 
-.inkscape-node-cusp,
+/*.inkscape-node-cusp,
 .inkscape-shaper, /* box 3d, connector tool, gradient stops */
-.inkscape-lpe { /* several path effects */
-    shape: "diamond";
-    scale: 2.828427; /* 2 * sqrt(2) */
-    size-extra: 2px;
-}
+/*.inkscape-lpe { /* several path effects */
+/*    shape: "diamond";
+/*   scale: 2.828427; /* 2 * sqrt(2) */
+/*  size-extra: 2px;
+}*/
 
 .inkscape-node-smooth,
 .inkscape-node-symmetrical,
