@@ -27,7 +27,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-02-04 23:42+0100\n"
-"PO-Revision-Date: 2025-04-22 10:27+0000\n"
+"PO-Revision-Date: 2025-04-22 18:21+0000\n"
 "Last-Translator: Duarte Farrajota Ramos <duarte.framos@gmail.com>\n"
 "Language-Team: Portuguese <https://translate.inkscape.org/projects/inkscape/"
 "inkscape-master/pt/>\n"
@@ -23866,16 +23866,12 @@ msgstr "Aplicar cor do preenchimento a partir da amostra de cor"
 
 #. TRANSLATORS: An item in context menu on a colour in the swatches
 #: ../src/ui/dialog/color-item.cpp:382
-#, fuzzy
-#| msgid "Set fill"
 msgid "Set Fill"
-msgstr "Definir preenchimento"
+msgstr "Definir Preenchimento"
 
 #: ../src/ui/dialog/color-item.cpp:383
-#, fuzzy
-#| msgid "Set stroke"
 msgid "Set Stroke"
-msgstr "Definir traço"
+msgstr "Definir Traço"
 
 #: ../src/ui/dialog/color-item.cpp:391
 msgid "Edit..."
@@ -23925,13 +23921,12 @@ msgstr "par de números decimais"
 #. TRANSLATORS: %1 will be replaced with the type of parameter
 #. *              expected by the action, e.g., “whole number”.
 #: ../src/ui/dialog/command-palette.cpp:568
-#, fuzzy
 msgid "Enter a %1..."
 msgstr "Introduzir um %1..."
 
 #: ../src/ui/dialog/command-palette.cpp:1074
 msgid "Enter search term to search for a command"
-msgstr ""
+msgstr "Introduza termos de pesquisa para procurar um comando"
 
 #: ../src/ui/dialog/command-palette.cpp:1104
 msgid "Enter action argument"
@@ -23967,7 +23962,7 @@ msgstr "Criar Clones em Grelha"
 
 #: ../src/ui/dialog/dialog-data.cpp:33
 msgid "_Debugger"
-msgstr ""
+msgstr "_Depurador"
 
 #: ../src/ui/dialog/dialog-data.cpp:34
 msgid "_Document Properties"
@@ -23982,10 +23977,8 @@ msgid "_Export"
 msgstr "_Exportar"
 
 #: ../src/ui/dialog/dialog-data.cpp:37
-#, fuzzy
-#| msgid "_Extensions Gallery"
 msgid "_Extension Gallery"
-msgstr "_Galeria de extensões"
+msgstr "_Galeria de Extensões"
 
 #: ../src/ui/dialog/dialog-data.cpp:38
 msgid "_Fill and Stroke"
@@ -24254,11 +24247,11 @@ msgstr "Alternar estilo da etiqueta de página"
 
 #: ../src/ui/dialog/document-properties.cpp:565
 msgid "Toggle system coordinate Y axis orientation"
-msgstr ""
+msgstr "Alternar orientação do eixo Y do sistema de coordenadas"
 
 #: ../src/ui/dialog/document-properties.cpp:568
 msgid "Toggle system coordinate origin correction"
-msgstr ""
+msgstr "Alternar correcção da origem do sistema de coordenadas"
 
 #: ../src/ui/dialog/document-properties.cpp:603
 msgid "<b>Guides</b>"
@@ -24374,16 +24367,12 @@ msgid "Edit embedded script"
 msgstr "Editar script integrado"
 
 #: ../src/ui/dialog/document-properties.cpp:1448
-#, fuzzy
-#| msgid "Save Grid"
 msgid "New Grid"
-msgstr "Guardar grelha"
+msgstr "Nova Grelha"
 
 #: ../src/ui/dialog/document-properties.cpp:1459
-#, fuzzy
-#| msgid "there was no name defined for it."
 msgid "There are no grids defined."
-msgstr "não houve nenhum nome definido para ele."
+msgstr "Não há grelhas definidas."
 
 #: ../src/ui/dialog/document-properties.cpp:1673
 msgid "Create new grid"
@@ -24441,10 +24430,8 @@ msgid "Align to page:"
 msgstr "Alinhar à página:"
 
 #: ../src/ui/dialog/document-properties.cpp:1775
-#, fuzzy
-#| msgid "Keep aspect ratio"
 msgid "Set angle from aspect ratio:"
-msgstr "Manter proporção"
+msgstr "Definir ângulo a partir do rácio"
 
 #: ../src/ui/dialog/document-properties.cpp:1785
 msgid "Set"
@@ -24458,6 +24445,8 @@ msgid ""
 "Automatically calculate angles from width to height ratio\n"
 "of a single grid parallelogram"
 msgstr ""
+"Calcular automaticamente ângulos a partir do rácio entre\n"
+"largura e altura de um único paralelogramo da grelha"
 
 #: ../src/ui/dialog/document-properties.cpp:1827
 msgid "Grid _units:"
@@ -24514,33 +24503,26 @@ msgid "Vertical distance between blocks"
 msgstr "Distância vertical entre blocos"
 
 #: ../src/ui/dialog/document-properties.cpp:1848
-#, fuzzy
 msgid "_Margin X:"
-msgstr "_Origem X:"
+msgstr "_Margem X:"
 
 #: ../src/ui/dialog/document-properties.cpp:1848
 #: ../src/ui/dialog/inkscape-preferences.cpp:2216
-#, fuzzy
-#| msgid "Right margin"
 msgid "Right and left margins"
-msgstr "Margem direita"
+msgstr "Margens direita e esquerda"
 
 #: ../src/ui/dialog/document-properties.cpp:1851
-#, fuzzy
 msgid "M_argin Y:"
-msgstr "O_rigem Y:"
+msgstr "M_argem Y:"
 
 #: ../src/ui/dialog/document-properties.cpp:1851
 #: ../src/ui/dialog/inkscape-preferences.cpp:2217
-#, fuzzy
-#| msgid "Bottom margin"
 msgid "Top and bottom margins"
-msgstr "Margem inferior"
+msgstr "Margens inferior e superior"
 
 #: ../src/ui/dialog/document-properties.cpp:1855
-#, fuzzy
 msgid "An_gle X:"
-msgstr "Ângulo X:"
+msgstr "Ân_gulo X:"
 
 #: ../src/ui/dialog/document-properties.cpp:1855
 #: ../src/ui/dialog/inkscape-preferences.cpp:2189
@@ -24548,9 +24530,8 @@ msgid "Angle of x-axis"
 msgstr "Ângulo do eixo X"
 
 #: ../src/ui/dialog/document-properties.cpp:1857
-#, fuzzy
 msgid "Ang_le Z:"
-msgstr "Ângulo Z:"
+msgstr "Ângu_lo Z:"
 
 #: ../src/ui/dialog/document-properties.cpp:1857
 #: ../src/ui/dialog/inkscape-preferences.cpp:2190
@@ -24558,79 +24539,59 @@ msgid "Angle of z-axis"
 msgstr "Ângulo do eixo Z"
 
 #: ../src/ui/dialog/document-properties.cpp:1859
-#, fuzzy
-#| msgid "Grid line color"
 msgid "Grid color"
-msgstr "Cor da linha de grelha"
+msgstr "Cor da grelha"
 
 #: ../src/ui/dialog/document-properties.cpp:1860
-#, fuzzy
-#| msgid "Color of the minor grid lines"
 msgid "Color of the grid lines"
-msgstr "Cor das linhas secundárias da grelha"
+msgstr "Cor das linhas da grelha"
 
 #: ../src/ui/dialog/document-properties.cpp:1874
-#, fuzzy
-#| msgid "Major grid line every:"
 msgid "Major grid line e_very:"
-msgstr "Linha principal de grelha a cada:"
+msgstr "Linha _principal de grelha a cada:"
 
 #: ../src/ui/dialog/document-properties.cpp:1874
 msgid "Number of lines"
 msgstr "Número de linhas"
 
 #: ../src/ui/dialog/document-properties.cpp:1878
-#, fuzzy
-#| msgid "Change index of knot"
 msgid "Change grid units"
-msgstr "Alterar índice do nó"
+msgstr "Alterar unidades da grelha"
 
 #: ../src/ui/dialog/document-properties.cpp:1879
 #: ../src/ui/dialog/document-properties.cpp:1880
 #: ../src/ui/dialog/document-properties.cpp:1884
-#, fuzzy
-#| msgid "Page dimensions"
 msgid "Change grid dimensions"
-msgstr "Dimensões da página"
+msgstr "Alterar dimensões da grelha"
 
 #: ../src/ui/dialog/document-properties.cpp:1881
-#, fuzzy
-#| msgid "Change gradient stop color"
 msgid "Change grid color"
-msgstr "Alterar cor da paragem no gradiente"
+msgstr "Alterar cor da grelha"
 
 #: ../src/ui/dialog/document-properties.cpp:1882
-#, fuzzy
-#| msgid "Change number of simplify steps "
 msgid "Change grid number of lines"
-msgstr "Alterar número de passos de simplificação "
+msgstr "Alterar número de linhas da grelha"
 
 #: ../src/ui/dialog/document-properties.cpp:1911
-#, fuzzy
-#| msgid "Delete guide"
 msgid "Delete this grid"
-msgstr "Eliminar guia"
+msgstr "Apagar esta grelha"
 
 #: ../src/ui/dialog/document-properties.cpp:1915
 msgid "Remove grid"
 msgstr "Remover grelha"
 
 #: ../src/ui/dialog/document-properties.cpp:1931
-#, fuzzy
-#| msgid "Align"
 msgctxt "popup-align-grid-origin"
 msgid "Align"
 msgstr "Alinhar"
 
 #: ../src/ui/dialog/document-properties.cpp:1932
 msgid "Align grid origin relative to active page."
-msgstr ""
+msgstr "Alinhar origem da grelha à página activa."
 
 #: ../src/ui/dialog/document-properties.cpp:1964
-#, fuzzy
-#| msgid "Change segment type"
 msgid "Change to a different grid type."
-msgstr "Alterar tipo do segmento"
+msgstr "Alterar para tipo diferente de grelha."
 
 #: ../src/ui/dialog/document-properties.cpp:2061
 msgid "Block _width:"
@@ -24778,19 +24739,16 @@ msgstr[0] "%d Página"
 msgstr[1] "%d Páginas"
 
 #: ../src/ui/dialog/export-batch.cpp:616
-#, fuzzy
-#| msgid "Choose folder name"
 msgid "Choose folder..."
-msgstr "Escolha o nome da pasta"
+msgstr "Escolha pasta..."
 
 #: ../src/ui/dialog/export-batch.cpp:719
 msgid "No items selected."
 msgstr "Nenhum item seleccionado."
 
 #: ../src/ui/dialog/export-batch.cpp:734
-#, fuzzy
 msgid "Can not save to a directory that is actually a file."
-msgstr "Não pode guardar num directório que é um ficheiro."
+msgstr "Não é possível guardar numa pasta que é na verdade um ficheiro."
 
 #: ../src/ui/dialog/export-batch.cpp:739
 #, c-format
@@ -24802,9 +24760,8 @@ msgstr ""
 "agora?</span>"
 
 #: ../src/ui/dialog/export-batch.cpp:751
-#, fuzzy
 msgid "Set Batch Export Options"
-msgstr "Opções de exportação"
+msgstr "Definir Opções de Exportação em Massa"
 
 #: ../src/ui/dialog/export-batch.cpp:871 ../src/ui/dialog/export-single.cpp:731
 msgid "Exporting %1"
@@ -24831,10 +24788,9 @@ msgid "Select a filename for exporting"
 msgstr "Seleccionar um nome de ficheiro para exportar"
 
 #: ../src/ui/dialog/export.cpp:206
-#, fuzzy, c-format
-#| msgid "Directory <b>%s</b> does not exist or is not a directory.\n"
+#, c-format
 msgid "Directory <b>%s</b> does not exist and can't be created.\n"
-msgstr "Directório <b>%s</b> não existe ou não é um directório.\n"
+msgstr "Directório <b>%s</b> não existe e não pode ser criado.\n"
 
 #: ../src/ui/dialog/export.cpp:233
 msgid "The chosen area to be exported is invalid."
@@ -24897,20 +24853,15 @@ msgid "All Effects"
 msgstr "Todos os Efeitos"
 
 #: ../src/ui/dialog/extensions-gallery.cpp:289
-#, fuzzy
-#| msgid "All Files"
 msgid "All Filters"
-msgstr "Todos os ficheiros"
+msgstr "Todos os Filtros"
 
 #: ../src/ui/dialog/extensions-gallery.cpp:317
-#, fuzzy
-#| msgid "_Apply"
 msgctxt "apply-filter"
 msgid "_Apply"
 msgstr "_Aplicar"
 
 #: ../src/ui/dialog/extensions-gallery.cpp:321
-#, fuzzy
 msgid "Select extension to run:"
 msgstr "Seleccionar extensão a correr:"
 
@@ -24923,17 +24874,13 @@ msgid "Toggle list of effect categories"
 msgstr "Alternar lista de categorias de efeitos"
 
 #: ../src/ui/dialog/extensions-gallery.cpp:347
-#, fuzzy
-#| msgid "Toggle list of effect categories"
 msgid "Toggle list of filter categories"
-msgstr "Alternar lista de categorias de efeitos"
+msgstr "Alternar lista de categorias de filtros"
 
 #: ../src/ui/dialog/extensions-gallery.cpp:486
-#, fuzzy
-#| msgid "..."
 msgctxt "take-input"
 msgid "..."
-msgstr "…"
+msgstr "..."
 
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:141
 msgid "_Open"
@@ -25145,10 +25092,8 @@ msgid "R_ename"
 msgstr "R_enomear"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1375
-#, fuzzy
-#| msgid "Select filter elements"
 msgid "Select Filter Elements"
-msgstr "Seleccionar elementos de filtro"
+msgstr "Seleccionar Elementos de Filtro"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1390
 msgid "Rename filter"
@@ -26083,20 +26028,19 @@ msgstr "Fonte '%1' substituída por '%2'"
 
 #: ../src/ui/dialog/global-palettes.cpp:134
 msgid "ACB file header not recognized."
-msgstr ""
+msgstr "Cabeçalho de ficheiro ACB não reconhecido."
 
 #: ../src/ui/dialog/global-palettes.cpp:197
-#, fuzzy
 msgid "ACB file color space not supported."
-msgstr "Espaço de cor de palete inesperado."
+msgstr "Espaço de cor de ficheiro ACB não suportado."
 
 #: ../src/ui/dialog/global-palettes.cpp:228
 msgid "ASE file header not recognized."
-msgstr ""
+msgstr "Cabeçalho de ficheiro ASE não reconhecido."
 
 #: ../src/ui/dialog/global-palettes.cpp:263
 msgid "ASE color mode not recognized:"
-msgstr ""
+msgstr "Modo de cor de ficheiro ASE não reconhecido."
 
 #: ../src/ui/dialog/global-palettes.cpp:299
 msgid "Failed to open file"
@@ -26120,10 +26064,8 @@ msgid "Error loading palette %1: %2"
 msgstr "Erro no carregamento de palete %1: %2"
 
 #: ../src/ui/dialog/global-palettes.cpp:380
-#, fuzzy
-#| msgid "Unknown error loading palette %"
 msgid "Unknown error loading palette %1"
-msgstr "Erro desconhecido ao carregar palete %"
+msgstr "Erro desconhecido ao carregar palete %1"
 
 #: ../src/ui/dialog/global-palettes.cpp:422
 msgid "Gimp Color Palette"
@@ -27118,10 +27060,8 @@ msgid "X:"
 msgstr "X:"
 
 #: ../src/ui/dialog/grid-arrange-tab.cpp:476
-#, fuzzy
-#| msgid "Horizontal spacing between columns."
 msgid "Horizontal spacing between columns"
-msgstr "Espaçamento horizontal entre colunas."
+msgstr "Espaçamento horizontal entre colunas"
 
 #: ../src/ui/dialog/grid-arrange-tab.cpp:477
 #: ../src/ui/widget/registered-widget.cpp:611
@@ -27132,10 +27072,8 @@ msgid "Y:"
 msgstr "Y:"
 
 #: ../src/ui/dialog/grid-arrange-tab.cpp:477
-#, fuzzy
-#| msgid "Vertical spacing between rows."
 msgid "Vertical spacing between rows"
-msgstr "Espaçamento vertical entre filas."
+msgstr "Espaçamento vertical entre filas"
 
 #: ../src/ui/dialog/grid-arrange-tab.cpp:495
 msgid "_Rows:"
@@ -27284,21 +27222,16 @@ msgid "Change layer on selection"
 msgstr "Alterar camada na selecção"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:772
-#, fuzzy
-#| msgid "Whether changing the selected objects changes the selected layer"
 msgid "Whether selecting objects in another layer changes the active layer"
-msgstr "Se mudar os objectos seleccionados muda a camada seleccionada"
+msgstr "Se seleccionar objects noutra camada altera a acamada activa"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:778
-#, fuzzy
 msgid "Change page on selection"
-msgstr "Mudar página na selecção"
+msgstr "Mudar página ao seleccionar"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:779
-#, fuzzy
-#| msgid "Whether changing the selected objects changes the selected page"
 msgid "Whether selecting objects on another page changes the current page"
-msgstr "Se mudar os objectos seleccionados muda a página seleccionada"
+msgstr "Se seleccionar objectos noutra página muda a página actual"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:784
 msgid "Conversion to guides uses edges instead of bounding box"
@@ -27627,13 +27560,15 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1011
 msgid "Cusp considered flat for deletion:"
-msgstr ""
+msgstr "Cúspide considerada achatada para eliminação"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1011
 msgid ""
 "Preserve shape when deleting flat nodes.\n"
 "Insert segments for sharp ones."
 msgstr ""
+"Preservar forma ao apagar nós planos.\n"
+"Inserir segmentos para os aguçados."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1014
 msgid "Object paint style"
@@ -28197,12 +28132,12 @@ msgid "Clear list"
 msgstr "Limpar lista"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1620
-#, fuzzy
-#| msgid "Maximum documents in Open _Recent:"
 msgid ""
 "Maximum documents\n"
 " in Open _Recent:"
-msgstr "Número máximo de documentos no menu Abrir _Recente:"
+msgstr ""
+"Documentos máximos\n"
+" no Aberto _Recentemente:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1621
 msgid ""
@@ -28264,10 +28199,8 @@ msgid "Set the relative size of node handles"
 msgstr "Definir o tamanho relativo dos manípulos dos nós"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1675
-#, fuzzy
-#| msgid "Triangles color"
 msgid "Handle colors"
-msgstr "Cor dos triângulos"
+msgstr "Cor dos manípulos"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1677
 msgid "Use narrow number entry boxes"
@@ -28777,40 +28710,28 @@ msgid "Whether dialog windows are to be hidden in the window manager taskbar"
 msgstr "Se janelas de diálogo são escondidas, ou não, na barra de tarefas"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2083
-#, fuzzy
-#| msgid "Text and Font"
 msgid "Text and Font dialog"
-msgstr "Texto e Fonte"
+msgstr "Diálogo de Texto e Fonte"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2085
-#, fuzzy
-#| msgid "Last used style"
 msgid "List fonts and styles"
-msgstr "Último estilo usado"
+msgstr "Listar fontes e estilos"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2085
-#, fuzzy
-#| msgid "Modify lights and shadows separately"
 msgid "List fonts and styles separately"
-msgstr "Alterar luzes e sombras separadamente"
+msgstr "Listar fontes e estilos separadamente"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2086
-#, fuzzy
-#| msgid "Interpolate style (experimental)"
 msgid "Unified font browser (experimental)"
-msgstr "Estilo de interpolação (experimental)"
+msgstr "Navegador de fontes unificado (experimental)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2086
-#, fuzzy
-#| msgid "Show font samples in the drop-down list"
 msgid "Show all font styles in a single list"
-msgstr "Mostrar aspeto real das fontes na lista de fontes"
+msgstr "Mostrar todos os estilos de fontes numa lista única"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2088
-#, fuzzy
-#| msgid "From selection"
 msgid "Font selector"
-msgstr "Da selecção"
+msgstr "Selector de Fonte"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2090
 msgid "Miscellaneous"
@@ -28922,17 +28843,13 @@ msgstr "Espaçamento Y:"
 #: ../src/ui/dialog/inkscape-preferences.cpp:2192
 #: ../src/ui/dialog/inkscape-preferences.cpp:2207
 #: ../src/ui/dialog/inkscape-preferences.cpp:2218
-#, fuzzy
-#| msgid "Guide co_lor:"
 msgid "Grid color:"
-msgstr "_Cor das guias:"
+msgstr "Cor da grelha:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2175
 #: ../src/ui/dialog/inkscape-preferences.cpp:2192
-#, fuzzy
-#| msgid "Color used for normal grid lines"
 msgid "Color used for grid lines"
-msgstr "Cor das linhas finas da grelha"
+msgstr "Cor usada para linhas da grelha"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2177
 #: ../src/ui/dialog/inkscape-preferences.cpp:2194
@@ -28996,9 +28913,8 @@ msgid "Margin Y:"
 msgstr "Margem Y:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2218
-#, fuzzy
 msgid "Color used for grid blocks"
-msgstr "Cor das linhas finas da grelha"
+msgstr "Cor usada para blocos da grelha"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2246
 msgid "Display Options"
@@ -29437,9 +29353,8 @@ msgstr ""
 "Pastas procuradas:%s"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2440
-#, fuzzy
 msgid "User monitor profile:"
-msgstr "Perfil de cor associado"
+msgstr "Usar perfil do monitor"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2445
 msgid "Use profile from user"
@@ -29450,6 +29365,8 @@ msgid ""
 "Use a user-specified ICC profile for monitor color correction. Warning: "
 "System wide color correction should be disabled."
 msgstr ""
+"Usar um perfil ICC especificado pelo utilizador para correcção de cor. Aviso:"
+" Correcção de cor ao nível do sistema deve ser desactivada."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2450
 msgid "Display rendering intent:"
@@ -29596,25 +29513,27 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2551
 msgid "Limit Undo Size:"
-msgstr ""
+msgstr "Limitar Lista de Desfazer"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2552
 msgid ""
 "Enable the undo limit and remove old changes. Disabling this option will use "
 "more memory."
 msgstr ""
+"Activar limite de desfazer e remover alterações antigas. Desactivar esta "
+"opção consumirá mais memória."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2554
-#, fuzzy
-#| msgid "Minimum size:"
 msgid "Maximum _Undo Size:"
-msgstr "Tamanho mínimo:"
+msgstr "Tamanho Máximo de Lista de _Desfazer"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2555
 msgid ""
 "How large the undo log will be allowed to get before being trimmed to free "
 "memory."
 msgstr ""
+"Quão grande a lista de desfazer operações pode crescer até ser reduzida para "
+"libertar memória"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2559
 msgid "Color stock markers the same color as object"
@@ -30014,19 +29933,19 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2699
 msgid "Restrict Snap Targets"
-msgstr ""
+msgstr "Restringir Alvos de Atracção"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2701
-#, fuzzy
-#| msgid "Always snap to grid"
 msgid "Always snap to grids"
-msgstr "Atrair sempre à grelha"
+msgstr "Atrair sempre às grelhas"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2702
 msgid ""
 "When a grid is visible, and snapping to grids is active, other snap targets "
 "will be ignored, unless explicitly allowed below."
 msgstr ""
+"Quando uma grelha está visível e atracção às grelhas activo, outros alvos de "
+"atracção serão ignorados a não ser que expressamente permitidos abaixo."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2704
 msgid "Always snap to guides"
@@ -30038,18 +29957,17 @@ msgid ""
 "guides is active, other snap targets will be ignored, unless explicitly "
 "allowed below."
 msgstr ""
+"Quando existem linhas guia visíveis na actual janela de visualização, e "
+"atracção às guias está activa, outros alvos de atracção serão ignorados a "
+"não ser que expressamente permitidos abaixo."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2707
-#, fuzzy
-#| msgid "Always snap to guides"
 msgid "While Always Snapping to Grid/Guides"
-msgstr "Atrair sempre às guias"
+msgstr "Quando Atraindo Sempre às Grelhas/Guias"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2709
-#, fuzzy
-#| msgid "Toggle snapping to nodes"
 msgid "Allow snapping to objects"
-msgstr "Alternar atrair aos nós"
+msgstr "Permitir atrair a objectos"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2710
 msgid ""
@@ -30064,28 +29982,24 @@ msgid "Allow alignment snapping"
 msgstr "Permitir atracção de alinhamento"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2713
-#, fuzzy
 msgid ""
 "Allow alignment snapping while 'Always snap to grids / guides' is active, if "
 "an alignment snap target is closer."
 msgstr ""
-"Permitir atracção de alinhamento quando se atrai sempre às grelhas ou guias, "
-"se o alinhamento estiver mais perto."
+"Permitir atracção a alinhamento quando 'Atrair sempre a grelhas / guias' "
+"está activo, se um alvo de atracção a alinhamento estiver mais perto."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2715
-#, fuzzy
-#| msgid "Allow distribution"
 msgid "Allow distribution snapping"
-msgstr "Permitir distribuição"
+msgstr "Permitir atracção a distribuição"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2716
-#, fuzzy
 msgid ""
 "Allow distribution snapping while 'Always snap to grids / guides' is active, "
 "if a distribution snap target is closer."
 msgstr ""
-"Permitir atracção de distribuição quando se atrai sempre às grelhas ou "
-"guias, se a distribuição estiver mais perto."
+"Permitir atracção a distribuição quando 'Atrair sempre a grelhas / guias' "
+"está activo, se um alvo de atracção a distribuição estiver mais perto."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2724
 msgid "_Arrow keys move by:"
@@ -30209,19 +30123,14 @@ msgid "Arrow keys move object relative to screen"
 msgstr "As teclas de setas movem o objecto em relação ao ecrã"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2770
-#, fuzzy
-#| msgid ""
-#| "When on, arrow keys move objects relative to screen. If workspace is "
-#| "rotated the translation doesn't follow its coordinate system but the "
-#| "screen one."
 msgid ""
 "When on, arrow keys move objects relative to screen. When the canvas is "
 "rotated, the selection will then still be moved horizontally and vertically "
 "relative to the screen, not to the rotated document."
 msgstr ""
-"Quando activadas, as teclas de setas movem o objecto em relação ao ecrã. Se "
-"a área de trabalho for rodada a tradução não segue o seu sistema de "
-"coordenadas mas sim a do ecrã."
+"Quando activado, as teclas de setas movem o objecto em relação ao ecrã. Se a "
+"tela estiver rodada a selecção ainda será movida horizontal ou verticalmente "
+"relativo ao ecrã, não à tela rodada."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2772
 msgid "Steps"
@@ -30249,7 +30158,7 @@ msgstr "São eliminados"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2785
 msgid "Become orphans"
-msgstr ""
+msgstr "Tornam-se órfãos"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2788
 msgid "Moving original: clones and linked offsets"
@@ -30285,10 +30194,8 @@ msgid "Orphaned clones are deleted along with their original"
 msgstr "Clones órfãos são eliminados juntamente com os seus originais"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2801
-#, fuzzy
-#| msgid "Orphaned clones are converted to regular objects"
 msgid "Orphaned clones are not modified"
-msgstr "Clones órfãos são convertidos em objectos regulares"
+msgstr "Clones órfãos não são modificados"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2803
 msgid "Duplicating original+clones/linked offset"
@@ -31136,10 +31043,8 @@ msgid "Change:"
 msgstr "Alterar:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3273
-#, fuzzy
-#| msgid "Modifiers"
 msgid "Tools Modifiers"
-msgstr "Modificadores"
+msgstr "Modificadores de Ferramentas"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3294
 msgid ""
@@ -31166,10 +31071,8 @@ msgid "Import custom keyboard shortcuts from a file"
 msgstr "Importar atalhos de teclado personalizados de um ficheiro"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3322
-#, fuzzy
-#| msgid "Open keyboard shortcuts folder"
 msgid "Keyboard Shortcuts"
-msgstr "Abrir pasta de atalhos do teclado"
+msgstr "Atalhos de Teclado"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3326
 #: ../src/ui/dialog/inkscape-preferences.cpp:3334
@@ -31248,16 +31151,12 @@ msgid "System info"
 msgstr "Informações do sistema"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3748
-#, fuzzy
-#| msgid "Reset the values on the current tab to defaults"
 msgid "Reset the preferences to default"
-msgstr "Repor os valores pré-definidos do separador actual"
+msgstr "Repor preferências para valores pré-definidos"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3753
-#, fuzzy
-#| msgid "Open preferences folder"
 msgid "Save the preferences to disk"
-msgstr "Abrir pasta de preferências"
+msgstr "Guardar preferências para o disco"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3758
 msgid "User preferences:"
@@ -31663,10 +31562,8 @@ msgid "Multiple objects selected"
 msgstr "Múltiplos objectos seleccionados"
 
 #: ../src/ui/dialog/object-attributes.cpp:153
-#, fuzzy
-#| msgid "Lock selection"
 msgid "No selection"
-msgstr "Bloquear selecção"
+msgstr "Sem selecção"
 
 #: ../src/ui/dialog/object-attributes.cpp:247
 msgid "Removed live path effect"
@@ -31679,34 +31576,29 @@ msgid "Change object attribute"
 msgstr "Modificar atributo do objecto"
 
 #: ../src/ui/dialog/object-attributes.cpp:403
-#, fuzzy
-#| msgid "Selected objects only"
 msgid ""
 "<b>Picker Tool</b>\n"
 "Select objects on canvas"
-msgstr "Apenas objectos seleccionados"
+msgstr ""
+"<b>Ferramenta Apanhar</b>\n"
+"\n"
+"Seleccionar objectos na tela"
 
 #: ../src/ui/dialog/object-attributes.cpp:517
-#, fuzzy
-#| msgid "Add Live Path Effect"
 msgid "Add fillet/chamfer effect"
-msgstr "Adicionar Efeito em Tempo Real"
+msgstr "Adicionar efeito bolear/chanfrar"
 
 #: ../src/ui/dialog/object-attributes.cpp:660
 msgid "Change arc type"
 msgstr "Alterar tipo de arco"
 
 #: ../src/ui/dialog/object-attributes.cpp:902
-#, fuzzy
-#| msgid "Nodes"
 msgid "Nodes: "
-msgstr "Nós"
+msgstr "Nós: "
 
 #: ../src/ui/dialog/object-attributes.cpp:923
-#, fuzzy
-#| msgid "Change opacity"
 msgid "Change path"
-msgstr "Alterar opacidade"
+msgstr "Alterar caminho"
 
 #: ../src/ui/dialog/object-properties.cpp:63
 #: ../src/ui/dialog/object-properties.cpp:371
@@ -31766,6 +31658,8 @@ msgid ""
 "Set resolution for vector images (press Enter to see change in rendering "
 "quality)"
 msgstr ""
+"Definir resolução para imagens vectoriais (acrreguem em Entre para ver a "
+"alteração em qualidade de renderização)"
 
 #: ../src/ui/dialog/object-properties.cpp:233
 msgid "Check to make the object invisible"
@@ -31789,6 +31683,8 @@ msgid ""
 "<small><i>Enter JavaScript code for interactive behavior in a browser.</i></"
 "small>"
 msgstr ""
+"<small><i>Introduza código JavaScript para comportamento interactivo num "
+"navegador.</i></small>"
 
 #: ../src/ui/dialog/object-properties.cpp:358
 #: ../src/ui/dialog/object-properties.cpp:363
@@ -31926,12 +31822,9 @@ msgid "Starting angle"
 msgstr "Ângulo inicial"
 
 #: ../src/ui/dialog/polar-arrange-tab.cpp:41
-#, fuzzy
-#| msgctxt "Polar arrange tab"
-#| msgid "Anchor point:"
 msgctxt "Polar arrange tab"
 msgid "<b>Anchor point:</b>"
-msgstr "Ponto de âncora:"
+msgstr "<b>Ponto de âncora:</b>"
 
 #: ../src/ui/dialog/polar-arrange-tab.cpp:45
 msgctxt "Polar arrange tab"
@@ -32007,22 +31900,16 @@ msgid "Failed to set CairoRenderContext"
 msgstr "Não foi possível definir o “CairoRenderContext”"
 
 #: ../src/ui/dialog/save-template-dialog.cpp:24
-#, fuzzy
-#| msgid "Save Template"
 msgid "Save as Template"
-msgstr "Guardar modelo"
+msgstr "Guardar como Modelo"
 
 #: ../src/ui/dialog/save-template-dialog.cpp:56
-#, fuzzy
-#| msgid "Save a copy of the document as template"
 msgid "Base every other new document on this template"
-msgstr "Guardar uma cópia do documento como modelo"
+msgstr "Basear todos os novos documentos neste modelo"
 
 #: ../src/ui/dialog/save-template-dialog.cpp:107
-#, fuzzy
-#| msgid "Export Overwrite"
 msgid "Overwrite"
-msgstr "Exportar substituir"
+msgstr "Substituir"
 
 #: ../src/ui/dialog/save-template-dialog.h:35
 #: ../share/ui/dialog-save-template.glade:96
@@ -32030,10 +31917,8 @@ msgid "Set as default template"
 msgstr "Definir como modelo padrão"
 
 #: ../src/ui/dialog/save-template-dialog.h:36
-#, fuzzy
-#| msgid "Name"
 msgid "_Name"
-msgstr "Nome"
+msgstr "_Nome"
 
 #: ../src/ui/dialog/save-template-dialog.h:38
 msgid "_Description"
@@ -32061,20 +31946,16 @@ msgid "No dictionaries installed"
 msgstr "Não existem dicionários instalados"
 
 #: ../src/ui/dialog/spellcheck.cpp:293
-#, fuzzy
-#| msgid "<b>Finished</b>, <b>%d</b> words added to dictionary"
 msgid "<b>Finished</b>, <b>%1</b> words added to dictionary"
-msgstr "<b>Terminado</b>, <b>%d</b> palavras adicionadas ao dicionário"
+msgstr "<b>Terminado</b>, <b>%1</b> palavras adicionadas ao dicionário"
 
 #: ../src/ui/dialog/spellcheck.cpp:294
 msgid "<b>Finished</b>, nothing suspicious found"
 msgstr "<b>Terminado</b>, não foi encontrado nada suspeito"
 
 #: ../src/ui/dialog/spellcheck.cpp:391
-#, fuzzy
-#| msgid "Not in dictionary: <b>%s</b>"
 msgid "Not in dictionary: <b>%1</b>"
-msgstr "Não está no dicionário: <b>%s</b>"
+msgstr "Não está no dicionário: <b>%1</b>"
 
 #: ../src/ui/dialog/spellcheck.cpp:474
 msgid "<i>Checking...</i>"
@@ -32125,10 +32006,8 @@ msgid "Used in %1"
 msgstr "Usado em %1"
 
 #: ../src/ui/dialog/styledialog.cpp:842
-#, fuzzy
-#| msgid "Used in style attribute"
 msgid "Used in inline attributes"
-msgstr "Usado em atributo de estilo"
+msgstr "Usado em atributo em linha"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:186
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:256
@@ -32364,15 +32243,12 @@ msgid "Switch to a layer with the same name as current glyph"
 msgstr "Mudar para uma camada com o mesmo nome que o glifo actual"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:1393
-#, fuzzy
-#| msgid "_Sort glyphs"
 msgid "Sort glyphs"
 msgstr "Ordenar glifos"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:1394
-#, fuzzy
 msgid "Sort glyphs in Unicode order"
-msgstr "Organizar glifos em ordem de CódigoÚnico"
+msgstr "Ordenar glifos em ordem de Unicode"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:1399
 msgid "Add new glyph"
@@ -32810,23 +32686,16 @@ msgid "Drop bitmap image"
 msgstr "Soltar imagem de mapa de bits"
 
 #: ../src/ui/interface.cpp:82
-#, fuzzy
-#| msgid ""
-#| "<span weight=\"bold\" size=\"larger\">A file named \"%s\" already exists. "
-#| "Do you want to replace it?</span>\n"
-#| "\n"
-#| "The file already exists in \"%s\". Replacing it will overwrite its "
-#| "contents."
 msgid ""
 "<span weight=\"bold\" size=\"larger\">A file named \"%1\" already exists. Do "
 "you want to replace it?</span>\n"
 "\n"
 "The file already exists in \"%2\". Replacing it will overwrite its contents."
 msgstr ""
-"<span weight=\"bold\" size=\"larger\">Um ficheiro com nome \"%s\" já existe. "
+"<span weight=\"bold\" size=\"larger\">Um ficheiro com nome \"%1\" já existe. "
 "Pretende substituí-lo?</span>\n"
 "\n"
-"O ficheiro já existe em \"%s\". Substituir irá escrever por ccima do seu "
+"O ficheiro já existe em \"%2\". Substituir irá escrever por ccima do seu "
 "conteúdo."
 
 #: ../src/ui/interface.cpp:89 ../share/extensions/web_set_att.inx:25
@@ -33135,44 +33004,32 @@ msgstr "Construtor de Formas"
 
 #: ../src/ui/modifiers.cpp:236
 msgid "[NEVER]"
-msgstr ""
+msgstr "[NUNCA]"
 
 # File: ../src/ui/tool/node.cpp, line: 611
 #: ../src/ui/modifiers.cpp:239
-#, fuzzy
-#| msgctxt "Path handle tip"
-#| msgid "Ctrl"
 msgid "Ctrl"
 msgstr "Ctrl"
 
 #: ../src/ui/modifiers.cpp:242
-#, fuzzy
-#| msgid "S_hift"
 msgid "Shift"
-msgstr "_Deslocar"
+msgstr "Shift"
 
 #: ../src/ui/modifiers.cpp:246
-#, fuzzy
-#| msgid "All"
 msgid "Alt"
-msgstr "Tudo"
+msgstr "Alt"
 
 #: ../src/ui/modifiers.cpp:250
-#, fuzzy
-#| msgctxt "Symbol"
-#| msgid "Supermarket"
 msgid "Super"
-msgstr "Supermercado"
+msgstr "Super"
 
 #: ../src/ui/modifiers.cpp:254
 msgid "Hyper"
-msgstr ""
+msgstr "Hiper"
 
 #: ../src/ui/modifiers.cpp:258
-#, fuzzy
-#| msgid "Metadata"
 msgid "Meta"
-msgstr "Metadados"
+msgstr "Meta"
 
 #: ../src/ui/shape-editor-knotholders.cpp:567
 msgid ""
@@ -33385,54 +33242,37 @@ msgid "<b>Ctrl+Alt</b>: click to insert a node"
 msgstr "<b>Ctrl+Alt</b>: clicar para inserir um nó"
 
 #: ../src/ui/tool/curve-drag-point.cpp:215
-#, fuzzy
-#| msgctxt "Path segment tip"
-#| msgid "<b>Ctrl</b>: click to change line type"
 msgctxt "Path segment tip"
 msgid "<b>Alt</b>: double click to change line type"
-msgstr "<b>Ctrl</b>: clicar para alterar tipo de linha"
+msgstr "<b>Alt</b>: duplo clique para alterar tipo de linha"
 
 #: ../src/ui/tool/curve-drag-point.cpp:218
-#, fuzzy
-#| msgctxt "Path segment tip"
-#| msgid ""
-#| "<b>BSpline segment</b>: drag to shape the segment, doubleclick to insert "
-#| "node, click to select (more: Shift, Ctrl+Alt)"
 msgctxt "Path segment tip"
 msgid ""
 "<b>BSpline segment</b>: drag to shape the segment, doubleclick to insert "
 "node, click to select (more: Alt, Shift, Ctrl+Alt)"
 msgstr ""
 "<b>Segmento B-spline</b>: arrastar para formar o segmento; clicar 2 vezes "
-"para inserir nó; clicar para seleccionar (mais: Shift, Ctrl+Alt)"
+"para inserir nó; clicar para seleccionar (mais: Alt, Shift, Ctrl+Alt)"
 
 #: ../src/ui/tool/curve-drag-point.cpp:222
-#, fuzzy
-#| msgctxt "Path segment tip"
-#| msgid ""
-#| "<b>Linear segment</b>: drag to convert to a Bezier segment, doubleclick "
-#| "to insert node, click to select (more: Shift, Ctrl+Alt)"
 msgctxt "Path segment tip"
 msgid ""
 "<b>Linear segment</b>: drag to convert to a Bezier segment, doubleclick to "
 "insert node, click to select (more: Alt, Shift, Ctrl+Alt)"
 msgstr ""
 "<b>Segmento linear</b>: arrastar para converter num segmento Bézier; clicar "
-"duas vezes para inserir nó; clicar para seleccionar (mais: Shift, Ctrl+Alt)"
+"duas vezes para inserir nó; clicar para seleccionar (mais: Alt, Shift, "
+"Ctrl+Alt)"
 
 #: ../src/ui/tool/curve-drag-point.cpp:225
-#, fuzzy
-#| msgctxt "Path segment tip"
-#| msgid ""
-#| "<b>Bezier segment</b>: drag to shape the segment, doubleclick to insert "
-#| "node, click to select (more: Shift, Ctrl+Alt)"
 msgctxt "Path segment tip"
 msgid ""
 "<b>Bezier segment</b>: drag to shape the segment, doubleclick to insert "
 "node, click to select (more: Alt, Shift, Ctrl+Alt)"
 msgstr ""
 "<b>Segmento Bézier</b>: arrastar para formar o segmento; clicar 2 vezes para "
-"inserir nó; clicar para seleccionar (mais: Shift, Ctrl+Alt)"
+"inserir nó; clicar para seleccionar (mais: Alt, Shift, Ctrl+Alt)"
 
 #: ../src/ui/tool/multi-path-manipulator.cpp:313
 msgid "Retract handles"
@@ -34717,16 +34557,12 @@ msgid "Star: Reset to defaults"
 msgstr "Estrela: Repor para pré-definições"
 
 #: ../src/ui/toolbar/text-toolbar.cpp:233
-#, fuzzy
-#| msgid "Single scan"
 msgid "Single spaced"
-msgstr "Passagem única"
+msgstr "Espaço Individual"
 
 #: ../src/ui/toolbar/text-toolbar.cpp:236
-#, fuzzy
-#| msgid "No-break space"
 msgid "Double spaced"
-msgstr "Espaço sem quebras de linha"
+msgstr "Espaço duplo"
 
 #: ../src/ui/toolbar/text-toolbar.cpp:238
 #: ../src/ui/toolbar/text-toolbar.cpp:239
@@ -34868,11 +34704,8 @@ msgid "<b>Shift</b>: draw around the starting point"
 msgstr "<b>Shift</b>: desenhar em redor do ponto inicial"
 
 #: ../src/ui/tools/arc-tool.cpp:210
-#, fuzzy
-#| msgctxt "Transform handle tip"
-#| msgid "<b>Alt</b>: scale using an integer ratio"
 msgid "<b>Alt</b>: snap ellipse to mouse pointer"
-msgstr "<b>Alt</b>: redimensionar utilizando uma proporção de número inteiro"
+msgstr "<b>Alt</b>: atrair elipse ao ponteiro do rato"
 
 #: ../src/ui/tools/arc-tool.cpp:372
 #, c-format
@@ -35309,80 +35142,65 @@ msgid "Crossing %lu"
 msgstr "A cruzar %lu"
 
 #: ../src/ui/tools/measure-tool.cpp:1644
-#, fuzzy
-#| msgid "Maximum segment length:"
 msgid ""
 "\n"
 "Intersection segments lengths:\n"
-msgstr "Comprimento máximo do segmento:"
+msgstr ""
+"\n"
+"Comprimento dos segmentos de intersecção:\n"
 
 #: ../src/ui/tools/measure-tool.cpp:1656
 msgid ""
 "\n"
 "Info about the shape under the pointer:\n"
 msgstr ""
+"\n"
+"Informação sobre a forma debaixo do ponteiro\n"
 
 #: ../src/ui/tools/measure-tool.cpp:1696
 msgid "The measurements have been copied to the clipboard"
-msgstr ""
+msgstr "As medições foram copiadas para a área de transferência"
 
 #: ../src/ui/tools/measure-tool.h:79
 msgid "Segment"
 msgstr "Segmento"
 
 #: ../src/ui/tools/measure-tool.h:81
-#, fuzzy
-#| msgid "Length left:"
 msgid "Length between"
-msgstr "Comprimento esquerdo:"
+msgstr "Comprimento entre"
 
 #: ../src/ui/tools/measure-tool.h:82
-#, fuzzy
-#| msgid "X"
 msgid "dX"
-msgstr "X"
+msgstr "dX"
 
 #: ../src/ui/tools/measure-tool.h:83
-#, fuzzy
-#| msgid "Y"
 msgid "dY"
-msgstr "Y"
+msgstr "dY"
 
 #: ../src/ui/tools/measure-tool.h:84
 #: ../share/ui/dialog-measure-tool-settings.ui:254
-#, fuzzy
-#| msgid "Angle:"
 msgid "Angle"
-msgstr "Ângulo:"
+msgstr "Ângulo"
 
 #: ../src/ui/tools/measure-tool.h:85
-#, fuzzy
-#| msgid "_Gap length:"
 msgid "Shape length"
-msgstr "_Comprimento do intervalo:"
+msgstr "Comprimento da forma"
 
 #: ../src/ui/tools/measure-tool.h:86
-#, fuzzy
 msgid "Shape width"
-msgstr "Largura igual"
+msgstr "Largura da forma"
 
 #: ../src/ui/tools/measure-tool.h:87
-#, fuzzy
-#| msgid "Caps height:"
 msgid "Shape height"
-msgstr "Altura das maiúsculas:"
+msgstr "Altura da forma"
 
 #: ../src/ui/tools/measure-tool.h:88
-#, fuzzy
-#| msgid "Shape"
 msgid "Shape X"
-msgstr "Forma"
+msgstr "X da Forma"
 
 #: ../src/ui/tools/measure-tool.h:89
-#, fuzzy
-#| msgid "Shape"
 msgid "Shape Y"
-msgstr "Forma"
+msgstr "Y da Forma"
 
 #. TRANSLATORS: Mind the space in front. This is part of a compound message
 #: ../src/ui/tools/mesh-tool.cpp:137 ../src/ui/tools/mesh-tool.cpp:148
@@ -35482,13 +35300,10 @@ msgid "<b>Shift</b>: drag to add nodes to the selection"
 msgstr "<b>Shift</b>: arrastar para adicionar nós à selecção"
 
 #: ../src/ui/tools/node-tool.cpp:678
-#, fuzzy
-#| msgid "<b>%u of %u</b> node selected."
-#| msgid_plural "<b>%u of %u</b> nodes selected."
 msgid "<b>%1 of %2</b> node selected."
 msgid_plural "<b>%1 of %2</b> nodes selected."
-msgstr[0] "<b>%u de  %u</b> nó seleccionado."
-msgstr[1] "<b>%u de %u</b> nós seleccionados."
+msgstr[0] "<b>%1 de %2</b> nó seleccionado."
+msgstr[1] "<b>%1 de %2</b> nós seleccionados."
 
 #. TRANSLATORS: %1 is an angle in degrees, formatted with two decimal places.
 #: ../src/ui/tools/node-tool.cpp:696
@@ -35496,14 +35311,10 @@ msgid "Angle: %1°."
 msgstr "Ângulo: %1°."
 
 #: ../src/ui/tools/node-tool.cpp:703
-#, fuzzy
-#| msgctxt "Node tool tip"
-#| msgid ""
-#| "%s Drag to select nodes, click to edit only this object (more: Shift)"
 msgctxt "Node tool tip"
 msgid "%1 Drag to select nodes, click to edit only this object (more: Shift)"
 msgstr ""
-"%s Arrastar para seleccionar nós; clicar para editar apenas este objecto "
+"%1 Arrastar para seleccionar nós; clicar para editar apenas este objecto "
 "(mais: Shift)"
 
 #: ../src/ui/tools/node-tool.cpp:709
@@ -35696,7 +35507,7 @@ msgstr ""
 
 #: ../src/ui/tools/rect-tool.cpp:226
 msgid "<b>Alt</b>: use with Ctrl to make square"
-msgstr ""
+msgstr "<b>Alt</b>: usar com Ctrl para tornar quadrado"
 
 #: ../src/ui/tools/rect-tool.cpp:368
 #, c-format
@@ -35795,70 +35606,54 @@ msgid "Selected object is not a group. Cannot enter."
 msgstr "O objecto seleccionado não é um grupo. Não pode entrar."
 
 #: ../src/ui/tools/shortcuts.cpp:20
-#, fuzzy
-#| msgid "Quick preview:"
 msgid "Quick Preview"
-msgstr "Pré-visualização rápida:"
+msgstr "Pré-Visualização Rápida"
 
 #: ../src/ui/tools/shortcuts.cpp:20
 msgid "Preview how the document will look while the key is pressed."
 msgstr ""
+"Pré visualizar como o documento ficará enquanto a tecla está pressionada"
 
 #: ../src/ui/tools/shortcuts.cpp:21
-#, fuzzy
-#| msgid "Quick zoom:"
 msgid "Quick Zoom"
-msgstr "Ampliação Rápida:"
+msgstr "Ampliação Rápida"
 
 #: ../src/ui/tools/shortcuts.cpp:21
-#, fuzzy
-#| msgid "Remove selected objects when shape building is completed"
 msgid "Zoom into the selected objects while the key is pressed."
 msgstr ""
-"Remover objectos seleccionados quando a construção da forma estiver completa"
+"Aproximar dos objectos seleccionados enquanto a tecla estiver pressionada."
 
 #: ../src/ui/tools/shortcuts.cpp:22
-#, fuzzy
-#| msgid "Linen Canvas"
 msgid "Quick Pan Canvas"
-msgstr "Tela de Linho"
+msgstr "Enquadrar Tela Rapidamente"
 
 #: ../src/ui/tools/shortcuts.cpp:22
 msgid "Pan the canvas with the mouse while the key is pressed."
-msgstr ""
+msgstr "Enquadrar a tela com o rato enquanto a tecla estiver pressionada."
 
 #: ../src/ui/tools/shortcuts.cpp:24
-#, fuzzy
-#| msgid "Segment size"
 msgid "Pen Segment To Line"
-msgstr "Tamanho de segmento"
+msgstr "Segmento de Caneta Em Linha"
 
 #: ../src/ui/tools/shortcuts.cpp:24
 msgid "Convert the last pen segment to a straight line."
-msgstr ""
+msgstr "Converter o último segmento da caneta em linha recta."
 
 #: ../src/ui/tools/shortcuts.cpp:25
-#, fuzzy
-#| msgctxt "path effect"
-#| msgid "Tangent to curve"
 msgid "Pen Segment To Curve"
-msgstr "Tangente à curva"
+msgstr "Segmento de Caneta Em Curva"
 
 #: ../src/ui/tools/shortcuts.cpp:25
 msgid "Convert the last pen segment to a curved line."
-msgstr ""
+msgstr "Converter o último segmento da caneta em linha curva."
 
 #: ../src/ui/tools/shortcuts.cpp:26
-#, fuzzy
-#| msgid "Make segments curves"
 msgid "Pen Segments To Guides"
-msgstr "Curvar segmentos"
+msgstr "Segmento de Caneta Em Guia"
 
 #: ../src/ui/tools/shortcuts.cpp:26
-#, fuzzy
-#| msgid "Conversion to guides"
 msgid "Convert the pen shape into guides."
-msgstr "Converter objectos em guias"
+msgstr "Converter a forma de caneta em guias."
 
 #: ../src/ui/tools/spiral-tool.cpp:207
 msgid "<b>Ctrl</b>: snap angle"
@@ -35892,40 +35687,34 @@ msgid "<b>Nothing</b> selected"
 msgstr "<b>Nada</b> seleccionado"
 
 #: ../src/ui/tools/spray-tool.cpp:205
-#, fuzzy, c-format
-#| msgid ""
-#| "%s. Drag, click or click and scroll to spray <b>copies</b> of the initial "
-#| "selection."
+#, c-format
 msgid ""
 "%s. Drag, click or click and scroll to spray <b>copies</b> of the initial "
 "selection. Right-click + move to update single click item."
 msgstr ""
 "%s. Arrastar, clicar ou clicar e deslocar o rato para borrifar <b>cópias</b> "
-"da selecção inicial."
+"da selecção inicial. Clique direito + mover para actualizar item de clique "
+"único."
 
 #: ../src/ui/tools/spray-tool.cpp:208
-#, fuzzy, c-format
-#| msgid ""
-#| "%s. Drag, click or click and scroll to spray <b>clones</b> of the initial "
-#| "selection."
+#, c-format
 msgid ""
 "%s. Drag, click or click and scroll to spray <b>clones</b> of the initial "
 "selection. Right-click + move to update single click item."
 msgstr ""
 "%s. Arrastar, clicar ou clicar e deslocar o rato para borrifar <b>clones</b> "
-"da selecção inicial."
+"da selecção inicial. Clique direito + mover para actualizar item de clique "
+"único."
 
 #: ../src/ui/tools/spray-tool.cpp:211
-#, fuzzy, c-format
-#| msgid ""
-#| "%s. Drag, click or click and scroll to spray in a <b>single path</b> of "
-#| "the initial selection."
+#, c-format
 msgid ""
 "%s. Drag, click or click and scroll to spray into a <b>single path</b>. "
 "Right-click + move to update single click item.."
 msgstr ""
 "%s. Arrastar, clicar ou clicar e deslocar o rato para borrifar <b>num "
-"caminho único</b> da selecção inicial."
+"caminho único</b> da selecção inicial. Clique direito + mover para "
+"actualizar item de clique único."
 
 #: ../src/ui/tools/spray-tool.cpp:1245
 msgid "<b>Nothing selected!</b> Select objects to spray."
@@ -36251,12 +36040,12 @@ msgstr ""
 "<b>Shift+clicar</b> para reduzir."
 
 #: ../src/ui/tools/tool-data.cpp:62
-#, fuzzy
-#| msgid "<b>Drag</b> to measure the dimensions of objects."
 msgid ""
 "<b>Drag</b> to measure the dimensions of objects.  Press <b>Alt+C</b> to "
 "copy the length to the clipboard."
-msgstr "<b>Arrastar</b> para medir as dimensões dos objectos."
+msgstr ""
+"<b>Arrastar</b> para medir as dimensões dos objectos. Carregue em  <b>Alt+C</"
+"b> para copiar o comprimento para a área de transferência."
 
 #: ../src/ui/tools/tool-data.cpp:64
 msgid "To tweak a path by pushing, select it and drag over it."
@@ -36298,10 +36087,8 @@ msgid "Create and manage pages."
 msgstr "Criar e gerir páginas."
 
 #: ../src/ui/tools/tool-data.cpp:71
-#, fuzzy
-#| msgid "Lock objects"
 msgid "Pick objects."
-msgstr "Bloquear objetos"
+msgstr "Escolher objectos."
 
 #: ../src/ui/tools/tweak-tool.cpp:142
 #, c-format
@@ -36498,10 +36285,8 @@ msgid "Configure..."
 msgstr "Configurar…"
 
 #: ../src/ui/widget/dash-selector.cpp:146
-#, fuzzy
-#| msgid "Pattern offset"
 msgid "Dash pattern offset"
-msgstr "Deslocamento do padrão"
+msgstr "Deslocamento do padrão de tracejado"
 
 #: ../src/ui/widget/desktop-widget.cpp:381
 msgid "outline"
@@ -36532,10 +36317,8 @@ msgid "Note:"
 msgstr "Nota:"
 
 #: ../src/ui/widget/document-templates.cpp:19
-#, fuzzy
-#| msgid "Select a filter"
 msgid "Select a template"
-msgstr "Seleccione um filtro"
+msgstr "Seleccione um modelo"
 
 #: ../src/ui/widget/export-lists.cpp:160
 msgid "Add Export"
@@ -36699,42 +36482,34 @@ msgstr "Tem a certeza que quer eliminar a \"%1\" colecção de fonte?\n"
 
 #: ../src/ui/widget/font-list.cpp:111
 msgid "Sans Serif"
-msgstr ""
+msgstr "Sem Serifa"
 
 #: ../src/ui/widget/font-list.cpp:292
 msgid "Sort alphabetically"
-msgstr ""
+msgstr "Ordenar alfabeticamente"
 
 #: ../src/ui/widget/font-list.cpp:293
-#, fuzzy
-#| msgid "Right to left"
 msgid "Light to heavy"
-msgstr "Direita para a esquerda"
+msgstr "Fina para Grossa"
 
 #: ../src/ui/widget/font-list.cpp:294
-#, fuzzy
 msgid "Condensed to expanded"
-msgstr "Grego Extendido"
+msgstr "Condensada para Expandida"
 
 #: ../src/ui/widget/font-list.cpp:808
-#, fuzzy
-#| msgid "All Fonts"
 msgctxt "N-of-fonts"
 msgid "All fonts"
 msgstr "Todas as Fontes"
 
 #: ../src/ui/widget/font-list.cpp:808
-#, fuzzy
 msgctxt "N-of-fonts"
 msgid "of"
-msgstr "NKo"
+msgstr "de"
 
 #: ../src/ui/widget/font-list.cpp:808
-#, fuzzy
-#| msgid "font"
 msgctxt "N-of-fonts"
 msgid "fonts"
-msgstr "fonte"
+msgstr "fontes"
 
 #: ../src/ui/widget/font-selector.cpp:49
 msgid "Font family"
@@ -37120,72 +36895,66 @@ msgstr ""
 #. TRANSLATORS: “Grade” (GRAD in CSS) is an axis that can be used to alter stroke thicknesses (or other forms)
 #. without affecting the type's overall width, inter-letter spacing, or kerning — unlike altering weight.
 #: ../src/ui/widget/font-variations.cpp:54
-#, fuzzy
-#| msgid "Gradient"
 msgctxt "Variable font axis"
 msgid "Grade"
-msgstr "Gradiente"
+msgstr "Grade"
 
 #: ../src/ui/widget/font-variations.cpp:54
 msgid ""
 "Alter stroke thicknesses (or other forms) without affecting the type’s "
 "overall width"
 msgstr ""
+"Alterar a espessura do traço (ou outras formas) sem afectar a largura total "
+"do tipo"
 
 #. TRANSLATORS: “Parametric Thick Stroke”, XOPQ, is a reference to its logical name, “X Opaque”,
 #. which describes how it alters the opaque stroke forms of glyphs typically in the X dimension
 #: ../src/ui/widget/font-variations.cpp:57
-#, fuzzy
-#| msgid "100% (opaque)"
 msgctxt "Variable font axis"
 msgid "X opaque"
-msgstr "100% (opaco)"
+msgstr "X opaco"
 
 #: ../src/ui/widget/font-variations.cpp:57
 msgid "Alter the opaque stroke forms of glyphs in the X dimension"
-msgstr ""
+msgstr "Alterar a forma dos traços opacos dos glifos na dimensão X"
 
 #. TRANSLATORS: “Parametric Thin Stroke”, YOPQ, is a reference to its logical name, “Y Opaque”,
 #. which describes how it alters the opaque stroke forms of glyphs typically in the Y dimension
 #: ../src/ui/widget/font-variations.cpp:60
-#, fuzzy
-#| msgid "100% (opaque)"
 msgctxt "Variable font axis"
 msgid "Y opaque"
-msgstr "100% (opaco)"
+msgstr "Y opaco"
 
 #: ../src/ui/widget/font-variations.cpp:60
 msgid "Alter the opaque stroke forms of glyphs in the Y dimension"
-msgstr ""
+msgstr "Alterar a forma dos traços opacos dos glifos na dimensão Y"
 
 #. TRANSLATORS: “Parametric Counter Width”, XTRA, is a reference to its logical name, “X-Transparent,”
 #. which describes how it alters a font’s transparent spaces (also known as negative shapes)
 #. inside and around all glyphs along the X dimension
 #: ../src/ui/widget/font-variations.cpp:64
-#, fuzzy
-#| msgid "0 (transparent)"
 msgctxt "Variable font axis"
 msgid "X transparent"
-msgstr "0 (transparente)"
+msgstr "X transparente"
 
 #: ../src/ui/widget/font-variations.cpp:64
 msgid ""
 "Alter the transparent spaces inside and around all glyphs along the X "
 "dimension"
 msgstr ""
+"Alterar os espaços transparentes dentro e à volta dos glifos na dimensão X"
 
 #: ../src/ui/widget/font-variations.cpp:65
-#, fuzzy
-#| msgid "0 (transparent)"
 msgctxt "Variable font axis"
 msgid "Y transparent"
-msgstr "0 (transparente)"
+msgstr "Y transparente"
 
 #: ../src/ui/widget/font-variations.cpp:65
 msgid ""
 "Alter the transparent spaces inside and around all glyphs along the Y "
 "dimension"
 msgstr ""
+"Alterar os espaços transparentes dentro e à volta dos glifos na dimensão Y"
 
 #. TRANSLATORS: Width/height of Chinese glyphs
 #: ../src/ui/widget/font-variations.cpp:67
