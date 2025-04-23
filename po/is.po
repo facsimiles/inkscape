@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-02-04 23:42+0100\n"
-"PO-Revision-Date: 2025-04-23 17:49+0000\n"
+"PO-Revision-Date: 2025-04-23 21:26+0000\n"
 "Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
 "Language-Team: Icelandic <https://translate.inkscape.org/projects/inkscape/"
 "inkscape-master/is/>\n"
@@ -6141,7 +6141,7 @@ msgstr "Villuleitarupplýsingar"
 
 #: ../src/actions/actions-base.cpp:206
 msgid "Print debugging information and exit"
-msgstr "Birta villuleitarupplýsingar og hætta."
+msgstr "Birta villuleitarupplýsingar og hætta"
 
 #: ../src/actions/actions-base.cpp:207
 msgid "System Directory"
@@ -10453,7 +10453,7 @@ msgstr "Þvinga hrun"
 
 #: ../src/actions/actions-window.cpp:99
 msgid "Force Inkscape to crash, useful for testing."
-msgstr "Þvinga Inkscape til að hrynja, nýtist fyrir prófanir"
+msgstr "Þvinga Inkscape til að hrynja, nýtist fyrir prófanir."
 
 #: ../src/auto-save.cpp:155
 msgid "Autosave failed! Could not find inkscape extension to save document."
@@ -14361,7 +14361,7 @@ msgstr "Ívefja SVG-skrá í image-merki (ekki breytanlegt í þessu skjali)"
 
 #: ../src/extension/internal/svg.h:27
 msgid "Link the SVG file in an image tag (not editable in this document)."
-msgstr "Tengja SVG-skrá í image-merki (ekki breytanlegt í þessu skjali)"
+msgstr "Tengja SVG-skrá í image-merki (ekki breytanlegt í þessu skjali)."
 
 #: ../src/extension/internal/svg.h:28
 msgid "Open SVG image as separate document"
@@ -16260,8 +16260,8 @@ msgid ""
 "Add ruler marks to the object in adjustable intervals, using the object's "
 "stroke style."
 msgstr ""
-"Bættu mælistikumerkjum á hlutinn með stillanlegu millibili með því að nota "
-"stíl útlínu"
+"Bættu mælistikumerkjum á hlutinn með stillanlegu millibili, með því að nota "
+"stíl útlínu."
 
 #: ../src/live_effects/effect.cpp:287
 msgctxt "path effect"
@@ -16286,7 +16286,7 @@ msgid ""
 "another object."
 msgstr ""
 "Láta hlut fá sömu lögun, fyllingu, útlínu og/eða aðra eiginleika frá öðrum "
-"hlut"
+"hlut."
 
 #: ../src/live_effects/effect.cpp:316
 msgctxt "path effect"
@@ -18441,7 +18441,7 @@ msgid ""
 "When the path is grouped and the group is then scaled, adjust the dimensions."
 msgstr ""
 "Þegar ferillinn er í hópi og hópurinn síðan er kvarðaður, á að aðlaga "
-"stærðina"
+"stærðina."
 
 #: ../src/live_effects/lpe-measure-segments.cpp:94
 msgid "Localize number format"
@@ -18814,11 +18814,11 @@ msgstr "Skilgreinir hægri enda á samsíðungi"
 
 #: ../src/live_effects/lpe-parallel.cpp:108
 msgid "Adjust the \"left\" end of the parallel"
-msgstr "Stilla \"vinstri\" endann á samsíðungnum."
+msgstr "Stilla \"vinstri\" endann á samsíðungnum"
 
 #: ../src/live_effects/lpe-parallel.cpp:114
 msgid "Adjust the \"right\" end of the parallel"
-msgstr "Stilla \"hægri\" endann á samsíðungnum."
+msgstr "Stilla \"hægri\" endann á samsíðungnum"
 
 #: ../src/live_effects/lpe-patternalongpath.cpp:65
 #: ../share/extensions/patternalongpath.inx:9
@@ -19932,11 +19932,11 @@ msgstr "Stilla festipunkt snertilsins"
 
 #: ../src/live_effects/lpe-tangent_to_curve.cpp:108
 msgid "Adjust the <b>left</b> end of the tangent"
-msgstr "Stilla <b>vinstri</b> endann á snertlinum."
+msgstr "Stilla <b>vinstri</b> endann á snertlinum"
 
 #: ../src/live_effects/lpe-tangent_to_curve.cpp:114
 msgid "Adjust the <b>right</b> end of the tangent"
-msgstr "Stilla <b>hægri</b> endann á snertlinum."
+msgstr "Stilla <b>hægri</b> endann á snertlinum"
 
 #: ../src/live_effects/lpe-taperstroke.cpp:82
 msgid "Extrapolated"
@@ -20834,9 +20834,8 @@ msgid "Axonometric Grid"
 msgstr "Jafnhliða hnitanet"
 
 #: ../src/object/sp-grid.cpp:610 ../src/ui/dialog/inkscape-preferences.cpp:2164
-#, fuzzy
 msgid "Modular Grid"
-msgstr "Pólhnitanet"
+msgstr "Eininganet"
 
 #: ../src/object/sp-guide.cpp:490
 msgid "Deleted"
@@ -24132,7 +24131,7 @@ msgstr ""
 
 #: ../src/ui/dialog/document-properties.cpp:1964
 msgid "Change to a different grid type."
-msgstr "Breyta í aðra tegund hnitanets"
+msgstr "Breyta í aðra tegund hnitanets."
 
 #: ../src/ui/dialog/document-properties.cpp:2061
 msgid "Block _width:"
@@ -24412,14 +24411,12 @@ msgid "Select filter to apply:"
 msgstr "Veldu síu til að beita:"
 
 #: ../src/ui/dialog/extensions-gallery.cpp:346
-#, fuzzy
 msgid "Toggle list of effect categories"
-msgstr "Víxla sýnileika virks lags"
+msgstr "Víxla af/á lista yfir flokka af sjónbrellum"
 
 #: ../src/ui/dialog/extensions-gallery.cpp:347
-#, fuzzy
 msgid "Toggle list of filter categories"
-msgstr "Hæð áhrifasvæðis síu"
+msgstr "Víxla af/á lista yfir flokka af síum"
 
 #: ../src/ui/dialog/extensions-gallery.cpp:486
 msgctxt "take-input"
@@ -25500,9 +25497,8 @@ msgid "ACB file header not recognized."
 msgstr ""
 
 #: ../src/ui/dialog/global-palettes.cpp:197
-#, fuzzy
 msgid "ACB file color space not supported."
-msgstr "Hliðrænar (LPT) tengingar eru ekki studdar."
+msgstr "Ekki er stuðningur við litrýmd ACB-skrár."
 
 #: ../src/ui/dialog/global-palettes.cpp:228
 msgid "ASE file header not recognized."
@@ -26680,24 +26676,20 @@ msgid "Whether selected objects display gradient editing controls"
 msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:771
-#, fuzzy
 msgid "Change layer on selection"
-msgstr "Breyta öllum myndum í vali"
+msgstr "Skipta um lag við að velja"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:772
-#, fuzzy
 msgid "Whether selecting objects in another layer changes the active layer"
-msgstr "Við að velja hluti er það sá síðasti sá sem farið er á."
+msgstr "Við að velja hluti í öðru lagi er skipt um virkt lag"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:778
-#, fuzzy
 msgid "Change page on selection"
-msgstr "Breyta öllum myndum í vali"
+msgstr "Skipta um síðu við að velja"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:779
-#, fuzzy
 msgid "Whether selecting objects on another page changes the current page"
-msgstr "Flytja val á næsta lag fyrir ofan lagið sem þú ert að vinna á núna"
+msgstr "Hvort skipt sé um síðu við að velja hluti á annarri síðu"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:784
 msgid "Conversion to guides uses edges instead of bounding box"
@@ -27597,7 +27589,7 @@ msgstr "Sýna val á mælistiku"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1636
 msgid "Shows a blue line in the ruler where the selection is."
-msgstr "Birtir bláa línu á mælistiku þar sem valið er"
+msgstr "Birtir bláa línu á mælistiku þar sem valið er."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1638
 msgid "User Interface"
@@ -27617,7 +27609,7 @@ msgstr "Nota mjóa reiti til innsetningar á tölum"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1678
 msgid "Make number editing boxes smaller by limiting padding"
-msgstr "Minnka reiti til innsetningar á tölum með takmörkun á bólstrun."
+msgstr "Minnka reiti til innsetningar á tölum með takmörkun á bólstrun"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1680
 msgid "Status bar"
@@ -29035,7 +29027,7 @@ msgstr "Alt+skrunhjól"
 msgid "Wrap around at start and end when cycling objects in z-order"
 msgstr ""
 "Fara í hring milli upphafs og endaatriða þegar flett er í gegnum atriði í z-"
-"röð þeirra (dýpt á lagi)."
+"röð þeirra (dýpt á lagi)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2606
 msgid "Paste above selection instead of layer-top"
@@ -29299,9 +29291,8 @@ msgid ""
 msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2707
-#, fuzzy
 msgid "While Always Snapping to Grid/Guides"
-msgstr "Víxla gripi í hnitanet af/á"
+msgstr "Þegar ávallt er gripið í hnitanet/stoðlínur"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2709
 msgid "Allow snapping to objects"
@@ -31166,7 +31157,7 @@ msgstr "Bæta við"
 
 #: ../src/ui/dialog/selectorsdialog.cpp:986
 msgid "Invalid CSS selector."
-msgstr "Ógildur CSS-veljari"
+msgstr "Ógildur CSS-veljari."
 
 #: ../src/ui/dialog/spellcheck.cpp:100
 msgid "No dictionaries installed"
@@ -32303,7 +32294,7 @@ msgstr "Laga til stefnu merkis með snúningi"
 #: ../src/ui/shape-editor-knotholders.cpp:1347
 #: ../src/ui/shape-editor-knotholders.cpp:1350
 msgid "Adjust the <b>size</b> of the marker"
-msgstr "Aðlaga <b>stærð</b> merkisins."
+msgstr "Aðlaga <b>stærð</b> merkisins"
 
 #: ../src/ui/shape-editor-knotholders.cpp:1639
 msgid "Adjust ellipse <b>width</b>, with <b>Ctrl</b> to make circle"
@@ -35226,7 +35217,7 @@ msgstr "Búa til og sýsla með síður."
 
 #: ../src/ui/tools/tool-data.cpp:71
 msgid "Pick objects."
-msgstr "Veldu hluti"
+msgstr "Veldu hluti."
 
 #: ../src/ui/tools/tweak-tool.cpp:142
 #, c-format
@@ -35972,31 +35963,31 @@ msgstr "Skástrikuð núll. OpenType tafla: 'zero'"
 
 #: ../src/ui/widget/font-variants.cpp:431
 msgid "Default variant."
-msgstr "Sjálfgefið tilbrigði"
+msgstr "Sjálfgefið tilbrigði."
 
 #: ../src/ui/widget/font-variants.cpp:432
 msgid "JIS78 forms. OpenType table: 'jp78'."
-msgstr "JIS78 form. OpenType tafla: 'jp78'"
+msgstr "JIS78 form. OpenType tafla: 'jp78'."
 
 #: ../src/ui/widget/font-variants.cpp:433
 msgid "JIS83 forms. OpenType table: 'jp83'."
-msgstr "JIS83 form. OpenType tafla: 'jp83'"
+msgstr "JIS83 form. OpenType tafla: 'jp83'."
 
 #: ../src/ui/widget/font-variants.cpp:434
 msgid "JIS90 forms. OpenType table: 'jp90'."
-msgstr "JIS90 form. OpenType tafla: 'jp90'"
+msgstr "JIS90 form. OpenType tafla: 'jp90'."
 
 #: ../src/ui/widget/font-variants.cpp:435
 msgid "JIS2004 forms. OpenType table: 'jp04'."
-msgstr "JIS2004 form. OpenType tafla: 'jp04'"
+msgstr "JIS2004 form. OpenType tafla: 'jp04'."
 
 #: ../src/ui/widget/font-variants.cpp:436
 msgid "Simplified forms. OpenType table: 'smpl'."
-msgstr "Einfölduð form OpenType tafla: 'smpl'"
+msgstr "Einfölduð form OpenType tafla: 'smpl'."
 
 #: ../src/ui/widget/font-variants.cpp:437
 msgid "Traditional forms. OpenType table: 'trad'."
-msgstr "Hefðbundin form. OpenType tafla: 'trad'"
+msgstr "Hefðbundin form. OpenType tafla: 'trad'."
 
 #: ../src/ui/widget/font-variants.cpp:438
 msgid "Default width."
@@ -36004,7 +35995,7 @@ msgstr "Sjálfgefin breidd."
 
 #: ../src/ui/widget/font-variants.cpp:439
 msgid "Full width variants. OpenType table: 'fwid'."
-msgstr "Fullbreið tilbrigði. OpenType tafla: 'fwid'"
+msgstr "Fullbreið tilbrigði. OpenType tafla: 'fwid'."
 
 #: ../src/ui/widget/font-variants.cpp:440
 msgid "Proportional width variants. OpenType table: 'pwid'."
@@ -36012,7 +36003,7 @@ msgstr "Hlutfallsbreið tilbrigði. OpenType tafla: 'pwid'."
 
 #: ../src/ui/widget/font-variants.cpp:441
 msgid "Ruby variants. OpenType table: 'ruby'."
-msgstr "Ruby-tilbrigði (smáletur). OpenType tafla: 'ruby'"
+msgstr "Ruby-tilbrigði (smáletur). OpenType tafla: 'ruby'."
 
 #: ../src/ui/widget/font-variants.cpp:491
 msgid "Feature settings in CSS form (e.g. \"wxyz\" or \"wxyz\" 3)."
@@ -36492,7 +36483,7 @@ msgstr "Skipta um mynd"
 
 #: ../src/ui/widget/image-properties.cpp:101
 msgid "Set image rendering option"
-msgstr "Setja valkost myndgerðarmarkmiðs:"
+msgstr "Setja valkost myndgerðarmarkmiðs"
 
 #: ../src/ui/widget/image-properties.cpp:109
 msgid "Preserve image aspect ratio"
@@ -37752,7 +37743,7 @@ msgstr "Skoða útflutningsmöppu"
 
 #: ../share/ui/dialog-export.glade:913
 msgid "Export to multiple files and file formats"
-msgstr "Flytja út í margar skrár og margvísleg skráasnið."
+msgstr "Flytja út í margar skrár og margvísleg skráasnið"
 
 #: ../share/ui/dialog-export.glade:914
 msgid "Batch Export"
@@ -38375,7 +38366,7 @@ msgstr "Flýtiaðdráttur:"
 
 #: ../share/ui/display-popup.glade:129
 msgid "Quick preview:"
-msgstr "Flýtiforskoðun"
+msgstr "Flýtiforskoðun:"
 
 #: ../share/ui/display-popup.glade:160
 msgid "Zoom with window size"
@@ -39063,7 +39054,7 @@ msgstr "Tiltekið fast horn"
 
 #: ../share/ui/marker-popup.glade:233
 msgid "Fixed angle:"
-msgstr "Valtól"
+msgstr "Fast horn:"
 
 #: ../share/ui/marker-popup.glade:256 ../share/ui/pattern-edit.glade:402
 msgid "Offset X:"
@@ -39305,7 +39296,7 @@ msgstr "Upphaf:"
 #: ../share/ui/page-properties.glade:345
 msgid ""
 "Coordinate system origin at the top of the page with Y axis pointing down."
-msgstr "Upphafspunktur hnitakerfis efst á síðunni með Y-ás sem vísar niður"
+msgstr "Upphafspunktur hnitakerfis efst á síðunni með Y-ás sem vísar niður."
 
 #: ../share/ui/page-properties.glade:358
 msgid ""
@@ -42063,8 +42054,8 @@ msgid ""
 "{} is now a new method in the SvgDocumentElement class. Use `self.svg."
 "getElement(path)` instead."
 msgstr ""
-"{} er núna ný aðferð (method) í SvgDocumentElement klasa. Notaðu `self.svg."
-"getElement(path)` í staðinn.`"
+"{} er núna ný aðferð (method) í SvgDocumentElement klasa. Notaðu "
+"`self.svg.getElement(path)` í staðinn."
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:179
 msgid "{} is no longer in use. Use the lxml `.getparent()` method instead."
@@ -42077,8 +42068,8 @@ msgid ""
 "{} is now a property of the SvgDocumentElement class. Use `self.svg."
 "namedview` to access this element."
 msgstr ""
-"{} er núna eiginleiki (property) í SvgDocumentElement klasa. Notaðu `self."
-"svg.namedview` til að nálgast þetta einindi"
+"{} er núna eiginleiki (property) í SvgDocumentElement klasa. Notaðu "
+"`self.svg.namedview` til að nálgast þetta einindi."
 
 #: ../share/extensions/inkex/deprecated/deprecatedeffect.py:199
 msgid ""
@@ -43779,7 +43770,7 @@ msgstr "Breidd útlínu (einingar notanda)"
 
 #: ../share/extensions/frame.inx:30
 msgid "Stacking order"
-msgstr "Stöflun:"
+msgstr "Röð stöflunar"
 
 #: ../share/extensions/frame.inx:31
 msgid "Frame below object(s)"
@@ -43933,7 +43924,7 @@ msgstr "Vista stoðlínur"
 
 #: ../share/extensions/gimp_xcf.inx:9
 msgid "Convert all guides to Gimp guides."
-msgstr "Umbreyta öllum stoðlínum í Gimp-stoðlínur"
+msgstr "Umbreyta öllum stoðlínum í Gimp-stoðlínur."
 
 #: ../share/extensions/gimp_xcf.inx:10
 msgid "Save Grid"
@@ -44519,7 +44510,7 @@ msgstr ""
 
 #: ../share/extensions/hpgl_input.inx:8
 msgid "Width (in):"
-msgstr "Breidd (in)"
+msgstr "Breidd (in):"
 
 #: ../share/extensions/hpgl_input.inx:8
 msgid "Width of the PCL picture frame"
@@ -44798,7 +44789,7 @@ msgstr "Gæði myndgerðar"
 
 #: ../share/extensions/image_attributes.inx:47
 msgid "Image rendering attribute:"
-msgstr "Eigindi myndgerðar"
+msgstr "Eigindi myndgerðar:"
 
 #: ../share/extensions/image_attributes.inx:58
 msgid "Apply attribute to parent group of selection"
@@ -46829,7 +46820,7 @@ msgstr "Veggjakrot"
 
 #: ../share/extensions/other/gcodetools/gcodetools_graffiti.inx:10
 msgid "Minimal connector radius:"
-msgstr "Lágmarksradíus tengilínu"
+msgstr "Lágmarksradíus tengilínu:"
 
 #: ../share/extensions/other/gcodetools/gcodetools_graffiti.inx:11
 msgid "Start position (x;y):"
@@ -47195,9 +47186,8 @@ msgid "Cross"
 msgstr "Kross"
 
 #: ../share/extensions/other/templates/template_shape_prefab.inx:15
-#, fuzzy
 msgid "Very Cross"
-msgstr "Bylgjaður kross"
+msgstr "Sveigður kross"
 
 #: ../share/extensions/other/templates/template_shape_prefab.inx:16
 msgid "Target"
@@ -47433,7 +47423,7 @@ msgstr "Ekkert"
 
 #: ../share/extensions/output_scour.inx:68
 msgid "Depth of indentation:"
-msgstr "Dýpt inndráttar"
+msgstr "Dýpt inndráttar:"
 
 #: ../share/extensions/output_scour.inx:68
 msgid ""
@@ -47922,7 +47912,7 @@ msgstr ""
 
 #: ../share/extensions/pixelsnap.inx:10
 msgid "Maximum slope to consider straight (%)"
-msgstr ""
+msgstr "Hámarkslengd sveigs til að skilgreina sem beinan (%)"
 
 #: ../share/extensions/pixelsnap.inx:11
 msgid "Origin of the coordinate system:"
