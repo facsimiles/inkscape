@@ -27,7 +27,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-02-04 23:42+0100\n"
-"PO-Revision-Date: 2025-04-22 18:21+0000\n"
+"PO-Revision-Date: 2025-04-23 17:49+0000\n"
 "Last-Translator: Duarte Farrajota Ramos <duarte.framos@gmail.com>\n"
 "Language-Team: Portuguese <https://translate.inkscape.org/projects/inkscape/"
 "inkscape-master/pt/>\n"
@@ -23481,8 +23481,8 @@ msgid ""
 "Initial color for clones (works only if the original has unset fill or "
 "stroke or on spray tool in copy mode)"
 msgstr ""
-"Cor inicial para os clones (só funciona se o original não tiver "
-"preenchimento ou traço ou na ferramenta borrifar no modo cópia)"
+"Cor inicial para os clones (só funciona se o original tiver preenchimento ou "
+"traço indefinido, ou na ferramenta borrifar no modo cópia)"
 
 #: ../src/ui/dialog/clonetiler.cpp:692
 msgid "<b>H:</b>"
@@ -23674,8 +23674,8 @@ msgid ""
 "Each clone is painted by the picked color (the original must have unset fill "
 "or stroke)"
 msgstr ""
-"Cada clone é preenchido com a cor escolhida (a original não deve ter "
-"definidos o preenchimento nem o traço)"
+"Cada clone é preenchido com a cor escolhida (a original deve ter "
+"preenchimento e traço indefinidos)"
 
 #: ../src/ui/dialog/clonetiler.cpp:980
 msgid "Each clone's opacity is determined by the picked value in that point"
@@ -25299,7 +25299,7 @@ msgstr "Região automática"
 msgid ""
 "If unset, the coordinates and dimensions won't be updated automatically."
 msgstr ""
-"Se não forem definidas, as coordenadas e dimensões não serão actualizadas "
+"Se não definidas, as coordenadas e dimensões não serão actualizadas "
 "automaticamente."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2941
@@ -36380,13 +36380,13 @@ msgstr "Aplicar padrão no traço"
 #: ../src/ui/widget/selected-style.cpp:302
 #: ../src/ui/widget/style-swatch.cpp:275
 msgid "Unset fill"
-msgstr "Preenchimento não definido"
+msgstr "Preenchimento indefinido"
 
 #: ../src/ui/widget/fill-style.cpp:725 ../src/ui/widget/selected-style.cpp:78
 #: ../src/ui/widget/selected-style.cpp:318
 #: ../src/ui/widget/style-swatch.cpp:275
 msgid "Unset stroke"
-msgstr "Traço não definido"
+msgstr "Traço indefinido"
 
 #: ../src/ui/widget/filter-effect-chooser.cpp:26
 msgctxt "BlendMode"
@@ -36958,426 +36958,349 @@ msgstr ""
 
 #. TRANSLATORS: Width/height of Chinese glyphs
 #: ../src/ui/widget/font-variations.cpp:67
-#, fuzzy
-#| msgid "0 (transparent)"
 msgctxt "Variable font axis"
 msgid "X transparent Chinese"
-msgstr "0 (transparente)"
+msgstr "X transparente Chinês"
 
 #: ../src/ui/widget/font-variations.cpp:67
-#, fuzzy
-#| msgid "Scale the width of the stitch path"
 msgid "Alter the width of Chinese glyphs"
-msgstr "Redimensionar a largura do caminho de costura"
+msgstr "Alterar a largura dos glifos chineses"
 
 #: ../src/ui/widget/font-variations.cpp:68
-#, fuzzy
-#| msgid "0 (transparent)"
 msgctxt "Variable font axis"
 msgid "Y transparent Chinese"
-msgstr "0 (transparente)"
+msgstr "Y transparente Chinês"
 
 #: ../src/ui/widget/font-variations.cpp:68
 msgid "Alter the height of Chinese glyphs"
-msgstr ""
+msgstr "Alterar a altura dos glifos chineses"
 
 #. TRANSLATORS: “Parametric Lowercase Height”
 #: ../src/ui/widget/font-variations.cpp:70
-#, fuzzy
-#| msgid "Local light"
 msgctxt "Variable font axis"
 msgid "Lowercase height"
-msgstr "Luz local"
+msgstr "Altura das minúsculas"
 
 #: ../src/ui/widget/font-variations.cpp:70
 msgid ""
 "Vary the height of counters and other spaces between the baseline and x-"
 "height"
 msgstr ""
+"Variar a altura dos oucos e outros espaços entre a linha base e a altura x"
 
 #. TRANSLATORS: “Parametric Uppercase Counter Height”
 #: ../src/ui/widget/font-variations.cpp:72
-#, fuzzy
-#| msgid "Caps height:"
 msgctxt "Variable font axis"
 msgid "Uppercase height"
-msgstr "Altura das maiúsculas:"
+msgstr "Altura das maiúsculas"
 
 #: ../src/ui/widget/font-variations.cpp:72
 msgid "Vary the height of uppercase letterforms"
-msgstr ""
+msgstr "Variar a altura das formas das letras maiúsculas"
 
 #. TRANSLATORS: “Parametric Ascender Height”
 #: ../src/ui/widget/font-variations.cpp:74
-#, fuzzy
 msgctxt "Variable font axis"
 msgid "Ascender height"
-msgstr "Alinhar linhas à direita"
+msgstr "Altura do ascendente"
 
 #: ../src/ui/widget/font-variations.cpp:74
 msgid "Vary the height of lowercase ascenders"
-msgstr ""
+msgstr "Variar a altura dos ascendentes das letras minúsculas"
 
 #. TRANSLATORS: “Parametric Descender Depth”
 #: ../src/ui/widget/font-variations.cpp:76
-#, fuzzy
-#| msgid "Descender:"
 msgctxt "Variable font axis"
 msgid "Descender depth"
-msgstr "Descendente:"
+msgstr "Profundidade do descendente"
 
 #: ../src/ui/widget/font-variations.cpp:76
 msgid "Vary the depth of lowercase descenders"
-msgstr ""
+msgstr "Variar a profundidade dos descendentes de letras minúsculas"
 
 #. TRANSLATORS: “Parametric Figure Height”
 #: ../src/ui/widget/font-variations.cpp:78
-#, fuzzy
-#| msgid "Blur height:"
 msgctxt "Variable font axis"
 msgid "Figure height"
-msgstr "Altura da desfocagem:"
+msgstr "Altura da figura"
 
 #: ../src/ui/widget/font-variations.cpp:78
 msgid "Vary the height of figures"
-msgstr ""
+msgstr "Varia altura da figura"
 
 #. TRANSLATORS: "Serif rise" - found in the wild (https://github.com/googlefonts/amstelvar)
 #: ../src/ui/widget/font-variations.cpp:80
-#, fuzzy
-#| msgid "Serif cap"
 msgctxt "Variable font axis"
 msgid "Serif rise"
-msgstr "Ponta Serifa"
+msgstr "Ponta da serifa"
 
 #: ../src/ui/widget/font-variations.cpp:80
-#, fuzzy
-#| msgid "Determines the shape of the path's corners"
 msgid "Vary the shape of the serifs"
-msgstr "Determina a forma dos cantos do caminho"
+msgstr "Varia a forma das serifas"
 
 #. TRANSLATORS: Flare - flaring of the stems
 #: ../src/ui/widget/font-variations.cpp:82
 msgctxt "Variable font axis"
 msgid "Flare"
-msgstr ""
+msgstr "Afunilamento"
 
 #: ../src/ui/widget/font-variations.cpp:82
-#, fuzzy
-#| msgid "Controlling dock item"
 msgid "Controls the flaring of the stems"
-msgstr "Controlo do item no painel"
+msgstr "Controla o afunilamento das hastes"
 
 #. TRANSLATORS: Volume - The volume axis works only in combination with the Flare axis. It transforms the serifs
 #. and adds a little more edge to details.
 #: ../src/ui/widget/font-variations.cpp:85
-#, fuzzy
-#| msgid "column"
 msgctxt "Variable font axis"
 msgid "Volume"
-msgstr "coluna"
+msgstr "Volume"
 
 #: ../src/ui/widget/font-variations.cpp:85
 msgid "Volume works in combination with flare to transform serifs"
-msgstr ""
+msgstr "Volume funciona em combinação com afunilamento para transformar serifas"
 
 #: ../src/ui/widget/font-variations.cpp:87
-#, fuzzy
-#| msgid "Smoothness"
 msgctxt "Variable font axis"
 msgid "Softness"
 msgstr "Suavidade"
 
 #: ../src/ui/widget/font-variations.cpp:87
 msgid "Softness makes letterforms more soft and rounded"
-msgstr ""
+msgstr "Suavidade torna as formas das letras mais suaves e arredondadas"
 
 #: ../src/ui/widget/font-variations.cpp:89
-#, fuzzy
-#| msgid "Visual"
 msgctxt "Variable font axis"
 msgid "Casual"
-msgstr "Visual"
+msgstr "Casual"
 
 #: ../src/ui/widget/font-variations.cpp:89
 msgid "Adjust the letterforms from a more serious style to a more casual style"
-msgstr ""
+msgstr "Ajusta as formas das letras de um estilo mais sério a um mais casual"
 
 #: ../src/ui/widget/font-variations.cpp:91
-#, fuzzy
-#| msgid "Meroitic Cursive"
 msgctxt "Variable font axis"
 msgid "Cursive"
-msgstr "Meroitic cursiva"
+msgstr "Cursiva"
 
 #: ../src/ui/widget/font-variations.cpp:91
 msgid "Control the substitution of cursive forms"
-msgstr ""
+msgstr "Controla a substituição de formas cursivas"
 
 #: ../src/ui/widget/font-variations.cpp:93
-#, fuzzy
-#| msgid "Fill"
 msgctxt "Variable font axis"
 msgid "Fill"
-msgstr "Preenchimento"
+msgstr "Preenchida"
 
 #: ../src/ui/widget/font-variations.cpp:93
 msgid "Fill can turn transparent forms opaque"
-msgstr ""
+msgstr "Preenchimento pode tornar formas transparentes em opacas"
 
 #: ../src/ui/widget/font-variations.cpp:95
-#, fuzzy
-#| msgid "Monospaced font:"
 msgctxt "Variable font axis"
 msgid "Monospace"
-msgstr "Fonte mono espaçada:"
+msgstr "Mono espaçada"
 
 #: ../src/ui/widget/font-variations.cpp:95
 msgid "Adjust the glyphs from a proportional width to a fixed width"
-msgstr ""
+msgstr "Ajustar glifos de uma largura proporcional para uma largura fixa"
 
 #: ../src/ui/widget/font-variations.cpp:97
 msgctxt "Variable font axis"
 msgid "Wonky"
-msgstr ""
+msgstr "Torto"
 
 #: ../src/ui/widget/font-variations.cpp:97
 msgid "Binary switch used to control substitution of “wonky” forms"
-msgstr ""
+msgstr "Troca binária para controlar a substituição de formas \"tortas\""
 
 #: ../src/ui/widget/font-variations.cpp:99
-#, fuzzy
-#| msgid "Level shape"
 msgctxt "Variable font axis"
 msgid "Element shape"
-msgstr "Nivelar forma"
+msgstr "Forma de elemento"
 
 #: ../src/ui/widget/font-variations.cpp:99
 msgid "Selection of the base element glyphs are composed of"
-msgstr ""
+msgstr "Selecção do elemento base de que são compostos os glifos"
 
 #: ../src/ui/widget/font-variations.cpp:101
-#, fuzzy
-#| msgid "Reset grid"
 msgctxt "Variable font axis"
 msgid "Element grid"
-msgstr "Repor grelha"
+msgstr "Grelha de elementos"
 
 #: ../src/ui/widget/font-variations.cpp:101
 msgid "Controls how many elements are used per one grid unit"
-msgstr ""
+msgstr "Controla quantos elementos são usados por uma unidade de grelha"
 
 #. TRANSLATORS: “Optical Size”
 #. Optical sizes in a variable font are different versions of a typeface optimized for use at singular specific sizes,
 #. such as 14 pt or 144 pt. Small (or body) optical sizes tend to have less stroke contrast, more open and wider spacing,
 #. and a taller x-height than those of their large (or display) counterparts.
 #: ../src/ui/widget/font-variations.cpp:106
-#, fuzzy
-#| msgid "Initial size:"
 msgctxt "Variable font axis"
 msgid "Optical size"
-msgstr "Tamanho inicial:"
+msgstr "Tamanho óptico"
 
 #: ../src/ui/widget/font-variations.cpp:106
-#, fuzzy
-#| msgid "Optimize PNG output for file size."
 msgid "Optimize the typeface for use at specific size"
-msgstr "Optimizar a saída PNG para o tamanho do ficheiro."
+msgstr "Optimizar a fonte para utilização em tamanho específico"
 
 #. TRANSLATORS: Slant controls the font file’s slant parameter for oblique styles.
 #: ../src/ui/widget/font-variations.cpp:108
 msgctxt "Variable font axis"
 msgid "Slant"
-msgstr ""
+msgstr "Inclinação"
 
 #: ../src/ui/widget/font-variations.cpp:108
 msgid "Controls the font file’s slant parameter for oblique styles"
-msgstr ""
+msgstr "Controla o parâmetro de inclinação da fonte para estilos oblíquos"
 
 #: ../src/ui/widget/font-variations.cpp:110
-#, fuzzy
-#| msgid "Old Italic"
 msgctxt "Variable font axis"
 msgid "Italic"
-msgstr "Itálico Antigo"
+msgstr "Itálico"
 
 #: ../src/ui/widget/font-variations.cpp:110
 msgid "Turns on the font’s italic forms"
-msgstr ""
+msgstr "Liga as formas itálicas da fonte"
 
 #. TRANSLATORS: Weight controls the font file’s weight parameter.
 #: ../src/ui/widget/font-variations.cpp:112
-#, fuzzy
-#| msgid "Weight"
 msgctxt "Variable font axis"
 msgid "Weight"
 msgstr "Peso"
 
 #: ../src/ui/widget/font-variations.cpp:112
 msgid "Controls the font file’s weight parameter"
-msgstr ""
+msgstr "Controla o parâmetro de peso da fonte"
 
 #. TRANSLATORS: Width controls the font file’s width parameter.
 #: ../src/ui/widget/font-variations.cpp:114
-#, fuzzy
-#| msgid "Width"
 msgctxt "Variable font axis"
 msgid "Width"
 msgstr "Largura"
 
 #: ../src/ui/widget/font-variations.cpp:114
 msgid "Controls the font file’s width parameter"
-msgstr ""
+msgstr "Controla o parâmetro da largura da fonte"
 
 #: ../src/ui/widget/font-variations.cpp:116
-#, fuzzy
-#| msgctxt "Font feature"
-#| msgid "Tabular"
 msgctxt "Variable font axis"
 msgid "Tabular width"
-msgstr "Tabular"
+msgstr "Largura tabular"
 
 #: ../src/ui/widget/font-variations.cpp:116
-#, fuzzy
-#| msgid "_Crossing path stroke width"
 msgid "Controls the tabular width"
-msgstr "_Adicionar espessura do cruzamento"
+msgstr "Controla a largura tabular"
 
 #: ../src/ui/widget/font-variations.cpp:117
-#, fuzzy
-#| msgid "Guideline"
 msgctxt "Variable font axis"
 msgid "Underline"
-msgstr "Linha guia"
+msgstr "Sublinhado"
 
 #: ../src/ui/widget/font-variations.cpp:117
 msgid "Controls the weight of an underline"
-msgstr ""
+msgstr "Controla o peso do sublinhado"
 
 #: ../src/ui/widget/font-variations.cpp:118
-#, fuzzy
-#| msgid "Shadows"
 msgctxt "Variable font axis"
 msgid "Shadow"
-msgstr "Sombras"
+msgstr "Sombra"
 
 #: ../src/ui/widget/font-variations.cpp:118
 msgid "Controls the depth of a shadow"
-msgstr ""
+msgstr "Controla a profundidade de uma sombra"
 
 #: ../src/ui/widget/font-variations.cpp:119
-#, fuzzy
-#| msgid "Selection"
 msgctxt "Variable font axis"
 msgid "Reflection"
-msgstr "Selecção"
+msgstr "Reflexo"
 
 #: ../src/ui/widget/font-variations.cpp:119
-#, fuzzy
-#| msgid "Convert selection:"
 msgid "Controls the Y reflection"
-msgstr "Converter selecção:"
+msgstr "Controla a reflexão em Y"
 
 #: ../src/ui/widget/font-variations.cpp:120
-#, fuzzy
-#| msgid "Outline"
 msgctxt "Variable font axis"
 msgid "Outline"
 msgstr "Contorno"
 
 #: ../src/ui/widget/font-variations.cpp:120
 msgid "Controls the weight of a font’s outline"
-msgstr ""
+msgstr "Controla o peso do contorno da fonte"
 
 #: ../src/ui/widget/font-variations.cpp:121
-#, fuzzy
-#| msgid "Engraving"
 msgctxt "Variable font axis"
 msgid "Engrave"
-msgstr "Gravura"
+msgstr "Gravação"
 
 #: ../src/ui/widget/font-variations.cpp:121
 msgid "Controls the width of an engraving"
-msgstr ""
+msgstr "Controla a largura da gravação"
 
 #: ../src/ui/widget/font-variations.cpp:122
-#, fuzzy
-#| msgid "Emboss"
 msgctxt "Variable font axis"
 msgid "Emboss"
-msgstr "Alto relevo"
+msgstr "Alto Relevo"
 
 #: ../src/ui/widget/font-variations.cpp:122
 msgid "Controls the depth of an emboss"
-msgstr ""
+msgstr "Controla a profundidade do alto relevo"
 
 #: ../src/ui/widget/font-variations.cpp:123
-#, fuzzy
-#| msgid "Rela_tive change"
 msgctxt "Variable font axis"
 msgid "Relative X advance"
-msgstr "Alteração _relativa"
+msgstr "Avanço X relativo"
 
 #: ../src/ui/widget/font-variations.cpp:123
 msgid "Controls the relative X advance - horizontal motion of the glyph"
-msgstr ""
+msgstr "Controla o avanço X relativo - movimento horizontal do glifo"
 
 #: ../src/ui/widget/font-variations.cpp:124
-#, fuzzy
-#| msgid "Rela_tive change"
 msgctxt "Variable font axis"
 msgid "Relative Y advance"
-msgstr "Alteração _relativa"
+msgstr "Avanço Y relativo"
 
 #: ../src/ui/widget/font-variations.cpp:124
 msgid "Controls the relative Y advance - vertical motion of the glyph"
-msgstr ""
+msgstr "Controla o avanço Y relativo - movimento vertical do glifo"
 
 #: ../src/ui/widget/font-variations.cpp:125
-#, fuzzy
-#| msgid "Relative to:"
 msgctxt "Variable font axis"
 msgid "Relative second"
-msgstr "Relativo a:"
+msgstr "Relativo a segundo"
 
 #: ../src/ui/widget/font-variations.cpp:125
 msgid "Controls the relative second value - as in one second of animation time"
 msgstr ""
+"Controla o valor relativo segundo - No sentido de um segundo de tempo de "
+"animação"
 
 #: ../src/ui/widget/font-variations.cpp:126
-#, fuzzy
-#| msgid "_Rotation"
 msgctxt "Variable font axis"
 msgid "Rotation"
-msgstr "_Rotação"
+msgstr "Rotação"
 
 #: ../src/ui/widget/font-variations.cpp:126
 msgid "Controls the rotation of the glyph in degrees"
-msgstr ""
+msgstr "Controla a rotação dos glifos em graus"
 
 #: ../src/ui/widget/font-variations.cpp:127
-#, fuzzy
-#| msgid "Unicode character:"
 msgctxt "Variable font axis"
 msgid "Unicode variation"
-msgstr "Carácter Unicode:"
+msgstr "Variação Unicode:"
 
 #: ../src/ui/widget/font-variations.cpp:127
-#, fuzzy
-#| msgid "Set glyph unicode"
 msgid "Controls the glyph’s unicode ID"
-msgstr "Definir Unicode do glifo"
+msgstr "Controla o identificador Unicode do glifo"
 
 #: ../src/ui/widget/font-variations.cpp:128
-#, fuzzy
-#| msgid "Length variation:"
 msgctxt "Variable font axis"
 msgid "Feature variation"
-msgstr "Variação do comprimento:"
+msgstr "Variação do feição"
 
 #: ../src/ui/widget/font-variations.cpp:128
 msgid "Controls the glyph’s feature variation"
-msgstr ""
+msgstr "Controla a variação da feição do glifo"
 
 #: ../src/ui/widget/gradient-editor.cpp:218
 msgid "Stop color"
@@ -37573,7 +37496,6 @@ msgstr "Alterar isolamento"
 
 #. TRANSLATORS: "US" is an abbreviation for United States.
 #: ../src/ui/widget/page-properties.cpp:70
-#, fuzzy
 msgid "US"
 msgstr "EUA"
 
@@ -37631,7 +37553,7 @@ msgstr "Padrão"
 
 #: ../src/ui/widget/paint-selector.cpp:163
 msgid "Unset paint (make it undefined so it can be inherited)"
-msgstr "Pintura indefinida (deixar indefinida para poder ser herdada)"
+msgstr "Indefinir Pintura (deixar sem definição para poder ser herdada)"
 
 #: ../src/ui/widget/paint-selector.cpp:174
 msgid ""
@@ -37756,9 +37678,6 @@ msgid "<i>None</i>"
 msgstr "<i>Nenhum</i>"
 
 #: ../src/ui/widget/selected-style.cpp:75
-#, fuzzy
-#| msgctxt "Fill and stroke"
-#| msgid "No fill, middle-click for black fill"
 msgid "No fill, middle-click for black fill"
 msgstr ""
 "Sem preenchimento, clique com o botão do meio do rato para preenchimento "
@@ -37770,9 +37689,6 @@ msgid "<i>None</i>"
 msgstr "<i>Nenhum</i>"
 
 #: ../src/ui/widget/selected-style.cpp:76
-#, fuzzy
-#| msgctxt "Fill and stroke"
-#| msgid "No stroke, middle-click for black stroke"
 msgid "No stroke, middle-click for black stroke"
 msgstr "Sem traço, clique com botão do meio do rato para traço preto"
 
@@ -37850,9 +37766,8 @@ msgstr "Gradiente de malha (traço)"
 
 #: ../src/ui/widget/selected-style.cpp:91
 #: ../src/ui/widget/selected-style.cpp:92
-#, fuzzy
 msgid "<b>C</b>"
-msgstr "<b>L</b>"
+msgstr "<b>C</b>"
 
 #: ../src/ui/widget/selected-style.cpp:91
 msgid "Flat color (fill)"
@@ -37925,34 +37840,24 @@ msgid "Paste stroke"
 msgstr "Colar traço"
 
 #: ../src/ui/widget/selected-style.cpp:603
-#, fuzzy
-#| msgid "Edit fill..."
 msgid "Edit Fill..."
-msgstr "Editar preenchimento…"
+msgstr "Editar Preenchimento..."
 
 #: ../src/ui/widget/selected-style.cpp:604
-#, fuzzy
-#| msgid "Edit stroke..."
 msgid "Edit Stroke..."
-msgstr "Editar traço…"
+msgstr "Editar Traço..."
 
 #: ../src/ui/widget/selected-style.cpp:609
-#, fuzzy
-#| msgid "Last set color"
 msgid "Last Set Color"
-msgstr "Última cor aplicada"
+msgstr "Última Cor Definida"
 
 #: ../src/ui/widget/selected-style.cpp:611
-#, fuzzy
-#| msgid "Last selected color"
 msgid "Last Selected Color"
-msgstr "Última cor seleccionada"
+msgstr "Última Cor Seleccionada"
 
 #: ../src/ui/widget/selected-style.cpp:629
-#, fuzzy
-#| msgid "Copy color"
 msgid "Copy Color"
-msgstr "Copiar cor"
+msgstr "Copiar Cor"
 
 #: ../src/ui/widget/selected-style.cpp:633
 msgid "Paste Color"
@@ -37967,21 +37872,17 @@ msgid "Make Fill Opaque"
 msgstr "Tornar o Preenchimento Opaco"
 
 #: ../src/ui/widget/selected-style.cpp:641
-#, fuzzy
-#| msgid "Make stroke opaque"
 msgid "Make Stroke Opaque"
-msgstr "Tornar o traço opaco"
+msgstr "Tornar Traço Opaco"
 
 #. TRANSLATORS COMMENT: unset is a verb here
 #: ../src/ui/widget/selected-style.cpp:643
-#, fuzzy
 msgid "Unset Fill"
-msgstr "Preenchimento não definido"
+msgstr "Indefinir Preenchimento"
 
 #: ../src/ui/widget/selected-style.cpp:644
-#, fuzzy
 msgid "Unset Stroke"
-msgstr "Traço não definido"
+msgstr "Indefinir Traço"
 
 #: ../src/ui/widget/selected-style.cpp:645
 msgid "Remove Fill"
@@ -38013,14 +37914,10 @@ msgid "Stroke is averaged over selected objects"
 msgstr "Média do traço dos objectos seleccionados"
 
 #: ../src/ui/widget/selected-style.cpp:852
-#, fuzzy
-#| msgid "Multiple selected objects have the same fill"
 msgid "Multiple selected objects have same fill"
 msgstr "Múltiplos objectos seleccionados têm o mesmo preenchimento"
 
 #: ../src/ui/widget/selected-style.cpp:853
-#, fuzzy
-#| msgid "Multiple selected objects have the same stroke"
 msgid "Multiple selected objects have same stroke"
 msgstr "Múltiplos objectos seleccionados têm o mesmo traço"
 
@@ -38029,6 +37926,8 @@ msgid ""
 "<b>Opacity (%)</b>\n"
 "Middle-click cycles through 0%, 50%, 100%"
 msgstr ""
+"<b>Opacidade (%)</b>\n"
+"Clique com botão do meio do rato alterna entre 0%, 50%, 100%"
 
 #: ../src/ui/widget/selected-style.cpp:906
 #: ../src/ui/widget/stroke-style.cpp:238 ../src/ui/widget/style-swatch.cpp:284
@@ -38050,16 +37949,12 @@ msgid " (averaged)"
 msgstr " (médio)"
 
 #: ../src/ui/widget/selected-style.cpp:954
-#, fuzzy
-#| msgid "0 (transparent)"
 msgid "0% (Transparent)"
-msgstr "0 (transparente)"
+msgstr "0% (Transparente)"
 
 #: ../src/ui/widget/selected-style.cpp:958
-#, fuzzy
-#| msgid "100% (opaque)"
 msgid "100% (Opaque)"
-msgstr "100% (opaco)"
+msgstr "100% (Opaco)"
 
 #: ../src/ui/widget/selected-style.cpp:1047
 msgid "Adjust alpha"
@@ -38276,16 +38171,14 @@ msgid "R Gradient"
 msgstr "Gradiente R"
 
 #: ../src/ui/widget/style-swatch.cpp:261
-#, fuzzy, c-format
-#| msgid "Fill:"
+#, c-format
 msgid "Fill: %s"
-msgstr "Preenchimento:"
+msgstr "Preenchimento: %s"
 
 #: ../src/ui/widget/style-swatch.cpp:263
-#, fuzzy, c-format
-#| msgid "Stroke:"
+#, c-format
 msgid "Stroke: %s"
-msgstr "Traço:"
+msgstr "Traço:%s"
 
 #: ../src/ui/widget/style-swatch.cpp:268
 msgctxt "Fill and stroke"
@@ -38330,33 +38223,24 @@ msgid "Change swatch color"
 msgstr "Alterar cor da amostra de cor"
 
 #: ../src/ui/widget/tabs-widget.cpp:94
-#, fuzzy
-#| msgid "Move Tab to New Window"
 msgid "Detach to New Window"
-msgstr "Mover Separador para Nova Janela"
+msgstr "Separar para Nova Janela"
 
 #: ../src/ui/widget/tabs-widget.cpp:95
-#, fuzzy
 msgid "Close File"
-msgstr "Fe_char"
+msgstr "Fechar Ficheiro"
 
 #: ../src/ui/widget/tabs-widget.cpp:112
-#, fuzzy
-#| msgid "New Document"
 msgid "New Document..."
-msgstr "Novo documento"
+msgstr "Novo Documento..."
 
 #: ../src/ui/widget/tabs-widget.cpp:113
-#, fuzzy
-#| msgid "New Document"
 msgid "Open Document..."
-msgstr "Novo documento"
+msgstr "Abrir Documento..."
 
 #: ../src/ui/widget/template-list.cpp:130
-#, fuzzy
-#| msgid "User templates:"
 msgid "<new template>"
-msgstr "Modelos do utilizador:"
+msgstr "<novo modelo>"
 
 #: ../src/util/font-collections.h:35
 msgid "Recently Used Fonts"
@@ -38369,46 +38253,37 @@ msgstr "Fontes do documento"
 #: ../src/util/font-tags.cpp:15
 msgctxt "Font category"
 msgid "Sans Serif"
-msgstr ""
+msgstr "Sem Serifa"
 
 #: ../src/util/font-tags.cpp:16
-#, fuzzy
-#| msgid "Serial"
 msgctxt "Font category"
 msgid "Serif"
-msgstr "Série"
+msgstr "Serifa"
 
 #: ../src/util/font-tags.cpp:17
-#, fuzzy
-#| msgid "Script: "
 msgctxt "Font category"
 msgid "Script"
-msgstr "Sistema de escrita: "
+msgstr "Manuscrito"
 
 #: ../src/util/font-tags.cpp:19
-#, fuzzy
-#| msgid "Symbols"
 msgctxt "Font category"
 msgid "Symbols"
 msgstr "Símbolos"
 
 #: ../src/util/font-tags.cpp:20
-#, fuzzy
-#| msgid "Monospaced font:"
 msgctxt "Font category"
 msgid "Monospace"
-msgstr "Fonte mono espaçada:"
+msgstr "Mono Espaçada"
 
 #: ../src/util/font-tags.cpp:21
-#, fuzzy
 msgctxt "Font category"
 msgid "Variable"
-msgstr "Carian"
+msgstr "Variável"
 
 #: ../src/util/font-tags.cpp:22
 msgctxt "Font category"
 msgid "Oblique"
-msgstr ""
+msgstr "Oblíqua"
 
 #: ../src/util/paper.cpp:35
 msgid "Failed to create the page file."
@@ -38521,16 +38396,12 @@ msgstr "Shift+Retroceder para fechar"
 #: ../share/ui/color-page.glade:140 ../share/ui/color-page.glade:153
 #: ../share/ui/color-page.glade:167 ../share/ui/color-page.glade:181
 #: ../share/ui/color-page.glade:195 ../share/ui/color-page.glade:209
-#, fuzzy
-#| msgid "_L:"
 msgid "L:"
-msgstr "_L:"
+msgstr "L:"
 
 #: ../share/ui/color-page.glade:244
-#, fuzzy
-#| msgid "Color Markers"
 msgid "Color Picker"
-msgstr "Marcadores coloridos"
+msgstr "Selector de Cores"
 
 #: ../share/ui/color-palette.glade:207 ../share/ui/pattern-edit.glade:88
 msgid "Tile size:"
@@ -38573,13 +38444,11 @@ msgstr "Clicar para copiar"
 
 #: ../share/ui/dialog-crash.glade:6
 msgid "Crash Report"
-msgstr ""
+msgstr "Relatório de Fecho Inesperado"
 
 #: ../share/ui/dialog-crash.glade:20
-#, fuzzy
-#| msgid "Inkscape has crashed and will now close."
 msgid "<b>Inkscape has crashed and will now close.</b>"
-msgstr "O Inkscape encontrou um erro interno e irá encerrar agora."
+msgstr "<b>O Inkscape fechou inesperadamente e irá agora encerrar.</b>"
 
 #: ../share/ui/dialog-crash.glade:26
 msgid ""
@@ -38711,26 +38580,20 @@ msgid "Background Color"
 msgstr "Cor de Fundo"
 
 #: ../share/ui/dialog-export.glade:484
-#, fuzzy
-#| msgid "Export Area"
 msgid "Export format"
-msgstr "Área a Exportar"
+msgstr "Formato de exportação"
 
 #: ../share/ui/dialog-export.glade:494
 msgid "Select export format"
 msgstr "Seleccionar formato de exportação"
 
 #: ../share/ui/dialog-export.glade:527
-#, fuzzy
-#| msgid "No file selected"
 msgid "(No file selected)"
-msgstr "Nenhum ficheiro selecionado"
+msgstr "(Nenhum ficheiro seleccionado)"
 
 #: ../share/ui/dialog-export.glade:536
-#, fuzzy
-#| msgid "_Browse..."
 msgid "Choose..."
-msgstr "_Procurar…"
+msgstr "Escolher..."
 
 #: ../share/ui/dialog-export.glade:589 ../share/ui/dialog-export.glade:892
 msgid "Cancel Export"
@@ -38769,6 +38632,8 @@ msgid ""
 "When exporting each of the images in the batch, generated filenames which "
 "already exist will be overwritten without confirmation."
 msgstr ""
+"Ao exportar cada uma das imagens na lista, ficheiros cujos nomes gerados já "
+"existam serão substituídos sem confirmação."
 
 #: ../share/ui/dialog-export.glade:815
 msgid "Browse export directory"
@@ -38783,9 +38648,8 @@ msgid "Batch Export"
 msgstr "Exportação em Massa"
 
 #: ../share/ui/dialog-extensions.glade:19
-#, fuzzy
 msgid "Thumbnail size:"
-msgstr "Tamanho do ladrilho:"
+msgstr "Tamanho da miniatura:"
 
 #: ../share/ui/dialog-extensions.glade:134
 msgid "column"
@@ -38793,7 +38657,6 @@ msgstr "coluna"
 
 #. This verb is used to execute an extension. If extension accepts input parameters, then ellipsis will be appended to this word -> _Run...
 #: ../share/ui/dialog-extensions.glade:208
-#, fuzzy
 msgctxt "run-extension"
 msgid "_Run"
 msgstr "_Correr"
@@ -38872,16 +38735,12 @@ msgid "Flatten"
 msgstr "Combinar"
 
 #: ../share/ui/dialog-livepatheffect-item.glade:25
-#, fuzzy
-#| msgid "Set custom defaults"
 msgid "Set Custom Defaults"
-msgstr "Definir padrões personalizados"
+msgstr "Definir Padrões Personalizados"
 
 #: ../share/ui/dialog-livepatheffect-item.glade:30
-#, fuzzy
-#| msgid "Forget custom defaults"
 msgid "Forget Custom Defaults"
-msgstr "Esquecer padrões personalizados"
+msgstr "Esquecer Padrões Personalizados"
 
 #: ../share/ui/dialog-livepatheffect-item.glade:35
 msgid "Set Favorite"
@@ -38889,7 +38748,7 @@ msgstr "Definir favorito"
 
 #: ../share/ui/dialog-livepatheffect-item.glade:40
 msgid "Unset Favorite"
-msgstr "Retirar favorito"
+msgstr "Retirar Favorito"
 
 #: ../share/ui/dialog-livepatheffect-item.glade:123
 msgid "Show/hide this Live Path Effect"
@@ -39015,10 +38874,8 @@ msgid "Search for symbol"
 msgstr "Procurar por símbolo"
 
 #: ../share/ui/dialog-symbols.glade:264
-#, fuzzy
-#| msgid "Copy selection to clipboard"
 msgid "Copy selected symbol onto clipboard"
-msgstr "Copiar a selecção para a área de transferência"
+msgstr "Copiar símbolo seleccionado para a área de transferência"
 
 #: ../share/ui/dialog-symbols.glade:276
 msgid "Convert selected object(s) to symbol"
@@ -39034,7 +38891,7 @@ msgstr ""
 
 #: ../share/ui/dialog-symbols.glade:307
 msgid "Symbols display settings"
-msgstr ""
+msgstr "Definições de exibição de símbolos"
 
 #: ../share/ui/dialog-text-edit.glade:32 ../share/ui/toolbar-text.ui:68
 msgid "Open Collections Editor"
@@ -39045,10 +38902,8 @@ msgid "Open the Font Collections Manager dialogue"
 msgstr "Abrir a caixa de diálogo de Gestão de Colecções de Fontes"
 
 #: ../share/ui/dialog-text-edit.glade:41
-#, fuzzy
-#| msgid "Select a filter"
 msgid "Clear all filters"
-msgstr "Seleccione um filtro"
+msgstr "Limpar todos os filtros"
 
 #: ../share/ui/dialog-text-edit.glade:45
 msgid "Reset filters and show all available fonts"
@@ -39380,20 +39235,14 @@ msgid "Abort trace operation"
 msgstr "Abortar vectorização em progresso"
 
 #: ../share/ui/dialog-xml.glade:7
-#, fuzzy
-#| msgid "Automatic layout"
 msgid "Automatic Layout"
-msgstr "Layout automático"
+msgstr "Layout Automático"
 
 #: ../share/ui/dialog-xml.glade:12
-#, fuzzy
-#| msgid "Horizontal layout"
 msgid "Horizontal Layout"
-msgstr "Layout horizontal"
+msgstr "Layout Horizontal"
 
 #: ../share/ui/dialog-xml.glade:17
-#, fuzzy
-#| msgid "Vertical layout"
 msgid "Vertical Layout"
 msgstr "Layout Vertical"
 
@@ -39480,10 +39329,8 @@ msgid "Media Box"
 msgstr "Caixa de Média"
 
 #: ../share/ui/extension-pdfinput.glade:20
-#, fuzzy
-#| msgid "Clip Box"
 msgid "Crop Box"
-msgstr "Caixa de Corte"
+msgstr "Caixa de Recorte"
 
 #: ../share/ui/extension-pdfinput.glade:24
 msgid "Trim Box"
@@ -39626,25 +39473,25 @@ msgstr "<b>Importação Cairo</b>"
 #: ../share/ui/font-list.glade:17
 msgctxt "font-sample-text"
 msgid "AbcdEfgh1234"
-msgstr ""
+msgstr "AbcdEfgh1234"
 
 #. Sample text consisting of Arabic numerals
 #: ../share/ui/font-list.glade:18
 msgctxt "font-sample-text"
 msgid "1234567890"
-msgstr ""
+msgstr "1234567890"
 
 #. Sample text of lowercase Latin letters. Feel free to add diacritics if your language uses Latin script.
 #: ../share/ui/font-list.glade:19
 msgctxt "font-sample-text"
 msgid "abcdefghijklmnopqrstuvwxyz"
-msgstr ""
+msgstr "abcdefghijklmnopqrstuvwxyz"
 
 #. Sample text of uppercase Latin letters. Feel free to add diacritics if your language uses Latin script.
 #: ../share/ui/font-list.glade:20
 msgctxt "font-sample-text"
 msgid "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-msgstr ""
+msgstr "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 #. Provide a sentence in your language that uses every letter in your alphabet. If your language uses logographs, you may want to include a few to give a glimpse of what selected font looks like.
 #.
@@ -39652,62 +39499,46 @@ msgstr ""
 #: ../share/ui/font-list.glade:21
 msgctxt "font-sample-text"
 msgid "The quick brown fox jumps over the lazy dog."
-msgstr ""
+msgstr "Jovem craque belga prediz falhas no taxi"
 
 #. Sample text using diacritical marks and special characters. Add diacritics if your alphabet supports them, or other character variants that may be of interest to speakers of your language, like currency sign, etc. The idea is to test if selected font defines those variants.
 #: ../share/ui/font-list.glade:22
 msgctxt "font-sample-text"
 msgid "Yélløw ťüřtle fröm Áłphårettä íś čōmińġ fôr ďïññęr tòđây."
-msgstr ""
+msgstr "Yélløw ťüřtle fröm Áłphårettä íś čōmińġ fôr ďïññęr tòđây."
 
 #. This is an option to select to show font name as a font preview in font browser
 #: ../share/ui/font-list.glade:28
-#, fuzzy
-#| msgid "Font sample"
 msgid "Font name"
-msgstr "Amostra da fonte"
+msgstr "Nome da Fonte"
 
 #: ../share/ui/font-list.glade:48
-#, fuzzy
-#| msgid "Font collections"
 msgid "Font collections:"
-msgstr "Colecções de fontes"
+msgstr "Colecções de Fontes:"
 
 #: ../share/ui/font-list.glade:60
-#, fuzzy
-#| msgid "Show all available fonts"
 msgid "Show all fonts"
-msgstr "MOstrar todas as fontes disponíveis"
+msgstr "Mostrar todas as fontes"
 
 #: ../share/ui/font-list.glade:72
-#, fuzzy
-#| msgid "All Fonts"
 msgid "All fonts"
-msgstr "Todas as Fontes"
+msgstr "Todas as fontes"
 
 #: ../share/ui/font-list.glade:109
-#, fuzzy
-#| msgid "Font collections"
 msgid "Edit font collections"
-msgstr "Colecções de fontes"
+msgstr "Editar colecções de fontes"
 
 #: ../share/ui/font-list.glade:265
-#, fuzzy
-#| msgid "Samples:"
 msgid "Sample"
-msgstr "Amostras:"
+msgstr "Amostra"
 
 #: ../share/ui/font-list.glade:275
-#, fuzzy
-#| msgid "Preview's size (px):"
 msgid "Preview size"
-msgstr "Tamanho da pré-visualização (px):"
+msgstr "Tamanho de pré-visualização"
 
 #: ../share/ui/font-list.glade:284
-#, fuzzy
-#| msgid "Show names"
 msgid "Show font name"
-msgstr "Mostrar nomes"
+msgstr "Mostrar nome da fonte"
 
 #: ../share/ui/font-list.glade:320 ../share/extensions/jessyink_view.inx:3
 #: ../share/extensions/polyhedron_3d.inx:32
@@ -39716,11 +39547,9 @@ msgstr "Vista"
 
 #. A short text sample for when fonts are arranged in grid
 #: ../share/ui/font-list.glade:365
-#, fuzzy
-#| msgid "Area"
 msgctxt "font-sample-text"
 msgid "Aa"
-msgstr "Área"
+msgstr "Aa"
 
 #: ../share/ui/font-list.glade:396 ../share/extensions/nicechart.inx:52
 #: ../share/extensions/path_number_nodes.inx:8
@@ -39728,87 +39557,69 @@ msgid "Font size:"
 msgstr "Tamanho da fonte:"
 
 #: ../share/ui/font-list.glade:409
-#, fuzzy
-#| msgid "A6"
 msgid "6"
-msgstr "A6"
+msgstr "6"
 
 #: ../share/ui/font-list.glade:410
-#, fuzzy
-#| msgid "A7"
 msgid "7"
-msgstr "A7"
+msgstr "7"
 
 #: ../share/ui/font-list.glade:411
-#, fuzzy
-#| msgid "A8"
 msgid "8"
-msgstr "A8"
+msgstr "8"
 
 #: ../share/ui/font-list.glade:412
-#, fuzzy
-#| msgid "A9"
 msgid "9"
-msgstr "A9"
+msgstr "9"
 
 #: ../share/ui/font-list.glade:413
-#, fuzzy
-#| msgid "A10"
 msgid "10"
-msgstr "A10"
+msgstr "10"
 
 #: ../share/ui/font-list.glade:414
 msgid "12"
-msgstr ""
+msgstr "12"
 
 #: ../share/ui/font-list.glade:415
 msgid "14"
-msgstr ""
+msgstr "14"
 
 #: ../share/ui/font-list.glade:416
 msgid "16"
-msgstr ""
+msgstr "16"
 
 #: ../share/ui/font-list.glade:417
-#, fuzzy
-#| msgid "20%"
 msgid "20"
-msgstr "20%"
+msgstr "20"
 
 #: ../share/ui/font-list.glade:418
 msgid "24"
-msgstr ""
+msgstr "24"
 
 #: ../share/ui/font-list.glade:419
 msgid "32"
-msgstr ""
+msgstr "32"
 
 #: ../share/ui/font-list.glade:420
 msgid "48"
-msgstr ""
+msgstr "48"
 
 #: ../share/ui/font-list.glade:421
 msgid "72"
-msgstr ""
+msgstr "72"
 
 #: ../share/ui/font-list.glade:422
-#, fuzzy
-#| msgid "4x4"
 msgid "144"
-msgstr "4x4"
+msgstr "144"
 
 #: ../share/ui/font-list.glade:462
-#, fuzzy
-#| msgid "Antialiasing"
 msgctxt "loading-fonts"
 msgid "Initializing"
-msgstr "Suavização"
+msgstr "Inicializando"
 
 #: ../share/ui/font-list.glade:516
-#, fuzzy
-#| msgid "<small>Per row:</small>"
 msgid "<small>256 fonts</small>"
-msgstr "<small>Por fila:</small>"
+msgstr "<small>256 fontes</small>"
 
 #: ../share/ui/gradient-edit.glade:57 ../share/ui/toolbar-gradient.ui:90
 msgid "Reverse the direction of the gradient"
@@ -40092,13 +39903,6 @@ msgid "Quick Setup"
 msgstr "Configuração rápida"
 
 #: ../share/ui/inkscape-start.glade:512
-#, fuzzy
-#| msgid ""
-#| "<b>The Inkscape project is supported by users like you.</b> Through our "
-#| "collective time, money and skill, we have made this software for everyone "
-#| "in the world to enjoy free from restrictions and free from costs. <b>\n"
-#| "If you would like to get involved and make the next version of Inkscape "
-#| "even better, please consider joining the Inkscape project today.</b>"
 msgid ""
 "<b>The Inkscape project is supported by users like you.</b> Through our "
 "collective time, money and skill, we have made this software for everyone in "
@@ -40107,31 +39911,23 @@ msgid ""
 "of Inkscape even better, please consider joining the Inkscape project today."
 "</b>"
 msgstr ""
-"<b>O Inkscape é apoiado por pessoas como você.</b> Através da dedicação da "
-"comunidade, com conhecimento, perícia, tempo e ajuda financeira conseguimos "
-"desenvolver este programa dedicado a todas as pessoas do mundo, para que "
-"possam usufruir sem restrições e livre de custos.\n"
-"Se quiser envolver-se e tornar a próxima versão do Inkscape ainda melhor, "
-"por favor considere juntar-se ao projecto Inkscape.</big>"
+"<b>O projecto Inkscape é apoiado por pessoas como você.</b> Através da "
+"dedicação da comunidade, com conhecimento, perícia, tempo e ajuda financeira "
+"conseguimos desenvolver este programa dedicado a todas as pessoas do mundo, "
+"para que possam usufruir sem restrições e livre de custos.\n"
+"                Se quiser envolver-se e tornar a próxima versão do Inkscape "
+"ainda melhor, por favor considere juntar-se ao projecto Inkscape.</big>"
 
 #: ../share/ui/inkscape-start.glade:551
-#, fuzzy
-#| msgid ""
-#| "Learn how to\n"
-#| "Contribute Time"
 msgid "Learn how to Contribute Time"
 msgstr ""
-"Como contribuir\n"
+"Saiba como contribuir\n"
 "com tempo"
 
 #: ../share/ui/inkscape-start.glade:587
-#, fuzzy
-#| msgid ""
-#| "Learn how to\n"
-#| "Fund Inkscape"
 msgid "Learn how to Fund Inkscape"
 msgstr ""
-"Como ajudar\n"
+"Aprenda como ajudar\n"
 "financeiramente"
 
 #: ../share/ui/inkscape-start.glade:604
@@ -40148,11 +39944,9 @@ msgid "Recent Files"
 msgstr "Ficheiros recentes"
 
 #: ../share/ui/inkscape-start.glade:673
-#, fuzzy
-#| msgid "Emergence"
 msgctxt "Welcome dialog"
 msgid "Emergency Save"
-msgstr "Surgir"
+msgstr "Guardar em Emergência"
 
 #: ../share/ui/inkscape-start.glade:690
 msgctxt "Welcome dialog"
@@ -40297,8 +40091,6 @@ msgstr "Largura do rectângulo (sem traço)"
 #: ../share/ui/object-attributes.glade:371
 #: ../share/ui/object-attributes.glade:922 ../share/ui/toolbar-rect.ui:61
 #: ../share/ui/toolbar-select.ui:426
-#, fuzzy
-#| msgid "H:"
 msgctxt "Abbreviation of Height"
 msgid "H:"
 msgstr "A:"
@@ -40375,38 +40167,28 @@ msgid "Base radius to tip radius ratio"
 msgstr "Proporção entre o raio interno e o raio externo"
 
 #: ../share/ui/object-attributes.glade:825
-#, fuzzy
-#| msgid "Label position"
 msgid "Path vertical position"
-msgstr "Posição da etiqueta"
+msgstr "Posição vertical do caminho"
 
 #: ../share/ui/object-attributes.glade:850
-#, fuzzy
-#| msgid "Horizontal point:"
 msgid "Path horizontal position"
-msgstr "Ponto horizontal:"
+msgstr "Posição horizontal do caminho"
 
 #: ../share/ui/object-attributes.glade:886
-#, fuzzy
-#| msgid "Location:"
 msgid "Location"
-msgstr "Localização:"
+msgstr "Posição"
 
 #: ../share/ui/object-attributes.glade:907
-#, fuzzy
-#| msgid "Width of paper"
 msgid "Width of path shape"
-msgstr "Largura do papel"
+msgstr "Largura da forma do caminho"
 
 #: ../share/ui/object-attributes.glade:932
-#, fuzzy
-#| msgid "Height of paper"
 msgid "Height of path shape"
-msgstr "Altura do papel"
+msgstr "Altura da forma do caminho"
 
 #: ../share/ui/object-attributes.glade:1040
 msgid "Press Shift+Enter to commit editing changes"
-msgstr ""
+msgstr "Carregue em Shift+Enter para submeter alterações em edição"
 
 #: ../share/ui/page-properties.glade:61
 msgid "Front page"
@@ -40445,34 +40227,30 @@ msgstr ""
 "não houver nada seleccionado."
 
 #: ../share/ui/page-properties.glade:312
-#, fuzzy
-#| msgid "Coordinates:"
 msgid "Coordinate system"
-msgstr "Coordenadas:"
+msgstr "Sistema de coordenadas"
 
 #: ../share/ui/page-properties.glade:334
-#, fuzzy
-#| msgid "Origin"
 msgid "Origin:"
-msgstr "Origem"
+msgstr "Origem:"
 
 #: ../share/ui/page-properties.glade:345
-#, fuzzy
-#| msgid "Origin at upper left with y-axis pointing down"
 msgid ""
 "Coordinate system origin at the top of the page with Y axis pointing down."
-msgstr "Origem no canto superior esquerdo com eixo Y apontando para baixo"
+msgstr ""
+"Origem do sistema de coordenadas no topo da página com eixo Y apontado para "
+"baixo."
 
 #: ../share/ui/page-properties.glade:358
 msgid ""
 "Coordinate system origin at the bottom of the page with Y axis pointing up."
 msgstr ""
+"Origem do sistema de coordenadas no fundo da página com eixo Y apontado para "
+"cima."
 
 #: ../share/ui/page-properties.glade:376
-#, fuzzy
-#| msgid "Current page"
 msgid "Follow current page"
-msgstr "Página actual"
+msgstr "Seguir página actual"
 
 #: ../share/ui/page-properties.glade:378
 msgid ""
@@ -40509,11 +40287,10 @@ msgid "per user unit"
 msgstr "por unidade de utilizador"
 
 #: ../share/ui/page-properties.glade:635
-#, fuzzy
 msgid ""
 "Link the scale of the viewbox to the scale of the content in the document."
 msgstr ""
-"Conectar a dimensão da caixa de visualização ao tamanho do conteúdo neste "
+"Conectar a escala da caixa de visualização ao tamanho do conteúdo no "
 "documento."
 
 #: ../share/ui/page-properties.glade:704
@@ -40599,7 +40376,7 @@ msgstr "Controlo de intervalos:"
 
 #: ../share/ui/pattern-edit.glade:124
 msgid "Mouse-friendly"
-msgstr ""
+msgstr "Adequado para rato"
 
 #: ../share/ui/pattern-edit.glade:136
 msgid "Precise"
@@ -40773,114 +40550,85 @@ msgid "Distribute Nodes"
 msgstr "Distribuir nós"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:37
-#, fuzzy
-#| msgid "Show handles"
 msgid "Show angle"
-msgstr "Mostrar manípulos"
+msgstr "Mostrar ângulo"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:40
-#, fuzzy
-#| msgid "Unit of measurement"
 msgid "Show the angle measurement"
-msgstr "Unidade de medida"
+msgstr "Mostrar medição de ângulo"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:50
-#, fuzzy
-#| msgid "Show values"
 msgid "Show delta values"
-msgstr "Mostrar valores"
+msgstr "Mostrar valores delta"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:53
-#, fuzzy
-#| msgid "Unit of measurement"
 msgid "Show dX and dY measurements"
-msgstr "Unidade de medida"
+msgstr "Mostrar medições dX e dY"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:63
-#, fuzzy
-#| msgid "Show color labels"
 msgid "Show delta labels"
-msgstr "Mostrar etiquetas de cores"
+msgstr "Mostrar etiquetas delta"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:66
 msgid "Add labels to the delta measurements"
-msgstr ""
+msgstr "Adicionar etiquetas às medições delta"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:76
-#, fuzzy
-#| msgid "Show segment index"
 msgid "Show segment labels"
-msgstr "Mostrar índice do segmento"
+msgstr "Mostrar etiquetas de segmento"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:79
-#, fuzzy
-#| msgid "Add the stroke width to the interruption size"
 msgid "Add labels to the intersection segments"
-msgstr "Adicionar espessura do traço ao tamanho da interrupção"
+msgstr "Adicionar etiquetas aos segmentos de intersecção"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:89
-#, fuzzy
-#| msgid "Maximum segment length:"
 msgid "Min. segment length"
-msgstr "Comprimento máximo do segmento:"
+msgstr "Comprimento mínimo do segmento"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:106
 msgid "Intersection segments shorter than this length will not be shown"
 msgstr ""
+"Segmentos de intersecção menores que este comprimento não serão mostrados"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:128
 msgid "Copy measurements as text"
-msgstr ""
+msgstr "Copiar medições como texto"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:142
-#, fuzzy
-#| msgid "XML formatting"
 msgid "String formatting"
-msgstr "Formatação XML"
+msgstr "Formatação de texto"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:156
-#, fuzzy
-#| msgid "Include loc_ked"
 msgid "Include labels"
-msgstr "Incluir objectos _bloqueados"
+msgstr "Incluir etiquetas"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:168
-#, fuzzy
-#| msgid "Include"
 msgid "Include units"
-msgstr "Imagem incluída"
+msgstr "Incluir unidades"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:180
 msgid "Tab-separated string"
-msgstr ""
+msgstr "Texto separado por tabulação"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:192
-#, fuzzy
-#| msgid "Measurement Type:"
 msgid "Measurements to copy"
-msgstr "Tipo de medida:"
+msgstr "Medições a copiar"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:218
-#, fuzzy
-#| msgid "Length (document units):"
 msgid "Length - no end points"
-msgstr "Comprimento (unidades de documento):"
+msgstr "Comprimento - sem pontas"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:266
-#, fuzzy
-#| msgid "Delete segment"
 msgid "In-between segments"
-msgstr "Eliminar segmento"
+msgstr "Segmentos intermédios"
 
 #: ../share/ui/dialog-measure-tool-settings.ui:278
-#, fuzzy
-#| msgid "Show page info"
 msgid "Shape info"
-msgstr "Mostrar informações da página"
+msgstr "Informações de forma"
 
 #: ../share/ui/dialog-spellcheck.ui:16
 msgid "<b>Press Start</b> to check spelling"
-msgstr ""
+msgstr "<b>Carregue em Start</b> para verificar ortografia"
 
 #: ../share/ui/dialog-spellcheck.ui:38
 msgid "Suggestions:"
@@ -40915,10 +40663,8 @@ msgid "_Start"
 msgstr "_Começar"
 
 #: ../share/ui/document-tab.ui:18
-#, fuzzy
-#| msgid "Close Tab"
 msgid "Close tab"
-msgstr "Fechar Separador"
+msgstr "Fechar separador"
 
 #: ../share/ui/menus.ui:6
 msgid "_File"
@@ -41534,8 +41280,6 @@ msgid "_Previous Extension Settings..."
 msgstr "_Definições da Extensão Anterior…"
 
 #: ../share/ui/menus.ui:1209
-#, fuzzy
-#| msgid "_Extensions Gallery..."
 msgid "_Extension Gallery..."
 msgstr "_Galeria de Extensões..."
 
@@ -41585,10 +41329,8 @@ msgid "_Tips and Tricks"
 msgstr "Dicas e _Truques"
 
 #: ../share/ui/menus.ui:1278
-#, fuzzy
-#| msgid "Grain mode"
 msgid "Learn more"
-msgstr "Aplicar grão"
+msgstr "Saber mais"
 
 #: ../share/ui/menus.ui:1329
 msgid "_About Inkscape"
@@ -41612,17 +41354,12 @@ msgid "Zoom (also Ctrl+scroll)"
 msgstr "Zoom (também Ctrl+rodar)"
 
 #: ../share/ui/statusbar.ui:109
-#, fuzzy
-#| msgctxt "canvas"
-#| msgid "Z:"
 msgid "Z:"
-msgstr "A:"
+msgstr "Z:"
 
 #: ../share/ui/statusbar.ui:128
-#, fuzzy
-#| msgid "Rotation. (Also Ctrl+Shift+Scroll)"
 msgid "Rotation (also Ctrl+Shift+scroll)"
-msgstr "Rotação. (Também Ctrl+Shift+Rolar)"
+msgstr "Rotação (também Ctrl+Shift+rolar)"
 
 #: ../share/ui/statusbar.ui:133
 msgid "R:"
@@ -41645,56 +41382,44 @@ msgid "Accept"
 msgstr "Aceitar"
 
 #: ../share/ui/toolbar-box3d.ui:28
-#, fuzzy
-#| msgid "Angle of PLs in X direction"
 msgid "Angle of perspective lines in x-direction"
 msgstr "Ângulo das linhas de perspectiva na direcção X"
 
 #: ../share/ui/toolbar-box3d.ui:51
-#, fuzzy
-#| msgid "Toggle VP in X direction between 'finite' and 'infinite' (=parallel)"
 msgid ""
 "Toggle vanishing point in x-direction between 'finite' and 'infinite' (= "
 "parallel)"
 msgstr ""
-"Alternar o ponto de fuga na direcção X entre 'finito' e "
-"'infinito' (=paralelo)"
+"Alternar o ponto de fuga na direcção X entre 'finito' e 'infinito' "
+"(=paralelo)"
 
 #: ../share/ui/toolbar-box3d.ui:62
-#, fuzzy
-#| msgid "Angle of PLs in X direction"
 msgid "Angle of perspective lines in y-direction"
-msgstr "Ângulo das linhas de perspectiva na direcção X"
+msgstr "Ângulo das linhas de perspectiva na direcção Y"
 
 #: ../share/ui/toolbar-box3d.ui:65
 msgid "Angle Y:"
 msgstr "Ângulo Y:"
 
 #: ../share/ui/toolbar-box3d.ui:86
-#, fuzzy
-#| msgid "Toggle VP in X direction between 'finite' and 'infinite' (=parallel)"
 msgid ""
 "Toggle vanishing point in y-direction between 'finite' and 'infinite' (= "
 "parallel)"
 msgstr ""
-"Alternar o ponto de fuga na direcção X entre 'finito' e "
-"'infinito' (=paralelo)"
+"Alternar o ponto de fuga na direcção Y entre 'finito' e 'infinito' "
+"(=paralelo)"
 
 #: ../share/ui/toolbar-box3d.ui:96
-#, fuzzy
-#| msgid "Angle of PLs in X direction"
 msgid "Angle of perspective lines in z-direction"
-msgstr "Ângulo das linhas de perspectiva na direcção X"
+msgstr "Ângulo das linhas de perspectiva na direcção Z"
 
 #: ../share/ui/toolbar-box3d.ui:120
-#, fuzzy
-#| msgid "Toggle VP in X direction between 'finite' and 'infinite' (=parallel)"
 msgid ""
 "Toggle vanishing point in z-direction between 'finite' and 'infinite' (= "
 "parallel)"
 msgstr ""
-"Alternar o ponto de fuga na direcção X entre 'finito' e "
-"'infinito' (=paralelo)"
+"Alternar o ponto de fuga na direcção Z entre 'finito' e 'infinito' "
+"(=paralelo)"
 
 #: ../share/ui/toolbar-calligraphy.ui:54
 msgid "Choose a preset"
@@ -41946,9 +41671,6 @@ msgid "Link gradients to change all related gradients"
 msgstr "Conectar gradientes para alterar todos os gradientes relacionados"
 
 #: ../share/ui/toolbar-gradient.ui:125 ../share/ui/toolbar-select.ui:396
-#, fuzzy
-#| msgctxt "Select toolbar"
-#| msgid "Width of selection"
 msgid "Width of selection"
 msgstr "Largura da selecção"
 
@@ -41961,22 +41683,18 @@ msgid "Line Segment"
 msgstr "Segmento de linha"
 
 #: ../share/ui/toolbar-lpe.ui:35
-#, fuzzy
 msgid "Circle by 3 points"
 msgstr "Círculo por 3 pontos"
 
 #: ../share/ui/toolbar-lpe.ui:65
-#, fuzzy
 msgid "Perpendicular bisector"
-msgstr "Bissetriz de ângulo perpendicular"
+msgstr "Bissetriz perpendicular"
 
 #: ../share/ui/toolbar-lpe.ui:75
-#, fuzzy
 msgid "Angle Bisector"
-msgstr "Bissetriz de ângulo"
+msgstr "Bissetriz de Ângulo"
 
 #: ../share/ui/toolbar-lpe.ui:85
-#, fuzzy
 msgid "Mirror symmetry"
 msgstr "Simetria de espelho"
 
@@ -42002,10 +41720,8 @@ msgstr ""
 "Abre a janela de Efeito em Tempo Real (para adaptar parâmetros numericamente)"
 
 #: ../share/ui/toolbar-marker.ui:12
-#, fuzzy
-#| msgid "Edit on canvas"
 msgid "Edit marker on canvas."
-msgstr "Editar na tela"
+msgstr "Editar marcador na tela."
 
 #: ../share/ui/toolbar-measure.ui:39
 msgid "The font size to be used in the measurement labels"
@@ -42080,11 +41796,8 @@ msgid "Mark dimension offset"
 msgstr "Marcar desvio da dimensão"
 
 #: ../share/ui/toolbar-measure.ui:312
-#, fuzzy
-#| msgctxt "Font feature"
-#| msgid "Feature Settings"
 msgid "Measurement settings"
-msgstr "Configurações das funcionalidades"
+msgstr "Definições de medições"
 
 #: ../share/ui/toolbar-mesh.ui:33
 msgid "Create mesh gradient"
@@ -42224,16 +41937,12 @@ msgid "Y coordinate of selected node(s)"
 msgstr "Coordenada Y do(s) nó(s) seleccionado(s) (eixo dos Y)"
 
 #: ../share/ui/toolbar-node.ui:395
-#, fuzzy
-#| msgid "ID:"
 msgid "D:"
-msgstr "ID:"
+msgstr "D:"
 
 #: ../share/ui/toolbar-node.ui:401
-#, fuzzy
-#| msgid "Delete selected nodes"
 msgid "Distance between two selected nodes."
-msgstr "Eliminar nós seleccionados"
+msgstr "Distância entre nós seleccionados."
 
 #: ../share/ui/toolbar-node.ui:451
 msgid "Show path outline (without path effects)"
@@ -42256,10 +41965,8 @@ msgid "Show clipping path(s) of selected object(s)"
 msgstr "Mostrar caminho(s) cortado(s) do(s) objecto(s) seleccionado(s)"
 
 #: ../share/ui/toolbar-objectpicker.ui:15
-#, fuzzy
-#| msgid "Selected objects only"
 msgid "Select object on canvas"
-msgstr "Apenas objectos seleccionados"
+msgstr "Seleccionar objectos na tela"
 
 #: ../share/ui/toolbar-page.ui:101
 msgid "Page Margins"
@@ -42389,8 +42096,6 @@ msgid "Select all objects"
 msgstr "Seleccionar todos os objectos"
 
 #: ../share/ui/toolbar-select.ui:53
-#, fuzzy
-#| msgid "Select in all layers"
 msgid "Select all in all layers"
 msgstr "Seleccionar em todas as camadas"
 
@@ -42399,11 +42104,8 @@ msgid "Deselect any selected objects"
 msgstr "Desseleccionar qualquer objecto seleccionado"
 
 #: ../share/ui/toolbar-select.ui:87
-#, fuzzy
-#| msgid "Toggle selection box to select all touched objects."
 msgid "Toggle selection box to select all touched objects"
-msgstr ""
-"Alternar a caixa de selecção para seleccionar todos os objectos tocados."
+msgstr "Alternar a caixa de selecção para seleccionar todos os objectos tocados"
 
 #: ../share/ui/toolbar-select.ui:110
 msgid "Rotate selection 90\\xc2\\xb0 counter-clockwise"
@@ -42414,29 +42116,18 @@ msgid "Rotate selection 90\\xc2\\xb0 clockwise"
 msgstr "Rodar a selecção 90\\xc2\\xb0 no sentido horário"
 
 #: ../share/ui/toolbar-select.ui:349
-#, fuzzy
-#| msgctxt "Select toolbar"
-#| msgid "Horizontal coordinate of selection"
 msgid "Horizontal coordinate of selection"
 msgstr "Coordenada horizontal da selecção"
 
 #: ../share/ui/toolbar-select.ui:372
-#, fuzzy
-#| msgctxt "Select toolbar"
-#| msgid "Vertical coordinate of selection"
 msgid "Vertical coordinate of selection"
 msgstr "Coordenada vertical da selecção"
 
 #: ../share/ui/toolbar-select.ui:412
-#, fuzzy
-#| msgid "When locked, change both width and height by the same proportion"
 msgid "When locked, change width and height by the same proportion"
-msgstr "Quando bloqueado, alterar largura e altura pela mesma proporção"
+msgstr "Quando trancado, alterar largura e altura pela mesma proporção"
 
 #: ../share/ui/toolbar-select.ui:432
-#, fuzzy
-#| msgctxt "Select toolbar"
-#| msgid "Height of selection"
 msgid "Height of selection"
 msgstr "Altura da selecção"
 
@@ -42573,10 +42264,8 @@ msgid "Radius of the innermost revolution (relative to the spiral size)"
 msgstr "Raio da revolução mais interna (relativo ao tamanho da espiral)"
 
 #: ../share/ui/toolbar-spiral.ui:78
-#, fuzzy
-#| msgid "Inner radius:"
 msgid "Inner Radius:"
-msgstr "Raio interno:"
+msgstr "Raio Interno:"
 
 #: ../share/ui/toolbar-spiral.ui:102
 msgid ""
@@ -42647,9 +42336,6 @@ msgid "Increase to scatter sprayed objects"
 msgstr "Aumentar para espalhar os objectos pulverizados"
 
 #: ../share/ui/toolbar-spray.ui:240
-#, fuzzy
-#| msgctxt "Spray tool"
-#| msgid "Scatter:"
 msgid "Scatter:"
 msgstr "Espalhar:"
 
@@ -42688,7 +42374,7 @@ msgid ""
 msgstr ""
 "Escolher cor do desenho. Pode-se usar a janela de clonar ladrilho do traço "
 "para efeitos avançados. No modo clone, o preenchimento original e as cores "
-"de traço não devem estar definidos."
+"de traço devem estar indefinidos."
 
 #: ../share/ui/toolbar-spray.ui:384
 msgid "Apply picked color to fill"
@@ -42716,29 +42402,20 @@ msgid "Corners:"
 msgstr "Vértices:"
 
 #: ../share/ui/toolbar-star.ui:117
-#, fuzzy
 msgid "Spoke Ratio:"
-msgstr "Proporção do raio:"
+msgstr "Rácio de Pontas:"
 
 #: ../share/ui/toolbar-star.ui:191
-#, fuzzy
-#| msgid "Reset default settings of this LPE to Inkscape's default values"
 msgid "Reset all parameters to their default values"
-msgstr ""
-"Repor todas as definições pré-definidas deste Efeito em Tempo Real para os "
-"valores pré-definidos do Inkscape"
+msgstr "Repor todas os parâmetros para os valores pré-definidos"
 
 #: ../share/ui/toolbar-star.ui:205
-#, fuzzy
-#| msgid "Even top edges"
 msgid "Length of edge"
-msgstr "Igualar arestas do topo"
+msgstr "Comprimento da arestas"
 
 #: ../share/ui/toolbar-star.ui:209
-#, fuzzy
-#| msgid "Edge"
 msgid "Edge:"
-msgstr "Borda"
+msgstr "Aresta:"
 
 #: ../share/ui/toolbar-text.ui:71
 msgid "Open the Font Collections dialog"
@@ -42999,19 +42676,16 @@ msgid "In color mode, act on object's opacity"
 msgstr "No modo de cor, agir na opacidade do objecto"
 
 #: ../share/ui/toolbar-zoom.ui:41
-#, fuzzy
 msgid "Zoom 1-1"
 msgstr "Ampliação 1-1"
 
 #: ../share/ui/toolbar-zoom.ui:54
-#, fuzzy
 msgid "Zoom 1-2"
 msgstr "Ampliação 1-2"
 
 #: ../share/ui/toolbar-zoom.ui:67
-#, fuzzy
 msgid "Zoom 2-1"
-msgstr "Ampliação 21"
+msgstr "Ampliação 2-1"
 
 #: ../share/extensions/barcode/Base.py:49
 msgid "Error encoding '{}' as {} barcode: {}\n"
@@ -43112,10 +42786,12 @@ msgid ""
 "Encountered key of unknown format, id={0} while parsing DXF. This is "
 "probably a bug."
 msgstr ""
+"Encontrada chave de formato desconhecido, id={0} ao analisar DXF. É "
+"provavelmente um erro."
 
 #: ../share/extensions/dxf_input.py:1400
 msgid "Binary DXF file has unexpected header."
-msgstr ""
+msgstr "Ficheiro DXF binário tem cabeçalho inesperado."
 
 #: ../share/extensions/dxf_input.py:1697
 msgid ""
@@ -43494,7 +43170,7 @@ msgstr ""
 #: ../share/extensions/inkex/elements/_parser.py:116
 #, python-brace-format
 msgid "{error_message}. Line {line_number}, column {column_number}"
-msgstr ""
+msgstr "{error_message}. Linha {line_number}, coluna {column_number}"
 
 #: ../share/extensions/inkex/elements/_parser.py:125
 msgid ""
@@ -44073,19 +43749,17 @@ msgid "Invalid Triangle Specifications."
 msgstr "Especificações de Triângulo Inválidas."
 
 #: ../share/extensions/typst_formula.py:63
-#, fuzzy
-#| msgid "An exception occurred during LaTeX compilation: "
 msgid "An exception occurred during typst compilation: "
-msgstr "Uma excepção ocorreu ao compilar LaTeX: "
+msgstr "Ocorreu uma excepção durante compilação typst "
 
 #: ../share/extensions/typst_formula.py:68
 msgid "No svg has been produced by compilation: "
-msgstr ""
+msgstr "Não foi produzido nenhum SVG pela compilação: "
 
 #: ../share/extensions/typst_formula.py:69
 #, python-brace-format
 msgid "Expected file name was: {svg_file}."
-msgstr ""
+msgstr "Nome do ficheiro esperado era: {svg_file}."
 
 #: ../share/extensions/voronoi_diagram.py:163
 msgid "Please select objects!"
@@ -44194,21 +43868,16 @@ msgid "Cleans the cruft out of Adobe Illustrator SVGs before opening"
 msgstr "Limpa as impurezas dos Adobe Illustrator SVGs antes de abrir"
 
 #: ../share/extensions/cgm_input.inx:3
-#, fuzzy
-#| msgid "EMF Input"
 msgid "CGM Input"
-msgstr "Entrada de EMF"
+msgstr "Entrada CGM"
 
 #: ../share/extensions/cgm_input.inx:11
-#, fuzzy
 msgid "Computer Graphics Metafile (*.cgm)"
-msgstr "Computer Graphics Metafile (*.cgm)"
+msgstr "Metaficheiro de Gráficos de Computador (*.cgm)"
 
 #: ../share/extensions/cgm_input.inx:12
-#, fuzzy
-#| msgid "Open Computer Graphics Metafile files"
 msgid "Import a Computer Graphics Metafile (CGM)"
-msgstr "Ficheiros Open Computer Graphics Metafile"
+msgstr "Importar Metaficheiro de Gráficos de Computador (CGM)"
 
 #: ../share/extensions/color_blackandwhite.inx:3
 msgid "Black and White"
@@ -46354,7 +46023,7 @@ msgstr "atributo de manter a proporção:"
 #: ../share/extensions/image_attributes.inx:22
 #: ../share/extensions/image_attributes.inx:48
 msgid "Unset"
-msgstr "Não definido"
+msgstr "Indefinido"
 
 #: ../share/extensions/image_attributes.inx:33
 msgid "meetOrSlice:"
@@ -46995,8 +46664,8 @@ msgstr "Nome da camada:"
 #: ../share/extensions/jessyink_master_slide.inx:8
 msgid "If no layer name is supplied, the master slide is unset."
 msgstr ""
-"Se não for fornecido nenhum nome da camada, o diapositivo principal não é "
-"definido."
+"Se não for fornecido nenhum nome da camada, o diapositivo principal é "
+"indefinido."
 
 #: ../share/extensions/jessyink_master_slide.inx:11
 msgid ""
@@ -47909,18 +47578,16 @@ msgid "Import Web Image..."
 msgstr "Importar Imagem Web..."
 
 #: ../share/extensions/other/extension-afdesign/inkaf.inx:10
-#, fuzzy
-#| msgid "Open Input"
 msgid "Afdesign Input"
-msgstr "Abrir Entrada"
+msgstr "Abrir Afdesign"
 
 #: ../share/extensions/other/extension-afdesign/inkaf.inx:15
 msgid "Affinity Designer file (*.afdesign)"
-msgstr ""
+msgstr "Ficheiro Affinity Designer (*.afdesign)"
 
 #: ../share/extensions/other/extension-afdesign/inkaf.inx:16
 msgid "Import an Affinity Designer file"
-msgstr ""
+msgstr "Importar um ficheiro Affinity Designer"
 
 #: ../share/extensions/other/extension-xaml/inkxaml/svg2xaml.inx:3
 msgid "XAML Output"
@@ -51652,14 +51319,12 @@ msgid "Rotation is clockwise"
 msgstr "Rotação é no sentido horário"
 
 #: ../share/extensions/typst_formula.inx:3
-#, fuzzy
-#| msgid "Formula (pdflatex)"
 msgid "Formula (typst)"
-msgstr "Formula (pdflatex)"
+msgstr "Formula (typst)"
 
 #: ../share/extensions/typst_formula.inx:9
 msgid "typst input:"
-msgstr ""
+msgstr "Entrada typst:"
 
 #: ../share/extensions/ungroup_deep.inx:3
 msgid "Deep Ungroup"
@@ -51682,16 +51347,12 @@ msgid "Depth to Keep (from bottom)"
 msgstr "Profundidade a manter (a partir do fundo)"
 
 #: ../share/extensions/ungroup_deep.inx:9
-#, fuzzy
-#| msgid "Preserve"
 msgid "Preserve Layers"
-msgstr "Preservar"
+msgstr "Preservar Camadas"
 
 #: ../share/extensions/ungroup_deep.inx:9
-#, fuzzy
-#| msgid "Lock other layers"
 msgid "Do not ungroup layers"
-msgstr "Bloquear outras camadas"
+msgstr "Não desagrupar camadas"
 
 #: ../share/extensions/voronoi_diagram.inx:3
 #: ../share/extensions/voronoi_diagram.inx:9
@@ -52334,25 +51995,19 @@ msgstr ""
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:45
 msgid "Editing a Flatpak Logo"
-msgstr ""
+msgstr "Editando um Logo Flatpak"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:49
-#, fuzzy
-#| msgid "Multiple gradients"
 msgid "Multipage editing"
-msgstr "Gradientes múltiplos"
+msgstr "Edição Multipágina"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:53
-#, fuzzy
-#| msgid "Getting started with Inkscape"
 msgid "Editing with Inkscape"
-msgstr "Como começar com o Inkscape"
+msgstr "Edição com o Inkscape"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:57
-#, fuzzy
-#| msgid "Enable gradient editing"
 msgid "Gradient editing"
-msgstr "Mostrar controlos dos gradientes (necessário reiniciar)"
+msgstr "Edição de gradientes"
 
 #: ../org.inkscape.Inkscape.desktop.template:8
 msgid "Create and edit Scalable Vector Graphics images"
@@ -52416,15 +52071,15 @@ msgstr "Polegadas (96 px/in)"
 
 #: ../share/ui/units.xml:39
 msgid "foot"
-msgstr ""
+msgstr "pé"
 
 #: ../share/ui/units.xml:40
 msgid "feet"
-msgstr ""
+msgstr "pés"
 
 #: ../share/ui/units.xml:43
 msgid "Feet (12 in/ft)"
-msgstr ""
+msgstr "Pé (12 in/ft)"
 
 #: ../share/ui/units.xml:46
 msgid "millimeter"
@@ -52451,22 +52106,16 @@ msgid "Centimeters (10 mm/cm)"
 msgstr "Centímetros (10 mm/cm)"
 
 #: ../share/ui/units.xml:60
-#, fuzzy
-#| msgid "Meter"
 msgid "meter"
 msgstr "Metro"
 
 #: ../share/ui/units.xml:61
-#, fuzzy
-#| msgid "Meters"
 msgid "meters"
-msgstr "Metros"
+msgstr "metros"
 
 #: ../share/ui/units.xml:64
-#, fuzzy
-#| msgid "Centimeters (10 mm/cm)"
 msgid "Meters (100 cm/m)"
-msgstr "Centímetros (10 mm/cm)"
+msgstr "Metros (100 cm/m)"
 
 #: ../share/ui/units.xml:67
 msgid "degree"
