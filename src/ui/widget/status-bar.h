@@ -62,6 +62,7 @@ public:
     void onDefocus() override;
 
 private:
+    bool on_zoom_key_press(GdkEventKey* event);
     int zoom_input(double &new_value);
     bool zoom_output();
     void zoom_value_changed();

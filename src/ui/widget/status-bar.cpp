@@ -80,6 +80,8 @@ StatusBar::StatusBar()
     zoom_value->signal_output().connect(sigc::mem_fun(*this, &StatusBar::zoom_output), true);
     zoom_value->signal_value_changed().connect(sigc::mem_fun(*this, &StatusBar::zoom_value_changed));
     on_popup_menu(*zoom_value, sigc::mem_fun(*this, &StatusBar::zoom_popup));
+    zoom_value->signal_key_press_event().connect(
+        sigc::mem_fun(*this, &StatusBar::on_zoom_key_press), false);
     zoom_value->setDefocusTarget(this);
 
     auto zoom_adjustment = zoom_value->get_adjustment();
@@ -327,6 +329,18 @@ StatusBar::update_visibility()
     selected_style->set_visible(prefs->getBool(path + "style",       true));
     coordinates->set_visible(   prefs->getBool(path + "coordinates", true));
     rotate->set_visible(        prefs->getBool(path + "rotation",    true));
+}
+bool StatusBar::on_zoom_key_press(GdkEventKey* event)
+{
+    if ((event->keyval == GDK_KEY_z || event->keyval == GDK_KEY_Z) && 
+        (event->state & GDK_MOD1_MASK)) 
+    {
+        // Clear the field and focus it
+        zoom_value->set_text("");
+        zoom_value->grab_focus();
+        return true; // Event handled - prevent 'Z' insertion
+    }
+    return false; // Let other handlers process the event
 }
 
 } // namespace Inkscape::UI::Widget
