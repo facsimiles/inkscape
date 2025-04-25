@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-02-04 23:42+0100\n"
-"PO-Revision-Date: 2025-04-23 21:26+0000\n"
+"PO-Revision-Date: 2025-04-25 16:34+0000\n"
 "Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
 "Language-Team: Icelandic <https://translate.inkscape.org/projects/inkscape/"
 "inkscape-master/is/>\n"
@@ -36012,16 +36012,17 @@ msgstr "Stillingar eiginleika á CSS-formi (t.d. \"wxyz\" eða \"wxyz\" 3)."
 #. TRANSLATORS: “Grade” (GRAD in CSS) is an axis that can be used to alter stroke thicknesses (or other forms)
 #. without affecting the type's overall width, inter-letter spacing, or kerning — unlike altering weight.
 #: ../src/ui/widget/font-variations.cpp:54
-#, fuzzy
 msgctxt "Variable font axis"
 msgid "Grade"
-msgstr "Litstigull"
+msgstr "Vægi/Gráða"
 
 #: ../src/ui/widget/font-variations.cpp:54
 msgid ""
 "Alter stroke thicknesses (or other forms) without affecting the type’s "
 "overall width"
 msgstr ""
+"Breyttu þykkt útlínu (eða annarra forma) án þess að hafa áhrif á "
+"heildarbreiddina"
 
 #. TRANSLATORS: “Parametric Thick Stroke”, XOPQ, is a reference to its logical name, “X Opaque”,
 #. which describes how it alters the opaque stroke forms of glyphs typically in the X dimension
@@ -36109,7 +36110,7 @@ msgstr "Hæð hástafa"
 
 #: ../src/ui/widget/font-variations.cpp:72
 msgid "Vary the height of uppercase letterforms"
-msgstr ""
+msgstr "Aðlagaðu hæð hástafa leturs"
 
 #. TRANSLATORS: “Parametric Ascender Height”
 #: ../src/ui/widget/font-variations.cpp:74
@@ -36119,7 +36120,7 @@ msgstr "Hæð hálínu"
 
 #: ../src/ui/widget/font-variations.cpp:74
 msgid "Vary the height of lowercase ascenders"
-msgstr ""
+msgstr "Aðlagaðu hve langt upp háleggir lágstafa ná"
 
 #. TRANSLATORS: “Parametric Descender Depth”
 #: ../src/ui/widget/font-variations.cpp:76
@@ -36129,7 +36130,7 @@ msgstr "Dýpt láglínu"
 
 #: ../src/ui/widget/font-variations.cpp:76
 msgid "Vary the depth of lowercase descenders"
-msgstr ""
+msgstr "Aðlagaðu hve langt niður lágleggir lágstafa ná"
 
 #. TRANSLATORS: “Parametric Figure Height”
 #: ../src/ui/widget/font-variations.cpp:78
@@ -36139,7 +36140,7 @@ msgstr "Hæð lögunar"
 
 #: ../src/ui/widget/font-variations.cpp:78
 msgid "Vary the height of figures"
-msgstr ""
+msgstr "Aðlagaðu hæð lagana"
 
 #. TRANSLATORS: "Serif rise" - found in the wild (https://github.com/googlefonts/amstelvar)
 #: ../src/ui/widget/font-variations.cpp:80
@@ -36159,7 +36160,7 @@ msgstr "Blossi"
 
 #: ../src/ui/widget/font-variations.cpp:82
 msgid "Controls the flaring of the stems"
-msgstr ""
+msgstr "Stýrir hvernig broddar sveigjast frá legg (flare)"
 
 #. TRANSLATORS: Volume - The volume axis works only in combination with the Flare axis. It transforms the serifs
 #. and adds a little more edge to details.
@@ -36171,6 +36172,7 @@ msgstr "Umfang"
 #: ../src/ui/widget/font-variations.cpp:85
 msgid "Volume works in combination with flare to transform serifs"
 msgstr ""
+"Umfang (volume) virkar saman með sveigjum frá legg til að ummynda brodda"
 
 #: ../src/ui/widget/font-variations.cpp:87
 msgctxt "Variable font axis"
@@ -36197,7 +36199,7 @@ msgstr "Skriftletur"
 
 #: ../src/ui/widget/font-variations.cpp:91
 msgid "Control the substitution of cursive forms"
-msgstr ""
+msgstr "Stýrðu útskiptingu skriftlíkra lagana"
 
 #: ../src/ui/widget/font-variations.cpp:93
 msgctxt "Variable font axis"
@@ -36206,7 +36208,7 @@ msgstr "Fylling"
 
 #: ../src/ui/widget/font-variations.cpp:93
 msgid "Fill can turn transparent forms opaque"
-msgstr ""
+msgstr "Fylling getur breytt gegnsæum lögunum yfir í ógegnsæ"
 
 #: ../src/ui/widget/font-variations.cpp:95
 msgctxt "Variable font axis"
@@ -36220,11 +36222,11 @@ msgstr ""
 #: ../src/ui/widget/font-variations.cpp:97
 msgctxt "Variable font axis"
 msgid "Wonky"
-msgstr ""
+msgstr "Óreglulegt"
 
 #: ../src/ui/widget/font-variations.cpp:97
 msgid "Binary switch used to control substitution of “wonky” forms"
-msgstr ""
+msgstr "Af/á rofi sem stýrir útskiptingu óreglulegra eða óvenjulegra lagana"
 
 #: ../src/ui/widget/font-variations.cpp:99
 msgctxt "Variable font axis"
@@ -36236,14 +36238,13 @@ msgid "Selection of the base element glyphs are composed of"
 msgstr ""
 
 #: ../src/ui/widget/font-variations.cpp:101
-#, fuzzy
 msgctxt "Variable font axis"
 msgid "Element grid"
-msgstr "Frumstilla hnitanet"
+msgstr "Stakanet"
 
 #: ../src/ui/widget/font-variations.cpp:101
 msgid "Controls how many elements are used per one grid unit"
-msgstr ""
+msgstr "Stýrir hve mörg stök eru notuð á hverja einingu hnitanets"
 
 #. TRANSLATORS: “Optical Size”
 #. Optical sizes in a variable font are different versions of a typeface optimized for use at singular specific sizes,
@@ -36361,34 +36362,31 @@ msgid "Controls the depth of an emboss"
 msgstr "Stýrir dýpt upphleypingar"
 
 #: ../src/ui/widget/font-variations.cpp:123
-#, fuzzy
 msgctxt "Variable font axis"
 msgid "Relative X advance"
-msgstr "Afs_tæð breyting"
+msgstr "Afstætt X-framskrið"
 
 #: ../src/ui/widget/font-variations.cpp:123
 msgid "Controls the relative X advance - horizontal motion of the glyph"
-msgstr ""
+msgstr "Stýrir afstæðu X-framskriði - láréttri hreyfingu staftáknsins"
 
 #: ../src/ui/widget/font-variations.cpp:124
-#, fuzzy
 msgctxt "Variable font axis"
 msgid "Relative Y advance"
-msgstr "Afs_tæð breyting"
+msgstr "Afstætt Y-framskrið"
 
 #: ../src/ui/widget/font-variations.cpp:124
 msgid "Controls the relative Y advance - vertical motion of the glyph"
-msgstr ""
+msgstr "Stýrir afstæðu Y-framskriði - lóðréttri hreyfingu staftáknsins"
 
 #: ../src/ui/widget/font-variations.cpp:125
-#, fuzzy
 msgctxt "Variable font axis"
 msgid "Relative second"
-msgstr "Miðað við:"
+msgstr "Afstæð sekúnda"
 
 #: ../src/ui/widget/font-variations.cpp:125
 msgid "Controls the relative second value - as in one second of animation time"
-msgstr ""
+msgstr "Stýrir afstæðu sekúndugildi - eins og í einni sekúndu af hreyfingu"
 
 #: ../src/ui/widget/font-variations.cpp:126
 msgctxt "Variable font axis"
