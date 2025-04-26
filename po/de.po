@@ -26,7 +26,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2024-09-28 10:42+0000\n"
-"PO-Revision-Date: 2025-04-18 10:06+0000\n"
+"PO-Revision-Date: 2025-04-26 18:37+0000\n"
 "Last-Translator: Maren Hachmann <moini@users.noreply.translate.inkscape.org>"
 "\n"
 "Language-Team: German <https://translate.inkscape.org/projects/inkscape/"
@@ -19094,8 +19094,8 @@ msgid ""
 "Split original and mirror image into separate paths, so each can have its "
 "own style."
 msgstr ""
-"Gespiegelte und Originalpfade werden aufgetrennt, so dass jeder einen "
-"eigenen Stil verwenden kann"
+"Original und Spiegelung werden voneinander getrennt, so dass jedes Objekt "
+"einen eigenen Stil verwenden kann."
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:68
 msgid "Keep open paths on split"
@@ -19447,7 +19447,7 @@ msgid ""
 "the nearest path segment"
 msgstr ""
 "Erlaubt es, die Anfasser entlang des Pfades zu verschieben, ohne dass diese "
-"sich automatisch an das nächstgelegene Pfadsegment anheften."
+"sich automatisch an das nächstgelegene Pfadsegment anheften"
 
 #: ../src/live_effects/lpe-powerstroke.cpp:157
 msgid "Sort points"
@@ -20150,7 +20150,7 @@ msgid ""
 "that need to be significantly simplified. "
 msgstr ""
 "Anzahl der Wiederholungen der Vereinfachungsoperation ändern – besonders "
-"nützlich für komplexe Pfade, die sehr stark vereinfacht werden sollen"
+"nützlich für komplexe Pfade, die sehr stark vereinfacht werden sollen "
 
 #: ../src/live_effects/lpe-simplify.cpp:28
 msgid "Drag slider to set the amount of simplification"
@@ -20368,11 +20368,11 @@ msgstr "Winkel:"
 
 #: ../src/live_effects/lpe-tangent_to_curve.cpp:60
 msgid "Additional angle between tangent and curve"
-msgstr "Winkel, um den Tangente zu Kurve gedreht wird."
+msgstr "Winkel, um den Tangente zu Kurve gedreht wird"
 
 #: ../src/live_effects/lpe-tangent_to_curve.cpp:61
 msgid "Location along curve:"
-msgstr "Ort des Benutzer-Caches"
+msgstr "Ort auf der Kurve:"
 
 #: ../src/live_effects/lpe-tangent_to_curve.cpp:61
 msgid ""
@@ -21924,7 +21924,7 @@ msgstr "Urheber:"
 msgid "An entity primarily responsible for making the resource"
 msgstr ""
 "Name der Person oder Organisation, die hauptsächlich für die Erstellung des "
-"Dokumenteninhalts verantwortlich ist."
+"Dokumenteninhalts verantwortlich ist"
 
 #: ../src/rdf.cpp:258
 msgid "Rights:"
@@ -22011,7 +22011,7 @@ msgstr "Mitwirkende:"
 msgid "An entity responsible for making contributions to the resource"
 msgstr ""
 "Namen von Personen oder Organisationen, die am Inhalt dieses Dokuments "
-"mitgewirkt haben."
+"mitgewirkt haben"
 
 #. TRANSLATORS: URL to a page that defines the license for the document
 #: ../src/rdf.cpp:296
@@ -22023,7 +22023,7 @@ msgstr "URI:"
 msgid "URI to this document's license's namespace definition"
 msgstr ""
 "URI, unter dem die Lizenzdefinition (license namespace) dieses Dokuments zu "
-"finden ist."
+"finden ist"
 
 #. TRANSLATORS: fragment of XML representing the license of the document
 #: ../src/rdf.cpp:302
