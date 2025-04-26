@@ -26,7 +26,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2024-09-28 10:42+0000\n"
-"PO-Revision-Date: 2025-04-26 18:37+0000\n"
+"PO-Revision-Date: 2025-04-27 02:14+0000\n"
 "Last-Translator: Maren Hachmann <moini@users.noreply.translate.inkscape.org>"
 "\n"
 "Language-Team: German <https://translate.inkscape.org/projects/inkscape/"
@@ -24670,7 +24670,7 @@ msgstr "Nebengitterlinienfarbe:"
 #: ../src/ui/dialog/document-properties.cpp:1909
 #: ../src/ui/dialog/inkscape-preferences.cpp:2100
 msgid "Minor grid line color"
-msgstr "Nebengitterlinienfarbe:"
+msgstr "Nebengitterlinienfarbe"
 
 #: ../src/ui/dialog/document-properties.cpp:1909
 msgid "Color of the minor grid lines"
@@ -27620,11 +27620,11 @@ msgstr "Pfadumriss"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:980
 msgid "Path outline color"
-msgstr "Entwurfspfad Farbe"
+msgstr "Entwurfspfadfarbe"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:981
 msgid "Selects the color used for showing the path outline"
-msgstr "Die Farbe, in der der Entwurfspfad angezeigt wird."
+msgstr "Die Farbe, in der der Entwurfspfad angezeigt wird"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:982
 msgid "Always show outline"
@@ -27689,7 +27689,8 @@ msgstr "Zeige temporär Umrandung für ausgewählte Pfade"
 #: ../src/ui/dialog/inkscape-preferences.cpp:993
 msgid "Show temporary outline even when a path is selected for editing"
 msgstr ""
-"Zeigt temporäre Umrandung an, wenn der Pfad zum Bearbeiten ausgewählt wurde."
+"Zeigt temporäre Umrandung auch dann an, wenn der Pfad zum Bearbeiten "
+"ausgewählt wurde."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:995
 msgid "_Flash time:"
@@ -27714,7 +27715,7 @@ msgstr "Zeige Anfasser für einzelne Knoten"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:998
 msgid "Show transform handles even when only a single node is selected"
-msgstr "Anfasser anzeigen, wenn nur ein einzelner Knoten ausgewählt ist."
+msgstr "Anfasser anzeigen, wenn nur ein einzelner Knoten ausgewählt ist"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:999
 msgid "Deleting nodes preserves shape"
@@ -27755,8 +27756,8 @@ msgid ""
 "If on, the sketch result will be the normal average of all sketches made, "
 "instead of averaging the old result with the new sketch"
 msgstr ""
-"Wenn gewählt, dann ist das Resultat das Mittel aus allen Skizzenlinien, "
-"statt das alte Ergebnis mit der neuen Linie zu mitteln."
+"Wenn aktiviert, dann ist das Resultat das Mittel aus allen Skizzenlinien, "
+"statt das alte Ergebnis mit der neuen Linie zu mitteln"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1055
 msgid ""
@@ -27870,7 +27871,7 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1115
 msgid "Linear gradient _angle:"
-msgstr "Winkel des linearen Farbverlaufs"
+msgstr "Winkel des linearen Farbverlaufs:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1116
 msgid ""
@@ -27920,7 +27921,7 @@ msgstr "Farbe symbolischer Erfolgs-Icons:"
 #: ../src/ui/dialog/inkscape-preferences.cpp:1499
 #: ../src/ui/dialog/inkscape-preferences.cpp:1783
 msgid "Color for symbolic warning icons:"
-msgstr "Farbe symbolischer Warn-Icons"
+msgstr "Farbe symbolischer Warn-Icons:"
 
 #
 # File: ../src/ui/dialog/inkscape-preferences.cpp, line: 889
@@ -27928,7 +27929,7 @@ msgstr "Farbe symbolischer Warn-Icons"
 #: ../src/ui/dialog/inkscape-preferences.cpp:1501
 #: ../src/ui/dialog/inkscape-preferences.cpp:1785
 msgid "Color for symbolic error icons:"
-msgstr "Farbe symbolischer Fehler-Icons"
+msgstr "Farbe symbolischer Fehler-Icons:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1510
 msgid "System default"
@@ -28321,7 +28322,7 @@ msgid ""
 msgstr ""
 "Verschieben Sie den Schieberegler, bis die Länge der Maßbandes auf ihrem "
 "Bildschirm der echten Größe entspricht. Diese Information wird genutzt, um "
-"beim Zoom auf 1:1, 1:2, usw. das Objekt in realistischen Größen darzustellen."
+"beim Zoom auf 1:1, 1:2 usw. das Objekt in realistischen Größen darzustellen."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1603
 msgid "Show zoom percentage corrected by factor"
@@ -28367,7 +28368,7 @@ msgid ""
 "actions for rotation"
 msgstr ""
 "Versehentliches Drehen der Arbeitsfläche durch Deaktivierung von Tastatur- "
-"und Mausaktionen für die Drehung verhindern."
+"und Mausaktionen für die Drehung verhindern"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1617
 msgid "Show selection in ruler"
@@ -28554,7 +28555,7 @@ msgstr "Symbolische Icons verwenden"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1773
 msgid "Use default base color for icons"
-msgstr "Standard Grundfarbe für Icons verwenden"
+msgstr "Standard-Grundfarbe für Icons verwenden"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1776
 msgid "Use default highlight colors for icons"
@@ -28563,7 +28564,7 @@ msgstr "Standard-Hervorhebungsfarbe für Icons verwenden"
 # !!! correct?
 #: ../src/ui/dialog/inkscape-preferences.cpp:1802
 msgid "Icon color base"
-msgstr "Icon Grundfarbe"
+msgstr "Icon-Grundfarbe"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1803
 msgid "Base color for icons"
@@ -28673,11 +28674,11 @@ msgstr "Sichtbare Werkzeuge wählen"
 # !!! called "Commands Bar" in other places
 #: ../src/ui/dialog/inkscape-preferences.cpp:1919
 msgid "Toolbox icon size:"
-msgstr "Symbolgröße in der Werkzeugleiste"
+msgstr "Symbolgröße in der Werkzeugleiste:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1920
 msgid "Control bar icon size:"
-msgstr "Symbolgröße in Einstellungsleiste"
+msgstr "Symbolgröße in Einstellungsleiste:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1935
 msgid "Adjust toolbar icon size"
@@ -28790,11 +28791,11 @@ msgstr "Maximiert"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1981
 msgid "Default window size:"
-msgstr "Standard Fenstergröße:"
+msgstr "Standard-Fenstergröße:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1982
 msgid "Set the default window size"
-msgstr "Standard Fenstergröße setzen:"
+msgstr "Standard-Fenstergröße wählen"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1985
 msgid "Saving window size and position"
@@ -29170,8 +29171,8 @@ msgid ""
 "it's off, each will open in the directory where you last saved a file using "
 "it"
 msgstr ""
-"Wenn diese Option aktiviert ist, wird der „Speichern unter“- und „Kopie "
-"speichern unter“-Dialog immer das Verzeichnis des derzeit geöffneten "
+"Wenn diese Option aktiviert ist, werden die Dialoge „Speichern unter“ und „"
+"Kopie speichern unter“ immer das Verzeichnis des derzeit geöffneten "
 "Dokuments öffnen. Ist sie deaktiviert, wird das Verzeichnis geöffnet in "
 "welchem die letzte Datei gespeichert wurde."
 
@@ -29195,7 +29196,7 @@ msgstr "Alle Formate im Exportdialog anzeigen"
 msgid ""
 "Will list all possible output extensions in the Export Dialog selection."
 msgstr ""
-"Alle vorhandenen Ausgabe-Erweiterungen stehen im Exportdialog zur Auswahl"
+"Alle vorhandenen Ausgabe-Erweiterungen werden im Exportdialog verfügbar."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2277
 msgid "_Grab sensitivity:"
@@ -29238,9 +29239,9 @@ msgid ""
 "this only if you have problems with the tablet (you can still use it as a "
 "mouse)"
 msgstr ""
-"Die Möglichkeiten eines Grafiktabletts oder anderen druckempfindlichen "
-"Geräts verwenden. Schalten Sie dies nur aus, wenn Sie Probleme mit dem Gerät "
-"haben (Sie können es immer noch als Maus verwenden)."
+"Die Fähigkeiten eines Grafiktabletts oder eines anderen druckempfindlichen "
+"Geräts verwenden. Nur deaktivieren, wenn Probleme mit dem Gerät auftreten ("
+"es kann immer noch als Maus verwendet werden)."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2287
 msgid "Switch tool based on tablet device"
@@ -29267,7 +29268,7 @@ msgid ""
 "'magenta') instead of the numeric value"
 msgstr ""
 "Benutzt, wenn möglich, die CSS-Farbnamen (z.B. 'red', 'magenta') anstelle "
-"von nummerischen Werten."
+"von nummerischen Werten"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2296
 msgid "XML formatting"
@@ -29279,7 +29280,7 @@ msgstr "Attribute kürzen"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2299
 msgid "Put attributes on the same line as the element tag"
-msgstr "Schreibt Attribute in die gleiche Zeile wie das Element-Tag."
+msgstr "Schreibt Attribute in die gleiche Zeile wie das Element-Tag"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2302
 msgid "_Indent, spaces:"
@@ -29290,8 +29291,8 @@ msgid ""
 "The number of spaces to use for indenting nested elements; set to 0 for no "
 "indentation"
 msgstr ""
-"Die Anzahl an Leerstellen die zum einrücken untergeordneter Elemente genutzt "
-"werden soll. Mit 0 werden keine Leerstellen eingefügt."
+"Die Anzahl an Leerzeichen, die zum Einrücken untergeordneter Elemente "
+"genutzt werden soll. Mit 0 werden keine Leerzeichen eingefügt."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2304
 #: ../share/ui/object-attributes.glade:1212
@@ -29358,7 +29359,7 @@ msgid ""
 "The smallest number written to SVG is 10 to the power of this exponent; "
 "anything smaller is written as zero"
 msgstr ""
-"Alle Zahlen die kleiner als 10 hoch diesen Exponenten sind, werden als 0 in "
+"Alle Zahlen, die kleiner als 10 hoch diesen Exponenten sind, werden als 0 in "
 "SVG-Dateien geschrieben."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2325
@@ -29588,12 +29589,11 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2409
 msgid "Display rendering intent:"
-msgstr "Anzeigenversatz"
+msgstr "Renderpriorität für den Monitor:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2410
 msgid "The rendering intent to use to calibrate display output"
-msgstr ""
-"Geräte-Wiedergabe-Bedeutung wird genutzt, um die Ausgabe zu kalibrieren."
+msgstr "Die Renderpriorität wird verwendet, um die Monitorfarben anzupassen"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2412
 msgid "Proofing"
@@ -29613,7 +29613,7 @@ msgstr "Farben der Farbskala hervorheben"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2420
 msgid "Highlights colors that are out of gamut for the target device"
-msgstr "Hebe Farben hervor die nicht im Farbbereich des Ausgabegerätes liegen."
+msgstr "Hebt Farben hervor, die nicht im Farbbereich des Ausgabegerätes liegen"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2427
 msgid "Out of gamut warning color:"
@@ -29621,7 +29621,7 @@ msgstr "Farbe für Farbbereichswarnung:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2428
 msgid "Selects the color used for out of gamut warning"
-msgstr "Bestimmt die Farbe die für Farbbereichswarnungen genutzt werden soll."
+msgstr "Bestimmt die Farbe, die für Farbbereichswarnungen genutzt werden soll"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2430
 msgid "Device profile:"
@@ -29629,16 +29629,17 @@ msgstr "Geräteprofil:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2431
 msgid "The ICC profile to use to simulate device output"
-msgstr "ICC-Profil für Simulation der Geräteausgabe."
+msgstr "ICC-Profil für Simulation der Geräteausgabe"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2434
 msgid "Device rendering intent:"
-msgstr "Gerätewiedergabe-Bedeutung"
+msgstr "Renderpriorität für das Ausgabegerät:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2435
 msgid "The rendering intent to use to calibrate device output"
 msgstr ""
-"Geräte-Wiedergabe-Bedeutung wird genutzt, um die Ausgabe zu kalibrieren."
+"Die Renderpriorität wird verwendet, um die Ausgabe auf dem Gerät zu "
+"kalibrieren"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2437
 msgid "Black point compensation"
@@ -29668,8 +29669,8 @@ msgid ""
 "Automatically save the current document(s) at a given interval, thus "
 "minimizing loss in case of a crash"
 msgstr ""
-"Speichert das Dokument in bestimmten Zeitabständen. Dadurch kann der "
-"Verlust, der durch Programmabstürze entsteht, verringert werden."
+"Speichert das Dokument in bestimmten Zeitabständen, um Verluste durch "
+"Programmabstürze zu minimieren"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2488
 msgctxt "Filesystem"
@@ -29693,7 +29694,7 @@ msgstr "Zeitabstand (in Minuten):"
 msgid "Interval (in minutes) at which document will be autosaved"
 msgstr ""
 "In diesen Zeitabständen (in Minuten) wird das Dokument automatisch "
-"gespeichert."
+"gespeichert"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2492
 msgid "_Maximum number of autosaves:"
@@ -29703,8 +29704,8 @@ msgstr "Maximale Anzahl an Sicherungen:"
 msgid ""
 "Maximum number of autosaved files; use this to limit the storage space used"
 msgstr ""
-"Maximale Anzahl an Sicherungsdateien. Hiermit läßt sich der genutzte "
-"Speicherplatz einschränken."
+"Maximale Anzahl an Sicherungsdateien. Hiermit lässt sich der genutzte "
+"Speicherplatz begrenzen."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2499
 msgid "Autosave"
@@ -29942,19 +29943,19 @@ msgstr "Strichlinienmuster bei Änderung der Konturbreite anpassen"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2585
 msgid "Store transformation"
-msgstr "Transformation speichern:"
+msgstr "Transformation speichern"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2587
 msgid ""
 "If possible, apply transformation to objects without adding a transform= "
 "attribute"
 msgstr ""
-"Wenn möglich, dann werden Transformationen auf Objekte angewendet, ohne ein "
-"transform=-Attribut hinzuzufügen."
+"Wenn möglich, werden Transformationen auf Objekte angewendet, ohne ein "
+"\"transform\"-Attribut hinzuzufügen"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2589
 msgid "Always store transformation as a transform= attribute on objects"
-msgstr "Transformationen immer als transform=-Attribute speichern."
+msgstr "Transformationen immer als \"transform\"-Attribute speichern"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2591
 msgid "Transforms"
@@ -30051,8 +30052,7 @@ msgstr "Einrast-Indikator aktivieren"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2621
 msgid "After snapping, a symbol is drawn at the point that has snapped"
-msgstr ""
-"Nach dem Einrasten wird ein Symbol an der Stelle, die einrastete, gezeichnet."
+msgstr "Nach dem Einrasten wird der Einrastort durch ein Symbol gekennzeichnet"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2624
 #: ../src/ui/dialog/inkscape-preferences.cpp:2626
@@ -30063,14 +30063,14 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2629
 msgid "Snap indicator persistence (in seconds):"
-msgstr "Anzeigedauer des Einrast-Indikators (in Sekunden)"
+msgstr "Anzeigedauer des Einrast-Indikators (in Sekunden):"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2630
 msgid ""
 "Controls how long the snap indicator message will be shown, before it "
 "disappears"
 msgstr ""
-"Bestimmt wie lange die Einrast-Indikator-Benachrichtigung angezeigt wird."
+"Bestimmt, wie lange die Einrast-Indikator-Benachrichtigung angezeigt wird"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2633
 msgid "What should snap"
@@ -30078,18 +30078,18 @@ msgstr "Woran einrasten"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2635
 msgid "Only snap the node closest to the pointer"
-msgstr "Nur an dem Knoten einrasten, der dem Zeiger am nächsten ist."
+msgstr "Nur an dem Knoten einrasten, der dem Zeiger am nächsten ist"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2637
 msgid ""
 "Only try to snap the node that is initially closest to the mouse pointer"
 msgstr ""
-"Nur versuchen an dem Knoten einzurasten, der dem Mauszeiger zu Beginn am "
-"nächsten ist."
+"Verwendet zum Einrasten nur den Knoten, der dem Mauszeiger zu Beginn am "
+"nächsten ist"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2639
 msgid "Snap the mouse pointer when dragging a constrained knot"
-msgstr "Rastet den Mauszeiger ein, wenn ein festgesetzter Knoten gezogen wird."
+msgstr "Rastet den Mauszeiger ein, wenn ein festgesetzter Knoten gezogen wird"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2641
 msgid ""
@@ -30098,7 +30098,7 @@ msgid ""
 "constraint line"
 msgstr ""
 "Wird ein Knoten entlang einer festgesetzten Linie gezogen, dann rastet der "
-"Mauszeiger statt der Projektion des Knotens auf der Linie ein."
+"Mauszeiger selbst und nicht die Projektion des Knotens auf die Linie ein."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2644
 msgid "_Weight factor:"
@@ -30110,9 +30110,9 @@ msgid ""
 "closest transformation (when set to 0), or prefer the node that was "
 "initially the closest to the pointer (when set to 1)"
 msgstr ""
-"Wurden mehrere Einrastmöglichkeiten gefunden, kann Inkscape die näheste "
-"Transformation anwenden (wenn auf 0 gesetzt) oder am Knoten, der dem "
-"Mauszeiger am nähesten ist (wenn auf 1 gesetzt) einrasten."
+"Wurden mehrere Einrastmöglichkeiten gefunden, kann Inkscape entweder die "
+"kleinste Transformation anwenden (wenn auf 0 gesetzt) oder am Knoten, der "
+"dem Mauszeiger am nächsten ist (wenn auf 1 gesetzt) einrasten."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2647
 msgid "Delayed snap"
@@ -30376,17 +30376,16 @@ msgstr "Klone werden mit demselben Vektor wie das Original verschoben."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2744
 msgid "Clones preserve their positions when their original is moved"
-msgstr ""
-"Klone bleiben an ihren Positionen, während das Original verschoben wird."
+msgstr "Klone bleiben an ihren Positionen, wenn das Original verschoben wird."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2746
 msgid ""
 "Each clone moves according to the value of its transform= attribute; for "
 "example, a rotated clone will move in a different direction than its original"
 msgstr ""
-"Jeder Klon verschiebt sich entsprechend des Wertes seines transform=-"
-"Attributs. Ein rotierter Klon wird sich zum Beispiel in eine andere Richtung "
-"als das Original drehen."
+"Jeder Klon verschiebt sich entsprechend des Wertes seines \"transform\"-"
+"Attributs. Ein gedrehter Klon wird daher in eine andere Richtung als das "
+"Original verschoben."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2747
 msgid "Deleting original: clones"
@@ -30414,9 +30413,8 @@ msgid ""
 "(possibly in groups), relink the duplicated clone to the duplicated original "
 "instead of the old original"
 msgstr ""
-"Wenn eine Auswahl kopiert wird in der Klone und dessen Originale enthalten "
-"sind verbinde die kopierten Klone mit den kopierten Originalen anstatt mit "
-"den alten Originalen."
+"Wenn eine Auswahl kopiert wird, in der Klone und deren Originale enthalten "
+"sind, werden die kopierten Klone den kopierten Originalen neu zugeordnet."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2759
 msgid "Unlinking clones"
@@ -30477,7 +30475,7 @@ msgstr ""
 msgid "Uncheck this to remove clip/mask on ungroup"
 msgstr ""
 "Deaktivieren, um beim Auflösen von Gruppen auch das Ausschneiden/die "
-"Maskierung zu beenden."
+"Maskierung zu beenden"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2776
 msgid "Remove clippath/mask object after applying"
@@ -30527,7 +30525,7 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2795
 msgid "After releasing"
-msgstr "Nach dem Lösen:"
+msgstr "Nach dem Freigeben"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2797
 msgid "Ungroup automatically created groups"
@@ -30622,7 +30620,7 @@ msgid ""
 msgstr ""
 "Erlaubt die Verwendung von 16 fortgeschrittenen Spiegeloptionen für das "
 "Kachelmuster (Kacheln können in Reihen und Spalten unterschiedlich "
-"gespiegelt werden) im Kacheln-Pfadeffekt."
+"gespiegelt werden) im Kacheln-Pfadeffekt"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2843
 msgid "Live Path Effects (LPE)"
@@ -30771,7 +30769,7 @@ msgstr "Niedrigste Qualität (beträchtliche Artefakte), aber schnellste Anzeige
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2912
 msgid "Filter effects quality for display"
-msgstr "Effekt-Qualität für Anzeige:"
+msgstr "Qualität der Filterdarstellung"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2925
 msgid "Use dithering"
@@ -30915,7 +30913,7 @@ msgstr "Klebriger Abstand für den Coarsener-Algorithmus"
 #: ../src/ui/dialog/inkscape-preferences.cpp:2999
 msgid "Coarsener algorithm absorbs nearby rectangles within this distance."
 msgstr ""
-"Der Coarsener-Algorithmus absorbiert Rechtecke innerhalb dieser Distanz"
+"Der Coarsener-Algorithmus absorbiert Rechtecke innerhalb dieser Distanz."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3001
 msgid "Min fullness for coarsener algorithm"
@@ -31054,7 +31052,7 @@ msgstr "Automatisches Aktualisieren von Bildern"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3036
 msgid "Automatically reload linked images when file is changed on disk"
-msgstr "Bilder neu laden, wenn diese auf dem Datenträger geändert wurden."
+msgstr "Bilder neu laden, wenn diese auf dem Datenträger geändert wurden"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3038
 msgid "_Bitmap editor:"
@@ -31098,7 +31096,7 @@ msgstr "Auflösung für Bitmap-_Kopie erstellen:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3049
 msgid "Resolution used by the Create Bitmap Copy command"
-msgstr "Auflösung von Bildern die mit „Bitmap-Kopie erstellen“ erzeugt werden."
+msgstr "Auflösung von Bildern die mit „Bitmap-Kopie erstellen“ erzeugt werden"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3052
 msgid "Ask about linking and scaling when importing bitmap images"
@@ -31160,7 +31158,7 @@ msgstr "SVG-Import-Modus:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3087
 msgid "Image scale (image-rendering):"
-msgstr "Bitmap-Skalierung (Darstellung am Bildschirm)"
+msgstr "Bitmap-Skalierung (Darstellung am Bildschirm):"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3092
 msgid "Default _import resolution:"
@@ -31840,7 +31838,7 @@ msgstr "Bogenart ändern"
 
 #: ../src/ui/dialog/object-attributes.cpp:882
 msgid "Nodes: "
-msgstr "Knoten:"
+msgstr "Knoten: "
 
 #: ../src/ui/dialog/object-attributes.cpp:903
 msgid "Change path"
@@ -31940,11 +31938,11 @@ msgstr "Ref"
 
 #: ../src/ui/dialog/object-properties.cpp:424
 msgid "Id invalid! "
-msgstr "ID-Kennung ungültig!"
+msgstr "ID-Kennung ungültig! "
 
 #: ../src/ui/dialog/object-properties.cpp:426
 msgid "Id exists! "
-msgstr "ID-Kennung existiert!"
+msgstr "ID-Kennung existiert! "
 
 #: ../src/ui/dialog/object-properties.cpp:430
 msgid "Set object ID"
@@ -31960,7 +31958,7 @@ msgstr "Objekttitel setzen"
 
 #: ../src/ui/dialog/object-properties.cpp:456
 msgid "Set image DPI"
-msgstr "Auflösung des Bildes (DPI):"
+msgstr "Auflösung des Bildes geändert"
 
 #: ../src/ui/dialog/object-properties.cpp:464
 msgid "Set object description"
@@ -32075,7 +32073,7 @@ msgstr "<b>Ankerpunkt:</b>"
 #: ../src/ui/dialog/polar-arrange-tab.cpp:49
 msgctxt "Polar arrange tab"
 msgid "Objects' bounding boxes:"
-msgstr "Objektrahmen der Objekte"
+msgstr "Objektrahmen der Objekte:"
 
 #: ../src/ui/dialog/polar-arrange-tab.cpp:59
 msgctxt "Polar arrange tab"
