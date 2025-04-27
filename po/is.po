@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2025-02-04 23:42+0100\n"
-"PO-Revision-Date: 2025-04-25 16:34+0000\n"
+"PO-Revision-Date: 2025-04-28 23:06+0000\n"
 "Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
 "Language-Team: Icelandic <https://translate.inkscape.org/projects/inkscape/"
 "inkscape-master/is/>\n"
@@ -34303,10 +34303,12 @@ msgid ""
 "\n"
 "Info about the shape under the pointer:\n"
 msgstr ""
+"\n"
+"Upplýsingar um lögunina undir bendlinum:\n"
 
 #: ../src/ui/tools/measure-tool.cpp:1696
 msgid "The measurements have been copied to the clipboard"
-msgstr ""
+msgstr "Mælingarnar hafa verið afritaðar á klippispjaldið"
 
 #: ../src/ui/tools/measure-tool.h:79
 msgid "Segment"
